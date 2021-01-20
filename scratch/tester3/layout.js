@@ -33,12 +33,29 @@ function setupFigure() {
     name: 'title',
     method: 'primitives.textLines',
     options: {
-      text: 'Traveling Sine Waves',
+      text: [
+        'Traveling Sine Waves',
+        {
+          text: 'The velocity, wavelength and frequency relationship.',
+          font: { size: 0.15 },
+        },
+      ],
       font: { size: 0.25, color: colorText },
       xAlign: 'center',
-      position: [0, 2.4],
+      justify: 'center',
+      position: [0, 2.6],
     },
   });
+  // figure.add({
+  //   name: 'subTitle',
+  //   method: 'primitives.textLines',
+  //   options: {
+  //     text: 'Frequency, Wavelength and Velocity',
+  //     font: { size: 0.1, color: colorText },
+  //     xAlign: 'center',
+  //     position: [0, 2],
+  //   },
+  // });
   const button = (name, position, text) => ({
     name,
     method: 'collections.rectangle',
@@ -284,9 +301,9 @@ function setupFigure() {
         movePad.setPosition(0, 0);
         medium.custom.recording.reset(0);
       },
-      setTimeSpeed: (speed) => {
-        movePad.animations.setTimeSpeed(speed);
-      },
+      // setTimeSpeed: (speed) => {
+      //   movePad.animations.setTimeSpeed(speed);
+      // },
       setVelocity: (velocity) => {
         medium.custom.c = velocity;
       },
@@ -467,6 +484,9 @@ function setupFigure() {
     }
   };
 
+  const slowMotion = () => setTimeSpeed(0.3, 'On');
+  const normalMotion = () => setTimeSpeed(1, 'Off');
+
   // velocityButton.onClick = () => {
   //   reset();
   //   time.pause();
@@ -569,6 +589,8 @@ function setupFigure() {
     reset,
     pause,
     unpause,
+    slowMotion,
+    normalMotion,
     setTimeSpeed,
     time,
   };

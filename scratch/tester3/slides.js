@@ -1,4 +1,4 @@
-/* globals figure, layout */
+/* globals figure, layout, color0, color1 */
 
 function addSlides() {
   const nav = figure.getElement('nav');
@@ -8,10 +8,12 @@ function addSlides() {
   // const title = figure.getElement('title');
   const sideEqn = figure.getElement('sideEqn');
   const eqn = figure.getElement('eqn');
+  const slowTimeButton = figure.getElement('slowTimeButton');
+  const freezeTimeButton = figure.getElement('freezeTimeButton');
 
   const slides = [];
 
-  let lastDisturbance = 0;
+  let lastDisturbance = layout.time.now() - 100;
   let timerId = null;
 
   const stopDisturbances = () => {
@@ -30,16 +32,16 @@ function addSlides() {
     // startDisturbances();
   };
 
-  const startDisturbances = (m, timeTillNext = 10) => {
+  const startDisturbances = (m, timeTillNext = 10, immediately = true) => {
     if (timerId != null) {
       clearTimeout(timerId);
     }
     const now = layout.time.now();
-    if (now - lastDisturbance > timeTillNext) {
+    if (now - lastDisturbance > timeTillNext || immediately) {
       disturb(m);
     }
     timerId = setTimeout(() => {
-      startDisturbances(m, timeTillNext);
+      startDisturbances(m, timeTillNext, false);
     }, 1000);
   };
 
@@ -109,6 +111,15 @@ function addSlides() {
     },
   };
   // ///////////////////////////////////////////////////////////////////////////
+  /*
+  .......########.####.########.##.......########
+  ..........##.....##.....##....##.......##......
+  ..........##.....##.....##....##.......##......
+  ..........##.....##.....##....##.......######..
+  ..........##.....##.....##....##.......##......
+  ..........##.....##.....##....##.......##......
+  ..........##....####....##....########.########
+  */
   // ///////////////////////////////////////////////////////////////////////////
   slides.push({
     modifiersCommon,
@@ -161,8 +172,8 @@ function addSlides() {
       layout.unpause();
     },
     steadyState: () => {
-      disturb(medium);
-      startDisturbances(medium);
+      layout.reset();
+      startDisturbances(medium, 10, true);
     },
     leaveState: () => stopDisturbances(),
     leaveStateCommon: () => {
@@ -180,11 +191,20 @@ function addSlides() {
     touchBorder,
     onClick: () => figure.getElement(element).pulse({ scale, xAlign, yAlign }),
   });
-  const highlight = (text) => ({
+  const highlight = text => ({
     text, font: { style: 'italic' },
   });
 
   // ///////////////////////////////////////////////////////////////////////////
+  /*
+  .......##.....##.########.##........#######...######..####.########.##....##
+  .......##.....##.##.......##.......##.....##.##....##..##.....##.....##..##.
+  .......##.....##.##.......##.......##.....##.##........##.....##......####..
+  .......##.....##.######...##.......##.....##.##........##.....##.......##...
+  ........##...##..##.......##.......##.....##.##........##.....##.......##...
+  .........##.##...##.......##.......##.....##.##....##..##.....##.......##...
+  ..........###....########.########..#######...######..####....##.......##...
+  */
   // ///////////////////////////////////////////////////////////////////////////
   slides.push({
     scenarioCommon: ['default'],
@@ -198,13 +218,19 @@ function addSlides() {
     form: null,
     showCommon: ['medium1', 'medium2', 'timePlot1', 'timePlot2', 'vFast', 'vSlow'],
     scenario: 'default',
-    steadyState: () => {
-      disturb([medium1, medium2]);
-      startDisturbances([medium1, medium2], 5.5);
+    steadyState: (index, from) => {
+      if (from === 'prev') {
+        layout.reset();
+        startDisturbances([medium1, medium2], 5.5, true);
+      } else {
+        startDisturbances([medium1, medium2], 5.5, false);
+      }
     },
     leaveStateCommon: () => {
       stopDisturbances();
       medium.custom.balls.undim();
+      layout.normalMotion();
+      layout.unpause();
     },
   });
 
@@ -214,26 +240,28 @@ function addSlides() {
     modifiers: {
       fast: pulse('fast', 'vFast', 2.5, 0.05, 'right'),
       slow: pulse('slow', 'vSlow', 2.5, 0.05, 'right'),
-      slowing: pulse('slowing', 'slowTimeButton', 1.8, 0.05, 0.3, 0.3),
-      freezing: pulse('freezing', 'freezeTimeButton', 1.8, 0.05, 0.3, 0.3),
-      Pulse: action('Pulse', () => disturb([medium1, medium2]), 0.03),
+      slowing: action('slowing', () => {
+        slowTimeButton.click();
+        slowTimeButton.pulse({ scale: 1.7, xAlign: 0.2, yAlign: 0.3 });
+      }, 0.05),
+      freezing: action('freezing', () => {
+        freezeTimeButton.click();
+        freezeTimeButton.pulse({ scale: 1.7, xAlign: 0.3, yAlign: 0.3 });
+      }, 0.05),
+      disturbance: action('disturbance', () => disturb([medium1, medium2]), 0.03),
       particle: action('particle', () => {
         medium1.custom.ball0.pulse({ scale: 4 });
         medium2.custom.ball0.pulse({ scale: 4 });
       }, 0.03, color0),
     },
     text: [
-      '|Pulse| a disturbance, or drag the first |particle|. Compare |fast| and',
+      'Create a |disturbance|, or drag the first |particle|. Compare |fast| and',
       '|slow| disturbance velocities while |slowing| or |freezing| time.',
     ],
     showCommon: ['medium1', 'medium2', 'timePlot1', 'timePlot2', 'vFast', 'vSlow', 'freezeTimeButton', 'slowTimeButton', 'slowTimeLabel', 'freezeTimeLabel'],
     scenario: 'default',
     steadyState: () => {
-      startDisturbances([medium1, medium2], 5.5);
-    },
-    leaveStateCommon: () => {
-      stopDisturbances();
-      medium.custom.balls.undim();
+      startDisturbances([medium1, medium2], 5.5, false);
     },
   });
 
@@ -249,35 +277,71 @@ function addSlides() {
       'And so we see, for |faster| velocities, the |disturbance| is more  ',
       '|spread out| in space.',
     ],
-    steadyState: () => {
-      startDisturbances([medium1, medium2], 5.5);
+    steadyState: (index, from) => {
+      if (from === 'prev') {
+        startDisturbances([medium1, medium2], 5.5, false);
+      } else {
+        layout.reset();
+        startDisturbances([medium1, medium2], 5.5, true);
+      }
+    },
+  });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  /*
+  .......########.####.##.....##.########
+  ..........##.....##..###...###.##......
+  ..........##.....##..####.####.##......
+  ..........##.....##..##.###.##.######..
+  ..........##.....##..##.....##.##......
+  ..........##.....##..##.....##.##......
+  ..........##....####.##.....##.########
+  */
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    modifiers: {
+      disturbance: action('disturbance', () => disturb(medium), 0.1),
+      when: highlight('when'),
+    },
+    text: [
+      'The velocity also determines |when| the |disturbance| will reach some position.',
+    ],
+    showCommon: ['medium'],
+    steadyState: (index, from) => {
+      if (from === 'prev') {
+        layout.reset();
+        startDisturbances(medium, 10, true);
+      } else {
+        startDisturbances(medium, 10, false);
+      }
     },
   });
 
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
   slides.push({
-    text: [
-      'The |disturbance| moves with a velocity |v|.',
-      '',
-      {
-        text: 'Thus, the time it takes to move some distance |x||1| can be calculated.',
-        // lineSpace: 0.2,
-      },
-    ],
-    steadyState: () => {
-      startDisturbances(medium);
+    modifiers: {
+      disturbance: action('disturbance', () => disturb(medium), 0.1),
+      when: highlight('when'),
     },
-    leaveState: () => stopDisturbances(),
+    text: [
+      'If the disturbance travels with velocity |v|, then the time it takes',
+      'to travel distance |x||1| can be calculated.',
+    ],
+    showCommon: ['medium'],
+    steadyState: () => {
+      startDisturbances(medium, 10, false);
+    },
   });
+
   slides.push({
     fromForm: null,
     form: 't1',
     steadyState: () => {
-      startDisturbances(medium);
+      startDisturbances(medium, 10, false);
     },
-    leaveState: () => stopDisturbances(),
   });
+
   slides.push({
     form: null,
     transition: (done) => {
@@ -291,11 +355,20 @@ function addSlides() {
     steadyState: () => {
       sideEqn.showForm('t11');
       sideEqn.setScenario('side');
-      startDisturbances(medium);
+      startDisturbances(medium, 10, false);
     },
   });
 
   // ///////////////////////////////////////////////////////////////////////////
+  /*
+  .##....##......###....##.....##...#####......###..
+  ..##..##......##.......##...##...##...##.......##.
+  ...####......##.........##.##...##.....##.......##
+  ....##.......##..........###....##.....##.......##
+  ....##.......##.........##.##...##.....##.......##
+  ....##........##.......##...##...##...##.......##.
+  ....##.........###....##.....##...#####......###..
+  */
   // ///////////////////////////////////////////////////////////////////////////
   slides.push({
     modifiers: {
@@ -315,7 +388,7 @@ function addSlides() {
     show: ['x0'],
     steadyState: () => {
       eqn.getElement('x0Box').onClick = () => medium.custom.balls.getElement('ball0').pulse({ scale: 4 });
-      startDisturbances(medium);
+      startDisturbances(medium, 10, false);
       sideEqn.showForm('t11');
       sideEqn.setScenario('side');
     },
@@ -331,7 +404,7 @@ function addSlides() {
     steadyState: () => {
       eqn.getElement('x0Box').onClick = () => medium.custom.balls.getElement('ball0').pulse({ scale: 4 });
       eqn.getElement('x2Box').onClick = () => medium.custom.balls.getElement('ball40').pulse({ scale: 4 });
-      startDisturbances(medium);
+      startDisturbances(medium, 10, false);
     },
   });
 
@@ -360,7 +433,7 @@ function addSlides() {
       eqn.getElement('x2Box').onClick = () => medium.custom.balls.getElement('ball40').pulse({ scale: 4 });
     },
     steadyState: () => {
-      startDisturbances(medium);
+      startDisturbances(medium, 10, false);
     },
   });
 
@@ -369,7 +442,7 @@ function addSlides() {
     fromForm: 'yx0t',
     form: 'yx0tAndft',
     steadyState: () => {
-      startDisturbances(medium);
+      startDisturbances(medium, 10, false);
     },
   });
 
@@ -378,7 +451,7 @@ function addSlides() {
     fromForm: 'yx0tAndft',
     form: 'yx1tTemp',
     steadyState: () => {
-      startDisturbances(medium);
+      startDisturbances(medium, 10, false);
     },
   });
 
@@ -408,7 +481,7 @@ function addSlides() {
       eqn.getElement('x1Box').onClick = () => medium.custom.balls.getElement('ball40').pulse({ scale: 4 });
     },
     steadyState: () => {
-      startDisturbances(medium);
+      startDisturbances(medium, 10, false);
     },
   });
 
@@ -417,7 +490,7 @@ function addSlides() {
     fromForm: 'yx1t',
     form: 'yx1tSub',
     steadyState: () => {
-      startDisturbances(medium);
+      startDisturbances(medium, 10, false);
     },
   });
 
@@ -426,7 +499,7 @@ function addSlides() {
     fromForm: 'yx1tSub',
     form: 'yx1tx1',
     steadyState: () => {
-      startDisturbances(medium);
+      startDisturbances(medium, 10, false);
     },
   });
 
@@ -455,7 +528,7 @@ function addSlides() {
       eqn.getElement('x1Box').onClick = () => medium.custom.balls.getElement('ball40').pulse({ scale: 4 });
     },
     steadyState: () => {
-      startDisturbances(medium);
+      startDisturbances(medium, 10, false);
     },
   });
 
@@ -464,14 +537,12 @@ function addSlides() {
     fromForm: 'yx1tx1',
     form: 'yxtx',
     steadyState: () => {
-      startDisturbances(medium);
+      startDisturbances(medium, 10, false);
     },
   });
 
-
-
   nav.loadSlides(slides);
-  nav.goToSlide(2);
+  nav.goToSlide(0);
 }
 
 addSlides();

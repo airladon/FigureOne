@@ -136,7 +136,6 @@ function addEquation() {
           xOnV: frac(['x_2'], 'vin1', 'v_1'),
           x1OnVb: { scale: [frac('x1y2', 'vin1', 'v_1'), 0.8] },
           // x1OnVb: { scale: [frac('x11', 'vin1', 'v_1'), 0.8] },
-          
           t11: { sub: ['t_1', '_1_2'] },
           t12: { sub: ['t_2', '_1_3'] },
           // yxt: ['y_1', brac(['x_y1', 'comma1', 't_y1'], 1)],
@@ -163,7 +162,11 @@ function addEquation() {
           alignment: { fixTo: 'equals' },
         },
         forms: {
-          title: ['yxt', 'equals', 'sin', brac(['k', 'x', 'min1', 'w1', 't'], 2)],
+          // title: ['yxt', 'equals', 'sin', brac(['k', 'x', 'min1', 'w1', 't'], 2)],
+          title: {
+            content: ['v', 'equals', 'lambda', ' ', 'f'],
+            scale: 1.1,
+          },
           t1: ['t11', 'equals', 'x1OnV'],
           yx0t: ['yx0t', 'equals', 'ft'],
           // yx0tAndyx1t: {
