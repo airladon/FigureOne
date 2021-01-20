@@ -15,7 +15,9 @@ function addSlides() {
 
   eqn.getElement('x1Box1').onClick = () => ballx1.pulse({ scale: 4 });
   eqn.getElement('x1Box2').onClick = () => ballx1.pulse({ scale: 4 });
-  eqn.getElement('x0Box').onClick = () => ballx0.pulse({ scale: 4 });
+  eqn.getElement('x0Box1').onClick = () => ballx0.pulse({ scale: 4 });
+  eqn.getElement('x0Box2').onClick = () => ballx0.pulse({ scale: 4 });
+  eqn.getElement('x0Box3').onClick = () => ballx0.pulse({ scale: 4 });
   sideEqn.getElement('x1Box').onClick = () => ballx1.pulse({ scale: 4 });
 
   const slides = [];
@@ -35,8 +37,6 @@ function addSlides() {
       layout.pulse(med, 0.6);
     }
     lastDisturbance = layout.time.now();
-    // stopDisturbances();
-    // startDisturbances();
   };
 
   const startDisturbances = (m, timeTillNext = 10, immediately = true) => {
@@ -54,21 +54,18 @@ function addSlides() {
 
   medium.custom.movePad.subscriptions.add('setTransform', () => {
     if (medium.custom.movePad.state.isBeingMoved) {
-      // stopDisturbances();
       lastDisturbance = layout.time.now();
     }
   });
 
   medium1.custom.movePad.subscriptions.add('setTransform', () => {
     if (medium1.custom.movePad.state.isBeingMoved) {
-      // stopDisturbances();
       lastDisturbance = layout.time.now();
     }
   });
 
   medium2.custom.movePad.subscriptions.add('setTransform', () => {
     if (medium2.custom.movePad.state.isBeingMoved) {
-      // stopDisturbances();
       lastDisturbance = layout.time.now();
     }
   });
@@ -159,6 +156,15 @@ function addSlides() {
   });
 
   // ///////////////////////////////////////////////////////////////////////////
+  /*
+  ..######..########.########.##.....##.########.
+  .##....##.##..........##....##.....##.##.....##
+  .##.......##..........##....##.....##.##.....##
+  ..######..######......##....##.....##.########.
+  .......##.##..........##....##.....##.##.......
+  .##....##.##..........##....##.....##.##.......
+  ..######..########....##.....#######..##.......
+  */
   // ///////////////////////////////////////////////////////////////////////////
   slides.push({
     scenarioCommon: ['default'],
@@ -237,6 +243,15 @@ function addSlides() {
   });
 
   // ///////////////////////////////////////////////////////////////////////////
+  /*
+  .##.....##.########.##........#######...######..####.########.##....##
+  .##.....##.##.......##.......##.....##.##....##..##.....##.....##..##.
+  .##.....##.##.......##.......##.....##.##........##.....##......####..
+  .##.....##.######...##.......##.....##.##........##.....##.......##...
+  ..##...##..##.......##.......##.....##.##........##.....##.......##...
+  ...##.##...##.......##.......##.....##.##....##..##.....##.......##...
+  ....###....########.########..#######...######..####....##.......##...
+  */
   // ///////////////////////////////////////////////////////////////////////////
   slides.push({
     modifiers: {
@@ -301,45 +316,6 @@ function addSlides() {
       }
     },
   });
-
-  // ///////////////////////////////////////////////////////////////////////////
-  /*
-  .......##.....##.########.##........#######...######..####.########.##....##
-  .......##.....##.##.......##.......##.....##.##....##..##.....##.....##..##.
-  .......##.....##.##.......##.......##.....##.##........##.....##......####..
-  .......##.....##.######...##.......##.....##.##........##.....##.......##...
-  ........##...##..##.......##.......##.....##.##........##.....##.......##...
-  .........##.##...##.......##.......##.....##.##....##..##.....##.......##...
-  ..........###....########.########..#######...######..####....##.......##...
-  */
-  // ///////////////////////////////////////////////////////////////////////////
-  // slides.push({
-  //   scenarioCommon: ['default'],
-  //   modifiers: {
-  //     disturbance: action('disturbance', () => disturb([medium1, medium2]), 0.15),
-  //   },
-  //   text: [
-  //     'The velocity of the |disturbance| changes how the disturbance is',
-  //     'distributed in space.',
-  //   ],
-  //   form: null,
-  //   showCommon: ['medium1', 'medium2', 'timePlot1', 'timePlot2', 'vFast', 'vSlow'],
-  //   scenario: 'default',
-  //   steadyState: (index, from) => {
-  //     if (from === 'prev') {
-  //       layout.reset();
-  //       startDisturbances([medium1, medium2], 5.5, true);
-  //     } else {
-  //       startDisturbances([medium1, medium2], 5.5, false);
-  //     }
-  //   },
-  //   leaveStateCommon: () => {
-  //     stopDisturbances();
-  //     medium.custom.balls.undim();
-  //     layout.normalMotion();
-  //     layout.unpause();
-  //   },
-  // });
 
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
@@ -466,10 +442,7 @@ function addSlides() {
     },
   });
 
-  slides.push({
-    fromForm: null,
-    form: 't1',
-  });
+  slides.push({ fromForm: null, form: 't1' });
 
   slides.push({
     form: null,
@@ -512,10 +485,7 @@ function addSlides() {
     },
   });
 
-  slides.push({
-    fromForm: null,
-    form: 'yx0t',
-  });
+  slides.push({ fromForm: null, form: 'yx0t' });
 
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
@@ -523,15 +493,8 @@ function addSlides() {
     text: 'Then the |disturbance| at |x1||b1| is the disturbance at |x0||r0| from time |t||1| ago.',
   });
 
-  slides.push({
-    fromForm: 'yx0t',
-    form: 'yx0tAndft',
-  });
-
-  slides.push({
-    fromForm: 'yx0tAndft',
-    form: 'yx1tTemp',
-  });
+  slides.push({ fromForm: 'yx0t', form: 'yx0tAndft' });
+  slides.push({ fromForm: 'yx0tAndft', form: 'yx1tTemp' });
 
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
@@ -543,34 +506,14 @@ function addSlides() {
     form: 'yx1t',
   });
 
-  slides.push({
-    fromForm: 'yx1t',
-    form: 'yx1tSub',
-  });
-
-  slides.push({
-    fromForm: 'yx1tSub',
-    form: 'yx1tx1',
-  });
+  slides.push({ fromForm: 'yx1t', form: 'yx1tSub' });
+  slides.push({ fromForm: 'yx1tSub', form: 'yx1tx1' });
 
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
   slides.push({
-    text: [
-      '|x1||b1| can be any point, and so we can generalize it by simply calling it |x|.',
-    ],
+    text: '|x1||b1| can be any point, and so we can generalize it by simply calling it |x|.',
     form: 'yx1tx1HiddenX',
-    // show: ['x0', 'x1'],
-    // enterStateCommon: () => {
-    //   // sideEqn.showForm('t11');
-    //   // sideEqn.setScenario('side');
-    //   medium.custom.balls.highlight(['ball0', 'ball40']);
-    //   // eqn.getElement('x2Box').onClick = () => medium.custom.balls.getElement('ball40').pulse({ scale: 4 });
-    //   // eqn.getElement('x1Box').onClick = () => medium.custom.balls.getElement('ball40').pulse({ scale: 4 });
-    // },
-    // steadyState: () => {
-    //   startDisturbances(medium, 10, false);
-    // },
   });
 
   slides.push({
@@ -586,8 +529,61 @@ function addSlides() {
     },
   });
 
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    modifiers: {
+      f: actionMath(
+        'f', () => eqn.pulse({ elements: ['f_2', 'rx2', 'r02'], centerOn: 'f_2', xAlign: 2 }), 0.05, color0,
+      ),
+      function: action(
+        'function', () => eqn.pulse({
+          elements: [
+            'f_2', 'lb5', 'rb5', 't_3', 'min2', 'x_2', 'vin1', 'v_1', 'rx2', 'r02',
+          ],
+          centerOn: 'f_2',
+        }), 0.15,
+      ),
+      space: action('space', () => eqn.pulse({ elements: ['x_1', 'x_2'] }), 0.05, color1),
+      time: action('time', () => eqn.pulse({ elements: ['t_y3', 't_3'] }), 0.05, color1),
+    },
+    text: [
+      'If we know the time dependent disturbance |f| at |x0||r0|, then this ',
+      '|function| tells us the disturbance at any point in |space|, at any |time|.',
+    ],
+    form: 'yxtx',
+  });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  /*
+  ..######..####.##....##.########
+  .##....##..##..###...##.##......
+  .##........##..####..##.##......
+  ..######...##..##.##.##.######..
+  .......##..##..##..####.##......
+  .##....##..##..##...###.##......
+  ..######..####.##....##.########
+  */
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    modifiers: {
+      sine: highlight('sine'),
+      'initial disturbance': action(
+        'initial disturbance',
+        () => eqn.pulse({ elements: ['f_2', 'rx2', 'r02'], centerOn: 'f_2', xAlign: 2 }),
+        0.05, color0,
+      ),
+    },
+    showCommon: [],
+    text: 'Now, let\'s make our |initial disturbance| a |sine| function.',
+  });
+  slides.push({ fromForm: 'yxtx', form: 'yxtxAndSine' });
+  slides.push({ fromForm: 'yxtxAndSine', form: 'yxtxAndSineBotCom' });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
   nav.loadSlides(slides);
-  nav.goToSlide(15);
+  nav.goToSlide(27);
 }
 
 addSlides();

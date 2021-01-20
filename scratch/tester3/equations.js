@@ -109,10 +109,14 @@ function addEquation() {
           line2: { symbol: 'line', width: 0.005, arrow: { start: { head: 'triangle' } } },
           x_1: 'x',
           x_2: 'x',
+          f_1: { color: color0 },
+          f_2: { color: color0 },
           rx1: { text: 'x', color: color0 },
           rx2: { text: 'x', color: color0 },
+          rx3: { text: 'x', color: color0 },
           r01: { text: '0', color: color0 },
           r02: { text: '0', color: color0 },
+          r03: { text: '0', color: color0 },
           bx1: { text: 'x', color: color1 },
           bx2: { text: 'x', color: color1 },
           b11: { text: '1', color: color1 },
@@ -126,16 +130,19 @@ function addEquation() {
           // _1_7: { color: color1 },
           strike1: { symbol: 'strike', lineWidth: 0.007 },
           strike2: { symbol: 'strike', lineWidth: 0.007 },
-          x0Box: { symbol: 'tBox', touchBorder: 0.1, isTouchable: true },
+          x0Box1: { symbol: 'tBox', touchBorder: 0.1, isTouchable: true },
+          x0Box2: { symbol: 'tBox', touchBorder: 0.1, isTouchable: true },
+          x0Box3: { symbol: 'tBox', touchBorder: 0.1, isTouchable: true },
           x1Box1: { symbol: 'tBox', touchBorder: 0.1, isTouchable: true },
           x1Box2: { symbol: 'tBox', touchBorder: 0.1, isTouchable: true },
         },
         phrases: {
-          f1: { container: ['f_1', 0.08] },
-          f2: { container: ['f_2', 0.08] },
+          x0y: { tBox: [{ sub: ['rx1', 'r01'] }, 'x0Box1'] },
+          x0y2: { sub: ['rx2', 'r02'] },
+          x0y3: { sub: ['rx3', 'r03'] },
+          f1: { tBox: [{ container: [{ sub: ['f_1', 'x0y3'] }, 0.08] }, 'x0Box2'] },
+          f2: { tBox: [{ container: [{ sub: ['f_2', 'x0y2'] }, 0.08] }, 'x0Box3'] },
           x11: { sub: ['x_1', '_1_1'] },
-          x0y: { tBox: [{ sub: ['rx1', 'r01'] }, 'x0Box'] },
-          x0y2: { tBox: [{ sub: ['rx2', 'r02'] }, 'x1Box1'] },
           x1y: { tBox: [{ sub: ['bx1', 'b11'] }, 'x1Box2'] },
           x1y2: { tBox: [{ sub: ['bx2', 'b12'] }, 'x1Box1'] },
           x1y2H: { tBox: [{ sub: [[hide('x_2'), 'bx2'], 'b12'] }, 'x1Box1'] },
@@ -169,31 +176,35 @@ function addEquation() {
           ftx1: ['f2', brac(['t_3', 'min2', 'x1OnVb'], 5)],
           ftx1H: ['f2', brac(['t_3', 'min2', 'x1OnVbH'], 5)],
           ftx: ['f2', brac(['t_3', 'min2', 'xOnV'], 5)],
+          ftx2: ['f1', brac('t_1', 1)],
+          sinwt: ['sin', brac(['w1', 't_4'], 2)],
+          ftxBotCom: ['f2', brac({
+            bar: {
+              content: ['t_3', 'min2', 'xOnV'],
+              symbol: 'brace',
+              inSize: false,
+              side: 'bottom',
+            },
+          }, 5)],
+          // ftx2Sine: [
+          //   {
+          //     topComment: ['f1', ]
+          //   }
+          // ]
         },
         formDefaults: {
           alignment: { fixTo: 'equals' },
         },
         forms: {
-          // title: ['yxt', 'equals', 'sin', brac(['k', 'x', 'min1', 'w1', 't'], 2)],
+          // //////////////////////////////////////////////////////////
           title: {
             content: ['v', 'equals', 'lambda', ' ', 'f'],
             scale: 1.1,
           },
+          // //////////////////////////////////////////////////////////
           t1: ['t11', 'equals', 'x1OnV'],
+          // //////////////////////////////////////////////////////////
           yx0t: ['yx0t', 'equals', 'ft'],
-          // yx0tAndyx1t: {
-          //   content: {
-          //     lines: {
-          //       content: [
-          //         { content: ['yx0t', 'equals', 'ft'], justify: 'equals' },
-          //         { content: ['yx1t', 'equals2', 'yx0tt1'], justify: 'equals2' },
-          //       ],
-          //       justify: 'element',
-          //       space: 0.1,
-          //     },
-          //   },
-          //   alignment: { yAlign: -2.9 },
-          // },
           yx0tAndft: {
             content: {
               lines: {
@@ -216,6 +227,27 @@ function addEquation() {
           yx1tx1: ['yx1t', 'equals', 'ftx1'],
           yx1tx1HiddenX: ['yx1tH', 'equals', 'ftx1H'],
           yxtx: ['yxt', 'equals', 'ftx'],
+          // //////////////////////////////////////////////////////////
+          yxtxAndSine: {
+            lines: {
+              content: [
+                { content: ['yxt', 'equals', 'ftx'], justify: 'equals' },
+                { content: ['ftx2', 'equals2', 'sinwt'], justify: 'equals2' },
+              ],
+              justify: 'element',
+              space: 0.2,
+            },
+          },
+          yxtxAndSineBotCom: {
+            lines: {
+              content: [
+                { content: ['yxt', 'equals', 'ftxBotCom'], justify: 'equals' },
+                { content: ['ftx2', 'equals2', 'sinwt'], justify: 'equals2' },
+              ],
+              justify: 'element',
+              space: 0.2,
+            },
+          },
         },
         // formSeries: ['0'],
         position: [0, 1],
