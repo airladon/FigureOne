@@ -64,6 +64,10 @@ function addEquation() {
       symbol: `strike${num}`,
     },
   });
+
+  const hide = content => ({
+    container: { content, inSize: false },
+  });
   figure.add([
     {
       name: 'eqn',
@@ -103,6 +107,8 @@ function addEquation() {
           brace: { symbol: 'brace', side: 'bottom', lineWidth: 0.005 },
           line1: { symbol: 'line', width: 0.005, arrow: { start: { head: 'triangle' } } },
           line2: { symbol: 'line', width: 0.005, arrow: { start: { head: 'triangle' } } },
+          x_1: 'x',
+          x_2: 'x',
           rx1: { text: 'x', color: color0 },
           rx2: { text: 'x', color: color0 },
           r01: { text: '0', color: color0 },
@@ -132,9 +138,13 @@ function addEquation() {
           x0y2: { tBox: [{ sub: ['rx2', 'r02'] }, 'x1Box'] },
           x1y: { tBox: [{ sub: ['bx1', 'b11'] }, 'x2Box'] },
           x1y2: { tBox: [{ sub: ['bx2', 'b12'] }, 'x1Box'] },
+          x1y2H: { tBox: [{ sub: [[hide('x_2'), 'bx2'], 'b12'] }, 'x1Box'] },
           x1OnV: frac(['x11'], 'vin1', 'v_1'),
-          xOnV: frac(['x_2'], 'vin1', 'v_1'),
+          x1OnVH: frac([hide('x_2'), 'x11'], 'vin1', 'v_1'),
           x1OnVb: { scale: [frac('x1y2', 'vin1', 'v_1'), 0.8] },
+          x1OnVbH: { scale: [frac('x1y2H', 'vin1', 'v_1'), 0.8] },
+          xOnV: frac(['x_2'], 'vin1', 'v_1'),
+
           // x1OnVb: { scale: [frac('x11', 'vin1', 'v_1'), 0.8] },
           t11: { sub: ['t_1', '_1_2'] },
           t12: { sub: ['t_2', '_1_3'] },
@@ -142,6 +152,7 @@ function addEquation() {
           yx0t: ['y_1', brac(['x0y', 'comma1', 't_y1'], 1)],
           yx0tt1: ['y_2', brac(['x0y2', 'comma2', 't_y2', 'min1', 't11'], 4)],
           yx1t: ['y_3', brac(['x1y', 'comma3', 't_y3'], 3)],
+          yx1tH: ['y_3', brac([hide('x_1'), 'x1y', 'comma3', 't_y3'], 3)],
           yxt: ['y_3', brac(['x_1', 'comma3', 't_y3'], 3)],
           ft: ['f1', brac('t', 2)],
           ftt1: ['f2', brac(['t_3', 'min2', 't12'], 5)],
@@ -156,6 +167,7 @@ function addEquation() {
             },
           }], 5)],
           ftx1: ['f2', brac(['t_3', 'min2', 'x1OnVb'], 5)],
+          ftx1H: ['f2', brac(['t_3', 'min2', 'x1OnVbH'], 5)],
           ftx: ['f2', brac(['t_3', 'min2', 'xOnV'], 5)],
         },
         formDefaults: {
@@ -202,6 +214,7 @@ function addEquation() {
           yx1t: ['yx1t', 'equals', 'ftt1'],
           yx1tSub: ['yx1t', 'equals', 'ftt1Sub'],
           yx1tx1: ['yx1t', 'equals', 'ftx1'],
+          yx1tx1HiddenX: ['yx1tH', 'equals', 'ftx1H'],
           yxtx: ['yxt', 'equals', 'ftx'],
         },
         // formSeries: ['0'],

@@ -10,6 +10,8 @@ function addSlides() {
   const eqn = figure.getElement('eqn');
   const slowTimeButton = figure.getElement('slowTimeButton');
   const freezeTimeButton = figure.getElement('freezeTimeButton');
+  const ballx0 = medium.custom.balls.getElement('ball0');
+  const ballx1 = medium.custom.balls.getElement('ball40');
 
   const slides = [];
 
@@ -97,7 +99,7 @@ function addSlides() {
       touchBorder: 0.1,
     },
     'first particle': {
-      onClick: () => medium.custom.balls.getElement('ball0').pulse({ scale: 4 }),
+      onClick: () => ballx0.pulse({ scale: 4 }),
       font: { color: color0 },
       touchBorder: 0.15,
     },
@@ -106,7 +108,7 @@ function addSlides() {
       font: {
         family: 'Times New Roman', style: 'italic', size: 0.17, color: color1,
       },
-      onClick: () => medium.custom.balls.getElement('ball40').pulse({ scale: 4 }),
+      onClick: () => ballx1.pulse({ scale: 4 }),
       touchBorder: 0.15,
     },
   };
@@ -302,11 +304,17 @@ function addSlides() {
     modifiers: {
       disturbance: action('disturbance', () => disturb(medium), 0.1),
       when: highlight('when'),
+      position: action('position', () => ballx1.pulse({ scale: 4 })),
     },
     text: [
-      'The velocity also determines |when| the |disturbance| will reach some position.',
+      'The velocity also determines |when| the |disturbance| will reach some |position|.',
     ],
     showCommon: ['medium'],
+    enterStateCommon: () => {
+      medium.custom.balls.highlight(['ball0', 'ball40']);
+      medium.custom.movePad.setMovable(true);
+      layout.unpause();
+    },
     steadyState: (index, from) => {
       if (from === 'prev') {
         layout.reset();
@@ -325,10 +333,10 @@ function addSlides() {
       when: highlight('when'),
     },
     text: [
-      'If the disturbance travels with velocity |v|, then the time it takes',
-      'to travel distance |x||1| can be calculated.',
+      'If the |disturbance| travels with velocity |v|, then the time it takes',
+      'to travel distance |x1||b1| can be calculated.',
     ],
-    showCommon: ['medium'],
+    showCommon: ['medium', 'x1'],
     steadyState: () => {
       startDisturbances(medium, 10, false);
     },
@@ -396,7 +404,7 @@ function addSlides() {
   slides.push({
     fromForm: null,
     form: 'yx0t',
-    show: ['x0'],
+    showCommon: ['medium', 'x0', 'x1'],
     enterState: () => {
       sideEqn.showForm('t11');
       sideEqn.setScenario('side');
@@ -424,7 +432,7 @@ function addSlides() {
     text: [
       'Then the |disturbance| at |x1||b1| is the disturbance at |x0||r0| from time |t||1| ago.',
     ],
-    show: ['x0', 'x1'],
+    // show: ['x0', 'x1'],
     enterStateCommon: () => {
       sideEqn.showForm('t11');
       sideEqn.setScenario('side');
@@ -438,7 +446,7 @@ function addSlides() {
   });
 
   slides.push({
-    show: ['x0', 'x1'],
+    // show: ['x0', 'x1'],
     fromForm: 'yx0t',
     form: 'yx0tAndft',
     steadyState: () => {
@@ -447,7 +455,7 @@ function addSlides() {
   });
 
   slides.push({
-    show: ['x0', 'x1'],
+    // show: ['x0', 'x1'],
     fromForm: 'yx0tAndft',
     form: 'yx1tTemp',
     steadyState: () => {
@@ -472,7 +480,7 @@ function addSlides() {
       'We can now substitute in equation |one|.',
     ],
     form: 'yx1t',
-    show: ['x0', 'x1'],
+    // show: ['x0', 'x1'],
     enterStateCommon: () => {
       sideEqn.showForm('t11');
       sideEqn.setScenario('side');
@@ -486,7 +494,7 @@ function addSlides() {
   });
 
   slides.push({
-    show: ['x0', 'x1'],
+    // show: ['x0', 'x1'],
     fromForm: 'yx1t',
     form: 'yx1tSub',
     steadyState: () => {
@@ -495,7 +503,7 @@ function addSlides() {
   });
 
   slides.push({
-    show: ['x0', 'x1'],
+    // show: ['x0', 'x1'],
     fromForm: 'yx1tSub',
     form: 'yx1tx1',
     steadyState: () => {
@@ -519,7 +527,8 @@ function addSlides() {
     text: [
       '|x1||b1| can be any point, and so we can generalize it by simply calling it |x|.',
     ],
-    show: ['x0', 'x1'],
+    form: 'yx1tx1HiddenX',
+    // show: ['x0', 'x1'],
     enterStateCommon: () => {
       // sideEqn.showForm('t11');
       // sideEqn.setScenario('side');
@@ -533,16 +542,19 @@ function addSlides() {
   });
 
   slides.push({
-    show: ['x0', 'x1'],
-    fromForm: 'yx1tx1',
+    showCommon: ['medium', 'x0'],
+    fromForm: 'yx1tx1HiddenX',
     form: 'yxtx',
+    enterStateCommon: () => {
+      medium.custom.balls.highlight(['ball0']);
+    },
     steadyState: () => {
       startDisturbances(medium, 10, false);
     },
   });
 
   nav.loadSlides(slides);
-  nav.goToSlide(0);
+  nav.goToSlide(17);
 }
 
 addSlides();
