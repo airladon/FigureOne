@@ -2962,12 +2962,18 @@ class Transform {
     if (orderEnd < 0) {
       orderEndToUse = this.order.length + orderEnd;
     }
+    // if (window.asdf) { 
+    //   console.log(this.name, orderStart, orderEnd, this.order)
+    //   // debugger;
+    // }
     let m = m2.identity();
     for (let i = orderEndToUse; i >= orderStart; i -= 1) {
       if (!this.order[i].isUnity()) {
+        // if (window.asdf) { console.log(i, this.order[i]) }
         m = m2.mul(m, this.order[i].matrix());
       }
     }
+    window.asdf = false
     return m;
     // this.mat = m2.copy(m);
     // return m;
@@ -6055,8 +6061,14 @@ function getBorder(
   return border.map(b => b.map(p => getPoint(p)));
 }
 
+/**
+ *
+ */
 export type TypeXAlign = 'left' | 'right' | 'center' | 'string' | number;
 
+/**
+ *
+ */
 export type TypeYAlign = 'bottom' | 'top' | 'middle' | 'string' | number;
 
 function getPositionInRect(

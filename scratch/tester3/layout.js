@@ -127,6 +127,20 @@ function setupFigure() {
     ]),
   ]);
 
+  figure.add([
+    {
+      name: 'pointer1',
+      method: 'collections.line',
+      options: { width: 0.008, color: colorText, arrow: { end: 'barb' } },
+    },
+    {
+      name: 'pointer2',
+      method: 'collections.line',
+      options: { width: 0.008, color: colorText, arrow: { end: 'barb' } },
+    },
+  ]);
+
+
   const resetButton = figure.getElement('resetButton');
   const pulseButton = figure.getElement('pulseButton');
   const sineButton = figure.getElement('sineButton');

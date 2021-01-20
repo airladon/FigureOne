@@ -2113,11 +2113,12 @@ class FigureElement {
   // }
 
   updateLastDrawTransform() {
-    const { parentCount } = this.lastDrawElementTransformPosition;
-    const pLength = this.lastDrawTransform.order.length;
+    // const { parentCount } = this.lastDrawElementTransformPosition;
+    // const pLength = this.lastDrawTransform.order.length;
     const transform = this.getTransform();
     transform.order.forEach((t, index) => {
-      this.lastDrawTransform.order[pLength - parentCount - index - 1] = t._dup();
+      // this.lastDrawTransform.order[pLength - parentCount - index - 1] = t._dup();
+      this.lastDrawTransform.order[index] = t._dup();
     });
     this.lastDrawTransform.calcAndSetMatrix();
   }

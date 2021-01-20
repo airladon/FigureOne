@@ -2,12 +2,14 @@
 
 // import Figure from '../Figure';
 import {
-  Transform, Point, Line, normAngle, getBoundingBorder,
+  Transform, Point, Line, normAngle, getBoundingBorder, getPositionInRect,
 } from '../../tools/g2';
 // import {
 //   mul,
 // } from '../../tools/m2';
-import type { TypeParsablePoint, TypeParsableBuffer, TypeBorder } from '../../tools/g2';
+import type {
+  TypeParsablePoint, TypeParsableBuffer, TypeBorder, TypeXAlign, TypeYAlign,
+} from '../../tools/g2';
 import {
   roundNum,
 } from '../../tools/math';
@@ -1549,6 +1551,31 @@ export default class CollectionsLine extends FigureElementCollection {
     this.line = new Line(p1, p2).offset('positive', offset);
     // console.log(p, q)
     this.setupLine();
+  }
+
+  pointFromTo(
+    from: {
+      element: FigureElement,
+      xAlign: TypeXAlign,
+      yAlign: TypeYAlign,
+      space: number,
+    },
+    to: {
+      element: FigureElement,
+      xAlign: TypeXAlign,
+      yAlign: TypeYAlign,
+      space: number,
+    },
+  ) {
+    const figureToLocal = this.spaceTransformMatrix('figure', 'local');
+    const fromPos = getPositionInRect(
+      from.element.getBoundingRect('figure'), from.xAlign, from.yAlign,
+    ).transformBy(figureToLocal);
+    const toPos = getPositionInRect(
+      to.element.getBoundingRect('figure'), to.xAlign, to.yAlign,
+    ).transformBy(figureToLocal);
+    console.log(fromPos, toPos)
+    this.setEndPoints(fromPos, toPos);
   }
 
   // animateLengthToStep(percent: number) {

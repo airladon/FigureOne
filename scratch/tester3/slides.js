@@ -578,12 +578,33 @@ function addSlides() {
     text: 'Now, let\'s make our |initial disturbance| a |sine| function.',
   });
   slides.push({ fromForm: 'yxtx', form: 'yxtxAndSine' });
-  slides.push({ fromForm: 'yxtxAndSine', form: 'yxtxAndSineBotCom' });
+  slides.push({
+    fromForm: 'yxtxAndSine',
+    form: 'yxtxAndSineBotCom',
+    steadyState: () => {
+      const p1 = figure.getElement('pointer1');
+      p1.showAll();
+      p1.pointFromTo(
+        {
+          element: eqn.getElement('brace'),
+          xAlign: 'center',
+          yAlign: 'bottom',
+          space: 0.05,
+        },
+        {
+          element: eqn.getElement('t_1'),
+          xAlign: 'right',
+          yAlign: 'top',
+          space: 0.05,
+        },
+      );
+    },
+  });
 
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
   nav.loadSlides(slides);
-  nav.goToSlide(27);
+  nav.goToSlide(28);
 }
 
 addSlides();
