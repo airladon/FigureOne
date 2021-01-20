@@ -12,6 +12,8 @@ function addSlides() {
   const freezeTimeButton = figure.getElement('freezeTimeButton');
   const ballx0 = medium.custom.balls.getElement('ball0');
   const ballx1 = medium.custom.balls.getElement('ball40');
+  const arrow1 = figure.getElement('arrow1');
+  const arrow2 = figure.getElement('arrow2');
 
   eqn.getElement('x1Box1').onClick = () => ballx1.pulse({ scale: 4 });
   eqn.getElement('x1Box2').onClick = () => ballx1.pulse({ scale: 4 });
@@ -578,26 +580,55 @@ function addSlides() {
     text: 'Now, let\'s make our |initial disturbance| a |sine| function.',
   });
   slides.push({ fromForm: 'yxtx', form: 'yxtxAndSine' });
+
+  const setArrows = () => {
+    arrow1.pointFromTo(
+      { element: eqn.getElement('bBrace'), space: 0.05 },
+      { element: eqn.getElement('t_1'), space: 0.1 },
+    );
+    arrow2.pointFromTo(
+      { element: eqn.getElement('bBrace'), space: 0.05 },
+      { element: eqn.getElement('t_4'), space: 0.05 },
+    );
+  }
   slides.push({
     fromForm: 'yxtxAndSine',
     form: 'yxtxAndSineBotCom',
+    transition: (done) => {
+      eqn.animations.new()
+        .goToForm({ target: 'yxtxAndSineBotCom', animate: 'move' })
+        .trigger({
+          callback: () => {
+            setArrows();
+            arrow1.showAll();
+            arrow2.showAll();
+          },
+        })
+        .inParallel([
+          arrow1.animations.length({ start: 0, duration: 0.8 }),
+          arrow2.animations.length({ start: 0, duration: 0.8 }),
+        ])
+        .trigger({
+          callback: () => {
+            eqn.getElement('t_4').setColor(color1);
+            eqn.getElement('t_1').setColor(color1);
+            eqn.pulse({ elements: ['t_1', 't_4'], duration: 1 });
+          },
+          duration: 1,
+        })
+        .whenFinished(done)
+        .start();
+    },
     steadyState: () => {
-      const p1 = figure.getElement('pointer1');
-      p1.showAll();
-      p1.pointFromTo(
-        {
-          element: eqn.getElement('brace'),
-          xAlign: 'center',
-          yAlign: 'bottom',
-          space: 0.05,
-        },
-        {
-          element: eqn.getElement('t_1'),
-          xAlign: 'right',
-          yAlign: 'top',
-          space: 0.05,
-        },
-      );
+      setArrows();
+      arrow1.showAll();
+      arrow2.showAll();
+      eqn.getElement('t_4').setColor(color1);
+      eqn.getElement('t_1').setColor(color1);
+    },
+    leaveState: () => {
+      eqn.getElement('t_4').setColor(colorText);
+      eqn.getElement('t_1').setColor(colorText);
     },
   });
 

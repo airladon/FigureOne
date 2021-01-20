@@ -105,6 +105,7 @@ function addEquation() {
           vin1: { symbol: 'vinculum', lineWidth: 0.007 },
           vin2: { symbol: 'vinculum', lineWidth: 0.007 },
           brace: { symbol: 'brace', side: 'bottom', lineWidth: 0.005 },
+          bBrace: { symbol: 'brace', side: 'bottom', lineWidth: 0.008, color: color1 },
           line1: { symbol: 'line', width: 0.005, arrow: { start: { head: 'triangle' } } },
           line2: { symbol: 'line', width: 0.005, arrow: { start: { head: 'triangle' } } },
           x_1: 'x',
@@ -181,9 +182,10 @@ function addEquation() {
           ftxBotCom: ['f2', brac({
             bar: {
               content: ['t_3', 'min2', 'xOnV'],
-              symbol: 'brace',
+              symbol: 'bBrace',
               inSize: false,
               side: 'bottom',
+              space: 0.08,
             },
           }, 5)],
           // ftx2Sine: [
@@ -235,7 +237,7 @@ function addEquation() {
                 { content: ['ftx2', 'equals2', 'sinwt'], justify: 'equals2' },
               ],
               justify: 'element',
-              space: 0.2,
+              space: 0.3,
             },
           },
           yxtxAndSineBotCom: {
@@ -245,7 +247,7 @@ function addEquation() {
                 { content: ['ftx2', 'equals2', 'sinwt'], justify: 'equals2' },
               ],
               justify: 'element',
-              space: 0.2,
+              space: 0.3,
             },
           },
         },

@@ -1566,16 +1566,40 @@ export default class CollectionsLine extends FigureElementCollection {
       yAlign: TypeYAlign,
       space: number,
     },
+    autoOutside: boolean = true,
   ) {
     const figureToLocal = this.spaceTransformMatrix('figure', 'local');
-    const fromPos = getPositionInRect(
-      from.element.getBoundingRect('figure'), from.xAlign, from.yAlign,
-    ).transformBy(figureToLocal);
-    const toPos = getPositionInRect(
-      to.element.getBoundingRect('figure'), to.xAlign, to.yAlign,
-    ).transformBy(figureToLocal);
-    console.log(fromPos, toPos)
-    this.setEndPoints(fromPos, toPos);
+    const fromBounds = from.element.getBoundingRect('figure');
+    const toBounds = to.element.getBoundingRect('figure');
+
+    const defaults = {
+      from: { xAlign: 'center', yAlign: 'middle', space: 0 },
+      to: { xAlign: 'center', yAlign: 'middle', space: 0 },
+    };
+    if (autoOutside) {
+      const fromIntersect = fromBounds.intersectsWith(toBounds.center());
+      const toIntersect = toBounds.intersectsWith(fromBounds.center());
+      if (fromIntersect != null) {
+        defaults.from.xAlign = (fromIntersect.x - fromBounds.left) / fromBounds.width;
+        defaults.from.yAlign = (fromIntersect.y - fromBounds.bottom) / fromBounds.height;
+      }
+      if (toIntersect != null) {
+        defaults.to.xAlign = (toIntersect.x - toBounds.left) / toBounds.width;
+        defaults.to.yAlign = (toIntersect.y - toBounds.bottom) / toBounds.height;
+      }
+    }
+
+    const o = joinObjects({}, defaults, { from, to });
+
+    const fromPos = getPositionInRect(fromBounds, o.from.xAlign, o.from.yAlign)
+      .transformBy(figureToLocal);
+    const toPos = getPositionInRect(toBounds, o.to.xAlign, o.to.yAlign)
+      .transformBy(figureToLocal);
+    const line = new Line(fromPos, toPos);
+    this.setEndPoints(
+      line.pointAtLength(o.from.space),
+      line.pointAtLength(line.length() - o.to.space),
+    );
   }
 
   // animateLengthToStep(percent: number) {

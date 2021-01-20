@@ -129,14 +129,14 @@ function setupFigure() {
 
   figure.add([
     {
-      name: 'pointer1',
+      name: 'arrow1',
       method: 'collections.line',
-      options: { width: 0.008, color: colorText, arrow: { end: 'barb' } },
+      options: { width: 0.006, color: color1, arrow: { end: 'barb' } },
     },
     {
-      name: 'pointer2',
+      name: 'arrow2',
       method: 'collections.line',
-      options: { width: 0.008, color: colorText, arrow: { end: 'barb' } },
+      options: { width: 0.006, color: color1, arrow: { end: 'barb' } },
     },
   ]);
 
