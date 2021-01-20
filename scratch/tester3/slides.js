@@ -3,6 +3,8 @@
 function addSlides() {
   const nav = figure.getElement('nav');
   const medium = figure.getElement('medium');
+  const medium1 = figure.getElement('medium1');
+  const medium2 = figure.getElement('medium2');
   // const title = figure.getElement('title');
   const sideEqn = figure.getElement('sideEqn');
   const eqn = figure.getElement('eqn');
@@ -12,30 +14,31 @@ function addSlides() {
   let lastDisturbance = 0;
   let timerId = null;
 
-  const startDisturbances = (m) => {
-    if (timerId != null) {
-      clearTimeout(timerId);
-    }
-    const now = layout.time.now();
-    if (now - lastDisturbance > 10) {
-      disturb();
-    }
-    timerId = setTimeout(() => {
-      startDisturbances(m);
-    }, 1000);
-  };
-
   const stopDisturbances = () => {
     if (timerId != null) {
       clearTimeout(timerId);
     }
   };
   const disturb = (m) => {
-    layout.pulse(medium, 0.6);
+    layout.pulse(m, 0.6);
     lastDisturbance = layout.time.now();
     // stopDisturbances();
     // startDisturbances();
   };
+
+  const startDisturbances = (m) => {
+    if (timerId != null) {
+      clearTimeout(timerId);
+    }
+    const now = layout.time.now();
+    if (now - lastDisturbance > 10) {
+      disturb(m);
+    }
+    timerId = setTimeout(() => {
+      startDisturbances(m);
+    }, 1000);
+  };
+
   medium.custom.movePad.subscriptions.add('setTransform', () => {
     if (medium.custom.movePad.state.isBeingMoved) {
       stopDisturbances();
@@ -124,7 +127,8 @@ function addSlides() {
       },
     },
     text: [
-      'A wave is a |disturbance| that propagates through a medium or field.',
+      'A wave is a |disturbance| that propagates through a medium or field',
+      'with some velocity.',
       {
         text: 'Touch the word |disturbance| or manually move the |first particle|.',
         font: { size: 0.08 },
@@ -146,6 +150,59 @@ function addSlides() {
       stopDisturbances();
       medium.custom.balls.undim();
     },
+  });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    scenarioCommon: ['default'],
+    modifiers: {
+      disturbance: {
+        onClick: () => {
+          disturb(medium1);
+          disturb(medium2);
+        },
+        font: { color: color1 },
+        touchBorder: 0.15,
+      },
+    },
+    text: [
+      'The velocity of the |disturbance| changes how the disturbance is distirbuted',
+      'through space.',
+    ],
+    form: null,
+    showCommon: ['medium1', 'medium2', 'timePlot1', 'timePlot2', 'vFast', 'vSlow', 'freezeTimeButton', 'slowTimeButton', 'slowTimeLabel'],
+    scenario: 'default',
+    steadyState: () => {
+      console.log(figure.elements)
+      // console.log(figure.elements._velocityFast)
+      // figure.elements._velocityFast.showAll();
+    }
+    // form: null,
+    // enterStateCommon: () => {
+    //   medium.custom.movePad.setMovable(true);
+    //   medium.custom.balls.highlight(['ball0']);
+    //   layout.unpause();
+    // },
+    // steadyState: () => {
+    //   // disturb(medium);
+    //   // startDisturbances(medium);
+    // },
+    // // leaveState: () => stopDisturbances(),
+    // leaveStateCommon: () => {
+    //   // stopDisturbances();
+    //   medium.custom.balls.undim();
+    // },
+  });
+
+  slides.push({
+    showCommon: ['medium1', 'medium2', 'timePlot1', 'timePlot2', 'vFast', 'vSlow', 'freezeTimeButton', 'slowTimeButton', 'slowTimeLabel'],
+    scenario: 'default',
+    steadyState: () => {
+      console.log(figure.elements)
+      // console.log(figure.elements._velocityFast)
+      // figure.elements._velocityFast.showAll();
+    }
   });
 
   // ///////////////////////////////////////////////////////////////////////////
@@ -365,7 +422,7 @@ function addSlides() {
 
 
   nav.loadSlides(slides);
-  // nav.goToSlide(13);
+  nav.goToSlide(3);
 }
 
 addSlides();

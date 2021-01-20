@@ -69,6 +69,17 @@ function setupFigure() {
     },
   });
 
+  const label = (name, position, col, text) => ({
+    name,
+    method: 'primitives.textLine',
+    options: {
+      text,
+      position,
+      font: { size: 0.13, color: col },
+      xAlign: 'center',
+    },
+  });
+
   figure.add([
     button('pulseButton', [-1.7, 0.2], 'Pulse'),
     button('sineButton', [-1.3, 0.2], 'Sine'),
@@ -87,8 +98,13 @@ function setupFigure() {
       'x',
       { text: '1', font: { size: 0.1 }, offset: [0, -0.04] },
     ]),
-    // label('velocityLabel', [1.3, 0.4], 'Velocity'),
-    // label('frequencyLabel', [1.7, 0.4], 'Period'),
+    axisLabel('vFast', [2.1, 1.8], color1, [
+      'fast',
+    ]),
+    axisLabel('vSlow', [2.1, 0.7], color1, [
+      'slow',
+    ]),
+    label('slowTimeLabel', [-1, 1], colorText, 'Slow Motion'),
   ]);
 
   const resetButton = figure.getElement('resetButton');
@@ -175,7 +191,7 @@ function setupFigure() {
     },
   });
 
-  const addMedium = (name, length, maxValue, A) => {
+  const addMedium = (name, length, maxValue, A, defaultPosition) => {
     figure.add({
       name,
       method: 'collection',
@@ -198,7 +214,7 @@ function setupFigure() {
           options: {
             radius: 0.4,
             sides: 8,
-            color: [0, 0, 0, 0],
+            color: [0, 0, 0, 0.5],
           },
           mods: {
             // isMovable: true,
@@ -214,7 +230,7 @@ function setupFigure() {
       ],
       mods: {
         scenarios: {
-          default: { position: [-2, 0.9], scale: 1 },
+          default: { position: defaultPosition, scale: 1 },
           title: { position: [-2, 0.9], scale: 1 },
           small: { position: [0.1, 1.5], scale: 1 },
         },
@@ -287,7 +303,7 @@ function setupFigure() {
     return medium;
   };
 
-  const addTimePlot = (name, length, maxValue, recording, A) => {
+  const addTimePlot = (name, length, maxValue, recording, A, defaultPosition) => {
     figure.add({
       name,
       method: 'collection',
@@ -306,7 +322,7 @@ function setupFigure() {
       ],
       mods: {
         scenarios: {
-          default: { position: [-1.5, 2], scale: 1 },
+          default: { position: defaultPosition, scale: 1 },
           smallold: { position: [-0.6, 0.8], scale: 1 },
           small: { position: [-1.85, 1.5], scale: 1 },
         },
@@ -328,19 +344,31 @@ function setupFigure() {
   };
 
 
-  const medium1 = addMedium('medium1', 2.2, 5, 0.6);
-  const medium2 = addMedium('medium2', 2.2, 5, 0.6);
-  const medium = addMedium('medium', 4, 10, 0.6);
-  const timePlot1 = addTimePlot('timePlot1', 1.5, 5, medium1.custom.recording, 0.6);
-  const timePlot2 = addTimePlot('timePlot2', 1.5, 5, medium2.custom.recording, 0.6);
-  medium1.setPosition(-0.3, 1.9);
-  medium2.setPosition(-0.3, 0.8);
+  const medium1 = addMedium('medium1', 2.2, 5, 0.4, [-0, 1.7]);
+  const medium2 = addMedium('medium2', 2.2, 5, 0.4, [-0, 0.6]);
+  const medium = addMedium('medium', 4, 10, 0.6, [-2, 0.9]);
+  const timePlot1 = addTimePlot('timePlot1', 1.5, 5, medium1.custom.recording, 0.4, [-2, 1.7]);
+  const timePlot2 = addTimePlot('timePlot2', 1.5, 5, medium2.custom.recording, 0.4, [-2, 0.6]);
+  // medium1.setPosition(-0.3, 1.9);
+  // medium2.setPosition(-0.3, 0.8);
   medium1.custom.movePad.setMovable();
   medium2.custom.movePad.setMovable();
+  medium1.custom.movePad.subscriptions.add('setTransform', () => {
+    if (medium1.custom.movePad.state.isBeingMoved || medium1.custom.movePad.state.isMovingFreely) {
+      medium2.custom.stop();
+      medium2.custom.movePad.setPosition(medium1.custom.movePad.transform.t());
+    }
+  });
+  medium2.custom.movePad.subscriptions.add('setTransform', () => {
+    if (medium2.custom.movePad.state.isBeingMoved || medium2.custom.movePad.state.isMovingFreely) {
+      medium1.custom.stop();
+      medium1.custom.movePad.setPosition(medium2.custom.movePad.transform.t());
+    }
+  });
   medium1.custom.c = 2;
   // medium1.custom.f = 0.5;
-  timePlot1.setPosition(-1.9, 1.9);
-  timePlot2.setPosition(-1.9, 0.8);
+  // timePlot1.setPosition(-1.9, 1.9);
+  // timePlot2.setPosition(-1.9, 0.8);
 
 
   const stop = () => {
@@ -359,7 +387,7 @@ function setupFigure() {
   };
   const setTimeSpeed = (timeSpeed, buttonLabel) => {
     time.setTimeSpeed(timeSpeed);
-    // slowTimeButton.setLabel(buttonLabel);
+    slowTimeButton.setLabel(buttonLabel);
   };
   // const setVelocity = (velocity, buttonLabel) => {
   //   reset();
