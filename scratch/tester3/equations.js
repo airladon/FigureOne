@@ -132,13 +132,6 @@ function addEquation() {
           bx2: { text: 'x', color: color1 },
           b11: { text: '1', color: color1 },
           b12: { text: '1', color: color1 },
-          // _0_4: { color: color0 },
-          // x_5: { color: color1 },
-          // x_6: { color: color1 },
-          // x_7: { color: color1 },
-          // _1_5: { color: color1 },
-          // _1_6: { color: color1 },
-          // _1_7: { color: color1 },
           strike1: { symbol: 'strike', lineWidth: 0.007 },
           strike2: { symbol: 'strike', lineWidth: 0.007 },
           x0Box1: { symbol: 'tBox', touchBorder: 0.1, isTouchable: true },
@@ -165,12 +158,11 @@ function addEquation() {
           x1OnVbH: { scale: [frac('x1y2H', 'vin1', 'v_1'), 0.8] },
           xOnV: frac(['x_2'], 'vin1', 'v_1'),
           xOnV1: frac(['x_3'], 'vin2', 'v_2'),
+          wOnV1: frac(['w3'], 'vin2', 'v_2'),
+          wxOnV1: frac(['w3', 'x_3'], 'vin2', 'v_2'),
           xOnV2: frac(['x_4'], 'vin3', 'v_3'),
-
-          // x1OnVb: { scale: [frac('x11', 'vin1', 'v_1'), 0.8] },
           t11: { sub: ['t_1', '_1_2'] },
           t12: { sub: ['t_2', '_1_3'] },
-          // yxt: ['y_1', brac(['x_y1', 'comma1', 't_y1'], 1)],
           yx0t: ['y_1', brac(['x0y', 'comma1', 't_y1'], 1)],
           yx0tt1: ['y_2', brac(['x0y2', 'comma2', 't_y2', 'min1', 't11'], 4)],
           yx1t: ['y_3', brac(['x1y', 'comma3', 't_y3'], 3)],
@@ -195,6 +187,21 @@ function addEquation() {
           ftx3: ['f3', brac(['t_2', 'min1', 'xOnV1'], 6)],
           sinwt: ['sin', brac(['w1', 't_4'], 2)],
           sinwtXOnV: ['sin_1', brac(['w2', brac(['t_5', 'min3', 'xOnV2'], 7)], 4)],
+          sinwtXOnVExpand: [
+            'sin_1', brac([
+              {
+                bottomComment: {
+                  content: ['w2', brac(['t_5', 'min3', 'xOnV2'], 7)],
+                  comment: ['w1', 't_2', 'min1', 'w3', ' ', 'xOnV1'],
+                  symbol: 'brace',
+                  inSize: false,
+                },
+              },
+            ], 4),
+          ],
+          sinwtwXOnV: ['sin_1', brac(['w1', 't_2', 'min1', 'w3', ' ', 'xOnV1'], 4)],
+          sinwtwxOnVComb: ['sin_1', brac(['w1', 't_2', 'min1', 'wxOnV1'], 4)],
+          sinwtwOnVx: ['sin_1', brac(['w1', 't_2', 'min1', 'wOnV1', ' ', 'x_3'], 4)],
           ftxBotCom: ['f2', brac({
             bar: {
               content: ['t_3', 'min2', 'xOnV'],
@@ -204,11 +211,6 @@ function addEquation() {
               space: 0.08,
             },
           }, 5)],
-          // ftx2Sine: [
-          //   {
-          //     topComment: ['f1', ]
-          //   }
-          // ]
         },
         formDefaults: {
           alignment: { fixTo: 'equals' },
@@ -288,6 +290,10 @@ function addEquation() {
             },
           },
           yxtxSine: ['yxt', 'equals', 'sinwtXOnV'],
+          yxtxSineExpanded: ['yxt', 'equals', 'sinwtXOnVExpand'],
+          yxtxSinewtwxv: ['yxt', 'equals', 'sinwtwXOnV'],
+          yxtxSinewtwxOnv: ['yxt', 'equals', 'sinwtwxOnVComb'],
+          yxtxSinewtwvx: ['yxt', 'equals', 'sinwtwOnVx'],
         },
         // formSeries: ['0'],
         position: [0, 1],

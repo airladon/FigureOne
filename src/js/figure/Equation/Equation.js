@@ -1777,8 +1777,11 @@ export class Equation extends FigureElementCollection {
    * @return {Array<FigureElement>}
    */
   getPhraseElements(phrase: TypeEquationPhrase) {
-    const content = this.eqn.functions.contentToElement(phrase);
-    return content.getAllElements();
+    if (this.eqn.functions.phraseElements[phrase] == null) {
+      return [];
+    }
+    return this.eqn.functions.phraseElements[phrase];
+    // return content.getAllElements();
   }
 
   stopEquationAnimating(how: 'complete' | 'cancel' = 'cancel') {

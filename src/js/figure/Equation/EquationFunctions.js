@@ -3200,6 +3200,7 @@ export class EquationFunctions {
     this.fullLineHeight = null;
     this.addElementFromKey = addElementFromKey;
     this.getExistingOrAddSymbol = getExistingOrAddSymbol;
+    this.phraseElements = {};
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -3240,7 +3241,24 @@ export class EquationFunctions {
       return content;
     }
     if (typeof content === 'string') {
-      return this.stringToElement(content);
+      const c = this.stringToElement(content);
+      if (this.phraseElements[content] != null) {
+        return c;
+      }
+      if (c.getAllElements != null) {
+        this.phraseElements[content] = c.getAllElements();
+      } else {
+        const elements = [];
+        c.forEach((e) => {
+          if (e.getAllElements != null) {
+            elements.push(...e.getAllElements());
+          } else {
+            elements.push(e);
+          }
+        });
+        this.phraseElements[content] = elements;
+      }
+      return c;
     }
     if (Array.isArray(content)) {
       let elementArray = [];

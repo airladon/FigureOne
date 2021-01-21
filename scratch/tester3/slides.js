@@ -677,20 +677,42 @@ function addSlides() {
         const ftx = eqn.getPhraseElements('ftx');
         const ftx3 = eqn.getPhraseElements('ftx3');
         eqn.pulse({
-          elements: ftx, translation: 0.02, angle: Math.PI / 2, min: -0.02, frequency: 3,
+          elements: ftx, translation: 0.03, angle: Math.PI / 2, min: -0.03, frequency: 3,
         });
         eqn.pulse({
-          elements: ftx3, translation: 0.02, angle: Math.PI / 2, min: -0.02, frequency: 3,
+          elements: ftx3, translation: 0.03, angle: Math.PI / 2, min: -0.03, frequency: 3,
+        });
+      }, 0.15),
+      terms: action('terms', () => {
+        const ftx = eqn.getPhraseElements('yxt');
+        const ftx3 = eqn.getPhraseElements('sinwtXOnV');
+        eqn.pulse({
+          elements: ftx, translation: 0.03, angle: Math.PI / 2, min: -0.03, frequency: 3,
+        });
+        eqn.pulse({
+          elements: ftx3, translation: 0.03, angle: Math.PI / 2, min: -0.03, frequency: 3,
         });
       }, 0.15),
     },
-    text: 'Both equations are |equal| and so we can equate |terms|',
+    text: 'Both equations are |equal| and so we can equate |terms|.',
   });
+
+  slides.push({ fromForm: 'yxtxAndSineXOnV', form: 'yxtxSine' });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    text: 'Now expand the terms inside the sine function.',
+  });
+  slides.push({ fromForm: 'yxtxSine', form: 'yxtxSineExpanded' });
+  slides.push({ fromForm: 'yxtxSineExpanded', form: 'yxtxSinewtwxv' });
+  slides.push({ fromForm: 'yxtxSinewtwxv', form: 'yxtxSinewtwxOnv' });
+  slides.push({ fromForm: 'yxtxSinewtwxOnv', form: 'yxtxSinewtwvx' });
 
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
   nav.loadSlides(slides);
-  nav.goToSlide(31);
+  nav.goToSlide(34);
 }
 
 addSlides();
