@@ -28,8 +28,8 @@ function addEquation() {
     scale: { content, scale: s },
   });
 
-  const brac = (content, id) => ({
-    brac: { left: `lb${id}`, content, right: `rb${id}` },
+  const brac = (content, id, overhang = 0.05) => ({
+    brac: { left: `lb${id}`, content, right: `rb${id}`, overhang },
   });
 
   const ann = (content, comment, symbol, space = 0.2) => ({
@@ -78,6 +78,7 @@ function addEquation() {
         dimColor: [0.7, 0.7, 0.7, 1],
         elements: {
           sin: { style: 'normal' },
+          sin_1: { style: 'normal' },
           lb1: { symbol: 'bracket', side: 'left' },
           rb1: { symbol: 'bracket', side: 'right' },
           lb2: { symbol: 'bracket', side: 'left' },
@@ -88,6 +89,10 @@ function addEquation() {
           rb4: { symbol: 'bracket', side: 'right' },
           lb5: { symbol: 'bracket', side: 'left' },
           rb5: { symbol: 'bracket', side: 'right' },
+          lb6: { symbol: 'bracket', side: 'left' },
+          rb6: { symbol: 'bracket', side: 'right' },
+          lb7: { symbol: 'squareBracket', side: 'left', lineWidth: 0.008 },
+          rb7: { symbol: 'squareBracket', side: 'right', lineWidth: 0.008 },
           equals: '  =  ',
           equals2: '  =  ',
           equals3: '  =  ',
@@ -96,6 +101,7 @@ function addEquation() {
           w3: '\u03c9',
           min1: ' \u2212 ',
           min2: ' \u2212 ',
+          min3: ' \u2212 ',
           _2pi1: '2\u03c0',
           _2pi2: '2\u03c0',
           comma1: ', ',
@@ -104,6 +110,7 @@ function addEquation() {
           lambda: '\u03bb',
           vin1: { symbol: 'vinculum', lineWidth: 0.007 },
           vin2: { symbol: 'vinculum', lineWidth: 0.007 },
+          vin3: { symbol: 'vinculum', lineWidth: 0.007 },
           brace: { symbol: 'brace', side: 'bottom', lineWidth: 0.005 },
           bBrace: { symbol: 'brace', side: 'bottom', lineWidth: 0.008, color: color1 },
           line1: { symbol: 'line', width: 0.005, arrow: { start: { head: 'triangle' } } },
@@ -112,12 +119,15 @@ function addEquation() {
           x_2: 'x',
           f_1: { color: color0 },
           f_2: { color: color0 },
+          f_3: { color: color0 },
           rx1: { text: 'x', color: color0 },
           rx2: { text: 'x', color: color0 },
           rx3: { text: 'x', color: color0 },
+          rx4: { text: 'x', color: color0 },
           r01: { text: '0', color: color0 },
           r02: { text: '0', color: color0 },
           r03: { text: '0', color: color0 },
+          r04: { text: '0', color: color0 },
           bx1: { text: 'x', color: color1 },
           bx2: { text: 'x', color: color1 },
           b11: { text: '1', color: color1 },
@@ -141,8 +151,10 @@ function addEquation() {
           x0y: { tBox: [{ sub: ['rx1', 'r01'] }, 'x0Box1'] },
           x0y2: { sub: ['rx2', 'r02'] },
           x0y3: { sub: ['rx3', 'r03'] },
+          x0y4: { sub: ['rx4', 'r04'] },
           f1: { tBox: [{ container: [{ sub: ['f_1', 'x0y3'] }, 0.08] }, 'x0Box2'] },
           f2: { tBox: [{ container: [{ sub: ['f_2', 'x0y2'] }, 0.08] }, 'x0Box3'] },
+          f3: { container: [{ sub: ['f_3', 'x0y4'] }, 0.08] },
           x11: { sub: ['x_1', '_1_1'] },
           x1y: { tBox: [{ sub: ['bx1', 'b11'] }, 'x1Box2'] },
           x1y2: { tBox: [{ sub: ['bx2', 'b12'] }, 'x1Box1'] },
@@ -152,6 +164,8 @@ function addEquation() {
           x1OnVb: { scale: [frac('x1y2', 'vin1', 'v_1'), 0.8] },
           x1OnVbH: { scale: [frac('x1y2H', 'vin1', 'v_1'), 0.8] },
           xOnV: frac(['x_2'], 'vin1', 'v_1'),
+          xOnV1: frac(['x_3'], 'vin2', 'v_2'),
+          xOnV2: frac(['x_4'], 'vin3', 'v_3'),
 
           // x1OnVb: { scale: [frac('x11', 'vin1', 'v_1'), 0.8] },
           t11: { sub: ['t_1', '_1_2'] },
@@ -178,7 +192,9 @@ function addEquation() {
           ftx1H: ['f2', brac(['t_3', 'min2', 'x1OnVbH'], 5)],
           ftx: ['f2', brac(['t_3', 'min2', 'xOnV'], 5)],
           ftx2: ['f1', brac('t_1', 1)],
+          ftx3: ['f3', brac(['t_2', 'min1', 'xOnV1'], 6)],
           sinwt: ['sin', brac(['w1', 't_4'], 2)],
+          sinwtXOnV: ['sin_1', brac(['w2', brac(['t_5', 'min3', 'xOnV2'], 7)], 4)],
           ftxBotCom: ['f2', brac({
             bar: {
               content: ['t_3', 'min2', 'xOnV'],
@@ -237,7 +253,7 @@ function addEquation() {
                 { content: ['ftx2', 'equals2', 'sinwt'], justify: 'equals2' },
               ],
               justify: 'element',
-              space: 0.3,
+              baselineSpace: 0.5,
             },
           },
           yxtxAndSineBotCom: {
@@ -247,9 +263,31 @@ function addEquation() {
                 { content: ['ftx2', 'equals2', 'sinwt'], justify: 'equals2' },
               ],
               justify: 'element',
-              space: 0.3,
+              baselineSpace: 0.5,
             },
           },
+          yxtxAndSineBotComXOnV: {
+            lines: {
+              content: [
+                { content: ['yxt', 'equals', 'ftxBotCom'], justify: 'equals' },
+                { content: ['ftx2', 'equals2', 'sinwt'], justify: 'equals2' },
+                { content: ['ftx3', 'equals3', 'sinwtXOnV'], justify: 'equals3' },
+              ],
+              justify: 'element',
+              baselineSpace: 0.5,
+            },
+          },
+          yxtxAndSineXOnV: {
+            lines: {
+              content: [
+                { content: ['yxt', 'equals', 'ftx'], justify: 'equals' },
+                { content: ['ftx3', 'equals3', 'sinwtXOnV'], justify: 'equals3' },
+              ],
+              justify: 'element',
+              baselineSpace: 0.6,
+            },
+          },
+          yxtxSine: ['yxt', 'equals', 'sinwtXOnV'],
         },
         // formSeries: ['0'],
         position: [0, 1],

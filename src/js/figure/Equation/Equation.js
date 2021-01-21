@@ -1759,6 +1759,28 @@ export class Equation extends FigureElementCollection {
     );
   }
 
+  /**
+   * Return all the elements that are used in a form.
+   * @param {string} form
+   * @return {Array<FigureElement>}
+   */
+  getFormElements(form: string) {
+    if (this.eqn.forms[form] == null) {
+      return [];
+    }
+    return this.eqn.forms[form].content[0].getAllElements();
+  }
+
+  /**
+   * Return all the elements that are used in an equation phrase.
+   * @param {TypeEquationPhrase} phrase
+   * @return {Array<FigureElement>}
+   */
+  getPhraseElements(phrase: TypeEquationPhrase) {
+    const content = this.eqn.functions.contentToElement(phrase);
+    return content.getAllElements();
+  }
+
   stopEquationAnimating(how: 'complete' | 'cancel' = 'cancel') {
     this.stopAnimating(how, '_Equation', true);
     this.stopAnimating(how, '_EquationColor', true);

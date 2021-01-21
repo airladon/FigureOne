@@ -580,6 +580,23 @@ function addSlides() {
     text: 'Now, let\'s make our |initial disturbance| a |sine| function.',
   });
   slides.push({ fromForm: 'yxtx', form: 'yxtxAndSine' });
+  slides.push({
+    modifiers: {
+      input: action(
+        'input', () => eqn.pulse({
+          elements: [
+            't_3', 'min2', 'x_2', 'vin1', 'v_1',
+          ],
+          centerOn: 'min2',
+          translation: 0.02,
+          angle: Math.PI / 2,
+          min: -0.02,
+          frequency: 3,
+        }), 0.15,
+      ),
+    },
+    text: 'And substitute the |input|.',
+  });
 
   const setArrows = () => {
     arrow1.pointFromTo(
@@ -590,7 +607,8 @@ function addSlides() {
       { element: eqn.getElement('bBrace'), space: 0.05 },
       { element: eqn.getElement('t_4'), space: 0.05 },
     );
-  }
+  };
+
   slides.push({
     fromForm: 'yxtxAndSine',
     form: 'yxtxAndSineBotCom',
@@ -612,9 +630,9 @@ function addSlides() {
           callback: () => {
             eqn.getElement('t_4').setColor(color1);
             eqn.getElement('t_1').setColor(color1);
-            eqn.pulse({ elements: ['t_1', 't_4'], duration: 1 });
+            // eqn.pulse({ elements: ['t_1', 't_4'], duration: 1, scale: 1.3 });
           },
-          duration: 1,
+          // duration: 1,
         })
         .whenFinished(done)
         .start();
@@ -632,10 +650,47 @@ function addSlides() {
     },
   });
 
+  slides.push({
+    fromForm: 'yxtxAndSineBotCom',
+    form: 'yxtxAndSineBotComXOnV',
+    enterState: () => {
+      setArrows();
+      arrow1.showAll();
+      arrow2.showAll();
+      eqn.getElement('t_4').setColor(color1);
+      eqn.getElement('t_1').setColor(color1);
+    },
+    leaveState: () => {
+      eqn.getElement('t_4').setColor(colorText);
+      eqn.getElement('t_1').setColor(colorText);
+    },
+  });
+
+  slides.push({
+    fromForm: 'yxtxAndSineBotComXOnV',
+    form: 'yxtxAndSineXOnV',
+  });
+
+  slides.push({
+    modifiers: {
+      equal: action('equal', () => {
+        const ftx = eqn.getPhraseElements('ftx');
+        const ftx3 = eqn.getPhraseElements('ftx3');
+        eqn.pulse({
+          elements: ftx, translation: 0.02, angle: Math.PI / 2, min: -0.02, frequency: 3,
+        });
+        eqn.pulse({
+          elements: ftx3, translation: 0.02, angle: Math.PI / 2, min: -0.02, frequency: 3,
+        });
+      }, 0.15),
+    },
+    text: 'Both equations are |equal| and so we can equate |terms|',
+  });
+
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
   nav.loadSlides(slides);
-  nav.goToSlide(28);
+  nav.goToSlide(31);
 }
 
 addSlides();

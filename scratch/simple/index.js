@@ -9,14 +9,17 @@ const figure = new Fig.Figure({
 const [p] = figure.add({
   method: 'equation',
   options: {
-    forms: { 
-      0: 't',
+    forms: {
+      0: [{ frac: ['t', 'vinculum', 'a'] }],
     },
   },
 });
 // p.showForm('0');
 console.log(p._t.lastDrawTransform.order);
+p.pulse({ elements: ['b', 'vinculum', 't', 'a'], translation: 0.02, min: -0.02, frequency: 2, duration: 3, angle: Math.PI / 2 })
 
+console.log(p._a.lastDrawTransform)
+console.log(p._vinculum.lastDrawTransform)
 
 // const [eqn] = figure.add(
 //   {

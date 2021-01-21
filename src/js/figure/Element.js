@@ -4925,10 +4925,6 @@ class FigureElementCollection extends FigureElement {
       }
     }
     options.elements = null;
-    // if (elements == null || elements.length === 0) {
-    //   super.pulse(optionsOrElementsOrDone);
-    //   return;
-    // }
 
     let counter = 0;
     const combinedCallback = () => {
@@ -4941,7 +4937,9 @@ class FigureElementCollection extends FigureElement {
     };
     // $FlowFixMe
     options.done = combinedCallback;
-    // let doneToUse = done;
+    const m0 = this.spaceTransformMatrix('draw', 'figure');
+    const translationBackup = options.translation;
+    const minBackup = options.min;
     elements.forEach((elementToPulse) => {
       let element: ?FigureElement;
       if (typeof elementToPulse === 'string') {
@@ -4950,31 +4948,28 @@ class FigureElementCollection extends FigureElement {
         element = elementToPulse;
       }
       if (element != null) {
-        // element.pulseDefault(doneToUse);
+        // If different elements have different scales relative to each other
+        // then they will move different distances. This is because the
+        // pulseTransforms are applied after the full transform (including the
+        // draw space elements of order). Therefore, normalize all scales to the
+        // same scale as the collection.
+        if (options.translation != null) {
+          const m1 = element.spaceTransformMatrix('figure', 'draw');
+          const scaleFactor = m1[0] / m0[0];
+          options.translation *= scaleFactor;
+          if (options.min != null) {
+            options.min *= scaleFactor;
+          }
+        }
         element.pulse(options);
-        // doneToUse = null;
+        if (translationBackup != null) {
+          options.translation = translationBackup;
+        }
+        if (minBackup != null) {
+          options.min = minBackup;
+        }
       }
     });
-    // if (doneToUse != null) {
-    //   doneToUse();
-    // }
-
-    // if (typeof this.pulseDefault === 'function') {
-    //   this.pulseDefault(done);
-    // } else {
-    //   // const { frequency, time, scale } = this.pulseDefault;
-    //   // this.pulseScaleNow(time, scale, frequency, done);
-    //   this.pulseScaleRelativeTo(
-    //     options.centeredOn,
-    //     options.x,
-    //     options.y,
-    //     options.space,
-    //     options.time,
-    //     options.scale,
-    //     options.frequency,
-    //     done,
-    //   );
-    // }
   }
 
   /**
