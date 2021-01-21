@@ -437,9 +437,9 @@ export default class SlideNavigator {
     const slide = this.slides[index];
     const form = this.getForm(index);
     this.showForms(form);
-    this.getProperty('steadyStateCommon', index, () => {})(index, from);
+    this.getProperty('steadyStateCommon', index, () => {})(from, index);
     if (slide.steadyState != null) {
-      slide.steadyState(index, from);
+      slide.steadyState(from, index);
     }
     const { prevButton, nextButton } = this;
     if (prevButton != null) {
@@ -613,9 +613,9 @@ export default class SlideNavigator {
     this.hideElements(index);
     this.collection.setScenarios(this.getProperty('scenarioCommon', index, []));
     this.collection.setScenarios(slide.scenario || []);
-    this.getProperty('enterStateCommon', index, () => {})(index, fromToUse);
+    this.getProperty('enterStateCommon', index, () => {})(fromToUse, index);
     if (slide.enterState != null) {
-      slide.enterState(index, fromToUse);
+      slide.enterState(fromToUse, index);
     }
     const fromForm = this.getFromForm(index);
     this.showForms(fromForm);

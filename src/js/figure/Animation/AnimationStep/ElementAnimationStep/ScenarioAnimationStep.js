@@ -385,6 +385,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     const steps = [];
     if (target.transform != null) {
       steps.push(element.anim.transform({
+        delay: this.startDelay,
         start: start.transform,
         target: target.transform,
         duration: transformDuration,
@@ -397,6 +398,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
 
     if (target.color != null) {
       steps.push(element.anim.color({
+        delay: this.startDelay,
         start: start.color,
         target: target.color,
         duration: colorDuration,
@@ -406,6 +408,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
 
     if (dissolve != null) {
       steps.push(element.anim.opacity({
+        delay: this.startDelay,
         dissolve,
         dissolveFromCurrent,
         duration: opacityDuration,

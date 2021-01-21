@@ -32,27 +32,60 @@ function addSlides() {
       clearTimeout(timerId);
     }
   };
-  const disturb = (med) => {
+  const disturb = (med, style = 'pulse', parameter = 0.6) => {
     if (Array.isArray(med)) {
-      med.forEach(m => layout.pulse(m, 0.6));
+      med.forEach(m => layout[style](m, parameter));
     } else {
-      layout.pulse(med, 0.6);
+      layout[style](med, parameter);
     }
     lastDisturbance = layout.time.now();
   };
 
-  const startDisturbances = (m, timeTillNext = 10, immediately = true) => {
+  const startDisturbances = (med, timeTillNext = 10, immediately = true, style = 'pulse', parameter) => {
     if (timerId != null) {
       clearTimeout(timerId);
     }
     const now = layout.time.now();
+    if (Array.isArray(med)) {
+      med.forEach((m) => {
+        if (m.custom.movePad.isAnimating() && style === 'sineWave') {
+          lastDisturbance = now;
+        }
+      });
+    } else if (med.custom.movePad.isAnimating() && style === 'sineWave') {
+      lastDisturbance = now;
+    }
     if (now - lastDisturbance > timeTillNext || immediately) {
-      disturb(m);
+      disturb(med, style, parameter);
     }
     timerId = setTimeout(() => {
-      startDisturbances(m, timeTillNext, false);
+      startDisturbances(med, timeTillNext, false, style, parameter);
     }, 1000);
   };
+
+  // const startSineWaves = (med, timeTillNext = 5, immediately = true) => {
+  //   if (timerId != null) {
+  //     clearTimeout(timerId);
+  //   }
+  //   const now = layout.time.now();
+  //   if (Array.isArray(med)) {
+  //     med.forEach((m) => {
+  //       if (m.custom.movePad.isAnimating()) {
+  //         lastDisturbance = now;
+  //       }
+  //     });
+  //   } else if (med.custom.movePad.isAnimating()) {
+  //       lastDisturbance = now;
+  //     }
+  //   }
+
+  //   if (now - lastDisturbance > timeTillNext || immediately) {
+  //     disturb(med, 'sineWave', 0);
+  //   }
+  //   timerId = setTimeout(() => {
+  //     startSineWaves(medium, timeTillNext, false);
+  //   });
+  // }
 
   medium.custom.movePad.subscriptions.add('setTransform', () => {
     if (medium.custom.movePad.state.isBeingMoved) {
@@ -89,13 +122,25 @@ function addSlides() {
     touchBorder,
     onClick: () => figure.getElement(element).pulse({ scale, xAlign, yAlign }),
   });
+  const eqnPulse = (text, elements, touchBorder = 0, color = color1) => ({
+    text,
+    font: { color },
+    touchBorder,
+    onClick: () => eqn.pulse({
+      elements,
+      frequency: 3,
+      translation: 0.02,
+      min: -0.02,
+      angle: Math.PI / 2,
+    }),
+  });
   const highlight = text => ({
     text, font: { style: 'italic' },
   });
-  const math = (text, color = colorText) => ({
+  const math = (text, color = colorText, size = 0.17) => ({
     text,
     font: {
-      family: 'Times New Roman', style: 'italic', size: 0.17, color,
+      family: 'Times New Roman', style: 'italic', size, color,
     },
   });
   const subMath = (text, color = colorText) => ({
@@ -113,6 +158,17 @@ function addSlides() {
     t: math('t'),
     v: math('v'),
     k: math('k'),
+    div: math(' \u2215 '),
+    w: math('\u03c9'),
+    pi: math('\u03c0'),
+    twoPi: math('2\u03c0'),
+    lambda: math('\u03bb'),
+    piSmall: math('\u03c0', colorText, 0.11),
+    vS: math('v', colorText, 0.11),
+    fS: math('f', colorText, 0.11),
+    divS: math(' \u2215 ', colorText, 0.11),
+    twoPiS: math('2\u03c0', colorText, 0.11),
+    xS: math('x', colorText, 0.11),
     1: subMath('1'),
     0: subMath('1'),
     r0: subMath('0', color0),
@@ -280,7 +336,7 @@ function addSlides() {
 
   slides.push({
     showCommon: ['medium1', 'medium2', 'vFast', 'vSlow'],
-    steadyStateCommon: (index, from) => {
+    steadyStateCommon: (from) => {
       if (from === 'prev') {
         layout.reset();
         startDisturbances([medium1, medium2], 5.5, true);
@@ -309,7 +365,7 @@ function addSlides() {
 
   slides.push({
     showCommon: ['medium1', 'medium2', 'timePlot1', 'timePlot2', 'vFast', 'vSlow'],
-    steadyStateCommon: (index, from) => {
+    steadyStateCommon: (from) => {
       if (from === 'prev') {
         layout.reset();
         startDisturbances([medium1, medium2], 5.5, true);
@@ -381,7 +437,7 @@ function addSlides() {
       'As such, for |faster| velocities, the |disturbance| is wider, or',
       'more |spread out| in space.',
     ],
-    steadyStateCommon: (index, from) => {
+    steadyStateCommon: (from) => {
       if (from === 'prev') {
         startDisturbances([medium1, medium2], 5.5, false);
       } else {
@@ -417,7 +473,7 @@ function addSlides() {
       medium.custom.movePad.setMovable(true);
       layout.unpause();
     },
-    steadyStateCommon: (index, from) => {
+    steadyStateCommon: (from) => {
       if (from === 'prev') {
         layout.reset();
         startDisturbances(medium, 10, true);
@@ -576,10 +632,25 @@ function addSlides() {
         0.05, color0,
       ),
     },
-    showCommon: [],
+    // showCommon: [],
     text: 'Now, let\'s make our |initial disturbance| a |sine| function.',
+    steadyStateCommon: (from) => {
+      if (from === 'prev') {
+        layout.reset();
+        layout.unpause();
+        startDisturbances(medium, 10, true, 'sineWave', 0);
+      } else {
+        startDisturbances(medium, 10, false, 'sineWave', 0);
+      }
+    },
   });
-  slides.push({ fromForm: 'yxtx', form: 'yxtxAndSine' });
+  slides.push({
+    fromForm: 'yxtx',
+    form: 'yxtxAndSine',
+    steadyStateCommon: () => {
+      startDisturbances(medium, 10, false, 'sineWave', 0);
+    },
+  });
   slides.push({
     modifiers: {
       input: action(
@@ -605,7 +676,7 @@ function addSlides() {
     );
     arrow2.pointFromTo(
       { element: eqn.getElement('bBrace'), space: 0.05 },
-      { element: eqn.getElement('t_4'), space: 0.05 },
+      { element: eqn.getElement('t_4'), space: 0.02 },
     );
   };
 
@@ -638,6 +709,9 @@ function addSlides() {
         .start();
     },
     steadyState: () => {
+      // eqn.showForm('yxtxAndSineBotCom');
+      // figure.setFirstTransform();
+      // console.log(eqn.getElement('t_1').lastDrawTransform._dup());
       setArrows();
       arrow1.showAll();
       arrow2.showAll();
@@ -652,24 +726,25 @@ function addSlides() {
 
   slides.push({
     fromForm: 'yxtxAndSineBotCom',
-    form: 'yxtxAndSineBotComXOnV',
-    enterState: () => {
-      setArrows();
-      arrow1.showAll();
-      arrow2.showAll();
-      eqn.getElement('t_4').setColor(color1);
-      eqn.getElement('t_1').setColor(color1);
-    },
-    leaveState: () => {
-      eqn.getElement('t_4').setColor(colorText);
-      eqn.getElement('t_1').setColor(colorText);
-    },
+    // form: 'yxtxAndSineBotComXOnV',
+    form: 'yxtxAndSineXOnV',
+    // enterState: () => {
+    //   setArrows();
+    //   arrow1.showAll();
+    //   arrow2.showAll();
+    //   eqn.getElement('t_4').setColor(color1);
+    //   eqn.getElement('t_1').setColor(color1);
+    // },
+    // leaveState: () => {
+    //   eqn.getElement('t_4').setColor(colorText);
+    //   eqn.getElement('t_1').setColor(colorText);
+    // },
   });
 
-  slides.push({
-    fromForm: 'yxtxAndSineBotComXOnV',
-    form: 'yxtxAndSineXOnV',
-  });
+  // slides.push({
+  //   fromForm: 'yxtxAndSineBotComXOnV',
+  //   form: 'yxtxAndSineXOnV',
+  // });
 
   slides.push({
     modifiers: {
@@ -697,7 +772,26 @@ function addSlides() {
     text: 'Both equations are |equal| and so we can equate |terms|.',
   });
 
-  slides.push({ fromForm: 'yxtxAndSineXOnV', form: 'yxtxSine' });
+  slides.push({
+    fromForm: 'yxtxAndSineXOnV',
+    transition: (done) => {
+      eqn.animations.new()
+        .inParallel([
+          eqn.animations.goToForm({ target: 'yxtxSine', animate: 'move' }),
+          eqn.animations.scenario({ target: 'left', duration: 1, delay: 0.5 }),
+        ])
+        .whenFinished(done)
+        .start();
+    },
+    form: 'yxtxSine',
+    steadyState: () => {
+      eqn.setScenario('left');
+    },
+  });
+  slides.push({
+    showCommon: ['medium'],
+    scenarioCommon: ['default', 'left'],
+  });
 
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
@@ -710,9 +804,292 @@ function addSlides() {
   slides.push({ fromForm: 'yxtxSinewtwxOnv', form: 'yxtxSinewtwvx' });
 
   // ///////////////////////////////////////////////////////////////////////////
+  /*
+  ....###....##....##....###....##.......##....##..######..####..######.
+  ...##.##...###...##...##.##...##........##..##..##....##..##..##....##
+  ..##...##..####..##..##...##..##.........####...##........##..##......
+  .##.....##.##.##.##.##.....##.##..........##.....######...##...######.
+  .#########.##..####.#########.##..........##..........##..##........##
+  .##.....##.##...###.##.....##.##..........##....##....##..##..##....##
+  .##.....##.##....##.##.....##.########....##.....######..####..######.
+  */
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    text: [
+      'Similar to before, this equation tells us the disturbance at any point',
+      'in space, at any snapshot in time.',
+    ],
+    enterStateCommon: () => {
+      // medium.custom.balls.highlight(['ball0', 'ball40']);
+      // medium.custom.movePad.setMovable(true);
+      layout.unpause();
+    },
+  });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    modifiers: {
+      'phase offset': eqnPulse('phase offset', [
+        ...eqn.getPhraseElements('wOnV1'), 'x_3', 'min1',
+      ]),
+      time: eqnPulse('time', ['sin', 'w2', 't_2']),
+      'fixed position': eqnPulse('fixed position', ['constant_1']),
+    },
+    text: [
+      'If we look at a |fixed position|, we see a sine function dependent on |time|',
+      'with a constant |phase offset|.',
+    ],
+    form: 'sineConstX',
+    enterState: () => {
+      medium.custom.balls.highlight(['ball40']);
+    },
+    steadyState: () => {
+      eqn.dim([...eqn.getPhraseElements('wOnV1'), 'x_3', 'min1', 'x_1']);
+    },
+    leaveStateCommon: () => eqn.undim(),
+  });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    modifiers: {
+      'phase offset': eqnPulse('phase offset', ['w2', 't_2']),
+      space: eqnPulse('space', [
+        'sin', ...eqn.getPhraseElements('wOnV1'), 'x_3', 'min1',
+      ]),
+      'time snapshot': eqnPulse('time snapshot', ['constant_1']),
+      'minus sign': eqnPulse('minus sign', ['min1']),
+    },
+    text: [
+      'Similarly, if we look at a |time snapshot|, we see a sine function in',
+      '|space| with a constant |phase offset|.',
+      {
+        text: 'NB: The |minus sign| is a phase offset of |piSmall|.',
+        font: { size: 0.09 },
+        lineSpace: 0.2,
+      },
+    ],
+    form: 'sineConstT',
+    enterStateCommon: () => {
+      eqn.dim(['w2', 't_2', 't_y3']);
+      layout.pause();
+    },
+  });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    text: [
+      'So, if we disturb a medium with a sine function over time at a position,',
+      'then the disturbance distributed over space is also a sine function.',
+    ],
+    enterStateCommon: () => {
+      eqn.dim(['w2', 't_2', 't_y3', 'line1', 'line2', 'constant', 'constant_1']);
+      layout.pause();
+    },
+  });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    modifiers: {
+      wavelength: highlight('wavelength'),
+    },
+    text: [
+      'The distance over which a spatial sine function repeats is commonly called',
+      'the |wavelength| |lambda|. Can we see the wavelength in this equation?',
+    ],
+  });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    text: [
+      'To find it, we need to expand the angular frequency |w|, and rearrange the',
+      'equation.',
+    ],
+  });
+
+  slides.push({ fromForm: 'sineConstT', form: 'sineExpandW' });
+  slides.push({ fromForm: 'sineExpandW', form: 'sine2PiF' });
+  slides.push({ fromForm: 'sine2PiF', form: 'sine2PiFTimesF' });
+  slides.push({ fromForm: 'sine2PiFTimesF', form: 'sine2PiFTimesFCancel' });
+  slides.push({ fromForm: 'sine2PiFTimesFCancel', form: 'sine2PiOnfv' });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    text: [
+      'Let\'s look at the units of |v||div||f|.',
+    ],
+  });
+
+  slides.push({
+    fromForm: 'sine2PiOnfv',
+    transition: (done) => {
+      eqn.animations.new()
+        .scenario({ target: 'farLeft', duration: 1, delay: 0.4 })
+        .goToForm({ target: 'sine2PiOnfvUnits', animate: 'move' })
+        .whenFinished(done)
+        .start();
+    },
+    form: 'sine2PiOnfvUnits',
+    steadyState: () => {
+      eqn.setScenario('farLeft');
+    },
+  });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    modifiers: {
+      length: eqnPulse('length', ['f_5', 'vin3', 'v_1', 'm_2']),
+    },
+    scenarioCommon: ['default', 'farLeft'],
+    text: [
+      'So |v||div||f|  is a measure of distance or |length|.',
+    ],
+  });
+
+  slides.push({
+    fromForm: 'sine2PiOnfvUnits',
+    text: [
+      'A sine function repeats every time its input value progresses |twoPi|.',
+    ],
+    transition: (done) => {
+      eqn.animations.new()
+        .inParallel([
+          eqn.animations.goToForm({ target: 'sine2PiOnfv', animate: 'move' }),
+          eqn.animations.scenario({ target: 'left', duration: 1, delay: 0.4 }),
+        ])
+        .whenFinished(done)
+        .start();
+    },
+    form: 'sine2PiOnfv',
+    steadyState: () => {
+      eqn.setScenario('left');
+    },
+  });
+
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    modifiers: {
+      'input value': eqnPulse('input value', ['twoPi', 'vin2', 'v_2', 'div2', 'f_6', 'x_3']),
+    },
+    scenarioCommon: ['default', 'left'],
+    text: [
+      'In our case, sine |input value| changes by |twoPi| each time |x| changes',
+      'by the distance |v||div||f|.',
+      {
+        text: 'As when |xS| = |vS||divS||fS|   \u21d2   |twoPiS||xS||divS|(|vS||divS||fS| ) = |twoPiS|.',
+        font: { size: 0.09 },
+      },
+    ],
+  });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    modifiers: {
+      is: highlight('is'),
+    },
+    text: [
+      'Wavelength is defined as the distance over which the sine wave repeats.',
+      'Our wave repeats every |v||div||f|, and so |v||div||f|  |is| the wavelength.',
+    ],
+  });
+  slides.push({ fromForm: 'sine2PiOnfv', form: 'sine2PiOnfvL' });
+  slides.push({ fromForm: 'sine2PiOnfvL', form: 'sine2PiOnL' });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    text: 'And so in general we have',
+  });
+  slides.push({
+    fromForm: 'sine2PiOnL',
+    form: 'sineGeneral',
+    steadyStateCommon: () => {
+      startDisturbances(medium, 10, false, 'sineWave', 0);
+      layout.unpause();
+      eqn.undim();
+    },
+  });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    enterStateCommon: () => {
+      layout.unpause();
+    },
+    text: [
+      'When a disturbance is a time dependent sine wave, the disturbance will be',
+      'distributed through space as a sine wave whose wavelength is related to the',
+      'frequency of the disturbance and the disturbance\'s propatation velocity.',
+    ],
+  });
+  slides.push({
+    fromForm: 'sineGeneral',
+    form: 'vOnFLambda',
+    transition: (done) => {
+      eqn.animations.new()
+        .dissolveOut(0.4)
+        .trigger(() => {
+          eqn.setScenario('default');
+          eqn.showForm('vOnFLambda');
+        })
+        .dissolveIn(0.4)
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      eqn.setScenario('default');
+    },
+  });
+  slides.push({
+    scenarioCommon: 'default',
+    text: 'Which is often rearranged to be inline.',
+  });
+  slides.push({ fromForm: 'vOnFLambda', form: 'cLambdaF' });
+
+  slides.push({
+    text: [
+      'This equation says that as velocity increases, then so does wavelength.',
+      'This is consistent with our initial observation that a faster propagation',
+      'velocity results in a more spread out pulse or wave.',
+    ],
+  });
+  // slides.push({ fromForm: 'sine2PiOnfvL', form: 'sine2PiOnL' });
+
+  // slides.push({ fromForm: 'sineExpandW', form: 'sine2PiF' });
+  // slides.push({ fromForm: 'sine2PiF', form: 'sine2PiFTimesF' });
+  // slides.push({ fromForm: 'sine2PiFTimesF', form: 'sine2PiFTimesFCancel' });
+  // slides.push({ fromForm: 'sine2PiFTimesFCancel', form: 'sine2PiOnfv' });
+
+  // // ///////////////////////////////////////////////////////////////////////////
+  // // ///////////////////////////////////////////////////////////////////////////
+  // slides.push({
+  //   text: [
+  //     'Let\'s look at the sine wave in space more closely by expanding the',
+  //     'angular frequency.',
+  //   ],
+  //   form: 'sineConstT',
+  //   steadyStateCommon: () => {
+  //     eqn.dim(['w2', 't_2', 't_y3', 'line1', 'line2', 'constant', 'constant_1']);
+  //     layout.pause();
+  //   },
+  //   leaveState: () => eqn.undim(),
+  // });
+
+
+
+  // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
   nav.loadSlides(slides);
-  nav.goToSlide(34);
+  nav.goToSlide(58);
 }
 
 addSlides();

@@ -36,7 +36,7 @@ function setupFigure() {
       text: [
         'Traveling Sine Waves',
         {
-          text: 'The velocity, wavelength and frequency relationship.',
+          text: 'Velocity, wavelength and frequency relationship.',
           font: { size: 0.15 },
         },
       ],
@@ -543,12 +543,13 @@ function setupFigure() {
   const sineWave = (med, delay = 0) => {
     unpause();
     const { movePad, A } = med.custom;
+    const startTime = time.now();
     movePad.animations.new('_noStop_sine')
       .delay(delay)
       .custom({
         callback: () => {
           if (!time.isPaused()) {
-            const t = time.now();
+            const t = time.now() - startTime;
             movePad.setPosition(0, A * 0.8 * Math.sin(2 * Math.PI * med.custom.f * t));
           }
         },
@@ -583,8 +584,8 @@ function setupFigure() {
   pulseButton.onClick = () => {
     stop();
     unpause();
-    pulse(medium1.custom.movePad, 0.5);
-    pulse(medium2.custom.movePad, 0.5);
+    pulse(medium1, 0.5);
+    pulse(medium2, 0.5);
   };
   sineButton.onClick = () => {
     reset();

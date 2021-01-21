@@ -75,7 +75,7 @@ function addEquation() {
       options: {
         // Define the elements that require specific styling
         color: colorText,
-        dimColor: [0.7, 0.7, 0.7, 1],
+        dimColor: [0.65, 0.65, 0.65, 1],
         elements: {
           sin: { style: 'normal' },
           sin_1: { style: 'normal' },
@@ -104,10 +104,16 @@ function addEquation() {
           min3: ' \u2212 ',
           _2pi1: '2\u03c0',
           _2pi2: '2\u03c0',
+          times1: ' \u00d7 ',
+          times2: ' \u00d7 ',
           comma1: ', ',
           comma2: ', ',
           comma3: ', ',
           lambda: '\u03bb',
+          lambda1: '\u03bb',
+          div1: ' \u2215 ',
+          div2: ' \u2215 ',
+          div3: ' \u2215 ',
           vin1: { symbol: 'vinculum', lineWidth: 0.007 },
           vin2: { symbol: 'vinculum', lineWidth: 0.007 },
           vin3: { symbol: 'vinculum', lineWidth: 0.007 },
@@ -115,6 +121,7 @@ function addEquation() {
           bBrace: { symbol: 'brace', side: 'bottom', lineWidth: 0.008, color: color1 },
           line1: { symbol: 'line', width: 0.005, arrow: { start: { head: 'triangle' } } },
           line2: { symbol: 'line', width: 0.005, arrow: { start: { head: 'triangle' } } },
+          line3: { symbol: 'line', width: 0.005, arrow: { start: { head: 'triangle' } } },
           x_1: 'x',
           x_2: 'x',
           f_1: { color: color0 },
@@ -139,6 +146,7 @@ function addEquation() {
           x0Box3: { symbol: 'tBox', touchBorder: 0.1, isTouchable: true },
           x1Box1: { symbol: 'tBox', touchBorder: 0.1, isTouchable: true },
           x1Box2: { symbol: 'tBox', touchBorder: 0.1, isTouchable: true },
+          twoPi: '2\u03c0',
         },
         phrases: {
           x0y: { tBox: [{ sub: ['rx1', 'r01'] }, 'x0Box1'] },
@@ -168,6 +176,16 @@ function addEquation() {
           yx1t: ['y_3', brac(['x1y', 'comma3', 't_y3'], 3)],
           yx1tH: ['y_3', brac([hide('x_1'), 'x1y', 'comma3', 't_y3'], 3)],
           yxt: ['y_3', brac(['x_1', 'comma3', 't_y3'], 3)],
+          yxtConstX: ['y_3', brac([{
+            bottomComment: {
+              content: 'x_1', comment: 'constant_1', symbol: 'line2', commentSpace: 0.27, inSize: false,
+            },
+          }, 'comma3', 't_y3'], 3)],
+          yxtConstT: ['y_3', brac(['x_1', 'comma3', {
+            bottomComment: {
+              content: 't_y3', comment: 'constant_1', symbol: 'line2', commentSpace: 0.21, inSize: false,
+            },
+          }], 3)],
           ft: ['f1', brac('t', 2)],
           ftt1: ['f2', brac(['t_3', 'min2', 't12'], 5)],
           ftt1Sub: ['f2', brac(['t_3', 'min2', {
@@ -184,24 +202,127 @@ function addEquation() {
           ftx1H: ['f2', brac(['t_3', 'min2', 'x1OnVbH'], 5)],
           ftx: ['f2', brac(['t_3', 'min2', 'xOnV'], 5)],
           ftx2: ['f1', brac('t_1', 1)],
-          ftx3: ['f3', brac(['t_2', 'min1', 'xOnV1'], 6)],
+          ftx3: ['f1', brac(['t_2', 'min1', 'xOnV1'], 1)],
           sinwt: ['sin', brac(['w1', 't_4'], 2)],
-          sinwtXOnV: ['sin_1', brac(['w2', brac(['t_5', 'min3', 'xOnV2'], 7)], 4)],
+          sinwtXOnV: ['sin', brac(['w1', brac(['t_5', 'min3', 'xOnV2'], 7)], 2)],
           sinwtXOnVExpand: [
-            'sin_1', brac([
+            'sin', brac([
               {
                 bottomComment: {
-                  content: ['w2', brac(['t_5', 'min3', 'xOnV2'], 7)],
-                  comment: ['w1', 't_2', 'min1', 'w3', ' ', 'xOnV1'],
+                  content: ['w1', brac(['t_5', 'min3', 'xOnV2'], 7)],
+                  comment: ['w2', 't_2', 'min1', 'w3', ' ', 'xOnV1'],
                   symbol: 'brace',
                   inSize: false,
                 },
               },
-            ], 4),
+            ], 2),
           ],
-          sinwtwXOnV: ['sin_1', brac(['w1', 't_2', 'min1', 'w3', ' ', 'xOnV1'], 4)],
-          sinwtwxOnVComb: ['sin_1', brac(['w1', 't_2', 'min1', 'wxOnV1'], 4)],
-          sinwtwOnVx: ['sin_1', brac(['w1', 't_2', 'min1', 'wOnV1', ' ', 'x_3'], 4)],
+          sinwtwXOnV: ['sin', brac(['w2', 't_2', 'min1', 'w3', ' ', 'xOnV1'], 2)],
+          sinwtwxOnVComb: ['sin', brac(['w2', 't_2', 'min1', 'wxOnV1'], 2)],
+          sinwtwOnVx: ['sin', brac(['w2', 't_2', 'min1', 'wOnV1', ' ', 'x_3'], 2)],
+          sinConstX: ['sin', brac(['w2', 't_2', 'min1', {
+            bottomComment: {
+              content: ['wOnV1', ' ', 'x_3'],
+              comment: ['constant'],
+              symbol: 'line1',
+              commentSpace: 0.2,
+              inSize: false,
+            },
+          }], 2)],
+          constT: {
+            bottomComment: {
+              content: ['w2', 't_2'],
+              comment: ['constant'],
+              symbol: 'line1',
+              commentSpace: 0.2,
+              inSize: false,
+            },
+          },
+          expandW: {
+            topComment: {
+              content: 'wOnV1',
+              comment: ['twoPi', 'f_4'],
+              symbol: 'line3',
+              inSize: false,
+              commentSpace: 0.2,
+            },
+          },
+          twoPiFOnV1: { frac: [['twoPi', 'f_4'], 'vin2', 'v_2'] },
+          sinConstT: ['sin', brac(['constT', 'min1', 'wOnV1', ' ', 'x_3'], 2)],
+          sinExpandW: ['sin', brac(['constT', 'min1', 'expandW', ' ', 'x_3'], 2)],
+          sin2pif: ['sin', brac(['constT', 'min1', 'twoPiFOnV1', ' ', 'x_3'], 2)],
+          // sin2pifTimesF: ['sin', brac([
+          //   'constT', 'min1',
+          //   {
+          //     frac: [
+          //       ['twoPi', 'f_4', 'times1', { scale: [{ frac: ['_1_1', 'vin1', 'f_5'] }, 0.4] }],
+          //       'vin2',
+          //       ['v_2', 'times2', { scale: [{ frac: ['_1_2', 'vin3', 'f_6'] }, 0.4] }],
+          //     ],
+          //   },
+          //   ' ', 'x_3',
+          // ], 2)],
+          sin2pifTimesF: ['sin', brac([
+            'constT', 'min1',
+            {
+              frac: [
+                ['twoPi', 'f_4', 'div1', 'f_5'],
+                'vin2',
+                ['v_2', 'div2', 'f_6'],
+              ],
+            },
+            '  ', 'x_3',
+          ], 2)],
+          sin2pifTimesFCancel: ['sin', brac([
+            'constT', 'min1',
+            {
+              frac: [
+                ['twoPi', stk('f_4', 1), 'div1', stk('f_5', 2)],
+                'vin2',
+                ['v_2', 'div2', 'f_6'],
+              ],
+            },
+            '  ', 'x_3',
+          ], 2)],
+          sin2piOnfv: ['sin', brac([
+            'constT', 'min1',
+            {
+              frac: [
+                'twoPi',
+                'vin2',
+                ['v_2', 'div2', 'f_6'],
+              ],
+            },
+            '  ', 'x_3',
+          ], 2)],
+          sin2piOnfvL: ['sin', brac([
+            'constT', 'min1',
+            {
+              frac: [
+                'twoPi',
+                'vin2',
+                {
+                  bottomComment: {
+                    content: ['v_2', 'div2', 'f_6'],
+                    comment: 'lambda',
+                    symbol: 'brace',
+                    inSize: false,
+                  },
+                },
+              ],
+            },
+            '  ', 'x_3',
+          ], 2)],
+          sin2piOnLConst: ['sin', brac([
+            'constT', 'min1',
+            { frac: ['twoPi', 'vin2', 'lambda'] },
+            '  ', 'x_3',
+          ], 2)],
+          sin2piOnL: ['sin', brac([
+            'w2', 't_2', 'min1',
+            { frac: ['twoPi', 'vin2', 'lambda'] },
+            '  ', 'x_3',
+          ], 2)],
           ftxBotCom: ['f2', brac({
             bar: {
               content: ['t_3', 'min2', 'xOnV'],
@@ -211,6 +332,13 @@ function addEquation() {
               space: 0.08,
             },
           }, 5)],
+          fOnVUnits: [
+            { frac: ['v_1', 'vin3', 'f_5'] },
+            '_ \u21d2 ',
+            { frac: [['m_1', 'div3', 's_2'], 'vin1', ['_1_1', 'div1', 's_1']] },
+            'equals2',
+            'm_2',
+          ],
         },
         formDefaults: {
           alignment: { fixTo: 'equals' },
@@ -249,51 +377,82 @@ function addEquation() {
           yxtx: ['yxt', 'equals', 'ftx'],
           // //////////////////////////////////////////////////////////
           yxtxAndSine: {
-            lines: {
-              content: [
-                { content: ['yxt', 'equals', 'ftx'], justify: 'equals' },
-                { content: ['ftx2', 'equals2', 'sinwt'], justify: 'equals2' },
-              ],
-              justify: 'element',
-              baselineSpace: 0.5,
+            content: {
+              lines: {
+                content: [
+                  { content: ['yxt', 'equals', 'ftx'], justify: 'equals' },
+                  { content: ['ftx2', 'equals2', 'sinwt'], justify: 'equals2' },
+                ],
+                justify: 'element',
+                baselineSpace: 0.4,
+              },
             },
+            alignment: { yAlign: -2.9 },
           },
           yxtxAndSineBotCom: {
-            lines: {
-              content: [
-                { content: ['yxt', 'equals', 'ftxBotCom'], justify: 'equals' },
-                { content: ['ftx2', 'equals2', 'sinwt'], justify: 'equals2' },
-              ],
-              justify: 'element',
-              baselineSpace: 0.5,
+            content: {
+              lines: {
+                content: [
+                  { content: ['yxt', 'equals', 'ftxBotCom'], justify: 'equals' },
+                  { content: ['ftx2', 'equals2', 'sinwt'], justify: 'equals2' },
+                ],
+                justify: 'element',
+                baselineSpace: 0.4,
+              },
             },
+            alignment: { yAlign: -2.9 },
           },
-          yxtxAndSineBotComXOnV: {
-            lines: {
-              content: [
-                { content: ['yxt', 'equals', 'ftxBotCom'], justify: 'equals' },
-                { content: ['ftx2', 'equals2', 'sinwt'], justify: 'equals2' },
-                { content: ['ftx3', 'equals3', 'sinwtXOnV'], justify: 'equals3' },
-              ],
-              justify: 'element',
-              baselineSpace: 0.5,
-            },
-          },
+          // yxtxAndSineBotComXOnV: {
+          //   content: {
+          //     lines: {
+          //       content: [
+          //         { content: ['yxt', 'equals', 'ftxBotCom'], justify: 'equals' },
+          //         { content: ['ftx2', 'equals2', 'sinwt'], justify: 'equals2' },
+          //         { content: ['ftx3', 'equals3', 'sinwtXOnV'], justify: 'equals3' },
+          //       ],
+          //       justify: 'element',
+          //       baselineSpace: 0.4,
+          //     },
+          //   },
+          //   alignment: { yAlign: -2.9 },
+          // },
           yxtxAndSineXOnV: {
-            lines: {
-              content: [
-                { content: ['yxt', 'equals', 'ftx'], justify: 'equals' },
-                { content: ['ftx3', 'equals3', 'sinwtXOnV'], justify: 'equals3' },
-              ],
-              justify: 'element',
-              baselineSpace: 0.6,
+            content: {
+              lines: {
+                content: [
+                  { content: ['yxt', 'equals', 'ftx'], justify: 'equals' },
+                  { content: ['ftx3', 'equals3', 'sinwtXOnV'], justify: 'equals3' },
+                ],
+                justify: 'element',
+                baselineSpace: 0.4,
+              },
             },
+            alignment: { yAlign: -2.9 },
           },
           yxtxSine: ['yxt', 'equals', 'sinwtXOnV'],
           yxtxSineExpanded: ['yxt', 'equals', 'sinwtXOnVExpand'],
           yxtxSinewtwxv: ['yxt', 'equals', 'sinwtwXOnV'],
           yxtxSinewtwxOnv: ['yxt', 'equals', 'sinwtwxOnVComb'],
           yxtxSinewtwvx: ['yxt', 'equals', 'sinwtwOnVx'],
+          // //////////////////////////////////////////////////////////
+          sineConstX: ['yxtConstX', 'equals', 'sinConstX'],
+          sineConstT: ['yxtConstT', 'equals', 'sinConstT'],
+          sineExpandW: ['yxtConstT', 'equals', 'sinExpandW'],
+          sine2PiF: ['yxtConstT', 'equals', 'sin2pif'],
+          sine2PiFTimesF: ['yxtConstT', 'equals', 'sin2pifTimesF'],
+          sine2PiFTimesFCancel: ['yxtConstT', 'equals', 'sin2pifTimesFCancel'],
+          sine2PiOnfv: ['yxtConstT', 'equals', 'sin2piOnfv'],
+          sine2PiOnfvUnits: ['yxtConstT', 'equals', 'sin2piOnfv', 'comma2', '            ', 'fOnVUnits'],
+          sine2PiOnfvL: ['yxtConstT', 'equals', 'sin2piOnfvL'],
+          sine2PiOnL: ['yxtConstT', 'equals', 'sin2piOnLConst'],
+          sineGeneral: ['yxt', 'equals', 'sin2piOnL'],
+          vOnFLambda: [{ frac: ['v', 'vin1', 'f'] }, 'equals2', 'lambda1'],
+          cLambdaF: {
+            content: ['v', 'equals2', 'lambda1', ' ', 'f'],
+            translation: {
+              f: { style: 'curve', direction: 'down', mag: 0.8 },
+            },
+          },
         },
         // formSeries: ['0'],
         position: [0, 1],
@@ -302,6 +461,8 @@ function addEquation() {
         scenarios: {
           title: { position: [-0.4, 1.9], scale: 1.3 },
           default: { position: [-0.1, 1.9], scale: 1.3 },
+          left: { position: [-0.4, 1.9], scale: 1.3 },
+          farLeft: { position: [-1.3, 1.9], scale: 1.3}
         },
       },
     },
@@ -332,6 +493,7 @@ function addEquation() {
         scenarios: {
           side: { position: [2, 0.4], scale: 1 },
           default: { position: [-0.1, 1.9], scale: 1.3 },
+
         },
       },
     },

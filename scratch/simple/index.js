@@ -13,14 +13,21 @@ const [p] = figure.add({
       0: [{ frac: ['t', 'vinculum', 'a'] }],
     },
   },
+  mods: {
+    scenarios: {
+      default: { position: [0, 0] },
+      left: { position: [1, 0] },
+    },
+  },
 });
-// p.showForm('0');
-console.log(p._t.lastDrawTransform.order);
-p.pulse({ elements: ['b', 'vinculum', 't', 'a'], translation: 0.02, min: -0.02, frequency: 2, duration: 3, angle: Math.PI / 2 })
 
-console.log(p._a.lastDrawTransform)
-console.log(p._vinculum.lastDrawTransform)
-
+p.animations.new()
+  .inParallel([
+    // p.animations.position({ target: [1, 0], delay: 1, duration: 1 }),
+    p.animations.scenario({ target: 'left', delay: 1, duration: 1 }),
+    p.animations.rotation({ target: 1, delay: 1, duration: 1 }),
+  ])
+  .start();
 // const [eqn] = figure.add(
 //   {
 //     name: 'eqn',
