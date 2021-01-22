@@ -12,8 +12,8 @@ const figure = new Fig.Figure({
 const colorText = [0.3, 0.3, 0.3, 1];
 const color0 = [1, 0, 0, 1];
 const color1 = [0, 0.5, 1, 1];
-const color2 = [0.4, 0.4, 0.4, 1];
-const color3 = [1, 0.2, 0.8, 1];
+const color2 = [0.3, 0.3, 0.3, 1];
+const color3 = [1, 0, 1, 1];
 
 function setupFigure() {
   const { Transform, Point } = Fig;
@@ -228,11 +228,12 @@ function setupFigure() {
       sides,
       radius,
       transform: new Transform().translate(x, 0),
-      color: color2,
+      color: color1,
       position: [x, 0],
     },
     mods: {
-      dimColor: [0.5, 0.5, 0.5, 1],
+      // dimColor: [0.5, 0.5, 0.5, 1],
+      dimColor: color2,
     },
   });
 
@@ -300,13 +301,15 @@ function setupFigure() {
       if (index === 0) { b.setColor(color0); }
     });
     balls.toFront(['ball0', 'ball40']);
+    const [tracker] = medium.add(ball(0, 'Tracker', ballSize));
+    tracker.setColor(color3);
     const movePad = medium.getElement('movePad');
     medium.custom = {
       f: 0.2,
       c: 1,
       A,
       balls,
-      tracker: xValues.length + 1,
+      tracker,
       trackingTime: -10000,
       ball0: balls.getElement('ball0'),
       recording: new Recorder(maxValue / minVelocity),
@@ -316,29 +319,37 @@ function setupFigure() {
         if (medium.custom.tracker < xValues.length) {
           balls[`_ball${medium.custom.tracker}`].setColor(color2);
         }
-        medium.custom.tracker = xValues.length + 1;
+        // medium.custom.tracker = xValues.length + 1;
         for (let i = 0; i < xValues.length; i += 1) {
           const b = balls[`_ball${i}`];
           const by = medium.custom.recording.getValueAtTimeAgo((b.custom.x) / medium.custom.c);
-          if (i > 0) {
-            if (Math.abs(time.now() + medium.custom.trackingTime - b.custom.x / medium.custom.c) <= ballSize / medium.custom.c * 2.5 ) {
-              medium.custom.tracker = i;
-            }
-            // b.setColor(color2);
-          }
           b.setPosition(b.custom.drawX, by);
         }
-        if (medium.custom.tracker < xValues.length) {
-          balls[`_ball${medium.custom.tracker}`].setColor(color3);
+        if (tracker.isShown) {
+          // const ballSizeTime = ballSize * 2 / medium.custom.c;
+          const ballSpaceTime = axis.drawToValue(ballSize * 2) / medium.custom.c;
+          const t = Math.floor((time.now() + medium.custom.trackingTime) / ballSpaceTime) * ballSpaceTime;
+          
+          const xValue = Math.max(t * medium.custom.c, 0);
+          const x = axis.valueToDraw(xValue);
+          if (t > 0 && axis.inAxis(xValue + 0.2)) {
+            const by = medium.custom.recording.getValueAtTimeAgo(t);
+            tracker.setPosition(x, by);
+          } else {
+            tracker.setPosition(100, 0);
+          }
         }
+        // if (medium.custom.tracker < xValues.length) {
+        //   balls[`_ball${medium.custom.tracker}`].setColor(color3);
+        // }
       },
-      pulseTracked: (scale = 4) => {
-        if (medium.custom.tracker < xValues.length) {
-          const ballName = `ball${medium.custom.tracker}`;
-          balls.toFront([ballName]);
-          balls.elements[ballName].pulse({ scale });
-        }
-      },
+      // pulseTracked: (scale = 4) => {
+      //   if (medium.custom.tracker < xValues.length) {
+      //     const ballName = `ball${medium.custom.tracker}`;
+      //     balls.toFront([ballName]);
+      //     balls.elements[ballName].pulse({ scale });
+      //   }
+      // },
       stop: () => {
         medium.stop();
         movePad.animations.cancel('_noStop_sine');
@@ -769,6 +780,37 @@ function setupFigure() {
     }
   });
 
+  const disturbThenFreeze = () => {
+    reset();
+    disturb([medium1, medium2], 'pulse', 0.6, true);
+    figure.elements.animations.cancelAll();
+    pauseAfterDelay(1.4);
+    const startTime = time.now();
+    figure.elements.animations.new()
+      .custom({
+        duration: 10000,
+        callback: () => {
+          if (figure.elements.animations.get('pauseAfterDelay') == null) {
+            return true;
+          }
+          if (time.now() - startTime >= 1.35) {
+            return true;
+          }
+          return false;
+        },
+      })
+      .trigger({
+        delay: 0.2,
+        callback: () => {
+          if (getInAnimation()) {
+            medium1.custom.tracker.pulse({ scale: 4 });
+            medium2.custom.tracker.pulse({ scale: 4 });
+          }
+        },
+      })
+      .start();
+  };
+
   pulseButton.onClick = () => {
     reset();
     unpause();
@@ -801,6 +843,7 @@ function setupFigure() {
     pauseAfterDelay,
     setInAnimation,
     getInAnimation,
+    disturbThenFreeze,
   };
 }
 

@@ -146,16 +146,20 @@ function addSlides() {
   slides.push({
     scenarioCommon: ['default'],
     modifiers: {
-      string: action('string', () => medium.custom.balls.pulse({
+      medium: action('medium', () => medium.custom.balls.pulse({
         translation: 0.02, angle: Math.PI / 2, min: -0.02, frequency: 3,
       })),
       particle: action('particle', () => medium.custom.ball0.pulse({ scale: 4 }), 0.15, color0),
-      medium: highlight('medium'),
+      // medium: highlight('medium'),
       disturbing: highlight('disturbing'),
     },
     text: [
-      'This |string| of connected particles represent a |medium|. Moving or',
-      '|disturbing| one |particle| pulls its neighbor in the same direction.',
+      'This string of connected particles represent a |medium|. Moving or',
+      '|disturbing| a |particle| pulls its neighbor in the same direction.',
+      {
+        text: 'Try dragging the |first particle| to see how it pulls it\'s neighbor',
+        font: { size: 0.09 },
+      },
     ],
     form: null,
     enterStateCommon: () => {
@@ -205,8 +209,7 @@ function addSlides() {
       velocity: highlight('velocity'),
     },
     text: [
-      'A |wave| is a |disturbance| that propagates through a medium or field',
-      'with some |velocity|.',
+      'A |disturbance| that propagates through a medium or field is a |wave|.',
       // {
       //   text: 'Touch the word |disturbance| or manually move the |first particle|.',
       //   font: { size: 0.08 },
@@ -250,10 +253,25 @@ function addSlides() {
       'To see this, let\'s look at |two mediums| where disturbances propagate',
       'with |different| velocities.',
     ],
+    steadyStateCommon: (from) => {
+      if (from === 'prev') {
+        layout.startDisturbances(medium, 10, false);
+      } else {
+        layout.reset();
+        layout.startDisturbances(medium, 10, true);
+      }
+    },
   });
 
   slides.push({
     showCommon: ['medium1', 'medium2', 'vFast', 'vSlow'],
+    enterStateCommon: () => {
+      medium1.custom.movePad.setMovable(true);
+      medium1.custom.balls.highlight(['ball0']);
+      medium2.custom.movePad.setMovable(true);
+      medium2.custom.balls.highlight(['ball0']);
+      layout.unpause();
+    },
     steadyStateCommon: (from) => {
       if (from === 'prev') {
         layout.setVelocity(medium1, 2, 1);
@@ -262,6 +280,11 @@ function addSlides() {
       } else {
         layout.startDisturbances([medium1, medium2], 5.5, false);
       }
+    },
+    leaveStateCommon: () => {
+      medium1.custom.balls.undim();
+      medium2.custom.balls.undim();
+      layout.stopDisturbances();
     },
   });
 
@@ -334,76 +357,52 @@ function addSlides() {
 
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
-  const disturbThenFreeze = () => {
-    layout.reset();
-    layout.disturb([medium1, medium2], 'pulse', 0.6, true);
-    figure.elements.animations.cancelAll();
-    layout.pauseAfterDelay(1.4);
-    const startTime = layout.time.now();
-    figure.elements.animations.new()
-      .custom({
-        duration: 10000,
-        callback: () => {
-          if (figure.elements.animations.get('pauseAfterDelay') == null) {
-            return true;
-          }
-          if (layout.time.now() - startTime >= 1.35) {
-            return true;
-          }
-          return false;
-        },
-      })
-      .trigger({
-        delay: 0.2,
-        callback: () => {
-          // if (figure.elements.animations.animations.length > 0) {
-          if (layout.getInAnimation()) {
-            medium1.custom.pulseTracked(4);
-            medium2.custom.pulseTracked(4);
-          }
-        },
-      })
-      .start();
-  };
   slides.push({
     modifiers: {
-      faster: pulse('faster', 'vFast', 2.5, 0.05, 'right'),
       disturbance: action('disturbance', () => layout.disturb([medium1, medium2]), 0.03),
-      freeze: action('freeze', () => disturbThenFreeze()),
+      freeze: action('freeze', () => layout.disturbThenFreeze()),
       'initial disturbance': action('initial disturbance', () => {
-        if (layout.getInAnimation()) {
-          medium1.custom.pulseTracked(4);
-          medium2.custom.pulseTracked(4);
+        if (
+          layout.getInAnimation()
+          && (
+            medium1.custom.tracker.getPosition().x < 100
+            || medium2.custom.tracker.getPosition().x < 100
+          )
+        ) {
+          medium1.custom.tracker.pulse({ scale: 4 });
+          medium2.custom.tracker.pulse({ scale: 4 });
         } else {
-          disturbThenFreeze();
+          layout.disturbThenFreeze();
         }
-        // medium1.custom.balls.getElement('ball27').pulse({ scale: 4 });
-        // medium2.custom.balls.getElement('ball13').pulse({ scale: 4 });
       }, 0, color3),
       source: action('source', () => {
         medium1.custom.balls.getElement('ball0').pulse({ scale: 4 });
         medium2.custom.balls.getElement('ball0').pulse({ scale: 4 });
       }, 0, color0),
-      'faster velocity': action('faster velocity', () => {
-        medium1.custom.pulseTracked(4);
-      }, 0),
-      'slower velocity': action('slower velocity', () => {
-        // medium2.custom.balls.getElement('ball13').pulse({ scale: 4 });
-        medium2.custom.pulseTracked(4);
-      }, 0),
+      faster: action('faster velocity', () => figure.getElement('vFast').pulse()),
+      'slow motion': action('slow motion', () => {
+        layout.slowMotion();
+        layout.disturbThenFreeze();
+      }),
     },
     enterState: () => {
+      medium1.custom.tracker.show();
+      medium2.custom.tracker.show();
       medium1.custom.trackingTime = -0.2;
       medium2.custom.trackingTime = -0.2;
     },
     text: [
       'When we |freeze| time, we see the |initial disturbance| has travelled farther',
-      'from the |source| for the |faster velocity| than for the |slower velocity|.',
+      'from the |source| when the velocity is |faster|.',
+      {
+        text: 'It can help to watch it in |slow motion|.',
+        font: { size: 0.09 },
+      },
     ],
     leaveState: () => {
-      medium1.custom.trackingTime = -10000;
-      medium2.custom.trackingTime = -10000;
-    }
+      medium1.custom.trackingTime = 1000;
+      medium2.custom.trackingTime = 1000;
+    },
   });
 
   // ///////////////////////////////////////////////////////////////////////////
@@ -564,6 +563,7 @@ function addSlides() {
     fromForm: 'yx1tx1HiddenX',
     form: 'yxtx',
     enterStateCommon: () => {
+      medium.custom.movePad.setMovable(true);
       medium.custom.balls.highlight(['ball0']);
     },
   });
@@ -591,6 +591,14 @@ function addSlides() {
       '|function| tells us the disturbance at any point in |space|, at any |time|.',
     ],
     form: 'yxtx',
+    steadyStateCommon: (from) => {
+      if (from === 'prev') {
+        layout.startDisturbances(medium, 10, false);
+      } else {
+        layout.reset();
+        layout.startDisturbances(medium, 10, true);
+      }
+    },
   });
 
   // ///////////////////////////////////////////////////////////////////////////
@@ -615,6 +623,10 @@ function addSlides() {
     },
     // showCommon: [],
     text: 'Now, let\'s make our |initial disturbance| a |sine| function.',
+    enterStateCommon: () => {
+      medium.custom.movePad.setMovable(false);
+      medium.custom.balls.highlight(['ball0']);
+    },
     steadyStateCommon: (from) => {
       if (from === 'prev') {
         layout.reset();
@@ -646,8 +658,12 @@ function addSlides() {
           frequency: 3,
         }), 0.15,
       ),
+      any: eqnPulse('any', eqn.getPhraseElements('yxt')),
     },
-    text: 'And substitute the |input|.',
+    text: [
+      'To find the resulting wave at |any| position in time we can substitute',
+      'the |input|.',
+    ],
   });
 
   const setArrows = () => {
@@ -751,6 +767,10 @@ function addSlides() {
       }, 0.15),
     },
     text: 'Both equations are |equal| and so we can equate |terms|.',
+    enterStateCommon: () => {
+      medium.custom.movePad.setMovable(false);
+      medium.custom.balls.dim();
+    },
   });
 
   slides.push({
@@ -798,11 +818,12 @@ function addSlides() {
   slides.push({
     text: [
       'Similar to before, this equation tells us the disturbance at any point',
-      'in space, at any snapshot in time.',
+      'in space, at any time.',
     ],
     enterStateCommon: () => {
-      // medium.custom.balls.highlight(['ball0', 'ball40']);
-      // medium.custom.movePad.setMovable(true);
+      // medium.custom.balls.highlight(['ball0']);
+      medium.custom.movePad.setMovable(false);
+      medium.custom.balls.dim();
       layout.unpause();
     },
   });
@@ -814,12 +835,22 @@ function addSlides() {
       'phase offset': eqnPulse('phase offset', [
         ...eqn.getPhraseElements('wOnV1'), 'x_3', 'min1',
       ]),
-      time: eqnPulse('time', ['sin', 'w2', 't_2']),
-      'fixed position': eqnPulse('fixed position', ['constant_1']),
+      'sine function dependent on time': eqnPulse('sine function dependent on time', ['sin', 'w2', 't_2']),
+      // 'fixed position': eqnPulse('fixed position', ['constant_1']),
+      'fixed position': action('fixed position', () => {
+        eqn.pulse({
+          elements: ['constant_1'],
+          translation: 0.03,
+          min: -0.03,
+          frequency: 3,
+          angle: Math.PI / 2,
+        });
+        ballx1.pulse({ scale: 4 });
+      }),
     },
     text: [
-      'If we look at a |fixed position|, we see a sine function dependent on |time|',
-      'with a constant |phase offset|.',
+      'If we look at a |fixed position|, we see a |sine function dependent on time|',
+      'with a constant |phase offset| (delay from the original disturbance).',
     ],
     form: 'sineConstX',
     enterState: () => {
@@ -835,15 +866,18 @@ function addSlides() {
   // ///////////////////////////////////////////////////////////////////////////
   slides.push({
     modifiers: {
-      'phase offset': eqnPulse('phase offset', ['w2', 't_2']),
+      'phase offset': eqnPulse('phase offset', ['w2', 't_2', 'min1']),
       space: eqnPulse('space', [
+        'sin', ...eqn.getPhraseElements('wOnV1'), 'x_3', 'min1',
+      ]),
+      'sine function in': eqnPulse('sine function in', [
         'sin', ...eqn.getPhraseElements('wOnV1'), 'x_3', 'min1',
       ]),
       'time snapshot': eqnPulse('time snapshot', ['constant_1']),
       'minus sign': eqnPulse('minus sign', ['min1']),
     },
     text: [
-      'Similarly, if we look at a |time snapshot|, we see a sine function in',
+      'Similarly, if we look at a |time snapshot|, we see a |sine function in|',
       '|space| with a constant |phase offset|.',
       {
         text: 'NB: The |minus sign| is a phase offset of |piSmall|.',
@@ -853,21 +887,28 @@ function addSlides() {
     ],
     form: 'sineConstT',
     enterStateCommon: () => {
-      eqn.dim(['w2', 't_2', 't_y3']);
+      eqn.dim(['w2', 't_2', 't_y3', 'min1']);
       layout.pause();
+      medium.custom.movePad.setMovable(false);
+      medium.custom.balls.dim();
     },
   });
 
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
   slides.push({
+    modifiers: {
+      'traveling sine wave': highlight('traveling sine wave'),
+    },
     text: [
-      'When we disturb a medium with a time dependent sine wave at some point',
-      'the disturbance will distribute through space as a traveling sine wave.',
+      'Therefore, when we disturb a medium with a time dependent sine wave, the',
+      'disturbance will distribute through space as a |traveling sine wave|.',
     ],
     enterStateCommon: () => {
-      eqn.dim(['w2', 't_2', 't_y3', 'line1', 'line2', 'constant', 'constant_1']);
+      eqn.dim(['w2', 't_2', 't_y3', 'line1', 'line2', 'constant', 'constant_1', 'min1']);
       layout.pause();
+      medium.custom.movePad.setMovable(false);
+      medium.custom.balls.dim();
     },
   });
 
@@ -1123,7 +1164,7 @@ function addSlides() {
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
   nav.loadSlides(slides);
-  nav.goToSlide(10);
+  nav.goToSlide(40);
 }
 
 addSlides();

@@ -118,6 +118,7 @@ function addEquation() {
           vin2: { symbol: 'vinculum', lineWidth: 0.007 },
           vin3: { symbol: 'vinculum', lineWidth: 0.007 },
           brace: { symbol: 'brace', side: 'bottom', lineWidth: 0.005 },
+          tBrace: { symbol: 'brace', side: 'top', lineWidth: 0.005 },
           bBrace: { symbol: 'brace', side: 'bottom', lineWidth: 0.008, color: color1 },
           line1: { symbol: 'line', width: 0.005, arrow: { start: { head: 'triangle' } } },
           line2: { symbol: 'line', width: 0.005, arrow: { start: { head: 'triangle' } } },
@@ -208,10 +209,10 @@ function addEquation() {
           sinwtXOnVExpand: [
             'sin', brac([
               {
-                bottomComment: {
+                topComment: {
                   content: ['w1', brac(['t_5', 'min3', 'xOnV2'], 7)],
                   comment: ['w2', 't_2', 'min1', 'w3', ' ', 'xOnV1'],
-                  symbol: 'brace',
+                  symbol: 'tBrace',
                   inSize: false,
                 },
               },
