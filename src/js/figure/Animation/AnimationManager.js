@@ -704,6 +704,20 @@ export default class AnimationManager {
     }
   }
 
+  /**
+   * Get an animation by name.
+   @param {string} name
+   @return {AnimationStep | null}
+   */
+  get(name: string) {
+    for (let i = 0; i < this.animations.length; i += 1) {
+      if (this.animations[i].name === name) {
+        return this.animations[i];
+      }
+    }
+    return null;
+  }
+
   cancelAll(how: ?'complete' | 'freeze' = null, force: boolean = false) {
     for (let i = 0; i < this.animations.length; i += 1) {
       if (force || !this.animations[i].name.startsWith('_noStop_')) {

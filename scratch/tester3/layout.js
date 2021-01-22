@@ -13,6 +13,7 @@ const colorText = [0.3, 0.3, 0.3, 1];
 const color0 = [1, 0, 0, 1];
 const color1 = [0, 0.5, 1, 1];
 const color2 = [0.4, 0.4, 0.4, 1];
+const color3 = [1, 0.2, 0.8, 1];
 
 function setupFigure() {
   const { Transform, Point } = Fig;
@@ -37,7 +38,8 @@ function setupFigure() {
         'Traveling Sine Waves',
         {
           text: 'Velocity, wavelength and frequency',
-          font: { size: 0.15 },
+          font: { size: 0.12 },
+          lineSpace: 0.25,
         },
       ],
       font: { size: 0.25, color: colorText },
@@ -70,7 +72,7 @@ function setupFigure() {
     },
     mods: {
       isTouchable: true,
-      touchBorder: [0.15, 0.05, 0.15, 0.15],
+      touchBorder: [0.05, 0.05, 0.05, 0.1],
     },
   });
 
@@ -294,7 +296,7 @@ function setupFigure() {
       const b = balls.getElement(`ball${index}`);
       b.custom.x = axis.drawToValue(x);
       b.custom.drawX = x;
-      if (index % 10 === 0) { b.setColor(color1); }
+      // if (index % 10 === 0) { b.setColor(color1); }
       if (index === 0) { b.setColor(color0); }
     });
     balls.toFront(['ball0', 'ball40']);
@@ -304,15 +306,37 @@ function setupFigure() {
       c: 1,
       A,
       balls,
+      tracker: xValues.length + 1,
+      trackingTime: -10000,
       ball0: balls.getElement('ball0'),
       recording: new Recorder(maxValue / minVelocity),
       update: (deltaTime) => {
         const { y } = movePad.transform.order[2];
         medium.custom.recording.record(y, deltaTime);
+        if (medium.custom.tracker < xValues.length) {
+          balls[`_ball${medium.custom.tracker}`].setColor(color2);
+        }
+        medium.custom.tracker = xValues.length + 1;
         for (let i = 0; i < xValues.length; i += 1) {
           const b = balls[`_ball${i}`];
           const by = medium.custom.recording.getValueAtTimeAgo((b.custom.x) / medium.custom.c);
+          if (i > 0) {
+            if (Math.abs(time.now() + medium.custom.trackingTime - b.custom.x / medium.custom.c) <= ballSize / medium.custom.c * 2.5 ) {
+              medium.custom.tracker = i;
+            }
+            // b.setColor(color2);
+          }
           b.setPosition(b.custom.drawX, by);
+        }
+        if (medium.custom.tracker < xValues.length) {
+          balls[`_ball${medium.custom.tracker}`].setColor(color3);
+        }
+      },
+      pulseTracked: (scale = 4) => {
+        if (medium.custom.tracker < xValues.length) {
+          const ballName = `ball${medium.custom.tracker}`;
+          balls.toFront([ballName]);
+          balls.elements[ballName].pulse({ scale });
         }
       },
       stop: () => {
@@ -414,6 +438,14 @@ function setupFigure() {
   // timePlot1.setPosition(-1.9, 1.9);
   // timePlot2.setPosition(-1.9, 0.8);
 
+  let inAnimation = false;
+
+  const setInAnimation = (value = true) => {
+    inAnimation = value;
+  };
+
+  const getInAnimation = () => inAnimation;
+
 
   const stop = () => {
     medium1.custom.stop();
@@ -422,6 +454,7 @@ function setupFigure() {
   };
   const reset = () => {
     stop();
+    setInAnimation(false);
     maxTimeReached = false;
     medium.custom.reset();
     medium1.custom.reset();
@@ -603,8 +636,26 @@ function setupFigure() {
     if (timerId != null) {
       clearTimeout(timerId);
     }
+    figure.elements.animations.cancel('pauseAfterDelay');
   };
-  const disturb = (med, style = 'pulse', parameter = 0.6) => {
+
+  const pauseAfterDelay = (delay) => {
+    const startTime = time.now();
+    figure.elements.animations.new('pauseAfterDelay')
+      .custom({
+        duration: 10000,
+        callback: () => {
+          if (time.now() - startTime >= delay) {
+            return true;
+          }
+          return false;
+        },
+      })
+      .trigger(() => pause())
+      .start();
+  };
+
+  const disturb = (med, style = 'pulse', parameter = 0.6, inAnimationValue = false) => {
     if (Array.isArray(med)) {
       med.forEach((m) => {
         if (style === 'pulse') {
@@ -619,6 +670,7 @@ function setupFigure() {
       sineWave(med, parameter);
     }
     lastDisturbance = time.now();
+    setInAnimation(inAnimationValue);
   };
 
   const startDisturbances = (med, timeTillNext = 10, immediately = true, style = 'pulse', parameter) => {
@@ -645,7 +697,7 @@ function setupFigure() {
 
   const setVelocity = (med, velocity, velocityButtonIndex) => {
     reset();
-    unpause();
+    // unpause();
     med.custom.setVelocity(velocity);
     let velocityButton = velocityButton1;
     if (velocityButtonIndex === 2) {
@@ -656,7 +708,7 @@ function setupFigure() {
     } else {
       velocityButton.setLabel('2v');
     }
-    startDisturbances([medium1, medium2], 5.5, true, 'sineWave', 0);
+    // startDisturbances([medium1, medium2], 5.5, true, 'sineWave', 0);
   };
   const toggleVelocity = (med, velocityButtonIndex) => {
     if (med.custom.c === 0.5) {
@@ -693,55 +745,29 @@ function setupFigure() {
   freqButton1.onClick = () => toggleFrequency(medium1, 1);
   freqButton2.onClick = () => toggleFrequency(medium2, 2);
 
+  medium.custom.movePad.subscriptions.add('setTransform', () => {
+    if (medium.custom.movePad.state.isBeingMoved) {
+      lastDisturbance = time.now();
+      figure.elements.animations.cancel('pauseAfterDelay');
+      setInAnimation(false);
+    }
+  });
 
-    // reset();
-    // unpause();
-    // if (medium1.custom.c === 0.5) {
-    //   medium1.custom.setVelocity(0.9);
-    //   velocityButton1.setLabel('Fast');
-    // } else {
-    //   medium1.custom.setVelocity(0.5);
-    //   velocityButton1.setLabel('Slow');
-    // }
-    // startDisturbances([medium1, medium2], 5.5, true, 'sineWave', 0);
-  // };
-  // velocityButton2.onClick = () => {
-  //   reset();
-  //   unpause();
-  //   if (medium2.custom.c === 0.5) {
-  //     medium2.custom.setVelocity(0.9);
-  //     velocityButton2.setLabel('Fast');
-  //   } else {
-  //     medium2.custom.setVelocity(0.5);
-  //     velocityButton2.setLabel('Slow');
-  //   }
-  //   startDisturbances([medium1, medium2], 5.5, true, 'sineWave', 0);
-  // };
+  medium1.custom.movePad.subscriptions.add('setTransform', () => {
+    if (medium1.custom.movePad.state.isBeingMoved) {
+      lastDisturbance = time.now();
+      figure.elements.animations.cancel('pauseAfterDelay');
+      setInAnimation(false);
+    }
+  });
 
-  // freqButton1.onClick = () => {
-  //   reset();
-  //   unpause();
-  //   if (medium1.custom.f === 0.25) {
-  //     medium1.custom.setFrequency(0.5);
-  //     freqButton1.setLabel('0.5 Hz');
-  //   } else {
-  //     medium1.custom.setFrequency(0.25);
-  //     freqButton1.setLabel('0.25 Hz');
-  //   }
-  //   startDisturbances([medium1, medium2], 5.5, true, 'sineWave', 0);
-  // };
-  // freqButton2.onClick = () => {
-  //   reset();
-  //   unpause();
-  //   if (medium2.custom.f === 0.25) {
-  //     medium2.custom.setFrequency(0.5);
-  //     freqButton2.setLabel('0.5 Hz');
-  //   } else {
-  //     medium2.custom.setFrequency(0.25);
-  //     freqButton2.setLabel('0.25 Hz');
-  //   }
-  //   startDisturbances([medium1, medium2], 5.5, true, 'sineWave', 0);
-  // };
+  medium2.custom.movePad.subscriptions.add('setTransform', () => {
+    if (medium2.custom.movePad.state.isBeingMoved) {
+      lastDisturbance = time.now();
+      figure.elements.animations.cancel('pauseAfterDelay');
+      setInAnimation(false);
+    }
+  });
 
   pulseButton.onClick = () => {
     reset();
@@ -752,11 +778,6 @@ function setupFigure() {
     reset();
     unpause();
     startDisturbances([medium1, medium2], 8, true, 'sineWave', 0);
-    // reset();
-    // unpause();
-    // stop();
-    // sineWave(medium1);
-    // sineWave(medium2);
   };
   const setMaxTime = (t) => { maxTime = t; };
 
@@ -776,154 +797,11 @@ function setupFigure() {
     stopDisturbances,
     setVelocity,
     setFrequency,
+    disturb,
+    pauseAfterDelay,
+    setInAnimation,
+    getInAnimation,
   };
 }
 
 const layout = setupFigure();
-
-// balls.highlight([
-//   'ball0', 'ball10', 'ball20', 'ball30', 'ball40', 'ball50', 'ball60', 'ball70',
-// ]);
-
-// spacePlot.setScenario('small');
-// spaceXSmall.show();
-// spaceX.hide();
-// timePlot.show();
-// timePlot.setScenario('small');
-// enableMaxTime = true;
-
-/**
-  Why does c = lf for a travelling sine wave?
-  
-  A wave is a disturbance that propagates through a medium or field.
-
-  >>The disturbance propagates through the medium without moving the medium in the direction of the wave.
-
-  The velocity of the disturbance changes how it is distributed in space. Make the velocity faster or slower to see how it changes.
-
-  If the disturbance travels faster, the distribution of the disturbance in space is more spread out.
-
-  If the disturbance travels slower, the distribution of the disturbance in space is more compressed.
-
-  When the disturbance travels with a velocity v, then in time t1 it will travel a distance x1 where:
-        x1 = vt1
-
-  If we know the disturbance at x0 is:
-  y(x0, t) = f(t)
-
-  Then, the disturbance at x1 is the disturbance at x0 from time t1 ago.
-  >>Assuming the disturbance doesn't attenuate significantly
-  y(x1, t) = y(x0, t-t1) = f(t - t1)
-
-  Now, let's say we know our disturbance at x0 is a sine function:
-  y(x0, t) = f(t) = sin(wt)
-
-  Then at some point x1, our disturbance will be:
-  y(x1, t) = f(t - t1) = sin(w(t - t1))
-  y(x1, t) = sin(wt - wt1)
-  y(x1, t) = sin(wt - wx1/c)
-
-  Or as x1 is arbitrary we can say:
-  y(x, t) = sin(wt - wx/c)
-
-  Now, let's freeze time and take a snapshot of how the disturbance is distributed through space.
-
-  Our resulting equation is simply a general form of a sine equation over x where wt is a constant phase shift, and the negative sign signifies an additional phase shift of π.
-
-
-
-
-
-
-
-  f(t-x1/c)
-  Now, let's assume our disturbance at x0 is a sine function
-  y(x0, t) = sin(wt)
-
-  Then our 
-
-  Now, let's assume the particle at x0 is disturbed with a sine function:
-  y(x0, t) = sin(wt)
-
-  Therefore, the disturbance at x1 is:
-  y(x1, t) = sin(w(t-t1))
-  y(x1, t) = sin(wt-wt1))
-
-  Substituting in (1)
-  y(x1, t) = sin(wt - wx1/v)
-
-  Freeze
-
-  Slow/Normal Time
-
-  Slow/Normal Velocity
-
-  Show Time Recording
-
-  Pulse
-
-  Sine Wave
-
-
-
- */
-
- 
-// const x = Fig.tools.math.range(-10, 10, 0.01);
-// const t = Fig.tools.math.range(0, 5, 0.01);
-// const ft = (tt) => Math.exp(-((tt*2 - 2) ** 2));
-// // const ft = (tt) => {
-// //   if (tt < 0) {
-// //     return 0;
-// //   }
-// //   if (tt < 1.5) {
-// //     return tt / 3;
-// //   }
-// //   if (tt < 2) {
-// //     return 1.5 / 3 - (tt - 1.5);
-// //   }
-// //   return 0;
-// // };
-// const ftPoints = t.map(tt => new Point(tt, ft(tt)));
-// // const v = 2;
-// // const tNow = 4;
-// // // const fxPoints = x.map(xx => xx <= 0 ? new Point(xx, ft(tNow + xx / v)) : new Point(xx, ft(tNow - xx / v)));
-// // const fxPoints = x.map(xx => xx <= 1 ? new Point(xx, ft(tNow + (xx - 1) / v)) : new Point(xx, ft(tNow - (xx - 1) / v)));
-// // const v = 1;
-// // const tNow = 1;
-// // const fxtNow = t.map(tt => {
-
-// // });
-
-// figure.add({
-//   name: 'plot',
-//   method: 'collections.plot',
-//   options: {
-//     trace: ftPoints,
-//     width: 1,
-//     yAxis: {
-//       start: -0.5,
-//       stop: 1,
-//       ticks: { step: 0.25 },
-//     },
-//     xAxis: { ticks: { step: 0.5 }, labels: { precision: 1 } },
-//     position: [-1.5, 1],
-//   },
-// });
-
-// figure.add({
-//   name: 'plotX',
-//   method: 'collections.plot',
-//   options: {
-//     trace: fxPoints,
-//     width: 2,
-//     yAxis: {
-//       start: -0.5,
-//       stop: 1,
-//       ticks: { step: 0.25 },
-//       labels: { precision: 2 },
-//     },
-//     xAxis: { ticks: { step: 2 }, labels: { precision: 1 }, stop: 10 },
-//     position: [0, 1],
-//   },
-// });

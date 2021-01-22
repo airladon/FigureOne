@@ -24,87 +24,6 @@ function addSlides() {
 
   const slides = [];
 
-  // let lastDisturbance = layout.time.now() - 100;
-  // let timerId = null;
-
-  // const layout.stopDisturbances = () => {
-  //   if (timerId != null) {
-  //     clearTimeout(timerId);
-  //   }
-  // };
-  // const disturb = (med, style = 'pulse', parameter = 0.6) => {
-  //   if (Array.isArray(med)) {
-  //     med.forEach(m => layout[style](m, parameter));
-  //   } else {
-  //     layout[style](med, parameter);
-  //   }
-  //   lastDisturbance = layout.time.now();
-  // };
-
-  // const layout.startDisturbances = (med, timeTillNext = 10, immediately = true, style = 'pulse', parameter) => {
-  //   if (timerId != null) {
-  //     clearTimeout(timerId);
-  //   }
-  //   const now = layout.time.now();
-  //   if (Array.isArray(med)) {
-  //     med.forEach((m) => {
-  //       if (m.custom.movePad.isAnimating() && style === 'sineWave') {
-  //         lastDisturbance = now;
-  //       }
-  //     });
-  //   } else if (med.custom.movePad.isAnimating() && style === 'sineWave') {
-  //     lastDisturbance = now;
-  //   }
-  //   if (now - lastDisturbance > timeTillNext || immediately) {
-  //     disturb(med, style, parameter);
-  //   }
-  //   timerId = setTimeout(() => {
-  //     layout.startDisturbances(med, timeTillNext, false, style, parameter);
-  //   }, 1000);
-  // };
-
-  // const startSineWaves = (med, timeTillNext = 5, immediately = true) => {
-  //   if (timerId != null) {
-  //     clearTimeout(timerId);
-  //   }
-  //   const now = layout.time.now();
-  //   if (Array.isArray(med)) {
-  //     med.forEach((m) => {
-  //       if (m.custom.movePad.isAnimating()) {
-  //         lastDisturbance = now;
-  //       }
-  //     });
-  //   } else if (med.custom.movePad.isAnimating()) {
-  //       lastDisturbance = now;
-  //     }
-  //   }
-
-  //   if (now - lastDisturbance > timeTillNext || immediately) {
-  //     disturb(med, 'sineWave', 0);
-  //   }
-  //   timerId = setTimeout(() => {
-  //     startSineWaves(medium, timeTillNext, false);
-  //   });
-  // }
-
-  medium.custom.movePad.subscriptions.add('setTransform', () => {
-    if (medium.custom.movePad.state.isBeingMoved) {
-      lastDisturbance = layout.time.now();
-    }
-  });
-
-  medium1.custom.movePad.subscriptions.add('setTransform', () => {
-    if (medium1.custom.movePad.state.isBeingMoved) {
-      lastDisturbance = layout.time.now();
-    }
-  });
-
-  medium2.custom.movePad.subscriptions.add('setTransform', () => {
-    if (medium2.custom.movePad.state.isBeingMoved) {
-      lastDisturbance = layout.time.now();
-    }
-  });
-
   const action = (text, onClick, touchBorder = 0, color = color1) => ({
     text, font: { color }, onClick, touchBorder,
   });
@@ -173,7 +92,7 @@ function addSlides() {
     0: subMath('1'),
     r0: subMath('0', color0),
     b1: subMath('1', color1),
-    disturbance: action('disturbance', () => disturb(medium), 0.03),
+    disturbance: action('disturbance', () => layout.disturb(medium), 0.03),
     'first particle': action('first particle', () => medium.custom.ball0.pulse({ scale: 4 }), 0.15, color0),
     x1: actionMath('x', () => ballx1.pulse({ scale: 4 }, 0.15, color1)),
     x0: actionMath('x', () => ballx0.pulse({ scale: 4 }), 0.2, color0),
@@ -337,7 +256,8 @@ function addSlides() {
     showCommon: ['medium1', 'medium2', 'vFast', 'vSlow'],
     steadyStateCommon: (from) => {
       if (from === 'prev') {
-        layout.reset();
+        layout.setVelocity(medium1, 2, 1);
+        layout.setVelocity(medium2, 1, 2);
         layout.startDisturbances([medium1, medium2], 5.5, true);
       } else {
         layout.startDisturbances([medium1, medium2], 5.5, false);
@@ -351,7 +271,7 @@ function addSlides() {
         medium1.custom.ball0.pulse({ scale: 4 });
         medium2.custom.ball0.pulse({ scale: 4 });
       }, 0.03, color0),
-      disturbance: action('disturbance', () => disturb([medium1, medium2]), 0.03),
+      disturbance: action('disturbance', () => layout.disturb([medium1, medium2]), 0.03),
     },
     text: [
       'To help compare, we can plot the disturbance of the |first particle|',
@@ -388,7 +308,7 @@ function addSlides() {
         freezeTimeButton.click();
         freezeTimeButton.pulse({ scale: 1.7, xAlign: 0.3, yAlign: 0.3 });
       }, 0.05),
-      disturbance: action('disturbance', () => disturb([medium1, medium2]), 0.03),
+      disturbance: action('disturbance', () => layout.disturb([medium1, medium2]), 0.03),
       particle: action('particle', () => {
         medium1.custom.ball0.pulse({ scale: 4 });
         medium2.custom.ball0.pulse({ scale: 4 });
@@ -411,17 +331,79 @@ function addSlides() {
     },
   });
 
+
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
+  const disturbThenFreeze = () => {
+    layout.reset();
+    layout.disturb([medium1, medium2], 'pulse', 0.6, true);
+    figure.elements.animations.cancelAll();
+    layout.pauseAfterDelay(1.4);
+    const startTime = layout.time.now();
+    figure.elements.animations.new()
+      .custom({
+        duration: 10000,
+        callback: () => {
+          if (figure.elements.animations.get('pauseAfterDelay') == null) {
+            return true;
+          }
+          if (layout.time.now() - startTime >= 1.35) {
+            return true;
+          }
+          return false;
+        },
+      })
+      .trigger({
+        delay: 0.2,
+        callback: () => {
+          // if (figure.elements.animations.animations.length > 0) {
+          if (layout.getInAnimation()) {
+            medium1.custom.pulseTracked(4);
+            medium2.custom.pulseTracked(4);
+          }
+        },
+      })
+      .start();
+  };
   slides.push({
     modifiers: {
       faster: pulse('faster', 'vFast', 2.5, 0.05, 'right'),
-      disturbance: action('disturbance', () => disturb([medium1, medium2]), 0.03),
+      disturbance: action('disturbance', () => layout.disturb([medium1, medium2]), 0.03),
+      freeze: action('freeze', () => disturbThenFreeze()),
+      'initial disturbance': action('initial disturbance', () => {
+        if (layout.getInAnimation()) {
+          medium1.custom.pulseTracked(4);
+          medium2.custom.pulseTracked(4);
+        } else {
+          disturbThenFreeze();
+        }
+        // medium1.custom.balls.getElement('ball27').pulse({ scale: 4 });
+        // medium2.custom.balls.getElement('ball13').pulse({ scale: 4 });
+      }, 0, color3),
+      source: action('source', () => {
+        medium1.custom.balls.getElement('ball0').pulse({ scale: 4 });
+        medium2.custom.balls.getElement('ball0').pulse({ scale: 4 });
+      }, 0, color0),
+      'faster velocity': action('faster velocity', () => {
+        medium1.custom.pulseTracked(4);
+      }, 0),
+      'slower velocity': action('slower velocity', () => {
+        // medium2.custom.balls.getElement('ball13').pulse({ scale: 4 });
+        medium2.custom.pulseTracked(4);
+      }, 0),
+    },
+    enterState: () => {
+      medium1.custom.trackingTime = -0.2;
+      medium2.custom.trackingTime = -0.2;
     },
     text: [
-      'For a |faster| velocity, when the |disturbance| finishes the start of the',
-      'disturbance has travelled |further| from the source.',
+      'When we |freeze| time, we see the |initial disturbance| has travelled farther',
+      'from the |source| for the |faster velocity| than for the |slower velocity|.',
     ],
+    leaveState: () => {
+      medium1.custom.trackingTime = -10000;
+      medium2.custom.trackingTime = -10000;
+    }
   });
 
   // ///////////////////////////////////////////////////////////////////////////
@@ -429,7 +411,7 @@ function addSlides() {
   slides.push({
     modifiers: {
       faster: pulse('faster', 'vFast', 2.5, 0.05, 'right'),
-      disturbance: action('disturbance', () => disturb([medium1, medium2]), 0.03),
+      disturbance: action('disturbance', () => layout.disturb([medium1, medium2]), 0.03),
       'spread out': highlight('spread out'),
     },
     text: [
@@ -459,7 +441,7 @@ function addSlides() {
   // ///////////////////////////////////////////////////////////////////////////
   slides.push({
     modifiers: {
-      disturbance: action('disturbance', () => disturb(medium), 0.1),
+      disturbance: action('disturbance', () => layout.disturb(medium), 0.1),
       when: highlight('when'),
       position: action('position', () => ballx1.pulse({ scale: 4 })),
     },
@@ -486,7 +468,7 @@ function addSlides() {
   // ///////////////////////////////////////////////////////////////////////////
   slides.push({
     modifiers: {
-      disturbance: action('disturbance', () => disturb(medium), 0.1),
+      disturbance: action('disturbance', () => layout.disturb(medium), 0.1),
       when: highlight('when'),
     },
     text: [
@@ -1141,7 +1123,7 @@ function addSlides() {
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
   nav.loadSlides(slides);
-  nav.goToSlide(66);
+  nav.goToSlide(10);
 }
 
 addSlides();
