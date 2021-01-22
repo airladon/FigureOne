@@ -100,15 +100,20 @@ function setupFigure() {
   });
 
   figure.add([
-    button('pulseButton', [-1.7, 0.2], 'Pulse'),
-    button('sineButton', [-1.3, 0.2], 'Sine'),
-    button('resetButton', [-0.9, 0.2], 'Reset'),
+    button('pulseButton', [1.7, 0.15], 'Pulse'),
+    button('sineButton', [1.3, 0.15], 'Sine'),
+    button('resetButton', [0.9, 0.15], 'Reset'),
     button('freezeTimeButton', [-1.6, 0.15], 'Off'),
     label('freezeTimeLabel', [-1.95, 0.15], colorText, 'Freeze:'),
     button('slowTimeButton', [-0.6, 0.15], 'Off'),
     label('slowTimeLabel', [-1.05, 0.15], colorText, ['Slow Motion:']),
-    button('velocityButton1', [1.3, 0.2], 'Fast'),
-    button('velocityButton2', [1.3, 0.5], 'Fast'),
+    label('disturbance', [0.45, 0.15], colorText, ['Disturbance:']),
+    button('velocityButton1', [2, 1.9], 'Fast'),
+    button('velocityButton2', [2, 1.04], 'Fast'),
+    button('freqButton1', [-0.7, 1.9], 'Fast'),
+    button('freqButton2', [-0.7, 1.04], 'Fast'),
+    label('velocity', [2, 2.1], colorText, 'Velocity'),
+    label('frequency', [-0.7, 2.1], colorText, 'Sine Frequency'),
     // button('frequencyButton', [1.7, 0.2], '3s'),
     // label('disturbanceLabel', [-1.3, 0.4], 'Disturbance'),
     // label('timeLabel', [0.2, 0.4], 'Time'),
@@ -149,6 +154,8 @@ function setupFigure() {
   const slowTimeButton = figure.getElement('slowTimeButton');
   const velocityButton1 = figure.getElement('velocityButton1');
   const velocityButton2 = figure.getElement('velocityButton2');
+  const freqButton1 = figure.getElement('freqButton1');
+  const freqButton2 = figure.getElement('freqButton2');
   // const frequencyButton = figure.getElement('frequencyButton');
   // const recordingLine = spacePlot.getElement('recordingLine');
 
@@ -426,14 +433,14 @@ function setupFigure() {
     time.setTimeSpeed(timeSpeed);
     slowTimeButton.setLabel(buttonLabel);
   };
-  const setVelocity = (num, velocity, buttonLabel) => {
-    // reset();
-    // unpause();
-    const med = num === 1 ? medium1 : medium2;
-    med.custom.c = velocity;
-    const vButton = num === 1 ? velocityButton1 : velocityButton2;
-    vButton.setLabel(buttonLabel);
-  };
+  // const setVelocity = (medium, velocity, buttonLabel) => {
+  //   // reset();
+  //   // unpause();
+  //   const med = num === 1 ? medium1 : medium2;
+  //   med.custom.c = velocity;
+  //   const vButton = num === 1 ? velocityButton1 : velocityButton2;
+  //   vButton.setLabel(buttonLabel);
+  // };
 
 
   
@@ -636,39 +643,120 @@ function setupFigure() {
     }, 1000);
   };
 
-  velocityButton1.onClick = () => {
+  const setVelocity = (med, velocity, velocityButtonIndex) => {
     reset();
     unpause();
-    if (medium1.custom.c === 0.5) {
-      setVelocity(1, 0.9, 'Fast');
+    med.custom.setVelocity(velocity);
+    let velocityButton = velocityButton1;
+    if (velocityButtonIndex === 2) {
+      velocityButton = velocityButton2;
+    }
+    if (velocity === 0.5) {
+      velocityButton.setLabel('1v');
     } else {
-      setVelocity(1, 0.5, 'Slow');
+      velocityButton.setLabel('2v');
     }
     startDisturbances([medium1, medium2], 5.5, true, 'sineWave', 0);
   };
-  velocityButton2.onClick = () => {
+  const toggleVelocity = (med, velocityButtonIndex) => {
+    if (med.custom.c === 0.5) {
+      setVelocity(med, 0.9, velocityButtonIndex);
+    } else {
+      setVelocity(med, 0.5, velocityButtonIndex);
+    }
+  };
+  velocityButton1.onClick = () => toggleVelocity(medium1, 1);
+  velocityButton2.onClick = () => toggleVelocity(medium2, 2);
+
+  const setFrequency = (med, frequency, frequencyButtonIndex) => {
     reset();
     unpause();
-    if (medium2.custom.c === 0.5) {
-      setVelocity(2, 0.9, 'Fast');
+    med.custom.setFrequency(frequency);
+    let frequencyButton = freqButton1;
+    if (frequencyButtonIndex === 2) {
+      frequencyButton = freqButton2;
+    }
+    if (frequency === 0.5) {
+      frequencyButton.setLabel('2f');
     } else {
-      setVelocity(2, 0.5, 'Slow');
+      frequencyButton.setLabel('1f');
     }
     startDisturbances([medium1, medium2], 5.5, true, 'sineWave', 0);
   };
+  const toggleFrequency = (med, frequencyButtonIndex) => {
+    if (med.custom.f === 0.5) {
+      setFrequency(med, 0.25, frequencyButtonIndex);
+    } else {
+      setFrequency(med, 0.5, frequencyButtonIndex);
+    }
+  };
+  freqButton1.onClick = () => toggleFrequency(medium1, 1);
+  freqButton2.onClick = () => toggleFrequency(medium2, 2);
+
+
+    // reset();
+    // unpause();
+    // if (medium1.custom.c === 0.5) {
+    //   medium1.custom.setVelocity(0.9);
+    //   velocityButton1.setLabel('Fast');
+    // } else {
+    //   medium1.custom.setVelocity(0.5);
+    //   velocityButton1.setLabel('Slow');
+    // }
+    // startDisturbances([medium1, medium2], 5.5, true, 'sineWave', 0);
+  // };
+  // velocityButton2.onClick = () => {
+  //   reset();
+  //   unpause();
+  //   if (medium2.custom.c === 0.5) {
+  //     medium2.custom.setVelocity(0.9);
+  //     velocityButton2.setLabel('Fast');
+  //   } else {
+  //     medium2.custom.setVelocity(0.5);
+  //     velocityButton2.setLabel('Slow');
+  //   }
+  //   startDisturbances([medium1, medium2], 5.5, true, 'sineWave', 0);
+  // };
+
+  // freqButton1.onClick = () => {
+  //   reset();
+  //   unpause();
+  //   if (medium1.custom.f === 0.25) {
+  //     medium1.custom.setFrequency(0.5);
+  //     freqButton1.setLabel('0.5 Hz');
+  //   } else {
+  //     medium1.custom.setFrequency(0.25);
+  //     freqButton1.setLabel('0.25 Hz');
+  //   }
+  //   startDisturbances([medium1, medium2], 5.5, true, 'sineWave', 0);
+  // };
+  // freqButton2.onClick = () => {
+  //   reset();
+  //   unpause();
+  //   if (medium2.custom.f === 0.25) {
+  //     medium2.custom.setFrequency(0.5);
+  //     freqButton2.setLabel('0.5 Hz');
+  //   } else {
+  //     medium2.custom.setFrequency(0.25);
+  //     freqButton2.setLabel('0.25 Hz');
+  //   }
+  //   startDisturbances([medium1, medium2], 5.5, true, 'sineWave', 0);
+  // };
 
   pulseButton.onClick = () => {
-    stop();
+    reset();
     unpause();
-    pulse(medium1, 0.5);
-    pulse(medium2, 0.5);
+    startDisturbances([medium1, medium2], 8, true, 'pulse', 0.6);
   };
   sineButton.onClick = () => {
     reset();
     unpause();
-    stop();
-    sineWave(medium1);
-    sineWave(medium2);
+    startDisturbances([medium1, medium2], 8, true, 'sineWave', 0);
+    // reset();
+    // unpause();
+    // stop();
+    // sineWave(medium1);
+    // sineWave(medium2);
   };
   const setMaxTime = (t) => { maxTime = t; };
 
@@ -686,6 +774,8 @@ function setupFigure() {
     time,
     startDisturbances,
     stopDisturbances,
+    setVelocity,
+    setFrequency,
   };
 }
 

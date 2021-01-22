@@ -1078,17 +1078,37 @@ function addSlides() {
   */
   // ///////////////////////////////////////////////////////////////////////////
   slides.push({
+    modifiers: {
+      velocities: action('velocities', () => {
+        layout.setVelocity(medium1, 0.5, 1);
+        layout.setVelocity(medium2, 1, 2);
+        layout.setFrequency(medium1, 0.25, 1);
+        layout.setFrequency(medium2, 0.25, 2);
+      }),
+      frequencies: action('frequencies', () => {
+        layout.setVelocity(medium1, 0.5, 1);
+        layout.setVelocity(medium2, 0.5, 2);
+        layout.setFrequency(medium1, 0.25, 1);
+        layout.setFrequency(medium2, 0.5, 2);
+      }),
+    },
     text: [
-      'Experiment and compare waves when different velocities, or different',
-      'disturbance frequencies are used.',
+      'Experiment and compare different |velocities| and disturbance',
+      '|frequencies|.',
     ],
     form: null,
     showCommon: [
-      'medium1', 'medium2', 'vFast', 'vSlow', 'timePlot1', 'timePlot2',
+      'medium1', 'medium2', 'timePlot1', 'timePlot2',
       'freezeTimeButton', 'slowTimeButton', 'slowTimeLabel', 'freezeTimeLabel',
-      'velocityButton1', 'velocityButton2',
+      'velocityButton1', 'velocityButton2', 'freqButton1', 'freqButton2',
+      'resetButton', 'pulseButton', 'sineButton', 'disturbance',
+      'frequency', 'velocity',
     ],
     steadyStateCommon: () => {
+      layout.setVelocity(medium1, 0.5, 1);
+      layout.setVelocity(medium2, 0.5, 2);
+      layout.setFrequency(medium1, 0.25, 1);
+      layout.setFrequency(medium2, 0.25, 2);
       layout.reset();
       layout.startDisturbances([medium1, medium2], 5.5, true, 'sineWave', 0);
     },
