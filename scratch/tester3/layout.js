@@ -434,20 +434,9 @@ function setupFigure() {
     const vButton = num === 1 ? velocityButton1 : velocityButton2;
     vButton.setLabel(buttonLabel);
   };
-  velocityButton1.onClick = () => {
-    if (medium1.custom.c === 0.5) {
-      setVelocity(1, 0.9, 'Fast');
-    } else {
-      setVelocity(1, 0.5, 'Slow');
-    }
-  };
-  velocityButton2.onClick = () => {
-    if (medium2.custom.c === 0.5) {
-      setVelocity(2, 0.9, 'Fast');
-    } else {
-      setVelocity(2, 0.5, 'Slow');
-    }
-  };
+
+
+  
   // const setFrequency = (frequency, buttonLabel) => {
   //   // reset();
   //   f = frequency;
@@ -600,6 +589,74 @@ function setupFigure() {
       .start();
   };
 
+  let lastDisturbance = time.now() - 100;
+  let timerId = null;
+
+  const stopDisturbances = () => {
+    if (timerId != null) {
+      clearTimeout(timerId);
+    }
+  };
+  const disturb = (med, style = 'pulse', parameter = 0.6) => {
+    if (Array.isArray(med)) {
+      med.forEach((m) => {
+        if (style === 'pulse') {
+          pulse(m, parameter);
+        } else {
+          sineWave(m, parameter);
+        }
+      });
+    } else if (style === 'pulse') {
+      pulse(med, parameter);
+    } else {
+      sineWave(med, parameter);
+    }
+    lastDisturbance = time.now();
+  };
+
+  const startDisturbances = (med, timeTillNext = 10, immediately = true, style = 'pulse', parameter) => {
+    if (timerId != null) {
+      clearTimeout(timerId);
+    }
+    const now = time.now();
+    if (Array.isArray(med)) {
+      med.forEach((m) => {
+        if (m.custom.movePad.isAnimating() && style === 'sineWave') {
+          lastDisturbance = now;
+        }
+      });
+    } else if (med.custom.movePad.isAnimating() && style === 'sineWave') {
+      lastDisturbance = now;
+    }
+    if (now - lastDisturbance > timeTillNext || immediately) {
+      disturb(med, style, parameter);
+    }
+    timerId = setTimeout(() => {
+      startDisturbances(med, timeTillNext, false, style, parameter);
+    }, 1000);
+  };
+
+  velocityButton1.onClick = () => {
+    reset();
+    unpause();
+    if (medium1.custom.c === 0.5) {
+      setVelocity(1, 0.9, 'Fast');
+    } else {
+      setVelocity(1, 0.5, 'Slow');
+    }
+    startDisturbances([medium1, medium2], 5.5, true, 'sineWave', 0);
+  };
+  velocityButton2.onClick = () => {
+    reset();
+    unpause();
+    if (medium2.custom.c === 0.5) {
+      setVelocity(2, 0.9, 'Fast');
+    } else {
+      setVelocity(2, 0.5, 'Slow');
+    }
+    startDisturbances([medium1, medium2], 5.5, true, 'sineWave', 0);
+  };
+
   pulseButton.onClick = () => {
     stop();
     unpause();
@@ -627,6 +684,8 @@ function setupFigure() {
     normalMotion,
     setTimeSpeed,
     time,
+    startDisturbances,
+    stopDisturbances,
   };
 }
 

@@ -24,44 +24,44 @@ function addSlides() {
 
   const slides = [];
 
-  let lastDisturbance = layout.time.now() - 100;
-  let timerId = null;
+  // let lastDisturbance = layout.time.now() - 100;
+  // let timerId = null;
 
-  const stopDisturbances = () => {
-    if (timerId != null) {
-      clearTimeout(timerId);
-    }
-  };
-  const disturb = (med, style = 'pulse', parameter = 0.6) => {
-    if (Array.isArray(med)) {
-      med.forEach(m => layout[style](m, parameter));
-    } else {
-      layout[style](med, parameter);
-    }
-    lastDisturbance = layout.time.now();
-  };
+  // const layout.stopDisturbances = () => {
+  //   if (timerId != null) {
+  //     clearTimeout(timerId);
+  //   }
+  // };
+  // const disturb = (med, style = 'pulse', parameter = 0.6) => {
+  //   if (Array.isArray(med)) {
+  //     med.forEach(m => layout[style](m, parameter));
+  //   } else {
+  //     layout[style](med, parameter);
+  //   }
+  //   lastDisturbance = layout.time.now();
+  // };
 
-  const startDisturbances = (med, timeTillNext = 10, immediately = true, style = 'pulse', parameter) => {
-    if (timerId != null) {
-      clearTimeout(timerId);
-    }
-    const now = layout.time.now();
-    if (Array.isArray(med)) {
-      med.forEach((m) => {
-        if (m.custom.movePad.isAnimating() && style === 'sineWave') {
-          lastDisturbance = now;
-        }
-      });
-    } else if (med.custom.movePad.isAnimating() && style === 'sineWave') {
-      lastDisturbance = now;
-    }
-    if (now - lastDisturbance > timeTillNext || immediately) {
-      disturb(med, style, parameter);
-    }
-    timerId = setTimeout(() => {
-      startDisturbances(med, timeTillNext, false, style, parameter);
-    }, 1000);
-  };
+  // const layout.startDisturbances = (med, timeTillNext = 10, immediately = true, style = 'pulse', parameter) => {
+  //   if (timerId != null) {
+  //     clearTimeout(timerId);
+  //   }
+  //   const now = layout.time.now();
+  //   if (Array.isArray(med)) {
+  //     med.forEach((m) => {
+  //       if (m.custom.movePad.isAnimating() && style === 'sineWave') {
+  //         lastDisturbance = now;
+  //       }
+  //     });
+  //   } else if (med.custom.movePad.isAnimating() && style === 'sineWave') {
+  //     lastDisturbance = now;
+  //   }
+  //   if (now - lastDisturbance > timeTillNext || immediately) {
+  //     disturb(med, style, parameter);
+  //   }
+  //   timerId = setTimeout(() => {
+  //     layout.startDisturbances(med, timeTillNext, false, style, parameter);
+  //   }, 1000);
+  // };
 
   // const startSineWaves = (med, timeTillNext = 5, immediately = true) => {
   //   if (timerId != null) {
@@ -246,9 +246,9 @@ function addSlides() {
     },
     steadyState: () => {
       layout.reset();
-      // startDisturbances(medium, 10, true);
+      // layout.startDisturbances(medium, 10, true);
     },
-    // leaveState: () => stopDisturbances(),
+    // leaveState: () => layout.layout.stopDisturbances(),
     leaveState: () => {
       medium.custom.balls.undim();
     },
@@ -270,11 +270,10 @@ function addSlides() {
     },
     steadyState: () => {
       layout.reset();
-      startDisturbances(medium, 10, true);
+      layout.startDisturbances(medium, 10, true);
     },
-    // leaveState: () => stopDisturbances(),
     leaveStateCommon: () => {
-      stopDisturbances();
+      layout.stopDisturbances();
       medium.custom.balls.undim();
     },
   });
@@ -296,7 +295,7 @@ function addSlides() {
       // },
     ],
     steadyStateCommon: () => {
-      startDisturbances(medium, 10, false);
+      layout.startDisturbances(medium, 10, false);
     },
   });
 
@@ -339,9 +338,9 @@ function addSlides() {
     steadyStateCommon: (from) => {
       if (from === 'prev') {
         layout.reset();
-        startDisturbances([medium1, medium2], 5.5, true);
+        layout.startDisturbances([medium1, medium2], 5.5, true);
       } else {
-        startDisturbances([medium1, medium2], 5.5, false);
+        layout.startDisturbances([medium1, medium2], 5.5, false);
       }
     },
   });
@@ -359,7 +358,7 @@ function addSlides() {
       'over time to see both mediums are being |disturbed| in the same way.',
     ],
     steadyStateCommon: () => {
-      startDisturbances([medium1, medium2], 5.5, false);
+      layout.startDisturbances([medium1, medium2], 5.5, false);
     },
   });
 
@@ -368,9 +367,9 @@ function addSlides() {
     steadyStateCommon: (from) => {
       if (from === 'prev') {
         layout.reset();
-        startDisturbances([medium1, medium2], 5.5, true);
+        layout.startDisturbances([medium1, medium2], 5.5, true);
       } else {
-        startDisturbances([medium1, medium2], 5.5, false);
+        layout.startDisturbances([medium1, medium2], 5.5, false);
       }
     },
   });
@@ -402,10 +401,10 @@ function addSlides() {
     showCommon: ['medium1', 'medium2', 'timePlot1', 'timePlot2', 'vFast', 'vSlow', 'freezeTimeButton', 'slowTimeButton', 'slowTimeLabel', 'freezeTimeLabel'],
     scenario: 'default',
     steadyStateCommon: () => {
-      startDisturbances([medium1, medium2], 5.5, false);
+      layout.startDisturbances([medium1, medium2], 5.5, false);
     },
     leaveStateCommon: () => {
-      stopDisturbances();
+      layout.stopDisturbances();
       medium.custom.balls.undim();
       layout.normalMotion();
       layout.unpause();
@@ -439,10 +438,10 @@ function addSlides() {
     ],
     steadyStateCommon: (from) => {
       if (from === 'prev') {
-        startDisturbances([medium1, medium2], 5.5, false);
+        layout.startDisturbances([medium1, medium2], 5.5, false);
       } else {
         layout.reset();
-        startDisturbances([medium1, medium2], 5.5, true);
+        layout.startDisturbances([medium1, medium2], 5.5, true);
       }
     },
   });
@@ -476,9 +475,9 @@ function addSlides() {
     steadyStateCommon: (from) => {
       if (from === 'prev') {
         layout.reset();
-        startDisturbances(medium, 10, true);
+        layout.startDisturbances(medium, 10, true);
       } else {
-        startDisturbances(medium, 10, false);
+        layout.startDisturbances(medium, 10, false);
       }
     },
   });
@@ -496,7 +495,7 @@ function addSlides() {
     ],
     showCommon: ['medium', 'x1'],
     steadyStateCommon: () => {
-      startDisturbances(medium, 10, false);
+      layout.startDisturbances(medium, 10, false);
     },
   });
 
@@ -513,7 +512,7 @@ function addSlides() {
         .start();
     },
     steadyStateCommon: () => {
-      startDisturbances(medium, 10, false);
+      layout.startDisturbances(medium, 10, false);
       sideEqn.showForm('t11');
       sideEqn.setScenario('side');
     },
@@ -539,7 +538,7 @@ function addSlides() {
       medium.custom.balls.highlight(['ball0', 'ball40']);
     },
     steadyStateCommon: () => {
-      startDisturbances(medium, 10, false);
+      layout.startDisturbances(medium, 10, false);
     },
   });
 
@@ -638,9 +637,9 @@ function addSlides() {
       if (from === 'prev') {
         layout.reset();
         layout.unpause();
-        startDisturbances(medium, 10, true, 'sineWave', 0);
+        layout.startDisturbances(medium, 10, true, 'sineWave', 0);
       } else {
-        startDisturbances(medium, 10, false, 'sineWave', 0);
+        layout.startDisturbances(medium, 10, false, 'sineWave', 0);
       }
     },
   });
@@ -648,7 +647,7 @@ function addSlides() {
     fromForm: 'yxtx',
     form: 'yxtxAndSine',
     steadyStateCommon: () => {
-      startDisturbances(medium, 10, false, 'sineWave', 0);
+      layout.startDisturbances(medium, 10, false, 'sineWave', 0);
     },
   });
   slides.push({
@@ -1013,7 +1012,7 @@ function addSlides() {
     fromForm: 'sine2PiOnL',
     form: 'sineGeneral',
     steadyStateCommon: () => {
-      startDisturbances(medium, 10, false, 'sineWave', 0);
+      layout.startDisturbances(medium, 10, false, 'sineWave', 0);
       layout.unpause();
       eqn.undim();
     },
@@ -1080,8 +1079,8 @@ function addSlides() {
   // ///////////////////////////////////////////////////////////////////////////
   slides.push({
     text: [
-      'Experiment and compare waves when different velocities, or different disturbance',
-      'frequencies are used.',
+      'Experiment and compare waves when different velocities, or different',
+      'disturbance frequencies are used.',
     ],
     form: null,
     showCommon: [
@@ -1091,7 +1090,7 @@ function addSlides() {
     ],
     steadyStateCommon: () => {
       layout.reset();
-      startDisturbances([medium1, medium2], 5.5, true, 'sineWave', 0);
+      layout.startDisturbances([medium1, medium2], 5.5, true, 'sineWave', 0);
     },
   });
 
