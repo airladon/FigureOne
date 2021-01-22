@@ -158,6 +158,8 @@ function setupFigure() {
   const velocityButton2 = figure.getElement('velocityButton2');
   const freqButton1 = figure.getElement('freqButton1');
   const freqButton2 = figure.getElement('freqButton2');
+
+  
   // const frequencyButton = figure.getElement('frequencyButton');
   // const recordingLine = spacePlot.getElement('recordingLine');
 
@@ -273,6 +275,21 @@ function setupFigure() {
             },
           },
         },
+        {
+          name: 'wavelength',
+          method: 'collections.line',
+          options: {
+            width: 0.01,
+            color: color1,
+            arrow: 'barb',
+            label: {
+              text: '\u03bb',
+              offset: 0.01,
+            },
+            p1: [100, 0],
+            p2: [101, 0],
+          },
+        },
       ],
       mods: {
         scenarios: {
@@ -304,12 +321,15 @@ function setupFigure() {
     const [tracker] = medium.add(ball(0, 'Tracker', ballSize));
     tracker.setColor(color3);
     const movePad = medium.getElement('movePad');
+    const wavelength = medium.getElement('wavelength');
     medium.custom = {
       f: 0.2,
       c: 1,
       A,
+      axis,
       balls,
       tracker,
+      wavelength,
       trackingTime: -10000,
       ball0: balls.getElement('ball0'),
       recording: new Recorder(maxValue / minVelocity),
@@ -367,6 +387,20 @@ function setupFigure() {
       },
       setFrequency: (frequency) => {
         medium.custom.f = frequency;
+      },
+      setWavelengthPosition: (deltaX = 0) => {
+        const t = time.now();
+        const x0Phase = (2 * Math.PI * medium.custom.f * t) % (2 * Math.PI);
+        const lambda = medium.custom.c / medium.custom.f;
+        const wavelengthDraw = axis.valueToDraw(lambda);
+        const wavelengthStartPhase = Math.PI / 2 * 3;
+        let deltaPhase = Math.PI * 2 - (wavelengthStartPhase - x0Phase);
+        if (x0Phase > wavelengthStartPhase) {
+          deltaPhase = x0Phase - wavelengthStartPhase;
+        }
+        const xDistanceToStart = deltaPhase / Math.PI / 2 * lambda;
+        const xDraw = axis.valueToDraw(xDistanceToStart) + deltaX;
+        wavelength.setEndPoints([xDraw, -A], [xDraw + wavelengthDraw, -A]);
       },
       movePad,
     };
@@ -617,6 +651,12 @@ function setupFigure() {
       .start();
   };
 
+  // const setWaveLength = (med) => {
+  //   const lambda = med.custom.c / med.custom.f;
+  //   const drawLength = med.custom.axis.valueToDraw(lambda);
+  //   wavelength.setLength(drawLength);
+  // };
+
   const assymetricPulse = (med) => {
     unpause();
     const startTime = time.now();
@@ -844,6 +884,7 @@ function setupFigure() {
     setInAnimation,
     getInAnimation,
     disturbThenFreeze,
+    // setWavelengthPosition,
   };
 }
 

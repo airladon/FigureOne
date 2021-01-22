@@ -915,13 +915,42 @@ function addSlides() {
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
   slides.push({
+    show: ['waveLength'],
     modifiers: {
-      wavelength: highlight('wavelength'),
+      'wavelength lambda': action('wavelength \u03bb', () => {
+        medium.custom.wavelength.pulseWidth({ line: 1, arrow: 1, label: { scale: 2, yAlign: 'bottom' } });
+      }),
     },
     text: [
       'The distance over which a spatial sine function repeats is commonly called',
-      'the |wavelength| |lambda|. Can we see the wavelength in this equation?',
+      'the |wavelength lambda|.',
     ],
+    steadyState: () => {
+      medium.custom.setWavelengthPosition(0);
+    },
+    leaveState: () => {
+      medium.custom.setWavelengthPosition(100);
+    },
+  });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    show: ['waveLength'],
+    modifiers: {
+      wavelength: action('wavelength', () => {
+        medium.custom.wavelength.pulseWidth({ line: 1, arrow: 1, label: { scale: 2, yAlign: 'bottom' } });
+      }),
+    },
+    text: [
+      'Can we find the |wavelength| in this equation?',
+    ],
+    steadyState: () => {
+      medium.custom.setWavelengthPosition(0);
+    },
+    leaveState: () => {
+      medium.custom.setWavelengthPosition(100);
+    },
   });
 
   // ///////////////////////////////////////////////////////////////////////////
