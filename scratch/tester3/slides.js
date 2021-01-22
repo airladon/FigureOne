@@ -881,8 +881,8 @@ function addSlides() {
   // ///////////////////////////////////////////////////////////////////////////
   slides.push({
     text: [
-      'So, if we disturb a medium with a sine function over time at a position,',
-      'then the disturbance distributed over space is also a sine function.',
+      'When we disturb a medium with a time dependent sine wave at some point',
+      'the disturbance will distribute through space as a traveling sine wave.',
     ],
     enterStateCommon: () => {
       eqn.dim(['w2', 't_2', 't_y3', 'line1', 'line2', 'constant', 'constant_1']);
@@ -981,7 +981,7 @@ function addSlides() {
     },
     scenarioCommon: ['default', 'left'],
     text: [
-      'In our case, sine |input value| changes by |twoPi| each time |x| changes',
+      'In our case, the sine |input value| changes by |twoPi| each time |x| changes',
       'by the distance |v||div||f|.',
       {
         text: 'As when |xS| = |vS||divS||fS|   \u21d2   |twoPiS||xS||divS|(|vS||divS||fS| ) = |twoPiS|.',
@@ -998,7 +998,7 @@ function addSlides() {
     },
     text: [
       'Wavelength is defined as the distance over which the sine wave repeats.',
-      'Our wave repeats every |v||div||f|, and so |v||div||f|  |is| the wavelength.',
+      'Our wave repeats every |v||div||f|, and so |v||div||f|  |is| the wavelength |lambda|.',
     ],
   });
   slides.push({ fromForm: 'sine2PiOnfv', form: 'sine2PiOnfvL' });
@@ -1026,9 +1026,8 @@ function addSlides() {
       layout.unpause();
     },
     text: [
-      'When a disturbance is a time dependent sine wave, the disturbance will be',
-      'distributed through space as a sine wave whose wavelength is related to the',
-      'frequency of the disturbance and the disturbance\'s propatation velocity.',
+      'And so we see the travelling sine wave has a wavelength proportional to',
+      'the disturbance\'s propagation velocity.',
     ],
   });
   slides.push({
@@ -1049,19 +1048,53 @@ function addSlides() {
       eqn.setScenario('default');
     },
   });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
   slides.push({
     scenarioCommon: 'default',
     text: 'Which is often rearranged to be inline.',
   });
   slides.push({ fromForm: 'vOnFLambda', form: 'cLambdaF' });
 
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
   slides.push({
     text: [
-      'This equation says that as velocity increases, then so does wavelength.',
-      'This is consistent with our initial observation that a faster propagation',
-      'velocity results in a more spread out pulse or wave.',
+      'As velocity and wavelength are proportional, then increasing one will increase',
+      'the other. This is consistent with our initial observation that a faster',
+      'propagation velocity results in a more spread out pulse or wave.',
     ],
   });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  /*
+  ..######...#######..##.....##.########.....###....########..########
+  .##....##.##.....##.###...###.##.....##...##.##...##.....##.##......
+  .##.......##.....##.####.####.##.....##..##...##..##.....##.##......
+  .##.......##.....##.##.###.##.########..##.....##.########..######..
+  .##.......##.....##.##.....##.##........#########.##...##...##......
+  .##....##.##.....##.##.....##.##........##.....##.##....##..##......
+  ..######...#######..##.....##.##........##.....##.##.....##.########
+  */
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    text: [
+      'Experiment and compare waves when different velocities, or different disturbance',
+      'frequencies are used.',
+    ],
+    form: null,
+    showCommon: [
+      'medium1', 'medium2', 'vFast', 'vSlow', 'timePlot1', 'timePlot2',
+      'freezeTimeButton', 'slowTimeButton', 'slowTimeLabel', 'freezeTimeLabel',
+      'velocityButton1', 'velocityButton2',
+    ],
+    steadyStateCommon: () => {
+      layout.reset();
+      startDisturbances([medium1, medium2], 5.5, true, 'sineWave', 0);
+    },
+  });
+
   // slides.push({ fromForm: 'sine2PiOnfvL', form: 'sine2PiOnL' });
 
   // slides.push({ fromForm: 'sineExpandW', form: 'sine2PiF' });
@@ -1089,7 +1122,7 @@ function addSlides() {
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
   nav.loadSlides(slides);
-  nav.goToSlide(58);
+  nav.goToSlide(66);
 }
 
 addSlides();

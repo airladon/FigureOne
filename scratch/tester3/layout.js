@@ -36,7 +36,7 @@ function setupFigure() {
       text: [
         'Traveling Sine Waves',
         {
-          text: 'Velocity, wavelength and frequency relationship.',
+          text: 'Velocity, wavelength and frequency',
           font: { size: 0.15 },
         },
       ],
@@ -107,7 +107,8 @@ function setupFigure() {
     label('freezeTimeLabel', [-1.95, 0.15], colorText, 'Freeze:'),
     button('slowTimeButton', [-0.6, 0.15], 'Off'),
     label('slowTimeLabel', [-1.05, 0.15], colorText, ['Slow Motion:']),
-    // button('velocityButton', [1.3, 0.2], 'Normal'),
+    button('velocityButton1', [1.3, 0.2], 'Fast'),
+    button('velocityButton2', [1.3, 0.5], 'Fast'),
     // button('frequencyButton', [1.7, 0.2], '3s'),
     // label('disturbanceLabel', [-1.3, 0.4], 'Disturbance'),
     // label('timeLabel', [0.2, 0.4], 'Time'),
@@ -146,7 +147,8 @@ function setupFigure() {
   const sineButton = figure.getElement('sineButton');
   const freezeButton = figure.getElement('freezeTimeButton');
   const slowTimeButton = figure.getElement('slowTimeButton');
-  // const velocityButton = figure.getElement('velocityButton');
+  const velocityButton1 = figure.getElement('velocityButton1');
+  const velocityButton2 = figure.getElement('velocityButton2');
   // const frequencyButton = figure.getElement('frequencyButton');
   // const recordingLine = spacePlot.getElement('recordingLine');
 
@@ -424,11 +426,28 @@ function setupFigure() {
     time.setTimeSpeed(timeSpeed);
     slowTimeButton.setLabel(buttonLabel);
   };
-  // const setVelocity = (velocity, buttonLabel) => {
-  //   reset();
-  //   c = velocity;
-  //   velocityButton.setLabel(buttonLabel);
-  // };
+  const setVelocity = (num, velocity, buttonLabel) => {
+    // reset();
+    // unpause();
+    const med = num === 1 ? medium1 : medium2;
+    med.custom.c = velocity;
+    const vButton = num === 1 ? velocityButton1 : velocityButton2;
+    vButton.setLabel(buttonLabel);
+  };
+  velocityButton1.onClick = () => {
+    if (medium1.custom.c === 0.5) {
+      setVelocity(1, 0.9, 'Fast');
+    } else {
+      setVelocity(1, 0.5, 'Slow');
+    }
+  };
+  velocityButton2.onClick = () => {
+    if (medium2.custom.c === 0.5) {
+      setVelocity(2, 0.9, 'Fast');
+    } else {
+      setVelocity(2, 0.5, 'Slow');
+    }
+  };
   // const setFrequency = (frequency, buttonLabel) => {
   //   // reset();
   //   f = frequency;
