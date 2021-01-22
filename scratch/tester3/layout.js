@@ -284,7 +284,8 @@ function setupFigure() {
             arrow: 'barb',
             label: {
               text: '\u03bb',
-              offset: 0.01,
+              offset: 0.04,
+              location: 'bottom',
             },
             p1: [100, 0],
             p2: [101, 0],

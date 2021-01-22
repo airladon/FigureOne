@@ -918,7 +918,7 @@ function addSlides() {
     show: ['waveLength'],
     modifiers: {
       'wavelength lambda': action('wavelength \u03bb', () => {
-        medium.custom.wavelength.pulseWidth({ line: 1, arrow: 1, label: { scale: 2, yAlign: 'bottom' } });
+        medium.custom.wavelength.pulseWidth({ line: 1, arrow: 1, label: { scale: 2, yAlign: 'top' } });
       }),
     },
     text: [
@@ -939,7 +939,7 @@ function addSlides() {
     show: ['waveLength'],
     modifiers: {
       wavelength: action('wavelength', () => {
-        medium.custom.wavelength.pulseWidth({ line: 1, arrow: 1, label: { scale: 2, yAlign: 'bottom' } });
+        medium.custom.wavelength.pulseWidth({ line: 1, arrow: 1, label: { scale: 2, yAlign: 'top' } });
       }),
     },
     text: [
@@ -1136,12 +1136,16 @@ function addSlides() {
         layout.setVelocity(medium2, 1, 2);
         layout.setFrequency(medium1, 0.25, 1);
         layout.setFrequency(medium2, 0.25, 2);
+        figure.getElement('velocityButton1').pulse({ scale: 1.6 });
+        figure.getElement('velocityButton2').pulse({ scale: 1.6 });
       }),
       frequencies: action('frequencies', () => {
         layout.setVelocity(medium1, 0.5, 1);
         layout.setVelocity(medium2, 0.5, 2);
         layout.setFrequency(medium1, 0.25, 1);
         layout.setFrequency(medium2, 0.5, 2);
+        figure.getElement('freqButton1').pulse({ scale: 1.6 });
+        figure.getElement('freqButton2').pulse({ scale: 1.6 });
       }),
     },
     text: [
@@ -1163,6 +1167,8 @@ function addSlides() {
       layout.setFrequency(medium2, 0.25, 2);
       layout.reset();
       layout.startDisturbances([medium1, medium2], 5.5, true, 'sineWave', 0);
+      medium1.custom.balls.highlight(['ball0']);
+      medium2.custom.balls.highlight(['ball0']);
     },
   });
 
@@ -1193,7 +1199,7 @@ function addSlides() {
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
   nav.loadSlides(slides);
-  nav.goToSlide(40);
+  nav.goToSlide(67);
 }
 
 addSlides();
