@@ -1,6 +1,5 @@
 
 /* globals Fig, Recorder, TimeKeeper */
-// const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1] });
 
 
 const figure = new Fig.Figure({
@@ -18,18 +17,20 @@ const color3 = [1, 0, 1, 1];
 function setupFigure() {
   const { Transform, Point } = Fig;
   const { range, rand, randSign } = Fig.tools.math;
-
-  // let f = 0.3;     // Hz
-  // const A = 0.4;   // m
-  // let c = 1;       // m/s
   const minVelocity = 0.5;
   const time = new TimeKeeper();
   let maxTime = 0;
   let maxTimeReached = false;
 
-  // const equationPosition = new Point(0, 2.2);
-  // const sideEquationPosition = new Point(1.4, 2.5);
-  // const colorText = [0.3, 0.3, 0.3, 1];
+  /*
+  .########.####.########.##.......########
+  ....##.....##.....##....##.......##......
+  ....##.....##.....##....##.......##......
+  ....##.....##.....##....##.......######..
+  ....##.....##.....##....##.......##......
+  ....##.....##.....##....##.......##......
+  ....##....####....##....########.########
+  */
   figure.add({
     name: 'title',
     method: 'primitives.textLines',
@@ -49,6 +50,15 @@ function setupFigure() {
     },
   });
 
+  /*
+  ..######..##.....##.##.....##.##.....##....###....########..##....##
+  .##....##.##.....##.###...###.###...###...##.##...##.....##..##..##.
+  .##.......##.....##.####.####.####.####..##...##..##.....##...####..
+  ..######..##.....##.##.###.##.##.###.##.##.....##.########.....##...
+  .......##.##.....##.##.....##.##.....##.#########.##...##......##...
+  .##....##.##.....##.##.....##.##.....##.##.....##.##....##.....##...
+  ..######...#######..##.....##.##.....##.##.....##.##.....##....##...
+  */
   figure.add({
     name: 'summary',
     method: 'primitives.textLines',
@@ -84,16 +94,16 @@ function setupFigure() {
       lineSpace: 0.2,
     },
   });
-  // figure.add({
-  //   name: 'subTitle',
-  //   method: 'primitives.textLines',
-  //   options: {
-  //     text: 'Frequency, Wavelength and Velocity',
-  //     font: { size: 0.1, color: colorText },
-  //     xAlign: 'center',
-  //     position: [0, 2],
-  //   },
-  // });
+
+  /*
+  .########..##.....##.########.########..#######..##....##..######.
+  .##.....##.##.....##....##.......##....##.....##.###...##.##....##
+  .##.....##.##.....##....##.......##....##.....##.####..##.##......
+  .########..##.....##....##.......##....##.....##.##.##.##..######.
+  .##.....##.##.....##....##.......##....##.....##.##..####.......##
+  .##.....##.##.....##....##.......##....##.....##.##...###.##....##
+  .########...#######.....##.......##.....#######..##....##..######.
+  */
   const button = (name, position, text) => ({
     name,
     method: 'collections.rectangle',
@@ -152,9 +162,6 @@ function setupFigure() {
     button('freqButton2', [-0.7, 1.04], 'Fast'),
     label('velocity', [2, 2.1], colorText, 'Velocity'),
     label('frequency', [-0.7, 2.1], colorText, 'Sine Frequency'),
-    // button('frequencyButton', [1.7, 0.2], '3s'),
-    // label('disturbanceLabel', [-1.3, 0.4], 'Disturbance'),
-    // label('timeLabel', [0.2, 0.4], 'Time'),
     axisLabel('x0', [-2.1, 0.77], color0, [
       'x',
       { text: '0', font: { size: 0.1 }, offset: [0, -0.04] },
@@ -195,10 +202,6 @@ function setupFigure() {
   const freqButton1 = figure.getElement('freqButton1');
   const freqButton2 = figure.getElement('freqButton2');
 
-  
-  // const frequencyButton = figure.getElement('frequencyButton');
-  // const recordingLine = spacePlot.getElement('recordingLine');
-
   const pause = () => {
     time.pause();
     freezeButton.setLabel('On');
@@ -217,13 +220,6 @@ function setupFigure() {
       stop: maxValue + 0.1,
       length,
       line: { width: 0.008, arrow: { end: 'barb' } },
-      // ticks: { step: 1, length: 0.1 },
-      // labels: [
-      //   { font: { size: 0.08 }, text: [''], precision: 0 },
-      //   {
-      //     values: 0, text: '0', offset: [-0.1, 0.13], font: { size: 0.08 },
-      //   },
-      // ],
       title: {
         font: { style: 'italic', family: 'serif', size: 0.12 },
         text: [title, { font: { size: 0.06 }, lineSpace: 0.06, text: units }],
@@ -244,10 +240,8 @@ function setupFigure() {
       position: [0, -A - 0.05],
       title: {
         font: { style: 'italic', family: 'serif', size: 0.12 },
-        // text: [title, { font: { size: 0.06 }, lineSpace: 0.08, text: units }],
         text: {
           text: `${title} |unitsText|`,
-          // text: title,
         },
         modifiers: {
           unitsText: { text: units, font: { size: 0.06 } },
@@ -270,7 +264,6 @@ function setupFigure() {
       position: [x, 0],
     },
     mods: {
-      // dimColor: [0.5, 0.5, 0.5, 1],
       dimColor: color2,
     },
   });
@@ -301,7 +294,6 @@ function setupFigure() {
             color: [0, 0, 0, 0],
           },
           mods: {
-            // isMovable: true,
             move: {
               bounds: {
                 translation: {
@@ -337,11 +329,6 @@ function setupFigure() {
       },
     });
     const medium = figure.getElement(name);
-    // medium.custom.constants = {
-    //   f: 0.3,
-    //   A: 0.6,
-    //   c: 1,
-    // };
     const axis = medium.getElement('xAxis');
     const ballSize = 0.02;
     const xValues = range(0, length - 0.1, ballSize * 2);
@@ -351,7 +338,6 @@ function setupFigure() {
       const b = balls.getElement(`ball${index}`);
       b.custom.x = axis.drawToValue(x);
       b.custom.drawX = x;
-      // if (index % 10 === 0) { b.setColor(color1); }
       if (index === 0) { b.setColor(color0); }
     });
     balls.toFront(['ball0', 'ball40']);
@@ -385,8 +371,10 @@ function setupFigure() {
         if (tracker.isShown) {
           // const ballSizeTime = ballSize * 2 / medium.custom.c;
           const ballSpaceTime = axis.drawToValue(ballSize * 2) / medium.custom.c;
-          const t = Math.floor((time.now() + medium.custom.trackingTime) / ballSpaceTime) * ballSpaceTime;
-          
+          const t = Math.floor(
+            (time.now() + medium.custom.trackingTime) / ballSpaceTime,
+          ) * ballSpaceTime;
+
           const xValue = Math.max(t * medium.custom.c, 0);
           const x = axis.valueToDraw(xValue);
           if (t > 0 && axis.inAxis(xValue + 0.2)) {
@@ -396,17 +384,7 @@ function setupFigure() {
             tracker.setPosition(100, 0);
           }
         }
-        // if (medium.custom.tracker < xValues.length) {
-        //   balls[`_ball${medium.custom.tracker}`].setColor(color3);
-        // }
       },
-      // pulseTracked: (scale = 4) => {
-      //   if (medium.custom.tracker < xValues.length) {
-      //     const ballName = `ball${medium.custom.tracker}`;
-      //     balls.toFront([ballName]);
-      //     balls.elements[ballName].pulse({ scale });
-      //   }
-      // },
       stop: () => {
         medium.stop();
         movePad.animations.cancel('_noStop_sine');
@@ -416,9 +394,6 @@ function setupFigure() {
         movePad.setPosition(0, 0);
         medium.custom.recording.reset(0);
       },
-      // setTimeSpeed: (speed) => {
-      //   movePad.animations.setTimeSpeed(speed);
-      // },
       setVelocity: (velocity) => {
         medium.custom.c = velocity;
       },
@@ -499,8 +474,6 @@ function setupFigure() {
   const medium2 = addMedium('medium2', 2.2, 5, 0.35, [-0, 0.8], true);
   const timePlot1 = addTimePlot('timePlot1', 1.5, 5, medium1.custom.recording, 0.35, [-2, 1.65]);
   const timePlot2 = addTimePlot('timePlot2', 1.5, 5, medium2.custom.recording, 0.35, [-2, 0.8]);
-  // medium1.setPosition(-0.3, 1.9);
-  // medium2.setPosition(-0.3, 0.8);
   medium1.custom.movePad.setMovable();
   medium2.custom.movePad.setMovable();
   medium1.custom.movePad.subscriptions.add('setTransform', () => {
@@ -516,9 +489,6 @@ function setupFigure() {
     }
   });
   medium1.custom.c = 2;
-  // medium1.custom.f = 0.5;
-  // timePlot1.setPosition(-1.9, 1.9);
-  // timePlot2.setPosition(-1.9, 0.8);
 
   let inAnimation = false;
 
@@ -548,34 +518,6 @@ function setupFigure() {
     time.setTimeSpeed(timeSpeed);
     slowTimeButton.setLabel(buttonLabel);
   };
-  // const setVelocity = (medium, velocity, buttonLabel) => {
-  //   // reset();
-  //   // unpause();
-  //   const med = num === 1 ? medium1 : medium2;
-  //   med.custom.c = velocity;
-  //   const vButton = num === 1 ? velocityButton1 : velocityButton2;
-  //   vButton.setLabel(buttonLabel);
-  // };
-
-
-  
-  // const setFrequency = (frequency, buttonLabel) => {
-  //   // reset();
-  //   f = frequency;
-  //   frequencyButton.setLabel(buttonLabel);
-  // };
-
-
-  // movePad.subscriptions.add('setTransform', () => {
-  //   if (enableMaxTime && timeMax) {
-  //     return;
-  //   }
-  //   if (movePad.state.isBeingMoved && movePad.isAnimating()) {
-  //     stop();
-  //   }
-  //   unpause();
-  // });
-
 
   // Update function for everytime we want to update the signal
   function update() {
@@ -631,28 +573,6 @@ function setupFigure() {
   const slowMotion = () => setTimeSpeed(0.3, 'On');
   const normalMotion = () => setTimeSpeed(1, 'Off');
 
-  // velocityButton.onClick = () => {
-  //   reset();
-  //   time.pause();
-  //   if (c === 0.5) {
-  //     setVelocity(1, 'Normal');
-  //   } else if (c === 1) {
-  //     setVelocity(2, 'Fast');
-  //   } else {
-  //     setVelocity(0.5, 'Slow');
-  //   }
-  // };
-  // frequencyButton.onClick = () => {
-  //   reset();
-  //   time.pause();
-  //   if (f === 0.555) {
-  //     setFrequency(0.3, '3s');
-  //   } else {
-  //     setFrequency(0.555, '2s');
-  //   }
-  // };
-  // timeAxisShow();
-
   const pulse = (med, amplitude = randSign() * rand(0.3, 0.6)) => {
     unpause();
     const startTime = time.now();
@@ -687,12 +607,6 @@ function setupFigure() {
       })
       .start();
   };
-
-  // const setWaveLength = (med) => {
-  //   const lambda = med.custom.c / med.custom.f;
-  //   const drawLength = med.custom.axis.valueToDraw(lambda);
-  //   wavelength.setLength(drawLength);
-  // };
 
   const assymetricPulse = (med) => {
     unpause();
@@ -785,7 +699,6 @@ function setupFigure() {
 
   const setVelocity = (med, velocity, velocityButtonIndex) => {
     reset();
-    // unpause();
     med.custom.setVelocity(velocity);
     let velocityButton = velocityButton1;
     if (velocityButtonIndex === 2) {
@@ -796,7 +709,6 @@ function setupFigure() {
     } else {
       velocityButton.setLabel('2v');
     }
-    // startDisturbances([medium1, medium2], 5.5, true, 'sineWave', 0);
   };
   const toggleVelocity = (med, velocityButtonIndex) => {
     if (med.custom.c === 0.5) {
@@ -921,7 +833,6 @@ function setupFigure() {
     setInAnimation,
     getInAnimation,
     disturbThenFreeze,
-    // setWavelengthPosition,
   };
 }
 
