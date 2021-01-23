@@ -447,8 +447,8 @@ function addSlides() {
       'spread out': highlight('spread out'),
     },
     text: [
-      'As such, for |faster| velocities, the |disturbance| is wider, or',
-      'more |spread out| in space.',
+      'As a result, the |disturbance| is wider, or more |spread out| for',
+      '|faster| propagation velocities.',
     ],
     steadyStateCommon: (from) => {
       if (from === 'prev') {
@@ -1218,19 +1218,20 @@ function addSlides() {
   // ///////////////////////////////////////////////////////////////////////////
 
   slides.push({
-    showCommon: [],
-    text: [
-      '', '', '',
-      'A wave is a disturbance that propagates through a medium or',
-      'field.',
-      '', '', '',
-      'A sinusoidal disturbance at a point results in a sine wave disturbance',
-      'in space.',
-      '', '', '',
-      'The sine wave\'s wavelength |lambda| is related to the frequency |f| of the',
-      'initial disturbance, and the propagation velocity |v| in the',
-      'medium or field.',
-    ],
+    showCommon: ['summary'],
+    text: '',
+    // text: [
+    //   '', '', '',
+    //   'A wave is a disturbance that propagates through a medium or',
+    //   'field.',
+    //   '', '', '',
+    //   'A sinusoidal disturbance at a point results in a sine wave disturbance',
+    //   'in space.',
+    //   '', '', '',
+    //   'The sine wave\'s wavelength |lambda| is related to the frequency |f| of the',
+    //   'initial disturbance, and the propagation velocity |v| in the',
+    //   'medium or field.',
+    // ],
     form: 'cLambdaF',
     scenarioCommon: ['low'],
   });
@@ -1262,7 +1263,7 @@ function addSlides() {
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
   nav.loadSlides(slides);
-  nav.goToSlide(69);
+  nav.goToSlide(70);
 }
 
 addSlides();

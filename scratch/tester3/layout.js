@@ -48,6 +48,42 @@ function setupFigure() {
       position: [0, 2.6],
     },
   });
+
+  figure.add({
+    name: 'summary',
+    method: 'primitives.textLines',
+    options: {
+      text: [
+        { text: 'Summary', font: { size: 0.25 }, justify: 'center' },
+        '', '', '',
+        'A |wave| is a disturbance that propagates through a',
+        'medium or field.',
+        '', '',
+        'A sinusoidal disturbance at a point produces a',
+        '|sine wave| disturbance in space.',
+        '', '',
+        'The |wavelength| |lambda| of the sine wave is related to',
+        'the |frequency| |f| of the initial disturbance, and the',
+        'propagation |velocity| |v| in the medium or field.',
+      ],
+      modifiers: {
+        wave: { font: { color: color1, style: 'italic' } },
+        wavelength: { font: { color: color1, style: 'italic' } },
+        frequency: { font: { color: color1, style: 'italic' } },
+        velocity: { font: { color: color1, style: 'italic' } },
+        'sine wave': { font: { color: color1, style: 'italic' } },
+        lambda: { text: '\u03bb', font: { family: 'Times New Roman', style: 'italic', size: 0.18 } },
+        f: { font: { family: 'Times New Roman', style: 'italic', size: 0.18 } },
+        v: { font: { family: 'Times New Roman', style: 'italic', size: 0.18 } },
+      },
+      font: { size: 0.15, color: colorText },
+      xAlign: 'center',
+      yAlign: 'middle',
+      justify: 'left',
+      position: [0, 1.75],
+      lineSpace: 0.2,
+    },
+  });
   // figure.add({
   //   name: 'subTitle',
   //   method: 'primitives.textLines',
