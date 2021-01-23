@@ -463,7 +463,8 @@ function addEquation() {
           title: { position: [-0.4, 1.9], scale: 1.3 },
           default: { position: [-0.1, 1.9], scale: 1.3 },
           left: { position: [-0.4, 1.9], scale: 1.3 },
-          farLeft: { position: [-1.3, 1.9], scale: 1.3}
+          farLeft: { position: [-1.3, 1.9], scale: 1.3},
+          low: { position: [-0.1, 0.5], scale: 1.8 },
         },
       },
     },
@@ -494,7 +495,6 @@ function addEquation() {
         scenarios: {
           side: { position: [2, 0.4], scale: 1 },
           default: { position: [-0.1, 1.9], scale: 1.3 },
-
         },
       },
     },

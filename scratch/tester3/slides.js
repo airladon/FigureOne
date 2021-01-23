@@ -88,6 +88,11 @@ function addSlides() {
     divS: math(' \u2215 ', colorText, 0.11),
     twoPiS: math('2\u03c0', colorText, 0.11),
     xS: math('x', colorText, 0.11),
+    sinS: {
+      text: 'sin',
+      color: colorText,
+      font: { size: 0.11, family: 'Times New Roman' },
+    },
     1: subMath('1'),
     0: subMath('1'),
     r0: subMath('0', color0),
@@ -154,7 +159,7 @@ function addSlides() {
       disturbing: highlight('disturbing'),
     },
     text: [
-      'This string of connected particles represent a |medium|. Moving or',
+      'A string of connected particles below represents a |medium|. Moving or',
       '|disturbing| a |particle| pulls its neighbor in the same direction.',
       {
         text: 'Try dragging the |first particle| to see how it pulls it\'s neighbor',
@@ -183,8 +188,10 @@ function addSlides() {
     // modifiers: {
     // },
     text: [
-      'How quickly particles pull their neighbors defines how quickly the',
-      '|disturbance| propagates through the medium.',
+      'Each particle in turn pulls on the next particle and as a consequence',
+      'the |disturbance| propagates through the medium.',
+      // 'How quickly particles pull their neighbors defines how quickly the',
+      // '|disturbance| propagates through the medium.',
     ],
     enterStateCommon: () => {
       medium.custom.movePad.setMovable(true);
@@ -210,11 +217,6 @@ function addSlides() {
     },
     text: [
       'A |disturbance| that propagates through a medium or field is a |wave|.',
-      // {
-      //   text: 'Touch the word |disturbance| or manually move the |first particle|.',
-      //   font: { size: 0.08 },
-      //   lineSpace: 0.2,
-      // },
     ],
     steadyStateCommon: () => {
       layout.startDisturbances(medium, 10, false);
@@ -232,6 +234,37 @@ function addSlides() {
   ....###....########.########..#######...######..####....##.......##...
   */
   // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    modifiers: {
+      wave: highlight('wave'),
+    },
+    // density, temperature, elasticity
+    text: [
+      'Different mediums have different amounts of coupling between particles.',
+      'Coupling is a result of the physical characteristics of the medium (such as',
+      'density, elasticity, compressibility etc.)',
+      // 'More coupling, results in more particles that are more responsive to changes',
+      // 'in their neighbors, and thus results in faster dis'
+      // 'Mediums with more tightly coupled particles will propagate the disturbance',
+      // 'faster, as the particles respond faster to their neighbors.',
+      // { text: 'For example, sound travels faster in a solid than in air.' },
+    ],
+  });
+  slides.push({
+    modifiers: {
+      wave: highlight('wave'),
+    },
+    text: [
+      'Tighter coupling results in particles that are more responsive to changes',
+      'in their neighbors, and thus disturbances will propagate faster in them.'
+      // 'More coupling, results in more particles that are more responsive to changes',
+      // 'in their neighbors, and thus results in faster dis'
+      // 'Mediums with more tightly coupled particles will propagate the disturbance',
+      // 'faster, as the particles respond faster to their neighbors.',
+      // { text: 'For example, sound travels faster in a solid than in air.' },
+    ],
+  });
+
   slides.push({
     modifiers: {
       wave: highlight('wave'),
@@ -379,7 +412,7 @@ function addSlides() {
         medium1.custom.balls.getElement('ball0').pulse({ scale: 4 });
         medium2.custom.balls.getElement('ball0').pulse({ scale: 4 });
       }, 0, color0),
-      faster: action('faster velocity', () => figure.getElement('vFast').pulse()),
+      faster: action('faster', () => figure.getElement('vFast').pulse()),
       'slow motion': action('slow motion', () => {
         layout.slowMotion();
         layout.disturbThenFreeze();
@@ -646,8 +679,8 @@ function addSlides() {
   });
   slides.push({
     modifiers: {
-      input: action(
-        'input', () => eqn.pulse({
+      delay: action(
+        'delay', () => eqn.pulse({
           elements: [
             't_3', 'min2', 'x_2', 'vin1', 'v_1',
           ],
@@ -661,8 +694,8 @@ function addSlides() {
       any: eqnPulse('any', eqn.getPhraseElements('yxt')),
     },
     text: [
-      'To find the resulting wave at |any| position in time we can substitute',
-      'the |input|.',
+      'The resulting wave at |any| position in time takes into account the',
+      'propagation |delay|.',
     ],
   });
 
@@ -850,7 +883,7 @@ function addSlides() {
     },
     text: [
       'If we look at a |fixed position|, we see a |sine function dependent on time|',
-      'with a constant |phase offset| (delay from the original disturbance).',
+      'with a constant |phase offset|.',
     ],
     form: 'sineConstX',
     enterState: () => {
@@ -868,10 +901,10 @@ function addSlides() {
     modifiers: {
       'phase offset': eqnPulse('phase offset', ['w2', 't_2', 'min1']),
       space: eqnPulse('space', [
-        'sin', ...eqn.getPhraseElements('wOnV1'), 'x_3', 'min1',
+        'sin', ...eqn.getPhraseElements('wOnV1'), 'x_3',
       ]),
       'sine function in': eqnPulse('sine function in', [
-        'sin', ...eqn.getPhraseElements('wOnV1'), 'x_3', 'min1',
+        'sin', ...eqn.getPhraseElements('wOnV1'), 'x_3',
       ]),
       'time snapshot': eqnPulse('time snapshot', ['constant_1']),
       'minus sign': eqnPulse('minus sign', ['min1']),
@@ -880,7 +913,7 @@ function addSlides() {
       'Similarly, if we look at a |time snapshot|, we see a |sine function in|',
       '|space| with a constant |phase offset|.',
       {
-        text: 'NB: The |minus sign| is a phase offset of |piSmall|.',
+        text: 'NB: The |minus sign| is a phase offset of |piSmall| (as |sinS|(\u2212|xS|) = \u2212|sinS|(|xS|) = |sinS|(|xS| + |piSmall|)).',
         font: { size: 0.09 },
         lineSpace: 0.2,
       },
@@ -1172,6 +1205,36 @@ function addSlides() {
     },
   });
 
+  // ///////////////////////////////////////////////////////////////////////////
+  /*
+  ..######..##.....##.##.....##.##.....##....###....########..##....##
+  .##....##.##.....##.###...###.###...###...##.##...##.....##..##..##.
+  .##.......##.....##.####.####.####.####..##...##..##.....##...####..
+  ..######..##.....##.##.###.##.##.###.##.##.....##.########.....##...
+  .......##.##.....##.##.....##.##.....##.#########.##...##......##...
+  .##....##.##.....##.##.....##.##.....##.##.....##.##....##.....##...
+  ..######...#######..##.....##.##.....##.##.....##.##.....##....##...
+  */
+  // ///////////////////////////////////////////////////////////////////////////
+
+  slides.push({
+    showCommon: [],
+    text: [
+      '', '', '',
+      'A wave is a disturbance that propagates through a medium or',
+      'field.',
+      '', '', '',
+      'A sinusoidal disturbance at a point results in a sine wave disturbance',
+      'in space.',
+      '', '', '',
+      'The sine wave\'s wavelength |lambda| is related to the frequency |f| of the',
+      'initial disturbance, and the propagation velocity |v| in the',
+      'medium or field.',
+    ],
+    form: 'cLambdaF',
+    scenarioCommon: ['low'],
+  });
+
   // slides.push({ fromForm: 'sine2PiOnfvL', form: 'sine2PiOnL' });
 
   // slides.push({ fromForm: 'sineExpandW', form: 'sine2PiF' });
@@ -1199,8 +1262,44 @@ function addSlides() {
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
   nav.loadSlides(slides);
-  nav.goToSlide(67);
+  nav.goToSlide(69);
 }
 
 addSlides();
 // nav.goToSlide()
+
+/**
+A sinusoidal disturbance at a point results in a sine wave disturbance distrubted through space, that travels away from the disturbance
+
+The spatial sine wave's wavelength is related to the frequency of the initial disturbance, and the propagation velocity of the medium it is traveling in.
+
+c = Lf
+
+A sinusoidal traveling wave is often described as
+y = sin(kx - wt)
+but we have an equation of
+y = sin(wt-kx)
+Both are valid, the difference is from where you start.
+
+We started with a known time disturbance as a sinusoid and from that found the travelling wave.
+
+If however you start with a known spatial disturbtion as a sinusoid, and then find the traveling wave you get
+y = sin(kw - wt)
+
+Both these equations say that the relationship between a spatially distributed wave and a temporal wave are inverted. 
+
+Some waves, like electromagnetic waves propagate in a field distributed through space instead of a medium). The wave is a disturbance in the field, and is not a spatial displacement, but rather a change in field direction and intensity.
+
+In terms of coupling, we might think of a field as something that is as tightly coupled as possible as propagation in the field is as fast as possible. But, we need to be careful. When a field exists in a vaccum, it is least impeded, and thus propagation velocity is fastest. When a field exits in a medium, such as air, or water, then the propagation velocity is slower.
+
+This is in contract to propagation velocity in a medium. Sound waves travel in solids fast than they do in air as the molecules in air are slower to respond to neighboring disturbances than the closely packed molecules of a solid.
+
+So sound waves in a solid travel faster than those in air, and thus have a longer wavelength.
+
+In constrast, electromagnetic waves travel slower in solids compared to air and therefore have shorter wavelengths.
+
+When a field is in a medium, the propagation of the wave is dependent on the medium, but not because of the medium. A wave propagating in an electromagnetic field in free space travels at the speed of light. If the electromagnetic field is in a medium, such as air, or a dielectric, then the speed is reduced.
+You might think of fields as being most tightly coupled as wave propagation in fields is as fast as possible. Electromagnetic waves propag
+
+NB, a disturbance is caused 
+ */
