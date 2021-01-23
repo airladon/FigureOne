@@ -1205,6 +1205,18 @@ function addSlides() {
     },
   });
 
+  /**
+  Some things to see in the last slide:
+
+  Changing frequency of the sine disturbance does not change the velocity
+  (velocity is dependent on the medium, not the disturbance).
+
+  Faster velocity results in a more spread out wave form, or larger wavelength
+
+  For positive travelling waves, the traveling wave and time plot are negatives
+  or inverses of each other. Use Pulse 2 to see this best.
+   */
+
   // ///////////////////////////////////////////////////////////////////////////
   /*
   ..######..##.....##.##.....##.##.....##....###....########..##....##
