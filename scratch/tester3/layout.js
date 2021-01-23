@@ -122,6 +122,48 @@ function setupFigure() {
     },
   });
 
+  figure.add([
+    button('pulseButton1', [1.7, 0.15], 'Pulse 1'),
+    button('pulseButton2', [2.1, 0.15], 'Pulse 2'),
+    button('sineButton', [1.3, 0.15], 'Sine'),
+    button('resetButton', [0.9, 0.15], 'Reset'),
+    button('freezeTimeButton', [-1.6, 0.15], 'Off'),
+    button('slowTimeButton', [-0.6, 0.15], 'Off'),
+    button('velocityButton1', [2, 1.9], 'Fast'),
+    button('velocityButton2', [2, 1.04], 'Fast'),
+    button('freqButton1', [-0.7, 1.9], 'Fast'),
+    button('freqButton2', [-0.7, 1.04], 'Fast'),
+  ]);
+
+  const resetButton = figure.getElement('resetButton');
+  const pulseButton1 = figure.getElement('pulseButton1');
+  const pulseButton2 = figure.getElement('pulseButton2');
+  const sineButton = figure.getElement('sineButton');
+  const freezeButton = figure.getElement('freezeTimeButton');
+  const slowTimeButton = figure.getElement('slowTimeButton');
+  const velocityButton1 = figure.getElement('velocityButton1');
+  const velocityButton2 = figure.getElement('velocityButton2');
+  const freqButton1 = figure.getElement('freqButton1');
+  const freqButton2 = figure.getElement('freqButton2');
+
+  const pause = () => {
+    time.pause();
+    freezeButton.setLabel('On');
+  };
+  const unpause = () => {
+    freezeButton.setLabel('Off');
+    time.unpause();
+  };
+
+  /*
+  .##..........###....########..########.##........######.
+  .##.........##.##...##.....##.##.......##.......##....##
+  .##........##...##..##.....##.##.......##.......##......
+  .##.......##.....##.########..######...##........######.
+  .##.......#########.##.....##.##.......##.............##
+  .##.......##.....##.##.....##.##.......##.......##....##
+  .########.##.....##.########..########.########..######.
+  */
   const axisLabel = (name, position, col, text) => ({
     name,
     method: 'primitives.textLine',
@@ -148,18 +190,9 @@ function setupFigure() {
   });
 
   figure.add([
-    button('pulseButton', [1.7, 0.15], 'Pulse'),
-    button('sineButton', [1.3, 0.15], 'Sine'),
-    button('resetButton', [0.9, 0.15], 'Reset'),
-    button('freezeTimeButton', [-1.6, 0.15], 'Off'),
     label('freezeTimeLabel', [-1.95, 0.15], colorText, 'Freeze:'),
-    button('slowTimeButton', [-0.6, 0.15], 'Off'),
     label('slowTimeLabel', [-1.05, 0.15], colorText, ['Slow Motion:']),
     label('disturbance', [0.45, 0.15], colorText, ['Disturbance:']),
-    button('velocityButton1', [2, 1.9], 'Fast'),
-    button('velocityButton2', [2, 1.04], 'Fast'),
-    button('freqButton1', [-0.7, 1.9], 'Fast'),
-    button('freqButton2', [-0.7, 1.04], 'Fast'),
     label('velocity', [2, 2.1], colorText, 'Velocity'),
     label('frequency', [-0.7, 2.1], colorText, 'Sine Frequency'),
     axisLabel('x0', [-2.1, 0.77], color0, [
@@ -178,6 +211,15 @@ function setupFigure() {
     ]),
   ]);
 
+  /*
+  ....###....########..########...#######..##......##..######.
+  ...##.##...##.....##.##.....##.##.....##.##..##..##.##....##
+  ..##...##..##.....##.##.....##.##.....##.##..##..##.##......
+  .##.....##.########..########..##.....##.##..##..##..######.
+  .#########.##...##...##...##...##.....##.##..##..##.......##
+  .##.....##.##....##..##....##..##.....##.##..##..##.##....##
+  .##.....##.##.....##.##.....##..#######...###..###...######.
+  */
   figure.add([
     {
       name: 'arrow1',
@@ -192,26 +234,15 @@ function setupFigure() {
   ]);
 
 
-  const resetButton = figure.getElement('resetButton');
-  const pulseButton = figure.getElement('pulseButton');
-  const sineButton = figure.getElement('sineButton');
-  const freezeButton = figure.getElement('freezeTimeButton');
-  const slowTimeButton = figure.getElement('slowTimeButton');
-  const velocityButton1 = figure.getElement('velocityButton1');
-  const velocityButton2 = figure.getElement('velocityButton2');
-  const freqButton1 = figure.getElement('freqButton1');
-  const freqButton2 = figure.getElement('freqButton2');
-
-  const pause = () => {
-    time.pause();
-    freezeButton.setLabel('On');
-  };
-  const unpause = () => {
-    freezeButton.setLabel('Off');
-    time.unpause();
-  };
-
-
+  /*
+  .##.....##.########.########..####.##.....##.##.....##
+  .###...###.##.......##.....##..##..##.....##.###...###
+  .####.####.##.......##.....##..##..##.....##.####.####
+  .##.###.##.######...##.....##..##..##.....##.##.###.##
+  .##.....##.##.......##.....##..##..##.....##.##.....##
+  .##.....##.##.......##.....##..##..##.....##.##.....##
+  .##.....##.########.########..####..#######..##.....##
+  */
   const xAxis = (name, title, units, length, maxValue) => ({
     name,
     method: 'collections.axis',
@@ -428,6 +459,35 @@ function setupFigure() {
     return medium;
   };
 
+  const medium = addMedium('medium', 4, 10, 0.6, [-2, 0.9], false);
+  const medium1 = addMedium('medium1', 2.2, 5, 0.35, [-0, 1.65], true);
+  const medium2 = addMedium('medium2', 2.2, 5, 0.35, [-0, 0.8], true);
+
+  medium1.custom.movePad.setMovable();
+  medium2.custom.movePad.setMovable();
+  medium1.custom.movePad.subscriptions.add('setTransform', () => {
+    if (medium1.custom.movePad.state.isBeingMoved || medium1.custom.movePad.state.isMovingFreely) {
+      medium2.custom.stop();
+      medium2.custom.movePad.setPosition(medium1.custom.movePad.transform.t());
+    }
+  });
+  medium2.custom.movePad.subscriptions.add('setTransform', () => {
+    if (medium2.custom.movePad.state.isBeingMoved || medium2.custom.movePad.state.isMovingFreely) {
+      medium1.custom.stop();
+      medium1.custom.movePad.setPosition(medium2.custom.movePad.transform.t());
+    }
+  });
+  // medium1.custom.c = 2;
+
+  /*
+  .########.####.##.....##.########....########..##........#######..########
+  ....##.....##..###...###.##..........##.....##.##.......##.....##....##...
+  ....##.....##..####.####.##..........##.....##.##.......##.....##....##...
+  ....##.....##..##.###.##.######......########..##.......##.....##....##...
+  ....##.....##..##.....##.##..........##........##.......##.....##....##...
+  ....##.....##..##.....##.##..........##........##.......##.....##....##...
+  ....##....####.##.....##.########....##........########..#######.....##...
+  */
   const addTimePlot = (name, length, maxValue, recording, A, defaultPosition) => {
     figure.add({
       name,
@@ -456,7 +516,6 @@ function setupFigure() {
     const timePlot = figure.getElement(name);
     const axis = timePlot.getElement('xAxis');
     const trace = timePlot.getElement('trace');
-    // timePlot.custom.recording = new Recorder(maxValue);
     timePlot.custom.update = () => {
       const recorded = recording.getRecording();
       const points = Array(recorded.time.length);
@@ -468,27 +527,13 @@ function setupFigure() {
     return timePlot;
   };
 
+  const timePlot1 = addTimePlot(
+    'timePlot1', 1.5, 5, medium1.custom.recording, 0.35, [-2, 1.65],
+  );
+  const timePlot2 = addTimePlot(
+    'timePlot2', 1.5, 5, medium2.custom.recording, 0.35, [-2, 0.8],
+  );
 
-  const medium = addMedium('medium', 4, 10, 0.6, [-2, 0.9], false);
-  const medium1 = addMedium('medium1', 2.2, 5, 0.35, [-0, 1.65], true);
-  const medium2 = addMedium('medium2', 2.2, 5, 0.35, [-0, 0.8], true);
-  const timePlot1 = addTimePlot('timePlot1', 1.5, 5, medium1.custom.recording, 0.35, [-2, 1.65]);
-  const timePlot2 = addTimePlot('timePlot2', 1.5, 5, medium2.custom.recording, 0.35, [-2, 0.8]);
-  medium1.custom.movePad.setMovable();
-  medium2.custom.movePad.setMovable();
-  medium1.custom.movePad.subscriptions.add('setTransform', () => {
-    if (medium1.custom.movePad.state.isBeingMoved || medium1.custom.movePad.state.isMovingFreely) {
-      medium2.custom.stop();
-      medium2.custom.movePad.setPosition(medium1.custom.movePad.transform.t());
-    }
-  });
-  medium2.custom.movePad.subscriptions.add('setTransform', () => {
-    if (medium2.custom.movePad.state.isBeingMoved || medium2.custom.movePad.state.isMovingFreely) {
-      medium1.custom.stop();
-      medium1.custom.movePad.setPosition(medium2.custom.movePad.transform.t());
-    }
-  });
-  medium1.custom.c = 2;
 
   let inAnimation = false;
 
@@ -497,7 +542,6 @@ function setupFigure() {
   };
 
   const getInAnimation = () => inAnimation;
-
 
   const stop = () => {
     medium1.custom.stop();
@@ -527,21 +571,11 @@ function setupFigure() {
       resetButton.pulse({ scale: 1.1, duration: 10000, frequency: 1.5 });
     }
     const deltaTime = time.step();
-    if (medium.isShown) {
-      medium.custom.update(deltaTime);
-    }
-    if (medium1.isShown) {
-      medium1.custom.update(deltaTime);
-    }
-    if (medium2.isShown) {
-      medium2.custom.update(deltaTime);
-    }
-    if (timePlot1.isShown) {
-      timePlot1.custom.update();
-    }
-    if (timePlot2.isShown) {
-      timePlot2.custom.update();
-    }
+    if (medium.isShown) { medium.custom.update(deltaTime); }
+    if (medium1.isShown) { medium1.custom.update(deltaTime); }
+    if (medium2.isShown) { medium2.custom.update(deltaTime); }
+    if (timePlot1.isShown) { timePlot1.custom.update(); }
+    if (timePlot2.isShown) { timePlot2.custom.update(); }
   }
 
   // Before each draw, update the points
@@ -562,7 +596,6 @@ function setupFigure() {
   };
 
   slowTimeButton.onClick = () => {
-    // unpause();
     if (time.getTimeSpeed() === 1) {
       setTimeSpeed(0.3, 'On');
     } else {
@@ -577,7 +610,7 @@ function setupFigure() {
     unpause();
     const startTime = time.now();
     const { movePad, A } = med.custom;
-    movePad.animations.new('_noStop_sine')
+    movePad.animations.new()
       .custom({
         callback: () => {
           if (!time.isPaused()) {
@@ -660,12 +693,16 @@ function setupFigure() {
   const disturb = (med, style = 'pulse', parameter = 0.6, inAnimationValue = false) => {
     if (Array.isArray(med)) {
       med.forEach((m) => {
-        if (style === 'pulse') {
+        if (style === 'asymPulse') {
+          assymetricPulse(m);
+        } else if (style === 'pulse') {
           pulse(m, parameter);
         } else {
           sineWave(m, parameter);
         }
       });
+    } else if (style === 'asymPulse') {
+      assymetricPulse(med);
     } else if (style === 'pulse') {
       pulse(med, parameter);
     } else {
@@ -800,10 +837,15 @@ function setupFigure() {
       .start();
   };
 
-  pulseButton.onClick = () => {
+  pulseButton1.onClick = () => {
     reset();
     unpause();
     startDisturbances([medium1, medium2], 8, true, 'pulse', 0.6);
+  };
+  pulseButton2.onClick = () => {
+    reset();
+    unpause();
+    startDisturbances([medium1, medium2], 8, true, 'asymPulse', 0.6);
   };
   sineButton.onClick = () => {
     reset();

@@ -1190,8 +1190,8 @@ function addSlides() {
       'medium1', 'medium2', 'timePlot1', 'timePlot2',
       'freezeTimeButton', 'slowTimeButton', 'slowTimeLabel', 'freezeTimeLabel',
       'velocityButton1', 'velocityButton2', 'freqButton1', 'freqButton2',
-      'resetButton', 'pulseButton', 'sineButton', 'disturbance',
-      'frequency', 'velocity',
+      'resetButton', 'pulseButton1', 'sineButton', 'disturbance',
+      'pulseButton2', 'frequency', 'velocity',
     ],
     steadyStateCommon: () => {
       layout.setVelocity(medium1, 0.5, 1);
