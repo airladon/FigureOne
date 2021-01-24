@@ -341,8 +341,6 @@ function addSlides() {
   slides.push({
     showCommon: ['medium1', 'medium2', 'timePlot1', 'timePlot2', 'vFast', 'vSlow'],
     steadyStateCommon: (from) => {
-      layout.setVelocity(medium1, 2, 1);
-      layout.setVelocity(medium2, 1, 2);
       if (from === 'prev') {
         layout.reset();
         layout.startDisturbances([medium1, medium2], 5.5, true);
@@ -379,8 +377,6 @@ function addSlides() {
     showCommon: ['medium1', 'medium2', 'timePlot1', 'timePlot2', 'vFast', 'vSlow', 'freezeTimeButton', 'slowTimeButton', 'slowTimeLabel', 'freezeTimeLabel'],
     scenario: 'default',
     steadyStateCommon: () => {
-      layout.setVelocity(medium1, 2, 1);
-      layout.setVelocity(medium2, 1, 2);
       layout.startDisturbances([medium1, medium2], 5.5, false);
     },
     leaveStateCommon: () => {
@@ -459,6 +455,8 @@ function addSlides() {
         layout.startDisturbances([medium1, medium2], 5.5, false);
       } else {
         layout.reset();
+        layout.setVelocity(medium1, 2, 1);
+        layout.setVelocity(medium2, 1, 2);
         layout.startDisturbances([medium1, medium2], 5.5, true);
       }
     },
