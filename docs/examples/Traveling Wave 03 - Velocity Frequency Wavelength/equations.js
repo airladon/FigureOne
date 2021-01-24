@@ -2,6 +2,7 @@
 /* eslint-disable camelcase */
 
 function addEquation() {
+  // Helper functions to make forms and phrases more readable
   const brac = (content, id, overhang = 0.05) => ({
     brac: {
       left: `lb${id}`, content, right: `rb${id}`, overhang,

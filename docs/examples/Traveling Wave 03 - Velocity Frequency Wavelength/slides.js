@@ -1,11 +1,11 @@
 /* globals figure, layout, color0, color1, color3, colorText */
 
 function addSlides() {
+  // Commonly used figure elements
   const nav = figure.getElement('nav');
   const medium = figure.getElement('medium');
   const medium1 = figure.getElement('medium1');
   const medium2 = figure.getElement('medium2');
-  // const title = figure.getElement('title');
   const sideEqn = figure.getElement('sideEqn');
   const eqn = figure.getElement('eqn');
   const slowTimeButton = figure.getElement('slowTimeButton');
@@ -756,25 +756,8 @@ function addSlides() {
 
   slides.push({
     fromForm: 'yxtxAndSineBotCom',
-    // form: 'yxtxAndSineBotComXOnV',
     form: 'yxtxAndSineXOnV',
-    // enterState: () => {
-    //   setArrows();
-    //   arrow1.showAll();
-    //   arrow2.showAll();
-    //   eqn.getElement('t_4').setColor(color1);
-    //   eqn.getElement('t_1').setColor(color1);
-    // },
-    // leaveState: () => {
-    //   eqn.getElement('t_4').setColor(colorText);
-    //   eqn.getElement('t_1').setColor(colorText);
-    // },
   });
-
-  // slides.push({
-  //   fromForm: 'yxtxAndSineBotComXOnV',
-  //   form: 'yxtxAndSineXOnV',
-  // });
 
   slides.push({
     modifiers: {
@@ -1204,18 +1187,6 @@ function addSlides() {
       medium2.custom.balls.highlight(['ball0']);
     },
   });
-
-  /**
-  Some things to see in the last slide:
-
-  Changing frequency of the sine disturbance does not change the velocity
-  (velocity is dependent on the medium, not the disturbance).
-
-  Faster velocity results in a more spread out wave form, or larger wavelength
-
-  For positive travelling waves, the traveling wave and time plot are negatives
-  or inverses of each other. Use Pulse 2 to see this best.
-   */
 
   // ///////////////////////////////////////////////////////////////////////////
   /*
