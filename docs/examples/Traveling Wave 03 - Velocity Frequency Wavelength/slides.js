@@ -1,4 +1,4 @@
-/* globals figure, layout, color0, color1, colorText */
+/* globals figure, layout, color0, color1, color3, colorText */
 
 function addSlides() {
   const nav = figure.getElement('nav');
@@ -24,6 +24,7 @@ function addSlides() {
 
   const slides = [];
 
+  // Helper functions to make defining text modifiers more succinct
   const action = (text, onClick, touchBorder = 0, color = color1) => ({
     text, font: { color }, onClick, touchBorder,
   });
@@ -256,12 +257,7 @@ function addSlides() {
     },
     text: [
       'Tighter coupling results in particles that are more responsive to changes',
-      'in their neighbors, and thus disturbances will propagate faster in them.'
-      // 'More coupling, results in more particles that are more responsive to changes',
-      // 'in their neighbors, and thus results in faster dis'
-      // 'Mediums with more tightly coupled particles will propagate the disturbance',
-      // 'faster, as the particles respond faster to their neighbors.',
-      // { text: 'For example, sound travels faster in a solid than in air.' },
+      'in their neighbors, and thus disturbances will propagate faster in them.',
     ],
   });
 
@@ -321,6 +317,8 @@ function addSlides() {
     },
   });
 
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
   slides.push({
     modifiers: {
       'first particle': action('first particle', () => {
@@ -1245,44 +1243,3 @@ function addSlides() {
 }
 
 addSlides();
-
-
-/**
-Some caveats and gotchas.
-
-A positive travelling sine wave is often described as
-
-y(x,t) = sin(kx - wt)
-
-but we have an equation of
-
-y(x,t) = sin(wt - kx)
-
-Both are valid. The difference is from where you start.
-
-We started with a known time disturbance y(x0, t) = f(t).
-
-We then found the 
-
-We started with a known time disturbance as a sinusoid and from that found the travelling wave.
-
-If however you start with a known spatial disturbtion as a sinusoid, and then find the traveling wave you get
-y = sin(kw - wt)
-
-Both these equations say that the relationship between a spatially distributed wave and a temporal wave are inverted. 
-
-Some waves, like electromagnetic waves propagate in a field distributed through space instead of a medium). The wave is a disturbance in the field, and is not a spatial displacement, but rather a change in field direction and intensity.
-
-In terms of coupling, we might think of a field as something that is as tightly coupled as possible as propagation in the field is as fast as possible. But, we need to be careful. When a field exists in a vaccum, it is least impeded, and thus propagation velocity is fastest. When a field exits in a medium, such as air, or water, then the propagation velocity is slower.
-
-This is in contract to propagation velocity in a medium. Sound waves travel in solids fast than they do in air as the molecules in air are slower to respond to neighboring disturbances than the closely packed molecules of a solid.
-
-So sound waves in a solid travel faster than those in air, and thus have a longer wavelength.
-
-In constrast, electromagnetic waves travel slower in solids compared to air and therefore have shorter wavelengths.
-
-When a field is in a medium, the propagation of the wave is dependent on the medium, but not because of the medium. A wave propagating in an electromagnetic field in free space travels at the speed of light. If the electromagnetic field is in a medium, such as air, or a dielectric, then the speed is reduced.
-You might think of fields as being most tightly coupled as wave propagation in fields is as fast as possible. Electromagnetic waves propag
-
-NB, a disturbance is caused 
- */
