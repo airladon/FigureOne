@@ -930,6 +930,7 @@ function setupFigure() {
   return {
     setMaxTime,
     reset,
+    sineWave,
     pause,
     unpause,
     slowMotion,

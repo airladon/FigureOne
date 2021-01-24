@@ -1,54 +1,10 @@
-/* globals colorText, color0, figure, layout */
+/* globals colorText, color0, figure, color1 */
+/* eslint-disable camelcase */
 
 function addEquation() {
-  const b1 = content => ({
-    brac: {
-      left: 'lb1', content, right: 'rb1', height: 0.2, descent: 0.05,
-    },
-  });
-  const ASin = content => ([
-    'A', 'sin',
-    {
-      brac: {
-        left: 'lb2', content, right: 'rb2', height: 0.2, descent: 0.05,
-      },
-    },
-  ]);
-  const b2 = content => ({
-    brac: {
-      left: 'lb2', content, right: 'rb2', height: 0.2, descent: 0.05,
-    },
-  });
-  const brac3 = content => ({
-    brac: {
-      left: 'lb3', content, right: 'rb3', descent: 0.05,
-    },
-  });
-  const scale = (content, s = 0.8) => ({
-    scale: { content, scale: s },
-  });
-
   const brac = (content, id, overhang = 0.05) => ({
-    brac: { left: `lb${id}`, content, right: `rb${id}`, overhang },
-  });
-
-  const ann = (content, comment, symbol, space = 0.2) => ({
-    bottomComment: {
-      content,
-      comment,
-      commentSpace: space,
-      symbol,
-      inSize: false,
-    },
-  });
-
-  const tann = (content, comment, symbol, space = 0.2) => ({
-    topComment: {
-      content,
-      comment,
-      commentSpace: space,
-      symbol,
-      inSize: false,
+    brac: {
+      left: `lb${id}`, content, right: `rb${id}`, overhang,
     },
   });
 
@@ -68,17 +24,28 @@ function addEquation() {
   const hide = content => ({
     container: { content, inSize: false },
   });
+
+  const bCom = (content, comment, symbol, commentSpace, inSize) => ({
+    bottomComment: {
+      content, comment, symbol, commentSpace, inSize,
+    },
+  });
+  const tCom = (content, comment, symbol, commentSpace, inSize) => ({
+    topComment: {
+      content, comment, symbol, commentSpace, inSize,
+    },
+  });
+
   figure.add([
     {
       name: 'eqn',
       method: 'collections.equation',
       options: {
-        // Define the elements that require specific styling
         color: colorText,
         dimColor: [0.65, 0.65, 0.65, 1],
+        // Customized elements
         elements: {
           sin: { style: 'normal' },
-          sin_1: { style: 'normal' },
           lb1: { symbol: 'bracket', side: 'left' },
           rb1: { symbol: 'bracket', side: 'right' },
           lb2: { symbol: 'bracket', side: 'left' },
@@ -102,10 +69,6 @@ function addEquation() {
           min1: ' \u2212 ',
           min2: ' \u2212 ',
           min3: ' \u2212 ',
-          _2pi1: '2\u03c0',
-          _2pi2: '2\u03c0',
-          times1: ' \u00d7 ',
-          times2: ' \u00d7 ',
           comma1: ', ',
           comma2: ', ',
           comma3: ', ',
@@ -119,15 +82,14 @@ function addEquation() {
           vin3: { symbol: 'vinculum', lineWidth: 0.007 },
           brace: { symbol: 'brace', side: 'bottom', lineWidth: 0.005 },
           tBrace: { symbol: 'brace', side: 'top', lineWidth: 0.005 },
-          bBrace: { symbol: 'brace', side: 'bottom', lineWidth: 0.008, color: color1 },
+          bBrace: {
+            symbol: 'brace', side: 'bottom', lineWidth: 0.008, color: color1,
+          },
           line1: { symbol: 'line', width: 0.005, arrow: { start: { head: 'triangle' } } },
           line2: { symbol: 'line', width: 0.005, arrow: { start: { head: 'triangle' } } },
           line3: { symbol: 'line', width: 0.005, arrow: { start: { head: 'triangle' } } },
-          x_1: 'x',
-          x_2: 'x',
           f_1: { color: color0 },
           f_2: { color: color0 },
-          f_3: { color: color0 },
           rx1: { text: 'x', color: color0 },
           rx2: { text: 'x', color: color0 },
           rx3: { text: 'x', color: color0 },
@@ -149,6 +111,7 @@ function addEquation() {
           x1Box2: { symbol: 'tBox', touchBorder: 0.1, isTouchable: true },
           twoPi: '2\u03c0',
         },
+        // Reusable phrases
         phrases: {
           x0y: { tBox: [{ sub: ['rx1', 'r01'] }, 'x0Box1'] },
           x0y2: { sub: ['rx2', 'r02'] },
@@ -156,13 +119,11 @@ function addEquation() {
           x0y4: { sub: ['rx4', 'r04'] },
           f1: { tBox: [{ container: [{ sub: ['f_1', 'x0y3'] }, 0.08] }, 'x0Box2'] },
           f2: { tBox: [{ container: [{ sub: ['f_2', 'x0y2'] }, 0.08] }, 'x0Box3'] },
-          f3: { container: [{ sub: ['f_3', 'x0y4'] }, 0.08] },
           x11: { sub: ['x_1', '_1_1'] },
           x1y: { tBox: [{ sub: ['bx1', 'b11'] }, 'x1Box2'] },
           x1y2: { tBox: [{ sub: ['bx2', 'b12'] }, 'x1Box1'] },
           x1y2H: { tBox: [{ sub: [[hide('x_2'), 'bx2'], 'b12'] }, 'x1Box1'] },
           x1OnV: frac(['x1y2'], 'vin1', 'v_1'),
-          x1OnVH: frac([hide('x_2'), 'x11'], 'vin1', 'v_1'),
           x1OnVb: { scale: [frac('x1y2', 'vin1', 'v_1'), 0.8] },
           x1OnVbH: { scale: [frac('x1y2H', 'vin1', 'v_1'), 0.8] },
           xOnV: frac(['x_2'], 'vin1', 'v_1'),
@@ -173,20 +134,15 @@ function addEquation() {
           t11: { sub: ['t_1', '_1_2'] },
           t12: { sub: ['t_2', '_1_3'] },
           yx0t: ['y_1', brac(['x0y', 'comma1', 't_y1'], 1)],
-          yx0tt1: ['y_2', brac(['x0y2', 'comma2', 't_y2', 'min1', 't11'], 4)],
           yx1t: ['y_3', brac(['x1y', 'comma3', 't_y3'], 3)],
           yx1tH: ['y_3', brac([hide('x_1'), 'x1y', 'comma3', 't_y3'], 3)],
           yxt: ['y_3', brac(['x_1', 'comma3', 't_y3'], 3)],
-          yxtConstX: ['y_3', brac([{
-            bottomComment: {
-              content: 'x_1', comment: 'constant_1', symbol: 'line2', commentSpace: 0.27, inSize: false,
-            },
-          }, 'comma3', 't_y3'], 3)],
-          yxtConstT: ['y_3', brac(['x_1', 'comma3', {
-            bottomComment: {
-              content: 't_y3', comment: 'constant_1', symbol: 'line2', commentSpace: 0.21, inSize: false,
-            },
-          }], 3)],
+          yxtConstX: ['y_3', brac([
+            bCom('x_1', 'constant_1', 'line2', 0.27, false), 'comma3', 't_y3',
+          ], 3)],
+          yxtConstT: ['y_3', brac([
+            'x_1', 'comma3', bCom('t_y3', 'constant_1', 'line2', 0.21, false),
+          ], 3)],
           ft: ['f1', brac('t', 2)],
           ftt1: ['f2', brac(['t_3', 'min2', 't12'], 5)],
           ftt1Sub: ['f2', brac(['t_3', 'min2', {
@@ -252,17 +208,6 @@ function addEquation() {
           sinConstT: ['sin', brac(['constT', 'min1', 'wOnV1', ' ', 'x_3'], 2)],
           sinExpandW: ['sin', brac(['constT', 'min1', 'expandW', ' ', 'x_3'], 2)],
           sin2pif: ['sin', brac(['constT', 'min1', 'twoPiFOnV1', ' ', 'x_3'], 2)],
-          // sin2pifTimesF: ['sin', brac([
-          //   'constT', 'min1',
-          //   {
-          //     frac: [
-          //       ['twoPi', 'f_4', 'times1', { scale: [{ frac: ['_1_1', 'vin1', 'f_5'] }, 0.4] }],
-          //       'vin2',
-          //       ['v_2', 'times2', { scale: [{ frac: ['_1_2', 'vin3', 'f_6'] }, 0.4] }],
-          //     ],
-          //   },
-          //   ' ', 'x_3',
-          // ], 2)],
           sin2pifTimesF: ['sin', brac([
             'constT', 'min1',
             {
@@ -403,20 +348,6 @@ function addEquation() {
             },
             alignment: { yAlign: -2.9 },
           },
-          // yxtxAndSineBotComXOnV: {
-          //   content: {
-          //     lines: {
-          //       content: [
-          //         { content: ['yxt', 'equals', 'ftxBotCom'], justify: 'equals' },
-          //         { content: ['ftx2', 'equals2', 'sinwt'], justify: 'equals2' },
-          //         { content: ['ftx3', 'equals3', 'sinwtXOnV'], justify: 'equals3' },
-          //       ],
-          //       justify: 'element',
-          //       baselineSpace: 0.4,
-          //     },
-          //   },
-          //   alignment: { yAlign: -2.9 },
-          // },
           yxtxAndSineXOnV: {
             content: {
               lines: {
@@ -455,7 +386,6 @@ function addEquation() {
             },
           },
         },
-        // formSeries: ['0'],
         position: [0, 1],
       },
       mods: {
@@ -463,7 +393,7 @@ function addEquation() {
           title: { position: [-0.4, 1.9], scale: 1.3 },
           default: { position: [-0.1, 1.9], scale: 1.3 },
           left: { position: [-0.4, 1.9], scale: 1.3 },
-          farLeft: { position: [-1.3, 1.9], scale: 1.3},
+          farLeft: { position: [-1.3, 1.9], scale: 1.3 },
           low: { position: [-0.4, 0.3], scale: 1.8 },
         },
       },
@@ -498,57 +428,16 @@ function addEquation() {
         },
       },
     },
-    // {
-    //   name: 'sideEqn',
-    //   method: 'equation',
-    //   options: {
-    //     // scale: 0.5,
-    //     color: colorDef,
-    //     elements: {
-    //       id1: '    (1)',
-    //       id2: '    (2)',
-    //       v: { symbol: 'vinculum', lineWidth: 0.007 },
-    //       comma1: ', ',
-    //       comma2: ', ',
-    //       min: ' \u2212 ',
-    //       lb1: { symbol: 'bracket', side: 'left' },
-    //       rb1: { symbol: 'bracket', side: 'right' },
-    //       lb2: { symbol: 'bracket', side: 'left' },
-    //       rb2: { symbol: 'bracket', side: 'right' },
-    //       equals: '  =  ',
-    //       lambda: '\u03bb',
-    //     },
-    //     phrases: {
-    //       t1: { sub: ['t', '_1_1'] },
-    //       x1: { sub: ['x', '_1_2'] },
-    //       x0: { sub: ['x_1', '_0'] },
-    //       ytx: ['y_1', b1(['x_3', 'comma1', 't_0'])],
-    //       xOnC: { frac: ['x_2', 'v', 'c'] },
-    //       sXOnC: scale('xOnC'),
-    //       yxc: ['y_0', b2(['x0', 'comma2', 't_1', 'min', 'sXOnC'])],
-    //     },
-    //     formDefaults: { alignment: { xAlign: 'equals' } }, // { fixTo: 'equals' } },
-    //     forms: {
-    //       2: ['t1', 'equals', frac('x1', 'c')],
-    //       '2id': ['t1', 'equals', frac('x1', 'c'), 'id1'],
-    //       clambdaf: ['c', 'equals', 'lambda', ' ', 'f'],
-    //       clambdafid: ['c', 'equals', 'lambda', ' ', 'f', 'id2'],
-    //     },
-    //     // position: sideEquationPosition,
-    //   },
-    //   mods: {
-    //     scenarios: {
-    //       center: { position: equationPosition, scale: 1 },
-    //       side: { position: sideEquationPosition, scale: 0.7 },
-    //     },
-    //   },
-    // },
     {
       name: 'nav',
       method: 'collections.slideNavigator',
       options: {
-        prevButton: { position: [-2.75, 1.5], type: 'arrow', length: 0.4, width: 0.8 },
-        nextButton: { position: [2.75, 1.5], type: 'arrow', length: 0.4, width: 0.8 },
+        prevButton: {
+          position: [-2.75, 1.5], type: 'arrow', length: 0.4, width: 0.8,
+        },
+        nextButton: {
+          position: [2.75, 1.5], type: 'arrow', length: 0.4, width: 0.8,
+        },
         text: { font: { size: 0.15 }, position: [-2.4, 2.7], xAlign: 'left' },
         equation: 'eqn',
       },
