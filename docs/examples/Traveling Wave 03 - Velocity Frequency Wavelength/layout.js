@@ -8,6 +8,7 @@ const figure = new Fig.Figure({
   font: { size: 0.1 },
 });
 
+// Global colors used in equations.js and slides.js
 const colorText = [0.3, 0.3, 0.3, 1];
 const color0 = [1, 0, 0, 1];
 const color1 = [0, 0.5, 1, 1];
@@ -31,6 +32,7 @@ function setupFigure() {
   ....##.....##.....##....##.......##......
   ....##....####....##....########.########
   */
+  // Title text on the first slide
   figure.add({
     name: 'title',
     method: 'primitives.textLines',
@@ -59,6 +61,7 @@ function setupFigure() {
   .##....##.##.....##.##.....##.##.....##.##.....##.##....##.....##...
   ..######...#######..##.....##.##.....##.##.....##.##.....##....##...
   */
+  // Text on the last slide summarizing the learnings
   figure.add({
     name: 'summary',
     method: 'primitives.textLines',
@@ -243,6 +246,7 @@ function setupFigure() {
   .##.....##.##.......##.....##..##..##.....##.##.....##
   .##.....##.########.########..####..#######..##.....##
   */
+  // Axis helper functions
   const xAxis = (name, title, units, length, maxValue) => ({
     name,
     method: 'collections.axis',
@@ -284,6 +288,7 @@ function setupFigure() {
     },
   });
 
+  // Particle creater
   const ball = (x, index, radius, sides = 20) => ({
     name: `ball${index}`,
     method: 'primitives.polygon',
@@ -316,6 +321,7 @@ function setupFigure() {
             transform: new Transform(),
           },
         },
+        // movePad moves the first particle in the medium
         {
           name: 'movePad',
           method: 'primitives.polygon',
@@ -334,6 +340,7 @@ function setupFigure() {
             },
           },
         },
+        // Arrowed line showing a wavelength of a sine wave
         {
           name: 'wavelength',
           method: 'collections.line',
@@ -377,35 +384,44 @@ function setupFigure() {
     const movePad = medium.getElement('movePad');
     const wavelength = medium.getElement('wavelength');
     medium.custom = {
-      f: 0.2,
-      c: 1,
-      A,
-      axis,
+      f: 0.2,   // Current frequency of sine wave for medium
+      c: 1,     // Propagation velocity of medium
+      A,        // Amplitude of pulse or sine wave for medium
+      axis,     // Make some elements easily available
       balls,
       tracker,
       wavelength,
       trackingTime: -10000,
       ball0: balls.getElement('ball0'),
       recording: new Recorder(maxValue / minVelocity),
+      // Update function gets the position of the movePad, then records it, and
+      // updates all the particles with their current displacement.
       update: (deltaTime) => {
+        // Get movePad displacement
         const { y } = movePad.transform.order[2];
+        // Record the displacement
         medium.custom.recording.record(y, deltaTime);
-        if (medium.custom.tracker < xValues.length) {
-          balls[`_ball${medium.custom.tracker}`].setColor(color2);
-        }
-        // medium.custom.tracker = xValues.length + 1;
+
+        // Calculate the displacement of each particle and set it
         for (let i = 0; i < xValues.length; i += 1) {
           const b = balls[`_ball${i}`];
           const by = medium.custom.recording.getValueAtTimeAgo((b.custom.x) / medium.custom.c);
           b.setPosition(b.custom.drawX, by);
         }
+
+        // If the tracker is being used, then calculate its current position and
+        // place it there
         if (tracker.isShown) {
-          // const ballSizeTime = ballSize * 2 / medium.custom.c;
+          // The space between particles in seconds (from the velocity)
           const ballSpaceTime = axis.drawToValue(ballSize * 2) / medium.custom.c;
+          // Quantize the space so the tracker particle can only exist on an
+          // existing particle and not between
           const t = Math.floor(
             (time.now() + medium.custom.trackingTime) / ballSpaceTime,
           ) * ballSpaceTime;
 
+          // If the tracker is within the axis, then position it appropriately,
+          // otherwise position it way off
           const xValue = Math.max(t * medium.custom.c, 0);
           const x = axis.valueToDraw(xValue);
           if (t > 0 && axis.inAxis(xValue + 0.2)) {
@@ -431,6 +447,8 @@ function setupFigure() {
       setFrequency: (frequency) => {
         medium.custom.f = frequency;
       },
+      // Find the minimum of the displayed sine curve and position the
+      // wavelength arrow annotation to align with it.
       setWavelengthPosition: (deltaX = 0) => {
         const t = time.now();
         const x0Phase = (2 * Math.PI * medium.custom.f * t) % (2 * Math.PI);
@@ -451,6 +469,7 @@ function setupFigure() {
       if (maxTimeReached) {
         return;
       }
+      // If the movePad has been manually moved, then stop current animations
       if (movePad.state.isBeingMoved && movePad.isAnimating()) {
         medium.custom.stop();
       }
@@ -459,10 +478,13 @@ function setupFigure() {
     return medium;
   };
 
+  // Create the mediums
   const medium = addMedium('medium', 4, 10, 0.6, [-2, 0.9], false);
   const medium1 = addMedium('medium1', 2.2, 5, 0.35, [-0, 1.65], true);
   const medium2 = addMedium('medium2', 2.2, 5, 0.35, [-0, 0.8], true);
 
+  // Tie medium1 and medium2 movePads together so if one is manually moved,
+  // then the other moves identically.
   medium1.custom.movePad.setMovable();
   medium2.custom.movePad.setMovable();
   medium1.custom.movePad.subscriptions.add('setTransform', () => {
@@ -477,7 +499,6 @@ function setupFigure() {
       medium1.custom.movePad.setPosition(medium2.custom.movePad.transform.t());
     }
   });
-  // medium1.custom.c = 2;
 
   /*
   .########.####.##.....##.########....########..##........#######..########
@@ -534,13 +555,24 @@ function setupFigure() {
     'timePlot2', 1.5, 5, medium2.custom.recording, 0.35, [-2, 0.8],
   );
 
-
+  /*
+  .##........#######...######...####..######.
+  .##.......##.....##.##....##...##..##....##
+  .##.......##.....##.##.........##..##......
+  .##.......##.....##.##...####..##..##......
+  .##.......##.....##.##....##...##..##......
+  .##.......##.....##.##....##...##..##....##
+  .########..#######...######...####..######.
+  */
+  // inAnimation is used for showing the leading edge of the displacement
+  // If the animation starts, then inAnimation is set to true. The animation
+  // stops after a short period of time, to let the user see the current
+  // position of the leading edge by pulsing it. However, we only want to pulse
+  // these particles if the user
   let inAnimation = false;
-
   const setInAnimation = (value = true) => {
     inAnimation = value;
   };
-
   const getInAnimation = () => inAnimation;
 
   const stop = () => {

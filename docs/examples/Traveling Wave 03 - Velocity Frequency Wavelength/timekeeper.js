@@ -1,10 +1,20 @@
 
+/**
+This function keeps track of time.
+
+Time is in seconds, and starts at 0 from the most recent reset.
+
+Time can be paused, unpaused, sped up or slowed down. A time speed of 1
+is normal time. When the speed is changed, the time speed will ramp up or
+down to the target speed and not change instantly.
+
+Time is automatically paused whenever the browser window loses focus.
+ */
 function TimeKeeper() {
   let time = 0;
   let timeSpeed = 1;
   let targetSpeed = 1;
   let internalPaused = false;
-
   let paused = false;
   let blurred = false;
 
@@ -19,6 +29,7 @@ function TimeKeeper() {
     internalPaused = false;
   }
 
+  // Update the current time and return the change in time from the last step
   function step(delta = null) {
     if (delta === null && internalPaused) {
       return 0;
@@ -38,7 +49,6 @@ function TimeKeeper() {
   function pauseTime() {
     if ((paused || blurred) && !internalPaused) {
       internalPaused = true;
-      // console.log(internalPaused)
     }
   }
 
@@ -46,10 +56,10 @@ function TimeKeeper() {
     if (!paused && !blurred && internalPaused) {
       internalPaused = false;
       lastTime = getNow();
-      // console.log(internalPaused)
     }
   }
 
+  // Automatically pause and unpause time when browser window focus changes
   window.addEventListener('focus', () => {
     blurred = false;
     unpauseTime();
@@ -64,7 +74,6 @@ function TimeKeeper() {
   function isPaused() { return paused || blurred; }
   function now() { return time; }
   function setTimeSpeed(speed) {
-    // oldSpeed = timeSpeed;
     targetSpeed = speed;
   }
   function getTimeSpeed() { return timeSpeed; }
