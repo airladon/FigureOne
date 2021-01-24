@@ -434,7 +434,7 @@ function setupFigure() {
       },
       stop: () => {
         medium.stop();
-        movePad.animations.cancel('_noStop_sine');
+        movePad.animations.cancel('_noStop_disturb_');
       },
       reset: () => {
         medium.custom.stop();
@@ -648,7 +648,7 @@ function setupFigure() {
     unpause();
     const startTime = time.now();
     const { movePad, A } = med.custom;
-    movePad.animations.new()
+    movePad.animations.new('_noStop_disturb_')
       .custom({
         callback: () => {
           if (!time.isPaused()) {
@@ -666,7 +666,7 @@ function setupFigure() {
     unpause();
     const { movePad, A } = med.custom;
     const startTime = time.now();
-    movePad.animations.new('_noStop_sine')
+    movePad.animations.new('_noStop_disturb_')
       .delay(delay)
       .custom({
         callback: () => {

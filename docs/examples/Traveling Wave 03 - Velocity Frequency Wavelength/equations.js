@@ -30,9 +30,9 @@ function addEquation() {
       content, comment, symbol, commentSpace, inSize,
     },
   });
-  const tCom = (content, comment, symbol, commentSpace, inSize) => ({
+  const tCom = (content, comment, symbol, commentSpace, inSize, scale = 0.6) => ({
     topComment: {
-      content, comment, symbol, commentSpace, inSize,
+      content, comment, symbol, commentSpace, inSize, scale,
     },
   });
 
@@ -74,6 +74,8 @@ function addEquation() {
           comma3: ', ',
           lambda: '\u03bb',
           lambda1: '\u03bb',
+          x_2: 'x',
+          x_1: 'x',
           div1: ' \u2215 ',
           div2: ' \u2215 ',
           div3: ' \u2215 ',
@@ -137,24 +139,11 @@ function addEquation() {
           yx1t: ['y_3', brac(['x1y', 'comma3', 't_y3'], 3)],
           yx1tH: ['y_3', brac([hide('x_1'), 'x1y', 'comma3', 't_y3'], 3)],
           yxt: ['y_3', brac(['x_1', 'comma3', 't_y3'], 3)],
-          yxtConstX: ['y_3', brac([
-            bCom('x_1', 'constant_1', 'line2', 0.27, false), 'comma3', 't_y3',
-          ], 3)],
-          yxtConstT: ['y_3', brac([
-            'x_1', 'comma3', bCom('t_y3', 'constant_1', 'line2', 0.21, false),
-          ], 3)],
+          yxtConstX: ['y_3', brac([bCom('x_1', 'constant_1', 'line2', 0.27, false), 'comma3', 't_y3'], 3)],
+          yxtConstT: ['y_3', brac(['x_1', 'comma3', bCom('t_y3', 'constant_1', 'line2', 0.21, false)], 3)],
           ft: ['f1', brac('t', 2)],
           ftt1: ['f2', brac(['t_3', 'min2', 't12'], 5)],
-          ftt1Sub: ['f2', brac(['t_3', 'min2', {
-            topComment: {
-              content: 't12',
-              comment: 'x1OnVb',
-              symbol: 'line1',
-              commentSpace: 0.2,
-              inSize: false,
-              scale: 0.8,
-            },
-          }], 5)],
+          ftt1Sub: ['f2', brac(['t_3', 'min2', tCom('t12', 'x1OnVb', 'line1', 0.2, false, 0.8)], 5)],
           ftx1: ['f2', brac(['t_3', 'min2', 'x1OnVb'], 5)],
           ftx1H: ['f2', brac(['t_3', 'min2', 'x1OnVbH'], 5)],
           ftx: ['f2', brac(['t_3', 'min2', 'xOnV'], 5)],
@@ -162,113 +151,28 @@ function addEquation() {
           ftx3: ['f1', brac(['t_2', 'min1', 'xOnV1'], 1)],
           sinwt: ['sin', brac(['w1', 't_4'], 2)],
           sinwtXOnV: ['sin', brac(['w1', brac(['t_5', 'min3', 'xOnV2'], 7)], 2)],
-          sinwtXOnVExpand: [
-            'sin', brac([
-              {
-                topComment: {
-                  content: ['w1', brac(['t_5', 'min3', 'xOnV2'], 7)],
-                  comment: ['w2', 't_2', 'min1', 'w3', ' ', 'xOnV1'],
-                  symbol: 'tBrace',
-                  inSize: false,
-                },
-              },
-            ], 2),
-          ],
+          sinwtXOnVExpand: ['sin', brac([tCom(['w1', brac(['t_5', 'min3', 'xOnV2'], 7)], ['w2', 't_2', 'min1', 'w3', ' ', 'xOnV1'], 'tBrace', 0.05, false)], 2)],
           sinwtwXOnV: ['sin', brac(['w2', 't_2', 'min1', 'w3', ' ', 'xOnV1'], 2)],
           sinwtwxOnVComb: ['sin', brac(['w2', 't_2', 'min1', 'wxOnV1'], 2)],
           sinwtwOnVx: ['sin', brac(['w2', 't_2', 'min1', 'wOnV1', ' ', 'x_3'], 2)],
-          sinConstX: ['sin', brac(['w2', 't_2', 'min1', {
-            bottomComment: {
-              content: ['wOnV1', ' ', 'x_3'],
-              comment: ['constant'],
-              symbol: 'line1',
-              commentSpace: 0.2,
-              inSize: false,
-            },
-          }], 2)],
-          constT: {
-            bottomComment: {
-              content: ['w2', 't_2'],
-              comment: ['constant'],
-              symbol: 'line1',
-              commentSpace: 0.2,
-              inSize: false,
-            },
-          },
-          expandW: {
-            topComment: {
-              content: 'wOnV1',
-              comment: ['twoPi', 'f_4'],
-              symbol: 'line3',
-              inSize: false,
-              commentSpace: 0.2,
-            },
-          },
+          sinConstX: ['sin', brac(['w2', 't_2', 'min1', bCom(['wOnV1', ' ', 'x_3'], ['constant'], 'line1', 0.2, false)], 2)],
+          constT: bCom(['w2', 't_2'], ['constant'], 'line1', 0.2, false),
+          expandW: tCom('wOnV1', ['twoPi', 'f_4'], 'line3', 0.2, false),
           twoPiFOnV1: { frac: [['twoPi', 'f_4'], 'vin2', 'v_2'] },
           sinConstT: ['sin', brac(['constT', 'min1', 'wOnV1', ' ', 'x_3'], 2)],
           sinExpandW: ['sin', brac(['constT', 'min1', 'expandW', ' ', 'x_3'], 2)],
           sin2pif: ['sin', brac(['constT', 'min1', 'twoPiFOnV1', ' ', 'x_3'], 2)],
           sin2pifTimesF: ['sin', brac([
             'constT', 'min1',
-            {
-              frac: [
-                ['twoPi', 'f_4', 'div1', 'f_5'],
-                'vin2',
-                ['v_2', 'div2', 'f_6'],
-              ],
-            },
+            frac(['twoPi', 'f_4', 'div1', 'f_5'], 'vin2', ['v_2', 'div2', 'f_6']),
             '  ', 'x_3',
           ], 2)],
-          sin2pifTimesFCancel: ['sin', brac([
-            'constT', 'min1',
-            {
-              frac: [
-                ['twoPi', stk('f_4', 1), 'div1', stk('f_5', 2)],
-                'vin2',
-                ['v_2', 'div2', 'f_6'],
-              ],
-            },
-            '  ', 'x_3',
+          sin2pifTimesFCancel: ['sin', brac(['constT', 'min1', frac(['twoPi', stk('f_4', 1), 'div1', stk('f_5', 2)], 'vin2', ['v_2', 'div2', 'f_6']), '  ', 'x_3',
           ], 2)],
-          sin2piOnfv: ['sin', brac([
-            'constT', 'min1',
-            {
-              frac: [
-                'twoPi',
-                'vin2',
-                ['v_2', 'div2', 'f_6'],
-              ],
-            },
-            '  ', 'x_3',
-          ], 2)],
-          sin2piOnfvL: ['sin', brac([
-            'constT', 'min1',
-            {
-              frac: [
-                'twoPi',
-                'vin2',
-                {
-                  bottomComment: {
-                    content: ['v_2', 'div2', 'f_6'],
-                    comment: 'lambda',
-                    symbol: 'brace',
-                    inSize: false,
-                  },
-                },
-              ],
-            },
-            '  ', 'x_3',
-          ], 2)],
-          sin2piOnLConst: ['sin', brac([
-            'constT', 'min1',
-            { frac: ['twoPi', 'vin2', 'lambda'] },
-            '  ', 'x_3',
-          ], 2)],
-          sin2piOnL: ['sin', brac([
-            'w2', 't_2', 'min1',
-            { frac: ['twoPi', 'vin2', 'lambda'] },
-            '  ', 'x_3',
-          ], 2)],
+          sin2piOnfv: ['sin', brac(['constT', 'min1', frac('twoPi', 'vin2', ['v_2', 'div2', 'f_6']), '  ', 'x_3'], 2)],
+          sin2piOnfvL: ['sin', brac(['constT', 'min1', frac('twoPi', 'vin2', bCom(['v_2', 'div2', 'f_6'], 'lambda', 'brace', 0.05, false)), '  ', 'x_3'], 2)],
+          sin2piOnLConst: ['sin', brac(['constT', 'min1', frac('twoPi', 'vin2', 'lambda'), '  ', 'x_3'], 2)],
+          sin2piOnL: ['sin', brac(['w2', 't_2', 'min1', frac('twoPi', 'vin2', 'lambda'), '  ', 'x_3'], 2)],
           ftxBotCom: ['f2', brac({
             bar: {
               content: ['t_3', 'min2', 'xOnV'],
@@ -279,9 +183,9 @@ function addEquation() {
             },
           }, 5)],
           fOnVUnits: [
-            { frac: ['v_1', 'vin3', 'f_5'] },
+            frac('v_1', 'vin3', 'f_5'),
             '_ \u21d2 ',
-            { frac: [['m_1', 'div3', 's_2'], 'vin1', ['_1_1', 'div1', 's_1']] },
+            frac(['m_1', 'div3', 's_2'], 'vin1', ['_1_1', 'div1', 's_1']),
             'equals2',
             'm_2',
           ],
