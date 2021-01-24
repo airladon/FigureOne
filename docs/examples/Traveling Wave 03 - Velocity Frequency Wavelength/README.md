@@ -44,14 +44,23 @@ Recorder also does not use FigureOne, and so like TimeKeeper is just a helper fu
 
 There are a lot of figure elements within this example, and so a file is dedicated to just defining those figure elements, as well as the logic and animations that make them interactive.
 
-One of the main figure element collections in the example is a simulation of a medium. The medium consists of an x and y axis, and a number of particles distriubted along the x axis. When the first particle is displaced in y, the disturbance propagates through the remainder of the particles in the medium.
+#### Medium Simulation
 
-There are three mediums used in the example. `medium` extends the width of the slide, and is used most frequently. `medium1` and `medium2` are then smaller verions that are placed next to each other so waves traveling in mediums with different properties can be compared.
+The main figure element collection in the example is a simulation of a medium. The medium consists of x and y axes, and a string of particles distriubted along the x axis. When the first particle is displaced in y, the displacement disturbance propagates through the remainder of the particles in the medium.
 
-Mediums can be disturbed by:
-* touching and dragging the first particle in the medium
+The first particle can be disturbed by:
+* user touching and dragging
 * using the defined `pulse` disturbance
 * using the defined `sineWave` disturbance
 * using the defined `assymetricPulse` disturbance
 
 All four ways move the first particle. The movement gets recorded in `Recorder` and then over time, each animation frame updates all the particles by calculating their disturbance from the initial disturbance and how long it takes to get there from the medium properties.
+
+If the first particle hasn't been disturbed for a period of time, then a `pulse` disturbance will be automatically started to keep the diagram dynamic.
+
+There are three mediums used in the example. `medium` extends the width of the slide, and is used most frequently. `medium1` and `medium2` are smaller verions that are placed vertically next to each other so waves traveling in mediums with different properties can be compared.
+
+#### Time Plot
+
+Time plots are used to show the displacement of the first particle over time. Two time plots are placed vertically next to `medium1` and `medium2` to show the respective first particles. Each time plot attaches to the recorder of each medium recording the displacement of the first particle over time, and then plots it out.
+

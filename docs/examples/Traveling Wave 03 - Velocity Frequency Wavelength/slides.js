@@ -341,6 +341,8 @@ function addSlides() {
   slides.push({
     showCommon: ['medium1', 'medium2', 'timePlot1', 'timePlot2', 'vFast', 'vSlow'],
     steadyStateCommon: (from) => {
+      layout.setVelocity(medium1, 2, 1);
+      layout.setVelocity(medium2, 1, 2);
       if (from === 'prev') {
         layout.reset();
         layout.startDisturbances([medium1, medium2], 5.5, true);
@@ -377,6 +379,8 @@ function addSlides() {
     showCommon: ['medium1', 'medium2', 'timePlot1', 'timePlot2', 'vFast', 'vSlow', 'freezeTimeButton', 'slowTimeButton', 'slowTimeLabel', 'freezeTimeLabel'],
     scenario: 'default',
     steadyStateCommon: () => {
+      layout.setVelocity(medium1, 2, 1);
+      layout.setVelocity(medium2, 1, 2);
       layout.startDisturbances([medium1, medium2], 5.5, false);
     },
     leaveStateCommon: () => {
@@ -1232,67 +1236,35 @@ function addSlides() {
   slides.push({
     showCommon: ['summary'],
     text: '',
-    // text: [
-    //   '', '', '',
-    //   'A wave is a disturbance that propagates through a medium or',
-    //   'field.',
-    //   '', '', '',
-    //   'A sinusoidal disturbance at a point results in a sine wave disturbance',
-    //   'in space.',
-    //   '', '', '',
-    //   'The sine wave\'s wavelength |lambda| is related to the frequency |f| of the',
-    //   'initial disturbance, and the propagation velocity |v| in the',
-    //   'medium or field.',
-    // ],
     form: 'cLambdaF',
     scenarioCommon: ['low'],
   });
 
-  // slides.push({ fromForm: 'sine2PiOnfvL', form: 'sine2PiOnL' });
-
-  // slides.push({ fromForm: 'sineExpandW', form: 'sine2PiF' });
-  // slides.push({ fromForm: 'sine2PiF', form: 'sine2PiFTimesF' });
-  // slides.push({ fromForm: 'sine2PiFTimesF', form: 'sine2PiFTimesFCancel' });
-  // slides.push({ fromForm: 'sine2PiFTimesFCancel', form: 'sine2PiOnfv' });
-
-  // // ///////////////////////////////////////////////////////////////////////////
-  // // ///////////////////////////////////////////////////////////////////////////
-  // slides.push({
-  //   text: [
-  //     'Let\'s look at the sine wave in space more closely by expanding the',
-  //     'angular frequency.',
-  //   ],
-  //   form: 'sineConstT',
-  //   steadyStateCommon: () => {
-  //     eqn.dim(['w2', 't_2', 't_y3', 'line1', 'line2', 'constant', 'constant_1']);
-  //     layout.pause();
-  //   },
-  //   leaveState: () => eqn.undim(),
-  // });
-
-
-
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
   nav.loadSlides(slides);
-  nav.goToSlide(70);
+  nav.goToSlide(12);
 }
 
 addSlides();
-// nav.goToSlide()
+
 
 /**
-A sinusoidal disturbance at a point results in a sine wave disturbance distrubted through space, that travels away from the disturbance
+Some caveats and gotchas.
 
-The spatial sine wave's wavelength is related to the frequency of the initial disturbance, and the propagation velocity of the medium it is traveling in.
+A positive travelling sine wave is often described as
 
-c = Lf
+y(x,t) = sin(kx - wt)
 
-A sinusoidal traveling wave is often described as
-y = sin(kx - wt)
 but we have an equation of
-y = sin(wt-kx)
-Both are valid, the difference is from where you start.
+
+y(x,t) = sin(wt - kx)
+
+Both are valid. The difference is from where you start.
+
+We started with a known time disturbance y(x0, t) = f(t).
+
+We then found the 
 
 We started with a known time disturbance as a sinusoid and from that found the travelling wave.
 

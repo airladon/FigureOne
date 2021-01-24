@@ -564,11 +564,17 @@ function setupFigure() {
   .##.......##.....##.##....##...##..##....##
   .########..#######...######...####..######.
   */
-  // inAnimation is used for showing the leading edge of the displacement
-  // If the animation starts, then inAnimation is set to true. The animation
-  // stops after a short period of time, to let the user see the current
-  // position of the leading edge by pulsing it. However, we only want to pulse
-  // these particles if the user
+  // The leading edge of a disturbance animation resets the medium, then pulses
+  // the first particle and freezes time when the pulse is done. The user can
+  // then highlight the particle where the initial disturbance has travelled to.
+  // However, if during animation or after freezing, the medium is disturbed
+  // again, the particle being highlighted may not make any sense, so the
+  // animation needs to be restarted.
+  //
+  // The inAnimation flag holds the state of whether the medium has been
+  // disturbed since the start of the animation. The text button that lets
+  // the user highlight the initial disturbance can then use it do determine
+  // whether to highlight the particle, or restart the animation.
   let inAnimation = false;
   const setInAnimation = (value = true) => {
     inAnimation = value;
@@ -595,7 +601,7 @@ function setupFigure() {
     slowTimeButton.setLabel(buttonLabel);
   };
 
-  // Update function for everytime we want to update the signal
+  // Update function for everytime we want to update the particles
   function update() {
     if (maxTime > 0 && time.now() > maxTime) {
       maxTimeReached = true;
@@ -620,24 +626,24 @@ function setupFigure() {
     figure.animateNextFrame();
   });
 
-
-  resetButton.onClick = () => reset();
-
-  freezeButton.onClick = () => {
-    if (time.isPaused()) unpause(); else pause();
-  };
-
-  slowTimeButton.onClick = () => {
-    if (time.getTimeSpeed() === 1) {
-      setTimeSpeed(0.3, 'On');
-    } else {
-      setTimeSpeed(1, 'Off');
-    }
-  };
-
+  // Functions used by slides to set state of the mediums
   const slowMotion = () => setTimeSpeed(0.3, 'On');
   const normalMotion = () => setTimeSpeed(1, 'Off');
 
+  /*
+  .########..####..######..########.##.....##.########..########.
+  .##.....##..##..##....##....##....##.....##.##.....##.##.....##
+  .##.....##..##..##..........##....##.....##.##.....##.##.....##
+  .##.....##..##...######.....##....##.....##.########..########.
+  .##.....##..##........##....##....##.....##.##...##...##.....##
+  .##.....##..##..##....##....##....##.....##.##....##..##.....##
+  .########..####..######.....##.....#######..##.....##.########.
+  */
+  // Pulse disturbance - disturb the first particle with a pulse
+  // Instead of using the normal animation time step (which is real time)
+  // a custom animation step is used where time is taken from the TimeKeeper.
+  // This means if the TimeKeeper pauses, or is sped up or slowed down, then the
+  // animation will be too.
   const pulse = (med, amplitude = randSign() * rand(0.3, 0.6)) => {
     unpause();
     const startTime = time.now();
@@ -655,6 +661,7 @@ function setupFigure() {
       .start();
   };
 
+  // Sine wave disturbance
   const sineWave = (med, delay = 0) => {
     unpause();
     const { movePad, A } = med.custom;
@@ -673,6 +680,7 @@ function setupFigure() {
       .start();
   };
 
+  // Assymetric pulse disturbance
   const assymetricPulse = (med) => {
     unpause();
     const startTime = time.now();
@@ -696,16 +704,8 @@ function setupFigure() {
       .start();
   };
 
-  let lastDisturbance = time.now() - 100;
-  let timerId = null;
-
-  const stopDisturbances = () => {
-    if (timerId != null) {
-      clearTimeout(timerId);
-    }
-    figure.elements.animations.cancel('pauseAfterDelay');
-  };
-
+  // When called, this will pause time after some delay, where the delay is
+  // tied to the time kept by TimeKeeper.  
   const pauseAfterDelay = (delay) => {
     const startTime = time.now();
     figure.elements.animations.new('pauseAfterDelay')
@@ -722,6 +722,25 @@ function setupFigure() {
       .start();
   };
 
+  // It is desirable to always have a disturbance travelling down a medium, so
+  // the plots are always doing something. Therefore, the slides can
+  // `startDisturbances` which will send a new disturbance at a defined time
+  // interval after the last disturbance (animated or manual). Any manual
+  // intervention will reset this timer.
+
+  // Time of last disturbance global variable
+  let lastDisturbance = time.now() - 100;
+  let timerId = null;
+
+  // Stop all disturbance timers and cancel current animations
+  const stopDisturbances = () => {
+    if (timerId != null) {
+      clearTimeout(timerId);
+    }
+    figure.elements.animations.cancel('pauseAfterDelay');
+  };
+
+  // Create a disturbance
   const disturb = (med, style = 'pulse', parameter = 0.6, inAnimationValue = false) => {
     if (Array.isArray(med)) {
       med.forEach((m) => {
@@ -744,6 +763,7 @@ function setupFigure() {
     setInAnimation(inAnimationValue);
   };
 
+  // Start timed disturbances
   const startDisturbances = (med, timeTillNext = 10, immediately = true, style = 'pulse', parameter) => {
     if (timerId != null) {
       clearTimeout(timerId);
@@ -766,6 +786,99 @@ function setupFigure() {
     }, 1000);
   };
 
+  // Reset the lastDisturbance timer if the movePad of the medium is moved
+  medium.custom.movePad.subscriptions.add('setTransform', () => {
+    if (medium.custom.movePad.state.isBeingMoved) {
+      lastDisturbance = time.now();
+      figure.elements.animations.cancel('pauseAfterDelay');
+      setInAnimation(false);
+    }
+  });
+
+  medium1.custom.movePad.subscriptions.add('setTransform', () => {
+    if (medium1.custom.movePad.state.isBeingMoved) {
+      lastDisturbance = time.now();
+      figure.elements.animations.cancel('pauseAfterDelay');
+      setInAnimation(false);
+    }
+  });
+
+  medium2.custom.movePad.subscriptions.add('setTransform', () => {
+    if (medium2.custom.movePad.state.isBeingMoved) {
+      lastDisturbance = time.now();
+      figure.elements.animations.cancel('pauseAfterDelay');
+      setInAnimation(false);
+    }
+  });
+
+  // Start a disturbance, then freeze after some time
+  const disturbThenFreeze = () => {
+    reset();
+    disturb([medium1, medium2], 'pulse', 0.6, true);
+    figure.elements.animations.cancelAll();
+    pauseAfterDelay(1.4);
+    const startTime = time.now();
+    figure.elements.animations.new()
+      .custom({
+        duration: 10000,
+        callback: () => {
+          if (figure.elements.animations.get('pauseAfterDelay') == null) {
+            return true;
+          }
+          if (time.now() - startTime >= 1.35) {
+            return true;
+          }
+          return false;
+        },
+      })
+      .trigger({
+        delay: 0.2,
+        callback: () => {
+          if (getInAnimation()) {
+            medium1.custom.tracker.pulse({ scale: 4 });
+            medium2.custom.tracker.pulse({ scale: 4 });
+          }
+        },
+      })
+      .start();
+  };
+
+  /*
+  .########..##.....##.########.########..#######..##....##..######.
+  .##.....##.##.....##....##.......##....##.....##.###...##.##....##
+  .##.....##.##.....##....##.......##....##.....##.####..##.##......
+  .########..##.....##....##.......##....##.....##.##.##.##..######.
+  .##.....##.##.....##....##.......##....##.....##.##..####.......##
+  .##.....##.##.....##....##.......##....##.....##.##...###.##....##
+  .########...#######.....##.......##.....#######..##....##..######.
+  */
+  resetButton.onClick = () => reset();
+  freezeButton.onClick = () => {
+    if (time.isPaused()) unpause(); else pause();
+  };
+  slowTimeButton.onClick = () => {
+    if (time.getTimeSpeed() === 1) {
+      setTimeSpeed(0.3, 'On');
+    } else {
+      setTimeSpeed(1, 'Off');
+    }
+  };
+  pulseButton1.onClick = () => {
+    reset();
+    unpause();
+    startDisturbances([medium1, medium2], 8, true, 'pulse', 0.6);
+  };
+  pulseButton2.onClick = () => {
+    reset();
+    unpause();
+    startDisturbances([medium1, medium2], 8, true, 'asymPulse', 0.6);
+  };
+  sineButton.onClick = () => {
+    reset();
+    unpause();
+    startDisturbances([medium1, medium2], 8, true, 'sineWave', 0);
+  };
+  const setMaxTime = (t) => { maxTime = t; };
   const setVelocity = (med, velocity, velocityButtonIndex) => {
     reset();
     med.custom.setVelocity(velocity);
@@ -814,97 +927,20 @@ function setupFigure() {
   freqButton1.onClick = () => toggleFrequency(medium1, 1);
   freqButton2.onClick = () => toggleFrequency(medium2, 2);
 
-  medium.custom.movePad.subscriptions.add('setTransform', () => {
-    if (medium.custom.movePad.state.isBeingMoved) {
-      lastDisturbance = time.now();
-      figure.elements.animations.cancel('pauseAfterDelay');
-      setInAnimation(false);
-    }
-  });
-
-  medium1.custom.movePad.subscriptions.add('setTransform', () => {
-    if (medium1.custom.movePad.state.isBeingMoved) {
-      lastDisturbance = time.now();
-      figure.elements.animations.cancel('pauseAfterDelay');
-      setInAnimation(false);
-    }
-  });
-
-  medium2.custom.movePad.subscriptions.add('setTransform', () => {
-    if (medium2.custom.movePad.state.isBeingMoved) {
-      lastDisturbance = time.now();
-      figure.elements.animations.cancel('pauseAfterDelay');
-      setInAnimation(false);
-    }
-  });
-
-  const disturbThenFreeze = () => {
-    reset();
-    disturb([medium1, medium2], 'pulse', 0.6, true);
-    figure.elements.animations.cancelAll();
-    pauseAfterDelay(1.4);
-    const startTime = time.now();
-    figure.elements.animations.new()
-      .custom({
-        duration: 10000,
-        callback: () => {
-          if (figure.elements.animations.get('pauseAfterDelay') == null) {
-            return true;
-          }
-          if (time.now() - startTime >= 1.35) {
-            return true;
-          }
-          return false;
-        },
-      })
-      .trigger({
-        delay: 0.2,
-        callback: () => {
-          if (getInAnimation()) {
-            medium1.custom.tracker.pulse({ scale: 4 });
-            medium2.custom.tracker.pulse({ scale: 4 });
-          }
-        },
-      })
-      .start();
-  };
-
-  pulseButton1.onClick = () => {
-    reset();
-    unpause();
-    startDisturbances([medium1, medium2], 8, true, 'pulse', 0.6);
-  };
-  pulseButton2.onClick = () => {
-    reset();
-    unpause();
-    startDisturbances([medium1, medium2], 8, true, 'asymPulse', 0.6);
-  };
-  sineButton.onClick = () => {
-    reset();
-    unpause();
-    startDisturbances([medium1, medium2], 8, true, 'sineWave', 0);
-  };
-  const setMaxTime = (t) => { maxTime = t; };
-
   return {
     setMaxTime,
-    sineWave,
-    assymetricPulse,
-    pulse,
     reset,
     pause,
     unpause,
     slowMotion,
     normalMotion,
     setTimeSpeed,
-    time,
     startDisturbances,
     stopDisturbances,
     setVelocity,
     setFrequency,
     disturb,
     pauseAfterDelay,
-    setInAnimation,
     getInAnimation,
     disturbThenFreeze,
   };
