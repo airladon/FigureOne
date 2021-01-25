@@ -27,7 +27,7 @@ function zeroPad(num, places) {
 }
 
 // let lastTime = -1;
-function tester(htmlFile, framesFile, threshold = 0) {
+function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0) {
   require('./start.js');
   if (framesFile != null && framesFile !== '') {
     require(framesFile);
@@ -74,6 +74,17 @@ function tester(htmlFile, framesFile, threshold = 0) {
     });
     test.each(tests)('%s %s',
       async (time, description, deltaTime, action, location) => {
+        let d = deltaTime;
+        if (intermitentTime > 0) {
+          if (deltaTime > intermitentTime) {
+            for (let i = intermitentTime; i < deltaTime - intermitentTime; i += intermitentTime) {
+              await page.evaluate((t) => {
+                figure.globalAnimation.frame(t);
+              }, [intermitentTime]);
+              d -= intermitentTime;
+            }
+          }
+        }
         await page.evaluate(([delta, t, l]) => {
           figure.globalAnimation.frame(delta);
           if (t != null) {
@@ -84,7 +95,7 @@ function tester(htmlFile, framesFile, threshold = 0) {
               eval(t);
             }
           }
-        }, [deltaTime, action, location]);
+        }, [d, action, location]);
         // console.log(time, lastTime)
         if (time !== lastTime) {
           const image = await page.screenshot({ fullPage: true });

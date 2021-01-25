@@ -9,6 +9,7 @@ down to the target speed and not change instantly.
 
 Time is automatically paused whenever the browser window loses focus.
  */
+//  window.performance.now = () => new Fig.GlobalAnimation().now();
 function TimeKeeper() {
   let time = 0;
   let timeSpeed = 1;
@@ -17,9 +18,11 @@ function TimeKeeper() {
   let paused = false;
   let blurred = false;
 
-  function getNow() {
-    return performance.now() / 1000;
-  }
+  let getNow = () => performance.now() / 1000;
+  const setGetNow = (newGetNow) => {
+    getNow = newGetNow;
+  };
+
   let lastTime = getNow();
 
   function reset() {
@@ -78,6 +81,6 @@ function TimeKeeper() {
   function getTimeSpeed() { return timeSpeed; }
 
   return {
-    reset, now, step, pause, unpause, isPaused, setTimeSpeed, getTimeSpeed,
+    reset, now, step, pause, unpause, isPaused, setTimeSpeed, getTimeSpeed, setGetNow,
   };
 }

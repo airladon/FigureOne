@@ -944,6 +944,7 @@ function setupFigure() {
     pauseAfterDelay,
     getInAnimation,
     disturbThenFreeze,
+    time,
   };
 }
 
