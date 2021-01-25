@@ -1,4 +1,3 @@
-
 /**
 This function keeps track of time.
 

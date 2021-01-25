@@ -66,13 +66,15 @@ Time plots are used to show the displacement of the first particle over time. Tw
 
 #### Equations
 
-There are 31 different equation forms (made from 56 phrases) shown. This is a lot, and I don't yet have a good strategy to make all these forms super readable.
+There are 31 different equation forms (made from 56 phrases) shown. As a consequence, it is hard to read linearly, but easier to read starting at the form name, and then drilling down into the phrases and elements that make it up.
 
 #### Slides
 
 While there are 70 unique slides defined, there is some overlap as some slides are just transitioning between equation forms. For instance, there are "only" 40 slides with unique text descriptions.
 
 Each text description is usually one sentence (sometimes two). The trade-off between displaying more text and less slides, or more slides with less text is one that will be different for different scenarios.
+
+Most of the slides are simply text description changes, equation form changes, or changes in what is being shown in the figure. Common properties like `scenarioCommon`, `steadStateCommon` and `enterStateCommon` are used at every opportunity to help make each slide definition just a difference compared to the last slide, rather than a complete redefinition of everythin.
 
 ### Caveats
 
