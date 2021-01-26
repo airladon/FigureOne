@@ -11,9 +11,6 @@ The examples are also hosted on this repository's GitHub Pages site [here](https
 ![](docs/examples/Sine%20Limit/example.gif)
 
 
-![](docs/examples/Traveling%20Wave%2003%20-%20Velocity%20Frequency%20Wavelength/example2.gif)
-
-
 ## Getting Started
 
 Load the FigureOne library into your HTML file:
