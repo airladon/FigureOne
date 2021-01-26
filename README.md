@@ -8,10 +8,9 @@ See the [Tutorials](https://github.com/airladon/FigureOne/tree/master/docs/tutor
 
 The examples are also hosted on this repository's GitHub Pages site [here](https://airladon.github.io/FigureOne/).
 
-An example with interactivity:
-![](docs/examples/Traveling%20Wave%2003%20-%20Velocity%20Frequency%20Wavelength/example1.gif)
+![](docs/examples/Sine%20Limit/example.gif)
 
-An example with equations:
+
 ![](docs/examples/Traveling%20Wave%2003%20-%20Velocity%20Frequency%20Wavelength/example2.gif)
 
 
