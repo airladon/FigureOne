@@ -34,7 +34,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0) {
   }
   const { __finish } = require('./finish.js');
   __finish();
-  jest.setTimeout(60000);
+  jest.setTimeout(120000);
 
   const tests = [];
   let lastTime = 0;

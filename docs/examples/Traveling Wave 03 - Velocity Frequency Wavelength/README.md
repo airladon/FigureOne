@@ -12,7 +12,13 @@ This example doesn't introduce new concepts compared to the other examples, but 
 
 Open `index.html` in a browser to view example, or the example is hosted [here](https://airladon.github.io/FigureOne/examples/Traveling%20Wave%2003%20-%20Velocity%20Frequency%20Wavelength/index.html).
 
-![](./example.gif)
+Interactivity example segment (note, the animated gifs distort the movement animation of the round particles)
+
+![](./example1.gif)
+
+Equation story example segment
+
+![](./example2.gif)
 
 ## Explanation
 

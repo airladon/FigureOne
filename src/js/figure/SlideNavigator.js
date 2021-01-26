@@ -33,7 +33,7 @@ export type TypeSlideLeaveStateCallback = (number, TypeSlideFrom) => void;
 /**
  * `(currentIndex: number, from: `{@link TypeSlideFrom}`) => void`
  */
-export type TypeSlideStateCallback = (number, TypeSlideFrom) => void;
+export type TypeSlideStateCallback = (TypeSlideFrom, number) => void;
 
 /**
  * `(done: () => void, currentIndex: number, from: `{@link TypeSlideFrom}`) => void`

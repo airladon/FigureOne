@@ -1776,7 +1776,7 @@ export class Equation extends FigureElementCollection {
    * @param {TypeEquationPhrase} phrase
    * @return {Array<FigureElement>}
    */
-  getPhraseElements(phrase: TypeEquationPhrase) {
+  getPhraseElements(phrase: string) {
     if (this.eqn.functions.phraseElements[phrase] == null) {
       return [];
     }

@@ -2996,7 +2996,7 @@ class Transform {
     if (orderEnd < 0) {
       orderEndToUse = this.order.length + orderEnd;
     }
-    // if (window.asdf) { 
+    // if (window.asdf) {
     //   console.log(this.name, orderStart, orderEnd, this.order)
     //   // debugger;
     // }
@@ -3007,7 +3007,7 @@ class Transform {
         m = m2.mul(m, this.order[i].matrix());
       }
     }
-    window.asdf = false
+    // window.asdf = false
     return m;
     // this.mat = m2.copy(m);
     // return m;

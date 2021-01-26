@@ -7,7 +7,7 @@ const { toMatchImageSnapshot } = require('jest-image-snapshot');
 expect.extend({ toMatchImageSnapshot });
 
 function testBrowserAnimation(title, file, duration, step) {
-  jest.setTimeout(60000);
+  jest.setTimeout(120000);
 
   // function delay(time) {
   //   return new Promise(function(resolve) {

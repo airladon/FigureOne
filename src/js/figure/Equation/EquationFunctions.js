@@ -3180,6 +3180,10 @@ export class EquationFunctions {
     [phraseName: string]: TypeEquationPhrase,
   };
 
+  phraseElements: {
+    [phraseName: string]: Array<FigureElementPrimitive>;
+  };
+
   fullLineHeight: EquationForm | null;
   addElementFromKey: (string, Object) => ?FigureElementPrimitive;
   getExistingOrAddSymbol: (string | Object) => ?FigureElementPrimitive;
@@ -3242,20 +3246,20 @@ export class EquationFunctions {
     }
     if (typeof content === 'string') {
       const c = this.stringToElement(content);
-      if (this.phraseElements[content] != null) {
+      if (c == null || this.phraseElements[content] != null) {
         return c;
       }
-      if (c.getAllElements != null) {
+      if (c.getAllElements != null) { // $FlowFixMe
         this.phraseElements[content] = c.getAllElements();
       } else {
-        const elements = [];
-        c.forEach((e) => {
-          if (e.getAllElements != null) {
+        const elements = []; // $FlowFixMe
+        c.forEach((e) => { // $FlowFixMe
+          if (e.getAllElements != null) { // $FlowFixMe
             elements.push(...e.getAllElements());
           } else {
             elements.push(e);
           }
-        });
+        }); // $FlowFixMe
         this.phraseElements[content] = elements;
       }
       return c;

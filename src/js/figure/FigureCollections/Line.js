@@ -1572,7 +1572,10 @@ export default class CollectionsLine extends FigureElementCollection {
     const fromBounds = from.element.getBoundingRect('figure');
     const toBounds = to.element.getBoundingRect('figure');
 
-    const defaults = {
+    const defaults: {
+      from: { xAlign: TypeXAlign, yAlign: TypeYAlign, space: number},
+      to: { xAlign: TypeXAlign, yAlign: TypeYAlign, space: number},
+    } = {
       from: { xAlign: 'center', yAlign: 'middle', space: 0 },
       to: { xAlign: 'center', yAlign: 'middle', space: 0 },
     };
