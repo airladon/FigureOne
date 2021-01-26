@@ -10,6 +10,7 @@ recording available. When it is full, the last half of the array is copied to
 the first half and recording continues from half way. This limits the number
 of times arrays need to be copied.
  */
+// eslint-disable-next-line no-unused-vars
 function Recorder(duration) {
   const timeStep = 0.005;
   const num = duration / timeStep;

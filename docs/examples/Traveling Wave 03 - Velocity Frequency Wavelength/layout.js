@@ -948,4 +948,5 @@ function setupFigure() {
   };
 }
 
+// eslint-disable-next-line no-unused-vars
 const layout = setupFigure();

@@ -51,7 +51,9 @@ figure.getElement('tri').animations.new()
 
 And you will see:
 
-![](./docs/example.gif)
+![](docs/examples/Traveling%20Wave%2003%20-%20Velocity%20Frequency%20Wavelength/example1.gif)
+
+![](docs/examples/Traveling%20Wave%2003%20-%20Velocity%20Frequency%20Wavelength/example2.gif)
 
 
 ## Tutorials
@@ -117,6 +119,10 @@ The tutorials introduce how to use FigureOne and many of the main concepts.
 
 ![](docs/examples/Total%20Angle%20of%20a%20Polygon/example.gif)
 
+### **[Sine Limit](https://github.com/airladon/FigureOne/tree/master/docs/examples/Sine%20Limit)**
+
+![](docs/examples/Sine%20Limit/example.gif)
+
 ### **[Traveling Wave 01 - Shifting Equations](https://github.com/airladon/FigureOne/tree/master/docs/examples/Traveling%20Wave%2001%20-%20Shifting%20Equations)**
 
 ![](docs/examples/Traveling%20Wave%2001%20-%20Shifting%20Equations/example.gif)
@@ -124,6 +130,12 @@ The tutorials introduce how to use FigureOne and many of the main concepts.
 ### **[Traveling Wave 02 - Sine Wave](https://github.com/airladon/FigureOne/tree/master/docs/examples/Traveling%20Wave%2002%20-%20Sine%20Waves)**
 
 ![](docs/examples/Traveling%20Wave%2002%20-%20Sine%20Waves/example.gif)
+
+### **[Traveling Wave 03 - Velocity Frequency Wavelength](https://github.com/airladon/FigureOne/tree/master/docs/examples/Traveling%20Wave%2003%20-%20Velocity%20Frequency%20Wavelength)**
+
+![](docs/examples/Traveling%20Wave%2003%20-%20Velocity%20Frequency%20Wavelength/example1.gif)
+
+![](docs/examples/Traveling%20Wave%2003%20-%20Velocity%20Frequency%20Wavelength/example2.gif)
 
 ### **[Holiday Equation](https://github.com/airladon/FigureOne/tree/master/docs/examples/Holiday%20Equation)**
 

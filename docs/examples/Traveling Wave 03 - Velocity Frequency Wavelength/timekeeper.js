@@ -9,7 +9,7 @@ down to the target speed and not change instantly.
 
 Time is automatically paused whenever the browser window loses focus.
  */
-//  window.performance.now = () => new Fig.GlobalAnimation().now();
+// eslint-disable-next-line no-unused-vars
 function TimeKeeper() {
   let time = 0;
   let timeSpeed = 1;

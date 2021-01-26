@@ -45,6 +45,15 @@ See how equations change when they are shifted along the x axis.
 
 Find the general form of a sine wave, and look at how to define it in space or time.
 
+### **[Traveling Wave 03 - Velocity Frequency Wavelength](https://github.com/airladon/FigureOne/tree/master/docs/examples/Traveling%20Wave%2003%20-%20Velocity%20Frequency%20Wavelength)**
+
+Intuitive understanding of the relationship between frequency, wavelength and velocity of a traveling sine wave.
+
+![](Traveling%20Wave%2003%20-%20Velocity%20Frequency%20Wavelength/example1.gif)
+
+![](Traveling%20Wave%2003%20-%20Velocity%20Frequency%20Wavelength/example2.gif)
+
+
 ![](Traveling%20Wave%2002%20-%20Sine%20Waves/example.gif)
 
 ## **[Holiday Equation](https://github.com/airladon/FigureOne/tree/master/docs/examples/Holiday%20Equation)**
