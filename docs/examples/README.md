@@ -52,9 +52,11 @@ Find the general form of a sine wave, and look at how to define it in space or t
 Intuitive understanding of the relationship between frequency, wavelength and velocity of a traveling sine wave.
 
 Interactivity portion example:
+
 ![](Traveling%20Wave%2003%20-%20Velocity%20Frequency%20Wavelength/example1.gif)
 
 Equation portion example:
+
 ![](Traveling%20Wave%2003%20-%20Velocity%20Frequency%20Wavelength/example2.gif)
 
 
