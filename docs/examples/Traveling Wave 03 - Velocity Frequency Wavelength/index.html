@@ -1,58 +1,46 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-    <style>
-        .wrapper {
-            margin-left: auto;
-            margin-right: auto;
-            max-width: 100%;
-          }
-          
-          .wrapper_2_1, .wrapper_4_3, .wrapper_3_2 {
-            width: calc(100vw - 20px);
-          }
-          
-          @media (min-aspect-ratio: 1/1) {
-            .wrapper_2_1 {
-              width: calc((100vh - 20px)/0.5);
-            }
-            .wrapper_3_2 {
-              width: calc((100vh - 20px)/0.667);
-            }
-            .wrapper_4_3 {
-              width: calc((100vh - 20px)/0.75);
-            }
-          }
-          
-          .container {
-            width: 100%;
-            background-color: white;
-          }
-          
-          .container_2_1 {
-            padding-bottom: 50%;
-          }
-          
-          .container_3_2 {
-            padding-bottom: 66.67%;
-          }
-          
-          .container_4_3 {
-            padding-bottom: 75%;
-          }
-    </style>
-<body>
-    <!-- <img src="1.jpg" id="img1"> -->
-    <!-- <div id="figureOneContainer" style="width: 1500px; height: 750px; background-color: white;">
-    </div> -->
-    <div class="wrapper wrapper_2_1">
-        <div id="figureOneContainer" class="container container_2_1"></div>
-    </div>
-    <!-- <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.5.2/figureone.min.js'></script> -->
-    <script type="text/javascript" src='../../../package/index.js'></script>
-    <script type="text/javascript" src='./recorder.js'></script>
+  <head>
+    <meta charset='utf-8'>
+    <title>FigureOne</title>
+    <meta name='description' content='Javascript library to draw, animate and interact with shapes, text, plots and equations.'>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link href='../../style.css' rel='stylesheet'>
+    <link href='../examples.css' rel='stylesheet'>
+  </head>
+    <body>
+      <div id="header"></div>
+      <div class="example">
+        <!-- *************************************************************** -->
+        <!-- ************    Example Specific HTML Start     *************** -->
+        <!-- *************************************************************** -->
+
+        <p class="instructions">
+          Touch the right arrow to step through the story.
+          When colored text is in the top description, or in an equation, touch it to see an action.
+          The red particle in a string of particles can usually be manually dragged to create your own waveform.
+        </p>
+        <div class='wrapper wrapper_2_1'>
+          <div id="figureOneContainer" class="container container_2_1">
+          </div>
+        </div>
+
+        <!-- *************************************************************** -->
+      </div>
+      <div id="footer"></div>
+      <!-- ***************************************************************** -->
+      <!-- **********    Choose local or remote package     *************** -->
+      <!-- ***************************************************************** -->
+      <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.5.2/figureone.min.js'></script>
+      <!-- <script type="text/javascript" src='../../../package/index.js'></script> -->
+      <!-- ***************************************************************** -->
+      <script type="text/javascript" src="../../fill.js"></script>
+      <script>fillHeader('Example - Shifting Equations', 'Traveling Wave 01 - Shifting Equations');</script>
+      <script>fillFooter('..')</script>
+      <script type="text/javascript" src='./recorder.js'></script>
     <script type="text/javascript" src='./timekeeper.js'></script>
     <script type="text/javascript" src='./layout.js'></script>
     <script type="text/javascript" src='./equations.js'></script>
     <script type="text/javascript" src='./slides.js'></script>
-</body>
+   </body>
 </html>
