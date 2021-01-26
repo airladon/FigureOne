@@ -16,7 +16,7 @@ page.on('console', (msg) => {
 });
 
 function browserStaticTester(title, file) {
-  jest.setTimeout(60000);
+  jest.setTimeout(120000);
   test(title, async () => {
     await page.goto(file);
     const dimensions = await page.evaluate(() => ({

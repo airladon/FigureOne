@@ -1,6 +1,6 @@
 PROJECT_PATH=`pwd`
 
-cp containers/playwright/.dockerignore .
+# cp containers/playwright/.dockerignore .
 
 cp containers/playwright/Dockerfile Dockerfile
 docker build -t playwright .

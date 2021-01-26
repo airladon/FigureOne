@@ -2,7 +2,7 @@
 const { toMatchImageSnapshot } = require('jest-image-snapshot');
 
 expect.extend({ toMatchImageSnapshot });
-jest.setTimeout(60000);
+jest.setTimeout(120000);
 test('Primitives: Star', async () => {
   // eslint-disable-next-line no-undef
   await page.goto(`file:/${__dirname}/index.html`);

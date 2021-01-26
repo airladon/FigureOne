@@ -3180,6 +3180,10 @@ export class EquationFunctions {
     [phraseName: string]: TypeEquationPhrase,
   };
 
+  phraseElements: {
+    [phraseName: string]: Array<FigureElementPrimitive>;
+  };
+
   fullLineHeight: EquationForm | null;
   addElementFromKey: (string, Object) => ?FigureElementPrimitive;
   getExistingOrAddSymbol: (string | Object) => ?FigureElementPrimitive;
@@ -3200,6 +3204,7 @@ export class EquationFunctions {
     this.fullLineHeight = null;
     this.addElementFromKey = addElementFromKey;
     this.getExistingOrAddSymbol = getExistingOrAddSymbol;
+    this.phraseElements = {};
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -3240,7 +3245,24 @@ export class EquationFunctions {
       return content;
     }
     if (typeof content === 'string') {
-      return this.stringToElement(content);
+      const c = this.stringToElement(content);
+      if (c == null || this.phraseElements[content] != null) {
+        return c;
+      }
+      if (c.getAllElements != null) { // $FlowFixMe
+        this.phraseElements[content] = c.getAllElements();
+      } else {
+        const elements = []; // $FlowFixMe
+        c.forEach((e) => { // $FlowFixMe
+          if (e.getAllElements != null) { // $FlowFixMe
+            elements.push(...e.getAllElements());
+          } else {
+            elements.push(e);
+          }
+        }); // $FlowFixMe
+        this.phraseElements[content] = elements;
+      }
+      return c;
     }
     if (Array.isArray(content)) {
       let elementArray = [];

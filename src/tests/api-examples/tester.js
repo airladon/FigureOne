@@ -70,7 +70,7 @@ figure.globalAnimation.frame(0);
     tests.push([key, value]);
   });
 
-  jest.setTimeout(60000);
+  jest.setTimeout(120000);
   fs.writeFileSync(`${__dirname}/index.js`, `${start}`);
   test.each(tests)('%s',
     async (id, code) => {

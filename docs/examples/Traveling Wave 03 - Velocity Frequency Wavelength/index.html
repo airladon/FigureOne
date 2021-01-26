@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>FigureOne</title>
+    <meta name='description' content='Javascript library to draw, animate and interact with shapes, text, plots and equations.'>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link href='../../style.css' rel='stylesheet'>
+    <link href='../examples.css' rel='stylesheet'>
+  </head>
+    <body>
+      <div id="header"></div>
+      <div class="example">
+        <!-- *************************************************************** -->
+        <!-- ************    Example Specific HTML Start     *************** -->
+        <!-- *************************************************************** -->
+
+        <p class="instructions">
+          Touch the right arrow to step through the story.
+          When colored text is in the top description, or in an equation, touch it to see an action.
+          The red particle in a string of particles can usually be manually dragged to create your own waveform.
+        </p>
+        <div class='wrapper wrapper_2_1'>
+          <div id="figureOneContainer" class="container container_2_1">
+          </div>
+        </div>
+
+        <!-- *************************************************************** -->
+      </div>
+      <div id="footer"></div>
+      <!-- ***************************************************************** -->
+      <!-- **********    Choose local or remote package     *************** -->
+      <!-- ***************************************************************** -->
+      <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.6.0/figureone.min.js'></script>
+      <!-- <script type="text/javascript" src='../../../package/index.js'></script> -->
+      <!-- ***************************************************************** -->
+      <script type="text/javascript" src="../../fill.js"></script>
+      <script>fillHeader('Example - Shifting Equations', 'Traveling Wave 01 - Shifting Equations');</script>
+      <script>fillFooter('..')</script>
+      <script type="text/javascript" src='./recorder.js'></script>
+    <script type="text/javascript" src='./timekeeper.js'></script>
+    <script type="text/javascript" src='./layout.js'></script>
+    <script type="text/javascript" src='./equations.js'></script>
+    <script type="text/javascript" src='./slides.js'></script>
+   </body>
+</html>

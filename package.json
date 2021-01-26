@@ -1,6 +1,6 @@
 {
   "name": "figureone",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "Draw, animate and interact with shapes, text, plots and equations in Javascript",
   "main": "index.js",
   "repository": {

@@ -8,14 +8,15 @@ See the [Tutorials](https://github.com/airladon/FigureOne/tree/master/docs/tutor
 
 The examples are also hosted on this repository's GitHub Pages site [here](https://airladon.github.io/FigureOne/).
 
-![](./docs/examples/Sine%20Limit/example.gif)
+![](docs/examples/Sine%20Limit/example.gif)
+
 
 ## Getting Started
 
 Load the FigureOne library into your HTML file:
 
 ```html
-<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.5.2/figureone.min.js'></script>
+<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.6.0/figureone.min.js'></script>
 ```
 
 Create a `div` element to attach the figure to:
@@ -52,7 +53,6 @@ figure.getElement('tri').animations.new()
 And you will see:
 
 ![](./docs/example.gif)
-
 
 ## Tutorials
 
@@ -117,6 +117,10 @@ The tutorials introduce how to use FigureOne and many of the main concepts.
 
 ![](docs/examples/Total%20Angle%20of%20a%20Polygon/example.gif)
 
+### **[Sine Limit](https://github.com/airladon/FigureOne/tree/master/docs/examples/Sine%20Limit)**
+
+![](docs/examples/Sine%20Limit/example.gif)
+
 ### **[Traveling Wave 01 - Shifting Equations](https://github.com/airladon/FigureOne/tree/master/docs/examples/Traveling%20Wave%2001%20-%20Shifting%20Equations)**
 
 ![](docs/examples/Traveling%20Wave%2001%20-%20Shifting%20Equations/example.gif)
@@ -124,6 +128,12 @@ The tutorials introduce how to use FigureOne and many of the main concepts.
 ### **[Traveling Wave 02 - Sine Wave](https://github.com/airladon/FigureOne/tree/master/docs/examples/Traveling%20Wave%2002%20-%20Sine%20Waves)**
 
 ![](docs/examples/Traveling%20Wave%2002%20-%20Sine%20Waves/example.gif)
+
+### **[Traveling Wave 03 - Velocity Frequency Wavelength](https://github.com/airladon/FigureOne/tree/master/docs/examples/Traveling%20Wave%2003%20-%20Velocity%20Frequency%20Wavelength)**
+
+![](docs/examples/Traveling%20Wave%2003%20-%20Velocity%20Frequency%20Wavelength/example1.gif)
+
+![](docs/examples/Traveling%20Wave%2003%20-%20Velocity%20Frequency%20Wavelength/example2.gif)
 
 ### **[Holiday Equation](https://github.com/airladon/FigureOne/tree/master/docs/examples/Holiday%20Equation)**
 

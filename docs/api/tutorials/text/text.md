@@ -13,7 +13,7 @@ All examples are snippets which can be appended to the end of the `index.js` fil
 <body>
     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
     </div>
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.5.2/figureone.min.js'></script>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.6.0/figureone.min.js'></script>
     <script type="text/javascript" src='./index.js'></script>
 </body>
 </html>

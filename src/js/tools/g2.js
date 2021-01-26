@@ -281,7 +281,7 @@ class Rect {
   }
 
   /**
-   * Returns `true` if `point` is within on on the border of the rectangle
+   * Returns `true` if `point` is within or on the border of the rectangle
    * @param {TypeParsablePoint} point point to test
    * @param {number} precision precision to test
    * @example
@@ -316,6 +316,40 @@ class Rect {
     newRect.top = roundNum(newRect.top, precision);
     newRect.right = roundNum(newRect.right, precision);
     return newRect;
+  }
+
+  /**
+   * Find the intersect of the line from the center of the rectangle to the
+   * point, with the rectangle border.
+   * @param {TypeParsablePoint} point
+   * @return {Point | null} intersect
+   */
+  intersectsWith(point: TypeParsablePoint) {
+    const p = getPoint(point);
+    const center = this.center();
+    const centerToP = new Line(center, p);
+    const centerOut = new Line(center, this.width + this.height, centerToP.angle());
+    const left = new Line([this.left, this.bottom], [this.left, this.top]);
+    let i = centerOut.intersectsWith(left);
+    if (i.withinLine) { return i.intersect; }
+
+    const top = new Line([this.left, this.top], [this.right, this.top]);
+    i = centerOut.intersectsWith(top);
+    if (i.withinLine) { return i.intersect; }
+
+    const right = new Line([this.right, this.top], [this.right, this.bottom]);
+    i = centerOut.intersectsWith(right);
+    if (i.withinLine) { return i.intersect; }
+
+    const bottom = new Line([this.left, this.bottom], [this.right, this.bottom]);
+    i = centerOut.intersectsWith(bottom);
+    if (i.withinLine) { return i.intersect; }
+    return null;
+  }
+
+  // Return the center point of the rectangle
+  center() {
+    return new Point(this.left + this.width / 2, this.bottom + this.height / 2);
   }
 }
 
@@ -2962,12 +2996,18 @@ class Transform {
     if (orderEnd < 0) {
       orderEndToUse = this.order.length + orderEnd;
     }
+    // if (window.asdf) {
+    //   console.log(this.name, orderStart, orderEnd, this.order)
+    //   // debugger;
+    // }
     let m = m2.identity();
     for (let i = orderEndToUse; i >= orderStart; i -= 1) {
       if (!this.order[i].isUnity()) {
+        // if (window.asdf) { console.log(i, this.order[i]) }
         m = m2.mul(m, this.order[i].matrix());
       }
     }
+    // window.asdf = false
     return m;
     // this.mat = m2.copy(m);
     // return m;
@@ -6055,8 +6095,14 @@ function getBorder(
   return border.map(b => b.map(p => getPoint(p)));
 }
 
+/**
+ *
+ */
 export type TypeXAlign = 'left' | 'right' | 'center' | 'string' | number;
 
+/**
+ *
+ */
 export type TypeYAlign = 'bottom' | 'top' | 'middle' | 'string' | number;
 
 function getPositionInRect(

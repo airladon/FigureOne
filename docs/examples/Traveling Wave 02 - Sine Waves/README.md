@@ -4,7 +4,7 @@ This is part 2 of the Travelling Waves examples.
 
 It is a static page with four interactive figures as part of an explanation of sine waves, and how to transform them.
 
-Open `index.html` in a browser to view example, or the example is hosted [here](https://airladon.github.io/FigureOne/examples/Traveling%20Wave%2001%20-%20Sine%20Waves/index.html).
+Open `index.html` in a browser to view example, or the example is hosted [here](https://airladon.github.io/FigureOne/examples/Traveling%20Wave%2002%20-%20Sine%20Waves/index.html).
 
 
 ![](./example.gif)

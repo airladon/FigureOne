@@ -33,7 +33,7 @@ export type TypeSlideLeaveStateCallback = (number, TypeSlideFrom) => void;
 /**
  * `(currentIndex: number, from: `{@link TypeSlideFrom}`) => void`
  */
-export type TypeSlideStateCallback = (number, TypeSlideFrom) => void;
+export type TypeSlideStateCallback = (TypeSlideFrom, number) => void;
 
 /**
  * `(done: () => void, currentIndex: number, from: `{@link TypeSlideFrom}`) => void`
@@ -151,7 +151,7 @@ export type TypeSlideTransitionCallback = (() => void, number, TypeSlideFrom) =>
  * `modifiers` define the text for the text element associated with the
  * SlideNavigator
  * @property {OBJ_TextModifiersDefinition} [modifiersCommon] common property
- * @property {OBJ_TextModifiersDefinition} [modifiers] will
+ * @property {OBJ_TextModifiersDefinition} [modifiers] common property - will
  * overwrite any keys from `modifiersCommon` with the same name
  * @property {TypeElementPath} [showCommon] common property
  * @property {TypeElementPath} [show]
@@ -437,9 +437,9 @@ export default class SlideNavigator {
     const slide = this.slides[index];
     const form = this.getForm(index);
     this.showForms(form);
-    this.getProperty('steadyStateCommon', index, () => {})(index, from);
+    this.getProperty('steadyStateCommon', index, () => {})(from, index);
     if (slide.steadyState != null) {
-      slide.steadyState(index, from);
+      slide.steadyState(from, index);
     }
     const { prevButton, nextButton } = this;
     if (prevButton != null) {
@@ -613,9 +613,9 @@ export default class SlideNavigator {
     this.hideElements(index);
     this.collection.setScenarios(this.getProperty('scenarioCommon', index, []));
     this.collection.setScenarios(slide.scenario || []);
-    this.getProperty('enterStateCommon', index, () => {})(index, fromToUse);
+    this.getProperty('enterStateCommon', index, () => {})(fromToUse, index);
     if (slide.enterState != null) {
-      slide.enterState(index, fromToUse);
+      slide.enterState(fromToUse, index);
     }
     const fromForm = this.getFromForm(index);
     this.showForms(fromForm);

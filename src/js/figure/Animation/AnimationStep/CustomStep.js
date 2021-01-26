@@ -156,7 +156,10 @@ export class CustomAnimationStep extends AnimationStep {
   setFrame(deltaTime: number) {
     const percentTime = deltaTime / this.duration;
     const percentComplete = this.getPercentComplete(percentTime);
-    this.fnExec(this.callback, percentComplete);
+    const cancelled = this.fnExec(this.callback, percentComplete);
+    if (cancelled) {
+      this.duration = deltaTime;
+    }
   }
 
   getPercentComplete(percentTime: number, invert: boolean = false) {
