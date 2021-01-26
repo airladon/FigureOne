@@ -14,6 +14,7 @@ figure.add([
 
 // Start a new animation
 figure.getElement('hexagon').animations.new()
+.delay(1)
   .position({ target: [-0.4, -0.4], velocity: 0.3 })
   .rotation({ delta: Math.PI / 2, duration: 1 })
   .position({ target: [0, 0], velocity: 0.3 })
