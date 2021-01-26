@@ -564,31 +564,31 @@ FigureElementPrimitive {
     "mat": Array [
       0.45,
       0,
-      2.849375,
+      3.8875,
       0,
       0.45,
-      2.8807625000000003,
+      3.95725,
       0,
       0,
       1,
     ],
     "name": "Equation",
     "order": Array [
-      Translation {
-        "_type": "point",
-        "name": "text",
-        "x": 1.8875,
-        "y": 1.9572500000000002,
-      },
-      Rotation {
-        "name": "text",
-        "r": 0,
-      },
       Scale {
         "_type": "point",
         "name": "text",
         "x": 0.45,
         "y": 0.45,
+      },
+      Rotation {
+        "name": "text",
+        "r": 0,
+      },
+      Translation {
+        "_type": "point",
+        "name": "text",
+        "x": 1.8875,
+        "y": 1.9572500000000002,
       },
       Scale {
         "_type": "point",

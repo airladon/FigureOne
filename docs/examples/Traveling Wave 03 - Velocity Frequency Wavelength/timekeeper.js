@@ -19,6 +19,10 @@ function TimeKeeper() {
   let blurred = false;
 
   let getNow = () => performance.now() / 1000;
+
+  // This method is for testing only. The browser tests need to tie the
+  // reference time `getNow` to the test time source, which makes animation
+  // frames deterministic.
   const setGetNow = (newGetNow) => {
     getNow = newGetNow;
   };

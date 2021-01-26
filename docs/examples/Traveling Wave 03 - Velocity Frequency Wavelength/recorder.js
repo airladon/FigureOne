@@ -45,7 +45,7 @@ function Recorder(duration) {
     lastDelta = deltaTime - count * timeStep;
 
     const lastValue = data[index - 1];
-    const deltaValue = (value - lastValue) / count; 
+    const deltaValue = (value - lastValue) / count;
     for (let i = 0; i < count; i += 1) {
       data[index] = lastValue + deltaValue * (i + 1);
       incrementIndex();

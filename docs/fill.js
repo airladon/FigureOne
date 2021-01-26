@@ -43,6 +43,7 @@ function fillFooter(path = '..') {
         ${link('Total Angle of a Polygon')}
         ${link('Traveling Wave 01 - Shifting Equations')}
         ${link('Traveling Wave 02 - Sine Waves')}
+        ${link('Traveling Wave 03 - Velocity Frequency Wavelength')}
         ${link('Holiday Equation')}
       <div class="footer">
         <p>Built for and used by <a class="link" href="https://www.thisiget.com">www.thisiget.com</a></p>

@@ -8,13 +8,15 @@ This example is a slides based example showing:
 
 Most diagrams are interactive, and most colored text is interactive.
 
+This example doesn't introduce new concepts compared to the other examples, but it is significantly more complexity in figure logic, equations and slides.
+
 Open `index.html` in a browser to view example, or the example is hosted [here](https://airladon.github.io/FigureOne/examples/Traveling%20Wave%2003%20-%20Velocity%20Frequency%20Wavelength/index.html).
 
 ![](./example.gif)
 
 ## Explanation
 
-This is a large example (70 slides), and as such is split into numerous files to make it easier to consume. Nevertheless, it would be better to review the tutorials and some of the simpler examples first before this example.
+This is a large example (70 slides), and as such is split into numerous files to make it easier to consume. As such, it would be better to review the tutorials and some of the simpler examples first before this example.
 
 The example is split into several files:
 * `timekeeper.js` - a global timer used for all animations that allows for time freezing and slow motion
@@ -22,6 +24,8 @@ The example is split into several files:
 * `layout.js` - all figure elements and element logic defined
 * `equations.js` - all equation related helper function, phrase and form definitions
 * `slides.js` - slide definitions
+
+Splitting files like this would not necessarily be best practice for production. Using a bundler (like webpack), to combine them into a single file would reduce load time for clients as few files need to be downloaded.
 
 ### Time Keeper
 TimeKeeper doesn't use FigureOne, and is simply a helper function for this example.
@@ -76,13 +80,13 @@ Each text description is usually one sentence (sometimes two). The trade-off bet
 
 Most of the slides are simply text description changes, equation form changes, or changes in what is being shown in the figure. Common properties like `scenarioCommon`, `steadStateCommon` and `enterStateCommon` are used at every opportunity to help make each slide definition just a difference compared to the last slide, rather than a complete redefinition of everythin.
 
-### Caveats
+## Caveats
 
 This example is primarily used to demonstrate FigureOne. However, it is also trying to show an intuitive wave to understand the relationship between freqeuency, velocity and wavelength of traveling sine waves.
 
 For the interested reader, there are a few more things to note to put the content of this example in context.
 
-#### Common Traveling Sine Wave Equation
+### Common Traveling Sine Wave Equation
 
 In this example, a sine wave travelling in the positive direction is considered. The equation used to described it in space and time is:
 
@@ -120,7 +124,7 @@ If we use this as our initial disturbance in the same process as deriving (1), t
 
 So both (1) and (2) both are valid solutions to the wave equation, but they are different because the time dependent disturbance is different.
 
-#### Medium vs Field Propagation Velocity
+### Medium vs Field Propagation Velocity
 
 The difference between propagation velocity in mediums and fields can be a little confusing.
 

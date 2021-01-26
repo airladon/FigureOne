@@ -705,7 +705,7 @@ function setupFigure() {
   };
 
   // When called, this will pause time after some delay, where the delay is
-  // tied to the time kept by TimeKeeper.  
+  // tied to the time kept by TimeKeeper.
   const pauseAfterDelay = (delay) => {
     const startTime = time.now();
     figure.elements.animations.new('pauseAfterDelay')
