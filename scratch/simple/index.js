@@ -4,40 +4,24 @@ const figure = new Fig.Figure({
   lineWidth: 0.01,
   font: { size: 0.1 },
 });
+// const figure = new Fig.Figure();
 
-// Add name and element
-const [p] = figure.add({
-  method: 'equation',
-  options: {
-    forms: {
-      0: [{ frac: ['t', 'vinculum', 'a'] }],
+// Create the shape
+figure.add(
+  {
+    name: 'tri',
+    method: 'triangle',
+    options: {
+      width: 1,
+      height: 1,
+      color: [1, 0, 0, 1],
     },
   },
-  mods: {
-    scenarios: {
-      default: { position: [0, 0] },
-      left: { position: [1, 0] },
-    },
-  },
-});
+);
 
-p.animations.new()
-  .inParallel([
-    // p.animations.position({ target: [1, 0], delay: 1, duration: 1 }),
-    p.animations.scenario({ target: 'left', delay: 1, duration: 1 }),
-    p.animations.rotation({ target: 1, delay: 1, duration: 1 }),
-  ])
+// Animate the shape
+figure.getElement('tri').animations.new()
+  .position({ target: [0.8, 0], duration: 1 })
+  .rotation({ target: Math.PI, duration: 2 })
+  .position({ target: [0, 0], duration: 1 })
   .start();
-// const [eqn] = figure.add(
-//   {
-//     name: 'eqn',
-//     method: 'equation',
-//     options: {
-//       forms: {
-//         test: ['at_1'],
-//       },
-//     },
-//   },
-// );
-// eqn.showForm('test')
-// console.log(eqn._at_1.lastDrawTransform.order)
