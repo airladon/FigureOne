@@ -1,3 +1,6 @@
+/* globals Fig */
+/* eslint-disable camelcase, object-curly-newline */
+
 const { Point } = Fig;
 const { round, range } = Fig.tools.math;
 
@@ -7,7 +10,7 @@ const actionColor = [0, 0.6, 1, 1];
 const primaryCol = [1, 0, 0, 1];
 const secondaryCol = [0, 0.6, 1, 1];
 
-figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color:dGreyColor });
+const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: dGreyColor });
 
 /*
 .......##..........###....##....##..#######..##.....##.########
@@ -25,6 +28,12 @@ const getFx = (ox, oy) => x.map(xx => fx(xx, ox, oy));
 const plotWidth = 2.67;
 const plotHeight = 1.383;
 const mathFont = 'Times New Roman';
+
+const brac = (left, content, right, outsideSpace = 0.025) => ({
+  brac: {
+    content, left, right, topSpace: 0.03, bottomSpace: 0.03, outsideSpace,
+  },
+});
 
 const makeEqn = (name, funcName, bottomX, color, space) => ({
   name,
@@ -57,20 +66,14 @@ const makeEqn = (name, funcName, bottomX, color, space) => ({
       title: { position: [name === 'eqnF' ? 0.75 : 1.5, -0.15], scale: 1.2 },
       bottom: { position: [bottomX, -0.15], scale: 1.2 },
       example: { scale: 0.9 },
-    }
-  }
+    },
+  },
 });
 
 const makeMark = (name, color = greyColor, radius = 0.02) => ({
   name,
   method: 'primitives.polygon',
   options: { radius, sides: 20, color },
-});
-
-const brac = (left, content, right, outsideSpace = 0.025) => ({
-  brac: {
-    content, left, right, topSpace: 0.03, bottomSpace: 0.03, outsideSpace,
-  },
 });
 
 figure.add([
@@ -144,7 +147,7 @@ figure.add([
               rotation: 0,
               font: { family: mathFont, style: 'italic', size: 0.12 },
               offset: [plotWidth / 2 + 0.15, 0.75],
-            }
+            },
           },
         },
       },
@@ -160,13 +163,15 @@ figure.add([
         mods: {
           move: {
             style: 'translation',
-            bounds: { translation: {
-              p1: [plotWidth / 5, plotHeight / 2],
-              mag: plotWidth / 5 * 3,
-              angle: 0,
-            } },
-          }
-        }
+            bounds: {
+              translation: {
+                p1: [plotWidth / 5, plotHeight / 2],
+                mag: plotWidth / 5 * 3,
+                angle: 0,
+              },
+            },
+          },
+        },
       },
       {
         name: 'distance',
@@ -224,7 +229,7 @@ figure.add([
               forms: {
                 right: ['x\'', '\u2212', 'd'],
                 left: ['x\'', '+', 'd'],
-              }
+              },
             },
             location: 'start',
           },
@@ -274,10 +279,10 @@ figure.add([
       phrases: {
         xdTox: { bottomComment: {
           content: 'xd', comment: 'x', symbol: 'line', inSize: false, commentSpace: 0.15,
-        }},
+        } },
         xrdToX: { bottomComment: {
           content: 'xd_r', comment: 'x_r', symbol: 'lineR', inSize: false, commentSpace: 0.15,
-        }},
+        } },
         gxd: ['g_r', brac('lbr', 'xd_r', 'rbr')],
         gxdToX: ['g_r', brac('lbr', 'xrdToX', 'rbr')],
         gx: ['g_r', brac('lbr', 'x_r', 'rbr')],
@@ -304,26 +309,26 @@ figure.add([
         alignment: { fixTo: 'equals', xAlign: 'center' },
       },
     },
-    mods: { 
+    mods: {
       scenarios: {
         default: { position: [0, 0.8], scale: 1.2 },
         title: { position: [-0.5, -1.05], scale: 1 },
         example: { position: [0, -1.25], scale: 1 },
-      }
-    }
+      },
+    },
   },
   {
     name: 'nav',
     method: 'collections.slideNavigator',
     options: {
-      prevButton: { position: [-1.7, -1.3 ] },
-      nextButton: { position: [1.7, -1.3 ] },
+      prevButton: { position: [-1.7, -1.3] },
+      nextButton: { position: [1.7, -1.3] },
       text: {
         font: { weight: '100', size: 0.15 },
         position: [-1.7, 1.2],
         xAlign: 'left',
       },
-      equation: ['eqn', 'diagram.eqnF', 'diagram.eqnG']
+      equation: ['eqn', 'diagram.eqnF', 'diagram.eqnG'],
     },
   },
 ]);
@@ -401,7 +406,7 @@ const setElementPosition = (name, position, label = null) => {
       e.updateElementText({ value: label }, 'current');
     }
   }
-}
+};
 
 // Set end points of a line on the plot
 const setLine = (name, fX, offset) => {
@@ -412,20 +417,13 @@ const setLine = (name, fX, offset) => {
   e.setEndPoints([xDraw, yDraw0], [xDraw, yDraw]);
 };
 
-// Cycle which global offsets to use to determine where to draw
-// plot equations, marks and distance label.
-const cycle = () => {
-  cycleIndex = (cycleIndex + 1) % offsets.length;
-  update();
-};
-
 // Main update function, called each time the plot changes
 const update = () => {
   const [curvePosition, fLabel, yLabel] = offsets[cycleIndex];
-  const xPad = xAxis.drawToValue(movePad.getPosition('local').x)
+  const xPad = xAxis.drawToValue(movePad.getPosition('local').x);
   const xY = xPad + curvePosition;
   const xF = curvePosition;
-  const y = fx(xF).y;
+  const { y } = fx(xF);
 
   // Update the trace with a new x location
   trace.update(getFx(xPad, 0));
@@ -458,7 +456,14 @@ const update = () => {
 
   // Call an animation frame
   figure.animateNextFrame();
-}
+};
+
+// Cycle which global offsets to use to determine where to draw
+// plot equations, marks and distance label.
+const cycle = () => {
+  cycleIndex = (cycleIndex + 1) % offsets.length;
+  update();
+};
 
 // Everytime the movePad changes, the trace needs to be updated
 movePad.subscriptions.add('setTransform', () => update());
@@ -471,11 +476,11 @@ const moveMarks = (xOffsetFrom, xOffsetTo = 0, type = 'G', skipAnimation = true)
     const from = xAxis.valueToDraw(pointX + xOffsetFrom);
     const to = xAxis.valueToDraw(pointX + xOffsetTo);
     const mark = marks.getElement(`mark${type}${i + 1}`);
-      mark.setPosition(from, y);
+    mark.setPosition(from, y);
     if (!skipAnimation) {
       mark.setPosition(from, y);
       mark.animations.new()
-        .position({ target: [to, y], duration: 2})
+        .position({ target: [to, y], duration: 2 })
         .start();
     }
   }
@@ -506,7 +511,7 @@ const moveTrace = (xOffset, done = null, duration = 1) => {
     ])
     .whenFinished(done)
     .start();
-}
+};
 
 // Initializiation
 update();
@@ -549,7 +554,7 @@ const modifiersCommon = {
   lb1: { text: '(', font: { family: mathFont } },
   rb1: { text: ')', font: { family: mathFont } },
   xr: { text: 'x', font: { family: mathFont, style: 'italic', color: primaryCol } },
-}
+};
 
 // //////////////////////////////////////////////////////////
 // Slide 1
@@ -570,7 +575,7 @@ slides.push({
   leaveState: () => {
     fxTrace.update(getFx(0, 0));
     trace.update(getFx(0, 0));
-  }
+  },
 });
 
 // //////////////////////////////////////////////////////////
@@ -606,10 +611,10 @@ slides.push({
 slides.push({
   text: [
     'For each |x| value input to |f||lb1||x||rb1|, a |y| value is output.',
-    'These pairs of values are |points|.'
+    'These pairs of values are |points|.',
   ],
   modifiers: {
-    'points': { font: { color: actionColor }, onClick: () => nav.nextSlide() },
+    points: { font: { color: actionColor }, onClick: () => nav.nextSlide() },
   },
   showCommon: [
     { 'diagram.plot': ['x.line', 'x.title', 'y.line', 'y.title', 'fxTrace'] },
@@ -617,7 +622,7 @@ slides.push({
 });
 slides.push({
   modifiers: {
-    'points': { font: { color: actionColor }, onClick: () => pulseMarks() },
+    points: { font: { color: actionColor }, onClick: () => pulseMarks() },
   },
   enterStateCommon: () => {
     marks.showAll();
@@ -642,7 +647,7 @@ slides.push({
 slides.push({
   showCommon: [
     { 'diagram.plot': ['x.line', 'x.title', 'y.line', 'y.title', 'fxTrace'] },
-    { 'diagram': ['marks', 'movePad'] },
+    { diagram: ['marks', 'movePad'] },
   ],
   modifiers: {
     Shifting: {
@@ -650,9 +655,9 @@ slides.push({
       onClick: () => moveTrace(1.6, null),
       touchBorder: 0.1,
     },
-    value: { font: { color: actionColor}, onClick: pulseMarks },
+    value: { font: { color: actionColor }, onClick: pulseMarks },
   },
-  transition: (done) => moveTrace(1.6, done),
+  transition: done => moveTrace(1.6, done),
   fromForm: [null, 'funcX', null],
   form: [null, 'funcX', 'funcX'],
   steadyState: () => {
@@ -671,10 +676,10 @@ slides.push({
   ],
   showCommon: [
     { 'diagram.plot': ['x.line', 'x.title', 'y.line', 'y.title', 'fxTrace'] },
-    { 'diagram': ['marks.markG7', 'marks.markF7', 'plot.mainTrace', 'distance'] },
+    { diagram: ['marks.markG7', 'marks.markF7', 'plot.mainTrace', 'distance'] },
   ],
   enterStateCommon: () => {
-    moveTrace(1.6, null, 0),
+    moveTrace(1.6, null, 0);
     updateLines = true;
     update();
   },
@@ -684,8 +689,8 @@ slides.push({
     gLine.showAll();
     update();
   },
-  leaveStateCommon: () => { updateLines = false; }
-})
+  leaveStateCommon: () => { updateLines = false; },
+});
 
 // //////////////////////////////////////////////////////////
 // //////////////////////////////////////////////////////////
@@ -705,7 +710,7 @@ slides.push({
   steadyState: () => {
     gLine.showAll();
     fLine.showAll();
-    fLine.label.showForm('right')
+    fLine.label.showForm('right');
     updateLines = true;
     update();
   },
@@ -720,11 +725,11 @@ slides.push({
   ],
   showCommon: [
     { 'diagram.plot': ['x.line', 'x.title', 'y.line', 'y.title', 'fxTrace'] },
-    { 'diagram': ['marks.markG7', 'marks.markF7', 'plot.mainTrace'] },
-    { 'diagram': ['distance', 'gLine', 'fLine'] },
+    { diagram: ['marks.markG7', 'marks.markF7', 'plot.mainTrace'] },
+    { diagram: ['distance', 'gLine', 'fLine'] },
   ],
   enterStateCommon: () => {
-    fLine.label.showForm('right')
+    fLine.label.showForm('right');
     updateLines = true;
     moveTrace(1.6, null, 0);
   },
@@ -762,7 +767,7 @@ slides.push({
     highlighter.showAll();
     highlighter.surround(eqn, 0.07);
     highlighter.pulse({ scale: 1.2 });
-  }
+  },
 });
 
 
@@ -773,13 +778,13 @@ slides.push({
   steadyState: () => {
     highlighter.showAll();
     highlighter.surround(eqn, 0.07);
-  }
+  },
 });
 
 slides.push({
   showCommon: [
     { 'diagram.plot': ['x.line', 'x.title', 'y.line', 'y.title', 'fxTrace'] },
-    { 'diagram': ['plot.mainTrace', 'movePad', 'distance'] },
+    { diagram: ['plot.mainTrace', 'movePad', 'distance'] },
   ],
   show: marks,
   scenarioCommon: ['default', 'low', 'left'],
@@ -790,7 +795,7 @@ slides.push({
   },
   fromForm: [null, 'funcX', null],
   form: [null, 'funcX', 'funcX'],
-  transition: (done) => moveTrace(-1.6, done),
+  transition: done => moveTrace(-1.6, done),
   steadyState: () => {
     moveTrace(-1.6, null, 0);
     update();
@@ -803,14 +808,14 @@ slides.push({ show: [gLine] });
 slides.push({
   showCommon: [
     { 'diagram.plot': ['x.line', 'x.title', 'y.line', 'y.title', 'fxTrace'] },
-    { 'diagram': ['marks.markG0', 'marks.markF0', 'plot.mainTrace'] },
-    { 'diagram': ['distance', 'gLine', 'fLine'] },
+    { diagram: ['marks.markG0', 'marks.markF0', 'plot.mainTrace'] },
+    { diagram: ['distance', 'gLine', 'fLine'] },
   ],
   enterStateCommon: () => {
     cycleIndex = 0;
     updateLines = true;
     moveTrace(-1.6, null, 0);
-    fLine.label.showForm('left')
+    fLine.label.showForm('left');
   },
 });
 
@@ -831,7 +836,7 @@ slides.push({
     highlighter.showAll();
     highlighter.surround(eqn, 0.07);
     highlighter.pulse({ scale: 1.2 });
-  }
+  },
 });
 
 // //////////////////////////////////////////////////////////
@@ -872,16 +877,16 @@ slides.push({
   enterStateCommon: () => {},
   text: [
     'Interactive example: Drag the curve to shift,',
-    '|change| points, and compare |f||lb1||x||rb1| and |g1||lb||xr||rb|.'
+    '|change| points, and compare |f||lb1||x||rb1| and |g1||lb||xr||rb|.',
   ],
   modifiers: {
     change: {
       font: { color: actionColor }, onClick: () => cycle(), touchBorder: 0.1,
-    }
+    },
   },
   scenario: ['default', 'example'],
   showCommon: [
-    { 'diagram': ['markG', 'markF', 'plot'] },
+    { diagram: ['markG', 'markF', 'plot'] },
     movePad, trace,
   ],
   steadyState: () => {
@@ -903,7 +908,7 @@ slides.push({
     cycleIndex = 6;
     offsets = offsetsD;
   },
-  form: ['value', '0', '0']
+  form: ['value', '0', '0'],
 });
 
 // Load slides into slideNavigator

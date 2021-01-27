@@ -1,3 +1,6 @@
+/* globals Fig */
+/* eslint-disable camelcase, object-curly-newline */
+
 /*
 This figure has a plot of a general sine function, and its associated equation.
 
@@ -39,7 +42,7 @@ function fig4() {
   const { Point } = Fig;
   const { range } = Fig.tools.math;
 
-  fig = new Fig.Figure({
+  const fig = new Fig.Figure({
     limits: [-1.9, -0.8, 4 * 0.95, 2],
     htmlId: 'figureOneContainer4',
     color: [0.4, 0.4, 0.4, 1],
@@ -79,7 +82,7 @@ function fig4() {
       },
       mods: {
         isMovable: true,
-      }
+      },
     },
     arrow('up', Math.PI / 2, [0, 0.2]),
     arrow('down', -Math.PI / 2, [0, -0.2]),
@@ -123,7 +126,9 @@ function fig4() {
         start: -4,
         stop: 4,
         line: { width: 0.006 },
-        grid: { values: [-4, -3, -2, -1, 1, 2, 3, 4], width: 0.005, dash: [], color: [0.7, 0.7, 0.7, 1] },
+        grid: {
+          values: [-4, -3, -2, -1, 1, 2, 3, 4], width: 0.005, dash: [], color: [0.7, 0.7, 0.7, 1],
+        },
         ticks: { values: range(-4, 4, 1), offset: -0.025, length: 0.05 },
         labels: { precision: 0, font: { size: 0.07 }, offset: [-0.01, 0] },
         title: {
@@ -160,12 +165,12 @@ function fig4() {
           'y', '_  =', { container: ['ASign', 0.1] }, 'A', ' ', 'sin', { brac: ['lb', [{ frac: ['twoPi', 'vinculum', 'r'] }, ' ', 'theta', 'phiSign', 'phi', ' '], 'rb'] }, 'BSign', 'B'],
       },
       position: [-1, 0.9],
-    }
+    },
   });
 
   // Get commonly used figure elements
   const [A, B, phi, r] = fig.getElements({ eqn: ['A', 'B', 'phi', 'r'] });
-   const [mover, left, right, up, down, trace, eqn] = fig.elements.getElements([
+  const [mover, left, right, up, down, trace, eqn] = fig.elements.getElements([
     'mover', 'left', 'right', 'up', 'down', 'plot.trace', 'eqn',
   ]);
 
@@ -179,7 +184,9 @@ function fig4() {
 
   // Updates the trace and equation to the current `value`s of `variables`
   const update = () => {
-    trace.update(sine(variables.A.value, variables.r.value, variables.phi.value, variables.B.value));
+    trace.update(
+      sine(variables.A.value, variables.r.value, variables.phi.value, variables.B.value),
+    );
     const BSign = variables.B.value <= -0.1 ? ' \u2212 ' : ' + ';
     const phiSign = variables.phi.value <= 0.1 ? ' \u2212 ' : ' + ';
     const ASign = variables.A.value <= -0.1 ? '\u2212' : '';
@@ -192,7 +199,7 @@ function fig4() {
       phiSign,
       ASign,
     }, 'current');
-  }
+  };
 
   // Holds which variable is currently selected
   let selected = null;
@@ -216,25 +223,24 @@ function fig4() {
     if (e.offset > 1) { e.offset = 1; }
     if (e.offset < -1) { e.offset = -1; }
     e.value = e.calc(e.offset);
-    const { offset } = e;
     if (selected === 'A' || selected === 'B') {
       left.hide();
       right.hide();
-      e.offset > -0.9 ? down.show() : down.hide();
-      e.offset < 0.9 ? up.show() : up.hide();
+      if (e.offset > -0.9) { down.show(); } else { down.hide(); }
+      if (e.offset < 0.9) { up.show(); } else { up.hide(); }
     }
     if (selected === 'phi' || selected === 'r') {
       down.hide();
       up.hide();
-      e.offset > -0.9 ? left.show() : left.hide();
-      e.offset < 0.9 ? right.show() : right.hide();
+      if (e.offset > -0.9) { left.show(); } else { left.hide(); }
+      if (e.offset < 0.9) { right.show(); } else { right.hide(); }
     }
     update();
   });
 
   // Helper function to setup each variable
-  const setupVariable = (name, moverFunc) => {
-    const element = variables[name].element;
+  const setupVariable = (name) => {
+    const { element } = variables[name];
     element.onClick = () => {
       eqn.setColor([0.4, 0.4, 0.4, 1]);
       element.setColor([1, 0, 0, 1]);
@@ -246,7 +252,7 @@ function fig4() {
         eqn.getElement(sign).setColor([1, 0, 0, 1]);
       }
     };
-  }
+  };
   setupVariable('A');
   setupVariable('B');
   setupVariable('phi');

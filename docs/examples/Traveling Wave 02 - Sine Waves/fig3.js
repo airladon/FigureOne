@@ -1,3 +1,6 @@
+/* globals Fig */
+/* eslint-disable camelcase, object-curly-newline */
+
 /*
 This figure has a plot of a sine function with a variable frequency/wavelength,
 and the associated equation.
@@ -19,16 +22,16 @@ links within the text can pulse parts of the figure.
 */
 function fig3() {
   const { Point } = Fig;
-  const { round, range } = Fig.tools.math;
+  const { range } = Fig.tools.math;
 
-  fig = new Fig.Figure({
+  const fig = new Fig.Figure({
     limits: [-2, -0.6, 4, 2],
     htmlId: 'figureOneContainer3',
     color: [0.4, 0.4, 0.4, 1],
   });
 
   const thetaValues = range(0, 13, 0.05);
-  const sine = (r) => thetaValues.map(theta => new Point(theta, Math.sin(2 * Math.PI / r * theta)));
+  const sine = r => thetaValues.map(theta => new Point(theta, Math.sin(2 * Math.PI / r * theta)));
 
   // Add sine plot
   fig.add({
@@ -110,15 +113,15 @@ function fig3() {
       },
       formDefaults: { alignment: { xAlign: 'center' } },
       forms: {
-        0: ['y', '_ = ', 'sin', { brac: ['lb', [{ frac: ['twoPi', 'vinculum', 'value'] }, ' ', 'theta'], 'rb'] }]
+        0: ['y', '_ = ', 'sin', { brac: ['lb', [{ frac: ['twoPi', 'vinculum', 'value'] }, ' ', 'theta'], 'rb'] }],
       },
       position: [0, 1.05],
-    }
+    },
   });
 
   // Commonly used figure elements
-  const [mover, trace, xAxis, eqn] = fig.elements.getElements(
-    ['mover', 'plot.trace', 'plot.x', 'eqn']
+  const [mover, trace, eqn] = fig.elements.getElements(
+    ['mover', 'plot.trace', 'plot.x', 'eqn'],
   );
 
   // Holds the amount the plot has been dragged left or right
@@ -134,7 +137,7 @@ function fig3() {
     if (offset < -1) { offset = -1; }
     const newR = offset * 3 + 5;
     trace.update(sine(newR));
-    eqn.updateElementText({ value: `${newR.toFixed(1)}`});
+    eqn.updateElementText({ value: `${newR.toFixed(1)}` });
   });
 
   // Initialize

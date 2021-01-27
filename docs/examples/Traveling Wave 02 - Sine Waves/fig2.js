@@ -1,3 +1,6 @@
+/* globals Fig */
+/* eslint-disable camelcase, object-curly-newline */
+
 /*
 This figure has a plot of a sine function with a variable amplitude,
 and the associated equation.
@@ -21,14 +24,14 @@ function fig2() {
   const { Point } = Fig;
   const { range } = Fig.tools.math;
 
-  fig = new Fig.Figure({
+  const fig = new Fig.Figure({
     limits: [-2, -0.8, 4, 2],
     htmlId: 'figureOneContainer2',
     color: [0.4, 0.4, 0.4, 1],
   });
 
   const thetaValues = range(0, Math.PI * 4.12, 0.1);
-  const sine = (A) => thetaValues.map(theta => new Point(theta, A * Math.sin( theta)));
+  const sine = A => thetaValues.map(theta => new Point(theta, A * Math.sin(theta)));
 
   fig.add([
     // Add plot of sine function
@@ -107,11 +110,11 @@ function fig2() {
         },
         formDefaults: { alignment: { xAlign: 'center' } },
         forms: {
-          0: ['y', '_  = ', 'sign', 'A', ' ', 'sin', { brac: ['lb', 'theta', 'rb'] }]
+          0: ['y', '_  = ', 'sign', 'A', ' ', 'sin', { brac: ['lb', 'theta', 'rb'] }],
         },
         position: [0, 0.9],
-      }
-    }
+      },
+    },
   ]);
 
   // Commonly used figure elements

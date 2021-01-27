@@ -1,7 +1,10 @@
-figure = new Fig.Figure({
+/* globals Fig */
+/* eslint-disable object-curly-newline */
+
+const figure = new Fig.Figure({
   limits: [-2.5, -1.7, 6.667 * 0.65, 5 * 0.65],
-  color: [1, 0, 0, 1] },
-);
+  color: [1, 0, 0, 1],
+});
 
 /*
 .##.....##.########.##.......########..########.########...######.
@@ -14,14 +17,16 @@ figure = new Fig.Figure({
 */
 
 // Helper function to get figure elements succinctly
-const get = (name) => figure.getElement(name);
+const get = name => figure.getElement(name);
 
 // Helper function to create angle definition objects
 const angle = (p1, p2, p3, name, label, alpha = 1, fill = false, direction = 1) => ({
   name,
   method: 'collections.angle',
   options: {
-    p1, p2, p3,
+    p1,
+    p2,
+    p3,
     label: { offset: 0.01, text: label },
     curve: { width: 0.01, radius: 0.3, fill, sides: 200 },
     direction,
@@ -46,7 +51,7 @@ const hideAngles = () => {
   get('angleAf').hide();
   get('angleBf').hide();
   get('angleCf').hide();
-}
+};
 
 /*
 .......##..........###....##....##..#######..##.....##.########
@@ -60,7 +65,7 @@ const hideAngles = () => {
 // Define the polyline points
 const { getPoints, threePointAngle } = Fig.tools.g2;
 const points = [
-  [1, 0.5], [0.4, 1.3], [-1.7, 1.5], [-0.5, 0.7], [-1.4, -0.5], [0.5, -0.5]
+  [1, 0.5], [0.4, 1.3], [-1.7, 1.5], [-0.5, 0.7], [-1.4, -0.5], [0.5, -0.5],
 ];
 const p = getPoints(points);
 
@@ -78,7 +83,7 @@ const angles = {
     old: 0,
     new: threePointAngle(p[4], p[3], p[2]),
   },
-}
+};
 figure.add([
   // Rectangle that highlights equation elements
   {
@@ -111,7 +116,7 @@ figure.add([
       angle: {
         direction: -1,
         curve: { fill: true, radius: 0.3, sides: 200 },
-        color: [1, 0, 0, 0.7]
+        color: [1, 0, 0, 0.7],
       },
     },
   },
@@ -125,7 +130,7 @@ figure.add([
       angle: {
         direction: -1,
         curve: { fill: true, radius: 0.3, sides: 200 },
-        color: [1, 0, 0, 0.7]
+        color: [1, 0, 0, 0.7],
       },
       close: true,
       cornerStyle: 'fill',
@@ -186,7 +191,7 @@ figure.add([
       // Equation forms
       forms: {
         0: {
-          content: [ 'newEqOld', 'negA', ' ', 'negB', '  ', 'plus360', 'negC'],
+          content: ['newEqOld', 'negA', ' ', 'negB', '  ', 'plus360', 'negC'],
           // When animating to this form, just hide the angles at the start of
           // the animation - wait to change the button text and touchability
           // until the form is fully shown
@@ -208,7 +213,7 @@ figure.add([
             'newEqOld', 'negA', ' ', 'negB', ' ', 'negC', '  ', 'plus360',
           ],
           translation: {
-            negC: { style: 'curve', direction: 'up', mag: 0.9 }
+            negC: { style: 'curve', direction: 'up', mag: 0.9 },
           },
           onTransition: () => setTouchable(false),
         },
@@ -260,7 +265,7 @@ figure.add([
 ..........########..#######...######...####..######.
 */
 // The highlighter element will be used frequently
-const highlighter = get('highlightRect')
+const highlighter = get('highlightRect');
 
 // When angle a, b or c is pressed in the equation, then surround the element
 // and highlight the angle on the figure
@@ -285,8 +290,8 @@ const setAngleClick = (ang, eqnElement, angleFill, surround, oldAngle, newAngle)
       .angle({ target: ang.new, duration: 1 })
       .pulse({ scale: 1.5, duration: 1 })
       .start();
-  }
-}
+  };
+};
 
 // Setup click callbacks for each angle term in the equation
 setAngleClick(angles.a, 'eqn.negA', 'angleAf', null, 1, 1);
@@ -296,7 +301,7 @@ setAngleClick(angles.c, 'eqn.negC', 'angleCf', 'eqn.plus360', null, 2);
 // Setup click callbacks for the "Total Angle" terms in the equation
 get('eqn.newBox').onClick = () => {
   get('old').hideAngles();
-  hideAngles()
+  hideAngles();
   get('new').showAngles();
   highlighter.show();
   highlighter.surround(get('eqn.newBox'), -0.02);
@@ -315,7 +320,7 @@ get('eqn.oldBox').onClick = () => {
 get('button').onClick = () => {
   highlighter.hide();
   get('eqn').nextForm({ animate: 'move', duration: 2 });
-}
+};
 
 // Start by showing form ('0')
 get('eqn').showForm('0');

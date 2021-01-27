@@ -41,7 +41,7 @@ function __addGrid(__figure) {
   const __nav = __figure.getElement('nav');
 
   if (__nav != null && __nav.nav != null) {
-    __nav.nav.subscriptions.add('slideSteady', () => {
+    __nav.nav.subscriptions.add('steady', () => {
       __figure.elements.exec(['show'], ['__minorGrid', '__majorGrid', '__origin']);
     });
     __nav.nav.subscriptions.add('beforeTransition', () => {
