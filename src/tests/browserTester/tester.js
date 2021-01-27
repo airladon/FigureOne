@@ -27,12 +27,12 @@ function zeroPad(num, places) {
 }
 
 // let lastTime = -1;
-function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0) {
+function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish = 'finish') {
   require('./start.js');
   if (framesFile != null && framesFile !== '') {
     require(framesFile);
   }
-  const { __finish } = require('./finish.js');
+  const { __finish } = require(`./${finish}.js`);
   __finish();
   jest.setTimeout(120000);
 
