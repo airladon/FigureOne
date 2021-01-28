@@ -78,8 +78,23 @@ function __finish(__figure) {
             } else if (action === 'tap') {
               __figure.touchDown(loc);
               __figure.touchUp();
-              steps = `${steps}[0, 'touchDown', [${round(loc.x, 2)}, ${round(loc.y, 2)}], '${description}'],\n`;
-              steps = `${steps}[${deltaTime}, 'touchUp'],\n`;
+              steps = `${steps}[0, 'touchDown', [${round(loc.x, 2)}, ${round(loc.y, 2)}], '${description}', false],\n`;
+              steps = `${steps}[${deltaTime}, 'touchUp', [0, 0], '${description}'],\n`;
+            } else if (action === 'tap2') {
+              __figure.touchDown(loc);
+              __figure.touchUp();
+              steps = `${steps}[0, 'touchDown', [${round(loc.x, 2)}, ${round(loc.y, 2)}], '${description}', false],\n`;
+              steps = `${steps}[${deltaTime / 2}, 'touchUp', [0, 0], '', false],\n`;
+              steps = `${steps}[${deltaTime / 2}, 'delay', [0, 0], '${description}'],\n`;
+            } else if (action === 'tap3') {
+              __figure.touchDown(loc);
+              __figure.touchUp();
+              steps = `${steps}[0, 'touchDown', [${round(loc.x, 2)}, ${round(loc.y, 2)}], '${description}', false],\n`;
+              steps = `${steps}[${deltaTime / 3}, 'touchUp', [0, 0], '', false],\n`;
+              steps = `${steps}[${deltaTime / 3}],\n`;
+              steps = `${steps}[${deltaTime / 3}],\n`;
+            } else if (action === 'delay') {
+              steps = `${steps}[${deltaTime / 3}, 'delay', [], '', false],\n`;
             } else {
               eval(action);
               steps = `${steps}[${deltaTime}, \`${action}\`],\n`;
@@ -102,8 +117,9 @@ function __finish(__figure) {
             const loc = figure.getElement(__frames.next).getPosition('figure');
             nav.subscriptions.add('steady', () => {
               setTimeout(() => {
-                steps = `${steps}[0, 'touchDown', [${round(loc.x, 2)}, ${round(loc.y, 2)}], 'Next Slide - ${slideIndex}'],\n`;
-                steps = `${steps}[${getDeltaTime()}, 'touchUp'],\n`;
+                steps = `${steps}[0, 'touchDown', [${round(loc.x, 2)}, ${round(loc.y, 2)}], 'Next Slide - ${slideIndex}', false],\n`;
+                steps = `${steps}[${getDeltaTime()}, 'touchUp', [0, 0], '', false],\n`;
+                steps = `${steps}[0, 'delay', [0, 0], 'Slide - ${slideIndex}'],\n`;
                 nextAction();
               }, 500);
             }, 1);
@@ -112,7 +128,7 @@ function __finish(__figure) {
             __figure.touchUp();
           }, delay * 1000);
         } else {
-          console.log(steps)
+          console.log(steps);
         }
       };
       if (__frames.start !== 0) {

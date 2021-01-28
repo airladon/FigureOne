@@ -809,6 +809,7 @@ function addSlides() {
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
   slides.push({
+    scenarioCommon: ['default', 'left'],
     text: 'Now expand the terms inside the sine function.',
   });
   slides.push({ fromForm: 'yxtxSine', form: 'yxtxSineExpanded' });

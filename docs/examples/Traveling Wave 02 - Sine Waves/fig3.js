@@ -121,7 +121,7 @@ function fig3() {
 
   // Commonly used figure elements
   const [mover, trace, eqn] = fig.elements.getElements(
-    ['mover', 'plot.trace', 'plot.x', 'eqn'],
+    ['mover', 'plot.trace', 'eqn'],
   );
 
   // Holds the amount the plot has been dragged left or right

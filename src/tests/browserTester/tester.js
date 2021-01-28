@@ -43,10 +43,14 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
     let action;
     let location;
     let description;
+    let snap;
     if (Array.isArray(step)) {
-      [time, action, location, description] = step;
+      [time, action, location, description, snap] = step;
     } else {
       time = step;
+    }
+    if (snap == null) {
+      snap = true;
     }
     const delta = time - lastTime;
     const test = [
@@ -55,6 +59,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
       delta,
       action || null,
       location || [],
+      snap,
     ];
     lastTime = time;
     tests.push(test);
@@ -73,7 +78,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
       });
     });
     test.each(tests)('%s %s',
-      async (time, description, deltaTime, action, location) => {
+      async (time, description, deltaTime, action, location, snap) => {
         let d = deltaTime;
         if (intermitentTime > 0) {
           if (deltaTime > intermitentTime) {
@@ -85,18 +90,22 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
             }
           }
         }
-        await page.evaluate(([delta, t, l]) => {
-          figure.globalAnimation.frame(delta);
-          if (t != null) {
-            if (t.startsWith('touch')) {
-              const loc = Fig.tools.g2.getPoint(l || [0, 0]);
-              figure[t](loc);
-            } else {
-              eval(t);
+        if (action !== 'delay') {
+          await page.evaluate(([delta, t, l]) => {
+            figure.globalAnimation.frame(delta);
+            if (t != null) {
+              if (t.startsWith('touch')) {
+                const loc = Fig.tools.g2.getPoint(l || [0, 0]);
+                figure[t](loc);
+              } else {
+                eval(t);
+              }
             }
-          }
-        }, [d, action, location]);
-        // console.log(time, lastTime)
+          }, [d, action, location]);
+        }
+        if (!snap) {
+          return;
+        }
         if (time !== lastTime) {
           const image = await page.screenshot({ fullPage: true });
           expect(image).toMatchImageSnapshot({

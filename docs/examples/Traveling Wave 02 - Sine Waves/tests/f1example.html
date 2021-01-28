@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+    <style>
+        #wrapper {
+            width: calc(100vw - 20px);
+            max-width: 100%;
+        }
+        @media (min-aspect-ratio: 1/1) {
+            #wrapper {
+              width: calc((100vh - 20px)/0.5);
+            }
+        } 
+        #figureOneContainer1 {
+            width: 100%;
+            padding-bottom: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div id="figureOneContainer1" style="background-color: white;">
+    </div>
+    <script type="text/javascript" src='../../../../package/index.js'></script>
+    <script type="text/javascript" src='../../../../src/tests/browserTester/start.js'></script>
+    <script type="text/javascript" src='../fig1.js'></script>
+    <script type="text/javascript" src='./f1frames.js'></script>
+    <script type="text/javascript" src='../../../../src/tests/browserTester/addCursor.js'></script>
+    <script type="text/javascript" src='../../../../src/tests/browserTester/addGrid.js'></script>
+    <script type="text/javascript" src='../../../../src/tests/browserTester/finish.js'></script>
+    <script>__addCursor(figure1.fig); __addGrid(figure1.fig); __finish(figure1.fig);</script>
+</body>
+</html>

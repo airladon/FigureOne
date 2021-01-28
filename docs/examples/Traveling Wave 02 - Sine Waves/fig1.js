@@ -272,7 +272,7 @@ function fig1() {
       .rotation({ start, target: Math.PI * 1.999, velocity: 1, direction: 1 })
       .start();
   };
-  return { pulse, drawFull };
+  return { pulse, drawFull, fig };
 }
 
 const figure1 = fig1();
