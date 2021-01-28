@@ -6,7 +6,7 @@
 function __finish(__figure) {
   __steps = [];
   let index = 0;
-  let [cumTime] = __frames.jest[0];
+  let cumTime = 0; // __frames.jest[0];
   if (__duration === -1) {
     __duration = 0;
     __frames.jest.forEach((f) => {
@@ -22,11 +22,10 @@ function __finish(__figure) {
         Math.round((cumTime + cumTimeIncremental) * 1000) / 1000,
         ...__frames.jest[index].slice(1),
       ]);
-      index += 1;
       if (cumTime === t) {
         same = true;
       }
-      if (index < __frames.jest.length) {
+      if (index + 1 < __frames.jest.length) {
         const [delta] = __frames.jest[index];
         cumTime = Math.round((cumTime + delta) * 1000) / 1000;
         if (delta === 0) {
@@ -35,12 +34,13 @@ function __finish(__figure) {
       } else {
         cumTime = Math.round((__duration + 1) * 1000) / 1000;
       }
+      index += 1;
     }
     if (!same) {
       __steps.push([t]);
     }
   }
-  console.log(__steps)
+  // console.log(__steps)
   if (typeof process !== 'object') {
     // eslint-disable-next-line no-console
     // console.log(__steps);
@@ -69,20 +69,19 @@ function __finish(__figure) {
           const [deltaTime, action, location, description] = slides[slideIndex][actionIndex];
           if (action != null) {
             const loc = Fig.tools.g2.getPoint(location || [0, 0]);
-            if (action.startsWith('touch')) {
+            if (action === 'touchUp') {
+              __figure.touchUp();
+              steps = `${steps}[${deltaTime}, 'touchUp'],\n`;
+            } else if (action.startsWith('touch')) {
               __figure[action](loc);
-              // steps.push([getDeltaTime(), action, location]);
               steps = `${steps}[${deltaTime}, '${action}', [${round(loc.x, 2)}, ${round(loc.y, 2)}], '${description}'],\n`;
             } else if (action === 'tap') {
               __figure.touchDown(loc);
               __figure.touchUp();
-              steps = `${steps}[${deltaTime}, 'touchDown', [${round(loc.x, 2)}, ${round(loc.y, 2)}], '${description}'],\n`;
-              steps = `${steps}[0, 'touchUp'],\n`;
-              // steps.push([deltaTime, 'touchDown', location]);
-              // steps.push([0, 'touchUp']);
+              steps = `${steps}[0, 'touchDown', [${round(loc.x, 2)}, ${round(loc.y, 2)}], '${description}'],\n`;
+              steps = `${steps}[${deltaTime}, 'touchUp'],\n`;
             } else {
               eval(action);
-              // steps.push([deltaTime, action]);
               steps = `${steps}[${deltaTime}, ${action}]\n`;
             }
           }
@@ -101,8 +100,8 @@ function __finish(__figure) {
             const loc = figure.getElement(__frames.next).getPosition('figure');
             nav.subscriptions.add('steady', () => {
               setTimeout(() => {
-                steps = `${steps}[${getDeltaTime()}, 'touchDown', [${round(loc.x, 2)}, ${round(loc.y, 2)}], 'Next Slide - ${slideIndex}'],\n`;
-                steps = `${steps}[0, 'touchUp'],\n`;
+                steps = `${steps}[0, 'touchDown', [${round(loc.x, 2)}, ${round(loc.y, 2)}], 'Next Slide - ${slideIndex}'],\n`;
+                steps = `${steps}[${getDeltaTime()}, 'touchUp'],\n`;
                 nextAction();
               }, 500);
             }, 1);

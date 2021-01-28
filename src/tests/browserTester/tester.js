@@ -1,4 +1,4 @@
-/* global page figure timeoutId Fig __steps __title */
+/* global page figure timeoutId Fig __steps __title __width __height */
 /* eslint-disable import/prefer-default-export, global-require */
 /* eslint-disable import/no-dynamic-require, no-eval */
 /* eslint-disable jest/no-export, no-await-in-loop */
@@ -64,7 +64,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
   lastTime = -1;
   describe(__title, () => {
     beforeAll(async () => {
-      await page.setViewportSize({ width: 500, height: 375 });
+      await page.setViewportSize({ width: __width || 500, height: __height || 375 });
       await page.goto(file);
       await page.evaluate(() => {
         clearTimeout(timeoutId);
