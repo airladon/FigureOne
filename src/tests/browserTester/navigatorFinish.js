@@ -40,7 +40,7 @@ function __finish(__figure) {
       __steps.push([t]);
     }
   }
-  // console.log(__steps)
+  console.log(__steps)
   if (typeof process !== 'object') {
     // eslint-disable-next-line no-console
     // console.log(__steps);
@@ -82,8 +82,10 @@ function __finish(__figure) {
               steps = `${steps}[${deltaTime}, 'touchUp'],\n`;
             } else {
               eval(action);
-              steps = `${steps}[${deltaTime}, ${action}]\n`;
+              steps = `${steps}[${deltaTime}, \`${action}\`],\n`;
             }
+          } else {
+            steps = `${steps}[${deltaTime}],\n`;
           }
           if (actionIndex + 1 < slides[slideIndex].length) {
             actionIndex += 1;
