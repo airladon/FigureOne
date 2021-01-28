@@ -1,19 +1,19 @@
-/* global __duration __frames __timeStep __title*/
+/* global __duration __frames __timeStep __title __width __height */
+/* eslint-disable no-global-assign */
 __title = 'Example - Sin Limit';
 __duration = -1;
 __timeStep = 0.5;
-__width = 300;
-__height = 300 * 0.75;
+__width = 500;
+__height = 500 * 0.75;
 const s = 0.5;
 const s1 = 1;
-const s15 = 1.5;
-const s2 = 2;
 __frames = {
-  start: 0,
-  stop: null,
+  start: 10,
+  stop: 10,
   nav: 'nav',
   next: 'nav.nextButton',
   slides: [
+    // 0
     [
       [s, 'touchDown', [-0.4, 0.5], 'touch radius'],
       [s, 'touchMove', [-0.5, 0.6], 'move radius'],
@@ -36,6 +36,7 @@ __frames = {
     [],
     [],
     [],
+    // 5
     [],
     [],
     [
@@ -47,6 +48,23 @@ __frames = {
     [
       [s1, 'tap', [-0.3, -1.2], 'touch vertical'],
       [s1, 'tap', [0.7, -1.2], 'touch x'],
+    ],
+    // 10
+    [],
+    [
+      [s1, 'tap', [-0.7, -1.2], 'touch radius'],
+      [s1, 'tap', [0.2, -1.2], 'touch arc'],
+      [s1, 'tap', [-0.7, -1.4], 'touch angle'],
+    ],
+    [
+      [s1, 'tap', [-0.7, -1.2], 'touch radius'],
+      [s1, 'tap', [0.2, -1.2], 'touch arc'],
+      [s1, 'tap', [-0.7, -1.4], 'touch angle'],
+    ],
+    [
+      [s1, 'tap', [0.5, -1.2], 'touch x'],
+      [s1, 'tap', [-0.7, -1.4], 'touch sinx'],
+      [s1, 'tap', [-1.5, -1.2], 'prev'],
     ],
   ],
   jest: [
@@ -97,84 +115,31 @@ __frames = {
     [1, 'touchUp'],
     [0, 'touchDown', [0.7, -1.2], 'touch x'],
     [1, 'touchUp'],
+    [0, 'touchDown', [1.5, -1.25], 'Next Slide - 10'],
+    [1.3, 'touchUp'],
+    [0, 'touchDown', [1.5, -1.25], 'Next Slide - 11'],
+    [0.5, 'touchUp'],
+    [0, 'touchDown', [-0.7, -1.2], 'touch radius'],
+    [1, 'touchUp'],
+    [0, 'touchDown', [0.2, -1.2], 'touch arc'],
+    [1, 'touchUp'],
+    [0, 'touchDown', [-0.7, -1.4], 'touch angle'],
+    [1, 'touchUp'],
+    [0, 'touchDown', [1.5, -1.25], 'Next Slide - 12'],
+    [1.3, 'touchUp'],
+    [0, 'touchDown', [-0.7, -1.2], 'touch radius'],
+    [1, 'touchUp'],
+    [0, 'touchDown', [0.2, -1.2], 'touch arc'],
+    [1, 'touchUp'],
+    [0, 'touchDown', [-0.7, -1.4], 'touch angle'],
+    [1, 'touchUp'],
+    [0, 'touchDown', [1.5, -1.25], 'Next Slide - 13'],
+    [0.6, 'touchUp'],
+    [0, 'touchDown', [0.5, -1.2], 'touch x'],
+    [1, 'touchUp'],
+    [0, 'touchDown', [-0.7, -1.4], 'touch sinx'],
+    [1, 'touchUp'],
+    [0, 'touchDown', [-1.5, -1.2], 'prev'],
+    [1, 'touchUp'],
   ],
 };
-
-
-// __frames = [
-//   [s, 'touchDown', [-0.4, 0.5], 'touch radius'],
-//   [s, 'touchMove', [-0.5, 0.6], 'move radius'],
-//   [s, 'touchMove', [-0.4, 0.5], 'move radius'],
-//   [s, 'touchMove', [-0.2, 0.2], 'move radius'],
-//   [s, 'touchMove', [0.1, -0.2], 'move radius'],
-//   [s, 'touchMove', [-0.2, 0.2], 'move radius'],
-//   [s, 'touchMove', [-0.4, 0.5], 'move radius'],
-//   [0, 'touchMove', [-0.4, 0.5], 'move radius'],
-//   [0, 'touchUp'],
-//   [s, 'touchDown', [0.2, -1.2], 'touch line'],
-//   [s, 'touchUp'],
-//   [s1, 'touchDown', [-0.7, -1.4], 'touch arc'],
-//   [s, 'touchUp'],
-//   [s1, 'touchDown', [-0.4, -1.4], 'touch vertical'],
-//   [s, 'touchUp'],
-
-//   [s1, 'touchDown', [1.5, -1.2], 'next'],
-//   [s, 'touchUp'],
-//   [s, 'touchDown', [-0.4, -1.2], 'touch angle'],
-//   [s, 'touchUp'],
-//   [s1, 'touchDown', [0.6, -1.2], 'touch arc'],
-//   [s, 'touchUp'],
-//   [s1, 'touchDown', [-0.6, -1.4], 'touch vertical'],
-//   [s, 'touchUp'],
-
-//   [s1, 'touchDown', [1.5, -1.2], 'next - eqn'],
-//   [s, 'touchUp'],
-//   [s, 'touchDown', [1.5, -1.2], 'next - divide both sides'],
-//   [s, 'touchUp'],
-//   [s, 'touchDown', [1.5, -1.2], 'next - eqn'],
-//   [s, 'touchUp'],
-//   [s15, 'touchDown', [1.5, -1.2], 'next - the right hand side'],
-//   [s, 'touchUp'],
-//   [s1, 'touchDown', [1.5, -1.2], 'next - eqn'],
-//   [s, 'touchUp'],
-
-//   [s15, 'touchDown', [1.5, -1.2], 'next - use math notation'],
-//   [s, 'touchUp'],
-//   [s, 'touchDown', [0.7, -1.2], 'touch limit'],
-//   [s, 'touchUp'],
-
-//   [s1, 'touchDown', [1.5, -1.2], 'next - eqn - goto limit'],
-//   [s, 'touchUp'],
-//   [s2, 'touchDown', [0.7, -1.2], 'touch limit'],
-//   [s, 'touchUp'],
-
-//   [s1, 'touchDown', [1.5, -1.2], 'next - the vertical line'],
-//   [s, 'touchUp'],
-//   [s1, 'touchDown', [-0.3, -1.2], 'touch vertical'],
-//   [s, 'touchUp'],
-//   [s1, 'touchDown', [0.7, -1.2], 'touch x'],
-//   [s, 'touchUp'],
-
-//   [s1, 'touchDown', [1.5, -1.2], 'next - eqn - sinx'],
-//   [s, 'touchUp'],
-//   [s1, 'touchDown', [1.5, -1.2], 'next - the radius is 1'],
-//   [s, 'touchUp'],
-//   [s1, 'touchDown', [-0.7, -1.2], 'touch radius'],
-//   [s, 'touchUp'],
-//   [s1, 'touchDown', [0.2, -1.2], 'touch arc'],
-//   [s, 'touchUp'],
-//   [s1, 'touchDown', [-0.7, -1.4], 'touch angle'],
-//   [s, 'touchUp'],
-
-//   [s1, 'touchDown', [1.5, -1.2], 'next - eqn - x'],
-//   [s, 'touchUp'],
-//   [s1, 'touchDown', [1.5, -1.2], 'next - summary'],
-//   [s, 'touchUp'],
-//   [s1, 'touchDown', [0.5, -1.2], 'touch x'],
-//   [s, 'touchUp'],
-//   [s1, 'touchDown', [-0.7, -1.4], 'touch sinx'],
-//   [s, 'touchUp'],
-
-//   [s1, 'touchDown', [-1.5, -1.2], 'prev'],
-//   [s, 'touchUp'],
-// ];

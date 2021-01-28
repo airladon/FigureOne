@@ -79,7 +79,7 @@ figure.add([
         simple: true,
       },
       label: {
-        text: ['arc', 'x'],
+        text: ['arc', '_   x'],
         offset: 0.05,
         touchBorder: 0.1,
         isTouchable: true,
@@ -376,6 +376,7 @@ figure.getElement('nav').loadSlides([
     ],
     fromForm: '7',
     form: '8',
+    steadyState: () => figure.getElement('arc.label').showForm('1'),
   },
 ]);
 
