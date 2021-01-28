@@ -3422,7 +3422,7 @@ class FigureElement {
   }
 
   // eslint-disable-next-line no-unused-vars
-  click(glPoint: Point) {
+  click(glPoint: Point = new Point(0, 0)) {
     const drawPoint = glPoint.transformBy(this.spaceTransformMatrix('gl', 'draw'));
     if (this.onClick != null) {
       if (this.recorder.state === 'recording') {
@@ -3687,7 +3687,7 @@ class FigureElementPrimitive extends FigureElement {
   //   }
   // }
 
-  click(glPoint: Point) {
+  click(glPoint: Point = new Point(0, 0)) {
     super.click(glPoint);
     if (this.drawingObject instanceof TextObjectBase) {
       this.drawingObject.click(

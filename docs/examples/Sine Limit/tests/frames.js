@@ -1,5 +1,5 @@
+/* eslint-disable no-global-assign, no-unused-vars */
 /* global __duration __frames __timeStep __title __width __height */
-/* eslint-disable no-global-assign */
 __title = 'Example - Sin Limit';
 __duration = -1;
 __timeStep = 0.5;
@@ -8,8 +8,8 @@ __height = 500 * 0.75;
 const s = 0.5;
 const s1 = 1;
 __frames = {
-  start: 10,
-  stop: 10,
+  start: 0,
+  stop: null,
   nav: 'nav',
   next: 'nav.nextButton',
   slides: [

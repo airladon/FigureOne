@@ -25,6 +25,8 @@ const [plot, annotation] = figure.add([
     },
   },
 ]);
+
+
 plot.setTouchable();
 const [xAxis, yAxis, trace] = plot.getElements(['x', 'y', 'trace']);
 plot.onClick = (p) => {

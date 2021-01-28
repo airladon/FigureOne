@@ -5,4 +5,5 @@ tester(
   `${__dirname}/frames.js`,
   0,
   0.03,
+  'navigatorFinish',
 );
