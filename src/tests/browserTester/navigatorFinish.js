@@ -40,7 +40,7 @@ function __finish(__figure) {
       __steps.push([t]);
     }
   }
-  console.log(__steps)
+  // console.log(__steps)
   if (typeof process !== 'object') {
     // eslint-disable-next-line no-console
     // console.log(__steps);
