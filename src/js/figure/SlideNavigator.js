@@ -286,6 +286,7 @@ export default class SlideNavigator {
   equations: Array<FigureElement>;
   collection: FigureElementCollection;
   subscriptions: SubscriptionManager;
+  inTransition: boolean;
   equationDefaults: {
     duration: number,
     animate: "move" | "dissolve" | "moveFrom" | "pulse" | "dissolveInThenMove",
@@ -299,6 +300,7 @@ export default class SlideNavigator {
    */
   constructor(options: OBJ_SlideNavigator | null = null) {
     this.subscriptions = new SubscriptionManager();
+    this.inTransition = false;
     if (options != null) {
       this.load(options);
     }
@@ -458,7 +460,8 @@ export default class SlideNavigator {
         nextButton.setLabel('Next');
       }
     }
-    this.subscriptions.publish('slideSteady');
+    this.inTransition = false;
+    this.subscriptions.publish('steady');
   }
 
   transition(from: 'next' | 'prev' | number) {
@@ -573,6 +576,7 @@ export default class SlideNavigator {
     if (this.slides == null || this.slides.length === 0) {
       return;
     }
+    this.inTransition = true;
     let fromToUse = from;
     if (fromToUse == null) {
       fromToUse = this.currentSlideIndex;

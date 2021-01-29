@@ -1,3 +1,6 @@
+/* globals Fig */
+/* eslint-disable camelcase, object-curly-newline */
+
 /*
 This figure traces a sine wave onto cartesian axes from a movable radius line
 on a unit circle.
@@ -12,16 +15,16 @@ links within the text can pulse and animate parts of the figure.
 */
 function fig1() {
   const { Point } = Fig;
-  const { round, range } = Fig.tools.math;
+  const { range } = Fig.tools.math;
 
-  fig = new Fig.Figure({
+  const fig = new Fig.Figure({
     limits: [-2 * 0.86, -1 * 0.85, 4 * 0.85, 2 * 0.85],
     htmlId: 'figureOneContainer1',
     color: [0.4, 0.4, 0.4, 1],
   });
 
   const thetaValues = range(0, Math.PI * 2, 0.01);
-  const getSine = (max) => thetaValues
+  const getSine = max => thetaValues
     .filter(theta => theta < max)
     .map(theta => new Point(theta, Math.sin(theta)));
 
@@ -45,7 +48,7 @@ function fig1() {
             position: [-r, 0],
             width: 0.005,
             color: [0.7, 0.7, 0.7, 1],
-          }
+          },
         },
         {
           name: 'y',
@@ -178,7 +181,7 @@ function fig1() {
           ],
           labels: [
             {
-              text: ['', 'π/2', 'π', '3π/2', '2π',],
+              text: ['', '\u03C0/2', '\u03C0', '3\u03C0/2', '2\u03C0'],
               offset: [0, -r * 0.95],
             },
             {
@@ -189,10 +192,8 @@ function fig1() {
         },
         yAxis: {
           grid: {
-            length: 1.5 + 1, width: 0.004, dash: [], color: [0.7, 0.7, 0.7, 1],
-            values: [-1, 1],
+            length: 1.5 + 1, width: 0.004, dash: [], color: [0.7, 0.7, 0.7, 1], values: [-1, 1],
           },
-          ticks: false,
           start: -1,
           stop: 1,
           line: { width: 0.006 },
@@ -223,12 +224,12 @@ function fig1() {
         theta: '\u03b8',
       },
       forms: {
-        0: ['y', '_ = ', 'sin', { brac: ['lb', 'theta', 'rb'] }]
+        0: ['y', '_ = ', 'sin', { brac: ['lb', 'theta', 'rb'] }],
       },
       scale: 0.6,
       position: [-0.4, 0.7],
-    }
-  })
+    },
+  });
 
   // Commonly used figure elements
   const [line, theta, sineLine, tracer, sineWave, xAxis] = fig.getElements([
@@ -268,9 +269,10 @@ function fig1() {
       start = 0.001;
     }
     line.animations.new()
-    .rotation({ start, target: Math.PI * 1.999, velocity: 1, direction: 1 })
-    .start();
+      .rotation({ start, target: Math.PI * 1.999, velocity: 1, direction: 1 })
+      .start();
   };
-  return { pulse, drawFull };
+  return { pulse, drawFull, fig };
 }
+
 const figure1 = fig1();

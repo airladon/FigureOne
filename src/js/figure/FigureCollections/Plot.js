@@ -457,6 +457,7 @@ class CollectionsPlot extends FigureElementCollection {
       yAlign: 'plotAreaBottom',
       limits: collections.primitives.limits,
       transform: new Transform('Plot').scale(1, 1).rotate(0).translate(0, 0),
+      touchBorder: 'rect',
     };
     if (
       optionsIn.color != null
@@ -477,7 +478,6 @@ class CollectionsPlot extends FigureElementCollection {
     if (options.stop == null) {
       options.stop = options.start + 1;
     }
-
     super(options);
     this.collections = collections;
 

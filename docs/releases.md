@@ -18,3 +18,9 @@
 * Enable delay option in scenario animation step
 * Add ability to cancel custom animation step from within the step instead of using a predetermined duration
 * Fix pulse translation for different scales in a collection
+
+## v0.6.1
+* Add `inTransition` flag to SlideNavigator
+* Add clicked position in element.click
+* Updates to automated testing of examples
+* Add summary gif to main readme

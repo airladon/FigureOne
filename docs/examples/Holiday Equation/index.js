@@ -1,3 +1,6 @@
+/* globals Fig */
+/* eslint-disable camelcase, no-param-reassign, object-curly-newline */
+
 const figure = new Fig.Figure({
   limits: [-2, -1.5, 4, 3], color: [0.4, 0.4, 0.4, 1], font: { size: 0.1 },
 });

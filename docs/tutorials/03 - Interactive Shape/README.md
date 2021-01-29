@@ -38,7 +38,7 @@ figure.add(
 ## Explanation
 Figure elements can be touched, moved, released (to move freely) and animated.
 
-This example shows how an element can be setup to be moved and bounce of the figure walls so it stays within the figure's limits. By default, the object will move freely when released.
+This example shows how an element can be setup to be moved and bounce off the figure walls so it stays within the figure's limits. By default, the object will move freely when released.
 
 ```js
     options: {

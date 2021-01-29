@@ -1,5 +1,8 @@
+/* globals Fig */
+/* eslint-disable camelcase */
+
 const { Point, Figure } = Fig;
-figure = new Figure({
+const figure = new Figure({
   limits: [-2, -1.5, 4, 3],
   color: [0.5, 0.5, 0.5, 1],
   font: { size: 0.1 },
@@ -60,7 +63,7 @@ figure.add([
         autoHide: 0.2,
         touchBorder: 0.1,
         isTouchable: true,
-        color: [1, 0, 0, 1 ],
+        color: [1, 0, 0, 1],
       },
       position: origin,
     },
@@ -76,7 +79,7 @@ figure.add([
         simple: true,
       },
       label: {
-        text: ['arc', 'x'],
+        text: ['arc', '_   x'],
         offset: 0.05,
         touchBorder: 0.1,
         isTouchable: true,
@@ -130,12 +133,9 @@ const bot = (content, comment, space = 0.05) => ({
 
 // Fraction
 const frac = (numerator, symbol, denominator, offsetY = 0.07) => ({
-  frac: { numerator, denominator, symbol, offsetY },
-});
-
-// Fixed width container
-const cont = (content, width) => ({
-  container: { content, width },
+  frac: {
+    numerator, denominator, symbol, offsetY,
+  },
 });
 
 // Add equation
@@ -165,15 +165,15 @@ figure.add([
       phrases: {
         csinx: { container: [['sin', ' ', 'x_1'], 0.25] },
         sinx: { tBox: ['csinx', 'sinBox'] },
-        limit: { tBox: [[bot('lim', 'xTo0'), '    '], 'limBox']},
+        limit: { tBox: [[bot('lim', 'xTo0'), '    '], 'limBox'] },
         cvert: { container: { content: 'vert', width: 0.25 } },
         xTo0: ['xTo', '_0'],
-        asXTo0: ['as ', 'xTo0', ':   ']
+        asXTo0: ['as ', 'xTo0', ':   '],
       },
       formDefaults: { alignment: { fixTo: 'equals' } },
       forms: {
         0: [],
-        1: ['asXTo0', 'cvert', 'equals', 'arc' ],
+        1: ['asXTo0', 'cvert', 'equals', 'arc'],
         2: [
           'asXTo0', frac('cvert', 'vinculum', 'arc_1'),
           'equals', frac('arc', 'v2_vinculum', 'arc_2'),
@@ -182,7 +182,8 @@ figure.add([
           'asXTo0', frac('cvert', 'vinculum', 'arc_1'),
           'equals', {
             sub: {
-              content: { strike: {
+              content: {
+                strike: {
                   content: [frac('arc', 'v2', 'arc_2')],
                   symbol: 's',
                 },
@@ -229,7 +230,6 @@ figure.add([
 const angle = figure.getElement('angle');
 const arc = figure.getElement('arc');
 const sine = figure.getElement('sine');
-const rect = figure.getElement('rect');
 const radiusLine = figure.getElement('radius');
 const eqn = figure.getElement('eqn');
 
@@ -274,22 +274,30 @@ const modifiersCommon = {
   sin: {
     font: { color: [1, 0, 0, 1], family: 'Times New Roman', size: 0.12 },
     onClick: () => {
-      eqn.pulse({ elements: ['sin', 'x_1'], centerOn: 'sin', xAlign: 'right', yAlign: 'bottom' });
+      eqn.pulse({
+        elements: ['sin', 'x_1'], centerOn: 'sin', xAlign: 'right', yAlign: 'bottom',
+      });
       figure.getElement('sine.label').pulse();
     },
     touchBorder: 0.1,
   },
   x1: {
     text: 'x',
-    font: { color: [1, 0, 0, 1], family: 'Times New Roman', style: 'italic', size: 0.12 },
+    font: {
+      color: [1, 0, 0, 1], family: 'Times New Roman', style: 'italic', size: 0.12,
+    },
     onClick: () => {
-      eqn.pulse({ elements: ['sin', 'x_1'], centerOn: 'sin', xAlign: 'right', yAlign: 'bottom' });
+      eqn.pulse({
+        elements: ['sin', 'x_1'], centerOn: 'sin', xAlign: 'right', yAlign: 'bottom',
+      });
       figure.getElement('sine.label').pulse({ xAlign: 0.9 });
     },
     touchBorder: 0.1,
   },
   x: {
-    font: { color: [1, 0, 0, 1], family: 'Times New Roman', style: 'italic', size: 0.12 },
+    font: {
+      color: [1, 0, 0, 1], family: 'Times New Roman', style: 'italic', size: 0.12,
+    },
     onClick: () => {
       figure.getElement('eqn.x_2').pulse({ yAlign: 'top' });
       figure.getElement('angle.label').pulse();
@@ -316,10 +324,12 @@ figure.getElement('nav').loadSlides([
       figure.getElement('sine.label').showForm('0');
     },
   },
-  { text: [
-     'As the |angle| gets smaller, the |arc| and',
+  {
+    text: [
+      'As the |angle| gets smaller, the |arc| and',
       '|vertical| line get closer in length',
-  ] },
+    ],
+  },
   { fromForm: '0', form: '1' },
   { text: 'Divide both sides by the arc length' },
   { fromForm: '1', form: '2' },
@@ -332,10 +342,13 @@ figure.getElement('nav').loadSlides([
     steadyState: () => figure.getElement('sine.label').showForm('0'),
   },
   {
+    fromForm: '5',
     form: '6',
     transition: (done) => {
       figure.getElement('sine.label').goToForm({ form: '1', animate: 'move', duration: 1 });
-      eqn.goToForm({ form: '6', duration: 1, animate: 'move', callback: done });
+      eqn.goToForm({
+        form: '6', duration: 1, animate: 'move', callback: done,
+      });
     },
     steadyState: () => figure.getElement('sine.label').showForm('1'),
   },
@@ -346,10 +359,13 @@ figure.getElement('nav').loadSlides([
     },
   },
   {
+    fromForm: '6',
     form: '7',
     transition: (done) => {
       figure.getElement('arc.label').goToForm({ form: '1', animate: 'move', duration: 1 });
-      eqn.goToForm({ form: '7', duration: 1, animate: 'move', callback: done });
+      eqn.goToForm({
+        form: '7', duration: 1, animate: 'move', callback: done,
+      });
     },
     steadyState: () => figure.getElement('arc.label').showForm('1'),
   },
@@ -360,6 +376,7 @@ figure.getElement('nav').loadSlides([
     ],
     fromForm: '7',
     form: '8',
+    steadyState: () => figure.getElement('arc.label').showForm('1'),
   },
 ]);
 

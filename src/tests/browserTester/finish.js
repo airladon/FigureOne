@@ -7,8 +7,13 @@ function __finish(__figure) {
   __steps = [];
   let index = 0;
   let [cumTime] = __frames[0];
-  // const duration = 19;
-  // const step = 0.5;
+  if (__duration === -1) {
+    __duration = 0;
+    __frames.forEach((f) => {
+      __duration += f[0];
+    });
+    __duration = Math.round(__duration * 1000) / 1000;
+  }
   for (let t = 0; t <= __duration; t = Math.round((t + __timeStep) * 100) / 100) {
     let same = false;
     let cumTimeIncremental = 0;

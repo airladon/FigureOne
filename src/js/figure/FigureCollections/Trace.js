@@ -6,9 +6,9 @@ import {
   getPoints,
 } from '../../tools/g2';
 import type { TypeParsablePoint } from '../../tools/g2';
-// import {
-//   round, range,
-// } from '../../tools/math';
+import {
+  round,
+} from '../../tools/math';
 import { joinObjects } from '../../tools/tools';
 import {
   FigureElementCollection, FigureElementPrimitive,
@@ -305,6 +305,48 @@ class CollectionsTrace extends FigureElementCollection {
     // if (this._line != null) {
     //   this._line.updatePoints({ points: this.points });
     // }
+  }
+
+  getY(xValue: number, precision: number = 8) {
+    const yValues = [];
+    let closestDelta = Math.abs(xValue - this.points[0].x);
+    let closestIndex = 0;
+    for (let i = 0; i < this.points.length; i += 1) {
+      const xAtIndex = this.points[i].x;
+      const delta = Math.abs(xAtIndex - xValue);
+      if (delta < closestDelta) {
+        closestIndex = i;
+        closestDelta = delta;
+      }
+      if (round(delta, precision) === 0) {
+        yValues.push(this.points[i].y);
+      }
+    }
+    if (yValues.length === 0) {
+      yValues.push(this.points[closestIndex].y);
+    }
+    return yValues;
+  }
+
+  getX(yValue: number, precision: number = 8) {
+    const xValues = [];
+    let closestDelta = Math.abs(yValue - this.points[0].y);
+    let closestIndex = 0;
+    for (let i = 0; i < this.points.length; i += 1) {
+      const xAtIndex = this.points[i].y;
+      const delta = Math.abs(xAtIndex - yValue);
+      if (delta < closestDelta) {
+        closestIndex = i;
+        closestDelta = delta;
+      }
+      if (round(delta, precision) === 0) {
+        xValues.push(this.points[i].x);
+      }
+    }
+    if (xValues.length === 0) {
+      xValues.push(this.points[closestIndex].x);
+    }
+    return xValues;
   }
 
   pointToDraw(p: Point) {
