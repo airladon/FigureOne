@@ -8,7 +8,7 @@ See the [Tutorials](https://github.com/airladon/FigureOne/tree/master/docs/tutor
 
 The examples are also hosted on this repository's GitHub Pages site [here](https://airladon.github.io/FigureOne/).
 
-![](docs/examples/Sine%20Limit/example.gif)
+![](docs/summary.gif)
 
 
 ## Getting Started
