@@ -24,7 +24,7 @@ Finally, a slide navigator is added that provides buttons and a description to n
 
 ### Slides
 
-The second part of the example defines a number of slides for the [slideNavigator](https://airladon.github.io/FigureOne/api/#slidenavigator to navigate through. Each slide has an associated description and equation form.
+The second part of the example defines a number of slides for the [slideNavigator](https://airladon.github.io/FigureOne/api/#slidenavigator) to navigate through. Each slide has an associated description and equation form.
 
 The descriptions are all [TextLines](https://airladon.github.io/FigureOne/api/#obj_textlines) objects, which uses modifiers to format specific words or phrases. As several of the modifiers are used on multiple slides, all the modifiers are defined once, and then made available to all slides.
 
