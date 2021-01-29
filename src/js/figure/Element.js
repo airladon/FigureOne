@@ -493,7 +493,7 @@ class FigureElement {
 
   isMovable: boolean;             // Element is able to be moved
   isTouchable: boolean;           // Element can be touched
-  isTrackable: boolean;
+  // isTrackable: boolean;
   touchPriority: boolean;
   isInteractive: ?boolean;         // Touch event is not processed by Figure
   hasTouchableElements: boolean;
@@ -691,7 +691,7 @@ class FigureElement {
     this.subscriptions = new SubscriptionManager(this.fnMap);
     this.isMovable = false;
     this.isTouchable = false;
-    this.isTrackable = false;
+    // this.isTrackable = false;
     this.touchPriority = false;
     // this.touchInBoundingRect = false;
     this.isInteractive = undefined;
@@ -3422,7 +3422,7 @@ class FigureElement {
   }
 
   // eslint-disable-next-line no-unused-vars
-  click(glPoint: Point) {
+  click(glPoint: Point = new Point(0, 0)) {
     const drawPoint = glPoint.transformBy(this.spaceTransformMatrix('gl', 'draw'));
     if (this.onClick != null) {
       if (this.recorder.state === 'recording') {
@@ -3687,7 +3687,7 @@ class FigureElementPrimitive extends FigureElement {
   //   }
   // }
 
-  click(glPoint: Point) {
+  click(glPoint: Point = new Point(0, 0)) {
     super.click(glPoint);
     if (this.drawingObject instanceof TextObjectBase) {
       this.drawingObject.click(

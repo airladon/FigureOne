@@ -8,7 +8,7 @@ See the [Tutorials](https://github.com/airladon/FigureOne/tree/master/docs/tutor
 
 The examples are also hosted on this repository's GitHub Pages site [here](https://airladon.github.io/FigureOne/).
 
-![](docs/examples/Sine%20Limit/example.gif)
+![](docs/summary.gif)
 
 
 ## Getting Started
@@ -16,7 +16,7 @@ The examples are also hosted on this repository's GitHub Pages site [here](https
 Load the FigureOne library into your HTML file:
 
 ```html
-<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.6.0/figureone.min.js'></script>
+<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.6.1/figureone.min.js'></script>
 ```
 
 Create a `div` element to attach the figure to:

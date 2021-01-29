@@ -147,7 +147,7 @@ function fig2() {
     translation: 0.02, min: -0.02, angle: Math.PI / 2, frequency: 2,
   });
   const pulseAmplitude = () => eqn.pulse({ elements: ['A'], scale: 2 });
-  return { pulseTrace, pulseAmplitude };
+  return { pulseTrace, pulseAmplitude, fig };
 }
 
 const figure2 = fig2();

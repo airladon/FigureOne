@@ -121,7 +121,7 @@ function fig3() {
 
   // Commonly used figure elements
   const [mover, trace, eqn] = fig.elements.getElements(
-    ['mover', 'plot.trace', 'plot.x', 'eqn'],
+    ['mover', 'plot.trace', 'eqn'],
   );
 
   // Holds the amount the plot has been dragged left or right
@@ -148,7 +148,7 @@ function fig3() {
     translation: 0.02, min: -0.02, frequency: 2,
   });
   const pulseEqn = () => eqn.pulse({ scale: 1.5, yAlign: 'bottom' });
-  return { pulseTrace, pulseEqn };
+  return { pulseTrace, pulseEqn, fig };
 }
 
 const figure3 = fig3();

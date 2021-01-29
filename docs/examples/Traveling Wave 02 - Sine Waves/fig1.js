@@ -181,7 +181,7 @@ function fig1() {
           ],
           labels: [
             {
-              text: ['', 'π/2', 'π', '3π/2', '2π'],
+              text: ['', '\u03C0/2', '\u03C0', '3\u03C0/2', '2\u03C0'],
               offset: [0, -r * 0.95],
             },
             {
@@ -272,7 +272,7 @@ function fig1() {
       .rotation({ start, target: Math.PI * 1.999, velocity: 1, direction: 1 })
       .start();
   };
-  return { pulse, drawFull };
+  return { pulse, drawFull, fig };
 }
 
 const figure1 = fig1();

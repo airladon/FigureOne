@@ -1,4 +1,4 @@
-/* global page figure timeoutId Fig __steps __title */
+/* global page figure timeoutId Fig __steps __title __width __height */
 /* eslint-disable import/prefer-default-export, global-require */
 /* eslint-disable import/no-dynamic-require, no-eval */
 /* eslint-disable jest/no-export, no-await-in-loop */
@@ -7,6 +7,8 @@ global.__title = '';
 global.__steps = [];
 global.__duration = 5;
 global.__timeStep = 0.5;
+global.__width = 500;
+global.__height = 375;
 
 // eslint-disable-next-line import/no-unresolved
 const { toMatchImageSnapshot } = require('jest-image-snapshot');
@@ -27,12 +29,12 @@ function zeroPad(num, places) {
 }
 
 // let lastTime = -1;
-function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0) {
+function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish = 'finish') {
   require('./start.js');
   if (framesFile != null && framesFile !== '') {
     require(framesFile);
   }
-  const { __finish } = require('./finish.js');
+  const { __finish } = require(`./${finish}.js`);
   __finish();
   jest.setTimeout(120000);
 
@@ -43,10 +45,14 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0) {
     let action;
     let location;
     let description;
+    let snap;
     if (Array.isArray(step)) {
-      [time, action, location, description] = step;
+      [time, action, location, description, snap] = step;
     } else {
       time = step;
+    }
+    if (snap == null) {
+      snap = true;
     }
     const delta = time - lastTime;
     const test = [
@@ -55,6 +61,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0) {
       delta,
       action || null,
       location || [],
+      snap,
     ];
     lastTime = time;
     tests.push(test);
@@ -64,7 +71,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0) {
   lastTime = -1;
   describe(__title, () => {
     beforeAll(async () => {
-      await page.setViewportSize({ width: 500, height: 375 });
+      await page.setViewportSize({ width: __width || 500, height: __height || 375 });
       await page.goto(file);
       await page.evaluate(() => {
         clearTimeout(timeoutId);
@@ -73,7 +80,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0) {
       });
     });
     test.each(tests)('%s %s',
-      async (time, description, deltaTime, action, location) => {
+      async (time, description, deltaTime, action, location, snap) => {
         let d = deltaTime;
         if (intermitentTime > 0) {
           if (deltaTime > intermitentTime) {
@@ -85,18 +92,22 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0) {
             }
           }
         }
-        await page.evaluate(([delta, t, l]) => {
-          figure.globalAnimation.frame(delta);
-          if (t != null) {
-            if (t.startsWith('touch')) {
-              const loc = Fig.tools.g2.getPoint(l || [0, 0]);
-              figure[t](loc);
-            } else {
-              eval(t);
+        if (action !== 'delay') {
+          await page.evaluate(([delta, t, l]) => {
+            figure.globalAnimation.frame(delta);
+            if (t != null) {
+              if (t.startsWith('touch')) {
+                const loc = Fig.tools.g2.getPoint(l || [0, 0]);
+                figure[t](loc);
+              } else {
+                eval(t);
+              }
             }
-          }
-        }, [d, action, location]);
-        // console.log(time, lastTime)
+          }, [d, action, location]);
+        }
+        if (!snap) {
+          return;
+        }
         if (time !== lastTime) {
           const image = await page.screenshot({ fullPage: true });
           expect(image).toMatchImageSnapshot({
