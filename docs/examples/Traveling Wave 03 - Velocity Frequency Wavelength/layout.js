@@ -927,7 +927,7 @@ function setupFigure() {
   freqButton1.onClick = () => toggleFrequency(medium1, 1);
   freqButton2.onClick = () => toggleFrequency(medium2, 2);
 
-  figure.elements.hideAll();
+  // figure.elements.hideAll();
   return {
     setMaxTime,
     reset,
@@ -948,6 +948,3 @@ function setupFigure() {
     time,
   };
 }
-
-// eslint-disable-next-line no-unused-vars
-const layout = setupFigure();

@@ -1,4 +1,6 @@
-/* globals figure, layout, color0, color1, color3, colorText */
+/* globals figure, setupFigure, addEquation, color0, color1, color3, colorText */
+
+let layout;
 
 function addSlides() {
   // Commonly used figure elements
@@ -1207,7 +1209,15 @@ function addSlides() {
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
   nav.loadSlides(slides);
-  nav.goToSlide(0);
 }
 
+// timekeeper.js, recorder.js, layout.js, equations.js, and slides.js are loaded
+// separately by the html. It can take a little while to load all files, and if
+// processing is done in each, then animation frames can be drawn during the
+// loading process. This results in figure elements that aren't supposed to be
+// shown on the first slide being shown while the remaining files are being
+// loaded. Therefore, each file includes just the function definition, and
+// nothing is executed till now.
+layout = setupFigure();
+addEquation();
 addSlides();
