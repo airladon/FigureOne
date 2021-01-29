@@ -148,7 +148,7 @@ function fig3() {
     translation: 0.02, min: -0.02, frequency: 2,
   });
   const pulseEqn = () => eqn.pulse({ scale: 1.5, yAlign: 'bottom' });
-  return { pulseTrace, pulseEqn };
+  return { pulseTrace, pulseEqn, fig };
 }
 
 const figure3 = fig3();

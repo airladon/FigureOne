@@ -272,7 +272,7 @@ function fig4() {
   const pulsePhase = () => phi.onClick();
   const pulseOffset = () => B.onClick();
   return {
-    pulseTrace, pulseEqn, pulseAmplitude, pulseWavelength, pulsePhase, pulseOffset,
+    pulseTrace, pulseEqn, pulseAmplitude, pulseWavelength, pulsePhase, pulseOffset, fig,
   };
 }
 

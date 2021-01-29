@@ -7,6 +7,8 @@ global.__title = '';
 global.__steps = [];
 global.__duration = 5;
 global.__timeStep = 0.5;
+global.__width = 500;
+global.__height = 375;
 
 // eslint-disable-next-line import/no-unresolved
 const { toMatchImageSnapshot } = require('jest-image-snapshot');
