@@ -128,6 +128,7 @@ function __finish(__figure) {
             __figure.touchUp();
           }, delay * 1000);
         } else {
+          // eslint-disable-next-line no-console
           console.log(steps);
         }
       };
