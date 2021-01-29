@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+    <head>
+        <style>
+            #f1_recorder {
+                text-align: center;
+                margin-left: auto;
+                margin-right: auto;
+                user-select: none; /* supported by Chrome and Opera */
+                -webkit-user-select: none; /* Safari */
+                -khtml-user-select: none; /* Konqueror HTML */
+                -moz-user-select: none; /* Firefox */
+                -ms-user-select: none; /* Internet Explorer/Edge */
+            }
+            .f1_rec__button {
+                display: inline-block;
+                margin-left: 1em;
+                margin-right: 1em;
+                font-size: 3em;
+                font-family: Arial, Helvetica, sans-serif;
+                width: 5em;
+                text-align: center
+            }
+            .f1_recorder__button_disable {
+                pointer-events: none;
+                color: #aaa;
+            }
+        </style>
+    </head>
+<body>
+    <!-- <img src="1.jpg" id="img1"> -->
+    <div id="figureOneContainer" style="width: 1000px; height: 750px; background-color: white;">
+    </div>
+    <div id='f1_recorder'>
+        <div id='f1_recorder__play_pause' class="f1_rec__button">Play</div>
+        <div id='f1_recorder__record' class="f1_rec__button">Record</div>
+        <div id='f1_recorder__save' class="f1_rec__button">Save</div>
+    </div>
+    <!-- <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.6.1/figureone.min.js'></script> -->
+    <script type="text/javascript" src='../../package/index.js'></script>
+    <script type="text/javascript" src='../../package/9aa9b212f7f34e7c2b72.worker.js'></script>
+    <script type="text/javascript" src='./index.js'></script>
+    <script type="text/javascript" src='./recorder.js'></script>
+</body>
+</html>
