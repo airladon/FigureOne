@@ -493,7 +493,7 @@ class FigureElement {
 
   isMovable: boolean;             // Element is able to be moved
   isTouchable: boolean;           // Element can be touched
-  isTrackable: boolean;
+  // isTrackable: boolean;
   touchPriority: boolean;
   isInteractive: ?boolean;         // Touch event is not processed by Figure
   hasTouchableElements: boolean;
@@ -691,7 +691,7 @@ class FigureElement {
     this.subscriptions = new SubscriptionManager(this.fnMap);
     this.isMovable = false;
     this.isTouchable = false;
-    this.isTrackable = false;
+    // this.isTrackable = false;
     this.touchPriority = false;
     // this.touchInBoundingRect = false;
     this.isInteractive = undefined;
