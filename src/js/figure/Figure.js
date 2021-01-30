@@ -627,10 +627,10 @@ class Figure {
       }
     };
     const elementClick = (payload) => {
-      const [elementPath] = payload;
+      const [elementPath, xLoc, yLoc] = payload;
       const element = this.getElement(elementPath);
       if (element != null) {
-        element.click(payload);
+        element.click(new Point(xLoc, yLoc));
       }
     };
     const eqnNavClick = (payload) => {
@@ -2062,7 +2062,7 @@ class Figure {
   // or the `add` method can be used.
   createFigureElements() {
     // this.elements = new FigureElementCollection();
-    this.elements = this.collections.collection();
+    this.elements = this.collections.collection({ name: 'rootCollection' });
     this.initElements();
     // this.elements.setFigure({
     //   limits: this.limits,

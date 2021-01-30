@@ -368,8 +368,11 @@ class Recorder {
     this.audio = audio;
     this.audio.onloadedmetadata = () => {
       this.duration = this.calcDuration();
+      this.subscriptions.publish('durationUpdated', this.duration);
     };
-    this.subscriptions.publish('audioLoaded');
+    this.audio.oncanplaythrough = () => {
+      this.subscriptions.publish('audioLoaded');
+    };
   }
 
   loadEvents(
@@ -388,6 +391,7 @@ class Recorder {
     });
     this.duration = this.calcDuration();
     this.subscriptions.publish('eventsLoaded');
+    this.subscriptions.publish('durationUpdated', this.duration);
   }
 
   loadStates(
@@ -398,6 +402,7 @@ class Recorder {
     this.states = this.decodeStates(statesIn, isMinified, isObjectForm);
     this.duration = this.calcDuration();
     this.subscriptions.publish('statesLoaded');
+    this.subscriptions.publish('durationUpdated', this.duration);
   }
 
   encodeEvents(
@@ -976,7 +981,6 @@ class Recorder {
     } else if (this.state === 'playing') {
       this.pausePlayback('freeze');
     }
-    // console.log(time)
     this.setToTime(time);
     // this.figure.pause({
     //   animation: 'freeze',
@@ -1005,8 +1009,8 @@ class Recorder {
       return;
     }
     const time = stateTime;
-
-    this.lastSeekTime = stateTime;
+    // console.log(timeIn, time)
+    this.lastSeekTime = timeIn;
     // console.log('setting to time', timeIn, stateTime);
     // For each eventName, if it is to be set on seek, then get the previous
     // index (or multiple indexes if multiple are set for the same time)
@@ -1077,12 +1081,13 @@ class Recorder {
     playEvents(eventsToSetAfterState);
     // console.log('done')
     if (this.audio) {
-      this.audio.currentTime = time;
+      this.audio.currentTime = timeIn;
+      // console.log('audio', timeIn, this.audio.currentTime, this.audio.duration)
     }
-    this.setCurrentTime(time);
+    this.setCurrentTime(timeIn);
     // this.currentTime = time;
 
-    this.setCursor(time);
+    this.setCursor(timeIn);
     this.figure.animateNextFrame();
     // console.log(this.figure.getElement('a').getRotation())
   }
@@ -1305,6 +1310,7 @@ class Recorder {
     if (this.audio) {
       this.isAudioPlaying = true;
       this.audio.currentTime = fromTime;
+      // debugger;
       this.audio.play();
       const audioEnded = () => {
         this.isAudioPlaying = false;

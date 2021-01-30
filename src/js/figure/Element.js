@@ -3426,7 +3426,7 @@ class FigureElement {
     const drawPoint = glPoint.transformBy(this.spaceTransformMatrix('gl', 'draw'));
     if (this.onClick != null) {
       if (this.recorder.state === 'recording') {
-        this.recorder.recordEvent('elementClick', [this.getPath()]);
+        this.recorder.recordEvent('elementClick', [this.getPath(), glPoint.x, glPoint.y]);
       }
       this.fnMap.exec(this.onClick, drawPoint, this);
     }

@@ -6,6 +6,7 @@
                 text-align: center;
                 margin-left: auto;
                 margin-right: auto;
+                height: 30px;
                 user-select: none; /* supported by Chrome and Opera */
                 -webkit-user-select: none; /* Safari */
                 -khtml-user-select: none; /* Konqueror HTML */
@@ -16,14 +17,39 @@
                 display: inline-block;
                 margin-left: 1em;
                 margin-right: 1em;
-                font-size: 3em;
+                font-size: 1em;
                 font-family: Arial, Helvetica, sans-serif;
-                width: 5em;
+                width: 3em;
                 text-align: center
             }
             .f1_recorder__button_disable {
                 pointer-events: none;
                 color: #aaa;
+            }
+            #f1_recorder__seek {
+                display: inline-block;
+                width: 200px;
+                height: 20px;
+                position: relative;
+            }
+            #f1_recorder__seek_bar {
+                width: calc(100% - 10px);
+                height: 4px;
+                position: absolute;
+                top: calc(50% - 2px);
+                left: 5px;
+                background-color: #444;
+            }
+            #f1_recorder__seek_circle {
+                width: 10px;
+                height: 10px;
+                background-color: #999;
+                border-radius: 5px;
+                position: absolute;
+                top: calc(50% - 5px);
+            }
+            #f1_recorder__time {
+                width: 6em
             }
         </style>
     </head>
@@ -34,11 +60,22 @@
     <div id='f1_recorder'>
         <div id='f1_recorder__play_pause' class="f1_rec__button">Play</div>
         <div id='f1_recorder__record' class="f1_rec__button">Record</div>
+        <div id='f1_recorder__seek'>
+            <div id='f1_recorder__seek_bar'></div>
+            <div id='f1_recorder__seek_circle'></div>
+        </div>
+        <div id='f1_recorder__time' class="f1_rec__button">00:00 / 00:00</div>
         <div id='f1_recorder__save' class="f1_rec__button">Save</div>
     </div>
     <!-- <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.6.1/figureone.min.js'></script> -->
     <script type="text/javascript" src='../../package/index.js'></script>
     <script type="text/javascript" src='../../package/9aa9b212f7f34e7c2b72.worker.js'></script>
+    <!-- <audio
+        controls
+        src="./audio.m4a">
+            Your browser does not support the
+            <code>audio</code> element.
+    </audio> -->
     <script type="text/javascript" src='./index.js'></script>
     <script type="text/javascript" src='./recorder.js'></script>
 </body>

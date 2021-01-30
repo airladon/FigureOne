@@ -8,6 +8,7 @@ rm Dockerfile
 docker run -it --rm \
   -v $PROJECT_PATH/package:/opt/app/package \
   -v $PROJECT_PATH/src:/opt/app/src \
+  -v $PROJECT_PATH/static:/opt/app/static \
   -v $PROJECT_PATH/tools:/opt/app/tools \
   -v $PROJECT_PATH/containers/figureone/webpack.config.js:/opt/app/webpack.config.js \
   -v $PROJECT_PATH/build.sh:/opt/app/build.sh \
