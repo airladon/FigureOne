@@ -272,5 +272,3 @@ function similarLayout() {
   });
   eqn.showForm('AOnB');
 }
-
-similarLayout();
