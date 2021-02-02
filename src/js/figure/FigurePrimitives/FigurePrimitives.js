@@ -1847,7 +1847,7 @@ export type OBJ_TextModifierDefinition = {
  * Used to define the modifiers of a string within a text lines primitive
  * {@link OBJ_TextLines}.
  *
- * @property {OBJ_TextModifiersDefinition} [modifierId] modifierId can be any
+ * @property {OBJ_TextModifierDefinition} [modifierId] modifierId can be any
  * key
  */
 export type OBJ_TextModifiersDefinition = {

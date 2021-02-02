@@ -7,3 +7,4 @@ src/tests/api-examples/index.js
 audio.m4a
 states.json
 events.json
+./favicon.ico

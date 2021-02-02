@@ -1914,6 +1914,7 @@ class CollectionsAngle extends FigureElementCollection {
   addAnglePad(percentLength: number = 1, width: number = 0.5, type: 'rotation' | 'angle') {
     if (this._anglePad == null) {
       const length = this.getLength();
+      console.log(this.getLength())
       const anglePad = this.collections.primitives.rectangle({
         offset: [length * (1 - percentLength), 0],
         // position: [length * (1 - percentLength), 0],

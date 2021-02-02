@@ -1196,14 +1196,16 @@ export class Equation extends FigureElementCollection {
       o.callback = () => {
         const currentForm = this.getCurrentForm();
         if (currentForm != null) {
-          if (o.start == null) {
-            o.start = currentForm.name;
-          }
+          // if (o.start == null) {
+          //   o.start = currentForm.name;
+          // }
           if (o.target == null) {
             o.target = currentForm.name;
           }
         }
-        this.showForm(o.start);
+        if (o.start != null) {
+          this.showForm(o.start);
+        }
         this.goToForm(joinObjects({}, o, {
           form: o.target,
           callback: null,
