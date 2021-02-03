@@ -23,6 +23,120 @@ function layout() {
     },
   });
 
+  const link = (name, text, position, onClick = {}) => ({
+    name,
+    method: 'text',
+    options: {
+      text,
+      position,
+      font: { size: 0.1 },
+      xAlign: 'center',
+    },
+    mods: {
+      isTouchable: true,
+      touchBorder: 0.1,
+      onClick,
+    },
+  });
+
+  const hint = (name, position, hints) => {
+    const elements = [];
+    elements.push({
+      name: 'label',
+      method: 'text',
+      options: {
+        text: 'Hint',
+        xAlign: 'center',
+        font: { size: 0.1 },
+      },
+      mods: {
+        isTouchable: true,
+        touchBorder: 0.1,
+        onClick: () => {
+          const hintElement = figure.getElement(name);
+          for (let i = 0; i < hints.length; i += 1) {
+            const hintText = hintElement.getElement(`hint${i}`);
+            if (hintText.isShown) {
+              hintText.hide();
+              if (i < hints.length - 1) {
+                hintElement.getElement(`hint${i + 1}`).show();
+                return;
+              }
+              return;
+            }
+          }
+          hintElement.getElement(`hint${0}`).show();
+        },
+      },
+    });
+    hints.forEach((h, index) => {
+      elements.push({
+        name: `hint${index}`,
+        method: 'primitives.textLines',
+        options: {
+          text: h.text,
+          modifiers: h.modifiers,
+          position: [0, -0.2],
+          xAlign: 'center',
+        },
+        mods: {
+          isTouchable: true,
+          hasTouchableElements: true,
+        },
+      });
+    });
+    return {
+      name,
+      method: 'collection',
+      elements,
+      options: {
+        position,
+      },
+    };
+  };
+
+  // const hint = (name, position, text, modifiers = {}) => ({
+  //   name,
+  //   method: 'collection',
+  //   elements: [
+  //     {
+  //       name: 'label',
+  //       method: 'text',
+  //       options: {
+  //         text: 'Hint',
+  //         xAlign: 'center',
+  //         font: { size: 0.1 },
+  //       },
+  //       mods: {
+  //         isTouchable: true,
+  //         touchBorder: 0.1,
+  //         onClick: () => {
+  //           const hintElement = figure.getElement(name);
+  //           const hintText = hintElement.getElement('hint');
+  //           if (hintText.isShown) {
+  //             hintText.hide();
+  //           } else {
+  //             hintText.show();
+  //           }
+  //         },
+  //       },
+  //     },
+  //     {
+  //       name: 'hint',
+  //       method: 'primitives.textLines',
+  //       options: {
+  //         text,
+  //         modifiers,
+  //         position: [0, -0.2],
+  //         xAlign: 'center',
+  //       },
+  //     },
+  //   ],
+  //   options: {
+  //     position,
+  //   },
+  // });
+
   figure.add([
     {
       name: 'title',
@@ -45,6 +159,41 @@ function layout() {
     centerText('background', 'Background'),
     centerText('sumOfAngles', 'Angles in a triangle always add to 180\u00b0'),
     centerText('similarTriangles', 'Similar Triangles'),
+    centerText('similarQuestion', 'Are these triangles similar?'),
+    centerText('thetaSimilar', '|All| right angle triangles with angle |theta| are similar.', {
+      All: { font: { style: 'italic' } },
+      theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic' } },
+    }),
+    hint('similarHint', [0, 0.7], [
+      {
+        text: '1 / 2: Use the |background| knowledge',
+        modifiers: {
+          background: {
+            font: { color: color2 },
+            onClick: () => {
+              figure.elements.pulse({ elements: ['similarLink', 'totalAngleLink'] });
+            },
+            isTouchable: true,
+          },
+        },
+      },
+      {
+        text: '2 / 2: We know two angles: |theta| and 90\u00b0',
+        modifiers: {
+          theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic', color: color1 } },
+        },
+      },
+    ]),
+    link('similarLink', 'Similar Triangles', [1, -1.4], () => {
+      figure.getElement('similar').showAll();
+      figure.getElement('similar').setScenario('default');
+      figure.getElement('totalAngle').hide();
+    }),
+    link('totalAngleLink', 'Triangle Total Angle', [-1, -1.4], () => {
+      figure.getElement('totalAngle').showAll();
+      figure.getElement('totalAngle').setScenario('default');
+      figure.getElement('similar').hide();
+    }),
   ]);
   figure.add({
     name: 'nav',
@@ -65,11 +214,12 @@ function layout() {
     },
   });
 }
-const totalAngle = totalAngleLayout();
 layoutRight();
 layoutCircle();
-similarLayout();
 layout();
+rightTris();
+const totalAngle = totalAngleLayout();
+similarLayout();
 
 function makeSlides() {
   const slides = [];
@@ -77,6 +227,7 @@ function makeSlides() {
   const nav = figure.getElement('nav');
   const rightTri = figure.getElement('rightTri');
   const circle = figure.getElement('circle');
+  const rightTris = figure.getElement('rightTris');
 
   /*
   .########.####.########.##.......########
@@ -95,7 +246,7 @@ function makeSlides() {
     },
   });
 
-  slides.push({ show: ['background'] });
+  slides.push({ scenario: 'default', show: ['background'] });
 
   /*
   ..######..##.....##.##.....##
@@ -116,19 +267,11 @@ function makeSlides() {
     scenario: ['default', 'top'],
     transition: (done) => {
       figure.getElement('sumOfAngles').animations.new()
-        .scenario({ start: 'default', target: 'top', duration: 10 })
+        .scenario({ start: 'default', target: 'top', duration: 1 })
         .whenFinished(done)
         .start();
     },
     steadyState: () => {
-      // figure.getElement('sumOfAngles').animations.new()
-      //   .scenario({ start: 'default', target: 'top', duration: 10 })
-      //   .trigger(() => {
-      //     figure.getElement('sumOfAngles').setScenario('top');
-      //     figure.show(['totalAngle.tri', 'totalAngle.eqn']);
-      //   })
-      //   .whenFinished(done)
-      //   .start();
       figure.getElement('sumOfAngles').setScenario('top');
       figure.show(['totalAngle.tri', 'totalAngle.eqn']);
       figure.shortCuts['1'] = 'totalAnglePulse';
@@ -152,7 +295,7 @@ function makeSlides() {
     scenario: ['default', 'top'],
     transition: (done) => {
       figure.getElement('similarTriangles').animations.new()
-        .scenario({ start: 'default', target: 'top', duration: 0.9 })
+        .scenario({ start: 'default', target: 'top', duration: 1 })
         .whenFinished(done)
         .start();
     },
@@ -164,23 +307,57 @@ function makeSlides() {
     },
   });
 
-  // slides.push({
-  //   show: ['similarTriangles', 'similar.tri1', 'similar.tri2', 'similar.eqn'],
-  //   scenario: ['default', 'top'],
-  //   transition: (done) => {
-  //     figure.fnMap.exec()
-  //   },
-  //   // steadyState: () => {
-  //   //   figure.shortCuts['1'] = 'similarPulseAngles';
-  //   //   figure.shortCuts['2'] = 'similarPulseScale';
-  //   //   figure.shortCuts['3'] = 'similarAnimateEqn';
-  //   // },
-  // });
+  slides.push({
+    show: ['similarTriangles', 'similar.tri1', 'similar.tri2'],
+    scenario: ['default', 'top'],
+    transition: (done) => {
+      figure.animations.new()
+        .trigger({ callback: 'similarAnimateEqn', duration: 3 })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      figure.getElement('similar.eqn').showForm('AOnB');
+    },
+  });
 
-  slides.push({ show: ['similar'] });
-  // slides.push({ show: ['similar.tri1', 'similar.tri2'] });
+  slides.push({
+    show: ['background', 'similarLink', 'totalAngleLink'],
+    scenario: ['default'],
+  });
+
+  slides.push({
+    show: ['similarLink', 'totalAngleLink', 'rightTris'],
+    scenario: ['default'],
+    steadyState: () => {
+      rightTris.hideSides();
+    },
+  });
+
+  slides.push({
+    show: ['similarLink', 'totalAngleLink', 'rightTris', 'similarQuestion', 'similarHint.label'],
+    scenario: ['default', 'top'],
+    steadyState: () => {
+      rightTris.hideSides();
+    },
+  });
+
+  slides.push({
+    show: ['similarLink', 'totalAngleLink', 'rightTris', 'thetaSimilar'],
+    scenario: ['default', 'top'],
+    steadyState: () => {
+      rightTris.hideSides();
+    },
+  });
+  slides.push({
+    show: ['similarLink', 'totalAngleLink', 'rightTris', 'thetaSimilar'],
+    scenario: ['default', 'top'],
+    steadyState: () => {
+      // rightTris.hideSides();
+    },
+  });
 
   nav.loadSlides(slides);
-  // nav.goToSlide(0)
+  nav.goToSlide(9);
 }
 makeSlides();

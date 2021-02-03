@@ -64,11 +64,12 @@ function similarLayout() {
     elements: [
       {
         name: 'border',
-        method: 'rectangle',
+        method: 'collections.rectangle',
         options: {
           line: {
             width: 0.006,
           },
+          fill: [0.95, 0.95, 0.95, 1],
           corner: {
             radius: 0.02,
             sides: 10,
@@ -108,8 +109,8 @@ function similarLayout() {
           touchBorder: 0.1,
         },
       },
-      polyline('tri1', tri1Points, [0.3, 0.3 - 0.5], ''),
-      polyline('tri2', tri2Points, [-1.5, 0 - 0.5], 's'),
+      polyline('tri1', tri1Points, [0.4, 0.3 - 0.5], ''),
+      polyline('tri2', tri2Points, [-1.6, 0 - 0.5], 's'),
       {
         name: 'eqn',
         method: 'collections.equation',
@@ -218,6 +219,9 @@ function similarLayout() {
       })
       .trigger(() => {
         eqn.showForm('sAsB');
+        // This is needed as the hidden s1, s2, A, B elements don't have a most
+        // recent lastDrawTransform with the updated eqn position
+        figure.setFirstTransform();
         s1.setPositionToElement(tri2._side12._label._s);
         s2.setPositionToElement(tri2._side20._label._s);
         A.setPositionToElement(tri2._side12._label._A);

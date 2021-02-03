@@ -298,6 +298,8 @@ class Figure {
   mockPreviousTouchPoint: Point;
   shortCuts: Object;
 
+  animations: AnimationManager;
+
   state: {
     pause: 'paused' | 'preparingToPause' | 'preparingToUnpause' | 'unpaused';
     preparingToStop: boolean;
@@ -1318,6 +1320,7 @@ class Figure {
 
   setElements(collection: FigureElementCollection) {
     this.elements = collection;
+    this.animations = this.elements.animations;
     this.initElements();
     // this.elements.setFigure(this);
     // // /* eslint-enable no-param-reassign */
@@ -2074,6 +2077,7 @@ class Figure {
   createFigureElements() {
     // this.elements = new FigureElementCollection();
     this.elements = this.collections.collection({ name: 'rootCollection' });
+    this.animations = this.elements.animations;
     this.initElements();
     // this.elements.setFigure({
     //   limits: this.limits,
@@ -2091,6 +2095,7 @@ class Figure {
     this.elements = collection;
     // this.elements.setDigram(this);
     // this.setFirstTransform();
+    this.animations = this.elements.animations;
     this.initElements();
   }
 
