@@ -1622,6 +1622,8 @@ export type OBJ_TextDefinition = {
  * @property {TypeParsablePoint} [position] if defined, overrides translation
  * in transform
  * @property {TypeParsableTransform} [transform]
+ * @property {boolean} [fixColor] If `true`, {@link FigureElement}`.setColor`
+ * method will not change the color of text
  * (default: `Transform('text').standard()`)
  *
  * @see To test examples, append them to the
@@ -1680,6 +1682,7 @@ export type OBJ_Text = {
   touchBorder?: TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw',
   position?: TypeParsablePoint,
   transform?: TypeParsableTransform,
+  fixColor?: boolean,
 }
 
 
@@ -1700,6 +1703,8 @@ export type OBJ_Text = {
  * @property {TypeParsableBuffer | Array<TypeParsablePoint>} [touchBorder]
  * touch border can be custom (`Array<TypeParsablePoint>`), or be set to some
  * buffer (`TypeParsableBuffer`) around the rectangle (default: `'0'`)
+ * @property {boolean} [fixColor] If `true`, {@link FigureElement}`.setColor`
+ * method will not change the color of text
  */
 export type OBJ_TextLineDefinition = {
   text: string,
@@ -1709,6 +1714,7 @@ export type OBJ_TextLineDefinition = {
   inLine?: boolean,
   onClick?: string | () => void,
   touchBorder?: TypeParsableBuffer | Array<TypeParsablePoint>,
+  fixColor?: boolean,
 };
 
 /**
@@ -1803,12 +1809,15 @@ export type OBJ_TextLine = {
  * @property {'left' | 'right' | 'center'} [justify] line specific justification
  * @property {number} [lineSpace] line specific separation from baseline of
  * this line to baseline of previous line
+ * @property {boolean} [fixColor] If `true`, {@link FigureElement}`.setColor`
+ * method will not change the color of text
  */
 export type OBJ_TextLinesDefinition = {
   text: string,
   font?: OBJ_Font,
   justify?: 'left' | 'right' | 'center',
   lineSpace?: number,
+  fixColor?: boolean,
 };
 
 /**

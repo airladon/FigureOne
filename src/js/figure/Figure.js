@@ -296,6 +296,7 @@ class Figure {
   setStateCallback: ?(string | (() => void));
   subscriptions: SubscriptionManager;
   mockPreviousTouchPoint: Point;
+  shortCuts: Object;
 
   state: {
     pause: 'paused' | 'preparingToPause' | 'preparingToUnpause' | 'unpaused';
@@ -324,6 +325,7 @@ class Figure {
     this.scrolled = false;
     this.cursorElementName = 'cursor';
     this.setStateCallback = null;
+    this.shortCuts = {};
     this.mockPreviousTouchPoint = new Point(0, 0);
     // this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
@@ -651,6 +653,13 @@ class Figure {
       }
     };
 
+    const exec = (payload) => {
+      const [functionName, args] = payload;
+      // const element = this.getElement(elementPath);
+      // element.fnMap.exec(functionName, args);
+      this.fnMap.exec(functionName, args);
+    };
+
     this.recorder.addEventType('cursor', onCursor);
     this.recorder.addEventType('cursorMove', onCursorMove);
     this.recorder.addEventType('touch', onTouch);
@@ -660,7 +669,9 @@ class Figure {
     this.recorder.addEventType('startBeingMoved', startBeingMoved);
     this.recorder.addEventType('click', click);
     this.recorder.addEventType('elementClick', elementClick);
+    this.recorder.addEventType('elementTextClick', elementClick);
     this.recorder.addEventType('eqnNavClick', eqnNavClick);
+    this.recorder.addEventType('exec', exec);
   }
 
   setDefaultLineWidth(userInputLineWidth: number | null) {

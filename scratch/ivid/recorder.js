@@ -31,9 +31,28 @@ function setupRecorder() {
     touch: 'up',
   };
 
+  figure.fnMap.add('navNext', () => figure.getElement('nav').nav.nextSlide());
+  figure.fnMap.add('navPrev', () => figure.getElement('nav').nav.prevSlide());
+  figure.fnMap.add('toggleCursor', () => figure.toggleCursor());
+  figure.shortCuts = {
+    n: 'navNext',
+    p: 'navPrev',
+    s: 'toggleCursor',
+  };
+
   document.addEventListener('keypress', (event) => {
-    if (String.fromCharCode(event.keyCode) === 's') {
+    const keyCode = String.fromCharCode(event.keyCode);
+    if (keyCode === 's') {
       figure.toggleCursor();
+    } else if (keyCode === 'n') {
+      figure.getElement('nav').nav.nextSlide();
+    } else if (keyCode === 'p') {
+      figure.getElement('nav').nav.prevSlide();
+    } else if (figure.shortCuts[keyCode] != null) {
+      if (figure.recorder.state === 'recording') {
+        figure.recorder.recordEvent('exec', [figure.shortCuts[keyCode]]);
+      }
+      figure.fnMap.exec(figure.shortCuts[keyCode]);
     }
   }, false);
 
@@ -172,6 +191,7 @@ function setupRecorder() {
       recorder.stopRecording();
     } else {
       recorder.startRecording(0);
+      figure.getElement('nav').nav.goToSlide(0);
     }
   }
 
@@ -180,13 +200,13 @@ function setupRecorder() {
   saveButton.onclick = () => recorder.save();
   recorder.subscriptions.add('durationUpdated', (d) => { state.duration = d; });
 
-  // fetch('states.json')
-  //   .then(response => response.json())
-  //   .then(json => recorder.loadStates(json));
+  fetch('states.json')
+    .then(response => response.json())
+    .then(json => recorder.loadStates(json));
 
-  // fetch('events.json')
-  //   .then(response => response.json())
-  //   .then(json => recorder.loadEvents(json));
+  fetch('events.json')
+    .then(response => response.json())
+    .then(json => recorder.loadEvents(json));
 
   // recorder.loadAudio(new Audio('./audio.m4a'));
 }

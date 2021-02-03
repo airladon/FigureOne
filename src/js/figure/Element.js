@@ -3690,13 +3690,14 @@ class FigureElementPrimitive extends FigureElement {
   click(glPoint: Point = new Point(0, 0)) {
     super.click(glPoint);
     if (this.drawingObject instanceof TextObjectBase) {
+      console.log(glPoint)
       this.drawingObject.click(
         glPoint.transformBy(this.spaceTransformMatrix('gl', 'draw')),
         // this.lastDrawTransform.matrix(),
         this.fnMap,
       );
       if (this.recorder.state === 'recording') {
-        this.recorder.recordEvent('elementTextClick', [this.getPath()]);
+        this.recorder.recordEvent('elementTextClick', [this.getPath(), glPoint.x, glPoint.y]);
       }
     }
   }

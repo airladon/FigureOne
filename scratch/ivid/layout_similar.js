@@ -162,6 +162,12 @@ function similarLayout() {
     // options: {
     //   position: [-1, 0],
     // },
+    mods: {
+      scenarios: {
+        title: { scale: 1.3 },
+        default: { scale: 1 },
+      },
+    },
   });
 
   const similar = figure.getElement('similar');
@@ -246,6 +252,7 @@ function similarLayout() {
         '  \u2022 Equal corresponding |ratios| between sides.',
       ],
       lineSpace: 0.17,
+      fixColor: true,
       modifiers: {
         similar: { font: { style: 'italic' } },
         ratios: {

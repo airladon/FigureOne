@@ -169,7 +169,7 @@ function layoutCircle() {
   // figure.getElement('circle.angle').setMovable({ endArm: 'angle' });
   const [line, angle, sec, tan, sin, cos, tanLabel, sinLabel, cosLabel, lineLabel] = circle.getElements(['line', 'angle', 'sec', 'tan', 'sin', 'cos', 'tanLabel', 'sinLabel', 'cosLabel', 'lineLabel']);
   const bounds = new Fig.Rect(-radius, -radius - 0.4, radius * 2, radius * 2 + 0.4 * 2);
-  line.subscriptions.add('setTransform', () => {
+  line.fnMap.add('updateCircle', () => {
     const r = line.transform.r();
     angle.setAngle({ angle: r });
     const x = radius * Math.cos(r);
@@ -192,4 +192,5 @@ function layoutCircle() {
     cosLabel.setPosition([x / 2, -0.03]);
     lineLabel.setPosition([x / 2 - 0.02, y / 2 + 0.02]);
   });
+  line.subscriptions.add('setTransform', 'updateCircle');
 }

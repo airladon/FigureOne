@@ -320,6 +320,21 @@ export default class SlideNavigator {
     } else if (o.collection != null && o.collection.elements != null) {
       this.collection = o.collection.elements;
     }
+
+    // this.collection.fnMap.add('slideNavigatorNext', this.nextSlide.bind(this));
+    // this.collection.fnMap.add('slideNavigatorPrev', this.prevSlide.bind(this));
+    const processSlide = (payload) => {
+      const [direction, slideNo] = payload;
+      if (direction === 'next' && this.currentSlideIndex === slideNo - 1) {
+        this.nextSlide();
+      } else if (direction === 'prev' && this.currentSlideIndex === slideNo + 1) {
+        this.prevSlide();
+      } else {
+        this.goToSlide(slideNo);
+      }
+    };
+    this.collection.recorder.addEventType('slide', processSlide, true);
+
     if (o.slides != null) {
       this.slides = o.slides;
     }
@@ -587,6 +602,14 @@ export default class SlideNavigator {
       }
     }
 
+    if (this.collection.recorder.state === 'recording') {
+      if (fromToUse === 'next' || fromToUse === 'prev') {
+        this.collection.recorder.recordEvent('slide', [fromToUse, index]);
+      } else {
+        this.collection.recorder.recordEvent('slide', ['goTo', index]);
+      }
+    }
+
     // Leave States
     this.getProperty('leaveStateCommon', this.currentSlideIndex, () => {})(this.currentSlideIndex, index);
     if (this.slides[this.currentSlideIndex].leaveState != null) {
@@ -638,13 +661,17 @@ export default class SlideNavigator {
    * next slide will be progressed to.
    */
   nextSlide(ignoreTransition: boolean = false) {
+    const nextSlideIndex = (this.currentSlideIndex + 1) % this.slides.length;
+    // if (this.collection.recorder.state === 'recording') {
+    //   this.collection.recorder.recordEvent('slide', ['next', nextSlideIndex]);
+    // }
     if (this.inTransition) {
       this.collection.stop('complete');
       if (!ignoreTransition) {
         return;
       }
     }
-    const nextSlideIndex = (this.currentSlideIndex + 1) % this.slides.length;
+    // const nextSlideIndex = (this.currentSlideIndex + 1) % this.slides.length;
     this.goToSlide(nextSlideIndex);
     this.collection.animateNextFrame();
   }
@@ -653,11 +680,18 @@ export default class SlideNavigator {
    * Progress to the previous slide.
    */
   prevSlide() {
-    this.collection.stop('complete');
     let prevSlideIndex = this.currentSlideIndex - 1;
     if (prevSlideIndex < 0) {
       prevSlideIndex = this.slides.length - 1;
     }
+    // if (this.collection.recorder.state === 'recording') {
+    //   this.collection.recorder.recordEvent('slide', ['prev', prevSlideIndex]);
+    // }
+    this.collection.stop('complete');
+    // let prevSlideIndex = this.currentSlideIndex - 1;
+    // if (prevSlideIndex < 0) {
+    //   prevSlideIndex = this.slides.length - 1;
+    // }
     this.goToSlide(prevSlideIndex);
     this.collection.animateNextFrame();
   }

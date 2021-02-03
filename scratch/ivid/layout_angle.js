@@ -94,9 +94,46 @@ function totalAngleLayout() {
         },
       },
     ],
+    mods: {
+      scenarios: {
+        title: { scale: 1.3 },
+        default: { scale: 1 },
+      },
+    },
   });
 
   const eqn = figure.getElement('totalAngle.eqn');
+
+  const pulse = () => {
+    eqn.pulse({ elements: ['a', 'b'] });
+  };
+  const goToABC = () => {
+    if (eqn.getCurrentForm().name === 'abc') {
+      if (eqn.isAnimating()) {
+        eqn.stop('complete');
+      } else {
+        eqn.pulse();
+      }
+    } else {
+      eqn.stop('freeze');
+      eqn.goToForm({ form: 'abc', animate: 'move' });
+    }
+  };
+  const goToAB = () => {
+    if (eqn.getCurrentForm().name === 'ab') {
+      if (eqn.isAnimating()) {
+        eqn.stop('complete');
+      } else {
+        eqn.pulse();
+      }
+    } else {
+      eqn.stop('freeze');
+      eqn.goToForm({ form: 'ab', animate: 'move' });
+    }
+  };
+  figure.fnMap.global.add('totalAnglePulse', pulse);
+  figure.fnMap.global.add('totalAngleGoToABC', goToABC);
+  figure.fnMap.global.add('totalAngleGoToAB', goToAB);
 
   totalAngle.add({
     name: 'summary',
@@ -107,44 +144,21 @@ function totalAngleLayout() {
         'Thus, only |two angles| are needed to |find all three|.',
       ],
       lineSpace: 1.7,
+      fixColor: true,
       modifiers: {
         'add to 180': {
           text: 'add to 180\u00b0',
-          onClick: () => {
-            if (eqn.getCurrentForm().name === 'abc') {
-              if (eqn.isAnimating()) {
-                eqn.stop('complete');
-              } else {
-                eqn.pulse();
-              }
-            } else {
-              eqn.stop('freeze');
-              eqn.goToForm({ form: 'abc', animate: 'move' });
-            }
-          },
+          onClick: 'totalAngleGoToABC',
           font: { color: color1 },
           touchBorder: 0.08,
         },
         'two angles': {
-          onClick: () => {
-            eqn.pulse({ elements: ['a', 'b'] });
-          },
+          onClick: 'totalAnglePulse',
           font: { color: color1 },
           touchBorder: 0.08,
         },
         'find all three': {
-          onClick: () => {
-            if (eqn.getCurrentForm().name === 'ab') {
-              if (eqn.isAnimating()) {
-                eqn.stop('complete');
-              } else {
-                eqn.pulse();
-              }
-            } else {
-              eqn.stop('freeze');
-              eqn.goToForm({ form: 'ab', animate: 'move' });
-            }
-          },
+          onClick: 'totalAngleGoToAB',
           font: { color: color1 },
           touchBorder: 0.08,
         },
@@ -155,5 +169,9 @@ function totalAngleLayout() {
       isTouchable: true,
     },
   });
+
+  // return {
+  //   pulse,
+  // };
 }
 

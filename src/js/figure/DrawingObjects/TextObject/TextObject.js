@@ -521,6 +521,7 @@ class TextObjectBase extends DrawingObject {
 
   textBorder: Array<Array<Point>>;
   textBorderBuffer: Array<Array<Point>>;
+  fixColor: boolean;
   // borderSetup: 'text' | 'rect' | Array<Point>;
   // touchBorderSetup: 'text' | 'rect' | 'border' | number | Array<Point>;
 
@@ -536,6 +537,7 @@ class TextObjectBase extends DrawingObject {
     }
     this.lastDrawTransform = [1, 0, 0, 0, 1, 0, 0, 0, 1];
     this.text = [];
+    this.fixColor = false;
     // this.state = 'loaded';
   }
 
@@ -629,6 +631,9 @@ class TextObjectBase extends DrawingObject {
   }
 
   setColor(color: TypeColor, index: null | number = null) {
+    if (this.fixColor) {
+      return;
+    }
     if (index === null) {
       for (let i = 0; i < this.text.length; i += 1) {
         this.text[i].font.color = color.slice();
@@ -936,6 +941,9 @@ class TextObject extends TextObjectBase {
     if (!Array.isArray(textArray)) {
       textArray = [textArray];
     }
+    if (options.fixColor != null) {
+      this.fixColor = options.fixColor;
+    }
     const figureTextArray = [];
     textArray.forEach((textDefinition) => {
       let font;
@@ -1099,6 +1107,9 @@ class TextLineObject extends TextObjectBase {
     let textArray = options.text;
     if (!Array.isArray(textArray)) {
       textArray = [textArray];
+    }
+    if (options.fixColor != null) {
+      this.fixColor = options.fixColor;
     }
     const figureTextArray = [];
     textArray.forEach((textDefinition) => {
@@ -1264,6 +1275,9 @@ class TextLinesObject extends TextObjectBase {
     let textLines = options.text;
     if (typeof textLines === 'string') {
       textLines = [textLines];
+    }
+    if (options.fixColor != null) {
+      this.fixColor = options.fixColor;
     }
     this.modifiers = options.modifiers || {};
     this.lines = [];
