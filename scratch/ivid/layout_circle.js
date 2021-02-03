@@ -188,7 +188,7 @@ function layoutCircle() {
     sin.custom.updatePoints({ p1: [x, 0], p2: [x, y] });
     cos.custom.updatePoints({ p1: [0, 0], p2: [x, 0] });
     tanLabel.setPosition([radius + 0.05, i.y / 2]);
-    sinLabel.setPosition([x < radius * 0.7 ? x + 0.12 : x - 0.12, Math.max(0.06, y / 2)]);
+    sinLabel.setPosition([x < radius * 0.3 ? x + 0.12 : x - 0.12, Math.max(0.06, y / 2)]);
     cosLabel.setPosition([x / 2, -0.03]);
     lineLabel.setPosition([x / 2 - 0.02, y / 2 + 0.02]);
   });

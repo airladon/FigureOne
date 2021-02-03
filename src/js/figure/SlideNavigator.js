@@ -287,6 +287,7 @@ export default class SlideNavigator {
   collection: FigureElementCollection;
   subscriptions: SubscriptionManager;
   inTransition: boolean;
+  from: 'prev' | 'next' | number;
   equationDefaults: {
     duration: number,
     animate: "move" | "dissolve" | "moveFrom" | "pulse" | "dissolveInThenMove",
@@ -324,16 +325,21 @@ export default class SlideNavigator {
     // this.collection.fnMap.add('slideNavigatorNext', this.nextSlide.bind(this));
     // this.collection.fnMap.add('slideNavigatorPrev', this.prevSlide.bind(this));
     const processSlide = (payload) => {
-      const [direction, slideNo] = payload;
-      if (direction === 'next' && this.currentSlideIndex === slideNo - 1) {
+      const [fromDirection, slideNo] = payload;
+      if (fromDirection === 'prev' && this.currentSlideIndex === slideNo - 1) {
         this.nextSlide();
-      } else if (direction === 'prev' && this.currentSlideIndex === slideNo + 1) {
+      } else if (fromDirection === 'prev') {
+        this.goToSlide(slideNo - 1);
+        this.nextSlide();
+      } else if (fromDirection === 'next' && this.currentSlideIndex === slideNo + 1) {
         this.prevSlide();
       } else {
         this.goToSlide(slideNo);
       }
     };
     this.collection.recorder.addEventType('slide', processSlide, true);
+    this.collection.fnMap.global.add('slideNavigatorTransitionDone', this.transitionDone.bind(this));
+    this.from = 'prev';
 
     if (o.slides != null) {
       this.slides = o.slides;
@@ -479,26 +485,36 @@ export default class SlideNavigator {
     this.subscriptions.publish('steady');
   }
 
+  transitionDone(cancelled: boolean = false, force: 'freeze' | 'complete' | null = 'complete') {
+    console.log(cancelled, force)
+    if (force !== 'freeze') {
+      this.setSteadyState(this.from);
+      this.inTransition = false;
+    }
+  }
+
   transition(from: 'next' | 'prev' | number) {
     this.subscriptions.publish('beforeTransition');
-    let done = () => {
-      this.setSteadyState(from);
-      this.inTransition = false;
-    };
+    // let done = () => {
+    //   this.setSteadyState(from);
+    //   this.inTransition = false;
+    // };
+    this.from = from;
     if (from !== 'prev') {
-      return done();
+      return this.transitionDone();
     }
     this.inTransition = true;
     const slide = this.slides[this.currentSlideIndex];
     if (typeof slide.transition === 'function') {
-      return slide.transition(done, this.currentSlideIndex, from);
+      return slide.transition('slideNavigatorTransitionDone', this.currentSlideIndex, from);
     }
 
     const forms = this.getForm(this.currentSlideIndex);
     const fromForms = this.getFromForm(this.currentSlideIndex);
     if (forms.length === 0 || fromForms.length === 0) {
-      return done();
+      return this.transitionDone();
     }
+    let done = 'slideNavigatorTransitionDone';
     for (let i = 0; i < this.equations.length; i += 1) {
       const e = this.collection.getElement(this.equations[i]);
       if (
@@ -537,7 +553,7 @@ export default class SlideNavigator {
       }
     }
     if (done != null) {
-      return done();
+      return this.transitionDone();
     }
     return null;
   }

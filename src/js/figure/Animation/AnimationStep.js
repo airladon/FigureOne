@@ -380,7 +380,7 @@ export default class AnimationStep {
     }
 
     if (this.onFinish != null) {
-      this.fnExec(this.onFinish, cancelled);
+      this.fnExec(this.onFinish, cancelled, force);
       // this.onFinish(cancelled);
     }
   }

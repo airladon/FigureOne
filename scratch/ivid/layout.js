@@ -13,6 +13,13 @@ function layout() {
       justify: 'left',
       yAlign: 'middle',
       font: { size: 0.2, color: [0.3, 0.3, 0.3, 1] },
+      fixColor: true,
+    },
+    mods: {
+      scenarios: {
+        default: { position: [0, 0], scale: 1 },
+        top: { position: [0, 1], scale: 1 },
+      },
     },
   });
 
@@ -38,43 +45,20 @@ function layout() {
     centerText('background', 'Background'),
     centerText('sumOfAngles', 'Angles in a triangle always add to 180\u00b0'),
     centerText('similarTriangles', 'Similar Triangles'),
-    // {
-    //   name: 'background',
-    //   method: 'textLines',
-    //   options: {
-    //     text: [
-    //       'Background:',
-    //       {
-    //         text: '  \u2022 Angles in a triangle always sum to 180\u00b0',
-    //         lineSpace: 0.3,
-    //       },
-    //       {
-    //         text: '  \u2022 Similar Triangles',
-    //         lineSpace: 0.3,
-    //         // font: { size: 0.1 },
-    //       },
-    //     ],
-    //     position: [0, 0],
-    //     xAlign: 'center',
-    //     justify: 'left',
-    //     yAlign: 'middle',
-    //     font: { size: 0.2, color: [0.3, 0.3, 0.3, 1] },
-    //   },
-    // },
   ]);
   figure.add({
     name: 'nav',
     method: 'collections.slideNavigator',
     options: {
-      nextButton: { position: [2.7, -1.1] },
-      prevButton: { position: [-2.7, -1.1] },
+      nextButton: { position: [3.8, 0], width: 0.2, height: 0.2 },
+      prevButton: { position: [-3.8, 0], width: 0.2, height: 0.2 },
     },
   });
   figure.add({
     name: 'cursor',
     method: 'collections.cursor',
     options: {
-      color: [1, 0.6, 0.6, 0.7],
+      color: [0.5, 0.5, 0, 0.7],
     },
     mods: {
       isShown: false,
@@ -87,47 +71,116 @@ layoutCircle();
 similarLayout();
 layout();
 
+function makeSlides() {
+  const slides = [];
 
-const slides = [];
+  const nav = figure.getElement('nav');
+  const rightTri = figure.getElement('rightTri');
+  const circle = figure.getElement('circle');
 
-const nav = figure.getElement('nav');
-const rightTri = figure.getElement('rightTri');
-const circle = figure.getElement('circle');
+  /*
+  .########.####.########.##.......########
+  ....##.....##.....##....##.......##......
+  ....##.....##.....##....##.......##......
+  ....##.....##.....##....##.......######..
+  ....##.....##.....##....##.......##......
+  ....##.....##.....##....##.......##......
+  ....##....####....##....########.########
+  */
+  slides.push({
+    show: ['circle', 'title'],
+    scenario: 'title',
+    steadyState: () => {
+      circle.getElement('line').setRotation(0.87);
+    },
+  });
 
-slides.push({
-  show: ['circle', 'title'],
-  scenarioCommon: 'title',
-  enterState: () => {
-    circle.getElement('line').setRotation(0.87);
-    console.log('asdf')
-  },
-});
+  slides.push({ show: ['background'] });
 
-slides.push({ show: ['background'] });
-slides.push({
-  show: ['sumOfAngles'],
-});
-slides.push({
-  show: ['totalAngle.tri', 'totalAngle.eqn'],
-  steadyState: () => {
-    figure.shortCuts['1'] = 'totalAnglePulse';
-  },
-});
-slides.push({
-  show: ['totalAngle'],
-  hide: ['totalAngle.border', 'totalAngle.close'],
-  steadyState: () => {
-    figure.shortCuts['1'] = 'totalAngleGoToABC';
-    figure.shortCuts['2'] = 'totalAnglePulse';
-    figure.shortCuts['3'] = 'totalAngleGoToAB';
-  },
-});
-slides.push({ show: ['similarTriangles'] });
-slides.push({ show: ['similar.tri1', 'similar.tri2'] });
+  /*
+  ..######..##.....##.##.....##
+  .##....##.##.....##.###...###
+  .##.......##.....##.####.####
+  ..######..##.....##.##.###.##
+  .......##.##.....##.##.....##
+  .##....##.##.....##.##.....##
+  ..######...#######..##.....##
+  */
+  slides.push({
+    scenario: 'default',
+    show: ['sumOfAngles'],
+  });
 
-nav.loadSlides(slides);
-console.log(nav)
+  slides.push({
+    show: ['sumOfAngles'],
+    scenario: ['default', 'top'],
+    transition: (done) => {
+      figure.getElement('sumOfAngles').animations.new()
+        .scenario({ start: 'default', target: 'top', duration: 10 })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      // figure.getElement('sumOfAngles').animations.new()
+      //   .scenario({ start: 'default', target: 'top', duration: 10 })
+      //   .trigger(() => {
+      //     figure.getElement('sumOfAngles').setScenario('top');
+      //     figure.show(['totalAngle.tri', 'totalAngle.eqn']);
+      //   })
+      //   .whenFinished(done)
+      //   .start();
+      figure.getElement('sumOfAngles').setScenario('top');
+      figure.show(['totalAngle.tri', 'totalAngle.eqn']);
+      figure.shortCuts['1'] = 'totalAnglePulse';
+      figure.shortCuts['2'] = 'totalAngleGoToAB';
+    },
+  });
 
-// figure.getElement('similar').hide();
-// figure.getElement('totalAngle').hide();
-// figure.getElement('circle').hide();
+  /*
+  ..######..####.##.....##.####.##..........###....########.
+  .##....##..##..###...###..##..##.........##.##...##.....##
+  .##........##..####.####..##..##........##...##..##.....##
+  ..######...##..##.###.##..##..##.......##.....##.########.
+  .......##..##..##.....##..##..##.......#########.##...##..
+  .##....##..##..##.....##..##..##.......##.....##.##....##.
+  ..######..####.##.....##.####.########.##.....##.##.....##
+  */
+  slides.push({ scenario: 'default', show: ['similarTriangles'] });
+
+  slides.push({
+    show: ['similarTriangles'],
+    scenario: ['default', 'top'],
+    transition: (done) => {
+      figure.getElement('similarTriangles').animations.new()
+        .scenario({ start: 'default', target: 'top', duration: 0.9 })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      figure.getElement('similarTriangles').setScenario('top');
+      figure.show(['similar.tri1', 'similar.tri2']);
+      figure.shortCuts['1'] = 'similarPulseAngles';
+      figure.shortCuts['2'] = 'similarPulseScale';
+    },
+  });
+
+  // slides.push({
+  //   show: ['similarTriangles', 'similar.tri1', 'similar.tri2', 'similar.eqn'],
+  //   scenario: ['default', 'top'],
+  //   transition: (done) => {
+  //     figure.fnMap.exec()
+  //   },
+  //   // steadyState: () => {
+  //   //   figure.shortCuts['1'] = 'similarPulseAngles';
+  //   //   figure.shortCuts['2'] = 'similarPulseScale';
+  //   //   figure.shortCuts['3'] = 'similarAnimateEqn';
+  //   // },
+  // });
+
+  slides.push({ show: ['similar'] });
+  // slides.push({ show: ['similar.tri1', 'similar.tri2'] });
+
+  nav.loadSlides(slides);
+  // nav.goToSlide(0)
+}
+makeSlides();

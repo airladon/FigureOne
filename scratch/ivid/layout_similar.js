@@ -164,7 +164,7 @@ function similarLayout() {
     // },
     mods: {
       scenarios: {
-        title: { scale: 1.3 },
+        top: { scale: 1.2 },
         default: { scale: 1 },
       },
     },
@@ -194,9 +194,6 @@ function similarLayout() {
         duration: 1,
         callback: () => similar.pulse({ elements: ['tri1.angle2', 'tri2.angle2'] }),
       })
-      // .pulse({ elements: ['tri1.angle0', 'tri2.angle0'] })
-      // .pulse({ elements: ['tri1.angle1', 'tri2.angle1'] })
-      // .pulse({ elements: ['tri1.angle2', 'tri2.angle2'] })
       .start();
   };
 
@@ -241,6 +238,11 @@ function similarLayout() {
     figure.animateNextFrame();
   };
 
+  figure.fnMap.global.add('similarPulseAngles', pulseCorrespondingAngles);
+  figure.fnMap.global.add('similarAnimateEqn', animateEqn);
+  figure.fnMap.global.add('similarPulseScale', pulseScale);
+
+
   similar.add({
     name: 'summary',
     method: 'primitives.textLines',
@@ -256,18 +258,18 @@ function similarLayout() {
       modifiers: {
         similar: { font: { style: 'italic' } },
         ratios: {
-          onClick: () => animateEqn(),
+          onClick: 'similarAnimateEqn',
           font: { color: color1 },
           touchBorder: 0.08,
         },
         angles: {
           font: { color: color1 },
-          onClick: () => pulseCorrespondingAngles(),
+          onClick: () => 'similarPulseAngles',
           touchBorder: 0.08,
         },
         factor: {
           font: { color: color1 },
-          onClick: () => pulseScale(),
+          onClick: () => 'similarPulseScale',
           touchBorder: 0.1,
         },
       },

@@ -96,8 +96,8 @@ function totalAngleLayout() {
     ],
     mods: {
       scenarios: {
-        title: { scale: 1.3 },
-        default: { scale: 1 },
+        top: { scale: 1.3, position: [0, -0.2] },
+        default: { scale: 1, position: [0, 0] },
       },
     },
   });

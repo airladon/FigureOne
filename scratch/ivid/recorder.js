@@ -190,8 +190,11 @@ function setupRecorder() {
     if (state.recording) {
       recorder.stopRecording();
     } else {
+      const currentTime = recorder.getCurrentTime();
       recorder.startRecording(0);
-      figure.getElement('nav').nav.goToSlide(0);
+      if (currentTime === 0) {
+        recorder.recordEvent('slide', ['goto', 0], 0);
+      }
     }
   }
 

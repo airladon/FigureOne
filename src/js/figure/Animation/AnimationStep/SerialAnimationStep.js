@@ -224,8 +224,9 @@ export class SerialAnimationStep extends AnimationStep {
         step.finish(cancelled, forceToUse);
       }
     });
+    // console.log(this.onFinish, cancelled, force)
     if (this.onFinish != null) {
-      this.fnExec(this.onFinish, cancelled);
+      this.fnExec(this.onFinish, cancelled, force);
     }
   }
 
