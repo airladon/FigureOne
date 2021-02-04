@@ -13,20 +13,21 @@ const color2 = [0, 0.5, 1, 1];
 const color3 = [0, 0.6, 0, 1];
 const color4 = [0.6, 0, 0.6, 1];
 const colGrey = [0.6, 0.6, 0.6, 1];
+const colText = [0.3, 0.3, 0.3, 1];
 
 function similarLayout() {
-  const scale1 = 0.9;
-  const scale2 = 1.5;
+  const scale1 = 1.2;
+  const scale2 = 1.9;
   const tri1Points = [[0, 0], [0.5 * scale1, 0.5 * scale1], [1.2 * scale1, 0]];
   const tri2Points = [[0, 0], [0.5 * scale2, 0.5 * scale2], [1.2 * scale2, 0]];
 
   const label = (text, s = '', location = 'outside') => ({
     label: {
-      scale: 0.5,
+      scale: 0.8,
       offset: 0.04,
       location,
       text: {
-        forms: { 0: [{ s: { text: s, color: color1 } }, text] },
+        forms: { 0: [{ s: { text: s, color: color2 } }, text] },
       },
     },
   });
@@ -38,15 +39,16 @@ function similarLayout() {
       points,
       close: true,
       angle: {
+        color: color1,
         curve: {
-          radius: 0.1,
-          width: 0.005,
+          radius: 0.16,
+          width: 0.01,
         },
         2: {
-          curve: { num: 2, step: 0.01 },
+          curve: { num: 2, step: 0.03 },
         },
         1: {
-          curve: { num: 3, step: 0.01 },
+          curve: { num: 3, step: 0.03 },
         },
       },
       side: [
@@ -62,64 +64,17 @@ function similarLayout() {
     name: 'similar',
     method: 'collection',
     elements: [
-      {
-        name: 'border',
-        method: 'collections.rectangle',
-        options: {
-          line: {
-            width: 0.006,
-          },
-          fill: [0.95, 0.95, 0.95, 1],
-          corner: {
-            radius: 0.02,
-            sides: 10,
-          },
-          width: 4,
-          height: 2.5,
-          color: [0.7, 0.7, 0.7, 1],
-        },
-      },
-      {
-        name: 'close',
-        method: 'collection',
-        elements: [
-          {
-            name: 'x',
-            method: 'polyline',
-            options: {
-              points: [[-0.05, -0.05], [0.05, 0.05], [0, 0], [-0.05, 0.05], [0.05, -0.05]],
-            },
-          },
-          {
-            name: 'circle',
-            method: 'polygon',
-            options: {
-              radius: 0.1,
-              line: { width: 0.006 },
-              sides: 50,
-            },
-          },
-        ],
-        options: {
-          position: [1.8, 1.05],
-        },
-        mods: {
-          onClick: () => figure.getElement('similar').hide(),
-          isTouchable: true,
-          touchBorder: 0.1,
-        },
-      },
-      polyline('tri1', tri1Points, [0.4, 0.3 - 0.5], ''),
-      polyline('tri2', tri2Points, [-1.6, 0 - 0.5], 's'),
+      polyline('tri1', tri1Points, [-2.5, 0.2], ''),
+      polyline('tri2', tri2Points, [-2.5, -1.1], 's'),
       {
         name: 'eqn',
         method: 'collections.equation',
         options: {
           elements: {
-            s_1: { color: color1 },
-            s_2: { color: color1 },
-            s_3: { color: color1 },
-            s_4: { color: color1 },
+            s_1: { color: color2 },
+            s_2: { color: color2 },
+            s_3: { color: color2 },
+            s_4: { color: color2 },
             strk1: { symbol: 'strike', lineWidth: 0.006 },
             strk2: { symbol: 'strike', lineWidth: 0.006 },
             equals: '  =  ',
@@ -131,7 +86,7 @@ function similarLayout() {
           },
           forms: {
             blank: [],
-            sAsB: { scale: [[['s_1', 'A'], ['s_2', 'B']], 0.5 / 0.7] },
+            sAsB: { scale: [[['s_1', 'A'], ['s_2', 'B']], 0.6 / 0.7] },
             sAOnsB: { frac: [['s_1', 'A'], 'v1_vinculum', ['s_2', 'B']] },
             sAOnsBEquals: [
               { frac: [['s_1', 'A'], 'v1', ['s_2', 'B']] },
@@ -156,7 +111,8 @@ function similarLayout() {
               { frac: ['A_2', 'v3', 'B_2'] },
             ],
           },
-          position: [-0.2, -1],
+          scale: 0.9,
+          position: [1, -0.9],
         },
       },
     ],
@@ -165,7 +121,7 @@ function similarLayout() {
     // },
     mods: {
       scenarios: {
-        top: { scale: 1.2 },
+        // top: { scale: 1.2 },
         default: { scale: 1 },
       },
     },
@@ -230,6 +186,7 @@ function similarLayout() {
       .goToForm({ target: 'sAOnsB', animate: 'move', duration: 2 })
       .goToForm({ delay: 0.5, target: 'sAOnsBSimplify1', animate: 'move' })
       .goToForm({ delay: 0.5, target: 'sAOnsBSimplify2', animate: 'move' })
+      .goToForm({ delay: 1, target: 'AOnB', animate: 'move', duration: 1 })
       .trigger({
         callback: () => {
           tri1.pulse({ elements: ['side12.label.A', 'side20.label.B'], scale: 2.5 });
@@ -237,7 +194,6 @@ function similarLayout() {
         },
         duration: 1,
       })
-      .goToForm({ delay: 0.5, target: 'AOnB', animate: 'move' })
       .start();
     figure.animateNextFrame();
   };
@@ -247,41 +203,47 @@ function similarLayout() {
   figure.fnMap.global.add('similarPulseScale', pulseScale);
 
 
-  similar.add({
-    name: 'summary',
+  const summary = (name, position, text, modifiers = {}) => ({
+    name,
     method: 'primitives.textLines',
     options: {
-      text: [
-        'Similar triangles have:',
-        '  \u2022 Equal corresponding |angles|',
-        '  \u2022 Corresponding sides scaled by the same |factor|.',
-        '  \u2022 Equal corresponding |ratios| between sides.',
-      ],
-      lineSpace: 0.17,
+      text,
+      modifiers,
+      position,
       fixColor: true,
-      modifiers: {
-        similar: { font: { style: 'italic' } },
-        ratios: {
-          onClick: 'similarAnimateEqn',
-          font: { color: color1 },
-          touchBorder: 0.08,
-        },
-        angles: {
-          font: { color: color1 },
-          onClick: () => 'similarPulseAngles',
-          touchBorder: 0.08,
-        },
-        factor: {
-          font: { color: color1 },
-          onClick: () => 'similarPulseScale',
-          touchBorder: 0.1,
-        },
-      },
-      position: [-1.5, 1],
+      font: { size: 0.15, color: colText },
     },
     mods: {
       isTouchable: true,
     },
   });
+  similar.add([
+    // summary('summary1', [0, 1], 'Similar Triangles:', {}),
+    summary('summary1', [0.2, 0.6], 'Equal corresponding |angles|', {
+      angles: {
+        font: { color: color1 },
+        onClick: 'similarPulseAngles',
+        touchBorder: 0.08,
+      },
+    }),
+    summary('summary2', [0.2, 0.2], [
+      'Equally |scaled| corresponding sides',
+    ], {
+      scaled: {
+        font: { color: color2 },
+        onClick: 'similarPulseScale',
+        touchBorder: 0.1,
+      },
+    }),
+    summary('summary3', [0.2, -0.2], [
+      'Equal corresponding side |ratios|',
+    ], {
+      ratios: {
+        onClick: 'similarAnimateEqn',
+        font: { color: color1 },
+        touchBorder: 0.08,
+      },
+    }),
+  ]);
   eqn.showForm('AOnB');
 }

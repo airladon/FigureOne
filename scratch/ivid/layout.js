@@ -18,7 +18,7 @@ function layout() {
     mods: {
       scenarios: {
         default: { position: [0, 0], scale: 1 },
-        top: { position: [0, 1], scale: 1 },
+        top: { position: [0, 1.2], scale: 1 },
       },
     },
   });
@@ -287,27 +287,27 @@ function makeSlides() {
   .##....##.##.....##.##.....##
   ..######...#######..##.....##
   */
+  // slides.push({
+  //   scenario: 'default',
+  //   show: ['sumOfAngles'],
+  // });
+
   slides.push({
-    scenario: 'default',
-    show: ['sumOfAngles'],
+    show: ['totalAngle.summary1', 'totalAngle.tri', 'totalAngle.eqn'],
+    scenario: ['default'],
+    steadyState: () => {
+      figure.getElement('totalAngle.eqn').showForm('abc');
+    },
   });
 
   slides.push({
-    show: ['sumOfAngles'],
-    scenario: ['default', 'top'],
-    transition: (done) => {
-      figure.getElement('sumOfAngles').animations.new()
-        .scenario({ start: 'default', target: 'top', duration: 1 })
-        .whenFinished(done)
-        .start();
-    },
+    show: ['totalAngle.summary1', 'totalAngle.tri', 'totalAngle.eqn', 'totalAngle.summary2'],
+    scenario: ['default'],
     steadyState: () => {
-      figure.getElement('sumOfAngles').setScenario('top');
-      figure.show(['totalAngle.tri', 'totalAngle.eqn']);
-      figure.shortCuts['1'] = 'totalAnglePulse';
-      figure.shortCuts['2'] = 'totalAngleGoToAB';
+      figure.getElement('totalAngle.eqn').showForm('abc');
     },
   });
+
 
   /*
   ..######..####.##.....##.####.##..........###....########.
@@ -318,6 +318,9 @@ function makeSlides() {
   .##....##..##..##.....##..##..##.......##.....##.##....##.
   ..######..####.##.....##.####.########.##.....##.##.....##
   */
+  const sTri1 = figure.getElement('similar.tri1');
+  const sTri2 = figure.getElement('similar.tri2');
+
   slides.push({ scenario: 'default', show: ['similarTriangles'] });
 
   slides.push({
@@ -326,31 +329,126 @@ function makeSlides() {
     transition: (done) => {
       figure.getElement('similarTriangles').animations.new()
         .scenario({ start: 'default', target: 'top', duration: 1 })
+        .then(figure.getElement('similar.summary1').animations.dissolveIn(0.8))
+        .inParallel([
+          sTri1.getElement('line').animations.dissolveIn(0.8),
+          sTri2.getElement('line').animations.dissolveIn(0.8),
+        ])
+        .inParallel([
+          sTri1.getElement('angle0').animations.dissolveIn(0.8),
+          sTri1.getElement('angle1').animations.dissolveIn(0.8),
+          sTri1.getElement('angle2').animations.dissolveIn(0.8),
+        ])
+        .inParallel([
+          sTri2.getElement('angle0').animations.dissolveIn(0.8),
+          sTri2.getElement('angle1').animations.dissolveIn(0.8),
+          sTri2.getElement('angle2').animations.dissolveIn(0.8),
+        ])
         .whenFinished(done)
         .start();
     },
     steadyState: () => {
       figure.getElement('similarTriangles').setScenario('top');
-      figure.show(['similar.tri1', 'similar.tri2']);
-      figure.shortCuts['1'] = 'similarPulseAngles';
-      figure.shortCuts['2'] = 'similarPulseScale';
+      figure.show(['similar.tri1', 'similar.tri2', 'similar.summary1']);
+      sTri1.hideSides();
+      sTri2.hideSides();
     },
   });
 
   slides.push({
-    show: ['similarTriangles', 'similar.tri1', 'similar.tri2'],
+    show: ['similarTriangles', 'similar.tri1', 'similar.tri2', 'similar.summary1', 'similar.summary2'],
     scenario: ['default', 'top'],
     transition: (done) => {
-      figure.animations.new()
-        .trigger({ callback: 'similarAnimateEqn', duration: 3 })
+      sTri1.hideSides();
+      sTri2.hideSides();
+      figure.getElement('similar.summary2').animations.new()
+        .dissolveIn(0.8)
+        .inParallel([
+          sTri1.getElement('side01').animations.dissolveIn(0.8),
+          sTri1.getElement('side12').animations.dissolveIn(0.8),
+          sTri1.getElement('side20').animations.dissolveIn(0.8),
+        ])
+        .inParallel([
+          sTri2.getElement('side01').animations.dissolveIn(0.8),
+          sTri2.getElement('side12').animations.dissolveIn(0.8),
+          sTri2.getElement('side20').animations.dissolveIn(0.8),
+        ])
         .whenFinished(done)
         .start();
     },
     steadyState: () => {
-      figure.getElement('similar.eqn').showForm('AOnB');
+      sTri1.showAll();
+      sTri2.showAll();
     },
   });
 
+  slides.push({
+    show: ['similarTriangles', 'similar.tri1', 'similar.tri2', 'similar.summary1', 'similar.summary2', 'similar.summary3'],
+    scenario: ['default', 'top'],
+    transition: (done) => {
+      figure.getElement('similar.summary3').animations.new()
+        .dissolveIn(0.8)
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      figure.getElement('similar.summary3').showAll();
+    },
+  });
+
+  // slides.push({
+  //   show: ['similar'],
+  //   scenario: ['default'],
+  // });
+
+  // slides.push({
+  //   show: ['totalAngle.summary1', 'totalAngle.tri', 'totalAngle.eqn', 'totalAngle.summary2'],
+  //   scenario: ['default'],
+  //   steadyState: () => {
+  //     figure.getElement('totalAngle.eqn').showForm('abc');
+  //   },
+  // });
+
+  // slides.push({
+  //   show: ['similarTriangles'],
+  //   scenario: ['default', 'top'],
+  //   transition: (done) => {
+  //     figure.getElement('similarTriangles').animations.new()
+  //       .scenario({ start: 'default', target: 'top', duration: 1 })
+  //       .whenFinished(done)
+  //       .start();
+  //   },
+  //   steadyState: () => {
+  //     figure.getElement('similarTriangles').setScenario('top');
+  //     figure.show(['similar.tri1', 'similar.tri2']);
+  //     figure.shortCuts['1'] = 'similarPulseAngles';
+  //     figure.shortCuts['2'] = 'similarPulseScale';
+  //   },
+  // });
+
+  // slides.push({
+  //   show: ['similarTriangles', 'similar.tri1', 'similar.tri2'],
+  //   scenario: ['default', 'top'],
+  //   transition: (done) => {
+  //     figure.animations.new()
+  //       .trigger({ callback: 'similarAnimateEqn', duration: 3 })
+  //       .whenFinished(done)
+  //       .start();
+  //   },
+  //   steadyState: () => {
+  //     figure.getElement('similar.eqn').showForm('AOnB');
+  //   },
+  // });
+
+  /*
+  .########..####..######...##.....##.########....########.########..####
+  .##.....##..##..##....##..##.....##....##..........##....##.....##..##.
+  .##.....##..##..##........##.....##....##..........##....##.....##..##.
+  .########...##..##...####.#########....##..........##....########...##.
+  .##...##....##..##....##..##.....##....##..........##....##...##....##.
+  .##....##...##..##....##..##.....##....##..........##....##....##...##.
+  .##.....##.####..######...##.....##....##..........##....##.....##.####
+  */
   slides.push({
     show: ['background', 'similarLink', 'totalAngleLink'],
     scenario: ['default'],
@@ -575,20 +673,29 @@ function makeSlides() {
     },
   });
 
+  /*
+  .########...#######..##......##
+  .##.....##.##.....##.##..##..##
+  .##.....##.##.....##.##..##..##
+  .########..##.....##.##..##..##
+  .##.....##.##.....##.##..##..##
+  .##.....##.##.....##.##..##..##
+  .########...#######...###..###.
+  */
   slides.push({
     form: null,
     showCommon: ['bow.circle'],
     steadyState: () => {
-      figure.shortCuts['1'] = 'bowString';
-      figure.shortCuts['2'] = 'bow';
-      figure.shortCuts['3'] = 'bowCircle';
-      figure.shortCuts['4'] = 'bowRad';
-      figure.shortCuts['5'] = 'bowTri';
-      figure.shortCuts['6'] = 'bowSin';
+      // figure.shortCuts['1'] = 'bowString';
+      // figure.shortCuts['2'] = 'bow';
+      // figure.shortCuts['3'] = 'bowCircle';
+      // figure.shortCuts['4'] = 'bowRad';
+      // figure.shortCuts['5'] = 'bowTri';
+      // figure.shortCuts['6'] = 'bowSin';
     },
   });
 
   nav.loadSlides(slides);
-  nav.goToSlide(26);
+  nav.goToSlide(5);
 }
 makeSlides();

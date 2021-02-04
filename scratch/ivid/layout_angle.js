@@ -24,52 +24,6 @@ function totalAngleLayout() {
     name: 'totalAngle',
     method: 'collection',
     elements: [
-      {
-        name: 'border',
-        method: 'rectangle',
-        options: {
-          line: {
-            width: 0.006,
-          },
-          corner: {
-            radius: 0.02,
-            sides: 10,
-          },
-          width: 4,
-          height: 2.5,
-          color: [0.7, 0.7, 0.7, 1],
-        },
-      },
-      {
-        name: 'close',
-        method: 'collection',
-        elements: [
-          {
-            name: 'x',
-            method: 'polyline',
-            options: {
-              points: [[-0.05, -0.05], [0.05, 0.05], [0, 0], [-0.05, 0.05], [0.05, -0.05]],
-            },
-          },
-          {
-            name: 'circle',
-            method: 'polygon',
-            options: {
-              radius: 0.1,
-              line: { width: 0.006 },
-              sides: 50,
-            },
-          },
-        ],
-        options: {
-          position: [1.8, 1.05],
-        },
-        mods: {
-          onClick: () => figure.getElement('totalAngle').hide(),
-          isTouchable: true,
-          touchBorder: 0.1,
-        },
-      },
       polyline('tri', triPoints, [-0.8, -0.2], ''),
       {
         name: 'eqn',
@@ -80,7 +34,6 @@ function totalAngleLayout() {
             equals: '  =  ',
           },
           formDefaults: {
-            // alignment: { fixTo: 'equals' },
             translation: {
               a: { style: 'curve', direction: 'down', mag: 0.5 },
               b: { style: 'curve', direction: 'down', mag: 0.5 },
@@ -96,8 +49,7 @@ function totalAngleLayout() {
     ],
     mods: {
       scenarios: {
-        top: { scale: 1.3, position: [0, -0.2] },
-        default: { scale: 1, position: [0, 0] },
+        default: { scale: 1.2, position: [0, 0] },
       },
     },
   });
@@ -136,15 +88,13 @@ function totalAngleLayout() {
   figure.fnMap.global.add('totalAngleGoToAB', goToAB);
 
   totalAngle.add({
-    name: 'summary',
+    name: 'summary1',
     method: 'primitives.textLines',
     options: {
-      text: [
-        'Angles in a triangle always |add to 180|.',
-        'Thus, only |two angles| are needed to |find all three|.',
-      ],
-      lineSpace: 1.7,
+      text: 'Angles in a triangle always |add to 180|.',
+      xAlign: 'center',
       fixColor: true,
+      font: { size: 0.15, color: colText },
       modifiers: {
         'add to 180': {
           text: 'add to 180\u00b0',
@@ -152,6 +102,23 @@ function totalAngleLayout() {
           font: { color: color1 },
           touchBorder: 0.08,
         },
+      },
+      position: [0, 0.8],
+    },
+    mods: {
+      isTouchable: true,
+    },
+  });
+
+  totalAngle.add({
+    name: 'summary2',
+    method: 'primitives.textLines',
+    options: {
+      text: 'Only |two angles| are needed to |find all three|.',
+      xAlign: 'center',
+      fixColor: true,
+      font: { size: 0.15, color: colText },
+      modifiers: {
         'two angles': {
           onClick: 'totalAnglePulse',
           font: { color: color1 },
@@ -163,7 +130,7 @@ function totalAngleLayout() {
           touchBorder: 0.08,
         },
       },
-      position: [-1.5, 0.8],
+      position: [0, -0.9],
     },
     mods: {
       isTouchable: true,
