@@ -486,7 +486,6 @@ export default class SlideNavigator {
   }
 
   transitionDone(cancelled: boolean = false, force: 'freeze' | 'complete' | null = 'complete') {
-    console.log(cancelled, force)
     if (force !== 'freeze') {
       this.setSteadyState(this.from);
       this.inTransition = false;

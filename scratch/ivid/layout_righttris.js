@@ -19,6 +19,7 @@ function rightTris() {
     options: {
       points: [[0, 0], [scale, scale / 2], [scale, 0]],
       close: true,
+      width: 0.008,
       angle: [
         {
           curve: null,
@@ -53,7 +54,7 @@ function rightTris() {
     name: 'rightTris',
     method: 'collection',
     elements: [
-      polyline('tri1', 2, [-0.2, -0.5], ''),
+      polyline('tri1', 1.8, [-0.2, -0.5], ''),
       polyline('tri2', 1, [-1.8, -0.5], ''),
     ],
     mods: {

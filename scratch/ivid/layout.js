@@ -217,58 +217,6 @@ function layout() {
       figure.getElement('totalAngle').setScenario('default');
       figure.getElement('similar').hide();
     }),
-    {
-      name: 'eqn',
-      method: 'equation',
-      options: {
-        elements: {
-          v1: { symbol: 'vinculum' },
-          v2: { symbol: 'vinculum' },
-          v3: { symbol: 'vinculum' },
-          equals1: '  =  ',
-          equals2: '  =  ',
-          equals3: '  =  ',
-        },
-        phrases: {
-          oppOnHyp: { frac: ['opposite', 'v1', 'hypotenuse'] },
-          adjOnHyp: { frac: ['adjacent', 'v2', 'hypotenuse_1'] },
-          oppOnAdj: { frac: ['opposite_1', 'v3', 'adjacent_1'] },
-        },
-        forms: {
-          oneRatio: ['oppOnHyp', 'equals1', 'constant_1'],
-          twoRatios: [
-            {
-              lines: {
-                content: [
-                  ['oppOnHyp', 'equals1', 'constant_1'],
-                  ['adjOnHyp', 'equals2', 'constant_2'],
-                ],
-                baselineSpace: 0.6,
-              },
-            },
-          ],
-          threeRatios: [
-            {
-              lines: {
-                content: [
-                  ['oppOnHyp', 'equals1', 'constant_1'],
-                  ['adjOnHyp', 'equals2', 'constant_2'],
-                  ['oppOnAdj', 'equals3', 'constant_3'],
-                ],
-                baselineSpace: 0.6,
-              },
-            },
-          ],
-        },
-      },
-      mods: {
-        scenarios: {
-          upperLeft: { position: [-2, 0.4] },
-          left: { position: [-2, -0.3] },
-          default: { position: [0, 0] },
-        },
-      },
-    },
   ]);
   figure.add({
     name: 'nav',
@@ -290,6 +238,7 @@ function layout() {
     },
   });
 }
+makeEquation();
 layoutRight();
 layoutCircle();
 layout();
@@ -487,12 +436,11 @@ function makeSlides() {
     form: 'threeRatios',
   });
   slides.push({
-    showCommon: ['similarLink', 'totalAngleLink', 'rightTris.tri1'],
+    showCommon: ['similarLink', 'totalAngleLink', 'rightTris.tri1', 'forAllTris'],
     hide: ['rightTris.tri1.side20'],
     fromForm: 'oneRatio',
     form: 'oneRatio',
     transition: (done) => {
-      // eqn.showForm('oneRatio');
       eqn.animations.new()
         .scenario({ start: 'upperLeft', target: 'left', duration: 1 })
         .whenFinished(done)
@@ -503,7 +451,63 @@ function makeSlides() {
     },
   });
 
+  slides.push({
+    showCommon: ['similarLink', 'totalAngleLink'],
+    scenarioCommon: ['default', 'left'],
+    fromForm: 'oneRatio',
+    form: 'oneRatio',
+    enterState: () => {
+      rightTri.hasTouchableElements = false;
+    },
+    transition: (done) => {
+      rightTri.showAll();
+      figure.getElement('rightTri.rotLine').setRotation(0.4636);
+      rightTri.animations.new()
+        .inParallel([
+          rightTri._tri._side01.animations.dissolveIn({ duration: 0.8 }),
+          rightTri._tri._side12.animations.dissolveIn({ duration: 0.8 }),
+          rightTri._tri._angle2._label.animations.dissolveIn({ duration: 0.8 }),
+        ])
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      rightTri.showAll();
+      figure.getElement('rightTri.rotLine').setRotation(0.4636);
+    },
+  });
+
+  slides.push({
+    showCommon: ['similarLink', 'totalAngleLink', 'rightTri'],
+    fromForm: 'oneRatio',
+    form: 'ratioValueDef',
+    enterState: () => {
+      rightTri.hasTouchableElements = false;
+      figure.getElement('rightTri.rotLine').setRotation(0.4636);
+    },
+  });
+
+  slides.push({
+    showCommon: ['similarLink', 'totalAngleLink', 'rightTri'],
+    fromForm: 'ratioValue',
+    form: 'ratioValue',
+    enterState: () => {
+      rightTri.hasTouchableElements = false;
+      figure.getElement('rightTri.rotLine').setRotation(0.4636);
+    },
+    transition: (done) => {
+      rightTri.animations.new()
+        .scenario({ start: 'default', target: 'bottom', duration: 0.8 })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      rightTri.setScenario('bottom');
+      rightTri.hasTouchableElements = true;
+    },
+  });
+
   nav.loadSlides(slides);
-  nav.goToSlide(10);
+  nav.goToSlide(20);
 }
 makeSlides();
