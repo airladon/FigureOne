@@ -35,19 +35,25 @@ function rightTris() {
         },
       ],
       side: [
-        label('A', s),
-        label('B', s),
-        label('C', s),
+        label('hypotenuse', s),
+        label('opposite', s),
+        label('adjacent', s),
       ],
       position,
     },
+    // mods: {
+    //   scenarios: {
+    //     default: { position },
+    //     center: { position: [-1, -0.5] },
+    //   },
+    // },
   });
 
   figure.add({
     name: 'rightTris',
     method: 'collection',
     elements: [
-      polyline('tri1', 2, [-0.2, -0.5], 's'),
+      polyline('tri1', 2, [-0.2, -0.5], ''),
       polyline('tri2', 1, [-1.8, -0.5], ''),
     ],
     mods: {

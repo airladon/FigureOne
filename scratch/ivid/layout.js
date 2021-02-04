@@ -23,6 +23,26 @@ function layout() {
     },
   });
 
+  const leftText = (name, text, modifiers = {}) => ({
+    name,
+    method: 'textLines',
+    options: {
+      text,
+      modifiers,
+      position: [0, 0],
+      xAlign: 'left',
+      justify: 'left',
+      yAlign: 'middle',
+      font: { size: 0.15, color: [0.3, 0.3, 0.3, 1] },
+      fixColor: true,
+    },
+    mods: {
+      scenarios: {
+        default: { position: [-2, 1], scale: 1 },
+      },
+    },
+  });
+
   const link = (name, text, position, onClick = {}) => ({
     name,
     method: 'text',
@@ -164,6 +184,9 @@ function layout() {
       All: { font: { style: 'italic' } },
       theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic' } },
     }),
+    centerText('forAllTris', 'For all right angle triangles with the same angle |theta|:', {
+      theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic' } },
+    }),
     hint('similarHint', [0, 0.7], [
       {
         text: '1 / 2: Use the |background| knowledge',
@@ -194,6 +217,58 @@ function layout() {
       figure.getElement('totalAngle').setScenario('default');
       figure.getElement('similar').hide();
     }),
+    {
+      name: 'eqn',
+      method: 'equation',
+      options: {
+        elements: {
+          v1: { symbol: 'vinculum' },
+          v2: { symbol: 'vinculum' },
+          v3: { symbol: 'vinculum' },
+          equals1: '  =  ',
+          equals2: '  =  ',
+          equals3: '  =  ',
+        },
+        phrases: {
+          oppOnHyp: { frac: ['opposite', 'v1', 'hypotenuse'] },
+          adjOnHyp: { frac: ['adjacent', 'v2', 'hypotenuse_1'] },
+          oppOnAdj: { frac: ['opposite_1', 'v3', 'adjacent_1'] },
+        },
+        forms: {
+          oneRatio: ['oppOnHyp', 'equals1', 'constant_1'],
+          twoRatios: [
+            {
+              lines: {
+                content: [
+                  ['oppOnHyp', 'equals1', 'constant_1'],
+                  ['adjOnHyp', 'equals2', 'constant_2'],
+                ],
+                baselineSpace: 0.6,
+              },
+            },
+          ],
+          threeRatios: [
+            {
+              lines: {
+                content: [
+                  ['oppOnHyp', 'equals1', 'constant_1'],
+                  ['adjOnHyp', 'equals2', 'constant_2'],
+                  ['oppOnAdj', 'equals3', 'constant_3'],
+                ],
+                baselineSpace: 0.6,
+              },
+            },
+          ],
+        },
+      },
+      mods: {
+        scenarios: {
+          upperLeft: { position: [-2, 0.4] },
+          left: { position: [-2, -0.3] },
+          default: { position: [0, 0] },
+        },
+      },
+    },
   ]);
   figure.add({
     name: 'nav',
@@ -201,6 +276,7 @@ function layout() {
     options: {
       nextButton: { position: [3.8, 0], width: 0.2, height: 0.2 },
       prevButton: { position: [-3.8, 0], width: 0.2, height: 0.2 },
+      equation: 'eqn',
     },
   });
   figure.add({
@@ -228,6 +304,7 @@ function makeSlides() {
   const rightTri = figure.getElement('rightTri');
   const circle = figure.getElement('circle');
   const rightTris = figure.getElement('rightTris');
+  const eqn = figure.getElement('eqn');
 
   /*
   .########.####.########.##.......########
@@ -349,15 +426,84 @@ function makeSlides() {
       rightTris.hideSides();
     },
   });
+
   slides.push({
-    show: ['similarLink', 'totalAngleLink', 'rightTris', 'thetaSimilar'],
-    scenario: ['default', 'top'],
+    show: ['similarLink', 'totalAngleLink', 'rightTris.tri1'],
+    scenario: ['default'],
     steadyState: () => {
-      // rightTris.hideSides();
+      rightTris.hideSides();
+    },
+  });
+
+  slides.push({
+    show: ['similarLink', 'totalAngleLink', 'rightTris.tri1'],
+    hide: ['rightTris.tri1.side20', 'rightTris.tri1.side12'],
+    scenario: ['default'],
+    transition: (done) => {
+      rightTris.getElement('tri1.side01').animations.new()
+        .dissolveIn({ duration: 0.5 })
+        .whenFinished(done)
+        .start();
+    },
+  });
+
+  slides.push({
+    show: ['similarLink', 'totalAngleLink', 'rightTris.tri1'],
+    hide: ['rightTris.tri1.side20'],
+    scenario: ['default'],
+    transition: (done) => {
+      rightTris.getElement('tri1.side12').animations.new()
+        .dissolveIn({ duration: 0.5 })
+        .whenFinished(done)
+        .start();
+    },
+  });
+  slides.push({
+    show: ['similarLink', 'totalAngleLink', 'rightTris.tri1'],
+    scenario: ['default'],
+    transition: (done) => {
+      rightTris.getElement('tri1.side20').animations.new()
+        .dissolveIn({ duration: 0.5 })
+        .whenFinished(done)
+        .start();
+    },
+  });
+
+  slides.push({
+    showCommon: ['similarLink', 'totalAngleLink', 'rightTris.tri1', 'forAllTris'],
+    scenarioCommon: ['default', 'upperLeft', 'top'],
+  });
+
+  slides.push({
+    fromForm: null,
+    form: 'oneRatio',
+  });
+  slides.push({
+    fromForm: 'oneRatio',
+    form: 'twoRatios',
+  });
+  slides.push({
+    fromForm: 'twoRatios',
+    form: 'threeRatios',
+  });
+  slides.push({
+    showCommon: ['similarLink', 'totalAngleLink', 'rightTris.tri1'],
+    hide: ['rightTris.tri1.side20'],
+    fromForm: 'oneRatio',
+    form: 'oneRatio',
+    transition: (done) => {
+      // eqn.showForm('oneRatio');
+      eqn.animations.new()
+        .scenario({ start: 'upperLeft', target: 'left', duration: 1 })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      eqn.setScenario('left');
     },
   });
 
   nav.loadSlides(slides);
-  nav.goToSlide(9);
+  nav.goToSlide(10);
 }
 makeSlides();
