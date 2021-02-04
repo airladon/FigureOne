@@ -196,10 +196,12 @@ function layoutRight() {
     const r = rotLine.getRotation();
     const x = radius * Math.cos(r);
     const y = radius * Math.sin(r);
-    tri._side12.setLabel(Math.sin(r).toFixed(3));
     tri.updatePoints([
       [0, 0], [x, y], [x, 0],
     ]);
+    const a = Fig.tools.math.round(r * 180 / Math.PI, 0) * Math.PI / 180;
+    const sin = Math.sin(a)
+    tri._side12.setLabel(sin.toFixed(4));
     if (r < 0.3 || r > 1.4) {
       tri._angle2.label.location = 'start';
       xLine.show();
@@ -216,10 +218,10 @@ function layoutRight() {
 
   //   const opp = parseFloat(tri._side12.getLabel());
   //   const hyp = parseFloat(tri._side01.getLabel());
-    const oppValue = tri._side12.getLabel();
+    // const oppValue = tri._side12.getLabel();
     eqn.updateElementText({
-      oppValue,
-      ratioValue: oppValue,
+      // oppValue,
+      ratioValue: sin.toFixed(4),
     });
   });
   rotLine.setRotation(1);

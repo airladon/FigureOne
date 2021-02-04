@@ -507,6 +507,16 @@ function makeSlides() {
     },
   });
 
+  slides.push({
+    fromForm: 'ratioValue',
+    form: 'f',
+    scenarioCommon: ['default', 'left', 'bottom'],
+    steadyState: () => {
+      rightTri.setScenario('bottom');
+      rightTri.hasTouchableElements = true;
+    },
+  });
+
   nav.loadSlides(slides);
   nav.goToSlide(20);
 }
