@@ -185,8 +185,8 @@ function layoutRight() {
     ],
     mods: {
       scenarios: {
-        default: { position: [-0.2, -0.5] },
-        bottom: { position: [-0.5, -0.8] },
+        default: { position: [0, -0.8] },
+        bottom: { position: [0, -0.8] },
       },
     },
   });

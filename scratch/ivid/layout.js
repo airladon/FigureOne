@@ -246,6 +246,7 @@ rightTris();
 const totalAngle = totalAngleLayout();
 similarLayout();
 layoutTable();
+layoutBow();
 
 function makeSlides() {
   const slides = [];
@@ -255,6 +256,8 @@ function makeSlides() {
   const circle = figure.getElement('circle');
   const rightTris = figure.getElement('rightTris');
   const eqn = figure.getElement('eqn');
+  const table = figure.getElement('table');
+  const bow = figure.getElement('bow');
 
   /*
   .########.####.########.##.......########
@@ -462,7 +465,7 @@ function makeSlides() {
     },
     transition: (done) => {
       rightTri.showAll();
-      figure.getElement('rightTri.rotLine').setRotation(0.4636);
+      figure.getElement('rightTri.rotLine').setRotation(0.61072);
       rightTri.animations.new()
         .inParallel([
           rightTri._tri._side01.animations.dissolveIn({ duration: 0.8 }),
@@ -474,7 +477,7 @@ function makeSlides() {
     },
     steadyState: () => {
       rightTri.showAll();
-      figure.getElement('rightTri.rotLine').setRotation(0.4636);
+      figure.getElement('rightTri.rotLine').setRotation(0.61072);
     },
   });
 
@@ -484,7 +487,7 @@ function makeSlides() {
     form: 'ratioValueDef',
     enterState: () => {
       rightTri.hasTouchableElements = false;
-      figure.getElement('rightTri.rotLine').setRotation(0.4636);
+      figure.getElement('rightTri.rotLine').setRotation(0.61072);
     },
   });
 
@@ -494,7 +497,7 @@ function makeSlides() {
     form: 'ratioValue',
     enterState: () => {
       rightTri.hasTouchableElements = false;
-      figure.getElement('rightTri.rotLine').setRotation(0.4636);
+      figure.getElement('rightTri.rotLine').setRotation(0.61072);
     },
     transition: (done) => {
       rightTri.animations.new()
@@ -533,15 +536,59 @@ function makeSlides() {
   });
 
   slides.push({
-    form: 'f',
-    showCommon: ['similarLink', 'totalAngleLink', 'rightTri', 'table'],
+    form: 'fOnly',
+    fromForm: 'f',
+    showCommon: ['similarLink', 'totalAngleLink', 'rightTri'],
+    scenarioCommon: ['default', 'left'],
+    transition: (done) => {
+      eqn.animations.new()
+        .inParallel([
+          eqn.animations.goToForm({ start: 'f', target: 'fOnly', animate: 'move', duration: 0.1 }),
+          eqn.animations.scenario({ start: 'left', target: 'table', duration: 0.8 })
+        ])
+        // .then(table.animations.dissolveIn({ duration: 0.5 }))
+        .whenFinished(done)
+        .start();
+    },
     steadyState: () => {
+      console.log('adsf')
+      table.showAll();
+      eqn.setScenario('table');
       rightTri.hasTouchableElements = true;
       figure.getElement('rightTri.rotLine').setRotation(Math.PI / 4);
     },
   });
 
+  slides.push({
+    form: 'fInf',
+    fromForm: 'fOnly',
+    showCommon: ['similarLink', 'totalAngleLink'],
+    transition: (done) => {
+      eqn.animations.new()
+        .inParallel([
+          eqn.animations.goToForm({ start: 'fOnly', target: 'fLeft', animate: 'move', duration: 1 }),
+          eqn.animations.scenario({ start: 'table', target: 'default', duration: 1 }),
+        ])
+        // .then(table.animations.dissolveIn({ duration: 0.5 }))
+        .whenFinished(done)
+        .start();
+    },
+  });
+
+  slides.push({
+    form: null,
+    showCommon: ['bow.circle'],
+    steadyState: () => {
+      figure.shortCuts['1'] = 'bowString';
+      figure.shortCuts['2'] = 'bow';
+      figure.shortCuts['3'] = 'bowCircle';
+      figure.shortCuts['4'] = 'bowRad';
+      figure.shortCuts['5'] = 'bowTri';
+      figure.shortCuts['6'] = 'bowSin';
+    },
+  });
+
   nav.loadSlides(slides);
-  nav.goToSlide(24);
+  nav.goToSlide(26);
 }
 makeSlides();

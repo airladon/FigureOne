@@ -34,11 +34,11 @@ function setupRecorder() {
   figure.fnMap.add('navNext', () => figure.getElement('nav').nav.nextSlide());
   figure.fnMap.add('navPrev', () => figure.getElement('nav').nav.prevSlide());
   figure.fnMap.add('toggleCursor', () => figure.toggleCursor());
-  figure.shortCuts = {
-    n: 'navNext',
-    p: 'navPrev',
-    s: 'toggleCursor',
-  };
+  // figure.shortCuts = {
+  //   n: 'navNext',
+  //   p: 'navPrev',
+  //   s: 'toggleCursor',
+  // };
 
   document.addEventListener('keypress', (event) => {
     const keyCode = String.fromCharCode(event.keyCode);

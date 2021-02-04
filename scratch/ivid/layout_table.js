@@ -4,7 +4,7 @@
 
 function layoutTable() {
 
-  const step = 0.13;
+  const step = 0.11;
   const yStart = 1;
   const text = (angle, sin, index) => ({
     name: `angle${index}`,
@@ -15,24 +15,32 @@ function layoutTable() {
           text: angle,
           location: [0, yStart - index * step],
           xAlign: 'right',
+          font: { size: 0.1 },
         },
         {
           text: sin,
-          location: [0.5, yStart - index * step],
+          location: [0.75, yStart - index * step],
           xAlign: 'right',
+          font: { size: 0.1 },
         },
       ],
     },
   });
   const elements = [];
   let i = 0;
-  for (let k = 0; k < 11; k += 1) {
+  for (let k = 0; k < 6; k += 1) {
     elements.push(text(k.toFixed(0), `${Fig.tools.math.round(Math.sin(k / 180 * Math.PI), 4).toFixed(4)}`, i));
     i += 1;
   }
   elements.push(text('\u22ee ', '\u22ee   ', i));
   i += 1;
-  for (let k = 87; k < 91; k += 1) {
+  for (let k = 43; k < 48; k += 1) {
+    elements.push(text(k.toFixed(0), `${Fig.tools.math.round(Math.sin(k / 180 * Math.PI), 4).toFixed(4)}`, i));
+    i += 1;
+  }
+  elements.push(text('\u22ee ', '\u22ee   ', i));
+  i += 1;
+  for (let k = 85; k < 91; k += 1) {
     elements.push(text(k.toFixed(0), `${Fig.tools.math.round(Math.sin(k / 180 * Math.PI), 4).toFixed(4)}`, i));
     i += 1;
   }
@@ -51,7 +59,8 @@ function layoutTable() {
         fTheta: ['f', { container: ['', 0.02] }, { brac: ['lb', 'theta2', 'rb'] }],
       },
       forms: {
-        0: ['theta1', '          ', 'fTheta'],
+        // 0: ['theta1', '          ', 'fTheta'],
+        0: 'theta1',
       },
       position: [-0.05, 1.2],
     },
@@ -63,7 +72,7 @@ function layoutTable() {
     elements,
     mods: {
       scenarios: {
-        default: { position: [2, -0.1] },
+        default: { position: [-1.7, -0.1] },
       },
     },
   });
