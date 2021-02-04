@@ -245,6 +245,7 @@ layout();
 rightTris();
 const totalAngle = totalAngleLayout();
 similarLayout();
+layoutTable();
 
 function makeSlides() {
   const slides = [];
@@ -511,13 +512,36 @@ function makeSlides() {
     fromForm: 'ratioValue',
     form: 'f',
     scenarioCommon: ['default', 'left', 'bottom'],
+    transition: (done) => {
+      figure.animations.new()
+        .trigger({
+          callback: () => {
+            eqn.goToForm({
+              start: 'ratioValue', form: 'f', duration: 1, animate: 'move'
+            });
+          },
+          duration: 1,
+        })
+        .trigger({ callback: 'rotateTri', duration: 1 })
+        .whenFinished(done)
+        .start();
+    },
     steadyState: () => {
-      rightTri.setScenario('bottom');
       rightTri.hasTouchableElements = true;
+      figure.getElement('rightTri.rotLine').setRotation(Math.PI / 4);
+    },
+  });
+
+  slides.push({
+    form: 'f',
+    showCommon: ['similarLink', 'totalAngleLink', 'rightTri', 'table'],
+    steadyState: () => {
+      rightTri.hasTouchableElements = true;
+      figure.getElement('rightTri.rotLine').setRotation(Math.PI / 4);
     },
   });
 
   nav.loadSlides(slides);
-  nav.goToSlide(20);
+  nav.goToSlide(24);
 }
 makeSlides();

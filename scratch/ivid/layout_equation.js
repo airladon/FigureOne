@@ -24,7 +24,7 @@ function makeEquation() {
         oppOnHyp: { frac: ['opposite', 'v1', 'hypotenuse'] },
         adjOnHyp: { frac: ['adjacent', 'v2', 'hypotenuse_1'] },
         oppOnAdj: { frac: ['opposite_1', 'v3', 'adjacent_1'] },
-        fTheta: ['f', { brac: ['lb', 'theta', 'rb'] }],
+        fTheta: ['f', { container: ['', 0.02] }, { brac: ['lb', 'theta', 'rb'] }],
       },
       forms: {
         oneRatio: ['oppOnHyp', 'equals1', 'constant_1'],

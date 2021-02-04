@@ -216,12 +216,14 @@ function layoutRight() {
     }
     const eqn = figure.getElement('eqn');
 
-  //   const opp = parseFloat(tri._side12.getLabel());
-  //   const hyp = parseFloat(tri._side01.getLabel());
-    // const oppValue = tri._side12.getLabel();
     eqn.updateElementText({
-      // oppValue,
       ratioValue: sin.toFixed(4),
+    });
+
+    figure.fnMap.global.add('rotateTri', () => {
+      rotLine.animations.new()
+        .rotation({ target: Math.PI / 4, duration: 1 })
+        .start();
     });
   });
   rotLine.setRotation(1);
