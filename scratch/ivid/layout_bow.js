@@ -66,16 +66,16 @@ function layoutBow() {
           color: color1,
         },
       },
-      {
-        name: 'negHyp',
-        method: 'line',
-        options: {
-          p1: [0, 0],
-          p2: [x, -y],
-          width: lineWidth,
-          color: color1,
-        },
-      },
+      // {
+      //   name: 'negHyp',
+      //   method: 'line',
+      //   options: {
+      //     p1: [0, 0],
+      //     p2: [x, -y],
+      //     width: lineWidth,
+      //     color: color1,
+      //   },
+      // },
       {
         name: 'cos',
         method: 'collections.line',
@@ -84,6 +84,9 @@ function layoutBow() {
           p1: [x, 0],
           width: lineWidth,
           color: color1,
+        },
+        mods: {
+          scenarios: { final: { position: [x, 0] } },
         },
       },
       {
@@ -112,6 +115,25 @@ function layoutBow() {
         },
       },
       {
+        name: 'theta',
+        method: 'collections.angle',
+        options: {
+          p1: [x, 0],
+          p2: [0, 0],
+          p3: [x, y],
+          curve: {
+            width: lineWidth,
+            autoRightAngle: true,
+            radius: 0.2,
+          },
+          label: {
+            text: '\u03b8',
+            offset: 0.01,
+          },
+          color: color1,
+        },
+      },
+      {
         name: 'sin',
         method: 'collections.line',
         options: {
@@ -125,15 +147,20 @@ function layoutBow() {
         name: 'eqn',
         method: 'equation',
         options: {
+          elements: { comma: ', ' },
           forms: {
             0: 'bowstring',
-            1: ['half-', 'bowstring'],
+            1: ['half - ', 'bowstring'],
             2: 'sinus',
             3: 'sine',
+            4: ['sine', 'comma', 'sin'],
           },
           color: color1,
-          position: [1.4, 0],
+          position: [0.9, 0.8],
           scale: 1,
+          formDefaults: {
+            alignment: { yAlign: 'middle', xAlign: 'left' },
+          },
         },
       },
     ],

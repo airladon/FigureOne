@@ -2,7 +2,7 @@
 /* globals figure, color1, color2, color3, color4, colGrey */
 
 function layout() {
-  const centerText = (name, text, modifiers = {}) => ({
+  const centerText = (name, text, modifiers = {}, position = [0, 0]) => ({
     name,
     method: 'textLines',
     options: {
@@ -17,9 +17,10 @@ function layout() {
     },
     mods: {
       scenarios: {
-        default: { position: [0, 0], scale: 1 },
+        default: { position, scale: 1 },
         topHigh: { position: [0, 1.2], scale: 1 },
         top: { position: [0, 1], scale: 1 },
+        // right: { position: [1, 0] },
       },
       isTouchable: true,
     },
@@ -180,6 +181,9 @@ function layout() {
         fixColor: true,
       },
     },
+    centerText('firstCentury', 'First Century CE:', {}, [1, 0.5]),
+    centerText('geometry', 'Geometry', {}, [1, 0]),
+    centerText('fourteenthCentury', '1400 CE:', {}, [1, 0.5]),
     centerText('background', 'Background'),
     centerText('sumOfAngles', 'Angles in a triangle always add to 180\u00b0'),
     centerText('similarTriangles', 'Similar Triangles'),
@@ -575,14 +579,189 @@ function makeSlides() {
   });
 
   slides.push({
-    scenarioCommon: ['default', 'left', 'top'],
     show: ['rightTri'],
     fromForm: 'f',
-    form: 'fOnly',
+    form: 'sinBracTheta',
+    steadyState: () => {
+      rightTri.hasTouchableElements = true;
+    },
+  });
+  slides.push({
+    show: ['rightTri'],
+    fromForm: 'sinBracTheta',
+    form: 'sinTheta',
+    steadyState: () => {
+      rightTri.hasTouchableElements = true;
+    },
+  });
+
+  /*
+  .########...#######..##......##
+  .##.....##.##.....##.##..##..##
+  .##.....##.##.....##.##..##..##
+  .########..##.....##.##..##..##
+  .##.....##.##.....##.##..##..##
+  .##.....##.##.....##.##..##..##
+  .########...#######...###..###.
+  */
+  slides.push({
+    fromForm: 'sinTheta',
+    show: ['rightTri'],
+    dissolve: {
+      out: ['eqn', 'rightTri'],
+      in: 'bow.circle',
+    },
+    form: null,
+  });
+
+  slides.push({
+    clear: true,
+    show: ['bow.circle'],
+    transition: (done) => {
+      figure.animations.new()
+        .trigger({ callback: 'bowString', duration: 2.5 })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      figure.getElement('bow.bowString').showAll();
+      figure.getElement('bow.eqn').showForm('0');
+    },
+  });
+
+  slides.push({
+    show: ['bow.circle', 'bow.eqn', 'bow.bowString'],
+    enterStateCommon: () => figure.getElement('bow.eqn').showForm('0'),
+    transition: (done) => {
+      figure.animations.new()
+        .trigger({ callback: 'bow', duration: 1 })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      figure.getElement('bow.arc').showAll();
+    },
+  });
+
+  slides.push({
+    show: ['bow.circle', 'bow.eqn', 'bow.bowString', 'bow.arc'],
+    dissolve: {
+      in: ['bow.x', 'bow.y'],
+    },
+  });
+
+  slides.push({
+    show: ['bow.circle', 'bow.eqn', 'bow.bowString', 'bow.arc', 'bow.x', 'bow.y'],
+    dissolve: {
+      in: ['bow.hyp', 'bow.cos', 'bow.sin', 'bow.rightAngle', 'bow.theta'],
+    },
+  });
+
+  slides.push({
+    show: ['bow'],
+    steadyState: () => {
+      bow.highlight(['sin', 'eqn']);
+    },
+    leaveStateCommon: () => bow.undim(),
+  });
+  slides.push({
+    show: ['bow'],
+    enterStateCommon: () => bow.highlight(['sin', 'eqn']),
+    transition: (done) => {
+      bow._eqn.animations.new()
+        .goToForm({ start: '0', target: '1', animate: 'move', duration: 1 })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => bow._eqn.showForm('1'),
+  });
+
+  slides.push({
+    show: ['bow'],
+    enterStateCommon: () => bow.highlight(['sin', 'eqn']),
+    transition: (done) => {
+      bow._eqn.animations.new()
+        .goToForm({ start: '1', target: '2', animate: 'move', duration: 1 })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => bow._eqn.showForm('2'),
+  });
+
+  // slides.push({
+  //   clear: true,
+  //   show: ['bow.circle', 'bow.eqn', 'bow.bowString', 'bow.arc'],
+  //   enterState: () => {
+  //     figure.getElement('bow.eqn').showForm('0');
+  //   },
+  //   dissolve: {
+  //     out: ['bow.bowString', 'bow.arc', 'bow.eqn'],
+  //     in: ['bow.x', 'bow.y'],
+  //   },
+  // });
+
+  // slides.push({
+  //   clear: true,
+  //   show: ['bow.circle', 'bow.x', 'bow.y'],
+  //   transition: (done) => {
+  //     figure.animations.new()
+  //       .trigger({ callback: 'bowRad', duration: 1 })
+  //       .whenFinished(done)
+  //       .start();
+  //   },
+  //   steadyState: () => {
+  //     figure.getElement('bow.hyp').showAll();
+  //   },
+  // });
+
+  // slides.push({
+  //   clear: true,
+  //   show: ['bow.circle', 'bow.x', 'bow.y', 'bow.hyp'],
+  //   transition: (done) => {
+  //     figure.animations.new()
+  //       .trigger({ callback: 'bowTri', duration: 4.6 })
+  //       .whenFinished(done)
+  //       .start();
+  //   },
+  //   steadyState: () => {
+  //     figure.getElement('bow.sin').showAll();
+  //     figure.getElement('bow.cos').showAll();
+  //     figure.getElement('bow.rightAngle').showAll();
+  //   },
+  // });
+
+  slides.push({
+    clear: true,
+    form: null,
+    showCommon: ['bow.circle'],
+    steadyState: () => {
+      figure.shortCuts['1'] = 'bowString';
+      figure.shortCuts['2'] = 'bow';
+      figure.shortCuts['3'] = 'bowCircle';
+      figure.shortCuts['4'] = 'bowRad';
+      figure.shortCuts['5'] = 'bowTri';
+      figure.shortCuts['6'] = 'bowSin';
+    },
+  });
+
+  /*
+  .########....###....########..##.......########
+  ....##......##.##...##.....##.##.......##......
+  ....##.....##...##..##.....##.##.......##......
+  ....##....##.....##.########..##.......######..
+  ....##....#########.##.....##.##.......##......
+  ....##....##.....##.##.....##.##.......##......
+  ....##....##.....##.########..########.########
+  */
+  slides.push({
+    scenarioCommon: ['default', 'left', 'top'],
+    show: ['rightTri'],
+    fromForm: 'sinTheta',
+    form: 'sinOnly',
     transition: (done) => {
       figure.animations.new()
         .inParallel([
-          eqn.animations.goToForm({ target: 'fOnly', animate: 'move' }),
+          eqn.animations.goToForm({ target: 'sinOnly', animate: 'move' }),
           eqn.animations.scenario({ target: 'table', duration: 2 }),
           rightTri.animations.scenario({ target: 'default', duration: 2 }),
         ])
@@ -592,7 +771,33 @@ function makeSlides() {
     },
     steadyState: () => {
       rightTri.hasTouchableElements = true;
+      table.showAll();
+      eqn.setScenario('table');
+      rightTri.setScenario('default');
     },
+  });
+
+  slides.push({
+    scenarioCommon: ['default', 'table'],
+    show: ['rightTri', 'table'],
+    dissolve: { out: 'rightTri', in: 'firstCentury' },
+  });
+
+  slides.push({
+    show: ['table', 'firstCentury'],
+    enterStateCommon: () => {},
+    dissolve: { in: 'geometry' },
+  });
+
+  slides.push({
+    show: ['table', 'firstCentury', 'geometry'],
+    dissolve: { out: ['firstCentury', 'geometry'], in: 'fourteenthCentury' },
+  });
+
+  slides.push({
+    scenarioCommon: ['default', 'table'],
+    show: ['table', 'fourteenthCentury'],
+    dissolve: { in: 'eqn1' },
   });
 
 
@@ -863,6 +1068,6 @@ function makeSlides() {
   });
 
   nav.loadSlides(slides);
-  nav.goToSlide(19);
+  nav.goToSlide(27);
 }
 makeSlides();

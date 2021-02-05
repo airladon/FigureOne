@@ -538,6 +538,9 @@ export default class SlideNavigator {
       return slide.transition('slideNavigatorTransitionDone', this.currentSlideIndex, from);
     }
 
+    const forms = this.getForm(this.currentSlideIndex);
+    const fromForms = this.getFromForm(this.currentSlideIndex);
+
     if (slide.dissolve != null) {
       const inElements = this.collection.getElements(slide.dissolve.in);
       const outElements = this.collection.getElements(slide.dissolve.out);
@@ -551,6 +554,14 @@ export default class SlideNavigator {
           }
         }
       }
+      for (let i = 0; i < forms.length; i += 1) {
+        if (fromForms.length - 1 < i) {
+          const e = this.collection.getElement(this.equations[i]);
+          if (forms[i] != null) {
+            e.showForm(forms[i]);
+          }
+        }
+      }
       this.collection.animations.new()
         .inParallel(dissolveOutSteps)
         .inParallel(dissolveInSteps)
@@ -559,8 +570,6 @@ export default class SlideNavigator {
       return null;
     }
 
-    const forms = this.getForm(this.currentSlideIndex);
-    const fromForms = this.getFromForm(this.currentSlideIndex);
     if (forms.length === 0 || fromForms.length === 0) {
       return this.transitionDone();
     }
