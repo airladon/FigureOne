@@ -31,6 +31,9 @@ function makeEquation() {
         sinText: { color: color1 },
         sin: { font: { style: 'normal' } },
         comma: ',',
+        opposite: { color: color2 },
+        hypotenuse: { color: color2 },
+        adjacent: { color: color2 },
       },
       phrases: {
         oppOnHyp: { frac: ['opposite', 'v1', 'hypotenuse'] },
@@ -39,6 +42,7 @@ function makeEquation() {
         fTheta: ['f', { container: ['', 0.02] }, { brac: ['lb', 'theta', 'rb'] }],
       },
       forms: {
+        oppOnHyp: 'oppOnHyp',
         oneRatio: ['oppOnHyp', 'equals1', 'constant_1'],
         twoRatios: [
           {
@@ -82,6 +86,8 @@ function makeEquation() {
         sinus: 'sinus',
         sine: 'sine',
         sineSin: ['sine', 'comma', 'sinText'],
+        statement: ['oppOnHyp', '_  is the same for all right triangles with angle ', 'theta',
+        ],
       },
     },
     mods: {
@@ -90,6 +96,8 @@ function makeEquation() {
         left: { position: [-2, 0], scale: 1 },
         default: { position: [-1.2, 0], scale: 1.5 },
         table: { position: [-2.1, 1.1], scale: 1 },
+        top: { position: [-1.5, 0.7], scale: 1 },
+        topRight: { position: [1.6, 0.95], scale: 1 },
       },
     },
   });

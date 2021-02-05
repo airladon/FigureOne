@@ -116,15 +116,11 @@ function similarLayout() {
         },
       },
     ],
-    // options: {
-    //   position: [-1, 0],
+    // mods: {
+    //   scenarios: {
+    //     default: { scale: 1 },
+    //   },
     // },
-    mods: {
-      scenarios: {
-        // top: { scale: 1.2 },
-        default: { scale: 1 },
-      },
-    },
   });
 
   const similar = figure.getElement('similar');
@@ -218,7 +214,6 @@ function similarLayout() {
     },
   });
   similar.add([
-    // summary('summary1', [0, 1], 'Similar Triangles:', {}),
     summary('summary1', [0.2, 0.6], 'Equal corresponding |angles|', {
       angles: {
         font: { color: color1 },

@@ -3,6 +3,21 @@
 
 
 function layoutRight() {
+  const sideLabel = (value, name) => ({
+    label: {
+      text: {
+        color: color2,
+        elements: {
+          v: value,
+          n: name,
+        },
+        forms: {
+          value: 'v',
+          name: 'n',
+        },
+      },
+    },
+  });
   const [rightTri] = figure.add({
     name: 'rightTri',
     method: 'collection',
@@ -25,10 +40,31 @@ function layoutRight() {
           width: 0.008,
           close: true,
           angle: [
+            // {
+            //   curve: null,
+            //   label: { text: '', scale: 0.6 },
+            //   color: [0, 0, 0, 0],
+            // },
             {
-              curve: null,
-              label: { text: '', scale: 0.6 },
-              color: [0, 0, 0, 0],
+              curve: {
+                radius: 0.25, width: 0.006,
+              },
+              label: {
+                text: {
+                  elements: {
+                    deg: '\u00b0',
+                    min: '\u2212',
+                    theta: '\u03b8',
+                  },
+                  forms: {
+                    name: ['90', 'deg', 'min', 'theta'],
+                  },
+                },
+                scale: 0.6,
+                offset: 0.02,
+                curvePosition: 0.65,
+              },
+              color: color1,
             },
             {
               curve: {
@@ -42,14 +78,27 @@ function layoutRight() {
               curve: {
                 radius: 0.2, width: 0.006,
               },
-              label: { text: null, scale: 0.6, offset: 0.02 },
+              label: {
+                text: {
+                  elements: {
+                    v: '0\u00b0',
+                    n: '\u03b8',
+                  },
+                  forms: {
+                    value: 'v',
+                    name: 'n',
+                  },
+                },
+                scale: 0.6,
+                offset: 0.02,
+              },
               color: color1,
             },
           ],
           side: [
-            { label: { text: '1' } },
-            { label: { text: '0.0000', precision: 3 } },
-            { label: '' },
+            sideLabel('1', 'hypotenuse'),
+            sideLabel('0.0000', 'opposite'),
+            sideLabel('', 'adjacent'),
           ],
         },
       },
@@ -79,6 +128,7 @@ function layoutRight() {
       scenarios: {
         default: { position: [0, -0.8] },
         bottom: { position: [0, -0.8] },
+        left: { position: [-0.7, -0.8] },
       },
     },
   });
@@ -92,8 +142,14 @@ function layoutRight() {
       [0, 0], [x, y], [x, 0],
     ]);
     const a = Fig.tools.math.round(r * 180 / Math.PI, 0) * Math.PI / 180;
-    const sin = Math.sin(a)
-    tri._side12.setLabel(sin.toFixed(4));
+    const sin = Math.sin(a);
+
+    if (tri._side12.label.eqn.getCurrentForm().name === 'value') {
+      tri._side12.label.eqn.updateElementText({ v: sin.toFixed(4) }, 'none');
+    }
+    if (tri._angle2.label.eqn.getCurrentForm().name === 'value') {
+      tri._angle2.label.eqn.updateElementText({ v: `${Fig.tools.math.round(r * 180 / Math.PI, 0)}\u00b0` });
+    }
     if (r < 0.3 || r > 1.4) {
       tri._angle2.label.location = 'start';
       xLine.show();
@@ -118,34 +174,122 @@ function layoutRight() {
         .start();
     });
   });
-  rotLine.setRotation(1);
-  // const [tri, movePad] = rightTri.getElements(['tri', 'movePad']);
-  // movePad.subscriptions.add('setTransform', () => {
-  //   const p = movePad.transform.t();
-  //   tri.updatePoints(
-  //     [[-1, -1], [p.x, p.y], [p.x, -1]],
-  //   );
-  //   const a0 = tri._angle2.angle;
-  //   if (a0 < 0.3) {
-  //     tri._angle2.label.location = 'end';
-  //   } else {
-  //     tri._angle2.label.location = 'outside';
-  //   }
-  //   tri._side20.hide();
-  //   // const [oppValue, hypValue, ratioValue] = figure.getElements(
-  //   //   ['eqn.oppValue', 'eqn.hypValue', 'eqn.ratioValue'],
-  //   // );
-  //   const eqn = figure.getElement('eqn');
 
-  //   const opp = parseFloat(tri._side12.getLabel());
-  //   const hyp = parseFloat(tri._side01.getLabel());
-  //   eqn.updateElementText({
-  //     oppValue: tri._side12.getLabel(),
-  //     hypValue: tri._side01.getLabel(),
-  //     ratioValue: Fig.tools.math.round(opp / hyp, 3).toFixed(3),
-  //   });
-  //   // oppValue.custom.updateText(tri._side01.getLabel());
-  //   // console.log(oppValue, figure.elements._eqn)
-  // });
-  // movePad.setPosition(1, 1);
+  const [side01, side12, side20, angle2] = tri.getElements(['side01', 'side12', 'side20', 'angle2']);
+
+  const sidesDissolveOut = () => {
+    tri.animations.new()
+      .inParallel([
+        side01.animations.dissolveOut(0.8),
+        side12.animations.dissolveOut(0.8),
+        side20.animations.dissolveOut(0.8),
+      ])
+      .start();
+  };
+  const angleDissolveOut = () => {
+    angle2._label.animations.new()
+      .dissolveOut(0.8)
+      .start();
+  };
+  const sidesDissolveIn = () => {
+    tri.animations.new()
+      .inParallel([
+        side01.animations.dissolveIn(0.8),
+        side12.animations.dissolveIn(0.8),
+        side20.animations.dissolveIn(0.8),
+      ])
+      .start();
+  };
+  const angleDissolveIn = () => {
+    angle2._label.animations.new()
+      .dissolveIn(0.8)
+      .start();
+  };
+  const sidesShowForm = (form) => {
+    side01.label.eqn.showForm(form);
+    side12.label.eqn.showForm(form);
+    side20.label.eqn.showForm(form);
+  };
+  const angleShowForm = (form) => {
+    angle2.label.eqn.showForm(form);
+  };
+
+  const animateToNames = () => {
+    tri.animations.new()
+      .trigger({
+        callback: () => {
+          sidesDissolveOut();
+          angleDissolveOut();
+        },
+        duration: 0.8,
+      })
+      .trigger(() => {
+        sidesShowForm('name');
+        angleShowForm('name');
+        rotLine.setPosition(rotLine.getPosition());
+      })
+      .trigger({
+        callback: () => {
+          sidesDissolveIn();
+          angleDissolveIn();
+        },
+        duration: 0.8,
+      })
+      .start();
+  };
+  const animateToValues = () => {
+    tri.animations.new()
+      .trigger({
+        callback: () => {
+          sidesDissolveOut();
+          angleDissolveOut();
+        },
+        duration: 0.8,
+      })
+      .trigger(() => {
+        sidesShowForm('value');
+        angleShowForm('value');
+        rotLine.setPosition(rotLine.getPosition());
+      })
+      .trigger({
+        callback: () => {
+          sidesDissolveIn();
+          angleDissolveIn();
+        },
+        duration: 0.8,
+      })
+      .start();
+  };
+  const toNames = () => {
+    sidesShowForm('name');
+    angleShowForm('name');
+    rotLine.setPosition(rotLine.getPosition());
+  };
+  const toValues = () => {
+    sidesShowForm('value');
+    angleShowForm('value');
+    rotLine.setPosition(rotLine.getPosition());
+  };
+  const pulseAngle = (element) => element.pulseAngle({
+    curve: { scale: 1.7 }, label: { scale: 1.7 }, duration: 1,
+  });
+  const pulseRight = () => tri.getElement('angle1').pulse({ xAlign: 'right', yAlign: 'bottom', scale: 1.7 });
+  figure.fnMap.global.add('triAnimateToNames', animateToNames.bind(this));
+  figure.fnMap.global.add('triAnimateToValues', animateToValues.bind(this));
+  figure.fnMap.global.add('triToNames', toNames.bind(this));
+  figure.fnMap.global.add('triToValues', toValues.bind(this));
+  figure.fnMap.global.add('triSidesDissolveIn', sidesDissolveIn.bind(this));
+  figure.fnMap.global.add('triAngleDissolveIn', angleDissolveIn.bind(this));
+  figure.fnMap.global.add('triPulseTheta', () => pulseAngle(angle2));
+  figure.fnMap.global.add('triPulseRight', () => pulseRight());
+  figure.fnMap.global.add('triToRot', (rot) => {
+    rotLine.setRotation(rot);
+  });
+  figure.fnMap.global.add('triPulseAngles', () => {
+    pulseAngle(angle2);
+    // pulseAngle(tri.getElement('angle0'));
+    pulseRight();
+    pulseAngle(tri.getElement('angle0'));
+  });
+  rotLine.setRotation(1);
 }
