@@ -522,25 +522,9 @@ export default class SlideNavigator {
     }
   }
 
-  transition(from: 'next' | 'prev' | number) {
-    this.subscriptions.publish('beforeTransition');
-    // let done = () => {
-    //   this.setSteadyState(from);
-    //   this.inTransition = false;
-    // };
-    this.from = from;
-    if (from !== 'prev') {
-      return this.transitionDone();
-    }
-    this.inTransition = true;
-    const slide = this.slides[this.currentSlideIndex];
-    if (typeof slide.transition === 'function') {
-      return slide.transition('slideNavigatorTransitionDone', this.currentSlideIndex, from);
-    }
-
+  dissolveTransition(slide) {
     const forms = this.getForm(this.currentSlideIndex);
     const fromForms = this.getFromForm(this.currentSlideIndex);
-
     if (slide.dissolve != null) {
       const inElements = this.collection.getElements(slide.dissolve.in);
       const outElements = this.collection.getElements(slide.dissolve.out);
@@ -567,8 +551,31 @@ export default class SlideNavigator {
         .inParallel(dissolveInSteps)
         .whenFinished('slideNavigatorTransitionDone')
         .start();
-      return null;
     }
+  }
+
+  transition(from: 'next' | 'prev' | number) {
+    this.subscriptions.publish('beforeTransition');
+    // let done = () => {
+    //   this.setSteadyState(from);
+    //   this.inTransition = false;
+    // };
+    this.from = from;
+    if (from !== 'prev') {
+      return this.transitionDone();
+    }
+    this.inTransition = true;
+    const slide = this.slides[this.currentSlideIndex];
+    if (typeof slide.transition === 'function') {
+      return slide.transition('slideNavigatorTransitionDone', this.currentSlideIndex, from);
+    }
+
+    if (slide.dissolve != null) {
+      return this.dissolveTransition(slide);
+    }
+
+    const forms = this.getForm(this.currentSlideIndex);
+    const fromForms = this.getFromForm(this.currentSlideIndex);
 
     if (forms.length === 0 || fromForms.length === 0) {
       return this.transitionDone();
