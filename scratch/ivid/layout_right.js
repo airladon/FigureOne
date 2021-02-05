@@ -98,7 +98,7 @@ function layoutRight() {
           side: [
             sideLabel('1', 'hypotenuse'),
             sideLabel('0.0000', 'opposite'),
-            sideLabel('', 'adjacent'),
+            sideLabel('adjacent', 'adjacent'),
           ],
         },
       },
@@ -126,7 +126,7 @@ function layoutRight() {
     ],
     mods: {
       scenarios: {
-        default: { position: [0, -0.8] },
+        default: { position: [-0.4, -0.8] },
         bottom: { position: [0, -0.8] },
         left: { position: [-0.7, -0.8] },
       },
@@ -177,38 +177,10 @@ function layoutRight() {
 
   const [side01, side12, side20, angle2] = tri.getElements(['side01', 'side12', 'side20', 'angle2']);
 
-  const sidesDissolveOut = () => {
-    tri.animations.new()
-      .inParallel([
-        side01.animations.dissolveOut(0.8),
-        side12.animations.dissolveOut(0.8),
-        side20.animations.dissolveOut(0.8),
-      ])
-      .start();
-  };
-  const angleDissolveOut = () => {
-    angle2._label.animations.new()
-      .dissolveOut(0.8)
-      .start();
-  };
-  const sidesDissolveIn = () => {
-    tri.animations.new()
-      .inParallel([
-        side01.animations.dissolveIn(0.8),
-        side12.animations.dissolveIn(0.8),
-        side20.animations.dissolveIn(0.8),
-      ])
-      .start();
-  };
-  const angleDissolveIn = () => {
-    angle2._label.animations.new()
-      .dissolveIn(0.8)
-      .start();
-  };
   const sidesShowForm = (form) => {
     side01.label.eqn.showForm(form);
     side12.label.eqn.showForm(form);
-    side20.label.eqn.showForm(form);
+    // side20.label.eqn.showForm(form);
   };
   const angleShowForm = (form) => {
     angle2.label.eqn.showForm(form);
@@ -216,48 +188,40 @@ function layoutRight() {
 
   const animateToNames = () => {
     tri.animations.new()
-      .trigger({
-        callback: () => {
-          sidesDissolveOut();
-          angleDissolveOut();
-        },
-        duration: 0.8,
-      })
+      .inParallel([
+        side01.animations.dissolveOut(0.8),
+        side12.animations.dissolveOut(0.8),
+        angle2._label.animations.dissolveOut(0.8),
+      ])
       .trigger(() => {
         sidesShowForm('name');
         angleShowForm('name');
         rotLine.setPosition(rotLine.getPosition());
       })
-      .trigger({
-        callback: () => {
-          sidesDissolveIn();
-          angleDissolveIn();
-        },
-        duration: 0.8,
-      })
+      .inParallel([
+        side01.animations.dissolveIn(0.8),
+        side12.animations.dissolveIn(0.8),
+        angle2._label.animations.dissolveIn(0.8),
+      ])
       .start();
   };
   const animateToValues = () => {
     tri.animations.new()
-      .trigger({
-        callback: () => {
-          sidesDissolveOut();
-          angleDissolveOut();
-        },
-        duration: 0.8,
-      })
+      .inParallel([
+        side01.animations.dissolveOut(0.4),
+        side12.animations.dissolveOut(0.4),
+        angle2._label.animations.dissolveOut(0.4),
+      ])
       .trigger(() => {
         sidesShowForm('value');
         angleShowForm('value');
         rotLine.setPosition(rotLine.getPosition());
       })
-      .trigger({
-        callback: () => {
-          sidesDissolveIn();
-          angleDissolveIn();
-        },
-        duration: 0.8,
-      })
+      .inParallel([
+        side01.animations.dissolveIn(0.4),
+        side12.animations.dissolveIn(0.4),
+        angle2._label.animations.dissolveIn(0.4),
+      ])
       .start();
   };
   const toNames = () => {
@@ -278,8 +242,6 @@ function layoutRight() {
   figure.fnMap.global.add('triAnimateToValues', animateToValues.bind(this));
   figure.fnMap.global.add('triToNames', toNames.bind(this));
   figure.fnMap.global.add('triToValues', toValues.bind(this));
-  figure.fnMap.global.add('triSidesDissolveIn', sidesDissolveIn.bind(this));
-  figure.fnMap.global.add('triAngleDissolveIn', angleDissolveIn.bind(this));
   figure.fnMap.global.add('triPulseTheta', () => pulseAngle(angle2));
   figure.fnMap.global.add('triPulseRight', () => pulseRight());
   figure.fnMap.global.add('triToRot', (rot) => {
@@ -287,7 +249,6 @@ function layoutRight() {
   });
   figure.fnMap.global.add('triPulseAngles', () => {
     pulseAngle(angle2);
-    // pulseAngle(tri.getElement('angle0'));
     pulseRight();
     pulseAngle(tri.getElement('angle0'));
   });

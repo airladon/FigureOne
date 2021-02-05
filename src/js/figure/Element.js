@@ -5061,6 +5061,9 @@ class FigureElementCollection extends FigureElement {
    */
   getElements(children: TypeElementPath) {
     // const paths = [];
+    if (children == null) {
+      return [];
+    }
     const processPath = (path, prefix = '') => {
       if (typeof path === 'string') {
         return [`${prefix}${path}`];

@@ -43,6 +43,18 @@ export type TypeSlideStateCallback = (TypeSlideFrom, number) => void;
 export type TypeSlideTransitionCallback = (() => void, number, TypeSlideFrom) => void;
 
 /**
+ * All element paths should be relative to the slide navigator reference
+ * collection {@link OBJ_SlideNavigator}`.collection`.
+ *
+ * @property {TypeElementPath} [in] elements to dissolve in
+ * @property {TypeElementPath} [out] elements to dissolve out
+ */
+export type OBJ_SlideNavigatorDissolve = {
+  in?: TypeElementPath,
+  out?: TypeElementPath,
+}
+
+/**
  * Slide definition options object.
  *
  * This object defines the state the figure should be set to when this slide
@@ -141,7 +153,7 @@ export type TypeSlideTransitionCallback = (() => void, number, TypeSlideFrom) =>
  * - `enterStateCommon` (for new slide)
  * - `enterState`
  * - show `fromForm`
- * - `transition` or '`fromForm` to `form` animations
+ * - `transition`, `dissolve` or '`fromForm` to `form` animations
  * - show `form`
  * - `steadyStateCommon`
  * - `steadyState`
@@ -157,6 +169,7 @@ export type TypeSlideTransitionCallback = (() => void, number, TypeSlideFrom) =>
  * @property {TypeElementPath} [show]
  * @property {TypeElementPath} [hideCommon] common property
  * @property {TypeElementPath} [hide]
+ * @property {OBJ_SlideNavigatorDissolve} [dissolve]
  * @property {TypeSlideStateCallback} [enterStateCommon] common property
  * @property {TypeSlideStateCallback} [enterState]
  * @property {TypeSlideTransitionCallback} [transition] transititions are
@@ -173,6 +186,7 @@ export type TypeSlideTransitionCallback = (() => void, number, TypeSlideFrom) =>
  * @property {string | Array<string | null> | null} [fromForm]
  * @property {string | Array<string>} [scenarioCommon] common property
  * @property {string | Array<string>} [scenario]
+ * @property {boolean} [clear] `true` does not use any prior common properties (`false`)
  */
 export type OBJ_SlideNavigatorSlide = {
   text?: OBJ_TextLines,
@@ -404,9 +418,15 @@ export default class SlideNavigator {
   getProperty(property: string, indexIn: number, defaultValue: any = null) {
     let index = indexIn;
     let prop = this.slides[index][property];
+    if (this.slides[index].clear) {
+      return prop === undefined ? defaultValue : prop;
+    }
     while (prop === undefined && index > 0) {
       index -= 1;
       prop = this.slides[index][property];
+      if (this.slides[index].clear) {
+        return prop === undefined ? defaultValue : prop;
+      }
     }
     if (prop === undefined) {
       return defaultValue;
@@ -455,11 +475,21 @@ export default class SlideNavigator {
     }
   }
 
+  showDissolved(slide) {
+    if (slide.dissolve != null) {
+      const inElements = this.collection.getElements(slide.dissolve.in);
+      const outElements = this.collection.getElements(slide.dissolve.out);
+      outElements.map(e => e.hide());
+      inElements.map(e => e.showAll());
+    }
+  }
+
   setSteadyState(from: 'next' | 'prev' | number) {
     const index = this.currentSlideIndex;
     const slide = this.slides[index];
     const form = this.getForm(index);
     this.showForms(form);
+    this.showDissolved(slide);
     this.getProperty('steadyStateCommon', index, () => {})(from, index);
     if (slide.steadyState != null) {
       slide.steadyState(from, index);
@@ -506,6 +536,27 @@ export default class SlideNavigator {
     const slide = this.slides[this.currentSlideIndex];
     if (typeof slide.transition === 'function') {
       return slide.transition('slideNavigatorTransitionDone', this.currentSlideIndex, from);
+    }
+
+    if (slide.dissolve != null) {
+      const inElements = this.collection.getElements(slide.dissolve.in);
+      const outElements = this.collection.getElements(slide.dissolve.out);
+      const dissolveInSteps = inElements.map(e => e.animations.dissolveIn(0.4));
+      const dissolveOutSteps = outElements.map(e => e.animations.dissolveOut(0.4));
+      for (let j = 0; j < inElements.length; j += 1) {
+        for (let i = 0; i < this.equations.length; i += 1) {
+          const e = this.collection.getElement(this.equations[i]);
+          if (e === inElements[j]) {
+            e.hide();
+          }
+        }
+      }
+      this.collection.animations.new()
+        .inParallel(dissolveOutSteps)
+        .inParallel(dissolveInSteps)
+        .whenFinished('slideNavigatorTransitionDone')
+        .start();
+      return null;
     }
 
     const forms = this.getForm(this.currentSlideIndex);

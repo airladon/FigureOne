@@ -86,18 +86,19 @@ function makeEquation() {
         sinus: 'sinus',
         sine: 'sine',
         sineSin: ['sine', 'comma', 'sinText'],
-        statement: ['oppOnHyp', '_  is the same for all right triangles with angle ', 'theta',
-        ],
+        // statement: ['oppOnHyp', '_  is the same for all right triangles with angle ', 'theta',
+        // ],
       },
     },
     mods: {
       scenarios: {
         upperLeft: { position: [-2, 0.4], scale: 1 },
-        left: { position: [-2, 0], scale: 1 },
+        left: { position: [-2.2, 0], scale: 1 },
         default: { position: [-1.2, 0], scale: 1.5 },
         table: { position: [-2.1, 1.1], scale: 1 },
-        top: { position: [-1.5, 0.7], scale: 1 },
+        // top: { position: [-1.5, 0.7], scale: 1 },
         topRight: { position: [1.6, 0.95], scale: 1 },
+        bottom: { position: [0, -1.3], scale: 1 },
       },
     },
   });
