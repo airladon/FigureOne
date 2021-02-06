@@ -1186,20 +1186,6 @@ export class Equation extends FigureElementCollection {
     }
 
     this.fnMap.add('_goToForm', (percentage: number, customProperties: Object) => {
-      // const {
-      //   name
-      //   index
-      //   animate
-      //   delay
-      //   dissolveOutTime
-      //   duration
-      //   blankTime
-      //   dissolveInTime
-      //   prioritizeFormDuration
-      //   fromWhere
-      //   ifAnimating
-      //   callback
-      //  } = customProperties;
       const currentForm = this.getCurrentForm();
       if (currentForm != null) {
         if (customProperties.target == null) {
@@ -1239,26 +1225,6 @@ export class Equation extends FigureElementCollection {
         callback: o.callback,
       };
       o.callback = '_goToForm';
-      // o.callback = () => {
-      //   const currentForm = this.getCurrentForm();
-      //   if (currentForm != null) {
-      //     // if (o.start == null) {
-      //     //   o.start = currentForm.name;
-      //     // }
-      //     if (o.target == null) {
-      //       o.target = currentForm.name;
-      //     }
-      //   }
-      //   if (o.start != null) {
-      //     this.showForm(o.start);
-      //   }
-      //   this.goToForm(joinObjects({}, o, {
-      //     form: o.target,
-      //     callback: null,
-      //     delay: 0,
-      //   }));
-      //   return this.getRemainingAnimationTime(['_Equation', '_EquationColor']);
-      // };
       o.setToEnd = () => {
         this.showForm(o.target);
       };
@@ -1269,6 +1235,7 @@ export class Equation extends FigureElementCollection {
       name: 'goToForm',
     });
 
+    // TODO this needs to be updated for recording
     this.animations.nextForm = (...opt) => {
       const o = joinObjects({}, {
         element: this,

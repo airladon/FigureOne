@@ -10,7 +10,7 @@ function layoutRight() {
         elements: {
           v: value,
           n: name,
-          n2: name2,
+          n2: { text: name2, font: { style: 'normal' } },
         },
         forms: {
           value: 'v',
@@ -130,7 +130,7 @@ function layoutRight() {
       scenarios: {
         default: { position: [-0.4, -0.8] },
         bottom: { position: [0, -0.8] },
-        left: { position: [-0.7, -0.8] },
+        eqnTri: { position: [-1.9, -0.8] },
       },
     },
   });
@@ -236,10 +236,15 @@ function layoutRight() {
     angleShowForm('value');
     rotLine.setPosition(rotLine.getPosition());
   };
-  const pulseAngle = (element) => element.pulseAngle({
+  const pulseAngle = element => element.pulseAngle({
     curve: { scale: 1.7 }, label: { scale: 1.7 }, duration: 1,
   });
   const pulseRight = () => tri.getElement('angle1').pulse({ xAlign: 'right', yAlign: 'bottom', scale: 1.7 });
+
+  figure.fnMap.global.add('triToSin', () => {
+    rightTri._tri._side12._label.showForm('name2');
+    rotLine.setPosition(rotLine.getPosition());
+  });
   figure.fnMap.global.add('triAnimateToNames', animateToNames.bind(this));
   figure.fnMap.global.add('triAnimateToValues', animateToValues.bind(this));
   figure.fnMap.global.add('triToNames', toNames.bind(this));

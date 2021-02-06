@@ -77,7 +77,7 @@ function makeEquation() {
         sinOnly: [{ container: ['', 0.9] }, 'sinTheta'],
         fOnly: [{ container: ['', 0.9] }, 'fTheta'],
         fLeft: ['fTheta'],
-        fInf: {
+        sinInf: {
           content: [
             'fTheta', 'equals1', 'theta1', '_  –  _1',
             { frac: [{ sup: ['theta2', '3'] }, 'v2', '3!'] },
@@ -101,13 +101,14 @@ function makeEquation() {
     mods: {
       scenarios: {
         upperLeft: { position: [-2, 0.4], scale: 1 },
-        left: { position: [-2.2, 0], scale: 1 },
-        default: { position: [-1.2, 0], scale: 1.5 },
+        // left: { position: [-2.2, 0], scale: 1.2 },
+        default: { position: [0, 0], scale: 1.3 },
         table: { position: [-2.1, 1.1], scale: 1 },
         // top: { position: [-1.5, 0.7], scale: 1 },
         topRight: { position: [1.6, 0.95], scale: 1 },
         bottom: { position: [0, -1.3], scale: 1 },
-        right: { position: [1, 0] },
+        eqnTri: { position: [0.8, 0], scale: 1.2 },
+        right: { position: [1, 0], scale: 1.1 },
       },
     },
   });

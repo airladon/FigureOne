@@ -181,9 +181,9 @@ function layout() {
         fixColor: true,
       },
     },
-    centerText('firstCentury', 'First Century CE:', {}, [1, 0.5]),
-    centerText('geometry', 'Geometry', {}, [1, 0]),
-    centerText('fourteenthCentury', '1400 CE:', {}, [1, 0.5]),
+    centerText('firstCentury', 'First century CE:', {}, [0, 1]),
+    centerText('geometry', 'Geometry', {}, [0, 0]),
+    centerText('fifteenth', 'Fifteenth century CE:', {}, [0, 1]),
     centerText('background', 'Background'),
     centerText('sumOfAngles', 'Angles in a triangle always add to 180\u00b0'),
     centerText('similarTriangles', 'Similar Triangles'),
@@ -264,7 +264,7 @@ function makeSlides() {
       nextButton: { position: [3.8, 0], width: 0.2, height: 0.2 },
       prevButton: { position: [-3.8, 0], width: 0.2, height: 0.2 },
       equation: ['eqn', 'bow.eqn'],
-      equationDefaults: { duration: 4 },
+      // equationDefaults: { duration: 4 },
     },
   });
   const slides = [];
@@ -294,32 +294,6 @@ function makeSlides() {
     },
   });
 
-  slides.push({ form: 'bowstring' });
-  // figure.fnMap.global.add('tester', (done) => {
-  //   figure.getElement('bow.bowString').animations.new()
-  //     .length({ start: 0, duration: 4 })
-  //     .whenFinished(done)
-  //     .start();
-  // });
-  slides.push({
-    // show: 'eqn',
-    // hide: 'bow.sin',
-    fromForm: 'bowstring',
-    form: 'halfBowstring',
-    // transition: (done) => {
-    //   // figure.fnMap.exec('tester', done);
-    //   eqn.animations.new()
-    //     .delay(1)
-    //     .goToForm({ start: 'bowstring', target: 'halfBowstring', animate: 'move', duration: 4 })
-    //     .whenFinished(done)
-    //     .start();
-    //   // figure.getElement('bow.bowString').animations.new()
-    //   //   .length({ start: 0, duration: 4 })
-    //   //   .pulseWidth({ duration: 4 })
-    //   //   .whenFinished(done)
-    //   //   .start();
-    // },
-  });
   slides.push({ scenario: 'default', show: ['background'] });
 
   /*
@@ -579,7 +553,8 @@ function makeSlides() {
     transition: (done) => {
       figure.animations.new()
         .inParallel([
-          eqn.animations.scenario({ target: 'left', duration: 2 }),
+          eqn.animations.scenario({ target: 'eqnTri', duration: 2 }),
+          rightTri.animations.scenario({ target: 'eqnTri', duration: 2 }),
           figure.getElement('haveTheSame').animations.dissolveOut(0.4),
           figure.getElement('allTriangles').animations.dissolveOut(0.4),
         ])
@@ -590,13 +565,14 @@ function makeSlides() {
     steadyState: () => {
       figure.getElement('haveTheSame').hide();
       figure.getElement('allTriangles').hide();
-      eqn.setScenario('left');
+      eqn.setScenario('eqnTri');
+      rightTri.setScenario('eqnTri');
       rightTri.hasTouchableElements = true;
     },
   });
 
   slides.push({
-    scenarioCommon: ['default', 'left', 'top'],
+    scenarioCommon: ['default', 'eqnTri'],
     show: ['rightTri'],
     fromForm: 'ratioValue',
     form: 'f',
@@ -622,13 +598,17 @@ function makeSlides() {
     },
   });
 
+
   slides.push({
     show: ['rightTri'],
+    fromForm: 'sinTheta',
     form: 'sinTheta',
     transition: (done) => {
       rightTri._tri._side12._label.showForm('value');
       rightTri._tri._side12._label.animations.new()
-        .goToForm({ target: 'name2', animate: 'move', duration: 1 })
+        .dissolveOut(0.4)
+        .trigger({ callback: 'triToSin' })
+        .dissolveIn(0.4)
         .whenFinished(done)
         .start();
     },
@@ -650,6 +630,7 @@ function makeSlides() {
   slides.push({
     fromForm: 'sinTheta',
     show: ['rightTri'],
+    enterState: () => figure.fnMap.exec('triToSin'),
     dissolve: {
       out: ['eqn', 'rightTri'],
       in: 'bow.circle',
@@ -757,6 +738,36 @@ function makeSlides() {
   ....##....##.....##.########..########.########
   */
   slides.push({
+    clear: true,
+    scenarioCommon: 'default',
+    dissolve: { in: 'firstCentury' },
+  });
+
+  slides.push({
+    show: ['firstCentury'],
+    dissolve: { in: 'geometry' },
+  });
+
+  slides.push({
+    show: ['firstCentury', 'geometry'],
+    dissolve:{
+      out: ['firstCentury', 'geometry'],
+      in: 'table',
+    },
+  });
+
+  slides.push({
+    show: 'table',
+    dissolve: { out: 'table', in: 'fifteenth' },
+  });
+
+  slides.push({
+    show: ['fifteenth'],
+    fromForm: null,
+    form: 'sinInf',
+  });
+
+  slides.push({
     show: ['rightTri'],
     scenarioCommon: ['default', 'left', 'top'],
     hideCommon: ['rightTri.tri.angle0', 'rightTri.tri.side20'],
@@ -812,12 +823,12 @@ function makeSlides() {
 
   slides.push({
     show: ['table', 'firstCentury', 'geometry'],
-    dissolve: { out: ['firstCentury', 'geometry'], in: 'fourteenthCentury' },
+    dissolve: { out: ['firstCentury', 'geometry'], in: 'fifteenth' },
   });
 
   slides.push({
     scenarioCommon: ['default', 'table'],
-    show: ['table', 'fourteenthCentury'],
+    show: ['table', 'fifteenth'],
     dissolve: { in: 'eqn1' },
   });
 
@@ -1089,6 +1100,6 @@ function makeSlides() {
   });
 
   nav.loadSlides(slides);
-  nav.goToSlide(0);
+  nav.goToSlide(33);
 }
 makeSlides();

@@ -967,9 +967,6 @@ class Recorder {
   }
 
   seek(timeIn: number) {
-    // console.log('called seek', timeIn)
-    // this.pauseState = null;
-    console.log('seeking', this.state, this.pauseState)
     let time = timeIn;
     if (time < 0) {
       time = 0;
@@ -990,8 +987,6 @@ class Recorder {
     //   movingFreely: 'freeze',
     // });
     this.figure.stop('freeze');
-    // console.log('last seek time', this.lastSeekTime)
-    console.log('end seek', this.pauseState)
   }
 
   setToTime(timeIn: number, force: boolean = false) {
