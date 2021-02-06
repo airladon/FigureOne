@@ -159,13 +159,13 @@ function layoutBow() {
           position: [0.9, 0.8],
           scale: 1,
           formDefaults: {
-            alignment: { yAlign: 'middle', xAlign: 'left' },
+            alignment: { yAlign: 'baseline', xAlign: 'left' },
           },
         },
       },
     ],
   });
-  const eqn = bow.getElement('eqn')
+  const eqn = bow.getElement('eqn');
   figure.fnMap.global.add('bowString', () => {
     bow.showOnly(['circle', 'bowString']);
     bow.getElement('bowString').animations.new()

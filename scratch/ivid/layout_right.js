@@ -3,17 +3,19 @@
 
 
 function layoutRight() {
-  const sideLabel = (value, name) => ({
+  const sideLabel = (value, name, name2) => ({
     label: {
       text: {
         color: color2,
         elements: {
           v: value,
           n: name,
+          n2: name2,
         },
         forms: {
           value: 'v',
           name: 'n',
+          name2: 'n2',
         },
       },
     },
@@ -96,9 +98,9 @@ function layoutRight() {
             },
           ],
           side: [
-            sideLabel('1', 'hypotenuse'),
-            sideLabel('0.0000', 'opposite'),
-            sideLabel('adjacent', 'adjacent'),
+            sideLabel('1', 'hypotenuse', 'hypotenuse'),
+            sideLabel('0.0000', 'opposite', 'sin'),
+            sideLabel('adjacent', 'adjacent', 'cos'),
           ],
         },
       },

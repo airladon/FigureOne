@@ -762,49 +762,58 @@ export default class CollectionsLine extends FigureElementCollection {
       this.setProperties(optionsToUse.mods);
     }
 
+    this.fnMap.add('_lengthCallback', (percentage: number, customProperties: Object) => {
+      const { start, target } = customProperties;
+      const l = (target - start) * percentage + start;
+      this.setLength(l);
+    });
     this.animations.length = (...opt) => {
       const o = joinObjects({}, {
         element: this,
-        // start: this.line.length(),
-        // target: this.line.length(),
       }, ...opt);
-      let target;
-      let start;
-      let toSetup = true;
-      o.callback = (percentage) => {
-        if (toSetup) {
-          if (o.start == null) {
-            start = this.line.length();
-          } else {
-            ({ start } = o);
-          }
-          if (o.target == null) {
-            target = this.line.length();
-          } else {
-            ({ target } = o);
-          }
-          toSetup = false;
-        }
-        const l = (target - start) * percentage + start;
-        this.setLength(l);
+      o.customProperties = {
+        start: o.start == null ? this.line.length() : o.start,
+        target: o.target == null ? this.line.length() : o.target,
       };
+      o.callback = '_lengthCallback';
       return new animation.CustomAnimationStep(o);
     };
 
+    // this.animations.form = (...opt) => {
+    //   const o = joinObjects({}, { element: this }, ...opt);
+
+    // }
+
+    this.fnMap.add('_pulseWidth', (percentage: number, customProperties: Object) => {
+      const {
+        line, label, arrow, duration, frequency,
+      } = customProperties;
+      this.pulseWidth({
+        line, label, arrow, duration, frequency,
+      });
+    });
     this.animations.pulseWidth = (...opt) => {
       const o = joinObjects({}, {
         element: this,
         duration: 1,
       }, ...opt);
-      o.callback = () => {
-        this.pulseWidth({
-          line: o.line,
-          label: o.label,
-          arrow: o.arrow,
-          duration: o.duration,
-          frequency: o.frequency,
-        });
+      o.callback = '_pulseWidth';
+      o.customProperties = {
+        line: o.line,
+        label: o.label,
+        arrow: o.arrow,
+        duration: o.duration,
+        frequency: o.frequency,
       };
+      // o.callback = () => {
+      //   this.pulseWidth({
+      //     line: o.line,
+      //     label: o.label,
+      //     arrow: o.arrow,
+      //     duration: o.duration,
+      //     frequency: o.frequency,
+      //   });
+      // };
       return new animation.TriggerAnimationStep(o);
     };
 
@@ -840,6 +849,10 @@ export default class CollectionsLine extends FigureElementCollection {
     this.setupLine();
     // this.setLineDimensions();
     return this;
+  }
+
+  stateSet() {
+    this.setupLine();
   }
 
   pulseWidthDone() {

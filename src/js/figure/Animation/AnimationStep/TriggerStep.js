@@ -25,6 +25,7 @@ import type { FigureElement } from '../../Element';
 export type OBJ_TriggerAnimationStep = {
   callback?: Function;      // default is element transform
   payload?: any;
+  setToEnd?: string | Function
 } & OBJ_AnimationStep;
 
 /**
@@ -91,6 +92,8 @@ export class TriggerAnimationStep extends AnimationStep {
   element: ?Object;
   callback: ?(string | Function);
   payload: ?Object;
+  setToEnd: ?(string | Function);
+  customProperties: Object;
 
   /**
    * @hideconstructor
@@ -102,6 +105,7 @@ export class TriggerAnimationStep extends AnimationStep {
     const defaultOptions = {
       payload: null,
       duration: 0,
+      setToEnd: () => {},
     };
     let options;
     if (
@@ -118,6 +122,8 @@ export class TriggerAnimationStep extends AnimationStep {
     this.callback = options.callback;
     this.payload = options.payload;
     this.duration = options.duration;
+    this.setToEnd = options.setToEnd;
+    this.customProperties = options.customProperties;
   }
 
   // fnExec(idOrFn: string | Function | null, ...args: any) {
@@ -164,6 +170,7 @@ export class TriggerAnimationStep extends AnimationStep {
     return [...super._getStateProperties(),
       'callback',
       'payload',
+      'customProperties',
     ];
   }
 
@@ -175,7 +182,7 @@ export class TriggerAnimationStep extends AnimationStep {
     // if (this.callback != null && this.payload != null) {
     //   console.log(this.payload)
     // }
-    const remainingTime = this.fnExec(this.callback, this.payload);
+    const remainingTime = this.fnExec(this.callback, this.payload, this.customProperties);
     if (remainingTime != null && typeof remainingTime === 'number') {
       this.duration = remainingTime;
     }
@@ -191,7 +198,8 @@ export class TriggerAnimationStep extends AnimationStep {
     //   this.callback(this.payload);
     //   this.callback = null;
     // }
-    this.fnExec(this.callback, this.payload);
+    this.fnExec(this.setToEnd);
+    this.fnExec(this.callback, this.payload, this.customProperties);
     this.callback = null;
   }
 

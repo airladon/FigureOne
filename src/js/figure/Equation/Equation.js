@@ -1185,6 +1185,37 @@ export class Equation extends FigureElementCollection {
       this.eqn.currentFormSeriesName = 'base';
     }
 
+    this.fnMap.add('_goToForm', (percentage: number, customProperties: Object) => {
+      // const {
+      //   name
+      //   index
+      //   animate
+      //   delay
+      //   dissolveOutTime
+      //   duration
+      //   blankTime
+      //   dissolveInTime
+      //   prioritizeFormDuration
+      //   fromWhere
+      //   ifAnimating
+      //   callback
+      //  } = customProperties;
+      const currentForm = this.getCurrentForm();
+      if (currentForm != null) {
+        if (customProperties.target == null) {
+          customProperties.target = currentForm.name;
+        }
+      }
+      if (customProperties.start != null) {
+        this.showForm(customProperties.start);
+      }
+      this.goToForm(joinObjects({}, customProperties, {
+        form: customProperties.target,
+        callback: null,
+        delay: 0,
+      }));
+      return this.getRemainingAnimationTime(['_Equation', '_EquationColor']);
+    });
     this.animations.goToForm = (...opt) => {
       const o = joinObjects({}, {
         element: this,
@@ -1193,25 +1224,43 @@ export class Equation extends FigureElementCollection {
       if (o.callback != null) {
         o.done = o.callback;
       }
-      o.callback = () => {
-        const currentForm = this.getCurrentForm();
-        if (currentForm != null) {
-          // if (o.start == null) {
-          //   o.start = currentForm.name;
-          // }
-          if (o.target == null) {
-            o.target = currentForm.name;
-          }
-        }
-        if (o.start != null) {
-          this.showForm(o.start);
-        }
-        this.goToForm(joinObjects({}, o, {
-          form: o.target,
-          callback: null,
-          delay: 0,
-        }));
-        return this.getRemainingAnimationTime(['_Equation', '_EquationColor']);
+      o.customProperties = {
+        target: o.target,
+        index: o.index,
+        animate: o.animate,
+        delay: o.delay,
+        dissolveOutTime: o.dissolveOutTime,
+        duration: o.duration,
+        blankTime: o.blankTime,
+        dissolveInTime: o.dissolveInTime,
+        prioritizeFormDuration: o.prioritizeFormDuration,
+        fromWhere: o.fromWhere,
+        ifAnimating: o.ifAnimating,
+        callback: o.callback,
+      };
+      o.callback = '_goToForm';
+      // o.callback = () => {
+      //   const currentForm = this.getCurrentForm();
+      //   if (currentForm != null) {
+      //     // if (o.start == null) {
+      //     //   o.start = currentForm.name;
+      //     // }
+      //     if (o.target == null) {
+      //       o.target = currentForm.name;
+      //     }
+      //   }
+      //   if (o.start != null) {
+      //     this.showForm(o.start);
+      //   }
+      //   this.goToForm(joinObjects({}, o, {
+      //     form: o.target,
+      //     callback: null,
+      //     delay: 0,
+      //   }));
+      //   return this.getRemainingAnimationTime(['_Equation', '_EquationColor']);
+      // };
+      o.setToEnd = () => {
+        this.showForm(o.target);
       };
       return new TriggerAnimationStep(o);
     };
@@ -1234,6 +1283,16 @@ export class Equation extends FigureElementCollection {
           delay: 0,
         }));
         return this.getRemainingAnimationTime(['_Equation', '_EquationColor']);
+      };
+      let nextIndex = this.getFormIndex(this.getCurrenForm());
+      if (nextIndex > -1) {
+        nextIndex += 1;
+        if (nextIndex > this.eqn.currentFormSeries.length - 1) {
+          nextIndex = 0;
+        }
+      }
+      o.setToEnd = () => {
+        this.showForm(this.eqn.forms[this.eqn.currentFormSeries[nextIndex]]);
       };
       return new TriggerAnimationStep(o);
     };

@@ -968,7 +968,8 @@ class Recorder {
 
   seek(timeIn: number) {
     // console.log('called seek', timeIn)
-    this.pauseState = null;
+    // this.pauseState = null;
+    console.log('seeking', this.state, this.pauseState)
     let time = timeIn;
     if (time < 0) {
       time = 0;
@@ -981,6 +982,7 @@ class Recorder {
     } else if (this.state === 'playing') {
       this.pausePlayback('freeze');
     }
+    this.pauseState = null;
     this.setToTime(time);
     // this.figure.pause({
     //   animation: 'freeze',
@@ -989,9 +991,11 @@ class Recorder {
     // });
     this.figure.stop('freeze');
     // console.log('last seek time', this.lastSeekTime)
+    console.log('end seek', this.pauseState)
   }
 
   setToTime(timeIn: number, force: boolean = false) {
+    // console.log('time set', timeIn)
     if (timeIn === 0 && this.states.diffs.length > 0) {
       this.stateIndex = 0;
     } else {  // $FlowFixMe
@@ -1209,7 +1213,9 @@ class Recorder {
     }
 
     const finished = () => {
+      console.log('Finished start playback', this.pauseState)
       if (this.pauseState == null) {
+        // console.log('setting time')
         this.setToTime(fromTime, true);
       } else {
         // this.figure.setState(this.pauseState, 'instant');

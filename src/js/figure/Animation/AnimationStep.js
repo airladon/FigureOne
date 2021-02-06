@@ -185,6 +185,7 @@ export default class AnimationStep {
   // }
 
   setTimeDelta(delta: ?number) {
+    // console.log(this.name, performance.now()/1000 - delta)
     if (this.startTime != null && delta != null) {
       this.startTime += delta;
     }

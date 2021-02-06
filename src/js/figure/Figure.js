@@ -754,6 +754,7 @@ class Figure {
       // }
       setState(this, state);
       this.elements.setTimeDelta(this.globalAnimation.now() / 1000 - this.stateTime);
+      this.elements.stateSet();
       this.elements.setPointsFromDefinition();
       this.elements.setPrimitiveColors();
       if (this.setStateCallback != null) {

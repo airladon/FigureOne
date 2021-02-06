@@ -236,15 +236,6 @@ function layout() {
     }),
   ]);
   figure.add({
-    name: 'nav',
-    method: 'collections.slideNavigator',
-    options: {
-      nextButton: { position: [3.8, 0], width: 0.2, height: 0.2 },
-      prevButton: { position: [-3.8, 0], width: 0.2, height: 0.2 },
-      equation: 'eqn',
-    },
-  });
-  figure.add({
     name: 'cursor',
     method: 'collections.cursor',
     options: {
@@ -266,6 +257,16 @@ layoutTable();
 layoutBow();
 
 function makeSlides() {
+  figure.add({
+    name: 'nav',
+    method: 'collections.slideNavigator',
+    options: {
+      nextButton: { position: [3.8, 0], width: 0.2, height: 0.2 },
+      prevButton: { position: [-3.8, 0], width: 0.2, height: 0.2 },
+      equation: ['eqn', 'bow.eqn'],
+      equationDefaults: { duration: 4 },
+    },
+  });
   const slides = [];
 
   const nav = figure.getElement('nav');
@@ -293,6 +294,32 @@ function makeSlides() {
     },
   });
 
+  slides.push({ form: 'bowstring' });
+  // figure.fnMap.global.add('tester', (done) => {
+  //   figure.getElement('bow.bowString').animations.new()
+  //     .length({ start: 0, duration: 4 })
+  //     .whenFinished(done)
+  //     .start();
+  // });
+  slides.push({
+    // show: 'eqn',
+    // hide: 'bow.sin',
+    fromForm: 'bowstring',
+    form: 'halfBowstring',
+    // transition: (done) => {
+    //   // figure.fnMap.exec('tester', done);
+    //   eqn.animations.new()
+    //     .delay(1)
+    //     .goToForm({ start: 'bowstring', target: 'halfBowstring', animate: 'move', duration: 4 })
+    //     .whenFinished(done)
+    //     .start();
+    //   // figure.getElement('bow.bowString').animations.new()
+    //   //   .length({ start: 0, duration: 4 })
+    //   //   .pulseWidth({ duration: 4 })
+    //   //   .whenFinished(done)
+    //   //   .start();
+    // },
+  });
   slides.push({ scenario: 'default', show: ['background'] });
 
   /*
@@ -595,6 +622,22 @@ function makeSlides() {
     },
   });
 
+  slides.push({
+    show: ['rightTri'],
+    form: 'sinTheta',
+    transition: (done) => {
+      rightTri._tri._side12._label.showForm('value');
+      rightTri._tri._side12._label.animations.new()
+        .goToForm({ target: 'name2', animate: 'move', duration: 1 })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      rightTri._tri._side12._label.showForm('name2');
+      rightTri.hasTouchableElements = true;
+    },
+  });
+
   /*
   .########...#######..##......##
   .##.....##.##.....##.##..##..##
@@ -667,82 +710,42 @@ function makeSlides() {
   slides.push({
     show: ['bow'],
     enterStateCommon: () => bow.highlight(['sin', 'eqn']),
-    transition: (done) => {
-      bow._eqn.animations.new()
-        .goToForm({ start: '0', target: '1', animate: 'move', duration: 1 })
-        .whenFinished(done)
-        .start();
-    },
-    steadyState: () => bow._eqn.showForm('1'),
+    fromForm: { 'bow.eqn': '0' },
+    form: { 'bow.eqn': '1' },
   });
 
   slides.push({
     show: ['bow'],
-    enterStateCommon: () => bow.highlight(['sin', 'eqn']),
-    transition: (done) => {
-      bow._eqn.animations.new()
-        .goToForm({ start: '1', target: '2', animate: 'move', duration: 1 })
-        .whenFinished(done)
-        .start();
-    },
-    steadyState: () => bow._eqn.showForm('2'),
+    fromForm: { 'bow.eqn': '1' },
+    form: { 'bow.eqn': '2' },
   });
-
-  // slides.push({
-  //   clear: true,
-  //   show: ['bow.circle', 'bow.eqn', 'bow.bowString', 'bow.arc'],
-  //   enterState: () => {
-  //     figure.getElement('bow.eqn').showForm('0');
-  //   },
-  //   dissolve: {
-  //     out: ['bow.bowString', 'bow.arc', 'bow.eqn'],
-  //     in: ['bow.x', 'bow.y'],
-  //   },
-  // });
-
-  // slides.push({
-  //   clear: true,
-  //   show: ['bow.circle', 'bow.x', 'bow.y'],
-  //   transition: (done) => {
-  //     figure.animations.new()
-  //       .trigger({ callback: 'bowRad', duration: 1 })
-  //       .whenFinished(done)
-  //       .start();
-  //   },
-  //   steadyState: () => {
-  //     figure.getElement('bow.hyp').showAll();
-  //   },
-  // });
-
-  // slides.push({
-  //   clear: true,
-  //   show: ['bow.circle', 'bow.x', 'bow.y', 'bow.hyp'],
-  //   transition: (done) => {
-  //     figure.animations.new()
-  //       .trigger({ callback: 'bowTri', duration: 4.6 })
-  //       .whenFinished(done)
-  //       .start();
-  //   },
-  //   steadyState: () => {
-  //     figure.getElement('bow.sin').showAll();
-  //     figure.getElement('bow.cos').showAll();
-  //     figure.getElement('bow.rightAngle').showAll();
-  //   },
-  // });
 
   slides.push({
-    clear: true,
-    form: null,
-    showCommon: ['bow.circle'],
-    steadyState: () => {
-      figure.shortCuts['1'] = 'bowString';
-      figure.shortCuts['2'] = 'bow';
-      figure.shortCuts['3'] = 'bowCircle';
-      figure.shortCuts['4'] = 'bowRad';
-      figure.shortCuts['5'] = 'bowTri';
-      figure.shortCuts['6'] = 'bowSin';
-    },
+    show: ['bow'],
+    fromForm: { 'bow.eqn': '2' },
+    form: { 'bow.eqn': '3' },
   });
+
+  slides.push({
+    show: ['bow'],
+    fromForm: { 'bow.eqn': '3' },
+    form: { 'bow.eqn': '4' },
+  });
+
+
+  // slides.push({
+  //   clear: true,
+  //   form: null,
+  //   showCommon: ['bow.circle'],
+  //   steadyState: () => {
+  //     figure.shortCuts['1'] = 'bowString';
+  //     figure.shortCuts['2'] = 'bow';
+  //     figure.shortCuts['3'] = 'bowCircle';
+  //     figure.shortCuts['4'] = 'bowRad';
+  //     figure.shortCuts['5'] = 'bowTri';
+  //     figure.shortCuts['6'] = 'bowSin';
+  //   },
+  // });
 
   /*
   .########....###....########..##.......########
@@ -753,6 +756,24 @@ function makeSlides() {
   ....##....##.....##.##.....##.##.......##......
   ....##....##.....##.########..########.########
   */
+  slides.push({
+    show: ['rightTri'],
+    scenarioCommon: ['default', 'left', 'top'],
+    hideCommon: ['rightTri.tri.angle0', 'rightTri.tri.side20'],
+    enterStateCommon: () => {
+      figure.fnMap.exec('triToValues');
+      rightTri.hasTouchableElements = false;
+      figure.fnMap.exec('triToRot', initialAngle);
+    },
+    form: 'sinTheta',
+    // steadyState: () => {
+    //   figure.getElement('haveTheSame').hide();
+    //   figure.getElement('allTriangles').hide();
+    //   eqn.setScenario('left');
+    //   rightTri.hasTouchableElements = true;
+    // },
+  });
+
   slides.push({
     scenarioCommon: ['default', 'left', 'top'],
     show: ['rightTri'],
@@ -1068,6 +1089,6 @@ function makeSlides() {
   });
 
   nav.loadSlides(slides);
-  nav.goToSlide(27);
+  nav.goToSlide(0);
 }
 makeSlides();

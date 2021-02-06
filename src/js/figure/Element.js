@@ -1223,6 +1223,9 @@ class FigureElement {
     return getState(this, this._getStateProperties(options), options);
   }
 
+  stateSet() {
+  }
+
   // execFn(fn: string | Function | null, ...args: Array<any>) {
   //   if (fn == null) {
   //     return null;
@@ -6090,6 +6093,13 @@ class FigureElementCollection extends FigureElement {
         const element = this.elements[this.drawOrder[i]];
         element.stopAnimating(how, name, includeChildren);
       }
+    }
+  }
+
+  stateSet() {
+    super.stateSet();
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      this.elements[this.drawOrder[i]].stateSet();
     }
   }
 

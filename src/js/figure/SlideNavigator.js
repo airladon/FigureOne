@@ -297,7 +297,8 @@ export default class SlideNavigator {
   nextButton: ?FigureElement;
   textElement: ?FigureElement;
   inTransition: boolean;
-  equations: Array<FigureElement>;
+  equationsOrder: Array<FigureElement>;
+  equations: { [string: eqnName]: FigureElement };
   collection: FigureElementCollection;
   subscriptions: SubscriptionManager;
   inTransition: boolean;
@@ -392,8 +393,8 @@ export default class SlideNavigator {
       nextButton.onClick = this.nextSlide.bind(this, false);
     }
 
-    if (this.slides == null && this.equations.length === 1) {
-      const [equation] = this.equations;
+    if (this.slides == null && this.equationsOrder.length === 1) {
+      const [equation] = this.equationsOrder;
       if (equation instanceof Equation) {
         const { eqn } = equation;
         if (eqn.currentFormSeries != null && eqn.currentFormSeries.length > 0) {
@@ -405,14 +406,17 @@ export default class SlideNavigator {
   }
 
   setEquations(equationsIn: Array<string | Equation>) {
-    const equations = [];
+    const equations = {};
+    const equationsOrder = [];
     equationsIn.forEach((e) => {
       const element = this.collection.getElement(e);
       if (element != null) {
-        equations.push(element);
+        equationsOrder.push(element);
+        equations[e] = element;
       }
     });
     this.equations = equations;
+    this.equationsOrder = equationsOrder;
   }
 
   getProperty(property: string, indexIn: number, defaultValue: any = null) {
@@ -439,40 +443,120 @@ export default class SlideNavigator {
   }
 
   getForm(index: number) {
-    const forms = this.getProperty('form', index, null);
-    if (forms === undefined) {
-      return [];
+    // const forms = this.getProperty('form', index, null);
+    // if (forms === undefined) {
+    //   return [];
+    // }
+    // if (!Array.isArray(forms)) {
+    //   return [forms];
+    // }
+    // return forms;
+    return this.getFormGeneric('form', index);
+  }
+
+  getFormGeneric(formType: 'form' | 'fromForm', index: number) {
+    let form;
+    if (formType === 'form') {
+      form = this.getProperty('form', index, null);
+    } else {
+      form = this.slides[index][formType];
     }
-    if (!Array.isArray(forms)) {
-      return [forms];
+    if (form === undefined) {
+      return {};
     }
-    return forms;
+    if (Array.isArray(form)) {
+      const forms = {};
+      form.forEach((f, i) => {
+        if (this.equationsOrder.length > i) {
+          forms[this.equationsOrder[i].name] = f;
+        }
+      });
+      return forms;
+    }
+    if (typeof form === 'string' || form === null) {
+      const forms = {};
+      if (this.equationsOrder.length > 0) {
+        forms[this.equationsOrder[0].name] = form;
+      }
+      return forms;
+    }
+    return form;
   }
 
   getFromForm(index: number): Array<string | null> {
-    const { fromForm } = this.slides[index];
-    if (fromForm === undefined) {
-      return [];
-    }
-    if (Array.isArray(fromForm)) {
-      return fromForm;
-    }
-    return [fromForm];
+    return this.getFormGeneric('fromForm', index);
+    // const { fromForm } = this.slides[index];
+    // if (fromForm === undefined) {
+    //   return {};
+    // }
+    // if (Array.isArray(fromForm)) {
+    //   const forms = {};
+    //   fromForm.forEach((form, i) => {
+    //     if (this.equations.length > i) {
+    //       forms[this.equations[i]] = form;
+    //     }
+    //   });
+    //   return forms;
+    // }
+    // if (typeof fromForm === 'string') {
+    //   const forms = {};
+    //   if (this.equations.length > 0) {
+    //     forms[this.equations[0]] = fromForm;
+    //   }
+    //   return forms;
+    // }
+    // return fromForm;
   }
 
-  showForms(forms: Array<string | null>, hideOnly: boolean = false) {
-    for (let i = 0; i < this.equations.length; i += 1) {
-      const e = this.collection.getElement(this.equations[i]);
+  showForms(formsToShow: Object) { //, hideOnly: boolean = false) {
+    Object.keys(formsToShow).forEach((eqnName) => {
+      const form = formsToShow[eqnName];
+      const e = this.collection.getElement(eqnName);
       if (e != null) {
-        if (forms.length > i && forms[i] != null) {
-          if (!hideOnly) {  // $FlowFixMe
-            e.showForm(forms[i]);
-          }
-        } else {
+        if (form == null) {
           e.hide();
+        } else {
+          e.showForm(form);
         }
       }
-    }
+    });
+    // for (let i = 0; i < this.equations.length; i += 1) {
+    //   const eqnName = this.equations[i];
+    //   const e = this.collection.getElement(eqnName);
+    //   const form = formsToShow[eqnName];
+    //   if (form !== undefined) {
+    //     if (form === null) {
+    //       e.hide();
+    //     } else {
+    //       e.showForm(form);
+    //     }
+    //   }
+    //   // if (hideOnly) {
+    //   //   e.
+    //   // }
+    //   // if (e != null) {
+    //   //   if (forms.length > i && forms[i] != null) {
+    //   //     if (!hideOnly) {  // $FlowFixMe
+    //   //       e.showForm(forms[i]);
+    //   //     }
+    //   //   } else {
+    //   //     e.hide();
+    //   //   }
+    //   // }
+    // }
+
+    // for (let i = 0; i < this.equations.length; i += 1) {
+    //   const e = this.collection.getElement();
+    //   if (e != null) {
+    //     if (forms.length > i && forms[i] != null) {
+    //       if (!hideOnly) {  // $FlowFixMe
+    //         e.showForm(forms[i]);
+    //       }
+    //     } else {
+    //       e.hide();
+    //     }
+    //   }
+    // }
   }
 
   showDissolved(slide) {
@@ -531,8 +615,8 @@ export default class SlideNavigator {
       const dissolveInSteps = inElements.map(e => e.animations.dissolveIn(0.4));
       const dissolveOutSteps = outElements.map(e => e.animations.dissolveOut(0.4));
       for (let j = 0; j < inElements.length; j += 1) {
-        for (let i = 0; i < this.equations.length; i += 1) {
-          const e = this.collection.getElement(this.equations[i]);
+        for (let i = 0; i < this.equationsOrder.length; i += 1) {
+          const e = this.equationsOrder[i];
           if (e === inElements[j]) {
             e.hide();
           }
@@ -540,7 +624,7 @@ export default class SlideNavigator {
       }
       for (let i = 0; i < forms.length; i += 1) {
         if (fromForms.length - 1 < i) {
-          const e = this.collection.getElement(this.equations[i]);
+          const e = this.equationsOrder[i];
           if (forms[i] != null) {
             e.showForm(forms[i]);
           }
@@ -577,51 +661,82 @@ export default class SlideNavigator {
     const forms = this.getForm(this.currentSlideIndex);
     const fromForms = this.getFromForm(this.currentSlideIndex);
 
-    if (forms.length === 0 || fromForms.length === 0) {
-      return this.transitionDone();
-    }
     let done = 'slideNavigatorTransitionDone';
-    for (let i = 0; i < this.equations.length; i += 1) {
-      const e = this.collection.getElement(this.equations[i]);
-      if (
-        e != null
-        && e instanceof Equation
-        && forms.length > i
-        && fromForms.length > i
-        && forms[i] != null
-        && fromForms[i] !== forms[i]
-      ) {
-        const form = forms[i];
-        const fromForm = fromForms[i];
-        if (fromForm === null) {
-          e.showForm(form);
+
+    Object.keys(fromForms).forEach((eqnName) => {
+      const e = this.collection.getElement(this.equations[eqnName]);
+      if (e != null && e instanceof Equation && forms[eqnName] !== undefined) {
+        const fromForm = fromForms[eqnName];
+        const toForm = forms[eqnName];
+        if (fromForm == null) {
+          e.showForm(toForm);
           e.animations.new()
             .dissolveIn(0.4)
-            // .inParallel([
-            //   e.animations.dissolveIn({ duration: 0.2 }),
-            //   e.animations.trigger({
-            //     callback: () => {
-            //       e.showForm(form);
-            //     },
-            //   }),
-            // ])
             .whenFinished(done)
             .start();
           done = null;
-        } else if (fromForm !== null) {
+        } else {
           const { animate, duration } = this.equationDefaults;
+          // e.showForm(toForm);
           e.animations.new()
-            .goToForm({ target: form, animate, duration })
+            .goToForm({ start: fromForm, target: toForm, animate, duration })
             .whenFinished(done)
             .start();
           done = null;
         }
       }
-    }
+    });
     if (done != null) {
       return this.transitionDone();
     }
     return null;
+
+
+    // if (forms.length === 0 || fromForms.length === 0) {
+    //   return this.transitionDone();
+    // }
+    // let done = 'slideNavigatorTransitionDone';
+    // for (let i = 0; i < this.equations.length; i += 1) {
+    //   const e = this.collection.getElement(this.equations[i]);
+    //   if (
+    //     e != null
+    //     && e instanceof Equation
+    //     && forms.length > i
+    //     && fromForms.length > i
+    //     && forms[i] != null
+    //     && fromForms[i] !== forms[i]
+    //   ) {
+    //     const form = forms[i];
+    //     const fromForm = fromForms[i];
+    //     if (fromForm === null) {
+    //       e.showForm(form);
+    //       e.animations.new()
+    //         .dissolveIn(0.4)
+    //         // .inParallel([
+    //         //   e.animations.dissolveIn({ duration: 0.2 }),
+    //         //   e.animations.trigger({
+    //         //     callback: () => {
+    //         //       e.showForm(form);
+    //         //     },
+    //         //   }),
+    //         // ])
+    //         .whenFinished(done)
+    //         .start();
+    //       done = null;
+    //     } else if (fromForm !== null) {
+    //       const { animate, duration } = this.equationDefaults;
+    //       e.animations.new()
+    //         .goToForm({ target: form, animate, duration })
+    //         .whenFinished(done)
+    //         .start();
+    //       done = null;
+    //     }
+    //   }
+    // }
+    // if (done != null) {
+    //   return this.transitionDone();
+    // }
+    // return null;
   }
 
   setText(index: number) {

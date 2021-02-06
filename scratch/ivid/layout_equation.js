@@ -90,7 +90,7 @@ function makeEquation() {
           alignment: { xAlign: 'center' },
         },
         bowstring: 'bowstring',
-        halfBowstring: 'halfBowstring',
+        halfBowstring: ['half way there ', 'bowstring'],
         sinus: 'sinus',
         sine: 'sine',
         sineSin: ['sine', 'comma', 'sinText'],

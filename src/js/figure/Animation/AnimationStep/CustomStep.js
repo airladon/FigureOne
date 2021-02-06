@@ -67,6 +67,7 @@ export class CustomAnimationStep extends AnimationStep {
   callback: ?(number) => void;
   startPercent: ?number;
   progression: string | ((number, ?boolean) => number);
+  customProperties: Object;
 
   /**
    * @hideconstructor
@@ -99,6 +100,7 @@ export class CustomAnimationStep extends AnimationStep {
     // }
     this.startTimeOffset = this.getPercentComplete(options.startPercent, true) * options.duration;
     this.duration = options.duration;
+    this.customProperties = options.customProperties;
   }
 
   // fnExec(idOrFn: string | Function | null, ...args: any) {
@@ -127,6 +129,7 @@ export class CustomAnimationStep extends AnimationStep {
       'callback',
       'startPercent',
       'progression',
+      'customProperties',
     ];
   }
 
@@ -156,7 +159,7 @@ export class CustomAnimationStep extends AnimationStep {
   setFrame(deltaTime: number) {
     const percentTime = deltaTime / this.duration;
     const percentComplete = this.getPercentComplete(percentTime);
-    const cancelled = this.fnExec(this.callback, percentComplete);
+    const cancelled = this.fnExec(this.callback, percentComplete, this.customProperties);
     if (cancelled) {
       this.duration = deltaTime;
     }
@@ -177,7 +180,7 @@ export class CustomAnimationStep extends AnimationStep {
   }
 
   setToEnd() {
-    this.fnExec(this.callback, 1);
+    this.fnExec(this.callback, 1, this.customProperties);
   }
 
   _dup() {
