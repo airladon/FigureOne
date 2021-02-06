@@ -181,9 +181,27 @@ function layout() {
         fixColor: true,
       },
     },
-    centerText('firstCentury', 'First century CE:', {}, [0, 1]),
-    centerText('geometry', 'Geometry', {}, [0, 0]),
-    centerText('fifteenth', 'Fifteenth century CE:', {}, [0, 1]),
+    centerText('firstCentury', '1|st| century CE', {
+      // Geometry: {
+      //   font: { style: 'italic', color: color2 },
+      // },
+      st: { font: { size: 0.1 }, offset: [0, 0.1] },
+    }, [0, 0.8]),
+    centerText('geometry', '|Geometry|', {
+      Geometry: {
+        font: { style: 'italic', color: color2 },
+      },
+    }, [0, 0]),
+    centerText('fifteenth', '15|th| century CE', {
+      th: { font: { size: 0.1 }, offset: [0, 0.1] },
+    }, [0, 0.8]),
+    centerText('lateTwentieth', 'Late 20|th| century CE', {
+      th: { font: { size: 0.1 }, offset: [0, 0.1] },
+    }, [0, 0.8]),
+    centerText('calculators', 'Personal |Calculators| & |Computers|', {
+      Calculators: { font: { style: 'italic', color: color2 } },
+      Computers: { font: { style: 'italic', color: color2 } },
+    }, [0, 0]),
     centerText('background', 'Background'),
     centerText('sumOfAngles', 'Angles in a triangle always add to 180\u00b0'),
     centerText('similarTriangles', 'Similar Triangles'),
@@ -615,6 +633,7 @@ function makeSlides() {
     steadyState: () => {
       rightTri._tri._side12._label.showForm('name2');
       rightTri.hasTouchableElements = true;
+      figure.fnMap.exec('triToSin');
     },
   });
 
@@ -749,12 +768,27 @@ function makeSlides() {
   });
 
   slides.push({
-    show: ['firstCentury', 'geometry'],
-    dissolve:{
-      out: ['firstCentury', 'geometry'],
-      in: 'table',
+    show: ['firstCentury'],
+    transition: (done) => {
+      figure.animations.new()
+        .inParallel([
+          figure.getElement('firstCentury').animations.dissolveOut(0.4),
+          figure.getElement('geometry').animations.dissolveOut(0.4),
+        ])
+        .then(figure.getElement('table.tab1').animations.dissolveIn(0.4))
+        .then(figure.getElement('table.tab2').animations.dissolveIn({ delay: 0.5, duration: 0.4 }))
+        .then(figure.getElement('table.tab3').animations.dissolveIn({ delay: 0.5, duration: 0.4 }))
+        .then(figure.getElement('table.tab4').animations.dissolveIn({ delay: 0.5, duration: 0.4 }))
+        .then(figure.getElement('table.tab5').animations.dissolveIn({ delay: 0.5, duration: 0.4 }))
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      table.showAll();
+      figure.getElement('firstCentury').hide();
     },
   });
+
 
   slides.push({
     show: 'table',
@@ -768,69 +802,251 @@ function makeSlides() {
   });
 
   slides.push({
-    show: ['rightTri'],
-    scenarioCommon: ['default', 'left', 'top'],
-    hideCommon: ['rightTri.tri.angle0', 'rightTri.tri.side20'],
-    enterStateCommon: () => {
-      figure.fnMap.exec('triToValues');
-      rightTri.hasTouchableElements = false;
-      figure.fnMap.exec('triToRot', initialAngle);
-    },
-    form: 'sinTheta',
-    // steadyState: () => {
-    //   figure.getElement('haveTheSame').hide();
-    //   figure.getElement('allTriangles').hide();
-    //   eqn.setScenario('left');
-    //   rightTri.hasTouchableElements = true;
-    // },
-  });
-
-  slides.push({
-    scenarioCommon: ['default', 'left', 'top'],
-    show: ['rightTri'],
-    fromForm: 'sinTheta',
-    form: 'sinOnly',
+    show: ['fifteenth'],
+    fromForm: 'sinInf',
+    form: 'sinInf',
     transition: (done) => {
-      figure.animations.new()
-        .inParallel([
-          eqn.animations.goToForm({ target: 'sinOnly', animate: 'move' }),
-          eqn.animations.scenario({ target: 'table', duration: 2 }),
-          rightTri.animations.scenario({ target: 'default', duration: 2 }),
-        ])
-        .then(figure.getElement('table').animations.dissolveIn(0.4))
+      table.showAll();
+      table.animations.new()
+        .opacity({ target: 0.6, start: 0.01, duration: 0.8 })
         .whenFinished(done)
         .start();
     },
     steadyState: () => {
-      rightTri.hasTouchableElements = true;
       table.showAll();
-      eqn.setScenario('table');
-      rightTri.setScenario('default');
+      table.setOpacity(0.6);
+    },
+    leaveState: () => table.setOpacity(1),
+  });
+
+  slides.push({
+    form: null,
+    show: ['sinInf', 'fifteenth'],
+    dissolve: { out: ['sinInf', 'fifteenth'], in: 'lateTwentieth' },
+  });
+
+  slides.push({
+    form: null,
+    show: ['lateTwentieth'],
+    dissolve: { in: 'calculators' },
+  });
+
+  slides.push({
+    show: ['lateTwentieth', 'calculators'],
+    transition: (done) => {
+      table.showAll();
+      table.animations.new()
+        .opacity({ target: 0.6, start: 0.01, duration: 0.8 })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      table.showAll();
+      table.setOpacity(0.6);
+    },
+    leaveState: () => table.setOpacity(1),
+  });
+
+  /*
+  ..######...#######...######.
+  .##....##.##.....##.##....##
+  .##.......##.....##.##......
+  .##.......##.....##..######.
+  .##.......##.....##.......##
+  .##....##.##.....##.##....##
+  ..######...#######...######.
+  */
+  slides.push({
+    clear: true,
+    show: ['rightTri'],
+    fromForm: 'sinTheta',
+    form: 'sinTheta',
+    scenarioCommon: ['default', 'eqnTri1'],
+    enterStateCommon: () => {
+      figure.fnMap.exec('triToRot', initialAngle);
+      figure.fnMap.exec('triToNames');
+      rightTri.hasTouchableElements = true;
+    },
+    transition: (done) => {
+      figure.animations.new()
+        .inParallel([
+          rightTri._tri._angle1.animations.dissolveIn(0.4),
+          rightTri._tri._angle2.animations.dissolveIn(0.4),
+          rightTri._tri._side01.animations.dissolveIn(0.4),
+          rightTri._tri._side12.animations.dissolveIn(0.4),
+          rightTri._tri._line.animations.dissolveIn(0.4),
+          eqn.animations.dissolveIn(0.4),
+        ])
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      rightTri.show();
+      rightTri._tri._angle0.hide();
+      rightTri._tri._side20.hide();
     },
   });
 
   slides.push({
-    scenarioCommon: ['default', 'table'],
-    show: ['rightTri', 'table'],
-    dissolve: { out: 'rightTri', in: 'firstCentury' },
+    showCommon: ['rightTri', 'eqn'],
+    hide: ['rightTri.tri.angle0'],
+    fromForm: 'sinTheta',
+    form: 'sinTheta',
+    dissolve: { in: 'rightTri._tri._side20' },
   });
 
   slides.push({
-    show: ['table', 'firstCentury'],
-    enterStateCommon: () => {},
-    dissolve: { in: 'geometry' },
+    hide: ['rightTri.tri.angle0'],
+    fromForm: 'sinTheta',
+    form: 'twoRatios',
   });
 
   slides.push({
-    show: ['table', 'firstCentury', 'geometry'],
-    dissolve: { out: ['firstCentury', 'geometry'], in: 'fifteenth' },
+    // hide: ['rightTri.tri.angle0'],
+    fromForm: 'twoRatios',
+    form: 'twoRatios',
+    dissolve: { in: 'rightTri._tri._angle0' },
   });
 
   slides.push({
-    scenarioCommon: ['default', 'table'],
-    show: ['table', 'fifteenth'],
-    dissolve: { in: 'eqn1' },
+    fromForm: 'twoRatios',
+    form: 'twoRatiosSinComp',
   });
+
+  slides.push({
+    fromForm: 'twoRatiosSinComp',
+    form: 'twoRatiosSinCompComment',
+  });
+
+  slides.push({
+    fromForm: 'twoRatiosSinCompComment',
+    form: 'twoRatiosComplementarySine',
+  });
+
+  slides.push({
+    fromForm: 'twoRatiosComplementarySine',
+    form: 'twoRatiosCosine',
+  });
+
+  slides.push({
+    fromForm: 'twoRatiosCosine',
+    form: 'twoRatiosCos',
+  });
+
+  slides.push({
+    fromForm: 'twoRatiosCos',
+    form: 'twoRatiosCosOnly',
+  });
+
+  slides.push({
+    fromForm: 'twoRatiosCosOnly',
+    form: 'threeRatiosEqual',
+  });
+
+  slides.push({
+    fromForm: 'threeRatiosEqual',
+    form: 'threeRatiosSineTimes',
+  });
+
+  slides.push({
+    fromForm: 'threeRatiosSineTimes',
+    form: 'threeRatiosSineTimes2',
+  });
+
+  slides.push({
+    fromForm: 'threeRatiosSineTimes2',
+    form: 'threeRatiosSineTimesStrike',
+  });
+
+  slides.push({
+    fromForm: 'threeRatiosSineTimesStrike',
+    form: 'threeRatiosSineOnCos',
+  });
+
+  slides.push({
+    fromForm: 'threeRatiosSineOnCos',
+    form: 'threeRatiosSineOnCosTangent',
+  });
+
+  slides.push({
+    fromForm: 'threeRatiosSineOnCosTangent',
+    form: 'threeRatiosSineOnCosTan',
+  });
+
+  slides.push({
+    fromForm: 'threeRatiosSineOnCosTan',
+    form: 'threeRatiosTimesTan',
+  });
+
+  slides.push({
+    fromForm: 'threeRatiosTimesTan',
+    form: 'threeRatiosSinCosTan',
+  });
+
+  // slides.push({
+  //   show: ['rightTri'],
+  //   scenarioCommon: ['default', 'left', 'top'],
+  //   hideCommon: ['rightTri.tri.angle0', 'rightTri.tri.side20'],
+  //   enterStateCommon: () => {
+  //     figure.fnMap.exec('triToValues');
+  //     rightTri.hasTouchableElements = false;
+  //     figure.fnMap.exec('triToRot', initialAngle);
+  //   },
+  //   form: 'sinTheta',
+  //   // steadyState: () => {
+  //   //   figure.getElement('haveTheSame').hide();
+  //   //   figure.getElement('allTriangles').hide();
+  //   //   eqn.setScenario('left');
+  //   //   rightTri.hasTouchableElements = true;
+  //   // },
+  // });
+
+  // slides.push({
+  //   scenarioCommon: ['default', 'left', 'top'],
+  //   show: ['rightTri'],
+  //   fromForm: 'sinTheta',
+  //   form: 'sinOnly',
+  //   transition: (done) => {
+  //     figure.animations.new()
+  //       .inParallel([
+  //         eqn.animations.goToForm({ target: 'sinOnly', animate: 'move' }),
+  //         eqn.animations.scenario({ target: 'table', duration: 2 }),
+  //         rightTri.animations.scenario({ target: 'default', duration: 2 }),
+  //       ])
+  //       .then(figure.getElement('table').animations.dissolveIn(0.4))
+  //       .whenFinished(done)
+  //       .start();
+  //   },
+  //   steadyState: () => {
+  //     rightTri.hasTouchableElements = true;
+  //     table.showAll();
+  //     eqn.setScenario('table');
+  //     rightTri.setScenario('default');
+  //   },
+  // });
+
+  // slides.push({
+  //   scenarioCommon: ['default', 'table'],
+  //   show: ['rightTri', 'table'],
+  //   dissolve: { out: 'rightTri', in: 'firstCentury' },
+  // });
+
+  // slides.push({
+  //   show: ['table', 'firstCentury'],
+  //   enterStateCommon: () => {},
+  //   dissolve: { in: 'geometry' },
+  // });
+
+  // slides.push({
+  //   show: ['table', 'firstCentury', 'geometry'],
+  //   dissolve: { out: ['firstCentury', 'geometry'], in: 'fifteenth' },
+  // });
+
+  // slides.push({
+  //   scenarioCommon: ['default', 'table'],
+  //   show: ['table', 'fifteenth'],
+  //   dissolve: { in: 'eqn1' },
+  // });
 
 
 
@@ -1085,21 +1301,21 @@ function makeSlides() {
   .##.....##.##.....##.##..##..##
   .########...#######...###..###.
   */
-  slides.push({
-    clear: true, 
-    form: null,
-    showCommon: ['bow.circle'],
-    steadyState: () => {
-      figure.shortCuts['1'] = 'bowString';
-      figure.shortCuts['2'] = 'bow';
-      figure.shortCuts['3'] = 'bowCircle';
-      figure.shortCuts['4'] = 'bowRad';
-      figure.shortCuts['5'] = 'bowTri';
-      figure.shortCuts['6'] = 'bowSin';
-    },
-  });
+  // slides.push({
+  //   clear: true, 
+  //   form: null,
+  //   showCommon: ['bow.circle'],
+  //   steadyState: () => {
+  //     figure.shortCuts['1'] = 'bowString';
+  //     figure.shortCuts['2'] = 'bow';
+  //     figure.shortCuts['3'] = 'bowCircle';
+  //     figure.shortCuts['4'] = 'bowRad';
+  //     figure.shortCuts['5'] = 'bowTri';
+  //     figure.shortCuts['6'] = 'bowSin';
+  //   },
+  // });
 
   nav.loadSlides(slides);
-  nav.goToSlide(33);
+  nav.goToSlide(-1);
 }
 makeSlides();

@@ -784,10 +784,11 @@ export default class SlideNavigator {
    * @param {'next' | 'prev' | number} from this should generally not be used
    * and will be set automatically
    */
-  goToSlide(index: number, from?: 'next' | 'prev' | number) {
+  goToSlide(slideIndex: number, from?: 'next' | 'prev' | number) {
     if (this.slides == null || this.slides.length === 0) {
       return;
     }
+    const index = slideIndex < 0 ? this.slides.length - 1 : slideIndex;
     this.inTransition = true;
     let fromToUse = from;
     if (fromToUse == null) {
