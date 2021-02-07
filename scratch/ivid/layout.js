@@ -267,6 +267,7 @@ function layout() {
 makeEquation();
 layoutRight();
 layoutCircle();
+layoutCircle1();
 layout();
 rightTris();
 const totalAngle = totalAngleLayout();
@@ -981,6 +982,12 @@ function makeSlides() {
   slides.push({
     fromForm: 'threeRatiosTimesTan',
     form: 'threeRatiosSinCosTan',
+  });
+
+  slides.push({
+    clear: true,
+    show: ['circle1'],
+    form: null,
   });
 
   // slides.push({
