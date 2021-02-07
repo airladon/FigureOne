@@ -986,8 +986,18 @@ function makeSlides() {
 
   slides.push({
     clear: true,
+    scenario: 'end',
     show: ['circle1'],
     form: null,
+    steadyState: () => {
+      figure.getElement('circle1.line').setRotation(0.45);
+      figure.getElement('circle1.sinCos1').animations.new()
+        .delay(1)
+        .scenario({ start: 'end', target: 'start', duration: 3 })
+        .then(figure.getElement('circle1.tanSec1').animations.scenario({ target: 'mid', duration: 3 }))
+        .then(figure.getElement('circle1.tanSec1').animations.scenario({ target: 'start', duration: 3 }))
+        .start();
+    },
   });
 
   // slides.push({

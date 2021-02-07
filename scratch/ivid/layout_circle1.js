@@ -2,11 +2,25 @@
 /* globals figure, color1, color2, color3, color4, colGrey */
 
 function layoutCircle1() {
+  const radius = 1.5;
+  const colCos = [0, 0, 0.9, 1];
+  const colSec = [0, 0.7, 1, 1];
+  const colTan = [0, 0.4, 0, 1];
+  const colCot = [0, 0.9, 0, 1];
+  const colSin = [0.9, 0, 0, 1];
+  const colCsc = [1, 0.4, 0, 1];
+  const colRad = [1, 0, 1, 1];
+  const defaultAngle = 0.45;
+  const defaultX = radius * Math.cos(defaultAngle);
+  const defaultY = radius * Math.sin(defaultAngle);
+  const defaultSec = radius / Math.cos(defaultAngle);
 
-  const line = (name, color) => ({
+  const line = (name, color, p1 = [0, 0], p2 = [1, 0]) => ({
     name,
     method: 'primitives.line',
-    options: { length: 1, width: 0.013, color },
+    options: {
+      p1, p2, width: 0.013, color,
+    },
   });
   const lineLabel = (name, text, color) => ({
     name,
@@ -20,14 +34,42 @@ function layoutCircle1() {
     },
   });
 
-  const radius = 1.5;
-  const colCos = [0, 0, 0.9, 1];
-  const colSec = [0, 0.7, 1, 1];
-  const colTan = [0, 0.4, 0, 1];
-  const colCot = [0, 0.9, 0, 1];
-  const colSin = [0.9, 0, 0, 1];
-  const colCsc = [1, 0.4, 0, 1];
-  const colRad = [1, 0, 1, 1];
+  const triangle = (name, p1, p2, p3, col1, col2, col3, start, mid, end) => ({
+    name,
+    method: 'collection',
+    elements: [
+      line('side1', col1, p1, p2),
+      line('side2', col2, p2, p3),
+      line('side3', col3, p3, p1),
+      {
+        name: 'theta',
+        method: 'collections.angle',
+        options: {
+          curve: { radius: 0.2, width: 0.01 },
+          label: {
+            text: '\u03b8',
+            offset: 0.01,
+          },
+          angle: defaultAngle,
+        },
+      },
+      {
+        name: 'rightAngle',
+        method: 'collections.angle',
+        options: {
+          curve: { radius: 0.15, width: 0.006, autoRightAngle: true },
+          angle: Math.PI / 2,
+          position: p2,
+          startAngle: Math.PI / 2,
+        },
+      },
+    ],
+    mods: {
+      scenarios: { start, end, mid },
+    },
+  });
+
+  
   const [circle] = figure.add({
     name: 'circle1',
     method: 'collection',
@@ -144,6 +186,25 @@ function layoutCircle1() {
           yAlign: 'bottom',
         },
       },
+      triangle(
+        'sinCos1', [0, 0], [defaultX, 0], [defaultX, defaultY],
+        colCos, colSin, colRad,
+        { position: [-2, 0], scale: 1, rotation: 0 },
+        {},
+        { position: [0, 0], scale: 1, rotation: 0 },
+      ),
+      triangle(
+        'tanSec1', [0, 0], [radius, 0], [radius, radius * defaultY / defaultX],
+        colRad, colTan, colSec,
+        // { position: [-2, 1], scale: [-1, 1], rotation: Math.PI + defaultAngle },
+        // { position: [0, 1], scale: [-1, 1], rotation: 0 },
+        { position: [-2, 1], scale: [1, 1], rotation: 0 },
+        { position: [-0.3, 1], scale: [-1, 1], rotation: 0 },
+        { position: [0, 0], scale: [-1, 1], rotation: Math.PI + defaultAngle },
+        // { position: [0, 0], scale: [-1, 1], rotation: 0 },
+        // { position: [0, 0], scale: [-1, 1], rotation: 0 },
+        // { position: [-2, 1], scale: [1, 1], rotation: Math.PI + defaultAngle },
+      ),
     ],
     options: {
       position: [-radius / 2, -1.2],
