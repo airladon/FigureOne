@@ -986,17 +986,40 @@ function makeSlides() {
 
   slides.push({
     clear: true,
-    scenario: 'end',
+    scenario: ['start', 'right'],
     show: ['circle1'],
+    hide: [{ circle1: ['csc', 'cscLabel', 'cot', 'cotLabel'] }],
     form: null,
     steadyState: () => {
       figure.getElement('circle1.line').setRotation(0.45);
-      figure.getElement('circle1.sinCos1').animations.new()
-        .delay(1)
-        .scenario({ start: 'end', target: 'start', duration: 3 })
-        .then(figure.getElement('circle1.tanSec1').animations.scenario({ target: 'mid', duration: 3 }))
-        .then(figure.getElement('circle1.tanSec1').animations.scenario({ target: 'start', duration: 3 }))
-        .start();
+      figure.shortCuts = {
+        1: () => figure.getElement('circle1.tanSec1.eqn1').nextForm(),
+        2: () => figure.getElement('circle1.tanSec1.eqn2').nextForm(),
+        3: () => figure.getElement('circle1.tanSec1.eqn3').nextForm(),
+        4: () => {
+          figure.getElement('circle1.tanSec1').setScenario('end');
+          figure.getElement('circle1.sinCos1').setScenario('end');
+          figure.getElement('circle1.tanSec1.eqn1').hide();
+          figure.getElement('circle1.tanSec1.eqn2').hide();
+          figure.getElement('circle1.tanSec1.eqn3').hide();
+          figure.getElement('circle1.tanSec1.theta.label').hide();
+          figure.getElement('circle1.sinCos1.eqn1').hide();
+          figure.getElement('circle1.sinCos1.eqn2').hide();
+          figure.getElement('circle1.sinCos1.eqn3').hide();
+          figure.getElement('circle1.sinCos1.theta.label').hide();
+          figure.getElement('circle1.sinCos1').animations.new()
+            .scenario({ start: 'end', target: 'start', duration: 3 })
+            .then(figure.getElement('circle1.tanSec1').animations.scenario({ target: 'mid', duration: 3 }))
+            .then(figure.getElement('circle1.tanSec1').animations.scenario({ target: 'start', duration: 3 }))
+            .start();
+        },
+      };
+    //   figure.getElement('circle1.sinCos1').animations.new()
+    //     .delay(1)
+    //     .scenario({ start: 'end', target: 'start', duration: 3 })
+    //     .then(figure.getElement('circle1.tanSec1').animations.scenario({ target: 'mid', duration: 3 }))
+    //     .then(figure.getElement('circle1.tanSec1').animations.scenario({ target: 'start', duration: 3 }))
+    //     .start();
     },
   });
 
