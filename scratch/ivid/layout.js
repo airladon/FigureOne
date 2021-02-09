@@ -961,34 +961,78 @@ function makeSlides() {
 
   slides.push({
     fromForm: 'threeRatiosSineTimesStrike',
+    form: 'threeRatiosSineOnCosTimes',
+  });
+  slides.push({
+    fromForm: 'threeRatiosSineOnCosTimes',
     form: 'threeRatiosSineOnCos',
   });
 
   slides.push({
+    showCommon: [],
+    enterStateCommon: () => {},
+    form: 'threeRatiosSineOnCos',
     fromForm: 'threeRatiosSineOnCos',
-    form: 'threeRatiosSineOnCosTangent',
+    transition: (done) => {
+      eqn.animations.new()
+        .scenario({ target: 'left', duration: 1.5 })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => eqn.setScenario('left'),
   });
 
   slides.push({
-    fromForm: 'threeRatiosSineOnCosTangent',
-    form: 'threeRatiosSineOnCosTan',
+    scenarioCommon: ['left'],
+    fromForm: 'threeRatiosSineOnCos',
+    form: 'fourRatios',
   });
 
   slides.push({
-    fromForm: 'threeRatiosSineOnCosTan',
-    form: 'threeRatiosTimesTan',
+    fromForm: 'fourRatios',
+    form: 'fiveRatios',
   });
 
   slides.push({
-    fromForm: 'threeRatiosTimesTan',
-    form: 'threeRatiosSinCosTan',
+    fromForm: 'fiveRatios',
+    form: 'sixRatios',
   });
+
+
+
+
+  // slides.push({
+  //   fromForm: 'threeRatiosSineOnCos',
+  //   form: 'threeRatiosSineOnCosTangent',
+  // });
+
+  // slides.push({
+  //   fromForm: 'threeRatiosSineOnCosTangent',
+  //   form: 'threeRatiosSineOnCosTan',
+  // });
+
+  // slides.push({
+  //   fromForm: 'threeRatiosSineOnCosTan',
+  //   form: 'threeRatiosTimesTan',
+  // });
+
+  // slides.push({
+  //   fromForm: 'threeRatiosTimesTan',
+  //   form: 'threeRatiosSinCosTan',
+  // });
+
+  // slides.push({
+  //   clear: true,
+  //   scenarioCommon: ['left'],
+  //   fromForm: 'threeRatiosSinCosTan',
+  //   form: 'sixRatios',
+  // });
 
   slides.push({
     clear: true,
     scenario: ['start', 'right'],
     show: ['circle1'],
-    hide: [{ circle1: ['csc', 'cscLabel', 'cot', 'cotLabel'] }],
+    // hide: [{ circle1: ['csc', 'cscLabel', 'cot', 'cotLabel'] }],
     form: null,
     steadyState: () => {
       figure.getElement('circle1.line').setRotation(0.45);
@@ -1356,6 +1400,6 @@ function makeSlides() {
   // });
 
   nav.loadSlides(slides);
-  nav.goToSlide(-1);
+  nav.goToSlide(58);
 }
 makeSlides();

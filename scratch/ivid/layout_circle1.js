@@ -298,19 +298,6 @@ function layoutCircle1() {
               },
               alignment: { fixTo: 's', yAlign: 'top', xAlign: 1.5 },
             },
-            // final: {
-            //   content: [
-            //     's', 'times',
-            //     bot('cos', ['div1', 'cos_1']),
-            //     '_ = ',
-            //     bot('_1', ['div2', 'cos_2']),
-            //   ],
-            //   alignment: { fixTo: 's', yAlign: 'top', xAlign: 1.5 },
-            // },
-            // final2: {
-            //   content: ['s', '_ = ', { frac: ['_1', 'vinculum', 'cos_2', 0.7] }],
-            //   alignment: { fixTo: 's', yAlign: 1.2, xAlign: 1.5 },
-            // },
           },
         },
         {
@@ -460,13 +447,14 @@ function layoutCircle1() {
       });
       cotLabel.setPosition(cotLine.offset('negative', 0.12).midPoint());
       csc.custom.updatePoints({
-        p1: [-0.1, 0],
-        p2: [-0.1, cotLine.p2.y],
-        arrow: {
-          scale: 0.8,
-          start: { head: 'bar' },
-          end: { head: cotLine.p2.x > 0.01 ? 'barb' : 'bar' },
-        },
+        p1: [0, 0],
+        p2: [0, cotLine.p2.y],
+        // arrow: {
+        //   scale: 0.8,
+        //   start: { head: 'bar' },
+        //   end: { head: cotLine.p2.x > 0.01 ? 'barb' : 'bar' },
+        // },
+        arrow: cotLine.p2.x > 0.01 ? { end: { head: 'barb', scale: 0.8 } } : null,
       });
       cscLabel.setPosition(-0.25, cotLine.p2.y / 2);
       // if (r < Math.PI / 2 - 0.1 && r > 0.1) {
