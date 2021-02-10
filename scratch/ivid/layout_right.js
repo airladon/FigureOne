@@ -3,10 +3,10 @@
 
 
 function layoutRight() {
-  const sideLabel = (value, name, name2) => ({
+  const sideLabel = (value, name, name2, color = color2) => ({
     label: {
       text: {
-        color: color2,
+        color,
         elements: {
           v: value,
           n: name,
@@ -66,7 +66,7 @@ function layoutRight() {
                 offset: 0.02,
                 curvePosition: 0.65,
               },
-              color: color1,
+              color: colTheta,
             },
             {
               curve: {
@@ -98,9 +98,9 @@ function layoutRight() {
             },
           ],
           side: [
-            sideLabel('1', 'hypotenuse', 'hypotenuse'),
-            sideLabel('0.0000', 'opposite', 'sin'),
-            sideLabel('adjacent', 'adjacent', 'cos'),
+            sideLabel('1', 'hypotenuse', 'hypotenuse', colRad),
+            sideLabel('0.0000', 'opposite', 'sin', colSin),
+            sideLabel('adjacent', 'adjacent', 'cos', colCos),
           ],
         },
       },

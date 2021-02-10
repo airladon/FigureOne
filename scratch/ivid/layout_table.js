@@ -9,7 +9,7 @@ function layoutTable() {
   const theta = x => ({
     text: '\u03b8',
     font: {
-      color: color1, family: 'Times New Roman', style: 'italic', size: 0.15,
+      color: colTheta, family: 'Times New Roman', style: 'italic', size: 0.15,
     },
     location: [x, yStart + step * 1.2],
   });
@@ -23,7 +23,7 @@ function layoutTable() {
       text: `${angle}\u00b0`,
       location: [x, yStart - index * step],
       xAlign: 'right',
-      font: { size: 0.1, color: color1 },
+      font: { size: 0.1, color: colTheta },
     },
     {
       text: Fig.tools.math.round(Math.sin(angle / 180 * Math.PI), 4).toFixed(4),

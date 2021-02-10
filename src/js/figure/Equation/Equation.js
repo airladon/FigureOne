@@ -463,7 +463,7 @@ export type EQN_FromForms = {
  * @property {{}} [modifiers] description modifiers
  * @property {?number} [duration] duration if animating to this form, use
  * `null` for velocity based duration
- * @property {EQN_TranslationStyle} [translation] translation style
+ * @property {EQN_TranslationStyles} [translation] translation style
  * when animating to this form
  * @property {string | (() => void)} [onTransition] called at the start of
  * animating to this form, or when `showForm` is used.
@@ -560,7 +560,7 @@ type EQN_FormObjectDefinition = {
   description?: string,
   modifiers?: {},                 // Modifiers for description
   duration?: ?number,               // null means to use velocity
-  translation?: EQN_TranslationStyle,
+  translation?: EQN_TranslationStyles,
   onShow?: string | (() => void),
   onTransition?: string | (() => void),
   elementMods?: OBJ_ElementMods,
@@ -1884,6 +1884,7 @@ export class Equation extends FigureElementCollection {
     form.name = name;
     form.duration = duration;
     form.translation = translation;
+    // console.log(name, translation)
     // form.animation = animation;
     form.fromForm = fromForm;
     form.onShow = onShow;

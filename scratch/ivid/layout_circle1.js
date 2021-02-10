@@ -3,13 +3,6 @@
 
 function layoutCircle1() {
   const radius = 1.5;
-  const colCos = [0, 0, 0.9, 1];
-  const colSec = [0, 0.7, 1, 1];
-  const colTan = [0, 0.4, 0, 1];
-  const colCot = [0, 0.9, 0, 1];
-  const colSin = [0.9, 0, 0, 1];
-  const colCsc = [1, 0.4, 0, 1];
-  const colRad = [1, 0, 1, 1];
   const defaultAngle = 0.45;
   const defaultX = radius * Math.cos(defaultAngle);
   const defaultY = radius * Math.sin(defaultAngle);
@@ -159,7 +152,8 @@ function layoutCircle1() {
           radius,
           line: { width: 0.006 },
           sides: 100,
-          sidesToDraw: 100,
+          sidesToDraw: 60,
+          rotation: -0.3,
           color: colGrey,
         },
       },
@@ -210,9 +204,9 @@ function layoutCircle1() {
         name: 'angle',
         method: 'collections.angle',
         options: {
+          color: colTheta,
           curve: {
             width: 0.01,
-            color: color1,
             radius: 0.2,
             step: 0.8,
             sides: 400,
@@ -227,6 +221,7 @@ function layoutCircle1() {
         },
       },
       line('sec', colSec),
+      line('sec1', colSec),
       lineLabel('secLabel', 'sec', colSec),
       line('sin', colSin),
       lineLabel('sinLabel', 'sin', colSin),
@@ -380,10 +375,12 @@ function layoutCircle1() {
         default: { scale: 1, position: [-radius / 2, -1.2] },
         right: { scale: 1, position: [0.5, -1.2] },
         small: { scale: 0.7, position: [0, -0.3] },
+        center: { scale: 1, position: [0, -0.5] },
+        right1: { scale: 1, position: [0.7, -0.5] },
       },
     },
   });
-  const [radLine, angle, sec, tan, sin, cos, tanLabel, sinLabel, cosLabel, radLineLabel] = circle.getElements(['line', 'angle', 'sec', 'tan', 'sin', 'cos', 'tanLabel', 'sinLabel', 'cosLabel', 'lineLabel']);
+  const [radLine, angle, sec, tan, sin, cos, tanLabel, sinLabel, cosLabel, radLineLabel, sec1] = circle.getElements(['line', 'angle', 'sec', 'tan', 'sin', 'cos', 'tanLabel', 'sinLabel', 'cosLabel', 'lineLabel', 'sec1']);
   const [cot, cotLabel, csc, xLine, yLine, secLabel, cscLabel, rightAngle1, rightAngle2] = circle.getElements(['cot', 'cotLabel', 'csc', 'x', 'y', 'secLabel', 'cscLabel', 'rightAngle1', 'rightAngle2']);
   const xBounds = 1.5;
   const yBounds = 1;
@@ -394,14 +391,17 @@ function layoutCircle1() {
     angle.setAngle({ angle: r });
     if (cos.isShown && r < Math.PI / 2 - 0.15) {
       angle._curve.showAll();
-    // } else if (!cos.isShown) {
-    //   angle.showAll();
+    } else if (!cos.isShown) {
+      angle.showAll();
     } else {
       angle.hide();
     }
     if (
-      r > 0.25
-      && (cos.isShown && r < Math.PI / 2 - 0.15)
+      (
+        r > 0.25
+        && (cos.isShown && r < Math.PI / 2 - 0.15)
+      )
+      || !cos.isShown
     ) {
       angle._label.showAll();
     } else {
@@ -432,11 +432,14 @@ function layoutCircle1() {
         p2: tanLine.p2._dup(),
         arrow: tanLine.p2.y > 0.01 ? { end: { head: 'barb', scale: 0.8 } } : null,
       });
-      // xLine.custom.updatePoints({
-      //   p1: [0, 0.0],
-      //   p2: [tanLine.p2.x, 0.0],
-      //   arrow: tanLine.p2.y > 0.01 ? { end: { head: 'barb', scale: 0.013 / 0.006 * 0.8 } } : null,
-      // });
+      if (sec1.isShown) {
+      // sec1.custom.updatePoints()
+        sec1.custom.updatePoints({
+          p1: [0, 0.0],
+          p2: [tanLine.p2.x, 0.0],
+          arrow: tanLine.p2.y > 0.01 ? { end: { head: 'barb', scale: 0.013 / 0.006 * 0.8 } } : null,
+        });
+      }
       tanLabel.setPosition(tanLine.offset('positive', 0.12).midPoint());
       sec.custom.updatePoints({
         p1: [0, -0.25],
@@ -517,7 +520,6 @@ function layoutCircle1() {
   }
   radLine.fnMap.add('updateCircle', () => updateCircle());
   figure.fnMap.global.add('circSetAngle', (r) => {
-    console.log(r)
     radLine.setRotation(r);
     updateCircle();
   });
@@ -529,8 +531,6 @@ function layoutCircle1() {
   figure.fnMap.global.add('circGrowRadius', () => {
     radLine.showAll();
     radLine.setRotation(Math.PI / 6)
-    console.log(radLine.line)
-    console.log(radLine)
     radLine.animations.new()
       .length({ start: 0, target: radius, duration: 1.5 })
       .then(circle.getElement('rightAngle2').animations.dissolveIn(0.5))

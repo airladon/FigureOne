@@ -800,23 +800,23 @@ function makeSlides() {
     form: 'sinInf',
   });
 
-  slides.push({
-    show: ['fifteenth'],
-    fromForm: 'sinInf',
-    form: 'sinInf',
-    transition: (done) => {
-      table.showAll();
-      table.animations.new()
-        .opacity({ target: 0.6, start: 0.01, duration: 0.8 })
-        .whenFinished(done)
-        .start();
-    },
-    steadyState: () => {
-      table.showAll();
-      table.setOpacity(0.6);
-    },
-    leaveState: () => table.setOpacity(1),
-  });
+  // slides.push({
+  //   show: ['fifteenth'],
+  //   fromForm: 'sinInf',
+  //   form: 'sinInf',
+  //   transition: (done) => {
+  //     table.showAll();
+  //     table.animations.new()
+  //       .opacity({ target: 0.6, start: 0.01, duration: 0.8 })
+  //       .whenFinished(done)
+  //       .start();
+  //   },
+  //   steadyState: () => {
+  //     table.showAll();
+  //     table.setOpacity(0.6);
+  //   },
+  //   leaveState: () => table.setOpacity(1),
+  // });
 
   slides.push({
     form: null,
@@ -858,12 +858,15 @@ function makeSlides() {
   slides.push({
     clear: true,
     show: ['rightTri'],
+    // hide: { rightTri: ['rightTri.tri.angle0', 'rightTri.tri.side20'] },
     fromForm: 'sinTheta',
     form: 'sinTheta',
     scenarioCommon: ['default', 'eqnTri1'],
     enterStateCommon: () => {
       figure.fnMap.exec('triToRot', initialAngle);
       figure.fnMap.exec('triToNames');
+      figure.getElement('rightTri.tri.angle0').hide();
+      figure.getElement('rightTri.tri.side20').hide();
       rightTri.hasTouchableElements = true;
     },
     transition: (done) => {
@@ -895,19 +898,28 @@ function makeSlides() {
   });
 
   slides.push({
-    hide: ['rightTri.tri.angle0'],
+    enterStateCommon: () => {
+      figure.fnMap.exec('triToRot', initialAngle);
+      figure.fnMap.exec('triToNames');
+      figure.getElement('rightTri.tri.angle0').hide();
+      rightTri.hasTouchableElements = true;
+    },
     fromForm: 'sinTheta',
     form: 'twoRatios',
   });
 
   slides.push({
-    // hide: ['rightTri.tri.angle0'],
     fromForm: 'twoRatios',
     form: 'twoRatios',
     dissolve: { in: 'rightTri._tri._angle0' },
   });
 
   slides.push({
+    enterStateCommon: () => {
+      figure.fnMap.exec('triToRot', initialAngle);
+      figure.fnMap.exec('triToNames');
+      rightTri.hasTouchableElements = true;
+    },
     fromForm: 'twoRatios',
     form: 'twoRatiosSinComp',
   });
@@ -1006,6 +1018,204 @@ function makeSlides() {
   ....##....##.....##.##....##.....######..########..######.
   */
   const [tan, cot] = figure.getElements(['circle1.tan', 'circle1.cot']);
+
+  slides.push({
+    clear: true,
+    // show: { circle1: ['arc', 'x', 'y', 'circle', 'center'] },
+    scenario: ['left', 'right1'],
+    fromForm: 'sixRatios',
+    form: 'sixRatiosLeft',
+    transition: (done) => {
+      figure.animations.new()
+        .inParallel([
+          eqn.animations.goToForm({
+            start: 'sixRatios', target: 'sixRatiosLeft', duration: 2, animate: 'move',
+          }),
+          eqn.animations.scenario({ start: 'left', target: 'eqnCircLeft', duration: 2 }),
+        ])
+        .inParallel(
+          figure.getElements({ circle1: ['arc', 'x', 'y', 'circle', 'center']}).map(e => e.animations.dissolveIn(0.5)),
+        )
+        .whenFinished(done)
+        .start();
+    },
+    // dissolve: { in: { circle1: ['arc', 'x', 'y', 'circle', 'center'] } },
+    steadyState: () => {
+      eqn.setScenario('eqnCircLeft');
+      figure.getElement('circle1').show(['arc', 'x', 'y', 'circle', 'center']);
+    }
+  });
+
+  slides.push({
+    show: { circle1: ['arc', 'x', 'y', 'circle', 'center'] },
+    scenario: ['eqnCircLeft', 'right1'],
+    fromForm: 'sixRatiosLeft',
+    form: 'sixRatiosLeft',
+    enterStateCommon: () => {
+      figure.fnMap.exec('circSetAngle', 0.8);
+      figure.getElement('circle1.rightAngle2').hide();
+    },
+    dissolve: { in: { circle1: ['line', 'angle', 'lineLabel'] } },
+  });
+
+  slides.push({
+    show: { circle1: ['arc', 'x', 'y', 'circle', 'center', 'line', 'angle', 'lineLabel', 'rightAngle1', 'sin', 'cos'] },
+    scenario: ['eqnCircLeft', 'right1'],
+    fromForm: 'sixRatiosLeft',
+    form: 'sixRatiosLeft',
+    dissolve: { in: { circle1: ['sin', 'cos', 'rightAngle1'] } },
+  });
+  slides.push({
+    show: { circle1: ['arc', 'x', 'y', 'circle', 'center', 'line', 'angle', 'lineLabel', 'rightAngle1', 'sin', 'cos'] },
+    scenario: ['eqnCircLeft', 'right1'],
+    fromForm: 'sixRatiosLeft',
+    form: 'sixRatiosLeft',
+    enterStateCommon: () => {
+      figure.fnMap.exec('circSetAngle', 0.8);
+      figure.getElement('circle1.rightAngle2').hide();
+      eqn.highlight(['opposite', 'hypotenuse', 'v1', 'equals1', 'sin_1', 'theta1', '_1_rad']);
+    },
+    leaveStateCommon: () => eqn.undim(),
+  });
+
+  slides.push({
+    show: { circle1: ['arc', 'x', 'y', 'circle', 'center', 'line', 'angle', 'lineLabel', 'rightAngle1', 'sin', 'cos'] },
+    scenario: ['eqnCircLeft', 'right1'],
+    fromForm: 'sixRatiosLeft',
+    form: 'sixRatiosLeftOnOne',
+  });
+
+  slides.push({
+    show: { circle1: ['arc', 'x', 'y', 'circle', 'center', 'line', 'angle', 'lineLabel', 'rightAngle1', 'sin', 'cos'] },
+    scenario: ['eqnCircLeft', 'right1'],
+    fromForm: 'sixRatiosLeftOnOne',
+    form: 'sixRatiosLeftOpp',
+  });
+
+  slides.push({
+    show: { circle1: ['arc', 'x', 'y', 'circle', 'center', 'line', 'angle', 'lineLabel', 'rightAngle1', 'sin', 'cos', 'sinLabel'] },
+    scenario: ['eqnCircLeft', 'right1'],
+    fromForm: 'sixRatiosLeftOpp',
+    form: 'sixRatiosLeftOpp',
+    dissolve: { in: { circle1: ['sinLabel'] } },
+  });
+
+  slides.push({
+    enterStateCommon: () => {
+      figure.fnMap.exec('circSetAngle', 0.8);
+      figure.getElement('circle1.rightAngle2').hide();
+    },
+    show: { circle1: ['arc', 'x', 'y', 'circle', 'center', 'line', 'angle', 'lineLabel', 'rightAngle1', 'sin', 'cos', 'sinLabel'] },
+    scenario: ['eqnCircLeft', 'right1'],
+    fromForm: 'sixRatiosLeftOpp',
+    form: 'sixRatiosLeft',
+    leaveStateCommon: () => {},
+  });
+
+  slides.push({
+    show: { circle1: ['arc', 'x', 'y', 'circle', 'center', 'line', 'angle', 'lineLabel', 'rightAngle1', 'sin', 'cos', 'sinLabel', 'cosLabel'] },
+    scenario: ['eqnCircLeft', 'right1'],
+    fromForm: 'sixRatiosLeft',
+    form: 'sixRatiosLeft',
+    dissolve: { in: { circle1: ['cosLabel'] } },
+  });
+
+  slides.push({
+    show: { circle1: ['arc', 'x', 'y', 'circle', 'center', 'line', 'angle', 'lineLabel', 'rightAngle1', 'sin', 'cos', 'sinLabel', 'cosLabel'] },
+    scenario: ['eqnCircLeft', 'right1'],
+    fromForm: 'sixRatiosLeft',
+    form: 'sixRatiosLeft',
+    transition: (done) => {
+      figure.animations.new()
+        .inParallel([
+          figure.getElement('circle1.circle').animations.dissolveOut(0.5),
+          figure.getElement('circle1.center').animations.dissolveOut(0.5),
+          figure.getElement('circle1').animations.scenario({
+            target: 'default', duration: 2,
+          }),
+        ])
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      figure.getElement('circle1').hide(['circle', 'center']);
+      figure.getElement('circle1').setScenario('default');
+    },
+  });
+
+  slides.push({
+    show: { circle1: ['arc', 'x', 'y', 'line', 'angle', 'lineLabel', 'rightAngle1', 'sin', 'cos', 'sinLabel', 'cosLabel', 'tan', 'tanLabel'] },
+    scenario: ['default', 'eqnCircLeft'],
+    fromForm: 'sixRatiosLeft',
+    form: 'sixRatiosLeft',
+    dissolve: { in: { circle1: ['tan', 'tanLabel'] } },
+  });
+
+  slides.push({
+    show: { circle1: ['arc', 'x', 'y', 'line', 'angle', 'lineLabel', 'rightAngle1', 'sin', 'cos', 'sinLabel', 'cosLabel', 'tan', 'tanLabel', 'rightAngle2'] },
+    scenario: ['default', 'eqnCircLeft'],
+    fromForm: 'sixRatiosLeft',
+    form: 'sixRatiosLeft',
+    enterStateCommon: () => {
+      figure.fnMap.exec('circSetAngle', 0.8);
+    },
+    dissolve: { in: { circle1: ['rightAngle2'] } },
+  });
+
+  slides.push({
+    show: { circle1: ['arc', 'x', 'y', 'line', 'angle', 'lineLabel', 'rightAngle1', 'sin', 'cos', 'sinLabel', 'cosLabel', 'tan', 'tanLabel', 'rightAngle2', 'sec1'] },
+    scenario: ['default', 'eqnCircLeft'],
+    fromForm: 'sixRatiosLeft',
+    form: 'sixRatiosLeft',
+    dissolve: { in: { circle1: ['sec1'] } },
+  });
+
+  // slides.push({
+  //   show: { circle1: ['arc', 'x', 'y', 'line', 'angle', 'lineLabel', 'rightAngle1', 'sin', 'cos', 'sinLabel', 'cosLabel', 'tan', 'cot'] },
+  //   scenario: ['default', 'eqnCircLeft'],
+  //   fromForm: 'sixRatiosLeft',
+  //   form: 'sixRatiosLeft',
+  //   enterState: () => {
+  //     tan.dim();
+  //     cot.dim();
+  //     figure.fnMap.exec('circSetAngle', 0.8);
+  //     tan.setPosition(0, 0);
+  //     cot.setPosition(0, 0);
+  //     figure.getElement('circle1.rightAngle2').hide();
+  //   },
+  //   transition: (done) => {
+  //     tan.setPosition(0.5, 0.5);
+  //     cot.setPosition(0.5, 0.5);
+  //     tan.show();
+  //     cot.show();
+  //     figure.animations.new()
+  //       .inParallel([
+  //         tan.animations.dissolveIn(0.5),
+  //         cot.animations.dissolveIn(0.5),
+  //       ])
+  //       .trigger({ callback: 'circTangentMove', duration: 2 })
+  //       .whenFinished(done)
+  //       .start();
+  //   },
+  //   steadyState: () => {
+  //     tan.show();
+  //     cot.show();
+  //     tan.setPosition(0, 0);
+  //     cot.setPosition(0, 0);
+  //   },
+  //   leaveStateCommon: () => {
+  //     tan.undim();
+  //     cot.undim();
+  //   },
+  // });
+
+
+
+
+
+
+
+
   slides.push({
     clear: true,
     show: { circle1: ['circle', 'center'] },
@@ -1013,12 +1223,14 @@ function makeSlides() {
   });
 
   slides.push({
-    show: { circle1: ['circle', 'center'] },
+    show: { circle1: ['circle', 'center', 'tan', 'cot'] },
     scenarioCommon: ['small'],
     enterState: () => {
       tan.dim();
       cot.dim();
       figure.fnMap.exec('circSetAngle', 0.8);
+      tan.setPosition(0, 0);
+      cot.setPosition(0, 0);
       figure.getElement('circle1.rightAngle2').hide();
     },
     transition: (done) => {
@@ -1087,9 +1299,9 @@ function makeSlides() {
   });
 
   slides.push({
-    scenarioCommon: 'default',
+    scenarioCommon: ['default', 'eqnCirc'],
     show: {
-      circle1: ['x', 'y', 'arc', 'tan', 'cot', 'rightAngle2', 'line'],
+      circle1: ['x', 'y', 'arc', 'tan', 'cot', 'rightAngle2', 'line', 'rightAngle1', 'sin', 'cos', 'angle'],
     },
     dissolve: {
       in: { circle1: ['sin', 'cos', 'angle', 'rightAngle1'] },
@@ -1097,7 +1309,6 @@ function makeSlides() {
   });
 
   slides.push({
-    scenarioCommon: 'default',
     show: {
       circle1: ['x', 'y', 'arc', 'tan', 'cot', 'rightAngle2', 'line', 'sin', 'cos', 'angle', 'rightAngle1'],
     },
@@ -1105,7 +1316,31 @@ function makeSlides() {
   });
 
   slides.push({
-    scenarioCommon: 'default',
+    fromForm: null,
+    form: 'sinTheta',
+    show: {
+      circle1: ['x', 'y', 'arc', 'tan', 'cot', 'rightAngle2', 'line', 'sin', 'cos', 'angle', 'rightAngle1', 'lineLabel'],
+    },
+  });
+
+  slides.push({
+    fromForm: 'sinTheta',
+    form: 'sinThetaOne',
+    show: {
+      circle1: ['x', 'y', 'arc', 'tan', 'cot', 'rightAngle2', 'line', 'sin', 'cos', 'angle', 'rightAngle1', 'lineLabel'],
+    },
+  });
+  slides.push({
+    fromForm: 'sinThetaOne',
+    form: 'sinThetaOpp',
+    show: {
+      circle1: ['x', 'y', 'arc', 'tan', 'cot', 'rightAngle2', 'line', 'sin', 'cos', 'angle', 'rightAngle1', 'lineLabel'],
+    },
+  });
+
+  slides.push({
+    // scenarioCommon: 'default',
+    fromForm: 'sinThetaOpp',
     show: {
       circle1: ['x', 'y', 'arc', 'tan', 'cot', 'rightAngle2', 'line', 'sin', 'cos', 'angle', 'rightAngle1', 'lineLabel'],
     },
@@ -1113,7 +1348,7 @@ function makeSlides() {
   });
 
   slides.push({
-    scenarioCommon: 'default',
+    form: null,
     show: {
       circle1: ['x', 'y', 'arc', 'tan', 'cot', 'rightAngle2', 'line', 'sin', 'cos', 'angle', 'rightAngle1', 'lineLabel', 'sinLabel'],
     },
@@ -1215,6 +1450,6 @@ function makeSlides() {
 
 
   nav.loadSlides(slides);
-  nav.goToSlide(28);
+  nav.goToSlide(68);
 }
 makeSlides();

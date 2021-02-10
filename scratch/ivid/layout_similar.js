@@ -14,6 +14,14 @@ const color3 = [0, 0.6, 0, 1];
 const color4 = [0.6, 0, 0.6, 1];
 const colGrey = [0.6, 0.6, 0.6, 1];
 const colText = [0.3, 0.3, 0.3, 1];
+const colCos = [0, 0, 0.9, 1];
+const colSec = [0, 0.7, 1, 1];
+const colTan = [0, 0.4, 0, 1];
+const colCot = [0, 0.9, 0, 1];
+const colSin = [0.9, 0, 0, 1];
+const colCsc = [1, 0.4, 0, 1];
+const colRad = [1, 0, 1, 1];
+const colTheta = [0, 0.6, 0, 1];
 
 function similarLayout() {
   const scale1 = 1.2;
