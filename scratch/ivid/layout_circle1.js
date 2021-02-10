@@ -136,6 +136,7 @@ function layoutCircle1() {
         options: {
           p1: [0, 0],
           p2: [radius, 0],
+          dash: [0.01, 0.005],
           width: 0.006,
           color: colGrey,
         },
@@ -146,7 +147,19 @@ function layoutCircle1() {
         options: {
           p1: [0, 0],
           p2: [0, radius],
+          dash: [0.01, 0.005],
           width: 0.006,
+          color: colGrey,
+        },
+      },
+      {
+        name: 'circle',
+        method: 'primitives.polygon',
+        options: {
+          radius,
+          line: { width: 0.006 },
+          sides: 100,
+          sidesToDraw: 100,
           color: colGrey,
         },
       },
@@ -159,6 +172,14 @@ function layoutCircle1() {
           sides: 100,
           sidesToDraw: 25,
           color: colGrey,
+        },
+      },
+      {
+        name: 'center',
+        method: 'primitives.polygon',
+        options: {
+          radius: 0.015,
+          sides: 12,
         },
       },
       {
@@ -195,13 +216,13 @@ function layoutCircle1() {
             radius: 0.2,
             step: 0.8,
             sides: 400,
-            autoHideMax: Math.PI / 2 - 0.15,
+            // autoHideMax: Math.PI / 2 - 0.15,
           },
           label: {
             text: '\u03b8',
             offset: 0.01,
-            autoHideMax: Math.PI / 2 - 0.15,
-            autoHide: 0.2,
+            // autoHideMax: Math.PI / 2 - 0.15,
+            // autoHide: 0.2,
           },
         },
       },
@@ -219,7 +240,7 @@ function layoutCircle1() {
       lineLabel('cotLabel', 'cot', colCot),
       {
         name: 'line',
-        method: 'line',
+        method: 'collections.line',
         options: {
           length: radius,
           width: 0.013,
@@ -350,14 +371,15 @@ function layoutCircle1() {
         },
       ),
     ],
-    options: {
-      position: [-radius / 2, -1.2],
-    },
+    // options: {
+    //   position: [-radius / 2, -1.2],
+    // },
     mods: {
       scenarios: {
         title: { scale: 1 },
-        default: { scale: 1 },
+        default: { scale: 1, position: [-radius / 2, -1.2] },
         right: { scale: 1, position: [0.5, -1.2] },
+        small: { scale: 0.7, position: [0, -0.3] },
       },
     },
   });
@@ -367,11 +389,27 @@ function layoutCircle1() {
   const yBounds = 1;
   const rightBounds = new Fig.Line([radius + xBounds, 0], radius + xBounds, Math.PI / 2);
   const topBounds = new Fig.Line([0, radius + yBounds], radius + xBounds, 0);
-  radLine.fnMap.add('updateCircle', () => {
+  function updateCircle() {
     const r = radLine.transform.r();
     angle.setAngle({ angle: r });
+    if (cos.isShown && r < Math.PI / 2 - 0.15) {
+      angle._curve.showAll();
+    // } else if (!cos.isShown) {
+    //   angle.showAll();
+    } else {
+      angle.hide();
+    }
+    if (
+      r > 0.25
+      && (cos.isShown && r < Math.PI / 2 - 0.15)
+    ) {
+      angle._label.showAll();
+    } else {
+      angle._label.hide();
+    }
     const x = radius * Math.cos(r);
     const y = radius * Math.sin(r);
+    // xLine.custom.updatePoints({ p1: [0, 0.0], p2: [radius, 0.0], arrow: null });
     if (tan.isShown) {
       const idealTanLine = new Fig.Line([x, y], [radius / Math.cos(r), 0]);
       let tanLineIntersect;
@@ -394,11 +432,11 @@ function layoutCircle1() {
         p2: tanLine.p2._dup(),
         arrow: tanLine.p2.y > 0.01 ? { end: { head: 'barb', scale: 0.8 } } : null,
       });
-      xLine.custom.updatePoints({
-        p1: [0, 0.0],
-        p2: [tanLine.p2.x, 0.0],
-        arrow: tanLine.p2.y > 0.01 ? { end: { head: 'barb', scale: 0.013 / 0.006 * 0.8 } } : null,
-      });
+      // xLine.custom.updatePoints({
+      //   p1: [0, 0.0],
+      //   p2: [tanLine.p2.x, 0.0],
+      //   arrow: tanLine.p2.y > 0.01 ? { end: { head: 'barb', scale: 0.013 / 0.006 * 0.8 } } : null,
+      // });
       tanLabel.setPosition(tanLine.offset('positive', 0.12).midPoint());
       sec.custom.updatePoints({
         p1: [0, -0.25],
@@ -440,11 +478,11 @@ function layoutCircle1() {
         p2: cotLine.p2._dup(),
         arrow: cotLine.p2.x > 0.01 ? { end: { head: 'barb', scale: 0.8 } } : null,
       });
-      yLine.custom.updatePoints({
-        p1: [0, 0.0],
-        p2: [0, cotLine.p2.y],
-        arrow: cotLine.p2.x > 0.01 ? { end: { head: 'barb', scale: 0.8 } } : null,
-      });
+      // yLine.custom.updatePoints({
+      //   p1: [0, 0.0],
+      //   p2: [0, cotLine.p2.y],
+      //   arrow: cotLine.p2.x > 0.01 ? { end: { head: 'barb', scale: 0.8 } } : null,
+      // });
       cotLabel.setPosition(cotLine.offset('negative', 0.12).midPoint());
       csc.custom.updatePoints({
         p1: [0, 0],
@@ -464,17 +502,68 @@ function layoutCircle1() {
       //   rightAngle2.hide();
       // }
     }
+
     sin.custom.updatePoints({ p1: [x, 0], p2: [x, y] });
-    cos.custom.updatePoints({ p1: [0, 0], p2: [x, 0] });
-    sinLabel.setPosition([x < radius * 0.3 ? x + 0.12 : x - 0.12, Math.max(0.06, y / 2)]);
+    cos.custom.updatePoints({ p1: [0, 0], p2: [x + 0.013 / 2, 0] });
+    sinLabel.setPosition([x < radius * 0.3 || !tan.isShown ? x + 0.12 : x - 0.12, Math.max(0.06, y / 2)]);
     cosLabel.setPosition([x / 2, -0.07]);
     radLineLabel.setPosition([x / 2 - 0.02, y / 2 + 0.02]);
-    if (r < Math.PI / 2 - 0.3 && r > 0.2) {
+    if (r < Math.PI / 2 - 0.3 && r > 0.2 && cos.isShown) {
       rightAngle1.showAll();
       rightAngle1.setAngle({ p1: [x, y], p2: [x, 0], p3: [0, 0] });
     } else {
       rightAngle1.hide();
     }
+  }
+  radLine.fnMap.add('updateCircle', () => updateCircle());
+  figure.fnMap.global.add('circSetAngle', (r) => {
+    console.log(r)
+    radLine.setRotation(r);
+    updateCircle();
   });
+  figure.fnMap.global.add('circGoToAngle', () => {
+    radLine.animations.new()
+      .rotation({ target: defaultAngle, velocity: 1 })
+      .start();
+  });
+  figure.fnMap.global.add('circGrowRadius', () => {
+    radLine.showAll();
+    radLine.setRotation(Math.PI / 6)
+    console.log(radLine.line)
+    console.log(radLine)
+    radLine.animations.new()
+      .length({ start: 0, target: radius, duration: 1.5 })
+      .then(circle.getElement('rightAngle2').animations.dissolveIn(0.5))
+      .start();
+  });
+
+  // figure.fnMap.global.add('circSetTangentLine', () => {
+  //   const a = defaultAngle + Math.PI / 2;
+  //   const leftLine = new Fig.Line([0, 0], 1, a);
+  //   const rightLine = new Fig.Line([0, 0], 1, a + Math.PI);
+  //   tangent._line.custom.updatePoints({ p1: leftLine.p2, p2: rightLine.p2 });
+  //   tangent.setPosition(defaultX, defaultY);
+  //   tangent.showAll();
+  // });
+  figure.fnMap.global.add('circTangentMove', () => {
+    tan.animations.new()
+      .position({
+        // start: [defaultX + 1, defaultY + 1],
+        // target: [defaultX, defaultY],
+        start: [0.5, 0.5],
+        target: [0, 0],
+        duration: 2,
+      })
+      .start();
+    cot.animations.new()
+      .position({
+        // start: [defaultX + 1, defaultY + 1],
+        // target: [defaultX, defaultY],
+        start: [0.5, 0.5],
+        target: [0, 0],
+        duration: 2,
+      })
+      .start();
+  })
   radLine.subscriptions.add('setTransform', 'updateCircle');
 }

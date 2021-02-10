@@ -1457,6 +1457,11 @@ export default class CollectionsLine extends FigureElementCollection {
     this.setupLine();
   }
 
+  // setRotation(angle: number) {
+  //   super.setRotation(angle);
+  //   this.line = new Line(this.) 
+  // }
+
   setupLine() {
     const set = (key, x) => {
       // $FlowFixMe

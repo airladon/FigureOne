@@ -324,25 +324,32 @@ function makeSlides() {
   .##....##.##.....##.##.....##
   ..######...#######..##.....##
   */
-  // slides.push({
-  //   scenario: 'default',
-  //   show: ['sumOfAngles'],
-  // });
-
   slides.push({
-    show: ['totalAngle.summary1', 'totalAngle.tri', 'totalAngle.eqn'],
+    show: [],
     scenario: ['default'],
+    transition: (done) => {
+      figure.getElement('totalAngle.eqn').showForm('abc')
+      figure.getElement('totalAngle.eqn').hide();
+      figure.animations.new()
+        .then(figure.getElement('totalAngle.summary1').animations.dissolveIn(0.5))
+        .then(figure.getElement('totalAngle.tri').animations.dissolveIn(0.5))
+        .then(figure.getElement('totalAngle.eqn').animations.dissolveIn(0.5))
+        .whenFinished(done)
+        .start();
+    },
     steadyState: () => {
       figure.getElement('totalAngle.eqn').showForm('abc');
+      figure.getElement('totalAngle.tri').showAll();
+      figure.getElement('totalAngle.summary1').showAll();
     },
   });
 
   slides.push({
-    show: ['totalAngle.summary1', 'totalAngle.tri', 'totalAngle.eqn', 'totalAngle.summary2'],
+    show: { totalAngle: ['summary1', 'tri', 'eqn'] },
     scenario: ['default'],
-    steadyState: () => {
-      figure.getElement('totalAngle.eqn').showForm('abc');
-    },
+    fromForm: { 'totalAngle.eqn': 'abc' },
+    form: { 'totalAngle.eqn': 'abc' },
+    dissolve: { in: 'totalAngle.summary2' },
   });
 
 
@@ -358,19 +365,21 @@ function makeSlides() {
   const sTri1 = figure.getElement('similar.tri1');
   const sTri2 = figure.getElement('similar.tri2');
 
-  slides.push({ scenario: 'default', show: ['similarTriangles'] });
+  slides.push({
+    form: null,
+    scenarioCommon: ['default', 'topHigh'],
+    dissolve: { in: 'similarTriangles' },
+  });
 
   slides.push({
     show: ['similarTriangles'],
-    scenario: ['default', 'top'],
     transition: (done) => {
       figure.getElement('similarTriangles').animations.new()
-        .scenario({ start: 'default', target: 'topHigh', duration: 1 })
-        .then(figure.getElement('similar.summary1').animations.dissolveIn(0.8))
         .inParallel([
           sTri1.getElement('line').animations.dissolveIn(0.8),
           sTri2.getElement('line').animations.dissolveIn(0.8),
         ])
+        .then(figure.getElement('similar.summary1').animations.dissolveIn(0.8))
         .inParallel([
           sTri1.getElement('angle0').animations.dissolveIn(0.8),
           sTri1.getElement('angle1').animations.dissolveIn(0.8),
@@ -394,7 +403,6 @@ function makeSlides() {
 
   slides.push({
     show: ['similarTriangles', 'similar.tri1', 'similar.tri2', 'similar.summary1', 'similar.summary2'],
-    scenario: ['default', 'topHigh'],
     transition: (done) => {
       sTri1.hideSides();
       sTri2.hideSides();
@@ -421,16 +429,7 @@ function makeSlides() {
 
   slides.push({
     show: ['similarTriangles', 'similar.tri1', 'similar.tri2', 'similar.summary1', 'similar.summary2', 'similar.summary3'],
-    scenario: ['default', 'topHigh'],
-    transition: (done) => {
-      figure.getElement('similar.summary3').animations.new()
-        .dissolveIn(0.8)
-        .whenFinished(done)
-        .start();
-    },
-    steadyState: () => {
-      figure.getElement('similar.summary3').showAll();
-    },
+    dissolve: { in: 'similar.summary3' },
   });
 
   /*
@@ -444,6 +443,7 @@ function makeSlides() {
   */
   const initialAngle = 0.7;
   slides.push({
+    clear: true,
     scenarioCommon: ['default', 'left', 'top'],
     show: ['rightTri.tri.line'],
     enterStateCommon: () => {
@@ -458,51 +458,57 @@ function makeSlides() {
 
   // dissolve in theta
   slides.push({
-    show: ['rightTri.tri.line'],
+    show: ['rightTri.tri.line', 'rightTri.tri.angle1'],
     dissolve: { in: 'rightTri.tri.angle2' },
-  });
-
-  // Dissolve in sides
-  slides.push({
-    show: ['rightTri.tri.line', 'rightTri.tri.angle2'],
-    enterStateCommon: () => {
-      figure.fnMap.exec('triToNames');
-      rightTri.hasTouchableElements = false;
-      figure.fnMap.exec('triToRot', initialAngle);
-    },
-    dissolve: { in: { 'rightTri.tri': ['side01', 'side12', 'side20'] } },
-    steadyState: () => {
-      figure.shortCuts = {
-        1: 'triPulseTheta',
-        2: 'triPulseRight',
-      };
-    },
   });
 
   // Dissolve in third angle
   slides.push({
-    show: ['rightTri'],
+    enterStateCommon: () => {
+      figure.fnMap.exec('triToNames');
+      rightTri._tri.hideSides();
+      rightTri.hasTouchableElements = false;
+      figure.fnMap.exec('triToRot', initialAngle);
+    },
+    show: ['rightTri.tri.line', 'rightTri.tri.angle2', 'rightTri.tri.angle1'],
     dissolve: { in: 'rightTri.tri.angle0' },
   });
 
   // Dissolve in All Triangles
   slides.push({
-    show: ['rightTri'],
+    show: ['rightTri.tri.line', 'rightTri.tri.angle2', 'rightTri.tri.angle0', 'rightTri.tri.angle1'],
     dissolve: { in: 'allTriangles' },
   });
 
   // Dissolve in Have the Same Angles
   slides.push({
-    show: ['rightTri', 'allTriangles'],
+    show: ['rightTri.tri.line', 'rightTri.tri.angle2', 'rightTri.tri.angle0', 'allTriangles', 'rightTri.tri.angle1'],
     dissolve: { in: 'haveSameAngles' },
   });
 
   // Dissolve Are Similar
   slides.push({
-    show: ['rightTri', 'allTriangles', 'haveSameAngles'],
+    show: ['rightTri.tri.line', 'rightTri.tri.angle2', 'rightTri.tri.angle0', 'rightTri.tri.angle1', 'allTriangles', 'haveSameAngles'],
     dissolve: {
       out: ['haveSameAngles', 'rightTri.tri.angle0'],
       in: 'areSimilar',
+    },
+  });
+
+  // Dissolve in sides
+  slides.push({
+    show: ['rightTri.tri.line', 'rightTri.tri.angle2', 'rightTri.tri.angle1', 'allTriangles', 'areSimilar'],
+    enterStateCommon: () => {
+      figure.fnMap.exec('triToNames');
+      rightTri.hasTouchableElements = false;
+      figure.fnMap.exec('triToRot', initialAngle);
+    },
+    dissolve: { in: { 'rightTri.tri': ['side01', 'side12'] } },
+    steadyState: () => {
+      figure.shortCuts = {
+        1: 'triPulseTheta',
+        2: 'triPulseRight',
+      };
     },
   });
 
@@ -512,20 +518,13 @@ function makeSlides() {
     fromForm: 'oppOnHyp',
     form: 'opp',
     show: ['rightTri', 'allTriangles', 'areSimilar'],
-    hideCommon: ['rightTri.tri.angle0'],
+    hideCommon: ['rightTri.tri.angle0', 'rightTri.tri.side20'],
     dissolve: {
-      out: 'areSimilar',
+      out: ['areSimilar'],
       in: ['haveTheSame', 'eqn'],
     },
   });
 
-  // Dissolve out adjacent
-  slides.push({
-    show: ['rightTri', 'allTriangles', 'haveTheSame'],
-    fromForm: 'oppOnHyp',
-    form: 'oppOnHyp',
-    dissolve: { out: 'rightTri.tri.side20' },
-  });
 
   /*
   .########.##.....##.##....##..######..########.####..#######..##....##
@@ -542,7 +541,7 @@ function makeSlides() {
     show: ['rightTri', 'allTriangles', 'haveTheSame'],
     hideCommon: ['rightTri.tri.angle0', 'rightTri.tri.side20'],
     fromForm: 'oppOnHyp',
-    form: 'oppOnHyp',
+    form: 'ratioValue',
     enterStateCommon: () => {
       figure.fnMap.exec('triToNames');
       // rightTri._tri._side20.hide();
@@ -551,37 +550,19 @@ function makeSlides() {
     },
     transition: (done) => {
       figure.animations.new()
-        .trigger({ callback: 'triAnimateToValues', duration: 0.8 })
-        .whenFinished(done)
-        .start();
-    },
-    steadyState: () => {
-      figure.fnMap.exec('triToValues');
-    },
-  });
-  slides.push({
-    show: ['rightTri', 'allTriangles', 'haveTheSame'],
-    enterStateCommon: () => {
-      figure.fnMap.exec('triToValues');
-      rightTri.hasTouchableElements = false;
-      figure.fnMap.exec('triToRot', initialAngle);
-    },
-    fromForm: 'oppOnHyp',
-    form: 'ratioValue',
-
-    transition: (done) => {
-      figure.animations.new()
         .inParallel([
           eqn.animations.scenario({ target: 'eqnTri', duration: 2 }),
           rightTri.animations.scenario({ target: 'eqnTri', duration: 2 }),
           figure.getElement('haveTheSame').animations.dissolveOut(0.4),
           figure.getElement('allTriangles').animations.dissolveOut(0.4),
         ])
+        .trigger({ callback: 'triAnimateToValues', duration: 0.8 })
         .then(eqn.animations.goToForm({ target: 'ratioValue', animate: 'move' }))
         .whenFinished(done)
         .start();
     },
     steadyState: () => {
+      figure.fnMap.exec('triToValues');
       figure.getElement('haveTheSame').hide();
       figure.getElement('allTriangles').hide();
       eqn.setScenario('eqnTri');
@@ -592,49 +573,16 @@ function makeSlides() {
 
   slides.push({
     scenarioCommon: ['default', 'eqnTri'],
+    enterStateCommon: () => {
+      figure.fnMap.exec('triToValues');
+      rightTri.hasTouchableElements = false;
+      figure.fnMap.exec('triToRot', initialAngle);
+    },
     show: ['rightTri'],
     fromForm: 'ratioValue',
     form: 'f',
     steadyState: () => {
       rightTri.hasTouchableElements = true;
-    },
-  });
-
-  slides.push({
-    show: ['rightTri'],
-    fromForm: 'f',
-    form: 'sinBracTheta',
-    steadyState: () => {
-      rightTri.hasTouchableElements = true;
-    },
-  });
-  slides.push({
-    show: ['rightTri'],
-    fromForm: 'sinBracTheta',
-    form: 'sinTheta',
-    steadyState: () => {
-      rightTri.hasTouchableElements = true;
-    },
-  });
-
-
-  slides.push({
-    show: ['rightTri'],
-    fromForm: 'sinTheta',
-    form: 'sinTheta',
-    transition: (done) => {
-      rightTri._tri._side12._label.showForm('value');
-      rightTri._tri._side12._label.animations.new()
-        .dissolveOut(0.4)
-        .trigger({ callback: 'triToSin' })
-        .dissolveIn(0.4)
-        .whenFinished(done)
-        .start();
-    },
-    steadyState: () => {
-      rightTri._tri._side12._label.showForm('name2');
-      rightTri.hasTouchableElements = true;
-      figure.fnMap.exec('triToSin');
     },
   });
 
@@ -648,9 +596,9 @@ function makeSlides() {
   .########...#######...###..###.
   */
   slides.push({
-    fromForm: 'sinTheta',
+    fromForm: 'f',
     show: ['rightTri'],
-    enterState: () => figure.fnMap.exec('triToSin'),
+    // enterState: () => figure.fnMap.exec('triToSin'),
     dissolve: {
       out: ['eqn', 'rightTri'],
       in: 'bow.circle',
@@ -733,18 +681,68 @@ function makeSlides() {
     form: { 'bow.eqn': '4' },
   });
 
+  /*
+  ..######..####.##....##
+  .##....##..##..###...##
+  .##........##..####..##
+  ..######...##..##.##.##
+  .......##..##..##..####
+  .##....##..##..##...###
+  ..######..####.##....##
+  */
+  slides.push({
+    clear: true,
+    scenarioCommon: ['default', 'eqnTri'],
+    show: ['rightTri'],
+    hideCommon: { rightTri: ['rightTri.tri.angle0', 'rightTri.tri.side20'] },
+    enterStateCommon: () => {
+      figure.fnMap.exec('triToNames');
+      rightTri.hasTouchableElements = false;
+      figure.fnMap.exec('triToRot', initialAngle);
+    },
+    fromForm: 'f',
+    form: 'f',
+    steadyState: () => {
+      rightTri.hasTouchableElements = true;
+    },
+  });
+
+  slides.push({
+    show: ['rightTri'],
+    fromForm: 'f',
+    form: 'sinBracTheta',
+    steadyState: () => {
+      rightTri.hasTouchableElements = true;
+    },
+  });
+
+  slides.push({
+    show: ['rightTri'],
+    fromForm: 'sinBracTheta',
+    form: 'sinTheta',
+    steadyState: () => {
+      rightTri.hasTouchableElements = true;
+    },
+  });
+
 
   // slides.push({
-  //   clear: true,
-  //   form: null,
-  //   showCommon: ['bow.circle'],
+  //   show: ['rightTri'],
+  //   fromForm: 'sinTheta',
+  //   form: 'sinTheta',
+  //   transition: (done) => {
+  //     rightTri._tri._side12._label.showForm('value');
+  //     rightTri._tri._side12._label.animations.new()
+  //       .dissolveOut(0.4)
+  //       .trigger({ callback: 'triToSin' })
+  //       .dissolveIn(0.4)
+  //       .whenFinished(done)
+  //       .start();
+  //   },
   //   steadyState: () => {
-  //     figure.shortCuts['1'] = 'bowString';
-  //     figure.shortCuts['2'] = 'bow';
-  //     figure.shortCuts['3'] = 'bowCircle';
-  //     figure.shortCuts['4'] = 'bowRad';
-  //     figure.shortCuts['5'] = 'bowTri';
-  //     figure.shortCuts['6'] = 'bowSin';
+  //     rightTri._tri._side12._label.showForm('name2');
+  //     rightTri.hasTouchableElements = true;
+  //     figure.fnMap.exec('triToSin');
   //   },
   // });
 
@@ -998,7 +996,155 @@ function makeSlides() {
     form: 'sixRatios',
   });
 
+  /*
+  .########....###....##....##.....######..########..######.
+  ....##......##.##...###...##....##....##.##.......##....##
+  ....##.....##...##..####..##....##.......##.......##......
+  ....##....##.....##.##.##.##.....######..######...##......
+  ....##....#########.##..####..........##.##.......##......
+  ....##....##.....##.##...###....##....##.##.......##....##
+  ....##....##.....##.##....##.....######..########..######.
+  */
+  const [tan, cot] = figure.getElements(['circle1.tan', 'circle1.cot']);
+  slides.push({
+    clear: true,
+    show: { circle1: ['circle', 'center'] },
+    scenarioCommon: ['small'],
+  });
 
+  slides.push({
+    show: { circle1: ['circle', 'center'] },
+    scenarioCommon: ['small'],
+    enterState: () => {
+      tan.dim();
+      cot.dim();
+      figure.fnMap.exec('circSetAngle', 0.8);
+      figure.getElement('circle1.rightAngle2').hide();
+    },
+    transition: (done) => {
+      tan.setPosition(0.5, 0.5);
+      cot.setPosition(0.5, 0.5);
+      tan.show();
+      cot.show();
+      figure.animations.new()
+        .inParallel([
+          tan.animations.dissolveIn(0.5),
+          cot.animations.dissolveIn(0.5),
+        ])
+        .trigger({ callback: 'circTangentMove', duration: 2 })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      tan.show();
+      cot.show();
+      tan.setPosition(0, 0);
+      cot.setPosition(0, 0);
+    },
+    leaveStateCommon: () => {
+      tan.undim();
+      cot.undim();
+    },
+  });
+
+  slides.push({
+    show: { circle1: ['circle', 'center', 'tan', 'cot'] },
+    scenarioCommon: ['small'],
+    enterStateCommon: () => {
+      tan.dim();
+      cot.dim();
+      figure.fnMap.exec('circSetAngle', 0.8);
+      tan.setPosition(0, 0);
+      cot.setPosition(0, 0);
+    },
+    dissolve: {
+      in: ['circle1.line', 'circle1.rightAngle2'],
+    },
+  });
+
+  slides.push({
+    show: { circle1: ['circle', 'center', 'tan', 'cot', 'rightAngle2', 'arc', 'line'] },
+    scenarioCommon: ['small'],
+    transition: (done) => {
+      figure.animations.new()
+        .inParallel([
+          figure.getElement('circle1.x').animations.dissolveIn(0.5),
+          figure.getElement('circle1.y').animations.dissolveIn(0.5),
+          figure.getElement('circle1.circle').animations.dissolveOut(0.5),
+          figure.getElement('circle1.center').animations.dissolveOut(0.5),
+          figure.getElement('circle1').animations.scenario({
+            target: 'default', duration: 2,
+          }),
+        ])
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      figure.getElement('circle1').show(['x', 'y']);
+      figure.getElement('circle1').hide(['circle', 'center']);
+      figure.getElement('circle1').setScenario('default');
+    },
+  });
+
+  slides.push({
+    scenarioCommon: 'default',
+    show: {
+      circle1: ['x', 'y', 'arc', 'tan', 'cot', 'rightAngle2', 'line'],
+    },
+    dissolve: {
+      in: { circle1: ['sin', 'cos', 'angle', 'rightAngle1'] },
+    },
+  });
+
+  slides.push({
+    scenarioCommon: 'default',
+    show: {
+      circle1: ['x', 'y', 'arc', 'tan', 'cot', 'rightAngle2', 'line', 'sin', 'cos', 'angle', 'rightAngle1'],
+    },
+    dissolve: { in: { circle1: ['lineLabel'] } },
+  });
+
+  slides.push({
+    scenarioCommon: 'default',
+    show: {
+      circle1: ['x', 'y', 'arc', 'tan', 'cot', 'rightAngle2', 'line', 'sin', 'cos', 'angle', 'rightAngle1', 'lineLabel'],
+    },
+    dissolve: { in: { circle1: ['sinLabel'] } },
+  });
+
+  slides.push({
+    scenarioCommon: 'default',
+    show: {
+      circle1: ['x', 'y', 'arc', 'tan', 'cot', 'rightAngle2', 'line', 'sin', 'cos', 'angle', 'rightAngle1', 'lineLabel', 'sinLabel'],
+    },
+    dissolve: { in: { circle1: ['cosLabel'] } },
+  });
+
+  slides.push({
+    show: { circle1: ['arc', 'x', 'y', 'line', 'sin', 'cos', 'sinLabel', 'cosLabel', 'rightAngle1', 'lineLabel', 'angle'] },
+    scenario: ['default'],
+    enterStateCommon: () => {
+      figure.fnMap.exec('circSetAngle', 0.8);
+      figure.shortCuts = { 1: 'circGoToAngle', 2: 'circTangentMove' };
+    },
+  });
+
+  slides.push({
+    show: { circle1: ['arc', 'x', 'y', 'line', 'sin', 'cos', 'sinLabel', 'cosLabel', 'rightAngle1', 'lineLabel', 'angle', 'tan', 'cot'] },
+    scenario: ['default'],
+    steadyState: () => {
+      // figure.fnMap.exec('circSetTangentLine');
+      figure.shortCuts = { 1: 'circGoToAngle', 2: 'circTangentMove' };
+    },
+  });
+
+  // slides.push({
+  //   show: { circle1: ['arc', 'x', 'y', 'line'] },
+  //   scenario: ['default'],
+  //   dissolve: {
+  //     in: { circle1: ['sin', 'cos', 'sinLabel', 'cosLabel', 'rightAngle', 'radLineLabel'] },
+  //   },
+  // });
 
 
   // slides.push({
@@ -1067,339 +1213,8 @@ function makeSlides() {
     },
   });
 
-  // slides.push({
-  //   show: ['rightTri'],
-  //   scenarioCommon: ['default', 'left', 'top'],
-  //   hideCommon: ['rightTri.tri.angle0', 'rightTri.tri.side20'],
-  //   enterStateCommon: () => {
-  //     figure.fnMap.exec('triToValues');
-  //     rightTri.hasTouchableElements = false;
-  //     figure.fnMap.exec('triToRot', initialAngle);
-  //   },
-  //   form: 'sinTheta',
-  //   // steadyState: () => {
-  //   //   figure.getElement('haveTheSame').hide();
-  //   //   figure.getElement('allTriangles').hide();
-  //   //   eqn.setScenario('left');
-  //   //   rightTri.hasTouchableElements = true;
-  //   // },
-  // });
-
-  // slides.push({
-  //   scenarioCommon: ['default', 'left', 'top'],
-  //   show: ['rightTri'],
-  //   fromForm: 'sinTheta',
-  //   form: 'sinOnly',
-  //   transition: (done) => {
-  //     figure.animations.new()
-  //       .inParallel([
-  //         eqn.animations.goToForm({ target: 'sinOnly', animate: 'move' }),
-  //         eqn.animations.scenario({ target: 'table', duration: 2 }),
-  //         rightTri.animations.scenario({ target: 'default', duration: 2 }),
-  //       ])
-  //       .then(figure.getElement('table').animations.dissolveIn(0.4))
-  //       .whenFinished(done)
-  //       .start();
-  //   },
-  //   steadyState: () => {
-  //     rightTri.hasTouchableElements = true;
-  //     table.showAll();
-  //     eqn.setScenario('table');
-  //     rightTri.setScenario('default');
-  //   },
-  // });
-
-  // slides.push({
-  //   scenarioCommon: ['default', 'table'],
-  //   show: ['rightTri', 'table'],
-  //   dissolve: { out: 'rightTri', in: 'firstCentury' },
-  // });
-
-  // slides.push({
-  //   show: ['table', 'firstCentury'],
-  //   enterStateCommon: () => {},
-  //   dissolve: { in: 'geometry' },
-  // });
-
-  // slides.push({
-  //   show: ['table', 'firstCentury', 'geometry'],
-  //   dissolve: { out: ['firstCentury', 'geometry'], in: 'fifteenth' },
-  // });
-
-  // slides.push({
-  //   scenarioCommon: ['default', 'table'],
-  //   show: ['table', 'fifteenth'],
-  //   dissolve: { in: 'eqn1' },
-  // });
-
-
-
-
-  // slides.push({
-  //   scenario: ['default'],
-  //   show: ['rightTri'],
-  //   transition: (done) => {
-  //     figure.animations.new()
-  //       .trigger({
-  //         callback: 'triAnimateToNames', duration: 1,
-  //       })
-  //       .whenFinished(done)
-  //       .start();
-  //   },
-  //   steadyState: () => {
-  //     figure.fnMap.exec('triToNames');
-  //   },
-  // });
-
-
-  // slides.push({
-  //   show: ['background', 'similarLink', 'totalAngleLink'],
-  //   scenario: ['default'],
-  // });
-
-  // slides.push({
-  //   show: ['similarLink', 'totalAngleLink', 'rightTris'],
-  //   scenario: ['default'],
-  //   steadyState: () => {
-  //     rightTris.hideSides();
-  //   },
-  // });
-
-  // slides.push({
-  //   show: ['similarLink', 'totalAngleLink', 'rightTris', 'similarQuestion', 'similarHint.label'],
-  //   scenario: ['default', 'top'],
-  //   steadyState: () => {
-  //     rightTris.hideSides();
-  //   },
-  // });
-
-  // slides.push({
-  //   show: ['similarLink', 'totalAngleLink', 'rightTris', 'thetaSimilar'],
-  //   scenario: ['default', 'top'],
-  //   steadyState: () => {
-  //     rightTris.hideSides();
-  //   },
-  // });
-
-  // slides.push({
-  //   show: ['similarLink', 'totalAngleLink', 'rightTris.tri1'],
-  //   scenario: ['default'],
-  //   steadyState: () => {
-  //     rightTris.hideSides();
-  //   },
-  // });
-
-  // slides.push({
-  //   show: ['similarLink', 'totalAngleLink', 'rightTris.tri1'],
-  //   hide: ['rightTris.tri1.side20', 'rightTris.tri1.side12'],
-  //   scenario: ['default'],
-  //   transition: (done) => {
-  //     rightTris.getElement('tri1.side01').animations.new()
-  //       .dissolveIn({ duration: 0.5 })
-  //       .whenFinished(done)
-  //       .start();
-  //   },
-  // });
-
-  // slides.push({
-  //   show: ['similarLink', 'totalAngleLink', 'rightTris.tri1'],
-  //   hide: ['rightTris.tri1.side20'],
-  //   scenario: ['default'],
-  //   transition: (done) => {
-  //     rightTris.getElement('tri1.side12').animations.new()
-  //       .dissolveIn({ duration: 0.5 })
-  //       .whenFinished(done)
-  //       .start();
-  //   },
-  // });
-  // slides.push({
-  //   show: ['similarLink', 'totalAngleLink', 'rightTris.tri1'],
-  //   scenario: ['default'],
-  //   transition: (done) => {
-  //     rightTris.getElement('tri1.side20').animations.new()
-  //       .dissolveIn({ duration: 0.5 })
-  //       .whenFinished(done)
-  //       .start();
-  //   },
-  // });
-
-  // slides.push({
-  //   showCommon: ['similarLink', 'totalAngleLink', 'rightTris.tri1', 'forAllTris'],
-  //   scenarioCommon: ['default', 'upperLeft', 'top'],
-  // });
-
-  // slides.push({
-  //   fromForm: null,
-  //   form: 'oneRatio',
-  // });
-  // slides.push({
-  //   fromForm: 'oneRatio',
-  //   form: 'twoRatios',
-  // });
-  // slides.push({
-  //   fromForm: 'twoRatios',
-  //   form: 'threeRatios',
-  // });
-  // slides.push({
-  //   showCommon: ['similarLink', 'totalAngleLink', 'rightTris.tri1', 'forAllTris'],
-  //   hide: ['rightTris.tri1.side20'],
-  //   fromForm: 'oneRatio',
-  //   form: 'oneRatio',
-  //   transition: (done) => {
-  //     eqn.animations.new()
-  //       .scenario({ start: 'upperLeft', target: 'left', duration: 1 })
-  //       .whenFinished(done)
-  //       .start();
-  //   },
-  //   steadyState: () => {
-  //     eqn.setScenario('left');
-  //   },
-  // });
-
-  // slides.push({
-  //   showCommon: ['similarLink', 'totalAngleLink'],
-  //   scenarioCommon: ['default', 'left'],
-  //   fromForm: 'oneRatio',
-  //   form: 'oneRatio',
-  //   enterState: () => {
-  //     rightTri.hasTouchableElements = false;
-  //   },
-  //   transition: (done) => {
-  //     rightTri.showAll();
-  //     figure.getElement('rightTri.rotLine').setRotation(0.61072);
-  //     rightTri.animations.new()
-  //       .inParallel([
-  //         rightTri._tri._side01.animations.dissolveIn({ duration: 0.8 }),
-  //         rightTri._tri._side12.animations.dissolveIn({ duration: 0.8 }),
-  //         rightTri._tri._angle2._label.animations.dissolveIn({ duration: 0.8 }),
-  //       ])
-  //       .whenFinished(done)
-  //       .start();
-  //   },
-  //   steadyState: () => {
-  //     rightTri.showAll();
-  //     figure.getElement('rightTri.rotLine').setRotation(0.61072);
-  //   },
-  // });
-
-  // slides.push({
-  //   showCommon: ['similarLink', 'totalAngleLink', 'rightTri'],
-  //   fromForm: 'oneRatio',
-  //   form: 'ratioValueDef',
-  //   enterState: () => {
-  //     rightTri.hasTouchableElements = false;
-  //     figure.getElement('rightTri.rotLine').setRotation(0.61072);
-  //   },
-  // });
-
-  // slides.push({
-  //   showCommon: ['similarLink', 'totalAngleLink', 'rightTri'],
-  //   fromForm: 'ratioValue',
-  //   form: 'ratioValue',
-  //   enterState: () => {
-  //     rightTri.hasTouchableElements = false;
-  //     figure.getElement('rightTri.rotLine').setRotation(0.61072);
-  //   },
-  //   transition: (done) => {
-  //     rightTri.animations.new()
-  //       .scenario({ start: 'default', target: 'bottom', duration: 0.8 })
-  //       .whenFinished(done)
-  //       .start();
-  //   },
-  //   steadyState: () => {
-  //     rightTri.setScenario('bottom');
-  //     rightTri.hasTouchableElements = true;
-  //   },
-  // });
-
-  // slides.push({
-  //   fromForm: 'ratioValue',
-  //   form: 'f',
-  //   scenarioCommon: ['default', 'left', 'bottom'],
-  //   transition: (done) => {
-  //     figure.animations.new()
-  //       .trigger({
-  //         callback: () => {
-  //           eqn.goToForm({
-  //             start: 'ratioValue', form: 'f', duration: 1, animate: 'move'
-  //           });
-  //         },
-  //         duration: 1,
-  //       })
-  //       .trigger({ callback: 'rotateTri', duration: 1 })
-  //       .whenFinished(done)
-  //       .start();
-  //   },
-  //   steadyState: () => {
-  //     rightTri.hasTouchableElements = true;
-  //     figure.getElement('rightTri.rotLine').setRotation(Math.PI / 4);
-  //   },
-  // });
-
-  // slides.push({
-  //   form: 'fOnly',
-  //   fromForm: 'f',
-  //   showCommon: ['similarLink', 'totalAngleLink', 'rightTri'],
-  //   scenarioCommon: ['default', 'left'],
-  //   transition: (done) => {
-  //     eqn.animations.new()
-  //       .inParallel([
-  //         eqn.animations.goToForm({ start: 'f', target: 'fOnly', animate: 'move', duration: 0.1 }),
-  //         eqn.animations.scenario({ start: 'left', target: 'table', duration: 0.8 })
-  //       ])
-  //       // .then(table.animations.dissolveIn({ duration: 0.5 }))
-  //       .whenFinished(done)
-  //       .start();
-  //   },
-  //   steadyState: () => {
-  //     console.log('adsf')
-  //     table.showAll();
-  //     eqn.setScenario('table');
-  //     rightTri.hasTouchableElements = true;
-  //     figure.getElement('rightTri.rotLine').setRotation(Math.PI / 4);
-  //   },
-  // });
-
-  // slides.push({
-  //   form: 'fInf',
-  //   fromForm: 'fOnly',
-  //   showCommon: ['similarLink', 'totalAngleLink'],
-  //   transition: (done) => {
-  //     eqn.animations.new()
-  //       .inParallel([
-  //         eqn.animations.goToForm({ start: 'fOnly', target: 'fLeft', animate: 'move', duration: 1 }),
-  //         eqn.animations.scenario({ start: 'table', target: 'default', duration: 1 }),
-  //       ])
-  //       // .then(table.animations.dissolveIn({ duration: 0.5 }))
-  //       .whenFinished(done)
-  //       .start();
-  //   },
-  // });
-
-  /*
-  .########...#######..##......##
-  .##.....##.##.....##.##..##..##
-  .##.....##.##.....##.##..##..##
-  .########..##.....##.##..##..##
-  .##.....##.##.....##.##..##..##
-  .##.....##.##.....##.##..##..##
-  .########...#######...###..###.
-  */
-  // slides.push({
-  //   clear: true, 
-  //   form: null,
-  //   showCommon: ['bow.circle'],
-  //   steadyState: () => {
-  //     figure.shortCuts['1'] = 'bowString';
-  //     figure.shortCuts['2'] = 'bow';
-  //     figure.shortCuts['3'] = 'bowCircle';
-  //     figure.shortCuts['4'] = 'bowRad';
-  //     figure.shortCuts['5'] = 'bowTri';
-  //     figure.shortCuts['6'] = 'bowSin';
-  //   },
-  // });
 
   nav.loadSlides(slides);
-  nav.goToSlide(58);
+  nav.goToSlide(28);
 }
 makeSlides();
