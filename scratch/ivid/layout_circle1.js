@@ -1,12 +1,12 @@
 /* eslint-disable camelcase */
-/* globals figure, color1, color2, color3, color4, colGrey */
+/* globals figure, colTheta, colCot, colTan, colSin, colCos, colSec, colCsc, colRad, colGrey */
 
 function layoutCircle1() {
   const radius = 1.5;
   const defaultAngle = 0.45;
-  const defaultX = radius * Math.cos(defaultAngle);
-  const defaultY = radius * Math.sin(defaultAngle);
-  const defaultSec = radius / Math.cos(defaultAngle);
+  // const defaultX = radius * Math.cos(defaultAngle);
+  // const defaultY = radius * Math.sin(defaultAngle);
+  // const defaultSec = radius / Math.cos(defaultAngle);
 
   const line = (name, color, p1 = [0, 0], p2 = [1, 0]) => ({
     name,
@@ -28,96 +28,96 @@ function layoutCircle1() {
     },
   });
 
-  const triangle = (name, p1, p2, p3, col1, col2, col3, start, mid, end, eqn1, eqn2 = {}, eqn3 = {}) => ({
-    name,
-    method: 'collection',
-    elements: [
-      line('side1', col1, p1, p2),
-      line('side2', col2, p2, p3),
-      line('side3', col3, p3, p1),
-      {
-        name: 'theta',
-        method: 'collections.angle',
-        options: {
-          curve: { radius: 0.2, width: 0.01 },
-          label: {
-            text: '\u03b8',
-            offset: 0.01,
-          },
-          angle: defaultAngle,
-        },
-      },
-      {
-        name: 'rightAngle',
-        method: 'collections.angle',
-        options: {
-          curve: { radius: 0.15, width: 0.006, autoRightAngle: true },
-          angle: Math.PI / 2,
-          position: p2,
-          startAngle: Math.PI / 2,
-        },
-      },
-      {
-        name: 'eqn1',
-        method: 'equation',
-        options: {
-          elements: eqn1.elements,
-          forms: eqn1.forms,
-          position: new Fig.Line(p1, p2).offset('negative', 0.1).midPoint(),
-          formDefaults: { alignment: { xAlign: 'center', yAlign: 'middle' } },
-        },
-      },
-      {
-        name: 'eqn2',
-        method: 'equation',
-        options: {
-          elements: eqn2.elements,
-          forms: eqn2.forms,
-          position: new Fig.Line(p2, p3).offset('negative', 0.05).midPoint(),
-          formDefaults: { alignment: { xAlign: 'left', yAlign: 'middle' } },
-        },
-      },
-      {
-        name: 'eqn3',
-        method: 'equation',
-        options: {
-          elements: eqn3.elements,
-          forms: eqn3.forms,
-          position: new Fig.Line(p3, p1).offset('negative', 0.05).midPoint(),
-          formDefaults: { alignment: { xAlign: 'right', yAlign: 'bottom' } },
-        },
-      },
-    ],
-    mods: {
-      scenarios: { start, end, mid },
-    },
-  });
+  // const triangle = (name, p1, p2, p3, col1, col2, col3, start, mid, end, eqn1, eqn2 = {}, eqn3 = {}) => ({
+  //   name,
+  //   method: 'collection',
+  //   elements: [
+  //     line('side1', col1, p1, p2),
+  //     line('side2', col2, p2, p3),
+  //     line('side3', col3, p3, p1),
+  //     {
+  //       name: 'theta',
+  //       method: 'collections.angle',
+  //       options: {
+  //         curve: { radius: 0.2, width: 0.01 },
+  //         label: {
+  //           text: '\u03b8',
+  //           offset: 0.01,
+  //         },
+  //         angle: defaultAngle,
+  //       },
+  //     },
+  //     {
+  //       name: 'rightAngle',
+  //       method: 'collections.angle',
+  //       options: {
+  //         curve: { radius: 0.15, width: 0.006, autoRightAngle: true },
+  //         angle: Math.PI / 2,
+  //         position: p2,
+  //         startAngle: Math.PI / 2,
+  //       },
+  //     },
+  //     {
+  //       name: 'eqn1',
+  //       method: 'equation',
+  //       options: {
+  //         elements: eqn1.elements,
+  //         forms: eqn1.forms,
+  //         position: new Fig.Line(p1, p2).offset('negative', 0.1).midPoint(),
+  //         formDefaults: { alignment: { xAlign: 'center', yAlign: 'middle' } },
+  //       },
+  //     },
+  //     {
+  //       name: 'eqn2',
+  //       method: 'equation',
+  //       options: {
+  //         elements: eqn2.elements,
+  //         forms: eqn2.forms,
+  //         position: new Fig.Line(p2, p3).offset('negative', 0.05).midPoint(),
+  //         formDefaults: { alignment: { xAlign: 'left', yAlign: 'middle' } },
+  //       },
+  //     },
+  //     {
+  //       name: 'eqn3',
+  //       method: 'equation',
+  //       options: {
+  //         elements: eqn3.elements,
+  //         forms: eqn3.forms,
+  //         position: new Fig.Line(p3, p1).offset('negative', 0.05).midPoint(),
+  //         formDefaults: { alignment: { xAlign: 'right', yAlign: 'bottom' } },
+  //       },
+  //     },
+  //   ],
+  //   mods: {
+  //     scenarios: { start, end, mid },
+  //   },
+  // });
 
-  const bot = (content, comment, symbol = undefined) => ({
-    bottomComment: {
-      content,
-      comment,
-      symbol,
-      contentSpace: 0.1,
-      commentSpace: 0.1,
-      inSize: false,
-    },
-  });
+  // const bot = (content, comment, symbol = undefined) => ({
+  //   bottomComment: {
+  //     content,
+  //     comment,
+  //     symbol,
+  //     contentSpace: 0.1,
+  //     commentSpace: 0.1,
+  //     inSize: false,
+  //   },
+  // });
 
-  const top = (content, comment, symbol = undefined) => ({
-    topComment: {
-      content,
-      comment,
-      symbol,
-      contentSpace: 0.1,
-      commentSpace: 0.1,
-      inSize: false,
-    },
-  });
+  // const top = (content, comment, symbol = undefined) => ({
+  //   topComment: {
+  //     content,
+  //     comment,
+  //     symbol,
+  //     contentSpace: 0.1,
+  //     commentSpace: 0.1,
+  //     inSize: false,
+  //   },
+  // });
 
-  const frac = (numerator, symbol, denominator, scale = 1) => ({
-    frac: { numerator, symbol, denominator, scale },
-  });
+  // const frac = (numerator, symbol, denominator, scale = 1) => ({
+  //   frac: { numerator, symbol, denominator, scale },
+  // });
 
   const [circle] = figure.add({
     name: 'circle1',
@@ -315,113 +315,113 @@ function layoutCircle1() {
           yAlign: 'bottom',
         },
       },
-      triangle(
-        'sinCos1', [0, 0], [defaultX, 0], [defaultX, defaultY],
-        colCos, colSin, colRad,
-        { position: [-2.7, 0], scale: 1, rotation: 0 },
-        {},
-        { position: [0, 0], scale: 1, rotation: 0 },
-        {
-          elements: { cos: { style: 'normal', color: colCos } },
-          forms: { 0: 'cos' },
-        },
-        {
-          elements: { sin: { style: 'normal', color: colSin } },
-          forms: { 0: 'sin' },
-        },
-        {
-          elements: { _1: { color: colRad } },
-          forms: { 0: '_1' },
-        },
-      ),
-      triangle(
-        'tanSec1', [0, 0], [radius, 0], [radius, radius * defaultY / defaultX],
-        colRad, colTan, colSec,
-        { position: [-2.7, 1.3], scale: [1, 1], rotation: 0 },
-        { position: [-0.3, 1.3], scale: [-1, 1], rotation: 0 },
-        { position: [0, 0], scale: [-1, 1], rotation: Math.PI + defaultAngle },
-        {
-          elements: {
-            times: { text: ' \u00d7 ' },
-            _1: { color: colRad },
-            cos: { style: 'normal', color: colCos },
-            cos_1: { style: 'normal', color: colCos },
-            cos_2: { style: 'normal', color: colCos },
-            div1: '\u00f7 ',
-            div2: '\u00f7 ',
-          },
-          forms: {
-            scale: {
-              content: ['s', 'times', 'cos'],
-              alignment: { fixTo: 's', yAlign: 'top', xAlign: 1.5 },
-            },
-            equals: {
-              content: ['s', 'times', 'cos', '_ = ', '_1'],
-              alignment: { fixTo: 's', yAlign: 'top', xAlign: 1.5 },
-            },
-            final: {
-              content: {
-                lines: {
-                  content: [
-                    ['s', 'times', 'cos', '_ = ', '_1'],
-                    ['_\u2234 ', 's_1', '_ = _1', frac('_1_1', 'vinculum', 'cos_1', 0.8)],
-                  ],
-                  baselineSpace: 0.25,
-                },
-              },
-              alignment: { fixTo: 's', yAlign: 'top', xAlign: 1.5 },
-            },
-          },
-        },
-        {
-          elements: {
-            times: { text: ' \u00d7 ' },
-            sin: { style: 'normal', color: colSin },
-            cos: { style: 'normal', color: colCos },
-            tan: { style: 'normal', color: colTan },
-            arrow: { symbol: 'line', arrow: { start: 'triangle' }, width: 0.006 },
-          },
-          forms: {
-            scale: {
-              content: ['s', 'times', 'sin'],
-              alignment: { fixTo: 's', yAlign: 'middle', xAlign: -0.3 },
-            },
-            equals: {
-              content: ['s', 'times', 'sin', '_ = ', 'tan'],
-              alignment: { fixTo: 's', yAlign: 'middle', xAlign: -0.3 },
-            },
-            final1: {
-              content: [bot('s', frac('_1', 'vinculum', 'cos'), 'arrow'), 'times', 'sin', '_ = ', 'tan'],
-              alignment: { fixTo: 's', yAlign: 'middle', xAlign: -0.3 },
-            },
-            final2: {
-              content: [frac('_1', 'vinculum', 'cos'), 'times', 'sin', '_ = ', 'tan'],
-              alignment: { fixTo: 'vinculum', yAlign: 'middle', xAlign: 'left' },
-            },
-            final3: {
-              content: [frac('sin', 'vinculum', 'cos'), '_ = ', 'tan'],
-              alignment: { fixTo: 'vinculum', yAlign: 'middle', xAlign: 'left' },
-            },
-          },
-        },
-        {
-          elements: {
-            _1: { color: colRad },
-            cos: { style: 'normal', color: colCos },
-            times: { text: ' \u00d7 ' },
-            sin: { style: 'normal', color: colSin },
-            sec: { style: 'normal', color: colSec },
-            arrow: { symbol: 'line', arrow: { start: 'triangle' }, width: 0.006 },
-          },
-          forms: {
-            scale: ['s', 'times', '_1'],
-            equals: ['sec', '_ = ', 's', 'times', '_1'],
-            final1: ['sec', '_ = ', top('s', frac('_1_1', 'vinculum', 'cos'), 'arrow'), 'times', '_1'],
-            final2: ['sec', '_ = ', frac('_1_1', 'vinculum', 'cos'), 'times', '_1'],
-            final3: ['sec', '_ = ', frac('_1_1', 'vinculum', 'cos')],
-          },
-        },
-      ),
+      // triangle(
+      //   'sinCos1', [0, 0], [defaultX, 0], [defaultX, defaultY],
+      //   colCos, colSin, colRad,
+      //   { position: [-2.7, 0], scale: 1, rotation: 0 },
+      //   {},
+      //   { position: [0, 0], scale: 1, rotation: 0 },
+      //   {
+      //     elements: { cos: { style: 'normal', color: colCos } },
+      //     forms: { 0: 'cos' },
+      //   },
+      //   {
+      //     elements: { sin: { style: 'normal', color: colSin } },
+      //     forms: { 0: 'sin' },
+      //   },
+      //   {
+      //     elements: { _1: { color: colRad } },
+      //     forms: { 0: '_1' },
+      //   },
+      // ),
+      // triangle(
+      //   'tanSec1', [0, 0], [radius, 0], [radius, radius * defaultY / defaultX],
+      //   colRad, colTan, colSec,
+      //   { position: [-2.7, 1.3], scale: [1, 1], rotation: 0 },
+      //   { position: [-0.3, 1.3], scale: [-1, 1], rotation: 0 },
+      //   { position: [0, 0], scale: [-1, 1], rotation: Math.PI + defaultAngle },
+      //   {
+      //     elements: {
+      //       times: { text: ' \u00d7 ' },
+      //       _1: { color: colRad },
+      //       cos: { style: 'normal', color: colCos },
+      //       cos_1: { style: 'normal', color: colCos },
+      //       cos_2: { style: 'normal', color: colCos },
+      //       div1: '\u00f7 ',
+      //       div2: '\u00f7 ',
+      //     },
+      //     forms: {
+      //       scale: {
+      //         content: ['s', 'times', 'cos'],
+      //         alignment: { fixTo: 's', yAlign: 'top', xAlign: 1.5 },
+      //       },
+      //       equals: {
+      //         content: ['s', 'times', 'cos', '_ = ', '_1'],
+      //         alignment: { fixTo: 's', yAlign: 'top', xAlign: 1.5 },
+      //       },
+      //       final: {
+      //         content: {
+      //           lines: {
+      //             content: [
+      //               ['s', 'times', 'cos', '_ = ', '_1'],
+      //               ['_\u2234 ', 's_1', '_ = _1', frac('_1_1', 'vinculum', 'cos_1', 0.8)],
+      //             ],
+      //             baselineSpace: 0.25,
+      //           },
+      //         },
+      //         alignment: { fixTo: 's', yAlign: 'top', xAlign: 1.5 },
+      //       },
+      //     },
+      //   },
+      //   {
+      //     elements: {
+      //       times: { text: ' \u00d7 ' },
+      //       sin: { style: 'normal', color: colSin },
+      //       cos: { style: 'normal', color: colCos },
+      //       tan: { style: 'normal', color: colTan },
+      //       arrow: { symbol: 'line', arrow: { start: 'triangle' }, width: 0.006 },
+      //     },
+      //     forms: {
+      //       scale: {
+      //         content: ['s', 'times', 'sin'],
+      //         alignment: { fixTo: 's', yAlign: 'middle', xAlign: -0.3 },
+      //       },
+      //       equals: {
+      //         content: ['s', 'times', 'sin', '_ = ', 'tan'],
+      //         alignment: { fixTo: 's', yAlign: 'middle', xAlign: -0.3 },
+      //       },
+      //       final1: {
+      //         content: [bot('s', frac('_1', 'vinculum', 'cos'), 'arrow'), 'times', 'sin', '_ = ', 'tan'],
+      //         alignment: { fixTo: 's', yAlign: 'middle', xAlign: -0.3 },
+      //       },
+      //       final2: {
+      //         content: [frac('_1', 'vinculum', 'cos'), 'times', 'sin', '_ = ', 'tan'],
+      //         alignment: { fixTo: 'vinculum', yAlign: 'middle', xAlign: 'left' },
+      //       },
+      //       final3: {
+      //         content: [frac('sin', 'vinculum', 'cos'), '_ = ', 'tan'],
+      //         alignment: { fixTo: 'vinculum', yAlign: 'middle', xAlign: 'left' },
+      //       },
+      //     },
+      //   },
+      //   {
+      //     elements: {
+      //       _1: { color: colRad },
+      //       cos: { style: 'normal', color: colCos },
+      //       times: { text: ' \u00d7 ' },
+      //       sin: { style: 'normal', color: colSin },
+      //       sec: { style: 'normal', color: colSec },
+      //       arrow: { symbol: 'line', arrow: { start: 'triangle' }, width: 0.006 },
+      //     },
+      //     forms: {
+      //       scale: ['s', 'times', '_1'],
+      //       equals: ['sec', '_ = ', 's', 'times', '_1'],
+      //       final1: ['sec', '_ = ', top('s', frac('_1_1', 'vinculum', 'cos'), 'arrow'), 'times', '_1'],
+      //       final2: ['sec', '_ = ', frac('_1_1', 'vinculum', 'cos'), 'times', '_1'],
+      //       final3: ['sec', '_ = ', frac('_1_1', 'vinculum', 'cos')],
+      //     },
+      //   },
+      // ),
     ],
     // options: {
     //   position: [-radius / 2, -1.2],
@@ -429,7 +429,7 @@ function layoutCircle1() {
     mods: {
       scenarios: {
         title: { scale: 1 },
-        default: { scale: 1, position: [-radius / 2, -1.1] },
+        default: { scale: 1, position: [-radius / 2 + 0.4, -1.1] },
         right: { scale: 1, position: [0.5, -1.2] },
         small: { scale: 0.7, position: [0, -0.3] },
         center: { scale: 1, position: [0, -0.5] },
@@ -614,10 +614,29 @@ function layoutCircle1() {
       .then(circle.getElement('rightAngle2').animations.dissolveIn(0.5))
       .start();
   });
-  figure.fnMap.global.add('circPulseTan', () => tanLabel.pulse({ xAlign: 'left', yAlign: 'bottom' }));
-  figure.fnMap.global.add('circPulseRad', () => radLineLabel.pulse({ xAlign: 'right', yAlign: 'bottom' }));
-  figure.fnMap.global.add('circPulseSec1', () => secLabel1.pulse({ xAlign: 'center', yAlign: 'top' }));
-  figure.fnMap.global.add('circPulseTheta', () => angle.pulseAngle({ duration: 1, curve: { scale: 2 }, label: { scale: 2 }}));
+
+  const addPulseFn = (name, element, xAlign, yAlign) => {
+    figure.fnMap.global.add(name, () => element.pulse({ xAlign, yAlign }));
+  };
+  addPulseFn('circPulseTan', tanLabel, 'left', 'bottom');
+  addPulseFn('circPulseCot', cotLabel, 'left', 'bottom');
+  addPulseFn('circPulseRad', radLineLabel, 'right', 'bottom');
+  addPulseFn('circPulseSec1', secLabel1, 'center', 'top');
+  addPulseFn('circPulseSec', secLabel, 'center', 'bottom');
+  addPulseFn('circPulseCsc', cscLabel, 'right', 'middle');
+  addPulseFn('circPulseSin1', sinLabel, 'left', 'middle');
+  addPulseFn('circPulseSin', sinLabel, 'right', 'middle');
+  addPulseFn('circPulseCos', cosLabel, 'center', 'top');
+
+  const addPulseAngleFn = (name, element) => {
+    figure.fnMap.global.add(name, () => element.pulseAngle({
+      duration: 1, curve: { scale: 2 }, label: { scale: 2 },
+    }));
+  };
+  addPulseAngleFn('circPulseTheta', angle);
+  addPulseAngleFn('circPulseComp', compAngle);
+  addPulseAngleFn('circPulseTheta2', angle2);
+  figure.fnMap.global.add('circPulseTheta', () => angle.pulseAngle({ duration: 1, curve: { scale: 2 }, label: { scale: 2 } }));
 
   // figure.fnMap.global.add('circSetTangentLine', () => {
   //   const a = defaultAngle + Math.PI / 2;

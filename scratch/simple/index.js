@@ -10,18 +10,23 @@ const figure = new Fig.Figure({
 figure.add(
   {
     name: 'tri',
-    method: 'triangle',
+    method: 'collections.angle',
     options: {
-      width: 1,
-      height: 1,
-      color: [1, 0, 0, 1],
+      angle: Math.PI / 2,
+      curve: { autoRightAngle: true, width: 0.01 },
+      corner: { width: 0.01 },
+      position: [0.5, -0.5]
     },
   },
 );
 
-// Animate the shape
-figure.getElement('tri').animations.new()
-  .position({ target: [0.8, 0], duration: 1 })
-  .rotation({ target: Math.PI, duration: 2 })
-  .position({ target: [0, 0], duration: 1 })
-  .start();
+figure.getElement('tri').pulseAngle({ curve: {
+  scale: 2,
+  // centerOn: figure.getElement('tri').getPosition(),
+}, corner: 1 })
+// // Animate the shape
+// figure.getElement('tri').animations.new()
+//   .position({ target: [0.8, 0], duration: 1 })
+//   .rotation({ target: Math.PI, duration: 2 })
+//   .position({ target: [0, 0], duration: 1 })
+//   .start();

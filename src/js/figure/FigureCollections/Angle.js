@@ -1773,7 +1773,7 @@ class CollectionsAngle extends FigureElementCollection {
     const p = this.getPosition('figure');
     const o = joinObjects(defaultOptions, options);
     let { done } = o;
-    const pulse = (elementName, oName, oScale, oThick) => {
+    const pulse = (elementName, oName, oScale, oThick, centerOn = null) => {
       const element = this.elements[elementName];
       if (element != null && element.isShown) {
         let pulseOptions;
@@ -1790,6 +1790,9 @@ class CollectionsAngle extends FigureElementCollection {
         if (pulseOptions.num > 1 && pulseOptions.min == null) {
           pulseOptions.min = 1 / pulseOptions.scale;
         }
+        if (centerOn != null) {
+          pulseOptions.centerOn = centerOn;
+        }
         element.pulse(pulseOptions);
         done = null;
       }
@@ -1798,7 +1801,7 @@ class CollectionsAngle extends FigureElementCollection {
       pulse('curve', 'curve', {}, {});
     }
     if (this._curveRight != null) {
-      pulse('curveRight', 'curve', {}, {});
+      pulse('curveRight', 'curve', {}, {}, this.getPosition('figure'));
     }
     if (this.corner != null && this._corner != null) {
       // const cornerLength = this.corner.length || 0;

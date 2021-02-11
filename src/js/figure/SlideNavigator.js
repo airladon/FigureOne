@@ -612,7 +612,12 @@ export default class SlideNavigator {
     if (slide.dissolve != null) {
       const inElements = this.collection.getElements(slide.dissolve.in);
       const outElements = this.collection.getElements(slide.dissolve.out);
-      const dissolveInSteps = inElements.map(e => e.animations.dissolveIn(0.4));
+      let dissolveInSteps;
+      if (slide.dissolve.pulse) {
+        dissolveInSteps = inElements.map(e => e.animations.builder().dissolveIn(0.4).pulse(slide.dissolve.pulse));
+      } else {
+        dissolveInSteps = inElements.map(e => e.animations.dissolveIn(0.4));
+      }
       const dissolveOutSteps = outElements.map(e => e.animations.dissolveOut(0.4));
       for (let j = 0; j < inElements.length; j += 1) {
         for (let i = 0; i < this.equationsOrder.length; i += 1) {

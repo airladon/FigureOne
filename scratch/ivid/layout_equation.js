@@ -27,6 +27,7 @@ function makeEquation() {
     name: 'eqn',
     method: 'equation',
     options: {
+      dimColor: [0.3, 0.3, 0.3, 1],
       elements: {
         v1: { symbol: 'vinculum' },
         v2: { symbol: 'vinculum' },
@@ -102,10 +103,10 @@ function makeEquation() {
         times2: ' \u00d7 ',
         times3: ' \u00d7 ',
         times4: ' \u00d7 ',
-        opposite: { color: colSin },
-        opposite_1: { color: colSin },
-        opposite_2: { color: colSin },
-        opposite_3: { color: colSin },
+        // opposite: { color: colSin },
+        // opposite_1: { color: colSin },
+        // opposite_2: { color: colSin },
+        // opposite_3: { color: colSin },
         hypotenuse: { color: colRad },
         hypotenuse_1: { color: colRad },
         hypotenuse_2: { color: colRad },
@@ -469,9 +470,9 @@ function makeEquation() {
         csc_2: { color: colCsc, style: 'normal' },
         sec_1: { color: colSec, style: 'normal' },
         sec_2: { color: colSec, style: 'normal' },
-        opposite_1: { color: colSin },
-        adjacent_1: { color: colCos },
-        hypotenuse_1: { color: colRad },
+        // opposite_1: { color: colSin },
+        // adjacent_1: { color: colCos },
+        // hypotenuse_1: { color: colRad },
       },
       phrases: {
         oppOnHyp: { frac: ['opposite', 'v1', 'hypotenuse_1'] },
@@ -514,7 +515,20 @@ function makeEquation() {
       scenarios: {
         default: { position: [1, -0.2] },
         eqn1Right: { position: [0.4, 0.6] },
+        eqn1MoreRight: { position: [0.8, 0.6] },
       },
     },
   });
+
+  const addFn = (name, elements, centerOn, xAlign, yAlign) => {
+    figure.fnMap.global.add(name, () => {
+      figure.getElement('eqn').pulse({
+        elements, centerOn, xAlign, yAlign, scale: 2.5
+      });
+    });
+  };
+  addFn('eqnPulseTan', ['tan', 'theta9'], 'tan', 'left', 'middle');
+  addFn('eqnPulseCot', ['cot', 'theta12'], 'cot', 'left', 'middle');
+  addFn('eqnPulseSec', ['sec', 'theta11'], 'sec', 'left', 'middle');
+  addFn('eqnPulseCsc', ['csc', 'theta10'], 'csc', 'left', 'middle');
 }
