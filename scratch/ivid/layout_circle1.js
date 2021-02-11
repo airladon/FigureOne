@@ -507,21 +507,15 @@ function layoutCircle1() {
       if (secLabel.isShown) {
         secLabel.setPosition(tanLine.p2.x / 2, -0.2);
       }
-      if (r > 0.2) {
-        rightAngle2.showAll();
+      if (rightAngle2.isShown && r > 0.2) {
+        rightAngle2.setOpacity(1);
         rightAngle2.setAngle({ p1: [0, 0], p2: [x, y], p3: tanLine.p2._dup() });
       } else {
-        rightAngle2.hide();
+        rightAngle2.setOpacity(0);
       }
       if (secLabel1.isShown) {
         secLabel1.setPosition(tanLine.p2.x / 2, -0.07);
       }
-      // if (r > 0.2) {
-      //   rightAngle2.showAll();
-      //   rightAngle2.setAngle({ p1: [0, 0], p2: [x, y], p3: tanLine.p2._dup() });
-      // } else {
-      //   rightAngle2.hide();
-      // }
     }
     if (cot.isShown) {
       const idealCotLine = new Fig.Line([x, y], [0, radius / Math.sin(r)]);
@@ -552,7 +546,7 @@ function layoutCircle1() {
         p2: [0, cotLine.p2.y],
         arrow: cotLine.p2.x > 0.01 ? { end: { head: 'barb', scale: 0.8 } } : null,
       });
-      cscLabel.setPosition(-0.14, cotLine.p2.y / 2);
+      cscLabel.setPosition(-0.14, cotLine.p2.y / 2 * 1.2);
       if (angle2.isShown && cotLine.p2.x < 0.01 && r < Math.PI / 2 - 0.2) {
         angle2.setOpacity(1);
         angle2.setAngle({ startAngle: Math.PI / 2 * 3, angle: r, position: cotLine.p2 });
@@ -569,22 +563,18 @@ function layoutCircle1() {
 
     sin.custom.updatePoints({ p1: [x, 0], p2: [x, y] });
     cos.custom.updatePoints({ p1: [0, 0], p2: [x + 0.013 / 2, 0] });
-    sinLabel.setPosition([x < radius * 0.3 || !tan.isShown ? x + 0.12 : x - 0.12, Math.max(0.06, y / 2)]);
+    sinLabel.setPosition([
+      x < radius * 0.3 || !tan.isShown ? x + 0.12 : x - 0.12,
+      Math.max(0.06, y / 2),
+    ]);
     cosLabel.setPosition([x / 2, -0.07]);
-    radLineLabel.setPosition([x / 2 - 0.02, y / 2 + 0.02]);
+    radLineLabel.setPosition([x / 2.2 - 0.02, y / 2.2 + 0.02]);
     if (rightAngle1.isShown && r < Math.PI / 2 - 0.3 && r > 0.2) {
       rightAngle1.setOpacity(1);
       rightAngle1.setAngle({ p1: [x, y], p2: [x, 0], p3: [0, 0] });
     } else {
       rightAngle1.setOpacity(0);
     }
-    // }
-    // if (r < Math.PI / 2 - 0.3 && r > 0.2 && cos.isShown) {
-    //   rightAngle1.showAll();
-    //   rightAngle1.setAngle({ p1: [x, y], p2: [x, 0], p3: [0, 0] });
-    // } else {
-    //   rightAngle1.hide();
-    // }
   }
   radLine.fnMap.add('updateCircle', () => updateCircle());
   figure.fnMap.global.add('circSetAngle', (r) => {
