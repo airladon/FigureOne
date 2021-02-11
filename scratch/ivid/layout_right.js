@@ -78,7 +78,7 @@ function layoutRight() {
             },
             {
               curve: {
-                radius: 0.2, width: 0.006,
+                radius: 0.3, width: 0.006,
               },
               label: {
                 text: {
@@ -91,10 +91,10 @@ function layoutRight() {
                     name: 'n',
                   },
                 },
-                scale: 0.6,
+                scale: 0.8,
                 offset: 0.02,
               },
-              color: color1,
+              color: colTheta,
             },
           ],
           side: [
@@ -153,7 +153,7 @@ function layoutRight() {
     if (tri._angle2.label.eqn.getCurrentForm().name === 'value') {
       tri._angle2.label.eqn.updateElementText({ v: `${Fig.tools.math.round(r * 180 / Math.PI, 0)}\u00b0` });
     }
-    if (r < 0.3 || r > 1.4) {
+    if (r < 0.3 || r > 1.34) {
       tri._angle2.label.location = 'start';
       xLine.show();
     } else {

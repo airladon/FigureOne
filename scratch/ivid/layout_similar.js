@@ -1,29 +1,6 @@
 /* eslint-disable camelcase */
 /* globals Fig */
 
-
-const figure = new Fig.Figure({
-  limits: [-3, -1.5, 6, 3],
-  color: [0.3, 0.3, 0.3, 1],
-  font: { size: 0.1 },
-  dimColor: [0.8, 0.8, 0.8, 1],
-});
-
-const color1 = [1, 0, 0, 1];
-const color2 = [0, 0.5, 1, 1];
-const color3 = [0, 0.6, 0, 1];
-const color4 = [0.6, 0, 0.6, 1];
-const colGrey = [0.6, 0.6, 0.6, 1];
-const colText = [0.3, 0.3, 0.3, 1];
-const colCos = [0, 0, 0.9, 1];
-const colSec = [0, 0.7, 1, 1];
-const colTan = [0, 0.4, 0, 1];
-const colCot = [0, 0.9, 0, 1];
-const colSin = [0.9, 0, 0, 1];
-const colCsc = [1, 0.4, 0, 1];
-const colRad = [1, 0, 1, 1];
-const colTheta = [0, 0.6, 0, 1];
-
 function similarLayout() {
   const scale1 = 1.2;
   const scale2 = 1.9;
@@ -48,7 +25,7 @@ function similarLayout() {
       points,
       close: true,
       angle: {
-        color: color1,
+        color: colTheta,
         curve: {
           radius: 0.16,
           width: 0.01,
@@ -225,7 +202,7 @@ function similarLayout() {
   similar.add([
     summary('summary1', [0.2, 0.6], 'Equal corresponding |angles|', {
       angles: {
-        font: { color: color1 },
+        font: { color: colTheta },
         onClick: 'similarPulseAngles',
         touchBorder: 0.08,
       },
@@ -244,7 +221,7 @@ function similarLayout() {
     ], {
       ratios: {
         onClick: 'similarAnimateEqn',
-        font: { color: color1 },
+        font: { color: color2 },
         touchBorder: 0.08,
       },
     }),

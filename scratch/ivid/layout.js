@@ -203,9 +203,9 @@ function layout() {
       Computers: { font: { style: 'italic', color: color2 } },
     }, [0, 0]),
     centerText('background', 'Background'),
-    centerText('sumOfAngles', 'Angles in a triangle always add to 180\u00b0'),
+    // centerText('sumOfAngles', 'Angles in a triangle always add to 180\u00b0'),
     centerText('similarTriangles', 'Similar Triangles'),
-    centerText('similarQuestion', 'Are these triangles similar?'),
+    // centerText('similarQuestion', 'Are these triangles similar?'),
     centerText('tangent', '|tangent|: from Latin |tangere| - "to touch"', {
       tangent: { font: { style: 'italic', family: 'Times New Roman', color: colTan } },
       tangere: { font: { style: 'italic', family: 'Times New Roman' } },
@@ -226,11 +226,11 @@ function layout() {
       secare: { font: { style: 'italic', family: 'Times New Roman' } },
     }, [0.8, -1.25]),
     leftText('allTriangles', [-2, 0.95], 'All right triangles with |theta|:', {
-      theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic', color: color1 } },
+      theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic', color: colTheta } },
     }),
     leftText('haveSameAngles', [0.1, 0.95], ' have the |same angles|', {
       'same angles': {
-        font: { color: color1 },
+        font: { color: colTheta },
         onClick: 'triPulseAngles',
         touchBorder: 0.1,
       },
@@ -238,39 +238,39 @@ function layout() {
     leftText('areSimilar', [0.1, 0.95], ' are similar'),
     leftText('haveTheSame', [0.1, 0.95], ' have the same'),
 
-    centerText('forAllTris', 'For all right angle triangles with the same angle |theta|:', {
-      theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic' } },
-    }),
-    hint('similarHint', [0, 0.7], [
-      {
-        text: '1 / 2: Use the |background| knowledge',
-        modifiers: {
-          background: {
-            font: { color: color2 },
-            onClick: () => {
-              figure.elements.pulse({ elements: ['similarLink', 'totalAngleLink'] });
-            },
-            isTouchable: true,
-          },
-        },
-      },
-      {
-        text: '2 / 2: We know two angles: |theta| and 90\u00b0',
-        modifiers: {
-          theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic', color: color1 } },
-        },
-      },
-    ]),
-    link('similarLink', 'Similar Triangles', [1, -1.4], () => {
-      figure.getElement('similar').showAll();
-      figure.getElement('similar').setScenario('default');
-      figure.getElement('totalAngle').hide();
-    }),
-    link('totalAngleLink', 'Triangle Total Angle', [-1, -1.4], () => {
-      figure.getElement('totalAngle').showAll();
-      figure.getElement('totalAngle').setScenario('default');
-      figure.getElement('similar').hide();
-    }),
+    // centerText('forAllTris', 'For all right angle triangles with the same angle |theta|:', {
+    //   theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic' } },
+    // }),
+    // hint('similarHint', [0, 0.7], [
+    //   {
+    //     text: '1 / 2: Use the |background| knowledge',
+    //     modifiers: {
+    //       background: {
+    //         font: { color: color2 },
+    //         onClick: () => {
+    //           figure.elements.pulse({ elements: ['similarLink', 'totalAngleLink'] });
+    //         },
+    //         isTouchable: true,
+    //       },
+    //     },
+    //   },
+    //   {
+    //     text: '2 / 2: We know two angles: |theta| and 90\u00b0',
+    //     modifiers: {
+    //       theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic', color: color1 } },
+    //     },
+    //   },
+    // ]),
+    // link('similarLink', 'Similar Triangles', [1, -1.4], () => {
+    //   figure.getElement('similar').showAll();
+    //   figure.getElement('similar').setScenario('default');
+    //   figure.getElement('totalAngle').hide();
+    // }),
+    // link('totalAngleLink', 'Triangle Total Angle', [-1, -1.4], () => {
+    //   figure.getElement('totalAngle').showAll();
+    //   figure.getElement('totalAngle').setScenario('default');
+    //   figure.getElement('similar').hide();
+    // }),
   ]);
   figure.add({
     name: 'cursor',
@@ -1037,7 +1037,7 @@ function makeSlides() {
   ....##....##.....##.##....##.....######..########..######.
   */
   const circle1 = figure.getElement('circle1');
-  const [tan, cot] = figure.getElements(['circle1.tan', 'circle1.cot']);
+  // const [tan, cot] = figure.getElements(['circle1.tan', 'circle1.cot']);
 
   slides.push({
     clear: true,
@@ -1054,7 +1054,7 @@ function makeSlides() {
           eqn.animations.scenario({ start: 'left', target: 'eqnCircLeft', duration: 2 }),
         ])
         .inParallel(
-          figure.getElements({ circle1: ['arc', 'x', 'y', 'circle', 'center']}).map(e => e.animations.dissolveIn(0.5)),
+          figure.getElements({ circle1: ['arc', 'x', 'y', 'circle', 'center'] }).map(e => e.animations.dissolveIn(0.5)),
         )
         .whenFinished(done)
         .start();
@@ -1068,7 +1068,7 @@ function makeSlides() {
   });
 
   slides.push({
-    show: { circle1: ['arc', 'x', 'y', 'circle', 'center'] },
+    show: { circle1: ['arc', 'x', 'y', 'circle', 'center', 'line', 'angle', 'lineLabel'] },
     scenario: ['eqnCircLeft', 'right1'],
     fromForm: 'sixRatiosLeft',
     form: 'sixRatiosLeft',
@@ -1357,7 +1357,7 @@ function makeSlides() {
   });
 
   slides.push({
-    show: { circle1: ['arc', 'x', 'y', 'line', 'angle', 'lineLabel', 'tan', 'tanLabel', 'rightAngle2', 'sec1', 'compAngle', 'cot', 'cotLabel', 'rightAngle3', 'csc', 'cscLabel', 'compSecant', 'angle2', 'sin', 'sinLabel', 'sec', 'secLabel', 'rightAngle1'] },
+    show: { circle1: ['arc', 'x', 'y', 'line', 'angle', 'lineLabel', 'tan', 'tanLabel', 'rightAngle2', 'xSec', 'compAngle', 'cot', 'cotLabel', 'rightAngle3', 'csc', 'cscLabel', 'compSecant', 'angle2', 'sin', 'sinLabel', 'sec', 'secLabel', 'rightAngle1'] },
     fromForm: 'sixRatiosCsc',
     form: 'sixRatiosCsc',
     dissolve: {
@@ -1367,13 +1367,10 @@ function makeSlides() {
   });
 
   slides.push({
-    show: { circle1: ['arc', 'x', 'y', 'line', 'angle', 'lineLabel', 'tan', 'tanLabel', 'rightAngle2', 'cot', 'cotLabel', 'csc', 'cscLabel', 'compSecant', 'sin', 'sinLabel', 'cos', 'cosLabel', 'sec', 'secLabel', 'sec1'] },
+    show: { circle1: ['arc', 'x', 'y', 'line', 'angle', 'lineLabel', 'tan', 'tanLabel', 'rightAngle2', 'cot', 'cotLabel', 'csc', 'cscLabel', 'compSecant', 'sin', 'sinLabel', 'cos', 'cosLabel', 'sec', 'secLabel', 'xSec'] },
     enterStateCommon: () => {
       figure.fnMap.exec('circSetAngle', 0.8);
     },
-    // dissolve: {
-    //   out: { circle1: ['rightAngle3', 'angle2', 'compAngle'] },
-    // },
   });
 
   /*
@@ -1745,6 +1742,6 @@ function makeSlides() {
 
 
   nav.loadSlides(slides);
-  nav.goToSlide(85);
+  nav.goToSlide(89);
 }
 makeSlides();

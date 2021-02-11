@@ -135,6 +135,17 @@ function layoutCircle1() {
         },
       },
       {
+        name: 'xSec',
+        method: 'primitives.line',
+        options: {
+          p1: [0, 0],
+          p2: [radius, 0],
+          // dash: [0.01, 0.005],
+          width: 0.006,
+          color: colGrey,
+        },
+      },
+      {
         name: 'y',
         method: 'primitives.line',
         options: {
@@ -418,7 +429,7 @@ function layoutCircle1() {
     mods: {
       scenarios: {
         title: { scale: 1 },
-        default: { scale: 1, position: [-radius / 2, -1.2] },
+        default: { scale: 1, position: [-radius / 2, -1.1] },
         right: { scale: 1, position: [0.5, -1.2] },
         small: { scale: 0.7, position: [0, -0.3] },
         center: { scale: 1, position: [0, -0.5] },
@@ -426,8 +437,8 @@ function layoutCircle1() {
       },
     },
   });
-  const [radLine, angle, sec, tan, sin, cos, tanLabel, sinLabel, cosLabel, radLineLabel, sec1, angle2] = circle.getElements(['line', 'angle', 'sec', 'tan', 'sin', 'cos', 'tanLabel', 'sinLabel', 'cosLabel', 'lineLabel', 'sec1', 'angle2']);
-  const [cot, cotLabel, csc, xLine, yLine, secLabel, secLabel1, cscLabel, rightAngle1, rightAngle2, compAngle, rightAngle3] = circle.getElements(['cot', 'cotLabel', 'csc', 'x', 'y', 'secLabel', 'secLabel1', 'cscLabel', 'rightAngle1', 'rightAngle2', 'compAngle', 'rightAngle3']);
+  const [radLine, angle, sec, tan, sin, cos, tanLabel, sinLabel, cosLabel, radLineLabel, sec1, angle2, xSec] = circle.getElements(['line', 'angle', 'sec', 'tan', 'sin', 'cos', 'tanLabel', 'sinLabel', 'cosLabel', 'lineLabel', 'sec1', 'angle2', 'xSec']);
+  const [cot, cotLabel, csc, secLabel, secLabel1, cscLabel, rightAngle1, rightAngle2, compAngle, rightAngle3] = circle.getElements(['cot', 'cotLabel', 'csc', 'secLabel', 'secLabel1', 'cscLabel', 'rightAngle1', 'rightAngle2', 'compAngle', 'rightAngle3']);
   const xBounds = 1.5;
   const yBounds = 1;
   const rightBounds = new Fig.Line([radius + xBounds, 0], radius + xBounds, Math.PI / 2);
@@ -495,15 +506,24 @@ function layoutCircle1() {
         });
       }
       tanLabel.setPosition(tanLine.offset('positive', 0.12).midPoint());
-      sec.custom.updatePoints({
-        p1: [0, -0.25],
-        p2: [tanLine.p2.x, -0.25],
-        arrow: {
-          scale: 0.8,
-          start: { head: 'bar' },
-          end: { head: tanLine.p2.y > 0.01 ? 'barb' : 'bar' },
-        },
-      });
+      if (sec.isShown) {
+        sec.custom.updatePoints({
+          p1: [0, -0.25],
+          p2: [tanLine.p2.x, -0.25],
+          arrow: {
+            scale: 0.8,
+            start: { head: 'bar' },
+            end: { head: tanLine.p2.y > 0.01 ? 'barb' : 'bar' },
+          },
+        });
+      }
+      if (xSec.isShown) {
+        xSec.custom.updatePoints({
+          p1: [0, 0],
+          p2: [tanLine.p2.x, 0],
+          arrow: tanLine.p2.y > 0.01 ? { end: { head: 'barb', scale: 1.5 } } : null,
+        });
+      }
       if (secLabel.isShown) {
         secLabel.setPosition(tanLine.p2.x / 2, -0.2);
       }

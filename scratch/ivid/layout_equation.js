@@ -115,8 +115,8 @@ function makeEquation() {
         adjacent_1: { color: colCos },
         adjacent_2: { color: colCos },
         adjacent_3: { color: colCos },
-        _90min: { text: '90\u00b0 \u2212 ', color: color1 },
-        brace: { symbol: 'brace', side: 'top', color: color1 },
+        _90min: { text: '90\u00b0 \u2212 ', color: colTheta },
+        brace: { symbol: 'brace', side: 'top' },
         stk1: { symbol: 'strike', style: 'forward', lineWidth: 0.006 },
         stk2: { symbol: 'strike', style: 'forward', lineWidth: 0.006 },
       },
@@ -154,7 +154,7 @@ function makeEquation() {
         compComment: {
           topComment: {
             content: ['_90min', 'theta2'],
-            comment: { 'complementary angle': { color: color1 } },
+            comment: 'complementary angle',
             inSize: false,
             commentSpace: 0.1,
             contentSpace: 0.1,
@@ -229,7 +229,7 @@ function makeEquation() {
             [['oppOnAdj', 'equals3', {
               frac: [
                 ['hypotenuse_2', 'times3', 'sinTheta2'],
-                'v4',
+                'v7',
                 ['hypotenuse_3', 'times4', 'cosTheta2'],
               ],
             }], 'equals3'],
@@ -242,7 +242,7 @@ function makeEquation() {
             [['oppOnAdj', 'equals3', {
               frac: [
                 [{ strike: ['hypotenuse_2', 'stk1'] }, 'times3', 'sinTheta2'],
-                'v4',
+                'v7',
                 [{ strike: ['hypotenuse_3', 'stk2'] }, 'times4', 'cosTheta2'],
               ],
             }], 'equals3'],
@@ -278,7 +278,7 @@ function makeEquation() {
         ),
         sixRatios: lines(
           [
-            [['oppOnHyp', 'equals1', 'sinTheta1', space, cont(['hypOnOpp', 'equals4', 'oneOnSinTheta'], 1)], 'equals1'],
+            [['oppOnHyp', 'equals1', 'sinTheta1', space, 'hypOnOpp', 'equals4', 'oneOnSinTheta'], 'equals1'],
             [['adjOnHyp', 'equals2', 'cosTheta1', space, 'hypOnAdj', 'equals5', 'oneOnCosTheta'], 'equals2'],
             [['oppOnAdj', 'equals3', 'sinOnCos', space, 'adjOnOpp', 'equals6', 'cosOnSin'], 'equals3'],
           ],

@@ -12,9 +12,9 @@ function totalAngleLayout() {
       points,
       close: true,
       angle: [
-        { curve: { radius: 0.15, width: 0.006 }, label: { text: 'a', offset: 0.05 } },
-        { curve: { radius: 0.2, width: 0.006 }, label: { text: 'b', offset: 0.05 } },
-        { curve: { radius: 0.2, width: 0.006 }, label: { text: 'c', offset: 0.05 } },
+        { curve: { radius: 0.15, width: 0.006 }, label: { text: 'a', offset: 0.05 }, color: colTheta },
+        { curve: { radius: 0.2, width: 0.006 }, label: { text: 'b', offset: 0.05 }, color: colTheta },
+        { curve: { radius: 0.2, width: 0.006 }, label: { text: 'c', offset: 0.05 }, color: colTheta },
       ],
       position,
     },
@@ -32,6 +32,9 @@ function totalAngleLayout() {
           elements: {
             _180: '180\u00b0',
             equals: '  =  ',
+            a: { color: colTheta },
+            b: { color: colTheta },
+            c: { color: colTheta },
           },
           formDefaults: {
             translation: {
@@ -99,7 +102,7 @@ function totalAngleLayout() {
         'add to 180': {
           text: 'add to 180\u00b0',
           onClick: 'totalAngleGoToABC',
-          font: { color: color1 },
+          font: { color: colTheta },
           touchBorder: 0.08,
         },
       },
@@ -121,12 +124,12 @@ function totalAngleLayout() {
       modifiers: {
         'two angles': {
           onClick: 'totalAnglePulse',
-          font: { color: color1 },
+          font: { color: colTheta },
           touchBorder: 0.08,
         },
         'find all three': {
           onClick: 'totalAngleGoToAB',
-          font: { color: color1 },
+          font: { color: colTheta },
           touchBorder: 0.08,
         },
       },
