@@ -44,6 +44,10 @@ function makeEquation() {
         equals4: '  =  ',
         equals5: '  =  ',
         equals6: '  =  ',
+        equals7: '  =  ',
+        equals8: '  =  ',
+        equals9: '  =  ',
+        equals10: '  =  ',
         oppValue: { text: '1.000' },
         hypValue: { text: '1' },
         ratioValue: { text: '0.4540' },
@@ -293,6 +297,26 @@ function makeEquation() {
             hypotenuse_1: { style: 'linear' },
           },
         ),
+        sixRatiosTan: lines(
+          [
+            [['oppOnHyp', 'equals1', 'sinTheta1'], 'equals1'],
+            [['hypOnOpp', 'equals4', 'oneOnSinTheta'], 'equals4'],
+            [['adjOnHyp', 'equals2', 'cosTheta1'], 'equals2'],
+            [['hypOnAdj', 'equals5', 'oneOnCosTheta'], 'equals5'],
+            [['oppOnAdj', 'equals3', 'sinOnCos', 'equals7', 'tanTheta'], 'equals3'],
+            [['adjOnOpp', 'equals6', 'cosOnSin'], 'equals6'],
+          ],
+        ),
+        sixRatiosSec: lines(
+          [
+            [['oppOnHyp', 'equals1', 'sinTheta1'], 'equals1'],
+            [['hypOnOpp', 'equals4', 'oneOnSinTheta'], 'equals4'],
+            [['adjOnHyp', 'equals2', 'cosTheta1'], 'equals2'],
+            [['hypOnAdj', 'equals5', 'oneOnCosTheta', 'equals8', 'secTheta'], 'equals5'],
+            [['oppOnAdj', 'equals3', 'sinOnCos', 'equals7', 'tanTheta'], 'equals3'],
+            [['adjOnOpp', 'equals6', 'cosOnSin'], 'equals6'],
+          ],
+        ),
         sixRatiosLeftOnOne: lines(
           [
             [['oppOnOne', 'equals1', 'sinTheta1'], 'equals1'],
@@ -349,42 +373,6 @@ function makeEquation() {
             hypotenuse_1: { style: 'curve', mag: 0.5, direction: 'down' },
           },
         ),
-        // sixRatios: {
-        //   content: [
-        //     {
-        //       lines: {
-        //         content: [
-        //           { content: ['oppOnHyp', 'equals1', 'sinTheta', { container: ['', 0.6] }, 'hypOnOpp', 'equals4', 'cscTheta'], justify: 'equals1' },
-        //           { content: ['adjOnHyp', 'equals2', 'cosTheta', { container: ['', 0.59] }, 'hypOnAdj', 'equals5', 'secTheta'], justify: 'equals2' },
-        //           {
-        //             content: ['oppOnAdj', 'equals3', 'tanTheta', { container: ['', 0.75] }, 'adjOnOpp', 'equals6', 'cotTheta'],
-        //             justify: 'equals3',
-        //           },
-        //         ],
-        //         baselineSpace: 0.6,
-        //         justify: 'element',
-        //       },
-        //     },
-        //   ],
-        //   translation: {
-        //     hypotenuse: { style: 'linear' },
-        //     hypotenuse_1: { style: 'linear' },
-        //     duration: 2,
-        //   },
-        //   alignment: { xAlign: 'left' },
-        // },
-        // threeRatios: [
-        //   {
-        //     lines: {
-        //       content: [
-        //         ['oppOnHyp', 'equals1', 'constant_1'],
-        //         ['adjOnHyp', 'equals2', 'constant_2'],
-        //         ['oppOnAdj', 'equals3', 'constant_3'],
-        //       ],
-        //       baselineSpace: 0.6,
-        //     },
-        //   },
-        // ],
         ratioValue: ['oppOnHyp', 'equals1', 'ratioValue'],
         ratioValueDef: ['oppOnHyp', 'equals1', 'ratioValueDef'],
         f: ['oppOnHyp', 'equals1', 'fTheta'],
@@ -429,7 +417,7 @@ function makeEquation() {
         eqnTri1: { position: [0.5, 0.7], scale: 1.1 },
         right: { position: [1, 0], scale: 1.1 },
         eqnCirc: { position: [-2.5, 0], scale: 1.1 },
-        eqnCircLeft: { position: [-2.6, 1.2], scale: 0.8 },
+        eqnCircLeft: { position: [-2.7, 1.2], scale: 0.8 },
       },
     },
   });
@@ -452,10 +440,21 @@ function makeEquation() {
         dotDotDot: '...',
         lb: { symbol: 'bracket', side: 'left' },
         rb: { symbol: 'bracket', side: 'right' },
+        _1_rad: { color: colRad },
+        tan_1: { color: colTan, style: 'normal' },
+        tan_2: { color: colTan, style: 'normal' },
+        sec_1: { color: colSec, style: 'normal' },
+        sec_2: { color: colSec, style: 'normal' },
+        opposite_1: { color: colSin },
+        adjacent_1: { color: colCos },
+        hyptonetuse_1: { color: colRad },
+        co: { color: colCot },
+        t: { color: colCot },
       },
       phrases: {
-        oppOnHyp: { frac: ['opposite', 'v1', 'hypotenuse'] },
+        oppOnHyp: { frac: ['opposite', 'v1', 'hyptonetuse_1'] },
         adjOnHyp: { frac: ['adjacent', 'v2', 'hypotenuse_1'] },
+        hypOnAdj: { frac: ['hyptonetuse_1', 'v2', 'adjacent_1'] },
         oppOnAdj: { frac: ['opposite_1', 'v3', 'adjacent_1'] },
         fTheta: ['f', { container: ['', 0.02] }, { brac: ['lb', 'theta', 'rb'] }],
       },
@@ -472,11 +471,21 @@ function makeEquation() {
           ],
           alignment: { xAlign: 'center' },
         },
+        oppOnAdj: 'oppOnAdj',
+        hypOnAdj: 'hypOnAdj',
+        secOn1: ['hypOnAdj', 'equals1', { frac: ['sec_1', 'v1', '_1_rad'] }],
+        sec: ['hypOnAdj', 'equals1', { frac: ['sec_1', 'v1', '_1_rad'] }, 'equals2', 'sec_2'],
+        tanOn1: ['oppOnAdj', 'equals1', { frac: ['tan_1', 'v1', '_1_rad'] }],
+        tan: ['oppOnAdj', 'equals1', { frac: ['tan_1', 'v1', '_1_rad'] }, 'equals2', 'tan_2'],
+        compTangent: ['co', 'mplementary ', 't', 'angent'],
+        coTangent: ['co', 't', 'angent'],
+        cot: ['co', 't'],
       },
     },
     mods: {
       scenarios: {
         default: { position: [1, -0.2] },
+        eqn1Right: { position: [0.4, 0.6] },
       },
     },
   });

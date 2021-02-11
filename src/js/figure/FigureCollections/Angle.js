@@ -1715,6 +1715,7 @@ class CollectionsAngle extends FigureElementCollection {
         let labelPosition = polarToRect(
           label.radius, angle * label.curvePosition,
         );
+        // console.log(label.curvePosition)
         let { orientation, location } = label;
         if (orientation === 'tangent') {
           orientation = 'baseToLine';

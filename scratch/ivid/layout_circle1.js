@@ -152,8 +152,8 @@ function layoutCircle1() {
           radius,
           line: { width: 0.006 },
           sides: 100,
-          sidesToDraw: 60,
-          rotation: -0.3,
+          sidesToDraw: 33,
+          rotation: -0.25,
           color: colGrey,
         },
       },
@@ -201,6 +201,18 @@ function layoutCircle1() {
         },
       },
       {
+        name: 'rightAngle3',
+        method: 'collections.angle',
+        options: {
+          curve: {
+            autoRightAngle: true,
+            radius: 0.15,
+            width: 0.006,
+          },
+          color: colGrey,
+        },
+      },
+      {
         name: 'angle',
         method: 'collections.angle',
         options: {
@@ -210,19 +222,53 @@ function layoutCircle1() {
             radius: 0.2,
             step: 0.8,
             sides: 400,
-            // autoHideMax: Math.PI / 2 - 0.15,
           },
           label: {
             text: '\u03b8',
             offset: 0.01,
-            // autoHideMax: Math.PI / 2 - 0.15,
-            // autoHide: 0.2,
+          },
+        },
+      },
+      {
+        name: 'angle2',
+        method: 'collections.angle',
+        options: {
+          color: colTheta,
+          curve: {
+            width: 0.01,
+            radius: 0.2,
+            step: 0.8,
+            sides: 400,
+          },
+          label: {
+            text: '\u03b8',
+            offset: 0.01,
+          },
+        },
+      },
+      {
+        name: 'compAngle',
+        method: 'collections.angle',
+        options: {
+          color: colTheta,
+          curve: {
+            width: 0.01,
+            radius: 0.3,
+            step: 0.8,
+            sides: 400,
+          },
+          label: {
+            text: '90\u00b0\u2212\u03b8',
+            curvePosition: 0.65,
+            offset: 0.01,
+            scale: 0.6,
           },
         },
       },
       line('sec', colSec),
-      line('sec1', colSec),
       lineLabel('secLabel', 'sec', colSec),
+      line('sec1', colSec),
+      lineLabel('secLabel1', 'sec', colSec),
       line('sin', colSin),
       lineLabel('sinLabel', 'sin', colSin),
       line('cos', colCos),
@@ -376,40 +422,49 @@ function layoutCircle1() {
         right: { scale: 1, position: [0.5, -1.2] },
         small: { scale: 0.7, position: [0, -0.3] },
         center: { scale: 1, position: [0, -0.5] },
-        right1: { scale: 1, position: [0.7, -0.5] },
+        right1: { scale: 1, position: [0, -0.5] },
       },
     },
   });
-  const [radLine, angle, sec, tan, sin, cos, tanLabel, sinLabel, cosLabel, radLineLabel, sec1] = circle.getElements(['line', 'angle', 'sec', 'tan', 'sin', 'cos', 'tanLabel', 'sinLabel', 'cosLabel', 'lineLabel', 'sec1']);
-  const [cot, cotLabel, csc, xLine, yLine, secLabel, cscLabel, rightAngle1, rightAngle2] = circle.getElements(['cot', 'cotLabel', 'csc', 'x', 'y', 'secLabel', 'cscLabel', 'rightAngle1', 'rightAngle2']);
+  const [radLine, angle, sec, tan, sin, cos, tanLabel, sinLabel, cosLabel, radLineLabel, sec1, angle2] = circle.getElements(['line', 'angle', 'sec', 'tan', 'sin', 'cos', 'tanLabel', 'sinLabel', 'cosLabel', 'lineLabel', 'sec1', 'angle2']);
+  const [cot, cotLabel, csc, xLine, yLine, secLabel, secLabel1, cscLabel, rightAngle1, rightAngle2, compAngle, rightAngle3] = circle.getElements(['cot', 'cotLabel', 'csc', 'x', 'y', 'secLabel', 'secLabel1', 'cscLabel', 'rightAngle1', 'rightAngle2', 'compAngle', 'rightAngle3']);
   const xBounds = 1.5;
   const yBounds = 1;
   const rightBounds = new Fig.Line([radius + xBounds, 0], radius + xBounds, Math.PI / 2);
   const topBounds = new Fig.Line([0, radius + yBounds], radius + xBounds, 0);
   function updateCircle() {
     const r = radLine.transform.r();
-    angle.setAngle({ angle: r });
-    if (cos.isShown && r < Math.PI / 2 - 0.15) {
-      angle._curve.showAll();
-    } else if (!cos.isShown) {
-      angle.showAll();
-    } else {
-      angle.hide();
+    if (angle.isShown) {
+      if (
+        (cos.isShown && r < Math.PI / 2 - 0.15)
+        || !cos.isShown
+      ) {
+        angle.setAngle({ angle: r });
+        angle.setOpacity(1);
+      } else {
+        angle.setOpacity(0);
+      }
+      if (r > 0.3) {
+        angle._label.setOpacity(1);
+      } else {
+        angle._label.setOpacity(0);
+      }
     }
-    if (
-      (
-        r > 0.25
-        && (cos.isShown && r < Math.PI / 2 - 0.15)
-      )
-      || !cos.isShown
-    ) {
-      angle._label.showAll();
-    } else {
-      angle._label.hide();
+    if (compAngle.isShown) {
+      let curvePosition = 0.65;
+      if (r > Math.PI / 2 - 0.8) {
+        curvePosition = (r - (Math.PI / 2 - 0.8)) + 0.65;
+      }
+      compAngle.setAngle({ startAngle: r, angle: Math.PI / 2 - r });
+      if (r > Math.PI / 2 - 0.3) {
+        compAngle._label.hide();
+      } else {
+        compAngle.label.curvePosition = curvePosition;
+        compAngle._label.showAll();
+      }
     }
     const x = radius * Math.cos(r);
     const y = radius * Math.sin(r);
-    // xLine.custom.updatePoints({ p1: [0, 0.0], p2: [radius, 0.0], arrow: null });
     if (tan.isShown) {
       const idealTanLine = new Fig.Line([x, y], [radius / Math.cos(r), 0]);
       let tanLineIntersect;
@@ -433,11 +488,10 @@ function layoutCircle1() {
         arrow: tanLine.p2.y > 0.01 ? { end: { head: 'barb', scale: 0.8 } } : null,
       });
       if (sec1.isShown) {
-      // sec1.custom.updatePoints()
         sec1.custom.updatePoints({
           p1: [0, 0.0],
           p2: [tanLine.p2.x, 0.0],
-          arrow: tanLine.p2.y > 0.01 ? { end: { head: 'barb', scale: 0.013 / 0.006 * 0.8 } } : null,
+          arrow: tanLine.p2.y > 0.01 ? { end: { head: 'barb', scale: 0.8 } } : null,
         });
       }
       tanLabel.setPosition(tanLine.offset('positive', 0.12).midPoint());
@@ -450,13 +504,24 @@ function layoutCircle1() {
           end: { head: tanLine.p2.y > 0.01 ? 'barb' : 'bar' },
         },
       });
-      secLabel.setPosition(tanLine.p2.x / 2, -0.2);
+      if (secLabel.isShown) {
+        secLabel.setPosition(tanLine.p2.x / 2, -0.2);
+      }
       if (r > 0.2) {
         rightAngle2.showAll();
         rightAngle2.setAngle({ p1: [0, 0], p2: [x, y], p3: tanLine.p2._dup() });
       } else {
         rightAngle2.hide();
       }
+      if (secLabel1.isShown) {
+        secLabel1.setPosition(tanLine.p2.x / 2, -0.07);
+      }
+      // if (r > 0.2) {
+      //   rightAngle2.showAll();
+      //   rightAngle2.setAngle({ p1: [0, 0], p2: [x, y], p3: tanLine.p2._dup() });
+      // } else {
+      //   rightAngle2.hide();
+      // }
     }
     if (cot.isShown) {
       const idealCotLine = new Fig.Line([x, y], [0, radius / Math.sin(r)]);
@@ -481,29 +546,25 @@ function layoutCircle1() {
         p2: cotLine.p2._dup(),
         arrow: cotLine.p2.x > 0.01 ? { end: { head: 'barb', scale: 0.8 } } : null,
       });
-      // yLine.custom.updatePoints({
-      //   p1: [0, 0.0],
-      //   p2: [0, cotLine.p2.y],
-      //   arrow: cotLine.p2.x > 0.01 ? { end: { head: 'barb', scale: 0.8 } } : null,
-      // });
       cotLabel.setPosition(cotLine.offset('negative', 0.12).midPoint());
       csc.custom.updatePoints({
         p1: [0, 0],
         p2: [0, cotLine.p2.y],
-        // arrow: {
-        //   scale: 0.8,
-        //   start: { head: 'bar' },
-        //   end: { head: cotLine.p2.x > 0.01 ? 'barb' : 'bar' },
-        // },
         arrow: cotLine.p2.x > 0.01 ? { end: { head: 'barb', scale: 0.8 } } : null,
       });
-      cscLabel.setPosition(-0.25, cotLine.p2.y / 2);
-      // if (r < Math.PI / 2 - 0.1 && r > 0.1) {
-      //   rightAngle2.showAll();
-      //   rightAngle2.setAngle({ p3: [0, 0], p2: [x, y], p1: cotLine.p2._dup() });
-      // } else {
-      //   rightAngle2.hide();
-      // }
+      cscLabel.setPosition(-0.14, cotLine.p2.y / 2);
+      if (angle2.isShown && cotLine.p2.x < 0.01 && r < Math.PI / 2 - 0.2) {
+        angle2.setOpacity(1);
+        angle2.setAngle({ startAngle: Math.PI / 2 * 3, angle: r, position: cotLine.p2 });
+      } else {
+        angle2.setOpacity(0);
+      }
+      if (rightAngle3.isShown && r < Math.PI / 2 - 0.1) {
+        rightAngle3.setOpacity(1);
+        rightAngle3.setAngle({ p1: cotLine.p2, p2: [x, y], p3: [0, 0] });
+      } else {
+        rightAngle3.setOpacity(0);
+      }
     }
 
     sin.custom.updatePoints({ p1: [x, 0], p2: [x, y] });
@@ -511,12 +572,19 @@ function layoutCircle1() {
     sinLabel.setPosition([x < radius * 0.3 || !tan.isShown ? x + 0.12 : x - 0.12, Math.max(0.06, y / 2)]);
     cosLabel.setPosition([x / 2, -0.07]);
     radLineLabel.setPosition([x / 2 - 0.02, y / 2 + 0.02]);
-    if (r < Math.PI / 2 - 0.3 && r > 0.2 && cos.isShown) {
-      rightAngle1.showAll();
+    if (rightAngle1.isShown && r < Math.PI / 2 - 0.3 && r > 0.2) {
+      rightAngle1.setOpacity(1);
       rightAngle1.setAngle({ p1: [x, y], p2: [x, 0], p3: [0, 0] });
     } else {
-      rightAngle1.hide();
+      rightAngle1.setOpacity(0);
     }
+    // }
+    // if (r < Math.PI / 2 - 0.3 && r > 0.2 && cos.isShown) {
+    //   rightAngle1.showAll();
+    //   rightAngle1.setAngle({ p1: [x, y], p2: [x, 0], p3: [0, 0] });
+    // } else {
+    //   rightAngle1.hide();
+    // }
   }
   radLine.fnMap.add('updateCircle', () => updateCircle());
   figure.fnMap.global.add('circSetAngle', (r) => {
@@ -536,6 +604,10 @@ function layoutCircle1() {
       .then(circle.getElement('rightAngle2').animations.dissolveIn(0.5))
       .start();
   });
+  figure.fnMap.global.add('circPulseTan', () => tanLabel.pulse({ xAlign: 'left', yAlign: 'bottom' }));
+  figure.fnMap.global.add('circPulseRad', () => radLineLabel.pulse({ xAlign: 'right', yAlign: 'bottom' }));
+  figure.fnMap.global.add('circPulseSec1', () => secLabel1.pulse({ xAlign: 'center', yAlign: 'top' }));
+  figure.fnMap.global.add('circPulseTheta', () => angle.pulseAngle({ duration: 1, curve: { scale: 2 }, label: { scale: 2 }}));
 
   // figure.fnMap.global.add('circSetTangentLine', () => {
   //   const a = defaultAngle + Math.PI / 2;

@@ -668,14 +668,15 @@ export default class SlideNavigator {
       if (e != null && e instanceof Equation && forms[eqnName] !== undefined) {
         const fromForm = fromForms[eqnName];
         const toForm = forms[eqnName];
-        if (fromForm == null) {
+        // console.log(fromForm, toForm)
+        if (fromForm == null && toForm != null) {
           e.showForm(toForm);
           e.animations.new()
             .dissolveIn(0.4)
             .whenFinished(done)
             .start();
           done = null;
-        } else {
+        } else if (fromForm !== toForm) {
           const { animate, duration } = this.equationDefaults;
           // e.showForm(toForm);
           e.animations.new()
