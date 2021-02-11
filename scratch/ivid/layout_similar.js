@@ -13,7 +13,7 @@ function similarLayout() {
       offset: 0.04,
       location,
       text: {
-        forms: { 0: [{ s: { text: s, color: color2 } }, text] },
+        forms: { 0: [{ s: { text: s, color: color1 } }, text] },
       },
     },
   });
@@ -57,10 +57,10 @@ function similarLayout() {
         method: 'collections.equation',
         options: {
           elements: {
-            s_1: { color: color2 },
-            s_2: { color: color2 },
-            s_3: { color: color2 },
-            s_4: { color: color2 },
+            s_1: { color: color1 },
+            s_2: { color: color1 },
+            s_3: { color: color1 },
+            s_4: { color: color1 },
             strk1: { symbol: 'strike', lineWidth: 0.006 },
             strk2: { symbol: 'strike', lineWidth: 0.006 },
             equals: '  =  ',
@@ -211,7 +211,7 @@ function similarLayout() {
       'Equally |scaled| corresponding sides',
     ], {
       scaled: {
-        font: { color: color2 },
+        font: { color: color1 },
         onClick: 'similarPulseScale',
         touchBorder: 0.1,
       },
@@ -221,7 +221,7 @@ function similarLayout() {
     ], {
       ratios: {
         onClick: 'similarAnimateEqn',
-        font: { color: color2 },
+        font: { color: color1 },
         touchBorder: 0.08,
       },
     }),

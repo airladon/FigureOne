@@ -128,7 +128,7 @@ function layoutRight() {
     ],
     mods: {
       scenarios: {
-        default: { position: [-0.4, -0.8] },
+        default: { position: [-0.8, -0.8] },
         bottom: { position: [0, -0.8] },
         eqnTri: { position: [-1.9, -0.8] },
         eqnTri1: { position: [-2.1, -0.8] },
