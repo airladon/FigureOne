@@ -69,7 +69,7 @@ function layoutCircle1() {
           radius,
           line: { width: 0.006 },
           sides: 100,
-          sidesToDraw: 33,
+          sidesToDraw: 100,
           rotation: -0.25,
           color: colGrey,
         },
@@ -188,6 +188,8 @@ function layoutCircle1() {
       lineLabel('secLabel1', 'sec', colSec),
       line('sin', colSin),
       lineLabel('sinLabel', 'sin', colSin),
+      lineLabel('f1Label', { forms: { 0: { sub: ['f', '_1'] } } }, colSin),
+      { name: 'f1Label', method: 'equation', options: { forms: { 0: { sub: ['f', '_1'] } }, color: colSin } },
       line('cos', colCos),
       lineLabel('cosLabel', 'cos', colCos),
       line('csc', colCsc),
@@ -238,10 +240,11 @@ function layoutCircle1() {
         small: { scale: 0.7, position: [0, -0.3] },
         center: { scale: 1, position: [0, -0.5] },
         right1: { scale: 1, position: [0, -0.5] },
+        circleSmall: { scale: 0.8, position: [0.7, 0] },
       },
     },
   });
-  const [radLine, angle, sec, tan, sin, cos, tanLabel, sinLabel, cosLabel, radLineLabel, sec1, angle2, xSec] = circle.getElements(['line', 'angle', 'sec', 'tan', 'sin', 'cos', 'tanLabel', 'sinLabel', 'cosLabel', 'lineLabel', 'sec1', 'angle2', 'xSec']);
+  const [radLine, angle, sec, tan, sin, cos, tanLabel, sinLabel, cosLabel, radLineLabel, sec1, angle2, xSec, f1Label] = circle.getElements(['line', 'angle', 'sec', 'tan', 'sin', 'cos', 'tanLabel', 'sinLabel', 'cosLabel', 'lineLabel', 'sec1', 'angle2', 'xSec', 'f1Label']);
   const [cot, cotLabel, csc, secLabel, secLabel1, cscLabel, rightAngle1, rightAngle2, compAngle, rightAngle3] = circle.getElements(['cot', 'cotLabel', 'csc', 'secLabel', 'secLabel1', 'cscLabel', 'rightAngle1', 'rightAngle2', 'compAngle', 'rightAngle3']);
   const [tanAlt, tanLabelAlt] = circle.getElements(['tanAlt', 'tanLabelAlt']);
   const [secAlt, secLabelAlt] = circle.getElements(['secAlt', 'secLabelAlt']);
@@ -444,10 +447,18 @@ function layoutCircle1() {
 
     sin.custom.updatePoints({ p1: [x, 0], p2: [x, y] });
     cos.custom.updatePoints({ p1: [0, 0], p2: [x + 0.013 / 2, 0] });
-    sinLabel.setPosition([
-      x < radius * 0.3 || (!tan.isShown && !tanAlt.isShown) ? x + 0.12 : x - 0.12,
-      Math.max(0.06, y / 2),
-    ]);
+    if (sinLabel.isShown) {
+      sinLabel.setPosition([
+        x < radius * 0.3 || (!tan.isShown && !tanAlt.isShown) ? x + 0.12 : x - 0.12,
+        Math.max(0.06, y / 2),
+      ]);
+    }
+    if (f1Label.isShown) {
+      f1Label.setPosition([
+        x < radius * 0.3 || (!tan.isShown && !tanAlt.isShown) ? x + 0.12 : x - 0.12,
+        Math.max(0.06, y / 2),
+      ]);
+    }
     cosLabel.setPosition([x / 2, -0.07]);
     radLineLabel.setPosition([x / 2.2 - 0.02, y / 2.2 + 0.02]);
     if (rightAngle1.isShown && r < Math.PI / 2 - 0.3 && r > 0.2) {

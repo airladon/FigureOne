@@ -128,7 +128,7 @@ function layoutRight() {
     ],
     mods: {
       scenarios: {
-        default: { position: [-0.8, -0.8] },
+        default: { position: [-0.8, -0.9] },
         bottom: { position: [0, -0.8] },
         eqnTri: { position: [0.3, -0.8] },
         eqnTri1: { position: [-2.1, -0.8] },
@@ -261,6 +261,8 @@ function layoutRight() {
   const pulseHyp = () => tri.getElement('side01.label').pulse({ xAlign: 'right', yAlign: 'bottom' });
   const pulseAdj = () => tri.getElement('side20.label').pulse({ yAlign: 'top' });
 
+  // const animateToRot = (target) => radLine.animations.new().rotation({ target, duration: 1 });
+
   figure.fnMap.global.add('triToSin', () => {
     rightTri._tri._side12._label.showForm('name2');
     rotLine.setPosition(rotLine.getPosition());
@@ -276,6 +278,11 @@ function layoutRight() {
   figure.fnMap.global.add('triPulseAdj', () => pulseAdj());
   figure.fnMap.global.add('triToRot', (rot) => {
     rotLine.setRotation(rot);
+  });
+  figure.fnMap.global.add('triAnimateToRot', () => {
+    rotLine.animations.new()
+      .rotation({ target: 0.7, duration: 1 })
+      .start();
   });
   figure.fnMap.global.add('triPulseAngles', () => {
     pulseAngle(angle2);

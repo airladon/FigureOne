@@ -669,12 +669,6 @@ function makeSlides() {
     },
     transition: (done) => {
       figure.animations.new()
-        // .inParallel([
-        //   eqn.animations.scenario({ target: 'eqnTri', duration: 2 }),
-        //   rightTri.animations.scenario({ target: 'eqnTri', duration: 2 }),
-        //   figure.getElement('haveTheSame').animations.dissolveOut(0.4),
-        //   figure.getElement('allTriangles').animations.dissolveOut(0.4),
-        // ])
         .inParallel([
           figure.animations.trigger({ callback: 'triAnimateToValues', duration: 0.8 }),
           eqn.animations.goToForm({ delay: 0.4, target: 'sixSideRatiosWithValue', animate: 'move' }),
@@ -687,9 +681,11 @@ function makeSlides() {
       figure.getElement('haveTheSame').hide();
       figure.getElement('allTriangles').hide();
       eqn.showForm('sixSideRatiosWithValue');
-      // eqn.setScenario('eqnTri');
-      // rightTri.setScenario('eqnTri');
+      figure.fnMap.exec('triToRot', initialAngle);
       rightTri.hasTouchableElements = true;
+      figure.shortCuts = {
+        1: 'triAnimateToRot',
+      };
     },
   });
 
@@ -702,9 +698,95 @@ function makeSlides() {
     show: ['rightTri'],
     fromForm: 'sixSideRatiosWithValue',
     form: 'sixSideRatiosFunction',
+    transition: (done) => {
+      figure.animations.new()
+        .inParallel([
+          figure.animations.trigger({ callback: 'triAnimateToNames', duration: 0.8 }),
+          eqn.animations.goToForm({ delay: 0.4, target: 'sixSideRatiosFunction', animate: 'move' }),
+        ])
+        .whenFinished(done)
+        .start();
+    },
     steadyState: () => {
+      figure.fnMap.exec('triToNames');
+      eqn.showForm('sixSideRatiosFunction');
       rightTri.hasTouchableElements = true;
     },
+  });
+
+  /*
+  .##.....##.##....##.####.########.....######..####.########...######.
+  .##.....##.###...##..##.....##.......##....##..##..##.....##.##....##
+  .##.....##.####..##..##.....##.......##........##..##.....##.##......
+  .##.....##.##.##.##..##.....##.......##........##..########..##......
+  .##.....##.##..####..##.....##.......##........##..##...##...##......
+  .##.....##.##...###..##.....##.......##....##..##..##....##..##....##
+  ..#######..##....##.####....##........######..####.##.....##..######.
+  */
+  slides.push({
+    scenarioCommon: ['default', 'eqnTri', 'circleSmall'],
+    enterStateCommon: () => {
+      figure.fnMap.exec('triToNames');
+      rightTri.hasTouchableElements = false;
+      figure.fnMap.exec('triToRot', initialAngle);
+      figure.fnMap.exec('circSetAngle', initialAngle);
+    },
+    show: ['rightTri'],
+    fromForm: 'sixSideRatiosFunction',
+    form: 'sixSideRatiosFunction',
+    dissolve: { out: 'rightTri', in: { circle1: ['circle', 'center', 'line', 'lineLabel'] } },
+  });
+
+  slides.push({
+    enterStateCommon: () => {
+      figure.fnMap.exec('circSetAngle', initialAngle);
+    },
+    show: { circle1: ['circle', 'center', 'line', 'lineLabel', 'x', 'angle'] },
+    fromForm: 'sixSideRatiosFunction',
+    form: 'sixSideRatiosFunction',
+    dissolve: { in: { circle1: ['x', 'angle'] } },
+  });
+
+  slides.push({
+    show: { circle1: ['circle', 'center', 'line', 'lineLabel', 'x', 'angle', 'sin', 'cos', 'rightAngle1'] },
+    fromForm: 'sixSideRatiosFunction',
+    form: 'sixSideRatiosFunction',
+    dissolve: { in: { circle1: ['sin', 'cos', 'rightAngle1'] } },
+  });
+
+  slides.push({
+    show: { circle1: ['circle', 'center', 'line', 'lineLabel', 'x', 'angle', 'sin', 'cos', 'rightAngle1'] },
+    fromForm: 'sixSideRatiosFunction',
+    form: 'sixSROppHyp1',
+    enterState: () => {
+      eqn.highlight(['opposite', 'v1', 'hypotenuse', '_1_rad', 'f_1', '_1', 'lb1', 'rb1', 'theta1']);
+    },
+    leaveStateCommon: () => eqn.undim(),
+  });
+  slides.push({
+    show: { circle1: ['circle', 'center', 'line', 'lineLabel', 'x', 'angle', 'sin', 'cos', 'rightAngle1'] },
+    fromForm: 'sixSROppHyp1',
+    form: 'sixSROppHyp1Stk',
+    enterState: () => {
+      eqn.highlight(['opposite', 'v1', 'hypotenuse', '_1_rad', 'f_1', '_1', 'lb1', 'rb1', 'theta1']);
+    },
+  });
+  slides.push({
+    show: { circle1: ['circle', 'center', 'line', 'lineLabel', 'x', 'angle', 'sin', 'cos', 'rightAngle1'] },
+    fromForm: 'sixSROppHyp1Stk',
+    form: 'sixSROppF',
+    enterState: () => {
+      eqn.highlight(['opposite', 'v1', 'hypotenuse', '_1_rad', 'f_1', '_1', 'lb1', 'rb1', 'theta1']);
+    },
+  });
+  slides.push({
+    show: { circle1: ['circle', 'center', 'line', 'lineLabel', 'x', 'angle', 'sin', 'cos', 'rightAngle1', 'f1Label'] },
+    fromForm: 'sixSROppF',
+    form: 'sixSROppF',
+    enterState: () => {
+      eqn.highlight(['opposite', 'v1', 'hypotenuse', '_1_rad', 'f_1', '_1', 'lb1', 'rb1', 'theta1']);
+    },
+    dissolve: { in: 'f1Label', pulse: { xAlign: 'left' } },
   });
 
   /*
@@ -1568,6 +1650,6 @@ function makeSlides() {
   });
 
   nav.loadSlides(slides);
-  nav.goToSlide(15);
+  nav.goToSlide(18);
 }
 makeSlides();
