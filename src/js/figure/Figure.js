@@ -1573,6 +1573,15 @@ class Figure {
   }
 
   /**
+   * Hide specific elements within the figure
+   */
+  hide(
+    toShow: TypeElementPath = [],
+  ): void {
+    this.elements.hide(toShow);
+  }
+
+  /**
    * Show specific elements within a figure, while hiding all others
    */
   showOnly(

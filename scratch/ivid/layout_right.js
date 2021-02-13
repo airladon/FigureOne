@@ -100,7 +100,7 @@ function layoutRight() {
           side: [
             sideLabel('1', 'hypotenuse', 'hypotenuse', colRad),
             sideLabel('0.0000', 'opposite', 'sin', colSin),
-            sideLabel('adjacent', 'adjacent', 'cos', colCos),
+            sideLabel('0.0000', 'adjacent', 'cos', colCos),
           ],
         },
       },
@@ -130,7 +130,7 @@ function layoutRight() {
       scenarios: {
         default: { position: [-0.8, -0.8] },
         bottom: { position: [0, -0.8] },
-        eqnTri: { position: [-1.9, -0.8] },
+        eqnTri: { position: [0.3, -0.8] },
         eqnTri1: { position: [-2.1, -0.8] },
       },
     },
@@ -146,13 +146,18 @@ function layoutRight() {
     ]);
     const a = Fig.tools.math.round(r * 180 / Math.PI, 0) * Math.PI / 180;
     const sin = Math.sin(a);
+    const cos = Math.cos(a);
 
     if (tri._side12.label.eqn.getCurrentForm().name === 'value') {
       tri._side12.label.eqn.updateElementText({ v: sin.toFixed(4) }, 'none');
     }
+    if (tri._side20.label.eqn.getCurrentForm().name === 'value') {
+      tri._side20.label.eqn.updateElementText({ v: cos.toFixed(4) }, 'none');
+    }
     if (tri._angle2.label.eqn.getCurrentForm().name === 'value') {
       tri._angle2.label.eqn.updateElementText({ v: `${Fig.tools.math.round(r * 180 / Math.PI, 0)}\u00b0` });
     }
+
     if (r < 0.3 || r > 1.34) {
       tri._angle2.label.location = 'start';
       xLine.show();
@@ -167,9 +172,16 @@ function layoutRight() {
     }
     const eqn = figure.getElement('eqn');
 
-    eqn.updateElementText({
-      ratioValue: sin.toFixed(4),
-    });
+    if (eqn.getElement('value1').isShown) {
+      eqn.updateElementText({
+        value1: sin.toFixed(4),
+        value2: cos.toFixed(4),
+        value3: sin / cos > 100 ? '\u221e' : (sin / cos).toFixed(4),
+        value4: 1 / cos > 100 ? '\u221e' : (1 / cos).toFixed(4),
+        value5: cos / sin > 100 ? '\u221e' : (cos / sin).toFixed(4),
+        value6: 1 / sin > 100 ? '\u221e' : (1 / sin).toFixed(4),
+      });
+    }
 
     figure.fnMap.global.add('rotateTri', () => {
       rotLine.animations.new()
@@ -183,7 +195,7 @@ function layoutRight() {
   const sidesShowForm = (form) => {
     side01.label.eqn.showForm(form);
     side12.label.eqn.showForm(form);
-    // side20.label.eqn.showForm(form);
+    side20.label.eqn.showForm(form);
   };
   const angleShowForm = (form) => {
     angle2.label.eqn.showForm(form);
@@ -194,6 +206,7 @@ function layoutRight() {
       .inParallel([
         side01.animations.dissolveOut(0.8),
         side12.animations.dissolveOut(0.8),
+        side20.animations.dissolveOut(0.8),
         angle2._label.animations.dissolveOut(0.8),
       ])
       .trigger(() => {
@@ -204,6 +217,7 @@ function layoutRight() {
       .inParallel([
         side01.animations.dissolveIn(0.8),
         side12.animations.dissolveIn(0.8),
+        side20.animations.dissolveIn(0.8),
         angle2._label.animations.dissolveIn(0.8),
       ])
       .start();
@@ -213,6 +227,7 @@ function layoutRight() {
       .inParallel([
         side01.animations.dissolveOut(0.4),
         side12.animations.dissolveOut(0.4),
+        side20.animations.dissolveOut(0.4),
         angle2._label.animations.dissolveOut(0.4),
       ])
       .trigger(() => {
@@ -223,6 +238,7 @@ function layoutRight() {
       .inParallel([
         side01.animations.dissolveIn(0.4),
         side12.animations.dissolveIn(0.4),
+        side20.animations.dissolveIn(0.4),
         angle2._label.animations.dissolveIn(0.4),
       ])
       .start();
@@ -241,6 +257,9 @@ function layoutRight() {
     curve: { scale: 1.7 }, label: { scale: 1.7 }, duration: 1,
   });
   const pulseRight = () => tri.getElement('angle1').pulse({ xAlign: 'right', yAlign: 'bottom', scale: 1.7 });
+  const pulseOpp = () => tri.getElement('side12.label').pulse({ xAlign: 'left' });
+  const pulseHyp = () => tri.getElement('side01.label').pulse({ xAlign: 'right', yAlign: 'bottom' });
+  const pulseAdj = () => tri.getElement('side20.label').pulse({ yAlign: 'top' });
 
   figure.fnMap.global.add('triToSin', () => {
     rightTri._tri._side12._label.showForm('name2');
@@ -252,6 +271,9 @@ function layoutRight() {
   figure.fnMap.global.add('triToValues', toValues.bind(this));
   figure.fnMap.global.add('triPulseTheta', () => pulseAngle(angle2));
   figure.fnMap.global.add('triPulseRight', () => pulseRight());
+  figure.fnMap.global.add('triPulseOpp', () => pulseOpp());
+  figure.fnMap.global.add('triPulseHyp', () => pulseHyp());
+  figure.fnMap.global.add('triPulseAdj', () => pulseAdj());
   figure.fnMap.global.add('triToRot', (rot) => {
     rotLine.setRotation(rot);
   });

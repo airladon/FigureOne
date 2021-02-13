@@ -1,17 +1,20 @@
+/* eslint-disable camelcase */
+/* global colSin, colRad, colCos, colCot, colTan, colSec, colCsc, colTheta, color1, figure */
+
 function makeEquation() {
   const lines = (linesIn, translation = {}, alignment = {}) => {
     const contentLines = [];
     linesIn.forEach((line) => {
       const [content, justify, baselineSpace] = line;
       contentLines.push({
-        content, justify, baselineSpace: baselineSpace || 0.6,
+        content, justify, baselineSpace: baselineSpace || 0.5,
       });
     });
     return {
       content: {
         lines: {
           content: contentLines,
-          baselinSpace: 0.6,
+          baselinSpace: 0.5,
           justify: 'element',
         },
       },
@@ -19,9 +22,18 @@ function makeEquation() {
       alignment,
     };
   };
-  const cont = (content, width = 0.6) => ({
-    container: { content, width },
+  const cont = (content, width = 0.6, xAlign = 'center') => ({
+    container: { content, width, xAlign },
   });
+  const frac = (numerator, symbol, denominator, nSpace = 0.03, dSpace = 0.03, width) => (cont({
+    frac: {
+      numerator, // : cont(numerator, width),
+      symbol,
+      denominator, // : cont(denominator, width),
+      numeratorSpace: nSpace,
+      denominatorSpace: dSpace,
+    },
+  }, width, 'right'));
   const space = { container: ['', 0.6] };
   figure.add({
     name: 'eqn',
@@ -59,6 +71,16 @@ function makeEquation() {
         rb: { symbol: 'bracket', side: 'right' },
         lb1: { symbol: 'bracket', side: 'left' },
         rb1: { symbol: 'bracket', side: 'right' },
+        lb2: { symbol: 'bracket', side: 'left' },
+        rb2: { symbol: 'bracket', side: 'right' },
+        lb3: { symbol: 'bracket', side: 'left' },
+        rb3: { symbol: 'bracket', side: 'right' },
+        lb4: { symbol: 'bracket', side: 'left' },
+        rb4: { symbol: 'bracket', side: 'right' },
+        lb5: { symbol: 'bracket', side: 'left' },
+        rb5: { symbol: 'bracket', side: 'right' },
+        lb6: { symbol: 'bracket', side: 'left' },
+        rb6: { symbol: 'bracket', side: 'right' },
         // theta: { text: '\u03b8', color: color1 },
         theta1: { text: '\u03b8', color: colTheta },
         theta2: { text: '\u03b8', color: colTheta },
@@ -120,15 +142,22 @@ function makeEquation() {
         brace: { symbol: 'brace', side: 'top' },
         stk1: { symbol: 'strike', style: 'forward', lineWidth: 0.006 },
         stk2: { symbol: 'strike', style: 'forward', lineWidth: 0.006 },
+        value1: '0.0000',
+        value2: '0.0000',
+        value3: '0.0000',
+        value4: '0.0000',
+        value5: '0.0000',
+        value6: '0.0000',
       },
       phrases: {
         oppOnOne: { frac: ['opposite', 'v1', cont('_1_rad')] },
-        oppOnHyp: { frac: ['opposite', 'v1', cont('hypotenuse')] },
-        adjOnHyp: { frac: ['adjacent', 'v2', cont('hypotenuse_1')] },
-        oppOnAdj: { frac: ['opposite_1', 'v3', 'adjacent_1'] },
-        hypOnOpp: { frac: [cont('hypotenuse_3'), 'v4', 'opposite_2'] },
-        hypOnAdj: { frac: [cont('hypotenuse_4'), 'v5', 'adjacent_2'] },
-        adjOnOpp: { frac: ['adjacent_3', 'v6', 'opposite_3'] },
+        // oppOnHyp: { frac: ['opposite', 'v1', cont('hypotenuse')] },
+        oppOnHyp: frac('opposite', 'v1', 'hypotenuse', 0.01, 0.03, 0.65),
+        adjOnHyp: frac('adjacent', 'v2', 'hypotenuse_1', 0.01, 0.03, 0.65),
+        oppOnAdj: frac('opposite_1', 'v3', 'adjacent_1', 0.01, 0.03, 0.65),
+        hypOnOpp: frac('hypotenuse_3', 'v4', 'opposite_2', 0.01, 0.03, 0.65),
+        hypOnAdj: frac('hypotenuse_4', 'v5', 'adjacent_2', 0.01, 0.03, 0.65),
+        adjOnOpp: frac('adjacent_3', 'v6', 'opposite_3', 0.01, 0.03, 0.65),
         fTheta: ['function', { container: ['', 0.02] }, { brac: ['lb', 'theta1', 'rb'] }],
         sinBracTheta: ['sin_1', { brac: ['lb', 'theta1', 'rb'] }],
         // sinTheta: ['sin', ' ', 'theta'],
@@ -174,6 +203,21 @@ function makeEquation() {
       },
       forms: {
         oppOnHyp: 'oppOnHyp',
+        twoSideRatios: lines([[['oppOnHyp']], [['adjOnHyp']]]),
+        sixSideRatios: lines([
+          [['oppOnHyp']], [['adjOnHyp']], [['oppOnAdj']], [['hypOnAdj']], [['adjOnOpp']], [['hypOnOpp']],
+        ]),
+        sixSideRatiosWithValue: lines([
+          [['oppOnHyp', 'equals1', 'value1']], [['adjOnHyp', 'equals2', 'value2']], [['oppOnAdj', 'equals3', 'value3']], [['hypOnAdj', 'equals4', 'value4']], [['adjOnOpp', 'equals5', 'value5']], [['hypOnOpp', 'equals6', 'value6']],
+        ]),
+        sixSideRatiosFunction: lines([
+          [['oppOnHyp', 'equals1', { sub: ['f_1', '_1'] }, { brac: ['lb1', 'theta1', 'rb1'] }]],
+          [['adjOnHyp', 'equals2', { sub: ['f_2', '_2'] }, { brac: ['lb2', 'theta2', 'rb2'] }]],
+          [['oppOnAdj', 'equals3', { sub: ['f_3', '_3'] }, { brac: ['lb3', 'theta3', 'rb3'] }]],
+          [['hypOnAdj', 'equals4', { sub: ['f_4', '_4'] }, { brac: ['lb4', 'theta4', 'rb4'] }]],
+          [['adjOnOpp', 'equals5', { sub: ['f_5', '_5'] }, { brac: ['lb5', 'theta5', 'rb5'] }]],
+          [['hypOnOpp', 'equals6', { sub: ['f_6', '_6'] }, { brac: ['lb6', 'theta6', 'rb6'] }]],
+        ]),
         oneRatio: ['oppOnHyp', 'equals1', 'constant_1'],
         twoRatios: lines([
           [['oppOnHyp', 'equals1', 'sinTheta1'], 'equals1'],
@@ -434,7 +478,7 @@ function makeEquation() {
         // top: { position: [-1.5, 0.7], scale: 1 },
         topRight: { position: [1.6, 0.95], scale: 1 },
         bottom: { position: [0, -1.3], scale: 1 },
-        eqnTri: { position: [0.8, 0], scale: 1.2 },
+        eqnTri: { position: [-2.4, 1.2], scale: 1 },
         eqnTri1: { position: [0.5, 0.7], scale: 1.1 },
         right: { position: [1, 0], scale: 1.1 },
         eqnCirc: { position: [-2.5, 0], scale: 1.1 },

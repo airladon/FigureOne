@@ -27,7 +27,7 @@ function layout() {
     },
   });
 
-  const leftText = (name, position, text, modifiers = {}) => ({
+  const leftText = (name, position, text, modifiers = {}, size = 0.2) => ({
     name,
     method: 'textLines',
     options: {
@@ -37,7 +37,7 @@ function layout() {
       xAlign: 'left',
       justify: 'left',
       yAlign: 'baseline',
-      font: { size: 0.2, color: [0.3, 0.3, 0.3, 1] },
+      font: { size, color: [0.3, 0.3, 0.3, 1] },
       fixColor: true,
     },
     mods: {
@@ -238,40 +238,26 @@ function layout() {
     }),
     leftText('areSimilar', [0.1, 0.95], ' are similar'),
     leftText('haveTheSame', [0.1, 0.95], ' have the same'),
-
-    // centerText('forAllTris', 'For all right angle triangles with the same angle |theta|:', {
-    //   theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic' } },
-    // }),
-    // hint('similarHint', [0, 0.7], [
-    //   {
-    //     text: '1 / 2: Use the |background| knowledge',
-    //     modifiers: {
-    //       background: {
-    //         font: { color: color2 },
-    //         onClick: () => {
-    //           figure.elements.pulse({ elements: ['similarLink', 'totalAngleLink'] });
-    //         },
-    //         isTouchable: true,
-    //       },
-    //     },
-    //   },
-    //   {
-    //     text: '2 / 2: We know two angles: |theta| and 90\u00b0',
-    //     modifiers: {
-    //       theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic', color: color1 } },
-    //     },
-    //   },
-    // ]),
-    // link('similarLink', 'Similar Triangles', [1, -1.4], () => {
-    //   figure.getElement('similar').showAll();
-    //   figure.getElement('similar').setScenario('default');
-    //   figure.getElement('totalAngle').hide();
-    // }),
-    // link('totalAngleLink', 'Triangle Total Angle', [-1, -1.4], () => {
-    //   figure.getElement('totalAngle').showAll();
-    //   figure.getElement('totalAngle').setScenario('default');
-    //   figure.getElement('similar').hide();
-    // }),
+    leftText('haveEqualCorr', [0.1, 0.95], ' have equal corresponding'),
+    leftText('sideRatios', [0.1, 0.7], ' side ratios'),
+    leftText('hasTheSameValue', [-1.6, 1.2], 'is the same value for all right triangles with angle |theta|', {
+      theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic', color: colTheta } },
+    }, 0.15),
+    leftText('hasTheSameValue1', [-1.6, 0.7], 'is the same value for all right triangles with angle |theta|', {
+      theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic', color: colTheta } },
+    }, 0.15),
+    leftText('hasTheSameValue2', [-1.6, 0.2], 'is the same value for all right triangles with angle |theta|', {
+      theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic', color: colTheta } },
+    }, 0.15),
+    leftText('hasTheSameValue3', [-1.6, -0.3], 'is the same value for all right triangles with angle |theta|', {
+      theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic', color: colTheta } },
+    }, 0.15),
+    leftText('hasTheSameValue4', [-1.6, -0.8], 'is the same value for all right triangles with angle |theta|', {
+      theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic', color: colTheta } },
+    }, 0.15),
+    leftText('hasTheSameValue5', [-1.6, -1.3], 'is the same value for all right triangles with angle |theta|', {
+      theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic', color: colTheta } },
+    }, 0.15),
   ]);
   figure.add({
     name: 'cursor',
@@ -333,44 +319,44 @@ function makeSlides() {
     },
   });
 
-  slides.push({ scenario: 'default', show: ['background'] });
+  // slides.push({ scenario: 'default', show: ['background'] });
 
-  /*
-  ..######..##.....##.##.....##
-  .##....##.##.....##.###...###
-  .##.......##.....##.####.####
-  ..######..##.....##.##.###.##
-  .......##.##.....##.##.....##
-  .##....##.##.....##.##.....##
-  ..######...#######..##.....##
-  */
-  slides.push({
-    show: [],
-    scenario: ['default'],
-    transition: (done) => {
-      figure.getElement('totalAngle.eqn').showForm('abc');
-      figure.getElement('totalAngle.eqn').hide();
-      figure.animations.new()
-        .then(figure.getElement('totalAngle.summary1').animations.dissolveIn(0.5))
-        .then(figure.getElement('totalAngle.tri').animations.dissolveIn(0.5))
-        .then(figure.getElement('totalAngle.eqn').animations.dissolveIn(0.5))
-        .whenFinished(done)
-        .start();
-    },
-    steadyState: () => {
-      figure.getElement('totalAngle.eqn').showForm('abc');
-      figure.getElement('totalAngle.tri').showAll();
-      figure.getElement('totalAngle.summary1').showAll();
-    },
-  });
+  // /*
+  // ..######..##.....##.##.....##
+  // .##....##.##.....##.###...###
+  // .##.......##.....##.####.####
+  // ..######..##.....##.##.###.##
+  // .......##.##.....##.##.....##
+  // .##....##.##.....##.##.....##
+  // ..######...#######..##.....##
+  // */
+  // slides.push({
+  //   show: [],
+  //   scenario: ['default'],
+  //   transition: (done) => {
+  //     figure.getElement('totalAngle.eqn').showForm('abc');
+  //     figure.getElement('totalAngle.eqn').hide();
+  //     figure.animations.new()
+  //       .then(figure.getElement('totalAngle.summary1').animations.dissolveIn(0.5))
+  //       .then(figure.getElement('totalAngle.tri').animations.dissolveIn(0.5))
+  //       .then(figure.getElement('totalAngle.eqn').animations.dissolveIn(0.5))
+  //       .whenFinished(done)
+  //       .start();
+  //   },
+  //   steadyState: () => {
+  //     figure.getElement('totalAngle.eqn').showForm('abc');
+  //     figure.getElement('totalAngle.tri').showAll();
+  //     figure.getElement('totalAngle.summary1').showAll();
+  //   },
+  // });
 
-  slides.push({
-    show: { totalAngle: ['summary1', 'tri', 'eqn'] },
-    scenario: ['default'],
-    fromForm: { 'totalAngle.eqn': 'abc' },
-    form: { 'totalAngle.eqn': 'abc' },
-    dissolve: { in: 'totalAngle.summary2' },
-  });
+  // slides.push({
+  //   show: { totalAngle: ['summary1', 'tri', 'eqn'] },
+  //   scenario: ['default'],
+  //   fromForm: { 'totalAngle.eqn': 'abc' },
+  //   form: { 'totalAngle.eqn': 'abc' },
+  //   dissolve: { in: 'totalAngle.summary2' },
+  // });
 
 
   /*
@@ -474,6 +460,15 @@ function makeSlides() {
       figure.fnMap.exec('triToRot', initialAngle);
     },
     dissolve: { in: ['rightTri.tri.line', 'rightTri.tri.angle1'] },
+    steadyStateCommon: () => {
+      figure.shortCuts = {
+        1: 'triPulseRight',
+        2: 'triPulseTheta',
+        3: 'triPulseOpp',
+        4: 'triPulseHyp',
+        5: 'triPulseAdj',
+      };
+    },
   });
 
   // dissolve in theta
@@ -515,35 +510,139 @@ function makeSlides() {
     },
   });
 
+  // Dissolve Have equal corresponding side ratios
+  slides.push({
+    show: ['rightTri.tri.line', 'rightTri.tri.angle2', 'rightTri.tri.angle1', 'allTriangles'],
+    dissolve: {
+      out: ['areSimilar'],
+      in: ['haveEqualCorr', 'sideRatios'],
+    },
+  });
+
   // Dissolve in sides
   slides.push({
-    show: ['rightTri.tri.line', 'rightTri.tri.angle2', 'rightTri.tri.angle1', 'allTriangles', 'areSimilar'],
+    scenarioCommon: ['default', 'eqnTri'],
+    show: ['rightTri.tri.line', 'rightTri.tri.angle2', 'rightTri.tri.angle1', 'allTriangles', 'haveEqualCorr', 'sideRatios'],
     enterStateCommon: () => {
       figure.fnMap.exec('triToNames');
       rightTri.hasTouchableElements = false;
       figure.fnMap.exec('triToRot', initialAngle);
     },
-    dissolve: { in: { 'rightTri.tri': ['side01', 'side12'] } },
+    transition: (done) => {
+      eqn.showForm('oppOnHyp');
+      eqn.hide();
+      figure.animations.new()
+        .inParallel([
+          eqn.animations.scenario({ target: 'eqnTri', duration: 2 }),
+          rightTri.animations.scenario({ start: 'default', target: 'eqnTri', duration: 2 }),
+          figure.getElement('haveEqualCorr').animations.dissolveOut(0.4),
+          figure.getElement('sideRatios').animations.dissolveOut(0.4),
+          figure.getElement('allTriangles').animations.dissolveOut(0.4),
+          figure.getElement('rightTri.tri.side01').animations.dissolveIn(0.4),
+          figure.getElement('rightTri.tri.side12').animations.dissolveIn(0.4),
+          figure.getElement('rightTri.tri.side20').animations.dissolveIn(0.4),
+        ])
+        .inParallel([
+          eqn.animations.dissolveIn(0.4),
+          figure.getElement('hasTheSameValue').animations.dissolveIn(0.4),
+        ])
+        .whenFinished(done)
+        .start();
+    },
     steadyState: () => {
-      figure.shortCuts = {
-        1: 'triPulseTheta',
-        2: 'triPulseRight',
-      };
+      figure.hide(['haveEqualCorr', 'sideRatios', 'allTriangles']);
+      figure.getElement('rightTri.tri').show(['side01', 'side12', 'side20']);
+      figure.getElement('hasTheSameValue').show();
+      eqn.showForm('oppOnHyp');
     },
   });
 
-  // Dissolve in have the same ratio
+  // Dissolve in all ratios the same with opp on hyp
   slides.push({
-    scenarioCommon: ['default', 'left', 'top', 'topRight'],
+    show: ['rightTri', 'hasTheSameValue'],
+    hideCommon: ['rightTri.tri.angle0'],
     fromForm: 'oppOnHyp',
-    form: 'opp',
-    show: ['rightTri', 'allTriangles', 'areSimilar'],
-    hideCommon: ['rightTri.tri.angle0', 'rightTri.tri.side20'],
-    dissolve: {
-      out: ['areSimilar'],
-      in: ['haveTheSame', 'eqn'],
+    transition: (done) => {
+      figure.animations.new()
+        .inParallel([
+          eqn.animations.goToForm({ target: 'twoSideRatios', duration: 2, animate: 'move' }),
+          figure.getElement('hasTheSameValue1').animations.dissolveIn(0.4),
+        ])
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      figure.getElement('hasTheSameValue1').show();
+      eqn.showForm('twoSideRatios');
     },
   });
+
+  // Dissolve in two ratios
+  slides.push({
+    show: ['rightTri', 'hasTheSameValue', 'hasTheSameValue1'],
+    hideCommon: ['rightTri.tri.angle0'],
+    fromForm: 'twoSideRatios',
+    transition: (done) => {
+      figure.animations.new()
+        .inParallel([
+          eqn.animations.goToForm({ target: 'sixSideRatios', duration: 2, animate: 'move' }),
+          figure.getElement('hasTheSameValue2').animations.dissolveIn(0.4),
+          figure.getElement('hasTheSameValue3').animations.dissolveIn(0.4),
+          figure.getElement('hasTheSameValue4').animations.dissolveIn(0.4),
+          figure.getElement('hasTheSameValue5').animations.dissolveIn(0.4),
+          rightTri.animations.dissolveOut(0.4),
+        ])
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      figure.getElement('hasTheSameValue2').show();
+      figure.getElement('hasTheSameValue3').show();
+      figure.getElement('hasTheSameValue4').show();
+      figure.getElement('hasTheSameValue5').show();
+      eqn.showForm('sixSideRatios');
+      rightTri.hide();
+    },
+  });
+
+  // Dissolve second ratio
+  slides.push({
+    fromForm: 'sixSideRatios',
+    form: 'sixSideRatios',
+    show: ['rightTri', 'hasTheSameValue', 'hasTheSameValue1', 'hasTheSameValue2', 'hasTheSameValue3', 'hasTheSameValue4', 'hasTheSameValue5'],
+    hideCommon: ['rightTri.tri.angle0'],
+    transition: (done) => {
+      figure.animations.new()
+        .inParallel([
+          figure.getElement('hasTheSameValue').animations.dissolveOut(0.4),
+          figure.getElement('hasTheSameValue1').animations.dissolveOut(0.4),
+          figure.getElement('hasTheSameValue2').animations.dissolveOut(0.4),
+          figure.getElement('hasTheSameValue3').animations.dissolveOut(0.4),
+          figure.getElement('hasTheSameValue4').animations.dissolveOut(0.4),
+          figure.getElement('hasTheSameValue5').animations.dissolveOut(0.4),
+          rightTri.animations.dissolveIn(0.4),
+        ])
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      figure.getElement('hasTheSameValue').hide();
+      figure.getElement('hasTheSameValue1').hide();
+      figure.getElement('hasTheSameValue2').hide();
+      figure.getElement('hasTheSameValue3').hide();
+      figure.getElement('hasTheSameValue4').hide();
+      figure.getElement('hasTheSameValue5').hide();
+      rightTri.show();
+    },
+  });
+
+  // // Dissolve in all ratios
+  // slides.push({
+  //   fromForm: 'sixSideRatios',
+  //   form: 'sixSideRatios',
+  //   show: ['rightTri', 'hasTheSameValue', 'hasTheSameValue1'],
+  //   dissolve: { out: ['hasTheSameValue', 'hasTheSameValue1'] },
+  // });
 
 
   /*
@@ -557,11 +656,11 @@ function makeSlides() {
   */
   slides.push({
     clear: true,
-    scenarioCommon: ['default', 'left', 'top', 'topRight'],
-    show: ['rightTri', 'allTriangles', 'haveTheSame'],
-    hideCommon: ['rightTri.tri.angle0', 'rightTri.tri.side20'],
-    fromForm: 'oppOnHyp',
-    form: 'ratioValue',
+    scenarioCommon: ['default', 'eqnTri'],
+    show: ['rightTri'],
+    hideCommon: ['rightTri.tri.angle0'],
+    fromForm: 'sixSideRatios',
+    form: 'sixSideRatios',
     enterStateCommon: () => {
       figure.fnMap.exec('triToNames');
       // rightTri._tri._side20.hide();
@@ -570,14 +669,16 @@ function makeSlides() {
     },
     transition: (done) => {
       figure.animations.new()
+        // .inParallel([
+        //   eqn.animations.scenario({ target: 'eqnTri', duration: 2 }),
+        //   rightTri.animations.scenario({ target: 'eqnTri', duration: 2 }),
+        //   figure.getElement('haveTheSame').animations.dissolveOut(0.4),
+        //   figure.getElement('allTriangles').animations.dissolveOut(0.4),
+        // ])
         .inParallel([
-          eqn.animations.scenario({ target: 'eqnTri', duration: 2 }),
-          rightTri.animations.scenario({ target: 'eqnTri', duration: 2 }),
-          figure.getElement('haveTheSame').animations.dissolveOut(0.4),
-          figure.getElement('allTriangles').animations.dissolveOut(0.4),
+          figure.animations.trigger({ callback: 'triAnimateToValues', duration: 0.8 }),
+          eqn.animations.goToForm({ delay: 0.4, target: 'sixSideRatiosWithValue', animate: 'move' }),
         ])
-        .trigger({ callback: 'triAnimateToValues', duration: 0.8 })
-        .then(eqn.animations.goToForm({ target: 'ratioValue', animate: 'move' }))
         .whenFinished(done)
         .start();
     },
@@ -585,22 +686,22 @@ function makeSlides() {
       figure.fnMap.exec('triToValues');
       figure.getElement('haveTheSame').hide();
       figure.getElement('allTriangles').hide();
-      eqn.setScenario('eqnTri');
-      rightTri.setScenario('eqnTri');
+      eqn.showForm('sixSideRatiosWithValue');
+      // eqn.setScenario('eqnTri');
+      // rightTri.setScenario('eqnTri');
       rightTri.hasTouchableElements = true;
     },
   });
 
   slides.push({
-    scenarioCommon: ['default', 'eqnTri'],
     enterStateCommon: () => {
       figure.fnMap.exec('triToValues');
       rightTri.hasTouchableElements = false;
       figure.fnMap.exec('triToRot', initialAngle);
     },
     show: ['rightTri'],
-    fromForm: 'ratioValue',
-    form: 'f',
+    fromForm: 'sixSideRatiosWithValue',
+    form: 'sixSideRatiosFunction',
     steadyState: () => {
       rightTri.hasTouchableElements = true;
     },
@@ -1467,6 +1568,6 @@ function makeSlides() {
   });
 
   nav.loadSlides(slides);
-  nav.goToSlide(0);
+  nav.goToSlide(15);
 }
 makeSlides();
