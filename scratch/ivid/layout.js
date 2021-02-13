@@ -288,7 +288,7 @@ function makeSlides() {
     options: {
       nextButton: { position: [3.8, 0], width: 0.2, height: 0.2 },
       prevButton: { position: [-3.8, 0], width: 0.2, height: 0.2 },
-      equation: ['eqn', 'bow.eqn', 'eqn1'],
+      equation: ['eqn', 'bow.eqn', 'eqn1', 'circle1.bowStringLabel'],
       // equationDefaults: { duration: 4 },
     },
   });
@@ -644,7 +644,7 @@ function makeSlides() {
   //   dissolve: { out: ['hasTheSameValue', 'hasTheSameValue1'] },
   // });
 
-
+  const circle1 = figure.getElement('circle1');
   /*
   .########.##.....##.##....##..######..########.####..#######..##....##
   .##.......##.....##.###...##.##....##....##.....##..##.....##.###...##
@@ -742,22 +742,30 @@ function makeSlides() {
       figure.fnMap.exec('circSetAngle', initialAngle);
     },
     show: { circle1: ['circle', 'center', 'line', 'lineLabel', 'x', 'angle'] },
-    fromForm: 'sixSideRatiosFunction',
+    // fromForm: 'sixSideRatiosFunction',
     form: 'sixSideRatiosFunction',
     dissolve: { in: { circle1: ['x', 'angle'] } },
   });
 
   slides.push({
     show: { circle1: ['circle', 'center', 'line', 'lineLabel', 'x', 'angle', 'sin', 'cos', 'rightAngle1'] },
-    fromForm: 'sixSideRatiosFunction',
+    // fromForm: 'sixSideRatiosFunction',
     form: 'sixSideRatiosFunction',
     dissolve: { in: { circle1: ['sin', 'cos', 'rightAngle1'] } },
   });
 
+  /*
+  ..######..####.##....##
+  .##....##..##..###...##
+  .##........##..####..##
+  ..######...##..##.##.##
+  .......##..##..##..####
+  .##....##..##..##...###
+  ..######..####.##....##
+  */
   slides.push({
     show: { circle1: ['circle', 'center', 'line', 'lineLabel', 'x', 'angle', 'sin', 'cos', 'rightAngle1'] },
-    fromForm: 'sixSideRatiosFunction',
-    form: 'sixSROppHyp1',
+    form: 'sixRatiosSinHighlight',
     enterState: () => {
       eqn.highlight(['opposite', 'v1', 'hypotenuse', '_1_rad', 'f_1', '_1', 'lb1', 'rb1', 'theta1']);
     },
@@ -765,15 +773,13 @@ function makeSlides() {
   });
   slides.push({
     show: { circle1: ['circle', 'center', 'line', 'lineLabel', 'x', 'angle', 'sin', 'cos', 'rightAngle1'] },
-    fromForm: 'sixSROppHyp1',
-    form: 'sixSROppHyp1Stk',
+    form: 'sixSROppHyp1',
     enterState: () => {
       eqn.highlight(['opposite', 'v1', 'hypotenuse', '_1_rad', 'f_1', '_1', 'lb1', 'rb1', 'theta1']);
     },
   });
   slides.push({
     show: { circle1: ['circle', 'center', 'line', 'lineLabel', 'x', 'angle', 'sin', 'cos', 'rightAngle1'] },
-    fromForm: 'sixSROppHyp1Stk',
     form: 'sixSROppF',
     enterState: () => {
       eqn.highlight(['opposite', 'v1', 'hypotenuse', '_1_rad', 'f_1', '_1', 'lb1', 'rb1', 'theta1']);
@@ -781,12 +787,17 @@ function makeSlides() {
   });
   slides.push({
     show: { circle1: ['circle', 'center', 'line', 'lineLabel', 'x', 'angle', 'sin', 'cos', 'rightAngle1', 'f1Label'] },
-    fromForm: 'sixSROppF',
     form: 'sixSROppF',
     enterState: () => {
       eqn.highlight(['opposite', 'v1', 'hypotenuse', '_1_rad', 'f_1', '_1', 'lb1', 'rb1', 'theta1']);
     },
-    dissolve: { in: 'f1Label', pulse: { xAlign: 'left' } },
+    dissolve: { in: 'circle1.f1Label', pulse: { xAlign: 'left', scale: 3 } },
+  });
+
+  slides.push({
+    show: { circle1: ['circle', 'center', 'line', 'lineLabel', 'x', 'angle', 'sin', 'cos', 'rightAngle1', 'f1Label'] },
+    fromForm: 'sixSROppF',
+    form: 'sixSideRatiosFunction',
   });
 
   /*
@@ -798,6 +809,141 @@ function makeSlides() {
   .##.....##.##.....##.##..##..##
   .########...#######...###..###.
   */
+  slides.push({
+    showCommon: { circle1: ['circle', 'center', 'line', 'lineLabel', 'x', 'angle', 'sin', 'cos', 'rightAngle1'] },
+    show: { circle1: 'f1Label' },
+    dissolve: { out: 'circle1.f1Label' },
+  });
+  slides.push({
+    show: { circle1: ['bowString'] },
+    dissolve: { in: 'circle1.bowString' },
+    enterStateCommon: () => {
+      figure.fnMap.exec('circSetAngle', initialAngle);
+      circle1.highlight(['bow', 'bowStringLabel', 'bowString', 'sin']);
+    },
+    leaveStateCommon: () => circle1.undim(),
+  });
+
+  slides.push({
+    show: { circle1: ['bowString', 'bow'] },
+    dissolve: { in: 'circle1.bow' },
+  });
+
+  slides.push({
+    show: { circle1: ['bowString', 'bowStringLabel'] },
+    fromForm: { eqn: 'sixSideRatiosFunction', 'circle1.bowStringLabel': null },
+    form: { eqn: 'sixSideRatiosFunction', 'circle1.bowStringLabel': 'bowstring' },
+  });
+
+  slides.push({
+    show: { circle1: ['bowStringLabel'] },
+    form: { eqn: 'sixSideRatiosFunction', 'circle1.bowStringLabel': 'half' },
+  });
+
+  slides.push({
+    show: { circle1: ['bowStringLabel'] },
+    form: { eqn: 'sixSideRatiosFunction', 'circle1.bowStringLabel': 'sinus' },
+  });
+
+  slides.push({
+    show: { circle1: ['bowStringLabel'] },
+    form: { eqn: 'sixSideRatiosFunction', 'circle1.bowStringLabel': 'sine' },
+  });
+
+  slides.push({
+    show: { circle1: ['bowStringLabel'] },
+    form: { eqn: 'sixSideRatiosFunction', 'circle1.bowStringLabel': 'sinesin' },
+  });
+
+  slides.push({
+    show: { circle1: ['bowStringLabel'] },
+    form: { eqn: 'sixSideRatiosFunction', 'circle1.bowStringLabel': 'sin' },
+    steadyState: () => { figure.shortCuts = { 1: 'eqnPulseF1' }; },
+    enterStateCommon: () => {
+      figure.fnMap.exec('circSetAngle', initialAngle);
+    },
+    leaveStateCommon: () => {},
+  });
+
+  slides.push({
+    show: { circle1: ['sinLabel'] },
+    fromForm: { eqn: 'sixSideRatiosFunction', 'circle1.bowStringLabel': null },
+    form: { eqn: 'sixSRSin', 'circle1.bowStringLabel': null },
+    steadyState: () => { figure.shortCuts = { 1: 'eqnPulseSin' }; },
+  });
+
+  /*
+  ..######...#######...######.
+  .##....##.##.....##.##....##
+  .##.......##.....##.##......
+  .##.......##.....##..######.
+  .##.......##.....##.......##
+  .##....##.##.....##.##....##
+  ..######...#######...######.
+  */
+
+  slides.push({
+    scenarioCommon: ['default', 'eqnTri', 'circleSmall'],
+    showCommon: { circle1: ['circle', 'center', 'line', 'lineLabel', 'x', 'angle', 'sin', 'cos', 'rightAngle1', 'sinLabel'] },
+    form: 'sixSRSin',
+    transition: (done) => {
+      figure.animations.new()
+        .inParallel([
+          circle1.animations.scenario({ target: 'circleQuart', duration: 2 }),
+          circle1._x.animations.dissolveIn(0.4),
+          circle1._y.animations.dissolveIn(0.4),
+          circle1._arc.animations.dissolveIn(0.4),
+          circle1._circle.animations.dissolveOut(0.4),
+          circle1._center.animations.dissolveOut(0.4),
+        ])
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      circle1.show(['x', 'y', 'arc']);
+      circle1.setScenario('circleQuart');
+      circle1.hide(['circle', 'center']);
+    },
+  });
+
+  slides.push({
+    scenarioCommon: ['default', 'eqnTri', 'circleQuart'],
+    showCommon: { circle1: ['x', 'y', 'arc', 'line', 'lineLabel', 'x', 'angle', 'sin', 'cos', 'rightAngle1', 'sinLabel'] },
+    form: 'sixSRCosHighlight',
+  });
+  slides.push({
+    scenarioCommon: ['default', 'eqnTri', 'circleQuart'],
+    showCommon: { circle1: ['x', 'y', 'arc', 'line', 'lineLabel', 'x', 'angle', 'sin', 'cos', 'rightAngle1', 'sinLabel', 'compAngle2'] },
+    form: 'sixSRCosHighlight',
+    dissolve: { in: 'circle1.compAngle2', pulse: { scale: 1.4 } },
+  });
+  slides.push({ form: 'sixSRCosComp' });
+  slides.push({ form: 'sixSRCosComplementarySine' });
+  slides.push({ form: 'sixSRCosCosine' });
+  slides.push({ form: 'sixSRCosCos' });
+  slides.push({ form: 'sixSRCosThetaHighlight' });
+  slides.push({ form: 'sixSRCosThetaHighlight', dissolve: { in: 'circle1.cosLabel', pulse: { scale: 2, yAlign: 'top' } } });
+  slides.push({
+    showCommon: { circle1: ['x', 'y', 'arc', 'line', 'lineLabel', 'x', 'angle', 'sin', 'cos', 'rightAngle1', 'sinLabel', 'cosLabel'] },
+    form: 'sixSRCos',
+  });
+
+
+  /*
+  .########....###....##....##
+  ....##......##.##...###...##
+  ....##.....##...##..####..##
+  ....##....##.....##.##.##.##
+  ....##....#########.##..####
+  ....##....##.....##.##...###
+  ....##....##.....##.##....##
+  */
+  slides.push({
+    showCommon: { circle1: ['circle', 'center', 'line', 'lineLabel', 'x', 'angle', 'sin', 'cos', 'rightAngle1', 'sinLabel'] },
+    show: { circle1: 'f1Label' },
+    dissolve: { out: 'circle1.f1Label' },
+  });
+
   slides.push({
     fromForm: 'f',
     show: ['rightTri'],
@@ -1220,7 +1366,6 @@ function makeSlides() {
   ....##....##.....##.##...###....##....##.##.......##....##
   ....##....##.....##.##....##.....######..########..######.
   */
-  const circle1 = figure.getElement('circle1');
   // const [tan, cot] = figure.getElements(['circle1.tan', 'circle1.cot']);
 
   slides.push({
@@ -1650,6 +1795,6 @@ function makeSlides() {
   });
 
   nav.loadSlides(slides);
-  nav.goToSlide(18);
+  nav.goToSlide(37);
 }
 makeSlides();

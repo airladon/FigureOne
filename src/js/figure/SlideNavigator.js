@@ -483,7 +483,19 @@ export default class SlideNavigator {
     return form;
   }
 
-  getFromForm(index: number): Array<string | null> {
+  getFromForm(index: number) {
+    if (this.slides[index].fromForm === undefined) {
+      if (index === 0) {
+        return {};
+      }
+      return this.getFormGeneric('form', index - 1);
+    }
+    // if (this.slides[index].fromForm !== undefined) {
+    //   return this.slides[index].fromForm;
+    // }
+    // if (index === 0) {
+    //   return null;
+    // }
     return this.getFormGeneric('fromForm', index);
     // const { fromForm } = this.slides[index];
     // if (fromForm === undefined) {

@@ -10,20 +10,19 @@ const figure = new Fig.Figure({
 figure.add(
   {
     name: 'tri',
-    method: 'collections.angle',
+    method: 'equation',
     options: {
-      angle: Math.PI / 2,
-      curve: { autoRightAngle: true, width: 0.01 },
-      corner: { width: 0.01 },
-      position: [0.5, -0.5]
+      forms: {
+        0: ['a', { offset: ['b', [0.2, -0.5], true] }, 'c'],
+      },
     },
   },
 );
 
-figure.getElement('tri').pulseAngle({ curve: {
-  scale: 2,
-  // centerOn: figure.getElement('tri').getPosition(),
-}, corner: 1 })
+// figure.getElement('tri').pulseAngle({ curve: {
+//   scale: 2,
+//   // centerOn: figure.getElement('tri').getPosition(),
+// }, corner: 1 })
 // // Animate the shape
 // figure.getElement('tri').animations.new()
 //   .position({ target: [0.8, 0], duration: 1 })

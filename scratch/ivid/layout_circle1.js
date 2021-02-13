@@ -12,7 +12,7 @@ function layoutCircle1() {
       p1, length, angle, width: 0.013, color,
     },
   });
-  const lineLabel = (name, text, color, position = [0, 0]) => ({
+  const lineLabel = (name, text, color, position = [0, 0], yAlign = 'middle') => ({
     name,
     method: 'text',
     options: {
@@ -20,7 +20,7 @@ function layoutCircle1() {
       font: { family: 'Times New Roman', size: 0.14 },
       color,
       xAlign: 'center',
-      yAlign: 'middle',
+      yAlign,
       position,
     },
   });
@@ -83,6 +83,18 @@ function layoutCircle1() {
           sides: 100,
           sidesToDraw: 25,
           color: colGrey,
+        },
+      },
+      {
+        name: 'bow',
+        method: 'collections.angle',
+        options: {
+          curve: { radius, width: 0.013, sides: 200 },
+          // radius,
+          // line: { width: 0.006 },
+          // sides: 200,
+          // sidesToDraw: 100,
+          color: colSin,
         },
       },
       {
@@ -182,13 +194,33 @@ function layoutCircle1() {
           },
         },
       },
+      {
+        name: 'compAngle2',
+        method: 'collections.angle',
+        options: {
+          color: colTheta,
+          curve: {
+            width: 0.01,
+            radius: 0.3,
+            step: 0.8,
+            sides: 400,
+          },
+          label: {
+            text: '90\u00b0\u2212\u03b8',
+            curvePosition: 0.65,
+            offset: 0.01,
+            scale: 0.6,
+          },
+        },
+      },
       line('sec', colSec),
       lineLabel('secLabel', 'sec', colSec),
       line('sec1', colSec),
       lineLabel('secLabel1', 'sec', colSec),
+      line('bowString', colSin),
       line('sin', colSin),
-      lineLabel('sinLabel', 'sin', colSin),
-      lineLabel('f1Label', { forms: { 0: { sub: ['f', '_1'] } } }, colSin),
+      lineLabel('sinLabel', 'sin', colSin, [0, 0], 'baseline'),
+      // lineLabel('f1Label', { forms: { 0: { sub: ['f', '_1'] } } }, colSin),
       { name: 'f1Label', method: 'equation', options: { forms: { 0: { sub: ['f', '_1'] } }, color: colSin } },
       line('cos', colCos),
       lineLabel('cosLabel', 'cos', colCos),
@@ -202,6 +234,27 @@ function layoutCircle1() {
       lineLabel('tanLabelAlt', 'tan', colTan),
       line('cotAlt', colCot),
       lineLabel('cotLabelAlt', 'cot', colCot),
+      {
+        name: 'bowStringLabel',
+        method: 'equation',
+        options: {
+          elements: {
+            sin: { style: 'normal' },
+            comma: ', ',
+            rightArrow: ' \u2192 ',
+          },
+          forms: {
+            bowstring: 'bowstring',
+            half: ['half ', 'bowstring'],
+            sinus: 'sinus',
+            sine: ['sinus', 'rightArrow', 'sine'],
+            sinesin: ['sinus', 'rightArrow', 'sine', 'comma', 'sin'],
+            sin: 'sin',
+          },
+          formDefaults: { alignment: { yAlign: 'baseline' } },
+          color: colSin,
+        },
+      },
       {
         name: 'line',
         method: 'collections.line',
@@ -241,11 +294,12 @@ function layoutCircle1() {
         center: { scale: 1, position: [0, -0.5] },
         right1: { scale: 1, position: [0, -0.5] },
         circleSmall: { scale: 0.8, position: [0.7, 0] },
+        circleQuart: { scale: 1, position: [-radius / 2 + 0.7, -1] },
       },
     },
   });
-  const [radLine, angle, sec, tan, sin, cos, tanLabel, sinLabel, cosLabel, radLineLabel, sec1, angle2, xSec, f1Label] = circle.getElements(['line', 'angle', 'sec', 'tan', 'sin', 'cos', 'tanLabel', 'sinLabel', 'cosLabel', 'lineLabel', 'sec1', 'angle2', 'xSec', 'f1Label']);
-  const [cot, cotLabel, csc, secLabel, secLabel1, cscLabel, rightAngle1, rightAngle2, compAngle, rightAngle3] = circle.getElements(['cot', 'cotLabel', 'csc', 'secLabel', 'secLabel1', 'cscLabel', 'rightAngle1', 'rightAngle2', 'compAngle', 'rightAngle3']);
+  const [radLine, angle, sec, tan, sin, cos, tanLabel, sinLabel, cosLabel, radLineLabel, sec1, angle2, xSec, f1Label, bowString, bowStringLabel] = circle.getElements(['line', 'angle', 'sec', 'tan', 'sin', 'cos', 'tanLabel', 'sinLabel', 'cosLabel', 'lineLabel', 'sec1', 'angle2', 'xSec', 'f1Label', 'bowString', 'bowStringLabel']);
+  const [cot, cotLabel, csc, secLabel, secLabel1, cscLabel, rightAngle1, rightAngle2, compAngle, compAngle2, rightAngle3, bow] = circle.getElements(['cot', 'cotLabel', 'csc', 'secLabel', 'secLabel1', 'cscLabel', 'rightAngle1', 'rightAngle2', 'compAngle', 'compAngle2', 'rightAngle3', 'bow']);
   const [tanAlt, tanLabelAlt] = circle.getElements(['tanAlt', 'tanLabelAlt']);
   const [secAlt, secLabelAlt] = circle.getElements(['secAlt', 'secLabelAlt']);
   const [cotAlt, cotLabelAlt] = circle.getElements(['cotAlt', 'cotLabelAlt']);
@@ -277,6 +331,10 @@ function layoutCircle1() {
       }
     }
 
+    if (bow.isShown) {
+      bow.setAngle({ angle: r * 2, startAngle: -r });
+    }
+
     // Theta Complement
     if (compAngle.isShown) {
       let curvePosition = 0.65;
@@ -289,6 +347,26 @@ function layoutCircle1() {
       } else {
         compAngle.label.curvePosition = curvePosition;
         compAngle._label.showAll();
+      }
+    }
+
+    // Theta Complement 2
+    if (compAngle2.isShown) {
+      let curvePosition = 0.65;
+      if (r > Math.PI / 2 - 0.8) {
+        curvePosition = (r - (Math.PI / 2 - 0.8)) + 0.65;
+      }
+      compAngle2.setAngle({ position: [x, y], startAngle: r + Math.PI, angle: Math.PI / 2 - r });
+      if (r > Math.PI / 2 - 0.3 || r < 0.25) {
+        compAngle2._label.hide();
+      } else {
+        compAngle2.label.curvePosition = curvePosition;
+        compAngle2._label.showAll();
+      }
+      if (r < 0.25) {
+        compAngle2._curve.hide();
+      } else {
+        compAngle2._curve.showAll();
       }
     }
 
@@ -445,19 +523,29 @@ function layoutCircle1() {
       }
     }
 
-    sin.custom.updatePoints({ p1: [x, 0], p2: [x, y] });
-    cos.custom.updatePoints({ p1: [0, 0], p2: [x + 0.013 / 2, 0] });
+    if (sin.isShown) {
+      sin.custom.updatePoints({ p1: [x, 0], p2: [x, y] });
+    }
+    if (cos.isShown) {
+      cos.custom.updatePoints({ p1: [0, 0], p2: [x + 0.013 / 2, 0] });
+    }
+    if (bowString.isShown) {
+      bowString.custom.updatePoints({ p1: [x, -y], p2: [x, y] });
+    }
     if (sinLabel.isShown) {
       sinLabel.setPosition([
         x < radius * 0.3 || (!tan.isShown && !tanAlt.isShown) ? x + 0.12 : x - 0.12,
-        Math.max(0.06, y / 2),
+        Math.max(0.06, y / 2) - 0.06,
       ]);
     }
     if (f1Label.isShown) {
       f1Label.setPosition([
         x < radius * 0.3 || (!tan.isShown && !tanAlt.isShown) ? x + 0.12 : x - 0.12,
-        Math.max(0.06, y / 2),
+        Math.max(0.06, y / 2) - 0.06,
       ]);
+    }
+    if (bowStringLabel.isShown) {
+      bowStringLabel.setPosition(x + 0.04, Math.max(0.06, y / 2) - 0.06);
     }
     cosLabel.setPosition([x / 2, -0.07]);
     radLineLabel.setPosition([x / 2.2 - 0.02, y / 2.2 + 0.02]);

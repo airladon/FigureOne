@@ -21,6 +21,7 @@ import Scale from './Elements/Scale';
 import Container from './Elements/Container';
 import BaseAnnotationFunction from './Elements/BaseAnnotationFunction';
 import EquationLine from './Symbols/Line';
+import Offset from './Elements/Offset';
 // eslint-disable-next-line import/no-cycle
 // import type {
 //   EQN_Annotation, EQN_EncompassGlyph, EQN_LeftRightGlyph, EQN_TopBottomGlyph,
@@ -74,6 +75,7 @@ export function getFigureElement(
  *  - `{ bar: `{@link EQN_Bar} `}`
  *  - `{ scale: `{@link EQN_Scale} `}`
  *  - `{ container: `{@link EQN_Container} `}`
+ *  - `{ offset: `{@link EQN_Offset} `}`
  *  - `{ matrix: `{@link EQN_Matrix} `}
  *  - `{ lines: `{@link EQN_Lines} `}`
  *  - `{ int: `{@link EQN_Integral} `}`
@@ -132,6 +134,7 @@ export type TypeEquationPhrase =
   | { bar: EQN_Bar }
   | { scale: EQN_Scale }
   | { container: EQN_Container }
+  | { offset: EQN_Offset }
   | { matrix: EQN_Matrix }
   | { matrix: EQN_Lines }
   | { int: EQN_Integral }
@@ -242,6 +245,36 @@ export type EQN_Container = {
   ?'bottom' | 'middle' | 'top' | 'baseline' | number,
   ?'width' | 'height' | 'contain',
   ?number,
+  ?boolean,
+];
+
+/**
+ * Equation offset options
+ *
+ * ![](./apiassets/eqn_offset.gif)
+ *
+ * Offset a phrase from the current layout.
+ *
+ * Options can be an object, or an array in the property order below
+ *
+ * @property {TypeEquationPhrase} content
+ * @property {TypeParsablePoint} [offset] (`[0, 0]`)
+ * @property {boolean} [fullContentBounds] - (`false`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
+ * @example
+ */
+export type EQN_Offset = {
+  content: TypeEquationPhrase,
+  offset?: TypeParsablePoint,
+  // inSize?: boolean,
+  fullContentBounds?: boolean,
+} | [
+  TypeEquationPhrase,
+  ?TypeParsablePoint,
+  ?boolean,
   ?boolean,
 ];
 
@@ -3337,7 +3370,8 @@ export class EquationFunctions {
     if (name === 'matrix') { return this.matrix(params); }   // $FlowFixMe
     if (name === 'lines') { return this.lines(params); }   // $FlowFixMe
     if (name === 'scale') { return this.scale(params); }   // $FlowFixMe
-    if (name === 'container') { return this.container(params); }
+    if (name === 'container') { return this.container(params); }   // $FlowFixMe
+    if (name === 'offset') { return this.offset(params); }
     return null;
   }
 
@@ -3394,6 +3428,45 @@ export class EquationFunctions {
     };
     const o = joinObjects(defaultOptions, optionsIn);
     return new Container(
+      [this.contentToElement(content)],
+      [],
+      o,
+    );
+  }
+
+  /**
+   * Equation container function
+   * @see {@link EQN_Offset} for description and examples
+   */
+  offset(
+    options: EQN_Offset,
+  ) {
+    let content;
+    let offset;
+    // let inSize;
+    let fullContentBounds;
+
+    const defaultOptions = {
+      offset: [0, 0],
+      // inSize: false,
+      fullContentBounds: false,
+    };
+    if (Array.isArray(options)) {
+      [
+        content, offset, fullContentBounds,
+      ] = options;
+    } else {
+      ({
+        content, offset, fullContentBounds,
+      } = options);
+    }
+    const optionsIn = {
+      offset: getPoint(offset),
+      // inSize,
+      fullContentBounds,
+    };
+    const o = joinObjects(defaultOptions, optionsIn);
+    return new Offset(
       [this.contentToElement(content)],
       [],
       o,

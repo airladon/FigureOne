@@ -22,16 +22,16 @@ function makeEquation() {
       alignment,
     };
   };
-  const lines1 = (contentLines, translation = {}, alignment = {}) => ({
-    content: {
+  const lines1 = (contentLines) => ({
+    // content: {
       lines: {
         content: contentLines,
         baselineSpace: 0.5,
         justify: 'element',
       },
-    },
-    translation,
-    alignment,
+    // },
+    // translation,
+    // alignment,
   });
   const cont = (content, width = 0.6, xAlign = 'center') => ({
     container: { content, width, xAlign },
@@ -192,21 +192,23 @@ function makeEquation() {
         hypOnAdjF: ['hypOnAdjEq', 'f4', 'bTheta4'],
         adjOnOppF: ['adjOnOppEq', 'f5', 'bTheta5'],
         hypOnOppF: ['hypOnOppEq', 'f6', 'bTheta6'],
+        sinTheta1: ['sin_1', ' ', 'theta1'],
+        sinTheta2: ['sin_2', ' ', 'theta2'],
+        sinTheta3: ['sin_3', ' ', 'theta3'],
+        sinTheta4: ['sin_4', ' ', 'theta4'],
+        cosTheta1: ['cos', ' ', 'theta7'],
+        cosTheta2: ['cos_2', ' ', 'theta8'],
+        cosTheta3: ['cos_3', ' ', 'theta9'],
+        cosTheta4: ['cos_4', ' ', 'theta10'],
+        oppOnHypSin: ['oppOnHypEq', 'sinTheta1'],
+        adjOnHypCos: ['adjOnHypEq', 'cosTheta1'],
         oppOnOne: { frac: ['opposite', 'v1', cont('_1_rad')] },
         // oppOnHyp: { frac: ['opposite', 'v1', cont('hypotenuse')] },
         fTheta: ['function', { container: ['', 0.02] }, { brac: ['lb', 'theta1', 'rb'] }],
         sinBracTheta: ['sin_1', { brac: ['lb', 'theta1', 'rb'] }],
         // sinTheta: ['sin', ' ', 'theta'],
-        sinTheta1: ['sin_1', ' ', 'theta1'],
-        sinTheta2: ['sin_2', ' ', 'theta2'],
-        sinTheta3: ['sin_3', ' ', 'theta3'],
-        sinTheta4: ['sin_4', ' ', 'theta4'],
         cos: ['co', 's'],
-        cosineTheta: ['cos', 'ine', ' ', 'theta5'],
-        cosTheta1: ['cos', ' ', 'theta5'],
-        cosTheta2: ['cos_2', ' ', 'theta6'],
-        cosTheta3: ['cos_3', ' ', 'theta7'],
-        cosTheta4: ['cos_4', ' ', 'theta8'],
+        cosineTheta: ['cos', 'ine', ' ', 'theta7'],
         tangentTheta: ['tan', 'gent', ' ', 'theta9'],
         tanTheta: ['tan', ' ', 'theta9'],
         cscTheta: ['csc', ' ', 'theta10'],
@@ -219,7 +221,7 @@ function makeEquation() {
         sinComp: ['sin_2', { brac: ['lb1', ['_90min', 'theta2'], 'rb1'] }],
         compComment: {
           topComment: {
-            content: ['_90min', 'theta2'],
+            content: ['_90min', 'theta8'],
             comment: 'complementary angle',
             inSize: false,
             commentSpace: 0.1,
@@ -228,7 +230,7 @@ function makeEquation() {
           },
         },
         sinCompComment: ['sin_2', { brac: ['lb1', 'compComment', 'rb1'] }],
-        complementarySineTheta: ['co', 'mplementary', ' ', 's', 'ine', ' ', 'theta5'],
+        complementarySineTheta: ['co', 'mplementary', ' ', 's', 'ine', ' ', 'theta7'],
       },
       formDefaults: {
         translation: {
@@ -249,18 +251,103 @@ function makeEquation() {
         sixSideRatiosFunction: lines1([
           ['oppOnHypF'], ['adjOnHypF'], ['oppOnAdjF'], ['hypOnAdjF'], ['adjOnOppF'], ['hypOnOppF'],
         ]),
-        sixSROppHyp1: lines1([
-          [frac('opposite', 'v1', cont('_1_rad', 0.6), 0.01, 0.03, 0.65), 'equals1', 'f1', 'bTheta1'],
-          ['adjOnHypF'], ['oppOnAdjF'], ['hypOnAdjF'], ['adjOnOppF'], ['hypOnOppF'],
+        /*
+        ..######..####.##....##
+        .##....##..##..###...##
+        .##........##..####..##
+        ..######...##..##.##.##
+        .......##..##..##..####
+        .##....##..##..##...###
+        ..######..####.##....##
+        */
+        sixRatiosSinHighlight: {
+          content: [
+            lines1([[''], ['adjOnHypF'], ['oppOnAdjF'], ['hypOnAdjF'], ['adjOnOppF'], ['hypOnOppF'],
+            ]),
+            { offset: ['oppOnHypF', [0.5, 0]] },
+          ],
+          translation: { hypotenuse: { style: 'linear' } },
+        },
+        sixSROppHyp1: [
+          lines1([[''], ['adjOnHypF'], ['oppOnAdjF'], ['hypOnAdjF'], ['adjOnOppF'], ['hypOnOppF'],
+          ]),
+          { offset: [[frac('opposite', 'v1', { bottomStrike: [cont('hypotenuse', 0.6), 'stk1', '_1_rad', false, 0, 0.7, 0] }, 0.01, 0.03, 0.65), 'equals1', 'f1', 'bTheta1'], [0.5, 0]] },
+        ],
+        sixSROppF: [
+          lines1([[''], ['adjOnHypF'], ['oppOnAdjF'], ['hypOnAdjF'], ['adjOnOppF'], ['hypOnOppF']]),
+          { offset: [[cont('opposite', 0.65, 'right'), 'equals1', 'f1', 'bTheta1'], [0.5, 0]] },
+        ],
+        sixSRSin: lines1([
+          ['oppOnHypSin'], ['adjOnHypF'], ['oppOnAdjF'], ['hypOnAdjF'], ['adjOnOppF'], ['hypOnOppF'],
         ]),
-        sixSROppHyp1Stk: lines1([
-          [frac('opposite', 'v1', cont({ strike: ['_1_rad', 'stk1'] }, 0.6), 0.01, 0.03, 0.65), 'equals1', 'f1', 'bTheta1'],
-          ['adjOnHypF'], ['oppOnAdjF'], ['hypOnAdjF'], ['adjOnOppF'], ['hypOnOppF'],
-        ]),
-        sixSROppF: lines1([
-          [cont('opposite', 0.65), 'equals1', 'f1', 'bTheta1'],
-          ['adjOnHypF'], ['oppOnAdjF'], ['hypOnAdjF'], ['adjOnOppF'], ['hypOnOppF'],
-        ]),
+        /*
+        ..######...#######...######.
+        .##....##.##.....##.##....##
+        .##.......##.....##.##......
+        .##.......##.....##..######.
+        .##.......##.....##.......##
+        .##....##.##.....##.##....##
+        ..######...#######...######.
+        */
+        sixSRCosHighlight: {
+          content: [
+            lines1([['oppOnHypSin'], [''], ['oppOnAdjF'], ['hypOnAdjF'], ['adjOnOppF'], ['hypOnOppF'],
+            ]),
+            { scale: [{ offset: ['adjOnHypF', [1.5, -0.3]] }, 1.1] },
+          ],
+          translation: { hypotenuse_1: { style: 'linear' } },
+        },
+        sixSRCosComp: {
+          content: [
+            lines1([['oppOnHypSin'], [''], ['oppOnAdjF'], ['hypOnAdjF'], ['adjOnOppF'], ['hypOnOppF'],
+            ]),
+            { scale: [{ offset: [['adjOnHypEq', 'sinCompComment'], [1.5, -0.3]] }, 1.1] },
+          ],
+        },
+        sixSRCosComplementarySine: {
+          content: [
+            lines1([['oppOnHypSin'], [''], ['oppOnAdjF'], ['hypOnAdjF'], ['adjOnOppF'], ['hypOnOppF'],
+            ]),
+            { scale: [{ offset: [['adjOnHypEq', 'sinCompComment'], [1.5, -0.3]] }, 1.1] },
+            { scale: [{ offset: [['equals7', 'complementarySineTheta'], [2.15, -0.6]] }, 1.1] },
+          ],
+        },
+        sixSRCosCosine: {
+          content: [
+            lines1([['oppOnHypSin'], [''], ['oppOnAdjF'], ['hypOnAdjF'], ['adjOnOppF'], ['hypOnOppF'],
+            ]),
+            { scale: [{ offset: [['adjOnHypEq', 'sinCompComment'], [1.5, -0.3]] }, 1.1] },
+            { scale: [{ offset: [['equals7', 'cosineTheta'], [2.15, -0.6]] }, 1.1] },
+          ],
+        },
+        sixSRCosCos: {
+          content: [
+            lines1([['oppOnHypSin'], [''], ['oppOnAdjF'], ['hypOnAdjF'], ['adjOnOppF'], ['hypOnOppF'],
+            ]),
+            { scale: [{ offset: [['adjOnHypEq', 'sinCompComment'], [1.5, -0.3]] }, 1.1] },
+            { scale: [{ offset: [['equals7', 'cosTheta1'], [2.15, -0.6]] }, 1.1] },
+          ],
+        },
+        sixSRCosThetaHighlight: {
+          content: [
+            lines1([['oppOnHypSin'], [''], ['oppOnAdjF'], ['hypOnAdjF'], ['adjOnOppF'], ['hypOnOppF'],
+            ]),
+            { scale: [{ offset: ['adjOnHypCos', [1.5, -0.3]] }, 1.1] },
+          ],
+        },
+        sixSRCos: {
+          content: lines1([['oppOnHypSin'], ['adjOnHypCos'], ['oppOnAdjF'], ['hypOnAdjF'], ['adjOnOppF'], ['hypOnOppF']]),
+          translation: { hypotenuse_1: { style: 'linear' } },
+        },
+        /*
+        .########....###....##....##
+        ....##......##.##...###...##
+        ....##.....##...##..####..##
+        ....##....##.....##.##.##.##
+        ....##....#########.##..####
+        ....##....##.....##.##...###
+        ....##....##.....##.##....##
+        */
         oneRatio: ['oppOnHyp', 'equals1', 'constant_1'],
         twoRatios: lines([
           [['oppOnHyp', 'equals1', 'sinTheta1'], 'equals1'],
@@ -607,7 +694,7 @@ function makeEquation() {
     },
   });
 
-  const addFn = (name, elements, centerOn, xAlign, yAlign) => {
+  const addFn = (name, elements, centerOn, xAlign, yAlign = 'middle') => {
     figure.fnMap.global.add(name, () => {
       figure.getElement('eqn').pulse({
         elements, centerOn, xAlign, yAlign, scale: 2.5
@@ -618,4 +705,11 @@ function makeEquation() {
   addFn('eqnPulseCot', ['cot', 'theta12'], 'cot', 'left', 'middle');
   addFn('eqnPulseSec', ['sec', 'theta11'], 'sec', 'left', 'middle');
   addFn('eqnPulseCsc', ['csc', 'theta10'], 'csc', 'left', 'middle');
+  addFn('eqnPulseF1', ['f_1', '_1', 'lb1', 'theta1', 'rb1'], 'f_1', 'left');
+  addFn('eqnPulseF2', ['f_2', '_2', 'lb2', 'theta2', 'rb2'], 'f_2', 'left');
+  addFn('eqnPulseF3', ['f_3', '_3', 'lb3', 'theta3', 'rb3'], 'f_3', 'left');
+  addFn('eqnPulseF4', ['f_4', '_4', 'lb4', 'theta4', 'rb4'], 'f_4', 'left');
+  addFn('eqnPulseF5', ['f_5', '_5', 'lb5', 'theta5', 'rb5'], 'f_5', 'left');
+  addFn('eqnPulseF6', ['f_6', '_6', 'lb6', 'theta6', 'rb6'], 'f_6', 'left');
+  addFn('eqnPulseSin', ['sin_1', 'theta1'], 'sin_1', 'left', 'middle');
 }
