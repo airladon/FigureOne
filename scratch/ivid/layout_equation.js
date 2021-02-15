@@ -119,6 +119,8 @@ function makeEquation() {
         sinText: { color: color1 },
         tan_1: { font: { style: 'normal', color: colTan } },
         sec_1: { font: { style: 'normal', color: colSec } },
+        cot_1: { font: { style: 'normal', color: colCot } },
+        csc_1: { font: { style: 'normal', color: colCsc } },
         tan: { font: { style: 'normal' } },
         gent: { font: { style: 'normal' } },
         sin: { font: { style: 'normal' } },
@@ -225,7 +227,13 @@ function makeEquation() {
         hypOnAdjSecEquals: ['hypOnAdjF', 'equals8', frac('_1_1', 'v8', 'cosTheta3', 0.03, 0.03, 0.34), 'equals11', 'sec_1'],
         hypOnAdjSec: ['hypOnAdjEq', cont(['sec', ' ', 'theta3'], 0.3), 'equals8', frac('_1_1', 'v8', 'cosTheta3', 0.03, 0.03, 0.34)],
         adjOnOppCosOnSin: ['adjOnOppF', 'equals9', frac('cosTheta4', 'v9', 'sinTheta3', 0.05, 0.05, 0.34)],
+        adjOnOppCotOnOne: ['adjOnOppF', 'equals9', frac('cosTheta4', 'v9', 'sinTheta3', 0.05, 0.05, 0.34), 'equals11', frac('cot_1', 'v11', '_1_rad', 0.03, 0.03, 0.2)],
+        adjOnOppCotEquals: ['adjOnOppF', 'equals9', frac('cosTheta4', 'v9', 'sinTheta3', 0.05, 0.05, 0.34), 'equals11', 'cot_1'],
+        adjOnOppCot: ['adjOnOppEq', cont(['cot', ' ', 'theta4'], 0.3), 'equals9', frac('cosTheta4', 'v9', 'sinTheta3', 0.05, 0.05, 0.34)],
         hypOnOppOneOnSin: ['hypOnOppF', 'equals10', frac('_1_2', 'v10', 'sinTheta4', 0.05, 0.05, 0.34)],
+        hypOnOppCscOnOne: ['hypOnOppF', 'equals10', frac('_1_2', 'v10', 'sinTheta4', 0.05, 0.05, 0.34), 'equals11', frac('csc_1', 'v11', '_1_rad', 0.03, 0.03, 0.2)],
+        hypOnOppCscEquals: ['hypOnOppF', 'equals10', frac('_1_2', 'v10', 'sinTheta4', 0.05, 0.05, 0.34), 'equals11', 'csc_1'],
+        hypOnOppCsc: ['hypOnOppEq', cont(['csc', ' ', 'theta5'], 0.3), 'equals10', frac('_1_2', 'v10', 'sinTheta4', 0.05, 0.05, 0.34)],
         oppHypSin: [cont('opposite', 0.65, 'right'), 'equals1', 'hypotenuse', 'times1', 'sinTheta1'],
         adjHypCos: [cont('adjacent', 0.65, 'right'), 'equals2', 'hypotenuse_1', 'times2', 'cosTheta1'],
         oppOnOne: { frac: ['opposite', 'v1', cont('_1_rad')] },
@@ -411,10 +419,35 @@ function makeEquation() {
         */
         sixSRRSecOnOne: lines1([['oppOnHypSin'], ['adjOnHypCos'], ['oppOnAdjTan'], ['hypOnAdjSecOnOne'], ['adjOnOppCosOnSin'], ['hypOnOppOneOnSin']]),
         sixSRRSecEquals: lines1([['oppOnHypSin'], ['adjOnHypCos'], ['oppOnAdjTan'], ['hypOnAdjSecEquals'], ['adjOnOppCosOnSin'], ['hypOnOppOneOnSin']]),
-        sixSRRSec: {
-          content: lines1([['oppOnHypSin'], ['adjOnHypCos'], ['oppOnAdjTan'], ['hypOnAdjSec'], ['adjOnOppCosOnSin'], ['hypOnOppOneOnSin']]),
-          // translation: { sec_1: { style: 'curve', magnitude: 0.5, direction: 'down' } },
-        },
+        sixSRRSec: lines1([['oppOnHypSin'], ['adjOnHypCos'], ['oppOnAdjTan'], ['hypOnAdjSec'], ['adjOnOppCosOnSin'], ['hypOnOppOneOnSin']]),
+
+        /*
+        ..######...#######..########
+        .##....##.##.....##....##...
+        .##.......##.....##....##...
+        .##.......##.....##....##...
+        .##.......##.....##....##...
+        .##....##.##.....##....##...
+        ..######...#######.....##...
+        */
+        sixSRRCotOnOne: lines1([['oppOnHypSin'], ['adjOnHypCos'], ['oppOnAdjTan'], ['hypOnAdjSec'], ['adjOnOppCotOnOne'], ['hypOnOppOneOnSin']]),
+        sixSRRCotEquals: lines1([['oppOnHypSin'], ['adjOnHypCos'], ['oppOnAdjTan'], ['hypOnAdjSec'], ['adjOnOppCotEquals'], ['hypOnOppOneOnSin']]),
+        sixSRRCot: lines1([['oppOnHypSin'], ['adjOnHypCos'], ['oppOnAdjTan'], ['hypOnAdjSec'], ['adjOnOppCot'], ['hypOnOppOneOnSin']]),
+
+        /*
+        ..######...######...######.
+        .##....##.##....##.##....##
+        .##.......##.......##......
+        .##........######..##......
+        .##.............##.##......
+        .##....##.##....##.##....##
+        ..######...######...######.
+        */
+        sixSRRCscOnOne: lines1([['oppOnHypSin'], ['adjOnHypCos'], ['oppOnAdjTan'], ['hypOnAdjSec'], ['adjOnOppCot'], ['hypOnOppCscOnOne']]),
+        sixSRRCscEquals: lines1([['oppOnHypSin'], ['adjOnHypCos'], ['oppOnAdjTan'], ['hypOnAdjSec'], ['adjOnOppCot'], ['hypOnOppCscEquals']]),
+        sixSRRCsc: lines1([['oppOnHypSin'], ['adjOnHypCos'], ['oppOnAdjTan'], ['hypOnAdjSec'], ['adjOnOppCot'], ['hypOnOppCsc']]),
+
+
 
 
         oneRatio: ['oppOnHyp', 'equals1', 'constant_1'],

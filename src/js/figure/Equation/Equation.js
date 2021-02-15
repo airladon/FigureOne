@@ -1804,11 +1804,27 @@ export class Equation extends FigureElementCollection {
    * @param {TypeEquationPhrase} phrase
    * @return {Array<FigureElement>}
    */
-  getPhraseElements(phrase: string) {
-    if (this.eqn.functions.phraseElements[phrase] == null) {
-      return [];
+  getPhraseElements(phrase: string | Array<string>) {
+    if (typeof phrase === 'string') {
+      if (this.eqn.functions.phraseElements[phrase] == null) {
+        return [];
+      }
+      return this.eqn.functions.phraseElements[phrase];
     }
-    return this.eqn.functions.phraseElements[phrase];
+    const elementNames = {};
+    const elements = [];
+    phrase.forEach((p) => {
+      if (this.eqn.functions.phraseElements[p] != null) {
+        const elems = this.eqn.functions.phraseElements[p];
+        elems.forEach((e) => {
+          if (elementNames[e.name] == null) {
+            elementNames[e.name] = true;
+            elements.push(e);
+          }
+        });
+      }
+    });
+    return elements;
     // return content.getAllElements();
   }
 
