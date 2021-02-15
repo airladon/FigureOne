@@ -51,7 +51,7 @@ function makeEquation() {
     name: 'eqn',
     method: 'equation',
     options: {
-      dimColor: [0.3, 0.3, 0.3, 1],
+      dimColor: [0.7, 0.7, 0.7, 1],
       elements: {
         v1: { symbol: 'vinculum' },
         v2: { symbol: 'vinculum' },
@@ -63,6 +63,7 @@ function makeEquation() {
         v8: { symbol: 'vinculum' },
         v9: { symbol: 'vinculum' },
         v10: { symbol: 'vinculum' },
+        v11: { symbol: 'vinculum' },
         equals1: '  =  ',
         equals2: '  =  ',
         equals3: '  =  ',
@@ -73,6 +74,7 @@ function makeEquation() {
         equals8: '  =  ',
         equals9: '  =  ',
         equals10: '  =  ',
+        equals11: '  =  ',
         oppValue: { text: '1.000' },
         hypValue: { text: '1' },
         ratioValue: { text: '0.4540' },
@@ -108,12 +110,15 @@ function makeEquation() {
         theta12: { text: '\u03b8', color: colTheta },
         theta13: { text: '\u03b8', color: colTheta },
         theta14: { text: '\u03b8', color: colTheta },
+        theta15: { text: '\u03b8', color: colTheta },
         dotDotDot: '...',
         bowstring: { color: color1 },
         halfBowstring: { text: 'half-bowstring', color: color1 },
         sinus: { color: color1 },
         sine: { color: color1 },
         sinText: { color: color1 },
+        tan_1: { font: { style: 'normal', color: colTan } },
+        sec_1: { font: { style: 'normal', color: colSec } },
         tan: { font: { style: 'normal' } },
         gent: { font: { style: 'normal' } },
         sin: { font: { style: 'normal' } },
@@ -190,12 +195,12 @@ function makeEquation() {
         hypOnAdjEq: ['hypOnAdj', 'equals4'],
         adjOnOppEq: ['adjOnOpp', 'equals5'],
         hypOnOppEq: ['hypOnOpp', 'equals6'],
-        oppOnHypF: ['oppOnHypEq', 'f1', 'bTheta1'],
-        adjOnHypF: ['adjOnHypEq', 'f2', 'bTheta2'],
-        oppOnAdjF: ['oppOnAdjEq', 'f3', 'bTheta3'],
-        hypOnAdjF: ['hypOnAdjEq', 'f4', 'bTheta4'],
-        adjOnOppF: ['adjOnOppEq', 'f5', 'bTheta5'],
-        hypOnOppF: ['hypOnOppEq', 'f6', 'bTheta6'],
+        oppOnHypF: ['oppOnHypEq', cont(['f1', 'bTheta1'], 0.3)],
+        adjOnHypF: ['adjOnHypEq', cont(['f2', 'bTheta2'], 0.3)],
+        oppOnAdjF: ['oppOnAdjEq', cont(['f3', 'bTheta3'], 0.3)],
+        hypOnAdjF: ['hypOnAdjEq', cont(['f4', 'bTheta4'], 0.3)],
+        adjOnOppF: ['adjOnOppEq', cont(['f5', 'bTheta5'], 0.3)],
+        hypOnOppF: ['hypOnOppEq', cont(['f6', 'bTheta6'], 0.3)],
         sinTheta1: ['sin_1', ' ', 'theta11'],
         sinTheta2: ['sin_2', ' ', 'theta12'],
         sinTheta3: ['sin_3', ' ', 'theta13'],
@@ -209,9 +214,16 @@ function makeEquation() {
         oppOnAdjSinOnCosHyp: ['oppOnAdjF', 'equals7', frac(['hypotenuse_5', 'times3', 'sinTheta2'], 'v7', ['hypotenuse_6', 'times4', 'cosTheta2'], 0.01, 0.03, 1.05)],
         oppOnAdjSinOnCosHypStk: ['oppOnAdjF', 'equals7', frac([{ strike: ['hypotenuse_5', 'stk1'] }, 'times3', 'sinTheta2'], 'v7', [{ strike: ['hypotenuse_6', 'stk2'] }, 'times4', 'cosTheta2'], 0.01, 0.03, 1.05)],
         oppOnAdjSinOnCos: ['oppOnAdjF', 'equals7', frac('sinTheta2', 'v7', 'cosTheta2', 0.05, 0.03, 0.34)],
+        oppOnAdjTanOnOne: ['oppOnAdjF', 'equals7', frac('sinTheta2', 'v7', 'cosTheta2', 0.05, 0.03, 0.34), 'equals11', frac('tan_1', 'v11', '_1_rad', 0.03, 0.03, 0.2)],
+        oppOnAdjTanOnOneStk: ['oppOnAdjF', 'equals7', frac('sinTheta2', 'v7', 'cosTheta2', 0.05, 0.03, 0.34), 'equals11', frac('tan_1', 'v11', { strike: ['_1_rad', 'stk1'] }, 0.03, 0.03, 0.2)],
+        oppOnAdjTanEquals: ['oppOnAdjF', 'equals7', frac('sinTheta2', 'v7', 'cosTheta2', 0.05, 0.03, 0.34), 'equals11', 'tan_1'],
+        oppOnAdjTan: ['oppOnAdjEq', cont(['tan', ' ', 'theta15'], 0.3), 'equals7', frac('sinTheta2', 'v7', 'cosTheta2', 0.05, 0.03, 0.34)],
         hypOnAdjHypOnCos: ['hypOnAdjF', 'equals8', frac('hypotenuse_5', 'v8', ['hypotenuse_6', 'times4', 'cosTheta3'], 0.01, 0.03, 1.05)],
         hypOnAdjOneOnCosStk: ['hypOnAdjF', 'equals8', frac({ sup: [{ strike: ['hypotenuse_5', 'stk1'] }, '_1_1', 0.9, [-0.1, 0.07], false] }, 'v8', [{ strike: ['hypotenuse_6', 'stk2'] }, 'times4', 'cosTheta3'], 0.01, 0.03, 1.05)],
         hypOnAdjOneOnCos: ['hypOnAdjF', 'equals8', frac('_1_1', 'v8', 'cosTheta3', 0.03, 0.03, 0.34)],
+        hypOnAdjSecOnOne: ['hypOnAdjF', 'equals8', frac('_1_1', 'v8', 'cosTheta3', 0.03, 0.03, 0.34), 'equals11', frac('sec_1', 'v11', '_1_rad', 0.03, 0.03, 0.2)],
+        hypOnAdjSecEquals: ['hypOnAdjF', 'equals8', frac('_1_1', 'v8', 'cosTheta3', 0.03, 0.03, 0.34), 'equals11', 'sec_1'],
+        hypOnAdjSec: ['hypOnAdjEq', cont(['sec', ' ', 'theta3'], 0.3), 'equals8', frac('_1_1', 'v8', 'cosTheta3', 0.03, 0.03, 0.34)],
         adjOnOppCosOnSin: ['adjOnOppF', 'equals9', frac('cosTheta4', 'v9', 'sinTheta3', 0.05, 0.05, 0.34)],
         hypOnOppOneOnSin: ['hypOnOppF', 'equals10', frac('_1_2', 'v10', 'sinTheta4', 0.05, 0.05, 0.34)],
         oppHypSin: [cont('opposite', 0.65, 'right'), 'equals1', 'hypotenuse', 'times1', 'sinTheta1'],
@@ -381,6 +393,30 @@ function makeEquation() {
         ....##....##.....##.##...###
         ....##....##.....##.##....##
         */
+        sixSRRTanOnOne: lines1([['oppOnHypSin'], ['adjOnHypCos'], ['oppOnAdjTanOnOne'], ['hypOnAdjOneOnCos'], ['adjOnOppCosOnSin'], ['hypOnOppOneOnSin']]),
+        sixSRRTanOnOneStk: lines1([['oppOnHypSin'], ['adjOnHypCos'], ['oppOnAdjTanOnOneStk'], ['hypOnAdjOneOnCos'], ['adjOnOppCosOnSin'], ['hypOnOppOneOnSin']]),
+        sixSRRTanEquals: lines1([['oppOnHypSin'], ['adjOnHypCos'], ['oppOnAdjTanEquals'], ['hypOnAdjOneOnCos'], ['adjOnOppCosOnSin'], ['hypOnOppOneOnSin']]),
+        sixSRRTan: {
+          content: lines1([['oppOnHypSin'], ['adjOnHypCos'], ['oppOnAdjTan'], ['hypOnAdjOneOnCos'], ['adjOnOppCosOnSin'], ['hypOnOppOneOnSin']]),
+          // translation: { tan_1: { style: 'curve', magnitude: 0.5, direction: 'down' } },
+        },
+        /*
+        ..######..########..######.
+        .##....##.##.......##....##
+        .##.......##.......##......
+        ..######..######...##......
+        .......##.##.......##......
+        .##....##.##.......##....##
+        ..######..########..######.
+        */
+        sixSRRSecOnOne: lines1([['oppOnHypSin'], ['adjOnHypCos'], ['oppOnAdjTan'], ['hypOnAdjSecOnOne'], ['adjOnOppCosOnSin'], ['hypOnOppOneOnSin']]),
+        sixSRRSecEquals: lines1([['oppOnHypSin'], ['adjOnHypCos'], ['oppOnAdjTan'], ['hypOnAdjSecEquals'], ['adjOnOppCosOnSin'], ['hypOnOppOneOnSin']]),
+        sixSRRSec: {
+          content: lines1([['oppOnHypSin'], ['adjOnHypCos'], ['oppOnAdjTan'], ['hypOnAdjSec'], ['adjOnOppCosOnSin'], ['hypOnOppOneOnSin']]),
+          // translation: { sec_1: { style: 'curve', magnitude: 0.5, direction: 'down' } },
+        },
+
+
         oneRatio: ['oppOnHyp', 'equals1', 'constant_1'],
         twoRatios: lines([
           [['oppOnHyp', 'equals1', 'sinTheta1'], 'equals1'],

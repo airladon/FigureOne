@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-/* globals figure, colTheta, colCot, colTan, colSin, colCos, colSec, colCsc, colRad, colGrey */
+/* globals figure, colTheta, colCot, colTan, colSin, colCos, colSec, colCsc, colRad, colGrey, colDim */
 
 function layoutCircle1() {
   const radius = 1.5;
@@ -22,6 +22,9 @@ function layoutCircle1() {
       xAlign: 'center',
       yAlign,
       position,
+    },
+    mods: {
+      dimColor: colDim,
     },
   });
 
@@ -352,7 +355,7 @@ function layoutCircle1() {
         center: { scale: 1, position: [0, -0.5] },
         right1: { scale: 1, position: [0, -0.5] },
         circleSmall: { scale: 0.8, position: [0.7, 0] },
-        circleQuart: { scale: 1, position: [-radius / 2 + 0.7, -1] },
+        circleQuart: { scale: 1, position: [-radius / 2 + 0.8, -1] },
       },
     },
   });
@@ -516,6 +519,7 @@ function layoutCircle1() {
         if (x > radius - 0.15) {
           rightAngle4.setOpacity(0);
         } else {
+          rightAngle4.setOpacity(1);
           rightAngle4.setAngle({
             position: [radius, 0], startAngle: Math.PI / 2, angle: Math.PI / 2,
           });

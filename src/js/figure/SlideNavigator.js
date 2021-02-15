@@ -625,6 +625,7 @@ export default class SlideNavigator {
       const inElements = this.collection.getElements(slide.dissolve.in);
       const outElements = this.collection.getElements(slide.dissolve.out);
       let dissolveInSteps;
+      inElements.forEach(element => element.hide());
       if (slide.dissolve.pulse) {
         dissolveInSteps = inElements.map(e => e.animations.builder().dissolveIn(0.4).pulse(slide.dissolve.pulse));
       } else {

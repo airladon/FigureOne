@@ -12,6 +12,7 @@ const color3 = [0, 0.6, 0, 1];
 const color4 = [0.6, 0, 0.6, 1];
 const colGrey = [0.6, 0.6, 0.6, 1];
 const colText = [0.3, 0.3, 0.3, 1];
+const colDim = [0.7, 0.7, 0.7, 1];
 
 // const colCos = [0, 0, 0.9, 1];
 // const colSec = [0, 0.7, 1, 1];
