@@ -142,6 +142,18 @@ function layoutCircle1() {
         },
       },
       {
+        name: 'rightAngle4',
+        method: 'collections.angle',
+        options: {
+          curve: {
+            autoRightAngle: true,
+            radius: 0.15,
+            width: 0.006,
+          },
+          color: colGrey,
+        },
+      },
+      {
         name: 'angle',
         method: 'collections.angle',
         options: {
@@ -234,6 +246,18 @@ function layoutCircle1() {
       lineLabel('tanLabelAlt', 'tan', colTan),
       line('cotAlt', colCot),
       lineLabel('cotLabelAlt', 'cot', colCot),
+      lineLabel('adjacentOneLabel', '1', colRad, [radius / 2, -0.3]),
+      {
+        name: 'adjacentOne',
+        method: 'primitives.line',
+        options: {
+          p1: [0, -0.2],
+          p2: [radius, -0.2],
+          width: 0.013,
+          color: colRad,
+          arrow: 'bar',
+        },
+      },
       {
         name: 'bowStringLabel',
         method: 'equation',
@@ -253,6 +277,40 @@ function layoutCircle1() {
           },
           formDefaults: { alignment: { yAlign: 'baseline' } },
           color: colSin,
+        },
+      },
+      {
+        name: 'tanAltEqn',
+        method: 'equation',
+        options: {
+          elements: {
+            tan: { style: 'normal' },
+            comma: ', ',
+          },
+          forms: {
+            tangent: 'tangent',
+            tangentTan: ['tangent', 'comma', 'tan'],
+            tan: ['tan'],
+          },
+          formDefaults: { alignment: { yAlign: 'baseline' } },
+          color: colTan,
+        },
+      },
+      {
+        name: 'secAltEqn',
+        method: 'equation',
+        options: {
+          elements: {
+            sec: { style: 'normal' },
+            comma: ', ',
+          },
+          forms: {
+            secant: 'secant',
+            secantSec: ['secant', 'comma', 'sec'],
+            sec: ['sec'],
+          },
+          formDefaults: { alignment: { yAlign: 'baseline', xAlign: 'right' } },
+          color: colSec,
         },
       },
       {
@@ -299,7 +357,7 @@ function layoutCircle1() {
     },
   });
   const [radLine, angle, sec, tan, sin, cos, tanLabel, sinLabel, cosLabel, radLineLabel, sec1, angle2, xSec, f1Label, bowString, bowStringLabel] = circle.getElements(['line', 'angle', 'sec', 'tan', 'sin', 'cos', 'tanLabel', 'sinLabel', 'cosLabel', 'lineLabel', 'sec1', 'angle2', 'xSec', 'f1Label', 'bowString', 'bowStringLabel']);
-  const [cot, cotLabel, csc, secLabel, secLabel1, cscLabel, rightAngle1, rightAngle2, compAngle, compAngle2, rightAngle3, bow] = circle.getElements(['cot', 'cotLabel', 'csc', 'secLabel', 'secLabel1', 'cscLabel', 'rightAngle1', 'rightAngle2', 'compAngle', 'compAngle2', 'rightAngle3', 'bow']);
+  const [cot, cotLabel, csc, secLabel, secLabel1, cscLabel, rightAngle1, rightAngle2, compAngle, compAngle2, rightAngle3, bow, rightAngle4, tanAltEqn, secAltEqn] = circle.getElements(['cot', 'cotLabel', 'csc', 'secLabel', 'secLabel1', 'cscLabel', 'rightAngle1', 'rightAngle2', 'compAngle', 'compAngle2', 'rightAngle3', 'bow', 'rightAngle4', 'tanAltEqn', 'secAltEqn']);
   const [tanAlt, tanLabelAlt] = circle.getElements(['tanAlt', 'tanLabelAlt']);
   const [secAlt, secLabelAlt] = circle.getElements(['secAlt', 'secLabelAlt']);
   const [cotAlt, cotLabelAlt] = circle.getElements(['cotAlt', 'cotLabelAlt']);
@@ -444,12 +502,31 @@ function layoutCircle1() {
       const secLength = y > 0.001 ? tanLine.p2.y / Math.sin(r) : radius;
       const secLine = new Fig.Line([0, 0], secLength, r);
       secAlt.custom.updatePoints({
-        p1: [0.01, 0],
+        p1: [0, 0],
         length: secLength,
         angle: r,
         arrow: tanLine.p2.y > topBounds.p1.y - 0.01 ? { end: { head: 'barb', scale: 0.8 } } : null,
       });
-      secLabelAlt.setPosition(secLine.offset('negative', 0.12).pointAtPercent(0.7));
+      if (cscLabelAlt.isShown) {
+        secLabelAlt.setPosition(secLine.offset('negative', 0.12).pointAtPercent(0.7));
+      } else {
+        secLabelAlt.setPosition(secLine.offset('positive', 0.12).pointAtPercent(0.5));
+      }
+      if (rightAngle4.isShown) {
+        if (x > radius - 0.15) {
+          rightAngle4.setOpacity(0);
+        } else {
+          rightAngle4.setAngle({
+            position: [radius, 0], startAngle: Math.PI / 2, angle: Math.PI / 2,
+          });
+        }
+      }
+      if (tanAltEqn.isShown) {
+        tanAltEqn.setPosition(radius + 0.036, tanLine.p2.y / 2 - 0.046);
+      }
+      if (secAltEqn.isShown) {
+        secAltEqn.setPosition(secLine.offset('positive', 0.05).pointAtPercent(0.5).add(0.043, 0.023));
+      }
     }
     if (cotAlt.isShown) {
       const cotLine = new Fig.Line(
@@ -462,12 +539,6 @@ function layoutCircle1() {
       });
       cotLabelAlt.setPosition(cotLine.p2.x / 2, radius + 0.08);
       if (cscAlt.isShown) {
-        // const cscLine = new Fig.Line([0, 0], cotLine.p2.x / Math.cos(r), r).offset('positive', 0.2);//radius * Math.sin(Math.PI / 2 - r) + 0.1);
-        // cscAlt.custom.updatePoints({
-        //   p1: cscLine.p1,
-        //   p2: cscLine.p2,
-        //   arrow: cotLine.p2.x > rightBounds.p1.x - 0.01 ? { end: { head: 'barb', scale: 0.8 } } : null,
-        // });
         const cscLength = cotLine.p2.x / Math.cos(r);
         const cscLine = new Fig.Line([0, 0], cscLength, r);
         cscAlt.custom.updatePoints({
@@ -534,7 +605,7 @@ function layoutCircle1() {
     }
     if (sinLabel.isShown) {
       sinLabel.setPosition([
-        x < radius * 0.3 || (!tan.isShown && !tanAlt.isShown) ? x + 0.12 : x - 0.12,
+        x < radius * 0.8 || (!tan.isShown && !tanAlt.isShown) ? x + 0.12 : x - 0.12,
         Math.max(0.06, y / 2) - 0.06,
       ]);
     }

@@ -3,7 +3,7 @@
    colCsc */
 
 function layout() {
-  const centerText = (name, text, modifiers = {}, position = [0, 0]) => ({
+  const centerText = (name, text, modifiers = {}, position = [0, 0], size = 0.2) => ({
     name,
     method: 'textLines',
     options: {
@@ -13,7 +13,7 @@ function layout() {
       xAlign: 'center',
       justify: 'left',
       yAlign: 'middle',
-      font: { size: 0.2, color: [0.3, 0.3, 0.3, 1] },
+      font: { size, color: [0.3, 0.3, 0.3, 1] },
       fixColor: true,
     },
     mods: {
@@ -210,7 +210,7 @@ function layout() {
     centerText('tangent', '|tangent|: from Latin |tangere| - "to touch"', {
       tangent: { font: { style: 'italic', family: 'Times New Roman', color: colTan } },
       tangere: { font: { style: 'italic', family: 'Times New Roman' } },
-    }, [0.8, -1.25]),
+    }, [1, 1], 0.15),
     centerText('compTangent', '|co|mplementary |t|angent', {
       co: { font: { color: colCot } },
       t: { font: { color: colCot } },
@@ -225,7 +225,7 @@ function layout() {
     centerText('secant', '|secant|: from Latin |secare| - "to cut"', {
       secant: { font: { style: 'italic', family: 'Times New Roman', color: colSec } },
       secare: { font: { style: 'italic', family: 'Times New Roman' } },
-    }, [0.8, -1.25]),
+    }, [1, 1], 0.15),
     leftText('allTriangles', [-2, 0.95], 'All right triangles with |theta|:', {
       theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic', color: colTheta } },
     }),
@@ -288,7 +288,7 @@ function makeSlides() {
     options: {
       nextButton: { position: [3.8, 0], width: 0.2, height: 0.2 },
       prevButton: { position: [-3.8, 0], width: 0.2, height: 0.2 },
-      equation: ['eqn', 'bow.eqn', 'eqn1', 'circle1.bowStringLabel'],
+      equation: ['eqn', 'bow.eqn', 'eqn1', 'circle1.bowStringLabel', 'circle1.tanAltEqn', 'circle1.secAltEqn'],
       // equationDefaults: { duration: 4 },
     },
   });
@@ -911,18 +911,22 @@ function makeSlides() {
     showCommon: { circle1: ['x', 'y', 'arc', 'line', 'lineLabel', 'x', 'angle', 'sin', 'cos', 'rightAngle1', 'sinLabel'] },
     form: 'sixSRCosHighlight',
   });
+
   slides.push({
     scenarioCommon: ['default', 'eqnTri', 'circleQuart'],
     showCommon: { circle1: ['x', 'y', 'arc', 'line', 'lineLabel', 'x', 'angle', 'sin', 'cos', 'rightAngle1', 'sinLabel', 'compAngle2'] },
     form: 'sixSRCosHighlight',
     dissolve: { in: 'circle1.compAngle2', pulse: { scale: 1.4 } },
   });
+
   slides.push({ form: 'sixSRCosComp' });
   slides.push({ form: 'sixSRCosComplementarySine' });
   slides.push({ form: 'sixSRCosCosine' });
   slides.push({ form: 'sixSRCosCos' });
   slides.push({ form: 'sixSRCosThetaHighlight' });
+
   slides.push({ form: 'sixSRCosThetaHighlight', dissolve: { in: 'circle1.cosLabel', pulse: { scale: 2, yAlign: 'top' } } });
+
   slides.push({
     showCommon: { circle1: ['x', 'y', 'arc', 'line', 'lineLabel', 'x', 'angle', 'sin', 'cos', 'rightAngle1', 'sinLabel', 'cosLabel'] },
     form: 'sixSRCos',
@@ -930,14 +934,102 @@ function makeSlides() {
 
 
   /*
-  .########....###....##....##
-  ....##......##.##...###...##
-  ....##.....##...##..####..##
-  ....##....##.....##.##.##.##
-  ....##....#########.##..####
-  ....##....##.....##.##...###
-  ....##....##.....##.##....##
+  .########.####.##.......##..........########.....###....########..######.
+  .##........##..##.......##..........##.....##...##.##......##....##....##
+  .##........##..##.......##..........##.....##..##...##.....##....##......
+  .######....##..##.......##..........########..##.....##....##.....######.
+  .##........##..##.......##..........##...##...#########....##..........##
+  .##........##..##.......##..........##....##..##.....##....##....##....##
+  .##.......####.########.########....##.....##.##.....##....##.....######.
   */
+  slides.push({ form: 'sixSRCosRearrange' });
+  slides.push({ form: 'sixSRSinOnCosHyp' });
+  slides.push({ form: 'sixSRSinOnCosHypStk' });
+  slides.push({ form: 'sixSRSinOnCos' });
+  slides.push({ form: 'sixSRHypOnCos' });
+  slides.push({ form: 'sixSROneOnCosStk' });
+  slides.push({ form: 'sixSROneOnCos' });
+  slides.push({ form: 'sixSRCosOnSin' });
+  slides.push({ form: 'sixSROneOnSin' });
+  slides.push({ form: 'sixSRR' });
+
+  /*
+  .##..........########.########..####
+  .##.............##....##.....##..##.
+  .##.............##....##.....##..##.
+  .##.............##....########...##.
+  .##.............##....##...##....##.
+  .##.............##....##....##...##.
+  .########.......##....##.....##.####
+  */
+  slides.push({
+    showCommon: { circle1: ['x', 'y', 'arc', 'line', 'x', 'angle', 'sin', 'cos', 'rightAngle1', 'sinLabel', 'cosLabel', 'tanAlt', 'secAlt', 'rightAngle4'] },
+    enterStateCommon: () => {
+      figure.fnMap.exec('circSetAngle', initialAngle);
+      circle1.highlight(['tanAlt', 'secAlt', 'tanAltEqn', 'tanLabelAlt', 'secAltEqn', 'secLabelAlt', 'adjacentOne', 'adjacentOneLabel', 'angle']);
+    },
+    dissolve: {
+      in: { circle1: ['secAlt', 'tanAlt', 'rightAngle4'] },
+    },
+    leaveStateCommon: () => circle1.undim(),
+  });
+
+  slides.push({
+    showCommon: { circle1: ['x', 'y', 'arc', 'line', 'x', 'angle', 'sin', 'cos', 'rightAngle1', 'sinLabel', 'cosLabel', 'tanAlt', 'secAlt', 'rightAngle4'] },
+    dissolve: { in: ['circle1.adjacentOne', 'circle1.adjacentOneLabel'] },
+  });
+
+  slides.push({
+    showCommon: ['tangent', { circle1: ['x', 'y', 'arc', 'line', 'x', 'angle', 'sin', 'cos', 'rightAngle1', 'sinLabel', 'cosLabel', 'tanAlt', 'secAlt', 'rightAngle4', 'adjacentOne', 'adjacentOneLabel'] }],
+    dissolve: { in: 'tangent' },
+  });
+
+  slides.push({
+    showCommon: ['tangent', { circle1: ['x', 'y', 'arc', 'line', 'x', 'angle', 'sin', 'cos', 'rightAngle1', 'sinLabel', 'cosLabel', 'tanAlt', 'secAlt', 'rightAngle4', 'tanAltEqn', 'adjacentOne', 'adjacentOneLabel'] }],
+    fromForm: { eqn: 'sixSRR', 'circle1.tanAltEqn': null },
+    form: { eqn: 'sixSRR', 'circle1.tanAltEqn': 'tangent' },
+  });
+
+  slides.push({
+    showCommon: { circle1: ['x', 'y', 'arc', 'line', 'x', 'angle', 'sin', 'cos', 'rightAngle1', 'sinLabel', 'cosLabel', 'tanAlt', 'secAlt', 'rightAngle4', 'tanAltEqn', 'adjacentOne', 'adjacentOneLabel'] },
+    form: { eqn: 'sixSRR', 'circle1.tanAltEqn': 'tangentTan' },
+  });
+
+  slides.push({
+    form: { eqn: 'sixSRR', 'circle1.tanAltEqn': 'tan' },
+  });
+
+
+  slides.push({
+    showCommon: ['secant', { circle1: ['x', 'y', 'arc', 'line', 'x', 'angle', 'sin', 'cos', 'rightAngle1', 'sinLabel', 'cosLabel', 'tanAlt', 'secAlt', 'rightAngle4', 'tanLabelAlt', 'adjacentOne', 'adjacentOneLabel'] }],
+    fromForm: 'sixSRR',
+    form: 'sixSRR',
+    dissolve: { in: 'secant' },
+  });
+
+  slides.push({
+    showCommon: ['secant', { circle1: ['x', 'y', 'arc', 'line', 'x', 'angle', 'sin', 'cos', 'rightAngle1', 'sinLabel', 'cosLabel', 'tanAlt', 'secAlt', 'rightAngle4', 'tanLabelAlt', 'secAltEqn', 'adjacentOne', 'adjacentOneLabel'] }],
+    fromForm: { eqn: 'sixSRR', 'circle1.secAltEqn': null },
+    form: { eqn: 'sixSRR', 'circle1.secAltEqn': 'secant' },
+  });
+
+  slides.push({
+    showCommon: { circle1: ['x', 'y', 'arc', 'line', 'x', 'angle', 'sin', 'cos', 'rightAngle1', 'sinLabel', 'cosLabel', 'tanAlt', 'secAlt', 'rightAngle4', 'tanLabelAlt', 'secAltEqn', 'adjacentOne', 'adjacentOneLabel'] },
+    form: { eqn: 'sixSRR', 'circle1.secAltEqn': 'secantSec' },
+  });
+
+  slides.push({
+    form: { eqn: 'sixSRR', 'circle1.secAltEqn': 'sec' },
+  });
+
+  slides.push({
+    showCommon: { circle1: ['x', 'y', 'arc', 'line', 'x', 'angle', 'sin', 'cos', 'rightAngle1', 'sinLabel', 'cosLabel', 'tanAlt', 'secAlt', 'rightAngle4', 'tanLabelAlt', 'secLabelAlt', 'adjacentOne', 'adjacentOneLabel'] },
+    fromForm: 'sixSRR',
+    form: 'sixSRR',
+  });
+
+
+
   slides.push({
     showCommon: { circle1: ['circle', 'center', 'line', 'lineLabel', 'x', 'angle', 'sin', 'cos', 'rightAngle1', 'sinLabel'] },
     show: { circle1: 'f1Label' },
@@ -1795,6 +1887,6 @@ function makeSlides() {
   });
 
   nav.loadSlides(slides);
-  nav.goToSlide(37);
+  nav.goToSlide(62);
 }
 makeSlides();

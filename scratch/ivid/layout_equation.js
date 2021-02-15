@@ -106,6 +106,8 @@ function makeEquation() {
         theta10: { text: '\u03b8', color: colTheta },
         theta11: { text: '\u03b8', color: colTheta },
         theta12: { text: '\u03b8', color: colTheta },
+        theta13: { text: '\u03b8', color: colTheta },
+        theta14: { text: '\u03b8', color: colTheta },
         dotDotDot: '...',
         bowstring: { color: color1 },
         halfBowstring: { text: 'half-bowstring', color: color1 },
@@ -146,6 +148,8 @@ function makeEquation() {
         hypotenuse_2: { color: colRad },
         hypotenuse_3: { color: colRad },
         hypotenuse_4: { color: colRad },
+        hypotenuse_5: { color: colRad },
+        hypotenuse_6: { color: colRad },
         adjacent: { color: colCos },
         adjacent_1: { color: colCos },
         adjacent_2: { color: colCos },
@@ -192,16 +196,26 @@ function makeEquation() {
         hypOnAdjF: ['hypOnAdjEq', 'f4', 'bTheta4'],
         adjOnOppF: ['adjOnOppEq', 'f5', 'bTheta5'],
         hypOnOppF: ['hypOnOppEq', 'f6', 'bTheta6'],
-        sinTheta1: ['sin_1', ' ', 'theta1'],
-        sinTheta2: ['sin_2', ' ', 'theta2'],
-        sinTheta3: ['sin_3', ' ', 'theta3'],
-        sinTheta4: ['sin_4', ' ', 'theta4'],
+        sinTheta1: ['sin_1', ' ', 'theta11'],
+        sinTheta2: ['sin_2', ' ', 'theta12'],
+        sinTheta3: ['sin_3', ' ', 'theta13'],
+        sinTheta4: ['sin_4', ' ', 'theta14'],
         cosTheta1: ['cos', ' ', 'theta7'],
         cosTheta2: ['cos_2', ' ', 'theta8'],
         cosTheta3: ['cos_3', ' ', 'theta9'],
         cosTheta4: ['cos_4', ' ', 'theta10'],
         oppOnHypSin: ['oppOnHypEq', 'sinTheta1'],
         adjOnHypCos: ['adjOnHypEq', 'cosTheta1'],
+        oppOnAdjSinOnCosHyp: ['oppOnAdjF', 'equals7', frac(['hypotenuse_5', 'times3', 'sinTheta2'], 'v7', ['hypotenuse_6', 'times4', 'cosTheta2'], 0.01, 0.03, 1.05)],
+        oppOnAdjSinOnCosHypStk: ['oppOnAdjF', 'equals7', frac([{ strike: ['hypotenuse_5', 'stk1'] }, 'times3', 'sinTheta2'], 'v7', [{ strike: ['hypotenuse_6', 'stk2'] }, 'times4', 'cosTheta2'], 0.01, 0.03, 1.05)],
+        oppOnAdjSinOnCos: ['oppOnAdjF', 'equals7', frac('sinTheta2', 'v7', 'cosTheta2', 0.05, 0.03, 0.34)],
+        hypOnAdjHypOnCos: ['hypOnAdjF', 'equals8', frac('hypotenuse_5', 'v8', ['hypotenuse_6', 'times4', 'cosTheta3'], 0.01, 0.03, 1.05)],
+        hypOnAdjOneOnCosStk: ['hypOnAdjF', 'equals8', frac({ sup: [{ strike: ['hypotenuse_5', 'stk1'] }, '_1_1', 0.9, [-0.1, 0.07], false] }, 'v8', [{ strike: ['hypotenuse_6', 'stk2'] }, 'times4', 'cosTheta3'], 0.01, 0.03, 1.05)],
+        hypOnAdjOneOnCos: ['hypOnAdjF', 'equals8', frac('_1_1', 'v8', 'cosTheta3', 0.03, 0.03, 0.34)],
+        adjOnOppCosOnSin: ['adjOnOppF', 'equals9', frac('cosTheta4', 'v9', 'sinTheta3', 0.05, 0.05, 0.34)],
+        hypOnOppOneOnSin: ['hypOnOppF', 'equals10', frac('_1_2', 'v10', 'sinTheta4', 0.05, 0.05, 0.34)],
+        oppHypSin: [cont('opposite', 0.65, 'right'), 'equals1', 'hypotenuse', 'times1', 'sinTheta1'],
+        adjHypCos: [cont('adjacent', 0.65, 'right'), 'equals2', 'hypotenuse_1', 'times2', 'cosTheta1'],
         oppOnOne: { frac: ['opposite', 'v1', cont('_1_rad')] },
         // oppOnHyp: { frac: ['opposite', 'v1', cont('hypotenuse')] },
         fTheta: ['function', { container: ['', 0.02] }, { brac: ['lb', 'theta1', 'rb'] }],
@@ -339,6 +353,25 @@ function makeEquation() {
           content: lines1([['oppOnHypSin'], ['adjOnHypCos'], ['oppOnAdjF'], ['hypOnAdjF'], ['adjOnOppF'], ['hypOnOppF']]),
           translation: { hypotenuse_1: { style: 'linear' } },
         },
+        /*
+        .########.####.##.......##......
+        .##........##..##.......##......
+        .##........##..##.......##......
+        .######....##..##.......##......
+        .##........##..##.......##......
+        .##........##..##.......##......
+        .##.......####.########.########
+        */
+        sixSRCosRearrange: lines1([['oppHypSin'], ['adjHypCos'], ['oppOnAdjF'], ['hypOnAdjF'], ['adjOnOppF'], ['hypOnOppF']]),
+        sixSRSinOnCosHyp: lines1([['oppHypSin'], ['adjHypCos'], ['oppOnAdjSinOnCosHyp'], ['hypOnAdjF'], ['adjOnOppF'], ['hypOnOppF']]),
+        sixSRSinOnCosHypStk: lines1([['oppHypSin'], ['adjHypCos'], ['oppOnAdjSinOnCosHypStk'], ['hypOnAdjF'], ['adjOnOppF'], ['hypOnOppF']]),
+        sixSRSinOnCos: lines1([['oppHypSin'], ['adjHypCos'], ['oppOnAdjSinOnCos'], ['hypOnAdjF'], ['adjOnOppF'], ['hypOnOppF']]),
+        sixSRHypOnCos: lines1([['oppHypSin'], ['adjHypCos'], ['oppOnAdjSinOnCos'], ['hypOnAdjHypOnCos'], ['adjOnOppF'], ['hypOnOppF']]),
+        sixSROneOnCosStk: lines1([['oppHypSin'], ['adjHypCos'], ['oppOnAdjSinOnCos'], ['hypOnAdjOneOnCosStk'], ['adjOnOppF'], ['hypOnOppF']]),
+        sixSROneOnCos: lines1([['oppHypSin'], ['adjHypCos'], ['oppOnAdjSinOnCos'], ['hypOnAdjOneOnCos'], ['adjOnOppF'], ['hypOnOppF']]),
+        sixSRCosOnSin: lines1([['oppHypSin'], ['adjHypCos'], ['oppOnAdjSinOnCos'], ['hypOnAdjOneOnCos'], ['adjOnOppCosOnSin'], ['hypOnOppF']]),
+        sixSROneOnSin: lines1([['oppHypSin'], ['adjHypCos'], ['oppOnAdjSinOnCos'], ['hypOnAdjOneOnCos'], ['adjOnOppCosOnSin'], ['hypOnOppOneOnSin']]),
+        sixSRR: lines1([['oppOnHypSin'], ['adjOnHypCos'], ['oppOnAdjSinOnCos'], ['hypOnAdjOneOnCos'], ['adjOnOppCosOnSin'], ['hypOnOppOneOnSin']]),
         /*
         .########....###....##....##
         ....##......##.##...###...##
