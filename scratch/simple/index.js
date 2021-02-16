@@ -7,17 +7,26 @@ const figure = new Fig.Figure({
 // const figure = new Fig.Figure();
 
 // Create the shape
-figure.add(
+figure.add([
   {
     name: 'tri',
     method: 'equation',
     options: {
+      elements: { stk1: { symbol: 'strike', style: 'forward' } },
       forms: {
-        0: ['a', { offset: ['b', [0.2, -0.5], true] }, 'c'],
+        0: [{
+          lines: {
+            content: ['a', 'bde', { strike: [{ container: ['c', 0.5] }, 'stk1', false, 0.2, 0.2] }],
+          },
+        }, 'r'],
       },
     },
   },
-);
+  {
+    method: 'rectangle',
+    options: { width: 0.5, height: 0.1, position: [0, 0.1], xAlign: 'left' }
+  }
+]);
 
 // figure.getElement('tri').pulseAngle({ curve: {
 //   scale: 2,

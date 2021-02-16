@@ -89,6 +89,7 @@ export default class Lines extends BaseEquationFunction {
     }
 
     const fullBounds = new Bounds();
+    const lineBounds = new Bounds();
     for (let lineNum = 0; lineNum < numLines; lineNum += 1) {
       const element = this.content[lineNum];
       if (element != null) {
@@ -97,13 +98,18 @@ export default class Lines extends BaseEquationFunction {
           fullBounds.copyFrom(element.getBounds(true));
         }
         fullBounds.growWithSameBaseline(element.getBounds(true));
+        if (lineBounds.width === 0) {
+          lineBounds.copyFrom(element.getBounds(false));
+        }
+        lineBounds.growWithSameBaseline(element.getBounds(false));
       }
+      // console.log(element.width, element.fullSize, element.getBounds(true), fullBounds)
     }
 
-    this.width = fullBounds.width;
-    this.height = fullBounds.height;
-    this.descent = fullBounds.descent;
-    this.ascent = fullBounds.ascent;
+    this.width = lineBounds.width;
+    this.height = lineBounds.height;
+    this.descent = lineBounds.descent;
+    this.ascent = lineBounds.ascent;
     this.fullSize = {
       leftOffset: this.location.x - fullBounds.left,
       width: fullBounds.width,

@@ -28,6 +28,7 @@ export default class Container extends BaseEquationFunction {
 
     if (width != null) {
       containerBounds.width = width;
+      containerBounds.right = containerBounds.left + width;
     }
 
     if (descent != null) {
@@ -86,7 +87,7 @@ export default class Container extends BaseEquationFunction {
     } else {
       fullBounds.copyFrom(containerBounds);
     }
-
+    // console.log(mainContent, containerBounds, fullBounds)
     if (inSize) {
       this.width = containerBounds.width;
       this.height = containerBounds.height;

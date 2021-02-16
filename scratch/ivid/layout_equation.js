@@ -840,7 +840,14 @@ function makeEquation() {
   const lin = content => ({
     lines: { content, baselineSpace: 0.5 },
   });
-  const w1 = 0.32;
+  const s = (content, strikeNum) => ({
+    strike: {
+      content,
+      symbol: `s${strikeNum}`,
+      inSize: false,
+    },
+  });
+  const w1 = 0.33;
 
   const addFn = (name, elements, centerOn, xAlign, yAlign = 'middle') => {
     figure.fnMap.global.add(name, () => {
@@ -944,6 +951,14 @@ function makeEquation() {
         hyp_2: { text: 'hypotenuse', color: colHyp, size: 0.17 },
         hyp_3: { text: 'hypotenuse', color: colHyp, size: 0.17 },
         hyp_4: { text: 'hypotenuse', color: colHyp, size: 0.17 },
+        s1: { symbol: 'strike', style: 'forward' },
+        s2: { symbol: 'strike', style: 'forward' },
+        s3: { symbol: 'strike', style: 'forward' },
+        s4: { symbol: 'strike', style: 'forward' },
+        s5: { symbol: 'strike', style: 'forward' },
+        s6: { symbol: 'strike', style: 'forward' },
+        s7: { symbol: 'strike', style: 'forward' },
+        s8: { symbol: 'strike', style: 'forward' },
       },
       phrases: {
         oppHyp: { frac: ['opp_1', 'v1', 'hyp_1'] },
@@ -995,6 +1010,7 @@ function makeEquation() {
         c5_05: lin(['sin', 'cos', 'sinCos', 'oneSin', '', '']),
         c5_06: lin(['sin', 'cos', 'sinCos', 'oneSin', 'oneCos', '']),
         c5_07: lin(['sin', 'cos', 'sinCos', 'oneSin', 'oneCos', 'cosSin']),
+        c5s: lin(['sin', 'cos', 'sinCos', 'oneSin', 'oneCos', { strike: ['cosSin', 's1', false] }]),
         c5d: lin(['sin', 'cos', 'sinCos', 'oneSin', 'oneCos', '']),
         c5: lin(['', '', 'sinCos', 'oneSin', 'oneCos', 'oneTan']),
 
@@ -1015,6 +1031,7 @@ function makeEquation() {
         c3_05: lin(['tanSec', 'oneSec', 'tan', 'secTan', 'secOne', '']),
         c3_06: lin(['tanSec', 'oneSec', 'tan', 'secTan', 'sec', '']),
         c3_07: lin(['tanSec', 'oneSec', 'tan', 'secTan', 'sec', 'oneTan']),
+        c3s: lin([s('tanSec', 2), s('oneSec', 3), 'tan', s('secTan', 4), 'sec', 'oneTan']),
         c3d: lin(['', '', 'tan', '', 'sec', 'oneTan']),
         c3: lin(['sin', 'cos', 'tan', 'csc', 'sec', 'cot']),
 
@@ -1034,13 +1051,14 @@ function makeEquation() {
         c7_05: lin(['oneCsc', 'cotCsc', 'oneCot', 'csc', 'cscCot', '']),
         c7_06: lin(['oneCsc', 'cotCsc', 'oneCot', 'csc', 'cscCot', 'cotOne']),
         c7_07: lin(['oneCsc', 'cotCsc', 'oneCot', 'csc', 'cscCot', 'cot']),
+        c7s: lin([s('oneCsc', 5), s('cotCsc', 6), s('oneCot', 7), 'csc', s('cscCot', 8), 'cot']),
         c7d: lin(['', '', '', 'csc', '', 'cot']),
       },
       formDefaults: {
         translation: {
           cot_4: { style: 'linear' },
           csc_3: { style: 'linear' },
-        }
+        },
       },
       forms: {
         '00': ['c1'],
@@ -1068,8 +1086,9 @@ function makeEquation() {
         25: ['c1', 'c2_5', 'c3_07', 'c4_5', 'c5_07', 'c6_4', 'c7_05'],
         26: ['c1', 'c2_5', 'c3_07', 'c4_5', 'c5_07', 'c6_5', 'c7_06'],
         27: ['c1', 'c2_5', 'c3_07', 'c4_5', 'c5_07', 'c6_5', 'c7_07'],
-        summary0: ['c1', 'c2d', 'c3d', 'c4d', 'c5d', 'c6d', 'c7d'],
-        summary1: {
+        summaryStrike: ['c1', 'c2_5', 'c3s', 'c4_5', 'c5s', 'c6_5', 'c7s'],
+        summaryDissapear: ['c1', 'c2d', 'c3d', 'c4d', 'c5d', 'c6d', 'c7d'],
+        summary: {
           content: ['c1', 'c2', 'c3', 'c4', 'c5'],
           translation: {
             cot_4: { style: 'curve', direction: 'up', mag: 0.4 },
