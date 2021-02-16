@@ -289,7 +289,7 @@ function makeSlides() {
     options: {
       nextButton: { position: [3.8, 0], width: 0.2, height: 0.2 },
       prevButton: { position: [-3.8, 0], width: 0.2, height: 0.2 },
-      equation: ['eqn', 'bow.eqn', 'eqn1', 'circle1.bowStringLabel', 'circle1.tanAltEqn', 'circle1.secAltEqn', 'circle1.cotAltEqn', 'circle1.cscAltEqn'],
+      equation: ['eqn', 'bow.eqn', 'eqn1', 'circle1.bowStringLabel', 'circle1.tanAltEqn', 'circle1.secAltEqn', 'circle1.cotAltEqn', 'circle1.cscAltEqn', 'eqn2'],
       // equationDefaults: { duration: 4 },
     },
   });
@@ -1203,10 +1203,38 @@ function makeSlides() {
   })
 
   slides.push({
-    showCommon: {
+    showCommon: [{
       circle1: ['x', 'y', 'arc', 'line', 'x', 'angle', 'cotAlt', '']
-    }
-  })
+    }],
+    form: { eqn2: '0' },
+  });
+  slides.push({ form: { eqn2: '00' } });
+  slides.push({ form: { eqn2: '01' } });
+  slides.push({ form: { eqn2: '02' } });
+  slides.push({ form: { eqn2: '03' } });
+  slides.push({ form: { eqn2: '04' } });
+  slides.push({ form: { eqn2: '05' } });
+  slides.push({ form: { eqn2: '06' } });
+  slides.push({ form: { eqn2: '07' } });
+  slides.push({ form: { eqn2: '08' } });
+  slides.push({ form: { eqn2: '10' } });
+  slides.push({ form: { eqn2: '11' } });
+  slides.push({ form: { eqn2: '12' } });
+  slides.push({ form: { eqn2: '13' } });
+  slides.push({ form: { eqn2: '14' } });
+  slides.push({ form: { eqn2: '15' } });
+  slides.push({ form: { eqn2: '16' } });
+  slides.push({ form: { eqn2: '17' } });
+  slides.push({ form: { eqn2: '20' } });
+  slides.push({ form: { eqn2: '21' } });
+  slides.push({ form: { eqn2: '22' } });
+  slides.push({ form: { eqn2: '23' } });
+  slides.push({ form: { eqn2: '24' } });
+  slides.push({ form: { eqn2: '25' } });
+  slides.push({ form: { eqn2: '26' } });
+  slides.push({ form: { eqn2: '27' } });
+  slides.push({ form: { eqn2: 'summary0' } });
+  slides.push({ form: { eqn2: 'summary1' } });
 
 
 

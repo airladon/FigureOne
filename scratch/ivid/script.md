@@ -39,6 +39,8 @@ The third line cuts through the circle and is called a secant line coming from t
 
 So, how do these three lines relate to our triangle ratios?
 
+
+
 ## Sin, Tan, Sec
 Well if we take a circle with radius one, also called a unit circle, and define an arc with some angle theta, then we can draw a right angle triangle within the arc, and one outside of the arc and we can see and label some of these lines.
 
@@ -68,3 +70,51 @@ So, we start with our complementary angle, and construct our inside and outside 
 This means we have a tangent of the complmentary angle
 
 Now if we look at our remaining ratios, we can see each one is just a reciprocal of one we've already named, nevertheless they all have individual names, and all these names come from the concept of a complementary angle
+
+
+
+
+
+# RESET from Sin, Tan, Sec
+Well we start by taking a circle with radius one, also called a unit circle, and define an arc with some angle theta, around which we can draw a right angle triangle.
+
+## Tan, sec
+
+Now, the side opposite theta of this right angle triangle is a tangent line, so we will call it tan. The hypotenuse cuts through the circle, so its a secant line, that we will call sec, and our adjacent side is the radius, which is 1.
+
+Let's now rewrite all of our ratios in terms of these sides. So the opposite side over the hypotenuse is tan over sec. The adjacent side over hypotenuse is 1 over sec. The opposite side over the adjacent side is then tan over 1, which just simplifies down to tan. Our next ratio is sec over tan, then we have sec over 1 which is simply sec and finally we have 1 over tan.
+
+## Sin, Cosine
+Ok great.
+
+Now let's draw a right angle triangle within the arc. This triangle also has an angle theta and is thus similar to our first triangle and all its side ratios will be the same.
+
+The side opposite theta is a part of a chord line. Using geometry you can show this is actually half of a chord, and it was called a half chord or half bowstring when these concepts were first developed in Sanskrit by Indian Mathematitians. Now our word for this line today sine, comes from the Latin translation of this which unfortunately lost the original meaning. Maybe it would make more sense to be called a half-chord, but nevertheless, sine is the word we use and we usually abreviate this without the e.
+
+Next, we can recognize that the adjacent side to theta, is actually the side opposite theta's complementary angle. We therefore call this the complimentary sine, which we abbreviate to cosine or cos.
+
+Finally the hypotenuse of this triangle is the radius 1, so we can now write all our ratios in terms of these sides.
+
+So opposite over hypotenuse is sine over 1 which simplifies down to sin. Adjacent over hypotenuse is then cos over one or just cos.
+
+Opposite over adjacent is sine over the cosine. Our next ratio is then the reciprocal of the sine. And then we also have over over cos and cos over sin.
+
+## Cot, Cosec
+
+Now we construct a third right angle triangle around the arc of the circle that covers theta's complementary angle.
+
+Once again we have a tangent line, but in this case it's the tangent of the complimentary angle, which we cal the complimenetary tangent, cotangent, or cot for short.
+
+We also have a secant line of the the complementary angle which we will call the complimentary secant, cosec or csc for short.
+
+Now, this right angle triangle is also similar to our first two right angle triangles because it also has an angle theta.
+
+So let's do the same exercise and substitute our sides into the ratios, being careful to use the sides relative to theta and not the complementary angle.
+
+So, the side opposite theta over the hypotenuse is 1 over the cosec. The side adjacent to theta, over the hypotenuse is the cotangent over the cosec. The opposite over adjacent is one over the cotangent. The hypotenuse over the opposite side is the cosec over one which simplifies down to the cosec. And finally we have the cosec over the cotangent and the cotangent over 1 which simplifies down to cot.
+
+## Summary
+Now we have a whole bunch of different expressions for the 6 different side ratios of a right angle triangle. In fact, we could make a lot more, as using substitution we could each ratio in additional terms it is not already in. But many of these ratios are not 
+Now, each ratios name, comes from the side that 
+
+
