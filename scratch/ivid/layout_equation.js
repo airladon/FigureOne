@@ -75,6 +75,11 @@ function makeEquation() {
         equals9: '  =  ',
         equals10: '  =  ',
         equals11: '  =  ',
+        equals12: '  =  ',
+        equals13: '  =  ',
+        equals14: '  =  ',
+        equals15: '  =  ',
+        equals16: '  =  ',
         oppValue: { text: '1.000' },
         hypValue: { text: '1' },
         ratioValue: { text: '0.4540' },
@@ -220,20 +225,24 @@ function makeEquation() {
         oppOnAdjTanOnOneStk: ['oppOnAdjF', 'equals7', frac('sinTheta2', 'v7', 'cosTheta2', 0.05, 0.03, 0.34), 'equals11', frac('tan_1', 'v11', { strike: ['_1_rad', 'stk1'] }, 0.03, 0.03, 0.2)],
         oppOnAdjTanEquals: ['oppOnAdjF', 'equals7', frac('sinTheta2', 'v7', 'cosTheta2', 0.05, 0.03, 0.34), 'equals11', 'tan_1'],
         oppOnAdjTan: ['oppOnAdjEq', cont(['tan', ' ', 'theta15'], 0.3), 'equals7', frac('sinTheta2', 'v7', 'cosTheta2', 0.05, 0.03, 0.34)],
+        tanTheta: [cont(['tan', ' ', 'theta15'], 0.3), 'equals7', frac('sinTheta2', 'v7', 'cosTheta2', 0.05, 0.03, 0.34)],
         hypOnAdjHypOnCos: ['hypOnAdjF', 'equals8', frac('hypotenuse_5', 'v8', ['hypotenuse_6', 'times4', 'cosTheta3'], 0.01, 0.03, 1.05)],
         hypOnAdjOneOnCosStk: ['hypOnAdjF', 'equals8', frac({ sup: [{ strike: ['hypotenuse_5', 'stk1'] }, '_1_1', 0.9, [-0.1, 0.07], false] }, 'v8', [{ strike: ['hypotenuse_6', 'stk2'] }, 'times4', 'cosTheta3'], 0.01, 0.03, 1.05)],
         hypOnAdjOneOnCos: ['hypOnAdjF', 'equals8', frac('_1_1', 'v8', 'cosTheta3', 0.03, 0.03, 0.34)],
         hypOnAdjSecOnOne: ['hypOnAdjF', 'equals8', frac('_1_1', 'v8', 'cosTheta3', 0.03, 0.03, 0.34), 'equals11', frac('sec_1', 'v11', '_1_rad', 0.03, 0.03, 0.2)],
         hypOnAdjSecEquals: ['hypOnAdjF', 'equals8', frac('_1_1', 'v8', 'cosTheta3', 0.03, 0.03, 0.34), 'equals11', 'sec_1'],
         hypOnAdjSec: ['hypOnAdjEq', cont(['sec', ' ', 'theta3'], 0.3), 'equals8', frac('_1_1', 'v8', 'cosTheta3', 0.03, 0.03, 0.34)],
+        secTheta: [cont(['sec', ' ', 'theta3'], 0.3), 'equals8', frac('_1_1', 'v8', 'cosTheta3', 0.03, 0.03, 0.34)],
         adjOnOppCosOnSin: ['adjOnOppF', 'equals9', frac('cosTheta4', 'v9', 'sinTheta3', 0.05, 0.05, 0.34)],
         adjOnOppCotOnOne: ['adjOnOppF', 'equals9', frac('cosTheta4', 'v9', 'sinTheta3', 0.05, 0.05, 0.34), 'equals11', frac('cot_1', 'v11', '_1_rad', 0.03, 0.03, 0.2)],
         adjOnOppCotEquals: ['adjOnOppF', 'equals9', frac('cosTheta4', 'v9', 'sinTheta3', 0.05, 0.05, 0.34), 'equals11', 'cot_1'],
         adjOnOppCot: ['adjOnOppEq', cont(['cot', ' ', 'theta4'], 0.3), 'equals9', frac('cosTheta4', 'v9', 'sinTheta3', 0.05, 0.05, 0.34)],
+        cotTheta: [cont(['cot', ' ', 'theta4'], 0.3), 'equals9', frac('cosTheta4', 'v9', 'sinTheta3', 0.05, 0.05, 0.34)],
         hypOnOppOneOnSin: ['hypOnOppF', 'equals10', frac('_1_2', 'v10', 'sinTheta4', 0.05, 0.05, 0.34)],
         hypOnOppCscOnOne: ['hypOnOppF', 'equals10', frac('_1_2', 'v10', 'sinTheta4', 0.05, 0.05, 0.34), 'equals11', frac('csc_1', 'v11', '_1_rad', 0.03, 0.03, 0.2)],
         hypOnOppCscEquals: ['hypOnOppF', 'equals10', frac('_1_2', 'v10', 'sinTheta4', 0.05, 0.05, 0.34), 'equals11', 'csc_1'],
         hypOnOppCsc: ['hypOnOppEq', cont(['csc', ' ', 'theta5'], 0.3), 'equals10', frac('_1_2', 'v10', 'sinTheta4', 0.05, 0.05, 0.34)],
+        cscTheta: [cont(['csc', ' ', 'theta5'], 0.3), 'equals10', frac('_1_2', 'v10', 'sinTheta4', 0.05, 0.05, 0.34)],
         oppHypSin: [cont('opposite', 0.65, 'right'), 'equals1', 'hypotenuse', 'times1', 'sinTheta1'],
         adjHypCos: [cont('adjacent', 0.65, 'right'), 'equals2', 'hypotenuse_1', 'times2', 'cosTheta1'],
         oppOnOne: { frac: ['opposite', 'v1', cont('_1_rad')] },
@@ -244,10 +253,10 @@ function makeEquation() {
         cos: ['co', 's'],
         cosineTheta: ['cos', 'ine', ' ', 'theta7'],
         tangentTheta: ['tan', 'gent', ' ', 'theta9'],
-        tanTheta: ['tan', ' ', 'theta9'],
-        cscTheta: ['csc', ' ', 'theta10'],
-        secTheta: ['sec', ' ', 'theta11'],
-        cotTheta: ['cot', ' ', 'theta12'],
+        // tanTheta: ['tan', ' ', 'theta9'],
+        // cscTheta: ['csc', ' ', 'theta10'],
+        // secTheta: ['sec', ' ', 'theta11'],
+        // cotTheta: ['cot', ' ', 'theta12'],
         sinOnCos: { frac: ['sinTheta2', 'v7', 'cosTheta2'] },
         cosOnSin: { frac: ['cosTheta4', 'v8', 'sinTheta4'] },
         oneOnSinTheta: { frac: ['_1_1', 'v9', 'sinTheta3'] },
@@ -447,7 +456,38 @@ function makeEquation() {
         sixSRRCscEquals: lines1([['oppOnHypSin'], ['adjOnHypCos'], ['oppOnAdjTan'], ['hypOnAdjSec'], ['adjOnOppCot'], ['hypOnOppCscEquals']]),
         sixSRRCsc: lines1([['oppOnHypSin'], ['adjOnHypCos'], ['oppOnAdjTan'], ['hypOnAdjSec'], ['adjOnOppCot'], ['hypOnOppCsc']]),
 
+        /*
+        .##.....##....###....##.......##.....##.########..######.
+        .##.....##...##.##...##.......##.....##.##.......##....##
+        .##.....##..##...##..##.......##.....##.##.......##......
+        .##.....##.##.....##.##.......##.....##.######....######.
+        ..##...##..#########.##.......##.....##.##.............##
+        ...##.##...##.....##.##.......##.....##.##.......##....##
+        ....###....##.....##.########..#######..########..######.
+        */
+        sixSRRWithValues: lines1([
+          ['sinTheta1', 'equals11', 'value1'],
+          ['cosTheta1', 'equals12', 'value2'],
+          ['tanTheta', 'equals13', 'value3'],
+          ['secTheta', 'equals14', 'value4'],
+          ['cotTheta', 'equals15', 'value5'],
+          ['cscTheta', 'equals16', 'value6'],
+        ]),
 
+        /*
+        ..######..##.....##.##.....##.##.....##....###....########..##....##
+        .##....##.##.....##.###...###.###...###...##.##...##.....##..##..##.
+        .##.......##.....##.####.####.####.####..##...##..##.....##...####..
+        ..######..##.....##.##.###.##.##.###.##.##.....##.########.....##...
+        .......##.##.....##.##.....##.##.....##.#########.##...##......##...
+        .##....##.##.....##.##.....##.##.....##.##.....##.##....##.....##...
+        ..######...#######..##.....##.##.....##.##.....##.##.....##....##...
+        */
+        summaryTable: lines1([
+          [cont(['sinTheta1'], 0.9), cont('cosTheta1')],
+          [cont(['sine'], 0.9), cont('cosine')],
+          [cont(['oppOnHyp'], 0.9), cont('adjOnHyp')],
+        ]),
 
 
         oneRatio: ['oppOnHyp', 'equals1', 'constant_1'],
@@ -710,7 +750,8 @@ function makeEquation() {
         // top: { position: [-1.5, 0.7], scale: 1 },
         topRight: { position: [1.6, 0.95], scale: 1 },
         bottom: { position: [0, -1.3], scale: 1 },
-        eqnTri: { position: [-2.4, 1.2], scale: 1 },
+        eqnTri: { position: [-2.5, 1.2], scale: 1 },
+        eqnTriValues: { position: [-2.8, 1.2], scale: 1 },
         eqnTri1: { position: [0.5, 0.7], scale: 1.1 },
         right: { position: [1, 0], scale: 1.1 },
         eqnCirc: { position: [-2.5, 0], scale: 1.1 },

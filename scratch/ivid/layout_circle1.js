@@ -446,7 +446,7 @@ function layoutCircle1() {
   const [cotAlt, cotLabelAlt] = circle.getElements(['cotAlt', 'cotLabelAlt']);
   const [cscAlt, cscLabelAlt] = circle.getElements(['cscAlt', 'cscLabelAlt']);
   const xBounds = 1.3;
-  const yBounds = 1;
+  const yBounds = 0.9;
   const rightBounds = new Fig.Line([radius + xBounds, 0], radius + xBounds, Math.PI / 2);
   const topBounds = new Fig.Line([0, radius + yBounds], radius + xBounds, 0);
   function updateCircle() {
@@ -748,6 +748,21 @@ function layoutCircle1() {
       rightAngle1.setAngle({ p1: [x, y], p2: [x, 0], p3: [0, 0] });
     } else {
       rightAngle1.setOpacity(0);
+    }
+
+    const a = Fig.tools.math.round(r * 180 / Math.PI, 0) * Math.PI / 180;
+    const sinA = Math.sin(a);
+    const cosA = Math.cos(a);
+    const eqn = figure.getElement('eqn');
+    if (eqn.getElement('value1').isShown) {
+      eqn.updateElementText({
+        value1: sinA.toFixed(4),
+        value2: cosA.toFixed(4),
+        value3: sinA / cosA > 100 ? '\u221e' : (sinA / cosA).toFixed(4),
+        value4: 1 / cosA > 100 ? '\u221e' : (1 / cosA).toFixed(4),
+        value5: cosA / sinA > 100 ? '\u221e' : (cosA / sinA).toFixed(4),
+        value6: 1 / sinA > 100 ? '\u221e' : (1 / sinA).toFixed(4),
+      });
     }
   }
   radLine.fnMap.add('updateCircle', () => updateCircle());
