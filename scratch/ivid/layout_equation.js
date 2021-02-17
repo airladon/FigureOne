@@ -972,6 +972,12 @@ function makeEquation() {
         s6: { symbol: 'strike', style: 'forward', lineWidth: 0.008 },
         s7: { symbol: 'strike', style: 'forward', lineWidth: 0.008 },
         s8: { symbol: 'strike', style: 'forward', lineWidth: 0.008 },
+        val1: '0.0000',
+        val2: '0.0000',
+        val3: '0.0000',
+        val4: '0.0000',
+        val5: '0.0000',
+        val6: '0.0000',
         // b1: { symbol: 'box', lineWidth: 0.008, color: color1 },
         // b2: { symbol: 'box', lineWidth: 0.008, color: color1 },
         // b3: { symbol: 'box', lineWidth: 0.008, color: color1 },
@@ -1048,6 +1054,7 @@ function makeEquation() {
         c5d: lin(['sin', 'cos', 'sinCos', 'oneSin', 'oneCos', '']),
         c5: lin(['', '', 'sinCos', 'oneSin', 'oneCos', 'oneTan']),
         c5Theta: lin(['', '', 'sinCosTheta', 'oneSinTheta', 'oneCosTheta', 'oneTanTheta']),
+        c5v: lin(['val1', 'val2', 'sinCos', 'oneSin', 'oneCos', 'oneTan']),
 
         c4_0: cont(lin(['eq7', '', '', '', '', '']), 0.3),
         c4_1: cont(lin(['eq7', 'eq8', '', '', '', '']), 0.3),
@@ -1057,6 +1064,7 @@ function makeEquation() {
         c4_5: cont(lin(['eq7', 'eq8', 'eq9', 'eq10', 'eq11', 'eq12']), 0.3),
         c4d: cont(lin(['', '', 'eq9', '', 'eq11', '']), 0.3),
         c4: cont(lin(['', '', 'eq9', 'eq10', 'eq11', 'eq6']), 0.3),
+        c4v: cont(lin(['eq7', 'eq8', 'eq9', 'eq10', 'eq11', 'eq6']), 0.3),
 
         c3_00: lin(['tanSec', '', '', '', '', '']),
         c3_01: lin(['tanSec', 'oneSec', '', '', '', '']),
@@ -1079,6 +1087,7 @@ function makeEquation() {
         c6_4: cont(lin(['eq13', 'eq14', 'eq15', 'eq16', 'eq17', '']), 0.3),
         c6_5: cont(lin(['eq13', 'eq14', 'eq15', 'eq16', 'eq17', 'eq18']), 0.3),
         c6d: cont(lin(['', '', '', 'eq16', '', 'eq18']), 0.3),
+        c6v: cont(lin(['', '', 'eq15', 'eq16', 'eq17', 'eq13']), 0.3),
 
         c7_00: lin(['oneCsc', '', '', '', '', '']),
         c7_01: lin(['oneCsc', 'cotCsc', '', '', '', '']),
@@ -1091,6 +1100,8 @@ function makeEquation() {
         // c7b: lin(['oneCsc', 'cotCsc', 'oneCot', b('csc', 9), 'cscCot', b('cot', 10)]),
         c7s: lin([s('oneCsc', 5), s('cotCsc', 6), s('oneCot', 7), 'csc', s('cscCot', 8), 'cot']),
         c7d: lin(['', '', '', 'csc', '', 'cot']),
+
+        values: lin(['', '', 'val3', 'val4', 'val5', 'val6']),
       },
       formDefaults: {
         translation: {
@@ -1104,25 +1115,25 @@ function makeEquation() {
         '02': ['c1', 'c2_1', 'c3_01'],
         '03': ['c1', 'c2_2', 'c3_02'],
         '04': ['c1', 'c2_2', 'c3_03'],
-        '05': ['c1', 'c2_3', 'c3_04'],
-        '06': ['c1', 'c2_4', 'c3_05'],
-        '07': ['c1', 'c2_4', 'c3_06'],
+        // '05': ['c1', 'c2_3', 'c3_04'],
+        // '06': ['c1', 'c2_4', 'c3_05'],
+        // '07': ['c1', 'c2_4', 'c3_06'],
         '08': ['c1', 'c2_5', 'c3_07'],
         10: ['c1', 'c2_5', 'c3_07', 'c4_0', 'c5_00'],
         11: ['c1', 'c2_5', 'c3_07', 'c4_0', 'c5_01'],
-        12: ['c1', 'c2_5', 'c3_07', 'c4_1', 'c5_02'],
-        13: ['c1', 'c2_5', 'c3_07', 'c4_1', 'c5_03'],
-        14: ['c1', 'c2_5', 'c3_07', 'c4_2', 'c5_04'],
-        15: ['c1', 'c2_5', 'c3_07', 'c4_3', 'c5_05'],
-        16: ['c1', 'c2_5', 'c3_07', 'c4_4', 'c5_06'],
+        // 12: ['c1', 'c2_5', 'c3_07', 'c4_1', 'c5_02'],
+        // 13: ['c1', 'c2_5', 'c3_07', 'c4_1', 'c5_03'],
+        // 14: ['c1', 'c2_5', 'c3_07', 'c4_2', 'c5_04'],
+        // 15: ['c1', 'c2_5', 'c3_07', 'c4_3', 'c5_05'],
+        // 16: ['c1', 'c2_5', 'c3_07', 'c4_4', 'c5_06'],
         17: ['c1', 'c2_5', 'c3_07', 'c4_5', 'c5_07'],
         20: ['c1', 'c2_5', 'c3_07', 'c4_5', 'c5_07', 'c6_0', 'c7_00'],
-        21: ['c1', 'c2_5', 'c3_07', 'c4_5', 'c5_07', 'c6_1', 'c7_01'],
-        22: ['c1', 'c2_5', 'c3_07', 'c4_5', 'c5_07', 'c6_2', 'c7_02'],
-        23: ['c1', 'c2_5', 'c3_07', 'c4_5', 'c5_07', 'c6_3', 'c7_03'],
-        24: ['c1', 'c2_5', 'c3_07', 'c4_5', 'c5_07', 'c6_3', 'c7_04'],
-        25: ['c1', 'c2_5', 'c3_07', 'c4_5', 'c5_07', 'c6_4', 'c7_05'],
-        26: ['c1', 'c2_5', 'c3_07', 'c4_5', 'c5_07', 'c6_5', 'c7_06'],
+        // 21: ['c1', 'c2_5', 'c3_07', 'c4_5', 'c5_07', 'c6_1', 'c7_01'],
+        // 22: ['c1', 'c2_5', 'c3_07', 'c4_5', 'c5_07', 'c6_2', 'c7_02'],
+        // 23: ['c1', 'c2_5', 'c3_07', 'c4_5', 'c5_07', 'c6_3', 'c7_03'],
+        // 24: ['c1', 'c2_5', 'c3_07', 'c4_5', 'c5_07', 'c6_3', 'c7_04'],
+        // 25: ['c1', 'c2_5', 'c3_07', 'c4_5', 'c5_07', 'c6_4', 'c7_05'],
+        // 26: ['c1', 'c2_5', 'c3_07', 'c4_5', 'c5_07', 'c6_5', 'c7_06'],
         27: ['c1', 'c2_5', 'c3_07', 'c4_5', 'c5_07', 'c6_5', 'c7_07'],
         summaryStrike: ['c1', 'c2_5', 'c3s', 'c4_5', 'c5s', 'c6_5', 'c7s'],
         summaryDissapear: ['c1', 'c2d', 'c3d', 'c4d', 'c5d', 'c6d', 'c7d'],
@@ -1136,9 +1147,57 @@ function makeEquation() {
           duration: 2,
         },
         summaryTheta: ['c1', 'c2', 'c3Theta', 'c4', 'c5Theta'],
-        noRatios: ['c3Theta', 'c4', 'c5Theta'],
+        noRatios: ['c3', 'c4', 'c5'],
+        values: {
+          content: ['c3', 'c4v', 'c5v', 'c6v', 'values'],
+          alignment: { xAlign: '-0.4o' },
+        },
+        // c3: lin(['sin', 'cos', 'tan', 'csc', 'sec', 'cot'])
+        // c4v: cont(lin(['eq7', 'eq8', 'eq9', 'eq10', 'eq11', 'eq6']), 0.3),
+        // c5v: lin(['val1', 'val2', 'sinCos', 'oneSin', 'oneCos', 'oneTan']),
+        // c6v: cont(lin(['', '', 'eq15', 'eq16', 'eq17', 'eq18']), 0.3),
+        // values: lin(['', '', 'val3', 'val4', 'val5', 'val6']),
       },
       position: [-2.8, 1.2],
     },
+  });
+  const eqn2 = figure.getElement('eqn2');
+  figure.fnMap.global.add('eqnColors', () => {
+    eqn2.getElement('sin_1').setColor(colSin);
+    eqn2.getElement('sin_2').setColor(colSin);
+    eqn2.getElement('sin_3').setColor(colSin);
+    eqn2.getElement('cos_1').setColor(colCos);
+    eqn2.getElement('cos_2').setColor(colCos);
+    eqn2.getElement('cos_3').setColor(colCos);
+    eqn2.getElement('tan_2').setColor(colTan);
+    eqn2.getElement('tan_4').setColor(colTan);
+    eqn2.getElement('sec_4').setColor(colSec);
+    eqn2.getElement('csc_3').setColor(colCsc);
+    eqn2.getElement('cot_4').setColor(colCot);
+    eqn2.getElement('val1').setColor(colSin);
+    eqn2.getElement('val2').setColor(colCos);
+    eqn2.getElement('val3').setColor(colTan);
+    eqn2.getElement('val4').setColor(colCsc);
+    eqn2.getElement('val5').setColor(colSec);
+    eqn2.getElement('val6').setColor(colCot);
+  });
+  figure.fnMap.global.add('eqnColorsReset', () => {
+    eqn2.getElement('sin_1').setColor(colText);
+    eqn2.getElement('sin_2').setColor(colText);
+    eqn2.getElement('sin_3').setColor(colText);
+    eqn2.getElement('cos_1').setColor(colText);
+    eqn2.getElement('cos_2').setColor(colText);
+    eqn2.getElement('cos_3').setColor(colText);
+    eqn2.getElement('tan_2').setColor(colText);
+    eqn2.getElement('tan_4').setColor(colText);
+    eqn2.getElement('sec_4').setColor(colText);
+    eqn2.getElement('csc_3').setColor(colText);
+    eqn2.getElement('cot_4').setColor(colText);
+    eqn2.getElement('val1').setColor(colText);
+    eqn2.getElement('val2').setColor(colText);
+    eqn2.getElement('val3').setColor(colText);
+    eqn2.getElement('val4').setColor(colText);
+    eqn2.getElement('val5').setColor(colText);
+    eqn2.getElement('val6').setColor(colText);
   });
 }

@@ -49,10 +49,12 @@ const colTan = color4;
 
 const colTheta = color2;
 const colRad = [0.1, 0, 0.7, 1];
+const colOne = [0.3, 0.3, 0.3, 1];
 
-const colSec = [0, 0.6, 0.6, 1];
+// const colSec = [0, 0.6, 0.6, 1];
+const colSec = [0, 0.8, 0.8, 1];
 const colCot = [1, 0, 1, 1];
-const colCsc = [0, 0.8, 0.8, 1];
+const colCsc = colRad;
 
 const colOpp = colSin;
 const colAdj = colCos;

@@ -658,11 +658,18 @@ export default class SlideNavigator {
           }
         }
       }
-      this.collection.animations.new()
-        .inParallel(dissolveOutSteps)
-        .inParallel(dissolveInSteps)
-        .whenFinished('slideNavigatorTransitionDone')
-        .start();
+      if (slide.dissolve.simultaneous) {
+        this.collection.animations.new()
+          .inParallel([...dissolveOutSteps, ...dissolveInSteps])
+          .whenFinished('slideNavigatorTransitionDone')
+          .start();
+      } else {
+        this.collection.animations.new()
+          .inParallel(dissolveOutSteps)
+          .inParallel(dissolveInSteps)
+          .whenFinished('slideNavigatorTransitionDone')
+          .start();
+      }
     }
   }
 

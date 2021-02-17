@@ -5,7 +5,7 @@ Welcome to this interactive video describing where the trigonometric functions c
 # Similar Triangles
 To understand where the trigonometric functions come from, we first need to remember properties of similar triangles.
 
-Two triangles are said to be similar when they have the same shape, but are of different size. This means, their corresponding angles are all equal, so they have the same shape, and their corresponding sides are all scaled by the same amount. This then helps us understand the third property, which is the ratio of any two corresponding sides of similar triangles will be equal. So if we take the ratio of sides sA and sB, the s term cancels and we are left with the same ratio as sides A and B from the top triangle. Finally, if you can show triangles have any of these properties, then in fact those triangles will be similar, and will have all of the properties.
+Two triangles are said to be similar when they have the same shape, but are of different size. This means, their corresponding angles are all equal, so they have the same shape, and their corresponding sides are all scaled by the same amount. This then helps us understand a third property, which is the ratio of any two corresponding sides of similar triangles will be equal. So if we take the ratio of sides sA and sB, the s term cancels and we are left with the same ratio as sides A and B from the top triangle. Finally, if you can show triangles have any of these properties, then in fact those triangles will be similar, and will have all of the properties.
 
 # Right Angle Triangles
 So what does this mean for right angle triangles?
