@@ -580,6 +580,16 @@ export default class SlideNavigator {
     }
   }
 
+  showAllDissolved(index: number) {
+    const slide = this.slides[index];
+    if (slide.dissolve != null) {
+      const inElements = this.collection.getElements(slide.dissolve.in);
+      const outElements = this.collection.getElements(slide.dissolve.out);
+      outElements.map(e => e.showAll());
+      inElements.map(e => e.showAll());
+    }
+  }
+
   setSteadyState(from: 'next' | 'prev' | number) {
     const index = this.currentSlideIndex;
     const slide = this.slides[index];
@@ -854,6 +864,7 @@ export default class SlideNavigator {
     const slide = this.slides[index];
     this.collection.hideAll();
     this.showElements(index);
+    this.showAllDissolved(index);
     this.hideElements(index);
     this.collection.setScenarios(this.getProperty('scenarioCommon', index, []));
     this.collection.setScenarios(slide.scenario || []);

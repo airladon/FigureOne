@@ -325,6 +325,7 @@ export default class EquationForm extends Elements {
       }
     }
 
+    // console.log(xAlign)
     if (xAlign === 'right') {
       fixPoint.x += w;
     } else if (xAlign === 'center') {

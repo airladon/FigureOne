@@ -1136,7 +1136,7 @@ function makeEquation() {
           duration: 2,
         },
         summaryTheta: ['c1', 'c2', 'c3Theta', 'c4', 'c5Theta'],
-
+        noRatios: ['c3Theta', 'c4', 'c5Theta'],
       },
       position: [-2.8, 1.2],
     },

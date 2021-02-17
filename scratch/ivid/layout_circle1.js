@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-/* globals figure, colTheta, colCot, colTan, colSin, colCos, colSec, colCsc, colRad, colGrey, colDim */
+/* globals figure, colTheta, colCot, colTan, colSin, colCos, colSec, colCsc, colRad, colGrey, colDim, colAdj, colOpp, colHyp, Fig */
 
 function layoutCircle1() {
   const radius = 1.5;
@@ -83,8 +83,7 @@ function layoutCircle1() {
         options: {
           p1: [-radius * 1.3, -radius * 0.6],
           p2: [radius * 0.7, -radius * 1.32],
-          // p1: 
-          width: 0.013,
+          width: 0.015,
           color: colTan,
           label: {
             text: 'tangent',
@@ -100,7 +99,7 @@ function layoutCircle1() {
         options: {
           p1: [radius * 0.6, radius * 1.1],
           p2: [-radius * 1.2, radius * 0],
-          width: 0.013,
+          width: 0.015,
           color: colSec,
           label: {
             text: 'secant',
@@ -116,7 +115,7 @@ function layoutCircle1() {
         options: {
           p1: [radius * Math.cos(1), radius * Math.sin(1)],
           p2: [radius * Math.cos(1), -radius * Math.sin(1)],
-          width: 0.013,
+          width: 0.015,
           color: colSin,
           label: {
             text: 'chord',
@@ -124,6 +123,18 @@ function layoutCircle1() {
             location: 'right',
             scale: 1.1,
           },
+        },
+      },
+      {
+        name: 'bow',
+        method: 'polygon',
+        options: {
+          radius,
+          line: { width: 0.015 },
+          color: colSin,
+          rotation: -1,
+          sides: 300,
+          angleToDraw: 2,
         },
       },
       {
@@ -157,18 +168,18 @@ function layoutCircle1() {
           color: colGrey,
         },
       },
-      {
-        name: 'bow',
-        method: 'collections.angle',
-        options: {
-          curve: { radius, width: 0.013, sides: 200 },
-          // radius,
-          // line: { width: 0.006 },
-          // sides: 200,
-          // sidesToDraw: 100,
-          color: colSin,
-        },
-      },
+      // {
+      //   name: 'bow',
+      //   method: 'collections.angle',
+      //   options: {
+      //     curve: { radius, width: 0.013, sides: 200 },
+      //     // radius,
+      //     // line: { width: 0.006 },
+      //     // sides: 200,
+      //     // sidesToDraw: 100,
+      //     color: colSin,
+      //   },
+      // },
       {
         name: 'center',
         method: 'primitives.polygon',
@@ -336,19 +347,19 @@ function layoutCircle1() {
       // lineLabel('f1Label', { forms: { 0: { sub: ['f', '_1'] } } }, colSin),
       { name: 'f1Label', method: 'equation', options: { forms: { 0: { sub: ['f', '_1'] } }, color: colSin } },
       line('cos', colCos),
-      lineLabel('cosLabel', 'cos', colCos),
+      lineLabel('cosLabel', 'cos', colCos, [0, 0], 'top', 'left'),
       line('csc', colCsc),
       lineLabel('cscLabel', 'csc', colCsc),
       line('tan', colTan),
       lineLabel('tanLabel', 'tan', colTan),
       line('cot', colCot),
       lineLabel('cotLabel', 'cot', colCot),
-      line('tanAlt', colTan),
-      lineLabel('tanLabelAlt', 'tan', colTan),
-      line('cotAlt', colCot),
-      lineLabel('cotLabelAlt', 'cot', colCot),
-      lineLabel('adjacentOneLabel', '1', colRad, [radius / 2, -0.1]),
-      lineLabel('oppositeOneLabel', '1', colRad, [-0.1, radius / 2]),
+      line('tanAlt', colOpp),
+      lineLabel('tanLabelAlt', 'tan', colOpp),
+      line('cotAlt', colAdj),
+      lineLabel('cotLabelAlt', 'cot', colAdj),
+      lineLabel('adjacentOneLabel', '1', colAdj, [radius / 2, -0.1]),
+      lineLabel('oppositeOneLabel', '1', colOpp, [-0.1, radius / 2]),
       {
         name: 'adjacentOne',
         method: 'primitives.line',
@@ -356,7 +367,7 @@ function layoutCircle1() {
           p1: [0, 0],
           p2: [radius, 0],
           width: 0.013,
-          color: colRad,
+          color: colAdj,
           // arrow: 'bar',
         },
       },
@@ -367,7 +378,7 @@ function layoutCircle1() {
           p1: [0, 0],
           p2: [0, radius],
           width: 0.013,
-          color: colRad,
+          color: colOpp,
           // arrow: 'bar',
         },
       },
@@ -378,18 +389,53 @@ function layoutCircle1() {
           elements: {
             sin: { style: 'normal' },
             comma: ', ',
-            rightArrow: ' \u2192 ',
+            // rightArrow: ' \u2192 ',
           },
           forms: {
-            bowstring: 'bowstring',
-            half: ['half ', 'bowstring'],
-            sinus: 'sinus',
-            sine: ['sinus', 'rightArrow', 'sine'],
-            sinesin: ['sinus', 'rightArrow', 'sine', 'comma', 'sin'],
+            // bowstring: 'bowstring',
+            half: ['half chord'],
+            // sinus: 'sinus',
+            // sine: ['sinus', 'rightArrow', 'sine'],
+            sinesin: ['sine', 'comma', 'sin'],
             sin: 'sin',
           },
           formDefaults: { alignment: { yAlign: 'baseline' } },
-          color: colSin,
+          color: colOpp,
+        },
+      },
+      {
+        name: 'cosLabelEqn',
+        method: 'equation',
+        options: {
+          elements: {
+            co: { style: 'normal' },
+            s: { style: 'normal' },
+            sin: { style: 'normal' },
+            comma: ', ',
+            // rightArrow: ' \u2192 ',
+            comp: { text: '90\u00b0 \u2212 \u03b8', color: colTheta },
+            lb: { symbol: 'bracket', side: 'left' },
+            rb: { symbol: 'bracket', side: 'right' },
+            brace: { symbol: 'brace', side: 'bottom' },
+            theta: { text: '\u03b8', color: colTheta },
+          },
+          forms: {
+            sine: {
+              content: ['sin', { brac: ['lb', 'comp', 'rb'] }],
+              alignment: { xAlign: '0.25o' },
+            },
+            compSine: {
+              content: ['sin', { brac: ['lb', 'comp', 'rb'] }, '_ = ', 'co', 'mplementary', ' ', 's', 'ine', ' ', 'theta'],
+              alignment: { xAlign: '0.25o' },
+            },
+            cosine: {
+              content: ['sin', { brac: ['lb', 'comp', 'rb'] }, '_ = ', 'co', 's', 'ine', ' ', 'theta'],
+              alignment: { xAlign: '0.25o' },
+            },
+            cos: ['co', 's'],
+          },
+          formDefaults: { alignment: { yAlign: 'top', xAlign: 'left' } },
+          color: colAdj,
         },
       },
       {
@@ -442,7 +488,7 @@ function layoutCircle1() {
             cotangent: ['co', 't', 'angent'],
             cot: ['co', 't'],
           },
-          color: colCot,
+          color: colAdj,
         },
       },
       {
@@ -462,7 +508,7 @@ function layoutCircle1() {
             cosec: ['c', 'o', 's', 'e', 'c_1'],
             csc: ['c', 's', 'c_1'],
           },
-          color: colCsc,
+          color: colHyp,
         },
       },
       {
@@ -490,10 +536,10 @@ function layoutCircle1() {
           yAlign: 'bottom',
         },
       },
-      line('secAlt', colSec),
-      lineLabel('secLabelAlt', 'sec', colSec),
-      line('cscAlt', colCsc),
-      lineLabel('cscLabelAlt', 'csc', colCsc),
+      line('secAlt', colHyp),
+      lineLabel('secLabelAlt', 'sec', colHyp),
+      line('cscAlt', colHyp),
+      lineLabel('cscLabelAlt', 'csc', colHyp),
     ],
     mods: {
       scenarios: {
@@ -510,7 +556,7 @@ function layoutCircle1() {
       },
     },
   });
-  const [radLine, angle, sec, tan, sin, cos, tanLabel, sinLabel, cosLabel, radLineLabel, sec1, angle2, xSec, f1Label, bowString, bowStringLabel] = circle.getElements(['line', 'angle', 'sec', 'tan', 'sin', 'cos', 'tanLabel', 'sinLabel', 'cosLabel', 'lineLabel', 'sec1', 'angle2', 'xSec', 'f1Label', 'bowString', 'bowStringLabel']);
+  const [radLine, angle, sec, tan, sin, cos, tanLabel, sinLabel, cosLabel, radLineLabel, sec1, angle2, xSec, f1Label, bowString, bowStringLabel, cosLabelEqn] = circle.getElements(['line', 'angle', 'sec', 'tan', 'sin', 'cos', 'tanLabel', 'sinLabel', 'cosLabel', 'lineLabel', 'sec1', 'angle2', 'xSec', 'f1Label', 'bowString', 'bowStringLabel', 'cosLabelEqn']);
   const [cot, cotLabel, csc, secLabel, secLabel1, cscLabel, rightAngle1, rightAngle2, compAngle, compAngle2, rightAngle3, bow, rightAngle4, tanAltEqn, secAltEqn, rightAngle5, cotAltEqn, angle3, cscAltEqn] = circle.getElements(['cot', 'cotLabel', 'csc', 'secLabel', 'secLabel1', 'cscLabel', 'rightAngle1', 'rightAngle2', 'compAngle', 'compAngle2', 'rightAngle3', 'bow', 'rightAngle4', 'tanAltEqn', 'secAltEqn', 'rightAngle5', 'cotAltEqn', 'angle3', 'cscAltEqn']);
   const [tanAlt, tanLabelAlt] = circle.getElements(['tanAlt', 'tanLabelAlt']);
   const [secAlt, secLabelAlt] = circle.getElements(['secAlt', 'secLabelAlt']);
@@ -543,9 +589,9 @@ function layoutCircle1() {
       }
     }
 
-    if (bow.isShown) {
-      bow.setAngle({ angle: r * 2, startAngle: -r });
-    }
+    // if (bow.isShown) {
+    //   bow.setAngle({ angle: r * 2, startAngle: -r });
+    // }
 
     // Theta Complement
     if (compAngle.isShown) {
@@ -708,7 +754,7 @@ function layoutCircle1() {
         const cscLength = cotLine.p2.x / Math.cos(r);
         const cscLine = new Fig.Line([0, 0], cscLength, r);
         cscAlt.custom.updatePoints({
-          p1: [0, 0.01],
+          p1: [0, 0.0],
           length: cscLength,
           angle: r,
           arrow: cotLine.p2.x > rightBounds.p1.x - 0.01 ? { end: { head: 'barb', scale: 0.8 } } : null,
@@ -812,7 +858,12 @@ function layoutCircle1() {
     if (bowStringLabel.isShown) {
       bowStringLabel.setPosition(x + 0.04, Math.max(0.06, y / 2) - 0.06);
     }
-    cosLabel.setPosition([x / 2, -0.07]);
+    if (cosLabel.isShown) {
+      cosLabel.setPosition([x / 2 - 0.1, -0.05]);
+    }
+    if (cosLabelEqn.isShown) {
+      cosLabelEqn.setPosition([x / 2 - 0.1, -0.05]);
+    }
     radLineLabel.setPosition([x / 2.2 - 0.02, y / 2.2 + 0.02]);
     if (rightAngle1.isShown && r < Math.PI / 2 - 0.3 && r > 0.2) {
       rightAngle1.setOpacity(1);

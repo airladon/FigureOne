@@ -293,7 +293,7 @@ function makeSlides() {
     options: {
       nextButton: { position: [3.8, 0], width: 0.2, height: 0.2 },
       prevButton: { position: [-3.8, 0], width: 0.2, height: 0.2 },
-      equation: ['eqn', 'bow.eqn', 'eqn1', 'circle1.bowStringLabel', 'circle1.tanAltEqn', 'circle1.secAltEqn', 'circle1.cotAltEqn', 'circle1.cscAltEqn', 'eqn2'],
+      equation: ['eqn', 'bow.eqn', 'eqn1', 'circle1.bowStringLabel', 'circle1.tanAltEqn', 'circle1.secAltEqn', 'circle1.cotAltEqn', 'circle1.cscAltEqn', 'eqn2', 'circle1.cosLabelEqn'],
       // equationDefaults: { duration: 4 },
     },
   });
@@ -1223,6 +1223,7 @@ function makeSlides() {
   .##.....##.########..######..########....##...
   */
   // Slide 95
+  const eqn2 = figure.getElement('eqn2');
   slides.push({
     clear: true,
     scenarioCommon: ['circleLines'],
@@ -1235,8 +1236,12 @@ function makeSlides() {
   });
   slides.push({ dissolve: { in: 'chord' } });
   slides.push({
+    showCommon: ['chord', { circle1: ['circle', 'chord', 'bow'] }],
+    dissolve: { in: 'circle1.bow' },
+  });
+  slides.push({
     showCommon: { circle1: ['circle', 'chord', 'tangent'] },
-    dissolve: { out: 'chord', in: 'circle1.tangent' },
+    dissolve: { out: ['chord', 'circle1.bow'], in: 'circle1.tangent' },
   });
   slides.push({ dissolve: { in: 'tangent' } });
   slides.push({
@@ -1298,33 +1303,20 @@ function makeSlides() {
   });
 
   slides.push({
-    showCommon: { circle1: ['x', 'line', 'angle', 'circle', 'center', 'tanAlt', 'secAlt', 'rightAngle4', 'adjacentOne', 'adjacentOneLabel'] },
-    transition: (done) => {
-      circle1.animations.new()
-        .inParallel([
-          circle1._tanAlt.animations.dissolveIn(0.4),
-          circle1._secAlt.animations.dissolveIn(0.4),
-          circle1._rightAngle4.animations.dissolveIn(0.4),
-          circle1._lineLabel.animations.dissolveOut(0.4),
-          circle1._center.animations.dissolveOut(0.4),
-        ])
-        .whenFinished(done)
-        .start();
-    },
-    steadyState: () => {
-      circle1.hide(['center', 'lineLabel']);
+    showCommon: { circle1: ['line', 'angle', 'circle', 'tanAlt', 'secAlt', 'rightAngle4', 'adjacentOne', 'adjacentOneLabel', 'arc'] },
+    dissolve: {
+      in: { circle1: ['tanAlt', 'secAlt', 'rightAngle4'] },
+      out: { circle1: ['center'] },
     },
   });
 
   slides.push({
-    showCommon: { circle1: ['line', 'angle', 'circle', 'tanAlt', 'secAlt', 'rightAngle4', 'adjacentOne', 'adjacentOneLabel', 'arc', 'y'] },
     transition: (done) => {
       circle1.animations.new()
         .inParallel([
           circle1.animations.scenario({ target: 'circleQuartMid', duration: 2 }),
           circle1._y.animations.dissolveIn(0.4),
           circle1._circle.animations.dissolveOut(0.4),
-          circle1._center.animations.dissolveOut(0.4),
         ])
         .whenFinished(done)
         .start();
@@ -1357,43 +1349,98 @@ function makeSlides() {
   slides.push({ form: { eqn2: '07' } });
   slides.push({ form: { eqn2: '08' } });
 
+  /*
+  ..######..####.##....##.########.....######...#######...######.
+  .##....##..##..###...##.##..........##....##.##.....##.##....##
+  .##........##..####..##.##..........##.......##.....##.##......
+  ..######...##..##.##.##.######......##.......##.....##..######.
+  .......##..##..##..####.##..........##.......##.....##.......##
+  .##....##..##..##...###.##..........##....##.##.....##.##....##
+  ..######..####.##....##.########.....######...#######...######.
+  */
+  slides.push({
+    showCommon: { circle1: ['x', 'line', 'arc', 'y', 'lineLabel', 'angle', 'sin', 'cos', 'rightAngle1', 'lineLabel', 'bowStringLabel'] },
+    dissolve: {
+      in: { circle1: ['sin', 'rightAngle1', 'lineLabel'] },
+      out: { circle1: ['secAlt', 'rightAngle4', 'adjacentOne', 'adjacentOneLabel', 'tanAlt'] },
+    },
+    fromForm: { eqn2: '08', 'circle1.bowStringLabel': null },
+    form: { eqn2: '08', 'circle1.bowStringLabel': null },
+  });
 
-
-
-
-  // slides.push({
-  //   showCommon: { circle1: ['x', 'arc', 'line', 'lineLabel', 'angle', 'circle', 'center'] },
-  // })
+  slides.push({ form: { eqn2: '08', 'circle1.bowStringLabel': 'half' } });
+  slides.push({ form: { eqn2: '08', 'circle1.bowStringLabel': 'sinesin' } });
+  slides.push({ form: { eqn2: '08', 'circle1.bowStringLabel': 'sin' } });
+  slides.push({ dissolve: { in: 'circle1.compAngle2' } });
+  slides.push({
+    showCommon: { circle1: ['x', 'line', 'arc', 'y', 'lineLabel', 'angle', 'sin', 'cos', 'rightAngle1', 'lineLabel', 'sinLabel', 'compAngle2', 'cosLabelEqn'] },
+    fromForm: { eqn2: '08', 'circle1.cosLabelEqn': null },
+    form: { eqn2: '08', 'circle1.cosLabelEqn': 'sine' },
+  });
+  slides.push({ form: { eqn2: '08', 'circle1.cosLabelEqn': 'compSine' } });
+  slides.push({ form: { eqn2: '08', 'circle1.cosLabelEqn': 'cosine' } });
+  slides.push({ form: { eqn2: '08', 'circle1.cosLabelEqn': 'cos' } });
+  slides.push({ dissolve: { out: 'circle1.compAngle2' } });
 
   slides.push({
-    showCommon: { circle1: ['x', 'y', 'arc', 'line', 'x', 'angle', 'tanAlt', 'secAlt', 'rightAngle4', 'adjacentOne', 'adjacentOneLabel'] },
-    enterStateCommon: () => {
-      figure.fnMap.exec('circSetAngle', initialAngle);
-      circle1.highlight(['tanAlt', 'secAlt', 'tanAltEqn', 'tanLabelAlt', 'secAltEqn', 'secLabelAlt', 'adjacentOne', 'adjacentOneLabel', 'angle']);
+    showCommon: { circle1: ['x', 'line', 'arc', 'y', 'lineLabel', 'angle', 'sin', 'cos', 'rightAngle1', 'lineLabel', 'sinLabel', 'cosLabel'] },
+    transition: (done) => {
+      circle1.animations.new()
+        .scenario({ target: 'circleQuart', duration: 1.5 })
+        .then(eqn2.animations.goToForm({ target: '10', animate: 'move' }))
+        // .then(eqn2.animations.pulse({ elements: eqn.getPhraseElements('sinOne'), duration: 1 }))
+        .whenFinished(done)
+        .start();
     },
-    dissolve: {
-      in: { circle1: ['secAlt', 'tanAlt', 'rightAngle4', 'adjacentOne', 'adjacentOneLabel'] },
-    },
-    leaveStateCommon: () => circle1.undim(),
+    form: { eqn2: '10' },
   });
-  slides.push({ form: { eqn2: '00' } });
-  slides.push({ form: { eqn2: '01' } });
-  slides.push({ form: { eqn2: '02' } });
-  slides.push({ form: { eqn2: '03' } });
-  slides.push({ form: { eqn2: '04' } });
-  slides.push({ form: { eqn2: '05' } });
-  slides.push({ form: { eqn2: '06' } });
-  slides.push({ form: { eqn2: '07' } });
-  slides.push({ form: { eqn2: '08' } });
-  slides.push({ form: { eqn2: '10' } });
-  slides.push({ form: { eqn2: '11' } });
+  slides.push({ scenarioCommon: ['circleQuart'], form: { eqn2: '11' } });
   slides.push({ form: { eqn2: '12' } });
   slides.push({ form: { eqn2: '13' } });
   slides.push({ form: { eqn2: '14' } });
   slides.push({ form: { eqn2: '15' } });
   slides.push({ form: { eqn2: '16' } });
   slides.push({ form: { eqn2: '17' } });
-  slides.push({ form: { eqn2: '20' } });
+
+  /*
+  ..######...#######..########.....######...######...######.
+  .##....##.##.....##....##.......##....##.##....##.##....##
+  .##.......##.....##....##.......##.......##.......##......
+  .##.......##.....##....##.......##........######..##......
+  .##.......##.....##....##.......##.............##.##......
+  .##....##.##.....##....##.......##....##.##....##.##....##
+  ..######...#######.....##........######...######...######.
+  */
+  slides.push({
+    showCommon: { circle1: ['x', 'line', 'arc', 'y', 'angle', 'cotAlt', 'rightAngle5', 'oppositeOneLabel', 'oppositeOne', 'cscAlt', 'compAngle', 'cotAltEqn'] },
+    dissolve: {
+      in: { circle1: ['cotAlt', 'rightAngle5', 'oppositeOneLabel', 'oppositeOne', 'cscAlt', 'compAngle'] },
+      out: { circle1: ['sin', 'rightAngle1', 'cos', 'lineLabel', 'sineLabel', 'cosLabel'] },
+    },
+    fromForm: { eqn2: '17', 'circle1.cotAltEqn': null },
+    form: { eqn2: '17', 'circle1.cotAltEqn': null },
+  });
+
+  slides.push({ form: { eqn2: '17', 'circle1.cotAltEqn': 'complementaryTangent' } });
+  slides.push({ form: { eqn2: '17', 'circle1.cotAltEqn': 'cotangent' } });
+  slides.push({ form: { eqn2: '17', 'circle1.cotAltEqn': 'cot' } });
+
+  slides.push({
+    showCommon: { circle1: ['x', 'line', 'arc', 'y', 'angle', 'cotAlt', 'rightAngle5', 'oppositeOneLabel', 'oppositeOne', 'cscAlt', 'compAngle', 'cotLabelAlt', 'cscAltEqn'] },
+    fromForm: { eqn2: '17', 'circle1.cscAltEqn': null },
+    form: { eqn2: '17', 'circle1.cscAltEqn': null },
+  });
+
+  slides.push({ form: { eqn2: '17', 'circle1.cscAltEqn': 'complementarySecant' } });
+  slides.push({ form: { eqn2: '17', 'circle1.cscAltEqn': 'cosec' } });
+  slides.push({ form: { eqn2: '17', 'circle1.cscAltEqn': 'csc' } });
+
+  slides.push({ dissolve: { in: 'circle1.angle3', pulse: { scale: 1.5 } } });
+  slides.push({
+    showCommon: { circle1: ['x', 'line', 'arc', 'y', 'angle', 'cotAlt', 'rightAngle5', 'oppositeOneLabel', 'oppositeOne', 'cscAlt', 'compAngle', 'cotLabelAlt', 'cscLabelAlt', 'angle3'] },
+    fromForm: { eqn2: '17', 'circle1.cscAltEqn': null },
+    form: { eqn2: '20' },
+  });
   slides.push({ form: { eqn2: '21' } });
   slides.push({ form: { eqn2: '22' } });
   slides.push({ form: { eqn2: '23' } });
@@ -1402,9 +1449,63 @@ function makeSlides() {
   slides.push({ form: { eqn2: '26' } });
   slides.push({ form: { eqn2: '27' } });
   slides.push({ form: { eqn2: 'summaryStrike' } });
-  // slides.push({ form: { eqn2: 'summaryDissapear' } });
   slides.push({ form: { eqn2: 'summary' } });
   slides.push({ form: { eqn2: 'summaryTheta' } });
+
+
+  slides.push({
+    showCommon: { circle1: ['x', 'y', 'arc', 'line', 'x', 'angle', 'cotAlt', 'cscAlt', 'cscLabelAlt', 'cotLabelAlt', 'secLabelAlt', 'secAlt', 'sin', 'sinLabel', 'cos', 'cosLabel', 'rightAngle1', 'tanAlt', 'tanLabelAlt'] },
+    // form: { eqn2: 'summaryTheta' },
+  });
+
+
+  slides.push({ form: { eqn2: 'noRatios' } });
+
+
+  // // slides.push({
+  // //   showCommon: { circle1: ['x', 'arc', 'line', 'lineLabel', 'angle', 'circle', 'center'] },
+  // // })
+
+  // slides.push({
+  //   showCommon: { circle1: ['x', 'y', 'arc', 'line', 'x', 'angle', 'tanAlt', 'secAlt', 'rightAngle4', 'adjacentOne', 'adjacentOneLabel'] },
+  //   enterStateCommon: () => {
+  //     figure.fnMap.exec('circSetAngle', initialAngle);
+  //     circle1.highlight(['tanAlt', 'secAlt', 'tanAltEqn', 'tanLabelAlt', 'secAltEqn', 'secLabelAlt', 'adjacentOne', 'adjacentOneLabel', 'angle']);
+  //   },
+  //   dissolve: {
+  //     in: { circle1: ['secAlt', 'tanAlt', 'rightAngle4', 'adjacentOne', 'adjacentOneLabel'] },
+  //   },
+  //   leaveStateCommon: () => circle1.undim(),
+  // });
+  // slides.push({ form: { eqn2: '00' } });
+  // slides.push({ form: { eqn2: '01' } });
+  // slides.push({ form: { eqn2: '02' } });
+  // slides.push({ form: { eqn2: '03' } });
+  // slides.push({ form: { eqn2: '04' } });
+  // slides.push({ form: { eqn2: '05' } });
+  // slides.push({ form: { eqn2: '06' } });
+  // slides.push({ form: { eqn2: '07' } });
+  // slides.push({ form: { eqn2: '08' } });
+  // slides.push({ form: { eqn2: '10' } });
+  // slides.push({ form: { eqn2: '11' } });
+  // slides.push({ form: { eqn2: '12' } });
+  // slides.push({ form: { eqn2: '13' } });
+  // slides.push({ form: { eqn2: '14' } });
+  // slides.push({ form: { eqn2: '15' } });
+  // slides.push({ form: { eqn2: '16' } });
+  // slides.push({ form: { eqn2: '17' } });
+  // slides.push({ form: { eqn2: '20' } });
+  // slides.push({ form: { eqn2: '21' } });
+  // slides.push({ form: { eqn2: '22' } });
+  // slides.push({ form: { eqn2: '23' } });
+  // slides.push({ form: { eqn2: '24' } });
+  // slides.push({ form: { eqn2: '25' } });
+  // slides.push({ form: { eqn2: '26' } });
+  // slides.push({ form: { eqn2: '27' } });
+  // slides.push({ form: { eqn2: 'summaryStrike' } });
+  // // slides.push({ form: { eqn2: 'summaryDissapear' } });
+  // slides.push({ form: { eqn2: 'summary' } });
+  // slides.push({ form: { eqn2: 'summaryTheta' } });
 
 
 

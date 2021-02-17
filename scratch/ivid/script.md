@@ -3,9 +3,9 @@
 Welcome to this interactive video describing where the trigonometric functions come from. This video is interactive, which means if you see me interacting with an element on the screen, then you can too. When you do, the video will pause, so just press play when you are ready to continue.
 
 # Similar Triangles
-To understand where the trigonometric functions come from, we first need to remember properties that similar triangles have.
+To understand where the trigonometric functions come from, we first need to remember properties of similar triangles.
 
-Two triangles are said to be similar when they have the same shape, but are of different size. This means, their corresponding angles are all equal, so they have the same shape, and their corresponding sides are all scaled by the same amount. This then helps us understand the third property, which is the ratio of any two corresponding sides of similar triangles will be equal. So if we take the ratio of sides sA and sB, the s term cancels and we are left with the same ratio as sides A and B from the top triangle. Finally, if you can show triangles have any of these properties, then in fact those two triangle will be similar, and will have all of the properties.
+Two triangles are said to be similar when they have the same shape, but are of different size. This means, their corresponding angles are all equal, so they have the same shape, and their corresponding sides are all scaled by the same amount. This then helps us understand the third property, which is the ratio of any two corresponding sides of similar triangles will be equal. So if we take the ratio of sides sA and sB, the s term cancels and we are left with the same ratio as sides A and B from the top triangle. Finally, if you can show triangles have any of these properties, then in fact those triangles will be similar, and will have all of the properties.
 
 # Right Angle Triangles
 So what does this mean for right angle triangles?
@@ -29,15 +29,17 @@ Now, the ratio values all change with angle and as we change theta between 0 and
 
 # Names
 ## Lines
-Each of these functions have abreviated names that come directly from Latin, so the names are not necessarily intuitive. However, the names are all derived from just three different lines related to a circle, and knowing these lines can help make sense of the names.
+Each of these functions have abreviated names that come directly from Latin, so the names are not necessarily intuitive. However, the names are all derived from just three different lines related to a circle, and knowing these lines can help make some sense of the names.
 
-The first line is the chord, and is a line between two points on a circle. The word chord comes from the latin word meaning bowsting, and you might see a bow when you highlight the arc between the cord.
+The first line is between two points on a circle and is called a chord. The word chord comes from the latin word meaning bowstring, and you might see the bow when you highlight the arc between the cord.
 
-The second line touches the circle in just one spot and is called a tangent line coming from the latin word meaning to touch. The tangent line has the property that it is at right angles to the radius line that touches the same point.
+The second line touches the circle in just one spot and is called a tangent line coming from the latin word meaning to touch. The tangent line has the property that it is at right angles to the radius line that touches the same point on the circle.
 
 The third line cuts through the circle and is called a secant line coming from the latin word meaning to cut.
 
 So, how do these three lines relate to our triangle ratios?
+
+
 
 
 
@@ -82,26 +84,24 @@ Well we start by taking a circle with radius one, also called a unit circle, and
 
 Now, the side opposite theta of this right angle triangle is a tangent line, so we will call it tan. The hypotenuse cuts through the circle, so its a secant line, that we will call sec, and our adjacent side is the radius, which is 1.
 
-Let's now rewrite all of our ratios in terms of these sides. So the opposite side over the hypotenuse is tan over sec. The adjacent side over hypotenuse is 1 over sec. The opposite side over the adjacent side is then tan over 1, which just simplifies down to tan. Our next ratio is sec over tan, then we have sec over 1 which is simply sec and finally we have 1 over tan.
+Let's now rewrite all of our ratios in terms of these sides. So the opposite side over the hypotenuse is tan over sec. The adjacent side over hypotenuse is 1 over sec. The opposite side over the adjacent side is then tan over 1, which just simplifies down to tan, and we can continue to fill out our ratios.
 
 ## Sin, Cosine
 Ok great.
 
-Now let's draw a right angle triangle within the arc. This triangle also has an angle theta and is thus similar to our first triangle and all its side ratios will be the same.
+Now we draw a right angle triangle within the arc. This triangle also has an angle theta and is thus similar to our first triangle and all its side ratios will be the same.
 
-The side opposite theta is a part of a chord line. Using geometry you can show this is actually half of a chord, and it was called a half chord or half bowstring when these concepts were first developed in Sanskrit by Indian Mathematitians. Now our word for this line today sine, comes from the Latin translation of this which unfortunately lost the original meaning. Maybe it would make more sense to be called a half-chord, but nevertheless, sine is the word we use and we usually abreviate this without the e.
+The side opposite theta is a part of a chord line, and in fact using geometry you can show this is actually half of a chord, and as such it was called a half chord or half bowstring when these concepts were first developed in Sanskrit by Indian Mathematitians. Now our word for this line today sine, comes from the Latin translation of the concept which unfortunately lost the original meaning. Nevertheless, sine comes from the word for half-chord and is the word we use today, though ofen we abreviate it without the e.
 
-Next, we can recognize that the adjacent side to theta, is actually the side opposite theta's complementary angle. We therefore call this the complimentary sine, which we abbreviate to cosine or cos.
+Next, we can recognize that the adjacent side to theta, is actually the side opposite theta's complementary angle. We can therefore say this is the sine of the complementary angle, which we then call complimentary sine of theta, which we abbreviate to cosine or cos.
 
 Finally the hypotenuse of this triangle is the radius 1, so we can now write all our ratios in terms of these sides.
 
-So opposite over hypotenuse is sine over 1 which simplifies down to sin. Adjacent over hypotenuse is then cos over one or just cos.
-
-Opposite over adjacent is sine over the cosine. Our next ratio is then the reciprocal of the sine. And then we also have over over cos and cos over sin.
+So opposite over hypotenuse is sine over 1 which simplifies down to sin. Adjacent over hypotenuse is then cos over one or just cos. And we can go ahead and fill out the remainder of the ratios.
 
 ## Cot, Cosec
 
-Now we construct a third right angle triangle around the arc of the circle that covers theta's complementary angle.
+Now finally we construct a third right angle triangle, but this time around the arc of the circle that covers theta's complementary angle.
 
 Once again we have a tangent line, but in this case it's the tangent of the complimentary angle, which we cal the complimenetary tangent, cotangent, or cot for short.
 
@@ -111,10 +111,13 @@ Now, this right angle triangle is also similar to our first two right angle tria
 
 So let's do the same exercise and substitute our sides into the ratios, being careful to use the sides relative to theta and not the complementary angle.
 
-So, the side opposite theta over the hypotenuse is 1 over the cosec. The side adjacent to theta, over the hypotenuse is the cotangent over the cosec. The opposite over adjacent is one over the cotangent. The hypotenuse over the opposite side is the cosec over one which simplifies down to the cosec. And finally we have the cosec over the cotangent and the cotangent over 1 which simplifies down to cot.
-
 ## Summary
-Now we have a whole bunch of different expressions for the 6 different side ratios of a right angle triangle. In fact, we could make a lot more, as using substitution we could each ratio in additional terms it is not already in. But many of these ratios are not 
-Now, each ratios name, comes from the side that 
+Now we have a whole bunch of different expressions for the 6 different side ratios of a right angle triangle. In fact, we could make a lot more expressions using substitution and the pythagorean theorem. But most commonly, we usually remember just a few of these, and understand we can derive the rest from them. So let's remove some of the less common ratios, and we are left with
+
+The sine is the opposite over the hypotenuse, the cosine is the adjacent over the hypotenuse, the tangent is the opposite over the adjacent, and is often useful to remember it can be a function of the sine and cosine. The cosec, sec and cot are then the reciprocals of the sin, cosine and tangent.
+
+
+
+
 
 
