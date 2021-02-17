@@ -105,9 +105,9 @@ Now we construct a third right angle triangle around the arc of the circle that 
 
 Once again we have a tangent line, but in this case it's the tangent of the complimentary angle, which we cal the complimenetary tangent, cotangent, or cot for short.
 
-We also have a secant line of the the complementary angle which we will call the complimentary secant, cosec or csc for short.
+We also have a secant line of the the complementary angle which we will call the complimentary secant, cosec or csc for short. And our third line is the radius 1.
 
-Now, this right angle triangle is also similar to our first two right angle triangles because it also has an angle theta.
+Now, this right angle triangle is also similar to our first two right angle triangles because it also has the theta as well.
 
 So let's do the same exercise and substitute our sides into the ratios, being careful to use the sides relative to theta and not the complementary angle.
 

@@ -1234,7 +1234,7 @@ function makeSlides() {
   slides.push({ form: { eqn2: '26' } });
   slides.push({ form: { eqn2: '27' } });
   slides.push({ form: { eqn2: 'summaryStrike' } });
-  slides.push({ form: { eqn2: 'summaryDissapear' } });
+  // slides.push({ form: { eqn2: 'summaryDissapear' } });
   slides.push({ form: { eqn2: 'summary' } });
 
 

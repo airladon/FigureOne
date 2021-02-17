@@ -1200,6 +1200,7 @@ export class Equation extends FigureElementCollection {
         callback: null,
         delay: 0,
       }));
+      console.log(this.getRemainingAnimationTime(['_Equation', '_EquationColor']))
       return this.getRemainingAnimationTime(['_Equation', '_EquationColor']);
     });
     this.animations.goToForm = (...opt) => {
@@ -1587,7 +1588,7 @@ export class Equation extends FigureElementCollection {
       // const [key, elem] = entry;
       const elem = elems[key];
       if (typeof elem === 'string') {
-        if (!(key.startsWith('space') && key.startsWith(' '))) {
+        if (!(key.startsWith('space') && key.startsWith(' ') && key.length > 0)) {
           this.add(key, this.makeTextElem({ text: elem }));
         }
       } else if (elem instanceof FigureElementPrimitive) {

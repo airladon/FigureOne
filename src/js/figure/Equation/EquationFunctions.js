@@ -3242,6 +3242,9 @@ export class EquationFunctions {
 
   // eslint-disable-next-line class-methods-use-this
   stringToElement(content: string) {
+    if (content.length === 0) {
+      return null;
+    }
     if (content.startsWith('space')) {
       const spaceNum = parseFloat(content.replace(/space[_]*/, '')) || 0.03;
       return new Element(new BlankElement(spaceNum));
