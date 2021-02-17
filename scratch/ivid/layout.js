@@ -1192,10 +1192,10 @@ function makeSlides() {
     form: 'sixSRRWithValues',
   });
 
-  slides.push({
-    showCommon: [],
-    form: 'summaryTable',
-  });
+  // slides.push({
+  //   showCommon: [],
+  //   form: 'summaryTable',
+  // });
   
   slides.push({
     showCommon: ['circleLines'],

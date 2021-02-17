@@ -1200,7 +1200,7 @@ export class Equation extends FigureElementCollection {
         callback: null,
         delay: 0,
       }));
-      console.log(this.getRemainingAnimationTime(['_Equation', '_EquationColor']))
+      // console.log(this.getRemainingAnimationTime(['_Equation', '_EquationColor']))
       return this.getRemainingAnimationTime(['_Equation', '_EquationColor']);
     });
     this.animations.goToForm = (...opt) => {
