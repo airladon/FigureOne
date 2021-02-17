@@ -9,7 +9,7 @@ function layout() {
     options: {
       text,
       modifiers,
-      position: [0, 0],
+      position,
       xAlign: 'center',
       justify: 'left',
       yAlign: 'middle',
@@ -207,10 +207,14 @@ function layout() {
     // centerText('sumOfAngles', 'Angles in a triangle always add to 180\u00b0'),
     centerText('similarTriangles', 'Similar Triangles'),
     // centerText('similarQuestion', 'Are these triangles similar?'),
+    centerText('chord', '|chord|: from Latin |chorda| - "bowstring"', {
+      chord: { font: { style: 'italic', family: 'Times New Roman', color: colSin } },
+      chorda: { font: { style: 'italic', family: 'Times New Roman' } },
+    }, [1.5, 0], 0.15),
     centerText('tangent', '|tangent|: from Latin |tangere| - "to touch"', {
       tangent: { font: { style: 'italic', family: 'Times New Roman', color: colTan } },
       tangere: { font: { style: 'italic', family: 'Times New Roman' } },
-    }, [1, 1], 0.15),
+    }, [1.5, 0], 0.15),
     centerText('compTangent', '|co|mplementary |t|angent', {
       co: { font: { color: colCot } },
       t: { font: { color: colCot } },
@@ -225,7 +229,7 @@ function layout() {
     centerText('secant', '|secant|: from Latin |secare| - "to cut"', {
       secant: { font: { style: 'italic', family: 'Times New Roman', color: colSec } },
       secare: { font: { style: 'italic', family: 'Times New Roman' } },
-    }, [1, 1], 0.15),
+    }, [1.5, 0], 0.15),
     leftText('allTriangles', [-2, 0.95], 'All right triangles with |theta|:', {
       theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic', color: colTheta } },
     }),
@@ -1196,17 +1200,181 @@ function makeSlides() {
   //   showCommon: [],
   //   form: 'summaryTable',
   // });
-  
+
   slides.push({
     showCommon: ['circleLines'],
     form: null,
-  })
+  });
 
   slides.push({
     showCommon: [{
       circle1: ['x', 'y', 'arc', 'line', 'x', 'angle', 'cotAlt', '']
     }],
     form: { eqn2: '0' },
+  });
+
+  /*
+  .########..########..######..########.########
+  .##.....##.##.......##....##.##..........##...
+  .##.....##.##.......##.......##..........##...
+  .########..######....######..######......##...
+  .##...##...##.............##.##..........##...
+  .##....##..##.......##....##.##..........##...
+  .##.....##.########..######..########....##...
+  */
+  // Slide 95
+  slides.push({
+    clear: true,
+    scenarioCommon: ['circleLines'],
+    showCommon: { circle1: ['circle'] },
+  });
+
+  slides.push({
+    showCommon: { circle1: ['circle', 'chord'] },
+    dissolve: { in: 'circle1.chord' },
+  });
+  slides.push({ dissolve: { in: 'chord' } });
+  slides.push({
+    showCommon: { circle1: ['circle', 'chord', 'tangent'] },
+    dissolve: { out: 'chord', in: 'circle1.tangent' },
+  });
+  slides.push({ dissolve: { in: 'tangent' } });
+  slides.push({
+    showCommon: ['tangent', { circle1: ['circle', 'chord', 'tangent', 'radius', 'rightAngle'] }],
+    dissolve: { in: { circle1: ['radius', 'rightAngle', 'center'] } },
+  });
+  slides.push({
+    showCommon: ['tangent', { circle1: ['circle', 'chord', 'tangent', 'radius', 'rightAngle', 'center'] }],
+    dissolve: {
+      out: ['tangent', 'circle1.radius', 'circle1.rightAngle', 'circle1.center'],
+      in: ['circle1.secant'],
+    },
+  });
+  slides.push({
+    showCommon: { circle1: ['circle', 'chord', 'tangent', 'secant'] },
+    dissolve: { in: ['secant'] },
+  });
+
+  /*
+  .########....###....##....##.....######..########..######.
+  ....##......##.##...###...##....##....##.##.......##....##
+  ....##.....##...##..####..##....##.......##.......##......
+  ....##....##.....##.##.##.##.....######..######...##......
+  ....##....#########.##..####..........##.##.......##......
+  ....##....##.....##.##...###....##....##.##.......##....##
+  ....##....##.....##.##....##.....######..########..######.
+  */
+  slides.push({
+    showCommon: { circle1: ['circle'] },
+    transition: (done) => {
+      circle1.animations.new()
+        .inParallel([
+          circle1.animations.scenario({ target: 'circleSmall', duration: 2 }),
+          circle1._chord.animations.dissolveOut(0.4),
+          circle1._tangent.animations.dissolveOut(0.4),
+          circle1._secant.animations.dissolveOut(0.4),
+        ])
+        .inParallel([
+          circle1._adjacentOneLabel.animations.dissolveIn(0.4),
+          circle1._adjacentOne.animations.dissolveIn(0.4),
+          circle1._center.animations.dissolveIn(0.4),
+        ])
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      circle1.setScenario('circleSmall');
+      circle1.show(['adjacentOne', 'adjacentOneLabel', 'center']);
+    },
+  });
+  slides.push({
+    clear: true,
+    showCommon: { circle1: ['line', 'angle', 'circle', 'center', 'adjacentOne', 'adjacentOneLabel'] },
+    scenarioCommon: ['circleSmall'],
+    enterStateCommon: () => figure.fnMap.exec('circSetAngle', initialAngle),
+    // fromForm: { eqn2: '00' },
+    // form: { eqn2: '00' },
+    dissolve: { in: { circle1: ['line', 'angle'] } },
+  });
+
+  slides.push({
+    showCommon: { circle1: ['x', 'line', 'angle', 'circle', 'center', 'tanAlt', 'secAlt', 'rightAngle4', 'adjacentOne', 'adjacentOneLabel'] },
+    transition: (done) => {
+      circle1.animations.new()
+        .inParallel([
+          circle1._tanAlt.animations.dissolveIn(0.4),
+          circle1._secAlt.animations.dissolveIn(0.4),
+          circle1._rightAngle4.animations.dissolveIn(0.4),
+          circle1._lineLabel.animations.dissolveOut(0.4),
+          circle1._center.animations.dissolveOut(0.4),
+        ])
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      circle1.hide(['center', 'lineLabel']);
+    },
+  });
+
+  slides.push({
+    showCommon: { circle1: ['line', 'angle', 'circle', 'tanAlt', 'secAlt', 'rightAngle4', 'adjacentOne', 'adjacentOneLabel', 'arc', 'y'] },
+    transition: (done) => {
+      circle1.animations.new()
+        .inParallel([
+          circle1.animations.scenario({ target: 'circleQuartMid', duration: 2 }),
+          circle1._y.animations.dissolveIn(0.4),
+          circle1._circle.animations.dissolveOut(0.4),
+          circle1._center.animations.dissolveOut(0.4),
+        ])
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      circle1.hide(['circle']);
+      circle1.setScenario('circleQuartMid');
+    },
+  });
+
+  slides.push({
+    scenarioCommon: ['default', 'eqnTri', 'circleQuartMid'],
+    showCommon: { circle1: ['line', 'angle', 'arc', 'tanAlt', 'secAlt', 'rightAngle4', 'adjacentOne', 'adjacentOneLabel', 'y', 'tanLabelAlt'] },
+    dissolve: { in: 'circle1.tanLabelAlt' },
+  });
+
+  slides.push({
+    showCommon: { circle1: ['line', 'angle', 'arc', 'tanAlt', 'secAlt', 'rightAngle4', 'adjacentOne', 'adjacentOneLabel', 'y', 'tanLabelAlt', 'secLabelAlt'] },
+    dissolve: { in: 'circle1.secLabelAlt' },
+    form: { eqn2: null },
+  });
+
+  slides.push({ form: { eqn2: '00' } });
+  slides.push({ form: { eqn2: '01' } });
+  slides.push({ form: { eqn2: '02' } });
+  slides.push({ form: { eqn2: '03' } });
+  slides.push({ form: { eqn2: '04' } });
+  slides.push({ form: { eqn2: '05' } });
+  slides.push({ form: { eqn2: '06' } });
+  slides.push({ form: { eqn2: '07' } });
+  slides.push({ form: { eqn2: '08' } });
+
+
+
+
+
+  // slides.push({
+  //   showCommon: { circle1: ['x', 'arc', 'line', 'lineLabel', 'angle', 'circle', 'center'] },
+  // })
+
+  slides.push({
+    showCommon: { circle1: ['x', 'y', 'arc', 'line', 'x', 'angle', 'tanAlt', 'secAlt', 'rightAngle4', 'adjacentOne', 'adjacentOneLabel'] },
+    enterStateCommon: () => {
+      figure.fnMap.exec('circSetAngle', initialAngle);
+      circle1.highlight(['tanAlt', 'secAlt', 'tanAltEqn', 'tanLabelAlt', 'secAltEqn', 'secLabelAlt', 'adjacentOne', 'adjacentOneLabel', 'angle']);
+    },
+    dissolve: {
+      in: { circle1: ['secAlt', 'tanAlt', 'rightAngle4', 'adjacentOne', 'adjacentOneLabel'] },
+    },
+    leaveStateCommon: () => circle1.undim(),
   });
   slides.push({ form: { eqn2: '00' } });
   slides.push({ form: { eqn2: '01' } });
@@ -1236,6 +1404,7 @@ function makeSlides() {
   slides.push({ form: { eqn2: 'summaryStrike' } });
   // slides.push({ form: { eqn2: 'summaryDissapear' } });
   slides.push({ form: { eqn2: 'summary' } });
+  slides.push({ form: { eqn2: 'summaryTheta' } });
 
 
 
@@ -2155,6 +2324,6 @@ function makeSlides() {
   // });
 
   nav.loadSlides(slides);
-  nav.goToSlide(-1);
+  nav.goToSlide(95);
 }
 makeSlides();

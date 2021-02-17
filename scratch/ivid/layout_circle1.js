@@ -78,6 +78,75 @@ function layoutCircle1() {
         },
       },
       {
+        name: 'tangent',
+        method: 'collections.line',
+        options: {
+          p1: [-radius * 1.3, -radius * 0.6],
+          p2: [radius * 0.7, -radius * 1.32],
+          // p1: 
+          width: 0.013,
+          color: colTan,
+          label: {
+            text: 'tangent',
+            orientation: 'baseAway',
+            location: 'bottom',
+            scale: 1.1,
+          },
+        },
+      },
+      {
+        name: 'secant',
+        method: 'collections.line',
+        options: {
+          p1: [radius * 0.6, radius * 1.1],
+          p2: [-radius * 1.2, radius * 0],
+          width: 0.013,
+          color: colSec,
+          label: {
+            text: 'secant',
+            orientation: 'baseToLine',
+            location: 'top',
+            scale: 1.1,
+          },
+        },
+      },
+      {
+        name: 'chord',
+        method: 'collections.line',
+        options: {
+          p1: [radius * Math.cos(1), radius * Math.sin(1)],
+          p2: [radius * Math.cos(1), -radius * Math.sin(1)],
+          width: 0.013,
+          color: colSin,
+          label: {
+            text: 'chord',
+            orientation: 'horizontal',
+            location: 'right',
+            scale: 1.1,
+          },
+        },
+      },
+      {
+        name: 'radius',
+        method: 'primitives.line',
+        options: {
+          p1: [0, 0],
+          p2: [radius * Math.cos(4.37), radius * Math.sin(4.37)],
+          width: 0.008,
+          color: colRad,
+        },
+      },
+      {
+        name: 'rightAngle',
+        method: 'collections.angle',
+        options: {
+          p1: [0, 0],
+          p2: [radius * Math.cos(4.37), radius * Math.sin(4.37)],
+          p3: [-radius * 1.3, -radius * 0.6],
+          curve: { autoRightAngle: true, width: 0.008, radius: 0.2 },
+        },
+      },
+      {
         name: 'arc',
         method: 'primitives.polygon',
         options: {
@@ -434,8 +503,10 @@ function layoutCircle1() {
         small: { scale: 0.7, position: [0, -0.3] },
         center: { scale: 1, position: [0, -0.5] },
         right1: { scale: 1, position: [0, -0.5] },
-        circleSmall: { scale: 0.8, position: [0.7, 0] },
+        circleSmall: { scale: 0.8, position: [0, 0] },
+        circleLines: { scale: 0.7, position: [-1.3, 0] },
         circleQuart: { scale: 1, position: [-radius / 2 + 0.8, -1] },
+        circleQuartMid: { scale: 1, position: [-radius / 2 + 0.3, -1] },
       },
     },
   });

@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
-/* global colSin, colRad, colCos, colCot, colTan, colSec, colCsc, colTheta, color1, figure */
+/* global colSin, colRad, colCos, colCot, colTan, colSec, colCsc, colTheta */
+/* global color1, figure, colOpp, colHyp, colAdj */
 
 function makeEquation() {
   const lines = (linesIn, translation = {}, alignment = {}) => {
@@ -22,13 +23,13 @@ function makeEquation() {
       alignment,
     };
   };
-  const lines1 = (contentLines) => ({
+  const lines1 = contentLines => ({
     // content: {
-      lines: {
-        content: contentLines,
-        baselineSpace: 0.5,
-        justify: 'element',
-      },
+    lines: {
+      content: contentLines,
+      baselineSpace: 0.5,
+      justify: 'element',
+    },
     // },
     // translation,
     // alignment,
@@ -952,6 +953,17 @@ function makeEquation() {
         hyp_2: { text: 'hypotenuse', color: colHyp, size: 0.17 },
         hyp_3: { text: 'hypotenuse', color: colHyp, size: 0.17 },
         hyp_4: { text: 'hypotenuse', color: colHyp, size: 0.17 },
+        theta1: { text: '\u03b8', color: colTheta },
+        theta2: { text: '\u03b8', color: colTheta },
+        theta3: { text: '\u03b8', color: colTheta },
+        theta4: { text: '\u03b8', color: colTheta },
+        theta5: { text: '\u03b8', color: colTheta },
+        theta6: { text: '\u03b8', color: colTheta },
+        theta7: { text: '\u03b8', color: colTheta },
+        theta8: { text: '\u03b8', color: colTheta },
+        theta9: { text: '\u03b8', color: colTheta },
+        theta10: { text: '\u03b8', color: colTheta },
+        theta11: { text: '\u03b8', color: colTheta },
         s1: { symbol: 'strike', style: 'forward', lineWidth: 0.008 },
         s2: { symbol: 'strike', style: 'forward', lineWidth: 0.008 },
         s3: { symbol: 'strike', style: 'forward', lineWidth: 0.008 },
@@ -960,16 +972,16 @@ function makeEquation() {
         s6: { symbol: 'strike', style: 'forward', lineWidth: 0.008 },
         s7: { symbol: 'strike', style: 'forward', lineWidth: 0.008 },
         s8: { symbol: 'strike', style: 'forward', lineWidth: 0.008 },
-        b1: { symbol: 'box', lineWidth: 0.008, color: color1 },
-        b2: { symbol: 'box', lineWidth: 0.008, color: color1 },
-        b3: { symbol: 'box', lineWidth: 0.008, color: color1 },
-        b4: { symbol: 'box', lineWidth: 0.008, color: color1 },
-        b5: { symbol: 'box', lineWidth: 0.008, color: color1 },
-        b6: { symbol: 'box', lineWidth: 0.008, color: color1 },
-        b7: { symbol: 'box', lineWidth: 0.008, color: color1 },
-        b8: { symbol: 'box', lineWidth: 0.008, color: color1 },
-        b9: { symbol: 'box', lineWidth: 0.008, color: color1 },
-        b10: { symbol: 'box', lineWidth: 0.008, color: color1 },
+        // b1: { symbol: 'box', lineWidth: 0.008, color: color1 },
+        // b2: { symbol: 'box', lineWidth: 0.008, color: color1 },
+        // b3: { symbol: 'box', lineWidth: 0.008, color: color1 },
+        // b4: { symbol: 'box', lineWidth: 0.008, color: color1 },
+        // b5: { symbol: 'box', lineWidth: 0.008, color: color1 },
+        // b6: { symbol: 'box', lineWidth: 0.008, color: color1 },
+        // b7: { symbol: 'box', lineWidth: 0.008, color: color1 },
+        // b8: { symbol: 'box', lineWidth: 0.008, color: color1 },
+        // b9: { symbol: 'box', lineWidth: 0.008, color: color1 },
+        // b10: { symbol: 'box', lineWidth: 0.008, color: color1 },
       },
       phrases: {
         oppHyp: { frac: ['opp_1', 'v1', 'hyp_1'] },
@@ -1002,6 +1014,16 @@ function makeEquation() {
         sec: cont('sec_4', w1),
         cot: cont('cot_4', w1),
         csc: cont('csc_3', w1),
+        sinTheta: cont(['sin_1', ' ', 'theta1'], w1),
+        cosTheta: cont(['cos_1', ' ', 'theta2'], w1),
+        tanTheta: cont(['tan_2', ' ', 'theta3'], w1),
+        secTheta: cont(['sec_4', ' ', 'theta4'], w1),
+        cotTheta: cont(['cot_4', ' ', 'theta5'], w1),
+        cscTheta: cont(['csc_3', ' ', 'theta6'], w1),
+        sinCosTheta: cont({ frac: [['sin_2', ' ', 'theta7'], 'v9', ['cos_2', ' ', 'theta8']] }, w1),
+        oneSinTheta: cont({ frac: ['_1_3', 'v10', ['sin_3', ' ', 'theta9']] }, w1),
+        oneCosTheta: cont({ frac: ['_1_4', 'v11', ['cos_3', ' ', 'theta10']] }, w1),
+        oneTanTheta: cont({ frac: ['_1_8', 'v18', ['tan_4', ' ', 'theta11']] }, w1),
         c1: lin(['oppHyp', 'adjHyp', 'oppAdj', 'hypOpp', 'hypAdj', 'adjOpp']),
 
         c2_0: cont(lin(['eq1', '', '', '', '', '']), 0.3),
@@ -1022,9 +1044,10 @@ function makeEquation() {
         c5_06: lin(['sin', 'cos', 'sinCos', 'oneSin', 'oneCos', '']),
         c5_07: lin(['sin', 'cos', 'sinCos', 'oneSin', 'oneCos', 'cosSin']),
         c5s: lin(['sin', 'cos', 'sinCos', 'oneSin', 'oneCos', s('cosSin', 1)]),
-        c5b: lin([b('sin', 1), b('cos', 2), b('sinCos', 3), b('oneSin', 4), b('oneCos', 5), 'cosSin']),
+        // c5b: lin([b('sin', 1), b('cos', 2), b('sinCos', 3), b('oneSin', 4), b('oneCos', 5), 'cosSin']),
         c5d: lin(['sin', 'cos', 'sinCos', 'oneSin', 'oneCos', '']),
         c5: lin(['', '', 'sinCos', 'oneSin', 'oneCos', 'oneTan']),
+        c5Theta: lin(['', '', 'sinCosTheta', 'oneSinTheta', 'oneCosTheta', 'oneTanTheta']),
 
         c4_0: cont(lin(['eq7', '', '', '', '', '']), 0.3),
         c4_1: cont(lin(['eq7', 'eq8', '', '', '', '']), 0.3),
@@ -1043,10 +1066,11 @@ function makeEquation() {
         c3_05: lin(['tanSec', 'oneSec', 'tan', 'secTan', 'secOne', '']),
         c3_06: lin(['tanSec', 'oneSec', 'tan', 'secTan', 'sec', '']),
         c3_07: lin(['tanSec', 'oneSec', 'tan', 'secTan', 'sec', 'oneTan']),
-        c3b: lin(['tanSec', 'oneSec', b('tan', 6), 'secTan', b('sec', 7), b('oneTan', 8)]),
+        // c3b: lin(['tanSec', 'oneSec', b('tan', 6), 'secTan', b('sec', 7), b('oneTan', 8)]),
         c3s: lin([s('tanSec', 2), s('oneSec', 3), 'tan', s('secTan', 4), 'sec', 'oneTan']),
         c3d: lin(['', '', 'tan', '', 'sec', 'oneTan']),
         c3: lin(['sin', 'cos', 'tan', 'csc', 'sec', 'cot']),
+        c3Theta: lin(['sinTheta', 'cosTheta', 'tanTheta', 'cscTheta', 'secTheta', 'cotTheta']),
 
         c6_0: cont(lin(['eq13', '', '', '', '', '']), 0.3),
         c6_1: cont(lin(['eq13', 'eq14', '', '', '', '']), 0.3),
@@ -1064,7 +1088,7 @@ function makeEquation() {
         c7_05: lin(['oneCsc', 'cotCsc', 'oneCot', 'csc', 'cscCot', '']),
         c7_06: lin(['oneCsc', 'cotCsc', 'oneCot', 'csc', 'cscCot', 'cotOne']),
         c7_07: lin(['oneCsc', 'cotCsc', 'oneCot', 'csc', 'cscCot', 'cot']),
-        c7b: lin(['oneCsc', 'cotCsc', 'oneCot', b('csc', 9), 'cscCot', b('cot', 10)]),
+        // c7b: lin(['oneCsc', 'cotCsc', 'oneCot', b('csc', 9), 'cscCot', b('cot', 10)]),
         c7s: lin([s('oneCsc', 5), s('cotCsc', 6), s('oneCot', 7), 'csc', s('cscCot', 8), 'cot']),
         c7d: lin(['', '', '', 'csc', '', 'cot']),
       },
@@ -1111,6 +1135,7 @@ function makeEquation() {
           },
           duration: 2,
         },
+        summaryTheta: ['c1', 'c2', 'c3Theta', 'c4', 'c5Theta'],
 
       },
       position: [-2.8, 1.2],
