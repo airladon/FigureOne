@@ -1492,7 +1492,15 @@ function makeSlides() {
   slides.push({
     clear: true,
     scenario: 'small',
-    show: { circ: ['circle', 'sin', 'cos', 'rotator', 'sec', 'tan', 'theta', 'tanLabel', 'sinLabel', 'cosLabel', 'secLabel', 'cot', 'cotLabel', 'csc', 'cscLabel', 'rightSin', 'rightTan', 'rightCot'] },
+    show: { circ: ['circle', 'sin', 'cos', 'rotator', 'sec', 'tan', 'q1Theta', 'tanLabel', 'sinLabel', 'cosLabel', 'secLabel', 'cot', 'cotLabel', 'csc', 'cscLabel', 'rightSin', 'rightTan', 'rightCot'] },
+    form: null,
+    fromForm: null,
+  });
+
+  slides.push({
+    clear: true,
+    scenario: 'small',
+    show: { circ: ['circle', 'sin', 'cosAlt', 'rotator', 'secAlt', 'tanAlt', 'thetaQ1', 'tanLabelAlt', 'sinLabel', 'cosLabelAlt', 'secLabelAlt', 'cotAlt', 'cotLabelAlt', 'cscAlt', 'cscLabelAlt', 'rightSinAlt', 'rightTanAlt', 'rightCotAlt', 'thetaCos', 'thetaCot', 'hyp', 'rightCosAlt', 'rightTanAlt', 'rightCotAlt', 'hypLabel', 'compAngle'] },
     form: null,
     fromForm: null,
   });

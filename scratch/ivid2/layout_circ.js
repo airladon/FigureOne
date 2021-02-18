@@ -16,13 +16,16 @@ function layoutCirc() {
       p1, length, angle, width, color, dash,
     },
   });
-  const arc = (name, color, width = thin, sides = 100, angleToDraw = Math.PI * 2, rotation = 0) => ({
-    name,
-    method: 'primitives.polygon',
-    options: {
-      radius, line: { width }, sides, angleToDraw: angleToDraw + 0.001, rotation, color,
-    },
-  });
+
+  function arc(name, color, width = thin, sides = 100, angleToDraw = Math.PI * 2, rotation = 0) {
+    return {
+      name,
+      method: 'primitives.polygon',
+      options: {
+        radius, line: { width }, sides, angleToDraw: angleToDraw + 0.001, rotation, color,
+      },
+    };
+  }
   const lineLabel = (name, text, color, position = [0, 0], yAlign = 'middle', xAlign = 'center') => ({
     name,
     method: 'text',
@@ -50,19 +53,20 @@ function layoutCirc() {
     },
   });
 
-  const angle = (name, text) => ({
+  const angle = (name, text, rad = 0.2, curvePosition = 0.5) => ({
     name,
     method: 'collections.angle',
     options: {
       color: colTheta,
       curve: {
         width: 0.01,
-        radius: 0.2,
+        radius: rad,
         sides: 400,
       },
       label: {
         text,
         offset: 0.01,
+        curvePosition,
       },
     },
   });
@@ -130,76 +134,14 @@ function layoutCirc() {
       rightAngle('rightSin', [0, 0], Math.PI / 2),
       rightAngle('rightTan', [radius, 0], Math.PI / 2),
       rightAngle('rightCot', [0, radius], Math.PI / 2),
-      // {
-      //   name: 'center',
-      //   method: 'primitives.polygon',
-      //   options: {
-      //     radius: 0.015,
-      //     sides: 12,
-      //   },
-      // },
-      // {
-      //   name: 'rightAngle1',
-      //   method: 'collections.angle',
-      //   options: {
-      //     curve: {
-      //       autoRightAngle: true,
-      //       radius: 0.15,
-      //       width: 0.006,
-      //     },
-      //     color: colGrey,
-      //   },
-      // },
-      // {
-      //   name: 'rightAngle2',
-      //   method: 'collections.angle',
-      //   options: {
-      //     curve: {
-      //       autoRightAngle: true,
-      //       radius: 0.15,
-      //       width: 0.006,
-      //     },
-      //     color: colGrey,
-      //   },
-      // },
-      // {
-      //   name: 'rightAngle3',
-      //   method: 'collections.angle',
-      //   options: {
-      //     curve: {
-      //       autoRightAngle: true,
-      //       radius: 0.15,
-      //       width: 0.006,
-      //     },
-      //     color: colGrey,
-      //   },
-      // },
-      // {
-      //   name: 'rightAngle4',
-      //   method: 'collections.angle',
-      //   options: {
-      //     curve: {
-      //       autoRightAngle: true,
-      //       radius: 0.15,
-      //       width: 0.006,
-      //     },
-      //     color: colGrey,
-      //   },
-      // },
-      // {
-      //   name: 'rightAngle5',
-      //   method: 'collections.angle',
-      //   options: {
-      //     curve: {
-      //       autoRightAngle: true,
-      //       radius: 0.15,
-      //       width: 0.006,
-      //     },
-      //     color: colGrey,
-      //   },
-      // },
+      rightAngle('rightTanAlt', [0, radius], Math.PI / 2),
+      rightAngle('rightCotAlt', [0, radius], Math.PI / 2),
+      rightAngle('rightCosAlt', [0, radius], Math.PI / 2),
       angle('theta', '\u03b8'),
-      angle('q1Theta', '\u03b8'),
+      angle('thetaQ1', '\u03b8'),
+      angle('thetaCos', '\u03b8'),
+      angle('thetaCot', '\u03b8'),
+      angle('compAngle', '90\u00b0\u2212\u03b8', 0.35, 0.7),
       // {
       //   name: 'angle',
       //   method: 'collections.angle',
@@ -293,26 +235,37 @@ function layoutCirc() {
       // lineLabel('secLabel', 'sec', colSec),
       // line('sec1', colSec),
       // lineLabel('secLabel1', 'sec', colSec),
-      lineLabel('secLabel', 'sec', colSec),
       // line('bowString', colSin),
       // line('sin', colSin),
-      lineLabel('sinLabel', 'sin', colSin, [0, 0], 'middle', 'center'),
       // lineLabel('cosLabel', 'cos', colSin, [0, 0], 'baseline'),
       // // lineLabel('f1Label', { forms: { 0: { sub: ['f', '_1'] } } }, colSin),
       // { name: 'f1Label', method: 'equation', options: { forms: { 0: { sub: ['f', '_1'] } }, color: colSin } },
       line('cos', colCos),
       line('sin', colSin),
-      lineLabel('cosLabel', 'cos', colCos, [0, 0], 'middle', 'left'),
-      // line('csc', colCsc),
-      lineLabel('cscLabel', 'csc', colCsc),
       line('cot', colCot),
       line('csc', colCsc),
       line('sec', colSec),
       line('tan', colTan),
       line('hyp', colHyp, thick, [0, 0], radius),
+      lineLabel('hypLabel', '1', colHyp),
+      lineLabel('sinLabel', 'sin', colSin, [0, 0], 'middle', 'center'),
+      lineLabel('cosLabel', 'cos', colCos, [0, 0], 'middle', 'center'),
       lineLabel('tanLabel', 'tan', colTan),
-      // line('cot', colCot),
+      lineLabel('secLabel', 'sec', colSec),
+      lineLabel('cscLabel', 'csc', colCsc),
       lineLabel('cotLabel', 'cot', colCot),
+      lineLabel('cosLabelAlt', 'cos', colCos, [0, 0], 'middle', 'center'),
+      lineLabel('tanLabelAlt', 'tan', colTan),
+      lineLabel('secLabelAlt', 'sec', colSec),
+      lineLabel('cscLabelAlt', 'csc', colCsc),
+      lineLabel('cotLabelAlt', 'cot', colCot),
+      line('cosAlt', colCos),
+      line('cotAlt', colCot),
+      line('cscAlt', colCsc),
+      line('secAlt', colSec),
+      line('tanAlt', colTan),
+      
+      // line('cot', colCot),
       // line('tanAlt', colOpp),
       // lineLabel('tanLabelAlt', 'tan', colOpp),
       // line('cotAlt', colAdj),
@@ -530,20 +483,23 @@ function layoutCirc() {
       },
     },
   });
+  const get = list => circle.getElements(list);
   const rotator = circle.getElement('rotator');
-  const [theta, q1Theta] = circle.getElements(['theta', 'q1Theta']);
-  const [cos, sin, tan] = circle.getElements(['cos', 'sin', 'tan']);
-  const [cot, sec, csc] = circle.getElements(['cot', 'sec', 'csc']);
-  const [hyp] = circle.getElements(['hyp']);
-  const [cosLabel, sinLabel, tanLabel] = circle.getElements(['cosLabel', 'sinLabel', 'tanLabel']);
-  const [cotLabel, secLabel, cscLabel] = circle.getElements(['cotLabel', 'secLabel', 'cscLabel']);
-  const [rightSin, rightTan, rightCot] = circle.getElements(['rightSin', 'rightTan', 'rightCot']);
-  // const [rotator, radLine, angle, sec, tan, sin, cos, tanLabel, sinLabel, cosLabel, radLineLabel, sec1, angle2, xSec, f1Label, bowString, bowStringLabel, cosLabelEqn] = circle.getElements(['rotator', 'line', 'angle', 'sec', 'tan', 'sin', 'cos', 'tanLabel', 'sinLabel', 'cosLabel', 'lineLabel', 'sec1', 'angle2', 'xSec', 'f1Label', 'bowString', 'bowStringLabel', 'cosLabelEqn']);
-  // const [cot, cotLabel, csc, secLabel, secLabel1, cscLabel, rightAngle1, rightAngle2, compAngle, compAngle2, rightAngle3, rightAngle4, tanAltEqn, secAltEqn, rightAngle5, cotAltEqn, angle3, cscAltEqn] = circle.getElements(['cot', 'cotLabel', 'csc', 'secLabel', 'secLabel1', 'cscLabel', 'rightAngle1', 'rightAngle2', 'compAngle', 'compAngle2', 'rightAngle3', 'rightAngle4', 'tanAltEqn', 'secAltEqn', 'rightAngle5', 'cotAltEqn', 'angle3', 'cscAltEqn']);
-  // const [tanAlt, tanLabelAlt] = circle.getElements(['tanAlt', 'tanLabelAlt']);
-  // const [secAlt, secLabelAlt] = circle.getElements(['secAlt', 'secLabelAlt']);
-  // const [cotAlt, cotLabelAlt] = circle.getElements(['cotAlt', 'cotLabelAlt']);
-  // const [cscAlt, cscLabelAlt] = circle.getElements(['cscAlt', 'cscLabelAlt']);
+  const [theta, thetaQ1, compAngle] = get(['theta', 'thetaQ1', 'compAngle']);
+  const [thetaCos, thetaCot] = get(['thetaCos', 'thetaCot']);
+  const [cos, sin] = get(['cos', 'sin', 'tan']);
+  const [tan, cot, sec, csc] = get(['tan', 'cot', 'sec', 'csc']);
+  const [cotAlt, secAlt, cscAlt] = get(['cotAlt', 'secAlt', 'cscAlt']);
+  const [tanAlt, cosAlt] = get(['tanAlt', 'cosAlt']);
+  const [hyp, hypLabel] = get(['hyp', 'hypLabel']);
+  const [cosLabel, sinLabel] = get(['cosLabel', 'sinLabel']);
+  const [secLabel, cscLabel] = get(['secLabel', 'cscLabel']);
+  const [cotLabel, tanLabel] = get(['cotLabel', 'tanLabel']);
+  const [rightSin, rightTan, rightCot] = get(['rightSin', 'rightTan', 'rightCot']);
+  const [cotLabelAlt, secLabelAlt, cscLabelAlt] = get(['cotLabelAlt', 'secLabelAlt', 'cscLabelAlt']);
+  const [cosLabelAlt, tanLabelAlt] = get(['cosLabelAlt', 'tanLabelAlt']);
+  const [rightCosAlt, rightTanAlt, rightCotAlt] = get(['rightCosAlt', 'rightTanAlt', 'rightCotAlt']);
+
   // const xBounds = 1.3;
   // const yBounds = 0.9;
   const bounds = new Fig.Rect(
@@ -676,6 +632,16 @@ function layoutCirc() {
     }
     return { end: { head: 'barb', scale} };
   };
+  const setRightAng = (element, test, position, startAngle) => {
+    if (element.isShown) {
+      if (test) {
+        element.setAngle({ position, startAngle, angle: Math.PI / 2 });
+        element.setOpacity(1);
+      } else {
+        element.setOpacity(0);
+      }
+    }
+  }
   function updateCircle() {
     const r = rotator.transform.r();
     const cosR = Math.cos(r);
@@ -699,10 +665,20 @@ function layoutCirc() {
 
     if (hyp.isShown) {
       hyp.setRotation(r);
+      if (hypLabel.isShown) {
+        const hypLine = new Fig.Line([0, 0], [x, y]);
+        const direction = quad === 1 || quad === 3 ? 'positive' : 'negative';
+        hypLabel.setPosition(hypLine.offset(direction, 0.1).midPoint());
+        if (Math.abs(x) < 0.3 || Math.abs(y) < 0.3) {
+          hypLabel.setOpacity(0);
+        } else {
+          hypLabel.setOpacity(1);
+        }
+      }
     }
 
     // Theta angle
-    if (q1Theta.isShown) {
+    if (thetaQ1.isShown) {
       if (
         r > 0.3
         && (
@@ -710,22 +686,73 @@ function layoutCirc() {
           || !cos.isShown
         )
       ) {
-        q1Theta.setAngle({ angle: r });
-        q1Theta.setOpacity(1);
+        thetaQ1.setAngle({ angle: r });
+        thetaQ1.setOpacity(1);
       } else {
-        q1Theta.setOpacity(0);
+        thetaQ1.setOpacity(0);
       }
     }
     if (theta.isShown) {
       theta.setAngle({ angle: r });
     }
+    if (compAngle.isShown) {
+      if (Math.abs(y) > 0.6 && Math.abs(x) > 0.4) {
+        compAngle.setAngle({ position: [0, 0], startAngle: r, angle: Math.PI / 2 - r });
+        compAngle.setOpacity(1);
+      } else {
+        compAngle.setOpacity(0);
+      }
+    }
 
+    /*
+    ..######..####.##....##
+    .##....##..##..###...##
+    .##........##..####..##
+    ..######...##..##.##.##
+    .......##..##..##..####
+    .##....##..##..##...###
+    ..######..####.##....##
+    */
     if (sin.isShown) {
       sin.custom.updatePoints({ p1: [x, 0], p2: [x, y] });
+      if (sinLabel.isShown) {
+        if ((tan.isShown || tanAlt.isShown) && Math.abs(x) > radius * 0.8) {
+          sinLabel.setPosition(x - xSign * 0.1, y / 2);
+        } else {
+          sinLabel.setPosition(x + xSign * 0.1, y / 2);
+        }
+      }
     }
+
+    /*
+    ..######...#######...######.
+    .##....##.##.....##.##....##
+    .##.......##.....##.##......
+    .##.......##.....##..######.
+    .##.......##.....##.......##
+    .##....##.##.....##.##....##
+    ..######...#######...######.
+    */
     if (cos.isShown) {
       cos.custom.updatePoints({ p1: [0, 0], p2: [x + xSign * thick / 2, 0] });
+      if (cosLabel.isShown) {
+        if (ySign > 0) {
+          cosLabel.setPosition(x / 2 - 0.1, -0.05);
+        } else {
+          cosLabel.setPosition(x / 2 - 0.1, 0.05);
+        }
+      }
     }
+
+    /*
+    .########....###....##....##
+    ....##......##.##...###...##
+    ....##.....##...##..####..##
+    ....##....##.....##.##.##.##
+    ....##....#########.##..####
+    ....##....##.....##.##...###
+    ....##....##.....##.##....##
+    */
     if (tan.isShown) {
       const [tanLine, isClipped] = clip([xSign * radius, 0], [xSign * radius, ySign * tanVal]);
       tan.custom.updatePoints({
@@ -735,6 +762,16 @@ function layoutCirc() {
         tanLabel.setPosition(xSign * (radius + 0.1), tanLine.p2.y / 2);
       }
     }
+
+    /*
+    ..######..########..######.
+    .##....##.##.......##....##
+    .##.......##.......##......
+    ..######..######...##......
+    .......##.##.......##......
+    .##....##.##.......##....##
+    ..######..########..######.
+    */
     if (sec.isShown) {
       const [secLine, isClipped] = clip([0, 0], [xSign * radius, ySign * tanVal]);
       sec.custom.updatePoints({
@@ -765,6 +802,16 @@ function layoutCirc() {
         secLabel.setPosition(secLine.offset(direction, 0.12).pointAtPercent(0.5));
       }
     }
+
+    /*
+    ..######...#######..########
+    .##....##.##.....##....##...
+    .##.......##.....##....##...
+    .##.......##.....##....##...
+    .##.......##.....##....##...
+    .##....##.##.....##....##...
+    ..######...#######.....##...
+    */
     if (cot.isShown) {
       const [cotLine, isClipped] = clip([0, ySign * radius], [xSign * cotVal, ySign * radius]);
       cot.custom.updatePoints({
@@ -774,6 +821,16 @@ function layoutCirc() {
         cotLabel.setPosition(cotLine.p2.x / 2, ySign * (radius + 0.08));
       }
     }
+
+    /*
+    ..######...######...######.
+    .##....##.##....##.##....##
+    .##.......##.......##......
+    .##........######..##......
+    .##.............##.##......
+    .##....##.##....##.##....##
+    ..######...######...######.
+    */
     if (csc.isShown) {
       const [cscLine, isClipped] = clip([0, 0], [xSign * cotVal, ySign * radius]);
       csc.custom.updatePoints({
@@ -787,44 +844,142 @@ function layoutCirc() {
         }
       }
     }
-    if (sinLabel.isShown) {
-      if (tan.isShown && Math.abs(x) > radius * 0.8) {
-        sinLabel.setPosition(x - xSign * 0.1, y / 2);
-      } else {
-        sinLabel.setPosition(x + xSign * 0.1, y / 2);
+    
+    /*
+    ....###....##.......########
+    ...##.##...##..........##...
+    ..##...##..##..........##...
+    .##.....##.##..........##...
+    .#########.##..........##...
+    .##.....##.##..........##...
+    .##.....##.########....##...
+    */
+    if (tanAlt.isShown) {
+      const [tanLine, isClipped] = clip([x, y], [xSign * secVal, 0]);
+      tanAlt.custom.updatePoints({
+        p1: tanLine.p1, p2: tanLine.p2, arrow: arrow(isClipped),
+      });
+      if (tanLabelAlt.isShown) {
+        const direction = quad === 1 || quad === 3 ? 'positive' : 'negative';
+        tanLabelAlt.setPosition(tanLine.offset(direction, 0.12).midPoint());
       }
     }
-    if (cosLabel.isShown) {
-      if (ySign > 0) {
-        cosLabel.setPosition(x / 2 - 0.1, -0.05);
-      } else {
-        cosLabel.setPosition(x / 2 - 0.1, 0.05);
+    if (cotAlt.isShown) {
+      const [cotLine, isClipped] = clip([x, y], [0, ySign * cscVal]);
+      cotAlt.custom.updatePoints({
+        p1: cotLine.p1, p2: cotLine.p2, arrow: arrow(isClipped),
+      });
+      if (cotLabelAlt.isShown) {
+        const direction = quad === 1 || quad === 3 ? 'negative' : 'positive';
+        cotLabelAlt.setPosition(cotLine.offset(direction, 0.12).midPoint());
+      }
+      if (thetaCot.isShown) {
+        if (!isClipped && Math.abs(x) > 0.4 * radius) {
+          thetaCot.setAngle({ position: cotLine.p2, startAngle: 3 * Math.PI / 2, angle: r });
+          thetaCot.setOpacity(1);
+        } else {
+          thetaCot.setOpacity(0);
+        }
       }
     }
-    if (rightSin.isShown) {
-      if (Math.abs(y) > 0.2 && Math.abs(x) > 0.2) {
-        rightSin.setAngle({ position: [x, 0], startAngle: Math.PI / 2 - (quad - 1) * Math.PI / 2, angle: Math.PI / 2});
-        rightSin.setOpacity(1);
-      } else {
-        rightSin.setOpacity(0);
+    if (secAlt.isShown) {
+      const [secLine, isClipped] = clip([0, 0], [xSign * secVal, 0]);
+      secAlt.custom.updatePoints({
+        p1: secLine.p1, p2: secLine.p2, arrow: arrow(isClipped),
+      });
+      if (secLabelAlt.isShown) {
+        secLabelAlt.setPosition([secLine.p2.x / 2, ySign * -0.1]);
       }
     }
-    if (rightTan.isShown) {
-      if (Math.abs(x) < radius - 0.2) {
-        rightTan.setAngle({ position: [xSign * radius, 0], startAngle: Math.PI / 2 - (quad - 1) * Math.PI / 2, angle: Math.PI / 2});
-        rightTan.setOpacity(1);
-      } else {
-        rightTan.setOpacity(0);
+    if (cscAlt.isShown) {
+      const [cscLine, isClipped] = clip([0, 0], [0, ySign * cscVal]);
+      cscAlt.custom.updatePoints({
+        p1: cscLine.p1, p2: cscLine.p2, arrow: arrow(isClipped),
+      });
+      if (cscLabelAlt.isShown) {
+        cscLabelAlt.setPosition([xSign * -0.1, cscLine.p2.y / 2]);
       }
     }
-    if (rightCot.isShown) {
-      if (Math.abs(x) > 0.2) {
-        rightCot.setAngle({ position: [0, ySign * radius], startAngle: Math.PI / 2 * 3 - (quad - 1) * Math.PI / 2, angle: Math.PI / 2});
-        rightCot.setOpacity(1);
-      } else {
-        rightCot.setOpacity(0);
+    if (cosAlt.isShown) {
+      cosAlt.custom.updatePoints({ p1: [0, y], p2: [x, y] });
+      if (cosLabelAlt.isShown) {
+        if ((tan.isShown || cotAlt.isShown) && Math.abs(y) > radius * 0.8) {
+          cosLabelAlt.setPosition(x / 2, y - ySign * 0.1);
+        } else {
+          cosLabelAlt.setPosition(x / 2, y + ySign * 0.1);
+        }
+      }
+      if (thetaCos.isShown) {
+        if (Math.abs(y) > 0.2 && Math.abs(x) > 0.4 * radius) {
+          thetaCos.setAngle({ position: [x, y], startAngle: Math.PI, angle: r });
+          thetaCos.setOpacity(1);
+        } else {
+          thetaCos.setOpacity(0);
+        }
       }
     }
+    /*
+    .########..####..######...##.....##.########
+    .##.....##..##..##....##..##.....##....##...
+    .##.....##..##..##........##.....##....##...
+    .########...##..##...####.#########....##...
+    .##...##....##..##....##..##.....##....##...
+    .##....##...##..##....##..##.....##....##...
+    .##.....##.####..######...##.....##....##...
+    */
+    setRightAng(
+      rightSin,
+      (Math.abs(y) > 0.4 || !tan.isShown) && Math.abs(x) > 0.2,
+      [x, 0],
+      Math.PI / 2 - (quad - 1) * Math.PI / 2,
+    );
+
+    setRightAng(
+      rightTan,
+      Math.abs(x) < radius - 0.2,
+      [xSign * radius, 0],
+      Math.PI / 2 - (quad - 1) * Math.PI / 2,
+    );
+
+    setRightAng(
+      rightCot,
+      Math.abs(x) > 0.2,
+      [0, ySign * radius],
+      Math.PI / 2 * 3 - (quad - 1) * Math.PI / 2,
+    );
+
+    setRightAng(
+      rightCosAlt,
+      r < Math.PI / 2 && Math.abs(y) > 0.2 && Math.abs(x) > 0.45,
+      [0, y],
+      Math.PI / 2 * 3,
+    );
+
+    setRightAng(
+      rightTanAlt,
+      r < Math.PI / 2 && Math.abs(y) > 0.4 && Math.abs(x) > 0.45,
+      [x, y],
+      r + Math.PI,
+    );
+
+    setRightAng(
+      rightCotAlt,
+      r < Math.PI / 2 && Math.abs(y) > 0.2 && Math.abs(x) > 0.55,
+      [x, y],
+      r + Math.PI / 2,
+    );
+
+
+    // if (rightCotAlt.isShown) {
+    //   if (r < Math.PI / 2 && Math.abs(y) > 0.2 && Math.abs(x) > 0.55) {
+    //     rightCotAlt.setAngle({
+    //       position: [x, y], startAngle: r + Math.PI / 2, angle: Math.PI / 2,
+    //     });
+    //     rightCotAlt.setOpacity(1);
+    //   } else {
+    //     rightCotAlt.setOpacity(0);
+    //   }
+    // }
     // if (radLine.isShown) {
     //   radLine.setRotation(r);
     // }
@@ -1033,10 +1188,10 @@ function layoutCirc() {
     // }
   }
   rotator.fnMap.add('updateCircle', () => updateCircle());
-  // figure.fnMap.global.add('circSetAngle', (r) => {
-  //   rotator.setRotation(r);
-  //   updateCircle();
-  // });
+  figure.fnMap.global.add('circSetAngle', (r) => {
+    rotator.setRotation(r);
+    updateCircle();
+  });
   // figure.fnMap.global.add('circGoToAngle', () => {
   //   rotator.animations.new()
   //     .rotation({ target: defaultAngle, velocity: 1 })
@@ -1051,18 +1206,18 @@ function layoutCirc() {
   //     .start();
   // });
 
-  // const addPulseFn = (name, element, xAlign, yAlign) => {
-  //   figure.fnMap.global.add(name, () => element.pulse({ xAlign, yAlign }));
-  // };
-  // addPulseFn('circPulseTan', tanLabel, 'left', 'bottom');
-  // addPulseFn('circPulseCot', cotLabel, 'left', 'bottom');
-  // addPulseFn('circPulseRad', radLineLabel, 'right', 'bottom');
-  // addPulseFn('circPulseSec1', secLabel1, 'center', 'top');
-  // addPulseFn('circPulseSec', secLabel, 'center', 'bottom');
-  // addPulseFn('circPulseCsc', cscLabel, 'right', 'middle');
-  // addPulseFn('circPulseSin1', sinLabel, 'left', 'middle');
-  // addPulseFn('circPulseSin', sinLabel, 'right', 'middle');
-  // addPulseFn('circPulseCos', cosLabel, 'center', 'top');
+  const addPulseFn = (name, element, xAlign, yAlign) => {
+    figure.fnMap.global.add(name, () => element.pulse({ xAlign, yAlign }));
+  };
+  addPulseFn('circPulseTan', tanLabel, 'left', 'bottom');
+  addPulseFn('circPulseCot', cotLabel, 'left', 'bottom');
+  addPulseFn('circPulseRad', hypLabel, 'right', 'bottom');
+  addPulseFn('circPulseSec1', secLabel, 'center', 'top');
+  addPulseFn('circPulseSec', secLabel, 'center', 'bottom');
+  addPulseFn('circPulseCsc', cscLabel, 'right', 'middle');
+  addPulseFn('circPulseSin1', sinLabel, 'left', 'middle');
+  addPulseFn('circPulseSin', sinLabel, 'right', 'middle');
+  addPulseFn('circPulseCos', cosLabel, 'center', 'top');
 
   // figure.fnMap.global.add('circAltColorsToSides', () => {
   //   tanAlt.setColor(colOpp);
