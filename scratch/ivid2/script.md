@@ -39,6 +39,67 @@ The third line cuts through the circle and is called a secant line coming from t
 
 So, how do these three lines relate to our triangle ratios?
 
+## Unit Circle
+
+We start with a quarter circle of radius 1, around which we construct a right angle triangle such that the hypotenuse is tangent to the circle, and touches the circle at some angle theta.
+
+Now, we have two right angle triangles, and using complementary angles, we can show that the top angle is also angle theta, meaning both right angle triangles are similar and have the same corresponding side ratios.
+
+Also, because the triangles have a side length equal to one, some of those ratios will have a 1 in their denominator, simplifying them down to a single side.
+
+So now, let's name our sides relative to theta.
+
+## Tan Sec
+Firstly, we will call side that covers or subtends theta in the first triangle the tangent, or just tan. The third line of this triangle is a secant line that cuts through the circle, so we call it the sec.
+
+Let's now fill in our opposite over ajcent ratio. The side opposite theta is the tan line, whose length is a function of theta, and the adjacent side is 1, and this simplifies to just the tan.
+
+Similarly, we can see our hypotenuse over adjacent is the sec line over one, leaving us with just the sec.
+
+Let's now look at our second triangle.
+
+## Cot CSC
+This triangle also has a tangent line, but this time it covers the complementary angle. Therefore we will call it the complementary tangent, cotangent or cot for short.
+
+Similarly the we have a complimentary secant line, which we call the cosec or csc for short.
+
+We can now fill in two more ratios, being careful to fill them in relative to theta and not the complementary angle, so the side adjacent to theta over the opposite side is equal to the cot, and the hypotenuse over the opposite is the cosec.
+
+## Sin Cos
+Now our final two ratios have the hypotenuse as the denominator so we construct a similar right angle triangle with a hypotenuse of 1. Now this line is a half cord line, and in fact when these ratios were developed it was called the half chord or half bowstring. However, as the concept was translated into Latin, the original meaning was lost, and the Latin word sinus meaning bay or bossom was used to describe this line. As a result our word today is the sine, or sin comes from this.
+
+So now our opposite over hypotenuse ratio is the sine, whose length is a function of theta, over one or just the sine.
+
+Our third side of this triangle is actually the sine of the complementary angle, and so we call it the complementary sine, cosine or cos for short. And with it, we see our last ratio is simply the cos.
+
+
+And so, that was kind of a long winded way to say, each of these ratios have a special name, and these names come from the relationship between circles, triangles and right angles.
+
+## Relationships
+Now, you also see these functions expressed as relationships relative to each other, and in fact, you can express each of these functions in terms of any other function, but we are going to look at just the most common relationships and understand it's pretty easy to derive all the others.  
+
+
+
+
+
+
+And so these are the names we use today for each of these ratios. The names come from the relationship between right angle triangles, complementary angles and circles. This diagram not only helps us understand where the names comes from, but also helps us get an intuitive understanding of what these ratios values are, and how they are bounded.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -120,4 +181,49 @@ The sine is the opposite over the hypotenuse, the cosine is the adjacent over th
 
 
 
+
+# RESET
+So how do these lines relate to the ratios in a triangle?
+
+We start with a quarter circle of radius 1, around which we construct a right angle triangle such that the hypotenuse is tangent to the circle, and touches the circle at some angle theta.
+
+Now, we have two right angle triangles, and using complementary angles, we can show that the top angle is also angle theta, meaning both right angle triangles are similar and have the same corresponding side ratios.
+
+Also, because the triangles have a side length equal to one, some of those ratios will have a 1 in their denominator, simplifying them down to a single side.
+
+So now, let's name our sides relative to theta.
+
+Firstly, we will call side that covers or subtends theta in the first triangle the tangent, or just tan. The third line of this triangle is a secant line that cuts through the circle, so we call it the sec.
+
+Let's now fill in our opposite over ajcent ratio. The side opposite theta is the tan line, whose length is a function of theta, and the adjacent side is 1.
+
+Similarly, we can see our hypotenuse over adjacent is the sec line over one, where the sec length is also a function of theta, leaving us with just the sec.
+
+And in fact, these two ratios are most often called the tan function and sec function.
+
+Let's now look at our second triangle.
+
+This triangle also has a tangent line, but this time it covers the complementary angle. Therefore we will call it the complementary tangent, cotangent or cot for short.
+
+Similarly the we have a complimentary secant line, which we call the cosec or csc for short.
+
+We can now fill in two more ratios, being careful to fill them in relative to theta and not the complementary angle, so the side adjacent to theta over the opposite side is equal to the cot, whose lenght is a function of theta over 1, or simply the cot, and the hypotenuse over the opposite is the cosec.
+
+Now our final two ratios have the hypotenuse as the denominator so we need to construct a similar right angle triangle with the radius as the hypotenuse. Now this line is a half cord line, and in fact when these ratios were developed it was called the half chord or half bowstring. However, as the concept was translated into Latin, the original meaning was lost, and the Latin word sinus meaning bay or bossom was used to describe this line. As a result our word today is the sine, or sin comes from this. But we can think of it as a half cord as that is what it is.
+
+So now our opposite over hypotenuse ratio is the sine, whose length is a function of theta, over one or just the sine.
+
+Finally, we will draw the sine of the complementary angle, which we will call the cosine or cos for short. And with it, we see our last ratio is simply the cos.
+
+And so these are the names we use today for each of these ratios. The names come from the relationship between right angle triangles, complementary angles and circles. This diagram not only helps us understand where the names comes from, but also helps us get an intuitive understanding of what these ratios values are, and how they are bounded.
+
+
+
+
+
+
+
+So let's name our sides relative to the angle theta. First we will name the tangent line that subtends the angle theta, tan (from tangent). And the
+
+Now our second triangle also has a tangent line, but it covers the complementary angle, so we will call it the complementary tan, or cotan or cot for short. And our final line is the complementary secant line, or which we call the cosec or csc.
 

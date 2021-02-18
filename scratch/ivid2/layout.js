@@ -294,7 +294,7 @@ function makeSlides() {
     options: {
       nextButton: { position: [3.8, 0], width: 0.2, height: 0.2 },
       prevButton: { position: [-3.8, 0], width: 0.2, height: 0.2 },
-      equation: ['eqn', 'bow.eqn', 'eqn1', 'circle1.bowStringLabel', 'circle1.tanAltEqn', 'circle1.secAltEqn', 'circle1.cotAltEqn', 'circle1.cscAltEqn', 'eqn2', 'circle1.cosLabelEqn'],
+      equation: ['eqn', 'bow.eqn', 'eqn1', 'circle1.bowStringLabel', 'circle1.tanAltEqn', 'circle1.secAltEqn', 'circle1.cotAltEqn', 'circle1.cscAltEqn', 'eqn2', 'circle1.cosLabelEqn', 'eqn3'],
       // equationDefaults: { duration: 4 },
     },
   });
@@ -1503,6 +1503,122 @@ function makeSlides() {
     show: { circ: ['circle', 'sin', 'cosAlt', 'rotator', 'secAlt', 'tanAlt', 'thetaQ1', 'tanLabelAlt', 'sinLabel', 'cosLabelAlt', 'secLabelAlt', 'cotAlt', 'cotLabelAlt', 'cscAlt', 'cscLabelAlt', 'rightSinAlt', 'rightTanAlt', 'rightCotAlt', 'thetaCos', 'thetaCot', 'hyp', 'rightCosAlt', 'rightTanAlt', 'rightCotAlt', 'hypLabel', 'compAngle'] },
     form: null,
     fromForm: null,
+  });
+
+  slides.push({
+    clear: true,
+    scenario: 'circQuarter',
+    show: { circ: ['arc', 'tanAlt', 'secAlt', 'rotator', 'theta', 'hypAlt', 'hypLabel', 'sin', 'rightSin', 'rightTanAlt', 'cotAlt', 'cscAlt', 'cosAlt'] },
+    form: null,
+    fromForm: null,
+    steadyState: () => {
+      circ.highlight(['hypAlt', 'hypLabel', 'theta']);
+    },
+    enterStateCommon: () => {
+      figure.fnMap.exec('cSetAngle', initialAngle);
+    },
+  });
+  slides.push({
+    scenarioCommon: 'circQuarter',
+    showCommon: { circ: ['arc', 'x', 'y', 'rotator', 'theta', 'hypAlt', 'hypLabel'] },
+  });
+  slides.push({
+    showCommon: { circ: ['arc', 'x', 'y', 'rotator', 'theta', 'hypAlt', 'hypLabel', 'tanAlt', 'secAlt', 'rightTanAlt'] },
+  });
+  slides.push({
+    showCommon: { circ: ['arc', 'x', 'y', 'rotator', 'theta', 'hypAlt', 'hypLabel', 'tanAlt', 'secAlt', 'rightTanAlt', 'tanLabelAlt'] },
+  });
+  slides.push({
+    showCommon: { circ: ['arc', 'x', 'y', 'rotator', 'theta', 'hypAlt', 'hypLabel', 'tanAlt', 'secAlt', 'rightTanAlt', 'tanLabelAlt', 'secLabelAlt'] },
+  });
+  slides.push({
+    showCommon: { circ: ['arc', 'x', 'y', 'rotator', 'theta', 'hypAlt', 'hypLabel', 'tanAlt', 'secAlt', 'rightTanAlt', 'tanLabelAlt', 'secLabelAlt', 'sin', 'rightSin', 'sinLabel'] },
+  });
+
+  slides.push({
+    showCommon: { circ: ['arc', 'x', 'y', 'rightOrigin', 'unitCsc'] },
+    leaveStateCommon: () => circ.undim(),
+  });
+  slides.push({
+    showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'rightOrigin'] },
+  });
+  slides.push({
+    showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta'] },
+  });
+  slides.push({
+    showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta', 'rightTanAlt', 'tanTri'] },
+  });
+  slides.push({
+    showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta', 'rightCotAlt', 'cotTri'] },
+  });
+  slides.push({
+    showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta', 'thetaComp'] },
+  });
+  slides.push({
+    showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta', 'thetaComp', 'thetaCot', 'rightCotAlt'] },
+  });
+  slides.push({
+    showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta', 'thetaCot'] },
+  });
+  slides.push({
+    showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta', 'tanAlt', 'tanLabelAlt', 'rightTanAlt'] },
+  });
+
+  slides.push({
+    showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta', 'tanAlt', 'tanLabelAlt', 'secAlt', 'secLabelAlt', 'rightTanAlt'] },
+  });
+
+  slides.push({
+    showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta', 'tanAlt', 'tanLabelAlt', 'secAlt', 'secLabelAlt', 'thetaComp', 'rightCotAlt'] },
+    steadyState: () => circ.highlight(['hypAlt', 'hypLabel', 'thetaComp']),
+  });
+
+  slides.push({
+    showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta', 'tanAlt', 'tanLabelAlt', 'secAlt', 'secLabelAlt', 'cotAlt', 'cotLabelAlt', 'thetaComp', 'rightCotAlt'] },
+    steadyState: () => circ.highlight(['cotAlt', 'cotLabelAlt', 'hypAlt', 'hypLabel', 'thetaComp']),
+  });
+
+  slides.push({
+    showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta', 'tanAlt', 'tanLabelAlt', 'secAlt', 'secLabelAlt', 'cotAlt', 'cotLabelAlt', 'thetaComp', 'cscAlt', 'cscLabelAlt', 'rightCotAlt', 'rightTanAlt'] },
+    steadyState: () => circ.highlight(['cotAlt', 'cotLabelAlt', 'hypAlt', 'hypLabel', 'thetaComp', 'cscAlt', 'cscLabelAlt']),
+  });
+
+  slides.push({
+    showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta', 'tanAlt', 'tanLabelAlt', 'secAlt', 'secLabelAlt', 'cotAlt', 'cotLabelAlt', 'thetaCot', 'cscAlt', 'cscLabelAlt', 'rightCotAlt', 'rightTanAlt'] },
+    steadyState: () => circ.highlight(['cotAlt', 'cotLabelAlt', 'hypAlt', 'hypLabel', 'thetaCot', 'cscAlt', 'cscLabelAlt']),
+  });
+
+  slides.push({
+    showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta', 'tanAlt', 'tanLabelAlt', 'secAlt', 'secLabelAlt', 'cotAlt', 'cotLabelAlt', 'theta', 'cscAlt', 'cscLabelAlt', 'rightCotAlt', 'rightSin', 'sinLabel', 'sin'] },
+    steadyState: () => circ.highlight(['sin', 'sinLabel', 'hypAlt', 'hypLabel', 'theta']),
+  });
+
+  slides.push({ form: { eqn3: '0' } });
+  slides.push({ form: { eqn3: '1' } });
+  slides.push({ form: { eqn3: '2' } });
+  slides.push({ form: { eqn3: '3' } });
+  slides.push({ form: { eqn3: '4' } });
+  slides.push({ form: { eqn3: '5' } });
+  slides.push({ form: { eqn3: '6' } });
+  slides.push({ form: { eqn3: '7' } });
+  slides.push({ form: { eqn3: '8' } });
+  slides.push({ form: { eqn3: '9' } });
+  slides.push({ form: { eqn3: '10' } });
+  slides.push({ form: { eqn3: '11' } });
+  slides.push({ form: { eqn3: '12' } });
+  slides.push({ form: { eqn3: '13' } });
+  slides.push({ form: { eqn3: '14' } });
+  slides.push({ form: { eqn3: '15' } });
+  slides.push({ form: { eqn3: '16' } });
+  slides.push({ form: { eqn3: '17' } });
+  slides.push({ form: { eqn3: '18' } });
+  slides.push({ form: { eqn3: '19' } });
+  slides.push({ form: { eqn3: '20' } });
+  slides.push({ form: { eqn3: '21' } });
+  slides.push({
+    scenarioCommon: 'circValues',
+    showCommon: { circ: ['circle', 'rotatorFull', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'thetaVal', 'tanAlt', 'tanLabelAlt', 'secAlt', 'secLabelAlt', 'cotAlt', 'cotLabelAlt', 'cscAlt', 'cscLabelAlt', 'sinLabel', 'sin', 'cosAlt', 'cosLabelAlt', 'xFull', 'yFull'] },
+    form: { eqn3: 'values' },
   });
 
 
