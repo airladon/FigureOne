@@ -347,6 +347,28 @@ class Rect {
     return null;
   }
 
+
+  /**
+   * Find the intersect between a line and the rectangle
+   */
+  intersectsWithLine(lineIn: TypeParsableLine) {
+    const l = getLine(lineIn);
+    const left = new Line([this.left, this.bottom], [this.left, this.top]);
+    const top = new Line([this.left, this.top], [this.right, this.top]);
+    const right = new Line([this.right, this.top], [this.right, this.bottom]);
+    const bottom = new Line([this.left, this.bottom], [this.right, this.bottom]);
+    const intersects = [];
+    const leftIntersect = l.intersectsWith(left);
+    if (leftIntersect.withinLine) { intersects.push(leftIntersect.intersect); }
+    const topIntersect = l.intersectsWith(top);
+    if (topIntersect.withinLine) { intersects.push(topIntersect.intersect); }
+    const bottomIntersect = l.intersectsWith(bottom);
+    if (bottomIntersect.withinLine) { intersects.push(bottomIntersect.intersect); }
+    const rightIntersect = l.intersectsWith(right);
+    if (rightIntersect.withinLine) { intersects.push(rightIntersect.intersect); }
+    return intersects;
+  }
+
   // Return the center point of the rectangle
   center() {
     return new Point(this.left + this.width / 2, this.bottom + this.height / 2);
