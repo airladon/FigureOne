@@ -1884,7 +1884,7 @@ class FigureElement {
    * Set element color to `defaultColor`
    */
   undim() {
-    this.setColor(this.defaultColor, true);
+    this.setColor(this.defaultColor, false);
   }
 
   setOpacity(opacity: number) {
@@ -5518,40 +5518,47 @@ class FigureElementCollection extends FigureElement {
     this.dimColor = nonNullColor.slice();
   }
 
-  undim() {
-    this.color = this.defaultColor.slice();
-    for (let i = 0; i < this.drawOrder.length; i += 1) {
-      const element = this.elements[this.drawOrder[i]];
-      element.undim();
+  undim(children: ?TypeElementPath) {
+    let elements;
+    if (children != null) {
+      elements = this.getElements(children);
+    } else {
+      elements = this.drawOrder.map(name => this.elements[name]);
     }
+    elements.forEach(element => element.undim());
   }
 
-  dim(elementsToDim: ?Array<string | FigureElement>) {
-    if (elementsToDim == null
-      || (Array.isArray(elementsToDim) && elementsToDim.length === 0)) {
-      // super.dim();
-      this.color = this.dimColor.slice();
-      for (let i = 0; i < this.drawOrder.length; i += 1) {
-        const element = this.elements[this.drawOrder[i]];
-        element.dim();
-      }
-      return;
+  dim(children: ?TypeElementPath) {
+    // if (elementsToDim == null
+    //   || (Array.isArray(elementsToDim) && elementsToDim.length === 0)) {
+    //   // super.dim();
+    //   this.color = this.dimColor.slice();
+    //   for (let i = 0; i < this.drawOrder.length; i += 1) {
+    //     const element = this.elements[this.drawOrder[i]];
+    //     element.dim();
+    //   }
+    //   return;
+    // }
+    // this.exec('dim', elementsToDim);
+    let elements;
+    if (children != null) {
+      elements = this.getElements(children);
+    } else {
+      elements = this.drawOrder.map(name => this.elements[name]);
     }
-    this.exec('dim', elementsToDim);
+    elements.forEach(element => element.dim());
   }
 
-  highlight(elementsToHighlight: ?Array<string | FigureElement> = null) {
+  highlight(elementsToHighlight: ?TypeElementPath = null) {
     if (elementsToHighlight == null) {
       this.undim();
       return;
     }
 
-    if (Array.isArray(elementsToHighlight) && elementsToHighlight.length === 0) {
-      return;
-    }
+    const elements = this.getElements(elementsToHighlight);
 
     this.dim();
-    this.exec('undim', elementsToHighlight);
+    this.exec('undim', elements);
   }
 
   // setOpacity(opacity: number) {

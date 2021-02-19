@@ -1201,6 +1201,11 @@ function makeEquation() {
     eqn2.getElement('val6').setColor(colText);
   });
 
+  const t = (content, boxNum, rightSpace = 0.3) => ({
+    tBox: {
+      content, symbol: `t${boxNum}`, space: 0.25, rightSpace,
+    },
+  });
   figure.add({
     name: 'eqn3',
     method: 'equation',
@@ -1295,6 +1300,12 @@ function makeEquation() {
         times2: ' \u00d7 ',
         times3: ' \u00d7 ',
         times4: ' \u00d7 ',
+        t1: { symbol: 'tBox' },
+        t2: { symbol: 'tBox' },
+        t3: { symbol: 'tBox' },
+        t4: { symbol: 'tBox' },
+        t5: { symbol: 'tBox' },
+        t6: { symbol: 'tBox' },
       },
       phrases: {
         oppHyp: { frac: ['opp_1', 'v1', 'hyp_1'] },
@@ -1309,12 +1320,12 @@ function makeEquation() {
         cscTheta: cont(['csc_1', ' ', 'theta4'], w1),
         secTheta: cont(['sec_1', ' ', 'theta5'], w1),
         cotTheta: cont(['cot_1', ' ', 'theta6'], w1),
-        sinThetaV: cont(['sin_1', ' ', 'thetaVal1'], w1),
-        cosThetaV: cont(['cos_1', ' ', 'thetaVal2'], w1),
-        tanThetaV: cont(['tan_1', ' ', 'thetaVal3'], w1),
-        cscThetaV: cont(['csc_1', ' ', 'thetaVal4'], w1),
-        secThetaV: cont(['sec_1', ' ', 'thetaVal5'], w1),
-        cotThetaV: cont(['cot_1', ' ', 'thetaVal6'], w1),
+        sinThetaT: cont(t(['sin_1', ' ', 'theta1'], 1, 1.5), w1),
+        cosThetaT: cont(t(['cos_1', ' ', 'theta2'], 2, 1.5), w1),
+        tanThetaT: cont(t(['tan_1', ' ', 'theta3'], 3, 2.2), w1),
+        cscThetaT: cont(t(['csc_1', ' ', 'theta4'], 4, 2.2), w1),
+        secThetaT: cont(t(['sec_1', ' ', 'theta5'], 5, 2.2), w1),
+        cotThetaT: cont(t(['cot_1', ' ', 'theta6'], 6, 2.2), w1),
         sinHyp: ['hyp_1', 'times1', 'sinTheta'],
         cosHyp: ['hyp_2', 'times2', 'cosTheta'],
         sinTheta1: ['sin_2', ' ', 'theta7'],
@@ -1377,7 +1388,7 @@ function makeEquation() {
         c3_r3: lin(['sinHyp', 'cosHyp', ['tanTheta', cont('eq7', w1), 'sinHcosHStrk'], 'cscTheta', 'secTheta', 'cotTheta']),
         c3_r4: lin(['sinHyp', 'cosHyp', ['tanTheta', cont('eq7', w1), 'sinCos'], 'cscTheta', 'secTheta', 'cotTheta']),
         c3_r5: lin(['sinTheta', 'cosTheta', ['tanTheta', cont('eq7', w1), 'sinCos'], 'cscTheta', 'secTheta', 'cotTheta']),
-        c3_5v: lin(['sinThetaV', 'cosThetaV', 'tanThetaV', 'cscThetaV', 'secThetaV', 'cotThetaV']),
+        c3t: lin(['sinThetaT', 'cosThetaT', 'tanThetaT', 'cscThetaT', 'secThetaT', 'cotThetaT']),
 
         c4_0: cont(lin(['', '', 'eq7', '', '', '']), 0.3),
         c4_1: cont(lin(['', '', 'eq7', 'eq8', '', '']), 0.3),
@@ -1423,9 +1434,43 @@ function makeEquation() {
         19: ['c1', 'c2_5', 'c3_51', 'c4_1', 'c5_1'],
         20: ['c1', 'c2_5', 'c3_51', 'c4_2', 'c5_2'],
         21: ['c1', 'c2_5', 'c3_51', 'c4_3', 'c5_3'],
-        values: ['c3_51', 'c4', 'c5_v', 'c6', 'c7'],
+        values: ['c3t', 'c4', 'c5_v', 'c6', 'c7'],
       },
       position: [-2.8, 1.2],
     },
   });
+  const eqn3 = figure.getElement('eqn3');
+  const circ = figure.getElement('circ');
+  const [sin, cos, tan] = circ.getElements(['sin', 'cosAlt', 'tanAlt']);
+  const [csc, sec, cot] = circ.getElements(['cscAlt', 'secAlt', 'cotAlt']);
+  const [t1, t2, t3, t4, t5, t6] = eqn3.getElements(['t1', 't2', 't3', 't4', 't5', 't6']);
+  const makeOnClick = (phrases, elems, line, figElements) => () => {
+    const elements = [...eqn3.getPhraseElements(phrases), ...elems];
+    if (line.isShown) {
+      circ.hide(figElements);
+      eqn3.dim(elements);
+    } else {
+      circ.show(figElements);
+      eqn3.undim(elements);
+      circ._rotatorFull.fnMap.exec('updateCircle');
+    }
+  };
+  t1.onClick = makeOnClick(
+    ['sinTheta'], ['eq11', 'val1'], sin, ['sin', 'sinLabel'],
+  );
+  t2.onClick = makeOnClick(
+    ['cosTheta'], ['eq12', 'val2'], cos, ['cosAlt', 'cosLabelAlt'],
+  );
+  t3.onClick = makeOnClick(
+    ['tanTheta', 'sinCos'], ['eq7', 'eq13', 'val3'], tan, ['tanAlt', 'tanLabelAlt'],
+  );
+  t4.onClick = makeOnClick(
+    ['cscTheta', 'oneSin'], ['eq8', 'eq14', 'val4'], csc, ['cscAlt', 'cscLabelAlt'],
+  );
+  t5.onClick = makeOnClick(
+    ['secTheta', 'oneCos'], ['eq9', 'eq15', 'val5'], sec, ['secAlt', 'secLabelAlt'],
+  );
+  t6.onClick = makeOnClick(
+    ['cotTheta', 'oneTan'], ['eq10', 'eq16', 'val6'], cot, ['cotAlt', 'cotLabelAlt'],
+  );
 }

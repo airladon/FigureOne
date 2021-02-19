@@ -1365,7 +1365,7 @@ export class Equation extends FigureElementCollection {
       }
       const col = e.color.slice();
       e.custom.updateText({ text: elements[elementName] });
-      e.setColor(col);
+      e.setColor(col, false);
     });
     this.layoutForms(layoutForms);
   }

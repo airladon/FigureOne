@@ -274,12 +274,12 @@ function layout() {
     },
   });
 }
+layoutCirc();
 makeEquation();
 layoutLines();
 layoutRight();
 layoutCircle();
 layoutCircle1();
-layoutCirc();
 layout();
 // rightTris();
 // const totalAngle = totalAngleLayout();
@@ -1592,7 +1592,7 @@ function makeSlides() {
     showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta', 'tanAlt', 'tanLabelAlt', 'secAlt', 'secLabelAlt', 'cotAlt', 'cotLabelAlt', 'theta', 'cscAlt', 'cscLabelAlt', 'rightCotAlt', 'rightSin', 'sinLabel', 'sin'] },
     steadyState: () => circ.highlight(['sin', 'sinLabel', 'hypAlt', 'hypLabel', 'theta']),
   });
-
+  const eqn3 = figure.getElement('eqn3');
   slides.push({ form: { eqn3: '0' } });
   slides.push({ form: { eqn3: '1' } });
   slides.push({ form: { eqn3: '2' } });
@@ -1617,8 +1617,9 @@ function makeSlides() {
   slides.push({ form: { eqn3: '21' } });
   slides.push({
     scenarioCommon: 'circValues',
-    showCommon: { circ: ['circle', 'rotatorFull', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'thetaVal', 'tanAlt', 'tanLabelAlt', 'secAlt', 'secLabelAlt', 'cotAlt', 'cotLabelAlt', 'cscAlt', 'cscLabelAlt', 'sinLabel', 'sin', 'cosAlt', 'cosLabelAlt', 'xFull', 'yFull'] },
+    showCommon: { circ: ['circle', 'rotatorFull', 'hypAlt', 'hypLabel', 'thetaVal', 'tanAlt', 'tanLabelAlt', 'secAlt', 'secLabelAlt', 'cotAlt', 'cotLabelAlt', 'cscAlt', 'cscLabelAlt', 'sinLabel', 'sin', 'cosAlt', 'cosLabelAlt', 'xFull', 'yFull'] },
     form: { eqn3: 'values' },
+    leaveStateCommon: () => eqn3.undim(),
   });
 
 
