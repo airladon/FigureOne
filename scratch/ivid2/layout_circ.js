@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-/* globals figure, colTheta, colCot, colTan, colSin, colCos, colSec, colCsc, colRad, colGrey, colDim, colAdj, colOpp, colHyp, Fig */
+/* globals figure, colTheta, colCot, colTan, colSin, colCos, colSec, colCsc, colRad, colGrey, colDim, colAdj, colOpp, colHyp, Fig, colDarkGrey */
 
 function layoutCirc() {
   const radius = 1.5;
@@ -69,7 +69,7 @@ function layoutCirc() {
     },
   });
 
-  const rightAngle = (name, position, startAngle, r = 0.15) => ({
+  const rightAngle = (name, position, startAngle, r = 0.15, color = colGrey) => ({
     name,
     method: 'collections.angle',
     options: {
@@ -77,7 +77,7 @@ function layoutCirc() {
       startAngle,
       angle: Math.PI / 2,
       curve: { autoRightAngle: true, width: thin, radius: r },
-      color: colGrey,
+      color,
     },
   });
 
@@ -114,13 +114,17 @@ function layoutCirc() {
     elements: [
       fill('tanTri', [1, 0, 0, 0.3]),
       fill('cotTri', [1, 0, 0, 0.3]),
-      line('x', colGrey, thin, [0, 0], radius, 0),
-      line('y', colGrey, thin, [0, 0], radius, Math.PI / 2),
+      line('xLight', colGrey, thin, [0, 0], radius, 0),
+      line('yLight', colGrey, thin, [0, 0], radius, Math.PI / 2),
+      line('x', colDarkGrey, thin, [0, 0], radius, 0),
+      line('y', colDarkGrey, thin, [0, 0], radius, Math.PI / 2),
       line('xFull', colGrey, thin, [-radius, 0], radius * 2, 0),
       line('yFull', colGrey, thin, [0, -radius], radius * 2, Math.PI / 2),
       line('xSec', colGrey, thin, [0, 0], radius, 0, [0.01, 0.005]),
-      arc('circle', colGrey),
-      arc('arc', colGrey, thin, 300, Math.PI / 2, 0),
+      arc('circleLight', colGrey),
+      arc('circle', colDarkGrey, thick),
+      arc('arcLight', colGrey, thin, 300, Math.PI / 2, 0),
+      arc('arc', colDarkGrey, thick, 300, Math.PI / 2, 0),
       {
         name: 'tangent',
         method: 'collections.line',
@@ -171,9 +175,9 @@ function layoutCirc() {
       },
       arc('bow', colSin, thick, 300, 2, -1),
       line('radius', colRad, thin, [0, 0], radius, 4.37),
-      rightAngle('rightAngle', [radius * Math.cos(4.37), radius * Math.sin(4.37)], 4.37 - Math.PI),
+      rightAngle('rightAngle', [radius * Math.cos(4.37), radius * Math.sin(4.37)], 4.37 - Math.PI, 0.3, colDarkGrey),
       arc('arc', colGrey, thin, 100, Math.PI / 2),
-      rightAngle('rightOrigin', [0, 0], 0, 0.2),
+      rightAngle('rightOrigin', [0, 0], 0, 0.2, colDarkGrey),
       rightAngle('rightSin', [0, 0], Math.PI / 2),
       rightAngle('rightTan', [radius, 0], Math.PI / 2),
       rightAngle('rightCot', [0, radius], Math.PI / 2),
@@ -186,10 +190,18 @@ function layoutCirc() {
       angle('thetaCos', '\u03b8'),
       angle('thetaCot', '\u03b8'),
       angle('thetaComp', '90\u00b0\u2212\u03b8', 0.35, 0.7),
-      line('tanLight', colGrey, thin),
-      line('cotLight', colGrey, thin),
-      line('secLight', colGrey, thin),
-      line('cscLight', colGrey, thin),
+      line('tanLight', colDarkGrey, thin),
+      line('cotLight', colDarkGrey, thin),
+      line('secLight', colDarkGrey, thin),
+      line('cscLight', colDarkGrey, thin),
+      {
+        name: 'center',
+        method: 'primitives.polygon',
+        options: {
+          radius: 0.015,
+          sides: 12,
+        },
+      },
       // {
       //   name: 'angle',
       //   method: 'collections.angle',
@@ -295,7 +307,7 @@ function layoutCirc() {
       line('sec', colSec),
       line('tan', colTan),
       line('hyp', colHyp, thick, [0, 0], radius),
-      lineLabel('hypLabel', '1', colHyp),
+      lineLabel('hypLabel', '1', colDarkGrey),
       lineLabel('sinLabel', 'sin', colSin, [0, 0], 'middle', 'center'),
       lineLabel('cosLabel', 'cos', colCos, [0, 0], 'middle', 'center'),
       lineLabel('tanLabel', 'tan', colTan),
@@ -307,13 +319,13 @@ function layoutCirc() {
       lineLabel('secLabelAlt', 'sec', colSec),
       lineLabel('cscLabelAlt', 'csc', colCsc),
       lineLabel('cotLabelAlt', 'cot', colCot),
-      lineLabel('unitCsc', '1', colGrey, [-0.1, radius / 2]),
+      lineLabel('unitCsc', '1', colText, [-0.1, radius / 2]),
       line('cosAlt', colCos),
       line('cscAlt', colCsc),
       line('cotAlt', colCot),
       line('secAlt', colSec),
       line('tanAlt', colTan),
-      line('hypAlt', colHyp, thick, [0, 0], radius),
+      line('hypAlt', colDarkGrey, thick, [0, 0], radius),
       
       // line('cot', colCot),
       // line('tanAlt', colOpp),
@@ -540,6 +552,7 @@ function layoutCirc() {
         circQuarter: { scale: 1, position: [-0.5, -1] },
         circFull: { scale: 0.7, position: [0, 0] },
         circValues: { scale: 0.7, position: [0.6, 0] },
+        circLines: { scale: 0.7, position: [-1.3, 0] },
         // title: { scale: 1 },
         // default: { scale: 1, position: [-radius / 2 + 0.4, -1.1] },
         // right: { scale: 1, position: [0.5, -1.2] },
@@ -1326,12 +1339,6 @@ function layoutCirc() {
         val4: Math.abs(1 / sinA) > 100 ? `${ySign < 0 ? '-' : ''}\u221e` : (1 / sinA).toFixed(4),
         val5: Math.abs(1 / cosA) > 100 ? `${xSign < 0 ? '-' : ''}\u221e` : (1 / cosA).toFixed(4),
         val6: Math.abs(cosA / sinA) > 100 ? `${xSign * ySign < 0 ? '-' : ''}\u221e` : (cosA / sinA).toFixed(4),
-        // thetaVal1: `${deg}\u00b0`,
-        // thetaVal2: `${deg}\u00b0`,
-        // thetaVal3: `${deg}\u00b0`,
-        // thetaVal4: `${deg}\u00b0`,
-        // thetaVal5: `${deg}\u00b0`,
-        // thetaVal6: `${deg}\u00b0`,
       });
     }
   }
