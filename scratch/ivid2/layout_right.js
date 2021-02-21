@@ -268,9 +268,9 @@ function layoutRight() {
     curve: { scale: 1.7 }, label: { scale: 1.7 }, duration: 1,
   });
   const pulseRight = () => tri.getElement('angle1').pulse({ xAlign: 'right', yAlign: 'bottom', scale: 1.7 });
-  const pulseOpp = () => tri.getElement('side12.label').pulse({ xAlign: 'left' });
-  const pulseHyp = () => tri.getElement('side01.label').pulse({ xAlign: 'right', yAlign: 'bottom' });
-  const pulseAdj = () => tri.getElement('side20.label').pulse({ yAlign: 'top' });
+  const pulseOpp = () => tri.getElement('side12.label').pulse({ xAlign: 'left', scale: 1.5 });
+  const pulseHyp = () => tri.getElement('side01.label').pulse({ xAlign: 'right', yAlign: 'bottom', scale: 1.5 });
+  const pulseAdj = () => tri.getElement('side20.label').pulse({ yAlign: 'top', scale: 1.5 });
 
   // const animateToRot = (target) => radLine.animations.new().rotation({ target, duration: 1 });
 

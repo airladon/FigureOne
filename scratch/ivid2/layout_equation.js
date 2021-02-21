@@ -1397,7 +1397,7 @@ function makeEquation() {
         f6: [{ sub: ['f_6', '_6'] }, { brac: ['lb6', 'theta6', 'rb6'] }],
 
         c1: lin(['oppHyp', 'adjHyp', 'oppAdj', 'hypOpp', 'hypAdj', 'adjOpp']),
-        c1_rearrange: lin(['opp_1', 'adj_1', 'oppAdj', 'hypOpp', 'hypAdj', 'adjOpp']),
+        c1_rearrange: lin([cont('opp_1', 0.65, 'right'), cont('adj_1', 0.65, 'right'), 'oppAdj', 'hypOpp', 'hypAdj', 'adjOpp']),
 
         c2_0: cont(lin(['', '', 'eq3', '', '', '']), 0.3),
         c2_1: cont(lin(['', '', 'eq3', '', 'eq5', '']), 0.3),
@@ -1420,10 +1420,10 @@ function makeEquation() {
         c3_50: lin(['sinTheta', 'cosOne', 'tanTheta', 'cscTheta', 'secTheta', 'cotTheta']),
         c3_51: lin(['sinTheta', 'cosTheta', 'tanTheta', 'cscTheta', 'secTheta', 'cotTheta']),
         c3_r1: lin(['sinHyp', 'cosHyp', 'tanTheta', 'cscTheta', 'secTheta', 'cotTheta']),
-        c3_r2: lin(['sinHyp', 'cosHyp', ['tanTheta', cont('eq7', w1), 'sinHcosH'], 'cscTheta', 'secTheta', 'cotTheta']),
-        c3_r3: lin(['sinHyp', 'cosHyp', ['tanTheta', cont('eq7', w1), 'sinHcosHStrk'], 'cscTheta', 'secTheta', 'cotTheta']),
-        c3_r4: lin(['sinHyp', 'cosHyp', ['tanTheta', cont('eq7', w1), 'sinCos'], 'cscTheta', 'secTheta', 'cotTheta']),
-        c3_r5: lin(['sinTheta', 'cosTheta', ['tanTheta', cont('eq7', w1), 'sinCos'], 'cscTheta', 'secTheta', 'cotTheta']),
+        c3_r2: lin(['sinHyp', 'cosHyp', ['tanTheta', cont('eq7', 0.3), 'sinHcosH'], 'cscTheta', 'secTheta', 'cotTheta']),
+        c3_r3: lin(['sinHyp', 'cosHyp', ['tanTheta', cont('eq7', 0.3), 'sinHcosHStrk'], 'cscTheta', 'secTheta', 'cotTheta']),
+        c3_r4: lin(['sinHyp', 'cosHyp', ['tanTheta', cont('eq7', 0.3), 'sinCos'], 'cscTheta', 'secTheta', 'cotTheta']),
+        c3_r5: lin(['sinTheta', 'cosTheta', ['tanTheta', cont('eq7', 0.3), 'sinCos'], 'cscTheta', 'secTheta', 'cotTheta']),
         c3t: lin(['sinThetaT', 'cosThetaT', 'tanThetaT', 'cscThetaT', 'secThetaT', 'cotThetaT']),
 
         c4_0: cont(lin(['', '', 'eq7', '', '', '']), 0.3),
@@ -1480,11 +1480,10 @@ function makeEquation() {
         14: ['c1_rearrange', 'c2_5', 'c3_r2'],
         15: ['c1_rearrange', 'c2_5', 'c3_r3'],
         16: ['c1_rearrange', 'c2_5', 'c3_r4'],
-        17: ['c1', 'c2_5', 'c3_r5'],
-        18: ['c1', 'c2_5', 'c3_51', 'c4_0', 'c5_0'],
-        19: ['c1', 'c2_5', 'c3_51', 'c4_1', 'c5_1'],
-        20: ['c1', 'c2_5', 'c3_51', 'c4_2', 'c5_2'],
-        21: ['c1', 'c2_5', 'c3_51', 'c4_3', 'c5_3'],
+        17: ['c1', 'c2_5', 'c3_51', 'c4_0', 'c5_0'],
+        18: ['c1', 'c2_5', 'c3_51', 'c4_1', 'c5_1'],
+        19: ['c1', 'c2_5', 'c3_51', 'c4_2', 'c5_2'],
+        20: ['c1', 'c2_5', 'c3_51', 'c4_3', 'c5_3'],
         values: ['c3t', 'c4', 'c5_v', 'c6', 'c7'],
       },
       position: [-2.8, 1.2],
@@ -1513,13 +1512,13 @@ function makeEquation() {
     }
   };
   t1.onClick = makeOnClick(
-    ['sinTheta'], ['eq11', 'val1'], sin, ['sin', 'sinLabel'],
+    ['sinTheta'], ['eq11', 'val1'], sin, ['sin', 'sinLabel', 'rightSin'],
   );
   t2.onClick = makeOnClick(
-    ['cosTheta'], ['eq12', 'val2'], cos, ['cosAlt', 'cosLabelAlt'],
+    ['cosTheta'], ['eq12', 'val2'], cos, ['cosAlt', 'cosLabelAlt', 'rightCosAlt'],
   );
   t3.onClick = makeOnClick(
-    ['tanTheta', 'sinCos'], ['eq7', 'eq13', 'val3'], tan, ['tanAlt', 'tanLabelAlt'],
+    ['tanTheta', 'sinCos'], ['eq7', 'eq13', 'val3'], tan, ['tanAlt', 'tanLabelAlt', 'rightTanAlt'],
   );
   t4.onClick = makeOnClick(
     ['cscTheta', 'oneSin'], ['eq8', 'eq14', 'val4'], csc, ['cscAlt', 'cscLabelAlt'],
@@ -1528,6 +1527,13 @@ function makeEquation() {
     ['secTheta', 'oneCos'], ['eq9', 'eq15', 'val5'], sec, ['secAlt', 'secLabelAlt'],
   );
   t6.onClick = makeOnClick(
-    ['cotTheta', 'oneTan'], ['eq10', 'eq16', 'val6'], cot, ['cotAlt', 'cotLabelAlt'],
+    ['cotTheta', 'oneTan'], ['eq10', 'eq16', 'val6'], cot, ['cotAlt', 'cotLabelAlt', 'rightCotAlt'],
   );
+
+  const add = (name, fn) => figure.fnMap.global.add(name, fn);
+  const get = name => eqn3.getElement(name);
+  const pulse = (elements, fixTo) => circ.pulse({ elements, fixTo });
+  add('eqnPulseTanAdj', () => get('adj_2').pulse({ yAlign: 'top' }));
+  add('eqnPulseSecAdj', () => get('adj_3').pulse({ yAlign: 'top' }));
+  add('eqnPulseOppAdj', () => pulse(['opp_2', 'v3', 'adj_2'], 'v3'));
 }

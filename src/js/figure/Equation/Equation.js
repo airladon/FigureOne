@@ -676,7 +676,10 @@ export type EQN_FormDefaults = {
  *
  * @property {TypeColor} [color] default equation color
  * @property {TypeColor} [dimColor] default equation dim color
- * @property {OBJ_Font} [font] default {@link FigureFont} for the equation
+ * @property {OBJ_Font} [font] default {@link FigureFont} for math elements in
+ * the equation
+ * @property {OBJ_Font} [textFont] default {@link FigureFont} for text elements
+ * in the equation (defaults to `font`)
  * @property {number} [scale] equation scale (`0.7`)
  * @property {EQN_EquationElements} [elements] equation element definitions
  * @property {EQN_Forms} [forms] form definitions
@@ -700,6 +703,7 @@ export type EQN_Equation = {
   color?: TypeColor;
   dimColor?: TypeColor;
   font?: OBJ_Font;
+  textFont?: OBJ_Font;
   scale?: number,
   elements?: EQN_EquationElements;
   formDefaults: EQN_FormDefaults;
@@ -965,6 +969,7 @@ export class Equation extends FigureElementCollection {
     currentForm: string;
     // currentSubForm: string;
     font: FigureFont;
+    textFont: FigureFont;
     // fontText: FigureFont;
     scale: number;
 
@@ -1086,6 +1091,17 @@ export class Equation extends FigureElementCollection {
     } else {
       optionsToUse.font = new FigureFont(defaultFont);
     }
+    if (options.textFont instanceof FigureFont) {
+      optionsToUse.textFont = options.textFont;
+    } else if (options.textFont != null) {
+      optionsToUse.textFont = new FigureFont(
+        joinObjects({}, defaultFont, { style: 'italic' }, options.textFont),
+      );
+    } else {
+      optionsToUse.textFont = new FigureFont(
+        joinObjects({}, defaultFont, { style: 'italic' }),
+      );
+    }
     if (optionsToUse.transform != null) {
       optionsToUse.transform = getTransform(optionsToUse.transform);
     }
@@ -1143,6 +1159,7 @@ export class Equation extends FigureElementCollection {
       ),
       symbols: new EquationSymbols(this.shapes, this.color),
       font: optionsToUse.font,
+      textFont: optionsToUse.textFont,
       // fontText: optionsToUse.fontText,
       isAnimating: false,
       descriptionElement: null,
@@ -1252,7 +1269,7 @@ export class Equation extends FigureElementCollection {
         }));
         return this.getRemainingAnimationTime(['_Equation', '_EquationColor']);
       };
-      let nextIndex = this.getFormIndex(this.getCurrenForm());
+      let nextIndex = this.getFormIndex(this.getCurrentForm());
       if (nextIndex > -1) {
         nextIndex += 1;
         if (nextIndex > this.eqn.currentFormSeries.length - 1) {
@@ -1390,7 +1407,7 @@ export class Equation extends FigureElementCollection {
     if (options.text != null) {
       textToUse = options.text;
     }
-    const defaultFontDefinition = this.eqn.font.definition();
+    const defaultFontDefinition = this.eqn.textFont.definition();
     let fontDefinition = defaultFontDefinition;
     if (options.font != null && options.font instanceof FigureFont) {
       fontDefinition = options.font.definition();
@@ -1417,7 +1434,7 @@ export class Equation extends FigureElementCollection {
       )
     ) {
       if (textToUse.match(/[A-Z,a-z,\u0370-\u03ff]/)) {
-        fontDefinition.style = 'italic';
+        fontDefinition.style = this.eqn.textFont.style;
       } else {
         fontDefinition.style = 'normal';
       }
