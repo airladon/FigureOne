@@ -1531,9 +1531,21 @@ function makeEquation() {
   );
 
   const add = (name, fn) => figure.fnMap.global.add(name, fn);
-  const get = name => eqn3.getElement(name);
-  const pulse = (elements, fixTo) => circ.pulse({ elements, fixTo });
-  add('eqnPulseTanAdj', () => get('adj_2').pulse({ yAlign: 'top' }));
-  add('eqnPulseSecAdj', () => get('adj_3').pulse({ yAlign: 'top' }));
-  add('eqnPulseOppAdj', () => pulse(['opp_2', 'v3', 'adj_2'], 'v3'));
+  // const get = name => eqn3.getElement(name);
+  const pulse = (elements, centerOn, xAlign = 'center', yAlign = 'middle') => eqn3.pulse({
+    elements, centerOn, xAlign, yAlign, scale: 1.5, duration: 1.5,
+  });
+  const sPulse = (element, xAlign = 'center', yAlign = 'middle') => eqn3.pulse({
+    elements: [element], xAlign, yAlign, scale: 1.5, duration: 1.5,
+  });
+  add('eqnPulseTanAdj', () => sPulse('adj_2', 'center', 'top'));
+  add('eqnPulseSecAdj', () => sPulse('adj_3', 'center', 'top'));
+  add('eqnPulseCotOpp', () => sPulse('opp_4', 'center', 'top'));
+  add('eqnPulseCscOpp', () => sPulse('opp_3', 'center', 'top'));
+  add('eqnPulseOppHyp', () => pulse(['opp_1', 'v1', 'hyp_1'], 'v1', 'right'));
+  add('eqnPulseAdjHyp', () => pulse(['adj_1', 'v2', 'hyp_2'], 'v2', 'right'));
+  add('eqnPulseOppAdj', () => pulse(['opp_2', 'v3', 'adj_2'], 'v3', 'right'));
+  add('eqnPulseHypOpp', () => pulse(['hyp_3', 'v4', 'opp_3'], 'v4', 'right'));
+  add('eqnPulseHypAdj', () => pulse(['hyp_4', 'v5', 'adj_3'], 'v5', 'right'));
+  add('eqnPulseAdjOpp', () => pulse(['adj_4', 'v6', 'opp_4'], 'v6', 'right'));
 }

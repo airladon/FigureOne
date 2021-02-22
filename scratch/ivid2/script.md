@@ -96,13 +96,19 @@ The fourth ratio is the reciprocal of the first ratio, and so the cossec is one 
 
 Similarly the sec is the reciprocal of the cosine, and the cot is the reciprocal of the tangent.
 
+Finally, one more useful set of 
 # Summary
 So we have seen 
 ## Relationships
 Now, there are many ways to use algebra and the geometry on the right to rearrange these ratios to be interms of any of the other ratios, but we will focus on just the few which are most common, with the understanding that you can find any of the others pretty easily.
 
 Sor
+Limits of Functions:
+* Sin and cosine are a right angle trinalge where 1 is the hypotenuse, so they must always be less than 1.
+* Sec and the Cosec never have magnitudes less than 1.
 
+Relationships between functions
+* Similar triangles show us 
 
 
 * All complementary relationships are equal to each other with complementary angles

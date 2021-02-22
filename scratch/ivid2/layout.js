@@ -832,6 +832,7 @@ function makeSlides() {
     enterStateCommon: () => {
       figure.fnMap.exec('cSetAngle', initialAngle);
       circ.highlight(['tanAlt', 'tanLabelAlt', 'hypAlt', 'hypLabel', 'theta', 'secLabelAlt', 'tanAltEqn', 'secAlt', 'thetaCot']);
+      figure.fnMap.exec('circSetBounds', 'circle');
     },
   });
   slides.push({
@@ -859,11 +860,13 @@ function makeSlides() {
     steadyStateCommon: () => {
       figure.shortCuts = {
         1: 'eqnPulseOppAdj',
-        2: 'eqnPulseTanAdj',
-        3: 'eqnPulseSecAdj',
-        4: 'circPulseTanAlt',
-        5: 'circPulseCotAlt',
-        6: 'circPulseRad',
+        2: 'eqnPulseHypAdj',
+        3: 'eqnPulseTanAdj',
+        4: 'eqnPulseSecAdj',
+        5: 'circPulseTanAlt',
+        6: 'circPulseSecAlt',
+        7: 'circPulseRad',
+        8: 'circPulseTheta',
       };
     },
   });
@@ -891,17 +894,14 @@ function makeSlides() {
     enterStateCommon: () => {
       figure.fnMap.exec('cSetAngle', initialAngle);
       circ.highlight(['cotAlt', 'cotLabelAlt', 'hypAlt', 'hypLabel', 'thetaComp', 'cscAlt', 'cscLabelAlt', 'cotAltEqn', 'cscAltEqn', 'thetaCot']);
-      figure.shortCuts = {
-        1: 'circPulseRad',
-        2: 'circPulseTanAlt',
-        3: 'circPulseCotAlt',
-        4: 'circPulseSecAlt',
-        5: 'circPulseCscAlt',
-        6: 'circPulseSin',
-        7: 'circPulseCosAlt',
-      };
+      figure.fnMap.exec('circSetBounds', 'circle');
     },
     dissolve: { in: { circ: ['thetaComp'] } },
+    steadyStateCommon: () => {
+      figure.shortCuts = {
+        1: 'circPulseThetaComp',
+      };
+    },
   });
 
   slides.push({
@@ -934,6 +934,19 @@ function makeSlides() {
   slides.push({ form: { eqn3: '4', 'circ.cscAltEqn': 'csc' } });
   slides.push({
     dissolve: { out: { circ: ['thetaComp'] } },
+    steadyStateCommon: () => {
+      figure.shortCuts = {
+        1: 'eqnPulseAdjOpp',
+        2: 'eqnPulseHypOpp',
+        3: 'eqnPulseCotOpp',
+        4: 'eqnPulseCscOpp',
+        5: 'circPulseCotAlt',
+        6: 'circPulseCscAlt',
+        7: 'circPulseRad',
+        8: 'circPulseTheta',
+        9: 'circPulseThetaCot',
+      };
+    },
   });
 
   slides.push({
@@ -973,10 +986,12 @@ function makeSlides() {
   slides.push({ form: { eqn3: '8', 'circ.sinEqn': 'sine' } });
   slides.push({
     form: { eqn3: '8', 'circ.sinEqn': 'sin' },
-    steadyState: () => {
+    steadyStateCommon: () => {
       figure.shortCuts = {
-        2: 'circPulseTheta',
-        1: 'circPulseSinEqn',
+        1: 'circPulseTheta',
+        2: 'circPulseSinEqn',
+        3: 'circPulseRad',
+        4: 'eqnPulseOppAdj',
       };
     },
   });
@@ -1003,6 +1018,19 @@ function makeSlides() {
     showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta', 'tanLabelAlt', 'secLabelAlt', 'cotLabelAlt', 'theta', 'cscLabelAlt', 'rightSin', 'sinLabel', 'sin', 'cosAlt', 'cosLabelAlt', 'rightCosAlt'] },
     fromForm: { eqn3: '10', 'circ.cosAltEqn': null },
     form: { eqn3: '11' },
+    // steadyStateCommon: () => {
+    //   figure.shortCuts = {
+    //     1: 'eqnPulseAdjOpp',
+    //     2: 'eqnPulseHypOpp',
+    //     3: 'eqnPulseCotOpp',
+    //     4: 'eqnPulseCscOpp',
+    //     5: 'circPulseCotAlt',
+    //     6: 'circPulseCscAlt',
+    //     7: 'circPulseRad',
+    //     8: 'circPulseTheta',
+    //     9: 'circPulseThetaCot',
+    //   };
+    // },
   });
   slides.push({ form: { eqn3: '12' } });
 
@@ -1011,15 +1039,6 @@ function makeSlides() {
     enterStateCommon: () => {
       figure.fnMap.exec('cSetAngle', initialAngle);
       figure.fnMap.exec('circSetBounds', 'circle');
-      figure.shortCuts = {
-        1: 'circPulseRad',
-        2: 'circPulseTanAlt',
-        3: 'circPulseSecAlt',
-        4: 'circPulseCotAlt',
-        5: 'circPulseCscAlt',
-        6: 'circPulseSin',
-        7: 'circPulseCosAlt',
-      };
     },
     transition: (done) => {
       figure.animations.new()
@@ -1090,6 +1109,6 @@ function makeSlides() {
 
 
   nav.loadSlides(slides);
-  nav.goToSlide(0);
+  nav.goToSlide(40);
 }
 makeSlides();
