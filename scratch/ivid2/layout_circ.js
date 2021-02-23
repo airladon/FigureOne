@@ -548,13 +548,24 @@ function layoutCirc() {
             // s: { style: 'normal' },
             // c_2: { style: 'normal' },
             theta: { text: '\u03b8', color: colTheta },
+            comp: { text: '\u00b0\u2212\u03b8', color: colTheta, style: 'italic' },
+            _90: { color: colTheta },
+            lb: { symbol: 'bracket', side: 'left' },
+            rb: { symbol: 'bracket', side: 'right' },
           },
           formDefaults: {
             alignment: { yAlign: 'middle', xAlign: 'center', style: 'italic' },
           },
+          phrases: {
+            compAngle: { brac: ['lb', ['_90', 'comp'], 'rb'] },
+          },
           forms: {
+            secComp: {
+              content: ['sec', ' ', 'compAngle'],
+              alignment: { xAlign: 'right', yAlign: 'middle' },
+            },
             cosecant: {
-              content: ['c_1', 'o', ' ', 's', 'e', 'c_2', 'ant ', 'theta'],
+              content: ['c_1', 'o', 's', 'e', 'c_2', 'ant ', 'theta'],
               alignment: { fixTo: 'theta', xAlign: 'left' },
             },
             cosec: {
@@ -576,11 +587,22 @@ function layoutCirc() {
           textFont: { style: 'normal' },
           elements: {
             theta: { text: '\u03b8', color: colTheta, style: 'italic' },
+            comp: { text: '\u00b0\u2212\u03b8', color: colTheta, style: 'italic' },
+            _90: { color: colTheta },
+            lb: { symbol: 'bracket', side: 'left' },
+            rb: { symbol: 'bracket', side: 'right' },
           },
           formDefaults: {
             alignment: { yAlign: 'middle', xAlign: 'center', fixTo: 'cos' },
           },
+          phrases: {
+            compAngle: { brac: ['lb', ['_90', 'comp'], 'rb'] },
+          },
           forms: {
+            sinComp: {
+              content: ['sin', ' ', 'compAngle'],
+              alignment: { xAlign: 'center', yAlign: 'middle' },
+            },
             cosine: {
               content: ['cos', 'i', 'ne', ' ', 'theta'],
               alignment: { xAlign: 'right' },

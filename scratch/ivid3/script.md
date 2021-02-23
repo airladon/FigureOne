@@ -3,15 +3,17 @@ This geometry both shows the relationships between the trionometric functions, a
 At it's heart, it is three similar right angle triangles. Any triangles with the same set of angles are similar, and so right angle triangles with an angle theta must all be similar as we have defined two angles - theta and the right angle.
 
 
-Here is the thing.
+>> Triangles have three angles that add to 180º, so only two angles are needed to define all three.
 
-* Triangles have three angles that add to 180º, so only two angles are needed to define all three.
+Welcome to this interactive video, introducing the trigonometric functions, where they come from and some of their relationships. This video is interactive, so if you see me interacting with an element on the screen, such as this radius line, then you can to.
+
+The trigonometric functions come from the study of similar triangles and right angle triangles.
 * Triangles that have the same set of angles, are similar triangles.
-* Similar trianlges have the property that corresponding side ratios are equal
-* A right angle triangle with angle theta has two angles defined
-* All right angle triangles with angle theta have the same set of angles and will be similar
+* Similar trianlges have the property that corresponding side ratios are equal.
+* A right angle triangle has a right angle, and then when we define one more angle theta, we effectively define all three as their sum will always be 180º.
+* So All right angle triangles with angle theta have the same set of angles and will be similar
 * Meaning all right angle triangles with angle theta will have equal corresponding side ratios
-* These ratios are constant for cosntant theta, but change when theta changes, and so are a dependant on, or a function of theta.
+* These ratios are constant when theta is constant, but change when with theta, and so are a dependant on, or a function of theta.
 * These are the trigonometric functions. Because of similar trianlges, they depend only on theta and apply to right angle triangles of all sizes.
 * This geometry shows how the trigonometric functions are related, though we can also use it to see where the names come from.
 * The tangent line is a line that touches the circle in one place, and is perpendicular to the radius line that touches at the same place.

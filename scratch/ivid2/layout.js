@@ -806,10 +806,16 @@ function makeSlides() {
     },
   });
   slides.push({
-    showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta', 'rightTanAlt'] },
+    showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'rightTanAlt'] },
     dissolve: {
       out: { circ: ['rightOrigin', 'unitCsc'] },
-      in: { circ: ['hypAlt', 'hypLabel', 'theta', 'rightTanAlt'] },
+      in: { circ: ['hypAlt', 'hypLabel', 'rightTanAlt'] },
+    },
+  });
+  slides.push({
+    showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta', 'rightTanAlt'] },
+    dissolve: {
+      in: { circ: ['theta'] },
     },
   });
 
@@ -824,7 +830,7 @@ function makeSlides() {
   ....##....##.....##.##....##.....######..########..######.
   */
   slides.push({
-    scenarioCommon: ['circQuarter', 'eqnTri'],
+    scenarioCommon: ['circQuarter', 'eqnCirc'],
     showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta', 'tanAlt', 'rightTanAlt'] },
     dissolve: {
       in: { circ: ['tanAlt'], pulse: { translation: 0.05 } },
@@ -926,11 +932,13 @@ function makeSlides() {
 
   slides.push({
     showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta', 'tanLabelAlt', 'secLabelAlt', 'cotAlt', 'thetaComp', 'rightCotAlt', 'cotLabelAlt', 'cscAlt', 'cscAltEqn', 'thetaCot'] },
-    fromForm: { eqn3: '4', 'circ.cotAltEqn': null, 'circ.cscAltEqn': 'cosec' },
-    form: { eqn3: '4', 'circ.cscAltEqn': 'cosec' },
+    fromForm: { eqn3: '4', 'circ.cotAltEqn': null, 'circ.cscAltEqn': 'secComp' },
+    form: { eqn3: '4', 'circ.cscAltEqn': 'secComp' },
     dissolve: { in: { circ: ['cscAlt', 'cscAltEqn'] } },
   });
   // slides.push({ form: { eqn3: '4', 'circ.cscAltEqn': 'cosec' } });
+  slides.push({ form: { eqn3: '4', 'circ.cscAltEqn': 'cosecant' } });
+  slides.push({ form: { eqn3: '4', 'circ.cscAltEqn': 'cosec' } });
   slides.push({ form: { eqn3: '4', 'circ.cscAltEqn': 'csc' } });
   slides.push({
     dissolve: { out: { circ: ['thetaComp'] } },
@@ -1003,13 +1011,21 @@ function makeSlides() {
   slides.push({ form: { eqn3: '10' } });
 
   slides.push({
-    showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta', 'tanLabelAlt', 'secLabelAlt', 'cotLabelAlt', 'theta', 'cscLabelAlt', 'rightSin', 'sinLabel', 'sin', 'cosAlt', 'thetaComp', 'cosAltEqn', 'rightCosAlt', 'thetaCos'] },
-    fromForm: { eqn3: '10', 'circ.sinEqn': null, 'circ.cosAltEqn': 'cosine' },
-    form: { eqn3: '10', 'circ.sinEqn': null, 'circ.cosAltEqn': 'cosine' },
-    dissolve: { in: { circ: ['thetaComp', 'cosAlt', 'cosAltEqn', 'rightCosAlt', 'thetaCos'] } },
+    showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta', 'tanLabelAlt', 'secLabelAlt', 'cotLabelAlt', 'theta', 'cscLabelAlt', 'rightSin', 'sinLabel', 'sin', 'cosAlt', 'thetaComp', 'cosAltEqn', 'rightCosAlt'] },
+    fromForm: { eqn3: '10', 'circ.sinEqn': null, 'circ.cosAltEqn': 'sinComp' },
+    form: { eqn3: '10', 'circ.sinEqn': null, 'circ.cosAltEqn': 'sinComp' },
+    dissolve: { in: { circ: ['thetaComp', 'cosAlt', 'cosAltEqn', 'rightCosAlt'] } },
+  });
+  slides.push({
+    showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'tanLabelAlt', 'secLabelAlt', 'cotLabelAlt', 'theta', 'cscLabelAlt', 'rightSin', 'sinLabel', 'sin', 'cosAlt', 'cosAltEqn', 'rightCosAlt'] },
+    form: { eqn3: '10', 'circ.cosAltEqn': 'cosine' },
   });
   slides.push({
     showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta', 'tanLabelAlt', 'secLabelAlt', 'cotLabelAlt', 'theta', 'cscLabelAlt', 'rightSin', 'sinLabel', 'sin', 'cosAlt', 'cosAltEqn', 'rightCosAlt'] },
+    form: { eqn3: '10', 'circ.cosAltEqn': 'cos' },
+  });
+  slides.push({
+    dissolve: { in: 'circ.thetaCos' },
     form: { eqn3: '10', 'circ.cosAltEqn': 'cos' },
   });
   // slides.push({ form: { eqn3: '9' } });
@@ -1057,15 +1073,26 @@ function makeSlides() {
 
   slides.push({
     scenarioCommon: ['circQuarterRight', 'eqnCirc'],
-    form: { eqn3: '13' },
+    form: { eqn3: 'compRearrange' },
   });
+  slides.push({ form: { eqn3: 'compHalf' } });
+  // slides.push({ form: { eqn3: 'compHalf2' } });
+  slides.push({ form: { eqn3: 'comp' } });
+
+  slides.push({ form: { eqn3: 'recRearrange' } });
+  slides.push({ form: { eqn3: 'recHalf' } });
+  slides.push({ form: { eqn3: 'rec' } });
+
+  slides.push({ form: { eqn3: 'tanRearrange' } });
+
+  slides.push({ form: { eqn3: '13' } });
   slides.push({ form: { eqn3: '14' } });
   slides.push({ form: { eqn3: '15' } });
   slides.push({ form: { eqn3: '16' } });
   slides.push({ form: { eqn3: '17' } });
-  slides.push({ form: { eqn3: '18' } });
-  slides.push({ form: { eqn3: '19' } });
-  slides.push({ form: { eqn3: '20' } });
+  // slides.push({ form: { eqn3: '18' } });
+  // slides.push({ form: { eqn3: '19' } });
+  // slides.push({ form: { eqn3: '20' } });
   slides.push({ form: { eqn3: 'values' } });
   slides.push({
     // scenarioCommon: 'circValues',
@@ -1105,10 +1132,13 @@ function makeSlides() {
     // leaveStateCommon: () => eqn3.undim(),
   });
 
+  slides.push({
+    form: { eqn3: 'comp' },
+  });
   // showCommon: { circ: ['circle', 'rotatorFull', 'hypAlt', 'hypLabel', 'thetaVal', 'tanAlt', 'tanLabelAlt', 'secAlt', 'secLabelAlt', 'cotAlt', 'cotLabelAlt', 'cscAlt', 'cscLabelAlt', 'sinLabel', 'sin', 'cosAlt', 'cosLabelAlt', 'xFull', 'yFull'] },
 
 
   nav.loadSlides(slides);
-  nav.goToSlide(40);
+  nav.goToSlide(85);
 }
 makeSlides();
