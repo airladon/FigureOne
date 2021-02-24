@@ -379,7 +379,7 @@ function layoutCirc() {
     mods: {
       scenarios: {
         title: { scale: 0.9, position: [-radius / 2, -1.2] },
-        circQ1: { scale: 1, position: [-1.2, -1] },
+        circQ1: { scale: 1, position: [-0.4, -1] },
         circFull: { scale: 0.7, position: [0, 0] },
       },
     },
@@ -1093,6 +1093,19 @@ function layoutCirc() {
   const add = (name, fn) => figure.fnMap.global.add(name, fn);
   const pAngle = (name, element, s = 2) => figure.fnMap.global.add(name, () => element.pulseAngle({ label: s, curve: s, duration: 1.5 }));
 
+  add('circToRot', () => {
+    if (rotator.isShown) {
+      rotator.animations.new()
+        .rotation({ target: 0.9, duration: 1 })
+        .start();
+      return;
+    }
+    if (rotatorFull.isShown) {
+      rotatorFull.animations.new()
+        .rotation({ target: 0.9, duration: 1 })
+        .start();
+    }
+  })
   add('circToSplit', () => {
     circle.animations.new()
       // .scenarios({ target: 'split', duration: 3 })

@@ -179,6 +179,7 @@ function makeSlides() {
         3: 'triPulseOpp',
         4: 'triPulseHyp',
         5: 'triPulseAdj',
+        0: 'triAnimatePadTo',
       };
     },
   });
@@ -351,73 +352,101 @@ function makeSlides() {
       figure.fnMap.exec('triSetup', [2, 1.5], 'names', false);
     },
   });
-  slides.push({
-    form: 'names',
-  });
+  slides.push({ form: 'names' });
 
+  /*
+  ..######...########..#######..##.....##
+  .##....##..##.......##.....##.###...###
+  .##........##.......##.....##.####.####
+  .##...####.######...##.....##.##.###.##
+  .##....##..##.......##.....##.##.....##
+  .##....##..##.......##.....##.##.....##
+  ..######...########..#######..##.....##
+  */
   slides.push({
-    clear: true,
-    scenarioCommon: ['default', 'left', 'top'],
-    showCommon: ['rightTri'],
-    enterStateCommon: () => {
-      figure.fnMap.exec('triToValues');
-      rightTri._tri.hideSides();
-      rightTri._tri._angle2.hide();
-      rightTri.hasTouchableElements = true;
-      figure.fnMap.exec('triToRot', 1);
-    },
-    form: 'functions',
-    // dissolve: { in: ['rightTri', 'rightTri'] },
-    steadyStateCommon: () => {
+    scenario: 'circQ1',
+    enterState: () => {
+      figure.fnMap.exec('circSetup', 0.9, 'quarter');
       figure.shortCuts = {
-        1: 'triPulseRight',
-        2: 'triPulseTheta',
-        3: 'triPulseOpp',
-        4: 'triPulseHyp',
-        5: 'triPulseAdj',
+        0: 'circToRot',
       };
     },
+    dissolve: {
+      out: { 'rightTri.tri': ['line', 'angle1', 'angle2', 'side01', 'side12', 'side20'] },
+      in: { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc'] },
+    },
     steadyState: () => {
-      rightTri.showAll();
-      rightTri.hide(['tri.angle0']);
+      circ.show(['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc']);
     },
   });
-  slides.push({ form: 'names' });
-  slides.push({ form: 'ratios' });
-  slides.push({ form: 'build0' });
-  slides.push({ form: 'build1' });
-  slides.push({ form: 'build2' });
-  slides.push({ form: 'build3' });
-  slides.push({ form: 'build4' });
-  slides.push({ form: 'full' });
-  slides.push({
-    form: 'full',
-    enterState: () => {
-      const elements = eqn.getPhraseElements(['tanSec', 'oneSec', 'secTan', 'cosSin', 'cotCsc', 'oneCot', 'oneCsc', 'oneSec', 'cscCot']);
-      eqn.dim(elements);
-    },
-    leaveState: () => eqn.undim(),
-  });
-  slides.push({
-    enterState: () => {
-      const elements = eqn.getPhraseElements(['tanSec', 'oneSec', 'secTan', 'cosSin', 'cotCsc', 'oneCot', 'oneCsc', 'oneSec', 'cscCot']);
-      eqn.dim(elements);
-    },
-    fromForm: 'full',
-    transition: (done) => {
-      eqn.animations.new()
-        .goToForm({
-          target: 'final', duration: 2.5, dissolveOutTime: 1.5, animate: 'move',
-        })
-        .whenFinished(done)
-        .start();
-    },
-    form: 'final',
-    leaveState: () => eqn.undim(),
-  });
-  slides.push({
-    form: 'value',
-  });
+
+
+
+
+
+  // slides.push({
+  //   clear: true,
+  //   scenarioCommon: ['default', 'left', 'top'],
+  //   showCommon: ['rightTri'],
+  //   enterStateCommon: () => {
+  //     figure.fnMap.exec('triToValues');
+  //     rightTri._tri.hideSides();
+  //     rightTri._tri._angle2.hide();
+  //     rightTri.hasTouchableElements = true;
+  //     figure.fnMap.exec('triToRot', 1);
+  //   },
+  //   form: 'functions',
+  //   // dissolve: { in: ['rightTri', 'rightTri'] },
+  //   steadyStateCommon: () => {
+  //     figure.shortCuts = {
+  //       1: 'triPulseRight',
+  //       2: 'triPulseTheta',
+  //       3: 'triPulseOpp',
+  //       4: 'triPulseHyp',
+  //       5: 'triPulseAdj',
+  //     };
+  //   },
+  //   steadyState: () => {
+  //     rightTri.showAll();
+  //     rightTri.hide(['tri.angle0']);
+  //   },
+  // });
+  // slides.push({ form: 'names' });
+  // slides.push({ form: 'ratios' });
+  // slides.push({ form: 'build0' });
+  // slides.push({ form: 'build1' });
+  // slides.push({ form: 'build2' });
+  // slides.push({ form: 'build3' });
+  // slides.push({ form: 'build4' });
+  // slides.push({ form: 'full' });
+  // slides.push({
+  //   form: 'full',
+  //   enterState: () => {
+  //     const elements = eqn.getPhraseElements(['tanSec', 'oneSec', 'secTan', 'cosSin', 'cotCsc', 'oneCot', 'oneCsc', 'oneSec', 'cscCot']);
+  //     eqn.dim(elements);
+  //   },
+  //   leaveState: () => eqn.undim(),
+  // });
+  // slides.push({
+  //   enterState: () => {
+  //     const elements = eqn.getPhraseElements(['tanSec', 'oneSec', 'secTan', 'cosSin', 'cotCsc', 'oneCot', 'oneCsc', 'oneSec', 'cscCot']);
+  //     eqn.dim(elements);
+  //   },
+  //   fromForm: 'full',
+  //   transition: (done) => {
+  //     eqn.animations.new()
+  //       .goToForm({
+  //         target: 'final', duration: 2.5, dissolveOutTime: 1.5, animate: 'move',
+  //       })
+  //       .whenFinished(done)
+  //       .start();
+  //   },
+  //   form: 'final',
+  //   leaveState: () => eqn.undim(),
+  // });
+  // slides.push({
+  //   form: 'value',
+  // });
 
   // // dissolve in theta
   // slides.push({
@@ -1086,6 +1115,6 @@ function makeSlides() {
 
 
   nav.loadSlides(slides);
-  nav.goToSlide(9);
+  nav.goToSlide(14);
 }
 makeSlides();

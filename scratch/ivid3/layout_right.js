@@ -454,11 +454,12 @@ function layoutRight() {
       rightTri.hasTouchableElements = false;
     }
   });
-  // figure.fnMap.global.add('triAnimateToRot', () => {
-  //   rotLine.animations.new()
-  //     .rotation({ target: 0.7, duration: 1 })
-  //     .start();
-  // });
+  figure.fnMap.global.add('triAnimatePadTo', () => {
+    movePad.animations.new()
+      .rotation({ target: [2, 1.5], duration: 1 })
+      .start();
+  });
+
   figure.fnMap.global.add('triPulseAngles', () => {
     pulseAngle(angle2);
     pulseRight();
