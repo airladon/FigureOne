@@ -92,7 +92,7 @@ export class TriggerAnimationStep extends AnimationStep {
   element: ?Object;
   callback: ?(string | Function);
   payload: ?Object;
-  setToEnd: ?(string | Function);
+  setToEndCallback: ?(string | Function);
   customProperties: Object;
 
   /**
@@ -105,7 +105,7 @@ export class TriggerAnimationStep extends AnimationStep {
     const defaultOptions = {
       payload: null,
       duration: 0,
-      setToEnd: () => {},
+      setToEnd: null,
     };
     let options;
     if (
@@ -122,7 +122,10 @@ export class TriggerAnimationStep extends AnimationStep {
     this.callback = options.callback;
     this.payload = options.payload;
     this.duration = options.duration;
-    this.setToEnd = options.setToEnd;
+    if (options.setToEnd) {
+      this.setToEndCallback = options.setToEnd;
+    }
+    // this.setToEnd = options.setToEnd;
     this.customProperties = options.customProperties;
   }
 
@@ -198,7 +201,7 @@ export class TriggerAnimationStep extends AnimationStep {
     //   this.callback(this.payload);
     //   this.callback = null;
     // }
-    this.fnExec(this.setToEnd);
+    this.fnExec(this.setToEndCallback);
     this.fnExec(this.callback, this.payload, this.customProperties);
     this.callback = null;
   }

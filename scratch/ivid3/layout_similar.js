@@ -60,9 +60,21 @@ function similarLayout() {
     name: 'similar',
     method: 'collection',
     elements: [
-      polyline('tri1', tri1Points, [-2.5, -0.4], 'A', 'B', 'C'),
-      polyline('tri2', tri2Points, [-1.2, -0.4], 'D', 'E', 'F'),
-      polyline('tri3', tri3Points, [0.6, -0.4], 'G', 'H', 'I'),
+      {
+        name: 'tris',
+        method: 'collection',
+        elements: [
+          polyline('tri1', tri1Points, [-2.5, -0.4], 'A', 'B', 'C'),
+          polyline('tri2', tri2Points, [-1.2, -0.4], 'D', 'E', 'F'),
+          polyline('tri3', tri3Points, [0.6, -0.4], 'G', 'H', 'I'),
+        ],
+        mods: {
+          scenarios: {
+            similarLarge: { scale: 1 },
+            similarSmall: { scale: 0.8 },
+          },
+        },
+      },
       {
         name: 'eqn',
         method: 'collections.equation',
@@ -135,183 +147,17 @@ function similarLayout() {
   const similar = figure.getElement('similar');
   const tri1 = figure.getElement('similar.tri1');
   const tri2 = figure.getElement('similar.tri2');
-  // const pulseScale = () => {
-  //   tri2.pulse({
-  //     elements: ['side01.label.s', 'side12.label.s', 'side20.label.s'],
-  //     xAlign: 'right',
-  //   });
-  // };
-  // const pulseCorrespondingAngles = () => {
-  //   similar.stop();
-  //   similar.animations.new()
-  //     .trigger({
-  //       duration: 1,
-  //       callback: () => similar.pulse({ elements: ['tri1.angle0', 'tri2.angle0'] }),
-  //     })
-  //     .trigger({
-  //       duration: 1,
-  //       callback: () => similar.pulse({ elements: ['tri1.angle1', 'tri2.angle1'] }),
-  //     })
-  //     .trigger({
-  //       duration: 1,
-  //       callback: () => similar.pulse({ elements: ['tri1.angle2', 'tri2.angle2'] }),
-  //     })
-  //     .start();
-  // };
 
   const eqn = figure.getElement('similar.eqn');
-  // const [s1, s2, A, B] = eqn.getElements(['s_1', 's_2', 'A', 'B']);
-  // const animateEqn = () => {
-  //   eqn.stop();
-  //   eqn.showForm('blank');
-  //   eqn.animations.new()
-  //     .trigger({
-  //       callback: () => {
-  //         tri2.pulse({
-  //           elements: ['side12.label.s', 'side12.label.A'],
-  //           centerOn: 'side12.label.A',
-  //         });
-  //         tri2.pulse({
-  //           elements: ['side20.label.s', 'side20.label.B'],
-  //           centerOn: 'side20.label.B',
-  //         });
-  //       },
-  //       duration: 1,
-  //     })
-  //     .trigger(() => {
-  //       eqn.showForm('sAsB');
-  //       // This is needed as the hidden s1, s2, A, B elements don't have a most
-  //       // recent lastDrawTransform with the updated eqn position
-  //       figure.setFirstTransform();
-  //       s1.setPositionToElement(tri2._side12._label._s);
-  //       s2.setPositionToElement(tri2._side20._label._s);
-  //       A.setPositionToElement(tri2._side12._label._A);
-  //       B.setPositionToElement(tri2._side20._label._B);
-  //     })
-  //     .goToForm({ target: 'sAOnsB', animate: 'move', duration: 2 })
-  //     .goToForm({ delay: 0.5, target: 'sAOnsBSimplify1', animate: 'move' })
-  //     .goToForm({ delay: 0.5, target: 'sAOnsBSimplify2', animate: 'move' })
-  //     .goToForm({ delay: 1, target: 'AOnB', animate: 'move', duration: 1 })
-  //     .trigger({
-  //       callback: () => {
-  //         tri1.pulse({ elements: ['side12.label.A', 'side20.label.B'], scale: 2.5 });
-  //         eqn.pulse({ elements: ['A_2', 'B_2'], centerOn: 'v3' });
-  //       },
-  //       duration: 1,
-  //     })
-  //     .start();
-  //   figure.animateNextFrame();
-  // };
-
-  // figure.fnMap.global.add('similarPulseAngles', pulseCorrespondingAngles);
-  // figure.fnMap.global.add('similarAnimateEqn', animateEqn);
-  // figure.fnMap.global.add('similarPulseScale', pulseScale);
 
   figure.fnMap.global.add('similarToggleRatios', () => {
     const t = 0.2;
     const form = eqn.getCurrentForm().name;
-    // if (form === 'AB') {
-    //   eqn.goToForm({ form: 'BC', animate: 'move', duration: t * 2 });
-    //   similar.animations.new()
-    //     .inParallel([
-    //       similar._tri1._side12.animations.dissolveOut(t),
-    //       similar._tri2._side12.animations.dissolveOut(t),
-    //       similar._tri3._side12.animations.dissolveOut(t),
-    //     ])
-    //     .inParallel([
-    //       similar._tri1._side01.animations.dissolveIn(t),
-    //       similar._tri2._side01.animations.dissolveIn(t),
-    //       similar._tri3._side01.animations.dissolveIn(t),
-    //     ])
-    //     .start();
-    //   similar.hide(['tri1.side12', 'tri2.side12', 'tri3.side12']);
-    // } else if (form === 'BC') {
-    //   eqn.goToForm({ form: 'CA', animate: 'move', duration: t * 2 });
-    //   similar.animations.new()
-    //     .inParallel([
-    //       similar._tri1._side20.animations.dissolveOut(t),
-    //       similar._tri2._side20.animations.dissolveOut(t),
-    //       similar._tri3._side20.animations.dissolveOut(t),
-    //     ])
-    //     .inParallel([
-    //       similar._tri1._side12.animations.dissolveIn(t),
-    //       similar._tri2._side12.animations.dissolveIn(t),
-    //       similar._tri3._side12.animations.dissolveIn(t),
-    //     ])
-    //     .start();
-    // } else if (form === 'CA') {
-    //   eqn.goToForm({ form: 'BA', animate: 'move', duration: t * 2 });
-    //   similar.animations.new()
-    //     .inParallel([
-    //       similar._tri1._side01.animations.dissolveOut(t),
-    //       similar._tri2._side01.animations.dissolveOut(t),
-    //       similar._tri3._side01.animations.dissolveOut(t),
-    //     ])
-    //     .inParallel([
-    //       similar._tri1._side20.animations.dissolveIn(t),
-    //       similar._tri2._side20.animations.dissolveIn(t),
-    //       similar._tri3._side20.animations.dissolveIn(t),
-    //     ])
-    //     .start();
-    // } else if (form === 'BA') {
-    //   eqn.goToForm({ form: 'CB', animate: 'move', duration: t * 2 });
-    //   similar.animations.new()
-    //     .inParallel([
-    //       similar._tri1._side12.animations.dissolveOut(t),
-    //       similar._tri2._side12.animations.dissolveOut(t),
-    //       similar._tri3._side12.animations.dissolveOut(t),
-    //     ])
-    //     .inParallel([
-    //       similar._tri1._side01.animations.dissolveIn(t),
-    //       similar._tri2._side01.animations.dissolveIn(t),
-    //       similar._tri3._side01.animations.dissolveIn(t),
-    //     ])
-    //     .start();
-    // } else if (form === 'CB') {
-    //   eqn.goToForm({ form: 'AC', animate: 'move', duration: t * 2 });
-    //   similar.animations.new()
-    //     .inParallel([
-    //       similar._tri1._side20.animations.dissolveOut(t),
-    //       similar._tri2._side20.animations.dissolveOut(t),
-    //       similar._tri3._side20.animations.dissolveOut(t),
-    //     ])
-    //     .inParallel([
-    //       similar._tri1._side12.animations.dissolveIn(t),
-    //       similar._tri2._side12.animations.dissolveIn(t),
-    //       similar._tri3._side12.animations.dissolveIn(t),
-    //     ])
-    //     .start();
-    // } else {
-    //   eqn.goToForm({ form: 'AB', animate: 'move', duration: t * 2 });
-    //   similar.animations.new()
-    //     .inParallel([
-    //       similar._tri1._side01.animations.dissolveOut(t),
-    //       similar._tri2._side01.animations.dissolveOut(t),
-    //       similar._tri3._side01.animations.dissolveOut(t),
-    //     ])
-    //     .inParallel([
-    //       similar._tri1._side20.animations.dissolveIn(t),
-    //       similar._tri2._side20.animations.dissolveIn(t),
-    //       similar._tri3._side20.animations.dissolveIn(t),
-    //     ])
-    //     .start();
-    // }
     if (form === 'AB') {
       eqn.stop('complete');
       similar.stop('complete');
       eqn.goToForm({ form: 'BA', animate: 'move', duration: t * 2 });
       similar.animations.new()
-        // .inParallel([
-        //   similar._tri1._side01.animations.dissolveOut(t),
-        //   similar._tri2._side01.animations.dissolveOut(t),
-        //   similar._tri3._side01.animations.dissolveOut(t),
-        // ])
-        // .inParallel([
-        //   similar._tri1._side20.animations.dissolveIn(t),
-        //   similar._tri2._side20.animations.dissolveIn(t),
-        //   similar._tri3._side20.animations.dissolveIn(t),
-        // ])
-        // .start();
     } else if (form === 'BA') {
       eqn.stop('complete');
       similar.stop('complete');
@@ -333,18 +179,6 @@ function similarLayout() {
       eqn.stop('complete');
       similar.stop('complete');
       eqn.goToForm({ form: 'CB', animate: 'move', duration: t * 2 });
-      // similar.animations.new()
-      //   .inParallel([
-      //     similar._tri1._side12.animations.dissolveOut(t),
-      //     similar._tri2._side12.animations.dissolveOut(t),
-      //     similar._tri3._side12.animations.dissolveOut(t),
-      //   ])
-      //   .inParallel([
-      //     similar._tri1._side01.animations.dissolveIn(t),
-      //     similar._tri2._side01.animations.dissolveIn(t),
-      //     similar._tri3._side01.animations.dissolveIn(t),
-      //   ])
-      //   .start();
     } else if (form === 'CB') {
       eqn.stop('complete');
       similar.stop('complete');
@@ -365,18 +199,6 @@ function similarLayout() {
       eqn.stop('complete');
       similar.stop('complete');
       eqn.goToForm({ form: 'AC', animate: 'move', duration: t * 2 });
-      // similar.animations.new()
-      //   .inParallel([
-      //     similar._tri1._side20.animations.dissolveOut(t),
-      //     similar._tri2._side20.animations.dissolveOut(t),
-      //     similar._tri3._side20.animations.dissolveOut(t),
-      //   ])
-      //   .inParallel([
-      //     similar._tri1._side12.animations.dissolveIn(t),
-      //     similar._tri2._side12.animations.dissolveIn(t),
-      //     similar._tri3._side12.animations.dissolveIn(t),
-      //   ])
-      //   .start();
     } else {
       eqn.stop('complete');
       similar.stop('complete');
@@ -394,7 +216,6 @@ function similarLayout() {
         ])
         .start();
     }
-    
   });
 
   const summary = (name, position, text, modifiers = {}) => ({

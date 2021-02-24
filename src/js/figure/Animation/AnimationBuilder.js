@@ -172,7 +172,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const options = joinObjects({}, defaultOptions, ...optionsIn);
-      this.then(new animation.CustomAnimationStep(options));
+      // this.then(new animation.CustomAnimationStep(options));
+      this.addStep(options, 'CustomAnimationStep', true);
     } else {
       this.then(new animation.CustomAnimationStep(...optionsIn));
     }
@@ -188,7 +189,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const optionsToUse = joinObjects({}, defaultOptions, ...options);
-      this.then(new animation.RotationAnimationStep(optionsToUse));
+      // this.then(new animation.RotationAnimationStep(optionsToUse));
+      this.addStep(optionsToUse, 'RotationAnimationStep', true);
     }
     return this;
   }
@@ -203,7 +205,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const optionsToUse = joinObjects({}, defaultOptions, ...options);
-      this.then(new animation.PositionAnimationStep(optionsToUse));
+      // this.then(new animation.PositionAnimationStep(optionsToUse));
+      this.addStep(optionsToUse, 'PositionAnimationStep', true);
     }
     return this;
   }
@@ -226,7 +229,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const optionsToUse = joinObjects({}, defaultOptions, ...options);
-      this.then(new animation.ScaleAnimationStep(optionsToUse));
+      // this.then(new animation.ScaleAnimationStep(optionsToUse));
+      this.addStep(optionsToUse, 'ScaleAnimationStep', true);
     }
     return this;
   }
@@ -248,7 +252,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const optionsToUse = joinObjects({}, defaultOptions, ...options);
-      this.then(new animation.TransformAnimationStep(optionsToUse));
+      // this.then(new animation.TransformAnimationStep(optionsToUse));
+      this.addStep(optionsToUse, 'TransformAnimationStep', true);
     }
     return this;
   }
@@ -257,7 +262,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const optionsToUse = joinObjects({}, defaultOptions, ...options);
-      this.then(new animation.PulseTransformAnimationStep(optionsToUse));
+      // this.then(new animation.PulseTransformAnimationStep(optionsToUse));
+      this.addStep(optionsToUse, 'PulseTransformAnimationStep', true);
     }
     return this;
   }
@@ -279,7 +285,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const optionsToUse = joinObjects({}, defaultOptions, ...options);
-      this.then(new animation.ScenarioAnimationStep(optionsToUse));
+      // this.then(new animation.ScenarioAnimationStep(optionsToUse));
+      this.addStep(optionsToUse, 'ScenarioAnimationStep', true);
     }
     return this;
   }
@@ -309,7 +316,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const optionsToUse = joinObjects({}, defaultOptions, ...options);
-      this.then(new animation.ColorAnimationStep(optionsToUse));
+      // this.then(new animation.ColorAnimationStep(optionsToUse));
+      this.addStep(optionsToUse, 'ColorAnimationStep', true);
     }
     return this;
   }
@@ -323,7 +331,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const optionsToUse = joinObjects({}, defaultOptions, ...options);
-      this.then(new animation.OpacityAnimationStep(optionsToUse));
+      // this.then(new animation.OpacityAnimationStep(optionsToUse));
+      this.addStep(optionsToUse, 'OpacityAnimationStep', true);
     }
     return this;
   }
@@ -344,7 +353,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     } else {
       options = joinObjects({}, defaultOptions, durationOrOptions, ...args);
     }
-    this.then(animation.dissolveOut(options));
+    // this.then(animation.dissolveOut(options));
+    this.addStep(options, 'dissolveOut');
     return this;
   }
 
@@ -364,8 +374,32 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     } else {
       options = joinObjects({}, defaultOptions, durationOrOptions, ...args);
     }
-    this.then(animation.dissolveIn(options));
+    this.addStep(options, 'dissolveIn');
     return this;
+  }
+
+  addStep(options: Object, animName: string, isClass: boolean = false) {
+    if (typeof options.element === 'string' && this.element != null) {
+      options.element = this.element.getElement(options.element);
+    }
+    if (options.elements != null && options.element != null) {
+      const elements = options.element.getElements(options.elements);
+      const steps = [];
+      options.elements = undefined;
+      options.element = undefined;
+      elements.forEach((element) => {
+        if (isClass) {
+          steps.push(new element.animations[animName](options));
+        } else {
+          steps.push(element.animations[animName](options));
+        }
+      });
+      this.then(new animation.ParallelAnimationStep(options, { steps }));
+    } else if (isClass) {
+      this.then(new animation[animName](options));
+    } else {
+      this.then(animation[animName](options));
+    }
   }
 
   /**
@@ -384,7 +418,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     } else {
       options = joinObjects({}, defaultOptions, durationOrOptions, ...args);
     }
-    this.then(animation.dim(options));
+    // this.then(animation.dim(options));
+    this.addStep(options, 'dim');
     return this;
   }
 
@@ -404,7 +439,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     } else {
       options = joinObjects({}, defaultOptions, durationOrOptions, ...args);
     }
-    this.then(animation.undim(options));
+    // this.then(animation.undim(options));
+    this.addStep(options, 'undim');
     return this;
   }
 
@@ -471,7 +507,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   pulse(...optionsIn: Array<OBJ_PulseAnimationStep>) {
     const defaultOptions = { element: this.element };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
-    this.then(new animation.PulseAnimationStep(options));
+    // this.then(new animation.PulseAnimationStep(options));
+    this.addStep(options, 'PulseAnimationStep', true);
     return this;
   }
 

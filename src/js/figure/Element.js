@@ -5524,6 +5524,7 @@ class FigureElementCollection extends FigureElement {
     if (children != null) {
       elements = this.getElements(children);
     } else {
+      this.color = this.defaultColor.slice();
       elements = this.drawOrder.map(name => this.elements[name]);
     }
     elements.forEach(element => element.undim());
@@ -5545,6 +5546,7 @@ class FigureElementCollection extends FigureElement {
     if (children != null) {
       elements = this.getElements(children);
     } else {
+      this.color = this.dimColor.slice();
       elements = this.drawOrder.map(name => this.elements[name]);
     }
     elements.forEach(element => element.dim());

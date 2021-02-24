@@ -498,6 +498,30 @@ export default class AnimationManager {
     return new anim.UndimAnimationStep(optionsToUse);
   }
 
+  getStep(options: Object, animName: string, isClass: boolean = false) {
+    if (typeof options.element === 'string' && this.element != null) {
+      options.element = this.element.getElement(options.element);
+    }
+    if (options.elements != null && options.element != null) {
+      const elements = options.element.getElements(options.elements);
+      const steps = [];
+      options.elements = undefined;
+      options.element = undefined;
+      elements.forEach((element) => {
+        if (isClass) {
+          steps.push(new element.animations[animName](options));
+        } else {
+          steps.push(element.animations[animName](options));
+        }
+      });
+      this.then(new animation.ParallelAnimationStep(options, { steps }));
+    } else if (isClass) {
+      this.then(new animation[animName](options));
+    } else {
+      this.then(animation[animName](options));
+    }
+  }
+
   /**
    * Create a Scenario animation step tied to this element
    * @param {OBJ_ScenarioAnimationStep} options

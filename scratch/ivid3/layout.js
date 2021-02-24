@@ -294,7 +294,7 @@ function makeSlides() {
     show: 'similar.allAngles',
     dissolve: {
       in: {
-        similar: [
+        'similar.tris': [
           'tri1.line', 'tri1.angle0', 'tri1.angle1', 'tri1.angle2',
           'tri2.line', 'tri2.angle0', 'tri2.angle1', 'tri2.angle2',
           'tri3.line', 'tri3.angle0', 'tri3.angle1', 'tri3.angle2',
@@ -306,10 +306,11 @@ function makeSlides() {
     clear: true,
     show: {
       similar: [
+        { tris: [
         'tri1.line', 'tri1.angle0', 'tri1.angle1', 'tri1.angle2',
         'tri2.line', 'tri2.angle0', 'tri2.angle1', 'tri2.angle2',
         'tri3.line', 'tri3.angle0', 'tri3.angle1', 'tri3.angle2',
-        'allAngles',
+        ] }, 'allAngles',
       ],
     },
     fromForm: { 'similar.eqn': 'AB' },
@@ -319,14 +320,15 @@ function makeSlides() {
       similar.animations.new()
         .then(similar._allAngles.animations.dissolveOut(0.4))
         .then(similar._allRatios.animations.dissolveIn(0.4))
-        .inParallel([
-          similar._tri1._side20.animations.dissolveIn({ delay: 0.5, duration: 0.5 }),
-          similar._tri1._side12.animations.dissolveIn({ delay: 0.5, duration: 0.5 }),
-          similar._tri2._side20.animations.dissolveIn({ delay: 0.5, duration: 0.5 }),
-          similar._tri2._side12.animations.dissolveIn({ delay: 0.5, duration: 0.5 }),
-          similar._tri3._side20.animations.dissolveIn({ delay: 0.5, duration: 0.5 }),
-          similar._tri3._side12.animations.dissolveIn({ delay: 0.5, duration: 0.5 }),
-        ])
+        .dissolveIn({ elements: { tris: ['tri1.side20', 'tri1.side12', 'tri2.side20', 'tri2.side12', 'tri3.side20', 'tri3.side12'] }, delay: 0.5, duration: 0.5 })
+        // .inParallel([
+        //   similar._tri1._side20.animations.dissolveIn({ delay: 0.5, duration: 0.5 }),
+        //   similar._tri1._side12.animations.dissolveIn({ delay: 0.5, duration: 0.5 }),
+        //   similar._tri2._side20.animations.dissolveIn({ delay: 0.5, duration: 0.5 }),
+        //   similar._tri2._side12.animations.dissolveIn({ delay: 0.5, duration: 0.5 }),
+        //   similar._tri3._side20.animations.dissolveIn({ delay: 0.5, duration: 0.5 }),
+        //   similar._tri3._side12.animations.dissolveIn({ delay: 0.5, duration: 0.5 }),
+        // ])
         .then(similar._eqn.animations.dissolveIn({ delay: 0.5, duration: 0.5 }))
         .whenFinished(done)
         .start();
