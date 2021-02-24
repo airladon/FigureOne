@@ -298,7 +298,7 @@ function makeSlides() {
   slides.push({
     clear: true,
     scenarioCommon: ['default', 'left', 'top'],
-    show: ['rightTri.tri.line'],
+    show: ['rightTri'],
     enterStateCommon: () => {
       figure.fnMap.exec('triToValues');
       rightTri._tri.hideSides();
@@ -306,7 +306,8 @@ function makeSlides() {
       rightTri.hasTouchableElements = true;
       figure.fnMap.exec('triToRot', 1);
     },
-    dissolve: { in: ['rightTri', 'rightTri'] },
+    form: 'full',
+    // dissolve: { in: ['rightTri', 'rightTri'] },
     steadyStateCommon: () => {
       figure.shortCuts = {
         1: 'triPulseRight',
@@ -318,9 +319,12 @@ function makeSlides() {
     },
     steadyState: () => {
       // rightTri._sizeLine.setPosition(1, 0)
+      rightTri.showAll();
       rightTri.hide(['tri.angle0']);
     }
   });
+  slides.push({ form: 'strike' });
+  slides.push({ form: 'final' });
 
   // // dissolve in theta
   // slides.push({

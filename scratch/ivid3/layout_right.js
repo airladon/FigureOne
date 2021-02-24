@@ -202,17 +202,17 @@ function layoutRight() {
       tri._angle1.show();
     }
 
-    const eqn3 = figure.getElement('eqn3');
-    if (eqn3.getElement('val7').isShown) {
-      eqn3.updateElementText({
-        val7: sin.toFixed(4),
-        val8: cos.toFixed(4),
-        val9: sin / cos > 100 ? '\u221e' : (sin / cos).toFixed(4),
-        val10: 1 / cos > 100 ? '\u221e' : (1 / cos).toFixed(4),
-        val11: cos / sin > 100 ? '\u221e' : (cos / sin).toFixed(4),
-        val12: 1 / sin > 100 ? '\u221e' : (1 / sin).toFixed(4),
-      });
-    }
+    // const eqn3 = figure.getElement('eqn');
+    // if (eqn3.getElement('val7').isShown) {
+    //   eqn3.updateElementText({
+    //     val7: sin.toFixed(4),
+    //     val8: cos.toFixed(4),
+    //     val9: sin / cos > 100 ? '\u221e' : (sin / cos).toFixed(4),
+    //     val10: 1 / cos > 100 ? '\u221e' : (1 / cos).toFixed(4),
+    //     val11: cos / sin > 100 ? '\u221e' : (cos / sin).toFixed(4),
+    //     val12: 1 / sin > 100 ? '\u221e' : (1 / sin).toFixed(4),
+    //   });
+    // }
 
     // figure.fnMap.global.add('rotateTri', () => {
     //   rotLine.animations.new()
