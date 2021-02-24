@@ -1,54 +1,9 @@
 /* eslint-disable camelcase */
 /* globals figure, colTan, colCot, colCsc, color2, colSec, colTheta
-   colCsc */
+   colCsc, centerText */
 
 function layout() {
-  const centerText = (name, text, modifiers = {}, position = [0, 0], size = 0.2) => ({
-    name,
-    method: 'textLines',
-    options: {
-      text,
-      modifiers,
-      position,
-      xAlign: 'center',
-      justify: 'left',
-      yAlign: 'middle',
-      font: { size, color: [0.3, 0.3, 0.3, 1] },
-      fixColor: true,
-    },
-    mods: {
-      scenarios: {
-        default: { position, scale: 1 },
-        topHigh: { position: [0, 1.2], scale: 1 },
-        top: { position: [0, 1], scale: 1 },
-        // right: { position: [1, 0] },
-      },
-      isTouchable: true,
-    },
-  });
-
-  const leftText = (name, position, text, modifiers = {}, size = 0.2) => ({
-    name,
-    method: 'textLines',
-    options: {
-      text,
-      modifiers,
-      position,
-      xAlign: 'left',
-      justify: 'left',
-      yAlign: 'baseline',
-      font: { size, color: [0.3, 0.3, 0.3, 1] },
-      fixColor: true,
-    },
-    mods: {
-      isTouchable: true,
-    //   scenarios: {
-    //     top: { position: [-2, 1], scale: 1 },
-    //     default: { position: [-2, 0], scale: 1 },
-    //   },
-    },
-  });
-
+  
 
   figure.add([
     {
@@ -83,19 +38,6 @@ function layout() {
       secant: { font: { style: 'italic', family: 'Times New Roman', color: colSec } },
       secare: { font: { style: 'italic', family: 'Times New Roman' } },
     }, [1.3, 0], 0.15),
-    leftText('allTriangles', [-2, 0.95], 'All right triangles with |theta|:', {
-      theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic', color: colTheta } },
-    }),
-    leftText('haveSameAngles', [0.1, 0.95], ' have the |same angles|', {
-      'same angles': {
-        font: { color: colTheta },
-        onClick: 'triPulseAngles',
-        touchBorder: 0.1,
-      },
-    }),
-    leftText('areSimilar', [0.1, 0.95], ' are similar'),
-    leftText('haveTheSame', [0.1, 0.95], ' have the same'),
-    leftText('haveEqualCorr', [0.1, 0.95], ' have equal corresponding'),
   ]);
   figure.add({
     name: 'cursor',
@@ -129,15 +71,10 @@ function makeSlides() {
   const slides = [];
 
   const nav = figure.getElement('nav');
+  const similar = figure.getElement('similar');
   const rightTri = figure.getElement('rightTri');
-  // const circle = figure.getElement('circle');
-  // const rightTris = figure.getElement('rightTris');
-  // const eqn = figure.getElement('eqn');
-  // const table = figure.getElement('table');
-  // const bow = figure.getElement('bow');
   const circ = figure.getElement('circ');
   const eqn = figure.getElement('eqn');
-  const similar = figure.getElement('similar');
 
   /*
   .########.####.########.##.......########
@@ -148,61 +85,15 @@ function makeSlides() {
   ....##.....##.....##....##.......##......
   ....##....####....##....########.########
   */
-  // slides.push({
-  //   scenarioCommon: ['circQ1', 'title', 'circ'],
-  //   showCommon: [
-  //     // 'title',
-  //     // { circ: ['circle', 'x', 'y', 'rotatorFull', 'tan', 'sec', 'cot', 'csc', 'theta', 'sin', 'cos', 'sinLabel', 'cosLabel', 'tanLabel', 'secLabel', 'cscLabel', 'cotLabel'] }],
-  //     { circ: ['arc', 'xQ1', 'yQ1', 'rotatorFull', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc'] }],
-  //   // show: 'title',
-  //   enterStateCommon: () => {
-  //     // figure.fnMap.exec('cSetAngle', 1);
-  //     figure.fnMap.exec('circSetup', 1, 'circle');
-  //   },
-  // });
-  // slides.push({
-  //   scenarioCommon: ['circQ1', 'title'],
-  //   showCommon: [
-  //     { circ: ['arc', 'xQ1', 'yQ1', 'rotatorFull', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc'] }],
-  //   enterStateCommon: () => {
-  //     figure.fnMap.exec('circSetup', 1, 'circle');
-  //   },
-  //   steadyState: () => {
-  //     figure.fnMap.exec('circToSplit');
-  //     // circ.animations.new()
-  //     //   .scenarios({ target: 'split', duration: 2 })
-  //     //   .start();
-  //     // circ.setScenarios('split');
-  //   },
-  // });
-  // slides.push({
-  //   enterStateCommon: () => {
-  //     figure.fnMap.exec('cSetAngle', 1);
-  //     figure.fnMap.exec('circSetBounds', 'quarter');
-  //   },
-  //   transition: (done) => {
-  //     figure.animations.new()
-  //       .inParallel([
-  //         figure.getElement('title').animations.dissolveOut(0.4),
-  //         circ.animations.scenario({ target: 'circPreview', duration: 1.5 }),
-  //       ])
-  //       .whenFinished(done)
-  //       .start();
-  //   },
-  //   steadyState: () => {
-  //     circ.setScenario('circPreview');
-  //     figure.hide('title');
-  //   },
-  // });
-
-  // // slides.push({
-  // //   show: ['circle', 'title'],
-  // //   scenario: 'title',
-  // //   steadyState: () => {
-  // //     circle.getElement('line').setRotation(0.87);
-  // //   },
-  // // });
-
+  slides.push({
+    scenarioCommon: ['title'],
+    showCommon: [
+      'title',
+      { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc'] }],
+    enterStateCommon: () => {
+      figure.fnMap.exec('circSetup', 0.9, 'title');
+    },
+  });
 
   // /*
   // ..######..####.##.....##.####.##..........###....########.
@@ -213,78 +104,6 @@ function makeSlides() {
   // .##....##..##..##.....##..##..##.......##.....##.##....##.
   // ..######..####.##.....##.####.########.##.....##.##.....##
   // */
-  // // const sTri1 = figure.getElement('similar.tri1');
-  // // const sTri2 = figure.getElement('similar.tri2');
-
-  // // slides.push({
-  // //   form: null,
-  // //   scenarioCommon: ['default', 'topHigh'],
-  // //   dissolve: { in: 'similarTriangles' },
-  // // });
-
-  // // slides.push({
-  // //   scenarioCommon: ['default', 'topHigh'],
-  // //   // show: ['similarTriangles'],
-  // //   transition: (done) => {
-  // //     figure.getElement('similarTriangles').animations.new()
-  // //       .dissolveIn(0.4)
-  // //       .inParallel([
-  // //         sTri1.getElement('line').animations.dissolveIn(0.8),
-  // //         sTri2.getElement('line').animations.dissolveIn(0.8),
-  // //       ])
-  // //       .then(figure.getElement('similar.summary1').animations.dissolveIn(0.8))
-  // //       .inParallel([
-  // //         sTri1.getElement('angle0').animations.dissolveIn(0.8),
-  // //         sTri1.getElement('angle1').animations.dissolveIn(0.8),
-  // //         sTri1.getElement('angle2').animations.dissolveIn(0.8),
-  // //       ])
-  // //       .inParallel([
-  // //         sTri2.getElement('angle0').animations.dissolveIn(0.8),
-  // //         sTri2.getElement('angle1').animations.dissolveIn(0.8),
-  // //         sTri2.getElement('angle2').animations.dissolveIn(0.8),
-  // //       ])
-  // //       .whenFinished(done)
-  // //       .start();
-  // //   },
-  // //   steadyState: () => {
-  // //     figure.getElement('similarTriangles').setScenario('topHigh');
-  // //     figure.show(['similar.tri1', 'similar.tri2', 'similar.summary1']);
-  // //     sTri1.hideSides();
-  // //     sTri2.hideSides();
-  // //   },
-  // // });
-
-  // // slides.push({
-  // //   show: ['similarTriangles', 'similar.tri1', 'similar.tri2', 'similar.summary1', 'similar.summary2'],
-  // //   transition: (done) => {
-  // //     sTri1.hideSides();
-  // //     sTri2.hideSides();
-  // //     figure.getElement('similar.summary2').animations.new()
-  // //       .dissolveIn(0.8)
-  // //       .inParallel([
-  // //         sTri1.getElement('side01').animations.dissolveIn(0.8),
-  // //         sTri1.getElement('side12').animations.dissolveIn(0.8),
-  // //         sTri1.getElement('side20').animations.dissolveIn(0.8),
-  // //       ])
-  // //       .inParallel([
-  // //         sTri2.getElement('side01').animations.dissolveIn(0.8),
-  // //         sTri2.getElement('side12').animations.dissolveIn(0.8),
-  // //         sTri2.getElement('side20').animations.dissolveIn(0.8),
-  // //       ])
-  // //       .whenFinished(done)
-  // //       .start();
-  // //   },
-  // //   steadyState: () => {
-  // //     sTri1.showAll();
-  // //     sTri2.showAll();
-  // //   },
-  // // });
-
-  // slides.push({
-  //   scenarioCommon: ['default', 'topHigh'],
-  //   showCommon: ['similarTriangles', 'similar.tri1', 'similar.tri2', 'similar.summary1', 'similar.summary2', 'similar.summary3'],
-  //   dissolve: { in: ['similarTriangles', 'similar'] },
-  // });
   slides.push({
     clear: true,
     dissolve: { in: 'similar.allAngles' },
@@ -335,19 +154,9 @@ function makeSlides() {
       similar.show(['allRatios']);
       similar.hide('allAngles');
       similar._tris.setScenario('similarSmall');
-    }
-  });
-  slides.push({
-    clear: true,
-    showCommon: 'similar',
-    steadyState: () => {
-      similar._allRatios.hide();
-      similar._eqn.hide();
-      similar._tri1.hideSides();
-      similar._tri2.hideSides();
-      similar._tri3.hideSides();
     },
   });
+
   // /*
   // .########..####..######...##.....##.########....########.########..####
   // .##.....##..##..##....##..##.....##....##..........##....##.....##..##.
@@ -358,6 +167,194 @@ function makeSlides() {
   // .##.....##.####..######...##.....##....##..........##....##.....##.####
   // */
   // const initialAngle = 0.7;
+  slides.push({
+    clear: true,
+    scenarioCommon: 'center',
+    show: ['rightTri.tri.line', 'rightTri.tri.angle1'],
+    enterStateCommon: () => {
+      figure.fnMap.exec('triSetup', [2, 1.5], 'names');
+      figure.shortCuts = {
+        1: 'triPulseRight',
+        2: 'triPulseTheta',
+        3: 'triPulseOpp',
+        4: 'triPulseHyp',
+        5: 'triPulseAdj',
+      };
+    },
+  });
+
+  // Theta
+  slides.push({
+    showCommon: ['rightTri.tri.line', 'rightTri.tri.angle1', 'rightTri.tri.angle2'],
+    dissolve: { in: 'rightTri.tri.angle2' },
+  });
+
+  // Complementary
+  slides.push({
+    showCommon: { 'rightTri.tri': ['line', 'angle1', 'angle2', 'angle0'] },
+    dissolve: { in: 'rightTri.tri.angle0' },
+  });
+
+
+  slides.push({
+    transition: (done) => {
+      rightTri.animations.new()
+        .scenario({ target: 'similar', duration: 1 })
+        .dissolveIn({
+          elements: [
+            'tri1.line', 'tri2.line',
+            'tri1.angle2', 'tri2.angle2',
+            'tri1.angle0', 'tri2.angle0',
+            'tri1.angle1', 'tri2.angle1',
+            'allTriangles', 'haveSameAngles',
+          ],
+          duration: 0.8,
+        })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      rightTri.show([
+        'tri1.line', 'tri2.line',
+        'tri1.angle2', 'tri2.angle2',
+        'tri1.angle0', 'tri2.angle0',
+        'tri1.angle1', 'tri2.angle1',
+        'allTriangles', 'haveSameAngles',
+      ]);
+      rightTri.setScenario('similar');
+    },
+  });
+  slides.push({
+    scenarioCommon: 'similar',
+    showCommon: {
+      'rightTri.tri': ['line', 'angle1', 'angle2', 'angle0'],
+      'rightTri.tri1': ['line', 'angle1', 'angle2', 'angle0'],
+      'rightTri.tri2': ['line', 'angle1', 'angle2', 'angle0'],
+      rightTri: ['allTriangles', 'haveSameAngles'],
+    },
+    transition: (done) => {
+      rightTri.animations.new()
+        .dissolveOut({ element: 'haveSameAngles', duration: 0.5 })
+        .dissolveIn({ element: 'areSimilar', duration: 0.5 })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      rightTri.show(['areSimilar']);
+    },
+  });
+  slides.push({
+    scenarioCommon: 'similar',
+    showCommon: {
+      'rightTri.tri': ['line', 'angle1', 'angle2', 'angle0'],
+      'rightTri.tri1': ['line', 'angle1', 'angle2', 'angle0'],
+      'rightTri.tri2': ['line', 'angle1', 'angle2', 'angle0'],
+      rightTri: ['allTriangles', 'areSimilar'],
+    },
+    transition: (done) => {
+      rightTri.animations.new()
+        .dissolveIn({
+          elements: [
+            'tri1.side01', 'tri1.side12', 'tri1.side20',
+            'tri2.side01', 'tri2.side12', 'tri2.side20',
+            'tri3.side01', 'tri3.side12', 'tri3.side20',
+            'eqn',
+          ],
+          duration: 0.5,
+        })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      rightTri.show([
+        'tri1.side01', 'tri1.side12', 'tri1.side20',
+        'tri2.side01', 'tri2.side12', 'tri2.side20',
+        'tri3.side01', 'tri3.side12', 'tri3.side20',
+        'eqn',
+      ]);
+    },
+  });
+
+  slides.push({
+    scenarioCommon: 'similar',
+    form: 'ratios',
+    fromForm: 'ratios',
+    transition: (done) => {
+      eqn.hide();
+      eqn.setScenario('ratioValues');
+      rightTri.animations.new()
+        .dissolveOut({
+          elements: [
+            'tri1', 'tri2', 'tri3', 'eqn', 'allTriangles', 'areSimilar', 'tri.angle0',
+          ],
+          duration: 0.5,
+        })
+        .scenario({ start: 'similar', target: 'ratioValues', duration: 1.5 })
+        .inParallel([
+          rightTri._tri.animations.dissolveIn({ elements: ['side01', 'side12', 'side20'], duration: 0.8 }),
+          eqn.animations.dissolveIn(0.8),
+        ])
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      rightTri.hide([
+        'tri1', 'tri2', 'tri3', 'eqn', 'allTriangles', 'areSimilar', 'tri.angle0',
+      ]);
+      rightTri.setScenario('ratioValues');
+      rightTri.show(['tri.side01', 'tri.side12', 'tri.side20']);
+    },
+  });
+
+  /*
+  .########.....###....########.####..#######...######.
+  .##.....##...##.##......##.....##..##.....##.##....##
+  .##.....##..##...##.....##.....##..##.....##.##......
+  .########..##.....##....##.....##..##.....##..######.
+  .##...##...#########....##.....##..##.....##.......##
+  .##....##..##.....##....##.....##..##.....##.##....##
+  .##.....##.##.....##....##....####..#######...######.
+  */
+  slides.push({
+    scenarioCommon: 'ratioValues',
+    showCommon: {
+      'rightTri.tri': ['line', 'angle1', 'angle2', 'side01', 'side12', 'side20'],
+      rightTri: ['rotLine', 'movePad'],
+    },
+    form: 'ratioValues',
+    transition: (done) => {
+      figure.animations.new()
+        .trigger({ callback: 'triAnimateToValues', duration: 0.4 })
+        .then(eqn.animations.goToForm({ target: 'ratioValues', animate: 'move' }))
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      figure.fnMap.exec('triSetup', [2, 1.5], 'values', true);
+    },
+  });
+
+  slides.push({
+    showCommon: {
+      'rightTri.tri': ['line', 'angle1', 'angle2', 'side01', 'side12', 'side20'],
+    },
+    form: 'functions',
+    transition: (done) => {
+      figure.fnMap.exec('triSetup', [2, 1.5], 'values', false);
+      figure.animations.new()
+        .trigger({ callback: 'triAnimateToNames' })
+        .then(eqn.animations.goToForm({ target: 'functions', animate: 'move' }))
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      figure.fnMap.exec('triSetup', [2, 1.5], 'names', false);
+    },
+  });
+  slides.push({
+    form: 'names',
+  });
+
   slides.push({
     clear: true,
     scenarioCommon: ['default', 'left', 'top'],
@@ -1089,6 +1086,6 @@ function makeSlides() {
 
 
   nav.loadSlides(slides);
-  // nav.goToSlide(85);
+  nav.goToSlide(9);
 }
 makeSlides();

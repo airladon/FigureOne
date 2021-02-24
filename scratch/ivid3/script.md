@@ -5,7 +5,7 @@ At it's heart, it is three similar right angle triangles. Any triangles with the
 
 >> Triangles have three angles that add to 180º, so only two angles are needed to define all three.
 
-Welcome to this interactive video, introducing the trigonometric functions, where they come from and some of their relationships. This video is interactive, so if you see me interacting with an element on the screen, such as this radius line, then you can to.
+Welcome to this interactive video, introducing the trigonometric functions, where they come from and some of their relationships. This video is interactive, so if you see me interacting with an element on the screen, such as this line here, then you can to.
 
 The trigonometric functions come from the study of similar triangles and right angle triangles.
 * Triangles that have the same set of angles, are similar triangles.

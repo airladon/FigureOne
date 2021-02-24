@@ -67,3 +67,65 @@ const colCsc = color5;
 const colOpp = colSin;
 const colAdj = colCos;
 const colHyp = color3;
+
+const summary = (name, position, text, modifiers = {}) => ({
+  name,
+  method: 'primitives.textLines',
+  options: {
+    text,
+    modifiers,
+    position,
+    fixColor: true,
+    font: { size: 0.18, color: colText },
+    xAlign: 'center',
+  },
+  mods: {
+    isTouchable: true,
+  },
+});
+
+const centerText = (name, text, modifiers = {}, position = [0, 0], size = 0.2) => ({
+  name,
+  method: 'textLines',
+  options: {
+    text,
+    modifiers,
+    position,
+    xAlign: 'center',
+    justify: 'left',
+    yAlign: 'middle',
+    font: { size, color: [0.3, 0.3, 0.3, 1] },
+    fixColor: true,
+  },
+  mods: {
+    scenarios: {
+      default: { position, scale: 1 },
+      topHigh: { position: [0, 1.2], scale: 1 },
+      top: { position: [0, 1], scale: 1 },
+      // right: { position: [1, 0] },
+    },
+    isTouchable: true,
+  },
+});
+
+const leftText = (name, position, text, modifiers = {}, size = 0.2) => ({
+  name,
+  method: 'textLines',
+  options: {
+    text,
+    modifiers,
+    position,
+    xAlign: 'left',
+    justify: 'left',
+    yAlign: 'baseline',
+    font: { size, color: [0.3, 0.3, 0.3, 1] },
+    fixColor: true,
+  },
+  mods: {
+    isTouchable: true,
+  //   scenarios: {
+  //     top: { position: [-2, 1], scale: 1 },
+  //     default: { position: [-2, 0], scale: 1 },
+  //   },
+  },
+});

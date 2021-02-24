@@ -378,7 +378,7 @@ function layoutCirc() {
     ],
     mods: {
       scenarios: {
-        circTitle: { scale: 0.9, position: [-1.2, -1.2] },
+        title: { scale: 0.9, position: [-radius / 2, -1.2] },
         circQ1: { scale: 1, position: [-1.2, -1] },
         circFull: { scale: 0.7, position: [0, 0] },
       },
@@ -555,7 +555,6 @@ function layoutCirc() {
     ..######..####.##....##
     */
     if (sin.isShown) {
-      sin.setEndPoints([x, 0], [x, y]);
       if (sin._label.isShown) {
         if ((tan._label.isShown) && Math.abs(x) > radius * 0.8) {
           sin.label.location = xSign > 0 ? 'left' : 'right';
@@ -563,6 +562,7 @@ function layoutCirc() {
           sin.label.location = xSign > 0 ? 'right' : 'left';
         }
       }
+      sin.setEndPoints([x, 0], [x, y]);
     }
     // if (sinLight.isShown) {
     //   sinLight.custom.updatePoints({ p1: [x, 0], p2: [x, y] });
@@ -578,7 +578,6 @@ function layoutCirc() {
     ..######...#######...######.
     */
     if (cos.isShown) {
-      cos.setEndPoints([0, 0], [x + xSign * thick / 2, 0]);
       if (cos._label.isShown) {
         cos.label.location = ySign > 0 ? 'bottom' : 'top';
         // if (ySign > 0) {
@@ -587,6 +586,7 @@ function layoutCirc() {
         //   cos.label.location = 'top';
         // }
       }
+      cos.setEndPoints([0, 0], [x + xSign * thick / 2, 0]);
     }
 
     /*
@@ -600,13 +600,13 @@ function layoutCirc() {
     */
     if (tan.isShown) {
       const [tanLine, isClipped] = clip([xSign * radius, 0], [xSign * radius, ySign * tanVal]);
+      if (tan._label.isShown) {
+        tan.label.location = xSign > 0 ? 'right' : 'left';
+      }
       tan.setEndPoints(
         tanLine.p1, tanLine.p2,
         // arrow: arrow(isClipped),
       );
-      if (tan._label.isShown) {
-        tan.label.location = xSign > 0 ? 'right' : 'left';
-      }
     }
 
     /*
@@ -620,14 +620,14 @@ function layoutCirc() {
     */
     if (sec.isShown) {
       const [secLine, isClipped] = clip([0, 0], [xSign * radius, ySign * tanVal]);
-      sec.setEndPoints(
-        secLine.p1, secLine.p2,
-        // arrow: arrow(isClipped)
-      );
       if (sec._label.isShown) {
         sec.label.location = ySign > 0 ? 'bottom' : 'top';
         sec.label.linePosition = 0.65;
       }
+      sec.setEndPoints(
+        secLine.p1, secLine.p2,
+        // arrow: arrow(isClipped)
+      );
       // if (csc.isShown) {
       //   const direction = xSign * ySign > 0 ? 'negative' : 'positive';
       //   const secLabelPos = secLine
@@ -667,13 +667,13 @@ function layoutCirc() {
       const [cotLine, isClipped] = clip([0, ySign * radius], [xSign * cotVal, ySign * radius]);
       const offsetX = thick * Math.cos(r + xSign * ySign * Math.PI / 2);
       const offsetY = thick * Math.sin(r + xSign * ySign * Math.PI / 2);
-      cot.setEndPoints(
-        cotLine.p1, cotLine.p2.add(offsetX, offsetY), // arrow: arrow(isClipped),
-      );
       if (cot._label.isShown) {
         // console.log(cot._label.getPosition('figure').y)
         cot.label.location = ySign > 0 ? 'top' : 'bottom';
       }
+      cot.setEndPoints(
+        cotLine.p1, cotLine.p2.add(offsetX, offsetY), // arrow: arrow(isClipped),
+      );
     }
 
     /*
@@ -689,14 +689,14 @@ function layoutCirc() {
       const [cscLine, isClipped] = clip([0, 0], [xSign * cotVal, ySign * radius]);
       const offsetX = thick * Math.cos(r + xSign * ySign * Math.PI / 2);
       const offsetY = thick * Math.sin(r + xSign * ySign * Math.PI / 2);
+      if (csc._label.isShown) {
+        csc.label.location = ySign > 0 ? 'top' : 'bottom';
+      }
       csc.setEndPoints(
         cscLine.p1.add(offsetX, offsetY),
         cscLine.p2.add(offsetX, offsetY),
         // arrow: arrow(isCl//ipped),
       );
-      if (csc._label.isShown) {
-        csc.label.location = ySign > 0 ? 'top' : 'bottom';
-      }
       // if (cscLabel.isShown) {
       //   if (xSign * ySign > 0) {
       //     cscLabel.setPosition(cscLine.offset('positive', 0.1).midPoint());
@@ -991,9 +991,9 @@ function layoutCirc() {
     //     value6: 1 / sinA > 100 ? '\u221e' : (1 / sinA).toFixed(4),
     //   });
     // }
-    const eqn3 = figure.getElement('eqn3');
+    const eqn3 = figure.getElement('eqn');
     if (eqn3.getElement('val1').isShown) {
-      const deg = Math.round(a / Math.PI * 180);
+      // const deg = Math.round(a / Math.PI * 180);
       eqn3.updateElementText({
         val1: sinA.toFixed(4),
         val2: cosA.toFixed(4),
@@ -1062,13 +1062,13 @@ function layoutCirc() {
     // updateCircle();
   });
   figure.fnMap.global.add('circSetup', (angle, boundsName) => {
+    bounds = boundsRects[boundsName];
     if (rotator.isShown) {
       rotator.setRotation(angle);
     }
     if (rotatorFull.isShown) {
       rotatorFull.setRotation(angle);
     }
-    bounds = boundsRects[boundsName];
   });
   // figure.fnMap.global.add('circGoToAngle', () => {
   //   rotator.animations.new()

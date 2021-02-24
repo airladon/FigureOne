@@ -441,6 +441,7 @@ function makeEquation() {
       // },
       forms: {
         ratios: ['c1'],
+        ratioValues: ['c1', 'c2', 'cv'],
         functions: ['c1', 'c2', 'cfunc'],
         names: ['c1', 'c2', 'c3f'],
         build0: ['c1', 'c2_0', 'c3_0'],
@@ -503,6 +504,7 @@ function makeEquation() {
       scenarios: {
         eqnTri: { position: [-2.3, 1.2] },
         eqnCirc: { position: [-2.8, 1.2] },
+        ratioValues: { position: [-2.5, 1.2] },
       },
     },
   });

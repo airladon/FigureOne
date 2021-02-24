@@ -196,21 +196,6 @@ function similarLayout() {
   ....##....##........##...##.....##...
   ....##....########.##.....##....##...
   */
-  const summary = (name, position, text, modifiers = {}) => ({
-    name,
-    method: 'primitives.textLines',
-    options: {
-      text,
-      modifiers,
-      position,
-      fixColor: true,
-      font: { size: 0.18, color: colText },
-      xAlign: 'center',
-    },
-    mods: {
-      isTouchable: true,
-    },
-  });
   similar.add([
     summary('allAngles', [0, 1.1], 'Triangles with the same set of angles are similar'),
     summary('allRatios', [0, 1.1], [

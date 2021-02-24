@@ -485,7 +485,7 @@ export default class SlideNavigator {
 
   getFromForm(index: number) {
     if (this.slides[index].fromForm === undefined) {
-      if (index === 0) {
+      if (index === 0 || this.slides[index].clear) {
         return {};
       }
       return this.getFormGeneric('form', index - 1);
