@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-/* globals Fig */
+/* globals figure, colTheta, colHyp, colOpp, colAdj, colText, color1 */
 
 function similarLayout() {
   const scale1 = 1;
@@ -16,9 +16,6 @@ function similarLayout() {
       location: 'outside',
       color,
       text,
-      // text: {
-      //   forms: { 0: [{ s: { text: s, color } }, text] },
-      // },
     },
   });
 
@@ -70,8 +67,8 @@ function similarLayout() {
         ],
         mods: {
           scenarios: {
-            similarLarge: { scale: 1 },
-            similarSmall: { scale: 0.8 },
+            similarLarge: { scale: 1, position: [0, 0] },
+            similarSmall: { scale: 0.8, position: [0, 0.2] },
           },
         },
       },
@@ -137,7 +134,7 @@ function similarLayout() {
             ],
           },
           scale: 1.2,
-          position: [0, -1.2],
+          position: [0, -1],
           formDefaults: { alignment: { xAlign: 'center' } },
         },
       },
@@ -145,79 +142,60 @@ function similarLayout() {
   });
 
   const similar = figure.getElement('similar');
-  const tri1 = figure.getElement('similar.tri1');
-  const tri2 = figure.getElement('similar.tri2');
-
   const eqn = figure.getElement('similar.eqn');
 
+  /*
+  .########.....###....########.####..#######...######.
+  .##.....##...##.##......##.....##..##.....##.##....##
+  .##.....##..##...##.....##.....##..##.....##.##......
+  .########..##.....##....##.....##..##.....##..######.
+  .##...##...#########....##.....##..##.....##.......##
+  .##....##..##.....##....##.....##..##.....##.##....##
+  .##.....##.##.....##....##....####..#######...######.
+  */
+  const t = 0.2;
+  const elements = {
+    C: ['tri1._side01', 'tri2._side01', 'tri3._side01'],
+    A: ['tri1._side12', 'tri2._side12', 'tri3._side12'],
+    B: ['tri1._side20', 'tri2._side20', 'tri3._side20'],
+  };
+  const goToEqn = (form, outElements, inElements) => {
+    eqn.stop('complete');
+    similar.stop('complete');
+    eqn.goToForm({
+      form, animate: 'move', duration: t * 2, dissolveOutTime: t, dissolveInTime: t, blankTime: 0,
+    });
+    similar._tris.animations.new()
+      .dissolveOut({ elements: elements[outElements], duration: t })
+      .dissolveIn({ elements: elements[inElements], duration: t })
+      .start();
+  };
   figure.fnMap.global.add('similarToggleRatios', () => {
-    const t = 0.2;
     const form = eqn.getCurrentForm().name;
     if (form === 'AB') {
-      eqn.stop('complete');
-      similar.stop('complete');
-      eqn.goToForm({ form: 'BA', animate: 'move', duration: t * 2 });
-      similar.animations.new()
-    } else if (form === 'BA') {
-      eqn.stop('complete');
-      similar.stop('complete');
-      eqn.goToForm({ form: 'BC', animate: 'move', duration: t * 2 });
-      similar.animations.new()
-        .inParallel([
-          similar._tri1._side12.animations.dissolveOut(t),
-          similar._tri2._side12.animations.dissolveOut(t),
-          similar._tri3._side12.animations.dissolveOut(t),
-        ])
-        .inParallel([
-          similar._tri1._side01.animations.dissolveIn(t),
-          similar._tri2._side01.animations.dissolveIn(t),
-          similar._tri3._side01.animations.dissolveIn(t),
-        ])
-        .start();
-      similar.hide(['tri1.side12', 'tri2.side12', 'tri3.side12']);
-    } else if (form === 'BC') {
-      eqn.stop('complete');
-      similar.stop('complete');
-      eqn.goToForm({ form: 'CB', animate: 'move', duration: t * 2 });
+      goToEqn('CB', 'A', 'C');
     } else if (form === 'CB') {
-      eqn.stop('complete');
-      similar.stop('complete');
-      eqn.goToForm({ form: 'CA', animate: 'move', duration: t * 2 });
-      similar.animations.new()
-        .inParallel([
-          similar._tri1._side20.animations.dissolveOut(t),
-          similar._tri2._side20.animations.dissolveOut(t),
-          similar._tri3._side20.animations.dissolveOut(t),
-        ])
-        .inParallel([
-          similar._tri1._side12.animations.dissolveIn(t),
-          similar._tri2._side12.animations.dissolveIn(t),
-          similar._tri3._side12.animations.dissolveIn(t),
-        ])
-        .start();
+      goToEqn('CA', 'B', 'A');
     } else if (form === 'CA') {
-      eqn.stop('complete');
-      similar.stop('complete');
-      eqn.goToForm({ form: 'AC', animate: 'move', duration: t * 2 });
-    } else {
-      eqn.stop('complete');
-      similar.stop('complete');
-      eqn.goToForm({ form: 'AB', animate: 'move', duration: t * 2 });
-      similar.animations.new()
-        .inParallel([
-          similar._tri1._side01.animations.dissolveOut(t),
-          similar._tri2._side01.animations.dissolveOut(t),
-          similar._tri3._side01.animations.dissolveOut(t),
-        ])
-        .inParallel([
-          similar._tri1._side20.animations.dissolveIn(t),
-          similar._tri2._side20.animations.dissolveIn(t),
-          similar._tri3._side20.animations.dissolveIn(t),
-        ])
-        .start();
+      goToEqn('BA', 'C', 'B');
+    } else if (form === 'BA') {
+      goToEqn('BC', 'A', 'C');
+    } else if (form === 'BC') {
+      goToEqn('AC', 'B', 'A');
+    } else if (form === 'AC') {
+      goToEqn('AB', 'C', 'B');
     }
   });
 
+  /*
+  .########.########.##.....##.########
+  ....##....##........##...##.....##...
+  ....##....##.........##.##......##...
+  ....##....######......###.......##...
+  ....##....##.........##.##......##...
+  ....##....##........##...##.....##...
+  ....##....########.##.....##....##...
+  */
   const summary = (name, position, text, modifiers = {}) => ({
     name,
     method: 'primitives.textLines',
@@ -247,3 +225,4 @@ function similarLayout() {
   ]);
   eqn.showForm('AOnB');
 }
+

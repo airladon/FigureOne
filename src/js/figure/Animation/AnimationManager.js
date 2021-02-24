@@ -327,7 +327,8 @@ export default class AnimationManager {
    */
   rotation(...options: Array<OBJ_RotationAnimationStep>) {
     const optionsToUse = joinObjects({}, { element: this.element }, ...options);
-    return new anim.RotationAnimationStep(optionsToUse);
+    // return new anim.RotationAnimationStep(optionsToUse);
+    return this.getStep(optionsToUse, 'RotationAnimationStep');
   }
 
   /**
@@ -337,7 +338,8 @@ export default class AnimationManager {
    */
   scale(...options: Array<OBJ_ScaleAnimationStep>) {
     const optionsToUse = joinObjects({}, { element: this.element }, ...options);
-    return new anim.ScaleAnimationStep(optionsToUse);
+    // return new anim.ScaleAnimationStep(optionsToUse);
+    return this.getStep(optionsToUse, 'ScaleAnimationStep');
   }
 
   /**
@@ -377,7 +379,8 @@ export default class AnimationManager {
    */
   translation(...options: Array<OBJ_PositionAnimationStep>) {
     const optionsToUse = joinObjects({}, { element: this.element }, ...options);
-    return new anim.PositionAnimationStep(optionsToUse);
+    // return new anim.PositionAnimationStep(optionsToUse);
+    return this.getStep(optionsToUse, 'PositionAnimationStep');
   }
 
   /**
@@ -387,7 +390,8 @@ export default class AnimationManager {
    */
   position(...options: Array<OBJ_PositionAnimationStep>) {
     const optionsToUse = joinObjects({}, { element: this.element }, ...options);
-    return new anim.PositionAnimationStep(optionsToUse);
+    // return new anim.PositionAnimationStep(optionsToUse);
+    return this.getStep(optionsToUse, 'PositionAnimationStep');
   }
 
   /**
@@ -419,17 +423,20 @@ export default class AnimationManager {
    */
   transform(...options: Array<OBJ_TransformAnimationStep>) {
     const optionsToUse = joinObjects({}, { element: this.element }, ...options);
-    return new anim.TransformAnimationStep(optionsToUse);
+    // return new anim.TransformAnimationStep(optionsToUse);
+    return this.getStep(optionsToUse, 'TransformAnimationStep');
   }
 
   pulseTransform(...options: Array<OBJ_PulseTransformAnimationStep>) {
     const optionsToUse = joinObjects({}, { element: this.element }, ...options);
-    return new anim.PulseTransformAnimationStep(optionsToUse);
+    // return new anim.PulseTransformAnimationStep(optionsToUse);
+    return this.getStep(optionsToUse, 'PulseTransformAnimationStep');
   }
 
   pulse(...options: Array<OBJ_PulseAnimationStep>) {
     const optionsToUse = joinObjects({}, { element: this.element }, ...options);
-    return new anim.PulseAnimationStep(optionsToUse);
+    // return new anim.PulseAnimationStep(optionsToUse);
+    return this.getStep(optionsToUse, 'PulseAnimationStep');
   }
 
   /**
@@ -482,7 +489,8 @@ export default class AnimationManager {
     } else {
       optionsToUse = joinObjects({}, defaultOptions, durationOrOptions);
     }
-    return new anim.DimAnimationStep(optionsToUse);
+    // return new anim.DimAnimationStep(optionsToUse);
+    return this.getStep(optionsToUse, 'DimAnimationStep');
   }
 
   /**
@@ -499,7 +507,8 @@ export default class AnimationManager {
     } else {
       optionsToUse = joinObjects({}, defaultOptions, durationOrOptions);
     }
-    return new anim.UndimAnimationStep(optionsToUse);
+    // return new anim.UndimAnimationStep(optionsToUse);
+    return this.getStep(optionsToUse, 'UndimAnimationStep');
   }
 
   getStep(options: Object, animName: string) {
@@ -526,7 +535,8 @@ export default class AnimationManager {
    */
   scenario(...options: Array<OBJ_ScenarioAnimationStep>) {
     const optionsToUse = joinObjects({}, { element: this.element }, ...options);
-    return new anim.ScenarioAnimationStep(optionsToUse);
+    // return new anim.ScenarioAnimationStep(optionsToUse);
+    return this.getStep(optionsToUse, 'ScenarioAnimationStep');
   }
 
   /**

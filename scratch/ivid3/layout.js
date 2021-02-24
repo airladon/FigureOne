@@ -287,11 +287,12 @@ function makeSlides() {
   // });
   slides.push({
     clear: true,
-    show: 'similar.allAngles',
+    dissolve: { in: 'similar.allAngles' },
   });
   slides.push({
     clear: true,
     show: 'similar.allAngles',
+    scenario: 'similarLarge',
     dissolve: {
       in: {
         'similar.tris': [
@@ -304,47 +305,37 @@ function makeSlides() {
   });
   slides.push({
     clear: true,
+    scenario: 'similarLarge',
     show: {
-      similar: [
-        { tris: [
-        'tri1.line', 'tri1.angle0', 'tri1.angle1', 'tri1.angle2',
-        'tri2.line', 'tri2.angle0', 'tri2.angle1', 'tri2.angle2',
-        'tri3.line', 'tri3.angle0', 'tri3.angle1', 'tri3.angle2',
-        ] }, 'allAngles',
-      ],
+      similar: [{
+        tris: [
+          'tri1.line', 'tri1.angle0', 'tri1.angle1', 'tri1.angle2',
+          'tri2.line', 'tri2.angle0', 'tri2.angle1', 'tri2.angle2',
+          'tri3.line', 'tri3.angle0', 'tri3.angle1', 'tri3.angle2',
+        ],
+      }, 'allAngles'],
     },
     fromForm: { 'similar.eqn': 'AB' },
     form: { 'similar.eqn': 'AB' },
     transition: (done) => {
       similar._eqn.hide();
       similar.animations.new()
-        .then(similar._allAngles.animations.dissolveOut(0.4))
-        .then(similar._allRatios.animations.dissolveIn(0.4))
+        .dissolveOut({ element: 'allAngles', duration: 0.4 })
+        .dissolveIn({ element: 'allRatios', duration: 0.4 })
         .dissolveIn({ elements: { tris: ['tri1.side20', 'tri1.side12', 'tri2.side20', 'tri2.side12', 'tri3.side20', 'tri3.side12'] }, delay: 0.5, duration: 0.5 })
-        // .inParallel([
-        //   similar._tri1._side20.animations.dissolveIn({ delay: 0.5, duration: 0.5 }),
-        //   similar._tri1._side12.animations.dissolveIn({ delay: 0.5, duration: 0.5 }),
-        //   similar._tri2._side20.animations.dissolveIn({ delay: 0.5, duration: 0.5 }),
-        //   similar._tri2._side12.animations.dissolveIn({ delay: 0.5, duration: 0.5 }),
-        //   similar._tri3._side20.animations.dissolveIn({ delay: 0.5, duration: 0.5 }),
-        //   similar._tri3._side12.animations.dissolveIn({ delay: 0.5, duration: 0.5 }),
-        // ])
-        .then(similar._eqn.animations.dissolveIn({ delay: 0.5, duration: 0.5 }))
+        .inParallel([
+          similar.animations.scenario({ element: 'tris', target: 'similarSmall', delay: 0.5, duration: 0.8 }),
+          similar.animations.dissolveIn({ element: 'eqn', delay: 0.8, duration: 0.5 }),
+        ])
         .whenFinished(done)
         .start();
     },
-    // dissolve: {
-    //   // out: 'similar.allAngles',
-    //   in: {
-    //     similar: [
-    //       'tri1.side20', 'tri1.side12',
-    //       'tri2.side20', 'tri2.side12',
-    //       'tri3.side20', 'tri3.side12',
-    //       'eqn',
-    //       'allRatios',
-    //     ],
-    //   },
-    // },
+    steadyState: () => {
+      similar._tris.show(['tri1.side20', 'tri1.side12', 'tri2.side20', 'tri2.side12', 'tri3.side20', 'tri3.side12']);
+      similar.show(['allRatios']);
+      similar.hide('allAngles');
+      similar._tris.setScenario('similarSmall');
+    }
   });
   slides.push({
     clear: true,
