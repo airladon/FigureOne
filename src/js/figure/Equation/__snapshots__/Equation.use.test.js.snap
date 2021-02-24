@@ -256,6 +256,7 @@ FigureElementPrimitive {
         "resize": [Function],
       },
     ],
+    "fixColor": false,
     "lastDrawTransform": Array [
       1,
       0,

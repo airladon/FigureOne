@@ -397,7 +397,8 @@ export default class AnimationManager {
    */
   color(...options: Array<OBJ_ColorAnimationStep>) {
     const optionsToUse = joinObjects({}, { element: this.element }, ...options);
-    return new anim.ColorAnimationStep(optionsToUse);
+    // return new anim.ColorAnimationStep(optionsToUse);
+    return this.getStep(optionsToUse, 'ColorAnimationStep');
   }
 
   /**
@@ -407,7 +408,8 @@ export default class AnimationManager {
    */
   opacity(...options: Array<OBJ_OpacityAnimationStep>) {
     const optionsToUse = joinObjects({}, { element: this.element }, ...options);
-    return new anim.OpacityAnimationStep(optionsToUse);
+    // return new anim.OpacityAnimationStep(optionsToUse);
+    return this.getStep(optionsToUse, 'OpacityAnimationStep');
   }
 
   /**
@@ -444,7 +446,8 @@ export default class AnimationManager {
     } else {
       optionsToUse = joinObjects({}, defaultOptions, durationOrOptions);
     }
-    return new anim.DissolveInAnimationStep(optionsToUse);
+    // return new anim.DissolveInAnimationStep(optionsToUse);
+    return this.getStep(optionsToUse, 'DissolveInAnimationStep');
   }
 
   /**
@@ -461,7 +464,8 @@ export default class AnimationManager {
     } else {
       optionsToUse = joinObjects({}, defaultOptions, durationOrOptions);
     }
-    return new anim.DissolveOutAnimationStep(optionsToUse);
+    // return new anim.DissolveOutAnimationStep(optionsToUse);
+    return this.getStep(optionsToUse, 'DissolveOutAnimationStep');
   }
 
   /**
@@ -498,7 +502,7 @@ export default class AnimationManager {
     return new anim.UndimAnimationStep(optionsToUse);
   }
 
-  getStep(options: Object, animName: string, isClass: boolean = false) {
+  getStep(options: Object, animName: string) {
     if (typeof options.element === 'string' && this.element != null) {
       options.element = this.element.getElement(options.element);
     }
@@ -506,20 +510,13 @@ export default class AnimationManager {
       const elements = options.element.getElements(options.elements);
       const steps = [];
       options.elements = undefined;
-      options.element = undefined;
       elements.forEach((element) => {
-        if (isClass) {
-          steps.push(new element.animations[animName](options));
-        } else {
-          steps.push(element.animations[animName](options));
-        }
+        options.element = element;
+        steps.push(new anim[animName](options));
       });
-      this.then(new animation.ParallelAnimationStep(options, { steps }));
-    } else if (isClass) {
-      this.then(new animation[animName](options));
-    } else {
-      this.then(animation[animName](options));
+      return new anim.ParallelAnimationStep(options, { steps });
     }
+    return new anim[animName](options);
   }
 
   /**
