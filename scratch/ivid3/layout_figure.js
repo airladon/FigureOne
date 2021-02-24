@@ -66,4 +66,4 @@ const colCsc = color5;
 
 const colOpp = colSin;
 const colAdj = colCos;
-const colHyp = colRad;
+const colHyp = color3;
