@@ -6,6 +6,9 @@ const figure = new Fig.Figure({
   dimColor: [0.7, 0.7, 0.7, 1],
 });
 
+const thick = 0.012;
+const thin = 0.005;
+
 // const color1 = [1, 0, 0, 1];
 // const color2 = [0, 0.5, 1, 1];
 // const color3 = [0, 0.6, 0, 1];
@@ -108,7 +111,7 @@ const centerText = (name, text, modifiers = {}, position = [0, 0], size = 0.2) =
   },
 });
 
-const leftText = (name, position, text, modifiers = {}, size = 0.2) => ({
+const leftText = (name, text, modifiers = {}, position, size = 0.2) => ({
   name,
   method: 'textLines',
   options: {

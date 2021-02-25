@@ -4,8 +4,6 @@
 function layoutCirc() {
   const radius = 1.5;
   const defaultAngle = 1;
-  const thick = 0.012;
-  const thin = 0.005;
 
   const line = (name, color, width = thick, p1 = [0, 0], length = 1, angle = 0, dash = []) => ({
     name,
@@ -127,7 +125,7 @@ function layoutCirc() {
       line('radius', colRad, thin, [0, 0], radius, 4.37),
       rightAngle('rightSin', [0, 0], Math.PI / 2),
       rightAngle('rightTan', [radius, 0], Math.PI / 2),
-      rightAngle('rightCot', [0, radius], Math.PI / 2),
+      rightAngle('rightCot', [0, radius], -Math.PI / 2),
       angle('theta', '\u03b8'),
       angle('thetaVal', null),
       angle('thetaCot', '\u03b8'),
@@ -381,6 +379,7 @@ function layoutCirc() {
         title: { scale: 0.9, position: [-radius / 2, -1.2] },
         circQ1: { scale: 1, position: [-0.4, -1] },
         circFull: { scale: 0.7, position: [0, 0] },
+        nameDefs: { scale: 1, position: [0.4, -1] },
       },
     },
   });
@@ -390,6 +389,10 @@ function layoutCirc() {
   const [triCotCsc] = get(['triCotCsc']);
   const [triSinCos] = get(['triSinCos']);
   const [triTanSec] = get(['triTanSec']);
+  const [sinLight] = get(['sinLight']);
+  const [tanLight, cotLight] = get(['tanLight', 'cotLight']);
+  const [cscLight, secLight] = get(['cscLight', 'secLight']);
+  const [rightSin, rightCot, rightTan] = get(['rightSin', 'rightCot', 'rightTan']);
   // const [cos, sin, cosLabel, sinLabel] = get({
   //   triSinCos: ['cos', 'sin', 'cosLabel', 'sinLabel'],
   // });
@@ -564,6 +567,9 @@ function layoutCirc() {
       }
       sin.setEndPoints([x, 0], [x, y]);
     }
+    if (sinLight.isShown) {
+      sinLight.custom.updatePoints({ p1: [x, 0], p2: [x, y]});
+    }
     // if (sinLight.isShown) {
     //   sinLight.custom.updatePoints({ p1: [x, 0], p2: [x, y] });
     // }
@@ -588,6 +594,9 @@ function layoutCirc() {
       }
       cos.setEndPoints([0, 0], [x + xSign * thick / 2, 0]);
     }
+    // if (cosLight.isShown) {
+    //   cosLight.custom.updatePoints({ p1: [0, 0], [x + xSign * thick / 2, 0]);
+    // }
 
     /*
     .########....###....##....##
@@ -607,6 +616,10 @@ function layoutCirc() {
         tanLine.p1, tanLine.p2,
         // arrow: arrow(isClipped),
       );
+    }
+    if (tanLight.isShown) {
+      const [tanLine, isClipped] = clip([xSign * radius, 0], [xSign * radius, ySign * tanVal]);
+      tanLight.custom.updatePoints({ p1: tanLine.p1, p2: tanLine.p2 });
     }
 
     /*
@@ -653,6 +666,10 @@ function layoutCirc() {
       //   secLabel.setPosition(secLine.offset(direction, 0.12).pointAtPercent(0.5));
       // }
     }
+    if (secLight.isShown) {
+      const [secLine] = clip([0, 0], [xSign * radius, ySign * tanVal]);
+      secLight.custom.updatePoints({ p1: secLine.p1, p2: secLine.p2 });
+    }
 
     /*
     ..######...#######..########
@@ -674,6 +691,10 @@ function layoutCirc() {
       cot.setEndPoints(
         cotLine.p1, cotLine.p2.add(offsetX, offsetY), // arrow: arrow(isClipped),
       );
+    }
+    if (cotLight.isShown) {
+      const [cotLine] = clip([0, ySign * radius], [xSign * cotVal, ySign * radius]);
+      cotLight.custom.updatePoints({ p1: cotLine.p1, p2: cotLine.p2 });
     }
 
     /*
@@ -704,6 +725,10 @@ function layoutCirc() {
       //     cscLabel.setPosition(cscLine.offset('negative', 0.1).midPoint());
       //   }
       // }
+    }
+    if (cscLight.isShown) {
+      const [cscLine] = clip([0, 0], [xSign * cotVal, ySign * radius]);
+      cscLight.custom.updatePoints({ p1: cscLine.p1, p2: cscLine.p2 });
     }
 
     // /*
@@ -819,26 +844,26 @@ function layoutCirc() {
     // .##....##...##..##....##..##.....##....##...
     // .##.....##.####..######...##.....##....##...
     // */
-    // setRightAng(
-    //   rightSin,
-    //   (Math.abs(y) > 0.4 || !tan.isShown) && Math.abs(x) > 0.2,
-    //   [x, 0],
-    //   Math.PI / 2 - (quad - 1) * Math.PI / 2,
-    // );
+    setRightAng(
+      rightSin,
+      (Math.abs(y) > 0.4 || !tan.isShown) && Math.abs(x) > 0.2,
+      [x, 0],
+      Math.PI / 2 - (quad - 1) * Math.PI / 2,
+    );
 
-    // setRightAng(
-    //   rightTan,
-    //   Math.abs(x) < radius - 0.2,
-    //   [xSign * radius, 0],
-    //   Math.PI / 2 - (quad - 1) * Math.PI / 2,
-    // );
+    setRightAng(
+      rightTan,
+      Math.abs(x) < radius - 0.2,
+      [xSign * radius, 0],
+      Math.PI / 2 - (quad - 1) * Math.PI / 2,
+    );
 
-    // setRightAng(
-    //   rightCot,
-    //   Math.abs(x) > 0.2,
-    //   [0, ySign * radius],
-    //   Math.PI / 2 * 3 - (quad - 1) * Math.PI / 2,
-    // );
+    setRightAng(
+      rightCot,
+      Math.abs(x) > 0.2,
+      [0, ySign * radius],
+      Math.PI / 2 * 3 - (quad - 1) * Math.PI / 2,
+    );
 
     // setRightAng(
     //   rightCosAlt,
@@ -1105,7 +1130,7 @@ function layoutCirc() {
         .rotation({ target: 0.9, duration: 1 })
         .start();
     }
-  })
+  });
   add('circToSplit', () => {
     circle.animations.new()
       // .scenarios({ target: 'split', duration: 3 })
@@ -1144,14 +1169,14 @@ function layoutCirc() {
       ])
       .start();
   });
-  // addPulseFn('circPulseTan', tanLabel, 'left', 'bottom');
+  addPulseFn('circPulseTan', triTanSec._tan._label, 'left', 'middle');
   // addPulseFn('circPulseCot', cotLabel, 'left', 'bottom');
   // addPulseFn('circPulseRad', hypLabel, 'right', 'bottom');
   // addPulseFn('circPulseSec1', secLabel, 'center', 'top');
-  // addPulseFn('circPulseSec', secLabel, 'center', 'bottom');
+  addPulseFn('circPulseSec', triTanSec._sec._label, 'left', 'top');
   // addPulseFn('circPulseCsc', cscLabel, 'right', 'middle');
   // addPulseFn('circPulseSin1', sinLabel, 'left', 'middle');
-  // addPulseFn('circPulseSin', sinLabel, 'right', 'middle');
+  addPulseFn('circPulseSin', triSinCos._sin._label, 'left', 'middle');
   // addPulseFn('circPulseCos', cosLabel, 'center', 'top');
 
   // addPulseFn('circPulseTanAlt', tanLabelAlt, 'left', 'bottom');

@@ -468,11 +468,11 @@ function layoutRight() {
   // rotLine.setRotation(1);
 
   rightTri.add([
-    leftText('allTriangles', [-2 - 1.3, 2], 'All right triangles with |theta|:', {
+    leftText('allTriangles', 'All right triangles with |theta|:', {
       theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic', color: colTheta } },
-    }, 0.18 / 0.7),
-    leftText('haveSameAngles', [0.1 - 0.7, 2], ' have the same angles', {}, 0.18 / 0.7),
-    leftText('areSimilar', [0.1 - 0.7, 2], ' are similar', {}, 0.18 / 0.7),
+    }, [-2 - 1.3, 2], 0.18 / 0.7),
+    leftText('haveSameAngles', ' have the same angles', {}, [0.1 - 0.7, 2], 0.18 / 0.7),
+    leftText('areSimilar', ' are similar', {}, [0.1 - 0.7, 2], 0.18 / 0.7),
     // summary('sameAngles', [0, 1.1], 'All right angle triangles with |theta| have same angle set', {
     //   theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic', color: colTheta } },
     // }),
