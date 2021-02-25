@@ -64,7 +64,7 @@ function makeSlides() {
     options: {
       nextButton: { position: [3.8, 0], width: 0.2, height: 0.2 },
       prevButton: { position: [-3.8, 0], width: 0.2, height: 0.2 },
-      equation: ['eqn', 'similar.eqn'],
+      equation: ['eqn', 'similar.eqn', 'circ.eqn'],
       // equationDefaults: { duration: 4 },
     },
   });
@@ -562,8 +562,6 @@ function makeSlides() {
       lines: ['circle'],
     },
     show: ['lines.halfChord', 'lines.dullChord', 'lines.sine', 'lines.jya'],
-    fromForm: null,
-    form: null,
     transition: (done) => {
       circ.animations.new()
         .dissolveIn({ element: 'triSinCos.sin.label', duration: 0.5 })
@@ -577,7 +575,121 @@ function makeSlides() {
     },
   });
 
+  /*
+  ..######...#######..########
+  .##....##.##.....##....##...
+  .##.......##.....##....##...
+  .##.......##.....##....##...
+  .##.......##.....##....##...
+  .##....##.##.....##....##...
+  ..######...#######.....##...
+  */
+  slides.push({
+    showCommon: {
+      circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'sinLight', 'tanLight', 'cscLight', 'secLight', 'cotLight', 'rightTan', 'rightSin', 'rightCot', 'theta', 'triTanSec.tan', 'triTanSec.sec', 'triSinCos.sin', 'thetaComp'],
+      lines: ['circle'],
+    },
+    enterStateCommon: () => {
+      figure.fnMap.exec('circSetup', 0.9, 'quarter');
+      figure.shortCuts = { 0: 'circToRot' };
+      circ.highlight(['triCotCsc.cot', 'thetaComp', 'eqn']);
+    },
+    dissolve: {
+      out: ['lines.halfChord', 'lines.dullChord', 'lines.sine', 'lines.jya', 'lines.circle'],
+      in: ['circ.thetaComp'],
+    },
+  });
 
+  slides.push({
+    showCommon: {
+      circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'sinLight', 'tanLight', 'cscLight', 'secLight', 'cotLight', 'rightTan', 'rightSin', 'rightCot', 'theta', 'triTanSec.tan', 'triTanSec.sec', 'triSinCos.sin', 'triCotCsc.cot.line', 'thetaComp'],
+    },
+    fromForm: { 'circ.eqn': 'tanComp' },
+    form: { 'circ.eqn': 'tanComp' },
+    transition: (done) => {
+      circ._eqn.hide();
+      circ.animations.new()
+        .dissolveIn({ element: 'triCotCsc.cot.line', duration: 0.5 })
+        .then(circ._triCotCsc._cot.animations.pulseWidth({ line: 4, duration: 1 }))
+        .dissolveIn({ element: 'eqn', duration: 0.5 })
+        .whenFinished(done)
+        .start();
+    },
+  });
+
+  slides.push({ form: { 'circ.eqn': 'complementaryTangent' } });
+  slides.push({ form: { 'circ.eqn': 'cotangent' } });
+  slides.push({ form: { 'circ.eqn': 'cotan' } });
+  slides.push({ form: { 'circ.eqn': 'cotTheta' } });
+
+  slides.push({
+    showCommon: {
+      circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'sinLight', 'tanLight', 'cscLight', 'secLight', 'cotLight', 'rightTan', 'rightSin', 'rightCot', 'theta', 'triTanSec.tan', 'triTanSec.sec', 'triSinCos.sin', 'triCotCsc.cot', 'thetaComp'],
+    },
+    transition: (done) => {
+      circ.animations.new()
+        .dissolveIn({ element: 'triCotCsc.cot.label', duration: 0.5 })
+        .trigger({ callback: 'circPulseCot', duration: 1.5 })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      circ._triCotCsc._cot.showAll();
+    },
+  });
+
+  /*
+  ..######...######...######.
+  .##....##.##....##.##....##
+  .##.......##.......##......
+  .##........######..##......
+  .##.............##.##......
+  .##....##.##....##.##....##
+  ..######...######...######.
+  */
+  slides.push({
+    showCommon: {
+      circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'sinLight', 'tanLight', 'cscLight', 'secLight', 'cotLight', 'rightTan', 'rightSin', 'rightCot', 'theta', 'triTanSec.tan', 'triTanSec.sec', 'triSinCos.sin', 'triCotCsc.cot', 'thetaComp', 'triCotCsc.csc.line'],
+    },
+    enterStateCommon: () => {
+      figure.fnMap.exec('circSetup', 0.9, 'quarter');
+      figure.shortCuts = { 0: 'circToRot' };
+      circ.highlight(['triCotCsc.csc', 'thetaComp', 'eqn']);
+    },
+    fromForm: { 'circ.eqn': 'secComp' },
+    form: { 'circ.eqn': 'secComp' },
+    transition: (done) => {
+      circ._eqn.hide();
+      circ.animations.new()
+        // .dissolveOut({ element: 'eqn', duration: 0.5 })
+        .dissolveIn({ element: 'triCotCsc.csc.line', duration: 0.5 })
+        .then(circ._triCotCsc._csc.animations.pulseWidth({ line: 4, duration: 1 }))
+        .dissolveIn({ element: 'eqn', duration: 0.5 })
+        .whenFinished(done)
+        .start();
+    },
+  });
+
+  slides.push({ form: { 'circ.eqn': 'complementarySecant' } });
+  slides.push({ form: { 'circ.eqn': 'cosecant' } });
+  slides.push({ form: { 'circ.eqn': 'cosec' } });
+  slides.push({ form: { 'circ.eqn': 'csc' } });
+
+  slides.push({
+    showCommon: {
+      circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'sinLight', 'tanLight', 'cscLight', 'secLight', 'cotLight', 'rightTan', 'rightSin', 'rightCot', 'theta', 'triTanSec.tan', 'triTanSec.sec', 'triSinCos.sin', 'triCotCsc.cot', 'thetaComp', 'triCotCsc.csc'],
+    },
+    transition: (done) => {
+      circ.animations.new()
+        .dissolveIn({ element: 'triCotCsc.csc.label', duration: 0.5 })
+        .trigger({ callback: 'circPulseCsc', duration: 1.5 })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      circ._triCotCsc._csc.showAll();
+    },
+  });
 
 
   // slides.push({
@@ -1311,6 +1423,6 @@ function makeSlides() {
 
 
   nav.loadSlides(slides);
-  nav.goToSlide(18);
+  nav.goToSlide(23);
 }
 makeSlides();

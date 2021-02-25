@@ -185,8 +185,11 @@ function layoutLines() {
   add('showHalfChord', () => {
     lines._halfChord.showAll();
     lines._dullChord.showAll();
-    line.animations.new()
-      .dissolveOut(0.5)
+    lines._line.hide();
+    lines._halfChord.setLength(length);
+    lines._halfChord.animations.new()
+      // .dissolveOut(0.5)
+      .length({ target: length / 2, duration: 0.5 })
       .start();
   });
   // add('setBow', () => {

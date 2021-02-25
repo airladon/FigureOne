@@ -105,6 +105,15 @@ function layoutCirc() {
     },
   });
 
+  const ln = (...content) => ({
+    lines: {
+      content: [...content],
+      justify: 'left',
+      xAlign: 'left',
+      yAlign: 'baseline',
+      baselineSpace: 0.3,
+    },
+  });
 
   const [circle] = figure.add({
     name: 'circ',
@@ -118,9 +127,9 @@ function layoutCirc() {
       line('x', colGrey, thin, [-radius, 0], radius * 2, 0),
       line('y', colGrey, thin, [0, -radius], radius * 2, Math.PI / 2),
       line('tanLight', colGrey, thin),
-      line('cscLight', colGrey, thin),
       line('secLight', colGrey, thin),
       line('cotLight', colGrey, thin),
+      line('cscLight', colGrey, thin),
       line('sinLight', colGrey, thin),
       line('radius', colRad, thin, [0, 0], radius, 4.37),
       rightAngle('rightSin', [0, 0], Math.PI / 2),
@@ -131,7 +140,7 @@ function layoutCirc() {
       angle('thetaCot', '\u03b8'),
       angle('thetaComp', {
         forms: { 0: ['_90', '_\u00b0\u2212\u03b8'] },
-      }, 0.35, 0.7),
+      }, 0.45, 0.7),
       angle('thetaCompCos', {
         forms: { 0: ['_90', '_\u00b0\u2212\u03b8'] },
       }, 0.35, 0.7),
@@ -175,27 +184,27 @@ function layoutCirc() {
       // line('sec1', colSec),
       // line('tan1', colTan),
       // line('hyp1', colRad),
-      {
-        name: 'tanAltEqn',
-        method: 'equation',
-        options: {
-          textFont: { style: 'normal' },
-          elements: {
-            theta: { text: '\u03b8', color: colTheta, style: 'italic' },
-            lb: { symbol: 'bracket', side: 'left' },
-            rb: { symbol: 'bracket', side: 'right' },
-          },
-          formDefaults: {
-            alignment: { yAlign: 'middle', xAlign: 'center', fixTo: 'tan' },
-          },
-          forms: {
-            tangent: ['tan', 'gent', ' ', { brac: ['lb', 'theta', 'rb'] }],
-            tanTheta: ['tan', ' ', 'theta'],
-            tan: ['tan'],
-          },
-          color: colTan,
-        },
-      },
+      // {
+      //   name: 'tanAltEqn',
+      //   method: 'equation',
+      //   options: {
+      //     textFont: { style: 'normal' },
+      //     elements: {
+      //       theta: { text: '\u03b8', color: colTheta, style: 'italic' },
+      //       lb: { symbol: 'bracket', side: 'left' },
+      //       rb: { symbol: 'bracket', side: 'right' },
+      //     },
+      //     formDefaults: {
+      //       alignment: { yAlign: 'middle', xAlign: 'center', fixTo: 'tan' },
+      //     },
+      //     forms: {
+      //       tangent: ['tan', 'gent', ' ', { brac: ['lb', 'theta', 'rb'] }],
+      //       tanTheta: ['tan', ' ', 'theta'],
+      //       tan: ['tan'],
+      //     },
+      //     color: colTan,
+      //   },
+      // },
       // {
       //   name: 'cotAltEqn',
       //   method: 'equation',
@@ -313,34 +322,101 @@ function layoutCirc() {
       //     color: colCos,
       //   },
       // },
+      // {
+      //   name: 'sinEqn',
+      //   method: 'equation',
+      //   options: {
+      //     elements: {
+      //       sin: { style: 'normal' },
+      //       theta: { text: '\u03b8', color: colTheta },
+      //       e: { style: 'normal' },
+      //     },
+      //     formDefaults: {
+      //       alignment: { yAlign: 'middle', xAlign: 'center', fixTo: 'sin' },
+      //     },
+      //     forms: {
+      //       halfChord: {
+      //         content: ['h', 'alf-chord'],
+      //         alignment: { fixTo: 'h' },
+      //       },
+      //       sinus: {
+      //         content: ['s', 'i', 'nus'],
+      //         alignment: { fixTo: 'i' },
+      //       },
+      //       sine: {
+      //         content: ['s', 'i', 'nus', '_ \u2192 ', 'sin', 'e', ' ', 'theta'],
+      //         alignment: { fixTo: 'i' },
+      //       },
+      //       sin: ['sin'],
+      //     },
+      //     color: colSin,
+      //   },
+      // },
       {
-        name: 'sinEqn',
+        name: 'eqn',
         method: 'equation',
         options: {
+          textFont: { style: 'normal' },
           elements: {
-            sin: { style: 'normal' },
-            theta: { text: '\u03b8', color: colTheta },
-            e: { style: 'normal' },
+            eq: { text: ' = ', color: colText },
+            theta: { text: '\u03b8', color: colTheta, style: 'italic' },
+            theta1: { text: '\u03b8', color: colTheta, style: 'italic' },
+            comp: { text: '\u00b0\u2212\u03b8', color: colTheta, style: 'italic' },
+            _90: { color: colTheta },
+            lb: { symbol: 'bracket', side: 'left' },
+            rb: { symbol: 'bracket', side: 'right' },
+            lb1: { symbol: 'bracket', side: 'left' },
+            rb1: { symbol: 'bracket', side: 'right' },
+            tan: { color: colCot },
+            c_1: { color: colCot },
+            o_1: { color: colCot },
+            t_1: { color: colCot },
+            gent_1: { color: colCot },
+            an_1: { color: colCot },
+            mplementary_1: { color: colCot },
+            '_ of _1': { color: colCot },
+            '_ of _2': { color: colCsc },
+            sec: { color: colCsc },
+            c_2: { color: colCsc },
+            c_21: { color: colCsc },
+            o_2: { color: colCsc },
+            s_2: { color: colCsc },
+            e_2: { color: colCsc },
+            angent_2: { color: colCsc },
+            mplementary_2: { color: colCsc },
+            ant_2: { color: colCsc },
           },
           formDefaults: {
-            alignment: { yAlign: 'middle', xAlign: 'center', fixTo: 'sin' },
+            alignment: { yAlign: 'baseline', xAlign: 'left' },
+          },
+          phrases: {
+            compAngle: { brac: ['lb', ['_90', 'comp'], 'rb'] },
+            tanComp: ['tan', ' ', 'compAngle'],
+            secComp: ['sec', ' ', 'compAngle'],
           },
           forms: {
-            halfChord: {
-              content: ['h', 'alf-chord'],
-              alignment: { fixTo: 'h' },
-            },
-            sinus: {
-              content: ['s', 'i', 'nus'],
-              alignment: { fixTo: 'i' },
-            },
-            sine: {
-              content: ['s', 'i', 'nus', '_ \u2192 ', 'sin', 'e', ' ', 'theta'],
-              alignment: { fixTo: 'i' },
-            },
-            sin: ['sin'],
+            tanComp: 'tanComp',
+            complementaryTangent: ['tanComp', 'eq', ln(
+              ['c_1', 'o_1', 'mplementary_1'],
+              ['t_1', 'an_1', 'gent_1', '_ of _1', 'theta1'],
+            )],
+            cotangent: ['tanComp',
+              'eq', 'c_1', 'o_1', 't_1', 'an_1', 'gent_1', ' ', 'theta1'],
+            cotan: ['tanComp',
+              'eq', 'c_1', 'o_1', 't_1', 'an_1', ' ', 'theta1'],
+            cotTheta: ['tanComp', 'eq', 'c_1', 'o_1', 't_1', ' ', 'theta1'],
+            //
+            secComp: 'secComp',
+            complementarySecant: ['secComp', 'eq', ln(
+              ['c_2', 'o_2', 'mplementary_2'],
+              ['s_2', 'e_2', 'c_21', 'ant_2', '_ of _2', 'theta1'],
+            )],
+            cosecant: ['secComp', 'eq', 'c_2', 'o_2', 's_2', 'e_2', 'c_21', 'ant_2', 'theta1'],
+            cosec: ['secComp', 'eq', 'c_2', 'o_2', 's_2', 'e_2', 'c_21', 'theta1'],
+            csc: ['secComp', 'eq', 'c_2', 's_2', 'c_21', ' ', 'theta1'],
           },
-          color: colSin,
+          position: [-2.7, radius / 2],
+          scale: 1,
         },
       },
       {
@@ -682,8 +758,12 @@ function layoutCirc() {
     */
     if (cot.isShown) {
       const [cotLine, isClipped] = clip([0, ySign * radius], [xSign * cotVal, ySign * radius]);
-      const offsetX = thick * Math.cos(r + xSign * ySign * Math.PI / 2);
-      const offsetY = thick * Math.sin(r + xSign * ySign * Math.PI / 2);
+      let offsetX = 0;
+      let offsetY = 0;
+      if (csc.isShown) {
+        offsetX = thick * Math.cos(r + xSign * ySign * Math.PI / 2);
+        offsetY = thick * Math.sin(r + xSign * ySign * Math.PI / 2);
+      }
       if (cot._label.isShown) {
         // console.log(cot._label.getPosition('figure').y)
         cot.label.location = ySign > 0 ? 'top' : 'bottom';
@@ -1170,7 +1250,8 @@ function layoutCirc() {
       .start();
   });
   addPulseFn('circPulseTan', triTanSec._tan._label, 'left', 'middle');
-  // addPulseFn('circPulseCot', cotLabel, 'left', 'bottom');
+  addPulseFn('circPulseCot', triCotCsc._cot._label, 'center', 'bottom');
+  addPulseFn('circPulseCsc', triCotCsc._csc._label, 'right', 'bottom');
   // addPulseFn('circPulseRad', hypLabel, 'right', 'bottom');
   // addPulseFn('circPulseSec1', secLabel, 'center', 'top');
   addPulseFn('circPulseSec', triTanSec._sec._label, 'left', 'top');
