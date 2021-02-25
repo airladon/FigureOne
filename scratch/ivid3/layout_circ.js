@@ -376,6 +376,7 @@ function layoutCirc() {
             mplementary_1: { color: colCot },
             '_ of _1': { color: colCot },
             '_ of _2': { color: colCsc },
+            '_ of _3': { color: colCos },
             sec: { color: colCsc },
             c_2: { color: colCsc },
             c_21: { color: colCsc },
@@ -385,6 +386,13 @@ function layoutCirc() {
             angent_2: { color: colCsc },
             mplementary_2: { color: colCsc },
             ant_2: { color: colCsc },
+            //
+            sin: { color: colCos },
+            mplementary_3: { color: colCos },
+            c_3: { color: colCos },
+            o_3: { color: colCos },
+            s_3: { color: colCos },
+            ine_3: { color: colCos },
           },
           formDefaults: {
             alignment: { yAlign: 'baseline', xAlign: 'left' },
@@ -393,6 +401,7 @@ function layoutCirc() {
             compAngle: { brac: ['lb', ['_90', 'comp'], 'rb'] },
             tanComp: ['tan', ' ', 'compAngle'],
             secComp: ['sec', ' ', 'compAngle'],
+            sinComp: ['sin', ' ', 'compAngle'],
           },
           forms: {
             tanComp: 'tanComp',
@@ -411,9 +420,17 @@ function layoutCirc() {
               ['c_2', 'o_2', 'mplementary_2'],
               ['s_2', 'e_2', 'c_21', 'ant_2', '_ of _2', 'theta1'],
             )],
-            cosecant: ['secComp', 'eq', 'c_2', 'o_2', 's_2', 'e_2', 'c_21', 'ant_2', 'theta1'],
-            cosec: ['secComp', 'eq', 'c_2', 'o_2', 's_2', 'e_2', 'c_21', 'theta1'],
+            cosecant: ['secComp', 'eq', 'c_2', 'o_2', 's_2', 'e_2', 'c_21', 'ant_2', ' ', 'theta1'],
+            cosec: ['secComp', 'eq', 'c_2', 'o_2', 's_2', 'e_2', 'c_21', ' ', 'theta1'],
             csc: ['secComp', 'eq', 'c_2', 's_2', 'c_21', ' ', 'theta1'],
+            //
+            sinComp: 'sinComp',
+            complementarySine: ['sinComp', 'eq', ln(
+              ['c_3', 'o_3', 'mplementary_3'],
+              ['s_3', 'ine_3', '_ of _3', 'theta1'],
+            )],
+            cosine: ['sinComp', 'eq', 'c_3', 'o_3', 's_3', 'ine_3', ' ', 'theta1'],
+            cos: ['sinComp', 'eq', 'c_3', 'o_3', 's_3', ' ', 'theta1'],
           },
           position: [-2.7, radius / 2],
           scale: 1,
@@ -1211,6 +1228,22 @@ function layoutCirc() {
         .start();
     }
   });
+  add('circToCosUp', () => {
+    triSinCos._cos.animations.new()
+      .position({ target: [0, radius * Math.sin(0.9)], duration: 1.5 })
+      .start();
+  });
+  add('circSetCosUp', () => {
+    triSinCos._cos.setPosition([0, radius * Math.sin(0.9)]);
+  });
+  add('circSetCosDown', () => {
+    triSinCos._cos.setPosition([0, 0]);
+  });
+  add('circToCosDown', () => {
+    triSinCos._cos.animations.new()
+      .position({ target: [0, 0], duration: 1.5 })
+      .start();
+  });
   add('circToSplit', () => {
     circle.animations.new()
       // .scenarios({ target: 'split', duration: 3 })
@@ -1252,6 +1285,7 @@ function layoutCirc() {
   addPulseFn('circPulseTan', triTanSec._tan._label, 'left', 'middle');
   addPulseFn('circPulseCot', triCotCsc._cot._label, 'center', 'bottom');
   addPulseFn('circPulseCsc', triCotCsc._csc._label, 'right', 'bottom');
+  addPulseFn('circPulseCos', triSinCos._cos._label, 'center', 'top');
   // addPulseFn('circPulseRad', hypLabel, 'right', 'bottom');
   // addPulseFn('circPulseSec1', secLabel, 'center', 'top');
   addPulseFn('circPulseSec', triTanSec._sec._label, 'left', 'top');

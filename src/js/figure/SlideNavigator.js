@@ -596,9 +596,12 @@ export default class SlideNavigator {
     const form = this.getForm(index);
     this.showForms(form);
     this.showDissolved(slide);
-    this.getProperty('steadyStateCommon', index, () => {})(from, index);
+    this.collection.fnMap.exec(
+      this.getProperty('steadyStateCommon', index, () => {}),
+      from, index,
+    );
     if (slide.steadyState != null) {
-      slide.steadyState(from, index);
+      this.collection.fnMap.exec(slide.steadyState, from, index);
     }
     const { prevButton, nextButton } = this;
     if (prevButton != null) {
@@ -875,9 +878,13 @@ export default class SlideNavigator {
     this.hideElements(index);
     this.collection.setScenarios(this.getProperty('scenarioCommon', index, []));
     this.collection.setScenarios(slide.scenario || []);
-    this.getProperty('enterStateCommon', index, () => {})(fromToUse, index);
+    this.collection.fnMap.exec(
+      this.getProperty('enterStateCommon', index, () => {}),
+      fromToUse,
+      index,
+    );
     if (slide.enterState != null) {
-      slide.enterState(fromToUse, index);
+      this.collection.fnMap.exec(slide.enterState, fromToUse, index);
     }
     const fromForm = this.getFromForm(index);
     this.showForms(fromForm);

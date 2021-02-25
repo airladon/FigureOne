@@ -691,6 +691,63 @@ function makeSlides() {
     },
   });
 
+  /*
+  ..######...#######...######.
+  .##....##.##.....##.##....##
+  .##.......##.....##.##......
+  .##.......##.....##..######.
+  .##.......##.....##.......##
+  .##....##.##.....##.##....##
+  ..######...#######...######.
+  */
+  slides.push({
+    showCommon: {
+      circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'sinLight', 'tanLight', 'cscLight', 'secLight', 'cotLight', 'rightTan', 'rightSin', 'rightCot', 'theta', 'triTanSec.tan', 'triTanSec.sec', 'triSinCos.sin', 'triCotCsc.cot', 'thetaComp', 'triCotCsc.csc', 'triSinCos.cos.line'],
+    },
+    enterStateCommon: () => {
+      figure.fnMap.exec('circSetup', 0.9, 'quarter');
+      figure.shortCuts = { 0: 'circToRot' };
+      circ.highlight(['triSinCos.cos', 'thetaComp', 'eqn']);
+    },
+    fromForm: { 'circ.eqn': 'sinComp' },
+    form: { 'circ.eqn': 'sinComp' },
+    transition: (done) => {
+      circ._eqn.hide();
+      circ.animations.new()
+        // .dissolveOut({ element: 'eqn', duration: 0.5 })
+        .dissolveIn({ element: 'triSinCos.cos.line', duration: 0.5 })
+        .then(circ._triSinCos._cos.animations.pulseWidth({ line: 4, duration: 1 }))
+        // .then(circ._triSinCos._cos.animations.position({ target: [0, 1], duration: 1 }))
+        .trigger({ callback: 'circToCosUp', duration: 1.5 })
+        .dissolveIn({ element: 'eqn', duration: 0.5 })
+        .whenFinished(done)
+        .start();
+    },
+    leaveStateCommon: () => {
+      circ.undim();
+      figure.fnMap.exec('circSetCosDown');
+    },
+  });
+
+  slides.push({ enterState: 'circSetCosUp', form: { 'circ.eqn': 'complementarySine' } });
+  slides.push({ enterState: 'circSetCosUp', form: { 'circ.eqn': 'cosine' } });
+  slides.push({ enterState: 'circSetCosUp', form: { 'circ.eqn': 'cos' } });
+
+  slides.push({
+    enterState: 'circSetCosUp',
+    transition: (done) => {
+      circ.animations.new()
+        .trigger({ callback: 'circToCosDown', duration: 1.5 })
+        .dissolveIn({ element: 'triSinCos.cos.label', duration: 0.5 })
+        .trigger({ callback: 'circPulseCos', duration: 1.5 })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      circ._triCotCsc._csc.showAll();
+    },
+  });
+
 
   // slides.push({
   //   clear: true,
@@ -1423,6 +1480,6 @@ function makeSlides() {
 
 
   nav.loadSlides(slides);
-  nav.goToSlide(23);
+  nav.goToSlide(34);
 }
 makeSlides();
