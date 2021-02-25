@@ -415,20 +415,21 @@ function makeEquation() {
         c3_2: lin(['sin', 'cos', '', '', '', '']),
         c3s: lin(['sin', 'cos', 'sinCos', 'oneSin', 'oneCos', s('cosSin', 1)]),
         c3f: lin(['sin', 'cos', 'tan', 'csc', 'sec', 'cot']),
+        c3t: lin([t('sin', 1, 1), t('cos', 2, 1), t('tan', 3, 1), t('csc', 4, 1), t('sec', 5, 1), t('cot', 6, 1)]),
 
         c4: cont(lin(['eq7', 'eq8', 'eq9', 'eq10', 'eq11', 'eq12']), 0.3),
         c4f: cont(lin(['', '', 'eq9', 'eq10', 'eq11', 'eq12']), 0.3),
 
         c7: lin(['tanSec', 'oneSec', 'tan', 'secTan', 'sec', 'oneTan']),
         c7s: lin([s('tanSec', 2), s('oneSec', 3), 'tan', s('secTan', 4), 'sec', 'oneTan']),
-        c7f: lin(['oppHyps', 'adjHyps', 'sinCos', 'oneSin', 'oneCos', 'oneTan']),
+        c5f: lin(['oppHyps', 'adjHyps', 'sinCos', 'oneSin', 'oneCos', 'oneTan']),
 
         c6: cont(lin(['eq13', 'eq14', 'eq15', 'eq16', 'eq17', 'eq18']), 0.3),
         c6f: cont(lin(['', '', 'eq15', '', '', '']), 0.3),
 
         c5: lin(['oneCsc', 'cotCsc', 'oneCot', 'csc', 'cscCot', 'cot']),
         c5s: lin([s('oneCsc', 5), s('cotCsc', 6), s('oneCot', 7), 'csc', s('cscCot', 8), 'cot']),
-        c5f: lin(['', '', 'oppAdjs', '', '', '']),
+        c7f: lin(['', '', 'oppAdjs', '', '', '']),
 
         cv: lin(['val1', 'val2', 'val3', 'val4', 'val5', 'val6']),
         cfunc: lin(['f1', 'f2', 'f3', 'f4', 'f5', 'f6']),
@@ -446,57 +447,13 @@ function makeEquation() {
         names: ['c1', 'c2', 'c3f'],
         build0: ['c1', 'c2_0', 'c3_0'],
         build1: ['c1', 'c2_0', 'c3_1'],
-        build2: ['c1', 'c2_1', 'c3_2'],
         build3: ['c1', 'c2', 'c3'],
         build4: ['c1', 'c2', 'c3', 'c4', 'c5'],
         full: ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7'],
         strike: ['c1', 'c2', 'c3s', 'c4', 'c5s', 'c6', 'c7s'],
         // final: ['c1f', 'c2', 'c3f', 'c4f', 'c5f'],
         final: ['c3f', 'c2', 'c5f'],
-        value: ['c3f', 'c2', 'c5f', 'c4', 'cv'],
-        // r1Constant: 'r1',
-        // r2Constant: 'r2',
-        // rConstant: ['r6', 're', 'rc'],
-        // rValues: ['c1', 'c2', 'rVals'],
-        // rFunctions: ['c1', 'c2', 'rFuncs'],
-        // rNames: ['c1', 'c2', 'rNames'],
-        // 0: ['c1'],
-        // 1: ['c1', 'c2_0', 'c3_00'],
-        // 2: ['c1', 'c2_0', 'c3_01'],
-        // 3: ['c1', 'c2_1', 'c3_10'],
-        // 4: ['c1', 'c2_1', 'c3_11'],
-        // 5: ['c1', 'c2_2', 'c3_20'],
-        // 6: ['c1', 'c2_2', 'c3_21'],
-        // 7: ['c1', 'c2_3', 'c3_30'],
-        // 8: ['c1', 'c2_3', 'c3_31'],
-        // 9: ['c1', 'c2_4', 'c3_40'],
-        // 10: ['c1', 'c2_4', 'c3_41'],
-        // 11: ['c1', 'c2_5', 'c3_50'],
-        // 12: ['c1', 'c2_5', 'c3_51'],
-        // compRearrange: ['compR', 'compE', 'compN'],
-        // compHalf: ['compR', 'compE', 'compN', 'comp4EHalf', 'compHalf'],
-        // compHalf2: ['compR', 'compE', 'compN', 'comp4EHalf2', 'compHalf2'],
-        // comp: ['compR', 'compE', 'compN', 'comp4', 'comp'],
-        // recRearrange: {
-        //   content: ['recR', 'recE', 'recN'],
-        //   translation: { hyp_2: { style: 'linear' } },
-        // },
-        // recHalf: ['recR', 'recE', 'recN', 'rec4Half', 'recHalf'],
-        // rec: ['recR', 'recE', 'recN', 'rec4', 'rec'],
-        // tanRearrange: {
-        //   content: ['c1', 'c2_5', 'c3_51'],
-        //   translation: { hyp_2: { style: 'linear' } },
-        // },
-        // 13: ['c1_rearrange', 'c2_5', 'c3_r1'],
-        // 14: ['c1_rearrange', 'c2_5', 'c3_r2'],
-        // 15: ['c1_rearrange', 'c2_5', 'c3_r3'],
-        // 16: ['c1_rearrange', 'c2_5', 'c3_r4'],
-        // 17: ['c1', 'c2_5', 'c3_51', 'c4_0', 'c5_0'],
-        // 18: ['c1', 'c2_5', 'c3_51', 'c4_1', 'c5_1'],
-        // 19: ['c1', 'c2_5', 'c3_51', 'c4_2', 'c5_2'],
-        // 20: ['c1', 'c2_5', 'c3_51', 'c4_3', 'c5_3'],
-        // values: ['c3t', 'c4', 'c5_v', 'c6', 'c7'],
-        // // comp: ['compR', 'compE', 'compN', 'c4', 'comp'],
+        value: ['c3t', 'c2', 'c5f', 'c4', 'cv'],
       },
       position: [-2.8, 1.2],
     },
@@ -506,42 +463,53 @@ function makeEquation() {
         eqnCirc: { position: [-2.8, 1.2] },
         ratioValues: { position: [-2.5, 1.2] },
         circQ1: { position: [-2.5, 1.2] },
+        split: { position: [-2.5, 1.2] },
+        tanSecTri: { position: [-2.5, 1.2] },
       },
     },
   });
   const eqn3 = figure.getElement('eqn');
   const circ = figure.getElement('circ');
-  const [sin, cos, tan] = circ.getElements(['sin', 'cosAlt', 'tanAlt']);
-  const [csc, sec, cot] = circ.getElements(['cscAlt', 'secAlt', 'cotAlt']);
+  const [sin, cos, tan] = circ.getElements(['triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan']);
+  const [csc, sec, cot] = circ.getElements(['triCotCsc.csc', 'triTanSec.sec', 'triCotCsc.cot']);
   const [t1, t2, t3, t4, t5, t6] = eqn3.getElements(['t1', 't2', 't3', 't4', 't5', 't6']);
   const makeOnClick = (phrases, elems, line, figElements) => () => {
     const elements = [...eqn3.getPhraseElements(phrases), ...elems];
-    if (line.isShown) {
+    if (
+      // line.color[0] === line.defaultColor[0]
+      // && line.color[1] === line.defaultColor[1]
+      // && line.color[2] === line.defaultColor[2]
+      line.isShown
+    ) {
       circ.hide(figElements);
       eqn3.dim(elements);
     } else {
       circ.show(figElements);
       eqn3.undim(elements);
+    }
+    if (circ._rotatorFull.isShown) {
       circ._rotatorFull.fnMap.exec('updateCircle');
+    } else {
+      circ._rotator.fnMap.exec('updateCircle');
     }
   };
   t1.onClick = makeOnClick(
-    ['sinTheta'], ['eq11', 'val1'], sin, ['sin', 'sinLabel', 'rightSin'],
+    ['sin', 'oppHyps'], ['eq1', 'eq7', 'val1'], sin, ['triSinCos.sin'],
   );
   t2.onClick = makeOnClick(
-    ['cosTheta'], ['eq12', 'val2'], cos, ['cosAlt', 'cosLabelAlt', 'rightCosAlt'],
+    ['cos', 'adjHyps'], ['eq2', 'eq8', 'val2'], cos, ['triSinCos.cos'],
   );
   t3.onClick = makeOnClick(
-    ['tanTheta', 'sinCos'], ['eq7', 'eq13', 'val3'], tan, ['tanAlt', 'tanLabelAlt', 'rightTanAlt'],
+    ['tan', 'sinCos'], ['eq3', 'eq9', 'val3'], tan, ['triTanSec.tan', 'triTanSec.rightTan'],
   );
   t4.onClick = makeOnClick(
-    ['cscTheta', 'oneSin'], ['eq8', 'eq14', 'val4'], csc, ['cscAlt', 'cscLabelAlt'],
+    ['csc', 'oneSin'], ['eq4', 'eq10', 'val4'], csc, ['triCotCsc.csc'],
   );
   t5.onClick = makeOnClick(
-    ['secTheta', 'oneCos'], ['eq9', 'eq15', 'val5'], sec, ['secAlt', 'secLabelAlt'],
+    ['sec', 'oneCos'], ['eq5', 'eq11', 'val5'], sec, ['triTanSec.sec'],
   );
   t6.onClick = makeOnClick(
-    ['cotTheta', 'oneTan'], ['eq10', 'eq16', 'val6'], cot, ['cotAlt', 'cotLabelAlt', 'rightCotAlt'],
+    ['cot', 'oneTan'], ['eq6', 'eq12', 'val6'], cot, ['triCotCsc.cot', 'triCotCsc.rightCot'],
   );
 
   const add = (name, fn) => figure.fnMap.global.add(name, fn);

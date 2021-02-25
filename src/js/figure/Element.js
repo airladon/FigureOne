@@ -1871,6 +1871,7 @@ class FigureElement {
    */
   dim() {
     this.setColor(this.dimColor, false);
+    this.animateNextFrame();
   }
 
   /**
@@ -1885,6 +1886,7 @@ class FigureElement {
    */
   undim() {
     this.setColor(this.defaultColor, false);
+    this.animateNextFrame();
   }
 
   setOpacity(opacity: number) {

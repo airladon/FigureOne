@@ -135,7 +135,9 @@ function layoutCirc() {
       line('cotLight', colGrey, thin),
       line('cscLight', colGrey, thin),
       line('sinLight', colGrey, thin),
-      line('radius', colRad, thin, [0, 0], radius, 4.37),
+      // line('radius', colGrey, thin, [0, 0], radius, 4.37),
+      lineWithLabel('radius', colGrey, '1', thin),
+      lineWithLabel('xRadius', colGrey, '1', thin, [0, 0], radius, 0),
       angle('theta', '\u03b8'),
       angle('thetaVal', null),
       angle('thetaCot', '\u03b8'),
@@ -152,21 +154,21 @@ function layoutCirc() {
         lineWithLabel('sin', colSin, 'sin'),
         lineWithLabel('cos', colCos, 'cos'),
         rightAngle('rightSin', [0, 0], Math.PI / 2),
-      ], [-0.3, 0.8], 0),
+      ], [-0.3 - 1.6, 0.8 + 0.2], 0),
       tri('triTanSec', [
         angle('theta', '\u03b8', 0.2, 0.5, [0, 0], 0, defaultAngle),
         lineWithLabel('unit', colText, '1', thick, [radius + thick / 2, 0], radius + thick * 0.7, Math.PI),
         lineWithLabel('tan', colTan, 'tan'),
         lineWithLabel('sec', colSec, 'sec'),
         rightAngle('rightTan', [radius, 0], Math.PI / 2),
-      ], [1.6, -0.2], 0),
+      ], [0, 0], 0),
       tri('triCotCsc', [
         angle('theta', '\u03b8', 0.2, 0.5, [radius / Math.sin(defaultAngle) * Math.cos(defaultAngle), radius / Math.sin(defaultAngle) * Math.sin(defaultAngle)], Math.PI, defaultAngle - 0.05),
         lineWithLabel('unit', colText, '1', thick, [-thick / 2, thick], radius - thick / 2, Math.PI / 2),
         lineWithLabel('csc', colCsc, 'csc'),
         lineWithLabel('cot', colCot, 'cot'),
         rightAngle('rightCot', [0, radius], -Math.PI / 2),
-      ], [1.7, radius - 0.2 + 0.5], Math.PI),
+      ], [0.1, radius - 0.2 + 0.5 + 0.2], Math.PI),
 
       // lineLabel('cosLabelAlt', 'cos', colCos, [0, 0]),
       // lineLabel('tanLabelAlt', 'tan', colTan),
@@ -478,8 +480,8 @@ function layoutCirc() {
       scenarios: {
         title: { scale: 0.9, position: [-radius / 2, -1.2] },
         circQ1: { scale: 1, position: [-0.4, -1] },
-        split: { scale: 1, position: [0.5, -0.7] },
-        tanSecTri: { scale: 1, position: [1.5, -0.7] },
+        split: { scale: 1, position: [1.1, -1.2] },
+        tanSecTri: { scale: 1, position: [0.5, -1] },
         circFull: { scale: 0.7, position: [0, 0] },
         nameDefs: { scale: 1, position: [0.4, -1] },
       },
@@ -495,6 +497,7 @@ function layoutCirc() {
   const [tanLight, cotLight] = get(['tanLight', 'cotLight']);
   const [cscLight, secLight] = get(['cscLight', 'secLight']);
   const [rightSin, rightCot, rightTan] = get(['triSinCos.rightSin', 'triCotCsc.rightCot', 'triTanSec.rightTan']);
+  const [radiusLine, xRadius] = get(['radius', 'xRadius']);
   // const [cos, sin, cosLabel, sinLabel] = get({
   //   triSinCos: ['cos', 'sin', 'cosLabel', 'sinLabel'],
   // });
@@ -671,7 +674,12 @@ function layoutCirc() {
       sin.setEndPoints([x, 0], [x, y]);
     }
     if (sinLight.isShown) {
-      sinLight.custom.updatePoints({ p1: [x, 0], p2: [x, y]});
+      if (!sin.isShown && (cos.isShown || !radiusLine.isShown)) {
+        sinLight.setOpacity(1);
+        sinLight.custom.updatePoints({ p1: [x, 0], p2: [x, y]});
+      } else {
+        sinLight.setOpacity(0);
+      }
     }
     // if (sinLight.isShown) {
     //   sinLight.custom.updatePoints({ p1: [x, 0], p2: [x, y] });
@@ -700,6 +708,29 @@ function layoutCirc() {
     // if (cosLight.isShown) {
     //   cosLight.custom.updatePoints({ p1: [0, 0], [x + xSign * thick / 2, 0]);
     // }
+    if (radiusLine.isShown) {
+      if (!sec.isShown && !csc.isShown) {
+        radiusLine.setOpacity(1);
+        if (radiusLine._label.isShown) {
+          radiusLine.label.location = ySign > 0 ? 'top' : 'bottom';
+        }
+        radiusLine.setEndPoints([0, 0], [x, y]);
+      } else {
+        radiusLine.setOpacity(0);
+      }
+    }
+
+    if (xRadius.isShown) {
+      if (tan.isShown && sec.isShown && !cos.isShown) {
+        xRadius.setOpacity(1);
+        if (xRadius._label.isShown) {
+          xRadius.label.location = ySign > 0 ? 'bottom' : 'top';
+        }
+        xRadius.setEndPoints([0, 0], [xSign * radius, 0]);
+      } else {
+        xRadius.setOpacity(0);
+      }
+    }
 
     /*
     .########....###....##....##
@@ -721,8 +752,13 @@ function layoutCirc() {
       );
     }
     if (tanLight.isShown) {
-      const [tanLine, isClipped] = clip([xSign * radius, 0], [xSign * radius, ySign * tanVal]);
-      tanLight.custom.updatePoints({ p1: tanLine.p1, p2: tanLine.p2 });
+      if (sec.isShown || (secLight.isShown && !radiusLine.isShown)) {
+        tanLight.setOpacity(1);
+        const [tanLine, isClipped] = clip([xSign * radius, 0], [xSign * radius, ySign * tanVal]);
+        tanLight.custom.updatePoints({ p1: tanLine.p1, p2: tanLine.p2 });
+      } else {
+        tanLight.setOpacity(0);
+      }
     }
 
     /*
@@ -770,8 +806,13 @@ function layoutCirc() {
       // }
     }
     if (secLight.isShown) {
-      const [secLine] = clip([0, 0], [xSign * radius, ySign * tanVal]);
-      secLight.custom.updatePoints({ p1: secLine.p1, p2: secLine.p2 });
+      if (tan.isShown || (tanLight.isShown && !radiusLine.isShown)) {
+        secLight.setOpacity(1);
+        const [secLine] = clip([0, 0], [xSign * radius, ySign * tanVal]);
+        secLight.custom.updatePoints({ p1: secLine.p1, p2: secLine.p2 });
+      } else {
+        secLight.setOpacity(0);
+      }
     }
 
     /*
@@ -787,7 +828,7 @@ function layoutCirc() {
       const [cotLine, isClipped] = clip([0, ySign * radius], [xSign * cotVal, ySign * radius]);
       let offsetX = 0;
       let offsetY = 0;
-      if (csc.isShown) {
+      if (csc.isShown && sec.isShown) {
         offsetX = thick * Math.cos(r + xSign * ySign * Math.PI / 2);
         offsetY = thick * Math.sin(r + xSign * ySign * Math.PI / 2);
       }
@@ -800,8 +841,22 @@ function layoutCirc() {
       );
     }
     if (cotLight.isShown) {
-      const [cotLine] = clip([0, ySign * radius], [xSign * cotVal, ySign * radius]);
-      cotLight.custom.updatePoints({ p1: cotLine.p1, p2: cotLine.p2 });
+      let offsetX = 0;
+      let offsetY = 0;
+      if (csc.isShown && sec.isShown) {
+        offsetX = thick * Math.cos(r + xSign * ySign * Math.PI / 2);
+        offsetY = thick * Math.sin(r + xSign * ySign * Math.PI / 2);
+      }
+      if (
+        (csc.isShown || (cscLight.isShown && !radiusLine.isShown))
+        && !cot.isShown
+      ) {
+        cotLight.setOpacity(1);
+        const [cotLine] = clip([0, ySign * radius], [xSign * cotVal, ySign * radius]);
+        cotLight.custom.updatePoints({ p1: cotLine.p1, p2: cotLine.p2.add(offsetX, offsetY) });
+      } else {
+        cotLight.setOpacity(0);
+      }
     }
 
     /*
@@ -815,8 +870,12 @@ function layoutCirc() {
     */
     if (csc.isShown) {
       const [cscLine, isClipped] = clip([0, 0], [xSign * cotVal, ySign * radius]);
-      const offsetX = thick * Math.cos(r + xSign * ySign * Math.PI / 2);
-      const offsetY = thick * Math.sin(r + xSign * ySign * Math.PI / 2);
+      let offsetX = 0;
+      let offsetY = 0;
+      if (sec.isShown) {
+        offsetX = thick * Math.cos(r + xSign * ySign * Math.PI / 2);
+        offsetY = thick * Math.sin(r + xSign * ySign * Math.PI / 2);
+      }
       if (csc._label.isShown) {
         csc.label.location = ySign > 0 ? 'top' : 'bottom';
       }
@@ -834,8 +893,16 @@ function layoutCirc() {
       // }
     }
     if (cscLight.isShown) {
-      const [cscLine] = clip([0, 0], [xSign * cotVal, ySign * radius]);
-      cscLight.custom.updatePoints({ p1: cscLine.p1, p2: cscLine.p2 });
+      if (
+        (cot.isShown || (cotLight.isShown && !radiusLine.isShown))
+        && !csc.isShown
+      ) {
+        cscLight.setOpacity(1);
+        const [cscLine] = clip([0, 0], [xSign * cotVal, ySign * radius]);
+        cscLight.custom.updatePoints({ p1: cscLine.p1, p2: cscLine.p2 });
+      } else {
+        cscLight.setOpacity(0);
+      }
     }
 
     // /*
@@ -953,7 +1020,7 @@ function layoutCirc() {
     // */
     setRightAng(
       rightSin,
-      (Math.abs(y) > 0.4 || !tan.isShown) && Math.abs(x) > 0.2,
+      (Math.abs(y) > 0.4 || !tan.isShown) && Math.abs(x) > 0.3 && (sin.isShown || (sinLight.isShown && sinLight.opacity > 0)),
       [x, 0],
       Math.PI / 2 - (quad - 1) * Math.PI / 2,
     );
