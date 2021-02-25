@@ -419,16 +419,16 @@ function makeEquation() {
         c4: cont(lin(['eq7', 'eq8', 'eq9', 'eq10', 'eq11', 'eq12']), 0.3),
         c4f: cont(lin(['', '', 'eq9', 'eq10', 'eq11', 'eq12']), 0.3),
 
-        c5: lin(['tanSec', 'oneSec', 'tan', 'secTan', 'sec', 'oneTan']),
-        c5s: lin([s('tanSec', 2), s('oneSec', 3), 'tan', s('secTan', 4), 'sec', 'oneTan']),
-        c5f: lin(['oppHyps', 'adjHyps', 'sinCos', 'oneSin', 'oneCos', 'oneTan']),
+        c7: lin(['tanSec', 'oneSec', 'tan', 'secTan', 'sec', 'oneTan']),
+        c7s: lin([s('tanSec', 2), s('oneSec', 3), 'tan', s('secTan', 4), 'sec', 'oneTan']),
+        c7f: lin(['oppHyps', 'adjHyps', 'sinCos', 'oneSin', 'oneCos', 'oneTan']),
 
         c6: cont(lin(['eq13', 'eq14', 'eq15', 'eq16', 'eq17', 'eq18']), 0.3),
         c6f: cont(lin(['', '', 'eq15', '', '', '']), 0.3),
 
-        c7: lin(['oneCsc', 'cotCsc', 'oneCot', 'csc', 'cscCot', 'cot']),
-        c7s: lin([s('oneCsc', 5), s('cotCsc', 6), s('oneCot', 7), 'csc', s('cscCot', 8), 'cot']),
-        c7f: lin(['', '', 'oppAdjs', '', '', '']),
+        c5: lin(['oneCsc', 'cotCsc', 'oneCot', 'csc', 'cscCot', 'cot']),
+        c5s: lin([s('oneCsc', 5), s('cotCsc', 6), s('oneCot', 7), 'csc', s('cscCot', 8), 'cot']),
+        c5f: lin(['', '', 'oppAdjs', '', '', '']),
 
         cv: lin(['val1', 'val2', 'val3', 'val4', 'val5', 'val6']),
         cfunc: lin(['f1', 'f2', 'f3', 'f4', 'f5', 'f6']),
@@ -505,6 +505,7 @@ function makeEquation() {
         eqnTri: { position: [-2.3, 1.2] },
         eqnCirc: { position: [-2.8, 1.2] },
         ratioValues: { position: [-2.5, 1.2] },
+        circQ1: { position: [-2.5, 1.2] },
       },
     },
   });

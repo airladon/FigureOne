@@ -5559,7 +5559,6 @@ class FigureElementCollection extends FigureElement {
     }
 
     const elements = this.getElements(elementsToHighlight);
-
     this.dim();
     this.exec('undim', elements);
   }

@@ -21,7 +21,8 @@ The trigonometric functions come from the study of similar triangles and right a
 * The secant line is a line is a line that cuts through a circle
 * And so we call this line the secant.
 * The chord line is a line between two points on a circle
-* This line is a half cord, and our word sine derived from Latin has its roots in Sanskrit and Ancient Greek as a half cord or half bowstring.
+* While this lines name has its roots from Sanskrit meaning half-cord or half bowstring, the more recent translation into Latin lost this meaning. Nevertheless, we can think of the sine as the half cord as that's what it is.
+> This line is a half cord, and our word sine derived from Latin has its roots in Sanskrit and Ancient Greek as a half cord or half bowstring.
 * This line is the tagent of the complementary angle of theta, and so we call it the complimentary tangent, cotangent or cot.
 * This line is the secant of the complementary angle, and so we call it the cosecant, cosec or csc.
 * This line is the sine of the complementary angle, and so we call it the cosine or cos.

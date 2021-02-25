@@ -3,7 +3,7 @@ const figure = new Fig.Figure({
   limits: [-3, -1.5, 6, 3],
   color: [0.3, 0.3, 0.3, 1],
   font: { size: 0.1 },
-  dimColor: [0.7, 0.7, 0.7, 1],
+  dimColor: [0.5, 0.5, 0.5, 1],
 });
 
 const thick = 0.012;

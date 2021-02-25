@@ -3,7 +3,7 @@
 
 function layoutCirc() {
   const radius = 1.5;
-  const defaultAngle = 1;
+  const defaultAngle = 0.9;
 
   const line = (name, color, width = thick, p1 = [0, 0], length = 1, angle = 0, dash = []) => ({
     name,
@@ -32,7 +32,11 @@ function layoutCirc() {
         update: true,
       },
     },
-    // mods: { dimColor: colText },
+    // mods: {
+    //   dimColor: colSin,
+    //   _line: { dimColor: colSin },
+    //   _label: { dimColor: colSin },
+    // },
   });
 
   function arc(name, color, width = thin, sides = 100, angleToDraw = Math.PI * 2, rotation = 0) {
@@ -56,9 +60,9 @@ function layoutCirc() {
       yAlign,
       position,
     },
-    mods: {
-      dimColor: colDim,
-    },
+    // mods: {
+    //   dimColor: colDim,
+    // },
   });
 
   const rightAngle = (name, position, startAngle, r = 0.15, color = colGrey) => ({
@@ -99,7 +103,7 @@ function layoutCirc() {
     elements,
     mods: {
       scenarios: {
-        circ: { position: [0, 0], rotation: 0 },
+        noSplit: { position: [0, 0], rotation: 0 },
         split: { position, rotation },
       },
     },
@@ -132,9 +136,6 @@ function layoutCirc() {
       line('cscLight', colGrey, thin),
       line('sinLight', colGrey, thin),
       line('radius', colRad, thin, [0, 0], radius, 4.37),
-      rightAngle('rightSin', [0, 0], Math.PI / 2),
-      rightAngle('rightTan', [radius, 0], Math.PI / 2),
-      rightAngle('rightCot', [0, radius], -Math.PI / 2),
       angle('theta', '\u03b8'),
       angle('thetaVal', null),
       angle('thetaCot', '\u03b8'),
@@ -147,22 +148,25 @@ function layoutCirc() {
 
       tri('triSinCos', [
         angle('theta', '\u03b8', 0.2, 0.5, [0, 0], 0, defaultAngle),
-        lineWithLabel('unit', colGrey, '1', thick, [0, 0], radius, defaultAngle),
+        lineWithLabel('unit', colText, '1', thick, [0, 0], radius, defaultAngle),
         lineWithLabel('sin', colSin, 'sin'),
         lineWithLabel('cos', colCos, 'cos'),
-      ], [1.7, 1], 0),
+        rightAngle('rightSin', [0, 0], Math.PI / 2),
+      ], [-0.3, 0.8], 0),
       tri('triTanSec', [
         angle('theta', '\u03b8', 0.2, 0.5, [0, 0], 0, defaultAngle),
-        lineWithLabel('unit', colGrey, '1', thick, [radius + thick / 2, 0], radius + thick * 0.7, Math.PI),
+        lineWithLabel('unit', colText, '1', thick, [radius + thick / 2, 0], radius + thick * 0.7, Math.PI),
         lineWithLabel('tan', colTan, 'tan'),
         lineWithLabel('sec', colSec, 'sec'),
-      ], [2, -0.2], 0),
+        rightAngle('rightTan', [radius, 0], Math.PI / 2),
+      ], [1.6, -0.2], 0),
       tri('triCotCsc', [
         angle('theta', '\u03b8', 0.2, 0.5, [radius / Math.sin(defaultAngle) * Math.cos(defaultAngle), radius / Math.sin(defaultAngle) * Math.sin(defaultAngle)], Math.PI, defaultAngle - 0.05),
-        lineWithLabel('unit', colGrey, '1', thick, [-thick / 2, thick], radius - thick / 2, Math.PI / 2),
+        lineWithLabel('unit', colText, '1', thick, [-thick / 2, thick], radius - thick / 2, Math.PI / 2),
         lineWithLabel('csc', colCsc, 'csc'),
         lineWithLabel('cot', colCot, 'cot'),
-      ], [1.4, radius - 0.2], Math.PI),
+        rightAngle('rightCot', [0, radius], -Math.PI / 2),
+      ], [1.7, radius - 0.2 + 0.5], Math.PI),
 
       // lineLabel('cosLabelAlt', 'cos', colCos, [0, 0]),
       // lineLabel('tanLabelAlt', 'tan', colTan),
@@ -467,10 +471,15 @@ function layoutCirc() {
         },
       },
     ],
+    // options: {
+    //   dimColor: colDarkGrey,
+    // },
     mods: {
       scenarios: {
         title: { scale: 0.9, position: [-radius / 2, -1.2] },
         circQ1: { scale: 1, position: [-0.4, -1] },
+        split: { scale: 1, position: [0.5, -0.7] },
+        tanSecTri: { scale: 1, position: [1.5, -0.7] },
         circFull: { scale: 0.7, position: [0, 0] },
         nameDefs: { scale: 1, position: [0.4, -1] },
       },
@@ -485,7 +494,7 @@ function layoutCirc() {
   const [sinLight] = get(['sinLight']);
   const [tanLight, cotLight] = get(['tanLight', 'cotLight']);
   const [cscLight, secLight] = get(['cscLight', 'secLight']);
-  const [rightSin, rightCot, rightTan] = get(['rightSin', 'rightCot', 'rightTan']);
+  const [rightSin, rightCot, rightTan] = get(['triSinCos.rightSin', 'triCotCsc.rightCot', 'triTanSec.rightTan']);
   // const [cos, sin, cosLabel, sinLabel] = get({
   //   triSinCos: ['cos', 'sin', 'cosLabel', 'sinLabel'],
   // });
@@ -569,7 +578,8 @@ function layoutCirc() {
     }
   };
 
-  function updateCircle(r) {
+  function updateCircle(rIn) {
+    const r = rIn > Math.PI / 4 ? rIn - 0.00001 : rIn + 0.00001;
     const cosR = Math.cos(r);
     const sinR = Math.sin(r);
     const x = radius * cosR;
@@ -1245,40 +1255,50 @@ function layoutCirc() {
       .start();
   });
   add('circToSplit', () => {
+    // circle.animations.new()
+    //   // .scenarios({ target: 'split', duration: 3 })
+    //   .then(triTanSec.animations.scenario({ target: 'split', duration: 2.5 }))
+    //   .inParallel([
+    //     triTanSec._unit.animations.dissolveIn(0.5),
+    //     triTanSec._theta.animations.dissolveIn(0.5),
+    //   ])
+    //   .then(triSinCos.animations.scenario({ target: 'split', duration: 2 }))
+    //   .inParallel([
+    //     triSinCos._unit.animations.dissolveIn(0.5),
+    //     triSinCos._theta.animations.dissolveIn(0.5),
+    //   ])
+    //   .inParallel([
+    //     triCotCsc.animations.scenario({ target: 'split', duration: 2 }),
+    //     circle._arc.animations.dissolveOut(0.5),
+    //     circle._xQ1.animations.dissolveOut(0.5),
+    //     circle._yQ1.animations.dissolveOut(0.5),
+    //     circle._rotator.animations.dissolveOut(0.5),
+    //     circle._theta.animations.dissolveOut(0.5),
+    //   ])
+    //   .inParallel([
+    //     triCotCsc._unit.animations.dissolveIn(0.5),
+    //     triCotCsc._theta.animations.dissolveIn(0.5),
+    //   ])
+    //   .start();
     circle.animations.new()
       // .scenarios({ target: 'split', duration: 3 })
-      .then(triTanSec.animations.scenario({ target: 'split', duration: 2 }))
       .inParallel([
-        triTanSec._unit.animations.dissolveIn(0.4),
-        triTanSec._theta.animations.dissolveIn(0.4),
+        triTanSec.animations.scenario({ target: 'split', duration: 5.5 }),
+        triSinCos.animations.scenario({ target: 'split', duration: 5.5 }),
+        triCotCsc.animations.scenario({ target: 'split', duration: 5.5 }),
+        circle._arc.animations.dissolveOut(0.5),
+        circle._xQ1.animations.dissolveOut(0.5),
+        circle._yQ1.animations.dissolveOut(0.5),
+        circle._rotator.animations.dissolveOut(0.5),
+        circle._theta.animations.dissolveOut(0.5),
       ])
-      .then(triSinCos.animations.scenario({ target: 'split', duration: 1 }))
       .inParallel([
-        triSinCos._unit.animations.dissolveIn(0.4),
-        triSinCos._theta.animations.dissolveIn(0.4),
-      ])
-      .inParallel([
-        triCotCsc.animations.scenario({ target: 'split', duration: 2 }),
-        circle._arc.animations.dissolveOut(0.4),
-        circle._xQ1.animations.dissolveOut(0.4),
-        circle._yQ1.animations.dissolveOut(0.4),
-      ])
-      // .trigger(() => {
-      //   triCotCsc.showAll();
-      //   triTanSec.showAll();
-      //   triSinCos.showAll();
-      //   updateCircle(defaultAngle);
-      //   triCotCsc.hide(['unit', 'theta']);
-      //   triTanSec.hide(['unit', 'theta']);
-      //   triSinCos.hide(['unit', 'theta']);
-      // })
-      .inParallel([
-        // triTanSec._unit.animations.dissolveIn(0.4),
-        // triTanSec._theta.animations.dissolveIn(0.4),
-        // triSinCos._unit.animations.dissolveIn(0.4),
-        // triSinCos._theta.animations.dissolveIn(0.4),
-        triCotCsc._unit.animations.dissolveIn(0.4),
-        triCotCsc._theta.animations.dissolveIn(0.4),
+        triTanSec._unit.animations.dissolveIn(0.5),
+        triTanSec._theta.animations.dissolveIn(0.5),
+        triSinCos._unit.animations.dissolveIn(0.5),
+        triSinCos._theta.animations.dissolveIn(0.5),
+        triCotCsc._unit.animations.dissolveIn(0.5),
+        triCotCsc._theta.animations.dissolveIn(0.5),
       ])
       .start();
   });
