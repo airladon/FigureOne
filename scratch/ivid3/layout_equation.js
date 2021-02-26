@@ -363,6 +363,7 @@ function makeEquation() {
         names: ['c1', 'c2', 'c3f'],
         build0: ['c1', 'c2_0', 'c3_0'],
         build1: ['c1', 'c2_0', 'c3_1'],
+        build2: ['c1', 'c2_1', 'c3_2'],
         build3: ['c1', 'c2', 'c3'],
         build4: ['c1', 'c2', 'c3', 'c4', 'c5'],
         full: ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7'],
@@ -525,7 +526,7 @@ function makeEquation() {
         ],
       },
       scale: 1.1,
-      position: [1.3, -1],
+      position: [1.2, -1.3],
     },
   });
   const pulseEqn = (form) => {

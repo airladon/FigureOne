@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-/* globals figure, color1, color2, color3, color4, colGrey */
+/* globals figure, color2, colGrey, leftText, colOpp, colAdj, colHyp, colTheta, Fig */
 
 
 function layoutRight() {
@@ -456,7 +456,7 @@ function layoutRight() {
   });
   figure.fnMap.global.add('triAnimatePadTo', () => {
     movePad.animations.new()
-      .rotation({ target: [2, 1.5], duration: 1 })
+      .position({ target: [2, 1.5], duration: 1 })
       .start();
   });
 
@@ -473,17 +473,5 @@ function layoutRight() {
     }, [-2 - 1.3, 2], 0.18 / 0.7),
     leftText('haveSameAngles', ' have the same angles', {}, [0.1 - 0.7, 2], 0.18 / 0.7),
     leftText('areSimilar', ' are similar', {}, [0.1 - 0.7, 2], 0.18 / 0.7),
-    // summary('sameAngles', [0, 1.1], 'All right angle triangles with |theta| have same angle set', {
-    //   theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic', color: colTheta } },
-    // }),
-    // summary('similar', [0, 1.1], [
-    //   'Similar triangles have |equal| corresponding side ratios',
-    // ], {
-    //   equal: {
-    //     font: { color: color1 },
-    //     onClick: 'similarToggleRatios',
-    //     touchBorder: 0.1,
-    //   },
-    // }),
   ]);
 }

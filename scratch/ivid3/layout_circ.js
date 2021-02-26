@@ -130,6 +130,9 @@ function layoutCirc() {
       line('secLightAlt', colGrey, thin),
       line('cotLightAlt', colGrey, thin),
       line('cscLightAlt', colGrey, thin),
+      rightAngle('rightCotAlt', [radius, 0], Math.PI / 2),
+      rightAngle('rightTanAlt', [radius, 0], Math.PI / 2),
+      rightAngle('rightSinAlt', [0, 0], Math.PI / 2),
       // line('radius', colGrey, thin, [0, 0], radius, 4.37),
       lineWithLabel('radius', colGrey, '1', thin),
       lineWithLabel('radiusAlt', colGrey, '1', thin),
@@ -325,6 +328,7 @@ function layoutCirc() {
   const [tanLight, cotLight] = get(['tanLight', 'cotLight']);
   const [cscLight, secLight] = get(['cscLight', 'secLight']);
   const [rightSin, rightCot, rightTan] = get(['triSinCos.rightSin', 'triCotCsc.rightCot', 'triTanSec.rightTan']);
+  const [rightSinAlt, rightCotAlt, rightTanAlt] = get(['rightSinAlt', 'rightCotAlt', 'rightTanAlt']);
   const [radiusLine, xRadius, radiusAlt] = get(['radius', 'xRadius', 'radiusAlt']);
   const [cosAlt, sinAlt] = get(['cosAlt', 'sinAlt']);
   const [tanAlt, secAlt] = get(['tanAlt', 'secAlt']);
@@ -825,6 +829,33 @@ function layoutCirc() {
       Math.PI / 2 * 3 - (quad - 1) * Math.PI / 2,
     );
 
+    setRightAng(
+      rightSinAlt,
+      sinAlt.isShown && Math.abs(x) > 0.3 && Math.abs(x) < radius - 0.2,
+      [x, 0],
+      Math.PI / 2 - (quad - 1) * Math.PI / 2,
+    );
+
+    setRightAng(
+      rightCotAlt,
+      (cotAlt.isShown || (cotLightAlt.isShown && cotLightAlt.opacity > 0.5))
+      && Math.abs(x) > 0.5
+      && Math.abs(y) > 0.15,
+      [x, y],
+      // r + Math.PI / 2 * 3 - (quad - 1) * Math.PI / 2,
+      r + Math.PI / 2 + Math.PI / 4 - xSign * ySign * Math.PI / 4,
+    );
+    setRightAng(
+      rightTanAlt,
+      (tanAlt.isShown || (tanLightAlt.isShown && tanLightAlt.opacity > 0.5))
+      && Math.abs(x) > 0.3
+      && Math.abs(y) > 0.35,
+      [x, y],
+      // Math.PI / 2 * 3 - (quad - 1) * Math.PI / 2,
+      r + Math.PI / 2 + Math.PI / 4 + xSign * ySign * Math.PI / 4,
+    );
+
+
 
     const a = Fig.tools.math.round(r * 180 / Math.PI, 0) * Math.PI / 180;
     const sinA = Math.sin(a);
@@ -929,7 +960,7 @@ function layoutCirc() {
       .start();
   });
   add('circToAlt', () => {
-    circle.show(['sinAlt', 'cosAlt', 'tanAlt', 'secAlt', 'cscAlt', 'cotAlt', 'radiusAlt', 'tanLightAlt', 'secLightAlt', 'cscLightAlt', 'cotLightAlt']);
+    circle.show(['sinAlt', 'cosAlt', 'tanAlt', 'secAlt', 'cscAlt', 'cotAlt', 'radiusAlt', 'tanLightAlt', 'secLightAlt', 'cscLightAlt', 'cotLightAlt', 'rightSinAlt', 'rightTanAlt', 'rightCotAlt']);
     circle.hide(['triSinCos.sin', 'triSinCos.cos', 'triSinCos.rightSin', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc', 'triCotCsc.rightCot', 'triTanSec.rightTan', 'radius']);
     circle.setScenarios('noSplit');
   });
