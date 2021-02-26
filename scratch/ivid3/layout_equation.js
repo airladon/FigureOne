@@ -344,6 +344,7 @@ function makeEquation() {
 
         c7: lin(['tanSec', 'oneSec', 'tan', 'secTan', 'sec', 'oneTan']),
         c7s: lin([s('tanSec', 2), s('oneSec', 3), 'tan', s('secTan', 4), 'sec', 'oneTan']),
+        c5fPre: lin(['oppHyp', 'adjHyp', 'sinCos', 'oneSin', 'oneCos', 'oneTan']),
         c5f: lin(['oppHyps', 'adjHyps', 'sinCos', 'oneSin', 'oneCos', 'oneTan']),
 
         c6: cont(lin(['eq13', 'eq14', 'eq15', 'eq16', 'eq17', 'eq18']), 0.3),
@@ -368,6 +369,7 @@ function makeEquation() {
         build4: ['c1', 'c2', 'c3', 'c4', 'c5'],
         full: ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7'],
         // strike: ['c1', 'c2', 'c3s', 'c4', 'c5s', 'c6', 'c7s'],
+        finalPre: ['c3f', 'c2', 'c5fPre'],
         final: ['c3f', 'c2', 'c5f'],
         value: ['c3t', 'c2', 'c5f', 'c4', 'cv'],
         valueAlt: ['c3tAlt', 'c2', 'c5f', 'c4', 'cv'],
@@ -498,6 +500,7 @@ function makeEquation() {
         cos: { style: 'normal', color: colCos },
         tan: { style: 'normal', color: colTan },
         sec: { style: 'normal', color: colSec },
+        csc: { style: 'normal', color: colCsc },
         plus: ' + ',
         eq: '  =  ',
         gr: '  >  ',
@@ -505,6 +508,14 @@ function makeEquation() {
         rb1: { symbol: 'bar', side: 'right' },
         lb2: { symbol: 'bar', side: 'left' },
         rb2: { symbol: 'bar', side: 'right' },
+        _90_1: { color: colTheta },
+        comp1: { text: '\u00b0\u2212\u03b8', color: colTheta, style: 'italic' },
+        theta1: { text: '\u03b8', color: colTheta },
+        theta2: { text: '\u03b8', color: colTheta },
+        lb3: { symbol: 'bracket', side: 'left' },
+        rb3: { symbol: 'bracket', side: 'right' },
+        lb4: { symbol: 'bracket', side: 'left' },
+        rb4: { symbol: 'bracket', side: 'right' },
       },
       forms: {
         sinCosOne: [
@@ -520,13 +531,18 @@ function makeEquation() {
           'eq', '_1',
         ],
         secTan: [
-          abs('sec', 1),
+          abs(['sec'], 1),
           'gr',
-          abs('tan', 2),
+          abs(['tan'], 2),
+        ],
+        cscSec: [
+          'csc', { brac: ['lb3', ['_90_1', 'comp1'], 'rb3'] },
+          'eq',
+          'sec', ' ', 'theta1',
         ],
       },
       scale: 1.1,
-      position: [1.2, -1.3],
+      position: [0.9, -1.3],
     },
   });
   const pulseEqn = (form) => {
@@ -535,13 +551,14 @@ function makeEquation() {
     eqn1.hide();
     eqn1.animations.new()
       .dissolveIn(0.5)
-      .pulse({ scale: 1.5, duration: 2 })
-      .delay(1)
+      .pulse({ scale: 1.3, duration: 2 })
+      .delay(1.5)
       .dissolveOut(0.5)
       .start();
   };
   add('eqn1SinCosOne', () => pulseEqn('sinCosOne'));
   add('eqn1TanSecOne', () => pulseEqn('tanSecOne'));
   add('eqn1SecTan', () => pulseEqn('secTan'));
+  add('eqn1CscSec', () => pulseEqn('cscSec'));
 }
 
