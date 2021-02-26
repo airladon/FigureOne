@@ -602,7 +602,7 @@ function layoutCirc() {
       const [cscLine] = clip([0, 0], [xSign * cotVal, ySign * radius]);
       let offsetX = 0;
       let offsetY = 0;
-      if (sec.isShown) {
+      if (sec.isShown && csc.getScale().x > 0) {
         offsetX = thick * Math.cos(r + xSign * ySign * Math.PI / 2);
         offsetY = thick * Math.sin(r + xSign * ySign * Math.PI / 2);
       }
@@ -614,13 +614,6 @@ function layoutCirc() {
         cscLine.p2.add(offsetX, offsetY),
         // arrow: arrow(isCl//ipped),
       );
-      // if (cscLabel.isShown) {
-      //   if (xSign * ySign > 0) {
-      //     cscLabel.setPosition(cscLine.offset('positive', 0.1).midPoint());
-      //   } else {
-      //     cscLabel.setPosition(cscLine.offset('negative', 0.1).midPoint());
-      //   }
-      // }
     }
     if (cscLight.isShown) {
       if (

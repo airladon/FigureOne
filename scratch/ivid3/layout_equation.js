@@ -468,4 +468,79 @@ function makeEquation() {
   add('eqnPulseHypOpp', () => pulse(['hyp_3', 'v4', 'opp_3'], 'v4', 'right'));
   add('eqnPulseHypAdj', () => pulse(['hyp_4', 'v5', 'adj_3'], 'v5', 'right'));
   add('eqnPulseAdjOpp', () => pulse(['adj_4', 'v6', 'opp_4'], 'v6', 'right'));
+
+  /*
+  .########..#######..##....##....##..
+  .##.......##.....##.###...##..####..
+  .##.......##.....##.####..##....##..
+  .######...##.....##.##.##.##....##..
+  .##.......##..##.##.##..####....##..
+  .##.......##....##..##...###....##..
+  .########..#####.##.##....##..######
+  */
+  const abs = (content, index) => ({
+    brac: {
+      content,
+      left: `lb${index}`,
+      right: `rb${index}`,
+      minContentHeight: 0.2,
+      minContentDescent: 0.03,
+    },
+  });
+  const [eqn1] = figure.add({
+    name: 'eqn1',
+    method: 'equation',
+    options: {
+
+      elements: {
+        sin: { style: 'normal', color: colSin },
+        cos: { style: 'normal', color: colCos },
+        tan: { style: 'normal', color: colTan },
+        sec: { style: 'normal', color: colSec },
+        plus: ' + ',
+        eq: '  =  ',
+        gr: '  >  ',
+        lb1: { symbol: 'bar', side: 'left' },
+        rb1: { symbol: 'bar', side: 'right' },
+        lb2: { symbol: 'bar', side: 'left' },
+        rb2: { symbol: 'bar', side: 'right' },
+      },
+      forms: {
+        sinCosOne: [
+          { sup: ['sin', '2_1'] },
+          '_ + ',
+          { sup: ['cos', '2_2'] },
+          'eq', '_1',
+        ],
+        tanSecOne: [
+          { sup: ['tan', '2_1'] },
+          '_ + ',
+          { sup: ['sec', '2_2'] },
+          'eq', '_1',
+        ],
+        secTan: [
+          abs('sec', 1),
+          'gr',
+          abs('tan', 2),
+        ],
+      },
+      scale: 1.1,
+      position: [1.3, -1],
+    },
+  });
+  const pulseEqn = (form) => {
+    eqn1.stop();
+    eqn1.showForm(form);
+    eqn1.hide();
+    eqn1.animations.new()
+      .dissolveIn(0.5)
+      .pulse({ scale: 1.5, duration: 2 })
+      .delay(1)
+      .dissolveOut(0.5)
+      .start();
+  };
+  add('eqn1SinCosOne', () => pulseEqn('sinCosOne'));
+  add('eqn1TanSecOne', () => pulseEqn('tanSecOne'));
+  add('eqn1SecTan', () => pulseEqn('secTan'));
 }
+

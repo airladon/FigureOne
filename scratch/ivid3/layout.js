@@ -1011,11 +1011,14 @@ function makeSlides() {
       eqn.showForm('valueAlt');
       figure.fnMap.exec('circToAlt', 0.9, 'circle');
       figure.fnMap.exec('circSetup', 0.9, 'circle');
-      // circ.setScenarios('circ');
-      // figure.fnMap.exec('circSetup', 0.9, 'circle');
+      figure.shortCuts = {
+        1: 'eqn1SinCosOne',
+        2: 'eqn1TanSecOne',
+        3: 'eqn1SecTan',
+      };
     },
     leaveState: () => {
-      circ.setScenarios('noSplit')
+      circ.setScenarios('noSplit');
     },
   });
 
