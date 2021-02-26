@@ -482,7 +482,7 @@ function layoutCirc() {
         circQ1: { scale: 1, position: [-0.4, -1] },
         split: { scale: 1, position: [1.1, -1.2] },
         tanSecTri: { scale: 1, position: [0.5, -1] },
-        circFull: { scale: 0.7, position: [0, 0] },
+        circFull: { scale: 0.7, position: [0.7, 0] },
         nameDefs: { scale: 1, position: [0.4, -1] },
       },
     },
@@ -1020,7 +1020,12 @@ function layoutCirc() {
     // */
     setRightAng(
       rightSin,
-      (Math.abs(y) > 0.4 || !tan.isShown) && Math.abs(x) > 0.3 && (sin.isShown || (sinLight.isShown && sinLight.opacity > 0)),
+      (Math.abs(y) > 0.4 || !tan.isShown)
+      && Math.abs(x) > 0.3
+      && (
+        sin.isShown
+        || (sinLight.isShown && sinLight.opacity > 0)
+      ),
       [x, 0],
       Math.PI / 2 - (quad - 1) * Math.PI / 2,
     );

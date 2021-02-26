@@ -758,6 +758,7 @@ function makeSlides() {
   .##....##.##........##........##.....##...
   ..######..##........########.####....##...
   */
+  // Setup
   slides.push({
     clear: true,
     scenario: ['circQ1', 'nameDefs'],
@@ -789,6 +790,7 @@ function makeSlides() {
     },
   });
 
+  // Split
   slides.push({
     scenario: ['circQ1'],
     transition: (done) => {
@@ -813,6 +815,7 @@ function makeSlides() {
     },
   });
 
+  // Sin Column
   slides.push({
     showCommon: {
       circ: ['triTanSec', 'triSinCos', 'triCotCsc'],
@@ -827,6 +830,8 @@ function makeSlides() {
   slides.push({ form: 'build1' });
   slides.push({ form: 'build2' });
   slides.push({ form: 'build3' });
+
+  // Cot Column
   slides.push({
     form: 'build4',
     enterStateCommon: () => {
@@ -849,6 +854,8 @@ function makeSlides() {
       circ.hide('triSinCos');
     },
   });
+
+  // Tan Column
   slides.push({
     form: 'full',
     showCommon: {
@@ -896,13 +903,9 @@ function makeSlides() {
     },
   });
 
-  // Strike
-
-  // console.log(eqn.getPhraseElements(['cosSin', 'oneCsc', 'cotCsc', 'oneCot', 'cscCot']))
-  // slides.push({ form: 'strike' });
-  // slides.push({ form: 'final' });
+  // Simplify
   slides.push({
-    showCommon: { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.rightSin', 'triCotCsc.rightCot', 'triTanSec.rightTan', 'theta', 'triTanSec.tan', 'triTanSec.sec', 'triSinCos.sin', 'triSinCos.cos', 'triCotCsc.cot', 'triCotCsc.csc', 'radius', 'xRadius', 'secLight', 'cscLight', 'cotLight', 'tanLight', 'sinLight'] },
+    showCommon: { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.rightSin', 'triCotCsc.rightCot', 'triTanSec.rightTan', 'triTanSec.tan', 'triTanSec.sec', 'triSinCos.sin', 'triSinCos.cos', 'triCotCsc.cot', 'triCotCsc.csc', 'radius', 'xRadius', 'secLight', 'cscLight', 'cotLight', 'tanLight', 'sinLight', 'theta'] },
     form: 'final',
     transition: (done) => {
       eqn.animations.new()
@@ -924,19 +927,63 @@ function makeSlides() {
       circ.setScenario('circQ1');
     },
   });
+
+  // Values
   slides.push({
     scenarioCommon: 'circQ1',
     form: 'value',
     transition: (done) => {
       eqn.showForm('value');
+      circ.show('thetaVal');
       figure.fnMap.exec('circSetup', 0.9, 'quarter');
       eqn.showForm('final');
+      circ.hide('thetaVal');
       eqn.animations.new()
-        .goToForm({ target: 'value', duration: 1, animate: 'move' })
+        .inParallel([
+          eqn.animations.goToForm({ target: 'value', duration: 1, animate: 'move' }),
+          circ.animations.dissolveOut({ element: 'theta', duration: 0.5 }),
+          circ.animations.dissolveIn({ element: 'thetaVal', duration: 0.5, delay: 0.5 }),
+        ])
+
         .whenFinished(done)
         .start();
     },
+    steadyState: () => {
+      circ.hide('theta');
+      circ.show('thetaVal');
+      figure.fnMap.exec('circSetup', 0.9, 'quarter');
+    },
   });
+
+  /*
+  ..######..####.########...######..##.......########
+  .##....##..##..##.....##.##....##.##.......##......
+  .##........##..##.....##.##.......##.......##......
+  .##........##..########..##.......##.......######..
+  .##........##..##...##...##.......##.......##......
+  .##....##..##..##....##..##....##.##.......##......
+  ..######..####.##.....##..######..########.########
+  */
+  slides.push({
+    show: 'circ.thetaVal',
+    hide: 'circ.theta',
+    transition: (done) => {
+      figure.fnMap.exec('circSetup', 0.9, 'circle');
+      circ.animations.new()
+        .scenario({ target: 'circFull', duration: 2 })
+        .dissolveIn({ elements: ['circle', 'x', 'y', 'rotatorFull'], duration: 0.5 })
+        .dissolveOut({ elements: ['rotator'], duration: 0 })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      circ.setScenario('circFull');
+      circ.hide('rotator');
+      circ.show('rotatorFull');
+      figure.fnMap.exec('circSetup', 0.9, 'circle');
+    },
+  });
+
   // slides.push({
   //   clear: true,
   //   scenarioCommon: ['default', 'left', 'top'],
