@@ -1,54 +1,27 @@
 /* eslint-disable camelcase */
-/* global colSin, colRad, colCos, colCot, colTan, colSec, colCsc, colTheta */
-/* global color1, figure, colOpp, colHyp, colAdj */
+/* global colSin, colCos, colCot, colTan, colSec, colCsc, colTheta,
+   figure, colOpp, colHyp, colAdj */
 
 function makeEquation() {
-  const lines = (linesIn, translation = {}, alignment = {}) => {
-    const contentLines = [];
-    linesIn.forEach((line) => {
-      const [content, justify, baselineSpace] = line;
-      contentLines.push({
-        content, justify, baselineSpace: baselineSpace || 0.5,
-      });
-    });
-    return {
-      content: {
-        lines: {
-          content: contentLines,
-          baselineSpace: 0.5,
-          justify: 'element',
-        },
-      },
-      translation,
-      alignment,
-    };
-  };
-  const lines1 = contentLines => ({
-    // content: {
-    lines: {
-      content: contentLines,
-      baselineSpace: 0.5,
-      justify: 'element',
-    },
-    // },
-    // translation,
-    // alignment,
-  });
   const cont = (content, width = 0.6, xAlign = 'center') => ({
     container: { content, width, xAlign },
   });
-  const frac = (numerator, symbol, denominator, nSpace = 0.03, dSpace = 0.03, width, overhang = 0.03) => (cont({
-    frac: {
-      numerator, // : cont(numerator, width),
-      symbol,
-      denominator, // : cont(denominator, width),
-      numeratorSpace: nSpace,
-      denominatorSpace: dSpace,
-      scale: 0.95,
-      overhang
-    },
-  }, width, 'right'));
-  const space = { container: ['', 0.6] };
+  function frac(
+    numerator, symbol, denominator, nSpace = 0.03, dSpace = 0.03, width, overhang = 0.03,
+  ) {
+    return cont({
+      frac: {
+        numerator, // : cont(numerator, width),
+        symbol,
+        denominator, // : cont(denominator, width),
+        numeratorSpace: nSpace,
+        denominatorSpace: dSpace,
+        scale: 0.95,
+        overhang,
+      },
+    }, width, 'right');
+  }
+
   figure.add({
     name: 'eqn',
     method: 'equation',
@@ -78,11 +51,6 @@ function makeEquation() {
   const s = (content, strikeNum) => ({
     strike: { content, symbol: `s${strikeNum}`, inSize: false },
   });
-  const b = (content, boxNum) => ({
-    box: {
-      content, symbol: `b${boxNum}`, inSize: false, space: 0.05,
-    },
-  });
   const w1 = 0.28;
   const o1 = 0;
 
@@ -110,9 +78,6 @@ function makeEquation() {
     tBox: {
       content, symbol: `t${boxNum}`, space: 0.25, rightSpace,
     },
-  });
-  const brac = (content, index) => ({
-    brac: [`lb${index}`, content, `rb${index}`],
   });
   figure.add({
     name: 'eqn',
@@ -241,17 +206,6 @@ function makeEquation() {
         theta62: { text: '\u03b8', color: colTheta },
         theta63: { text: '\u03b8', color: colTheta },
         theta64: { text: '\u03b8', color: colTheta },
-        // thetaVal1: { text: '0\u00b0', color: colTheta },
-        // thetaVal2: { text: '0\u00b0', color: colTheta },
-        // thetaVal3: { text: '0\u00b0', color: colTheta },
-        // thetaVal4: { text: '0\u00b0', color: colTheta },
-        // thetaVal5: { text: '0\u00b0', color: colTheta },
-        // thetaVal6: { text: '0\u00b0', color: colTheta },
-        // thetaVal7: { text: '0\u00b0', color: colTheta },
-        // thetaVal8: { text: '0\u00b0', color: colTheta },
-        // thetaVal9: { text: '0\u00b0', color: colTheta },
-        // thetaVal10: { text: '0\u00b0', color: colTheta },
-        // thetaVal11: { text: '0\u00b0', color: colTheta },
         s1: { symbol: 'strike', style: 'forward', lineWidth: 0.008 },
         s2: { symbol: 'strike', style: 'forward', lineWidth: 0.008 },
         s3: { symbol: 'strike', style: 'forward', lineWidth: 0.008 },
@@ -266,22 +220,18 @@ function makeEquation() {
         val4: { text: '0.0000', color: colCsc },
         val5: { text: '0.0000', color: colSec },
         val6: { text: '0.0000', color: colCot },
-        // val7: { text: '0.0000' },
-        // val8: { text: '0.0000' },
-        // val9: { text: '0.0000' },
-        // val10: { text: '0.0000' },
-        // val11: { text: '0.0000' },
-        // val12: { text: '0.0000' },
-        // times1: ' \u00d7 ',
-        // times2: ' \u00d7 ',
-        // times3: ' \u00d7 ',
-        // times4: ' \u00d7 ',
         t1: { symbol: 'tBox' },
         t2: { symbol: 'tBox' },
         t3: { symbol: 'tBox' },
         t4: { symbol: 'tBox' },
         t5: { symbol: 'tBox' },
         t6: { symbol: 'tBox' },
+        t7: { symbol: 'tBox' },
+        t8: { symbol: 'tBox' },
+        t9: { symbol: 'tBox' },
+        t10: { symbol: 'tBox' },
+        t11: { symbol: 'tBox' },
+        t12: { symbol: 'tBox' },
         lb1: { symbol: 'bracket', side: 'left' },
         lb2: { symbol: 'bracket', side: 'left' },
         lb3: { symbol: 'bracket', side: 'left' },
@@ -294,24 +244,6 @@ function makeEquation() {
         rb4: { symbol: 'bracket', side: 'right' },
         rb5: { symbol: 'bracket', side: 'right' },
         rb6: { symbol: 'bracket', side: 'right' },
-        // _90_1: { color: colTheta },
-        // _90_2: { color: colTheta },
-        // _90_3: { color: colTheta },
-        // _90_4: { color: colTheta },
-        // _90_5: { color: colTheta },
-        // _90_6: { color: colTheta },
-        // deg1: { text: '\u00b0', color: colTheta },
-        // deg2: { text: '\u00b0', color: colTheta },
-        // deg3: { text: '\u00b0', color: colTheta },
-        // deg4: { text: '\u00b0', color: colTheta },
-        // deg5: { text: '\u00b0', color: colTheta },
-        // deg6: { text: '\u00b0', color: colTheta },
-        // min1: { text: '\u2212', col: colTheta },
-        // min2: { text: '\u2212', col: colTheta },
-        // min3: { text: '\u2212', col: colTheta },
-        // min4: { text: '\u2212', col: colTheta },
-        // min5: { text: '\u2212', col: colTheta },
-        // min6: { text: '\u2212', col: colTheta },
       },
       phrases: {
         oppHyp: frac(['opp_1s', 'opp_1'], 'v1', ['hyp_1s', 'hyp_1'], 0.01, 0.03, 0.65),
@@ -351,17 +283,6 @@ function makeEquation() {
         cscTheta2: cont(['csc_2', ' ', 'theta62'], w1),
         cscTheta3: cont(['csc_3', ' ', 'theta63'], w1),
         cscTheta4: cont(['csc_4', ' ', 'theta64'], w1),
-        // cosTheta: cont(['cos_1', ' ', 'theta2'], w1),
-        // tanTheta: cont(['tan_1', ' ', 'theta3'], w1),
-        // cscTheta: cont(['csc_1', ' ', 'theta4'], w1),
-        // secTheta: cont(['sec_1', ' ', 'theta5'], w1),
-        // cotTheta: cont(['cot_1', ' ', 'theta6'], w1),
-        // sinThetaG: cont(['sin_0', ' ', 'theta1'], w1),
-        // cosThetaG: cont(['cos_0', ' ', 'theta2'], w1),
-        // tanThetaG: cont(['tan_0', ' ', 'theta3'], w1),
-        // cscThetaG: cont(['csc_0', ' ', 'theta4'], w1),
-        // secThetaG: cont(['sec_0', ' ', 'theta5'], w1),
-        // cotThetaG: cont(['cot_0', ' ', 'theta6'], w1),
         sin: 'sinTheta1',
         sinOne: frac('sinTheta1', 'v7', '_1_11', 0.03, 0.03, w1, o1),
         cos: 'cosTheta1',
@@ -416,6 +337,7 @@ function makeEquation() {
         c3s: lin(['sin', 'cos', 'sinCos', 'oneSin', 'oneCos', s('cosSin', 1)]),
         c3f: lin(['sin', 'cos', 'tan', 'csc', 'sec', 'cot']),
         c3t: lin([t('sin', 1, 1), t('cos', 2, 1), t('tan', 3, 1), t('csc', 4, 1), t('sec', 5, 1), t('cot', 6, 1)]),
+        c3tAlt: lin([t('sin', 7, 1), t('cos', 8, 1), t('tan', 9, 1), t('csc', 10, 1), t('sec', 11, 1), t('cot', 12, 1)]),
 
         c4: cont(lin(['eq7', 'eq8', 'eq9', 'eq10', 'eq11', 'eq12']), 0.3),
         c4f: cont(lin(['', '', 'eq9', 'eq10', 'eq11', 'eq12']), 0.3),
@@ -434,12 +356,6 @@ function makeEquation() {
         cv: lin(['val1', 'val2', 'val3', 'val4', 'val5', 'val6']),
         cfunc: lin(['f1', 'f2', 'f3', 'f4', 'f5', 'f6']),
       },
-      // formDefaults: {
-      //   translation: {
-      //     hyp_1: { style: 'curve', direction: 'down', mag: 0.5 },
-      //     hyp_2: { style: 'curve', direction: 'down', mag: 0.5 },
-      //   },
-      // },
       forms: {
         ratios: ['c1'],
         ratioValues: ['c1', 'c2', 'cv'],
@@ -450,10 +366,10 @@ function makeEquation() {
         build3: ['c1', 'c2', 'c3'],
         build4: ['c1', 'c2', 'c3', 'c4', 'c5'],
         full: ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7'],
-        strike: ['c1', 'c2', 'c3s', 'c4', 'c5s', 'c6', 'c7s'],
-        // final: ['c1f', 'c2', 'c3f', 'c4f', 'c5f'],
+        // strike: ['c1', 'c2', 'c3s', 'c4', 'c5s', 'c6', 'c7s'],
         final: ['c3f', 'c2', 'c5f'],
         value: ['c3t', 'c2', 'c5f', 'c4', 'cv'],
+        valueAlt: ['c3tAlt', 'c2', 'c5f', 'c4', 'cv'],
       },
       position: [-2.8, 1.2],
     },
@@ -463,18 +379,22 @@ function makeEquation() {
         eqnCirc: { position: [-2.8, 1.2] },
         ratioValues: { position: [-2.5, 1.2] },
         circQ1: { position: [-2.5, 1.2] },
+        circFull: { position: [-2.5, 1.2] },
         split: { position: [-2.5, 1.2] },
         tanSecTri: { position: [-2.5, 1.2] },
       },
     },
   });
-  const eqn3 = figure.getElement('eqn');
+  const eqn = figure.getElement('eqn');
   const circ = figure.getElement('circ');
   const [sin, cos, tan] = circ.getElements(['triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan']);
   const [csc, sec, cot] = circ.getElements(['triCotCsc.csc', 'triTanSec.sec', 'triCotCsc.cot']);
-  const [t1, t2, t3, t4, t5, t6] = eqn3.getElements(['t1', 't2', 't3', 't4', 't5', 't6']);
+  const [sinAlt, cosAlt, tanAlt] = circ.getElements(['sinAlt', 'cosAlt', 'tanAlt']);
+  const [cscAlt, secAlt, cotAlt] = circ.getElements(['cscAlt', 'secAlt', 'cotAlt']);
+  const [t1, t2, t3, t4, t5, t6] = eqn.getElements(['t1', 't2', 't3', 't4', 't5', 't6']);
+  const [t7, t8, t9, t10, t11, t12] = eqn.getElements(['t7', 't8', 't9', 't10', 't11', 't12']);
   const makeOnClick = (phrases, elems, line, figElements) => () => {
-    const elements = [...eqn3.getPhraseElements(phrases), ...elems];
+    const elements = [...eqn.getPhraseElements(phrases), ...elems];
     if (
       // line.color[0] === line.defaultColor[0]
       // && line.color[1] === line.defaultColor[1]
@@ -482,10 +402,10 @@ function makeEquation() {
       line.isShown
     ) {
       circ.hide(figElements);
-      eqn3.dim(elements);
+      eqn.dim(elements);
     } else {
       circ.show(figElements);
-      eqn3.undim(elements);
+      eqn.undim(elements);
     }
     if (circ._rotatorFull.isShown) {
       circ._rotatorFull.fnMap.exec('updateCircle');
@@ -511,13 +431,31 @@ function makeEquation() {
   t6.onClick = makeOnClick(
     ['cot', 'oneTan'], ['eq6', 'eq12', 'val6'], cot, ['triCotCsc.cot', 'triCotCsc.rightCot'],
   );
+  t7.onClick = makeOnClick(
+    ['sin', 'oppHyps'], ['eq1', 'eq7', 'val1'], sinAlt, ['sinAlt'],
+  );
+  t8.onClick = makeOnClick(
+    ['cos', 'adjHyps'], ['eq2', 'eq8', 'val2'], cosAlt, ['cosAlt'],
+  );
+  t9.onClick = makeOnClick(
+    ['tan', 'sinCos'], ['eq3', 'eq9', 'val3'], tanAlt, ['tanAlt'],
+  );
+  t10.onClick = makeOnClick(
+    ['csc', 'oneSin'], ['eq4', 'eq10', 'val4'], cscAlt, ['cscAlt'],
+  );
+  t11.onClick = makeOnClick(
+    ['sec', 'oneCos'], ['eq5', 'eq11', 'val5'], secAlt, ['secAlt'],
+  );
+  t12.onClick = makeOnClick(
+    ['cot', 'oneTan'], ['eq6', 'eq12', 'val6'], cotAlt, ['cotAlt'],
+  );
 
   const add = (name, fn) => figure.fnMap.global.add(name, fn);
-  // const get = name => eqn3.getElement(name);
-  const pulse = (elements, centerOn, xAlign = 'center', yAlign = 'middle') => eqn3.pulse({
+  // const get = name => eqn.getElement(name);
+  const pulse = (elements, centerOn, xAlign = 'center', yAlign = 'middle') => eqn.pulse({
     elements, centerOn, xAlign, yAlign, scale: 1.5, duration: 1.5,
   });
-  const sPulse = (element, xAlign = 'center', yAlign = 'middle') => eqn3.pulse({
+  const sPulse = (element, xAlign = 'center', yAlign = 'middle') => eqn.pulse({
     elements: [element], xAlign, yAlign, scale: 1.5, duration: 1.5,
   });
   add('eqnPulseTanAdj', () => sPulse('adj_2', 'center', 'top'));

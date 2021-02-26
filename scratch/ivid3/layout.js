@@ -968,7 +968,7 @@ function makeSlides() {
     show: 'circ.thetaVal',
     hide: 'circ.theta',
     transition: (done) => {
-      figure.fnMap.exec('circSetup', 0.9, 'circle');
+      // figure.fnMap.exec('circSetup', 0.9, 'circle');
       circ.animations.new()
         .scenario({ target: 'circFull', duration: 2 })
         .dissolveIn({ elements: ['circle', 'x', 'y', 'rotatorFull'], duration: 0.5 })
@@ -979,8 +979,43 @@ function makeSlides() {
     steadyState: () => {
       circ.setScenario('circFull');
       circ.hide('rotator');
-      circ.show('rotatorFull');
+      circ.show(['x', 'y', 'circle', 'rotatorFull']);
       figure.fnMap.exec('circSetup', 0.9, 'circle');
+    },
+  });
+
+  slides.push({
+    scenarioCommon: 'circFull',
+    showCommon: { circ: ['circle', 'x', 'y', 'rotatorFull', 'triSinCos.rightSin', 'triCotCsc.rightCot', 'triTanSec.rightTan', 'triTanSec.tan', 'triTanSec.sec', 'triSinCos.sin', 'triSinCos.cos', 'triCotCsc.cot', 'triCotCsc.csc', 'radius', 'xRadius', 'secLight', 'cscLight', 'cotLight', 'tanLight', 'sinLight', 'thetaVal'] },
+    show: 'circ.thetaVal',
+    hide: { circ: ['theta', 'secLight', 'cscLight', 'cotLight', 'tanLight', 'sinLight'] },
+    transition: (done) => {
+      figure.fnMap.exec('circSetup', 0.9, 'circle');
+      circ.hasTouchableElements = false;
+      circ.hide(['secLight', 'cscLight', 'cotLight', 'tanLight', 'sinLight']);
+      circ.animations.new()
+        .dissolveOut({
+          elements: [
+            'triTanSec.tan.label', 'triTanSec.sec.label',
+            'triCotCsc.cot.label', 'triCotCsc.csc.label',
+          ],
+        })
+        .scenarios({ target: 'trans1', duration: 2 })
+        .scenarios({ target: 'trans2', duration: 2 })
+        // .trigger({ callback: 'circToAlt' })
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      circ.hasTouchableElements = true;
+      eqn.showForm('valueAlt');
+      figure.fnMap.exec('circToAlt', 0.9, 'circle');
+      figure.fnMap.exec('circSetup', 0.9, 'circle');
+      // circ.setScenarios('circ');
+      // figure.fnMap.exec('circSetup', 0.9, 'circle');
+    },
+    leaveState: () => {
+      circ.setScenarios('noSplit')
     },
   });
 
@@ -1715,6 +1750,6 @@ function makeSlides() {
 
 
   nav.loadSlides(slides);
-  nav.goToSlide(51);
+  nav.goToSlide(52);
 }
 makeSlides();
