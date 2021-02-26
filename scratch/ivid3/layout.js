@@ -25,7 +25,7 @@ function layout() {
         fixColor: true,
       },
     },
-    // centerText('similarTriangles', 'Similar Triangles'),
+    centerText('background', 'Background'),
     // centerText('chord', '|chord|: from Latin |chorda| - "bowstring"', {
     //   chord: { font: { style: 'italic', family: 'Times New Roman', color: colSin } },
     //   chorda: { font: { style: 'italic', family: 'Times New Roman' } },
@@ -144,7 +144,9 @@ function makeSlides() {
         .dissolveIn({ element: 'allRatios', duration: 0.4 })
         .dissolveIn({ elements: { tris: ['tri1.side20', 'tri1.side12', 'tri2.side20', 'tri2.side12', 'tri3.side20', 'tri3.side12'] }, delay: 0.5, duration: 0.5 })
         .inParallel([
-          similar.animations.scenario({ element: 'tris', target: 'similarSmall', delay: 0.5, duration: 0.8 }),
+          similar.animations.scenario({
+            element: 'tris', target: 'similarSmall', delay: 0.5, duration: 0.8,
+          }),
           similar.animations.dissolveIn({ element: 'eqn', delay: 0.8, duration: 0.5 }),
         ])
         .whenFinished(done)
@@ -243,6 +245,7 @@ function makeSlides() {
     },
     steadyState: () => {
       rightTri.show(['areSimilar']);
+      rightTri.hide('haveSameAngles');
     },
   });
   slides.push({
@@ -255,15 +258,23 @@ function makeSlides() {
     },
     transition: (done) => {
       rightTri.animations.new()
-        .dissolveIn({
-          elements: [
-            'tri1.side01', 'tri1.side12', 'tri1.side20',
-            'tri2.side01', 'tri2.side12', 'tri2.side20',
-            'tri3.side01', 'tri3.side12', 'tri3.side20',
-            'eqn',
-          ],
-          duration: 0.5,
-        })
+        .inParallel([
+          rightTri.animations.dissolveIn({
+            elements: [
+              'tri1.side01', 'tri1.side12', 'tri1.side20',
+              'tri2.side01', 'tri2.side12', 'tri2.side20',
+              'tri3.side01', 'tri3.side12', 'tri3.side20',
+              'eqn',
+            ],
+            duration: 0.5,
+          }),
+          rightTri.animations.dissolveOut({
+            elements: [
+              'tri1.angle0', 'tri2.angle0', 'tri.angle0',
+            ],
+            duration: 0.5,
+          }),
+        ])
         .whenFinished(done)
         .start();
     },
@@ -274,11 +285,20 @@ function makeSlides() {
         'tri3.side01', 'tri3.side12', 'tri3.side20',
         'eqn',
       ]);
+      rightTri.hide([
+        'tri1.angle0', 'tri2.angle0', 'tri.angle0',
+      ]);
     },
   });
 
   slides.push({
     scenarioCommon: 'similar',
+    showCommon: {
+      'rightTri.tri': ['line', 'angle1', 'angle2'],
+      'rightTri.tri1': ['line', 'angle1', 'angle2'],
+      'rightTri.tri2': ['line', 'angle1', 'angle2'],
+      rightTri: ['allTriangles', 'areSimilar'],
+    },
     form: 'ratios',
     fromForm: 'ratios',
     transition: (done) => {
@@ -287,7 +307,12 @@ function makeSlides() {
       rightTri.animations.new()
         .dissolveOut({
           elements: [
-            'tri1', 'tri2', 'tri3', 'eqn', 'allTriangles', 'areSimilar', 'tri.angle0',
+            'tri1.side01', 'tri1.side12', 'tri1.side20', 'tri1.line',
+            'tri2.side01', 'tri2.side12', 'tri2.side20', 'tri2.line',
+            'tri3.side01', 'tri3.side12', 'tri3.side20', 'tri3.line',
+            'tri1.angle1', 'tri2.angle1', 'tri3.angle1',
+            'tri1.angle2', 'tri2.angle2', 'tri3.angle2',
+            'eqn', 'allTriangles', 'areSimilar',
           ],
           duration: 0.5,
         })
@@ -422,7 +447,7 @@ function makeSlides() {
   slides.push({
     scenarioCommon: 'nameDefs',
     showCommon: {
-      circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'sinLight', 'tanLight', 'cscLight', 'secLight', 'cotLight', 'triTanSec.rightTan', 'triSinCos.rightSin', 'triCotCsc.rightCot', 'triTanSec.tan', 'theta'],
+      circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'sinLight', 'tanLight', 'cscLight', 'secLight', 'cotLight', 'triTanSec.rightTan', 'triSinCos.rightSin', 'triCotCsc.rightCot', 'triTanSec.tan', 'theta', 'tanTheta'],
       lines: ['circle', 'line'],
     },
     show: { lines: ['tangent', 'radius', 'rightAngle'] },
@@ -430,13 +455,27 @@ function makeSlides() {
     form: null,
     transition: (done) => {
       circ.animations.new()
-        .dissolveIn({ element: 'triTanSec.tan', duration: 0.5 })
+        .dissolveIn({ elements: ['triTanSec.tan', 'tanTheta'], duration: 0.5 })
+        .trigger({ callback: 'circPulseTanTheta', duration: 0 })
         .trigger({ callback: 'circPulseTan', duration: 1.5 })
         .whenFinished(done)
         .start();
     },
     steadyState: () => {
       circ._triTanSec._tan.show();
+      figure.fnMap.exec('linesSetTan');
+    },
+  });
+
+  slides.push({
+    scenarioCommon: 'nameDefs',
+    showCommon: {
+      circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'sinLight', 'tanLight', 'cscLight', 'secLight', 'cotLight', 'triTanSec.rightTan', 'triSinCos.rightSin', 'triCotCsc.rightCot', 'triTanSec.tan', 'theta'],
+      lines: ['circle', 'line'],
+    },
+    show: { lines: ['tangent', 'radius', 'rightAngle'] },
+    dissolve: { out: 'circ.tanTheta.label' },
+    steadyState: () => {
       figure.fnMap.exec('linesSetTan');
     },
   });
@@ -596,6 +635,7 @@ function makeSlides() {
       figure.fnMap.exec('circSetup', 0.9, 'quarter');
       figure.shortCuts = { 0: 'circToRot' };
       circ.highlight(['triCotCsc.cot', 'thetaComp', 'eqn']);
+      circ._cotLight.show();
     },
     dissolve: {
       out: ['lines.halfChord', 'lines.dullChord', 'lines.sine', 'lines.jya', 'lines.circle'],
@@ -915,10 +955,13 @@ function makeSlides() {
     form: 'final',
     transition: (done) => {
       eqn.animations.new()
-        .dim({
-          elements: eqn.getPhraseElements(['cosSin', 'oneCsc', 'cotCsc', 'oneCot', 'cscCot']),
-          duration: 1,
-        })
+        .goToForm({ target: 'fullBoxes', animate: 'move', duration: 1 })
+        .delay(2)
+        .goToForm({ target: 'strike', animate: 'move', duration: 1 })
+        // .dim({
+        //   elements: eqn.getPhraseElements(['cosSin', 'oneCsc', 'cotCsc', 'oneCot', 'cscCot']),
+        //   duration: 1,
+        // })
         .inParallel([
           eqn.animations.goToForm({
             target: 'finalPre', duration: 3, animate: 'move', dissolveOutTime: 2, delay: 1,
@@ -1036,6 +1079,6 @@ function makeSlides() {
 
 
   nav.loadSlides(slides);
-  nav.goToSlide(49);
+  nav.goToSlide(0);
 }
 makeSlides();

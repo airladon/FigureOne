@@ -168,6 +168,7 @@ function layoutCirc() {
         { scale: [1, -1], rotation: 0, position: [0, 0] },
         { scale: [1, -1], rotation: defaultAngle, position: [0, 0] },
       ),
+      lineWithLabel('tanTheta', colTan, [{ tan: { color: [0, 0, 0, 0] } }, ' ', { theta: { text: '\u03b8', color: colTheta, style: 'italic' } }]),
       tri(
         'triCotCsc',
         [
@@ -339,6 +340,7 @@ function layoutCirc() {
   const [cos, sin] = get({ triSinCos: ['cos', 'sin'] });
   const [cot, csc] = get({ triCotCsc: ['cot', 'csc'] });
   const [tan, sec] = get({ triTanSec: ['tan', 'sec'] });
+  const [tanTheta] = get(['tanTheta']);
   const boundsRects = {
     title: new Fig.Rect(-0.1, -0.1, radius + 2.5, radius + 0.7),
     quarter: new Fig.Rect(-0.1, -0.1, radius + 3, radius + 2),
@@ -503,6 +505,16 @@ function layoutCirc() {
         tan.label.location = xSign > 0 ? 'right' : 'left';
       }
       tan.setEndPoints(
+        tanLine.p1, tanLine.p2,
+        // arrow: arrow(isClipped),
+      );
+    }
+    if (tanTheta.isShown) {
+      const [tanLine] = clip([xSign * radius, 0], [xSign * radius, ySign * tanVal]);
+      if (tanTheta._label.isShown) {
+        tanTheta.label.location = xSign > 0 ? 'right' : 'left';
+      }
+      tanTheta.setEndPoints(
         tanLine.p1, tanLine.p2,
         // arrow: arrow(isClipped),
       );
@@ -972,6 +984,7 @@ function layoutCirc() {
     circle.setScenarios('noSplit');
   });
   addPulseFn('circPulseTan', triTanSec._tan._label, 'left', 'middle');
+  addPulseFn('circPulseTanTheta', circle._tanTheta._label, 'left', 'middle');
   addPulseFn('circPulseCot', triCotCsc._cot._label, 'center', 'bottom');
   addPulseFn('circPulseCsc', triCotCsc._csc._label, 'right', 'bottom');
   addPulseFn('circPulseCos', triSinCos._cos._label, 'center', 'top');

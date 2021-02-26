@@ -51,6 +51,9 @@ function makeEquation() {
   const s = (content, strikeNum) => ({
     strike: { content, symbol: `s${strikeNum}`, inSize: false },
   });
+  const b = (content, boxNum) => ({
+    strike: { content, symbol: `b${boxNum}`, inSize: false, space: 0.1 },
+  });
   const w1 = 0.28;
   const o1 = 0;
 
@@ -232,6 +235,12 @@ function makeEquation() {
         t10: { symbol: 'tBox' },
         t11: { symbol: 'tBox' },
         t12: { symbol: 'tBox' },
+        b1: { symbol: 'box', line: { width: thin }, color: color1 },
+        b2: { symbol: 'box', line: { width: thin }, color: color1 },
+        b3: { symbol: 'box', line: { width: thin }, color: color1 },
+        b4: { symbol: 'box', line: { width: thin }, color: color1 },
+        b5: { symbol: 'box', line: { width: thin }, color: color1 },
+        b6: { symbol: 'box', line: { width: thin }, color: color1 },
         lb1: { symbol: 'bracket', side: 'left' },
         lb2: { symbol: 'bracket', side: 'left' },
         lb3: { symbol: 'bracket', side: 'left' },
@@ -331,10 +340,11 @@ function makeEquation() {
         c2_1: cont(lin(['eq1', 'eq2', '', '', '', '']), 0.3),
 
         c3: lin(['sin', 'cos', 'sinCos', 'oneSin', 'oneCos', 'cosSin']),
+        c3b: lin([b('sin', 1), b('cos', 2), 'sinCos', 'oneSin', 'oneCos', 'cosSin']),
         c3_0: lin(['sinOne', '', '', '', '', '']),
         c3_1: lin(['sin', '', '', '', '', '']),
         c3_2: lin(['sin', 'cos', '', '', '', '']),
-        c3s: lin(['sin', 'cos', 'sinCos', 'oneSin', 'oneCos', s('cosSin', 1)]),
+        c3s: lin([b('sin', 1), b('cos', 2), 'sinCos', 'oneSin', 'oneCos', s('cosSin', 1)]),
         c3f: lin(['sin', 'cos', 'tan', 'csc', 'sec', 'cot']),
         c3t: lin([t('sin', 1, 1), t('cos', 2, 1), t('tan', 3, 1), t('csc', 4, 1), t('sec', 5, 1), t('cot', 6, 1)]),
         c3tAlt: lin([t('sin', 7, 1), t('cos', 8, 1), t('tan', 9, 1), t('csc', 10, 1), t('sec', 11, 1), t('cot', 12, 1)]),
@@ -343,7 +353,8 @@ function makeEquation() {
         c4f: cont(lin(['', '', 'eq9', 'eq10', 'eq11', 'eq12']), 0.3),
 
         c7: lin(['tanSec', 'oneSec', 'tan', 'secTan', 'sec', 'oneTan']),
-        c7s: lin([s('tanSec', 2), s('oneSec', 3), 'tan', s('secTan', 4), 'sec', 'oneTan']),
+        c7b: lin(['tanSec', 'oneSec', b('tan', 5), 'secTan', b('sec', 6), 'oneTan']),
+        c7s: lin([s('tanSec', 2), s('oneSec', 3), b('tan', 5), s('secTan', 4), b('sec', 6), 'oneTan']),
         c5fPre: lin(['oppHyp', 'adjHyp', 'sinCos', 'oneSin', 'oneCos', 'oneTan']),
         c5f: lin(['oppHyps', 'adjHyps', 'sinCos', 'oneSin', 'oneCos', 'oneTan']),
 
@@ -351,7 +362,8 @@ function makeEquation() {
         c6f: cont(lin(['', '', 'eq15', '', '', '']), 0.3),
 
         c5: lin(['oneCsc', 'cotCsc', 'oneCot', 'csc', 'cscCot', 'cot']),
-        c5s: lin([s('oneCsc', 5), s('cotCsc', 6), s('oneCot', 7), 'csc', s('cscCot', 8), 'cot']),
+        c5b: lin(['oneCsc', 'cotCsc', 'oneCot', b('csc', 3), 'cscCot', b('cot', 4)]),
+        c5s: lin([s('oneCsc', 5), s('cotCsc', 6), s('oneCot', 7), b('csc', 3), s('cscCot', 8), b('cot', 4)]),
         c7f: lin(['', '', 'oppAdjs', '', '', '']),
 
         cv: lin(['val1', 'val2', 'val3', 'val4', 'val5', 'val6']),
@@ -368,7 +380,8 @@ function makeEquation() {
         build3: ['c1', 'c2', 'c3'],
         build4: ['c1', 'c2', 'c3', 'c4', 'c5'],
         full: ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7'],
-        // strike: ['c1', 'c2', 'c3s', 'c4', 'c5s', 'c6', 'c7s'],
+        fullBoxes: ['c1', 'c2', 'c3b', 'c4', 'c5b', 'c6', 'c7b'],
+        strike: ['c1', 'c2', 'c3s', 'c4', 'c5s', 'c6', 'c7s'],
         finalPre: ['c3f', 'c2', 'c5fPre'],
         final: ['c3f', 'c2', 'c5f'],
         value: ['c3t', 'c2', 'c5f', 'c4', 'cv'],
