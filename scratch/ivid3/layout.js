@@ -25,7 +25,7 @@ function layout() {
         fixColor: true,
       },
     },
-    centerText('background', 'Background'),
+    centerText('background', 'Background: Similar Triangles'),
     // centerText('chord', '|chord|: from Latin |chorda| - "bowstring"', {
     //   chord: { font: { style: 'italic', family: 'Times New Roman', color: colSin } },
     //   chorda: { font: { style: 'italic', family: 'Times New Roman' } },
@@ -94,6 +94,18 @@ function makeSlides() {
     enterStateCommon: () => {
       figure.fnMap.exec('circSetup', 0.9, 'title');
     },
+  });
+
+  slides.push({
+    scenarioCommon: ['title'],
+    dissolve: {
+      out: [
+        'title',
+        { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc'] },
+      ],
+      in: 'background',
+    },
+
   });
 
   // /*
@@ -931,6 +943,7 @@ function makeSlides() {
       circ.setScenario('tanSecTri');
     },
   });
+
   slides.push({
     scenarioCommon: 'tanSecTri',
     showCommon: { circ: ['theta', 'triTanSec.tan', 'triTanSec.sec', 'triTanSec.rightTan', 'rotator', 'xQ1'] },
@@ -952,11 +965,18 @@ function makeSlides() {
   // Simplify
   slides.push({
     showCommon: { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.rightSin', 'triCotCsc.rightCot', 'triTanSec.rightTan', 'triTanSec.tan', 'triTanSec.sec', 'triSinCos.sin', 'triSinCos.cos', 'triCotCsc.cot', 'triCotCsc.csc', 'radius', 'xRadius', 'secLight', 'cscLight', 'cotLight', 'tanLight', 'sinLight', 'theta'] },
+    form: 'fullBoxes',
+  });
+  slides.push({ form: 'fullNames' })
+
+  // Simplify
+  slides.push({
+    // showCommon: { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.rightSin', 'triCotCsc.rightCot', 'triTanSec.rightTan', 'triTanSec.tan', 'triTanSec.sec', 'triSinCos.sin', 'triSinCos.cos', 'triCotCsc.cot', 'triCotCsc.csc', 'radius', 'xRadius', 'secLight', 'cscLight', 'cotLight', 'tanLight', 'sinLight', 'theta'] },
     form: 'final',
     transition: (done) => {
       eqn.animations.new()
-        .goToForm({ target: 'fullBoxes', animate: 'move', duration: 1 })
-        .delay(2)
+        // .goToForm({ target: 'fullBoxes', animate: 'move', duration: 1 })
+        // .delay(2)
         .goToForm({ target: 'strike', animate: 'move', duration: 1 })
         // .dim({
         //   elements: eqn.getPhraseElements(['cosSin', 'oneCsc', 'cotCsc', 'oneCot', 'cscCot']),
@@ -969,7 +989,7 @@ function makeSlides() {
           circ.animations.scenario({ target: 'circQ1', duration: 3, delay: 3 }),
         ])
         .goToForm({
-          target: 'final', duration: 1, animate: 'move', dissolveOutTime: 2, delay: 0,
+          target: 'final', duration: 0.4, animate: 'move', dissolveOutTime: 0.5, delay: 0,
         })
         .whenFinished(done)
         .start();
@@ -1079,6 +1099,6 @@ function makeSlides() {
 
 
   nav.loadSlides(slides);
-  nav.goToSlide(0);
+  nav.goToSlide(12);
 }
 makeSlides();

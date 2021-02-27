@@ -210,15 +210,15 @@ function setupRecorder() {
   saveButton.onclick = () => recorder.save();
   recorder.subscriptions.add('durationUpdated', (d) => { state.duration = d; });
 
-  // fetch('states.json')
-  //   .then(response => response.json())
-  //   .then(json => recorder.loadStates(json));
+  fetch('states.json')
+    .then(response => response.json())
+    .then(json => recorder.loadStates(json));
 
-  // fetch('events.json')
-  //   .then(response => response.json())
-  //   .then(json => recorder.loadEvents(json));
+  fetch('events.json')
+    .then(response => response.json())
+    .then(json => recorder.loadEvents(json));
 
-  // recorder.loadAudio(new Audio('./audio.m4a'));
+  recorder.loadAudio(new Audio('./audio.m4a'));
 }
 
 setupRecorder();

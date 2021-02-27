@@ -298,7 +298,7 @@ function layoutRight() {
     //     .start();
     // });
   };
-  movePad.subscriptions.add('setTransform', () => {
+  movePad.fnMap.add('updateMovePad', () => {
     const { x, y } = movePad.transform.t();
     const angle = Math.atan2(y, x);
     const hyp = Math.sqrt(x ** 2 + y ** 2);
@@ -313,17 +313,15 @@ function layoutRight() {
     rotLine.custom.updatePoints({ length: Math.max(hyp, minHypotenuse) });
     update();
   });
-  rotLine.subscriptions.add('setTransform', () => {
+  movePad.subscriptions.add('setTransform', 'updateMovePad');
+
+  rotLine.fnMap.add('updateRotLine', () => {
     const { x, y } = movePad.transform.t();
     const hyp = Math.sqrt(x ** 2 + y ** 2);
     const r = rotLine.getRotation();
-    // const maxY = 2;
-    // if (hyp * Math.sin(r) > maxY) {
-    //   movePad.setPosition(hyp * Math.cos(r), maxY);
-    // } else {
     movePad.setPosition(hyp * Math.cos(r), hyp * Math.sin(r));
-    // }
   });
+  rotLine.subscriptions.add('setTransform', 'updateRotLine');
   // sizeLine.subscriptions.add('setTransform', () => {
   //   const r = rotLine.getRotation();
   //   hypotenuse = sizeLine.getPosition().x / Math.cos(r);
