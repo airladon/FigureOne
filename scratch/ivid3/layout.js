@@ -416,6 +416,7 @@ function makeSlides() {
     },
     steadyState: () => {
       circ.show(['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc']);
+      rightTri.hide();
     },
   });
 
@@ -1099,6 +1100,6 @@ function makeSlides() {
 
 
   nav.loadSlides(slides);
-  nav.goToSlide(12);
+  nav.goToSlide(15);
 }
 makeSlides();

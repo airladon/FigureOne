@@ -992,10 +992,12 @@ function layoutCirc() {
   addPulseFn('circPulseSin', triSinCos._sin._label, 'left', 'middle');
   rotator.subscriptions.add('setTransform', 'updateCircle');
   rotatorFull.subscriptions.add('setTransform', 'updateCircle');
-  triCotCsc.subscriptions.add('setTransform', () => {
+  triCotCsc.fnMap.add('updateRotation', () => {
     const r = triCotCsc.getRotation();
     triCotCsc._cot.updateLabel(r);
     triCotCsc._csc.updateLabel(r);
     triCotCsc._unit.updateLabel(r);
   });
+  triCotCsc.subscriptions.add('setTransform', 'updateRotation');
+  triCotCsc.subscriptions.add('setState', 'updateRotation');
 }

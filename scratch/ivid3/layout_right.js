@@ -314,6 +314,7 @@ function layoutRight() {
     update();
   });
   movePad.subscriptions.add('setTransform', 'updateMovePad');
+  movePad.subscriptions.add('setState', 'updateMovePad');
 
   rotLine.fnMap.add('updateRotLine', () => {
     const { x, y } = movePad.transform.t();
@@ -322,6 +323,7 @@ function layoutRight() {
     movePad.setPosition(hyp * Math.cos(r), hyp * Math.sin(r));
   });
   rotLine.subscriptions.add('setTransform', 'updateRotLine');
+  rotLine.subscriptions.add('setState', 'updateRotLine');
   // sizeLine.subscriptions.add('setTransform', () => {
   //   const r = rotLine.getRotation();
   //   hypotenuse = sizeLine.getPosition().x / Math.cos(r);

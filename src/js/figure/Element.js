@@ -1224,6 +1224,7 @@ class FigureElement {
   }
 
   stateSet() {
+    this.subscriptions.publish('setState');
   }
 
   // execFn(fn: string | Function | null, ...args: Array<any>) {
@@ -3294,6 +3295,20 @@ class FigureElement {
     return this.move.bounds;
   }
 
+  getShown() {
+    if (this.isShown) {
+      return [this];
+    }
+    return [];
+  }
+
+  getUid(uid: string) {
+    if (uid === this.uid) {
+      return this;
+    }
+    return null;
+  }
+
   /**
    * Show element
    */
@@ -5099,6 +5114,40 @@ class FigureElementCollection extends FigureElement {
       }
     });
     return elements;
+  }
+
+  getShown() {
+    if (this.isShown === false) {
+      return [];
+    }
+    // const elements = this.getAllElements();
+    const shown = [this];
+    // elements.forEach((element) => {
+    //   if (element.isShown) {
+    //     shown.push(element);
+    //   }
+    // });
+    this.drawOrder.forEach((elementName) => {
+      const element = this.elements[elementName];
+      shown.push(...element.getShown());
+    });
+    return shown;
+  }
+
+  getUid(uid: string) {
+    if (uid === this.uid) {
+      return this;
+    }
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+    // this.drawOrder.forEach((elementName) => {
+      const element = this.elements[this.drawOrder[i]];
+      const result = element.getUid(uid);
+      if (result !== null) {
+        return result;
+      }
+    }
+    // });
+    return null;
   }
 
 
