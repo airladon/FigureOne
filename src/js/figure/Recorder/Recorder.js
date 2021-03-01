@@ -1208,7 +1208,6 @@ class Recorder {
     }
 
     const finished = () => {
-      console.log('Finished start playback', this.pauseState)
       if (this.pauseState == null) {
         // console.log('setting time')
         this.setToTime(fromTime, true);
