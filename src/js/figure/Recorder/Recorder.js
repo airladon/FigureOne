@@ -362,6 +362,7 @@ class Recorder {
     this.lastRecordTime = null;
     this.eventsToPlay = [];
     this.lastSeekTime = null;
+    this.referenceIndex = 0;
   }
 
   loadAudio(audio: HTMLAudioElement) {
@@ -575,6 +576,7 @@ class Recorder {
       this.statesCache.diffs = payload.diffs;
       this.statesCache.baseReference = payload.baseReference;
       this.statesCache.references = payload.references;
+      // console.log(payload)
       this.mergeEventsCache();
       this.mergeStatesCache();
       this.duration = this.calcDuration();
@@ -595,9 +597,11 @@ class Recorder {
       precision: this.precision,
       ignoreShown: true,
     });
+    // console.log(this.reference, state)
     if (this.state === 'recording') {
       // this.statesCache.addReference(state, this.reference);
       if (this.worker != null) {
+        // console.log('posting')
         this.worker.postMessage({
           message: 'addReference',
           payload: {
@@ -606,6 +610,8 @@ class Recorder {
             basedOn: '__base',
           },
         });
+      } else {
+        this.states.addReference(state, this.reference);
       }
     } else {
       this.states.addReference(state, this.reference);
@@ -745,7 +751,9 @@ class Recorder {
     this.stopTimeouts();
 
     // $FlowFixMe
-    this.worker.postMessage({ message: 'get' });
+    if (this.worker != null) {
+      this.worker.postMessage({ message: 'get' });
+    }
     if (this.audio) {
       this.audio.pause();
       this.isAudioPlaying = false;
@@ -830,7 +838,7 @@ class Recorder {
     // console.log('recordState', performance.now() - start);
   }
 
-  recordCurrentStateAsReference(refName: string, basedOn: '__base') {
+  recordCurrentStateAsReference(refName: string, basedOn: string = '__base') {
     const state = this.figure.getState({
       precision: this.precision,
       ignoreShown: true,

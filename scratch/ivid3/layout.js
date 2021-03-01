@@ -880,6 +880,7 @@ function makeSlides() {
     },
     enterStateCommon: () => {
       circ.highlight('triSinCos');
+      figure.shortCuts = { 0: 'circToRot' };
       figure.fnMap.exec('circSetup', 0.9, 'quarter');
     },
     scenarioCommon: 'split',
@@ -895,6 +896,7 @@ function makeSlides() {
     form: 'build4',
     enterStateCommon: () => {
       figure.fnMap.exec('circSetup', 0.9, 'quarter');
+      figure.shortCuts = { 0: 'circToRot' };
       circ.highlight('triCotCsc');
     },
     transition: (done) => {
@@ -922,6 +924,7 @@ function makeSlides() {
     },
     enterStateCommon: () => {
       figure.fnMap.exec('circSetup', 0.9, 'quarter');
+      figure.shortCuts = { 0: 'circToRot' };
       circ.highlight('triTanSec');
     },
     transition: (done) => {
@@ -950,6 +953,7 @@ function makeSlides() {
     showCommon: { circ: ['theta', 'triTanSec.tan', 'triTanSec.sec', 'triTanSec.rightTan', 'rotator', 'xQ1'] },
     enterStateCommon: () => {
       figure.fnMap.exec('circSetup', 0.9, 'quarter');
+      figure.shortCuts = { 0: 'circToRot' };
     },
     dissolve: {
       out: 'circ.triTanSec.unit',
@@ -968,7 +972,7 @@ function makeSlides() {
     showCommon: { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.rightSin', 'triCotCsc.rightCot', 'triTanSec.rightTan', 'triTanSec.tan', 'triTanSec.sec', 'triSinCos.sin', 'triSinCos.cos', 'triCotCsc.cot', 'triCotCsc.csc', 'radius', 'xRadius', 'secLight', 'cscLight', 'cotLight', 'tanLight', 'sinLight', 'theta'] },
     form: 'fullBoxes',
   });
-  slides.push({ form: 'fullNames' })
+  slides.push({ form: 'fullNames' });
 
   // Simplify
   slides.push({
@@ -1030,7 +1034,9 @@ function makeSlides() {
         2: 'eqn1TanSecOne',
         3: 'eqn1SecTan',
         4: 'eqn1CscSec',
+        0: 'circToRot',
       };
+      figure.recorder.addCurrentStateAsReference();
     },
   });
 
@@ -1060,6 +1066,7 @@ function makeSlides() {
       circ.hide('rotator');
       circ.show(['x', 'y', 'circle', 'rotatorFull']);
       figure.fnMap.exec('circSetup', 0.9, 'circle');
+      figure.recorder.addCurrentStateAsReference();
     },
   });
 
@@ -1092,6 +1099,7 @@ function makeSlides() {
       eqn.showForm('valueAlt');
       figure.fnMap.exec('circToAlt', 0.9, 'circle');
       figure.fnMap.exec('circSetup', 0.9, 'circle');
+      figure.recorder.addCurrentStateAsReference();
     },
     leaveState: () => {
       circ.setScenarios('noSplit');
@@ -1100,6 +1108,6 @@ function makeSlides() {
 
 
   nav.loadSlides(slides);
-  nav.goToSlide(15);
+  nav.goToSlide(53);
 }
 makeSlides();
