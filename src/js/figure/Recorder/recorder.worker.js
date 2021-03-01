@@ -22,7 +22,7 @@ addEventListener('message', (event) => {
     });
   } else if (message === 'add') {
     cache.add(payload.now, payload.state, payload.reference, payload.lastRecordTimeCount);
-  } else if (message === 'addReferece') {
+  } else if (message === 'addReference') {
     cache.addReference(payload.state, payload.refName, payload.basedOn);
   }
 });

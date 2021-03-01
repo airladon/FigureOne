@@ -14,19 +14,20 @@ The trigonometric functions apply the study of similar triangles to right angle 
 * So All right angle triangles with the same angle theta have the same set of angles and will be similar
 * Meaning all right angle triangles with angle theta will have equal corresponding side ratios
 * This is the important, so let me say it again. All right angle triangles, with the same angle theta, will have the same corresponding side ratios.
-* Ok, so let's develop this, by naming the sides relative to theta and measuring the different side ratios. Here we can move the top corner of the triangle, to look at the different ratios for different triangles. Now if we are careful, and try to keep theta constant we can see that the ratios stay constant, as we just showed they should with similar triangles. If on the other hand we change the angle by moving the hypotenuse, we can see the ratios change, and so we can say the ratios are dependant on, or a function of theta.
+* Ok, so let's develop this, by naming the sides relative to theta and measuring the different side ratios. Here we can move the top corner of the triangle, to look at the different ratios for different triangles. Now if we're careful, and try and keep theta constant we can see that the ratios stay constant, as we just showed they should with similar triangles. If on the other hand we change the angle by moving the hypotenuse, we can see the ratios change, and so we can say the ratios are dependant on, or a function of theta.
 > These ratios are constant when theta is constant, but change when with theta, and so are a dependant on, or a function of theta.
 * These are the trigonometric functions, which because of similar triangles, apply to right angle triangles of all sizes.
 * This geometry then shows how the trigonometric functions are related and where their names come from.
-* So starting with their names, firstly, a tangent line is a line that touches the circle at one point, and is perpendicular to the radius line at the same point. The word tagent comes from the latin word meaning to touch.
+
+* So starting with their names, we first need to know that a line that touches the circle at one point, and is perpendicular to the radius line at the same point, is called a tangent line, where the word tangent comes from the latin word meaning to touch.
 * And so we call the line opposite theta that's touching the circle at a right angle to the radius, the tangent, or just tan for short. Note that the tangent is a function of theta, because as we change theta, the length of the tangent line changes, though here we will leave off the theta to keep the diagram as simple as possible.
 * Secondly, a line that cuts through the circle is called a secant line, where the word secant comes from the latin word meaning to cut.
 * And so we call the line adjacent to theta, that cuts through the circle the secant, or just sec for short, remembering the sec is also a function of theta.
-* Thirdly the line between any two points on a circle is a chord line where the word chord comes from the Latin word meaning bowstring, and you might see the bow in the arc. The line opposite theta and inside the circle is a half chord, and while the Sanskrit roots meant just that, a half-chord or half bowstring, the more recent Latin translation lost this meaning, and so while our word sine comes from this translation, we can think of the sine as the half-chord as that's what it is. And we often abbreviate the sine without the e.
+* Thirdly the line between any two points on a circle is a chord line where the word chord comes from the Latin word meaning bowstring, and you might see the bow in the arc. This means the line opposite theta and inside the circle is a half chord, and while the Sanskrit roots for this line described just that, a half-chord or half bowstring, our word sine, which we often abreviate without the e, comes from the more recent Latin translation that lost this meaning.
 > While this lines name has its roots from Sanskrit meaning half-cord or half bowstring, the more recent translation into Latin lost this meaning. Nevertheless, we can think of the sine as the half cord as that's what it is.
 > This line is a half cord, and our word sine derived from Latin has its roots in Sanskrit and Ancient Greek as a half cord or half bowstring.
 * The remaining lines in our geometry are then these first three lines related to the complementary angle of theta.
-* So the top horizontal line is tangent of the complementary angle, and so we call it the complimentary tangent of theta, cotangent, cotan or just cot.
+* So the top horizontal line is the tangent of the complementary angle, and so we call it the complimentary tangent of theta, cotangent, cotan or just cot.
 * We also have a secant of the complementary angle, and so we call it the cosecant, cosec or csc.
 * And our final line is the sine of the complementary angle, and so we call it the cosine or cos.
 * Now, we can show how these names relate to the ratios by recognizing our geometry is actually three similar triangles, each with a side of length 1 in a different position relative to theta.
@@ -40,16 +41,16 @@ The trigonometric functions apply the study of similar triangles to right angle 
 > And we are left with a number of relationships between the trigonometric functions - but you don't need to remember them all. In fact, you just remember a small portion, you can derive the rest relatively easily. Firstly, we can identify
 > Each ratio has an expression that it is equal to one of our named sides, and these are the names of the trigonometric functions.
 > We also have two columns of relationships between functions, which for now we will pair down to just those that are most convenient to remember, as all others can be derived from them.
-* And now we've defined and named our trigonmetric functions, and found some useful relationships.
-* Now, we can use our interactive geometry to play around and get a feel for what these functions are, find other ways that they're related and get an idea of their bounds.
+* And finally we've defined and named our trigonmetric functions
+* so now, we can use our interactive geometry to play around and get a feel for what these functions are, find other ways that they're related and get an idea of their bounds.
 * To play around, you can change the angle theta, by draggin the sec or cosec lines, and you can touch the various relationships to the left to turn on and off lines.
 
 > Now, its time to explore the interactive geometry, and find some other interesting relationships and properties of the trigonometric functions, as well as get an intuitive feel for them. So we can change the geometry by changing the angle theta, and we can turn on and off lines by touching the relevant rows in the equations here.
 > These are not the only relationships or properties, and they can also be found from studying the math, but sometimes a picture can highlight relationships that might not be as obvious in the Math.
 * Let's start by comparing the sine and the tan, and we can see as the angle gets smaller, the sine, the tan and the arc length betwen them all approach the same length. In fact, this is a well known limit and is used throughout calculus.
 * Next comparing the Sec and Cosec, we can see that at 45ª their lengths are the same, which is expected as they are compliments of each other, and so, we can expect the same for the other complimentary pairs, the sine and cosine, and tan and cot.
-* Now let's look at the sine and cosine, and it forms a right angle trianlge with the unit radius. So we can use pythagorean theorem to relate them.
-* We can similarly show this with the tan and sec. Here we can make an additional observation that the sec is the hypotenuse, and therefore it's magnitude must always be greater than the tan.
+* Now let's look at the sine and cosine, and they form a right angle triangle with the unit radius. So we can use the pythagorean theorem to relate them, and we can also see as 1 is the hypotenuse, then the length of the sine and cosine must always be less than 1.
+* We can similarly show this with the tan and sec. but here the sec is the hypotenuse, and therefore it's length must always be greater than the tan, and always greater than 1.
 * Now, let's extend this geometry out to a full circle and see the trigonometric functions for theta values between 90º and 360º. For instance we can see in the second and third quadrant, the cosine is negative, and the 3rd and 4th quadrants the sine is negative.
 * Let's now change up this geometry to look at the bounds of our functions, and we will do so by flipping and rotating our similar triangles.
 * The first thing we see is the sine and cosine are the x, y coordinates of each point on the circle, and so are limited between -1 and 1.

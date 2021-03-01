@@ -343,7 +343,7 @@ function layoutRight() {
       .start();
   });
 
-  const [side01, side12, side20, angle2] = tri.getElements(['side01', 'side12', 'side20', 'angle2']);
+  const [side01, side12, side20, angle2, angle0] = tri.getElements(['side01', 'side12', 'side20', 'angle2', 'angle0']);
 
   const setEqn = (element, form, forceShow) => {
     if ((element._label.isShown && element.isShown) || forceShow) {
@@ -413,10 +413,10 @@ function layoutRight() {
     angleShowForm('value');
     update();
   };
-  const pulseAngle = element => element.pulseAngle({
-    curve: { scale: 1.7 }, label: { scale: 1.7 }, duration: 1,
+  const pulseAngle = (element, scale = 1.7) => element.pulseAngle({
+    curve: { scale }, label: { scale }, duration: 1,
   });
-  const pulseRight = () => tri.getElement('angle1').pulse({ xAlign: 'right', yAlign: 'bottom', scale: 1.7 });
+  const pulseRight = () => tri.getElement('angle1').pulse({ xAlign: 'right', yAlign: 'bottom', scale: 2 });
   const pulseOpp = () => tri.getElement('side12.label').pulse({ xAlign: 'left', scale: 1.5 });
   const pulseHyp = () => tri.getElement('side01.label').pulse({ xAlign: 'right', yAlign: 'bottom', scale: 1.5 });
   const pulseAdj = () => tri.getElement('side20.label').pulse({ yAlign: 'top', scale: 1.5 });
@@ -432,6 +432,7 @@ function layoutRight() {
   figure.fnMap.global.add('triToNames', toNames.bind(this));
   figure.fnMap.global.add('triToValues', toValues.bind(this));
   figure.fnMap.global.add('triPulseTheta', () => pulseAngle(angle2));
+  figure.fnMap.global.add('triPulseComp', () => pulseAngle(angle0, 1.4));
   figure.fnMap.global.add('triPulseRight', () => pulseRight());
   figure.fnMap.global.add('triPulseOpp', () => pulseOpp());
   figure.fnMap.global.add('triPulseHyp', () => pulseHyp());

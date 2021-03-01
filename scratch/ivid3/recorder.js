@@ -218,7 +218,7 @@ function setupRecorder() {
   //   .then(response => response.json())
   //   .then(json => recorder.loadEvents(json));
 
-  // recorder.loadAudio(new Audio('./audio.m4a'));
+  recorder.loadAudio(new Audio('./audio.m4a'));
 }
 
 setupRecorder();

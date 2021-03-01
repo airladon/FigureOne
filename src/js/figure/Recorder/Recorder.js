@@ -591,15 +591,13 @@ class Recorder {
   }
 
   addCurrentStateAsReference() {
-    this.referenceIndex += 1;
-    this.reference = `ref${this.referenceIndex}`;
-    const state = this.figure.getState({
-      precision: this.precision,
-      ignoreShown: true,
-    });
-    // console.log(this.reference, state)
     if (this.state === 'recording') {
-      // this.statesCache.addReference(state, this.reference);
+      this.referenceIndex += 1;
+      this.reference = `ref${this.referenceIndex}`;
+      const state = this.figure.getState({
+        precision: this.precision,
+        ignoreShown: true,
+      });
       if (this.worker != null) {
         // console.log('posting')
         this.worker.postMessage({
@@ -613,8 +611,6 @@ class Recorder {
       } else {
         this.states.addReference(state, this.reference);
       }
-    } else {
-      this.states.addReference(state, this.reference);
     }
   }
 

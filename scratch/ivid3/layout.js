@@ -1,10 +1,8 @@
 /* eslint-disable camelcase */
 /* globals figure, colTan, colCot, colCsc, color2, colSec, colTheta
-   colCsc, centerText */
+   colCsc, centerText, leftText */
 
 function layout() {
-  
-
   figure.add([
     {
       name: 'title',
@@ -25,7 +23,8 @@ function layout() {
         fixColor: true,
       },
     },
-    centerText('background', 'Background: Similar Triangles'),
+    leftText('background1', 'Similar Triangles', {}, [-1.8, 0]),
+    leftText('background2', 'Similar Triangles  +  Right Angle Triangles', {}, [-1.8, 0]),
     // centerText('chord', '|chord|: from Latin |chorda| - "bowstring"', {
     //   chord: { font: { style: 'italic', family: 'Times New Roman', color: colSin } },
     //   chorda: { font: { style: 'italic', family: 'Times New Roman' } },
@@ -103,9 +102,13 @@ function makeSlides() {
         'title',
         { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc'] },
       ],
-      in: 'background',
+      in: 'background1',
     },
+  });
 
+  slides.push({
+    showCommon: ['background1'],
+    dissolve: { in: 'background2' },
   });
 
   // /*
@@ -119,7 +122,7 @@ function makeSlides() {
   // */
   slides.push({
     clear: true,
-    dissolve: { in: 'similar.allAngles' },
+    dissolve: { out: ['background1', 'background2'], in: 'similar.allAngles' },
   });
   slides.push({
     clear: true,
@@ -165,7 +168,11 @@ function makeSlides() {
         .start();
     },
     steadyState: () => {
-      similar._tris.show(['tri1.side20', 'tri1.side12', 'tri2.side20', 'tri2.side12', 'tri3.side20', 'tri3.side12']);
+      similar._tris.show([
+        'tri1.side20', 'tri1.side12',
+        'tri2.side20', 'tri2.side12',
+        'tri3.side20', 'tri3.side12',
+      ]);
       similar.show(['allRatios']);
       similar.hide('allAngles');
       similar._tris.setScenario('similarSmall');
@@ -185,15 +192,35 @@ function makeSlides() {
   slides.push({
     clear: true,
     scenarioCommon: 'center',
-    show: ['rightTri.tri.line', 'rightTri.tri.angle1'],
+    // show: ['rightTri.tri.line', 'rightTri.tri.angle1'],
+    fromForm: { 'similar.eqn': 'CA' },
+    form: null,
+    dissolve: {
+      out: [
+        {
+          'similar._tris': [
+            'tri1.side12', 'tri1.side01',
+            'tri2.side12', 'tri2.side01',
+            'tri3.side12', 'tri3.side01',
+            'tri1.line', 'tri1.angle0', 'tri1.angle1', 'tri1.angle2',
+            'tri2.line', 'tri2.angle0', 'tri2.angle1', 'tri2.angle2',
+            'tri3.line', 'tri3.angle0', 'tri3.angle1', 'tri3.angle2',
+          ],
+        },
+        'similar.eqn',
+        'similar.allRatios',
+      ],
+      in: ['rightTri.tri.line', 'rightTri.tri.angle1'],
+    },
     enterStateCommon: () => {
       figure.fnMap.exec('triSetup', [2, 1.5], 'names');
       figure.shortCuts = {
         1: 'triPulseRight',
         2: 'triPulseTheta',
-        3: 'triPulseOpp',
-        4: 'triPulseHyp',
-        5: 'triPulseAdj',
+        3: 'triPulseComp',
+        4: 'triPulseOpp',
+        5: 'triPulseHyp',
+        6: 'triPulseAdj',
         0: 'triAnimatePadTo',
       };
     },
@@ -212,6 +239,7 @@ function makeSlides() {
   });
 
 
+  // All right trianlges have same angles
   slides.push({
     transition: (done) => {
       rightTri.animations.new()
@@ -240,6 +268,8 @@ function makeSlides() {
       rightTri.setScenario('similar');
     },
   });
+
+  // All right triangles are similar
   slides.push({
     scenarioCommon: 'similar',
     showCommon: {
@@ -260,6 +290,8 @@ function makeSlides() {
       rightTri.hide('haveSameAngles');
     },
   });
+
+  // Show corresponding ratios eqn
   slides.push({
     scenarioCommon: 'similar',
     showCommon: {
@@ -303,12 +335,14 @@ function makeSlides() {
     },
   });
 
+  // Named sides
   slides.push({
     scenarioCommon: 'similar',
     showCommon: {
+      'rightTri.tri3': ['line', 'angle1', 'angle2', 'side01', 'side12', 'side20'],
+      'rightTri.tri1': ['line', 'angle1', 'angle2', 'side01', 'side12', 'side20'],
+      'rightTri.tri2': ['line', 'angle1', 'angle2', 'side01', 'side12', 'side20'],
       'rightTri.tri': ['line', 'angle1', 'angle2'],
-      'rightTri.tri1': ['line', 'angle1', 'angle2'],
-      'rightTri.tri2': ['line', 'angle1', 'angle2'],
       rightTri: ['allTriangles', 'areSimilar'],
     },
     form: 'ratios',
@@ -326,7 +360,7 @@ function makeSlides() {
             'tri1.angle2', 'tri2.angle2', 'tri3.angle2',
             'eqn', 'allTriangles', 'areSimilar',
           ],
-          duration: 0.5,
+          duration: 1.5,
         })
         .scenario({ start: 'similar', target: 'ratioValues', duration: 1.5 })
         .inParallel([
@@ -976,7 +1010,6 @@ function makeSlides() {
 
   // Simplify
   slides.push({
-    // showCommon: { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.rightSin', 'triCotCsc.rightCot', 'triTanSec.rightTan', 'triTanSec.tan', 'triTanSec.sec', 'triSinCos.sin', 'triSinCos.cos', 'triCotCsc.cot', 'triCotCsc.csc', 'radius', 'xRadius', 'secLight', 'cscLight', 'cotLight', 'tanLight', 'sinLight', 'theta'] },
     form: 'final',
     transition: (done) => {
       eqn.animations.new()
@@ -1036,7 +1069,7 @@ function makeSlides() {
         4: 'eqn1CscSec',
         0: 'circToRot',
       };
-      figure.recorder.addCurrentStateAsReference();
+      // figure.recorder.addCurrentStateAsReference();
     },
   });
 
@@ -1066,7 +1099,9 @@ function makeSlides() {
       circ.hide('rotator');
       circ.show(['x', 'y', 'circle', 'rotatorFull']);
       figure.fnMap.exec('circSetup', 0.9, 'circle');
-      figure.recorder.addCurrentStateAsReference();
+      // console.log('adding Reference')
+      // circ.animations.cleanAnimations();
+      // figure.recorder.addCurrentStateAsReference();
     },
   });
 
@@ -1099,7 +1134,8 @@ function makeSlides() {
       eqn.showForm('valueAlt');
       figure.fnMap.exec('circToAlt', 0.9, 'circle');
       figure.fnMap.exec('circSetup', 0.9, 'circle');
-      figure.recorder.addCurrentStateAsReference();
+      // circ.animations.cleanAnimations();
+      // figure.recorder.addCurrentStateAsReference();
     },
     leaveState: () => {
       circ.setScenarios('noSplit');
@@ -1108,6 +1144,7 @@ function makeSlides() {
 
 
   nav.loadSlides(slides);
-  nav.goToSlide(53);
+  // nav.goToSlide(53);
+  nav.goToSlide(11);
 }
 makeSlides();
