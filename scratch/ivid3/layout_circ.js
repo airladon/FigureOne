@@ -890,10 +890,18 @@ function layoutCirc() {
     }
   }
   const rotatorUpdateCircle = () => {
-    updateCircle(Fig.tools.g2.clipAngle(rotator.transform.r(), '0to360'));
+    // console.log('r', rotator.transform.r())
+    if (rotator.isShown) {
+      // console.log(rotator.transform.r())
+      updateCircle(Fig.tools.g2.clipAngle(rotator.transform.r(), '0to360'));
+      // console.log(rotator.transform.r())
+    }
   };
   const rotatorFullUpdateCircle = () => {
-    updateCircle(Fig.tools.g2.clipAngle(rotatorFull.transform.r(), '0to360'));
+    // console.log('f', rotator.transform.r())
+    if (rotatorFull.isShown) {
+      updateCircle(Fig.tools.g2.clipAngle(rotatorFull.transform.r(), '0to360'));
+    }
   };
   rotator.fnMap.add('updateCircle', () => rotatorUpdateCircle());
   rotatorFull.fnMap.add('updateCircle', () => rotatorFullUpdateCircle());
@@ -915,6 +923,8 @@ function layoutCirc() {
       rotatorFull.setRotation(ang);
     }
   });
+  rotator.subscriptions.add('setState', 'updateCircle');
+  rotatorFull.subscriptions.add('setState', 'updateCircle');
 
   const addPulseFn = (name, element, xAlign, yAlign) => {
     figure.fnMap.global.add(name, () => {
@@ -993,6 +1003,9 @@ function layoutCirc() {
   rotator.subscriptions.add('setTransform', 'updateCircle');
   rotatorFull.subscriptions.add('setTransform', 'updateCircle');
   triCotCsc.fnMap.add('updateRotation', () => {
+    if (!triCotCsc.isShown) {
+      return;
+    }
     const r = triCotCsc.getRotation();
     triCotCsc._cot.updateLabel(r);
     triCotCsc._csc.updateLabel(r);

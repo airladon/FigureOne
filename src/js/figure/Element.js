@@ -6157,6 +6157,9 @@ class FigureElementCollection extends FigureElement {
   }
 
   stateSet() {
+    // if (this.parent != null && this.parent.name === 'circ') {
+    //   console.log(this.name)
+    // }
     super.stateSet();
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       this.elements[this.drawOrder[i]].stateSet();

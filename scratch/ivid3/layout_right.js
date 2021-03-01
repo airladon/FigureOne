@@ -299,6 +299,9 @@ function layoutRight() {
     // });
   };
   movePad.fnMap.add('updateMovePad', () => {
+    if (!rightTri.isShown) {
+      return;
+    }
     const { x, y } = movePad.transform.t();
     const angle = Math.atan2(y, x);
     const hyp = Math.sqrt(x ** 2 + y ** 2);

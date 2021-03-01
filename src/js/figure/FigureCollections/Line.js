@@ -829,12 +829,68 @@ export default class CollectionsLine extends FigureElementCollection {
     //   const optionsToUse = joinObjects({}, ...options);
     //   return new anim.TriggerAnimationStep(optionsToUse);
     // }
+    this.fnMap.add('transformToLine', this.transformToLine.bind(this));
+    this.subscriptions.add('setTransform', 'transformToLine');
+  }
+
+  /** A line has:
+   *    - length
+   *    - p1, p2
+   *    - angle
+   *    - position
+   *    - reference alignment
+   *
+   * Two ways to define a line:
+   *  - p1, p2
+   *  - position, align, length, angle
+   *
+   * Line is defined by:
+   *  - primitive line: full length, angle = 0, aligned in draw space with align
+   *  - transform.translate: moves align position
+   *  - transform.rotate: changes angle
+   */
+  transformToLine() {
+    const r = this.transform.r() || 0;
+    const t = this.transform.t() || new Point(0, 0);
+    const length = this.line.length();
+    const l = new Line(t, length, r);
+    let p1 = [0, 0];
+    if (this.alignDraw === 'start') {
+      p1 = t._dup();
+    } else if (this.alignDraw === 'end') {
+      p1 = l.pointAtPercent(-1);
+    } else if (this.alignDraw === 'center') {
+      p1 = l.pointAtPercent(-0.5);
+    } else if (typeof this.alignDraw === 'number') {
+      p1 = l.pointAtPercent(-this.alignDraw);
+    }
+
+    // if (align === 'start') {
+    //   this.line = new Line(this.line.p1, newLen, this.line.angle());
+    // } else if (align === 'end') {
+    //   this.line = new Line(
+    //     this.line.pointAtLength(this.line.length() - newLen),
+    //     newLen, this.line.angle(),
+    //   );
+    // } else if (align === 'center') {
+    //   this.line = new Line(
+    //     this.line.pointAtLength((this.line.length() - newLen) / 2),
+    //     newLen, this.line.angle(),
+    //   );
+    // } else if (typeof align === 'number') {
+    //   // console.log(align)
+    //   this.line = new Line(
+    //     this.line.pointAtLength((this.line.length() - newLen) * align),
+    //     newLen, this.line.angle(),
+    //   );
+    // }
+    this.line = new Line(p1, length, r);
   }
 
   _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(options),
       'line',
-      'align',
+      'alignDraw',
       // 'length',
       // 'position',
       'width',
@@ -852,6 +908,10 @@ export default class CollectionsLine extends FigureElementCollection {
   }
 
   stateSet() {
+    // if (this.name === 'rotator') {
+    //   debugger;
+    // }
+    super.stateSet();
     this.setupLine();
   }
 

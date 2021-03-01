@@ -763,6 +763,7 @@ class Figure {
       this.animateNextFrame();
       // console.log('triggered')
       this.subscriptions.publish('stateSet');
+      // console.log(this.elements._rightTri.isShown)
     };
 
     let options = {
