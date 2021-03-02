@@ -824,6 +824,8 @@ export default class SlideNavigator {
    * and will be set automatically
    */
   goToSlide(slideIndex: number, from?: 'next' | 'prev' | number) {
+    console.log(slideIndex)
+    // console.trace()
     if (this.slides == null || this.slides.length === 0) {
       return;
     }

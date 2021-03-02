@@ -367,7 +367,6 @@ class Recorder {
 
   loadAudio(audio: HTMLAudioElement) {
     this.audio = audio;
-    console.log(this.audio.preload)
     this.audio.onloadedmetadata = () => {
       this.duration = this.calcDuration();
       this.subscriptions.publish('durationUpdated', this.duration);

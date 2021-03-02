@@ -914,7 +914,8 @@ function layoutCirc() {
     }
     // updateCircle();
   });
-  figure.fnMap.global.add('circSetup', (ang, boundsName) => {
+  figure.fnMap.global.add('circSetup', (payload) => {
+    const [ang, boundsName] = payload;
     bounds = boundsRects[boundsName];
     if (rotator.isShown) {
       rotator.setRotation(ang);
