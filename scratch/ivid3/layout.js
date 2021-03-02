@@ -108,15 +108,18 @@ function makeSlides() {
       ],
       // in: 'background1',
     },
+    time: 21,
   });
 
   slides.push({
     showCommon: ['title'],
     dissolve: { in: 'background1' },
+    time: 24,
   });
   slides.push({
     showCommon: ['background1', 'title'],
     dissolve: { in: 'background2' },
+    time: 26,
   });
 
   // /*
@@ -131,6 +134,7 @@ function makeSlides() {
   slides.push({
     clear: true,
     dissolve: { out: ['background1', 'background2', 'title'], in: 'similar.allAngles' },
+    time: 33,
   });
   slides.push({
     clear: true,
@@ -145,6 +149,7 @@ function makeSlides() {
         ],
       },
     },
+    time: 36,
   });
   slides.push({
     clear: true,
@@ -185,6 +190,7 @@ function makeSlides() {
       similar.hide('allAngles');
       similar._tris.setScenario('similarSmall');
     },
+    time: 38.5,
   });
 
   // /*
@@ -232,18 +238,21 @@ function makeSlides() {
         0: 'triAnimatePadTo',
       };
     },
+    time: 49,
   });
 
   // Theta
   slides.push({
     showCommon: ['rightTri.tri.line', 'rightTri.tri.angle1', 'rightTri.tri.angle2'],
     dissolve: { in: 'rightTri.tri.angle2' },
+    time: 53.5,
   });
 
   // Complementary
   slides.push({
     showCommon: { 'rightTri.tri': ['line', 'angle1', 'angle2', 'angle0'] },
     dissolve: { in: 'rightTri.tri.angle0' },
+    time: 56,
   });
 
 
@@ -275,6 +284,7 @@ function makeSlides() {
       ]);
       rightTri.setScenario('similar');
     },
+    time: 62,
   });
 
   // All right triangles are similar
@@ -297,6 +307,7 @@ function makeSlides() {
       rightTri.show(['areSimilar']);
       rightTri.hide('haveSameAngles');
     },
+    time: 66,
   });
 
   // Show corresponding ratios eqn
@@ -341,6 +352,7 @@ function makeSlides() {
         'tri1.angle0', 'tri2.angle0', 'tri.angle0',
       ]);
     },
+    time: 72,
   });
 
   // Named sides
@@ -385,6 +397,7 @@ function makeSlides() {
       rightTri.setScenario('ratioValues');
       rightTri.show(['tri.side01', 'tri.side12', 'tri.side20']);
     },
+    time: '1:16',
   });
 
   /*
@@ -414,6 +427,7 @@ function makeSlides() {
       figure.fnMap.exec('triSetup', [2, 1.5], 'values', true);
       // figure.shortCuts = { 1: 'triAnimatePadTo' };
     },
+    time: '1:22.2',
   });
 
   slides.push({
@@ -432,8 +446,9 @@ function makeSlides() {
     steadyState: () => {
       figure.fnMap.exec('triSetup', [2, 1.5], 'names', false);
     },
+    time: '1:48',
   });
-  slides.push({ form: 'names' });
+  slides.push({ form: 'names', time: '1:52' });
 
   /*
   .########....###....##....##

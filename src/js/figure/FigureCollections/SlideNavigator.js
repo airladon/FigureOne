@@ -329,6 +329,7 @@ class CollectionsSlideNavigator extends FigureElementCollection {
    */
   loadSlides(slides: Array<OBJ_SlideNavigatorSlide>) {
     this.nav.slides = slides;
+    this.nav.loadRecorder();
     this.nav.goToSlide(0);
   }
 

@@ -978,9 +978,9 @@ class Recorder {
     if (time < 0) {
       time = 0;
     }
-    if (this.states.diffs.length === 0) {
-      return;
-    }
+    // if (this.states.diffs.length === 0) {
+    //   return;
+    // }
     if (this.state === 'recording') {
       this.stopRecording();
     } else if (this.state === 'playing') {
@@ -1583,6 +1583,9 @@ class Recorder {
       return;
     }
     const state = this.states.getFromIndex(index);
+    if (state == null) {
+      return;
+    }
     this.figure.setState(state);
   }
 

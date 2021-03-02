@@ -353,6 +353,18 @@ export default class SlideNavigator {
       }
     };
     this.collection.recorder.addEventType('slide', processSlide, true);
+    const processAutoSlide = (payload) => {
+      const [slideNo] = payload;
+      if (this.currentSlideIndex === slideNo - 1) {
+        this.nextSlide(true);
+      } else if (slideNo !== 0) {
+        this.goToSlide(slideNo - 1);
+        this.nextSlide(true);
+      } else {
+        this.goToSlide(slideNo);
+      }
+    };
+    this.collection.recorder.addEventType('autoSlide', processAutoSlide, true);
     this.collection.fnMap.global.add('slideNavigatorTransitionDone', this.transitionDone.bind(this));
     this.from = 'prev';
 
@@ -403,6 +415,33 @@ export default class SlideNavigator {
         }
       }
     }
+    this.loadRecorder();
+  }
+
+  loadRecorder() {
+    if (this.slides == null || this.slides.length === 0) {
+      return;
+    }
+    let lastTime = 0;
+    this.slides.forEach((slide, index) => {
+      const { time, delta } = slide;
+      if (time != null) {
+        let t = time;
+        if (typeof time === 'string') {
+          const splitTime = time.split(':');
+          const minutes = parseInt(splitTime[0], 10);
+          const seconds = parseFloat(splitTime[1]);
+          t = minutes * 60 + seconds;
+        }
+        this.collection.recorder.events.autoSlide.list.push([t, [index]]);
+        lastTime = time;
+        return;
+      }
+      if (delta != null) {
+        lastTime += delta;
+        this.collection.recorder.events.autoSlide.list.push([lastTime, [index]]);
+      }
+    });
   }
 
   setEquations(equationsIn: Array<string | Equation>) {

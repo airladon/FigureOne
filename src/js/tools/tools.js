@@ -1056,7 +1056,7 @@ class ObjectTracker {
   }
 
   getFromIndex(index: number) {
-    if (index > this.diffs.length) {
+    if (index > this.diffs.length || this.diffs.length === 0) {
       return null;
     }
     const [, basedOn, diff] = this.diffs[index];
