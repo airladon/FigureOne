@@ -963,6 +963,30 @@ class Recorder {
     // });
   }
 
+  showEvent(eventName: string, precision: number = 3) {
+    const out = [];
+    this.events[eventName].list.forEach((event) => {
+      const [time, payload] = event;
+      let payloadStr;
+      if (Array.isArray(payload)) {
+        payloadStr = '';
+        const payloadOut = [];
+        payload.forEach((item) => {
+          if (typeof item === 'string') {
+            payloadOut.push(`'${item}'`);
+          } else {
+            payloadOut.push(round(item, precision));
+          }
+        });
+        payloadStr = payloadOut.join(', ');
+      } else {
+        payloadStr = payload;
+      }
+      out.push(`[${round(time, 4)}, [${payloadStr}]]`);
+    });
+    return out.join(',\n');
+  }
+
   // ////////////////////////////////////
   // ////////////////////////////////////
   // Seeking

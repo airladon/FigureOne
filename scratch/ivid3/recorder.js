@@ -199,7 +199,7 @@ function setupRecorder() {
       recorder.stopRecording();
     } else {
       const currentTime = recorder.getCurrentTime();
-      recorder.startRecording(currentTime);
+      recorder.startRecording(currentTime, ['autoSlide', 'autoCursor', 'autoTouch', 'autoCursorMove', 'autoExec']);
       if (currentTime === 0) {
         recorder.recordEvent('slide', ['goto', 0], 0);
       }

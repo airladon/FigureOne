@@ -418,30 +418,64 @@ export default class SlideNavigator {
     this.loadRecorder();
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  convertTime(timeIn: string | number): number {
+    let t;
+    if (typeof timeIn === 'string') {
+      const splitTime = timeIn.split(':');
+      const minutes = parseInt(splitTime[0], 10);
+      const seconds = parseFloat(splitTime[1]);
+      t = minutes * 60 + seconds;
+    } else {
+      t = timeIn;
+    }
+    return t;
+  }
+
   loadRecorder() {
     if (this.slides == null || this.slides.length === 0) {
       return;
     }
     let lastTime = 0;
     this.slides.forEach((slide, index) => {
-      const { time, delta } = slide;
+      const { time, delta, execDelta } = slide;
       if (time != null) {
-        let t = time;
-        if (typeof time === 'string') {
-          const splitTime = time.split(':');
-          const minutes = parseInt(splitTime[0], 10);
-          const seconds = parseFloat(splitTime[1]);
-          t = minutes * 60 + seconds;
-        }
-        this.collection.recorder.events.autoSlide.list.push([t, [index]]);
+        const t = this.convertTime(time);
+        this.collection.recorder.events.autoSlide.list.push([t, [index], 0]);
         lastTime = time;
-        return;
-      }
-      if (delta != null) {
+      } else if (delta != null) {
         lastTime += delta;
-        this.collection.recorder.events.autoSlide.list.push([lastTime, [index]]);
+        this.collection.recorder.events.autoSlide.list.push([lastTime, [index], 0]);
+      }
+      if (execDelta != null && execDelta.length > 0) {
+        let eDelta = execDelta;
+        if (!Array.isArray(eDelta[0])) {
+          eDelta = [eDelta];
+        }
+        eDelta.forEach((e) => {
+          const { execDeltaTime, command } = e;
+          const t = lastTime + execDeltaTime;
+          this.collection.recorder.events.autoExec.list.push([t, [command], 0]);
+        });
       }
     });
+    this.slides.forEach((slide) => {
+      let { exec } = slide;
+      if (exec != null) {
+        if (exec.length === 0) {
+          return;
+        }
+        if (!Array.isArray(exec[0])) {
+          exec = [exec];
+        }
+        exec.forEach((e) => {
+          const { time, command } = e;
+          const t = this.convertTime(time);
+          this.collection.recorder.events.autoExec.list.push([t, [command], 0]);
+        });
+      }
+    });
+    this.collection.recorder.events.autoExec.list.sort((a, b) => a[0] - b[0]);
   }
 
   setEquations(equationsIn: Array<string | Equation>) {
@@ -863,7 +897,6 @@ export default class SlideNavigator {
    * and will be set automatically
    */
   goToSlide(slideIndex: number, from?: 'next' | 'prev' | number) {
-    console.log(slideIndex)
     // console.trace()
     if (this.slides == null || this.slides.length === 0) {
       return;

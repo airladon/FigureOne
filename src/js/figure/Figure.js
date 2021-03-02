@@ -580,9 +580,27 @@ class Figure {
         this.showCursor('up');
       }
     };
+    const onTouchAuto = (payload) => {
+      // onTouch(payload);
+      if (this.recorder.state === 'recording') {
+        const [action, x, y] = payload;
+        if (action === 'down') {
+          this.touchDown(new Point(x, y));
+        } else {
+          this.touchUp();
+        }
+      }
+    };
     const onCursorMove = (payload) => {
       const [x, y] = payload;
       this.setCursor(new Point(x, y));
+    };
+    const onCursorMoveAuto = (payload) => {
+      if (this.recorder.state === 'recording') {
+        const [x, y] = payload;
+        this.setCursor(new Point(x, y));
+        this.touchMove(new Point(x, y));
+      }
     };
     const moved = (payload) => {
       const [elementPath, transform] = payload;
@@ -663,8 +681,11 @@ class Figure {
     };
 
     this.recorder.addEventType('cursor', onCursor);
+    this.recorder.addEventType('autoCursor', onCursor);
     this.recorder.addEventType('cursorMove', onCursorMove);
+    this.recorder.addEventType('autoCursorMove', onCursorMoveAuto);
     this.recorder.addEventType('touch', onTouch);
+    this.recorder.addEventType('autoTouch', onTouchAuto);
     this.recorder.addEventType('moved', moved);
     this.recorder.addEventType('stopBeingMoved', stopBeingMoved);
     this.recorder.addEventType('startMovingFreely', startMovingFreely);
@@ -674,6 +695,7 @@ class Figure {
     this.recorder.addEventType('elementTextClick', elementClick);
     this.recorder.addEventType('eqnNavClick', eqnNavClick);
     this.recorder.addEventType('exec', exec);
+    this.recorder.addEventType('autoExec', exec);
   }
 
   setDefaultLineWidth(userInputLineWidth: number | null) {
@@ -2237,10 +2259,10 @@ class Figure {
     this.touchMoveHandler(this.mockPreviousTouchPoint, clientPoint);
     this.mockPreviousTouchPoint = clientPoint;
     // $FlowFixMe
-    if (this.elements.elements[this.cursorElementName] != null) {
-      this.showCursor('down', p);
-      // cursor.setPosition(p);
-    }
+    // if (this.elements.elements[this.cursorElementName] != null) {
+    //   this.showCursor('down', p);
+    //   // cursor.setPosition(p);
+    // }
   }
 
   // unpauseLegacy() {
