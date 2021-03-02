@@ -310,6 +310,7 @@ class Recorder {
     Object.keys(this.events).forEach((eventName) => {
       const event = this.events[eventName];
       if (event.list.length > 0) {
+        // console.log(eventsTime, eventName, event.list[event.list.length - 1])
         eventsTime = Math.max(eventsTime, event.list[event.list.length - 1][0]);
       }
     });

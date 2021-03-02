@@ -453,7 +453,7 @@ export default class SlideNavigator {
           eDelta = [eDelta];
         }
         eDelta.forEach((e) => {
-          const { execDeltaTime, command } = e;
+          const [execDeltaTime, command] = e;
           const t = lastTime + execDeltaTime;
           this.collection.recorder.events.autoExec.list.push([t, [command], 0]);
         });
@@ -469,13 +469,12 @@ export default class SlideNavigator {
           exec = [exec];
         }
         exec.forEach((e) => {
-          const { time, command } = e;
+          const [time, command] = e;
           const t = this.convertTime(time);
           this.collection.recorder.events.autoExec.list.push([t, [command], 0]);
         });
       }
     });
-    this.collection.recorder.events.autoExec.list.sort((a, b) => a[0] - b[0]);
   }
 
   setEquations(equationsIn: Array<string | Equation>) {
