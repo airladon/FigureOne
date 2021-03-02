@@ -177,9 +177,9 @@ function layoutLines() {
   });
   add('showBow', () => {
     line.animations.new()
-      .rotation({ target: -angle, duration: 1 })
+      .rotation({ target: -angle, duration: 2 })
       .dissolveIn({ element: bow, duration: 0.5 })
-      .dissolveOut({ element: bow, duration: 0.5, delay: 1 })
+      .dissolveOut({ element: bow, duration: 0.5, delay: 1.5 })
       .start();
   });
   add('showHalfChord', () => {

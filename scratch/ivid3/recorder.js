@@ -31,7 +31,7 @@ function setupRecorder() {
     touch: 'up',
   };
 
-  figure.fnMap.add('navNext', () => figure.getElement('nav').nav.nextSlide());
+  figure.fnMap.add('navNext', () => figure.getElement('nav').nav.nextSlide(true));
   figure.fnMap.add('navPrev', () => figure.getElement('nav').nav.prevSlide());
   figure.fnMap.add('toggleCursor', () => figure.toggleCursor());
   // figure.shortCuts = {
@@ -45,7 +45,8 @@ function setupRecorder() {
     if (keyCode === 's') {
       figure.toggleCursor();
     } else if (keyCode === 'n') {
-      figure.getElement('nav').nav.nextSlide();
+      figure.getElement('nav').nav.nextSlide(true);
+      // console.log('next')
     } else if (keyCode === 'p') {
       figure.getElement('nav').nav.prevSlide();
     } else if (figure.shortCuts[keyCode] != null) {
@@ -198,7 +199,7 @@ function setupRecorder() {
       recorder.stopRecording();
     } else {
       const currentTime = recorder.getCurrentTime();
-      recorder.startRecording(0);
+      recorder.startRecording(currentTime);
       if (currentTime === 0) {
         recorder.recordEvent('slide', ['goto', 0], 0);
       }
@@ -210,13 +211,13 @@ function setupRecorder() {
   saveButton.onclick = () => recorder.save();
   recorder.subscriptions.add('durationUpdated', (d) => { state.duration = d; });
 
-  // fetch('states.json')
-  //   .then(response => response.json())
-  //   .then(json => recorder.loadStates(json));
+  fetch('states.json')
+    .then(response => response.json())
+    .then(json => recorder.loadStates(json));
 
-  // fetch('events.json')
-  //   .then(response => response.json())
-  //   .then(json => recorder.loadEvents(json));
+  fetch('events.json')
+    .then(response => response.json())
+    .then(json => recorder.loadEvents(json));
 
   recorder.loadAudio(new Audio('./audio.m4a'));
 }

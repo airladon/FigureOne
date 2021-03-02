@@ -367,6 +367,7 @@ class Recorder {
 
   loadAudio(audio: HTMLAudioElement) {
     this.audio = audio;
+    console.log(this.audio.preload)
     this.audio.onloadedmetadata = () => {
       this.duration = this.calcDuration();
       this.subscriptions.publish('durationUpdated', this.duration);
@@ -553,10 +554,13 @@ class Recorder {
     this.eventsToPlay = whilePlaying;
     // this.initializePlayback(fromTime);
     this.startEventsPlayback(fromTime);
-    this.startAudioPlayback(fromTime);
+    const audioStarted = this.startAudioPlayback(fromTime);
     this.subscriptions.publish('startRecording');
     this.startRecordingTime = fromTime;
     this.startTimeUpdates();
+    if (!audioStarted) {
+      this.pausePlayback();
+    }
     // console.log('recorder is', this.state);
   }
 
@@ -1315,7 +1319,10 @@ class Recorder {
       this.isAudioPlaying = true;
       this.audio.currentTime = fromTime;
       // debugger;
-      this.audio.play();
+      const playPromise = this.audio.play();
+      if (playPromise === undefined) {
+        return false;
+      }
       const audioEnded = () => {
         this.isAudioPlaying = false;
         if (this.state === 'playing') {
@@ -1328,6 +1335,7 @@ class Recorder {
         audio.addEventListener('ended', audioEnded.bind(this), false);
       }
     }
+    return true;
   }
 
   startTimeUpdates() {

@@ -4,27 +4,29 @@
 
 function layout() {
   figure.add([
-    {
-      name: 'title',
-      method: 'textLines',
-      options: {
-        text: [
-          'The Trigonmetric Functions',
-          {
-            // text: 'Where they come from, and how they relate',
-            text: 'An interactive video',
-            font: { size: 0.1 },
-          },
-        ],
-        position: [0, 1],
-        xAlign: 'center',
-        justify: 'center',
-        font: { size: 0.2, color: [0.3, 0.3, 0.3, 1] },
-        fixColor: true,
-      },
-    },
+    // {
+    //   name: 'subTitle',
+    //   method: 'textLines',
+    //   options: {
+    //     text: [
+    //       // 'The Trigonmetric Functions',
+    //       {
+    //         // text: 'Where they come from, and how they relate',
+    //         text: 'An interactive video',
+    //         font: { size: 0.1 },
+    //       },
+    //     ],
+    //     position: [0, 1],
+    //     xAlign: 'center',
+    //     justify: 'center',
+    //     font: { size: 0.2, color: [0.3, 0.3, 0.3, 0.7] },
+    //     fixColor: true,
+    //   },
+    // },
+    centerText('title', 'The Trigonometric Functions', {}, [0, 1]),
+    centerText('subTitle', 'An interactive video', {}, [0, 0.7], 0.1),
     leftText('background1', 'Similar Triangles', {}, [-1.8, 0]),
-    leftText('background2', 'Similar Triangles  +  Right Angle Triangles', {}, [-1.8, 0]),
+    leftText('background2', 'Similar Triangles  \u2192  Right Angle Triangles', {}, [-1.8, 0]),
     // centerText('chord', '|chord|: from Latin |chorda| - "bowstring"', {
     //   chord: { font: { style: 'italic', family: 'Times New Roman', color: colSin } },
     //   chorda: { font: { style: 'italic', family: 'Times New Roman' } },
@@ -42,7 +44,7 @@ function layout() {
     name: 'cursor',
     method: 'collections.cursor',
     options: {
-      color: [0.5, 0.5, 0, 0.7],
+      color: [0, 0.5, 1, 0.7],
     },
     mods: {
       isShown: false,
@@ -88,26 +90,32 @@ function makeSlides() {
   slides.push({
     scenarioCommon: ['title'],
     showCommon: [
-      'title',
+      'title', 'subTitle',
       { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc'] }],
     enterStateCommon: () => {
       figure.fnMap.exec('circSetup', 0.9, 'title');
+      figure.shortCuts = { 0: 'circToRot' };
     },
   });
 
   slides.push({
     scenarioCommon: ['title'],
+    show: ['title'],
     dissolve: {
       out: [
-        'title',
+        'subTitle',
         { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc'] },
       ],
-      in: 'background1',
+      // in: 'background1',
     },
   });
 
   slides.push({
-    showCommon: ['background1'],
+    showCommon: ['title'],
+    dissolve: { in: 'background1' },
+  });
+  slides.push({
+    showCommon: ['background1', 'title'],
     dissolve: { in: 'background2' },
   });
 
@@ -122,7 +130,7 @@ function makeSlides() {
   // */
   slides.push({
     clear: true,
-    dissolve: { out: ['background1', 'background2'], in: 'similar.allAngles' },
+    dissolve: { out: ['background1', 'background2', 'title'], in: 'similar.allAngles' },
   });
   slides.push({
     clear: true,
@@ -597,7 +605,7 @@ function makeSlides() {
         .dissolveOut({ elements: ['secant'], duration: 0.5 })
         .trigger({ callback: 'linesToChord', duration: 1.5 })
         .dissolveIn({ element: 'chord', duration: 0.5 })
-        .trigger({ callback: 'showBow', duration: 3 })
+        .trigger({ callback: 'showBow', duration: 4.5, delay: 1 })
         .whenFinished(done)
         .start();
     },
@@ -700,7 +708,7 @@ function makeSlides() {
       circ._eqn.hide();
       circ.animations.new()
         .dissolveIn({ element: 'triCotCsc.cot.line', duration: 0.5 })
-        .then(circ._triCotCsc._cot.animations.pulseWidth({ line: 4, duration: 1 }))
+        .then(circ._triCotCsc._cot.animations.pulseWidth({ line: 6, duration: 1 }))
         .dissolveIn({ element: 'eqn', duration: 0.5 })
         .whenFinished(done)
         .start();
@@ -1145,6 +1153,6 @@ function makeSlides() {
 
   nav.loadSlides(slides);
   // nav.goToSlide(53);
-  nav.goToSlide(11);
+  nav.goToSlide(0);
 }
 makeSlides();

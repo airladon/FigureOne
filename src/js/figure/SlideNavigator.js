@@ -342,10 +342,10 @@ export default class SlideNavigator {
     const processSlide = (payload) => {
       const [fromDirection, slideNo] = payload;
       if (fromDirection === 'prev' && this.currentSlideIndex === slideNo - 1) {
-        this.nextSlide();
+        this.nextSlide(true);
       } else if (fromDirection === 'prev') {
         this.goToSlide(slideNo - 1);
-        this.nextSlide();
+        this.nextSlide(true);
       } else if (fromDirection === 'next' && this.currentSlideIndex === slideNo + 1) {
         this.prevSlide();
       } else {
@@ -907,7 +907,9 @@ export default class SlideNavigator {
     // if (this.collection.recorder.state === 'recording') {
     //   this.collection.recorder.recordEvent('slide', ['next', nextSlideIndex]);
     // }
+    // debugger;
     if (this.inTransition) {
+      this.inTransition = false;
       this.collection.stop('complete');
       if (!ignoreTransition) {
         return;

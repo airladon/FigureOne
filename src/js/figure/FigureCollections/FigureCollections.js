@@ -304,12 +304,14 @@ export default class FigureCollections {
     const options = joinObjects(defaultOptions, optionsIn);
     const cursor = this.collection();
     const polygon = {
-      width: options.width,
+      // width: options.width,
       color: options.color,
       radius: options.radius,
       sides: 50,
     };
-    const up = this.primitives.polygon(polygon);
+    const up = this.primitives.polygon(
+      joinObjects({}, polygon, { line: { width: options.width } }),
+    );
     const down = this.primitives.polygon(joinObjects({}, polygon));
     cursor.add('up', up);
     cursor.add('down', down);
