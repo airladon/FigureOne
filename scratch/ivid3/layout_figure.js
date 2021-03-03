@@ -111,7 +111,7 @@ const centerText = (name, text, modifiers = {}, position = [0, 0], size = 0.2) =
   },
 });
 
-const leftText = (name, text, modifiers = {}, position, size = 0.2) => ({
+const leftText = (name, text, modifiers = {}, position, size = 0.2, scenarios = {}) => ({
   name,
   method: 'textLines',
   options: {
@@ -126,6 +126,7 @@ const leftText = (name, text, modifiers = {}, position, size = 0.2) => ({
   },
   mods: {
     isTouchable: true,
+    scenarios,
   //   scenarios: {
   //     top: { position: [-2, 1], scale: 1 },
   //     default: { position: [-2, 0], scale: 1 },

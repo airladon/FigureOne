@@ -1,5 +1,5 @@
 // @flow
-import { joinObjects, SubscriptionManager } from '../tools/tools';
+import { joinObjects, SubscriptionManager, joinObjectsWithOptions } from '../tools/tools';
 import { FigureElementCollection } from './Element';
 import type { FigureElement, TypeElementPath } from './Element';
 import type {
@@ -475,6 +475,7 @@ export default class SlideNavigator {
         });
       }
     });
+    this.collection.recorder.events.autoExec.list.sort((a, b) => a[0] - b[0]);
   }
 
   setEquations(equationsIn: Array<string | Equation>) {
@@ -668,6 +669,12 @@ export default class SlideNavigator {
     const form = this.getForm(index);
     this.showForms(form);
     this.showDissolved(slide);
+    if (slide.transition != null && Array.isArray(slide.transition)) {
+      this.setFinalFromAutoTransition(slide.transition);
+    }
+    if (slide.transition != null && typeof slide.transition === 'object') {
+      this.setFinalFromAutoTransition([slide.transition]);
+    }
     this.collection.fnMap.exec(
       this.getProperty('steadyStateCommon', index, () => {}),
       from, index,
@@ -748,6 +755,111 @@ export default class SlideNavigator {
     }
   }
 
+  // processStep(steps) {
+  //   if (step.in != null) {
+  //     const elements = this.colleciton.getElements(step.in);
+  //     anim.
+  //   }
+  // }
+
+  setFinalFromAutoTransition(stepsIn: Array<Array<Object>> | Array<Object>) {
+    stepsIn.forEach((serialStep) => {
+      let steps;
+      if (!Array.isArray(serialStep)) {
+        steps = [serialStep];
+      } else {
+        steps = serialStep;
+      }
+      steps.forEach((step) => {
+        this.processAutoTransitionSet(step, 'in', 'showAll');
+        this.processAutoTransitionSet(step, 'out', 'hide');
+        this.processAutoTransitionSet(step, 'scenario', 'setScenario', 'target');
+      });
+    });
+  }
+
+  processAutoTransitionAnim(
+    step: Object,
+    key: string,
+    animName: string = '',
+    animSteps: Array<AnimationStep>,
+    defaultOptions: Object = {},
+  ) {
+    if (step[key] != null) {
+      const elements = this.collection.getElements(step[key]);
+      const o = joinObjectsWithOptions({ except: key }, {}, defaultOptions, step);
+      animSteps.push(...elements.map(e => e.animations[animName](o)));
+    }
+  }
+
+  processAutoTransitionSet(
+    step: Object,
+    key: string,
+    setName: string,
+    setKey: string = '',
+  ) {
+    if (step[key] != null) {
+      const elements = this.collection.getElements(step[key]);
+      if (setKey !== '') {
+        elements.map(e => e[setName](step[setKey]))
+      } else {
+        elements.map(e => e[setName]());
+      }
+    }
+  }
+
+  showAutoTransitionDissolveOut(index: number) {
+    const slide = this.slides[index];
+    if (slide.transition == null || typeof slide.transition === 'function') {
+      return;
+    }
+    let stepsIn = slide.transition;
+    if (!Array.isArray(stepsIn)) {
+      stepsIn = [stepsIn];
+    }
+    stepsIn.forEach((serialStep) => {
+      let steps;
+      if (!Array.isArray(serialStep)) {
+        steps = [serialStep];
+      } else {
+        steps = serialStep;
+      }
+      steps.forEach((step) => {
+        if (step.out != null && (step.show == null || step.show !== false)) {
+          const elements = this.collection.getElements(step.out);
+          elements.map(e => e.showAll());
+        }
+      });
+    });
+  }
+
+  autoTransition(stepsIn: Array<Array<Object>> | Array<Object>) {
+    const anim = this.collection.animations.new();
+    stepsIn.forEach((serialStep) => {
+      let steps;
+      if (!Array.isArray(serialStep)) {
+        steps = [serialStep];
+      } else {
+        steps = serialStep;
+      }
+      const animSteps = [];
+      steps.forEach((step) => {
+        this.processAutoTransitionAnim(step, 'in', 'dissolveIn', animSteps, { duration: 0.5 });
+        this.processAutoTransitionAnim(step, 'out', 'dissolveOut', animSteps, { duration: 0.5 });
+        this.processAutoTransitionAnim(step, 'scenario', 'scenario', animSteps, { duration: 2 });
+        if (Object.keys(step).length === 1 && step.delay != null) {
+          animSteps.push(this.collection.animations.delay(step.delay));
+        }
+      });
+      if (animSteps.length === 1) {
+        anim.then(animSteps[0]);
+      } else {
+        anim.inParallel(animSteps);
+      }
+    });
+    anim.whenFinished('slideNavigatorTransitionDone').start();
+  }
+
   transition(from: 'next' | 'prev' | number) {
     this.subscriptions.publish('beforeTransition');
     // let done = () => {
@@ -762,6 +874,12 @@ export default class SlideNavigator {
     const slide = this.slides[this.currentSlideIndex];
     if (typeof slide.transition === 'function') {
       return slide.transition('slideNavigatorTransitionDone', this.currentSlideIndex, from);
+    }
+    if (slide.transition != null && Array.isArray(slide.transition)) {
+      return this.autoTransition(slide.transition);
+    }
+    if (slide.transition != null && typeof slide.transition === 'object') {
+      return this.autoTransition([slide.transition]);
     }
 
     if (slide.dissolve != null) {
@@ -948,6 +1066,7 @@ export default class SlideNavigator {
     this.collection.hideAll();
     this.showElements(index);
     this.showAllDissolved(index);
+    this.showAutoTransitionDissolveOut(index);
     this.hideElements(index);
     this.collection.setScenarios(this.getProperty('scenarioCommon', index, []));
     this.collection.setScenarios(slide.scenario || []);

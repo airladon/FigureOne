@@ -4,41 +4,13 @@
 
 function layout() {
   figure.add([
-    // {
-    //   name: 'subTitle',
-    //   method: 'textLines',
-    //   options: {
-    //     text: [
-    //       // 'The Trigonmetric Functions',
-    //       {
-    //         // text: 'Where they come from, and how they relate',
-    //         text: 'An interactive video',
-    //         font: { size: 0.1 },
-    //       },
-    //     ],
-    //     position: [0, 1],
-    //     xAlign: 'center',
-    //     justify: 'center',
-    //     font: { size: 0.2, color: [0.3, 0.3, 0.3, 0.7] },
-    //     fixColor: true,
-    //   },
-    // },
     centerText('title', 'The Trigonometric Functions', {}, [0, 1]),
     centerText('subTitle', 'An interactive video', {}, [0, 0.7], 0.1),
-    leftText('background1', 'Similar Triangles', {}, [-1.8, 0]),
+    leftText('background1', 'Similar Triangles', {}, [-1.8, 0], 0.2, {
+      default: { position: [-1.8, 0] },
+      center: { position: [-0.5, 0] },
+    }),
     leftText('background2', 'Similar Triangles  \u2192  Right Angle Triangles', {}, [-1.8, 0]),
-    // centerText('chord', '|chord|: from Latin |chorda| - "bowstring"', {
-    //   chord: { font: { style: 'italic', family: 'Times New Roman', color: colSin } },
-    //   chorda: { font: { style: 'italic', family: 'Times New Roman' } },
-    // }, [1.3, 0], 0.15),
-    // centerText('tangent', '|tangent|: from Latin |tangere| - "to touch"', {
-    //   tangent: { font: { style: 'italic', family: 'Times New Roman', color: colTan } },
-    //   tangere: { font: { style: 'italic', family: 'Times New Roman' } },
-    // }, [1.3, 0], 0.15),
-    // centerText('secant', '|secant|: from Latin |secare| - "to cut"', {
-    //   secant: { font: { style: 'italic', family: 'Times New Roman', color: colSec } },
-    //   secare: { font: { style: 'italic', family: 'Times New Roman' } },
-    // }, [1.3, 0], 0.15),
   ]);
   figure.add({
     name: 'cursor',
@@ -88,7 +60,7 @@ function makeSlides() {
   ....##....####....##....########.########
   */
   slides.push({
-    scenarioCommon: ['title'],
+    scenarioCommon: ['default', 'title'],
     showCommon: [
       'title', 'subTitle',
       { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc'] }],
@@ -100,27 +72,40 @@ function makeSlides() {
   });
 
   slides.push({
-    scenarioCommon: ['title'],
     show: ['title'],
-    dissolve: {
-      out: [
-        'subTitle',
-        { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc'] },
+    transition: [
+      [
+        { out: 'subTitle' },
+        { out: { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc'] }, duration: 2 },
       ],
-      // in: 'background1',
-    },
+    ],
+    // dissolve: {
+    //   out: [
+    //     'subTitle',
+    //     { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc'] },
+    //   ],
+    //   // in: 'background1',
+    // },
     time: 21,
   });
 
   slides.push({
+    scenarioCommon: ['default'],
     showCommon: ['title'],
-    dissolve: { in: 'background1' },
-    time: 24,
+    transition: { in: 'background1' },
+    // dissolve: { in: 'background1' },
+    time: 24.5,
   });
   slides.push({
     showCommon: ['background1', 'title'],
-    dissolve: { in: 'background2' },
+    // dissolve: { in: 'background2' },
+    transition: { in: 'background2' },
     time: 26,
+  });
+  slides.push({
+    transition: [
+      [{ out: ['background2', 'title'] }, { scenario: 'background1', target: 'center' }],
+    ],
   });
 
   // /*
@@ -132,26 +117,109 @@ function makeSlides() {
   // .##....##..##..##.....##..##..##.......##.....##.##....##.
   // ..######..####.##.....##.####.########.##.....##.##.....##
   // */
+  // slides.push({
+  //   clear: true,
+  //   // show: 'similar.allAngles',
+  //   scenario: 'similarLarge',
+  //   transition: (done) => {
+  //     console.log('asdf')
+  //     figure.animations.new()
+  //       .dissolveOut({ elements: ['background1', 'background2', 'title'], duration: 0.5 })
+  //       .start();
+  //     similar._tris.animations.new()
+  //       .delay(0.5)
+  //       .dissolveIn({ elements: ['tri1.line', 'tri1.angle0', 'tri1.angle1', 'tri1.angle2'], duration: 0.5 })
+  //       .dissolveIn({ elements: ['tri2.line', 'tri2.angle0', 'tri2.angle1', 'tri2.angle2'], duration: 0.5 })
+  //       .dissolveIn({ elements: ['tri3.line', 'tri3.angle0', 'tri3.angle1', 'tri3.angle2'], duration: 0.5 })
+  //       .dissolveIn({ elements: 'allAngles', duration: 0.5 })
+  //       .whenFinished(done)
+  //       .start();
+  //   },
+  //   steadyState: () => {
+  //     figure.show(['background1', 'background2', 'title']);
+  //     similar._tris.show([
+  //       'tri1.line', 'tri1.angle0', 'tri1.angle1', 'tri1.angle2',
+  //       'tri2.line', 'tri2.angle0', 'tri2.angle1', 'tri2.angle2',
+  //       'tri3.line', 'tri3.angle0', 'tri3.angle1', 'tri3.angle2',
+  //     ]);
+  //   },
+  //   // dissolve: {
+  //   //   in: {
+  //   //     'similar.tris': [
+  //   //       'tri1.line', 'tri1.angle0', 'tri1.angle1', 'tri1.angle2',
+  //   //       'tri2.line', 'tri2.angle0', 'tri2.angle1', 'tri2.angle2',
+  //   //       'tri3.line', 'tri3.angle0', 'tri3.angle1', 'tri3.angle2',
+  //   //     ],
+  //   //   },
+  //   // },
+  //   // time: 36,
+  //   time: 33,
+  // });
   slides.push({
     clear: true,
-    dissolve: { out: ['background1', 'background2', 'title'], in: 'similar.allAngles' },
+    scenarioCommon: 'similarLarge',
+    transition: [
+      { out: 'background1' },
+      { in: { 'similar.tris.tri1': ['line', 'angle0', 'angle1', 'angle2'] }, duration: 1 },
+      // { delay: 1 },
+      { in: { 'similar.tris.tri2': ['line', 'angle0', 'angle1', 'angle2'] }, duration: 1 },
+      // { delay: 1 },
+      { in: { 'similar.tris.tri3': ['line', 'angle0', 'angle1', 'angle2'] }, duration: 1 },
+      // { delay: 1 },
+      { in: 'similar.allAngles' },
+    ],
+    // dissolve: {
+    //   out: ['background1', 'background2', 'title'],
+    //   in: { 'similar.tris.tri1': ['line', 'angle0', 'angle1', 'angle2'] },
+    // },
     time: 33,
   });
-  slides.push({
-    clear: true,
-    show: 'similar.allAngles',
-    scenario: 'similarLarge',
-    dissolve: {
-      in: {
-        'similar.tris': [
-          'tri1.line', 'tri1.angle0', 'tri1.angle1', 'tri1.angle2',
-          'tri2.line', 'tri2.angle0', 'tri2.angle1', 'tri2.angle2',
-          'tri3.line', 'tri3.angle0', 'tri3.angle1', 'tri3.angle2',
-        ],
-      },
-    },
-    time: 36,
-  });
+  // slides.push({
+  //   show: { 'similar.tris.tri1': ['line', 'angle0', 'angle1', 'angle2'] },
+  //   dissolve: {
+  //     in: { 'similar.tris.tri2': ['line', 'angle0', 'angle1', 'angle2'] },
+  //   },
+  //   time: 34,
+  // });
+  // slides.push({
+  //   show: {
+  //     'similar.tris.tri1': ['line', 'angle0', 'angle1', 'angle2'],
+  //     'similar.tris.tri2': ['line', 'angle0', 'angle1', 'angle2'],
+  //   },
+  //   dissolve: {
+  //     in: { 'similar.tris.tri3': ['line', 'angle0', 'angle1', 'angle2'] },
+  //   },
+  //   time: 35,
+  // });
+  // slides.push({
+  //   show: {
+  //     'similar.tris.tri1': ['line', 'angle0', 'angle1', 'angle2'],
+  //     'similar.tris.tri2': ['line', 'angle0', 'angle1', 'angle2'],
+  //     'similar.tris.tri3': ['line', 'angle0', 'angle1', 'angle2'],
+  //   },
+  //   dissolve: { in: 'similar.allAngles' },
+  //   time: 36,
+  // });
+  // slides.push({
+  //   clear: true,
+  //   dissolve: { out: ['background1', 'background2', 'title'], in: 'similar.allAngles' },
+  //   time: 33,
+  // });
+  // slides.push({
+  //   clear: true,
+  //   show: 'similar.allAngles',
+  //   scenario: 'similarLarge',
+  //   dissolve: {
+  //     in: {
+  //       'similar.tris': [
+  //         'tri1.line', 'tri1.angle0', 'tri1.angle1', 'tri1.angle2',
+  //         'tri2.line', 'tri2.angle0', 'tri2.angle1', 'tri2.angle2',
+  //         'tri3.line', 'tri3.angle0', 'tri3.angle1', 'tri3.angle2',
+  //       ],
+  //     },
+  //   },
+  //   time: 36,
+  // });
   slides.push({
     clear: true,
     scenario: 'similarLarge',
@@ -240,6 +308,7 @@ function makeSlides() {
       };
     },
     time: 49,
+    execDelta: [2.5, 'triPulseRight'],
   });
 
   // Theta
@@ -247,6 +316,7 @@ function makeSlides() {
     showCommon: ['rightTri.tri.line', 'rightTri.tri.angle1', 'rightTri.tri.angle2'],
     dissolve: { in: 'rightTri.tri.angle2' },
     time: 53.5,
+    execDelta: [0.5, 'triPulseTheta'],
   });
 
   // Complementary
@@ -261,16 +331,22 @@ function makeSlides() {
   slides.push({
     transition: (done) => {
       rightTri.animations.new()
-        .scenario({ target: 'similar', duration: 1 })
+        .scenario({ target: 'similar', duration: 1.5 })
         .dissolveIn({
-          elements: [
-            'tri1.line', 'tri2.line',
-            'tri1.angle2', 'tri2.angle2',
-            'tri1.angle0', 'tri2.angle0',
-            'tri1.angle1', 'tri2.angle1',
-            'allTriangles', 'haveSameAngles',
-          ],
-          duration: 0.8,
+          elements: ['tri2.line', 'tri2.angle2', 'tri2.angle0', 'tri2.angle1'],
+          duration: 0.5,
+        })
+        .dissolveIn({
+          elements: ['tri1.line', 'tri1.angle2', 'tri1.angle0', 'tri1.angle1'],
+          duration: 0.5,
+        })
+        .dissolveIn({
+          elements: ['allTriangles'],
+          duration: 1,
+        })
+        .dissolveIn({
+          elements: ['haveSameAngles'],
+          duration: 1,
         })
         .whenFinished(done)
         .start();
@@ -285,7 +361,7 @@ function makeSlides() {
       ]);
       rightTri.setScenario('similar');
     },
-    time: 62,
+    time: 60,
   });
 
   // All right triangles are similar
@@ -449,7 +525,7 @@ function makeSlides() {
     },
     time: '1:48',
   });
-  slides.push({ form: 'names', time: '1:52' });
+  slides.push({ form: 'names', time: '1:52', exec: ['1:53.5', 'eqnPulseTrig'] });
 
   /*
   .########....###....##....##
@@ -476,6 +552,7 @@ function makeSlides() {
       circ.show(['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc']);
       rightTri.hide();
     },
+    time: '2:01',
   });
 
   slides.push({
@@ -490,15 +567,15 @@ function makeSlides() {
       figure.animations.new()
         .inParallel([
           eqn.animations.dissolveOut(0.5),
-          circ.animations.scenario({ target: 'nameDefs', duration: 1 }),
+          circ.animations.scenario({ target: 'nameDefs', duration: 1.5 }),
           circ.animations.dissolveOut({ elements: ['triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc'], duration: 1 }),
           lines.animations.dissolveIn({ elements: ['circle'], duration: 0.5 }),
           // figure.animations.trigger({ delay: 0.05, callback: 'circSetup' }),
         ])
         .then(lines.animations.dissolveIn({ elements: ['line'], duration: 0.5 }))
-        .trigger({ callback: 'linesToTan', duration: 1.5 })
-        .dissolveIn({ element: 'lines.tangent', duration: 0.5 })
-        .dissolveIn({ elements: ['lines.radius', 'lines.rightAngle'], duration: 0.5 })
+        .trigger({ callback: 'linesToTan', duration: 3 })
+        .dissolveIn({ elements: ['lines.radius', 'lines.rightAngle'], duration: 0.5, delay: 2.5 })
+        .dissolveIn({ element: 'lines.tangent', duration: 0.5, delay: 3 })
         .whenFinished(done)
         .start();
     },
@@ -513,6 +590,7 @@ function makeSlides() {
     leaveStateCommon: () => {
       circ.undim();
     },
+    time: '2:09.5',
   });
 
   slides.push({
@@ -536,6 +614,7 @@ function makeSlides() {
       circ._triTanSec._tan.show();
       figure.fnMap.exec('linesSetTan');
     },
+    time: '2:29',
   });
 
   slides.push({

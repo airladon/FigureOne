@@ -499,6 +499,15 @@ function makeEquation() {
   add('eqnPulseHypOpp', () => pulse(['hyp_3', 'v4', 'opp_3'], 'v4', 'right'));
   add('eqnPulseHypAdj', () => pulse(['hyp_4', 'v5', 'adj_3'], 'v5', 'right'));
   add('eqnPulseAdjOpp', () => pulse(['adj_4', 'v6', 'opp_4'], 'v6', 'right'));
+  add('eqnPulseTrig', () => {
+    const phrases = ['sin', 'cos', 'tan', 'csc', 'sec', 'cot'];
+    phrases.forEach((phrase) => {
+      const elements = eqn.getPhraseElements(phrase);
+      eqn.pulse({
+        elements, centerOn: elements[0], xAlign: 'left', duration: 1.5,
+      });
+    });
+  });
 
   /*
   .########..#######..##....##....##..

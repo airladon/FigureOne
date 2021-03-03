@@ -1428,6 +1428,9 @@ class Recorder {
 
   playbackEvent(eventName: string) {
     const index = this.eventIndex[eventName];
+    if (this.events[eventName].list.length === 0) {
+      return;
+    }
     const delay = round(this.events[eventName].list[index][0] - this.getCurrentTime(), 8);
 
     if (delay > 0.0001) {

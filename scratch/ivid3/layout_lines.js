@@ -137,7 +137,7 @@ function layoutLines() {
   const add = (name, func) => figure.fnMap.global.add(name, func);
   add('linesToTan', () => {
     line.animations.new()
-      .position({ target: lines.custom.tanPosition, duration: 1.5 })
+      .position({ target: lines.custom.tanPosition, duration: 3 })
       .trigger(() => line.setColor(colTan))
       .start();
   });
