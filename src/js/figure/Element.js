@@ -3297,7 +3297,7 @@ class FigureElement {
 
   getShown() {
     if (this.isShown) {
-      return [this];
+      return [[this.getPath(), this.uid, this]];
     }
     return [];
   }
@@ -5121,7 +5121,7 @@ class FigureElementCollection extends FigureElement {
       return [];
     }
     // const elements = this.getAllElements();
-    const shown = [this];
+    const shown = [[this.getPath(), this.uid, this]];
     // elements.forEach((element) => {
     //   if (element.isShown) {
     //     shown.push(element);

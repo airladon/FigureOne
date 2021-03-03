@@ -275,9 +275,9 @@ function layoutRight() {
       xLine.hide();
     }
     if (x < 0.45 || y < 0.15) {
-      tri._angle1.hide();
+      tri._angle1.SetOpacity(0);
     } else {
-      tri._angle1.show();
+      tri._angle1.setOpacity(1);
     }
 
     const eqn = figure.getElement('eqn');

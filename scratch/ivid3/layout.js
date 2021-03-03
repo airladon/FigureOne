@@ -79,13 +79,6 @@ function makeSlides() {
         { out: { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc'] } },
       ],
     ],
-    // dissolve: {
-    //   out: [
-    //     'subTitle',
-    //     { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc'] },
-    //   ],
-    //   // in: 'background1',
-    // },
     time: 21,
   });
 
@@ -93,12 +86,10 @@ function makeSlides() {
     scenarioCommon: ['default'],
     showCommon: ['title'],
     transition: { in: 'background1' },
-    // dissolve: { in: 'background1' },
     time: 24.5,
   });
   slides.push({
     showCommon: ['background1', 'title'],
-    // dissolve: { in: 'background2' },
     transition: { in: 'background2' },
     time: 26,
   });
@@ -152,47 +143,6 @@ function makeSlides() {
     ],
     time: 38.5,
   });
-  slides.push({
-    clear: true,
-    scenario: 'similarLarge',
-    show: {
-      similar: [{
-        tris: [
-          'tri1.line', 'tri1.angle0', 'tri1.angle1', 'tri1.angle2',
-          'tri2.line', 'tri2.angle0', 'tri2.angle1', 'tri2.angle2',
-          'tri3.line', 'tri3.angle0', 'tri3.angle1', 'tri3.angle2',
-        ],
-      }, 'allAngles'],
-    },
-    fromForm: { 'similar.eqn': 'AB' },
-    form: { 'similar.eqn': 'AB' },
-    transition: (done) => {
-      similar._eqn.hide();
-      similar.animations.new()
-        .dissolveOut({ element: 'allAngles', duration: 0.4 })
-        .dissolveIn({ element: 'allRatios', duration: 0.4 })
-        .dissolveIn({ elements: { tris: ['tri1.side20', 'tri1.side12', 'tri2.side20', 'tri2.side12', 'tri3.side20', 'tri3.side12'] }, delay: 0.5, duration: 0.5 })
-        .inParallel([
-          similar.animations.scenario({
-            element: 'tris', target: 'similarSmall', delay: 0.5, duration: 0.8,
-          }),
-          similar.animations.dissolveIn({ element: 'eqn', delay: 0.8, duration: 0.5 }),
-        ])
-        .whenFinished(done)
-        .start();
-    },
-    steadyState: () => {
-      similar._tris.show([
-        'tri1.side20', 'tri1.side12',
-        'tri2.side20', 'tri2.side12',
-        'tri3.side20', 'tri3.side12',
-      ]);
-      similar.show(['allRatios']);
-      similar.hide('allAngles');
-      similar._tris.setScenario('similarSmall');
-    },
-    time: 38.5,
-  });
 
   // /*
   // .########..####..######...##.....##.########....########.########..####
@@ -207,37 +157,19 @@ function makeSlides() {
   slides.push({
     clear: true,
     scenarioCommon: 'center',
-    // show: ['rightTri.tri.line', 'rightTri.tri.angle1'],
     fromForm: { 'similar.eqn': 'CA' },
     form: null,
-    dissolve: {
-      out: [
-        {
-          'similar._tris': [
-            'tri1.side12', 'tri1.side01',
-            'tri2.side12', 'tri2.side01',
-            'tri3.side12', 'tri3.side01',
-            'tri1.line', 'tri1.angle0', 'tri1.angle1', 'tri1.angle2',
-            'tri2.line', 'tri2.angle0', 'tri2.angle1', 'tri2.angle2',
-            'tri3.line', 'tri3.angle0', 'tri3.angle1', 'tri3.angle2',
-          ],
+    transition: [{
+      out: ['similar.eqn', 'similar.allRatios', {
+        'similar.tris': {
+          tri1: ['side01', 'side12', 'line', 'angle0', 'angle1', 'angle2'],
+          tri2: ['side01', 'side12', 'line', 'angle0', 'angle1', 'angle2'],
+          tri3: ['side01', 'side12', 'line', 'angle0', 'angle1', 'angle2'],
         },
-        'similar.eqn',
-        'similar.allRatios',
-      ],
-      in: ['rightTri.tri.line', 'rightTri.tri.angle1'],
-    },
+      }],
+    }, { in: { 'rightTri.tri': ['line', 'angle1'] } }],
     enterStateCommon: () => {
       figure.fnMap.exec('triSetup', [2, 1.5], 'names');
-      figure.shortCuts = {
-        1: 'triPulseRight',
-        2: 'triPulseTheta',
-        3: 'triPulseComp',
-        4: 'triPulseOpp',
-        5: 'triPulseHyp',
-        6: 'triPulseAdj',
-        0: 'triAnimatePadTo',
-      };
     },
     time: 49,
     execDelta: [2.5, 'triPulseRight'],
@@ -245,8 +177,8 @@ function makeSlides() {
 
   // Theta
   slides.push({
-    showCommon: ['rightTri.tri.line', 'rightTri.tri.angle1', 'rightTri.tri.angle2'],
-    dissolve: { in: 'rightTri.tri.angle2' },
+    showCommon: { 'rightTri.tri': ['line', 'angle1', 'angle2'] },
+    transition: { in: 'rightTri.tri.angle2' },
     time: 53.5,
     execDelta: [0.5, 'triPulseTheta'],
   });
@@ -254,45 +186,18 @@ function makeSlides() {
   // Complementary
   slides.push({
     showCommon: { 'rightTri.tri': ['line', 'angle1', 'angle2', 'angle0'] },
-    dissolve: { in: 'rightTri.tri.angle0' },
+    transition: { in: 'rightTri.tri.angle0' },
     time: 56,
   });
 
-
-  // All right trianlges have same angles
   slides.push({
-    transition: (done) => {
-      rightTri.animations.new()
-        .scenario({ target: 'similar', duration: 1.5 })
-        .dissolveIn({
-          elements: ['tri2.line', 'tri2.angle2', 'tri2.angle0', 'tri2.angle1'],
-          duration: 0.5,
-        })
-        .dissolveIn({
-          elements: ['tri1.line', 'tri1.angle2', 'tri1.angle0', 'tri1.angle1'],
-          duration: 0.5,
-        })
-        .dissolveIn({
-          elements: ['allTriangles'],
-          duration: 1,
-        })
-        .dissolveIn({
-          elements: ['haveSameAngles'],
-          duration: 1,
-        })
-        .whenFinished(done)
-        .start();
-    },
-    steadyState: () => {
-      rightTri.show([
-        'tri1.line', 'tri2.line',
-        'tri1.angle2', 'tri2.angle2',
-        'tri1.angle0', 'tri2.angle0',
-        'tri1.angle1', 'tri2.angle1',
-        'allTriangles', 'haveSameAngles',
-      ]);
-      rightTri.setScenario('similar');
-    },
+    transition: [
+      { scenario: 'rightTri', target: 'similar', duration: 1.5 },
+      { in: { 'rightTri.tri2': ['line', 'angle2', 'angle0', 'angle1'] } },
+      { in: { 'rightTri.tri1': ['line', 'angle2', 'angle0', 'angle1'] } },
+      { in: 'rightTri.allTriangles', duration: 1 },
+      { in: 'rightTri.haveSameAngles', duration: 1 },
+    ],
     time: 60,
   });
 
@@ -303,109 +208,61 @@ function makeSlides() {
       'rightTri.tri': ['line', 'angle1', 'angle2', 'angle0'],
       'rightTri.tri1': ['line', 'angle1', 'angle2', 'angle0'],
       'rightTri.tri2': ['line', 'angle1', 'angle2', 'angle0'],
-      rightTri: ['allTriangles', 'haveSameAngles'],
+      rightTri: ['allTriangles', 'areSimilar'],
     },
-    transition: (done) => {
-      rightTri.animations.new()
-        .dissolveOut({ element: 'haveSameAngles', duration: 0.5 })
-        .dissolveIn({ element: 'areSimilar', duration: 0.5 })
-        .whenFinished(done)
-        .start();
-    },
-    steadyState: () => {
-      rightTri.show(['areSimilar']);
-      rightTri.hide('haveSameAngles');
-    },
+    transition: [
+      { out: 'rightTri.haveSameAngles' },
+      { in: 'rightTri.areSimilar' },
+    ],
     time: 66,
   });
 
   // Show corresponding ratios eqn
   slides.push({
-    scenarioCommon: 'similar',
-    showCommon: {
-      'rightTri.tri': ['line', 'angle1', 'angle2', 'angle0'],
-      'rightTri.tri1': ['line', 'angle1', 'angle2', 'angle0'],
-      'rightTri.tri2': ['line', 'angle1', 'angle2', 'angle0'],
-      rightTri: ['allTriangles', 'areSimilar'],
-    },
-    transition: (done) => {
-      rightTri.animations.new()
-        .inParallel([
-          rightTri.animations.dissolveIn({
-            elements: [
-              'tri1.side01', 'tri1.side12', 'tri1.side20',
-              'tri2.side01', 'tri2.side12', 'tri2.side20',
-              'tri3.side01', 'tri3.side12', 'tri3.side20',
-              'eqn',
-            ],
-            duration: 0.5,
-          }),
-          rightTri.animations.dissolveOut({
-            elements: [
-              'tri1.angle0', 'tri2.angle0', 'tri.angle0',
-            ],
-            duration: 0.5,
-          }),
-        ])
-        .whenFinished(done)
-        .start();
-    },
-    steadyState: () => {
-      rightTri.show([
-        'tri1.side01', 'tri1.side12', 'tri1.side20',
-        'tri2.side01', 'tri2.side12', 'tri2.side20',
-        'tri3.side01', 'tri3.side12', 'tri3.side20',
-        'eqn',
-      ]);
-      rightTri.hide([
-        'tri1.angle0', 'tri2.angle0', 'tri.angle0',
-      ]);
-    },
+    transition: [
+      [
+        {
+          in: [
+            { 'rightTri.tri1': ['side01', 'side12', 'side20'] },
+            { 'rightTri.tri2': ['side01', 'side12', 'side20'] },
+            { 'rightTri.tri3': ['side01', 'side12', 'side20'] },
+            'rightTri.eqn',
+          ],
+        },
+        { out: { rightTri: ['tri1.angle0', 'tri2.angle0', 'tri.angle0'] } },
+      ],
+    ],
     time: 72,
   });
 
   // Named sides
   slides.push({
-    scenarioCommon: 'similar',
+    // scenarioCommon: 'similar',
     showCommon: {
-      'rightTri.tri3': ['line', 'angle1', 'angle2', 'side01', 'side12', 'side20'],
-      'rightTri.tri1': ['line', 'angle1', 'angle2', 'side01', 'side12', 'side20'],
-      'rightTri.tri2': ['line', 'angle1', 'angle2', 'side01', 'side12', 'side20'],
-      'rightTri.tri': ['line', 'angle1', 'angle2'],
-      rightTri: ['allTriangles', 'areSimilar'],
+      rightTri: [
+        { tri1: ['line', 'angle1', 'angle2', 'side01', 'side12', 'side20'] },
+        { tri2: ['line', 'angle1', 'angle2', 'side01', 'side12', 'side20'] },
+        { tri3: ['line', 'angle1', 'angle2', 'side01', 'side12', 'side20'] },
+        { tri: ['line', 'angle1', 'angle2'] },
+        'allTriangles', 'areSimilar',
+      ],
     },
-    form: 'ratios',
-    fromForm: 'ratios',
-    transition: (done) => {
-      eqn.hide();
-      eqn.setScenario('ratioValues');
-      rightTri.animations.new()
-        .dissolveOut({
-          elements: [
-            'tri1.side01', 'tri1.side12', 'tri1.side20', 'tri1.line',
-            'tri2.side01', 'tri2.side12', 'tri2.side20', 'tri2.line',
-            'tri3.side01', 'tri3.side12', 'tri3.side20', 'tri3.line',
-            'tri1.angle1', 'tri2.angle1', 'tri3.angle1',
-            'tri1.angle2', 'tri2.angle2', 'tri3.angle2',
-            'eqn', 'allTriangles', 'areSimilar',
-          ],
-          duration: 1.5,
-        })
-        .scenario({ start: 'similar', target: 'ratioValues', duration: 1.5 })
-        .inParallel([
-          rightTri._tri.animations.dissolveIn({ elements: ['side01', 'side12', 'side20'], duration: 0.8 }),
-          eqn.animations.dissolveIn(0.8),
-        ])
-        .whenFinished(done)
-        .start();
-    },
-    steadyState: () => {
-      rightTri.hide([
-        'tri1', 'tri2', 'tri3', 'eqn', 'allTriangles', 'areSimilar', 'tri.angle0',
-      ]);
-      rightTri.setScenario('ratioValues');
-      rightTri.show(['tri.side01', 'tri.side12', 'tri.side20']);
-    },
+    transition: [
+      {
+        out: [
+          {
+            rightTri: {
+              tri1: ['line', 'angle1', 'angle2', 'side01', 'side12', 'side20'],
+              tri2: ['line', 'angle1', 'angle2', 'side01', 'side12', 'side20'],
+              tri3: ['line', 'angle1', 'angle2', 'side01', 'side12', 'side20'],
+            },
+          },
+          { rightTri: ['eqn', 'allTriangles', 'areSimilar'] },
+        ],
+      },
+      { scenario: 'rightTri', target: 'ratioValues', duration: 1.5 },
+      { in: ['eqn', { 'rightTri.tri': ['side01', 'side12', 'side20'] }] },
+    ],
     time: '1:16',
   });
 

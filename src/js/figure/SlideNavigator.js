@@ -832,6 +832,7 @@ export default class SlideNavigator {
         if (step.in != null && (step.show == null || step.show !== true)) {
           const elements = this.collection.getElements(step.in);
           elements.map(e => e.hide());
+          // console.log('hide', elements.map(e => e.getPath()), elements.map(e => e.name))
         }
       });
     });
