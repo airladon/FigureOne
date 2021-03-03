@@ -808,7 +808,7 @@ export default class SlideNavigator {
     }
   }
 
-  showAutoTransitionDissolveOut(index: number) {
+  showAutoTransitionDissolve(index: number) {
     const slide = this.slides[index];
     if (slide.transition == null || typeof slide.transition === 'function') {
       return;
@@ -828,6 +828,10 @@ export default class SlideNavigator {
         if (step.out != null && (step.show == null || step.show !== false)) {
           const elements = this.collection.getElements(step.out);
           elements.map(e => e.showAll());
+        }
+        if (step.in != null && (step.show == null || step.show !== true)) {
+          const elements = this.collection.getElements(step.in);
+          elements.map(e => e.hide());
         }
       });
     });
@@ -1065,9 +1069,11 @@ export default class SlideNavigator {
     const slide = this.slides[index];
     this.collection.hideAll();
     this.showElements(index);
-    this.showAllDissolved(index);
-    this.showAutoTransitionDissolveOut(index);
     this.hideElements(index);
+    const fromForm = this.getFromForm(index);
+    this.showForms(fromForm);
+    this.showAllDissolved(index);
+    this.showAutoTransitionDissolve(index);
     this.collection.setScenarios(this.getProperty('scenarioCommon', index, []));
     this.collection.setScenarios(slide.scenario || []);
     this.collection.fnMap.exec(
@@ -1078,8 +1084,6 @@ export default class SlideNavigator {
     if (slide.enterState != null) {
       this.collection.fnMap.exec(slide.enterState, fromToUse, index);
     }
-    const fromForm = this.getFromForm(index);
-    this.showForms(fromForm);
     // Move to transition
     this.transition(fromToUse);
   }

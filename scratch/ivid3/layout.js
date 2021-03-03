@@ -76,7 +76,7 @@ function makeSlides() {
     transition: [
       [
         { out: 'subTitle' },
-        { out: { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc'] }, duration: 2 },
+        { out: { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc'] } },
       ],
     ],
     // dissolve: {
@@ -117,109 +117,41 @@ function makeSlides() {
   // .##....##..##..##.....##..##..##.......##.....##.##....##.
   // ..######..####.##.....##.####.########.##.....##.##.....##
   // */
-  // slides.push({
-  //   clear: true,
-  //   // show: 'similar.allAngles',
-  //   scenario: 'similarLarge',
-  //   transition: (done) => {
-  //     console.log('asdf')
-  //     figure.animations.new()
-  //       .dissolveOut({ elements: ['background1', 'background2', 'title'], duration: 0.5 })
-  //       .start();
-  //     similar._tris.animations.new()
-  //       .delay(0.5)
-  //       .dissolveIn({ elements: ['tri1.line', 'tri1.angle0', 'tri1.angle1', 'tri1.angle2'], duration: 0.5 })
-  //       .dissolveIn({ elements: ['tri2.line', 'tri2.angle0', 'tri2.angle1', 'tri2.angle2'], duration: 0.5 })
-  //       .dissolveIn({ elements: ['tri3.line', 'tri3.angle0', 'tri3.angle1', 'tri3.angle2'], duration: 0.5 })
-  //       .dissolveIn({ elements: 'allAngles', duration: 0.5 })
-  //       .whenFinished(done)
-  //       .start();
-  //   },
-  //   steadyState: () => {
-  //     figure.show(['background1', 'background2', 'title']);
-  //     similar._tris.show([
-  //       'tri1.line', 'tri1.angle0', 'tri1.angle1', 'tri1.angle2',
-  //       'tri2.line', 'tri2.angle0', 'tri2.angle1', 'tri2.angle2',
-  //       'tri3.line', 'tri3.angle0', 'tri3.angle1', 'tri3.angle2',
-  //     ]);
-  //   },
-  //   // dissolve: {
-  //   //   in: {
-  //   //     'similar.tris': [
-  //   //       'tri1.line', 'tri1.angle0', 'tri1.angle1', 'tri1.angle2',
-  //   //       'tri2.line', 'tri2.angle0', 'tri2.angle1', 'tri2.angle2',
-  //   //       'tri3.line', 'tri3.angle0', 'tri3.angle1', 'tri3.angle2',
-  //   //     ],
-  //   //   },
-  //   // },
-  //   // time: 36,
-  //   time: 33,
-  // });
   slides.push({
     clear: true,
     scenarioCommon: 'similarLarge',
     transition: [
       { out: 'background1' },
       { in: { 'similar.tris.tri1': ['line', 'angle0', 'angle1', 'angle2'] }, duration: 1 },
-      // { delay: 1 },
       { in: { 'similar.tris.tri2': ['line', 'angle0', 'angle1', 'angle2'] }, duration: 1 },
-      // { delay: 1 },
       { in: { 'similar.tris.tri3': ['line', 'angle0', 'angle1', 'angle2'] }, duration: 1 },
-      // { delay: 1 },
       { in: 'similar.allAngles' },
     ],
-    // dissolve: {
-    //   out: ['background1', 'background2', 'title'],
-    //   in: { 'similar.tris.tri1': ['line', 'angle0', 'angle1', 'angle2'] },
-    // },
     time: 33,
   });
-  // slides.push({
-  //   show: { 'similar.tris.tri1': ['line', 'angle0', 'angle1', 'angle2'] },
-  //   dissolve: {
-  //     in: { 'similar.tris.tri2': ['line', 'angle0', 'angle1', 'angle2'] },
-  //   },
-  //   time: 34,
-  // });
-  // slides.push({
-  //   show: {
-  //     'similar.tris.tri1': ['line', 'angle0', 'angle1', 'angle2'],
-  //     'similar.tris.tri2': ['line', 'angle0', 'angle1', 'angle2'],
-  //   },
-  //   dissolve: {
-  //     in: { 'similar.tris.tri3': ['line', 'angle0', 'angle1', 'angle2'] },
-  //   },
-  //   time: 35,
-  // });
-  // slides.push({
-  //   show: {
-  //     'similar.tris.tri1': ['line', 'angle0', 'angle1', 'angle2'],
-  //     'similar.tris.tri2': ['line', 'angle0', 'angle1', 'angle2'],
-  //     'similar.tris.tri3': ['line', 'angle0', 'angle1', 'angle2'],
-  //   },
-  //   dissolve: { in: 'similar.allAngles' },
-  //   time: 36,
-  // });
-  // slides.push({
-  //   clear: true,
-  //   dissolve: { out: ['background1', 'background2', 'title'], in: 'similar.allAngles' },
-  //   time: 33,
-  // });
-  // slides.push({
-  //   clear: true,
-  //   show: 'similar.allAngles',
-  //   scenario: 'similarLarge',
-  //   dissolve: {
-  //     in: {
-  //       'similar.tris': [
-  //         'tri1.line', 'tri1.angle0', 'tri1.angle1', 'tri1.angle2',
-  //         'tri2.line', 'tri2.angle0', 'tri2.angle1', 'tri2.angle2',
-  //         'tri3.line', 'tri3.angle0', 'tri3.angle1', 'tri3.angle2',
-  //       ],
-  //     },
-  //   },
-  //   time: 36,
-  // });
+
+  slides.push({
+    show: {
+      similar: [{
+        'tris.tri1': ['line', 'angle0', 'angle1', 'angle2'],
+        'tris.tri2': ['line', 'angle0', 'angle1', 'angle2'],
+        'tris.tri3': ['line', 'angle0', 'angle1', 'angle2'],
+      }, 'allAngles'],
+    },
+    fromForm: { 'similar.eqn': 'AB' },
+    form: { 'similar.eqn': 'AB' },
+    transition: [
+      { out: 'similar.allAngles' },
+      { in: 'similar.allRatios' },
+      { in: { 'similar.tris': ['tri1.side20', 'tri1.side12', 'tri2.side20', 'tri2.side12', 'tri3.side20', 'tri3.side12'] }, delay: 0.5 },
+      { delay: 0.5 },
+      [
+        { scenario: 'similar.tris', target: 'similarSmall', duration: 0.8 },
+        { in: 'similar.eqn', delay: 0.3 },
+      ],
+    ],
+    time: 38.5,
+  });
   slides.push({
     clear: true,
     scenario: 'similarLarge',
