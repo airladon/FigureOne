@@ -852,6 +852,9 @@ export default class SlideNavigator {
         this.processAutoTransitionAnim(step, 'in', 'dissolveIn', animSteps, { duration: 0.5 });
         this.processAutoTransitionAnim(step, 'out', 'dissolveOut', animSteps, { duration: 0.5 });
         this.processAutoTransitionAnim(step, 'scenario', 'scenario', animSteps, { duration: 2 });
+        this.processAutoTransitionAnim(step, 'pulseWidth', 'pulseWidth', animSteps, { duration: 1.5 });
+        this.processAutoTransitionAnim(step, 'pulseAngle', 'pulseAngle', animSteps, { duration: 1.5 });
+        this.processAutoTransitionAnim(step, 'pulse', 'pulse', animSteps, { duration: 1.5 });
         if (Object.keys(step).length === 1 && step.delay != null) {
           animSteps.push(this.collection.animations.delay(step.delay));
         }

@@ -44,7 +44,7 @@ function makeSlides() {
   const slides = [];
 
   const nav = figure.getElement('nav');
-  const similar = figure.getElement('similar');
+  // const similar = figure.getElement('similar');
   const rightTri = figure.getElement('rightTri');
   const circ = figure.getElement('circ');
   const eqn = figure.getElement('eqn');
@@ -97,6 +97,7 @@ function makeSlides() {
     transition: [
       [{ out: ['background2', 'title'] }, { scenario: 'background1', target: 'center' }],
     ],
+    time: 28.5,
   });
 
   // /*
@@ -113,9 +114,9 @@ function makeSlides() {
     scenarioCommon: 'similarLarge',
     transition: [
       { out: 'background1' },
-      { in: { 'similar.tris.tri1': ['line', 'angle0', 'angle1', 'angle2'] }, duration: 1 },
-      { in: { 'similar.tris.tri2': ['line', 'angle0', 'angle1', 'angle2'] }, duration: 1 },
-      { in: { 'similar.tris.tri3': ['line', 'angle0', 'angle1', 'angle2'] }, duration: 1 },
+      { in: { 'similar.tris.tri1': ['line', 'angle0', 'angle1', 'angle2'] }, duration: 0.7 },
+      { in: { 'similar.tris.tri2': ['line', 'angle0', 'angle1', 'angle2'] }, duration: 0.7 },
+      { in: { 'similar.tris.tri3': ['line', 'angle0', 'angle1', 'angle2'] }, duration: 0.7 },
       { in: 'similar.allAngles' },
     ],
     time: 33,
@@ -159,15 +160,18 @@ function makeSlides() {
     scenarioCommon: 'center',
     fromForm: { 'similar.eqn': 'CA' },
     form: null,
-    transition: [{
-      out: ['similar.eqn', 'similar.allRatios', {
-        'similar.tris': {
-          tri1: ['side01', 'side12', 'line', 'angle0', 'angle1', 'angle2'],
-          tri2: ['side01', 'side12', 'line', 'angle0', 'angle1', 'angle2'],
-          tri3: ['side01', 'side12', 'line', 'angle0', 'angle1', 'angle2'],
-        },
-      }],
-    }, { in: { 'rightTri.tri': ['line', 'angle1'] } }],
+    transition: [
+      {
+        out: ['similar.eqn', 'similar.allRatios', {
+          'similar.tris': {
+            tri1: ['side01', 'side12', 'line', 'angle0', 'angle1', 'angle2'],
+            tri2: ['side01', 'side12', 'line', 'angle0', 'angle1', 'angle2'],
+            tri3: ['side01', 'side12', 'line', 'angle0', 'angle1', 'angle2'],
+          },
+        }],
+      },
+      { in: { 'rightTri.tri': ['line', 'angle1'] } },
+    ],
     enterStateCommon: () => {
       figure.fnMap.exec('triSetup', [2, 1.5], 'names');
     },
@@ -175,19 +179,16 @@ function makeSlides() {
     execDelta: [2.5, 'triPulseRight'],
   });
 
-  // Theta
-  slides.push({
-    showCommon: { 'rightTri.tri': ['line', 'angle1', 'angle2'] },
-    transition: { in: 'rightTri.tri.angle2' },
-    time: 53.5,
-    execDelta: [0.5, 'triPulseTheta'],
-  });
-
-  // Complementary
+  // Theta and complementary
   slides.push({
     showCommon: { 'rightTri.tri': ['line', 'angle1', 'angle2', 'angle0'] },
-    transition: { in: 'rightTri.tri.angle0' },
-    time: 56,
+    transition: [
+      { in: 'rightTri.tri.angle2' },
+      { pulseAngle: 'rightTri.tri.angle2', label: { scale: 1.7 }, curve: { scale: 1.7 } },
+      { delay: 0.5 },
+      { in: 'rightTri.tri.angle0' },
+    ],
+    time: 53.5,
   });
 
   slides.push({
@@ -232,12 +233,14 @@ function makeSlides() {
         { out: { rightTri: ['tri1.angle0', 'tri2.angle0', 'tri.angle0'] } },
       ],
     ],
-    time: 72,
+    time: 71.5,
   });
 
   // Named sides
   slides.push({
     // scenarioCommon: 'similar',
+    fromForm: 'ratios',
+    form: 'ratios',
     showCommon: {
       rightTri: [
         { tri1: ['line', 'angle1', 'angle2', 'side01', 'side12', 'side20'] },
