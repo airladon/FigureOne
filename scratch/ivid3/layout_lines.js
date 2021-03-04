@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-/* globals figure, colTan, colSec, colSin, colGrey, thin, thick, centerText, colRad */
+/* globals figure, colTan, colSec, colSin, colGrey, thin, thick, centerText, colRad, leftText */
 
 
 function layoutLines() {
@@ -72,25 +72,51 @@ function layoutLines() {
           sides: 400,
         },
       },
-      centerText('tangent', '|tangent|: from Latin |tangere| - "to touch"', {
+      leftText('tangentDef', '|tangent|: from Latin |tangere| - "to touch"', {
         tangent: { font: { style: 'italic', family: 'Times New Roman', color: colTan } },
         tangere: { font: { style: 'italic', family: 'Times New Roman' } },
-      }, [0, -1.1], 0.15),
-      centerText('chord', '|chord|: from Latin |chorda| - "bowstring"', {
+      }, [-1.2, -1.1], 0.15),
+      leftText('tangent', '|tangent|', {
+        tangent: { font: { style: 'italic', family: 'Times New Roman', color: colTan } },
+        tangere: { font: { style: 'italic', family: 'Times New Roman' } },
+      }, [0, -1.1], 0.15, {
+        linesDefault: { position: [-1.2, -1.1] },
+        linesCenter: { position: [-0.3, -1.1] },
+      }),
+      leftText('chordDef', '|chord|: from Latin |chorda| - "bowstring"', {
         chord: { font: { style: 'italic', family: 'Times New Roman', color: colSin } },
         chorda: { font: { style: 'italic', family: 'Times New Roman' } },
-      }, [0, -1.1], 0.15),
-      leftText('sine', '|sine|: from Latin |sinus| - "bay"', {
+      }, [-1.2, -1.1], 0.15),
+      leftText('chord', '|chord|', { chord: { font: { style: 'italic', family: 'Times New Roman', color: colSin } } }, [0, -1.1], 0.15, {
+        linesDefault: { position: [-1.2, -1.1] },
+        linesCenter: { position: [-0.15, -1.1] },
+      }),
+      leftText('sine_Legacy', '|sine|: from Latin |sinus| - "bay"', {
         sine: { font: { style: 'italic', family: 'Times New Roman', color: colSin } },
         sinus: { font: { style: 'italic', family: 'Times New Roman' } },
       }, [-1.32, -1.1], 0.15),
-      leftText('jya', 'from Sanskrit |jya-ardha| - "half-cord"', {
+      leftText('jya_Legacy', 'from Sanskrit |jya-ardha| - "half-cord"', {
         'jya-ardha': { font: { style: 'italic', family: 'Times New Roman' } },
       }, [-1, -1.3], 0.15),
-      centerText('secant', '|secant|: from Latin |secare| - "to cut"', {
+      leftText('secant', '|secant|', {
+        secant: { font: { style: 'italic', family: 'Times New Roman', color: colSec } } }, [-1.2, -1.1], 0.15, {
+        linesDefault: { position: [-1.2, -1.1] },
+        linesCenter: { position: [-0.2, -1.1] },
+      }),
+      leftText('secantDef', '|secant|: from Latin |secare| - "to cut"', {
         secant: { font: { style: 'italic', family: 'Times New Roman', color: colSec } },
         secare: { font: { style: 'italic', family: 'Times New Roman' } },
-      }, [0, -1.1], 0.15),
+      }, [-1.2, -1.1], 0.15),
+
+      leftText('jya', 'Sanskrit |jya-ardha| - "half-bowstring"', {
+        'jya-ardha': { font: { style: 'italic', family: 'Times New Roman' } },
+      }, [-1.2, -1.1], 0.15),
+      leftText('sine', '\u2192 Latin |sinus| - "bay"  \u2192  |sine|', {
+        sine: { font: { style: 'italic', family: 'Times New Roman', color: colSin } },
+        sinus: { font: { style: 'italic', family: 'Times New Roman' } },
+      }, [-1.2, -1.3], 0.15),
+      leftText('halfChordLabel', '|halfchord|', { halfchord: { text: 'half-chord', font: { style: 'italic', family: 'Times New Roman', color: colSin } } }, [-0.3, 0.2], 0.15),
+
       {
         name: 'radius',
         method: 'primitives.line',
@@ -125,7 +151,7 @@ function layoutLines() {
       radius * Math.cos(angle), radius * Math.sin(angle),
     ],
     secPosition: [
-      radius * 0.8 * Math.cos(angle), radius * 0.8 * Math.sin(angle),
+      radius * 0.8 * Math.cos(angle), radius * 0.75 * Math.sin(angle),
     ],
     chordPosition: [
       cordRad * Math.cos(angle), cordRad * Math.sin(angle),
@@ -145,13 +171,13 @@ function layoutLines() {
     line.animations.new()
       .inParallel([
         line.animations.color({ target: colSec, duration: 0.5 }),
-        line.animations.position({ target: lines.custom.secPosition, duration: 1.5 }),
+        line.animations.position({ target: lines.custom.secPosition, duration: 2 }),
       ])
       .start();
   });
   add('linesToChord', () => {
     line.animations.new()
-      .position({ target: lines.custom.chordPosition, duration: 1.5 })
+      .position({ target: lines.custom.chordPosition, duration: 3 })
       .trigger(() => line.setColor(colSin))
       .start();
   });
@@ -177,7 +203,7 @@ function layoutLines() {
   });
   add('showBow', () => {
     line.animations.new()
-      .rotation({ target: -angle, duration: 2 })
+      .rotation({ target: -angle, duration: 1 })
       .dissolveIn({ element: bow, duration: 0.5 })
       .dissolveOut({ element: bow, duration: 0.5, delay: 1.5 })
       .start();

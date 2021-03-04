@@ -61,8 +61,8 @@ export type OBJ_PulseAnimationStep = {
   angle?: number,
   min?: number,
   centerOn?: null | FigureElement | TypeParsablePoint,
-  x?: 'left' | 'center' | 'right' | 'origin' | number,
-  y?: 'bottom' | 'middle' | 'top' | 'origin' | number,
+  xAlign?: 'left' | 'center' | 'right' | 'origin' | number,
+  yAlign?: 'bottom' | 'middle' | 'top' | 'origin' | number,
   space?: 'figure' | 'gl' | 'local' | 'draw',
   done?: ?(mixed) => void,
   num?: number,
@@ -133,8 +133,8 @@ export default class PulseAnimationStep extends ElementAnimationStep {
     angle: number;
     min: number;
     centerOn: null | FigureElement | TypeParsablePoint;
-    x: 'left' | 'center' | 'right' | 'origin' | number;
-    y: 'bottom' | 'middle' | 'top' | 'origin' | number;
+    xAlign: 'left' | 'center' | 'right' | 'origin' | number;
+    yAlign: 'bottom' | 'middle' | 'top' | 'origin' | number;
     space: 'figure' | 'gl' | 'local' | 'draw';
     done: ?(mixed) => void;
     num: number;
@@ -149,7 +149,7 @@ export default class PulseAnimationStep extends ElementAnimationStep {
       joinObjects({}, { type: 'position' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
       'stopAfterDuration', 'frequency', 'scale', 'rotation', 'translation',
-      'angle', 'min', 'centerOn', 'x', 'y', 'space', 'done', 'num', 'when',
+      'angle', 'min', 'centerOn', 'xAlign', 'yAlign', 'space', 'done', 'num', 'when',
       'stopAfterDuration', 'velocity', 'maxDuration',
     ]);
     super(ElementAnimationStepOptionsIn);
@@ -186,7 +186,7 @@ export default class PulseAnimationStep extends ElementAnimationStep {
     this.pulse = {};
     copyKeysFromTo(options, this.pulse, [
       'stopAfterDuration', 'frequency', 'scale', 'rotation', 'translation',
-      'angle', 'min', 'centerOn', 'x', 'y', 'space', 'done', 'num', 'when',
+      'angle', 'min', 'centerOn', 'xAlign', 'yAlign', 'space', 'done', 'num', 'when',
       'stopAfterDuration', 'velocity', 'maxDuration', 'duration',
     ]);
     this.pulse.centerOn = options.centerOn;

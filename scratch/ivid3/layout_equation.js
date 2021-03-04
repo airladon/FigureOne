@@ -409,6 +409,7 @@ function makeEquation() {
         eqnTri: { position: [-2.3, 1.2] },
         eqnCirc: { position: [-2.8, 1.2] },
         ratioValues: { position: [-2.5, 1.2] },
+        similar: { position: [-2.5, 1.2] },
         circQ1: { position: [-2.5, 1.2] },
         circFull: { position: [-2.5, 1.2] },
         split: { position: [-2.5, 1.2] },
