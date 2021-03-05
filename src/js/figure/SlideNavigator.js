@@ -307,6 +307,7 @@ export default class SlideNavigator {
     duration: number,
     animate: "move" | "dissolve" | "moveFrom" | "pulse" | "dissolveInThenMove",
   };
+  fromAutoSlide: boolean;
 
   /**
    * @param {OBJ_SlideNavigator | null} options use `null` to load options later
@@ -317,6 +318,7 @@ export default class SlideNavigator {
   constructor(options: OBJ_SlideNavigator | null = null) {
     this.subscriptions = new SubscriptionManager();
     this.inTransition = false;
+    this.fromAutoSlide = false;
     if (options != null) {
       this.load(options);
     }
@@ -355,6 +357,7 @@ export default class SlideNavigator {
     this.collection.recorder.addEventType('slide', processSlide, true);
     const processAutoSlide = (payload) => {
       const [slideNo] = payload;
+      this.fromAutoSlide = true;
       if (this.currentSlideIndex === slideNo - 1) {
         this.nextSlide(true);
       } else if (slideNo !== 0) {
@@ -792,7 +795,6 @@ export default class SlideNavigator {
         { except: key }, { callback: step.trigger }, defaultOptions, step,
       );
       animSteps.push(this.collection.animations[animName](o));
-      console.log('key', 'trigger')
     } else if (step[key] != null) {
       const elements = this.collection.getElements(step[key]);
       const o = joinObjectsWithOptions({ except: key }, {}, defaultOptions, step);
@@ -1057,10 +1059,13 @@ export default class SlideNavigator {
 
     if (this.collection.recorder.state === 'recording') {
       if (fromToUse === 'next' || fromToUse === 'prev') {
-        this.collection.recorder.recordEvent('slide', [fromToUse, index]);
-      } else {
+        if (this.fromAutoSlide === false) {
+          this.collection.recorder.recordEvent('slide', [fromToUse, index]);
+        }
+      } else if (this.fromAutoSlide === false) {
         this.collection.recorder.recordEvent('slide', ['goTo', index]);
       }
+      this.fromAutoSlide = false;
     }
 
     // Leave States
@@ -1104,6 +1109,9 @@ export default class SlideNavigator {
     );
     if (slide.enterState != null) {
       this.collection.fnMap.exec(slide.enterState, fromToUse, index);
+    }
+    if (slide.addReference && this.collection.recorder.state === 'recording') {
+      this.collection.recorder.addCurrentStateAsReference();
     }
     this.showAutoTransitionDissolve(index, false);
     // Move to transition

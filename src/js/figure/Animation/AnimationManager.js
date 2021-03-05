@@ -436,6 +436,25 @@ export default class AnimationManager {
   pulse(...options: Array<OBJ_PulseAnimationStep>) {
     const optionsToUse = joinObjects({}, { element: this.element }, ...options);
     // return new anim.PulseAnimationStep(optionsToUse);
+    // return this.getStep(optionsToUse, 'PulseAnimationStep');
+
+    if (typeof optionsToUse.element === 'string' && this.element != null) {
+      optionsToUse.element = this.element.getElement(optionsToUse.element);
+    }
+    // if (options.elements != null && options.element != null) {
+    //   const elements = options.element.getElements(options.elements);
+    //   const steps = [];
+    //   options.elements = undefined;
+    //   elements.forEach((element) => {
+    //     options.element = element;
+    //     steps.push(new anim[animName](options));
+    //   });
+    //   return new anim.ParallelAnimationStep(options, { steps });
+    // }
+    // return new anim[animName](options);
+    if (optionsToUse.centerOn) {
+      return new anim.PulseAnimationStep(optionsToUse);
+    }
     return this.getStep(optionsToUse, 'PulseAnimationStep');
   }
 

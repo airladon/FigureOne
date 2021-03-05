@@ -964,7 +964,7 @@ class Recorder {
     // });
   }
 
-  showEvent(eventName: string, precision: number = 3) {
+  showEvent(eventName: string, precision: number = 2) {
     const out = [];
     this.events[eventName].list.forEach((event) => {
       const [time, payload] = event;
@@ -986,6 +986,74 @@ class Recorder {
       out.push(`[${round(time, 4)}, [${payloadStr}]]`);
     });
     return out.join(',\n');
+  }
+
+  encodeEvent(
+    eventName: string,
+    timePrecision: number = 2,
+    valuePrecision: number = 2,
+  ) {
+    const out = [];
+    const firstTime = this.events[eventName].list[0][0];
+    let lastDeltaTime = 0;
+    let lastValues = null;
+    this.events[eventName].list.forEach((event, index) => {
+      const [time, payload] = event;
+      const deltaTime = round(time - firstTime, timePrecision);
+      const values = payload.map(p => round(p, valuePrecision));
+      if (lastValues == null) {
+        lastValues = values;
+        lastDeltaTime = deltaTime;
+        out.push(round(firstTime, timePrecision), ...values);
+        return;
+      }
+      if (deltaTime <= lastDeltaTime + 0.01) {
+        return;
+      }
+      let same = true;
+      for (let i = 0; i < values.length; i += 1) {
+        if (values[i] !== lastValues[i]) {
+          same = false;
+        }
+      }
+      if (same) {
+        return;
+      }
+      out.push(round(deltaTime - lastDeltaTime, timePrecision), ...values);
+      lastDeltaTime = deltaTime;
+      lastValues = values.slice();
+    });
+    return JSON.stringify(out);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  decodeEvent(eventName: string, eventData: Array<number>) {
+    const firstTime = eventData[0];
+    const out = [];
+    let cumDelta = 0;
+    for (let i = 0; i < eventData.length; i += 3) {
+      const deltaTime = eventData[i];
+      const x = eventData[i + 1];
+      const y = eventData[i + 2];
+      if (i === 0) {
+        out.push([firstTime, [x, y]]);
+      } else {
+        out.push([firstTime + cumDelta + deltaTime, [x, y]]);
+        cumDelta += deltaTime;
+      }
+    }
+    return out;
+  }
+
+  loadEventData(
+    eventName: string,
+    data: Array<number>,
+    decode: boolean = false) {
+    if (decode) {
+      this.events[eventName].list.push(...this.decodeEvent(eventName, data));
+    } else {
+      this.events[eventName].list.push(...data);
+    }
   }
 
   // ////////////////////////////////////

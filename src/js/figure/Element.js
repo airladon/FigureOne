@@ -199,8 +199,10 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
  * pulse to (`1.5`)
  * @property {number} [angle] translation angle (`0`)
  * @property {number} [min] minimum value to pulse to
- * @property {null | FigureElement | TypeParsablePoint | string} [centerOn] center
- * of scale or rotation pulse. By default, the element calling the pulse
+ * @property {null | FigureElement | TypeParsablePoint | string | 'this'} [centerOn] center
+ * of scale or rotation pulse. `null` is point [0, 0], `string` or
+ * `FigureElement` are elements to centerOn, and `'this'` is the calling
+ * element (`'this'`)
  * will be the default `centerOn`.
  * @property {'left' | 'center' | 'right' | 'location' | number} [xAlign]
  * if `centerOn` is a {@link FigureElement} then this property can be used to
@@ -277,7 +279,7 @@ export type OBJ_Pulse = {
   translation?: number,
   angle?: number,
   min?: number,
-  centerOn?: null | FigureElement | TypeParsablePoint | string,
+  centerOn?: null | FigureElement | TypeParsablePoint | string | 'this',
   x?: 'left' | 'center' | 'right' | 'origin' | number,
   y?: 'bottom' | 'middle' | 'top' | 'origin' | number,
   space?: 'figure' | 'gl' | 'local' | 'draw',
@@ -5921,7 +5923,7 @@ class FigureElementCollection extends FigureElement {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       if (element instanceof FigureElementPrimitive) {
-        element.setColor(element.color);
+        element.setColor(element.color, false);
         element.setOpacity(element.opacity);
       } else {
         element.setPrimitiveColors();

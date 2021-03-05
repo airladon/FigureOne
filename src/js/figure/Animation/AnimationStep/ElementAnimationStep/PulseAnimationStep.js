@@ -180,14 +180,14 @@ export default class PulseAnimationStep extends ElementAnimationStep {
       stopAfterDuration: true,
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
-    if (options.centerOn == null && this.element != null) {
+    if (options.centerOn === undefined && this.element != null) {
       options.centerOn = this.element;
     }
     this.pulse = {};
     copyKeysFromTo(options, this.pulse, [
       'stopAfterDuration', 'frequency', 'scale', 'rotation', 'translation',
       'angle', 'min', 'centerOn', 'xAlign', 'yAlign', 'space', 'done', 'num', 'when',
-      'stopAfterDuration', 'velocity', 'maxDuration', 'duration',
+      'stopAfterDuration', 'velocity', 'maxDuration', 'duration', 'elements',
     ]);
     this.pulse.centerOn = options.centerOn;
     this.duration = options.duration;

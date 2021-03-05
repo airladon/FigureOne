@@ -919,9 +919,10 @@ function layoutCirc() {
     bounds = boundsRects[boundsName];
     if (rotator.isShown) {
       rotator.setRotation(ang);
-    }
-    if (rotatorFull.isShown) {
+    } if (rotatorFull.isShown) {
       rotatorFull.setRotation(ang);
+    } else {
+      updateCircle(ang);
     }
   });
   rotator.subscriptions.add('setState', 'updateCircle');

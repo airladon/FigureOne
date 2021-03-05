@@ -346,6 +346,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     super.start(startTime);
     const { element } = this;
     if (element == null) {
+      console.log(this.scenario.target)
       throw new Error('Missing Element in animation');
     }
     let target = element.getScenarioTarget(this.scenario.target);
