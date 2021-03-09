@@ -94,6 +94,7 @@ export class TriggerAnimationStep extends AnimationStep {
   payload: ?Object;
   setToEndCallback: ?(string | Function);
   customProperties: Object;
+  autoDuration: boolean;
 
   /**
    * @hideconstructor
@@ -106,6 +107,7 @@ export class TriggerAnimationStep extends AnimationStep {
       payload: null,
       duration: 0,
       setToEnd: null,
+      autoDuration: true,
     };
     let options;
     if (
@@ -122,6 +124,7 @@ export class TriggerAnimationStep extends AnimationStep {
     this.callback = options.callback;
     this.payload = options.payload;
     this.duration = options.duration;
+    this.autoDuration = options.autoDuration;
     if (options.setToEnd) {
       this.setToEndCallback = options.setToEnd;
     }
@@ -186,7 +189,7 @@ export class TriggerAnimationStep extends AnimationStep {
     //   console.log(this.payload)
     // }
     const remainingTime = this.fnExec(this.callback, this.payload, this.customProperties);
-    if (remainingTime != null && typeof remainingTime === 'number') {
+    if (remainingTime != null && typeof remainingTime === 'number' && this.autoDuration) {
       this.duration = remainingTime;
     }
     this.callback = null;
@@ -201,8 +204,11 @@ export class TriggerAnimationStep extends AnimationStep {
     //   this.callback(this.payload);
     //   this.callback = null;
     // }
-    this.fnExec(this.setToEndCallback);
-    this.fnExec(this.callback, this.payload, this.customProperties);
+    if (this.setToEndCallback != null) {
+      this.fnExec(this.setToEndCallback, this.payload, this.customProperties);
+    } else {
+      this.fnExec(this.callback, this.payload, this.customProperties);
+    }
     this.callback = null;
   }
 

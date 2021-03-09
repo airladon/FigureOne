@@ -584,6 +584,26 @@ function makeSlides() {
     },
     fromForm: { 'circ.eqn': 'tanComp' },
     form: { 'circ.eqn': 'cotTheta' },
+    // enterState: () => {
+    //   window.asdf = true;
+    //   figure.subscriptions.add('afterDraw', () => {
+    //     // console.log('asdf')
+    //     if (window.asdf) {
+    //       console.log(
+    //         figure.animations.animations[0].steps[0].state,
+    //         figure.animations.animations[0].steps[1].state,
+    //         figure.animations.animations[0].steps[2].state,
+    //         figure.animations.animations[0].steps[3].state,
+    //         figure.animations.animations[0].steps[4].state,
+    //         figure.animations.animations[0].steps[3].duration,
+    //         figure.animations.animations[0].steps[4].duration,
+    //         figure.lastDrawTime - figure.animations.animations[0].steps[3].startTime,
+    //       )
+    //       // console.log(figure.animations.animations[0].steps[3].duration)
+    //     }
+    //   });
+    // },
+    // steadyState: () => window.asdf = false,
     transition: [
       { pulseWidth: 'circ.triCotCsc.cot', line: 6, duration: 1.5 },
       { in: 'circ.eqn', delay: 0.5 },

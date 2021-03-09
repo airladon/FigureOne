@@ -4062,7 +4062,7 @@ class FigureElementPrimitive extends FigureElement {
       // this.redrawElements.forEach((element) => {
       //   element.draw(element.getParentLastDrawTransform(), now);
       // })
-      this.subscriptions.publish('afterDrawDraw', [now]);
+      this.subscriptions.publish('afterDraw', [now]);
       if (this.afterDrawCallback != null) {
         this.fnMap.exec(this.afterDrawCallback, now);
       }

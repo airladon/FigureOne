@@ -1209,16 +1209,22 @@ export class Equation extends FigureElementCollection {
           customProperties.target = currentForm.name;
         }
       }
+      // if (customProperties.target === 'cotan') {
+      //   debugger;
+      // }
       if (customProperties.start != null) {
         this.showForm(customProperties.start);
       }
-      this.goToForm(joinObjects({}, customProperties, {
+      this.goToForm(joinObjects({ ifAnimating: { cancelGoTo: false } }, customProperties, {
         form: customProperties.target,
         callback: null,
-        delay: 0,
+        // delay: 0,
       }));
-      // console.log(this.getRemainingAnimationTime(['_Equation', '_EquationColor']))
+      // console.log()
       return this.getRemainingAnimationTime(['_Equation', '_EquationColor']);
+    });
+    this.fnMap.add('_showForm', (percentage, customProperties) => {
+      this.showForm(customProperties.target);
     });
     this.animations.goToForm = (...opt) => {
       const o = joinObjects({}, {
@@ -1242,10 +1248,16 @@ export class Equation extends FigureElementCollection {
         ifAnimating: o.ifAnimating,
         callback: o.callback,
       };
+      if (o.totalDuration != null) {
+        o.duration = o.totalDuration;
+      }
+      // console.log(o)
+      // if (o.target === 'cotangent') {
+      //   debugger;
+      // }
       o.callback = '_goToForm';
-      o.setToEnd = () => {
-        this.showForm(o.target);
-      };
+      o.delay = 0;
+      o.setToEnd = '_showForm';
       return new TriggerAnimationStep(o);
     };
     this.animations.customSteps.push({

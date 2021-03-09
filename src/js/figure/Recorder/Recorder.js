@@ -1081,11 +1081,15 @@ class Recorder {
     }
     this.pauseState = null;
     this.setToTime(time);
+    this.lastSeekTime = this.currentTime;
     // this.figure.pause({
     //   animation: 'freeze',
     //   pulse: 'freeze',
     //   movingFreely: 'freeze',
     // });
+
+    // this.figure.pause();
+    // this.figure.animateNextFrame();
     this.figure.stop('freeze');
   }
 
@@ -1102,15 +1106,15 @@ class Recorder {
     if (this.stateIndex !== -1) {
       [stateTime, , , stateTimeCount] = this.states.diffs[this.stateIndex];
     }
-
     if (stateTime === this.lastSeekTime && !force) {
       // console.log('setting to time - no change');
       return;
     }
-    const time = stateTime;
+    const time = stateTime > 0 ? stateTime : timeIn;
+    const timeToUse = time;
     // console.log(timeIn, time)
-    this.lastSeekTime = timeIn;
-    // console.log('setting to time', timeIn, stateTime);
+    // this.lastSeekTime = timeToUse;
+    // console.log('setting to time', timeToUse, stateTime);
     // For each eventName, if it is to be set on seek, then get the previous
     // index (or multiple indexes if multiple are set for the same time)
     // and add them to an eventsToExecuteArray
@@ -1127,7 +1131,7 @@ class Recorder {
       }
       const lastIndex = getIndexOfLatestTime(
         event.list,
-        getPrevIndexForTime(event.list, timeIn),
+        getPrevIndexForTime(event.list, timeToUse),
       );
       // const lastIndex = getIndexOfLatestTime(event.list, firstIndex);
       for (let i = firstIndex; i <= lastIndex; i += 1) {
@@ -1180,13 +1184,14 @@ class Recorder {
     playEvents(eventsToSetAfterState);
     // console.log('done')
     if (this.audio) {
-      this.audio.currentTime = timeIn;
-      // console.log('audio', timeIn, this.audio.currentTime, this.audio.duration)
+      // this.audio.currentTime = timeToUse;
+      // console.log(this.audio.currentTime)
+      // console.log('audio', timeToUse, this.audio.currentTime, this.audio.duration)
     }
-    this.setCurrentTime(timeIn);
+    this.setCurrentTime(timeToUse);
     // this.currentTime = time;
 
-    this.setCursor(timeIn);
+    this.setCursor(timeToUse);
     this.figure.animateNextFrame();
     // console.log(this.figure.getElement('a').getRotation())
   }
@@ -1282,10 +1287,11 @@ class Recorder {
   // ////////////////////////////////////
   // ////////////////////////////////////
   startPlayback(
-    fromTimeIn: number = this.lastSeekTime || 0,
+    fromTimeIn: number = this.currentTime || 0,
     forceStart: boolean = true,
     events: ?Array<string> = null,
   ) {
+    this.lastSeekTime = null;
     let fromTime = fromTimeIn;
     if (fromTimeIn == null || fromTimeIn >= this.duration) {
       fromTime = 0;
@@ -1409,12 +1415,12 @@ class Recorder {
   startAudioPlayback(fromTime: number) {
     if (this.audio) {
       this.isAudioPlaying = true;
-      this.audio.currentTime = fromTime;
       // debugger;
       const playPromise = this.audio.play();
       if (playPromise === undefined) {
         return false;
       }
+      this.audio.currentTime = fromTime;
       const audioEnded = () => {
         this.isAudioPlaying = false;
         if (this.state === 'playing') {

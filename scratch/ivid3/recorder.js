@@ -181,13 +181,6 @@ function setupRecorder() {
       recorder.pausePlayback();
     } else {
       recorder.resumePlayback();
-      // console.log(figure.elements._eqn._bowstring.animations.animations[0])
-      // console.log(
-      //   figure.elements._eqn._bowstring.animations.animations[0].startTime,
-      //   figure.elements._eqn._bowstring.animations.animations[0].steps[0].startTime,
-      //   figure.elements._eqn._bowstring.animations.animations[0].steps[1].startTime,
-      //   performance.now() / 1000 - figure.elements._eqn._bowstring.animations.animations[0].startTime,
-      // )
     }
   }
 
