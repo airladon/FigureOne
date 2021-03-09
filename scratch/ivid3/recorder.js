@@ -110,6 +110,8 @@ function setupRecorder() {
   //   return percentX * state.duration;
   // }
 
+  let seekId = null;
+  let lastSeekTime = 0;
   function touchHandler(x) {
     const circleBounds = seekCircle.getBoundingClientRect();
     const seekBounds = seekContainer.getBoundingClientRect();
@@ -124,7 +126,16 @@ function setupRecorder() {
       percent = 1;
     }
     const time = percent * state.duration;
-    recorder.seek(time);
+    lastSeekTime = time;
+    console.log(seekId)
+    if (seekId == null) {
+      seekId = figure.subscriptions.add('beforeDraw', () => {
+        console.log(lastSeekTime)
+        recorder.seek(lastSeekTime);
+        seekId = null;
+      }, 1);
+    }
+    // recorder.seek(time);
     setTime(time);
     // setTime(percent * state.duration);
   }
