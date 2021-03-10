@@ -1629,6 +1629,7 @@ class Figure {
           this.showCursor('down');
         } else {
           this.showCursor('up');
+          this.getElement(this.cursorElementName).pulse();
         }
         this.setCursor(this.previousCursorPoint);
       } else {

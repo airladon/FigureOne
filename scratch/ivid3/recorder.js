@@ -17,7 +17,6 @@ function setupRecorder() {
   const playPauseButton = document.querySelector('#f1_recorder__play_pause');
   const recordButton = document.querySelector('#f1_recorder__record');
   const saveButton = document.querySelector('#f1_recorder__save');
-  // const cursor = figure.getElement('cursor');
   const timeLabel = document.querySelector('#f1_recorder__time');
   const seekContainer = document.querySelector('#f1_recorder__seek');
   const seekCircle = document.querySelector('#f1_recorder__seek_circle');
@@ -59,25 +58,25 @@ function setupRecorder() {
 
   function playbackStarted() {
     playPauseButton.innerHTML = 'Pause';
-    state.playing = true;
+    // state.playing = true;
     recordButton.classList.add('f1_recorder__button_disable');
   }
 
   function playbackStopped() {
     playPauseButton.innerHTML = 'Play';
-    state.playing = false;
+    // state.playing = false;
     recordButton.classList.remove('f1_recorder__button_disable');
   }
 
   function recordingStarted() {
     recordButton.innerHTML = 'Pause';
-    state.recording = true;
+    // state.recording = true;
     playPauseButton.classList.add('f1_recorder__button_disable');
   }
 
   function recordingStopped() {
     recordButton.innerHTML = 'Record';
-    state.recording = false;
+    // state.recording = false;
     playPauseButton.classList.remove('f1_recorder__button_disable');
   }
 
@@ -110,7 +109,7 @@ function setupRecorder() {
   //   return percentX * state.duration;
   // }
 
-  let seekId = null;
+  // let seekId = null;
   let lastSeekTime = 0;
   function touchHandler(x) {
     const circleBounds = seekCircle.getBoundingClientRect();
@@ -127,16 +126,20 @@ function setupRecorder() {
     }
     const time = percent * state.duration;
     lastSeekTime = time;
-    console.log(seekId)
-    if (seekId == null) {
-      seekId = figure.subscriptions.add('beforeDraw', () => {
-        console.log(lastSeekTime)
-        recorder.seek(lastSeekTime);
-        seekId = null;
-      }, 1);
-    }
+    // console.log(lastSeekTime)
+    // console.log(seekId)
+    // if (seekId == null) {
+    //   seekId = figure.subscriptions.add('beforeDraw', () => {
+    //     // console.log(lastSeekTime)
+    //     const t = performance.now()
+    //     recorder.seek(lastSeekTime);
+    //     console.log((performance.now() - t) / 1000)
+    //     seekId = null;
+    //   }, 1);
+    // }
     // recorder.seek(time);
     setTime(time);
+    // figure.animateNextFrame();
     // setTime(percent * state.duration);
   }
 
@@ -166,7 +169,12 @@ function setupRecorder() {
     }
   }
 
-  function endHandler() { state.touch = 'up'; }
+  function endHandler() {
+    if (state.touch === 'down') {
+      recorder.seek(lastSeekTime);
+    }
+    state.touch = 'up';
+  }
   function mouseUpHandler() { endHandler(); }
   function touchEndHandler() { endHandler(); }
 
@@ -185,10 +193,10 @@ function setupRecorder() {
   recorder.subscriptions.add('stopRecording', recordingStopped.bind(this));
 
   function togglePlayPause() {
-    if (state.recording) {
+    if (recorder.state === 'recording') {
       return;
     }
-    if (state.playing) {
+    if (recorder.state !== 'idle') {
       recorder.pausePlayback();
     } else {
       recorder.resumePlayback();
@@ -196,10 +204,10 @@ function setupRecorder() {
   }
 
   function toggleRecord() {
-    if (state.playing) {
+    if (!(recorder.state === 'recording' && recorder.state === 'idle')) {
       return;
     }
-    if (state.recording) {
+    if (recorder.state === 'recording') {
       recorder.stopRecording();
     } else {
       const currentTime = recorder.getCurrentTime();

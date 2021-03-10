@@ -4,7 +4,7 @@ import { Point } from '../../tools/g2';
 import { round } from '../../tools/math';
 import {
   duplicate, minify, unminify, joinObjects,
-  ObjectTracker, download, SubscriptionManager,
+  ObjectTracker, download, SubscriptionManager, // PerformanceTimer,
 } from '../../tools/tools';
 import GlobalAnimation from '../webgl/GlobalAnimation';
 // import type { FigureElement } from './Element';
@@ -1095,11 +1095,13 @@ class Recorder {
 
   setToTime(timeIn: number, force: boolean = false) {
     // console.log('time set', timeIn)
+    // const timer = new PerformanceTimer();
     if (timeIn === 0 && this.states.diffs.length > 0) {
       this.stateIndex = 0;
     } else {  // $FlowFixMe
       this.stateIndex = getPrevIndexForTime(this.states.diffs, timeIn);
     }
+    // timer.stamp('m1');
     // console.log(this.stateIndex)
     let stateTime = 0;
     let stateTimeCount = 0;
@@ -1110,6 +1112,7 @@ class Recorder {
       // console.log('setting to time - no change');
       return;
     }
+    // timer.stamp('m2');
     const time = stateTime > 0 ? stateTime : timeIn;
     const timeToUse = time;
     // console.log(timeIn, time)
@@ -1150,6 +1153,7 @@ class Recorder {
         }
       }
     });
+    // timer.stamp('m3');
 
     const sortTimes = arrayToSort => arrayToSort.sort((a, b) => {
       if (a[2] < b[2] || (a[2] === b[2] && a[3] < b[3])) {
@@ -1164,6 +1168,7 @@ class Recorder {
     // Sort the eventsToSet arrays in time
     sortTimes(eventsToSetBeforeState);
     sortTimes(eventsToSetAfterState);
+    // timer.stamp('m4');
     const playEvents = (events) => {
       events.forEach((event) => {
         const [eventName, index] = event;
@@ -1177,9 +1182,11 @@ class Recorder {
     playEvents(eventsToSetBeforeState);
     // console.log('state')
     // console.log(this.stateIndex)
+    // timer.stamp('m5');
     if (this.stateIndex !== -1) {
       this.setState(this.stateIndex);
     }
+    // timer.stamp('m6');
     // console.log('after')
     playEvents(eventsToSetAfterState);
     // console.log('done')
@@ -1193,6 +1200,8 @@ class Recorder {
 
     this.setCursor(timeToUse);
     this.figure.animateNextFrame();
+    // timer.stamp('m7');
+    // timer.log();
     // console.log(this.figure.getElement('a').getRotation())
   }
 
@@ -1605,7 +1614,6 @@ class Recorder {
   pausePlayback(how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = this.settings.pause) {
     // this.currentTime = this.getCurrentTime();
     this.setCurrentTime(this.getCurrentTime());
-
     this.pauseState = this.figure.getState({
       precision: this.precision,
       ignoreShown: true,
