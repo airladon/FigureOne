@@ -565,6 +565,7 @@ class Figure {
       const [action, x, y] = payload;
       if (action === 'show') {
         this.showCursor('up', new Point(x, y));
+        this.getElement(this.cursorElementName).pulse({ duration: 1, scale: 3 });
       } else {
         this.showCursor('hide');
       }
@@ -1629,7 +1630,6 @@ class Figure {
           this.showCursor('down');
         } else {
           this.showCursor('up');
-          this.getElement(this.cursorElementName).pulse();
         }
         this.setCursor(this.previousCursorPoint);
       } else {
