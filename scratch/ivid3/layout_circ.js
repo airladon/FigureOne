@@ -283,7 +283,7 @@ function layoutCirc() {
           color: [0, 0, 0, 0],
         },
         mods: {
-          move: { type: 'rotation', bounds: { rotation: { min: 0, max: Math.PI / 2 } } },
+          move: { type: 'rotation', bounds: { rotation: { min: 0, max: Math.PI / 2 * 0.999 } } },
           dimColor: [0, 0, 0, 0],
           isMovable: true,
           touchBorder: [0, 0.5, 1.5, 0.5],
@@ -312,6 +312,7 @@ function layoutCirc() {
       scenarios: {
         title: { scale: 0.9, position: [-radius / 2, -1.2] },
         circQ1: { scale: 1, position: [-0.4, -1] },
+        circQ1Values: { scale: 1, position: [-0.2, -1] },
         split: { scale: 1, position: [1.1, -1.2] },
         tanSecTri: { scale: 1, position: [0.5, -1] },
         circFull: { scale: 0.7, position: [0.7, 0] },
@@ -342,7 +343,7 @@ function layoutCirc() {
   const [tan, sec] = get({ triTanSec: ['tan', 'sec'] });
   const [tanTheta] = get(['tanTheta']);
   const boundsRects = {
-    title: new Fig.Rect(-0.1, -0.1, radius + 2.5, radius + 0.7),
+    title: new Fig.Rect(-0.1, -0.1, radius + 2.5, radius + 0.6),
     quarter: new Fig.Rect(-0.1, -0.1, radius + 3, radius + 2),
     circle: new Fig.Rect(-radius - 0.6, -radius - 1, radius * 2 + 0.6 + 2.5, radius * 2 + 1 + 1.5),
   };
@@ -578,7 +579,12 @@ function layoutCirc() {
       }
       if (cot._label.isShown) {
         // console.log(cot._label.getPosition('figure').y)
-        cot.label.location = ySign > 0 ? 'top' : 'bottom';
+        // console.log(triCotCsc.getRotation());
+        if (Math.abs(triCotCsc.getRotation()) < 0.001) {
+          cot.label.location = ySign > 0 ? 'top' : 'bottom';
+        } else {
+          cot.label.location = 'positive';
+        }
       }
       cot.setEndPoints(
         cotLine.p1, cotLine.p2.add(offsetX, offsetY), // arrow: arrow(isClipped),
@@ -623,7 +629,11 @@ function layoutCirc() {
         offsetY = thick * Math.sin(r + xSign * ySign * Math.PI / 2);
       }
       if (csc._label.isShown) {
-        csc.label.location = ySign > 0 ? 'top' : 'bottom';
+        if (Math.abs(triCotCsc.getRotation()) < 0.001) {
+          csc.label.location = ySign > 0 ? 'top' : 'bottom';
+        } else {
+          csc.label.location = 'positive';
+        }
       }
       csc.setEndPoints(
         cscLine.p1.add(offsetX, offsetY),
@@ -1004,15 +1014,24 @@ function layoutCirc() {
   addPulseFn('circPulseSin', triSinCos._sin._label, 'left', 'middle');
   rotator.subscriptions.add('setTransform', 'updateCircle');
   rotatorFull.subscriptions.add('setTransform', 'updateCircle');
-  triCotCsc.fnMap.add('updateRotation', () => {
+  const updateRotation = () => {
     if (!triCotCsc.isShown) {
       return;
     }
     const r = triCotCsc.getRotation();
+    // console.log(triCotCsc.getRotation());
+    if (Math.abs(triCotCsc.getRotation()) < 0.001) {
+    //   cot.label.location = ySign > 0 ? 'top' : 'bottom';
+    // } else {
+      cot.label.location = 'positive';
+      csc.label.location = 'positive';
+    }
     triCotCsc._cot.updateLabel(r);
     triCotCsc._csc.updateLabel(r);
     triCotCsc._unit.updateLabel(r);
-  });
+  };
+  figure.fnMap.global.add('updateRotation', () => updateRotation());
+  triCotCsc.fnMap.add('updateRotation', () => updateRotation());
   triCotCsc.subscriptions.add('setTransform', 'updateRotation');
   triCotCsc.subscriptions.add('setState', 'updateRotation');
 }

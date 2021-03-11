@@ -46,7 +46,7 @@ So for example, if we focus on just the sine and cosine functions, we can see th
 
 Now what about the Tan and Sec? Can you play with the geometry to relate? Well let's see by turning off the sine and cosine and turning on the tan and sec. They also form a right angle triangle, but this time the Sec is the hypotenuse so their relationship is slightly different. Also, because the sec is the hypotenuse, we can see that its length must always be longer than the tan.
 
-Another common relatipnship we can see with this geometry is between the sine and the tan. As our angle get's smaller, the sine, the tan and the arc between them all approach the same length. This is a well known, very useful limit used extensively in calculus.
+Another common relatipnship we can see with this geometry is between the sine and the tan. As our angle get's smaller, the sine, the tan and the arc between them all approach the same length. This leads to a well known, very useful limit used extensively in calculus.
 
 Now, let's find an angle where two functions have the same length. Maybe most easy to see is the sec and cosec are equal at 45º. This makes sense remembering the cosec is the sec of the complementary angle, and we can expect similar for the other complimentary pairs - the sine and cosine and tan and cot.
 
