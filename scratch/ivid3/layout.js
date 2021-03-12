@@ -1072,7 +1072,7 @@ function makeSlides() {
 
   slides.push({
     scenarioCommon: 'circFull',
-    showCommon: { circ: ['circle', 'x', 'y', 'rotator', 'sinAlt', 'cosAlt', 'tanAlt', 'secAlt', 'cscAlt', 'cotAlt', 'rightSinAlt', 'rightTanAlt', 'rightCotAlt', 'thetaVal', 'radiusAlt', 'triSym'] },
+    showCommon: { circ: ['circle', 'x', 'y', 'rotator', 'sinAlt', 'cosAlt', 'tanAlt', 'secAlt', 'cscAlt', 'cotAlt', 'rightSinAlt', 'rightTanAlt', 'rightCotAlt', 'thetaVal', 'radiusAlt', 'triSym', 'theta'] },
     hide: 'circ.triSym.cos',
     transition: [
       {
@@ -1083,7 +1083,7 @@ function makeSlides() {
           },
         ],
       },
-      { in: 'circ.theta' },
+      { in: ['circ.theta.label', 'circ.triSym.theta.label'] },
     ],
   });
 
