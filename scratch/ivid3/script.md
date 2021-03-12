@@ -44,13 +44,61 @@ To do so, we can change this geometry by moving the sec or cosec lines, and touc
 
 So for example, if we focus on just the sine and cosine functions, we can see they are two sides of a right angle triangle and so we can use pythagorus to relate them. Also, as the hyptoentuse is 1, and must always be longer than the other sides we can say the sine and cosine lengths can never be larger than 1.
 
-Now what about the Tan and Sec? Can you play with the geometry to relate? Well let's see by turning off the sine and cosine and turning on the tan and sec. They also form a right angle triangle, but this time the Sec is the hypotenuse so their relationship is slightly different. Also, because the sec is the hypotenuse, we can see that its length must always be longer than the tan.
+Now what about the Tan and Sec? Well let's see by turning off the sine and cosine and turning on the tan and sec. They also form a right angle triangle, but this time the Sec is the hypotenuse so their relationship is slightly different. Also, because the sec is the hypotenuse, we can see that its length must always be longer than the tan.
 
 Another common relatipnship we can see with this geometry is between the sine and the tan. As our angle get's smaller, the sine, the tan and the arc between them all approach the same length. This leads to a well known, very useful limit used extensively in calculus.
 
 Now, let's find an angle where two functions have the same length. Maybe most easy to see is the sec and cosec are equal at 45º. This makes sense remembering the cosec is the sec of the complementary angle, and we can expect similar for the other complimentary pairs - the sine and cosine and tan and cot.
 
-Next, let's extend this geometry out to a full circle and see how the trigonometric functions change for theta values larger than 90º. For instance, if we look at the sine function,   
+
+Ok, we can now extend this geometry out to a full circle, and then flip and rotate some of the similar triangles to see a different form of the geometry. Now, this geometry separates the sec and the cosec lines, making them easier to see, it shows how the tan and cot lines combine to form a tangent line that subtends, or covers the entire quadrant.
+
+And it can also help us better see the relationship between the sine, the cosine and the circle. So lets look at just the sine and the cosine and as we rotate the unit radius within the first quadrant, the sine and cosine are the x and y coordinates of the circle. Now if we flip our definitions around and say the x and y coordinates of the circle are the sine and cosine functions, then we can extend our sine and cosine function definitions beyond 90º.
+
+
+To find the values of the sine and the cosine in the second, third and forth quadrants of the circle, we can use symmetry from the first quadrant.
+
+So for example, we can mirror any point on the circle in the first quadrant around the y axis into the second quadrant. So our mirrored point now is at 180º minus theta, and it has the same y coordinate as our original point. So the sine of this angle, 180º minus theta, is the same as the sine of the original angle and so we can say the sine of 180º minus theta equals the sine of theta. In comparison, the x coordinate of the mirrored point is the negative of the original, so we say the cosine of 180º minus theta equals the negative cosine of theta. Now while these two relationships hold for any theta, we can use them specifically to calculate the sine and cosine of any angle in the second quadrant.
+
+Similarly, we can mirror the original point around the x axis into the fourth quadrant. This point is at an angle of 360º minus theta, but this time it's y coordinate is negative of the original and the x coordinate is the same. Therefore we can say the sine of 360º - theta equals negative sine theta, and the cosine of 360º - theta equals the cosine of theta. We can also note here that 360º minus theta is the same as rotating our line in the opposite direction, and so we can rewrite the angle as just negative theta.
+
+Finally we can mirror the original point around the y axis and x axis into the third quadrant. This point is at an angle of 180º + theta, and both it's y and x coordinates are the negative of the original so we can say the sine of 180º + theta equals negative sine theta, and the cosine of 180º + theta equals negative cosine theta.
+
+And so we've shown how we can find the sine or cosine of any angle from the sine or cosine of an angle in the first quadrant. We can of course do the same exercise with the other trigonometric functions.
+
+Finally, let's use this geometry to quickly examine the bounds of the trigonometric functions. Looking at the sine and cosine, we can see that these functions only have values between -1 and 1.
+
+Next looking at the Tan and Cot, we can see these functions can have any value between negative infinity to positive infinity
+
+And finally looking at the Sec and Cosec, we can see their values can be between negative infinity and positive infinity but not between -1 and 1.
+
+Ok, so we have covered where the trigonometric functions come from and why they apply to all right angle triangles, and we've seen two geometries that have helped us name the functions, see some relationships between them, and helped us bound their values. So we are going to stop here, but remember, many of the diagrams in the video were interactive, so if you forgot to do so during the video, go back and play with them now, and doing so may help you get a more intuitive understanding of the various things discussed. This interactive video was created with FigureOne, and open source project on GitHub. If you liked it, then give the project a star, and if you want you can read the documentation, tutorials and examples and create something yourself. Thanks for watching!
+
+
+
+
+Now, these are just two geometries showing how the 
+
+ negative x coordinate, and it touches the circle at the same y coordinate, so we can say the sine of both angles is the same. Thus the sine of theta equals the sine of 180º minus theta. We can use this to calculate the sine of any angle in the second quadrant.
+So for example, we can mirror the sine of theta around the y axis into the second quadrant. The mirrored sine line's y coordinate is the same as the original, and the angle of the mirrored radius is 180º - theta, so we can say the sine of theta equals the sine of 180º - theta. And we can use this to calculate the sine of any angle in the second quadrant. Similarly we can mirror the sine of theta around the x axis into the fourth quadrant. The mirrored radius angle is 360º minus theta, but this time the mirrored sine line is the same length, but negative, so we can say the sine of 360º minus theta is equal to negative sine theta. And we can use this to calculate all the angles in the forth quadrant. Here we can also note that 360º - theta is the same as -theta, and so we can also write this relationship as the sine of negative theta equals negative sine theta.
+
+Finally, let's mirror the sine of theta around the y axis and x axis to the third quadrant. Our new angle is 180º plus theta, and as the sine line is again negative we can say the sine of 180º plus theta equals negative sine theta.
+
+And so with these equations we can calculate the sine at every angle from 90º to 360º from the sines in the first quadrant. Note that as the angle goes above 360º, the sine values start to repeat, so the sine of angles great
+
+and see there is a value for sine and see the sine of 180º - theta in the second quadrant will have the same value. the sine of theta in the first quadrant, will have the same value as the sine of 180º - theta in the second quadrant. Similarly, the first quadrant sine of theta will be the negative of the third quadrant sine of 180º plus theta. And finally the sine of theta in the first quadrant will be the negative of the sine of 360º - theta in the fourth quadrant, which we can also right as the sine of negative theta.
+
+As the angle grows beyond 360º, the sine values begin to repeat.
+
+Using the same process, we can similarly see the cosine of theta in the first quadrant is the negative of the cosine of 180 - theta in the second quadrant, the negative of the cosine of 180 + theta in third quadrant, and equal to the sine of 360 - theta, or just the cosine of minus theta in the fourth quadrant.
+
+We can now plug the sine and cosine relationships into the remaining trigonmetric functions to find their values in the second, third and fourth quadrants as well.
+
+
+Now let's talk about the bounds of the functions.
+
+ And so we can see the sine of angles in the second quadrant is the same as the angles in the first quadrant
+
 
 
 As this geometry is interactive, I suggest you yourslef

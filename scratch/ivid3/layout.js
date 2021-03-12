@@ -100,12 +100,12 @@ function makeSlides() {
     scenarioCommon: ['default'],
     showCommon: ['title'],
     transition: { in: 'background1' },
-    time: 24.5,
+    time: 24,
   });
   slides.push({
     showCommon: ['background1', 'title'],
     transition: { in: 'background2' },
-    time: 26,
+    time: 25,
   });
   slides.push({
     transition: [
@@ -134,7 +134,7 @@ function makeSlides() {
       { in: { 'similar.tris.tri3': ['line', 'angle0', 'angle1', 'angle2'] }, duration: 0.7 },
       // { in: 'similar.allAngles' },
     ],
-    time: 33,
+    time: 32,
   });
 
   slides.push({
@@ -157,7 +157,7 @@ function makeSlides() {
         { in: 'similar.eqn', delay: 0.3 },
       ],
     ],
-    time: 38.5,
+    time: 37.5,
   });
 
   // /*
@@ -191,20 +191,22 @@ function makeSlides() {
     enterStateCommon: () => {
       figure.fnMap.exec('triSetup', [2, 1.5], 'names');
     },
-    time: 49,
-    execDelta: [2.5, 'triPulseRight'],
+    time: 46,
+    execDelta: [3.2, 'triPulseRight'],
   });
 
   // Theta and complementary
   slides.push({
     showCommon: { 'rightTri.tri': ['line', 'angle1', 'angle2', 'angle0'] },
     transition: [
-      { in: 'rightTri.tri.angle2' },
-      { pulseAngle: 'rightTri.tri.angle2', label: { scale: 1.7 }, curve: { scale: 1.7 } },
-      { delay: 0.5 },
+      [
+        { in: 'rightTri.tri.angle2' },
+        { pulseAngle: 'rightTri.tri.angle2', label: { scale: 1.7 }, curve: { scale: 1.7, delay: 0.2 } },
+      ],
+      { delay: 1 },
       { in: 'rightTri.tri.angle0' },
     ],
-    time: 53.5,
+    time: 51.7,
   });
 
   slides.push({
@@ -212,10 +214,10 @@ function makeSlides() {
       { scenario: 'rightTri', target: 'similar', duration: 1.5 },
       { in: { 'rightTri.tri2': ['line', 'angle2', 'angle0', 'angle1'] } },
       { in: { 'rightTri.tri1': ['line', 'angle2', 'angle0', 'angle1'] } },
-      { in: 'rightTri.allTriangles', duration: 1 },
+      { in: 'rightTri.allTriangles', duration: 1, delay: 1 },
       { in: 'rightTri.haveSameAngles', duration: 1 },
     ],
-    time: 60,
+    time: 58,
   });
 
   // All right triangles are similar
@@ -232,7 +234,7 @@ function makeSlides() {
       { out: 'rightTri.haveSameAngles' },
       { in: 'rightTri.areSimilar' },
     ],
-    time: 66,
+    time: 65,
   });
 
   // Show corresponding ratios eqn
@@ -251,7 +253,7 @@ function makeSlides() {
         },
       ],
     ],
-    time: 71.5,
+    time: 70,
   });
 
   // Named sides
@@ -284,7 +286,7 @@ function makeSlides() {
       { in: { 'rightTri.tri': ['side01', 'side12', 'side20'] } },
       { in: 'eqn', delay: 0.5 },
     ],
-    time: '1:16',
+    time: '1:13.5',
   });
 
   /*
@@ -314,8 +316,8 @@ function makeSlides() {
     steadyState: () => {
       figure.fnMap.exec('triSetup', [2, 1.5], 'values', true);
     },
-    time: '1:22.2',
-    exec: ['1:45.7', 'triAnimatePadTo'],
+    time: '1:17.5',
+    exec: ['1:43.7', 'triAnimatePadTo'],
   });
 
   slides.push({
@@ -334,9 +336,9 @@ function makeSlides() {
     steadyState: () => {
       figure.fnMap.exec('triSetup', [2, 1.5], 'names', false);
     },
-    time: '1:48',
+    time: '1:46.8',
   });
-  slides.push({ form: 'names', time: '1:52', exec: ['1:53.5', 'eqnPulseTrig'] });
+  slides.push({ form: 'names', time: '1:53.5', exec: ['1:56.5', 'eqnPulseTrig'] });
 
   /*
   .########....###....##....##
@@ -360,7 +362,7 @@ function makeSlides() {
       { out: { 'rightTri.tri': ['line', 'angle1', 'angle2', 'side01', 'side12', 'side20'] } },
       { in: { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc', 'triTanSec.rightTan', 'triSinCos.rightSin', 'triCotCsc.rightCot', 'theta'] } },
     ],
-    time: '2:01',
+    time: '2:02',
   });
 
   slides.push({
@@ -393,7 +395,7 @@ function makeSlides() {
     leaveStateCommon: () => {
       circ.undim();
     },
-    time: '2:09.5',
+    time: '2:11',
   });
 
   slides.push({
@@ -1066,6 +1068,23 @@ function makeSlides() {
       circ.setScenarios('noSplit');
       eqn.undim();
     },
+  });
+
+  slides.push({
+    scenarioCommon: 'circFull',
+    showCommon: { circ: ['circle', 'x', 'y', 'rotator', 'sinAlt', 'cosAlt', 'tanAlt', 'secAlt', 'cscAlt', 'cotAlt', 'rightSinAlt', 'rightTanAlt', 'rightCotAlt', 'thetaVal', 'radiusAlt', 'triSym'] },
+    hide: 'circ.triSym.cos',
+    transition: [
+      {
+        out: [
+          'eqn',
+          {
+            circ: ['cosAlt', 'tanAlt', 'secAlt', 'cscAlt', 'cotAlt', 'radiusAlt.label', 'tanLightAlt', 'rightSinAlt', 'rightTanAlt', 'rightCotAlt', 'thetaVal'],
+          },
+        ],
+      },
+      { in: 'circ.theta' },
+    ],
   });
 
 
