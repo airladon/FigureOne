@@ -4518,6 +4518,8 @@ class FigureElementCollection extends FigureElement {
 
     const rootCollection = this;
     const addedElements = [];
+    const t = [];
+    // t.push(performance.now() / 1000)
     elements.forEach((elementDefinition, index) => {
       if (elementDefinition instanceof FigureElement) {
         addedElements.push(...this.add(elementDefinition.name, elementDefinition));
@@ -4608,7 +4610,15 @@ class FigureElementCollection extends FigureElement {
         newElement.add(addElementsToUse);
         addedElements.push(addElementsToUse);
       }
+      // if (this.name === 'circ') {
+      //   t.push(performance.now() / 1000);
+      //   console.log(newElement.name, t.slice(-1)[0] - t.slice(-2, -1)[0])
+      // }
     });
+    // if (this.name === 'circ') {
+    //     t.push(performance.now() / 1000);
+    //     console.log('done', t.slice(-1)[0] - t[0])
+    //   }
     return addedElements;
   }
 

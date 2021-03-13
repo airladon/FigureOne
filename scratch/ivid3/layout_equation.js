@@ -544,20 +544,29 @@ function makeEquation() {
 
       elements: {
         sin: { style: 'normal', color: colSin },
+        sin_2: { style: 'normal', color: colSin },
         cos: { style: 'normal', color: colCos },
+        cos_2: { style: 'normal', color: colCos },
         tan: { style: 'normal', color: colTan },
         sec: { style: 'normal', color: colSec },
         sec_2: { style: 'normal', color: colSec },
         csc: { style: 'normal', color: colCsc },
         csc_2: { style: 'normal', color: colCsc },
         cot: { style: 'normal', color: colCot },
-        lim: { style: 'normal' },
+        lim_1: { style: 'normal' },
+        lim_2: { style: 'normal' },
+        opp: { color: colSin },
+        adj: { color: colCos },
+        hyp_1: { color: colHyp },
+        hyp_2: { color: colHyp },
         plus: ' + ',
         eq: '  =  ',
+        eq1: '  =  ',
         gr: '  ≥  ',
         lt1: '  ≤  ',
         lt2: '  ≤  ',
-        comma: ',  ',
+        comma: ', ',
+        comma2: ', ',
         lb1: { symbol: 'bar', side: 'left' },
         rb1: { symbol: 'bar', side: 'right' },
         lb2: { symbol: 'bar', side: 'left' },
@@ -567,15 +576,34 @@ function makeEquation() {
         theta1: { text: '\u03b8', color: colTheta },
         theta2: { text: '\u03b8', color: colTheta },
         theta3: { text: '\u03b8', color: colTheta },
-        rightArrow: { text: '\u2192' },
+        theta4: { text: '\u03b8', color: colTheta },
+        theta5: { text: '\u03b8', color: colTheta },
+        theta6: { text: '\u03b8', color: colTheta },
+        rightArrow1: { text: '\u2192' },
+        rightArrow2: { text: '\u2192' },
         lb3: { symbol: 'bracket', side: 'left' },
         rb3: { symbol: 'bracket', side: 'right' },
         lb4: { symbol: 'bracket', side: 'left' },
         rb4: { symbol: 'bracket', side: 'right' },
+        lb5: { symbol: 'bracket', side: 'left' },
+        rb5: { symbol: 'bracket', side: 'right' },
         nInf1: '-\u221e',
         nInf2: '-\u221e',
         inf1: '\u221e',
         inf2: '\u221e',
+        v1: { symbol: 'vinculum' },
+        v2: { symbol: 'vinculum' },
+        deg1: { text: '\u00b0', color: colTheta },
+        deg2: { text: '\u00b0', color: colTheta },
+        min1: { text: '\u2212', color: colTheta },
+        min2: { text: '\u2212', color: colTheta },
+        plus1: { text: '+', color: colTheta },
+        plus2: { text: '+', color: colTheta },
+        _180: { color: colTheta },
+        _180_1: { color: colTheta },
+      },
+      formDefaults: {
+        alignment: { xAlign: 'center', yAlign: 'middle' },
       },
       forms: {
         sinCosOne: [
@@ -587,8 +615,8 @@ function makeEquation() {
         tanSecOne: [
           { sup: ['tan', '2_1'] },
           '_ + ',
+          '_1', 'eq',
           { sup: ['sec', '2_2'] },
-          'eq', '_1',
         ],
         secTan: [
           abs(['sec'], 1),
@@ -596,33 +624,96 @@ function makeEquation() {
           abs(['tan'], 2),
         ],
         cscSec: [
-          'csc', { brac: ['lb3', ['_90_1', 'comp1'], 'rb3'] },
+          'csc', ' ', 'theta1',
           'eq',
-          'sec', ' ', 'theta1',
+          'sec', { brac: ['lb3', ['_90_1', 'comp1'], 'rb3'] },
         ],
         sinCos: [
-          'cos', { brac: ['lb3', ['_90_1', 'comp1'], 'rb3'] },
+          'cos', ' ', 'theta1',
           'eq',
-          'sin', ' ', 'theta1',
+          'sin', { brac: ['lb3', ['_90_1', 'comp1'], 'rb3'] },
         ],
         tanCot: [
-          'cot', { brac: ['lb3', ['_90_1', 'comp1'], 'rb3'] },
+          'cot', ' ', 'theta1',
           'eq',
-          'tan', ' ', 'theta1',
+          'tan', { brac: ['lb3', ['_90_1', 'comp1'], 'rb3'] },
         ],
         sinCosMag: [
           abs(['sin'], 1), 'lt1', '_1', 'comma', abs(['cos'], 2), 'lt2', '_1_2',
         ],
-        limSin: [
-          {
-            bottomComment: ['lim', ['theta1', 'rightArrow', '_0']],
-          }, '  ', { scale: [{ frac: [['sin', 'theta2'], 'vinculum', 'theta3'] }, 0.8] }, 'eq', '_1',
+        xy: { brac: ['lb3', 'x, y', 'rb3'] },
+        coord: {
+          content: [
+            { brac: ['lb3', 'x, y', 'rb3'] }, 'eq1', { brac: ['lb4', ['cos', 'comma', 'sin'], 'rb4'] },
+          ],
+          // translation: {
+          //   eq: { style: 'linear' },
+          //   lb3: { style: 'linear' },
+          //   x: { style: 'linear' },
+          //   comma2: { style: 'linear' },
+          //   y: { style: 'linear' },
+          //   rb3: { style: 'linear' },
+          // },
+        },
+        sinCosDef: [
+          { brac: ['lb4', ['cos', 'comma', 'sin'], 'rb4'] }, 'eq',
+          { brac: ['lb5', [{ scale: [{ frac: ['adj', 'v1', 'hyp_1'] }, 0.7] }, 'comma2', { scale: [{ frac: ['opp', 'v2', 'hyp_2'] }, 0.7] }], 'rb5'] },
         ],
-        limTan: [
-          {
-            bottomComment: ['lim', ['theta1', 'rightArrow', '_0']],
-          }, '  ', { scale: [{ frac: [['tan', 'theta2'], 'vinculum', 'theta3'] }, 0.8] }, 'eq', '_1',
-        ],
+        coord1: {
+          content: [
+            { brac: ['lb4', ['cos', 'comma', 'sin'], 'rb4'] }, 'eq', { brac: ['lb5', ['x', 'comma2', 'y'], 'rb5'] },
+          ],
+          // translation: {
+          //   eq: { style: 'curve', direction: 'up', mag: 0.8 },
+          //   lb3: { style: 'curve', direction: 'up', mag: 0.8 },
+          //   x: { style: 'curve', direction: 'up', mag: 0.8 },
+          //   comma2: { style: 'curve', direction: 'up', mag: 0.8 },
+          //   y: { style: 'curve', direction: 'up', mag: 0.8 },
+          //   rb3: { style: 'curve', direction: 'up', mag: 0.8 },
+          // },
+        },
+        lim: {
+          content: {
+            lines: {
+              content: [
+                [
+                  {
+                    bottomComment: ['lim_1', ['theta1', 'rightArrow1', '_0']],
+                  }, '  ', { scale: [{ frac: [['sin', 'theta2'], 'v1', 'theta3'] }, 0.8] }, 'eq', '_1',
+                ],
+                [
+                  {
+                    bottomComment: ['lim_2', ['theta4', 'rightArrow2', '_0_1']],
+                  }, '  ', { scale: [{ frac: [['tan', 'theta5'], 'v2', 'theta6'] }, 0.8] }, 'eq1', '_1_1',
+                ],
+              ],
+              baselineSpace: 0.7,
+            },
+          },
+          alignment: { xAlign: -0.3, yAlign: 'middle' },
+        },
+        q2Sin: ['sin', { brac: ['lb3', ['_180', 'deg1', 'min1', 'theta1'], 'rb3'] }],
+        q2SinEq: ['sin', { brac: ['lb3', ['_180', 'deg1', 'min1', 'theta1'], 'rb3'] }, 'eq', 'sin_2', ' ', 'theta2'],
+        q2: {
+          lines: {
+            content: [
+              ['sin', { brac: ['lb3', ['_180', 'deg1', 'min1', 'theta1'], 'rb3'] }, 'eq', 'sin_2', ' ', 'theta2'],
+              ['cos', { brac: ['lb4', ['_180_1', 'deg2', 'min2', 'theta3'], 'rb4'] }, 'eq1', '_\u2212', 'cos_2', ' ', 'theta4'],
+            ],
+            baselineSpace: 0.5,
+          },
+        },
+        q3Sin: ['sin', { brac: ['lb3', ['_180', 'deg1', 'plus1', 'theta1'], 'rb3'] }],
+        q3SinEq: ['sin', { brac: ['lb3', ['_180', 'deg1', 'plus1', 'theta1'], 'rb3'] }, 'eq', '_\u2212_1', 'sin_2', ' ', 'theta2'],
+        q3: {
+          lines: {
+            content: [
+              ['sin', { brac: ['lb3', ['_180', 'deg1', 'plus1', 'theta1'], 'rb3'] }, 'eq', '_\u2212_1', 'sin_2', ' ', 'theta2'],
+              ['cos', { brac: ['lb4', ['_180_1', 'deg2', 'plus2', 'theta3'], 'rb4'] }, 'eq1', '_\u2212', 'cos_2', ' ', 'theta4'],
+            ],
+            baselineSpace: 0.5,
+          },
+        },
         sinBounds: ['_-1', 'lt1', 'sin', 'lt2', '_1'],
         cosBounds: ['_-1', 'lt1', 'cos', 'lt2', '_1'],
         tanBounds: ['nInf1', 'lt1', 'tan', 'lt2', 'inf1'],
@@ -631,7 +722,13 @@ function makeEquation() {
         secBounds: ['sec', 'lt1', '_-1', 'comma', '_1', 'lt2', 'sec_2'],
       },
       scale: 1.1,
-      position: [1, 0.7],
+      position: [0.8, 0.7],
+    },
+    mods: {
+      scenarios: {
+        eqn1TopRight: { position: [0.8, 0.7] },
+        eqn1Left: { position: [-1.7, 0] },
+      },
     },
   });
   const pulseEqn = (form) => {
@@ -646,8 +743,27 @@ function makeEquation() {
       .start();
   };
   add('eqn1SinCosOne', () => pulseEqn('sinCosOne'));
+  add('eqn1SinCosMag', () => pulseEqn('sinCosMag'));
   add('eqn1TanSecOne', () => pulseEqn('tanSecOne'));
   add('eqn1SecTan', () => pulseEqn('secTan'));
   add('eqn1CscSec', () => pulseEqn('cscSec'));
+  add('eqn1SinCos', () => pulseEqn('sinCos'));
+  add('eqn1TanCot', () => pulseEqn('tanCot'));
+  add('eqn1Lim', () => pulseEqn('lim'));
+  add('eqn1Coord', () => pulseEqn('coord'));
+  add('eqn1Q2Sin', () => {
+    eqn1.stop();
+    eqn1.showForm('q2Sin');
+    eqn1.animations.new().dissolveIn(0.5).start();
+  });
+  add('eqn1Q2SinEq', () => eqn1.goToForm({ start: 'q2SinEq', target: 'q2', duration: 2, animate: 'move' }));
+  add('eqn1Q2', () => eqn1.goToForm({ start: 'q2Sin', target: 'q2', duration: 1.5, animate: 'move' }));
+  add('eqn1Q3Sin', () => {
+    eqn1.stop();
+    eqn1.showForm('q3Sin');
+    eqn1.animations.new().dissolveIn(0.5).start();
+  });
+  add('eqn1Q3SinEq', () => eqn1.goToForm({ start: 'q3SinEq', target: 'q3', duration: 2, animate: 'move' }));
+  add('eqn1Q3', () => eqn1.goToForm({ start: 'q3Sin', target: 'q3', duration: 1.5, animate: 'move' }));
 }
 

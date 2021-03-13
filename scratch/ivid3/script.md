@@ -53,10 +53,23 @@ Now, let's find an angle where two functions have the same length. Maybe most ea
 
 Ok, we can now extend this geometry out to a full circle, and then flip and rotate some of the similar triangles to see a different form of the geometry. Now, this geometry separates the sec and the cosec lines, making them easier to see, it shows how the tan and cot lines combine to form a tangent line that subtends, or covers the entire quadrant.
 
-And it can also help us better see the relationship between the sine, the cosine and the circle. So lets look at just the sine and the cosine and as we rotate the unit radius within the first quadrant, the sine and cosine are the x and y coordinates of the circle. Now if we flip our definitions around and say the x and y coordinates of the circle are the sine and cosine functions, then we can extend our sine and cosine function definitions beyond 90º.
+And it can also help us extend the trigonometric functions for theta values beyond 0 to 90º. To do this, lets look at just the sine and the cosine, and as we rotate the unit radius within the first quadrant, we can see the x and y coordinates of points on the circle equal the cosine and sine functions. But our cosine and sine definitions come from side ratios of a right angle triangle, and so are limited to theta values between 0 and 90º. Therefore if instead we say the cosine and sine functions are defined by the x and y coordinates of points on a unit circle, this is still consistent with right angle triangles in the first quadrant, but allows us to use these functions for angles outside of 0º to 90º.
+
+>Now our sine and consine functions have been defined as the ratios of sides of a right angle triangle, but if instead we say the sine and cosine functions are the x and y coordinates of a circle, it is still consistent with the right angle triangle definition, but extends the 
+
+>Now if we change our definitions around and say the cosine and sine functions come from x and y coordinates of points on the circle instead of just the ratios of a triangles sides, then we can define sine and cosine for theta values greater than 90º.
+
+Let's start by finding the sine and cosine values for angles within the second quardant by mirroring any point on the circle in the first quadrant around the y axis. The mirrored point is at an angle of 180º minus theta, and it has the same y coordinate but negative x coordinate of the original point.
+
+And so we can say the sine of 180º minus theta is equal to the sine of theta, and the cosine of 180º minus theta is the negative of cosine theta. These two relationships will hold for any theta, but we can use them to calculate the sine and cosine of any angle in the second quadrant.
+
+We can do a similar exercise for the third quadrant, but this time mirror the point around the y and x axes. The new points is at 180º + theta, and the sine and cosine functions are both the negatives of the first quadrant, and so we can say the sine of 180º + theta equals negative sine theta, and the cosine of 180º + theta equals negative cosine theta.
+
+To complete this we can mirror the point around the x axis into the fourth quadrant, where the angle will be 360º - theta. We can see the sine in this quadrant is equal to the negative of the sine in the first quadrant and the cosine in this quadrant is the same as the cosine in the first quadrant. We can also note that 360º - theta is the same rotating in the opposite direction, and so we can subsitute negative theta into these relationships.
 
 
-To find the values of the sine and the cosine in the second, third and forth quadrants of the circle, we can use symmetry from the first quadrant.
+
+>> To find the values of the sine and the cosine in the second, third and forth quadrants of the circle, we can use symmetry from the first quadrant.
 
 So for example, we can mirror any point on the circle in the first quadrant around the y axis into the second quadrant. So our mirrored point now is at 180º minus theta, and it has the same y coordinate as our original point. So the sine of this angle, 180º minus theta, is the same as the sine of the original angle and so we can say the sine of 180º minus theta equals the sine of theta. In comparison, the x coordinate of the mirrored point is the negative of the original, so we say the cosine of 180º minus theta equals the negative cosine of theta. Now while these two relationships hold for any theta, we can use them specifically to calculate the sine and cosine of any angle in the second quadrant.
 
@@ -66,13 +79,13 @@ Finally we can mirror the original point around the y axis and x axis into the t
 
 And so we've shown how we can find the sine or cosine of any angle from the sine or cosine of an angle in the first quadrant. We can of course do the same exercise with the other trigonometric functions.
 
-Finally, let's use this geometry to quickly examine the bounds of the trigonometric functions. Looking at the sine and cosine, we can see that these functions only have values between -1 and 1.
+Now, let's use this geometry to quickly examine the bounds of the trigonometric functions. Looking at the sine and cosine, we can see that these functions only have values between -1 and 1.
 
 Next looking at the Tan and Cot, we can see these functions can have any value between negative infinity to positive infinity
 
 And finally looking at the Sec and Cosec, we can see their values can be between negative infinity and positive infinity but not between -1 and 1.
 
-Ok, so we have covered where the trigonometric functions come from and why they apply to all right angle triangles, and we've seen two geometries that have helped us name the functions, see some relationships between them, and helped us bound their values. So we are going to stop here, but remember, many of the diagrams in the video were interactive, so if you forgot to do so during the video, go back and play with them now, and doing so may help you get a more intuitive understanding of the various things discussed. This interactive video was created with FigureOne, and open source project on GitHub. If you liked it, then give the project a star, and if you want you can read the documentation, tutorials and examples and create something yourself. Thanks for watching!
+Ok, so we have covered where the trigonometric functions come from and why they apply to all right angle triangles, and we've seen two geometries that have helped us name the functions, see some relationships between them, and helped us bound their values. So we are going to stop here, but remember, many of the diagrams in the video were interactive, so if you forgot to do so during the video, go back and play with them now, and doing so may help you get a more intuitive understanding of the various things discussed. This interactive video was created with FigureOne, an open source project on GitHub. If you liked it, then give the project a star, and if you want you can read the documentation, tutorials and examples and create something yourself. Thanks for watching!
 
 
 

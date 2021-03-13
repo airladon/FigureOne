@@ -848,12 +848,10 @@ class CollectionsAngle extends FigureElementCollection {
 
     super(optionsToUse);
     this.setColor(optionsToUse.color);
-
     this.collections = collections;
     this.largerTouchBorder = optionsToUse.largerTouchBorder;
     this.isTouchDevice = isTouchDevice;
     this.autoUpdateSubscriptionId = 0;
-
     this.lastLabelRotationOffset = 0;
     if (optionsToUse.direction === 'positive') {
       this.direction = 1;
@@ -865,7 +863,6 @@ class CollectionsAngle extends FigureElementCollection {
 
     this.calculateAngleRotationPosition(optionsToUse);
     this.setNextPositionAndRotation();
-
     // Setup default values for sides, arrows, curve and label
     this.side1 = null;
     this.side2 = null;
@@ -953,7 +950,6 @@ class CollectionsAngle extends FigureElementCollection {
       const sideOptions = joinObjects({}, defaultSideOptions, optionsToUse.side1);
       this.addSide(1, sideOptions.length, sideOptions.width, sideOptions.color);
     }
-
     if (optionsToUse.side2) {
       const sideOptions = joinObjects({}, defaultSideOptions, optionsToUse.side2);
       this.addSide(2, sideOptions.length, sideOptions.width, sideOptions.color);
@@ -976,7 +972,6 @@ class CollectionsAngle extends FigureElementCollection {
       this.addSide(1, sideOptions.length, sideOptions.width, sideOptions.color);
       this.addSide(2, sideOptions.length, sideOptions.width, sideOptions.color);
     }
-
     this.pulseAngleDefaults = {
       curve: optionsToUse.pulseAngle.curve || 1.5,
       corner: optionsToUse.pulseAngle.corner || 1.5,
@@ -1047,6 +1042,12 @@ class CollectionsAngle extends FigureElementCollection {
     if (optionsToUse.mods != null && optionsToUse.mods !== {}) {
       this.setProperties(optionsToUse.mods);
     }
+    // console.log(this.name, t.slice(-1)[0] - t[0], t.map((t1, index) => {
+    //   if (index === 0) {
+    //     return 0;
+    //   }
+    //   return t1 - t[index - 1];
+    // }))
   }
 
   _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
@@ -1240,7 +1241,6 @@ class CollectionsAngle extends FigureElementCollection {
     const optionsToUse = joinObjects(
       {}, defaultCurveOptions, curveOptions,
     );
-
     let { direction } = this;
     if (this.angle < 0 && this.direction === -1) {
       direction = 1;
@@ -1260,10 +1260,10 @@ class CollectionsAngle extends FigureElementCollection {
       if (optionsToUse.fill === false) {  // $FlowFixMe
         o.line = {
           width: optionsToUse.width,
+          // simple: true,
           // dash: optionsToUse.dash,
         };
       }
-
       const curve = this.collections.primitives.polygon(o);
       this.curve = optionsToUse;
       let name = 'curve';

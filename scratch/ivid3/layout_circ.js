@@ -7,7 +7,8 @@ function layoutCirc() {
   const defaultAngle = 0.9;
   const defaultSin = radius * Math.sin(defaultAngle);
   const defaultCos = radius * Math.cos(defaultAngle);
-
+  const t = [];
+  t.push(performance.now() / 1000);
   const line = (name, color, width = thick, p1 = [0, 0], length = 1, ang = 0, dash = []) => ({
     name,
     method: 'primitives.line',
@@ -162,6 +163,7 @@ function layoutCirc() {
         lineWithLabel('cos', colCos, '', thick, [0, defaultSin], defaultCos, 0),
         lineWithLabel('unit', colGrey, '', thin, [0, 0], radius, defaultAngle),
         angle('theta', '\u03b8', 0.2, 0.5, [0, 0], 0, defaultAngle),
+        { name: 'point', method: 'polygon', options: { sides: 30, radius: 0.02, fill: colText, position: [defaultCos, defaultSin ] } },
       ]),
       tri('triSinCos', [
         angle('theta', '\u03b8', 0.2, 0.5, [0, 0], 0, defaultAngle),
@@ -290,6 +292,7 @@ function layoutCirc() {
           scale: 1,
         },
       },
+      { name: 'point', method: 'polygon', options: { sides: 30, radius: 0.02, fill: colText, position: [defaultCos, defaultSin ] } },
       {
         name: 'rotatorQ2',
         method: 'collections.line',
@@ -381,6 +384,8 @@ function layoutCirc() {
       },
     },
   });
+  t.push(performance.now() / 1000);
+  console.log(t.slice(-1)[0] - t.slice(-2, -1)[0])
   const get = list => circle.getElements(list);
   const [rotator, rotatorFull] = get(['rotator', 'rotatorFull']);
   const [theta, thetaComp, thetaVal] = get(['theta', 'thetaComp', 'thetaVal']);
@@ -406,6 +411,7 @@ function layoutCirc() {
   const [symSin, symCos, symRad, symTheta] = get({ triSym: ['sin', 'cos', 'unit', 'theta'] });
   const [q2, q3, q4] = get(['q2', 'q3', 'q4']);
   const [rotQ2, rotQ3, rotQ4] = get(['rotatorQ2', 'rotatorQ3', 'rotatorQ4']);
+  const [p, pSym] = get(['point', 'triSym.point']);
 
   const boundsRects = {
     title: new Fig.Rect(-0.1, -0.1, radius + 2.5, radius + 0.6),
@@ -508,6 +514,14 @@ function layoutCirc() {
     }
     if (q2.isShown) {
       q2.setAngle({ angle: Math.PI - r });
+    }
+
+    if (p.isShown) {
+      p.setPosition(x, y);
+    }
+
+    if (pSym.isShown) {
+      pSym.setPosition(x, y);
     }
 
     if (symRad.isShown) {
@@ -1076,6 +1090,12 @@ function layoutCirc() {
       // console.log(name, element)
     });
   };
+  const addPulseWidthFn = (name, element) => {
+    figure.fnMap.global.add(name, () => {
+      element.pulseWidth({ line: 8, duration: 1.5, label: 1 });
+      // console.log(name, element)
+    });
+  };
   const add = (name, fn) => figure.fnMap.global.add(name, fn);
 
   add('circToRot', () => {
@@ -1140,9 +1160,11 @@ function layoutCirc() {
   add('circToQuad2', () => {
     // circle._triSym.showAll();
     circle._triSym.animations.new()
-      .scale({ target: [-1, 1], duration: 2 })
+      .scale({ target: [-1, 1], duration: 4 })
+      .delay(3.8)
       .inParallel([
         circle._q2.animations.dissolveIn(0.5),
+        circle._q2.animations.pulseAngle({ duration: 1.5 }),
         circle.animations.trigger(() => rotQ2.show()),
         circle.animations.trigger({ callback: () => rotatorUpdateCircle() }),
       ])
@@ -1154,8 +1176,10 @@ function layoutCirc() {
     circle._triSym.animations.new()
       .scale({ target: [-1, 1], duration: 2 })
       .scale({ target: [-1, -1], duration: 2 })
+      .delay(1.5)
       .inParallel([
         circle._q3.animations.dissolveIn(0.5),
+        circle._q3.animations.pulseAngle({ duration: 1.5 }),
         circle.animations.trigger(() => rotQ3.show()),
         circle.animations.trigger({ callback: () => rotatorUpdateCircle() }),
       ])
@@ -1171,6 +1195,18 @@ function layoutCirc() {
         circle.animations.trigger(() => rotQ4.show()),
         circle.animations.trigger({ callback: () => rotatorUpdateCircle() }),
       ])
+      .start();
+  });
+  add('circPulsePointSym', () => {
+    circle._triSym._point.show();
+    circle._triSym._point.animations.new()
+      .pulse({ scale: 5, duration: 1.5 })
+      .start();
+  });
+  add('circPulsePoint', () => {
+    circle._point.show();
+    circle._point.animations.new()
+      .pulse({ scale: 5, duration: 1.5 })
       .start();
   });
   add('circToQuad1', () => {
@@ -1205,6 +1241,10 @@ function layoutCirc() {
   addPulseFn('circPulseCos', triSinCos._cos._label, 'center', 'top');
   addPulseFn('circPulseSec', triTanSec._sec._label, 'left', 'top');
   addPulseFn('circPulseSin', triSinCos._sin._label, 'left', 'middle');
+  addPulseWidthFn('circPulseWidthSin', sinAlt);
+  addPulseWidthFn('circPulseWidthSinSym', circle._triSym._sin);
+  addPulseWidthFn('circPulseWidthCos', cosAlt);
+  addPulseWidthFn('circPulseWidthCosSym', circle._triSym._cos);
   rotator.subscriptions.add('setTransform', 'updateCircle');
   rotatorFull.subscriptions.add('setTransform', 'updateCircle');
   // symRot.subscriptions.add('setTransform', 'updateCircle');
