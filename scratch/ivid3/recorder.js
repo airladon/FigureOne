@@ -204,12 +204,13 @@ function setupRecorder() {
   }
 
   function toggleRecord() {
-    if (!(recorder.state === 'recording' && recorder.state === 'idle')) {
+    if (!(recorder.state === 'recording') && !(recorder.state === 'idle')) {
       return;
     }
     if (recorder.state === 'recording') {
       recorder.stopRecording();
     } else {
+      console.log('asdfasdf')
       const currentTime = recorder.getCurrentTime();
       recorder.startRecording(currentTime, ['autoSlide', 'autoCursor', 'autoTouch', 'autoCursorMove', 'autoExec']);
       if (currentTime === 0) {

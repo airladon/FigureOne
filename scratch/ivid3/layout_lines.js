@@ -1,19 +1,36 @@
 /* eslint-disable camelcase */
-/* globals figure, colTan, colSec, colSin, colGrey, thin, thick, centerText, colRad, leftText */
+/* globals figure, colTan, colSec, colSin, colGrey, thin, thick, colDarkGrey, colRad, leftText */
 
 
 function layoutLines() {
   const radius = 0.8;
   const length = 1.4;
+  const rightScale = 1.3;
+  const r2 = 1.3 * 0.8;
   const angle = 1;
   const chordAngle = Math.asin(length / 2 / radius) * 2;
 
+  const tri = (name, p1, p2, p3) => ({
+    name,
+    method: 'primitives.polyline',
+    options: {
+      points: [p1, p2, p3],
+      width: thin,
+      color: colGrey,
+    },
+  });
   const [lines] = figure.add({
     name: 'lines',
     method: 'collection',
     options: {
       position: [-1.5, 0],
     },
+    // mods: {
+    //   scenarios: {
+    //     circQ1: { position: [-1.5, 0], scale: 1 },
+    //     // circLeft: { position: [-1.5, 0], scale: 1.2 },
+    //   },
+    // },
     elements: [
       {
         name: 'circle',
@@ -25,6 +42,40 @@ function layoutLines() {
           color: colGrey,
         },
       },
+      {
+        name: 'circleLarge',
+        method: 'primitives.polygon',
+        options: {
+          radius: radius * rightScale,
+          line: { width: thin },
+          sides: 100,
+          color: colDarkGrey,
+        },
+      },
+      {
+        name: 'p5',
+        method: 'polygon',
+        options: {
+          sides: 5,
+          rotation: Math.PI * 2 / 10,
+          line: { width: thin },
+          color: colGrey,
+          radius: r2 * 1 / Math.cos(Math.PI * 2 / 10),
+        },
+      },
+      {
+        name: 'line1',
+        method: 'primitives.line',
+        options: {
+          p1: [r2, -1.2],
+          p2: [r2, 1.2],
+          width: thin,
+          color: colGrey,
+        },
+      },
+      tri('tri0', [0, 0], [r2, -r2 / Math.cos(0.628) * Math.sin(0.628)], [r2, 0]),
+      tri('tri1', [0, 0], [r2 * Math.cos(0.628 * 2), r2 * Math.sin(0.628 * 2)], [r2, r2 / Math.cos(0.628) * Math.sin(0.628)]),
+      // tri('tri2', [0, 0], [r2 * Math.cos(1.25), r2 * Math.sin(1.25)], [r2 * Math.cos(1.25), 0]),
       {
         name: 'line',
         method: 'primitives.line',
@@ -38,6 +89,37 @@ function layoutLines() {
           ],
           width: thick,
           color: colGrey,
+        },
+      },
+      {
+        name: 'tangentLine',
+        method: 'collections.line',
+        options: {
+          p1: [radius * rightScale, 0.8 * 1.3 / 2 * 1.453],
+          p2: [radius * rightScale, 0],
+          label: {
+            text: 'tangent',
+            location: 'right',
+            // linePosition: 0,
+            offset: 0.02,
+          },
+          width: thin,
+          color: colDarkGrey,
+        },
+      },
+      {
+        name: 'radiusLine',
+        method: 'collections.line',
+        options: {
+          p1: [0, 0],
+          p2: [radius * rightScale, 0],
+          label: {
+            text: '1',
+            location: 'bottom',
+            offset: 0.02,
+          },
+          width: thin,
+          color: colDarkGrey,
         },
       },
       {

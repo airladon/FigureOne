@@ -445,7 +445,7 @@ export default class SlideNavigator {
       if (time != null) {
         const t = this.convertTime(time);
         this.collection.recorder.events.autoSlide.list.push([t, [index], 0]);
-        lastTime = time;
+        lastTime = t;
       } else if (delta != null) {
         lastTime += delta;
         this.collection.recorder.events.autoSlide.list.push([lastTime, [index], 0]);

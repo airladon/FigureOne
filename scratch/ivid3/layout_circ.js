@@ -1164,7 +1164,7 @@ function layoutCirc() {
       .delay(3.8)
       .inParallel([
         circle._q2.animations.dissolveIn(0.5),
-        circle._q2.animations.pulseAngle({ duration: 1.5 }),
+        circle._q2.animations.pulseAngle({ duration: 2, curve: 1.3, label: 1.3 }),
         circle.animations.trigger(() => rotQ2.show()),
         circle.animations.trigger({ callback: () => rotatorUpdateCircle() }),
       ])
@@ -1179,7 +1179,7 @@ function layoutCirc() {
       .delay(1.5)
       .inParallel([
         circle._q3.animations.dissolveIn(0.5),
-        circle._q3.animations.pulseAngle({ duration: 1.5 }),
+        circle._q3.animations.pulseAngle({ duration: 2, curve: 1.3, label: 1.3 }),
         circle.animations.trigger(() => rotQ3.show()),
         circle.animations.trigger({ callback: () => rotatorUpdateCircle() }),
       ])
@@ -1189,9 +1189,11 @@ function layoutCirc() {
   add('circToQuad4', () => {
     // circle._triSym.showAll();
     circle._triSym.animations.new()
-      .scale({ target: [1, -1], duration: 2 })
+      .scale({ target: [1, -1], duration: 4 })
+      .delay(1)
       .inParallel([
         circle._q4.animations.dissolveIn(0.5),
+        circle._q4.animations.pulseAngle({ duration: 2, curve: 1.3, label: 1.3 }),
         circle.animations.trigger(() => rotQ4.show()),
         circle.animations.trigger({ callback: () => rotatorUpdateCircle() }),
       ])

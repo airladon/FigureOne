@@ -90,25 +90,25 @@ function makeSlides() {
         { out: { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc'] } },
       ],
     ],
-    time: 21,
+    time: 22.5,
   });
 
   slides.push({
     scenarioCommon: ['default'],
     showCommon: ['title'],
     transition: { in: 'background1' },
-    time: 23.6,
+    time: 26.6,
   });
   slides.push({
     showCommon: ['background1', 'title'],
     transition: { in: 'background2' },
-    time: 25,
+    time: 28,
   });
   slides.push({
     transition: [
       [{ out: ['background2', 'title'] }, { scenario: 'background1', target: 'center' }],
     ],
-    time: 28.5,
+    time: 33,
   });
 
   // /*
@@ -126,12 +126,12 @@ function makeSlides() {
     addReference: true,
     transition: [
       { out: 'background1' },
-      { in: { 'similar.tris.tri1': ['line', 'angle0', 'angle1', 'angle2'] }, duration: 0.7 },
-      { in: { 'similar.tris.tri2': ['line', 'angle0', 'angle1', 'angle2'] }, duration: 0.7 },
-      { in: { 'similar.tris.tri3': ['line', 'angle0', 'angle1', 'angle2'] }, duration: 0.7 },
+      { in: { 'similar.tris.tri1': ['line', 'angle0', 'angle1', 'angle2'] }, duration: 1 },
+      { in: { 'similar.tris.tri2': ['line', 'angle0', 'angle1', 'angle2'] }, duration: 1 },
+      { in: { 'similar.tris.tri3': ['line', 'angle0', 'angle1', 'angle2'] }, duration: 1 },
       // { in: 'similar.allAngles' },
     ],
-    time: 32,
+    time: 35,
   });
 
   slides.push({
@@ -154,7 +154,7 @@ function makeSlides() {
         { in: 'similar.eqn', delay: 0.3 },
       ],
     ],
-    time: 37.5,
+    time: 43,
   });
 
   // /*
@@ -186,10 +186,10 @@ function makeSlides() {
       { in: { 'rightTri.tri': ['line', 'angle1'] } },
     ],
     enterStateCommon: () => {
-      figure.fnMap.exec('triSetup', [2, 1.5], 'names');
+      figure.fnMap.exec('triSetup', [2, 1.453], 'names');
     },
-    time: 46,
-    execDelta: [3.2, 'triPulseRight'],
+    time: '1:02',
+    execDelta: [6, 'triPulseRight'],
   });
 
   // Theta and complementary
@@ -200,10 +200,10 @@ function makeSlides() {
         { in: 'rightTri.tri.angle2' },
         { pulseAngle: 'rightTri.tri.angle2', label: { scale: 1.7 }, curve: { scale: 1.7, delay: 0.2 } },
       ],
-      { delay: 1 },
+      { delay: 0.7 },
       { in: 'rightTri.tri.angle0' },
     ],
-    time: 51.7,
+    time: '1:11',
   });
 
   slides.push({
@@ -214,7 +214,7 @@ function makeSlides() {
       { in: 'rightTri.allTriangles', duration: 1, delay: 0 },
       { in: 'rightTri.haveSameAngles', duration: 1, delay: 1 },
     ],
-    time: 58,
+    time: '1:19',
   });
 
   // All right triangles are similar
@@ -231,7 +231,7 @@ function makeSlides() {
       { out: 'rightTri.haveSameAngles' },
       { in: 'rightTri.areSimilar' },
     ],
-    time: 65,
+    time: '1:26',
   });
 
   // Show corresponding ratios eqn
@@ -250,7 +250,7 @@ function makeSlides() {
         },
       ],
     ],
-    time: 70,
+    time: '1:31.5',
   });
 
   // Named sides
@@ -279,11 +279,13 @@ function makeSlides() {
           { rightTri: ['eqn'] },
         ],
       },
-      { scenario: 'rightTri', target: 'ratioValues', duration: 1.5 },
-      { in: { 'rightTri.tri': ['side01', 'side12', 'side20'] } },
+      { scenario: 'rightTri', target: 'ratioValues', duration: 2.5 },
+      { in: { 'rightTri.tri': ['side01'] }, duration: 0.8 },
+      { in: { 'rightTri.tri': ['side12'] }, duration: 0.8 },
+      { in: { 'rightTri.tri': ['side20'] }, duration: 0.8 },
       // { in: 'eqn', delay: 0.5 },
     ],
-    time: '1:13',
+    time: '1:38',
   });
 
   /*
@@ -307,17 +309,17 @@ function makeSlides() {
     transition: (done) => {
       figure.animations.new()
         .dissolveIn({ element: 'eqn', duration: 0.5 })
-        .delay(1)
+        .delay(3)
         .trigger({ callback: 'triAnimateToValues', duration: 0.4 })
         .then(eqn.animations.goToForm({ target: 'ratioValues', animate: 'move' }))
         .whenFinished(done)
         .start();
     },
     steadyState: () => {
-      figure.fnMap.exec('triSetup', [2, 1.5], 'values', true);
+      figure.fnMap.exec('triSetup', [2, 1.453], 'values', true);
     },
-    time: '1:17.5',
-    exec: ['1:43.7', 'triAnimatePadTo'],
+    time: '1:45.5',
+    // exec: ['1:43.7', 'triAnimatePadTo'],
   });
 
   slides.push({
@@ -326,7 +328,7 @@ function makeSlides() {
     },
     form: 'functions',
     transition: (done) => {
-      figure.fnMap.exec('triSetup', [2, 1.5], 'values', false);
+      figure.fnMap.exec('triSetup', [2, 1.453], 'values', false);
       figure.animations.new()
         .trigger({ callback: 'triAnimateToNames' })
         .then(eqn.animations.goToForm({ target: 'functions', animate: 'move', dissolveOutTime: 0.5, dissolveInTime: 0.5 }))
@@ -334,16 +336,81 @@ function makeSlides() {
         .start();
     },
     steadyState: () => {
-      figure.fnMap.exec('triSetup', [2, 1.5], 'names', false);
+      figure.fnMap.exec('triSetup', [2, 1.453], 'names', false);
     },
-    time: '1:50',
+    time: '2:28',
   });
   slides.push({
     form: 'names',
-    time: '1:55.5',
-    // exec: ['1:56.5', 'eqnPulseTrig'],
+    time: '2:36',
+    exec: [
+      ['2:38.5', 'eqnPulseSin'],
+      ['2:39', 'eqnPulseCos'],
+      ['2:39.5', 'eqnPulseTan'],
+      ['2:40.5', 'eqnPulseCsc'],
+      ['2:41.5', 'eqnPulseSec'],
+      ['2:42.2', 'eqnPulseCot'],
+    ],
   });
 
+  /*
+  .########.########...#######..##.....##
+  .##.......##.....##.##.....##.###...###
+  .##.......##.....##.##.....##.####.####
+  .######...########..##.....##.##.###.##
+  .##.......##...##...##.....##.##.....##
+  .##.......##....##..##.....##.##.....##
+  .##.......##.....##..#######..##.....##
+  */
+  slides.push({
+    from: null,
+    time: '2:48',
+    transition: [
+      {
+        out: [
+          'eqn',
+          { 'rightTri.tri': ['side01', 'side12', 'side20'] },
+        ],
+      },
+      {
+        in: ['lines.circleLarge'], delay: 0.5,
+      },
+      [
+        { scenario: 'rightTri', duration: 2, target: 'circ', delay: 1 },
+        { in: ['lines.line1'], delay: 1.5 },
+      ],
+      { out: ['lines.line1'], show: false, delay: 1 },
+      [
+        { in: 'lines.p5' },
+        { in: ['lines.tri0'] },
+      ],
+      { delay: 1 },
+      [
+        { out: 'lines.p5', show: false },
+        { out: ['lines.tri0'], show: false },
+      ],
+      { in: ['lines.tri1'] },
+      { out: ['lines.tri1'], show: false, delay: 1 },
+      { in: ['lines.tangentLine'], duration: 0.7 },
+      { in: ['lines.radiusLine'], duration: 0.7 },
+    ],
+  });
+  slides.push({
+    showCommon: {
+      'rightTri.tri': ['line', 'angle1', 'angle2'],
+      lines: ['circleLarge', 'tangentLine', 'radiusLine'],
+    },
+    fromForm: { eqn1: 'tanOnOne' },
+    form: { eqn1: 'tanOppAdj' },
+    scenario: ['eqn1Right', 'circ'],
+    transition: [
+      { in: 'eqn1' },
+      { goToForm: 'eqn1', target: 'TangentOneOppAdj', delay: 1 },
+      { goToForm: 'eqn1', target: 'tanOppAdj', delay: 3 },
+      // { goToForm: 'eqn1', target: 'oppOnAdjTan', delay: 1 },
+    ],
+    time: '3:00.5',
+  });
   /*
   .########....###....##....##
   ....##......##.##...###...##
@@ -366,7 +433,7 @@ function makeSlides() {
       { out: { 'rightTri.tri': ['line', 'angle1', 'angle2', 'side01', 'side12', 'side20'] } },
       { in: { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc', 'triTanSec.rightTan', 'triSinCos.rightSin', 'triCotCsc.rightCot', 'theta'] } },
     ],
-    time: '2:02.5',
+    // time: '3:02.5',
   });
 
   slides.push({
@@ -402,7 +469,7 @@ function makeSlides() {
     leaveStateCommon: () => {
       circ.undim();
     },
-    time: '2:12',
+    // time: '2:12',
   });
 
   slides.push({
@@ -424,7 +491,7 @@ function makeSlides() {
         { pulse: ['circ.triTanSec.tan.label', 'circ.tanTheta.label'], xAlign: 'left', delay: 0.2 },
       ],
     ],
-    time: '2:32',
+    // time: '2:32',
     exec: ['2:43.5', 'circToRot'],
   });
 
@@ -437,7 +504,7 @@ function makeSlides() {
     show: { lines: ['tangentDef', 'radius', 'rightAngle'] },
     enterState: 'linesSetTan',
     transition: { out: 'circ.tanTheta.label' },
-    time: '2:48.5',
+    // time: '2:48.5',
   });
 
   /*
@@ -469,7 +536,7 @@ function makeSlides() {
       { in: 'lines.secantDef' },
     ],
     steadyState: 'linesSetSec',
-    time: '2:53.5',
+    // time: '2:53.5',
   });
 
   slides.push({
@@ -493,7 +560,7 @@ function makeSlides() {
       ],
     ],
     steadyState: 'linesSetSec',
-    time: '3:06',
+    // time: '3:06',
   });
 
   /*
@@ -527,7 +594,7 @@ function makeSlides() {
       ],
     ],
     steadyState: 'linesSetChord',
-    time: '3:13.5',
+    // time: '3:13.5',
   });
 
 
@@ -555,7 +622,7 @@ function makeSlides() {
       { out: 'lines.halfChordLabel', show: false },
     ],
     steadyState: 'linesSetChord',
-    time: '3:25.5',
+    // time: '3:25.5',
   });
 
 
@@ -590,7 +657,7 @@ function makeSlides() {
       ],
       { in: 'circ.thetaComp', delay: 0.5 },
     ],
-    time: '3:47',
+    // time: '3:47',
   });
 
   slides.push({
@@ -631,7 +698,7 @@ function makeSlides() {
         { pulse: 'circ.triCotCsc.cot.label', delay: 0.5, yAlign: 'bottom' },
       ],
     ],
-    time: '3:54.5',
+    // time: '3:54.5',
   });
 
   /*
@@ -670,7 +737,7 @@ function makeSlides() {
         },
       ],
     ],
-    time: '4:10.5',
+    // time: '4:10.5',
   });
 
 
@@ -716,7 +783,7 @@ function makeSlides() {
       circ.undim();
       figure.fnMap.exec('circSetCosDown');
     },
-    time: '4:22.5',
+    // time: '4:22.5',
   });
 
 
@@ -751,7 +818,7 @@ function makeSlides() {
         { in: 'eqn' },
       ],
     ],
-    time: '4:35',
+    // time: '4:35',
   });
 
   // Split
@@ -769,7 +836,7 @@ function makeSlides() {
       circ.setScenarios('noSplit');
       circ.undim();
     },
-    time: '4:39',
+    // time: '4:39',
   });
 
   // Sin Column
@@ -816,7 +883,7 @@ function makeSlides() {
       { goToForm: 'eqn', target: 'build2', delay: 0, duration: 1 },
       { goToForm: 'eqn', target: 'build3', delay: 2.3, duration: 1 },
     ],
-    time: '4:48.5',
+    // time: '4:48.5',
   });
   slides.push({
     addReference: true,
@@ -824,7 +891,7 @@ function makeSlides() {
     transition: [
       { pulseAngle: { circ: ['triSinCos.theta', 'triTanSec.theta', 'triCotCsc.theta', 'triSinCos.rightSin', 'triTanSec.rightTan', 'triCotCsc.rightCot'] }, duration: 1.5 },
     ],
-    time: '5:15.2',
+    // time: '5:15.2',
   });
   slides.push({
     transition: [
@@ -836,7 +903,7 @@ function makeSlides() {
       // },
       { out: 'circ.triSinCos' },
     ],
-    time: '5:26.5',
+    // time: '5:26.5',
   });
   // slides.push({ form: 'build1' });
   // slides.push({ form: 'build2' });
@@ -854,7 +921,7 @@ function makeSlides() {
     transition: [
       { goToForm: 'eqn', target: 'build4' },
     ],
-    time: '5:27.5',
+    // time: '5:27.5',
   });
 
   // Tan Column
@@ -876,12 +943,12 @@ function makeSlides() {
       ],
       { goToForm: 'eqn', target: 'full' },
     ],
-    time: '5:29',
+    // time: '5:29',
   });
 
   slides.push({
     addReference: true,
-    time: '5:34',
+    // time: '5:34',
     scenarioCommon: 'tanSecTri',
     showCommon: { circ: ['theta', 'triTanSec.tan', 'triTanSec.sec', 'triTanSec.rightTan', 'rotator', 'xQ1'] },
     enterStateCommon: () => figure.fnMap.exec('circSetup', [0.9, 'quarter']),
@@ -910,19 +977,19 @@ function makeSlides() {
 
   // Simplify
   slides.push({
-    time: '5:36',
+    // time: '5:36',
     showCommon: { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.rightSin', 'triCotCsc.rightCot', 'triTanSec.rightTan', 'triTanSec.tan', 'triTanSec.sec', 'triSinCos.sin', 'triSinCos.cos', 'triCotCsc.cot', 'triCotCsc.csc', 'radius', 'xRadius', 'secLight', 'cscLight', 'cotLight', 'tanLight', 'sinLight', 'theta'] },
     form: 'fullBoxes',
   });
   slides.push({
-    time: '5:38',
+    // time: '5:38',
     form: 'fullNamesBoxes',
     transition: { goToForm: 'eqn', target: 'fullNamesBoxes', duration: 3 },
   });
   slides.push({ time: '5:42', form: 'fullNames' });
   slides.push({ time: '5:54', form: 'keep' });
   slides.push({
-    time: '5:59',
+    // time: '5:59',
     form: 'final',
     transition: [
       [
@@ -983,7 +1050,7 @@ function makeSlides() {
 
   // Values
   slides.push({
-    time: '6:22',
+    // time: '6:22',
     scenarioCommon: ['circQ1Values', 'eqn1TopRight'],
     form: 'value',
     addReference: true,
@@ -1033,7 +1100,7 @@ function makeSlides() {
   slides.push({
     show: 'circ.thetaVal',
     hide: 'circ.theta',
-    time: '8:09',
+    // time: '8:09',
     addReference: true,
     transition: (done) => {
       // figure.fnMap.exec('circSetup', 0.9, 'circle');
@@ -1062,7 +1129,7 @@ function makeSlides() {
     showCommon: { circ: ['circle', 'x', 'y', 'rotatorFull', 'triSinCos.rightSin', 'triCotCsc.rightCot', 'triTanSec.rightTan', 'triTanSec.tan', 'triTanSec.sec', 'triSinCos.sin', 'triSinCos.cos', 'triCotCsc.cot', 'triCotCsc.csc', 'radius', 'xRadius', 'secLight', 'cscLight', 'cotLight', 'tanLight', 'sinLight', 'thetaVal', 'radiusAlt.line'] },
     show: 'circ.thetaVal',
     hide: { circ: ['theta', 'secLight', 'cscLight', 'cotLight', 'tanLight', 'sinLight'] },
-    time: '8:12.5',
+    // time: '8:12.5',
     transition: (done) => {
       figure.fnMap.exec('circSetup', [0.9, 'circle']);
       circ.hasTouchableElements = false;
@@ -1105,7 +1172,7 @@ function makeSlides() {
       figure.fnMap.exec('circSetup', [0.9, 'quarter']);
       figure.fnMap.exec('circToQuad1');
     },
-    time: '8:41',
+    // time: '8:41',
     // exec: [
       
     // ],
@@ -1135,7 +1202,7 @@ function makeSlides() {
       { in: 'eqn1' },
       { goToForm: 'eqn1', target: 'coord', delay: 2.7, duration: 2 },
     ],
-    time: '8:50',
+    // time: '8:50',
     exec: ['8:52.5', 'circPulsePoint'],
   });
   slides.push({
@@ -1143,19 +1210,19 @@ function makeSlides() {
     transition: [
       { goToForm: 'eqn1', target: 'sinCosDef', duration: 2.5 },
     ],
-    time: '8:58.5',
+    // time: '8:58.5',
   });
   slides.push({
     form: { eqn1: 'coord1' },
     transition: [
       { goToForm: 'eqn1', target: 'coord1', duration: 1.5 },
     ],
-    time: '9:14.5',
+    // time: '9:14.5',
   });
   slides.push({
     fromForm: { eqn1: 'coord1' },
     form: { eqn1: null },
-    time: '9:35',
+    // time: '9:35',
     transition: [
       { out: 'eqn1' },
     ],
@@ -1177,7 +1244,7 @@ function makeSlides() {
   slides.push({
     fromForm: { eqn1: 'q2' },
     form: { eqn1: null },
-    time: '10:18',
+    // time: '10:18',
     transition: [
       { out: 'eqn1' },
     ],
@@ -1192,6 +1259,50 @@ function makeSlides() {
       ['10:41', 'eqn1Q3'],
       ['10:43', 'circPulseWidthCosSym'],
       ['10:46', 'circPulseWidthCos'],
+    ],
+  });
+  slides.push({
+    fromForm: { eqn1: 'q3' },
+    form: { eqn1: null },
+    // time: '10:49',
+    transition: [
+      { out: 'eqn1' },
+    ],
+    exec: [
+      ['10:50', 'circToQuad4'],
+
+      ['10:59', 'eqn1Q4Sin'],
+      ['10:59', 'circPulseWidthSinSym'],
+      ['11:01', 'eqn1Q4SinEq'],
+      ['11:02.5', 'circPulseWidthSin'],
+      ['11:04', 'eqn1Q4'],
+      ['11:04.5', 'circPulseWidthCosSym'],
+      ['11:07', 'circPulseWidthCos'],
+      ['11:17', 'eqn1Q4Neg'],
+    ],
+  });
+
+  slides.push({
+    scenarioCommon: ['circFull', 'eqn1Left'],
+    showCommon: { circ: ['circle', 'x', 'y', 'rotatorFull', 'sinAlt', 'cosAlt', 'tanAlt', 'secAlt', 'cscAlt', 'cotAlt', 'rightSinAlt', 'rightTanAlt', 'rightCotAlt', 'thetaVal', 'radiusAlt', 'triSym', 'theta.label'] },
+    hide: ['circ.triSym.point'],
+    enterStateCommon: () => {
+      figure.fnMap.exec('circSetup', [0.9, 'quarter']);
+      figure.fnMap.exec('circToQuad1');
+    },
+    // time: '11:21',
+    fromForm: { eqn: 'valueAlt', eqn1: 'q4Neg' },
+    form: { eqn: 'valueAlt' },
+    transition: [
+      { out: ['circ.triSym', 'circ.theta.label', 'eqn1'] },
+      {
+        in: [
+          'eqn',
+          {
+            circ: ['tanAlt', 'secAlt', 'cscAlt', 'cotAlt', 'radiusAlt.label', 'tanLightAlt', 'rightSinAlt', 'rightTanAlt', 'rightCotAlt', 'thetaVal', 'thetaVal'],
+          },
+        ],
+      },
     ],
   });
   // slides.push({

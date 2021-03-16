@@ -225,6 +225,7 @@ function layoutRight() {
         center: { position: [-0.8, -0.9], scale: 1 },
         similar: { position: [0.5, -0.3], scale: 0.7 },
         ratioValues: { position: [-0.3, -0.9], scale: 1 },
+        circ: { position: [-1.5, 0], scale: 0.8 * 1.3 / 2 },
       },
     },
   });
@@ -460,7 +461,7 @@ function layoutRight() {
   });
   figure.fnMap.global.add('triAnimatePadTo', () => {
     movePad.animations.new()
-      .position({ target: [2, 1.5], duration: 1 })
+      .position({ target: [2, 1.453], duration: 1 })
       .start();
   });
 

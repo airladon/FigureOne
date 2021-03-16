@@ -503,6 +503,12 @@ function makeEquation() {
   add('eqnPulseSecAdj', () => sPulse('adj_3', 'center', 'top'));
   add('eqnPulseCotOpp', () => sPulse('opp_4', 'center', 'top'));
   add('eqnPulseCscOpp', () => sPulse('opp_3', 'center', 'top'));
+  add('eqnPulseSin', () => sPulse('sin_1', 'right', 'middle'));
+  add('eqnPulseCos', () => sPulse('cos_1', 'right', 'middle'));
+  add('eqnPulseTan', () => sPulse('tan_1', 'right', 'middle'));
+  add('eqnPulseCsc', () => sPulse('csc_1', 'right', 'middle'));
+  add('eqnPulseSec', () => sPulse('sec_1', 'right', 'middle'));
+  add('eqnPulseCot', () => sPulse('cot_1', 'right', 'middle'));
   add('eqnPulseOppHyp', () => pulse(['opp_1', 'v1', 'hyp_1'], 'v1', 'right'));
   add('eqnPulseAdjHyp', () => pulse(['adj_1', 'v2', 'hyp_2'], 'v2', 'right'));
   add('eqnPulseOppAdj', () => pulse(['opp_2', 'v3', 'adj_2'], 'v3', 'right'));
@@ -601,6 +607,8 @@ function makeEquation() {
         plus2: { text: '+', color: colTheta },
         _180: { color: colTheta },
         _180_1: { color: colTheta },
+        _360: { color: colTheta },
+        _360_1: { color: colTheta },
       },
       formDefaults: {
         alignment: { xAlign: 'center', yAlign: 'middle' },
@@ -714,12 +722,60 @@ function makeEquation() {
             baselineSpace: 0.5,
           },
         },
+        q4Sin: ['sin', { brac: ['lb3', ['_360', 'deg1', 'min1', 'theta1'], 'rb3'] }],
+        q4SinEq: ['sin', { brac: ['lb3', ['_360', 'deg1', 'min1', 'theta1'], 'rb3'] }, 'eq', '_\u2212_1', 'sin_2', ' ', 'theta2'],
+        q4: {
+          lines: {
+            content: [
+              ['sin', { brac: ['lb3', ['_360', 'deg1', 'min1', 'theta1'], 'rb3'] }, 'eq', '_\u2212_1', 'sin_2', ' ', 'theta2'],
+              ['cos', { brac: ['lb4', ['_360_1', 'deg2', 'min2', 'theta3'], 'rb4'] }, 'eq1', 'cos_2', ' ', 'theta4'],
+            ],
+            baselineSpace: 0.5,
+          },
+        },
+        q4Neg: {
+          lines: {
+            content: [
+              ['sin', { brac: ['lb3', ['min1', 'theta1'], 'rb3'] }, 'eq', '_\u2212_1', 'sin_2', ' ', 'theta2'],
+              ['cos', { brac: ['lb4', ['min2', 'theta3'], 'rb4'] }, 'eq1', 'cos_2', ' ', 'theta4'],
+            ],
+            baselineSpace: 0.5,
+          },
+        },
         sinBounds: ['_-1', 'lt1', 'sin', 'lt2', '_1'],
         cosBounds: ['_-1', 'lt1', 'cos', 'lt2', '_1'],
         tanBounds: ['nInf1', 'lt1', 'tan', 'lt2', 'inf1'],
         cotBounds: ['nInf1', 'lt1', 'cot', 'lt2', 'inf1'],
         cscBounds: ['csc', 'lt1', '_-1', 'comma', '_1', 'lt2', 'csc_2'],
         secBounds: ['sec', 'lt1', '_-1', 'comma', '_1', 'lt2', 'sec_2'],
+        tanOnOne: {
+          content: { frac: [['tan_1', 'gent'], 'v2', '_1'] },
+          alignment: { xAlign: 'left', yAlign: 'baseline' },
+        },
+        TangentOneOppAdj: {
+          content: [
+            { frac: [['tan_1', 'gent'], 'v2', '_1'] },
+            'eq',
+            { frac: ['opposite', 'v1', 'adjacent'] },
+          ],
+          alignment: { xAlign: 'left', yAlign: 'baseline' },
+        },
+        // oppOnAdjTangent: {
+        //   content: [
+        //     { frac: ['opposite', 'v1', 'adjacent'] },
+        //     'eq',
+        //     'tan_1', 'gent',
+        //   ],
+        //   alignment: { xAlign: 'left' },
+        // },
+        tanOppAdj: {
+          content: [
+            'tan_1',
+            'eq',
+            { frac: ['opposite', 'v1', 'adjacent'] },
+          ],
+          alignment: { xAlign: 'left', yAlign: 'baseline' },
+        },
       },
       scale: 1.1,
       position: [0.8, 0.7],
@@ -728,6 +784,7 @@ function makeEquation() {
       scenarios: {
         eqn1TopRight: { position: [0.8, 0.7] },
         eqn1Left: { position: [-1.7, 0] },
+        eqn1Right: { position: [0.3, 0] },
       },
     },
   });
@@ -765,5 +822,14 @@ function makeEquation() {
   });
   add('eqn1Q3SinEq', () => eqn1.goToForm({ start: 'q3SinEq', target: 'q3', duration: 2, animate: 'move' }));
   add('eqn1Q3', () => eqn1.goToForm({ start: 'q3Sin', target: 'q3', duration: 1.5, animate: 'move' }));
+
+  add('eqn1Q4Sin', () => {
+    eqn1.stop();
+    eqn1.showForm('q4Sin');
+    eqn1.animations.new().dissolveIn(0.5).start();
+  });
+  add('eqn1Q4SinEq', () => eqn1.goToForm({ start: 'q4SinEq', target: 'q4', duration: 2, animate: 'move' }));
+  add('eqn1Q4', () => eqn1.goToForm({ start: 'q4Sin', target: 'q4', duration: 1.5, animate: 'move' }));
+  add('eqn1Q4Neg', () => eqn1.goToForm({ start: 'q4', target: 'q4Neg', duration: 1.5, animate: 'move' }));
 }
 
