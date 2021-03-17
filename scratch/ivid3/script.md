@@ -29,7 +29,7 @@ To understand the trigonometric functions we apply the study of similar triangle
 
 * For the first ratio of the first triangle, the opposite side is the sine function, and the hypotenuse is one, and so our ratio is sine over one or just the sine function. 
 * Our second ratio then, the adjacent over the hypotenuse, is the cosine over one or just the cosine function. Our third ratio is the sine over the cosine and we can continue to fill in the remaining ratios.
-* Now, as we said, each triangle is similar, so we can equate the ratios of the second triangle to the first, and then do the same for the third triangle.
+* Now, as we said, each triangle is similar, so we can equate the ratios of the first triangle to the second, and then do the same for the third triangle.
 * And so each ratio here has an expression that is one of our named sides, and so that is the name we give the associated trigonometric function.
 * This exercise has also resulted in a bunch of relationships, however we don't have to worry about remembering them all as with just one relationship for each function, we can pretty easily derive the others, and so we will *keep* just one *key relationship* for each.
 

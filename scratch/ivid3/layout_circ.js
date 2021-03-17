@@ -260,7 +260,10 @@ function layoutCirc() {
             sinComp: ['sin', ' ', 'compAngle'],
           },
           forms: {
-            tanComp: 'tanComp',
+            tanComp: {
+              content: 'tanComp',
+              alignment: { xAlign: '-0.5o' },
+            },
             complementaryTangent: ['tanComp', 'eq', ln(
               ['c_1', 'o_1', 'mplementary_1'],
               ['t_1', 'an_1', 'gent_1', '_ of _1', 'theta1'],
@@ -271,7 +274,10 @@ function layoutCirc() {
               'eq', 'c_1', 'o_1', 't_1', 'an_1', ' ', 'theta1'],
             cotTheta: ['tanComp', 'eq', 'c_1', 'o_1', 't_1', ' ', 'theta1'],
             //
-            secComp: 'secComp',
+            secComp: {
+              content: 'secComp',
+              alignment: { xAlign: '-0.5o' },
+            },
             complementarySecant: ['secComp', 'eq', ln(
               ['c_2', 'o_2', 'mplementary_2'],
               ['s_2', 'e_2', 'c_21', 'ant_2', '_ of _2', 'theta1'],
@@ -280,7 +286,14 @@ function layoutCirc() {
             cosec: ['secComp', 'eq', 'c_2', 'o_2', 's_2', 'e_2', 'c_21', ' ', 'theta1'],
             csc: ['secComp', 'eq', 'c_2', 's_2', 'c_21', ' ', 'theta1'],
             //
-            sinComp: 'sinComp',
+            sin: {
+              content: 'sin',
+              alignment: { xAlign: '-0.4o' },
+            },
+            sinComp: {
+              content: 'sinComp',
+              alignment: { xAlign: '-0.4o' },
+            },
             complementarySine: ['sinComp', 'eq', ln(
               ['c_3', 'o_3', 'mplementary_3'],
               ['s_3', 'ine_3', '_ of _3', 'theta1'],
@@ -377,10 +390,13 @@ function layoutCirc() {
         title: { scale: 0.9, position: [-radius / 2, -1.2] },
         circQ1: { scale: 1, position: [-0.4, -1] },
         circQ1Values: { scale: 1, position: [-0.2, -1] },
-        split: { scale: 1, position: [1.1, -1.2] },
+        split: { scale: 1, position: [1.1, -1] },
+        centerSplit: { scale: 1, position: [0.4, -1] },
+        centerRightSplit: { scale: 1, position: [0.7, -1] },
         tanSecTri: { scale: 1, position: [0.5, -1] },
         circFull: { scale: 0.7, position: [0.7, 0] },
         nameDefs: { scale: 1, position: [0.4, -1] },
+        fromCirc: { scale: 1.04 / 1.5, position: [-1.5, 0] },
       },
     },
   });
@@ -548,7 +564,7 @@ function layoutCirc() {
       sin.setEndPoints([x, 0], [x, y]);
     }
     if (sinLight.isShown) {
-      if ((!sin.isShown && (cos.isShown || !radiusLine.isShown)) || radiusLight.isShown) {
+      if ((!sin._line.isShown && (cos.isShown || !radiusLine.isShown)) || radiusLight.isShown) {
         sinLight.setOpacity(1);
         sinLight.custom.updatePoints({ p1: [x, 0], p2: [x, y] });
       } else {
@@ -680,7 +696,7 @@ function layoutCirc() {
       const [cotLine] = clip([0, ySign * radius], [xSign * cotVal, ySign * radius]);
       let offsetX = 0;
       let offsetY = 0;
-      if (csc.isShown && sec.isShown) {
+      if (csc.isShown && sec._line.isShown) {
         offsetX = thick * Math.cos(r + xSign * ySign * Math.PI / 2);
         offsetY = thick * Math.sin(r + xSign * ySign * Math.PI / 2);
       }
@@ -700,7 +716,7 @@ function layoutCirc() {
     if (cotLight.isShown) {
       let offsetX = 0;
       let offsetY = 0;
-      if (csc.isShown && sec.isShown) {
+      if (csc.isShown && sec._line.isShown) {
         offsetX = thick * Math.cos(r + xSign * ySign * Math.PI / 2);
         offsetY = thick * Math.sin(r + xSign * ySign * Math.PI / 2);
       }
@@ -731,7 +747,7 @@ function layoutCirc() {
       const [cscLine] = clip([0, 0], [xSign * cotVal, ySign * radius]);
       let offsetX = 0;
       let offsetY = 0;
-      if (sec.isShown && csc.getScale().x > 0) {
+      if (sec._line.isShown && csc.getScale().x > 0) {
         offsetX = thick * Math.cos(r + xSign * ySign * Math.PI / 2);
         offsetY = thick * Math.sin(r + xSign * ySign * Math.PI / 2);
       }
@@ -1137,17 +1153,17 @@ function layoutCirc() {
         circle._xQ1.animations.dissolveOut(0.5),
         circle._yQ1.animations.dissolveOut(0.5),
         circle._rotator.animations.dissolveOut(0.5),
-        circle._theta.animations.dissolveOut(0.5),
+        // circle._theta.animations.dissolveOut(0.5),
         triTanSec._unit._line.animations.dissolveIn(0.5),
         triSinCos._unit._line.animations.dissolveIn(0.5),
-        triCotCsc._unit._line.animations.dissolveIn(0.5),
+        // triCotCsc._unit._line.animations.dissolveIn(0.5),
       ])
       .inParallel([
         triTanSec._unit._label.animations.dissolveIn(0.5),
         triSinCos._unit._label.animations.dissolveIn(0.5),
-        triCotCsc._unit._label.animations.dissolveIn(0.5),
-        triTanSec._theta.animations.dissolveIn(0.5),
-        triSinCos._theta.animations.dissolveIn(0.5),
+        // triCotCsc._unit._label.animations.dissolveIn(0.5),
+        // triTanSec._theta.animations.dissolveIn(0.5),
+        // triSinCos._theta.animations.dissolveIn(0.5),
         triCotCsc._theta.animations.dissolveIn(0.5),
       ])
       .start();
@@ -1242,7 +1258,10 @@ function layoutCirc() {
   addPulseFn('circPulseCsc', triCotCsc._csc._label, 'right', 'bottom');
   addPulseFn('circPulseCos', triSinCos._cos._label, 'center', 'top');
   addPulseFn('circPulseSec', triTanSec._sec._label, 'left', 'top');
+  addPulseFn('circPulseTanSecUnit', triTanSec._unit._label, 'center', 'top');
   addPulseFn('circPulseSin', triSinCos._sin._label, 'left', 'middle');
+  addPulseFn('circPulseSinCosUnit', triSinCos._unit._label, 'right', 'bottom');
+  addPulseFn('circPulseCotCscUnit', triCotCsc._unit._label, 'left', 'middle');
   addPulseWidthFn('circPulseWidthSin', sinAlt);
   addPulseWidthFn('circPulseWidthSinSym', circle._triSym._sin);
   addPulseWidthFn('circPulseWidthCos', cosAlt);

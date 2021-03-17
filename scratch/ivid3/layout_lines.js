@@ -239,13 +239,13 @@ function layoutLines() {
       cordRad * Math.cos(angle), cordRad * Math.sin(angle),
     ],
     outsidePosition: [
-      radius * 1.5 * Math.cos(angle), radius * 1.5 * Math.sin(angle),
+      radius * 1.2 * Math.cos(angle), radius * 1.2 * Math.sin(angle),
     ],
   };
   const add = (name, func) => figure.fnMap.global.add(name, func);
   add('linesToTan', () => {
     line.animations.new()
-      .position({ target: lines.custom.tanPosition, duration: 3 })
+      .position({ target: lines.custom.tanPosition, duration: 1.5 })
       .trigger(() => line.setColor(colTan))
       .start();
   });

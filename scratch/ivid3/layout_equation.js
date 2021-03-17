@@ -349,12 +349,14 @@ function makeEquation() {
         c2f: cont(lin(['eq1', 'eq2', 'eq9', 'eq10', 'eq11', 'eq12']), 0.3),
         c2_0: cont(lin(['eq1', '', '', '', '', '']), 0.3),
         c2_1: cont(lin(['eq1', 'eq2', '', '', '', '']), 0.3),
+        c2_2: cont(lin(['eq1', 'eq2', 'eq3', '', '', '']), 0.3),
 
         c3: lin(['sin', 'cos', 'sinCos', 'oneSin', 'oneCos', 'cosSin']),
         c3b: lin([b('sin', 1), b('cos', 2), 'sinCos', 'oneSin', 'oneCos', 'cosSin']),
         c3_0: lin(['sinOne', '', '', '', '', '']),
         c3_1: lin(['sin', '', '', '', '', '']),
         c3_2: lin(['sin', 'cos', '', '', '', '']),
+        c3_2a: lin(['sin', 'cos', 'sinCos', '', '', '']),
         c3s: lin(['sin', 'cos', 'sinCos', 'oneSin', 'oneCos', b('cosSin', 1)]),
         c3f: lin(['sin', 'cos', 'tan', 'csc', 'sec', 'cot']),
         c3fb: lin([b('sin', 1), b('cos', 2), b('tan', 5), b('csc', 3), b('sec', 6), b('cot', 4)]),
@@ -394,9 +396,10 @@ function makeEquation() {
         ratioValues: ['c1', 'c2', 'cv'],
         functions: ['c1', 'c2', 'cfunc'],
         names: ['c1', 'c2', 'c3f'],
-        build0: ['c1', 'c2', 'c3_0'],
-        build1: ['c1', 'c2', 'c3_1'],
-        build2: ['c1', 'c2', 'c3_2'],
+        build0: ['c1', 'c2_0', 'c3_0'],
+        build1: ['c1', 'c2_0', 'c3_1'],
+        build2: ['c1', 'c2_1', 'c3_2'],
+        build2a: ['c1', 'c2_2', 'c3_2a'],
         build3: ['c1', 'c2', 'c3'],
         build4: ['c1', 'c2', 'c3', 'c4', 'c5'],
         full: ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7'],
@@ -511,6 +514,8 @@ function makeEquation() {
   add('eqnPulseCot', () => sPulse('cot_1', 'right', 'middle'));
   add('eqnPulseOppHyp', () => pulse(['opp_1', 'v1', 'hyp_1'], 'v1', 'right'));
   add('eqnPulseAdjHyp', () => pulse(['adj_1', 'v2', 'hyp_2'], 'v2', 'right'));
+  add('eqnPulseOppHypS', () => pulse(['opp_1', 'opp_1s', 'v1', 'hyp_1', 'hyp_1s'], 'v1', 'right'));
+  add('eqnPulseAdjHypS', () => pulse(['adj_1', 'adj_1s', 'v2', 'hyp_2', 'hyp_2s'], 'v2', 'right'));
   add('eqnPulseOppAdj', () => pulse(['opp_2', 'v3', 'adj_2'], 'v3', 'right'));
   add('eqnPulseHypOpp', () => pulse(['hyp_3', 'v4', 'opp_3'], 'v4', 'right'));
   add('eqnPulseHypAdj', () => pulse(['hyp_4', 'v5', 'adj_3'], 'v5', 'right'));

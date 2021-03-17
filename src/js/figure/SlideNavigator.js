@@ -868,6 +868,7 @@ export default class SlideNavigator {
         this.processAutoTransitionAnim(step, 'out', 'dissolveOut', animSteps, { duration: 0.5 });
         this.processAutoTransitionAnim(step, 'scenario', 'scenario', animSteps, { duration: 2 });
         this.processAutoTransitionAnim(step, 'pulseWidth', 'pulseWidth', animSteps, { duration: 1.5 });
+        this.processAutoTransitionAnim(step, 'length', 'length', animSteps, { duration: 1.5 });
         this.processAutoTransitionAnim(step, 'pulseAngle', 'pulseAngle', animSteps, { duration: 1.5 });
         this.processAutoTransitionAnim(step, 'pulse', 'pulse', animSteps, { duration: 1.5 });
         this.processAutoTransitionAnim(step, 'dim', 'dim', animSteps, { duration: 1 });
