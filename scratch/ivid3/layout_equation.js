@@ -360,8 +360,8 @@ function makeEquation() {
         c3s: lin(['sin', 'cos', 'sinCos', 'oneSin', 'oneCos', b('cosSin', 1)]),
         c3f: lin(['sin', 'cos', 'tan', 'csc', 'sec', 'cot']),
         c3fb: lin([b('sin', 1), b('cos', 2), b('tan', 5), b('csc', 3), b('sec', 6), b('cot', 4)]),
-        c3t: lin([t('sin', 1, 1), t('cos', 2, 1), t('tan', 3, 1), t('csc', 4, 1), t('sec', 5, 1), t('cot', 6, 1)]),
-        c3tAlt: lin([t('sin', 7, 1), t('cos', 8, 1), t('tan', 9, 1), t('csc', 10, 1), t('sec', 11, 1), t('cot', 12, 1)]),
+        c3t: lin([t('sin', 1, 2), t('cos', 2, 2), t('tan', 3, 2), t('csc', 4, 2), t('sec', 5, 2), t('cot', 6, 2)]),
+        c3tAlt: lin([t('sin', 7, 2), t('cos', 8, 2), t('tan', 9, 2), t('csc', 10, 2), t('sec', 11, 2), t('cot', 12, 2)]),
 
         c4: cont(lin(['eq7', 'eq8', 'eq9', 'eq10', 'eq11', 'eq12']), 0.3),
         // c4f: cont(lin(['eq7', 'eq8', 'eq9', 'eq10', 'eq11', 'eq12']), 0.3),
@@ -852,7 +852,7 @@ function makeEquation() {
   // add('eqn1CscSec', () => pulseEqn('cscSec'));
   // add('eqn1SinCos', () => pulseEqn('sinCos'));
   // add('eqn1TanCot', () => pulseEqn('tanCot'));
-  add('eqn1Lim', () => pulseEqn('lim', 1, [1.3, -1.95]));
+  add('eqn1Lim', () => pulseEqn('lim', 1, [1.3, -0.95]));
   add('eqn1Coord', () => pulseEqn('coord'));
   add('eqn1Q2Sin', () => {
     eqn1.stop();

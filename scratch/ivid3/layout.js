@@ -555,6 +555,7 @@ function makeSlides() {
     ],
     steadyState: 'linesSetSec',
     time: '3:53',
+    exec: ['4:14', 'circToRot'],
   });
 
   slides.push({
@@ -993,6 +994,7 @@ function makeSlides() {
   });
 
   slides.push({
+    enterStateCommon: () => figure.fnMap.exec('circSetup', [0.9, 'circle']),
     time: '8:41',
     form: { eqn: 'final', eqn1: 'coord1' },
     showCommon: { circ: ['theta', 'rotatorFull', 'xQ1', 'triSinCos.sin', 'triSinCos.cos', 'triSinCos.rightSin', 'circle', 'x', 'y', 'point', 'xy'] },
@@ -1130,12 +1132,15 @@ function makeSlides() {
     exec: [
       ['11:35', 'eqn1SinCosOne'],
       ['11:45', 'eqn1TanSecOne'],
-      ['12:02', 'eqn1Lim'],
+      ['12:05', 'eqn1Lim'],
+      ['12:11', 'circToRot'],
     ],
   });
 
   slides.push({
     scenarioCommon: 'circFull',
+    fromForm: 'valueAlt',
+    form: 'valueAlt',
     showCommon: { circ: ['circle', 'x', 'y', 'rotatorFull', 'triSinCos.rightSin', 'triCotCsc.rightCot', 'triTanSec.rightTan', 'triTanSec.tan', 'triTanSec.sec', 'triSinCos.sin', 'triSinCos.cos', 'triCotCsc.cot', 'triCotCsc.csc', 'radiusAlt.line', 'xRadius', 'thetaVal', 'radiusAlt.line'] },
     enterState: () => { circ.hasTouchableElements = false; },
     transition: [

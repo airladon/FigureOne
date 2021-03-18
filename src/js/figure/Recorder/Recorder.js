@@ -198,6 +198,7 @@ class Recorder {
   eventIndex: {
     [eventName: string]: number;
   };
+  recordingStates: boolean;
 
   pauseState: ?Object;
   startRecordingTime: number;
@@ -512,7 +513,7 @@ class Recorder {
   // Recording
   // ////////////////////////////////////
   // ////////////////////////////////////
-  startRecording(fromTime: number = 0, whilePlaying: Array<string> = []) {
+  startRecording(fromTime: number = 0, whilePlaying: Array<string> = [], includeStates: boolean = true) {
     // if (fromTime > 0) {
     this.state = 'recording';
     this.lastSeekTime = null;
@@ -530,6 +531,11 @@ class Recorder {
       }));
     }
 
+    if (includeStates) {
+      this.recordingStates = true;
+    } else {
+      this.recordingStates = false;
+    }
     this.startWorker();
     if (this.worker != null) {
       this.worker.postMessage({
@@ -549,7 +555,9 @@ class Recorder {
     this.lastRecordTime = null;
     this.duration = this.calcDuration();
 
-    this.queueRecordState(fromTime % this.stateTimeStep);
+    if (this.recordingStates) {
+      this.queueRecordState(fromTime % this.stateTimeStep);
+    }
 
     this.eventsToPlay = whilePlaying;
     // this.initializePlayback(fromTime);
@@ -584,10 +592,12 @@ class Recorder {
       this.mergeEventsCache();
       this.mergeStatesCache();
       this.duration = this.calcDuration();
-      if (this.duration % 1 > 0) {
-        const lastIndex = this.states.diffs.length - 1;
-        const [, ref, diff] = this.states.diffs[lastIndex];
-        this.states.diffs.push([Math.ceil(this.duration), ref, duplicate(diff), 0]);
+      if (this.recordingStates) {
+        if (this.duration % 1 > 0) {
+          const lastIndex = this.states.diffs.length - 1;
+          const [, ref, diff] = this.states.diffs[lastIndex];
+          this.states.diffs.push([Math.ceil(this.duration), ref, duplicate(diff), 0]);
+        }
       }
       this.duration = this.calcDuration();
       // console.log(this)
@@ -717,6 +727,9 @@ class Recorder {
   }
 
   mergeStatesCache() {
+    if (!this.recordingStates) {
+      return;
+    }
     const merged = this.getMergedCacheArray(    // $FlowFixMe
       this.states.diffs, this.statesCache.diffs,
     );
@@ -751,9 +764,9 @@ class Recorder {
     this.stopTimeouts();
 
     // $FlowFixMe
-    if (this.worker != null) {
-      this.worker.postMessage({ message: 'get' });
-    }
+    // if (this.worker != null && this.recordingStates) {
+    this.worker.postMessage({ message: 'get' });
+    // }
     if (this.audio) {
       this.audio.pause();
       this.isAudioPlaying = false;
@@ -972,7 +985,7 @@ figure.recorder.loadEventData('autoCursor', [
 figure.recorder.loadEventData('autoTouch', [
   ${this.showEvent('touch', precision)},
 ]);
-figure.recorder.loadEventData('autoCursorMove', ${this.encodeEvent('cursorMove', precision, precision)}, true);
+figure.recorder.loadEventData('autoCursorMove', ${this.encodeCursorEvent('cursorMove', precision, precision)}, 'cursor', 2, 2);
     `;
   }
 
@@ -998,6 +1011,50 @@ figure.recorder.loadEventData('autoCursorMove', ${this.encodeEvent('cursorMove',
       out.push(`[${round(time, 4)}, [${payloadStr}]]`);
     });
     return out.join(',\n');
+  }
+
+  encodeCursorEvent(
+    eventName: string,
+    timePrecision: number = 2,
+    valuePrecision: number = 2,
+    minTimeStep: number = 0.01,
+  ) {
+    const out = [];
+    const firstTime = this.events[eventName].list[0][0];
+    // let [lastX, lastY] = this.events[eventName].list[0][1];
+    let lastDeltaTime = 0;
+    let lastValues = null;
+    this.events[eventName].list.forEach((event, index) => {
+      const [time, payload] = event;
+      const deltaTime = round(time - firstTime, timePrecision);
+      const values = payload.map(p => round(p, valuePrecision));
+      if (lastValues == null) {
+        lastValues = values;
+        lastDeltaTime = deltaTime;
+        out.push(round(firstTime, timePrecision), ...values);
+        return;
+      }
+      if (deltaTime <= lastDeltaTime + minTimeStep) {
+        return;
+      }
+      let same = true;
+      for (let i = 0; i < values.length; i += 1) {
+        if (values[i] !== lastValues[i]) {
+          same = false;
+        }
+      }
+      if (same) {
+        return;
+      }
+      const deltaValues = Array(values.length);
+      for (let i = 0; i < values.length; i += 1) {
+        deltaValues[i] = Math.round((values[i] - lastValues[i]) * 10 ** valuePrecision);
+      }
+      out.push(Math.round(round(deltaTime - lastDeltaTime, timePrecision) * 10 ** timePrecision), ...deltaValues);
+      lastDeltaTime = deltaTime;
+      lastValues = values.slice();
+    });
+    return JSON.stringify(out);
   }
 
   encodeEvent(
@@ -1039,6 +1096,36 @@ figure.recorder.loadEventData('autoCursorMove', ${this.encodeEvent('cursorMove',
   }
 
   // eslint-disable-next-line class-methods-use-this
+  decodeCursorEvent(
+    eventName: string,
+    eventData: Array<number>,
+    timePrecision: number = 2,
+    valuePrecision: number = 2,
+  ) {
+    const firstTime = eventData[0];
+    let lastX = eventData[1];
+    let lastY = eventData[2];
+    const out = [];
+    let cumDelta = 0;
+    for (let i = 0; i < eventData.length; i += 3) {
+      const deltaTime = eventData[i] / 10 ** timePrecision;
+      const xDelta = eventData[i + 1];
+      const yDelta = eventData[i + 2];
+      if (i === 0) {
+        out.push([firstTime, [xDelta, yDelta]]);
+      } else {
+        const x = lastX + xDelta / 10 ** valuePrecision;
+        const y = lastY + yDelta / 10 ** valuePrecision;
+        lastX = x;
+        lastY = y;
+        out.push([firstTime + cumDelta + deltaTime, [x, y]]);
+        cumDelta += deltaTime;
+      }
+    }
+    return out;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
   decodeEvent(eventName: string, eventData: Array<number>) {
     const firstTime = eventData[0];
     const out = [];
@@ -1060,9 +1147,18 @@ figure.recorder.loadEventData('autoCursorMove', ${this.encodeEvent('cursorMove',
   loadEventData(
     eventName: string,
     data: Array<number>,
-    decode: boolean = false) {
+    decode: 'cursor' | 'moved' | boolean = false,
+    timePrecision: number = 2,
+    valuePrecision: number = 2,
+  ) {
     if (decode) {
-      this.events[eventName].list.push(...this.decodeEvent(eventName, data));
+      if (decode === true) {
+        this.events[eventName].list.push(...this.decodeEvent(eventName, data));
+      } else if (decode === 'cursor') {
+        this.events[eventName].list.push(...this.decodeCursorEvent(
+          eventName, data, timePrecision, valuePrecision,
+        ));
+      }
     } else {
       this.events[eventName].list.push(...data);
     }
