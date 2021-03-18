@@ -964,6 +964,18 @@ class Recorder {
     // });
   }
 
+  showMouse(precision: number = 2) {
+    return `
+figure.recorder.loadEventData('autoCursor', [
+  ${this.showEvent('cursor', precision)},
+]);
+figure.recorder.loadEventData('autoTouch', [
+  ${this.showEvent('touch', precision)},
+]);
+figure.recorder.loadEventData('autoCursorMove', ${this.encodeEvent('cursorMove', precision, precision)}, true);
+    `;
+  }
+
   showEvent(eventName: string, precision: number = 2) {
     const out = [];
     this.events[eventName].list.forEach((event) => {
@@ -1066,8 +1078,23 @@ class Recorder {
     this.seek(duration * percentTime);
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  convertTime(timeIn: string | number): number {
+    let t;
+    if (typeof timeIn === 'string') {
+      const splitTime = timeIn.split(':');
+      const minutes = parseInt(splitTime[0], 10);
+      const seconds = parseFloat(splitTime[1]);
+      t = minutes * 60 + seconds;
+    } else {
+      t = timeIn;
+    }
+    return t;
+  }
+
+
   seek(timeIn: number) {
-    let time = timeIn;
+    let time = this.convertTime(timeIn);
     if (time < 0) {
       time = 0;
     }
@@ -1301,7 +1328,7 @@ class Recorder {
     events: ?Array<string> = null,
   ) {
     this.lastSeekTime = null;
-    let fromTime = fromTimeIn;
+    let fromTime = this.convertTime(fromTimeIn);
     if (fromTimeIn == null || fromTimeIn >= this.duration) {
       fromTime = 0;
     }
@@ -1429,7 +1456,7 @@ class Recorder {
       if (playPromise === undefined) {
         return false;
       }
-      this.audio.currentTime = fromTime;
+      this.audio.currentTime = this.convertTime(fromTime);
       const audioEnded = () => {
         this.isAudioPlaying = false;
         if (this.state === 'playing') {

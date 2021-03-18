@@ -54,11 +54,8 @@ function makeSlides() {
   const slides = [];
 
   const nav = figure.getElement('nav');
-  // const similar = figure.getElement('similar');
-  // const rightTri = figure.getElement('rightTri');
   const circ = figure.getElement('circ');
   const eqn = figure.getElement('eqn');
-  const lines = figure.getElement('lines');
 
   /*
   .########.####.########.##.......########
@@ -319,7 +316,7 @@ function makeSlides() {
       figure.fnMap.exec('triSetup', [2, 1.453], 'values', true);
     },
     time: '1:45.5',
-    // exec: ['1:43.7', 'triAnimatePadTo'],
+    exec: ['2:25', 'triAnimatePadTo'],
   });
 
   slides.push({
@@ -1167,7 +1164,7 @@ function makeSlides() {
   });
 
   slides.push({
-    time: '13.56',
+    time: '13:56',
   });
 
   nav.loadSlides(slides);

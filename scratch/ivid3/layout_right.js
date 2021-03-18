@@ -60,7 +60,7 @@ function layoutRight() {
     name,
     method: 'collections.polyline',
     options: {
-      points: [[0, 0], [scale * 2, scale * 1.5], [scale * 2, 0]],
+      points: [[0, 0], [scale * 2, scale * 1.453], [scale * 2, 0]],
       close: true,
       position,
       width: 0.008,

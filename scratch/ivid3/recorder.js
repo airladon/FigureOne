@@ -210,7 +210,6 @@ function setupRecorder() {
     if (recorder.state === 'recording') {
       recorder.stopRecording();
     } else {
-      console.log('asdfasdf')
       const currentTime = recorder.getCurrentTime();
       recorder.startRecording(currentTime, ['autoSlide', 'autoCursor', 'autoTouch', 'autoCursorMove', 'autoExec']);
       if (currentTime === 0) {
