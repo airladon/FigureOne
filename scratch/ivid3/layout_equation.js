@@ -578,6 +578,7 @@ function makeEquation() {
         lt2: '  ≤  ',
         comma: ', ',
         comma2: ', ',
+        comma3: ', ',
         lb1: { symbol: 'bar', side: 'left' },
         rb1: { symbol: 'bar', side: 'right' },
         lb2: { symbol: 'bar', side: 'left' },
@@ -668,22 +669,49 @@ function makeEquation() {
           //   rb3: { style: 'linear' },
           // },
         },
-        sinCosDef: [
-          { brac: ['lb4', ['cos', 'comma', 'sin'], 'rb4'] }, 'eq',
-          { brac: ['lb5', [{ scale: [{ frac: ['adj', 'v1', 'hyp_1'] }, 0.7] }, 'comma2', { scale: [{ frac: ['opp', 'v2', 'hyp_2'] }, 0.7] }], 'rb5'] },
-        ],
+        cosSin: {
+          content: [
+            { brac: ['lb4', ['cos', 'comma', 'sin'], 'rb4'] },
+          ],
+          alignment: { yAlign: 'baseline' },
+        },
+        cosSinDef: {
+          content: [
+            { brac: ['lb4', ['cos', 'comma', 'sin'], 'rb4'] }, 'eq',
+            { brac: ['lb5', [{ scale: [{ frac: ['adj', 'v1', 'hyp_1'] }, 0.7] }, 'comma2', { scale: [{ frac: ['opp', 'v2', 'hyp_2'] }, 0.7] }], 'rb5'] },
+          ],
+          alignment: { xAlign: '1.1o', yAlign: 'baseline' },
+        },
         coord1: {
           content: [
             { brac: ['lb4', ['cos', 'comma', 'sin'], 'rb4'] }, 'eq', { brac: ['lb5', ['x', 'comma2', 'y'], 'rb5'] },
           ],
-          // translation: {
-          //   eq: { style: 'curve', direction: 'up', mag: 0.8 },
-          //   lb3: { style: 'curve', direction: 'up', mag: 0.8 },
-          //   x: { style: 'curve', direction: 'up', mag: 0.8 },
-          //   comma2: { style: 'curve', direction: 'up', mag: 0.8 },
-          //   y: { style: 'curve', direction: 'up', mag: 0.8 },
-          //   rb3: { style: 'curve', direction: 'up', mag: 0.8 },
-          // },
+          alignment: { xAlign: '1.1o', yAlign: 'baseline' },
+        },
+        coord2: {
+          content: {
+            lines: {
+              content: [
+                {
+                  content: [{ brac: ['lb4', ['cos', 'comma', 'sin'], 'rb4'] }, 'eq', { brac: ['lb5', ['x', 'comma2', 'y'], 'rb5'] }],
+                  justify: 'eq',
+                },
+                {
+                  content: ['eq1', {
+                    bottomComment: {
+                      content: [{ brac: ['lb3', [{ scale: [{ frac: ['adj', 'v1', 'hyp_1'] }, 0.7] }, 'comma3', { scale: [{ frac: ['opp', 'v2', 'hyp_2'] }, 0.7] }], 'rb3'] }],
+                      comment: ['for 0 ≤ \u03b8 ≤ 90\u00b0'],
+                      contentSpace: 0.1,
+                    },
+                  }],
+                  justify: 'eq1',
+                  baselineSpace: 0.6,
+                },
+              ],
+              justify: 'element',
+            },
+          },
+          alignment: { xAlign: '1.1o', yAlign: 'baseline' },
         },
         lim: {
           content: {
@@ -700,7 +728,7 @@ function makeEquation() {
                   }, '  ', { scale: [{ frac: [['tan', 'theta5'], 'v2', 'theta6'] }, 0.8] }, 'eq1', '_1_1',
                 ],
               ],
-              baselineSpace: 0.7,
+              baselineSpace: 0.55,
             },
           },
           alignment: { xAlign: -0.3, yAlign: 'middle' },
@@ -747,12 +775,21 @@ function makeEquation() {
             baselineSpace: 0.5,
           },
         },
-        sinBounds: ['_-1', 'lt1', 'sin', 'lt2', '_1'],
-        cosBounds: ['_-1', 'lt1', 'cos', 'lt2', '_1'],
-        tanBounds: ['nInf1', 'lt1', 'tan', 'lt2', 'inf1'],
-        cotBounds: ['nInf1', 'lt1', 'cot', 'lt2', 'inf1'],
-        cscBounds: ['csc', 'lt1', '_-1', 'comma', '_1', 'lt2', 'csc_2'],
-        secBounds: ['sec', 'lt1', '_-1', 'comma', '_1', 'lt2', 'sec_2'],
+        sinBounds: ['_-1', 'lt1', 'sin', 'comma', 'cos', 'lt2', '_1'],
+        // cosBounds: ['_-1', 'lt1', 'cos', 'lt2', '_1'],
+        tanBounds: ['nInf1', 'lt1', 'tan', 'comma', 'cot', 'lt2', 'inf1'],
+        // cotBounds: ['nInf1', 'lt1', 'cot', 'lt2', 'inf1'],
+        secBounds: {
+          lines: {
+            content: [
+              ['csc', 'comma', 'sec', 'lt1', '_-1'],
+              ['csc_2', 'comma3', 'sec_2', 'gr', '_1'],
+            ],
+            justify: 'left',
+            baselineSpace: 0.3,
+          },
+        },
+        // secBounds: ['sec', 'lt1', '_-1', 'comma', '_1', 'lt2', 'sec_2'],
         tanOnOne: {
           content: { frac: [['tan_1', 'gent'], 'v2', '_1'] },
           alignment: { xAlign: 'left', yAlign: 'baseline' },
@@ -790,28 +827,32 @@ function makeEquation() {
         eqn1TopRight: { position: [0.8, 0.7] },
         eqn1Left: { position: [-1.7, 0] },
         eqn1Right: { position: [0.3, 0] },
+        eqn1Bottom: { position: [0.3, -1] },
       },
     },
   });
-  const pulseEqn = (form) => {
+  const pulseEqn = (form, scale, position) => {
     eqn1.stop();
     eqn1.showForm(form);
     eqn1.hide();
+    eqn1.setPosition(position);
     eqn1.animations.new()
       .dissolveIn(0.5)
-      .pulse({ scale: 1.3, duration: 2 })
-      .delay(1.5)
+      .pulse({ scale, duration: 2 })
+      .delay(2)
       .dissolveOut(0.5)
       .start();
   };
-  add('eqn1SinCosOne', () => pulseEqn('sinCosOne'));
-  add('eqn1SinCosMag', () => pulseEqn('sinCosMag'));
-  add('eqn1TanSecOne', () => pulseEqn('tanSecOne'));
-  add('eqn1SecTan', () => pulseEqn('secTan'));
-  add('eqn1CscSec', () => pulseEqn('cscSec'));
-  add('eqn1SinCos', () => pulseEqn('sinCos'));
-  add('eqn1TanCot', () => pulseEqn('tanCot'));
-  add('eqn1Lim', () => pulseEqn('lim'));
+  add('eqn1SinCosOne', () => pulseEqn('sinCosOne', 1.2, [2.1, -1.1]));
+  // add('eqn1SinCosMag', () => pulseEqn('sinCosMag'));
+  add('eqn1TanSecOne', () => pulseEqn('tanSecOne', 1.2, [2.1, -1.1]));
+  add('eqn1SinBounds', () => pulseEqn('sinBounds', 1, [2, -1.2]));
+  add('eqn1TanBounds', () => pulseEqn('tanBounds', 1, [2, -1.2]));
+  add('eqn1SecBounds', () => pulseEqn('secBounds', 1, [2.2, -1.1]));
+  // add('eqn1CscSec', () => pulseEqn('cscSec'));
+  // add('eqn1SinCos', () => pulseEqn('sinCos'));
+  // add('eqn1TanCot', () => pulseEqn('tanCot'));
+  add('eqn1Lim', () => pulseEqn('lim', 1, [1.3, -1.95]));
   add('eqn1Coord', () => pulseEqn('coord'));
   add('eqn1Q2Sin', () => {
     eqn1.stop();
@@ -833,8 +874,8 @@ function makeEquation() {
     eqn1.showForm('q4Sin');
     eqn1.animations.new().dissolveIn(0.5).start();
   });
-  add('eqn1Q4SinEq', () => eqn1.goToForm({ start: 'q4SinEq', target: 'q4', duration: 2, animate: 'move' }));
-  add('eqn1Q4', () => eqn1.goToForm({ start: 'q4Sin', target: 'q4', duration: 1.5, animate: 'move' }));
+  add('eqn1Q4SinEq', () => eqn1.goToForm({ start: 'q4Sin', target: 'q4SinEq', duration: 2, animate: 'move' }));
+  add('eqn1Q4', () => eqn1.goToForm({ start: 'q4SinEq', target: 'q4', duration: 1.5, animate: 'move' }));
   add('eqn1Q4Neg', () => eqn1.goToForm({ start: 'q4', target: 'q4Neg', duration: 1.5, animate: 'move' }));
 }
 

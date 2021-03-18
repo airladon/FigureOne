@@ -134,6 +134,24 @@ function layoutCirc() {
       line('cotLightAlt', colGrey, thin),
       line('cscLightAlt', colGrey, thin),
       line('radiusLight', colGrey, thin),
+      // lineWithLabel('xy', colGrey, 'x, y', thin),
+      {
+        name: 'xy',
+        method: 'collections.line',
+        options: {
+          width: thin,
+          color: colGrey,
+          label: {
+            text: {
+              textFont: { style: 'italic', color: colText, size: 0.25 },
+              forms: { 0: 'x, y' },
+            },
+            location: 'end',
+            orientation: 'horizontal',
+            update: true,
+          },
+        },
+      },
       rightAngle('rightCotAlt', [radius, 0], Math.PI / 2),
       rightAngle('rightTanAlt', [radius, 0], Math.PI / 2),
       rightAngle('rightSinAlt', [0, 0], Math.PI / 2),
@@ -160,9 +178,31 @@ function layoutCirc() {
       }, 0.45, 0.5, [0, 0], 0, 2 * Math.PI - defaultAngle),
       tri('triSym', [
         lineWithLabel('sin', colSin, '', thick, [defaultCos, 0], defaultSin, Math.PI / 2),
-        lineWithLabel('cos', colCos, '', thick, [0, defaultSin], defaultCos, 0),
+        lineWithLabel('cos', colCos, '', thick, [0, 0], defaultCos, 0),
         lineWithLabel('unit', colGrey, '', thin, [0, 0], radius, defaultAngle),
         angle('theta', '\u03b8', 0.2, 0.5, [0, 0], 0, defaultAngle),
+        {
+          name: 'xy',
+          method: 'collections.line',
+          options: {
+            width: thin,
+            color: colGrey,
+            label: {
+              text: {
+                textFont: { style: 'italic', color: colText, size: 0.25 },
+                forms: {
+                  1: ['x', '_, ', 'y'],
+                  2: ['_-x', '_, ', 'y'],
+                  3: ['_-x', '_, ', '_-y'],
+                  4: ['x', '_, ', '_-y'],
+                },
+              },
+              orientation: 'horizontal',
+              location: 'end',
+              update: true,
+            },
+          },
+        },
         { name: 'point', method: 'polygon', options: { sides: 30, radius: 0.02, fill: colText, position: [defaultCos, defaultSin ] } },
       ]),
       tri('triSinCos', [
@@ -414,7 +454,7 @@ function layoutCirc() {
   const [rightSin, rightCot, rightTan] = get(['triSinCos.rightSin', 'triCotCsc.rightCot', 'triTanSec.rightTan']);
   const [rightSinAlt, rightCotAlt, rightTanAlt] = get(['rightSinAlt', 'rightCotAlt', 'rightTanAlt']);
   const [radiusLine, xRadius, radiusAlt] = get(['radius', 'xRadius', 'radiusAlt']);
-  const [radiusLight] = get(['radiusLight']);
+  const [radiusLight, xy] = get(['radiusLight', 'xy']);
   const [cosAlt, sinAlt] = get(['cosAlt', 'sinAlt']);
   const [tanAlt, secAlt] = get(['tanAlt', 'secAlt']);
   const [cotAlt, cscAlt] = get(['cotAlt', 'cscAlt']);
@@ -424,7 +464,7 @@ function layoutCirc() {
   const [cot, csc] = get({ triCotCsc: ['cot', 'csc'] });
   const [tan, sec] = get({ triTanSec: ['tan', 'sec'] });
   const [tanTheta] = get(['tanTheta']);
-  const [symSin, symCos, symRad, symTheta] = get({ triSym: ['sin', 'cos', 'unit', 'theta'] });
+  const [symSin, symCos, symRad, symTheta, symXY] = get({ triSym: ['sin', 'cos', 'unit', 'theta', 'xy'] });
   const [q2, q3, q4] = get(['q2', 'q3', 'q4']);
   const [rotQ2, rotQ3, rotQ4] = get(['rotatorQ2', 'rotatorQ3', 'rotatorQ4']);
   const [p, pSym] = get(['point', 'triSym.point']);
@@ -511,6 +551,7 @@ function layoutCirc() {
     if (symTheta.isShown) {
       symTheta.setAngle({ angle: r });
     }
+    
     if (thetaVal.isShown) {
       thetaVal.setAngle({ angle: r });
     }
@@ -542,6 +583,9 @@ function layoutCirc() {
 
     if (symRad.isShown) {
       symRad.setRotation(r);
+    }
+    if (symXY.isShown) {
+      symXY.setEndPoints([0, 0], [Math.abs(x), Math.abs(y)]);
     }
 
     /*
@@ -611,7 +655,11 @@ function layoutCirc() {
       }
     }
     if (radiusLight.isShown) {
-      xRadius.setEndPoints([0, 0], [xSign * radius, 0]);
+      radiusLight.custom.updatePoints({ p1: [0, 0], p2: [x, y] });
+    }
+    if (xy.isShown) {
+      // xy.label.location = 'end';
+      xy.setEndPoints([0, 0], [x, y]);
     }
 
     /*
@@ -815,9 +863,9 @@ function layoutCirc() {
         }
       }
       sinAlt.setEndPoints([x, 0], [x, y]);
-      if (symSin.isShown) {
-        symSin.setEndPoints([x, 0], [x, y]);
-      }
+    }
+    if (symSin.isShown) {
+      symSin.setEndPoints([x, 0], [x, y]);
     }
 
     /*
@@ -841,9 +889,9 @@ function layoutCirc() {
         cosAlt.label.location = location;
       }
       cosAlt.setEndPoints([0, y], [x + xSign * thick / 2, y]);
-      if (symCos.isShown) {
-        symCos.setEndPoints([0, y], [x + xSign * thick / 2, y]);
-      }
+    }
+    if (symCos.isShown) {
+      symCos.setEndPoints([0, 0], [x + xSign * thick / 2, 0]);
     }
 
     /*
@@ -1176,8 +1224,11 @@ function layoutCirc() {
   add('circToQuad2', () => {
     // circle._triSym.showAll();
     circle._triSym.animations.new()
-      .scale({ target: [-1, 1], duration: 4 })
-      .delay(3.8)
+      .inParallel([
+        circle._triSym.animations.scale({ target: [-1, 1], duration: 4 }),
+        circle.animations.trigger({ callback: () => rotatorUpdateCircle(), delay: 2.1 }),
+      ])
+      .delay(1.8)
       .inParallel([
         circle._q2.animations.dissolveIn(0.5),
         circle._q2.animations.pulseAngle({ duration: 2, curve: 1.3, label: 1.3 }),
@@ -1191,8 +1242,12 @@ function layoutCirc() {
     // circle._triSym.showAll();
     circle._triSym.animations.new()
       .scale({ target: [-1, 1], duration: 2 })
-      .scale({ target: [-1, -1], duration: 2 })
-      .delay(1.5)
+      .inParallel([
+        circle._triSym.animations.scale({ target: [-1, -1], duration: 2 }),
+        circle.animations.trigger({ callback: () => rotatorUpdateCircle(), delay: 1.1 }),
+      ])
+      // .scale({ target: [-1, -1], duration: 2 })
+      .delay(2.5)
       .inParallel([
         circle._q3.animations.dissolveIn(0.5),
         circle._q3.animations.pulseAngle({ duration: 2, curve: 1.3, label: 1.3 }),
@@ -1203,9 +1258,11 @@ function layoutCirc() {
       .start();
   });
   add('circToQuad4', () => {
-    // circle._triSym.showAll();
     circle._triSym.animations.new()
-      .scale({ target: [1, -1], duration: 4 })
+      .inParallel([
+        circle._triSym.animations.scale({ target: [1, -1], duration: 4 }),
+        circle.animations.trigger({ callback: () => rotatorUpdateCircle(), delay: 2.1 }),
+      ])
       .delay(1)
       .inParallel([
         circle._q4.animations.dissolveIn(0.5),
@@ -1250,6 +1307,21 @@ function layoutCirc() {
     } else {
       circle._triSym._theta._label.setScale(thetaS.x, 1);
     }
+    // let xyS = circle._triSym._xy._label.transform.s();
+    // console.log(s)
+    if (s.x < 0 && s.y > 0) {
+      circle._triSym._xy._label.setScale(-1, 1);
+      circle._triSym._xy._label.showForm('2');
+    } else if (s.x < 0 && s.y < 0) {
+      circle._triSym._xy._label.setScale(-1, -1);
+      circle._triSym._xy._label.showForm('3');
+    } else if (s.x > 0 && s.y < 0) {
+      circle._triSym._xy._label.setScale(1, -1);
+      circle._triSym._xy._label.showForm('4');
+    } else {
+      circle._triSym._xy._label.setScale(1, 1);
+      circle._triSym._xy._label.showForm('1');
+    }
   };
   circle._triSym.subscriptions.add('setTransform', () => updateTriSymLabels());
   addPulseFn('circPulseTan', triTanSec._tan._label, 'left', 'middle');
@@ -1262,10 +1334,32 @@ function layoutCirc() {
   addPulseFn('circPulseSin', triSinCos._sin._label, 'left', 'middle');
   addPulseFn('circPulseSinCosUnit', triSinCos._unit._label, 'right', 'bottom');
   addPulseFn('circPulseCotCscUnit', triCotCsc._unit._label, 'left', 'middle');
-  addPulseWidthFn('circPulseWidthSin', sinAlt);
+  addPulseWidthFn('circPulseWidthSin', triSinCos._sin);
+  addPulseFn('circPulseWidthSinLabel', triSinCos._sin._label, 'left', 'middle');
   addPulseWidthFn('circPulseWidthSinSym', circle._triSym._sin);
-  addPulseWidthFn('circPulseWidthCos', cosAlt);
+  addPulseWidthFn('circPulseWidthCos', triSinCos._cos);
+  addPulseFn('circPulseWidthCosLabel', triSinCos._cos._label, 'center', 'top');
   addPulseWidthFn('circPulseWidthCosSym', circle._triSym._cos);
+  add('circPulseX', () => {
+    if (circle._triSym._xy._label._x.isShown) {
+      circle._triSym._xy._label._x.pulse({ scale: 2, xAlign: 'right', yAlign: 'top', duration: 1.5 });
+    }
+    if (circle._triSym._xy._label['__-x'].isShown && circle._triSym._xy._label['__-y'].isShown) {
+      circle._triSym._xy._label['__-x'].pulse({ scale: 2, xAlign: 'right', yAlign: 'top', duration: 1.5 });
+    } else if (circle._triSym._xy._label['__-x'].isShown) {
+      circle._triSym._xy._label['__-x'].pulse({ scale: 2, xAlign: 'right', yAlign: 'bottom', duration: 1.5 });
+    }
+  });
+  add('circPulseY', () => {
+    if (circle._triSym._xy._label._y.isShown) {
+      circle._triSym._xy._label._y.pulse({ scale: 2, xAlign: 'left', yAlign: 'bottom', duration: 1.5 });
+    }
+    if (circle._triSym._xy._label['__-y'].isShown && circle._triSym._xy._label['__-x'].isShown) {
+      circle._triSym._xy._label['__-y'].pulse({ scale: 2, xAlign: 'left', yAlign: 'top', duration: 1.5 });
+    } else if (circle._triSym._xy._label['__-y'].isShown) {
+      circle._triSym._xy._label['__-y'].pulse({ scale: 2, xAlign: 'right', yAlign: 'top', duration: 1.5 });
+    }
+  });
   rotator.subscriptions.add('setTransform', 'updateCircle');
   rotatorFull.subscriptions.add('setTransform', 'updateCircle');
   // symRot.subscriptions.add('setTransform', 'updateCircle');
