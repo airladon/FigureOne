@@ -3,9 +3,6 @@
     <head>
         <style>
             #f1_recorder {
-                text-align: center;
-                margin-left: auto;
-                margin-right: auto;
                 height: 30px;
                 margin-top: 2em;
                 user-select: none; /* supported by Chrome and Opera */
@@ -29,9 +26,10 @@
             }
             #f1_recorder__seek {
                 display: inline-block;
-                width: 200px;
+                width: 600px;
                 height: 20px;
                 position: relative;
+                cursor: pointer;
             }
             #f1_recorder__seek_bar {
                 width: calc(100% - 10px);
@@ -57,7 +55,7 @@
             }
         </style>
     </head>
-<body>
+<body>  
     <!-- <img src="1.jpg" id="img1"> -->
     <div id="figureOneContainer" style="width: 1000px; height: 500px; background-color: white;">
     </div>
@@ -73,7 +71,8 @@
     </div>
     <!-- <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.6.1/figureone.min.js'></script> -->
     <script type="text/javascript" src='../../package/index.js'></script>
-    <script type="text/javascript" src='../../package/9aa9b212f7f34e7c2b72.worker.js'></script>
+    <script type="text/javascript" src='../../package/0564676d80c6dc7b0266.worker.js'></script>
+    <!-- <script type="text/javascript" src='../../package/9aa9b212f7f34e7c2b72.worker.js'></script> -->
     <!-- <audio
         controls
         src="./audio.m4a">
@@ -82,17 +81,19 @@
     </audio> -->
     <!-- <script type="text/javascript" src='./index.js'></script> -->
     <script type="text/javascript" src='./layout_figure.js'></script>
-    <script type="text/javascript" src='./layout_similar.js'></script>
-    <script type="text/javascript" src='./layout_lines.js'></script>
-    <script type="text/javascript" src='./layout_angle.js'></script>
+    <!-- <script type="text/javascript" src='./layout_similar.js'></script> -->
+    <!-- <script type="text/javascript" src='./layout_lines.js'></script> -->
+    <!-- <script type="text/javascript" src='./layout_angle.js'></script> -->
     <script type="text/javascript" src='./layout_equation.js'></script>
-    <script type="text/javascript" src='./layout_circle.js'></script>
+    <!-- <script type="text/javascript" src='./layout_circle.js'></script> -->
     <script type="text/javascript" src='./layout_right.js'></script>
-    <script type="text/javascript" src='./layout_righttris.js'></script>
-    <script type="text/javascript" src='./layout_table.js'></script>
-    <script type="text/javascript" src='./layout_bow.js'></script>
-    <script type="text/javascript" src='./layout_circle1.js'></script>
+    <!-- <script type="text/javascript" src='./layout_righttris.js'></script> -->
+    <!-- <script type="text/javascript" src='./layout_table.js'></script> -->
+    <!-- <script type="text/javascript" src='./layout_bow.js'></script> -->
+    <!-- <script type="text/javascript" src='./layout_circle1.js'></script> -->
+    <!-- <script type="text/javascript" src='./layout_circ.js'></script> -->
     <script type="text/javascript" src='./layout.js'></script>
+    <script type="text/javascript" src='./cursor.js'></script>
     <script type="text/javascript" src='./recorder.js'></script>
 </body>
 </html>
