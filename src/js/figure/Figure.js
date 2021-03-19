@@ -565,7 +565,7 @@ class Figure {
       const [action, x, y] = payload;
       if (action === 'show') {
         this.showCursor('up', new Point(x, y));
-        this.getElement(this.cursorElementName).pulse({ duration: 1, scale: 3 });
+        // this.getElement(this.cursorElementName).pulse({ duration: 1, scale: 3 });
       } else {
         this.showCursor('hide');
       }

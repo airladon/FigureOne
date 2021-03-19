@@ -59,15 +59,16 @@ function makeSlides() {
     enterStateCommon: () => {
       figure.fnMap.exec('triSetup', [2, 1.453], 'values', true);
     },
-    exec: [10, 'triResetPad'],
+    exec: ['0:15', 'triResetPad'],
   });
 
   slides.push({
+    time: '0:21',
     addReference: true,
     fromForm: 'values',
     form: 'values',
     transition: { in: 'eqn' },
-    exec: [30, 'triResetPad'],
+    exec: ['0:50', 'triResetPad'],
   });
 
   /*
@@ -81,6 +82,7 @@ function makeSlides() {
   */
   slides.push({
     addReference: true,
+    time: '0:52',
     fromForm: 'values',
     form: null,
     transition: [
@@ -98,18 +100,19 @@ function makeSlides() {
       figure.fnMap.exec('triSetup', [2, 1.453], 'names', true);
     },
     exec: [
-      ['1:00', 'triPulseRight'],
-      ['1:01', 'triPulseTheta'],
+      ['0:58.5', 'triPulseRight'],
+      ['0:59.3', 'triPulseTheta'],
     ],
   });
 
   slides.push({
+    addReference: true,
+    time: '1:01.5',
     showCommon: { rightTri: ['tri.line', 'tri.angle1', 'tri.angle2', 'movePad', 'rotLine', 'tri.angle0'] },
     show: 'angleSum',
     enterStateCommon: () => {
       figure.fnMap.exec('triSetup', [2, 1.453], 'names', true);
     },
-    addReference: true,
     transition: [
       { in: 'rightTri.tri.angle0' },
     ],
@@ -117,18 +120,22 @@ function makeSlides() {
 
   slides.push({
     addReference: true,
+    time: '1:02',
     scenario: 'center',
     transition: [
       { out: 'angleSum' },
       { scenario: 'rightTri', target: 'twoTri' },
       { in: { 'rightTri.tri1': ['line', 'angle1', 'angle2', 'angle0'] } },
-      { in: 'similar1' },
-      { scenario: 'similar1', target: 'left', delay: 2 },
+      { trigger: 'triPulseThetas', duration: 1.5, delay: 1.8 },
+      { trigger: 'triPulseAllAngles', duration: 1.5, delay: 0.5 },
+      { in: 'similar1', delay: 0 },
+      { scenario: 'similar1', target: 'left', delay: 3.5, duration: 3 },
       { in: 'similar2' },
     ],
   });
 
   slides.push({
+    time: '1:22',
     addReference: true,
     scenarioCommon: 'twoTri',
     fromForm: 'AonB',
@@ -140,10 +147,10 @@ function makeSlides() {
     transition: [
       { out: 'similar2' },
       { in: { 'rightTri.tri1': ['side01', 'side12'] } },
-      { in: 'eqn', delay: 1 },
-      { in: { 'rightTri.tri2': ['side01', 'side12'] }, delay: 1 },
-      { goToForm: 'eqn', target: 'AonBEq', delay: 1 },
-      { in: { rightTri: ['tri1.side20', 'tri2.side20'] }, delay: 1 },
+      { in: 'eqn', delay: 2 },
+      { in: { 'rightTri.tri2': ['side01', 'side12'] }, delay: 3 },
+      { goToForm: 'eqn', target: 'AonBEq', delay: 2 },
+      { in: { rightTri: ['tri1.side20', 'tri2.side20'] }, delay: 3.5 },
       { goToForm: 'eqn', target: 'AonCEq', delay: 2 },
     ],
     leaveState: () => {
@@ -162,6 +169,7 @@ function makeSlides() {
   .##........#######..##....##..######.
   */
   slides.push({
+    time: '1:45',
     addReference: true,
     showCommon: { rightTri: ['tri.line', 'tri.angle1', 'tri.angle2', 'movePad', 'rotLine', 'tri.side01', 'tri.side12', 'tri.side20'] },
     enterStateCommon: () => {
@@ -195,48 +203,52 @@ function makeSlides() {
       rightTri._tri1.undim();
       rightTri._tri2.undim();
     },
+    exec: ['2:00.5', 'triResetPad'],
   });
 
   slides.push({
+    time: '2:02',
     addReference: true,
     scenarioCommon: 'oneTri',
     fromForm: 'values',
     form: 'functions',
     transition: [
       { goToForm: 'eqn', target: 'functions' },
-      { trigger: 'triAnimateToNames', duration: 1 },
+      { trigger: 'triAnimateToNames', duration: 1, delay: 1 },
     ],
     steadyState: () => {
       figure.fnMap.exec('triSetup', [2, 1.453], 'names', true);
     },
-    exec: [
-      ['2:38.5', 'eqnPulseSin'],
-      ['2:39', 'eqnPulseCos'],
-      ['2:39.5', 'eqnPulseTan'],
-      ['2:40.5', 'eqnPulseCsc'],
-      ['2:41.5', 'eqnPulseSec'],
-      ['2:42.2', 'eqnPulseCot'],
-    ],
   });
 
   slides.push({
+    time: '2:09.5',
     addReference: true,
     enterStateCommon: () => {
       figure.fnMap.exec('triSetup', [2, 1.453], 'names', true);
     },
     fromForm: 'functions',
     form: 'trig',
+    exec: [
+      ['2:11', 'eqnPulseSin'],
+      ['2:12.2', 'eqnPulseCos'],
+      ['2:13', 'eqnPulseTan'],
+      ['2:14', 'eqnPulseSec'],
+      ['2:15', 'eqnPulseCsc'],
+      ['2:16', 'eqnPulseCot'],
+    ],
   });
   slides.push({
+    time: '2:17',
     addReference: true,
     fromForm: 'trig',
     form: 'final',
     transition: [
       { out: { rightTri: ['tri.line', 'tri.angle1', 'tri.angle2', 'movePad', 'rotLine', 'tri.side01', 'tri.side12', 'tri.side20'] } },
       [
-        { scenario: 'eqn', target: 'center', duration: 4 },
-        { goToForm: 'eqn', target: 'final', duration: 3.5 },
-        { in: 'trig', delay: 3 },
+        { scenario: 'eqn', target: 'center', duration: 3 },
+        { goToForm: 'eqn', target: 'final', duration: 2.5 },
+        { in: 'trig', delay: 2 },
       ],
     ],
   });

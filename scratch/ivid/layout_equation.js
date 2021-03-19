@@ -137,27 +137,27 @@ function makeEquation() {
         cosTheta: ['cos', ' ', 'theta2'],
         tanTheta: ['tan', ' ', 'theta3'],
         secTheta: ['sec', ' ', 'theta4'],
-        cotTheta: ['cot', ' ', 'theta5'],
-        cscTheta: ['csc', ' ', 'theta6'],
+        cscTheta: ['csc', ' ', 'theta5'],
+        cotTheta: ['cot', ' ', 'theta6'],
         f1: [{ sub: ['f_1', '_1'] }, { brac: ['lb1', 'theta1', 'rb1'] }],
         f2: [{ sub: ['f_2', '_2'] }, { brac: ['lb2', 'theta2', 'rb2'] }],
         f3: [{ sub: ['f_3', '_3'] }, { brac: ['lb3', 'theta3', 'rb3'] }],
-        f4: [{ sub: ['f_4', '_4'] }, { brac: ['lb4', 'theta6', 'rb4'] }],
-        f5: [{ sub: ['f_5', '_5'] }, { brac: ['lb5', 'theta4', 'rb5'] }],
-        f6: [{ sub: ['f_6', '_6'] }, { brac: ['lb6', 'theta5', 'rb6'] }],
-        c1: cont(lin(['oppHyp', 'adjHyp', 'oppAdj', 'hypOpp', 'hypAdj', 'adjOpp']), 0.6),
+        f4: [{ sub: ['f_4', '_4'] }, { brac: ['lb4', 'theta4', 'rb4'] }],
+        f5: [{ sub: ['f_5', '_5'] }, { brac: ['lb5', 'theta5', 'rb5'] }],
+        f6: [{ sub: ['f_6', '_6'] }, { brac: ['lb6', 'theta6', 'rb6'] }],
+        c1: cont(lin(['oppHyp', 'adjHyp', 'oppAdj', 'hypAdj', 'hypOpp', 'adjOpp']), 0.6),
         c2: cont(lin(['eq1', 'eq2', 'eq3', 'eq4', 'eq5', 'eq6']), 0.3),
-        trig: lin(['sinTheta', 'cosTheta', 'tanTheta', 'cscTheta', 'secTheta', 'cotTheta']),
+        trig: lin(['sinTheta', 'cosTheta', 'tanTheta', 'secTheta', 'cscTheta', 'cotTheta']),
         values: lin(['val1', 'val2', 'val3', 'val4', 'val5', 'val6']),
         functions: lin(['f1', 'f2', 'f3', 'f4', 'f5', 'f6']),
         final1: lin([
           ['oppHyp', '  ', 'eq1', '  ', 'sinTheta'],
           ['oppAdj', '  ', 'eq3', '  ', 'tanTheta'],
-          ['hypAdj', '  ', 'eq5', '  ', 'secTheta'],
+          ['hypAdj', '  ', 'eq5', '  ', 'cscTheta'],
         ], 0.6),
         final2: lin([
           ['adjHyp', '  ', 'eq2', '  ', 'cosTheta'],
-          ['hypOpp', '  ', 'eq4', '  ', 'cscTheta'],
+          ['hypOpp', '  ', 'eq4', '  ', 'secTheta'],
           ['adjOpp', '  ', 'eq6', '  ', 'cotTheta'],
         ], 0.6),
       },
@@ -182,13 +182,6 @@ function makeEquation() {
             wFrac('A', 'v1', 'C'),
           ], 1.8],
         },
-        // BonC: {
-        //   scale: [[
-        //     wFrac('Bdash', 'v2', 'Cdash'),
-        //     '  ', 'eq1', '  ',
-        //     wFrac('B', 'v1', 'C'),
-        //   ], 1.8],
-        // },
       },
       position: [-2.8, 1.2],
     },
@@ -208,14 +201,14 @@ function makeEquation() {
     figure.fnMap.exec('triSetup', [2, 1.453], 'values', true);
   });
 
-  const sPulse = (element, xAlign = 'center', yAlign = 'middle') => eqn.pulse({
+  const sPulse = (element, xAlign = 'center', yAlign = 'middle') => figure.elements._eqn.pulse({
     elements: [element], xAlign, yAlign, scale: 1.5, duration: 1.5,
   });
-  add('eqnPulseSin', () => sPulse('sin_1', 'right', 'middle'));
-  add('eqnPulseCos', () => sPulse('cos_1', 'right', 'middle'));
-  add('eqnPulseTan', () => sPulse('tan_1', 'right', 'middle'));
-  add('eqnPulseCsc', () => sPulse('csc_1', 'right', 'middle'));
-  add('eqnPulseSec', () => sPulse('sec_1', 'right', 'middle'));
-  add('eqnPulseCot', () => sPulse('cot_1', 'right', 'middle'));
+  add('eqnPulseSin', () => sPulse('sin', 'right', 'middle'));
+  add('eqnPulseCos', () => sPulse('cos', 'right', 'middle'));
+  add('eqnPulseTan', () => sPulse('tan', 'right', 'middle'));
+  add('eqnPulseCsc', () => sPulse('csc', 'right', 'middle'));
+  add('eqnPulseSec', () => sPulse('sec', 'right', 'middle'));
+  add('eqnPulseCot', () => sPulse('cot', 'right', 'middle'));
 }
 
