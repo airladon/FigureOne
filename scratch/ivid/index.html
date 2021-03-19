@@ -2,9 +2,34 @@
 <html>
     <head>
         <style>
+            .wrapper {
+                margin-left: auto;
+                margin-right: auto;
+                max-width: 100%;
+            }
+            
+            .wrapper_2_1 {
+                width: calc(100vw - 20px);
+            }
+            
+            @media (min-aspect-ratio: 1/1) {
+                .wrapper_2_1 {
+                    width: calc((100vh - 20px)/0.5);
+                }
+            }
+            
+            .container {
+                width: 100%;
+                background-color: white;
+            }
+            
+            .container_2_1 {
+                padding-bottom: 50%;
+            }
+            
             #f1_recorder {
-                height: 30px;
-                margin-top: 2em;
+                height: 2em;
+                margin-top: 1em;
                 user-select: none; /* supported by Chrome and Opera */
                 -webkit-user-select: none; /* Safari */
                 -khtml-user-select: none; /* Konqueror HTML */
@@ -26,48 +51,54 @@
             }
             #f1_recorder__seek {
                 display: inline-block;
-                width: 600px;
-                height: 20px;
+                width: calc(100% - 3em - 6em - 4em - 1em);
+                height: 2em;
                 position: relative;
                 cursor: pointer;
             }
             #f1_recorder__seek_bar {
                 width: calc(100% - 10px);
-                height: 4px;
+                height: 0.1em;
                 position: absolute;
-                top: calc(50% - 2px);
+                top: calc(50% - 0.05em);
                 left: 5px;
-                background-color: #444;
+                background-color: #777;
             }
             #f1_recorder__seek_circle {
-                width: 10px;
-                height: 10px;
-                background-color: #999;
-                border-radius: 5px;
+                width: 0.7em;
+                height: 0.7em;
+                background-color: #444;
+                border-radius: 0.35em;
                 position: absolute;
-                top: calc(50% - 5px);
+                top: calc(50% - 0.35em);
             }
             #f1_recorder__time {
                 width: 6em
             }
             #figureOneContainer {
-                border: 1px solid #999;
+                border: 1px solid #eee;
+            }
+            .comment_out_to_record {
+                display: none;
             }
         </style>
     </head>
 <body>  
     <!-- <img src="1.jpg" id="img1"> -->
-    <div id="figureOneContainer" style="width: 1000px; height: 500px; background-color: white;">
+    <div class="wrapper wrapper_2_1">
+        <div id="figureOneContainer" class="container container_2_1"></div>
     </div>
-    <div id='f1_recorder'>
+    <!-- <div id="figureOneContainer" style="width: 1000px; height: 500px; background-color: white;">
+    </div> -->
+    <div id='f1_recorder' class="wrapper wrapper_2_1">
         <div id='f1_recorder__play_pause' class="f1_rec__button">Play</div>
-        <div id='f1_recorder__record' class="f1_rec__button">Record</div>
+        <div id='f1_recorder__record' class="f1_rec__button comment_out_to_record">Record</div>
         <div id='f1_recorder__seek'>
             <div id='f1_recorder__seek_bar'></div>
             <div id='f1_recorder__seek_circle'></div>
         </div>
         <div id='f1_recorder__time' class="f1_rec__button">00:00 / 00:00</div>
-        <div id='f1_recorder__save' class="f1_rec__button">Save</div>
+        <div id='f1_recorder__save' class="f1_rec__button comment_out_to_record">Save</div>
     </div>
     <!-- <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.6.1/figureone.min.js'></script> -->
     <script type="text/javascript" src='../../package/index.js'></script>
@@ -79,19 +110,9 @@
             Your browser does not support the
             <code>audio</code> element.
     </audio> -->
-    <!-- <script type="text/javascript" src='./index.js'></script> -->
     <script type="text/javascript" src='./layout_figure.js'></script>
-    <!-- <script type="text/javascript" src='./layout_similar.js'></script> -->
-    <!-- <script type="text/javascript" src='./layout_lines.js'></script> -->
-    <!-- <script type="text/javascript" src='./layout_angle.js'></script> -->
     <script type="text/javascript" src='./layout_equation.js'></script>
-    <!-- <script type="text/javascript" src='./layout_circle.js'></script> -->
     <script type="text/javascript" src='./layout_right.js'></script>
-    <!-- <script type="text/javascript" src='./layout_righttris.js'></script> -->
-    <!-- <script type="text/javascript" src='./layout_table.js'></script> -->
-    <!-- <script type="text/javascript" src='./layout_bow.js'></script> -->
-    <!-- <script type="text/javascript" src='./layout_circle1.js'></script> -->
-    <!-- <script type="text/javascript" src='./layout_circ.js'></script> -->
     <script type="text/javascript" src='./layout.js'></script>
     <script type="text/javascript" src='./cursor.js'></script>
     <script type="text/javascript" src='./recorder.js'></script>
