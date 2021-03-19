@@ -75,7 +75,8 @@
                 top: calc(50% - 0.35em);
             }
             #f1_player__time {
-                width: 8em
+                width: 8em;
+                color: #444;
             }
             #figureOneContainer {
                 border: 1px solid #ddd;
@@ -94,10 +95,15 @@
             .comment_out_to_show_recorder {
                 display: none;
             }
-            .f1_playing {
-                background-image: url('play.svg');
+            #f1_player__play_pause {
                 background-position: center;
                 background-repeat: no-repeat;
+            }
+            .f1_paused {
+                background-image: url('play.svg');
+            }
+            .f1_playing {
+                background-image: url('pause.svg');
             }
         </style>
     </head>
@@ -107,7 +113,7 @@
         <div id="figureOneContainer" class="container container_2_1"></div>
     </div>
     <div id='f1_player'>
-        <div id='f1_player__play_pause' class="f1_player__button f1_playing">Play</div>
+        <div id='f1_player__play_pause' class="f1_player__button f1_paused"></div>
         <div id='f1_player__seek'>
             <div id='f1_player__seek_bar'></div>
             <div id='f1_player__seek_circle'></div>

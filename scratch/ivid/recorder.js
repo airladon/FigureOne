@@ -51,12 +51,14 @@ function setupRecorder() {
   }, false);
 
   function playbackStarted() {
-    playPauseButton.innerHTML = 'Pause';
+    // playPauseButton.innerHTML = 'Pause';
+    playPauseButton.classList.add('f1_playing');
     recordButton.classList.add('f1_player__button_disable');
   }
 
   function playbackStopped() {
-    playPauseButton.innerHTML = 'Play';
+    // playPauseButton.innerHTML = 'Play';
+    playPauseButton.classList.remove('f1_playing');
     recordButton.classList.remove('f1_player__button_disable');
   }
 
