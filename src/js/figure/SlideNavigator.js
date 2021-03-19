@@ -781,6 +781,9 @@ export default class SlideNavigator {
         steps = serialStep;
       }
       steps.forEach((step) => {
+        if (step.final === false) {
+          return;
+        }
         this.processAutoTransitionSet(step, 'in', 'showAll');
         this.processAutoTransitionSet(step, 'out', 'hide');
         this.processAutoTransitionSet(step, 'scenario', 'setScenario', 'target');

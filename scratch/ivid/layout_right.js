@@ -152,7 +152,7 @@ function layoutRight() {
           move: {
             bounds: {
               translation: {
-                left: 0.001, right: 3, bottom: 0, top: 2,
+                left: 0.001, right: 3, bottom: 0.001, top: 2,
               },
             },
           },
@@ -348,32 +348,26 @@ function layoutRight() {
     curve: { scale }, label: { scale }, duration: 1,
   });
   const pulseRight = () => tri.getElement('angle1').pulse({ xAlign: 'right', yAlign: 'bottom', scale: 2, duration: 1.5 });
-  const pulseOpp = () => tri.getElement('side12.label').pulse({ xAlign: 'left', scale: 1.5 });
-  const pulseHyp = () => tri.getElement('side01.label').pulse({ xAlign: 'right', yAlign: 'bottom', scale: 1.5 });
-  const pulseAdj = () => tri.getElement('side20.label').pulse({ yAlign: 'top', scale: 1.5 });
+  // const pulseOpp = () => tri.getElement('side12.label').pulse({ xAlign: 'left', scale: 1.5 });
+  // const pulseHyp = () => tri.getElement('side01.label').pulse({ xAlign: 'right', yAlign: 'bottom', scale: 1.5 });
+  // const pulseAdj = () => tri.getElement('side20.label').pulse({ yAlign: 'top', scale: 1.5 });
 
-  // const animateToRot = (target) => radLine.animations.new().rotation({ target, duration: 1 });
-
-  // figure.fnMap.global.add('triToSin', () => {
-  //   rightTri._tri._side12._label.showForm('name2');
-  //   rotLine.setPosition(rotLine.getPosition());
-  // });
   figure.fnMap.global.add('triAnimateToNames', animateToNames.bind(this));
   figure.fnMap.global.add('triAnimateToValues', animateToValues.bind(this));
   figure.fnMap.global.add('triToNames', toNames.bind(this));
   figure.fnMap.global.add('triToValues', toValues.bind(this));
   figure.fnMap.global.add('triPulseTheta', () => pulseAngle(angle2));
-  figure.fnMap.global.add('triPulseComp', () => pulseAngle(angle0, 1.4));
+  // figure.fnMap.global.add('triPulseComp', () => pulseAngle(angle0, 1.4));
   figure.fnMap.global.add('triPulseRight', () => pulseRight());
-  figure.fnMap.global.add('triPulseOpp', () => pulseOpp());
-  figure.fnMap.global.add('triPulseHyp', () => pulseHyp());
-  figure.fnMap.global.add('triPulseAdj', () => pulseAdj());
-  figure.fnMap.global.add('triToRot', (rot) => {
-    rotLine.setRotation(rot);
-  });
-  figure.fnMap.global.add('triPadToPoint', (p) => {
-    movePad.setPosition(p);
-  });
+  // figure.fnMap.global.add('triPulseOpp', () => pulseOpp());
+  // figure.fnMap.global.add('triPulseHyp', () => pulseHyp());
+  // figure.fnMap.global.add('triPulseAdj', () => pulseAdj());
+  // figure.fnMap.global.add('triToRot', (rot) => {
+  //   rotLine.setRotation(rot);
+  // });
+  // figure.fnMap.global.add('triPadToPoint', (p) => {
+  //   movePad.setPosition(p);
+  // });
   figure.fnMap.global.add('triSetup', (p, namesOrValues, touchable = false) => {
     movePad.setPosition(p);
     if (namesOrValues === 'names') {
@@ -389,17 +383,17 @@ function layoutRight() {
       rightTri.hasTouchableElements = false;
     }
   });
-  figure.fnMap.global.add('triAnimatePadTo', () => {
+  figure.fnMap.global.add('triResetPad', () => {
     movePad.animations.new()
       .position({ target: [2, 1.453], duration: 1 })
       .start();
   });
 
-  figure.fnMap.global.add('triPulseAngles', () => {
-    pulseAngle(angle2);
-    pulseRight();
-    pulseAngle(tri.getElement('angle0'));
-  });
+  // figure.fnMap.global.add('triPulseAngles', () => {
+  //   pulseAngle(angle2);
+  //   pulseRight();
+  //   pulseAngle(tri.getElement('angle0'));
+  // });
   // rotLine.setRotation(1);
 
   // rightTri.add([

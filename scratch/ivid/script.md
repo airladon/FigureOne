@@ -1,23 +1,28 @@
-* This triangle is interactive. You can drag the top corner around to make different triangles, or you can rotate the hypotenuse, keeping its length constant while changing the angle theta. When you interact with it, the video will pause, so press play when you're ready to continue.
+* This triangle is interactive. You can drag the top corner or rotate the hypotenuse to make different triangles. When you interact with it, the video will pause, so press play when you're ready to continue.
 
-* Now, let's look at the different side ratio values as we change the triangle.
 
-* Try making different triangles and see how the ratios change. For instance, try making different triangles with the same angle and see how the ratios change. Also, try changing the angle, and see how the ratios change. Can you explain what you see?
+* Now, let's look at the values of all the possible side ratios as we change the triangle.
 
-* If we are careful and change the size of the triangle without changing the angle theta, we can see the ratios stay constant.
-* This works for any angle, so let's try another.
+* Try making different triangles and see how the ratios change. Can you find a way to change the triangle that keeps the ratios constant?
 
-* On the other hand when we change the angle, we can see the ratios change.
-* In other words, the ratios are a function of angle theta, and size does not seem to change the ratio.
-* Why?
-* Well, as a triangle's angles add to 180º, then if you define two angles in a triangle, in this case theta and the right angle, the complementary angle of theta is also defined.
+* Well, if we are careful and change the size of the triangle without changing the angle theta, we can see the ratios stay constant.
+* This seems to work for any angle, like small angles... and large angles.
 
-* Therefore all right angle triangles with the angle theta will have the same set of angles and be similar.
+* Why is this?
+
+
+* Well, we might remember from geometry, that a triangle's angles sum to 180º, so when we define two angles, in this case the right angle and theta, we are really defining all three.
+
+* Therefore all right angle triangles with the same angle theta will have the same set of angles and be similar triangles.
 
 * Now, a property of similar triangles is that all similar triangles will have equal corresponding side ratios.
+>> So we can say all right angle triangles with the same angle theta will have equal corresponding side ratios. 
+* So for example if we label two sides on the left triangle, and take their ratio, then the corresponding sides of the right triangle will have the same ratio. Similarly, if we label the third side, the ratio between the first and third sides will be the same for both triangles, and this holds for any side ratio.
 
-* In other words, all right angle triangles with the same angle theta will have equal corresponding side ratios, and this explains why our ratios are staying the same for constant theta.
+* So this explains why all the ratios stay constant when the angle stays the same.
 
-* Each of these ratios has a special abreviated name: sin, cos, tan, sec, csc, and cot, and they are commonly referred to as the trigonometric functions.
+* In fact, we can see the ratios only change when we change the angle - and therefore we can say the ratios are dependent on, or a function of angle, which we've called theta.
+
+* These functions are used frequently in trigonometry, and so they each have a special abreviated name - the sin, cos, tan, sec, csc and cot, and as a collection they are often called trigonometric functions.
 
 * The next video in this series will show where these names come from.
