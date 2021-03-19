@@ -1,17 +1,15 @@
 /* globals figure */
 function setupRecorder() {
   function supportsPassive() {
-    let supportsPassive = false;
+    let supportsPassiveFlag = false;
     try {
       const opts = Object.defineProperty({}, 'passive', {
-        get: function() {
-          supportsPassive = true;
-        }
+        get: function() { supportsPassiveFlag = true; }
       });
-      window.addEventListener("testPassive", null, opts);
-      window.removeEventListener("testPassive", null, opts);
+      window.addEventListener('testPassive', null, opts);
+      window.removeEventListener('testPassive', null, opts);
     } catch (e) {}
-    return supportsPassive;
+    return supportsPassiveFlag;
   }
 
   const playPauseButton = document.querySelector('#f1_recorder__play_pause');
@@ -33,11 +31,7 @@ function setupRecorder() {
   figure.fnMap.add('navNext', () => figure.getElement('nav').nav.nextSlide(true));
   figure.fnMap.add('navPrev', () => figure.getElement('nav').nav.prevSlide());
   figure.fnMap.add('toggleCursor', () => figure.toggleCursor());
-  // figure.shortCuts = {
-  //   n: 'navNext',
-  //   p: 'navPrev',
-  //   s: 'toggleCursor',
-  // };
+
 
   document.addEventListener('keypress', (event) => {
     const keyCode = String.fromCharCode(event.keyCode);
@@ -58,25 +52,21 @@ function setupRecorder() {
 
   function playbackStarted() {
     playPauseButton.innerHTML = 'Pause';
-    // state.playing = true;
     recordButton.classList.add('f1_recorder__button_disable');
   }
 
   function playbackStopped() {
     playPauseButton.innerHTML = 'Play';
-    // state.playing = false;
     recordButton.classList.remove('f1_recorder__button_disable');
   }
 
   function recordingStarted() {
     recordButton.innerHTML = 'Pause';
-    // state.recording = true;
     playPauseButton.classList.add('f1_recorder__button_disable');
   }
 
   function recordingStopped() {
     recordButton.innerHTML = 'Record';
-    // state.recording = false;
     playPauseButton.classList.remove('f1_recorder__button_disable');
   }
 
@@ -213,11 +203,11 @@ function setupRecorder() {
     .then(response => response.json())
     .then(json => recorder.loadStates(json));
 
-  fetch('events.json')
-    .then(response => response.json())
-    .then(json => recorder.loadEvents(json));
+  // fetch('events.json')
+  //   .then(response => response.json())
+  //   .then(json => recorder.loadEvents(json));
 
-  recorder.loadAudio(new Audio('./audio.m4a'));
+  recorder.loadAudio(new Audio('./audio.mp3'));
 }
 
 setupRecorder();

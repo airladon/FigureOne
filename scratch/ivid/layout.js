@@ -5,7 +5,6 @@ function layout() {
   figure.add([
     centerText('angleSum', 'A triangle\'s angles sum to 180\u00b0', {}, [0, 1]),
     centerText('trig', 'Trigonmetric Functions', {}, [0, 1]),
-    // centerText('subTitle', 'An interactive video', {}, [0, 0.7], 0.1),
     leftText('similar1', 'Similar Triangles', {}, [0, 1], 0.2, {
       left: { position: [-2.2, 0.9] },
       center: { position: [-0.5, 0.9] },
@@ -239,7 +238,7 @@ function makeSlides() {
     ],
   });
   slides.push({
-    time: '2:17',
+    time: '2:17.5',
     addReference,
     fromForm: 'trig',
     form: 'final',

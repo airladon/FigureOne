@@ -5,6 +5,7 @@ reports/
 node_modules
 src/tests/api-examples/index.js
 audio.m4a
+audio.mp3
 states.json
 events.json
 ./favicon.ico

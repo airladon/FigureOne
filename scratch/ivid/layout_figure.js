@@ -29,7 +29,6 @@ const colTheta = color2;
 const colRad = [0.1, 0, 0.7, 1];
 const colOne = [0.3, 0.3, 0.3, 1];
 
-// const colSec = [0, 0.6, 0.6, 1];
 const colSec = color4;
 const colCot = color6;
 const colCsc = color5;
@@ -94,9 +93,5 @@ const leftText = (name, text, modifiers = {}, position, size = 0.2, scenarios = 
   mods: {
     isTouchable: true,
     scenarios,
-  //   scenarios: {
-  //     top: { position: [-2, 1], scale: 1 },
-  //     default: { position: [-2, 0], scale: 1 },
-  //   },
   },
 });

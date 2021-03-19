@@ -460,7 +460,7 @@ export default class SlideNavigator {
           const [execDeltaTime, command] = e;
           const t = lastTime + execDeltaTime;
           if (!(typeof t === 'number')) {
-            console.log('Error in delta time: ', t, execDeltaTime, lastTime, command);
+            throw new Error(`Error in delta time: ${t}, ${execDeltaTime}, ${lastTime}, ${command}`);
           }
           this.collection.recorder.events.autoExec.list.push([t, [command], 0]);
         });

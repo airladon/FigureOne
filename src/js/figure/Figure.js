@@ -583,25 +583,25 @@ class Figure {
     };
     const onTouchAuto = (payload) => {
       // onTouch(payload);
-      if (this.recorder.state === 'recording') {
-        const [action, x, y] = payload;
-        if (action === 'down') {
-          this.touchDown(new Point(x, y));
-        } else {
-          this.touchUp();
-        }
+      // if (this.recorder.state === 'recording') {
+      const [action, x, y] = payload;
+      if (action === 'down') {
+        this.touchDown(new Point(x, y), true);
+      } else {
+        this.touchUp();
       }
+      // }
     };
     const onCursorMove = (payload) => {
       const [x, y] = payload;
       this.setCursor(new Point(x, y));
     };
     const onCursorMoveAuto = (payload) => {
-      if (this.recorder.state === 'recording') {
-        const [x, y] = payload;
-        this.setCursor(new Point(x, y));
-        this.touchMove(new Point(x, y));
-      }
+      // if (this.recorder.state === 'recording') {
+      const [x, y] = payload;
+      this.setCursor(new Point(x, y));
+      this.touchMove(new Point(x, y));
+      // }
     };
     const moved = (payload) => {
       const [elementPath, transform] = payload;
@@ -1676,7 +1676,7 @@ class Figure {
   // The default behavior is to be able to move objects that are touched
   // and dragged, then when they are released, for them to move freely before
   // coming to a stop.
-  touchDownHandler(clientPoint: Point) {
+  touchDownHandler(clientPoint: Point, eventFromPlayback: boolean = false) {
     if (this.recorder.state === 'recording') {
       const pixelP = this.clientToPixel(clientPoint);
       const figurePoint = pixelP.transformBy(this.spaceTransforms.pixelToFigure.matrix());
@@ -1689,7 +1689,7 @@ class Figure {
     if (this.isPaused) {
       this.unpause();
     }
-    if (this.recorder.state === 'playing') {
+    if (this.recorder.state === 'playing' && !eventFromPlayback) {
       this.recorder.pausePlayback();
       this.showCursor('hide');
     }
@@ -2231,11 +2231,11 @@ class Figure {
     this.subscriptions.publish('unpaused');
   }
 
-  touchDown(figurePosition: TypeParsablePoint) {
+  touchDown(figurePosition: TypeParsablePoint, eventFromPlayback: boolean = false) {
     const p = getPoint(figurePosition);
     const pixelPoint = p.transformBy(this.spaceTransforms.figureToPixel.m());
     const clientPoint = this.pixelToClient(pixelPoint);
-    this.touchDownHandler(clientPoint);
+    this.touchDownHandler(clientPoint, eventFromPlayback);
     this.mockPreviousTouchPoint = clientPoint;
     // $FlowFixMe
     if (this.elements.elements[this.cursorElementName] != null) {

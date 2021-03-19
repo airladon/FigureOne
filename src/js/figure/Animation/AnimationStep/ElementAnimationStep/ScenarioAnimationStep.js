@@ -368,7 +368,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
   start(startTime: AnimationStartTime = null) {
     super.start(startTime);
     const { element } = this;
-    if (element == null) {
+    if (element == null) { // $FlowFixMe
       throw new Error(`Missing Element in scenario animation - null element for target: ${this.scenario.target}`);
     }
     let target = element.getScenarioTarget(this.scenario.target);

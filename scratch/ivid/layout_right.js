@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
-/* globals figure, color2, colGrey, leftText, colOpp, colAdj, colHyp, colTheta, Fig */
+/* globals figure, color2, colGrey, colOpp, colAdj, colHyp, colTheta, Fig */
 
-
+// eslint-disable-next-line
 function layoutRight() {
   const sideLabel = (value, name, name2, color = color2) => ({
     label: {
@@ -110,7 +110,6 @@ function layoutRight() {
           color: colGrey,
         },
       },
-      // similarTri('tri1', 0.6, [-2, 0], theta(), sides('B', 'A', '')),
       similarTri('tri1', 0.7, [-2, 0], theta(), sides('A\'', 'B\'', 'C\'')),
       similarTri('tri2', 1, [0, 0], theta(), sides('A', 'B', 'C')),
       similarTri('tri', 1, [0, 0], thetaValue(), [
@@ -161,20 +160,15 @@ function layoutRight() {
         },
       },
     ],
-    // options: {
-    //   position: [-0.8, -0.9],
-    // },
     mods: {
       scenarios: {
         oneTri: { position: [-0.8, -0.9], scale: 1 },
         twoTri: { position: [0, -0.9], scale: 1 },
-        // ratioValues: { position: [-0.3, -0.9], scale: 1 },
-        // circ: { position: [-1.5, 0], scale: 0.8 * 1.3 / 2 },
       },
     },
   });
   const [tri, xLine] = rightTri.getElements(['tri', 'x']);
-  const [tri1, tri2] = rightTri.getElements(['tri1', 'tri2']);
+  const [tri1] = rightTri.getElements(['tri1', 'tri2']);
   const [movePad] = rightTri.getElements(['movePad']);
   const [rotLine] = rightTri.getElements(['rotLine']);
 
@@ -212,7 +206,6 @@ function layoutRight() {
       }
       xLine.show();
     } else {
-      // tri._angle2.label.location = 'outside';
       xLine.hide();
     }
     if (x < 0.45 || y < 0.15) {
@@ -314,27 +307,6 @@ function layoutRight() {
       ])
       .start();
   };
-  const animateToValues = () => {
-    tri.animations.new()
-      .inParallel([
-        side01.animations.dissolveOut(0.4),
-        side12.animations.dissolveOut(0.4),
-        side20.animations.dissolveOut(0.4),
-        angle2._label.animations.dissolveOut(0.4),
-      ])
-      .trigger(() => {
-        sidesShowForm('value', true);
-        angleShowForm('value', true);
-        update();
-      })
-      .inParallel([
-        side01.animations.dissolveIn(0.4),
-        side12.animations.dissolveIn(0.4),
-        side20.animations.dissolveIn(0.4),
-        angle2._label.animations.dissolveIn(0.4),
-      ])
-      .start();
-  };
   const toNames = () => {
     sidesShowForm('name');
     angleShowForm('name');
@@ -348,17 +320,13 @@ function layoutRight() {
   const pulseAngle = (element, scale = 1.7) => element.pulseAngle({
     curve: { scale }, label: { scale }, duration: 1.5,
   });
-  const pulseRight = () => tri.getElement('angle1').pulse({ xAlign: 'right', yAlign: 'bottom', scale: 2, duration: 1.5 });
-  // const pulseOpp = () => tri.getElement('side12.label').pulse({ xAlign: 'left', scale: 1.5 });
-  // const pulseHyp = () => tri.getElement('side01.label').pulse({ xAlign: 'right', yAlign: 'bottom', scale: 1.5 });
-  // const pulseAdj = () => tri.getElement('side20.label').pulse({ yAlign: 'top', scale: 1.5 });
+  const pulseRight = () => tri.getElement('angle1').pulse({
+    xAlign: 'right', yAlign: 'bottom', scale: 2, duration: 1.5,
+  });
 
   figure.fnMap.global.add('triAnimateToNames', animateToNames.bind(this));
-  figure.fnMap.global.add('triAnimateToValues', animateToValues.bind(this));
   figure.fnMap.global.add('triToNames', toNames.bind(this));
-  figure.fnMap.global.add('triToValues', toValues.bind(this));
   figure.fnMap.global.add('triPulseTheta', () => pulseAngle(angle2));
-  // figure.fnMap.global.add('triPulseComp', () => pulseAngle(angle0, 1.4));
   figure.fnMap.global.add('triPulseRight', () => pulseRight());
   figure.fnMap.global.add('triPulseAllAngles', () => {
     tri1._angle1.pulse({
@@ -376,15 +344,6 @@ function layoutRight() {
     tri1._angle2.pulseAngle({ curve: 1.5, label: { scale: 1.5 }, duration: 1.5 });
     tri._angle2.pulseAngle({ curve: 1.5, label: { scale: 1.5 }, duration: 1.5 });
   });
-  // figure.fnMap.global.add('triPulseOpp', () => pulseOpp());
-  // figure.fnMap.global.add('triPulseHyp', () => pulseHyp());
-  // figure.fnMap.global.add('triPulseAdj', () => pulseAdj());
-  // figure.fnMap.global.add('triToRot', (rot) => {
-  //   rotLine.setRotation(rot);
-  // });
-  // figure.fnMap.global.add('triPadToPoint', (p) => {
-  //   movePad.setPosition(p);
-  // });
   figure.fnMap.global.add('triSetup', (p, namesOrValues, touchable = false) => {
     movePad.setPosition(p);
     if (namesOrValues === 'names') {
@@ -393,7 +352,6 @@ function layoutRight() {
       toValues();
     }
     if (touchable) {
-      // rightTri.hasTouchableElements = true;
       rotLine.setMovable();
       movePad.setMovable();
     } else {
@@ -405,19 +363,4 @@ function layoutRight() {
       .position({ target: [2, 1.453], duration: 1 })
       .start();
   });
-
-  // figure.fnMap.global.add('triPulseAngles', () => {
-  //   pulseAngle(angle2);
-  //   pulseRight();
-  //   pulseAngle(tri.getElement('angle0'));
-  // });
-  // rotLine.setRotation(1);
-
-  // rightTri.add([
-  //   leftText('allTriangles', 'All right triangles with |theta|:', {
-  //     theta: { text: '\u03b8', font: { family: 'Times New Roman', style: 'italic', color: colTheta } },
-  //   }, [-2 - 1.3, -1], 0.18 / 0.7),
-  //   leftText('haveSameAngles', ' have the same angles', {}, [0.1 - 0.7, -1], 0.18 / 0.7),
-  //   leftText('areSimilar', ' are similar', {}, [0.1 - 0.7, -1], 0.18 / 0.7),
-  // ]);
 }

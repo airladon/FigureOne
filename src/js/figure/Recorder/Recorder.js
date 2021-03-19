@@ -927,13 +927,13 @@ class Recorder {
     const dateStr = new Date().toISOString();
     const location = (window.location.pathname).replace('/', '_');
     const encodedStates = this.encodeStates();
-    const encodedEvents = this.encodeEvents();
+    // const encodedEvents = this.encodeEvents();
     if (encodedStates != null) {
       download(`${dateStr} ${location}.vidstates.json`, JSON.stringify(encodedStates));
     }
-    if (encodedEvents != null) {
-      download(`${dateStr} ${location}.videvents.json`, JSON.stringify(encodedEvents));
-    }
+    // if (encodedEvents != null) {
+    //   download(`${dateStr} ${location}.videvents.json`, JSON.stringify(encodedEvents));
+    // }
   }
 
   show() {
@@ -1011,6 +1011,15 @@ figure.recorder.loadEventData('autoCursorMove', ${this.encodeCursorEvent('cursor
       out.push(`[${round(time, 4)}, [${payloadStr}]]`);
     });
     return out.join(',\n');
+  }
+
+  encodeMoveEvent(
+    eventName: string,
+    timePrecision: number = 2,
+    valuePrecision: number = 2,
+    minTimeStep: number = 0.01,
+  ) {
+
   }
 
   encodeCursorEvent(
@@ -1352,17 +1361,16 @@ figure.recorder.loadEventData('autoCursorMove', ${this.encodeCursorEvent('cursor
       return null;
     }
 
-    const cursorIndex = getPrevIndexForTime(this.events.cursor.list, atTime);
-    const touchIndex = getPrevIndexForTime(this.events.touch.list, atTime);
-    const cursorMoveIndex = getPrevIndexForTime(this.events.cursorMove.list, atTime);
-
+    const cursorIndex = getPrevIndexForTime(this.events.autoCursor.list, atTime);
+    const touchIndex = getPrevIndexForTime(this.events.autoTouch.list, atTime);
+    const cursorMoveIndex = getPrevIndexForTime(this.events.autoCursorMove.list, atTime);
     let touchUp = null;
     let showCursor = null;
     let cursorPosition = null;
     let cursorTime = null;
     let cursorTimeCount = null;
     if (touchIndex !== -1) {
-      const event = this.events.touch.list[touchIndex]; // $FlowFixMe
+      const event = this.events.autoTouch.list[touchIndex]; // $FlowFixMe
       const [time, [upOrDown, x, y], timeCount] = event;
       if (upOrDown === 'down') {
         touchUp = false;
@@ -1375,7 +1383,7 @@ figure.recorder.loadEventData('autoCursorMove', ${this.encodeCursorEvent('cursor
     }
 
     if (cursorIndex !== -1) {
-      const event = this.events.cursor.list[cursorIndex]; // $FlowFixMe
+      const event = this.events.autoCursor.list[cursorIndex]; // $FlowFixMe
       const [time, [showOrHide, x, y], timeCount] = event;
       if (showOrHide === 'show') {
         showCursor = true;
@@ -1394,7 +1402,7 @@ figure.recorder.loadEventData('autoCursorMove', ${this.encodeCursorEvent('cursor
     }
 
     if (cursorMoveIndex !== -1) {
-      const event = this.events.cursorMove.list[cursorMoveIndex]; // $FlowFixMe
+      const event = this.events.autoCursorMove.list[cursorMoveIndex]; // $FlowFixMe
       const [time, [x, y], timeCount] = event;
       if (
         cursorTime == null
@@ -1421,7 +1429,7 @@ figure.recorder.loadEventData('autoCursorMove', ${this.encodeCursorEvent('cursor
   startPlayback(
     fromTimeIn: number = this.currentTime || 0,
     forceStart: boolean = true,
-    events: ?Array<string> = null,
+    events: ?Array<string> = ['autoCursor', 'autoCursorMove', 'autoTouch', 'autoExec', 'autoSlide', 'slide'],
   ) {
     this.lastSeekTime = null;
     let fromTime = this.convertTime(fromTimeIn);

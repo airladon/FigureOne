@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 /* global colSin, colCos, colCot, colTan, colSec, colCsc, colTheta,
    figure, colOpp, colHyp, colAdj, colText */
-
+// eslint-disable-next-line
 function makeEquation() {
   const cont = (content, width = 0.6, xAlign = 'center') => ({
     container: { content, width, xAlign },
@@ -38,27 +38,6 @@ function makeEquation() {
   const lin = (content, baselineSpace = 0.5) => ({
     lines: { content, baselineSpace, justify: 'left' },
   });
-  // const w1 = 0.28;
-
-  // const addFn = (name, elements, centerOn, xAlign, yAlign = 'middle') => {
-  //   figure.fnMap.global.add(name, () => {
-  //     figure.getElement('eqn').pulse({
-  //       elements, centerOn, xAlign, yAlign, scale: 2.5,
-  //     });
-  //   });
-  // };
-  // addFn('eqnPulseTan', ['tan', 'theta9'], 'tan', 'left', 'middle');
-  // addFn('eqnPulseCot', ['cot', 'theta12'], 'cot', 'left', 'middle');
-  // addFn('eqnPulseSec', ['sec', 'theta11'], 'sec', 'left', 'middle');
-  // addFn('eqnPulseCsc', ['csc', 'theta10'], 'csc', 'left', 'middle');
-  // addFn('eqnPulseF1', ['f_1', '_1', 'lb1', 'theta1', 'rb1'], 'f_1', 'left');
-  // addFn('eqnPulseF2', ['f_2', '_2', 'lb2', 'theta2', 'rb2'], 'f_2', 'left');
-  // addFn('eqnPulseF3', ['f_3', '_3', 'lb3', 'theta3', 'rb3'], 'f_3', 'left');
-  // addFn('eqnPulseF4', ['f_4', '_4', 'lb4', 'theta4', 'rb4'], 'f_4', 'left');
-  // addFn('eqnPulseF5', ['f_5', '_5', 'lb5', 'theta5', 'rb5'], 'f_5', 'left');
-  // addFn('eqnPulseF6', ['f_6', '_6', 'lb6', 'theta6', 'rb6'], 'f_6', 'left');
-  // addFn('eqnPulseSin', ['sin_1', 'theta1'], 'sin_1', 'left', 'middle');
-
 
   figure.add({
     name: 'eqn',
