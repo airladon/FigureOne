@@ -12,12 +12,12 @@ function setupRecorder() {
     return supportsPassiveFlag;
   }
 
-  const playPauseButton = document.querySelector('#f1_recorder__play_pause');
+  const playPauseButton = document.querySelector('#f1_player__play_pause');
   const recordButton = document.querySelector('#f1_recorder__record');
   const saveButton = document.querySelector('#f1_recorder__save');
-  const timeLabel = document.querySelector('#f1_recorder__time');
-  const seekContainer = document.querySelector('#f1_recorder__seek');
-  const seekCircle = document.querySelector('#f1_recorder__seek_circle');
+  const timeLabel = document.querySelector('#f1_player__time');
+  const seekContainer = document.querySelector('#f1_player__seek');
+  const seekCircle = document.querySelector('#f1_player__seek_circle');
   const { recorder } = figure;
 
   const state = {
@@ -52,22 +52,22 @@ function setupRecorder() {
 
   function playbackStarted() {
     playPauseButton.innerHTML = 'Pause';
-    recordButton.classList.add('f1_recorder__button_disable');
+    recordButton.classList.add('f1_player__button_disable');
   }
 
   function playbackStopped() {
     playPauseButton.innerHTML = 'Play';
-    recordButton.classList.remove('f1_recorder__button_disable');
+    recordButton.classList.remove('f1_player__button_disable');
   }
 
   function recordingStarted() {
     recordButton.innerHTML = 'Pause';
-    playPauseButton.classList.add('f1_recorder__button_disable');
+    playPauseButton.classList.add('f1_player__button_disable');
   }
 
   function recordingStopped() {
     recordButton.innerHTML = 'Record';
-    playPauseButton.classList.remove('f1_recorder__button_disable');
+    playPauseButton.classList.remove('f1_player__button_disable');
   }
 
   function timeToStr(time) {

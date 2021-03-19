@@ -39,7 +39,7 @@
                 -moz-user-select: none; /* Firefox */
                 -ms-user-select: none; /* Internet Explorer/Edge */
             }
-            .f1_rec__button {
+            .f1_player__button {
                 display: table-cell;
                 vertical-align: middle;
                 font-size: 1em;
@@ -47,18 +47,18 @@
                 width: 5em;
                 text-align: center
             }
-            .f1_recorder__button_disable {
+            .f1_player__button_disable {
                 pointer-events: none;
                 color: #aaa;
             }
-            #f1_recorder__seek {
+            #f1_player__seek {
                 display: table-cell;
                 width: calc(100% - 3em - 6em - 4em - 1em);
                 height: 2em;
                 position: relative;
                 cursor: pointer;
             }
-            #f1_recorder__seek_bar {
+            #f1_player__seek_bar {
                 width: calc(100% - 10px);
                 height: 0.1em;
                 position: absolute;
@@ -66,7 +66,7 @@
                 left: 5px;
                 background-color: #777;
             }
-            #f1_recorder__seek_circle {
+            #f1_player__seek_circle {
                 width: 0.7em;
                 height: 0.7em;
                 background-color: #444;
@@ -74,14 +74,30 @@
                 position: absolute;
                 top: calc(50% - 0.35em);
             }
-            #f1_recorder__time {
+            #f1_player__time {
                 width: 8em
             }
             #figureOneContainer {
                 border: 1px solid #ddd;
             }
-            .comment_out_to_record {
+            #f1_recorder {
+                margin-left: auto;
+                margin-right: auto;
+                width: 16em;
+                margin-top: 1em;
+                display: table;
+                table-layout: fixed;
+            }
+            .f1_recorder__button {
+                width: 8em;
+            }
+            .comment_out_to_show_recorder {
                 display: none;
+            }
+            .f1_playing {
+                background-image: url('play.svg');
+                background-position: center;
+                background-repeat: no-repeat;
             }
         </style>
     </head>
@@ -90,17 +106,17 @@
     <div class="wrapper wrapper_2_1">
         <div id="figureOneContainer" class="container container_2_1"></div>
     </div>
-    <!-- <div id="figureOneContainer" style="width: 1000px; height: 500px; background-color: white;">
-    </div> -->
     <div id='f1_player'>
-        <div id='f1_recorder__play_pause' class="f1_rec__button">Play</div>
-        <div id='f1_recorder__record' class="f1_rec__button comment_out_to_record">Record</div>
-        <div id='f1_recorder__seek'>
-            <div id='f1_recorder__seek_bar'></div>
-            <div id='f1_recorder__seek_circle'></div>
+        <div id='f1_player__play_pause' class="f1_player__button f1_playing">Play</div>
+        <div id='f1_player__seek'>
+            <div id='f1_player__seek_bar'></div>
+            <div id='f1_player__seek_circle'></div>
         </div>
-        <div id='f1_recorder__time' class="f1_rec__button">00:00 / 00:00</div>
-        <div id='f1_recorder__save' class="f1_rec__button comment_out_to_record">Save</div>
+        <div id='f1_player__time' class="f1_player__button">00:00 / 00:00</div>
+    </div>
+    <div id='f1_recorder' class="comment_out_to_show_recorder">
+        <div id='f1_recorder__record' class="f1_player__button f1_recorder__button">Record</div>
+        <div id='f1_recorder__save' class="f1_player__button f1_recorder__button">Save</div>
     </div>
     <!-- <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.6.1/figureone.min.js'></script> -->
     <script type="text/javascript" src='../../package/index.js'></script>
