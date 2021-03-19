@@ -101,15 +101,7 @@ function setupRecorder() {
     updateTimeLabel(time);
   }
 
-  // function getSeekTime() {
-  //   const circleBounds = seekCircle.getBoundingClientRect();
-  //   const seekBounds = seekContainer.getBoundingClientRect();
-  //   const seekWidth = seekBounds.width - circleBounds.width;
-  //   const percentX = (circleBounds.left - seekBounds.left) / seekWidth;
-  //   return percentX * state.duration;
-  // }
-
-  // let seekId = null;
+  let seekId = null;
   let lastSeekTime = 0;
   function touchHandler(x) {
     const circleBounds = seekCircle.getBoundingClientRect();
@@ -126,21 +118,15 @@ function setupRecorder() {
     }
     const time = percent * state.duration;
     lastSeekTime = time;
-    // console.log(lastSeekTime)
-    // console.log(seekId)
-    // if (seekId == null) {
-    //   seekId = figure.subscriptions.add('beforeDraw', () => {
-    //     // console.log(lastSeekTime)
-    //     const t = performance.now()
-    //     recorder.seek(lastSeekTime);
-    //     console.log((performance.now() - t) / 1000)
-    //     seekId = null;
-    //   }, 1);
-    // }
-    // recorder.seek(time);
+    if (seekId != null) {
+      figure.subscriptions.remove('beforeDraw', seekId);
+    }
+    seekId = figure.subscriptions.add('beforeDraw', () => {
+      recorder.seek(lastSeekTime);
+      seekId = null;
+    }, 1);
     setTime(time);
-    // figure.animateNextFrame();
-    // setTime(percent * state.duration);
+    figure.animateNextFrame();
   }
 
   function touchStartHandler(event) {

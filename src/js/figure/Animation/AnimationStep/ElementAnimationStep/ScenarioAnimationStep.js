@@ -221,6 +221,29 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     return 'scenarioAnimationStep';
   }
 
+  _fromState(state: Object, getElement: ?(string) => FigureElement) {
+    // const obj = new this.constructor();
+    joinObjects(this, state);
+    if (this.element != null && typeof this.element === 'string' && getElement != null) {
+      this.element = getElement(this.element);
+    }
+    return this;
+  }
+
+  _state(options: Object) {
+    const state = super._state(options);
+    if (this.element != null) {
+      state.state.element = {
+        f1Type: 'de',
+        state: this.element.getPath(),
+      };
+    }
+    // if (this.element != null) {
+    //   definition.state.element = this.element.getPath();
+    // }
+    return state;
+  }
+
   getDuration(
     start: { transform?: Transform, color?: TypeColor, isShown?: boolean, opacity?: number },
     target: { transform?: Transform, color?: TypeColor, isShown?: boolean },

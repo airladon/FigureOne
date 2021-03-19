@@ -42,7 +42,7 @@ function makeSlides() {
   const nav = figure.getElement('nav');
   const rightTri = figure.getElement('rightTri');
 
-
+  const addReference = true;
   // /*
   // .########..####..######...##.....##.########....########.########..####
   // .##.....##..##..##....##..##.....##....##..........##....##.....##..##.
@@ -54,7 +54,7 @@ function makeSlides() {
   // */
   slides.push({
     scenarioCommon: 'oneTri',
-    addReference: true,
+    addReference,
     showCommon: { rightTri: ['tri.line', 'tri.angle1', 'tri.angle2', 'movePad', 'rotLine', 'tri.side01', 'tri.side12', 'tri.side20'] },
     enterStateCommon: () => {
       figure.fnMap.exec('triSetup', [2, 1.453], 'values', true);
@@ -64,7 +64,7 @@ function makeSlides() {
 
   slides.push({
     time: '0:21',
-    addReference: true,
+    addReference,
     fromForm: 'values',
     form: 'values',
     transition: { in: 'eqn' },
@@ -81,7 +81,7 @@ function makeSlides() {
   ..######..####.##.....##.####.########.##.....##.##.....##
   */
   slides.push({
-    addReference: true,
+    addReference,
     time: '0:52',
     fromForm: 'values',
     form: null,
@@ -106,7 +106,7 @@ function makeSlides() {
   });
 
   slides.push({
-    addReference: true,
+    addReference,
     time: '1:01.5',
     showCommon: { rightTri: ['tri.line', 'tri.angle1', 'tri.angle2', 'movePad', 'rotLine', 'tri.angle0'] },
     show: 'angleSum',
@@ -119,7 +119,7 @@ function makeSlides() {
   });
 
   slides.push({
-    addReference: true,
+    addReference,
     time: '1:02',
     scenario: 'center',
     transition: [
@@ -136,7 +136,7 @@ function makeSlides() {
 
   slides.push({
     time: '1:22',
-    addReference: true,
+    addReference,
     scenarioCommon: 'twoTri',
     fromForm: 'AonB',
     form: 'AonCEq',
@@ -170,7 +170,7 @@ function makeSlides() {
   */
   slides.push({
     time: '1:45',
-    addReference: true,
+    addReference,
     showCommon: { rightTri: ['tri.line', 'tri.angle1', 'tri.angle2', 'movePad', 'rotLine', 'tri.side01', 'tri.side12', 'tri.side20'] },
     enterStateCommon: () => {
       figure.fnMap.exec('triSetup', [2, 1.453], 'values', true);
@@ -208,7 +208,7 @@ function makeSlides() {
 
   slides.push({
     time: '2:02',
-    addReference: true,
+    addReference,
     scenarioCommon: 'oneTri',
     fromForm: 'values',
     form: 'functions',
@@ -223,7 +223,7 @@ function makeSlides() {
 
   slides.push({
     time: '2:09.5',
-    addReference: true,
+    addReference,
     enterStateCommon: () => {
       figure.fnMap.exec('triSetup', [2, 1.453], 'names', true);
     },
@@ -240,7 +240,7 @@ function makeSlides() {
   });
   slides.push({
     time: '2:17',
-    addReference: true,
+    addReference,
     fromForm: 'trig',
     form: 'final',
     transition: [

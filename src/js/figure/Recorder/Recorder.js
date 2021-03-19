@@ -1831,10 +1831,11 @@ figure.recorder.loadEventData('autoCursorMove', ${this.encodeCursorEvent('cursor
 
   getStateForTime(timeIn: number) {
     let stateIndex;
-    if (timeIn === 0 && this.states.diffs.length > 0) {
+    const time = this.convertTime(timeIn);
+    if (time === 0 && this.states.diffs.length > 0) {
       stateIndex = 0;
     } else {  // $FlowFixMe
-      stateIndex = getPrevIndexForTime(this.states.diffs, timeIn);
+      stateIndex = getPrevIndexForTime(this.states.diffs, time);
     }
     return this.getState(stateIndex);
   }
