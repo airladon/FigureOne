@@ -27,7 +27,10 @@
                 padding-bottom: 50%;
             }
             
-            #f1_recorder {
+            #f1_player {
+                display: table;
+                table-layout: fixed;
+                width: 100%;
                 height: 2em;
                 margin-top: 1em;
                 user-select: none; /* supported by Chrome and Opera */
@@ -37,12 +40,11 @@
                 -ms-user-select: none; /* Internet Explorer/Edge */
             }
             .f1_rec__button {
-                display: inline-block;
-                margin-left: 1em;
-                margin-right: 1em;
+                display: table-cell;
+                vertical-align: middle;
                 font-size: 1em;
                 font-family: Arial, Helvetica, sans-serif;
-                width: 3em;
+                width: 5em;
                 text-align: center
             }
             .f1_recorder__button_disable {
@@ -50,7 +52,7 @@
                 color: #aaa;
             }
             #f1_recorder__seek {
-                display: inline-block;
+                display: table-cell;
                 width: calc(100% - 3em - 6em - 4em - 1em);
                 height: 2em;
                 position: relative;
@@ -73,10 +75,10 @@
                 top: calc(50% - 0.35em);
             }
             #f1_recorder__time {
-                width: 6em
+                width: 8em
             }
             #figureOneContainer {
-                border: 1px solid #eee;
+                border: 1px solid #ddd;
             }
             .comment_out_to_record {
                 display: none;
@@ -90,7 +92,7 @@
     </div>
     <!-- <div id="figureOneContainer" style="width: 1000px; height: 500px; background-color: white;">
     </div> -->
-    <div id='f1_recorder' class="wrapper wrapper_2_1">
+    <div id='f1_player'>
         <div id='f1_recorder__play_pause' class="f1_rec__button">Play</div>
         <div id='f1_recorder__record' class="f1_rec__button comment_out_to_record">Record</div>
         <div id='f1_recorder__seek'>
