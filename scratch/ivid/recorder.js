@@ -1,10 +1,12 @@
 /* globals figure */
+/* eslint-disable no-empty, object-shorthand, func-names, getter-return */
+
 function setupRecorder() {
   function supportsPassive() {
     let supportsPassiveFlag = false;
     try {
       const opts = Object.defineProperty({}, 'passive', {
-        get: function() { supportsPassiveFlag = true; }
+        get: function () { supportsPassiveFlag = true; },
       });
       window.addEventListener('testPassive', null, opts);
       window.removeEventListener('testPassive', null, opts);
@@ -12,12 +14,6 @@ function setupRecorder() {
     return supportsPassiveFlag;
   }
 
-  const playPauseButton = document.querySelector('#f1_player__play_pause');
-  const recordButton = document.querySelector('#f1_recorder__record');
-  const saveButton = document.querySelector('#f1_recorder__save');
-  const timeLabel = document.querySelector('#f1_player__time');
-  const seekContainer = document.querySelector('#f1_player__seek');
-  const seekCircle = document.querySelector('#f1_player__seek_circle');
   const { recorder } = figure;
 
   const state = {
@@ -50,14 +46,57 @@ function setupRecorder() {
     }
   }, false);
 
+  /*
+  .########..##.....##.########.########..#######..##....##..######.
+  .##.....##.##.....##....##.......##....##.....##.###...##.##....##
+  .##.....##.##.....##....##.......##....##.....##.####..##.##......
+  .########..##.....##....##.......##....##.....##.##.##.##..######.
+  .##.....##.##.....##....##.......##....##.....##.##..####.......##
+  .##.....##.##.....##....##.......##....##.....##.##...###.##....##
+  .########...#######.....##.......##.....#######..##....##..######.
+  */
+  const playPauseButton = document.querySelector('#f1_player__play_pause');
+  const recordButton = document.querySelector('#f1_recorder__record');
+  const saveButton = document.querySelector('#f1_recorder__save');
+
+  // Button functionality
+  function togglePlayPause() {
+    if (recorder.state === 'recording') {
+      return;
+    }
+    if (recorder.state !== 'idle') {
+      recorder.pausePlayback();
+    } else {
+      recorder.resumePlayback();
+    }
+  }
+
+  function toggleRecord() {
+    if (!(recorder.state === 'recording') && !(recorder.state === 'idle')) {
+      return;
+    }
+    if (recorder.state === 'recording') {
+      recorder.stopRecording();
+    } else {
+      const currentTime = recorder.getCurrentTime();
+      recorder.startRecording(currentTime, ['autoSlide', 'autoCursor', 'autoTouch', 'autoCursorMove', 'autoExec']);
+      if (currentTime === 0) {
+        recorder.recordEvent('slide', ['goto', 0], 0);
+      }
+    }
+  }
+
+  playPauseButton.onclick = () => togglePlayPause();
+  recordButton.onclick = () => toggleRecord();
+  saveButton.onclick = () => recorder.save();
+
+  // Button state
   function playbackStarted() {
-    // playPauseButton.innerHTML = 'Pause';
     playPauseButton.classList.add('f1_playing');
     recordButton.classList.add('f1_player__button_disable');
   }
 
   function playbackStopped() {
-    // playPauseButton.innerHTML = 'Play';
     playPauseButton.classList.remove('f1_playing');
     recordButton.classList.remove('f1_player__button_disable');
   }
@@ -71,6 +110,23 @@ function setupRecorder() {
     recordButton.innerHTML = 'Record';
     playPauseButton.classList.remove('f1_player__button_disable');
   }
+  recorder.subscriptions.add('playbackStopped', playbackStopped.bind(this));
+  recorder.subscriptions.add('playbackStarted', playbackStarted.bind(this));
+  recorder.subscriptions.add('startRecording', recordingStarted.bind(this));
+  recorder.subscriptions.add('stopRecording', recordingStopped.bind(this));
+
+  /*
+  .########.####.##.....##.########
+  ....##.....##..###...###.##......
+  ....##.....##..####.####.##......
+  ....##.....##..##.###.##.######..
+  ....##.....##..##.....##.##......
+  ....##.....##..##.....##.##......
+  ....##....####.##.....##.########
+  */
+  const timeLabel = document.querySelector('#f1_player__time');
+  const seekContainer = document.querySelector('#f1_player__seek');
+  const seekCircle = document.querySelector('#f1_player__seek_circle');
 
   function timeToStr(time) {
     const minutes = Math.floor(time / 60);
@@ -92,6 +148,19 @@ function setupRecorder() {
     seekCircle.style.left = `${percentTime * seekWidth}px`;
     updateTimeLabel(time);
   }
+
+  recorder.subscriptions.add('timeUpdate', t => setTime(t[0]));
+  recorder.subscriptions.add('durationUpdated', (d) => { state.duration = d; });
+
+  /*
+  ..######..########.########.##....##
+  .##....##.##.......##.......##...##.
+  .##.......##.......##.......##..##..
+  ..######..######...######...#####...
+  .......##.##.......##.......##..##..
+  .##....##.##.......##.......##...##.
+  ..######..########.########.##....##
+  */
 
   let seekId = null;
   let lastSeekTime = 0;
@@ -164,50 +233,20 @@ function setupRecorder() {
   window.addEventListener('touchend', e => touchEndHandler(e), supportsPassive() ? { passive: false } : false);
   window.addEventListener('touchmove', e => touchMoveHandler(e), supportsPassive() ? { passive: false } : false);
 
-  recorder.subscriptions.add('timeUpdate', t => setTime(t[0]));
-  recorder.subscriptions.add('playbackStopped', playbackStopped.bind(this));
-  recorder.subscriptions.add('playbackStarted', playbackStarted.bind(this));
-  recorder.subscriptions.add('startRecording', recordingStarted.bind(this));
-  recorder.subscriptions.add('stopRecording', recordingStopped.bind(this));
-
-  function togglePlayPause() {
-    if (recorder.state === 'recording') {
-      return;
-    }
-    if (recorder.state !== 'idle') {
-      recorder.pausePlayback();
-    } else {
-      recorder.resumePlayback();
-    }
-  }
-
-  function toggleRecord() {
-    if (!(recorder.state === 'recording') && !(recorder.state === 'idle')) {
-      return;
-    }
-    if (recorder.state === 'recording') {
-      recorder.stopRecording();
-    } else {
-      const currentTime = recorder.getCurrentTime();
-      recorder.startRecording(currentTime, ['autoSlide', 'autoCursor', 'autoTouch', 'autoCursorMove', 'autoExec']);
-      if (currentTime === 0) {
-        recorder.recordEvent('slide', ['goto', 0], 0);
-      }
-    }
-  }
-
-  playPauseButton.onclick = () => togglePlayPause();
-  recordButton.onclick = () => toggleRecord();
-  saveButton.onclick = () => recorder.save();
-  recorder.subscriptions.add('durationUpdated', (d) => { state.duration = d; });
+  /*
+  .##........#######.....###....########.
+  .##.......##.....##...##.##...##.....##
+  .##.......##.....##..##...##..##.....##
+  .##.......##.....##.##.....##.##.....##
+  .##.......##.....##.#########.##.....##
+  .##.......##.....##.##.....##.##.....##
+  .########..#######..##.....##.########.
+  */
+  // Load video states and audio data
 
   fetch('states.json')
     .then(response => response.json())
     .then(json => recorder.loadStates(json));
-
-  // fetch('events.json')
-  //   .then(response => response.json())
-  //   .then(json => recorder.loadEvents(json));
 
   recorder.loadAudio(new Audio('./audio.mp3'));
 }
