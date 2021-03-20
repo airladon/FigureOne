@@ -2,32 +2,12 @@
 /* eslint-disable no-empty, object-shorthand, func-names, getter-return */
 
 function setupRecorder() {
-  function supportsPassive() {
-    let supportsPassiveFlag = false;
-    try {
-      const opts = Object.defineProperty({}, 'passive', {
-        get: function () { supportsPassiveFlag = true; },
-      });
-      window.addEventListener('testPassive', null, opts);
-      window.removeEventListener('testPassive', null, opts);
-    } catch (e) {}
-    return supportsPassiveFlag;
-  }
-
   const { recorder } = figure;
 
   const state = {
-    playing: false,
-    time: 0,
-    recording: false,
     duration: 0,
     touch: 'up',
   };
-
-  figure.fnMap.add('navNext', () => figure.getElement('nav').nav.nextSlide(true));
-  figure.fnMap.add('navPrev', () => figure.getElement('nav').nav.prevSlide());
-  figure.fnMap.add('toggleCursor', () => figure.toggleCursor());
-
 
   document.addEventListener('keypress', (event) => {
     const keyCode = String.fromCharCode(event.keyCode);
@@ -59,7 +39,7 @@ function setupRecorder() {
   const recordButton = document.querySelector('#f1_recorder__record');
   const saveButton = document.querySelector('#f1_recorder__save');
 
-  // Button functionality
+  // Setup button functionality
   function togglePlayPause() {
     if (recorder.state === 'recording') {
       return;
@@ -90,7 +70,7 @@ function setupRecorder() {
   recordButton.onclick = () => toggleRecord();
   saveButton.onclick = () => recorder.save();
 
-  // Button state
+  // Button state is updated from recorder subscriptions
   function playbackStarted() {
     playPauseButton.classList.add('f1_playing');
     recordButton.classList.add('f1_player__button_disable');
@@ -229,6 +209,18 @@ function setupRecorder() {
   window.addEventListener('mouseup', e => mouseUpHandler(e), false);
   window.addEventListener('mousemove', e => mouseMoveHandler(e), false);
   // docume.addEventListener('mouseleave', this.mouseUpHandler.bind(this), false);
+
+  function supportsPassive() {
+    let supportsPassiveFlag = false;
+    try {
+      const opts = Object.defineProperty({}, 'passive', {
+        get: function () { supportsPassiveFlag = true; },
+      });
+      window.addEventListener('testPassive', null, opts);
+      window.removeEventListener('testPassive', null, opts);
+    } catch (e) {}
+    return supportsPassiveFlag;
+  }
   seekContainer.addEventListener('touchstart', e => touchStartHandler(e), supportsPassive() ? { passive: false } : false);
   window.addEventListener('touchend', e => touchEndHandler(e), supportsPassive() ? { passive: false } : false);
   window.addEventListener('touchmove', e => touchMoveHandler(e), supportsPassive() ? { passive: false } : false);

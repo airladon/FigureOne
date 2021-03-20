@@ -5,17 +5,18 @@ function layout() {
   figure.add([
     centerText('angleSum', 'A triangle\'s angles sum to 180\u00b0', {}, [0, 1]),
     centerText('trig', 'Trigonmetric Functions', {}, [0, 1]),
-    leftText('similar1', 'Similar Triangles', {}, [0, 1], 0.2, {
+    leftText('similarTriangles', 'Similar Triangles', {}, [0, 1], 0.2, {
       left: { position: [-2.2, 0.9] },
       center: { position: [-0.5, 0.9] },
     }),
-    leftText('similar2', 'Similar Triangles: equal corresponding side ratios', {}, [-2.2, 0.9]),
+    leftText('similarTrianglesEq', 'Similar Triangles: equal corresponding side ratios', {}, [-2.2, 0.9]),
   ]);
   figure.add({
     name: 'cursor',
     method: 'collections.cursor',
     options: {
       color: [0, 0.5, 1, 0.7],
+      radius: 0.15,
     },
     mods: {
       isShown: false,
@@ -127,9 +128,9 @@ function makeSlides() {
       { in: { 'rightTri.tri1': ['line', 'angle1', 'angle2', 'angle0'] } },
       { trigger: 'triPulseThetas', duration: 1.5, delay: 1.8 },
       { trigger: 'triPulseAllAngles', duration: 1.5, delay: 0.5 },
-      { in: 'similar1', delay: 0 },
-      { scenario: 'similar1', target: 'left', delay: 3.5, duration: 3 },
-      { in: 'similar2' },
+      { in: 'similarTriangles', delay: 0 },
+      { scenario: 'similarTriangles', target: 'left', delay: 3.5, duration: 3 },
+      { in: 'similarTrianglesEq' },
     ],
   });
 
@@ -144,7 +145,7 @@ function makeSlides() {
       { 'rightTri.tri2': ['line', 'angle1', 'angle2', 'angle0'] },
     ],
     transition: [
-      { out: 'similar2' },
+      { out: 'similarTrianglesEq' },
       { in: { 'rightTri.tri1': ['side01', 'side12'] } },
       { in: 'eqn', delay: 2 },
       { in: { 'rightTri.tri2': ['side01', 'side12'] }, delay: 3 },
