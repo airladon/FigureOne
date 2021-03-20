@@ -84,11 +84,13 @@ export default class EquationLabel {
   height: number;
   width: number;
   aOffset: number;
+  lastOffsetMag: number;
 
   constructor(
     collections: FigureCollections,
     options: TypeLabelOptions = {},
   ) {
+    this.lastOffsetMag = 0;
     const defaultOptions = {
       label: '',
       color: [0, 0, 1, 1],
@@ -342,6 +344,10 @@ export default class EquationLabel {
       h = currentForm.height / 2;
       w = currentForm.width / 2;
     }
+    if (offsetMag !== this.lastOffsetMag) {
+      this.lastOffsetMag = offsetMag;
+      change = true;
+    }
     let positionOffset = new Point(0, 0);
     if (style === 'oval') {
       positionOffset = this.getOvalOffset(
@@ -382,6 +388,9 @@ export default class EquationLabel {
     startThetaAngle: number = Math.PI * 2,
     endThetaAngle: number = Math.PI,
   ) {
+    if (offsetMag === 10) {
+      debugger;
+    }
     // eslint-disable-next-line max-len
     const getR = (a, b, angle) => a * b / Math.sqrt((b * Math.cos(angle)) ** 2 + (a * Math.sin(angle)) ** 2);
 
