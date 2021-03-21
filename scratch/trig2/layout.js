@@ -4,7 +4,7 @@
 function layout() {
   figure.add([
     // centerText('angleSum', 'A triangle\'s angles sum to 180\u00b0', {}, [0, 1]),
-    // centerText('trig', 'Trigonmetric Functions', {}, [0, 1]),
+    centerText('trig', 'Trigonmetric Functions', {}, [0, 1]),
     // leftText('similarTriangles', 'Similar Triangles', {}, [0, 1], 0.2, {
     //   left: { position: [-2.2, 0.9] },
     //   center: { position: [-0.5, 0.9] },
@@ -25,6 +25,7 @@ function layout() {
 }
 makeEquation();
 layoutCirc();
+layoutLines();
 layout();
 
 function makeSlides() {
@@ -40,7 +41,7 @@ function makeSlides() {
   const slides = [];
 
   const nav = figure.getElement('nav');
-  // const circ = figure.getElement('rightTri');
+  const lines = figure.getElement('lines');
 
   const addReference = true;
   // /*
@@ -55,11 +56,174 @@ function makeSlides() {
   slides.push({
     scenarioCommon: 'center',
     addReference,
-    showCommon: 'circ',
-    enterStateCommon: () => {
-      figure.fnMap.exec('circSetup', [1]);
+    show: 'trig',
+    form: 'final',
+    exec: [
+      ['0:10', 'eqnPulseSin'],
+      ['0:10', 'eqnPulseCos'],
+      ['0:10', 'eqnPulseTan'],
+      ['0:10', 'eqnPulseSec'],
+      ['0:10', 'eqnPulseCsc'],
+      ['0:10', 'eqnPulseCot'],
+    ],
+  });
+
+  slides.push({
+    addReference,
+    form: 'ratios',
+    enterStateCommon: 'circDefault',
+    transition: [
+      { out: 'trig' },
+      [
+        { scenario: 'eqn', target: 'eqnLeft', duration: 3 },
+        { goToForm: 'eqn', target: 'ratios', duration: 2.5 },
+      ],
+      { in: { circ: ['x', 'y', 'arc'] } },
+      [
+        { in: 'circ.point' },
+        { pulse: 'circ.point', scale: 5 },
+      ],
+      { in: { circ: ['tri', 'rightSin', 'theta', 'xSide', 'ySide'] } },
+    ],
+  });
+
+  slides.push({
+    addReference,
+    scenarioCommon: ['center', 'eqnLeft'],
+    showCommon: { circ: ['point', 'x', 'y', 'arc', 'tri', 'rightSin', 'theta', 'unitHyp'] },
+    show: ['circ.xSide', 'circ.ySide'],
+    transition: [
+      [
+        { in: 'circ.unitHyp' },
+        { pulseWidth: 'circ.unitHyp', label: { scale: 1.5, xAlign: 'right', yAlign: 'bottom' }, line: 6 },
+      ],
+      { delay: 1 },
+      [
+        { goToForm: 'eqn', target: 'sinCos' },
+        { scenario: 'eqn', target: 'eqnCenterLeft' },
+        { scenario: 'circ', target: 'circRight' },
+      ],
+      { goToForm: 'eqn', target: 'xyOnOne', delay: 1 },
+      { goToForm: 'eqn', target: 'xyOnOneStk', delay: 1 },
+      { goToForm: 'eqn', target: 'xy', delay: 1 },
+    ],
+    form: 'xy',
+  });
+
+  /*
+  ..######..####.##....##
+  .##....##..##..###...##
+  .##........##..####..##
+  ..######...##..##.##.##
+  .......##..##..##..####
+  .##....##..##..##...###
+  ..######..####.##....##
+  */
+  slides.push({
+    addReference,
+    scenarioCommon: ['circRight', 'eqnCenterLeft', 'linesCenter'],
+    enterState: 'linesSetChord',
+    transition: [
+      { out: ['eqn', 'circ.xSide', 'circ.ySide'] },
+      { in: { lines: ['circle', 'line'] }, delay: 1 },
+      { delay: 1.3 },
+      [
+        { in: 'lines.chord' },
+        { pulse: 'lines.chord', duration: 1.5, delay: 0.2 },
+      ],
+      { scenario: 'lines.chord', target: 'linesDefault', delay: 0 },
+      [
+        { in: 'lines.chordDef', delay: 0.5 },
+        { trigger: 'showBow', duration: 2.5, delay: 1 },
+      ],
+    ],
+    form: null,
+  });
+
+  // Show sine line, half chord, translation explanation, sineTheta
+  slides.push({
+    addReference,
+    scenarioCommon: ['circRight', 'eqnCenterLeft', 'linesDefault'],
+    enterState: 'linesSetChord',
+    show: { lines: ['circle', 'line'] },
+    transition: [
+      [
+        { in: 'circ.sin.line' },
+        { pulseWidth: 'circ.sin', line: 6, duration: 1.5, delay: 0.2 },
+      ],
+      [
+        { trigger: 'showHalfChord', duration: 0.5 },
+      ],
+      [
+        { in: 'lines.halfChordLabel' },
+        {
+          pulse: 'lines.halfChordLabel', scale: 1.3, duration: 1.5, xAlign: 'right',
+        },
+      ],
+      { out: 'lines.chordDef', delay: 1 },
+      { in: 'lines.jya' },
+      { in: 'lines.sine', delay: 3 },
+      { delay: 3 },
+      [
+        { in: 'circ.sin.label' },
+        { pulse: 'circ.sin.label', delay: 0.2, xAlign: 'left' },
+        { in: 'circ.sinTheta.label' },
+        { pulse: 'circ.sinTheta.label', delay: 0.2, xAlign: 'left' },
+      ],
+      { out: 'lines.halfChordLabel', show: false },
+    ],
+    form: null,
+    steadyState: () => {
+      lines._line.hide();
+      lines._dullChord.show();
+      figure.fnMap.exec('setHalfChordLength');
+      lines._halfChord.showAll();
     },
-    // exec: ['0:15', 'triResetPad'],
+  });
+
+  // Opposite over Hypotenuse = sin
+  slides.push({
+    addReference,
+    scenarioCommon: ['circRight', 'eqnCenterLeftSingle', 'linesDefault'],
+    showCommon: { circ: ['point', 'x', 'y', 'arc', 'tri', 'rightSin', 'theta', 'unitHyp', 'sin', 'sinTheta'] },
+    enterState: 'linesSetChord',
+    fromForm: 'oppHyp',
+    transition: [
+      { out: { lines: ['circle', 'dullChord', 'halfChord', 'jya', 'sine'] } },
+      { in: 'eqn' },
+      { goToForm: 'eqn', target: 'sinOnOne', delay: 1 },
+      { goToForm: 'eqn', target: 'sinOnOneStk', delay: 1 },
+      { goToForm: 'eqn', target: 'sin', delay: 1 },
+    ],
+    form: 'sin',
+  });
+
+  /*
+  ..######...#######...######.
+  .##....##.##.....##.##....##
+  .##.......##.....##.##......
+  .##.......##.....##..######.
+  .##.......##.....##.......##
+  .##....##.##.....##.##....##
+  ..######...#######...######.
+  */
+  slides.push({
+    addReference,
+    showCommon: { circ: ['point', 'x', 'y', 'arc', 'tri', 'rightSin', 'theta', 'unitHyp', 'sin', 'cosLine', 'sinTheta', 'thetaCompSin'] },
+    fromForm: 'sin',
+    transition: [
+      [
+        { in: 'circ.cos.line' },
+        { pulseWidth: 'circ.cos', delay: 0.2, line: 6 },
+      ],
+      { in: 'circ.thetaCompSin' },
+      { in: 'circ.sinThetaComp' },
+      // { in: 'eqn' },
+      // { goToForm: 'eqn', target: 'sinOnOne', delay: 1 },
+      // { goToForm: 'eqn', target: 'sinOnOneStk', delay: 1 },
+      // { goToForm: 'eqn', target: 'sin', delay: 1 },
+    ],
+    form: 'sin',
   });
 
   // slides.push({

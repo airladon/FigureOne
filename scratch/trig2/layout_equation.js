@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 /* global colSin, colCos, colCot, colTan, colSec, colCsc, colTheta,
-   figure, colOpp, colHyp, colAdj, colText */
+   figure, colOpp, colHyp, colAdj, colRad */
 // eslint-disable-next-line
 function makeEquation() {
   const cont = (content, width = 0.6, xAlign = 'center') => ({
@@ -35,6 +35,12 @@ function makeEquation() {
     };
   }
 
+  const s = (content, strikeIndex) => ({
+    strike: {
+      content, symbol: `s${strikeIndex}`, inSize: false,
+    },
+  });
+
   const lin = (content, baselineSpace = 0.5) => ({
     lines: { content, baselineSpace, justify: 'left' },
   });
@@ -56,6 +62,8 @@ function makeEquation() {
         v4: { symbol: 'vinculum' },
         v5: { symbol: 'vinculum' },
         v6: { symbol: 'vinculum' },
+        v7: { symbol: 'vinculum' },
+        v8: { symbol: 'vinculum' },
         sin: { style: 'normal', color: colSin },
         cos: { style: 'normal', color: colCos },
         tan: { style: 'normal', color: colTan },
@@ -80,30 +88,14 @@ function makeEquation() {
         theta4: { text: '\u03b8', color: colTheta },
         theta5: { text: '\u03b8', color: colTheta },
         theta6: { text: '\u03b8', color: colTheta },
-        val1: { text: '0.0000', color: colText },
-        val2: { text: '0.0000', color: colText },
-        val3: { text: '0.0000', color: colText },
-        val4: { text: '0.0000', color: colText },
-        val5: { text: '0.0000', color: colText },
-        val6: { text: '0.0000', color: colText },
-        lb1: { symbol: 'bracket', side: 'left' },
-        lb2: { symbol: 'bracket', side: 'left' },
-        lb3: { symbol: 'bracket', side: 'left' },
-        lb4: { symbol: 'bracket', side: 'left' },
-        lb5: { symbol: 'bracket', side: 'left' },
-        lb6: { symbol: 'bracket', side: 'left' },
-        rb1: { symbol: 'bracket', side: 'right' },
-        rb2: { symbol: 'bracket', side: 'right' },
-        rb3: { symbol: 'bracket', side: 'right' },
-        rb4: { symbol: 'bracket', side: 'right' },
-        rb5: { symbol: 'bracket', side: 'right' },
-        rb6: { symbol: 'bracket', side: 'right' },
-        A: { color: colHyp },
-        B: { color: colOpp },
-        C: { color: colAdj },
-        Adash: { text: 'A\'', color: colHyp },
-        Bdash: { text: 'B\'', color: colOpp },
-        Cdash: { text: 'C\'', color: colAdj },
+        _1_1: { color: colRad },
+        _1_2: { color: colRad },
+        s1: { symbol: 'strike', style: 'forward', lineWidth: thin },
+        s2: { symbol: 'strike', style: 'forward', lineWidth: thin },
+        // lb1: { symbol: 'bracket', side: 'left' },
+        // lb2: { symbol: 'bracket', side: 'left' },
+        // rb1: { symbol: 'bracket', side: 'right' },
+        // rb2: { symbol: 'bracket', side: 'right' },
       },
       phrases: {
         oppHyp: frac('opp_1', 'v1', 'hyp_1', 0.01, 0.03, 0.65),
@@ -118,67 +110,55 @@ function makeEquation() {
         secTheta: ['sec', ' ', 'theta4'],
         cscTheta: ['csc', ' ', 'theta5'],
         cotTheta: ['cot', ' ', 'theta6'],
-        f1: [{ sub: ['f_1', '_1'] }, { brac: ['lb1', 'theta1', 'rb1'] }],
-        f2: [{ sub: ['f_2', '_2'] }, { brac: ['lb2', 'theta2', 'rb2'] }],
-        f3: [{ sub: ['f_3', '_3'] }, { brac: ['lb3', 'theta3', 'rb3'] }],
-        f4: [{ sub: ['f_4', '_4'] }, { brac: ['lb4', 'theta4', 'rb4'] }],
-        f5: [{ sub: ['f_5', '_5'] }, { brac: ['lb5', 'theta5', 'rb5'] }],
-        f6: [{ sub: ['f_6', '_6'] }, { brac: ['lb6', 'theta6', 'rb6'] }],
-        c1: cont(lin(['oppHyp', 'adjHyp', 'oppAdj', 'hypAdj', 'hypOpp', 'adjOpp']), 0.6),
+        c1: cont(lin(['oppHyp', 'adjHyp', 'oppAdj', 'adjOpp', 'hypAdj', 'hypOpp']), 0.6),
         c2: cont(lin(['eq1', 'eq2', 'eq3', 'eq4', 'eq5', 'eq6']), 0.3),
-        trig: lin(['sinTheta', 'cosTheta', 'tanTheta', 'secTheta', 'cscTheta', 'cotTheta']),
-        values: lin(['val1', 'val2', 'val3', 'val4', 'val5', 'val6']),
-        functions: lin(['f1', 'f2', 'f3', 'f4', 'f5', 'f6']),
+        c2_2: cont(lin(['eq1', 'eq2', '', '', '', '']), 0.3),
+        c1_sinCos: cont(lin(['oppHyp', 'adjHyp'])),
+        c2_sinCos: cont(lin(['eq1', 'eq2']), 0.3),
+        c2_sin: cont(lin(['eq1']), 0.3),
+        xyOnOne: lin([frac('y', 'v7', '_1_1', 0.03, 0.03, 0.1), frac('x', 'v8', '_1_2', 0.03, 0.03, 0.1)]),
+        xyOnOneStk: lin([frac('y', 'v7', s('_1_1', 1), 0.03, 0.03, 0.1), frac('x', 'v8', s('_1_2', 2), 0.03, 0.03, 0.1)]),
+        sinOnOne: frac('sinTheta', 'v7', '_1_1', 0.03, 0.03, 0.3),
+        sinOnOneStk: frac('sinTheta', 'v7', s('_1_1', 1), 0.03, 0.03, 0.3),
+        // sin: lin(['sinTheta']),
+        xy: lin(['y', 'x']),
+        trig: lin(['sinTheta', 'cosTheta', 'tanTheta', 'cotTheta', 'secTheta', 'cscTheta']),
         final1: lin([
           ['oppHyp', '  ', 'eq1', '  ', 'sinTheta'],
           ['oppAdj', '  ', 'eq3', '  ', 'tanTheta'],
-          ['hypAdj', '  ', 'eq5', '  ', 'cscTheta'],
+          ['hypAdj', '  ', 'eq5', '  ', 'secTheta'],
         ], 0.6),
         final2: lin([
           ['adjHyp', '  ', 'eq2', '  ', 'cosTheta'],
-          ['hypOpp', '  ', 'eq4', '  ', 'secTheta'],
           ['adjOpp', '  ', 'eq6', '  ', 'cotTheta'],
+          ['hypOpp', '  ', 'eq4', '  ', 'cscTheta'],
         ], 0.6),
       },
       forms: {
         ratios: ['c1'],
-        values: ['c1', 'c2', 'values'],
-        functions: ['c1', 'c2', 'functions'],
         trig: ['c1', 'c2', 'trig'],
         final: { scale: [['final1', cont('', 0.8), 'final2'], 1.1] },
-        AonB: { scale: [wFrac('Adash', 'v2', 'Bdash'), 1.8] },
-        AonBEq: {
-          scale: [[
-            wFrac('Adash', 'v2', 'Bdash'),
-            '  ', 'eq1', '  ',
-            wFrac('A', 'v1', 'B'),
-          ], 1.8],
-        },
-        AonCEq: {
-          scale: [[
-            wFrac('Adash', 'v2', 'Cdash'),
-            '  ', 'eq1', '  ',
-            wFrac('A', 'v1', 'C'),
-          ], 1.8],
-        },
+        sinCos: ['c1_sinCos'],
+        xyOnOne: ['c1_sinCos', 'c2_sinCos', 'xyOnOne'],
+        xyOnOneStk: ['c1_sinCos', 'c2_sinCos', 'xyOnOneStk'],
+        xy: ['c1_sinCos', 'c2_sinCos', 'xy'],
+        oppHyp: 'oppHyp',
+        sinOnOne: ['oppHyp', cont('eq1', 0.3), 'sinOnOne'],
+        sinOnOneStk: ['oppHyp', cont('eq1', 0.3), 'sinOnOneStk'],
+        sin: ['oppHyp', cont('eq1', 0.3), 'sinTheta'],
       },
-      position: [-2.8, 1.2],
     },
     mods: {
       scenarios: {
-        oneTri: { position: [-2.8, 1.2] },
-        twoTri: { position: [-0.3, 0.7] },
-        center: { position: [-1.5, 0.3] },
+        eqnLeft: { position: [-2.8, 1.2], scale: 1 },
+        eqnCenterLeft: { position: [-2, 0.2], scale: 1.2 },
+        eqnCenterLeftSingle: { position: [-2, 0], scale: 1.2 },
+        center: { position: [-1.5, 0.3], scale: 1 },
       },
     },
   });
 
   const add = (name, fn) => figure.fnMap.global.add(name, fn);
-  add('eqnInToValues', () => {
-    figure.elements._eqn.showForm('values');
-    figure.elements._eqn.animations.new().dissolveIn().start();
-    figure.fnMap.exec('triSetup', [2, 1.453], 'values', true);
-  });
 
   const sPulse = (element, xAlign = 'center', yAlign = 'middle') => figure.elements._eqn.pulse({
     elements: [element], xAlign, yAlign, scale: 1.5, duration: 1.5,

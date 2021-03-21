@@ -1,36 +1,21 @@
 /* eslint-disable camelcase */
-/* globals figure, colTan, colSec, colSin, colGrey, thin, thick, colDarkGrey, colRad, leftText */
+/* globals Fig, figure, colTan, colSec, colSin, colGrey, thin, thick,
+   colDarkGrey, colRad, leftText */
 
 
 function layoutLines() {
   const radius = 0.8;
   const length = 1.4;
   const rightScale = 1.3;
-  const r2 = 1.3 * 0.8;
   const angle = 1;
   const chordAngle = Math.asin(length / 2 / radius) * 2;
 
-  const tri = (name, p1, p2, p3) => ({
-    name,
-    method: 'primitives.polyline',
-    options: {
-      points: [p1, p2, p3],
-      width: thin,
-      color: colGrey,
-    },
-  });
   const [lines] = figure.add({
     name: 'lines',
     method: 'collection',
     options: {
-      position: [-1.5, 0],
+      position: [-1.5, 0.1],
     },
-    // mods: {
-    //   scenarios: {
-    //     circQ1: { position: [-1.5, 0], scale: 1 },
-    //     // circLeft: { position: [-1.5, 0], scale: 1.2 },
-    //   },
-    // },
     elements: [
       {
         name: 'circle',
@@ -42,40 +27,6 @@ function layoutLines() {
           color: colGrey,
         },
       },
-      {
-        name: 'circleLarge',
-        method: 'primitives.polygon',
-        options: {
-          radius: radius * rightScale,
-          line: { width: thin },
-          sides: 100,
-          color: colDarkGrey,
-        },
-      },
-      {
-        name: 'p5',
-        method: 'polygon',
-        options: {
-          sides: 5,
-          rotation: Math.PI * 2 / 10,
-          line: { width: thin },
-          color: colGrey,
-          radius: r2 * 1 / Math.cos(Math.PI * 2 / 10),
-        },
-      },
-      {
-        name: 'line1',
-        method: 'primitives.line',
-        options: {
-          p1: [r2, -1.2],
-          p2: [r2, 1.2],
-          width: thin,
-          color: colGrey,
-        },
-      },
-      tri('tri0', [0, 0], [r2, -r2 / Math.cos(0.628) * Math.sin(0.628)], [r2, 0]),
-      tri('tri1', [0, 0], [r2 * Math.cos(0.628 * 2), r2 * Math.sin(0.628 * 2)], [r2, r2 / Math.cos(0.628) * Math.sin(0.628)]),
-      // tri('tri2', [0, 0], [r2 * Math.cos(1.25), r2 * Math.sin(1.25)], [r2 * Math.cos(1.25), 0]),
       {
         name: 'line',
         method: 'primitives.line',
@@ -181,7 +132,8 @@ function layoutLines() {
         'jya-ardha': { font: { style: 'italic', family: 'Times New Roman' } },
       }, [-1, -1.3], 0.15),
       leftText('secant', '|secant|', {
-        secant: { font: { style: 'italic', family: 'Times New Roman', color: colSec } } }, [-1.2, -1.1], 0.15, {
+        secant: { font: { style: 'italic', family: 'Times New Roman', color: colSec } },
+      }, [-1.2, -1.1], 0.15, {
         linesDefault: { position: [-1.2, -1.1] },
         linesCenter: { position: [-0.2, -1.1] },
       }),
@@ -285,7 +237,7 @@ function layoutLines() {
   });
   add('showBow', () => {
     line.animations.new()
-      .rotation({ target: -angle, duration: 1 })
+      // .rotation({ target: -angle, duration: 1 })
       .dissolveIn({ element: bow, duration: 0.5 })
       .dissolveOut({ element: bow, duration: 0.5, delay: 1.5 })
       .start();
@@ -296,12 +248,11 @@ function layoutLines() {
     lines._line.hide();
     lines._halfChord.setLength(length);
     lines._halfChord.animations.new()
-      // .dissolveOut(0.5)
       .length({ target: length / 2, duration: 0.5 })
       .start();
   });
-  // add('setBow', () => {
-  //   line.setRotation(-angle);
-  // });
+  add('setHalfChordLength', () => {
+    lines._halfChord.setLength(length / 2);
+  });
   add('resetBow', () => line.setRotation(0));
 }

@@ -789,6 +789,9 @@ export default class SlideNavigator {
         this.processAutoTransitionSet(step, 'scenario', 'setScenario', 'target');
         this.processAutoTransitionSet(step, 'dim', 'dim');
         this.processAutoTransitionSet(step, 'undim', 'undim');
+        this.processAutoTransitionSet(step, 'rotation', 'setRotation', 'target');
+        this.processAutoTransitionSet(step, 'position', 'setPosition', 'target');
+        this.processAutoTransitionSet(step, 'scale', 'setScale', 'target');
       });
     });
   }
@@ -876,6 +879,9 @@ export default class SlideNavigator {
       steps.forEach((step) => {
         this.processAutoTransitionAnim(step, 'in', 'dissolveIn', animSteps, { duration: 0.5 });
         this.processAutoTransitionAnim(step, 'out', 'dissolveOut', animSteps, { duration: 0.5 });
+        this.processAutoTransitionAnim(step, 'rotation', 'rotation', animSteps, { duration: 2 });
+        this.processAutoTransitionAnim(step, 'position', 'position', animSteps, { duration: 2 });
+        this.processAutoTransitionAnim(step, 'scale', 'scale', animSteps, { duration: 2 });
         this.processAutoTransitionAnim(step, 'scenario', 'scenario', animSteps, { duration: 2 });
         this.processAutoTransitionAnim(step, 'scenarios', 'scenarios', animSteps, { duration: 2 });
         this.processAutoTransitionAnim(step, 'pulseWidth', 'pulseWidth', animSteps, { duration: 1.5 });
