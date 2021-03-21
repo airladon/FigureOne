@@ -71,7 +71,10 @@ function makeSlides() {
   slides.push({
     addReference,
     form: 'ratios',
-    enterStateCommon: 'circDefault',
+    enterStateCommon: () => {
+      figure.fnMap.exec('circDefault');
+      figure.fnMap.exec('circTriToCos');
+    },
     enterState: 'circTriToCos',
     transition: [
       { out: 'trig' },
@@ -290,196 +293,130 @@ function makeSlides() {
     steadyStateCommon: 'circTriToTan',
   });
 
-  // slides.push({
-  //   time: '0:21',
-  //   addReference,
-  //   fromForm: 'values',
-  //   form: 'values',
-  //   transition: { in: 'eqn' },
-  //   exec: ['0:50', 'triResetPad'],
-  // });
+  slides.push({
+    addReference,
+    scenarioCommon: ['circRight', 'eqnCenterLeftSingle', 'linesCenter'],
+    enterStateCommon: () => {
+      figure.fnMap.exec('circDefault');
+      figure.fnMap.exec('circTriToTan');
+    },
+    enterState: 'linesSetOutside',
+    transition: [
+      [
+        { in: 'lines.circle' },
+        { in: 'lines.line' },
+      ],
+      { trigger: 'linesToTan', duration: 1.5 },
+      { in: ['lines.radius', 'lines.rightAngle'], delay: 2.5 },
+      { delay: 3.5 },
+      [
+        { in: 'lines.tangent' },
+        { pulse: 'lines.tangent', duration: 1.5, delay: 0.2 },
+      ],
+      { scenario: 'lines.tangent', target: 'linesDefault', delay: 1 },
+      { in: 'lines.tangentDef' },
+      [
+        { in: 'circ.tan.line' },
+        { pulseWidth: 'circ.tan', delay: 0.2, line: 6 },
+      ],
+      [
+        { in: 'circ.tan.label' },
+        { pulse: 'circ.tan.label', delay: 0.2, xAlign: 'left' },
+      ],
+    ],
+    steadyState: 'linesSetTan',
+  });
 
-  // /*
-  // ..######..####.##.....##.####.##..........###....########.
-  // .##....##..##..###...###..##..##.........##.##...##.....##
-  // .##........##..####.####..##..##........##...##..##.....##
-  // ..######...##..##.###.##..##..##.......##.....##.########.
-  // .......##..##..##.....##..##..##.......#########.##...##..
-  // .##....##..##..##.....##..##..##.......##.....##.##....##.
-  // ..######..####.##.....##.####.########.##.....##.##.....##
-  // */
-  // slides.push({
-  //   addReference,
-  //   time: '0:52',
-  //   fromForm: 'values',
-  //   form: null,
-  //   transition: [
-  //     {
-  //       out: [
-  //         { 'rightTri.tri': ['side01', 'side12', 'side20', 'angle2.label'] },
-  //         'eqn',
-  //       ],
-  //     },
-  //     { trigger: 'triToNames' },
-  //     { in: 'rightTri.tri.angle2.label', show: true },
-  //     { in: 'angleSum' },
-  //   ],
-  //   steadyState: () => {
-  //     figure.fnMap.exec('triSetup', [2, 1.453], 'names', true);
-  //   },
-  //   exec: [
-  //     ['0:58.5', 'triPulseRight'],
-  //     ['0:59.3', 'triPulseTheta'],
-  //   ],
-  // });
+  /*
+  ..######..########..######.
+  .##....##.##.......##....##
+  .##.......##.......##......
+  ..######..######...##......
+  .......##.##.......##......
+  .##....##.##.......##....##
+  ..######..########..######.
+  */
+  slides.push({
+    addReference: true,
+    scenario: 'linesCenter',
+    enterState: 'linesSetTan',
+    show: ['circ.tan', 'lines.circle', 'lines.line'],
+    transition: [
+      { out: { lines: ['tangentDef', 'radius', 'rightAngle'] } },
+      { trigger: 'linesToSec', duration: 2 },
+      { delay: 2 },
+      [
+        { in: 'lines.secant' },
+        { pulse: 'lines.secant', duration: 1.5 },
+      ],
+      { scenario: 'lines.secant', target: 'linesDefault', delay: 0.8 },
+      { in: 'lines.secantDef' },
+      [
+        { in: 'circ.sec.line' },
+        { pulseWidth: 'circ.sec', delay: 0.2, line: 6 },
+      ],
+      [
+        { in: 'circ.sec.label' },
+        { pulse: 'circ.sec.label', delay: 0.2, xAlign: 'left', yAlign: 'bottom' },
+      ],
+    ],
+    steadyState: 'linesSetSec',
+    // time: '3:53',
+    // exec: ['4:14', 'circToRot'],
+  });
 
-  // slides.push({
-  //   addReference,
-  //   time: '1:01.5',
-  //   showCommon: { rightTri: ['tri.line', 'tri.angle1', 'tri.angle2', 'movePad', 'rotLine', 'tri.angle0'] },
-  //   show: 'angleSum',
-  //   enterStateCommon: () => {
-  //     figure.fnMap.exec('triSetup', [2, 1.453], 'names', true);
-  //   },
-  //   transition: [
-  //     { in: 'rightTri.tri.angle0' },
-  //   ],
-  // });
+  slides.push({
+    scenario: ['linesDefault', 'eqnCenterLeft'],
+    enterState: 'linesSetSec',
+    show: ['circ.tan', 'circ.sec'],
+    fromForm: 'adjDen',
+    form: 'tanSec',
+    transition: [
+      { out: { lines: ['secantDef', 'circle', 'line'] } },
+      { in: 'eqn' },
+      { goToForm: 'eqn', target: 'tan', delay: 1 },
+      { goToForm: 'eqn', target: 'tanSec', delay: 1 },
+    ],
+  });
 
-  // slides.push({
-  //   addReference,
-  //   time: '1:02',
-  //   scenario: 'center',
-  //   transition: [
-  //     { out: 'angleSum' },
-  //     { scenario: 'rightTri', target: 'twoTri' },
-  //     { in: { 'rightTri.tri1': ['line', 'angle1', 'angle2', 'angle0'] } },
-  //     { trigger: 'triPulseThetas', duration: 1.5, delay: 1.8 },
-  //     { trigger: 'triPulseAllAngles', duration: 1.5, delay: 0.5 },
-  //     { in: 'similarTriangles', delay: 0 },
-  //     { scenario: 'similarTriangles', target: 'left', delay: 3.5, duration: 3 },
-  //     { in: 'similarTrianglesEq' },
-  //   ],
-  // });
-
-  // slides.push({
-  //   time: '1:22',
-  //   addReference,
-  //   scenarioCommon: 'twoTri',
-  //   fromForm: 'AonB',
-  //   form: 'AonCEq',
-  //   showCommon: [
-  //     { 'rightTri.tri1': ['line', 'angle1', 'angle2', 'angle0'] },
-  //     { 'rightTri.tri2': ['line', 'angle1', 'angle2', 'angle0'] },
-  //   ],
-  //   transition: [
-  //     { out: 'similarTrianglesEq' },
-  //     { in: { 'rightTri.tri1': ['side01', 'side12'] } },
-  //     { in: 'eqn', delay: 2 },
-  //     { in: { 'rightTri.tri2': ['side01', 'side12'] }, delay: 3 },
-  //     { goToForm: 'eqn', target: 'AonBEq', delay: 2 },
-  //     { in: { rightTri: ['tri1.side20', 'tri2.side20'] }, delay: 3.5 },
-  //     { goToForm: 'eqn', target: 'AonCEq', delay: 2 },
-  //   ],
-  //   leaveState: () => {
-  //     rightTri._tri1.undim();
-  //     rightTri._tri2.undim();
-  //   },
-  // });
-
-  // /*
-  // .########.##.....##.##....##..######.
-  // .##.......##.....##.###...##.##....##
-  // .##.......##.....##.####..##.##......
-  // .######...##.....##.##.##.##.##......
-  // .##.......##.....##.##..####.##......
-  // .##.......##.....##.##...###.##....##
-  // .##........#######..##....##..######.
-  // */
-  // slides.push({
-  //   time: '1:45',
-  //   addReference,
-  //   showCommon: { rightTri: ['tri.line', 'tri.angle1', 'tri.angle2', 'movePad', 'rotLine', 'tri.side01', 'tri.side12', 'tri.side20'] },
-  //   enterStateCommon: () => {
-  //     figure.fnMap.exec('triSetup', [2, 1.453], 'values', true);
-  //   },
-  //   enterState: () => {
-  //     rightTri._tri2.dim();
-  //   },
-  //   fromForm: 'BonC',
-  //   form: 'values',
-  //   transition: [
-  //     [
-  //       { scenario: 'rightTri', target: 'oneTri', duration: 2 },
-  //       { undim: { 'rightTri.tri2': ['angle1', 'angle2'] } },
-  //       {
-  //         out: { 'rightTri.tri1': ['side01', 'side12', 'side20', 'line', 'angle1', 'angle2', 'angle0'] },
-  //       },
-  //       {
-  //         out: { 'rightTri.tri2': ['side01', 'side12', 'side20', 'angle0', 'angle2.label'] },
-  //       },
-  //       { out: 'eqn', final: false },
-  //     ],
-  //     { scenario: 'eqn', target: 'oneTri', duration: 0 },
-  //     {
-  //       in: { 'rightTri.tri': ['side01', 'side12', 'side20', 'angle2.label'], delay: 0.5 },
-  //     },
-  //     { out: { 'rightTri.tri2': ['side01', 'side12', 'side20', 'line', 'angle1', 'angle2', 'angle0'], duration: 0, delay: 0.5 } },
-  //     { trigger: 'eqnInToValues' },
-  //   ],
-  //   leaveState: () => {
-  //     rightTri._tri1.undim();
-  //     rightTri._tri2.undim();
-  //   },
-  //   exec: ['2:00.5', 'triResetPad'],
-  // });
-
-  // slides.push({
-  //   time: '2:02',
-  //   addReference,
-  //   scenarioCommon: 'oneTri',
-  //   fromForm: 'values',
-  //   form: 'functions',
-  //   transition: [
-  //     { goToForm: 'eqn', target: 'functions' },
-  //     { trigger: 'triAnimateToNames', duration: 1, delay: 1 },
-  //   ],
-  //   steadyState: () => {
-  //     figure.fnMap.exec('triSetup', [2, 1.453], 'names', true);
-  //   },
-  // });
-
-  // slides.push({
-  //   time: '2:09.5',
-  //   addReference,
-  //   enterStateCommon: () => {
-  //     figure.fnMap.exec('triSetup', [2, 1.453], 'names', true);
-  //   },
-  //   fromForm: 'functions',
-  //   form: 'trig',
-  //   exec: [
-  //     ['2:11', 'eqnPulseSin'],
-  //     ['2:12.2', 'eqnPulseCos'],
-  //     ['2:13', 'eqnPulseTan'],
-  //     ['2:14', 'eqnPulseSec'],
-  //     ['2:15', 'eqnPulseCsc'],
-  //     ['2:16', 'eqnPulseCot'],
-  //   ],
-  // });
-  // slides.push({
-  //   time: '2:17.5',
-  //   addReference,
-  //   fromForm: 'trig',
-  //   form: 'final',
-  //   transition: [
-  //     { out: { rightTri: ['tri.line', 'tri.angle1', 'tri.angle2', 'movePad', 'rotLine', 'tri.side01', 'tri.side12', 'tri.side20'] } },
-  //     [
-  //       { scenario: 'eqn', target: 'center', duration: 3 },
-  //       { goToForm: 'eqn', target: 'final', duration: 2.5 },
-  //       { in: 'trig', delay: 2 },
-  //     ],
-  //   ],
-  // });
+  /*
+  ..######...#######..########
+  .##....##.##.....##....##...
+  .##.......##.....##....##...
+  .##.......##.....##....##...
+  .##.......##.....##....##...
+  .##....##.##.....##....##...
+  ..######...#######.....##...
+  */
+  slides.push({
+    addReference,
+    scenario: ['eqnCenterLeft'],
+    showCommon: { circ: ['point', 'x', 'y', 'arc', 'tri', 'rightUnit', 'theta', 'unitOpp'] },
+    fromForm: 'tanSec',
+    transition: [
+      [
+        { out: { circ: ['tan', 'sec', 'rightTan', 'unitAdj'] } },
+        { out: 'eqn' },
+      ],
+      { trigger: 'circTriAnimateToCot', duration: 2 },
+      { in: 'circ.rightUnit' },
+      { in: 'circ.unitOpp' },
+      [
+        { in: 'circ.thetaCompCot' },
+        { pulseAngle: 'circ.thetaCompCot', curve: 1.3, label: 1.3 },
+      ],
+      [
+        { in: 'circ.cot.line' },
+        { pulseWidth: 'circ.cot', line: 6, delay: 0.2 },
+      ],
+      [
+        { in: 'circ.tanThetaComp.label' },
+        { pulseWidth: 'circ.tanThetaComp', line: 6, delay: 0.2 },
+      ],
+    ],
+    form: null,
+    steadyStateCommon: 'circTriToCot',
+  });
 
   nav.loadSlides(slides);
   nav.goToSlide(0);

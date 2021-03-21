@@ -10,28 +10,24 @@ const figure = new Fig.Figure({
 figure.add([
 
   {
-    method: 'rectangle',
+    name: 'eqn',
+    method: 'equation',
     options: {
-      width: 1, height: 0.2, position: [0, 0.1], xAlign: 'left',
-    }
-  },
-  {
-    name: 'rect2',
-    method: 'rectangle',
-    options: {
-      width: 0.5,
-      height: 0.1,
-      position: [0, 0.1],
-      xAlign: 'left',
-      color: [1, 0, 0, 1],
+      elements: {
+        // lb: { symbol: 'bracket', side: 'left', color: [0, 1, 0, 1] },
+        rb: { symbol: 'bracket', side: 'right', color: [0, 0, 1, 1] },
+      },
+      forms: {
+        0: { brac: [{lb_bracket: {color: [1, 1, 0, 1]}}, 'asdf1', 'rb'] },
+      },
     },
   },
 ]);
 
-figure.getElement('rect2').animations.new()
-  .delay(1)
-  .dissolveOut(2)
-  .start();
+// figure.getElement('rect2').animations.new()
+//   .delay(1)
+//   .dissolveOut(2)
+//   .start();
 
 // figure.getElement('tri').pulseAngle({ curve: {
 //   scale: 2,

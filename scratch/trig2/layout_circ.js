@@ -141,6 +141,9 @@ function layoutCirc() {
       lineWithLabel('sinThetaComp', colCos, [
         { sin: { color: colCos } },
         { brac: [{ lb_bracket: { side: 'left', color: colCos } }, ['_90', '_\u00b0\u2212', { theta: { text: '\u03b8', color: colCos, style: 'italic' } }], { rb_bracket: { side: 'right', color: colCos } }] }], 0, [0, 0], radius, 0, 'bottom'),
+      lineWithLabel('tanThetaComp', colTheta, [
+        { tan: { color: colCot } },
+        { brac: [{ lb_bracket: { side: 'left', color: colDarkGrey } }, ['_90', '_\u00b0\u2212\u03b8'], { rb_bracket: { side: 'right', color: colDarkGrey } }] }], 0, [0, 0], radius, 0, 'bottom'),
       {
         name: 'point',
         method: 'polygon',
@@ -166,6 +169,18 @@ function layoutCirc() {
           touchBorder: [0, 0.5, 1.5, 0.5],
         },
       },
+      // {
+      //   name: 'tanSec',
+      //   method: 'collection',
+      //   elements: [
+      //     lineWithLabel('tan', colTan, 'tan', thick, [radius, 0], radius * Math.tan(defaultAngle), Math.PI / 2, 'right'),
+      //     lineWithLabel('sec', colSec, 'sec', thick, [0, 0], radius / Math.tan(defaultAngle), defaultAngle, 'left'),
+      //     lineWithLabel('unitAdj', colRad, '1', thick, [0, 0], radius, 0, 'bottom'),
+      //   ],
+      //   options: {
+      //     position: [-2, -1],
+      //   },
+      // }
     ],
     mods: {
       scenarios: {
@@ -190,6 +205,7 @@ function layoutCirc() {
   const [xSide, ySide] = get(['xSide', 'ySide']);
   const [tri] = get('tri');
   const [sinTheta, sinThetaComp, cosTheta] = get(['sinTheta', 'sinThetaComp', 'cosTheta']);
+  const [tanThetaComp, secThetaComp] = get(['tanThetaComp', 'secThetaComp']);
 
   const setRightAng = (element, test, position, startAngle) => {
     if (element.isShown) {
@@ -370,6 +386,9 @@ function layoutCirc() {
         }
       }
       cot._label.transform.updateTranslation(labelX, labelY);
+    }
+    if (tanThetaComp.isShown) {
+      tanThetaComp.setEndPoints([0, 0], [cotVal + thick / 2, 0]);
     }
     if (csc.isShown) {
       let offsetX = 0;

@@ -1531,7 +1531,8 @@ export class Equation extends FigureElementCollection {
     let symbol = this.eqn.symbols.get(cleanKey, options);
     if (symbol != null) {
       // symbol.dimColor = this.dimColor.slice();
-      if (symbol.color[3] > 0.01) {
+      // console.log(symbol, symbol.color.slice())
+      if (symbol.color[3] > 0.01 && options.color == null) {
         symbol.setColor(this.color);
       }
       if (options.mods != null) {
@@ -1546,7 +1547,7 @@ export class Equation extends FigureElementCollection {
       symbol = this.eqn.symbols.get(ending[0].replace(/_/, ''), options);
       if (symbol != null) {
         // symbol.dimColor = this.dimColor.slice();
-        if (symbol.color[3] > 0.01) {
+        if (symbol.color[3] > 0.01 && options.color == null) {
           symbol.setColor(this.color);
         }
         if (options.mods != null) {
