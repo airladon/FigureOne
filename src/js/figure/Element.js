@@ -642,6 +642,7 @@ class FigureElement {
   custom: { [string]: any };
 
   stateProperties: Array<string>
+  customState: Object;
   fnMap: FunctionMap;
   // isPaused: boolean;
 
@@ -720,6 +721,7 @@ class FigureElement {
     // this.figure = null;
     this.recorder = new Recorder(true);
     this.custom = {};
+    this.customState = {};
     this.parent = parent;
     this.drawPriority = 1;
     this.stateProperties = [];
@@ -1195,6 +1197,7 @@ class FigureElement {
         // 'finishAnimationOnPause',
         'pulseTransforms',
         'frozenPulseTransforms',
+        'customState',
         // 'lastDrawTime',
         ...this.stateProperties,
       ];
@@ -1202,6 +1205,7 @@ class FigureElement {
     return [
       'isShown',
       'transform',
+      'customState',
     ];
   }
 
@@ -3101,7 +3105,11 @@ class FigureElement {
       p.x = bounds.left + bounds.width / 2;
     } else if (typeof xAlign === 'number') {
       p.x = bounds.left + bounds.width * xAlign;
+    } else if (xAlign != null && xAlign.slice(-1)[0] === 'o') {
+      const offset = parseFloat(xAlign);
+      p.x = bounds.left + offset;
     }
+
     if (yAlign === 'top') {
       p.y = bounds.top;
     } else if (yAlign === 'bottom') {
@@ -3110,6 +3118,9 @@ class FigureElement {
       p.y = bounds.bottom + bounds.height / 2;
     } else if (typeof yAlign === 'number') {
       p.y = bounds.bottom + bounds.height * yAlign;
+    } else if (yAlign != null && yAlign.slice(-1)[0] === 'o') {
+      const offset = parseFloat(yAlign);
+      p.y = bounds.bottom + offset;
     }
     return p;
   }

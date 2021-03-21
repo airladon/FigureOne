@@ -35,6 +35,16 @@ function makeEquation() {
     };
   }
 
+  const ln = (...content) => ({
+    lines: {
+      content: [...content],
+      justify: 'left',
+      xAlign: 'left',
+      yAlign: 'baseline',
+      baselineSpace: 0.3,
+    },
+  });
+
   const s = (content, strikeIndex) => ({
     strike: {
       content, symbol: `s${strikeIndex}`, inSize: false,
@@ -143,16 +153,18 @@ function makeEquation() {
         xyOnOneStk: ['c1_sinCos', 'c2_sinCos', 'xyOnOneStk'],
         xy: ['c1_sinCos', 'c2_sinCos', 'xy'],
         oppHyp: 'oppHyp',
+        adjHyp: 'adjHyp',
         sinOnOne: ['oppHyp', cont('eq1', 0.3), 'sinOnOne'],
         sinOnOneStk: ['oppHyp', cont('eq1', 0.3), 'sinOnOneStk'],
         sin: ['oppHyp', cont('eq1', 0.3), 'sinTheta'],
+        cos: ['adjHyp', cont('eq2', 0.3), 'cosTheta'],
       },
     },
     mods: {
       scenarios: {
         eqnLeft: { position: [-2.8, 1.2], scale: 1 },
-        eqnCenterLeft: { position: [-2, 0.2], scale: 1.2 },
-        eqnCenterLeftSingle: { position: [-2, 0], scale: 1.2 },
+        eqnCenterLeft: { position: [-2, 0.2], scale: 1.4 },
+        eqnCenterLeftSingle: { position: [-2, 0], scale: 1.4 },
         center: { position: [-1.5, 0.3], scale: 1 },
       },
     },
@@ -169,5 +181,104 @@ function makeEquation() {
   add('eqnPulseCsc', () => sPulse('csc', 'right', 'middle'));
   add('eqnPulseSec', () => sPulse('sec', 'right', 'middle'));
   add('eqnPulseCot', () => sPulse('cot', 'right', 'middle'));
+
+
+  figure.add({
+    name: 'eqn2',
+    method: 'equation',
+    options: {
+      textFont: { style: 'normal' },
+      elements: {
+        eq: { text: ' = ', color: colText },
+        theta: { text: '\u03b8', color: colTheta, style: 'italic' },
+        theta1: { text: '\u03b8', color: colTheta, style: 'italic' },
+        comp: { text: '\u00b0\u2212\u03b8', color: colTheta, style: 'italic' },
+        _90: { color: colTheta },
+        lb: { symbol: 'bracket', side: 'left' },
+        rb: { symbol: 'bracket', side: 'right' },
+        lb1: { symbol: 'bracket', side: 'left' },
+        rb1: { symbol: 'bracket', side: 'right' },
+        tan: { color: colCot },
+        c_1: { color: colCot },
+        o_1: { color: colCot },
+        t_1: { color: colCot },
+        gent_1: { color: colCot },
+        an_1: { color: colCot },
+        mplementary_1: { color: colCot },
+        '_ of _1': { color: colCot },
+        '_ of _2': { color: colCsc },
+        '_ of _3': { color: colCos },
+        sec: { color: colCsc },
+        c_2: { color: colCsc },
+        c_21: { color: colCsc },
+        o_2: { color: colCsc },
+        s_2: { color: colCsc },
+        e_2: { color: colCsc },
+        angent_2: { color: colCsc },
+        mplementary_2: { color: colCsc },
+        ant_2: { color: colCsc },
+        //
+        sin: { color: colCos },
+        mplementary_3: { color: colCos },
+        c_3: { color: colCos },
+        o_3: { color: colCos },
+        s_3: { color: colCos },
+        ine_3: { color: colCos },
+      },
+      formDefaults: {
+        alignment: { yAlign: 'baseline', xAlign: 'left' },
+      },
+      phrases: {
+        compAngle: { brac: ['lb', ['_90', 'comp'], 'rb'] },
+        tanComp: ['tan', ' ', 'compAngle'],
+        secComp: ['sec', ' ', 'compAngle'],
+        sinComp: ['sin', ' ', 'compAngle'],
+      },
+      forms: {
+        tanComp: {
+          content: 'tanComp',
+          alignment: { xAlign: '-0.5o' },
+        },
+        complementaryTangent: ['tanComp', 'eq', ln(
+          ['c_1', 'o_1', 'mplementary_1'],
+          ['t_1', 'an_1', 'gent_1', '_ of _1', 'theta1'],
+        )],
+        cotangent: ['tanComp',
+          'eq', 'c_1', 'o_1', 't_1', 'an_1', 'gent_1', ' ', 'theta1'],
+        cotan: ['tanComp',
+          'eq', 'c_1', 'o_1', 't_1', 'an_1', ' ', 'theta1'],
+        cotTheta: ['tanComp', 'eq', 'c_1', 'o_1', 't_1', ' ', 'theta1'],
+        //
+        secComp: {
+          content: 'secComp',
+          alignment: { xAlign: '-0.5o' },
+        },
+        complementarySecant: ['secComp', 'eq', ln(
+          ['c_2', 'o_2', 'mplementary_2'],
+          ['s_2', 'e_2', 'c_21', 'ant_2', '_ of _2', 'theta1'],
+        )],
+        cosecant: ['secComp', 'eq', 'c_2', 'o_2', 's_2', 'e_2', 'c_21', 'ant_2', ' ', 'theta1'],
+        cosec: ['secComp', 'eq', 'c_2', 'o_2', 's_2', 'e_2', 'c_21', ' ', 'theta1'],
+        csc: ['secComp', 'eq', 'c_2', 's_2', 'c_21', ' ', 'theta1'],
+        //
+        sin: {
+          content: 'sin',
+          alignment: { xAlign: '-0.4o' },
+        },
+        sinComp: {
+          content: 'sinComp',
+          alignment: { xAlign: '-0.4o' },
+        },
+        complementarySine: ['sinComp', 'eq', ln(
+          ['c_3', 'o_3', 'mplementary_3'],
+          ['s_3', 'ine_3', '_ of _3', 'theta1'],
+        )],
+        cosine: ['sinComp', 'eq', 'c_3', 'o_3', 's_3', 'ine_3', ' ', 'theta1'],
+        cos: ['sinComp', 'eq', 'c_3', 'o_3', 's_3', ' ', 'theta1'],
+      },
+      position: [-2.5, 0],
+      scale: 1,
+    },
+  });
 }
 

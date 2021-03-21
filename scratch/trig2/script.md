@@ -15,9 +15,9 @@ When we use a unit circle, the hypotenuse of the right angle triangle is one, an
 
 Now a line between any two points on a circle is called a *chord* line where the word *chord* comes from the Latin word meaning *bowstring*. The vertical line of the triangle is then a half chord, and so the opposite over hypotenuse ratio is the half chord over one, or just the half chord. In fact, originally in Sanskrit this ratio was called just that, a half chord or half bowstring, but when it was later translated into Latin it lost this meaning. Our word for this ratio today, sine, comes from this Latin translation, though we often abreviate it without the e.
 
-Note here that as we change theta, the length of the sine line changes, and so the sine is a function of theta, and we might say this line is the sine of angle theta.
+Note here that as we change theta, the length of the sine line changes, and so the sine is a function of theta, meaning our ratio opposite over hypotenuse is the sine over one, or just the sine function of angle theta.
 
-So if the sine of an angle is the side opposite the angle over the hypotenuse, and our horizontal side is opposite the complementary angle, then we can say the side is the sine of the complementary angle of theta. Therefore, we call this side the complementary sine, the cosine or just cos for short. Relative to theta, the ratio of the adjacent side over the hypotenuse is the cos over one, or just the cosine and so this ratio is called the cosine.
+So if the sine of an angle is *opposite* the angle, and our horizontal side is opposite the complementary angle, then we can say the side is the sine of the complementary angle of theta. Therefore, we call this side the complementary sine, the cosine or just cos for short. Relative to theta, the ratio of the adjacent side over the hypotenuse is the cos over one, or just the cosine and so this ratio is called the cosine.
 
 Ok, we've named our first two trigonometric functions by using a right angle triangle with side length one, and then naming the other two sides.
 

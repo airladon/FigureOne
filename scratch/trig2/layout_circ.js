@@ -63,13 +63,13 @@ function layoutCirc() {
   });
 
   function angle(
-    name, text, rad = 0.2, curvePosition = 0.5, position = [0, 0], startAngle = 0, angleSize = 0,
+    name, text, rad = 0.2, curvePosition = 0.5, position = [0, 0], startAngle = 0, angleSize = 0, color = colTheta,
   ) {
     return {
       name,
       method: 'collections.angle',
       options: {
-        color: colTheta,
+        color,
         curve: {
           width: 0.01,
           radius: rad,
@@ -118,7 +118,7 @@ function layoutCirc() {
       angle('theta', '\u03b8'),
       angle('thetaCompSin', {
         forms: { 0: ['_90', '_\u00b0\u2212\u03b8'] },
-      }, 0.45, 0.7),
+      }, 0.45, 0.7, [0, 0], 0, 0, colCos),
       angle('thetaCompCot', {
         forms: { 0: ['_90', '_\u00b0\u2212\u03b8'] },
       }, 0.45, 0.7),
@@ -137,7 +137,10 @@ function layoutCirc() {
       lineWithLabel('xSide', colText, 'x', 0, [0, 0], radius, 0, 'bottom', 0.5, 'italic'),
       lineWithLabel('ySide', colText, 'y', 0, [0, 0], radius, 0, 'right', 0.5, 'italic'),
       lineWithLabel('sinTheta', colSin, [{ sin: { color: [0, 0, 0, 0] } }, ' ', { theta: { text: '\u03b8', color: colTheta, style: 'italic' } }], 0, [0, 0], radius, 0, 'right'),
-      lineWithLabel('sinThetaComp', colTheta, [{ sin: { color: colCos } }, ' ', '_90', '_\u00b0\u2212', { theta: { text: '\u03b8', color: colTheta, style: 'italic' } }], 0, [0, 0], radius, 0, 'bottom'),
+      lineWithLabel('cosTheta', colCos, [{ cos: { color: [0, 0, 0, 0] } }, ' ', { container: [{ theta: { text: '\u03b8', color: colTheta, style: 'italic' } }, null, false] }], 0, [0, 0], radius, 0, 'bottom'),
+      lineWithLabel('sinThetaComp', colCos, [
+        { sin: { color: colCos } },
+        { brac: [{ lb_bracket: { side: 'left', color: colCos } }, ['_90', '_\u00b0\u2212', { theta: { text: '\u03b8', color: colCos, style: 'italic' } }], { rb_bracket: { side: 'right', color: colCos } }] }], 0, [0, 0], radius, 0, 'bottom'),
       {
         name: 'point',
         method: 'polygon',
@@ -186,7 +189,7 @@ function layoutCirc() {
   );
   const [xSide, ySide] = get(['xSide', 'ySide']);
   const [tri] = get('tri');
-  const [sinTheta, sinThetaComp] = get(['sinTheta', 'sinThetaComp']);
+  const [sinTheta, sinThetaComp, cosTheta] = get(['sinTheta', 'sinThetaComp', 'cosTheta']);
 
   const setRightAng = (element, test, position, startAngle) => {
     if (element.isShown) {
@@ -305,6 +308,10 @@ function layoutCirc() {
 
     if (sinThetaComp.isShown) {
       sinThetaComp.setEndPoints([0, 0], [x + thick / 2, 0]);
+    }
+
+    if (cosTheta.isShown) {
+      cosTheta.setEndPoints([0, 0], [x + thick / 2, 0]);
     }
 
     /*
@@ -482,4 +489,27 @@ function layoutCirc() {
   unitHyp.subscriptions.add('setTransform', () => {
     unitHyp.updateLabel();
   });
+
+  const triToX = (x) => {
+    tri.customState.xLength = x;
+    const y = Math.tan(defaultAngle) * x;
+    tri.custom.updatePoints({ points: [[0, 0], [x, y], [x, 0]] });
+  };
+  const animateTri = (from, to) => {
+    circle.animations.new()
+      .custom({
+        callback: (percent) => {
+          const delta = to - from;
+          const x = from + percent * delta;
+          triToX(x);
+        },
+        duration: 2,
+      })
+      .start();
+  };
+  add('circTriAnimateToTan', () => animateTri(defaultCos, radius));
+  add('circTriAnimateToCot', () => animateTri(radius, radius / Math.tan(defaultAngle)));
+  add('circTriToTan', () => triToX(radius));
+  add('circTriToCos', () => triToX(defaultCos));
+  add('circTriToCot', () => triToX(radius / Math.tan(defaultAngle)));
 }
