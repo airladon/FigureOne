@@ -1,5 +1,5 @@
 /* eslint-disable camelcase, object-curly-newline */
-/* globals figure makeEquation, layoutRight, centerText, leftText */
+/* globals figure makeEquation, centerText, layoutCirc, layoutLines */
 
 function layout() {
   figure.add([
@@ -74,19 +74,11 @@ function makeSlides() {
     transition: [
       { out: ['trig', 'eqn'] },
       { in: { circ: ['x', 'y', 'arc'] }, duration: 1 },
-      // { delay: 3 },
-      // [
-      //   { in: 'circ.xAxis' },
-      //   { pulse: 'circ.xAxis', delay: 0.2 },
-      //   { in: 'circ.yAxis', delay: 0.5 },
-      //   { pulse: 'circ.yAxis', delay: 0.7 },
-      // ],
       { delay: 3 },
       [
         { in: 'circ.xy' },
         { pulse: 'circ.xy', scale: 1.5, xAlign: 'left', yAlign: 'bottom' },
         { in: 'circ.point' },
-        // { pulse: 'circ.point', scale: 5 },
       ],
       { delay: 3 },
       [
@@ -467,7 +459,7 @@ function makeSlides() {
       { delay: 1 },
       [
         { in: 'circ.tanThetaComp.label' },
-        { pulseWidth: 'circ.tanThetaComp', line: 6, delay: 0.2 },
+        { pulse: 'circ.tanThetaComp', delay: 0.2, yAlign: 'top' },
       ],
       { in: 'eqn2' },
       { goToForm: 'eqn2', target: 'complementaryTangent', delay: 0.5 },
@@ -571,30 +563,8 @@ function makeSlides() {
       { scenario: 'eqn', target: 'summary', duration: 0 },
       { goToForm: 'eqn', start: null, target: 'namesSinTanSec', duration: 0 },
       { in: 'eqn', duration: 1 },
-      // { goToForm: 'eqn', target: 'namesSinTan' },
-      // { goToForm: 'eqn', target: 'namesSinTanSec' },
       { goToForm: 'eqn', target: 'namesAll', dissolveInTime: 1, delay: 4 },
       { goToForm: 'eqn', target: 'namesComp', delay: 3, dissolveInTime: 1 },
-    ],
-  });
-
-  /*
-  .########..##..........###....##....##
-  .##.....##.##.........##.##....##..##.
-  .##.....##.##........##...##....####..
-  .########..##.......##.....##....##...
-  .##........##.......#########....##...
-  .##........##.......##.....##....##...
-  .##........########.##.....##....##...
-  */
-  slides.push({
-    scenario: ['eqnCenterLeft'],
-    enterState: 'circTriToCot',
-    showCommon: { circ: ['x', 'y', 'arc', 'sin', 'cos', 'tan', 'sec', 'cot', 'csc', 'unitOpp', 'rotator', 'theta', 'rightSin', 'rightTan', 'rightUnit'] },
-    transition: [
-      { out: ['eqn', 'circ.cscTheta', 'circCotTheta'] },
-      { scenario: 'circ', target: 'center' },
-      { in: { circ: ['sin', 'cos', 'tan', 'sec', 'csc.label', 'cot.label', 'rightSin', 'rightTan'] } },
     ],
   });
 

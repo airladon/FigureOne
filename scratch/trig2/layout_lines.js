@@ -2,7 +2,7 @@
 /* globals Fig, figure, colTan, colSec, colSin, colGrey, thin, thick,
    colDarkGrey, colRad, leftText */
 
-
+// eslint-disable-next-line
 function layoutLines() {
   const radius = 0.8;
   const length = 1.4;
@@ -51,7 +51,6 @@ function layoutLines() {
           label: {
             text: 'tangent',
             location: 'right',
-            // linePosition: 0,
             offset: 0.02,
           },
           width: thin,

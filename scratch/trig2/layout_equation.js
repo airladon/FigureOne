@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 /* global colSin, colCos, colCot, colTan, colSec, colCsc, colTheta,
-   figure, colOpp, colHyp, colAdj, colRad */
+   figure, colOpp, colHyp, colAdj, colRad, colThetaComp, thin, colText */
 // eslint-disable-next-line
 function makeEquation() {
   const cont = (content, width = 0.6, xAlign = 'center') => ({
@@ -20,19 +20,6 @@ function makeEquation() {
         overhang,
       },
     }, width, 'right');
-  }
-
-  function wFrac(
-    numerator, symbol, denominator, width = 0.2,
-  ) {
-    return {
-      frac: {
-        numerator: cont(numerator, width),
-        symbol,
-        denominator: cont(denominator, width),
-        scale: 0.95,
-      },
-    };
   }
 
   const ln = (...content) => ({
