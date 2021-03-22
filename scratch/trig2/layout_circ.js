@@ -280,4 +280,5 @@ function layoutCirc() {
   tri.subscriptions.add('setState', () => {
     triToX(tri.customState.xLength);
   });
+  triToX(dCos);
 }

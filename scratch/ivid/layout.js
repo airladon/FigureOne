@@ -230,12 +230,12 @@ function makeSlides() {
     fromForm: 'functions',
     form: 'trig',
     exec: [
-      ['2:11', 'eqnPulseSin'],
+      ['2:11.5', 'eqnPulseSin'],
       ['2:12.2', 'eqnPulseCos'],
       ['2:13', 'eqnPulseTan'],
-      ['2:14', 'eqnPulseSec'],
-      ['2:15', 'eqnPulseCsc'],
-      ['2:16', 'eqnPulseCot'],
+      ['2:14', 'eqnPulseCot'],
+      ['2:15', 'eqnPulseSec'],
+      ['2:16', 'eqnPulseCsc'],
     ],
   });
   slides.push({

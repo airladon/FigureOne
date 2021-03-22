@@ -33,7 +33,7 @@
 
 * In fact, we can see the ratios *only* change when we change the angle - and therefore we can say the ratios are dependent on, or a function of angle, which we've called theta.
 
-* These functions are used frequently in trigonometry, and so they each have a special abreviated name - the sin, cos, tan, sec, csc and cot, and as a collection they are often called trigonometric functions.
+* These functions are used frequently in trigonometry, and so they each have a special abreviated name - the sin, cos, tan, cot, sec and csc, and as a collection they are often called trigonometric functions.
 
 * The next video in this series will show where these names come from.
 

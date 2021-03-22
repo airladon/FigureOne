@@ -227,9 +227,9 @@ function layoutRight() {
         val1: sin.toFixed(4),
         val2: cos.toFixed(4),
         val3: sin / cos > 100 ? '\u221e' : (sin / cos).toFixed(4),
-        val4: 1 / cos > 100 ? '\u221e' : (1 / cos).toFixed(4),
-        val5: 1 / sin > 100 ? '\u221e' : (1 / sin).toFixed(4),
-        val6: cos / sin > 100 ? '\u221e' : (cos / sin).toFixed(4),
+        val4: cos / sin > 100 ? '\u221e' : (cos / sin).toFixed(4),
+        val5: 1 / cos > 100 ? '\u221e' : (1 / cos).toFixed(4),
+        val6: 1 / sin > 100 ? '\u221e' : (1 / sin).toFixed(4),
       });
     }
   };

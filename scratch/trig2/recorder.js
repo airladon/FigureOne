@@ -247,9 +247,9 @@ function setupRecorder() {
   */
   // Load video states and audio data
 
-  fetch('states.json')
-    .then(response => response.json())
-    .then(json => recorder.loadStates(json));
+  // fetch('states.json')
+  //   .then(response => response.json())
+  //   .then(json => recorder.loadStates(json));
 
   recorder.loadAudio(new Audio('./audio.mp3'));
 }

@@ -7,9 +7,9 @@
 ...##.##....##..##.....##....##.......
 ....###....####.########.....#########
 -->
-When first learned, the trigonometric function abreviations may seem strange. In fact they come from the relationship between right angle triangles and circles.
+The names of the trigonometric functions come from the relationship between right angle triangles and circles.
 
-We start with the first quadrant of a circle, and note the x and y coordinates of each point on the circle can be expressed with a right angle triangle.
+To show this we start with the first quadrant of a circle, and note that the x and y coordinates of each point on the circle can be expressed with a right angle triangle.
 
 When we use a *unit circle*, the hypotenuse of the right angle triangle is one, and the two trigonometric ratios with hypotenuse in the denominator will have denominators of 1 and simpify down to just the length of the triangle's sides. The the names of these sides will be the names of the trigonometric functions.
 
@@ -17,7 +17,7 @@ Now a line between any two points on a circle is called a *chord* line where the
 
 Therefore, the opposite over hypotenuse ratio is the sine function over 1, or just the sine function.
 
-So if the sine of an angle is *opposite* the angle, and our horizontal side is opposite the complementary angle, then we can say the horiztonal side is the *sine of the complementary angle of theta*. Therefore, we call this side the complementary sine, the cosine or just cos for short. Relative to theta, the ratio of the adjacent side over the hypotenuse is then the cosine function.
+So if the sine of an angle is *opposite* the angle, and our horizontal side is opposite the complementary angle, then we can say the horiztonal side is the *sine of the complementary angle of theta*. Therefore, we call this side the complementary sine, the cosine or just cos for short. Relative to theta, the ratio of the adjacent side over the hypotenuse is then this cosine or cos function.
 
 Ok, we've named our first two trigonometric functions by using a right angle triangle with side length one, and then naming the other two sides.
 
@@ -33,7 +33,7 @@ And so the ratio of opposite over adjacent is the tan function, and the ratio hy
 
 Let's now find our last two ratio names by growing the triangle again so that now the *opposite* side is one.
 
-Now this triangle is similar to our tan sec triangle in that is has a side, that isn't the hypotenuse, of length one, but now it is adjacent to the *complementary angle*. Therefore the side opposite the complimentary angle is the tangent of the complementary angle, and so we call this the complementary tangent, cotangent, cotan or just cot for short. 
+Now this triangle is similar to our tan sec triangle in that is has a side of length one, but now it is adjacent to the *complementary angle*. Therefore the side opposite the complimentary angle is the tangent of the complementary angle, and so we call this the complementary tangent, cotangent, cotan or just cot for short. 
 
 Similarly, the hypotenuse over the adjacent is the secant of the complementary angle, which we call the complementary secant, cosecant, cosec or just csc.
 

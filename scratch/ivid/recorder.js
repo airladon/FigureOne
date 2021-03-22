@@ -9,23 +9,6 @@ function setupRecorder() {
     touch: 'up',
   };
 
-  document.addEventListener('keypress', (event) => {
-    const keyCode = String.fromCharCode(event.keyCode);
-    if (keyCode === 's') {
-      figure.toggleCursor();
-    } else if (keyCode === 'n') {
-      figure.getElement('nav').nav.nextSlide(true);
-      // console.log('next')
-    } else if (keyCode === 'p') {
-      figure.getElement('nav').nav.prevSlide();
-    } else if (figure.shortCuts[keyCode] != null) {
-      if (figure.recorder.state === 'recording') {
-        figure.recorder.recordEvent('exec', [figure.shortCuts[keyCode]]);
-      }
-      figure.fnMap.exec(figure.shortCuts[keyCode]);
-    }
-  }, false);
-
   /*
   .########..##.....##.########.########..#######..##....##..######.
   .##.....##.##.....##....##.......##....##.....##.###...##.##....##
@@ -95,6 +78,34 @@ function setupRecorder() {
   recorder.subscriptions.add('startRecording', recordingStarted.bind(this));
   recorder.subscriptions.add('stopRecording', recordingStopped.bind(this));
 
+  /*
+  .##....##.########.##....##..######.
+  .##...##..##........##..##..##....##
+  .##..##...##.........####...##......
+  .#####....######......##.....######.
+  .##..##...##..........##..........##
+  .##...##..##..........##....##....##
+  .##....##.########....##.....######.
+  */
+  document.addEventListener('keypress', (event) => {
+    const keyCode = String.fromCharCode(event.keyCode);
+    if (keyCode === 's') {
+      figure.toggleCursor();
+    } else if (keyCode === ' ') {
+      togglePlayPause();
+      // console.log('next')
+    } else if (keyCode === 'n') {
+      figure.getElement('nav').nav.nextSlide(true);
+      // console.log('next')
+    } else if (keyCode === 'p') {
+      figure.getElement('nav').nav.prevSlide();
+    } else if (figure.shortCuts[keyCode] != null) {
+      if (figure.recorder.state === 'recording') {
+        figure.recorder.recordEvent('exec', [figure.shortCuts[keyCode]]);
+      }
+      figure.fnMap.exec(figure.shortCuts[keyCode]);
+    }
+  }, false);
   /*
   .########.####.##.....##.########
   ....##.....##..###...###.##......
