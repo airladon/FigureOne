@@ -26,6 +26,7 @@ const colSin = color2;
 const colTan = color3;
 
 const colTheta = color2;
+const colThetaComp = color1;
 const colRad = [0.1, 0, 0.7, 1];
 const colOne = [0.3, 0.3, 0.3, 1];
 

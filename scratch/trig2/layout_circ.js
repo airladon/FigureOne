@@ -7,6 +7,8 @@ function layoutCirc() {
   const defaultAngle = 0.7;
   const defaultSin = radius * Math.sin(defaultAngle);
   const defaultCos = radius * Math.cos(defaultAngle);
+  const defaultTan = radius * Math.tan(defaultAngle);
+  const defaultCot = radius / Math.tan(defaultAngle);
   const t = [];
   t.push(performance.now() / 1000);
   const line = (name, color, width = thick, p1 = [0, 0], length = 1, ang = 0, dash = []) => ({
@@ -16,6 +18,51 @@ function layoutCirc() {
       p1, length, angle: ang, width, color, dash,
     },
   });
+
+  const staticLineLabel = (name, color, text, includeTheta, p1, p2, location = 'negative', linePosition = 0.5, style = 'normal') => {
+    let forms = { 0: text };
+    if (includeTheta === true) {
+      forms = { 0: [text, ' ', { theta: { text: '\u03b8', color: colTheta, style: 'italic' } }] };
+    }
+    if (includeTheta === 'comp') {
+      forms = {
+        0: [
+          text,
+          {
+            brac: [
+              { lb_bracket: { side: 'left', color: colText } },
+              [
+                { '_90': { color: colThetaComp, style: 'normal' } },
+                { '_\u00b0\u2212': { color: colThetaComp } },
+                { '_\u03b8': { color: colThetaComp, style: 'italic' } }
+              ],
+              { rb_bracket: { side: 'right', color: colText } },
+            ],
+          },
+        ],
+      };
+    }
+    return {
+      name,
+      method: 'collections.line',
+      options: {
+        width: 0,
+        color,
+        p1,
+        p2,
+        label: {
+          text: {
+            textFont: { style },
+            forms,
+          },
+          location,
+          offset: 0.03,
+          linePosition,
+          orientation: 'horizontal',
+        },
+      },
+    }
+  };
 
   const lineWithLabel = (name, color, text, width = thick, p1, length, ang, location = 'negative', linePosition = 0.5, style = 'normal') => ({
     name,
@@ -115,35 +162,50 @@ function layoutCirc() {
           },
         },
       },
+      // Angles
       angle('theta', '\u03b8'),
       angle('thetaCompSin', {
         forms: { 0: ['_90', '_\u00b0\u2212\u03b8'] },
-      }, 0.45, 0.7, [0, 0], 0, 0, colCos),
+      }, 0.45, 0.7, [defaultCos, defaultSin], defaultAngle + Math.PI, Math.PI / 2 - defaultAngle, colThetaComp),
       angle('thetaCompCot', {
         forms: { 0: ['_90', '_\u00b0\u2212\u03b8'] },
-      }, 0.45, 0.7),
+      }, 0.45, 0.7, [defaultCot, radius], defaultAngle + Math.PI, Math.PI / 2 - defaultAngle, colThetaComp),
       rightAngle('rightSin', [radius, 0], Math.PI / 2),
       rightAngle('rightTan', [radius, 0], Math.PI / 2),
       rightAngle('rightUnit', [radius, 0], Math.PI / 2),
-      lineWithLabel('unitHyp', colRad, '1', thick, [0, 0], radius, 0, 'left', 0.4),
+
+      // Unit lines
+      lineWithLabel('unitHyp', colRad, '1', thick, [0, 0], radius, defaultAngle, 'left', 0.4),
       lineWithLabel('unitAdj', colRad, '1', thick, [0, 0], radius, 0, 'bottom'),
       lineWithLabel('unitOpp', colRad, '1', thick, [0, 0], radius, 0, 'right', 0.55),
+
+      // movable lines
       lineWithLabel('sin', colSin, 'sin', thick, [0, 0], radius, 0, 'right'),
       lineWithLabel('cos', colCos, 'cos', thick, [0, 0], radius, 0, 'bottom'),
       lineWithLabel('tan', colTan, 'tan', thick, [0, 0], radius, 0, 'right'),
       lineWithLabel('sec', colSec, 'sec', thick, [0, 0], radius, 0, 'left'),
       lineWithLabel('cot', colCot, 'cot', thick, [0, 0], radius, 0, 'bottom'),
       lineWithLabel('csc', colCsc, 'csc', thick, [0, 0], radius, 0, 'left'),
+
       lineWithLabel('xSide', colText, 'x', 0, [0, 0], radius, 0, 'bottom', 0.5, 'italic'),
       lineWithLabel('ySide', colText, 'y', 0, [0, 0], radius, 0, 'right', 0.5, 'italic'),
-      lineWithLabel('sinTheta', colSin, [{ sin: { color: [0, 0, 0, 0] } }, ' ', { theta: { text: '\u03b8', color: colTheta, style: 'italic' } }], 0, [0, 0], radius, 0, 'right'),
-      lineWithLabel('cosTheta', colCos, [{ cos: { color: [0, 0, 0, 0] } }, ' ', { container: [{ theta: { text: '\u03b8', color: colTheta, style: 'italic' } }, null, false] }], 0, [0, 0], radius, 0, 'bottom'),
-      lineWithLabel('sinThetaComp', colCos, [
-        { sin: { color: colCos } },
-        { brac: [{ lb_bracket: { side: 'left', color: colCos } }, ['_90', '_\u00b0\u2212', { theta: { text: '\u03b8', color: colCos, style: 'italic' } }], { rb_bracket: { side: 'right', color: colCos } }] }], 0, [0, 0], radius, 0, 'bottom'),
-      lineWithLabel('tanThetaComp', colTheta, [
-        { tan: { color: colCot } },
-        { brac: [{ lb_bracket: { side: 'left', color: colDarkGrey } }, ['_90', '_\u00b0\u2212\u03b8'], { rb_bracket: { side: 'right', color: colDarkGrey } }] }], 0, [0, 0], radius, 0, 'bottom'),
+
+      staticLineLabel('sinTheta', colSin, 'sin', true, [defaultCos, 0], [defaultCos, defaultSin], 'right'),
+      staticLineLabel('tanTheta', colTan, 'tan', true, [radius, 0], [radius, defaultTan], 'right'),
+      staticLineLabel('secTheta', colSec, 'sec', true, [0, 0], [radius, defaultTan], 'left'),
+      staticLineLabel('cosTheta', colCos, 'cos', true, [0, 0], [defaultCos, 0], 'bottom'),
+      staticLineLabel('cotTheta', colCot, 'cot', true, [0, 0], [defaultCot, 0], 'bottom'),
+      staticLineLabel('cscTheta', colCsc, 'csc', true, [0, 0], [defaultCot, radius], 'left'),
+      staticLineLabel('sinThetaComp', colCos, 'sin', 'comp', [0, 0], [defaultCos, 0], 'bottom'),
+      staticLineLabel('tanThetaComp', colCot, 'tan', 'comp', [0, 0], [defaultCot, 0], 'bottom'),
+      staticLineLabel('secThetaComp', colCsc, 'sec', 'comp', [0, 0], [defaultCot, radius], 'left'),
+      // // lineWithLabel('cosTheta', colCos, [{ cos: { color: [0, 0, 0, 0] } }, ' ', { container: [{ theta: { text: '\u03b8', color: colTheta, style: 'italic' } }, null, false] }], 0, [0, 0], radius, 0, 'bottom'),
+      // // lineWithLabel('sinThetaComp', colCos, [
+      // //   { sin: { color: colCos } },
+      // //   { brac: [{ lb_bracket: { side: 'left', color: colCos } }, ['_90', '_\u00b0\u2212', { theta: { text: '\u03b8', color: colCos, style: 'italic' } }], { rb_bracket: { side: 'right', color: colCos } }] }], 0, [0, 0], radius, 0, 'bottom'),
+      // lineWithLabel('tanThetaComp', colTheta, [
+      //   { tan: { color: colCot } },
+      //   { brac: [{ lb_bracket: { side: 'left', color: colDarkGrey } }, ['_90', '_\u00b0\u2212\u03b8'], { rb_bracket: { side: 'right', color: colDarkGrey } }] }], 0, [0, 0], radius, 0, 'bottom'),
       {
         name: 'point',
         method: 'polygon',
@@ -204,7 +266,7 @@ function layoutCirc() {
   );
   const [xSide, ySide] = get(['xSide', 'ySide']);
   const [tri] = get('tri');
-  const [sinTheta, sinThetaComp, cosTheta] = get(['sinTheta', 'sinThetaComp', 'cosTheta']);
+  // const [sinTheta, sinThetaComp, cosTheta] = get(['sinTheta', 'sinThetaComp', 'cosTheta']);
   const [tanThetaComp, secThetaComp] = get(['tanThetaComp', 'secThetaComp']);
 
   const setRightAng = (element, test, position, startAngle) => {
@@ -244,38 +306,6 @@ function layoutCirc() {
     if (theta.isShown) {
       theta.setAngle({ angle: r });
     }
-    if (thetaCompSin.isShown) {
-      if (Math.abs(y) > 0.6 && Math.abs(x) > 0.4) {
-        thetaCompSin.setAngle({
-          position: [x, y], startAngle: r + Math.PI, angle: Math.PI / 2 - r,
-        });
-        thetaCompSin.setOpacity(1);
-      } else {
-        thetaCompSin.setOpacity(0);
-      }
-    }
-    if (thetaCompCot.isShown) {
-      if (Math.abs(y) > 0.6 && Math.abs(x) > 0.4) {
-        thetaCompCot.setAngle({
-          position: [cotVal, radius], startAngle: r + Math.PI, angle: Math.PI / 2 - r,
-        });
-        thetaCompCot.setOpacity(1);
-      } else {
-        thetaCompCot.setOpacity(0);
-      }
-    }
-
-    if (p.isShown) {
-      p.setPosition(x, y);
-    }
-
-    if (unitHyp.isShown) {
-      unitHyp.setRotation(r);
-    }
-
-    if (unitAdj.isShown) {
-      unitAdj.setLength(radius);
-    }
 
     if (unitOpp.isShown) {
       let offsetY = 0;
@@ -285,16 +315,16 @@ function layoutCirc() {
       unitOpp.setEndPoints([cotVal, 0 - offsetY], [cotVal, radius + offsetY]);
     }
 
-    if (tri.isShown) {
-      tri.custom.updatePoints({ points: [[0, 0], [x, y], [x, 0]] });
-    }
+    // if (tri.isShown) {
+    //   tri.custom.updatePoints({ points: [[0, 0], [x, y], [x, 0]] });
+    // }
 
-    if (xSide.isShown) {
-      xSide.setEndPoints([0, 0], [x, 0]);
-    }
-    if (ySide.isShown) {
-      ySide.setEndPoints([x, 0], [x, y]);
-    }
+    // if (xSide.isShown) {
+    //   xSide.setEndPoints([0, 0], [x, 0]);
+    // }
+    // if (ySide.isShown) {
+    //   ySide.setEndPoints([x, 0], [x, y]);
+    // }
     /*
     ..######..####.##....##.....######...#######...######.
     .##....##..##..###...##....##....##.##.....##.##....##
@@ -314,21 +344,21 @@ function layoutCirc() {
       }
       sin.setEndPoints([x, 0], [x, y]);
     }
-    if (sinTheta.isShown) {
-      sinTheta.setEndPoints([x, 0], [x, y]);
-    }
+    // if (sinTheta.isShown) {
+    //   sinTheta.setEndPoints([x, 0], [x, y]);
+    // }
 
     if (cos.isShown) {
       cos.setEndPoints([0, 0], [x + thick / 2, 0]);
     }
 
-    if (sinThetaComp.isShown) {
-      sinThetaComp.setEndPoints([0, 0], [x + thick / 2, 0]);
-    }
+    // if (sinThetaComp.isShown) {
+    //   sinThetaComp.setEndPoints([0, 0], [x + thick / 2, 0]);
+    // }
 
-    if (cosTheta.isShown) {
-      cosTheta.setEndPoints([0, 0], [x + thick / 2, 0]);
-    }
+    // if (cosTheta.isShown) {
+    //   cosTheta.setEndPoints([0, 0], [x + thick / 2, 0]);
+    // }
 
     /*
     .########....###....##....##.....######..########..######.

@@ -145,6 +145,8 @@ function makeEquation() {
         ], 0.6),
         adjDen: cont(lin(['oppAdj', 'hypAdj']), 0.6),
         tanSec: lin(['tanTheta', 'secTheta']),
+        oppDen: cont(lin(['adjOpp', 'hypOpp']), 0.6),
+        cotCsc: lin(['cotTheta', 'cscTheta']),
       },
       forms: {
         ratios: ['c1'],
@@ -163,6 +165,9 @@ function makeEquation() {
         adjDen: 'adjDen',
         tan: ['adjDen', cont('eq1', 0.3), 'tanTheta'],
         tanSec: ['adjDen', 'c2_2', 'tanSec'],
+        oppDen: 'oppDen',
+        cot: ['oppDen', cont('eq1', 0.3), 'cotTheta'],
+        cotCsc: ['oppDen', 'c2_2', 'cotCsc'],
       },
     },
     mods: {
@@ -197,8 +202,8 @@ function makeEquation() {
         eq: { text: ' = ', color: colText },
         theta: { text: '\u03b8', color: colTheta, style: 'italic' },
         theta1: { text: '\u03b8', color: colTheta, style: 'italic' },
-        comp: { text: '\u00b0\u2212\u03b8', color: colTheta, style: 'italic' },
-        _90: { color: colTheta },
+        comp: { text: '\u00b0\u2212\u03b8', color: colThetaComp, style: 'italic' },
+        _90: { color: colThetaComp },
         lb: { symbol: 'bracket', side: 'left' },
         rb: { symbol: 'bracket', side: 'right' },
         lb1: { symbol: 'bracket', side: 'left' },
@@ -252,7 +257,7 @@ function makeEquation() {
           'eq', 'c_1', 'o_1', 't_1', 'an_1', 'gent_1', ' ', 'theta1'],
         cotan: ['tanComp',
           'eq', 'c_1', 'o_1', 't_1', 'an_1', ' ', 'theta1'],
-        cotTheta: ['tanComp', 'eq', 'c_1', 'o_1', 't_1', ' ', 'theta1'],
+        cot: ['tanComp', 'eq', 'c_1', 'o_1', 't_1', ' ', 'theta1'],
         //
         secComp: {
           content: 'secComp',
