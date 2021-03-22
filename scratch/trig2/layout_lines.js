@@ -124,13 +124,13 @@ function layoutLines() {
         linesDefault: { position: [-1.2, -1.1] },
         linesCenter: { position: [-0.15, -1.1] },
       }),
-      leftText('sine_Legacy', '|sine|: from Latin |sinus| - "bay"', {
-        sine: { font: { style: 'italic', family: 'Times New Roman', color: colSin } },
-        sinus: { font: { style: 'italic', family: 'Times New Roman' } },
-      }, [-1.32, -1.1], 0.15),
-      leftText('jya_Legacy', 'from Sanskrit |jya-ardha| - "half-cord"', {
-        'jya-ardha': { font: { style: 'italic', family: 'Times New Roman' } },
-      }, [-1, -1.3], 0.15),
+      // leftText('sine_Legacy', '|sine|: from Latin |sinus| - "bay"', {
+      //   sine: { font: { style: 'italic', family: 'Times New Roman', color: colSin } },
+      //   sinus: { font: { style: 'italic', family: 'Times New Roman' } },
+      // }, [-1.32, -1.1], 0.15),
+      // leftText('jya_Legacy', 'from Sanskrit |jya-ardha| - "half-cord"', {
+      //   'jya-ardha': { font: { style: 'italic', family: 'Times New Roman' } },
+      // }, [-1, -1.3], 0.15),
       leftText('secant', '|secant|', {
         secant: { font: { style: 'italic', family: 'Times New Roman', color: colSec } },
       }, [-1.2, -1.1], 0.15, {
@@ -145,6 +145,9 @@ function layoutLines() {
       leftText('jya', 'Sanskrit |jya-ardha| - "half-bowstring"', {
         'jya-ardha': { font: { style: 'italic', family: 'Times New Roman' } },
       }, [-1.2, -1.1], 0.15),
+      leftText('latin', '\u2192 Latin |sinus| - "bay"', {
+        sinus: { font: { style: 'italic', family: 'Times New Roman' } },
+      }, [-1.2, -1.3], 0.15),
       leftText('sine', '\u2192 Latin |sinus| - "bay"  \u2192  |sine|', {
         sine: { font: { style: 'italic', family: 'Times New Roman', color: colSin } },
         sinus: { font: { style: 'italic', family: 'Times New Roman' } },
@@ -248,7 +251,7 @@ function layoutLines() {
     lines._line.hide();
     lines._halfChord.setLength(length);
     lines._halfChord.animations.new()
-      .length({ target: length / 2, duration: 0.5 })
+      .length({ target: length / 2, duration: 1.5 })
       .start();
   });
   add('setHalfChordLength', () => {

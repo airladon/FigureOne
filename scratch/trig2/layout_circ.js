@@ -3,15 +3,19 @@
    colGrey, Fig, thin, thick, colText, colRad, colDarkGrey */
 
 function layoutCirc() {
-  const radius = 1.8;
-  const defaultAngle = 0.7;
-  const defaultSin = radius * Math.sin(defaultAngle);
-  const defaultCos = radius * Math.cos(defaultAngle);
-  const defaultTan = radius * Math.tan(defaultAngle);
-  const defaultCot = radius / Math.tan(defaultAngle);
+  const rad = 1.8;
+  // /const rad = 1.8;
+  const piOn2 = Math.PI / 2;
+  const dAng = 0.7;
+  const dSin = rad * Math.sin(dAng);
+  const dCos = rad * Math.cos(dAng);
+  const dTan = rad * Math.tan(dAng);
+  const dCot = rad / Math.tan(dAng);
+  const dSec = rad / Math.cos(dAng);
+  const dCsc = rad / Math.sin(dAng);
   const t = [];
   t.push(performance.now() / 1000);
-  const line = (name, color, width = thick, p1 = [0, 0], length = 1, ang = 0, dash = []) => ({
+  const linePrimitve = (name, color, width = thick, p1 = [0, 0], length = 1, ang = 0, dash = []) => ({
     name,
     method: 'primitives.line',
     options: {
@@ -61,38 +65,62 @@ function layoutCirc() {
           orientation: 'horizontal',
         },
       },
-    }
+    };
   };
 
-  const lineWithLabel = (name, color, text, width = thick, p1, length, ang, location = 'negative', linePosition = 0.5, style = 'normal') => ({
-    name,
-    method: 'collections.line',
-    options: {
-      width,
-      color,
-      p1,
-      length,
-      angle: ang,
-      label: {
-        text: {
-          textFont: { style },
-          forms: { 0: text },
+  const line = (name, color, text, includeTheta, width = thick, p1, length, ang, location = 'negative', linePosition = 0.5, style = 'normal') => {
+    let forms = { 0: text };
+    if (includeTheta === true) {
+      forms = { 0: [text, ' ', { theta: { text: '\u03b8', color: colTheta, style: 'italic' } }] };
+    }
+    if (includeTheta === 'comp') {
+      forms = {
+        0: [
+          text,
+          {
+            brac: [
+              { lb_bracket: { side: 'left', color: colText } },
+              [
+                { '_90': { color: colThetaComp, style: 'normal' } },
+                { '_\u00b0\u2212': { color: colThetaComp } },
+                { '_\u03b8': { color: colThetaComp, style: 'italic' } }
+              ],
+              { rb_bracket: { side: 'right', color: colText } },
+            ],
+          },
+        ],
+      };
+    }
+    return {
+      name,
+      method: 'collections.line',
+      options: {
+        width,
+        color,
+        p1,
+        length,
+        angle: ang,
+        label: {
+          text: {
+            textFont: { style },
+            forms,
+          },
+          location,
+          offset: 0.03,
+          linePosition,
+          orientation: 'horizontal',
+          update: true,
         },
-        location,
-        offset: 0.03,
-        linePosition,
-        orientation: 'horizontal',
-        update: true,
       },
-    },
-  });
+    };
+  };
 
   function arc(name, color, width = thin, sides = 100, angleToDraw = Math.PI * 2, rotation = 0) {
     return {
       name,
       method: 'primitives.polygon',
       options: {
-        radius, line: { width }, sides, angleToDraw: angleToDraw + 0.001, rotation, color,
+        radius: rad, line: { width }, sides, angleToDraw: angleToDraw + 0.001, rotation, color,
       },
     };
   }
@@ -110,7 +138,7 @@ function layoutCirc() {
   });
 
   function angle(
-    name, text, rad = 0.2, curvePosition = 0.5, position = [0, 0], startAngle = 0, angleSize = 0, color = colTheta,
+    name, text, r = 0.2, curvePosition = 0.5, position = [0, 0], startAngle = 0, angleSize = 0, color = colTheta,
   ) {
     return {
       name,
@@ -119,7 +147,7 @@ function layoutCirc() {
         color,
         curve: {
           width: 0.01,
-          radius: rad,
+          radius: r,
           sides: 400,
         },
         startAngle,
@@ -139,16 +167,16 @@ function layoutCirc() {
     method: 'collection',
     elements: [
       arc('arc', colGrey, thin, 300, Math.PI / 2, 0),
-      line('x', colGrey, thin, [0, 0], radius, 0),
-      line('y', colGrey, thin, [0, 0], radius, Math.PI / 2),
+      linePrimitve('x', colGrey, thin, [0, 0], rad, 0),
+      linePrimitve('y', colGrey, thin, [0, 0], rad, Math.PI / 2),
       {
         name: 'tri',
         method: 'polyline',
         options: {
           points: [
             [0, 0],
-            [defaultCos, defaultSin],
-            [defaultCos, 0],
+            [dCos, dSin],
+            [dCos, 0],
           ],
           line: { width: thick },
           color: colDarkGrey,
@@ -166,46 +194,40 @@ function layoutCirc() {
       angle('theta', '\u03b8'),
       angle('thetaCompSin', {
         forms: { 0: ['_90', '_\u00b0\u2212\u03b8'] },
-      }, 0.45, 0.7, [defaultCos, defaultSin], defaultAngle + Math.PI, Math.PI / 2 - defaultAngle, colThetaComp),
+      }, 0.45, 0.7, [dCos, dSin], dAng + Math.PI, Math.PI / 2 - dAng, colThetaComp),
       angle('thetaCompCot', {
         forms: { 0: ['_90', '_\u00b0\u2212\u03b8'] },
-      }, 0.45, 0.7, [defaultCot, radius], defaultAngle + Math.PI, Math.PI / 2 - defaultAngle, colThetaComp),
-      rightAngle('rightSin', [radius, 0], Math.PI / 2),
-      rightAngle('rightTan', [radius, 0], Math.PI / 2),
-      rightAngle('rightUnit', [radius, 0], Math.PI / 2),
+      }, 0.45, 0.7, [dCot, rad], dAng + Math.PI, Math.PI / 2 - dAng, colThetaComp),
+      rightAngle('rightSin', [rad, 0], Math.PI / 2),
+      rightAngle('rightTan', [rad, 0], Math.PI / 2),
+      rightAngle('rightUnit', [rad, 0], Math.PI / 2),
+      line('xy', colText, 'x, y', false, 0, [0, 0], rad, dAng, 'end', 0, 'italic'),
 
       // Unit lines
-      lineWithLabel('unitHyp', colRad, '1', thick, [0, 0], radius, defaultAngle, 'left', 0.4),
-      lineWithLabel('unitAdj', colRad, '1', thick, [0, 0], radius, 0, 'bottom'),
-      lineWithLabel('unitOpp', colRad, '1', thick, [0, 0], radius, 0, 'right', 0.55),
+      line('unitHyp', colRad, '1', false, thick, [0, 0], rad, dAng, 'left'),
+      line('unitAdj', colRad, '1', false, thick, [0, 0], rad, 0, 'bottom'),
+      line('unitOpp', colRad, '1', false, thick, [0, 0], rad, piOn2, 'right', 0.5),
 
       // movable lines
-      lineWithLabel('sin', colSin, 'sin', thick, [0, 0], radius, 0, 'right'),
-      lineWithLabel('cos', colCos, 'cos', thick, [0, 0], radius, 0, 'bottom'),
-      lineWithLabel('tan', colTan, 'tan', thick, [0, 0], radius, 0, 'right'),
-      lineWithLabel('sec', colSec, 'sec', thick, [0, 0], radius, 0, 'left'),
-      lineWithLabel('cot', colCot, 'cot', thick, [0, 0], radius, 0, 'bottom'),
-      lineWithLabel('csc', colCsc, 'csc', thick, [0, 0], radius, 0, 'left'),
+      line('sin', colSin, 'sin', false, thick, [0, 0], rad, 0, 'right'),
+      line('cos', colCos, 'cos', false, thick, [0, 0], rad, 0, 'bottom'),
+      line('tan', colTan, 'tan', false, thick, [0, 0], rad, 0, 'right'),
+      line('sec', colSec, 'sec', false, thick, [0, 0], rad, 0, 'left'),
+      line('cot', colCot, 'cot', false, thick, [0, 0], rad, 0, 'bottom'),
+      line('csc', colCsc, 'csc', false, thick, [0, 0], rad, 0, 'left'),
 
-      lineWithLabel('xSide', colText, 'x', 0, [0, 0], radius, 0, 'bottom', 0.5, 'italic'),
-      lineWithLabel('ySide', colText, 'y', 0, [0, 0], radius, 0, 'right', 0.5, 'italic'),
+      line('xSide', colText, 'x', false, 0, [0, 0], dCos, 0, 'bottom', 0.5, 'italic'),
+      line('ySide', colText, 'y', false, 0, [dCos, 0], dSin, Math.PI / 2, 'right', 0.5, 'italic'),
 
-      staticLineLabel('sinTheta', colSin, 'sin', true, [defaultCos, 0], [defaultCos, defaultSin], 'right'),
-      staticLineLabel('tanTheta', colTan, 'tan', true, [radius, 0], [radius, defaultTan], 'right'),
-      staticLineLabel('secTheta', colSec, 'sec', true, [0, 0], [radius, defaultTan], 'left'),
-      staticLineLabel('cosTheta', colCos, 'cos', true, [0, 0], [defaultCos, 0], 'bottom'),
-      staticLineLabel('cotTheta', colCot, 'cot', true, [0, 0], [defaultCot, 0], 'bottom'),
-      staticLineLabel('cscTheta', colCsc, 'csc', true, [0, 0], [defaultCot, radius], 'left'),
-      staticLineLabel('sinThetaComp', colCos, 'sin', 'comp', [0, 0], [defaultCos, 0], 'bottom'),
-      staticLineLabel('tanThetaComp', colCot, 'tan', 'comp', [0, 0], [defaultCot, 0], 'bottom'),
-      staticLineLabel('secThetaComp', colCsc, 'sec', 'comp', [0, 0], [defaultCot, radius], 'left'),
-      // // lineWithLabel('cosTheta', colCos, [{ cos: { color: [0, 0, 0, 0] } }, ' ', { container: [{ theta: { text: '\u03b8', color: colTheta, style: 'italic' } }, null, false] }], 0, [0, 0], radius, 0, 'bottom'),
-      // // lineWithLabel('sinThetaComp', colCos, [
-      // //   { sin: { color: colCos } },
-      // //   { brac: [{ lb_bracket: { side: 'left', color: colCos } }, ['_90', '_\u00b0\u2212', { theta: { text: '\u03b8', color: colCos, style: 'italic' } }], { rb_bracket: { side: 'right', color: colCos } }] }], 0, [0, 0], radius, 0, 'bottom'),
-      // lineWithLabel('tanThetaComp', colTheta, [
-      //   { tan: { color: colCot } },
-      //   { brac: [{ lb_bracket: { side: 'left', color: colDarkGrey } }, ['_90', '_\u00b0\u2212\u03b8'], { rb_bracket: { side: 'right', color: colDarkGrey } }] }], 0, [0, 0], radius, 0, 'bottom'),
+      line('sinTheta', colSin, 'sin', true, thick, [dCos, 0], dSin, piOn2, 'right'),
+      line('tanTheta', colTan, 'tan', true, thick, [rad, 0], dTan, piOn2, 'right'),
+      line('secTheta', colSec, 'sec', true, thick, [0, 0], dSec, dAng, 'left'),
+      line('cosTheta', colCos, 'cos', true, thick, [0, 0], dCos, 0, 'bottom'),
+      line('cotTheta', colCot, 'cot', true, thick, [0, 0], dCot, 0, 'bottom'),
+      line('cscTheta', colCsc, 'csc', true, thick, [0, 0], dCsc, dAng, 'left'),
+      line('sinThetaComp', colCos, 'sin', 'comp', 0, [0, 0], dCos, 0, 'bottom'),
+      line('tanThetaComp', colCot, 'tan', 'comp', 0, [0, 0], dCot, 0, 'bottom'),
+      line('secThetaComp', colCsc, 'sec', 'comp', 0, [0, 0], dCsc, dAng, 'left'),
       {
         name: 'point',
         method: 'polygon',
@@ -213,14 +235,14 @@ function layoutCirc() {
           sides: 30,
           radius: 0.02,
           fill: colText,
-          position: [defaultCos, defaultSin],
+          position: [dCos, dSin],
         },
       },
       {
         name: 'rotator',
         method: 'collections.line',
         options: {
-          length: radius,
+          length: rad,
           width: 0.1,
           color: [0, 0, 0, 0],
         },
@@ -235,8 +257,8 @@ function layoutCirc() {
       //   name: 'tanSec',
       //   method: 'collection',
       //   elements: [
-      //     lineWithLabel('tan', colTan, 'tan', thick, [radius, 0], radius * Math.tan(defaultAngle), Math.PI / 2, 'right'),
-      //     lineWithLabel('sec', colSec, 'sec', thick, [0, 0], radius / Math.tan(defaultAngle), defaultAngle, 'left'),
+      //     lineWithLabel('tan', colTan, 'tan', thick, [radius, 0], radius * Math.tan(dAng), Math.PI / 2, 'right'),
+      //     lineWithLabel('sec', colSec, 'sec', thick, [0, 0], radius / Math.tan(dAng), dAng, 'left'),
       //     lineWithLabel('unitAdj', colRad, '1', thick, [0, 0], radius, 0, 'bottom'),
       //   ],
       //   options: {
@@ -293,12 +315,12 @@ function layoutCirc() {
     const r = rIn > Math.PI / 4 ? rIn - 0.00001 : rIn + 0.00001;
     const cosR = Math.cos(r);
     const sinR = Math.sin(r);
-    const x = radius * cosR;
-    const y = radius * sinR;
-    const tanVal = Math.abs(radius * sinR / cosR);
-    const secVal = Math.abs(radius / cosR);
-    const cotVal = Math.abs(radius * cosR / sinR);
-    const cscVal = Math.abs(radius / sinR);
+    const x = rad * cosR;
+    const y = rad * sinR;
+    const tanVal = Math.abs(rad * sinR / cosR);
+    const secVal = Math.abs(rad / cosR);
+    const cotVal = Math.abs(rad * cosR / sinR);
+    const cscVal = Math.abs(rad / sinR);
 
     if (rotator.isShown) {
       rotator.transform.updateRotation(rIn);
@@ -312,7 +334,7 @@ function layoutCirc() {
       if (cos.isShown) {
         offsetY = thick;
       }
-      unitOpp.setEndPoints([cotVal, 0 - offsetY], [cotVal, radius + offsetY]);
+      unitOpp.setEndPoints([cotVal, 0 - offsetY], [cotVal, rad + offsetY]);
     }
 
     // if (tri.isShown) {
@@ -336,7 +358,7 @@ function layoutCirc() {
     */
     if (sin.isShown) {
       if (sin._label.isShown) {
-        if ((tan._label.isShown) && Math.abs(x) > radius * 0.8) {
+        if ((tan._label.isShown) && Math.abs(x) > rad * 0.8) {
           sin.label.location = 'left';
         } else {
           sin.label.location = 'right';
@@ -371,24 +393,24 @@ function layoutCirc() {
     */
     if (tan.isShown) {
       tan.setEndPoints(
-        [radius, 0],
-        [radius, tanVal],
+        [rad, 0],
+        [rad, tanVal],
       );
-      if (tan._label.transform.t().x > radius * 1.2) {
-        tan._label.transform.updateTranslation(radius * 1.2, tan._label.transform.t().y);
+      if (tan._label.transform.t().x > rad * 1.2) {
+        tan._label.transform.updateTranslation(rad * 1.2, tan._label.transform.t().y);
       }
     }
 
     if (sec.isShown) {
       if (sec._label.isShown) {
-        if (secVal > radius * 2) {
-          sec.label.linePosition = radius * 0.65 * 2 / secVal;
+        if (secVal > rad * 2) {
+          sec.label.linePosition = rad * 0.65 * 2 / secVal;
         } else {
           sec.label.linePosition = 0.65;
         }
       }
       sec.setEndPoints(
-        [0, 0], [radius, tanVal],
+        [0, 0], [rad, tanVal],
       );
     }
 
@@ -407,12 +429,12 @@ function layoutCirc() {
         offsetY = thick;
       }
       cot.setEndPoints([0, 0 - offsetY], [cotVal + thick / 2, 0 - offsetY]);
-      const labelX = Math.min(cot._label.transform.t().x, radius * 1.2);
+      const labelX = Math.min(cot._label.transform.t().x, rad * 1.2);
       let labelY = -0.075;
-      // labelX = Math.min(labelX, radius * 1.2);
+      // labelX = Math.min(labelX, rad * 1.2);
       if (cos.isShown) {
-        if (labelX < radius * 0.5) {
-          labelY = Math.max(cot._label.transform.t().y - (radius * 0.5 - labelX), -0.17);
+        if (labelX < rad * 0.5) {
+          labelY = Math.max(cot._label.transform.t().y - (rad * 0.5 - labelX), -0.17);
         }
       }
       cot._label.transform.updateTranslation(labelX, labelY);
@@ -430,8 +452,8 @@ function layoutCirc() {
         thickOffset = thick * Math.cos(r);
       }
       if (csc._label.isShown) {
-        if (cscVal > radius * 2) {
-          csc.label.linePosition = radius * 0.65 * 2 / cscVal;
+        if (cscVal > rad * 2) {
+          csc.label.linePosition = rad * 0.65 * 2 / cscVal;
         } else {
           csc.label.linePosition = 0.65;
         }
@@ -444,7 +466,7 @@ function layoutCirc() {
       }
       csc.setEndPoints(
         [0 + offsetX, 0 + offsetY],
-        [cotVal + thickOffset + offsetX, radius + offsetY + thickOffset],
+        [cotVal + thickOffset + offsetX, rad + offsetY + thickOffset],
       );
     }
 
@@ -458,22 +480,13 @@ function layoutCirc() {
     // .##.....##.####..######...##.....##....##...
     // */
     setRightAng(
-      rightSin,
-      x > 0.3 && y > 0.3,
-      [x, 0],
-      Math.PI / 2,
+      rightSin, x > 0.3 && y > 0.3, [x, 0], Math.PI / 2,
     );
     setRightAng(
-      rightUnit,
-      x > 0.3 && y > 0.3,
-      [cotVal, cos.isShown ? -thick / 2 : 0],
-      Math.PI / 2,
+      rightUnit, x > 0.3 && y > 0.3, [cotVal, cos.isShown ? -thick / 2 : 0], Math.PI / 2,
     );
     setRightAng(
-      rightTan,
-      y > 0.3,
-      [radius, 0],
-      Math.PI / 2,
+      rightTan, y > 0.3, [rad, 0], Math.PI / 2,
     );
   }
 
@@ -498,14 +511,14 @@ function layoutCirc() {
   //   rotator.setRotation(ang);
   // });
   figure.fnMap.global.add('circDefault', () => {
-    rotator.setRotation(defaultAngle);
+    rotator.setRotation(dAng);
   });
   rotator.subscriptions.add('setState', 'updateCircle');
   rotator.subscriptions.add('setTransform', 'updateCircle');
 
-  const addPulseFn = (name, element, xAlign, yAlign) => {
+  const addPulseFn = (name, element, xAlign, yAlign, scale = 1.8) => {
     figure.fnMap.global.add(name, () => {
-      element.pulse({ xAlign, yAlign, duration: 1.5 });
+      circle.getElement(element).pulse({ xAlign, yAlign, duration: 1.5, scale });
     });
   };
   const addPulseWidthFn = (name, element) => {
@@ -527,21 +540,26 @@ function layoutCirc() {
       .start();
   });
 
-  addPulseFn('circPulseTan', tan._label, 'left', 'middle');
-  addPulseFn('circPulseCot', cot._label, 'center', 'bottom');
-  addPulseFn('circPulseCsc', csc._label, 'right', 'bottom');
-  addPulseFn('circPulseCos', cos._label, 'center', 'top');
-  addPulseFn('circPulseSec', sec._label, 'left', 'top');
-  addPulseFn('circPulseSin', sin._label, 'left', 'middle');
-  addPulseWidthFn('circPulseWidthSin', sin);
-  addPulseWidthFn('circPulseWidthCos', cos);
+  addPulseFn('circPulseTan', 'tanTheta.label', 'left', 'middle');
+  addPulseFn('circPulseCot', 'cotTheta.label', 'center', 'top');
+  addPulseFn('circPulseCsc', 'cscTheta.label', 'right', 'bottom');
+  addPulseFn('circPulseCos', 'cosTheta.label', 'center', 'top');
+  addPulseFn('circPulseSec', 'secTheta.label', 'right', 'bottom');
+  addPulseFn('circPulseSin', 'sinTheta.label', 'left', 'middle');
+  addPulseFn('circPulseUnitAdj', 'unitAdj.label', 'center', 'top', 2.7);
+  addPulseFn('circPulseUnitOpp', 'unitOpp.label', 'left', 'middle', 2.7);
+  addPulseFn('circPulseUnitHyp', 'unitHyp.label', 'right', 'bottom', 2.7);
+  addPulseFn('circPulseX', 'xSide.label', 'center', 'top');
+  addPulseFn('circPulseY', 'ySide.label', 'left', 'middle');
+  // addPulseWidthFn('circPulseWidthSin', sin);
+  // addPulseWidthFn('circPulseWidthCos', cos);
   unitHyp.subscriptions.add('setTransform', () => {
     unitHyp.updateLabel();
   });
 
   const triToX = (x) => {
     tri.customState.xLength = x;
-    const y = Math.tan(defaultAngle) * x;
+    const y = Math.tan(dAng) * x;
     tri.custom.updatePoints({ points: [[0, 0], [x, y], [x, 0]] });
   };
   const animateTri = (from, to) => {
@@ -552,13 +570,13 @@ function layoutCirc() {
           const x = from + percent * delta;
           triToX(x);
         },
-        duration: 2,
+        duration: 2.5,
       })
       .start();
   };
-  add('circTriAnimateToTan', () => animateTri(defaultCos, radius));
-  add('circTriAnimateToCot', () => animateTri(radius, radius / Math.tan(defaultAngle)));
-  add('circTriToTan', () => triToX(radius));
-  add('circTriToCos', () => triToX(defaultCos));
-  add('circTriToCot', () => triToX(radius / Math.tan(defaultAngle)));
+  add('circTriAnimateToTan', () => animateTri(dCos, rad));
+  add('circTriAnimateToCot', () => animateTri(rad, rad / Math.tan(dAng)));
+  add('circTriToTan', () => triToX(rad));
+  add('circTriToCos', () => triToX(dCos));
+  add('circTriToCot', () => triToX(rad / Math.tan(dAng)));
 }

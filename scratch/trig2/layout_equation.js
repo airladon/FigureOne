@@ -75,10 +75,13 @@ function makeEquation() {
         v7: { symbol: 'vinculum' },
         v8: { symbol: 'vinculum' },
         sin: { style: 'normal', color: colSin },
+        sin_2: { style: 'normal', color: colSin },
         cos: { style: 'normal', color: colCos },
         tan: { style: 'normal', color: colTan },
+        tan_2: { style: 'normal', color: colTan },
         cot: { style: 'normal', color: colCot },
         sec: { style: 'normal', color: colSec },
+        sec_2: { style: 'normal', color: colSec },
         csc: { style: 'normal', color: colCsc },
         opp_1: { text: 'opposite', color: colOpp, size: 0.2 },
         opp_2: { text: 'opposite', color: colOpp, size: 0.2 },
@@ -102,10 +105,18 @@ function makeEquation() {
         _1_2: { color: colRad },
         s1: { symbol: 'strike', style: 'forward', lineWidth: thin },
         s2: { symbol: 'strike', style: 'forward', lineWidth: thin },
-        // lb1: { symbol: 'bracket', side: 'left' },
-        // lb2: { symbol: 'bracket', side: 'left' },
-        // rb1: { symbol: 'bracket', side: 'right' },
-        // rb2: { symbol: 'bracket', side: 'right' },
+        comp_1: { text: '\u00b0\u2212\u03b8', color: colThetaComp, style: 'italic' },
+        _90_1: { color: colThetaComp },
+        comp_2: { text: '\u00b0\u2212\u03b8', color: colThetaComp, style: 'italic' },
+        _90_2: { color: colThetaComp },
+        comp_3: { text: '\u00b0\u2212\u03b8', color: colThetaComp, style: 'italic' },
+        _90_3: { color: colThetaComp },
+        lb1: { symbol: 'bracket', side: 'left' },
+        lb2: { symbol: 'bracket', side: 'left' },
+        lb3: { symbol: 'bracket', side: 'left' },
+        rb1: { symbol: 'bracket', side: 'right' },
+        rb2: { symbol: 'bracket', side: 'right' },
+        rb3: { symbol: 'bracket', side: 'right' },
       },
       phrases: {
         oppHyp: frac('opp_1', 'v1', 'hyp_1', 0.01, 0.03, 0.65),
@@ -120,6 +131,9 @@ function makeEquation() {
         secTheta: ['sec', ' ', 'theta4'],
         cscTheta: ['csc', ' ', 'theta5'],
         cotTheta: ['cot', ' ', 'theta6'],
+        sinComp: ['sin_2', { brac: ['lb1', ['_90_1', 'comp_1'], 'rb1'] }],
+        tanComp: ['tan_2', { brac: ['lb2', ['_90_2', 'comp_2'], 'rb2'] }],
+        secComp: ['sec_2', { brac: ['lb3', ['_90_3', 'comp_3'], 'rb3'] }],
         c1: cont(lin(['oppHyp', 'adjHyp', 'oppAdj', 'adjOpp', 'hypAdj', 'hypOpp']), 0.6),
         c2: cont(lin(['eq1', 'eq2', 'eq3', 'eq4', 'eq5', 'eq6']), 0.3),
         // c2_2: cont(lin(['eq1', 'eq2', '', '', '', '']), 0.3),
@@ -132,25 +146,35 @@ function makeEquation() {
         sinOnOneStk: frac('sinTheta', 'v7', s('_1_1', 1), 0.03, 0.03, 0.3),
         // sin: lin(['sinTheta']),
         xy: lin(['y', 'x']),
-        trig: lin(['sinTheta', 'cosTheta', 'tanTheta', 'cotTheta', 'secTheta', 'cscTheta']),
+        // trig: lin(['sinTheta', 'cosTheta', 'tanTheta', 'cotTheta', 'secTheta', 'cscTheta']),
+        // trig: lin(['sin', 'cos', 'tan', 'cot', 'sec', 'csc']),
         final1: lin([
-          ['oppHyp', '  ', 'eq1', '  ', 'sinTheta'],
-          ['oppAdj', '  ', 'eq3', '  ', 'tanTheta'],
-          ['hypAdj', '  ', 'eq5', '  ', 'secTheta'],
+          ['oppHyp', '  ', 'eq1', '  ', 'sin'],
+          ['oppAdj', '  ', 'eq3', '  ', 'tan'],
+          ['hypAdj', '  ', 'eq5', '  ', 'sec'],
         ], 0.6),
         final2: lin([
-          ['adjHyp', '  ', 'eq2', '  ', 'cosTheta'],
-          ['adjOpp', '  ', 'eq6', '  ', 'cotTheta'],
-          ['hypOpp', '  ', 'eq4', '  ', 'cscTheta'],
+          ['adjHyp', '  ', 'eq2', '  ', 'cos'],
+          ['adjOpp', '  ', 'eq6', '  ', 'cot'],
+          ['hypOpp', '  ', 'eq4', '  ', 'csc'],
         ], 0.6),
         adjDen: cont(lin(['oppAdj', 'hypAdj']), 0.6),
         tanSec: lin(['tanTheta', 'secTheta']),
         oppDen: cont(lin(['adjOpp', 'hypOpp']), 0.6),
         cotCsc: lin(['cotTheta', 'cscTheta']),
+        namesSin: cont(lin([['sinTheta']], 0.5), 1),
+        namesSinTan: cont(lin([['sinTheta'], ['tanTheta']], 0.5), 1),
+        namesSinTanSec: cont(lin([['sinTheta'], ['tanTheta'], ['secTheta']], 0.5), 1),
+        namesCosCotCsc: cont(lin([['cosTheta'], ['cotTheta'], ['cscTheta']], 0.5), 0.3),
+        namesComp: cont(lin([
+          ['eq1', '  ', 'sinComp'],
+          ['eq2', '  ', 'tanComp'],
+          ['eq3', '  ', 'secComp'],
+        ], 0.5), 0.85),
       },
       forms: {
-        ratios: ['c1'],
-        trig: ['c1', 'c2', 'trig'],
+        // ratios: ['c1'],
+        // trig: ['c1', 'c2', 'trig'],
         final: { scale: [['final1', cont('', 0.8), 'final2'], 1.1] },
         sinCos: ['c1_sinCos'],
         xyOnOne: ['c1_sinCos', 'c2_2', 'xyOnOne'],
@@ -168,6 +192,11 @@ function makeEquation() {
         oppDen: 'oppDen',
         cot: ['oppDen', cont('eq1', 0.3), 'cotTheta'],
         cotCsc: ['oppDen', 'c2_2', 'cotCsc'],
+        namesSin: ['namesSin'],
+        namesSinTan: ['namesSinTan'],
+        namesSinTanSec: ['namesSinTanSec'],
+        namesAll: ['namesSinTanSec', 'namesCosCotCsc'],
+        namesComp: ['namesSinTanSec', 'namesCosCotCsc', 'namesComp'],
       },
     },
     mods: {
@@ -176,21 +205,24 @@ function makeEquation() {
         eqnCenterLeft: { position: [-2, 0.2], scale: 1.4 },
         eqnCenterLeftSingle: { position: [-2, 0], scale: 1.4 },
         center: { position: [-1.5, 0.3], scale: 1 },
+        summary: { position: [-1.3, 0.3], scale: 1.4 },
       },
     },
   });
 
   const add = (name, fn) => figure.fnMap.global.add(name, fn);
 
-  const sPulse = (element, xAlign = 'center', yAlign = 'middle') => figure.elements._eqn.pulse({
-    elements: [element], xAlign, yAlign, scale: 1.5, duration: 1.5,
+  const sPulse = (element, xAlign = 'center', yAlign = 'middle', scale = 1.5) => figure.elements._eqn.pulse({
+    elements: [element], xAlign, yAlign, scale, duration: 1.5,
   });
-  add('eqnPulseSin', () => sPulse('sin', 'right', 'middle'));
-  add('eqnPulseCos', () => sPulse('cos', 'right', 'middle'));
-  add('eqnPulseTan', () => sPulse('tan', 'right', 'middle'));
-  add('eqnPulseCsc', () => sPulse('csc', 'right', 'middle'));
-  add('eqnPulseSec', () => sPulse('sec', 'right', 'middle'));
-  add('eqnPulseCot', () => sPulse('cot', 'right', 'middle'));
+  add('eqnPulseSin', () => sPulse('sin', 'left', 'middle'));
+  add('eqnPulseCos', () => sPulse('cos', 'left', 'middle'));
+  add('eqnPulseTan', () => sPulse('tan', 'left', 'middle'));
+  add('eqnPulseCsc', () => sPulse('csc', 'left', 'middle'));
+  add('eqnPulseSec', () => sPulse('sec', 'left', 'middle'));
+  add('eqnPulseCot', () => sPulse('cot', 'left', 'middle'));
+  add('eqnPulseX', () => sPulse('x', 'center', 'middle', 1.8));
+  add('eqnPulseY', () => sPulse('y', 'center', 'middle', 1.8));
 
 
   figure.add({
@@ -247,7 +279,7 @@ function makeEquation() {
       forms: {
         tanComp: {
           content: 'tanComp',
-          alignment: { xAlign: '-0.5o' },
+          alignment: { xAlign: '-0.7o' },
         },
         complementaryTangent: ['tanComp', 'eq', ln(
           ['c_1', 'o_1', 'mplementary_1'],
@@ -261,7 +293,7 @@ function makeEquation() {
         //
         secComp: {
           content: 'secComp',
-          alignment: { xAlign: '-0.5o' },
+          alignment: { xAlign: '-0.7o' },
         },
         complementarySecant: ['secComp', 'eq', ln(
           ['c_2', 'o_2', 'mplementary_2'],
@@ -273,11 +305,11 @@ function makeEquation() {
         //
         sin: {
           content: 'sin',
-          alignment: { xAlign: '-0.4o' },
+          alignment: { xAlign: '-0.7o' },
         },
         sinComp: {
           content: 'sinComp',
-          alignment: { xAlign: '-0.4o' },
+          alignment: { xAlign: '-0.7o' },
         },
         complementarySine: ['sinComp', 'eq', ln(
           ['c_3', 'o_3', 'mplementary_3'],
