@@ -241,7 +241,7 @@ function layoutLines() {
     line.animations.new()
       // .rotation({ target: -angle, duration: 1 })
       .dissolveIn({ element: bow, duration: 0.5 })
-      .dissolveOut({ element: bow, duration: 0.5, delay: 1.5 })
+      .dissolveOut({ element: bow, duration: 0.5, delay: 1 })
       .start();
   });
   add('showHalfChord', () => {
@@ -250,7 +250,7 @@ function layoutLines() {
     lines._line.hide();
     lines._halfChord.setLength(length);
     lines._halfChord.animations.new()
-      .length({ target: length / 2, duration: 1.5 })
+      .length({ target: length / 2, duration: 0.8 })
       .start();
   });
   add('setHalfChordLength', () => {

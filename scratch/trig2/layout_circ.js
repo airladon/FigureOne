@@ -249,8 +249,8 @@ function layoutCirc() {
   addPulseFn('circPulseUnitAdj', 'unitAdj.label', 'center', 'top', 2.7);
   addPulseFn('circPulseUnitOpp', 'unitOpp.label', 'left', 'middle', 2.7);
   addPulseFn('circPulseUnitHyp', 'unitHyp.label', 'right', 'bottom', 2.7);
-  addPulseFn('circPulseX', 'xSide.label', 'center', 'top');
-  addPulseFn('circPulseY', 'ySide.label', 'left', 'middle');
+  addPulseFn('circPulseX', 'xSide.label', 'center', 'top', 2);
+  addPulseFn('circPulseY', 'ySide.label', 'left', 'middle', 2);
   unitHyp.subscriptions.add('setTransform', () => {
     unitHyp.updateLabel();
   });
@@ -277,7 +277,9 @@ function layoutCirc() {
   add('circTriToTan', () => triToX(rad));
   add('circTriToCos', () => triToX(dCos));
   add('circTriToCot', () => triToX(rad / Math.tan(dAng)));
+  // console.log(tri)
   tri.subscriptions.add('setState', () => {
+    console.log(figure)
     triToX(tri.customState.xLength);
   });
   triToX(dCos);

@@ -208,8 +208,8 @@ function makeEquation() {
   add('eqnPulseCsc', () => sPulse('csc', 'left', 'middle'));
   add('eqnPulseSec', () => sPulse('sec', 'left', 'middle'));
   add('eqnPulseCot', () => sPulse('cot', 'left', 'middle'));
-  add('eqnPulseX', () => sPulse('x', 'center', 'middle', 1.8));
-  add('eqnPulseY', () => sPulse('y', 'center', 'middle', 1.8));
+  add('eqnPulseX', () => sPulse('x', 'center', 'middle', 2));
+  add('eqnPulseY', () => sPulse('y', 'center', 'middle', 2));
 
 
   figure.add({

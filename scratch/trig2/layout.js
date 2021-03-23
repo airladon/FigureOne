@@ -53,19 +53,19 @@ function makeSlides() {
     show: 'trig',
     form: 'final',
     exec: [
-      ['0:04', 'eqnPulseSin'],
-      ['0:04', 'eqnPulseCos'],
-      ['0:04', 'eqnPulseTan'],
-      ['0:04', 'eqnPulseSec'],
-      ['0:04', 'eqnPulseCsc'],
-      ['0:04', 'eqnPulseCot'],
+      ['0:00.5', 'eqnPulseSin'],
+      ['0:00.5', 'eqnPulseCos'],
+      ['0:00.5', 'eqnPulseTan'],
+      ['0:00.5', 'eqnPulseSec'],
+      ['0:00.5', 'eqnPulseCsc'],
+      ['0:00.5', 'eqnPulseCot'],
     ],
   });
 
   slides.push({
     addReference,
     form: null,
-    time: '0:14.5',
+    time: '0:07',
     enterStateCommon: () => {
       figure.fnMap.exec('circDefault');
       figure.fnMap.exec('circTriToCos');
@@ -95,29 +95,29 @@ function makeSlides() {
     showCommon: { circ: ['point', 'x', 'y', 'arc', 'tri', 'rightSin', 'theta', 'unitHyp'] },
     fromForm: 'sinCos',
     show: ['circ.xSide', 'circ.ySide', 'circ.xy'],
-    time: '0:28',
+    time: '0:19.5',
     transition: [
       // [
       { in: 'circ.unitHyp' },
       [
-        { pulseWidth: 'circ.unitHyp', label: 1, width: 6, delay: 1.5 },
-        { pulse: 'circ.unitHyp.label', xAlign: 'right', yAlign: 'bottom', delay: 3.7 },
+        { pulseWidth: 'circ.unitHyp', label: 1, width: 6, delay: 1 },
+        { pulse: 'circ.unitHyp.label', xAlign: 'right', yAlign: 'bottom', delay: 2.5 },
       ],
       { delay: 0.3 },
       [
         { in: 'eqn' },
         { scenario: 'circ', target: 'circRight' },
       ],
-      { goToForm: 'eqn', target: 'xyOnOne', delay: 2.3 },
-      { goToForm: 'eqn', target: 'xyOnOneStk', delay: 1.7 },
+      { goToForm: 'eqn', target: 'xyOnOne', delay: 1.8 },
+      { goToForm: 'eqn', target: 'xyOnOneStk', delay: 0.7 },
       { goToForm: 'eqn', target: 'xy', delay: 1 },
     ],
     form: 'xy',
     exec: [
-      ['0:46', 'circPulseX'],
-      ['0:46', 'circPulseY'],
-      ['0:48.5', 'eqnPulseX'],
-      ['0:48.5', 'eqnPulseY'],
+      ['0:34.3', 'circPulseX'],
+      ['0:34.3', 'circPulseY'],
+      ['0:36.3', 'eqnPulseX'],
+      ['0:36.3', 'eqnPulseY'],
     ],
   });
 
@@ -134,11 +134,11 @@ function makeSlides() {
     addReference,
     scenarioCommon: ['circRight', 'eqnCenterLeft', 'linesCenter'],
     enterState: 'linesSetChord',
-    time: '0:52',
+    time: '0:38.5',
     transition: [
       { out: ['eqn', 'circ.xSide', 'circ.ySide'] },
       { in: { lines: ['circle', 'line'] }, delay: 1 },
-      { delay: 2 },
+      { delay: 2.2 },
       [
         { in: 'lines.chord' },
         { pulse: 'lines.chord', duration: 1.5, delay: 0.2 },
@@ -146,7 +146,7 @@ function makeSlides() {
       { scenario: 'lines.chord', target: 'linesDefault', delay: 0 },
       [
         { in: 'lines.chordDef', delay: 0.5 },
-        { trigger: 'showBow', duration: 2.5, delay: 0 },
+        { trigger: 'showBow', duration: 2.5, delay: 0.5 },
       ],
     ],
     form: null,
@@ -155,7 +155,7 @@ function makeSlides() {
   // Show sine line, half chord, translation explanation, sineTheta
   slides.push({
     addReference,
-    time: '1:02.5',
+    time: '0:48.5',
     scenarioCommon: ['circRight', 'eqnCenterLeft', 'linesDefault'],
     enterState: 'linesSetChord',
     show: { lines: ['circle', 'line'] },
@@ -163,21 +163,21 @@ function makeSlides() {
       [
         { in: 'circ.sinTheta.line' },
         { pulseWidth: 'circ.sinTheta', line: 6, duration: 1.5, delay: 0.2 },
-      ],  // 1:04
+      ],
       [
-        { trigger: 'showHalfChord', delay: 3, duration: 1.5 },
-      ],  // 1:08.5
+        { trigger: 'showHalfChord', delay: 2.8, duration: 0.8 },
+      ],
       [
         { in: 'lines.halfChordLabel' },
         {
           pulse: 'lines.halfChordLabel', scale: 1.3, duration: 1.5, xAlign: 'right',
         },
-      ],  // 1:10
-      { out: 'lines.chordDef', delay: 2 },  // 1:12.5
-      { in: 'lines.jya' },   // 1:13
-      { in: 'lines.latin', delay: 5.5 }, // 1:19
-      { in: 'lines.sine', delay: 4.5 }, // 1:24
-      { delay: 4 }, // 1:28
+      ],
+      { out: 'lines.chordDef', delay: 1 },
+      { in: 'lines.jya' },
+      { in: 'lines.latin', delay: 5.5 },
+      { in: 'lines.sine', delay: 4.5 },
+      { delay: 3.2 },
       [
         { in: 'circ.sinTheta.label' },
         { pulse: 'circ.sinTheta.label', delay: 0.2, xAlign: 'left' },
@@ -195,7 +195,7 @@ function makeSlides() {
 
   // Opposite over Hypotenuse = sin
   slides.push({
-    time: '1:32',
+    time: '1:14',
     addReference,
     scenarioCommon: ['circRight', 'eqnCenterLeftSingle', 'linesDefault'],
     showCommon: { circ: ['point', 'x', 'y', 'arc', 'tri', 'rightSin', 'theta', 'unitHyp', 'sinTheta'] },
@@ -221,7 +221,7 @@ function makeSlides() {
   ..######...#######...######.
   */
   slides.push({
-    time: '1:41',
+    time: '1:23',
     addReference,
     showCommon: { circ: ['point', 'x', 'y', 'arc', 'tri', 'rightSin', 'theta', 'unitHyp', 'sinTheta', 'thetaCompSin'] },
     fromForm: { eqn: 'sin', eqn2: 'sinComp' },
@@ -236,12 +236,12 @@ function makeSlides() {
         { in: 'circ.cosTheta.line' },
         { pulseWidth: 'circ.cosTheta', delay: 0.2, line: 6 },
       ],  // 1:46
-      { delay: 0.2 },  // 1:46.2
+      { delay: 0.7 },  // 1:46.2
       [
         { in: 'circ.thetaCompSin' },
         { pulseAngle: 'circ.thetaCompSin', curve: 1.2, label: 1.2 },
       ],  // 1:47.7
-      { delay: 3.8 }, // 1:51.5
+      { delay: 3 }, // 1:51.5
       [
         { in: 'circ.sinThetaComp' },
         { pulse: 'circ.sinThetaComp', yAlign: 'top', scale: 1.3 },
@@ -249,7 +249,7 @@ function makeSlides() {
       { delay: 0.5 },
       { out: 'eqn' },
       { in: 'eqn2' },
-      { goToForm: 'eqn2', target: 'complementarySine', delay: 2 },
+      { goToForm: 'eqn2', target: 'complementarySine', delay: 1 },
       { goToForm: 'eqn2', target: 'cosine', delay: 1 },
       { delay: 1 },
       [
@@ -264,7 +264,7 @@ function makeSlides() {
 
   slides.push({
     addReference,
-    time: '2:08',
+    time: '1:48.5',
     showCommon: { circ: ['point', 'x', 'y', 'arc', 'tri', 'rightSin', 'theta', 'unitHyp', 'sinTheta', 'thetaCompSin', 'cosTheta'] },
     fromForm: { eqn: 'adjHyp', eqn2: 'cos' },
     transition: [
@@ -277,9 +277,9 @@ function makeSlides() {
     ],
     form: { eqn: 'cos', eqn2: null },
     exec: [
-      ['2:21', 'circPulseUnitHyp'],
-      ['2:23.5', 'circPulseCos'],
-      ['2:23.5', 'circPulseSin'],
+      ['2:00.3', 'circPulseUnitHyp'],
+      ['2:02', 'circPulseCos'],
+      ['2:02', 'circPulseSin'],
     ],
   });
 
@@ -294,7 +294,7 @@ function makeSlides() {
   */
 
   slides.push({
-    time: '2:30.5',
+    time: '2:09.5',
     addReference,
     showCommon: { circ: ['point', 'x', 'y', 'arc', 'tri', 'rightTan', 'theta', 'unitAdj'] },
     fromForm: 'adjHyp',
@@ -312,7 +312,7 @@ function makeSlides() {
   });
 
   slides.push({
-    time: '2:37',
+    time: '2:15.5',
     addReference,
     scenarioCommon: ['circRight', 'eqnCenterLeftSingle', 'linesCenter'],
     enterStateCommon: () => {
@@ -339,7 +339,7 @@ function makeSlides() {
         { in: 'circ.tanTheta.line' },
         { pulseWidth: 'circ.tanTheta', delay: 0.2, line: 6 },
       ],
-      { delay: 1 },
+      { delay: 1.3 },
       [
         { in: 'circ.tanTheta.label' },
         { pulse: 'circ.tanTheta.label', delay: 0.2, xAlign: 'left' },
@@ -358,7 +358,7 @@ function makeSlides() {
   ..######..########..######.
   */
   slides.push({
-    time: '2:57',
+    time: '2:35.5',
     addReference: true,
     scenario: 'linesCenter',
     enterState: 'linesSetTan',
@@ -366,19 +366,19 @@ function makeSlides() {
     transition: [
       { out: { lines: ['tangentDef', 'radius', 'rightAngle'] } },
       { trigger: 'linesToSec', duration: 2 },
-      { delay: 1.7 },
+      { delay: 0.8 },
       [
         { in: 'lines.secant' },
         { pulse: 'lines.secant', duration: 1.5 },
       ],
       { scenario: 'lines.secant', target: 'linesDefault', delay: 0.8 },
       { in: 'lines.secantDef' },
-      { delay: 2.3 },
+      { delay: 2.5 },
       [
         { in: 'circ.secTheta.line' },
         { pulseWidth: 'circ.secTheta', delay: 0.2, line: 6 },
       ],
-      { delay: 1 },
+      { delay: 1.2 },
       [
         { in: 'circ.secTheta.label' },
         { pulse: 'circ.secTheta.label', delay: 0.2, xAlign: 'right', yAlign: 'bottom' },
@@ -390,7 +390,8 @@ function makeSlides() {
   });
 
   slides.push({
-    time: '3:15',
+    time: '2:52',
+    addReference,
     scenario: ['linesDefault', 'eqnCenterLeft'],
     enterState: 'linesSetSec',
     show: ['circ.tanTheta', 'circ.secTheta'],
@@ -403,10 +404,10 @@ function makeSlides() {
       { goToForm: 'eqn', target: 'tanSec', delay: 4 },
     ],
     exec: [
-      ['3:16', 'circPulseTan'],
-      ['3:16.5', 'circPulseUnitAdj'],
-      ['3:20', 'circPulseSec'],
-      ['3:20.5', 'circPulseUnitAdj'],
+      ['2:52.2', 'circPulseTan'],
+      ['2:53', 'circPulseUnitAdj'],
+      ['2:57', 'circPulseSec'],
+      ['2:58', 'circPulseUnitAdj'],
     ],
   });
 
@@ -420,7 +421,7 @@ function makeSlides() {
   ..######...#######.....##...
   */
   slides.push({
-    time: '3:28',
+    time: '3:03',
     addReference,
     scenario: ['eqnCenterLeft'],
     showCommon: { circ: ['point', 'x', 'y', 'arc', 'tri', 'rightUnit', 'theta', 'unitOpp'] },
@@ -438,7 +439,7 @@ function makeSlides() {
     steadyStateCommon: 'circTriToCot',
   });
   slides.push({
-    time: '3:43',
+    time: '3:14.5',
     addReference,
     scenario: ['eqnCenterLeft'],
     // showCommon: { circ: ['point', 'x', 'y', 'arc', 'tri', 'rightUnit', 'theta', 'unitOpp'] },
@@ -446,30 +447,30 @@ function makeSlides() {
     enterState: 'circTriToCot',
     transition: [
       { pulseWidth: 'circ.unitOpp', label: { xAlign: 'left', scale: 1.5 }, line: 6 },
-      { delay: 2 },
+      { delay: 1 },
       [
         { in: 'circ.thetaCompCot' },
         { pulseAngle: 'circ.thetaCompCot', curve: 1.3, label: 1.3 },
       ],
-      { delay: 1.5 },
+      { delay: 2 },
       [
         { in: 'circ.cotTheta.line' },
         { pulseWidth: 'circ.cotTheta', line: 6, delay: 0.2 },
       ],
-      { delay: 1 },
+      { delay: 0.7 },
       [
         { in: 'circ.tanThetaComp.label' },
-        { pulse: 'circ.tanThetaComp', delay: 0.2, yAlign: 'top' },
+        { pulse: 'circ.tanThetaComp', delay: 0.2, yAlign: 'top', scale: 1.3 },
       ],
       { in: 'eqn2' },
-      { goToForm: 'eqn2', target: 'complementaryTangent', delay: 0.5 },
-      { goToForm: 'eqn2', target: 'cotangent', delay: 0.5 },
-      { goToForm: 'eqn2', target: 'cotan', delay: 0.5 },
+      { goToForm: 'eqn2', target: 'complementaryTangent', delay: 0.2 },
+      { goToForm: 'eqn2', target: 'cotangent', delay: 1.5 },
+      { goToForm: 'eqn2', target: 'cotan', delay: 1 },
       [
-        { goToForm: 'eqn2', target: 'cot', delay: 0.5 },
-        { out: 'circ.tanThetaComp', show: false },
-        { in: 'circ.cotTheta.label', delay: 1 },
-        { pulse: 'circ.cotTheta.label', delay: 1.2, yAlign: 'top' },
+        { goToForm: 'eqn2', target: 'cot', delay: 1 },
+        { out: 'circ.tanThetaComp', show: false, delay: 1 },
+        { in: 'circ.cotTheta.label', delay: 1.5 },
+        { pulse: 'circ.cotTheta.label', delay: 1.7, yAlign: 'top' },
       ],
     ],
     form: { eqn2: 'cot' },
@@ -487,7 +488,7 @@ function makeSlides() {
   */
   slides.push({
     addReference,
-    time: '4:06',
+    time: '3:39',
     scenario: ['eqnCenterLeft'],
     show: { circ: ['thetaCompCot', 'cotTheta'] },
     fromForm: { eqn2: 'tanComp' },
@@ -498,6 +499,7 @@ function makeSlides() {
         { in: 'circ.cscTheta.line' },
         { pulseWidth: 'circ.cscTheta', line: 6, delay: 0.2 },
       ],
+      { delay: 1 },
       [
         { in: 'circ.secThetaComp' },
         { pulse: 'circ.secThetaComp.label', delay: 0.2, xAlign: 'right', yAlign: 'bottom', scale: 1.3 },
@@ -505,10 +507,10 @@ function makeSlides() {
       { goToForm: 'eqn2', target: 'secComp', delay: 1, duration: 0 },
       { in: 'eqn2' },
       { goToForm: 'eqn2', target: 'complementarySecant' },
-      { goToForm: 'eqn2', target: 'cosecant', delay: 1 },
-      { goToForm: 'eqn2', target: 'cosec', delay: 0.3 },
+      { goToForm: 'eqn2', target: 'cosecant', delay: 1.5 },
+      { goToForm: 'eqn2', target: 'cosec', delay: 1 },
       [
-        { goToForm: 'eqn2', target: 'csc', delay: 0.3 },
+        { goToForm: 'eqn2', target: 'csc', delay: 1 },
         { out: 'circ.secThetaComp', show: false },
         { in: 'circ.cscTheta.label', delay: 1 },
         { pulse: 'circ.cscTheta.label', delay: 1.2, yAlign: 'bottom', xAlign: 'right' },
@@ -518,7 +520,8 @@ function makeSlides() {
   });
 
   slides.push({
-    time: '4:21',
+    time: '3:57',
+    addReference,
     scenario: ['eqnCenterLeft'],
     enterState: 'circTriToCot',
     show: ['circ.cscTheta', 'circ.cotTheta'],
@@ -528,13 +531,13 @@ function makeSlides() {
       { out: ['eqn2', 'circ.thetaCompCot'] },
       { in: 'eqn' },
       { goToForm: 'eqn', target: 'cot', delay: 2 },
-      { goToForm: 'eqn', target: 'cotCsc', delay: 4 },
+      { goToForm: 'eqn', target: 'cotCsc', delay: 3.5 },
     ],
     exec: [
-      ['4:22', 'circPulseCot'],
-      ['4:22.5', 'circPulseUnitOpp'],
-      ['4:26', 'circPulseCsc'],
-      ['4:26.5', 'circPulseUnitOpp'],
+      ['3:58', 'circPulseCot'],
+      ['3:58.7', 'circPulseUnitOpp'],
+      ['4:01.5', 'circPulseCsc'],
+      ['4:02.2', 'circPulseUnitOpp'],
     ],
   });
 
@@ -548,7 +551,8 @@ function makeSlides() {
   ..######...#######..##.....##.##.....##.##.....##.##.....##....##...
   */
   slides.push({
-    time: '4:34.5',
+    time: '4:09',
+    addReference,
     scenario: ['eqnCenterLeft'],
     enterState: 'circTriToCot',
     fromForm: 'cotCsc',
@@ -559,7 +563,7 @@ function makeSlides() {
         { out: 'eqn' },
       ],
       { in: 'trig' },
-      { delay: 1.5 },
+      { delay: 2 },
       { scenario: 'eqn', target: 'summary', duration: 0 },
       { goToForm: 'eqn', start: null, target: 'namesSinTanSec', duration: 0 },
       { in: 'eqn', duration: 1 },
