@@ -3320,6 +3320,7 @@ export default class FigurePrimitives {
       element.drawingObject.clear(); // $FlowFixMe
       element.drawingObject.loadText(this.parseTextOptions(element.custom.options, o));
       element.custom.updateBorders({});
+      element.animateNextFrame();
     };
     element.custom.updateBorders(options);
     return element;
