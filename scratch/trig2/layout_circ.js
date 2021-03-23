@@ -260,27 +260,37 @@ function layoutCirc() {
     const y = Math.tan(dAng) * x;
     tri.custom.updatePoints({ points: [[0, 0], [x, y], [x, 0]] });
   };
-  const animateTri = (from, to) => {
+  add('circTriCosToTan', (percent) => {
+    const from = dCos;
+    const to = rad;
+    const delta = to - from;
+    const x = from + percent * delta;
+    triToX(x);
+  });
+  add('circTriTanToCot', (percent) => {
+    const from = rad;
+    const to = rad / Math.tan(dAng);
+    const delta = to - from;
+    const x = from + percent * delta;
+    triToX(x);
+  });
+  const animateTri = (callback) => {
     circle.animations.new()
       .custom({
-        callback: (percent) => {
-          const delta = to - from;
-          const x = from + percent * delta;
-          triToX(x);
-        },
+        callback,
         duration: 2.5,
       })
       .start();
   };
-  add('circTriAnimateToTan', () => animateTri(dCos, rad));
-  add('circTriAnimateToCot', () => animateTri(rad, rad / Math.tan(dAng)));
+  add('circTriAnimateToTan', () => animateTri('circTriCosToTan'));
+  add('circTriAnimateToCot', () => animateTri('circTriTanToCot'));
   add('circTriToTan', () => triToX(rad));
   add('circTriToCos', () => triToX(dCos));
   add('circTriToCot', () => triToX(rad / Math.tan(dAng)));
-  // console.log(tri)
-  tri.subscriptions.add('setState', () => {
-    console.log(figure)
+
+  add('circSetState', () => {
     triToX(tri.customState.xLength);
   });
+  tri.subscriptions.add('setState', 'circSetState');
   triToX(dCos);
 }
