@@ -70,18 +70,18 @@ function makeEquation() {
         sec: { style: 'normal', color: colSec },
         sec_2: { style: 'normal', color: colSec },
         csc: { style: 'normal', color: colCsc },
-        opp_1: { text: 'opposite', color: colOpp, size: 0.2 },
-        opp_2: { text: 'opposite', color: colOpp, size: 0.2 },
-        opp_3: { text: 'opposite', color: colOpp, size: 0.2 },
-        opp_4: { text: 'opposite', color: colOpp, size: 0.2 },
-        adj_1: { text: 'adjacent', color: colAdj, size: 0.2 },
-        adj_2: { text: 'adjacent', color: colAdj, size: 0.2 },
-        adj_3: { text: 'adjacent', color: colAdj, size: 0.2 },
-        adj_4: { text: 'adjacent', color: colAdj, size: 0.2 },
-        hyp_1: { text: 'hypotenuse', color: colHyp, size: 0.2 },
-        hyp_2: { text: 'hypotenuse', color: colHyp, size: 0.2 },
-        hyp_3: { text: 'hypotenuse', color: colHyp, size: 0.2 },
-        hyp_4: { text: 'hypotenuse', color: colHyp, size: 0.2 },
+        opp_1: { text: 'opposite', color: colText, size: 0.2 },
+        opp_2: { text: 'opposite', color: colText, size: 0.2 },
+        opp_3: { text: 'opposite', color: colText, size: 0.2 },
+        opp_4: { text: 'opposite', color: colText, size: 0.2 },
+        adj_1: { text: 'adjacent', color: colText, size: 0.2 },
+        adj_2: { text: 'adjacent', color: colText, size: 0.2 },
+        adj_3: { text: 'adjacent', color: colText, size: 0.2 },
+        adj_4: { text: 'adjacent', color: colText, size: 0.2 },
+        hyp_1: { text: 'hypotenuse', color: colText, size: 0.2 },
+        hyp_2: { text: 'hypotenuse', color: colText, size: 0.2 },
+        hyp_3: { text: 'hypotenuse', color: colText, size: 0.2 },
+        hyp_4: { text: 'hypotenuse', color: colText, size: 0.2 },
         theta1: { text: '\u03b8', color: colTheta },
         theta2: { text: '\u03b8', color: colTheta },
         theta3: { text: '\u03b8', color: colTheta },
@@ -131,10 +131,7 @@ function makeEquation() {
         xyOnOneStk: lin([frac('y', 'v7', s('_1_1', 1), 0.03, 0.03, 0.1), frac('x', 'v8', s('_1_2', 2), 0.03, 0.03, 0.1)]),
         sinOnOne: frac('sinTheta', 'v7', '_1_1', 0.03, 0.03, 0.3),
         sinOnOneStk: frac('sinTheta', 'v7', s('_1_1', 1), 0.03, 0.03, 0.3),
-        // sin: lin(['sinTheta']),
         xy: lin(['y', 'x']),
-        // trig: lin(['sinTheta', 'cosTheta', 'tanTheta', 'cotTheta', 'secTheta', 'cscTheta']),
-        // trig: lin(['sin', 'cos', 'tan', 'cot', 'sec', 'csc']),
         final1: lin([
           ['oppHyp', '  ', 'eq1', '  ', 'sin'],
           ['oppAdj', '  ', 'eq3', '  ', 'tan'],
@@ -160,8 +157,6 @@ function makeEquation() {
         ], 0.5), 0.85),
       },
       forms: {
-        // ratios: ['c1'],
-        // trig: ['c1', 'c2', 'trig'],
         final: { scale: [['final1', cont('', 0.8), 'final2'], 1.1] },
         sinCos: ['c1_sinCos'],
         xyOnOne: ['c1_sinCos', 'c2_2', 'xyOnOne'],
@@ -211,6 +206,38 @@ function makeEquation() {
   add('eqnPulseX', () => sPulse('x', 'center', 'middle', 2));
   add('eqnPulseY', () => sPulse('y', 'center', 'middle', 2));
 
+  add('eqnPulseOpp1', () => sPulse('opp_1', 'center', 'bottom'));
+  add('eqnPulseOpp2', () => sPulse('opp_2', 'center', 'bottom'));
+  add('eqnPulseOpp3', () => sPulse('opp_3', 'center', 'top'));
+  add('eqnPulseOpp4', () => sPulse('opp_4', 'center', 'top'));
+  add('eqnPulseAdj1', () => sPulse('adj_1', 'center', 'bottom'));
+  add('eqnPulseAdj2', () => sPulse('adj_2', 'center', 'top'));
+  add('eqnPulseAdj3', () => sPulse('adj_3', 'center', 'top'));
+  add('eqnPulseAdj4', () => sPulse('adj_4', 'center', 'bottom'));
+  add('eqnPulseHyp1', () => sPulse('hyp_1', 'center', 'top'));
+  add('eqnPulseHyp2', () => sPulse('hyp_2', 'center', 'top'));
+  add('eqnPulseHyp3', () => sPulse('hyp_3', 'center', 'bottom'));
+  add('eqnPulseHyp4', () => sPulse('hyp_4', 'center', 'bottom'));
+
+  const eqnSetColor = (opp, adj, hyp) => {
+    figure.elements._eqn._opp_1.setColor(opp);
+    figure.elements._eqn._opp_2.setColor(opp);
+    figure.elements._eqn._opp_3.setColor(opp);
+    figure.elements._eqn._opp_4.setColor(opp);
+    figure.elements._eqn._adj_1.setColor(adj);
+    figure.elements._eqn._adj_2.setColor(adj);
+    figure.elements._eqn._adj_3.setColor(adj);
+    figure.elements._eqn._adj_4.setColor(adj);
+    figure.elements._eqn._hyp_1.setColor(hyp);
+    figure.elements._eqn._hyp_2.setColor(hyp);
+    figure.elements._eqn._hyp_3.setColor(hyp);
+    figure.elements._eqn._hyp_4.setColor(hyp);
+  };
+  add('eqnColGrey', () => eqnSetColor(colText, colText, colText));
+  add('eqnColHyp', () => eqnSetColor(colText, colText, colRad));
+  add('eqnColSinCos', () => eqnSetColor(colSin, colCos, colRad));
+  add('eqnColTanSec', () => eqnSetColor(colTan, colRad, colSec));
+  add('eqnColCotCsc', () => eqnSetColor(colRad, colCot, colCsc));
 
   figure.add({
     name: 'eqn2',

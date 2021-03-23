@@ -52,6 +52,7 @@ function makeSlides() {
     addReference,
     show: 'trig',
     form: 'final',
+    enterState: 'eqnColGrey',
     exec: [
       ['0:00.5', 'eqnPulseSin'],
       ['0:00.5', 'eqnPulseCos'],
@@ -66,11 +67,8 @@ function makeSlides() {
     addReference,
     form: null,
     time: '0:07',
-    enterStateCommon: () => {
-      figure.fnMap.exec('circDefault');
-      figure.fnMap.exec('circTriToCos');
-    },
-    enterState: 'circTriToCos',
+    enterStateCommon: 'circTriToCos',
+    enterState: 'eqnColGrey',
     transition: [
       { out: ['trig', 'eqn'] },
       { in: { circ: ['x', 'y', 'arc'] }, duration: 1 },
@@ -94,6 +92,7 @@ function makeSlides() {
     scenarioCommon: ['center', 'eqnCenterLeft'],
     showCommon: { circ: ['point', 'x', 'y', 'arc', 'tri', 'rightSin', 'theta', 'unitHyp'] },
     fromForm: 'sinCos',
+    enterState: 'eqnColHyp',
     show: ['circ.xSide', 'circ.ySide', 'circ.xy'],
     time: '0:19.5',
     transition: [
@@ -133,7 +132,10 @@ function makeSlides() {
   slides.push({
     addReference,
     scenarioCommon: ['circRight', 'eqnCenterLeft', 'linesCenter'],
-    enterState: 'linesSetChord',
+    enterState: () => {
+      figure.fnMap.exec('linesSetChord');
+      figure.fnMap.exec('eqnColHyp');
+    },
     time: '0:38.5',
     transition: [
       { out: ['eqn', 'circ.xSide', 'circ.ySide'] },
@@ -199,7 +201,10 @@ function makeSlides() {
     addReference,
     scenarioCommon: ['circRight', 'eqnCenterLeftSingle', 'linesDefault'],
     showCommon: { circ: ['point', 'x', 'y', 'arc', 'tri', 'rightSin', 'theta', 'unitHyp', 'sinTheta'] },
-    enterState: 'linesSetChord',
+    enterState: () => {
+      figure.fnMap.exec('linesSetChord');
+      figure.fnMap.exec('eqnColSinCos');
+    },
     fromForm: 'oppHyp',
     transition: [
       { out: { lines: ['circle', 'dullChord', 'halfChord', 'jya', 'sine'] } },
@@ -225,6 +230,7 @@ function makeSlides() {
     addReference,
     showCommon: { circ: ['point', 'x', 'y', 'arc', 'tri', 'rightSin', 'theta', 'unitHyp', 'sinTheta', 'thetaCompSin'] },
     fromForm: { eqn: 'sin', eqn2: 'sinComp' },
+    enterState: 'eqnColSinCos',
     transition: [
       [
         { pulse: 'circ.sin.label', xAlign: 'left' },
@@ -267,6 +273,7 @@ function makeSlides() {
     time: '1:48.5',
     showCommon: { circ: ['point', 'x', 'y', 'arc', 'tri', 'rightSin', 'theta', 'unitHyp', 'sinTheta', 'thetaCompSin', 'cosTheta'] },
     fromForm: { eqn: 'adjHyp', eqn2: 'cos' },
+    enterState: 'eqnColSinCos',
     transition: [
       [
         { out: 'circ.thetaCompSin' },
@@ -298,6 +305,10 @@ function makeSlides() {
     addReference,
     showCommon: { circ: ['point', 'x', 'y', 'arc', 'tri', 'rightTan', 'theta', 'unitAdj'] },
     fromForm: 'adjHyp',
+    enterState: () => {
+      figure.fnMap.exec('eqnColSinCos');
+      figure.fnMap.exec('circTriToCos');
+    },
     transition: [
       [
         { out: { circ: ['sinTheta', 'cosTheta', 'rightSin', 'unitHyp'] } },
@@ -315,10 +326,7 @@ function makeSlides() {
     time: '2:15.5',
     addReference,
     scenarioCommon: ['circRight', 'eqnCenterLeftSingle', 'linesCenter'],
-    enterStateCommon: () => {
-      figure.fnMap.exec('circDefault');
-      figure.fnMap.exec('circTriToTan');
-    },
+    enterStateCommon: 'circTriToTan',
     enterState: 'linesSetOutside',
     transition: [
       [
@@ -393,7 +401,10 @@ function makeSlides() {
     time: '2:52',
     addReference,
     scenario: ['linesDefault', 'eqnCenterLeft'],
-    enterState: 'linesSetSec',
+    enterState: () => {
+      figure.fnMap.exec('linesSetSec');
+      figure.fnMap.exec('eqnColTanSec');
+    },
     show: ['circ.tanTheta', 'circ.secTheta'],
     fromForm: 'adjDen',
     form: 'tanSec',
@@ -405,9 +416,13 @@ function makeSlides() {
     ],
     exec: [
       ['2:52.2', 'circPulseTan'],
+      ['2:52.2', 'eqnPulseOpp2'],
       ['2:53', 'circPulseUnitAdj'],
+      ['2:53', 'eqnPulseAdj2'],
       ['2:57', 'circPulseSec'],
+      ['2:57', 'eqnPulseHyp4'],
       ['2:58', 'circPulseUnitAdj'],
+      ['2:58', 'eqnPulseAdj3'],
     ],
   });
 
@@ -426,6 +441,7 @@ function makeSlides() {
     scenario: ['eqnCenterLeft'],
     showCommon: { circ: ['point', 'x', 'y', 'arc', 'tri', 'rightUnit', 'theta', 'unitOpp'] },
     fromForm: 'tanSec',
+    enterState: 'eqnColTanSec',
     transition: [
       [
         { out: { circ: ['tanTheta', 'secTheta', 'rightTan', 'unitAdj'] } },
@@ -438,13 +454,13 @@ function makeSlides() {
     form: null,
     steadyStateCommon: 'circTriToCot',
   });
+
   slides.push({
     time: '3:14.5',
     addReference,
     scenario: ['eqnCenterLeft'],
-    // showCommon: { circ: ['point', 'x', 'y', 'arc', 'tri', 'rightUnit', 'theta', 'unitOpp'] },
     fromForm: { eqn2: 'tanComp' },
-    enterState: 'circTriToCot',
+    enterStateCommon: 'circTriToCot',
     transition: [
       { pulseWidth: 'circ.unitOpp', label: { xAlign: 'left', scale: 1.5 }, line: 6 },
       { delay: 1 },
@@ -474,7 +490,6 @@ function makeSlides() {
       ],
     ],
     form: { eqn2: 'cot' },
-    steadyStateCommon: 'circTriToCot',
   });
 
   /*
@@ -492,7 +507,6 @@ function makeSlides() {
     scenario: ['eqnCenterLeft'],
     show: { circ: ['thetaCompCot', 'cotTheta'] },
     fromForm: { eqn2: 'tanComp' },
-    enterState: 'circTriToCot',
     transition: [
       { out: 'eqn2' },
       [
@@ -523,7 +537,7 @@ function makeSlides() {
     time: '3:57',
     addReference,
     scenario: ['eqnCenterLeft'],
-    enterState: 'circTriToCot',
+    enterState: 'eqnColCotCsc',
     show: ['circ.cscTheta', 'circ.cotTheta'],
     fromForm: { eqn2: 'csc', eqn: 'oppDen' },
     form: 'cotCsc',
@@ -535,9 +549,13 @@ function makeSlides() {
     ],
     exec: [
       ['3:58', 'circPulseCot'],
+      ['3:58', 'eqnPulseAdj4'],
       ['3:58.7', 'circPulseUnitOpp'],
+      ['3:58.7', 'eqnPulseOpp4'],
       ['4:01.5', 'circPulseCsc'],
+      ['4:01.5', 'eqnPulseHyp3'],
       ['4:02.2', 'circPulseUnitOpp'],
+      ['4:02.2', 'eqnPulseOpp3'],
     ],
   });
 
