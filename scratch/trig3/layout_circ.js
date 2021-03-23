@@ -149,7 +149,31 @@ function layoutCirc() {
         method: 'text',
         options: {
           text: 'Rotate',
-          position: [-2.9, -0.3],
+          position: [-2.9, -0.4],
+          font: { size: 0.2 },
+        },
+        mods: {
+          isTouchable: true,
+        },
+      },
+      {
+        name: 'lock',
+        method: 'text',
+        options: {
+          text: 'Lock',
+          position: [-2.9, 0.4],
+          font: { size: 0.2 },
+        },
+        mods: {
+          isTouchable: true,
+        },
+      },
+      {
+        name: 'lockHyp',
+        method: 'text',
+        options: {
+          text: 'Hyp Free',
+          position: [-2.9, 0.8],
           font: { size: 0.2 },
         },
         mods: {
@@ -253,10 +277,10 @@ function layoutCirc() {
   const [cos, sin] = get({ triSinCos: ['cos', 'sin'] });
   const [cot, csc] = get({ triCotCsc: ['cot', 'csc'] });
   const [tan, sec] = get({ triTanSec: ['tan', 'sec'] });
-  const [unitSinCos, thetaSinCos, rightSinCos, moveSinCos, lockSinCos] = get({ triSinCos: ['unit', 'theta', 'right', 'movePad', 'lock'] });
-  const [unitTanSec, thetaTanSec, rightTanSec, moveTanSec, lockTanSec] = get({ triTanSec: ['unit', 'theta', 'right', 'movePad', 'lock'] });
-  const [unitCotCsc, thetaCotCsc, rightCotCsc, moveCotCsc, lockCotCsc] = get({ triCotCsc: ['unit', 'theta', 'right', 'movePad', 'lock'] });
-  const [flip, rotate] = get(['flip', 'rotate']);
+  const [unitSinCos, thetaSinCos, rightSinCos, moveSinCos] = get({ triSinCos: ['unit', 'theta', 'right', 'movePad'] });
+  const [unitTanSec, thetaTanSec, rightTanSec, moveTanSec] = get({ triTanSec: ['unit', 'theta', 'right', 'movePad'] });
+  const [unitCotCsc, thetaCotCsc, rightCotCsc, moveCotCsc] = get({ triCotCsc: ['unit', 'theta', 'right', 'movePad'] });
+  const [flip, rotate, lock, lockHyp] = get(['flip', 'rotate', 'lock', 'lockHyp']);
  
   const setRightAng = (element, test, position, startAngle) => {
     if (element.isShown) {
@@ -271,6 +295,7 @@ function layoutCirc() {
 
   const setCurrentLockPosition = (triElement, rightElement, compElement) => {
     let element = rightElement;
+    triElement.customState.angle = triElement._theta.angle;
     if (triElement.customState.lock === 'theta') {
       return;
     }
@@ -281,6 +306,11 @@ function layoutCirc() {
       = triElement.pointFromSpaceToSpace(element.getP2(), 'draw', 'local');
   };
   const offsetForLock = (triElement, rightElement, compElement) => {
+    if (triElement.customState.lockSide === 'hyp') {
+      const r = triElement.transform.r();
+      const delta = triElement._theta.angle - triElement.customState.angle;
+      triElement.transform.updateRotation(r + delta);
+    }
     let element = rightElement;
     if (triElement.customState.lock === 'theta') {
       return;
@@ -430,49 +460,25 @@ function layoutCirc() {
   rotator.subscriptions.add('setTransform', 'updateCircle');
   // rotatorFull.subscriptions.add('setTransform', 'updateCircle');
   // symRot.subscriptions.add('setTransform', 'updateCircle');
-  const updateRotation = () => {
-    if (!triCotCsc.isShown) {
-      return;
-    }
-    const r = triCotCsc.getRotation();
-    // console.log(triCotCsc.getRotation());
-    if (Math.abs(triCotCsc.getRotation()) < 0.001) {
-    //   cot.label.location = ySign > 0 ? 'top' : 'bottom';
-    // } else {
-      cot.label.location = 'positive';
-      csc.label.location = 'positive';
-    }
-    triCotCsc._cot.updateLabel(r);
-    triCotCsc._csc.updateLabel(r);
-    triCotCsc._unit.updateLabel(r);
-  };
-  moveSinCos.move.element = triSinCos;
-  moveTanSec.move.element = triTanSec;
-  moveCotCsc.move.element = triCotCsc;
-  moveSinCos.customState.lock = 'theta';
-  moveTanSec.customState.lock = 'theta';
-  moveCotCsc.customState.lock = 'theta';
-  moveSinCos.onClick = () => {
-    moveSinCos.setOpacity(1);
-    moveTanSec.setOpacity(0);
-    moveCotCsc.setOpacity(0);
-    circle.customState.selected = 'triSinCos';
-  };
-  moveTanSec.onClick = () => {
-    circle.customState.selected = 'triTanSec';
-    moveSinCos.setOpacity(0);
-    moveTanSec.setOpacity(1);
-    moveCotCsc.setOpacity(0);
-  };
-  moveCotCsc.onClick = () => {
-    circle.customState.selected = 'triCotCsc';
-    moveSinCos.setOpacity(0);
-    moveTanSec.setOpacity(0);
-    moveCotCsc.setOpacity(1);
-  };
-  const lock = (element, angle) => {
-    element.customState.lock = angle;
-  };
+  // const updateRotation = () => {
+  //   if (!triCotCsc.isShown) {
+  //     return;
+  //   }
+  //   const r = triCotCsc.getRotation();
+  //   // console.log(triCotCsc.getRotation());
+  //   if (Math.abs(triCotCsc.getRotation()) < 0.001) {
+  //   //   cot.label.location = ySign > 0 ? 'top' : 'bottom';
+  //   // } else {
+  //     cot.label.location = 'positive';
+  //     csc.label.location = 'positive';
+  //   }
+  //   triCotCsc._cot.updateLabel(r);
+  //   triCotCsc._csc.updateLabel(r);
+  //   triCotCsc._unit.updateLabel(r);
+  // };
+  // const lock = (element, angle) => {
+  //   element.customState.lock = angle;
+  // };
   triSinCos.setScale([-1, 1]);
 
   const updateLabels = (triElement, el1, el2, el3, el4) => {
@@ -499,8 +505,8 @@ function layoutCirc() {
     updateLabels(triCotCsc, cot, csc, unitCotCsc, thetaCotCsc);
   });
 
-  figure.fnMap.global.add('updateRotation', () => updateRotation());
-  triCotCsc.fnMap.add('updateRotation', () => updateRotation());
+  // figure.fnMap.global.add('updateRotation', () => updateRotation());
+  // triCotCsc.fnMap.add('updateRotation', () => updateRotation());
   triCotCsc.subscriptions.add('setTransform', 'updateRotation');
   triCotCsc.subscriptions.add('setState', 'updateRotation');
 
@@ -523,4 +529,63 @@ function layoutCirc() {
       rotate.custom.updateText({ text: 'Moving' });
     }
   };
+
+  const updateLockText = (triElement) => {
+    lock.custom.updateText({ text: `Lock: ${triElement.customState.lock}` });
+    lockHyp.custom.updateText({ text: `Lock Side: ${triElement.customState.lockSide}` });
+  };
+
+  lock.onClick = () => {
+    const triElement = circle.getElement(circle.customState.selected);
+    if (triElement.customState.lock === 'theta') {
+      triElement.customState.lock = 'right';
+    } else if (triElement.customState.lock === 'right') {
+      triElement.customState.lock = 'comp';
+    } else {
+      triElement.customState.lock = 'theta';
+    }
+    updateLockText(triElement);
+  };
+
+  lockHyp.onClick = () => {
+    const triElement = circle.getElement(circle.customState.selected);
+    if (triElement.customState.lockSide === 'hyp') {
+      triElement.customState.lockSide = '';
+    } else {
+      triElement.customState.lockSide = 'hyp';
+    }
+    updateLockText(triElement);
+  }
+
+  moveSinCos.move.element = triSinCos;
+  moveTanSec.move.element = triTanSec;
+  moveCotCsc.move.element = triCotCsc;
+  moveSinCos.customState.lock = 'theta';
+  moveTanSec.customState.lock = 'theta';
+  moveCotCsc.customState.lock = 'theta';
+  moveSinCos.onClick = () => {
+    moveSinCos.setOpacity(1);
+    moveTanSec.setOpacity(0);
+    moveCotCsc.setOpacity(0);
+    circle.customState.selected = 'triSinCos';
+    updateLockText(triSinCos);
+  };
+  moveTanSec.onClick = () => {
+    circle.customState.selected = 'triTanSec';
+    moveSinCos.setOpacity(0);
+    moveTanSec.setOpacity(1);
+    moveCotCsc.setOpacity(0);
+    updateLockText(triTanSec);
+  };
+  moveCotCsc.onClick = () => {
+    circle.customState.selected = 'triCotCsc';
+    moveSinCos.setOpacity(0);
+    moveTanSec.setOpacity(0);
+    moveCotCsc.setOpacity(1);
+    updateLockText(triCotCsc);
+  };
+
+  // triSinCos.subscriptions.add('setTransform', () => {
+  //   triSinCos
+  // })
 }
