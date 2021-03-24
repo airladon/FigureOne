@@ -3333,6 +3333,8 @@ class FigureElement {
         this.parent.show();
       }
     }
+    this.subscriptions.publish('show');
+    this.subscriptions.publish('visibility');
     this.animateNextFrame();
   }
 
@@ -3437,6 +3439,8 @@ class FigureElement {
    */
   hide(): void {
     this.isShown = false;
+    this.subscriptions.publish('hide');
+    this.subscriptions.publish('visibility');
     this.animateNextFrame();
   }
 

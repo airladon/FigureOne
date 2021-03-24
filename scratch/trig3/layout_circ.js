@@ -1,12 +1,19 @@
-/* eslint-disable camelcase, no-restricted-globals */
+/* eslint-disable camelcase, no-restricted-globals, no-param-reassign */
 /* globals figure, colTheta, colCot, colTan, colSin, colCos, colSec, colCsc,
    colGrey, Fig, thin, thick, colText */
 
+// eslint-disable-next-line
 function layoutCirc() {
-  const radius = 1.5;
-  const defaultAngle = 0.9;
-  const defaultSin = radius * Math.sin(defaultAngle);
-  const defaultCos = radius * Math.cos(defaultAngle);
+  const radius = 1.1;
+  const defaultAngle = 35 / 180 * Math.PI;
+  const dCos = radius * Math.cos(defaultAngle);
+  const dSin = radius * Math.sin(defaultAngle);
+  const dTan = radius * Math.tan(defaultAngle);
+  const dCot = radius / Math.tan(defaultAngle);
+  const dC1 = Fig.tools.g2.getTriangleCenter([0, 0], [dCos, 0], [dCos, dSin]);
+  const dC2 = Fig.tools.g2.getTriangleCenter([0, 0], [radius, 0], [radius, dTan]);
+  const dC3 = Fig.tools.g2.getTriangleCenter([0, 0], [dCot, 0], [dCot, radius]);
+
   const point = (pointX, pointY) => new Fig.Point(pointX, pointY);
 
   const line = (name, color, width = thick, p1 = [0, 0], length = 1, ang = 0, dash = []) => ({
@@ -15,10 +22,9 @@ function layoutCirc() {
     options: {
       p1, length, angle: ang, width, color, dash,
     },
-    // mods: { dimColor: colText },
   });
 
-  const lineWithLabel = (name, color, text, width = thick, p1, length, ang) => ({
+  const lineWithLabel = (name, color, text, width = thick, p1, length, ang, location = 'negative') => ({
     name,
     method: 'collections.line',
     options: {
@@ -28,10 +34,8 @@ function layoutCirc() {
       length,
       angle: ang,
       label: {
-        text: {
-          textFont: { style: 'normal' },
-          forms: { 0: text },
-        },
+        text: { textFont: { style: 'normal' }, forms: { 0: text } },
+        location,
         orientation: 'horizontal',
         update: true,
       },
@@ -61,44 +65,37 @@ function layoutCirc() {
   });
 
   function angle(
-    name, text, rad = 0.2, curvePosition = 0.5, position = [0, 0], startAngle = 0, angleSize = 0,
+    name, text, rad = 0.2, curvePosition = 0.5,
+    position = [0, 0], startAngle = 0, angleSize = 0, sides = null,
   ) {
     return {
       name,
       method: 'collections.angle',
       options: {
         color: colTheta,
-        curve: {
-          width: 0.01,
-          radius: rad,
-          sides: 400,
-        },
+        curve: { width: 0.01, radius: rad, sides: 400 },
         startAngle,
         angle: angleSize,
-        label: {
-          text,
-          offset: 0.01,
-          curvePosition,
-        },
+        label: { text, offset: 0.01, curvePosition },
+        sides,
         position,
       },
     };
   }
-  const rot = (name) => ({
+  const rot = name => ({
     name,
     method: 'primitives.polygon',
     options: {
-      radius: 0.3,
-      color: [0, 1, 0, 0.4],
+      radius: 0.2,
+      color: [0, 1, 0, 0],
       sides: 8,
     },
     mods: {
       isMovable: true,
       move: { type: 'rotation' },
-      // transform: new Fig.Transform().translate(0, 0).rotate(0),
     },
   });
-  const tri = (name, elements, position, rotation, trans1 = {}, trans2 = {}) => ({
+  const tri = (name, elements, position, rotation, center, x, y) => ({
     name,
     method: 'collection',
     elements: [
@@ -110,7 +107,7 @@ function layoutCirc() {
         method: 'primitives.generic',
         options: {
           points: [[0, 0], [0, 1], [1, 1]],
-          color: [1, 0.5, 1, 0.3],
+          color: [0, 0, 1, 0.3],
           close: true,
         },
         mods: {
@@ -122,89 +119,64 @@ function layoutCirc() {
       rot('rotRight'),
     ],
     mods: {
-      scenarios: {
-        default: { scale: [1, 1], position: [0, 0], rotation: 0 },
-        split: { scale: [1, 1], position, rotation },
-        trans1,
-        trans2,
+      // scenarios: {
+      //   default: { scale: [1, 1], position, rotation: 0 },
+      // },
+      customState: {
+        lock: 'theta', lockSide: '', center, x, y,
       },
-      customState: { lock: 'theta' },
-      // isMovable: true,
     },
   });
 
+  const button = (name, position, text) => ({
+    name,
+    method: 'collections.rectangle',
+    options: {
+      label: { text, font: { size: 0.1 } },
+      position,
+      width: 0.7,
+      height: 0.3,
+      line: { width: thin },
+      corner: { radius: 0.02, sides: 3 },
+      color: colText,
+    },
+    mods: { isTouchable: true },
+  });
 
-  const [circle] = figure.add({
+
+  const [circ] = figure.add({
     name: 'circ',
     method: 'collection',
     elements: [
-      // Light Lines
       {
-        name: 'flip',
-        method: 'text',
-        options: {
-          text: 'Flip',
-          position: [-2.9, 0],
-          font: { size: 0.2 },
-        },
-        mods: {
-          isTouchable: true,
-        },
-      },
-      {
-        name: 'rotate',
-        method: 'text',
-        options: {
-          text: 'Rotate',
-          position: [-2.9, -0.4],
-          font: { size: 0.2 },
-        },
-        mods: {
-          isTouchable: true,
-        },
-      },
-      {
-        name: 'lock',
-        method: 'text',
-        options: {
-          text: 'Lock',
-          position: [-2.9, 0.4],
-          font: { size: 0.2 },
-        },
-        mods: {
-          isTouchable: true,
-        },
-      },
-      {
-        name: 'lockHyp',
-        method: 'text',
-        options: {
-          text: 'Hyp Free',
-          position: [-2.9, 0.8],
-          font: { size: 0.2 },
-        },
-        mods: {
-          isTouchable: true,
-        },
-      },
-      arc('circle', colGrey, thin),
-      line('x', colGrey, thin, [-radius, 0], radius * 2, 0),
-      line('y', colGrey, thin, [0, -radius], radius * 2, Math.PI / 2),
-      lineWithLabel('radius', colGrey, '1', thin),
-      lineWithLabel('radiusAlt', colGrey, '1', thin),
-      lineWithLabel('xRadius', colGrey, '1', thin, [0, 0], radius, 0),
-      tri(
-        'triTanSec',
-        [
-          lineWithLabel('unit', colText, '1', thick, [radius + thick / 2, 0], radius + thick * 0.7, Math.PI),
-          lineWithLabel('tan', colTan, 'tan'),
-          lineWithLabel('sec', colSec, 'sec'),
+        name: 'circle',
+        method: 'collection',
+        elements: [
+          arc('circle', colGrey, thin),
+          line('x', colGrey, thin, [-radius, 0], radius * 2, 0),
+          line('y', colGrey, thin, [0, -radius], radius * 2, Math.PI / 2),
+          {
+            name: 'movePad',
+            method: 'primitives.polygon',
+            options: {
+              sides: 15,
+              radius: radius + 0.03,
+              color: [0, 0, 0, 0],
+            },
+            mods: {
+              isMovable: true,
+            },
+          },
         ],
-        [0, 0],
-        0,
-        { scale: [1, -1], rotation: 0, position: [0, 0] },
-        { scale: [1, -1], rotation: defaultAngle, position: [0, 0] },
-      ),
+        mods: {
+          scenarios: {
+            reset: { position: [0, 0] },
+            preset1: { position: [0, 0] },
+            preset2: { position: [0, 0] },
+          },
+        },
+      },
+      angle('theta', '0', 0.3, 0.5, [-2.8, -1.3], 0, defaultAngle, { length: 0.33, width: thick }),
       tri(
         'triCotCsc',
         [
@@ -212,49 +184,64 @@ function layoutCirc() {
           lineWithLabel('csc', colCsc, 'csc'),
           lineWithLabel('cot', colCot, 'cot'),
         ],
-        [0.1, radius - 0.2 + 0.5 + 0.2],
+        [1.9, -0.22],
         Math.PI,
-        { scale: [-1, 1], rotation: 0, position: [0, 0] },
-        { scale: [-1, 1], rotation: -(Math.PI / 2 - defaultAngle), position: [0, 0] },
+        dC3, dCot,
+        radius,
+      ),
+      tri(
+        'triTanSec',
+        [
+          lineWithLabel('unit', colText, '1', thick, [radius + thick / 2, 0], radius + thick * 0.7, Math.PI),
+          lineWithLabel('tan', colTan, 'tan'),
+          lineWithLabel('sec', colSec, 'sec'),
+        ],
+        [0.1, -0.31],
+        0,
+        dC2, radius, dTan,
       ),
       tri('triSinCos', [
         lineWithLabel('unit', colText, '1', thick, [0, 0], radius, defaultAngle),
         lineWithLabel('sin', colSin, 'sin'),
         lineWithLabel('cos', colCos, 'cos'),
-      ], [-0.3 - 1.6, 0.8 + 0.2], 0),
+      ], [-1.5, -0.35], 0, dC1, dCos, dSin),
+      // button('flip', [1.7, -1.25], 'Flip'),
+      // button('lock', [0.9, -1.25], 'Lock: Theta'),
+      // button('lockHyp', [0.1, -1.25], 'Lock Hyp: No'),
+      // button('reset', [2.5, -1.25], 'Reset'),
+      // button('circleButton', [-0.7, -1.25], 'Circle: No'),
+      button('flip', [-2.6, 1.2], 'Flip'),
+      button('lock', [-2.6, 0.8], 'Lock: Theta'),
+      button('lockHyp', [-2.6, 0.4], 'Lock Hyp: No'),
+      button('circleButton', [1.8, -1.2], 'Circle: No'),
+      button('reset', [2.6, -1.2], 'Reset'),
       {
         name: 'rotator',
         method: 'collections.line',
         options: {
-          length: radius,
-          width: 0.1,
-          color: [0, 0, 0, 0.5],
+          length: radius * 0.5,
+          width: 0.5,
+          color: [0, 0, 0, 0],
+          p1: [-2.8, -1.3],
         },
         mods: {
           dimColor: [0, 0, 0, 0],
-          move: { type: 'rotation' },
           isMovable: true,
-          touchBorder: [0, 0.1, 1.5, 0.1],
+          move: { type: 'rotation', bounds: { rotation: { min: 0.0001, max: Math.PI / 2 * 0.999 } } },
+          scenarios: {
+            default: { rotation: defaultAngle },
+          },
+          // touchBorder: [0, 0, radius , 0],
         },
       },
     ],
     mods: {
       scenarios: {
-        title: { scale: 0.9, position: [-radius / 2, -1.2] },
-        circQ1: { scale: 1, position: [-0.4, -1] },
-        circQ1Values: { scale: 1, position: [-0.2, -1] },
-        split: { scale: 1, position: [1.1, -1] },
-        centerSplit: { scale: 1, position: [0.4, -1] },
-        centerRightSplit: { scale: 1, position: [0.7, -1] },
-        tanSecTri: { scale: 1, position: [0.5, -1] },
-        circFull: { scale: 0.7, position: [0.7, 0] },
-        nameDefs: { scale: 1, position: [0.4, -1] },
-        fromCirc: { scale: 1.04 / 1.5, position: [-1.5, 0] },
       },
     },
   });
-  const get = list => circle.getElements(list);
-  const [rotator] = get(['rotator']);
+  const get = list => circ.getElements(list);
+  const [rotator, theta] = get(['rotator', 'theta']);
   const [triCotCsc] = get(['triCotCsc']);
   const [triSinCos] = get(['triSinCos']);
   const [triTanSec] = get(['triTanSec']);
@@ -264,8 +251,15 @@ function layoutCirc() {
   const [unitSinCos, thetaSinCos, rightSinCos, moveSinCos, rotThetaSinCos, rotCompSinCos, rotRightSinCos] = get({ triSinCos: ['unit', 'theta', 'right', 'movePad', 'rotTheta', 'rotComp', 'rotRight'] });
   const [unitTanSec, thetaTanSec, rightTanSec, moveTanSec, rotThetaTanSec, rotCompTanSec, rotRightTanSec] = get({ triTanSec: ['unit', 'theta', 'right', 'movePad', 'rotTheta', 'rotComp', 'rotRight'] });
   const [unitCotCsc, thetaCotCsc, rightCotCsc, moveCotCsc, rotThetaCotCsc, rotCompCotCsc, rotRightCotCsc] = get({ triCotCsc: ['unit', 'theta', 'right', 'movePad', 'rotTheta', 'rotComp', 'rotRight'] });
-  const [flip, rotate, lock, lockHyp] = get(['flip', 'rotate', 'lock', 'lockHyp']);
- 
+  const [flip, lock, lockHyp, reset, circleButton] = get(['flip', 'lock', 'lockHyp', 'reset', 'circleButton']);
+  const [circle] = get(['circle']);
+
+  sec.label.location = 'positive';
+  csc.label.location = 'positive';
+  unitSinCos.label.location = 'positive';
+
+  theta.setLabelToRealAngle();
+
   const setRightAng = (element, test, position, startAngle) => {
     if (element.isShown) {
       if (test) {
@@ -278,7 +272,6 @@ function layoutCirc() {
   };
 
   const setCurrentLockPosition = (triElement, rightPos, compPos, thetaPos) => {
-    // let element = rightElement;
     triElement.customState.angle = triElement._theta.angle;
     let pos = rightPos;
     if (triElement.customState.lock === 'theta') {
@@ -291,13 +284,14 @@ function layoutCirc() {
   };
   const offsetForLock = (triElement, rightPos, compPos, thetaPos) => {
     if (triElement.customState.lockSide === 'hyp') {
+      const s = triElement.transform.s().x;
       const r = triElement.transform.r();
       const delta = triElement._theta.angle - triElement.customState.angle;
-      triElement.transform.updateRotation(r + delta);
+      triElement.transform.updateRotation(r - s * delta);
     }
     let pos = rightPos;
     if (triElement.customState.lock === 'theta') {
-      pos = thetaPos
+      pos = thetaPos;
     } else if (triElement.customState.lock === 'comp') {
       pos = compPos;
     }
@@ -310,10 +304,6 @@ function layoutCirc() {
     const r = rIn > Math.PI / 4 ? rIn - 0.00001 : rIn + 0.00001;
     const cosR = Math.cos(r);
     const sinR = Math.sin(r);
-    const x = radius * cosR;
-    const y = radius * sinR;
-    const xSign = x === 0 ? 1 : x / Math.abs(x);
-    const ySign = y === 0 ? 1 : y / Math.abs(y);
     const cosVal = Math.abs(radius * cosR);
     const sinVal = Math.abs(radius * sinR);
     const tanVal = Math.abs(radius * sinR / cosR);
@@ -324,14 +314,10 @@ function layoutCirc() {
     const c1 = Fig.tools.g2.getTriangleCenter([0, 0], [cosVal, 0], [cosVal, sinVal]);
     const c2 = Fig.tools.g2.getTriangleCenter([0, 0], [radius, 0], [radius, tanVal]);
     const c3 = Fig.tools.g2.getTriangleCenter([0, 0], [cotVal, 0], [cotVal, radius]);
-    // let quad = 1;
-    // if (xSign < 0 && ySign > 0) {
-    //   quad = 2;
-    // } else if (xSign < 0) {
-    //   quad = 3;
-    // } else if (ySign < 0) {
-    //   quad = 4;
-    // }
+    if (theta.isShown) {
+      theta.setAngle({ angle: Math.acos(Math.abs(cosR)) });
+    }
+
     setCurrentLockPosition(triSinCos, cos.getP2(), unitSinCos.getP2(), cos.getP1());
     setCurrentLockPosition(triTanSec, unitTanSec.getP2(), sec.getP2(), sec.getP1());
     setCurrentLockPosition(triCotCsc, cot.getP2(), csc.getP2(), cot.getP1());
@@ -345,67 +331,32 @@ function layoutCirc() {
     if (thetaTanSec.isShown) {
       thetaTanSec.setAngle({ angle: Math.acos(Math.abs(cosR)), position: [-c2.x, -c2.y] });
     }
-    if (sin.isShown) {
-      sin.setEndPoints(point(cosVal, 0).sub(c1), point(cosVal, sinVal).sub(c1));
-    }
-    if (cos.isShown) {
-      cos.setEndPoints(point(0, 0).sub(c1), point(cosVal, 0).sub(c1));
-    }
-    if (unitSinCos.isShown) {
-      unitSinCos.setEndPoints(
-        point(0, 0).sub(c1), point(cosVal, sinVal).sub(c1),
-      );
-    }
-    setRightAng(rightSinCos, true, point(cosVal, 0).sub(c1), Math.PI / 2);
-    if (rotThetaSinCos.isShown) {
-      rotThetaSinCos.setPosition(-c1.x, -c1.y);
-    }
-    if (rotCompSinCos.isShown) {
-      rotCompSinCos.setPosition(cosVal - c1.x, sinVal - c1.y);
-    }
-    if (rotRightSinCos.isShown) {
-      rotRightSinCos.setPosition(cosVal - c1.x, -c1.y);
-    }
 
-    if (tan.isShown) {
-      tan.setEndPoints(point(radius, 0).sub(c2), point(radius, tanVal).sub(c2));
-    }
-    if (sec.isShown) {
-      sec.setEndPoints(point(0, 0).sub(c2), point(radius, tanVal).sub(c2));
-    }
-    if (unitTanSec.isShown) {
-      unitTanSec.setEndPoints(point(0, 0).sub(c2), point(radius, 0).sub(c2));
-    }
-    setRightAng(rightTanSec, true, point(radius, 0).sub(c2), Math.PI / 2);
-    if (rotThetaTanSec.isShown) {
-      rotThetaTanSec.setPosition(-c2.x, -c2.y);
-    }
-    if (rotCompTanSec.isShown) {
-      rotCompTanSec.setPosition(radius - c2.x, tanVal - c2.y);
-    }
-    if (rotRightTanSec.isShown) {
-      rotRightTanSec.setPosition(radius - c2.x, -c2.y);
-    }
+    sin.setEndPoints(point(cosVal, 0).sub(c1), point(cosVal, sinVal).sub(c1));
+    cos.setEndPoints(point(0, 0).sub(c1), point(cosVal, 0).sub(c1));
+    unitSinCos.setEndPoints(point(0, 0).sub(c1), point(cosVal, sinVal).sub(c1));
+    setRightAng(
+      rightSinCos, r > 0.2 && r < Math.PI / 2 - 0.2, point(cosVal, 0).sub(c1), Math.PI / 2,
+    );
+    rotThetaSinCos.setPosition(-c1.x, -c1.y);
+    rotCompSinCos.setPosition(cosVal - c1.x, sinVal - c1.y);
+    rotRightSinCos.setPosition(cosVal - c1.x, -c1.y);
 
-    if (cot.isShown) {
-      cot.setEndPoints(point(0, 0).sub(c3), point(cotVal, 0).sub(c3));
-    }
-    if (csc.isShown) {
-      csc.setEndPoints(point(0, 0).sub(c3), point(cotVal, radius).sub(c3));
-    }
-    if (unitCotCsc.isShown) {
-      unitCotCsc.setEndPoints(point(cotVal, 0).sub(c3), point(cotVal, radius).sub(c3));
-    }
-    setRightAng(rightCotCsc, true, point(cotVal, 0).sub(c3), Math.PI / 2);
-    if (rotThetaCotCsc.isShown) {
-      rotThetaCotCsc.setPosition(-c3.x, -c3.y);
-    }
-    if (rotCompCotCsc.isShown) {
-      rotCompCotCsc.setPosition(cotVal - c3.x, radius - c3.y);
-    }
-    if (rotRightCotCsc.isShown) {
-      rotRightCotCsc.setPosition(cotVal - c3.x, -c3.y);
-    }
+    tan.setEndPoints(point(radius, 0).sub(c2), point(radius, tanVal).sub(c2));
+    sec.setEndPoints(point(0, 0).sub(c2), point(radius, tanVal).sub(c2));
+    unitTanSec.setEndPoints(point(0, 0).sub(c2), point(radius, 0).sub(c2));
+    setRightAng(rightTanSec, r > 0.2, point(radius, 0).sub(c2), Math.PI / 2);
+    rotThetaTanSec.setPosition(-c2.x, -c2.y);
+    rotCompTanSec.setPosition(radius - c2.x, tanVal - c2.y);
+    rotRightTanSec.setPosition(radius - c2.x, -c2.y);
+
+    cot.setEndPoints(point(0, 0).sub(c3), point(cotVal, 0).sub(c3));
+    csc.setEndPoints(point(0, 0).sub(c3), point(cotVal, radius).sub(c3));
+    unitCotCsc.setEndPoints(point(cotVal, 0).sub(c3), point(cotVal, radius).sub(c3));
+    setRightAng(rightCotCsc, r < Math.PI / 2 - 0.2, point(cotVal, 0).sub(c3), Math.PI / 2);
+    rotThetaCotCsc.setPosition(-c3.x, -c3.y);
+    rotCompCotCsc.setPosition(cotVal - c3.x, radius - c3.y);
+    rotRightCotCsc.setPosition(cotVal - c3.x, -c3.y);
 
     moveSinCos.custom.updatePoints({
       points: [[0, 0], [cosVal, 0], [cosVal, sinVal]],
@@ -436,18 +387,6 @@ function layoutCirc() {
   });
   rotator.subscriptions.add('setState', 'updateCircle');
 
-  const addPulseFn = (name, element, xAlign, yAlign) => {
-    figure.fnMap.global.add(name, () => {
-      element.pulse({ xAlign, yAlign, duration: 1.5 });
-      // console.log(name, element)
-    });
-  };
-  const addPulseWidthFn = (name, element) => {
-    figure.fnMap.global.add(name, () => {
-      element.pulseWidth({ line: 8, duration: 1.5, label: 1 });
-      // console.log(name, element)
-    });
-  };
   const add = (name, fn) => figure.fnMap.global.add(name, fn);
 
   add('circToRot', () => {
@@ -455,37 +394,9 @@ function layoutCirc() {
       rotator.animations.new()
         .rotation({ target: 0.9, duration: 1 })
         .start();
-      return;
     }
-    // if (rotatorFull.isShown) {
-    //   rotatorFull.animations.new()
-    //     .rotation({ target: 0.9, duration: 1 })
-    //     .start();
-    // }
   });
   rotator.subscriptions.add('setTransform', 'updateCircle');
-  // rotatorFull.subscriptions.add('setTransform', 'updateCircle');
-  // symRot.subscriptions.add('setTransform', 'updateCircle');
-  // const updateRotation = () => {
-  //   if (!triCotCsc.isShown) {
-  //     return;
-  //   }
-  //   const r = triCotCsc.getRotation();
-  //   // console.log(triCotCsc.getRotation());
-  //   if (Math.abs(triCotCsc.getRotation()) < 0.001) {
-  //   //   cot.label.location = ySign > 0 ? 'top' : 'bottom';
-  //   // } else {
-  //     cot.label.location = 'positive';
-  //     csc.label.location = 'positive';
-  //   }
-  //   triCotCsc._cot.updateLabel(r);
-  //   triCotCsc._csc.updateLabel(r);
-  //   triCotCsc._unit.updateLabel(r);
-  // };
-  // const lock = (element, angle) => {
-  //   element.customState.lock = angle;
-  // };
-  triSinCos.setScale([-1, 1]);
 
   const updateLabels = (triElement, el1, el2, el3, el4) => {
     const s = triElement.getScale();
@@ -496,10 +407,14 @@ function layoutCirc() {
     el1.updateLabel(r);
     el2._label.setScale(labelSx, labelSy);
     el2.updateLabel(r);
-    el3._label.setScale(labelSx, labelSy);
-    el3.updateLabel(r);
-    el4._label.setScale(labelSx, labelSy);
-    el4.updateLabel(r);
+    if (el3.isShown) {
+      el3._label.setScale(labelSx, labelSy);
+      el3.updateLabel(r);
+    }
+    if (el4.isShown) {
+      el4._label.setScale(labelSx, labelSy);
+      el4.updateLabel(r);
+    }
   };
   triSinCos.subscriptions.add('setTransform', () => {
     updateLabels(triSinCos, sin, cos, unitSinCos, thetaSinCos);
@@ -511,38 +426,25 @@ function layoutCirc() {
     updateLabels(triCotCsc, cot, csc, unitCotCsc, thetaCotCsc);
   });
 
-  // figure.fnMap.global.add('updateRotation', () => updateRotation());
-  // triCotCsc.fnMap.add('updateRotation', () => updateRotation());
   triCotCsc.subscriptions.add('setTransform', 'updateRotation');
   triCotCsc.subscriptions.add('setState', 'updateRotation');
 
   rotator.setRotation(0.5);
 
   flip.onClick = () => {
-    const triElement = circle.getElement(circle.customState.selected);
+    const triElement = circ.getElement(circ.customState.selected);
     const target = [triElement.getScale().x < 0 ? 1 : -1, 1];
     triElement.stop('freeze');
     triElement.animations.new().scale({ target, duration: 2 }).start();
   };
 
-  rotate.onClick = () => {
-    const movePad = circle.getElement(circle.customState.selected).getElement('movePad');
-    if (movePad.move.type === 'translation') {
-      movePad.move.type = 'rotation';
-      rotate.custom.updateText({ text: 'Rotating' });
-    } else {
-      movePad.move.type = 'translation';
-      rotate.custom.updateText({ text: 'Moving' });
-    }
-  };
-
   const updateLockText = (triElement) => {
-    lock.custom.updateText({ text: `Lock: ${triElement.customState.lock}` });
-    lockHyp.custom.updateText({ text: `Lock Side: ${triElement.customState.lockSide}` });
+    lock.setLabel(`Lock: ${triElement.customState.lock}`);
+    lockHyp.setLabel(`Lock Hyp: ${triElement.customState.lockSide === 'hyp' ? 'Yes' : 'No'}`);
   };
 
   lock.onClick = () => {
-    const triElement = circle.getElement(circle.customState.selected);
+    const triElement = circ.getElement(circ.customState.selected);
     if (triElement.customState.lock === 'theta') {
       triElement.customState.lock = 'right';
     } else if (triElement.customState.lock === 'right') {
@@ -554,53 +456,206 @@ function layoutCirc() {
   };
 
   lockHyp.onClick = () => {
-    const triElement = circle.getElement(circle.customState.selected);
+    const triElement = circ.getElement(circ.customState.selected);
     if (triElement.customState.lockSide === 'hyp') {
       triElement.customState.lockSide = '';
     } else {
       triElement.customState.lockSide = 'hyp';
     }
     updateLockText(triElement);
-  }
-
-  moveSinCos.move.element = triSinCos;
-  moveTanSec.move.element = triTanSec;
-  moveCotCsc.move.element = triCotCsc;
-  rotThetaSinCos.move.element = triSinCos;
-  rotThetaTanSec.move.element = triTanSec;
-  rotThetaCotCsc.move.element = triCotCsc;
-  rotRightSinCos.move.element = triSinCos;
-  rotRightTanSec.move.element = triTanSec;
-  rotRightCotCsc.move.element = triCotCsc;
-  rotCompSinCos.move.element = triSinCos;
-  rotCompTanSec.move.element = triTanSec;
-  rotCompCotCsc.move.element = triCotCsc;
-  moveSinCos.customState.lock = 'theta';
-  moveTanSec.customState.lock = 'theta';
-  moveCotCsc.customState.lock = 'theta';
-  moveSinCos.onClick = () => {
-    moveSinCos.setOpacity(1);
-    moveTanSec.setOpacity(0);
-    moveCotCsc.setOpacity(0);
-    circle.customState.selected = 'triSinCos';
-    updateLockText(triSinCos);
-  };
-  moveTanSec.onClick = () => {
-    circle.customState.selected = 'triTanSec';
-    moveSinCos.setOpacity(0);
-    moveTanSec.setOpacity(1);
-    moveCotCsc.setOpacity(0);
-    updateLockText(triTanSec);
-  };
-  moveCotCsc.onClick = () => {
-    circle.customState.selected = 'triCotCsc';
-    moveSinCos.setOpacity(0);
-    moveTanSec.setOpacity(0);
-    moveCotCsc.setOpacity(1);
-    updateLockText(triCotCsc);
   };
 
-  // triSinCos.subscriptions.add('setTransform', () => {
-  //   triSinCos
-  // })
+  // const hideCircle = () => {
+  //   circle.hide();
+  //   circleButton.setLabel('Circle: No');
+  // };
+  // const showCircle = () => {
+  //   circle.show();
+  //   circleButton.setLabel('Circle: Yes');
+  // };
+  circleButton.onClick = () => {
+    if (circle.isShown) {
+      circle.hide(); 
+    } else {
+      circle.show();
+    }
+  };
+  circle.fnMap.add('processButton', () => {
+    if (circle.isShown) {
+      circleButton.setLabel('Circle: Yes');
+    } else {
+      circleButton.setLabel('Circle: No');
+    }
+  });
+  circle.subscriptions.add('visibility', 'processButton');
+
+  reset.onClick = () => { figure.fnMap.exec('reset'); };
+
+  const selectTriangle = (triangle) => {
+    moveSinCos.setOpacity(0);
+    moveTanSec.setOpacity(0);
+    moveCotCsc.setOpacity(0);
+    if (triangle === '') {
+      lock.hide();
+      flip.hide();
+      lockHyp.hide();
+      circ.customState.selected = '';
+      return;
+    }
+    triangle._movePad.setOpacity(1);
+    circ.customState.selected = triangle.name;
+    updateLockText(triangle);
+    lock.showAll();
+    flip.showAll();
+    lockHyp.showAll();
+  };
+
+  const showAll = () => {
+    triSinCos.showAll();
+    triTanSec.showAll();
+    triCotCsc.showAll();
+  };
+
+  const setLock = (triangle, angleName, side) => {
+    if (angleName != null) {
+      triangle.customState.lock = angleName;
+    }
+    if (side != null) {
+      triangle.customState.lockSide = side;
+    }
+  };
+  const setLocks = (ang1, side1, ang2, side2, ang3, side3) => {
+    setLock(triSinCos, ang1, side1);
+    setLock(triTanSec, ang2, side2);
+    setLock(triCotCsc, ang3, side3);
+  };
+  const bindMoveElements = (triangle) => {
+    triangle._rotTheta.move.element = triangle;
+    triangle._rotRight.move.element = triangle;
+    triangle._rotComp.move.element = triangle;
+    triangle._movePad.move.element = triangle;
+    triangle._movePad.onClick = () => selectTriangle(triangle);
+    triangle._rotComp.onClick = () => selectTriangle(triangle);
+    triangle._rotRight.onClick = () => selectTriangle(triangle);
+    triangle._rotTheta.onClick = () => selectTriangle(triangle);
+  };
+  bindMoveElements(triSinCos);
+  bindMoveElements(triTanSec);
+  bindMoveElements(triCotCsc);
+
+  circle._movePad.move.element = circle;
+
+  /*
+  .########..########..########..######..########.########..######.
+  .##.....##.##.....##.##.......##....##.##..........##....##....##
+  .##.....##.##.....##.##.......##.......##..........##....##......
+  .########..########..######....######..######......##.....######.
+  .##........##...##...##.............##.##..........##..........##
+  .##........##....##..##.......##....##.##..........##....##....##
+  .##........##.....##.########..######..########....##.....######.
+  */
+  const getPosition = (triangle, p, vertex, rotation, flipFlag) => {
+    const matrix = new Fig.Transform().scale(flipFlag ? -1 : 1, 1).rotate(rotation).matrix();
+    const { center, x, y } = triangle.customState;
+    const thetaVertex = point(-center.x, -center.y);
+    const rightVertex = (thetaVertex.add(x, 0));
+    const compVertex = thetaVertex.add(x, y);
+    if (vertex === 'theta') {
+      return Fig.tools.g2.getPoint(p).sub(thetaVertex.transformBy(matrix));
+    }
+    if (vertex === 'comp') {
+      return Fig.tools.g2.getPoint(p).sub(compVertex.transformBy(matrix));
+    }
+    return Fig.tools.g2.getPoint(p).sub(rightVertex.transformBy(matrix));
+  };
+
+  const createScenario = (scenario, triangle, p, vertex, rotation, flipFlag) => {
+    triangle.scenarios[scenario] = {
+      position: getPosition(triangle, p, vertex, rotation, flipFlag),
+      scale: [flipFlag ? -1 : 1, 1],
+      rotation,
+    };
+  };
+
+  createScenario('preset1', triSinCos, [0, 0], 'theta', 0, false);
+  createScenario('preset1', triTanSec, [0, 0], 'theta', 0, false);
+  createScenario('preset1', triCotCsc, [-thick / 2, thick / 2], 'theta', 0, false);
+  createScenario('preset2', triSinCos, [0, 0], 'theta', 0, false);
+  createScenario('preset2', triTanSec, [0, 0], 'theta', defaultAngle - Math.PI, true);
+  createScenario('preset2', triCotCsc, [0, 0], 'comp', Math.PI / 2 + defaultAngle, true);
+  createScenario('preset3', triSinCos, [0, 0], 'theta', 0, false);
+  createScenario('preset3', triTanSec, [0, 0], 'theta', 0, false);
+  createScenario('preset3', triCotCsc, [0, 0], 'comp', Math.PI, false);
+  createScenario('reset', triSinCos, [-2.2, -0.5], 'theta', 0, false);
+  createScenario('reset', triTanSec, [-0.8, -0.5], 'theta', 0, false);
+  createScenario('reset', triCotCsc, [0.8, -0.5], 'theta', 0, false);
+
+  const animateScenario = (scenario, dissolveOut, locks, duration = 3) => {
+    figure.stop('freeze');
+    showAll();
+    circ.hide(dissolveOut);
+    rotator.animations.new().rotation({ target: defaultAngle, duration }).start();
+    circ.animations.new()
+      .inParallel([
+        circ.animations.scenarios({ target: scenario, duration }),
+        // circ.animations.dissolveOut({ elements: dissolveOut }),
+      ])
+      .start();
+    selectTriangle('');
+    setLocks(...locks);
+  };
+
+  figure.fnMap.global.add('preset1', () => {
+    animateScenario(
+      'preset1',
+      ['triSinCos.unit.label', 'triTanSec.unit.label', 'triCotCsc.theta'],
+      ['theta', '', 'theta', '', 'theta', ''],
+    );
+    if (!circle.isShown) {
+      circle.animations.new().dissolveIn().start();
+    }
+  });
+  figure.fnMap.global.add('preset2', () => {
+    animateScenario(
+      'preset2',
+      ['triCotCsc.unit.label', 'triTanSec.unit.label'],
+      ['theta', '', 'theta', 'hyp', 'comp', 'hyp'],
+    );
+    if (!circle.isShown) {
+      circle.animations.new().dissolveIn().start();
+    }
+  });
+  figure.fnMap.global.add('preset3', () => {
+    animateScenario(
+      'preset3',
+      ['triCotCsc.unit.label', 'triTanSec.unit.label'],
+      ['theta', '', 'theta', '', 'comp', ''],
+    );
+    if (!circle.isShown) {
+      circle.animations.new().dissolveIn().start();
+    }
+  });
+
+  /*
+  .########..########..######..########.########
+  .##.....##.##.......##....##.##..........##...
+  .##.....##.##.......##.......##..........##...
+  .########..######....######..######......##...
+  .##...##...##.............##.##..........##...
+  .##....##..##.......##....##.##..........##...
+  .##.....##.########..######..########....##...
+  */
+  figure.fnMap.global.add('reset', () => {
+    rotator.setRotation(defaultAngle);
+    circ.setScenarios('reset');
+    circle.hide();
+    setLocks('theta', '', 'theta', '', 'theta', '');
+    showAll();
+    selectTriangle('');
+  });
+  // figure.fnMap.global.add('reset', () => {
+  //   animateScenario(
+  //     'reset', ['circle'], ['theta', '', 'theta', '', 'theta', ''],
+  //   );
+  // });
 }

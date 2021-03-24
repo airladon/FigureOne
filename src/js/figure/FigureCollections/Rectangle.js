@@ -581,6 +581,7 @@ class CollectionsRectangle extends FigureElementCollection {
       }
       this._label.custom.updateText(textToUse);
     }
+    this.animateNextFrame();
   }
 
   /**

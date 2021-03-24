@@ -67,6 +67,8 @@ function makeSlides() {
   ....##....####....##....########.########
   */
   slides.push({
+    scenario: 'reset',
+    enterState: 'reset',
     showCommon: 'circ',
   });
 
