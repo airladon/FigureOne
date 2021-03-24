@@ -7,6 +7,7 @@ function layoutCirc() {
   const defaultAngle = 0.9;
   const defaultSin = radius * Math.sin(defaultAngle);
   const defaultCos = radius * Math.cos(defaultAngle);
+  const point = (pointX, pointY) => new Fig.Point(pointX, pointY);
 
   const line = (name, color, width = thick, p1 = [0, 0], length = 1, ang = 0, dash = []) => ({
     name,
@@ -114,6 +115,9 @@ function layoutCirc() {
       //   },
       // },
     ],
+    // options: {
+    //   transform: new Fig.Transform().scale(1, 1).translate(1, 0).rotate(0).translate(-1, 0).translate(0, 0),
+    // },
     mods: {
       scenarios: {
         default: { scale: [1, 1], position: [0, 0], rotation: 0 },
@@ -293,33 +297,32 @@ function layoutCirc() {
     }
   };
 
-  const setCurrentLockPosition = (triElement, rightElement, compElement) => {
-    let element = rightElement;
+  const setCurrentLockPosition = (triElement, rightPos, compPos, thetaPos) => {
+    // let element = rightElement;
     triElement.customState.angle = triElement._theta.angle;
+    let pos = rightPos;
     if (triElement.customState.lock === 'theta') {
-      return;
-    }
-    if (triElement.customState.lock === 'comp') {
-      element = compElement;
+      pos = thetaPos;
+    } else if (triElement.customState.lock === 'comp') {
+      pos = compPos;
     }
     triElement.customState.lockPosition
-      = triElement.pointFromSpaceToSpace(element.getP2(), 'draw', 'local');
+      = triElement.pointFromSpaceToSpace(pos, 'draw', 'local');
   };
-  const offsetForLock = (triElement, rightElement, compElement) => {
+  const offsetForLock = (triElement, rightPos, compPos, thetaPos) => {
     if (triElement.customState.lockSide === 'hyp') {
       const r = triElement.transform.r();
       const delta = triElement._theta.angle - triElement.customState.angle;
       triElement.transform.updateRotation(r + delta);
     }
-    let element = rightElement;
+    let pos = rightPos;
     if (triElement.customState.lock === 'theta') {
-      return;
+      pos = thetaPos
+    } else if (triElement.customState.lock === 'comp') {
+      pos = compPos;
     }
-    if (triElement.customState.lock === 'comp') {
-      element = compElement;
-    }
-    const newP = triElement.pointFromSpaceToSpace(element.getP2(), 'draw', 'local')
-    const delta = newP.sub(triElement.customState.lockPosition)
+    const newP = triElement.pointFromSpaceToSpace(pos, 'draw', 'local');
+    const delta = newP.sub(triElement.customState.lockPosition);
     const p = triElement.getPosition();
     triElement.setPosition(p.sub(delta));
     // if (triSinCos.customState.lock === 'right') {
@@ -350,6 +353,9 @@ function layoutCirc() {
     rotator.customState = {
       cosVal, sinVal, tanVal, cotVal,
     };
+    const c1 = Fig.tools.g2.getTriangleCenter([0, 0], [cosVal, 0], [cosVal, sinVal]);
+    const c2 = Fig.tools.g2.getTriangleCenter([0, 0], [radius, 0], [radius, tanVal]);
+    const c3 = Fig.tools.g2.getTriangleCenter([0, 0], [cotVal, 0], [cotVal, radius]);
     // let quad = 1;
     // if (xSign < 0 && ySign > 0) {
     //   quad = 2;
@@ -358,65 +364,82 @@ function layoutCirc() {
     // } else if (ySign < 0) {
     //   quad = 4;
     // }
-    setCurrentLockPosition(triSinCos, cos, unitSinCos);
-    setCurrentLockPosition(triTanSec, unitTanSec, sec);
-    setCurrentLockPosition(triCotCsc, cot, csc);
+    setCurrentLockPosition(triSinCos, cos.getP2(), unitSinCos.getP2(), cos.getP1());
+    setCurrentLockPosition(triTanSec, unitTanSec.getP2(), sec.getP2(), sec.getP1());
+    setCurrentLockPosition(triCotCsc, cot.getP2(), csc.getP2(), cot.getP1());
 
+    // const sinCosCenter = Fig.tools.g2.getTriangleCenter([0, 0], [cosVal, 0], [cosVal, sinVal]);
+    // const tanSecCenter = Fig.tools.g2.getTriangleCenter([[0, 0], [radius, 0], [radius, tanVal]]);
+    // const cotCscCenter = Fig.tools.g2.getTriangleCenter([[0, 0], [cotVal, 0], [cotVal, radius]]);
     if (thetaSinCos.isShown) {
-      thetaSinCos.setAngle({ angle: Math.acos(Math.abs(cosR)) });
+      thetaSinCos.setAngle({ angle: Math.acos(Math.abs(cosR)), position: [-c1.x, -c1.y] });
     }
     if (thetaCotCsc.isShown) {
-      thetaCotCsc.setAngle({ angle: Math.acos(Math.abs(cosR)) });
+      thetaCotCsc.setAngle({ angle: Math.acos(Math.abs(cosR)), position: [-c3.x, -c3.y] });
     }
     if (thetaTanSec.isShown) {
-      thetaTanSec.setAngle({ angle: Math.acos(Math.abs(cosR)) });
+      thetaTanSec.setAngle({ angle: Math.acos(Math.abs(cosR)), position: [-c2.x, -c2.y] });
     }
     if (sin.isShown) {
-      sin.setEndPoints([cosVal, 0], [cosVal, sinVal]);
+      sin.setEndPoints(point(cosVal, 0).sub(c1), point(cosVal, sinVal).sub(c1));
     }
     if (cos.isShown) {
-      cos.setEndPoints([0, 0], [cosVal, 0]);
+      cos.setEndPoints(point(0, 0).sub(c1), point(cosVal, 0).sub(c1));
     }
     if (unitSinCos.isShown) {
-      unitSinCos.setEndPoints([0, 0], [cosVal, sinVal]);
+      unitSinCos.setEndPoints(
+        point(0, 0).sub(c1), point(cosVal, sinVal).sub(c1),
+      );
     }
-    setRightAng(rightSinCos, true, [cosVal, 0], Math.PI / 2);
+    setRightAng(rightSinCos, true, point(cosVal, 0).sub(c1), Math.PI / 2);
 
     if (tan.isShown) {
-      tan.setEndPoints([radius, 0], [radius, tanVal]);
+      tan.setEndPoints(point(radius, 0).sub(c2), point(radius, tanVal).sub(c2));
     }
     if (sec.isShown) {
-      sec.setEndPoints([0, 0], [radius, tanVal]);
+      sec.setEndPoints(point(0, 0).sub(c2), point(radius, tanVal).sub(c2));
     }
     if (unitTanSec.isShown) {
-      unitTanSec.setEndPoints([0, 0], [radius, 0]);
+      unitTanSec.setEndPoints(point(0, 0).sub(c2), point(radius, 0).sub(c2));
     }
-    setRightAng(rightTanSec, true, [radius, 0], Math.PI / 2);
+    setRightAng(rightTanSec, true, point(radius, 0).sub(c2), Math.PI / 2);
 
     if (cot.isShown) {
-      cot.setEndPoints([0, 0], [cotVal, 0]);
+      cot.setEndPoints(point(0, 0).sub(c3), point(cotVal, 0).sub(c3));
     }
     if (csc.isShown) {
-      csc.setEndPoints([0, 0], [cotVal, radius]);
+      csc.setEndPoints(point(0, 0).sub(c3), point(cotVal, radius).sub(c3));
     }
     if (unitCotCsc.isShown) {
-      unitCotCsc.setEndPoints([cotVal, 0], [cotVal, radius]);
+      unitCotCsc.setEndPoints(point(cotVal, 0).sub(c3), point(cotVal, radius).sub(c3));
     }
-    setRightAng(rightCotCsc, true, [cotVal, 0], Math.PI / 2);
+    setRightAng(rightCotCsc, true, point(cotVal, 0).sub(c3), Math.PI / 2);
 
     moveSinCos.custom.updatePoints({
       points: [[0, 0], [cosVal, 0], [cosVal, sinVal]],
     });
+    moveSinCos.setPosition(-c1.x, -c1.y);
     moveTanSec.custom.updatePoints({
       points: [[0, 0], [radius, 0], [radius, tanVal]],
     });
+    moveTanSec.setPosition(-c2.x, -c2.y);
     moveCotCsc.custom.updatePoints({
       points: [[0, 0], [cotVal, 0], [cotVal, radius]],
     });
+    moveCotCsc.setPosition(-c3.x, -c3.y);
 
-    offsetForLock(triSinCos, cos, unitSinCos);
-    offsetForLock(triTanSec, unitTanSec, sec);
-    offsetForLock(triCotCsc, cot, csc);
+    // offsetForLock(triSinCos, cos, unitSinCos);
+    // offsetForLock(triTanSec, unitTanSec, sec);
+    // offsetForLock(triCotCsc, cot, csc);
+    offsetForLock(triSinCos, cos.getP2(), unitSinCos.getP2(), cos.getP1());
+    offsetForLock(triTanSec, unitTanSec.getP2(), sec.getP2(), sec.getP1());
+    offsetForLock(triCotCsc, cot.getP2(), csc.getP2(), cot.getP1());
+
+    
+    // sin.setPosition(-sinCosCenter.x, -sinCosCenter.y);
+    // cos.setPosition(-sinCosCenter.x, -sinCosCenter.y);
+    // rightSinCos.setPosition(-sinCosCenter.x, -sinCosCenter.y);
+    // thetaSinCos.setPosition(-sinCosCenter.x, -sinCosCenter.y);
   }
   const rotatorUpdateCircle = () => {
     if (rotator.isShown) {
