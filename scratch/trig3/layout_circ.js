@@ -84,6 +84,20 @@ function layoutCirc() {
       },
     };
   }
+  const rot = (name) => ({
+    name,
+    method: 'primitives.polygon',
+    options: {
+      radius: 0.3,
+      color: [0, 1, 0, 0.4],
+      sides: 8,
+    },
+    mods: {
+      isMovable: true,
+      move: { type: 'rotation' },
+      // transform: new Fig.Transform().translate(0, 0).rotate(0),
+    },
+  });
   const tri = (name, elements, position, rotation, trans1 = {}, trans2 = {}) => ({
     name,
     method: 'collection',
@@ -103,21 +117,10 @@ function layoutCirc() {
           isMovable: true,
         },
       },
-      // {
-      //   name: 'lock',
-      //   method: 'primitives.polygon',
-      //   options: {
-      //     radius: 0.1,
-      //     color: [0, 0, 1, 0.5],
-      //   },
-      //   mods: {
-      //     isMovable: true,
-      //   },
-      // },
+      rot('rotTheta'),
+      rot('rotComp'),
+      rot('rotRight'),
     ],
-    // options: {
-    //   transform: new Fig.Transform().scale(1, 1).translate(1, 0).rotate(0).translate(-1, 0).translate(0, 0),
-    // },
     mods: {
       scenarios: {
         default: { scale: [1, 1], position: [0, 0], rotation: 0 },
@@ -185,33 +188,17 @@ function layoutCirc() {
         },
       },
       arc('circle', colGrey, thin),
-      // arc('arc', colGrey, thin, 300, Math.PI / 2, 0),
-      // line('xQ1', colGrey, thin, [0, 0], radius, 0),
-      // line('yQ1', colGrey, thin, [0, 0], radius, Math.PI / 2),
       line('x', colGrey, thin, [-radius, 0], radius * 2, 0),
       line('y', colGrey, thin, [0, -radius], radius * 2, Math.PI / 2),
-      // line('tanLight', colGrey, thin),
-      // line('secLight', colGrey, thin),
-      // line('cotLight', colGrey, thin),
-      // line('cscLight', colGrey, thin),
-      // line('sinLight', colGrey, thin),
-      // line('tanLightAlt', colGrey, thin),
-      // line('secLightAlt', colGrey, thin),
-      // line('cotLightAlt', colGrey, thin),
-      // line('cscLightAlt', colGrey, thin),
-      // line('radiusLight', colGrey, thin),
-
       lineWithLabel('radius', colGrey, '1', thin),
       lineWithLabel('radiusAlt', colGrey, '1', thin),
       lineWithLabel('xRadius', colGrey, '1', thin, [0, 0], radius, 0),
       tri(
         'triTanSec',
         [
-          // angle('theta', '\u03b8', 0.2, 0.5, [0, 0], 0, defaultAngle),
           lineWithLabel('unit', colText, '1', thick, [radius + thick / 2, 0], radius + thick * 0.7, Math.PI),
           lineWithLabel('tan', colTan, 'tan'),
           lineWithLabel('sec', colSec, 'sec'),
-          // rightAngle('right', [radius, 0], Math.PI / 2),
         ],
         [0, 0],
         0,
@@ -221,11 +208,9 @@ function layoutCirc() {
       tri(
         'triCotCsc',
         [
-          // angle('theta', '\u03b8', 0.2, 0.5, [0, 0], 0, defaultAngle),
           lineWithLabel('unit', colText, '1', thick, [-thick / 2, thick], radius - thick / 2, Math.PI / 2),
           lineWithLabel('csc', colCsc, 'csc'),
           lineWithLabel('cot', colCot, 'cot'),
-          // rightAngle('right', [0, radius], -Math.PI / 2),
         ],
         [0.1, radius - 0.2 + 0.5 + 0.2],
         Math.PI,
@@ -233,11 +218,9 @@ function layoutCirc() {
         { scale: [-1, 1], rotation: -(Math.PI / 2 - defaultAngle), position: [0, 0] },
       ),
       tri('triSinCos', [
-        // angle('theta', '\u03b8', 0.2, 0.5, [0, 0], 0, defaultAngle),
         lineWithLabel('unit', colText, '1', thick, [0, 0], radius, defaultAngle),
         lineWithLabel('sin', colSin, 'sin'),
         lineWithLabel('cos', colCos, 'cos'),
-        // rightAngle('right', [0, 0], Math.PI / 2),
       ], [-0.3 - 1.6, 0.8 + 0.2], 0),
       {
         name: 'rotator',
@@ -255,9 +238,6 @@ function layoutCirc() {
         },
       },
     ],
-    // options: {
-    //   dimColor: colDarkGrey,
-    // },
     mods: {
       scenarios: {
         title: { scale: 0.9, position: [-radius / 2, -1.2] },
@@ -281,9 +261,9 @@ function layoutCirc() {
   const [cos, sin] = get({ triSinCos: ['cos', 'sin'] });
   const [cot, csc] = get({ triCotCsc: ['cot', 'csc'] });
   const [tan, sec] = get({ triTanSec: ['tan', 'sec'] });
-  const [unitSinCos, thetaSinCos, rightSinCos, moveSinCos] = get({ triSinCos: ['unit', 'theta', 'right', 'movePad'] });
-  const [unitTanSec, thetaTanSec, rightTanSec, moveTanSec] = get({ triTanSec: ['unit', 'theta', 'right', 'movePad'] });
-  const [unitCotCsc, thetaCotCsc, rightCotCsc, moveCotCsc] = get({ triCotCsc: ['unit', 'theta', 'right', 'movePad'] });
+  const [unitSinCos, thetaSinCos, rightSinCos, moveSinCos, rotThetaSinCos, rotCompSinCos, rotRightSinCos] = get({ triSinCos: ['unit', 'theta', 'right', 'movePad', 'rotTheta', 'rotComp', 'rotRight'] });
+  const [unitTanSec, thetaTanSec, rightTanSec, moveTanSec, rotThetaTanSec, rotCompTanSec, rotRightTanSec] = get({ triTanSec: ['unit', 'theta', 'right', 'movePad', 'rotTheta', 'rotComp', 'rotRight'] });
+  const [unitCotCsc, thetaCotCsc, rightCotCsc, moveCotCsc, rotThetaCotCsc, rotCompCotCsc, rotRightCotCsc] = get({ triCotCsc: ['unit', 'theta', 'right', 'movePad', 'rotTheta', 'rotComp', 'rotRight'] });
   const [flip, rotate, lock, lockHyp] = get(['flip', 'rotate', 'lock', 'lockHyp']);
  
   const setRightAng = (element, test, position, startAngle) => {
@@ -325,18 +305,6 @@ function layoutCirc() {
     const delta = newP.sub(triElement.customState.lockPosition);
     const p = triElement.getPosition();
     triElement.setPosition(p.sub(delta));
-    // if (triSinCos.customState.lock === 'right') {
-    //   const newP = triSinCos.pointFromSpaceToSpace([cosVal, 0], 'draw', 'local')
-    //   const delta = newP.sub(triSinCos.customState.lockPosition)
-    //   const p = triSinCos.getPosition();
-    //   triSinCos.setPosition(p.sub(delta));
-    // }
-    // if (triSinCos.customState.lock === 'comp') {
-    //   const newP = triSinCos.pointFromSpaceToSpace([cosVal, sinVal], 'draw', 'local');
-    //   const delta = newP.sub(triSinCos.customState.lockPosition);
-    //   const p = triSinCos.getPosition();
-    //   triSinCos.setPosition(p.sub(delta));
-    // }
   };
   function updateCircle(rIn) {
     const r = rIn > Math.PI / 4 ? rIn - 0.00001 : rIn + 0.00001;
@@ -368,9 +336,6 @@ function layoutCirc() {
     setCurrentLockPosition(triTanSec, unitTanSec.getP2(), sec.getP2(), sec.getP1());
     setCurrentLockPosition(triCotCsc, cot.getP2(), csc.getP2(), cot.getP1());
 
-    // const sinCosCenter = Fig.tools.g2.getTriangleCenter([0, 0], [cosVal, 0], [cosVal, sinVal]);
-    // const tanSecCenter = Fig.tools.g2.getTriangleCenter([[0, 0], [radius, 0], [radius, tanVal]]);
-    // const cotCscCenter = Fig.tools.g2.getTriangleCenter([[0, 0], [cotVal, 0], [cotVal, radius]]);
     if (thetaSinCos.isShown) {
       thetaSinCos.setAngle({ angle: Math.acos(Math.abs(cosR)), position: [-c1.x, -c1.y] });
     }
@@ -392,6 +357,15 @@ function layoutCirc() {
       );
     }
     setRightAng(rightSinCos, true, point(cosVal, 0).sub(c1), Math.PI / 2);
+    if (rotThetaSinCos.isShown) {
+      rotThetaSinCos.setPosition(-c1.x, -c1.y);
+    }
+    if (rotCompSinCos.isShown) {
+      rotCompSinCos.setPosition(cosVal - c1.x, sinVal - c1.y);
+    }
+    if (rotRightSinCos.isShown) {
+      rotRightSinCos.setPosition(cosVal - c1.x, -c1.y);
+    }
 
     if (tan.isShown) {
       tan.setEndPoints(point(radius, 0).sub(c2), point(radius, tanVal).sub(c2));
@@ -403,6 +377,15 @@ function layoutCirc() {
       unitTanSec.setEndPoints(point(0, 0).sub(c2), point(radius, 0).sub(c2));
     }
     setRightAng(rightTanSec, true, point(radius, 0).sub(c2), Math.PI / 2);
+    if (rotThetaTanSec.isShown) {
+      rotThetaTanSec.setPosition(-c2.x, -c2.y);
+    }
+    if (rotCompTanSec.isShown) {
+      rotCompTanSec.setPosition(radius - c2.x, tanVal - c2.y);
+    }
+    if (rotRightTanSec.isShown) {
+      rotRightTanSec.setPosition(radius - c2.x, -c2.y);
+    }
 
     if (cot.isShown) {
       cot.setEndPoints(point(0, 0).sub(c3), point(cotVal, 0).sub(c3));
@@ -414,6 +397,15 @@ function layoutCirc() {
       unitCotCsc.setEndPoints(point(cotVal, 0).sub(c3), point(cotVal, radius).sub(c3));
     }
     setRightAng(rightCotCsc, true, point(cotVal, 0).sub(c3), Math.PI / 2);
+    if (rotThetaCotCsc.isShown) {
+      rotThetaCotCsc.setPosition(-c3.x, -c3.y);
+    }
+    if (rotCompCotCsc.isShown) {
+      rotCompCotCsc.setPosition(cotVal - c3.x, radius - c3.y);
+    }
+    if (rotRightCotCsc.isShown) {
+      rotRightCotCsc.setPosition(cotVal - c3.x, -c3.y);
+    }
 
     moveSinCos.custom.updatePoints({
       points: [[0, 0], [cosVal, 0], [cosVal, sinVal]],
@@ -428,18 +420,9 @@ function layoutCirc() {
     });
     moveCotCsc.setPosition(-c3.x, -c3.y);
 
-    // offsetForLock(triSinCos, cos, unitSinCos);
-    // offsetForLock(triTanSec, unitTanSec, sec);
-    // offsetForLock(triCotCsc, cot, csc);
     offsetForLock(triSinCos, cos.getP2(), unitSinCos.getP2(), cos.getP1());
     offsetForLock(triTanSec, unitTanSec.getP2(), sec.getP2(), sec.getP1());
     offsetForLock(triCotCsc, cot.getP2(), csc.getP2(), cot.getP1());
-
-    
-    // sin.setPosition(-sinCosCenter.x, -sinCosCenter.y);
-    // cos.setPosition(-sinCosCenter.x, -sinCosCenter.y);
-    // rightSinCos.setPosition(-sinCosCenter.x, -sinCosCenter.y);
-    // thetaSinCos.setPosition(-sinCosCenter.x, -sinCosCenter.y);
   }
   const rotatorUpdateCircle = () => {
     if (rotator.isShown) {
@@ -583,6 +566,15 @@ function layoutCirc() {
   moveSinCos.move.element = triSinCos;
   moveTanSec.move.element = triTanSec;
   moveCotCsc.move.element = triCotCsc;
+  rotThetaSinCos.move.element = triSinCos;
+  rotThetaTanSec.move.element = triTanSec;
+  rotThetaCotCsc.move.element = triCotCsc;
+  rotRightSinCos.move.element = triSinCos;
+  rotRightTanSec.move.element = triTanSec;
+  rotRightCotCsc.move.element = triCotCsc;
+  rotCompSinCos.move.element = triSinCos;
+  rotCompTanSec.move.element = triTanSec;
+  rotCompCotCsc.move.element = triCotCsc;
   moveSinCos.customState.lock = 'theta';
   moveTanSec.customState.lock = 'theta';
   moveCotCsc.customState.lock = 'theta';
