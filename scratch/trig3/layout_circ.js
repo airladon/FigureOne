@@ -119,7 +119,7 @@ function layoutCirc() {
       //   default: { scale: [1, 1], position, rotation: 0 },
       // },
       customState: {
-        lock: 'theta', lockHyp: false, center, x, y, unit: true,
+        lock: 'theta', lockHyp: false, center, x, y, unit: true, theta: true,
       },
     },
   });
@@ -144,6 +144,18 @@ function layoutCirc() {
     name: 'circ',
     method: 'collection',
     elements: [
+      {
+        name: 'background',
+        method: 'rectangle',
+        options: {
+          width: 6,
+          height: 3,
+          color: [0, 0, 0, 0],
+        },
+        mods: {
+          isTouchable: true,
+        },
+      },
       {
         name: 'circle',
         method: 'collection',
@@ -207,7 +219,7 @@ function layoutCirc() {
       button('lock', [-2.6, 0.8], 'Lock: Theta'),
       button('lockHyp', [-2.6, 0.4], 'Lock Hyp: No'),
       button('unitButton', [-2.6, 0], 'Unit: Yes'),
-      button('circleButton', [1.8, -1.2], 'Circle: No'),
+      button('thetaButton', [-2.6, -0.4], 'Theta: Yes'),
       button('reset', [2.6, -1.2], 'Reset'),
       {
         name: 'arcButton',
@@ -260,8 +272,8 @@ function layoutCirc() {
   const [unitSinCos, thetaSinCos, rightSinCos, moveSinCos, rotThetaSinCos, rotCompSinCos, rotRightSinCos] = get({ triSinCos: ['unit', 'theta', 'right', 'movePad', 'rotTheta', 'rotComp', 'rotRight'] });
   const [unitTanSec, thetaTanSec, rightTanSec, moveTanSec, rotThetaTanSec, rotCompTanSec, rotRightTanSec] = get({ triTanSec: ['unit', 'theta', 'right', 'movePad', 'rotTheta', 'rotComp', 'rotRight'] });
   const [unitCotCsc, thetaCotCsc, rightCotCsc, moveCotCsc, rotThetaCotCsc, rotCompCotCsc, rotRightCotCsc] = get({ triCotCsc: ['unit', 'theta', 'right', 'movePad', 'rotTheta', 'rotComp', 'rotRight'] });
-  const [flip, lock, lockHyp, reset, arcButton, unitButton] = get(['flip', 'lock', 'lockHyp', 'reset', 'arcButton', 'unitButton']);
-  const [circle] = get(['circle']);
+  const [flip, lock, lockHyp, reset, arcButton, unitButton, thetaButton] = get(['flip', 'lock', 'lockHyp', 'reset', 'arcButton', 'unitButton', 'thetaButton']);
+  const [circle, background] = get(['circle', 'background']);
 
   sec.label.location = 'positive';
   csc.label.location = 'positive';
@@ -281,7 +293,7 @@ function layoutCirc() {
   };
 
   const setCurrentLockPosition = (triElement, rightPos, compPos, thetaPos) => {
-    triElement.customState.angle = triElement._theta.angle;
+    triElement.customState.angle = triSinCos._unit.line.angle();
     let pos = rightPos;
     if (triElement.customState.lock === 'theta') {
       pos = thetaPos;
@@ -291,11 +303,11 @@ function layoutCirc() {
     triElement.customState.lockPosition
       = triElement.pointFromSpaceToSpace(pos, 'draw', 'local');
   };
-  const offsetForLock = (triElement, rightPos, compPos, thetaPos) => {
+  const offsetForLock = (triElement, newAngle, rightPos, compPos, thetaPos) => {
     if (triElement.customState.lockHyp) {
       const s = triElement.transform.s().x;
       const r = triElement.transform.r();
-      const delta = triElement._theta.angle - triElement.customState.angle;
+      const delta = newAngle - triElement.customState.angle;
       triElement.transform.updateRotation(r - s * delta);
     }
     let pos = rightPos;
@@ -394,9 +406,9 @@ function layoutCirc() {
     });
     moveCotCsc.setPosition(-c3.x, -c3.y);
 
-    offsetForLock(triSinCos, cos.getP2(), unitSinCos.getP2(), cos.getP1());
-    offsetForLock(triTanSec, unitTanSec.getP2(), sec.getP2(), sec.getP1());
-    offsetForLock(triCotCsc, cot.getP2(), csc.getP2(), cot.getP1());
+    offsetForLock(triSinCos, r, cos.getP2(), unitSinCos.getP2(), cos.getP1());
+    offsetForLock(triTanSec, r, unitTanSec.getP2(), sec.getP2(), sec.getP1());
+    offsetForLock(triCotCsc, r, cot.getP2(), csc.getP2(), cot.getP1());
   }
   const rotatorUpdateCircle = () => {
     if (rotator.isShown) {
@@ -471,6 +483,13 @@ function layoutCirc() {
       unitButton.setLabel('Unit: No');
       triElement._unit._label.hide();
     }
+    if (triElement.customState.theta) {
+      thetaButton.setLabel('Theta: Yes');
+      triElement._theta.show();
+    } else {
+      thetaButton.setLabel('Theta: No');
+      triElement._theta.hide();
+    }
   };
 
   lock.onClick = () => {
@@ -502,6 +521,7 @@ function layoutCirc() {
   };
   lockHyp.onClick = () => toggleButton('lockHyp');
   unitButton.onClick = () => toggleButton('unit');
+  thetaButton.onClick = () => toggleButton('theta');
 
   arcButton.onClick = () => {
     if (circle.isShown) {
@@ -517,8 +537,6 @@ function layoutCirc() {
       arcButton.setColor(colGrey);
     }
   });
-  circle.subscriptions.add('visibility', 'processButton');
-
   reset.onClick = () => { figure.fnMap.exec('reset'); };
 
   const selectTriangle = (triangle) => {
@@ -530,6 +548,7 @@ function layoutCirc() {
       flip.hide();
       lockHyp.hide();
       unitButton.hide();
+      thetaButton.hide();
       circ.customState.selected = '';
       return;
     }
@@ -540,7 +559,12 @@ function layoutCirc() {
     flip.showAll();
     lockHyp.showAll();
     unitButton.showAll();
+    thetaButton.showAll();
   };
+
+  circle.subscriptions.add('visibility', 'processButton');
+  background.onClick = () => { selectTriangle(''); };
+
 
   const showAll = () => {
     triSinCos.showAll();
@@ -548,21 +572,16 @@ function layoutCirc() {
     triCotCsc.showAll();
   };
 
-  const setLock = (triangle, angleName, side, unit) => {
-    if (angleName != null) {
-      triangle.customState.lock = angleName;
-    }
-    if (side != null) {
-      triangle.customState.lockHyp = side;
-    }
-    if (unit != null) {
-      triangle.customState.unit = unit;
-    }
+  const setLock = (triangle, angleName, side, unit, thetaFlag) => {
+    triangle.customState.lock = angleName;
+    triangle.customState.lockHyp = side;
+    triangle.customState.unit = unit;
+    triangle.customState.theta = thetaFlag;
   };
-  const setLocks = (ang1, side1, unit1, ang2, side2, unit2, ang3, side3, unit3) => {
-    setLock(triSinCos, ang1, side1, unit1);
-    setLock(triTanSec, ang2, side2, unit2);
-    setLock(triCotCsc, ang3, side3, unit3);
+  const setLocks = (ang1, side1, unit1, theta1, ang2, side2, theta2, unit2, ang3, side3, unit3, theta3) => {
+    setLock(triSinCos, ang1, side1, unit1, theta1);
+    setLock(triTanSec, ang2, side2, unit2, theta2);
+    setLock(triCotCsc, ang3, side3, unit3, theta3);
   };
   const bindMoveElements = (triangle) => {
     triangle._rotTheta.move.element = triangle;
@@ -643,7 +662,7 @@ function layoutCirc() {
     animateScenario(
       'preset1',
       ['triSinCos.unit.label', 'triTanSec.unit.label', 'triCotCsc.theta'],
-      ['theta', false, false, 'theta', false, false, 'theta', false, true],
+      ['theta', false, false, true, 'theta', false, false, true, 'theta', false, true, true],
     );
     if (!circle.isShown) {
       circle.animations.new().dissolveIn().start();
@@ -653,7 +672,7 @@ function layoutCirc() {
     animateScenario(
       'preset2',
       ['triCotCsc.unit.label', 'triTanSec.unit.label'],
-      ['theta', false, true, 'theta', true, false, 'comp', true, false],
+      ['theta', false, true, true, 'theta', true, false, true, 'comp', true, false, true],
     );
     if (!circle.isShown) {
       circle.animations.new().dissolveIn().start();
@@ -663,7 +682,7 @@ function layoutCirc() {
     animateScenario(
       'preset3',
       ['triCotCsc.unit.label', 'triTanSec.unit.label', 'triSinCos.unit.label'],
-      ['theta', false, false, 'theta', false, false, 'comp', false, false],
+      ['theta', false, false, true, 'theta', false, false, true, 'comp', false, false, true],
     );
     if (!circle.isShown) {
       circle.animations.new().dissolveIn().start();
@@ -684,7 +703,10 @@ function layoutCirc() {
     rotator.setRotation(defaultAngle);
     circ.setScenarios('reset');
     circle.hide();
-    setLocks('theta', false, true, 'theta', false, true, 'theta', false, true);
+    // setLocks('theta', false, true, 'theta', false, true, 'theta', false, true);
+    setLock(triSinCos, 'theta', false, true, true);
+    setLock(triTanSec, 'theta', false, true, true);
+    setLock(triCotCsc, 'theta', false, true, true);
     selectTriangle('');
   });
 }
