@@ -13,7 +13,7 @@ function layoutCirc() {
   const dC1 = Fig.tools.g2.getTriangleCenter([0, 0], [dCos, 0], [dCos, dSin]);
   const dC2 = Fig.tools.g2.getTriangleCenter([0, 0], [radius, 0], [radius, dTan]);
   const dC3 = Fig.tools.g2.getTriangleCenter([0, 0], [dCot, 0], [dCot, radius]);
-
+  const origin = [-0.8, -0.7];
   const point = (pointX, pointY) => new Fig.Point(pointX, pointY);
 
   const line = (name, color, width = thick, p1 = [0, 0], length = 1, ang = 0, dash = []) => ({
@@ -42,12 +42,12 @@ function layoutCirc() {
     },
   });
 
-  function arc(name, color, width = thin, sides = 100, angleToDraw = Math.PI * 2, rotation = 0) {
+  function arc(name, color, width = thin, sides = 100, angleToDraw = Math.PI * 2, rotation = 0, rad = radius) {
     return {
       name,
       method: 'primitives.polygon',
       options: {
-        radius, line: { width }, sides, angleToDraw: angleToDraw + 0.001, rotation, color,
+        radius: rad, line: { width }, sides, angleToDraw: angleToDraw + 0.001, rotation, color,
       },
     };
   }
@@ -84,12 +84,8 @@ function layoutCirc() {
   }
   const rot = name => ({
     name,
-    method: 'primitives.polygon',
-    options: {
-      radius: 0.2,
-      color: [0, 1, 0, 0],
-      sides: 8,
-    },
+    method: 'primitives.generic',
+    options: { color: [0, 1, 0, 0] },
     mods: {
       isMovable: true,
       move: { type: 'rotation' },
@@ -123,7 +119,7 @@ function layoutCirc() {
       //   default: { scale: [1, 1], position, rotation: 0 },
       // },
       customState: {
-        lock: 'theta', lockSide: '', center, x, y,
+        lock: 'theta', lockHyp: false, center, x, y, unit: true,
       },
     },
   });
@@ -152,16 +148,17 @@ function layoutCirc() {
         name: 'circle',
         method: 'collection',
         elements: [
-          arc('circle', colGrey, thin),
-          line('x', colGrey, thin, [-radius, 0], radius * 2, 0),
-          line('y', colGrey, thin, [0, -radius], radius * 2, Math.PI / 2),
+          arc('circle', colGrey, thin, 100, Math.PI / 2, 0),
+          line('x', colGrey, thin, [0, 0], radius, 0),
+          line('y', colGrey, thin, [0, 0], radius, Math.PI / 2),
           {
             name: 'movePad',
             method: 'primitives.polygon',
             options: {
-              sides: 15,
+              sides: 16,
               radius: radius + 0.03,
               color: [0, 0, 0, 0],
+              sidesToDraw: 4,
             },
             mods: {
               isMovable: true,
@@ -170,9 +167,10 @@ function layoutCirc() {
         ],
         mods: {
           scenarios: {
-            reset: { position: [0, 0] },
-            preset1: { position: [0, 0] },
-            preset2: { position: [0, 0] },
+            reset: { position: origin },
+            preset1: { position: origin },
+            preset2: { position: origin },
+            preset3: { position: origin },
           },
         },
       },
@@ -205,16 +203,28 @@ function layoutCirc() {
         lineWithLabel('sin', colSin, 'sin'),
         lineWithLabel('cos', colCos, 'cos'),
       ], [-1.5, -0.35], 0, dC1, dCos, dSin),
-      // button('flip', [1.7, -1.25], 'Flip'),
-      // button('lock', [0.9, -1.25], 'Lock: Theta'),
-      // button('lockHyp', [0.1, -1.25], 'Lock Hyp: No'),
-      // button('reset', [2.5, -1.25], 'Reset'),
-      // button('circleButton', [-0.7, -1.25], 'Circle: No'),
       button('flip', [-2.6, 1.2], 'Flip'),
       button('lock', [-2.6, 0.8], 'Lock: Theta'),
       button('lockHyp', [-2.6, 0.4], 'Lock Hyp: No'),
+      button('unitButton', [-2.6, 0], 'Unit: Yes'),
       button('circleButton', [1.8, -1.2], 'Circle: No'),
       button('reset', [2.6, -1.2], 'Reset'),
+      {
+        name: 'arcButton',
+        method: 'collection',
+        elements: [
+          arc('arc', colText, thin, 100, Math.PI / 2, 0, 0.2),
+          line('x', colText, thin, [0, 0], 0.2, 0),
+          line('y', colText, thin, [0, 0], 0.2, Math.PI / 2),
+        ],
+        options: {
+          position: [2.6, 1.2],
+        },
+        mods: {
+          isTouchable: true,
+          touchBorder: 0.1,
+        },
+      },
       {
         name: 'rotator',
         method: 'collections.line',
@@ -236,8 +246,7 @@ function layoutCirc() {
       },
     ],
     mods: {
-      scenarios: {
-      },
+      customState: { selected: '' },
     },
   });
   const get = list => circ.getElements(list);
@@ -251,7 +260,7 @@ function layoutCirc() {
   const [unitSinCos, thetaSinCos, rightSinCos, moveSinCos, rotThetaSinCos, rotCompSinCos, rotRightSinCos] = get({ triSinCos: ['unit', 'theta', 'right', 'movePad', 'rotTheta', 'rotComp', 'rotRight'] });
   const [unitTanSec, thetaTanSec, rightTanSec, moveTanSec, rotThetaTanSec, rotCompTanSec, rotRightTanSec] = get({ triTanSec: ['unit', 'theta', 'right', 'movePad', 'rotTheta', 'rotComp', 'rotRight'] });
   const [unitCotCsc, thetaCotCsc, rightCotCsc, moveCotCsc, rotThetaCotCsc, rotCompCotCsc, rotRightCotCsc] = get({ triCotCsc: ['unit', 'theta', 'right', 'movePad', 'rotTheta', 'rotComp', 'rotRight'] });
-  const [flip, lock, lockHyp, reset, circleButton] = get(['flip', 'lock', 'lockHyp', 'reset', 'circleButton']);
+  const [flip, lock, lockHyp, reset, arcButton, unitButton] = get(['flip', 'lock', 'lockHyp', 'reset', 'arcButton', 'unitButton']);
   const [circle] = get(['circle']);
 
   sec.label.location = 'positive';
@@ -283,7 +292,7 @@ function layoutCirc() {
       = triElement.pointFromSpaceToSpace(pos, 'draw', 'local');
   };
   const offsetForLock = (triElement, rightPos, compPos, thetaPos) => {
-    if (triElement.customState.lockSide === 'hyp') {
+    if (triElement.customState.lockHyp) {
       const s = triElement.transform.s().x;
       const r = triElement.transform.r();
       const delta = triElement._theta.angle - triElement.customState.angle;
@@ -299,6 +308,17 @@ function layoutCirc() {
     const delta = newP.sub(triElement.customState.lockPosition);
     const p = triElement.getPosition();
     triElement.setPosition(p.sub(delta));
+  };
+  const setRotPad = (rotPad, vertex, startAngle, ang) => {
+    const rotPadRad = 0.3;
+    const v = Fig.tools.g2.getPoint(vertex);
+    const cosV = rotPadRad * Math.cos(startAngle);
+    const sinV = rotPadRad * Math.sin(startAngle);
+    const cosVStop = rotPadRad * Math.cos(startAngle + ang);
+    const sinVStop = rotPadRad * Math.sin(startAngle + ang);
+    rotPad.custom.updatePoints({
+      points: [v, v.add(cosV, sinV), v.add(cosVStop, sinVStop)],
+    });
   };
   function updateCircle(rIn) {
     const r = rIn > Math.PI / 4 ? rIn - 0.00001 : rIn + 0.00001;
@@ -338,25 +358,28 @@ function layoutCirc() {
     setRightAng(
       rightSinCos, r > 0.2 && r < Math.PI / 2 - 0.2, point(cosVal, 0).sub(c1), Math.PI / 2,
     );
-    rotThetaSinCos.setPosition(-c1.x, -c1.y);
-    rotCompSinCos.setPosition(cosVal - c1.x, sinVal - c1.y);
-    rotRightSinCos.setPosition(cosVal - c1.x, -c1.y);
 
     tan.setEndPoints(point(radius, 0).sub(c2), point(radius, tanVal).sub(c2));
     sec.setEndPoints(point(0, 0).sub(c2), point(radius, tanVal).sub(c2));
     unitTanSec.setEndPoints(point(0, 0).sub(c2), point(radius, 0).sub(c2));
     setRightAng(rightTanSec, r > 0.2, point(radius, 0).sub(c2), Math.PI / 2);
-    rotThetaTanSec.setPosition(-c2.x, -c2.y);
-    rotCompTanSec.setPosition(radius - c2.x, tanVal - c2.y);
-    rotRightTanSec.setPosition(radius - c2.x, -c2.y);
 
     cot.setEndPoints(point(0, 0).sub(c3), point(cotVal, 0).sub(c3));
     csc.setEndPoints(point(0, 0).sub(c3), point(cotVal, radius).sub(c3));
     unitCotCsc.setEndPoints(point(cotVal, 0).sub(c3), point(cotVal, radius).sub(c3));
     setRightAng(rightCotCsc, r < Math.PI / 2 - 0.2, point(cotVal, 0).sub(c3), Math.PI / 2);
-    rotThetaCotCsc.setPosition(-c3.x, -c3.y);
-    rotCompCotCsc.setPosition(cotVal - c3.x, radius - c3.y);
-    rotRightCotCsc.setPosition(cotVal - c3.x, -c3.y);
+
+    setRotPad(rotThetaSinCos, [-c1.x, -c1.y], 0, r);
+    setRotPad(rotThetaTanSec, [-c2.x, -c2.y], 0, r);
+    setRotPad(rotThetaCotCsc, [-c3.x, -c3.y], 0, r);
+
+    setRotPad(rotRightSinCos, [cosVal - c1.x, -c1.y], Math.PI / 2, Math.PI / 2);
+    setRotPad(rotRightTanSec, [radius - c2.x, -c2.y], Math.PI / 2, Math.PI / 2);
+    setRotPad(rotRightCotCsc, [cotVal - c3.x, -c3.y], Math.PI / 2, Math.PI / 2);
+
+    setRotPad(rotCompSinCos, [cosVal - c1.x, sinVal - c1.y], Math.PI + r, Math.PI / 2 - r);
+    setRotPad(rotCompTanSec, [radius - c2.x, tanVal - c2.y], Math.PI + r, Math.PI / 2 - r);
+    setRotPad(rotCompCotCsc, [cotVal - c3.x, radius - c3.y], Math.PI + r, Math.PI / 2 - r);
 
     moveSinCos.custom.updatePoints({
       points: [[0, 0], [cosVal, 0], [cosVal, sinVal]],
@@ -440,10 +463,20 @@ function layoutCirc() {
 
   const updateLockText = (triElement) => {
     lock.setLabel(`Lock: ${triElement.customState.lock}`);
-    lockHyp.setLabel(`Lock Hyp: ${triElement.customState.lockSide === 'hyp' ? 'Yes' : 'No'}`);
+    lockHyp.setLabel(`Lock Hyp: ${triElement.customState.lockHyp ? 'Yes' : 'No'}`);
+    if (triElement.customState.unit) {
+      unitButton.setLabel('Unit: Yes');
+      triElement._unit._label.show();
+    } else {
+      unitButton.setLabel('Unit: No');
+      triElement._unit._label.hide();
+    }
   };
 
   lock.onClick = () => {
+    if (circ.customState.selected === '') {
+      return;
+    }
     const triElement = circ.getElement(circ.customState.selected);
     if (triElement.customState.lock === 'theta') {
       triElement.customState.lock = 'right';
@@ -455,36 +488,33 @@ function layoutCirc() {
     updateLockText(triElement);
   };
 
-  lockHyp.onClick = () => {
+  const toggleButton = (customStatePropertyName) => {
+    if (circ.customState.selected === '') {
+      return;
+    }
     const triElement = circ.getElement(circ.customState.selected);
-    if (triElement.customState.lockSide === 'hyp') {
-      triElement.customState.lockSide = '';
+    if (triElement.customState[customStatePropertyName]) {
+      triElement.customState[customStatePropertyName] = false;
     } else {
-      triElement.customState.lockSide = 'hyp';
+      triElement.customState[customStatePropertyName] = true;
     }
     updateLockText(triElement);
   };
+  lockHyp.onClick = () => toggleButton('lockHyp');
+  unitButton.onClick = () => toggleButton('unit');
 
-  // const hideCircle = () => {
-  //   circle.hide();
-  //   circleButton.setLabel('Circle: No');
-  // };
-  // const showCircle = () => {
-  //   circle.show();
-  //   circleButton.setLabel('Circle: Yes');
-  // };
-  circleButton.onClick = () => {
+  arcButton.onClick = () => {
     if (circle.isShown) {
-      circle.hide(); 
+      circle.hide();
     } else {
       circle.show();
     }
   };
   circle.fnMap.add('processButton', () => {
     if (circle.isShown) {
-      circleButton.setLabel('Circle: Yes');
+      arcButton.setColor(colText);
     } else {
-      circleButton.setLabel('Circle: No');
+      arcButton.setColor(colGrey);
     }
   });
   circle.subscriptions.add('visibility', 'processButton');
@@ -499,6 +529,7 @@ function layoutCirc() {
       lock.hide();
       flip.hide();
       lockHyp.hide();
+      unitButton.hide();
       circ.customState.selected = '';
       return;
     }
@@ -508,6 +539,7 @@ function layoutCirc() {
     lock.showAll();
     flip.showAll();
     lockHyp.showAll();
+    unitButton.showAll();
   };
 
   const showAll = () => {
@@ -516,18 +548,21 @@ function layoutCirc() {
     triCotCsc.showAll();
   };
 
-  const setLock = (triangle, angleName, side) => {
+  const setLock = (triangle, angleName, side, unit) => {
     if (angleName != null) {
       triangle.customState.lock = angleName;
     }
     if (side != null) {
-      triangle.customState.lockSide = side;
+      triangle.customState.lockHyp = side;
+    }
+    if (unit != null) {
+      triangle.customState.unit = unit;
     }
   };
-  const setLocks = (ang1, side1, ang2, side2, ang3, side3) => {
-    setLock(triSinCos, ang1, side1);
-    setLock(triTanSec, ang2, side2);
-    setLock(triCotCsc, ang3, side3);
+  const setLocks = (ang1, side1, unit1, ang2, side2, unit2, ang3, side3, unit3) => {
+    setLock(triSinCos, ang1, side1, unit1);
+    setLock(triTanSec, ang2, side2, unit2);
+    setLock(triCotCsc, ang3, side3, unit3);
   };
   const bindMoveElements = (triangle) => {
     triangle._rotTheta.move.element = triangle;
@@ -577,15 +612,15 @@ function layoutCirc() {
     };
   };
 
-  createScenario('preset1', triSinCos, [0, 0], 'theta', 0, false);
-  createScenario('preset1', triTanSec, [0, 0], 'theta', 0, false);
-  createScenario('preset1', triCotCsc, [-thick / 2, thick / 2], 'theta', 0, false);
-  createScenario('preset2', triSinCos, [0, 0], 'theta', 0, false);
-  createScenario('preset2', triTanSec, [0, 0], 'theta', defaultAngle - Math.PI, true);
-  createScenario('preset2', triCotCsc, [0, 0], 'comp', Math.PI / 2 + defaultAngle, true);
-  createScenario('preset3', triSinCos, [0, 0], 'theta', 0, false);
-  createScenario('preset3', triTanSec, [0, 0], 'theta', 0, false);
-  createScenario('preset3', triCotCsc, [0, 0], 'comp', Math.PI, false);
+  createScenario('preset1', triSinCos, origin, 'theta', 0, false);
+  createScenario('preset1', triTanSec, origin, 'theta', 0, false);
+  createScenario('preset1', triCotCsc, [origin[0] - thick / 2, origin[1] + thick / 2], 'theta', 0, false);
+  createScenario('preset2', triSinCos, origin, 'theta', 0, false);
+  createScenario('preset2', triTanSec, origin, 'theta', defaultAngle - Math.PI, true);
+  createScenario('preset2', triCotCsc, origin, 'comp', Math.PI / 2 + defaultAngle, true);
+  createScenario('preset3', triSinCos, origin, 'theta', 0, false);
+  createScenario('preset3', triTanSec, origin, 'theta', 0, false);
+  createScenario('preset3', triCotCsc, [origin[0] - thick / 2, origin[1] + thick / 2], 'comp', Math.PI, false);
   createScenario('reset', triSinCos, [-2.2, -0.5], 'theta', 0, false);
   createScenario('reset', triTanSec, [-0.8, -0.5], 'theta', 0, false);
   createScenario('reset', triCotCsc, [0.8, -0.5], 'theta', 0, false);
@@ -598,7 +633,6 @@ function layoutCirc() {
     circ.animations.new()
       .inParallel([
         circ.animations.scenarios({ target: scenario, duration }),
-        // circ.animations.dissolveOut({ elements: dissolveOut }),
       ])
       .start();
     selectTriangle('');
@@ -609,7 +643,7 @@ function layoutCirc() {
     animateScenario(
       'preset1',
       ['triSinCos.unit.label', 'triTanSec.unit.label', 'triCotCsc.theta'],
-      ['theta', '', 'theta', '', 'theta', ''],
+      ['theta', false, false, 'theta', false, false, 'theta', false, true],
     );
     if (!circle.isShown) {
       circle.animations.new().dissolveIn().start();
@@ -619,7 +653,7 @@ function layoutCirc() {
     animateScenario(
       'preset2',
       ['triCotCsc.unit.label', 'triTanSec.unit.label'],
-      ['theta', '', 'theta', 'hyp', 'comp', 'hyp'],
+      ['theta', false, true, 'theta', true, false, 'comp', true, false],
     );
     if (!circle.isShown) {
       circle.animations.new().dissolveIn().start();
@@ -628,8 +662,8 @@ function layoutCirc() {
   figure.fnMap.global.add('preset3', () => {
     animateScenario(
       'preset3',
-      ['triCotCsc.unit.label', 'triTanSec.unit.label'],
-      ['theta', '', 'theta', '', 'comp', ''],
+      ['triCotCsc.unit.label', 'triTanSec.unit.label', 'triSinCos.unit.label'],
+      ['theta', false, false, 'theta', false, false, 'comp', false, false],
     );
     if (!circle.isShown) {
       circle.animations.new().dissolveIn().start();
@@ -646,16 +680,11 @@ function layoutCirc() {
   .##.....##.########..######..########....##...
   */
   figure.fnMap.global.add('reset', () => {
+    showAll();
     rotator.setRotation(defaultAngle);
     circ.setScenarios('reset');
     circle.hide();
-    setLocks('theta', '', 'theta', '', 'theta', '');
-    showAll();
+    setLocks('theta', false, true, 'theta', false, true, 'theta', false, true);
     selectTriangle('');
   });
-  // figure.fnMap.global.add('reset', () => {
-  //   animateScenario(
-  //     'reset', ['circle'], ['theta', '', 'theta', '', 'theta', ''],
-  //   );
-  // });
 }
