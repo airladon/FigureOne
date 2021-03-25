@@ -4,7 +4,7 @@
 
 // eslint-disable-next-line
 function layoutCirc() {
-  const radius = 1.1;
+  const radius = 1.2;
   const defaultAngle = 35 / 180 * Math.PI;
   const dCos = radius * Math.cos(defaultAngle);
   const dSin = radius * Math.sin(defaultAngle);
@@ -124,14 +124,14 @@ function layoutCirc() {
     },
   });
 
-  const button = (name, position, text) => ({
+  const button = (name, position, text, width = 0.7, height = 0.3) => ({
     name,
     method: 'collections.rectangle',
     options: {
       label: { text, font: { size: 0.1 } },
       position,
-      width: 0.7,
-      height: 0.3,
+      width,
+      height,
       line: { width: thin },
       corner: { radius: 0.02, sides: 3 },
       color: colText,
@@ -221,6 +221,9 @@ function layoutCirc() {
       button('unitButton', [-2.6, 0], 'Unit: Yes'),
       button('thetaButton', [-2.6, -0.4], 'Theta: Yes'),
       button('reset', [2.6, -1.2], 'Reset'),
+      button('preset1', [-0.4, -1.2], '1', 0.25, 0.25),
+      button('preset2', [0, -1.2], '2', 0.25, 0.25),
+      button('preset3', [0.4, -1.2], '3', 0.25, 0.25),
       {
         name: 'arcButton',
         method: 'collection',
@@ -230,7 +233,7 @@ function layoutCirc() {
           line('y', colText, thin, [0, 0], 0.2, Math.PI / 2),
         ],
         options: {
-          position: [2.6, 1.2],
+          position: [0.7, -1.3],
         },
         mods: {
           isTouchable: true,
@@ -274,6 +277,7 @@ function layoutCirc() {
   const [unitCotCsc, thetaCotCsc, rightCotCsc, moveCotCsc, rotThetaCotCsc, rotCompCotCsc, rotRightCotCsc] = get({ triCotCsc: ['unit', 'theta', 'right', 'movePad', 'rotTheta', 'rotComp', 'rotRight'] });
   const [flip, lock, lockHyp, reset, arcButton, unitButton, thetaButton] = get(['flip', 'lock', 'lockHyp', 'reset', 'arcButton', 'unitButton', 'thetaButton']);
   const [circle, background] = get(['circle', 'background']);
+  const [preset1, preset2, preset3] = get(['preset1', 'preset2', 'preset3']);
 
   sec.label.location = 'positive';
   csc.label.location = 'positive';
@@ -411,9 +415,7 @@ function layoutCirc() {
     offsetForLock(triCotCsc, r, cot.getP2(), csc.getP2(), cot.getP1());
   }
   const rotatorUpdateCircle = () => {
-    if (rotator.isShown) {
-      updateCircle(Fig.tools.g2.clipAngle(rotator.transform.r(), '0to360'));
-    }
+    updateCircle(Fig.tools.g2.clipAngle(rotator.transform.r(), '0to360'));
   };
   rotator.fnMap.add('updateCircle', () => rotatorUpdateCircle());
   figure.fnMap.global.add('circSetup', (payload) => {
@@ -432,6 +434,7 @@ function layoutCirc() {
     }
   });
   rotator.subscriptions.add('setTransform', 'updateCircle');
+  rotator.onClick = () => figure.stop('complete');
 
   const updateLabels = (triElement, el1, el2, el3, el4) => {
     const s = triElement.getScale();
@@ -578,7 +581,11 @@ function layoutCirc() {
     triangle.customState.unit = unit;
     triangle.customState.theta = thetaFlag;
   };
-  const setLocks = (ang1, side1, unit1, theta1, ang2, side2, theta2, unit2, ang3, side3, unit3, theta3) => {
+  const setLocks = (
+    ang1, side1, unit1, theta1,
+    ang2, side2, theta2, unit2,
+    ang3, side3, unit3, theta3
+  ) => {
     setLock(triSinCos, ang1, side1, unit1, theta1);
     setLock(triTanSec, ang2, side2, unit2, theta2);
     setLock(triCotCsc, ang3, side3, unit3, theta3);
@@ -644,19 +651,41 @@ function layoutCirc() {
   createScenario('reset', triTanSec, [-0.8, -0.5], 'theta', 0, false);
   createScenario('reset', triCotCsc, [0.8, -0.5], 'theta', 0, false);
 
-  const animateScenario = (scenario, dissolveOut, locks, duration = 3) => {
+  const animateScenario = (scenario, dissolveOut, locks) => {
     figure.stop('freeze');
     showAll();
     circ.hide(dissolveOut);
+    const velocity = new Fig.Transform().scale(0.5, 0.5).rotate(0.5).translate(0.5, 0.5);
+    const duration1 = Fig.tools.g2.getMaxTimeFromVelocity(
+      triSinCos.transform._dup(), triSinCos.getScenarioTarget(scenario).transform, velocity, 0,
+    );
+    const duration2 = Fig.tools.g2.getMaxTimeFromVelocity(
+      triTanSec.transform._dup(), triTanSec.getScenarioTarget(scenario).transform, velocity, 0,
+    );
+    const duration3 = Fig.tools.g2.getMaxTimeFromVelocity(
+      triCotCsc.transform._dup(), triCotCsc.getScenarioTarget(scenario).transform, velocity, 0,
+    );
+    const duration4 = Fig.tools.g2.getMaxTimeFromVelocity(
+      circle.transform._dup(), circle.getScenarioTarget(scenario).transform, velocity, 0,
+    );
+    const duration = Math.min(3, Math.max(duration1, duration2, duration3, duration4));
     rotator.animations.new().rotation({ target: defaultAngle, duration }).start();
+    figure.fnMap.exec('lockInput');
     circ.animations.new()
       .inParallel([
-        circ.animations.scenarios({ target: scenario, duration }),
+        triSinCos.animations.scenario({ target: scenario, duration }),
+        triTanSec.animations.scenario({ target: scenario, duration }),
+        triCotCsc.animations.scenario({ target: scenario, duration }),
+        circle.animations.scenario({ target: scenario, duration }),
       ])
+      .trigger('unlockInput')
       .start();
     selectTriangle('');
     setLocks(...locks);
   };
+
+  figure.fnMap.global.add('lockInput', () => { rotator.isTouchable = false; });
+  figure.fnMap.global.add('unlockInput', () => { rotator.isTouchable = true; });
 
   figure.fnMap.global.add('preset1', () => {
     animateScenario(
@@ -689,6 +718,10 @@ function layoutCirc() {
     }
   });
 
+  preset1.onClick = 'preset1';
+  preset2.onClick = 'preset2';
+  preset3.onClick = 'preset3';
+
   /*
   .########..########..######..########.########
   .##.....##.##.......##....##.##..........##...
@@ -703,7 +736,6 @@ function layoutCirc() {
     rotator.setRotation(defaultAngle);
     circ.setScenarios('reset');
     circle.hide();
-    // setLocks('theta', false, true, 'theta', false, true, 'theta', false, true);
     setLock(triSinCos, 'theta', false, true, true);
     setLock(triTanSec, 'theta', false, true, true);
     setLock(triCotCsc, 'theta', false, true, true);

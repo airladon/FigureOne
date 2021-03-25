@@ -10,6 +10,9 @@ Next, as all of these triangles share the same angles, then they are similar and
 
 We can use this logic to find a multitude of other relationships between side ratios. Two other common examples are, the hyptoneuse over one gives us one over cos equals sec, and one over sine equals csc.
 
+Next, let's line up the sin cos triangle with a circle. So we can put the tan and cot triangles to the side, and show a quarter circle, and we can see that 
+
+
 Now, let's start interacting. First, we can change our angle theta with the angle in the bottom left corner here.
 
 First, we can move triangles by dragging them. When we touch them, some options for the specific triangle show up on the left here, and we will cover them as we need them, but by all means experiment with them now if you wish.
