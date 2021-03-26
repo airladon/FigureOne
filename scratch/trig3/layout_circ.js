@@ -583,8 +583,8 @@ function layoutCirc() {
   };
   const setLocks = (
     ang1, side1, unit1, theta1,
-    ang2, side2, theta2, unit2,
-    ang3, side3, unit3, theta3
+    ang2, side2, unit2, theta2,
+    ang3, side3, unit3, theta3,
   ) => {
     setLock(triSinCos, ang1, side1, unit1, theta1);
     setLock(triTanSec, ang2, side2, unit2, theta2);
@@ -641,12 +641,12 @@ function layoutCirc() {
   createScenario('preset1', triSinCos, origin, 'theta', 0, false);
   createScenario('preset1', triTanSec, origin, 'theta', 0, false);
   createScenario('preset1', triCotCsc, [origin[0] - thick / 2, origin[1] + thick / 2], 'theta', 0, false);
-  createScenario('preset2', triSinCos, origin, 'theta', 0, false);
-  createScenario('preset2', triTanSec, origin, 'theta', defaultAngle - Math.PI, true);
-  createScenario('preset2', triCotCsc, origin, 'comp', Math.PI / 2 + defaultAngle, true);
   createScenario('preset3', triSinCos, origin, 'theta', 0, false);
-  createScenario('preset3', triTanSec, origin, 'theta', 0, false);
-  createScenario('preset3', triCotCsc, [origin[0] - thick / 2, origin[1] + thick / 2], 'comp', Math.PI, false);
+  createScenario('preset3', triTanSec, origin, 'theta', defaultAngle - Math.PI, true);
+  createScenario('preset3', triCotCsc, origin, 'comp', Math.PI / 2 + defaultAngle, true);
+  createScenario('preset2', triSinCos, origin, 'theta', 0, false);
+  createScenario('preset2', triTanSec, origin, 'theta', 0, false);
+  createScenario('preset2', triCotCsc, [origin[0] - thick / 2, origin[1] + thick / 2], 'comp', Math.PI, false);
   createScenario('reset', triSinCos, [-2.2, -0.5], 'theta', 0, false);
   createScenario('reset', triTanSec, [-0.8, -0.5], 'theta', 0, false);
   createScenario('reset', triCotCsc, [0.8, -0.5], 'theta', 0, false);
@@ -691,7 +691,11 @@ function layoutCirc() {
     animateScenario(
       'preset1',
       ['triSinCos.unit.label', 'triTanSec.unit.label', 'triCotCsc.theta'],
-      ['theta', false, false, true, 'theta', false, false, true, 'theta', false, true, true],
+      [
+        'theta', false, false, true,
+        'theta', false, false, true,
+        'theta', false, true, false,
+      ],
     );
     if (!circle.isShown) {
       circle.animations.new().dissolveIn().start();
@@ -700,8 +704,12 @@ function layoutCirc() {
   figure.fnMap.global.add('preset2', () => {
     animateScenario(
       'preset2',
-      ['triCotCsc.unit.label', 'triTanSec.unit.label'],
-      ['theta', false, true, true, 'theta', true, false, true, 'comp', true, false, true],
+      ['triCotCsc.unit.label', 'triTanSec.unit.label', 'triSinCos.unit.label'],
+      [
+        'theta', false, false, true,
+        'theta', false, false, true,
+        'comp', false, false, true,
+      ],
     );
     if (!circle.isShown) {
       circle.animations.new().dissolveIn().start();
@@ -710,8 +718,11 @@ function layoutCirc() {
   figure.fnMap.global.add('preset3', () => {
     animateScenario(
       'preset3',
-      ['triCotCsc.unit.label', 'triTanSec.unit.label', 'triSinCos.unit.label'],
-      ['theta', false, false, true, 'theta', false, false, true, 'comp', false, false, true],
+      ['triCotCsc.unit.label', 'triTanSec.unit.label'],
+      [
+        'theta', false, true, true,
+        'theta', true, false, true,
+        'comp', true, false, true],
     );
     if (!circle.isShown) {
       circle.animations.new().dissolveIn().start();
