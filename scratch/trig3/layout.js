@@ -39,44 +39,45 @@ layout();
 // t6 = performance.now()
 // console.log('t6', t6 - t5)
 
-// function makeSlides() {
-//   figure.add({
-//     name: 'nav',
-//     method: 'collections.slideNavigator',
-//     options: {
-//       nextButton: { position: [3.8, 0], width: 0.2, height: 0.2 },
-//       prevButton: { position: [-3.8, 0], width: 0.2, height: 0.2 },
-//       equation: ['eqn', 'similar.eqn', 'circ.eqn'],
-//       // equationDefaults: { duration: 4 },
-//     },
-//   });
-//   const slides = [];
-
-//   const nav = figure.getElement('nav');
-//   // const circ = figure.getElement('circ');
-//   // const eqn = figure.getElement('eqn');
-
-//   /*
-//   .########.####.########.##.......########
-//   ....##.....##.....##....##.......##......
-//   ....##.....##.....##....##.......##......
-//   ....##.....##.....##....##.......######..
-//   ....##.....##.....##....##.......##......
-//   ....##.....##.....##....##.......##......
-//   ....##....####....##....########.########
-//   */
-//   slides.push({
-//     scenario: 'reset',
-//     enterState: 'reset',
-//     showCommon: 'circ',
-//   });
-
-//   nav.loadSlides(slides);
-//   nav.goToSlide(0);
+function makeSlides() {
+  figure.add({
+    name: 'nav',
+    method: 'collections.slideNavigator',
+    options: {
+      nextButton: { position: [3.8, 0], width: 0.2, height: 0.2 },
+      prevButton: { position: [-3.8, 0], width: 0.2, height: 0.2 },
+      equation: ['eqn', 'similar.eqn', 'circ.eqn'],
+      // equationDefaults: { duration: 4 },
+    },
+  });
 // }
-// makeSlides();
+  const slides = [];
+
+  const nav = figure.getElement('nav');
+  // const circ = figure.getElement('circ');
+  // const eqn = figure.getElement('eqn');
+
+  /*
+  .########.####.########.##.......########
+  ....##.....##.....##....##.......##......
+  ....##.....##.....##....##.......##......
+  ....##.....##.....##....##.......######..
+  ....##.....##.....##....##.......##......
+  ....##.....##.....##....##.......##......
+  ....##....####....##....########.########
+  */
+  slides.push({
+    scenario: 'reset',
+    enterState: 'reset',
+    showCommon: 'circ',
+  });
+
+  nav.loadSlides(slides);
+  nav.goToSlide(0);
+}
+makeSlides();
 
 // const circ = figure.elements._circ;
 // circ.
-figure.fnMap.exec('reset');
-figure.elements._eqn.hide();
+// figure.fnMap.exec('reset');
+// figure.elements._eqn.hide();

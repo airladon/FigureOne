@@ -158,9 +158,6 @@ function layoutCirc() {
       rot('rotRight'),
     ],
     mods: {
-      // scenarios: {
-      //   default: { scale: [1, 1], position, rotation: 0 },
-      // },
       customState: {
         lock: 'theta', lockHyp: false, center, x, y, unit: true, theta: true,
       },
@@ -169,17 +166,6 @@ function layoutCirc() {
 
   const button = (name, position, text, width = 0.7, height = 0.25, size = 0.1, textPosition = [0, 0]) => ({
     name,
-    // method: 'collections.rectangle',
-    // options: {
-    //   label: { text, font: { size }, modifiers: { theta: { text: '\u03b8', font: { style: 'italic', family: 'Time New Roman', size: size * 1.2, color: colTheta } } } },
-    //   position,
-    //   width,
-    //   height,
-    //   line: { width: thin },
-    //   corner: { radius: 0.02, sides: 3 },
-    //   color: colText,
-    //   fill: [1, 1, 1, 1],
-    // },
     method: 'collection',
     elements: [
       { name: 'rect', method: 'primitives.rectangle', options: { width, height, line: { width: thin }, corner: { radius: 0.02, sides: 3 }, color: colGrey } },
@@ -365,7 +351,7 @@ function layoutCirc() {
   const [flip, lock, lockHyp, reset, arcButton, unitButton, thetaButton] = get(['flip', 'lock', 'lockHyp', 'reset', 'arcButton', 'unitButton', 'thetaButton']);
   const [circle, background] = get(['circle', 'background']);
   const [preset1, preset2, preset3] = get(['preset1', 'preset2', 'preset3']);
-  const [hypLock, angleLock, viewUnit, viewTheta] = get(['hypLock', 'angleLock', 'viewUnit', 'viewTheta']);
+  const [hypLock, viewUnit, viewTheta] = get(['hypLock', 'viewUnit', 'viewTheta']);
 
   sec.label.location = 'positive';
   csc.label.location = 'positive';
