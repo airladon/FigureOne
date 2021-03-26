@@ -52,6 +52,48 @@ function layoutCirc() {
     };
   }
 
+  const addEye = (name, position) => ({
+    name,
+    method: 'collection',
+    elements: [
+      { name: 'eye1', method: 'polygon', options: { line: { width: medium }, radius: 0.075, angleToDraw: 2, rotation: Math.PI / 2 - 1, sides: 100, position: [0, -0.043] } },
+      { name: 'eye2', method: 'polygon', options: { line: { width: medium }, radius: 0.075, angleToDraw: 2, rotation: Math.PI / 2 - 1 + Math.PI, sides: 100, position: [0, 0.043] } },
+      { name: 'center', method: 'polygon', options: { radius: 0.012, sides: 6 }},
+      { name: 'strike', method: 'line', options: { p1: [-0.05, -0.05], p2: [0.05, 0.05], width: medium } },
+    ],
+    options: {
+      position,
+    },
+    mods: {
+      custom: {
+        visible: () => figure.elements._circ.getElement(name)._strike.hide(),
+        hidden: () => figure.elements._circ.getElement(name)._strike.show(),
+      },
+    },
+  });
+
+  const addLock = (name, position, unlockOpacity = 1) => ({
+    name,
+    method: 'collection',
+    elements: [
+      // { name: 'l', method: 'ellipse', options: { position: [0, 0.035], line: { width: medium }, height: 0.05, width: 0.05, sides: 20 } },
+      { name: 'lock', method: 'polygon', options: { position: [0, 0.035], line: { width: medium }, radius: 0.025, sides: 20, angleToDraw: Math.PI } },
+      // { name: 'unlock', method: 'line', options: { width: 0.02, p1: [0, 0.03 + 0.01], length: 0.04, color: [1, 1, 1, unlockOpacity] } },
+      { name: 'r', method: 'collections.rectangle', options: { width: 0.08, height: 0.07, corner: { radius: 0.005 }, line: { width: medium }, fill: [1, 1, 1, 1] } },
+    ],
+    options: {
+      position,
+    },
+    mods: {
+      custom: {
+        // lock: () => figure.elements._circ.getElement(name)._unlock.hide(),
+        // unlock: () => figure.elements._circ.getElement(name)._unlock.show(),
+        lock: () => figure.elements._circ.getElement(name)._lock.setRotation(0),
+        unlock: () => figure.elements._circ.getElement(name)._lock.setRotation(0.7),
+      },
+    },
+  });
+
   const rightAngle = (name, position, startAngle, r = 0.15, color = colGrey) => ({
     name,
     method: 'collections.angle',
@@ -108,6 +150,7 @@ function layoutCirc() {
         },
         mods: {
           isMovable: true,
+          // move: { bounds: 'diagram' },
         },
       },
       rot('rotTheta'),
@@ -124,19 +167,57 @@ function layoutCirc() {
     },
   });
 
-  const button = (name, position, text, width = 0.7, height = 0.3) => ({
+  const button = (name, position, text, width = 0.7, height = 0.25, size = 0.1, textPosition = [0, 0]) => ({
     name,
-    method: 'collections.rectangle',
-    options: {
-      label: { text, font: { size: 0.1 } },
-      position,
-      width,
-      height,
-      line: { width: thin },
-      corner: { radius: 0.02, sides: 3 },
-      color: colText,
-    },
-    mods: { isTouchable: true },
+    // method: 'collections.rectangle',
+    // options: {
+    //   label: { text, font: { size }, modifiers: { theta: { text: '\u03b8', font: { style: 'italic', family: 'Time New Roman', size: size * 1.2, color: colTheta } } } },
+    //   position,
+    //   width,
+    //   height,
+    //   line: { width: thin },
+    //   corner: { radius: 0.02, sides: 3 },
+    //   color: colText,
+    //   fill: [1, 1, 1, 1],
+    // },
+    method: 'collection',
+    elements: [
+      { name: 'rect', method: 'primitives.rectangle', options: { width, height, line: { width: thin }, corner: { radius: 0.02, sides: 3 }, color: colGrey } },
+      {
+        name: 'label',
+        method: 'textLines',
+        options: {
+          position:
+          textPosition,
+          text,
+          font: { size, color: colText },
+          xAlign: 'center',
+          yAlign: 'middle',
+          modifiers: {
+            theta: {
+              text: '\u03b8',
+              font: {
+                style: 'italic', family: 'Time New Roman', size: size * 1.2, color: colTheta,
+              },
+            },
+            _90: {
+              text: '90\u00b0',
+              font: {
+                family: 'Time New Roman', size: size * 1.2, color: colTheta,
+              },
+            },
+            min: {
+              text: '\u2212',
+              font: {
+                family: 'Time New Roman', size: size * 1.2, color: colTheta,
+              },
+            },
+          },
+        },
+      },
+    ],
+    options: { position },
+    mods: { isTouchable: true, touchBorder: 0 },
   });
 
 
@@ -215,31 +296,37 @@ function layoutCirc() {
         lineWithLabel('sin', colSin, 'sin'),
         lineWithLabel('cos', colCos, 'cos'),
       ], [-1.5, -0.35], 0, dC1, dCos, dSin),
-      button('flip', [-2.6, 1.2], 'Flip'),
-      button('lock', [-2.6, 0.8], 'Lock: Theta'),
-      button('lockHyp', [-2.6, 0.4], 'Lock Hyp: No'),
-      button('unitButton', [-2.6, 0], 'Unit: Yes'),
-      button('thetaButton', [-2.6, -0.4], 'Theta: Yes'),
-      button('reset', [2.6, -1.2], 'Reset'),
-      button('preset1', [-0.4, -1.2], '1', 0.25, 0.25),
-      button('preset2', [0, -1.2], '2', 0.25, 0.25),
-      button('preset3', [0.4, -1.2], '3', 0.25, 0.25),
+      button('flip', [0.1, -1.2], 'Flip', 0.3, 0.25, 0.1, [0, -0.01]),
+      button('unitButton', [0.5, -1.2], 'Unit', 0.3, 0.25, 0.07, [0, -0.06]),
+      button('thetaButton', [0.9, -1.2], '|theta|', 0.3, 0.25, 0.07, [0, -0.06]),
+      button('lockHyp', [1.3, -1.2], 'Hyp', 0.3, 0.25, 0.07, [0, -0.06]),
+      button('lock', [1.7, -1.2], '|theta|', 0.3, 0.25, 0.07, [0, -0.06]),
+      // button('lock', [-2.6, 0.8], 'Lk: Theta'),
+      // button('lockHyp', [-2.6, 0.4], 'Lk Hyp: No'),
+      button('reset', [2.6, -1.2], 'Reset', 0.4),
+      button('preset1', [-2, -1.2], '1', 0.25),
+      button('preset2', [-1.6, -1.2], '2', 0.25),
+      button('preset3', [-1.2, -1.2], '3', 0.25),
       {
         name: 'arcButton',
         method: 'collection',
         elements: [
-          arc('arc', colText, thin, 100, Math.PI / 2, 0, 0.2),
-          line('x', colText, thin, [0, 0], 0.2, 0),
-          line('y', colText, thin, [0, 0], 0.2, Math.PI / 2),
+          arc('arc', colText, thin, 100, Math.PI / 2, 0, 0.22),
+          line('x', colText, thin, [0, 0], 0.22, 0),
+          line('y', colText, thin, [0, 0], 0.22, Math.PI / 2),
         ],
         options: {
-          position: [0.7, -1.3],
+          position: [-0.9, -1.31],
         },
         mods: {
           isTouchable: true,
           touchBorder: 0.1,
         },
       },
+      addLock('hypLock', [1.3, -1.17]),
+      addLock('angleLock', [1.7, -1.17], 0),
+      addEye('viewUnit', [0.5, -1.16]),
+      addEye('viewTheta', [0.9, -1.16]),
       {
         name: 'rotator',
         method: 'collections.line',
@@ -278,6 +365,7 @@ function layoutCirc() {
   const [flip, lock, lockHyp, reset, arcButton, unitButton, thetaButton] = get(['flip', 'lock', 'lockHyp', 'reset', 'arcButton', 'unitButton', 'thetaButton']);
   const [circle, background] = get(['circle', 'background']);
   const [preset1, preset2, preset3] = get(['preset1', 'preset2', 'preset3']);
+  const [hypLock, angleLock, viewUnit, viewTheta] = get(['hypLock', 'angleLock', 'viewUnit', 'viewTheta']);
 
   sec.label.location = 'positive';
   csc.label.location = 'positive';
@@ -477,21 +565,43 @@ function layoutCirc() {
   };
 
   const updateLockText = (triElement) => {
-    lock.setLabel(`Lock: ${triElement.customState.lock}`);
-    lockHyp.setLabel(`Lock Hyp: ${triElement.customState.lockHyp ? 'Yes' : 'No'}`);
-    if (triElement.customState.unit) {
-      unitButton.setLabel('Unit: Yes');
-      triElement._unit._label.show();
+    // lock.setLabel(`\u{1F512}: ${triElement.customState.lock}`);
+    
+    // lock.setLabel(`${triElement.customState.lock}`);
+    if (triElement.customState.lock === 'theta') {
+      lock._label.custom.updateText({ text: '|theta|' });
+    } else if (triElement.customState.lock === 'comp') {
+      lock._label.custom.updateText({ text: '|_90||min||theta|' });
     } else {
-      unitButton.setLabel('Unit: No');
+      lock._label.custom.updateText({ text: '|_90|' });
+    }
+
+    // lock._label.custom.updateText({ text: `${triElement.customState.lock}`});
+    
+    // lock.setLabel('Hyp');
+    if (triElement.customState.lockHyp) {
+      hypLock.custom.lock();
+    } else {
+      hypLock.custom.unlock();
+    }
+    // lockHyp.setLabel(`Hyp: ${triElement.customState.lockHyp ? '\u{1F512}' : '\u{1F513}'}`);
+    if (triElement.customState.unit) {
+      // unitButton.setLabel('Unit: Yes');
+      triElement._unit._label.show();
+      viewUnit.custom.visible();
+    } else {
+      // unitButton.setLabel('Unit: No');
       triElement._unit._label.hide();
+      viewUnit.custom.hidden();
     }
     if (triElement.customState.theta) {
-      thetaButton.setLabel('Theta: Yes');
+      // thetaButton.setLabel('Theta: Yes');
       triElement._theta.show();
+      viewTheta.custom.visible();
     } else {
-      thetaButton.setLabel('Theta: No');
+      // thetaButton.setLabel('Theta: No');
       triElement._theta.hide();
+      viewTheta.custom.hidden();
     }
   };
 
@@ -547,22 +657,14 @@ function layoutCirc() {
     moveTanSec.setOpacity(0);
     moveCotCsc.setOpacity(0);
     if (triangle === '') {
-      lock.hide();
-      flip.hide();
-      lockHyp.hide();
-      unitButton.hide();
-      thetaButton.hide();
+      circ.hide(['lock', 'flip', 'lockHyp', 'unitButton', 'thetaButton', 'viewTheta', 'viewUnit', 'angleLock', 'hypLock']);
       circ.customState.selected = '';
       return;
     }
     triangle._movePad.setOpacity(1);
     circ.customState.selected = triangle.name;
+    circ.show(['lock', 'flip', 'lockHyp', 'unitButton', 'thetaButton', 'viewTheta', 'viewUnit', 'angleLock', 'hypLock']);
     updateLockText(triangle);
-    lock.showAll();
-    flip.showAll();
-    lockHyp.showAll();
-    unitButton.showAll();
-    thetaButton.showAll();
   };
 
   circle.subscriptions.add('visibility', 'processButton');

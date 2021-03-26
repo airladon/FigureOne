@@ -8,6 +8,7 @@ const figure = new Fig.Figure({
 
 const thick = 0.012;
 const thin = 0.005;
+const medium = 0.007;
 
 // const color1 = [1, 0, 0, 1];
 // const color2 = [0, 0.5, 1, 1];

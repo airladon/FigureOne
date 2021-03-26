@@ -251,7 +251,7 @@ function setupRecorder() {
   //   .then(response => response.json())
   //   .then(json => recorder.loadStates(json));
 
-  // recorder.loadAudio(new Audio('./audio.mp3'));
+  recorder.loadAudio(new Audio('./audio.mp3'));
 }
 
 setupRecorder();
