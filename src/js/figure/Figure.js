@@ -1992,7 +1992,15 @@ class Figure {
       if (element !== this.elements) {
         if (element.isBeingTouched(previousGLPoint)
               || element.move.canBeMovedAfterLosingTouch) {
-          const elementToMove = element.move.element == null ? element : element.move.element;
+          let elementToMove;
+          if (element.move.element == null) {
+            elementToMove = element;
+          } else if (typeof element.move.element === 'string') {
+            elementToMove = this.getElement(element.move.element);
+          } else {
+            elementToMove = element.move.element;
+          }
+          // const elementToMove = element.move.element == null ? element : element.move.element;
           if (elementToMove.state.isBeingMoved === false) {
             elementToMove.startBeingMoved();
           }

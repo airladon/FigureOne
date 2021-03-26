@@ -11,11 +11,22 @@ function layout() {
   //   }),
   //   leftText('background2', 'Similar Triangles  \u2192  Right Angle Triangles', {}, [-1.8, 0]),
   // ]);
+  // figure.add({
+  //   name: 'cursor',
+  //   method: 'collections.cursor',
+  //   options: {
+  //     color: [0, 0.5, 1, 0.7],
+  //   },
+  //   mods: {
+  //     isShown: false,
+  //   },
+  // });
   figure.add({
     name: 'cursor',
     method: 'collections.cursor',
     options: {
       color: [0, 0.5, 1, 0.7],
+      radius: 0.15,
     },
     mods: {
       isShown: false,
@@ -70,6 +81,32 @@ function makeSlides() {
     scenario: 'reset',
     enterState: 'reset',
     showCommon: 'circ',
+    exec: [
+      ['0:19.8', 'pulseSinTri'],
+      ['0:19.8', 'pulseTanTri'],
+      ['0:19.8', 'pulseCotTri'],
+      ['0:32.5', 'pulseRightAngles'],
+      ['0:41.3', 'pulseSinTri'],
+      ['0:44.5', 'eqnSinCosOne'],
+      ['0:50', 'eqnTanSecOne'],
+      ['0:54', 'eqnCotCscOne'],
+      ['1:00', 'pulseSinTheta'],
+      ['1:00', 'pulseTanTheta'],
+      ['1:00', 'pulseCotTheta'],
+      ['1:00', 'pulseRightAngles'],
+      ['1:08', 'eqnOppAdj'],
+      ['1:13', 'pulseSin'],
+      ['1:14', 'pulseCos'],
+      ['1:17', 'pulseTan'],
+      ['1:17.7', 'pulseTanUnit'],
+      ['1:21.5', 'pulseCotUnit'],
+      ['1:22.3', 'pulseCot'],
+      ['1:28', 'eqnHypAdj'],
+      ['1:32', 'eqnHypOpp'],
+      ['2:41.8', 'pulseSin'],
+      ['2:42.5', 'pulseCos'],
+      ['3:06', 'eqnCoord'],
+    ],
   });
 
   nav.loadSlides(slides);

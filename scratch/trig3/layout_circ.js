@@ -13,7 +13,7 @@ function layoutCirc() {
   const dC1 = Fig.tools.g2.getTriangleCenter([0, 0], [dCos, 0], [dCos, dSin]);
   const dC2 = Fig.tools.g2.getTriangleCenter([0, 0], [radius, 0], [radius, dTan]);
   const dC3 = Fig.tools.g2.getTriangleCenter([0, 0], [dCot, 0], [dCot, radius]);
-  const origin = [-0.8, -0.7];
+  const origin = [-0.8, -0.5];
   const point = (pointX, pointY) => new Fig.Point(pointX, pointY);
 
   const line = (name, color, width = thick, p1 = [0, 0], length = 1, ang = 0, dash = []) => ({
@@ -652,6 +652,9 @@ function layoutCirc() {
     circ.show(['lock', 'flip', 'lockHyp', 'unitButton', 'thetaButton', 'viewTheta', 'viewUnit', 'angleLock', 'hypLock']);
     updateLockText(triangle);
   };
+  add('selectSinCos', () => selectTriangle(triSinCos));
+  add('selectTanSec', () => selectTriangle(triTanSec));
+  add('selectCotCsc', () => selectTriangle(triCotCsc));
 
   circle.subscriptions.add('visibility', 'processButton');
   background.onClick = () => { selectTriangle(''); };
@@ -678,21 +681,21 @@ function layoutCirc() {
     setLock(triTanSec, ang2, side2, unit2, theta2);
     setLock(triCotCsc, ang3, side3, unit3, theta3);
   };
-  const bindMoveElements = (triangle) => {
-    triangle._rotTheta.move.element = triangle;
-    triangle._rotRight.move.element = triangle;
-    triangle._rotComp.move.element = triangle;
-    triangle._movePad.move.element = triangle;
-    triangle._movePad.onClick = () => selectTriangle(triangle);
-    triangle._rotComp.onClick = () => selectTriangle(triangle);
-    triangle._rotRight.onClick = () => selectTriangle(triangle);
-    triangle._rotTheta.onClick = () => selectTriangle(triangle);
+  const bindMoveElements = (triangle, fn) => {
+    triangle._rotTheta.move.element = triangle.getPath();
+    triangle._rotRight.move.element = triangle.getPath();
+    triangle._rotComp.move.element = triangle.getPath();
+    triangle._movePad.move.element = triangle.getPath();
+    triangle._movePad.onClick = fn;
+    triangle._rotComp.onClick = fn;
+    triangle._rotRight.onClick = fn;
+    triangle._rotTheta.onClick = fn;
   };
-  bindMoveElements(triSinCos);
-  bindMoveElements(triTanSec);
-  bindMoveElements(triCotCsc);
+  bindMoveElements(triSinCos, 'selectSinCos');
+  bindMoveElements(triTanSec, 'selectTanSec');
+  bindMoveElements(triCotCsc, 'selectCotCsc');
 
-  circle._movePad.move.element = circle;
+  circle._movePad.move.element = circle.getPath();
 
   /*
   .########..########..########..######..########.########..######.
@@ -840,4 +843,41 @@ function layoutCirc() {
     setLock(triCotCsc, 'theta', false, true, true);
     selectTriangle('');
   });
+
+  /*
+  .########..##.....##.##........######..########
+  .##.....##.##.....##.##.......##....##.##......
+  .##.....##.##.....##.##.......##.......##......
+  .########..##.....##.##........######..######..
+  .##........##.....##.##.............##.##......
+  .##........##.....##.##.......##....##.##......
+  .##.........#######..########..######..########
+  */
+  add('pulseSinTri', () => triSinCos.pulse({ duration: 1.5, scale: 1.2 }));
+  add('pulseTanTri', () => triTanSec.pulse({ duration: 1.5, scale: 1.2 }));
+  add('pulseCotTri', () => triCotCsc.pulse({ duration: 1.5, scale: 1.2 }));
+  add('pulseRightAngles', () => {
+    circ.pulse({
+      elements: ['triSinCos.right', 'triTanSec.right', 'triCotCsc.right'], duration: 1.5, scale: 2.5, xAlign: 'right', yAlign: 'bottom',
+    });
+  });
+
+  add('pulseSinTheta', () => triSinCos._theta.pulseAngle({ duration: 1.5 }));
+  add('pulseTanTheta', () => triTanSec._theta.pulseAngle({ duration: 1.5 }));
+  add('pulseCotTheta', () => triCotCsc._theta.pulseAngle({ duration: 1.5 }));
+  function pulseLabel(name, side, xAlign = 'center', yAlign = 'middle') {
+    add(name, () => side._label.pulse({
+      xAlign, yAlign, scale: 2, duration: 1.5,
+    }));
+  }
+  pulseLabel('pulseSin', sin, 'left');
+  pulseLabel('pulseTan', tan, 'left');
+  pulseLabel('pulseCotUnit', unitCotCsc, 'left');
+  pulseLabel('pulseCos', cos, 'center', 'top');
+  pulseLabel('pulseTanUnit', unitTanSec, 'center', 'top');
+  pulseLabel('pulseCot', cot, 'center', 'top');
+  pulseLabel('pulseSinUnit', unitSinCos, 'right', 'bottom');
+  pulseLabel('pulseSec', sec, 'right', 'bottom');
+  pulseLabel('pulseCsc', csc, 'right', 'bottom');
+  // add('pulseSin', () => triSinCos._sin._label.pulse({ scale: 1.8, xAlign: 'left' }));
 }

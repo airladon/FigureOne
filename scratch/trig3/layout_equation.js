@@ -100,7 +100,7 @@ function makeEquation() {
           frac('hyp', 'v1', 'opp'),
           'eq1', frac('_1', 'v2', 'sin'),
           'eq2', frac('sec', 'v3', 'tan'),
-          'csc',
+          'eq3', 'csc',
         ],
         lim: [
           {
@@ -127,20 +127,21 @@ function makeEquation() {
   });
   const eqn = figure.getElement('eqn');
 
-  const addShow = (name, form, delay = 2) => {
+  const addShow = (name, form, delay = 3) => {
     figure.fnMap.global.add(name, () => {
+      eqn.stop();
       eqn.showForm(form);
       eqn.animations.new()
-        .dissolveIn()
+        .dissolveIn(0.5)
         .delay(delay)
-        .dissolveOut()
+        .dissolveOut(0.5)
         .start();
     });
   };
 
   addShow('eqnSinCosOne', 'sinCosOne');
-  addShow('eqnTanSecOne', 'tanSecOne', 1.5);
-  addShow('eqnCotCscOne', 'cotCscOne', 1.5);
+  addShow('eqnTanSecOne', 'tanSecOne');
+  addShow('eqnCotCscOne', 'cotCscOne');
   addShow('eqnHypAdj', 'hypAdj');
   addShow('eqnHypOpp', 'hypOpp');
   addShow('eqnLim', 'lim');
@@ -149,13 +150,13 @@ function makeEquation() {
     eqn.showForm('oppAdj1');
     eqn.animations.new()
       .dissolveIn()
-      .delay(1)
+      .delay(2.3)
       .goToForm({ target: 'oppAdj2', duration: 1.5, animate: 'move' })
-      .delay(1)
+      .delay(2)
       .goToForm({ target: 'oppAdj3', duration: 1.5, animate: 'move' })
-      .delay(1)
+      .delay(3)
       .goToForm({ target: 'oppAdj4', duration: 1.5, animate: 'move' })
-      .delay(1)
+      .delay(3)
       .dissolveOut()
       .start();
   });

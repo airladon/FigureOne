@@ -48,6 +48,9 @@ function getState(
     if (typeof value === 'boolean') {
       return value;
     }
+    if (typeof value === 'function') {
+      return undefined;
+    }
     if (value == null) {
       return value;
     }
@@ -88,7 +91,9 @@ function getState(
       });
     }
     keysToUse.forEach((key) => {
-      out[key] = processValue(value[key]);
+      if (typeof value[key] !== 'function') {
+        out[key] = processValue(value[key]);
+      }
     });
     return out;
     // return joinObjects({}, value);
