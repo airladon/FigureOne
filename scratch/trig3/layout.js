@@ -106,6 +106,11 @@ function makeSlides() {
       ['2:41.8', 'pulseSin'],
       ['2:42.5', 'pulseCos'],
       ['3:06', 'eqnCoord'],
+      ['3:45', 'eqnLim'],
+      ['5:20', 'eqnCotTanCscSec'],
+      ['5:35', 'preset5'],
+      ['5:41', 'preset4'],
+      ['5:50', 'preset3'],
     ],
   });
 

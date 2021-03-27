@@ -188,7 +188,7 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
   }
 
   setFrame(deltaTime: number) {
-    const percentTime = deltaTime / this.duration;
+    const percentTime = deltaTime / (this.duration + 0.000001);
     const percentComplete = this.getPercentComplete(percentTime);
     const p = percentComplete;
 

@@ -86,6 +86,13 @@ function makeEquation() {
           '_1', 'eq1',
           { sup: ['csc', '2_2'] },
         ],
+        cotTanCscSec: [
+          { sup: ['sec', '2_1'] },
+          '_ + ',
+          { sup: ['csc', '2_1'] },
+          'eq1',
+          { sup: [{ brac: ['lb1', ['tan', '_ + _1', 'cot'], 'rb1'] }, '2_2'] },
+        ],
         oppAdj1: 'oppHyp',
         oppAdj2: ['oppHyp', 'eq1', 'sinCos'],
         oppAdj3: ['oppHyp', 'eq1', 'sinCos', 'eq2', 'tan'],
@@ -122,7 +129,7 @@ function makeEquation() {
           alignment: { xAlign: '1.1o', yAlign: 'baseline' },
         },
       },
-      position: [0, 1],
+      position: [0, 1.2],
     },
   });
   const eqn = figure.getElement('eqn');
@@ -144,7 +151,8 @@ function makeEquation() {
   addShow('eqnCotCscOne', 'cotCscOne');
   addShow('eqnHypAdj', 'hypAdj');
   addShow('eqnHypOpp', 'hypOpp');
-  addShow('eqnLim', 'lim');
+  addShow('eqnCotTanCscSec', 'cotTanCscSec');
+  addShow('eqnLim', 'lim', 2.5);
   addShow('eqnCoord', 'coord');
   figure.fnMap.add('eqnOppAdj', () => {
     eqn.showForm('oppAdj1');

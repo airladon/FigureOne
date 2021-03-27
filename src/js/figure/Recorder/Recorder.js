@@ -1223,6 +1223,7 @@ figure.recorder.loadEventData('autoCursorMove', ${this.encodeCursorEvent('cursor
     // this.figure.pause();
     // this.figure.animateNextFrame();
     this.figure.stop('freeze');
+    this.subscriptions.publish('seek', timeIn);
   }
 
   setToTime(timeIn: number, force: boolean = false) {

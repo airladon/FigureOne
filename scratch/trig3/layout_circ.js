@@ -250,6 +250,7 @@ function layoutCirc() {
             preset1: { position: origin },
             preset2: { position: origin },
             preset3: { position: origin },
+            preset4: { position: origin },
           },
         },
       },
@@ -741,8 +742,14 @@ function layoutCirc() {
   createScenario('reset', triSinCos, [-2.2, -0.5], 'theta', 0, false);
   createScenario('reset', triTanSec, [-0.8, -0.5], 'theta', 0, false);
   createScenario('reset', triCotCsc, [0.8, -0.5], 'theta', 0, false);
+  createScenario('preset4', triSinCos, [origin[0] + 1, origin[1]], 'right', 0, false);
+  createScenario('preset4', triTanSec, [origin[0] + 1, origin[1]], 'right', 0, false);
+  createScenario('preset4', triCotCsc, [origin[0] + 1, origin[1]], 'right', 0, false);
+  createScenario('preset5', triSinCos, [-2.3, origin[1]], 'theta', 0, false);
+  createScenario('preset5', triTanSec, [0, 1.3], 'theta', Math.PI / 2 + defaultAngle, true);
+  createScenario('preset5', triCotCsc, [0, 1.3], 'theta', Math.PI + Math.PI / 2 - defaultAngle, false);
 
-  const animateScenario = (scenario, dissolveOut, locks) => {
+  const animateScenario = (scenario, dissolveOut, locks, finalAngle = defaultAngle, showCircle = true) => {
     figure.stop('freeze');
     showAll();
     circ.hide(dissolveOut);
@@ -756,9 +763,12 @@ function layoutCirc() {
     const duration3 = Fig.tools.g2.getMaxTimeFromVelocity(
       triCotCsc.transform._dup(), triCotCsc.getScenarioTarget(scenario).transform, velocity, 0,
     );
-    const duration4 = Fig.tools.g2.getMaxTimeFromVelocity(
-      circle.transform._dup(), circle.getScenarioTarget(scenario).transform, velocity, 0,
-    );
+    let duration4 = 0;
+    if (showCircle) {
+      duration4 = Fig.tools.g2.getMaxTimeFromVelocity(
+        circle.transform._dup(), circle.getScenarioTarget(scenario).transform, velocity, 0,
+      );
+    }
     const duration = Math.min(3, Math.max(duration1, duration2, duration3, duration4));
     rotator.animations.new().rotation({ target: defaultAngle, duration }).start();
     figure.fnMap.exec('lockInput');
@@ -769,6 +779,8 @@ function layoutCirc() {
         triCotCsc.animations.scenario({ target: scenario, duration }),
         circle.animations.scenario({ target: scenario, duration }),
       ])
+      .then(rotator.animations.rotation({ target: finalAngle, velocity: 0.2 }))
+      .delay(0.1)
       .trigger('unlockInput')
       .start();
     selectTriangle('');
@@ -813,11 +825,39 @@ function layoutCirc() {
       [
         'theta', false, true, true,
         'theta', true, false, true,
-        'comp', true, false, true],
+        'comp', true, false, true,
+      ],
+      1,
     );
     if (!circle.isShown) {
       circle.animations.new().dissolveIn().start();
     }
+  });
+  figure.fnMap.global.add('preset4', () => {
+    animateScenario(
+      'preset4',
+      ['triSinCos.unit.label', 'triTanSec.unit.label', 'triCotCsc.unit.label', 'circle'],
+      [
+        'right', false, false, true,
+        'right', false, false, true,
+        'right', false, false, true,
+      ],
+      39 * Math.PI / 180,
+      false,
+    );
+  });
+  figure.fnMap.global.add('preset5', () => {
+    animateScenario(
+      'preset5',
+      ['circle'],
+      [
+        'theta', false, false, true,
+        'theta', true, false, true,
+        'theta', true, false, true,
+      ],
+      45 * Math.PI / 180,
+      false,
+    );
   });
 
   preset1.onClick = 'preset1';
@@ -841,6 +881,7 @@ function layoutCirc() {
     setLock(triSinCos, 'theta', false, true, true);
     setLock(triTanSec, 'theta', false, true, true);
     setLock(triCotCsc, 'theta', false, true, true);
+    figure.fnMap.exec('unlockInput');
     selectTriangle('');
   });
 
@@ -880,4 +921,7 @@ function layoutCirc() {
   pulseLabel('pulseSec', sec, 'right', 'bottom');
   pulseLabel('pulseCsc', csc, 'right', 'bottom');
   // add('pulseSin', () => triSinCos._sin._label.pulse({ scale: 1.8, xAlign: 'left' }));
+
+  figure.recorder.subscriptions.add('playbackStopped', 'unlockInput');
+  figure.recorder.subscriptions.add('seek', 'unlockInput');
 }
