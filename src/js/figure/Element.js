@@ -3563,6 +3563,9 @@ class FigureElement {
     // console.log(this.name, this.parent)
     // console.log(vertexLocation)
     // console.log(borders)
+    // if (this.name === 'rotLine') {
+    //   debugger;
+    // }
     const holeBorders = this.getBorder('draw', 'holeBorder');
     for (let i = 0; i < borders.length; i += 1) {
       const border = borders[i];

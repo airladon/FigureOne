@@ -123,3 +123,4 @@ makeSlides();
 // circ.
 // figure.fnMap.exec('reset');
 // figure.elements._eqn.hide();
+

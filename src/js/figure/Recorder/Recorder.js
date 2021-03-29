@@ -905,9 +905,9 @@ class Recorder {
     // console.log(time)
     const recordAndQueue = () => {
       if (this.state === 'recording') {
-        if (this.figure.getIsInTransition() === false) {
-          this.recordCurrentState();
-        }
+        // if (this.figure.getIsInTransition() === false) {
+        this.recordCurrentState();
+        // }
         this.queueRecordState(this.stateTimeStep - this.getCurrentTime() % this.stateTimeStep);
       }
     };
@@ -1301,6 +1301,8 @@ figure.recorder.loadEventData('autoCursorMove', ${this.encodeCursorEvent('cursor
     // Sort the eventsToSet arrays in time
     sortTimes(eventsToSetBeforeState);
     sortTimes(eventsToSetAfterState);
+    // console.log(eventsToSetBeforeState)
+    // console.log(eventsToSetAfterState)
     // timer.stamp('m4');
     const playEvents = (events) => {
       events.forEach((event) => {
@@ -1462,6 +1464,7 @@ figure.recorder.loadEventData('autoCursorMove', ${this.encodeCursorEvent('cursor
         // this.figure.setState(this.pauseState, 'instant');
         this.pauseState = null;
       }
+      fromTime = this.getCurrentTime();
       this.state = 'playing';
       this.setVideoToNowDeltaTime(fromTime);
       // this.currentTime = fromTime;

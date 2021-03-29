@@ -228,7 +228,7 @@ class Figure {
   globalAnimation: GlobalAnimation;
   recorder: Recorder;
   gesture: Gesture;
-  inTransition: boolean;
+  // inTransition: boolean;
   beingMovedElements: Array<FigureElement>;
 
   beingTouchedElements: Array<FigureElement>;
@@ -461,7 +461,7 @@ class Figure {
     this.setDefaultLength(options.length || null);
     this.drawQueued = false;
     this.lastDrawTime = 0;
-    this.inTransition = false;
+    // this.inTransition = false;
     this.beingMovedElements = [];
     this.beingTouchedElements = [];
     this.touchTopElementOnly = true;
@@ -741,11 +741,30 @@ class Figure {
 
   getState(options: { precision?: number, ignoreShown?: boolean, min?: boolean }) {
     this.stateTime = this.globalAnimation.now() / 1000;
-    return getState(this, [
+    const state = getState(this, [
       'lastDrawTime',
       'elements',
       'stateTime',
+      // 'beingMovedElements',
+      // 'beingTouchedElements',
+      'isTouchDown',
     ], options);
+    state.beingTouchedElements = [];
+    state.beingMovedElements = [];
+
+    this.beingTouchedElements.forEach((e) => {
+      state.beingTouchedElements.push({
+        f1Type: 'de',
+        state: e.getPath(),
+      });
+    });
+    this.beingMovedElements.forEach((e) => {
+      state.beingMovedElements.push({
+        f1Type: 'de',
+        state: e.getPath(),
+      });
+    });
+    return state;
   }
 
   setState(
@@ -784,6 +803,7 @@ class Figure {
         this.fnMap.exec(this.setStateCallback);
       }
       this.animateNextFrame();
+      // this.setFirstTransform();
       // console.log('triggered')
       this.subscriptions.publish('stateSet');
       // console.log(this.elements._rightTri.isShown)
@@ -1677,6 +1697,8 @@ class Figure {
   // and dragged, then when they are released, for them to move freely before
   // coming to a stop.
   touchDownHandler(clientPoint: Point, eventFromPlayback: boolean = false) {
+    // console.trace()
+    // console.log(this.beingTouchedElements, this.beingMovedElements)
     if (this.recorder.state === 'recording') {
       const pixelP = this.clientToPixel(clientPoint);
       const figurePoint = pixelP.transformBy(this.spaceTransforms.pixelToFigure.matrix());
@@ -1693,9 +1715,9 @@ class Figure {
       this.recorder.pausePlayback();
       this.showCursor('hide');
     }
-    if (this.inTransition) {
-      return false;
-    }
+    // if (this.inTransition) {
+    //   return false;
+    // }
     this.isTouchDown = true;
 
     // Get the touched point in clip space
@@ -1710,6 +1732,7 @@ class Figure {
 
     // Get all the figure elements that were touched at this point (element
     // must have isTouchable = true to be considered)
+    // debugger;
     this.beingTouchedElements = this.elements.getTouched(glPoint);
 
     if (this.touchTopElementOnly && this.beingTouchedElements.length > 1) {
@@ -1734,6 +1757,8 @@ class Figure {
         element.startBeingMoved();
       }
     }
+    
+    // console.log(this.beingTouchedElements, this.beingMovedElements)
     if (this.beingMovedElements.length > 0) {
       this.animateNextFrame(true, 'touch down handler');
     }
@@ -1931,9 +1956,9 @@ class Figure {
     }
   }
 
-  getIsInTransition() {
-    return this.inTransition;
-  }
+  // getIsInTransition() {
+  //   return this.inTransition;
+  // }
 
   // simulateTouchMove(
   //   previousFigurePoint: Point,
@@ -1974,9 +1999,9 @@ class Figure {
       }
     }
 
-    if (this.inTransition) {
-      return false;
-    }
+    // if (this.inTransition) {
+    //   return false;
+    // }
     if (this.beingMovedElements.length === 0) {
       return false;
     }
