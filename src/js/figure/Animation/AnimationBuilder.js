@@ -126,42 +126,40 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this.fnMap.exec(idOrFn, ...args);
   }
 
-  _fromState(state: Object, getElement: ?(string) => FigureElement) {
-    // const obj = new this.constructor();
-    joinObjects(this, state);
-    if (this.element != null && typeof this.element === 'string' && getElement != null) {
-      this.element = getElement(this.element);
-    }
-    return this;
-  }
+  // _fromState(state: Object, getElement: ?(string) => FigureElement) {
+  //   // const obj = new this.constructor();
+  //   joinObjects(this, state);
+  //   if (this.element != null && typeof this.element === 'string' && getElement != null) {
+  //     this.element = getElement(this.element);
+  //   }
+  //   return this;
+  // }
 
   // _getStateProperties() {  // eslint-disable-line class-methods-use-this
   //   return [...super._getStateProperties(),
   //     'steps',
   //   ];
   // }
+  _getStateProperties() {  // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(),
+      'element',
+    ];
+  }
 
   _getStateName() {  // eslint-disable-line class-methods-use-this
     return 'animationBuilder';
   }
 
-  _state(options: Object) {
-    const state = super._state(options);
-    // definition.f1Type = 'animationBuilder';
-    // if (this.element != null) {
-    //   definition.state.element = this.element.getPath();
-    // }
-    if (this.element != null) {
-      state.state.element = {
-        f1Type: 'de',
-        state: this.element.getPath(),
-      };
-    }
-    // if (this.steps.length > 0) {
-    //   definition.def.steps = getState()
-    // }
-    return state;
-  }
+  // _state(options: Object) {
+  //   const state = super._state(options);
+  //   if (this.element != null) {
+  //     state.state.element = {
+  //       f1Type: 'de',
+  //       state: this.element.getPath(),
+  //     };
+  //   }
+  //   return state;
+  // }
 
   /**
    * Add a custom animation step that uses this element by default

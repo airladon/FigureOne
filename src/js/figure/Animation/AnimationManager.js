@@ -582,13 +582,14 @@ export default class AnimationManager {
       'animations',
       'state',
       'options',
+      'element',
     ], options);
-    if (this.element != null) {
-      state.element = {
-        f1Type: 'de',
-        state: this.element.getPath(),
-      };
-    }
+    // if (this.element != null) {
+    //   state.element = {
+    //     f1Type: 'de',
+    //     state: this.element.getPath(),
+    //   };
+    // }
     return state;
   }
 

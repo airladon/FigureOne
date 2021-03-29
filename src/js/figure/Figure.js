@@ -741,6 +741,7 @@ class Figure {
 
   getState(options: { precision?: number, ignoreShown?: boolean, min?: boolean }) {
     this.stateTime = this.globalAnimation.now() / 1000;
+    const o = joinObjects({}, options, { returnF1Type: false });
     const state = getState(this, [
       'lastDrawTime',
       'elements',
@@ -748,7 +749,7 @@ class Figure {
       // 'beingMovedElements',
       // 'beingTouchedElements',
       'isTouchDown',
-    ], options);
+    ], o);
     state.beingTouchedElements = [];
     state.beingMovedElements = [];
 

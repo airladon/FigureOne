@@ -153,30 +153,31 @@ export class TriggerAnimationStep extends AnimationStep {
     return this.fnMap.exec(idOrFn, ...args);
   }
 
-  _fromState(state: Object, getElement: ?(string) => FigureElement) {
-    joinObjects(this, state);
-    if (this.element != null && typeof this.element === 'string' && getElement != null) {
-      this.element = getElement(this.element);
-    }
-    return this;
-  }
+  // _fromState(state: Object, getElement: ?(string) => FigureElement) {
+  //   joinObjects(this, state);
+  //   if (this.element != null && typeof this.element === 'string' && getElement != null) {
+  //     this.element = getElement(this.element);
+  //   }
+  //   return this;
+  // }
 
-  _state(options: Object) {
-    const state = super._state(options);
-    if (this.element != null) {
-      state.state.element = {
-        f1Type: 'de',
-        state: this.element.getPath(),
-      };
-    }
-    return state;
-  }
+  // _state(options: Object) {
+  //   const state = super._state(options);
+  //   if (this.element != null) {
+  //     state.state.element = {
+  //       f1Type: 'de',
+  //       state: this.element.getPath(),
+  //     };
+  //   }
+  //   return state;
+  // }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(),
       'callback',
       'payload',
       'customProperties',
+      'element',
     ];
   }
 

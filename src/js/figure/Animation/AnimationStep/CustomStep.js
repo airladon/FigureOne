@@ -130,27 +130,28 @@ export class CustomAnimationStep extends AnimationStep {
       'startPercent',
       'progression',
       'customProperties',
+      'element',
     ];
   }
 
-  _fromState(state: Object, getElement: ?(string) => FigureElement) {
-    joinObjects(this, state);
-    if (this.element != null && typeof this.element === 'string' && getElement != null) {
-      this.element = getElement(this.element);
-    }
-    return this;
-  }
+  // _fromState(state: Object, getElement: ?(string) => FigureElement) {
+  //   joinObjects(this, state);
+  //   if (this.element != null && typeof this.element === 'string' && getElement != null) {
+  //     this.element = getElement(this.element);
+  //   }
+  //   return this;
+  // }
 
-  _state(options: Object) {
-    const state = super._state(options);
-    if (this.element != null) {
-      state.state.element = {
-        f1Type: 'de',
-        state: this.element.getPath(),
-      };
-    }
-    return state;
-  }
+  // _state(options: Object) {
+  //   const state = super._state(options);
+  //   if (this.element != null) {
+  //     state.state.element = {
+  //       f1Type: 'de',
+  //       state: this.element.getPath(),
+  //     };
+  //   }
+  //   return state;
+  // }
 
   _getStateName() {  // eslint-disable-line class-methods-use-this
     return 'customAnimationStep';

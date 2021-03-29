@@ -1222,18 +1222,30 @@ class FigureElement {
     ];
   }
 
-  _state(options: { precision?: number, ignoreShown?: boolean, min?: boolean } = {}) {
+  _state(
+    options: {
+      precision?: number,
+      ignoreShown?: boolean,
+      min?: boolean,
+      returnF1Type?: boolean,
+    } = {},
+  ) {
     let state;
-    if (options.min) {
-      state = getState(this, this._getStatePropertiesMin(), options);
-    } else {
-      state = getState(this, this._getStateProperties(options), options);
+    let { returnF1Type } = options;
+    if (returnF1Type == null) {
+      returnF1Type = true;
     }
-    if (this.move.element != null && typeof this.move.element !== 'string') {
-      state.move.element = {
+    if (returnF1Type) {
+      return {
         f1Type: 'de',
-        state: this.move.element.getPath(),
+        state: this.getPath(),
       };
+    }
+    const o = joinObjects({}, options, { returnF1Type: true });
+    if (o.min) {
+      state = getState(this, this._getStatePropertiesMin(), o);
+    } else {
+      state = getState(this, this._getStateProperties(o), o);
     }
     return state;
   }
@@ -4299,20 +4311,20 @@ class FigureElementCollection extends FigureElement {
     if (this.isShown || ignoreShown) {
       return [...super._getStateProperties(options),
         // 'touchInBoundingRect',
-        'elements',
+        // 'elements',
         'hasTouchableElements',
       ];
     }
     return [
       ...super._getStateProperties(options),
-      'elements',
+      // 'elements',
     ];
   }
 
   _getStatePropertiesMin() {
     return [
       ...super._getStatePropertiesMin(),
-      'elements',
+      // 'elements',
     ];
   }
 
@@ -6203,6 +6215,51 @@ class FigureElementCollection extends FigureElement {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       this.elements[this.drawOrder[i]].stateSet();
     }
+  }
+
+  _state(
+    options: {
+      precision?: number,
+      ignoreShown?: boolean,
+      min?: boolean,
+      returnF1Type?: boolean,
+    } = {},
+  ) {
+    let state;
+    let { returnF1Type } = options;
+    if (returnF1Type == null) {
+      returnF1Type = true;
+    }
+    if (returnF1Type) {
+      return {
+        f1Type: 'de',
+        state: this.getPath(),
+      };
+    }
+    const tempOptions = joinObjects({}, options, { returnF1Type: true });
+    if (tempOptions.min) {
+      state = getState(this, this._getStatePropertiesMin(), tempOptions);
+    } else {
+      state = getState(this, this._getStateProperties(tempOptions), tempOptions);
+    }
+    // return state;
+
+    // let { returnF1Type } = options;
+    // if (returnF1Type == null) {
+    //   returnF1Type = true;
+    // }
+    // if (returnF1Type) {
+    //   return {
+    //     f1Type: 'de',
+    //     state: this.move.element.getPath(),
+    //   };
+    // }
+    // const o = joinObjects({}, options, { returnF1Type: false });
+    // const state = super._state(o);
+    // console.log(this.elements)
+    const elements = getState(this.elements, Object.keys(this.elements), options);
+    state.elements = elements;
+    return state;
   }
 
   align(
