@@ -27,6 +27,7 @@ docker run -it --rm \
   -v $PROJECT_PATH/.eslintignore:/opt/app/.eslintignore \
   -v $PROJECT_PATH/readme.md:/opt/app/readme.md \
   -v $PROJECT_PATH/scratch:/opt/app/scratch \
+  -v $PROJECT_PATH/untracked:/opt/app/untracked \
   -v $PROJECT_PATH/containers:/opt/app/containers \
   -v $PROJECT_PATH/containers/figureone/favicon.ico:/opt/app/favicon.ico \
   -v /var/run/docker.sock:/var/run/docker.sock \

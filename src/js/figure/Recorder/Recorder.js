@@ -929,7 +929,7 @@ class Recorder {
     const encodedStates = this.encodeStates();
     // const encodedEvents = this.encodeEvents();
     if (encodedStates != null) {
-      download(`${dateStr} ${location}.vidstates.json`, JSON.stringify(encodedStates));
+      download(`${dateStr}_${location}.json`, JSON.stringify(encodedStates));
     }
     // if (encodedEvents != null) {
     //   download(`${dateStr} ${location}.videvents.json`, JSON.stringify(encodedEvents));

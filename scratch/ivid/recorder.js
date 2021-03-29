@@ -247,7 +247,7 @@ function setupRecorder() {
   */
   // Load video states and audio data
 
-  fetch('states.json')
+  fetch('../../untracked/2021-03-29T21_50_51.179Z__scratch_ivid_.json')
     .then(response => response.json())
     .then(json => recorder.loadStates(json));
 
