@@ -1223,10 +1223,19 @@ class FigureElement {
   }
 
   _state(options: { precision?: number, ignoreShown?: boolean, min?: boolean } = {}) {
+    let state;
     if (options.min) {
-      return getState(this, this._getStatePropertiesMin(), options);
+      state = getState(this, this._getStatePropertiesMin(), options);
+    } else {
+      state = getState(this, this._getStateProperties(options), options);
     }
-    return getState(this, this._getStateProperties(options), options);
+    if (this.move.element != null && typeof this.move.element !== 'string') {
+      state.move.element = {
+        f1Type: 'de',
+        state: this.move.element.getPath(),
+      };
+    }
+    return state;
   }
 
   stateSet() {
