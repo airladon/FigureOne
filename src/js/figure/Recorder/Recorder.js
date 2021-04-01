@@ -1186,7 +1186,8 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
         ));
       }
     } else {
-      this.events[eventName].list.push(...data);
+      const timeConvertedData = data.map(d => [this.convertTime(d[0]), d[1]]);
+      this.events[eventName].list.push(...timeConvertedData);
     }
   }
 
