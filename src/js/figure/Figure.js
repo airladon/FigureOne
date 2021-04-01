@@ -693,6 +693,9 @@ class Figure {
       // const element = this.getElement(elementPath);
       // element.fnMap.exec(functionName, args);
       this.fnMap.exec(functionName, args);
+      if (this.recorder.state === 'recording') {
+        this.recorder.recordEvent('exec', payload);
+      }
     };
 
     this.recorder.addEventType('cursor', onCursor);
