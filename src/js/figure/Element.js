@@ -3354,9 +3354,6 @@ class FigureElement {
     // }
     this.isShown = true;
     // this.setOpacity(1);
-    if (this.getPath() === 'rightTri.tri.angle1') {
-      console.log(this.opacity)
-    }
     if (this.opacity === 0) {
       this.setOpacity(1);
     }

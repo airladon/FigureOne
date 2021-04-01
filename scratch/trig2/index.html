@@ -90,12 +90,13 @@
                 width: 16em;
                 margin-top: 1em;
                 display: table;
+                table-layout: fixed;
             }
             .f1_recorder__button {
                 width: 8em;
             }
             .comment_out_to_show_recorder {
-                /* display: none; */
+                display: none;
             }
             #f1_player__play_pause {
                 background-position: center;
@@ -133,6 +134,7 @@
         <div id='f1_recorder' >
             <div id='f1_recorder__record' class="f1_player__button f1_recorder__button">Record</div>
             <div id='f1_recorder__save' class="f1_player__button f1_recorder__button">Save</div>
+            <div id='f1_recorder__load' class="f1_player__button f1_recorder__button">Load Plan</div>
         </div>
     </div>
     <!-- <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.6.1/figureone.min.js'></script> -->
