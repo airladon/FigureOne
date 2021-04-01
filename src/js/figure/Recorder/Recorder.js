@@ -410,6 +410,13 @@ class Recorder {
     this.subscriptions.publish('durationUpdated', this.duration);
   }
 
+  loadSavedData(
+    combined: Object,
+  ) {
+    this.loadStates(combined.states, true, true);
+    this.loadEvents(combined.events, true);
+  }
+
   encodeEvents(
     minifyEvents: boolean = true,
   ) {
@@ -931,16 +938,19 @@ class Recorder {
   }
 
   save() {
-    const dateStr = new Date().toISOString();
-    const location = (window.location.pathname).replace('/', '_');
+    const dateStr = new Date().toISOString().split('.')[0];
+    // const location = (window.location.pathname).replace('/', '_');
+    const location = window.location.pathname.split('/').slice(1, -1).join('_');
     const encodedStates = this.encodeStates();
     const encodedEvents = this.encodeEvents();
-    if (encodedStates != null) {
-      download(`${dateStr}_${location}_states.json`, JSON.stringify(encodedStates));
-    }
-    if (encodedEvents != null) {
-      download(`${dateStr}_${location}_events.json`, JSON.stringify(encodedEvents));
-    }
+    const combined = { states: encodedStates, events: encodedEvents };
+    download(`${dateStr}_${location}.json`, JSON.stringify(combined));
+    // if (encodedStates != null) {
+    //   download(`${dateStr}_${location}_states.json`, JSON.stringify(encodedStates));
+    // }
+    // if (encodedEvents != null) {
+    //   download(`${dateStr}_${location}_events.json`, JSON.stringify(encodedEvents));
+    // }
   }
 
   show() {

@@ -259,13 +259,16 @@ function setupRecorder() {
   */
   // Load video states and audio data
 
-  fetch('../../untracked/2021-04-01T18_40_52.860Z__scratch_ivid__events.json')
-    .then(response => response.json())
-    .then(json => recorder.loadEvents(json));
+  // fetch('../../untracked/2021-04-01T18_40_52.860Z__scratch_ivid__events.json')
+  //   .then(response => response.json())
+  //   .then(json => recorder.loadEvents(json));
 
-  fetch('../../untracked/2021-04-01T18_40_52.860Z__scratch_ivid__states.json')
+  // fetch('../../untracked/2021-04-01T18_40_52.860Z__scratch_ivid__states.json')
+  //   .then(response => response.json())
+  //   .then(json => recorder.loadStates(json));
+  fetch('../../untracked/2021-04-01T18_54_48_scratch_ivid.json')
     .then(response => response.json())
-    .then(json => recorder.loadStates(json));
+    .then(json => recorder.loadSavedData(json));
 
   recorder.loadAudio(new Audio('./audio.mp3'));
 }
