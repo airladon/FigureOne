@@ -210,14 +210,14 @@ function layoutRight() {
     }
     if (x < 0.45 || y < 0.15) {
       tri._angle1.setOpacity(0);
-    } else {
+    } else if (tri._angle1.opacity === 0) {
       tri._angle1.setOpacity(1);
     }
 
     const compTheta = Math.PI / 2 - r;
     if (compTheta < 0.74 || y < 0.55) {
       tri._angle0.setOpacity(0);
-    } else {
+    } else if (tri._angle0.opacity === 0) {
       tri._angle0.setOpacity(1);
     }
 

@@ -1108,6 +1108,7 @@ class CollectionsAngle extends FigureElementCollection {
     if (this._label != null && this._label.isShown === false) {
       labelWasHidden = true;
     }
+    // const oldOpacity = this.opacity;
     this.calculateAngleRotationPosition(options);
     const { corner, _corner } = this;
     if (corner != null && _corner != null) {
@@ -1121,6 +1122,8 @@ class CollectionsAngle extends FigureElementCollection {
     if (labelWasHidden) {
       this._label.hide();
     }
+    // console.log(this.getPath(), oldOpacity)
+    // this.setOpacity(oldOpacity);
   }
 
   getCornerPoints(length: number) {

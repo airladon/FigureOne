@@ -3353,7 +3353,13 @@ class FigureElement {
     //   // console.log('shown')
     // }
     this.isShown = true;
-    this.setOpacity(1);
+    // this.setOpacity(1);
+    if (this.getPath() === 'rightTri.tri.angle1') {
+      console.log(this.opacity)
+    }
+    if (this.opacity === 0) {
+      this.setOpacity(1);
+    }
     if (this.parent != null) {
       if (!this.parent.isShown) {
         this.parent.show();
