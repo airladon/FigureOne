@@ -4,7 +4,7 @@ import WebGLInstance from './webgl/webgl';
 
 import {
   Rect, Point, Transform, getRect,
-  spaceToSpaceTransform, minAngleDiff, getTransform,
+  spaceToSpaceTransform, minAngleDiff,
   getPoint,
 } from '../tools/g2';
 import type { TypeParsableRect, TypeParsablePoint } from '../tools/g2';
@@ -29,10 +29,8 @@ import Gesture from './Gesture';
 import DrawContext2D from './DrawContext2D';
 import FigurePrimitives from './FigurePrimitives/FigurePrimitives';
 import type { OBJ_Polyline } from './FigurePrimitives/FigurePrimitives';
-// import FigureEquation from './Equation/FigureEquation';
 import FigureCollections from './FigureCollections/FigureCollections';
-// import addElements from './FigureAddElements/addElements';
-// import type { TypeAddElementObject } from './FigureAddElements/addElements';
+import AnimationManager from './Animation/AnimationManager';
 import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 import type { TypeColor, OBJ_Font } from '../tools/types';
 import SlideNavigator from './SlideNavigator';
@@ -511,33 +509,6 @@ class Figure {
     this.oldScroll = window.pageYOffset;
     this.drawAnimationFrames = 0;
     this.cursorShown = false;
-    // /**
-    //  * Create built in {@link FigureElement}s
-    //  * @property {function(OBJ_Polygon): FigureElementPrimitive} polygon
-    //  */
-    // deprecate
-    // $FlowFixMe
-    // this.create = {
-    //   collection: this.collections.collection.bind(this.shapes),
-    //   generic: this.shapes.generic.bind(this.shapes),
-    //   polyline: this.shapes.polyline.bind(this.shapes),
-    //   polygon: this.shapes.polygon.bind(this.shapes),
-    //   grid: this.shapes.grid.bind(this.shapes),
-    //   triangle: this.shapes.triangle.bind(this.shapes),
-    //   rectangle: this.shapes.rectangle.bind(this.shapes),
-    //   // radialLines: this.shapes.radialLines.bind(this.shapes),
-    //   text: this.shapes.text.bind(this.shapes),
-    //   textLine: this.shapes.textLine.bind(this.shapes),
-    //   textLines: this.shapes.textLines.bind(this.shapes),
-    //   // arrow: this.shapes.arrow.bind(this.shapes),
-    //   html: this.shapes.html.bind(this.shapes),
-    //   // htmlImage: this.shapes.htmlImage.bind(this.shapes),
-    //   // htmlText: this.shapes.htmlText.bind(this.shapes),
-    //   line: this.collections.line.bind(this.collections),
-    //   angle: this.collections.angle.bind(this.collections),
-    //   smartPolyLine: this.collections.polyline.bind(this.collections),
-    //   equation: this.equation.equation.bind(this.equation),
-    // };
   }
 
   slideNavigator(options: OBJ_SlideNavigator) {
