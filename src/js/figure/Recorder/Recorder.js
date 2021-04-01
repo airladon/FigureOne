@@ -1855,6 +1855,12 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
     event.playbackAction(event.list[index][1], event.list[index][0]);
   }
 
+  fetchAndLoad(path: string) {
+    fetch(path)
+      .then(response => response.json())
+      .then(json => this.loadSavedData(json));
+  }
+
 
   // queuePlaybackState(delay: number = 0) {
   //   const incrementIndexAndPlayState = () => {
