@@ -846,7 +846,11 @@ export default class CollectionsPolyline extends FigureElementCollection {
         }
         const name = `side${i}${j}`;
         if (this.elements[name] != null) {
-          const wasHidden = !this.elements[name].isShown;
+          // const wasHidden = !this.elements[name].isShown;
+          // let labelWasHidden = false;
+          // if (this.elements[name]._label != null && !this.elements[name]._label.isShown) {
+          //   labelWasHidden = true;
+          // }
           if (this.reverse) {
             this.elements[name].setEndPoints(
               newPoints[j], newPoints[i], this.elements[name].custom.offset,
@@ -856,9 +860,12 @@ export default class CollectionsPolyline extends FigureElementCollection {
               newPoints[i], newPoints[j], this.elements[name].custom.offset,
             );
           }
-          if (wasHidden) {
-            this.elements[name].hide();
-          }
+          // if (wasHidden) {
+          //   this.elements[name].hide();
+          // }
+          // if (labelWasHidden) {
+          //   this.elements[name]._label.hide();
+          // }
         }
       }
     }
@@ -900,7 +907,12 @@ export default class CollectionsPolyline extends FigureElementCollection {
       // }
       const name = `angle${i}`;
       if (this.elements[name] != null) {
-        const wasHidden = !this.elements[name].isShown;
+        // const wasHidden = !this.elements[name].isShown;
+        // let labelWasHidden = false;
+        // if (this.elements[name]._label != null && !this.elements[name]._label.isShown) {
+        //   labelWasHidden = true;
+        // }
+        // const labelWasHidden = !this.elements[name]._label.isShown;
         if (this.reverse) {
           const newP1 = p3;
           p3 = p1;
@@ -911,9 +923,12 @@ export default class CollectionsPolyline extends FigureElementCollection {
           p2: this.points[p2],
           p3: this.points[p3],
         });
-        if (wasHidden) {
-          this.elements[name].hide();
-        }
+        // if (wasHidden) {
+        //   this.elements[name].hide();
+        // }
+        // if (labelWasHidden) {
+        //   this.elements[name]._label.hide();
+        // }
       }
     }
   }

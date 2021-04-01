@@ -1523,6 +1523,11 @@ export default class CollectionsLine extends FigureElementCollection {
   // }
 
   setupLine() {
+    const wasHidden = !this.isShown;
+    let labelWasHidden = false;
+    if (this._label != null && this._label.isShown === false) {
+      labelWasHidden = true;
+    }
     const set = (key, x) => {
       // $FlowFixMe
       if (this[`_${key}`] != null) {  // $FlowFixMe
@@ -1580,6 +1585,12 @@ export default class CollectionsLine extends FigureElementCollection {
     this.transform.updateTranslation(position);
     this.updateLabel();
     this.updateMovePads();
+    if (wasHidden) {
+      this.hide();
+    }
+    if (labelWasHidden) {
+      this._label.hide();
+    }
   }
 
   updateMovePads() {

@@ -1103,6 +1103,11 @@ class CollectionsAngle extends FigureElementCollection {
    * originally defined.
    */
   setAngle(options: OBJ_AngleSet = {}) {
+    const wasHidden = !this.isShown;
+    let labelWasHidden = false;
+    if (this._label != null && this._label.isShown === false) {
+      labelWasHidden = true;
+    }
     this.calculateAngleRotationPosition(options);
     const { corner, _corner } = this;
     if (corner != null && _corner != null) {
@@ -1110,6 +1115,12 @@ class CollectionsAngle extends FigureElementCollection {
       _corner.custom.updatePoints({ points });
     }
     this.update();
+    if (wasHidden) {
+      this.hide();
+    }
+    if (labelWasHidden) {
+      this._label.hide();
+    }
   }
 
   getCornerPoints(length: number) {

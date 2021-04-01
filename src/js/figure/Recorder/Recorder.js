@@ -199,6 +199,7 @@ class Recorder {
     [eventName: string]: number;
   };
   recordingStates: boolean;
+  useAutoEvents: boolean;
 
   pauseState: ?Object;
   startRecordingTime: number;
@@ -259,6 +260,7 @@ class Recorder {
       pause: 'freeze',
       play: 'instant',
     };
+    this.useAutoEvents = false;
   }
 
   // ////////////////////////////////////
@@ -415,7 +417,9 @@ class Recorder {
     const events = duplicate(this.events);
     // $FlowFixMe
     Object.keys(events).forEach((eventName) => {  // $FlowFixMe
-      lists[eventName] = events[eventName].list;
+      if (!eventName.startsWith('_auto')) {
+        lists[eventName] = events[eventName].list;
+      }
     });
     if (minifyEvents) {
       return minify(lists);
@@ -513,8 +517,11 @@ class Recorder {
   // Recording
   // ////////////////////////////////////
   // ////////////////////////////////////
-  startRecording(fromTime: number = 0, whilePlaying: Array<string> = [], includeStates: boolean = true) {
-    // if (fromTime > 0) {
+  startRecording(
+    fromTime: number = 0,
+    whilePlaying: Array<string> = [],
+    includeStates: boolean = true,
+  ) {
     this.state = 'recording';
     this.lastSeekTime = null;
     this.setVideoToNowDeltaTime(fromTime);
@@ -548,9 +555,6 @@ class Recorder {
     }
 
     this.eventsCache = {};
-
-    // this.figure.unpause();
-
 
     this.lastRecordTime = null;
     this.duration = this.calcDuration();
@@ -847,7 +851,10 @@ class Recorder {
     // const unStr = JSON.parse(str)
     // console.log(unStr)
     // console.log(unStr == state)
+    // console.log(time, state)
+    // console.log(time, 'state')
     this.recordState(state, time);
+    // console.log('record state done');
     // console.log('recordState', performance.now() - start);
   }
 
@@ -875,7 +882,7 @@ class Recorder {
   recordEvent(
     eventName: string,
     payload: Array<string | number | Object>,
-    time: number = this.now(),
+    time: number = this.getCurrentTime(),
   ) {
     // console.log(time)
     if (this.events[eventName] == null) {
@@ -927,13 +934,13 @@ class Recorder {
     const dateStr = new Date().toISOString();
     const location = (window.location.pathname).replace('/', '_');
     const encodedStates = this.encodeStates();
-    // const encodedEvents = this.encodeEvents();
+    const encodedEvents = this.encodeEvents();
     if (encodedStates != null) {
-      download(`${dateStr}_${location}.json`, JSON.stringify(encodedStates));
+      download(`${dateStr}_${location}_states.json`, JSON.stringify(encodedStates));
     }
-    // if (encodedEvents != null) {
-    //   download(`${dateStr} ${location}.videvents.json`, JSON.stringify(encodedEvents));
-    // }
+    if (encodedEvents != null) {
+      download(`${dateStr}_${location}_events.json`, JSON.stringify(encodedEvents));
+    }
   }
 
   show() {
@@ -979,13 +986,13 @@ class Recorder {
 
   showMouse(precision: number = 2) {
     return `
-figure.recorder.loadEventData('autoCursor', [
+figure.recorder.loadEventData('_autoCursor', [
   ${this.showEvent('cursor', precision)},
 ]);
-figure.recorder.loadEventData('autoTouch', [
+figure.recorder.loadEventData('_autoTouch', [
   ${this.showEvent('touch', precision)},
 ]);
-figure.recorder.loadEventData('autoCursorMove', ${this.encodeCursorEvent('cursorMove', precision, precision)}, 'cursor', 2, 2);
+figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('cursorMove', precision, precision)}, 'cursor', 2, 2);
     `;
   }
 
@@ -1256,7 +1263,16 @@ figure.recorder.loadEventData('autoCursorMove', ${this.encodeCursorEvent('cursor
     // and add them to an eventsToExecuteArray
     const eventsToSetBeforeState = [];
     const eventsToSetAfterState = [];
-    Object.keys(this.events).forEach((eventName) => {
+    const eventNames = Object.keys(this.events).filter(eventName => {
+      if (this.useAutoEvents) {
+        return true;
+      }
+      if (eventName.startsWith('_auto')) {
+        return false;
+      }
+      return true;
+    });
+    eventNames.forEach((eventName) => {
       const event = this.events[eventName];
       if (event.setOnSeek === false) {
         return;
@@ -1318,9 +1334,11 @@ figure.recorder.loadEventData('autoCursorMove', ${this.encodeCursorEvent('cursor
     // console.log('state')
     // console.log(this.stateIndex)
     // timer.stamp('m5');
+    // console.log('set State')
     if (this.stateIndex !== -1) {
       this.setState(this.stateIndex);
     }
+    // console.log('State set')
     // timer.stamp('m6');
     // console.log('after')
     playEvents(eventsToSetAfterState);
@@ -1363,17 +1381,26 @@ figure.recorder.loadEventData('autoCursorMove', ${this.encodeCursorEvent('cursor
     ) {
       return null;
     }
+    let cursorEvents = this.events._autoCursor;
+    let touchEvents = this.events._autoTouch;
+    let cursorMoveEvents = this.events._autoCursorMove;
+    if (!this.useAutoEvents) {
+      cursorEvents = this.events.cursor;
+      touchEvents = this.events.touch;
+      cursorMoveEvents = this.events.cursorMove;
+    }
+    // console.log(this.useAutoEvents)
 
-    const cursorIndex = getPrevIndexForTime(this.events.autoCursor.list, atTime);
-    const touchIndex = getPrevIndexForTime(this.events.autoTouch.list, atTime);
-    const cursorMoveIndex = getPrevIndexForTime(this.events.autoCursorMove.list, atTime);
+    const cursorIndex = getPrevIndexForTime(cursorEvents.list, atTime);
+    const touchIndex = getPrevIndexForTime(touchEvents.list, atTime);
+    const cursorMoveIndex = getPrevIndexForTime(cursorMoveEvents.list, atTime);
     let touchUp = null;
     let showCursor = null;
     let cursorPosition = null;
     let cursorTime = null;
     let cursorTimeCount = null;
     if (touchIndex !== -1) {
-      const event = this.events.autoTouch.list[touchIndex]; // $FlowFixMe
+      const event = touchEvents.list[touchIndex]; // $FlowFixMe
       const [time, [upOrDown, x, y], timeCount] = event;
       if (upOrDown === 'down') {
         touchUp = false;
@@ -1386,7 +1413,7 @@ figure.recorder.loadEventData('autoCursorMove', ${this.encodeCursorEvent('cursor
     }
 
     if (cursorIndex !== -1) {
-      const event = this.events.autoCursor.list[cursorIndex]; // $FlowFixMe
+      const event = cursorEvents.list[cursorIndex]; // $FlowFixMe
       const [time, [showOrHide, x, y], timeCount] = event;
       if (showOrHide === 'show') {
         showCursor = true;
@@ -1405,7 +1432,7 @@ figure.recorder.loadEventData('autoCursorMove', ${this.encodeCursorEvent('cursor
     }
 
     if (cursorMoveIndex !== -1) {
-      const event = this.events.autoCursorMove.list[cursorMoveIndex]; // $FlowFixMe
+      const event = cursorMoveEvents.list[cursorMoveIndex]; // $FlowFixMe
       const [time, [x, y], timeCount] = event;
       if (
         cursorTime == null
@@ -1423,6 +1450,17 @@ figure.recorder.loadEventData('autoCursorMove', ${this.encodeCursorEvent('cursor
     };
   }
 
+  getEvents(eventsIn: ?Array<string> = []) {
+    let events = [];
+    if (eventsIn != null && eventsIn.length > 0) {
+      events = eventsIn;
+    } else if (this.useAutoEvents) {
+      events = ['_autoExec', '_autoCursor', '_autoSlide', '_autoCursorMove', '_autoTouch'];
+    } else {
+      events = Object.keys(this.events).filter(eventName => !eventName.startsWith('_auto'));
+    }
+    return events;
+  }
 
   // ////////////////////////////////////
   // ////////////////////////////////////
@@ -1432,18 +1470,21 @@ figure.recorder.loadEventData('autoCursorMove', ${this.encodeCursorEvent('cursor
   startPlayback(
     fromTimeIn: number = this.currentTime || 0,
     forceStart: boolean = true,
-    events: ?Array<string> = ['autoCursor', 'autoCursorMove', 'autoTouch', 'autoExec', 'autoSlide', 'slide'],
+    events: ?Array<string> = [],
   ) {
     this.lastSeekTime = null;
     let fromTime = this.convertTime(fromTimeIn);
     if (fromTimeIn == null || fromTimeIn >= this.duration) {
       fromTime = 0;
     }
-    if (events == null) {
-      this.eventsToPlay = Object.keys(this.events);
-    } else {
-      this.eventsToPlay = events;
-    }
+    // if (events != null && events.length > 0) {
+    //   this.eventsToPlay = events;
+    // } else if (this.useAutoEvents) {
+    //   this.eventsToPlay = ['_autoExec', '_autoCursor', '_autoSlide', '_autoCursorMove', '_autoTouch'];
+    // } else {
+    //   this.eventsToPlay = Object.keys(this.events).map(eventName => !eventName.startsWith('_auto'));
+    // }
+    this.eventsToPlay = this.getEvents(events);
 
     // this.figure.unpause();
     // this.setVideoToNowDeltaTime(this.currentTime);
@@ -1659,8 +1700,11 @@ figure.recorder.loadEventData('autoCursorMove', ${this.encodeCursorEvent('cursor
     }
 
     // const index = this.eventIndex[eventName];
+    // console.log(this.getCurrentTime(), eventName)
     this.setEvent(eventName, index);
+    // console.log(this.getCurrentTime(), eventName)
     this.figure.animateNextFrame();
+    // this.figure.elements.subscriptions.add('afterDraw', () => console.log('draw done'), 1);
     if (index + 1 === this.events[eventName].list.length) {
       this.eventIndex[eventName] = -1;
       if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
@@ -1789,6 +1833,7 @@ figure.recorder.loadEventData('autoCursorMove', ${this.encodeCursorEvent('cursor
     if (event == null) {
       return;
     }
+    // console.log(eventName)
     // $FlowFixMe
     event.playbackAction(event.list[index][1], event.list[index][0]);
   }

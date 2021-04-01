@@ -21,6 +21,7 @@ function setupRecorder() {
   const playPauseButton = document.querySelector('#f1_player__play_pause');
   const recordButton = document.querySelector('#f1_recorder__record');
   const saveButton = document.querySelector('#f1_recorder__save');
+  const loadButton = document.querySelector('#f1_recorder__load')
 
   // Setup button functionality
   function togglePlayPause() {
@@ -42,7 +43,7 @@ function setupRecorder() {
       recorder.stopRecording();
     } else {
       const currentTime = recorder.getCurrentTime();
-      recorder.startRecording(currentTime, ['autoSlide', 'autoCursor', 'autoTouch', 'autoCursorMove', 'autoExec']);
+      recorder.startRecording(currentTime, ['_autoSlide', '_autoCursor', '_autoTouch', '_autoCursorMove', '_autoExec']);
       if (currentTime === 0) {
         recorder.recordEvent('slide', ['goto', 0], 0);
       }
@@ -52,6 +53,17 @@ function setupRecorder() {
   playPauseButton.onclick = () => togglePlayPause();
   recordButton.onclick = () => toggleRecord();
   saveButton.onclick = () => recorder.save();
+
+  loadButton.onclick = () => {
+    if (loadButton.innerHTML === 'Plan Loaded') {
+      return;
+    }
+    const script = document.createElement('script');
+    script.setAttribute('src', 'cursor.js');
+    script.onload = () => { loadButton.innerHTML = 'Plan Loaded'; };
+    document.body.appendChild(script);
+    recorder.useAutoEvents = true;
+  };
 
   // Button state is updated from recorder subscriptions
   function playbackStarted() {
@@ -247,7 +259,11 @@ function setupRecorder() {
   */
   // Load video states and audio data
 
-  fetch('../../untracked/2021-03-29T21_50_51.179Z__scratch_ivid_.json')
+  fetch('../../untracked/2021-04-01T03_56_04.041Z__scratch_ivid__events.json')
+    .then(response => response.json())
+    .then(json => recorder.loadEvents(json));
+
+  fetch('../../untracked/2021-04-01T03_56_04.041Z__scratch_ivid__states.json')
     .then(response => response.json())
     .then(json => recorder.loadStates(json));
 

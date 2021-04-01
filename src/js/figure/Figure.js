@@ -561,27 +561,41 @@ class Figure {
     //   getPauseState: this.getPauseState.bind(this),
     //   dissolveToState: this.dissolveToState.bind(this),
     // };
+    const onCursorAuto = (payload) => {
+      const [action, x, y] = payload;
+      if (action === 'show') {
+        this.showCursor('up', new Point(x, y));
+        if (this.recorder.state === 'recording') {
+          this.recorder.recordEvent('cursor', ['show', x, y]);
+        }
+        // this.getElement(this.cursorElementName).pulse({ duration: 1, scale: 3 });
+      } else {
+        this.showCursor('hide');
+        if (this.recorder.state === 'recording') {
+          this.recorder.recordEvent('cursor', ['hide']);
+        }
+      }
+    };
     const onCursor = (payload) => {
       const [action, x, y] = payload;
       if (action === 'show') {
         this.showCursor('up', new Point(x, y));
-        // this.getElement(this.cursorElementName).pulse({ duration: 1, scale: 3 });
       } else {
         this.showCursor('hide');
       }
     };
+    // const onTouch = (payload) => {
+    //   const [action, x, y] = payload;
+    //   if (!this.isCursorShown()) {
+    //     return;
+    //   }
+    //   if (action === 'down') {
+    //     this.showCursor('down', new Point(x, y));
+    //   } else {
+    //     this.showCursor('up');
+    //   }
+    // };
     const onTouch = (payload) => {
-      const [action, x, y] = payload;
-      if (!this.isCursorShown()) {
-        return;
-      }
-      if (action === 'down') {
-        this.showCursor('down', new Point(x, y));
-      } else {
-        this.showCursor('up');
-      }
-    };
-    const onTouchAuto = (payload) => {
       // onTouch(payload);
       // if (this.recorder.state === 'recording') {
       const [action, x, y] = payload;
@@ -592,87 +606,87 @@ class Figure {
       }
       // }
     };
+    // const onCursorMove = (payload) => {
+    //   const [x, y] = payload;
+    //   this.setCursor(new Point(x, y));
+    // };
     const onCursorMove = (payload) => {
-      const [x, y] = payload;
-      this.setCursor(new Point(x, y));
-    };
-    const onCursorMoveAuto = (payload) => {
       // if (this.recorder.state === 'recording') {
       const [x, y] = payload;
       this.setCursor(new Point(x, y));
       this.touchMove(new Point(x, y));
       // }
     };
-    const moved = (payload) => {
-      const [elementPath, transform] = payload;
-      const element = this.getElement(elementPath);
-      if (element == null) {
-        return;
-      }
-      element.moved(getTransform(transform));
-    };
+    // const moved = (payload) => {
+    //   const [elementPath, transform] = payload;
+    //   const element = this.getElement(elementPath);
+    //   if (element == null) {
+    //     return;
+    //   }
+    //   element.moved(getTransform(transform));
+    // };
 
-    const startBeingMoved = (payload) => {
-      const [elementPath] = payload;
-      const element = this.getElement(elementPath);
-      if (element == null) {
-        return;
-      }
-      element.startBeingMoved();
-    };
+    // const startBeingMoved = (payload) => {
+    //   const [elementPath] = payload;
+    //   const element = this.getElement(elementPath);
+    //   if (element == null) {
+    //     return;
+    //   }
+    //   element.startBeingMoved();
+    // };
 
-    const stopBeingMoved = (payload) => {
-      const [elementPath, transform, velocity] = payload;
-      const element = this.getElement(elementPath);
-      if (element == null) {
-        return;
-      }
-      element.stopBeingMoved();
-      element.state.movement.velocity = getTransform(velocity);
-      element.transform = getTransform(transform);
-    };
+    // const stopBeingMoved = (payload) => {
+    //   const [elementPath, transform, velocity] = payload;
+    //   const element = this.getElement(elementPath);
+    //   if (element == null) {
+    //     return;
+    //   }
+    //   element.stopBeingMoved();
+    //   element.state.movement.velocity = getTransform(velocity);
+    //   element.transform = getTransform(transform);
+    // };
 
-    const startMovingFreely = (payload) => {
-      const [elementPath, transform, velocity] = payload;
-      const element = this.getElement(elementPath);
-      if (element == null) {
-        return;
-      }
-      element.transform = getTransform(transform);
-      element.state.movement.velocity = getTransform(velocity);
-      element.startMovingFreely();
-    };
-    const click = (payload) => {
-      const [id] = payload;
-      const element = document.getElementById(id);
-      if (element != null) {
-        element.click();
-      }
-    };
-    const elementClick = (payload) => {
-      const [elementPath, xLoc, yLoc] = payload;
-      const element = this.getElement(elementPath);
-      if (element != null) {
-        element.click(new Point(xLoc, yLoc));
-      }
-    };
-    const eqnNavClick = (payload) => {
-      const [direction, elementPath] = payload;
-      const element = this.getElement(elementPath);
-      if (element == null) {
-        // element.click();
-        return;
-      }
-      if (direction === 'next') { // $FlowFixMe
-        element.clickNext();
-      }
-      if (direction === 'prev') { // $FlowFixMe
-        element.clickPrev();
-      }
-      if (direction === 'refresh') { // $FlowFixMe
-        element.clickRefresh();
-      }
-    };
+    // const startMovingFreely = (payload) => {
+    //   const [elementPath, transform, velocity] = payload;
+    //   const element = this.getElement(elementPath);
+    //   if (element == null) {
+    //     return;
+    //   }
+    //   element.transform = getTransform(transform);
+    //   element.state.movement.velocity = getTransform(velocity);
+    //   element.startMovingFreely();
+    // };
+    // const click = (payload) => {
+    //   const [id] = payload;
+    //   const element = document.getElementById(id);
+    //   if (element != null) {
+    //     element.click();
+    //   }
+    // };
+    // const elementClick = (payload) => {
+    //   const [elementPath, xLoc, yLoc] = payload;
+    //   const element = this.getElement(elementPath);
+    //   if (element != null) {
+    //     element.click(new Point(xLoc, yLoc));
+    //   }
+    // };
+    // const eqnNavClick = (payload) => {
+    //   const [direction, elementPath] = payload;
+    //   const element = this.getElement(elementPath);
+    //   if (element == null) {
+    //     // element.click();
+    //     return;
+    //   }
+    //   if (direction === 'next') { // $FlowFixMe
+    //     element.clickNext();
+    //   }
+    //   if (direction === 'prev') { // $FlowFixMe
+    //     element.clickPrev();
+    //   }
+    //   if (direction === 'refresh') { // $FlowFixMe
+    //     element.clickRefresh();
+    //   }
+    // };
 
     const exec = (payload) => {
       const [functionName, args] = payload;
@@ -682,21 +696,21 @@ class Figure {
     };
 
     this.recorder.addEventType('cursor', onCursor);
-    this.recorder.addEventType('autoCursor', onCursor);
+    this.recorder.addEventType('_autoCursor', onCursorAuto);
     this.recorder.addEventType('cursorMove', onCursorMove);
-    this.recorder.addEventType('autoCursorMove', onCursorMoveAuto);
+    this.recorder.addEventType('_autoCursorMove', onCursorMove);
     this.recorder.addEventType('touch', onTouch);
-    this.recorder.addEventType('autoTouch', onTouchAuto);
-    this.recorder.addEventType('moved', moved);
-    this.recorder.addEventType('stopBeingMoved', stopBeingMoved);
-    this.recorder.addEventType('startMovingFreely', startMovingFreely);
-    this.recorder.addEventType('startBeingMoved', startBeingMoved);
-    this.recorder.addEventType('click', click);
-    this.recorder.addEventType('elementClick', elementClick);
-    this.recorder.addEventType('elementTextClick', elementClick);
-    this.recorder.addEventType('eqnNavClick', eqnNavClick);
+    this.recorder.addEventType('_autoTouch', onTouch);
+    // this.recorder.addEventType('moved', moved);
+    // this.recorder.addEventType('stopBeingMoved', stopBeingMoved);
+    // this.recorder.addEventType('startMovingFreely', startMovingFreely);
+    // this.recorder.addEventType('startBeingMoved', startBeingMoved);
+    // this.recorder.addEventType('click', click);
+    // this.recorder.addEventType('elementClick', elementClick);
+    // this.recorder.addEventType('elementTextClick', elementClick);
+    // this.recorder.addEventType('eqnNavClick', eqnNavClick);
     this.recorder.addEventType('exec', exec);
-    this.recorder.addEventType('autoExec', exec);
+    this.recorder.addEventType('_autoExec', exec);
   }
 
   setDefaultLineWidth(userInputLineWidth: number | null) {
@@ -1758,7 +1772,7 @@ class Figure {
         element.startBeingMoved();
       }
     }
-    
+
     // console.log(this.beingTouchedElements, this.beingMovedElements)
     if (this.beingMovedElements.length > 0) {
       this.animateNextFrame(true, 'touch down handler');

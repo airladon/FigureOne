@@ -183,7 +183,7 @@ function makeSlides() {
     transition: [
       [
         { scenario: 'rightTri', target: 'oneTri', duration: 2 },
-        { undim: { 'rightTri.tri2': ['angle1', 'angle2'] } },
+        // { undim: { 'rightTri.tri2': ['angle1', 'angle2'] } },
         {
           out: { 'rightTri.tri1': ['side01', 'side12', 'side20', 'line', 'angle1', 'angle2', 'angle0'] },
         },

@@ -196,6 +196,7 @@ class GlobalAnimation {
   }
 
   draw(now: number) {
+    this.animationId = null;
     clearTimeout(this.syncNowTimer);
     this.updateSyncNow = true;
     this.drawQueue = this.nextDrawQueue;
@@ -234,10 +235,12 @@ class GlobalAnimation {
 
   // Queue up an animation frame
   animateNextFrame() {
-    cancelAnimationFrame(this.animationId);
+    if (this.animationId == null) {
+    // cancelAnimationFrame(this.animationId);
     // $FlowFixMe
-    const nextFrame = this.requestNextAnimationFrame.call(window, this.draw.bind(this));
-    this.animationId = nextFrame;
+      this.animationId = this.requestNextAnimationFrame.call(window, this.draw.bind(this));
+      // this.animationId = nextFrame;
+    }
   }
 }
 

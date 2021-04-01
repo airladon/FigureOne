@@ -2225,16 +2225,17 @@ class FigureElement {
     // } else {
     //   this.calcVelocity(prevTransform, newTransform);
     // }
-    if (this.recorder.state === 'recording') {
-      this.recorder.recordEvent(
-        'moved',
-        [
-          this.getPath(),
-          this.transform.round(this.recorder.precision)._state(),
-        ],
-        // this.state.movement.velocity.toString(),
-      );
-    }
+
+    // if (this.recorder.state === 'recording') {
+    //   this.recorder.recordEvent(
+    //     'moved',
+    //     [
+    //       this.getPath(),
+    //       this.transform.round(this.recorder.precision)._state(),
+    //     ],
+    //     // this.state.movement.velocity.toString(),
+    //   );
+    // }
   }
 
   stopBeingMoved(): void {
@@ -3347,6 +3348,10 @@ class FigureElement {
    * Show element
    */
   show() {
+    // if (this.getPath() === 'rightTri.tri.angle2.label') {
+    //   console.trace(this.name, this.getPath());
+    //   // console.log('shown')
+    // }
     this.isShown = true;
     this.setOpacity(1);
     if (this.parent != null) {

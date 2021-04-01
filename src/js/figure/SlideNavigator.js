@@ -358,7 +358,7 @@ export default class SlideNavigator {
     this.collection.recorder.addEventType('slide', processSlide, true);
     const processAutoSlide = (payload) => {
       const [slideNo] = payload;
-      this.fromAutoSlide = true;
+      // this.fromAutoSlide = true;
       if (this.currentSlideIndex === slideNo - 1) {
         this.nextSlide(true);
       } else if (slideNo !== 0) {
@@ -368,7 +368,7 @@ export default class SlideNavigator {
         this.goToSlide(slideNo);
       }
     };
-    this.collection.recorder.addEventType('autoSlide', processAutoSlide, true);
+    this.collection.recorder.addEventType('_autoSlide', processAutoSlide, true);
     this.collection.fnMap.global.add('slideNavigatorTransitionDone', this.transitionDone.bind(this));
     this.from = 'prev';
 
@@ -445,11 +445,11 @@ export default class SlideNavigator {
       const { time, delta, execDelta } = slide;
       if (time != null) {
         const t = this.convertTime(time);
-        this.collection.recorder.events.autoSlide.list.push([t, [index], 0]);
+        this.collection.recorder.events._autoSlide.list.push([t, [index], 0]);
         lastTime = t;
       } else if (delta != null) {
         lastTime += delta;
-        this.collection.recorder.events.autoSlide.list.push([lastTime, [index], 0]);
+        this.collection.recorder.events._autoSlide.list.push([lastTime, [index], 0]);
       }
       if (execDelta != null && execDelta.length > 0) {
         let eDelta = execDelta;
@@ -462,7 +462,7 @@ export default class SlideNavigator {
           if (!(typeof t === 'number')) {
             throw new Error(`Error in delta time: ${t}, ${execDeltaTime}, ${lastTime}, ${command}`);
           }
-          this.collection.recorder.events.autoExec.list.push([t, [command], 0]);
+          this.collection.recorder.events._autoExec.list.push([t, [command], 0]);
         });
       }
     });
@@ -481,11 +481,11 @@ export default class SlideNavigator {
           if (!(typeof t === 'number')) {
             console.log('Error in exec time: ', t, time, command);
           }
-          this.collection.recorder.events.autoExec.list.push([t, [command], 0]);
+          this.collection.recorder.events._autoExec.list.push([t, [command], 0]);
         });
       }
     });
-    this.collection.recorder.events.autoExec.list.sort((a, b) => a[0] - b[0]);
+    this.collection.recorder.events._autoExec.list.sort((a, b) => a[0] - b[0]);
   }
 
   setEquations(equationsIn: Array<string | Equation>) {
@@ -1089,7 +1089,9 @@ export default class SlideNavigator {
     // Leave States
     this.getProperty('leaveStateCommon', this.currentSlideIndex, () => {})(this.currentSlideIndex, index);
     if (this.slides[this.currentSlideIndex].leaveState != null) {
-      this.collection.fnMap.exec(this.slides[this.currentSlideIndex].leaveState, this.currentSlideIndex, index);
+      this.collection.fnMap.exec(
+        this.slides[this.currentSlideIndex].leaveState, this.currentSlideIndex, index,
+      );
       // this.slides[this.currentSlideIndex].leaveState(this.currentSlideIndex, index);
     }
 
