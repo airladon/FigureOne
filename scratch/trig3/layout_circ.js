@@ -179,23 +179,24 @@ function layoutCirc() {
           font: { size, color: colText },
           xAlign: 'center',
           yAlign: 'middle',
+          fixColor: true,
           modifiers: {
             theta: {
               text: '\u03b8',
               font: {
-                style: 'italic', family: 'Time New Roman', size: size * 1.2, color: colTheta,
+                style: 'italic', family: 'Time New Roman', size: size * 1.2,
               },
             },
             _90: {
               text: '90\u00b0',
               font: {
-                family: 'Time New Roman', size: size * 1.2, color: colTheta,
+                family: 'Time New Roman', size: size * 1.2,
               },
             },
             min: {
               text: '\u2212',
               font: {
-                family: 'Time New Roman', size: size * 1.2, color: colTheta,
+                family: 'Time New Roman', size: size * 1.2,
               },
             },
           },

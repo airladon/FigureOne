@@ -24,7 +24,7 @@ function makeEquation() {
     name: 'eqn',
     method: 'equation',
     options: {
-      scale: 1.3,
+      scale: 1.2,
       elements: {
         eq1: '  =  ',
         eq2: '  =  ',
@@ -69,29 +69,29 @@ function makeEquation() {
       },
       forms: {
         sinCosOne: [
+          '_1', 'eq1',
           { sup: ['sin', '2_1'] },
           '_ + ',
           { sup: ['cos', '2_2'] },
-          'eq1', '_1',
         ],
         tanSecOne: [
-          { sup: ['tan', '2_1'] },
-          '_ + ',
-          '_1', 'eq1',
           { sup: ['sec', '2_2'] },
+          'eq1',
+          { sup: ['tan', '2_1'] },
+          '_ + ', '_1',
         ],
         cotCscOne: [
-          { sup: ['cot', '2_1'] },
-          '_ + ',
-          '_1', 'eq1',
           { sup: ['csc', '2_2'] },
+          'eq1',
+          '_1', '_ + ',
+          { sup: ['cot', '2_1'] },
         ],
         cotTanCscSec: [
           { sup: ['sec', '2_1'] },
           '_ + ',
-          { sup: ['csc', '2_1'] },
+          { sup: ['csc', '2_2'] },
           'eq1',
-          { sup: [{ brac: ['lb1', ['tan', '_ + _1', 'cot'], 'rb1'] }, '2_2'] },
+          { sup: [{ brac: ['lb1', ['tan', '_ + _1', 'cot'], 'rb1'] }, '2_3'] },
         ],
         oppAdj1: 'oppHyp',
         oppAdj2: ['oppHyp', 'eq1', 'sinCos'],
@@ -129,14 +129,21 @@ function makeEquation() {
           alignment: { xAlign: '1.1o', yAlign: 'baseline' },
         },
       },
-      position: [0, 1.2],
+      position: [0, 1.15],
+    },
+    mods: {
+      scenarios: {
+        default: { position: [0, 1] },
+        top: { position: [0, 1.15] },
+      },
     },
   });
   const eqn = figure.getElement('eqn');
 
-  const addShow = (name, form, delay = 3) => {
+  const addShow = (name, form, delay = 3, scenario = 'default') => {
     figure.fnMap.global.add(name, () => {
       eqn.stop();
+      eqn.setScenario(scenario);
       eqn.showForm(form);
       eqn.animations.new()
         .dissolveIn(0.5)
@@ -151,10 +158,11 @@ function makeEquation() {
   addShow('eqnCotCscOne', 'cotCscOne');
   addShow('eqnHypAdj', 'hypAdj');
   addShow('eqnHypOpp', 'hypOpp');
-  addShow('eqnCotTanCscSec', 'cotTanCscSec');
-  addShow('eqnLim', 'lim', 2.5);
+  addShow('eqnCotTanCscSec', 'cotTanCscSec', 3, 'top');
+  addShow('eqnLim', 'lim', 2.5, 'top');
   addShow('eqnCoord', 'coord');
   figure.fnMap.add('eqnOppAdj', () => {
+    eqn.setScenario('default');
     eqn.showForm('oppAdj1');
     eqn.animations.new()
       .dissolveIn()

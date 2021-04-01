@@ -938,7 +938,7 @@ class Recorder {
   }
 
   save() {
-    const dateStr = new Date().toISOString().split('.')[0];
+    const dateStr = new Date().toISOString().split('.')[0].split('-').join('_');
     // const location = (window.location.pathname).replace('/', '_');
     const location = window.location.pathname.split('/').slice(1, -1).join('_');
     const encodedStates = this.encodeStates();
@@ -1703,6 +1703,11 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
     const delay = round(this.events[eventName].list[index][0] - this.getCurrentTime(), 8);
 
     if (delay > 0.0001) {
+      if (window.asdf == null) {
+        window.asdf = 1;
+      } else {
+        window.asdf += 1;
+      }
       this.timeoutID = new GlobalAnimation().setTimeout(
         this.playbackEvent.bind(this, eventName), round(delay * 1000, 0),
       );
@@ -1725,6 +1730,7 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
       this.eventIndex[eventName] = index + 1;
     }
     const nextEvent = this.getNextEvent();
+    // console.log(nextEvent)
     if (nextEvent != null && this.events[nextEvent]) {
       this.playbackEvent(nextEvent);
     }

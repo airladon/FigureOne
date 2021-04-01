@@ -543,6 +543,8 @@ class Figure {
       } else {
         this.showCursor('hide');
         if (this.recorder.state === 'recording') {
+          // console.log('hide')
+          // console.trace();
           this.recorder.recordEvent('cursor', ['hide']);
         }
       }
