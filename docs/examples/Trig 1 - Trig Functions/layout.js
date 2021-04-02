@@ -256,7 +256,8 @@ function makeSlides() {
   nav.loadSlides(slides);
   nav.goToSlide(0);
 
-  figure.recorder.fetchAndLoad('../../../untracked/2021-04-01T18_54_48_scratch_ivid.json');
+  // figure.recorder.fetchAndLoad('http://localhost:8080/docs/examples/Trig%201%20-%20Trig%20Functions/ivid_data.json');
+  figure.recorder.fetchAndLoad('http://localhost:8080/docs/examples/Trig%201%20-%20Trig%20Functions/ivid_data.json');
   figure.recorder.loadAudio(new Audio('./audio.mp3'));
 }
 makeSlides();

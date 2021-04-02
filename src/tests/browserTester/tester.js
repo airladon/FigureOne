@@ -15,13 +15,38 @@ const { toMatchImageSnapshot } = require('jest-image-snapshot');
 
 expect.extend({ toMatchImageSnapshot });
 
-const messages = [];
-page.on('console', (msg) => {
-  for (let i = 0; i < msg.args().length; i += 1) {
-    const result = `${msg.args()[i]}`;
-    messages.push(result);
-  }
-});
+// const messages = [];
+// page.on('console', (msg) => {
+//   for (let i = 0; i < msg.args().length; i += 1) {
+//     const result = `${msg.args()[i]}`;
+//     messages.push(result);
+//   }
+//   // console.log(messages)
+// });
+page.on('console', m => console.log(m.text()));
+// page.on(`console`, async (msg) => {
+//           let msgType = msg.type();
+//         msgType = msgType === `warning` ? `warn` : msgType; // so we can feed it to console.warn
+//         const msgText = msg.text();
+//         const args = msg.args().map((jsHandle) => {
+//           // see https://github.com/microsoft/playwright/issues/2275
+//           const remoteObject = jsHandle[`_remoteObject`];
+//           if (Object.prototype.hasOwnProperty.call(remoteObject, `value`)) {
+//             return remoteObject.value;
+//           } else if (remoteObject.type === `object` && remoteObject.subtype === `error` && remoteObject.description) {
+//             const errStack = remoteObject.description;
+//             const errMessage = errStack.split(`\n`)[0];
+//             const err = new Error(errMessage);
+//             err.stack = errStack;
+//             return err;
+//           }
+//           // we don't know how to parse this out yet, return as is
+//           return remoteObject;
+//         });
+
+//         // proxy browser console stream
+//         console[msgType](...args);
+//         });
 
 function zeroPad(num, places) {
   const zero = places - num.toString().length + 1;
@@ -67,7 +92,10 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
     tests.push(test);
   });
 
-  const file = `file:/${htmlFile}`;
+  let file = `file:/${htmlFile}`;
+  if (htmlFile.startsWith('http')) {
+    file = htmlFile;
+  }
   lastTime = -1;
   describe(__title, () => {
     beforeAll(async () => {

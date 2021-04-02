@@ -1856,9 +1856,15 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
   }
 
   fetchAndLoad(path: string) {
-    fetch(path)
+    fetch(path, { mode: 'no-cors' })
       .then(response => response.json())
-      .then(json => this.loadSavedData(json));
+      .then(json => this.loadSavedData(json))
+      .catch((error) => {
+        console.error('Error:', error);
+        // const a = document.createElement('div')
+        // a.innerHTML = error;
+        // document.body.appendChild(a);
+      });
   }
 
 
