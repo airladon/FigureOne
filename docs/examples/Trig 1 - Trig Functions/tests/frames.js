@@ -7,13 +7,11 @@ __frames = [
   // [0, 'figure.recorder.audio = null'],
   [0, `
 figure.recorder.audio = null;
-figure.recorder.startPlayback();
-/*
-figure.recorder.fetchAndLoad('http://localhost:8080/docs/examples/Trig%201%20-%20Trig%20Functions/ivid_data.json');
-setTimeout(500, () => {
-  figure.recorder.startPlayback();
-});
-*/
+// figure.recorder.startPlayback();
+
+figure.recorder.fetchAndLoad('http://localhost:8080/docs/examples/Trig%201%20-%20Trig%20Functions/ivid_data.json', () => figure.recorder.startPlayback());
+// figure.recorder.startPlayback();
+
 `],
   // [0.5, 'figure.recorder.startPlayback();'],
 ];
