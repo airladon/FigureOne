@@ -256,8 +256,8 @@ function makeSlides() {
   nav.loadSlides(slides);
   nav.goToSlide(0);
 
-  // figure.recorder.fetchAndLoad('http://localhost:8080/docs/examples/Trig%201%20-%20Trig%20Functions/ivid_data.json');
-  // figure.recorder.fetchAndLoad('http://localhost:8080/docs/examples/Trig%201%20-%20Trig%20Functions/ivid_data.json');
-  // figure.recorder.loadAudio(new Audio('./audio.mp3'));
+  figure.recorder.fetchAndLoad('./ivid_data.json');
+  figure.recorder.fetchAndLoad('http://localhost:8080/docs/examples/Trig%201%20-%20Trig%20Functions/ivid_data.json');
+  figure.recorder.loadAudio(new Audio('./audio.mp3'));
 }
 makeSlides();

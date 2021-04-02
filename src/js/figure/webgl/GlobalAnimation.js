@@ -41,6 +41,8 @@ class GlobalAnimation {
   timers: Array<TimeoutID>;
   syncNowTimer: TimeoutID;
   manual: boolean;
+  manualTimers: Object;
+  manualTimerIds: number;
 
   constructor() {
     // If the instance alread exists, then don't create a new instance.
@@ -76,6 +78,8 @@ class GlobalAnimation {
     this.now = () => performance.now();
     this.updateSyncNow = true;
     this.manual = false;
+    this.manualTimers = {};
+    this.manualTimerIds = 0;
   }
 
   getWhen(when: TypeWhen) {
@@ -130,8 +134,45 @@ class GlobalAnimation {
   }
 
   frame(duration: number) {
-    this.nowTime += duration * 1000;
+    console.log('frame', this.nowTime, duration)
+    const targetTime = this.nowTime + duration * 1000;
+    this.incrementManualTimers(this.nowTime + duration * 1000);
+    // this.nowTime += duration * 1000;
+    this.nowTime = targetTime;
     this.draw(this.nowTime);
+  }
+
+  incrementManualTimers(maxTime: number) {
+    const timersToFire = [];
+    Object.keys(this.manualTimers).forEach((id) => {
+      const { duration, startTime, f } = this.manualTimers[id];
+      const endTime = startTime + duration;
+      console.log('in loop', id, startTime, duration, endTime, maxTime, maxTime >= endTime)
+      if (maxTime >= endTime) {
+        timersToFire.push([id, endTime, f]);
+      }
+    });
+    if (timersToFire.length === 0) {
+      return 0;
+    }
+    timersToFire.sort((t1, t2) => t1[1] - t2[1]);
+    const [id, endTime, f] = timersToFire[0];
+    this.nowTime = endTime;
+    console.log('firing', id, maxTime, endTime);
+    f();
+    delete this.manualTimers[`${id}`];
+    console.log('fired', id);
+    return this.incrementManualTimers(maxTime);
+    // timersToFire.forEach((timer) => {
+    //   const [id, endTime, f] = timer;
+    //   this.nowTime = endTime;
+    //   f();
+    //   delete this.manualTimers[`${id}`];
+    //   console.log('fired', id)
+    // });
+    // Object.keys(this.manualTimers).forEach((id) => {
+    //   const  {duration, startTime, f}
+    // })
   }
 
   queueNextDebugFrame() {
@@ -151,6 +192,24 @@ class GlobalAnimation {
     }
   }
 
+  setupTimeout(f: function, time: number): TimeoutID {
+    let id;
+    if (this.manual) {
+      id = this.manualTimerIds;
+      this.manualTimerIds += 1;
+      this.manualTimers[`${id}`] = ({
+        duration: time,
+        f,
+        startTime: this.nowTime,
+      });
+      console.log(JSON.stringify(this.manualTimers))
+      return id;
+    }
+    id = setTimeout(f, time);
+    this.timers.push(id);
+    return id;
+  }
+
   setTimeout(f: function, time: number): TimeoutID {
     if (this.debug) {
       let timeScale = 0;
@@ -159,21 +218,30 @@ class GlobalAnimation {
       }
       // console.log('setTimeout', time, timeScale)
       if (timeScale > 0) {
-        const id = setTimeout(f, time * timeScale);
-        this.timers.push(id);
-        return id;
+        // const id = setTimeout(f, time * timeScale);
+        return this.setupTimeout(f, time * timeScale);
+        // this.timers.push(id);
+        // return id;
       }
-      const id = setTimeout(f, 0);
-      this.timers.push(id);
-      return id;
+      // const id = setTimeout(f, 0);
+      // this.timers.push(id);
+      // return id;
+      return this.setupTimeout(f, 0);
     }
-    const id = setTimeout(f, time);
-    this.timers.push(id);
-    return id;
+    // const id = setTimeout(f, time);
+    // this.timers.push(id);
+    // return id;
+    return this.setupTimeout(f, time);
   }
 
   clearTimeout(id: TimeoutID | null) {
     if (id == null) {
+      return;
+    }
+    if (this.manual) {
+      if (this.manualTimers[id] != null) {
+        delete this.manualTimers[id];
+      }
       return;
     }
     clearTimeout(id);

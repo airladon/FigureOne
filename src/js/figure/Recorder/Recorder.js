@@ -1633,6 +1633,7 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
   }
 
   startTimeUpdates() {
+    console.log('start time updates', 100)
     this.timeUpdatesTimeoutID = new GlobalAnimation().setTimeout(
       () => {
         this.setCurrentTime(this.getCurrentTime());
@@ -1709,8 +1710,10 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
       } else {
         window.asdf += 1;
       }
+      console.log('setEvent', eventName, delay * 1000, this.events[eventName].list[index][0], this.getCurrentTime());
       this.timeoutID = new GlobalAnimation().setTimeout(
-        this.playbackEvent.bind(this, eventName), round(delay * 1000, 0),
+        this.playbackEvent.bind(this, eventName),
+        round(Math.ceil(delay * 1000), 0),
       );
       return;
     }
@@ -1758,6 +1761,7 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
 
     const remainingTime = this.duration - this.getCurrentTime();
     if (remainingTime > 0.0001) {
+      console.log('finishPlaying', remainingTime * 1000)
       this.timeoutID = new GlobalAnimation().setTimeout(() => {
         this.finishPlaying();
       }, round(remainingTime * 1000, 0));
@@ -1855,10 +1859,13 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
     event.playbackAction(event.list[index][1], event.list[index][0]);
   }
 
-  fetchAndLoad(path: string) {
+  fetchAndLoad(path: string, callback: () => void = () => {}) {
     fetch(path, { mode: 'no-cors' })
       .then(response => response.json())
-      .then(json => this.loadSavedData(json))
+      .then((json) => {
+        this.loadSavedData(json);
+        callback();
+      })
       .catch((error) => {
         console.error('Error:', error);
         // const a = document.createElement('div')
