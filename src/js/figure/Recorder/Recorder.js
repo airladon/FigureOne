@@ -219,6 +219,7 @@ class Recorder {
   reference: string;
   referenceIndex: number;
   lastSeekTime: ?number;
+  timeUpdates: number;  // milliseconds
 
   settings: {
     pause: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete',
@@ -261,6 +262,7 @@ class Recorder {
       play: 'instant',
     };
     this.useAutoEvents = false;
+    this.timeUpdates = 100; // ms
   }
 
   // ////////////////////////////////////
@@ -1633,14 +1635,14 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
   }
 
   startTimeUpdates() {
-    console.log('start time updates', 100)
+    // console.log('start time updates', 100)
     this.timeUpdatesTimeoutID = new GlobalAnimation().setTimeout(
       () => {
         this.setCurrentTime(this.getCurrentTime());
         this.subscriptions.publish('timeUpdate', [this.getCurrentTime()]);
         this.startTimeUpdates();
       },
-      100,
+      this.timeUpdates,
     );
   }
 
@@ -1710,7 +1712,7 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
       } else {
         window.asdf += 1;
       }
-      console.log('setEvent', eventName, delay * 1000, this.events[eventName].list[index][0], this.getCurrentTime());
+      // console.log('setEvent', eventName, delay * 1000, this.events[eventName].list[index][0], this.getCurrentTime());
       this.timeoutID = new GlobalAnimation().setTimeout(
         this.playbackEvent.bind(this, eventName),
         round(Math.ceil(delay * 1000), 0),
@@ -1761,7 +1763,7 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
 
     const remainingTime = this.duration - this.getCurrentTime();
     if (remainingTime > 0.0001) {
-      console.log('finishPlaying', remainingTime * 1000)
+      // console.log('finishPlaying', remainingTime * 1000)
       this.timeoutID = new GlobalAnimation().setTimeout(() => {
         this.finishPlaying();
       }, round(remainingTime * 1000, 0));

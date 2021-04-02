@@ -1,8 +1,8 @@
 /* global __duration __frames __timeStep __title*/
 
 __title = 'Example - Trig 1';
-__duration = 6;
-__timeStep = 0.5;
+__duration = 149;
+__timeStep = 1;
 __frames = [
   // [0, 'figure.recorder.audio = null'],
   [0, `

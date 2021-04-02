@@ -1,6 +1,16 @@
-const { tester } = require('../../../../src/tests/browserTester/tester.js')
+// const { tester } = require('../../../../src/tests/browserTester/tester.js')
 
+// tester(
+//   `http://localhost:8080/${__dirname}/example.html`,
+//   `${__dirname}/frames.js`,
+// );
+
+
+const { tester } = require('../../../../src/tests/ividTester/tester.js');
+
+const dataFile = __dirname.replace('tests', 'ivid_data.json');
 tester(
   `http://localhost:8080/${__dirname}/example.html`,
-  `${__dirname}/frames.js`,
+  `http://localhost:8080/${dataFile}`,
+  dataFile,
 );

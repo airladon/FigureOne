@@ -134,7 +134,7 @@ class GlobalAnimation {
   }
 
   frame(duration: number) {
-    console.log('frame', this.nowTime, duration)
+    // console.log('frame', this.nowTime, duration)
     const targetTime = this.nowTime + duration * 1000;
     this.incrementManualTimers(this.nowTime + duration * 1000);
     // this.nowTime += duration * 1000;
@@ -147,7 +147,7 @@ class GlobalAnimation {
     Object.keys(this.manualTimers).forEach((id) => {
       const { duration, startTime, f } = this.manualTimers[id];
       const endTime = startTime + duration;
-      console.log('in loop', id, startTime, duration, endTime, maxTime, maxTime >= endTime)
+      // console.log('in loop', id, startTime, duration, endTime, maxTime, maxTime >= endTime)
       if (maxTime >= endTime) {
         timersToFire.push([id, endTime, f]);
       }
@@ -158,10 +158,10 @@ class GlobalAnimation {
     timersToFire.sort((t1, t2) => t1[1] - t2[1]);
     const [id, endTime, f] = timersToFire[0];
     this.nowTime = endTime;
-    console.log('firing', id, maxTime, endTime);
+    // console.log('firing', id, maxTime, endTime);
     f();
     delete this.manualTimers[`${id}`];
-    console.log('fired', id);
+    // console.log('fired', id);
     return this.incrementManualTimers(maxTime);
     // timersToFire.forEach((timer) => {
     //   const [id, endTime, f] = timer;
@@ -202,7 +202,7 @@ class GlobalAnimation {
         f,
         startTime: this.nowTime,
       });
-      console.log(JSON.stringify(this.manualTimers))
+      // console.log(JSON.stringify(this.manualTimers))
       return id;
     }
     id = setTimeout(f, time);
