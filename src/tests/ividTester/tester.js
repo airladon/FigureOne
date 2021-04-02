@@ -2,10 +2,7 @@
 /* eslint-disable import/prefer-default-export, global-require */
 /* eslint-disable import/no-dynamic-require, no-eval */
 /* eslint-disable jest/no-export, no-await-in-loop */
-global.__frames = [];
 global.__title = '';
-global.__steps = [];
-global.__duration = 5;
 global.__timeStep = 0.5;
 global.__width = 500;
 global.__height = 375;
@@ -56,7 +53,6 @@ async function tester(htmlFile, dataFileUrl, dataFile, threshold = 0, intermiten
       await page.setViewportSize({ width: __width || 500, height: __height || 375 });
       await page.goto(htmlFile);
       await page.evaluate((url) => {
-        clearTimeout(timeoutId);
         figure.globalAnimation.setManualFrames();
         figure.globalAnimation.frame(0);
         figure.recorder.audio = null;
