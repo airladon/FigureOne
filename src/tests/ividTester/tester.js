@@ -53,7 +53,7 @@ async function tester(htmlFile, dataFileUrl, dataFile, fromTimesIn = [], toTimes
   }
   let toTimes = toTimesIn;
   if (toTimes.length === 0) {
-    toTimes = slideTimes;
+    toTimes = slideTimes.slice(0, -1);
   }
   // console.log(fromTimes, toTimes)
   const seekTests = [];
@@ -87,7 +87,7 @@ async function tester(htmlFile, dataFileUrl, dataFile, fromTimesIn = [], toTimes
       // Delay for time to fetch and load data file, then start playback
       await sleep(500);
     });
-    test.each(tests)('%s %s',
+    test.each(tests)('Play: %s %s',
       async (time, deltaTime) => {
         let d = deltaTime;
         // Trigger frames between those to be recorded
@@ -115,37 +115,56 @@ async function tester(htmlFile, dataFileUrl, dataFile, fromTimesIn = [], toTimes
           failureThreshold: threshold,
         });
       });
-    test.each(seekTests)('%s %s',
+    test.each(seekTests)('Seek: %s %s',
       async (fromTime, toTime) => {
+        const seek = async (seekTimeIn) => {
+          const currentTime = await page.evaluate(([seekTime]) => {
+            figure.recorder.seek(seekTime);
+            figure.globalAnimation.frame(0);
+            figure.recorder.resumePlayback();
+            figure.globalAnimation.frame(0);
+            return Promise.resolve(figure.recorder.getCurrentTime());
+          }, [seekTimeIn]);
+          let index = 0;
+          while (index < stateTimes.length - 1 && stateTimes[index] < currentTime + 0.5) {
+            index += 1;
+          }
+          const nextFrameTime = stateTimes[index][0];
+          console.log(currentTime, nextFrameTime);
+          const checkImage = async (imageTime) => {
+            const image = await page.screenshot({ fullPage: true });
+            expect(image).toMatchImageSnapshot({
+              customSnapshotIdentifier: `${zeroPad(Math.round(imageTime * 1000), 5)}`,
+              failureThreshold: threshold,
+            });
+          };
+          await checkImage(currentTime);
+          if (nextFrameTime > currentTime) {
+            await page.evaluate(([delta]) => {
+              figure.globalAnimation.frame(delta);
+            }, [nextFrameTime - currentTime]);
+            await checkImage(nextFrameTime);
+          }
+        };
+        console.log('from', fromTime);
+        await seek(fromTime);
+        console.log('to', toTime);
+        await seek(toTime);
         // Seek to fromTime
-        let currentTime = await page.evaluate(([seekTime]) => {
-          figure.recorder.seek(seekTime);
-          figure.globalAnimation.frame(0);
-          figure.recorder.resumePlayback();
-          figure.globalAnimation.frame(0);
-          return Promise.resolve(figure.recorder.getCurrentTime());
-        }, [fromTime]);
-        const image = await page.screenshot({ fullPage: true });
-        expect(image).toMatchImageSnapshot({
-          customSnapshotIdentifier: `${zeroPad(Math.round(currentTime * 1000), 5)}`,
-          failureThreshold: threshold,
-        });
-        console.log(currentTime)
 
         // Seek to toTime
-        currentTime = await page.evaluate(([seekTime]) => {
-          figure.recorder.seek(seekTime);
-          figure.globalAnimation.frame(0);
-          figure.recorder.resumePlayback();
-          figure.globalAnimation.frame(0);
-          return Promise.resolve(figure.recorder.getCurrentTime());
-        }, [toTime]);
-        console.log(currentTime)
-        const image1 = await page.screenshot({ fullPage: true });
-        expect(image1).toMatchImageSnapshot({
-          customSnapshotIdentifier: `${zeroPad(Math.round(currentTime * 1000), 5)}`,
-          failureThreshold: threshold,
-        });
+        // currentTime = await page.evaluate(([seekTime]) => {
+        //   figure.recorder.seek(seekTime);
+        //   figure.globalAnimation.frame(0);
+        //   figure.recorder.resumePlayback();
+        //   figure.globalAnimation.frame(0);
+        //   return Promise.resolve(figure.recorder.getCurrentTime());
+        // }, [toTime]);
+        // const image1 = await page.screenshot({ fullPage: true });
+        // expect(image1).toMatchImageSnapshot({
+        //   customSnapshotIdentifier: `${zeroPad(Math.round(currentTime * 1000), 5)}`,
+        //   failureThreshold: threshold,
+        // });
       });
   });
 }
