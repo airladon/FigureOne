@@ -160,6 +160,7 @@ class GlobalAnimation {
     this.nowTime = endTime;
     // console.log('firing', id, maxTime, endTime);
     f();
+    this.draw(this.nowTime);
     delete this.manualTimers[`${id}`];
     // console.log('fired', id);
     return this.incrementManualTimers(maxTime);

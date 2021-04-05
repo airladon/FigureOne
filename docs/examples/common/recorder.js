@@ -148,7 +148,10 @@ function setupRecorder() {
       seekCircle.style.left = 0;
     }
     const percentTime = time / recorder.duration;
-    seekCircle.style.left = `${percentTime * seekWidth}px`;
+    seekCircle.style.left = `${Math.floor(percentTime * seekWidth)}px`;
+    // if (time === 8.0002) {
+    //   console.log(time, seekCircle.style.left)
+    // }
     updateTimeLabel(time);
   }
 
