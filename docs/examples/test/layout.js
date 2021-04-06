@@ -43,6 +43,19 @@ function layout() {
     },
   });
   figure.add({
+    name: 'touchBall',
+    method: 'polygon',
+    options: {
+      radius: 0.3,
+      sides: 10,
+      position: [-2, 1],
+      color: [0, 0, 1, 1],
+    },
+    mods: {
+      isMovable: true,
+    },
+  });
+  figure.add({
     name: 'cursor',
     method: 'collections.cursor',
     options: {
@@ -80,7 +93,7 @@ function makeSlides() {
   // */
   slides.push({
     addReference,
-    showCommon: ['ball', 'gridMinor', 'gridMajor'],
+    showCommon: ['ball', 'gridMinor', 'gridMajor', 'touchBall'],
   });
   slides.push({
     time: 1,

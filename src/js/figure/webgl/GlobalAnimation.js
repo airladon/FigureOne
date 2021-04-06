@@ -130,7 +130,7 @@ class GlobalAnimation {
 
   endManualFrames() {
     this.manual = false;
-    this.now = () => performance.now;
+    this.now = () => performance.now();
   }
 
   frame(duration: number) {
@@ -139,6 +139,7 @@ class GlobalAnimation {
     this.incrementManualTimers(this.nowTime + duration * 1000);
     // this.nowTime += duration * 1000;
     this.nowTime = targetTime;
+    // console.log('frame')
     this.draw(this.nowTime);
   }
 
@@ -170,6 +171,7 @@ class GlobalAnimation {
     const [id, endTime, f] = timersToFire[0];
     this.nowTime = endTime;
     f();
+    // console.log('incremental timer')
     this.draw(this.nowTime);
     delete this.manualTimers[`${id}`];
     // console.log('fired', id);
@@ -277,6 +279,7 @@ class GlobalAnimation {
   }
 
   draw(now: number) {
+    // console.log('draw');
     this.animationId = null;
     clearTimeout(this.syncNowTimer);
     this.updateSyncNow = true;
@@ -296,13 +299,14 @@ class GlobalAnimation {
   queueNextFrame(func: (?number) => void) {
     // if (!(func in this.nextDrawQueue)) {
     this.nextDrawQueue.push(func);
+    // console.log(this.nextDrawQueue.length)
     // }
 
     // if (triggerFrameRequest) {
     //   this.animateNextFrame();
     // }
     if (this.nextDrawQueue.length === 1) {
-      if (!this.debug) {
+      if (!this.debug && !this.manual) {
         this.animateNextFrame();
       }
     }

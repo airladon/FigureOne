@@ -598,6 +598,7 @@ class Recorder {
   }
 
   autoFrame(frameTime: number = 0.1) {
+    // console.log('autoFrame', this.state)
     if (this.state === 'recording') {
       // console.log(this.getCurrentTime());
       this.figure.animateNextFrame();
@@ -824,6 +825,11 @@ class Recorder {
     // console.log(this)
   }
 
+  stopAutoRecording() {
+    this.stopRecording();
+    this.figure.globalAnimation.endManualFrames();
+  }
+
   addEventType(
     eventName: string,
     playbackAction: (any) => void,
@@ -908,7 +914,7 @@ class Recorder {
     // this.recordState(state, time);
     // console.log('record state done');
     // console.log('recordState', performance.now() - start);
-    console.log('state', this.getCurrentTime())
+    // console.log('state', this.getCurrentTime())
     this.recordState(state, this.getCurrentTime());
   }
 
