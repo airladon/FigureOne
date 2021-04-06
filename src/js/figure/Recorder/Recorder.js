@@ -589,69 +589,22 @@ class Recorder {
     fromTime: number = 0,
     whilePlaying: Array<string> = [],
     includeStates: boolean = true,
+    frameTime: number = 0.1,
   ) {
     this.figure.globalAnimation.setManualFrames();
-    this.state = 'recording';
-    this.lastSeekTime = null;
-    this.setVideoToNowDeltaTime(fromTime);
-    if (this.states.diffs.length > 0) {
-      this.setToTime(fromTime, true);
-    }
-
-    this.states.precision = this.precision;
-
-    if (fromTime === 0 && this.states.baseReference == null) {
-      this.states.setBaseReference(this.figure.getState({
-        precision: this.precision,
-        ignoreShown: true,
-      }));
-    }
-
-    if (includeStates) {
-      this.recordingStates = true;
-    } else {
-      this.recordingStates = false;
-    }
-    this.startWorker();
-    if (this.worker != null) {
-      this.worker.postMessage({
-        message: 'reset',
-        payload: {
-          baseReference: this.states.baseReference,
-          references: this.states.references,
-        },
-      });
-    }
-
-    this.eventsCache = {};
-
-    this.lastRecordTime = null;
-    this.duration = this.calcDuration();
-
-    if (this.recordingStates) {
-      this.queueRecordState(fromTime % this.stateTimeStep);
-    }
-
-    this.eventsToPlay = whilePlaying;
-    // this.initializePlayback(fromTime);
-    this.startEventsPlayback(fromTime);
-    const audioStarted = this.startAudioPlayback(fromTime);
-    this.subscriptions.publish('startRecording');
-    this.startRecordingTime = fromTime;
-    this.startTimeUpdates();
-    if (!audioStarted) {
-      this.pausePlayback();
-    }
-    this.autoFrame();
+    this.startRecording(fromTime, whilePlaying, includeStates);
+    this.autoFrame(frameTime);
     // console.log('recorder is', this.state);
   }
 
-  autoFrame() {
+  autoFrame(frameTime: number = 0.1) {
     if (this.state === 'recording') {
-      this.figure.globalAnimation.frame(0.01);
+      // console.log(this.getCurrentTime());
+      this.figure.animateNextFrame();
+      this.figure.globalAnimation.frame(frameTime);
       if (this.getCurrentTime() < this.duration) {
         setTimeout(
-          this.autoFrame.bind(this),
+          this.autoFrame.bind(this, frameTime),
           5,
         );
       }
@@ -887,6 +840,7 @@ class Recorder {
 
   recordState(state: Object, time: number = this.getCurrentTime()) {
     // const now = this.now();
+    // console.log('record state')
     const now = time;
     if (this.lastRecordTime == null || now > this.lastRecordTime) {
       this.lastRecordTime = now;
@@ -939,20 +893,23 @@ class Recorder {
     // Record state at the end of a draw to ensure it isn't stale as between
     // draws events may occur, or animations will have progressed.
     // Make sure state time is the time from the start of the draw
-    this.figure.subscriptions.add('afterDraw', () => {
-      this.recordState(
-        state,
-        this.getCurrentTime() - (
-          this.figure.globalAnimation.now() / 1000 - this.figure.lastDrawTime
-        ),
-      );
-    }, 1);
-    console.log(this.getCurrentTime(), this.figure.globalAnimation.now() / 1000, this.figure.lastDrawTime, this.getCurrentTime() - (
-          this.figure.globalAnimation.now() / 1000 - this.figure.lastDrawTime
-        ))
+    // this.figure.subscriptions.add('afterDraw', () => {
+    //   this.recordState(
+    //     state,
+    //     this.getCurrentTime(),
+    //     // this.getCurrentTime() - (
+    //     //   this.figure.globalAnimation.now() / 1000 - this.figure.lastDrawTime
+    //     // ),
+    //   );
+    // }, 1);
+    // console.log(this.getCurrentTime(), this.figure.globalAnimation.now() / 1000, this.figure.lastDrawTime, this.getCurrentTime() - (
+    //       this.figure.globalAnimation.now() / 1000 - this.figure.lastDrawTime
+    //     ))
     // this.recordState(state, time);
     // console.log('record state done');
     // console.log('recordState', performance.now() - start);
+    console.log('state', this.getCurrentTime())
+    this.recordState(state, this.getCurrentTime());
   }
 
   recordCurrentStateAsReference(refName: string, basedOn: string = '__base') {
@@ -981,6 +938,7 @@ class Recorder {
     payload: Array<string | number | Object>,
     time: number = this.getCurrentTime(),
   ) {
+    // console.log('record event', eventName)
     // console.log(time)
     if (this.events[eventName] == null) {
       return;
@@ -1024,7 +982,7 @@ class Recorder {
     // }
     this.timeoutID = new GlobalAnimation().setTimeout(() => {
       recordAndQueue();
-    }, round(time * 1000, 0));
+    }, round(time * 1000, 0), 'state', true);
   }
 
   save() {
@@ -1731,6 +1689,7 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
         this.startTimeUpdates();
       },
       this.timeUpdates,
+      'timeUpdates',
     );
   }
 
@@ -1795,15 +1754,16 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
     const delay = round(this.events[eventName].list[index][0] - this.getCurrentTime(), 8);
 
     if (delay > 0.0001) {
-      if (window.asdf == null) {
-        window.asdf = 1;
-      } else {
-        window.asdf += 1;
-      }
+      // if (window.asdf == null) {
+      //   window.asdf = 1;
+      // } else {
+      //   window.asdf += 1;
+      // }
       // console.log('setEvent', eventName, delay * 1000, this.events[eventName].list[index][0], this.getCurrentTime());
       this.timeoutID = new GlobalAnimation().setTimeout(
         this.playbackEvent.bind(this, eventName),
         round(Math.ceil(delay * 1000), 0),
+        `event: ${eventName}`,
       );
       return;
     }
@@ -1811,6 +1771,7 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
     // const index = this.eventIndex[eventName];
     // console.log(this.getCurrentTime(), eventName)
     this.setEvent(eventName, index);
+    // console.log('set Event', eventName)
     // console.log(this.getCurrentTime(), eventName)
     this.figure.animateNextFrame();
     // this.figure.elements.subscriptions.add('afterDraw', () => console.log('draw done'), 1);
@@ -1854,7 +1815,7 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
       // console.log('finishPlaying', remainingTime * 1000)
       this.timeoutID = new GlobalAnimation().setTimeout(() => {
         this.finishPlaying();
-      }, round(remainingTime * 1000, 0));
+      }, round(remainingTime * 1000, 0), 'finishPlaying');
       return false;
     }
 

@@ -145,20 +145,30 @@ class GlobalAnimation {
   incrementManualTimers(maxTime: number) {
     const timersToFire = [];
     Object.keys(this.manualTimers).forEach((id) => {
-      const { duration, startTime, f } = this.manualTimers[id];
+      const {
+        duration, startTime, f, stateTimer, description
+      } = this.manualTimers[id];
       const endTime = startTime + duration;
       // console.log('in loop', id, startTime, duration, endTime, maxTime, maxTime >= endTime)
       if (maxTime >= endTime) {
-        timersToFire.push([id, endTime, f]);
+        timersToFire.push([id, endTime, f, stateTimer, description]);
       }
     });
     if (timersToFire.length === 0) {
       return 0;
     }
-    timersToFire.sort((t1, t2) => t1[1] - t2[1]);
+    timersToFire.sort((t1, t2) => {
+      if (t1[1] === t2[1] && (t1[3] || t2[3])) {
+        if (t1[3]) {
+          return 1;
+        }
+        return -1;
+      }
+      return t1[1] - t2[1];
+    });
+    // console.log('timers to fire', timersToFire)
     const [id, endTime, f] = timersToFire[0];
     this.nowTime = endTime;
-    // console.log('firing', id, maxTime, endTime);
     f();
     this.draw(this.nowTime);
     delete this.manualTimers[`${id}`];
@@ -193,7 +203,7 @@ class GlobalAnimation {
     }
   }
 
-  setupTimeout(f: function, time: number): TimeoutID {
+  setupTimeout(f: function, time: number, description: string, stateTimer: boolean): TimeoutID {
     let id;
     if (this.manual) {
       id = this.manualTimerIds;
@@ -202,6 +212,8 @@ class GlobalAnimation {
         duration: time,
         f,
         startTime: this.nowTime,
+        stateTimer,
+        description,
       });
       // console.log(JSON.stringify(this.manualTimers))
       return id;
@@ -211,7 +223,7 @@ class GlobalAnimation {
     return id;
   }
 
-  setTimeout(f: function, time: number): TimeoutID {
+  setTimeout(f: function, time: number, description: string, stateTimer: boolean = false): TimeoutID {
     if (this.debug) {
       let timeScale = 0;
       if (this.debugFrameTime != null) {
@@ -220,19 +232,19 @@ class GlobalAnimation {
       // console.log('setTimeout', time, timeScale)
       if (timeScale > 0) {
         // const id = setTimeout(f, time * timeScale);
-        return this.setupTimeout(f, time * timeScale);
+        return this.setupTimeout(f, time * timeScale, description, stateTimer);
         // this.timers.push(id);
         // return id;
       }
       // const id = setTimeout(f, 0);
       // this.timers.push(id);
       // return id;
-      return this.setupTimeout(f, 0);
+      return this.setupTimeout(f, 0, description, stateTimer);
     }
     // const id = setTimeout(f, time);
     // this.timers.push(id);
     // return id;
-    return this.setupTimeout(f, time);
+    return this.setupTimeout(f, time, description, stateTimer);
   }
 
   clearTimeout(id: TimeoutID | null) {
