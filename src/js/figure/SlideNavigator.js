@@ -443,6 +443,7 @@ export default class SlideNavigator {
     let lastTime = 0;
     this.slides.forEach((slide, index) => {
       const { time, delta, execDelta } = slide;
+      console.log(time)
       if (time != null) {
         const t = this.convertTime(time);
         this.collection.recorder.events._autoSlide.list.push([t, [index], 0]);
