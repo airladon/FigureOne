@@ -91,7 +91,7 @@ function makeSlides() {
   nav.loadSlides(slides);
   nav.goToSlide(0);
 
-  figure.recorder.fetchAndLoad('./ivid_data.json');
+  // figure.recorder.fetchAndLoad('./ivid_data.json');
   figure.recorder.loadAudio(new Audio('./audio.mp3'));
 }
 makeSlides();

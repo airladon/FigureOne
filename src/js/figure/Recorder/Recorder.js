@@ -585,6 +585,79 @@ class Recorder {
     // console.log('recorder is', this.state);
   }
 
+  startAutoRecording(
+    fromTime: number = 0,
+    whilePlaying: Array<string> = [],
+    includeStates: boolean = true,
+  ) {
+    this.figure.globalAnimation.setManualFrames();
+    this.state = 'recording';
+    this.lastSeekTime = null;
+    this.setVideoToNowDeltaTime(fromTime);
+    if (this.states.diffs.length > 0) {
+      this.setToTime(fromTime, true);
+    }
+
+    this.states.precision = this.precision;
+
+    if (fromTime === 0 && this.states.baseReference == null) {
+      this.states.setBaseReference(this.figure.getState({
+        precision: this.precision,
+        ignoreShown: true,
+      }));
+    }
+
+    if (includeStates) {
+      this.recordingStates = true;
+    } else {
+      this.recordingStates = false;
+    }
+    this.startWorker();
+    if (this.worker != null) {
+      this.worker.postMessage({
+        message: 'reset',
+        payload: {
+          baseReference: this.states.baseReference,
+          references: this.states.references,
+        },
+      });
+    }
+
+    this.eventsCache = {};
+
+    this.lastRecordTime = null;
+    this.duration = this.calcDuration();
+
+    if (this.recordingStates) {
+      this.queueRecordState(fromTime % this.stateTimeStep);
+    }
+
+    this.eventsToPlay = whilePlaying;
+    // this.initializePlayback(fromTime);
+    this.startEventsPlayback(fromTime);
+    const audioStarted = this.startAudioPlayback(fromTime);
+    this.subscriptions.publish('startRecording');
+    this.startRecordingTime = fromTime;
+    this.startTimeUpdates();
+    if (!audioStarted) {
+      this.pausePlayback();
+    }
+    this.autoFrame();
+    // console.log('recorder is', this.state);
+  }
+
+  autoFrame() {
+    if (this.state === 'recording') {
+      this.figure.globalAnimation.frame(0.01);
+      if (this.getCurrentTime() < this.duration) {
+        setTimeout(
+          this.autoFrame.bind(this),
+          5,
+        );
+      }
+    }
+  }
+
   startWorker() {
     if (this.worker == null) {
       this.worker = new Worker();
@@ -862,7 +935,22 @@ class Recorder {
     // console.log(unStr == state)
     // console.log(time, state)
     // console.log(time, 'state')
-    this.recordState(state, time);
+
+    // Record state at the end of a draw to ensure it isn't stale as between
+    // draws events may occur, or animations will have progressed.
+    // Make sure state time is the time from the start of the draw
+    this.figure.subscriptions.add('afterDraw', () => {
+      this.recordState(
+        state,
+        this.getCurrentTime() - (
+          this.figure.globalAnimation.now() / 1000 - this.figure.lastDrawTime
+        ),
+      );
+    }, 1);
+    console.log(this.getCurrentTime(), this.figure.globalAnimation.now() / 1000, this.figure.lastDrawTime, this.getCurrentTime() - (
+          this.figure.globalAnimation.now() / 1000 - this.figure.lastDrawTime
+        ))
+    // this.recordState(state, time);
     // console.log('record state done');
     // console.log('recordState', performance.now() - start);
   }
