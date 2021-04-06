@@ -140,7 +140,9 @@ class GlobalAnimation {
     // this.nowTime += duration * 1000;
     this.nowTime = targetTime;
     // console.log('frame')
-    this.draw(this.nowTime);
+    this.animateNextFrame();
+    // this.draw(this.nowTime);
+    // console.log('id', this.animationId)
   }
 
   incrementManualTimers(maxTime: number) {
@@ -279,7 +281,6 @@ class GlobalAnimation {
   }
 
   draw(now: number) {
-    // console.log('draw');
     this.animationId = null;
     clearTimeout(this.syncNowTimer);
     this.updateSyncNow = true;
@@ -320,7 +321,9 @@ class GlobalAnimation {
 
   // Queue up an animation frame
   animateNextFrame() {
+    // console.log('animate next frame', this.animationId)
     if (this.animationId == null) {
+      // console.log('request animation frame')
     // cancelAnimationFrame(this.animationId);
     // $FlowFixMe
       this.animationId = this.requestNextAnimationFrame.call(window, this.draw.bind(this));

@@ -144,24 +144,27 @@ async function tester(htmlFile, dataFileUrl, dataFile, fromTimesIn = [], toTimes
         // const t1 = performance.now();
         // Trigger frame to be recordered
         await page.evaluate(([delta]) => {
+          // console.log(delta)
           figure.globalAnimation.frame(delta);
           figure.recorder.subscriptions.publish('timeUpdate', [figure.recorder.getCurrentTime()]);
-          figure.globalAnimation.frame(0);
+          // figure.globalAnimation.frame(0);
+          // figure.globalAnimation.animateNextFrame();
           // console.log(figure.elements._eqn.isShown, figure.elements._eqn.opacity, figure.getRemainingAnimationTime())
         }, [d]);
-        const t = performance.now();
+        // const t = performance.now();
+        // await sleep(200);
         // const currentTimeAfter = await page.evaluate(() => {
         //   return Promise.resolve(figure.recorder.getCurrentTime());
         // })
         const image = await page.screenshot({ fullPage: true });
-        const t1 = performance.now();
+        // const t1 = performance.now();
         expect(image).toMatchImageSnapshot({
           customSnapshotIdentifier: `${zeroPad(Math.round(time * 10000), 7)}`,
           failureThreshold: threshold,
         });
-        console.log('play', time,
-          Math.round((t1 - t)),
-        );
+        // console.log('play', time,
+        //   Math.round((t1 - t)),
+        // );
       });
     test.each(seekTests)('Seek: %s',
       async (seekTimeIn) => {

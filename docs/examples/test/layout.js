@@ -56,6 +56,19 @@ function layout() {
     },
   });
   figure.add({
+    name: 'xLabel',
+    method: 'text',
+    options: {
+      text: '0',
+      position: [-2, -1],
+      color: [0, 0, 1, 1],
+      font: { size: 0.2 },
+    },
+    mods: {
+      isMovable: true,
+    },
+  });
+  figure.add({
     name: 'cursor',
     method: 'collections.cursor',
     options: {
@@ -93,7 +106,7 @@ function makeSlides() {
   // */
   slides.push({
     addReference,
-    showCommon: ['ball', 'gridMinor', 'gridMajor', 'touchBall'],
+    showCommon: ['ball', 'gridMinor', 'gridMajor', 'touchBall', 'xLabel'],
   });
   slides.push({
     time: 1,

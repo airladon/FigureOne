@@ -2330,7 +2330,6 @@ class Figure {
 
   draw(nowIn: number, canvasIndex: number = 0): void {
     // const start = new Date().getTime();
-    // console.log('draw');
     let timer;
     if (FIGURE1DEBUG) {
       timer = new PerformanceTimer();
