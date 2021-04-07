@@ -854,6 +854,9 @@ class TextObjectBase extends DrawingObject {
         (figureText.locationAligned.x) * scalingFactor,
         (figureText.locationAligned.y) * -scalingFactor,
       );
+      if (window.asdf && figureText.text === '0') {
+        console.log('filled', figureText.text)
+      }
     });
     ctx.restore();
   }
@@ -891,6 +894,10 @@ class TextObjectBase extends DrawingObject {
       }
     });
     ctx.restore();
+    if (window.asdf && this.text[0] != null && this.text[0].text === '0') {
+      console.trace('cleared', this.text[0]);
+      // console.log('cleared');
+    }
   }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this

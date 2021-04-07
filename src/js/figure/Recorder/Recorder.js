@@ -1911,7 +1911,7 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
     if (event == null) {
       return;
     }
-    // console.log(eventName)
+    console.log(eventName)
     // $FlowFixMe
     event.playbackAction(event.list[index][1], event.list[index][0]);
   }

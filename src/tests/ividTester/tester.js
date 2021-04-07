@@ -83,15 +83,41 @@ async function tester(htmlFile, dataFileUrl, dataFile, fromTimesIn = [], toTimes
     beforeAll(async () => {
       await page.setViewportSize({ width: __width || 500, height: __height || 375 });
       await page.goto(htmlFile);
+      let image = await page.screenshot({ fullPage: true });
+      expect(image).toMatchImageSnapshot({
+        customSnapshotIdentifier: 'initial',
+        failureThreshold: threshold,
+      });
       await page.evaluate((url) => {
         figure.globalAnimation.setManualFrames();
         figure.globalAnimation.frame(0);
         figure.recorder.audio = null;
         figure.recorder.fetchAndLoad(url, () => figure.recorder.startPlayback());
-        document.getElementById('f1_player__play_pause').style.visibility = 'hidden';
+        // document.getElementById('f1_player__play_pause').style.visibility = 'hidden';
       }, [dataFileUrl]);
       // Delay for time to fetch and load data file, then start playback
-      await sleep(500);
+      await sleep(1000);
+      image = await page.screenshot({ fullPage: true });
+      expect(image).toMatchImageSnapshot({
+        customSnapshotIdentifier: 'after',
+        failureThreshold: threshold,
+      });
+      console.log('************ start ************');
+      await page.evaluate(() => {
+        window.asdf = true
+        console.log(figure.recorder.state)
+        figure.globalAnimation.frame(0.1);
+        // figure.globalAnimation.animateNextFrame();
+        figure.globalAnimation.requestNextAnimationFrame.call(window, figure.globalAnimation.draw.bind(figure.globalAnimation))
+        window.asdf = false
+      }, []);
+      await sleep(1000);
+      console.log('************ end ************');
+      image = await page.screenshot({ fullPage: true });
+      expect(image).toMatchImageSnapshot({
+        customSnapshotIdentifier: 'after1',
+        failureThreshold: threshold,
+      });
     });
     // test.each(tests)('Play: %s',
     //   async (time) => {
@@ -144,18 +170,17 @@ async function tester(htmlFile, dataFileUrl, dataFile, fromTimesIn = [], toTimes
         // const t1 = performance.now();
         // Trigger frame to be recordered
         await page.evaluate(([delta]) => {
-          // console.log(delta)
           figure.globalAnimation.frame(delta);
           figure.recorder.subscriptions.publish('timeUpdate', [figure.recorder.getCurrentTime()]);
           // figure.globalAnimation.frame(0);
-          // figure.globalAnimation.animateNextFrame();
           // console.log(figure.elements._eqn.isShown, figure.elements._eqn.opacity, figure.getRemainingAnimationTime())
         }, [d]);
         // const t = performance.now();
-        // await sleep(200);
+        await sleep(500);
         // const currentTimeAfter = await page.evaluate(() => {
         //   return Promise.resolve(figure.recorder.getCurrentTime());
         // })
+        console.log('******************* capture *************', time)
         const image = await page.screenshot({ fullPage: true });
         // const t1 = performance.now();
         expect(image).toMatchImageSnapshot({
