@@ -81,7 +81,7 @@ async function tester(htmlFile, dataFileUrl, dataFile, fromTimesIn = [], toTimes
     // Load page, set manual frames, remove audio, load video data file and play
     beforeAll(async () => {
       await page.setViewportSize({ width: __width || 500, height: __height || 375 });
-      // await page.goto(htmlFile);
+      await page.goto(htmlFile);
       // let image = await page.screenshot({ fullPage: true });
       // expect(image).toMatchImageSnapshot({
       //   customSnapshotIdentifier: 'initial',
