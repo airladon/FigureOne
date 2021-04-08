@@ -1,4 +1,4 @@
-const { tester } = require('../../../../src/tests/ividTester/tester1.js');
+const { tester } = require('../../../../src/tests/ividTester/tester.js');
 
 const dataFile = __dirname.replace('tests', 'ivid_data.json');
 tester(
