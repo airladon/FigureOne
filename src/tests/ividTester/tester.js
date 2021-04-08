@@ -58,7 +58,7 @@ async function tester(htmlFile, dataFileUrl, dataFile, fromTimesIn = [], toTimes
     toTimes = slideTimes.slice(0, -1);
   }
   const seekTests = [];
-  stateTimes.slice(0, 15).forEach((stateTime) => {
+  stateTimes.forEach((stateTime) => {
     seekTests.push([stateTime]);
   });
   // console.log(fromTimes, toTimes)
@@ -75,22 +75,22 @@ async function tester(htmlFile, dataFileUrl, dataFile, fromTimesIn = [], toTimes
   // Get the slide events
 
   // Final Tests
-  const tests = [[0], ...stateTimes.slice(0, 15).map(t => [t])];
+  const tests = [[0], ...stateTimes.map(t => [t])];
   jest.setTimeout(120000);
-  console.log(htmlFile)
   describe(__title, () => {
     // Load page, set manual frames, remove audio, load video data file and play
     beforeAll(async () => {
       await page.setViewportSize({ width: __width || 500, height: __height || 375 });
-      await page.goto(htmlFile);
-      let image = await page.screenshot({ fullPage: true });
-      expect(image).toMatchImageSnapshot({
-        customSnapshotIdentifier: 'initial',
-        failureThreshold: threshold,
-      });
+      // await page.goto(htmlFile);
+      // let image = await page.screenshot({ fullPage: true });
+      // expect(image).toMatchImageSnapshot({
+      //   customSnapshotIdentifier: 'initial',
+      //   failureThreshold: threshold,
+      // });
       await page.evaluate((url) => {
+        figure.globalAnimation.manualOneFrameOnly = false;
         figure.globalAnimation.setManualFrames();
-        figure.globalAnimation.frame(0);
+        // figure.globalAnimation.frame(0);
         figure.recorder.audio = null;
         figure.recorder.fetchAndLoad(url, () => figure.recorder.startPlayback());
         // console.log(Object.keys(figure.recorder.subscriptions.subscriptions.timeUpdate.subscribers).length)

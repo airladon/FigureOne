@@ -6,5 +6,10 @@ module.exports = {
     '/docs/tutorials/.*\\.btest\\.js',
   ],
   testPathIgnorePatterns: ['/node_modules/', '\\.snap$'],
+  testEnvironmentOptions: {
+    'jest-playwright': {
+      browsers: ['chromium'],
+    },
+  },
 };
 

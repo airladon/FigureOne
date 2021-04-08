@@ -44,6 +44,7 @@ class GlobalAnimation {
   manualTimers: Object;
   manualTimerIds: number;
   manualQueueCounter: number;
+  manualOneFrameOnly: boolean;
 
   constructor() {
     // If the instance alread exists, then don't create a new instance.
@@ -82,6 +83,7 @@ class GlobalAnimation {
     this.manualTimers = {};
     this.manualTimerIds = 0;
     this.manualQueueCounter = 0;
+    this.manualOneFrameOnly = true;
   }
 
   getWhen(when: TypeWhen) {
@@ -304,23 +306,13 @@ class GlobalAnimation {
   }
 
   queueNextFrame(func: (?number) => void) {
-    // if (!(func in this.nextDrawQueue)) {
-    // if (window.asdf) {
-    //   console.log('queue', this.manualQueueCounter);
-    // }
     this.nextDrawQueue.push(func);
-    // if (this.manual) {
-    //   if (this.manualQueueCounter > 2) {
-    //     return;
-    //   }
-    //   this.manualQueueCounter += 1;
-    // }
-    // console.log(this.nextDrawQueue.length)
-    // }
-
-    // if (triggerFrameRequest) {
-    //   this.animateNextFrame();
-    // }
+    if (this.manual && this.manualOneFrameOnly) {
+      if (this.manualQueueCounter >= 1) {
+        return;
+      }
+      this.manualQueueCounter += 1;
+    }
     if (this.nextDrawQueue.length === 1) {
       if (!this.debug) {
         this.animateNextFrame();
