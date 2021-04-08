@@ -5,7 +5,7 @@ tester(
   `http://localhost:8080/${__dirname}/example.html`,
   `http://localhost:8080/${dataFile}`,
   dataFile,
-  [0, 120],
-  [10],
-  1,
+  // [0, 120],
+  // [10],
+  // 1,
 );

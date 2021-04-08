@@ -38,12 +38,6 @@ async function tester(htmlFile, dataFileUrl, dataFile, fromTimesIn = [], toTimes
   const combinedData = JSON.parse(fs.readFileSync(dataFile));
   const diffsKey = combinedData.states.map.map.diffs;
   const diffs = combinedData.states.minified[diffsKey];
-  // const stateTimes = diffs.map((d, i) => {
-  //   if (i === 0) {
-  //     return [d[0], d[0]];
-  //   }
-  //   return [d[0], Math.round((d[0] - diffs[i - 1][0]) * 1000000) / 1000000];
-  // });
   const stateTimes = diffs.map(d => d[0]);
 
   const slideEventKey = combinedData.events.map.map.slide;
@@ -51,28 +45,22 @@ async function tester(htmlFile, dataFileUrl, dataFile, fromTimesIn = [], toTimes
   const slideTimes = slides.map(s => s[0] + 1.1);
   let fromTimes = fromTimesIn;
   if (fromTimes.length === 0) {
-    fromTimes = [slideTimes[0], slideTimes.slice(-1)[0]];
+    fromTimes = slideTimes;
   }
   let toTimes = toTimesIn;
   if (toTimes.length === 0) {
-    toTimes = slideTimes.slice(0, -1);
+    toTimes = slideTimes;
   }
   const seekTests = [];
   stateTimes.forEach((stateTime) => {
     seekTests.push([stateTime]);
   });
-  // console.log(fromTimes, toTimes)
   const fromToTests = [];
   fromTimes.forEach((from) => {
     toTimes.forEach((to) => {
       fromToTests.push([from, to]);
     });
   });
-  // console.log(fromToTests);
-
-  // console.log(combinedData.events.mini)
-
-  // Get the slide events
 
   // Final Tests
   const tests = [[0], ...stateTimes.map(t => [t])];
@@ -82,145 +70,68 @@ async function tester(htmlFile, dataFileUrl, dataFile, fromTimesIn = [], toTimes
     beforeAll(async () => {
       await page.setViewportSize({ width: __width || 500, height: __height || 375 });
       await page.goto(htmlFile);
-      // let image = await page.screenshot({ fullPage: true });
-      // expect(image).toMatchImageSnapshot({
-      //   customSnapshotIdentifier: 'initial',
-      //   failureThreshold: threshold,
-      // });
       await page.evaluate((url) => {
         figure.globalAnimation.manualOneFrameOnly = false;
         figure.globalAnimation.setManualFrames();
-        // figure.globalAnimation.frame(0);
         figure.recorder.audio = null;
         figure.recorder.fetchAndLoad(url, () => figure.recorder.startPlayback());
-        // console.log(Object.keys(figure.recorder.subscriptions.subscriptions.timeUpdate.subscribers).length)
         document.getElementById('f1_player__play_pause').style.visibility = 'hidden';
       }, [dataFileUrl]);
-      // Delay for time to fetch and load data file, then start playback
-      // await sleep(1000);
-      // image = await page.screenshot({ fullPage: true });
-      // expect(image).toMatchImageSnapshot({
-      //   customSnapshotIdentifier: 'after',
-      //   failureThreshold: threshold,
-      // });
-      // console.log('************ start ************');
-      // await page.evaluate(() => {
-      //   // window.asdf = true
-      //   // console.log(figure.recorder.state)
-      //   figure.globalAnimation.frame(0.1);
-      //   // figure.globalAnimation.animateNextFrame();
-      //   // figure.globalAnimation.requestNextAnimationFrame.call(window, figure.globalAnimation.draw.bind(figure.globalAnimation))
-      //   // window.asdf = false
-      // }, []);
-      // await sleep(200);
-      // console.log('************ end ************');
-      // image = await page.screenshot({ fullPage: true });
-      // expect(image).toMatchImageSnapshot({
-      //   customSnapshotIdentifier: 'after1',
-      //   failureThreshold: threshold,
-      // });
     });
     // test.each(tests)('Play: %s',
     //   async (time) => {
-    //     // console.log('play', time)
-    //     const t = performance.now();
-    //     const currentTime = await page.evaluate(() => {
-    //       return Promise.resolve(figure.recorder.getCurrentTime());
-    //     });
-    //     // console.log(currentTime, performance.now())
+    //     const currentTime = await page.evaluate(
+    //       () => Promise.resolve(figure.recorder.getCurrentTime()),
+    //     );
     //     const deltaTime = time - currentTime;
     //     let d = deltaTime;
     //     // Trigger frames between those to be recorded
+    //     if (intermitentTime > 0) {
+    //       if (deltaTime > intermitentTime) {
+    //         for (let i = intermitentTime; i < deltaTime - intermitentTime; i += intermitentTime) {
+    //           await page.evaluate((t) => {
+    //             figure.globalAnimation.frame(t);
+    //           }, [intermitentTime]);
+    //           d -= intermitentTime;
+    //         }
+    //       }
+    //     }
+    //     // Trigger frame to be recordered
     //     await page.evaluate(([delta]) => {
     //       figure.globalAnimation.frame(delta);
-    //       // figure.recorder.subscriptions.publish('timeUpdate', [figure.recorder.getCurrentTime()]);
-    //       figure.globalAnimation.frame(0);
+    //       figure.recorder.subscriptions.publish('timeUpdate', [figure.recorder.getCurrentTime()]);
     //     }, [d]);
+    //     await sleep(500);
+    //     console.log('Capture', time)
     //     const image = await page.screenshot({ fullPage: true });
-    //     const t3 = performance.now();
     //     expect(image).toMatchImageSnapshot({
     //       customSnapshotIdentifier: `${zeroPad(Math.round(time * 10000), 7)}`,
     //       failureThreshold: threshold,
     //     });
-    //     console.log('play', time,
-    //       Math.round((t3 - t)),
-    //     );
     //   });
-    test.each(tests)('Play: %s',
-      async (time) => {
-        // console.log('play', time)
-        const currentTime = await page.evaluate(() => {
-          return Promise.resolve(figure.recorder.getCurrentTime());
-        });
-        // console.log(currentTime, performance.now())
-        const deltaTime = time - currentTime;
-        let d = deltaTime;
-        // Trigger frames between those to be recorded
-        // console.log(deltaTime, intermitentTime)
-        if (intermitentTime > 0) {
-          if (deltaTime > intermitentTime) {
-            for (let i = intermitentTime; i < deltaTime - intermitentTime; i += intermitentTime) {
-              // console.log(i + currentTime)
-              await page.evaluate((t) => {
-                figure.globalAnimation.frame(t);
-              }, [intermitentTime]);
-              d -= intermitentTime;
-            }
-          }
-        }
-        // const t1 = performance.now();
-        // Trigger frame to be recordered
-        await page.evaluate(([delta]) => {
-          // console.log(delta)
-          figure.globalAnimation.frame(delta);
-          figure.recorder.subscriptions.publish('timeUpdate', [figure.recorder.getCurrentTime()]);
-          // figure.recorder.subscriptions.add('timeUpdate', (t) => console.log(t[0]))
-          // figure.globalAnimation.frame(0);
-          // console.log(figure.elements._eqn.isShown, figure.elements._eqn.opacity, figure.getRemainingAnimationTime())
-        }, [d]);
-        // const t = performance.now();
-        await sleep(500);
-        // const currentTimeAfter = await page.evaluate(() => {
-        //   return Promise.resolve(figure.recorder.getCurrentTime());
-        // })
-        console.log('******************* capture *************', time)
-        const image = await page.screenshot({ fullPage: true });
-        // const t1 = performance.now();
-        expect(image).toMatchImageSnapshot({
-          customSnapshotIdentifier: `${zeroPad(Math.round(time * 10000), 7)}`,
-          failureThreshold: threshold,
-        });
-        // console.log('play', time,
-        //   Math.round((t1 - t)),
-        // );
-      });
-    test.each(seekTests)('Seek: %s',
-      async (seekTimeIn) => {
-        // console.log('seek', seekTimeIn)
-        // console.log('Seek: ', seekTimeIn)
-        const currentTime = await page.evaluate(([seekTime]) => {
-          figure.recorder.seek(0);
-          figure.globalAnimation.frame(0);
-          figure.recorder.seek(seekTime);
-          figure.globalAnimation.frame(0);
-          // figure.recorder.resumePlayback();
-          // figure.globalAnimation.frame(0);
-          return Promise.resolve(figure.recorder.getCurrentTime());
-        }, [seekTimeIn]);
-        const image = await page.screenshot({ fullPage: true });
-        expect(image).toMatchImageSnapshot({
-          customSnapshotIdentifier: `${zeroPad(Math.round(currentTime * 10000), 7)}`,
-          failureThreshold: threshold,
-        });
-      });
+    // test.each(seekTests)('Seek: %s',
+    //   async (seekTimeIn) => {
+    //     const currentTime = await page.evaluate(([seekTime]) => {
+    //       figure.recorder.seek(0);
+    //       figure.globalAnimation.frame(0);
+    //       figure.recorder.seek(seekTime);
+    //       figure.globalAnimation.frame(0);
+    //       return Promise.resolve(figure.recorder.getCurrentTime());
+    //     }, [seekTimeIn]);
+    //     const image = await page.screenshot({ fullPage: true });
+    //     expect(image).toMatchImageSnapshot({
+    //       customSnapshotIdentifier: `${zeroPad(Math.round(currentTime * 10000), 7)}`,
+    //       failureThreshold: threshold,
+    //     });
+    //   });
     test.each(fromToTests)('From To: %s %s',
       async (fromTime, toTime) => {
-        const seek = async (seekTimeIn) => {
+        console.log(fromTime, toTime);
+        const seek = async (seekTimeIn, play) => {
           const currentTime = await page.evaluate(([seekTime]) => {
             figure.recorder.seek(seekTime);
             figure.globalAnimation.frame(0);
-            // figure.recorder.resumePlayback();
-            // figure.globalAnimation.frame(0);
+            figure.recorder.subscriptions.publish('timeUpdate', [figure.recorder.getCurrentTime()]);
             return Promise.resolve(figure.recorder.getCurrentTime());
           }, [seekTimeIn]);
           let index = 0;
@@ -228,7 +139,6 @@ async function tester(htmlFile, dataFileUrl, dataFile, fromTimesIn = [], toTimes
             index += 1;
           }
           const nextFrameTime = stateTimes[index][0];
-          // console.log(seekTimeIn, currentTime, nextFrameTime);
           const checkImage = async (imageTime) => {
             const image = await page.screenshot({ fullPage: true });
             expect(image).toMatchImageSnapshot({
@@ -237,18 +147,17 @@ async function tester(htmlFile, dataFileUrl, dataFile, fromTimesIn = [], toTimes
             });
           };
           await checkImage(currentTime);
-          if (nextFrameTime > currentTime) {
+          if (nextFrameTime > currentTime && play) {
             await page.evaluate(([delta]) => {
+              figure.recorder.resumePlayback();
               figure.globalAnimation.frame(delta);
+              figure.recorder.subscriptions.publish('timeUpdate', [figure.recorder.getCurrentTime()]);
             }, [nextFrameTime - currentTime]);
             await checkImage(nextFrameTime);
           }
         };
-        // console.log('from', fromTime);
-        await seek(fromTime);
-        // console.log('to', toTime);
-        await seek(toTime);
-        // Seek to fromTime
+        await seek(fromTime, false);
+        await seek(toTime, true);
       });
   });
 }
