@@ -58,7 +58,7 @@ async function tester(htmlFile, dataFileUrl, dataFile, fromTimesIn = [], toTimes
     toTimes = slideTimes.slice(0, -1);
   }
   const seekTests = [];
-  stateTimes.forEach((stateTime) => {
+  stateTimes.slice(0, 15).forEach((stateTime) => {
     seekTests.push([stateTime]);
   });
   // console.log(fromTimes, toTimes)
@@ -75,9 +75,9 @@ async function tester(htmlFile, dataFileUrl, dataFile, fromTimesIn = [], toTimes
   // Get the slide events
 
   // Final Tests
-  const tests = [[0], ...stateTimes.map(t => [t])];
+  const tests = [[0], ...stateTimes.slice(0, 15).map(t => [t])];
   jest.setTimeout(120000);
-
+  console.log(htmlFile)
   describe(__title, () => {
     // Load page, set manual frames, remove audio, load video data file and play
     beforeAll(async () => {
@@ -93,31 +93,32 @@ async function tester(htmlFile, dataFileUrl, dataFile, fromTimesIn = [], toTimes
         figure.globalAnimation.frame(0);
         figure.recorder.audio = null;
         figure.recorder.fetchAndLoad(url, () => figure.recorder.startPlayback());
-        // document.getElementById('f1_player__play_pause').style.visibility = 'hidden';
+        // console.log(Object.keys(figure.recorder.subscriptions.subscriptions.timeUpdate.subscribers).length)
+        document.getElementById('f1_player__play_pause').style.visibility = 'hidden';
       }, [dataFileUrl]);
       // Delay for time to fetch and load data file, then start playback
-      await sleep(1000);
-      image = await page.screenshot({ fullPage: true });
-      expect(image).toMatchImageSnapshot({
-        customSnapshotIdentifier: 'after',
-        failureThreshold: threshold,
-      });
-      console.log('************ start ************');
-      await page.evaluate(() => {
-        window.asdf = true
-        console.log(figure.recorder.state)
-        figure.globalAnimation.frame(0.1);
-        // figure.globalAnimation.animateNextFrame();
-        figure.globalAnimation.requestNextAnimationFrame.call(window, figure.globalAnimation.draw.bind(figure.globalAnimation))
-        window.asdf = false
-      }, []);
-      await sleep(1000);
-      console.log('************ end ************');
-      image = await page.screenshot({ fullPage: true });
-      expect(image).toMatchImageSnapshot({
-        customSnapshotIdentifier: 'after1',
-        failureThreshold: threshold,
-      });
+      // await sleep(1000);
+      // image = await page.screenshot({ fullPage: true });
+      // expect(image).toMatchImageSnapshot({
+      //   customSnapshotIdentifier: 'after',
+      //   failureThreshold: threshold,
+      // });
+      // console.log('************ start ************');
+      // await page.evaluate(() => {
+      //   // window.asdf = true
+      //   // console.log(figure.recorder.state)
+      //   figure.globalAnimation.frame(0.1);
+      //   // figure.globalAnimation.animateNextFrame();
+      //   // figure.globalAnimation.requestNextAnimationFrame.call(window, figure.globalAnimation.draw.bind(figure.globalAnimation))
+      //   // window.asdf = false
+      // }, []);
+      // await sleep(200);
+      // console.log('************ end ************');
+      // image = await page.screenshot({ fullPage: true });
+      // expect(image).toMatchImageSnapshot({
+      //   customSnapshotIdentifier: 'after1',
+      //   failureThreshold: threshold,
+      // });
     });
     // test.each(tests)('Play: %s',
     //   async (time) => {
@@ -170,8 +171,10 @@ async function tester(htmlFile, dataFileUrl, dataFile, fromTimesIn = [], toTimes
         // const t1 = performance.now();
         // Trigger frame to be recordered
         await page.evaluate(([delta]) => {
+          // console.log(delta)
           figure.globalAnimation.frame(delta);
           figure.recorder.subscriptions.publish('timeUpdate', [figure.recorder.getCurrentTime()]);
+          // figure.recorder.subscriptions.add('timeUpdate', (t) => console.log(t[0]))
           // figure.globalAnimation.frame(0);
           // console.log(figure.elements._eqn.isShown, figure.elements._eqn.opacity, figure.getRemainingAnimationTime())
         }, [d]);

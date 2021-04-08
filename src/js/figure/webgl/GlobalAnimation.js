@@ -284,9 +284,9 @@ class GlobalAnimation {
   }
 
   draw(now: number) {
-    if (window.asdf) {
-      console.log('draw', now, this.nextDrawQueue.length, this.drawQueue.length)
-    }
+    // if (window.asdf) {
+    //   console.log('draw', now, this.nextDrawQueue.length, this.drawQueue.length)
+    // }
     this.animationId = null;
     clearTimeout(this.syncNowTimer);
     this.updateSyncNow = true;
@@ -305,16 +305,16 @@ class GlobalAnimation {
 
   queueNextFrame(func: (?number) => void) {
     // if (!(func in this.nextDrawQueue)) {
-    if (window.asdf) {
-      console.log('queue', this.manualQueueCounter);
-    }
+    // if (window.asdf) {
+    //   console.log('queue', this.manualQueueCounter);
+    // }
     this.nextDrawQueue.push(func);
-    if (this.manual) {
-      if (this.manualQueueCounter > 2) {
-        return;
-      }
-      this.manualQueueCounter += 1;
-    }
+    // if (this.manual) {
+    //   if (this.manualQueueCounter > 2) {
+    //     return;
+    //   }
+    //   this.manualQueueCounter += 1;
+    // }
     // console.log(this.nextDrawQueue.length)
     // }
 
