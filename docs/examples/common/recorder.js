@@ -1,6 +1,47 @@
 /* globals figure */
 /* eslint-disable no-empty, object-shorthand, func-names, getter-return */
-
+function createRecorder() {
+  // const createDiv = (id = '', classes = ['']) => {
+  //   const div = document.createElement('div');
+  //   if (id !== '') {
+  //     div.setAttribute('id', id);
+  //   }
+  //   if (classes !== '') {
+  //     div.classList.add(classes);
+  //   }
+  // }
+  // const player = createDiv('f1_player');
+  // const playPause = createDiv('f1_player__play_pause', ['f1_player__button', 'f1_paused']);
+  // const seek = createDiv('f1_player__seek');
+  // const seekBar = createDiv('f1_player__seek_bar');
+  // const seekCircle = createDiv('f1_player__seek_circle');
+  // const time = createDiv('f1_player__time', ['f1_player__button']);
+  // player.appendChild(playPause);
+  // seek.appendChild(seekBar);
+  // seek.appendChild(seekCircle);
+  // player.appendChild(seek);
+  // player.appendChild(time);
+  const recorderElement = document.createElement('div');
+  recorderElement.innerHTML = `
+  <div id='f1_player'>
+      <div id='f1_player__play_pause' class="f1_player__button f1_paused"></div>
+      <div id='f1_player__seek'>
+          <div id='f1_player__seek_bar'></div>
+          <div id='f1_player__seek_circle'></div>
+      </div>
+      <div id='f1_player__time' class="f1_player__button">00:00 / 00:00</div>
+  </div>
+  <div class="comment_out_to_show_recorder">
+      <div id='f1_recorder' >
+          <div id='f1_recorder__record' class="f1_player__button f1_recorder__button">Record</div>
+          <div id='f1_recorder__save' class="f1_player__button f1_recorder__button">Save</div>
+          <div id='f1_recorder__load' class="f1_player__button f1_recorder__button">Load Plan</div>
+          <div id='f1_recorder__recordStates' class="f1_player__button f1_recorder__button">Record States</div>
+      </div>
+  </div>
+  `;
+  document.body.appendChild(recorderElement);
+}
 function setupRecorder() {
   const { recorder } = figure;
 
@@ -269,4 +310,5 @@ function setupRecorder() {
   window.addEventListener('touchmove', e => touchMoveHandler(e), supportsPassive() ? { passive: false } : false);
 }
 
+createRecorder();
 setupRecorder();

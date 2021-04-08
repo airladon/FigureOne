@@ -1,5 +1,5 @@
 /* global page figure __title __width __height */
-/* eslint-disable import/prefer-default-export, global-require */
+/* eslint-disable import/prefer-default-export, global-require, no-console */
 /* eslint-disable import/no-dynamic-require, no-eval */
 /* eslint-disable jest/no-export, no-await-in-loop */
 global.__title = '';
@@ -31,9 +31,8 @@ async function tester(
   require('./start.js');
   // Tests
   // * Snapshot at each state time
-  // * Matrix of snapshots seeking from a state, to a state
-  //    - where to states are different slides
-  //    - where from states are different slides, or user defined
+  // * Snapshot of seek to each state time
+  // * Snapshots of seek from a time, seek to a time, and play
 
   // Get the state times from the json video file and save them in a tests
   // array of tuples: [time, deltaTime]
@@ -104,7 +103,7 @@ async function tester(
           figure.recorder.subscriptions.publish('timeUpdate', [figure.recorder.getCurrentTime()]);
         }, [d]);
         await sleep(500);
-        console.log('Capture', time)
+        console.log('Capture', time);
         const image = await page.screenshot({ fullPage: true });
         expect(image).toMatchImageSnapshot({
           customSnapshotIdentifier: `${zeroPad(Math.round(time * 10000), 7)}`,
