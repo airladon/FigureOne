@@ -1,4 +1,4 @@
-/* global page figure timeoutId __title __width __height */
+/* global page figure __title __width __height */
 /* eslint-disable import/prefer-default-export, global-require */
 /* eslint-disable import/no-dynamic-require, no-eval */
 /* eslint-disable jest/no-export, no-await-in-loop */
@@ -10,7 +10,6 @@ global.__height = 375;
 // eslint-disable-next-line import/no-unresolved
 const { toMatchImageSnapshot } = require('jest-image-snapshot');
 const fs = require('fs');
-const { performance } = require('perf_hooks');
 
 expect.extend({ toMatchImageSnapshot });
 
@@ -25,7 +24,10 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function tester(htmlFile, dataFileUrl, dataFile, fromTimesIn = [], toTimesIn = [], threshold = 0, intermitentTime = 0) {
+async function tester(
+  htmlFile, dataFileUrl, dataFile,
+  fromTimesIn = [], toTimesIn = [], threshold = 0, intermitentTime = 0,
+) {
   require('./start.js');
   // Tests
   // * Snapshot at each state time
@@ -78,52 +80,52 @@ async function tester(htmlFile, dataFileUrl, dataFile, fromTimesIn = [], toTimes
         document.getElementById('f1_player__play_pause').style.visibility = 'hidden';
       }, [dataFileUrl]);
     });
-    // test.each(tests)('Play: %s',
-    //   async (time) => {
-    //     const currentTime = await page.evaluate(
-    //       () => Promise.resolve(figure.recorder.getCurrentTime()),
-    //     );
-    //     const deltaTime = time - currentTime;
-    //     let d = deltaTime;
-    //     // Trigger frames between those to be recorded
-    //     if (intermitentTime > 0) {
-    //       if (deltaTime > intermitentTime) {
-    //         for (let i = intermitentTime; i < deltaTime - intermitentTime; i += intermitentTime) {
-    //           await page.evaluate((t) => {
-    //             figure.globalAnimation.frame(t);
-    //           }, [intermitentTime]);
-    //           d -= intermitentTime;
-    //         }
-    //       }
-    //     }
-    //     // Trigger frame to be recordered
-    //     await page.evaluate(([delta]) => {
-    //       figure.globalAnimation.frame(delta);
-    //       figure.recorder.subscriptions.publish('timeUpdate', [figure.recorder.getCurrentTime()]);
-    //     }, [d]);
-    //     await sleep(500);
-    //     console.log('Capture', time)
-    //     const image = await page.screenshot({ fullPage: true });
-    //     expect(image).toMatchImageSnapshot({
-    //       customSnapshotIdentifier: `${zeroPad(Math.round(time * 10000), 7)}`,
-    //       failureThreshold: threshold,
-    //     });
-    //   });
-    // test.each(seekTests)('Seek: %s',
-    //   async (seekTimeIn) => {
-    //     const currentTime = await page.evaluate(([seekTime]) => {
-    //       figure.recorder.seek(0);
-    //       figure.globalAnimation.frame(0);
-    //       figure.recorder.seek(seekTime);
-    //       figure.globalAnimation.frame(0);
-    //       return Promise.resolve(figure.recorder.getCurrentTime());
-    //     }, [seekTimeIn]);
-    //     const image = await page.screenshot({ fullPage: true });
-    //     expect(image).toMatchImageSnapshot({
-    //       customSnapshotIdentifier: `${zeroPad(Math.round(currentTime * 10000), 7)}`,
-    //       failureThreshold: threshold,
-    //     });
-    //   });
+    test.each(tests)('Play: %s',
+      async (time) => {
+        const currentTime = await page.evaluate(
+          () => Promise.resolve(figure.recorder.getCurrentTime()),
+        );
+        const deltaTime = time - currentTime;
+        let d = deltaTime;
+        // Trigger frames between those to be recorded
+        if (intermitentTime > 0) {
+          if (deltaTime > intermitentTime) {
+            for (let i = intermitentTime; i < deltaTime - intermitentTime; i += intermitentTime) {
+              await page.evaluate((t) => {
+                figure.globalAnimation.frame(t);
+              }, [intermitentTime]);
+              d -= intermitentTime;
+            }
+          }
+        }
+        // Trigger frame to be recordered
+        await page.evaluate(([delta]) => {
+          figure.globalAnimation.frame(delta);
+          figure.recorder.subscriptions.publish('timeUpdate', [figure.recorder.getCurrentTime()]);
+        }, [d]);
+        await sleep(500);
+        console.log('Capture', time)
+        const image = await page.screenshot({ fullPage: true });
+        expect(image).toMatchImageSnapshot({
+          customSnapshotIdentifier: `${zeroPad(Math.round(time * 10000), 7)}`,
+          failureThreshold: threshold,
+        });
+      });
+    test.each(seekTests)('Seek: %s',
+      async (seekTimeIn) => {
+        const currentTime = await page.evaluate(([seekTime]) => {
+          figure.recorder.seek(0);
+          figure.globalAnimation.frame(0);
+          figure.recorder.seek(seekTime);
+          figure.globalAnimation.frame(0);
+          return Promise.resolve(figure.recorder.getCurrentTime());
+        }, [seekTimeIn]);
+        const image = await page.screenshot({ fullPage: true });
+        expect(image).toMatchImageSnapshot({
+          customSnapshotIdentifier: `${zeroPad(Math.round(currentTime * 10000), 7)}`,
+          failureThreshold: threshold,
+        });
+      });
     test.each(fromToTests)('From To: %s %s',
       async (fromTime, toTime) => {
         console.log(fromTime, toTime);
