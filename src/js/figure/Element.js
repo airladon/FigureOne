@@ -336,7 +336,7 @@ type OBJ_ElementMove = {
   freely: OBJ_ElementMoveFreely,
   canBeMovedAfterLosingTouch: boolean;
   type: 'rotation' | 'translation' | 'scaleX' | 'scaleY' | 'scale';
-  element: FigureElement | null;
+  element: FigureElement | null | string;
 };
 
 /* eslint-enable no-use-before-define */
@@ -2205,7 +2205,6 @@ class FigureElement {
     this.setTransform(newTransform._dup());
     let tBounds;
     if (this.move.bounds != null) {  // $FlowFixMe
-      // const bounds = this.getMoveBounds();
       tBounds = this.move.bounds.getTranslation();
     }
     // In a finite rect bounds, if we calculate the velocity from the clipped
@@ -4229,25 +4228,9 @@ class FigureElementCollection extends FigureElement {
   border: TypeBorder | 'children' | 'rect' | number;
   // $FlowFixMe
   touchBorder: TypeParsableBuffer | TypeBorder | 'border' | 'children' | 'rect' | number;
-  // border is whatever border is
-  // children is touch borders of children
-  // rect is rect of children touchBorder
-  // number is buffer of rect of children touch border
   // $FlowFixMe
   holeBorder: TypeBorder | 'children';
   eqns: Object;
-  // +pulse: (?({
-  //     x?: 'left' | 'center' | 'right' | 'origin' | number,
-  //     y?: 'bottom' | 'middle' | 'top' | 'origin' | number,
-  //     space?: TypeSpace,
-  //     centerOn?: null | FigureElement | TypeParsablePoint,
-  //     frequency?: number,
-  //     time?: number,
-  //     scale?: number,
-  //     done?: ?(mixed) => void,
-  //     elements?: Array<string | FigureElement>
-  //   } | Array<string | FigureElement> | ((mixed) => void)), ?(mixed) => void) => void;
-  // primitives: FigurePrimitives;
   collections: FigureCollections;
 
   +getElement: (?(string | FigureElement)) => ?FigureElement;

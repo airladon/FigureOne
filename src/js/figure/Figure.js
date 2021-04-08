@@ -2016,41 +2016,43 @@ class Figure {
           } else {
             elementToMove = element.move.element;
           }
-          // const elementToMove = element.move.element == null ? element : element.move.element;
+          // $FlowFixMe
           if (elementToMove.state.isBeingMoved === false) {
+            // $FlowFixMe
             elementToMove.startBeingMoved();
           }
           if (this.beingMovedElements.indexOf(elementToMove) === -1) {
+            // $FlowFixMe
             this.beingMovedElements.push(elementToMove);
           }
           if (element.move.type === 'rotation') {
-            this.rotateElement(
+            this.rotateElement( // $FlowFixMe
               elementToMove,
               previousClientPoint,
               currentClientPoint,
             );
           } else if (element.move.type === 'scale') {
-            this.scaleElement(
+            this.scaleElement( // $FlowFixMe
               elementToMove,
               previousClientPoint,
               currentClientPoint,
             );
           } else if (element.move.type === 'scaleX') {
-            this.scaleElement(
+            this.scaleElement( // $FlowFixMe
               elementToMove,
               previousClientPoint,
               currentClientPoint,
               'x',
             );
           } else if (element.move.type === 'scaleY') {
-            this.scaleElement(
+            this.scaleElement( // $FlowFixMe
               elementToMove,
               previousClientPoint,
               currentClientPoint,
               'y',
             );
           } else {
-            this.translateElement(
+            this.translateElement( // $FlowFixMe
               elementToMove,
               previousClientPoint,
               currentClientPoint,

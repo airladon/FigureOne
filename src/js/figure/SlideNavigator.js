@@ -54,6 +54,25 @@ export type OBJ_SlideNavigatorDissolve = {
   out?: TypeElementPath,
 }
 
+
+/**
+ * Recorder time format.
+ *
+ * `number | string`
+ *
+ * Use `number` for number of seconds, or use string with format 'm:s.s' (for
+ * example, '1:23.5' would define 1 minute, 23.5 seconds)
+ */
+export type TypeRecorderTime = string | number;
+
+/**
+ * Default equation animation properties for the {@link SlideNavigator}
+ * @property {number} [duration] default duration of equation animation
+ * @property {"move" | "dissolve" | "moveFrom" | "pulse" | "dissolveInThenMove"} [animate]
+   default style of equation animation
+ */
+
+
 /**
  * Slide definition options object.
  *
@@ -187,6 +206,15 @@ export type OBJ_SlideNavigatorDissolve = {
  * @property {string | Array<string>} [scenarioCommon] common property
  * @property {string | Array<string>} [scenario]
  * @property {boolean} [clear] `true` does not use any prior common properties (`false`)
+ * @property {TypeRecorderTime} [time] recorder only - absolute time to
+ * transition to slide.
+ * @property {number} [delta] recorder only - time delta in seconds from last
+ * slide transition to transition to this slide
+ * @property {Array<[TypeRecorderTime, string]> | [TypeRecorderTime, string]} [exec]
+ * recorder only - times to execute functions.
+ * @property {Array<[number, string]> | [number, string]} [execDelta]
+ * recorder only - time deltas to execute functions from the slide transition
+ * start.
  */
 export type OBJ_SlideNavigatorSlide = {
   text?: OBJ_TextLines,
@@ -207,14 +235,12 @@ export type OBJ_SlideNavigatorSlide = {
   form?: string | Array<string | null> | null;
   scenarioCommon?: string | Array<string>;
   scenario?: string | Array<string>;
+  clear?: boolean;
+  time?: TypeRecorderTime;
+  delta?: number,
+  exec?: Array<[TypeRecorderTime, string]> | [TypeRecorderTime, string],
+  execDelta?: Array<[number, string]> | [number, string],
 }
-
-/**
- * Default equation animation properties for the {@link SlideNavigator}
- * @property {number} [duration] default duration of equation animation
- * @property {"move" | "dissolve" | "moveFrom" | "pulse" | "dissolveInThenMove"} [animate]
-   default style of equation animation
- */
 export type OBJ_EquationDefaults = {
   duration?: number,
   animate?: "move" | "dissolve" | "moveFrom" | "pulse" | "dissolveInThenMove",
@@ -298,7 +324,7 @@ export default class SlideNavigator {
   textElement: ?FigureElement;
   inTransition: boolean;
   equationsOrder: Array<FigureElement>;
-  equations: { [string: eqnName]: FigureElement };
+  equations: { [string]: FigureElement };
   collection: FigureElementCollection;
   subscriptions: SubscriptionManager;
   inTransition: boolean;
@@ -604,7 +630,7 @@ export default class SlideNavigator {
     // return fromForm;
   }
 
-  showForms(formsToShow: Object) { //, hideOnly: boolean = false) {
+  showForms(formsToShow: Object) {
     Object.keys(formsToShow).forEach((eqnName) => {
       const form = formsToShow[eqnName];
       const e = this.collection.getElement(eqnName);
