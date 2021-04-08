@@ -1796,6 +1796,9 @@ class FigureElement {
    * @param {Transform} transform
    */
   setTransform(transform: Transform, publish: boolean = true): void {
+    // if (this.getPath() === 'rightTri.movePad') {
+    //   console.log(transform.t())
+    // }
     if (this.move.transformClip != null) {
       const clip = this.fnMap.exec(this.move.transformClip, transform);
       if (clip instanceof Transform) {

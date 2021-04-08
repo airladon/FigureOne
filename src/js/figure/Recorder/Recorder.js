@@ -251,7 +251,7 @@ class Recorder {
     this.eventsCache = {};
     this.reset();
     // default recording values
-    this.precision = 4;
+    this.precision = 8;
     this.stateTimeStep = 1;
     this.audio = null;
     // this.playbackStoppedCallback = null;

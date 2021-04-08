@@ -200,8 +200,8 @@ function layoutRight() {
     }
 
     tri._angle2.label.location = 'outside';
-    if (r < 0.3 || r > 1.34) {
-      if (r < 0.3) {
+    if (a < 0.3 || a > 1.34) {
+      if (a < 0.3) {
         tri._angle2.label.location = 'end';
       }
       xLine.show();
