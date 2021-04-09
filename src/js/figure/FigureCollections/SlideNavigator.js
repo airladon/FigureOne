@@ -100,6 +100,7 @@ export type COL_SlideNavigator = {
  * To test examples below, append them to the
  * <a href="#equation-boilerplate">boilerplate</a>.
  *
+ *
  * @example
  * // At its simplest, the SlideNavigator can be used to navigate an equation
  * figure.add([
@@ -244,7 +245,7 @@ export type COL_SlideNavigator = {
  *         .whenFinished(done)
  *         .start();
  *     },
- *     steadyStateCommon: () => update(0.4),
+ *     steadyStateCommon: () => update(0.8),
  *   },
  *   { form: '2' },
  * ]);

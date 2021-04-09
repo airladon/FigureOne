@@ -7,6 +7,7 @@ import type {
 } from './FigurePrimitives/FigurePrimitives';
 import type Figure from './Figure';
 import { Equation } from './Equation/Equation';
+import type AnimationStep from './Animation/AnimationStep';
 // enterStateCommon
 // enterState
 // showCommon
@@ -27,20 +28,187 @@ export type TypeSlideFrom = 'next' | 'prev' | number;
 
 /**
  * `(currentIndex: number, nextIndex: number) => void`
+ *
+ * When using {@link Recorder}, a string from a {@link FunctionMap} can be
+ * used, as long as the function the string maps to allows for the same
+ * parameters as above.
  */
-export type TypeSlideLeaveStateCallback = (number, TypeSlideFrom) => void;
+export type TypeSlideLeaveStateCallback = string | ((number, number) => void);
 
 /**
  * `(currentIndex: number, from: `{@link TypeSlideFrom}`) => void`
+ *
+ * When using {@link Recorder}, a string from a {@link FunctionMap} can be
+ * used, as long as the function the string maps to allows for the same
+ * parameters as above.
  */
-export type TypeSlideStateCallback = (TypeSlideFrom, number) => void;
+export type TypeSlideStateCallback = string | ((TypeSlideFrom, number) => void);
 
 /**
+ * Callback definition for slide transition.
+ *
  * `(done: () => void, currentIndex: number, from: `{@link TypeSlideFrom}`) => void`
  *
- * The `done` parameter must be called at the end of the transition.
+ * When using {@link Recorder}, a string from a {@link FunctionMap} can be
+ * used, as long as the function the string maps to allows for the same
+ * parameters as above.
+ *
+ * Important note: the `done` parameter MUST be called at the end of the
+ * transition to allow the slide to progress to steady state.
  */
-export type TypeSlideTransitionCallback = (string | (() => void), number, TypeSlideFrom) => void;
+export type TypeSlideTransitionCallback = string | ((() => void, number, TypeSlideFrom) => void);
+
+/**
+ * An animation definition object defines an animation in a json like
+ * object.
+ *
+ * One key of the object defines the animation to use, while the remaining
+ * keys are the properties of the animation.
+ *
+ * The value of the key (with the exception of the `delay` key) that defines
+ * the animation is a {@link TypeElementPath} defining which elements to apply
+ * the animation to. When using `delay`, the value will be a number in seconds.
+ *
+ * The remaining keys in the object then come from the definition objects of
+ * the associated animation.
+ *
+ * The possible key names that define animations are:
+ *
+ * - `delay`: delay where value is `number` in seconds
+ * - `in`: dissolve in with {@link OBJ_ElementAnimationStep} options where
+ *   duration is dissolve in time
+ * - `out`: dissolve out with {@link OBJ_ElementAnimationStep} options where
+ *   duration is dissolve out time
+ * - `rotation`: {@link OBJ_RotationAnimationStep}
+ * - `position`: {@link OBJ_PositionAnimationStep}
+ * - `scale`: {@link OBJ_ScaleAnimationStep}
+ * - `scenario`: {@link OBJ_ScenarioAnimationStep}
+ * - `scenarios`: {@link OBJ_ScenariosAnimationStep}
+ * - `pulseWidth`: {@link OBJ_PulseWidthAnimationStep}
+ * - `length`: {@link OBJ_LengthAnimationStep}
+ * - `pulseAngle`: {@link OBJ_PulseAngleAnimationStep}
+ * - `pulse`: {@link OBJ_PulseAnimationStep}
+ * - `dim`: dim animation step with {@link OBJ_ElementAnimationStep} options
+ *   where
+ *   duration is dim duration
+ * - `undim`: dim animation step with {@link OBJ_ElementAnimationStep} options
+ *   where duration is undim duration
+ * - `trigger`: {@link OBJ_TriggerAnimationStep}
+ * - `goToForm`: {@link OBJ_TriggerAnimationStep}
+ *
+ */
+export type OBJ_AnimationDefinition = Object;
+
+/* eslint-disable max-len */
+/**
+ * Transition Definition
+ *
+ * {@link TypeSlideTransitionCallback} | {@link OBJ_AnimationDefinition} | Array<{@link OBJ_AnimationDefinition} | Array<{@link OBJ_AnimationDefinition}>>
+ *
+ * For complete control in creating a transition animation, and/or setting
+ * necessary transition state within an application, use a function definition
+ * {@link TypeSlideTransitionCallback}.
+ *
+ * Many transitions will be simple animations, dissolving in elements,
+ * dissolving out elements, or animating between positions. For these, a short
+ * hand way of defining animations can be used.
+ *
+ * {@link OBJ_AnimationDefinition} is a json like object that defines the
+ * animation. When used in an array, multiple animations will be executed in
+ * series.
+ *
+ * If an array of {@link OBJ_AnimationDefinition} objects has an element that
+ * itself is an array of {@link OBJ_AnimationDefinition} objects, then the
+ * the animations within the nested array will be executed in parallel.
+ *
+ * <p class="inline_gif"><img src="./apiassets/slidetransition.gif" class="inline_gif_image"></p>
+ *
+ * @see To test examples, append them to the
+ * <a href="#animation-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Figure has two rectangles and a slide navigator. Slides will dissolve in,
+ * // dissolve out, move and rotate rectangles
+ * figure.add([
+ *   {
+ *     name: 'rect1',
+ *     method: 'primitives.rectangle',
+ *     options: {
+ *       width: 0.4, height: 0.4, position: [-0.5, 0.5],
+ *     },
+ *   },
+ *   {
+ *     name: 'rect2',
+ *     method: 'primitives.rectangle',
+ *     options: {
+ *       width: 0.4, height: 0.4, position: [0.5, 0.5],
+ *     },
+ *   },
+ *   {
+ *     name: 'nav',
+ *     method: 'collections.slideNavigator',
+ *   },
+ * ]);
+ *
+ * const rect2 = figure.getElement('rect2');
+ *
+ * // Add slides to the navigator
+ * figure.getElement('nav').loadSlides([
+ *   // Slide 1
+ *   { showCommon: 'rect1' },
+ *
+ *   // Slide 2
+ *   {
+ *     transition: (done) => {
+ *       rect2.animations.new()
+ *         .dissolveIn({ duration: 1 })
+ *         .whenFinished(done)  // Make sure to process done when finished
+ *         .start();
+ *     },
+ *     // When using a transition function, any changes during the transition
+ *     // need to be explicitly set at steady state
+ *     steadyState: () => {
+ *       rect2.show();
+ *     },
+ *   },
+ *
+ *   // Slide 3
+ *   // When using animation objects, the targets of animations will be
+ *   // automatically set at steady state, so user does not need to set them
+ *   {
+ *     showCommon: ['rect1', 'rect2'],
+ *     transition: { position: 'rect2', target: [0.3, 0.5], duration: 1 },
+ *   },
+ *
+ *   // Slide 4
+ *   // Use an array of animation object definitions to create a sequence of steps
+ *   {
+ *     transition: [
+ *       { position: 'rect1', target: [-0.3, 0.5], duration: 1 },
+ *       { rotation: 'rect1', target: Math.PI / 4, duration: 1 },
+ *       { rotation: 'rect2', target: Math.PI / 4, duration: 1 },
+ *     ],
+ *   },
+ *
+ *   // Slide 5
+ *   // Use an array within an array to create parallel steps
+ *   {
+ *     transition: [
+ *       [
+ *         { rotation: 'rect1', target: 0, duration: 1 },
+ *         { rotation: 'rect2', target: 0, duration: 1 },
+ *       ],
+ *       [
+ *         { position: 'rect1', target: [-0.5, 0.5], duration: 1 },
+ *         { position: 'rect2', target: [0.5, 0.5], duration: 1 },
+ *       ],
+ *       { out: ['rect1', 'rect2'] },
+ *     ],
+ *   },
+ * ]);
+ */
+export type TypeTransitionDefinition = TypeSlideTransitionCallback | OBJ_AnimationDefinition | Array<OBJ_AnimationDefinition | Array<OBJ_AnimationDefinition>>;
+/* eslint-enable max-len */
 
 // /**
 //  * All element paths should be relative to the slide navigator reference
@@ -65,15 +233,17 @@ export type TypeSlideTransitionCallback = (string | (() => void), number, TypeSl
  */
 export type TypeRecorderTime = string | number;
 
-/**
- * Default equation animation properties for the {@link SlideNavigator}
- * @property {number} [duration] default duration of equation animation
- * @property {"move" | "dissolve" | "moveFrom" | "pulse" | "dissolveInThenMove"} [animate]
-   default style of equation animation
- */
+// /**
+//  * Default equation animation properties for the {@link SlideNavigator}
+//  * @property {number} [duration] default duration of equation animation
+//  * @property {"move" | "dissolve" | "moveFrom" | "pulse" | "dissolveInThenMove"} [animate]
+//    default style of equation animation
+//  */
 
 
 /**
+ *
+ *
  * Slide definition options object.
  *
  * This object defines the state the figure should be set to when this slide
@@ -190,7 +360,7 @@ export type TypeRecorderTime = string | number;
  * @property {TypeElementPath} [hide]
  * @property {TypeSlideStateCallback} [enterStateCommon] common property
  * @property {TypeSlideStateCallback} [enterState]
- * @property {TypeSlideTransitionCallback} [transition] transititions are
+ * @property {TypeTransitionDefinition} [transition] transititions are
  * only called when moving between adjacent slides in the forward direction.
  * Progressing backwards, or skipping around with `goToSlide` will not call
  * `transition`. A transition is a callback where animations can be defined. A
@@ -211,9 +381,11 @@ export type TypeRecorderTime = string | number;
  * slide transition to transition to this slide
  * @property {Array<[TypeRecorderTime, string]> | [TypeRecorderTime, string]} [exec]
  * recorder only - times to execute functions.
- * @property {Array<[number, string]> | [number, string]} [execDelta]
+ * @property {Array<[number | string, string]> | [number | string, string]} [execDelta]
  * recorder only - time deltas to execute functions from the slide transition
  * start.
+ * @property {boolean} addReference recorder only `true` will add a new
+ * reference state based on the current state
  */
 export type OBJ_SlideNavigatorSlide = {
   text?: OBJ_TextLines,
@@ -225,7 +397,7 @@ export type OBJ_SlideNavigatorSlide = {
   hide?: TypeElementPath;
   enterStateCommon?: TypeSlideStateCallback,
   enterState?: TypeSlideStateCallback,
-  transition?: TypeSlideTransitionCallback;
+  transition?: TypeTransitionDefinition;
   steadyStateCommon?: TypeSlideStateCallback;
   steadyState?: TypeSlideStateCallback;
   leaveStateCommon?: TypeSlideLeaveStateCallback;
@@ -239,7 +411,10 @@ export type OBJ_SlideNavigatorSlide = {
   delta?: number,
   exec?: Array<[TypeRecorderTime, string]> | [TypeRecorderTime, string],
   execDelta?: Array<[number, string]> | [number, string],
+  addReference?: boolean,
 }
+
+
 export type OBJ_EquationDefaults = {
   duration?: number,
   animate?: "move" | "dissolve" | "moveFrom" | "pulse" | "dissolveInThenMove",
@@ -311,7 +486,7 @@ export type OBJ_SlideNavigator = {
  *
  * {@link CollectionsSlideNavigator} creates the navigation buttons, and
  * `textElement` automatically, and will usually be more convenient than
- * manually creating thema (unless custom buttons are needed).
+ * manually creating them (unless custom buttons are needed).
  *
  * Notifications - The subscription manager property `subscriptions` will
  * publish the following events:
@@ -375,8 +550,6 @@ export default class SlideNavigator {
       this.collection = o.collection.elements;
     }
 
-    // this.collection.fnMap.add('slideNavigatorNext', this.nextSlide.bind(this));
-    // this.collection.fnMap.add('slideNavigatorPrev', this.prevSlide.bind(this));
     const processSlide = (payload) => {
       const [fromDirection, slideNo] = payload;
       if (fromDirection === 'prev' && this.currentSlideIndex === slideNo - 1) {
@@ -478,13 +651,12 @@ export default class SlideNavigator {
     let lastTime = 0;
     this.slides.forEach((slide, index) => {
       const { time, delta, execDelta } = slide;
-      // console.log(time)
       if (time != null) {
-        const t = this.convertTime(time);
+        const t = this.convertTime(time); // $FlowFixMe
         this.collection.recorder.events._autoSlide.list.push([t, [index], 0]);
         lastTime = t;
       } else if (delta != null) {
-        lastTime += delta;
+        lastTime += delta; // $FlowFixMe
         this.collection.recorder.events._autoSlide.list.push([lastTime, [index], 0]);
       }
       if (execDelta != null && execDelta.length > 0) {
@@ -492,12 +664,12 @@ export default class SlideNavigator {
         if (!Array.isArray(eDelta[0])) {
           eDelta = [eDelta];
         }
-        eDelta.forEach((e) => {
-          const [execDeltaTime, command] = e;
+        eDelta.forEach((e) => { // $FlowFixMe
+          const [execDeltaTime, command] = e; // $FlowFixMe
           const t = lastTime + execDeltaTime;
-          if (!(typeof t === 'number')) {
+          if (!(typeof t === 'number')) { // $FlowFixMe
             throw new Error(`Error in delta time: ${t}, ${execDeltaTime}, ${lastTime}, ${command}`);
-          }
+          } // $FlowFixMe
           this.collection.recorder.events._autoExec.list.push([t, [command], 0]);
         });
       }
@@ -511,12 +683,12 @@ export default class SlideNavigator {
         if (!Array.isArray(exec[0])) {
           exec = [exec];
         }
-        exec.forEach((e) => {
-          const [time, command] = e;
+        exec.forEach((e) => { // $FlowFixMe
+          const [time, command] = e; // $FlowFixMe
           const t = this.convertTime(time);
-          if (!(typeof t === 'number')) {
-            console.log('Error in exec time: ', t, time, command);
-          }
+          if (!(typeof t === 'number')) { // $FlowFixMe
+            throw new Error(`Error in exec time: ${t}, ${time}, ${command}`);
+          } // $FlowFixMe
           this.collection.recorder.events._autoExec.list.push([t, [command], 0]);
         });
       }
@@ -531,7 +703,7 @@ export default class SlideNavigator {
       const element = this.collection.getElement(e);
       if (element != null) {
         equationsOrder.push(element);
-        equations[e] = element;
+        equations[element.name] = element;
       }
     });
     this.equations = equations;
@@ -619,31 +791,12 @@ export default class SlideNavigator {
       if (e != null) {
         if (form == null) {
           e.hide();
-        } else {
+        } else {  // $FlowFixMe
           e.showForm(form);
         }
       }
     });
   }
-
-  // showDissolved(slide) {
-  //   if (slide.dissolve != null) {
-  //     const inElements = this.collection.getElements(slide.dissolve.in);
-  //     const outElements = this.collection.getElements(slide.dissolve.out);
-  //     outElements.map(e => e.hide());
-  //     inElements.map(e => e.showAll());
-  //   }
-  // }
-
-  // showAllDissolved(index: number) {
-  //   const slide = this.slides[index];
-  //   if (slide.dissolve != null) {
-  //     const inElements = this.collection.getElements(slide.dissolve.in);
-  //     const outElements = this.collection.getElements(slide.dissolve.out);
-  //     outElements.map(e => e.showAll());
-  //     inElements.map(e => e.showAll());
-  //   }
-  // }
 
   setSteadyState(from: 'next' | 'prev' | number) {
     const index = this.currentSlideIndex;
@@ -685,14 +838,16 @@ export default class SlideNavigator {
     this.subscriptions.publish('steady');
   }
 
-  transitionDone(cancelled: boolean = false, force: 'freeze' | 'complete' | null = 'complete') {
+  transitionDone(force: 'freeze' | 'complete' | null = 'complete') {
     if (force !== 'freeze') {
       this.setSteadyState(this.from);
       this.inTransition = false;
     }
   }
 
-  setFinalFromAutoTransition(stepsIn: Array<Array<Object>> | Array<Object>) {
+  setFinalFromAutoTransition(
+    stepsIn: Array<OBJ_AnimationDefinition | Array<OBJ_AnimationDefinition>>,
+  ) {
     stepsIn.forEach((serialStep) => {
       let steps;
       if (!Array.isArray(serialStep)) {
@@ -726,11 +881,11 @@ export default class SlideNavigator {
     if (step.trigger != null && key === 'trigger') {
       const o = joinObjectsWithOptions(
         { except: key }, { callback: step.trigger }, defaultOptions, step,
-      );
+      );  // $FlowFixMe
       animSteps.push(this.collection.animations[animName](o));
     } else if (step[key] != null) {
       const elements = this.collection.getElements(step[key]);
-      const o = joinObjectsWithOptions({ except: key }, {}, defaultOptions, step);
+      const o = joinObjectsWithOptions({ except: key }, {}, defaultOptions, step);  // $FlowFixMe
       animSteps.push(...elements.map(e => e.animations[animName](o)));
     }
   }
@@ -743,9 +898,9 @@ export default class SlideNavigator {
   ) {
     if (step[key] != null) {
       const elements = this.collection.getElements(step[key]);
-      if (setKey !== '') {
-        elements.map(e => e[setName](step[setKey]))
-      } else {
+      if (setKey !== '') {  // $FlowFixMe
+        elements.map(e => e[setName](step[setKey]));
+      } else {  // $FlowFixMe
         elements.map(e => e[setName]());
       }
     }
@@ -769,16 +924,18 @@ export default class SlideNavigator {
       }
       steps.forEach((step) => {
         if (showAll) {
-          if (step.in != null) {
+          if (step.in != null) { // $FlowFixMe
             this.collection.getElements(step.in).map(e => e.showAll());
-          } else if (step.out != null) {
+          } else if (step.out != null) { // $FlowFixMe
             this.collection.getElements(step.out).map(e => e.showAll());
           }
         } else {
           if (step.out != null && (step.show == null || step.show !== false)) {
+            // $FlowFixMe
             this.collection.getElements(step.out).map(e => e.showAll());
           }
           if (step.in != null && (step.show == null || step.show !== true)) {
+            // $FlowFixMe
             this.collection.getElements(step.in).map(e => e.hide());
           }
         }
@@ -827,29 +984,22 @@ export default class SlideNavigator {
 
   transition(from: 'next' | 'prev' | number) {
     this.subscriptions.publish('beforeTransition');
-    // let done = () => {
-    //   this.setSteadyState(from);
-    //   this.inTransition = false;
-    // };
     this.from = from;
     if (from !== 'prev') {
       return this.transitionDone();
     }
     this.inTransition = true;
     const slide = this.slides[this.currentSlideIndex];
-    if (typeof slide.transition === 'function') {
+    if (typeof slide.transition === 'function') { // $FlowFixMe
       return slide.transition('slideNavigatorTransitionDone', this.currentSlideIndex, from);
     }
     if (slide.transition != null && Array.isArray(slide.transition)) {
       return this.autoTransition(slide.transition);
     }
     if (slide.transition != null && typeof slide.transition === 'object') {
+      // $FlowFixMe
       return this.autoTransition([slide.transition]);
     }
-
-    // if (slide.dissolve != null) {
-    //   return this.dissolveTransition(slide);
-    // }
 
     const forms = this.getForm(this.currentSlideIndex);
     const fromForms = this.getFromForm(this.currentSlideIndex);
@@ -873,7 +1023,9 @@ export default class SlideNavigator {
           const { animate, duration } = this.equationDefaults;
           // e.showForm(toForm);
           e.animations.new()
-            .goToForm({ start: fromForm, target: toForm, animate, duration })
+            .goToForm({
+              start: fromForm, target: toForm, animate, duration,
+            })
             .whenFinished(done)
             .start();
           done = null;

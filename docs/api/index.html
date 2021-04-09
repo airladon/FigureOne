@@ -3070,16 +3070,6 @@
               
                 
                 <li><a
-                  href='#obj_slidenavigatorslide'
-                  class="">
-                  OBJ_SlideNavigatorSlide
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#collectionsslidenavigator'
                   class=" toggle-sibling">
                   CollectionsSlideNavigator
@@ -5051,6 +5041,26 @@
                   href='#typeyalign'
                   class="">
                   TypeYAlign
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_animationdefinition'
+                  class="">
+                  OBJ_AnimationDefinition
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typetransitiondefinition'
+                  class="">
+                  TypeTransitionDefinition
                   
                 </a>
                 
@@ -42856,7 +42866,7 @@ is a presentation slide.</p>
 slides and step through them.</p>
 <p><a href="#collectionsslidenavigator">CollectionsSlideNavigator</a> creates the navigation buttons, and
 <code>textElement</code> automatically, and will usually be more convenient than
-manually creating thema (unless custom buttons are needed).</p>
+manually creating them (unless custom buttons are needed).</p>
 <p>Notifications - The subscription manager property <code>subscriptions</code> will
 publish the following events:</p>
 <ul>
@@ -43364,212 +43374,6 @@ transitions.</p>
   </div>
   
 
-  <p>Default equation animation properties for the <a href="#slidenavigator">SlideNavigator</a></p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>duration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : default duration of equation animation
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>animate</span> <code class='quiet'>((<code>"move"</code> | <code>"dissolve"</code> | <code>"moveFrom"</code> | <code>"pulse"</code> | <code>"dissolveInThenMove"</code>)?)</code>
-          : default style of equation animation
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>text</span> <code class='quiet'>(<a href="#obj_textlines">OBJ_TextLines</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>modifiersCommon</span> <code class='quiet'>(<a href="#obj_textmodifiersdefinition">OBJ_TextModifiersDefinition</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>modifiers</span> <code class='quiet'>(<a href="#obj_textmodifiersdefinition">OBJ_TextModifiersDefinition</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>showCommon</span> <code class='quiet'>(<a href="#typeelementpath">TypeElementPath</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>show</span> <code class='quiet'>(<a href="#typeelementpath">TypeElementPath</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>hideCommon</span> <code class='quiet'>(<a href="#typeelementpath">TypeElementPath</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>hide</span> <code class='quiet'>(<a href="#typeelementpath">TypeElementPath</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>enterStateCommon</span> <code class='quiet'>(<a href="#typeslidestatecallback">TypeSlideStateCallback</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>enterState</span> <code class='quiet'>(<a href="#typeslidestatecallback">TypeSlideStateCallback</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transition</span> <code class='quiet'>(<a href="#typeslidetransitioncallback">TypeSlideTransitionCallback</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>steadyStateCommon</span> <code class='quiet'>(<a href="#typeslidestatecallback">TypeSlideStateCallback</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>steadyState</span> <code class='quiet'>(<a href="#typeslidestatecallback">TypeSlideStateCallback</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>leaveStateCommon</span> <code class='quiet'>(<a href="#typeslideleavestatecallback">TypeSlideLeaveStateCallback</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>leaveState</span> <code class='quiet'>(<a href="#typeslideleavestatecallback">TypeSlideLeaveStateCallback</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fromForm</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | null)> | null)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>form</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | null)> | null)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scenarioCommon</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scenario</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>clear</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>time</span> <code class='quiet'>(<a href="#typerecordertime">TypeRecorderTime</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>delta</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>exec</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;[<a href="#typerecordertime">TypeRecorderTime</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]> | [<a href="#typerecordertime">TypeRecorderTime</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>])?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>execDelta</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]> | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>])?)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_slidenavigatorslide'>
-      OBJ_SlideNavigatorSlide
-    </h3>
-    
-    
-  </div>
-  
-
   <p>Slide definition options object.</p>
 <p>This object defines the state the figure should be set to when this slide
 is navigated to.</p>
@@ -43754,7 +43558,7 @@ overwrite any keys from
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>transition</span> <code class='quiet'>(<a href="#typeslidetransitioncallback">TypeSlideTransitionCallback</a>?)</code>
+          <span class='code bold'>transition</span> <code class='quiet'>(<a href="#typetransitiondefinition">TypeTransitionDefinition</a>?)</code>
           : transititions are
 only called when moving between adjacent slides in the forward direction.
 Progressing backwards, or skipping around with 
@@ -44098,7 +43902,7 @@ figure.getElement('nav').loadSlides([
         .whenFinished(done)
         .start();
     },
-    steadyStateCommon: () =&gt; update(0.4),
+    steadyStateCommon: () =&gt; update(0.8),
   },
   { form: '2' },
 ]);</pre>
@@ -44567,10 +44371,13 @@ to specify click colors for each (
   
 
   <p><code>(currentIndex: number, nextIndex: number) => void</code></p>
+<p>When using <a href="Recorder">Recorder</a>, a string from a <a href="#functionmap">FunctionMap</a> can be
+used, as long as the function the string maps to allows for the same
+parameters as above.</p>
 
   
     <p style="display: none;">      Type:
-      function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="#typeslidefrom">TypeSlideFrom</a>): void
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): void)
     </p>
   
   
@@ -44620,10 +44427,13 @@ to specify click colors for each (
   
 
   <p><code>(currentIndex: number, from:</code><a href="#typeslidefrom">TypeSlideFrom</a><code>) => void</code></p>
+<p>When using <a href="Recorder">Recorder</a>, a string from a <a href="#functionmap">FunctionMap</a> can be
+used, as long as the function the string maps to allows for the same
+parameters as above.</p>
 
   
     <p style="display: none;">      Type:
-      function (<a href="#typeslidefrom">TypeSlideFrom</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): void
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (<a href="#typeslidefrom">TypeSlideFrom</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): void)
     </p>
   
   
@@ -44672,12 +44482,17 @@ to specify click colors for each (
   </div>
   
 
-  <p><code>(done: () => void, currentIndex: number, from:</code><a href="#typeslidefrom">TypeSlideFrom</a><code>) => void</code></p>
-<p>The <code>done</code> parameter must be called at the end of the transition.</p>
+  <p>Callback definition for slide transition.</p>
+<p><code>(done: () => void, currentIndex: number, from:</code><a href="#typeslidefrom">TypeSlideFrom</a><code>) => void</code></p>
+<p>When using <a href="Recorder">Recorder</a>, a string from a <a href="#functionmap">FunctionMap</a> can be
+used, as long as the function the string maps to allows for the same
+parameters as above.</p>
+<p>Important note: the <code>done</code> parameter MUST be called at the end of the
+transition to allow the slide to progress to steady state.</p>
 
   
     <p style="display: none;">      Type:
-      function ((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void), <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="#typeslidefrom">TypeSlideFrom</a>): void
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (function (): void, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="#typeslidefrom">TypeSlideFrom</a>): void)
     </p>
   
   
@@ -63293,6 +63108,254 @@ e.animations.new()
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_animationdefinition'>
+      OBJ_AnimationDefinition
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>An animation definition object defines an animation in a json like
+object.</p>
+<p>One key of the object defines the animation to use, while the remaining
+keys are the properties of the animation.</p>
+<p>The value of the key (with the exception of the <code>delay</code> key) that defines
+the animation is a <a href="#typeelementpath">TypeElementPath</a> defining which elements to apply
+the animation to. When using <code>delay</code>, the value will be a number in seconds.</p>
+<p>The remaining keys in the object then come from the definition objects of
+the associated animation.</p>
+<p>The possible key names that define animations are:</p>
+<ul>
+<li><code>delay</code>: delay where value is <code>number</code> in seconds</li>
+<li><code>in</code>: dissolve in with <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a> options where
+duration is dissolve in time</li>
+<li><code>out</code>: dissolve out with <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a> options where
+duration is dissolve out time</li>
+<li><code>rotation</code>: <a href="#obj_rotationanimationstep">OBJ_RotationAnimationStep</a></li>
+<li><code>position</code>: <a href="#obj_positionanimationstep">OBJ_PositionAnimationStep</a></li>
+<li><code>scale</code>: <a href="#obj_scaleanimationstep">OBJ_ScaleAnimationStep</a></li>
+<li><code>scenario</code>: <a href="#obj_scenarioanimationstep">OBJ_ScenarioAnimationStep</a></li>
+<li><code>scenarios</code>: <a href="#obj_scenariosanimationstep">OBJ_ScenariosAnimationStep</a></li>
+<li><code>pulseWidth</code>: <a href="#obj_pulsewidthanimationstep">OBJ_PulseWidthAnimationStep</a></li>
+<li><code>length</code>: <a href="#obj_lengthanimationstep">OBJ_LengthAnimationStep</a></li>
+<li><code>pulseAngle</code>: <a href="#obj_pulseangleanimationstep">OBJ_PulseAngleAnimationStep</a></li>
+<li><code>pulse</code>: <a href="#obj_pulseanimationstep">OBJ_PulseAnimationStep</a></li>
+<li><code>dim</code>: dim animation step with <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a> options
+where
+duration is dim duration</li>
+<li><code>undim</code>: dim animation step with <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a> options
+where duration is undim duration</li>
+<li><code>trigger</code>: <a href="#obj_triggeranimationstep">OBJ_TriggerAnimationStep</a></li>
+<li><code>goToForm</code>: <a href="#obj_triggeranimationstep">OBJ_TriggerAnimationStep</a></li>
+</ul>
+
+  
+    <p style="display: none;">      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typetransitiondefinition'>
+      TypeTransitionDefinition
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Transition Definition</p>
+<p><a href="#typeslidetransitioncallback">TypeSlideTransitionCallback</a> | <a href="#obj_animationdefinition">OBJ_AnimationDefinition</a> | Array&#x3C;<a href="#obj_animationdefinition">OBJ_AnimationDefinition</a> | Array&#x3C;<a href="#obj_animationdefinition">OBJ_AnimationDefinition</a>>></p>
+<p>For complete control in creating a transition animation, and/or setting
+necessary transition state within an application, use a function definition
+<a href="#typeslidetransitioncallback">TypeSlideTransitionCallback</a>.</p>
+<p>Many transitions will be simple animations, dissolving in elements,
+dissolving out elements, or animating between positions. For these, a short
+hand way of defining animations can be used.</p>
+<p><a href="#obj_animationdefinition">OBJ_AnimationDefinition</a> is a json like object that defines the
+animation. When used in an array, multiple animations will be executed in
+series.</p>
+<p>If an array of <a href="#obj_animationdefinition">OBJ_AnimationDefinition</a> objects has an element that
+itself is an array of <a href="#obj_animationdefinition">OBJ_AnimationDefinition</a> objects, then the
+the animations within the nested array will be executed in parallel.</p>
+<p class="inline_gif"><img src="./apiassets/slidetransition.gif" class="inline_gif_image"></p>
+
+  
+    <p style="display: none;">      Type:
+      (<a href="#typeslidetransitioncallback">TypeSlideTransitionCallback</a> | <a href="#obj_animationdefinition">OBJ_AnimationDefinition</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#obj_animationdefinition">OBJ_AnimationDefinition</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_animationdefinition">OBJ_AnimationDefinition</a>>)>)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#animation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Figure has two rectangles and a slide navigator. Slides will dissolve in,</span>
+<span class="hljs-comment">// dissolve out, move and rotate rectangles</span>
+figure.add([
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'rect1'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'primitives.rectangle'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">width</span>: <span class="hljs-number">0.4</span>, <span class="hljs-attr">height</span>: <span class="hljs-number">0.4</span>, <span class="hljs-attr">position</span>: [<span class="hljs-number">-0.5</span>, <span class="hljs-number">0.5</span>],
+    },
+  },
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'rect2'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'primitives.rectangle'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">width</span>: <span class="hljs-number">0.4</span>, <span class="hljs-attr">height</span>: <span class="hljs-number">0.4</span>, <span class="hljs-attr">position</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>],
+    },
+  },
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'nav'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.slideNavigator'</span>,
+  },
+]);
+
+<span class="hljs-keyword">const</span> rect2 = figure.getElement(<span class="hljs-string">'rect2'</span>);
+
+<span class="hljs-comment">// Add slides to the navigator</span>
+figure.getElement(<span class="hljs-string">'nav'</span>).loadSlides([
+  <span class="hljs-comment">// Slide 1</span>
+  { <span class="hljs-attr">showCommon</span>: <span class="hljs-string">'rect1'</span> },
+
+  <span class="hljs-comment">// Slide 2</span>
+  {
+    <span class="hljs-attr">transition</span>: <span class="hljs-function">(<span class="hljs-params">done</span>) =&gt;</span> {
+      rect2.animations.new()
+        .dissolveIn({ <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> })
+        .whenFinished(done)  <span class="hljs-comment">// Make sure to process done when finished</span>
+        .start();
+    },
+    <span class="hljs-comment">// When using a transition function, any changes during the transition</span>
+    <span class="hljs-comment">// need to be explicitly set at steady state</span>
+    <span class="hljs-attr">steadyState</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+      rect2.show();
+    },
+  },
+
+  <span class="hljs-comment">// Slide 3</span>
+  <span class="hljs-comment">// When using animation objects, the targets of animations will be</span>
+  <span class="hljs-comment">// automatically set at steady state, so user does not need to set them</span>
+  {
+    <span class="hljs-attr">showCommon</span>: [<span class="hljs-string">'rect1'</span>, <span class="hljs-string">'rect2'</span>],
+    <span class="hljs-attr">transition</span>: { <span class="hljs-attr">position</span>: <span class="hljs-string">'rect2'</span>, <span class="hljs-attr">target</span>: [<span class="hljs-number">0.3</span>, <span class="hljs-number">0.5</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> },
+  },
+
+  <span class="hljs-comment">// Slide 4</span>
+  <span class="hljs-comment">// Use an array of animation object definitions to create a sequence of steps</span>
+  {
+    <span class="hljs-attr">transition</span>: [
+      { <span class="hljs-attr">position</span>: <span class="hljs-string">'rect1'</span>, <span class="hljs-attr">target</span>: [<span class="hljs-number">-0.3</span>, <span class="hljs-number">0.5</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> },
+      { <span class="hljs-attr">rotation</span>: <span class="hljs-string">'rect1'</span>, <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">4</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> },
+      { <span class="hljs-attr">rotation</span>: <span class="hljs-string">'rect2'</span>, <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">4</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> },
+    ],
+  },
+
+  <span class="hljs-comment">// Slide 5</span>
+  <span class="hljs-comment">// Use an array within an array to create parallel steps</span>
+  {
+    <span class="hljs-attr">transition</span>: [
+      [
+        { <span class="hljs-attr">rotation</span>: <span class="hljs-string">'rect1'</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> },
+        { <span class="hljs-attr">rotation</span>: <span class="hljs-string">'rect2'</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> },
+      ],
+      [
+        { <span class="hljs-attr">position</span>: <span class="hljs-string">'rect1'</span>, <span class="hljs-attr">target</span>: [<span class="hljs-number">-0.5</span>, <span class="hljs-number">0.5</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> },
+        { <span class="hljs-attr">position</span>: <span class="hljs-string">'rect2'</span>, <span class="hljs-attr">target</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> },
+      ],
+      { <span class="hljs-attr">out</span>: [<span class="hljs-string">'rect1'</span>, <span class="hljs-string">'rect2'</span>] },
+    ],
+  },
+]);</pre>
+    
   
 
   
