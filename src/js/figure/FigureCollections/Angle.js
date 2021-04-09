@@ -1119,7 +1119,7 @@ class CollectionsAngle extends FigureElementCollection {
     if (wasHidden) {
       this.hide();
     }
-    if (labelWasHidden) {
+    if (labelWasHidden && this._label != null) {
       this._label.hide();
     }
     // console.log(this.getPath(), oldOpacity)

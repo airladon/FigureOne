@@ -13,13 +13,9 @@ import type {
   OBJ_PulseTransformAnimationStep,
   AnimationStep, OBJ_ScenarioAnimationStep, OBJ_ElementAnimationStep,
 } from './Animation';
-// import PositionAnimationStep from './AnimationStep/ElementAnimationStep/PositionAnimationStep';
-// import SerialAnimationStep from './AnimationStep/SerialAnimationStep';
 // eslint-disable-next-line import/no-cycle
 import * as animation from './Animation';
 import { joinObjects, duplicateFromTo } from '../../tools/tools';
-// import { getState, setState } from '../state';
-// import type Figure from '../Figure';
 
 /**
  * Animation builder options object
@@ -85,39 +81,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  // _finishSetState(figure: Figure) {
-  //   if (this.element != null && typeof this.element === 'string') {
-  //     const element = figure.getElement(this.element);
-  //     if (element != null) {
-  //       this.element = element;
-  //     }
-  //   }
-  // }
-
-  // _getState() {
-  //   const state = super._getState();
-
-  //   // const state = getState(this, keys);
-  //   if (this.element != null) {
-  //     state.element = this.element.getPath();
-  //   }
-  //   return state;
-  // }
-
-  // fnExec(idOrFn: string | Function | null, ...args: any) {
-  //   const result = this.fnMap.exec(idOrFn, ...args);
-  //   if (result == null && this.element != null) {
-  //     return this.element.fnMap.exec(idOrFn, ...args);
-  //   }
-  //   return result;
-  // }
   fnExec(idOrFn: string | Function | null, ...args: any) {
-    // const result = this.fnMap.exec(idOrFn, ...args);
-    // if (result == null && this.element != null) {
-    //   return this.element.fnMap.exec(idOrFn, ...args);
-    // }
-    // return result;
     if (this.element != null) {
       return this.fnMap.execOnMaps(
         idOrFn, [this.element.fnMap.map], ...args,
@@ -126,20 +90,6 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this.fnMap.exec(idOrFn, ...args);
   }
 
-  // _fromState(state: Object, getElement: ?(string) => FigureElement) {
-  //   // const obj = new this.constructor();
-  //   joinObjects(this, state);
-  //   if (this.element != null && typeof this.element === 'string' && getElement != null) {
-  //     this.element = getElement(this.element);
-  //   }
-  //   return this;
-  // }
-
-  // _getStateProperties() {  // eslint-disable-line class-methods-use-this
-  //   return [...super._getStateProperties(),
-  //     'steps',
-  //   ];
-  // }
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(),
       'element',
@@ -149,17 +99,6 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   _getStateName() {  // eslint-disable-line class-methods-use-this
     return 'animationBuilder';
   }
-
-  // _state(options: Object) {
-  //   const state = super._state(options);
-  //   if (this.element != null) {
-  //     state.state.element = {
-  //       f1Type: 'de',
-  //       state: this.element.getPath(),
-  //     };
-  //   }
-  //   return state;
-  // }
 
   /**
    * Add a custom animation step that uses this element by default
@@ -184,13 +123,6 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
    * @return {AnimationBuilder}
    */
   rotation(...options: Array<OBJ_RotationAnimationStep>) {
-    // if (this.element != null) {
-    //   const defaultOptions = { element: this.element };
-    //   const optionsToUse = joinObjects({}, defaultOptions, ...options);
-    //   // this.then(new animation.RotationAnimationStep(optionsToUse));
-    //   this.addStep(optionsToUse, 'RotationAnimationStep', true);
-    // }
-    // return this;
     return this.addStep('rotation', ...options);
   }
 
@@ -201,13 +133,6 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
    * @return {AnimationBuilder}
    */
   position(...options: Array<OBJ_PositionAnimationStep>) {
-    // if (this.element != null) {
-    //   const defaultOptions = { element: this.element };
-    //   const optionsToUse = joinObjects({}, defaultOptions, ...options);
-    //   // this.then(new animation.PositionAnimationStep(optionsToUse));
-    //   this.addStep(optionsToUse, 'PositionAnimationStep', true);
-    // }
-    // return this;
     return this.addStep('position', ...options);
   }
 
@@ -226,23 +151,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
    * @return {AnimationBuilder}
    */
   scale(...options: Array<OBJ_ScaleAnimationStep>) {
-    // if (this.element != null) {
-    //   const defaultOptions = { element: this.element };
-    //   const optionsToUse = joinObjects({}, defaultOptions, ...options);
-    //   // this.then(new animation.ScaleAnimationStep(optionsToUse));
-    //   this.addStep(optionsToUse, 'ScaleAnimationStep', true);
-    // }
-    // return this;
     return this.addStep('scale', ...options);
   }
-
-  // moveTo(...optionsIn: Array<OBJ_PositionAnimationStep>) {
-  //   return this.moveToPosition(...optionsIn);
-  // }
-
-  // positionTo(...optionsIn: Array<OBJ_PositionAnimationStep>) {
-  //   return this.moveToPosition(...optionsIn);
-  // }
 
   /**
    * Add a transform animation step that uses this element by default
@@ -250,24 +160,10 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
    * @return {AnimationBuilder}
    */
   transform(...options: Array<OBJ_TransformAnimationStep>) {
-    // if (this.element != null) {
-    //   const defaultOptions = { element: this.element };
-    //   const optionsToUse = joinObjects({}, defaultOptions, ...options);
-    //   // this.then(new animation.TransformAnimationStep(optionsToUse));
-    //   this.addStep(optionsToUse, 'TransformAnimationStep', true);
-    // }
-    // return this;
     return this.addStep('transform', ...options);
   }
 
   pulseTransforms(...options: Array<OBJ_PulseTransformAnimationStep>) {
-    // if (this.element != null) {
-    //   const defaultOptions = { element: this.element };
-    //   const optionsToUse = joinObjects({}, defaultOptions, ...options);
-    //   // this.then(new animation.PulseTransformAnimationStep(optionsToUse));
-    //   this.addStep(optionsToUse, 'PulseTransformAnimationStep', true);
-    // }
-    // return this;
     return this.addStep('pulseTransform', ...options);
   }
 
@@ -279,19 +175,6 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   scenario(
     ...options: Array<OBJ_ScenarioAnimationStep & { scenario: string }>
   ) {
-    // if (this.element != null) {
-    //   const defaultOptions = { element: this.element };
-    //   const optionsToUse = joinObjects({}, defaultOptions, ...options);
-    //   this.then(optionsToUse.element.anim.scenario(optionsToUse));
-    // }
-    // return this;
-    // if (this.element != null) {
-    //   const defaultOptions = { element: this.element };
-    //   const optionsToUse = joinObjects({}, defaultOptions, ...options);
-    //   // this.then(new animation.ScenarioAnimationStep(optionsToUse));
-    //   this.addStep(optionsToUse, 'ScenarioAnimationStep', true);
-    // }
-    // return this;
     return this.addStep('scenario', ...options);
   }
 
@@ -317,13 +200,6 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
    * @return {AnimationBuilder}
    */
   color(...options: Array<OBJ_ColorAnimationStep>) {
-    // if (this.element != null) {
-    //   const defaultOptions = { element: this.element };
-    //   const optionsToUse = joinObjects({}, defaultOptions, ...options);
-    //   // this.then(new animation.ColorAnimationStep(optionsToUse));
-    //   this.addStep(optionsToUse, 'ColorAnimationStep', true);
-    // }
-    // return this;
     return this.addStep('color', ...options);
   }
 
@@ -333,16 +209,6 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
    * @return {AnimationBuilder}
    */
   opacity(...options: Array<OBJ_OpacityAnimationStep>) {
-    // if (this.element != null) {
-    //   const defaultOptions = { element: this.element };
-    //   const optionsToUse = joinObjects({}, defaultOptions, ...options);
-    //   // this.then(new animation.OpacityAnimationStep(optionsToUse));
-    //   this.addStep(optionsToUse, 'OpacityAnimationStep', true);
-    // }
-    // if (this.element != null) {
-    //   this.then(this.element.animations.opacity(options));
-    // }
-    // return this;
     return this.addStep('opacity', ...options);
   }
 
@@ -353,21 +219,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
    */
   dissolveOut(
     durationOrOptions: number | OBJ_ElementAnimationStep = {},
-    // ...args: Array<OBJ_ElementAnimationStep>
   ) {
-    // if (this.element != null) {
-    //   this.then(this.element.animations.dissolveOut(durationOrOptions));
-    // }
-    // const defaultOptions = { element: this.element };
-    // let options;
-    // if (typeof durationOrOptions === 'number') {
-    //   options = joinObjects({}, defaultOptions, { duration: durationOrOptions }, ...args);
-    // } else {
-    //   options = joinObjects({}, defaultOptions, durationOrOptions, ...args);
-    // }
-    // // this.then(animation.dissolveOut(options));
-    // this.addStep(options, 'dissolveOut');
-    // return this;
     return this.addStep('dissolveOut', durationOrOptions);
   }
 
@@ -378,53 +230,17 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
    */
   dissolveIn(
     durationOrOptions: number | OBJ_ElementAnimationStep = {},
-    // ...args: Array<OBJ_ElementAnimationStep>
   ) {
-    // if (this.element != null) {
-    //   this.then(this.element.animations.dissolveIn(durationOrOptions));
-    // }
-    // // const defaultOptions = { element: this.element };
-    // // let options;
-    // // if (typeof durationOrOptions === 'number') {
-    // //   options = joinObjects({}, defaultOptions, { duration: durationOrOptions }, ...args);
-    // // } else {
-    // //   options = joinObjects({}, defaultOptions, durationOrOptions, ...args);
-    // // }
-    // // this.addStep(options, 'dissolveIn');
-    // return this;
     return this.addStep('dissolveIn', durationOrOptions);
   }
 
   addStep(animName: string, options: Object) {
-    if (this.element != null) {
+    if (this.element != null) { // $FlowFixMe
       this.then(this.element.animations[animName](options));
     }
     return this;
   }
 
-  // addStepLegacy(options: Object, animName: string, isClass: boolean = false) {
-  //   if (typeof options.element === 'string' && this.element != null) {
-  //     options.element = this.element.getElement(options.element);
-  //   }
-  //   if (options.elements != null && options.element != null) {
-  //     const elements = options.element.getElements(options.elements);
-  //     const steps = [];
-  //     options.elements = undefined;
-  //     options.element = undefined;
-  //     elements.forEach((element) => {
-  //       if (isClass) {
-  //         steps.push(new element.animations[animName](options));
-  //       } else {
-  //         steps.push(element.animations[animName](options));
-  //       }
-  //     });
-  //     this.then(new animation.ParallelAnimationStep(options, { steps }));
-  //   } else if (isClass) {
-  //     this.then(new animation[animName](options));
-  //   } else {
-  //     this.then(animation[animName](options));
-  //   }
-  // }
 
   /**
    * Add an dim animation step that uses this element by default
@@ -435,16 +251,6 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     durationOrOptions: number | OBJ_ElementAnimationStep = {},
     // ...args: Array<OBJ_ElementAnimationStep>
   ) {
-    // const defaultOptions = { element: this.element };
-    // let options;
-    // if (typeof durationOrOptions === 'number') {
-    //   options = joinObjects({}, defaultOptions, { duration: durationOrOptions }, ...args);
-    // } else {
-    //   options = joinObjects({}, defaultOptions, durationOrOptions, ...args);
-    // }
-    // // this.then(animation.dim(options));
-    // this.addStep(options, 'dim');
-    // return this;
     return this.addStep('dim', durationOrOptions);
   }
 
@@ -457,16 +263,6 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     durationOrOptions: number | OBJ_ElementAnimationStep = {},
     // ...args: Array<OBJ_ElementAnimationStep>
   ) {
-    // const defaultOptions = { element: this.element };
-    // let options;
-    // if (typeof durationOrOptions === 'number') {
-    //   options = joinObjects({}, defaultOptions, { duration: durationOrOptions }, ...args);
-    // } else {
-    //   options = joinObjects({}, defaultOptions, durationOrOptions, ...args);
-    // }
-    // // this.then(animation.undim(options));
-    // this.addStep(options, 'undim');
-    // return this;
     return this.addStep('undim', durationOrOptions);
   }
 
@@ -531,11 +327,6 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   }
 
   pulse(...optionsIn: Array<OBJ_PulseAnimationStep>) {
-    // const defaultOptions = { element: this.element };
-    // const options = joinObjects({}, defaultOptions, ...optionsIn);
-    // // this.then(new animation.PulseAnimationStep(options));
-    // this.addStep(options, 'PulseAnimationStep', true);
-    // return this;
     return this.addStep('pulse', ...optionsIn);
   }
 
@@ -543,11 +334,6 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     this.steps = [];
     this.state = 'idle';
   }
-
-  // whenFinished(callback: (boolean) => void) {
-  //   super.whenFinished(callback);
-  //   return this;
-  // }
 
   _dup() {
     const newBuilder = new AnimationBuilder();

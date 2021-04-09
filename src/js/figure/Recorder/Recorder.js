@@ -16,9 +16,10 @@ import type { OBJ_ScenarioVelocity } from '../Animation/AnimationStep/ElementAni
 
 type TypeStateDiff = [number, string, Object];
 
+type TypeEventPayload = number | string | Object;
 type TypeEvent = [
   number,
-  (Array<number | string | Object> | string | number | Object),
+  Array<TypeEventPayload>,
   number,
 ];
 type TypeEvents = Array<TypeEvent>;
@@ -699,8 +700,6 @@ class Recorder {
     eventListOrStatesDiff: TypeEvents | TypeStateDiffs,
     cacheArray: TypeEvents | TypeStateDiffs,
   ) {
-    // const startTime = this.getCacheStartTime();
-    // const endTime = this.getCacheEndTime();
     const startTime = this.startRecordingTime;
     const endTime = this.currentTime;
     if (startTime == null || endTime === 0) {
@@ -733,15 +732,6 @@ class Recorder {
   }
 
   mergeEventsCache() {
-    // Object.keys(this.eventsCache).forEach((eventName) => {
-    //   const merged = this.getMergedCacheArray(
-    //     this.events[eventName].list, this.eventsCache[eventName].list,
-    //   );
-    //   if (merged.length === 0) {
-    //     return;
-    //   }
-    //   this.events[eventName].list = merged;
-    // });
     const allEventNames = {};
     Object.keys(this.events).forEach((eventName) => {
       allEventNames[eventName] = null;
@@ -787,18 +777,10 @@ class Recorder {
   }
 
   stopTimeouts() {
-    // if (this.timeoutID != null) {
-    //   clearTimeout(this.timeoutID);
-    //   this.timeoutID = null;
-    // }
     new GlobalAnimation().clearTimeout(this.timeoutID);
     new GlobalAnimation().clearTimeout(this.timeUpdatesTimeoutID);
     this.timeoutID = null;
     this.timeUpdatesTimeoutID = null;
-    // if (this.timeUpdatesTimeoutID != null) {
-    //   clearTimeout(this.timeUpdatesTimeoutID);
-    //   this.timeUpdatesTimeoutID = null;
-    // }
   }
 
   stopRecording() {
@@ -808,27 +790,15 @@ class Recorder {
     this.stopTimeouts();
 
     // $FlowFixMe
-    // if (this.worker != null && this.recordingStates) {
     if (this.worker != null) {
       this.worker.postMessage({ message: 'get' });
     }
-    // }
     if (this.audio) {
       this.audio.pause();
       this.isAudioPlaying = false;
     }
     this.lastSeekTime = null;
     this.subscriptions.publish('stopRecording');
-    // this.mergeEventsCache();
-    // this.mergeStatesCache();
-    // this.duration = this.calcDuration();
-    // if (this.duration % 1 > 0) {
-    //   const lastIndex = this.states.diffs.length - 1;
-    //   const [, ref, diff] = this.states.diffs[lastIndex];
-    //   this.states.diffs.push([Math.ceil(this.duration), ref, duplicate(diff), 0]);
-    // }
-    // this.duration = this.calcDuration();
-    // console.log(this)
   }
 
   stopAutoRecording() {
@@ -974,27 +944,11 @@ class Recorder {
       return s;
     };
     const wnd = window.open('about:blank', '', '_blank');
-    // this.slides.forEach((slide) => {
-    //   wnd.document.write(JSON.stringify(slide), '<br>');
-    // });
 
     wnd.document.write('<br><br>');
     wnd.document.write(`// ${'/'.repeat(500)}<br>`);
     wnd.document.write(`// ${'/'.repeat(500)}<br>`);
     wnd.document.write('<br><br>');
-
-    // Object.keys(this.events).forEach((eventName) => {
-    //   const event = this.events[eventName];
-    //   // const rounded = event.map((e) => {
-    //   //   if (typeof e === 'number') {
-    //   //     return round(e, this.precision);
-    //   //   }
-    //   //   return e;
-    //   // });
-    //   wnd.document.write('<br><br>');
-    //   wnd.document.write(`${eventName}`);
-    //   wnd.document.write(JSON.stringify(event, null, 2), '<br>');
-    // });
     wnd.document.write(toJsonHtml(this.events), '<br>');
     wnd.document.write('<br><br>');
     wnd.document.write(`// ${'/'.repeat(500)}<br>`);
@@ -1002,9 +956,6 @@ class Recorder {
     wnd.document.write('<br><br>');
     wnd.document.write(toJsonHtml(this.states.diffs), '<br>');
     wnd.document.write(toJsonHtml(this.states.references), '<br>');
-    // this.states.diffs.forEach((state) => {
-    //   wnd.document.write(JSON.stringify(state, null, 2), '<br>');
-    // });
   }
 
   showMouse(precision: number = 2) {
@@ -1066,6 +1017,7 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
     this.events[eventName].list.forEach((event) => {
       const [time, payload] = event;
       const deltaTime = round(time - firstTime, timePrecision);
+      // $FlowFixMe
       const values = payload.map(p => round(p, valuePrecision));
       if (lastValues == null) {
         lastValues = values;
@@ -1086,7 +1038,7 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
         return;
       }
       const deltaValues = Array(values.length);
-      for (let i = 0; i < values.length; i += 1) {
+      for (let i = 0; i < values.length; i += 1) { // $FlowFixMe
         deltaValues[i] = Math.round((values[i] - lastValues[i]) * 10 ** valuePrecision);
       }
       out.push(
@@ -1099,43 +1051,43 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
     return JSON.stringify(out);
   }
 
-  encodeEvent(
-    eventName: string,
-    timePrecision: number = 2,
-    valuePrecision: number = 2,
-  ) {
-    const out = [];
-    const firstTime = this.events[eventName].list[0][0];
-    let lastDeltaTime = 0;
-    let lastValues = null;
-    this.events[eventName].list.forEach((event) => {
-      const [time, payload] = event;
-      const deltaTime = round(time - firstTime, timePrecision);
-      const values = payload.map(p => round(p, valuePrecision));
-      if (lastValues == null) {
-        lastValues = values;
-        lastDeltaTime = deltaTime;
-        out.push(round(firstTime, timePrecision), ...values);
-        return;
-      }
-      if (deltaTime <= lastDeltaTime + 0.01) {
-        return;
-      }
-      let same = true;
-      for (let i = 0; i < values.length; i += 1) {
-        if (values[i] !== lastValues[i]) {
-          same = false;
-        }
-      }
-      if (same) {
-        return;
-      }
-      out.push(round(deltaTime - lastDeltaTime, timePrecision), ...values);
-      lastDeltaTime = deltaTime;
-      lastValues = values.slice();
-    });
-    return JSON.stringify(out);
-  }
+  // encodeEvent(
+  //   eventName: string,
+  //   timePrecision: number = 2,
+  //   valuePrecision: number = 2,
+  // ) {
+  //   const out = [];
+  //   const firstTime = this.events[eventName].list[0][0];
+  //   let lastDeltaTime = 0;
+  //   let lastValues = null;
+  //   this.events[eventName].list.forEach((event) => {
+  //     const [time, payload] = event;
+  //     const deltaTime = round(time - firstTime, timePrecision);
+  //     const values = payload.map(p => round(p, valuePrecision));
+  //     if (lastValues == null) {
+  //       lastValues = values;
+  //       lastDeltaTime = deltaTime;
+  //       out.push(round(firstTime, timePrecision), ...values);
+  //       return;
+  //     }
+  //     if (deltaTime <= lastDeltaTime + 0.01) {
+  //       return;
+  //     }
+  //     let same = true;
+  //     for (let i = 0; i < values.length; i += 1) {
+  //       if (values[i] !== lastValues[i]) {
+  //         same = false;
+  //       }
+  //     }
+  //     if (same) {
+  //       return;
+  //     }
+  //     out.push(round(deltaTime - lastDeltaTime, timePrecision), ...values);
+  //     lastDeltaTime = deltaTime;
+  //     lastValues = values.slice();
+  //   });
+  //   return JSON.stringify(out);
+  // }
 
   // eslint-disable-next-line class-methods-use-this
   decodeCursorEvent(
@@ -1188,7 +1140,7 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
 
   loadEventData(
     eventName: string,
-    data: Array<number>,
+    data: any,
     decode: 'cursor' | 'moved' | boolean = false,
     timePrecision: number = 2,
     valuePrecision: number = 2,
@@ -1202,7 +1154,7 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
         ));
       }
     } else {
-      const timeConvertedData = data.map(d => [this.convertTime(d[0]), d[1]]);
+      const timeConvertedData = data.map(d => [this.convertTime(d[0]), d[1], 0]);
       this.events[eventName].list.push(...timeConvertedData);
     }
   }
@@ -1321,13 +1273,9 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
       }
       return 0;
     });
-    // console.log(eventsToSetBeforeState);
     // Sort the eventsToSet arrays in time
     sortTimes(eventsToSetBeforeState);
     sortTimes(eventsToSetAfterState);
-    // console.log(eventsToSetBeforeState)
-    // console.log(eventsToSetAfterState)
-    // timer.stamp('m4');
     const playEvents = (events) => {
       events.forEach((event) => {
         const [eventName, index] = event;
@@ -1339,31 +1287,19 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
     };
     // console.log('before')
     playEvents(eventsToSetBeforeState);
-    // console.log('state')
-    // console.log(this.stateIndex)
-    // timer.stamp('m5');
-    // console.log('set State')
     if (this.stateIndex !== -1) {
       this.setState(this.stateIndex);
     }
-    // console.log('State set')
-    // timer.stamp('m6');
-    // console.log('after')
     playEvents(eventsToSetAfterState);
-    // console.log('done')
     if (this.audio) {
       // this.audio.currentTime = timeToUse;
       // console.log(this.audio.currentTime)
       // console.log('audio', timeToUse, this.audio.currentTime, this.audio.duration)
     }
     this.setCurrentTime(timeToUse);
-    // this.currentTime = time;
 
     this.setCursor(timeToUse);
     this.figure.animateNextFrame();
-    // timer.stamp('m7');
-    // timer.log();
-    // console.log(this.figure.getElement('a').getRotation())
   }
 
   setCursor(time: number) {
