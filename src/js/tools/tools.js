@@ -1082,7 +1082,8 @@ class ObjectTracker {
  * identifier associated with a subscriber callback.
  */
  type OBJ_Subscribers = {
-   _id: OBJ_Subscriber;
+  //  _id: OBJ_Subscriber;
+   [id: string]: OBJ_Subscriber;
  };
 
 /**
@@ -1093,12 +1094,7 @@ class ObjectTracker {
  */
 class Subscription {
   fnMap: FunctionMap;
-  subscribers: {
-    [id: string]: {
-      callback: string | () => void;
-      num: number;
-    }
-  };
+  subscribers: OBJ_Subscribers;
 
   order: Array<string>;
 
@@ -1190,7 +1186,7 @@ class Subscription {
  * unique subscription name associated with a subscription.
  */
  type OBJ_Subscriptions = {
-   _subscriptionName: Subscription;
+   [subscriptionName: string]: Subscription;
  };
 /**
  * Subscription manager.
@@ -1240,9 +1236,7 @@ class Subscription {
  */
 class SubscriptionManager {
   fnMap: FunctionMap;
-  subscriptions: {
-    [subscriptionName: string]: Subscription;
-  }
+  subscriptions: OBJ_Subscriptions;
 
   /**
    * @param {FunctionMap} fnMap default function map to use. Function maps

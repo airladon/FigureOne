@@ -4267,7 +4267,7 @@ class FigureElementCollection extends FigureElement {
   +getElement: (?(string | FigureElement)) => ?FigureElement;
   +getElements: (TypeElementPath) => Array<FigureElement>;
   +exec: (string | Array<string | Object>, ?Array<string | FigureElement>) => void;
-  +highlight: (elementsToDim: ?Array<string | FigureElement>) => void;
+  +highlight: (elementsToDim: ?TypeElementPath) => void;
 
   /**
    * @param {OBJ_FigureElementCollection} options
@@ -4574,8 +4574,6 @@ class FigureElementCollection extends FigureElement {
 
     const rootCollection = this;
     const addedElements = [];
-    const t = [];
-    // t.push(performance.now() / 1000)
     elements.forEach((elementDefinition, index) => {
       if (elementDefinition instanceof FigureElement) {
         addedElements.push(...this.add(elementDefinition.name, elementDefinition));
@@ -5679,7 +5677,7 @@ class FigureElementCollection extends FigureElement {
     }
 
     const elements = this.getElements(elementsToHighlight);
-    this.dim();
+    this.dim(); // $FlowFixMe
     this.exec('undim', elements);
   }
 
@@ -5719,9 +5717,6 @@ class FigureElementCollection extends FigureElement {
       const elemB = this.elements[b];
       return elemB.drawPriority - elemA.drawPriority;
     });
-    // this.elements.sort((a, b) => {
-    //   const elemA
-    //   b.z - a.z});
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       if (element instanceof FigureElementCollection) {
