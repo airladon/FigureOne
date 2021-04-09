@@ -82,6 +82,32 @@ class GlobalFunctionMap extends GeneralFunctionMap {
   }
 }
 
+/**
+ * Function Map
+ *
+ * In FigureOne {@link Recorder}, state is saved in stringified javascript
+ * objects. When the state includes a function (like a trigger method in an
+ * animation for example) then that function is referenced in the state object
+ * as a unique string id.
+ *
+ * When a geometry is loaded, functions that will be captured in state objects
+ * need to be added to a function map. Both {@link Figure} and
+ * {@link FigureElement} have attached function maps as the property `fnMap`.
+ * Therefore, the method is added to either the figure or element function map,
+ * with an associated unique string id, and that string id is used when the
+ * function is used. For example as defined callbacks, triggerAnimationStep and
+ * customAnimationStep callbacks, or recorder slide definitions (`entryState`,
+ * `steadyState`, `leaveState`, `exec`, `execDelta`).
+ *
+ * The funciton map has:
+ * - A map of functions
+ * - A link to a global map of functions (a singleton)
+ * - The ability to execute a function within the map
+ *
+ * @property {FunctionMap} global global function map
+ * @property {Object} map local function map where keys are unique identifiers
+ * and values are the associated functions
+ */
 class FunctionMap extends GeneralFunctionMap {
   map: { [id: string]: {
     fn: Function,
@@ -94,17 +120,30 @@ class FunctionMap extends GeneralFunctionMap {
     this.global = new GlobalFunctionMap();
   }
 
+  /**
+   * Execute function with arguments.
+   *
+   * @param {string | Function | null} idOrFn If `string`, then a function
+   * in the local map or global map will be executed (local map takes
+   * precedence). If `Function`, then the
+   * function will be exectuted. If `null`, then nothing will happen.
+   * @param {any} ...args arguments to pass to function.
+   */
   exec(idOrFn: string | Function | null, ...args: any) {
-    // const result = super.exec(idOrFn, ...args);
-    // if (result === null) {
-    //   return this.global.exec(idOrFn, ...args);
-    // }
-    // return result;
     return this.execOnMaps(idOrFn, [this.global.map], ...args);
   }
 
   execOnMaps(idOrFn: string | Function | null, mapsIn: Array<Object>, ...args: any) {
     return super.execOnMaps(idOrFn, [...mapsIn, this.global.map], ...args);
+  }
+
+  /**
+   * Add a function to the map.
+   * @param {string} id unique identifier
+   * @param {Function} fn function to add
+   */
+  add(id: string, fn: Function) {
+    return super.add(id, fn);
   }
 }
 

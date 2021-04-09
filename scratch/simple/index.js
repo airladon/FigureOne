@@ -6,23 +6,35 @@ const figure = new Fig.Figure({
 });
 // const figure = new Fig.Figure();
 
-// Create the shape
-figure.add([
-
+// Subscribe to the setTransform subscription of a figure element
+const [ball1, ball2] = figure.add([
   {
-    name: 'eqn',
-    method: 'equation',
+    name: 'ball1',
+    method: 'primitives.polygon',
     options: {
-      elements: {
-        // lb: { symbol: 'bracket', side: 'left', color: [0, 1, 0, 1] },
-        rb: { symbol: 'bracket', side: 'right', color: [0, 0, 1, 1] },
-      },
-      forms: {
-        0: { brac: [{lb_bracket: {color: [1, 1, 0, 1]}}, 'asdf1', 'rb'] },
-      },
+      sides: 100,
+      radius: 0.5,
+      color: [1, 0, 0, 1],
+    },
+  },
+  {
+    name: 'ball2',
+    method: 'primitives.polygon',
+    options: {
+      sides: 100,
+      radius: 0.3,
+      color: [0, 0, 1, 1],
     },
   },
 ]);
+
+ball1.subscriptions.add('setTransform', (transform) => {
+  ball2.setTransform(transform[0]);
+});
+
+ball1.animations.new()
+  .position({ target: [1, 0], duration: 2 })
+  .start();
 
 // figure.getElement('rect2').animations.new()
 //   .delay(1)

@@ -423,6 +423,15 @@ type ElementState = {
 }
 
 /**
+ * setTransform event.
+ *
+ * Fired whenever the transform is changed.
+ *
+ * @event FigureElement#setTransform
+ * @type {[Transform]}
+ */
+
+/**
  * Figure Element base class
  *
  * The set of properties and methods shared by all figure elements
@@ -446,6 +455,24 @@ type ElementState = {
  * The `opacity` property is used when dissolving. The opacity is multiplied by
  * the alpha channel of `color` to net a final opacity. Opacity should not be
  * set directly as it will be overwritten by dissolve animations.
+ *
+ * Notifications - The subscription manager property `subscriptions` will
+ * publish the following events:
+ * - `beforeSetTransform`: published just before the `transform` property is
+ * changed
+ * - `setTransform`: published whenever the `transform` property is changed
+ * - `startBeingMoved`: published when the element starts being moved by touch
+ * - `stopBeingMoved`: published when the element stops being moved by touch
+ * - `startMovingFreely`
+ * - `stopMovingFreely`
+ * - `show`: published when element is shown
+ * - `hide`: published when element is hidden
+ * - `visibility`: published when element element is shown or hidden
+ * - `onClick`: published when element is clicked on
+ * - `color`: published whenever color is set
+ * - `beforeDraw`
+ * - `afterDraw`
+ *
  * @class
  * @property {string} name reference name of element
  * @property {boolean} isShown if `false` then element will not be processed on
@@ -469,6 +496,7 @@ type ElementState = {
  * @property {AnimationManager} animations element animation manager
  * @property {SubscriptionManager} subscriptions subscription manager for
  * element
+ * @property {FunctionMap} fnMap function map for use with {@link Recorder}
  */
 class FigureElement {
   transform: Transform;
@@ -760,7 +788,7 @@ class FigureElement {
 
     // this.pauseSettings = {};
 
-    // Rename to animate in future
+    // deprecated
     this.anim = {
       rotation: (...optionsIn: Array<OBJ_RotationAnimationStep>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
@@ -1894,6 +1922,7 @@ class FigureElement {
     if (setDefault) {
       this.defaultColor = this.color.slice();
     }
+    this.subscriptions.publish('color');
     this.animateNextFrame();
   }
 
@@ -2312,6 +2341,7 @@ class FigureElement {
       this.move.freely.zeroVelocityThreshold,
       this.move.maxVelocity,
     );
+    this.subscriptions.publish('startMovingFreely');
     if (this.recorder.state === 'recording') {
       this.recorder.recordEvent(
         'startMovingFreely',
@@ -3834,6 +3864,7 @@ class FigureElementPrimitive extends FigureElement {
     if (setDefault) {
       this.defaultColor = this.color.slice();
     }
+    this.subscriptions.publish('color');
     if (this instanceof FigureElementPrimitive) {
       if (this.drawingObject instanceof TextObjectBase) {
         this.drawingObject.setColor(this.color);
@@ -4425,14 +4456,6 @@ class FigureElementCollection extends FigureElement {
     return false;
   }
 
-  /**
-   * Add a figure element to the collection.
-   *
-   * @param {string} name reference name of element
-   * @param {FigureElement} element element to add
-   * @param {number} index index to add in the `drawOrder` where -1 appends the
-   * element to the end of the draw order,
-   */
   addLegacy(
     name: string,
     element: FigureElementPrimitive | FigureElementCollection,
@@ -5600,6 +5623,7 @@ class FigureElementCollection extends FigureElement {
       element.setColor(nonNullColor, setDefault);
     }
     this.color = nonNullColor.slice();
+    this.subscriptions.publish('color');
     if (setDefault) {
       this.defaultColor = this.color.slice();
     }

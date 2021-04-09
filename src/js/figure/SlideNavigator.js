@@ -40,19 +40,19 @@ export type TypeSlideStateCallback = (TypeSlideFrom, number) => void;
  *
  * The `done` parameter must be called at the end of the transition.
  */
-export type TypeSlideTransitionCallback = (() => void, number, TypeSlideFrom) => void;
+export type TypeSlideTransitionCallback = (string | (() => void), number, TypeSlideFrom) => void;
 
-/**
- * All element paths should be relative to the slide navigator reference
- * collection {@link OBJ_SlideNavigator}`.collection`.
- *
- * @property {TypeElementPath} [in] elements to dissolve in
- * @property {TypeElementPath} [out] elements to dissolve out
- */
-export type OBJ_SlideNavigatorDissolve = {
-  in?: TypeElementPath,
-  out?: TypeElementPath,
-}
+// /**
+//  * All element paths should be relative to the slide navigator reference
+//  * collection {@link OBJ_SlideNavigator}`.collection`.
+//  *
+//  * @property {TypeElementPath} [in] elements to dissolve in
+//  * @property {TypeElementPath} [out] elements to dissolve out
+//  */
+// export type OBJ_SlideNavigatorDissolve = {
+//   in?: TypeElementPath,
+//   out?: TypeElementPath,
+// }
 
 
 /**
@@ -148,20 +148,20 @@ export type TypeRecorderTime = string | number;
  * equations will be hidden.
  *
  * The `form` property is a short cut with several consequences:
- * - All equations with `null` forms will be hidden prior to the `enterState`s.
+ * - All equations with `null` forms will be hidden prior to `enterState`.
  * - If the slide doesn't have a `transition` defined, and if an equation form
  *   is changed, then a transition will be added that animates the equation form
  *   change. If `transition` is defined, and equation animation is required,
  *   then it needs to be defined in the `transition` property explicity.
  * - Each equation with a defined form will have `showForm` called on that form
- *   prior to the `steadyState`s.
+ *   prior to `steadyState`.
  *
  * The life cycle of a slide change is:
  * - `leaveStateCommon` (for current slide)
  * - `leaveState` (for current slide)
  * - stop all animations
  * - Update associated text element with `text` property
- * - Hide all elements in associated collection
+ * - Hide all figure elements in associated collection
  * - `showCommon`
  * - `show`
  * - `hideCommon`
@@ -188,7 +188,6 @@ export type TypeRecorderTime = string | number;
  * @property {TypeElementPath} [show]
  * @property {TypeElementPath} [hideCommon] common property
  * @property {TypeElementPath} [hide]
- * @property {OBJ_SlideNavigatorDissolve} [dissolve]
  * @property {TypeSlideStateCallback} [enterStateCommon] common property
  * @property {TypeSlideStateCallback} [enterState]
  * @property {TypeSlideTransitionCallback} [transition] transititions are
@@ -314,6 +313,17 @@ export type OBJ_SlideNavigator = {
  * `textElement` automatically, and will usually be more convenient than
  * manually creating thema (unless custom buttons are needed).
  *
+ * Notifications - The subscription manager property `subscriptions` will
+ * publish the following events:
+ * - `goToSlide`: published when slide changes - will pass slide index to
+ * subscriber
+ * - `steady`: steady state reached (slide transition complete)
+ *
+ * @property {SubscriptionManager} subscriptions subscription manager for
+ * element
+ * @property {number} currentSlideIndex index of slide current shown
+ * @property {boolean} inTransition `true` if slide current transitioning
+ *
  * @see {@link CollectionsSlideNavigator} for examples.
  */
 export default class SlideNavigator {
@@ -327,7 +337,6 @@ export default class SlideNavigator {
   equations: { [string]: FigureElement };
   collection: FigureElementCollection;
   subscriptions: SubscriptionManager;
-  inTransition: boolean;
   from: 'prev' | 'next' | number;
   equationDefaults: {
     duration: number,
@@ -600,34 +609,7 @@ export default class SlideNavigator {
       }
       return this.getFormGeneric('form', index - 1);
     }
-    // if (this.slides[index].fromForm !== undefined) {
-    //   return this.slides[index].fromForm;
-    // }
-    // if (index === 0) {
-    //   return null;
-    // }
     return this.getFormGeneric('fromForm', index);
-    // const { fromForm } = this.slides[index];
-    // if (fromForm === undefined) {
-    //   return {};
-    // }
-    // if (Array.isArray(fromForm)) {
-    //   const forms = {};
-    //   fromForm.forEach((form, i) => {
-    //     if (this.equations.length > i) {
-    //       forms[this.equations[i]] = form;
-    //     }
-    //   });
-    //   return forms;
-    // }
-    // if (typeof fromForm === 'string') {
-    //   const forms = {};
-    //   if (this.equations.length > 0) {
-    //     forms[this.equations[0]] = fromForm;
-    //   }
-    //   return forms;
-    // }
-    // return fromForm;
   }
 
   showForms(formsToShow: Object) {
@@ -642,70 +624,33 @@ export default class SlideNavigator {
         }
       }
     });
-    // for (let i = 0; i < this.equations.length; i += 1) {
-    //   const eqnName = this.equations[i];
-    //   const e = this.collection.getElement(eqnName);
-    //   const form = formsToShow[eqnName];
-    //   if (form !== undefined) {
-    //     if (form === null) {
-    //       e.hide();
-    //     } else {
-    //       e.showForm(form);
-    //     }
-    //   }
-    //   // if (hideOnly) {
-    //   //   e.
-    //   // }
-    //   // if (e != null) {
-    //   //   if (forms.length > i && forms[i] != null) {
-    //   //     if (!hideOnly) {  // $FlowFixMe
-    //   //       e.showForm(forms[i]);
-    //   //     }
-    //   //   } else {
-    //   //     e.hide();
-    //   //   }
-    //   // }
-    // }
-
-    // for (let i = 0; i < this.equations.length; i += 1) {
-    //   const e = this.collection.getElement();
-    //   if (e != null) {
-    //     if (forms.length > i && forms[i] != null) {
-    //       if (!hideOnly) {  // $FlowFixMe
-    //         e.showForm(forms[i]);
-    //       }
-    //     } else {
-    //       e.hide();
-    //     }
-    //   }
-    // }
   }
 
-  showDissolved(slide) {
-    if (slide.dissolve != null) {
-      const inElements = this.collection.getElements(slide.dissolve.in);
-      const outElements = this.collection.getElements(slide.dissolve.out);
-      outElements.map(e => e.hide());
-      inElements.map(e => e.showAll());
-    }
-  }
+  // showDissolved(slide) {
+  //   if (slide.dissolve != null) {
+  //     const inElements = this.collection.getElements(slide.dissolve.in);
+  //     const outElements = this.collection.getElements(slide.dissolve.out);
+  //     outElements.map(e => e.hide());
+  //     inElements.map(e => e.showAll());
+  //   }
+  // }
 
-  showAllDissolved(index: number) {
-    const slide = this.slides[index];
-    if (slide.dissolve != null) {
-      const inElements = this.collection.getElements(slide.dissolve.in);
-      const outElements = this.collection.getElements(slide.dissolve.out);
-      outElements.map(e => e.showAll());
-      inElements.map(e => e.showAll());
-    }
-  }
+  // showAllDissolved(index: number) {
+  //   const slide = this.slides[index];
+  //   if (slide.dissolve != null) {
+  //     const inElements = this.collection.getElements(slide.dissolve.in);
+  //     const outElements = this.collection.getElements(slide.dissolve.out);
+  //     outElements.map(e => e.showAll());
+  //     inElements.map(e => e.showAll());
+  //   }
+  // }
 
   setSteadyState(from: 'next' | 'prev' | number) {
     const index = this.currentSlideIndex;
     const slide = this.slides[index];
     const form = this.getForm(index);
     this.showForms(form);
-    this.showDissolved(slide);
+    // this.showDissolved(slide);
     if (slide.transition != null && Array.isArray(slide.transition)) {
       this.setFinalFromAutoTransition(slide.transition);
     }
@@ -746,58 +691,6 @@ export default class SlideNavigator {
       this.inTransition = false;
     }
   }
-
-  dissolveTransition(slide) {
-    const forms = this.getForm(this.currentSlideIndex);
-    const fromForms = this.getFromForm(this.currentSlideIndex);
-    if (slide.dissolve != null) {
-      const inElements = this.collection.getElements(slide.dissolve.in);
-      const outElements = this.collection.getElements(slide.dissolve.out);
-      let dissolveInSteps;
-      inElements.forEach(element => element.hide());
-      if (slide.dissolve.pulse) {
-        dissolveInSteps = inElements.map(e => e.animations.builder().dissolveIn(0.4).pulse(slide.dissolve.pulse));
-      } else {
-        dissolveInSteps = inElements.map(e => e.animations.dissolveIn(0.4));
-      }
-      const dissolveOutSteps = outElements.map(e => e.animations.dissolveOut(0.4));
-      for (let j = 0; j < inElements.length; j += 1) {
-        for (let i = 0; i < this.equationsOrder.length; i += 1) {
-          const e = this.equationsOrder[i];
-          if (e === inElements[j]) {
-            e.hide();
-          }
-        }
-      }
-      for (let i = 0; i < forms.length; i += 1) {
-        if (fromForms.length - 1 < i) {
-          const e = this.equationsOrder[i];
-          if (forms[i] != null) {
-            e.showForm(forms[i]);
-          }
-        }
-      }
-      if (slide.dissolve.simultaneous) {
-        this.collection.animations.new()
-          .inParallel([...dissolveOutSteps, ...dissolveInSteps])
-          .whenFinished('slideNavigatorTransitionDone')
-          .start();
-      } else {
-        this.collection.animations.new()
-          .inParallel(dissolveOutSteps)
-          .inParallel(dissolveInSteps)
-          .whenFinished('slideNavigatorTransitionDone')
-          .start();
-      }
-    }
-  }
-
-  // processStep(steps) {
-  //   if (step.in != null) {
-  //     const elements = this.colleciton.getElements(step.in);
-  //     anim.
-  //   }
-  // }
 
   setFinalFromAutoTransition(stepsIn: Array<Array<Object>> | Array<Object>) {
     stepsIn.forEach((serialStep) => {
@@ -954,9 +847,9 @@ export default class SlideNavigator {
       return this.autoTransition([slide.transition]);
     }
 
-    if (slide.dissolve != null) {
-      return this.dissolveTransition(slide);
-    }
+    // if (slide.dissolve != null) {
+    //   return this.dissolveTransition(slide);
+    // }
 
     const forms = this.getForm(this.currentSlideIndex);
     const fromForms = this.getFromForm(this.currentSlideIndex);
@@ -991,53 +884,6 @@ export default class SlideNavigator {
       return this.transitionDone();
     }
     return null;
-
-
-    // if (forms.length === 0 || fromForms.length === 0) {
-    //   return this.transitionDone();
-    // }
-    // let done = 'slideNavigatorTransitionDone';
-    // for (let i = 0; i < this.equations.length; i += 1) {
-    //   const e = this.collection.getElement(this.equations[i]);
-    //   if (
-    //     e != null
-    //     && e instanceof Equation
-    //     && forms.length > i
-    //     && fromForms.length > i
-    //     && forms[i] != null
-    //     && fromForms[i] !== forms[i]
-    //   ) {
-    //     const form = forms[i];
-    //     const fromForm = fromForms[i];
-    //     if (fromForm === null) {
-    //       e.showForm(form);
-    //       e.animations.new()
-    //         .dissolveIn(0.4)
-    //         // .inParallel([
-    //         //   e.animations.dissolveIn({ duration: 0.2 }),
-    //         //   e.animations.trigger({
-    //         //     callback: () => {
-    //         //       e.showForm(form);
-    //         //     },
-    //         //   }),
-    //         // ])
-    //         .whenFinished(done)
-    //         .start();
-    //       done = null;
-    //     } else if (fromForm !== null) {
-    //       const { animate, duration } = this.equationDefaults;
-    //       e.animations.new()
-    //         .goToForm({ target: form, animate, duration })
-    //         .whenFinished(done)
-    //         .start();
-    //       done = null;
-    //     }
-    //   }
-    // }
-    // if (done != null) {
-    //   return this.transitionDone();
-    // }
-    // return null;
   }
 
   setText(index: number) {
@@ -1086,7 +932,7 @@ export default class SlideNavigator {
    * and will be set automatically
    */
   goToSlide(slideIndex: number, from?: 'next' | 'prev' | number) {
-    // console.trace()
+    this.subscriptions.publish('goToSlide', slideIndex);
     if (this.slides == null || this.slides.length === 0) {
       return;
     }
@@ -1119,7 +965,6 @@ export default class SlideNavigator {
       this.collection.fnMap.exec(
         this.slides[this.currentSlideIndex].leaveState, this.currentSlideIndex, index,
       );
-      // this.slides[this.currentSlideIndex].leaveState(this.currentSlideIndex, index);
     }
 
     // Reset and Set Text
@@ -1146,7 +991,6 @@ export default class SlideNavigator {
     this.hideElements(index);
     const fromForm = this.getFromForm(index);
     this.showForms(fromForm);
-    this.showAllDissolved(index);
     this.showAutoTransitionDissolve(index, true);
     this.collection.setScenarios(this.getProperty('scenarioCommon', index, []));
     this.collection.setScenarios(slide.scenario || []);
@@ -1178,10 +1022,6 @@ export default class SlideNavigator {
    */
   nextSlide(ignoreTransition: boolean = false) {
     const nextSlideIndex = (this.currentSlideIndex + 1) % this.slides.length;
-    // if (this.collection.recorder.state === 'recording') {
-    //   this.collection.recorder.recordEvent('slide', ['next', nextSlideIndex]);
-    // }
-    // debugger;
     if (this.inTransition) {
       this.inTransition = false;
       this.collection.stop('complete');
@@ -1189,7 +1029,6 @@ export default class SlideNavigator {
         return;
       }
     }
-    // const nextSlideIndex = (this.currentSlideIndex + 1) % this.slides.length;
     this.goToSlide(nextSlideIndex);
     this.collection.animateNextFrame();
   }
@@ -1202,14 +1041,7 @@ export default class SlideNavigator {
     if (prevSlideIndex < 0) {
       prevSlideIndex = this.slides.length - 1;
     }
-    // if (this.collection.recorder.state === 'recording') {
-    //   this.collection.recorder.recordEvent('slide', ['prev', prevSlideIndex]);
-    // }
     this.collection.stop('complete');
-    // let prevSlideIndex = this.currentSlideIndex - 1;
-    // if (prevSlideIndex < 0) {
-    //   prevSlideIndex = this.slides.length - 1;
-    // }
     this.goToSlide(prevSlideIndex);
     this.collection.animateNextFrame();
   }

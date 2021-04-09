@@ -1064,7 +1064,34 @@ class ObjectTracker {
   }
 }
 
-class Subscriber {
+/**
+ * Subscriber
+ * @property {string | function(): void} callback callback to use when
+ * subscription is published
+ * @property {number} num number of subscriptions
+ */
+ type OBJ_Subscriber = {
+   callback: string | () => void;
+   num: number;
+ };
+
+ /**
+ * Subscriber Map.
+ *
+ * @property {OBJ_Subscriber} [_id] each key in this object is a unique
+ * identifier associated with a subscriber callback.
+ */
+ type OBJ_Subscribers = {
+   _id: OBJ_Subscriber;
+ };
+
+/**
+ * A single subscription
+ *
+ * @property {OBJ_Subscribers} subscribers
+ * @property {FunctionMap} fnMap
+ */
+class Subscription {
   fnMap: FunctionMap;
   subscribers: {
     [id: string]: {
@@ -1077,6 +1104,9 @@ class Subscriber {
 
   nextId: number;
 
+  /**
+   * @property {FunctionMap} fnMap Only needed for {@link Recorder}.
+   */
   constructor(fnMap: FunctionMap = new FunctionMap()) {
     this.fnMap = fnMap;
     this.subscribers = {};
@@ -1084,52 +1114,60 @@ class Subscriber {
     this.order = [];
   }
 
-  add(callback: string | () => void, numberOfSubscriptions: number = -1) {
+  /**
+   * Add a subscriber to an event.
+   * @param {string} subscriptionName event name
+   * @param {string | function(): void} callback to be called when events
+   * are published. If `string`, then {@link FunctionMap} of the {@link Figure}
+   * or {@link FigureElement} to which the subscription manager is a property
+   * of will be used.
+   * @param {number} numberOfSubscriptions how many publications the
+   * subscription will receive. `-1` is no limit (`-1`).
+   * @return {number} subscirber id
+   */
+  add(callback: string | () => void, numberOfPublications: number = -1) {
     this.subscribers[`${this.nextId}`] = {
       callback,
-      num: numberOfSubscriptions,
+      num: numberOfPublications,
     };
     this.order.push(`${this.nextId}`);
     this.nextId += 1;
     return this.nextId - 1;
   }
 
-  publish(payload: any) {
+  /**
+   * Publish to all subscribers
+   *
+   * @param {any} functionArgument argument to pass to subscriber callback
+   */
+  publish(functionArgument: any) {
     const subscribersToRemove = [];
     for (let i = 0; i < this.order.length; i += 1) {
       const id = this.order[i];
       const { callback, num } = this.subscribers[id];
-      // if (callback != null) {
-      //   callback(payload);
-      // }
       if (num === 1) {
         subscribersToRemove.push(id);
       }
       let publishOk = false;
       if (num !== 0) {
         publishOk = true;
-        // subscribersToRemove.push(id);
       }
       if (num > 0) {
         this.subscribers[`${id}`].num = num - 1;
       }
-
-      // if (num > 0) {
-      // }
-      // else if (num > 1) {
-      //   publishOk = true;
-      //   this.subscribers[`${id}`].num = num - 1;
-      // }
-      // if (this.subscribers[`${id}`].num > 0) {
       if (publishOk) {
-        this.fnMap.exec(callback, payload);
+        this.fnMap.exec(callback, functionArgument);
       }
     }
     subscribersToRemove.forEach((id) => { this.remove(id); });
   }
 
-  remove(idIn: string | number) {
-    const id = `${idIn}`;
+  /**
+   * Remove subscriber - the subscirber id is returned by this object's `add`
+   * method
+   */
+  remove(subscirberId: string | number) {
+    const id = `${subscirberId}`;
     if (this.subscribers[id] != null) {
       delete this.subscribers[id];
     }
@@ -1145,38 +1183,119 @@ class Subscriber {
   }
 }
 
+ /**
+ * Subscription Map.
+ *
+ * @property {Subscription} [_subscriptionName] each key in this object is a
+ * unique subscription name associated with a subscription.
+ */
+ type OBJ_Subscriptions = {
+   _subscriptionName: Subscription;
+ };
+/**
+ * Subscription manager.
+ *
+ * Publishes notifications to event subscribers.
+ *
+ * {@link Figure}, {@link FigureElement}, {@link Recorder}, and
+ * {@link SlideNavigator} all use subscription managers for event nofitications.
+ *
+ * Subscriptions managers can also be added to custom objects, but it will only
+ * publish to subscribers when it is told to publish.
+ *
+ * @property {OBJ_Subscriptions} subscriptions
+ * @property {FunctionMap} fnMap
+ *
+ * @example
+ * // Subscribe to the `setTransform` subscription of `ball1` to move `ball2`
+ *
+ * // Add ball1 and ball2 to the figure
+ * const [ball1, ball2] = figure.add([
+ *   {
+ *     name: 'ball1',
+ *     method: 'primitives.polygon',
+ *     options: {
+ *       sides: 100, radius: 0.5, color: [1, 0, 0, 1],
+ *     },
+ *   },
+ *   {
+ *     name: 'ball2',
+ *     method: 'primitives.polygon',
+ *     options: {
+ *       sides: 100, radius: 0.3, color: [0, 0, 1, 1],
+ *     },
+ *   },
+ * ]);
+ *
+ * // Subscribe to ball1's `setTransform` publication, and use the set
+ * transform to move ball2 with ball1
+ * ball1.subscriptions.add('setTransform', (transform) => {
+ *   ball2.setTransform(transform[0]);
+ * });
+ *
+ * // Animate ball1 to show ball2 moves with it
+ * ball1.animations.new()
+ *   .position({ target: [1, 0], duration: 2 })
+ *   .start();
+ */
 class SubscriptionManager {
   fnMap: FunctionMap;
   subscriptions: {
-    [subscriptionName: string]: Subscriber;
+    [subscriptionName: string]: Subscription;
   }
 
+  /**
+   * @param {FunctionMap} fnMap default function map to use. Function maps
+   * need only be used with {@link Recorder}.
+   */
   constructor(fnMap: FunctionMap = new FunctionMap()) {
     this.subscriptions = {};
     this.fnMap = fnMap;
   }
 
+  /**
+   * Add a subscriber to an event.
+   * @param {string} subscriptionName event name
+   * @param {string | function(): void} callback to be called when events
+   * are published. If `string`, then {@link FunctionMap} of the {@link Figure}
+   * or {@link FigureElement} to which the subscription manager is a property
+   * of will be used.
+   * @param {number} numberOfSubscriptions how many publications the
+   * subscription will receive. `-1` is no limit (`-1`).
+   * @return {number} subscriber id
+   */
   add(
     subscriptionName: string,
     callback: string | () => void,
     numberOfSubscriptions: number = -1,
   ) {
     if (this.subscriptions[subscriptionName] == null) {
-      this.subscriptions[subscriptionName] = new Subscriber(this.fnMap);
+      this.subscriptions[subscriptionName] = new Subscription(this.fnMap);
     }
     return this.subscriptions[subscriptionName].add(callback, numberOfSubscriptions);
   }
 
+  /**
+   * Publish to all subscribers
+   *
+   * @param {string} subscriptionName
+   * @param {any} payload payload to pass to subscribers
+   */
   publish(subscriptionName: string, payload: any) {
     if (this.subscriptions[subscriptionName] != null) {
       this.subscriptions[subscriptionName].publish(payload);
     }
   }
 
-  remove(subscriptionName: string, id: string | number) {
+  /**
+  * Remove subscriber from subscription
+   * @param {string} subsciptionName
+   * @param {string | number} subscriberId
+   */
+  remove(subscriptionName: string, subscriberId: string | number) {
     if (this.subscriptions[subscriptionName] != null) {
       const subscription = this.subscriptions[subscriptionName];
-      subscription.remove(id);
+      subscription.remove(subscriberId);
       if (subscription.order.length === 0) {
         delete this.subscriptions[subscriptionName];
       }
@@ -1306,7 +1425,7 @@ export {
   UniqueMap, compressObject, refAndDiffToObject, uncompressObject,
   unminify, minify, ObjectTracker,
   download,
-  Subscriber,
+  Subscription,
   SubscriptionManager,
   getFromObject,
   splitString, PerformanceTimer,
