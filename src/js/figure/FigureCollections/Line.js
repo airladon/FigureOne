@@ -1519,7 +1519,7 @@ export default class CollectionsLine extends FigureElementCollection {
 
   // setRotation(angle: number) {
   //   super.setRotation(angle);
-  //   this.line = new Line(this.) 
+  //   this.line = new Line(this.)
   // }
 
   setupLine() {
@@ -1588,7 +1588,7 @@ export default class CollectionsLine extends FigureElementCollection {
     if (wasHidden) {
       this.hide();
     }
-    if (labelWasHidden) {
+    if (labelWasHidden && this._label != null) {
       this._label.hide();
     }
   }
