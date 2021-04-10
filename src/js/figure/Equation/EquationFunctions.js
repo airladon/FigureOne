@@ -3478,7 +3478,7 @@ export class EquationFunctions {
       } = options);
     }
     const optionsIn = {
-      offset: getPoint(offset),
+      offset: getPoint(offset || [0, 0]),
       // inSize,
       fullContentBounds,
     };
