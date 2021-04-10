@@ -108,6 +108,7 @@ toc:
   - EQN_Scale
   - EQN_Container
   - EQN_TouchBox
+  - EQN_Offset
   - EQN_Annotate
   - name: Equation Symbols
   - EQN_Symbol
@@ -136,6 +137,8 @@ toc:
   - TypeSlideStateCallback
   - TypeSlideTransitionCallback
   - OBJ_EquationDefaults
+  - name: Recorder
+    file: ./docs/api/tutorials/recorder/recorder.md
   - name: 2D Geometry Tools
   - minAngleDiff
   - getTriangleCenter

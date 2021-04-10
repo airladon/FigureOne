@@ -9,8 +9,7 @@ figure.add([
     options: {
       forms: {
         0: [
-          'a', '_ = ',
-          'n',
+          'a', '_ = ', 'n',
           { offset: ['for a > 0', [0.3, 0]] },
         ],
       },
