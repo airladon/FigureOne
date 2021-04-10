@@ -936,6 +936,7 @@ class TextObject extends TextObjectBase {
             onClick?: string | () => void,
           }>;
       font: OBJ_Font,                    // default font
+      fixColor: boolean,
       xAlign: 'left' | 'right' | 'center',                // default xAlign
       yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
       // border?: 'text' | 'rect' | Array<Point>,
@@ -1105,6 +1106,7 @@ class TextLineObject extends TextObjectBase {
       xAlign: 'left' | 'right' | 'center',                // default xAlign
       yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
       color: TypeColor,
+      fixColor: boolean,
       defaultTextTouchBorder?: TypeParsableBuffer,
       // border?: 'rect' | Array<Point>,
       // touchBorder?: 'rect' | number | 'border' | Array<Point>,
@@ -1273,6 +1275,7 @@ class TextLinesObject extends TextObjectBase {
     xAlign: 'left' | 'right' | 'center',
     yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
     color: TypeColor,
+    fixColor: boolean,
     // border?: 'rect' | Array<Point>,
     // touchBorder?: 'rect' | number | 'border' | Array<Point>,
   },

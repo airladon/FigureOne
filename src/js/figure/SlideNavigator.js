@@ -370,8 +370,8 @@ export type TypeRecorderTime = string | number;
  * @property {TypeSlideStateCallback} [steadyState]
  * @property {TypeSlideLeaveStateCallback} [leaveStateCommon] common property
  * @property {TypeSlideLeaveStateCallback} [leaveState]
- * @property {string | Array<string | null> | null} [form] common property
- * @property {string | Array<string | null> | null} [fromForm]
+ * @property {string | Array<string | null> | null | Object} [form] common property
+ * @property {string | Array<string | null> | null | Object} [fromForm]
  * @property {string | Array<string>} [scenarioCommon] common property
  * @property {string | Array<string>} [scenario]
  * @property {boolean} [clear] `true` does not use any prior common properties (`false`)

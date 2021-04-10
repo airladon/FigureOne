@@ -1206,6 +1206,7 @@ export class Equation extends FigureElementCollection {
       const currentForm = this.getCurrentForm();
       if (currentForm != null) {
         if (customProperties.target == null) {
+          // eslint-disable-next-line
           customProperties.target = currentForm.name;
         }
       }
@@ -2370,7 +2371,10 @@ export class Equation extends FigureElementCollection {
     }
   }
 
-  getFormIndex(formToGet: EquationForm | string) {
+  getFormIndex(formToGet: null | EquationForm | string = null) {
+    if (formToGet == null) {
+      return -1;
+    }
     const form = this.getForm(formToGet);
     let index = -1;
     if (form != null) {

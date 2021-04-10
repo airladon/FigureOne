@@ -5078,6 +5078,16 @@
               
                 
                 <li><a
+                  href='#recorder'
+                  class="">
+                  Recorder
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#functionmap'
                   class=" toggle-sibling">
                   FunctionMap
@@ -6868,7 +6878,7 @@ element
         <div class='space-bottom0'>
           <span class='code bold'>fnMap</span> <code class='quiet'>(<a href="#functionmap">FunctionMap</a>)</code>
           : function map for use with 
-<a href="Recorder">Recorder</a>
+<a href="#recorder">Recorder</a>
 
           
         </div>
@@ -43602,14 +43612,14 @@ the animation to allow slide steadyStates to be set.
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>form</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | null)> | null)?)</code>
+          <span class='code bold'>form</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | null)> | null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)?)</code>
           : common property
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>fromForm</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | null)> | null)?)</code>
+          <span class='code bold'>fromForm</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | null)> | null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)?)</code>
           
           
         </div>
@@ -44379,7 +44389,7 @@ to specify click colors for each (
   
 
   <p><code>(currentIndex: number, nextIndex: number) => void</code></p>
-<p>When using <a href="Recorder">Recorder</a>, a string from a <a href="#functionmap">FunctionMap</a> can be
+<p>When using <a href="#recorder">Recorder</a>, a string from a <a href="#functionmap">FunctionMap</a> can be
 used, as long as the function the string maps to allows for the same
 parameters as above.</p>
 
@@ -44435,7 +44445,7 @@ parameters as above.</p>
   
 
   <p><code>(currentIndex: number, from:</code><a href="#typeslidefrom">TypeSlideFrom</a><code>) => void</code></p>
-<p>When using <a href="Recorder">Recorder</a>, a string from a <a href="#functionmap">FunctionMap</a> can be
+<p>When using <a href="#recorder">Recorder</a>, a string from a <a href="#functionmap">FunctionMap</a> can be
 used, as long as the function the string maps to allows for the same
 parameters as above.</p>
 
@@ -44492,7 +44502,7 @@ parameters as above.</p>
 
   <p>Callback definition for slide transition.</p>
 <p><code>(done: () => void, currentIndex: number, from:</code><a href="#typeslidefrom">TypeSlideFrom</a><code>) => void</code></p>
-<p>When using <a href="Recorder">Recorder</a>, a string from a <a href="#functionmap">FunctionMap</a> can be
+<p>When using <a href="#recorder">Recorder</a>, a string from a <a href="#functionmap">FunctionMap</a> can be
 used, as long as the function the string maps to allows for the same
 parameters as above.</p>
 <p>Important note: the <code>done</code> parameter MUST be called at the end of the
@@ -63439,6 +63449,70 @@ example, '1:23.5' would define 1 minute, 23.5 seconds)</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='recorder'>
+      Recorder
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>The recorder class provides functionality to record and playback events in
+FigureOne.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>singleton</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
+            = <code>false</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='functionmap'>
       FunctionMap
     </h3>
@@ -63448,7 +63522,7 @@ example, '1:23.5' would define 1 minute, 23.5 seconds)</p>
   
 
   <p>Function Map</p>
-<p>In FigureOne <a href="Recorder">Recorder</a>, state is saved in stringified javascript
+<p>In FigureOne <a href="#recorder">Recorder</a>, state is saved in stringified javascript
 objects. When the state includes a function (like a trigger method in an
 animation for example) then that function is referenced in the state object
 as a unique string id.</p>
@@ -64215,7 +64289,7 @@ unique subscription name associated with a subscription.
 
   <p>Subscription manager.</p>
 <p>Publishes notifications to event subscribers.</p>
-<p><a href="#figure">Figure</a>, <a href="#figureelement">FigureElement</a>, <a href="Recorder">Recorder</a>, and
+<p><a href="#figure">Figure</a>, <a href="#figureelement">FigureElement</a>, <a href="#recorder">Recorder</a>, and
 <a href="#slidenavigator">SlideNavigator</a> all use subscription managers for event nofitications.</p>
 <p>Subscriptions managers can also be added to custom objects, but it will only
 publish to subscribers when it is told to publish.</p>
@@ -64240,7 +64314,7 @@ publish to subscribers when it is told to publish.</p>
             = <code>new FunctionMap()</code>)</code>
 	    default function map to use. Function maps
 need only be used with 
-<a href="Recorder">Recorder</a>
+<a href="#recorder">Recorder</a>
 .
 
           </div>
@@ -64909,13 +64983,15 @@ objects.</p>
   
 
   <p>Equation offset options</p>
-<p><img src="./apiassets/eqn_offset.gif"></p>
-<p>Offset a phrase from the current layout.</p>
+<p><img src="./apiassets/eqn_offset_ex1.png"></p>
+<p>Offset a phrase from the position it would normally be.
+An offest phrase will not contribute to layout of subsequent equation
+elements and phrases.</p>
 <p>Options can be an object, or an array in the property order below</p>
 
   
     <p style="display: none;">      Type:
-      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, offset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeparsablepoint">TypeParsablePoint</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
+      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, offset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeparsablepoint">TypeParsablePoint</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
     </p>
   
   
@@ -64978,6 +65054,25 @@ boilerplate
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>figure.add([
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'rect1'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">forms</span>: {
+        <span class="hljs-number">0</span>: [
+          <span class="hljs-string">'a'</span>, <span class="hljs-string">'_ = '</span>, <span class="hljs-string">'n'</span>,
+          { <span class="hljs-attr">offset</span>: [<span class="hljs-string">'for a &gt; 0'</span>, [<span class="hljs-number">0.3</span>, <span class="hljs-number">0</span>]] },
+        ],
+      },
+    },
+  },
+]);</pre>
+    
   
 
   

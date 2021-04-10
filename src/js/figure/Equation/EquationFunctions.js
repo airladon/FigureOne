@@ -251,9 +251,11 @@ export type EQN_Container = {
 /**
  * Equation offset options
  *
- * ![](./apiassets/eqn_offset.gif)
+ * ![](./apiassets/eqn_offset_ex1.png)
  *
- * Offset a phrase from the current layout.
+ * Offset a phrase from the position it would normally be.
+ * An offest phrase will not contribute to layout of subsequent equation
+ * elements and phrases.
  *
  * Options can be an object, or an array in the property order below
  *
@@ -265,16 +267,28 @@ export type EQN_Container = {
  * <a href="#equation-boilerplate">boilerplate</a>
  *
  * @example
+ * figure.add([
+ *   {
+ *     name: 'rect1',
+ *     method: 'equation',
+ *     options: {
+ *       forms: {
+ *         0: [
+ *           'a', '_ = ', 'n',
+ *           { offset: ['for a > 0', [0.3, 0]] },
+ *         ],
+ *       },
+ *     },
+ *   },
+ * ]);
  */
 export type EQN_Offset = {
   content: TypeEquationPhrase,
   offset?: TypeParsablePoint,
-  // inSize?: boolean,
   fullContentBounds?: boolean,
 } | [
   TypeEquationPhrase,
   ?TypeParsablePoint,
-  ?boolean,
   ?boolean,
 ];
 
