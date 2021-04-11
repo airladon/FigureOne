@@ -2,11 +2,19 @@
 /* eslint no-unused-vars: ["error", { "vars": "local" }] */
 /* eslint-disable no-global-assign */
 
-__title = 'Tutorial - Customized Plot';
-__duration = 0.6;
-__timeStep = 0.2;
+__title = 'Tutorial - Slide Navigator Introduction';
+__duration = 10;
+__timeStep = 0.25;
 __frames = [
-  [0.2, 'touchDown', [0, 0], 'touch down'],
-  [0.2, 'touchMove', [0.5, 0], 'move right'],
-  [0.2, 'touchMove', [0.5, 0.5], 'move up'],
+  [0],
+  [0, 'touchDown', [0, 0], 'touch eqn'],
+  [0, 'touchUp', [0, 0], 'release'],
+  [2, 'touchDown', [0, 0], 'touch eqn'],
+  [0, 'touchUp', [0, 0], 'release'],
+  [3, 'touchDown', [0, 0], 'touch eqn'],
+  [0, 'touchUp', [0, 0], 'release'],
+  [2, 'touchDown', [0, 0], 'touch eqn'],
+  [0, 'touchUp', [0, 0], 'release'],
+  [3, 'touchDown', [0, 0], 'touch eqn'],
+  [0, 'touchUp', [0, 0], 'release'],
 ];

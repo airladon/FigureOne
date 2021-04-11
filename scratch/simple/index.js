@@ -40,103 +40,18 @@ const [eqn, description] = figure.add([
 // depend on state from other slides. That way jumping between slides will not
 // produce unexpected behavior.
 const slides = [
-  // Slide 0
-  {
-    show: [eqn, description],
-    steadyState: () => {
-      eqn.showForm('0');
-      description.custom.updateText({ text: 'Goal: Rearrange for |a|' });
-    },
-  },
-
-  // Slide 1
-  {
-    show: [eqn, description],
-    enterState: () => {
-      eqn.showForm('0');
-      description.custom.updateText({ text: 'Goal: Rearrange for |a|' });
-    },
-    transition: (done) => {
-      description.animations.new()
-        .dissolveOut(0.5)
-        .trigger({
-          callback: () => description.custom.updateText({
-            text: 'Subtract |b| from both sides',
-          }),
-        })
-        .dissolveIn(0.5)
-        .whenFinished(done)
-        .start();
-    },
-    steadyState: () => {
-      description.custom.updateText({ text: 'Subtract |b| from both sides' });
-    },
-  },
-
-  // Slide 2
-  {
-    show: [eqn, description],
-    enterState: () => {
-      eqn.showForm('0');
-      description.custom.updateText({ text: 'Subtract |b| from both sides' });
-    },
-    transition: (done) => {
-      eqn.animations.new()
-        .goToForm({ target: '1', animate: 'move' })
-        .whenFinished(done)
-        .start();
-    },
-    steadyState: () => {
-      eqn.showForm('1');
-    },
-  },
-
-  // Slide 3
-  {
-    show: [eqn, description],
-    enterState: () => {
-      eqn.showForm('1');
-      description.custom.updateText({ text: 'Subtract |b| from both sides' });
-    },
-    transition: (done) => {
-      description.animations.new()
-        .dissolveOut(0.5)
-        .trigger({
-          callback: () => description.custom.updateText({
-            text: '|b| cancels on left side',
-          }),
-        })
-        .dissolveIn(0.5)
-        .whenFinished(done)
-        .start();
-    },
-    steadyState: () => {
-      description.custom.updateText({ text: '|b| cancels on left side' });
-    },
-  },
-
-  // Slide 4
-  {
-    show: [eqn, description],
-    enterState: () => {
-      eqn.showForm('1');
-      description.custom.updateText({ text: '|b| cancels on left side' });
-    },
-    transition: (done) => {
-      eqn.animations.new()
-        .goToForm({ target: '2', animate: 'move' })
-        .whenFinished(done)
-        .start();
-    },
-    steadyState: () => {
-      eqn.showForm('2');
-    },
-  },
+  { form: '0', text: 'Goal: Rearrange for |a|' },
+  { text: 'Subtract |b| from both sides' },
+  { form: '1' },
+  { text: '|b| cancels on left side' },
+  { form: '2' },
 ];
 
 // Create a slide navigator. If slides aren't provided it will auto generate
 // slides from the equation form series.
-const nav = new Fig.SlideNavigator({ collection: figure.elements, slides });
+const nav = new Fig.SlideNavigator({
+  collection: figure.elements, slides, equation: eqn, text: description,
+});
 nav.goToSlide(0);
 
 // Clicking on the equation progresses to the next slide, or next equation form

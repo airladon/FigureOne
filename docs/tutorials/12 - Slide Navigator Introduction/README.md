@@ -2,7 +2,7 @@
 
 Navigate through several equation forms with descriptions.
 
->Note: This tutorial introduces the SlideNavigator by showing an idealized set of slide definitions which is intentionally verbose. The ~90 lines of code used for slide definitions will be reduced to 5 lines in the next tutorial which will demonstrate short-cut slide definitions.
+>Note: This tutorial introduces the SlideNavigator by showing a verbose set of slide definitions to demonstrate what a slide is and how it is defined. The ~90 lines of code used for slide definitions will be reduced to 5 lines in the next tutorial which will demonstrate short-cut slide definitions.
 
 Open `index.html` in a browser to view example.
 
@@ -175,11 +175,11 @@ Each <a href="#figureelement">FigureElement</a> has properties that define how i
 
 [SlideNavigator](https://airladon.github.io/FigureOne/api/#slidenavigator) is essentially a Figure state manager. Each slide fully defines the state of a figure, and is independent of the current figure state. Therefore if you go to a specific slide, the Figure will always be set to the same state, no matter what it was beforehand.
 
-### Slide Lifecycle
+### Slide Progression
 
 [SlideNavigator](https://airladon.github.io/FigureOne/api/#slidenavigator) slides progress through several states as they go from one slide to another.
 
-A simplified lifecycle example for going from slide 3 to slide 4 is:
+A simplified slide progress example for going from slide 3 to slide 4 is:
 
 * `leaveState` (slide 3)
 * All elements in figure hidden
@@ -204,17 +204,146 @@ For example, the first slide in the tutorial is:
 
 This slide simply defines which elements to show on this slide. It doesn't have a `transition`, so either `enterState` or `steadyState` can be used to set the figure state. In this case `steadyState` is used to set the equation form, and description.
 
+Once a slide has reached steady state, the SlideNavigator pauses and waits for the next slide command. This is the best time to allow user interaction with the figure.
 
-### Slides
+### Slides from Tutorial above
 
-Each slide is a complete state definition of the elements within a figure. If properties of an element never change on any of the slides, then they never need to be defined after their original definition. If however a property is different on different slides, then it needs to be defined for all slides.
+Slide 0 is discussed above.
 
-
+Slide 1 is then:
 
 ```js
-ball.subscriptions.add('setTransform', () => {...});
+// Slide 1
+  {
+    show: [eqn, description],
+    enterState: () => {
+      eqn.showForm('0');
+      description.custom.updateText({ text: 'Goal: Rearrange for |a|' });
+    },
+    transition: (done) => {
+      description.animations.new()
+        .dissolveOut(0.5)
+        .trigger({
+          callback: () => description.custom.updateText({
+            text: 'Subtract |b| from both sides',
+          }),
+        })
+        .dissolveIn(0.5)
+        .whenFinished(done)
+        .start();
+    },
+    steadyState: () => {
+      description.custom.updateText({ text: 'Subtract |b| from both sides' });
+    },
+  },
 ```
 
-In this case, we are subscribing to the `'setTransform'` notification of the `ball` FigureElement. Whenever its transform changes, the notification will call our function that updates the text element with the latest coordinates of the ball.
+We start by showing the `eqn` and `description` elements
+```js
+    show: [eqn, description],
+```
 
-See the api reference for more details on [SubscriptionManager](https://airladon.github.io/FigureOne/api/#subscriptionmanager).
+`enterState` is an oppotunity to setup the figure state for before the transition. In this case we are showing form '0' of the equation and making sure the description has text that is the same to the prior slide 0.
+
+```js
+    enterState: () => {
+      eqn.showForm('0');
+      description.custom.updateText({ text: 'Goal: Rearrange for |a|' });
+    },
+```
+
+`transition` defines the animation leading into this slide. It is only called when progressing from the previous slide (slide 0) and will not be called if coming to this slide from any other slide.
+
+The `done` method is passed to the transition function and must be called when the transition is finished to progress to `steadyState`.
+
+In this transition, the description is dissolving out, being repopulated with updated text, and then dissolving back in.
+
+```js
+    transition: (done) => {
+      description.animations.new()
+        .dissolveOut(0.5)
+        .trigger({
+          callback: () => description.custom.updateText({
+            text: 'Subtract |b| from both sides',
+          }),
+        })
+        .dissolveIn(0.5)
+        .whenFinished(done)
+        .start();
+    },
+```
+
+When the tranisition is finished, `steadyState` is used to define what the end point of the transition should be, in case the transition is interrupted.
+
+```
+    steadyState: () => {
+      description.custom.updateText({ text: 'Subtract |b| from both sides' });
+    },
+```
+
+Slide 3 is essentially the same logic as slide 1, as it's purpose is also to update the description.
+
+Slide 2 and 4 are similar to Slide 1 and 3, except they are updating the equation instead of the description.
+
+### Loading the SlideNavigator
+
+First the SlideNavigator is instantiated with a figure collection it is to operate on (in this case the root collection `figure.elements`), and the defined `slides`.
+
+```js
+const nav = new Fig.SlideNavigator({ collection: figure.elements, slides });
+```
+
+The figure collection will often be the root figure collection, but does not need to be. All automated logic in SlideNavigator will be operated on the figure collection.
+
+For example, the step where the SlideNavigator hides all elements, will be performed on the figure collection. Any collections that are parents of the defined collection will not be impacted.
+
+Also, whenever SlideNavigator looks for elements defined with strings, it will use the path of the defined collection as the base path.
+
+For example, in each slide we used the `eqn` and `description` instantiated elements directly. We could similarly have said:
+
+```js
+    show: ['eqn', 'description'],
+```
+
+As these are the names of the elements in the collection tied to the SlideNavigator. In fact, there are several ways to define an element using [TypeElementPath](https://airladon.github.io/FigureOne/api/#typeelementpath). For this simple example, it doesn't really matter either way, but for more complex figures with many elements or many layers of elements, using string or object definitions for element paths can clean up code significantly.
+
+
+Next, we initialize the SlideNavigator to show the first slide:
+```js
+nav.goToSlide(0);
+```
+
+Finally, we make it so the navigator progresses to the next slide every time the equation is touched.
+
+```js
+eqn.subscriptions.add('onClick', () => nav.nextSlide());
+```
+
+### It Gets Easier
+
+This tutorial used complete slide definitions, which demonstrates the intent in defining slides generally.
+
+These slide definitions are robust, but verbose, and a lot of the information in slide definitions is duplicated. Therefore SlideNavigator has a number of slide definitions options that can greatly reduce the verbosity without reducing the robustness. To understand them however, it is important to understand the intent in defining a slide.
+
+The next tutorial will cover some of these options, but as an example the above slide definitions could be reduced to just 5 lines (instead of >90):
+
+```js
+const slides = [
+  { form: '0', text: 'Goal: Rearrange for |a|' },
+  { text: 'Subtract |b| from both sides' },
+  { form: '1' },
+  { text: '|b| cancels on left side' },
+  { form: '2' },
+];
+```
+
+When the equation and description elements are input into the SlideNavigator:
+
+```js
+const nav = new Fig.SlideNavigator({
+  collection: figure.elements,
+  slides,
+  equation: eqn,
+  text: description,
+});
+```

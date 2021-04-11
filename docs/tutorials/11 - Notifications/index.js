@@ -1,4 +1,4 @@
-const figure = new Fig.Figure({ limits: [-2, -2, 4, 4], color: [1, 0, 0, 1] });
+const figure = new Fig.Figure({ limits: [-2, -2, 4, 4] });
 
 // Create a movable ball and text that shows the balls coordinates
 const [ball, text] = figure.add([
