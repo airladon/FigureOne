@@ -3274,7 +3274,7 @@ export default class FigurePrimitives {
    * @see {@link OBJ_TextLines} for options and examples.
    */
   textLines(...optionsIn: Array<OBJ_TextLines | string>) {
-    const joinedOptions = joinObjects({}, ...optionsIn);
+    const joinedOptions = joinObjects({}, { color: this.defaultColor }, ...optionsIn);
     const to = new TextLinesObject(this.draw2D);
     const element = this.genericTextPrimitive(to, joinedOptions);
     element.custom.options = joinedOptions;

@@ -30,6 +30,7 @@ import EqnNavigator from './js/figure/FigureCollections/EqnNavigator';
 import EquationLabel from './js/figure/FigureCollections/EquationLabel';
 import { Equation } from './js/figure/Equation/Equation';
 import EquationForm from './js/figure/Equation/EquationForm';
+import SlideNavigator from './js/figure/SlideNavigator';
 
 import type { TypeRotationDirection, TypeParsablePoint } from './js/tools/g2';
 import type {
@@ -95,6 +96,7 @@ const Fig = {
   Recorder,
   FunctionMap,
   GlobalFunctionMap,
+  SlideNavigator,
   //
   FigureElement,
   FigureElementCollection,

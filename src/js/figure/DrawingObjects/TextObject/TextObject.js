@@ -1304,7 +1304,7 @@ class TextLinesObject extends TextObjectBase {
         } = lineDefinition;
         lineToUse = lineDefinition.text;
         if (font != null) {
-          lineFont = joinObjects({}, options.font, font);
+          lineFont = joinObjects({}, { color: options.color }, options.font, font);
         }
         if (lineSpace != null) {
           lineLineSpace = lineSpace;

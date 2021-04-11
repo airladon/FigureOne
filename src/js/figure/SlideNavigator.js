@@ -334,19 +334,26 @@ export type TypeRecorderTime = string | number;
  * - Hide all figure elements in associated collection
  * - `showCommon`
  * - `show`
+ * - show navigator buttons and navigator text element
  * - `hideCommon`
  * - `hide`
+ * - show `fromForm`
+ * - show all elements that dissolveIn or dissolveOut in an auto transition
  * - `scenarioCommon`
  * - `scenario`
- * - Show navigator buttons, text element and equations with defined forms
  * - `enterStateCommon` (for new slide)
  * - `enterState`
- * - show `fromForm`
- * - `transition`, `dissolve` or '`fromForm` to `form` animations
+ * - `addReference`
+ * - show all elements that dissolveOut and hide all elements that dissolveIn
+ *   in an auto transition
+ * - publish `beforeTransition` notification
+ * - transition
  * - show `form`
+ * - set targets from auto transition
  * - `steadyStateCommon`
  * - `steadyState`
- * - Wait for next navigation event
+ * - update slide navigator buttons
+ * - publish `steady` notification
  *
  * @property {OBJ_TextLines} [text] common property - With `modifiersCommon` and
  * `modifiers` define the text for the text element associated with the
@@ -414,7 +421,9 @@ export type OBJ_SlideNavigatorSlide = {
   addReference?: boolean,
 }
 
-
+/**
+ * Default equation animation properties.
+ */
 export type OBJ_EquationDefaults = {
   duration?: number,
   animate?: "move" | "dissolve" | "moveFrom" | "pulse" | "dissolveInThenMove",
@@ -450,7 +459,7 @@ export type OBJ_EquationDefaults = {
  * transitions.
  *
  * @property {Figure | FigureElementCollection} collection
- * @property {Array<OBJ_NavigatorSlide>} [slides]
+ * @property {Array<OBJ_SlideNavigatorSlide>} [slides]
  * @property {null | FigureElement | string} [prevButton]
  * @property {null | FigureElement | string} [nextButton]
  * @property {null | string | FigureElementCollection} [text]
