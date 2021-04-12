@@ -1,4 +1,4 @@
-# Tutorial 12 - Slide Navigator Introduction
+# Tutorial 12 - SlideNavigator Introduction
 
 Navigate through several equation forms with descriptions.
 
@@ -252,7 +252,7 @@ We start by showing the `eqn` and `description` elements
     },
 ```
 
-`transition` defines the animation leading into this slide. It is only called when progressing from the previous slide (slide 0) and will not be called if coming to this slide from any other slide.
+`transition` defines the animation leading into this slide. It is only called when progressing from the previous slide (slide 0) and will not be called if coming to this slide from any other slide. Therefore any state set in `transition` will need to be set in `steadyState` as well to handle the case where `transition` is not called.
 
 The `done` method is passed to the transition function and must be called when the transition is finished to progress to `steadyState`.
 
@@ -273,7 +273,8 @@ In this transition, the description is dissolving out, being repopulated with up
     },
 ```
 
-When the tranisition is finished, `steadyState` is used to define what the end point of the transition should be, in case the transition is interrupted.
+When the tranisition is finished, `steadyState` is used to define what the end point of the transition should be if navigating to the slide from a slide not immediately before it.
+
 
 ```
     steadyState: () => {

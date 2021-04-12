@@ -1,5 +1,4 @@
 /* globals Fig */
-/* globals Fig */
 const figure = new Fig.Figure();
 
 // Figure consists of an equation and a description

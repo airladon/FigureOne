@@ -34,21 +34,18 @@ const setPositionAndRotation = (sq1Pos, sq1Rot, sq2Pos, sq2Rot) => {
 
 // Add slides to the navigator
 figure.getElement('nav').loadSlides([
-  {
-    show: 'sq1',
-  },
-  // Slide 1
+  // Slide 0
   {
     showCommon: 'sq1',
     enterStateCommon: () => setPositionAndRotation([-0.5, 0.5], 0, [0.5, 0.5], 0),
   },
 
-  // Slide 2
+  // Slide 1
   {
     transition: { in: 'sq2' },
   },
 
-  // Slide 3
+  // Slide 2
   // When using animation objects, the targets of animations will be
   // automatically set at steady state, so user does not need to set them
   {
@@ -56,7 +53,7 @@ figure.getElement('nav').loadSlides([
     transition: { position: 'sq2', target: [0.3, 0.5], duration: 1 },
   },
 
-  // Slide 4
+  // Slide 3
   // Use an array of animation object definitions to create a sequence of steps
   {
     enterState: () => setPositionAndRotation([-0.5, 0.5], 0, [0.3, 0.5], 0),
@@ -67,7 +64,7 @@ figure.getElement('nav').loadSlides([
     ],
   },
 
-  // Slide 5
+  // Slide 4
   // Use an array within an array to create parallel steps
   {
     enterState: () => setPositionAndRotation([-0.3, 0.5], Math.PI / 4, [0.3, 0.5], Math.PI / 4),

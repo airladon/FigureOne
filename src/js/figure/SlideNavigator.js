@@ -129,7 +129,7 @@ export type OBJ_AnimationDefinition = Object;
  * @example
  * // Figure has two rectangles and a slide navigator. Slides will dissolve in,
  * // dissolve out, move and rotate rectangles
- * figure.add([
+ * const [rect1, rect2] = figure.add([
  *   {
  *     name: 'rect1',
  *     method: 'primitives.rectangle',
@@ -150,12 +150,20 @@ export type OBJ_AnimationDefinition = Object;
  *   },
  * ]);
  *
- * const rect2 = figure.getElement('rect2');
+ * const setPositionAndRotation = (r1Pos, r1Rot, r2Pos, r2Rot) => {
+ *   rect1.setPosition(r1Pos);
+ *   rect1.setRotation(r1Rot);
+ *   rect2.setPosition(r2Pos);
+ *   rect2.setRotation(r2Rot);
+ * };
  *
  * // Add slides to the navigator
  * figure.getElement('nav').loadSlides([
  *   // Slide 1
- *   { showCommon: 'rect1' },
+ *   {
+ *     showCommon: 'rect1',
+ *     enterStateCommon: () => setPositionAndRotation([-0.5, 0.5], 0, [0.5, 0.5],  * 0),
+ *   },
  *
  *   // Slide 2
  *   {
@@ -183,6 +191,7 @@ export type OBJ_AnimationDefinition = Object;
  *   // Slide 4
  *   // Use an array of animation object definitions to create a sequence of steps
  *   {
+ *     enterState: () => setPositionAndRotation([-0.5, 0.5], 0, [0.3, 0.5], 0),
  *     transition: [
  *       { position: 'rect1', target: [-0.3, 0.5], duration: 1 },
  *       { rotation: 'rect1', target: Math.PI / 4, duration: 1 },
@@ -193,6 +202,7 @@ export type OBJ_AnimationDefinition = Object;
  *   // Slide 5
  *   // Use an array within an array to create parallel steps
  *   {
+ *     enterState: () => setPositionAndRotation([-0.3, 0.5], Math.PI / 4, [0.3, 0. * 5], Math.PI / 4),
  *     transition: [
  *       [
  *         { rotation: 'rect1', target: 0, duration: 1 },
