@@ -1,4 +1,5 @@
 /* globals Fig */
+/* globals Fig */
 const figure = new Fig.Figure();
 
 // Figure consists of an equation and a description
@@ -54,4 +55,3 @@ nav.goToSlide(0);
 
 // Clicking on the equation progresses to the next slide, or next equation form
 eqn.subscriptions.add('onClick', () => nav.nextSlide());
-
