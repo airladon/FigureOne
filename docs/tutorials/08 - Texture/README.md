@@ -2,7 +2,7 @@
 
 Shapes can either be filled with colors or textures where textures come from an image file.
 
-As loading images into local html can be prevented by web browser security settings, this example needs to be loaded from a web server.
+As loading local images into a html can be prevented by web browser security settings, this example needs to be loaded from a web server.
 
 You can create a local web server and host the example by navigating to the examples folder then either use python or node to start a server:
 
@@ -17,18 +17,12 @@ Then, from the repository root, start the development container (you will need t
 ./start.sh
 ```
 
-The container will start and present a command prompt:
+The container will start and present a command prompt. You can start a http-server by typing:
 ```bash
-cd tutorials/08\ -\ Texture/
-python -m http.server 8080
+http-server
 ```
 
-Alternately, a node server can also be used from the initial path
-```bash
-http-server tutorials/08\ -\ Texture
-```
-
-You can then open a browser and go to http://localhost:8080.
+You can then open a browser and go to http://localhost:8080/docs/tutorials/08%20-%20Texture/.
 
 
 ![](example.png)
