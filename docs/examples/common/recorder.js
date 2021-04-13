@@ -1,26 +1,6 @@
 /* globals figure */
 /* eslint-disable no-empty, object-shorthand, func-names, getter-return */
 function createRecorder() {
-  // const createDiv = (id = '', classes = ['']) => {
-  //   const div = document.createElement('div');
-  //   if (id !== '') {
-  //     div.setAttribute('id', id);
-  //   }
-  //   if (classes !== '') {
-  //     div.classList.add(classes);
-  //   }
-  // }
-  // const player = createDiv('f1_player');
-  // const playPause = createDiv('f1_player__play_pause', ['f1_player__button', 'f1_paused']);
-  // const seek = createDiv('f1_player__seek');
-  // const seekBar = createDiv('f1_player__seek_bar');
-  // const seekCircle = createDiv('f1_player__seek_circle');
-  // const time = createDiv('f1_player__time', ['f1_player__button']);
-  // player.appendChild(playPause);
-  // seek.appendChild(seekBar);
-  // seek.appendChild(seekCircle);
-  // player.appendChild(seek);
-  // player.appendChild(time);
   const recorderElement = document.createElement('div');
   recorderElement.innerHTML = `
   <div id='f1_player'>
@@ -42,6 +22,7 @@ function createRecorder() {
   `;
   document.body.appendChild(recorderElement);
 }
+
 function setupRecorder() {
   const { recorder } = figure;
 
@@ -207,9 +188,6 @@ function setupRecorder() {
     }
     const percentTime = time / recorder.duration;
     seekCircle.style.left = `${Math.floor(percentTime * seekWidth)}px`;
-    // if (time === 8.0002) {
-    //   console.log(time, seekCircle.style.left)
-    // }
     updateTimeLabel(time);
   }
 
@@ -292,7 +270,6 @@ function setupRecorder() {
   seekContainer.addEventListener('mousedown', e => mouseDownHandler(e), false);
   window.addEventListener('mouseup', e => mouseUpHandler(e), false);
   window.addEventListener('mousemove', e => mouseMoveHandler(e), false);
-  // docume.addEventListener('mouseleave', this.mouseUpHandler.bind(this), false);
 
   function supportsPassive() {
     let supportsPassiveFlag = false;

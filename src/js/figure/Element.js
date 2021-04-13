@@ -4560,9 +4560,13 @@ class FigureElementCollection extends FigureElement {
     nameOrElementOrElementDefinition: string
         | FigureElement | OBJ_AddElement
         | Array<FigureElement | OBJ_AddElement>,
-    elementToAdd: FigureElement,
+    elementToAdd: ?FigureElement = null,
   ) {
     if (typeof nameOrElementOrElementDefinition === 'string') {
+      if (elementToAdd == null) {
+        throw new Error(`Adding element ${nameOrElementOrElementDefinition} fail: Element is null`);
+        return;
+      }
       return [this.addElementWithName(nameOrElementOrElementDefinition, elementToAdd)];
     }
     let elements;

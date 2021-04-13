@@ -613,6 +613,8 @@ class Recorder {
           this.autoFrame.bind(this, frameTime),
           5,
         );
+      } else {
+        this.stopAutoRecording();
       }
     }
   }
@@ -804,6 +806,7 @@ class Recorder {
   stopAutoRecording() {
     this.stopRecording();
     this.figure.globalAnimation.endManualFrames();
+    console.log('stopped');
   }
 
   addEventType(
@@ -1548,6 +1551,9 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
 
   startEventsPlayback(fromTime: number) {
     this.eventsToPlay.forEach((eventName) => {
+      if (this.events[eventName] == null) {
+        return;
+      }
       if (this.events[eventName].list.length === 0) {
         return;
       }

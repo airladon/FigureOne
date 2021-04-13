@@ -330,7 +330,7 @@ class Figure {
     this.fnMap = new FunctionMap();
     this.isPaused = false;
     this.scrolled = false;
-    this.cursorElementName = 'cursor';
+    this.cursorElementName = '__cursor';
     this.setStateCallback = null;
     this.shortCuts = {};
     this.mockPreviousTouchPoint = new Point(0, 0);
@@ -520,6 +520,15 @@ class Figure {
 
   slideNavigator(options: OBJ_SlideNavigator) {
     return new SlideNavigator(joinObjects({}, { collection: this.elements }, options));
+  }
+
+  addCursor() {
+    this.add({
+      name: '_cursor_',
+      method: 'collections.cursor',
+      mods: { isShown: false },
+    });
+    this.cursorElementName = '_cursor_';
   }
 
   bindRecorder() {
@@ -1110,7 +1119,7 @@ class Figure {
     nameOrElementOrElementDefinition: string
         | FigureElement | OBJ_AddElement
         | Array<FigureElement | OBJ_AddElement>,
-    elementToAdd: FigureElement,
+    elementToAdd: ?FigureElement = null,
   ) {
     return this.elements.add(nameOrElementOrElementDefinition, elementToAdd);
   }

@@ -298,9 +298,10 @@ export default class FigureCollections {
   ) {
     const defaultOptions = {
       color: this.primitives.defaultColor,
-      width: 0.01,
+      width: 0.008,
       radius: 0.05,
     };
+    defaultOptions.color[3] = 0.9;
     const options = joinObjects(defaultOptions, optionsIn);
     const cursor = this.collection();
     const polygon = {
