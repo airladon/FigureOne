@@ -116,19 +116,13 @@ reset.subscriptions.add('onClick', () => {
 });
 
 solution.hide();
-
-// Recording only
-// figure.recorder.subscriptions.add('startRecording', () => {
-//   figure.elements.animations.new()
-//     .delay(10)
-//     .dissolveIn({ element: solution })
-//     .pulse({ element: solution, scale: 1.1, duration: 1.5 })
-//     .start();
-// });
-// figure.recorder.subscriptions.
-// figure.recorder.
+figure.shortCuts['1'] = () => {
+  figure.elements.animations.new()
+    .dissolveIn({ element: solution })
+    .start();
+};
 
 // // Playback only
 // figure.recorder.fetchAndLoad('./ivid_data.json');
-// // figure.recorder.loadAudio(new Audio('./audio.mp3'));
+// figure.recorder.loadAudio(new Audio('./audio.mp3'));
 

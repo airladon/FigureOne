@@ -795,7 +795,6 @@ class Recorder {
   stopRecording() {
     // this.currentTime = this.getCurrentTime();
     this.setCurrentTime(this.getCurrentTime());
-    console.log('stopRecording')
     this.state = 'idle';
     this.stopTimeouts();
 
@@ -1470,6 +1469,17 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
       // console.log(this.figure.subscriptions.subscriptions.stateSet)
     } else {
       finished();
+    }
+  }
+
+  togglePlayback() {
+    if (this.state === 'recording') {
+      return;
+    }
+    if (this.state !== 'idle') {
+      this.pausePlayback();
+    } else {
+      this.resumePlayback();
     }
   }
 

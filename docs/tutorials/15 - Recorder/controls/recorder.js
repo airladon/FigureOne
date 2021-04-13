@@ -6,9 +6,8 @@ function addRecorder() {
   <div class="comment_out_to_show_recorder">
       <div id='f1_recorder' >
           <div id='f1_recorder__record' class="f1_player__button f1_recorder__button">Record</div>
+          <div id='f1_recorder__recordStates' class="f1_player__button f1_recorder__button">Record States</div>
           <div id='f1_recorder__save' class="f1_player__button f1_recorder__button">Save</div>
-          <div id='f1_recorder__load' class="f1_player__button f1_recorder__button">Load Plan</div>
-          <div id='f1_recorder__recordStates' class="f1_player__button f1_recorder__button">Record Seek States</div>
       </div>
   </div>
   `;
@@ -20,7 +19,6 @@ function addRecorder() {
   const recordButton = document.querySelector('#f1_recorder__record');
   const recordStatesButton = document.querySelector('#f1_recorder__recordStates');
   const saveButton = document.querySelector('#f1_recorder__save');
-  const loadButton = document.querySelector('#f1_recorder__load');
 
   function toggleRecord() {
     if (!(recorder.state === 'recording') && !(recorder.state === 'idle')) {
@@ -37,36 +35,10 @@ function addRecorder() {
     }
   }
 
-  // function toggleStatesRecord() {
-  //   if (!(recorder.state === 'recording') && !(recorder.state === 'idle')) {
-  //     return;
-  //   }
-  //   if (recorder.state === 'recording') {
-  //     recorder.stopAutoRecording();
-  //   } else {
-  //     const currentTime = recorder.getCurrentTime();
-  //     recorder.startStatesRecording(0);
-  //     if (currentTime === 0) {
-  //       recorder.recordEvent('slide', ['goto', 0], 0);
-  //     }
-  //   }
-  // }
-
   // playPauseButton.onclick = () => togglePlayPause();
   recordButton.onclick = () => toggleRecord();
   recordStatesButton.onclick = () => recorder.startStatesRecording();
   saveButton.onclick = () => recorder.save();
-
-  loadButton.onclick = () => {
-    if (loadButton.innerHTML === 'Plan Loaded') {
-      return;
-    }
-    const script = document.createElement('script');
-    script.setAttribute('src', 'cursor.js');
-    script.onload = () => { loadButton.innerHTML = 'Plan Loaded'; };
-    document.body.appendChild(script);
-    recorder.useAutoEvents = true;
-  };
 
   // Button state is updated from recorder subscriptions
   function playbackStarted() {
@@ -96,12 +68,12 @@ function addRecorder() {
     const keyCode = String.fromCharCode(event.keyCode);
     if (keyCode === 'c') {
       figure.toggleCursor();
-    }
-    if (keyCode === ' ' && recorder.state === 'recording') {
+    } else if (keyCode === ' ' && recorder.state === 'recording') {
       recorder.stopRecording();
-    }
-    if (keyCode === 'r') {
+    } else if (keyCode === 'r') {
       toggleRecord();
+    } else if (figure.shortCuts[keyCode] != null) {
+      figure.fnMap.exec(figure.shortCuts[keyCode]);
     }
   }, false);
 }

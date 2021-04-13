@@ -4565,7 +4565,6 @@ class FigureElementCollection extends FigureElement {
     if (typeof nameOrElementOrElementDefinition === 'string') {
       if (elementToAdd == null) {
         throw new Error(`Adding element ${nameOrElementOrElementDefinition} fail: Element is null`);
-        return;
       }
       return [this.addElementWithName(nameOrElementOrElementDefinition, elementToAdd)];
     }

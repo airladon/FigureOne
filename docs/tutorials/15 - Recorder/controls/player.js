@@ -17,24 +17,10 @@ function addPlayer() {
 
   // Get reference to figure's instantiated recorder
   const { recorder } = figure;
-  // The state of this player contains the seek bar touch state only.
-  // All other state is in recorder.
-  const state = { touch: 'up' };
 
   // Buttons
   const playPauseButton = document.querySelector('#f1_player__play_pause');
-  function togglePlayPause() {
-    if (recorder.state === 'recording') {
-      return;
-    }
-    if (recorder.state !== 'idle') {
-      recorder.pausePlayback();
-    } else {
-      recorder.resumePlayback();
-    }
-  }
-
-  playPauseButton.onclick = () => togglePlayPause();
+  playPauseButton.onclick = () => recorder.togglePlayback();
 
   // Button state is updated when recorder state changes
   recorder.subscriptions.add(
@@ -48,7 +34,7 @@ function addPlayer() {
   document.addEventListener('keypress', (event) => {
     const keyCode = String.fromCharCode(event.keyCode);
     if (keyCode === ' ') {
-      togglePlayPause();
+      recorder.togglePlayback();
     }
   }, false);
 
@@ -111,37 +97,45 @@ function addPlayer() {
     figure.animateNextFrame();
   }
 
+  /*
+  ..######...########..######..########.##.....##.########..########..######.
+  .##....##..##.......##....##....##....##.....##.##.....##.##.......##....##
+  .##........##.......##..........##....##.....##.##.....##.##.......##......
+  .##...####.######....######.....##....##.....##.########..######....######.
+  .##....##..##.............##....##....##.....##.##...##...##.............##
+  .##....##..##.......##....##....##....##.....##.##....##..##.......##....##
+  ..######...########..######.....##.....#######..##.....##.########..######.
+  */
+  let touchState = 'up';
   function touchStartHandler(event) {
-    state.touch = 'down';
-    const touch = event.touches[0];
-    touchHandler(touch.clientX);
+    touchState = 'down';
+    touchHandler(event.touches[0].clientX);
   }
 
   function mouseDownHandler(event) {
-    state.touch = 'down';
+    touchState = 'down';
     touchHandler(event.clientX);
   }
 
   function touchMoveHandler(event) {
-    if (state.touch === 'down') {
-      const touch = event.touches[0];
-      touchHandler(touch.clientX);
+    if (touchState === 'down') {
+      touchHandler(event.touches[0].clientX);
       event.preventDefault();
     }
   }
 
   function mouseMoveHandler(event) {
-    if (state.touch === 'down') {
+    if (touchState === 'down') {
       touchHandler(event.clientX);
       event.preventDefault();
     }
   }
 
   function endHandler() {
-    if (state.touch === 'down') {
+    if (touchState === 'down') {
       recorder.seek(lastSeekTime);
     }
-    state.touch = 'up';
+    touchState = 'up';
   }
   function mouseUpHandler() { endHandler(); }
   function touchEndHandler() { endHandler(); }
