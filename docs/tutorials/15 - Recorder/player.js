@@ -67,18 +67,20 @@ function addPlayer() {
     timeLabel.innerHTML = `${timeToStr(Math.floor(time))} / ${timeToStr(recorder.duration)}`;
   }
 
-  function setTime(time) {
+  function setTime(time, fromRecorder = false) {
     const circleWidth = seekCircle.clientWidth;
     const seekWidth = seekContainer.clientWidth - circleWidth;
     if (recorder.duration === 0) {
       seekCircle.style.left = 0;
     }
     const percentTime = Math.min(time / recorder.duration, 1);
-    seekCircle.style.left = `${Math.floor(percentTime * seekWidth)}px`;
+    if (fromRecorder === false || (fromRecorder && recorder.state !== 'idle')) {
+      seekCircle.style.left = `${Math.floor(percentTime * seekWidth)}px`;
+    }
     updateTimeLabel(time);
   }
 
-  recorder.subscriptions.add('timeUpdate', t => setTime(t[0]));
+  recorder.subscriptions.add('timeUpdate', t => setTime(t[0], true));
 
   // Seek
   let seekId = null;
