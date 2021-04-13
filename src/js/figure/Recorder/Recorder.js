@@ -590,32 +590,39 @@ class Recorder {
     // console.log('recorder is', this.state);
   }
 
-  startAutoRecording(
-    fromTime: number = 0,
-    whilePlaying: Array<string> = [],
-    includeStates: boolean = true,
+  startStatesRecording(
+    // fromTime: number = 0,
+    // whilePlaying: Array<string> = [],
+    // includeStates: boolean = true,
     frameTime: number = 0.1,
   ) {
+    this.seek(0);
     this.figure.globalAnimation.setManualFrames();
-    this.startRecording(fromTime, whilePlaying, includeStates);
+    // const { duration } = this;
+    this.states.reset();
+    this.startRecording(0, Object.keys(this.events), true);
+    // this.duration = duration;
     this.autoFrame(frameTime);
     // console.log('recorder is', this.state);
   }
 
   autoFrame(frameTime: number = 0.1) {
-    // console.log('autoFrame', this.state)
+    // console.log(this.state)
     if (this.state === 'recording') {
-      // console.log(this.getCurrentTime());
       this.figure.animateNextFrame();
       this.figure.globalAnimation.frame(frameTime);
       if (this.getCurrentTime() < this.duration) {
+        // console.log('auto')
         setTimeout(
           this.autoFrame.bind(this, frameTime),
           5,
         );
       } else {
-        this.stopAutoRecording();
+        // console.log('stopping')
+        this.stopStatesRecording();
       }
+    } else {
+      this.stopStatesRecording();
     }
   }
 
@@ -788,6 +795,7 @@ class Recorder {
   stopRecording() {
     // this.currentTime = this.getCurrentTime();
     this.setCurrentTime(this.getCurrentTime());
+    console.log('stopRecording')
     this.state = 'idle';
     this.stopTimeouts();
 
@@ -803,10 +811,9 @@ class Recorder {
     this.subscriptions.publish('stopRecording');
   }
 
-  stopAutoRecording() {
-    this.stopRecording();
+  stopStatesRecording() {
     this.figure.globalAnimation.endManualFrames();
-    console.log('stopped');
+    this.stopRecording();
   }
 
   addEventType(
@@ -840,7 +847,7 @@ class Recorder {
       });
     }
     this.lastRecordTimeCount += 1;
-    if (now > this.duration) {
+    if (now > this.duration && this.figure.globalAnimation.manual === false) {
       this.duration = now;
     }
   }
@@ -895,7 +902,7 @@ class Recorder {
       [time, payload, this.lastRecordTimeCount],
     );
     this.lastRecordTimeCount += 1;
-    if (time > this.duration) {
+    if (time > this.duration && this.figure.globalAnimation.manual === false) {
       this.duration = time;
     }
   }
@@ -911,7 +918,7 @@ class Recorder {
         this.queueRecordState(this.stateTimeStep - this.getCurrentTime() % this.stateTimeStep);
       }
     };
-    if (round(time, 4) === 0) {
+    if (round(time, 10) === 0) {
       recordAndQueue();
       return;
     }
@@ -920,7 +927,7 @@ class Recorder {
     // }
     this.timeoutID = new GlobalAnimation().setTimeout(() => {
       recordAndQueue();
-    }, round(time * 1000, 0), 'state', true);
+    }, round(time * 1000, 10), 'state', true);
   }
 
   save() {
@@ -1658,8 +1665,7 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
     }
 
     const remainingTime = this.duration - this.getCurrentTime();
-    if (remainingTime > 0.0001) {
-      // console.log('finishPlaying', remainingTime * 1000)
+    if (remainingTime > 0.001) {
       this.timeoutID = new GlobalAnimation().setTimeout(() => {
         this.finishPlaying();
       }, round(remainingTime * 1000, 0), 'finishPlaying');
@@ -1718,6 +1724,7 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
     });
 
     const pause = () => {
+      console.log('pause')
       this.state = 'idle';
       this.subscriptions.publish('playbackStopped');
       // this.figure.stop();

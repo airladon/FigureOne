@@ -129,12 +129,14 @@ class GlobalAnimation {
   }
 
   setManualFrames() {
+    // console.log('start manual')
     this.manual = true;
     this.nowTime = performance.now();
     this.now = () => this.nowTime;
   }
 
   endManualFrames() {
+    // console.log('end manual')
     this.manual = false;
     this.now = () => performance.now();
   }
@@ -142,7 +144,9 @@ class GlobalAnimation {
   frame(duration: number) {
     this.manualQueueCounter = 0;
     const targetTime = this.nowTime + duration * 1000;
+    // console.log('before')
     this.incrementManualTimers(this.nowTime + duration * 1000);
+    // console.log('after')
     this.nowTime = targetTime;
     this.animateNextFrame();
   }
@@ -175,6 +179,8 @@ class GlobalAnimation {
     this.nowTime = endTime;
     f();
     this.draw(this.nowTime);
+    // console.log(endTime, maxTime, preLength, Object.keys(this.manualTimers).length)
+    // console.log(timersToFire[0], timersToFire[1], timersToFire[2], this.nowTime, maxTime)
     delete this.manualTimers[`${id}`];
     return this.incrementManualTimers(maxTime);
   }

@@ -37,24 +37,24 @@ function addRecorder() {
     }
   }
 
-  function toggleStatesRecord() {
-    if (!(recorder.state === 'recording') && !(recorder.state === 'idle')) {
-      return;
-    }
-    if (recorder.state === 'recording') {
-      recorder.stopAutoRecording();
-    } else {
-      const currentTime = recorder.getCurrentTime();
-      recorder.startAutoRecording(currentTime, ['_autoSlide', '_autoCursor', '_autoTouch', '_autoCursorMove', '_autoExec']);
-      if (currentTime === 0) {
-        recorder.recordEvent('slide', ['goto', 0], 0);
-      }
-    }
-  }
+  // function toggleStatesRecord() {
+  //   if (!(recorder.state === 'recording') && !(recorder.state === 'idle')) {
+  //     return;
+  //   }
+  //   if (recorder.state === 'recording') {
+  //     recorder.stopAutoRecording();
+  //   } else {
+  //     const currentTime = recorder.getCurrentTime();
+  //     recorder.startStatesRecording(0);
+  //     if (currentTime === 0) {
+  //       recorder.recordEvent('slide', ['goto', 0], 0);
+  //     }
+  //   }
+  // }
 
   // playPauseButton.onclick = () => togglePlayPause();
   recordButton.onclick = () => toggleRecord();
-  recordStatesButton.onclick = () => toggleStatesRecord();
+  recordStatesButton.onclick = () => recorder.startStatesRecording();
   saveButton.onclick = () => recorder.save();
 
   loadButton.onclick = () => {
@@ -94,8 +94,14 @@ function addRecorder() {
   // Shortcut keys
   document.addEventListener('keypress', (event) => {
     const keyCode = String.fromCharCode(event.keyCode);
-    if (keyCode === 's') {
+    if (keyCode === 'c') {
       figure.toggleCursor();
+    }
+    if (keyCode === ' ' && recorder.state === 'recording') {
+      recorder.stopRecording();
+    }
+    if (keyCode === 'r') {
+      toggleRecord();
     }
   }, false);
 }
