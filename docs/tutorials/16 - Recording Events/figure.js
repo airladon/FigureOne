@@ -14,53 +14,60 @@ function button(name, text, position) {
 }
 
 // Helper function to make polygons
-const makePolygon = (name, radius, color, sides, startPosition, solPosition, solRotation) => ({
-  name,
-  method: 'collection',
-  elements: [
-    {
-      name: 'fill',
-      method: 'primitives.polygon',
-      options: { radius, color, sides },
-      mods: {
-        isMovable: true,
-        move: { element: name, type: 'rotation' },
+function makePolygon(
+  name, radius, color, sides, resetPosition, solutionPosition, solutionRotation,
+) {
+  return {
+    name,
+    method: 'collection',
+    elements: [
+      {
+        name: 'fill',
+        method: 'primitives.polygon',
+        options: { radius, color, sides },
+        mods: {
+          isMovable: true,
+          move: { element: name, type: 'rotation' },
+        },
+      },
+      {
+        name: 'movePad',
+        method: 'primitives.polygon',
+        options: { radius: radius * 0.7, sides },
+        mods: {
+          isMovable: true,
+          opacity: 0,
+          move: { element: name },
+        },
+      },
+      {
+        name: 'border',
+        method: 'primitives.polygon',
+        options: {
+          radius, sides, line: { width: 0.003 }, color: [1, 1, 1, 0.5],
+        },
+      },
+    ],
+    mods: {
+      scenarios: {
+        reset: { position: resetPosition, rotation: 0 },
+        solution: { position: solutionPosition, rotation: solutionRotation },
       },
     },
-    {
-      name: 'movePad',
-      method: 'primitives.polygon',
-      options: { radius: radius * 0.7, sides },
-      mods: {
-        isMovable: true,
-        opacity: 0,
-        move: { element: name },
-      },
-    },
-    {
-      name: 'border',
-      method: 'primitives.polygon',
-      options: {
-        radius, sides, line: { width: 0.003 }, color: [1, 1, 1, 0.5],
-      },
-    },
-  ],
-  mods: {
-    scenarios: {
-      start: { position: startPosition, rotation: 0 },
-      solution: { position: solPosition, rotation: solRotation },
-    },
-  },
-});
+  };
+}
 
 
 // Calculate the apothems of the shapes
+// The apothem (a) is related to side length (s) and number of sides (n) by:
+// s = 2*a*tan(180/n)
 const sideLength = 0.14;
-const a6 = sideLength / 2 / Math.tan(Math.PI / 6);
-const a12 = sideLength / 2 / Math.tan(Math.PI / 12);
-const a4 = sideLength / 2 / Math.tan(Math.PI / 4);
+const a6 = sideLength / 2 / Math.tan(Math.PI / 6);   // apothem of hexagon
+const a12 = sideLength / 2 / Math.tan(Math.PI / 12); // apothem of dodecagon
+const a4 = sideLength / 2 / Math.tan(Math.PI / 4);   // apothem of square
 const halfAng = Math.PI * 2 / 12 / 2;
 
+// Helper function that greates a group of shapes within a common hexagon layout
 function polygons(
   prefix, sides, color, count, startPosition, startRadius, startAngle, startRotation,
 ) {
@@ -96,8 +103,7 @@ figure.add([
 ]);
 figure.addCursor();
 
-figure.setScenarios('start');
-
+// Add animations for reset and solution
 const solution = figure.getElement('solutionButton');
 const reset = figure.getElement('resetButton');
 
@@ -111,18 +117,14 @@ solution.subscriptions.add('onClick', () => {
 reset.subscriptions.add('onClick', () => {
   figure.elements.stop();
   figure.elements.animations.new()
-    .scenarios({ target: 'start', duration: 2 })
+    .scenarios({ target: 'reset', duration: 2 })
     .start();
 });
 
-solution.hide();
-figure.shortCuts['1'] = () => {
-  figure.elements.animations.new()
-    .dissolveIn({ element: solution })
-    .start();
-};
+// First positions
+figure.setScenarios('reset');
 
-// // Playback only
-// figure.recorder.fetchAndLoad('./ivid_data.json');
-// figure.recorder.loadAudio(new Audio('./audio.mp3'));
 
+// Load audio, states and events data
+figure.recorder.loadAudio(new Audio('./audio.mp3'));
+figure.recorder.fetchAndLoad('./ivid_data.json');

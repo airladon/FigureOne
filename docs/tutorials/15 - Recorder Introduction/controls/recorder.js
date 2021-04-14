@@ -73,6 +73,9 @@ function addRecorder() {
     } else if (keyCode === 'r') {
       toggleRecord();
     } else if (figure.shortCuts[keyCode] != null) {
+      if (figure.recorder.state === 'recording') {
+        figure.recorder.recordEvent('exec', [figure.shortCuts[keyCode]]);
+      }
       figure.fnMap.exec(figure.shortCuts[keyCode]);
     }
   }, false);

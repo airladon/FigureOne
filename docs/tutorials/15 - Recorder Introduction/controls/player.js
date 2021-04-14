@@ -15,14 +15,15 @@ function addPlayer() {
   `;
   document.body.appendChild(playerElement);
 
-  // Get reference to figure's instantiated recorder
+  // Get reference to recorder
   const { recorder } = figure;
 
-  // Buttons
+  // Setup play/pause button
   const playPauseButton = document.querySelector('#f1_player__play_pause');
   playPauseButton.onclick = () => recorder.togglePlayback();
 
-  // Button state is updated when recorder state changes
+  // The play/pause button picture will change on 'playbackStopped' and
+  // 'playbackStarted' notifications from the recorder.
   recorder.subscriptions.add(
     'playbackStopped', () => playPauseButton.classList.remove('f1_playing'),
   );
@@ -30,7 +31,7 @@ function addPlayer() {
     'playbackStarted', () => playPauseButton.classList.add('f1_playing'),
   );
 
-  // Shortcut Keys
+  // If the user presses space bar, the play/pause will toggle
   document.addEventListener('keypress', (event) => {
     const keyCode = String.fromCharCode(event.keyCode);
     if (keyCode === ' ') {
@@ -38,22 +39,21 @@ function addPlayer() {
     }
   }, false);
 
-  // Time
+  // HTML elements used in time and seek logic below
   const timeLabel = document.querySelector('#f1_player__time');
   const seekContainer = document.querySelector('#f1_player__seek');
   const seekCircle = document.querySelector('#f1_player__seek_circle');
 
+  // Formate a time value in seconds into a mm:ss string
   function timeToStr(time) {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time - minutes * 60);
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    const minutes = Math.floor(time / 60).toString().padStart(2, '0');
+    const seconds = Math.floor(time - minutes * 60).toString().padStart(2, '0');
+    return `${minutes}:${seconds}`;
   }
 
-  function updateTimeLabel(time) {
-    timeLabel.innerHTML = `${timeToStr(Math.floor(time))} / ${timeToStr(recorder.duration)}`;
-  }
-
-  function setTime(time, fromRecorder = false) {
+  // Function that sets the circle position of the seek bar, and updates the
+  // time text based on some input time
+  function setTime(time = recorder.getCurrentTime(), fromRecorder = false) {
     const circleWidth = seekCircle.clientWidth;
     const seekWidth = seekContainer.clientWidth - circleWidth;
     if (recorder.duration === 0) {
@@ -63,10 +63,13 @@ function addPlayer() {
     if (fromRecorder === false || (fromRecorder && recorder.state !== 'idle')) {
       seekCircle.style.left = `${Math.floor(percentTime * seekWidth)}px`;
     }
-    updateTimeLabel(time);
+    timeLabel.innerHTML = `${timeToStr(Math.floor(time))} / ${timeToStr(recorder.duration)}`;
   }
 
+  // On 'timeUpdate' and 'duration' notifications from recorder, update the
+  // player seek bar and time label
   recorder.subscriptions.add('timeUpdate', t => setTime(t[0], true));
+  recorder.subscriptions.add('durationUpdated', () => setTime());
 
   // Seek
   let seekId = null;

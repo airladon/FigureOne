@@ -4,9 +4,7 @@ Shapes can either be filled with colors or textures where textures come from an 
 
 As loading local images into a html can be prevented by web browser security settings, this example needs to be loaded from a web server.
 
-You can create a local web server and host the example by navigating to the examples folder then either use python or node to start a server:
-
-This can all be done after cloning this repository:
+You can create a local web server and host the by first cloning this repository:
 
 ```bash
 git clone https://github.com/airladon/FigureOne
