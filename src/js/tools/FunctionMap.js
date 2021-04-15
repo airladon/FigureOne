@@ -41,7 +41,7 @@ class GeneralFunctionMap {
     if (typeof idOrFn === 'function') {
       return idOrFn(...args);
     }
-    return null;
+    throw new Error(`${idOrFn} needs to be a function or a string`);
   }
 
   execOnMaps(idOrFn: string | Function | null, mapsIn: Array<Object>, ...args: any) {
@@ -59,11 +59,13 @@ class GeneralFunctionMap {
           return map[idOrFn].fn(...args);
         }
       }
+      throw new Error(`FunctionMap Error: '${idOrFn}' does not exist in map`);
     }
     if (typeof idOrFn === 'function') {
       return idOrFn(...args);
     }
-    return null;
+    throw new Error(`FunctionMap Error: '${idOrFn}' needs to be a function or a string`);
+    // return null;
   }
 }
 

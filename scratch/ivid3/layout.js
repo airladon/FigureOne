@@ -73,7 +73,7 @@ function makeSlides() {
       { circ: ['arc', 'xQ1', 'yQ1', 'rotator', 'triSinCos.sin', 'triSinCos.cos', 'triTanSec.tan', 'triTanSec.sec', 'triCotCsc.cot', 'triCotCsc.csc'] }],
     enterStateCommon: () => {
       figure.fnMap.exec('circSetup', [0.9, 'title']);
-      figure.shortCuts = { 0: 'circToRot' };
+      figure.shortcuts = { 0: 'circToRot' };
     },
     addReference: true,
     exec: [17, 'circToRot'],

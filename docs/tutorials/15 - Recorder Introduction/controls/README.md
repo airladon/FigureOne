@@ -321,15 +321,15 @@ Add several useful keyboard shortcuts for quick control during the recording pro
       recorder.stopRecording();
     } else if (keyCode === 'r') {
       toggleRecord();
-    } else if (figure.shortCuts[keyCode] != null) {
+    } else if (figure.shortcuts[keyCode] != null) {
       if (figure.recorder.state === 'recording') {
-        figure.recorder.recordEvent('exec', [figure.shortCuts[keyCode]]);
+        figure.recorder.recordEvent('exec', [figure.shortcuts[keyCode]]);
       }
-      figure.fnMap.exec(figure.shortCuts[keyCode]);
+      figure.fnMap.exec(figure.shortcuts[keyCode]);
     }
   }, false);
 ```
 
-In addition, `figure.shortCuts` is a user defined dictionary of short cuts to different functions to execute. These functions may be animations, pulses or state changes. When these functions are executed, their execution time will be recorded as an event by `recorder`. However, as events are saved in json data in the interactive video data file, the values associated with the shortCut keys in `figure.shortCuts` cannot be function definitions. Instead, they have to be strings that refer to function definitions in the figure's FunctionMap (`figure.fnMap`)
+In addition, `figure.shortcuts` is a user defined dictionary of short cuts to different functions to execute. These functions may be animations, pulses or state changes. When these functions are executed, their execution time will be recorded as an event by `recorder`. However, as events are saved in json data in the interactive video data file, the values associated with the shortCut keys in `figure.shortcuts` cannot be function definitions. Instead, they have to be strings that refer to function definitions in the figure's FunctionMap (`figure.fnMap`)
 
 All functions should be defined as a key the figure's [Functionmap](https://airladon.github.io/FigureOne/api/#functionmap) `figure.fnMap` as keys are strings and can thus be recorded in the interactive video data file as a json string.

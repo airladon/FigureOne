@@ -1,6 +1,7 @@
 /* globals figure */
 /* eslint-disable no-empty, object-shorthand, func-names, getter-return */
 function addRecorder() {
+  // Create UI elements and add to DOM
   const recorderElement = document.createElement('div');
   recorderElement.innerHTML = `
   <div class="comment_out_to_show_recorder">
@@ -12,13 +13,8 @@ function addRecorder() {
   </div>
   `;
   document.body.appendChild(recorderElement);
-  const { recorder } = figure;
 
-  // Buttons
-  const playPauseButton = document.querySelector('#f1_player__play_pause');
-  const recordButton = document.querySelector('#f1_recorder__record');
-  const recordStatesButton = document.querySelector('#f1_recorder__recordStates');
-  const saveButton = document.querySelector('#f1_recorder__save');
+  const { recorder } = figure;
 
   function toggleRecord() {
     if (!(recorder.state === 'recording') && !(recorder.state === 'idle')) {
@@ -35,12 +31,16 @@ function addRecorder() {
     }
   }
 
-  // playPauseButton.onclick = () => togglePlayPause();
+  // Buttons
+  const recordButton = document.querySelector('#f1_recorder__record');
+  const recordStatesButton = document.querySelector('#f1_recorder__recordStates');
+  const saveButton = document.querySelector('#f1_recorder__save');
+
   recordButton.onclick = () => toggleRecord();
   recordStatesButton.onclick = () => recorder.startStatesRecording();
   saveButton.onclick = () => recorder.save();
 
-  // Button state is updated from recorder subscriptions
+  // Button state is updated from recorder notifications
   function playbackStarted() {
     recordButton.classList.add('f1_player__button_disable');
   }
@@ -49,6 +49,7 @@ function addRecorder() {
     recordButton.classList.remove('f1_player__button_disable');
   }
 
+  const playPauseButton = document.querySelector('#f1_player__play_pause');
   function recordingStarted() {
     recordButton.innerHTML = 'Pause';
     playPauseButton.classList.add('f1_player__button_disable');
@@ -72,11 +73,11 @@ function addRecorder() {
       recorder.stopRecording();
     } else if (keyCode === 'r') {
       toggleRecord();
-    } else if (figure.shortCuts[keyCode] != null) {
+    } else if (figure.shortcuts[keyCode] != null) {
       if (figure.recorder.state === 'recording') {
-        figure.recorder.recordEvent('exec', [figure.shortCuts[keyCode]]);
+        figure.recorder.recordEvent('exec', [figure.shortcuts[keyCode]]);
       }
-      figure.fnMap.exec(figure.shortCuts[keyCode]);
+      figure.fnMap.exec(figure.shortcuts[keyCode]);
     }
   }, false);
 }

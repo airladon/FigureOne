@@ -301,7 +301,7 @@ class Figure {
   setStateCallback: ?(string | (() => void));
   subscriptions: SubscriptionManager;
   mockPreviousTouchPoint: Point;
-  shortCuts: Object;
+  shortcuts: Object;
 
   animations: AnimationManager;
 
@@ -332,7 +332,7 @@ class Figure {
     this.scrolled = false;
     this.cursorElementName = '__cursor';
     this.setStateCallback = null;
-    this.shortCuts = {};
+    this.shortcuts = {};
     this.mockPreviousTouchPoint = new Point(0, 0);
     // this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
@@ -518,17 +518,35 @@ class Figure {
     this.cursorShown = false;
   }
 
+  /**
+   * Create a new {@link SlideNavigator} that controls the root collection of this figure.
+   *
+   * @return {SlideNavigator}
+   */
   slideNavigator(options: OBJ_SlideNavigator) {
     return new SlideNavigator(joinObjects({}, { collection: this.elements }, options));
   }
 
+  /**
+   * Add cursor for recording interactive videos.
+   * @return {FigureElement} cursor element
+   */
   addCursor() {
-    this.add({
+    const [cursor] = this.add({
       name: '_cursor_',
       method: 'collections.cursor',
       mods: { isShown: false },
     });
     this.cursorElementName = '_cursor_';
+    return cursor;
+  }
+
+  /**
+   * Get cursor element.
+   @return {FigureElement} cursor element
+   */
+  getCursor() {
+    return this.getElement(this.cursorElementName);
   }
 
   bindRecorder() {
@@ -1667,7 +1685,7 @@ class Figure {
   }
 
   showCursor(show: 'up' | 'down' | 'hide', position: ?Point = null) {
-    const cursor = this.getElement(this.cursorElementName);
+    const cursor = this.getCursor();
     if (cursor == null) {
       return;
     }

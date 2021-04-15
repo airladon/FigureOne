@@ -19,5 +19,5 @@ figure.add({
 figure.addCursor();
 
 // // Load audio, states and events data
-// figure.recorder.loadAudio(new Audio('./audio.mp3'));
-// figure.recorder.fetchAndLoad('./ivid.json');
+figure.recorder.loadAudio(new Audio('./audio-track.mp3'));
+figure.recorder.fetchAndLoad('./video-track.json');

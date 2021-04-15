@@ -462,7 +462,7 @@ function makeSlides() {
     },
     dissolve: { in: ['rightTri.tri.line', 'rightTri.tri.angle1'] },
     steadyStateCommon: () => {
-      figure.shortCuts = {
+      figure.shortcuts = {
         1: 'triPulseRight',
         2: 'triPulseTheta',
         3: 'triPulseOpp',
@@ -609,7 +609,7 @@ function makeSlides() {
   //   form: { eqn3: 'rValues' },
   //   steadyState: () => {
   //     rightTri.hasTouchableElements = true;
-  //     figure.shortCuts = {
+  //     figure.shortcuts = {
   //       1: 'triAnimateToRot',
   //     };
   //   },
@@ -693,7 +693,7 @@ function makeSlides() {
       // eqn.showForm('sixSideRatiosWithValue');
       // figure.fnMap.exec('triToRot', initialAngle);
       rightTri.hasTouchableElements = true;
-      figure.shortCuts = {
+      figure.shortcuts = {
         1: 'triAnimateToRot',
       };
     },
@@ -864,7 +864,7 @@ function makeSlides() {
     showCommon: { circ: ['arc', 'rotator', 'tanLight', 'secLight', 'cotLight', 'cscLight', 'hypAlt', 'hypLabel', 'theta', 'tanAlt', 'tanLabelAlt', 'secAlt', 'secLabelAlt', 'rightTanAlt'] },
     dissolve: { in: { circ: ['secLabelAlt'] } },
     steadyStateCommon: () => {
-      figure.shortCuts = {
+      figure.shortcuts = {
         1: 'eqnPulseOppAdj',
         2: 'eqnPulseHypAdj',
         3: 'eqnPulseTanAdj',
@@ -904,7 +904,7 @@ function makeSlides() {
     },
     dissolve: { in: { circ: ['thetaComp'] } },
     steadyStateCommon: () => {
-      figure.shortCuts = {
+      figure.shortcuts = {
         1: 'circPulseThetaComp',
       };
     },
@@ -943,7 +943,7 @@ function makeSlides() {
   slides.push({
     dissolve: { out: { circ: ['thetaComp'] } },
     steadyStateCommon: () => {
-      figure.shortCuts = {
+      figure.shortcuts = {
         1: 'eqnPulseAdjOpp',
         2: 'eqnPulseHypOpp',
         3: 'eqnPulseCotOpp',
@@ -995,7 +995,7 @@ function makeSlides() {
   slides.push({
     form: { eqn3: '8', 'circ.sinEqn': 'sin' },
     steadyStateCommon: () => {
-      figure.shortCuts = {
+      figure.shortcuts = {
         1: 'circPulseTheta',
         2: 'circPulseSinEqn',
         3: 'circPulseRad',
@@ -1035,7 +1035,7 @@ function makeSlides() {
     fromForm: { eqn3: '10', 'circ.cosAltEqn': null },
     form: { eqn3: '11' },
     // steadyStateCommon: () => {
-    //   figure.shortCuts = {
+    //   figure.shortcuts = {
     //     1: 'eqnPulseAdjOpp',
     //     2: 'eqnPulseHypOpp',
     //     3: 'eqnPulseCotOpp',

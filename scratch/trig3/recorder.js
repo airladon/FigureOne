@@ -111,11 +111,11 @@ function setupRecorder() {
       // console.log('next')
     } else if (keyCode === 'p') {
       figure.getElement('nav').nav.prevSlide();
-    } else if (figure.shortCuts[keyCode] != null) {
+    } else if (figure.shortcuts[keyCode] != null) {
       if (figure.recorder.state === 'recording') {
-        figure.recorder.recordEvent('exec', [figure.shortCuts[keyCode]]);
+        figure.recorder.recordEvent('exec', [figure.shortcuts[keyCode]]);
       }
-      figure.fnMap.exec(figure.shortCuts[keyCode]);
+      figure.fnMap.exec(figure.shortcuts[keyCode]);
     }
   }, false);
   /*

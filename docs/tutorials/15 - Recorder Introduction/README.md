@@ -1,6 +1,6 @@
 # Tutorial 15 - Recorder
 
-Use the [Recorder](https://airladon.github.io/FigureOne/api/#recorder) class to create an interactive video.
+Use the [Recorder](https://airladon.github.io/FigureOne/api/#recorder) class to create an interactive video from an interactive figure, recorded mouse movements and an audio track.
 
 As loading local images into a html can be prevented by web browser security settings, this example needs to be loaded from a web server.
 
@@ -125,7 +125,7 @@ To make a recording of the mouse movements then:
 * Seek back to the begining
 * Press the `play` button to review the recording
 
-![](../assets/15/recording.gif)
+![](example.gif)
 
 In longer recordings, you might want to re-record over sections. Just seek to the time you want to start re-recording, press `record` and when you're done press `pause`.
 
@@ -166,7 +166,12 @@ figure.recorder.fetchAndLoad('./ivid.json');
 
 Once you've finished your interactive video you can deploy it.
 
-Remember, you don't need to deploy it with the `content/recorder.js` file as the consumers of the video don't need a UI to record.
+In the HTML, you can remove two of the files being loaded:
+
+* `content/recorder.js`
+* `[hash].worker.js`
+
+Both are only needed during recording and are not required for playback.
 
 ### This video is interactive
 
