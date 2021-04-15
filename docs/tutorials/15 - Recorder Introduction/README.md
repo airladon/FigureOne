@@ -168,3 +168,8 @@ Once you've finished your interactive video you can deploy it.
 
 Remember, you don't need to deploy it with the `content/recorder.js` file as the consumers of the video don't need a UI to record.
 
+### This video is interactive
+
+The video created here is interactive. That means at any point in the video, the person watching it can move the ball themselves.
+
+When they do, `Recorder` will automatically pause the video playback and save the current state of the figure. When the user presses play again, `Recorder` will reload the paused state and resume playback.

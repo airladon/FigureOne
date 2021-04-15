@@ -44,7 +44,7 @@ function addPlayer() {
   const seekContainer = document.querySelector('#f1_player__seek');
   const seekCircle = document.querySelector('#f1_player__seek_circle');
 
-  // Formate a time value in seconds into a mm:ss string
+  // Format a time value in seconds into a mm:ss string
   function timeToStr(time) {
     const minutes = Math.floor(time / 60).toString().padStart(2, '0');
     const seconds = Math.floor(time - minutes * 60).toString().padStart(2, '0');
@@ -71,10 +71,19 @@ function addPlayer() {
   recorder.subscriptions.add('timeUpdate', t => setTime(t[0], true));
   recorder.subscriptions.add('durationUpdated', () => setTime());
 
-  // Seek
+  /*
+  ..######..########.########.##....##
+  .##....##.##.......##.......##...##.
+  .##.......##.......##.......##..##..
+  ..######..######...######...#####...
+  .......##.##.......##.......##..##..
+  .##....##.##.......##.......##...##.
+  ..######..########.########.##....##
+  */
   let seekId = null;
   let lastSeekTime = 0;
   function touchHandler(x) {
+    // Get circle position and convert it to percent of seek container width
     const circleBounds = seekCircle.getBoundingClientRect();
     const seekBounds = seekContainer.getBoundingClientRect();
     let percent = 0;
@@ -89,6 +98,8 @@ function addPlayer() {
     }
     const time = percent * recorder.duration;
     lastSeekTime = time;
+
+    // Only ask the recorder to seek when a frame is about to be drawn.
     if (seekId != null) {
       figure.subscriptions.remove('beforeDraw', seekId);
     }
@@ -96,19 +107,14 @@ function addPlayer() {
       recorder.seek(lastSeekTime);
       seekId = null;
     }, 1);
+
+    // Update the time label
     setTime(time);
     figure.animateNextFrame();
   }
 
-  /*
-  ..######...########..######..########.##.....##.########..########..######.
-  .##....##..##.......##....##....##....##.....##.##.....##.##.......##....##
-  .##........##.......##..........##....##.....##.##.....##.##.......##......
-  .##...####.######....######.....##....##.....##.########..######....######.
-  .##....##..##.............##....##....##.....##.##...##...##.............##
-  .##....##..##.......##....##....##....##.....##.##....##..##.......##....##
-  ..######...########..######.....##.....#######..##.....##.########..######.
-  */
+  // We only want to track mouse or touch movements when the seek bar is being
+  // touched. Use touchState flag to track this.
   let touchState = 'up';
   function touchStartHandler(event) {
     touchState = 'down';
@@ -143,6 +149,7 @@ function addPlayer() {
   function mouseUpHandler() { endHandler(); }
   function touchEndHandler() { endHandler(); }
 
+  // Listen for events using the above handlers
   seekContainer.addEventListener('mousedown', e => mouseDownHandler(e), false);
   window.addEventListener('mouseup', e => mouseUpHandler(e), false);
   window.addEventListener('mousemove', e => mouseMoveHandler(e), false);
