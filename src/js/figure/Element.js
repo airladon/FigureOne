@@ -472,6 +472,7 @@ type ElementState = {
  * - `color`: published whenever color is set
  * - `beforeDraw`
  * - `afterDraw`
+ * - `setState`: state of element has been set
  *
  * @class
  * @property {string} name reference name of element
@@ -489,14 +490,22 @@ type ElementState = {
  * color defined as red, green, blue, alpha with range 0 to 1
  * @property {[number, number, number, number]} dimColor color to use when
  * dimming element
+ * @property {[number, number, number, number]} defaultColor color to go to
+ * when undimming element
  * @property {number} opacity number between 0 and 1 that is multiplied with
  * `color` alpha channel to get final opacity
  * @property {OBJ_ElementMove} move movement parameters
  * @property {Scenarios} scenarios scenario presets
+ * @property {ElementState} state current state of element
  * @property {AnimationManager} animations element animation manager
  * @property {SubscriptionManager} subscriptions subscription manager for
  * element
  * @property {FunctionMap} fnMap function map for use with {@link Recorder}
+ * @property {Object} customState put any custom state information that needs
+ * to be captured with recorder here - only stringify-able values can go in this
+ * object like strings, numbers, booleans and nested arrays or objects
+ * containing these. Functions should not be put in here - use string
+ * identifiers to `fnMap` if functions are needed.
  */
 class FigureElement {
   transform: Transform;

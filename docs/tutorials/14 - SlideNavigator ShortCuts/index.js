@@ -18,11 +18,9 @@ const [sq1, sq2] = figure.add([
       width: 0.4, height: 0.4, position: [0.5, 0.5],
     },
   },
-  {
-    name: 'nav',
-    method: 'collections.slideNavigator',
-  },
 ]);
+
+const nav = figure.addSlideNavigator();
 
 // Helper function to set position and rotation of sq1 and sq2
 const setPositionAndRotation = (sq1Pos, sq1Rot, sq2Pos, sq2Rot) => {
@@ -33,7 +31,7 @@ const setPositionAndRotation = (sq1Pos, sq1Rot, sq2Pos, sq2Rot) => {
 };
 
 // Add slides to the navigator
-figure.getElement('nav').loadSlides([
+nav.loadSlides([
   // Slide 0
   {
     showCommon: 'sq1',

@@ -24,9 +24,23 @@ import type Figure from '../Figure';
 import type { Equation } from '../Equation/Equation';
 
 
+/**
+ * CollectionsSlideNavigator Button.
+ * @property {'arrow' | 'rectangle'} type
+ * @extends COL_Rectangle
+ * @extends OBJ_Arrow
+ */
 export type COL_SlideNavigatorButton = {
   type: 'arrow' | 'rectangle'
 } & COL_Rectangle & OBJ_Arrow;
+
+/**
+ * CollectionsSlideNavigator equation animation defaults
+ */
+export type COL_SlideNavigatorEqnDefaults = {
+  duration?: number,
+  animate?: 'move' | 'dissolve' | 'instant',
+};
 
 /**
  * {@link CollectionsSlideNavigator} options object that extends
@@ -37,33 +51,27 @@ export type COL_SlideNavigatorButton = {
  *
  * @extends OBJ_Collection
  *
- * @property {number} [width] rectangle width
- * @property {number} [height] rectangle height
- * @property {'left' | 'center' | 'right' | number} [xAlign] horiztonal
- * alignment of the rectangle
- * @property {'bottom' | 'middle' | 'top' | number} [yAlign] vertical alignment
-* of the rectangle
- * @property {OBJ_LineStyleSimple} [line] lines style - leave empty if only
- * want fill
- * @property {TypeColor | OBJ_Texture} [fill] fill color or texture
- * @property {OBJ_CurvedCorner} [corner] corner style of rectangle
- * @property {OBJ_TextLines} [label] Rectangle label
- * @property {boolean | TypeColor | OBJ_ButtonColor} [button] `true` to
- * make the rectangle behave like a button when clicked. `TypeColor` to
- * make fill, line and label the same color when clicked or `OBJ_ButtonColor`
- * to specify click colors for each (`false`)
+ * @property {Figure | FigureElementCollection | string} [collection]
+ * collection to tie slide navigator to. By default will tie to its parent.
+ * @property {Array<OBJ_SlideNavigatorSlide>} [slides]
+ * @property {COL_SlideNavigatorButton | null} [prevButton] previous button
+ * options - use `null` to hide
+ * @property {COL_SlideNavigatorButton | null} [nextButton] next button options
+ * - use `null` to hide
+ * @property {OBJ_TextLines | null} [text] text options - use `null` to hide
+ * @property {Equation | string | Array<string | Equation>} [equation] equation
+ * to tie to SlideNavigator
+ * @property {COL_SlideNavigatorEqnDefaults} [equationDefaults] default
+ * equation animation options
  */
 export type COL_SlideNavigator = {
-  collection: Figure | FigureElementCollection | string,
-  slides: Array<OBJ_SlideNavigatorSlide>,
-  prevButton?: COL_SlideNavigatorButton,
-  nextButton?: COL_SlideNavigatorButton,
-  text?: OBJ_TextLines,
+  collection?: Figure | FigureElementCollection | string,
+  slides?: Array<OBJ_SlideNavigatorSlide>,
+  prevButton?: COL_SlideNavigatorButton | null,
+  nextButton?: COL_SlideNavigatorButton | null,
+  text?: OBJ_TextLines | null,
   equation?: Equation | string | Array<string | Equation>,
-  equationDefaults: {
-    duration?: number,
-    animate?: 'move' | 'dissolve' | 'instant',
-  },
+  equationDefaults?: COL_SlideNavigatorEqnDefaults,
 } & OBJ_Collection;
 
 
@@ -278,13 +286,13 @@ class CollectionsSlideNavigator extends FigureElementCollection {
     this._nextButton = null;
     this._prevButton = null;
     this._text = null;
-    if (!o.prevButton !== null) {
+    if (o.prevButton !== null) {
       this.addButton(o.prevButton || {}, 'Prev');
     }
-    if (!o.nextButton !== null) {
+    if (o.nextButton !== null) {
       this.addButton(o.nextButton || {}, 'Next');
     }
-    if (!o.text !== null) {
+    if (o.text !== null) {
       this.addText(o.text || {});
     }
 

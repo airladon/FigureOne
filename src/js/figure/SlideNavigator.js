@@ -671,11 +671,11 @@ export default class SlideNavigator {
     this.slides.forEach((slide, index) => {
       const { time, delta, execDelta } = slide;
       if (time != null) {
-        const t = this.convertTime(time); // $FlowFixMe
+        const t = this.convertTime(time);
         this.collection.recorder.events._autoSlide.list.push([t, [index], 0]);
         lastTime = t;
       } else if (delta != null) {
-        lastTime += delta; // $FlowFixMe
+        lastTime += delta;
         this.collection.recorder.events._autoSlide.list.push([lastTime, [index], 0]);
       }
       if (execDelta != null && execDelta.length > 0) {
@@ -683,12 +683,12 @@ export default class SlideNavigator {
         if (!Array.isArray(eDelta[0])) {
           eDelta = [eDelta];
         }
-        eDelta.forEach((e) => { // $FlowFixMe
-          const [execDeltaTime, command] = e; // $FlowFixMe
+        eDelta.forEach((e) => {
+          const [execDeltaTime, command] = e;
           const t = lastTime + execDeltaTime;
-          if (!(typeof t === 'number')) { // $FlowFixMe
+          if (!(typeof t === 'number')) {
             throw new Error(`Error in delta time: ${t}, ${execDeltaTime}, ${lastTime}, ${command}`);
-          } // $FlowFixMe
+          }
           this.collection.recorder.events._autoExec.list.push([t, [command], 0]);
         });
       }
@@ -707,12 +707,21 @@ export default class SlideNavigator {
           const t = this.convertTime(time);
           if (!(typeof t === 'number')) { // $FlowFixMe
             throw new Error(`Error in exec time: ${t}, ${time}, ${command}`);
-          } // $FlowFixMe
+          }
           this.collection.recorder.events._autoExec.list.push([t, [command], 0]);
         });
       }
     });
     this.collection.recorder.events._autoExec.list.sort((a, b) => a[0] - b[0]);
+  }
+
+  /**
+   * Load slides into navigator
+   */
+  loadSlides(slides: Array<OBJ_SlideNavigatorSlide>) {
+    this.slides = slides;
+    this.loadRecorder();
+    this.goToSlide(0);
   }
 
   setEquations(equationsIn: Array<string | Equation>) {

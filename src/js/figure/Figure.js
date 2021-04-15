@@ -297,6 +297,7 @@ class Figure {
   pauseTime: number;
   cursorShown: boolean;
   cursorElementName: string;
+  slideNavigatorElementName: string;
   isTouchDown: boolean;
   setStateCallback: ?(string | (() => void));
   subscriptions: SubscriptionManager;
@@ -330,7 +331,8 @@ class Figure {
     this.fnMap = new FunctionMap();
     this.isPaused = false;
     this.scrolled = false;
-    this.cursorElementName = '__cursor';
+    this.cursorElementName = '_cursor_';
+    this.slideNavigatorElementName = '_nav_';
     this.setStateCallback = null;
     this.shortcuts = {};
     this.mockPreviousTouchPoint = new Point(0, 0);
@@ -519,12 +521,31 @@ class Figure {
   }
 
   /**
-   * Create a new {@link SlideNavigator} that controls the root collection of this figure.
+   * Add a {@link CollectionsSlideNavigator} that controls the root collection of this figure.
    *
-   * @return {SlideNavigator}
+   * @return {CollectionsSlideNavigator}
    */
-  slideNavigator(options: OBJ_SlideNavigator) {
-    return new SlideNavigator(joinObjects({}, { collection: this.elements }, options));
+  addSlideNavigator(options: COL_SlideNavigator) {
+    const [nav] = this.add(joinObjects(
+      {},
+      {
+        name: '_nav_',
+        method: 'collections.slideNavigator',
+      },
+      { options },
+    ));
+    this.slideNavigatorElementName = '_nav_';
+    return nav;
+  }
+
+  /**
+   * Get the {@link CollectionsSlideNavigator} for the figure (will only return
+   * if the navigator was added with `figure.addSlideNavigator`).
+   *
+   * @return {CollectionsSlideNavigator}
+   */
+  getSlideNavigator() {
+    return this.getElement(this.slideNavigatorElementName);
   }
 
   /**
@@ -1842,14 +1863,16 @@ class Figure {
   //   pointer.setPosition(figurePoint);
   // }
 
-  setCursor(p: Point) {
-    const pointer = this.getElement(this.cursorElementName);
-    if (pointer == null) {
+  setCursor(p: Point, animateNextFrame: boolean = true) {
+    const cursor = this.getElement(this.cursorElementName);
+    if (cursor == null) {
       return;
     }
-    pointer.setPosition(p);
+    cursor.setPosition(p);
     // console.log(p, pointer.isShown, pointer._up.isShown, pointer);
-    this.animateNextFrame();
+    if (animateNextFrame) {
+      this.animateNextFrame();
+    }
   }
 
   touchFreeHandler(clientPoint: Point) {
@@ -1860,6 +1883,8 @@ class Figure {
       if (this.cursorShown) {
         this.recorder.recordEvent('cursorMove', [figurePoint.x, figurePoint.y]);
         this.setCursor(figurePoint);
+      } else {
+        this.setCursor(figurePoint, false);
       }
     }
   }

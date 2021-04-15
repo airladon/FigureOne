@@ -73,6 +73,8 @@ function addRecorder() {
       recorder.stopRecording();
     } else if (keyCode === 'r') {
       toggleRecord();
+    } else if (keyCode === 'n' && figure.getSlideNavigator()) {
+      figure.getSlideNavigator().nextSlide(true);
     } else if (figure.shortcuts[keyCode] != null) {
       if (figure.recorder.state === 'recording') {
         figure.recorder.recordEvent('exec', [figure.shortcuts[keyCode]]);

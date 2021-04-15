@@ -89,12 +89,12 @@ figure.add({
 The figure is very simple, just a single shape that can be moved and is limited to the boundary of the figure (meaning it will bounce off the walls). Such a simple figure doesn't need an interactive video to describe it, but it is a good demonstrator for the steps required in making an interactive video.
 
 
-Once the figure is setup, we load the audio and interactive video data which includes the seek states, and mouse events. The next section will show how to record this data.
+Once the figure is setup, we load the audio track and video track (which includes the seek states, and mouse events). The next section will show how to record the video track.
 
 ```js
 // Load audio, states and events data
-figure.recorder.loadAudio(new Audio('./audio.mp3'));
-figure.recorder.fetchAndLoad('./ivid.json');
+figure.recorder.loadAudio(new Audio('./audio-track.mp3'));
+figure.recorder.fetchAndLoad('./video-track.json');
 ```
 
 #### Recording
@@ -103,10 +103,9 @@ An interactive video usually includes:
 
 * An interactive figure
 * An audio track
-* Recorded mouse events (like clicks and movements)
-* Triggered events like animations or figure state changes
+* A video track including recorded events and triggered events
 
-In this tutorial we will focus just on the first 3.
+In this tutorial we will focus just on recorded events.
 
 `Recorder` allows recording of mouse and touch events for touching and movement. To do recording both `player.js` and `recorder.js` need to be used and the recorder needs to be visible by making sure `controls.css` has the css class or class properties `comment_out_to_show_recorder` commented out.
 
@@ -129,10 +128,10 @@ To make a recording of the mouse movements then:
 
 In longer recordings, you might want to re-record over sections. Just seek to the time you want to start re-recording, press `record` and when you're done press `pause`.
 
-When you are happy with the recording, press the `save` button. A json file with the mouse events and seek states will be saved, which you can then rename to `ivid.json` and load in the future with the line from `figure.js`:
+When you are happy with the recording, press the `save` button. A json file with the mouse events and seek states will be saved, which you can then rename to `video-track.json` and load in the future with the line from `figure.js`:
 
 ```js
-figure.recorder.fetchAndLoad('./ivid.json');
+figure.recorder.fetchAndLoad('./video-track.json');
 ```
 
 #### Audio
@@ -144,7 +143,7 @@ You can record audio before, during or after the mouse recording - whatever you 
 If you record a track before hand, then you can load it with have it availble during the mouse recording. When you press `record` the audio track will play and you can synchronize the mouse events with the audio. Load the audio recording in `figure.js` with:
 
 ```js
-figure.recorder.loadAudio(new Audio('./audio.mp3'));
+figure.recorder.loadAudio(new Audio('./audio-track.mp3'));
 ```
 
 Alternately, you can record audio while you are recording the mouse movements. An easy way synchronize the audio in this scenario is:
@@ -159,8 +158,29 @@ Alternately, you can record audio while you are recording the mouse movements. A
 If on the other hand you prefer to record the curor first and then the audio, then load the cursor recording in `figure.js` with and play the recording while talking over it.
 
 ```js
-figure.recorder.fetchAndLoad('./ivid.json');
+figure.recorder.fetchAndLoad('./video-track.json');
 ```
+
+### Figure State
+
+Figure state is captured and saved to the json video track to create the seek frames. Note however that figure state only captures some of the figure state. For each element it will capture the properties:
+
+* `animations`,
+* `color`
+* `opacity`
+* `dimColor`
+* `defaultColor`
+* `transform`
+* `isShown`
+* `isMovable`
+* `isTouchable`
+* `state`
+* `move`
+* `subscriptions`
+* `customState`
+
+For example, that means if the element manages a drawingObject whose vertices change over time, then it needs to udpate these when the state is set. Use the `setState` notification from the `subscriptions` property of the element to do this.
+
 
 ### Deploy
 

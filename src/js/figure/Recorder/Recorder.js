@@ -1807,7 +1807,13 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
   getStateForTime(timeIn: number) {
     let stateIndex;
     const time = this.convertTime(timeIn);
-    if (time === 0 && this.states.diffs.length > 0) {
+    if (
+      this.states.diffs.length > 0
+      && (
+        time === 0
+        || time <= this.states.diffs[0][0]
+      )
+    ) {
       stateIndex = 0;
     } else {  // $FlowFixMe
       stateIndex = getPrevIndexForTime(this.states.diffs, time);

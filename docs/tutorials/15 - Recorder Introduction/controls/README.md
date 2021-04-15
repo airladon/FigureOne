@@ -310,6 +310,7 @@ Add several useful keyboard shortcuts for quick control during the recording pro
 * 'r' - toggles recording
 * 'c' - toggles showing the cursor (added by `figure.addCursor()` in `figure.js`)
 * space - stops recording
+* 'n' - navigate to the next slide of slide navigator (if it exists)
 
 ```js
   // Shortcut keys
@@ -321,6 +322,8 @@ Add several useful keyboard shortcuts for quick control during the recording pro
       recorder.stopRecording();
     } else if (keyCode === 'r') {
       toggleRecord();
+    } else if (keyCode === 'n' && figure.getSlideNavigator()) {
+      figure.getSlideNavigator().nextSlide(true);
     } else if (figure.shortcuts[keyCode] != null) {
       if (figure.recorder.state === 'recording') {
         figure.recorder.recordEvent('exec', [figure.shortcuts[keyCode]]);
