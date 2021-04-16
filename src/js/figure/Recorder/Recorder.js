@@ -967,19 +967,37 @@ class Recorder {
     wnd.document.write(toJsonHtml(this.states.references), '<br>');
   }
 
-  showMouse(precision: number = 2) {
+  /**
+   * Code generator that takes mouse events, and generates code to load them
+   * as auto mouse events
+   * @param {string} figureName name of figure used in code ('figure')
+   * @param {number} precision precision to save cursor positions to (2)
+   */
+  genAutoMouseEvents(
+    figureName: string = 'figure',
+    precision: number = 2,
+    encodeMove: boolean = true,
+  ) {
+    let cursorData;
+    if (encodeMove) {
+      cursorData = `${figureName}.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('cursorMove', precision, precision)}, 'cursor', 2, 2);`;
+    } else {
+      cursorData = `${figureName}.recorder.loadEventData('_autoCursorMove', [
+${this.showEvent('cursorMove', precision, 2)}
+], false, 2, 2);`;
+    }
     return `
-figure.recorder.loadEventData('_autoCursor', [
-  ${this.showEvent('cursor', precision)},
+${figureName}.recorder.loadEventData('_autoCursor', [
+${this.showEvent('cursor', precision, 2)},
 ]);
-figure.recorder.loadEventData('_autoTouch', [
-  ${this.showEvent('touch', precision)},
+${figureName}.recorder.loadEventData('_autoTouch', [
+${this.showEvent('touch', precision, 2)},
 ]);
-figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('cursorMove', precision, precision)}, 'cursor', 2, 2);
+${cursorData}
     `;
   }
 
-  showEvent(eventName: string, precision: number = 2) {
+  showEvent(eventName: string, precision: number = 2, space: number = 0) {
     const out = [];
     this.events[eventName].list.forEach((event) => {
       const [time, payload] = event;
@@ -998,7 +1016,7 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
       } else {
         payloadStr = payload;
       }
-      out.push(`[${round(time, 4)}, [${payloadStr}]]`);
+      out.push(`${Array(space + 1).join(' ')}[${round(time, 4)}, [${payloadStr}]]`);
     });
     return out.join(',\n');
   }
@@ -1670,6 +1688,9 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
   }
 
   finishPlaying() {
+    if (this.state === 'recording') {
+      return false;
+    }
     if (this.areEventsPlaying()) {
       return false;
     }
@@ -1734,7 +1755,7 @@ figure.recorder.loadEventData('_autoCursorMove', ${this.encodeCursorEvent('curso
     });
 
     const pause = () => {
-      console.log('pause')
+      // console.log('pause')
       this.state = 'idle';
       this.subscriptions.publish('playbackStopped');
       // this.figure.stop();
