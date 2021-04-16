@@ -1300,6 +1300,7 @@ ${cursorData}
     this.lastSeekTime = this.currentTime;
     this.figure.stop('freeze');
     this.subscriptions.publish('seek', timeIn);
+    // this.subscriptions.publish('timeUpdate', time);
   }
 
   setToTime(timeIn: number, force: boolean = false) {
@@ -1522,7 +1523,7 @@ ${cursorData}
    */
   startPlayback(
     fromTimeIn: number = this.currentTime || 0,
-    allowPauseResume: boolean = true,
+    allowPauseResume: boolean = false,
     events: ?Array<string> = [],
   ) {
     this.lastSeekTime = null;
@@ -1632,8 +1633,11 @@ ${cursorData}
     return onResume;
   }
 
+  /**
+   * Resume playback if paused.
+   */
   resumePlayback() {
-    this.startPlayback(this.currentTime, false);
+    this.startPlayback(this.currentTime, true);
   }
 
   startAudioPlayback(fromTime: number) {
@@ -1773,6 +1777,7 @@ ${cursorData}
   }
 
   finishPlaying() {
+    console.log('asdf')
     if (this.state === 'recording') {
       return false;
     }

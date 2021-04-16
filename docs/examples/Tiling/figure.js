@@ -50,6 +50,7 @@ function makePolygon(
     ],
     mods: {
       scenarios: {
+        start: { position: [resetPosition[0], 0], rotation: 0 },
         reset: { position: resetPosition, rotation: 0 },
         solution: { position: solutionPosition, rotation: solutionRotation },
       },
@@ -121,10 +122,21 @@ reset.subscriptions.add('onClick', () => {
     .start();
 });
 
+// Animation to show solution button
+figure.fnMap.add('showSolutionButton', () => {
+  solution.show();
+  solution.animations.new()
+    .dissolveIn(0.8)
+    .start();
+});
+
+figure.shortcuts = { 1: 'showSolutionButton' };
+
 // First positions
-figure.setScenarios('reset');
+figure.setScenarios('start');
+solution.hide();
 
 
 // Load audio, states and events data
-figure.recorder.loadAudioTrack(new Audio('./audio.mp3'));
-figure.recorder.loadVideoTrack('./ivid_data.json');
+figure.recorder.loadAudioTrack(new Audio('./audio-track.mp3'));
+figure.recorder.loadVideoTrack('./video-track.json');

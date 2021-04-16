@@ -2,7 +2,7 @@
 
 Create an interactive video from recorded SlideNavigator progressions.
 
-As loading local images into a html can be prevented by web browser security settings, this example needs to be loaded from a web server.
+As loading local files into a html can be prevented by web browser security settings, this example needs to be loaded from a web server.
 
 You can create a local web server and host the tutorial by first cloning the repository:
 

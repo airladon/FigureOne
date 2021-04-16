@@ -69,6 +69,7 @@ function addPlayer() {
   // On 'timeUpdate' and 'duration' notifications from recorder, update the
   // player seek bar and time label
   recorder.subscriptions.add('timeUpdate', t => setTime(t[0], true));
+  recorder.subscriptions.add('seek', t => setTime(t[0], false));
   recorder.subscriptions.add('durationUpdated', () => setTime());
 
   /*

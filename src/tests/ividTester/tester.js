@@ -41,9 +41,12 @@ async function tester(
   const diffs = combinedData.states.minified[diffsKey];
   const stateTimes = diffs.map(d => d[0]);
 
-  const slideEventKey = combinedData.events.map.map.slide;
-  const slides = combinedData.events.minified[slideEventKey];
-  const slideTimes = slides.map(s => s[0] + 1.1);
+  let slideTimes = [];
+  if (combinedData.events.map.map.slide != null) {
+    const slideEventKey = combinedData.events.map.map.slide;
+    const slides = combinedData.events.minified[slideEventKey];
+    slideTimes = slides.map(s => s[0] + 1.1);
+  }
   let fromTimes = fromTimesIn;
   if (fromTimes.length === 0) {
     fromTimes = slideTimes;
@@ -63,8 +66,13 @@ async function tester(
     });
   });
 
+  const path = dataFile.split('/').slice(0, -1).join('/');
+  fs.copyFileSync(dataFile, `${path}/tests/video-track.json`);
+  fs.copyFileSync(dataFile, `${path}/tests/audio-track.mp3`);
+
   // Final Tests
-  const tests = [[0], ...stateTimes.map(t => [t])];
+  // const tests = [[0], ...stateTimes.map(t => [t])];
+  const tests = [];
   jest.setTimeout(120000);
   describe(__title, () => {
     // Load page, set manual frames, remove audio, load video data file and play
@@ -74,10 +82,15 @@ async function tester(
       await page.evaluate((url) => {
         figure.globalAnimation.manualOneFrameOnly = false;
         figure.globalAnimation.setManualFrames();
-        figure.recorder.audio = null;
-        figure.recorder.loadVideoTrack(url, () => figure.recorder.startPlayback());
+        // figure.recorder.audio = null;
+        figure.recorder.startPlayback();
+        // figure.recorder.loadVideoTrack(url, () => figure.recorder.startPlayback());
         document.getElementById('f1_player__play_pause').style.visibility = 'hidden';
       }, [dataFileUrl]);
+    });
+    afterAll(() => {
+      fs.rmFileSync(dataFile, `${path}/tests/video-track.json`);
+      fs.rmFileSync(dataFile, `${path}/tests/audio-track.mp3`);
     });
     test.each(tests)('Play: %s',
       async (time) => {
