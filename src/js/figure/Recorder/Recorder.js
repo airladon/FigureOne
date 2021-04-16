@@ -180,6 +180,11 @@ function getPrevIndexForTime(
  *   current state - on resuming playback, the figure will revert to its paused
  *   state
  *
+ * For performance during recording, a separate javascript worker is used to
+ * parallelize state encoding. Therefore, in addition to the FigureOne library,
+ * a FigureOne worker file will need to be loaded. See the tutorials for
+ * examples on how this is done.
+ *
  * For tutorials and examples of how to use Recorder, see
  * - <a href="https://github.com/airladon/FigureOne/docs/tutorials/Tutorial%2015%20-%20-Recorder%20Introduction/index.html">Tutorial 15 - Recorder Introduction</a>
 * [Tutorial 16 - Recording Manual Events](https://github.com/airladon/FigureOne/docs/tutorials/Tutorial%2016%20-%20-Recording%20Manual%20Events/index.html)
