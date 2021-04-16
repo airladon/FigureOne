@@ -25,7 +25,7 @@ function sleep(ms) {
 }
 
 async function tester(
-  htmlFile, dataFileUrl, dataFile,
+  htmlFile, dataFileUrl, dataFile, stateResolution = 1,
   fromTimesIn = [], toTimesIn = [], threshold = 0, intermitentTime = 0,
 ) {
   require('./start.js');
@@ -39,7 +39,7 @@ async function tester(
   const combinedData = JSON.parse(fs.readFileSync(dataFile));
   const diffsKey = combinedData.states.map.map.diffs;
   const diffs = combinedData.states.minified[diffsKey];
-  const stateTimes = diffs.map(d => d[0]);
+  const stateTimes = diffs.filter((d, i) => i % stateResolution === 0).map(d => d[0]);
 
   let slideTimes = [];
   if (combinedData.events.map.map.slide != null) {
@@ -71,8 +71,8 @@ async function tester(
   fs.copyFileSync(dataFile, `${path}/tests/audio-track.mp3`);
 
   // Final Tests
-  // const tests = [[0], ...stateTimes.map(t => [t])];
-  const tests = [];
+  const tests = [[0], ...stateTimes.map(t => [t])];
+
   jest.setTimeout(120000);
   describe(__title, () => {
     // Load page, set manual frames, remove audio, load video data file and play
