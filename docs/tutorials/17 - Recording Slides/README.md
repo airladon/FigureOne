@@ -100,8 +100,8 @@ nav.loadSlides([
 Finally we will load the audio and video tracks (we will only load the video track if it is available - while recording it, you should comment out this line).
 
 ```js
-figure.recorder.loadAudio(new Audio('./audio-track.mp3'));
-figure.recorder.fetchAndLoad('./video-track.json');
+figure.recorder.loadAudioTrack(new Audio('./audio-track.mp3'));
+figure.recorder.loadVideoTrack('./video-track.json');
 ```
 
 ### Reocord Video

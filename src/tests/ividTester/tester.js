@@ -75,7 +75,7 @@ async function tester(
         figure.globalAnimation.manualOneFrameOnly = false;
         figure.globalAnimation.setManualFrames();
         figure.recorder.audio = null;
-        figure.recorder.fetchAndLoad(url, () => figure.recorder.startPlayback());
+        figure.recorder.loadVideoTrack(url, () => figure.recorder.startPlayback());
         document.getElementById('f1_player__play_pause').style.visibility = 'hidden';
       }, [dataFileUrl]);
     });

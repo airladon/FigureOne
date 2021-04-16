@@ -126,5 +126,5 @@ figure.setScenarios('reset');
 
 
 // Load audio, states and events data
-figure.recorder.loadAudio(new Audio('./audio.mp3'));
-figure.recorder.fetchAndLoad('./ivid_data.json');
+figure.recorder.loadAudioTrack(new Audio('./audio.mp3'));
+figure.recorder.loadVideoTrack('./ivid_data.json');

@@ -167,8 +167,51 @@ function getPrevIndexForTime(
 // }
 
 /**
- * The recorder class provides functionality to record and playback events in
- * FigureOne.
+ * The Recorder class provides functionality to record and playback video like
+ * experiences. It can:
+ *
+ * - record and playback events, such as function calls, mouse movements, mouse
+ *   clicks and slide navigation - these can either be recorded by a user, or
+ *   programmed for specific times
+ * - overlay an audio track on playback
+ * - record entire figure state at regular intervals (like 1 second) as seek
+ *   frames for the video
+ * - allow a user to pause video at any time and interact with the figure in its
+ *   current state - on resuming playback, the figure will revert to its paused
+ *   state
+ *
+ * For tutorials and examples of how to use Recorder, see
+ * - <a href="https://github.com/airladon/FigureOne/docs/tutorials/Tutorial%2015%20-%20-Recorder%20Introduction/index.html">Tutorial 15 - Recorder Introduction</a>
+* [Tutorial 16 - Recording Manual Events](https://github.com/airladon/FigureOne/docs/tutorials/Tutorial%2016%20-%20-Recording%20Manual%20Events/index.html)
+* [Tutorial 17 - Recording Slides](https://github.com/airladon/FigureOne/docs/tutorials/Tutorial%2017%20-%20-Recording%20Slides/index.html)
+* [Tutorial 18 - Recording Planned Events](https://github.com/airladon/FigureOne/docs/tutorials/Tutorial%2018%20-%20-Recording%20Planned%20Events/index.html)
+*
+ * Notifications - The subscription manager property `subscriptions` will
+ * publish the following events:
+ * - `timeUpdate`: updated at period defined in property `timeUpdates`
+ * - `durationUpdated`: updated whenever audio or video are loaded, or when
+ *    recording goes beyond the current duration
+ * - `audioLoaded`
+ * - `videoLoaded`
+ * - `recordingStarted`
+ * - `recordingStopped`
+ * - `preparingToPlay`
+ * - `playbackStarted`
+ * - `preparingToPause`
+ * - `playbackStopped`
+ * - `seek`
+ *
+ * @class
+ *
+ * @property {'recording' | 'playing' | 'idle' | 'preparingToPlay' | 'preparingToPause'} state
+ * @property {boolean} isAudioPlaying
+ * @property {number} duration in seconds
+ * @property {number} stateTimeStep in seconds - change this to change the
+ * duration between recorded seek frames
+ * @property {number} timeUpdates in seconds - how often to publish the
+ * 'timeUpdate' notification
+ * @property {SubscriptionManager} subscriptions - use to subscribe to
+ * notifications
  */
 class Recorder {
   states: ObjectTracker;
@@ -283,6 +326,10 @@ class Recorder {
     return round((this.timeStamp() - this.videoToNowDelta) / 1000, 8);
   }
 
+  /**
+   * Current time in seconds
+   * @return {number} seconds
+   */
   getCurrentTime() {
     if (this.state !== 'idle') {
       return this.now();
@@ -376,7 +423,7 @@ class Recorder {
     this.referenceIndex = 0;
   }
 
-  loadAudio(audio: HTMLAudioElement) {
+  loadAudioTrack(audio: HTMLAudioElement) {
     this.audio = audio;
     this.audio.onloadedmetadata = () => {
       this.duration = this.calcDuration();
@@ -422,6 +469,7 @@ class Recorder {
   ) {
     this.loadStates(combined.states, true, true);
     this.loadEvents(combined.events, true);
+    this.subscriptions.publish('videoLoaded');
   }
 
   encodeEvents(
@@ -531,6 +579,12 @@ class Recorder {
   // Recording
   // ////////////////////////////////////
   // ////////////////////////////////////
+  /**
+   * Start Recording
+   * @param {number} fromTime when to start recording from in seconds (0)
+   * @param {Array<string>} whilePlaying events to play while recording ([])
+   * @param {boolean} includeStates record states as well as events (`true`)
+   */
   startRecording(
     fromTime: number = 0,
     whilePlaying: Array<string> = [],
@@ -581,7 +635,7 @@ class Recorder {
     // this.initializePlayback(fromTime);
     this.startEventsPlayback(fromTime);
     const audioStarted = this.startAudioPlayback(fromTime);
-    this.subscriptions.publish('startRecording');
+    this.subscriptions.publish('recordingStarted');
     this.startRecordingTime = fromTime;
     this.startTimeUpdates();
     if (!audioStarted) {
@@ -792,6 +846,9 @@ class Recorder {
     this.timeUpdatesTimeoutID = null;
   }
 
+  /**
+   * Stop Recording
+   */
   stopRecording() {
     // this.currentTime = this.getCurrentTime();
     this.setCurrentTime(this.getCurrentTime());
@@ -807,7 +864,7 @@ class Recorder {
       this.isAudioPlaying = false;
     }
     this.lastSeekTime = null;
-    this.subscriptions.publish('stopRecording');
+    this.subscriptions.publish('recordingStopped');
   }
 
   stopStatesRecording() {
@@ -848,6 +905,7 @@ class Recorder {
     this.lastRecordTimeCount += 1;
     if (now > this.duration && this.figure.globalAnimation.manual === false) {
       this.duration = now;
+      this.subscriptions.publish('durationUpdated', this.duration);
     }
   }
 
@@ -903,6 +961,7 @@ class Recorder {
     this.lastRecordTimeCount += 1;
     if (time > this.duration && this.figure.globalAnimation.manual === false) {
       this.duration = time;
+      this.subscriptions.publish('durationUpdated', this.duration);
     }
   }
 
@@ -929,6 +988,9 @@ class Recorder {
     }, round(time * 1000, 10), 'state', true);
   }
 
+  /**
+   * Save events and states to video-track json file
+   */
   save() {
     const dateStr = new Date().toISOString().split('.')[0].split('-').join('_');
     // const location = (window.location.pathname).replace('/', '_');
@@ -1210,7 +1272,10 @@ ${cursorData}
     return t;
   }
 
-
+  /**
+   * Seek to time
+   * @param {number} timeIn in seconds
+   */
   seek(timeIn: number) {
     let time = this.convertTime(timeIn);
     if (time < 0) {
@@ -1438,9 +1503,17 @@ ${cursorData}
   // Playback
   // ////////////////////////////////////
   // ////////////////////////////////////
+  /**
+   * Start Playback
+   *
+   * @param {number} fromTimeIn ib seconds (current time)
+   * @param {boolean} allowPauseResume `true` to allow resuming from pause if a
+   * pause state exists
+   * @param {Array<string>} events list of events to play (all events)
+   */
   startPlayback(
     fromTimeIn: number = this.currentTime || 0,
-    forceStart: boolean = true,
+    allowPauseResume: boolean = true,
     events: ?Array<string> = [],
   ) {
     this.lastSeekTime = null;
@@ -1452,7 +1525,7 @@ ${cursorData}
 
     let stateToStartFrom = this.getStateForTime(fromTime);
     if (
-      !forceStart
+      allowPauseResume
       && this.pauseState != null
     ) {
       stateToStartFrom = this.pauseState;
@@ -1490,6 +1563,9 @@ ${cursorData}
     }
   }
 
+  /**
+   * Toggle playback (if not recording)
+   */
   togglePlayback() {
     if (this.state === 'recording') {
       return;
@@ -1746,6 +1822,11 @@ ${cursorData}
   //                    as by completing animations they will naturally clear
   // False     True     Pulse freeze and nextFrame nothing will happen
   // False     False    Pulse freeze and nextFrame will continue
+  /**
+   * Pause playback
+   * @param {'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete'} how
+   * how any animations currently playing should be stopped
+   */
   pausePlayback(how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = this.settings.pause) {
     // this.currentTime = this.getCurrentTime();
     this.setCurrentTime(this.getCurrentTime());
@@ -1795,7 +1876,15 @@ ${cursorData}
     event.playbackAction(event.list[index][1], event.list[index][0]);
   }
 
-  fetchAndLoad(path: string, callback: () => void = () => {}) {
+  /**
+   * Fetch and load a video track.
+   *
+   * When loading is finished, the notification 'videoLoaded' will be published
+   *
+   * @param {string} path path to load video track from
+   * @param {function(): void} callback function to execute when loaded
+   */
+  loadVideoTrack(path: string, callback: () => void = () => {}) {
     fetch(path, { mode: 'no-cors' })
       .then(response => response.json())
       .then((json) => {

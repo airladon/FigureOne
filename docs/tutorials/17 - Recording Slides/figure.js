@@ -51,5 +51,5 @@ nav.loadSlides([
 ]);
 
 
-figure.recorder.loadAudio(new Audio('./audio-track.mp3'));
-figure.recorder.fetchAndLoad('./video-track.json');
+figure.recorder.loadAudioTrack(new Audio('./audio-track.mp3'));
+figure.recorder.loadVideoTrack('./video-track.json');

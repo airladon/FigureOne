@@ -93,3 +93,13 @@ figure.recorder.loadEventData('_autoCursorMove', [2.24,-0.36,-0.66,3,1,1,3,1,1,1
 This can be copy and pasted straight into a javascript file.
 
 Note, the `_autoCursorMove` event data is encoded by default to make it more brief and therefore not easy to read. If you want the raw data (particularly useful if you want to modify the values), then set the `encodeMove` input parameter to `false`.
+
+### Record States
+
+In long videos, most events and slides will be programmed. However, to deploy a video-track file, the recorder still needs to make all the seek states.
+
+As above and in previous tutorials, this can be done by pressing the `Record` button, letting the video play through, and then stopping the recording and saving the video track.
+
+However, when debugging a long video it quickly becomes painful when making small change, then having to re-record all states.
+
+In this case, use the `Record States` button in the `recorder.js` UI. This will much more quickly progress through the video recording states, and so this is only useful if no manual recording is needed.

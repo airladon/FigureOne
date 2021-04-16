@@ -93,8 +93,8 @@ Once the figure is setup, we load the audio track and video track (which include
 
 ```js
 // Load audio, states and events data
-figure.recorder.loadAudio(new Audio('./audio-track.mp3'));
-figure.recorder.fetchAndLoad('./video-track.json');
+figure.recorder.loadAudioTrack(new Audio('./audio-track.mp3'));
+figure.recorder.loadVideoTrack('./video-track.json');
 ```
 
 #### Recording
@@ -131,7 +131,7 @@ In longer recordings, you might want to re-record over sections. Just seek to th
 When you are happy with the recording, press the `save` button. A json file with the mouse events and seek states will be saved, which you can then rename to `video-track.json` and load in the future with the line from `figure.js`:
 
 ```js
-figure.recorder.fetchAndLoad('./video-track.json');
+figure.recorder.loadVideoTrack('./video-track.json');
 ```
 
 #### Audio
@@ -143,7 +143,7 @@ You can record audio before, during or after the mouse recording - whatever you 
 If you record a track before hand, then you can load it with have it availble during the mouse recording. When you press `record` the audio track will play and you can synchronize the mouse events with the audio. Load the audio recording in `figure.js` with:
 
 ```js
-figure.recorder.loadAudio(new Audio('./audio-track.mp3'));
+figure.recorder.loadAudioTrack(new Audio('./audio-track.mp3'));
 ```
 
 Alternately, you can record audio while you are recording the mouse movements. An easy way synchronize the audio in this scenario is:
@@ -158,7 +158,7 @@ Alternately, you can record audio while you are recording the mouse movements. A
 If on the other hand you prefer to record the curor first and then the audio, then load the cursor recording in `figure.js` with and play the recording while talking over it.
 
 ```js
-figure.recorder.fetchAndLoad('./video-track.json');
+figure.recorder.loadVideoTrack('./video-track.json');
 ```
 
 ### Figure State

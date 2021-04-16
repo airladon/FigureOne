@@ -261,8 +261,8 @@ figure.setScenarios('reset');
 Once the figure is setup, we can load the audio and interactive video data which includes the seek states, and mouse events.
 ```js
 // Load audio, states and events data
-figure.recorder.loadAudio(new Audio('./audio.mp3'));
-figure.recorder.fetchAndLoad('./ivid_data.json');
+figure.recorder.loadAudioTrack(new Audio('./audio.mp3'));
+figure.recorder.loadVideoTrack('./ivid_data.json');
 ```
 
 In the next section, we will see how to record the interactive video data.

@@ -126,7 +126,7 @@ function setupRecorder() {
   }
   recorder.subscriptions.add('playbackStopped', playbackStopped.bind(this));
   recorder.subscriptions.add('playbackStarted', playbackStarted.bind(this));
-  recorder.subscriptions.add('startRecording', recordingStarted.bind(this));
+  recorder.subscriptions.add('recordingStarted', recordingStarted.bind(this));
   recorder.subscriptions.add('stopRecording', recordingStopped.bind(this));
 
   /*
