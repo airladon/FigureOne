@@ -137,8 +137,10 @@ toc:
   - TypeSlideStateCallback
   - TypeSlideTransitionCallback
   - OBJ_EquationDefaults
-  - name: Recorder
+  - name: Interactive Video
     file: ./docs/api/tutorials/recorder/recorder.md
+  - Recorder
+  - FunctionMap
   - name: 2D Geometry Tools
   - minAngleDiff
   - getTriangleCenter

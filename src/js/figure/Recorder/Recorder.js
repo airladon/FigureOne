@@ -186,11 +186,15 @@ function getPrevIndexForTime(
  * examples on how this is done.
  *
  * For tutorials and examples of how to use Recorder, see
+ *
  * - <a href="https://github.com/airladon/FigureOne/docs/tutorials/Tutorial%2015%20-%20-Recorder%20Introduction/index.html">Tutorial 15 - Recorder Introduction</a>
-* [Tutorial 16 - Recording Manual Events](https://github.com/airladon/FigureOne/docs/tutorials/Tutorial%2016%20-%20-Recording%20Manual%20Events/index.html)
-* [Tutorial 17 - Recording Slides](https://github.com/airladon/FigureOne/docs/tutorials/Tutorial%2017%20-%20-Recording%20Slides/index.html)
-* [Tutorial 18 - Recording Planned Events](https://github.com/airladon/FigureOne/docs/tutorials/Tutorial%2018%20-%20-Recording%20Planned%20Events/index.html)
-*
+ * - [Tutorial 16 - Recording Manual Events](https://github.com/airladon/FigureOne/docs/tutorials/Tutorial%2016%20-%20-Recording%20Manual%20Events/index.html)
+ * - [Tutorial 17 - Recording Slides](https://github.com/airladon/FigureOne/docs/tutorials/Tutorial%2017%20-%20-Recording%20Slides/index.html)
+ * - [Tutorial 18 - Recording Planned Events](https://github.com/airladon/FigureOne/docs/tutorials/Tutorial%2018%20-%20-Recording%20Planned%20Events/index.html)
+ * - [Trig 1 - Trig Functions](https://github.com/airladon/FigureOne/docs/examples/Trig%201%20-%20Trig%20Functions/index.html)
+ * - [Trig 2 - Names](https://github.com/airladon/FigureOne/docs/examples/Trig%202%20-%20Names/index.html)
+ * - [Trig 3 - Relationships](https://github.com/airladon/FigureOne/docs/examples/Trig%203%20-%20Relationships/index.html)
+ *
  * Notifications - The subscription manager property `subscriptions` will
  * publish the following events:
  * - `timeUpdate`: updated at period defined in property `timeUpdates`

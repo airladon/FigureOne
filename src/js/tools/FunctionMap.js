@@ -109,6 +109,11 @@ class GlobalFunctionMap extends GeneralFunctionMap {
  * @property {FunctionMap} global global function map
  * @property {Object} map local function map where keys are unique identifiers
  * and values are the associated functions
+ *
+ * @example
+ * // Add a console function to a FunctionMap and execute it with a parameter
+ * figure.fnMap.add('toConsole', s => console.log(s));
+ * figure.fnMap.exec('toConsole', 'hello');
  */
 class FunctionMap extends GeneralFunctionMap {
   map: { [id: string]: {

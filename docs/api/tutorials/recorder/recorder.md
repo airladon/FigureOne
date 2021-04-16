@@ -8,6 +8,8 @@ The evolution of this is interactive video, enabled by the <a href="#recorder">R
 * allow a user to pause video at any time and interact with the figure in its current state - on resuming playback, the figure will revert to its paused state
 
 As such, the animation in FigureOne can be overlaid with audio to create a video like experience. Except in this case, content on the screen can be just as rich and interactive as that created normally with FigureOne.
+
+![](./tutorials/recorder/ivid.gif)
 #### State, Seeking and Pausing
 
 Video seeking and pausing is enabled by recording and setting figure state.
@@ -103,18 +105,3 @@ FigureOne uses WebGL for hardware accelarated graphics performance and so comple
 FigureOne is a javascript library that can be used in the browser, or in app frameworks that support javascript modules.
 
 On iOS devices, Safari allows traditional video content to fully cover the screen (without menu bars) in landscape mode. This isn't available for other web content, and so for FigureOne to emulate a video experience in the browser then either the video height needs to be reduced, or the top portion of the video should have limited interactivity (as touching the top of the screen in landscape can show the menus).
-
-#### More Information
-
-Four tutorials cover how record videos with <a href="#recorder">Recorder</a>, and considerations when doing so. These are useful to go through to understand how to create interactive videos.
-
-* [Tutorial 15 - Recorder Introduction](https://github.com/airladon/FigureOne/docs/tutorials/Tutorial%2015%20-%20-Recorder%20Introduction/index.html)
-* [Tutorial 16 - Recording Manual Events](https://github.com/airladon/FigureOne/docs/tutorials/Tutorial%2016%20-%20-Recording%20Manual%20Events/index.html)
-* [Tutorial 17 - Recording Slides](https://github.com/airladon/FigureOne/docs/tutorials/Tutorial%2017%20-%20-Recording%20Slides/index.html)
-* [Tutorial 18 - Recording Planned Events](https://github.com/airladon/FigureOne/docs/tutorials/Tutorial%2018%20-%20-Recording%20Planned%20Events/index.html)
-
-Several examples go further to highlight some of the possibilities:
-
-* [Trig 1 - Trig Functions](https://github.com/airladon/FigureOne/docs/examples/Trig%201%20-%20Trig%20Functions/index.html)
-* [Trig 2 - Names](https://github.com/airladon/FigureOne/docs/examples/Trig%202%20-%20Names/index.html)
-* [Trig 3 - Relationships](https://github.com/airladon/FigureOne/docs/examples/Trig%203%20-%20Relationships/index.html)
