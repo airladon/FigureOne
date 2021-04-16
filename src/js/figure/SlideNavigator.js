@@ -585,7 +585,7 @@ export default class SlideNavigator {
     this.collection.recorder.addEventType('slide', processSlide, true);
     const processAutoSlide = (payload) => {
       const [slideNo] = payload;
-      // this.fromAutoSlide = true;
+      this.fromAutoSlide = true;
       if (this.currentSlideIndex === slideNo - 1) {
         this.nextSlide(true);
       } else if (slideNo !== 0) {
@@ -1200,7 +1200,7 @@ export default class SlideNavigator {
    * transition will instantly complete, setState and leaveStates called and the
    * next slide will be progressed to.
    */
-  nextSlide(ignoreTransition: boolean = false) {
+  nextSlide(ignoreTransition: boolean = false, recordSlide: boolean = true) {
     const nextSlideIndex = (this.currentSlideIndex + 1) % this.slides.length;
     if (this.inTransition) {
       this.inTransition = false;
@@ -1209,7 +1209,7 @@ export default class SlideNavigator {
         return;
       }
     }
-    this.goToSlide(nextSlideIndex);
+    this.goToSlide(nextSlideIndex, null, recordSlide);
     this.collection.animateNextFrame();
   }
 

@@ -82,15 +82,15 @@ async function tester(
       await page.evaluate((url) => {
         figure.globalAnimation.manualOneFrameOnly = false;
         figure.globalAnimation.setManualFrames();
-        // figure.recorder.audio = null;
         figure.recorder.startPlayback();
+        // figure.recorder.audio = null;
         // figure.recorder.loadVideoTrack(url, () => figure.recorder.startPlayback());
         document.getElementById('f1_player__play_pause').style.visibility = 'hidden';
       }, [dataFileUrl]);
     });
     afterAll(() => {
-      fs.rmFileSync(dataFile, `${path}/tests/video-track.json`);
-      fs.rmFileSync(dataFile, `${path}/tests/audio-track.mp3`);
+      fs.rmSync(dataFile, `${path}/tests/video-track.json`);
+      fs.rmSync(dataFile, `${path}/tests/audio-track.mp3`);
     });
     test.each(tests)('Play: %s',
       async (time) => {

@@ -877,8 +877,8 @@ class Recorder {
   }
 
   stopStatesRecording() {
-    this.figure.globalAnimation.endManualFrames();
     this.stopRecording();
+    this.figure.globalAnimation.endManualFrames();
   }
 
   addEventType(
@@ -895,6 +895,7 @@ class Recorder {
   }
 
   recordState(state: Object, time: number = this.getCurrentTime()) {
+    // console.log('record', time)
     const now = time;
     if (this.lastRecordTime == null || now > this.lastRecordTime) {
       this.lastRecordTime = now;
@@ -1329,9 +1330,9 @@ ${cursorData}
       if (this.useAutoEvents) {
         return true;
       }
-      if (eventName.startsWith('_auto')) {
-        return false;
-      }
+      // if (eventName.startsWith('_auto')) {
+      //   return false;
+      // }
       return true;
     });
     eventNames.forEach((eventName) => {
@@ -1365,7 +1366,6 @@ ${cursorData}
       }
     });
     // timer.stamp('m3');
-
     const sortTimes = arrayToSort => arrayToSort.sort((a, b) => {
       if (a[2] < b[2] || (a[2] === b[2] && a[3] < b[3])) {
         return -1;
@@ -1503,7 +1503,8 @@ ${cursorData}
     } else if (this.useAutoEvents) {
       events = ['_autoExec', '_autoCursor', '_autoSlide', '_autoCursorMove', '_autoTouch'];
     } else {
-      events = Object.keys(this.events).filter(eventName => !eventName.startsWith('_auto'));
+      // events = Object.keys(this.events).filter(eventName => !eventName.startsWith('_auto'));
+      events = Object.keys(this.events);
     }
     return events;
   }
@@ -1745,6 +1746,7 @@ ${cursorData}
       return;
     }
 
+    // console.log('play event', eventName);
     this.setEvent(eventName, index);
     this.figure.animateNextFrame();
     if (index + 1 === this.events[eventName].list.length) {
@@ -1777,7 +1779,6 @@ ${cursorData}
   }
 
   finishPlaying() {
-    console.log('asdf')
     if (this.state === 'recording') {
       return false;
     }

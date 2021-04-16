@@ -33,8 +33,8 @@ import FigureCollections from './FigureCollections/FigureCollections';
 import AnimationManager from './Animation/AnimationManager';
 import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 import type { TypeColor, OBJ_Font } from '../tools/types';
-import SlideNavigator from './SlideNavigator';
-import type { OBJ_SlideNavigator } from './SlideNavigator';
+// import SlideNavigator from './SlideNavigator';
+// import type { OBJ_SlideNavigator } from './SlideNavigator';
 
 const FIGURE1DEBUG = false;
 
@@ -552,12 +552,16 @@ class Figure {
    * Add cursor for recording interactive videos.
    * @return {FigureElement} cursor element
    */
-  addCursor() {
-    const [cursor] = this.add({
-      name: '_cursor_',
-      method: 'collections.cursor',
-      mods: { isShown: false },
-    });
+  addCursor(options) {
+    const [cursor] = this.add(joinObjects(
+      {},
+      {
+        name: '_cursor_',
+        method: 'collections.cursor',
+        mods: { isShown: false },
+      },
+      { options },
+    ));
     this.cursorElementName = '_cursor_';
     return cursor;
   }
@@ -726,6 +730,16 @@ class Figure {
       }
     };
 
+    const autoExec = (payload) => {
+      const [functionName, args] = payload;
+      // const element = this.getElement(elementPath);
+      // element.fnMap.exec(functionName, args);
+      this.fnMap.exec(functionName, args);
+      // if (this.recorder.state === 'recording') {
+      //   this.recorder.recordEvent('exec', payload);
+      // }
+    };
+
     this.recorder.addEventType('cursor', onCursor);
     this.recorder.addEventType('_autoCursor', onCursorAuto);
     this.recorder.addEventType('cursorMove', onCursorMove);
@@ -741,7 +755,7 @@ class Figure {
     // this.recorder.addEventType('elementTextClick', elementClick);
     // this.recorder.addEventType('eqnNavClick', eqnNavClick);
     this.recorder.addEventType('exec', exec);
-    this.recorder.addEventType('_autoExec', exec);
+    this.recorder.addEventType('_autoExec', autoExec);
   }
 
   setDefaultLineWidth(userInputLineWidth: number | null) {
