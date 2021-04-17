@@ -866,7 +866,9 @@ export default class SlideNavigator {
     this.subscriptions.publish('steady');
   }
 
-  transitionDone(force: 'freeze' | 'complete' | null = 'complete') {
+  // Animations pass cancelled and force. As we need the force information, we
+  // need to define cancelled even though we won't use it
+  transitionDone(cancelled: boolean, force: 'freeze' | 'complete' | null = 'complete') {
     if (force !== 'freeze') {
       this.setSteadyState(this.from);
       this.inTransition = false;

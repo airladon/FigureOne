@@ -154,6 +154,29 @@ function getPrevIndexForTime(
   return getIndexOfLatestTime(recordedData, prevIndex);
 }
 
+function getMostRecentForTime(
+  recordedData: Array<TypeEvents | TypeStateDiffs>,
+  time: number,
+) {
+  let latestTime = null;
+  let latestEventOrState = null;
+  recordedData.forEach((data) => {
+    // console.log(data)
+    const index = getPrevIndexForTime(data, time);
+    if (index < 0) {
+      return;
+    }
+    const t = data[index][0];
+    if (latestTime == null) {
+      latestTime = t;
+      latestEventOrState = data[index];
+    } else if (t > latestTime) {
+      latestTime = t;
+      latestEventOrState = data[index];
+    }
+  });
+  return latestEventOrState;
+}
 // function getTimeToIndex(
 //   recordedData: TypeEvents | TypeStateDiffs,
 //   eventIndex: number,
@@ -256,7 +279,7 @@ class Recorder {
   };
 
   recordingStates: boolean;
-  useAutoEvents: boolean;
+  // useAutoEvents: boolean;
 
   pauseState: ?Object;
   startRecordingTime: number;
@@ -318,7 +341,7 @@ class Recorder {
       pause: 'freeze',
       play: 'instant',
     };
-    this.useAutoEvents = false;
+    // this.useAutoEvents = false;
     this.timeUpdates = 100; // ms
   }
 
@@ -895,7 +918,6 @@ class Recorder {
   }
 
   recordState(state: Object, time: number = this.getCurrentTime()) {
-    // console.log('record', time)
     const now = time;
     if (this.lastRecordTime == null || now > this.lastRecordTime) {
       this.lastRecordTime = now;
@@ -1298,9 +1320,12 @@ ${cursorData}
     }
     this.pauseState = null;
     this.setToTime(time);
+    // console.log(this.figure.elements.elements.eqn.isShown)
     this.lastSeekTime = this.currentTime;
     this.figure.stop('freeze');
+    // console.log('here', this.figure.elements.elements.eqn.isShown)
     this.subscriptions.publish('seek', timeIn);
+    // console.log(this.figure.elements.elements.eqn.isShown)
     // this.subscriptions.publish('timeUpdate', time);
   }
 
@@ -1326,15 +1351,16 @@ ${cursorData}
     // and add them to an eventsToExecuteArray
     const eventsToSetBeforeState = [];
     const eventsToSetAfterState = [];
-    const eventNames = Object.keys(this.events).filter((eventName) => {
-      if (this.useAutoEvents) {
-        return true;
-      }
-      // if (eventName.startsWith('_auto')) {
-      //   return false;
-      // }
-      return true;
-    });
+    // const eventNames = Object.keys(this.events).filter((eventName) => {
+    //   // if (this.useAutoEvents) {
+    //   //   return true;
+    //   // }
+    //   // if (eventName.startsWith('_auto')) {
+    //   //   return false;
+    //   // }
+    //   return true;
+    // });
+    const eventNames = Object.keys(this.events);
     eventNames.forEach((eventName) => {
       const event = this.events[eventName];
       if (event.setOnSeek === false) {
@@ -1354,7 +1380,7 @@ ${cursorData}
         if (
           this.stateIndex === -1
           || eventTime < stateTime
-          || (eventTime === stateTime && timeCount < stateTimeCount)
+          || (eventTime === stateTime && timeCount <= stateTimeCount)
         ) {
           eventsToSetBeforeState.push([eventName, i, eventTime, timeCount]);
         } else if (
@@ -1388,10 +1414,13 @@ ${cursorData}
       });
     };
     // console.log('before')
+    // console.log(eventsToSetBeforeState)
+    // console.log(this.stateIndex)
     playEvents(eventsToSetBeforeState);
     if (this.stateIndex !== -1) {
       this.setState(this.stateIndex);
     }
+    // console.log(eventsToSetAfterState)
     playEvents(eventsToSetAfterState);
     if (this.audio) {
       // this.audio.currentTime = timeToUse;
@@ -1427,27 +1456,37 @@ ${cursorData}
     ) {
       return null;
     }
-    let cursorEvents = this.events._autoCursor;
-    let touchEvents = this.events._autoTouch;
-    let cursorMoveEvents = this.events._autoCursorMove;
-    if (!this.useAutoEvents) {
-      cursorEvents = this.events.cursor;
-      touchEvents = this.events.touch;
-      cursorMoveEvents = this.events.cursorMove;
-    }
+    // let cursorEvents = this.events._autoCursor;
+    // let touchEvents = this.events._autoTouch;
+    // let cursorMoveEvents = this.events._autoCursorMove;
+    // if (!this.useAutoEvents) {
+    //   cursorEvents = this.events.cursor;
+    //   touchEvents = this.events.touch;
+    //   cursorMoveEvents = this.events.cursorMove;
+    // }
     // console.log(this.useAutoEvents)
+    const cursorEvent = getMostRecentForTime(
+      [this.events.cursor.list, this.events._autoCursor.list], atTime,
+    );
+    const touchEvent = getMostRecentForTime(
+      [this.events.touch.list, this.events._autoTouch.list], atTime,
+    );
+    const cursorMoveEvent = getMostRecentForTime(
+      [this.events.cursorMove.list, this.events._autoCursorMove.list], atTime,
+    );
 
-    const cursorIndex = getPrevIndexForTime(cursorEvents.list, atTime);
-    const touchIndex = getPrevIndexForTime(touchEvents.list, atTime);
-    const cursorMoveIndex = getPrevIndexForTime(cursorMoveEvents.list, atTime);
+    // const cursorIndex = getPrevIndexForTime(cursorEvents.list, atTime);
+    // const touchIndex = getPrevIndexForTime(touchEvents.list, atTime);
+    // const cursorMoveIndex = getPrevIndexForTime(cursorMoveEvents.list, atTime);
     let touchUp = null;
     let showCursor = null;
     let cursorPosition = null;
     let cursorTime = null;
     let cursorTimeCount = null;
-    if (touchIndex !== -1) {
-      const event = touchEvents.list[touchIndex]; // $FlowFixMe
-      const [time, [upOrDown, x, y], timeCount] = event;
+    // if (touchIndex !== -1) {
+    if (touchEvent != null) {
+      // const event = touchEvents.list[touchIndex]; // $FlowFixMe
+      const [time, [upOrDown, x, y], timeCount] = touchEvent;
       if (upOrDown === 'down') {
         touchUp = false;
         cursorTime = time;
@@ -1458,9 +1497,9 @@ ${cursorData}
       }
     }
 
-    if (cursorIndex !== -1) {
-      const event = cursorEvents.list[cursorIndex]; // $FlowFixMe
-      const [time, [showOrHide, x, y], timeCount] = event;
+    if (cursorEvent != null) {
+      // const event = cursorEvents.list[cursorIndex]; // $FlowFixMe
+      const [time, [showOrHide, x, y], timeCount] = cursorEvent;
       if (showOrHide === 'show') {
         showCursor = true;
         if (
@@ -1477,9 +1516,9 @@ ${cursorData}
       }
     }
 
-    if (cursorMoveIndex !== -1) {
-      const event = cursorMoveEvents.list[cursorMoveIndex]; // $FlowFixMe
-      const [time, [x, y], timeCount] = event;
+    if (cursorMoveEvent != null) {
+      // const event = cursorMoveEvents.list[cursorMoveIndex]; // $FlowFixMe
+      const [time, [x, y], timeCount] = cursorMoveEvent;
       if (
         cursorTime == null
         || time > cursorTime // $FlowFixMe
@@ -1500,8 +1539,8 @@ ${cursorData}
     let events = [];
     if (eventsIn != null && eventsIn.length > 0) {
       events = eventsIn;
-    } else if (this.useAutoEvents) {
-      events = ['_autoExec', '_autoCursor', '_autoSlide', '_autoCursorMove', '_autoTouch'];
+    // } else if (this.useAutoEvents) {
+    //   events = ['_autoExec', '_autoCursor', '_autoSlide', '_autoCursorMove', '_autoTouch'];
     } else {
       // events = Object.keys(this.events).filter(eventName => !eventName.startsWith('_auto'));
       events = Object.keys(this.events);
@@ -1746,7 +1785,7 @@ ${cursorData}
       return;
     }
 
-    // console.log('play event', eventName);
+    console.log('play event', eventName);
     this.setEvent(eventName, index);
     this.figure.animateNextFrame();
     if (index + 1 === this.events[eventName].list.length) {
