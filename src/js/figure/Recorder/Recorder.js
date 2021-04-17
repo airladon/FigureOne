@@ -1785,7 +1785,7 @@ ${cursorData}
       return;
     }
 
-    console.log('play event', eventName);
+    // console.log('play event', eventName);
     this.setEvent(eventName, index);
     this.figure.animateNextFrame();
     if (index + 1 === this.events[eventName].list.length) {

@@ -47,6 +47,12 @@ async function tester(
     const slides = combinedData.events.minified[slideEventKey];
     slideTimes = slides.map(s => s[0] + 1.1);
   }
+  if (combinedData.events.map.map._autoSlide != null) {
+    const slideEventKey = combinedData.events.map.map._autoSlide;
+    const slides = combinedData.events.minified[slideEventKey];
+    slideTimes.push(...slides.map(s => s[0] + 1.1));
+    slideTimes.sort();
+  }
   let fromTimes = fromTimesIn;
   if (fromTimes.length === 0) {
     fromTimes = slideTimes;
@@ -71,7 +77,7 @@ async function tester(
   fs.copyFileSync(dataFile, `${path}/tests/audio-track.mp3`);
 
   // Final Tests
-  const tests = [[0], ...stateTimes.map(t => [t])];
+  const tests = stateTimes.map(t => [t]);
 
   jest.setTimeout(120000);
   describe(__title, () => {
@@ -88,10 +94,10 @@ async function tester(
         document.getElementById('f1_player__play_pause').style.visibility = 'hidden';
       }, [dataFileUrl]);
     });
-    afterAll(() => {
-      fs.rmSync(dataFile, `${path}/tests/video-track.json`);
-      fs.rmSync(dataFile, `${path}/tests/audio-track.mp3`);
-    });
+    // afterAll(() => {
+    //   fs.rmSync(dataFile, `${path}/tests/video-track.json`);
+    //   fs.rmSync(dataFile, `${path}/tests/audio-track.mp3`);
+    // });
     test.each(tests)('Play: %s',
       async (time) => {
         const currentTime = await page.evaluate(
