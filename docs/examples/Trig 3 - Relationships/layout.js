@@ -21,17 +21,18 @@ function layout() {
   //     isShown: false,
   //   },
   // });
-  figure.add({
-    name: 'cursor',
-    method: 'collections.cursor',
-    options: {
-      color: [0, 0.5, 1, 0.7],
-      radius: 0.15,
-    },
-    mods: {
-      isShown: false,
-    },
-  });
+  // figure.add({
+  //   name: 'cursor',
+  //   method: 'collections.cursor',
+  //   options: {
+  //     color: [0, 0.5, 1, 0.7],
+  //     radius: 0.15,
+  //   },
+  //   mods: {
+  //     isShown: false,
+  //   },
+  // });
+  figure.addCursor({ color: [0, 0.5, 1, 0.7], radius: 0.15 });
 }
 layoutCirc();
 makeEquation();
@@ -116,6 +117,9 @@ function makeSlides() {
 
   nav.loadSlides(slides);
   nav.goToSlide(0);
+
+  // figure.recorder.loadVideoTrack('./video-track.json');
+  figure.recorder.loadAudioTrack(new Audio('./audio-track.mp3'));
 }
 makeSlides();
 

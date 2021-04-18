@@ -493,7 +493,7 @@ function layoutCirc() {
   const rotatorUpdateCircle = () => {
     updateCircle(Fig.tools.g2.clipAngle(rotator.transform.r(), '0to360'));
   };
-  figure.fnMap.global.add('updateCircle', () => rotatorUpdateCircle());
+  rotator.fnMap.add('updateCircle', () => rotatorUpdateCircle());
   figure.fnMap.global.add('circSetup', (payload) => {
     const [ang] = payload;
     rotator.setRotation(ang);
@@ -540,9 +540,8 @@ function layoutCirc() {
     updateLabels(triCotCsc, cot, csc, unitCotCsc, thetaCotCsc);
   });
 
-  triCotCsc.subscriptions.add('setTransform', 'updateRotation');
-  triCotCsc.subscriptions.add('setState', 'updateRotation');
-
+  // triCotCsc.subscriptions.add('setTransform', 'updateRotation');
+  // triCotCsc.subscriptions.add('setState', 'updateRotation');
   rotator.setRotation(0.5);
 
   flip.onClick = () => {
