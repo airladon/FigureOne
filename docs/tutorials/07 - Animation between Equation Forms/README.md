@@ -107,4 +107,4 @@ eqn.animations.new()
   .start();
 ```
 
-![](example1.gif)
+![](example2.gif)
