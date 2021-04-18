@@ -1,6 +1,6 @@
 # Tutorial 11 - Notifications
 
-Update text with coordinates of a moving ball
+Update text with coordinates of a moving ball using notifications.
 
 Open `index.html` in a browser to view example.
 
