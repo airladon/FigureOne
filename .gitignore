@@ -10,3 +10,5 @@ states.json
 events.json
 ./favicon.ico
 untracked/*
+tests/audio-track.mp3
+tests/video-track.mp3

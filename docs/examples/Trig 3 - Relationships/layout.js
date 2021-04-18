@@ -118,7 +118,7 @@ function makeSlides() {
   nav.loadSlides(slides);
   nav.goToSlide(0);
 
-  // figure.recorder.loadVideoTrack('./video-track.json');
+  figure.recorder.loadVideoTrack('./video-track.json');
   figure.recorder.loadAudioTrack(new Audio('./audio-track.mp3'));
 }
 makeSlides();
