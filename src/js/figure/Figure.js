@@ -549,7 +549,8 @@ class Figure {
   }
 
   /**
-   * Add cursor for recording interactive videos.
+   * Add cursor for recording interactive videos. Cursor will be hidden when
+   * first added.
    * @return {FigureElement} cursor element
    */
   addCursor(options) {

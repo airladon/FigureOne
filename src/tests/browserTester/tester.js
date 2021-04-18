@@ -128,6 +128,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
               if (t.startsWith('touch')) {
                 const loc = Fig.tools.g2.getPoint(l || [0, 0]);
                 figure[t](loc);
+                figure.setCursor(loc);
               } else {
                 eval(t);
               }

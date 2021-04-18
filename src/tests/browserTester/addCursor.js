@@ -3,7 +3,7 @@
 // eslint-disable-next-line no-unused-vars
 function __addCursor(__figure) {
   __figure.add({
-    name: '__cursor',
+    name: '_cursor_',
     method: 'collections.cursor',
     options: {
       position: [0, 0],
@@ -12,6 +12,6 @@ function __addCursor(__figure) {
     },
   });
 
-  __figure.cursorElementName = '__cursor';
+  __figure.cursorElementName = '_cursor_';
 }
 // __addCursor();
