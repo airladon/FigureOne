@@ -193,6 +193,7 @@ export class TriggerAnimationStep extends AnimationStep {
     if (remainingTime != null && typeof remainingTime === 'number' && this.autoDuration) {
       this.duration = remainingTime;
     }
+    // console.log('remaining', remainingTime, this.duration, this.autoDuration)
     this.callback = null;
     // if (this.callback != null) {
     //   this.callback(this.payload);
