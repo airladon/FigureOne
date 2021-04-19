@@ -108,6 +108,7 @@ figure.add([
       prevButton: { position: [-1.5, -0.7] },
       nextButton: { position: [1.5, -0.7] },
       text: { position: [0, -0.7] },
+      equationDefaults: { dissolveOutTime: 0.4, dissolveInTime: 0.4 },
     },
   },
 ]);

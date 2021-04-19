@@ -869,6 +869,8 @@ export default class SlideNavigator {
   // Animations pass cancelled and force. As we need the force information, we
   // need to define cancelled even though we won't use it
   transitionDone(cancelled: boolean, force: 'freeze' | 'complete' | null = 'complete') {
+    console.log('transition done')
+    // console.log(this.collection.figure.globalAnimation.now())
     if (force !== 'freeze') {
       this.setSteadyState(this.from);
       this.inTransition = false;
@@ -1050,12 +1052,13 @@ export default class SlideNavigator {
             .start();
           done = null;
         } else if (fromForm !== toForm) {
-          const { animate, duration } = this.equationDefaults;
+          // const { animate, duration, dissolveInTime, dissolveOutTime } = this.equationDefaults;
           // e.showForm(toForm);
           e.animations.new()
-            .goToForm({
-              start: fromForm, target: toForm, animate, duration,
-            })
+            .goToForm(joinObjects({}, {
+              start: fromForm,
+              target: toForm,
+            }, this.equationDefaults))
             .whenFinished(done)
             .start();
           done = null;

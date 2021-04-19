@@ -128,7 +128,7 @@ To make a recording of the mouse movements then:
 
 In longer recordings, you might want to re-record over sections. Just seek to the time you want to start re-recording, press `record` and when you're done press `pause`.
 
-When you are happy with the recording, press the `save` button. A json file with the mouse events and seek states will be saved, which you can then rename to `video-track.json` and load in the future with the line from `figure.js`:
+When you are happy with the recording, press the `Record States` button, and when it is finished, the `save` button. A json file with the mouse events and seek states will be saved, which you can then rename to `video-track.json` and load in the future with the line from `figure.js`:
 
 ```js
 figure.recorder.loadVideoTrack('./video-track.json');

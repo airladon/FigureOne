@@ -24,6 +24,7 @@ expect.extend({ toMatchImageSnapshot });
 //   // console.log(messages)
 // });
 page.on('console', m => console.log(m.text()));
+// page.on('console', m => console.log(m.text(), JSON.stringify(m.args())));
 // page.on(`console`, async (msg) => {
 //           let msgType = msg.type();
 //         msgType = msgType === `warning` ? `warn` : msgType; // so we can feed it to console.warn
@@ -111,24 +112,35 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
     test.each(tests)('%s %s',
       async (time, description, deltaTime, action, location, snap) => {
         let d = deltaTime;
+        console.log('Plan time:', time)
         if (intermitentTime > 0) {
           if (deltaTime > intermitentTime) {
-            for (let i = intermitentTime; i < deltaTime - intermitentTime; i += intermitentTime) {
+            for (let i = intermitentTime; i <= deltaTime - intermitentTime; i += intermitentTime) {
               await page.evaluate((t) => {
                 figure.globalAnimation.frame(t);
-              }, [intermitentTime]);
+                // console.log('intermittent', t)
+              }, intermitentTime);
               d -= intermitentTime;
             }
           }
         }
         if (action !== 'delay') {
           await page.evaluate(([delta, t, l]) => {
+            console.log('before frame')
             figure.globalAnimation.frame(delta);
+            console.log('after frame')
+            // console.log('now time', figure.globalAnimation.now())
+            console.log(t, delta, figure.getRemainingAnimationTime(), figure.elements._nav.nav.currentSlideIndex, figure.elements._nav.nav.inTransition, figure.elements._eqn.animations.length, figure.elements._eqn.getRemainingAnimationTime())
+            // if (figure.elements._eqn.animations.animations[0] != null) {
+            //   console.log('start', figure.elements._eqn.animations.animations[0].startTime, figure.elements._eqn.animations.animations[0].steps[0].duration, figure.globalAnimation.now());
+            // }
             if (t != null) {
               if (t.startsWith('touch')) {
                 const loc = Fig.tools.g2.getPoint(l || [0, 0]);
                 figure[t](loc);
-                figure.setCursor(loc);
+                if (Array.isArray(l) && l.length === 2) {
+                  figure.setCursor(loc);
+                }
               } else {
                 eval(t);
               }
