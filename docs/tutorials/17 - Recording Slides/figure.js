@@ -51,5 +51,5 @@ nav.loadSlides([
 ]);
 
 
-figure.recorder.loadAudioTrack(new Audio('./audio-track.mp3'));
-figure.recorder.loadVideoTrack('./video-track.json');
+figure.recorder.loadAudioTrack(new Audio('http://localhost:8080/docs/tutorials/17%20-%20Recording%20Slides/audio-track.mp3'));
+figure.recorder.loadVideoTrack('video-track.json');

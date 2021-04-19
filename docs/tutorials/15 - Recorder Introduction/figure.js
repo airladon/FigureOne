@@ -19,5 +19,5 @@ figure.add({
 figure.addCursor();
 
 // // Load audio, states and events data
-figure.recorder.loadAudioTrack(new Audio('./audio-track.mp3'));
+figure.recorder.loadAudioTrack(new Audio('http://localhost:8080/docs/tutorials/15%20-%20Recording%20Introduction/audio-track.mp3'));
 figure.recorder.loadVideoTrack('./video-track.json');

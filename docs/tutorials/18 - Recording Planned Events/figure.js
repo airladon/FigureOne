@@ -54,5 +54,5 @@ nav.loadSlides([
 ]);
 
 
-figure.recorder.loadAudioTrack(new Audio('./audio-track.mp3'));
+figure.recorder.loadAudioTrack(new Audio('http://localhost:8080/docs/tutorials/18%20-%20Recording%20Planned%20Events/audio-track.mp3'));
 figure.recorder.loadVideoTrack('./video-track.json');
