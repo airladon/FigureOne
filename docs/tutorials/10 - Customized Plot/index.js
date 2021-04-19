@@ -11,13 +11,14 @@ figure.add({
   method: 'collections.plot',
   options: {
     // Plot size
-    width: 2,
-    height: 2,
+    width: 1,
+    height: 1,
+    position: [-0.5, -0.5],
     // Plot Title
     title: {
       text: [
         'Traveled Distance',
-        { text: 'Power Comparison', font: { size: 0.1 } },
+        { text: 'Power Comparison', font: { size: 0.05 } },
       ],
       offset: [0, 0.1],
     },
@@ -36,16 +37,16 @@ figure.add({
       {                                          // Trace with only markers
         points: pow(2, 10, 0.5),
         name: 'Power 2',
-        markers: { sides: 4, radius: 0.03 },
+        markers: { sides: 4, radius: 0.02 },
       },
       {                                          // Trace with markers and
         points: pow(3, 10, 0.5),                 // dashed line
         name: 'Power 3',
-        markers: { radius: 0.03, sides: 10, line: { width: 0.005 } },
+        markers: { radius: 0.02, sides: 10, line: { width: 0.005 } },
         line: { dash: [0.04, 0.01] },
       },
     ],
     // Turn on the legend
-    legend: true,
+    legend: { font: { size: 0.05 } },
   },
 });
