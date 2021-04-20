@@ -9,6 +9,7 @@ global.__height = 375;
 // eslint-disable-next-line import/no-unresolved
 const { toMatchImageSnapshot } = require('jest-image-snapshot');
 const fs = require('fs');
+const Path = require('path');
 
 expect.extend({ toMatchImageSnapshot });
 
@@ -63,22 +64,34 @@ async function snap(time, threshold) {
   });
 }
 
+/**
+ * Tests
+ * 1) Playback tests: snapshot at each state time during playback
+ * 2) Seek tests: snapshot of seek to each state time
+ * 3) FromTo tests: snapshots of:
+ *     - seekFrom time
+ *     - seekTo time
+ *     - one state time after resumePlayback at seekTo time
+ *
+ * During playback tests, use `intermitentTime` to force a frame draw
+ * at a specific interval.
+ */
 async function tester(
-  htmlFile, dataFileUrl, dataFile, stateResolution = 1,
-  fromTimesIn = [], toTimesIn = [], threshold = 0, intermitentTime = 0,
+  htmlFile,             // website to load
+  path,                 // path to test file
+  stateSampling = 1,    // Use n for testing every n state times
+  fromTimesIn = [],     // Defaults to slide times, then empty
+  toTimesIn = [],       // Defaults to slide times, from times, empty
+  threshold = 0,        // In pixels
+  intermitentTime = 0,  // Force a frame draw every intermitentTime seconds
 ) {
-  // require('./start.js');
-  // Tests
-  // * Snapshot at each state time during playback
-  // * Snapshot of seek to each state time
-  // * Snapshots of seek from a time, seek to a time, and play
-
   // Get the state times from the json video file and save them in a tests
   // array of tuples: [time, deltaTime]
-  const combinedData = JSON.parse(fs.readFileSync(dataFile));
+  const videoTrack = Path.resolve(path, '../video-track.json');
+  const combinedData = JSON.parse(fs.readFileSync(videoTrack));
   const diffsKey = combinedData.states.map.map.diffs;
   const diffs = combinedData.states.minified[diffsKey];
-  const stateTimes = diffs.filter((d, i) => i % stateResolution === 0).map(d => d[0]);
+  const stateTimes = diffs.filter((d, i) => i % stateSampling === 0).map(d => d[0]);
 
   // Get the slide times (if slides exist)
   let slideTimes = [];
@@ -125,9 +138,9 @@ async function tester(
 
   // Copy the audio and video track files to the tests folder so loading the
   // file doesn't cause an error
-  const path = dataFile.split('/').slice(0, -1).join('/');
-  fs.copyFileSync(dataFile, `${path}/tests/video-track.json`);
-  fs.copyFileSync(dataFile, `${path}/tests/audio-track.mp3`);
+  // const toPath = Path.resolve(path);
+  fs.copyFileSync(videoTrack, `${path}/video-track.json`);
+  fs.copyFileSync(videoTrack, `${path}/audio-track.mp3`);
 
   jest.setTimeout(120000);
   describe(__title, () => {
@@ -140,41 +153,37 @@ async function tester(
         figure.globalAnimation.setManualFrames();
         figure.recorder.startPlayback();
         document.getElementById('f1_player__play_pause').style.visibility = 'hidden';
-      }, [dataFileUrl]);
+      });
       await sleep(50);
     });
-    // afterAll(() => {
-    //   fs.rmSync(dataFile, `${path}/tests/video-track.json`);
-    //   fs.rmSync(dataFile, `${path}/tests/audio-track.mp3`);
-    // });
     test.each(playbackTests)('Play: %s',
       async (time) => {
+        console.log(`Playback Test: ${time}`);
         const currentTime = await getCurrentTime();
         const deltaTime = time - currentTime;
         let d = deltaTime;
-        if (intermitentTime > 0) {
-          if (deltaTime > intermitentTime) {
-            for (let i = intermitentTime; i < deltaTime - intermitentTime; i += intermitentTime) {
-              frame(intermitentTime);
-              d -= intermitentTime;
-            }
+        if (intermitentTime > 0 && deltaTime > intermitentTime) {
+          for (let i = intermitentTime; i < deltaTime - intermitentTime; i += intermitentTime) {
+            await frame(intermitentTime);
+            d -= intermitentTime;
           }
         }
         await frame(d);
         await snap(time, threshold);
       });
     test.each(seekTests)('Seek: %s',
-      async (seekTimeIn) => {
+      async (seekTime) => {
+        console.log(`Seek Test: ${seekTime}`);
         await seek(0);
         await frame(0);
-        await seek(seekTimeIn);
+        await seek(seekTime);
         await frame(0);
         const currentTime = await getCurrentTime();
         await snap(currentTime, threshold);
       });
     test.each(fromToTests)('From To: %s %s',
       async (fromTime, toTime) => {
-        console.log(fromTime, toTime);
+        console.log(`FromTo Test: ${fromTime}, ${toTime}`);
         const seekTo = async (seekTimeIn, play) => {
           await seek(seekTimeIn);
           await frame(0);
