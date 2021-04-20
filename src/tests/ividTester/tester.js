@@ -123,7 +123,7 @@ async function tester(
         }, [d]);
         await sleep(500);
         console.log('Capture', time);
-        const image = await page.screenshot({ fullPage: true, timeout: 300000 });
+        const image = await page.screenshot({ timeout: 300000 });
         expect(image).toMatchImageSnapshot({
           customSnapshotIdentifier: `${zeroPad(Math.round(time * 10000), 7)}`,
           failureThreshold: threshold,
@@ -138,7 +138,7 @@ async function tester(
           figure.globalAnimation.frame(0);
           return Promise.resolve(figure.recorder.getCurrentTime());
         }, [seekTimeIn]);
-        const image = await page.screenshot({ fullPage: true, timeout: 300000 });
+        const image = await page.screenshot({ timeout: 300000 });
         expect(image).toMatchImageSnapshot({
           customSnapshotIdentifier: `${zeroPad(Math.round(currentTime * 10000), 7)}`,
           failureThreshold: threshold,
@@ -160,7 +160,7 @@ async function tester(
           }
           const nextFrameTime = stateTimes[index][0];
           const checkImage = async (imageTime) => {
-            const image = await page.screenshot({ fullPage: true, timeout: 300000 });
+            const image = await page.screenshot({ timeout: 300000 });
             expect(image).toMatchImageSnapshot({
               customSnapshotIdentifier: `${zeroPad(Math.round(imageTime * 10000), 7)}`,
               failureThreshold: threshold,

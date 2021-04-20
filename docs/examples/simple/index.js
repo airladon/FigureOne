@@ -17,9 +17,10 @@ figure.add([
     options: { radius: 0.2, position: [0, -0.5] },
   },
 ]);
+figure.globalAnimation.setManualFrames();
 figure.elements.animations.new()
-  .delay(0.1)
-  .dissolveIn(0.1)
+  .delay(1)
+  .dissolveIn(1)
   .start();
 // // Figure has two squares and a slide navigator. Slides will dissolve in,
 // // dissolve out, move and rotate squares

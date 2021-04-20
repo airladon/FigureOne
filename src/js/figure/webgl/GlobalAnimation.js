@@ -84,6 +84,7 @@ class GlobalAnimation {
     this.manualTimerIds = 0;
     this.manualQueueCounter = 0;
     this.manualOneFrameOnly = true;
+    this.animateOnFrame = false;
   }
 
   getWhen(when: TypeWhen) {
@@ -148,6 +149,7 @@ class GlobalAnimation {
     this.incrementManualTimers(this.nowTime + duration * 1000);
     // console.log('after')
     this.nowTime = targetTime;
+    this.animateOnFrame = true;
     this.animateNextFrame();
   }
 
@@ -269,6 +271,7 @@ class GlobalAnimation {
   }
 
   draw(now: number) {
+    console.log(performance.now(), 'draw global', this.nextDrawQueue.length)
     this.animationId = null;
     clearTimeout(this.syncNowTimer);
     this.updateSyncNow = true;
@@ -283,10 +286,12 @@ class GlobalAnimation {
     }
     this.drawQueue = [];
     this.lastFrame = now;
+    console.log(performance.now(), 'draw global done')
   }
 
   queueNextFrame(func: (?number) => void) {
     this.nextDrawQueue.push(func);
+    console.log(performance.now(), 'queue', this.nextDrawQueue.length)
     if (this.manual && this.manualOneFrameOnly) {
       if (this.manualQueueCounter >= 1) {
         return;
@@ -308,7 +313,21 @@ class GlobalAnimation {
 
   // Queue up an animation frame
   animateNextFrame() {
-    // console.log('animate next frame', this.animationId)
+    console.log(performance.now(), 'animateNextFrame', this.manual, this.animateOnFrame, this.animationId == null, this.animationId)
+    if (this.manual) {
+      console.log('animateOnFrame manual')
+      
+      if (this.animateOnFrame && this.animationId == null) {
+        console.log('requested', performance.now())
+        this.animateOnFrame = false;
+        this.animationId = this.requestNextAnimationFrame.call(window, (n) => {
+          console.log('answered', performance.now())
+          this.draw(n); 
+        });
+      }
+      this.animateOnFrame = false;
+      return;
+    }
     if (this.animationId == null) {
       // console.log('request animation frame')
     // cancelAnimationFrame(this.animationId);

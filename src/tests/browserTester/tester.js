@@ -23,7 +23,19 @@ expect.extend({ toMatchImageSnapshot });
 //   }
 //   // console.log(messages)
 // });
-page.on('console', m => console.log(m.text()));
+// page.on('console', m => console.log(m.text()));
+ 
+        // lint rule is very aggresive,
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        page.on(`console`, async (msg) => {
+          const msgType = msg.type();
+          const args = await Promise.all(msg.args().map((jsHandle) => jsHandle.jsonValue()));
+          // proxy browser console stream
+          // eslint-disable-next-line no-console
+          console[msgType](...args);
+        });
+      // });
+
 // page.on('console', m => console.log(m.text(), JSON.stringify(m.args())));
 // page.on(`console`, async (msg) => {
 //           let msgType = msg.type();
@@ -32,6 +44,9 @@ page.on('console', m => console.log(m.text()));
 //         const args = msg.args().map((jsHandle) => {
 //           // see https://github.com/microsoft/playwright/issues/2275
 //           const remoteObject = jsHandle[`_remoteObject`];
+//           if (remoteObject == null) {
+//             return msgText
+//           }
 //           if (Object.prototype.hasOwnProperty.call(remoteObject, `value`)) {
 //             return remoteObject.value;
 //           } else if (remoteObject.type === `object` && remoteObject.subtype === `error` && remoteObject.description) {
@@ -48,6 +63,10 @@ page.on('console', m => console.log(m.text()));
 //         // proxy browser console stream
 //         console[msgType](...args);
 //         });
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 function zeroPad(num, places) {
   const zero = places - num.toString().length + 1;
@@ -106,19 +125,22 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
         clearTimeout(timeoutId);
         figure.globalAnimation.manualOneFrameOnly = false;
         figure.globalAnimation.setManualFrames();
+        // console.log('manual frames set')
         figure.globalAnimation.frame(0);
+        // console.log('setup done')
       });
+      // Sleep for an animation frame to act on the frame above
+      await sleep(100);
     });
     test.each(tests)('%s %s',
       async (time, description, deltaTime, action, location, snap) => {
         let d = deltaTime;
-        console.log('Plan time:', time)
+        // console.log('Plan time:', time)
         if (intermitentTime > 0) {
           if (deltaTime > intermitentTime) {
             for (let i = intermitentTime; i <= deltaTime - intermitentTime; i += intermitentTime) {
               await page.evaluate((t) => {
                 figure.globalAnimation.frame(t);
-                // console.log('intermittent', t)
               }, intermitentTime);
               d -= intermitentTime;
             }
@@ -126,14 +148,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
         }
         if (action !== 'delay') {
           await page.evaluate(([delta, t, l]) => {
-            console.log('before frame')
             figure.globalAnimation.frame(delta);
-            console.log('after frame')
-            // console.log('now time', figure.globalAnimation.now())
-            console.log(t, delta, figure.getRemainingAnimationTime(), figure.elements._nav.nav.currentSlideIndex, figure.elements._nav.nav.inTransition, figure.elements._eqn.animations.length, figure.elements._eqn.getRemainingAnimationTime())
-            // if (figure.elements._eqn.animations.animations[0] != null) {
-            //   console.log('start', figure.elements._eqn.animations.animations[0].startTime, figure.elements._eqn.animations.animations[0].steps[0].duration, figure.globalAnimation.now());
-            // }
             if (t != null) {
               if (t.startsWith('touch')) {
                 const loc = Fig.tools.g2.getPoint(l || [0, 0]);
@@ -150,8 +165,14 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
         if (!snap) {
           return;
         }
+        // Sleep for an animation frame to act on the frame above
+        await sleep(100);
         if (time !== lastTime) {
-          const image = await page.screenshot({ fullPage: true });
+          // console.log('before sleep')
+          // await sleep(500)
+          // console.log('before screenshot', time)
+          const image = await page.screenshot();
+          // console.log('after screenshot')
           expect(image).toMatchImageSnapshot({
             customSnapshotIdentifier: `${zeroPad(Math.round(time * 1000), 5)}-${description}`,
             failureThreshold: threshold,

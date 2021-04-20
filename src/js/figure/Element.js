@@ -1159,7 +1159,7 @@ class FigureElement {
 
   animateNextFrame() {
     if (this.figure != null) {
-      this.figure.animateNextFrame();
+      this.figure.animateNextFrame(true, this.name);
     }
   }
 

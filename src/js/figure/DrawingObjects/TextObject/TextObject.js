@@ -840,6 +840,7 @@ class TextObjectBase extends DrawingObject {
 
     // Fill in all the text
     this.text.forEach((figureText) => {
+      // console.log('text draw', figureText.text)
       // eslint-disable-next-line no-param-reassign
       figureText.lastDraw = {
         x: (figureText.locationAligned.x) * scalingFactor,
@@ -862,6 +863,7 @@ class TextObjectBase extends DrawingObject {
   }
 
   clear(contextIndex: number = 0) {
+    // console.log('clear', this.text[0].text)
     const { ctx } = this.drawContext2D[contextIndex];
     const t = this.lastDrawTransform;
     ctx.save();
