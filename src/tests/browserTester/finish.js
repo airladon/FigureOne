@@ -43,7 +43,7 @@ function __finish(__figure) {
 
   if (typeof process !== 'object') {
     // eslint-disable-next-line no-console
-    console.log(__steps);
+    // console.log(__steps);
     const startSteps = () => {
       cumTime = 0;
       __frames.forEach((touch) => {
