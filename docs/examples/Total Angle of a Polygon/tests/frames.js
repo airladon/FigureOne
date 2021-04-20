@@ -1,4 +1,7 @@
-/* global __title __frames __duration __timeStep */
+/* global __duration __frames __timeStep __title, __width, __height */
+/* eslint no-unused-vars: ["error", { "vars": "local" }] */
+/* eslint-disable no-global-assign */
+
 __title = 'Example - Total Angle of a Polygon';
 __duration = 19;
 __timeStep = 0.5;
