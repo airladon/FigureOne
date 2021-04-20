@@ -93,6 +93,7 @@ async function tester(
         // figure.recorder.loadVideoTrack(url, () => figure.recorder.startPlayback());
         document.getElementById('f1_player__play_pause').style.visibility = 'hidden';
       }, [dataFileUrl]);
+      await sleep(50);
     });
     // afterAll(() => {
     //   fs.rmSync(dataFile, `${path}/tests/video-track.json`);
@@ -121,7 +122,8 @@ async function tester(
           figure.globalAnimation.frame(delta);
           figure.recorder.subscriptions.publish('timeUpdate', [figure.recorder.getCurrentTime()]);
         }, [d]);
-        await sleep(500);
+        await sleep(50);
+        // await sleep(500);
         console.log('Capture', time);
         const image = await page.screenshot({ timeout: 300000 });
         expect(image).toMatchImageSnapshot({
@@ -138,6 +140,7 @@ async function tester(
           figure.globalAnimation.frame(0);
           return Promise.resolve(figure.recorder.getCurrentTime());
         }, [seekTimeIn]);
+        await sleep(50);
         const image = await page.screenshot({ timeout: 300000 });
         expect(image).toMatchImageSnapshot({
           customSnapshotIdentifier: `${zeroPad(Math.round(currentTime * 10000), 7)}`,

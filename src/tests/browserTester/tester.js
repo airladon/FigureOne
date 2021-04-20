@@ -130,7 +130,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
         // console.log('setup done')
       });
       // Sleep for an animation frame to act on the frame above
-      await sleep(100);
+      await sleep(50);
     });
     test.each(tests)('%s %s',
       async (time, description, deltaTime, action, location, snap) => {
@@ -166,7 +166,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
           return;
         }
         // Sleep for an animation frame to act on the frame above
-        await sleep(100);
+        await sleep(50);
         if (time !== lastTime) {
           // console.log('before sleep')
           // await sleep(500)

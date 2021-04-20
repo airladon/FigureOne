@@ -271,7 +271,7 @@ class GlobalAnimation {
   }
 
   draw(now: number) {
-    console.log(performance.now(), 'draw global', this.nextDrawQueue.length)
+    // console.log(performance.now(), 'draw global', this.nextDrawQueue.length)
     this.animationId = null;
     clearTimeout(this.syncNowTimer);
     this.updateSyncNow = true;
