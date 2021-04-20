@@ -24,6 +24,41 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+// It's not clear to me whether page.evaluate will always paint the screen
+// first and then return. Below, a promise is returned that resolves when
+// the screen is painted, guaranteeing this behaviour, but it's possible it is
+// overkill. In the seek function below, no such thing is done, though if
+// inconsistent behaviour in the future is seen, maybe try doing the same.
+async function frame(delta) {
+  await page.evaluate(([d]) => new Promise((resolve) => {
+    figure.subscriptions.add('afterDraw', () => resolve(), 1);
+    figure.globalAnimation.frame(d);
+    figure.animateNextFrame();
+    figure.recorder.subscriptions.publish('timeUpdate', [figure.recorder.getCurrentTime()]);
+    resolve();
+  }), [delta]);
+}
+
+async function seek(seekTimeIn) {
+  await page.evaluate(([seekTime]) => {
+    figure.recorder.seek(seekTime);
+    figure.animateNextFrame();
+  }, [seekTimeIn]);
+}
+
+async function getCurrentTime() {
+  const currentTime = await page.evaluate(() => Promise.resolve(figure.recorder.getCurrentTime()));
+  return currentTime;
+}
+
+async function snap(time, threshold) {
+  const image = await page.screenshot({ timeout: 300000 });
+  return expect(image).toMatchImageSnapshot({
+    customSnapshotIdentifier: `${zeroPad(Math.round(time * 10000), 7)}`,
+    failureThreshold: threshold,
+  });
+}
+
 async function tester(
   htmlFile, dataFileUrl, dataFile, stateResolution = 1,
   fromTimesIn = [], toTimesIn = [], threshold = 0, intermitentTime = 0,
@@ -89,8 +124,6 @@ async function tester(
         figure.globalAnimation.manualOneFrameOnly = false;
         figure.globalAnimation.setManualFrames();
         figure.recorder.startPlayback();
-        // figure.recorder.audio = null;
-        // figure.recorder.loadVideoTrack(url, () => figure.recorder.startPlayback());
         document.getElementById('f1_player__play_pause').style.visibility = 'hidden';
       }, [dataFileUrl]);
       await sleep(50);
@@ -101,51 +134,52 @@ async function tester(
     // });
     test.each(tests)('Play: %s',
       async (time) => {
-        const currentTime = await page.evaluate(
-          () => Promise.resolve(figure.recorder.getCurrentTime()),
-        );
+        // const currentTime = await page.evaluate(
+        //   () => Promise.resolve(figure.recorder.getCurrentTime()),
+        // );
+        const currentTime = await getCurrentTime();
         const deltaTime = time - currentTime;
         let d = deltaTime;
         // Trigger frames between those to be recorded
         if (intermitentTime > 0) {
           if (deltaTime > intermitentTime) {
             for (let i = intermitentTime; i < deltaTime - intermitentTime; i += intermitentTime) {
-              await page.evaluate((t) => {
-                figure.globalAnimation.frame(t);
-              }, [intermitentTime]);
+              frame(intermitentTime);
               d -= intermitentTime;
             }
           }
         }
         // Trigger frame to be recordered
-        await page.evaluate(([delta]) => {
-          figure.globalAnimation.frame(delta);
-          figure.recorder.subscriptions.publish('timeUpdate', [figure.recorder.getCurrentTime()]);
-        }, [d]);
-        await sleep(50);
-        // await sleep(500);
-        console.log('Capture', time);
-        const image = await page.screenshot({ timeout: 300000 });
-        expect(image).toMatchImageSnapshot({
-          customSnapshotIdentifier: `${zeroPad(Math.round(time * 10000), 7)}`,
-          failureThreshold: threshold,
-        });
+        await frame(d);
+        await snap(time, threshold);
+        // const image = await page.screenshot({ timeout: 300000 });
+        // expect(image).toMatchImageSnapshot({
+        //   customSnapshotIdentifier: `${zeroPad(Math.round(time * 10000), 7)}`,
+        //   failureThreshold: threshold,
+        // });
       });
     test.each(seekTests)('Seek: %s',
       async (seekTimeIn) => {
-        const currentTime = await page.evaluate(([seekTime]) => {
-          figure.recorder.seek(0);
-          figure.globalAnimation.frame(0);
-          figure.recorder.seek(seekTime);
-          figure.globalAnimation.frame(0);
-          return Promise.resolve(figure.recorder.getCurrentTime());
-        }, [seekTimeIn]);
-        await sleep(50);
-        const image = await page.screenshot({ timeout: 300000 });
-        expect(image).toMatchImageSnapshot({
-          customSnapshotIdentifier: `${zeroPad(Math.round(currentTime * 10000), 7)}`,
-          failureThreshold: threshold,
-        });
+        // const currentTime = await page.evaluate(([seekTime]) => {
+        //   figure.recorder.seek(0);
+        //   figure.globalAnimation.frame(0);
+        //   figure.recorder.seek(seekTime);
+        //   figure.globalAnimation.frame(0);
+        //   return Promise.resolve(figure.recorder.getCurrentTime());
+        // }, [seekTimeIn]);
+        await seek(0);
+        await frame(0);
+        await seek(seekTimeIn);
+        await frame(0);
+        const currentTime = await getCurrentTime();
+        // console.log(currentTime);
+        // await sleep(50);
+        // const image = await page.screenshot({ timeout: 300000 });
+        // expect(image).toMatchImageSnapshot({
+        //   customSnapshotIdentifier: `${zeroPad(Math.round(currentTime * 10000), 7)}`,
+        //   failureThreshold: threshold,
+        // });
+        await snap(currentTime, threshold);
       });
     test.each(fromToTests)('From To: %s %s',
       async (fromTime, toTime) => {
