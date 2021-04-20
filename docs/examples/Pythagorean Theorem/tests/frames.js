@@ -1,4 +1,7 @@
-/* global __title __frames __duration __timeStep */
+/* global __duration __frames __timeStep __title */
+/* eslint no-unused-vars: ["error", { "vars": "local" }] */
+/* eslint-disable no-global-assign */
+
 __title = 'Example - Pythagorean Theorem';
 __duration = 32;
 __timeStep = 0.5;
