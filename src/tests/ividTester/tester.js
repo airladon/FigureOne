@@ -1,10 +1,7 @@
-/* global page figure __title __width __height */
+/* global page figure  */
 /* eslint-disable import/prefer-default-export, global-require, no-console */
 /* eslint-disable import/no-dynamic-require, no-eval */
 /* eslint-disable jest/no-export, no-await-in-loop */
-global.__title = '';
-global.__width = 500;
-global.__height = 375;
 
 // eslint-disable-next-line import/no-unresolved
 const { toMatchImageSnapshot } = require('jest-image-snapshot');
@@ -75,19 +72,36 @@ async function snap(time, threshold) {
  *
  * During playback tests, use `intermitentTime` to force a frame draw
  * at a specific interval.
+ *
+ * Input options object to tester is:
+ *   title                 // test title
+ *   width                 // viewport width
+ *   height                // viewport height
+ *   htmlFile,             // website to load
+ *   testPath,             // path to test file - defaults to calling file
+ *   stateSampling = 1,    // Use n for testing every n state times
+ *   fromTimesIn = [],     // Defaults to slide times, then empty
+ *   toTimesIn = [],       // Defaults to slide times, from times, empty
+ *   threshold = 0,        // In pixels
+ *   intermitentTime = 0,  // Force a frame draw every intermitentTime seconds
  */
 async function tester(
-  htmlFile,             // website to load
-  path,                 // path to test file
-  stateSampling = 1,    // Use n for testing every n state times
-  fromTimesIn = [],     // Defaults to slide times, then empty
-  toTimesIn = [],       // Defaults to slide times, from times, empty
-  threshold = 0,        // In pixels
-  intermitentTime = 0,  // Force a frame draw every intermitentTime seconds
+  optionsIn,
 ) {
+  const title = optionsIn.title || 'Video Test';
+  const width = optionsIn.width || 500;
+  const height = optionsIn.height || 375;
+  const testPath = optionsIn.testPath || module.parent.path;
+  const htmlFile = optionsIn.htmlFile || 'http://localhost:8080/';
+  const fromTimesIn = optionsIn.fromTimes || [];
+  const toTimesIn = optionsIn.toTimes || [];
+  const threshold = optionsIn.threshold || 0;
+  const stateSampling = optionsIn.stateSampling || 1;
+  const intermittentTime = optionsIn.intermittentTime || 0;
+
   // Get the state times from the json video file and save them in a tests
   // array of tuples: [time, deltaTime]
-  const videoTrack = Path.resolve(path, '../video-track.json');
+  const videoTrack = Path.resolve(testPath, '../video-track.json');
   const combinedData = JSON.parse(fs.readFileSync(videoTrack));
   const diffsKey = combinedData.states.map.map.diffs;
   const diffs = combinedData.states.minified[diffsKey];
@@ -138,15 +152,14 @@ async function tester(
 
   // Copy the audio and video track files to the tests folder so loading the
   // file doesn't cause an error
-  // const toPath = Path.resolve(path);
-  fs.copyFileSync(videoTrack, `${path}/video-track.json`);
-  fs.copyFileSync(videoTrack, `${path}/audio-track.mp3`);
+  fs.copyFileSync(videoTrack, `${testPath}/video-track.json`);
+  fs.copyFileSync(videoTrack, `${testPath}/audio-track.mp3`);
 
   jest.setTimeout(120000);
-  describe(__title, () => {
+  describe(title, () => {
     // Load page, set manual frames, remove audio, load video data file and play
     beforeAll(async () => {
-      await page.setViewportSize({ width: __width || 500, height: __height || 375 });
+      await page.setViewportSize({ width, height });
       await page.goto(htmlFile);
       await page.evaluate(() => {
         figure.globalAnimation.manualOneFrameOnly = false;
@@ -162,10 +175,10 @@ async function tester(
         const currentTime = await getCurrentTime();
         const deltaTime = time - currentTime;
         let d = deltaTime;
-        if (intermitentTime > 0 && deltaTime > intermitentTime) {
-          for (let i = intermitentTime; i < deltaTime - intermitentTime; i += intermitentTime) {
-            await frame(intermitentTime);
-            d -= intermitentTime;
+        if (intermittentTime > 0 && deltaTime > intermittentTime) {
+          for (let i = intermittentTime; i < deltaTime - intermittentTime; i += intermittentTime) {
+            await frame(intermittentTime);
+            d -= intermittentTime;
           }
         }
         await frame(d);
