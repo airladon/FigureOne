@@ -1,4 +1,6 @@
-/* global __duration __frames __timeStep __title*/
+/* global __duration __frames __timeStep __title */
+/* eslint no-unused-vars: ["error", { "vars": "local" }] */
+/* eslint-disable no-global-assign */
 
 __title = 'Example - Holiday Equation';
 __duration = 18;
@@ -7,15 +9,16 @@ __frames = [
   [0],
   [0.5, 'touchDown', [1.5, -0.7], 'form 1'],
   [0, 'touchUp'],
-  [0.6, 'touchDown', [1.5, -0.7], 'Cancel'],
+  [0.5, 'touchDown', [1.5, -0.7], 'Cancel'],
   [0, 'touchUp'],
-  [0.6, 'touchDown', [1.5, -0.7], 'form 2'],
+  [0.5, 'touchDown', [1.5, -0.7], 'form 2'],
   [0, 'touchUp'],
   [0.5, 'touchDown', [1.5, -0.7], 'form 3'],
   [0, 'touchUp'],
   [1.5, 'touchDown', [1.5, -0.7], 'as both'],
   [0, 'touchUp'],
-  [0.5, 'touchDown', [1.5, -0.7], 'raise'],
+  [0.4],
+  [0.1, 'touchDown', [1.5, -0.7], 'raise'],
   [0, 'touchUp'],
   [0.5, 'touchDown', [1.5, -0.7], 'form 4'],
   [0, 'touchUp'],
