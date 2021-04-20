@@ -869,7 +869,7 @@ export default class SlideNavigator {
   // Animations pass cancelled and force. As we need the force information, we
   // need to define cancelled even though we won't use it
   transitionDone(cancelled: boolean, force: 'freeze' | 'complete' | null = 'complete') {
-    console.log('transition done')
+    // console.log('transition done')
     // console.log(this.collection.figure.globalAnimation.now())
     if (force !== 'freeze') {
       this.setSteadyState(this.from);

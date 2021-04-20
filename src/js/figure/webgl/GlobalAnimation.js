@@ -286,12 +286,12 @@ class GlobalAnimation {
     }
     this.drawQueue = [];
     this.lastFrame = now;
-    console.log(performance.now(), 'draw global done')
+    // console.log(performance.now(), 'draw global done')
   }
 
   queueNextFrame(func: (?number) => void) {
     this.nextDrawQueue.push(func);
-    console.log(performance.now(), 'queue', this.nextDrawQueue.length)
+    // console.log(performance.now(), 'queue', this.nextDrawQueue.length)
     if (this.manual && this.manualOneFrameOnly) {
       if (this.manualQueueCounter >= 1) {
         return;
@@ -313,27 +313,18 @@ class GlobalAnimation {
 
   // Queue up an animation frame
   animateNextFrame() {
-    console.log(performance.now(), 'animateNextFrame', this.manual, this.animateOnFrame, this.animationId == null, this.animationId)
     if (this.manual) {
-      console.log('animateOnFrame manual')
-      
       if (this.animateOnFrame && this.animationId == null) {
-        console.log('requested', performance.now())
         this.animateOnFrame = false;
-        this.animationId = this.requestNextAnimationFrame.call(window, (n) => {
-          console.log('answered', performance.now())
-          this.draw(n); 
-        });
+        this.animationId = this.requestNextAnimationFrame.call(window, this.draw.bind(this));
       }
       this.animateOnFrame = false;
       return;
     }
     if (this.animationId == null) {
-      // console.log('request animation frame')
     // cancelAnimationFrame(this.animationId);
     // $FlowFixMe
       this.animationId = this.requestNextAnimationFrame.call(window, this.draw.bind(this));
-      // this.animationId = nextFrame;
     }
   }
 }

@@ -501,7 +501,7 @@ class Figure {
 
     // this.updateFontSize = optionsToUse.updateFontSize;
 
-    window.addEventListener('resize', () => { console.log(performance.now(), 'why resize??'); this.resize.bind(this); });
+    window.addEventListener('resize', this.resize.bind(this));
     // window.addEventListener('resize', this.resize.bind(this));
     this.sizeHtmlText();
     this.isTouchDevice = isTouchDevice();
@@ -1617,7 +1617,7 @@ class Figure {
 
   // resize should only be called if the viewport size has changed.
   resize(skipHTMLTie: boolean = false) {
-    console.log('resize')
+    // console.log('resize')
     this.webglLow.resize();
     this.draw2DLow.resize();
     this.setSpaceTransforms();
@@ -2553,7 +2553,7 @@ class Figure {
    * Force figure to draw on next available animation frame.
    */
   animateNextFrame(draw: boolean = true, fromWhere: string = '') {
-    console.log('from', fromWhere)
+    // console.log('from', fromWhere)
     // console.trace();
     this.fromWhere = fromWhere;
     if (!this.drawQueued) {
