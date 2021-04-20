@@ -1,5 +1,7 @@
-/* eslint-disable no-global-assign, no-unused-vars */
 /* global __duration __frames __timeStep __title __width __height */
+/* eslint no-unused-vars: ["error", { "vars": "local" }] */
+/* eslint-disable no-global-assign */
+
 __title = 'Example - Sin Limit';
 __duration = -1;
 __timeStep = 0.5;
