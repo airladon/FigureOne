@@ -1,4 +1,7 @@
-/* global __duration __frames __timeStep __title*/
+/* global __duration __frames __timeStep __title */
+/* eslint no-unused-vars: ["error", { "vars": "local" }] */
+/* eslint-disable no-global-assign */
+
 __title = 'Example - Interactive Angle';
 __duration = 4;
 __timeStep = 0.5;
