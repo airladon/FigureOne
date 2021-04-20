@@ -3,7 +3,6 @@
 /* eslint-disable import/no-dynamic-require, no-eval */
 /* eslint-disable jest/no-export, no-await-in-loop */
 global.__title = '';
-global.__timeStep = 0.5;
 global.__width = 500;
 global.__height = 375;
 
@@ -13,7 +12,12 @@ const fs = require('fs');
 
 expect.extend({ toMatchImageSnapshot });
 
-page.on('console', m => console.log(m.text(), JSON.stringify(m.args())));
+// page.on('console', m => console.log(m.text(), JSON.stringify(m.args())));
+page.on('console', async (msg) => {
+  const msgType = msg.type();
+  const args = await Promise.all(msg.args().map(jsHandle => jsHandle.jsonValue()));
+  console[msgType](...args);
+});
 
 function zeroPad(num, places) {
   const zero = places - num.toString().length + 1;
@@ -63,9 +67,9 @@ async function tester(
   htmlFile, dataFileUrl, dataFile, stateResolution = 1,
   fromTimesIn = [], toTimesIn = [], threshold = 0, intermitentTime = 0,
 ) {
-  require('./start.js');
+  // require('./start.js');
   // Tests
-  // * Snapshot at each state time
+  // * Snapshot at each state time during playback
   // * Snapshot of seek to each state time
   // * Snapshots of seek from a time, seek to a time, and play
 
@@ -76,6 +80,7 @@ async function tester(
   const diffs = combinedData.states.minified[diffsKey];
   const stateTimes = diffs.filter((d, i) => i % stateResolution === 0).map(d => d[0]);
 
+  // Get the slide times (if slides exist)
   let slideTimes = [];
   if (combinedData.events.map.map.slide != null) {
     const slideEventKey = combinedData.events.map.map.slide;
@@ -88,6 +93,7 @@ async function tester(
     slideTimes.push(...slides.map(s => s[0] + 1.1));
     slideTimes.sort();
   }
+
   let fromTimes = fromTimesIn;
   if (fromTimes.length === 0) {
     fromTimes = slideTimes;
@@ -95,11 +101,21 @@ async function tester(
   let toTimes = toTimesIn;
   if (toTimes.length === 0) {
     toTimes = slideTimes;
+    if (toTimes.length === 0 && fromTimes.length > 0) {
+      toTimes = fromTimes;
+    }
   }
+
+  // Playback tests will snapshot at state times (so seek can then be compared)
+  const playbackTests = stateTimes.map(t => [t]);
+
+  // Seek tests will be all state times
   const seekTests = [];
   stateTimes.forEach((stateTime) => {
     seekTests.push([stateTime]);
   });
+
+  // FromToTests are all combinations of fromTimes and toTimes
   const fromToTests = [];
   fromTimes.forEach((from) => {
     toTimes.forEach((to) => {
@@ -107,12 +123,11 @@ async function tester(
     });
   });
 
+  // Copy the audio and video track files to the tests folder so loading the
+  // file doesn't cause an error
   const path = dataFile.split('/').slice(0, -1).join('/');
   fs.copyFileSync(dataFile, `${path}/tests/video-track.json`);
   fs.copyFileSync(dataFile, `${path}/tests/audio-track.mp3`);
-
-  // Final Tests
-  const tests = stateTimes.map(t => [t]);
 
   jest.setTimeout(120000);
   describe(__title, () => {
@@ -120,7 +135,7 @@ async function tester(
     beforeAll(async () => {
       await page.setViewportSize({ width: __width || 500, height: __height || 375 });
       await page.goto(htmlFile);
-      await page.evaluate((url) => {
+      await page.evaluate(() => {
         figure.globalAnimation.manualOneFrameOnly = false;
         figure.globalAnimation.setManualFrames();
         figure.recorder.startPlayback();
@@ -132,15 +147,11 @@ async function tester(
     //   fs.rmSync(dataFile, `${path}/tests/video-track.json`);
     //   fs.rmSync(dataFile, `${path}/tests/audio-track.mp3`);
     // });
-    test.each(tests)('Play: %s',
+    test.each(playbackTests)('Play: %s',
       async (time) => {
-        // const currentTime = await page.evaluate(
-        //   () => Promise.resolve(figure.recorder.getCurrentTime()),
-        // );
         const currentTime = await getCurrentTime();
         const deltaTime = time - currentTime;
         let d = deltaTime;
-        // Trigger frames between those to be recorded
         if (intermitentTime > 0) {
           if (deltaTime > intermitentTime) {
             for (let i = intermitentTime; i < deltaTime - intermitentTime; i += intermitentTime) {
@@ -149,76 +160,43 @@ async function tester(
             }
           }
         }
-        // Trigger frame to be recordered
         await frame(d);
         await snap(time, threshold);
-        // const image = await page.screenshot({ timeout: 300000 });
-        // expect(image).toMatchImageSnapshot({
-        //   customSnapshotIdentifier: `${zeroPad(Math.round(time * 10000), 7)}`,
-        //   failureThreshold: threshold,
-        // });
       });
     test.each(seekTests)('Seek: %s',
       async (seekTimeIn) => {
-        // const currentTime = await page.evaluate(([seekTime]) => {
-        //   figure.recorder.seek(0);
-        //   figure.globalAnimation.frame(0);
-        //   figure.recorder.seek(seekTime);
-        //   figure.globalAnimation.frame(0);
-        //   return Promise.resolve(figure.recorder.getCurrentTime());
-        // }, [seekTimeIn]);
         await seek(0);
         await frame(0);
         await seek(seekTimeIn);
         await frame(0);
         const currentTime = await getCurrentTime();
-        // console.log(currentTime);
-        // await sleep(50);
-        // const image = await page.screenshot({ timeout: 300000 });
-        // expect(image).toMatchImageSnapshot({
-        //   customSnapshotIdentifier: `${zeroPad(Math.round(currentTime * 10000), 7)}`,
-        //   failureThreshold: threshold,
-        // });
         await snap(currentTime, threshold);
       });
     test.each(fromToTests)('From To: %s %s',
       async (fromTime, toTime) => {
         console.log(fromTime, toTime);
-        const seek = async (seekTimeIn, play) => {
-          const currentTime = await page.evaluate(([seekTime]) => {
-            figure.recorder.seek(seekTime);
-            figure.globalAnimation.frame(0);
-            figure.recorder.subscriptions.publish('timeUpdate', [figure.recorder.getCurrentTime()]);
-            return Promise.resolve(figure.recorder.getCurrentTime());
-          }, [seekTimeIn]);
+        const seekTo = async (seekTimeIn, play) => {
+          await seek(seekTimeIn);
+          await frame(0);
+          const currentTime = await getCurrentTime();
           let index = 0;
           while (index < stateTimes.length - 1 && stateTimes[index] < currentTime + 0.5) {
             index += 1;
           }
           const nextFrameTime = stateTimes[index][0];
-          const checkImage = async (imageTime) => {
-            const image = await page.screenshot({ timeout: 300000 });
-            expect(image).toMatchImageSnapshot({
-              customSnapshotIdentifier: `${zeroPad(Math.round(imageTime * 10000), 7)}`,
-              failureThreshold: threshold,
-            });
-          };
-          await checkImage(currentTime);
+
+          await snap(currentTime, threshold);
           if (nextFrameTime > currentTime && play) {
-            await page.evaluate(([delta]) => {
-              figure.recorder.resumePlayback();
-              figure.globalAnimation.frame(delta);
-              figure.recorder.subscriptions.publish('timeUpdate', [figure.recorder.getCurrentTime()]);
-            }, [nextFrameTime - currentTime]);
-            await checkImage(nextFrameTime);
+            await page.evaluate(() => figure.recorder.resumePlayback());
+            await frame(nextFrameTime - currentTime);
+            await snap(nextFrameTime, threshold);
           }
         };
-        await seek(fromTime, false);
-        await seek(toTime, true);
+        await seekTo(fromTime, false);
+        await seekTo(toTime, true);
       });
   });
 }
-
 
 module.exports = {
   tester,
