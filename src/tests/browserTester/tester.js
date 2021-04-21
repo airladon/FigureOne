@@ -32,16 +32,13 @@ function zeroPad(num, places) {
   return Array(+(zero > 0 && zero)).join('0') + num;
 }
 
-// It's not clear to me whether page.evaluate will always paint the screen
-// first and then return. Below, a promise is returned that resolves when
-// the screen is painted, guaranteeing this behaviour, but it's possible it is
-// overkill.
+// We only want to return from this function after the canvas has actually been
+// painted, so we resolve the promise with the 'afterDraw' notification
 async function frame(delta) {
   await page.evaluate(([d]) => new Promise((resolve) => {
     figure.subscriptions.add('afterDraw', () => resolve(), 1);
     figure.globalAnimation.frame(d);
     figure.animateNextFrame();
-    resolve();
   }), [delta]);
 }
 
@@ -70,7 +67,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
     if (snap == null) {
       snap = true;
     }
-    const delta = time - lastTime;
+    const delta = Math.round((time - lastTime) * 10) / 10;
     const test = [
       time,
       description || '',
@@ -96,19 +93,23 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
         clearTimeout(timeoutId);
         figure.globalAnimation.manualOneFrameOnly = false;
         figure.globalAnimation.setManualFrames();
+        // console.log('set manual frames');
       });
       await frame(0);
+      // console.log('beforeAll done')
     });
     test.each(tests)('%s %s',
       async (time, description, deltaTime, action, location, snap) => {
         let d = deltaTime;
         if (intermitentTime > 0 && deltaTime > intermitentTime) {
           for (let i = intermitentTime; i <= deltaTime - intermitentTime; i += intermitentTime) {
+            // console.log('intermittent frame')
             await frame(intermitentTime);
-            d -= intermitentTime;
+            d = Math.round((d - intermitentTime) * 10) / 10;
           }
         }
         if (action !== 'delay') {
+          // console.log('real frame')
           await frame(d);
           await page.evaluate(([t, l]) => {
             if (t != null) {
@@ -123,6 +124,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
               }
             }
           }, [action, location]);
+          // console.log('post frame')
           await frame(0);
         }
         if (!snap) {

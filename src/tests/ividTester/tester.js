@@ -26,26 +26,24 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// It's not clear to me whether page.evaluate will always paint the screen
-// first and then return. Below, a promise is returned that resolves when
-// the screen is painted, guaranteeing this behaviour, but it's possible it is
-// overkill. In the seek function below, no such thing is done, though if
-// inconsistent behaviour in the future is seen, maybe try doing the same.
+// We only want to return from this function after the canvas has actually been
+// painted, so we resolve the promise with the 'afterDraw' notification
 async function frame(delta) {
   await page.evaluate(([d]) => new Promise((resolve) => {
     figure.subscriptions.add('afterDraw', () => resolve(), 1);
     figure.globalAnimation.frame(d);
-    figure.animateNextFrame();
     figure.recorder.subscriptions.publish('timeUpdate', [figure.recorder.getCurrentTime()]);
-    resolve();
+    figure.animateNextFrame();
+    // resolve();
   }), [delta]);
 }
 
 async function seek(seekTimeIn) {
-  await page.evaluate(([seekTime]) => {
+  await page.evaluate(([seekTime]) => new Promise((resolve) => {
+    figure.subscriptions.add('afterDraw', () => resolve(), 1);
     figure.recorder.seek(seekTime);
     figure.animateNextFrame();
-  }, [seekTimeIn]);
+  }), [seekTimeIn]);
 }
 
 async function getCurrentTime() {
