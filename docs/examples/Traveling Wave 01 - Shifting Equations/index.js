@@ -567,7 +567,7 @@ slides.push({
     { 'diagram.plot': ['mainTrace', 'fxTrace'] },
   ],
   scenarioCommon: ['default', 'title'],
-  form: [null, 'funcX', 'unknown'],
+  form: { 'diagram.eqnF': 'funcX', 'diagram.eqnG': 'unknown' },
   steadyState: () => {
     trace.update(getFx(1.6, 0));
     fxTrace.update(getFx(-1.6, 0));
@@ -586,24 +586,16 @@ slides.push({
     { 'diagram.plot': ['x.line', 'x.title', 'y.line', 'y.title'] },
   ],
   scenarioCommon: 'default',
-  form: [null, null, null],
+  fromForm: null,
+  form: null,
 });
 
 slides.push({
-  fromForm: [null, 'funcX', null],
-  transition: (done) => {
-    fxTrace.show();
-    fxTrace.animations.new()
-      .inParallel([
-        fxTrace.animations.dissolveIn(0.4),
-        eqnF.animations.dissolveIn(0.4),
-      ])
-      .whenFinished(done)
-      .start();
-  },
-
-  form: [null, 'funcX', null],
-  steadyState: () => fxTrace.showAll(),
+  fromForm: { 'diagram.eqnF': 'funcX' },
+  transition: [
+    { in: [fxTrace, eqnF] },
+  ],
+  form: { 'diagram.eqnF': 'funcX' },
 });
 
 // //////////////////////////////////////////////////////////
@@ -628,7 +620,8 @@ slides.push({
     marks.showAll();
     moveMarks(0);
   },
-  steadyState: () => pulseMarks(),
+  transition: { trigger: () => pulseMarks() },
+  // steadyState: () => pulseMarks(),
   leaveStateCommon: () => { marks.undim(); },
 });
 
@@ -658,8 +651,7 @@ slides.push({
     value: { font: { color: actionColor }, onClick: pulseMarks },
   },
   transition: done => moveTrace(1.6, done),
-  fromForm: [null, 'funcX', null],
-  form: [null, 'funcX', 'funcX'],
+  form: { 'diagram.eqnF': 'funcX', 'diagram.eqnG': 'funcX' },
   steadyState: () => {
     trace.show();
     dist.showAll();
@@ -685,10 +677,11 @@ slides.push({
   },
 });
 slides.push({
-  steadyState: () => {
-    gLine.showAll();
+  enterState: () => {
+    updateLines = true;
     update();
   },
+  transition: { in: gLine },
   leaveStateCommon: () => { updateLines = false; },
 });
 
@@ -699,21 +692,16 @@ slides.push({
     'Mark the point on |f1||lb1||x||rb1| where this point',
     'moved from.',
   ],
-  steadyState: () => {
-    gLine.showAll();
-    updateLines = true;
-    update();
-  },
+  show: gLine,
 });
 
 slides.push({
-  steadyState: () => {
-    gLine.showAll();
-    fLine.showAll();
-    fLine.label.showForm('right');
-    updateLines = true;
-    update();
-  },
+  showCommon: [
+    { 'diagram.plot': ['x.line', 'x.title', 'y.line', 'y.title', 'fxTrace'] },
+    { diagram: ['marks.markG7', 'marks.markF7', 'plot.mainTrace'] },
+    { diagram: ['distance', 'gLine', 'fLine'] },
+  ],
+  transition: { in: fLine },
 });
 
 // //////////////////////////////////////////////////////////
@@ -736,18 +724,12 @@ slides.push({
 });
 
 slides.push({
-  transition: (done) => {
-    eqnG.showForm('funcX');
-    eqnF.showForm('funcX');
-    diagram.animations.new()
-      .scenario({ target: 'low', duration: 1 })
-      .whenFinished(done)
-      .start();
-  },
-  form: ['gRightD', 'funcX', 'funcX'],
-  steadyState: () => {
-    diagram.setScenario('low');
-  },
+  fromForm: { eqn: 'gRightD', 'diagram.eqnF': 'funcX', 'diagram.eqnG': 'funcX' },
+  transition: [
+    { scenario: diagram, target: 'low', duration: 1 },
+    { in: eqn, duration: 0.8 },
+  ],
+  form: { eqn: 'gRightD', 'diagram.eqnF': 'funcX', 'diagram.eqnG': 'funcX' },
 });
 
 slides.push({
@@ -755,12 +737,10 @@ slides.push({
   text: 'As |xd| is arbitrary, we can replace it with |x|.',
 });
 slides.push({
-  fromForm: ['gRightD', 'funcX', 'funcX'],
-  form: ['gRightDToX', 'funcX', 'funcX'],
+  form: { eqn: 'gRightDToX', 'diagram.eqnF': 'funcX', 'diagram.eqnG': 'funcX' },
 });
 slides.push({
-  fromForm: ['gRightDToX', 'funcX', 'funcX'],
-  form: ['gRight', 'funcX', 'funcX'],
+  form: { eqn: 'gRight', 'diagram.eqnF': 'funcX', 'diagram.eqnG': 'funcX' },
 });
 slides.push({
   steadyState: () => {
@@ -793,8 +773,8 @@ slides.push({
     updateLines = true;
     moveTrace(-1.6, null, 0);
   },
-  fromForm: [null, 'funcX', null],
-  form: [null, 'funcX', 'funcX'],
+  fromForm: { 'diagram.eqnF': 'funcX', 'diagram.eqnG': null },
+  form: { 'diagram.eqnF': 'funcX', 'diagram.eqnG': 'funcX' },
   transition: done => moveTrace(-1.6, done),
   steadyState: () => {
     moveTrace(-1.6, null, 0);
@@ -803,7 +783,7 @@ slides.push({
   leaveStateCommon: () => { updateLines = false; cycleIndex = 6; },
 });
 
-slides.push({ show: [gLine] });
+slides.push({ transition: { in: gLine } });
 
 slides.push({
   showCommon: [
@@ -817,19 +797,19 @@ slides.push({
     moveTrace(-1.6, null, 0);
     fLine.label.showForm('left');
   },
+  transition: { in: fLine },
 });
 
 slides.push({
-  fromForm: [null, 'funcX', 'funcX'],
-  form: ['gLeftD', 'funcX', 'funcX'],
+  transition: { in: eqn },
+  fromForm: { eqn: 'gLeftD', 'diagram.eqnF': 'funcX', 'diagram.eqnG': 'funcX' },
+  form: { eqn: 'gLeftD', 'diagram.eqnF': 'funcX', 'diagram.eqnG': 'funcX' },
 });
 slides.push({
-  fromForm: ['gLeftD', 'funcX', 'funcX'],
-  form: ['gLeftDToX', 'funcX', 'funcX'],
+  form: { eqn: 'gLeftDToX', 'diagram.eqnF': 'funcX', 'diagram.eqnG': 'funcX' },
 });
 slides.push({
-  fromForm: ['gLeftDToX', 'funcX', 'funcX'],
-  form: ['gLeft', 'funcX', 'funcX'],
+  form: { eqn: 'gLeft', 'diagram.eqnF': 'funcX', 'diagram.eqnG': 'funcX' },
 });
 slides.push({
   steadyState: () => {
@@ -858,7 +838,8 @@ slides.push({
       onClick: () => eqnH.pulse({ yAlign: 'top' }),
     },
   },
-  form: [null, 'funcX', 'left'],
+  // form: [null, 'funcX', 'left'],
+  form: { eqn: null, 'diagram.eqnF': 'funcX', 'diagram.eqnG': 'left' },
   scenarioCommon: ['default', 'bottom'],
   showCommon: [
     { 'diagram.plot': ['x.line', 'x.title', 'y.line', 'y.title', 'fxTrace'] },
@@ -908,7 +889,8 @@ slides.push({
     cycleIndex = 6;
     offsets = offsetsD;
   },
-  form: ['value', '0', '0'],
+  fromForm: { eqn: 'value', 'diagram.eqnF': '0', 'diagram.eqnG': '0' },
+  form: { eqn: 'value', 'diagram.eqnF': '0', 'diagram.eqnG': '0' },
 });
 
 // Load slides into slideNavigator

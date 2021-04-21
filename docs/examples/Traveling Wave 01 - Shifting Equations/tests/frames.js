@@ -1,6 +1,9 @@
-/* global __title __frames __duration __timeStep */
+/* global __duration __frames __timeStep __title, __width, __height */
+/* eslint no-unused-vars: ["error", { "vars": "local" }] */
+/* eslint-disable no-global-assign */
+
 __title = 'Example - Shifting Equations';
-__duration = 32;
+__duration = -1;
 __timeStep = 0.5;
 __frames = [
   [0],
@@ -20,7 +23,7 @@ __frames = [
   [0, 'touchUp'],
   [1, 'touchDown', [1.7, -1.3], 'Next-to-shiftanim'],
   [0, 'touchUp'],
-  [2, 'touchDown', [1.4, 1.2], 'touch-points'],
+  [3, 'touchDown', [1.4, 1.2], 'touch-points'],
   [0, 'touchUp'],
   [1, 'touchDown', [1.7, -1.3], 'Next-to-nowselect'],
   [0, 'touchUp'],
@@ -36,7 +39,7 @@ __frames = [
   [0, 'touchUp'],
   [0.5, 'touchDown', [1.7, -1.3], 'Next-to-animdown'],
   [0, 'touchUp'],
-  [1.5, 'touchDown', [1.7, -1.3], 'Next-to-asarbitrary'],
+  [2.5, 'touchDown', [1.7, -1.3], 'Next-to-asarbitrary'],
   [0, 'touchUp'],
   [0.5, 'touchDown', [1.7, -1.3], 'Next-to-formxup'],
   [0, 'touchUp'],
@@ -48,7 +51,7 @@ __frames = [
   [0, 'touchUp'],
   [0.5, 'touchDown', [1.7, -1.3], 'Next-to-leftanim'],
   [0, 'touchUp'],
-  [2.5, 'touchDown', [1.7, -1.3], 'Next-to-xdash'],
+  [3, 'touchDown', [1.7, -1.3], 'Next-to-xdash'],
   [0, 'touchUp'],
   [0.5, 'touchDown', [1.7, -1.3], 'Next-to-xdashd'],
   [0, 'touchUp'],
