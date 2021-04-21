@@ -12,6 +12,16 @@ function zeroPad(num, places) {
   return Array(+(zero > 0 && zero)).join('0') + num;
 }
 
+// We only want to return from this function after the canvas has actually been
+// painted, so we resolve the promise with the 'afterDraw' notification
+async function frame(delta) {
+  await page.evaluate(([d]) => new Promise((resolve) => {
+    figure.subscriptions.add('afterDraw', () => resolve(), 1);
+    figure.globalAnimation.frame(d);
+    figure.animateNextFrame();
+  }), [delta]);
+}
+
 function tester(snapshots, path, initialization = '', threshold = 0) {
   const examples = getExamples(path);
   const start = `
@@ -59,9 +69,10 @@ figure.add([
 ]);
 
 ${initialization}
-
+figure.globalAnimation.manualOneFrameOnly = false;
 figure.globalAnimation.setManualFrames();
 figure.globalAnimation.frame(0);
+figure.animateNextFrame();
 `;
 
   const tests = [];
@@ -77,14 +88,17 @@ figure.globalAnimation.frame(0);
       await jestPlaywright.resetBrowser();
       await page.setViewportSize({ width: 500, height: 375 });
       await page.goto(`file://${__dirname}/index.html`);
-      await page.evaluate(([c]) => {
+      await page.evaluate(() => {
+        figure.globalAnimation.manualOneFrameOnly = false;
         figure.globalAnimation.setManualFrames();
-        figure.globalAnimation.frame(0);
+      });
+      await frame(0);
+      await page.evaluate(([c]) => {
         eval(c);
-        figure.globalAnimation.frame(0);
       }, [code]);
+      await frame(0);
       const remainingDuration = await page.evaluate(() => figure.getRemainingAnimationTime());
-      let image = await page.screenshot({ fullPage: true });
+      let image = await page.screenshot();
       expect(image).toMatchImageSnapshot({
         customSnapshotIdentifier: `${id}-00000`,
         failureThreshold: threshold,
@@ -95,11 +109,12 @@ figure.globalAnimation.frame(0);
         const timeStep = 0.5;
         const steps = Math.ceil(remainingDuration / timeStep) + 2;
         for (let i = 1; i <= steps; i += 1) {
-          if (id.endsWith('1ff30952')) {
-            // console.log(timeStep, timeStep * i * 1000)
-          }
-          await page.evaluate(([t]) => figure.globalAnimation.frame(t), [timeStep]);
-          image = await page.screenshot({ fullPage: true });
+          // if (id.endsWith('1ff30952')) {
+          //   // console.log(timeStep, timeStep * i * 1000)
+          // }
+          // await page.evaluate(([t]) => figure.globalAnimation.frame(t), [timeStep]);
+          await frame(timeStep);
+          image = await page.screenshot();
           expect(image).toMatchImageSnapshot({
             customSnapshotIdentifier: `${id}-${zeroPad(Math.floor(timeStep * i * 1000), 5)}`,
             failureThreshold: threshold,

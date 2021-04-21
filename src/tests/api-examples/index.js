@@ -43,6 +43,7 @@ figure.add([
 ]);
 
 
-
+figure.globalAnimation.manualOneFrameOnly = false;
 figure.globalAnimation.setManualFrames();
 figure.globalAnimation.frame(0);
+figure.animateNextFrame();
