@@ -274,7 +274,7 @@ class WebGLInstance {
   // shaderLocations: Array<string>,
   backgroundColor: Array<number>,
 ) {
-    let gl: ?WebGLRenderingContext = canvas.getContext('webgl', { antialias: true, premultipliedAlpha: false });
+    let gl: ?WebGLRenderingContext = canvas.getContext('webgl', { antialias: true });
     if (gl == null) {
       // $FlowFixMe
       gl = glMock;
