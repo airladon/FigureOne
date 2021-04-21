@@ -1,4 +1,6 @@
-/* global __title __frames __duration __timeStep */
+/* global __duration __frames __timeStep __title, __width, __height */
+/* eslint no-unused-vars: ["error", { "vars": "local" }] */
+/* eslint-disable no-global-assign */
 __title = 'Example - Traveling Wave 02 - Fig2';
 __duration = -1;
 __timeStep = 0.5;
