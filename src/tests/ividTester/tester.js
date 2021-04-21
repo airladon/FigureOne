@@ -39,11 +39,9 @@ async function frame(delta) {
 }
 
 async function seek(seekTimeIn) {
-  await page.evaluate(([seekTime]) => new Promise((resolve) => {
-    figure.subscriptions.add('afterDraw', () => resolve(), 1);
+  await page.evaluate(([seekTime]) => {
     figure.recorder.seek(seekTime);
-    figure.animateNextFrame();
-  }), [seekTimeIn]);
+  }, [seekTimeIn]);
 }
 
 async function getCurrentTime() {
