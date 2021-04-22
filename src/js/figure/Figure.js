@@ -79,6 +79,8 @@ export type OBJ_FigureForElement = {
   * size: 0.2, style: 'normal', weight: 'normal' }`)
   * @property {number} [lineWidth] default line width
   * @property {number} [length] default length to use for shapes
+  * @property {TypeColor} [backgroundColor] background color for the figure.
+  * Use [r, g, b, 1] for opaque and [0, 0, 0, 0] for transparent.
  */
 export type OBJ_Figure = {
   htmlId?: string,
@@ -142,8 +144,8 @@ export type OBJ_Figure = {
  * The figure manages all drawing elements, renders the drawing elements
  * on a browser's animation frames and listens for guestures from the user.
  *
- * The figure also has a recorder, allowing to record and playback states,
- * and gestures - though this is not yet documented.
+ * The figure also has a recorder, allowing it to record and playback states,
+ * and gestures.
  *
  * To attach to a different `div`, use the `htmlId` property in the class
  * constructor.
@@ -151,14 +153,15 @@ export type OBJ_Figure = {
  * If a figure is paused, then all drawing element animations will
  * also be paused.
  *
- * `Figure` has a number of convenience methods for create drawing elements
- * already attached to the drawing canvases, and useful transforms for
- * converting between the different spaces (e.g. pixel, GL, figure).
+ * `Figure` has a number of convenience methods for creating drawing elements
+ * and useful transforms for converting between the different spaces (e.g.
+ * pixel, GL, figure).
  *
  * Notifications - The subscription manager property `subscriptions` will
  * publish the following events:
  * - `beforeDraw`: published before a frame is drawn
  * - `afterDraw`: published after a frame is drawn
+ * - `resize`: published after a resize event, but before frame drawing
  *
  * @class
  * @param {OBJ_Figure} options
@@ -200,7 +203,6 @@ export type OBJ_Figure = {
  *     },
  *   },
  * );
- * figure.initialize();
  *
  * @example
  * // Alternately, an element can be added programatically
@@ -1640,6 +1642,7 @@ class Figure {
       this.renderAllElementsToTiedCanvases();
       this.oldWidth = this.canvasLow.clientWidth;
     }
+    this.subscriptions.publish('resize');
     this.animateNextFrame(true, 'resize');
     this.drawAnimationFrames = 2;
     // this.renderAllElementsToTiedCanvases(true);
