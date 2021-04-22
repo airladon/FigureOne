@@ -5,44 +5,149 @@ const figure = new Fig.Figure();
 // figure.fnMap.add('toConsole', s => console.log(s));
 // figure.fnMap.exec('toConsol', 'hello');
 
+const text = (index, position, opacity) => ({
+  name: `text${index}`,
+  method: 'text',
+  options: {
+    text: `a${index}`,
+    font: { weight: '900' },
+    position,
+    color: [1, 0, 0, opacity],
+  },
+});
+const square = (index, position, opacity) => ({
+  name: `square${index}`,
+  method: 'rectangle',
+  options: {
+    width: 0.2,
+    height: 0.2,
+    position,
+    color: [1, 0, 0, opacity],
+  },
+});
 figure.add([
   {
-    name: 'text',
-    method: 'text',
-    options: { text: 'hello' },
+    name: '__minorGrid',
+    method: 'primitives.grid',
+    options: {
+      position: [0, 0],
+      color: [0.9, 0.9, 0.9, 1],
+      line: { width: 0.002 },
+      xStep: 0.1,
+      yStep: 0.1,
+      bounds: figure.limits._dup(),
+    },
   },
   {
-    name: 'ellipse',
-    method: 'ellipse',
-    options: { width: 1, height: 0.2, position: [0, 0], color: [1, 0, 0, 1], line: { width: 0.01 } },
+    name: '__majorGrid',
+    method: 'primitives.grid',
+    options: {
+      position: [0, 0],
+      color: [0.9, 0.9, 0.9, 1],
+      line: { width: 0.005 },
+      xStep: 0.5,
+      yStep: 0.5,
+      bounds: figure.limits._dup(),
+    },
   },
-  {
-    name: 'polygon2',
-    method: 'polygon',
-    options: { radius: 0.5, position: [-0.2, 0], color: [1, 0, 0, 1] },
-  },
-  {
-    name: 'polygon3',
-    method: 'polygon',
-    options: { radius: 0.5, position: [0.2, 0], color: [1, 0, 0, 0.5] },
-  },
+  text(0, [-1, 0.8], 1),
+  text(1, [-0.5, 0.8], 0.75),
+  text(2, [0, 0.8], 0.5),
+  text(3, [0.5, 0.8], 0.25),
+  square(0, [-0.9, 0.7], 1),
+  square(1, [-0.4, 0.7], 0.75),
+  square(2, [0.1, 0.7], 0.5),
+  square(3, [0.6, 0.7], 0.25),
+
+  square(4, [-0.9, 0.4], 1),
+  square(5, [-0.75, 0.35], 0.5),
+  square(6, [-0.6, 0.3], 0.5),
 
 ]);
+figure.add(
+  {
+    name: 'gradient',
+    method: 'rectangle',
+    options: {
+      width: 0.4,
+      height: 0.4,
+      position: [-0.75, -0.8],
+      corner: { radius: 0.1, sides: 10 },
+      texture: {
+        src: 'gradient.png',
+        mapTo: [-0.2, -0.2, 0.4, 0.4],
+      },
+    },
+  },
+);
+figure.add(
+  {
+    name: 'solid',
+    method: 'rectangle',
+    options: {
+      width: 0.4,
+      height: 0.4,
+      position: [-0.3, -0.8],
+      corner: { radius: 0.1, sides: 10 },
+      texture: {
+        src: 'solid.png',
+        mapTo: [-0.2, -0.2, 0.4, 0.4],
+      },
+    },
+  },
+);
+figure.add(
+  {
+    name: 'solidWithOpacity',
+    method: 'rectangle',
+    options: {
+      width: 0.4,
+      height: 0.4,
+      position: [0.2, -0.8],
+      corner: { radius: 0.1, sides: 10 },
+      texture: {
+        src: 'solid.png',
+        mapTo: [-0.2, -0.2, 0.4, 0.4],
+      },
+    },
+    mods: {
+      opacity: 0.5,
+    },
+  },
+);
 figure.add(
   {
     name: 'flower',
     method: 'rectangle',
     options: {
-      width: 1.8,
-      height: 1.333,
+      width: 1.8 / 4,
+      height: 1.333 / 4,
+      position: [0.75, -0.8],
       corner: { radius: 0.1, sides: 10 },
       texture: {
-        src: 'gradient.png',
-        mapTo: [-1, -0.667, 2, 1.333],
+        src: 'transparent.png',
+        mapTo: [-1 / 4, -0.667 / 4, 2 / 4, 1.333 / 4],
       },
     },
   },
 );
+
+// figure.add(
+//   {
+//     name: 'hole',
+//     method: 'rectangle',
+//     options: {
+//       width: 0.5,
+//       height: 0.4,
+//       position: [0, -0.8],
+//       corner: { radius: 0.1, sides: 10 },
+//       texture: {
+//         src: 'transparent.png',
+//         mapTo: [-1, -0.667, 2, 1.333],
+//       },
+//     },
+//   },
+// );
 figure.elements.animations.new()
   .delay(0.1)
   .dissolveIn(0.1)

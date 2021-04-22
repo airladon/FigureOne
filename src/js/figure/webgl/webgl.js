@@ -314,7 +314,7 @@ class WebGLInstance {
       // this.gl.clearColor(bc[0], bc[1], bc[2], bc[3]);
       this.gl.clearColor(1, 1, 1, 1);
       this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-      gl.colorMask(true, true, true, false);
+      this.gl.colorMask(true, true, true, false);
       this.gl.disable(this.gl.DEPTH_TEST);
       this.gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
       this.gl.enable(gl.BLEND);
