@@ -837,7 +837,7 @@ class TextObjectBase extends DrawingObject {
     // channel. So make the same here to fade-ins happen at same rate
     const c = color.slice();
     // console.log(c[3], this.text[0].text, Math.cbrt(c[3]))
-    // c[3] = Math.cbrt(c[3])
+    c[3] = Math.cbrt(c[3])
     // c[3] *= c[3] * c[3];
 
     // Fill in all the text

@@ -1,5 +1,5 @@
 /* globals Fig */
-const figure = new Fig.Figure({ backgroundColor: [1, 1, 1, 1] });
+const figure = new Fig.Figure({ backgroundColor: [1, 1, 1, 0.5] });
 
 
 // figure.fnMap.add('toConsole', s => console.log(s));
@@ -25,6 +25,24 @@ const square = (index, position, opacity) => ({
     color: [1, 0, 0, opacity],
   },
 });
+
+const texture = (index, src, position, opacity) => ({
+  name: `texture${index}`,
+  method: 'rectangle',
+  options: {
+    width: 0.4,
+    height: 0.4,
+    position,
+    texture: {
+      src,
+      mapTo: [-0.2, -0.2, 0.4, 0.4],
+    },
+  },
+  mods: {
+    opacity,
+  },
+});
+
 figure.add([
   {
     name: '__minorGrid',
@@ -32,7 +50,7 @@ figure.add([
     options: {
       position: [0, 0],
       color: [0.9, 0.9, 0.9, 1],
-      line: { width: 0.002 },
+      line: { width: 0.004 },
       xStep: 0.1,
       yStep: 0.1,
       bounds: figure.limits._dup(),
@@ -66,74 +84,78 @@ figure.add([
   square(7, [-0.9, -0.6], 1),
   square(8, [-0.75, -0.6], 0.5),
 
+  texture(0, 'gradient.png', [-0.75, -0.8], 1),
+  texture(1, 'solid.png', [-0.25, -0.8], 1),
+  texture(2, 'solid.png', [0.25, -0.8], 0.5),
+  texture(3, 'border.png', [0.75, -0.8], 1),
 ]);
-figure.add(
-  {
-    name: 'gradient',
-    method: 'rectangle',
-    options: {
-      width: 0.4,
-      height: 0.4,
-      position: [-0.75, -0.8],
-      corner: { radius: 0.1, sides: 10 },
-      texture: {
-        src: 'gradient.png',
-        mapTo: [-0.2, -0.2, 0.4, 0.4],
-      },
-    },
-  },
-);
-figure.add(
-  {
-    name: 'solid',
-    method: 'rectangle',
-    options: {
-      width: 0.4,
-      height: 0.4,
-      position: [-0.3, -0.8],
-      corner: { radius: 0.1, sides: 10 },
-      texture: {
-        src: 'solid.png',
-        mapTo: [-0.2, -0.2, 0.4, 0.4],
-      },
-    },
-  },
-);
-figure.add(
-  {
-    name: 'solidWithOpacity',
-    method: 'rectangle',
-    options: {
-      width: 0.4,
-      height: 0.4,
-      position: [0.2, -0.8],
-      corner: { radius: 0.1, sides: 10 },
-      texture: {
-        src: 'solid.png',
-        mapTo: [-0.2, -0.2, 0.4, 0.4],
-      },
-    },
-    mods: {
-      opacity: 0.5,
-    },
-  },
-);
-figure.add(
-  {
-    name: 'flower',
-    method: 'rectangle',
-    options: {
-      width: 1.8 / 4,
-      height: 1.333 / 4,
-      position: [0.75, -0.8],
-      corner: { radius: 0.1, sides: 10 },
-      texture: {
-        src: 'transparent.png',
-        mapTo: [-1 / 4, -0.667 / 4, 2 / 4, 1.333 / 4],
-      },
-    },
-  },
-);
+// figure.add(
+//   {
+//     name: 'gradient',
+//     method: 'rectangle',
+//     options: {
+//       width: 0.4,
+//       height: 0.4,
+//       position: [-0.75, -0.8],
+//       corner: { radius: 0.1, sides: 10 },
+//       texture: {
+//         src: 'gradient.png',
+//         mapTo: [-0.2, -0.2, 0.4, 0.4],
+//       },
+//     },
+//   },
+// );
+// figure.add(
+//   {
+//     name: 'solid',
+//     method: 'rectangle',
+//     options: {
+//       width: 0.4,
+//       height: 0.4,
+//       position: [-0.3, -0.8],
+//       corner: { radius: 0.1, sides: 10 },
+//       texture: {
+//         src: 'solid.png',
+//         mapTo: [-0.2, -0.2, 0.4, 0.4],
+//       },
+//     },
+//   },
+// );
+// figure.add(
+//   {
+//     name: 'solidWithOpacity',
+//     method: 'rectangle',
+//     options: {
+//       width: 0.4,
+//       height: 0.4,
+//       position: [0.2, -0.8],
+//       corner: { radius: 0.1, sides: 10 },
+//       texture: {
+//         src: 'solid.png',
+//         mapTo: [-0.2, -0.2, 0.4, 0.4],
+//       },
+//     },
+//     mods: {
+//       opacity: 0.5,
+//     },
+//   },
+// );
+// figure.add(
+//   {
+//     name: 'flower',
+//     method: 'rectangle',
+//     options: {
+//       width: 1.8 / 4,
+//       height: 1.333 / 4,
+//       position: [0.75, -0.8],
+//       corner: { radius: 0.1, sides: 10 },
+//       texture: {
+//         src: 'transparent.png',
+//         mapTo: [-1 / 4, -0.667 / 4, 2 / 4, 1.333 / 4],
+//       },
+//     },
+//   },
+// );
 
 // figure.add(
 //   {
