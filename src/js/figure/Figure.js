@@ -87,6 +87,7 @@ export type OBJ_Figure = {
   font?: OBJ_Font,
   lineWidth?: number,
   length?: number,
+  backgroundColor?: number,
 };
 
 
@@ -327,6 +328,7 @@ class Figure {
         weight: '100',
         opacity: 1,
       },
+      backgroundColor: [1, 1, 1, 1],
     };
     this.fnMap = new FunctionMap();
     this.isPaused = false;
@@ -422,7 +424,7 @@ class Figure {
         `;
         document.getElementsByTagName('head')[0].appendChild(canvasStyle);
 
-        this.backgroundColor = [1, 1, 1, 1];
+        this.backgroundColor = optionsToUse.backgroundColor;
         const webglLow = new WebGLInstance(
           this.canvasLow,
           this.backgroundColor,

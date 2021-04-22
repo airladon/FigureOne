@@ -1,5 +1,5 @@
 /* globals Fig */
-const figure = new Fig.Figure();
+const figure = new Fig.Figure({ backgroundColor: [1, 1, 1, 1] });
 
 
 // figure.fnMap.add('toConsole', s => console.log(s));
