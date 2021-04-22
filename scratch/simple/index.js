@@ -12,11 +12,37 @@ figure.add([
     options: { text: 'hello' },
   },
   {
-    name: 'polygon',
-    method: 'polygon',
-    options: { radius: 0.2, position: [0, -0.5] },
+    name: 'ellipse',
+    method: 'ellipse',
+    options: { width: 1, height: 0.2, position: [0, 0], color: [1, 0, 0, 1], line: { width: 0.01 } },
   },
+  {
+    name: 'polygon2',
+    method: 'polygon',
+    options: { radius: 0.5, position: [-0.2, 0], color: [1, 0, 0, 1] },
+  },
+  {
+    name: 'polygon3',
+    method: 'polygon',
+    options: { radius: 0.5, position: [0.2, 0], color: [1, 0, 0, 0.5] },
+  },
+
 ]);
+figure.add(
+  {
+    name: 'flower',
+    method: 'rectangle',
+    options: {
+      width: 1.8,
+      height: 1.333,
+      corner: { radius: 0.1, sides: 10 },
+      texture: {
+        src: 'gradient.png',
+        mapTo: [-1, -0.667, 2, 1.333],
+      },
+    },
+  },
+);
 figure.elements.animations.new()
   .delay(0.1)
   .dissolveIn(0.1)

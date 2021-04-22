@@ -44,7 +44,7 @@ function makePolygon(
         name: 'border',
         method: 'primitives.polygon',
         options: {
-          radius, sides, line: { width: 0.003 }, color: [1, 1, 1, 0.5],
+          radius: radius - 0.0015, sides, line: { width: 0.003 }, color: [1, 1, 1, 1],
         },
       },
     ],

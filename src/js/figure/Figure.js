@@ -2238,8 +2238,16 @@ class Figure {
   clearContext(canvasIndex: number = 0) {
     // console.log('clearContext')
     if (canvasIndex === 0) {
-      this.webglLow.gl.clearColor(0, 0, 0, 0);
+      this.webglLow.gl.clearColor(
+        this.backgroundColor[0],
+        this.backgroundColor[1],
+        this.backgroundColor[2],
+        this.backgroundColor[3],
+      );
       this.webglLow.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
+      // gl.colorMask(true, true, true, false);
+      // this.webglLow.gl.colorMask(false, false, false, true);
+      // this.webglLow.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
     } else {
       this.webglOffscreen.gl.clearColor(0, 0, 0, 0);
       this.webglOffscreen.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
@@ -2486,6 +2494,16 @@ class Figure {
       this.drawAnimationFrames -= 1;
       this.animateNextFrame(true, 'queued frames');
     }
+    // if (canvasIndex === 0) {
+    //   // this.webglLow.gl.clearColor(0, 0, 0, 0);
+    //   // this.webglLow.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
+    //   this.webglLow.gl.clearColor(1, 1, 1, 1);
+    //   this.webglLow.gl.colorMask(false, false, false, true);
+    //   this.webglLow.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
+    // } else {
+    //   this.webglOffscreen.gl.clearColor(0, 0, 0, 0);
+    //   this.webglOffscreen.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
+    // }
     this.subscriptions.publish('afterDraw');
     if (FIGURE1DEBUG) { // $FlowFixMe
       timer.stamp('afterDraw'); // $FlowFixMe
