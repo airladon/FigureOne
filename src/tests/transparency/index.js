@@ -1,5 +1,5 @@
 /* globals Fig */
-const figure = new Fig.Figure({ backgroundColor: [1, 1, 1, 1] });
+const figure = new Fig.Figure({ backgroundColor: [1, 1, 1, 0] });
 
 const text = (index, position, opacity) => ({
   name: `text${index}`,
@@ -11,27 +11,27 @@ const text = (index, position, opacity) => ({
     color: [1, 0, 0, opacity],
   },
 });
-const square = (index, position, opacity) => ({
+const square = (index, position, opacity, side = 0.2) => ({
   name: `square${index}`,
   method: 'rectangle',
   options: {
-    width: 0.2,
-    height: 0.2,
+    width: side,
+    height: side,
     position,
     color: [1, 0, 0, opacity],
   },
 });
 
-const texture = (index, src, position, opacity) => ({
+const texture = (index, src, position, opacity, height = 0.4) => ({
   name: `texture${index}`,
   method: 'rectangle',
   options: {
     width: 0.4,
-    height: 0.4,
+    height,
     position,
     texture: {
-      src,
-      mapTo: [-0.2, -0.2, 0.4, 0.4],
+      src: `http://localhost:8080/src/tests/transparency/${src}`,
+      mapTo: [-0.2, -height / 2, 0.4, height],
     },
   },
   mods: {
@@ -77,14 +77,27 @@ figure.add([
   square(5, [-0.75, 0.35], 0.5),
   square(6, [-0.6, 0.3], 0.5),
 
-  square(7, [-0.9, -0.6], 1),
-  square(8, [-0.75, -0.6], 0.5),
 
-  texture(0, 'gradient.png', [-0.75, -0.8], 1),
-  texture(1, 'solid.png', [-0.25, -0.8], 1),
-  texture(2, 'solid.png', [0.25, -0.8], 0.5),
-  texture(3, 'border.png', [0.75, -0.8], 1),
-  texture(4, 'solid.jpg', [-0.25, -0.3], 1),
-  texture(5, 'solid.jpg', [0.25, -0.3], 0.5),
+  texture(0, 'gradient.png', [-0.75, -0.5], 1, 1),
+  texture(1, 'solid.png', [-0.35, -1], 1, 0.1),
+  texture(2, 'solid.png', [-0.35, -0.9], 0.9, 0.08),
+  texture(3, 'solid.png', [-0.35, -0.8], 0.8, 0.08),
+  texture(4, 'solid.png', [-0.35, -0.7], 0.7, 0.08),
+  texture(5, 'solid.png', [-0.35, -0.6], 0.6, 0.08),
+  texture(6, 'solid.png', [-0.35, -0.5], 0.5, 0.08),
+  texture(7, 'solid.png', [-0.35, -0.4], 0.4, 0.08),
+  texture(8, 'solid.png', [-0.35, -0.3], 0.3, 0.08),
+  texture(9, 'solid.png', [-0.35, -0.2], 0.2, 0.08),
+  texture(10, 'solid.png', [-0.35, -0.1], 0.1, 0.08),
+  texture(11, 'solid.png', [0.1, -0.9], 1, 0.2),
+  texture(12, 'solid.jpg', [0.1, -0.6], 1, 0.2),
+  texture(13, 'solid.jpg', [0.1, -0.3], 0.5, 0.2),
+  texture(14, 'border.png', [0.75, -0.8], 1),
+
+  square(7, [0.55, -0.25], 1, 0.1),
+  square(8, [0.95, -0.25], 0.5, 0.1),
+  texture(15, 'gradient.png', [0.75, -0.25], 1, 0.7),
+  square(9, [0.68, -0.25], 1, 0.1),
+  square(10, [0.82, -0.25], 0.5, 0.1),
 ]);
 // figure
