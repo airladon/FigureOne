@@ -290,37 +290,19 @@ class WebGLInstance {
       // $FlowFixMe
       this.gl = gl;
       
-      // this.program = createProgramFromScripts(
-      //   this.gl,
-      //   vertexSource,
-      //   fragmentSource,
-      // );
-
       // this.locations = getGLLocations(this.gl, this.program, shaderLocations);
 
       // Prep canvas
-      // resizeCanvasToDisplaySize(this.gl.canvas);
       this.resize();
 
 
-      // Tell WebGL how to convert from clip space to pixels
-      // this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
-      // gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-
-      // this.gl.viewport(0, 500, 500, 500);   // Tell WebGL how to convert from clip space to pixels
-
-      // Clear the canvas
-      // const bc = backgroundColor;
-      // this.gl.clearColor(bc[0], bc[1], bc[2], bc[3]);
-      this.gl.clearColor(1, 1, 1, 1);
-      this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-      // this.gl.colorMask(true, true, true, false);
+      // Clear the canvas - removing this as it's done in the draw frame
+      // this.gl.clearColor(1, 1, 1, 1);
+      // this.gl.clear(this.gl.COLOR_BUFFER_BIT);
       this.gl.disable(this.gl.DEPTH_TEST);
       this.gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA)
       this.gl.enable(gl.BLEND);
-      // this.gl.useProgram(this.program);
 
-      // window.addEventListener('resize', autoResize.bind(this, event));
     }
   }
 
