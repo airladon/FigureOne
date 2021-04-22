@@ -98,7 +98,7 @@ function makeFigure(backgroundColor, htmlId) {
     texture('p1', 'solid.png', [0.85, 0.5], 0.5, 1, 0.09),
     texture('j1', 'solid.jpg', [0.95, 0.5], 0.5, 1, 0.09),
 
-
+    texture('grad05', 'gradient.png', [-0.95, -0.5], 0.5, 1, 0.1),
     texture(0, 'gradient.png', [-0.8, -0.5], 1, 1, 0.2),
     texture(1, 'solid.png', [-0.6, -1], 1, 0.1, 0.2),
     texture(2, 'solid.png', [-0.6, -0.9], 0.9, 0.08, 0.2),
@@ -134,4 +134,4 @@ function makeFigure(backgroundColor, htmlId) {
 }
 
 const figure1 = makeFigure([1, 1, 1, 1], 'figureOneContainer1');
-const figure2 = makeFigure([1, 1, 1, 0], 'figureOneContainer2');
+const figure2 = makeFigure([0, 0, 0, 0], 'figureOneContainer2');
