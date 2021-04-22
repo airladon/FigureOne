@@ -47,9 +47,9 @@ const fragment = {
       + 'void main() {'
         + 'if ( u_use_texture == 1) {'
           + 'gl_FragColor = texture2D(u_texture, v_texcoord) * u_color.a;'
-          + 'gl_FragColor.rgb *= gl_FragColor.a;'
         + '} else {'
           + 'gl_FragColor = u_color;'
+          + 'gl_FragColor.rgb *= gl_FragColor.a;'
         + '}'
       + '}',
     varNames: ['u_color', 'u_use_texture', 'u_texture'],
