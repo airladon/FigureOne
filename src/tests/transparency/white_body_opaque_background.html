@@ -4,11 +4,41 @@
         body {
             background-color: white;
         }
+        .line {
+            width: 800px;
+            height: 80px;
+            position: absolute;
+        }
+        .whiteline {
+            top: 8px;
+            background-color: white;
+        }
+        .blackline {
+            top: 88px;
+            background-color: black;
+        }
+        .redline {
+            top: 168px;
+            background-color: red;
+        }
+        .greenline {
+            top: 248px;
+            background-color: green;
+        }
+        .blueline {
+            top: 328px;
+            background-color: blue;
+        }
     </style>
 </head>
 <html>
 <body>
-    <div id="figureOneContainer" style="width: 800px; height: 800px;">
+    <div class="line whiteline"></div>
+    <div class="line blackline"></div>
+    <div class="line redline"></div>
+    <div class="line greenline"></div>
+    <div class="line blueline"></div>
+    <div id="figureOneContainer" style="width: 800px; height: 800px;"></div>
     <script type="text/javascript" src='../../../package/index.js'></script>
     <script type="text/javascript" src='./index.js'></script>
     <script type="text/javascript">
