@@ -276,7 +276,7 @@ class WebGLInstance {
 ) {
     let gl: ?WebGLRenderingContext = canvas.getContext('webgl', {
       antialias: true,
-      premultipliedAlpha: false,
+      // premultipliedAlpha: false,
       // alpha: false
     });
     if (gl == null) {
@@ -316,7 +316,7 @@ class WebGLInstance {
       this.gl.clear(this.gl.COLOR_BUFFER_BIT);
       // this.gl.colorMask(true, true, true, false);
       this.gl.disable(this.gl.DEPTH_TEST);
-      this.gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
+      this.gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA)
       this.gl.enable(gl.BLEND);
       // this.gl.useProgram(this.program);
 

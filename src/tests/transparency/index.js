@@ -47,7 +47,7 @@ function makeFigure(backgroundColor, htmlId) {
       options: {
         position: [0, 0],
         color: [0.9, 0.9, 0.9, 1],
-        line: { width: 0.004 },
+        line: { width: 0.005 },
         xStep: 0.1,
         yStep: 0.1,
         bounds: figure.limits._dup(),
