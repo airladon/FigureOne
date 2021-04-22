@@ -5,7 +5,7 @@
 
 // eslint-disable-next-line import/no-unresolved
 const { toMatchImageSnapshot } = require('jest-image-snapshot');
-const playwright = require('playwright');
+// const playwright = require('playwright');
 
 expect.extend({ toMatchImageSnapshot });
 
@@ -29,10 +29,7 @@ function tester(htmlFile, title, threshold = 0, width = 500, height = 500) {
     file = htmlFile;
   }
   describe(title, () => {
-    test('chromium', async () => {
-      const browser = await playwright.chromium.launch();
-      const context = await browser.newContext();
-      const page = await context.newPage();
+    test('transparency', async () => {
       await page.setViewportSize({ width, height });
       await page.goto(file);
       const image = await page.screenshot();
@@ -40,34 +37,46 @@ function tester(htmlFile, title, threshold = 0, width = 500, height = 500) {
         customSnapshotIdentifier: `${title}-chromium`,
         failureThreshold: threshold,
       });
-      await browser.close();
     });
-    test('webkit', async () => {
-      const browser = await playwright.webkit.launch();
-      const context = await browser.newContext();
-      const page = await context.newPage();
-      await page.setViewportSize({ width, height });
-      await page.goto(file);
-      const image = await page.screenshot();
-      expect(image).toMatchImageSnapshot({
-        customSnapshotIdentifier: `${title}-webkit`,
-        failureThreshold: threshold,
-      });
-      await browser.close();
-    });
-    test('firefox', async () => {
-      const browser = await playwright.webkit.launch();
-      const context = await browser.newContext();
-      const page = await context.newPage();
-      await page.setViewportSize({ width, height });
-      await page.goto(file);
-      const image = await page.screenshot();
-      expect(image).toMatchImageSnapshot({
-        customSnapshotIdentifier: `${title}-firefox`,
-        failureThreshold: threshold,
-      });
-      await browser.close();
-    });
+    // test('chromium', async () => {
+    //   const browser = await playwright.chromium.launch();
+    //   const context = await browser.newContext();
+    //   const page = await context.newPage();
+    //   await page.setViewportSize({ width, height });
+    //   await page.goto(file);
+    //   const image = await page.screenshot();
+    //   expect(image).toMatchImageSnapshot({
+    //     customSnapshotIdentifier: `${title}-chromium`,
+    //     failureThreshold: threshold,
+    //   });
+    //   await browser.close();
+    // });
+    // test('webkit', async () => {
+    //   const browser = await playwright.webkit.launch();
+    //   const context = await browser.newContext();
+    //   const page = await context.newPage();
+    //   await page.setViewportSize({ width, height });
+    //   await page.goto(file);
+    //   const image = await page.screenshot();
+    //   expect(image).toMatchImageSnapshot({
+    //     customSnapshotIdentifier: `${title}-webkit`,
+    //     failureThreshold: threshold,
+    //   });
+    //   await browser.close();
+    // });
+    // test('firefox', async () => {
+    //   const browser = await playwright.webkit.launch();
+    //   const context = await browser.newContext();
+    //   const page = await context.newPage();
+    //   await page.setViewportSize({ width, height });
+    //   await page.goto(file);
+    //   const image = await page.screenshot();
+    //   expect(image).toMatchImageSnapshot({
+    //     customSnapshotIdentifier: `${title}-firefox`,
+    //     failureThreshold: threshold,
+    //   });
+    //   await browser.close();
+    // });
   });
 }
 
