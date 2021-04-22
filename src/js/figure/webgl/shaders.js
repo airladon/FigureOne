@@ -45,7 +45,7 @@ const fragment = {
       + 'varying vec2 v_texcoord;'
       + 'void main() {'
         + 'if ( u_use_texture == 1) {'
-          + 'gl_FragColor = texture2D(u_texture, v_texcoord);'
+          + 'gl_FragColor = texture2D(u_texture, v_texcoord) * u_color.a;'
         + '} else {'
           + 'gl_FragColor = u_color;'
         + '}'
