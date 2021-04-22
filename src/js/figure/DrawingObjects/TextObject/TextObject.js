@@ -90,14 +90,15 @@ class FigureFont {
 
   setColorInContext(ctx: CanvasRenderingContext2D, color: TypeColor | null) {
     const thisColor = this.color;
-    let { opacity } = this;
-    if (color != null) {
-      opacity *= color[3];
-    }
+    // let { opacity } = this;
+    // if (color != null) {
+    //   opacity *= color[3];
+    // }
     if (thisColor != null) {
       const c = [
         ...thisColor.slice(0, 3),
-        thisColor[3] * opacity,
+        // thisColor[3] * opacity,
+        color[3],
       ];
       ctx.fillStyle = colorArrayToRGBA(c);
     } else if (color != null) {
@@ -837,7 +838,7 @@ class TextObjectBase extends DrawingObject {
     // channel. So make the same here to fade-ins happen at same rate
     const c = color.slice();
     // console.log(c[3], this.text[0].text, Math.cbrt(c[3]))
-    c[3] = Math.cbrt(c[3])
+    // c[3] = Math.cbrt(c[3])
     // c[3] *= c[3] * c[3];
 
     // Fill in all the text
