@@ -66,6 +66,9 @@ function makeFigure(backgroundColor, htmlId) {
       },
     },
 
+    // Compare shape vs text transparenecy with transparency levels of
+    // 1, 0.75, 0.5 and 0.25 and when underlying html has white, black, red,
+    // green and blue backgrounds
     square('100', [-0.85, 0.5], 1, 1, 0.1),
     text('w1', [-0.815, 0.8], 1),
     text('bk1', [-0.815, 0.6], 1),
@@ -94,10 +97,14 @@ function makeFigure(backgroundColor, htmlId) {
     text('g4', [0.085, 0.2], 0.25),
     text('b4', [0.085, 0], 0.25),
 
+    // Test partically transparent texture, and opaque textures set to have 0.5
+    // transparency against html backgrounds of white, black, red, green blue.
     texture('g1', 'gradient.png', [0.75, 0.5], 1, 1, 0.09),
     texture('p1', 'solid.png', [0.85, 0.5], 0.5, 1, 0.09),
     texture('j1', 'solid.jpg', [0.95, 0.5], 0.5, 1, 0.09),
 
+    // Compare png with gradient transparency vs equivalent grades of
+    // transparent solid textures
     texture('grad05', 'gradient.png', [-0.95, -0.5], 0.5, 1, 0.1),
     texture(0, 'gradient.png', [-0.8, -0.5], 1, 1, 0.2),
     texture(1, 'solid.png', [-0.6, -1], 1, 0.1, 0.2),
@@ -111,27 +118,40 @@ function makeFigure(backgroundColor, htmlId) {
     texture(9, 'solid.png', [-0.6, -0.2], 0.2, 0.08, 0.2),
     texture(10, 'solid.png', [-0.6, -0.1], 0.1, 0.08, 0.2),
 
+    // Confirm png and jpg textures can be shown opaque and with dissolve
+    // opacity
     texture(11, 'solid.png', [-0.3, -0.9], 1, 0.2, 0.2),
     texture(13, 'solid.jpg', [-0.3, -0.7], 1, 0.2, 0.2, 0.2),
     texture(12, 'solid.png', [-0.3, -0.5], 0.5, 0.2, 0.2, 0.2),
     texture(14, 'solid.jpg', [-0.3, -0.3], 0.5, 0.2, 0.2, 0.2),
+
+    // Confirm a texture with a transparent hole can be shown
     texture(15, 'border.png', [0.75, -0.8], 1),
 
+    // Show overlap between opaque and semi-transparent shapes underneath
+    // and above a texture a gradient transparency
     square(7, [-0.05, -0.65], 1, 0.1, 0.1),
     square(8, [0.35, -0.65], 0.5, 0.1, 0.1),
     texture(16, 'gradient.png', [0.15, -0.65], 1, 0.7),
     square(9, [0.08, -0.65], 1, 0.1, 0.1),
     square(10, [0.22, -0.65], 0.5, 0.1, 0.1),
 
+    // Compare overlap of opaque and transparent shapes when html background
+    // is white, black, red, green, blue
     square('ov1', [0.35, 0.5], 1, 1, 0.15),
     square('ov2', [0.45, 0.5], 0.5, 1, 0.15),
     square('ov3', [0.55, 0.5], 0.5, 1, 0.15),
 
+    // Compare overlap of opaque and transparent shapes (similar to last group
+    // but maybe easier to see)
     square('ov1s', [0.5, -0.3], 1, 0.4),
     square('ov2s', [0.65, -0.35], 0.5, 0.3, 0.3),
     square('ov3s', [0.8, -0.4], 0.5, 0.2),
   ]);
 }
 
+// Opaque GL Background
 const figure1 = makeFigure([1, 1, 1, 1], 'figureOneContainer1');
+
+// Transparent GL Background
 const figure2 = makeFigure([0, 0, 0, 0], 'figureOneContainer2');
