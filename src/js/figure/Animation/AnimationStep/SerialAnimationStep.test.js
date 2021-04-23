@@ -77,7 +77,7 @@ describe('Serial Animation', () => {
       serial.start();
       serial.nextFrame(100);
       expect(serial.index).toBe(0);
-      expect(element.transform.round()).toEqual(element.transform.constant(0));
+      expect(element.transform.round(4)).toEqual(element.transform.constant(0));
       expect(step1.state).toBe('animating');
       expect(step2.state).toBe('waitingToStart');
       expect(step3.state).toBe('waitingToStart');
@@ -85,7 +85,7 @@ describe('Serial Animation', () => {
 
       serial.nextFrame(100.1);
       expect(serial.index).toBe(0);
-      expect(element.transform.round()).toEqual(element.transform.constant(0.1));
+      expect(element.transform.round(4)).toEqual(element.transform.constant(0.1));
       expect(step1.state).toBe('animating');
       expect(step2.state).toBe('waitingToStart');
       expect(step3.state).toBe('waitingToStart');
@@ -93,11 +93,11 @@ describe('Serial Animation', () => {
 
       serial.nextFrame(100.9);
       expect(serial.index).toBe(0);
-      expect(element.transform.round()).toEqual(element.transform.constant(0.9));
+      expect(element.transform.round(4)).toEqual(element.transform.constant(0.9));
 
       serial.nextFrame(101);
       expect(serial.index).toBe(1);
-      expect(element.transform.round()).toEqual(element.transform.constant(1));
+      expect(element.transform.round(4)).toEqual(element.transform.constant(1));
       expect(step1.state).toBe('finished');
       expect(step2.state).toBe('animating');
       expect(step3.state).toBe('waitingToStart');
@@ -105,11 +105,11 @@ describe('Serial Animation', () => {
 
       serial.nextFrame(101.5);
       expect(serial.index).toBe(1);
-      expect(element.transform.round()).toEqual(element.transform.constant(1.5));
+      expect(element.transform.round(4)).toEqual(element.transform.constant(1.5));
 
       serial.nextFrame(102.5);
       expect(serial.index).toBe(2);
-      expect(element.transform.round()).toEqual(element.transform.constant(2.5));
+      expect(element.transform.round(4)).toEqual(element.transform.constant(2.5));
       expect(step1.state).toBe('finished');
       expect(step2.state).toBe('finished');
       expect(step3.state).toBe('animating');
@@ -117,12 +117,12 @@ describe('Serial Animation', () => {
 
       remainingTime = serial.nextFrame(103);
       expect(serial.index).toBe(2);
-      expect(element.transform.round()).toEqual(element.transform.constant(3));
+      expect(element.transform.round(4)).toEqual(element.transform.constant(3));
       expect(math.round(remainingTime)).toBe(0);
 
       remainingTime = serial.nextFrame(103.1);
       expect(serial.index).toBe(2);
-      expect(element.transform.round()).toEqual(element.transform.constant(3));
+      expect(element.transform.round(4)).toEqual(element.transform.constant(3));
       expect(math.round(remainingTime)).toBe(0.1);
       expect(step1.state).toBe('finished');
       expect(step2.state).toBe('finished');
@@ -144,7 +144,7 @@ describe('Serial Animation', () => {
         serial.nextFrame(100);
         serial.nextFrame(100.1);
         serial.cancel();
-        expect(element.transform.round()).toEqual(target3);
+        expect(element.transform.round(4)).toEqual(target3);
       });
       test('Serial Complete on cancel = false forces all steps to cancel', () => {
         step1.completeOnCancel = true;
@@ -155,7 +155,7 @@ describe('Serial Animation', () => {
         serial.nextFrame(100);
         serial.nextFrame(100.1);
         serial.cancel();
-        expect(element.transform.round()).toEqual(target1.constant(0.1));
+        expect(element.transform.round(4)).toEqual(target1.constant(0.1));
       });
       test('Serial Complete on cancel = false overridden by force', () => {
         step1.completeOnCancel = true;
@@ -166,7 +166,7 @@ describe('Serial Animation', () => {
         serial.nextFrame(100);
         serial.nextFrame(100.1);
         serial.cancel('complete');
-        expect(element.transform.round()).toEqual(target3);
+        expect(element.transform.round(4)).toEqual(target3);
       });
       test('Serial Complete on cancel = true overriden by cancel', () => {
         step1.completeOnCancel = false;
@@ -177,7 +177,7 @@ describe('Serial Animation', () => {
         serial.nextFrame(100);
         serial.nextFrame(100.1);
         serial.cancel('freeze');
-        expect(element.transform.round()).toEqual(target1.constant(0.1));
+        expect(element.transform.round(4)).toEqual(target1.constant(0.1));
       });
       test('Complete on cancel = true, no forcing', () => {
         step1.completeOnCancel = true;
@@ -191,7 +191,7 @@ describe('Serial Animation', () => {
         expect(step2CallbackFlag).toBe(1);
         expect(step3CallbackFlag).toBe(1);
         expect(serialCallbackFlag).toBe(1);
-        expect(element.transform.round()).toEqual(target3);
+        expect(element.transform.round(4)).toEqual(target3);
       });
       // Testing to make sure we still end at the target of step3
       test('Complete on cancel = true except middle step, no forcing', () => {
@@ -206,7 +206,7 @@ describe('Serial Animation', () => {
         expect(step2CallbackFlag).toBe(1);
         expect(step3CallbackFlag).toBe(1);
         expect(serialCallbackFlag).toBe(1);
-        expect(element.transform.round()).toEqual(target3);
+        expect(element.transform.round(4)).toEqual(target3);
       });
       // Testing to make sure we end at the target of step 2
       test('Complete on cancel = true except end step, no forcing', () => {
@@ -221,7 +221,7 @@ describe('Serial Animation', () => {
         expect(step2CallbackFlag).toBe(1);
         expect(step3CallbackFlag).toBe(1);
         expect(serialCallbackFlag).toBe(1);
-        expect(element.transform.round()).toEqual(target2);
+        expect(element.transform.round(4)).toEqual(target2);
       });
       // Testing to make sure only one callback for 1st step is called
       test('Complete on cancel = true after 1st step complete, no forcing', () => {
@@ -236,7 +236,7 @@ describe('Serial Animation', () => {
         expect(step2CallbackFlag).toBe(1);
         expect(step3CallbackFlag).toBe(1);
         expect(serialCallbackFlag).toBe(1);
-        expect(element.transform.round()).toEqual(target3);
+        expect(element.transform.round(4)).toEqual(target3);
       });
       // Testing to make target remains at current
       test('Complete on cancel = true, force freeze', () => {
@@ -251,7 +251,7 @@ describe('Serial Animation', () => {
         expect(step2CallbackFlag).toBe(1);
         expect(step3CallbackFlag).toBe(1);
         expect(serialCallbackFlag).toBe(1);
-        expect(element.transform.round()).toEqual(target2.constant(1.1));
+        expect(element.transform.round(4)).toEqual(target2.constant(1.1));
       });
       // Testing to make sure non completion works
       test('Complete on cancel = false, no forcing', () => {
@@ -266,7 +266,7 @@ describe('Serial Animation', () => {
         expect(step2CallbackFlag).toBe(1);
         expect(step3CallbackFlag).toBe(1);
         expect(serialCallbackFlag).toBe(1);
-        expect(element.transform.round()).toEqual(target2.constant(1.1));
+        expect(element.transform.round(4)).toEqual(target2.constant(1.1));
       });
       // Testing to make sure complete override works
       test('Complete on cancel = false, force complete', () => {
@@ -281,7 +281,7 @@ describe('Serial Animation', () => {
         expect(step2CallbackFlag).toBe(1);
         expect(step3CallbackFlag).toBe(1);
         expect(serialCallbackFlag).toBe(1);
-        expect(element.transform.round()).toEqual(target3);
+        expect(element.transform.round(4)).toEqual(target3);
       });
     });
   });
@@ -386,7 +386,7 @@ describe('Serial Animation', () => {
       expect(builder.state).toBe('animating');
       expect(e1.state).toBe('finished');
       expect(e2.state).toBe('animating');
-      expect(elem2.getRotation()).toBe(1.5);
+      expect(math.round(elem2.getRotation(), 3)).toBe(1.5);
       figure.draw(1);
       expect(animationManager.state).toBe('idle');
       expect(animationManager.animations).toHaveLength(0);

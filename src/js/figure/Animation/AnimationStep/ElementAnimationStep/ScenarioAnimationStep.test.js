@@ -1,5 +1,5 @@
 import { Point, Transform } from '../../../../tools/g2';
-// import { round } from '../../../../tools/math';
+import { round } from '../../../../tools/math';
 // import * as tools from '../../../../tools/tools';
 import makeFigure from '../../../../__mocks__/makeFigure';
 // import timeStep from '../../../../__mocks__/timeStep';
@@ -29,11 +29,11 @@ describe('Figure Recorder', () => {
       .scenario({ target: { position: [1, 1] }, duration: 1 })
       .start();
     figure.mock.timeStep(0);
-    expect(a.getPosition()).toEqual(new Point(0, 0));
+    expect(a.getPosition().round(3)).toEqual(new Point(0, 0));
     figure.mock.timeStep(0.5);
-    expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
+    expect(a.getPosition().round(3)).toEqual(new Point(0.5, 0.5));
     figure.mock.timeStep(1);
-    expect(a.getPosition()).toEqual(new Point(1, 1));
+    expect(a.getPosition().round(3)).toEqual(new Point(1, 1));
   });
   test('Transform', () => {
     a.animations.new()
@@ -45,17 +45,17 @@ describe('Figure Recorder', () => {
       })
       .start();
     figure.mock.timeStep(0);
-    expect(a.getPosition()).toEqual(new Point(0, 0));
-    expect(a.getScale()).toEqual(new Point(1, 1));
-    expect(a.getRotation()).toBe(0);
+    expect(a.getPosition().round(3)).toEqual(new Point(0, 0));
+    expect(a.getScale().round(3).round(3)).toEqual(new Point(1, 1));
+    expect(round(round(a.getRotation(), 3), 3)).toBe(0);
     figure.mock.timeStep(0.5);
-    expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
-    expect(a.getScale()).toEqual(new Point(1.5, 1.5));
-    expect(a.getRotation()).toBe(0.5);
+    expect(a.getPosition().round(3)).toEqual(new Point(0.5, 0.5));
+    expect(a.getScale().round(3).round(3)).toEqual(new Point(1.5, 1.5));
+    expect(round(round(a.getRotation(), 3), 3)).toBe(0.5);
     figure.mock.timeStep(1);
-    expect(a.getPosition()).toEqual(new Point(1, 1));
-    expect(a.getScale()).toEqual(new Point(2, 2));
-    expect(a.getRotation()).toBe(1);
+    expect(a.getPosition().round(3)).toEqual(new Point(1, 1));
+    expect(a.getScale().round(3).round(3)).toEqual(new Point(2, 2));
+    expect(round(round(a.getRotation(), 3), 3)).toBe(1);
   });
   test('Position, Rotation, Scale, Color, isShown', () => {
     a.animations.new()
@@ -71,23 +71,23 @@ describe('Figure Recorder', () => {
       })
       .start();
     figure.mock.timeStep(0);
-    expect(a.getPosition()).toEqual(new Point(0, 0));
-    expect(a.getScale()).toEqual(new Point(1, 1));
-    expect(a.getRotation()).toBe(0);
+    expect(a.getPosition().round(3)).toEqual(new Point(0, 0));
+    expect(a.getScale().round(3)).toEqual(new Point(1, 1));
+    expect(round(a.getRotation(), 3)).toBe(0);
     expect(a.opacity).toBe(1);
     expect(a.isShown).toBe(true);
     expect(a.color).toEqual([1, 0, 0, 1]);
     figure.mock.timeStep(0.5);
-    expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
-    expect(a.getScale()).toEqual(new Point(1.5, 1.5));
-    expect(a.getRotation()).toBe(0.5);
+    expect(a.getPosition().round(3)).toEqual(new Point(0.5, 0.5));
+    expect(a.getScale().round(3)).toEqual(new Point(1.5, 1.5));
+    expect(round(a.getRotation(), 3)).toBe(0.5);
     expect(a.opacity).toBe(0.5005);
     expect(a.isShown).toBe(true);
     expect(a.color).toEqual([0.5, 0.5, 0, 1]);
     figure.mock.timeStep(1);
-    expect(a.getPosition()).toEqual(new Point(1, 1));
-    expect(a.getScale()).toEqual(new Point(2, 2));
-    expect(a.getRotation()).toBe(1);
+    expect(a.getPosition().round(3)).toEqual(new Point(1, 1));
+    expect(a.getScale().round(3)).toEqual(new Point(2, 2));
+    expect(round(a.getRotation(), 3)).toBe(1);
     expect(a.opacity).toBe(1);
     expect(a.isShown).toBe(false);
     expect(a.color).toEqual([0, 1, 0, 1]);
@@ -114,23 +114,23 @@ describe('Figure Recorder', () => {
       })
       .start();
     figure.mock.timeStep(0);
-    expect(a.getPosition()).toEqual(new Point(2, 2));
-    expect(a.getScale()).toEqual(new Point(3, 3));
-    expect(a.getRotation()).toBe(2);
+    expect(a.getPosition().round(3)).toEqual(new Point(2, 2));
+    expect(a.getScale().round(3)).toEqual(new Point(3, 3));
+    expect(round(a.getRotation(), 3)).toBe(2);
     expect(a.opacity).toBe(0.001);
     expect(a.isShown).toBe(true);
     expect(a.color).toEqual([0, 0, 1, 0.5]);
     figure.mock.timeStep(0.5);
-    expect(a.getPosition()).toEqual(new Point(1.5, 1.5));
-    expect(a.getScale()).toEqual(new Point(2.5, 2.5));
-    expect(a.getRotation()).toBe(1.5);
+    expect(a.getPosition().round(3)).toEqual(new Point(1.5, 1.5));
+    expect(a.getScale().round(3)).toEqual(new Point(2.5, 2.5));
+    expect(round(a.getRotation(), 3)).toBe(1.5);
     expect(a.opacity).toBe(0.5005);
     expect(a.isShown).toBe(true);
     expect(a.color).toEqual([0, 0.5, 0.5, 0.75]);
     figure.mock.timeStep(1);
-    expect(a.getPosition()).toEqual(new Point(1, 1));
-    expect(a.getScale()).toEqual(new Point(2, 2));
-    expect(a.getRotation()).toBe(1);
+    expect(a.getPosition().round(3)).toEqual(new Point(1, 1));
+    expect(a.getScale().round(3)).toEqual(new Point(2, 2));
+    expect(round(a.getRotation(), 3)).toBe(1);
     expect(a.opacity).toBe(1);
     expect(a.isShown).toBe(true);
     expect(a.color).toEqual([0, 1, 0, 1]);
@@ -141,11 +141,11 @@ describe('Figure Recorder', () => {
       .scenario({ target: { position: [1, 1] }, velocity: { translation: 0.5 } })
       .start();
     figure.mock.timeStep(0);
-    expect(a.getPosition()).toEqual(new Point(0, 0));
+    expect(a.getPosition().round(3)).toEqual(new Point(0, 0));
     figure.mock.timeStep(1);
-    expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
+    expect(a.getPosition().round(3)).toEqual(new Point(0.5, 0.5));
     figure.mock.timeStep(2);
-    expect(a.getPosition()).toEqual(new Point(1, 1));
+    expect(a.getPosition().round(3)).toEqual(new Point(1, 1));
     expect(figure.isAnimating()).toBe(false);
   });
   test('Velocity Rotation', () => {
@@ -153,11 +153,11 @@ describe('Figure Recorder', () => {
       .scenario({ target: { rotation: 1 }, velocity: { rotation: 0.5 } })
       .start();
     figure.mock.timeStep(0);
-    expect(a.getRotation()).toEqual(0);
+    expect(round(a.getRotation(), 3)).toEqual(0);
     figure.mock.timeStep(1);
-    expect(a.getRotation()).toEqual(0.5);
+    expect(round(a.getRotation(), 3)).toEqual(0.5);
     figure.mock.timeStep(2);
-    expect(a.getRotation()).toEqual(1);
+    expect(round(a.getRotation(), 3)).toEqual(1);
     expect(figure.isAnimating()).toBe(false);
   });
   test('Velocity Scale', () => {
@@ -165,11 +165,11 @@ describe('Figure Recorder', () => {
       .scenario({ target: { scale: [2, 2] }, velocity: { scale: 0.5 } })
       .start();
     figure.mock.timeStep(0);
-    expect(a.getScale()).toEqual(new Point(1, 1));
+    expect(a.getScale().round(3)).toEqual(new Point(1, 1));
     figure.mock.timeStep(1);
-    expect(a.getScale()).toEqual(new Point(1.5, 1.5));
+    expect(a.getScale().round(3)).toEqual(new Point(1.5, 1.5));
     figure.mock.timeStep(2);
-    expect(a.getScale()).toEqual(new Point(2, 2));
+    expect(a.getScale().round(3)).toEqual(new Point(2, 2));
     expect(figure.isAnimating()).toBe(false);
   });
   test('Velocity Transform', () => {
@@ -184,17 +184,17 @@ describe('Figure Recorder', () => {
       })
       .start();
     figure.mock.timeStep(0);
-    expect(a.getPosition()).toEqual(new Point(0, 0));
-    expect(a.getScale()).toEqual(new Point(1, 1));
-    expect(a.getRotation()).toBe(0);
+    expect(a.getPosition().round(3)).toEqual(new Point(0, 0));
+    expect(a.getScale().round(3)).toEqual(new Point(1, 1));
+    expect(round(a.getRotation(), 3)).toBe(0);
     figure.mock.timeStep(1);
-    expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
-    expect(a.getScale()).toEqual(new Point(1.5, 1.5));
-    expect(a.getRotation()).toBe(0.5);
+    expect(a.getPosition().round(3)).toEqual(new Point(0.5, 0.5));
+    expect(a.getScale().round(3)).toEqual(new Point(1.5, 1.5));
+    expect(round(a.getRotation(), 3)).toBe(0.5);
     figure.mock.timeStep(2);
-    expect(a.getPosition()).toEqual(new Point(1, 1));
-    expect(a.getScale()).toEqual(new Point(2, 2));
-    expect(a.getRotation()).toBe(1);
+    expect(a.getPosition().round(3)).toEqual(new Point(1, 1));
+    expect(a.getScale().round(3)).toEqual(new Point(2, 2));
+    expect(round(a.getRotation(), 3)).toBe(1);
   });
   test('Velocity Color', () => {
     a.animations.new()
@@ -292,23 +292,23 @@ describe('Figure Recorder', () => {
       .start();
 
     figure.mock.timeStep(0);
-    expect(a.getPosition()).toEqual(new Point(0, 0));
-    expect(a.getScale()).toEqual(new Point(1, 1));
-    expect(a.getRotation()).toBe(0);
+    expect(a.getPosition().round(3)).toEqual(new Point(0, 0));
+    expect(a.getScale().round(3)).toEqual(new Point(1, 1));
+    expect(round(a.getRotation(), 3)).toBe(0);
     expect(a.opacity).toBe(1);
     expect(a.isShown).toBe(true);
     expect(a.color).toEqual([1, 0, 0, 1]);
     figure.mock.timeStep(5);
-    expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
-    expect(a.getScale()).toEqual(new Point(1.5, 1.5));
-    expect(a.getRotation()).toBe(0.5);
+    expect(a.getPosition().round(3)).toEqual(new Point(0.5, 0.5));
+    expect(a.getScale().round(3)).toEqual(new Point(1.5, 1.5));
+    expect(round(a.getRotation(), 3)).toBe(0.5);
     expect(a.opacity).toBe(0.5005);
     expect(a.isShown).toBe(true);
     expect(a.color).toEqual([0.5, 0.5, 0, 1]);
     figure.mock.timeStep(10);
-    expect(a.getPosition()).toEqual(new Point(1, 1));
-    expect(a.getScale()).toEqual(new Point(2, 2));
-    expect(a.getRotation()).toBe(1);
+    expect(a.getPosition().round(3)).toEqual(new Point(1, 1));
+    expect(a.getScale().round(3)).toEqual(new Point(2, 2));
+    expect(round(a.getRotation(), 3)).toBe(1);
     expect(a.opacity).toBe(1);
     expect(a.isShown).toBe(false);
     expect(a.color).toEqual([0, 1, 0, 1]);
@@ -338,23 +338,23 @@ describe('Figure Recorder', () => {
     // Note, all transform velocities (position, scale, rotation)
     // will be the same as the slowest one
     figure.mock.timeStep(0);
-    expect(a.getPosition()).toEqual(new Point(0, 0));
-    expect(a.getScale()).toEqual(new Point(1, 1));
-    expect(a.getRotation()).toBe(0);
+    expect(a.getPosition().round(3)).toEqual(new Point(0, 0));
+    expect(a.getScale().round(3)).toEqual(new Point(1, 1));
+    expect(round(a.getRotation(), 3)).toBe(0);
     expect(a.opacity).toBe(1);
     expect(a.isShown).toBe(true);
     expect(a.color).toEqual([1, 0, 0, 1]);
     figure.mock.timeStep(1);
-    expect(a.getPosition()).toEqual(new Point(0.1, 0.1));
-    expect(a.getScale()).toEqual(new Point(1.1, 1.1));
-    expect(a.getRotation()).toBe(0.1);
+    expect(a.getPosition().round(3)).toEqual(new Point(0.1, 0.1));
+    expect(a.getScale().round(3)).toEqual(new Point(1.1, 1.1));
+    expect(round(a.getRotation(), 3)).toBe(0.1);
     expect(a.opacity).toBe(0.5005);
     expect(a.isShown).toBe(true);
     expect(a.color).toEqual([0.6, 0.4, 0, 1]);
     figure.mock.timeStep(10);
-    expect(a.getPosition()).toEqual(new Point(1, 1));
-    expect(a.getScale()).toEqual(new Point(2, 2));
-    expect(a.getRotation()).toBe(1);
+    expect(a.getPosition().round(3)).toEqual(new Point(1, 1));
+    expect(a.getScale().round(3)).toEqual(new Point(2, 2));
+    expect(round(a.getRotation(), 3)).toBe(1);
     expect(a.opacity).toBe(1);
     expect(a.isShown).toBe(false);
     expect(a.color).toEqual([0, 1, 0, 1]);
@@ -369,11 +369,11 @@ describe('Figure Recorder', () => {
       })
       .start();
     figure.mock.timeStep(0);
-    expect(a.getPosition()).toEqual(new Point(0, 0));
+    expect(a.getPosition().round(3)).toEqual(new Point(0, 0));
     figure.mock.timeStep(0.1);
     expect(a.getPosition().round(2)).toEqual(new Point(0.99, 0.99));
     figure.mock.timeStep(1);
-    expect(a.getPosition()).toEqual(new Point(1, 1));
+    expect(a.getPosition().round(3)).toEqual(new Point(1, 1));
     expect(figure.isAnimating()).toBe(false);
   });
   test('Velocity zero threshold - on', () => {
@@ -385,7 +385,7 @@ describe('Figure Recorder', () => {
       })
       .start();
     figure.mock.timeStep(0);
-    expect(a.getPosition()).toEqual(new Point(1, 1));
+    expect(a.getPosition().round(3)).toEqual(new Point(1, 1));
     expect(figure.isAnimating()).toBe(false);
   });
   test('Velocity zero threshold - just below', () => {
@@ -397,7 +397,7 @@ describe('Figure Recorder', () => {
       })
       .start();
     figure.mock.timeStep(0);
-    expect(a.getPosition()).toEqual(new Point(1, 1));
+    expect(a.getPosition().round(3)).toEqual(new Point(1, 1));
     expect(figure.isAnimating()).toBe(false);
   });
   test('Velocity maxDuration', () => {
@@ -409,11 +409,11 @@ describe('Figure Recorder', () => {
       })
       .start();
     figure.mock.timeStep(0);
-    expect(a.getPosition()).toEqual(new Point(0, 0));
+    expect(a.getPosition().round(3)).toEqual(new Point(0, 0));
     figure.mock.timeStep(1);
-    expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
+    expect(a.getPosition().round(3)).toEqual(new Point(0.5, 0.5));
     figure.mock.timeStep(2);
-    expect(a.getPosition()).toEqual(new Point(1, 1));
+    expect(a.getPosition().round(3)).toEqual(new Point(1, 1));
     expect(figure.isAnimating()).toBe(false);
   });
   test('Velocity minDuration', () => {
@@ -425,11 +425,11 @@ describe('Figure Recorder', () => {
       })
       .start();
     figure.mock.timeStep(0);
-    expect(a.getPosition()).toEqual(new Point(0, 0));
+    expect(a.getPosition().round(3)).toEqual(new Point(0, 0));
     figure.mock.timeStep(0.5);
-    expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
+    expect(a.getPosition().round(3)).toEqual(new Point(0.5, 0.5));
     figure.mock.timeStep(1);
-    expect(a.getPosition()).toEqual(new Point(1, 1));
+    expect(a.getPosition().round(3)).toEqual(new Point(1, 1));
     expect(figure.isAnimating()).toBe(false);
   });
   test('No Change', () => {
@@ -437,17 +437,17 @@ describe('Figure Recorder', () => {
       .scenario({ target: { position: [0, 0] }, duration: 1 })
       .start();
     figure.mock.timeStep(0);
-    expect(a.getPosition()).toEqual(new Point(0, 0));
+    expect(a.getPosition().round(3)).toEqual(new Point(0, 0));
     expect(figure.isAnimating()).toBe(true);
     figure.mock.timeStep(1);
-    expect(a.getPosition()).toEqual(new Point(0, 0));
+    expect(a.getPosition().round(3)).toEqual(new Point(0, 0));
     expect(figure.isAnimating()).toBe(false);
   });
   test('Velocity No Change', () => {
     a.animations.new()
       .scenario({ target: { position: [0, 0] }, velocity: { position: 1 } })
       .start();
-    expect(a.getPosition()).toEqual(new Point(0, 0));
+    expect(a.getPosition().round(3)).toEqual(new Point(0, 0));
     expect(figure.isAnimating()).toBe(false);
   });
   test('Element anim', () => {
@@ -455,11 +455,11 @@ describe('Figure Recorder', () => {
       .then(a.anim.scenario({ target: { position: [1, 1] }, duration: 1 }))
       .start();
     figure.mock.timeStep(0);
-    expect(a.getPosition()).toEqual(new Point(0, 0));
+    expect(a.getPosition().round(3)).toEqual(new Point(0, 0));
     figure.mock.timeStep(0.5);
-    expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
+    expect(a.getPosition().round(3)).toEqual(new Point(0.5, 0.5));
     figure.mock.timeStep(1);
-    expect(a.getPosition()).toEqual(new Point(1, 1));
+    expect(a.getPosition().round(3)).toEqual(new Point(1, 1));
   });
   test('Scenario Name', () => {
     a.scenarios.s1 = { position: [1, 1] };
@@ -467,10 +467,10 @@ describe('Figure Recorder', () => {
       .scenario({ target: 's1', duration: 1 })
       .start();
     figure.mock.timeStep(0);
-    expect(a.getPosition()).toEqual(new Point(0, 0));
+    expect(a.getPosition().round(3)).toEqual(new Point(0, 0));
     figure.mock.timeStep(0.5);
-    expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
+    expect(a.getPosition().round(3)).toEqual(new Point(0.5, 0.5));
     figure.mock.timeStep(1);
-    expect(a.getPosition()).toEqual(new Point(1, 1));
+    expect(a.getPosition().round(3)).toEqual(new Point(1, 1));
   });
 });

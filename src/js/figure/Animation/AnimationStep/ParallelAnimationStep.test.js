@@ -89,37 +89,37 @@ describe('Parallel Animation', () => {
 
       parallel.start();
       remainingTime = parallel.nextFrame(100);
-      expect(element1.transform.round()).toEqual(element1.transform.constant(0));
-      expect(element2.transform.round()).toEqual(element2.transform.constant(0));
-      expect(element3.transform.round()).toEqual(element3.transform.constant(0));
+      expect(element1.transform.round(4)).toEqual(element1.transform.constant(0));
+      expect(element2.transform.round(4)).toEqual(element2.transform.constant(0));
+      expect(element3.transform.round(4)).toEqual(element3.transform.constant(0));
       expect(math.round(remainingTime)).toBe(-3);
 
       remainingTime = parallel.nextFrame(100.5);
-      expect(element1.transform.round()).toEqual(t1.constant(0.5));
-      expect(element2.transform).toEqual(t2.constant(0.5));
-      expect(element3.transform).toEqual(t3.constant(0.5));
+      expect(element1.transform.round(4)).toEqual(t1.constant(0.5));
+      expect(element2.transform.round(4)).toEqual(t2.constant(0.5));
+      expect(element3.transform.round(4)).toEqual(t3.constant(0.5));
       expect(math.round(remainingTime)).toBe(-2.5);
 
       remainingTime = parallel.nextFrame(101.5);
-      expect(element1.transform.round()).toEqual(t1.constant(1));
-      expect(element2.transform).toEqual(t2.constant(1.5));
-      expect(element3.transform).toEqual(t3.constant(1.5));
+      expect(element1.transform.round(4)).toEqual(t1.constant(1));
+      expect(element2.transform.round(4)).toEqual(t2.constant(1.5));
+      expect(element3.transform.round(4)).toEqual(t3.constant(1.5));
       expect(math.round(remainingTime)).toBe(-1.5);
 
       remainingTime = parallel.nextFrame(102.5);
-      expect(element1.transform.round()).toEqual(t1.constant(1));
-      expect(element2.transform).toEqual(t2.constant(2));
-      expect(element3.transform).toEqual(t3.constant(2.5));
+      expect(element1.transform.round(4)).toEqual(t1.constant(1));
+      expect(element2.transform.round(4)).toEqual(t2.constant(2));
+      expect(element3.transform.round(4)).toEqual(t3.constant(2.5));
       expect(math.round(remainingTime)).toBe(-0.5);
 
       remainingTime = parallel.nextFrame(103);
-      expect(element1.transform.round()).toEqual(t1.constant(1));
-      expect(element2.transform).toEqual(t2.constant(2));
-      expect(element3.transform).toEqual(t3.constant(3));
+      expect(element1.transform.round(4)).toEqual(t1.constant(1));
+      expect(element2.transform.round(4)).toEqual(t2.constant(2));
+      expect(element3.transform.round(4)).toEqual(t3.constant(3));
       expect(math.round(remainingTime)).toBe(0);
 
       // remainingTime = parallel.nextFrame(103.1);
-      // expect(element1.transform.round()).toEqual(t1.constant(1));
+      // expect(element1.transform.round(4)).toEqual(t1.constant(1));
       // expect(element2.transform).toEqual(t2.constant(2));
       // expect(element3.transform).toEqual(t3.constant(3));
       // expect(math.round(remainingTime)).toBe(0.1);
@@ -143,9 +143,9 @@ describe('Parallel Animation', () => {
         expect(step2CallbackFlag).toBe(1);
         expect(step3CallbackFlag).toBe(1);
         expect(parallelCallbackFlag).toBe(1);
-        expect(element1.transform.round()).toEqual(target1);
-        expect(element2.transform.round()).toEqual(target2);
-        expect(element3.transform.round()).toEqual(target3);
+        expect(element1.transform.round(4)).toEqual(target1);
+        expect(element2.transform.round(4)).toEqual(target2);
+        expect(element3.transform.round(4)).toEqual(target3);
       });
       // checking override of step completeOnCancel
       test('Complete on cancel = false forces all steps to stop', () => {
@@ -161,9 +161,9 @@ describe('Parallel Animation', () => {
         expect(step2CallbackFlag).toBe(1);
         expect(step3CallbackFlag).toBe(1);
         expect(parallelCallbackFlag).toBe(1);
-        expect(element1.transform.round()).toEqual(target1.constant(0.1));
-        expect(element2.transform.round()).toEqual(target2.constant(0.1));
-        expect(element3.transform.round()).toEqual(target3.constant(0.1));
+        expect(element1.transform.round(4)).toEqual(target1.constant(0.1));
+        expect(element2.transform.round(4)).toEqual(target2.constant(0.1));
+        expect(element3.transform.round(4)).toEqual(target3.constant(0.1));
       });
       test('Parallel complete on cancel = true with force freeze', () => {
         step1.completeOnCancel = true;
@@ -178,9 +178,9 @@ describe('Parallel Animation', () => {
         expect(step2CallbackFlag).toBe(1);
         expect(step3CallbackFlag).toBe(1);
         expect(parallelCallbackFlag).toBe(1);
-        expect(element1.transform.round()).toEqual(target1.constant(0.1));
-        expect(element2.transform.round()).toEqual(target2.constant(0.1));
-        expect(element3.transform.round()).toEqual(target3.constant(0.1));
+        expect(element1.transform.round(4)).toEqual(target1.constant(0.1));
+        expect(element2.transform.round(4)).toEqual(target2.constant(0.1));
+        expect(element3.transform.round(4)).toEqual(target3.constant(0.1));
       });
       test('Complete on cancel = false forces with force complete', () => {
         step1.completeOnCancel = true;
@@ -195,9 +195,9 @@ describe('Parallel Animation', () => {
         expect(step2CallbackFlag).toBe(1);
         expect(step3CallbackFlag).toBe(1);
         expect(parallelCallbackFlag).toBe(1);
-        expect(element1.transform.round()).toEqual(target1);
-        expect(element2.transform.round()).toEqual(target2);
-        expect(element3.transform.round()).toEqual(target3);
+        expect(element1.transform.round(4)).toEqual(target1);
+        expect(element2.transform.round(4)).toEqual(target2);
+        expect(element3.transform.round(4)).toEqual(target3);
       });
       test('Complete on cancel = true, no forcing', () => {
         step1.completeOnCancel = true;
@@ -211,9 +211,9 @@ describe('Parallel Animation', () => {
         expect(step2CallbackFlag).toBe(1);
         expect(step3CallbackFlag).toBe(1);
         expect(parallelCallbackFlag).toBe(1);
-        expect(element1.transform.round()).toEqual(target1);
-        expect(element2.transform.round()).toEqual(target2);
-        expect(element3.transform.round()).toEqual(target3);
+        expect(element1.transform.round(4)).toEqual(target1);
+        expect(element2.transform.round(4)).toEqual(target2);
+        expect(element3.transform.round(4)).toEqual(target3);
       });
       test('Complete on cancel = true for step 2 only, no forcing', () => {
         step1.completeOnCancel = false;
@@ -227,9 +227,9 @@ describe('Parallel Animation', () => {
         expect(step2CallbackFlag).toBe(1);
         expect(step3CallbackFlag).toBe(1);
         expect(parallelCallbackFlag).toBe(1);
-        expect(element1.transform.round()).toEqual(target1.constant(0.1));
-        expect(element2.transform.round()).toEqual(target2);
-        expect(element3.transform.round()).toEqual(target3.constant(0.1));
+        expect(element1.transform.round(4)).toEqual(target1.constant(0.1));
+        expect(element2.transform.round(4)).toEqual(target2);
+        expect(element3.transform.round(4)).toEqual(target3.constant(0.1));
       });
       test('Complete on cancel = false, no forcing', () => {
         step1.completeOnCancel = false;
@@ -243,9 +243,9 @@ describe('Parallel Animation', () => {
         expect(step2CallbackFlag).toBe(1);
         expect(step3CallbackFlag).toBe(1);
         expect(parallelCallbackFlag).toBe(1);
-        expect(element1.transform.round()).toEqual(target1.constant(0.1));
-        expect(element2.transform.round()).toEqual(target2.constant(0.1));
-        expect(element3.transform.round()).toEqual(target3.constant(0.1));
+        expect(element1.transform.round(4)).toEqual(target1.constant(0.1));
+        expect(element2.transform.round(4)).toEqual(target2.constant(0.1));
+        expect(element3.transform.round(4)).toEqual(target3.constant(0.1));
       });
       test('Complete on cancel = false, force complete', () => {
         step1.completeOnCancel = false;
@@ -259,9 +259,9 @@ describe('Parallel Animation', () => {
         expect(step2CallbackFlag).toBe(1);
         expect(step3CallbackFlag).toBe(1);
         expect(parallelCallbackFlag).toBe(1);
-        expect(element1.transform.round()).toEqual(target1);
-        expect(element2.transform.round()).toEqual(target2);
-        expect(element3.transform.round()).toEqual(target3);
+        expect(element1.transform.round(4)).toEqual(target1);
+        expect(element2.transform.round(4)).toEqual(target2);
+        expect(element3.transform.round(4)).toEqual(target3);
       });
       test('Complete on cancel = true, force freeze', () => {
         step1.completeOnCancel = true;
@@ -275,9 +275,9 @@ describe('Parallel Animation', () => {
         expect(step2CallbackFlag).toBe(1);
         expect(step3CallbackFlag).toBe(1);
         expect(parallelCallbackFlag).toBe(1);
-        expect(element1.transform.round()).toEqual(target1.constant(0.1));
-        expect(element2.transform.round()).toEqual(target2.constant(0.1));
-        expect(element3.transform.round()).toEqual(target3.constant(0.1));
+        expect(element1.transform.round(4)).toEqual(target1.constant(0.1));
+        expect(element2.transform.round(4)).toEqual(target2.constant(0.1));
+        expect(element3.transform.round(4)).toEqual(target3.constant(0.1));
       });
     });
   });

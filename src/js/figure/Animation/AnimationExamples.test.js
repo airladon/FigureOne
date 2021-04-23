@@ -225,39 +225,39 @@ describe('Animation Examples', () => {
     examples.allStepsInBuilder();
     elem1.animations.nextFrame(100);
     elem1.animations.nextFrame(200);
-    expect(elem1.getPosition().round()).toEqual(p1);
-    expect(elem1.getScale().round()).toEqual(s1);
+    expect(elem1.getPosition().round(4)).toEqual(p1);
+    expect(elem1.getScale().round(4)).toEqual(s1);
     expect(elem1.getRotation()).toEqual(r1);
   });
   test('Move Element Simple', () => {
     examples.moveElementSimple();
     elem1.animations.nextFrame(100);
     elem1.animations.nextFrame(100.1);
-    expect(elem1.getPosition().round()).toEqual(point(0.1));
+    expect(elem1.getPosition().round(4)).toEqual(point(0.1));
 
     let remaining = elem1.animations.nextFrame(101.1);
-    expect(elem1.getPosition().round()).toEqual(point(1.1));
+    expect(elem1.getPosition().round(4)).toEqual(point(1.1));
     expect(math.round(remaining)).toBe(-0.9);
 
     remaining = elem1.animations.nextFrame(102.1);
-    expect(elem1.getPosition().round()).toEqual(point(2));
+    expect(elem1.getPosition().round(4)).toEqual(point(2));
     expect(math.round(remaining)).toBe(0.1);
   });
   test('Parallel Step', () => {
     examples.moveElementsInParallel();
     elem1.animations.nextFrame(100);
     elem1.animations.nextFrame(100.1);
-    expect(elem1.getPosition().round()).toEqual(point(0.1));
-    expect(elem2.getPosition().round()).toEqual(point(0.1));
+    expect(elem1.getPosition().round(4)).toEqual(point(0.1));
+    expect(elem2.getPosition().round(4)).toEqual(point(0.1));
 
     let remaining = elem1.animations.nextFrame(101.1);
-    expect(elem1.getPosition().round()).toEqual(point(1.1));
-    expect(elem2.getPosition().round()).toEqual(point(1));
+    expect(elem1.getPosition().round(4)).toEqual(point(1.1));
+    expect(elem2.getPosition().round(4)).toEqual(point(1));
     expect(math.round(remaining)).toBe(-0.9);
 
     remaining = elem1.animations.nextFrame(102.1);
-    expect(elem1.getPosition().round()).toEqual(point(2));
-    expect(elem2.getPosition().round()).toEqual(point(1));
+    expect(elem1.getPosition().round(4)).toEqual(point(2));
+    expect(elem2.getPosition().round(4)).toEqual(point(1));
     expect(math.round(remaining)).toBe(0.1);
   });
   test('Parallel Step Simple', () => {
@@ -265,17 +265,17 @@ describe('Animation Examples', () => {
     expect(elem1.animations.animations[0].steps[0].completeOnCancel).toBe(false);
     elem1.animations.nextFrame(100);
     elem1.animations.nextFrame(100.1);
-    expect(elem1.getPosition().round()).toEqual(point(0.1));
-    expect(elem2.getPosition().round()).toEqual(point(0.1));
+    expect(elem1.getPosition().round(4)).toEqual(point(0.1));
+    expect(elem2.getPosition().round(4)).toEqual(point(0.1));
 
     let remaining = elem1.animations.nextFrame(101.1);
-    expect(elem1.getPosition().round()).toEqual(point(1.1));
-    expect(elem2.getPosition().round()).toEqual(point(1));
+    expect(elem1.getPosition().round(4)).toEqual(point(1.1));
+    expect(elem2.getPosition().round(4)).toEqual(point(1));
     expect(math.round(remaining)).toBe(-0.9);
 
     remaining = elem1.animations.nextFrame(102.1);
-    expect(elem1.getPosition().round()).toEqual(point(2));
-    expect(elem2.getPosition().round()).toEqual(point(1));
+    expect(elem1.getPosition().round(4)).toEqual(point(2));
+    expect(elem2.getPosition().round(4)).toEqual(point(1));
     expect(math.round(remaining)).toBe(0.1);
   });
   test('Cancel, check callback and stop', () => {
@@ -283,68 +283,68 @@ describe('Animation Examples', () => {
     // console.log(elem1.animator)
     elem1.animations.nextFrame(100);
     elem1.animations.nextFrame(100.1);
-    expect(elem1.getPosition().round()).toEqual(point(0.1));
+    expect(elem1.getPosition().round(4)).toEqual(point(0.1));
     expect(callbackFlag).toBe(0);
 
     elem1.animations.cancelAll();
     expect(callbackFlag).toBe(1);
-    expect(elem1.getPosition().round()).toEqual(point(0.1));
+    expect(elem1.getPosition().round(4)).toEqual(point(0.1));
   });
   test('Cancel, check callback and complete', () => {
     examples.animationCallbackComplete();
     // console.log(elem1.animator)
     elem1.animations.nextFrame(100);
     elem1.animations.nextFrame(100.1);
-    expect(elem1.getPosition().round()).toEqual(point(0.1));
+    expect(elem1.getPosition().round(4)).toEqual(point(0.1));
     expect(callbackFlag).toBe(0);
 
     elem1.animations.cancelAll();
     expect(callbackFlag).toBe(1);
-    expect(elem1.getPosition().round()).toEqual(point(2));
+    expect(elem1.getPosition().round(4)).toEqual(point(2));
   });
   test('Nesting', () => {
     examples.nesting();
     elem1.animations.nextFrame(0);
     elem1.animations.nextFrame(0.5);
 
-    expect(elem1.getPosition().round()).toEqual(point(0.5));
-    expect(elem2.getPosition().round()).toEqual(point(0));
+    expect(elem1.getPosition().round(4)).toEqual(point(0.5));
+    expect(elem2.getPosition().round(4)).toEqual(point(0));
 
     elem1.animations.nextFrame(1.5);
-    expect(elem1.getPosition().round()).toEqual(point(1.5));
-    expect(elem2.getPosition().round()).toEqual(point(0.5));
+    expect(elem1.getPosition().round(4)).toEqual(point(1.5));
+    expect(elem2.getPosition().round(4)).toEqual(point(0.5));
 
     elem1.animations.nextFrame(2.4);
-    expect(elem1.getPosition().round()).toEqual(point(1.6));
-    expect(elem2.getPosition().round()).toEqual(point(1.4));
+    expect(elem1.getPosition().round(4)).toEqual(point(1.6));
+    expect(elem2.getPosition().round(4)).toEqual(point(1.4));
 
     elem1.animations.nextFrame(3.5);
-    expect(elem1.getPosition().round()).toEqual(point(1));
-    expect(elem2.getPosition().round()).toEqual(point(2));
+    expect(elem1.getPosition().round(4)).toEqual(point(1));
+    expect(elem2.getPosition().round(4)).toEqual(point(2));
 
     elem1.animations.nextFrame(4.5);
-    expect(elem1.getPosition().round()).toEqual(point(1.5));
-    expect(elem2.getPosition().round()).toEqual(point(2));
+    expect(elem1.getPosition().round(4)).toEqual(point(1.5));
+    expect(elem2.getPosition().round(4)).toEqual(point(2));
 
     elem1.animations.nextFrame(4.9);
-    expect(elem1.getPosition().round()).toEqual(point(1.9));
-    expect(elem2.getPosition().round()).toEqual(point(2));
+    expect(elem1.getPosition().round(4)).toEqual(point(1.9));
+    expect(elem2.getPosition().round(4)).toEqual(point(2));
 
     elem1.animations.nextFrame(5);
-    expect(elem1.getPosition().round()).toEqual(point(2));
-    expect(elem2.getPosition().round()).toEqual(point(2));
+    expect(elem1.getPosition().round(4)).toEqual(point(2));
+    expect(elem2.getPosition().round(4)).toEqual(point(2));
 
     elem1.animations.nextFrame(5.5);
-    expect(elem1.getPosition().round()).toEqual(point(1.5));
-    expect(elem2.getPosition().round()).toEqual(point(2));
+    expect(elem1.getPosition().round(4)).toEqual(point(1.5));
+    expect(elem2.getPosition().round(4)).toEqual(point(2));
 
     elem1.animations.nextFrame(6.5);
-    expect(elem1.getPosition().round()).toEqual(point(1));
-    expect(elem2.getPosition().round()).toEqual(point(1.5));
+    expect(elem1.getPosition().round(4)).toEqual(point(1));
+    expect(elem2.getPosition().round(4)).toEqual(point(1.5));
 
     const remaining = elem1.animations.nextFrame(7.5);
-    expect(elem1.getPosition().round()).toEqual(point(1));
-    expect(elem2.getPosition().round()).toEqual(point(1));
+    expect(elem1.getPosition().round(4)).toEqual(point(1));
+    expect(elem2.getPosition().round(4)).toEqual(point(1));
     expect(math.round(remaining)).toBe(remaining);
   });
   describe('Simple moveto possibilities', () => {
@@ -352,13 +352,13 @@ describe('Animation Examples', () => {
     beforeEach(() => {
       tester = () => {
         figure.draw(0);
-        expect(elem1.getPosition().round()).toEqual(point(0));
+        expect(elem1.getPosition().round(4)).toEqual(point(0));
         figure.draw(0.5);
-        expect(elem1.getPosition().round()).toEqual(point(0.5));
+        expect(elem1.getPosition().round(4)).toEqual(point(0.5));
         figure.draw(1);
-        expect(elem1.getPosition().round()).toEqual(point(1));
+        expect(elem1.getPosition().round(4)).toEqual(point(1));
         figure.draw(1.5);
-        expect(elem1.getPosition().round()).toEqual(point(1));
+        expect(elem1.getPosition().round(4)).toEqual(point(1));
       };
     });
     test('Separate Transform Elements', () => {
@@ -375,28 +375,28 @@ describe('Animation Examples', () => {
     beforeEach(() => {
       tester = () => {
         figure.draw(0);
-        expect(elem1.getPosition().round()).toEqual(point(0));
-        expect(elem1.getScale().round()).toEqual(point(0));
+        expect(elem1.getPosition().round(4)).toEqual(point(0));
+        expect(elem1.getScale().round(4)).toEqual(point(0));
         expect(math.round(elem1.getRotation(), 2)).toEqual(0);
         figure.draw(0.5);
-        expect(elem1.getPosition().round()).toEqual(point(0.5));
-        expect(elem1.getScale().round()).toEqual(point(0.5));
+        expect(elem1.getPosition().round(4)).toEqual(point(0.5));
+        expect(elem1.getScale().round(4)).toEqual(point(0.5));
         expect(math.round(elem1.getRotation(), 2)).toEqual(0.5);
         figure.draw(1);
-        expect(elem1.getPosition().round()).toEqual(point(1));
-        expect(elem1.getScale().round()).toEqual(point(1));
+        expect(elem1.getPosition().round(4)).toEqual(point(1));
+        expect(elem1.getScale().round(4)).toEqual(point(1));
         expect(math.round(elem1.getRotation(), 2)).toEqual(1);
         figure.draw(1.5);
-        expect(elem1.getPosition().round()).toEqual(point(1.5));
-        expect(elem1.getScale().round()).toEqual(point(1.5));
+        expect(elem1.getPosition().round(4)).toEqual(point(1.5));
+        expect(elem1.getScale().round(4)).toEqual(point(1.5));
         expect(math.round(elem1.getRotation(), 2)).toEqual(1.5);
         figure.draw(2);
-        expect(elem1.getPosition().round()).toEqual(point(2));
-        expect(elem1.getScale().round()).toEqual(point(2));
+        expect(elem1.getPosition().round(4)).toEqual(point(2));
+        expect(elem1.getScale().round(4)).toEqual(point(2));
         expect(math.round(elem1.getRotation(), 2)).toEqual(2);
         figure.draw(2.5);
-        expect(elem1.getPosition().round()).toEqual(point(2));
-        expect(elem1.getScale().round()).toEqual(point(2));
+        expect(elem1.getPosition().round(4)).toEqual(point(2));
+        expect(elem1.getScale().round(4)).toEqual(point(2));
         expect(math.round(elem1.getRotation(), 2)).toEqual(2);
       };
     });
