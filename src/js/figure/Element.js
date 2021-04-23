@@ -1223,6 +1223,7 @@ class FigureElement {
         'dimColor',
         'defaultColor',
         'transform',
+        'lastDrawTransform',
         'isShown',
         'isMovable',
         'isTouchable',

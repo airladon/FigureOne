@@ -2074,6 +2074,7 @@ class Figure {
     // if (this.inTransition) {
     //   return false;
     // }
+    // console.log(this.beingMovedElements.map(e => e.name))
     if (this.beingMovedElements.length === 0) {
       return false;
     }
@@ -2082,7 +2083,6 @@ class Figure {
 
     const previousGLPoint =
       previousPixelPoint.transformBy(this.spaceTransforms.pixelToGL.matrix());
-
     // Go through each element being moved, get the current translation
     for (let i = 0; i < this.beingMovedElements.length; i += 1) {
       const element = this.beingMovedElements[i];

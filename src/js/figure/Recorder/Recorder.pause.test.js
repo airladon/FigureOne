@@ -1548,17 +1548,17 @@ describe('Animate To State', () => {
       figure.mock.timeStep(1);
       // startAnimation();
       // recorder.recordEvent('startAnimation');
-      recorder.recordEvent('touch', ['down', new Point(0, 0)]);
+      // recorder.recordEvent('touch', ['down', new Point(0, 0)]);
       figure.mock.touchDown([0, 0]);
       figure.mock.timeStep(1);
-      recorder.recordEvent('moved', ['a', new Point(2, 0)]);
-      recorder.recordEvent('touch', ['up']);
+      // recorder.recordEvent('moved', ['a', new Point(2, 0)]);
+      // recorder.recordEvent('touch', ['up']);
       figure.mock.touchMove([2, 0]);
       figure.mock.touchUp();
       figure.mock.timeStep(1);
       figure.mock.timeStep(1);
       figure.mock.timeStep(1);
-      recorder.recordEvent('touch', ['up']);
+      // recorder.recordEvent('touch', ['up']);
       recorder.stopRecording();
       recorder.seek(0);
 
@@ -1578,6 +1578,7 @@ describe('Animate To State', () => {
       expect(states()).toEqual(['idle', false, false, false, 0, 0]);
       expect(callbacks()).toEqual([0, 0, 0, 0]);
       recorder.startPlayback(0);
+      // figure.mock.timeStep(0);
       expect(states()).toEqual(['playing', false, false, false, 0, 0]);
       expect(callbacks()).toEqual([0, 1, 0, 0]);
       figure.mock.timeStep(1);
@@ -1651,7 +1652,7 @@ describe('Animate To State', () => {
         // Start delay
         figure.mock.timeStep(0.4);
         expect(states()).toEqual(['preparingToPause', true, false, true, 0.2, 3.5]);
-        expect(round(figure.elements.opacity)).toBe(1);
+        expect(round(figure.elements.opacity)).toBe(0.001);
         expect(a.isShown).toBe(false);
 
         // Start dissolve in
@@ -1765,7 +1766,7 @@ describe('Animate To State', () => {
           // end dissolve out, start delay
           figure.mock.timeStep(0.4);
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.2, 1.5]);
-          expect(round(figure.elements.opacity)).toBe(1);
+          expect(round(figure.elements.opacity)).toBe(0.001);
           expect(figure.elements.isShown).toBe(true);
           expect(a.isShown).toBe(false);
 
@@ -1858,7 +1859,7 @@ describe('Animate To State', () => {
           // end dissolve out, start delay
           figure.mock.timeStep(0.4);
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.2, 4]);
-          expect(round(figure.elements.opacity)).toBe(1);
+          expect(round(figure.elements.opacity)).toBe(0.001);
           expect(figure.elements.isShown).toBe(true);
           expect(a.isShown).toBe(false);
 

@@ -36,14 +36,14 @@ describe('Figure Element State', () => {
 
     now = 0.5;
     figure.draw(now);
-    expect(elem1.getRotation()).toBe(0.5);
+    expect(math.round(elem1.getRotation(), 3)).toBe(0.5);
     expect(setTransformCallback.mock.calls.length).toBe(2);
 
     const state = figure.getState();
 
     now = 1;
     figure.draw(now);
-    expect(elem1.getRotation()).toBe(1);
+    expect(math.round(elem1.getRotation(), 3)).toBe(1);
     elem1.stop();
     expect(elem1.animations.animations).toHaveLength(0);
     expect(setTransformCallback.mock.calls.length).toBe(3);

@@ -544,12 +544,14 @@ describe('Figure Recorder', () => {
         });
         expect(recorder.states.diffs[2][0]).toBe(2);
         expect(recorder.states.diffs[2][2].diff).toEqual({
+          '.elements.elements.a.lastDrawTransform.state[2].state[1]': 1,
           '.elements.elements.a.transform.state[2].state[1]': 1,
           '.stateTime': 12,
           '.lastDrawTime': 11,
         });
         expect(recorder.states.diffs[3][0]).toBe(3);
         expect(recorder.states.diffs[3][2].diff).toEqual({
+          '.elements.elements.a.lastDrawTransform.state[2].state[1]': 1,
           '.elements.elements.a.transform.state[2].state[1]': 2,
           '.stateTime': 13,
           '.lastDrawTime': 12,
@@ -586,18 +588,21 @@ describe('Figure Recorder', () => {
         });
         expect(recorder.states.diffs[2][0]).toBe(2);
         expect(recorder.states.diffs[2][2].diff).toEqual({
+          '.elements.elements.a.lastDrawTransform.state[2].state[1]': 0.5,
           '.elements.elements.a.transform.state[2].state[1]': 1.5,
           '.stateTime': 22,
           '.lastDrawTime': 21,
         });
         expect(recorder.states.diffs[3][0]).toBe(3);
         expect(recorder.states.diffs[3][2].diff).toEqual({
+          '.elements.elements.a.lastDrawTransform.state[2].state[1]': 1.5,
           '.elements.elements.a.transform.state[2].state[1]': 1.5,
           '.stateTime': 23,
           '.lastDrawTime': 22,
         });
         expect(recorder.states.diffs[4][0]).toBe(4);
         expect(recorder.states.diffs[4][2].diff).toEqual({
+          '.elements.elements.a.lastDrawTransform.state[2].state[1]': 1.5,
           '.elements.elements.a.transform.state[2].state[1]': 2.5,
           '.stateTime': 24,
           '.lastDrawTime': 23,
@@ -697,6 +702,7 @@ describe('Figure Recorder', () => {
         }, 0]);
         expect(recorder.states.diffs[5]).toEqual([5, '__base', {
           diff: {
+            '.elements.elements.a.lastDrawTransform.state[2].state[1]': 1,
             '.elements.elements.a.transform.state[2].state[1]': 2,
             '.stateTime': 15,
             '.lastDrawTime': 14,
@@ -741,6 +747,7 @@ describe('Figure Recorder', () => {
         }, 0]);
         expect(recorder.states.diffs[5]).toEqual([5, '__base', {
           diff: {
+            '.elements.elements.a.lastDrawTransform.state[2].state[1]': 1,
             '.elements.elements.a.transform.state[2].state[1]': 2,
             '.stateTime': 15,
             '.lastDrawTime': 14,
@@ -821,6 +828,7 @@ describe('Figure Recorder', () => {
         }, 0]);
         expect(recorder.states.diffs[4]).toEqual([4, '__base', {
           diff: {
+            '.elements.elements.a.lastDrawTransform.state[2].state[1]': 5,
             '.elements.elements.a.transform.state[2].state[1]': 5,
             '.stateTime': 23.5,
             '.lastDrawTime': 22.5,
@@ -828,6 +836,7 @@ describe('Figure Recorder', () => {
         }, 0]);
         expect(recorder.states.diffs[5]).toEqual([5, '__base', {
           diff: {
+            '.elements.elements.a.lastDrawTransform.state[2].state[1]': 5,
             '.elements.elements.a.transform.state[2].state[1]': 5,
             '.stateTime': 24.5,
             '.lastDrawTime': 23.5,
@@ -835,6 +844,7 @@ describe('Figure Recorder', () => {
         }, 0]);
         expect(recorder.states.diffs[6]).toEqual([6, '__base', {
           diff: {
+            '.elements.elements.a.lastDrawTransform.state[2].state[1]': 5,
             '.elements.elements.a.transform.state[2].state[1]': 1.6,
             '.stateTime': 25.5,
             '.lastDrawTime': 24.5,
@@ -1801,7 +1811,6 @@ describe('Figure Recorder', () => {
       expect(onPlayback.mock.calls.length).toBe(1);
       expect(x).toBe(1);
       expect(y).toBe(1);
-
       timeStep(0.09);
 
       expect(onPlayback.mock.calls.length).toBe(1);

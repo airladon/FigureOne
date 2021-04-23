@@ -1584,6 +1584,7 @@ ${cursorData}
     const finished = () => {
       if (this.pauseState == null) {
         this.setToTime(fromTime, true);
+        fromTime = this.currentTime;
       } else {
         this.pauseState = null;
       }
