@@ -48,7 +48,7 @@ describe('Figure Recorder', () => {
         },
       },
       {
-        name: 'cursor',
+        name: '_cursor_',
         method: 'collections.cursor',
         options: {
           width: 0.01,
@@ -58,7 +58,7 @@ describe('Figure Recorder', () => {
       },
     ]);
     figure.initialize();
-    cursor = figure.getElement('cursor');
+    cursor = figure.getCursor();
 
     duration = 0;
     initialTime = 1;
@@ -524,7 +524,7 @@ describe('Figure Recorder', () => {
       // only
       test('New states from 0 to beyond end', () => {
         const { a } = figure.elements.elements;
-        figure.getElement('cursor').hide();
+        figure.getCursor().hide();
         initialTime = 10;
         timeStep(0);
         a.setRotation(0);
@@ -606,7 +606,7 @@ describe('Figure Recorder', () => {
       });
       test('New states from 0 to before end', () => {
         const { a } = figure.elements.elements;
-        figure.getElement('cursor').hide();
+        figure.getCursor().hide();
         global.performance.now = () => 10000;
         a.setRotation(0);
         recorder.startRecording();
@@ -653,7 +653,7 @@ describe('Figure Recorder', () => {
       });
       test('New states from after 0 to before end', () => {
         const { a } = figure.elements.elements;
-        figure.getElement('cursor').hide();
+        figure.getCursor().hide();
         // global.performance.now = () => 10000;
         recorder.stateTimeStep = 1;
         initialTime = 10;
@@ -748,7 +748,7 @@ describe('Figure Recorder', () => {
         }, 0]);
       });
       test('New states from after 0 to beyond end', () => {
-        figure.getElement('cursor').hide();
+        figure.getCursor().hide();
         const { a } = figure.elements.elements;
         recorder.stateTimeStep = 1;
         initialTime = 10;
@@ -1918,7 +1918,7 @@ describe('Figure Recorder', () => {
     beforeEach(() => {
       recorder.stateTimeStep = 2;
       // duration = 0;
-      cursor = figure.getElement('cursor');
+      cursor = figure.getCursor();
     });
     describe('Record', () => {
       test('Track Duration and current time during record', () => {
