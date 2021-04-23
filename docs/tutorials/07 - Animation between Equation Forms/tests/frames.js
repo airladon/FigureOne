@@ -5,7 +5,7 @@
 __title = 'Tutorial - Animation Between Equation Forms';
 __width = 500;
 __height = 500;
-__duration = 3;
+__duration = 3.5;
 __timeStep = 0.5;
 __frames = [
   [0, `
@@ -13,5 +13,6 @@ __frames = [
     figure.getElement('eqn.v').animations.setTimeDelta(null)
     figure.getElement('eqn.b').animations.setTimeDelta(null)
     figure.getElement('eqn.c').animations.setTimeDelta(null)
+    figure.getElement('eqn.times').animations.setTimeDelta(null)
   `],
 ];
