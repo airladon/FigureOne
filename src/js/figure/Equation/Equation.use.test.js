@@ -978,13 +978,13 @@ describe('Different ways to make an equation', () => {
     expect(round(eqn._vinculum.drawingObject.points, 3)).toEqual([
       0, 0, 0, 0.01, 0.19, 0, 0.19, 0.01,
     ]);
-    expect(eqn._vinculum.color).toEqual(color1);
+    expect(eqn._vinculum.color).toEqual(color2);
   });
   test('Auto Symbols Object ID', () => {
     ways.autoSymbolsObjectID();
     expect(round(eqn._v.drawingObject.points, 3)).toEqual([
       0, 0, 0, 0.01, 0.19, 0, 0.19, 0.01,
     ]);
-    expect(eqn._v.color).toEqual(color1);
+    expect(eqn._v.color).toEqual(color2);
   });
 });

@@ -62,7 +62,7 @@ describe('Animationa and Movement', () => {
 
           // element.setupDraw(10.5);
           figure.mock.timeStep(0.5);
-          expect(element.transform.r()).toBe(0.5);
+          expect(round(element.transform.r(), 3)).toBe(0.5);
           expect(element.animations.state).toBe('animating');
           expect(element.isAnimating()).toBe(true);
 
@@ -184,7 +184,7 @@ describe('Animationa and Movement', () => {
           // Half way through first phase
           // element.setupDraw(identity, 0.5);
           figure.mock.timeStep(0.5);
-          expect(element.transform.r()).toBe(0.5);
+          expect(round(element.transform.r(), 3)).toBe(0.5);
           expect(callback.mock.calls).toHaveLength(0);
 
           // End of first phase

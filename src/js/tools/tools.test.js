@@ -310,14 +310,15 @@ describe('Generate Unique ID', () => {
   test('With seed', () => {
     const s = tools.generateUniqueId('test');
     expect(s.startsWith('test')).toBe(true);
-    expect(s.length > 4).toBe(true);
-    expect(s.length < 11).toBe(true);
+    expect(s).toHaveLength(13);
+    // expect(s.length < 11).toBe(true);
   });
   test('Without seed', () => {
     const s = tools.generateUniqueId();
-    expect(s.startsWith('id_random_')).toBe(true);
-    expect(s.length > 10).toBe(true);
-    expect(s.length < 17).toBe(true);
+    // expect(s.startsWith('id_random_')).toBe(true);
+    expect(s).toHaveLength(9);
+    // expect(s.length > 10).toBe(true);
+    // expect(s.length < 17).toBe(true);
   });
 });
 describe('Is Touch Device', () => {
@@ -1205,7 +1206,7 @@ describe('ObjectTracker', () => {
   describe('Subscriptions', () => {
     describe('Subscriber', () => {
       test('Simple', () => {
-        const sub = new tools.Subscriber();
+        const sub = new tools.Subscription();
         const callback1 = jest.fn();
         const callback2 = jest.fn();
         sub.add(callback1);
@@ -1218,7 +1219,7 @@ describe('ObjectTracker', () => {
         expect(callback2.mock.calls.length).toBe(1);
       });
       test('Unsubscribe', () => {
-        const sub = new tools.Subscriber();
+        const sub = new tools.Subscription();
         const callback1 = jest.fn();
         const callback2 = jest.fn();
         const id1 = sub.add(callback1);
@@ -1236,7 +1237,7 @@ describe('ObjectTracker', () => {
         expect(callback2.mock.calls.length).toBe(2);
       });
       test('payload', () => {
-        const sub = new tools.Subscriber();
+        const sub = new tools.Subscription();
         const callback1 = jest.fn();
         const callback2 = jest.fn();
         sub.add(callback1);
@@ -1248,7 +1249,7 @@ describe('ObjectTracker', () => {
         expect(callback2.mock.calls[0][0]).toBe(24);
       });
       test('subscribe once', () => {
-        const sub = new tools.Subscriber();
+        const sub = new tools.Subscription();
         const callback = jest.fn();
         sub.add(callback, 1);
         expect(callback.mock.calls.length).toBe(0);
@@ -1261,7 +1262,7 @@ describe('ObjectTracker', () => {
         expect(callback.mock.calls[0][0]).toBe(24);
       });
       test('subscribe twice', () => {
-        const sub = new tools.Subscriber();
+        const sub = new tools.Subscription();
         const callback = jest.fn();
         sub.add(callback, 2);
         expect(callback.mock.calls.length).toBe(0);

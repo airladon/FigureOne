@@ -30,7 +30,7 @@ describe('Animation Step State', () => {
     figure.draw(now);
     now = 0.5;
     figure.draw(now);
-    expect(elem1.getRotation()).toBe(0.5);
+    expect(math.round(elem1.getRotation(), 3)).toBe(0.5);
     const state = figure.getState();
     now = 1;
     figure.draw(now);
@@ -91,7 +91,7 @@ describe('Animation Step State', () => {
     figure.draw(now);
     now = 0.5;
     figure.draw(now);
-    expect(elem1.getScale().x).toBe(0.5);
+    expect(math.round(elem1.getScale().x, 3)).toBe(0.5);
     const state = figure.getState();
     now = 1;
     figure.draw(now);
