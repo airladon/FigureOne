@@ -146,10 +146,10 @@ async function tester(
     });
   });
 
-  // Copy the audio and video track files to the tests folder so loading the
+  // Copy the video track file to the tests folder so loading the
   // file doesn't cause an error
   fs.copyFileSync(videoTrack, `${testPath}/video-track.json`);
-  fs.copyFileSync(videoTrack, `${testPath}/audio-track.mp3`);
+
 
   jest.setTimeout(120000);
   describe(title, () => {
