@@ -14,7 +14,7 @@ function makeShape(name, options, mods, getPos) {
     name,
     method: 'collections.polyline',
     options: tools.misc.joinObjects({}, {
-      color: [1, 0, 0, 0.9],
+      color: [1, 0, 0, 0.7],
       width: 0.05,
       points: [[0, 0], [0.3, 0], [0, 0.3]],
     }, options),

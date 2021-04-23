@@ -14,7 +14,7 @@ function makeAngle(name, options, mods, getPos) {
     name,
     method: 'collections.angle',
     options: tools.misc.joinObjects({}, {
-      color: [1, 0, 0, 0.9],
+      color: [1, 0, 0, 0.7],
       position: [0, 0],
       curve: {
         radius: 0.3,
