@@ -1796,11 +1796,13 @@ describe('Figure Recorder', () => {
       duration = 0;
       timeStep(0);
       recorder.startPlayback(0.15);
+      // Note the last state is at 0.1, so that is where the current time
+      // will start from (not 0.15)
       expect(onPlayback.mock.calls.length).toBe(1);
       expect(x).toBe(1);
       expect(y).toBe(1);
 
-      timeStep(0.04);
+      timeStep(0.09);
 
       expect(onPlayback.mock.calls.length).toBe(1);
       expect(x).toBe(1);
@@ -2110,8 +2112,8 @@ describe('Figure Recorder', () => {
         timeStep(0.01);
         recorder.startPlayback(3.5);            // Diff start (comp last test)
         expect(recorder.state).toBe('playing'); //
-        check(true, false, true, 3, 3, 3.5);    //
-        timeStep(0.5);                          // Diff end
+        check(true, false, true, 3, 3, 3);    //
+        timeStep(1);                          // Diff end
         check(true, false, true, 4, 4, 4);
         timeStep(1);
         check(true, false, true, 5, 5, 5);
@@ -2213,13 +2215,10 @@ describe('Figure Recorder', () => {
       recorder.save();
       recorder.reset();
       expect(recorder.events.cursorMove.list).toEqual([]);
+      const encodedData = JSON.parse(data[0]);
 
-      const [jsonStates, jsonEvents] = data;
-      const encodedStates = JSON.parse(jsonStates);
-      const encodedEvents = JSON.parse(jsonEvents);
-
-      recorder.loadEvents(encodedEvents);
-      recorder.loadStates(encodedStates);
+      recorder.loadEvents(encodedData.events);
+      recorder.loadStates(encodedData.states);
       expect(recorder.events.cursorMove.list).toEqual(expectedCursorMoveEventsList);
       expect(recorder.states).toEqual(expectedStates);
 
