@@ -112,6 +112,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -847,6 +848,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -1838,6 +1840,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -2985,6 +2988,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -5526,6 +5530,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -6777,6 +6782,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -9318,6 +9324,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -10413,6 +10420,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -11375,6 +11383,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -12167,6 +12176,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -12972,6 +12982,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -13707,6 +13718,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -14442,6 +14454,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -15177,6 +15190,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -15915,6 +15929,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -16821,6 +16836,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -17728,6 +17744,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -18634,6 +18651,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -19540,6 +19558,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -20443,6 +20462,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -21178,6 +21198,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -21913,6 +21934,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -22665,6 +22687,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -23400,6 +23423,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -24152,6 +24176,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -24887,6 +24912,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -25622,6 +25648,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -26571,6 +26598,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -27334,6 +27362,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -28069,6 +28098,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -28820,6 +28850,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -29608,6 +29639,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -30378,6 +30410,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -31136,6 +31169,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -31894,6 +31928,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -32629,6 +32664,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -33364,6 +33400,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -34099,6 +34136,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,
@@ -34834,6 +34872,7 @@ FigureElementPrimitive {
     "updatePoints": [Function],
     "updatePolyline": [Function],
   },
+  "customState": Object {},
   "defaultColor": Array [
     1,
     0,

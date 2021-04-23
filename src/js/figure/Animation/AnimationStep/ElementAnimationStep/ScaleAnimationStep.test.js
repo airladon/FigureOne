@@ -19,13 +19,13 @@ describe('Scale Animation Step', () => {
     elem1.setScale(1, 1);
     tester = () => {
       elem1.animations.nextFrame(0);
-      expect(elem1.getScale().round()).toEqual(new Point(1, 1));
+      expect(elem1.getScale().round(4)).toEqual(new Point(1, 1));
       elem1.animations.nextFrame(0.5);
-      expect(elem1.getScale().round()).toEqual(new Point(1.5, 1.5));
+      expect(elem1.getScale().round(4)).toEqual(new Point(1.5, 1.5));
       elem1.animations.nextFrame(1.0);
-      expect(elem1.getScale().round()).toEqual(new Point(2, 2));
+      expect(elem1.getScale().round(4)).toEqual(new Point(2, 2));
       elem1.animations.nextFrame(1.1);
-      expect(elem1.getScale().round()).toEqual(new Point(2, 2));
+      expect(elem1.getScale().round(4)).toEqual(new Point(2, 2));
     };
   });
   test('Simple scale', () => {
