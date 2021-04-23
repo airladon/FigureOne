@@ -27,7 +27,7 @@ function fillHeader(title, path) {
 
 function fillFooter(path = '..') {
   function link(name) {
-    return `<div class="title-link link">
+    return `<div class="examples-link link">
             <a href="${path}/${name.replace(' ', '%20')}/index.html">${name}</a>
             </div>`;
   }
@@ -35,16 +35,19 @@ function fillFooter(path = '..') {
   e.innerHTML = `
     <div class="footer-bar">
       <div class="examples">
-        <div class="other-examples">Examples</div>
-        ${link('Sine Wave')}
-        ${link('Pythagorean Theorem')}
-        ${link('Sine Limit')}
+        <div class="other-examples">Interactive Figure Examples</div>
         ${link('Interactive Angle')}
+        ${link('Sine Wave')}
         ${link('Total Angle of a Polygon')}
-        ${link('Traveling Wave 01 - Shifting Equations')}
         ${link('Traveling Wave 02 - Sine Waves')}
-        ${link('Traveling Wave 03 - Velocity Frequency Wavelength')}
+        <div class="other-examples">Equation Navigation Examples</div>
+        ${link('Pythagorean Theorem')}
         ${link('Holiday Equation')}
+        <div class="other-examples">Interactive Slide Show Examples</div>
+        ${link('Sine Limit')}
+        ${link('Traveling Wave 01 - Shifting Equations')}
+        ${link('Traveling Wave 03 - Velocity Frequency Wavelength')}
+        <div class="other-examples">Interactive Video Examples</div>
         ${link('Interactive Video - Tiling')}
         ${link('Interactive Video - Trig 1 - Trig Functions')}
       <div class="footer">

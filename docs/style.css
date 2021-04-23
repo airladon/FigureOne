@@ -133,6 +133,10 @@ h3 {
   padding: 15px;
 }
 
+.examples-link {
+  padding: 15px;
+}
+
 @media (max-width: 600px) {
   .title-link {
     display: block;
@@ -154,6 +158,10 @@ h3 {
   font-size: 1.5em;
 }
 
+.other-examples:not(:first-child) {
+  margin-top: 1.7em;
+}
+
 .examples {
   text-align: center;
   /* margin-bottom: 30px; */
@@ -164,6 +172,7 @@ h3 {
 }
 
 .footer {
+  margin-top: 1.7em;
   padding: 20px;
   text-align: center;
   color: #333;
