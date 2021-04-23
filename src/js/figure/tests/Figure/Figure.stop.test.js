@@ -100,7 +100,7 @@ describe('Figure Stop', () => {
 
         figure.mock.timeStep(0.4);
         expect(state()).toEqual([true, 0.2, 0, 1, 0, true]);
-        expect(round(figure.elements.opacity)).toBe(1);
+        expect(round(figure.elements.opacity)).toBe(0.001);
 
         figure.mock.timeStep(0.2);
         expect(state()).toEqual([true, 0.8, 1, 1, 0, true]);
@@ -111,6 +111,7 @@ describe('Figure Stop', () => {
         expect(round(figure.elements.opacity)).toBe(0.5005);
 
         figure.mock.timeStep(0.4);
+        expect(round(figure.elements.opacity)).toBe(1);
         expect(state()).toEqual([false, 0, 1, 1, 1, false]);
       });
     });
@@ -165,7 +166,7 @@ describe('Figure Stop', () => {
 
         figure.mock.timeStep(0.4);
         expect(state()).toEqual([true, 0.2, 0.5, 1, 0, true]);
-        expect(round(figure.elements.opacity)).toBe(1);
+        expect(round(figure.elements.opacity)).toBe(0.001);
 
         figure.mock.timeStep(0.2);
         expect(state()).toEqual([true, 0.8, 1, 1, 0, true]);
@@ -271,7 +272,7 @@ describe('Figure Stop', () => {
 
         figure.mock.timeStep(0.4);
         expect(state()).toEqual([true, 0.2, [], [2], [2], 1, 0, true]);
-        expect(round(figure.elements.opacity)).toBe(1);
+        expect(round(figure.elements.opacity)).toBe(0.001);
 
         figure.mock.timeStep(0.2);
         expect(state()).toEqual([true, 0.8, [], [], [1], 1, 0, true]);
@@ -349,7 +350,7 @@ describe('Figure Stop', () => {
 
         figure.mock.timeStep(0.4);
         expect(state()).toEqual([true, 0.2, 2, 1, 0, true]);
-        expect(round(figure.elements.opacity)).toBe(1);
+        expect(round(figure.elements.opacity)).toBe(0.001);
 
         figure.mock.timeStep(0.2);
         expect(state()).toEqual([true, 0.8, 4, 1, 0, true]);
@@ -396,7 +397,7 @@ describe('Figure Stop', () => {
 
         figure.mock.timeStep(0.4);
         expect(state()).toEqual([true, 0.2, 3.5, 1, 0, true]);
-        expect(round(figure.elements.opacity)).toBe(1);
+        expect(round(figure.elements.opacity)).toBe(0.001);
 
         figure.mock.timeStep(0.2);
         expect(state()).toEqual([true, 0.8, 4, 1, 0, true]);
@@ -467,7 +468,7 @@ describe('Figure Stop', () => {
 
         figure.mock.timeStep(0.4);
         expect(state()).toEqual([true, 0.2, 0, 2, 1, 0, true]);
-        expect(round(figure.elements.opacity)).toBe(1);
+        expect(round(figure.elements.opacity)).toBe(0.001);
 
         figure.mock.timeStep(0.2);
         expect(state()).toEqual([true, 0.8, 2, 4, 1, 0, true]);
@@ -537,7 +538,7 @@ describe('Figure Stop', () => {
 
         figure.mock.timeStep(0.4);
         expect(state()).toEqual([true, 0.2, 0, 2, 1, 0, true]);
-        expect(round(figure.elements.opacity)).toBe(1);
+        expect(round(figure.elements.opacity)).toBe(0.001);
 
         figure.mock.timeStep(0.2);
         expect(state()).toEqual([true, 0.8, 3, 4, 1, 0, true]);
