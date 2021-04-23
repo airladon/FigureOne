@@ -1,14 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-  <head>
+<head>
     <meta charset='utf-8'>
     <title>FigureOne</title>
     <meta name='description' content='Javascript library to draw, animate and interact with shapes, text, plots and equations.'>
     <meta name='viewport' content='width=device-width,initial-scale=1'>
     <link href='../../style.css' rel='stylesheet'>
     <link href='../examples.css' rel='stylesheet'>
-  </head>
-  <body>
+    <link href='../../tutorials/15%20-%20Recorder%20Introduction/controls/controls.css' rel='stylesheet' rel='stylesheet'>
+</head>
+<body>
     <div id="header"></div>
     <div class="example">
       <!-- *************************************************************** -->
@@ -16,12 +17,13 @@
       <!-- *************************************************************** -->
 
       <p class="instructions">
-          Touch the <i>Next</i> button to progress through the equation forms.
+          This video is interactive. You can interact with the shapes in the video at any time. When you do, the video will pause, so press play when you're ready to continue.
         </p>
 
-      <div class="wrapper wrapper_4_3">
-          <div id="figureOneContainer" class="container container_4_3"></div>
+      <div class="wrapper wrapper_1_1">
+          <div id="figureOneContainer" class="container container_1_1"></div>
       </div>
+      <div id="figureOneVideoControls"></div>
 
       <!-- *************************************************************** -->
       <!-- ************    Example Specific HTML End     *************** -->
@@ -32,16 +34,20 @@
 
     <!-- **********    Choose local or remote package     *************** -->
 
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.6.1/figureone.min.js'></script>
+    <!-- <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.6.1/figureone.min.js'></script> -->
 
-    <!-- <script type="text/javascript" src='../../../package/index.js'></script> -->
+    <script type="text/javascript" src='../../../package/index.js'></script>
     <!-- ***************************************************************** -->
 
     <script type="text/javascript" src="../../fill.js"></script>
-    <script>fillHeader('Example - Holiday Equation', 'Holiday Equation');</script>
+    <script>fillHeader('Interactive Video - Tiling', 'Holiday Equation');</script>
     <script>fillFooter('..')</script>
 
     <!-- ***************    Example Specific Scripts     ***************** -->
-    <script type="text/javascript" src='./index.js'></script>
+    <!-- <script type="text/javascript" src='./index.js'></script> -->
+    <script type="text/javascript" src='./figure.js'></script>
+    <script type="text/javascript" src='../../tutorials/15%20-%20Recorder%20Introduction/controls/player.js'></script>
+    <!-- Uncomment this if recording is needed -->
+    <!-- <script type="text/javascript" src='../../tutorials/15%20-%20Recorder%20Introduction/controls/recorder.js'></script> -->
   </body>
 </html>

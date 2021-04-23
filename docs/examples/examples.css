@@ -6,7 +6,7 @@
   /* margin-top: 2em; */
 }
 
-.wrapper_2_1, .wrapper_4_3, .wrapper_3_2 {
+.wrapper_1_1, .wrapper_2_1, .wrapper_4_3, .wrapper_3_2 {
   width: calc(100vw - 20px);
 }
 
@@ -19,6 +19,9 @@
   }
   .wrapper_4_3 {
     width: calc((100vh - 20px)/0.75);
+  }
+  .wrapper_1_1 {
+    width: calc((100vh - 20px));
   }
 }
 
@@ -37,6 +40,10 @@
 
 .container_4_3 {
   padding-bottom: 75%;
+}
+
+.container_1_1 {
+  padding-bottom: 100%;
 }
 
 .instructions {

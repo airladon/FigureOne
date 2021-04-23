@@ -12,7 +12,12 @@ function addRecorder() {
       </div>
   </div>
   `;
-  document.body.appendChild(recorderElement);
+  const existingControlsElement = document.getElementById('figureOneVideoControls');
+  if (existingControlsElement) {
+    existingControlsElement.appendChild(recorderElement);
+  } else {
+    document.body.appendChild(recorderElement);
+  }
 
   const { recorder } = figure;
 

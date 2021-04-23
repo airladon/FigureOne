@@ -13,7 +13,12 @@ function addPlayer() {
       <div id='f1_player__time' class="f1_player__button">00:00 / 00:00</div>
   </div>
   `;
-  document.body.appendChild(playerElement);
+  const existingControlsElement = document.getElementById('figureOneVideoControls');
+  if (existingControlsElement) {
+    existingControlsElement.appendChild(playerElement);
+  } else {
+    document.body.appendChild(playerElement);
+  }
 
   // Get reference to recorder
   const { recorder } = figure;
