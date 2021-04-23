@@ -4,50 +4,50 @@ For an introduction to FigureOne, see the [tutorials](../tutorials/).
 
 To interact with examples, either download the html and js files in the example, or go [here](https://airladon.github.io/FigureOne/).
 
-## **[Interactive Angle](./Interactive%20Angle)**
+## **[Interactive Angle](Interactive%20Angle)**
 
 A dynamic angle that changes its size, position and orientation with user interaction.
 
 ![](Interactive%20Angle/example.gif)
 
-## **[Pythagorean Equation Animation](./Pythagorean%20Theorem)**
+## **[Pythagorean Equation Animation](Pythagorean%20Theorem)**
 
 Setup the problem with animation, then step through the working at your own pace.
 
 ![](Pythagorean%20Theorem/example.gif)
 
-## **[Create a Sine Wave](./Sine%20Wave)**
+## **[Create a Sine Wave](Sine%20Wave)**
 
 See how sine waves and rotation are related with interaction and animation.
 
 
 ![](Sine%20Wave/example.gif)
 
-## **[Total Angle of a Polygon](./Total%20Angle%20of%20a%20Polygon)**
+## **[Total Angle of a Polygon](Total%20Angle%20of%20a%20Polygon)**
 
 Press on the different terms of an equation to see where they come from, then step through the simplification.
 
 ![](Total%20Angle%20of%20a%20Polygon/example.gif)
 
-## **[Sine Limit](./Sine%20Limit)**
+## **[Sine Limit](Sine%20Limit)**
 
 Step through the reasoning behind why the sine of a small angle is approximately equal to the small angle.
 
 ![](Sine%20Limit/example.gif)
 
-## **[Travelling Wave 01 - Shifting Equations](./Traveling%20Wave%2001%20-%20Shifting%20Equations)**
+## **[Travelling Wave 01 - Shifting Equations](Traveling%20Wave%2001%20-%20Shifting%20Equations)**
 
 See how equations change when they are shifted along the x axis.
 
 ![](Traveling%20Wave%2001%20-%20Shifting%20Equations/example.gif)
 
-## **[Traveling Wave 02 - Sine Waves in Space or Time](./Traveling%20Wave%2002%20-%20Sine%20Waves)**
+## **[Traveling Wave 02 - Sine Waves in Space or Time](Traveling%20Wave%2002%20-%20Sine%20Waves)**
 
 Find the general form of a sine wave, and look at how to define it in space or time.
 
 ![](Traveling%20Wave%2002%20-%20Sine%20Waves/example.gif)
 
-## **[Traveling Wave 03 - Velocity Frequency Wavelength](./Traveling%20Wave%2003%20-%20Velocity%20Frequency%20Wavelength)**
+## **[Traveling Wave 03 - Velocity Frequency Wavelength](Traveling%20Wave%2003%20-%20Velocity%20Frequency%20Wavelength)**
 
 Intuitive understanding of the relationship between frequency, wavelength and velocity of a traveling sine wave.
 
@@ -60,7 +60,7 @@ Equation portion example:
 ![](Traveling%20Wave%2003%20-%20Velocity%20Frequency%20Wavelength/example2.gif)
 
 
-## **[Holiday Equation](./Holiday%20Equation)**
+## **[Holiday Equation](Holiday%20Equation)**
 
 ![](Holiday%20Equation/example.gif)
 

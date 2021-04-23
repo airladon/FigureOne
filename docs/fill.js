@@ -46,6 +46,7 @@ function fillFooter(path = '..') {
         ${link('Traveling Wave 03 - Velocity Frequency Wavelength')}
         ${link('Holiday Equation')}
         ${link('Interactive Video - Tiling')}
+        ${link('Interactive Video - Trig 1 - Trig Functions')}
       <div class="footer">
         <p>Built for and used by <a class="link" href="https://www.thisiget.com">www.thisiget.com</a></p>
       </div>
