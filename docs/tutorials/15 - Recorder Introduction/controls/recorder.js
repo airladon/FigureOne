@@ -76,6 +76,7 @@ function addRecorder() {
       figure.toggleCursor();
     } else if (keyCode === ' ' && recorder.state === 'recording') {
       recorder.stopRecording();
+      event.preventDefault();
     } else if (keyCode === 'r') {
       toggleRecord();
     } else if (keyCode === 'n' && figure.getSlideNavigator()) {

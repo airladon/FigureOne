@@ -41,6 +41,7 @@ function addPlayer() {
     const keyCode = String.fromCharCode(event.keyCode);
     if (keyCode === ' ') {
       recorder.togglePlayback();
+      event.preventDefault();
     }
   }, false);
 

@@ -50,6 +50,8 @@ function fillFooter(path = '..') {
         <div class="other-examples">Interactive Video Examples</div>
         ${link('Interactive Video - Tiling')}
         ${link('Interactive Video - Trig 1 - Trig Functions')}
+        ${link('Interactive Video - Trig 2 - Names')}
+        ${link('Interactive Video - Trig 3 - Relationships')}
       <div class="footer">
         <p>Built for and used by <a class="link" href="https://www.thisiget.com">www.thisiget.com</a></p>
       </div>
