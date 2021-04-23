@@ -1587,9 +1587,9 @@ ${cursorData}
       } else {
         this.pauseState = null;
       }
+      this.setVideoToNowDeltaTime(fromTime);
       fromTime = this.getCurrentTime();
       this.state = 'playing';
-      this.setVideoToNowDeltaTime(fromTime);
       this.setCurrentTime(fromTime);
       this.startTimeUpdates();
       this.startEventsPlayback(fromTime);
@@ -1601,7 +1601,6 @@ ${cursorData}
       this.subscriptions.publish('playbackStarted');
     };
 
-    // console.log(this.settings.play)
     this.figure.setState(stateToStartFrom, this.settings.play);
     if (this.figure.state.preparingToSetState) {
       this.state = 'preparingToPlay';
