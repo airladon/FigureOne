@@ -1023,7 +1023,7 @@ describe('Figure Recorder', () => {
       recorder.reset();
       figure.add({
         name: 'line',
-        method: 'oline',
+        method: 'primitives.line',
         options: {
           width: 0.01,
           p1: [0, 0],
@@ -1052,7 +1052,7 @@ describe('Figure Recorder', () => {
       // ({ recorder } = figure);
     });
     test('addReferenceState', () => {
-      line.setEndPoints([1, 1], [2, 1]);
+      line.setPosition([10, 10]);
       figure.setState(state1);
       const state4 = figure.getState();
       expect(state4.elements).toEqual(state1.elements);
@@ -1069,12 +1069,12 @@ describe('Figure Recorder', () => {
     test('getReferenceState', () => {
       recorder.states.setBaseReference(state1);
       recorder.states.addReference(state2, 'ref1');
-      const ref1 = recorder.states.getReference('__base');
-      const ref2 = recorder.states.getReference('ref1');
-      figure.setState(ref1);
+      const base = recorder.states.getReference('__base');
+      const ref1 = recorder.states.getReference('ref1');
+      figure.setState(base);
       expect(line.transform.t().x).toBe(0);
       expect(line.transform.t().y).toBe(0);
-      figure.setState(ref2);
+      figure.setState(ref1);
       expect(line.transform.t().x).toBe(0);
       expect(line.transform.t().y).toBe(1);
     });
@@ -1175,7 +1175,7 @@ describe('Figure Recorder', () => {
           undefinedCode: '.a',
         },
         minified: {
-          a: 4,
+          a: 8,
           c: { b: 1 },
           d: {},
           h: [
@@ -1191,7 +1191,7 @@ describe('Figure Recorder', () => {
       const decoded = recorder.decodeStates(encoded, true, false);
       const decodeExpected = {
         lastReferenceName: '__base',
-        precision: 4,
+        precision: 8,
         baseReference: { elements: 1 },
         references: {},
         diffs: [
@@ -1235,7 +1235,7 @@ describe('Figure Recorder', () => {
             [1, 'c', { d: { a: 2.123 } }, 0],
           ],
           f: {},
-          g: 4,
+          g: 8,
           h: 'c',
         },
       };
@@ -1245,7 +1245,7 @@ describe('Figure Recorder', () => {
       const decoded = recorder.decodeStates(encoded, true, true);
       const decodeExpected = {
         lastReferenceName: '__base',
-        precision: 4,
+        precision: 8,
         baseReference: { elements: 1 },
         references: {},
         diffs: [
@@ -1267,7 +1267,7 @@ describe('Figure Recorder', () => {
       const encoded = recorder.encodeStates(true, false, 3);
       const expectedEncoded = {
         minified: {
-          a: 4,
+          a: 8,
           e: { d: { b: 1, c: 2 } },
           f: {},
           j: [
@@ -1301,7 +1301,7 @@ describe('Figure Recorder', () => {
 
       const expectedDecoded = {
         lastReferenceName: '__base',
-        precision: 4,
+        precision: 8,
         baseReference: { elements: { e1: 1, e2: 2 } },
         references: {},
         diffs: [
@@ -1314,7 +1314,7 @@ describe('Figure Recorder', () => {
       recorder.reset();
       const expectedReset = {
         lastReferenceName: '__base',
-        precision: 4,
+        precision: 8,
         baseReference: null,
         references: {},
         diffs: [],
@@ -1342,7 +1342,7 @@ describe('Figure Recorder', () => {
             [1, 'e', { f: { c: { a: 2 } } }, 0],
           ],
           h: {},
-          i: 4,
+          i: 8,
           j: 'e',
         },
         map: {
@@ -1369,7 +1369,7 @@ describe('Figure Recorder', () => {
 
       const expectedDecoded = {
         lastReferenceName: '__base',
-        precision: 4,
+        precision: 8,
         baseReference: { elements: { e1: 1, e2: 2 } },
         references: {},
         diffs: [
@@ -1382,7 +1382,7 @@ describe('Figure Recorder', () => {
       recorder.reset();
       const expectedReset = {
         lastReferenceName: '__base',
-        precision: 4,
+        precision: 8,
         baseReference: null,
         references: {},
         diffs: [],
