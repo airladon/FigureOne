@@ -129,19 +129,19 @@ describe('Transfrom Animation Unit', () => {
 
     let remainingTime;
     remainingTime = step.nextFrame(100.1);
-    expect(step.element.transform.round()).toEqual(start.constant(0.1));
+    expect(step.element.transform.round(4)).toEqual(start.constant(0.1));
     expect(math.round(remainingTime)).toBe(-0.9);
 
     remainingTime = step.nextFrame(100.55);
-    expect(step.element.transform.round()).toEqual(start.constant(0.55));
+    expect(step.element.transform.round(4)).toEqual(start.constant(0.55));
     expect(math.round(remainingTime)).toBe(-0.45);
 
     remainingTime = step.nextFrame(100.9);
-    expect(step.element.transform.round()).toEqual(start.constant(0.9));
+    expect(step.element.transform.round(4)).toEqual(start.constant(0.9));
     expect(math.round(remainingTime)).toBe(-0.1);
 
     remainingTime = step.nextFrame(101.1);
-    expect(step.element.transform.round()).toEqual(target);
+    expect(step.element.transform.round(4)).toEqual(target);
     expect(math.round(remainingTime)).toBe(0.1);
   });
   test('Animation flow curve', () => {
@@ -169,8 +169,8 @@ describe('Transfrom Animation Unit', () => {
     expect(step.element.transform).toEqual(start);
 
     step.nextFrame(100.5);
-    expect(step.element.transform.t().x).toBe(0.25);
-    expect(step.element.transform.t().y).toBe(0.75);
+    expect(math.round(step.element.transform.t().x, 4)).toBe(0.25);
+    expect(math.round(step.element.transform.t().y, 4)).toBe(0.75);
   });
   test('Duplication', () => {
     const start = element.transform.zero();
@@ -210,10 +210,10 @@ describe('Transfrom Animation Unit', () => {
       step.start();
       step.nextFrame(0);
       step.nextFrame(0.5);
-      expect(element.transform.round()).toEqual(start.constant(0.5));
+      expect(element.transform.round(4)).toEqual(start.constant(0.5));
 
       step.finish(true);
-      expect(element.transform.round()).toEqual(target);
+      expect(element.transform.round(4)).toEqual(target);
       expect(callbackFlag).toBe(1);
     });
     test('CompleteOnCancel = false, Default Force', () => {
@@ -221,10 +221,10 @@ describe('Transfrom Animation Unit', () => {
       step.start();
       step.nextFrame(0);
       step.nextFrame(0.5);
-      expect(element.transform.round()).toEqual(start.constant(0.5));
+      expect(element.transform.round(4)).toEqual(start.constant(0.5));
 
       step.finish(true);
-      expect(element.transform.round()).toEqual(start.constant(0.5));
+      expect(element.transform.round(4)).toEqual(start.constant(0.5));
       expect(callbackFlag).toBe(1);
     });
     test('CompleteOnCancel = true, Force freeze', () => {
@@ -232,10 +232,10 @@ describe('Transfrom Animation Unit', () => {
       step.start();
       step.nextFrame(0);
       step.nextFrame(0.5);
-      expect(element.transform.round()).toEqual(start.constant(0.5));
+      expect(element.transform.round(4)).toEqual(start.constant(0.5));
 
       step.finish(true, 'freeze');
-      expect(element.transform.round()).toEqual(start.constant(0.5));
+      expect(element.transform.round(4)).toEqual(start.constant(0.5));
       expect(callbackFlag).toBe(1);
     });
     test('CompleteOnCancel = false, Force complete', () => {
@@ -243,10 +243,10 @@ describe('Transfrom Animation Unit', () => {
       step.start();
       step.nextFrame(0);
       step.nextFrame(0.5);
-      expect(element.transform.round()).toEqual(start.constant(0.5));
+      expect(element.transform.round(4)).toEqual(start.constant(0.5));
 
       step.finish(true, 'complete');
-      expect(element.transform.round()).toEqual(target);
+      expect(element.transform.round(4)).toEqual(target);
       expect(callbackFlag).toBe(1);
     });
   });

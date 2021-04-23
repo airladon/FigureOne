@@ -147,7 +147,7 @@ describe('Equation Animation', () => {
     expect(round(a.opacity)).toEqual(0.001);
     expect(b.opacity).toEqual(1);
     expect(round(c.opacity)).toEqual(1);
-    expect(b.getPosition().round()).toEqual(new Point(0.035, 0));
+    expect(b.getPosition().round(4)).toEqual(new Point(0.035, 0));
     expect(a.animations.animations).toHaveLength(1);
     expect(b.animations.animations).toHaveLength(1);
     expect(c.animations.animations).toHaveLength(0);
