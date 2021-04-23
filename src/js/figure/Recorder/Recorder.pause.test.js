@@ -218,7 +218,7 @@ describe('Animate To State', () => {
         // Start delay
         figure.mock.timeStep(0.4);
         expect(states()).toEqual(['preparingToPause', true, false, true, 0.2, 0.5]);
-        expect(round(figure.elements.opacity)).toBe(1);
+        expect(round(figure.elements.opacity)).toBe(0.001);
         expect(a.isShown).toBe(false);
 
         // Start dissolve in
@@ -438,7 +438,7 @@ describe('Animate To State', () => {
           // end dissolve out, start delay
           figure.mock.timeStep(0.4);
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.2, 2.5]);
-          expect(round(figure.elements.opacity)).toBe(1);
+          expect(round(figure.elements.opacity)).toBe(0.001);
           expect(figure.elements.isShown).toBe(true);
           expect(a.isShown).toBe(false);
 
@@ -487,7 +487,7 @@ describe('Animate To State', () => {
           // end dissolve out, start delay
           figure.mock.timeStep(0.5);
           expect(states()).toEqual(['preparingToPlay', false, false, true, 1, 2.5]);
-          expect(round(figure.elements.opacity)).toBe(1);
+          expect(round(figure.elements.opacity)).toBe(0.001);
           expect(figure.elements.isShown).toBe(true);
           expect(a.isShown).toBe(false);
 
@@ -565,7 +565,7 @@ describe('Animate To State', () => {
           // end dissolve out, start delay
           figure.mock.timeStep(0.4);
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.2, 1]);
-          expect(round(figure.elements.opacity)).toBe(1);
+          expect(round(figure.elements.opacity)).toBe(0.001);
           expect(figure.elements.isShown).toBe(true);
           expect(a.isShown).toBe(false);
 
@@ -704,7 +704,7 @@ describe('Animate To State', () => {
         // Start delay
         figure.mock.timeStep(0.4);
         expect(states()).toEqual(['preparingToPause', true, false, true, 0.2, 2]);
-        expect(round(figure.elements.opacity)).toBe(1);
+        expect(round(figure.elements.opacity)).toBe(0.001);
         expect(a.isShown).toBe(false);
 
         // Start dissolve in
@@ -856,7 +856,7 @@ describe('Animate To State', () => {
           // end dissolve out, start delay
           figure.mock.timeStep(0.4);
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.2, 4]);
-          expect(round(figure.elements.opacity)).toBe(1);
+          expect(round(figure.elements.opacity)).toBe(0.001);
           expect(figure.elements.isShown).toBe(true);
           expect(a.isShown).toBe(false);
 
@@ -936,7 +936,7 @@ describe('Animate To State', () => {
           // end dissolve out, start delay
           figure.mock.timeStep(0.4);
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.2, 2]);
-          expect(round(figure.elements.opacity)).toBe(1);
+          expect(round(figure.elements.opacity)).toBe(0.001);
           expect(figure.elements.isShown).toBe(true);
           expect(a.isShown).toBe(false);
           expect(a.getPosition().round(3).x).toBe(4);
@@ -1048,7 +1048,7 @@ describe('Animate To State', () => {
           // end dissolve out, start delay
           figure.mock.timeStep(0.4);
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.2, 4]);
-          expect(round(figure.elements.opacity)).toBe(1);
+          expect(round(figure.elements.opacity)).toBe(0.001);
           expect(figure.elements.isShown).toBe(true);
           expect(a.isShown).toBe(false);
           expect(a.getPosition().round(3).x).toBe(4);
@@ -1142,7 +1142,7 @@ describe('Animate To State', () => {
           // end dissolve out, start delay
           figure.mock.timeStep(0.4);
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.2, 1]);
-          expect(round(figure.elements.opacity)).toBe(1);
+          expect(round(figure.elements.opacity)).toBe(0.001);
           expect(figure.elements.isShown).toBe(true);
           expect(a.isShown).toBe(false);
 
@@ -1279,7 +1279,7 @@ describe('Animate To State', () => {
         // Start delay
         figure.mock.timeStep(0.4);
         expect(states()).toEqual(['preparingToPause', true, false, true, 0.2, [1.1, 1, 0.9]]);
-        expect(round(figure.elements.opacity)).toBe(1);
+        expect(round(figure.elements.opacity)).toBe(0.001);
         expect(a.isShown).toBe(false);
 
         // Start dissolve in
@@ -1392,7 +1392,7 @@ describe('Animate To State', () => {
           // end dissolve out, start delay
           figure.mock.timeStep(0.4);
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.2, [1.2, 1, 0.8]]);
-          expect(round(figure.elements.opacity)).toBe(1);
+          expect(round(figure.elements.opacity)).toBe(0.001);
           expect(figure.elements.isShown).toBe(true);
           expect(a.isShown).toBe(false);
 
@@ -1489,7 +1489,7 @@ describe('Animate To State', () => {
           // end dissolve out, start delay
           figure.mock.timeStep(0.4);
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.2, [1]]);
-          expect(round(figure.elements.opacity)).toBe(1);
+          expect(round(figure.elements.opacity)).toBe(0.001);
           expect(figure.elements.isShown).toBe(true);
           expect(a.isShown).toBe(false);
 
@@ -2097,7 +2097,7 @@ describe('Animate To State', () => {
         // Start delay
         figure.mock.timeStep(0.4);
         expect(states()).toEqual(['preparingToPause', true, false, true, 0.2, 2]);
-        expect(round(figure.elements.opacity)).toBe(1);
+        expect(round(figure.elements.opacity)).toBe(0.001);
         expect(a.isShown).toBe(false);
 
         // Start dissolve in
@@ -2214,7 +2214,7 @@ describe('Animate To State', () => {
           // end dissolve out, start delay
           figure.mock.timeStep(0.4);
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.2, 4]);
-          expect(round(figure.elements.opacity)).toBe(1);
+          expect(round(figure.elements.opacity)).toBe(0.001);
           expect(figure.elements.isShown).toBe(true);
           expect(a.isShown).toBe(false);
 
@@ -2294,7 +2294,7 @@ describe('Animate To State', () => {
           // end dissolve out, start delay
           figure.mock.timeStep(0.4);
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.2, 2]);
-          expect(round(figure.elements.opacity)).toBe(1);
+          expect(round(figure.elements.opacity)).toBe(0.001);
           expect(figure.elements.isShown).toBe(true);
           expect(a.isShown).toBe(false);
           expect(a.getPosition().round(3).x).toBe(4);
@@ -2407,7 +2407,7 @@ describe('Animate To State', () => {
           // end dissolve out, start delay
           figure.mock.timeStep(0.4);
           expect(states()).toEqual(['preparingToPlay', false, false, true, 0.2, 4]);
-          expect(round(figure.elements.opacity)).toBe(1);
+          expect(round(figure.elements.opacity)).toBe(0.001);
           expect(figure.elements.isShown).toBe(true);
           expect(a.isShown).toBe(false);
           expect(a.getPosition().round(3).x).toBe(4);
