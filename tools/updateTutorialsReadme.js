@@ -82,7 +82,7 @@ let out = `# Tutorials
 Follow these tutorials in sequence to learn about FigureOne and how to use it.
 `;
 tutorials.forEach((t, i) => {
-  out = `${out}\n## **[${t}](https://github.com/airladon/FigureOne/tree/master/${t.split(' ').join('%20')})** - ${descriptions[i]}\n\n![](./${t.split(' ').join('%20')}/${examples[i]})\n`;
+  out = `${out}\n## **[${t}](./${t.split(' ').join('%20')})** - ${descriptions[i]}\n\n![](./${t.split(' ').join('%20')}/${examples[i]})\n`;
 });
 
 fs.writeFileSync('./docs/tutorials/README.md', out, { encoding: 'utf8' });
