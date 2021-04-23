@@ -138,5 +138,6 @@ solution.hide();
 
 
 // Load audio, states and events data
-figure.recorder.loadAudioTrack(new Audio('./audio-track.mp3'));
+// figure.recorder.loadAudioTrack(new Audio('./audio-track.mp3'));
+figure.recorder.loadAudioTrack(new Audio('http://localhost:8080/docs/examples/Tiling/audio-track.mp3'));
 figure.recorder.loadVideoTrack('./video-track.json');

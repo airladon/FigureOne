@@ -1,12 +1,27 @@
 <!doctype html>
 <html>
+    <style>
+        #wrapper {
+            width: calc(100vw - 20px);
+            max-width: 100%;
+        }
+        @media (min-aspect-ratio: 1/1) {
+            #wrapper {
+              width: calc((100vh - 20px)/0.75);
+            }
+        } 
+        #figureOneContainer {
+            width: 100%;
+            padding-bottom: 100%;
+        }
+    </style>
 <head>
     <!-- <link href='../common/recorder.css' rel='stylesheet'> -->
     <link href='../../../tutorials/15%20-%20Recorder%20Introduction/controls/controls.css' rel='stylesheet' rel='stylesheet'>
     <!-- <link href='../../examples.css' rel='stylesheet'> -->
 </head>
 <body>
-    <div id="figureOneContainer" style="width: 1000px; height: 1000px; background-color: white;">
+    <div id="figureOneContainer" style="background-color: white;">
     </div>
     <script type="text/javascript" src='../../../../package/index.js'></script>
     <script type="text/javascript" src='../figure.js'></script>
