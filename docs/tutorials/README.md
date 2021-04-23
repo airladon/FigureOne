@@ -42,7 +42,7 @@ Follow these tutorials in sequence to learn about FigureOne and how to use it.
 
 ![](./10%20-%20Customized%20Plot/example.png)
 
-## **[11 - Notifications](https://github.com/airladon/FigureOne/tree/master/11%20-%20Notifications)** - Update text with coordinates of a moving ball
+## **[11 - Notifications](https://github.com/airladon/FigureOne/tree/master/11%20-%20Notifications)** - Update text with coordinates of a moving ball using notifications.
 
 ![](./11%20-%20Notifications/example.gif)
 
