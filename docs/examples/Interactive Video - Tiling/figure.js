@@ -136,24 +136,6 @@ figure.shortcuts = { 1: 'showSolutionButton' };
 figure.setScenarios('start');
 solution.hide();
 
-figure.elements._polygond6_5.subscriptions.add('setTransform', () => {
-  console.log(figure.recorder.getCurrentTime(), figure.elements._polygond6_5.transform.t().round(2).x, figure.elements._polygond6_5.transform.t().round(2).y, figure.getRemainingAnimationTime())
-})
-
-window.asdf = 0;
-// Automatically pause and unpause time when browser window focus changes
-  window.addEventListener('focus', () => {
-    blurred = false;
-    window.asdf += 1;
-    console.log('**********************');
-    console.log('********************** back');
-    console.log('**********************');
-    console.log(figure.elements._polygond6_5.transform.t().round(2).x, figure.elements._polygond6_5.transform.t().round(2).y)
-    console.log(figure.elements._polygond6_5.transform.t().round(2))
-    console.log(figure.elements._polygond6_5.lastDrawTransform.t().round(2))
-  });
-
-
 // Load audio, states and events data
 figure.recorder.loadAudioTrack(new Audio(window.location.href.replace(/\/tests.index.html|\/index.html|\/tests\/$|\/$/, '/audio-track.mp3')));
 figure.recorder.loadVideoTrack('./video-track.json');
