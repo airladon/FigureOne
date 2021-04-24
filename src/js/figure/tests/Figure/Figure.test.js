@@ -271,8 +271,8 @@ describe('Figure', () => {
       const d = figures.landscapeCenter;
       d.draw(0);
       expect(d.beingMovedElements).toHaveLength(0);
-      // d.touchDownHandler(new Point(600, 450));          // Touch -0.01, -0.01
-      d.touchDownHandler(new Point(599, 451));          // Touch -0.01, -0.01
+      // d.touchDownHandlerClient(new Point(600, 450));          // Touch -0.01, -0.01
+      d.touchDownHandlerClient(new Point(599, 451));          // Touch -0.01, -0.01
       // d.mock.touchDown()
       expect(d.beingMovedElements).toHaveLength(1);
       expect(d.beingMovedElements[0]).toBe(d.elements._a);
@@ -282,7 +282,7 @@ describe('Figure', () => {
       const d = figures.landscapeCenter;
       d.draw(0);
       expect(d.beingMovedElements).toHaveLength(0);
-      d.touchDownHandler(new Point(601, 449));          // Touch 0.01, 0.01
+      d.touchDownHandlerClient(new Point(601, 449));          // Touch 0.01, 0.01
       expect(d.beingMovedElements).toHaveLength(2);
       expect(d.beingMovedElements[1]).toBe(d.elements._a);
       expect(d.beingMovedElements[0]).toBe(d.elements._c);
@@ -292,7 +292,7 @@ describe('Figure', () => {
       const d = figures.landscapeCenter;
       d.draw(0);
       expect(d.beingMovedElements).toHaveLength(0);
-      d.touchDownHandler(new Point(1099, 201));         // Touch 0.99, 0.99
+      d.touchDownHandlerClient(new Point(1099, 201));         // Touch 0.99, 0.99
       expect(d.beingMovedElements).toHaveLength(2);
       expect(d.beingMovedElements[1]).toBe(d.elements._b);
       expect(d.beingMovedElements[0]).toBe(d.elements._c);
@@ -301,7 +301,7 @@ describe('Figure', () => {
       const d = figures.landscapeOffset;
       d.draw(0);
       expect(d.beingMovedElements).toHaveLength(0);
-      d.touchDownHandler(new Point(349, 451));           // Touch 0.99, 0.99
+      d.touchDownHandlerClient(new Point(349, 451));           // Touch 0.99, 0.99
       expect(d.beingMovedElements).toHaveLength(2);
       expect(d.beingMovedElements[1]).toBe(d.elements._b);
       expect(d.beingMovedElements[0]).toBe(d.elements._c);
@@ -314,16 +314,16 @@ describe('Figure', () => {
       // d.initialize();
       d.draw(0);
       // Touch A
-      const t1 = d.dToP(new Point(-0.001, -0.001));
+      const t1 = new Point(-0.001, -0.001);
       // console.log(new Point(-0.001, -0.001).transformBy(d.figureToPixelSpaceTransform.matrix()))
       // console.log(t1)
       // Move to 0.25, 0.25
-      const t2 = d.dToP(new Point(0.25, 0.25));
+      const t2 = new Point(0.25, 0.25);
       // A center will move to 0.25, 0.25
       const a2 = new Point(0.25, 0.25);
 
       // Move to 2, 0.25
-      const t3 = d.dToP(new Point(2, 0.25));
+      const t3 = new Point(2, 0.25);
       // A center will move to 0.75, 0.25 as will be clipped by canvas
       const a3 = new Point(0.75, 0.25);
 
@@ -352,17 +352,17 @@ describe('Figure', () => {
       d.draw(0);
 
       // Touch A and C
-      const t1 = d.dToP(new Point(0.001, 0.001));
+      const t1 = new Point(0.001, 0.001);
 
       // Move to 0.25, 0.25
-      const t2 = d.dToP(new Point(-0.25, -0.25));
+      const t2 = new Point(-0.25, -0.25);
       // A center will move to -0.25, -0.25
       const a2 = new Point(-0.25, -0.25);
       // C corner will move to (-0.25, -0.25), and center to (0.25, 0.25)
       const c2 = new Point(0.25, 0.25);
 
       // Move to -2, -2
-      const t3 = d.dToP(new Point(-2, -2));
+      const t3 = new Point(-2, -2);
       // A will get stuck at -0.75, -0.75
       const a3 = new Point(-0.75, -0.75);
       // C will get stuck at -0.5, -0.5
@@ -395,25 +395,25 @@ describe('Figure', () => {
       d.draw(0);
 
       // Touch A and C
-      const t0 = d.dToP(new Point(0.001, 0.001));
+      const t0 = new Point(0.001, 0.001);
       const a0 = new Point(0, 0);
       const c0 = new Point(0.5, 0.5);
 
       // Very small movement, will clip A back to in border, and touch
       // will now be in corner and not center of A
-      const t1 = d.dToP(new Point(0.002, 0.002));
+      const t1 = new Point(0.002, 0.002);
       const a1 = new Point(0.25, 0.25);
       const c1 = new Point(0.5, 0.5);
 
       // Move to 0.25, 0.25
-      const t2 = d.dToP(new Point(0.25, 0.25));
+      const t2 = new Point(0.25, 0.25);
       // A corner will move to (0.25, 0.25) and center to (0.5, 0.5)
       const a2 = new Point(0.5, 0.5);
       // C corner will move to (0.25, 0.25), and center to (0.75, 0.75)
       const c2 = new Point(0.75, 0.75);
 
       // Move to 4, 4
-      const t3 = d.dToP(new Point(4, 4));
+      const t3 = new Point(4, 4);
       // A will get stuck at 3.75, 1.75
       const a3 = new Point(3.75, 1.75);
       // C will get stuck at 3.5, 1.5
@@ -465,25 +465,25 @@ describe('Figure', () => {
       d.draw(0);
 
       // Touch A and C
-      const t0 = d.dToP(new Point(0.001, 0.001));
+      const t0 = new Point(0.001, 0.001);
       const a0 = new Point(0, 0);
       const c0 = new Point(0.5, 0.5);
 
       // Very small movement, will clip A back to in border, and touch
       // will now be in corner and not center of A
-      const t1 = d.dToP(new Point(0.002, 0.002));
+      const t1 = new Point(0.002, 0.002);
       const a1 = new Point(0.25, 0.25);
       const c1 = new Point(0.5, 0.5);
 
       // Move to 0.25, 0.25
-      const t2 = d.dToP(new Point(0.25, 0.25));
+      const t2 = new Point(0.25, 0.25);
       // A corner will move to (0.25, 0.25) and center to (0.5, 0.5)
       const a2 = new Point(0.5, 0.5);
       // C corner will move to (0.25, 0.25), and center to (0.75, 0.75)
       const c2 = new Point(0.75, 0.75);
 
       // Move to 4, 4
-      const t3 = d.dToP(new Point(4, 4));
+      const t3 = new Point(4, 4);
       // A will get stuck at 1.75, 3.75
       const a3 = new Point(1.75, 3.75);
       // C will get stuck at 1.5, 3.5
@@ -529,12 +529,12 @@ describe('Figure', () => {
       a.move.freely.bounceLoss = 1;
 
       // Touch A
-      const t0 = d.dToP(new Point(-0.001, -0.001));
-      const t1 = d.dToP(new Point(0, 0));
+      const t0 = new Point(-0.001, -0.001);
+      const t1 = new Point(0, 0);
 
       // Move to 0.07, 0.07 in 0.1s - so velocity should be 0.7 clip unit / s
       // for each component, which is 0.989
-      const t2 = d.dToP(new Point(0.07, 0.07));
+      const t2 = new Point(0.07, 0.07);
       // A center will move to 0.07, 0.07
       const a2 = new Point(0.07, 0.07);
       const v2 = new Point(0.7, 0.7);

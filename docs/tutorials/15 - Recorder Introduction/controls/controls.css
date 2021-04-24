@@ -69,6 +69,7 @@
   margin-top: 1em;
   display: table;
   table-layout: fixed;
+  margin-bottom: 2000px;
 }
 .f1_recorder__button {
   width: 8em;

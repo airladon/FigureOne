@@ -26,9 +26,9 @@ class Gesture {
     this.figure = figure;
 
     // Override these if you want to use your own touch handlers
-    this.start = this.figure.touchDownHandler.bind(this.figure);
+    this.start = this.figure.touchDownHandlerClient.bind(this.figure);
     this.end = this.figure.touchUpHandler.bind(this.figure);
-    this.move = this.figure.touchMoveHandler.bind(this.figure);
+    this.move = this.figure.touchMoveHandlerClient.bind(this.figure);
     this.free = this.figure.touchFreeHandler.bind(this.figure);
     this.toggleCursor = this.figure.toggleCursor.bind(this.figure);
 

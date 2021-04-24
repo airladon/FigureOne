@@ -1760,16 +1760,20 @@ class Figure {
     return cursor.isShown;
   }
 
+  touchDownHandlerClient(clientPoint: Point, eventFromPlayback: boolean = false) {
+    const pixelP = this.clientToPixel(clientPoint);
+    const figurePoint = pixelP.transformBy(this.spaceTransforms.pixelToFigure.matrix());
+    this.touchDownHandler(figurePoint, eventFromPlayback);
+  }
+
   // Handle touch down, or mouse click events within the canvas.
   // The default behavior is to be able to move objects that are touched
   // and dragged, then when they are released, for them to move freely before
   // coming to a stop.
-  touchDownHandler(clientPoint: Point, eventFromPlayback: boolean = false) {
-    // console.trace()
-    // console.log(this.beingTouchedElements, this.beingMovedElements)
+  touchDownHandler(figurePoint: Point, eventFromPlayback: boolean = false) {
     if (this.recorder.state === 'recording') {
-      const pixelP = this.clientToPixel(clientPoint);
-      const figurePoint = pixelP.transformBy(this.spaceTransforms.pixelToFigure.matrix());
+      // const pixelP = this.clientToPixel(clientPoint);
+      // const figurePoint = pixelP.transformBy(this.spaceTransforms.pixelToFigure.matrix());
       this.recorder.recordEvent('touch', ['down', figurePoint.x, figurePoint.y]);
       if (this.cursorShown) {
         this.showCursor('down');
@@ -1783,20 +1787,12 @@ class Figure {
       this.recorder.pausePlayback();
       this.showCursor('hide');
     }
-    // if (this.inTransition) {
-    //   return false;
-    // }
     this.isTouchDown = true;
 
     // Get the touched point in clip space
-    const pixelPoint = this.clientToPixel(clientPoint);
-    // console.log(pixelPoint)
-    const glPoint = pixelPoint.transformBy(this.spaceTransforms.pixelToGL.matrix());
-    // console.log(glPoint)
-    // console.log(glPoint, clientPoint)
-
-    // console.log(glPoint.transformBy(this.glToFigureSpaceTransform.matrix()))
-    // const clipPoint = this.clientToClip(clientPoint);
+    // const pixelPoint = this.clientToPixel(clientPoint);
+    // const glPoint = pixelPoint.transformBy(this.spaceTransforms.pixelToGL.matrix());
+    const glPoint = figurePoint.transformBy(this.spaceTransforms.figureToGL.matrix());
 
     // Get all the figure elements that were touched at this point (element
     // must have isTouchable = true to be considered)
@@ -1807,13 +1803,7 @@ class Figure {
       this.beingTouchedElements = [this.beingTouchedElements[0]];
     }
 
-    // if (this.touchTopElementOnly && this.beingTouchedElements.length > 0) {
-    //   // if () {
-    //   this.beingTouchedElements[0].click(glPoint);
-    //   // }
-    // } else {
     this.beingTouchedElements.forEach(e => e.click(glPoint));
-    // }
 
     // Make a list of, and start moving elements that are being moved
     // (element must be touched and have isMovable = true to be in list)
@@ -1911,19 +1901,20 @@ class Figure {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   rotateElement(
     element: FigureElement,
-    previousClientPoint: Point,
-    currentClientPoint: Point,
+    previousFigurePoint: Point,
+    currentFigurePoint: Point,
   ) {
-    let centerFigureSpace = element.getPosition('figure');
-    if (centerFigureSpace == null) {
-      centerFigureSpace = new Point(0, 0);
+    let center = element.getPosition('figure');
+    if (center == null) {
+      center = new Point(0, 0);
     }
-    const center = centerFigureSpace
-      .transformBy(this.spaceTransforms.figureToPixel.matrix());
-    const previousPixelPoint = this.clientToPixel(previousClientPoint);
-    const currentPixelPoint = this.clientToPixel(currentClientPoint);
+    // const center = centerFigureSpace
+    //   .transformBy(this.spaceTransforms.figureToPixel.matrix());
+    // const previousPixelPoint = this.clientToPixel(previousClientPoint);
+    // const currentPixelPoint = this.clientToPixel(currentClientPoint);
 
     // const previousFigurePoint =
     //   previousPixelPoint.transformBy(this.pixelToFigureSpaceTransform.matrix());
@@ -1938,12 +1929,12 @@ class Figure {
     //   previousFigurePoint.x - center.x,
     // );
     const currentAngle = Math.atan2(
-      currentPixelPoint.y - center.y,
-      currentPixelPoint.x - center.x,
+      currentFigurePoint.y - center.y,
+      currentFigurePoint.x - center.x,
     );
     const previousAngle = Math.atan2(
-      previousPixelPoint.y - center.y,
-      previousPixelPoint.x - center.x,
+      previousFigurePoint.y - center.y,
+      previousFigurePoint.x - center.x,
     );
     const diffAngle = -minAngleDiff(previousAngle, currentAngle);
     const transform = element.transform._dup();
@@ -1962,18 +1953,18 @@ class Figure {
     element.moved(transform._dup());
   }
 
+  // eslint-disable-next-line class-methods-use-this
   translateElement(
     element: FigureElement,
-    previousClientPoint: Point,
-    currentClientPoint: Point,
+    previousFigurePoint: Point,
+    currentFigurePoint: Point,
   ) {
-    const previousPixelPoint = this.clientToPixel(previousClientPoint);
-    const currentPixelPoint = this.clientToPixel(currentClientPoint);
-
-    const previousFigurePoint =
-      previousPixelPoint.transformBy(this.spaceTransforms.pixelToFigure.matrix());
-    const currentFigurePoint =
-      currentPixelPoint.transformBy(this.spaceTransforms.pixelToFigure.matrix());
+    // const previousPixelPoint = this.clientToPixel(previousClientPoint);
+    // const currentPixelPoint = this.clientToPixel(currentClientPoint);
+    // const previousFigurePoint =
+    //   previousPixelPoint.transformBy(this.spaceTransforms.pixelToFigure.matrix());
+    // const currentFigurePoint =
+    //   currentPixelPoint.transformBy(this.spaceTransforms.pixelToFigure.matrix());
     const m = element.spaceTransformMatrix('figure', 'local');
 
     const currentVertexSpacePoint = currentFigurePoint.transformBy(m);
@@ -1990,14 +1981,15 @@ class Figure {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   scaleElement(
     element: FigureElement,
-    previousClientPoint: Point,
-    currentClientPoint: Point,
+    previousFigurePoint: Point,
+    currentFigurePoint: Point,
     type: 'x' | 'y' | '' = '',
   ) {
-    const previousPixelPoint = this.clientToPixel(previousClientPoint);
-    const currentPixelPoint = this.clientToPixel(currentClientPoint);
+    // const previousPixelPoint = this.clientToPixel(previousClientPoint);
+    // const currentPixelPoint = this.clientToPixel(currentClientPoint);
 
     // const previousFigurePoint =
     //   previousPixelPoint.transformBy(this.pixelToFigureSpaceTransform.matrix());
@@ -2006,10 +1998,10 @@ class Figure {
 
     // const previousMag = previousFigurePoint.sub(center).distance();
     // const currentMag = currentFigurePoint.sub(center).distance();
-    const center = element.getPosition('figure')
-      .transformBy(this.spaceTransforms.figureToPixel.matrix());
-    const previousMag = previousPixelPoint.sub(center).distance();
-    const currentMag = currentPixelPoint.sub(center).distance();
+    const center = element.getPosition('figure');
+      // .transformBy(this.spaceTransforms.figureToPixel.matrix());
+    const previousMag = previousFigurePoint.sub(center).distance();
+    const currentMag = currentFigurePoint.sub(center).distance();
 
 
     const currentScale = element.transform.s();
@@ -2052,6 +2044,17 @@ class Figure {
   //   pointer.setPosition(currentFigurePoint);
   // }
 
+  touchMoveHandlerClient(previousClientPoint: Point, currentClientPoint: Point) {
+    const currentPixelPoint = this.clientToPixel(currentClientPoint);
+    const currentFigurePoint = currentPixelPoint
+      .transformBy(this.spaceTransforms.pixelToFigure.matrix());
+    const previousPixelPoint = this.clientToPixel(previousClientPoint);
+    const previousFigurePoint = previousPixelPoint
+      .transformBy(this.spaceTransforms.pixelToFigure.matrix());
+    this.touchMoveHandler(previousFigurePoint, currentFigurePoint);
+  }
+
+
   // Handle touch/mouse move events in the canvas. These events will only be
   // sent if the initial touch down happened in the canvas.
   // The default behavior is to drag (move) any objects that were touched in
@@ -2060,17 +2063,18 @@ class Figure {
   // by the system. For example, on a touch device, a touch and drag would
   // normally scroll the screen. Typically, you would want to move the figure
   // element and not the screen, so a true would be returned.
-  touchMoveHandler(previousClientPoint: Point, currentClientPoint: Point): boolean {
+  touchMoveHandler(previousFigurePoint: Point, currentFigurePoint: Point): boolean {
     if (this.recorder.state === 'recording') {
-      const currentPixelPoint = this.clientToPixel(currentClientPoint);
-      const figurePoint = currentPixelPoint
-        .transformBy(this.spaceTransforms.pixelToFigure.matrix());
-      this.recorder.recordEvent('cursorMove', [figurePoint.x, figurePoint.y]);
+      // const currentPixelPoint = this.clientToPixel(currentClientPoint);
+      // const figurePoint = currentPixelPoint
+      //   .transformBy(this.spaceTransforms.pixelToFigure.matrix());
+      this.recorder.recordEvent('cursorMove', [currentFigurePoint.x, currentFigurePoint.y]);
       if (this.cursorShown) {
-        this.setCursor(figurePoint);
+        this.setCursor(currentFigurePoint);
       }
     }
 
+    // console.log(currentClientPoint);
     // if (this.inTransition) {
     //   return false;
     // }
@@ -2078,11 +2082,11 @@ class Figure {
     if (this.beingMovedElements.length === 0) {
       return false;
     }
-    const previousPixelPoint = this.clientToPixel(previousClientPoint);
-    // const currentPixelPoint = this.clientToPixel(currentClientPoint);
-
-    const previousGLPoint =
-      previousPixelPoint.transformBy(this.spaceTransforms.pixelToGL.matrix());
+    // const previousPixelPoint = this.clientToPixel(previousClientPoint);
+    // const previousGLPoint =
+    //   previousPixelPoint.transformBy(this.spaceTransforms.pixelToGL.matrix());
+    const previousGLPoint = previousFigurePoint
+      .transformBy(this.spaceTransforms.figureToGL.matrix());
     // Go through each element being moved, get the current translation
     for (let i = 0; i < this.beingMovedElements.length; i += 1) {
       const element = this.beingMovedElements[i];
@@ -2109,34 +2113,34 @@ class Figure {
           if (element.move.type === 'rotation') {
             this.rotateElement( // $FlowFixMe
               elementToMove,
-              previousClientPoint,
-              currentClientPoint,
+              previousFigurePoint,
+              currentFigurePoint,
             );
           } else if (element.move.type === 'scale') {
             this.scaleElement( // $FlowFixMe
               elementToMove,
-              previousClientPoint,
-              currentClientPoint,
+              previousFigurePoint,
+              currentFigurePoint,
             );
           } else if (element.move.type === 'scaleX') {
             this.scaleElement( // $FlowFixMe
               elementToMove,
-              previousClientPoint,
-              currentClientPoint,
+              previousFigurePoint,
+              currentFigurePoint,
               'x',
             );
           } else if (element.move.type === 'scaleY') {
             this.scaleElement( // $FlowFixMe
               elementToMove,
-              previousClientPoint,
-              currentClientPoint,
+              previousFigurePoint,
+              currentFigurePoint,
               'y',
             );
           } else {
             this.translateElement( // $FlowFixMe
               elementToMove,
-              previousClientPoint,
-              currentClientPoint,
+              previousFigurePoint,
+              currentFigurePoint,
             );
           }
         }
@@ -2349,10 +2353,10 @@ class Figure {
 
   touchDown(figurePosition: TypeParsablePoint, eventFromPlayback: boolean = false) {
     const p = getPoint(figurePosition);
-    const pixelPoint = p.transformBy(this.spaceTransforms.figureToPixel.m());
-    const clientPoint = this.pixelToClient(pixelPoint);
-    this.touchDownHandler(clientPoint, eventFromPlayback);
-    this.mockPreviousTouchPoint = clientPoint;
+    // const pixelPoint = p.transformBy(this.spaceTransforms.figureToPixel.m());
+    // const clientPoint = this.pixelToClient(pixelPoint);
+    this.touchDownHandler(p, eventFromPlayback);
+    this.mockPreviousTouchPoint = figurePosition;
     // $FlowFixMe
     if (this.elements.elements[this.cursorElementName] != null) {
       this.showCursor('down', p);
@@ -2371,15 +2375,12 @@ class Figure {
 
   touchMove(figurePosition: TypeParsablePoint) {
     const p = getPoint(figurePosition);
-    const pixelPoint = p.transformBy(this.spaceTransforms.figureToPixel.m());
-    const clientPoint = this.pixelToClient(pixelPoint);
-    this.touchMoveHandler(this.mockPreviousTouchPoint, clientPoint);
-    this.mockPreviousTouchPoint = clientPoint;
-    // $FlowFixMe
-    // if (this.elements.elements[this.cursorElementName] != null) {
-    //   this.showCursor('down', p);
-    //   // cursor.setPosition(p);
-    // }
+    this.touchMoveHandler(this.mockPreviousTouchPoint, p);
+    this.mockPreviousTouchPoint = p;
+    // const pixelPoint = p.transformBy(this.spaceTransforms.figureToPixel.m());
+    // const clientPoint = this.pixelToClient(pixelPoint);
+    // this.touchMoveHandler(this.mockPreviousTouchPoint, clientPoint);
+    // this.mockPreviousTouchPoint = clientPoint;
   }
 
   // unpauseLegacy() {
