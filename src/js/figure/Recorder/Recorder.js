@@ -1937,7 +1937,7 @@ ${cursorData}
     // dependency. Maybe a way to do this is to on each draw (and AFTER each
     // event), remove draw timer, check for soonest animation finish,
     // setTimeout a new draw timer for that.
-    this.figure.elements.setupDraw(this.figure.globalAnimation.now());
+    this.figure.elements.setupDraw(this.figure.globalAnimation.now() / 1000);
     // $FlowFixMe
     event.playbackAction(event.list[index][1], event.list[index][0]);
   }
