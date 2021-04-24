@@ -1837,12 +1837,12 @@ class FigureElement {
     // if (this.getPath() === 'rightTri.movePad') {
     //   console.log(transform.t())
     // }
-    if (this.name === 'polygond6_5' && window.qwer === 1) {
-      console.log('setting', transform.t())
-      // console.trace();
-      window.qwer += 1;
-      window.asdf += 1
-    }
+    // if (this.name === 'polygond6_5' && window.qwer === 1) {
+    //   console.log('setting', transform.t())
+    //   // console.trace();
+    //   window.qwer += 1;
+    //   window.asdf += 1
+    // }
     if (this.move.transformClip != null) {
       const clip = this.fnMap.exec(this.move.transformClip, transform);
       if (clip instanceof Transform) {
@@ -4853,12 +4853,12 @@ class FigureElementCollection extends FigureElement {
           deltas.slice(1),
         ]);
       }
-      if (this.name === 'polygond6_5') {
-        // console.log('afterDraw1', this.transform.t())
-        if (window.asdf === 2) {
-          window.asdf = 3;
-        }
-      }
+      // if (this.name === 'polygond6_5') {
+      //   // console.log('afterDraw1', this.transform.t())
+      //   if (window.asdf === 2) {
+      //     window.asdf = 3;
+      //   }
+      // }
       // }
       // if (this.unrenderNextDraw) {
       //   this.clearRender();

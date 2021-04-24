@@ -1925,8 +1925,19 @@ ${cursorData}
     if (event == null) {
       return;
     }
-    // console.log(eventName)
-    // this.figure.elements.setupDraw(this.figure.globalAnimation.now());
+    // Why is this here? When an animation is in progress and the screen loses
+    // focus, then draw events stop happening and the animation no longer
+    // progresses even though the events still happen. When the window regains
+    // focus, the animation finishes, but this is essentially finishing the
+    // animation after events that it would normally finish before hand.
+    // Therefore setupDraw will finish any animations due to finish when an
+    // event occurs.
+    //
+    // TODO - Long term, animations need to be removed from the draw
+    // dependency. Maybe a way to do this is to on each draw (and AFTER each
+    // event), remove draw timer, check for soonest animation finish,
+    // setTimeout a new draw timer for that.
+    this.figure.elements.setupDraw(this.figure.globalAnimation.now());
     // $FlowFixMe
     event.playbackAction(event.list[index][1], event.list[index][0]);
   }

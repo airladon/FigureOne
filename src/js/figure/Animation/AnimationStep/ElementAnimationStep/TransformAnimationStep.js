@@ -295,9 +295,6 @@ export default class TransformAnimationStep extends ElementAnimationStep {
   }
 
   setToEnd() {
-    if (this.element.name === 'polygond6_5') {
-      console.log('setToEnd', this.transform.target)
-    }
     if (this.element != null) {
       this.element.setTransform(this.transform.target);
     }
