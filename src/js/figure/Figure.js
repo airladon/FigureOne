@@ -1977,6 +1977,10 @@ class Figure {
     if (currentTranslation != null) {
       const newTranslation = currentTranslation.add(elementSpaceDelta);
       currentTransform.updateTranslation(newTranslation);
+      if (window.asdf === 2) {
+        console.log(newTranslation)
+        console.log(currentTransform)
+      }
       element.moved(currentTransform);
     }
   }
@@ -2423,6 +2427,10 @@ class Figure {
 
   draw(nowIn: number, canvasIndex: number = 0): void {
     // const start = new Date().getTime();
+    console.log('draw', this.elements._polygond6_5.transform.t())
+    if (window.asdf == 2) {
+      window.qwer = 1;
+    }
     let timer;
     if (FIGURE1DEBUG) {
       timer = new PerformanceTimer();
@@ -2481,10 +2489,12 @@ class Figure {
     this.subscriptions.publish('beforeDraw');
     // $FlowFixMe
     if (FIGURE1DEBUG) { timer.stamp('beforeDraw'); }
+    // console.log('drawMid', this.elements._polygond6_5.transform.t())
     this.elements.setupDraw(
       now,
       canvasIndex,
     );
+    // console.log('drawEnd', this.elements._polygond6_5.transform.t())
     // $FlowFixMe
     if (FIGURE1DEBUG) { timer.stamp('setupDraw'); }
 

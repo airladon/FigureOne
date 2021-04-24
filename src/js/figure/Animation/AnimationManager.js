@@ -660,6 +660,9 @@ export default class AnimationManager {
     const animationsToRemove = [];
     let remaining = null;
     let isAnimating = false;
+    // if (window.qwer === 1 && this.animations.length > 0) {
+    //   console.log('animation manager', this.element);
+    // }
     this.animations.forEach((animation, index) => {
       let animationIsAnimating = false;
       // console.log(this.element.name, animation.state)

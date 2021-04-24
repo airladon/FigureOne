@@ -1926,6 +1926,7 @@ ${cursorData}
       return;
     }
     // console.log(eventName)
+    // this.figure.elements.setupDraw(this.figure.globalAnimation.now());
     // $FlowFixMe
     event.playbackAction(event.list[index][1], event.list[index][0]);
   }
