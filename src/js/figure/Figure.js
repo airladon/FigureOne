@@ -1907,6 +1907,9 @@ class Figure {
     previousFigurePoint: Point,
     currentFigurePoint: Point,
   ) {
+    // if (element.getPath().includes('move-all-angle')) {
+    //   debugger;
+    // }
     let center = element.getPosition('figure');
     if (center == null) {
       center = new Point(0, 0);
@@ -1936,13 +1939,13 @@ class Figure {
       previousFigurePoint.y - center.y,
       previousFigurePoint.x - center.x,
     );
-    const diffAngle = -minAngleDiff(previousAngle, currentAngle);
+    const diffAngle = minAngleDiff(currentAngle, previousAngle);
     const transform = element.transform._dup();
     let rot = transform.r();
     if (rot == null) {
       rot = 0;
     }
-    const newAngle = rot - diffAngle;
+    const newAngle = rot + diffAngle;
     // if (newAngle < 0) {
     //   newAngle += 2 * Math.PI;
     // }
@@ -2360,7 +2363,7 @@ class Figure {
     // const pixelPoint = p.transformBy(this.spaceTransforms.figureToPixel.m());
     // const clientPoint = this.pixelToClient(pixelPoint);
     this.touchDownHandler(p, eventFromPlayback);
-    this.mockPreviousTouchPoint = figurePosition;
+    this.mockPreviousTouchPoint = p;
     // $FlowFixMe
     if (this.elements.elements[this.cursorElementName] != null) {
       this.showCursor('down', p);

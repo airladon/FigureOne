@@ -1224,6 +1224,7 @@ class FigureElement {
         'defaultColor',
         'transform',
         'lastDrawTransform',
+        // 'parentTransform',
         'isShown',
         'isMovable',
         'isTouchable',
@@ -1843,6 +1844,7 @@ class FigureElement {
     //   window.qwer += 1;
     //   window.asdf += 1
     // }
+    // const oldTransform = this.transform._dup();
     if (this.move.transformClip != null) {
       const clip = this.fnMap.exec(this.move.transformClip, transform);
       if (clip instanceof Transform) {
@@ -1863,6 +1865,7 @@ class FigureElement {
         this.cancelSetTransform = false;
       }
     }
+    this.updateDrawTransforms(this.parentTransform, false);
     if (this.internalSetTransformCallback) {
       this.fnMap.exec(this.internalSetTransformCallback, this.transform);
     }
@@ -3681,6 +3684,40 @@ class FigureElement {
     }
     return [];
   }
+
+  updateDrawTransforms(
+    parentTransform: Array<Transform> = [new Transform()],
+    isSame: boolean = false,
+  ) {
+    // let isSame = true;
+    // if (this.parentTransform.length === parentTransform.length) {
+    //   for (let i = 0; i < this.parentTransform.length; i += 1) {
+    //     if (!this.parentTransform[i].isEqualTo(parentTransform[i])) {
+    //       isSame = false;
+    //       i = this.parentTransform.length;
+    //     }
+    //   }
+    // }
+    if (isSame) {
+      return isSame;
+    }
+    const transform = this.getTransform()._dup();
+    const newTransforms = transformBy(parentTransform, [transform]);
+    this.parentTransform = parentTransform;
+    this.lastDrawElementTransformPosition = {
+      parentCount: parentTransform[0].order.length,
+      elementCount: this.transform.order.length,
+    };
+    this.pulseTransforms = this.getPulseTransforms(
+      new GlobalAnimation().now() / 1000,
+    ); // $FlowFixMe
+    this.drawTransforms = this.getDrawTransforms(newTransforms);
+    // eslint-disable-next-line prefer-destructuring
+    this.lastDrawTransform = newTransforms[0];
+    // eslint-disable-next-line prefer-destructuring
+    this.lastDrawPulseTransform = this.drawTransforms[0];
+    return isSame;
+  }
 }
 
 
@@ -4109,6 +4146,7 @@ class FigureElementPrimitive extends FigureElement {
       // if (parentTransform != null || this.transformUpdated) {
       const transform = this.getTransform()._dup();
       const newTransforms = transformBy(parentTransform, [transform]);
+      // eslint-disable-next-line prefer-destructuring
       this.parentTransform = parentTransform;
       // this.transformUpdated = false;
       // }
@@ -4182,6 +4220,7 @@ class FigureElementPrimitive extends FigureElement {
       parentCount: parentTransform.order.length,
       elementCount: this.transform.order.length,
     };
+    this.parentTransform = [parentTransform];
     // const finalParentTransform = this.processParentTransform(parentTransform);
     const firstTransform = parentTransform.transform(this.getTransform());
     this.lastDrawTransform = firstTransform._dup();
@@ -4901,6 +4940,7 @@ class FigureElementCollection extends FigureElement {
       if (FIGURE1DEBUG) { timer.stamp('m1'); }
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawTransform = newTransforms[0];
+      this.parentTransform = parentTransform;
       // this.lastDrawTransform = parentTransform[0].transform(transform)._dup();
       // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m2'); }
@@ -5400,10 +5440,23 @@ class FigureElementCollection extends FigureElement {
     }
   }
 
+  updateDrawTransforms(
+    parentTransform: Array<Transform> = [new Transform()],
+    isSame: boolean = false,
+  ) {
+    super.updateDrawTransforms(parentTransform, isSame);
+    for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
+      this.elements[this.drawOrder[i]].updateDrawTransforms(
+        this.drawTransforms, isSame,
+      );
+    }
+  }
+
   setFirstTransform(parentTransform: Transform = new Transform()) {
     // const finalParentTransform = this.processParentTransform(parentTransform);
     const firstTransform = parentTransform.transform(this.getTransform());
     this.lastDrawTransform = firstTransform._dup();
+    this.parentTransform = [parentTransform];
 
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
