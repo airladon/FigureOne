@@ -1224,7 +1224,7 @@ class FigureElement {
         'defaultColor',
         'transform',
         'lastDrawTransform',
-        // 'parentTransform',
+        'parentTransform',
         'isShown',
         'isMovable',
         'isTouchable',
