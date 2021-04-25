@@ -306,6 +306,7 @@ class Figure {
   subscriptions: SubscriptionManager;
   mockPreviousTouchPoint: Point;
   shortcuts: Object;
+  nextDrawTimer: TimeoutID | null;
 
   animations: AnimationManager;
 
@@ -340,6 +341,7 @@ class Figure {
     this.setStateCallback = null;
     this.shortcuts = {};
     this.mockPreviousTouchPoint = new Point(0, 0);
+    this.nextDrawTimer = null;
     // this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
@@ -2305,6 +2307,7 @@ class Figure {
     }
     this.state.pause = 'paused';
     this.pauseTime = this.globalAnimation.now() / 1000;
+    this.clearNextDrawTimer();
   }
 
   // pauseLegacy(pauseSettings: TypePauseSettings = { simplePause: true }) {
@@ -2427,6 +2430,10 @@ class Figure {
   //   // this.elements.setTimeDelta(performance.now() / 1000 - this.pauseTime);
   //   this.animateNextFrame();
   // }
+  clearNextDrawTimer() {
+    this.globalAnimation.clearTimeout(this.nextDrawTimer);
+    this.nextDrawTimer = null;
+  }
 
   draw(nowIn: number, canvasIndex: number = 0): void {
     // const start = new Date().getTime();
@@ -2434,6 +2441,7 @@ class Figure {
     // if (window.asdf == 2) {
     //   window.qwer = 1;
     // }
+    this.clearNextDrawTimer();
     let timer;
     if (FIGURE1DEBUG) {
       timer = new PerformanceTimer();
@@ -2545,6 +2553,14 @@ class Figure {
       } else {
         window.figureOneDebug.cumTimes.push(deltas[0]);
       }
+    }
+
+    const nextAnimationEnd = this.elements.getNextAnimationFinishTime();
+    if (nextAnimationEnd != null && nextAnimationEnd > 0) {
+      this.nextDrawTimer = this.globalAniamtion.setTimeout(() => {
+        this.drawQueued = true;
+        this.draw(this.globalAnimation.now() / 1000);
+      }, nextAnimationEnd * 1000);
     }
   }
 

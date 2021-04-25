@@ -884,6 +884,18 @@ export default class AnimationManager {
     return remainingTime;
   }
 
+  getNextAnimationFinishTime(now: number = new GlobalAnimation().now / 1000) {
+    let remainingTime = null;
+    this.animations.forEach((animation) => {
+      const animationRemainingTime = animation.getRemainingTime(now);
+      if (remainingTime == null || animationRemainingTime < remainingTime) {
+        remainingTime = animationRemainingTime;
+      }
+    });
+    // console.log(this.element.name, remainingTime, this.animations);
+    return remainingTime;
+  }
+
   addTo(name: string) {
     for (let i = 0; i < this.animations.length; i += 1) {
       const animation = this.animations[i];

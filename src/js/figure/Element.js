@@ -2914,6 +2914,10 @@ class FigureElement {
     return this.animations.getRemainingTime(animationNames);
   }
 
+  getNextAnimationFinishTime() {
+    return this.animations.getNextAnimationFinishTime();
+  }
+
 
   updateLimits(
     limits: Rect,
@@ -5919,6 +5923,21 @@ class FigureElementCollection extends FigureElement {
       }
     }
     return elements;
+  }
+
+  getNextAnimationFinishTime() {
+    const elements = this.getAllElements();
+    let remainingTime = super.getNextAnimationFinishTime();
+    elements.forEach((element) => {
+      const duration = element.animations.getRemainingTime();
+      if (
+        (remainingTime == null && duration != null)
+        || (remainingTime != null && duration != null && duration < remainingTime)
+      ) {
+        remainingTime = duration;
+      }
+    });
+    return remainingTime;
   }
 
   getRemainingAnimationTime(
