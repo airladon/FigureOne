@@ -2307,7 +2307,7 @@ class Figure {
     }
     this.state.pause = 'paused';
     this.pauseTime = this.globalAnimation.now() / 1000;
-    this.clearNextDrawTimer();
+    this.clearDrawTimeout();
   }
 
   // pauseLegacy(pauseSettings: TypePauseSettings = { simplePause: true }) {
@@ -2430,7 +2430,7 @@ class Figure {
   //   // this.elements.setTimeDelta(performance.now() / 1000 - this.pauseTime);
   //   this.animateNextFrame();
   // }
-  clearNextDrawTimer() {
+  clearDrawTimeout() {
     this.globalAnimation.clearTimeout(this.nextDrawTimer);
     this.nextDrawTimer = null;
   }
@@ -2441,7 +2441,7 @@ class Figure {
     // if (window.asdf == 2) {
     //   window.qwer = 1;
     // }
-    this.clearNextDrawTimer();
+    this.clearDrawTimeout();
     let timer;
     if (FIGURE1DEBUG) {
       timer = new PerformanceTimer();
@@ -2554,14 +2554,7 @@ class Figure {
         window.figureOneDebug.cumTimes.push(deltas[0]);
       }
     }
-
-    const nextAnimationEnd = this.elements.getNextAnimationFinishTime();
-    if (nextAnimationEnd != null && nextAnimationEnd > 0) {
-      this.nextDrawTimer = this.globalAniamtion.setTimeout(() => {
-        this.drawQueued = true;
-        this.draw(this.globalAnimation.now() / 1000);
-      }, nextAnimationEnd * 1000);
-    }
+    this.setDrawTimeout();
   }
 
   // renderToImages() {
@@ -2601,6 +2594,16 @@ class Figure {
     this.oldScroll = window.pageYOffset;
   }
 
+  setDrawTimeout() {
+    this.clearDrawTimeout();
+    const nextAnimationEnd = this.elements.getNextAnimationFinishTime();
+    if (nextAnimationEnd != null && nextAnimationEnd > 0) {
+      this.nextDrawTimer = this.globalAnimation.setTimeout(() => {
+        this.drawQueued = true;
+        this.draw(this.globalAnimation.now() / 1000);
+      }, nextAnimationEnd * 1000);
+    }
+  }
   /**
    * Force figure to draw on next available animation frame.
    */
@@ -2614,6 +2617,7 @@ class Figure {
       }
       this.globalAnimation.queueNextFrame(this.draw.bind(this));
     }
+    this.setDrawTimeout();
   }
 
   // animateNextFrameContinuous(method: () => void) {

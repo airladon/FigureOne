@@ -110,7 +110,7 @@ export default function makeFigure(
     duration: 0,
     previousTouchPoint: new Point(0, 0),
     timersBeforeDraw: true,
-    timeStep: (deltaTimeInSecondsIn, frameTimeIn = null) => {
+    timeStep: (deltaTimeInSecondsIn, frameTimeIn = null, draw = true) => {
       const { duration, initialTime } = figure.mock;
       const deltaTimeInSeconds = round(deltaTimeInSecondsIn, 8);
       let frameTime = deltaTimeInSeconds;
@@ -133,8 +133,9 @@ export default function makeFigure(
         if (figure.mock.timersBeforeDraw) {
           jest.advanceTimersByTime(round((deltaTime - lastTime) * 1000, 8));
         }
-        figure.animateNextFrame();
-        figure.draw(round(newNow / 1000, 8));
+        if (draw) {
+          figure.draw(round(newNow / 1000, 8));
+        }
         if (!figure.mock.timersBeforeDraw) {
           jest.advanceTimersByTime(round((deltaTime - lastTime) * 1000, 8));
         }

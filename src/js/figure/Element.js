@@ -5926,17 +5926,23 @@ class FigureElementCollection extends FigureElement {
   }
 
   getNextAnimationFinishTime() {
-    const elements = this.getAllElements();
+    // const elements = this.getAllElements();
     let remainingTime = super.getNextAnimationFinishTime();
-    elements.forEach((element) => {
-      const duration = element.animations.getRemainingTime();
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      const duration = element.getNextAnimationFinishTime();
       if (
-        (remainingTime == null && duration != null)
-        || (remainingTime != null && duration != null && duration < remainingTime)
+        (remainingTime == null && duration != null && duration > 0)
+        || (
+          remainingTime != null
+          && duration != null
+          && duration < remainingTime
+          && duration > 0
+        )
       ) {
         remainingTime = duration;
       }
-    });
+    }
     return remainingTime;
   }
 
