@@ -36,7 +36,7 @@ import type { TypeColor, OBJ_Font } from '../tools/types';
 // import SlideNavigator from './SlideNavigator';
 // import type { OBJ_SlideNavigator } from './SlideNavigator';
 
-const FIGURE1DEBUG = false;
+const FIGURE1DEBUG = true;
 
 
 /**
@@ -362,6 +362,7 @@ class Figure {
         draw: [],
         setupDraw: [],
         misc: [],
+        history: [],
       };
     }
     // this.layout = layout;
@@ -2553,6 +2554,14 @@ class Figure {
       } else {
         window.figureOneDebug.cumTimes.push(deltas[0]);
       }
+      window.figureOneDebug.history.push({
+        now: this.globalAnimation.now(),
+        frameTotal: deltas[0],
+        frame: deltas.slice(1),
+        setupDraw: window.figureOneDebug.setupDraw,
+        draw: window.figureOneDebug.draw,
+        misc: window.figureOneDebug.misc,
+      });
     }
     this.setDrawTimeout();
   }

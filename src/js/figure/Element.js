@@ -54,7 +54,7 @@ import type {
 // import type FigurePrimitives from './FigurePrimitives/FigurePrimitives';
 import type FigureCollections from './FigureCollections/FigureCollections';
 
-const FIGURE1DEBUG = false;
+const FIGURE1DEBUG = true;
 
 // eslint-disable-next-line import/no-cycle
 // import {
@@ -4126,6 +4126,9 @@ class FigureElementPrimitive extends FigureElement {
       if (FIGURE1DEBUG) { // $FlowFixMe
         timer.stamp('animations'); // $FlowFixMe
         const deltas = timer.deltas();
+        if (window.figureOneDebug == null) {
+          window.figureOneDebug = { setupDraw: [] };
+        }
         window.figureOneDebug.setupDraw.push([
           this.getPath(),
           deltas[0],
