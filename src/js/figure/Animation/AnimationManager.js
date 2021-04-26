@@ -23,13 +23,15 @@ import type {
 //   AnimationStep,
 // } from './Animation';
 import GlobalAnimation from '../webgl/GlobalAnimation';
-import { joinObjects, duplicateFromTo, SubscriptionManager } from '../../tools/tools';
+import { joinObjects, duplicateFromTo, SubscriptionManager, PerformanceTimer } from '../../tools/tools';
 import { getState } from '../Recorder/state';
 import { FunctionMap } from '../../tools/FunctionMap';
 import type { TypeWhen } from '../webgl/GlobalAnimation';
 // import type { OBJ_AnimationStep } from './AnimationStep';
 import type { TypeParsablePoint } from '../../tools/g2';
 // import type Figure from '../Figure';
+
+const FIGURE1DEBUG = false;
 
 /**
  * Scenarios animation step options object
@@ -665,6 +667,8 @@ export default class AnimationManager {
     // if (window.qwer === 1 && this.animations.length > 0) {
     //   console.log('animation manager', this.element);
     // }
+    let timer;
+    if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
     this.animations.forEach((animation, index) => {
       let animationIsAnimating = false;
       // console.log(this.element.name, animation.state)
@@ -686,6 +690,7 @@ export default class AnimationManager {
         isAnimating = true;
       }
     });
+    if (FIGURE1DEBUG) { timer.stamp('animations'); }
 
     let callback = null;
     if (isAnimating) {
@@ -699,6 +704,7 @@ export default class AnimationManager {
       }
       this.state = 'idle';
     }
+    if (FIGURE1DEBUG) { timer.stamp('finished'); }
     for (let i = animationsToRemove.length - 1; i >= 0; i -= 1) {
       this.animations.splice(animationsToRemove[i], 1);
     }
@@ -706,6 +712,21 @@ export default class AnimationManager {
     //   console.log('finished', this.element.name, callback)
     // }
     this.fnMap.exec(callback);
+    if (FIGURE1DEBUG) { // $FlowFixMe
+      timer.stamp('callback'); // $FlowFixMe
+      const deltas = timer.deltas();
+      if (window.figureOneDebug == null) {
+        window.figureOneDebug = { setupDraw: [] };
+      }
+      if (this.element.name === 'rootCollection') {
+        window.figureOneDebug.animationManager.push([
+          this.element.getPath(),
+          new GlobalAnimation().now(),
+          deltas[0],
+          deltas.slice(1),
+        ]);
+      }
+    }
     return remaining;
   }
 

@@ -225,7 +225,9 @@ class GlobalAnimation {
   }
 
   setTimeout(
-    f: function, time: number, description: string,
+    f: function,
+    time: number,
+    description: string,
     stateTimer: boolean = false,
   ): TimeoutID {
     if (this.debug) {

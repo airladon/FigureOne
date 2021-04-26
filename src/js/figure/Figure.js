@@ -36,7 +36,7 @@ import type { TypeColor, OBJ_Font } from '../tools/types';
 // import SlideNavigator from './SlideNavigator';
 // import type { OBJ_SlideNavigator } from './SlideNavigator';
 
-const FIGURE1DEBUG = true;
+const FIGURE1DEBUG = false;
 
 
 /**
@@ -307,6 +307,8 @@ class Figure {
   mockPreviousTouchPoint: Point;
   shortcuts: Object;
   nextDrawTimer: TimeoutID | null;
+  nextDrawTimerStart: number;
+  nextDrawTimerDuration: number;
 
   animations: AnimationManager;
 
@@ -342,6 +344,8 @@ class Figure {
     this.shortcuts = {};
     this.mockPreviousTouchPoint = new Point(0, 0);
     this.nextDrawTimer = null;
+    this.nextDrawTimerStart = 0;
+    this.nextDrawTimerDuration = 0;
     // this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
@@ -363,6 +367,7 @@ class Figure {
         setupDraw: [],
         misc: [],
         history: [],
+        animationManager: [],
       };
     }
     // this.layout = layout;
@@ -2561,6 +2566,7 @@ class Figure {
         setupDraw: window.figureOneDebug.setupDraw,
         draw: window.figureOneDebug.draw,
         misc: window.figureOneDebug.misc,
+        animationManager: window.figureOneDebug.animationManager,
       });
     }
     this.setDrawTimeout();
@@ -2603,15 +2609,33 @@ class Figure {
     this.oldScroll = window.pageYOffset;
   }
 
-  setDrawTimeout() {
-    this.clearDrawTimeout();
-    const nextAnimationEnd = this.elements.getNextAnimationFinishTime();
-    if (nextAnimationEnd != null && nextAnimationEnd > 0) {
-      this.nextDrawTimer = this.globalAnimation.setTimeout(() => {
-        this.elements.setupDraw(this.globalAnimation.now() / 1000, 0);
-        this.setDrawTimeout();
-        this.animateNextFrame();
-      }, nextAnimationEnd * 1000);
+  // TimerDuration is in seconds
+  setDrawTimeout(
+    timerDuration: number = this.elements.getNextAnimationFinishTime(),
+  ) {
+    // const nextAnimationEnd = this.elements.getNextAnimationFinishTime();
+    if (timerDuration != null && timerDuration > 0) {
+      const timerStart = this.globalAnimation.now() / 1000;
+      if (
+        this.nextDrawTimer == null
+        || (
+          this.nextDrawTimerStart > 0
+          && this.nextDrawTimerDuration > 0
+          && this.nextDrawTimerStart + this.nextDrawTimerDuration > timerStart + timerDuration + 0.001
+        )
+        || (this.nextDrawTimerStart + this.nextDrawTimerDuration < timerStart)
+      ) {
+        // console.log(this.nextDrawTimer, this.nextDrawTimerStart + this.nextDrawTimerDuration, timerStart + timerDuration, this.globalAnimation.now())
+        this.clearDrawTimeout();
+        this.nextDrawTimerStart = timerStart;
+        this.nextDrawTimerDuration = timerDuration;
+        this.nextDrawTimer = this.globalAnimation.setTimeout(() => {
+          console.log('setupDraw')
+          this.elements.setupDraw(this.globalAnimation.now() / 1000, 0);
+          this.setDrawTimeout();
+          this.animateNextFrame();
+        }, timerDuration * 1000);
+      }
     }
   }
 

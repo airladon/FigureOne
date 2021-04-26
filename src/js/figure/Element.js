@@ -54,7 +54,7 @@ import type {
 // import type FigurePrimitives from './FigurePrimitives/FigurePrimitives';
 import type FigureCollections from './FigureCollections/FigureCollections';
 
-const FIGURE1DEBUG = true;
+const FIGURE1DEBUG = false;
 
 // eslint-disable-next-line import/no-cycle
 // import {
