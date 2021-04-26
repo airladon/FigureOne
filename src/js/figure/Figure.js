@@ -2600,10 +2600,12 @@ class Figure {
     if (nextAnimationEnd != null && nextAnimationEnd > 0) {
       this.nextDrawTimer = this.globalAnimation.setTimeout(() => {
         this.drawQueued = true;
-        this.draw(this.globalAnimation.now() / 1000);
+        this.elements.setupDraw(this.globalAnimation.now() / 1000, 0);
+        this.setDrawTimeout();
       }, nextAnimationEnd * 1000);
     }
   }
+
   /**
    * Force figure to draw on next available animation frame.
    */
