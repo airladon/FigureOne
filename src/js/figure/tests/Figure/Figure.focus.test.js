@@ -12,7 +12,7 @@ describe('Animate To State', () => {
   let figure;
   let p1;
   let p2;
-  let p3;
+  // let p3;
   let c;
   let drawCallback;
   beforeEach(() => {
@@ -26,13 +26,13 @@ describe('Animate To State', () => {
             name: 'p2',
             method: 'polygon',
           },
-          {
-            name: 'p3',
-            method: 'polygon',
-            mods: {
-              dependantTransform: true,
-            },
-          },
+          // {
+          //   name: 'p3',
+          //   method: 'polygon',
+          //   mods: {
+          //     dependantTransform: true,
+          //   },
+          // },
         ],
       },
       {
@@ -43,7 +43,7 @@ describe('Animate To State', () => {
     c = figure.elements._c;
     p1 = figure.elements._p1;
     p2 = c._p2;
-    p3 = c._p3;
+    // p3 = c._p3;
     figure.initialize();
     drawCallback = jest.fn(() => {});
     figure.subscriptions.add('beforeDraw', drawCallback);

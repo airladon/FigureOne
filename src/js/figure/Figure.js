@@ -2008,7 +2008,7 @@ class Figure {
     // const previousMag = previousFigurePoint.sub(center).distance();
     // const currentMag = currentFigurePoint.sub(center).distance();
     const center = element.getPosition('figure');
-      // .transformBy(this.spaceTransforms.figureToPixel.matrix());
+    // .transformBy(this.spaceTransforms.figureToPixel.matrix());
     const previousMag = previousFigurePoint.sub(center).distance();
     const currentMag = currentFigurePoint.sub(center).distance();
 
@@ -2599,9 +2599,9 @@ class Figure {
     const nextAnimationEnd = this.elements.getNextAnimationFinishTime();
     if (nextAnimationEnd != null && nextAnimationEnd > 0) {
       this.nextDrawTimer = this.globalAnimation.setTimeout(() => {
-        // this.drawQueued = true;
         this.elements.setupDraw(this.globalAnimation.now() / 1000, 0);
         this.setDrawTimeout();
+        this.animateNextFrame();
       }, nextAnimationEnd * 1000);
     }
   }

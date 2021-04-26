@@ -221,7 +221,6 @@ describe('Figure Stop', () => {
         expect(state()).toEqual([true, 1, [2], [], [2], 1, 0, true]);
         figure.mock.timeStep(1);
         expect(state()).toEqual([false, 0, [1], [], [1], 1, 1, false]);
-        figure.drawQueued = true;
         figure.mock.timeStep(0);
         expect(state()).toEqual([false, 0, [], [], [1], 1, 1, false]);
       });

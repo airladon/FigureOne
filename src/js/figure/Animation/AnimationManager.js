@@ -530,6 +530,7 @@ export default class AnimationManager {
     return this.getStep(optionsToUse, 'UndimAnimationStep');
   }
 
+  /* eslint-disable no-param-reassign */
   getStep(options: Object, animName: string) {
     if (typeof options.element === 'string' && this.element != null) {
       options.element = this.element.getElement(options.element);
@@ -546,6 +547,7 @@ export default class AnimationManager {
     }
     return new anim[animName](options);
   }
+  /* eslint-enable no-param-reassign */
 
   /**
    * Create a Scenario animation step tied to this element
