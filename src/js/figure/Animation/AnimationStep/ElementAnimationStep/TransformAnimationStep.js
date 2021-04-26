@@ -269,6 +269,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
   }
 
   setFrame(deltaTime: number) {
+    const t = performance.now()
     // const start = phase.startTransform._dup();
     // const delta = phase.deltaTransform._dup();
     const percentTime = deltaTime / (this.duration + 0.000001);

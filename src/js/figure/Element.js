@@ -1873,10 +1873,10 @@ class FigureElement {
       this.subscriptions.publish('setTransform', [this.transform]);
       this.fnMap.exec(this.setTransformCallback, this.transform);
     }
+    // const t3 = performance.now();
     // this.transformUpdated = true;
-    this.animateNextFrame();
+    // this.animateNextFrame();
   }
-
   // Set the next transform (and velocity if moving freely) for the next
   // animation frame.
   //
@@ -4355,6 +4355,8 @@ class FigureElementCollection extends FigureElement {
   +exec: (string | Array<string | Object>, ?Array<string | FigureElement>) => void;
   +highlight: (elementsToDim: ?TypeElementPath) => void;
 
+  childrenCanAnimate: boolean;
+
   /**
    * @param {OBJ_FigureElementCollection} options
    */
@@ -4378,6 +4380,7 @@ class FigureElementCollection extends FigureElement {
     }
     this.elements = {};
     this.drawOrder = [];
+    this.childrenCanAnimate = true;
     // this.touchInBoundingRect = false;
     this.eqns = {};
     this.type = 'collection';
@@ -4910,8 +4913,10 @@ class FigureElementCollection extends FigureElement {
       // this.lastDrawPulseTransform = pulseTransforms[0]._dup();
 
       // for (let k = 0; k < this.drawTransforms.length; k += 1) {
-      for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
-        this.elements[this.drawOrder[i]].setupDraw(now, canvasIndex);
+      if (this.childrenCanAnimate) {
+        for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
+          this.elements[this.drawOrder[i]].setupDraw(now, canvasIndex);
+        }
       }
       if (FIGURE1DEBUG) { // $FlowFixMe
         timer.stamp('elements'); // $FlowFixMe
@@ -5942,12 +5947,12 @@ class FigureElementCollection extends FigureElement {
     let elements = super.getAllElementsWithScenario(scenario);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      if (element.scenarios[scenario] != null) {
-        elements.push(element);
-      }
-      if (element instanceof FigureElementCollection) {
-        elements = [...elements, ...element.getAllElementsWithScenario(scenario)];
-      }
+      // if (element.scenarios[scenario] != null) {
+      //   elements.push(element);
+      // }
+      // if (element instanceof FigureElementCollection) {
+      elements = [...elements, ...element.getAllElementsWithScenario(scenario)];
+      // }
     }
     return elements;
   }

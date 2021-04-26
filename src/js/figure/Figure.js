@@ -2611,8 +2611,15 @@ class Figure {
 
   // TimerDuration is in seconds
   setDrawTimeout(
-    timerDuration: number = this.elements.getNextAnimationFinishTime(),
+    timerDurationIn: number = -1,
   ) {
+    const t = performance.now()
+    let timerDuration = timerDurationIn;
+    if (timerDuration < 0) {
+      timerDuration = this.elements.getNextAnimationFinishTime();
+      // timerDuration = null;
+    }
+    // const t1 = performance.now()
     // const nextAnimationEnd = this.elements.getNextAnimationFinishTime();
     if (timerDuration != null && timerDuration > 0) {
       const timerStart = this.globalAnimation.now() / 1000;
@@ -2621,22 +2628,23 @@ class Figure {
         || (
           this.nextDrawTimerStart > 0
           && this.nextDrawTimerDuration > 0
-          && this.nextDrawTimerStart + this.nextDrawTimerDuration > timerStart + timerDuration + 0.001
+          && this.nextDrawTimerStart +
+            this.nextDrawTimerDuration > timerStart + timerDuration + 0.001
         )
         || (this.nextDrawTimerStart + this.nextDrawTimerDuration < timerStart)
       ) {
-        // console.log(this.nextDrawTimer, this.nextDrawTimerStart + this.nextDrawTimerDuration, timerStart + timerDuration, this.globalAnimation.now())
         this.clearDrawTimeout();
         this.nextDrawTimerStart = timerStart;
         this.nextDrawTimerDuration = timerDuration;
         this.nextDrawTimer = this.globalAnimation.setTimeout(() => {
-          console.log('setupDraw')
           this.elements.setupDraw(this.globalAnimation.now() / 1000, 0);
           this.setDrawTimeout();
           this.animateNextFrame();
         }, timerDuration * 1000);
       }
     }
+    // const t2 = performance.now()
+    // window.figureOneDebug.misc.push(['setDrawTimeout', t2 - t, t1 - t, t2 - t1])
   }
 
   /**

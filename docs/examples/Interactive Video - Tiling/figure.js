@@ -49,6 +49,7 @@ function makePolygon(
       },
     ],
     mods: {
+      childrenCanAnimate: false,
       scenarios: {
         start: { position: [resetPosition[0], 0], rotation: 0 },
         reset: { position: resetPosition, rotation: 0 },
