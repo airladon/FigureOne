@@ -247,6 +247,7 @@ describe('Animationa and Movement', () => {
         // figure.mock.timeStep(0);
         expect(element.state.movement.velocity.round()).toEqual(initialV);
         // element.setupDraw(identity, 1);
+        // debugger;
         figure.mock.timeStep(1);
         expect(element.state.isMovingFreely).toBe(true);
         let vel = element.state.movement.velocity;

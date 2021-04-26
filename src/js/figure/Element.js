@@ -2372,6 +2372,7 @@ class FigureElement {
         // this.state.movement.velocity.toString(),
       );
     }
+    this.animateNextFrame();
   }
 
   stopMovingFreely(how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel'): void {
@@ -2399,6 +2400,7 @@ class FigureElement {
       this.animationFinished('movingFreely');
       this.subscriptions.publish('stopMovingFreely');
     }
+    this.animateNextFrame();
   }
 
   getRemainingPulseTime(now: number = new GlobalAnimation().now() / 1000) {
@@ -2844,6 +2846,7 @@ class FigureElement {
       this.animationFinished('pulse');
       this.subscriptions.publish('stopPulsing');
     }
+    this.animateNextFrame();
   }
 
   // isAnimating() {
@@ -2915,7 +2918,28 @@ class FigureElement {
   }
 
   getNextAnimationFinishTime() {
-    return this.animations.getNextAnimationFinishTime();
+    const t1 = this.getRemainingMovingFreelyTime();
+    const t2 = this.getRemainingPulseTime();
+    const t3 = this.animations.getNextAnimationFinishTime();
+    let t = null;
+    if (t1 > 0) {
+      t = t1;
+    }
+    if (t2 > 0) {
+      if (t == null) {
+        t = t2;
+      } else if (t2 < t) {
+        t = t2;
+      }
+    }
+    if (t3 != null && t3 > 0) {
+      if (t == null) {
+        t = t3;
+      } else if (t3 < t) {
+        t = t3;
+      }
+    }
+    return t;
   }
 
 

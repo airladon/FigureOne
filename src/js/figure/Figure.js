@@ -2599,7 +2599,7 @@ class Figure {
     const nextAnimationEnd = this.elements.getNextAnimationFinishTime();
     if (nextAnimationEnd != null && nextAnimationEnd > 0) {
       this.nextDrawTimer = this.globalAnimation.setTimeout(() => {
-        this.drawQueued = true;
+        // this.drawQueued = true;
         this.elements.setupDraw(this.globalAnimation.now() / 1000, 0);
         this.setDrawTimeout();
       }, nextAnimationEnd * 1000);
