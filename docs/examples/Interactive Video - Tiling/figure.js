@@ -27,7 +27,10 @@ function makePolygon(
         options: { radius, color, sides },
         mods: {
           isMovable: true,
-          move: { element: name, type: 'rotation' },
+          move: {
+            element: name,
+            type: 'rotation',
+          },
         },
       },
       {
@@ -44,7 +47,10 @@ function makePolygon(
         name: 'border',
         method: 'primitives.polygon',
         options: {
-          radius: radius - 0.0015, sides, line: { width: 0.003 }, color: [1, 1, 1, 1],
+          radius: radius - 0.0015,
+          sides,
+          line: { width: 0.003 },
+          color: [1, 1, 1, 1],
         },
       },
     ],

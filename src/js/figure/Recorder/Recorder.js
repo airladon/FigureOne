@@ -676,16 +676,28 @@ class Recorder {
     // console.log('recorder is', this.state);
   }
 
+  /**
+   * Initiate states recording to generate seek frames. Any existing states
+   * will be removed before starting, so the initial state at time 0 must be in
+   * place (usually this means only start states recording when the figure is
+   * first created and not after any changes to the initial state have been
+   * made)
+   *
+   * @param {number} frameTime time between draw frames in seconds. It can be
+   * sometimes be useful to have draw frames happen more frequently than the
+   * seek frames [0.1s]
+   */
   startStatesRecording(
     // fromTime: number = 0,
     // whilePlaying: Array<string> = [],
     // includeStates: boolean = true,
     frameTime: number = 0.1,
   ) {
+    this.states.reset();
     this.seek(0);
     this.figure.globalAnimation.setManualFrames();
     // const { duration } = this;
-    this.states.reset();
+    // this.states.reset();
     this.startRecording(0, Object.keys(this.events), true);
     // this.duration = duration;
     this.autoFrame(frameTime);
@@ -697,7 +709,7 @@ class Recorder {
     if (this.state === 'recording') {
       this.figure.animateNextFrame();
       this.figure.globalAnimation.frame(frameTime);
-      if (this.getCurrentTime() < this.duration) {
+      if (this.getCurrentTime() <= this.duration) {
         // console.log('auto')
         setTimeout(
           this.autoFrame.bind(this, frameTime),
@@ -737,10 +749,19 @@ class Recorder {
           const lastIndex = this.states.diffs.length - 1;
           const [, ref, diff] = this.states.diffs[lastIndex];
           this.states.diffs.push([Math.ceil(this.duration), ref, duplicate(diff), 0]);
+          if (Math.ceil(this.duration) > this.duration) {
+            const atEnd = this.duration === this.getCurrentTime();
+            this.duration = Math.ceil(this.duration);
+            this.subscriptions.publish('durationUpdated', this.duration);
+            console.log(this.duration, this.getCurrentTime, atEnd)
+            if (atEnd) {
+              this.setCurrentTime(this.duration);
+              this.subscriptions.publish('timeUpdate', [this.duration]);
+            }
+          }
         }
       }
       this.duration = this.calcDuration();
-      // console.log(this)
     }
   }
 
@@ -899,6 +920,12 @@ class Recorder {
     this.subscriptions.publish('recordingStopped');
   }
 
+  /**
+   * Cancel the states recording.
+   *
+   * Use this only for cancelling recording as states recording will be
+   * automatically stopped if the event and audio duration has been reached.
+   */
   stopStatesRecording() {
     this.stopRecording();
     this.figure.globalAnimation.endManualFrames();
