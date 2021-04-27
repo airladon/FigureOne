@@ -35,6 +35,7 @@ function fillFooter(path = '..') {
   e.innerHTML = `
     <div class="footer-bar">
       <div class="examples">
+      <div class="examples-title">All Examples</div>
         <div class="other-examples">Interactive Figure Examples</div>
         ${link('Interactive Angle')}
         ${link('Sine Wave')}
