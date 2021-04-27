@@ -60,15 +60,14 @@ function addPlayer() {
   // Function that sets the circle position of the seek bar, and updates the
   // time text based on some input time
   function setTime(time = recorder.getCurrentTime(), fromRecorder = false) {
-    const circleWidth = seekCircle.clientWidth;
-    const seekWidth = seekContainer.clientWidth - circleWidth;
+    const seekWidth = seekContainer.clientWidth;
     if (recorder.duration === 0) {
       seekCircle.style.left = 0;
     }
     const percentTime = Math.min(time / recorder.duration, 1);
     if (fromRecorder === false || (fromRecorder && recorder.state !== 'idle')) {
       seekCircle.style.left = `${Math.floor(percentTime * seekWidth)}px`;
-    }
+    } 
     timeLabel.innerHTML = `${timeToStr(Math.floor(time))} / ${timeToStr(recorder.duration)}`;
   }
 
@@ -91,16 +90,15 @@ function addPlayer() {
   let lastSeekTime = 0;
   function touchHandler(x) {
     // Get circle position and convert it to percent of seek container width
-    const circleBounds = seekCircle.getBoundingClientRect();
+    // const circleBounds = seekCircle.getBoundingClientRect();
     const seekBounds = seekContainer.getBoundingClientRect();
     let percent = 0;
     if (
-      x >= seekBounds.left + circleBounds.width / 2
-      && x <= seekBounds.right - circleBounds.width / 2
+      x >= seekBounds.left && x <= seekBounds.right
     ) {
-      const xPos = x - (seekBounds.left + circleBounds.width / 2);
-      percent = xPos / (seekBounds.width - circleBounds.width);
-    } else if (x > seekBounds.right - circleBounds.width / 2) {
+      const xPos = x - seekBounds.left;
+      percent = xPos / seekBounds.width;
+    } else if (x > seekBounds.right) {
       percent = 1;
     }
     const time = percent * recorder.duration;
@@ -110,8 +108,11 @@ function addPlayer() {
     if (seekId != null) {
       figure.subscriptions.remove('beforeDraw', seekId);
     }
+
+    // Uncomment this to update seek frames while seeking - though can be
+    // performance intensive
     seekId = figure.subscriptions.add('beforeDraw', () => {
-      recorder.seek(lastSeekTime);
+      recorder.queueSeek(lastSeekTime);
       seekId = null;
     }, 1);
 

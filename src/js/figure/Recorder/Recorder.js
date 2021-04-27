@@ -284,6 +284,9 @@ class Recorder {
   pauseState: ?Object;
   startRecordingTime: number;
 
+  queueSeekId: null | TimeoutID;
+  queueSeekTime: null;
+
   stateTimeStep: number;      // in seconds
   figure: Figure;
 
@@ -341,6 +344,8 @@ class Recorder {
       pause: 'freeze',
       play: 'instant',
     };
+    this.queueSeekTime = 0;
+    this.queueSeekId = null;
     // this.useAutoEvents = false;
     this.timeUpdates = 100; // ms
   }
@@ -1330,11 +1335,21 @@ ${cursorData}
     return t;
   }
 
+  queueSeek(timeIn: number) {
+    this.queueSeekTime = timeIn;
+    this.figure.globalAnimation.clearTimeout(this.queueSeekId);
+    this.queueSeekId = this.figure.globalAnimation.setTimeout(() => {
+      this.seek(this.queueSeekTime);
+      this.queueSeekId = null;
+    }, 300);
+  }
+
   /**
    * Seek to time
    * @param {number} timeIn in seconds
    */
   seek(timeIn: number) {
+    this.figure.globalAnimation.clearTimeout(this.queueSeekId);
     let time = this.convertTime(timeIn);
     if (time < 0) {
       time = 0;

@@ -50,6 +50,7 @@
   border-radius: 0.35em;
   position: absolute;
   top: calc(50% - 0.35em);
+  transform: translate(-0.35em, 0);
 }
 #f1_player__time {
   width: 7em;

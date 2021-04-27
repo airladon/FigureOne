@@ -231,17 +231,9 @@ function makeSlides() {
     },
     fromForm: 'functions',
     form: 'trig',
-    exec: [
-      ['2:11.5', 'eqnPulseSin'],
-      ['2:12.2', 'eqnPulseCos'],
-      ['2:13', 'eqnPulseTan'],
-      ['2:14', 'eqnPulseCot'],
-      ['2:15', 'eqnPulseSec'],
-      ['2:16', 'eqnPulseCsc'],
-    ],
   });
   slides.push({
-    time: '2:17.5',
+    time: '2:12',
     addReference,
     fromForm: 'trig',
     form: 'final',
@@ -259,6 +251,6 @@ function makeSlides() {
   nav.goToSlide(0);
 
   figure.recorder.loadAudioTrack(new Audio(window.location.href.replace(/\/tests.index.html|\/index.html|\/tests\/$|\/$/, '/audio-track.mp3')));
-  figure.recorder.loadVideoTrack('./video-track.json');
+  figure.recorder.loadVideoTrack(window.location.href.replace(/\/tests.index.html|\/index.html|\/tests\/$|\/$/, '/video-track.json'));
 }
 makeSlides();
