@@ -750,10 +750,9 @@ class Recorder {
           const [, ref, diff] = this.states.diffs[lastIndex];
           this.states.diffs.push([Math.ceil(this.duration), ref, duplicate(diff), 0]);
           if (Math.ceil(this.duration) > this.duration) {
-            const atEnd = this.duration === this.getCurrentTime();
+            const atEnd = this.duration <= this.getCurrentTime();
             this.duration = Math.ceil(this.duration);
             this.subscriptions.publish('durationUpdated', this.duration);
-            console.log(this.duration, this.getCurrentTime, atEnd)
             if (atEnd) {
               this.setCurrentTime(this.duration);
               this.subscriptions.publish('timeUpdate', [this.duration]);
