@@ -2613,7 +2613,7 @@ class Figure {
   setDrawTimeout(
     timerDurationIn: number = -1,
   ) {
-    const t = performance.now()
+    // const t = performance.now()
     let timerDuration = timerDurationIn;
     if (timerDuration < 0) {
       timerDuration = this.elements.getNextAnimationFinishTime();
@@ -2624,19 +2624,21 @@ class Figure {
     if (timerDuration != null && timerDuration > 0) {
       const timerStart = this.globalAnimation.now() / 1000;
       if (
-        this.nextDrawTimer == null
+        (this.nextDrawTimer == null && timerDuration > 0)
         || (
-          this.nextDrawTimerStart > 0
+          this.nextDrawTimer != null
+          && this.nextDrawTimerStart > 0
           && this.nextDrawTimerDuration > 0
-          && this.nextDrawTimerStart +
-            this.nextDrawTimerDuration > timerStart + timerDuration + 0.001
+          && this.nextDrawTimerStart
+            + this.nextDrawTimerDuration > timerStart + timerDuration + 0.001
         )
-        || (this.nextDrawTimerStart + this.nextDrawTimerDuration < timerStart)
+        || (this.nextDrawTimerStart + this.nextDrawTimerDuration <= timerStart)
       ) {
         this.clearDrawTimeout();
         this.nextDrawTimerStart = timerStart;
         this.nextDrawTimerDuration = timerDuration;
         this.nextDrawTimer = this.globalAnimation.setTimeout(() => {
+          this.nextDrawTimer = null;
           this.elements.setupDraw(this.globalAnimation.now() / 1000, 0);
           this.setDrawTimeout();
           this.animateNextFrame();
