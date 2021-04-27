@@ -148,7 +148,7 @@ async function tester(
 
   // Copy the video track file to the tests folder so loading the
   // file doesn't cause an error
-  fs.copyFileSync(videoTrack, `${testPath}/video-track.json`);
+  // fs.copyFileSync(videoTrack, `${testPath}/video-track.json`);
 
 
   jest.setTimeout(120000);
