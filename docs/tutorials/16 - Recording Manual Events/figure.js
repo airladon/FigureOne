@@ -39,4 +39,4 @@ figure.shortcuts = {
 
 // // Load audio, states and events data
 figure.recorder.loadAudioTrack(new Audio('http://localhost:8080/docs/tutorials/16%20-%20Recording%20Manual%20Events/audio-track.mp3'));
-figure.recorder.loadVideoTrack('./video-track.json');
+figure.recorder.loadVideoTrack('http://localhost:8080/docs/tutorials/16%20-%20Recording%20Manual%20Events/video-track.json');
