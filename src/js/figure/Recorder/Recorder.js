@@ -1365,7 +1365,7 @@ ${cursorData}
     this.lastSeekTime = this.currentTime;
     this.figure.stop('freeze');
     // console.log('here', this.figure.elements.elements.eqn.isShown)
-    this.subscriptions.publish('seek', timeIn);
+    this.subscriptions.publish('seek', time);
     // console.log(this.figure.elements.elements.eqn.isShown)
     // this.subscriptions.publish('timeUpdate', time);
   }

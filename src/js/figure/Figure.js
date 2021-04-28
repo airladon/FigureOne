@@ -608,7 +608,7 @@ class Figure {
     //   getPauseState: this.getPauseState.bind(this),
     //   dissolveToState: this.dissolveToState.bind(this),
     // };
-    const onCursorAuto = (payload) => {
+    const onCursor = (payload) => {
       const [action, x, y] = payload;
       if (action === 'show') {
         this.showCursor('up', new Point(x, y));
@@ -625,7 +625,7 @@ class Figure {
         }
       }
     };
-    const onCursor = (payload) => {
+    const onAutoCursor = (payload) => {
       const [action, x, y] = payload;
       if (action === 'show') {
         this.showCursor('up', new Point(x, y));
@@ -655,6 +655,15 @@ class Figure {
       }
       // }
     };
+    const onAutoTouch = (payload) => {
+      const [action, x, y] = payload;
+      if (action === 'down') {
+        this.touchDown(new Point(x, y), true, true);
+      } else {
+        this.touchUp(true);
+      }
+      // }
+    };
     // const onCursorMove = (payload) => {
     //   const [x, y] = payload;
     //   this.setCursor(new Point(x, y));
@@ -666,6 +675,14 @@ class Figure {
       this.touchMove(new Point(x, y));
       // }
     };
+    const onAutoCursorMove = (payload) => {
+      // if (this.recorder.state === 'recording') {
+      const [x, y] = payload;
+      this.setCursor(new Point(x, y));
+      this.touchMove(new Point(x, y), true);
+      // }
+    };
+    // cons
     // const moved = (payload) => {
     //   const [elementPath, transform] = payload;
     //   const element = this.getElement(elementPath);
@@ -758,11 +775,11 @@ class Figure {
     };
 
     this.recorder.addEventType('cursor', onCursor);
-    this.recorder.addEventType('_autoCursor', onCursorAuto);
+    this.recorder.addEventType('_autoCursor', onAutoCursor);
     this.recorder.addEventType('cursorMove', onCursorMove);
-    this.recorder.addEventType('_autoCursorMove', onCursorMove);
+    this.recorder.addEventType('_autoCursorMove', onAutoCursorMove);
     this.recorder.addEventType('touch', onTouch);
-    this.recorder.addEventType('_autoTouch', onTouch);
+    this.recorder.addEventType('_autoTouch', onAutoTouch);
     // this.recorder.addEventType('moved', moved);
     // this.recorder.addEventType('stopBeingMoved', stopBeingMoved);
     // this.recorder.addEventType('startMovingFreely', startMovingFreely);
@@ -1782,11 +1799,17 @@ class Figure {
   // The default behavior is to be able to move objects that are touched
   // and dragged, then when they are released, for them to move freely before
   // coming to a stop.
-  touchDownHandler(figurePoint: Point, eventFromPlayback: boolean = false) {
+  touchDownHandler(
+    figurePoint: Point,
+    eventFromPlayback: boolean = false,
+    autoEvent: boolean = false,
+  ) {
     if (this.recorder.state === 'recording') {
       // const pixelP = this.clientToPixel(clientPoint);
       // const figurePoint = pixelP.transformBy(this.spaceTransforms.pixelToFigure.matrix());
-      this.recorder.recordEvent('touch', ['down', figurePoint.x, figurePoint.y]);
+      if (!autoEvent) {
+        this.recorder.recordEvent('touch', ['down', figurePoint.x, figurePoint.y]);
+      }
       if (this.cursorShown) {
         this.showCursor('down');
       }
@@ -1856,9 +1879,9 @@ class Figure {
   // Handle touch up, or mouse click up events in the canvas. When an UP even
   // happens, the default behavior is to let any elements being moved to move
   // freely until they decelerate to 0.
-  touchUpHandler() {
+  touchUpHandler(autoEvent: boolean = false) {
     // console.log(this.beingMovedElements)
-    if (this.recorder.state === 'recording') {
+    if (this.recorder.state === 'recording' && !autoEvent) {
       this.recorder.recordEvent('touch', ['up']);
       if (this.cursorShown) {
         this.showCursor('up');
@@ -2082,8 +2105,8 @@ class Figure {
   // by the system. For example, on a touch device, a touch and drag would
   // normally scroll the screen. Typically, you would want to move the figure
   // element and not the screen, so a true would be returned.
-  touchMoveHandler(previousFigurePoint: Point, currentFigurePoint: Point): boolean {
-    if (this.recorder.state === 'recording') {
+  touchMoveHandler(previousFigurePoint: Point, currentFigurePoint: Point, fromAutoEvent: boolean = false): boolean {
+    if (this.recorder.state === 'recording' && !fromAutoEvent) {
       // const currentPixelPoint = this.clientToPixel(currentClientPoint);
       // const figurePoint = currentPixelPoint
       //   .transformBy(this.spaceTransforms.pixelToFigure.matrix());
@@ -2371,11 +2394,15 @@ class Figure {
     this.subscriptions.publish('unpaused');
   }
 
-  touchDown(figurePosition: TypeParsablePoint, eventFromPlayback: boolean = false) {
+  touchDown(
+    figurePosition: TypeParsablePoint,
+    eventFromPlayback: boolean = false,
+    autoEvent: boolean = false
+  ) {
     const p = getPoint(figurePosition);
     // const pixelPoint = p.transformBy(this.spaceTransforms.figureToPixel.m());
     // const clientPoint = this.pixelToClient(pixelPoint);
-    this.touchDownHandler(p, eventFromPlayback);
+    this.touchDownHandler(p, eventFromPlayback, autoEvent);
     this.mockPreviousTouchPoint = p;
     // $FlowFixMe
     if (this.elements.elements[this.cursorElementName] != null) {
@@ -2384,8 +2411,8 @@ class Figure {
     }
   }
 
-  touchUp() {
-    this.touchUpHandler();
+  touchUp(autoEvent: boolean = false) {
+    this.touchUpHandler(autoEvent);
     // $FlowFixMe
     if (this.elements.elements[this.cursorElementName] != null) {
       this.showCursor('up');
@@ -2393,9 +2420,9 @@ class Figure {
     }
   }
 
-  touchMove(figurePosition: TypeParsablePoint) {
+  touchMove(figurePosition: TypeParsablePoint, autoEvent: boolean = false) {
     const p = getPoint(figurePosition);
-    this.touchMoveHandler(this.mockPreviousTouchPoint, p);
+    this.touchMoveHandler(this.mockPreviousTouchPoint, p, autoEvent);
     this.mockPreviousTouchPoint = p;
     // const pixelPoint = p.transformBy(this.spaceTransforms.figureToPixel.m());
     // const clientPoint = this.pixelToClient(pixelPoint);

@@ -553,7 +553,7 @@ function layoutCirc() {
 
   const updateLockText = (triElement) => {
     // lock.setLabel(`\u{1F512}: ${triElement.customState.lock}`);
-    
+
     // lock.setLabel(`${triElement.customState.lock}`);
     if (triElement.customState.lock === 'theta') {
       lock._label.custom.updateText({ text: '|theta|' });
@@ -564,7 +564,7 @@ function layoutCirc() {
     }
 
     // lock._label.custom.updateText({ text: `${triElement.customState.lock}`});
-    
+
     // lock.setLabel('Hyp');
     if (triElement.customState.lockHyp) {
       hypLock.custom.lock();
@@ -648,15 +648,20 @@ function layoutCirc() {
       circ.customState.selected = '';
       return;
     }
-    triangle._movePad.setOpacity(1);
+    const element = circ.getElement(triangle);
+    element._movePad.setOpacity(1);
+    // triangle._movePad.setOpacity(1);
     circ.customState.selected = triangle.name;
     circ.show(['lock', 'flip', 'lockHyp', 'unitButton', 'thetaButton', 'viewTheta', 'viewUnit', 'angleLock', 'hypLock']);
-    updateLockText(triangle);
+    updateLockText(element);
   };
   add('selectSinCos', () => selectTriangle(triSinCos));
   add('selectTanSec', () => selectTriangle(triTanSec));
   add('selectCotCsc', () => selectTriangle(triCotCsc));
 
+  circ.subscriptions.add('setState', () => {
+    selectTriangle(circ.customState.selected);
+  });
   circle.subscriptions.add('visibility', 'processButton');
   background.onClick = () => { selectTriangle(''); };
 
