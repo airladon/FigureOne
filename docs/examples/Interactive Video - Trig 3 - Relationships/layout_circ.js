@@ -42,7 +42,9 @@ function layoutCirc() {
     },
   });
 
-  function arc(name, color, width = thin, sides = 100, angleToDraw = Math.PI * 2, rotation = 0, rad = radius) {
+  function arc(
+    name, color, width = thin, sides = 100, angleToDraw = Math.PI * 2, rotation = 0, rad = radius,
+  ) {
     return {
       name,
       method: 'primitives.polygon',
@@ -76,9 +78,7 @@ function layoutCirc() {
     name,
     method: 'collection',
     elements: [
-      // { name: 'l', method: 'ellipse', options: { position: [0, 0.035], line: { width: medium }, height: 0.05, width: 0.05, sides: 20 } },
       { name: 'lock', method: 'polygon', options: { position: [0, 0.035], line: { width: medium }, radius: 0.025, sides: 20, angleToDraw: Math.PI } },
-      // { name: 'unlock', method: 'line', options: { width: 0.02, p1: [0, 0.03 + 0.01], length: 0.04, color: [1, 1, 1, unlockOpacity] } },
       { name: 'r', method: 'collections.rectangle', options: { width: 0.08, height: 0.07, corner: { radius: 0.005 }, line: { width: medium }, fill: [1, 1, 1, 1] } },
     ],
     options: {
@@ -86,8 +86,6 @@ function layoutCirc() {
     },
     mods: {
       custom: {
-        // lock: () => figure.elements._circ.getElement(name)._unlock.hide(),
-        // unlock: () => figure.elements._circ.getElement(name)._unlock.show(),
         lock: () => figure.elements._circ.getElement(name)._lock.setRotation(0),
         unlock: () => figure.elements._circ.getElement(name)._lock.setRotation(0.7),
       },
@@ -137,7 +135,6 @@ function layoutCirc() {
     name,
     method: 'collection',
     elements: [
-      ...elements,
       rightAngle('right', [0, radius], -Math.PI / 2),
       angle('theta', '\u03b8', 0.2, 0.5, [0, 0], 0, defaultAngle),
       {
@@ -156,6 +153,7 @@ function layoutCirc() {
       rot('rotTheta'),
       rot('rotComp'),
       rot('rotRight'),
+      ...elements,
     ],
     mods: {
       customState: {
@@ -164,48 +162,63 @@ function layoutCirc() {
     },
   });
 
-  const button = (name, position, text, width = 0.7, height = 0.25, size = 0.1, textPosition = [0, 0]) => ({
-    name,
-    method: 'collection',
-    elements: [
-      { name: 'rect', method: 'primitives.rectangle', options: { width, height, line: { width: thin }, corner: { radius: 0.02, sides: 3 }, color: colGrey } },
-      {
-        name: 'label',
-        method: 'textLines',
-        options: {
-          position:
-          textPosition,
-          text,
-          font: { size, color: colText },
-          xAlign: 'center',
-          yAlign: 'middle',
-          fixColor: true,
-          modifiers: {
-            theta: {
-              text: '\u03b8',
-              font: {
-                style: 'italic', family: 'Time New Roman', size: size * 1.2,
+  function button(
+    name, position, text, width = 0.7, height = 0.25, size = 0.1, textPosition = [0, 0],
+  ) {
+    return {
+      name,
+      method: 'collection',
+      elements: [
+        {
+          name: 'rect',
+          method: 'collections.rectangle',
+          options: {
+            width,
+            height,
+            line: { width: thin },
+            corner: { radius: 0.02, sides: 3 },
+            fill: [1, 1, 1, 1],
+            color: colGrey,
+          },
+        },
+        {
+          name: 'label',
+          method: 'textLines',
+          options: {
+            position:
+            textPosition,
+            text,
+            font: { size, color: colText },
+            xAlign: 'center',
+            yAlign: 'middle',
+            fixColor: true,
+            modifiers: {
+              theta: {
+                text: '\u03b8',
+                font: {
+                  style: 'italic', family: 'Time New Roman', size: size * 1.2,
+                },
               },
-            },
-            _90: {
-              text: '90\u00b0',
-              font: {
-                family: 'Time New Roman', size: size * 1.2,
+              _90: {
+                text: '90\u00b0',
+                font: {
+                  family: 'Time New Roman', size: size * 1.2,
+                },
               },
-            },
-            min: {
-              text: '\u2212',
-              font: {
-                family: 'Time New Roman', size: size * 1.2,
+              min: {
+                text: '\u2212',
+                font: {
+                  family: 'Time New Roman', size: size * 1.2,
+                },
               },
             },
           },
         },
-      },
-    ],
-    options: { position },
-    mods: { isTouchable: true, touchBorder: 0 },
-  });
+      ],
+      options: { position },
+      mods: { isTouchable: true, touchBorder: 0 },
+    };
+  }
 
 
   const [circ] = figure.add({
@@ -299,6 +312,16 @@ function layoutCirc() {
         name: 'arcButton',
         method: 'collection',
         elements: [
+          {
+            name: 'fill',
+            method: 'primitives.polygon',
+            options: {
+              color: [1, 1, 1, 1],
+              radius: 0.22,
+              sides: 400,
+              angleToDraw: Math.PI / 2,
+            },
+          },
           arc('arc', colText, thin, 100, Math.PI / 2, 0, 0.22),
           line('x', colText, thin, [0, 0], 0.22, 0),
           line('y', colText, thin, [0, 0], 0.22, Math.PI / 2),
@@ -372,6 +395,16 @@ function layoutCirc() {
     }
   };
 
+  const checkThetaAngleVisbility = (element, test) => {
+    if (element.isShown) {
+      if (test) {
+        element.setOpacity(1);
+      } else {
+        element.setOpacity(0);
+      }
+    }
+  };
+
   const setCurrentLockPosition = (triElement, rightPos, compPos, thetaPos) => {
     triElement.customState.angle = triSinCos._unit.line.angle();
     let pos = rightPos;
@@ -413,6 +446,7 @@ function layoutCirc() {
     });
   };
   function updateCircle(rIn) {
+    const t1 = performance.now()
     const r = rIn > Math.PI / 4 ? rIn - 0.00001 : rIn + 0.00001;
     const cosR = Math.cos(r);
     const sinR = Math.sin(r);
@@ -426,6 +460,7 @@ function layoutCirc() {
     const c1 = Fig.tools.g2.getTriangleCenter([0, 0], [cosVal, 0], [cosVal, sinVal]);
     const c2 = Fig.tools.g2.getTriangleCenter([0, 0], [radius, 0], [radius, tanVal]);
     const c3 = Fig.tools.g2.getTriangleCenter([0, 0], [cotVal, 0], [cotVal, radius]);
+    const t1a = performance.now()
     if (theta.isShown) {
       theta.setAngle({ angle: Math.acos(Math.abs(cosR)) });
     }
@@ -434,6 +469,7 @@ function layoutCirc() {
     setCurrentLockPosition(triTanSec, unitTanSec.getP2(), sec.getP2(), sec.getP1());
     setCurrentLockPosition(triCotCsc, cot.getP2(), csc.getP2(), cot.getP1());
 
+    const t1b = performance.now()
     if (thetaSinCos.isShown) {
       thetaSinCos.setAngle({ angle: Math.acos(Math.abs(cosR)), position: [-c1.x, -c1.y] });
     }
@@ -444,12 +480,14 @@ function layoutCirc() {
       thetaTanSec.setAngle({ angle: Math.acos(Math.abs(cosR)), position: [-c2.x, -c2.y] });
     }
 
+    const t2 = performance.now()
     sin.setEndPoints(point(cosVal, 0).sub(c1), point(cosVal, sinVal).sub(c1));
     cos.setEndPoints(point(0, 0).sub(c1), point(cosVal, 0).sub(c1));
     unitSinCos.setEndPoints(point(0, 0).sub(c1), point(cosVal, sinVal).sub(c1));
     setRightAng(
       rightSinCos, r > 0.2 && r < Math.PI / 2 - 0.2, point(cosVal, 0).sub(c1), Math.PI / 2,
     );
+    checkThetaAngleVisbility(thetaSinCos, r < Math.PI / 2 - 0.2);
 
     tan.setEndPoints(point(radius, 0).sub(c2), point(radius, tanVal).sub(c2));
     sec.setEndPoints(point(0, 0).sub(c2), point(radius, tanVal).sub(c2));
@@ -460,6 +498,7 @@ function layoutCirc() {
     csc.setEndPoints(point(0, 0).sub(c3), point(cotVal, radius).sub(c3));
     unitCotCsc.setEndPoints(point(cotVal, 0).sub(c3), point(cotVal, radius).sub(c3));
     setRightAng(rightCotCsc, r < Math.PI / 2 - 0.2, point(cotVal, 0).sub(c3), Math.PI / 2);
+    checkThetaAngleVisbility(thetaCotCsc, r < Math.PI / 2 - 0.2);
 
     setRotPad(rotThetaSinCos, [-c1.x, -c1.y], 0, r);
     setRotPad(rotThetaTanSec, [-c2.x, -c2.y], 0, r);
@@ -473,6 +512,7 @@ function layoutCirc() {
     setRotPad(rotCompTanSec, [radius - c2.x, tanVal - c2.y], Math.PI + r, Math.PI / 2 - r);
     setRotPad(rotCompCotCsc, [cotVal - c3.x, radius - c3.y], Math.PI + r, Math.PI / 2 - r);
 
+    const t3 = performance.now()
     moveSinCos.custom.updatePoints({
       points: [[0, 0], [cosVal, 0], [cosVal, sinVal]],
     });
@@ -489,6 +529,8 @@ function layoutCirc() {
     offsetForLock(triSinCos, r, cos.getP2(), unitSinCos.getP2(), cos.getP1());
     offsetForLock(triTanSec, r, unitTanSec.getP2(), sec.getP2(), sec.getP1());
     offsetForLock(triCotCsc, r, cot.getP2(), csc.getP2(), cot.getP1());
+    const t4 = performance.now()
+    console.log(t4 - t1, t1a - t1, t1b - t1a, t2 - t1b, t3 - t2,  t4 - t3)
   }
   const rotatorUpdateCircle = () => {
     updateCircle(Fig.tools.g2.clipAngle(rotator.transform.r(), '0to360'));
@@ -633,8 +675,10 @@ function layoutCirc() {
   circle.fnMap.add('processButton', () => {
     if (circle.isShown) {
       arcButton.setColor(colText);
+      arcButton._fill.setColor([1, 1, 1, 1]);
     } else {
       arcButton.setColor(colGrey);
+      arcButton._fill.setColor([1, 1, 1, 1]);
     }
   });
   reset.onClick = () => { figure.fnMap.exec('reset'); };
