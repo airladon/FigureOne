@@ -703,13 +703,19 @@ function layoutCirc() {
     circ.show(['lock', 'flip', 'lockHyp', 'unitButton', 'thetaButton', 'viewTheta', 'viewUnit', 'angleLock', 'hypLock']);
     updateLockText(element);
   };
+
   add('selectSinCos', () => selectTriangle(triSinCos));
   add('selectTanSec', () => selectTriangle(triTanSec));
   add('selectCotCsc', () => selectTriangle(triCotCsc));
 
-  circ.subscriptions.add('setState', () => {
+  figure.subscriptions.add('setStateInit', () => {
     selectTriangle(circ.customState.selected);
+    // updateCircle();
   });
+  // circ.subscriptions.add('setState', () => {
+  //   console.log('setState', circ.customState.selected)
+  //   selectTriangle(circ.customState.selected);
+  // });
   circle.subscriptions.add('visibility', 'processButton');
   background.onClick = () => { selectTriangle(''); };
 
