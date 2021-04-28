@@ -74,7 +74,7 @@ function layoutCirc() {
     },
   });
 
-  const addLock = (name, position, unlockOpacity = 1) => ({
+  const addLock = (name, position) => ({
     name,
     method: 'collection',
     elements: [
@@ -268,12 +268,11 @@ function layoutCirc() {
           },
         },
       },
-      angle('theta', '0', 0.3, 0.5, [-2.8, -1.3], 0, defaultAngle, { length: 0.33, width: thick }),
       tri(
         'triCotCsc',
         [
-          lineWithLabel('unit', colText, '1', thick, [-thick / 2, thick], radius - thick / 2, Math.PI / 2),
           lineWithLabel('csc', colCsc, 'csc'),
+          lineWithLabel('unit', colText, '1', thick, [-thick / 2, thick], radius - thick / 2, Math.PI / 2),
           lineWithLabel('cot', colCot, 'cot'),
         ],
         [1.9, -0.22],
@@ -284,9 +283,9 @@ function layoutCirc() {
       tri(
         'triTanSec',
         [
-          lineWithLabel('unit', colText, '1', thick, [radius + thick / 2, 0], radius + thick * 0.7, Math.PI),
-          lineWithLabel('tan', colTan, 'tan'),
           lineWithLabel('sec', colSec, 'sec'),
+          lineWithLabel('tan', colTan, 'tan'),
+          lineWithLabel('unit', colText, '1', thick, [radius + thick / 2, 0], radius + thick * 0.7, Math.PI),
         ],
         [0.1, -0.31],
         0,
@@ -297,6 +296,17 @@ function layoutCirc() {
         lineWithLabel('sin', colSin, 'sin'),
         lineWithLabel('cos', colCos, 'cos'),
       ], [-1.5, -0.35], 0, dC1, dCos, dSin),
+      {
+        name: 'angleBackground',
+        method: 'primitives.polygon',
+        options: {
+          sides: 400,
+          color: [1, 1, 1, 1],
+          radius: 0.3,
+          position: [-2.8, -1.3],
+        },
+      },
+      angle('theta', '0', 0.3, 0.5, [-2.8, -1.3], 0, defaultAngle, { length: 0.33, width: thick }),
       button('flip', [0.1, -1.2], 'Flip', 0.3, 0.25, 0.1, [0, -0.01]),
       button('unitButton', [0.5, -1.2], 'Unit', 0.3, 0.25, 0.07, [0, -0.06]),
       button('thetaButton', [0.9, -1.2], '|theta|', 0.3, 0.25, 0.07, [0, -0.06]),
@@ -377,6 +387,7 @@ function layoutCirc() {
   const [circle, background] = get(['circle', 'background']);
   const [preset1, preset2, preset3] = get(['preset1', 'preset2', 'preset3']);
   const [hypLock, viewUnit, viewTheta] = get(['hypLock', 'viewUnit', 'viewTheta']);
+  const [angleBackground] = get(['angleBackground']);
 
   sec.label.location = 'positive';
   csc.label.location = 'positive';
@@ -446,7 +457,6 @@ function layoutCirc() {
     });
   };
   function updateCircle(rIn) {
-    const t1 = performance.now()
     const r = rIn > Math.PI / 4 ? rIn - 0.00001 : rIn + 0.00001;
     const cosR = Math.cos(r);
     const sinR = Math.sin(r);
@@ -460,16 +470,14 @@ function layoutCirc() {
     const c1 = Fig.tools.g2.getTriangleCenter([0, 0], [cosVal, 0], [cosVal, sinVal]);
     const c2 = Fig.tools.g2.getTriangleCenter([0, 0], [radius, 0], [radius, tanVal]);
     const c3 = Fig.tools.g2.getTriangleCenter([0, 0], [cotVal, 0], [cotVal, radius]);
-    const t1a = performance.now()
     if (theta.isShown) {
       theta.setAngle({ angle: Math.acos(Math.abs(cosR)) });
     }
-
+    angleBackground.angleToDraw = r;
     setCurrentLockPosition(triSinCos, cos.getP2(), unitSinCos.getP2(), cos.getP1());
     setCurrentLockPosition(triTanSec, unitTanSec.getP2(), sec.getP2(), sec.getP1());
     setCurrentLockPosition(triCotCsc, cot.getP2(), csc.getP2(), cot.getP1());
 
-    const t1b = performance.now()
     if (thetaSinCos.isShown) {
       thetaSinCos.setAngle({ angle: Math.acos(Math.abs(cosR)), position: [-c1.x, -c1.y] });
     }
@@ -480,23 +488,22 @@ function layoutCirc() {
       thetaTanSec.setAngle({ angle: Math.acos(Math.abs(cosR)), position: [-c2.x, -c2.y] });
     }
 
-    const t2 = performance.now()
-    sin.setEndPoints(point(cosVal, 0).sub(c1), point(cosVal, sinVal).sub(c1));
-    cos.setEndPoints(point(0, 0).sub(c1), point(cosVal, 0).sub(c1));
+    sin.setEndPoints(point(cosVal, 0).sub(c1), point(cosVal, sinVal + thick / 3).sub(c1));
+    cos.setEndPoints(point(-thick / 2, 0).sub(c1), point(cosVal + thick / 2, 0).sub(c1));
     unitSinCos.setEndPoints(point(0, 0).sub(c1), point(cosVal, sinVal).sub(c1));
     setRightAng(
       rightSinCos, r > 0.2 && r < Math.PI / 2 - 0.2, point(cosVal, 0).sub(c1), Math.PI / 2,
     );
     checkThetaAngleVisbility(thetaSinCos, r < Math.PI / 2 - 0.2);
 
-    tan.setEndPoints(point(radius, 0).sub(c2), point(radius, tanVal).sub(c2));
+    tan.setEndPoints(point(radius, -thick / 2).sub(c2), point(radius, tanVal + thick / 3).sub(c2));
     sec.setEndPoints(point(0, 0).sub(c2), point(radius, tanVal).sub(c2));
-    unitTanSec.setEndPoints(point(0, 0).sub(c2), point(radius, 0).sub(c2));
+    unitTanSec.setEndPoints(point(-thick / 2, 0).sub(c2), point(radius + thick / 2, 0).sub(c2));
     setRightAng(rightTanSec, r > 0.2, point(radius, 0).sub(c2), Math.PI / 2);
 
-    cot.setEndPoints(point(0, 0).sub(c3), point(cotVal, 0).sub(c3));
+    cot.setEndPoints(point(-thick / 2, 0).sub(c3), point(cotVal + thick / 2, 0).sub(c3));
     csc.setEndPoints(point(0, 0).sub(c3), point(cotVal, radius).sub(c3));
-    unitCotCsc.setEndPoints(point(cotVal, 0).sub(c3), point(cotVal, radius).sub(c3));
+    unitCotCsc.setEndPoints(point(cotVal, 0).sub(c3), point(cotVal, radius + thick / 3).sub(c3));
     setRightAng(rightCotCsc, r < Math.PI / 2 - 0.2, point(cotVal, 0).sub(c3), Math.PI / 2);
     checkThetaAngleVisbility(thetaCotCsc, r < Math.PI / 2 - 0.2);
 
@@ -512,7 +519,6 @@ function layoutCirc() {
     setRotPad(rotCompTanSec, [radius - c2.x, tanVal - c2.y], Math.PI + r, Math.PI / 2 - r);
     setRotPad(rotCompCotCsc, [cotVal - c3.x, radius - c3.y], Math.PI + r, Math.PI / 2 - r);
 
-    const t3 = performance.now()
     moveSinCos.custom.updatePoints({
       points: [[0, 0], [cosVal, 0], [cosVal, sinVal]],
     });
@@ -529,8 +535,6 @@ function layoutCirc() {
     offsetForLock(triSinCos, r, cos.getP2(), unitSinCos.getP2(), cos.getP1());
     offsetForLock(triTanSec, r, unitTanSec.getP2(), sec.getP2(), sec.getP1());
     offsetForLock(triCotCsc, r, cot.getP2(), csc.getP2(), cot.getP1());
-    const t4 = performance.now()
-    console.log(t4 - t1, t1a - t1, t1b - t1a, t2 - t1b, t3 - t2,  t4 - t3)
   }
   const rotatorUpdateCircle = () => {
     updateCircle(Fig.tools.g2.clipAngle(rotator.transform.r(), '0to360'));
