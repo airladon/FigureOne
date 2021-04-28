@@ -1,6 +1,3 @@
-import {
-  Point,
-} from '../../../tools/g2';
 import * as tools from '../../../tools/tools';
 import makeFigure from '../../../__mocks__/makeFigure';
 
@@ -56,6 +53,8 @@ describe('Performance Testing', () => {
         figure.mock.timeStep(0.01);
         const duration = perf.now() - start;
         durations.push(duration);
+        // Note, if i === 100, then animation finishes and setTransformCount
+        // is 200 as animation step then finish is called.
         expect(setTransformCount).toBe(100);
       }
       durations = durations.sort().slice(5, 95);
@@ -67,17 +66,5 @@ describe('Performance Testing', () => {
       expect(min).toBeGreaterThan(refTime / 35);
       expect(ave).toBeLessThan(refTime / 20);
     });
-    // test('Number SetTransforms', () => {
-    //   figure.elements.animations.new()
-    //     .scenarios({ target: 'final', duration: 1 })
-    //     .start();
-    //   figure.mock.timeStep(0);
-    //   const start = perf.now();
-    //   figure.mock.timeStep(0.5);
-    //   const duration = perf.now() - start;
-    //   expect(duration).toBeLessThan(refTime / 10);
-    //   expect(duration).toBeGreaterThan(refTime / 15);
-      
-    // });
   });
 });
