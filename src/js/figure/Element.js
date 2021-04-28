@@ -5713,15 +5713,22 @@ class FigureElementCollection extends FigureElement {
     how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel',
     elementOnly: boolean = false,
   ) {
+    // const t1 = performance.now()
     super.stop(how);
+    // const t2 = performance.now()
     if (elementOnly) {
       return;
     }
     for (let i = 0; i < this.drawOrder.length; i += 1) {
+      // const t5 = performance.now()
       const element = this.elements[this.drawOrder[i]];
       element.stop(how, elementOnly);
+      // const t6 = performance.now()
+      // console.log('child', element.name, t6-t5)
       // element.cancel(forceSetToEndOfPlan);
     }
+    // const t3 = performance.now()
+    // console.log('parent', this.name, t3 - t1, t2 - t1, t3 - t2)
   }
 
   setFont(fontSize: number) {

@@ -588,9 +588,9 @@ export default class SlideNavigator {
       this.fromAutoSlide = true;
       if (this.currentSlideIndex === slideNo - 1) {
         this.nextSlide(true);
-      } else if (slideNo !== 0) {
-        this.goToSlide(slideNo - 1);
-        this.nextSlide(true);
+      // } else if (slideNo !== 0) {
+      //   this.goToSlide(slideNo - 1);
+      //   this.nextSlide(true);
       } else {
         this.goToSlide(slideNo);
       }
@@ -1151,9 +1151,13 @@ export default class SlideNavigator {
         this.slides[this.currentSlideIndex].leaveState, this.currentSlideIndex, index,
       );
     }
-
+    // const t1 = performance.now();
     // Reset and Set Text
+    // if (index === 5) {
+    //   debugger;
+    // }
     this.collection.stop('complete');
+    // const t2 = performance.now();
     const { textElement } = this;
     if (textElement != null) {
       this.setText(index);
@@ -1167,7 +1171,7 @@ export default class SlideNavigator {
         }
       }
     }
-
+    // const t3 = performance.now()
     // Enter new slide
     this.currentSlideIndex = index;
     const slide = this.slides[index];
@@ -1193,6 +1197,8 @@ export default class SlideNavigator {
     this.showAutoTransitionDissolve(index, false);
     // Move to transition
     this.transition(fromToUse);
+    // const t4 = performance.now();
+    // console.log(t4 - t1, t2 - t1, t3 - t2, t4 - t3)
   }
 
   /**

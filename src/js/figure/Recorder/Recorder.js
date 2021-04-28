@@ -1341,7 +1341,7 @@ ${cursorData}
     this.queueSeekId = this.figure.globalAnimation.setTimeout(() => {
       this.seek(this.queueSeekTime);
       this.queueSeekId = null;
-    }, 300);
+    }, 100);
   }
 
   /**
@@ -1371,6 +1371,8 @@ ${cursorData}
   }
 
   setToTime(timeIn: number, force: boolean = false) {
+    // const t = []
+    // t.push(performance.now())
     if (timeIn === 0 && this.states.diffs.length > 0) {
       this.stateIndex = 0;
     } else {  // $FlowFixMe
@@ -1454,13 +1456,16 @@ ${cursorData}
         this.setEvent(eventName, index);
       });
     };
+    // t.push(performance.now())
     // console.log('before')
     // console.log(eventsToSetBeforeState)
     // console.log(this.stateIndex)
     playEvents(eventsToSetBeforeState);
+    // t.push(performance.now())
     if (this.stateIndex !== -1) {
       this.setState(this.stateIndex);
     }
+    // t.push(performance.now())
     // console.log(eventsToSetAfterState)
     playEvents(eventsToSetAfterState);
     if (this.audio) {
@@ -1472,6 +1477,7 @@ ${cursorData}
 
     this.setCursor(timeToUse);
     this.figure.animateNextFrame();
+    // console.log(t.slice(-1)[0] - t[0], t[1]-t[0],t[2]-t[1],t[3]-t[2])
   }
 
   setCursor(time: number) {

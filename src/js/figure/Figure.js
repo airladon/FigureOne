@@ -513,7 +513,10 @@ class Figure {
 
     // this.updateFontSize = optionsToUse.updateFontSize;
 
+    this.focused = true;
     window.addEventListener('resize', this.resize.bind(this));
+    window.addEventListener('focus', this.focusGained.bind(this));
+    window.addEventListener('blur', this.focusLost.bind(this));
     // window.addEventListener('resize', this.resize.bind(this));
     this.sizeHtmlText();
     this.isTouchDevice = isTouchDevice();
@@ -1432,6 +1435,7 @@ class Figure {
       animateNextFrame: this.animateNextFrame.bind(this),
       animationFinished: this.animationFinished.bind(this),
       recorder: this.recorder,
+      // setDrawTimeout: this.setDrawTimeout,
     });
     this.setFirstTransform();
     this.animateNextFrame();
@@ -2639,14 +2643,33 @@ class Figure {
         this.nextDrawTimerDuration = timerDuration;
         this.nextDrawTimer = this.globalAnimation.setTimeout(() => {
           this.nextDrawTimer = null;
-          this.elements.setupDraw(this.globalAnimation.now() / 1000, 0);
-          this.setDrawTimeout();
+          this.setupDraw();
+          // this.elements.setupDraw(this.globalAnimation.now() / 1000, 0);
+          // this.setDrawTimeout();
           this.animateNextFrame();
         }, timerDuration * 1000);
       }
     }
     // const t2 = performance.now()
     // window.figureOneDebug.misc.push(['setDrawTimeout', t2 - t, t1 - t, t2 - t1])
+  }
+
+  focusLost() {
+    this.focused = false;
+    this.setDrawTimeout(0.1);
+  }
+
+  focusGained() {
+    this.focused = true;
+  }
+
+  setupDraw(time = this.globalAnimation.now() / 1000) {
+    this.elements.setupDraw(time);
+    if (!this.focused) {
+      this.setDrawTimeout(0.1);
+    } else {
+      this.setDrawTimeout();
+    }
   }
 
   /**
@@ -2662,7 +2685,8 @@ class Figure {
       }
       this.globalAnimation.queueNextFrame(this.draw.bind(this));
     }
-    this.setDrawTimeout();
+
+    // this.setDrawTimeout();
   }
 
   // animateNextFrameContinuous(method: () => void) {
