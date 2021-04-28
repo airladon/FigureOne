@@ -1877,6 +1877,7 @@ class FigureElement {
     // this.transformUpdated = true;
     // this.animateNextFrame();
   }
+
   // Set the next transform (and velocity if moving freely) for the next
   // animation frame.
   //

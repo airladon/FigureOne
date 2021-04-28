@@ -683,11 +683,11 @@ export default class SlideNavigator {
         if (!Array.isArray(eDelta[0])) {
           eDelta = [eDelta];
         }
-        eDelta.forEach((e) => {
-          const [execDeltaTime, command] = e;
+        eDelta.forEach((e) => { // $FlowFixMe
+          const [execDeltaTime, command] = e; // $FlowFixMe
           const t = lastTime + execDeltaTime;
-          if (!(typeof t === 'number')) {
-            throw new Error(`Error in delta time: ${t}, ${execDeltaTime}, ${lastTime}, ${command}`);
+          if (!(typeof t === 'number')) { // $FlowFixMe
+            throw new Error(`Error in delta time: ${t}, ${execDeltaTime}, $ // $FlowFixMe{lastTime}, ${command}`);
           }
           this.collection.recorder.events._autoExec.list.push([t, [command], 0]);
         });
