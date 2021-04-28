@@ -2713,7 +2713,7 @@ class Figure {
       this.globalAnimation.queueNextFrame(this.draw.bind(this));
     }
 
-    this.setDrawTimeout();
+    // this.setDrawTimeout();
   }
 
   // animateNextFrameContinuous(method: () => void) {
