@@ -753,6 +753,8 @@ FigureElementPrimitive {
     "lastSeekTime": null,
     "pauseState": null,
     "precision": 8,
+    "queueSeekId": null,
+    "queueSeekTime": 0,
     "reference": "__base",
     "referenceIndex": 0,
     "settings": Object {

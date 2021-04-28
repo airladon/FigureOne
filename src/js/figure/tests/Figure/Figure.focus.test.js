@@ -82,14 +82,14 @@ describe('Animate To State', () => {
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(0, 0));
       expect(p2.getPosition('figure').round(3)).toEqual(new Point(0, 0));
       figure.mock.timeStep(1.5, null, false);
-      expect(p1.getPosition('figure').round(3)).toEqual(new Point(0, 0));
-      expect(p2.getPosition('figure').round(3)).toEqual(new Point(0, 0));
+      expect(p1.getPosition('figure').round(3)).toEqual(new Point(1.5, 0));
+      expect(p2.getPosition('figure').round(3)).toEqual(new Point(1.5, 0));
       figure.mock.timeStep(0.5, null, false);
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(2, 0));
       expect(p2.getPosition('figure').round(3)).toEqual(new Point(2, 0));
       figure.mock.timeStep(0.5, null, false);
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(2, 0));
-      expect(p2.getPosition('figure').round(3)).toEqual(new Point(2, 0));
+      expect(p2.getPosition('figure').round(3)).toEqual(new Point(2.5, 0));
       figure.mock.timeStep(0.5, null, false);
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(2, 0));
       expect(p2.getPosition('figure').round(3)).toEqual(new Point(3, 0));
@@ -106,8 +106,8 @@ describe('Animate To State', () => {
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(0, 0));
       expect(p2.getPosition('figure').round(3)).toEqual(new Point(0, 0));
       figure.mock.timeStep(1.5, null, false);
-      expect(p1.getPosition('figure').round(3)).toEqual(new Point(0, 0));
-      expect(p2.getPosition('figure').round(3)).toEqual(new Point(0, 0));
+      expect(p1.getPosition('figure').round(3)).toEqual(new Point(1.5, 0));
+      expect(p2.getPosition('figure').round(3)).toEqual(new Point(1.5, 0));
       figure.mock.timeStep(1, null, false);
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(2, 0));
       expect(p2.getPosition('figure').round(3)).toEqual(new Point(2.5, 0));
@@ -121,6 +121,7 @@ describe('Animate To State', () => {
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(0, 0));
       expect(p2.getPosition('figure').round(3)).toEqual(new Point(0, 0));
       figure.mock.timeStep(0);
+      figure.focusLost();
       p1.animations.new()
         .position({ target: [2, 0], duration: 2, progression: 'linear' })
         .whenFinished(() => {
@@ -132,14 +133,14 @@ describe('Animate To State', () => {
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(0, 0));
       expect(p2.getPosition('figure').round(3)).toEqual(new Point(0, 0));
       figure.mock.timeStep(1.5, null, false);
-      expect(p1.getPosition('figure').round(3)).toEqual(new Point(0, 0));
+      expect(p1.getPosition('figure').round(3)).toEqual(new Point(1.5, 0));
       expect(p2.getPosition('figure').round(3)).toEqual(new Point(0, 0));
       figure.mock.timeStep(0.5, null, false);
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(2, 0));
       expect(p2.getPosition('figure').round(3)).toEqual(new Point(0, 0));
       figure.mock.timeStep(1, null, false);
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(2, 0));
-      expect(p2.getPosition('figure').round(3)).toEqual(new Point(0, 0));
+      expect(p2.getPosition('figure').round(3)).toEqual(new Point(1, 0));
       figure.mock.timeStep(1, null, false);
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(2, 0));
       expect(p2.getPosition('figure').round(3)).toEqual(new Point(2, 0));
@@ -150,6 +151,7 @@ describe('Animate To State', () => {
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(0, 0));
       expect(p2.getPosition('figure').round(3)).toEqual(new Point(0, 0));
       figure.mock.timeStep(0);
+      figure.focusLost();
       p1.animations.new()
         .position({ target: [2, 0], duration: 2, progression: 'linear' })
         .whenFinished(() => {
@@ -161,14 +163,14 @@ describe('Animate To State', () => {
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(0, 0));
       expect(p2.getPosition('figure').round(3)).toEqual(new Point(0, 0));
       figure.mock.timeStep(1.5, null, false);
-      expect(p1.getPosition('figure').round(3)).toEqual(new Point(0, 0));
+      expect(p1.getPosition('figure').round(3)).toEqual(new Point(1.5, 0));
       expect(p2.getPosition('figure').round(3)).toEqual(new Point(0, 0));
       figure.mock.timeStep(1, null, false);
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(2, 0));
       expect(p2.getPosition('figure').round(3)).toEqual(new Point(0, 0));
       figure.mock.timeStep(1, null, false);
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(2, 0));
-      expect(p2.getPosition('figure').round(3)).toEqual(new Point(0, 0));
+      expect(p2.getPosition('figure').round(3)).toEqual(new Point(1, 0));
       figure.mock.timeStep(1, null, false);
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(2, 0));
       expect(p2.getPosition('figure').round(3)).toEqual(new Point(2, 0));
@@ -209,6 +211,7 @@ describe('Animate To State', () => {
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(0, 0));
       expect(p2.getPosition('figure').round(3)).toEqual(new Point(0, 0));
       figure.mock.timeStep(0);
+      figure.focusLost();
       p1.animations.new()
         .position({ target: [2, 0], duration: 2, progression: 'linear' })
         .whenFinished(() => {
