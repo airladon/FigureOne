@@ -841,6 +841,7 @@ class Figure {
       'stateTime',
       // 'beingMovedElements',
       // 'beingTouchedElements',
+      'mockPreviousTouchPoint',
       'isTouchDown',
     ], o);
     state.beingTouchedElements = [];
@@ -1821,6 +1822,9 @@ class Figure {
 
     if (this.isPaused) {
       this.unpause();
+    }
+    if (this.recorder.state === 'idle') {
+      this.recorder.lastSeekTime = null;
     }
     if (this.recorder.state === 'playing' && !eventFromPlayback) {
       this.recorder.pausePlayback();
