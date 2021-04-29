@@ -1462,19 +1462,15 @@ ${cursorData}
     // console.log('before')
     // console.log(eventsToSetBeforeState)
     // console.log(this.stateIndex)
-    playEvents(eventsToSetBeforeState);
-    // t.push(performance.now())
+
+    // playEvents(eventsToSetBeforeState);
+
     if (this.stateIndex !== -1) {
       this.setState(this.stateIndex);
     }
-    // t.push(performance.now())
-    // console.log(eventsToSetAfterState)
-    playEvents(eventsToSetAfterState);
-    if (this.audio) {
-      // this.audio.currentTime = timeToUse;
-      // console.log(this.audio.currentTime)
-      // console.log('audio', timeToUse, this.audio.currentTime, this.audio.duration)
-    }
+
+    // playEvents(eventsToSetAfterState);
+
     this.setCurrentTime(timeToUse);
 
     this.setCursor(timeToUse);
