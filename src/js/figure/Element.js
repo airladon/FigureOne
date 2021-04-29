@@ -677,6 +677,7 @@ class FigureElement {
   unrenderNextDraw: boolean;
 
   custom: { [string]: any };
+  _custom: { [string]: any };
 
   stateProperties: Array<string>
   customState: Object;
@@ -758,6 +759,7 @@ class FigureElement {
     // this.figure = null;
     this.recorder = new Recorder(true);
     this.custom = {};
+    this._custom = {};
     this.customState = {};
     this.parent = parent;
     this.drawPriority = 1;
@@ -1223,6 +1225,7 @@ class FigureElement {
         'dimColor',
         'defaultColor',
         'transform',
+        '_custom',
         // 'lastDrawTransform',
         // 'parentTransform',
         'isShown',

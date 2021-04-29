@@ -195,7 +195,7 @@ export default class Box extends Symbol {
     maxBounds.right = maxBounds.left + maxBounds.width;
     maxBounds.top = maxBounds.bottom + maxBounds.height;
 
-    this.custom.setSize(
+    this._custom.setSize(
       new Point(maxBounds.left, maxBounds.bottom),
       maxBounds.width, maxBounds.height,
     );

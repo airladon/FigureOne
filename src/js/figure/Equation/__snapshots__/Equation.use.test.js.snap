@@ -2,6 +2,7 @@
 
 exports[`Different ways to make an equation All Text in constructor with all options 1`] = `
 FigureElementPrimitive {
+  "_custom": Object {},
   "afterDrawCallback": null,
   "angleToDraw": -1,
   "anim": Object {

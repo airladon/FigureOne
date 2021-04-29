@@ -5062,7 +5062,7 @@ export class EquationFunctions {
       } = options);
     }
     const glyph = this.getExistingOrAddSymbol(symbol);
-    if (glyph != null && glyph.custom.options.style === 'horizontal') {
+    if (glyph != null && glyph._custom.options.style === 'horizontal') {
       defaultOptions.space = 0;           // $FlowFixMe
       defaultOptions.leftSpace = 0.02;    // $FlowFixMe
       defaultOptions.rightSpace = 0.02;   // $FlowFixMe

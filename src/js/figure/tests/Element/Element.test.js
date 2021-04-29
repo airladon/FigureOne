@@ -254,6 +254,7 @@ describe('Animationa and Movement', () => {
         expect(vel.t().round(2)).toEqual(new Point(9.55, 19.11));
         expect(vel.s().round(2)).toEqual(new Point(-1, 0));
         expect(vel.r()).toBe(0);
+        element.transform.name = '';
         expect(element.transform.round(2)).toEqual(new Transform()
           .scale(-0.5, 1.5).rotate(0).translate(9.78, 19.55));
 

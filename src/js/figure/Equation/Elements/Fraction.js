@@ -46,7 +46,7 @@ export default class Fraction extends BaseEquationFunction {
 
     if (vinculum != null) {
       vinculumBounds.height = vinculum.getHeight(
-        vinculum.custom.options, vinculumBounds.width,
+        vinculum._custom.options, vinculumBounds.width,
       );
     }
 
@@ -125,7 +125,7 @@ export default class Fraction extends BaseEquationFunction {
     }
 
     if (vinculum) {
-      vinculum.custom.setSize(
+      vinculum._custom.setSize(
         this.glyphLocations[0],
         vinculumBounds.width,
         vinculumBounds.height,

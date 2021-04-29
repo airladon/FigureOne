@@ -226,9 +226,11 @@ describe('Figure Stop', () => {
       });
       test('Dissolve To Complete', () => {
         figure.stop('dissolveToComplete');
-        expect(state()).toEqual([false, 0, [], [], [1], 0, 1, false]);
-        figure.mock.timeStep(1);
-        expect(state()).toEqual([false, 0, [], [], [1], 0, 1, false]);
+        expect(state()).toEqual([true, 1, [], [1], [1], 1, 0, true]);
+        figure.mock.timeStep(0.8);
+        figure.mock.timeStep(0.2);
+        figure.mock.timeStep(0.8);
+        expect(state()).toEqual([false, 0, [], [], [1], 1, 1, false]);
       });
     });
     describe('Middle', () => {

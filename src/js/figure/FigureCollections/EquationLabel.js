@@ -388,9 +388,6 @@ export default class EquationLabel {
     startThetaAngle: number = Math.PI * 2,
     endThetaAngle: number = Math.PI,
   ) {
-    if (offsetMag === 10) {
-      debugger;
-    }
     // eslint-disable-next-line max-len
     const getR = (a, b, angle) => a * b / Math.sqrt((b * Math.cos(angle)) ** 2 + (a * Math.sin(angle)) ** 2);
 

@@ -7,7 +7,7 @@ import Symbol from './SymbolNew';
 // import WebGLInstance from '../../../webgl/webgl';
 
 
-export default class Bracket extends Symbol {
+export default class Vinculum extends Symbol {
   symbol: FigureElementPrimitive;
 
   // eslint-disable-next-line class-methods-use-this

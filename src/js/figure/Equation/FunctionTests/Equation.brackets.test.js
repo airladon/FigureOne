@@ -225,7 +225,7 @@ describe('Equation Functions - Brackets', () => {
       baseB = eqn._b.getPosition();
       baseL = eqn._lb.getPosition();
       baseR = eqn._rb.getPosition();
-      baseLScale = eqn._lb.custom.scale._dup();
+      baseLScale = eqn._lb._custom.scale._dup();
     });
     // Note, the letter a has the following bounds:
     //   width: 0.1,
@@ -247,7 +247,7 @@ describe('Equation Functions - Brackets', () => {
     });
     test('notInSize', () => {
       eqn.showForm('notInSize');
-      const newLScale = eqn._lb.custom.scale._dup();
+      const newLScale = eqn._lb._custom.scale._dup();
       const newL = eqn._lb.getPosition();
       const newB = eqn._b.getPosition();
       // 0.1x2 + 0.103 = 0.303
@@ -259,7 +259,7 @@ describe('Equation Functions - Brackets', () => {
     });
     test('forceHeightGreaterThanActualHeight', () => {
       eqn.showForm('forceHeightGreaterThanActualHeight');
-      const newLScale = eqn._lb.custom.scale._dup();
+      const newLScale = eqn._lb._custom.scale._dup();
       const newL = eqn._lb.getPosition();
       // 1
       expect(round(newLScale.y)).toBe(1);
@@ -267,7 +267,7 @@ describe('Equation Functions - Brackets', () => {
     });
     test('forceHeightLessThanActualHeight', () => {
       eqn.showForm('forceHeightLessThanActualHeight');
-      const newLScale = eqn._lb.custom.scale._dup();
+      const newLScale = eqn._lb._custom.scale._dup();
       const newL = eqn._lb.getPosition();
       // 0.005
       expect(round(newLScale.y)).toBe(0.05);
@@ -275,7 +275,7 @@ describe('Equation Functions - Brackets', () => {
     });
     test('forceDecentGreaterThanActualDescent', () => {
       eqn.showForm('forceDecentGreaterThanActualDescent');
-      const newLScale = eqn._lb.custom.scale._dup();
+      const newLScale = eqn._lb._custom.scale._dup();
       const newL = eqn._lb.getPosition();
       // 0.1 + 0.095 + 0.1 = 0.295
       expect(round(newLScale.y)).toBe(0.295);
@@ -283,7 +283,7 @@ describe('Equation Functions - Brackets', () => {
     });
     test('forceDecentLessThanActualDescent', () => {
       eqn.showForm('forceDecentLessThanActualDescent');
-      const newLScale = eqn._lb.custom.scale._dup();
+      const newLScale = eqn._lb._custom.scale._dup();
       const newL = eqn._lb.getPosition();
       // 0.004 + 0.095 + 0.1 = 0.199
       expect(round(newLScale.y)).toBe(0.199);
@@ -291,7 +291,7 @@ describe('Equation Functions - Brackets', () => {
     });
     test('minContentDescentWithLargeMinHeight', () => {
       eqn.showForm('minContentDescentWithLargeMinHeight');
-      const newLScale = eqn._lb.custom.scale._dup();
+      const newLScale = eqn._lb._custom.scale._dup();
       const newL = eqn._lb.getPosition();
       // 1 + 1 + 0.1x2 = 2.2
       expect(round(newLScale.y)).toBe(2.2);
@@ -299,7 +299,7 @@ describe('Equation Functions - Brackets', () => {
     });
     test('minContentDescentWithSmallLargeHeight', () => {
       eqn.showForm('minContentDescentWithSmallMinHeight');
-      const newLScale = eqn._lb.custom.scale._dup();
+      const newLScale = eqn._lb._custom.scale._dup();
       const newL = eqn._lb.getPosition();
       // 1 + 0.095 + 0.1x2 = 1.295 as minHeight doesn't raise above minDescent
       // more than old ascent does
@@ -308,7 +308,7 @@ describe('Equation Functions - Brackets', () => {
     });
     test('minContentDescentWithSmallMinHeight', () => {
       eqn.showForm('minContentDescentWithSmallMinHeight');
-      const newLScale = eqn._lb.custom.scale._dup();
+      const newLScale = eqn._lb._custom.scale._dup();
       const newL = eqn._lb.getPosition();
       // 1 + 0.095 + 0.1x2 = 1.295
       expect(round(newLScale.y)).toBe(1.295);
@@ -316,7 +316,7 @@ describe('Equation Functions - Brackets', () => {
     });
     test('minContentDescent', () => {
       eqn.showForm('minContentDescent');
-      const newLScale = eqn._lb.custom.scale._dup();
+      const newLScale = eqn._lb._custom.scale._dup();
       const newL = eqn._lb.getPosition();
       // 1 + 0.095 + 0.1x2 = 1.295
       expect(round(newLScale.y)).toBe(1.295);
@@ -324,7 +324,7 @@ describe('Equation Functions - Brackets', () => {
     });
     test('minContentHeight', () => {
       eqn.showForm('minContentHeight');
-      const newLScale = eqn._lb.custom.scale._dup();
+      const newLScale = eqn._lb._custom.scale._dup();
       const newL = eqn._lb.getPosition();
       // 1 + 0.1x2 = 1.2
       expect(round(newLScale.y)).toBe(1.2);
@@ -332,14 +332,14 @@ describe('Equation Functions - Brackets', () => {
     });
     test('bottomSpace', () => {
       eqn.showForm('bottomSpace');
-      const newLScale = eqn._lb.custom.scale._dup();
+      const newLScale = eqn._lb._custom.scale._dup();
       const newL = eqn._lb.getPosition();
       expect(round(newLScale.y)).toBe(round(baseLScale.y + 0.1));
       expect(round(newL.y)).toBe(round(baseL.y - 0.1));
     });
     test('topSpace', () => {
       eqn.showForm('topSpace');
-      const newLScale = eqn._lb.custom.scale._dup();
+      const newLScale = eqn._lb._custom.scale._dup();
       const newL = eqn._lb.getPosition();
       expect(round(newLScale.y)).toBe(round(baseLScale.y + 0.1));
       expect(round(newL.y)).toBe(round(baseL.y));

@@ -746,7 +746,7 @@ export default class CollectionsPolyline extends FigureElementCollection {
           }, sideArray[i]);
         }
         const sideLine = this.collections.line(sideOptions);
-        sideLine.custom.offset = sideOptions.offset;
+        sideLine._custom.offset = sideOptions.offset;
         this.add(name, sideLine);
       }
     }
@@ -853,11 +853,11 @@ export default class CollectionsPolyline extends FigureElementCollection {
           // }
           if (this.reverse) {
             this.elements[name].setEndPoints(
-              newPoints[j], newPoints[i], this.elements[name].custom.offset,
+              newPoints[j], newPoints[i], this.elements[name]._custom.offset,
             );
           } else {
             this.elements[name].setEndPoints(
-              newPoints[i], newPoints[j], this.elements[name].custom.offset,
+              newPoints[i], newPoints[j], this.elements[name]._custom.offset,
             );
           }
           // if (wasHidden) {

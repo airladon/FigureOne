@@ -45,15 +45,15 @@ export default class Symbol extends FigureElementPrimitive {
     if (symbolOptions.isTouchable != null) {
       this.isTouchable = symbolOptions.isTouchable;
     }
-    this.custom.options = symbolOptions;
-    if (this.custom.options.draw === 'dynamic') {
-      this.custom.scale = new Point(1, 1);
+    this._custom.options = symbolOptions;
+    if (this._custom.options.draw === 'dynamic') {
+      this._custom.scale = new Point(1, 1);
       this.internalSetTransformCallback = () => {
         const s = this.getScale();
-        if (this.custom.scale.isNotEqualTo(s, 8)) {
+        if (this._custom.scale.isNotEqualTo(s, 8)) {
           const [
             pointsNew, widthNew, heightNew, drawType,
-          ] = this.getPoints(this.custom.options, s.x, s.y);
+          ] = this.getPoints(this._custom.options, s.x, s.y);
           this.pointsDefinition = {
             points: duplicate(pointsNew),
             width: widthNew,
@@ -74,16 +74,16 @@ export default class Symbol extends FigureElementPrimitive {
           //   widthNew,
           //   heightNew,
           // );
-          this.custom.scale = s;
+          this._custom.scale = s;
         }
       };
     }
 
     // eslint-disable-next-line max-len
-    this.custom.setSize = (location: Point, widthIn: number, heightIn: number) => {
+    this._custom.setSize = (location: Point, widthIn: number, heightIn: number) => {
       const t = this.transform._dup();
       if (
-        this.custom.options.draw === 'static'
+        this._custom.options.draw === 'static'
         // && this.drawingObject.points.length === 0
       ) {
         let points = [];
@@ -91,16 +91,16 @@ export default class Symbol extends FigureElementPrimitive {
         let height = 0;
         let drawType = 'strip';
         if (
-          this.custom.options.staticHeight === 'first'
-          || this.custom.options.staticWidth === 'first'
+          this._custom.options.staticHeight === 'first'
+          || this._custom.options.staticWidth === 'first'
         ) {
           ([points, width, height, drawType] = this.getPoints(symbolOptions, widthIn, heightIn));
-        } else if (this.custom.options.staticHeight != null
-          || this.custom.options.staticWidth != null) {
+        } else if (this._custom.options.staticHeight != null
+          || this._custom.options.staticWidth != null) {
           ([points, width, height, drawType] = this.getPoints(
             symbolOptions,
-            this.custom.options.staticWidth,
-            this.custom.options.staticHeight,
+            this._custom.options.staticWidth,
+            this._custom.options.staticHeight,
           ));
         }
         this.pointsDefinition = {
@@ -112,14 +112,14 @@ export default class Symbol extends FigureElementPrimitive {
         // $FlowFixMe
         // this.drawingObject.updatePoints(points, width, height);
         this.updateSymbol(points, width, height, drawType);
-        this.custom.options.staticHeight = height;
-        this.custom.options.staticWidth = width;
+        this._custom.options.staticHeight = height;
+        this._custom.options.staticWidth = width;
         // console.log('a', width, height)
         t.updateScale(width, height);
       } else {
         const [
           pointsNew, widthNew, heightNew, drawType,
-        ] = this.getPoints(this.custom.options, widthIn, heightIn);
+        ] = this.getPoints(this._custom.options, widthIn, heightIn);
         this.pointsDefinition = {
           points: duplicate(pointsNew),
           width: widthNew,
@@ -133,7 +133,7 @@ export default class Symbol extends FigureElementPrimitive {
         //   widthNew,
         //   heightNew,
         // );
-        this.custom.scale = new Point(widthIn, heightIn);
+        this._custom.scale = new Point(widthIn, heightIn);
         // console.log('b', widthIn, heightIn, this.getPath())
         t.updateScale(widthIn, heightIn);
       }
@@ -154,7 +154,7 @@ export default class Symbol extends FigureElementPrimitive {
       // // if (width == null || height == null || location == null) {
       // //   return;
       // // }
-      // this.custom.setSize(this.getPosition(), width, height);
+      // this._custom.setSize(this.getPosition(), width, height);
     };
   }
 
@@ -172,18 +172,18 @@ export default class Symbol extends FigureElementPrimitive {
       new Point(0, height),
     ]];
     if (
-      typeof this.custom.options.drawBorderBuffer === 'number'
+      typeof this._custom.options.drawBorderBuffer === 'number'
       || (
-        Array.isArray(this.custom.options.drawBorderBuffer)
-        && typeof this.custom.options.drawBorderBuffer[0] === 'number'
+        Array.isArray(this._custom.options.drawBorderBuffer)
+        && typeof this._custom.options.drawBorderBuffer[0] === 'number'
       )
     ) {
       this.drawBorderBuffer = [getBoundingBorder( // $FlowFixMe
-        this.drawBorder, this.custom.options.drawBorderBuffer,
+        this.drawBorder, this._custom.options.drawBorderBuffer,
       )];
-    } else if (Array.isArray(this.custom.options.drawBorderBuffer)) {
+    } else if (Array.isArray(this._custom.options.drawBorderBuffer)) {
       // $FlowFixMe
-      this.drawBorderBuffer = getBorder(this.custom.options.drawBorderBuffer);
+      this.drawBorderBuffer = getBorder(this._custom.options.drawBorderBuffer);
     } else {
       this.drawBorderBuffer = this.drawBorder;
     }
@@ -194,13 +194,13 @@ export default class Symbol extends FigureElementPrimitive {
   // }
 
   getTransform() {
-    if (this.custom.options.draw === 'static') {
+    if (this._custom.options.draw === 'static') {
       const t = this.transform._dup();
       const s = t.s();
       if (s != null) {
         t.updateScale(
-          s.x / this.custom.options.staticWidth,
-          s.y / this.custom.options.staticHeight,
+          s.x / this._custom.options.staticWidth,
+          s.y / this._custom.options.staticHeight,
         );
       }
       return t;

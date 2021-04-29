@@ -455,7 +455,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
           return;
         }
         glyph.location = glyph.location.add(locationOffset);
-        glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
+        glyph.glyph._custom.setSize(glyph.location, glyph.width, glyph.height);
         glyph.annotations.forEach((annotation) => {
           annotation.content.offsetLocation(locationOffset);
         });
@@ -482,7 +482,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     contentBounds.copyFrom(contentBoundsIn);
     contentBounds.offset(top * scale, right * scale, -bottom * scale, -left * scale);
     const glyphBounds = glyph.glyph.getBounds(
-      glyph.glyph.custom.options,
+      glyph.glyph._custom.options,
       contentBounds.left,
       contentBounds.bottom,
       contentBounds.width,
@@ -496,7 +496,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     glyph.width = glyphBounds.width;
     glyph.height = glyphBounds.height;
     glyph.location = new Point(glyphBounds.left, glyphBounds.bottom);
-    glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
+    glyph.glyph._custom.setSize(glyph.location, glyph.width, glyph.height);
     glyph.annotations.forEach((annotation) => {
       annotation.content.calcSize(glyph.location, scale * annotation.scale);
       this.setAnnotationPosition(glyphBounds, annotation, scale);
@@ -533,9 +533,9 @@ export default class BaseAnnotationFunction implements ElementInterface {
     glyph.width = spacedLine.angle();
     glyph.height = spacedLine.length();
     glyph.location = spacedLine.p1._dup();
-    glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
+    glyph.glyph._custom.setSize(glyph.location, glyph.width, glyph.height);
 
-    // glyph.glyph.custom.options.spacedLine = spacedLine._dup();
+    // glyph.glyph._custom.options.spacedLine = spacedLine._dup();
     // glyph.location = new Point(0, 0);
     // const sp1 = spacedLine.p1._dup();
     // const sp2 = spacedLine.p2._dup();
@@ -547,7 +547,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     // });
     // glyph.width = glyphBounds.width;
     // glyph.height = glyphBounds.height;
-    // glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
+    // glyph.glyph._custom.setSize(glyph.location, glyph.width, glyph.height);
   }
 
   setVerticalGlyph(scale: number, contentBounds: Bounds, glyphName: 'left' | 'right') {
@@ -616,7 +616,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     }
 
     const glyphBounds = glyph.glyph.getBounds(
-      glyph.glyph.custom.options,
+      glyph.glyph._custom.options,
       contentX,
       glyphBottom + yOffset,  // $FlowFixMe
       null,
@@ -635,7 +635,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     glyph.width = glyphBounds.width;
     glyph.height = glyphBounds.height;
     glyph.location = new Point(glyphBounds.left, glyphBounds.bottom);
-    glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
+    glyph.glyph._custom.setSize(glyph.location, glyph.width, glyph.height);
     glyph.annotations.forEach((annotation) => {
       annotation.content.calcSize(glyph.location, scale * annotation.scale);
       this.setAnnotationPosition(glyphBounds, annotation, scale);
@@ -662,7 +662,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     if (xOffset !== 0) {
       const locationOffset = new Point(xOffset, 0);
       glyph.location = glyph.location.add(locationOffset);
-      glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
+      glyph.glyph._custom.setSize(glyph.location, glyph.width, glyph.height);
       glyph.annotations.forEach((annotation) => {
         annotation.content.offsetLocation(locationOffset);
       });
@@ -719,7 +719,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     }
 
     const glyphBounds = glyph.glyph.getBounds(
-      glyph.glyph.custom.options,
+      glyph.glyph._custom.options,
       contentX + xOffset,
       contentY,
       glyphLength,  // $FlowFixMe
@@ -739,7 +739,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
 
     glyph.height = glyphBounds.height;
     glyph.location = new Point(glyphBounds.left, glyphBounds.bottom);
-    glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
+    glyph.glyph._custom.setSize(glyph.location, glyph.width, glyph.height);
     glyph.annotations.forEach((annotation) => {
       annotation.content.calcSize(glyph.location, scale * annotation.scale);
       this.setAnnotationPosition(glyphBounds, annotation, scale);
@@ -767,7 +767,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     if (yOffset !== 0) {
       const locationOffset = new Point(0, yOffset);
       glyph.location = glyph.location.add(locationOffset);
-      glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
+      glyph.glyph._custom.setSize(glyph.location, glyph.width, glyph.height);
       glyph.annotations.forEach((annotation) => {
         annotation.content.offsetLocation(locationOffset);
       });

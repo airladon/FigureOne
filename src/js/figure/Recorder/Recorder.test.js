@@ -512,13 +512,11 @@ describe('Figure Recorder', () => {
         recorder.stopRecording();
 
         expect(recorder.states.diffs[1][2].diff).toEqual({
-          '.elements.elements.a.lastDrawTransform.state[2].state[1]': 1,
           '.elements.elements.a.transform.state[2].state[1]': 1,
           '.stateTime': 13,
         });
 
         expect(recorder.states.diffs[2][2].diff).toEqual({
-          '.elements.elements.a.lastDrawTransform.state[2].state[1]': 2,
           '.elements.elements.a.transform.state[2].state[1]': 2,
           '.stateTime': 14,
         });
@@ -541,20 +539,17 @@ describe('Figure Recorder', () => {
         expect(recorder.states.diffs[0]).toEqual([0, '__base', {}, 0]);
         expect(recorder.states.diffs[1][0]).toBe(1);
         expect(recorder.states.diffs[1][2].diff).toEqual({
-          '.elements.elements.a.lastDrawTransform.state[2].state[1]': 1,
           '.elements.elements.a.transform.state[2].state[1]': 1,
           '.stateTime': 11,
         });
         expect(recorder.states.diffs[2][0]).toBe(2);
         expect(recorder.states.diffs[2][2].diff).toEqual({
-          '.elements.elements.a.lastDrawTransform.state[2].state[1]': 1,
           '.elements.elements.a.transform.state[2].state[1]': 1,
           '.stateTime': 12,
           '.lastDrawTime': 11,
         });
         expect(recorder.states.diffs[3][0]).toBe(3);
         expect(recorder.states.diffs[3][2].diff).toEqual({
-          '.elements.elements.a.lastDrawTransform.state[2].state[1]': 2,
           '.elements.elements.a.transform.state[2].state[1]': 2,
           '.stateTime': 13,
           '.lastDrawTime': 12,
@@ -586,27 +581,23 @@ describe('Figure Recorder', () => {
 
         expect(recorder.states.diffs[1][0]).toBe(1);
         expect(recorder.states.diffs[1][2].diff).toEqual({
-          '.elements.elements.a.lastDrawTransform.state[2].state[1]': 0.5,
           '.elements.elements.a.transform.state[2].state[1]': 0.5,
           '.stateTime': 21,
         });
         expect(recorder.states.diffs[2][0]).toBe(2);
         expect(recorder.states.diffs[2][2].diff).toEqual({
-          '.elements.elements.a.lastDrawTransform.state[2].state[1]': 1.5,
           '.elements.elements.a.transform.state[2].state[1]': 1.5,
           '.stateTime': 22,
           '.lastDrawTime': 21,
         });
         expect(recorder.states.diffs[3][0]).toBe(3);
         expect(recorder.states.diffs[3][2].diff).toEqual({
-          '.elements.elements.a.lastDrawTransform.state[2].state[1]': 1.5,
           '.elements.elements.a.transform.state[2].state[1]': 1.5,
           '.stateTime': 23,
           '.lastDrawTime': 22,
         });
         expect(recorder.states.diffs[4][0]).toBe(4);
         expect(recorder.states.diffs[4][2].diff).toEqual({
-          '.elements.elements.a.lastDrawTransform.state[2].state[1]': 2.5,
           '.elements.elements.a.transform.state[2].state[1]': 2.5,
           '.stateTime': 24,
           '.lastDrawTime': 23,
@@ -646,19 +637,16 @@ describe('Figure Recorder', () => {
 
         expect(recorder.states.diffs[1][0]).toBe(0.5);
         expect(recorder.states.diffs[1][2].diff).toEqual({
-          '.elements.elements.a.lastDrawTransform.state[2].state[1]': 1.5,
           '.elements.elements.a.transform.state[2].state[1]': 1.5,
           '.stateTime': 20.5,
         });
         expect(recorder.states.diffs[2][0]).toBe(3);
         expect(recorder.states.diffs[2][2].diff).toEqual({
-          '.elements.elements.a.lastDrawTransform.state[2].state[1]': 2.5,
           '.elements.elements.a.transform.state[2].state[1]': 2.5,
           '.stateTime': 23,
         });
         expect(recorder.states.diffs[3][0]).toBe(4);
         expect(recorder.states.diffs[3][2].diff).toEqual({
-          '.elements.elements.a.lastDrawTransform.state[2].state[1]': 2,
           '.elements.elements.a.transform.state[2].state[1]': 2,
           '.stateTime': 14,
         });
@@ -702,7 +690,6 @@ describe('Figure Recorder', () => {
         }, 0]);
         expect(recorder.states.diffs[4]).toEqual([4, '__base', {
           diff: {
-            '.elements.elements.a.lastDrawTransform.state[2].state[1]': 1,
             '.elements.elements.a.transform.state[2].state[1]': 1,
             '.stateTime': 14,
             '.lastDrawTime': 13,
@@ -710,7 +697,6 @@ describe('Figure Recorder', () => {
         }, 0]);
         expect(recorder.states.diffs[5]).toEqual([5, '__base', {
           diff: {
-            '.elements.elements.a.lastDrawTransform.state[2].state[1]': 2,
             '.elements.elements.a.transform.state[2].state[1]': 2,
             '.stateTime': 15,
             '.lastDrawTime': 14,
@@ -741,7 +727,6 @@ describe('Figure Recorder', () => {
         }, 0]);
         expect(recorder.states.diffs[3]).toEqual([3, '__base', {
           diff: {
-            '.elements.elements.a.lastDrawTransform.state[2].state[1]': 1.6,
             '.elements.elements.a.transform.state[2].state[1]': 1.6,
             '.stateTime': 22.5,
             '.lastDrawTime': 21.5,
@@ -749,7 +734,6 @@ describe('Figure Recorder', () => {
         }, 0]);
         expect(recorder.states.diffs[4]).toEqual([4, '__base', {
           diff: {
-            '.elements.elements.a.lastDrawTransform.state[2].state[1]': 1,
             '.elements.elements.a.transform.state[2].state[1]': 1,
             '.stateTime': 14,
             '.lastDrawTime': 13,
@@ -757,7 +741,6 @@ describe('Figure Recorder', () => {
         }, 0]);
         expect(recorder.states.diffs[5]).toEqual([5, '__base', {
           diff: {
-            '.elements.elements.a.lastDrawTransform.state[2].state[1]': 2,
             '.elements.elements.a.transform.state[2].state[1]': 2,
             '.stateTime': 15,
             '.lastDrawTime': 14,
@@ -831,7 +814,6 @@ describe('Figure Recorder', () => {
         }, 0]);
         expect(recorder.states.diffs[3]).toEqual([3, '__base', {
           diff: {
-            '.elements.elements.a.lastDrawTransform.state[2].state[1]': 5,
             '.elements.elements.a.transform.state[2].state[1]': 5,
             '.stateTime': 22.5,
             '.lastDrawTime': 21.5,
@@ -839,7 +821,6 @@ describe('Figure Recorder', () => {
         }, 0]);
         expect(recorder.states.diffs[4]).toEqual([4, '__base', {
           diff: {
-            '.elements.elements.a.lastDrawTransform.state[2].state[1]': 5,
             '.elements.elements.a.transform.state[2].state[1]': 5,
             '.stateTime': 23.5,
             '.lastDrawTime': 22.5,
@@ -847,7 +828,6 @@ describe('Figure Recorder', () => {
         }, 0]);
         expect(recorder.states.diffs[5]).toEqual([5, '__base', {
           diff: {
-            '.elements.elements.a.lastDrawTransform.state[2].state[1]': 5,
             '.elements.elements.a.transform.state[2].state[1]': 5,
             '.stateTime': 24.5,
             '.lastDrawTime': 23.5,
@@ -855,7 +835,6 @@ describe('Figure Recorder', () => {
         }, 0]);
         expect(recorder.states.diffs[6]).toEqual([6, '__base', {
           diff: {
-            '.elements.elements.a.lastDrawTransform.state[2].state[1]': 1.6,
             '.elements.elements.a.transform.state[2].state[1]': 1.6,
             '.stateTime': 25.5,
             '.lastDrawTime': 24.5,
@@ -1427,7 +1406,6 @@ describe('Figure Recorder', () => {
         [0, '__base', {}, 0],
         [1, '__base', {
           diff: {
-            '.elements.elements.line.lastDrawTransform.state[3].state[2]': 1,
             '.elements.elements.line.transform.state[3].state[2]': 1,
             '.stateTime': 11,
           },
@@ -1472,8 +1450,6 @@ describe('Figure Recorder', () => {
         ref1: {
           diff: {
             diff: {
-              '.elements.elements.line.lastDrawTransform.state[3].state[1]': 1,
-              '.elements.elements.line.lastDrawTransform.state[3].state[2]': 2,
               '.elements.elements.line.transform.state[3].state[1]': 1,
               '.elements.elements.line.transform.state[3].state[2]': 2,
               '.stateTime': 12,
@@ -1486,15 +1462,12 @@ describe('Figure Recorder', () => {
         [0, '__base', {}, 0],
         [1, '__base', {
           diff: {
-            '.elements.elements.line.lastDrawTransform.state[3].state[2]': 1,
             '.elements.elements.line.transform.state[3].state[2]': 1,
             '.stateTime': 11,
           },
         }, 0],
         [2, '__base', {
           diff: {
-            '.elements.elements.line.lastDrawTransform.state[3].state[1]': 1,
-            '.elements.elements.line.lastDrawTransform.state[3].state[2]': 2,
             '.elements.elements.line.transform.state[3].state[1]': 1,
             '.elements.elements.line.transform.state[3].state[2]': 2,
             '.stateTime': 12,
@@ -1502,7 +1475,6 @@ describe('Figure Recorder', () => {
         }, 0],
         [3, 'ref1', {
           diff: {
-            '.elements.elements.line.lastDrawTransform.state[3].state[2]': 3,
             '.elements.elements.line.transform.state[3].state[2]': 3,
             '.stateTime': 13,
           },
@@ -1541,7 +1513,6 @@ describe('Figure Recorder', () => {
         [0, '__base', {}, 0],
         [1, '__base', {
           diff: {
-            '.elements.elements.line.lastDrawTransform.state[3].state[2]': 1,
             '.elements.elements.line.transform.state[3].state[2]': 1,
             '.stateTime': 11,
           },
@@ -1584,8 +1555,6 @@ describe('Figure Recorder', () => {
         ref1: {
           diff: {
             diff: {
-              '.elements.elements.line.lastDrawTransform.state[3].state[1]': 1,
-              '.elements.elements.line.lastDrawTransform.state[3].state[2]': 2,
               '.elements.elements.line.transform.state[3].state[1]': 1,
               '.elements.elements.line.transform.state[3].state[2]': 2,
               '.stateTime': 12,
@@ -1598,15 +1567,12 @@ describe('Figure Recorder', () => {
         [0, '__base', {}, 0],
         [1, '__base', {
           diff: {
-            '.elements.elements.line.lastDrawTransform.state[3].state[2]': 1,
             '.elements.elements.line.transform.state[3].state[2]': 1,
             '.stateTime': 11,
           },
         }, 0],
         [2, '__base', {
           diff: {
-            '.elements.elements.line.lastDrawTransform.state[3].state[1]': 1,
-            '.elements.elements.line.lastDrawTransform.state[3].state[2]': 2,
             '.elements.elements.line.transform.state[3].state[1]': 1,
             '.elements.elements.line.transform.state[3].state[2]': 2,
             '.stateTime': 12,
@@ -1614,7 +1580,6 @@ describe('Figure Recorder', () => {
         }, 0],
         [3, 'ref1', {
           diff: {
-            '.elements.elements.line.lastDrawTransform.state[3].state[2]': 3,
             '.elements.elements.line.transform.state[3].state[2]': 3,
             '.stateTime': 13,
           },
@@ -1653,7 +1618,6 @@ describe('Figure Recorder', () => {
         [0, '__base', {}, 0],
         [1, '__base', {
           diff: {
-            '.elements.elements.line.lastDrawTransform.state[3].state[2]': 1,
             '.elements.elements.line.transform.state[3].state[2]': 1,
             '.stateTime': 11,
           },
@@ -2232,6 +2196,7 @@ describe('Figure Recorder', () => {
       };
 
       global.performance.now = () => 0;
+      recorder.precision = 8;
       recorder.startRecording();
       global.performance.now = () => 100;
       recorder.recordEvent('cursorMove', [1, 1]);
