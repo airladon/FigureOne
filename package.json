@@ -12,6 +12,8 @@
     "webpack": "webpack",
     "flow": "flow",
     "jest": "jest",
+    "jest-perf": "jest --runInBand --config jest.perf.config.js",
+    "jest-perf-debug": "node --inspect-brk=0.0.0.0 node_modules/.bin/jest --runInBand --config jest.perf.config.js",
     "lint": "eslint src",
     "flowcopysource": "flow-copy-source src package",
     "jest-debug": "node --inspect-brk=0.0.0.0 node_modules/.bin/jest --runInBand"

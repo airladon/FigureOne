@@ -1012,22 +1012,31 @@ describe('Seek', () => {
     });
     describe('No state change', () => {
       afterEach(() => {
-        recorder.startPlayback();
+        // recorder.startPlayback();
         expect(transforms()).toEqual(['playing', 2, [], [], [1], 0]);
         figure.mock.timeStep(0);
         expect(transforms()).toEqual(['playing', 2, [], [], [1], 0]);
       });
       test('Instant', () => {
         recorder.settings.play = 'instant';
+        recorder.startPlayback();
       });
       test('Animate', () => {
         recorder.settings.play = {
           how: 'animate',
           velocity: {},
         };
+        recorder.startPlayback();
       });
       test('Dissolve', () => {
         recorder.settings.play = 'dissolve';
+        recorder.startPlayback();
+        dissolveTester(
+          [2, [], [], [1]],
+          [2, [], [1], [1]],
+          [2, [], [], [1]],
+          0,
+        );
       });
     });
     describe('Position Change', () => {
