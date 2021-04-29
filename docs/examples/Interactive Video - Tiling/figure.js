@@ -73,7 +73,7 @@ const sideLength = 0.14;
 const a6 = sideLength / 2 / Math.tan(Math.PI / 6);   // apothem of hexagon
 const a12 = sideLength / 2 / Math.tan(Math.PI / 12); // apothem of dodecagon
 const a4 = sideLength / 2 / Math.tan(Math.PI / 4);   // apothem of square
-const halfAng = Math.PI * 2 / 12 / 2;
+const halfAng = Math.PI * 2 / 12 / 2;            // Half side angle of dodecagon
 
 // Helper function that greates a group of shapes within a common hexagon layout
 function polygons(
