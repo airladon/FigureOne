@@ -1,6 +1,6 @@
 /* eslint-disable camelcase, no-restricted-globals, no-param-reassign */
 /* globals figure, colTheta, colCot, colTan, colSin, colCos, colSec, colCsc,
-   colGrey, Fig, thin, thick, colText */
+   colGrey, Fig, thin, thick, colText, medium */
 
 // eslint-disable-next-line
 function layoutCirc() {
@@ -58,8 +58,30 @@ function layoutCirc() {
     name,
     method: 'collection',
     elements: [
-      { name: 'eye1', method: 'polygon', options: { line: { width: medium }, radius: 0.075, angleToDraw: 2, rotation: Math.PI / 2 - 1, sides: 100, position: [0, -0.043] } },
-      { name: 'eye2', method: 'polygon', options: { line: { width: medium }, radius: 0.075, angleToDraw: 2, rotation: Math.PI / 2 - 1 + Math.PI, sides: 100, position: [0, 0.043] } },
+      {
+        name: 'eye1',
+        method: 'polygon',
+        options: {
+          line: { width: medium },
+          radius: 0.075,
+          angleToDraw: 2,
+          rotation: Math.PI / 2 - 1,
+          sides: 100,
+          position: [0, -0.043],
+        },
+      },
+      {
+        name: 'eye2',
+        method: 'polygon',
+        options: {
+          line: { width: medium },
+          radius: 0.075,
+          angleToDraw: 2,
+          rotation: Math.PI / 2 - 1 + Math.PI,
+          sides: 100,
+          position: [0, 0.043],
+        },
+      },
       { name: 'center', method: 'polygon', options: { radius: 0.012, sides: 6 }},
       { name: 'strike', method: 'line', options: { p1: [-0.05, -0.05], p2: [0.05, 0.05], width: medium } },
     ],
@@ -78,8 +100,28 @@ function layoutCirc() {
     name,
     method: 'collection',
     elements: [
-      { name: 'lock', method: 'polygon', options: { position: [0, 0.035], line: { width: medium }, radius: 0.025, sides: 20, angleToDraw: Math.PI } },
-      { name: 'r', method: 'collections.rectangle', options: { width: 0.08, height: 0.07, corner: { radius: 0.005 }, line: { width: medium }, fill: [1, 1, 1, 1] } },
+      {
+        name: 'lock',
+        method: 'polygon',
+        options: {
+          position: [0, 0.035],
+          line: { width: medium },
+          radius: 0.025,
+          sides: 20,
+          angleToDraw: Math.PI,
+        },
+      },
+      {
+        name: 'r',
+        method: 'collections.rectangle',
+        options: {
+          width: 0.08,
+          height: 0.07,
+          corner: { radius: 0.005 },
+          line: { width: medium },
+          fill: [1, 1, 1, 1],
+        },
+      },
     ],
     options: {
       position,
@@ -654,7 +696,7 @@ function layoutCirc() {
   };
 
   const toggleButton = (customStatePropertyName) => {
-    if (circ.customState.selected === '') {
+    if (circ.customState.selected === '' || circ.customState.selected == null) {
       return;
     }
     const triElement = circ.getElement(circ.customState.selected);
@@ -805,7 +847,9 @@ function layoutCirc() {
   createScenario('preset5', triTanSec, [0, 1.3], 'theta', Math.PI / 2 + defaultAngle, true);
   createScenario('preset5', triCotCsc, [0, 1.3], 'theta', Math.PI + Math.PI / 2 - defaultAngle, false);
 
-  const animateScenario = (scenario, dissolveOut, locks, finalAngle = defaultAngle, showCircle = true) => {
+  function animateScenario(
+    scenario, dissolveOut, locks, finalAngle = defaultAngle, showCircle = true,
+  ) {
     figure.stop('freeze');
     showAll();
     circ.hide(dissolveOut);
@@ -841,7 +885,7 @@ function layoutCirc() {
       .start();
     selectTriangle('');
     setLocks(...locks);
-  };
+  }
 
   figure.fnMap.global.add('lockInput', () => { rotator.isTouchable = false; });
   figure.fnMap.global.add('unlockInput', () => { rotator.isTouchable = true; });
