@@ -78,7 +78,7 @@ function makeSlides() {
   nav.loadSlides(slides);
   nav.goToSlide(0);
 
-  figure.recorder.loadVideoTrack('./video-track.json');
+  figure.recorder.loadVideoTrack(window.location.href.replace(/\/tests.index.html|\/index.html|\/tests\/$|\/$/, '/video-track.json'));
   figure.recorder.loadAudioTrack(new Audio(window.location.href.replace(/\/tests.index.html|\/index.html|\/tests\/$|\/$/, '/audio-track.mp3')));
 }
 makeSlides();
