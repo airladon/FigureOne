@@ -209,11 +209,11 @@ describe('Seek', () => {
     test('Seek to end of animation, middle of pulse', () => {
       expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
       recorder.seek(3);
-      expect(transforms()).toEqual(['idle', 2, [], [2], [1], 0]);
+      expect(transforms()).toEqual(['idle', 2, [], [2], [2], 0]);
       // figure.mock.timeStep(0, frameStep);
       // expect(transforms()).toEqual(['idle', 2, [], [2], [2], 0]);
       recorder.startPlayback();
-      expect(transforms()).toEqual(['playing', 2, [2], [], [1], 1]);
+      expect(transforms()).toEqual(['playing', 2, [2], [], [2], 1]);
       figure.mock.timeStep(0.5, frameStep);
       expect(transforms()).toEqual(['playing', 2, [1.5], [], [1.5], 0.5]);
       figure.mock.timeStep(0.5, frameStep);
@@ -233,9 +233,9 @@ describe('Seek', () => {
     test('Seek to end of pulse', () => {
       expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
       recorder.seek(4);
-      expect(transforms()).toEqual(['idle', 2, [1], [], [1], 0]);
+      expect(transforms()).toEqual(['idle', 2, [], [], [1], 0]);
       recorder.startPlayback();
-      expect(transforms()).toEqual(['playing', 2, [1], [], [1], 0]);
+      expect(transforms()).toEqual(['playing', 2, [], [], [1], 0]);
       figure.mock.timeStep(0.5, frameStep);
       expect(transforms()).toEqual(['playing', 2, [], [], [1], 0]);
     });
@@ -367,8 +367,7 @@ describe('Seek', () => {
         recorder.settings.play = 'instant';
         recorder.startPlayback();
 
-        // The old drawTransform scale is not yet updated
-        expect(transforms()).toEqual(['playing', 0, [], [], [2], 0]);
+        expect(transforms()).toEqual(['playing', 0, [], [], [1], 0]);
         // So let's update it so the afterEach works
         figure.mock.timeStep(0);
         expect(transforms()).toEqual(['playing', 0, [], [], [1], 0]);
@@ -411,7 +410,7 @@ describe('Seek', () => {
         recorder.settings.play = 'instant';
         recorder.startPlayback();
         // The old drawTransform scale is not yet updated
-        expect(transforms()).toEqual(['playing', 0, [], [], [2], 0]);
+        expect(transforms()).toEqual(['playing', 0, [], [], [1], 0]);
         // So let's update it so the afterEach works
         figure.mock.timeStep(0);
         expect(transforms()).toEqual(['playing', 0, [], [], [1], 0]);
@@ -509,7 +508,7 @@ describe('Seek', () => {
         recorder.settings.play = 'instant';
         recorder.startPlayback();
         // The old drawTransform scale will be updated on the next draw
-        expect(transforms()).toEqual(['playing', 0, [], [], [2], 2]);
+        expect(transforms()).toEqual(['playing', 0, [], [], [1], 2]);
         figure.mock.timeStep(0);
         // expect(transforms()).toEqual(['playing', 0, [], [], [1], 2]);
       });
@@ -553,7 +552,7 @@ describe('Seek', () => {
         recorder.settings.play = 'instant';
         recorder.startPlayback();
         // drawTransforms will update on next draw frame
-        expect(transforms()).toEqual(['playing', 0, [], [], [2], 2]);
+        expect(transforms()).toEqual(['playing', 0, [], [], [1], 2]);
         figure.mock.timeStep(0);
         expect(transforms()).toEqual(['playing', 0, [], [], [1], 2]);
       });
@@ -648,7 +647,7 @@ describe('Seek', () => {
       test('Instant', () => {
         recorder.settings.play = 'instant';
         recorder.startPlayback();
-        expect(transforms()).toEqual(['playing', 0.5, [], [], [2], 1.5]);
+        expect(transforms()).toEqual(['playing', 0.5, [], [], [1], 1.5]);
         figure.mock.timeStep(0);
         expect(transforms()).toEqual(['playing', 0.5, [], [], [1], 1.5]);
       });
@@ -691,7 +690,7 @@ describe('Seek', () => {
       test('Instant', () => {
         recorder.settings.play = 'instant';
         recorder.startPlayback();
-        expect(transforms()).toEqual(['playing', 0.5, [], [], [2], 1.5]);
+        expect(transforms()).toEqual(['playing', 0.5, [], [], [1], 1.5]);
         figure.mock.timeStep(0);
         expect(transforms()).toEqual(['playing', 0.5, [], [], [1], 1.5]);
       });
@@ -789,7 +788,7 @@ describe('Seek', () => {
       test('Instant', () => {
         recorder.settings.play = 'instant';
         recorder.startPlayback();
-        expect(transforms()).toEqual(['playing', 1, [], [], [2], 2]);
+        expect(transforms()).toEqual(['playing', 1, [], [], [1], 2]);
         figure.mock.timeStep(0);
         expect(transforms()).toEqual(['playing', 1, [1], [], [1], 2]);
       });
@@ -832,7 +831,7 @@ describe('Seek', () => {
       test('Instant', () => {
         recorder.settings.play = 'instant';
         recorder.startPlayback();
-        expect(transforms()).toEqual(['playing', 1, [], [], [2], 2]);
+        expect(transforms()).toEqual(['playing', 1, [], [], [1], 2]);
         figure.mock.timeStep(0);
         expect(transforms()).toEqual(['playing', 1, [1], [], [1], 2]);
       });
@@ -865,7 +864,7 @@ describe('Seek', () => {
     beforeEach(() => {
       expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
       recorder.seek(3.5);
-      expect(transforms()).toEqual(['idle', 2, [], [1.5], [1], 0]);
+      expect(transforms()).toEqual(['idle', 2, [], [1.5], [1.5], 0]);
     });
     afterEach(() => {
       expect(transforms()).toEqual(['playing', 2, [1.5], [], [1.5], 0.5]);
@@ -878,7 +877,7 @@ describe('Seek', () => {
     });
     test('No state change', () => {
       recorder.startPlayback();
-      expect(transforms()).toEqual(['playing', 2, [1.5], [], [1], 0.5]);
+      expect(transforms()).toEqual(['playing', 2, [1.5], [], [1.5], 0.5]);
       figure.mock.timeStep(0);
       expect(transforms()).toEqual(['playing', 2, [1.5], [], [1.5], 0.5]);
     });
@@ -932,7 +931,7 @@ describe('Seek', () => {
       test('Instant', () => {
         recorder.settings.play = 'instant';
         recorder.startPlayback();
-        expect(transforms()).toEqual(['playing', 2, [1.5], [], [2.5], 0.5]);
+        expect(transforms()).toEqual(['playing', 2, [1.5], [], [1.5], 0.5]);
         figure.mock.timeStep(0);
       });
       test('Animate', () => {
@@ -972,7 +971,7 @@ describe('Seek', () => {
       test('Instant', () => {
         recorder.settings.play = 'instant';
         recorder.startPlayback();
-        expect(transforms()).toEqual(['playing', 2, [1.5], [], [2.5], 0.5]);
+        expect(transforms()).toEqual(['playing', 2, [1.5], [], [1.5], 0.5]);
         figure.mock.timeStep(0);
       });
       test('Animate', () => {
@@ -1002,7 +1001,7 @@ describe('Seek', () => {
     beforeEach(() => {
       expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
       recorder.seek(4);
-      expect(transforms()).toEqual(['idle', 2, [1], [], [1], 0]);
+      expect(transforms()).toEqual(['idle', 2, [], [], [1], 0]);
     });
     afterEach(() => {
       expect(transforms()).toEqual(['playing', 2, [], [], [1], 0]);
@@ -1014,7 +1013,7 @@ describe('Seek', () => {
     describe('No state change', () => {
       afterEach(() => {
         recorder.startPlayback();
-        expect(transforms()).toEqual(['playing', 2, [1], [], [1], 0]);
+        expect(transforms()).toEqual(['playing', 2, [], [], [1], 0]);
         figure.mock.timeStep(0);
         expect(transforms()).toEqual(['playing', 2, [], [], [1], 0]);
       });
@@ -1040,7 +1039,7 @@ describe('Seek', () => {
       test('Instant', () => {
         recorder.settings.play = 'instant';
         recorder.startPlayback();
-        expect(transforms()).toEqual(['playing', 2, [1], [], [1], 0]);
+        expect(transforms()).toEqual(['playing', 2, [], [], [1], 0]);
         figure.mock.timeStep(0);
         expect(transforms()).toEqual(['playing', 2, [], [], [1], 0]);
       });
@@ -1079,7 +1078,7 @@ describe('Seek', () => {
       test('Instant', () => {
         recorder.settings.play = 'instant';
         recorder.startPlayback();
-        expect(transforms()).toEqual(['playing', 2, [1], [], [2], 0]);
+        expect(transforms()).toEqual(['playing', 2, [], [], [1], 0]);
         figure.mock.timeStep(0);
       });
       test('Animate', () => {
@@ -1118,7 +1117,7 @@ describe('Seek', () => {
       test('Instant', () => {
         recorder.settings.play = 'instant';
         recorder.startPlayback();
-        expect(transforms()).toEqual(['playing', 2, [1], [], [2], 0]);
+        expect(transforms()).toEqual(['playing', 2, [], [], [1], 0]);
         figure.mock.timeStep(0);
       });
       test('Animate', () => {
