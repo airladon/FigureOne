@@ -8,6 +8,11 @@
     <link href='../../style.css' rel='stylesheet'>
     <link href='../examples.css' rel='stylesheet'>
     <link href='../../tutorials/15%20-%20Recorder%20Introduction/controls/controls.css' rel='stylesheet' rel='stylesheet'>
+    <style>
+      .example {
+        max-width: 1000px;
+      }
+    </style>
 </head>
 <body>
     <div id="header"></div>
@@ -18,7 +23,7 @@
 
       <p class="instructions">
           This video is interactive. You can interact with the shapes in the video at any time. When you do, the video will pause, so press play when you're ready to continue.
-        </p>
+      </p>
 
       <div class="wrapper wrapper_1_1">
           <div id="figureOneContainer" class="container container_1_1"></div>
@@ -32,10 +37,10 @@
     </div>
     <div id="footer"></div>
 
+    <!-- *************************************************************** -->
     <!-- **********    Choose local or remote package     *************** -->
-
+    <!-- *************************************************************** -->
     <!-- <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.6.1/figureone.min.js'></script> -->
-
     <script type="text/javascript" src='../../../package/index.js'></script>
     <!-- ***************************************************************** -->
 
@@ -43,13 +48,20 @@
     <script>fillHeader('Interactive Video - Arrange Shapes into a Tiling', 'Interactive Video - Tiling');</script>
     <script>fillFooter('..')</script>
 
+    <!-- *************************************************************** -->
     <!-- ***************    Example Specific Scripts     ***************** -->
-    <!-- <script type="text/javascript" src='./index.js'></script> -->
+    <!-- *************************************************************** -->
     <script type="text/javascript" src='./figure.js'></script>
+    <!-- *************************************************************** -->
 
-    <!-- ***************        Video Controls           ***************** -->
+    <!-- *************************************************************** -->
+    <!-- ***************        Playback Control         *************** -->
+    <!-- *************************************************************** -->
     <script type="text/javascript" src='../../tutorials/15%20-%20Recorder%20Introduction/controls/player.js'></script>
-    <!-- Uncomment this if recording is needed -->
+
+    <!-- *************************************************************** -->
+    <!-- ***************       Recording Control         *************** -->
+    <!-- *************************************************************** -->
     <!-- <script type="text/javascript" src='../../tutorials/15%20-%20Recorder%20Introduction/controls/recorder.js'></script> -->
   </body>
 </html>

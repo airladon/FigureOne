@@ -232,6 +232,7 @@ function getMostRecentForTime(
  * - `preparingToPause`
  * - `playbackStopped`
  * - `seek`
+ * - `recordingStatesComplete` - recording completed and recorded states ready
  *
  * @class
  *
@@ -764,6 +765,7 @@ class Recorder {
             }
           }
         }
+        this.subscriptions.publish('recordingStatesComplete');
       }
       this.duration = this.calcDuration();
     }

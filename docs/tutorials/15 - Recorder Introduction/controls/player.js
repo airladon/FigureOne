@@ -67,7 +67,7 @@ function addPlayer() {
     const percentTime = Math.min(time / recorder.duration, 1);
     if (fromRecorder === false || (fromRecorder && recorder.state !== 'idle')) {
       seekCircle.style.left = `${Math.floor(percentTime * seekWidth)}px`;
-    } 
+    }
     timeLabel.innerHTML = `${timeToStr(Math.floor(time))} / ${timeToStr(recorder.duration)}`;
   }
 
@@ -76,6 +76,7 @@ function addPlayer() {
   recorder.subscriptions.add('timeUpdate', t => setTime(t[0], true));
   recorder.subscriptions.add('seek', t => setTime(t[0], false));
   recorder.subscriptions.add('durationUpdated', () => setTime());
+  recorder.subscriptions.add('recordingStatesComplete', () => setTime(recorder.getCurrentTime(), false));
 
   /*
   ..######..########.########.##....##
