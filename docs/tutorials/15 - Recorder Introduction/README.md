@@ -64,6 +64,8 @@ This tutorial covers a simple interactive video that describes and demonstrates 
 
 After an interactive figure is made, mouse movements and clicks are recorded in sync with an audio track.
 
+After going through this tutorial, check out ![Example - Tiling](../../examples/Interactive%20Video%20-%20-Tiling) for a similar example but with a more rich figure. Similar to this tutorial, the example is just a figure with some manually recorded touch events and an audio track.
+
 #### Figure
 
 `figure.js` contains the code for making the interactive figure.
