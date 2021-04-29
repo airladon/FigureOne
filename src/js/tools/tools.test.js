@@ -1172,6 +1172,54 @@ describe('ObjectTracker', () => {
     const getObj = tracker.getFromIndex(0);
     expect(getObj).toEqual({ a: 1, b: 3, c: 1 });
   });
+  test('Removing array end element, and chanigng mid element', () => {
+    const tracker = new tools.ObjectTracker();
+    const ref = { a: [] };
+    tracker.setBaseReference(ref);
+
+    const ref1 = { a: [1, 2, 3] };
+    tracker.addReference(ref1, 'ref1', '__base');
+    tracker.add(1, { a: [1, 4] }, 'ref1');
+
+    const getObj = tracker.getFromIndex(0);
+    expect(getObj).toEqual({ a: [1, 4, undefined] });
+  });
+  test('Removing array middle element', () => {
+    const tracker = new tools.ObjectTracker();
+    const ref = { a: [] };
+    tracker.setBaseReference(ref);
+
+    const ref1 = { a: [1, 2, 3] };
+    tracker.addReference(ref1, 'ref1', '__base');
+    tracker.add(1, { a: [1, 3] }, 'ref1');
+
+    const getObj = tracker.getFromIndex(0);
+    expect(getObj).toEqual({ a: [1, 3, undefined] });
+  });
+  test('Removing array first two elements', () => {
+    const tracker = new tools.ObjectTracker();
+    const ref = { a: [] };
+    tracker.setBaseReference(ref);
+
+    const ref1 = { a: [1, 2, 3] };
+    tracker.addReference(ref1, 'ref1', '__base');
+    tracker.add(1, { a: [3] }, 'ref1');
+
+    const getObj = tracker.getFromIndex(0);
+    expect(getObj).toEqual({ a: [3, undefined, undefined] });
+  });
+  test('Adding array first elements', () => {
+    const tracker = new tools.ObjectTracker();
+    const ref = { a: [] };
+    tracker.setBaseReference(ref);
+
+    const ref1 = { a: [1, 2, 3] };
+    tracker.addReference(ref1, 'ref1', '__base');
+    tracker.add(1, { a: [0, 1, 2, 3] }, 'ref1');
+
+    const getObj = tracker.getFromIndex(0);
+    expect(getObj).toEqual({ a: [0, 1, 2, 3] });
+  });
   test('Create Object', () => {
     const tracker = new tools.ObjectTracker();
     const ref = { a: 1, b: 1 };

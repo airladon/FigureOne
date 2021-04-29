@@ -889,7 +889,11 @@ class Figure {
       //   debugger;
       // }
       setState(this, state);
+      this.beingMovedElements = this.beingMovedElements.filter(e => Object.keys(e).length > 0);
+      this.beingTouchedElements = this.beingTouchedElements.filter(e => Object.keys(e).length > 0);
+      this.subscriptions.add('stateSetInit');
       this.elements.setTimeDelta(this.globalAnimation.now() / 1000 - this.stateTime);
+      this.elements.updateDrawTransforms([this.spaceTransforms.figureToGL]);
       this.elements.stateSet();
       this.elements.setPointsFromDefinition();
       this.elements.setPrimitiveColors();

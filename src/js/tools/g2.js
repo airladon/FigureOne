@@ -6030,8 +6030,8 @@ function decelerateTransform(
     duration = deltaTime;
   }
   return {
-    transform: new Transform(newOrder),
-    velocity: new Transform(newVOrder),
+    transform: new Transform(newOrder, transform.name),
+    velocity: new Transform(newVOrder, transform.name),
     duration,
   };
 }

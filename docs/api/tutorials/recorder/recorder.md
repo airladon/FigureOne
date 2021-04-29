@@ -105,3 +105,13 @@ FigureOne uses WebGL for hardware accelarated graphics performance and so comple
 FigureOne is a javascript library that can be used in the browser, or in app frameworks that support javascript modules.
 
 On iOS devices, Safari allows traditional video content to fully cover the screen (without menu bars) in landscape mode. This isn't available for other web content, and so for FigureOne to emulate a video experience in the browser then either the video height needs to be reduced, or the top portion of the video should have limited interactivity (as touching the top of the screen in landscape can show the menus).
+
+
+#### Important Note
+
+To significanty reduce the size of the seek states, states are generally saved as a delta to some reference state which is generated when the recorder starts, or when triggered with `addCurrentStateAsReference`.
+
+>Important note: within a state, if an array length is less than the length of the corresponding array in the reference state, then it will be padded with `undefined` elements to be the same length as in the reference.
+
+This isn't ideal, and will be fixed in a future release.
+

@@ -1223,8 +1223,8 @@ class FigureElement {
         'dimColor',
         'defaultColor',
         'transform',
-        'lastDrawTransform',
-        'parentTransform',
+        // 'lastDrawTransform',
+        // 'parentTransform',
         'isShown',
         'isMovable',
         'isTouchable',
@@ -1835,9 +1835,6 @@ class FigureElement {
    * @param {Transform} transform
    */
   setTransform(transform: Transform, publish: boolean = true): void {
-    // if (this.getPath() === 'rightTri.movePad') {
-    //   console.log(transform.t())
-    // }
     // if (this.name === 'polygond6_5' && window.qwer === 1) {
     //   console.log('setting', transform.t())
     //   // console.trace();
