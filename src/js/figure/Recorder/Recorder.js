@@ -1373,8 +1373,6 @@ ${cursorData}
   }
 
   setToTime(timeIn: number, force: boolean = false) {
-    // const t = []
-    // t.push(performance.now())
     if (timeIn === 0 && this.states.diffs.length > 0) {
       this.stateIndex = 0;
     } else {  // $FlowFixMe
@@ -1396,17 +1394,12 @@ ${cursorData}
     // and add them to an eventsToExecuteArray
     const eventsToSetBeforeState = [];
     const eventsToSetAfterState = [];
-    // const eventNames = Object.keys(this.events).filter((eventName) => {
-    //   // if (this.useAutoEvents) {
-    //   //   return true;
-    //   // }
-    //   // if (eventName.startsWith('_auto')) {
-    //   //   return false;
-    //   // }
-    //   return true;
-    // });
+
     const eventNames = Object.keys(this.events);
     eventNames.forEach((eventName) => {
+      if (eventName !== 'slide' && eventName !== '_autoSlide') {
+        return;
+      }
       const event = this.events[eventName];
       if (event.setOnSeek === false) {
         return;
@@ -1452,18 +1445,11 @@ ${cursorData}
     const playEvents = (events) => {
       events.forEach((event) => {
         const [eventName, index] = event;
-        // if (eventName === 'slide') {
-        //   debugger;
-        // }
         this.setEvent(eventName, index);
       });
     };
-    // t.push(performance.now())
-    // console.log('before')
-    // console.log(eventsToSetBeforeState)
-    // console.log(this.stateIndex)
 
-    // playEvents(eventsToSetBeforeState);
+    playEvents(eventsToSetBeforeState);
 
     if (this.stateIndex !== -1) {
       this.setState(this.stateIndex);
