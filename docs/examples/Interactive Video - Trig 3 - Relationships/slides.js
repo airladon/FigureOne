@@ -22,7 +22,7 @@ function makeSlides() {
     options: {
       nextButton: { position: [3.8, 0], width: 0.2, height: 0.2 },
       prevButton: { position: [-3.8, 0], width: 0.2, height: 0.2 },
-      equation: ['eqn', 'similar.eqn', 'circ.eqn'],
+      equation: ['eqn', 'similar.eqn'],
     },
   });
   const slides = [];
@@ -44,7 +44,7 @@ function makeSlides() {
   slides.push({
     scenario: 'reset',
     enterState: 'reset',
-    showCommon: 'circ',
+    showCommon: 'geom',
     exec: [
       ['0:19.8', 'pulseSinTri'],
       ['0:19.8', 'pulseTanTri'],

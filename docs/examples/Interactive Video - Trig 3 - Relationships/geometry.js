@@ -97,8 +97,8 @@ function layoutCirc() {
     },
     mods: {
       custom: {
-        visible: () => figure.elements._circ.getElement(name)._strike.hide(),
-        hidden: () => figure.elements._circ.getElement(name)._strike.show(),
+        visible: () => figure.elements._geom.getElement(name)._strike.hide(),
+        hidden: () => figure.elements._geom.getElement(name)._strike.show(),
       },
     },
   });
@@ -136,8 +136,8 @@ function layoutCirc() {
     },
     mods: {
       custom: {
-        lock: () => figure.elements._circ.getElement(name)._lock.setRotation(0),
-        unlock: () => figure.elements._circ.getElement(name)._lock.setRotation(0.7),
+        lock: () => figure.elements._geom.getElement(name)._lock.setRotation(0),
+        unlock: () => figure.elements._geom.getElement(name)._lock.setRotation(0.7),
       },
     },
   });
@@ -297,8 +297,8 @@ function layoutCirc() {
   }
 
   // Add all the elements to the figure
-  const [circ] = figure.add({
-    name: 'circ',
+  const [geom] = figure.add({
+    name: 'geom',
     method: 'collection',
     elements: [
       // When 'background' is touched, any selected triangle will be
@@ -459,7 +459,7 @@ function layoutCirc() {
   });
 
   // Get figure elements to be used in logic
-  const get = list => circ.getElements(list);
+  const get = list => geom.getElements(list);
   const [rotator, theta] = get(['rotator', 'theta']);
   const [triCotCsc] = get(['triCotCsc']);
   const [triSinCos] = get(['triSinCos']);
@@ -713,7 +713,7 @@ function layoutCirc() {
 
   // When the flip button is clicked, flip the selected triangle
   flipButton.onClick = () => {
-    const triElement = circ.getElement(circ.customState.selected);
+    const triElement = geom.getElement(geom.customState.selected);
     const target = [triElement.getScale().x < 0 ? 1 : -1, 1];
     triElement.stop('freeze');
     triElement.animations.new().scale({ target, duration: 2 }).start();
@@ -754,10 +754,10 @@ function layoutCirc() {
   // When the lock angle button is clicked cycle through the different
   // angles that can be locked
   lockAngle.onClick = () => {
-    if (circ.customState.selected === '') {
+    if (geom.customState.selected === '') {
       return;
     }
-    const triElement = circ.getElement(circ.customState.selected);
+    const triElement = geom.getElement(geom.customState.selected);
     if (triElement.customState.lock === 'theta') {
       triElement.customState.lock = 'right';
     } else if (triElement.customState.lock === 'right') {
@@ -771,10 +771,10 @@ function layoutCirc() {
   // For buttons that have binary states, toggle their state and updated
   // the associated customState property
   const toggleButton = (customStatePropertyName) => {
-    if (circ.customState.selected === '' || circ.customState.selected == null) {
+    if (geom.customState.selected === '' || geom.customState.selected == null) {
       return;
     }
-    const triElement = circ.getElement(circ.customState.selected);
+    const triElement = geom.getElement(geom.customState.selected);
     if (triElement.customState[customStatePropertyName]) {
       triElement.customState[customStatePropertyName] = false;
     } else {
@@ -819,14 +819,14 @@ function layoutCirc() {
     moveTanSec.setOpacity(0);
     moveCotCsc.setOpacity(0);
     if (triangle === '') {
-      circ.hide(['lockAngle', 'flip', 'lockHyp', 'unitButton', 'thetaButton', 'viewTheta', 'viewUnit', 'angleLock', 'hypLock']);
-      circ.customState.selected = '';
+      geom.hide(['lockAngle', 'flip', 'lockHyp', 'unitButton', 'thetaButton', 'viewTheta', 'viewUnit', 'angleLock', 'hypLock']);
+      geom.customState.selected = '';
       return;
     }
-    const element = circ.getElement(triangle);
+    const element = geom.getElement(triangle);
     element._movePad.setOpacity(1);
-    circ.customState.selected = triangle.name;
-    circ.show(['lockAngle', 'flip', 'lockHyp', 'unitButton', 'thetaButton', 'viewTheta', 'viewUnit', 'angleLock', 'hypLock']);
+    geom.customState.selected = triangle.name;
+    geom.show(['lockAngle', 'flip', 'lockHyp', 'unitButton', 'thetaButton', 'viewTheta', 'viewUnit', 'angleLock', 'hypLock']);
     updateButtons(element);
   };
 
@@ -839,7 +839,7 @@ function layoutCirc() {
   // before other figure elements update, as when the button elements get
   // updated they will need to know which triangle is selected (if any)
   figure.subscriptions.add('stateSetInit', () => {
-    selectTriangle(circ.customState.selected);
+    selectTriangle(geom.customState.selected);
   });
 
   // If the background element is clicked, then deselect all triangles
@@ -978,7 +978,7 @@ function layoutCirc() {
   ) {
     figure.stop('freeze');
     showAll();
-    circ.hide(dissolveOut);
+    geom.hide(dissolveOut);
     const velocity = new Fig.Transform().scale(0.5, 0.5).rotate(0.5).translate(0.5, 0.5);
     const duration1 = Fig.tools.g2.getMaxTimeFromVelocity(
       triSinCos.transform._dup(), triSinCos.getScenarioTarget(scenario).transform, velocity, 0,
@@ -997,7 +997,7 @@ function layoutCirc() {
     }
     const duration = Math.min(3, Math.max(duration1, duration2, duration3, duration4));
     figure.fnMap.exec('lockInput');
-    circ.animations.new()
+    geom.animations.new()
       .inParallel([
         rotator.animations.rotation({ target: defaultAngle, duration }),
         triSinCos.animations.scenario({ target: scenario, duration }),
@@ -1103,7 +1103,7 @@ function layoutCirc() {
   figure.fnMap.global.add('reset', () => {
     showAll();
     rotator.setRotation(defaultAngle);
-    circ.setScenarios('reset');
+    geom.setScenarios('reset');
     circle.hide();
     setLocksAndLabels(triSinCos, 'theta', false, true, true);
     setLocksAndLabels(triTanSec, 'theta', false, true, true);
@@ -1127,7 +1127,7 @@ function layoutCirc() {
   add('pulseTanTri', () => triTanSec.pulse({ duration: 1.5, scale: 1.2 }));
   add('pulseCotTri', () => triCotCsc.pulse({ duration: 1.5, scale: 1.2 }));
   add('pulseRightAngles', () => {
-    circ.pulse({
+    geom.pulse({
       elements: ['triSinCos.right', 'triTanSec.right', 'triCotCsc.right'], duration: 1.5, scale: 2.5, xAlign: 'right', yAlign: 'bottom',
     });
   });
