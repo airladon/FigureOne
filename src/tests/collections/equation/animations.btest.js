@@ -3,6 +3,6 @@ const { testBrowserAnimation } = require('../../browserAnimationTester');
 testBrowserAnimation(
   'Collections: Angle - Animations',
   `file:/${__dirname}/animations.html`,
-  6,
+  8,
   0.25,
 );
