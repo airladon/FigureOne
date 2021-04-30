@@ -1252,10 +1252,6 @@ export class Equation extends FigureElementCollection {
       if (o.totalDuration != null) {
         o.duration = o.totalDuration;
       }
-      // console.log(o)
-      // if (o.target === 'cotangent') {
-      //   debugger;
-      // }
       o.callback = '_goToForm';
       o.delay = 0;
       o.setToEnd = '_showForm';
@@ -1266,32 +1262,38 @@ export class Equation extends FigureElementCollection {
       name: 'goToForm',
     });
 
-    // TODO this needs to be updated for recording
+    this.fnMap.add('_nextForm', (percentage: number, customProperties: Object) => {
+      this.nextForm(joinObjects({ ifAnimating: { cancelGoTo: false } }, customProperties, {
+        callback: null,
+      }));
+      return this.getRemainingAnimationTime(['_Equation', '_EquationColor']);
+    });
     this.animations.nextForm = (...opt) => {
       const o = joinObjects({}, {
         element: this,
-        duration: 1,  // need a non zero duration so trigger can incorporate the new duration
+        duration: 1,
       }, ...opt);
       if (o.callback != null) {
         o.done = o.callback;
       }
-      o.callback = () => {
-        this.nextForm(joinObjects({}, o, {
-          callback: null,
-          delay: 0,
-        }));
-        return this.getRemainingAnimationTime(['_Equation', '_EquationColor']);
+      o.customProperties = {
+        animate: o.animate,
+        delay: o.delay,
+        dissolveOutTime: o.dissolveOutTime,
+        duration: o.duration,
+        blankTime: o.blankTime,
+        dissolveInTime: o.dissolveInTime,
+        prioritizeFormDuration: o.prioritizeFormDuration,
+        fromWhere: o.fromWhere,
+        ifAnimating: o.ifAnimating,
+        callback: o.callback,
       };
-      let nextIndex = this.getFormIndex(this.getCurrentForm());
-      if (nextIndex > -1) {
-        nextIndex += 1;
-        if (nextIndex > this.eqn.currentFormSeries.length - 1) {
-          nextIndex = 0;
-        }
+      if (o.totalDuration != null) {
+        o.duration = o.totalDuration;
       }
-      o.setToEnd = () => {
-        this.showForm(this.eqn.forms[this.eqn.currentFormSeries[nextIndex]]);
-      };
+      o.callback = '_nextForm';
+      o.delay = 0;
+      o.setToEnd = '_showForm';
       return new TriggerAnimationStep(o);
     };
     this.animations.customSteps.push({
