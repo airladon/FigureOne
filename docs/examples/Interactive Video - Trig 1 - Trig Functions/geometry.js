@@ -1,6 +1,17 @@
 /* eslint-disable camelcase */
 /* globals figure, color2, colGrey, colOpp, colAdj, colHyp, colTheta, Fig */
 
+// The main movable triangle consists of:
+// * triangle with labeled sides and angles
+// * movePad - invisible pad on top vertex of triangle that user can move to
+//   change triangle shape
+// * rotLine - invisible pad on hypotenuse of triangle that user can rotate to
+//   change angle theta.
+//
+// The rotLine and movePad are coupled. Only one can be touched at any time, and
+// its movement will move the other.
+
+
 // eslint-disable-next-line
 function layoutRight() {
   const sideLabel = (value, name, name2, color = color2) => ({
@@ -172,6 +183,8 @@ function layoutRight() {
   const [movePad] = rightTri.getElements(['movePad']);
   const [rotLine] = rightTri.getElements(['rotLine']);
 
+  // When the right angle triangle changes shape, the side labels and associated
+  // equation ratio values need to be updated.
   const update = () => {
     const { x, y } = movePad.getPosition();
     const radius = Math.sqrt(x ** 2 + y ** 2);
@@ -186,6 +199,7 @@ function layoutRight() {
     const rSin = rad * Math.sin(a);
     const rCos = rad * Math.cos(a);
 
+    // update side and angle labels
     if (tri._side01.label.eqn.getCurrentForm().name === 'value') {
       tri._side01.label.eqn.updateElementText({ v: rad.toFixed(4) }, 'none');
     }
@@ -199,6 +213,8 @@ function layoutRight() {
       tri._angle2.label.eqn.updateElementText({ v: `${Fig.tools.math.round(r * 180 / Math.PI, 0)}\u00b0` });
     }
 
+    // If theta is too close to 0 or 90 degrees, then rearrange or hide some
+    // labels
     tri._angle2.label.location = 'outside';
     if (a < 0.3 || a > 1.34) {
       if (a < 0.3) {
@@ -221,6 +237,7 @@ function layoutRight() {
       tri._angle0.setOpacity(1);
     }
 
+    // update the equation ratio values for current triangle
     const eqn = figure.getElement('eqn');
     if (eqn.getElement('val1').isShown) {
       eqn.updateElementText({
@@ -233,6 +250,9 @@ function layoutRight() {
       });
     }
   };
+
+  // When the move pad is updated, then update the rotLine position to be
+  // aligned with the new hypotenuse
   movePad.fnMap.add('updateMovePad', () => {
     if (!rightTri.isShown) {
       return;
@@ -251,9 +271,13 @@ function layoutRight() {
     rotLine.custom.updatePoints({ length: Math.max(hyp, minHypotenuse) });
     update();
   });
+  // Update the movePad whenever its transform is updated or a new state is set
+  // (from the recorder seeking to a new state)
   movePad.subscriptions.add('setTransform', 'updateMovePad');
   movePad.subscriptions.add('setState', 'updateMovePad');
 
+  // When the rotLine is updated, use it to move the movePad which will then
+  // update the triangle
   rotLine.fnMap.add('updateRotLine', () => {
     const { x, y } = movePad.transform.t();
     const hyp = Math.sqrt(x ** 2 + y ** 2);
@@ -262,6 +286,8 @@ function layoutRight() {
   });
   rotLine.subscriptions.add('setTransform', 'updateRotLine');
   rotLine.subscriptions.add('setState', 'updateRotLine');
+
+  // Animate the rotLine to a default angle
   figure.fnMap.global.add('rotateTri', () => {
     rotLine.animations.new()
       .rotation({ target: Math.PI / 4, duration: 1 })
@@ -270,6 +296,7 @@ function layoutRight() {
 
   const [side01, side12, side20, angle2] = tri.getElements(['side01', 'side12', 'side20', 'angle2', 'angle0']);
 
+  // Helper function to set a triangle side equation form
   const setEqn = (element, form, forceShow) => {
     if ((element._label.isShown && element.isShown) || forceShow) {
       element.label.eqn.showForm(form);
@@ -277,15 +304,20 @@ function layoutRight() {
       element.label.eqn.setCurrentForm(form);
     }
   };
+
+  // Helper function that sets all triangle sides to the same equation form
   const sidesShowForm = (form, forceShow = false) => {
     setEqn(side01, form, forceShow);
     setEqn(side12, form, forceShow);
     setEqn(side20, form, forceShow);
   };
+
+  // Helper function that sets a triangle angle to an equation form
   const angleShowForm = (form, forceShow = false) => {
     setEqn(angle2, form, forceShow);
   };
 
+  // Animate all triangle side/angle labels from values to names
   const animateToNames = () => {
     tri.animations.new()
       .inParallel([
@@ -307,23 +339,33 @@ function layoutRight() {
       ])
       .start();
   };
+
+  // Set all triangle side/angle to names
   const toNames = () => {
     sidesShowForm('name');
     angleShowForm('name');
     update();
   };
+
+  // Set all triangle side/angle to values
   const toValues = () => {
     sidesShowForm('value');
     angleShowForm('value');
     update();
   };
+
+  // Helper function that pulses a triangle angle
   const pulseAngle = (element, scale = 1.7) => element.pulseAngle({
     curve: { scale }, label: { scale }, duration: 1.5,
   });
+
+  // Helper function that pulses a triangle right angle
   const pulseRight = () => tri.getElement('angle1').pulse({
     xAlign: 'right', yAlign: 'bottom', scale: 2, duration: 1.5,
   });
 
+  // Various pulsing and animating functions that will be called during the
+  // video
   figure.fnMap.global.add('triAnimateToNames', animateToNames.bind(this));
   figure.fnMap.global.add('triToNames', toNames.bind(this));
   figure.fnMap.global.add('triPulseTheta', () => pulseAngle(angle2));
@@ -344,6 +386,8 @@ function layoutRight() {
     tri1._angle2.pulseAngle({ curve: 1.5, label: { scale: 1.5 }, duration: 1.5 });
     tri._angle2.pulseAngle({ curve: 1.5, label: { scale: 1.5 }, duration: 1.5 });
   });
+
+  // Setup the triangle - often used as an enterState in the SlideNavigator
   figure.fnMap.global.add('triSetup', (p, namesOrValues, touchable = false) => {
     movePad.setPosition(p);
     if (namesOrValues === 'names') {
@@ -358,6 +402,9 @@ function layoutRight() {
       rightTri.hasTouchableElements = false;
     }
   });
+
+  // Animate the movePad to a default location - effectively animates the
+  // triangle to a default size and shape
   figure.fnMap.global.add('triResetPad', () => {
     movePad.animations.new()
       .position({ target: [2, 1.453], duration: 1 })

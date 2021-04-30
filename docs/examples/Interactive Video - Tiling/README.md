@@ -4,7 +4,7 @@ An interactive video of a tiling exercise. Play the video. If you interact with 
 
 ### How to view
 
-The example is hosted [here](https://airladon.github.io/FigureOne/examples/Tiling/index.html).
+The example is hosted [here](https://airladon.github.io/FigureOne/examples/Interactive%20Video%20-%20Tiling/index.html).
 
 If you want to view it locally however, it is important to know that loading local files into a html can be prevented by web browser security settings, this example needs to be loaded from a web server.
 
@@ -32,7 +32,7 @@ You can then open a browser and go to `http://localhost:8080/docs/examples/Tilin
 
 ### Explanation
 
-This FigureOne interactive video is similar to tutorials 15 in that it only has an interactive figure and some recorded touch events.
+This FigureOne interactive video is similar to [tutorial 15](../../tutorials/15%20-%20Recorder%20Introduction) in that it only has an interactive figure and some recorded touch events.
 
 The main challenge in understanding the example may be the logic unrelated to FigureOne that sets up the solution scenario for the shapes.
 
