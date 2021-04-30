@@ -1,6 +1,6 @@
 # FigureOne
 
-Draw, animate and interact with shapes, text, plots and equations.
+Draw, animate and interact with shapes, text, plots and equations. Create interactive slide shows, and interactive videos.
 
 The library used to draw interactive slides at <a href="https://www.thisiget.com">thisiget.com</a>.
 
