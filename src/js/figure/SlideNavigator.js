@@ -868,7 +868,8 @@ export default class SlideNavigator {
 
   // Animations pass cancelled and force. As we need the force information, we
   // need to define cancelled even though we won't use it
-  transitionDone(cancelled: boolean, force: 'freeze' | 'complete' | null = 'complete') {
+  // eslint-disable-next-line no-unused-vars
+  transitionDone(cancelled: boolean = false, force: 'freeze' | 'complete' | null = 'complete') {
     // console.log('transition done')
     // console.log(this.collection.figure.globalAnimation.now())
     if (force !== 'freeze') {
@@ -1116,7 +1117,7 @@ export default class SlideNavigator {
    * @param {'next' | 'prev' | number} from this should generally not be used
    * and will be set automatically
    */
-  goToSlide(slideIndex: number, from?: 'next' | 'prev' | number) {
+  goToSlide(slideIndex: number, from: 'next' | 'prev' | number | null = null) {
     this.subscriptions.publish('goToSlide', slideIndex);
     if (this.slides == null || this.slides.length === 0) {
       return;
@@ -1211,7 +1212,7 @@ export default class SlideNavigator {
    * transition will instantly complete, setState and leaveStates called and the
    * next slide will be progressed to.
    */
-  nextSlide(ignoreTransition: boolean = false, recordSlide: boolean = true) {
+  nextSlide(ignoreTransition: boolean = false) {
     const nextSlideIndex = (this.currentSlideIndex + 1) % this.slides.length;
     if (this.inTransition) {
       this.inTransition = false;
@@ -1220,7 +1221,7 @@ export default class SlideNavigator {
         return;
       }
     }
-    this.goToSlide(nextSlideIndex, null, recordSlide);
+    this.goToSlide(nextSlideIndex, null);
     this.collection.animateNextFrame();
   }
 
