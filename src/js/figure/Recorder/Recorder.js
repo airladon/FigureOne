@@ -335,7 +335,7 @@ class Recorder {
     this.eventsCache = {};
     this.reset();
     // default recording values
-    this.precision = 11;
+    this.precision = 8;
     this.stateTimeStep = 1;
     this.audio = null;
     // this.playbackStoppedCallback = null;
@@ -1397,9 +1397,9 @@ ${cursorData}
 
     const eventNames = Object.keys(this.events);
     eventNames.forEach((eventName) => {
-      if (eventName !== 'slide' && eventName !== '_autoSlide') {
-        return;
-      }
+      // if (eventName !== 'slide' && eventName !== '_autoSlide') {
+      //   return;
+      // }
       const event = this.events[eventName];
       if (event.setOnSeek === false) {
         return;
@@ -1416,9 +1416,9 @@ ${cursorData}
       for (let i = firstIndex; i <= lastIndex; i += 1) {
         const [eventTime, , timeCount] = event.list[i];
         if (
-          this.stateIndex === -1
-          || eventTime < stateTime
-          || (eventTime === stateTime && timeCount <= stateTimeCount)
+          (this.stateIndex === -1 || eventTime < stateTime)
+          && (eventName === 'slide' || eventName === '_autoSlide')
+          // || (eventTime === stateTime && timeCount <= stateTimeCount)
         ) {
           eventsToSetBeforeState.push([eventName, i, eventTime, timeCount]);
         } else if (
@@ -1455,7 +1455,7 @@ ${cursorData}
       this.setState(this.stateIndex);
     }
 
-    // playEvents(eventsToSetAfterState);
+    playEvents(eventsToSetAfterState);
 
     this.setCurrentTime(timeToUse);
 

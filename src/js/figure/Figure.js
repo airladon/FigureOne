@@ -1833,6 +1833,9 @@ class Figure {
       }
     }
 
+    // this.currentCursorPoint = figurePoint._dup();
+    this.previousCursorPoint = figurePoint;
+
     if (this.isPaused) {
       this.unpause();
     }
@@ -2136,6 +2139,11 @@ class Figure {
         this.setCursor(currentFigurePoint);
       }
     }
+
+    // this.currentCursorPoint.x = currentFigurePoint.x;
+    // this.currentCursorPoint.y = currentFigurePoint.y;
+    this.previousCursorPoint.x = currentFigurePoint.x;
+    this.previousCursorPoint.y = currentFigurePoint.y;
 
     // console.log(currentClientPoint);
     // if (this.inTransition) {

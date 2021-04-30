@@ -42,7 +42,6 @@ The files in this examples are:
 * `slides.js` add slide navigator and slide definitions
 
 
-
 ### Script
 * This triangle is interactive. You can drag the top corner or rotate the hypotenuse to make different triangles. When you interact with it, the video will pause, so press play when you're ready to continue.
 

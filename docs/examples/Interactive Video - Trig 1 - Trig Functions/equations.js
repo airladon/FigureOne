@@ -3,17 +3,19 @@
    figure, colOpp, colHyp, colAdj, colText */
 // eslint-disable-next-line
 function makeEquation() {
+  // Helper function to make a 'container' equation element
   const cont = (content, width = 0.6, xAlign = 'center') => ({
     container: { content, width, xAlign },
   });
+  // Helper function to make a 'fraction' within a 'container' of fixed width
   function frac(
     numerator, symbol, denominator, nSpace = 0.03, dSpace = 0.03, width, overhang = 0.03,
   ) {
     return cont({
       frac: {
-        numerator, // : cont(numerator, width),
+        numerator,
         symbol,
-        denominator, // : cont(denominator, width),
+        denominator,
         numeratorSpace: nSpace,
         denominatorSpace: dSpace,
         scale: 0.95,
@@ -22,6 +24,8 @@ function makeEquation() {
     }, width, 'right');
   }
 
+  // Helper function to make a 'fraction' equation element with numerator
+  // and denominator of fixed width
   function wFrac(
     numerator, symbol, denominator, width = 0.2,
   ) {
@@ -35,6 +39,7 @@ function makeEquation() {
     };
   }
 
+  // Helper function to make a 'lines' equation element
   const lin = (content, baselineSpace = 0.5) => ({
     lines: { content, baselineSpace, justify: 'left' },
   });
@@ -173,16 +178,22 @@ function makeEquation() {
     },
   });
 
+  // Helper function to add a function to the global function map
   const add = (name, fn) => figure.fnMap.global.add(name, fn);
+
+  // Dissolve the equation in to its values form
   add('eqnInToValues', () => {
     figure.elements._eqn.showForm('values');
     figure.elements._eqn.animations.new().dissolveIn().start();
     figure.fnMap.exec('triSetup', [2, 1.453], 'values', true);
   });
 
+  // Helper function that pulses the specific elements of the equation
   const sPulse = (element, xAlign = 'center', yAlign = 'middle') => figure.elements._eqn.pulse({
     elements: [element], xAlign, yAlign, scale: 1.5, duration: 1.5,
   });
+
+  // Functions to pulse the trigonometic functions individually
   add('eqnPulseSin', () => sPulse('sin', 'right', 'middle'));
   add('eqnPulseCos', () => sPulse('cos', 'right', 'middle'));
   add('eqnPulseTan', () => sPulse('tan', 'right', 'middle'));

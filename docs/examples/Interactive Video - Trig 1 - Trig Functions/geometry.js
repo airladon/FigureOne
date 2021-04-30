@@ -1,16 +1,18 @@
 /* eslint-disable camelcase */
 /* globals figure, color2, colGrey, colOpp, colAdj, colHyp, colTheta, Fig */
 
-// The main movable triangle consists of:
-// * triangle with labeled sides and angles
-// * movePad - invisible pad on top vertex of triangle that user can move to
-//   change triangle shape
-// * rotLine - invisible pad on hypotenuse of triangle that user can rotate to
-//   change angle theta.
-//
-// The rotLine and movePad are coupled. Only one can be touched at any time, and
-// its movement will move the other.
 
+/**
+ * The main movable triangle consists of:
+ *   - triangle with labeled sides and angles
+ *   - movePad - invisible pad on top vertex of triangle that user can move to
+ *     change triangle shape
+ *   - rotLine - invisible pad on hypotenuse of triangle that user can rotate to
+ *     change angle theta.
+ *
+ * The rotLine and movePad are coupled. Only one can be touched at any time, and
+ * its movement will move the other.
+ */
 
 // eslint-disable-next-line
 function layoutRight() {
@@ -111,6 +113,8 @@ function layoutRight() {
     name: 'rightTri',
     method: 'collection',
     elements: [
+      // Little dashed line that completes the angle theta annotation
+      // when the angle extends beyond the triangle
       {
         name: 'x',
         method: 'primitives.line',
@@ -121,13 +125,16 @@ function layoutRight() {
           color: colGrey,
         },
       },
+      // Similar triangles
       similarTri('tri1', 0.7, [-2, 0], theta(), sides('A\'', 'B\'', 'C\'')),
       similarTri('tri2', 1, [0, 0], theta(), sides('A', 'B', 'C')),
+      // Main triangle
       similarTri('tri', 1, [0, 0], thetaValue(), [
         sideLabel('1.0000', 'hypotenuse', 'hypotenuse', colHyp),
         sideLabel('0.0000', 'opposite', 'sin', colOpp),
         sideLabel('0.0000', 'adjacent', 'cos', colAdj),
       ]),
+      // Movable line that rotates the hypotenuse changing the angle theta
       {
         name: 'rotLine',
         method: 'primitives.line',
@@ -149,6 +156,7 @@ function layoutRight() {
           touchBorder: 0.1,
         },
       },
+      // Movable pad that moves the top vertex of the triangle
       {
         name: 'movePad',
         method: 'primitives.polygon',
@@ -183,8 +191,17 @@ function layoutRight() {
   const [movePad] = rightTri.getElements(['movePad']);
   const [rotLine] = rightTri.getElements(['rotLine']);
 
-  // When the right angle triangle changes shape, the side labels and associated
-  // equation ratio values need to be updated.
+  /**
+   * Whenever the movePad changes location:
+   *   - Change the triangle's top vertex
+   *   - Update all side and angle labels
+   *   - Hide/Show/Move labels and annotations if theta is too small or large
+   *   - Update the ratio values in the equation
+   *
+   * This is the only updater function. When the user moves rotLine, a new
+   * movePad location will be calculated from the rotLine angle which will then
+   * call this function to update.
+   */
   const update = () => {
     const { x, y } = movePad.getPosition();
     const radius = Math.sqrt(x ** 2 + y ** 2);

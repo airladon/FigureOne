@@ -259,34 +259,46 @@ describe('Figure Recorder', () => {
     describe('Get Cursor State', () => {
       // let cursorEvents;
       beforeEach(() => {
-        recorder.addEventType('cursor', () => {}, true);
-        recorder.addEventType('cursorMove', () => {}, true);
-        recorder.addEventType('touch', () => {}, true);
+        // recorder.addEventType('cursor', () => {}, true);
+        // recorder.addEventType('cursorMove', () => {}, true);
+        // recorder.addEventType('touch', () => {}, true);
         recorder.addEventType('doNothing', () => {}, true);
         initialTime = 0;
         timeStep(0);
         global.performance.now = () => 0;
+        cursor.hide();
         recorder.startRecording();
         timeStep(1);
-        recorder.recordEvent('cursor', ['show', 0, 0]);
+        // recorder.recordEvent('cursor', ['show', 0, 0]);
+        figure.mock.touchMove([0, 0]);
+        figure.toggleCursor();
         timeStep(1);
-        recorder.recordEvent('cursorMove', [1, 1]);
+        // recorder.recordEvent('cursorMove', [1, 1]);
+        figure.mock.touchMove([1, 1]);
         timeStep(1);
-        recorder.recordEvent('cursorMove', [2, 2]);
+        // recorder.recordEvent('cursorMove', [2, 2]);
+        figure.mock.touchMove([2, 2]);
         timeStep(1);
-        recorder.recordEvent('touch', ['down', 3, 3]);
+        // recorder.recordEvent('touch', ['down', 3, 3]);
+        figure.mock.touchDown([3, 3]);
         timeStep(1);
-        recorder.recordEvent('cursorMove', [4, 4]);
+        // recorder.recordEvent('cursorMove', [4, 4]);
+        figure.mock.touchMove([4, 4]);
         timeStep(1);
-        recorder.recordEvent('cursorMove', [5, 5]);
+        // recorder.recordEvent('cursorMove', [5, 5]);
+        figure.mock.touchMove([5, 5]);
         timeStep(1);
-        recorder.recordEvent('touch', 'up');
+        // recorder.recordEvent('touch', 'up');
+        figure.mock.touchUp();
         timeStep(1);
-        recorder.recordEvent('cursorMove', [7, 7]);
+        // recorder.recordEvent('cursorMove', [7, 7]);
+        figure.mock.touchMove([7, 7]);
         timeStep(1);
-        recorder.recordEvent('cursorMove', [8, 8]);
+        // recorder.recordEvent('cursorMove', [8, 8]);
+        figure.mock.touchMove([8, 8]);
         timeStep(1);
-        recorder.recordEvent('cursor', ['hide']);
+        // recorder.recordEvent('cursor', ['hide']);
+        figure.toggleCursor();
         timeStep(1);
         recorder.recordEvent('doNothing');
         recorder.stopRecording();
@@ -1875,12 +1887,12 @@ describe('Figure Recorder', () => {
 
       // state comes AFTER event
       recorder.seek(0.15);
-      expect(onPlayback.mock.calls.length).toBe(1);
+      expect(onPlayback.mock.calls.length).toBe(0);
       expect(a.getPosition().x).toBe(-1);
 
       // state comes BEFORE event
       recorder.seek(0.25);
-      expect(onPlayback.mock.calls.length).toBe(2);
+      expect(onPlayback.mock.calls.length).toBe(1);
       expect(a.getPosition().x).toBe(2);
     });
     test('Encode Events', () => {
@@ -1963,33 +1975,35 @@ describe('Figure Recorder', () => {
       });
       test('Playback some events during record', () => {
         recorder.stateTimeStep = 0.5;
+        cursor.hide();
         timeStep(0);
         expect(recorder.duration).toBe(0);
         recorder.startRecording();
         timeStep(1);
-        recorder.recordEvent('cursor', ['show', 1, 1]);   // 1
+        figure.mock.touchMove([1, 1]);    // 1
+        figure.toggleCursor();
         timeStep(1);
-        recorder.recordEvent('cursorMove', [2, 2]);       // 2
+        figure.mock.touchMove([2, 2]);    // 2
         timeStep(1);
-        recorder.recordEvent('touch', ['down', 3, 3]);    // 3
+        figure.mock.touchDown([2, 2]);    // 3
         timeStep(1);
-        recorder.recordEvent('cursorMove', [3, 3]);       // 4
+        figure.mock.touchMove([3, 3]);    // 4
         timeStep(1);
-        recorder.recordEvent('touch', 'up');              // 5
+        figure.mock.touchUp();            // 5
         timeStep(1);
         recorder.stopRecording();                         // 6
-
         initialTime = 10;
         duration = 0;
         timeStep(0);
         recorder.startRecording(1.5, ['touch']);
         check(true, true, false, 1, 1, 1.5);
         timeStep(0.1);
-        recorder.recordEvent('cursorMove', [3.5, 3.5]);
+        // recorder.recordEvent('cursorMove', [3.5, 3.5]);
+        figure.mock.touchMove([3.5, 3.5]);
         timeStep(0.4);
-        check(true, true, false, 1, 1, 2);
+        check(true, true, false, 3.5, 3.5, 2);
         timeStep(1);
-        check(true, false, true, 3, 3, 3);
+        check(true, false, true, 2, 2, 3);
         timeStep(1);
         timeStep(1);
         recorder.stopRecording();
@@ -2006,35 +2020,37 @@ describe('Figure Recorder', () => {
         timeStep(0.4);
         check(true, true, false, 3.5, 3.5, 2);
         timeStep(1);
-        check(true, false, true, 3, 3, 3);
+        check(true, false, true, 2, 2, 3);
         timeStep(1);
-        check(true, false, true, 3, 3, 4);
+        check(true, false, true, 2, 2, 4);
         recorder.pausePlayback();
       });
     });
     describe('Playback', () => {
       beforeEach(() => {
         recorder.stateTimeStep = 0.5;
+        cursor.hide();
         timeStep(0);
         recorder.startRecording();
         timeStep(1);
-        recorder.recordEvent('cursor', ['show', 1, 1]);   // 1
+        figure.mock.touchMove([1, 1]);    // 1
+        figure.toggleCursor();
         timeStep(1);
-        recorder.recordEvent('cursorMove', [2, 2]);       // 2
+        figure.mock.touchMove([2, 2]);    // 2
         timeStep(1);
-        recorder.recordEvent('touch', ['down', 3, 3]);    // 3
+        figure.mock.touchDown([3, 3]);    // 3
         timeStep(1);
-        recorder.recordEvent('cursorMove', [4, 4]);       // 4
+        figure.mock.touchMove([4, 4]);    // 4
         timeStep(1);
-        recorder.recordEvent('cursorMove', [5, 5]);       // 5
+        figure.mock.touchMove([5, 5]);    // 5
         timeStep(1);
-        recorder.recordEvent('touch', 'up');              // 6
+        figure.mock.touchUp();            // 6
         timeStep(1);
-        recorder.recordEvent('cursorMove', [7, 7]);       // 7
+        figure.mock.touchMove([7, 7]);    // 7
         timeStep(1);
-        recorder.recordEvent('cursorMove', [8, 8]);       // 8
+        figure.mock.touchMove([8, 8]);    // 8
         timeStep(1);
-        recorder.recordEvent('cursor', ['hide']);         // 9
+        figure.toggleCursor();
         timeStep(3);
         recorder.stopRecording();                         // 12
       });
