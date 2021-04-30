@@ -59,31 +59,22 @@ So if the sine of an angle is *opposite* the angle, and our horizontal side is o
 
 Ok, we've named our first two trigonometric functions by using a right angle triangle with side length one, and then naming the other two sides.
 
-We will do something similar for the remaining ratios.
+So we will do something similar for the remaining ratios.
 
 Let's start by growing the triangle so that the side adjacent to theta becomes one. Now, a line that *touches* the circle at one point, and is perpendicular to the radius line at the same point, is called a *tangent* line, where the word tangent comes from the latin word meaning *to touch*.
 
-Our opposite side is a tangent line, and we call it the tan for short.
+Our opposite side is a tangent line, and we will call it the tan for short.
 
 Next, a line that *cuts* through the circle is called a *secant* line, where the word secant comes from the latin word meaning *to cut*. In this case our hypotenuse is a secant line and so we call it the sec for short.
 
-And so the ratio of opposite over adjacent is the tan function, and the ratio hypotenuse over adjacent is the sec function.
+And so the ratio of opposite over adjacent is the tan function, and the ratio of hypotenuse over adjacent is the sec function.
 
-Let's now find our last two ratio names by growing the triangle again so that now the *opposite* side is one.
+Let's now find our last two ratio names by growing the triangle again so now the *opposite* side is one.
 
-Now this triangle is similar to our tan sec triangle in that is has a side of length one, but now it is adjacent to the *complementary angle*. Therefore the side opposite the complimentary angle is the tangent of the complementary angle, and so we call this the complementary tangent, cotangent, cotan or just cot for short. 
+Now this triangle is similar to our tan sec triangle in that it has a side of length one, but now it is adjacent to the *complementary angle*. Therefore the side opposite the complimentary angle is the tangent of the complementary angle, and so we call this the complementary tangent, cotangent, cotan or just cot for short. 
 
 Similarly, the hypotenuse over the adjacent is the secant of the complementary angle, which we call the complementary secant, cosecant, cosec or just csc.
 
 Relative to theta then, the adjacent side over the opposite is the cot function, and the hypotenuse over the opposite is the cosec or csc function.
 
 And so we can see where the trigonometric function names come from. The sin, tan and sec names come from lines associated with circles, while the cosine, cotan and cosec names describe the complementary relationship with the sine, tan and sec functions.
-
-
-
-
->> show a triangle with sin, cosine, theta and comp
-Note also, in naming our functions we've also found three complimentary relationships between the trigonometric functions. We've found the sine of the complementary angle of theta is the cosine of theta. We can similarly show the cosine of the complementary angle is the sine of the theta.
-
-Similarly we seen the sec...
-
