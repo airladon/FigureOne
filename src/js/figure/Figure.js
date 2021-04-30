@@ -1285,6 +1285,19 @@ class Figure {
   }
 
   /**
+   * Returns an array of result from
+   * [getElement](#figureelementcollectiongetelement) calls on an
+   * array of paths. Same as `getElements` but more succinct
+   *
+   * @param {TypeElementPath} children
+   * @return {Array<FigureElement>} Array of
+   * [getElement](#figureelementcollectiongetelement) results
+   */
+  get(children: TypeElementPath) {
+    return this.getElements(children);
+  }
+
+  /**
    * Set the figure to be touchable.
    *
    * Using <a href="#figureelementsettouchable">element.setTouchable</a> will
@@ -2772,6 +2785,40 @@ class Figure {
       }));
       this.add(`__touchBorder_${index + startIndex}`, polyline);
     });
+  }
+
+  /**
+   * Sets manual frames.
+   *
+   * Normally, a when a browser is ready to refresh the screen it will call
+   * FigureOne to do a draw. The time between frames is not fixed and depends on
+   * a number of factors. This is the most performant way to handle drawing.
+   *
+   * However, when debugging it can be useful to manually trigger a draw frame
+   * with a defined delta time from the last frame.
+   *
+   * This method turns on manual frames. Use `frame` to trigger a draw.
+   */
+  setManualFrames() {
+    this.globalAnimation.setManualFrames();
+  }
+
+  /**
+   * End manual frames. Reverts drawing to when browser reqeusts it.
+   */
+  endManualFrames() {
+    this.globalAnimation.endManualFrames();
+  }
+
+  /**
+   * Manually trigger a draw frame with a specified time step (in seconds) from
+   * the last draw frame. Can only be used when `setManualFrames()` has been
+   * called.
+   *
+   * @param {number} timeStep in seconds
+   */
+  frame(timeStep: number) {
+    this.globalAnimation.frame(timeStep);
   }
 }
 
