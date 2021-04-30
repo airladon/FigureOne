@@ -335,7 +335,7 @@ class Recorder {
     this.eventsCache = {};
     this.reset();
     // default recording values
-    this.precision = 8;
+    this.precision = 11;
     this.stateTimeStep = 1;
     this.audio = null;
     // this.playbackStoppedCallback = null;
@@ -1459,7 +1459,7 @@ ${cursorData}
 
     this.setCurrentTime(timeToUse);
 
-    this.setCursor(timeToUse);
+    // this.setCursor(timeToUse);
     this.figure.animateNextFrame();
     // console.log(t.slice(-1)[0] - t[0], t[1]-t[0],t[2]-t[1],t[3]-t[2])
   }

@@ -500,6 +500,9 @@ function layoutCirc() {
   };
   function updateCircle(rIn) {
     const r = rIn > Math.PI / 4 ? rIn - 0.00001 : rIn + 0.00001;
+    if (window.asdf) {
+      console.log('r', r)
+    }
     const cosR = Math.cos(r);
     const sinR = Math.sin(r);
     const cosVal = Math.abs(radius * cosR);
@@ -752,7 +755,6 @@ function layoutCirc() {
 
   figure.subscriptions.add('stateSetInit', () => {
     selectTriangle(circ.customState.selected);
-    // updateCircle();
   });
 
   circle.subscriptions.add('visibility', 'processButton');
@@ -870,10 +872,11 @@ function layoutCirc() {
       );
     }
     const duration = Math.min(3, Math.max(duration1, duration2, duration3, duration4));
-    rotator.animations.new().rotation({ target: defaultAngle, duration }).start();
+    // rotator.animations.new().rotation({ target: defaultAngle, duration }).start();
     figure.fnMap.exec('lockInput');
     circ.animations.new()
       .inParallel([
+        rotator.animations.rotation({ target: defaultAngle, duration }),
         triSinCos.animations.scenario({ target: scenario, duration }),
         triTanSec.animations.scenario({ target: scenario, duration }),
         triCotCsc.animations.scenario({ target: scenario, duration }),

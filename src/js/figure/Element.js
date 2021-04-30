@@ -1838,6 +1838,10 @@ class FigureElement {
    * @param {Transform} transform
    */
   setTransform(transform: Transform, publish: boolean = true): void {
+    // if (this.name === '_cursor_') {
+    //   console.log(transform.t())
+    //   console.trace()
+    // }
     // if (this.name === 'polygond6_5' && window.qwer === 1) {
     //   console.log('setting', transform.t())
     //   // console.trace();
