@@ -60,23 +60,11 @@ Each triangle can be:
 * Moved by dragging it
 * Rotated by dragging its corner
 
-Each triangle carries state information with it:
-* `angle` - last theta angle of the triangle
-* `center` - center position of triangle with default theta
-* `lock` - which vertex is locked in place
-* `lockHyp` - whether to lock the hypotenuse rotation in place
-* `lockPosition` - position of the locked vertex in local space
-* `theta` - whether the theta label is visible
-* `unit` - whether the unit label is visible
-* `x` - length of adjacent side (side along the x axis when tri rotation is 0)
-* `y` - length of opposite side (side along the y axis when tri rotation is 0)
-
 
 The files in this examples are:
 * `setup.js` setup figure, define colors line widths and text helper functions
 * `equations.js` all equation definitions and functions to pulse equation phrases
-* `circle_tri.js` all geometry figure elements and logic related to the circle and right angle triangle comparison
-* `lines_definitions.js` all geometry figure elements and logic related where the tangent, secant and chord line names come from
+* `geometry.js` all geometry figure elements and logic related to the triangles and buttons
 * `slides.js` add slide navigator and slide definitions
 
 
