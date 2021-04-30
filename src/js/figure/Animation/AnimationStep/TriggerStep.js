@@ -4,7 +4,6 @@ import type {
   OBJ_AnimationStep,
 } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
-import type { FigureElement } from '../../Element';
 
 /**
  * {@link TriggernAnimationStep} options object

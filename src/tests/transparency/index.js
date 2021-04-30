@@ -150,6 +150,8 @@ function makeFigure(backgroundColor, htmlId) {
   ]);
 }
 
+/* eslint-disable no-unused-vars */
+
 // Opaque GL Background
 const figure1 = makeFigure([1, 1, 1, 1], 'figureOneContainer1');
 
