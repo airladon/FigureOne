@@ -691,7 +691,7 @@ export default class AnimationManager {
       if (animationIsAnimating) {
         isAnimating = true;
       }
-    });
+    }); // $FlowFixMe
     if (FIGURE1DEBUG) { timer.stamp('animations'); }
 
     let callback = null;
@@ -722,7 +722,7 @@ export default class AnimationManager {
         window.figureOneDebug = { setupDraw: [] };
       } // $FlowFixMe
       if (this.element.name === 'rootCollection') { // $FlowFixMe
-        window.figureOneDebug.animationManager.push([
+        window.figureOneDebug.animationManager.push([  // $FlowFixMe
           this.element.getPath(),
           new GlobalAnimation().now(),
           deltas[0],

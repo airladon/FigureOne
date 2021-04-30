@@ -98,7 +98,7 @@ class FigureFont {
       const c = [
         ...thisColor.slice(0, 3),
         // thisColor[3] * opacity,
-        color[3],
+        color != null ? color[3] : 1,
       ];
       ctx.fillStyle = colorArrayToRGBA(c);
     } else if (color != null) {

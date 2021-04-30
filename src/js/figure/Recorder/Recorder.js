@@ -286,7 +286,7 @@ class Recorder {
   startRecordingTime: number;
 
   queueSeekId: null | TimeoutID;
-  queueSeekTime: null;
+  queueSeekTime: number;
 
   stateTimeStep: number;      // in seconds
   figure: Figure;

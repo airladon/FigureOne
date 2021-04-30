@@ -33,6 +33,7 @@ import FigureCollections from './FigureCollections/FigureCollections';
 import AnimationManager from './Animation/AnimationManager';
 import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 import type { TypeColor, OBJ_Font } from '../tools/types';
+import type { COL_SlideNavigator } from './FigureCollections/SlideNavigator';
 // import SlideNavigator from './SlideNavigator';
 // import type { OBJ_SlideNavigator } from './SlideNavigator';
 
@@ -64,7 +65,7 @@ export type OBJ_SpaceTransforms = {
 export type OBJ_FigureForElement = {
   limits: Rect,
   spaceTransforms: OBJ_SpaceTransforms,
-  animateNextFrame: () => void,
+  animateNextFrame: (?boolean, ?string) => void,
   animationFinished: () => void,
   recorder: Recorder,
 }
@@ -309,6 +310,7 @@ class Figure {
   nextDrawTimer: TimeoutID | null;
   nextDrawTimerStart: number;
   nextDrawTimerDuration: number;
+  focused: boolean;
 
   animations: AnimationManager;
 
@@ -569,7 +571,7 @@ class Figure {
    * first added.
    * @return {FigureElement} cursor element
    */
-  addCursor(options) {
+  addCursor(options: Object) {
     const [cursor] = this.add(joinObjects(
       {},
       {
@@ -2129,7 +2131,11 @@ class Figure {
   // by the system. For example, on a touch device, a touch and drag would
   // normally scroll the screen. Typically, you would want to move the figure
   // element and not the screen, so a true would be returned.
-  touchMoveHandler(previousFigurePoint: Point, currentFigurePoint: Point, fromAutoEvent: boolean = false): boolean {
+  touchMoveHandler(
+    previousFigurePoint: Point,
+    currentFigurePoint: Point,
+    fromAutoEvent: boolean = false,
+  ): boolean {
     if (this.recorder.state === 'recording' && !fromAutoEvent) {
       // const currentPixelPoint = this.clientToPixel(currentClientPoint);
       // const figurePoint = currentPixelPoint
@@ -2426,7 +2432,7 @@ class Figure {
   touchDown(
     figurePosition: TypeParsablePoint,
     eventFromPlayback: boolean = false,
-    autoEvent: boolean = false
+    autoEvent: boolean = false,
   ) {
     const p = getPoint(figurePosition);
     // const pixelPoint = p.transformBy(this.spaceTransforms.figureToPixel.m());
@@ -2719,7 +2725,7 @@ class Figure {
     this.focused = true;
   }
 
-  setupDraw(time = this.globalAnimation.now() / 1000) {
+  setupDraw(time: number = this.globalAnimation.now() / 1000) {
     this.elements.setupDraw(time);
     if (!this.focused) {
       this.setDrawTimeout(0.1);
