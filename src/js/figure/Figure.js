@@ -1834,7 +1834,7 @@ class Figure {
     }
 
     // this.currentCursorPoint = figurePoint._dup();
-    this.previousCursorPoint = figurePoint;
+    this.previousCursorPoint = figurePoint._dup();
 
     if (this.isPaused) {
       this.unpause();
