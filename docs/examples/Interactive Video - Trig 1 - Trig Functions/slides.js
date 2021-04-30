@@ -25,7 +25,7 @@ function makeSlides() {
     options: {
       nextButton: { position: [3.8, 0], width: 0.2, height: 0.2 },
       prevButton: { position: [-3.8, 0], width: 0.2, height: 0.2 },
-      equation: ['eqn', 'similar.eqn', 'circ.eqn'],
+      equation: ['eqn'],
     },
   });
   const slides = [];

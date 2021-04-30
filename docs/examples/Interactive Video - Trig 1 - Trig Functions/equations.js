@@ -7,6 +7,7 @@ function makeEquation() {
   const cont = (content, width = 0.6, xAlign = 'center') => ({
     container: { content, width, xAlign },
   });
+
   // Helper function to make a 'fraction' within a 'container' of fixed width
   function frac(
     numerator, symbol, denominator, nSpace = 0.03, dSpace = 0.03, width, overhang = 0.03,
@@ -178,27 +179,27 @@ function makeEquation() {
     },
   });
 
-  // Helper function to add a function to the global function map
-  const add = (name, fn) => figure.fnMap.global.add(name, fn);
+  // // Helper function to add a function to the global function map
+  // const add = (name, fn) => figure.fnMap.global.add(name, fn);
 
   // Dissolve the equation in to its values form
-  add('eqnInToValues', () => {
+  figure.fnMap.global.add('eqnInToValues', () => {
     figure.elements._eqn.showForm('values');
     figure.elements._eqn.animations.new().dissolveIn().start();
     figure.fnMap.exec('triSetup', [2, 1.453], 'values', true);
   });
 
-  // Helper function that pulses the specific elements of the equation
-  const sPulse = (element, xAlign = 'center', yAlign = 'middle') => figure.elements._eqn.pulse({
-    elements: [element], xAlign, yAlign, scale: 1.5, duration: 1.5,
-  });
+//   // Helper function that pulses the specific elements of the equation
+//   const sPulse = (element, xAlign = 'center', yAlign = 'middle') => figure.elements._eqn.pulse({
+//     elements: [element], xAlign, yAlign, scale: 1.5, duration: 1.5,
+//   });
 
-  // Functions to pulse the trigonometic functions individually
-  add('eqnPulseSin', () => sPulse('sin', 'right', 'middle'));
-  add('eqnPulseCos', () => sPulse('cos', 'right', 'middle'));
-  add('eqnPulseTan', () => sPulse('tan', 'right', 'middle'));
-  add('eqnPulseCsc', () => sPulse('csc', 'right', 'middle'));
-  add('eqnPulseSec', () => sPulse('sec', 'right', 'middle'));
-  add('eqnPulseCot', () => sPulse('cot', 'right', 'middle'));
+//   // Functions to pulse the trigonometic functions individually
+//   add('eqnPulseSin', () => sPulse('sin', 'right', 'middle'));
+//   add('eqnPulseCos', () => sPulse('cos', 'right', 'middle'));
+//   add('eqnPulseTan', () => sPulse('tan', 'right', 'middle'));
+//   add('eqnPulseCsc', () => sPulse('csc', 'right', 'middle'));
+//   add('eqnPulseSec', () => sPulse('sec', 'right', 'middle'));
+//   add('eqnPulseCot', () => sPulse('cot', 'right', 'middle'));
 }
 
