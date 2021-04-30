@@ -18,6 +18,7 @@ function layoutCirc() {
   const origin = [-0.8, -0.5];
   const point = (pointX, pointY) => new Fig.Point(pointX, pointY);
 
+  // Helper function for a simple line primitive definition object
   const line = (name, color, width = thick, p1 = [0, 0], length = 1, ang = 0, dash = []) => ({
     name,
     method: 'primitives.line',
@@ -26,6 +27,7 @@ function layoutCirc() {
     },
   });
 
+  // Helper function for a labeled line definition object
   const lineWithLabel = (name, color, text, width = thick, p1, length, ang, location = 'negative') => ({
     name,
     method: 'collections.line',
@@ -44,6 +46,7 @@ function layoutCirc() {
     },
   });
 
+  // Helper function that creates an arc definition object
   function arc(
     name, color, width = thin, sides = 100, angleToDraw = Math.PI * 2, rotation = 0, rad = radius,
   ) {
@@ -56,6 +59,7 @@ function layoutCirc() {
     };
   }
 
+  // Helper function that creates a definition object that draws an eye icon
   const addEye = (name, position) => ({
     name,
     method: 'collection',
@@ -98,6 +102,7 @@ function layoutCirc() {
     },
   });
 
+  // Helper function that creates a definition object that draws a lock icon
   const addLock = (name, position) => ({
     name,
     method: 'collection',
@@ -136,6 +141,7 @@ function layoutCirc() {
     },
   });
 
+  // Helper function to make a right angle
   const rightAngle = (name, position, startAngle, r = 0.15, color = colGrey) => ({
     name,
     method: 'collections.angle',
@@ -148,6 +154,7 @@ function layoutCirc() {
     },
   });
 
+  // Helper function to make a angle
   function angle(
     name, text, rad = 0.2, curvePosition = 0.5,
     position = [0, 0], startAngle = 0, angleSize = 0, sides = null,
@@ -166,6 +173,8 @@ function layoutCirc() {
       },
     };
   }
+
+  // Helper function to make a rotation pad for a triangle
   const rot = name => ({
     name,
     method: 'primitives.generic',
@@ -175,6 +184,27 @@ function layoutCirc() {
       move: { type: 'rotation' },
     },
   });
+
+  /**
+   * Helper function that creates a triangle collection with a right angle
+   * annotation ('right'), theta angle annotation ('theta'), rotation pads
+   * ('rotTheta', 'rotComp' and 'rotRight'), translation move pad ('movePad'),
+   * and three labeled lines (input as the 'elements' param)
+   *
+   * Each triangle carries state information with it that is saved in a seek
+   * state and used to size and position the triangle when a seek state is set:
+   *  - `angle` - last theta angle of the triangle
+   *  - `center` - center position of triangle with default theta
+   *  - `lock` - which vertex is locked in place
+   *  - `lockHyp` - whether to lock the hypotenuse rotation in place
+   *  - `lockPosition` - position of the locked vertex in local space
+   *  - `theta` - whether the theta label is visible
+   *  - `unit` - whether the unit label is visible
+   *  - `x` - length of adjacent side (side along the x axis when tri rotation
+   *     is 0)
+   *  - `y` - length of opposite side (side along the y axis when tri rotation
+   *     is 0)
+   */
   const tri = (name, elements, position, rotation, center, x, y) => ({
     name,
     method: 'collection',
@@ -191,7 +221,6 @@ function layoutCirc() {
         },
         mods: {
           isMovable: true,
-          // move: { bounds: 'diagram' },
         },
       },
       rot('rotTheta'),
@@ -201,11 +230,13 @@ function layoutCirc() {
     ],
     mods: {
       customState: {
-        lock: 'theta', lockHyp: false, center, x, y, unit: true, theta: true,
+        lock: 'theta', lockHyp: false, center, x, y, unit: true, theta: true, lockPosition: [0, 0], angle: defaultAngle,
       },
     },
   });
 
+  // Helper function that creates a definition object for a button collection
+  // The button has a label, border and fill
   function button(
     name, position, text, width = 0.7, height = 0.25, size = 0.1, textPosition = [0, 0],
   ) {
@@ -264,11 +295,13 @@ function layoutCirc() {
     };
   }
 
-
+  // Add all the elements to the figure
   const [circ] = figure.add({
     name: 'circ',
     method: 'collection',
     elements: [
+      // When 'background' is touched, any selected triangle will be
+      // deselected
       {
         name: 'background',
         method: 'rectangle',
@@ -281,6 +314,7 @@ function layoutCirc() {
           isTouchable: true,
         },
       },
+      // A quarter circle with axes
       {
         name: 'circle',
         method: 'collection',
@@ -312,6 +346,7 @@ function layoutCirc() {
           },
         },
       },
+      // Three main triangles that can be manipulated
       tri(
         'triCotCsc',
         [
@@ -340,6 +375,9 @@ function layoutCirc() {
         lineWithLabel('sin', colSin, 'sin'),
         lineWithLabel('cos', colCos, 'cos'),
       ], [-1.5, -0.35], 0, dC1, dCos, dSin),
+      // Theta angle widget UI that is a theta angle with label and a
+      // background. The background separates the button from the triangle
+      // elements when they are dragged over the same spot
       {
         name: 'angleBackground',
         method: 'primitives.polygon',
@@ -351,13 +389,13 @@ function layoutCirc() {
         },
       },
       angle('theta', '0', 0.3, 0.5, [-2.8, -1.3], 0, defaultAngle, { length: 0.33, width: thick }),
+
+      // Buttons
       button('flip', [0.1, -1.2], 'Flip', 0.3, 0.25, 0.1, [0, -0.01]),
       button('unitButton', [0.5, -1.2], 'Unit', 0.3, 0.25, 0.07, [0, -0.06]),
       button('thetaButton', [0.9, -1.2], '|theta|', 0.3, 0.25, 0.07, [0, -0.06]),
       button('lockHyp', [1.3, -1.2], 'Hyp', 0.3, 0.25, 0.07, [0, -0.06]),
-      button('lock', [1.7, -1.2], '|theta|', 0.3, 0.25, 0.07, [0, -0.06]),
-      // button('lock', [-2.6, 0.8], 'Lk: Theta'),
-      // button('lockHyp', [-2.6, 0.4], 'Lk Hyp: No'),
+      button('lockAngle', [1.7, -1.2], '|theta|', 0.3, 0.25, 0.07, [0, -0.06]),
       button('reset', [2.6, -1.2], 'Reset', 0.4),
       button('preset1', [-2, -1.2], '1', 0.25),
       button('preset2', [-1.6, -1.2], '2', 0.25),
@@ -388,10 +426,13 @@ function layoutCirc() {
           touchBorder: 0.1,
         },
       },
+      // Lock and Eye icons that will be overlaid on associated buttons
       addLock('hypLock', [1.3, -1.17]),
       addLock('angleLock', [1.7, -1.17], 0),
       addEye('viewUnit', [0.5, -1.16]),
       addEye('viewTheta', [0.9, -1.16]),
+      // Invisible rotator element for the theta widget - at the top of the
+      // draw stack so it is touched first before anything else
       {
         name: 'rotator',
         method: 'collections.line',
@@ -408,7 +449,6 @@ function layoutCirc() {
           scenarios: {
             default: { rotation: defaultAngle },
           },
-          // touchBorder: [0, 0, radius , 0],
         },
       },
     ],
@@ -416,6 +456,8 @@ function layoutCirc() {
       customState: { selected: '' },
     },
   });
+
+  // Get figure elements to be used in logic
   const get = list => circ.getElements(list);
   const [rotator, theta] = get(['rotator', 'theta']);
   const [triCotCsc] = get(['triCotCsc']);
@@ -427,18 +469,22 @@ function layoutCirc() {
   const [unitSinCos, thetaSinCos, rightSinCos, moveSinCos, rotThetaSinCos, rotCompSinCos, rotRightSinCos] = get({ triSinCos: ['unit', 'theta', 'right', 'movePad', 'rotTheta', 'rotComp', 'rotRight'] });
   const [unitTanSec, thetaTanSec, rightTanSec, moveTanSec, rotThetaTanSec, rotCompTanSec, rotRightTanSec] = get({ triTanSec: ['unit', 'theta', 'right', 'movePad', 'rotTheta', 'rotComp', 'rotRight'] });
   const [unitCotCsc, thetaCotCsc, rightCotCsc, moveCotCsc, rotThetaCotCsc, rotCompCotCsc, rotRightCotCsc] = get({ triCotCsc: ['unit', 'theta', 'right', 'movePad', 'rotTheta', 'rotComp', 'rotRight'] });
-  const [flip, lock, lockHyp, reset, arcButton, unitButton, thetaButton] = get(['flip', 'lock', 'lockHyp', 'reset', 'arcButton', 'unitButton', 'thetaButton']);
+  const [flipButton, lockAngle, lockHyp, reset, arcButton, unitButton, thetaButton] = get(['flip', 'lockAngle', 'lockHyp', 'reset', 'arcButton', 'unitButton', 'thetaButton']);
   const [circle, background] = get(['circle', 'background']);
   const [preset1, preset2, preset3] = get(['preset1', 'preset2', 'preset3']);
   const [hypLock, viewUnit, viewTheta] = get(['hypLock', 'viewUnit', 'viewTheta']);
   const [angleBackground] = get(['angleBackground']);
 
+  // Default locations for sec, csc and unitSinCos labels
   sec.label.location = 'positive';
   csc.label.location = 'positive';
   unitSinCos.label.location = 'positive';
 
+  // Set the theta widget label to a real angle label in degrees
   theta.setLabelToRealAngle();
 
+  // Helper function that hides or shows a right angle depending on the result
+  // of the `test` param
   const setRightAng = (element, test, position, startAngle) => {
     if (element.isShown) {
       if (test) {
@@ -450,6 +496,8 @@ function layoutCirc() {
     }
   };
 
+  // Helper function that hides or shows a theta angle depending on the result
+  // of the `test` param
   const checkThetaAngleVisbility = (element, test) => {
     if (element.isShown) {
       if (test) {
@@ -460,8 +508,14 @@ function layoutCirc() {
     }
   };
 
+  // Store the current theta angle, and position of the locked vertex. These
+  // values will be used by `offsetLock` to calculate delta positions and
+  // rotations of the triangle to make the locked vertex stay in place, and
+  // if necessary, make the hypotenuse rotation stay constant
   const setCurrentLockPosition = (triElement, rightPos, compPos, thetaPos) => {
-    triElement.customState.angle = triSinCos._unit.line.angle();
+    // Store the current theta angle
+    triElement.customState.oldTheta = triSinCos._unit.line.angle();
+    // Store the position of the locked vertex
     let pos = rightPos;
     if (triElement.customState.lock === 'theta') {
       pos = thetaPos;
@@ -471,11 +525,19 @@ function layoutCirc() {
     triElement.customState.lockPosition
       = triElement.pointFromSpaceToSpace(pos, 'draw', 'local');
   };
-  const offsetForLock = (triElement, newAngle, rightPos, compPos, thetaPos) => {
+
+  // Adjust the rotation and translation of the triangle to make it look like
+  // the locked vertex stays in position and, if the hypotenuse is locked,
+  // the hypotenuse rotation is not changed
+  const offsetForLock = (triElement, newTheta, rightPos, compPos, thetaPos) => {
+    // If the hypotenuse is locked in place, then rotate the triangle the delta
+    // between the old theta and new theta so that it looks like the hypotenuse
+    // rotation hasn't changed. NB, scale.x will be -1 when the triangle is
+    // flipped.
     if (triElement.customState.lockHyp) {
       const s = triElement.transform.s().x;
       const r = triElement.transform.r();
-      const delta = newAngle - triElement.customState.angle;
+      const delta = newTheta - triElement.customState.oldTheta;
       triElement.transform.updateRotation(r - s * delta);
     }
     let pos = rightPos;
@@ -484,11 +546,17 @@ function layoutCirc() {
     } else if (triElement.customState.lock === 'comp') {
       pos = compPos;
     }
+    // Use the delta between the new and old positions of the locked vertex
+    // to adjust the triangle translation and make it look like the vertex
+    // hasn't moved
     const newP = triElement.pointFromSpaceToSpace(pos, 'draw', 'local');
     const delta = newP.sub(triElement.customState.lockPosition);
     const p = triElement.getPosition();
     triElement.setPosition(p.sub(delta));
   };
+
+  // Update the points of the rotator for some specificed angle at
+  // a vertex of a triangle
   const setRotPad = (rotPad, vertex, startAngle, ang) => {
     const rotPadRad = 0.3;
     const v = Fig.tools.g2.getPoint(vertex);
@@ -500,8 +568,11 @@ function layoutCirc() {
       points: [v, v.add(cosV, sinV), v.add(cosVStop, sinVStop)],
     });
   };
-  function updateCircle(rIn) {
-    const r = rIn > Math.PI / 4 ? rIn - 0.00001 : rIn + 0.00001;
+
+  // Update the triangles for a some angle theta
+  function updateGeometry(angleTheta) {
+    // Calculate the trig values for theta
+    const r = angleTheta > Math.PI / 4 ? angleTheta - 0.00001 : angleTheta + 0.00001;
     const cosR = Math.cos(r);
     const sinR = Math.sin(r);
     const cosVal = Math.abs(radius * cosR);
@@ -511,17 +582,24 @@ function layoutCirc() {
     rotator.customState = {
       cosVal, sinVal, tanVal, cotVal,
     };
+
+    // The triangle centers change when theta changes
     const c1 = Fig.tools.g2.getTriangleCenter([0, 0], [cosVal, 0], [cosVal, sinVal]);
     const c2 = Fig.tools.g2.getTriangleCenter([0, 0], [radius, 0], [radius, tanVal]);
     const c3 = Fig.tools.g2.getTriangleCenter([0, 0], [cotVal, 0], [cotVal, radius]);
+
+    // Update the theta widget UI with the new angle
     if (theta.isShown) {
       theta.setAngle({ angle: Math.acos(Math.abs(cosR)) });
     }
     angleBackground.angleToDraw = r;
+
+    // Store current theta value and positions of locked vertex
     setCurrentLockPosition(triSinCos, cos.getP2(), unitSinCos.getP2(), cos.getP1());
     setCurrentLockPosition(triTanSec, unitTanSec.getP2(), sec.getP2(), sec.getP1());
     setCurrentLockPosition(triCotCsc, cot.getP2(), csc.getP2(), cot.getP1());
 
+    // Set the theta angle for each triangle (if the theta angle is shown)
     if (thetaSinCos.isShown) {
       thetaSinCos.setAngle({ angle: Math.acos(Math.abs(cosR)), position: [-c1.x, -c1.y] });
     }
@@ -532,6 +610,7 @@ function layoutCirc() {
       thetaTanSec.setAngle({ angle: Math.acos(Math.abs(cosR)), position: [-c2.x, -c2.y] });
     }
 
+    // Update the sides and angles for the sinCos triangle
     sin.setEndPoints(point(cosVal, 0).sub(c1), point(cosVal, sinVal + thick / 3).sub(c1));
     cos.setEndPoints(point(-thick / 2, 0).sub(c1), point(cosVal + thick / 2, 0).sub(c1));
     unitSinCos.setEndPoints(point(0, 0).sub(c1), point(cosVal, sinVal).sub(c1));
@@ -540,17 +619,20 @@ function layoutCirc() {
     );
     checkThetaAngleVisbility(thetaSinCos, r < Math.PI / 2 - 0.2);
 
+    // Update the sides and angles for the tanSec triangle
     tan.setEndPoints(point(radius, -thick / 2).sub(c2), point(radius, tanVal + thick / 3).sub(c2));
     sec.setEndPoints(point(0, 0).sub(c2), point(radius, tanVal).sub(c2));
     unitTanSec.setEndPoints(point(-thick / 2, 0).sub(c2), point(radius + thick / 2, 0).sub(c2));
     setRightAng(rightTanSec, r > 0.2, point(radius, 0).sub(c2), Math.PI / 2);
 
+    // Update the sides and angles for the cotCsc triangle
     cot.setEndPoints(point(-thick / 2, 0).sub(c3), point(cotVal + thick / 2, 0).sub(c3));
     csc.setEndPoints(point(0, 0).sub(c3), point(cotVal, radius).sub(c3));
     unitCotCsc.setEndPoints(point(cotVal, 0).sub(c3), point(cotVal, radius + thick / 3).sub(c3));
     setRightAng(rightCotCsc, r < Math.PI / 2 - 0.2, point(cotVal, 0).sub(c3), Math.PI / 2);
     checkThetaAngleVisbility(thetaCotCsc, r < Math.PI / 2 - 0.2);
 
+    // Update the rotator pads for all triangles
     setRotPad(rotThetaSinCos, [-c1.x, -c1.y], 0, r);
     setRotPad(rotThetaTanSec, [-c2.x, -c2.y], 0, r);
     setRotPad(rotThetaCotCsc, [-c3.x, -c3.y], 0, r);
@@ -563,6 +645,8 @@ function layoutCirc() {
     setRotPad(rotCompTanSec, [radius - c2.x, tanVal - c2.y], Math.PI + r, Math.PI / 2 - r);
     setRotPad(rotCompCotCsc, [cotVal - c3.x, radius - c3.y], Math.PI + r, Math.PI / 2 - r);
 
+
+    // Update the translation move pads for the three triangles
     moveSinCos.custom.updatePoints({
       points: [[0, 0], [cosVal, 0], [cosVal, sinVal]],
     });
@@ -576,32 +660,40 @@ function layoutCirc() {
     });
     moveCotCsc.setPosition(-c3.x, -c3.y);
 
+    // Offset the triangles so the locked vertex stays in place, and if
+    // necessary, the hypotenuse rotation doesn't change
     offsetForLock(triSinCos, r, cos.getP2(), unitSinCos.getP2(), cos.getP1());
     offsetForLock(triTanSec, r, unitTanSec.getP2(), sec.getP2(), sec.getP1());
     offsetForLock(triCotCsc, r, cot.getP2(), csc.getP2(), cot.getP1());
   }
+
+  // Whenever the theta widget rotator changes, the geometry needs to be updated
   const rotatorUpdateCircle = () => {
-    updateCircle(Fig.tools.g2.clipAngle(rotator.transform.r(), '0to360'));
+    updateGeometry(Fig.tools.g2.clipAngle(rotator.transform.r(), '0to360'));
   };
-  rotator.fnMap.add('updateCircle', () => rotatorUpdateCircle());
-  figure.fnMap.global.add('circSetup', (payload) => {
-    const [ang] = payload;
-    rotator.setRotation(ang);
-  });
-  rotator.subscriptions.add('setState', 'updateCircle');
-
-  const add = (name, fn) => figure.fnMap.global.add(name, fn);
-
-  add('circToRot', () => {
-    if (rotator.isShown) {
-      rotator.animations.new()
-        .rotation({ target: 0.9, duration: 1 })
-        .start();
-    }
-  });
-  rotator.subscriptions.add('setTransform', 'updateCircle');
+  rotator.fnMap.add('updateGeometry', () => rotatorUpdateCircle());
+  // figure.fnMap.global.add('circSetup', (payload) => {
+  //   const [ang] = payload;
+  //   rotator.setRotation(ang);
+  // });
+  rotator.subscriptions.add('setState', 'updateGeometry');
+  rotator.subscriptions.add('setTransform', 'updateGeometry');
   rotator.onClick = () => figure.stop('complete');
 
+  // Helper function to add functions to the global function map
+  const add = (name, fn) => figure.fnMap.global.add(name, fn);
+
+  // //
+  // add('circToRot', () => {
+  //   if (rotator.isShown) {
+  //     rotator.animations.new()
+  //       .rotation({ target: 0.9, duration: 1 })
+  //       .start();
+  //   }
+  // });
+
+  // Update the triangle side labels so they are flipped if the triangle
+  // is flipped, and always horizontal
   const updateLabels = (triElement, el1, el2, el3, el4) => {
     const s = triElement.getScale();
     const r = s.x * s.y * triElement.getRotation();
@@ -630,59 +722,51 @@ function layoutCirc() {
     updateLabels(triCotCsc, cot, csc, unitCotCsc, thetaCotCsc);
   });
 
-  // triCotCsc.subscriptions.add('setTransform', 'updateRotation');
-  // triCotCsc.subscriptions.add('setState', 'updateRotation');
-  rotator.setRotation(0.5);
+  // rotator.setRotation(0.5);
 
-  flip.onClick = () => {
+  // When the flip button is clicked, flip the selected triangle
+  flipButton.onClick = () => {
     const triElement = circ.getElement(circ.customState.selected);
     const target = [triElement.getScale().x < 0 ? 1 : -1, 1];
     triElement.stop('freeze');
     triElement.animations.new().scale({ target, duration: 2 }).start();
   };
 
-  const updateLockText = (triElement) => {
-    // lock.setLabel(`\u{1F512}: ${triElement.customState.lock}`);
-
-    // lock.setLabel(`${triElement.customState.lock}`);
+  // Update the buttons that are dependent on the selected triangle
+  const updateButtons = (triElement) => {
     if (triElement.customState.lock === 'theta') {
-      lock._label.custom.updateText({ text: '|theta|' });
+      lockAngle._label.custom.updateText({ text: '|theta|' });
     } else if (triElement.customState.lock === 'comp') {
-      lock._label.custom.updateText({ text: '|_90||min||theta|' });
+      lockAngle._label.custom.updateText({ text: '|_90||min||theta|' });
     } else {
-      lock._label.custom.updateText({ text: '|_90|' });
+      lockAngle._label.custom.updateText({ text: '|_90|' });
     }
 
-    // lock._label.custom.updateText({ text: `${triElement.customState.lock}`});
-
-    // lock.setLabel('Hyp');
     if (triElement.customState.lockHyp) {
       hypLock.custom.lock();
     } else {
       hypLock.custom.unlock();
     }
-    // lockHyp.setLabel(`Hyp: ${triElement.customState.lockHyp ? '\u{1F512}' : '\u{1F513}'}`);
+
     if (triElement.customState.unit) {
-      // unitButton.setLabel('Unit: Yes');
       triElement._unit._label.show();
       viewUnit.custom.visible();
     } else {
-      // unitButton.setLabel('Unit: No');
       triElement._unit._label.hide();
       viewUnit.custom.hidden();
     }
     if (triElement.customState.theta) {
-      // thetaButton.setLabel('Theta: Yes');
       triElement._theta.show();
       viewTheta.custom.visible();
     } else {
-      // thetaButton.setLabel('Theta: No');
       triElement._theta.hide();
       viewTheta.custom.hidden();
     }
   };
 
-  lock.onClick = () => {
+  // When the lock angle button is clicked cycle through the different
+  // angles that can be locked
+  lockAngle.onClick = () => {
     if (circ.customState.selected === '') {
       return;
     }
@@ -694,9 +778,11 @@ function layoutCirc() {
     } else {
       triElement.customState.lock = 'theta';
     }
-    updateLockText(triElement);
+    updateButtons(triElement);
   };
 
+  // For buttons that have binary states, toggle their state and updated
+  // the associated customState property
   const toggleButton = (customStatePropertyName) => {
     if (circ.customState.selected === '' || circ.customState.selected == null) {
       return;
@@ -707,12 +793,13 @@ function layoutCirc() {
     } else {
       triElement.customState[customStatePropertyName] = true;
     }
-    updateLockText(triElement);
+    updateButtons(triElement);
   };
   lockHyp.onClick = () => toggleButton('lockHyp');
   unitButton.onClick = () => toggleButton('unit');
   thetaButton.onClick = () => toggleButton('theta');
 
+  // The arc button shows or hides the quarter circle
   arcButton.onClick = () => {
     if (circle.isShown) {
       circle.hide();
@@ -720,6 +807,9 @@ function layoutCirc() {
       circle.show();
     }
   };
+
+  // Whenever the visibility of the quarter circle changes, the color needs
+  // to be updated
   circle.fnMap.add('processButton', () => {
     if (circle.isShown) {
       arcButton.setColor(colText);
@@ -729,34 +819,43 @@ function layoutCirc() {
       arcButton._fill.setColor([1, 1, 1, 1]);
     }
   });
+  circle.subscriptions.add('visibility', 'processButton');
+
+  // Reset button resets all triangles to their default positions and rotations
   reset.onClick = () => { figure.fnMap.exec('reset'); };
 
+  // When a triangle selection changes, the selection dependent buttons need to
+  // be updated, hidden or shown, and the triangle fill color (movePad) becomes
+  // visible (if selected)
   const selectTriangle = (triangle) => {
     moveSinCos.setOpacity(0);
     moveTanSec.setOpacity(0);
     moveCotCsc.setOpacity(0);
     if (triangle === '') {
-      circ.hide(['lock', 'flip', 'lockHyp', 'unitButton', 'thetaButton', 'viewTheta', 'viewUnit', 'angleLock', 'hypLock']);
+      circ.hide(['lockAngle', 'flip', 'lockHyp', 'unitButton', 'thetaButton', 'viewTheta', 'viewUnit', 'angleLock', 'hypLock']);
       circ.customState.selected = '';
       return;
     }
     const element = circ.getElement(triangle);
     element._movePad.setOpacity(1);
-    // triangle._movePad.setOpacity(1);
     circ.customState.selected = triangle.name;
-    circ.show(['lock', 'flip', 'lockHyp', 'unitButton', 'thetaButton', 'viewTheta', 'viewUnit', 'angleLock', 'hypLock']);
-    updateLockText(element);
+    circ.show(['lockAngle', 'flip', 'lockHyp', 'unitButton', 'thetaButton', 'viewTheta', 'viewUnit', 'angleLock', 'hypLock']);
+    updateButtons(element);
   };
 
   add('selectSinCos', () => selectTriangle(triSinCos));
   add('selectTanSec', () => selectTriangle(triTanSec));
   add('selectCotCsc', () => selectTriangle(triCotCsc));
 
+  // When the state is set but before the states of each figure element is
+  // updated the appropriate triangle needs to be selected. This needs to happen
+  // before other figure elements update, as when the button elements get
+  // updated they will need to know which triangle is selected (if any)
   figure.subscriptions.add('stateSetInit', () => {
     selectTriangle(circ.customState.selected);
   });
 
-  circle.subscriptions.add('visibility', 'processButton');
+  // If the background element is clicked, then deselect all triangles
   background.onClick = () => { selectTriangle(''); };
 
 
@@ -766,21 +865,28 @@ function layoutCirc() {
     triCotCsc.showAll();
   };
 
-  const setLock = (triangle, angleName, side, unit, thetaFlag) => {
+  // Helper function to conveniently set angle lock, hypotenuse lock, unit label
+  // visibility and theta label visibility
+  const setLocksAndLabels = (triangle, angleName, side, unit, thetaFlag) => {
     triangle.customState.lock = angleName;
     triangle.customState.lockHyp = side;
     triangle.customState.unit = unit;
     triangle.customState.theta = thetaFlag;
   };
-  const setLocks = (
+
+  // Helper function to conveniently set all locks and labels
+  const setAllLocksAndLabels = (
     ang1, side1, unit1, theta1,
     ang2, side2, unit2, theta2,
     ang3, side3, unit3, theta3,
   ) => {
-    setLock(triSinCos, ang1, side1, unit1, theta1);
-    setLock(triTanSec, ang2, side2, unit2, theta2);
-    setLock(triCotCsc, ang3, side3, unit3, theta3);
+    setLocksAndLabels(triSinCos, ang1, side1, unit1, theta1);
+    setLocksAndLabels(triTanSec, ang2, side2, unit2, theta2);
+    setLocksAndLabels(triCotCsc, ang3, side3, unit3, theta3);
   };
+
+  // Bind rotation and translation move elements to their respective
+  // triangle collections. This could also be done in the object definition.
   const bindMoveElements = (triangle, fn) => {
     triangle._rotTheta.move.element = triangle.getPath();
     triangle._rotRight.move.element = triangle.getPath();
@@ -806,29 +912,38 @@ function layoutCirc() {
   .##........##....##..##.......##....##.##..........##....##....##
   .##........##.....##.########..######..########....##.....######.
   */
-  const getPosition = (triangle, p, vertex, rotation, flipFlag) => {
+  // Helper function that calculates the position of a triangle taking into
+  // account a desired position (p), which angle is locked (angleLock),
+  // the desired rotation of the triangle (rotation) and whether it is
+  // flipped or not (flipFlag)
+  const getPosition = (triangle, p, angleLock, rotation, flipFlag) => {
     const matrix = new Fig.Transform().scale(flipFlag ? -1 : 1, 1).rotate(rotation).matrix();
     const { center, x, y } = triangle.customState;
     const thetaVertex = point(-center.x, -center.y);
     const rightVertex = (thetaVertex.add(x, 0));
     const compVertex = thetaVertex.add(x, y);
-    if (vertex === 'theta') {
+    if (angleLock === 'theta') {
       return Fig.tools.g2.getPoint(p).sub(thetaVertex.transformBy(matrix));
     }
-    if (vertex === 'comp') {
+    if (angleLock === 'comp') {
       return Fig.tools.g2.getPoint(p).sub(compVertex.transformBy(matrix));
     }
     return Fig.tools.g2.getPoint(p).sub(rightVertex.transformBy(matrix));
   };
 
-  const createScenario = (scenario, triangle, p, vertex, rotation, flipFlag) => {
+  // Create a scenario for a triangle based on a desired position (p), rotation
+  // (rotation), whether it is flipped (flipFlag) and which angle is locked
+  // (angleLock)
+  const createScenario = (scenario, triangle, p, angleLock, rotation, flipFlag) => {
     triangle.scenarios[scenario] = {
-      position: getPosition(triangle, p, vertex, rotation, flipFlag),
+      position: getPosition(triangle, p, angleLock, rotation, flipFlag),
       scale: [flipFlag ? -1 : 1, 1],
       rotation,
     };
   };
 
+  // Create the preset and reset scenarios - preset 4 and 5 are used in the
+  // video but do not have associated buttons
   createScenario('preset1', triSinCos, origin, 'theta', 0, false);
   createScenario('preset1', triTanSec, origin, 'theta', 0, false);
   createScenario('preset1', triCotCsc, [origin[0] - thick / 2, origin[1] + thick / 2], 'theta', 0, false);
@@ -848,6 +963,29 @@ function layoutCirc() {
   createScenario('preset5', triTanSec, [0, 1.3], 'theta', Math.PI / 2 + defaultAngle, true);
   createScenario('preset5', triCotCsc, [0, 1.3], 'theta', Math.PI + Math.PI / 2 - defaultAngle, false);
 
+/**
+  * When animating to a scenario, each triangle must take the same time to
+  * reach their final position. As triangles can be thrown far off the screen,
+  * or can be very close to their final position, it is desirable to animate
+  * over a duration based on velocity. Therefore this function calculates the
+  * duration for each triangle, and the quarter circle, to reach their final
+  * positions, and then uses the maximum duration for the animation of all
+  * elements.
+  *
+  * Tricky note - the rotation of theta to the default angle happens in this
+  * same duration. It is important that this rotation animation step is BEFORE
+  * the triangle animation steps as the theta angle changes the position of the
+  * triangles. When a seek state is recorded, if the rotator angle is set after
+  * the triangle positions, the triangles will be in a slightly different
+  * position comparing the seek state time to the time of the same animation
+  * frame but arrived at during playback. For most people this will not matter
+  * but for the automated testing of this example, screenshots are captured
+  * that compare seek states with the same times during playback and require
+  * them to be the same.
+  *
+  * Also note, the rotator is disabled when animating between scenarios as it
+  * results in funky stuff not worth dealing with.
+  */
   function animateScenario(
     scenario, dissolveOut, locks, finalAngle = defaultAngle, showCircle = true,
   ) {
@@ -871,7 +1009,6 @@ function layoutCirc() {
       );
     }
     const duration = Math.min(3, Math.max(duration1, duration2, duration3, duration4));
-    // rotator.animations.new().rotation({ target: defaultAngle, duration }).start();
     figure.fnMap.exec('lockInput');
     circ.animations.new()
       .inParallel([
@@ -886,12 +1023,13 @@ function layoutCirc() {
       .trigger('unlockInput')
       .start();
     selectTriangle('');
-    setLocks(...locks);
+    setAllLocksAndLabels(...locks);
   }
 
   figure.fnMap.global.add('lockInput', () => { rotator.isTouchable = false; });
   figure.fnMap.global.add('unlockInput', () => { rotator.isTouchable = true; });
 
+  // Define the presets as functions in the global function map
   figure.fnMap.global.add('preset1', () => {
     animateScenario(
       'preset1',
@@ -980,9 +1118,9 @@ function layoutCirc() {
     rotator.setRotation(defaultAngle);
     circ.setScenarios('reset');
     circle.hide();
-    setLock(triSinCos, 'theta', false, true, true);
-    setLock(triTanSec, 'theta', false, true, true);
-    setLock(triCotCsc, 'theta', false, true, true);
+    setLocksAndLabels(triSinCos, 'theta', false, true, true);
+    setLocksAndLabels(triTanSec, 'theta', false, true, true);
+    setLocksAndLabels(triCotCsc, 'theta', false, true, true);
     figure.fnMap.exec('unlockInput');
     selectTriangle('');
   });
@@ -996,6 +1134,8 @@ function layoutCirc() {
   .##........##.....##.##.......##....##.##......
   .##.........#######..########..######..########
   */
+  // Add various functions to the global function map that pulse various parts
+  // of the geometries for use during video playback
   add('pulseSinTri', () => triSinCos.pulse({ duration: 1.5, scale: 1.2 }));
   add('pulseTanTri', () => triTanSec.pulse({ duration: 1.5, scale: 1.2 }));
   add('pulseCotTri', () => triCotCsc.pulse({ duration: 1.5, scale: 1.2 }));
