@@ -179,27 +179,11 @@ function makeEquation() {
     },
   });
 
-  // // Helper function to add a function to the global function map
-  // const add = (name, fn) => figure.fnMap.global.add(name, fn);
-
-  // Dissolve the equation in to its values form
+  // Add function to function map that dissolves equation in to its values form
   figure.fnMap.global.add('eqnInToValues', () => {
     figure.elements._eqn.showForm('values');
     figure.elements._eqn.animations.new().dissolveIn().start();
     figure.fnMap.exec('triSetup', [2, 1.453], 'values', true);
   });
-
-//   // Helper function that pulses the specific elements of the equation
-//   const sPulse = (element, xAlign = 'center', yAlign = 'middle') => figure.elements._eqn.pulse({
-//     elements: [element], xAlign, yAlign, scale: 1.5, duration: 1.5,
-//   });
-
-//   // Functions to pulse the trigonometic functions individually
-//   add('eqnPulseSin', () => sPulse('sin', 'right', 'middle'));
-//   add('eqnPulseCos', () => sPulse('cos', 'right', 'middle'));
-//   add('eqnPulseTan', () => sPulse('tan', 'right', 'middle'));
-//   add('eqnPulseCsc', () => sPulse('csc', 'right', 'middle'));
-//   add('eqnPulseSec', () => sPulse('sec', 'right', 'middle'));
-//   add('eqnPulseCot', () => sPulse('cot', 'right', 'middle'));
 }
 

@@ -23,7 +23,9 @@ import type {
 //   AnimationStep,
 // } from './Animation';
 import GlobalAnimation from '../webgl/GlobalAnimation';
-import { joinObjects, duplicateFromTo, SubscriptionManager, PerformanceTimer } from '../../tools/tools';
+import {
+  joinObjects, duplicateFromTo, SubscriptionManager, PerformanceTimer,
+} from '../../tools/tools';
 import { getState } from '../Recorder/state';
 import { FunctionMap } from '../../tools/FunctionMap';
 import type { TypeWhen } from '../webgl/GlobalAnimation';
@@ -704,6 +706,7 @@ export default class AnimationManager {
       }
       this.state = 'idle';
     }
+    // $FlowFixMe
     if (FIGURE1DEBUG) { timer.stamp('finished'); }
     for (let i = animationsToRemove.length - 1; i >= 0; i -= 1) {
       this.animations.splice(animationsToRemove[i], 1);
@@ -717,8 +720,8 @@ export default class AnimationManager {
       const deltas = timer.deltas();
       if (window.figureOneDebug == null) {
         window.figureOneDebug = { setupDraw: [] };
-      }
-      if (this.element.name === 'rootCollection') {
+      } // $FlowFixMe
+      if (this.element.name === 'rootCollection') { // $FlowFixMe
         window.figureOneDebug.animationManager.push([
           this.element.getPath(),
           new GlobalAnimation().now(),

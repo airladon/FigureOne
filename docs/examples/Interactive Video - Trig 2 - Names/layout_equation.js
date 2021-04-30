@@ -1,19 +1,25 @@
 /* eslint-disable camelcase */
 /* global colSin, colCos, colCot, colTan, colSec, colCsc, colTheta,
-   figure, colOpp, colHyp, colAdj, colRad, colThetaComp, thin, colText */
+   figure, colRad, colThetaComp, thin, colText */
+
 // eslint-disable-next-line
 function makeEquation() {
+  // Helper function that makes a container of default width with center
+  // alignment
   const cont = (content, width = 0.6, xAlign = 'center') => ({
     container: { content, width, xAlign },
   });
+
+  // Helper function that makes a fraction with specificied numerator
+  // and denominator space to vinculum, within a container of some width
   function frac(
-    numerator, symbol, denominator, nSpace = 0.03, dSpace = 0.03, width, overhang = 0.03,
+    numerator, symbol, denominator, nSpace = 0.03, dSpace = 0.03, width = 0.6, overhang = 0.03,
   ) {
     return cont({
       frac: {
-        numerator, // : cont(numerator, width),
+        numerator,
         symbol,
-        denominator, // : cont(denominator, width),
+        denominator,
         numeratorSpace: nSpace,
         denominatorSpace: dSpace,
         scale: 0.95,
@@ -22,6 +28,7 @@ function makeEquation() {
     }, width, 'right');
   }
 
+  // Helper function to create an equation line
   const ln = (...content) => ({
     lines: {
       content: [...content],
@@ -32,6 +39,7 @@ function makeEquation() {
     },
   });
 
+  // Helper function to create an equation strike
   const s = (content, strikeIndex) => ({
     strike: {
       content, symbol: `s${strikeIndex}`, inSize: false,
@@ -192,8 +200,10 @@ function makeEquation() {
     },
   });
 
+  // Helper function to add functions to the global funciton map
   const add = (name, fn) => figure.fnMap.global.add(name, fn);
 
+  // Add functions that pulse parts of the equation to the function map
   const sPulse = (element, xAlign = 'center', yAlign = 'middle', scale = 1.5) => figure.elements._eqn.pulse({
     elements: [element], xAlign, yAlign, scale, duration: 1.5,
   });
@@ -219,6 +229,7 @@ function makeEquation() {
   add('eqnPulseHyp3', () => sPulse('hyp_3', 'center', 'bottom'));
   add('eqnPulseHyp4', () => sPulse('hyp_4', 'center', 'bottom'));
 
+  // Functions that set equation element colors
   const eqnSetColor = (opp, adj, hyp) => {
     figure.elements._eqn._opp_1.setColor(opp);
     figure.elements._eqn._opp_2.setColor(opp);
@@ -239,6 +250,8 @@ function makeEquation() {
   add('eqnColTanSec', () => eqnSetColor(colTan, colRad, colSec));
   add('eqnColCotCsc', () => eqnSetColor(colRad, colCot, colCsc));
 
+  // This equation contains forms that describe the complementary function
+  // names that can be animated to show where they come from
   figure.add({
     name: 'eqn2',
     method: 'equation',

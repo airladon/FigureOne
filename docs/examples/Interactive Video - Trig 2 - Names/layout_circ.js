@@ -2,10 +2,16 @@
 /* globals figure, colTheta, colCot, colTan, colSin, colCos, colSec, colCsc,
    colGrey, thin, thick, colText, colRad, colDarkGrey, colThetaComp */
 
+/**
+ * This file creates the geometry that relates the circle to the right angle
+ * triangle. The right angle triangle can grow between three different sizes
+ * where the hypotenuse, adjacent side to theta, and opposite side to theta
+ * can each be unit length.
+ */
 // eslint-disable-next-line
 function layoutCirc() {
+  // Default radius, angle and trig values related to angle
   const rad = 1.8;
-  // /const rad = 1.8;
   const piOn2 = Math.PI / 2;
   const dAng = 0.7;
   const dSin = rad * Math.sin(dAng);
@@ -14,8 +20,9 @@ function layoutCirc() {
   const dCot = rad / Math.tan(dAng);
   const dSec = rad / Math.cos(dAng);
   const dCsc = rad / Math.sin(dAng);
-  const t = [];
-  t.push(performance.now() / 1000);
+
+  // Helper function that creates a line primitive definition object with
+  // default width, p1, length, angle and dash pattern
   function linePrimitve(
     name, color, width = thick, p1 = [0, 0], length = 1, ang = 0, dash = [],
   ) {
@@ -28,6 +35,8 @@ function layoutCirc() {
     };
   }
 
+  // Helper function that creates a line collection definition object with
+  // default properties as well as label positions and styles
   const line = (name, color, text, includeTheta, width = thick, p1, length, ang, location = 'negative', linePosition = 0.5, style = 'normal') => {
     let forms = { 0: text };
     if (includeTheta === true) {
@@ -75,6 +84,7 @@ function layoutCirc() {
     };
   };
 
+  // Helper function to create an arc definition object
   function arc(name, color, width = thin, sides = 100, angleToDraw = Math.PI * 2, rotation = 0) {
     return {
       name,
@@ -85,6 +95,7 @@ function layoutCirc() {
     };
   }
 
+  // Helper function to create a right angle definition object
   const rightAngle = (name, position, startAngle, r = 0.15, color = colGrey) => ({
     name,
     method: 'collections.angle',
@@ -97,6 +108,7 @@ function layoutCirc() {
     },
   });
 
+  // Helper function to create a generic angle definition object
   function angle(
     name,
     text,
@@ -133,9 +145,12 @@ function layoutCirc() {
     name: 'circ',
     method: 'collection',
     elements: [
+      // Unit circle arc and axes
       arc('arc', colGrey, thin, 300, Math.PI / 2, 0),
       linePrimitve('x', colGrey, thin, [0, 0], rad, 0),
       linePrimitve('y', colGrey, thin, [0, 0], rad, Math.PI / 2),
+
+      // Main triangle
       {
         name: 'tri',
         method: 'polyline',
@@ -175,18 +190,24 @@ function layoutCirc() {
       line('unitAdj', colRad, '1', false, thick, [0, 0], rad, 0, 'bottom'),
       line('unitOpp', colRad, '1', false, thick, [dCot, 0], rad, piOn2, 'right', 0.5),
 
+      // Triangle side labels
       line('xSide', colText, 'x', false, 0, [0, 0], dCos, 0, 'bottom', 0.5, 'italic'),
       line('ySide', colText, 'y', false, 0, [dCos, 0], dSin, Math.PI / 2, 'right', 0.5, 'italic'),
 
+      // Triangle sides associated with trig functions
       line('sinTheta', colSin, 'sin', true, thick, [dCos, 0], dSin, piOn2, 'right'),
       line('tanTheta', colTan, 'tan', true, thick, [rad, 0], dTan, piOn2, 'right'),
       line('secTheta', colSec, 'sec', true, thick, [0, 0], dSec, dAng, 'left'),
       line('cosTheta', colCos, 'cos', true, thick, [0, 0], dCos, 0, 'bottom'),
       line('cotTheta', colCot, 'cot', true, thick, [0, 0], dCot, 0, 'bottom'),
       line('cscTheta', colCsc, 'csc', true, thick, [0, 0], dCsc, dAng, 'left'),
+
+      // Complementary trig function side labels
       line('sinThetaComp', colCos, 'sin', 'comp', 0, [0, 0], dCos, 0, 'bottom'),
       line('tanThetaComp', colCot, 'tan', 'comp', 0, [0, 0], dCot, 0, 'bottom'),
       line('secThetaComp', colCsc, 'sec', 'comp', 0, [0, 0], dCsc, dAng, 'left'),
+
+      // Center point
       {
         name: 'point',
         method: 'polygon',
@@ -197,21 +218,21 @@ function layoutCirc() {
           position: [dCos, dSin],
         },
       },
-      {
-        name: 'rotator',
-        method: 'collections.line',
-        options: {
-          length: rad,
-          width: 0.1,
-          color: [0, 0, 0, 0],
-        },
-        mods: {
-          move: { type: 'rotation', bounds: { rotation: { min: 0, max: Math.PI / 2 * 0.999 } } },
-          dimColor: [0, 0, 0, 0],
-          isMovable: true,
-          touchBorder: [0, 0.5, 1.5, 0.5],
-        },
-      },
+      // {
+      //   name: 'rotator',
+      //   method: 'collections.line',
+      //   options: {
+      //     length: rad,
+      //     width: 0.1,
+      //     color: [0, 0, 0, 0],
+      //   },
+      //   mods: {
+      //     move: { type: 'rotation', bounds: { rotation: { min: 0, max: Math.PI / 2 * 0.999 } } },
+      //     dimColor: [0, 0, 0, 0],
+      //     isMovable: true,
+      //     touchBorder: [0, 0.5, 1.5, 0.5],
+      //   },
+      // },
     ],
     mods: {
       scenarios: {
@@ -220,11 +241,12 @@ function layoutCirc() {
       },
     },
   });
-  t.push(performance.now() / 1000);
+
+  // Helper function to get figure elements from the circle element
   const get = list => circle.getElements(list);
-  const [unitHyp] = get(['unitHyp']);
   const [tri] = get('tri');
 
+  // Helper functions to add functions to the global function map
   const addPulseFn = (name, element, xAlign, yAlign, scale = 1.8) => {
     figure.fnMap.global.add(name, () => {
       circle.getElement(element).pulse({
@@ -240,6 +262,8 @@ function layoutCirc() {
       .start();
   });
 
+  // Functions that pulse various figure elements which will be called during
+  // the slide show
   addPulseFn('circPulseTan', 'tanTheta.label', 'left', 'middle');
   addPulseFn('circPulseCot', 'cotTheta.label', 'center', 'top');
   addPulseFn('circPulseCsc', 'cscTheta.label', 'right', 'bottom');
@@ -251,15 +275,18 @@ function layoutCirc() {
   addPulseFn('circPulseUnitHyp', 'unitHyp.label', 'right', 'bottom', 2.7);
   addPulseFn('circPulseX', 'xSide.label', 'center', 'top', 2);
   addPulseFn('circPulseY', 'ySide.label', 'left', 'middle', 2);
-  unitHyp.subscriptions.add('setTransform', () => {
-    unitHyp.updateLabel();
-  });
 
+  // Set tri.customState.xLength and update triangle points for new xLength.
+  // tri.customState.xLength will be saved in all recorder seek states. Whenever
+  // a state is set, the xLength will be used to generate the triangle points
+  // to the correct size.
   const triToX = (x) => {
     tri.customState.xLength = x;
     const y = Math.tan(dAng) * x;
     tri.custom.updatePoints({ points: [[0, 0], [x, y], [x, 0]] });
   };
+
+  // Set triangle size between cos triangle and tan triangle
   add('circTriCosToTan', (percent) => {
     const from = dCos;
     const to = rad;
@@ -267,6 +294,8 @@ function layoutCirc() {
     const x = from + percent * delta;
     triToX(x);
   });
+
+  // Set triangle size between tan triangle and cot triangle
   add('circTriTanToCot', (percent) => {
     const from = rad;
     const to = rad / Math.tan(dAng);
@@ -274,6 +303,9 @@ function layoutCirc() {
     const x = from + percent * delta;
     triToX(x);
   });
+
+  // Animate triangle size where callback will be 'circTriCosToTan' or
+  // 'circTriTanToCot'
   const animateTri = (callback) => {
     circle.animations.new()
       .custom({
@@ -282,12 +314,16 @@ function layoutCirc() {
       })
       .start();
   };
+
+  // Animate or set triangle sizes
   add('circTriAnimateToTan', () => animateTri('circTriCosToTan'));
   add('circTriAnimateToCot', () => animateTri('circTriTanToCot'));
   add('circTriToTan', () => triToX(rad));
   add('circTriToCos', () => triToX(dCos));
   add('circTriToCot', () => triToX(rad / Math.tan(dAng)));
 
+  // Whenever a state is set, regenerate the triangles points based on the
+  // xLength stored in the state
   add('circSetState', () => {
     triToX(tri.customState.xLength);
   });

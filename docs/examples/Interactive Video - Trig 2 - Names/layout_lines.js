@@ -2,6 +2,10 @@
 /* globals Fig, figure, colTan, colSec, colSin, colGrey, thin, thick,
    colDarkGrey, colRad, leftText */
 
+/**
+ * Geometry that shows the different names of lines related to circles (the
+ * tangent, secant and chord lines) and where their names come from
+ */
 // eslint-disable-next-line
 function layoutLines() {
   const radius = 0.8;
@@ -123,13 +127,6 @@ function layoutLines() {
         linesDefault: { position: [-1.2, -1.1] },
         linesCenter: { position: [-0.15, -1.1] },
       }),
-      // leftText('sine_Legacy', '|sine|: from Latin |sinus| - "bay"', {
-      //   sine: { font: { style: 'italic', family: 'Times New Roman', color: colSin } },
-      //   sinus: { font: { style: 'italic', family: 'Times New Roman' } },
-      // }, [-1.32, -1.1], 0.15),
-      // leftText('jya_Legacy', 'from Sanskrit |jya-ardha| - "half-cord"', {
-      //   'jya-ardha': { font: { style: 'italic', family: 'Times New Roman' } },
-      // }, [-1, -1.3], 0.15),
       leftText('secant', '|secant|', {
         secant: { font: { style: 'italic', family: 'Times New Roman', color: colSec } },
       }, [-1.2, -1.1], 0.15, {
@@ -196,13 +193,19 @@ function layoutLines() {
       radius * 1.2 * Math.cos(angle), radius * 1.2 * Math.sin(angle),
     ],
   };
+
+  // Helper function to add functions to the global function map
   const add = (name, func) => figure.fnMap.global.add(name, func);
+
+  // Animate line to tagent position
   add('linesToTan', () => {
     line.animations.new()
       .position({ target: lines.custom.tanPosition, duration: 1.5 })
       .trigger(() => line.setColor(colTan))
       .start();
   });
+
+  // Animate line to secant position
   add('linesToSec', () => {
     line.animations.new()
       .inParallel([
@@ -211,39 +214,52 @@ function layoutLines() {
       ])
       .start();
   });
+
+  // Animate line to chord position
   add('linesToChord', () => {
     line.animations.new()
       .position({ target: lines.custom.chordPosition, duration: 3 })
       .trigger(() => line.setColor(colSin))
       .start();
   });
+
+  // Set line to tagent position
   add('linesSetTan', () => {
     line.setPosition(lines.custom.tanPosition);
     line.setColor(colTan);
     line.setRotation(0);
   });
+
+  // Set line to secant position
   add('linesSetSec', () => {
     line.setPosition(lines.custom.secPosition);
     line.setColor(colSec);
     line.setRotation(0);
   });
+
+  // Set line to chord position
   add('linesSetChord', () => {
     line.setPosition(lines.custom.chordPosition);
     line.setColor(colSin);
     line.setRotation(-angle);
   });
+
+  // Set line outside the circle
   add('linesSetOutside', () => {
     line.setColor(colGrey);
     line.setPosition(lines.custom.outsidePosition);
     line.setRotation(0);
   });
+
+  // Briefly show the arc between the chord line that forms a bow
   add('showBow', () => {
     line.animations.new()
-      // .rotation({ target: -angle, duration: 1 })
       .dissolveIn({ element: bow, duration: 0.5 })
       .dissolveOut({ element: bow, duration: 0.5, delay: 1 })
       .start();
   });
+
+  // Animate a full chord line to half chord line
   add('showHalfChord', () => {
     lines._halfChord.showAll();
     lines._dullChord.showAll();
@@ -253,8 +269,9 @@ function layoutLines() {
       .length({ target: length / 2, duration: 0.8 })
       .start();
   });
+
+  // Set half chord length
   add('setHalfChordLength', () => {
     lines._halfChord.setLength(length / 2);
   });
-  add('resetBow', () => line.setRotation(0));
 }

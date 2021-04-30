@@ -393,8 +393,6 @@ function makeSlides() {
       ],
     ],
     steadyState: 'linesSetSec',
-    // time: '3:53',
-    // exec: ['4:14', 'circToRot'],
   });
 
   slides.push({
