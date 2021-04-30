@@ -45,6 +45,7 @@ class GlobalAnimation {
   manualTimerIds: number;
   manualQueueCounter: number;
   manualOneFrameOnly: boolean;
+  animateOnFrame: boolean;
 
   constructor() {
     // If the instance alread exists, then don't create a new instance.
@@ -142,11 +143,11 @@ class GlobalAnimation {
     this.now = () => performance.now();
   }
 
-  frame(duration: number) {
+  frame(timeStep: number) {
     this.manualQueueCounter = 0;
-    const targetTime = this.nowTime + duration * 1000;
+    const targetTime = this.nowTime + timeStep * 1000;
     // console.log('before')
-    this.incrementManualTimers(this.nowTime + duration * 1000);
+    this.incrementManualTimers(this.nowTime + timeStep * 1000);
     // console.log('after')
     this.nowTime = targetTime;
     this.animateOnFrame = true;
@@ -312,7 +313,6 @@ class GlobalAnimation {
   //     this.queueNextDebugFrame();
   //   }
   // }
-
   // Queue up an animation frame
   animateNextFrame() {
     if (this.manual) {

@@ -1,9 +1,11 @@
 /* eslint-disable camelcase, no-restricted-globals, no-param-reassign */
 /* globals figure, colTheta, colCot, colTan, colSin, colCos, colSec, colCsc,
-   colGrey, Fig, thin, thick, colText, medium */
+   colGrey, Fig, thin, thick, colText, medium, layoutCirc */
 
-// eslint-disable-next-line
+/* eslint no-unused-vars: ["error", { "vars": "local" }] */
+
 function layoutCirc() {
+  // Default dimensions of triangles
   const radius = 1.2;
   const defaultAngle = 35 / 180 * Math.PI;
   const dCos = radius * Math.cos(defaultAngle);
@@ -82,7 +84,7 @@ function layoutCirc() {
           position: [0, 0.043],
         },
       },
-      { name: 'center', method: 'polygon', options: { radius: 0.012, sides: 6 }},
+      { name: 'center', method: 'polygon', options: { radius: 0.012, sides: 6 } },
       { name: 'strike', method: 'line', options: { p1: [-0.05, -0.05], p2: [0.05, 0.05], width: medium } },
     ],
     options: {
@@ -500,9 +502,6 @@ function layoutCirc() {
   };
   function updateCircle(rIn) {
     const r = rIn > Math.PI / 4 ? rIn - 0.00001 : rIn + 0.00001;
-    if (window.asdf) {
-      console.log('r', r)
-    }
     const cosR = Math.cos(r);
     const sinR = Math.sin(r);
     const cosVal = Math.abs(radius * cosR);
@@ -1023,7 +1022,6 @@ function layoutCirc() {
   pulseLabel('pulseSinUnit', unitSinCos, 'right', 'bottom');
   pulseLabel('pulseSec', sec, 'right', 'bottom');
   pulseLabel('pulseCsc', csc, 'right', 'bottom');
-  // add('pulseSin', () => triSinCos._sin._label.pulse({ scale: 1.8, xAlign: 'left' }));
 
   figure.recorder.subscriptions.add('playbackStopped', 'unlockInput');
   figure.recorder.subscriptions.add('seek', 'unlockInput');
