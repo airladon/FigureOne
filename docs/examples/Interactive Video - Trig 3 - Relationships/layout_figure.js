@@ -78,7 +78,6 @@ centerText = (name, text, modifiers = {}, position = [0, 0], size = 0.2) => ({
       default: { position, scale: 1 },
       topHigh: { position: [0, 1.2], scale: 1 },
       top: { position: [0, 1], scale: 1 },
-      // right: { position: [1, 0] },
     },
     isTouchable: true,
   },

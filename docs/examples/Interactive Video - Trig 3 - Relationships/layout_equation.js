@@ -140,6 +140,7 @@ function makeEquation() {
   });
   const eqn = figure.getElement('eqn');
 
+  // Helper function that dissolves in, then out, an equation form
   const addShow = (name, form, delay = 3, scenario = 'default') => {
     figure.fnMap.global.add(name, () => {
       eqn.stop();

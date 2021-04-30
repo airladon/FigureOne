@@ -17,6 +17,13 @@ function layout() {
     },
   });
 }
+
+/*
+Execute all figure element creation at the same time. If it is executed in each
+respective file, then there is a delay between each as the next file is loaded.
+As a result, the figure is constructed in patches, with everything shown before
+the slideNavigator kicks in and hides and positions everything to start.
+*/
 makeEquation();
 layoutCirc();
 layoutLines();

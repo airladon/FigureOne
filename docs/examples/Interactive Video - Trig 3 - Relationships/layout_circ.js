@@ -1,9 +1,10 @@
 /* eslint-disable camelcase, no-restricted-globals, no-param-reassign */
 /* globals figure, colTheta, colCot, colTan, colSin, colCos, colSec, colCsc,
-   colGrey, Fig, thin, thick, colText, medium, layoutCirc */
+   colGrey, Fig, thin, thick, colText, medium */
 
 /* eslint no-unused-vars: ["error", { "vars": "local" }] */
 
+// eslint-disable-next-line
 function layoutCirc() {
   // Default dimensions of triangles
   const radius = 1.2;
@@ -672,25 +673,12 @@ function layoutCirc() {
     updateGeometry(Fig.tools.g2.clipAngle(rotator.transform.r(), '0to360'));
   };
   rotator.fnMap.add('updateGeometry', () => rotatorUpdateCircle());
-  // figure.fnMap.global.add('circSetup', (payload) => {
-  //   const [ang] = payload;
-  //   rotator.setRotation(ang);
-  // });
   rotator.subscriptions.add('setState', 'updateGeometry');
   rotator.subscriptions.add('setTransform', 'updateGeometry');
   rotator.onClick = () => figure.stop('complete');
 
   // Helper function to add functions to the global function map
   const add = (name, fn) => figure.fnMap.global.add(name, fn);
-
-  // //
-  // add('circToRot', () => {
-  //   if (rotator.isShown) {
-  //     rotator.animations.new()
-  //       .rotation({ target: 0.9, duration: 1 })
-  //       .start();
-  //   }
-  // });
 
   // Update the triangle side labels so they are flipped if the triangle
   // is flipped, and always horizontal
@@ -722,7 +710,6 @@ function layoutCirc() {
     updateLabels(triCotCsc, cot, csc, unitCotCsc, thetaCotCsc);
   });
 
-  // rotator.setRotation(0.5);
 
   // When the flip button is clicked, flip the selected triangle
   flipButton.onClick = () => {
@@ -963,7 +950,7 @@ function layoutCirc() {
   createScenario('preset5', triTanSec, [0, 1.3], 'theta', Math.PI / 2 + defaultAngle, true);
   createScenario('preset5', triCotCsc, [0, 1.3], 'theta', Math.PI + Math.PI / 2 - defaultAngle, false);
 
-/**
+  /**
   * When animating to a scenario, each triangle must take the same time to
   * reach their final position. As triangles can be thrown far off the screen,
   * or can be very close to their final position, it is desirable to animate

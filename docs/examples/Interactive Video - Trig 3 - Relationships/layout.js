@@ -4,6 +4,13 @@
 function layout() {
   figure.addCursor({ color: [0, 0.5, 1, 0.7], radius: 0.15 });
 }
+
+/*
+Execute all figure element creation at the same time. If it is executed in each
+respective file, then there is a delay between each as the next file is loaded.
+As a result, the figure is constructed in patches, with everything shown before
+the slideNavigator kicks in and hides and positions everything to start.
+*/
 layoutCirc();
 makeEquation();
 layout();
