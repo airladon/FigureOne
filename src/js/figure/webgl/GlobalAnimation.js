@@ -45,21 +45,14 @@ class GlobalAnimation {
   drawQueue: Array<(number) => void>;
   nextDrawQueue: Array<(number) => void>;
   lastDrawTime: ?number;
-  debug: boolean;
-  simulatedFPS: number;
-  debugFrameTime: ?number;
   nowTime: number;
-  now: function;
   timeoutId: ?TimeoutID;
   speed: number;
-  // syncNow: () => number;
   synchronizedNow: number;
   updateSyncNow: boolean;
-  // timers: Array<TimeoutID>;
   syncNowTimer: TimeoutID;
+
   manual: boolean;
-  manualTimers: Object;
-  manualTimerIds: number;
   manualQueueCounter: number;
   manualOneFrameOnly: boolean;
   animateOnFrame: boolean;
@@ -96,35 +89,14 @@ class GlobalAnimation {
     this.drawQueue = [];
     this.nextDrawQueue = [];
     this.lastDrawTime = null;
-    this.debug = false;
     this.idCounter = 0;
     this.speed = 1;
-    // this.simulatedFPS = 60;
-    // this.debugFrameTime = 0.5;
     this.lastTime = performance.now();
     this.nowTime = this.lastTime;
-    // if (this.timers != null && this.timers.length > 0) {
-    //   this.timers.forEach(id => clearTimeout(id));
-    // }
-    // if (this.timers != null) {    // Needed for when first instantiated
-    //   Object.values(this.timers).forEach((timer) => {
-    //     if (timer.id != null) {
-    //       clearTimeout(timer.id);
-    //     }
-    //   });
-    // }
-    // this.timers = {};
     this.clearTimeouts();
-    // this.timers = [];
-    // if (this.timeoutId != null) {
-    //   clearTimeout(this.timeoutId);
-    // }
     this.timeoutId = null;
-    // this.now = () => performance.now();
     this.updateSyncNow = true;
     this.manual = false;
-    this.manualTimers = {};
-    this.manualTimerIds = 0;
     this.manualQueueCounter = 0;
     this.manualOneFrameOnly = true;
     this.animateOnFrame = false;
@@ -132,7 +104,7 @@ class GlobalAnimation {
 
   clearTimeouts() {
     if (this.timers != null) {    // Needed for when first instantiated
-      Object.values(this.timers).forEach((timer) => {
+      Object.keys(this.timers).map(id => this.timers[id]).forEach((timer) => {
         if (timer.id != null) {
           clearTimeout(timer.id);
         }
@@ -174,17 +146,6 @@ class GlobalAnimation {
     this.lastTime = now;
   }
 
-  // getNow() {
-  //   this.updateNow();
-  //   return this.nowTime;
-  // }
-
-  // getNowManual(deltaInMilliseconds: number = 0) {
-  //   this.nowTime += deltaInMilliseconds * this.speed;
-  //   this.lastTime = this.nowTime;
-  //   return this.nowTime;
-  // }
-
   /**
    * Current relative time.
    *
@@ -214,7 +175,8 @@ class GlobalAnimation {
     if (speedFactor <= 0) {
       throw new Error(`speedFactor ${speedFactor} is not greater than 0`);
     }
-    Object.keys(this.timers).map(id => this.timers[id]).forEach((timer) => {
+    Object.keys(this.timers).forEach((id) => {
+      const timer = this.timers[id];
       const remainingTime = timer.timeout - this.nowTime;
       const newRemainingTime = remainingTime / speedFactor;
       if (timer.id != null) {
@@ -242,11 +204,20 @@ class GlobalAnimation {
   //   this.queueNextDebugFrame();
   // }
 
+  /**
+   * Set manual frames.
+   * When set, all animation frames can only be initiated with `frame`.
+   */
   setManualFrames() {
     this.updateNow();
     this.manual = true;
   }
 
+  /**
+   * End manual frames.
+   * When ended, animation frames will again be triggered by
+   * requestAnimationFrame from the browser.
+   */
   endManualFrames() {
     this.manual = false;
     this.lastTime = performance.now();
@@ -285,21 +256,6 @@ class GlobalAnimation {
         }
       }
     }
-    // const nextTimer = Object.keys(this.timers).map(id => this.timers[id]).reduce((acc, val) => {
-    //   if (val.timeout === acc.timeout && (val.stateTimer || acc.stateTimer)) {
-    //     if (val.stateTimer) {
-    //       return val;
-    //     }
-    //     return acc;
-    //   }
-    //   if (val.timeout < acc.timeout) {
-    //     return val;
-    //   }
-    //   return acc;
-    // });
-    // if (nextTimer.timeout > nowTime) {
-    //   return;
-    // }
     if (nextTimer == null) {
       return 0;
     }
@@ -309,98 +265,28 @@ class GlobalAnimation {
     this.lastTime = timeout;
     callback();
     this.draw();
-    // delete this.manualTimers[`${id}`];
     delete this.timers[nextTimer.id];
     return this.incrementTimers(targetTime);
   }
 
-  incrementManualTimers(maxTimeInMs: number) {
-    const timersToFire = [];
-    Object.keys(this.manualTimers).forEach((id) => {
-      const {
-        duration, startTime, f, stateTimer, description,
-      } = this.manualTimers[id];
-      const endTime = startTime + duration;
-      if (maxTimeInMs >= endTime) {
-        timersToFire.push([id, endTime, f, stateTimer, description]);
-      }
-    });
-    if (timersToFire.length === 0) {
-      return 0;
-    }
-    timersToFire.sort((t1, t2) => {
-      if (t1[1] === t2[1] && (t1[3] || t2[3])) {
-        if (t1[3]) {
-          return 1;
-        }
-        return -1;
-      }
-      return t1[1] - t2[1];
-    });
-
-    const [id, endTime, f] = timersToFire[0];
-    this.nowTime = endTime;
-    this.lastTime = endTime;
-    f();
-    this.draw();
-    delete this.manualTimers[`${id}`];
-    return this.incrementManualTimers(maxTimeInMs);
-  }
-
-  // queueNextDebugFrame() {
-  //   if (this.debugFrameTime != null) {
-  //     this.timeoutId = setTimeout(() => {
-  //       this.nowTime += 1 / this.simulatedFPS * 1000;
-  //       if (this.nextDrawQueue.length > 0) {
-  //         this.draw(this.now());
-  //       }
-  //       this.queueNextDebugFrame();
-  //     }, this.debugFrameTime * 1000);
-  //   } else {
-  //     this.nowTime += 1 / this.simulatedFPS * 1000;
-  //     if (this.nextDrawQueue.length > 0) {
-  //       this.draw(this.now());
-  //     }
-  //   }
-  // }
-
-  setupTimeout(f: function, time: number, description: string, stateTimer: boolean): TimeoutID {
-    let id;
-    if (this.manual) {
-      id = this.manualTimerIds;
-      this.manualTimerIds += 1;
-      this.manualTimers[`${id}`] = ({
-        duration: time,
-        f,
-        startTime: this.nowTime,
-        stateTimer,
-        description,
-      });
-      // $FlowFixMe
-      return id;
-    }
-    id = setTimeout(f, time);
-    this.timers.push(id);
-    return id;
-  }
-
+  /**
+   * Use like normal setTimeout in javascript.
+   *
+   * @param {function(): void} callback function to be called after some time
+   * @param {number} time in ms
+   * @param {string} description timer description useful for debugging but not
+   * requied ('')
+   * @param {boolean} stateTime internal use only
+   *
+   * @return {number} unique identifier that can be used to clear timer with
+   * `clearTimeout`
+   */
   setTimeout(
     callback: function,
     time: number,
     description: string = '',
     stateTimer: boolean = false,
   ): number {
-    // if (this.debug) {
-    //   let timeScale = 0;
-    //   if (this.debugFrameTime != null) {
-    //     timeScale = (this.debugFrameTime || 0) / (1 / this.simulatedFPS);
-    //   }
-    //   if (timeScale > 0) {
-    //     return this.setupTimeout(f, time * timeScale, description, stateTimer);
-    //   }
-    //   return this.setupTimeout(f, 0, description, stateTimer);
-    // }
-    // return this.setupTimeout(f, time, description, stateTimer);
     if (!this.manual) {
       this.updateNow();
     }
@@ -418,23 +304,17 @@ class GlobalAnimation {
     return this.idCounter - 1;
   }
 
+  /**
+   * Clear a current timer (the callback will not be called).
+   *
+   * @param {number | null} id timer identifier return from `setTimeout`. If
+   * null, no action occurs.
+   */
   clearTimeout(id: number | null) {
     if (id == null) {
       return;
     }
-    // if (this.manual) {
-    //   if (this.manualTimers[id] != null) {
-    //     delete this.manualTimers[id];
-    //   }
-    //   return;
-    // }
-    // clearTimeout(id);
-
-    // const index = this.timers.indexOf(id);
-    // if (index > -1) {
-    //   this.timers.splice(index, 1);
-    // }
-    const timer = this.timers[`${id}`]
+    const timer = this.timers[`${id}`];
     if (timer != null) {
       if (timer.id != null) {
         clearTimeout(timer.id);
@@ -443,38 +323,28 @@ class GlobalAnimation {
     }
   }
 
-  disableDebugFrameRate() {
-    if (this.timeoutId != null) {
-      clearTimeout(this.timeoutId);
-    }
-    this.timeoutId = null;
-    this.debug = false;
-    if (this.nextDrawQueue.length > 0) {
-      this.animateNextFrame();
-    }
-  }
 
   draw() {
-    // console.log(performance.now(), 'draw global', this.nextDrawQueue.length)
     this.animationId = null;
     clearTimeout(this.syncNowTimer);
     this.updateSyncNow = true;
     this.drawQueue = this.nextDrawQueue;
     this.nextDrawQueue = [];
-    // let nowSeconds = nowInMs * 0.001;
-    // if (this.manual) {
     this.updateNow();
     const nowSeconds = this.now() * 0.001;
-    // console.log(nowSeconds)
-    // }
     for (let i = 0; i < this.drawQueue.length; i += 1) {
       this.drawQueue[i](nowSeconds);
     }
     this.drawQueue = [];
     this.lastDrawTime = this.nowTime;
-    // console.log(performance.now(), 'draw global done')
   }
 
+  /**
+   * Queue function to be called the next time an animation frame is triggered
+   *
+   * @param {function(number): void} func function that will be passed the
+   * current time as an input parameter when it is called
+   */
   queueNextFrame(func: (?number) => void) {
     this.nextDrawQueue.push(func);
     // console.log(performance.now(), 'queue', this.nextDrawQueue.length)
@@ -485,18 +355,13 @@ class GlobalAnimation {
       this.manualQueueCounter += 1;
     }
     if (this.nextDrawQueue.length === 1) {
-      if (!this.debug) {
-        this.animateNextFrame();
-      }
+      // if (!this.debug) {
+      this.animateNextFrame();
+      // }
     }
   }
 
-  // simulateNextFrame() {
-  //   if (this.timeoutId == null) {
-  //     this.queueNextDebugFrame();
-  //   }
-  // }
-  // Queue up an animation frame
+
   animateNextFrame() {
     if (this.manual) {
       if (this.animateOnFrame && this.animationId == null) {
@@ -507,7 +372,6 @@ class GlobalAnimation {
       return;
     }
     if (this.animationId == null) {
-    // cancelAnimationFrame(this.animationId);
     // $FlowFixMe
       this.animationId = this.requestNextAnimationFrame.call(window, this.draw.bind(this));
     }
