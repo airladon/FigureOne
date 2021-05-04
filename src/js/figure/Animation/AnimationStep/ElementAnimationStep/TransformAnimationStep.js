@@ -38,9 +38,9 @@ export type OBJ_TransformAnimationStep = {
   target?: Transform;     // Either target or delta must be defined
   delta?: Transform;      // delta overrides target if both are defined
   path?: OBJ_TranslationPath;       // default is linear
-  rotDirection: 0 | 1 | -1 | 2;
-  clipRotationTo: '0to360' | '-180to180' | null;
-  velocity: ?Transform | number;
+  rotDirection?: 0 | 1 | -1 | 2;
+  clipRotationTo?: '0to360' | '-180to180' | null;
+  velocity?: ?Transform | number;
   maxDuration?: number;
 } & OBJ_ElementAnimationStep;
 

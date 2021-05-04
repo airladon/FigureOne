@@ -945,7 +945,7 @@ class FigureElement {
       //   }
 
       //   if (target.color != null) {
-      //     steps.push(element.anim.color({
+      //     steps.push(element.animations.color({
       //       start: startColor,
       //       target: target.color,
       //       duration: options.duration,
@@ -953,7 +953,7 @@ class FigureElement {
       //   }
 
       //   if (target.transform != null) {
-      //     steps.push(element.anim.transform(options, {
+      //     steps.push(element.animations.transform(options, {
       //       start: startTransform,
       //       target: target.transform,
       //     }));
@@ -961,16 +961,16 @@ class FigureElement {
       //   if (target.isShown != null) {
       //     if (startIsShown != null) {
       //       if (target.isShown === true && startIsShown === true) {
-      //         steps.push(element.anim.dissolveIn({ duration: 0 }));
+      //         steps.push(element.animations.dissolveIn({ duration: 0 }));
       //       }
       //       if (target.isShown === false && startIsShown === false) {
-      //         steps.push(element.anim.dissolveOut({ duration: 0 }));
+      //         steps.push(element.animations.dissolveOut({ duration: 0 }));
       //       }
       //       if (target.isShown === false && startIsShown === true) {
-      //         steps.push(element.anim.dissolveOut({ duration: options.duration }));
+      //         steps.push(element.animations.dissolveOut({ duration: options.duration }));
       //       }
       //       if (target.isShown === true && startIsShown === false) {
-      //         steps.push(element.anim.dissolveIn({ duration: options.duration }));
+      //         steps.push(element.animations.dissolveIn({ duration: options.duration }));
       //       }
       //     } else {
       //       let dissolveFromCurrent = true;
@@ -978,13 +978,13 @@ class FigureElement {
       //         dissolveFromCurrent = false;
       //       }
       //       if (target.isShown) {
-      //         steps.push(element.anim.opacity({
+      //         steps.push(element.animations.opacity({
       //           duration: options.duration,
       //           dissolve: 'in',
       //           dissolveFromCurrent,
       //         }));
       //       } else {
-      //         steps.push(element.anim.opacity({
+      //         steps.push(element.animations.opacity({
       //           duration: options.duration,
       //           dissolve: 'out',
       //           dissolveFromCurrent,
@@ -1027,7 +1027,7 @@ class FigureElement {
         const simpleOptions = {};
         duplicateFromTo(options, simpleOptions, ['steps', 'element']);
         elements.forEach((element) => {
-          steps.push(element.anim.scenario(simpleOptions));
+          steps.push(element.animations.scenario(simpleOptions));
         });
         return new animations.ParallelAnimationStep(simpleOptions, { steps });
       },
@@ -1548,7 +1548,7 @@ class FigureElement {
     let duration = 0;
     if (Object.keys(target).length > 0) {
       const scenarioOptions = joinObjects({}, options, { target });
-      scenarioAnimation = this.anim.scenario(scenarioOptions);
+      scenarioAnimation = this.animations.scenario(scenarioOptions);
     }
     // let pulseTrigger = null;
     // let pulseDelay = null;
@@ -1567,7 +1567,7 @@ class FigureElement {
         targetPulseTransforms = [startPulseTransforms[0].identity()];
       }
 
-      pulseAnimation = this.anim.pulseTransform(joinObjects({}, options, {
+      pulseAnimation = this.animations.pulseTransform(joinObjects({}, options, {
         start: startPulseTransforms,
         target: targetPulseTransforms,
       }));

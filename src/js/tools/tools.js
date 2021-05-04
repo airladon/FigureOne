@@ -490,10 +490,13 @@ const cleanUIDs = (objectToClean: Object) => {
       && typeof value !== 'number'
       && typeof value !== 'boolean'
       && typeof value !== 'string'
-      && key !== 'recorder'
-      && key !== 'timeKeeper'
+      && key !== 'figure'
+      // && key !== 'timeKeeper'
     ) {
       cleanUIDs(value);
+    }
+    if (key === 'recorder' && objectToClean.recorder != null) {
+      objectToClean.recorder.figure = null;
     }
   }
 };

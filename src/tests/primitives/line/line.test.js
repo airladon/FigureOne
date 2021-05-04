@@ -24,6 +24,8 @@ describe('line tests', () => {
       element.animations = null;
       element.anim = null;
       element.recorder = null;
+      figure.globalAnimation.nowTime = 0;
+      figure.globalAnimation.lastTime = 0;
       expect(element).toMatchSnapshot();
     },
   );
