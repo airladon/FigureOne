@@ -285,14 +285,14 @@ class Recorder {
   pauseState: ?Object;
   startRecordingTime: number;
 
-  queueSeekId: null | TimeoutID;
+  queueSeekId: null | number;
   queueSeekTime: number;
 
   stateTimeStep: number;      // in seconds
   figure: Figure;
 
-  timeoutID: ?number;
-  timeUpdatesTimeoutID: ?TimeoutID;
+  timeoutID: number | null;
+  timeUpdatesTimeoutID: number | null;
 
   // playbackStoppedCallback: ?() =>void;
 

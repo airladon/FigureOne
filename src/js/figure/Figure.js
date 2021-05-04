@@ -308,7 +308,7 @@ class Figure {
   subscriptions: SubscriptionManager;
   mockPreviousTouchPoint: Point;
   shortcuts: Object;
-  nextDrawTimer: TimeoutID | null;
+  nextDrawTimer: number | null;
   nextDrawTimerStart: number;
   nextDrawTimerDuration: number;
   focused: boolean;

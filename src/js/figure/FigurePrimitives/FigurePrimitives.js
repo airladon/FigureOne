@@ -71,7 +71,7 @@ import type {
 } from '../../tools/types';
 import { getBufferBorder } from '../geometries/buffer';
 import type GlobalAnimation from '../webgl/GlobalAnimation';
-import type Recorder from '../Recorder/Recorder';
+import type { Recorder } from '../Recorder/Recorder';
 
 /**
  * Line style definition object.

@@ -355,9 +355,14 @@ export default class AnimationStep {
       return;
     }
     if (this.timeKeeper != null) {
-      this.startTime = this.timeKeeper.getWhen(startTime) / 1000;
-    } else if (startTime === 'nextFrame') {
+      const when = this.timeKeeper.getWhen(startTime);
+      if (when != null) {
+        this.startTime = when / 1000;
+      } else {
         this.startTime = null;
+      }
+    } else if (startTime === 'nextFrame') {
+      this.startTime = null;
     } else {
       this.startTime = performance.now();
     }
