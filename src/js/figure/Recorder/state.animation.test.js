@@ -5,51 +5,52 @@ import * as math from '../../tools/math';
 
 tools.isTouchDevice = jest.fn();
 
-jest.mock('../Gesture');
-jest.mock('../webgl/webgl');
-jest.mock('../DrawContext2D');
+// jest.useFakeTimers();
 
 describe('Animation Step State', () => {
   let elem1;
   let figure;
   let now;
+  let globalNow;
   beforeEach(() => {
     jest.useFakeTimers();
     figure = makeFigure();
     elem1 = figure.primitives.polygon();
     figure.elements.add('elem1', elem1);
+    globalNow = global.performance.now;
     global.performance.now = () => now * 1000;
   });
   test('Rotation', () => {
+    global.performance.now = globalNow;
     elem1.setRotation(0);
     elem1.animations.new()
       .rotation({ target: 3, duration: 3, progression: 'linear' })
       .start();
 
-    now = 0;
-    figure.draw(now);
-    now = 0.5;
-    figure.draw(now);
+    figure.mock.timeStep(0);
+    figure.mock.timeStep(0.5);
+    // now = 0;
+    // now = 0.5;
     expect(math.round(elem1.getRotation(), 3)).toBe(0.5);
     const state = figure.getState();
-    now = 1;
-    figure.draw(now);
+    // now = 1;
+    figure.mock.timeStep(0.5);
     expect(math.round(elem1.getRotation(), 3)).toBe(1);
     elem1.stop();
     expect(elem1.animations.animations).toHaveLength(0);
 
-    // now lets delay 10s
-    now = 11;
+    // now = 11;
+    figure.mock.timeStep(10);
     figure.setState(state);
-    figure.draw(now);
+    figure.mock.timeStep(0);
     expect(math.round(elem1.getRotation())).toBe(0.5);
 
-    now = 11.1;
-    figure.draw(now);
+    // now = 11.1;
+    figure.mock.timeStep(0.1);
     expect(math.round(elem1.getRotation())).toBe(0.6);
 
-    now = 11.5;
-    figure.draw(now);
+    // now = 11.5;
+    figure.mock.timeStep(0.4);
     expect(math.round(elem1.getRotation())).toBe(1);
   });
   test('Position', () => {

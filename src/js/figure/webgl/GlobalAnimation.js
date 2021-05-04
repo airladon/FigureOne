@@ -20,6 +20,23 @@
 export type TypeWhen = 'now' | 'nextFrame' | 'prevFrame' | 'syncNow';
 
 // Singleton class that contains projects global variables
+/**
+ * TimeKeeper keeps time for the figure, where time is the number of
+ * milliseconds after the page load.
+ *
+ * The current time can be accessed using the `now` method.
+ *
+ * In it's default form, `now` is the same as the system times
+ * `performance.now()` or the animation time sent through on frames requested
+ * from `requestAnimationFrame` .
+ *
+ * However, these system times diverge from `now` when TimeKeeper's time
+ * speed is changed, or manual time deltas are enabled.
+ *
+ * When time speed is n times faster than real time, `now` will report n times
+ * more passage of time from the page load than real time. So if the speed is
+ * set to 2, then `now` will report time passing twice as fast.
+ */
 class GlobalAnimation {
   // Method for requesting the next animation frame
   requestNextAnimationFrame: (()=>mixed) => AnimationFrameID;
@@ -38,7 +55,7 @@ class GlobalAnimation {
   // syncNow: () => number;
   synchronizedNow: number;
   updateSyncNow: boolean;
-  timers: Array<TimeoutID>;
+  // timers: Array<TimeoutID>;
   syncNowTimer: TimeoutID;
   manual: boolean;
   manualTimers: Object;
@@ -47,14 +64,17 @@ class GlobalAnimation {
   manualOneFrameOnly: boolean;
   animateOnFrame: boolean;
   lastTime: number;
+  idCounter: number;
 
-  timers: Array<{
-    timerId: number;
-    callback: () => void;
-    timeout: number;
-    description: string;
-    stateTimer: boolean;
-  }>;
+  timers: {
+    [id: string]: {
+      id: TimeoutID | null;   // if not null, then there is settimeout
+      callback: () => void;
+      timeout: number;        // timeout target time
+      description: string;
+      stateTimer: boolean;    // state timers should timeout before other timers
+    }
+  };
 
   constructor() {
     // If the instance alread exists, then don't create a new instance.
@@ -77,16 +97,24 @@ class GlobalAnimation {
     this.nextDrawQueue = [];
     this.lastDrawTime = null;
     this.debug = false;
+    this.idCounter = 0;
+    this.speed = 1;
     // this.simulatedFPS = 60;
     // this.debugFrameTime = 0.5;
     this.lastTime = performance.now();
+    this.nowTime = this.lastTime;
     // if (this.timers != null && this.timers.length > 0) {
     //   this.timers.forEach(id => clearTimeout(id));
     // }
-    if (this.timeoutId != null) {
-      clearTimeout(this.timeoutId);
-    }
-    this.timers = [];
+    // if (this.timers != null) {    // Needed for when first instantiated
+    //   Object.values(this.timers).forEach((timer) => {
+    //     if (timer.id != null) {
+    //       clearTimeout(timer.id);
+    //     }
+    //   });
+    // }
+    // this.timers = {};
+    this.clearTimeouts();
     // this.timers = [];
     // if (this.timeoutId != null) {
     //   clearTimeout(this.timeoutId);
@@ -100,6 +128,17 @@ class GlobalAnimation {
     this.manualQueueCounter = 0;
     this.manualOneFrameOnly = true;
     this.animateOnFrame = false;
+  }
+
+  clearTimeouts() {
+    if (this.timers != null) {    // Needed for when first instantiated
+      Object.values(this.timers).forEach((timer) => {
+        if (timer.id != null) {
+          clearTimeout(timer.id);
+        }
+      });
+    }
+    this.timers = {};
   }
 
 
@@ -125,14 +164,20 @@ class GlobalAnimation {
     return this.synchronizedNow;
   }
 
-  getNow() {
+  updateNow() {
+    if (this.manual) {
+      return;
+    }
     const now = performance.now();
     const delta = now - this.lastTime;
     this.nowTime += delta * this.speed;
     this.lastTime = now;
-    console.log(delta * this.speed, delta, this.nowTime)
-    return this.nowTime;
   }
+
+  // getNow() {
+  //   this.updateNow();
+  //   return this.nowTime;
+  // }
 
   // getNowManual(deltaInMilliseconds: number = 0) {
   //   this.nowTime += deltaInMilliseconds * this.speed;
@@ -140,11 +185,46 @@ class GlobalAnimation {
   //   return this.nowTime;
   // }
 
+  /**
+   * Current relative time.
+   *
+   * If speed is 1 and manual frames have not been used, then this will return
+   * the time in ms after the page is loaded.
+   *
+   * If speed is not 1, or manual frames have been or are being used, then this
+   * will return the relative time in ms taking into account pauses and frame
+   * steps from any manual frames, and any speed changes.
+   *
+   * @param {number} time in ms from page load
+   */
   now() {
-    if (this.manual) {
-      return this.nowTime;
+    if (!this.manual) {
+      this.updateNow();
     }
-    return this.getNow();
+    return this.nowTime;
+  }
+
+  /**
+   * Set the speed of time. 1 is normal timer, >1 is faster than normal time
+   * and <1 is slower than normal time. The speed must be greater than 0.
+   *
+   * @param {number} speedFactor
+   */
+  setSpeed(speedFactor: number = 1) {
+    if (speedFactor <= 0) {
+      throw new Error(`speedFactor ${speedFactor} is not greater than 0`);
+    }
+    Object.keys(this.timers).map(id => this.timers[id]).forEach((timer) => {
+      const remainingTime = timer.timeout - this.nowTime;
+      const newRemainingTime = remainingTime / speedFactor;
+      if (timer.id != null) {
+        clearTimeout(timer.id);
+      }
+      if (!this.manual) {
+        timer.id = setTimeout(timer.callback, newRemainingTime);
+      }
+    });
+    this.speed = speedFactor;
   }
 
   // setDebugFrameRate(simulatedFPS: number = 60, frameTime: ?number = 1) {
@@ -163,6 +243,7 @@ class GlobalAnimation {
   // }
 
   setManualFrames() {
+    this.updateNow();
     this.manual = true;
   }
 
@@ -171,46 +252,66 @@ class GlobalAnimation {
     this.lastTime = performance.now();
   }
 
-  frame(timeStep: number) {
+  /**
+   * Step manual frames by a delta time in seconds.
+   * @param {number} timeStepInSeconds
+   */
+  frame(timeStepInSeconds: number) {
     this.manualQueueCounter = 0;
-    const targetTime = this.nowTime + timeStep * 1000 * this.speed;
-    this.incrementManualTimers(targetTime);
+    const targetTime = this.nowTime + timeStepInSeconds * 1000;
+    this.incrementTimers(targetTime);
     this.nowTime = targetTime;
     this.lastTime = targetTime;
     this.animateOnFrame = true;
     this.animateNextFrame();
   }
 
-  incrementTimers(nowTime: number) {
-    const nextTimer = this.timers.reduce(
-      (acc, val) => (
-        (val.timeout === acc.timeout && val.stateTimer)
-        || val.timeout < acc.timeout
-     ) ? val : acc,
-    );
-    const timersToFire = this.timers.filter(t => t.timeout <= nowTime);
-    if (timersToFire.length === 0) {
+  incrementTimers(targetTime: number) {
+    if (this.timers == null || Object.keys(this.timers).length === 0) {
       return 0;
     }
-    // Sort timers such that earliest timer is first, and stateTimers happen
-    // before other timers
-    timersToFire.sort((t1, t2) => {
-      if (t1.timeout === t2.timeout && (t1.stateTimer || t2.stateTimer)) {
-        if (t1.stateTimer) {
-          return 1;
+    const ids = Object.keys(this.timers);
+    let nextTimer = null;
+    for (let i = 0; i < ids.length; i += 1) {
+      const id = ids[i];
+      const timer = this.timers[id];
+      if (timer.timeout <= targetTime) {
+        if (nextTimer == null) {
+          nextTimer = { id, timer };
+        } else if (timer.timeout < nextTimer.timeout) {
+          nextTimer = { id, timer };
+        } else if (timer.timeout === nextTimer.timeout && timer.stateTimer) {
+          nextTimer = { id, timer };
         }
-        return -1;
       }
-      return t1.timeout - t2.timeout;
-    });
+    }
+    // const nextTimer = Object.keys(this.timers).map(id => this.timers[id]).reduce((acc, val) => {
+    //   if (val.timeout === acc.timeout && (val.stateTimer || acc.stateTimer)) {
+    //     if (val.stateTimer) {
+    //       return val;
+    //     }
+    //     return acc;
+    //   }
+    //   if (val.timeout < acc.timeout) {
+    //     return val;
+    //   }
+    //   return acc;
+    // });
+    // if (nextTimer.timeout > nowTime) {
+    //   return;
+    // }
+    if (nextTimer == null) {
+      return 0;
+    }
 
-    const [id, callback, timeout] = timersToFire[0];
+    const { callback, timeout } = nextTimer.timer;
     this.nowTime = timeout;
     this.lastTime = timeout;
     callback();
-    this.draw(this.nowTime);
-    delete this.manualTimers[`${id}`];
-    return this.incrementManualTimers(maxTimeInMs);
+    this.draw();
+    // delete this.manualTimers[`${id}`];
+    delete this.timers[nextTimer.id];
+    return this.incrementTimers(targetTime);
   }
 
   incrementManualTimers(maxTimeInMs: number) {
@@ -241,7 +342,7 @@ class GlobalAnimation {
     this.nowTime = endTime;
     this.lastTime = endTime;
     f();
-    this.draw(this.nowTime);
+    this.draw();
     delete this.manualTimers[`${id}`];
     return this.incrementManualTimers(maxTimeInMs);
   }
@@ -284,39 +385,61 @@ class GlobalAnimation {
   }
 
   setTimeout(
-    f: function,
+    callback: function,
     time: number,
     description: string = '',
     stateTimer: boolean = false,
-  ): TimeoutID {
-    if (this.debug) {
-      let timeScale = 0;
-      if (this.debugFrameTime != null) {
-        timeScale = (this.debugFrameTime || 0) / (1 / this.simulatedFPS);
-      }
-      if (timeScale > 0) {
-        return this.setupTimeout(f, time * timeScale, description, stateTimer);
-      }
-      return this.setupTimeout(f, 0, description, stateTimer);
+  ): number {
+    // if (this.debug) {
+    //   let timeScale = 0;
+    //   if (this.debugFrameTime != null) {
+    //     timeScale = (this.debugFrameTime || 0) / (1 / this.simulatedFPS);
+    //   }
+    //   if (timeScale > 0) {
+    //     return this.setupTimeout(f, time * timeScale, description, stateTimer);
+    //   }
+    //   return this.setupTimeout(f, 0, description, stateTimer);
+    // }
+    // return this.setupTimeout(f, time, description, stateTimer);
+    if (!this.manual) {
+      this.updateNow();
     }
-    return this.setupTimeout(f, time, description, stateTimer);
+    this.timers[`${this.idCounter}`] = {
+      timeout: this.nowTime + time,
+      description,
+      stateTimer,
+      id: null,
+      callback,
+    };
+    if (!this.manual) {
+      this.timers[`${this.idCounter}`].id = setTimeout(callback, time / this.speed);
+    }
+    this.idCounter += 1;
+    return this.idCounter - 1;
   }
 
-  clearTimeout(id: TimeoutID | null) {
+  clearTimeout(id: number | null) {
     if (id == null) {
       return;
     }
-    if (this.manual) {
-      if (this.manualTimers[id] != null) {
-        delete this.manualTimers[id];
-      }
-      return;
-    }
-    clearTimeout(id);
+    // if (this.manual) {
+    //   if (this.manualTimers[id] != null) {
+    //     delete this.manualTimers[id];
+    //   }
+    //   return;
+    // }
+    // clearTimeout(id);
 
-    const index = this.timers.indexOf(id);
-    if (index > -1) {
-      this.timers.splice(index, 1);
+    // const index = this.timers.indexOf(id);
+    // if (index > -1) {
+    //   this.timers.splice(index, 1);
+    // }
+    const timer = this.timers[`${id}`]
+    if (timer != null) {
+      if (timer.id != null) {
+        clearTimeout(timer.id);
+      }
+      delete this.timers[`${id}`];
     }
   }
 
@@ -340,8 +463,9 @@ class GlobalAnimation {
     this.nextDrawQueue = [];
     // let nowSeconds = nowInMs * 0.001;
     // if (this.manual) {
+    this.updateNow();
     const nowSeconds = this.now() * 0.001;
-    console.log(nowSeconds)
+    // console.log(nowSeconds)
     // }
     for (let i = 0; i < this.drawQueue.length; i += 1) {
       this.drawQueue[i](nowSeconds);
