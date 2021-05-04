@@ -721,6 +721,7 @@ class FigureElement {
     figureLimitsOrFigure: Figure | Rect = new Rect(-1, -1, 2, 2),
     parent: FigureElement | null = null,
     name: string = generateUniqueId('element_'),
+    timeKeeper: GlobalAnimation = new GlobalAnimation(),
   ) {
     // This may be updated if element is added to a collection with a different
     // name
@@ -767,6 +768,7 @@ class FigureElement {
     this.lastDrawTime = 0;
     this.cancelSetTransform = false;
     this.onAdd = null;
+    this.timeKeeper = timeKeeper;
     // this.border = 'draw';
     // this.touchBorder = 'border';
     // this.holeBorder = [[]];
@@ -1130,6 +1132,7 @@ class FigureElement {
     this.animations = new animations.AnimationManager({
       element: this,
       finishedCallback: this.animationFinished.bind(this),
+      timeKeeper: this.timeKeeper,
     });
     this.tieToHTML = {
       element: null,
@@ -3817,8 +3820,9 @@ class FigureElementPrimitive extends FigureElement {
     figureLimits: Rect = new Rect(-1, -1, 2, 2),
     parent: FigureElement | null = null,
     name: string = generateUniqueId('element_'),
+    timeKeeper: GlobalAnimation = new GlobalAnimation(),
   ) {
-    super(transform, figureLimits, parent, name);
+    super(transform, figureLimits, parent, name, timeKeeper);
     this.drawingObject = drawingObject;
     this.color = color != null ? color.slice() : [0, 0, 0, 0];
     this.defaultColor = this.color.slice();
@@ -4379,10 +4383,11 @@ class FigureElementCollection extends FigureElement {
       holeBorder: [[]],
       color: [0, 0, 0, 1],
       name: generateUniqueId('collection_'),
+      timeKeeper: new GlobalAnimation(),
     };
     const o = joinObjects({}, defaultOptions, options);
     // console.log(o)
-    super(getTransform(o.transform), o.limits, o.parent, o.name);
+    super(getTransform(o.transform), o.limits, o.parent, o.name, o.timeKeeper);
     if (o.position != null) {
       this.transform.updateTranslation(getPoint(o.position));
     }

@@ -236,7 +236,6 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
 
   /* eslint-disable no-param-reassign */
   addStep(animName: string, options: Object) {
-    options.timeKeeper = this.timeKeeper;
     if (this.element != null) { // $FlowFixMe
       this.then(this.element.animations[animName](options));
     }

@@ -23,7 +23,7 @@ jest.useFakeTimers();
 describe('Animationa and Movement', () => {
   let figure;
   beforeEach(() => {
-    figure = makeFigure();  // this is just initializing the global
+    figure = makeFigure();  // this is just initializing the global    
   });
   describe('FigureElementPrimitive', () => {
     describe('Animation', () => {

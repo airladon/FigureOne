@@ -70,6 +70,8 @@ import type {
   TypeColor, TypeDash, OBJ_CurvedCorner, OBJ_Font,
 } from '../../tools/types';
 import { getBufferBorder } from '../geometries/buffer';
+import type GlobalAnimation from '../webgl/GlobalAnimation';
+import type Recorder from '../Recorder/Recorder';
 
 /**
  * Line style definition object.
@@ -2181,6 +2183,8 @@ export default class FigurePrimitives {
   defaultFont: OBJ_Font;
   defaultLineWidth: number;
   defaultLength: number;
+  timeKeeper: GlobalAnimation;
+  recorder: Recorder;
 
   /**
     * @hideconstructor
@@ -2198,6 +2202,8 @@ export default class FigurePrimitives {
     defaultFont: OBJ_Font,
     defaultLineWidth: number,
     defaultLength: number,
+    timeKeeper: GlobalAnimation,
+    recorder: Recorder,
   ) {
     if (Array.isArray(webgl)) {
       this.webgl = webgl;
@@ -2222,6 +2228,8 @@ export default class FigurePrimitives {
     this.defaultFont = defaultFont;
     this.defaultLineWidth = defaultLineWidth;
     this.defaultLength = defaultLength;
+    this.timeKeeper = timeKeeper;
+    this.recorder = recorder;
     // this.draw2DFigures = draw2DFigures;
   }
 
@@ -2301,6 +2309,8 @@ export default class FigurePrimitives {
     };
     element.custom.updateGeneric(options);
     element.custom.updatePoints = element.custom.updateGeneric;
+    element.timeKeeper = this.timeKeeper;
+    element.recorder = this.recorder;
     setupPulse(element, options);
     return element;
   }
@@ -3190,6 +3200,8 @@ export default class FigurePrimitives {
       options.color,
       this.limits,
     );
+    element.timeKeeper = this.timeKeeper;
+    element.recorder = this.recorder;
 
     setupPulse(element, options);
     if (options.mods != null && options.mods !== {}) {
@@ -3385,6 +3397,8 @@ export default class FigurePrimitives {
       [1, 1, 1, 1],
       this.limits,
     );
+    figureElement.timeKeeper = this.timeKeeper;
+    figureElement.recorder = this.recorder;
     return figureElement;
   }
 
@@ -3416,6 +3430,8 @@ export default class FigurePrimitives {
       [1, 1, 1, 1],
       this.limits,
     );
+    figureElement.timeKeeper = this.timeKeeper;
+    figureElement.recorder = this.recorder;
     // console.log('html', figureElement.transform.mat, location)
     // figureElement.setFirstTransform();
     return figureElement;

@@ -110,6 +110,7 @@ export default class FigureCollections {
     // }
     // console.log(optionsToUse.transform, transformOrPointOrOptions)
     const element = new FigureElementCollection(optionsToUse);
+    element.timeKeeper = this.primitives.timeKeeper;
     element.dimColor = this.primitives.defaultDimColor.slice();
     // console.log(element)
     // element.setColor(color);
@@ -131,7 +132,7 @@ export default class FigureCollections {
   line(...options: Array<COL_Line>) {
     // const optionsToUse = Object.assign({}, ...options);
     // console.log(Object.assign({}, ...options))
-    const optionsToUse = joinObjects({}, ...options);
+    const optionsToUse = joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options);
     return new CollectionsLine(
       this, this.isTouchDevice,
       optionsToUse,
@@ -142,7 +143,7 @@ export default class FigureCollections {
    * Create a {@link CollectionsAngle}.
    */
   angle(...options: Array<COL_Angle>) {
-    const optionsToUse = joinObjects({}, ...options);
+    const optionsToUse = joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options);
     return new CollectionsAngle(
       this, this.isTouchDevice, this.animateNextFrame,
       optionsToUse,
@@ -151,7 +152,7 @@ export default class FigureCollections {
 
   label(...options: Array<TypeLabelOptions>) {
     // const optionsToUse = Object.assign({}, ...options);
-    const optionsToUse = joinObjects({}, ...options);
+    const optionsToUse = joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options);
     return new EquationLabel(
       this, optionsToUse,
     );
@@ -161,7 +162,7 @@ export default class FigureCollections {
    * Create a {@link CollectionsPolyline}.
    */
   polyline(...options: Array<COL_Polyline>) {
-    const optionsToUse = joinObjects({}, ...options);
+    const optionsToUse = joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options);
     return new CollectionsPolyline(
       this,
       this.isTouchDevice, this.animateNextFrame,
@@ -173,42 +174,54 @@ export default class FigureCollections {
    * Create a {@link CollectionsRectangle}.
    */
   rectangle(...options: Array<COL_Rectangle>) {
-    return new CollectionsRectangle(this, joinObjects({}, ...options));
+    return new CollectionsRectangle(
+      this, joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options),
+    );
   }
 
   /**
    * Create a {@link CollectionSlideNavigator}
    */
   slideNavigator(...options: Array<COL_SlideNavigator>) {
-    return new SlideNavigator(this, joinObjects({}, ...options));
+    return new SlideNavigator(
+      this, joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options),
+    );
   }
 
   /**
    * Create a {@link CollectionsAixs}.
    */
   axis(...options: Array<COL_Axis>) {
-    return new CollectionsAxis(this, joinObjects({}, ...options));
+    return new CollectionsAxis(
+      this, joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options),
+    );
   }
 
   /**
    * Create a {@link CollectionsTrace}.
    */
   trace(...options: Array<COL_Trace>) {
-    return new CollectionsTrace(this, joinObjects({}, ...options));
+    return new CollectionsTrace(
+      this, joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options),
+    );
   }
 
   /**
    * Create a {@link CollectionsPlot}.
    */
   plot(...options: Array<COL_Plot>) {
-    return new CollectionsPlot(this, joinObjects({}, ...options));
+    return new CollectionsPlot(
+      this, joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options),
+    );
   }
 
   /**
    * Create a {@link CollectionsLegend}.
    */
   plotLegend(...options: Array<COL_Plot>) {
-    return new CollectionsPlotLegend(this, joinObjects({}, ...options));
+    return new CollectionsPlotLegend(
+      this, joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options),
+    );
   }
 
   /**

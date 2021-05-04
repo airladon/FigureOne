@@ -1339,6 +1339,8 @@ class Figure {
       this.defaultFont,
       this.defaultLineWidth,
       this.defaultLength,
+      this.globalAnimation,
+      this.recorder,
     );
   }
 

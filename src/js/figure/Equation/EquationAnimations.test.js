@@ -39,8 +39,8 @@ describe('Equation Animation', () => {
     ways = {
       simple: () => {
         figure.add([{
-          name: 'eqnA',
-          method: 'addNavigator',
+          name: 'eqn',
+          method: 'equation',
           options: {
             color: col(1),
             elements: {
@@ -56,17 +56,17 @@ describe('Equation Animation', () => {
             formSeries: ['0', '1', '2'],
           },
         }]);
-        eqn = figure.elements._eqnAEqn;
-        a = figure.elements._eqnAEqn._a;
-        b = figure.elements._eqnAEqn._b;
-        c = figure.elements._eqnAEqn._c;
+        eqn = figure.elements._eqn;
+        a = figure.elements._eqn._a;
+        b = figure.elements._eqn._b;
+        c = figure.elements._eqn._c;
       },
     };
   });
   test('Next Form without interruption', () => {
     ways.simple();
-    expect(figure.elements).toHaveProperty('_eqnAEqn');
-    expect(figure.elements).toHaveProperty('_eqnANav');
+    expect(figure.elements).toHaveProperty('_eqn');
+    // expect(figure.elements).toHaveProperty('_eqnANav');
 
     // only b is shown
     eqn.showForm('0');
@@ -206,8 +206,8 @@ describe('Equation Animation', () => {
   });
   test('Interruption on fade in', () => {
     ways.simple();
-    expect(figure.elements).toHaveProperty('_eqnAEqn');
-    expect(figure.elements).toHaveProperty('_eqnANav');
+    expect(figure.elements).toHaveProperty('_eqn');
+    // expect(figure.elements).toHaveProperty('_eqnANav');
 
     // only b is shown
     eqn.showForm('0');
@@ -259,8 +259,8 @@ describe('Equation Animation', () => {
 
   test('Interruption on fade out', () => {
     ways.simple();
-    expect(figure.elements).toHaveProperty('_eqnAEqn');
-    expect(figure.elements).toHaveProperty('_eqnANav');
+    expect(figure.elements).toHaveProperty('_eqn');
+    // expect(figure.elements).toHaveProperty('_eqnANav');
 
     // 'b' and 'c' is shown
     eqn.showForm('1');
