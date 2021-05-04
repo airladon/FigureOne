@@ -452,7 +452,7 @@ describe('Figure Recorder', () => {
   });
   test('Element anim', () => {
     figure.elements.animations.new()
-      .then(a.anim.scenario({ target: { position: [1, 1] }, duration: 1 }))
+      .then(a.animations.scenario({ target: { position: [1, 1] }, duration: 1 }))
       .start();
     figure.mock.timeStep(0);
     expect(a.getPosition().round(3)).toEqual(new Point(0, 0));

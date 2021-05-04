@@ -323,10 +323,13 @@ export default class AnimationManager {
    */
   // eslint-disable-next-line max-len
   builder(...options: Array<OBJ_AnimationBuilder>) {  // $FlowFixMe
-    return new anim.AnimationBuilder(this, {
+    const builder = new anim.AnimationBuilder(this.element, {
       customSteps: this.customSteps,
       timeKeeper: this.timeKeeper,
     }, ...options);
+
+    return builder;
+
   }
 
   /**

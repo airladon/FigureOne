@@ -271,9 +271,9 @@ class GlobalAnimation {
       if (timer.timeout <= targetTime) {
         if (nextTimer == null) {
           nextTimer = { id, timer };
-        } else if (timer.timeout < nextTimer.timeout) {
+        } else if (timer.timeout < nextTimer.timer.timeout) {
           nextTimer = { id, timer };
-        } else if (timer.timeout === nextTimer.timeout && timer.stateTimer) {
+        } else if (timer.timeout === nextTimer.timer.timeout && timer.stateTimer) {
           nextTimer = { id, timer };
         }
       }

@@ -105,10 +105,10 @@ describe('Transfrom Animation Unit', () => {
     elem1.animations.new()
       .position({ target: new Point(1, 1), duration: 1, progression: 'linear' })
       .inParallel([
-        elem1.anim.builder()
+        elem1.animations.builder()
           .delay(1)
           .position({ target: new Point(2, 2), duration: 1, progression: 'linear' }),
-        elem2.anim.position({ target: new Point(1, 1), duration: 1, progression: 'linear' }),
+        elem2.animations.position({ target: new Point(1, 1), duration: 1, progression: 'linear' }),
       ])
       .start();
     let remaining;

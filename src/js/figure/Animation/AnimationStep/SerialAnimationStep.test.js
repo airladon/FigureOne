@@ -299,8 +299,8 @@ describe('Serial Animation', () => {
     test('Zero duration, two steps, inSerial', () => {
       figure.elements.animations.new()
         .inSerial([
-          elem1.anim.rotation({ target: 1, duration: 0 }),
-          elem2.anim.rotation({ target: 1, duration: 0 }),
+          elem1.animations.rotation({ target: 1, duration: 0 }),
+          elem2.animations.rotation({ target: 1, duration: 0 }),
         ])
         .whenFinished(() => {})
         .start();

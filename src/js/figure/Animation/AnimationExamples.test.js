@@ -62,7 +62,7 @@ describe('Animation Examples', () => {
         },
         element: () => {
           elem1.animations.newFromStep(
-            elem1.anim.position({ target: p1, duration: 1 }),
+            elem1.animations.position({ target: p1, duration: 1 }),
           ).start();
         },
       },
@@ -103,16 +103,16 @@ describe('Animation Examples', () => {
           elem1.animations.new()
             .inParallel([
               inSerial([
-                elem1.anim.position({ target: p1, duration: 1 }),
-                elem1.anim.position({ target: p2, duration: 1 }),
+                elem1.animations.position({ target: p1, duration: 1 }),
+                elem1.animations.position({ target: p2, duration: 1 }),
               ]),
               inSerial([
-                elem1.anim.scale({ target: s1, duration: 1 }),
-                elem1.anim.scale({ target: s2, duration: 1 }),
+                elem1.animations.scale({ target: s1, duration: 1 }),
+                elem1.animations.scale({ target: s2, duration: 1 }),
               ]),
               inSerial([
-                elem1.anim.rotation({ target: r1, duration: 1 }),
-                elem1.anim.rotation({ target: r2, duration: 1 }),
+                elem1.animations.rotation({ target: r1, duration: 1 }),
+                elem1.animations.rotation({ target: r2, duration: 1 }),
               ]),
             ])
             .start();
@@ -155,8 +155,8 @@ describe('Animation Examples', () => {
         elem1.animations.new()
           .inParallel({
             steps: [
-              elem1.anim.position({ target: p1, duration: 1, progression: 'linear' }),
-              elem2.anim.position({ target: p1, duration: 1, progression: 'linear' }),
+              elem1.animations.position({ target: p1, duration: 1, progression: 'linear' }),
+              elem2.animations.position({ target: p1, duration: 1, progression: 'linear' }),
             ],
           })
           .position({ target: p2, duration: 1, progression: 'linear' })
@@ -165,8 +165,8 @@ describe('Animation Examples', () => {
       moveElementsInParallelSimply: () => {
         elem1.animations.new()
           .inParallel([
-            elem1.anim.position({ target: p1, duration: 1, progression: 'linear' }),
-            elem2.anim.position({ target: p1, duration: 1, progression: 'linear' }),
+            elem1.animations.position({ target: p1, duration: 1, progression: 'linear' }),
+            elem2.animations.position({ target: p1, duration: 1, progression: 'linear' }),
           ], { completeOnCancel: false })
           .position({ target: p2, duration: 1, progression: 'linear' })
           .start();
@@ -194,27 +194,27 @@ describe('Animation Examples', () => {
           // e1 moves to p2
           // e2 moves to p1
           .inParallel([
-            elem1.anim.position({ target: p2, duration: 1, progression: 'linear' }),
-            elem2.anim.position({ target: p1, duration: 1, progression: 'linear' }),
+            elem1.animations.position({ target: p2, duration: 1, progression: 'linear' }),
+            elem2.animations.position({ target: p1, duration: 1, progression: 'linear' }),
           ])
           // e1 moves to p1, delays 1, moves to p2
           // e2 moves to p2
           .inParallel([
-            elem1.anim.builder()
+            elem1.animations.builder()
               .position({ target: p1, duration: 1, progression: 'linear' })
               .delay(1)
               .position({ target: p2, duration: 1, progression: 'linear' }),
-            elem2.anim.position({ target: p2, duration: 1, progression: 'linear' }),
+            elem2.animations.position({ target: p2, duration: 1, progression: 'linear' }),
           ])
           // both e1 and e2 move to p1
           .inParallel([
             inSerial([
-              elem1.anim.position({ target: p1, duration: 1, progression: 'linear' }),
+              elem1.animations.position({ target: p1, duration: 1, progression: 'linear' }),
               delay(1),
             ]),
             inSerial([
               delay(1),
-              elem2.anim.position({ target: p1, duration: 1, progression: 'linear' }),
+              elem2.animations.position({ target: p1, duration: 1, progression: 'linear' }),
             ]),
           ])
           .start();

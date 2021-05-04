@@ -78,7 +78,7 @@ describe('Animation Manager', () => {
     elem.animations.new()
       .position({ target: p1, duration: 1, progression: 'linear' })
       .start();
-    elem.animations.newFromStep(elem.anim.dissolveOut(2))
+    elem.animations.newFromStep(elem.animations.dissolveOut(2))
       .start();
 
     elem.animations.nextFrame(0);

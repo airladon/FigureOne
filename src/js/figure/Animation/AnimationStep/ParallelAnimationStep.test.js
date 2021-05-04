@@ -293,8 +293,8 @@ describe('Parallel Animation', () => {
     test('Zero duration two steps', () => {
       figure.elements.animations.new()
         .inParallel([
-          elem1.anim.rotation({ target: 1, duration: 0 }),
-          elem2.anim.rotation({ target: 2, duration: 0 }),
+          elem1.animations.rotation({ target: 1, duration: 0 }),
+          elem2.animations.rotation({ target: 2, duration: 0 }),
         ])
         .whenFinished(() => {})
         .start();
@@ -315,8 +315,8 @@ describe('Parallel Animation', () => {
     test('One zero, the other not', () => {
       figure.elements.animations.new()
         .inParallel([
-          elem1.anim.rotation({ target: 1, duration: 0 }),
-          elem2.anim.rotation({ target: 2, duration: 1 }),
+          elem1.animations.rotation({ target: 1, duration: 0 }),
+          elem2.animations.rotation({ target: 2, duration: 1 }),
         ])
         .whenFinished(() => {})
         .start();

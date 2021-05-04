@@ -81,7 +81,7 @@ describe('Disolve In Animation', () => {
   test('Parallel dissolve in cancel', () => {
     figure.elements.animations.new()
       .inParallel([
-        elem1.anim.dissolveIn(1),
+        elem1.animations.dissolveIn(1),
       ])
       .start();
     figure.elements.animations.nextFrame(0);

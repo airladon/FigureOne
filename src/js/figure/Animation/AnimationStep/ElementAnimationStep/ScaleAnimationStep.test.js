@@ -35,7 +35,7 @@ describe('Scale Animation Step', () => {
     tester();
   });
   test('Simple scale with element creater', () => {
-    elem1.animations.newFromStep(elem1.anim.scale({ target: 2, duration: 1 }))
+    elem1.animations.newFromStep(elem1.animations.scale({ target: 2, duration: 1 }))
       .start();
     tester();
   });

@@ -442,8 +442,8 @@ describe('Animation Step State', () => {
     elem1.setRotation(0);
     elem1.animations.new()
       .inParallel([
-        elem1.anim.position({ target: [2, 0], duration: 2, progression: 'linear' }),
-        elem1.anim.rotation({ target: 2, duration: 2, progression: 'linear' }),
+        elem1.animations.position({ target: [2, 0], duration: 2, progression: 'linear' }),
+        elem1.animations.rotation({ target: 2, duration: 2, progression: 'linear' }),
       ])
       .start();
 
@@ -483,8 +483,8 @@ describe('Animation Step State', () => {
     elem1.setRotation(0);
     elem1.animations.new()
       .inSerial([
-        elem1.anim.position({ target: [1, 0], duration: 1, progression: 'linear' }),
-        elem1.anim.rotation({ target: 1, duration: 1, progression: 'linear' }),
+        elem1.animations.position({ target: [1, 0], duration: 1, progression: 'linear' }),
+        elem1.animations.rotation({ target: 1, duration: 1, progression: 'linear' }),
       ])
       .start();
 
