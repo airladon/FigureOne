@@ -734,9 +734,7 @@ class FigureElement {
     this.subscriptions = new SubscriptionManager(this.fnMap);
     this.isMovable = false;
     this.isTouchable = false;
-    // this.isTrackable = false;
     this.touchPriority = false;
-    // this.touchInBoundingRect = false;
     this.isInteractive = undefined;
     this.hasTouchableElements = false;
     this.color = [1, 1, 1, 1];
@@ -745,7 +743,6 @@ class FigureElement {
     this.defaultColor = this.color.slice();
     this.opacity = 1;
     this.setTransformCallback = null;
-    // this.transformUpdated = true;
     this.beforeDrawCallback = null;
     this.afterDrawCallback = null;
     this.internalSetTransformCallback = null;
@@ -757,28 +754,16 @@ class FigureElement {
       parentCount: 0,
       elementCount: 0,
     };
-    // this.recorder = new Recorder(true);
     this.custom = {};
     this._custom = {};
     this.customState = {};
     this.parent = parent;
     this.drawPriority = 1;
     this.stateProperties = [];
-    // this.finishAnimationOnPause = false;
     this.lastDrawTime = 0;
     this.cancelSetTransform = false;
     this.onAdd = null;
     this.timeKeeper = timeKeeper;
-    // this.border = 'draw';
-    // this.touchBorder = 'border';
-    // this.holeBorder = [[]];
-    // this.drawBorder = [[]];
-    // this.drawBorderBuffer = [[]];
-    // this.drawRect = [];
-    // this.noRotationFromParent = false;
-    // this.pulseDefault = (callback: ?() => void = null) => {
-    //   this.pulseScaleNow(1, 2, 0, callback);
-    // };
     this.pulseDefault = {
       scale: 2,
       rotation: null,
@@ -795,279 +780,31 @@ class FigureElement {
       progression: 'sinusoid',
       when: 'syncNow',
     };
-    // this.isPaused = false;
-    // this.copies = [];
 
-    // this.pauseSettings = {};
-
-    // deprecated
-    this.anim = {
-      rotation: (...optionsIn: Array<OBJ_RotationAnimationStep>) => {
-        const options = joinObjects({}, { element: this }, ...optionsIn);
-        return new animations.RotationAnimationStep(options);
-      },
-      scale: (...optionsIn: Array<OBJ_ScaleAnimationStep>) => {
-        const options = joinObjects({}, { element: this }, ...optionsIn);
-        return new animations.ScaleAnimationStep(options);
-      },
-      trigger: (...optionsIn: Array<OBJ_TriggerAnimationStep>) => {
-        const options = joinObjects({}, ...optionsIn);
-        return new animations.TriggerAnimationStep(options);
-      },
-      delay: (...optionsIn: Array<OBJ_AnimationStep>) => {
-        const options = joinObjects({}, ...optionsIn);
-        return new animations.DelayAnimationStep(options);
-      },
-      translation: (...optionsIn: Array<OBJ_PositionAnimationStep>) => {
-        const options = joinObjects({}, { element: this }, ...optionsIn);
-        return new animations.PositionAnimationStep(options);
-      },
-      position: (...optionsIn: Array<OBJ_PositionAnimationStep>) => {
-        const options = joinObjects({}, { element: this }, ...optionsIn);
-        return new animations.PositionAnimationStep(options);
-      },
-      color: (...optionsIn: Array<OBJ_ColorAnimationStep>) => {
-        const options = joinObjects({}, { element: this }, ...optionsIn);
-        return new animations.ColorAnimationStep(options);
-      },
-      opacity: (...optionsIn: Array<OBJ_OpacityAnimationStep>) => {
-        const options = joinObjects({}, { element: this }, ...optionsIn);
-        return new animations.OpacityAnimationStep(options);
-      },
-      transform: (...optionsIn: Array<OBJ_TransformAnimationStep>) => {
-        const options = joinObjects({}, { element: this }, ...optionsIn);
-        return new animations.TransformAnimationStep(options);
-      },
-      pulseTransform: (...optionsIn: Array<OBJ_PulseTransformAnimationStep>) => {
-        const options = joinObjects({}, { element: this }, ...optionsIn);
-        return new animations.PulseTransformAnimationStep(options);
-      },
-      pulse: (...optionsIn: Array<OBJ_PulseAnimationStep>) => {
-        const options = joinObjects({}, { element: this }, ...optionsIn);
-        return new animations.PulseAnimationStep(options);
-      },
-      // eslint-disable-next-line max-len
-      dissolveIn: (timeOrOptionsIn: number | OBJ_OpacityAnimationStep = {}, ...args: Array<OBJ_OpacityAnimationStep>) => {
-        const defaultOptions = { element: this };
-        let options;
-        if (typeof timeOrOptionsIn === 'number') {
-          options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
-        } else {
-          options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
-        }
-        return new animations.DissolveInAnimationStep(options);
-      },
-      // eslint-disable-next-line max-len
-      dissolveOut: (timeOrOptionsIn: number | OBJ_OpacityAnimationStep = {}, ...args: Array<OBJ_OpacityAnimationStep>) => {
-        const defaultOptions = { element: this };
-        let options;
-        if (typeof timeOrOptionsIn === 'number') {
-          options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
-        } else {
-          options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
-        }
-        return new animations.DissolveOutAnimationStep(options);
-      },
-      // eslint-disable-next-line max-len
-      dim: (timeOrOptionsIn: number | OBJ_ColorAnimationStep = {}, ...args: Array<OBJ_ColorAnimationStep>) => {
-        const defaultOptions = { element: this };
-        let options;
-        if (typeof timeOrOptionsIn === 'number') {
-          options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
-        } else {
-          options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
-        }
-        return new animations.DimAnimationStep(options);
-      },
-      // eslint-disable-next-line max-len
-      undim: (timeOrOptionsIn: number | OBJ_ColorAnimationStep = {}, ...args: Array<OBJ_ColorAnimationStep>) => {
-        const defaultOptions = { element: this };
-        let options;
-        if (typeof timeOrOptionsIn === 'number') {
-          options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
-        } else {
-          options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
-        }
-        return new animations.UndimAnimationStep(options);
-      },
-      // eslint-disable-next-line max-len
-      builder: (...optionsIn: Array<OBJ_AnimationBuilder>) => new animations.AnimationBuilder(this, ...optionsIn),
-      scenario: (...optionsIn: Array<OBJ_ScenarioAnimationStep>) => {
-        const options = joinObjects({}, { element: this }, ...optionsIn);
-        return new animations.ScenarioAnimationStep(options);
-      },
-      // eslint-disable-next-line max-len
-      // scenario: (...optionsIn: Array<OBJ_TransformAnimationStep
-      //                             & {
-      //                                 start?: OBJ_Scenario,
-      //                                 target: OBJ_Scenario,
-      //                                }>) => {
-      //   const defaultOptions = { element: this, delay: 0 };
-      //   const options = joinObjects({}, defaultOptions, ...optionsIn);
-
-      //   // Retrieve the target scenario
-      //   if (options.target != null) {
-      //     const target = options.element.getScenarioTarget(options.target);
-      //     if (Object.keys(target).length > 0) {
-      //       options.target = target;
-      //     }
-      //   }
-      //   // Retrieve the start scenario (if it doesn't exist, then the element's values
-      //   // at the time the animation starts will be used).
-      //   if (options.start != null) {
-      //     const start = options.element.getScenarioTarget(options.start);
-      //     if (Object.keys(start).length > 0) {
-      //       options.start = start;
-      //     }
-      //   }
-
-      //   const { start, target, element } = options;
-      //   const steps = [];
-      //   const duration = this.getTimeToMoveToScenario(target, options, start || '');
-      //   options.duration = duration;
-      //   const timeOptions = { delay: options.delay, duration: options.duration };
-      //   options.delay = 0;
-      //   options.velocity = undefined;
-      //   let startColor;
-      //   let startTransform;
-      //   let startIsShown;
-
-      //   if (start != null) {
-      //     if (start.color != null) {
-      //       startColor = start.color.slice();
-      //     }
-      //     if (start.transform != null) {
-      //       startTransform = start.transform._dup();
-      //     }
-      //     if (start.isShown != null) {
-      //       startIsShown = start.isShown;
-      //     }
-      //   }
-
-      //   if (target.color != null) {
-      //     steps.push(element.animations.color({
-      //       start: startColor,
-      //       target: target.color,
-      //       duration: options.duration,
-      //     }));
-      //   }
-
-      //   if (target.transform != null) {
-      //     steps.push(element.animations.transform(options, {
-      //       start: startTransform,
-      //       target: target.transform,
-      //     }));
-      //   }
-      //   if (target.isShown != null) {
-      //     if (startIsShown != null) {
-      //       if (target.isShown === true && startIsShown === true) {
-      //         steps.push(element.animations.dissolveIn({ duration: 0 }));
-      //       }
-      //       if (target.isShown === false && startIsShown === false) {
-      //         steps.push(element.animations.dissolveOut({ duration: 0 }));
-      //       }
-      //       if (target.isShown === false && startIsShown === true) {
-      //         steps.push(element.animations.dissolveOut({ duration: options.duration }));
-      //       }
-      //       if (target.isShown === true && startIsShown === false) {
-      //         steps.push(element.animations.dissolveIn({ duration: options.duration }));
-      //       }
-      //     } else {
-      //       let dissolveFromCurrent = true;
-      //       if (options.dissolveFromCurrent != null && options.dissolveFromCurrent === false) {
-      //         dissolveFromCurrent = false;
-      //       }
-      //       if (target.isShown) {
-      //         steps.push(element.animations.opacity({
-      //           duration: options.duration,
-      //           dissolve: 'in',
-      //           dissolveFromCurrent,
-      //         }));
-      //       } else {
-      //         steps.push(element.animations.opacity({
-      //           duration: options.duration,
-      //           dissolve: 'out',
-      //           dissolveFromCurrent,
-      //         }));
-      //       }
-      //     }
-      //   }
-      //   return new animations.ParallelAnimationStep(timeOptions, { steps });
-      // },
-      // scenarioLegacy: (...optionsIn: Array<OBJ_TransformAnimationStep
-      //                          & { scenario: string }>) => {
-      //   const defaultOptions = { element: this };
-      //   const options = joinObjects({}, defaultOptions, ...optionsIn);
-      //   if (options.target != null
-      //     && options.target in options.element.scenarios
-      //   ) {
-      //     const target = options.element.getScenarioTargetLegacy(options.target);
-      //     options.target = target;
-      //   }
-      //   if (options.start != null
-      //     && options.start in options.element.scenarios
-      //   ) {
-      //     const start = options.element.getScenarioTargetLegacy(options.start);
-      //     options.start = start;
-      //   }
-      //   if (options.delta != null
-      //     && options.delta in options.element.scenarios
-      //   ) {
-      //     const delta = options.element.getScenarioTargetLegacy(options.delta);
-      //     options.delta = delta;
-      //   }
-      //   return new animations.TransformAnimationStep(options);
-      // },
-      // eslint-disable-next-line max-len
-      scenarios: (...optionsIn: Array<OBJ_ParallelAnimationStep & OBJ_TransformAnimationStep>) => {
-        const defaultOptions = {};
-        const options = joinObjects({}, defaultOptions, ...optionsIn);
-        const elements = this.getAllElementsWithScenario(options.target);
-        const steps = [];
-        const simpleOptions = {};
-        duplicateFromTo(options, simpleOptions, ['steps', 'element']);
-        elements.forEach((element) => {
-          steps.push(element.animations.scenario(simpleOptions));
-        });
-        return new animations.ParallelAnimationStep(simpleOptions, { steps });
-      },
-    };
     if (figureLimitsOrFigure instanceof Rect) {
       this.figureLimits = figureLimitsOrFigure;
     } else if (figureLimitsOrFigure != null) {
       this.figureLimits = this.figure.limits._dup();
     }
     this.move = {
-      // maxTransform: this.transform.constant(1000),
-      // minTransform: this.transform.constant(-1000),
       bounds: 'none',
       sizeInBounds: false,
-      // boundsToUse: new TransformBounds(this.transform),
-      // bounds: { scale: null, rotation: null, position: null },
-      // boundary: null,
       maxVelocity: 5,
-      // maxVelocity: new TransformLimit(5, 5, 5),
       freely: {
         zeroVelocityThreshold: 0.0001,
         deceleration: 5,
         callback: null,
         bounceLoss: 0.5,
       },
-      // bounce: true, // deprecate
       canBeMovedAfterLosingTouch: true,
       type: 'translation',
       element: null,
-      // limitLine: null,
       transformClip: null,
     };
 
     this.scenarios = {};
 
     const pulseTransformMethod = (mag, d, type) => {
-      // if (type === 'scale' && (d == null || (d.x === 0 && d.y === 0))) {
-      // if (type === 'scale' && d == null) {
-      //   return new Transform().scale(mag, mag);
-      // }
       if (type === 'scale') {
         if (d == null) {
           return new Transform()
@@ -1088,7 +825,6 @@ class FigureElement {
       }
       const x = mag * Math.cos(type);
       const y = mag * Math.sin(type);
-      // const s = this.getScale();
       return new Transform().translate(x, y);
     };
     this.fnMap.add('_elementPulseSettingsTransformMethod', pulseTransformMethod);
@@ -1490,16 +1226,6 @@ class FigureElement {
   setFirstTransform(parentTransform: Transform) {
   }
 
-  // animateToPulseTransforms(pulseTranforms: Array<Transform>) {
-  //   let startTransforms = this.pulseTransforms;
-  //   if (pulseTransforms.length != this.startTransforms.length) {
-  //     startTransforms = [];
-  //     for (let i = 0; i < pulseTranforms.length; i += 1) {
-  //       startTransforms.push(this.transform._dup());
-  //     }
-  //   }
-  // }
-
   clearFrozenPulseTransforms() {
     this.frozenPulseTransforms = [];
   }
@@ -1519,15 +1245,11 @@ class FigureElement {
     independentOnly: boolean = false,
     startTime: ?number | 'now' | 'prevFrame' | 'nextFrame' = null,
   ) {
-    // if (this.name === 'a') {
-    //   console.log(this.frozenPulseTransforms)
-    // }
     const target = {};
     if (
       (this.isShown !== state.isShown && this.opacity === 1)
       || this.opacity !== 1
     ) {
-      // console.log('shown animation', this.getPath(), this.isShown, state.isShown)
       target.isShown = state.isShown;
     }
     if (!areColorsWithinDelta(this.color, state.color, 0.001)) {
@@ -1550,9 +1272,6 @@ class FigureElement {
       const scenarioOptions = joinObjects({}, options, { target });
       scenarioAnimation = this.animations.scenario(scenarioOptions);
     }
-    // let pulseTrigger = null;
-    // let pulseDelay = null;
-    // let delay = 0;
     let pulseAnimation = null;
     if (!this.arePulseTransformsSame(state, 0.001)) {
       let startPulseTransforms = this.pulseTransforms.map(t => t._dup());
@@ -1579,24 +1298,15 @@ class FigureElement {
           scenarioAnimation,
           pulseAnimation,
         ])
-        // .then(scenarioAnimation)
-        // .then(pulseTrigger)
-        // .then(pulseDelay)
         .start(startTime);
     }
 
-    // if (this.animations.animations.length > 0) {
-    //   console.log(this.getPath(), this.animations.animations[0]._dup());
-    // }
     if (scenarioAnimation != null) {
       duration = Math.max(duration, scenarioAnimation.getTotalDuration());
     }
     if (pulseAnimation != null) {
       duration = Math.max(duration, pulseAnimation.getTotalDuration());
     }
-    // if (this.name === 'a') {
-    //   console.log(this.frozenPulseTransforms)
-    // }
 
     return duration;
   }
@@ -1609,7 +1319,6 @@ class FigureElement {
     if (state.isShown === false) {
       return 0;
     }
-    // const target = {};
     this.transform = getTransform(state.transform);
     this.color = state.color.slice();
     this.frozenPulseTransforms = [];
@@ -1727,36 +1436,6 @@ class FigureElement {
     }
   }
 
-  // pulseScaleRelativeTo(
-  //   e: FigureElement | TypeParsablePoint | null,
-  //   x: 'left' | 'center' | 'right' | 'origin' | number,
-  //   y: 'bottom' | 'middle' | 'top' | 'origin' | number,
-  //   space: 'figure' | 'gl' | 'draw' | 'local',
-  //   time: number,
-  //   scale: number,
-  //   frequency: number = 0,
-  //   callback: ?(?mixed) => void = null,
-  // ) {
-  //   if (e == null || e instanceof FigureElement) {
-  //     this.pulseScaleRelativeToElement(e, x, y, space, time, scale, frequency, callback);
-  //   } else {
-  //     this.pulseScaleRelativeToPoint(e, space, time, scale, frequency, callback)
-  //   }
-  // }
-
-
-  // pulseLegacy(done: ?(mixed) => void = null) {
-  //   if (
-  //     typeof this.pulseDefault === 'function'
-  //     || typeof this.pulseDefault === 'string'
-  //   ) {
-  //     this.execFn(this.pulseDefault, done);
-  //   } else {
-  //     const { frequency, time, scale } = this.pulseDefault;
-  //     this.pulseScaleNow(time, scale, frequency, done);
-  //   }
-  // }
-
   getElement() {
     return this;
   }
@@ -1784,10 +1463,6 @@ class FigureElement {
     } else {
       position = getPoint(pointOrX);
     }
-    // let position = getPoint(pointOrX);
-    // if (typeof pointOrX === 'number') {
-    //   position = new Point(pointOrX, y);
-    // }
     const currentTransform = this.transform._dup();
     currentTransform.updateTranslation(position);
     this.setTransform(currentTransform);
@@ -1821,14 +1496,6 @@ class FigureElement {
     } else {
       scale = getPoint(scaleOrX);
     }
-    // let scale = getPoint(scaleOrX);
-    // if (typeof scaleOrX === 'number') {
-    //   if (y == null) {
-    //     scale = new Point(scaleOrX, scaleOrX);
-    //   } else {
-    //     scale = new Point(scaleOrX, y);
-    //   }
-    // }
     const currentTransform = this.transform._dup();
     currentTransform.updateScale(scale);
     this.setTransform(currentTransform);
@@ -1843,17 +1510,6 @@ class FigureElement {
    * @param {Transform} transform
    */
   setTransform(transform: Transform, publish: boolean = true): void {
-    // if (this.name === '_cursor_') {
-    //   console.log(transform.t())
-    //   console.trace()
-    // }
-    // if (this.name === 'polygond6_5' && window.qwer === 1) {
-    //   console.log('setting', transform.t())
-    //   // console.trace();
-    //   window.qwer += 1;
-    //   window.asdf += 1
-    // }
-    // const oldTransform = this.transform._dup();
     if (this.move.transformClip != null) {
       const clip = this.fnMap.exec(this.move.transformClip, transform);
       if (clip instanceof Transform) {
@@ -1882,9 +1538,6 @@ class FigureElement {
       this.subscriptions.publish('setTransform', [this.transform]);
       this.fnMap.exec(this.setTransformCallback, this.transform);
     }
-    // const t3 = performance.now();
-    // this.transformUpdated = true;
-    // this.animateNextFrame();
   }
 
   // Set the next transform (and velocity if moving freely) for the next
@@ -1983,29 +1636,6 @@ class FigureElement {
     this.opacity = opacity;
     this.animateNextFrame();
   }
-
-  // getScenarioTargetLegacy(
-  //   scenarioName: string,
-  // ) {
-  //   let target = this.transform._dup();
-  //   if (scenarioName in this.scenarios) {
-  //     const scenario = this.scenarios[scenarioName];
-  //     if (scenario.transform != null) {
-  //       target = getTransform(scenario.transform);
-  //     }
-  //     if (scenario.position != null) {
-  //       target.updateTranslation(getPoint(scenario.position));
-  //     }
-
-  //     if (scenario.rotation != null) {
-  //       target.updateRotation(scenario.rotation);
-  //     }
-  //     if (scenario.scale != null) {
-  //       target.updateScale(getScale(scenario.scale));
-  //     }
-  //   }
-  //   return target;
-  // }
 
   // retrieve a scenario
   getScenarioTarget(
@@ -2147,10 +1777,6 @@ class FigureElement {
     this.saveScenario(scenarioName, keys);
   }
 
-  // animateToScenario() {
-
-  // }
-
   getAllElementsWithScenario(scenarioName: string) {
     if (this.scenarios[scenarioName] != null) {
       return [this];
@@ -2172,17 +1798,6 @@ class FigureElement {
   // Decelerate over some time when moving freely to get a new element
   // transform and movement velocity
   decelerate(deltaTime: number | null = null): Object {
-    // let bounds;
-    // if (!this.move.bounds instanceof TransformBounds) {
-    //   this.setMoveBounds();
-    // }
-    // if (!this.move.bounds instanceof TransformBounds) {
-    //   bounds = new TransformBounds(this.transform);
-    // } else {
-    //   ({ bounds } = this.move);
-    // }
-    // this.checkMoveBounds();
-    // const { bounds } = this.move;
     const bounds = this.getMoveBounds();
 
     const next = this.transform.decelerate(
@@ -2200,20 +1815,10 @@ class FigureElement {
     };
   }
 
-  // getMoveBoundsRelativeToSize() {
-  //   if (this.move.includeSizeInBounds) {
-  //     const size = this.getBoundingRect('figure');
-  //     //asdfasdf
-  //   }
-  //   return this.move.bound
-  // }
 
   updateLastDrawTransform() {
-    // const { parentCount } = this.lastDrawElementTransformPosition;
-    // const pLength = this.lastDrawTransform.order.length;
     const transform = this.getTransform();
     transform.order.forEach((t, index) => {
-      // this.lastDrawTransform.order[pLength - parentCount - index - 1] = t._dup();
       this.lastDrawTransform.order[index] = t._dup();
     });
     this.lastDrawTransform.calcAndSetMatrix();
@@ -2238,9 +1843,6 @@ class FigureElement {
     return `${this.parent.getPath()}.${this.name}`;
   }
 
-  // getPause() {
-  //   return this.state.pause;
-  // }
 
   // Being Moved
   startBeingMoved(): void {
@@ -2277,25 +1879,6 @@ class FigureElement {
     } else {
       this.calcVelocity(prevTransform, this.transform);
     }
-    // if (
-    //   this.move.bounds.getTranslation instanceof LineBounds
-    //   || this.move.bounds.getTranslation()
-    // ) {
-    //   this.calcVelocity(prevTransform, this.transform);
-    // } else {
-    //   this.calcVelocity(prevTransform, newTransform);
-    // }
-
-    // if (this.recorder.state === 'recording') {
-    //   this.recorder.recordEvent(
-    //     'moved',
-    //     [
-    //       this.getPath(),
-    //       this.transform.round(this.recorder.precision)._state(),
-    //     ],
-    //     // this.state.movement.velocity.toString(),
-    //   );
-    // }
   }
 
   stopBeingMoved(): void {
@@ -2332,7 +1915,6 @@ class FigureElement {
       this.state.movement.previousTime = currentTime;
       return;
     }
-    // console.log(currentTime, this.state.movement.previousTime)
     const deltaTime = currentTime - this.state.movement.previousTime;
 
     // If the time is too small, weird calculations may happen
@@ -2356,15 +1938,12 @@ class FigureElement {
 
   // Moving Freely
   startMovingFreely(callback: ?(string | ((boolean) => void)) = null): void {
-    // this.stopAnimating();
     this.animations.cancelAll('freeze');
     this.stopBeingMoved();
     if (callback) {
-      // this.animate.transform.callback = callback;
       this.move.freely.callback = callback;
     }
     this.state.isMovingFreely = true;
-    // this.state.movement.previousTime = null;
     this.state.movement.previousTime = this.timeKeeper.now() / 1000;
     this.state.movement.velocity = this.state.movement.velocity.clipMag(
       this.move.freely.zeroVelocityThreshold,
@@ -2379,7 +1958,6 @@ class FigureElement {
           this.transform._state(),
           this.state.movement.velocity._state(),
         ],
-        // this.state.movement.velocity.toString(),
       );
     }
     this.animateNextFrame();
@@ -2389,7 +1967,6 @@ class FigureElement {
     if (how === 'animateToComplete') {
       return;
     }
-    // console.log(how)
     let wasMovingFreely = false;
     if (this.state.isMovingFreely === true) {
       wasMovingFreely = true;
@@ -2474,12 +2051,6 @@ class FigureElement {
           getPoint(this.pulseSettings.delta),
           this.pulseSettings.type,
         );
-        // console.log(this.name, this.transform._dup(), pTransform.matrix());
-        // if (this.name === 'p2') {
-        //   console.log(pTransform._dup(), pulseMag)
-        // }
-        // if(this.name === '_radius') {
-        // }
         // Transform the current transformMatrix by the pulse transform matrix
         // const pMatrix = m2.mul(m2.copy(transform), pTransform.matrix());
 
