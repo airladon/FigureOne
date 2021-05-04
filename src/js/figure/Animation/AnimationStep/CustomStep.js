@@ -7,7 +7,7 @@ import type {
   OBJ_AnimationStep,
 } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
-import type TimeKeeper from '../../webgl/TimeKeeper';
+import type { AnimationStartTime } from '../AnimationManager';
 
 /**
  * {@link CustomAnimationStep} options object
@@ -122,6 +122,13 @@ export class CustomAnimationStep extends AnimationStep {
       );
     }
     return this.fnMap.exec(idOrFn, ...args);
+  }
+
+  start(startTime: ?AnimationStartTime = null) {
+    super.start(startTime);
+    if (startTime === 'now' || startTime === 'prevFrame') {
+      this.setFrame(0);
+    }
   }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this

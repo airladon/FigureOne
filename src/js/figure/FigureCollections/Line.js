@@ -23,7 +23,7 @@ import type {
 // import type { TypeLabelEquationOptions } from './EquationLabel';
 import { joinObjects } from '../../tools/tools';
 import { Equation } from '../Equation/Equation';
-import type { TypeWhen } from '../webgl/TimeKeeper';
+import type { TypeWhen } from '../TimeKeeper';
 import { simplifyArrowOptions, getArrowLength } from '../geometries/arrow';
 import type { OBJ_LineArrows, OBJ_LineArrow, TypeArrowHead } from '../geometries/arrow';
 import type { OBJ_Pulse, FigureElement } from '../Element';

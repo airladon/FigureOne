@@ -4,7 +4,6 @@
 import type { OBJ_AnimationStep } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
-import TimeKeeper from '../../TimeKeeper';
 import type { AnimationStartTime } from '../AnimationManager';
 
 /**

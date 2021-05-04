@@ -4,6 +4,7 @@ import type {
   OBJ_AnimationStep,
 } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
+import type { AnimationStartTime } from '../AnimationManager';
 
 /**
  * {@link TriggernAnimationStep} options object
@@ -198,6 +199,13 @@ export class TriggerAnimationStep extends AnimationStep {
     //   this.callback(this.payload);
     //   this.callback = null;
     // }
+  }
+
+  start(startTime: ?AnimationStartTime = null) {
+    super.start(startTime);
+    if (startTime === 'now' || startTime === 'prevFrame') {
+      this.setFrame();
+    }
   }
 
   setToEnd() {

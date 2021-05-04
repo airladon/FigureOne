@@ -52,6 +52,7 @@ toc:
   - name: Animation
     file: ./docs/api/tutorials/animation/animation.md
   - AnimationManager
+  - TimeKeeper
   - AnimationBuilder
   - PositionAnimationStep
   - RotationAnimationStep

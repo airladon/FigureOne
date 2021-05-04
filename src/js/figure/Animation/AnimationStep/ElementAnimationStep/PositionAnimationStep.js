@@ -198,11 +198,12 @@ export default class PositionAnimationStep extends ElementAnimationStep {
         this.duration = 0;
         return;
       }
-    } else if (startTime === 'now' || startTime === 'prevFrame') {
-      if (this.element != null) {
-        this.element.setPosition(getPoint(this.position.start));
-      }
     }
+    // else if (startTime === 'now' || startTime === 'prevFrame') {
+    //   if (this.element != null) {
+    //     this.element.setPosition(getPoint(this.position.start));
+    //   }
+    // }
     // if delta is null, then calculate it from start and target
     if (this.position.delta == null
       && this.position.target != null
@@ -230,6 +231,9 @@ export default class PositionAnimationStep extends ElementAnimationStep {
       if (this.duration > this.position.maxDuration) {
         this.duration = this.position.maxDuration;
       }
+    }
+    if (startTime === 'now' || startTime === 'prevFrame') {
+      this.setFrame(0);
     }
   }
 

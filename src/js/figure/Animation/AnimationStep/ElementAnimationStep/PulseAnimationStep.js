@@ -9,7 +9,7 @@ import type {
   OBJ_ElementAnimationStep,
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
-import type { TypeWhen } from '../../../webgl/TimeKeeper';
+import type { TypeWhen } from '../../../TimeKeeper';
 import type { FigureElement } from '../../../Element';
 
 /**

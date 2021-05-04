@@ -185,6 +185,9 @@ export class ColorAnimationStep extends ElementAnimationStep {
     } else {
       this.duration = 0;
     }
+    if (startTime === 'now' || startTime === 'prevFrame') {
+      this.setFrame(0);
+    }
   }
 
   setFrame(deltaTime: number) {

@@ -4,7 +4,7 @@
 import type { OBJ_AnimationStep } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
-import type TimeKeeper from '../../webgl/TimeKeeper';
+import type { AnimationStartTime } from '../AnimationManager';
 
 
 // export type OBJ_AnimationStep = {
@@ -45,6 +45,13 @@ export class DelayAnimationStep extends AnimationStep {
     duplicateFromTo(this, dup, ['timeKeeper']);
     dup.timeKeeper = this.timeKeeper;
     return dup;
+  }
+
+  start(startTime: ?AnimationStartTime = null) {
+    super.start(startTime);
+    if (startTime === 'now' || startTime === 'prevFrame') {
+      this.setFrame(0);
+    }
   }
 
   // _getStateProperties() {  // eslint-disable-line class-methods-use-this

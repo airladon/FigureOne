@@ -70,7 +70,7 @@ import type {
   TypeColor, TypeDash, OBJ_CurvedCorner, OBJ_Font,
 } from '../../tools/types';
 import { getBufferBorder } from '../geometries/buffer';
-import type TimeKeeper from '../webgl/TimeKeeper';
+import type TimeKeeper from '../TimeKeeper';
 import type { Recorder } from '../Recorder/Recorder';
 
 /**
