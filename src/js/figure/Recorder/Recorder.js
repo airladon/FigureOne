@@ -6,13 +6,11 @@ import {
   duplicate, minify, unminify, joinObjects,
   ObjectTracker, download, SubscriptionManager, // PerformanceTimer,
 } from '../../tools/tools';
-import TimeKeeper from '../webgl/TimeKeeper';
+import TimeKeeper from '../TimeKeeper';
 // import type { FigureElement } from './Element';
 import Worker from './recorder.worker';
 import type Figure from '../Figure';
 import type { OBJ_ScenarioVelocity } from '../Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
-// import TimeKeeper from './webgl/TimeKeeper';
-// Singleton class that contains projects global variables
 
 type TypeStateDiff = [number, string, Object];
 

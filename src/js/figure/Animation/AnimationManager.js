@@ -23,13 +23,13 @@ import type {
 // import {
 //   AnimationStep,
 // } from './Animation';
-import TimeKeeper from '../webgl/TimeKeeper';
+import TimeKeeper from '../TimeKeeper';
 import {
   joinObjects, duplicateFromTo, SubscriptionManager, PerformanceTimer,
 } from '../../tools/tools';
 import { getState } from '../Recorder/state';
 import { FunctionMap } from '../../tools/FunctionMap';
-import type { TypeWhen } from '../webgl/TimeKeeper';
+import type { TypeWhen } from '../TimeKeeper';
 // import type { OBJ_AnimationStep } from './AnimationStep';
 import type { TypeParsablePoint } from '../../tools/g2';
 // import type Figure from '../Figure';

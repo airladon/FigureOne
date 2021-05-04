@@ -29,8 +29,8 @@ import {
   generateUniqueId, PerformanceTimer,
 } from '../tools/tools';
 import { colorArrayToRGBA, areColorsWithinDelta } from '../tools/color';
-import TimeKeeper from './webgl/TimeKeeper';
-import type { TypeWhen } from './webgl/TimeKeeper';
+import TimeKeeper from './TimeKeeper';
+import type { TypeWhen } from './TimeKeeper';
 // import DrawContext2D from './DrawContext2D';
 
 import type Figure, { OBJ_SpaceTransforms, OBJ_FigureForElement } from './Figure';

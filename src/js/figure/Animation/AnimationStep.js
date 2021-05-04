@@ -14,7 +14,7 @@ import * as math from '../../tools/math';
 import { getState } from '../Recorder/state';
 import type { FigureElement } from '../Element';
 import { FunctionMap } from '../../tools/FunctionMap';
-import TimeKeeper from '../webgl/TimeKeeper';
+import TimeKeeper from '../TimeKeeper';
 import type { AnimationStartTime } from './AnimationManager';
 // import * as anim from './Animation';
 

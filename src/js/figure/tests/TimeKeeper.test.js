@@ -1,4 +1,4 @@
-import TimeKeeper from './TimeKeeper';
+import TimeKeeper from '../TimeKeeper';
 import 'regenerator-runtime/runtime';
 
 function sleep(ms) {

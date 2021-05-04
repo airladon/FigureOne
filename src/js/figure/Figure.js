@@ -22,7 +22,7 @@ import {
 import type {
   OBJ_AddElement, TypeElementPath,
 } from './Element';
-import TimeKeeper from './webgl/TimeKeeper';
+import TimeKeeper from './TimeKeeper';
 import { Recorder } from './Recorder/Recorder';
 // eslint-disable-next-line import/no-cycle
 import Gesture from './Gesture';

@@ -3,7 +3,7 @@
 import * as g2 from './js/tools/g2';
 import * as math from './js/tools/math';
 import Figure from './js/figure/Figure';
-import TimeKeeper from './js/figure/webgl/TimeKeeper';
+import TimeKeeper from './js/figure/TimeKeeper';
 import { Recorder } from './js/figure/Recorder/Recorder';
 import { FunctionMap, GlobalFunctionMap } from './js/tools/FunctionMap';
 import * as color from './js/tools/color';
