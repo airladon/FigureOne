@@ -94,7 +94,7 @@ export type OBJ_AnimationStart = {
 export type TypeAnimationManagerInputOptions = {
   element?: FigureElement;
   finishedCallback?: ?(string | (() => void)),
-  recorder: Recorder,
+  recorder?: Recorder,
   timeKeeper: GlobalAnimation,
 };
 

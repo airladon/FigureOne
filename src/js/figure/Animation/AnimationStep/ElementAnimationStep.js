@@ -6,7 +6,6 @@ import AnimationStep from '../AnimationStep';
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
 import type { FigureElement } from '../../Element';
 import type { AnimationStartTime } from '../AnimationManager';
-import type GlobalAnimation from '../../webgl/GlobalAnimation';
 
 /**
  * Animation progression function.
@@ -38,7 +37,7 @@ export type AnimationProgression = (number) => number;
 export type OBJ_ElementAnimationStep = {
   element?: FigureElement; // Can't use FigureElement as importing it makes a loop
   type?: 'transform' | 'color' | 'custom' | 'position' | 'rotation' | 'scale' | 'opacity';
-  progression?: 'linear' | 'easeinout' | 'easein' | 'easeout' | (number) => number; // default is easeinout except color and custom which is linear
+  progression?: 'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression; // default is easeinout except color and custom which is linear
 } & OBJ_AnimationStep;
 
 /**
@@ -110,16 +109,6 @@ export default class ElementAnimationStep extends AnimationStep {
       'element',
     ];
   }
-
-  // _fromState(state: Object, getElement: ?(string) => FigureElement, timeKeeper: GlobalAnimation) {
-  //   // const obj = new this.constructor();
-  //   joinObjects(this, state);
-  //   if (this.element != null && typeof this.element === 'string' && getElement != null) {
-  //     this.element = getElement(this.element);
-  //   }
-  //   this.timeKeeper = timeKeeper;
-  //   return this;
-  // }
 
   // _state(options: Object) {
   //   const state = super._state(options);

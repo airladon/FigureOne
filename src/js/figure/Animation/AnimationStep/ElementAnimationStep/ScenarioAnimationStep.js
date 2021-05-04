@@ -157,7 +157,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     allDurationsSame: boolean;
     zeroDurationThreshold: number;
     clipRotationTo: '0to360' | '-180to180' | null;
-    progression: ((number, ?boolean) => number) | string;
+    progression: 'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression;
     // minDuration: number;
   };
 
