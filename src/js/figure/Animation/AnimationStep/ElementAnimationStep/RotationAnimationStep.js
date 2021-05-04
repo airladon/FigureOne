@@ -226,8 +226,9 @@ export default class RotationAnimationStep extends ElementAnimationStep {
 
   _dup() {
     const step = new RotationAnimationStep();
-    duplicateFromTo(this, step, ['element']);
+    duplicateFromTo(this, step, ['element', 'timeKeeper']);
     step.element = this.element;
+    step.timeKeeper = this.timeKeeper;
     return step;
   }
 }

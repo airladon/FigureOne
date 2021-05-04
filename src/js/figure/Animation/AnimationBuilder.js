@@ -107,7 +107,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
    */
   custom(...optionsIn: Array<OBJ_CustomAnimationStep>) {
     if (this.element != null) {
-      const defaultOptions = { element: this.element };
+      const defaultOptions = { element: this.element, timeKeeper: this.timeKeeper };
       const options = joinObjects({}, defaultOptions, ...optionsIn);
       this.then(new animation.CustomAnimationStep(options));
       // this.addStep(options, 'CustomAnimationStep', true);
@@ -187,7 +187,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     ...options: Array<OBJ_TransformAnimationStep & OBJ_ParallelAnimationStep>
   ) {
     if (this.element != null) {
-      const defaultOptions = { element: this.element };
+      const defaultOptions = { element: this.element, timeKeeper: this.timeKeeper };
       const optionsToUse = joinObjects({}, defaultOptions, ...options);
       this.then(optionsToUse.element.animations.scenarios(optionsToUse));
     }
@@ -234,12 +234,15 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this.addStep('dissolveIn', durationOrOptions);
   }
 
+  /* eslint-disable no-param-reassign */
   addStep(animName: string, options: Object) {
+    options.timeKeeper = this.timeKeeper;
     if (this.element != null) { // $FlowFixMe
       this.then(this.element.animations[animName](options));
     }
     return this;
   }
+  /* eslint-enable no-param-reassign */
 
 
   /**
@@ -275,7 +278,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     delayOrOptions: number | OBJ_AnimationStep = {},
     ...args: Array<OBJ_AnimationStep>
   ) {
-    this.then(animation.delay(delayOrOptions, ...args));
+    this.then(animation.delay(delayOrOptions, { timeKeeper: this.timeKeeper }, ...args));
     return this;
   }
 
@@ -289,7 +292,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     ...args: Array<OBJ_TriggerAnimationStep>
   ) {
     if (this.element != null) {
-      const defaultOptions = { element: this.element };
+      const defaultOptions = { element: this.element, timeKeeper: this.timeKeeper };
       const optionsToUse = joinObjects({}, defaultOptions, ...args);
       this.then(animation.trigger(triggerOrOptions, optionsToUse));
     } else {
@@ -309,7 +312,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
                       | OBJ_ParallelAnimationStep = {},
     ...options: Array<OBJ_ParallelAnimationStep>
   ) {
-    this.then(animation.inParallel(stepsOrOptions, ...options));
+    this.then(animation.inParallel(stepsOrOptions, { timeKeeper: this.timeKeeper }, ...options));
     return this;
   }
 
@@ -322,7 +325,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     stepsOrOptions: Array<animation.AnimationStep> | OBJ_SerialAnimationStep = {},
     ...options: Array<OBJ_SerialAnimationStep>
   ) {
-    this.then(animation.inSerial(stepsOrOptions, ...options));
+    this.then(animation.inSerial(stepsOrOptions, { timeKeeper: this.timeKeeper }, ...options));
     return this;
   }
 
@@ -338,6 +341,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   _dup() {
     const newBuilder = new AnimationBuilder();
     duplicateFromTo(this, newBuilder, ['element']);
+    duplicateFromTo(this, newBuilder, ['element', 'timeKeeper']);
+    newBuilder.timeKeeper = this.timeKeeper;
     newBuilder.element = this.element;
     return newBuilder;
   }

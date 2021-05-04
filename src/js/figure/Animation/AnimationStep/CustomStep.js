@@ -7,6 +7,7 @@ import type {
   OBJ_AnimationStep,
 } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
+import type GlobalAnimation from '../../webgl/GlobalAnimation';
 
 /**
  * {@link CustomAnimationStep} options object
@@ -133,11 +134,13 @@ export class CustomAnimationStep extends AnimationStep {
     ];
   }
 
-  // _fromState(state: Object, getElement: ?(string) => FigureElement) {
+  // _fromState(state: Object, getElement: ?(string) => FigureElement, timeKeeper: GlobalAnimation) {
+  //   // const obj = new this.constructor();
   //   joinObjects(this, state);
   //   if (this.element != null && typeof this.element === 'string' && getElement != null) {
   //     this.element = getElement(this.element);
   //   }
+  //   this.timeKeeper = timeKeeper;
   //   return this;
   // }
 
@@ -185,7 +188,8 @@ export class CustomAnimationStep extends AnimationStep {
 
   _dup() {
     const step = new CustomAnimationStep();
-    duplicateFromTo(this, step);
+    duplicateFromTo(this, step, ['timeKeeper']);
+    step.timeKeeper = this.timeKeeper;
     return step;
   }
 }

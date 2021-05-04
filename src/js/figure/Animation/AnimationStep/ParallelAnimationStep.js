@@ -4,7 +4,7 @@
 import type { OBJ_AnimationStep } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
-import GlobalAnimation from '../../webgl/GlobalAnimation';
+import type GlobalAnimation from '../../webgl/GlobalAnimation';
 import type { AnimationStartTime } from '../AnimationManager';
 
 
@@ -216,7 +216,7 @@ export class ParallelAnimationStep extends AnimationStep {
     return totalDuration;
   }
 
-  getRemainingTime(now: number = new GlobalAnimation().now() / 1000) {
+  getRemainingTime(now: number) {
     const totalDuration = this.getTotalDuration();
     if (this.startTime == null) {
       if (this.state === 'animating' || this.state === 'waitingToStart') {
@@ -230,7 +230,8 @@ export class ParallelAnimationStep extends AnimationStep {
 
   _dup() {
     const step = new ParallelAnimationStep();
-    duplicateFromTo(this, step);
+    duplicateFromTo(this, step, ['timeKeeper']);
+    step.timeKeeper = this.timeKeeper;
     return step;
   }
 }

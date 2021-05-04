@@ -448,8 +448,9 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
 
   _dup() {
     const step = new ScenarioAnimationStep();
-    duplicateFromTo(this, step, ['element']);
+    duplicateFromTo(this, step, ['element', 'timeKeeper']);
     step.element = this.element;
+    step.timeKeeper = this.timeKeeper;
     return step;
   }
 }

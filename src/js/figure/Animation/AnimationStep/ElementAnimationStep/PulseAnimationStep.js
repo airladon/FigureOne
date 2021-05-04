@@ -228,8 +228,9 @@ export default class PulseAnimationStep extends ElementAnimationStep {
 
   _dup() {
     const step = new PulseAnimationStep();
-    duplicateFromTo(this, step, ['element']);
+    duplicateFromTo(this, step, ['element', 'timeKeeper']);
     step.element = this.element;
+    step.timeKeeper = this.timeKeeper;
     return step;
   }
 }

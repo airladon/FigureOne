@@ -32,6 +32,10 @@ import type { AnimationStartTime } from './AnimationManager';
  * @property {null | boolean} [completeOnCancel] `true` to skip to end of
  * animation on cancel (`null`)
  * @property {number} [precision] precision to do calculations to (`8`)
+ * @property {TimeKeepr} [timeKeeper] animations need to be tied to a time
+ * reference. If this is not supplied, then the default browser time reference
+ * performance.now will be used and methods with {@link TypeWhen} parameters
+ * will allow only `'now'` and `'nextFrame'` and not `'lastFrame'`, `'syncNow'`
  */
 export type OBJ_AnimationStep = {
   onFinish?: ?(boolean) => void;
@@ -41,6 +45,7 @@ export type OBJ_AnimationStep = {
   duration?: number;
   delay?: number;
   precision?: number;
+  timeKeeper?: GlobalAnimation | null;
 };
 
 /**
@@ -76,6 +81,8 @@ export default class AnimationStep {
   _stepType: string;
   fnMap: FunctionMap;
   precision: number;
+  timeKeeper: GlobalAnimation | null;
+  element: ?FigureElement;
 
   constructor(optionsIn: OBJ_AnimationStep = {}) {
     const defaultOptions = {
@@ -88,11 +95,13 @@ export default class AnimationStep {
       beforeFrame: null,
       afterFrame: null,
       precision: 8,
+      element: null,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     this.onFinish = options.onFinish;
     this.completeOnCancel = options.completeOnCancel;
     this.duration = options.duration;
+    this.element = options.element;
     this.startTime = null;
     this.state = 'idle';
     this.name = options.name;
@@ -100,6 +109,10 @@ export default class AnimationStep {
     this.beforeFrame = options.beforeFrame;
     this.startDelay = options.delay;
     this.precision = options.precision;
+    this.timeKeeper = null;
+    if (options.timeKeeper != null) {
+      this.timeKeeper = options.timeKeeper;
+    }
     // This is only for it this step is a primary path in an Animation Manager
     this.removeOnFinish = options.removeOnFinish;
     // Each animation frame will typically calculate a percent complete,
@@ -242,9 +255,19 @@ export default class AnimationStep {
     };
   }
 
-  // eslint-disable-next-line no-unused-vars
-  _fromState(state: Object, getElement: ?(string) => FigureElement) {
+  // // eslint-disable-next-line no-unused-vars
+  // _fromState(state: Object, getElement: ?(string) => FigureElement) {
+  //   joinObjects(this, state);
+  //   return this;
+  // }
+
+  _fromState(state: Object, getElement: ?(string) => FigureElement, timeKeeper: GlobalAnimation) {
+    // const obj = new this.constructor();
     joinObjects(this, state);
+    if (this.element != null && typeof this.element === 'string' && getElement != null) {
+      this.element = getElement(this.element);
+    }
+    this.timeKeeper = timeKeeper;
     return this;
   }
 
@@ -293,7 +316,7 @@ export default class AnimationStep {
    * @param {number} now define this if you want remaining duration from a
    * custom time
    */
-  getRemainingTime(now: number = new GlobalAnimation().now() / 1000) {
+  getRemainingTime(now: number) {
     const totalDuration = this.getTotalDuration();
     if (this.startTime == null) {
       if (this.state === 'animating' || this.state === 'waitingToStart') {
@@ -331,8 +354,15 @@ export default class AnimationStep {
       this.startTime = null;
       return;
     }
-    const globalAnim = new GlobalAnimation();
-    this.startTime = globalAnim.getWhen(startTime) / 1000;
+    if (this.timeKeeper != null) {
+      this.startTime = this.timeKeeper.getWhen(startTime) / 1000;
+    } else if (startTime === 'nextFrame') {
+        this.startTime = null;
+    } else {
+      this.startTime = performance.now();
+    }
+    // const globalAnim = new GlobalAnimation();
+    // this.startTime = globalAnim.getWhen(startTime) / 1000;
     // if (startTime === 'prev') {
     //   this.startTime = new GlobalAnimation().lastFrame;
     // }
@@ -397,7 +427,9 @@ export default class AnimationStep {
 
   _dup() {
     const step = new AnimationStep();
-    duplicateFromTo(this, step);
+    duplicateFromTo(this, step, ['timeKeeper', 'element']);
+    step.timeKeeper = this.timeKeeper;
+    step.element = this.element;
     return step;
   }
 

@@ -10,6 +10,7 @@ import { FigureElement } from '../Element';
 // } from './Animation';
 // eslint-disable-next-line import/no-cycle
 import * as anim from './Animation';
+import type { Recorder } from '../Recorder/Recorder';
 import type {
   AnimationStep, OBJ_AnimationBuilder, OBJ_AnimationStep,
   OBJ_RotationAnimationStep, OBJ_ScaleAnimationStep, OBJ_TriggerAnimationStep,
@@ -93,6 +94,8 @@ export type OBJ_AnimationStart = {
 export type TypeAnimationManagerInputOptions = {
   element?: FigureElement;
   finishedCallback?: ?(string | (() => void)),
+  recorder: Recorder,
+  timeKeeper: GlobalAnimation,
 };
 
 /* eslint-disable max-len */
@@ -223,6 +226,9 @@ export default class AnimationManager {
     },
   };
 
+  recorder: Recorder;
+  timeKeeper: GlobalAnimation;
+
   animationSpeed: number;
 
   customSteps: Array<{
@@ -249,6 +255,8 @@ export default class AnimationManager {
     } else {
       options = joinObjects({}, defaultOptions, elementOrOptionsIn, ...optionsIn);
     }
+    this.timeKeeper = options.timeKeeper;
+    this.recorder = options.recorder;
     this.element = options.element;
     this.animations = [];
     this.state = 'idle';      // $FlowFixMe
@@ -275,6 +283,7 @@ export default class AnimationManager {
   new(name: ?string) {
     const options = {
       customSteps: this.customSteps,
+      timeKeeper: this.timeKeeper,
     };
     if (this.element != null) { // $FlowFixMe
       options.element = this.element;
@@ -301,7 +310,7 @@ export default class AnimationManager {
       animation.setTimeSpeed(
         this.animationSpeed,
         speed,
-        new GlobalAnimation().now() / 1000,
+        this.timeKeeper.now() / 1000,
       );
     });
     this.animationSpeed = speed;
@@ -316,6 +325,7 @@ export default class AnimationManager {
   builder(...options: Array<OBJ_AnimationBuilder>) {  // $FlowFixMe
     return new anim.AnimationBuilder(this, {
       customSteps: this.customSteps,
+      timeKeeper: this.timeKeeper,
     }, ...options);
   }
 
@@ -330,7 +340,9 @@ export default class AnimationManager {
    *   .start();
    */
   rotation(...options: Array<OBJ_RotationAnimationStep>) {
-    const optionsToUse = joinObjects({}, { element: this.element }, ...options);
+    const optionsToUse = joinObjects(
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, ...options,
+    );
     // return new anim.RotationAnimationStep(optionsToUse);
     return this.getStep(optionsToUse, 'RotationAnimationStep');
   }
@@ -341,7 +353,9 @@ export default class AnimationManager {
    * @return {ScaleAnimationStep}
    */
   scale(...options: Array<OBJ_ScaleAnimationStep>) {
-    const optionsToUse = joinObjects({}, { element: this.element }, ...options);
+    const optionsToUse = joinObjects(
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, ...options,
+    );
     // return new anim.ScaleAnimationStep(optionsToUse);
     return this.getStep(optionsToUse, 'ScaleAnimationStep');
   }
@@ -353,7 +367,10 @@ export default class AnimationManager {
    */
   // eslint-disable-next-line class-methods-use-this
   trigger(options: (() => void) | Array<OBJ_TriggerAnimationStep>) {
-    return new anim.TriggerAnimationStep(options);
+    const optionsToUse = joinObjects(
+      {}, { timeKeeper: this.timeKeeper }, options,
+    );
+    return new anim.TriggerAnimationStep(optionsToUse);
   }
 
   /**
@@ -367,13 +384,20 @@ export default class AnimationManager {
     delayOrOptions: number | OBJ_AnimationStep = {},
     // ...args: Array<OBJ_AnimationStep>
   ) {
-    // let optionsToUse;
-    // if (typeof delayOrOptions === 'number') {
-    //   optionsToUse = joinObjects({}, { duration: delayOrOptions }, ...args);
-    // } else {
-    //   optionsToUse = joinObjects({}, delayOrOptions, ...args);
-    // }
-    return new anim.DelayAnimationStep(delayOrOptions);
+    let optionsToUse;
+    if (typeof delayOrOptions === 'number') {
+      optionsToUse = joinObjects(
+        {}, { timeKeeper: this.timeKeeper }, { duration: delayOrOptions },
+      );
+    } else {
+      optionsToUse = joinObjects(
+        {}, { timeKeeper: this.timeKeeper }, delayOrOptions,
+      );
+    }
+    // const optionsToUse = joinObjects(
+    //   {}, { timeKeeper: this.timeKeeper }, options,
+    // );
+    return new anim.DelayAnimationStep(optionsToUse);
   }
 
   /**
@@ -382,7 +406,9 @@ export default class AnimationManager {
    * @return {PositionAnimationStep}
    */
   translation(...options: Array<OBJ_PositionAnimationStep>) {
-    const optionsToUse = joinObjects({}, { element: this.element }, ...options);
+    const optionsToUse = joinObjects(
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, ...options,
+    );
     // return new anim.PositionAnimationStep(optionsToUse);
     return this.getStep(optionsToUse, 'PositionAnimationStep');
   }
@@ -393,7 +419,9 @@ export default class AnimationManager {
    * @return {PositionAnimationStep}
    */
   position(...options: Array<OBJ_PositionAnimationStep>) {
-    const optionsToUse = joinObjects({}, { element: this.element }, ...options);
+    const optionsToUse = joinObjects(
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, ...options,
+    );
     // return new anim.PositionAnimationStep(optionsToUse);
     return this.getStep(optionsToUse, 'PositionAnimationStep');
   }
@@ -404,7 +432,9 @@ export default class AnimationManager {
    * @return {ColorAnimationStep}
    */
   color(...options: Array<OBJ_ColorAnimationStep>) {
-    const optionsToUse = joinObjects({}, { element: this.element }, ...options);
+    const optionsToUse = joinObjects(
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, ...options,
+    );
     // return new anim.ColorAnimationStep(optionsToUse);
     return this.getStep(optionsToUse, 'ColorAnimationStep');
   }
@@ -415,7 +445,9 @@ export default class AnimationManager {
    * @return {OpacityAnimationStep}
    */
   opacity(...options: Array<OBJ_OpacityAnimationStep>) {
-    const optionsToUse = joinObjects({}, { element: this.element }, ...options);
+    const optionsToUse = joinObjects(
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, ...options,
+    );
     // return new anim.OpacityAnimationStep(optionsToUse);
     return this.getStep(optionsToUse, 'OpacityAnimationStep');
   }
@@ -426,19 +458,25 @@ export default class AnimationManager {
    * @return {TransformAnimationStep}
    */
   transform(...options: Array<OBJ_TransformAnimationStep>) {
-    const optionsToUse = joinObjects({}, { element: this.element }, ...options);
+    const optionsToUse = joinObjects(
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, ...options,
+    );
     // return new anim.TransformAnimationStep(optionsToUse);
     return this.getStep(optionsToUse, 'TransformAnimationStep');
   }
 
   pulseTransform(...options: Array<OBJ_PulseTransformAnimationStep>) {
-    const optionsToUse = joinObjects({}, { element: this.element }, ...options);
+    const optionsToUse = joinObjects(
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, ...options,
+    );
     // return new anim.PulseTransformAnimationStep(optionsToUse);
     return this.getStep(optionsToUse, 'PulseTransformAnimationStep');
   }
 
   pulse(...options: Array<OBJ_PulseAnimationStep>) {
-    const optionsToUse = joinObjects({}, { element: this.element }, ...options);
+    const optionsToUse = joinObjects(
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, ...options,
+    );
     // return new anim.PulseAnimationStep(optionsToUse);
     // return this.getStep(optionsToUse, 'PulseAnimationStep');
 
@@ -469,7 +507,7 @@ export default class AnimationManager {
    * @return {DissolveInAnimationStep}
    */
   dissolveIn(durationOrOptions: number | OBJ_ElementAnimationStep = {}) {
-    const defaultOptions = { element: this.element };
+    const defaultOptions = { element: this.element, timeKeeper: this.timeKeeper };
     let optionsToUse;
     if (typeof durationOrOptions === 'number') {
       optionsToUse = joinObjects({}, defaultOptions, { duration: durationOrOptions });
@@ -487,7 +525,7 @@ export default class AnimationManager {
    * @return {DissolveOutAnimationStep}
    */
   dissolveOut(durationOrOptions: number | OBJ_ElementAnimationStep = {}) {
-    const defaultOptions = { element: this.element };
+    const defaultOptions = { element: this.element, timeKeeper: this.timeKeeper };
     let optionsToUse;
     if (typeof durationOrOptions === 'number') {
       optionsToUse = joinObjects({}, defaultOptions, { duration: durationOrOptions });
@@ -505,7 +543,7 @@ export default class AnimationManager {
    * @return {DimAnimationStep}
    */
   dim(durationOrOptions: number | OBJ_ElementAnimationStep = {}) {
-    const defaultOptions = { element: this.element };
+    const defaultOptions = { element: this.element, timeKeeper: this.timeKeeper };
     let optionsToUse;
     if (typeof durationOrOptions === 'number') {
       optionsToUse = joinObjects({}, defaultOptions, { duration: durationOrOptions });
@@ -523,7 +561,7 @@ export default class AnimationManager {
    * @return {UndimAnimationStep}
    */
   undim(durationOrOptions: number | OBJ_ColorAnimationStep = {}) {
-    const defaultOptions = { element: this.element };
+    const defaultOptions = { element: this.element, timeKeeper: this.timeKeeper };
     let optionsToUse;
     if (typeof durationOrOptions === 'number') {
       optionsToUse = joinObjects({}, defaultOptions, { duration: durationOrOptions });
@@ -536,6 +574,7 @@ export default class AnimationManager {
 
   /* eslint-disable no-param-reassign */
   getStep(options: Object, animName: string) {
+    options.timeKeeper = this.timeKeeper;
     if (typeof options.element === 'string' && this.element != null) {
       options.element = this.element.getElement(options.element);
     }
@@ -559,7 +598,9 @@ export default class AnimationManager {
    * @return {ScenarioAnimationStep}
    */
   scenario(...options: Array<OBJ_ScenarioAnimationStep>) {
-    const optionsToUse = joinObjects({}, { element: this.element }, ...options);
+    const optionsToUse = joinObjects(
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, ...options,
+    );
     // return new anim.ScenarioAnimationStep(optionsToUse);
     return this.getStep(optionsToUse, 'ScenarioAnimationStep');
   }
@@ -571,7 +612,7 @@ export default class AnimationManager {
    * @return {ParallelAnimationStep}
    */
   scenarios(...options: Array<OBJ_ParallelAnimationStep & OBJ_TransformAnimationStep>) {
-    const defaultOptions = { element: this.element };
+    const defaultOptions = { element: this.element, timeKeeper: this.timeKeeper };
     const optionsToUse = joinObjects({}, defaultOptions, ...options);
     const elements = optionsToUse.element.getAllElementsWithScenario(optionsToUse.target);
     const steps = [];
@@ -724,7 +765,7 @@ export default class AnimationManager {
       if (this.element.name === 'rootCollection') { // $FlowFixMe
         window.figureOneDebug.animationManager.push([  // $FlowFixMe
           this.element.getPath(),
-          new GlobalAnimation().now(),
+          this.timeKeeper.now(),
           deltas[0],
           deltas.slice(1),
         ]);
@@ -809,7 +850,7 @@ export default class AnimationManager {
 
   // eslint-disable-next-line class-methods-use-this
   getFrameTime(frame: 'nextFrame' | 'prevFrame' | 'now' | 'syncNow') {
-    new GlobalAnimation().getWhen(frame);
+    this.timeKeeper.getWhen(frame);
   }
 
   /**
@@ -888,7 +929,7 @@ export default class AnimationManager {
    */
   getRemainingTime(
     animationNames: Array<string> | string = [],
-    now: number = new GlobalAnimation().now() / 1000,
+    now: number = this.timeKeeper.now() / 1000,
   ) {
     let remainingTime = 0;
     let names: Array<string> = [];
@@ -910,7 +951,7 @@ export default class AnimationManager {
     return remainingTime;
   }
 
-  getNextAnimationFinishTime(now: number = new GlobalAnimation().now() / 1000): null | number {
+  getNextAnimationFinishTime(now: number = this.timeKeeper.now() / 1000): null | number {
     let remainingTime = null;
     this.animations.forEach((animation) => {
       const animationRemainingTime = animation.getRemainingTime(now);
@@ -950,8 +991,10 @@ export default class AnimationManager {
 
   _dup() {
     const newManager = new AnimationManager();
-    duplicateFromTo(this, newManager, ['element']);
+    duplicateFromTo(this, newManager, ['element', 'recorder', 'timeKeeper']);
     newManager.element = this.element;
+    newManager.recorder = this.recorder;
+    newManager.timeKeeper = this.timeKeeper;
     return newManager;
   }
 }

@@ -259,8 +259,9 @@ export default class PositionAnimationStep extends ElementAnimationStep {
 
   _dup() {
     const step = new PositionAnimationStep();
-    duplicateFromTo(this, step, ['element']);
+    duplicateFromTo(this, step, ['element', 'timeKeeper']);
     step.element = this.element;
+    step.timeKeeper = this.timeKeeper;
     return step;
   }
 }

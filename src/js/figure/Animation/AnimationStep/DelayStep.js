@@ -4,6 +4,7 @@
 import type { OBJ_AnimationStep } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
+import type GlobalAnimation from '../../webgl/GlobalAnimation';
 
 
 // export type OBJ_AnimationStep = {
@@ -41,7 +42,8 @@ export class DelayAnimationStep extends AnimationStep {
 
   _dup() {
     const dup = new DelayAnimationStep();
-    duplicateFromTo(this, dup);
+    duplicateFromTo(this, dup, ['timeKeeper']);
+    dup.timeKeeper = this.timeKeeper;
     return dup;
   }
 

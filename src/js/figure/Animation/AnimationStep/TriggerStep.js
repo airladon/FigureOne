@@ -215,7 +215,9 @@ export class TriggerAnimationStep extends AnimationStep {
 
   _dup() {
     const step = new TriggerAnimationStep();
-    duplicateFromTo(this, step, ['element']);
+    duplicateFromTo(this, step, ['element', 'timeKeeper']);
+    step.timeKeeper = this.timeKeeper;
+    step.element = this.element;
     return step;
   }
 }

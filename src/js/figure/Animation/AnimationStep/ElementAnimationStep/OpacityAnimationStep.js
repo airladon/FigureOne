@@ -260,8 +260,9 @@ export class OpacityAnimationStep extends ElementAnimationStep {
 
   _dup() {
     const step = new OpacityAnimationStep();
-    duplicateFromTo(this, step, ['element']);
+    duplicateFromTo(this, step, ['element', 'timeKeeper']);
     step.element = this.element;
+    step.timeKeeper = this.timeKeeper;
     return step;
   }
 }

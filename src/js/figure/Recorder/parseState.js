@@ -84,84 +84,98 @@ function parseState(state: Object, figure: Figure) {
       return new PositionAnimationStep()._fromState(
         parseState(state.state, figure),
         figure.getElement.bind(figure),
+        figure.globalAnimation,
       );
     }
     if (state.f1Type === 'rotationAnimationStep') {
       return new RotationAnimationStep()._fromState(
         parseState(state.state, figure),
         figure.getElement.bind(figure),
+        figure.globalAnimation,
       );
     }
     if (state.f1Type === 'scaleAnimationStep') {
       return new ScaleAnimationStep()._fromState(
         parseState(state.state, figure),
         figure.getElement.bind(figure),
+        figure.globalAnimation,
       );
     }
     if (state.f1Type === 'transformAnimationStep') {
       return new TransformAnimationStep()._fromState(
         parseState(state.state, figure),
         figure.getElement.bind(figure),
+        figure.globalAnimation,
       );
     }
     if (state.f1Type === 'scenarioAnimationStep') {
       return new ScenarioAnimationStep()._fromState(
         parseState(state.state, figure),
         figure.getElement.bind(figure),
+        figure.globalAnimation,
       );
     }
     if (state.f1Type === 'colorAnimationStep') {
       return new ColorAnimationStep()._fromState(
         parseState(state.state, figure),
         figure.getElement.bind(figure),
+        figure.globalAnimation,
       );
     }
     if (state.f1Type === 'opacityAnimationStep') {
       return new OpacityAnimationStep()._fromState(
         parseState(state.state, figure),
         figure.getElement.bind(figure),
+        figure.globalAnimation,
       );
     }
     if (state.f1Type === 'pulseAnimationStep') {
       return new PulseAnimationStep()._fromState(
         parseState(state.state, figure),
         figure.getElement.bind(figure),
+        figure.globalAnimation,
       );
     }
     if (state.f1Type === 'customAnimationStep') {
       return new CustomAnimationStep()._fromState(
         parseState(state.state, figure),
         figure.getElement.bind(figure),
+        figure.globalAnimation,
       );
     }
     if (state.f1Type === 'delayAnimationStep') {
       return new DelayAnimationStep()._fromState(
         parseState(state.state, figure),
         figure.getElement.bind(figure),
+        figure.globalAnimation,
       );
     }
     if (state.f1Type === 'parallelAnimationStep') {
       return new ParallelAnimationStep()._fromState(
         parseState(state.state, figure),
         figure.getElement.bind(figure),
+        figure.globalAnimation,
       );
     }
     if (state.f1Type === 'serialAnimationStep') {
       return new SerialAnimationStep()._fromState(
         parseState(state.state, figure),
         figure.getElement.bind(figure),
+        figure.globalAnimation,
       );
     }
     if (state.f1Type === 'triggerAnimationStep') {
       return new TriggerAnimationStep()._fromState(
         parseState(state.state, figure),
         figure.getElement.bind(figure),
+        figure.globalAnimation,
       );
     }
     if (state.f1Type === 'animationBuilder') {
       return new AnimationBuilder()._fromState(
         parseState(state.state, figure),
         figure.getElement.bind(figure),
+        figure.globalAnimation,
       );
     }
   }

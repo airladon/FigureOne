@@ -6,6 +6,7 @@ import AnimationStep from '../AnimationStep';
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
 import type { FigureElement } from '../../Element';
 import type { AnimationStartTime } from '../AnimationManager';
+import type GlobalAnimation from '../../webgl/GlobalAnimation';
 
 /**
  * Animation progression function.
@@ -110,12 +111,13 @@ export default class ElementAnimationStep extends AnimationStep {
     ];
   }
 
-  // _fromState(state: Object, getElement: ?(string) => FigureElement) {
+  // _fromState(state: Object, getElement: ?(string) => FigureElement, timeKeeper: GlobalAnimation) {
   //   // const obj = new this.constructor();
   //   joinObjects(this, state);
   //   if (this.element != null && typeof this.element === 'string' && getElement != null) {
   //     this.element = getElement(this.element);
   //   }
+  //   this.timeKeeper = timeKeeper;
   //   return this;
   // }
 
@@ -156,8 +158,9 @@ export default class ElementAnimationStep extends AnimationStep {
 
   _dup() {
     const step = new ElementAnimationStep();
-    duplicateFromTo(this, step, ['element']);
+    duplicateFromTo(this, step, ['element', 'timeKeeper']);
     step.element = this.element;
+    step.timeKeeper = this.timeKeeper;
     return step;
   }
 }

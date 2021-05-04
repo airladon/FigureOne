@@ -302,8 +302,9 @@ export default class TransformAnimationStep extends ElementAnimationStep {
 
   _dup() {
     const step = new TransformAnimationStep();
-    duplicateFromTo(this, step, ['element']);
+    duplicateFromTo(this, step, ['element', 'timeKeeper']);
     step.element = this.element;
+    step.timeKeeper = this.timeKeeper;
     return step;
   }
 }

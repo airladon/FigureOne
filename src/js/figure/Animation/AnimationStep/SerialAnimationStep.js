@@ -238,7 +238,7 @@ export class SerialAnimationStep extends AnimationStep {
     return totalDuration;
   }
 
-  getRemainingTime(now: number = new GlobalAnimation().now() / 1000) {
+  getRemainingTime(now: number) {
     const totalDuration = this.getTotalDuration();
     if (this.startTime == null) {
       if (this.state === 'animating' || this.state === 'waitingToStart') {
@@ -252,7 +252,8 @@ export class SerialAnimationStep extends AnimationStep {
 
   _dup() {
     const step = new SerialAnimationStep();
-    duplicateFromTo(this, step);
+    duplicateFromTo(this, step, ['timeKeeper']);
+    step.timeKeeper = this.timeKeeper;
     return step;
   }
 }
