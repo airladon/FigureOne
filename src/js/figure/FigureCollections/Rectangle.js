@@ -349,6 +349,7 @@ class CollectionsRectangle extends FigureElementCollection {
         const newPosition = startPosition.add(deltaPosition.scale(percentage));
         this.setSurround(newPosition, newWidth, newHeight);
       };
+      o.timeKeeper = this.timeKeeper;
       return new animation.CustomAnimationStep(o);
     };
     this.animations.customSteps.push({

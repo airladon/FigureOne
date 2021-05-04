@@ -26,7 +26,7 @@ import HTMLEquation from './js/figure/Equation/HTMLEquation';
 import CollectionsAngle from './js/figure/FigureCollections/Angle';
 import CollectionsLine from './js/figure/FigureCollections/Line';
 import CollectionsPolyline from './js/figure/FigureCollections/PolyLine';
-import EqnNavigator from './js/figure/FigureCollections/EqnNavigator';
+// import EqnNavigator from './js/figure/FigureCollections/EqnNavigator';
 import EquationLabel from './js/figure/FigureCollections/EquationLabel';
 import { Equation } from './js/figure/Equation/Equation';
 import EquationForm from './js/figure/Equation/EquationForm';
@@ -114,7 +114,7 @@ const Fig = {
   CollectionsAngle,
   CollectionsLine,
   CollectionsPolyline,
-  EqnNavigator,
+  // EqnNavigator,
   EquationLabel,
   //
   EquationForm,

@@ -776,6 +776,7 @@ export default class CollectionsLine extends FigureElementCollection {
         target: o.target == null ? this.line.length() : o.target,
       };
       o.callback = '_lengthCallback';
+      o.timeKeeper = this.timeKeeper;
       return new animation.CustomAnimationStep(o);
     };
 
@@ -805,6 +806,7 @@ export default class CollectionsLine extends FigureElementCollection {
         duration: o.duration,
         frequency: o.frequency,
       };
+      o.timeKeeper = this.timeKeeper;
       // o.callback = () => {
       //   this.pulseWidth({
       //     line: o.line,

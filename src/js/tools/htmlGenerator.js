@@ -392,7 +392,7 @@ function onClickId(
   actionMethod: Function,
   bind: Array<mixed>,
   additionalClassesToAdd: string = '',
-  recorder: Recorder = new Recorder(),
+  // recorder: Recorder = new Recorder(),
 ) {
   const element = document.getElementById(id);
   if (element) {
@@ -404,9 +404,9 @@ function onClickId(
     });
     const onClickFn = () => {
       // const recorder = new Recorder();
-      if (recorder.state === 'recording') {
-        recorder.recordEvent('click', [id]);
-      }
+      // if (recorder.state === 'recording') {
+      //   recorder.recordEvent('click', [id]);
+      // }
       actionMethod.bind(...bind)();
     };
     element.onclick = onClickFn;
@@ -444,7 +444,7 @@ function applyModifiers(
 function setOnClicks(
   modifiers: Object,
   additionalClassesToAdd: string = '',
-  recorder: Recorder = new Recorder(),
+  // recorder: Recorder = new Recorder(),
 ) {
   Object.keys(modifiers).forEach((key) => {
     const mod = modifiers[key];
@@ -454,7 +454,7 @@ function setOnClicks(
         mod.actionMethod,
         mod.bind,
         additionalClassesToAdd,
-        recorder,
+        // recorder,
       );
     }
   });

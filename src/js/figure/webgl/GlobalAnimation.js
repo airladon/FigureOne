@@ -393,6 +393,10 @@ class GlobalAnimation {
       this.animationId = this.requestNextAnimationFrame.call(window, this.draw.bind(this));
     }
   }
+
+  _dup() {
+    return this;
+  }
 }
 
 // Do not automatically create and instance and return it otherwise can't

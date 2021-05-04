@@ -31,8 +31,8 @@ import CollectionsRectangle from './Rectangle';
 import type { EQN_Equation } from '../Equation/Equation';
 import { Equation } from '../Equation/Equation';
 import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitives';
-import EqnNavigator from './EqnNavigator';
-import type { TypeNavigatorOptions } from './EqnNavigator';
+// import EqnNavigator from './EqnNavigator';
+// import type { TypeNavigatorOptions } from './EqnNavigator';
 import SlideNavigator from './SlideNavigator';
 import type { COL_SlideNavigator } from './SlideNavigator';
 import {
@@ -232,62 +232,62 @@ export default class FigureCollections {
     return equation;
   }
 
-  addNavigator(
-    parent: FigureElementCollection,
-    name: string,
-    options: TypeNavigatorOptions,
-  ) {
-    let navNameToUse = name;
-    const optionsToUse = joinObjects({}, options);
-    if (optionsToUse.equation == null) {                // $FlowFixMe
-      const equation = this.addEquation(parent, `${name}Eqn`, options);
-      optionsToUse.equation = equation;
-      navNameToUse = `${name}Nav`;
-    } else if (!(optionsToUse.equation instanceof Equation)) {
-      // let methodPathToUse;
-      let nameToUse;
-      // let pathToUse;
-      let eqnOptions;
-      let elementModsToUse;
-      // let addElementsToUse;
-      let firstScenario;
-      if (Array.isArray(optionsToUse.equation)) {
-        [, nameToUse, , eqnOptions,
-          elementModsToUse, , firstScenario,
-        ] = optionsToUse.equation;
-      } else {
-        nameToUse = optionsToUse.equation.name;
-        // pathToUse = optionsToUse.equation.path;
-        eqnOptions = optionsToUse.equation.options;
-        // methodPathToUse = optionsToUse.equation.method;
-        elementModsToUse = optionsToUse.equation.mods;
-        firstScenario = optionsToUse.equation.scenario;
-      }
+  // addNavigator(
+  //   parent: FigureElementCollection,
+  //   name: string,
+  //   options: TypeNavigatorOptions,
+  // ) {
+  //   let navNameToUse = name;
+  //   const optionsToUse = joinObjects({}, options);
+  //   if (optionsToUse.equation == null) {                // $FlowFixMe
+  //     const equation = this.addEquation(parent, `${name}Eqn`, options);
+  //     optionsToUse.equation = equation;
+  //     navNameToUse = `${name}Nav`;
+  //   } else if (!(optionsToUse.equation instanceof Equation)) {
+  //     // let methodPathToUse;
+  //     let nameToUse;
+  //     // let pathToUse;
+  //     let eqnOptions;
+  //     let elementModsToUse;
+  //     // let addElementsToUse;
+  //     let firstScenario;
+  //     if (Array.isArray(optionsToUse.equation)) {
+  //       [, nameToUse, , eqnOptions,
+  //         elementModsToUse, , firstScenario,
+  //       ] = optionsToUse.equation;
+  //     } else {
+  //       nameToUse = optionsToUse.equation.name;
+  //       // pathToUse = optionsToUse.equation.path;
+  //       eqnOptions = optionsToUse.equation.options;
+  //       // methodPathToUse = optionsToUse.equation.method;
+  //       elementModsToUse = optionsToUse.equation.mods;
+  //       firstScenario = optionsToUse.equation.scenario;
+  //     }
 
-      let equation;
-      if (Array.isArray(eqnOptions)) {
-        equation = this.addEquation(parent, nameToUse, ...eqnOptions);
-      } else {
-        equation = this.addEquation(parent, nameToUse, eqnOptions);
-      }
+  //     let equation;
+  //     if (Array.isArray(eqnOptions)) {
+  //       equation = this.addEquation(parent, nameToUse, ...eqnOptions);
+  //     } else {
+  //       equation = this.addEquation(parent, nameToUse, eqnOptions);
+  //     }
 
-      if (elementModsToUse != null && elementModsToUse !== {}) {
-        equation.setProperties(elementModsToUse);
-      }
-      if (firstScenario != null && firstScenario in equation.scenarios) {
-        equation.setScenario(firstScenario);
-      }
-      optionsToUse.equation = equation;
-    }
-    // $FlowFixMe
-    const navigator = new EqnNavigator(
-      this.primitives,
-      this.animateNextFrame,
-      optionsToUse,
-    );
-    parent.add(navNameToUse, navigator);
-    return navigator;
-  }
+  //     if (elementModsToUse != null && elementModsToUse !== {}) {
+  //       equation.setProperties(elementModsToUse);
+  //     }
+  //     if (firstScenario != null && firstScenario in equation.scenarios) {
+  //       equation.setScenario(firstScenario);
+  //     }
+  //     optionsToUse.equation = equation;
+  //   }
+  //   // $FlowFixMe
+  //   const navigator = new EqnNavigator(
+  //     this.primitives,
+  //     this.animateNextFrame,
+  //     optionsToUse,
+  //   );
+  //   parent.add(navNameToUse, navigator);
+  //   return navigator;
+  // }
 
   cursor(
     optionsIn: {

@@ -291,7 +291,7 @@ class Recorder {
   stateTimeStep: number;      // in seconds
   figure: Figure;
 
-  timeoutID: ?TimeoutID;
+  timeoutID: ?number;
   timeUpdatesTimeoutID: ?TimeoutID;
 
   // playbackStoppedCallback: ?() =>void;
@@ -312,20 +312,26 @@ class Recorder {
 
   worker: ?(typeof Worker);
 
-  static instance: Object;
+  // static instance: Object;
+
+  timeKeeper: GlobalAnimation;
 
   // All slides, events and states are relative to 0, where 0 is the start of a recording.
   // Slides, events and states do not have to have a 0 time,
   // maybe the first event will not happen till 1s in
-  constructor(singleton: boolean = false) {
-    // If the instance alread exists, then don't create a new instance.
-    // If it doesn't, then setup some default values.
-    if (singleton) {
-      if (!Recorder.instance) {
-        this.initialize();
-      }
-      return Recorder.instance;
-    }
+  // constructor(singleton: boolean = false) {
+  //   // If the instance alread exists, then don't create a new instance.
+  //   // If it doesn't, then setup some default values.
+  //   if (singleton) {
+  //     if (!Recorder.instance) {
+  //       this.initialize();
+  //     }
+  //     return Recorder.instance;
+  //   }
+  //   this.initialize();
+  // }
+  constructor(timeKeeper: GlobalAnimation) {
+    this.timeKeeper = timeKeeper;
     this.initialize();
   }
 
@@ -357,7 +363,7 @@ class Recorder {
   // ////////////////////////////////////
   // ////////////////////////////////////
   timeStamp() {   // eslint-disable-line class-methods-use-this
-    return new GlobalAnimation().now();
+    return this.timeKeeper.now();
   }
 
   now() {   // eslint-disable-line class-methods-use-this
@@ -899,8 +905,8 @@ class Recorder {
   }
 
   stopTimeouts() {
-    new GlobalAnimation().clearTimeout(this.timeoutID);
-    new GlobalAnimation().clearTimeout(this.timeUpdatesTimeoutID);
+    this.timeKeeper.clearTimeout(this.timeoutID);
+    this.timeKeeper.clearTimeout(this.timeUpdatesTimeoutID);
     this.timeoutID = null;
     this.timeUpdatesTimeoutID = null;
   }
@@ -1048,7 +1054,7 @@ class Recorder {
     // if (time < 1) {
     //   return
     // }
-    this.timeoutID = new GlobalAnimation().setTimeout(() => {
+    this.timeoutID = this.timeKeeper.setTimeout(() => {
       recordAndQueue();
     }, round(time * 1000, 10), 'state', true);
   }
@@ -1733,7 +1739,7 @@ ${cursorData}
   }
 
   startTimeUpdates() {
-    this.timeUpdatesTimeoutID = new GlobalAnimation().setTimeout(
+    this.timeUpdatesTimeoutID = this.timeKeeper.setTimeout(
       () => {
         this.setCurrentTime(this.getCurrentTime());
         this.subscriptions.publish('timeUpdate', [this.getCurrentTime()]);
@@ -1808,7 +1814,7 @@ ${cursorData}
     const delay = round(this.events[eventName].list[index][0] - this.getCurrentTime(), 8);
 
     if (delay > 0.0001) {
-      this.timeoutID = new GlobalAnimation().setTimeout(
+      this.timeoutID = this.timeKeeper.setTimeout(
         this.playbackEvent.bind(this, eventName),
         round(Math.ceil(delay * 1000), 0),
         `event: ${eventName}`,
@@ -1858,7 +1864,7 @@ ${cursorData}
 
     const remainingTime = this.duration - this.getCurrentTime();
     if (remainingTime > 0.001) {
-      this.timeoutID = new GlobalAnimation().setTimeout(() => {
+      this.timeoutID = this.timeKeeper.setTimeout(() => {
         this.finishPlaying();
       }, round(remainingTime * 1000, 0), 'finishPlaying');
       return false;

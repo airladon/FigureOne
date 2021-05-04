@@ -1006,6 +1006,7 @@ class CollectionsAngle extends FigureElementCollection {
         const a = (target - start) * percentage + start;
         this.setAngle({ angle: a });
       };
+      o.timeKeeper = this.timeKeeper;
       return new animation.CustomAnimationStep(o);
     };
 
@@ -1030,6 +1031,7 @@ class CollectionsAngle extends FigureElementCollection {
           thick: o.thick,
         });
       };
+      o.timeKeeper = this.timeKeeper;
       return new animation.TriggerAnimationStep(o);
     };
 

@@ -1255,6 +1255,7 @@ export class Equation extends FigureElementCollection {
       o.callback = '_goToForm';
       o.delay = 0;
       o.setToEnd = '_showForm';
+      o.timeKeeper = this.timeKeeper;
       return new TriggerAnimationStep(o);
     };
     this.animations.customSteps.push({
@@ -1294,6 +1295,7 @@ export class Equation extends FigureElementCollection {
       o.callback = '_nextForm';
       o.delay = 0;
       o.setToEnd = '_showForm';
+      o.timeKeeper = this.timeKeeper;
       return new TriggerAnimationStep(o);
     };
     this.animations.customSteps.push({

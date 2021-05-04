@@ -695,6 +695,7 @@ class FigureElement {
   dependantTransform: boolean;
 
   recorder: Recorder;
+  timeKeeper: GlobalAnimation;
   // scenarioSet: {
   //   quiz1: [
   //     { element: xyz, position: (), scale: (), rotation: (), length: () }
@@ -755,9 +756,7 @@ class FigureElement {
       parentCount: 0,
       elementCount: 0,
     };
-    // this.redrawElements = [];
-    // this.figure = null;
-    this.recorder = new Recorder(true);
+    // this.recorder = new Recorder(true);
     this.custom = {};
     this._custom = {};
     this.customState = {};
@@ -1311,6 +1310,9 @@ class FigureElement {
     if (figure != null) {
       this.recorder = figure.recorder;
       this.animationFinishedCallback = figure.animationFinished;
+      this.timeKeeper = figure.timeKeeper;
+      this.animations.timeKeeper = figure.timeKeeper;
+      this.animations.recorder = figure.recorder;
     }
     if (this.isTouchable) {
       this.setTouchable();
@@ -2244,7 +2246,7 @@ class FigureElement {
     this.stopMovingFreely('freeze');
     this.state.movement.velocity = this.transform.zero();
     this.state.movement.previousTransform = this.transform._dup();
-    this.state.movement.previousTime = new GlobalAnimation().now() / 1000;
+    this.state.movement.previousTime = this.timeKeeper.now() / 1000;
     this.state.isBeingMoved = true;
     this.unrender();
     this.subscriptions.publish('startBeingMoved');
@@ -2297,7 +2299,7 @@ class FigureElement {
     if (!this.state.isBeingMoved) {
       return;
     }
-    const currentTime = new GlobalAnimation().now() / 1000;
+    const currentTime = this.timeKeeper.now() / 1000;
     // Check wether last movement was a long time ago, if it was, then make
     // velocity 0 as the user has stopped moving before releasing touch/click
     if (this.state.movement.previousTime != null) {
@@ -2322,7 +2324,7 @@ class FigureElement {
   }
 
   calcVelocity(prevTransform: Transform, nextTransform: Transform): void {
-    const currentTime = new GlobalAnimation().now() / 1000;
+    const currentTime = this.timeKeeper.now() / 1000;
     if (this.state.movement.previousTime == null) {
       this.state.movement.previousTime = currentTime;
       return;
@@ -2360,7 +2362,7 @@ class FigureElement {
     }
     this.state.isMovingFreely = true;
     // this.state.movement.previousTime = null;
-    this.state.movement.previousTime = new GlobalAnimation().now() / 1000;
+    this.state.movement.previousTime = this.timeKeeper.now() / 1000;
     this.state.movement.velocity = this.state.movement.velocity.clipMag(
       this.move.freely.zeroVelocityThreshold,
       this.move.maxVelocity,
@@ -2408,7 +2410,7 @@ class FigureElement {
     this.animateNextFrame();
   }
 
-  getRemainingPulseTime(now: number = new GlobalAnimation().now() / 1000) {
+  getRemainingPulseTime(now: number = this.timeKeeper.now() / 1000) {
     if (this.state.isPulsing === false) {
       return 0;
     }
@@ -2817,7 +2819,7 @@ class FigureElement {
 
   startPulsing(when: TypeWhen = 'nextFrame') {
     this.state.isPulsing = true;
-    const time = new GlobalAnimation().getWhen(when);
+    const time = this.timeKeeper.getWhen(when);
     this.state.pulse.startTime = time == null ? time : time / 1000;
     this.unrender();
     this.frozenPulseTransforms = [];
@@ -3742,7 +3744,7 @@ class FigureElement {
       elementCount: this.transform.order.length,
     };
     this.pulseTransforms = this.getPulseTransforms(
-      new GlobalAnimation().now() / 1000,
+      this.timeKeeper.now() / 1000,
     ); // $FlowFixMe
     this.drawTransforms = this.getDrawTransforms(newTransforms);
     // eslint-disable-next-line prefer-destructuring
@@ -3907,7 +3909,7 @@ class FigureElementPrimitive extends FigureElement {
     // primitive.pointsToDraw = this.pointsToDraw;
     // primitive.angleToDraw = this.angleToDraw;
     // primitive.copyFrom(this);
-    duplicateFromTo(this, primitive, ['parent', 'figure', 'recorder', 'pulseDefault.centerOn']);
+    duplicateFromTo(this, primitive, ['parent', 'figure', 'recorder', 'pulseDefault.centerOn', 'timeKeeper']);
     if (transform != null) {
       primitive.transform = transform._dup();
     }
@@ -3922,6 +3924,7 @@ class FigureElementPrimitive extends FigureElement {
       primitive.pulseDefault = this.pulseDefault;
     }
     primitive.recorder = this.recorder;
+    primitive.timeKeeper = this.timeKeeper;
     return primitive;
   }
 
@@ -4814,7 +4817,7 @@ class FigureElementCollection extends FigureElement {
       //
       addEquation: collections.addEquation.bind(collections),
       equation: collections.equation.bind(collections),
-      addNavigator: collections.addNavigator.bind(collections),
+      // addNavigator: collections.addNavigator.bind(collections),
     };
     if (method in methods) {
       return methods[method];

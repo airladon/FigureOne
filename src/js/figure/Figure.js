@@ -68,6 +68,7 @@ export type OBJ_FigureForElement = {
   animateNextFrame: (?boolean, ?string) => void,
   animationFinished: () => void,
   recorder: Recorder,
+  timeKeeper: GlobalAnimation,
 }
 
 /**
@@ -488,7 +489,7 @@ class Figure {
     this.touchTopElementOnly = true;
     this.globalAnimation = new GlobalAnimation();
     this.subscriptions = new SubscriptionManager(this.fnMap);
-    this.recorder = new Recorder();
+    this.recorder = new Recorder(this.globalAnimation);
     this.recorder.figure = this;
     this.bindRecorder();
     this.pauseTime = this.globalAnimation.now() / 1000;
@@ -1472,6 +1473,7 @@ class Figure {
       animateNextFrame: this.animateNextFrame.bind(this),
       animationFinished: this.animationFinished.bind(this),
       recorder: this.recorder,
+      timeKeeper: this.globalAnimation,
       // setDrawTimeout: this.setDrawTimeout,
     });
     this.setFirstTransform();
