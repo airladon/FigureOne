@@ -18,6 +18,7 @@ describe('line tests', () => {
       if (updates[name] != null) {
         element.custom.updatePoints(updates[name]);
       }
+      expect(figure.globalAnimation).toBe(element.timeKeeper)
       element.uid = '';
       element.parent = null;
       element.figure = null;

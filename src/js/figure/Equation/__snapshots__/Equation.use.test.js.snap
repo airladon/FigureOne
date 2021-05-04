@@ -34,7 +34,6 @@ FigureElementPrimitive {
     },
     "timeKeeper": GlobalAnimation {
       "animateOnFrame": false,
-      "animationId": 1,
       "drawQueue": Array [],
       "idCounter": 0,
       "lastDrawTime": null,
@@ -839,7 +838,7 @@ FigureElementPrimitive {
     },
     "timeKeeper": GlobalAnimation {
       "animateOnFrame": false,
-      "animationId": 1,
+      "animationId": 20,
       "drawQueue": Array [],
       "idCounter": 0,
       "lastDrawTime": null,
@@ -988,7 +987,7 @@ FigureElementPrimitive {
   },
   "timeKeeper": GlobalAnimation {
     "animateOnFrame": false,
-    "animationId": 1,
+    "animationId": 20,
     "drawQueue": Array [],
     "idCounter": 0,
     "lastDrawTime": null,

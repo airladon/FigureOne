@@ -71,17 +71,18 @@ class GlobalAnimation {
   constructor() {
     // If the instance alread exists, then don't create a new instance.
     // If it doesn't, then setup some default values.
-    if (!GlobalAnimation.instance) {
-      this.requestNextAnimationFrame = (
-        window.requestAnimationFrame
-        || window.mozRequestAnimationFrame
-        || window.webkitRequestAnimationFrame
-        || window.msRequestAnimationFrame
-      );
-      GlobalAnimation.instance = this;
-      this.reset();
-    }
-    return GlobalAnimation.instance;
+    // if (!GlobalAnimation.instance) {
+    this.requestNextAnimationFrame = (
+      window.requestAnimationFrame
+      || window.mozRequestAnimationFrame
+      || window.webkitRequestAnimationFrame
+      || window.msRequestAnimationFrame
+    );
+    //   GlobalAnimation.instance = this;
+    //   this.reset();
+    // }
+    // return GlobalAnimation.instance;
+    this.reset();
   }
 
   /**
@@ -99,6 +100,9 @@ class GlobalAnimation {
     this.lastTime = performance.now();
     this.nowTime = this.lastTime;
     this.clearTimeouts();
+    if (this.syncNowTimer != null) {
+      this.clearTimeout(this.syncNowTimer);
+    }
     this.timeoutId = null;
     this.updateSyncNow = true;
     this.manual = false;
@@ -153,7 +157,8 @@ class GlobalAnimation {
     if (this.updateSyncNow) {
       this.updateSyncNow = false;
       this.synchronizedNow = this.now();
-      this.syncNowTimer = setTimeout(() => { this.updateSyncNow = true; }, this.syncNowTimeout);
+      // this.syncNowTimer = setTimeout(() => { this.updateSyncNow = true; }, this.syncNowTimeout);
+      this.syncNowTimer = this.setTimeout(() => { this.updateSyncNow = true; }, this.syncNowTimeout)
     }
     return this.synchronizedNow;
   }

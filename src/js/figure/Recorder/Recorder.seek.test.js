@@ -49,7 +49,7 @@ describe('Seek', () => {
     recorder.worker = new Worker();
     recorder.worker.recorder = recorder;
     recorder.stateTimeStep = 0.5;
- 
+
     // a.pulseSettings.progression = 'tools.math.triangle';
 
     const startPulse = () => {
@@ -151,6 +151,9 @@ describe('Seek', () => {
       expect(a.opacity).toBe(1);
       expect(round(a.lastDrawOpacity)).toBe(1);
     };
+  });
+  afterEach(() => {
+    figure.globalAnimation.reset();
   });
   test('Just playback', () => {
     // Note, the animation and pulse are starting on the frame after the desired
