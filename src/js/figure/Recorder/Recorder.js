@@ -319,17 +319,6 @@ class Recorder {
   // All slides, events and states are relative to 0, where 0 is the start of a recording.
   // Slides, events and states do not have to have a 0 time,
   // maybe the first event will not happen till 1s in
-  // constructor(singleton: boolean = false) {
-  //   // If the instance alread exists, then don't create a new instance.
-  //   // If it doesn't, then setup some default values.
-  //   if (singleton) {
-  //     if (!Recorder.instance) {
-  //       this.initialize();
-  //     }
-  //     return Recorder.instance;
-  //   }
-  //   this.initialize();
-  // }
   constructor(timeKeeper: GlobalAnimation) {
     this.timeKeeper = timeKeeper;
     this.initialize();
