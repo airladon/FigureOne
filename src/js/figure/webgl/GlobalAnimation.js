@@ -20,13 +20,16 @@
 export type TypeWhen = 'now' | 'nextFrame' | 'prevFrame' | 'syncNow';
 
 // Singleton class that contains projects global variables
+
 /**
- * TimeKeeper keeps time for the figure, where time is the number of
- * milliseconds after the page load.
+ * TimeKeeper keeps time for a figure, where time is the number of
+ * milliseconds after the page is loaded load.
+ *
+ * Time can be real time, sped up, slowed down or manually stepped.
  *
  * The current time can be accessed using the `now` method.
  *
- * In it's default form, `now` is the same as the system times
+ * In it's default form, `now` is the same as the system time
  * `performance.now()` or the animation time sent through on frames requested
  * from `requestAnimationFrame` .
  *
@@ -36,6 +39,15 @@ export type TypeWhen = 'now' | 'nextFrame' | 'prevFrame' | 'syncNow';
  * When time speed is n times faster than real time, `now` will report n times
  * more passage of time from the page load than real time. So if the speed is
  * set to 2, then `now` will report time passing twice as fast.
+ *
+ * If timeouts are needed in a figure's logic, use `figure.timeKeeper.
+ * setTimeout` and `figure.timeKeeper.clearTimeout` methods instead of the
+ * system equivalents so the timeouts follow figure time.
+ *
+ * TimeKeeper can also be used to synchronize times (for example, for multiple
+ * animations being started where it is desired they all have precisely the
+ * same start time). See `getWhen` method for information on how to retrieve a
+ * synchronized time
  */
 class GlobalAnimation {
   // Method for requesting the next animation frame
