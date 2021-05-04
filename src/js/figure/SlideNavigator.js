@@ -871,7 +871,7 @@ export default class SlideNavigator {
   // eslint-disable-next-line no-unused-vars
   transitionDone(cancelled: boolean = false, force: 'freeze' | 'complete' | null = 'complete') {
     // console.log('transition done')
-    // console.log(this.collection.figure.globalAnimation.now())
+    // console.log(this.collection.figure.timeKeeper.now())
     if (force !== 'freeze') {
       this.setSteadyState(this.from);
       this.inTransition = false;

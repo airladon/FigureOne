@@ -22,7 +22,7 @@ import {
 import type {
   OBJ_AddElement, TypeElementPath,
 } from './Element';
-import GlobalAnimation from './webgl/GlobalAnimation';
+import TimeKeeper from './webgl/TimeKeeper';
 import { Recorder } from './Recorder/Recorder';
 // eslint-disable-next-line import/no-cycle
 import Gesture from './Gesture';
@@ -68,7 +68,7 @@ export type OBJ_FigureForElement = {
   animateNextFrame: (?boolean, ?string) => void,
   animationFinished: () => void,
   recorder: Recorder,
-  timeKeeper: GlobalAnimation,
+  timeKeeper: TimeKeeper,
 }
 
 /**
@@ -235,7 +235,7 @@ class Figure {
   gestureCanvas: HTMLElement;
 
   elements: FigureElementCollection;
-  globalAnimation: GlobalAnimation;
+  timeKeeper: TimeKeeper;
   recorder: Recorder;
   gesture: Gesture;
   // inTransition: boolean;
@@ -487,12 +487,12 @@ class Figure {
     this.beingMovedElements = [];
     this.beingTouchedElements = [];
     this.touchTopElementOnly = true;
-    this.globalAnimation = new GlobalAnimation();
+    this.timeKeeper = new TimeKeeper();
     this.subscriptions = new SubscriptionManager(this.fnMap);
-    this.recorder = new Recorder(this.globalAnimation);
+    this.recorder = new Recorder(this.timeKeeper);
     this.recorder.figure = this;
     this.bindRecorder();
-    this.pauseTime = this.globalAnimation.now() / 1000;
+    this.pauseTime = this.timeKeeper.now() / 1000;
     this.shapesLow = this.getShapes();
     // this.shapesHigh = this.getShapes(true);
     this.shapes = this.shapesLow;
@@ -512,7 +512,7 @@ class Figure {
       preparingToStop: false,
       preparingToSetState: false,
     };
-    this.stateTime = this.globalAnimation.now() / 1000;
+    this.stateTime = this.timeKeeper.now() / 1000;
 
     // this.updateFontSize = optionsToUse.updateFontSize;
 
@@ -836,7 +836,7 @@ class Figure {
   }
 
   getState(options: { precision?: number, ignoreShown?: boolean, min?: boolean }) {
-    this.stateTime = this.globalAnimation.now() / 1000;
+    this.stateTime = this.timeKeeper.now() / 1000;
     const o = joinObjects({}, options, { returnF1Type: false });
     const state = getState(this, [
       'lastDrawTime',
@@ -896,7 +896,7 @@ class Figure {
       this.beingMovedElements = this.beingMovedElements.filter(e => Object.keys(e).length > 0);
       this.beingTouchedElements = this.beingTouchedElements.filter(e => Object.keys(e).length > 0);
       this.subscriptions.publish('stateSetInit');
-      this.elements.setTimeDelta(this.globalAnimation.now() / 1000 - this.stateTime);
+      this.elements.setTimeDelta(this.timeKeeper.now() / 1000 - this.stateTime);
       this.elements.updateDrawTransforms([this.spaceTransforms.figureToGL]);
       this.elements.stateSet();
       this.elements.setPointsFromDefinition();
@@ -1079,7 +1079,7 @@ class Figure {
       })
       .start(options.startTime);
     // console.log(this.elements)
-    // console.log(this.globalAnimation.now())
+    // console.log(this.timeKeeper.now())
   }
 
   // dissolveToComplete(optionsIn: {
@@ -1339,7 +1339,7 @@ class Figure {
       this.defaultFont,
       this.defaultLineWidth,
       this.defaultLength,
-      this.globalAnimation,
+      this.timeKeeper,
       this.recorder,
     );
   }
@@ -1475,7 +1475,7 @@ class Figure {
       animateNextFrame: this.animateNextFrame.bind(this),
       animationFinished: this.animationFinished.bind(this),
       recorder: this.recorder,
-      timeKeeper: this.globalAnimation,
+      timeKeeper: this.timeKeeper,
       // setDrawTimeout: this.setDrawTimeout,
     });
     this.setFirstTransform();
@@ -1495,7 +1495,7 @@ class Figure {
   /**
    * Get remaining animation durations of running animations
    */
-  getRemainingAnimationTime(nowIn: number = this.globalAnimation.now() / 1000) {
+  getRemainingAnimationTime(nowIn: number = this.timeKeeper.now() / 1000) {
     const elements = this.elements.getAllElements();
     let now = nowIn;
 
@@ -2378,7 +2378,7 @@ class Figure {
       return;
     }
     this.state.pause = 'paused';
-    this.pauseTime = this.globalAnimation.now() / 1000;
+    this.pauseTime = this.timeKeeper.now() / 1000;
     this.clearDrawTimeout();
   }
 
@@ -2387,7 +2387,7 @@ class Figure {
   //   this.elements.pause(pauseSettings);
   //   if (pauseSettings.simplePause != null && pauseSettings.simplePause) {
   //     this.state.pause = 'paused';
-  //     this.pauseTime = this.globalAnimation.now() / 1000;
+  //     this.pauseTime = this.timeKeeper.now() / 1000;
   //     return;
   //   }
 
@@ -2409,7 +2409,7 @@ class Figure {
   //       element.subscriptions.add('paused', checkAllPaused, 1);
   //     }
   //   });
-  //   this.pauseTime = this.globalAnimation.now() / 1000;
+  //   this.pauseTime = this.timeKeeper.now() / 1000;
   //   if (preparingToPauseCounter === 0 && this.state.pause !== 'paused') {
   //     checkAllPaused();
   //   } else if (preparingToPauseCounter > 0) {
@@ -2428,7 +2428,7 @@ class Figure {
     }
     this.state.pause = 'unpaused';
     this.isPaused = false;
-    this.elements.setTimeDelta(this.globalAnimation.now() / 1000 - this.pauseTime);
+    this.elements.setTimeDelta(this.timeKeeper.now() / 1000 - this.pauseTime);
     this.animateNextFrame();
     this.subscriptions.publish('unpaused');
   }
@@ -2480,7 +2480,7 @@ class Figure {
   //     if (preparingToUnpauseCounter === 0) {
   //       this.state.pause = 'unpaused';
   //       this.isPaused = false;
-  //       this.elements.setTimeDelta(this.globalAnimation.now() / 1000 - this.pauseTime);
+  //       this.elements.setTimeDelta(this.timeKeeper.now() / 1000 - this.pauseTime);
   //       this.animateNextFrame();
   //       this.subscriptions.publish('unpaused');
   //     }
@@ -2507,7 +2507,7 @@ class Figure {
   //   this.animateNextFrame();
   // }
   clearDrawTimeout() {
-    this.globalAnimation.clearTimeout(this.nextDrawTimer);
+    this.timeKeeper.clearTimeout(this.nextDrawTimer);
     this.nextDrawTimer = null;
   }
 
@@ -2630,7 +2630,7 @@ class Figure {
         window.figureOneDebug.cumTimes.push(deltas[0]);
       }
       window.figureOneDebug.history.push({
-        now: this.globalAnimation.now(),
+        now: this.timeKeeper.now(),
         frameTotal: deltas[0],
         frame: deltas.slice(1),
         setupDraw: window.figureOneDebug.setupDraw,
@@ -2692,7 +2692,7 @@ class Figure {
     // const t1 = performance.now()
     // const nextAnimationEnd = this.elements.getNextAnimationFinishTime();
     if (timerDuration != null && timerDuration > 0) {
-      const timerStart = this.globalAnimation.now() / 1000;
+      const timerStart = this.timeKeeper.now() / 1000;
       if (
         (this.nextDrawTimer == null && timerDuration > 0)
         || (
@@ -2707,10 +2707,10 @@ class Figure {
         this.clearDrawTimeout();
         this.nextDrawTimerStart = timerStart;
         this.nextDrawTimerDuration = timerDuration;
-        this.nextDrawTimer = this.globalAnimation.setTimeout(() => {
+        this.nextDrawTimer = this.timeKeeper.setTimeout(() => {
           this.nextDrawTimer = null;
           this.setupDraw();
-          // this.elements.setupDraw(this.globalAnimation.now() / 1000, 0);
+          // this.elements.setupDraw(this.timeKeeper.now() / 1000, 0);
           // this.setDrawTimeout();
           this.animateNextFrame();
         }, timerDuration * 1000);
@@ -2729,7 +2729,7 @@ class Figure {
     this.focused = true;
   }
 
-  setupDraw(time: number = this.globalAnimation.now() / 1000) {
+  setupDraw(time: number = this.timeKeeper.now() / 1000) {
     this.elements.setupDraw(time);
     if (!this.focused) {
       this.setDrawTimeout(0.1);
@@ -2749,14 +2749,14 @@ class Figure {
       if (draw) {
         this.drawQueued = true;
       }
-      this.globalAnimation.queueNextFrame(this.draw.bind(this));
+      this.timeKeeper.queueNextFrame(this.draw.bind(this));
     }
 
     // this.setDrawTimeout();
   }
 
   // animateNextFrameContinuous(method: () => void) {
-  //   this.globalAnimation.queueNextFrame((now) => {
+  //   this.timeKeeper.queueNextFrame((now) => {
   //     const t = performance.now();
   //     const lastTime = t - this.lastTime
   //     this.lastTime = t;
@@ -2818,14 +2818,14 @@ class Figure {
    * This method turns on manual frames. Use `frame` to trigger a draw.
    */
   setManualFrames() {
-    this.globalAnimation.setManualFrames();
+    this.timeKeeper.setManualFrames();
   }
 
   /**
    * End manual frames. Reverts drawing to when browser reqeusts it.
    */
   endManualFrames() {
-    this.globalAnimation.endManualFrames();
+    this.timeKeeper.endManualFrames();
   }
 
   /**
@@ -2836,7 +2836,7 @@ class Figure {
    * @param {number} timeStep in seconds
    */
   frame(timeStep: number) {
-    this.globalAnimation.frame(timeStep);
+    this.timeKeeper.frame(timeStep);
   }
 }
 

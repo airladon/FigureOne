@@ -23,13 +23,13 @@ import type {
 // import {
 //   AnimationStep,
 // } from './Animation';
-import GlobalAnimation from '../webgl/GlobalAnimation';
+import TimeKeeper from '../webgl/TimeKeeper';
 import {
   joinObjects, duplicateFromTo, SubscriptionManager, PerformanceTimer,
 } from '../../tools/tools';
 import { getState } from '../Recorder/state';
 import { FunctionMap } from '../../tools/FunctionMap';
-import type { TypeWhen } from '../webgl/GlobalAnimation';
+import type { TypeWhen } from '../webgl/TimeKeeper';
 // import type { OBJ_AnimationStep } from './AnimationStep';
 import type { TypeParsablePoint } from '../../tools/g2';
 // import type Figure from '../Figure';
@@ -95,7 +95,7 @@ export type TypeAnimationManagerInputOptions = {
   element?: FigureElement;
   finishedCallback?: ?(string | (() => void)),
   recorder?: Recorder,
-  timeKeeper: GlobalAnimation,
+  timeKeeper: TimeKeeper,
 };
 
 /* eslint-disable max-len */
@@ -227,7 +227,7 @@ export default class AnimationManager {
   };
 
   recorder: Recorder;
-  timeKeeper: GlobalAnimation;
+  timeKeeper: TimeKeeper;
 
   animationSpeed: number;
 

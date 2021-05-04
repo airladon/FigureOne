@@ -23,7 +23,7 @@ describe('Seek', () => {
   let dissolveTester;
   beforeEach(() => {
     figure = makeFigure();
-    figure.globalAnimation.reset();
+    figure.timeKeeper.reset();
     jest.useFakeTimers();
     figure.add([
       {
@@ -153,7 +153,7 @@ describe('Seek', () => {
     };
   });
   afterEach(() => {
-    figure.globalAnimation.reset();
+    figure.timeKeeper.reset();
   });
   test('Just playback', () => {
     // Note, the animation and pulse are starting on the frame after the desired

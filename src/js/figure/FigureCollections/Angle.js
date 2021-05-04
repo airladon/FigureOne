@@ -19,7 +19,7 @@ import { simplifyArrowOptions, getArrowLength } from '../geometries/arrow';
 import type { OBJ_LineArrows, OBJ_LineArrow } from '../geometries/arrow';
 import type { OBJ_Pulse } from '../Element';
 import type { EQN_Equation } from '../Equation/Equation';
-import type { TypeWhen } from '../webgl/GlobalAnimation';
+import type { TypeWhen } from '../webgl/TimeKeeper';
 import type {
   TypeLabelOrientation, TypeLabelLocation, TypeLabelSubLocation,
 } from './EquationLabel';

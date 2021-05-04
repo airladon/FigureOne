@@ -3,7 +3,7 @@
 import * as g2 from './js/tools/g2';
 import * as math from './js/tools/math';
 import Figure from './js/figure/Figure';
-import GlobalAnimation from './js/figure/webgl/GlobalAnimation';
+import TimeKeeper from './js/figure/webgl/TimeKeeper';
 import { Recorder } from './js/figure/Recorder/Recorder';
 import { FunctionMap, GlobalFunctionMap } from './js/tools/FunctionMap';
 import * as color from './js/tools/color';
@@ -160,7 +160,7 @@ const Fig = {
   randElements: math.randElements,
   removeRandElement: math.removeRandElement,
 
-  GlobalAnimation,
+  TimeKeeper,
 };
 
 export default Fig;

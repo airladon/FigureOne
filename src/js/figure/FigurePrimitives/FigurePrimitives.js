@@ -70,7 +70,7 @@ import type {
   TypeColor, TypeDash, OBJ_CurvedCorner, OBJ_Font,
 } from '../../tools/types';
 import { getBufferBorder } from '../geometries/buffer';
-import type GlobalAnimation from '../webgl/GlobalAnimation';
+import type TimeKeeper from '../webgl/TimeKeeper';
 import type { Recorder } from '../Recorder/Recorder';
 
 /**
@@ -2183,7 +2183,7 @@ export default class FigurePrimitives {
   defaultFont: OBJ_Font;
   defaultLineWidth: number;
   defaultLength: number;
-  timeKeeper: GlobalAnimation;
+  timeKeeper: TimeKeeper;
   recorder: Recorder;
 
   /**
@@ -2202,7 +2202,7 @@ export default class FigurePrimitives {
     defaultFont: OBJ_Font,
     defaultLineWidth: number,
     defaultLength: number,
-    timeKeeper: GlobalAnimation,
+    timeKeeper: TimeKeeper,
     recorder: Recorder,
   ) {
     if (Array.isArray(webgl)) {

@@ -26,14 +26,14 @@ function testBrowserAnimation(title, file, duration, step) {
     await page.goto(file);
     await page.evaluate(() => {
       clearTimeout(timeoutId);
-      figure.globalAnimation.setManualFrames();
-      figure.globalAnimation.frame(0);
+      figure.timeKeeper.setManualFrames();
+      figure.timeKeeper.frame(0);
       startUpdates();
     });
 
     for (let i = 0; i <= duration; i += step) {
       await page.evaluate(
-        ([s]) => figure.globalAnimation.frame(s), [i === 0 ? 0 : step],
+        ([s]) => figure.timeKeeper.frame(s), [i === 0 ? 0 : step],
       );
       // delay(100);
       image = await page.screenshot({ fullPage: true });

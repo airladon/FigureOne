@@ -18,15 +18,15 @@ describe('line tests', () => {
       if (updates[name] != null) {
         element.custom.updatePoints(updates[name]);
       }
-      expect(figure.globalAnimation).toBe(element.timeKeeper)
+      expect(figure.timeKeeper).toBe(element.timeKeeper)
       element.uid = '';
       element.parent = null;
       element.figure = null;
       element.animations = null;
       element.anim = null;
       element.recorder = null;
-      figure.globalAnimation.nowTime = 0;
-      figure.globalAnimation.lastTime = 0;
+      figure.timeKeeper.nowTime = 0;
+      figure.timeKeeper.lastTime = 0;
       expect(element).toMatchSnapshot();
     },
   );

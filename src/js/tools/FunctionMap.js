@@ -3,7 +3,7 @@
 // import { Point, getTransform, Transform } from '../tools/g2';
 // import { round } from '../tools/math';
 // import type { FigureElement } from './Element';
-// import GlobalAnimation from './webgl/GlobalAnimation';
+// import TimeKeeper from './webgl/TimeKeeper';
 
 // Singleton class that contains projects global functions
 

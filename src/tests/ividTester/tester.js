@@ -31,7 +31,7 @@ function sleep(ms) {
 async function frame(delta) {
   await page.evaluate(([d]) => new Promise((resolve) => {
     figure.subscriptions.add('afterDraw', () => resolve(), 1);
-    figure.globalAnimation.frame(d);
+    figure.timeKeeper.frame(d);
     figure.recorder.subscriptions.publish('timeUpdate', [figure.recorder.getCurrentTime()]);
     figure.animateNextFrame();
     // resolve();
@@ -158,7 +158,7 @@ async function tester(
       await page.setViewportSize({ width, height });
       await page.goto(htmlFile);
       await page.evaluate(() => {
-        figure.globalAnimation.setManualFrames();
+        figure.timeKeeper.setManualFrames();
         figure.recorder.startPlayback();
         document.getElementById('f1_player__play_pause').style.visibility = 'hidden';
       });

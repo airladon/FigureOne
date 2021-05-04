@@ -10,7 +10,7 @@ __frames = [
     `
     figure.stop();
     signal.data = [0];
-    signal.lastTime = figure.globalAnimation.now();
+    signal.lastTime = figure.timeKeeper.now();
     rotator.setRotation(0);
     rotator.animations.new()
       .rotation({ target: Math.PI / 4, duration: 1 })

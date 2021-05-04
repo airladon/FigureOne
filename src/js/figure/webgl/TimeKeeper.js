@@ -49,7 +49,7 @@ export type TypeWhen = 'now' | 'nextFrame' | 'prevFrame' | 'syncNow';
  * same start time). See `getWhen` method for information on how to retrieve a
  * synchronized time
  */
-class GlobalAnimation {
+class TimeKeeper {
   // Method for requesting the next animation frame
   requestNextAnimationFrame: (()=>mixed) => AnimationFrameID;
   animationId: ?AnimationFrameID;    // used to cancel animation frames
@@ -62,7 +62,7 @@ class GlobalAnimation {
   speed: number;
   synchronizedNow: number;
   updateSyncNow: boolean;
-  syncNowTimer: TimeoutID;
+  syncNowTimer: number;
 
   manual: boolean;
   animateOnFrame: boolean;
@@ -83,17 +83,17 @@ class GlobalAnimation {
   constructor() {
     // If the instance alread exists, then don't create a new instance.
     // If it doesn't, then setup some default values.
-    // if (!GlobalAnimation.instance) {
+    // if (!TimeKeeper.instance) {
     this.requestNextAnimationFrame = (
       window.requestAnimationFrame
       || window.mozRequestAnimationFrame
       || window.webkitRequestAnimationFrame
       || window.msRequestAnimationFrame
     );
-    //   GlobalAnimation.instance = this;
+    //   TimeKeeper.instance = this;
     //   this.reset();
     // }
-    // return GlobalAnimation.instance;
+    // return TimeKeeper.instance;
     this.reset();
   }
 
@@ -169,8 +169,9 @@ class GlobalAnimation {
     if (this.updateSyncNow) {
       this.updateSyncNow = false;
       this.synchronizedNow = this.now();
-      // this.syncNowTimer = setTimeout(() => { this.updateSyncNow = true; }, this.syncNowTimeout);
-      this.syncNowTimer = this.setTimeout(() => { this.updateSyncNow = true; }, this.syncNowTimeout)
+      this.syncNowTimer = this.setTimeout(
+        () => { this.updateSyncNow = true; }, this.syncNowTimeout,
+      );
     }
     return this.synchronizedNow;
   }
@@ -365,7 +366,7 @@ class GlobalAnimation {
 
   draw() {
     this.animationId = null;
-    clearTimeout(this.syncNowTimer);
+    this.clearTimeout(this.syncNowTimer);
     this.updateSyncNow = true;
     this.drawQueue = this.nextDrawQueue;
     this.nextDrawQueue = [];
@@ -421,4 +422,4 @@ class GlobalAnimation {
 // // const globalvars: Object = new GlobalVariables();
 // // Object.freeze(globalvars);
 
-export default GlobalAnimation;
+export default TimeKeeper;

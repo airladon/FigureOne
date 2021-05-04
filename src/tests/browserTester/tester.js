@@ -37,7 +37,7 @@ function zeroPad(num, places) {
 async function frame(delta) {
   await page.evaluate(([d]) => new Promise((resolve) => {
     figure.subscriptions.add('afterDraw', () => resolve(), 1);
-    figure.globalAnimation.frame(d);
+    figure.timeKeeper.frame(d);
     figure.animateNextFrame();
   }), [delta]);
 }
@@ -91,7 +91,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
       await page.goto(file);
       await page.evaluate(() => {
         clearTimeout(timeoutId);
-        figure.globalAnimation.setManualFrames();
+        figure.timeKeeper.setManualFrames();
         // console.log('set manual frames');
       });
       await frame(0);

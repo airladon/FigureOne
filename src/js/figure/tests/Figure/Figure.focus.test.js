@@ -196,7 +196,7 @@ describe('Animate To State', () => {
      *  - p2 starts at 4500, and sets a timer for 2000
      *  - timers now have a new timer for 2000 with 2500 left, so it goes
      *    to that time (which should be then end of p2), but p2 doesn't end
-     *    as its start time is 4500 and globalAnimation.now() is still 4500,
+     *    as its start time is 4500 and timeKeeper.now() is still 4500,
      *    so another 2000ms timer is set
      *  - timers now have a new timer for 2000 with 500ms left, so 500 ms comes
      *    out of next timer.

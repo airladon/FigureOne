@@ -14,7 +14,7 @@ import * as math from '../../tools/math';
 import { getState } from '../Recorder/state';
 import type { FigureElement } from '../Element';
 import { FunctionMap } from '../../tools/FunctionMap';
-import GlobalAnimation from '../webgl/GlobalAnimation';
+import TimeKeeper from '../webgl/TimeKeeper';
 import type { AnimationStartTime } from './AnimationManager';
 // import * as anim from './Animation';
 
@@ -45,7 +45,7 @@ export type OBJ_AnimationStep = {
   duration?: number;
   delay?: number;
   precision?: number;
-  timeKeeper?: GlobalAnimation | null;
+  timeKeeper?: TimeKeeper | null;
 };
 
 /**
@@ -81,7 +81,7 @@ export default class AnimationStep {
   _stepType: string;
   fnMap: FunctionMap;
   precision: number;
-  timeKeeper: GlobalAnimation | null;
+  timeKeeper: TimeKeeper | null;
   element: ?FigureElement;
 
   constructor(optionsIn: OBJ_AnimationStep = {}) {
@@ -261,7 +261,7 @@ export default class AnimationStep {
   //   return this;
   // }
 
-  _fromState(state: Object, getElement: ?(string) => FigureElement, timeKeeper: GlobalAnimation) {
+  _fromState(state: Object, getElement: ?(string) => FigureElement, timeKeeper: TimeKeeper) {
     // const obj = new this.constructor();
     joinObjects(this, state);
     if (this.element != null && typeof this.element === 'string' && getElement != null) {
@@ -366,12 +366,12 @@ export default class AnimationStep {
     } else {
       this.startTime = performance.now();
     }
-    // const globalAnim = new GlobalAnimation();
+    // const globalAnim = new TimeKeeper();
     // this.startTime = globalAnim.getWhen(startTime) / 1000;
     // if (startTime === 'prev') {
-    //   this.startTime = new GlobalAnimation().lastFrame;
+    //   this.startTime = new TimeKeeper().lastFrame;
     // }
-    // this.startTime = new GlobalAnimation().now() / 1000;
+    // this.startTime = new TimeKeeper().now() / 1000;
   }
 
   finishIfZeroDuration() {

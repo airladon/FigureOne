@@ -6,12 +6,12 @@ import {
   duplicate, minify, unminify, joinObjects,
   ObjectTracker, download, SubscriptionManager, // PerformanceTimer,
 } from '../../tools/tools';
-import GlobalAnimation from '../webgl/GlobalAnimation';
+import TimeKeeper from '../webgl/TimeKeeper';
 // import type { FigureElement } from './Element';
 import Worker from './recorder.worker';
 import type Figure from '../Figure';
 import type { OBJ_ScenarioVelocity } from '../Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
-// import GlobalAnimation from './webgl/GlobalAnimation';
+// import TimeKeeper from './webgl/TimeKeeper';
 // Singleton class that contains projects global variables
 
 type TypeStateDiff = [number, string, Object];
@@ -314,12 +314,12 @@ class Recorder {
 
   // static instance: Object;
 
-  timeKeeper: GlobalAnimation;
+  timeKeeper: TimeKeeper;
 
   // All slides, events and states are relative to 0, where 0 is the start of a recording.
   // Slides, events and states do not have to have a 0 time,
   // maybe the first event will not happen till 1s in
-  constructor(timeKeeper: GlobalAnimation) {
+  constructor(timeKeeper: TimeKeeper) {
     this.timeKeeper = timeKeeper;
     this.initialize();
   }
@@ -696,7 +696,7 @@ class Recorder {
   ) {
     this.states.reset();
     this.seek(0);
-    this.figure.globalAnimation.setManualFrames();
+    this.figure.timeKeeper.setManualFrames();
     // const { duration } = this;
     // this.states.reset();
     this.startRecording(0, Object.keys(this.events), true);
@@ -709,7 +709,7 @@ class Recorder {
     // console.log(this.state)
     if (this.state === 'recording') {
       this.figure.animateNextFrame();
-      this.figure.globalAnimation.frame(frameTime);
+      this.figure.timeKeeper.frame(frameTime);
       if (this.getCurrentTime() <= this.duration) {
         // console.log('auto')
         setTimeout(
@@ -929,7 +929,7 @@ class Recorder {
    */
   stopStatesRecording() {
     this.stopRecording();
-    this.figure.globalAnimation.endManualFrames();
+    this.figure.timeKeeper.endManualFrames();
   }
 
   addEventType(
@@ -963,7 +963,7 @@ class Recorder {
       });
     }
     this.lastRecordTimeCount += 1;
-    if (now > this.duration && this.figure.globalAnimation.manual === false) {
+    if (now > this.duration && this.figure.timeKeeper.manual === false) {
       this.duration = now;
       this.subscriptions.publish('durationUpdated', this.duration);
     }
@@ -1019,7 +1019,7 @@ class Recorder {
       [time, payload, this.lastRecordTimeCount],
     );
     this.lastRecordTimeCount += 1;
-    if (time > this.duration && this.figure.globalAnimation.manual === false) {
+    if (time > this.duration && this.figure.timeKeeper.manual === false) {
       this.duration = time;
       this.subscriptions.publish('durationUpdated', this.duration);
     }
@@ -1334,8 +1334,8 @@ ${cursorData}
 
   queueSeek(timeIn: number) {
     this.queueSeekTime = timeIn;
-    this.figure.globalAnimation.clearTimeout(this.queueSeekId);
-    this.queueSeekId = this.figure.globalAnimation.setTimeout(() => {
+    this.figure.timeKeeper.clearTimeout(this.queueSeekId);
+    this.queueSeekId = this.figure.timeKeeper.setTimeout(() => {
       this.seek(this.queueSeekTime);
       this.queueSeekId = null;
     }, 100);
@@ -1346,7 +1346,7 @@ ${cursorData}
    * @param {number} timeIn in seconds
    */
   seek(timeIn: number) {
-    this.figure.globalAnimation.clearTimeout(this.queueSeekId);
+    this.figure.timeKeeper.clearTimeout(this.queueSeekId);
     let time = this.convertTime(timeIn);
     if (time < 0) {
       time = 0;
@@ -1964,7 +1964,7 @@ ${cursorData}
     // event), remove draw timer, check for soonest animation finish,
     // setTimeout a new draw timer for that.
     // const t = performance.now()
-    // this.figure.elements.setupDraw(this.figure.globalAnimation.now() / 1000);
+    // this.figure.elements.setupDraw(this.figure.timeKeeper.now() / 1000);
     this.figure.setDrawTimeout(0.05);
     // console.log(performance.now() - t);
     // $FlowFixMe

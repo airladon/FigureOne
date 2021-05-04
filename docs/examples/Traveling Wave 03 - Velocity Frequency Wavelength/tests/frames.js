@@ -8,7 +8,7 @@ __height = 350 * 0.5;
 __duration = -1;
 // __frames = [[0,
 // `
-// layout.time.setGetNow(() => new Fig.GlobalAnimation().now() / 100);
+// layout.time.setGetNow(() => new Fig.TimeKeeper().now() / 100);
 // layout.reset();
 // const medium = figure.getElement('medium');
 // layout.unpause();
@@ -38,7 +38,7 @@ __frames = {
     [
       [0,
         `
-layout.time.setGetNow(() => new Fig.GlobalAnimation().now() / 1000);
+layout.time.setGetNow(() => new Fig.TimeKeeper().now() / 1000);
 layout.reset();
 const medium = figure.getElement('medium');
 layout.unpause();
@@ -323,7 +323,7 @@ medium.custom.recording.reset((timeStep, num) => {
   ],
   jest: [
     [0, `
-    layout.time.setGetNow(() => new Fig.GlobalAnimation().now() / 1000);
+    layout.time.setGetNow(() => new Fig.TimeKeeper().now() / 1000);
     layout.reset();
     const medium = figure.getElement('medium');
     layout.unpause();

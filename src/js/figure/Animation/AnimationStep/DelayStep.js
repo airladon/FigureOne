@@ -4,7 +4,7 @@
 import type { OBJ_AnimationStep } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
-import type GlobalAnimation from '../../webgl/GlobalAnimation';
+import type TimeKeeper from '../../webgl/TimeKeeper';
 
 
 // export type OBJ_AnimationStep = {

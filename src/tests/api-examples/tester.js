@@ -17,7 +17,7 @@ function zeroPad(num, places) {
 async function frame(delta) {
   await page.evaluate(([d]) => new Promise((resolve) => {
     figure.subscriptions.add('afterDraw', () => resolve(), 1);
-    figure.globalAnimation.frame(d);
+    figure.timeKeeper.frame(d);
     figure.animateNextFrame();
   }), [delta]);
 }
@@ -69,8 +69,8 @@ figure.add([
 ]);
 
 ${initialization}
-figure.globalAnimation.setManualFrames();
-figure.globalAnimation.frame(0);
+figure.timeKeeper.setManualFrames();
+figure.timeKeeper.frame(0);
 figure.animateNextFrame();
 `;
 
@@ -88,7 +88,7 @@ figure.animateNextFrame();
       await page.setViewportSize({ width: 500, height: 375 });
       await page.goto(`file://${__dirname}/index.html`);
       await page.evaluate(() => {
-        figure.globalAnimation.setManualFrames();
+        figure.timeKeeper.setManualFrames();
       });
       await frame(0);
       await page.evaluate(([c]) => {
@@ -110,7 +110,7 @@ figure.animateNextFrame();
           // if (id.endsWith('1ff30952')) {
           //   // console.log(timeStep, timeStep * i * 1000)
           // }
-          // await page.evaluate(([t]) => figure.globalAnimation.frame(t), [timeStep]);
+          // await page.evaluate(([t]) => figure.timeKeeper.frame(t), [timeStep]);
           await frame(timeStep);
           image = await page.screenshot();
           expect(image).toMatchImageSnapshot({

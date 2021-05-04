@@ -1,4 +1,4 @@
-import GlobalAnimation from './GlobalAnimation';
+import TimeKeeper from './TimeKeeper';
 import 'regenerator-runtime/runtime';
 
 function sleep(ms) {
@@ -7,7 +7,7 @@ function sleep(ms) {
 
 const performanceNow = performance.now;
 
-describe('GlobalAnimation', () => {
+describe('TimeKeeper', () => {
   let callback;
   let callback2;
   beforeEach(() => {
@@ -19,19 +19,19 @@ describe('GlobalAnimation', () => {
   });
   test('Instantiate', () => {
     performance.now = () => 0;
-    const ga = new GlobalAnimation();
+    const ga = new TimeKeeper();
     expect(ga.now()).toEqual(0);
   });
   test('Normal time', () => {
     performance.now = () => 0;
-    const ga = new GlobalAnimation();
+    const ga = new TimeKeeper();
     expect(ga.now()).toEqual(0);
     performance.now = () => 1;
     expect(ga.now()).toEqual(1);
   });
   test('Manual Frames time', () => {
     performance.now = () => 0;
-    const ga = new GlobalAnimation();
+    const ga = new TimeKeeper();
     expect(ga.now()).toEqual(0);
     performance.now = () => 1;
     expect(ga.now()).toEqual(1);
@@ -46,12 +46,12 @@ describe('GlobalAnimation', () => {
   describe('Real Time', () => {
     let ga;
     beforeEach(() => {
-      ga = new GlobalAnimation();
+      ga = new TimeKeeper();
       ga.reset();
     });
     describe('1x Speed', () => {
       test('Single timer executed', async () => {
-        // const ga = new GlobalAnimation();
+        // const ga = new TimeKeeper();
         const initialTime = ga.now();
         ga.setTimeout(callback, 100);
         expect(callback.mock.calls).toHaveLength(0);
@@ -62,7 +62,7 @@ describe('GlobalAnimation', () => {
         expect(callback.mock.calls).toHaveLength(1);
       });
       test('Single timer clear', async () => {
-        // const ga = new GlobalAnimation();
+        // const ga = new TimeKeeper();
         const initialTime = ga.now();
         ga.setTimeout(callback, 100);
         expect(callback.mock.calls).toHaveLength(0);
@@ -75,7 +75,7 @@ describe('GlobalAnimation', () => {
         expect(callback.mock.calls).toHaveLength(0);
       });
       test('Two timers executed', async () => {
-        // const ga = new GlobalAnimation();
+        // const ga = new TimeKeeper();
         const initialTime = ga.now();
         ga.setTimeout(callback, 50);
         ga.setTimeout(callback2, 150);
@@ -89,7 +89,7 @@ describe('GlobalAnimation', () => {
         expect(callback2.mock.calls).toHaveLength(1);
       });
       test('Two timers one cancelled', async () => {
-        // const ga = new GlobalAnimation();
+        // const ga = new TimeKeeper();
         const initialTime = ga.now();
         ga.setTimeout(callback, 100);
         const timerToCancel = ga.setTimeout(callback2, 150);
@@ -117,7 +117,7 @@ describe('GlobalAnimation', () => {
         // Set timer for 200ms, should take 100ms
         let endTime = performance.now();
         const endTimeCallback = () => { endTime = performance.now(); };
-        // const ga = new GlobalAnimation();
+        // const ga = new TimeKeeper();
         ga.setSpeed(2);
         const initialTime = ga.now();
         ga.setTimeout(endTimeCallback, 200);
@@ -145,7 +145,7 @@ describe('GlobalAnimation', () => {
         expect(endTime - initialTime).toBeLessThan(120);
       });
       test('Two timers one cancelled', async () => {
-        // const ga = new GlobalAnimation();
+        // const ga = new TimeKeeper();
         const initialTime = performance.now();
         ga.setSpeed(2);
         ga.setTimeout(callback, 200);
@@ -225,7 +225,7 @@ describe('GlobalAnimation', () => {
   describe('Manual Frames', () => {
     let ga;
     beforeEach(() => {
-      ga = new GlobalAnimation();
+      ga = new TimeKeeper();
       ga.reset();
     });
     test('Simple', async () => {

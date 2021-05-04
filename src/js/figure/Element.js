@@ -29,8 +29,8 @@ import {
   generateUniqueId, PerformanceTimer,
 } from '../tools/tools';
 import { colorArrayToRGBA, areColorsWithinDelta } from '../tools/color';
-import GlobalAnimation from './webgl/GlobalAnimation';
-import type { TypeWhen } from './webgl/GlobalAnimation';
+import TimeKeeper from './webgl/TimeKeeper';
+import type { TypeWhen } from './webgl/TimeKeeper';
 // import DrawContext2D from './DrawContext2D';
 
 import type Figure, { OBJ_SpaceTransforms, OBJ_FigureForElement } from './Figure';
@@ -695,7 +695,7 @@ class FigureElement {
   dependantTransform: boolean;
 
   recorder: Recorder;
-  timeKeeper: GlobalAnimation;
+  timeKeeper: TimeKeeper;
   // scenarioSet: {
   //   quiz1: [
   //     { element: xyz, position: (), scale: (), rotation: (), length: () }
@@ -721,7 +721,7 @@ class FigureElement {
     figureLimitsOrFigure: Figure | Rect = new Rect(-1, -1, 2, 2),
     parent: FigureElement | null = null,
     name: string = generateUniqueId('element_'),
-    timeKeeper: GlobalAnimation = new GlobalAnimation(),
+    timeKeeper: TimeKeeper = new TimeKeeper(),
   ) {
     // This may be updated if element is added to a collection with a different
     // name
@@ -3391,7 +3391,7 @@ class FigureElementPrimitive extends FigureElement {
     figureLimits: Rect = new Rect(-1, -1, 2, 2),
     parent: FigureElement | null = null,
     name: string = generateUniqueId('element_'),
-    timeKeeper: GlobalAnimation = new GlobalAnimation(),
+    timeKeeper: TimeKeeper = new TimeKeeper(),
   ) {
     super(transform, figureLimits, parent, name, timeKeeper);
     this.drawingObject = drawingObject;
@@ -3954,7 +3954,7 @@ class FigureElementCollection extends FigureElement {
       holeBorder: [[]],
       color: [0, 0, 0, 1],
       name: generateUniqueId('collection_'),
-      timeKeeper: new GlobalAnimation(),
+      timeKeeper: new TimeKeeper(),
     };
     const o = joinObjects({}, defaultOptions, options);
     // console.log(o)

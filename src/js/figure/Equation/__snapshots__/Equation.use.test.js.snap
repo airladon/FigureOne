@@ -32,7 +32,7 @@ FigureElementPrimitive {
       },
       "subscriptions": Object {},
     },
-    "timeKeeper": GlobalAnimation {
+    "timeKeeper": TimeKeeper {
       "animateOnFrame": false,
       "drawQueue": Array [],
       "idCounter": 0,
@@ -836,7 +836,7 @@ FigureElementPrimitive {
       },
       "subscriptions": Object {},
     },
-    "timeKeeper": GlobalAnimation {
+    "timeKeeper": TimeKeeper {
       "animateOnFrame": false,
       "animationId": 20,
       "drawQueue": Array [],
@@ -985,7 +985,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 20,
     "drawQueue": Array [],

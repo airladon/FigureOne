@@ -16,7 +16,7 @@ describe('Figure Stop', () => {
   beforeEach(() => {
     jest.useFakeTimers();
     figure = makeFigure();
-    figure.globalAnimation.reset();
+    figure.timeKeeper.reset();
     figure.add([
       {
         name: 'a',

@@ -171,7 +171,7 @@ export default function makeFigure(
       figure.mock.previousTouchPoint = p;
     },
   };
-  figure.globalAnimation.reset();
+  figure.timeKeeper.reset();
   return figure;
 }
 

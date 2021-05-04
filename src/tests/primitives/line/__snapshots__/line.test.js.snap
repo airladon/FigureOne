@@ -724,7 +724,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 1,
     "drawQueue": Array [],
@@ -1763,7 +1763,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 36,
     "drawQueue": Array [],
@@ -2958,7 +2958,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 32,
     "drawQueue": Array [],
@@ -5547,7 +5547,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 35,
     "drawQueue": Array [],
@@ -6846,7 +6846,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 37,
     "drawQueue": Array [],
@@ -9435,7 +9435,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 34,
     "drawQueue": Array [],
@@ -10578,7 +10578,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 33,
     "drawQueue": Array [],
@@ -11565,7 +11565,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 31,
     "drawQueue": Array [],
@@ -12371,7 +12371,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 10,
     "drawQueue": Array [],
@@ -13211,7 +13211,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 13,
     "drawQueue": Array [],
@@ -14064,7 +14064,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 14,
     "drawQueue": Array [],
@@ -14847,7 +14847,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 9,
     "drawQueue": Array [],
@@ -15630,7 +15630,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 12,
     "drawQueue": Array [],
@@ -16413,7 +16413,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 11,
     "drawQueue": Array [],
@@ -17367,7 +17367,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 22,
     "drawQueue": Array [],
@@ -18321,7 +18321,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 24,
     "drawQueue": Array [],
@@ -19276,7 +19276,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 23,
     "drawQueue": Array [],
@@ -20230,7 +20230,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 25,
     "drawQueue": Array [],
@@ -21184,7 +21184,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 26,
     "drawQueue": Array [],
@@ -21967,7 +21967,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 3,
     "drawQueue": Array [],
@@ -22750,7 +22750,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 4,
     "drawQueue": Array [],
@@ -23533,7 +23533,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 2,
     "drawQueue": Array [],
@@ -24333,7 +24333,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 5,
     "drawQueue": Array [],
@@ -25116,7 +25116,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 7,
     "drawQueue": Array [],
@@ -25916,7 +25916,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 8,
     "drawQueue": Array [],
@@ -26699,7 +26699,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 6,
     "drawQueue": Array [],
@@ -27696,7 +27696,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 39,
     "drawQueue": Array [],
@@ -28507,7 +28507,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 38,
     "drawQueue": Array [],
@@ -29290,7 +29290,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 21,
     "drawQueue": Array [],
@@ -30073,7 +30073,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 16,
     "drawQueue": Array [],
@@ -30872,7 +30872,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 19,
     "drawQueue": Array [],
@@ -31708,7 +31708,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 20,
     "drawQueue": Array [],
@@ -32526,7 +32526,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 15,
     "drawQueue": Array [],
@@ -33332,7 +33332,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 18,
     "drawQueue": Array [],
@@ -34138,7 +34138,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 17,
     "drawQueue": Array [],
@@ -34921,7 +34921,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 27,
     "drawQueue": Array [],
@@ -35704,7 +35704,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 29,
     "drawQueue": Array [],
@@ -36487,7 +36487,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 30,
     "drawQueue": Array [],
@@ -37270,7 +37270,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
-  "timeKeeper": GlobalAnimation {
+  "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
     "animationId": 28,
     "drawQueue": Array [],

@@ -7,7 +7,7 @@ import type {
   OBJ_AnimationStep,
 } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
-import type GlobalAnimation from '../../webgl/GlobalAnimation';
+import type TimeKeeper from '../../webgl/TimeKeeper';
 
 /**
  * {@link CustomAnimationStep} options object
@@ -134,7 +134,7 @@ export class CustomAnimationStep extends AnimationStep {
     ];
   }
 
-  // _fromState(state: Object, getElement: ?(string) => FigureElement, timeKeeper: GlobalAnimation) {
+  // _fromState(state: Object, getElement: ?(string) => FigureElement, timeKeeper: TimeKeeper) {
   //   // const obj = new this.constructor();
   //   joinObjects(this, state);
   //   if (this.element != null && typeof this.element === 'string' && getElement != null) {
