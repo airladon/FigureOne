@@ -69,7 +69,6 @@ figure.add([
 ]);
 
 ${initialization}
-figure.globalAnimation.manualOneFrameOnly = false;
 figure.globalAnimation.setManualFrames();
 figure.globalAnimation.frame(0);
 figure.animateNextFrame();
@@ -89,7 +88,6 @@ figure.animateNextFrame();
       await page.setViewportSize({ width: 500, height: 375 });
       await page.goto(`file://${__dirname}/index.html`);
       await page.evaluate(() => {
-        figure.globalAnimation.manualOneFrameOnly = false;
         figure.globalAnimation.setManualFrames();
       });
       await frame(0);

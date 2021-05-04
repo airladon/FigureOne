@@ -43,7 +43,19 @@ figure.add([
 ]);
 
 
-figure.globalAnimation.manualOneFrameOnly = false;
+figure.add(
+  {
+    name: 'p',
+    method: 'polygon',
+    options: {
+      sides: 4,
+      radius: 0.5,
+      position: [0, 0],
+    },
+  },
+);
+const p = figure.getElement('p');
+
 figure.globalAnimation.setManualFrames();
 figure.globalAnimation.frame(0);
 figure.animateNextFrame();

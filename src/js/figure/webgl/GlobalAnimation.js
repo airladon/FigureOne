@@ -53,11 +53,10 @@ class GlobalAnimation {
   syncNowTimer: TimeoutID;
 
   manual: boolean;
-  manualQueueCounter: number;
-  manualOneFrameOnly: boolean;
   animateOnFrame: boolean;
   lastTime: number;
   idCounter: number;
+  syncNowTimeout: number;
 
   timers: {
     [id: string]: {
@@ -85,7 +84,13 @@ class GlobalAnimation {
     return GlobalAnimation.instance;
   }
 
+  /**
+   * Reset TimeKeeper to 0 time.
+   *
+   * All ongoing timers will be cancelled, and all properties reset.
+   */
   reset() {
+    this.syncNowTimeout = 100;
     this.drawQueue = [];
     this.nextDrawQueue = [];
     this.lastDrawTime = null;
@@ -97,8 +102,6 @@ class GlobalAnimation {
     this.timeoutId = null;
     this.updateSyncNow = true;
     this.manual = false;
-    this.manualQueueCounter = 0;
-    this.manualOneFrameOnly = true;
     this.animateOnFrame = false;
   }
 
@@ -114,6 +117,11 @@ class GlobalAnimation {
   }
 
 
+  /**
+   * Current relative time now, of most recent animation frame or of most
+   * recent synchronized time.
+   *
+   */
   getWhen(when: TypeWhen) {
     if (when === 'now') {
       return this.now();
@@ -127,11 +135,25 @@ class GlobalAnimation {
     return null;
   }
 
+  /**
+   * Get synchronized relative now time.
+   *
+   * Each call of `now` when not using manual frames will result in a
+   * progressed time value in ms from the page load.
+   *
+   * This can be a challenge if you want to start two animations at precisely
+   * the same time.
+   *
+   * When syncNow is first called, the actual now time is returned. Each
+   * subsequent call of syncNow will return the same number. syncNow is reset
+   * on each animation frame, or after `TimeKeeper.syncNowTimeout` is ellapsed
+   * (defaults to 100ms).
+   */
   syncNow() {
     if (this.updateSyncNow) {
       this.updateSyncNow = false;
       this.synchronizedNow = this.now();
-      this.syncNowTimer = setTimeout(() => { this.updateSyncNow = true; }, 100);
+      this.syncNowTimer = setTimeout(() => { this.updateSyncNow = true; }, this.syncNowTimeout);
     }
     return this.synchronizedNow;
   }
@@ -228,7 +250,7 @@ class GlobalAnimation {
    * @param {number} timeStepInSeconds
    */
   frame(timeStepInSeconds: number) {
-    this.manualQueueCounter = 0;
+    // this.manualQueueCounter = 0;
     const targetTime = this.nowTime + timeStepInSeconds * 1000;
     this.incrementTimers(targetTime);
     this.nowTime = targetTime;
@@ -347,22 +369,17 @@ class GlobalAnimation {
    */
   queueNextFrame(func: (?number) => void) {
     this.nextDrawQueue.push(func);
-    // console.log(performance.now(), 'queue', this.nextDrawQueue.length)
-    if (this.manual && this.manualOneFrameOnly) {
-      if (this.manualQueueCounter >= 1) {
-        return;
-      }
-      this.manualQueueCounter += 1;
-    }
     if (this.nextDrawQueue.length === 1) {
-      // if (!this.debug) {
       this.animateNextFrame();
-      // }
     }
   }
 
 
   animateNextFrame() {
+    // When in manual, figure.draw will continue to call animateNextFrame
+    // if there is animation remaining. This can quickly spiral out of control
+    // so we only want to allow an animation frame to draw when this class's
+    // `frame` method is called.
     if (this.manual) {
       if (this.animateOnFrame && this.animationId == null) {
         this.animateOnFrame = false;

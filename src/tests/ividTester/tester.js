@@ -158,7 +158,6 @@ async function tester(
       await page.setViewportSize({ width, height });
       await page.goto(htmlFile);
       await page.evaluate(() => {
-        figure.globalAnimation.manualOneFrameOnly = false;
         figure.globalAnimation.setManualFrames();
         figure.recorder.startPlayback();
         document.getElementById('f1_player__play_pause').style.visibility = 'hidden';

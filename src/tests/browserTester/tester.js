@@ -91,7 +91,6 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
       await page.goto(file);
       await page.evaluate(() => {
         clearTimeout(timeoutId);
-        figure.globalAnimation.manualOneFrameOnly = false;
         figure.globalAnimation.setManualFrames();
         // console.log('set manual frames');
       });
