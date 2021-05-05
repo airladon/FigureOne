@@ -20,9 +20,6 @@ import type {
   OBJ_ScenarioAnimationStep, OBJ_ParallelAnimationStep,
 } from './Animation';
 // eslint-disable-next-line import/no-cycle
-// import {
-//   AnimationStep,
-// } from './Animation';
 import TimeKeeper from '../TimeKeeper';
 import {
   joinObjects, duplicateFromTo, SubscriptionManager, PerformanceTimer,

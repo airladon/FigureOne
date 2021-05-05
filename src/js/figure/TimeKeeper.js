@@ -23,7 +23,7 @@ export type TypeWhen = 'now' | 'nextFrame' | 'prevFrame' | 'syncNow';
 
 /**
  * TimeKeeper keeps time for a figure, where time is the number of
- * milliseconds after the page is loaded load.
+ * milliseconds after the page is loaded.
  *
  * Time can be real time, sped up, slowed down or manually stepped.
  *
