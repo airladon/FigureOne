@@ -2121,7 +2121,7 @@ class Figure {
     if (timerDuration < 0) {
       timerDuration = this.elements.getNextAnimationFinishTime();
     }
-    if (timerDuration != null && timerDuration > 0) {
+    if (timerDuration != null && timerDuration > 0.00000001) {
       const timerStart = this.timeKeeper.now() / 1000;
       if (
         (this.nextDrawTimer == null && timerDuration > 0)
@@ -2141,7 +2141,7 @@ class Figure {
           this.nextDrawTimer = null;
           this.setupDraw();
           this.animateNextFrame();
-        }, timerDuration * 1000);
+        }, timerDuration * 1000, 'drawTimeout');
       }
     }
   }
