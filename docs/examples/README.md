@@ -64,3 +64,9 @@ Equation portion example:
 
 ![](Holiday%20Equation/example.gif)
 
+## **[Interactive Video - Tiling](Interactive%20Video%20-%20Tiling)**
+
+Make an interactive video from a figure, including recorded mouse movements.
+
+![](Interactive%20Video%20-%20Tiling/example.gif)
+
