@@ -269,17 +269,10 @@ export default class TransformAnimationStep extends ElementAnimationStep {
   }
 
   setFrame(deltaTime: number) {
-    // const start = phase.startTransform._dup();
-    // const delta = phase.deltaTransform._dup();
     const percentTime = deltaTime / (this.duration + 0.000001);
     const percentComplete = this.getPercentComplete(percentTime);
     const p = percentComplete;
-    // if (this.element.name === 'polygond6_5') {
-    //   console.log('setFrame', p, deltaTime, this.transform.target)
-    // }
-    // let next = delta._dup().constant(p);
 
-    // next = start.add(delta.mul(next));
     const next = this.transform.start.toDelta(
       this.transform.delta, p,
       this.transform.path.style,

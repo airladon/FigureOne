@@ -280,7 +280,6 @@ describe('Animation Examples', () => {
   });
   test('Cancel, check callback and stop', () => {
     examples.animationCallbackStop();
-    // console.log(elem1.animator)
     elem1.animations.nextFrame(100);
     elem1.animations.nextFrame(100.1);
     expect(elem1.getPosition().round(4)).toEqual(point(0.1));
@@ -292,7 +291,6 @@ describe('Animation Examples', () => {
   });
   test('Cancel, check callback and complete', () => {
     examples.animationCallbackComplete();
-    // console.log(elem1.animator)
     elem1.animations.nextFrame(100);
     elem1.animations.nextFrame(100.1);
     expect(elem1.getPosition().round(4)).toEqual(point(0.1));

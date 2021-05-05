@@ -2778,12 +2778,7 @@ class FigureElement {
    * Show element
    */
   show() {
-    // if (this.getPath() === 'rightTri.tri.angle2.label') {
-    //   console.trace(this.name, this.getPath());
-    //   // console.log('shown')
-    // }
     this.isShown = true;
-    // this.setOpacity(1);
     if (this.opacity === 0) {
       this.setOpacity(1);
     }
@@ -3552,7 +3547,6 @@ class FigureElementCollection extends FigureElement {
       timeKeeper: new TimeKeeper(),
     };
     const o = joinObjects({}, defaultOptions, options);
-    // console.log(o)
     super(getTransform(o.transform), o.limits, o.parent, o.name, o.timeKeeper);
     if (o.position != null) {
       this.transform.updateTranslation(getPoint(o.position));
@@ -3874,9 +3868,6 @@ class FigureElementCollection extends FigureElement {
         }
       }
 
-      // element.setProperties(elementDefinition, [
-      //   'mods', 'name', 'method', 'scenario', 'addElementsKey', 'options', 'path',
-      // ]);
       if (firstScenario != null && firstScenario in newElement.scenarios) {
         newElement.setScenario(firstScenario);
       }
@@ -3887,15 +3878,7 @@ class FigureElementCollection extends FigureElement {
         newElement.add(addElementsToUse);
         addedElements.push(addElementsToUse);
       }
-      // if (this.name === 'circ') {
-      //   t.push(performance.now() / 1000);
-      //   console.log(newElement.name, t.slice(-1)[0] - t.slice(-2, -1)[0])
-      // }
     });
-    // if (this.name === 'circ') {
-    //     t.push(performance.now() / 1000);
-    //     console.log('done', t.slice(-1)[0] - t[0])
-    //   }
     return addedElements;
   }
 

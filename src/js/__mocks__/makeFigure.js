@@ -69,7 +69,6 @@ export default function makeFigure(
       };
     },
   };
-  // console.log(canvasMock.top, canvasMock.left, inputCanvas)
   const htmlCanvasMock = {
     style: {
       fontsize: 1,
@@ -125,9 +124,6 @@ export default function makeFigure(
       let lastTime = 0;
       deltaTime = round(deltaTime, 8);
       while (deltaTime <= round(deltaTimeInSeconds, 8)) {
-        // if (window.asdf) {
-        //   console.log(duration, deltaTime + 0.00);
-        // }
         const newNow = round((duration + deltaTime + initialTime) * 1000, 8);
         global.performance.now = () => newNow;
         if (figure.mock.timersBeforeDraw) {

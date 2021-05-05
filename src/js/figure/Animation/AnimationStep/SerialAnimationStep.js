@@ -188,7 +188,6 @@ export class SerialAnimationStep extends AnimationStep {
       if (this.afterFrame != null) { // $FlowFixMe - as this has been confirmed
         this.afterFrame(now - this.startTime);
       }
-      // console.log('serial', now, this.index, remaining)
       if (remaining >= 0) {
         if (this.index === this.steps.length - 1) {
           this.finish();
@@ -223,7 +222,6 @@ export class SerialAnimationStep extends AnimationStep {
         step.finish(cancelled, forceToUse);
       }
     });
-    // console.log(this.onFinish, cancelled, force)
     if (this.onFinish != null) {
       this.fnExec(this.onFinish, cancelled, force);
     }

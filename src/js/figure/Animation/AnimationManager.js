@@ -705,19 +705,13 @@ export default class AnimationManager {
   }
 
   nextFrame(now: number) {
-    // console.log('animation manager', now)
-    // console.log(this.element.name, this.state, this.animations)
     const animationsToRemove = [];
     let remaining = null;
     let isAnimating = false;
-    // if (window.qwer === 1 && this.animations.length > 0) {
-    //   console.log('animation manager', this.element);
-    // }
     let timer;
     if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
     this.animations.forEach((animation, index) => {
       let animationIsAnimating = false;
-      // console.log(this.element.name, animation.state)
       if (animation.state === 'waitingToStart' || animation.state === 'animating') {
         const stepRemaining = animation.nextFrame(now, this.animationSpeed);
         if (remaining === null) {
@@ -746,7 +740,6 @@ export default class AnimationManager {
         this.state = 'idle';
         callback = this.finishedCallback;
         this.subscriptions.publish('finished');
-        // this.fnMap.exec(this.finishedCallback);
       }
       this.state = 'idle';
     }
@@ -755,9 +748,6 @@ export default class AnimationManager {
     for (let i = animationsToRemove.length - 1; i >= 0; i -= 1) {
       this.animations.splice(animationsToRemove[i], 1);
     }
-    // if (callback != null) {
-    //   console.log('finished', this.element.name, callback)
-    // }
     this.fnMap.exec(callback);
     if (FIGURE1DEBUG) { // $FlowFixMe
       timer.stamp('callback'); // $FlowFixMe
@@ -796,7 +786,6 @@ export default class AnimationManager {
     } else {
       if (this.state === 'animating') {
         this.state = 'idle';
-        // console.log('clean finished', this.element.name, this.finishedCallback)
         this.fnMap.exec(this.finishedCallback);
         this.subscriptions.publish('finished');
       }
@@ -950,7 +939,6 @@ export default class AnimationManager {
         remainingTime = animationRemainingTime;
       }
     });
-    // console.log(this.element.name, remainingTime, this.animations);
     return remainingTime;
   }
 

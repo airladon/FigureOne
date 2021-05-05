@@ -267,7 +267,6 @@ class FigureTextBase {
     } else {
       aWidth = ctx.measureText('a').width;
     }
-    // console.log(aWidth)
     // Estimations of FONT ascent and descent for a baseline of "alphabetic"
     let ascent = aWidth * 1.4;
     let descent = aWidth * 0.08;
@@ -552,11 +551,6 @@ class TextObjectBase extends DrawingObject {
     this.layoutText();
   }
 
-  // calcTextBounds() {
-  //   this.text.forEach((t) => {
-  //     t.calcBorderAndBounds();
-  //   });
-  // }
 
   // eslint-disable-next-line class-methods-use-this
   setTextLocations() {
@@ -565,9 +559,6 @@ class TextObjectBase extends DrawingObject {
   click(p: Point, fnMap: FunctionMap) {
     this.text.forEach((text) => {
       if (text.onClick != null) {
-        // console.log(text.touchBorder, lastDrawTransformMatrix)
-        // const glBorder = this.transformBorder([text.touchBorder], lastDrawTransformMatrix);
-        // console.log(glBorder)
         if (p.isInPolygon(text.textBorderBuffer)) {
           fnMap.exec(text.onClick, fnMap);
         }
@@ -594,14 +585,8 @@ class TextObjectBase extends DrawingObject {
     this.text[index].setText(textOrOptions);
     this.setBorder();
     this.setTouchBorder();
-    // this.layoutText();
   }
 
-  // setText(text: string, index: number = 0) {
-  //   this.text[index].setText(text);
-  //   this.setBorder();
-  //   this.setTouchBorder();
-  // }
 
   _dup() {
     const c = new TextObjectBase(this.drawContext2D);
@@ -653,41 +638,6 @@ class TextObjectBase extends DrawingObject {
     this.setTouchBorder();
   }
 
-  // setGenericBorder(name: string) {
-  //   // $FlowFixMe
-  //   if (Array.isArray(this[`${name}Setup`])) {  // $FlowFixMe
-  //     this[name] = this[`${name}Setup`];
-  //     return;
-  //   }
-  //   const border = [];
-  //   this.text.forEach((text) => {
-  //     border.push(  // $FlowFixMe
-  //       text[name],
-  //     );
-  //   }); // $FlowFixMe
-  //   if (this[`${name}Setup`] === 'text') {  // $FlowFixMe
-  //     this[name] = border;
-  //     return;
-  //   }  // $FlowFixMe
-  //   const bounds = getBoundingRect(border);  // $FlowFixMe
-  //   if (this[`${name}Setup`] === 'rect') {  // $FlowFixMe
-  //     this[name] = [[
-  //       new Point(bounds.left, bounds.bottom),
-  //       new Point(bounds.right, bounds.bottom),
-  //       new Point(bounds.right, bounds.top),
-  //       new Point(bounds.left, bounds.top),
-  //     ]];
-  //     return;
-  //   }  // $FlowFixMe
-  //   const buffer = this[`${name}Setup`];  // $FlowFixMe
-  //   this[name] = [[
-  //     new Point(bounds.left - buffer, bounds.bottom - buffer),
-  //     new Point(bounds.right + buffer, bounds.bottom - buffer),
-  //     new Point(bounds.right + buffer, bounds.top + buffer),
-  //     new Point(bounds.left - buffer, bounds.top + buffer),
-  //   ]];
-  // }
-
   setBorder() {
     // this.setGenericBorder('border');
     this.textBorder = [];
@@ -701,24 +651,8 @@ class TextObjectBase extends DrawingObject {
     this.text.forEach((text) => {
       this.textBorderBuffer.push(text.textBorderBuffer);
     });
-
-    // if (this.touchBorderSetup === 'border') {
-    //   this.touchBorder = this.border;
-    //   return;
-    // }
-    // this.setGenericBorder('touchBorder');
-    // console.log(this.touchBorderSetup, this.touchBorder)
   }
 
-  // getBoundaries(
-  //   transformMatrix: Array<number>,
-  // ): Array<Array<Point>> {
-  //   const boundaries: Array<Array<Point>> = [];
-  //   this.text.forEach((t) => {
-  //     boundaries.push(t.getBoundary(transformMatrix));
-  //   });
-  //   return boundaries;
-  // }
 
   // Text is drawn in pixel space which is 0, 0 in the left hand top corner on
   // a canvas of size canvas.offsetWidth x canvas.offsetHeight.
@@ -837,13 +771,9 @@ class TextObjectBase extends DrawingObject {
     // Some bug I don't understand in webgl is effectively cubing the alph
     // channel. So make the same here to fade-ins happen at same rate
     const c = color.slice();
-    // console.log(c[3], this.text[0].text, Math.cbrt(c[3]))
-    // c[3] = Math.cbrt(c[3])
-    // c[3] *= c[3] * c[3];
 
     // Fill in all the text
     this.text.forEach((figureText) => {
-      // console.log('text draw', figureText.text)
       // eslint-disable-next-line no-param-reassign
       figureText.lastDraw = {
         x: (figureText.locationAligned.x) * scalingFactor,
@@ -858,51 +788,28 @@ class TextObjectBase extends DrawingObject {
         (figureText.locationAligned.x) * scalingFactor,
         (figureText.locationAligned.y) * -scalingFactor,
       );
-      // if (window.asdf && figureText.text === '0') {
-      //   console.log('filled', figureText.text)
-      // }
     });
     ctx.restore();
   }
 
   clear(contextIndex: number = 0) {
-    // console.log('clear', this.text[0].text)
     const { ctx } = this.drawContext2D[contextIndex];
     const t = this.lastDrawTransform;
     ctx.save();
     ctx.transform(t[0], t[3], t[1], t[4], t[2], t[5]);
-    // console.log('start clear');
     this.text.forEach((figureText) => {
-      // const x = figureText.locationAligned.x * this.scalingFactor;
-      // const y = figureText.locationAligned.y * -this.scalingFactor;
-      // const width = figureText.bounds.width * this.scalingFactor;
-      // const height = figureText.bounds.height * this.scalingFactor;
       if (figureText.lastDraw != null) {
         const {
           x, y, width, height,
         } = figureText.lastDraw;
         ctx.clearRect(
           x - width * 1, y + height * 0.5, width * 3, -height * 2,
-          // x - width * 1,
-          // y + height * 1,
-          // width * 3,
-          // -height * 3,\
         );
-        // ctx.rect(
-        //   x - width * 1, y + height * 0.5, width * 3, -height * 2,
-        //   // (figureText.locationAligned.x) * scalingFactor,
-        //   // (figureText.locationAligned.y) * -scalingFactor,
-        // );
-        // ctx.fill();
         // eslint-disable-next-line no-param-reassign
         figureText.lastDraw = null;
       }
     });
     ctx.restore();
-    // if (window.asdf && this.text[0] != null && this.text[0].text === '0') {
-    //   console.trace('cleared', this.text[0]);
-    //   // console.log('cleared');
-    // }
   }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
@@ -924,8 +831,6 @@ class TextObject extends TextObjectBase {
             location?: TypeParsablePoint,
             xAlign?: 'left' | 'right' | 'center',
             yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
-            // border?: 'rect' | Array<Point>,
-            // touchBorder?: 'rect' | number | 'border' | Array<Point>,
             touchBorder?: TypeParsableBuffer | Array<Point>,
             onClick?: string | () => void,
         }
@@ -935,8 +840,6 @@ class TextObject extends TextObjectBase {
             location?: TypeParsablePoint,
             xAlign?: 'left' | 'right' | 'center',
             yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
-            // border?: 'rect' | Array<Point>,
-            // touchBorder?: 'rect' | number | 'border' | Array<Point>,
             touchBorder?: TypeParsableBuffer | Array<Point>,
             onClick?: string | () => void,
           }>;
@@ -944,8 +847,6 @@ class TextObject extends TextObjectBase {
       fixColor: boolean,
       xAlign: 'left' | 'right' | 'center',                // default xAlign
       yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
-      // border?: 'text' | 'rect' | Array<Point>,
-      // touchBorder?: 'text' | 'rect' | number | 'border' | Array<Point>,
       defaultTextTouchBorder?: number,
       color: TypeColor
     },
@@ -964,7 +865,6 @@ class TextObject extends TextObjectBase {
       let xAlign;
       let yAlign;
       let textToUse;
-      // let border;
       let touchBorder;
       let onClick;
       if (typeof textDefinition === 'string') {
@@ -974,12 +874,6 @@ class TextObject extends TextObjectBase {
           font, location, xAlign, yAlign, touchBorder, onClick,
         } = textDefinition);
         textToUse = textDefinition.text;
-        // if (Array.isArray(border)) {  // $FlowFixMe
-        //   border = getPoints(border);
-        // }
-        // if (Array.isArray(touchBorder)) {  // $FlowFixMe
-        //   touchBorder = getPoints(touchBorder);
-        // }
       }
       let locationToUse;
       if (location == null) {
@@ -1013,8 +907,6 @@ class TextObject extends TextObjectBase {
     this.text = figureTextArray;
     // super.loadText();
     this.calcScalingFactor();
-    // this.borderSetup = options.border || [];
-    // this.touchBorderSetup = options.touchBorder || [];
     this.layoutText();
   }
 
@@ -1097,10 +989,6 @@ class TextLineObject extends TextObjectBase {
         font?: OBJ_Font,
         offset?: TypeParsablePoint,
         inLine?: boolean,
-        // onClick?: () => void,
-        // border?: 'rect' | Array<Point>,
-        // touchBorder?: 'rect' | number | Array<Point>,
-        // border?: 'rect' | Array<Point>,
         touchBorder?: number | Array<Point>,
         onClick?: string | () => void,
         followOffsetY?: boolean,
@@ -1113,9 +1001,6 @@ class TextLineObject extends TextObjectBase {
       color: TypeColor,
       fixColor: boolean,
       defaultTextTouchBorder?: TypeParsableBuffer,
-      // border?: 'rect' | Array<Point>,
-      // touchBorder?: 'rect' | number | 'border' | Array<Point>,
-      // onClick?: string | () => void,
     },
   ) {
     let textArray = options.text;
@@ -1145,12 +1030,6 @@ class TextLineObject extends TextObjectBase {
           lSpace, rSpace,
         } = textDefinition);
         textToUse = textDefinition.text;
-        // if (Array.isArray(border)) {  // $FlowFixMe
-        //   border = getPoints(border);
-        // }
-        // if (Array.isArray(touchBorder)) {  // $FlowFixMe
-        //   touchBorder = getBorder(touchBorder);
-        // }
         if (
           touchBorder != null
           && Array.isArray(touchBorder)
@@ -1285,7 +1164,6 @@ class TextLinesObject extends TextObjectBase {
     // touchBorder?: 'rect' | number | 'border' | Array<Point>,
   },
   ) {
-    // console.log('asdfasdf')
     // let { lines } = options;
     let textLines = options.text;
     if (typeof textLines === 'string') {

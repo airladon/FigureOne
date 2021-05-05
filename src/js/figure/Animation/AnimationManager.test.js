@@ -29,7 +29,6 @@ describe('Animation Manager', () => {
     p1 = new Point(1, 1);
   });
   test('Basic', () => {
-    // console.log(figure.elements)
     elem.animations.new()
       .position({ target: p1, duration: 1, progression: 'linear' })
       .start();
@@ -120,7 +119,6 @@ describe('Animation Manager', () => {
       .start();
     expect(elem.animations.animations).toHaveLength(1);
     expect(elem.animations.animations[0].steps).toHaveLength(2);
-    // console.log(elem.animations.animations[0].steps)
 
     elem.animations.nextFrame(0.6);
     expect(elem.getPosition().round()).toEqual(point(0.6));

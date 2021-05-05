@@ -126,10 +126,8 @@ export class ParallelAnimationStep extends AnimationStep {
       this.beforeFrame(now - this.startTime);
     }
     this.steps.forEach((step) => {
-      // console.log(step.state, step)
       if (step.state === 'animating' || step.state === 'waitingToStart') {
         const stepRemaining = step.nextFrame(now, speed);
-        // console.log(step.element.uid, stepRemaining)
         if (remaining === null) {
           remaining = stepRemaining;
         }

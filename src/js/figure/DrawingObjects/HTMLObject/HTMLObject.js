@@ -124,13 +124,11 @@ class HTMLObject extends DrawingObject {
 
   transformHtml(transformMatrix: Array<number>, opacity: number = 1) {
     if (this.show) {
-      // this.element.style.visibility = 'visible';
       const glLocation = this.location.transformBy(transformMatrix);
       const pixelLocation = this.glToPixelSpace(glLocation);
 
       const w = this.element.clientWidth;
       const h = this.element.clientHeight;
-      // console.log(w, h, this.element.id)
       let left = 0;
       let top = 0;
       if (this.xAlign === 'center') {
@@ -145,29 +143,16 @@ class HTMLObject extends DrawingObject {
       }
       const x = pixelLocation.x + left;
       const y = pixelLocation.y + top;
-      // this.element.style.position = 'absolute';
-      // this.element.style.left = `${x}px`;
-      // this.element.style.top = `${y}px`;
-      // this.element.style.visibility = 'visible';
-      // this.element.style.opacity = opacity;
       const style = `position: absolute; left: ${x}px; top: ${y}px; visibility: visible; opacity: ${opacity};`;
       const currentStyle = this.element.getAttribute('style');
       if (style !== currentStyle) {
         this.element.setAttribute('style', style);
       }
-      // this.element.classList.remove('figure__hidden');
     } else {
       this.element.setAttribute(
         'style',
         `position: absolute; left: -10000px; top: -10000px; visibility: hidden; opacity: ${opacity};`,
       );
-      // this.element.style.position = 'absolute';
-      // this.element.style.left = '-10000px';
-      // this.element.style.top = '-10000px';
-      // // this.element.classList.add('figure__hidden');
-      // this.element.style.visibility = 'hidden';
-      // // this.element.style.visibility = 'hidden';
-      // // console.trace()
     }
   }
 

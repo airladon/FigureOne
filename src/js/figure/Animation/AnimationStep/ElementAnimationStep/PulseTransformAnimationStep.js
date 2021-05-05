@@ -244,18 +244,6 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
         t.r = velocity.rotation;
       }
     }
-    // if (velocity.position != null) {
-    //   transformVelocity.updateTranslation(getScale(velocity.position));
-    // }
-    // if (velocity.translation != null) {
-    //   transformVelocity.updateTranslation(getScale(velocity.translation));
-    // }
-    // if (velocity.scale != null) {
-    //   transformVelocity.updateScale(getScale(velocity.scale));
-    // }
-    // if (velocity.rotation != null) {
-    //   transformVelocity.updateRotation(velocity.rotation);
-    // }
     return transformVelocity;
   }
 
@@ -265,8 +253,6 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
   // Setting a duration to 0 will effectively skip this animation step
   start(startTime: ?AnimationStartTime = null) {
     super.start(startTime);
-    // console.log(this.element.name, this.transform.start[0].order)
-    // console.log(this.transform.target[0].order)
     if (this.transform.start == null || this.transform.start.length === 0) {
       if (this.element != null) {
         if (this.element.pulseTransforms.length > 0) {
@@ -291,7 +277,6 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     if (this.transform.delta.length === 0) {
       this.duration = 0;
     }
-    // console.log(this.transform)
     // If Velocity is defined, then use it to calculate duration
     if (this.transform.velocity != null) {
       const velocity = this.getVelocityTransform();
@@ -304,13 +289,9 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
           velocity,
           this.transform.rotDirection,
         );
-        // console.log(duration, start, target, velocity)
         if (duration > this.duration) {
           this.duration = duration;
         }
-        // if (duration > 0) {
-        //   this.duration = duration;
-        // }
       }
     }
     if (this.transform.maxDuration != null) {
@@ -321,9 +302,6 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     if (this.duration <= this.transform.zeroDurationThreshold) {
       this.duration = 0;
     }
-    // if (this.duration < this.transform.minDuration) {
-    //   this.duration = this.transform.minDuration;
-    // }
     this.duration = round(this.duration, this.precision);
     if (startTime === 'now' || startTime === 'prevFrame') {
       this.setFrame(0);
@@ -331,14 +309,9 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
   }
 
   setFrame(deltaTime: number) {
-    // const start = phase.startTransform._dup();
-    // const delta = phase.deltaTransform._dup();
     const percentTime = deltaTime / this.duration;
     const percentComplete = this.getPercentComplete(percentTime);
     const p = percentComplete;
-    // let next = delta._dup().constant(p);
-
-    // next = start.add(delta.mul(next));
     if (this.element == null) {
       return;
     }

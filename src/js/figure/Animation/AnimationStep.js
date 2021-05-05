@@ -133,20 +133,6 @@ export default class AnimationStep {
     return this;
   }
 
-  // _getStateProperties(): Array<string> {  // eslint-disable-line class-methods-use-this
-  //   return Object.keys(this);
-  // }
-  // _getState() {
-  //   const keys = [];
-  //   Object.keys(this).forEach((key) => {
-  //     if (key !== 'element') {
-  //       keys.push(key);
-  //     }
-  //   });
-  //   console.log(keys)
-  //   const state = getState(this, keys);
-  //   return state;
-  // }
 
   // eslint-disable-next-line no-unused-vars
   _fromDef(definition: Object, getElement: ?(string) => FigureElement = null) {
@@ -157,63 +143,17 @@ export default class AnimationStep {
   fnExec(idOrFn: string | Function | null, ...args: any) {
     return this.fnMap.exec(idOrFn, ...args);
   }
-  // _finishSetState(figure: Figure) {
-  //   if (this.element != null && typeof this.element === 'string') {
-  //     const element = figure.getElement(this.element);
-  //     if (element != null) {
-  //       this.element = element;
-  //     }
-  //   }
-  //   if (this.steps != null) {
-  //     for (let i = 0; i < this.steps.length; i += 1) {
-  //       const animationStepState = this.steps[i];
-  //       let animationStep = {};
-  //       if (animationStepState._stepType === 'builder') {
-  //         animationStep = new anim.AnimationBuilder();
-  //       }
-  //       if (animationStepState._stepType === 'position') {
-  //         animationStep = new anim.PositionAnimationStep();
-  //       }
-  //       joinObjects(animationStep, animationStepState);
-  //       animationStep._finishSetState(figure);
-  //       this.steps[i] = animationStep;
-  //     }
-  //   }
-  // }
-
-  // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  // _finishSetState(figure: Figure) {
-  // }
-
-  // execFn(fn: string | Function | null, ...args: Array<any>) {
-  //   // if (fn == null) {
-  //   //   return null;
-  //   // }
-  //   // if (typeof fn === 'string') {
-  //   //   return this.fnMap.exec(fn, ...args);
-  //   // }
-  //   // console.log(fn)
-  //   // return fn(...args);
-  //   return this.fnMap.exec(fn, ...args);
-  // }
 
   setTimeDelta(delta: ?number) {
-    // console.log(this.name, performance.now()/1000 - delta)
     if (this.startTime != null && delta != null) {
       this.startTime += delta;
     }
     if (delta == null) {
       this.startTime = null;
     }
-    // if (this.steps != null) {
-    //   this.steps.forEach((step) => {
-    //     step.setTimeDelta(delta);
-    //   });
-    // }
   }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
-  // console.log('animationStep')
     return [
       'startTime',
       'duration',
@@ -237,29 +177,10 @@ export default class AnimationStep {
   _state(options: Object) {
     return {
       f1Type: this._getStateName(),
-      // def: {
-      //   startTime: this.startTime,
-      //   duration: this.duration,
-      //   onFinish: this.onFinish,
-      //   completeOnCancel: this.completeOnCancel,
-      //   state: this.state,
-      //   startTimeOffset: this.startTimeOffset,
-      //   removeOnFinish: this.removeOnFinish,
-      //   name: this.name,
-      //   startDelay: this.startDelay,
-      //   beforeFrame: this.beforeFrame,
-      //   afterFrame: this.afterFrame,
-      //   _stepType: this._stepType,
-      // },
       state: getState(this, this._getStateProperties(), options),
     };
   }
 
-  // // eslint-disable-next-line no-unused-vars
-  // _fromState(state: Object, getElement: ?(string) => FigureElement) {
-  //   joinObjects(this, state);
-  //   return this;
-  // }
 
   _fromState(state: Object, getElement: ?(string) => FigureElement, timeKeeper: TimeKeeper) {
     // const obj = new this.constructor();
@@ -283,13 +204,10 @@ export default class AnimationStep {
   // Return of 0 means this step is still going
   nextFrame(now: number, speed: number = 1) {
     if (this.startTime == null) {
-      // console.log('new Start', this.startTime, now, this.startTimeOffset)
       this.startTime = now - this.startTimeOffset;
     }
     const deltaTime = (now - this.startTime) * speed;
-    // console.log(now, this.startTime, deltaTime, this.startDelay);
     let remainingTime = math.round(-(this.duration + this.startDelay - deltaTime), this.precision);
-    // console.log('remainingTime', remainingTime, deltaTime, this.startDelay)
     if (deltaTime >= this.startDelay) {
       let deltaTimeAfterDelay = deltaTime - this.startDelay;
       if (deltaTimeAfterDelay >= this.duration) {
@@ -299,7 +217,6 @@ export default class AnimationStep {
       if (this.beforeFrame) {
         this.beforeFrame(deltaTimeAfterDelay / this.duration);
       }
-      // console.log(deltaTimeAfterDelay)
       this.setFrame(deltaTimeAfterDelay);
       if (this.afterFrame) {
         this.afterFrame(deltaTimeAfterDelay / this.duration);

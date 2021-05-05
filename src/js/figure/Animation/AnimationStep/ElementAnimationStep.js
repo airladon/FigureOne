@@ -86,11 +86,6 @@ export default class ElementAnimationStep extends AnimationStep {
   }
 
   fnExec(idOrFn: string | Function | null, ...args: any) {
-    // const result = this.fnMap.exec(idOrFn, ...args);
-    // if (result == null && this.element != null) {
-    //   return this.element.fnMap.exec(idOrFn, ...args);
-    // }
-    // return result;
     if (this.element != null) {
       return this.fnMap.execOnMaps(
         idOrFn, [this.element.fnMap.map], ...args,
@@ -100,7 +95,6 @@ export default class ElementAnimationStep extends AnimationStep {
   }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
-    // console.log('elementstep');
     return [...super._getStateProperties(),
       // 'element',
       'type',
@@ -110,19 +104,6 @@ export default class ElementAnimationStep extends AnimationStep {
     ];
   }
 
-  // _state(options: Object) {
-  //   const state = super._state(options);
-  //   if (this.element != null) {
-  //     state.state.element = {
-  //       f1Type: 'de',
-  //       state: this.element.getPath(),
-  //     };
-  //   }
-  //   // if (this.element != null) {
-  //   //   definition.state.element = this.element.getPath();
-  //   // }
-  //   return state;
-  // }
 
   getPercentComplete(percentTime: number) {
     if (typeof this.progression === 'string') {

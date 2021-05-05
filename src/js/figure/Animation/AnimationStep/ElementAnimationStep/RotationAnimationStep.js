@@ -144,7 +144,6 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     const a = [...super._getStateProperties(),
       'rotation',
     ];
-    // console.log('rotationStep')
     return a;
   }
 

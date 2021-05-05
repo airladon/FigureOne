@@ -241,20 +241,10 @@ export class OpacityAnimationStep extends ElementAnimationStep {
     }
   }
 
-  // cancelledWithNoComplete() {
-  //   const { element } = this;
-  //   console.log('cancel with no complete')
-  //   if (element != null) {
-  //     if (this.color.fullOpacity) {
-  //       element.setColor([...element.color.slice(0, 3), 1]);
-  //     }
-  //   }
-  // }
 
   setToEnd() {
     const { element } = this;
     if (element != null) {
-      // console.log(this.name, this.color.whenComplete)
       element.setOpacity(this.opacity.whenComplete);
       if (this.opacity.dissolve === 'out') {
         element.hide();

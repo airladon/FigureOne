@@ -870,8 +870,6 @@ export default class SlideNavigator {
   // need to define cancelled even though we won't use it
   // eslint-disable-next-line no-unused-vars
   transitionDone(cancelled: boolean = false, force: 'freeze' | 'complete' | null = 'complete') {
-    // console.log('transition done')
-    // console.log(this.collection.figure.timeKeeper.now())
     if (force !== 'freeze') {
       this.setSteadyState(this.from);
       this.inTransition = false;
@@ -1044,7 +1042,6 @@ export default class SlideNavigator {
       if (e != null && e instanceof Equation && forms[eqnName] !== undefined) {
         const fromForm = fromForms[eqnName];
         const toForm = forms[eqnName];
-        // console.log(fromForm, toForm)
         if (fromForm == null && toForm != null) {
           e.showForm(toForm);
           e.animations.new()
@@ -1053,8 +1050,6 @@ export default class SlideNavigator {
             .start();
           done = null;
         } else if (fromForm !== toForm) {
-          // const { animate, duration, dissolveInTime, dissolveOutTime } = this.equationDefaults;
-          // e.showForm(toForm);
           e.animations.new()
             .goToForm(joinObjects({}, {
               start: fromForm,
@@ -1152,13 +1147,8 @@ export default class SlideNavigator {
         this.slides[this.currentSlideIndex].leaveState, this.currentSlideIndex, index,
       );
     }
-    // const t1 = performance.now();
     // Reset and Set Text
-    // if (index === 5) {
-    //   debugger;
-    // }
     this.collection.stop('complete');
-    // const t2 = performance.now();
     const { textElement } = this;
     if (textElement != null) {
       this.setText(index);
@@ -1172,7 +1162,6 @@ export default class SlideNavigator {
         }
       }
     }
-    // const t3 = performance.now()
     // Enter new slide
     this.currentSlideIndex = index;
     const slide = this.slides[index];
@@ -1198,8 +1187,6 @@ export default class SlideNavigator {
     this.showAutoTransitionDissolve(index, false);
     // Move to transition
     this.transition(fromToUse);
-    // const t4 = performance.now();
-    // console.log(t4 - t1, t2 - t1, t3 - t2, t4 - t3)
   }
 
   /**

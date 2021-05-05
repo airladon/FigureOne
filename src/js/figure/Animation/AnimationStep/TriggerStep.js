@@ -128,23 +128,10 @@ export class TriggerAnimationStep extends AnimationStep {
     if (options.setToEnd) {
       this.setToEndCallback = options.setToEnd;
     }
-    // this.setToEnd = options.setToEnd;
     this.customProperties = options.customProperties;
   }
 
-  // fnExec(idOrFn: string | Function | null, ...args: any) {
-  //   const result = this.fnMap.exec(idOrFn, ...args);
-  //   if (result == null && this.element != null) {
-  //     return this.element.fnMap.exec(idOrFn, ...args);
-  //   }
-  //   return result;
-  // }
   fnExec(idOrFn: string | Function | null, ...args: any) {
-    // const result = this.fnMap.exec(idOrFn, ...args);
-    // if (result == null && this.element != null) {
-    //   return this.element.fnMap.exec(idOrFn, ...args);
-    // }
-    // return result;
     if (this.element != null) {
       return this.fnMap.execOnMaps(
         idOrFn, [this.element.fnMap.map], ...args,
@@ -153,24 +140,6 @@ export class TriggerAnimationStep extends AnimationStep {
     return this.fnMap.exec(idOrFn, ...args);
   }
 
-  // _fromState(state: Object, getElement: ?(string) => FigureElement) {
-  //   joinObjects(this, state);
-  //   if (this.element != null && typeof this.element === 'string' && getElement != null) {
-  //     this.element = getElement(this.element);
-  //   }
-  //   return this;
-  // }
-
-  // _state(options: Object) {
-  //   const state = super._state(options);
-  //   if (this.element != null) {
-  //     state.state.element = {
-  //       f1Type: 'de',
-  //       state: this.element.getPath(),
-  //     };
-  //   }
-  //   return state;
-  // }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(),
@@ -186,19 +155,11 @@ export class TriggerAnimationStep extends AnimationStep {
   }
 
   setFrame() {
-    // if (this.callback != null && this.payload != null) {
-    //   console.log(this.payload)
-    // }
     const remainingTime = this.fnExec(this.callback, this.payload, this.customProperties);
     if (remainingTime != null && typeof remainingTime === 'number' && this.autoDuration) {
       this.duration = remainingTime;
     }
-    // console.log('remaining', remainingTime, this.duration, this.autoDuration)
     this.callback = null;
-    // if (this.callback != null) {
-    //   this.callback(this.payload);
-    //   this.callback = null;
-    // }
   }
 
   start(startTime: ?AnimationStartTime = null) {
@@ -209,10 +170,6 @@ export class TriggerAnimationStep extends AnimationStep {
   }
 
   setToEnd() {
-    // if (this.callback != null) {
-    //   this.callback(this.payload);
-    //   this.callback = null;
-    // }
     if (this.setToEndCallback != null) {
       this.fnExec(this.setToEndCallback, this.payload, this.customProperties);
     } else {

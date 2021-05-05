@@ -34,7 +34,6 @@ export default class Worker {
       });
     } else if (message === 'add') {
       this.cache.add(payload.now, payload.state, payload.reference, payload.lastRecordTimeCount);
-      // console.log(this.cache.diffs.slice(-1)[0][2])
     } else if (message === 'addReference') {
       this.cache.addReference(payload.state, payload.refName, payload.basedOn);
     }

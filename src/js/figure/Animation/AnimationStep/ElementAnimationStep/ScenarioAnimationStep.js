@@ -251,9 +251,6 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
   ) {
     const { element } = this;
     const { velocity } = this.scenario;
-    // console.log(velocity)
-    // console.log(this.duration)
-    // console.log(element)
     if (velocity == null || element == null) {
       return [this.duration, this.duration, this.duration];
     }
@@ -277,13 +274,6 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     if (velocity.rotation != null) {
       transformVelocity.updateRotation(velocity.rotation);
     }
-    // if (velocity.color != null) {
-    //   colorVelocity = velocity.color;
-    // }
-
-    // if (velocity.opacity != null) {
-    //   opacityVelocity = velocity.color;
-    // }
 
     let transformDuration = 0;
     const startTransform = start.transform;
@@ -405,7 +395,6 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
 
     // $FlowFixMe
     const [transformDuration, colorDuration, opacityDuration] = this.getDuration(start, target);
-    // console.log(transformDuration, colorDuration, opacityDuration);
     const steps = [];
     if (target.transform != null) {
       steps.push(element.animations.transform({

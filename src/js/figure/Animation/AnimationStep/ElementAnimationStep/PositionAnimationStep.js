@@ -238,7 +238,6 @@ export default class PositionAnimationStep extends ElementAnimationStep {
   }
 
   setFrame(deltaTime: number) {
-    // console.log('setFrame', deltaTime);
     const percentTime = deltaTime / this.duration;
     const percentComplete = this.getPercentComplete(percentTime);
     const p = percentComplete;

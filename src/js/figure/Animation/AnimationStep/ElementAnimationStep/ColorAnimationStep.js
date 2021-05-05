@@ -160,7 +160,6 @@ export class ColorAnimationStep extends ElementAnimationStep {
   // Setting a duration to 0 will effectively skip this animation step
   start(startTime: ?AnimationStartTime = null) {
     const { element } = this;
-    // console.log('starting', element)
     if (element != null) {
       super.start(startTime);
       if (this.color.start == null) {
@@ -205,7 +204,6 @@ export class ColorAnimationStep extends ElementAnimationStep {
       return newColor;
     });
     if (this.element != null) {
-      // console.log(this.element.name, next)
       this.element.setColor(next, this.color.setDefault);
     }
   }
@@ -213,7 +211,6 @@ export class ColorAnimationStep extends ElementAnimationStep {
   setToEnd() {
     const { element } = this;
     if (element != null) {
-      // console.log(this.name, this.color.whenComplete)
       element.setColor(this.color.whenComplete, this.color.setDefault);
       if (this.color.dissolve === 'out') {
         element.hide();
