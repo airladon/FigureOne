@@ -4,7 +4,7 @@ An interactive video of a tiling exercise. Play the video. If you interact with 
 
 ### How to view
 
-The example is hosted [here](https://airladon.github.io/FigureOne/examples/Interactive%20Video%20-%20Tiling/index.html).
+The example is hosted [here](https://airladon.github.io/FigureOne/examples/Interactive%20Video%20-%20Tiling/index.html), where you can watch, listen and interact with the video.
 
 If you want to view it locally however, it is important to know that loading local files into a html can be prevented by web browser security settings, this example needs to be loaded from a web server.
 
@@ -24,7 +24,7 @@ The container will start and present a command prompt. You can start a http-serv
 http-server
 ```
 
-You can then open a browser and go to `http://localhost:8080/docs/examples/Tiling/index.html`.
+You can then open a browser and paste `http://localhost:8080/docs/examples/Interactive Video - Tiling/index.html` in the browser address bar.
 
 
 ![](example.gif)

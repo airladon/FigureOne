@@ -66,7 +66,26 @@ Equation portion example:
 
 ## **[Interactive Video - Tiling](Interactive%20Video%20-%20Tiling)**
 
-Make an interactive video from a figure, including recorded mouse movements.
+An interactive video of a tiling exercise. Play the video. If you interact with the shapes at any time, the video will pause while you do so. When you are ready to continue, press the play button again. If you are stuck on the solution, scrub through to the end of the video and press the solution button.
 
 ![](Interactive%20Video%20-%20Tiling/example.gif)
 
+## **[Interactive Video - Trig 1 - Trig Functions](Interactive%20Video%20-%20Trig%201%20-%20Trig%20Functions)**
+
+An interactive video introducing the trigonometric functions. Play the video. If you interact with the triangle at any time, the video will pause while you do so. When you are ready to continue, press the play button again.
+
+![](Interactive%20Video%20-%20Trig%201%20-%20Trig%20Functions/example.gif)
+
+
+## **[Interactive Video - Trig 2 - Names](Interactive%20Video%20-%20Trig%202%20-%20Names)**
+
+An FigureOne video showing where the trigonometric function names come from. It is not interactive, but the video track is only a 70KB download (the audio track is 2.1MB).
+
+![](Interactive%20Video%20-%20Trig%202%20-%20Names/example.gif)
+
+## **[Interactive Video - Trig 3 - Relationships](Interactive%20Video%20-%20Trig%203%20-%20Relationships)**
+
+Interactive video showing how three similar triangles can be arranged to find many different trigonometric functions. You are encouraged to arrage the triangles yourself to better understand the relationships. Play the video. If you interact with the figure at any time, the video will pause while you do so. When you are ready to continue, press the play button to continue.
+
+
+![](Interactive%20Video%20-%20Trig%203%20-%20Relationships/example.gif)

@@ -4,7 +4,7 @@ An interactive video introducing the trigonometric functions. Play the video. If
 
 ### How to view
 
-The example is hosted [here](https://airladon.github.io/FigureOne/examples/Interactive%20Video%20-%20Trig%201%20-%20Trig%20Functions/index.html).
+The example is hosted [here](https://airladon.github.io/FigureOne/examples/Interactive%20Video%20-%20Trig%201%20-%20Trig%20Functions/index.html), where you can watch, listen and interact with the video.
 
 If you want to view it locally however, it is important to know that loading local files into a html can be prevented by web browser security settings, this example needs to be loaded from a web server.
 
@@ -24,7 +24,7 @@ The container will start and present a command prompt. You can start a http-serv
 http-server
 ```
 
-You can then open a browser and go to `http://localhost:8080/docs/examples/Interactive%20Video%20-%20Trig%201%20-%20Trig%20Functions/index.html`.
+You can then open a browser and go to `http://localhost:8080/docs/examples/Interactive Video - Trig 1 - Trig Functions/index.html`.
 
 
 ![](example.gif)
