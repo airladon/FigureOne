@@ -4,6 +4,6 @@ tester({
   title: 'Tutorial 17',
   width: 500,
   height: 600,
-  htmlFile: `http://localhost:8080/${__dirname}/example.html`,
+  htmlFile: `http://localhost:8080/${__dirname}/test.html`,
   fromTimes: [0, 5, 10],
 });
