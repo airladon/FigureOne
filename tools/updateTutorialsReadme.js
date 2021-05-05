@@ -79,7 +79,7 @@ const [tutorials, examples, descriptions] = getTutorials('./docs/tutorials');
 
 let out = `# Tutorials
 
-Follow these tutorials in sequence to learn about FigureOne and how to use it.
+Follow these tutorials in sequence to learn about the concepts and features of FigureOne in simplified examples.
 `;
 tutorials.forEach((t, i) => {
   out = `${out}\n## **[${t}](./${t.split(' ').join('%20')})**\n${descriptions[i]}\n\n![](./${t.split(' ').join('%20')}/${examples[i]})\n`;

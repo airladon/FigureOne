@@ -1,6 +1,6 @@
 # Tutorials
 
-Follow these tutorials in sequence to learn about FigureOne and how to use it.
+Follow these tutorials in sequence to learn about the concepts and features of FigureOne in simplified examples.
 
 ## **[01 - Shape](./01%20-%20Shape)**
 Draw a triangle.
