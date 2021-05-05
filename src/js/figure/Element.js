@@ -3703,33 +3703,6 @@ class FigureElementCollection extends FigureElement {
     return false;
   }
 
-  addLegacy(
-    name: string,
-    element: FigureElementPrimitive | FigureElementCollection,
-    index: number = -1,
-  ) {
-    // eslint-disable-next-line no-param-reassign
-    element.parent = this;
-    this.elements[name] = element;
-    this.elements[name].name = name;
-    // $FlowFixMe
-    this[`_${name}`] = this.elements[name];
-    if (index !== -1) {
-      this.drawOrder = [
-        ...this.drawOrder.slice(0, index),
-        name,
-        ...this.drawOrder.slice(index),
-      ];
-    } else {
-      this.drawOrder.push(name);
-    }
-    if (this.figure != null) {
-      element.setFigure(this.figure);
-    }
-    element.setFirstTransform(this.lastDrawTransform);
-    this.animateNextFrame();
-  }
-
   addElementWithName(
     name: string,
     element: FigureElement,

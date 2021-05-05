@@ -17,7 +17,7 @@ import {
   isTouchDevice, joinObjects, SubscriptionManager, Console, PerformanceTimer,
 } from '../tools/tools';
 import {
-  FigureElementCollection, FigureElementPrimitive, FigureElement,
+  FigureElementCollection, FigureElement,
 } from './Element';
 import type {
   OBJ_AddElement, TypeElementPath,
@@ -34,8 +34,6 @@ import AnimationManager from './Animation/AnimationManager';
 import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 import type { TypeColor, OBJ_Font } from '../tools/types';
 import type { COL_SlideNavigator } from './FigureCollections/SlideNavigator';
-// import SlideNavigator from './SlideNavigator';
-// import type { OBJ_SlideNavigator } from './SlideNavigator';
 
 const FIGURE1DEBUG = false;
 
@@ -477,7 +475,6 @@ class Figure {
     this.isTouchDown = false;
     // this.pauseAfterNextDrawFlag = false;
     this.fontScale = optionsToUse.fontScale;
-    // console.log(this.canvasLow.getClientBoundingRect())
     this.updateLimits(limits);
     this.setDefaultLineWidth(options.lineWidth || null);
     this.setDefaultLength(options.length || null);
@@ -595,22 +592,6 @@ class Figure {
   }
 
   bindRecorder() {
-    // this.recorder.figure = {
-    //   animateNextFrame: this.animateNextFrame.bind(this),
-    //   setState: this.setState.bind(this),
-    //   getState: this.getState.bind(this),
-    //   getElement: this.getElement.bind(this),
-    //   showCursor: this.showCursor.bind(this),
-    //   pause: this.pause.bind(this),
-    //   unpause: this.unpause.bind(this),
-    //   getIsInTransition: this.getIsInTransition.bind(this),
-    //   animateToState: this.animateToState.bind(this),
-    //   isAnimating: this.isAnimating.bind(this),
-    //   setAnimationFinishedCallback: this.setAnimationFinishedCallback.bind(this),
-    //   subscriptions: this.subscriptions,
-    //   getPauseState: this.getPauseState.bind(this),
-    //   dissolveToState: this.dissolveToState.bind(this),
-    // };
     const onCursor = (payload) => {
       const [action, x, y] = payload;
       if (action === 'show') {
@@ -618,12 +599,9 @@ class Figure {
         if (this.recorder.state === 'recording') {
           this.recorder.recordEvent('cursor', ['show', x, y]);
         }
-        // this.getElement(this.cursorElementName).pulse({ duration: 1, scale: 3 });
       } else {
         this.showCursor('hide');
         if (this.recorder.state === 'recording') {
-          // console.log('hide')
-          // console.trace();
           this.recorder.recordEvent('cursor', ['hide']);
         }
       }
@@ -636,27 +614,13 @@ class Figure {
         this.showCursor('hide');
       }
     };
-    // const onTouch = (payload) => {
-    //   const [action, x, y] = payload;
-    //   if (!this.isCursorShown()) {
-    //     return;
-    //   }
-    //   if (action === 'down') {
-    //     this.showCursor('down', new Point(x, y));
-    //   } else {
-    //     this.showCursor('up');
-    //   }
-    // };
     const onTouch = (payload) => {
-      // onTouch(payload);
-      // if (this.recorder.state === 'recording') {
       const [action, x, y] = payload;
       if (action === 'down') {
         this.touchDown(new Point(x, y), true);
       } else {
         this.touchUp();
       }
-      // }
     };
     const onAutoTouch = (payload) => {
       const [action, x, y] = payload;
@@ -665,102 +629,20 @@ class Figure {
       } else {
         this.touchUp(true);
       }
-      // }
     };
-    // const onCursorMove = (payload) => {
-    //   const [x, y] = payload;
-    //   this.setCursor(new Point(x, y));
-    // };
     const onCursorMove = (payload) => {
-      // if (this.recorder.state === 'recording') {
       const [x, y] = payload;
       this.setCursor(new Point(x, y));
       this.touchMove(new Point(x, y));
-      // }
     };
     const onAutoCursorMove = (payload) => {
-      // if (this.recorder.state === 'recording') {
       const [x, y] = payload;
       this.setCursor(new Point(x, y));
       this.touchMove(new Point(x, y), true);
-      // }
     };
-    // cons
-    // const moved = (payload) => {
-    //   const [elementPath, transform] = payload;
-    //   const element = this.getElement(elementPath);
-    //   if (element == null) {
-    //     return;
-    //   }
-    //   element.moved(getTransform(transform));
-    // };
-
-    // const startBeingMoved = (payload) => {
-    //   const [elementPath] = payload;
-    //   const element = this.getElement(elementPath);
-    //   if (element == null) {
-    //     return;
-    //   }
-    //   element.startBeingMoved();
-    // };
-
-    // const stopBeingMoved = (payload) => {
-    //   const [elementPath, transform, velocity] = payload;
-    //   const element = this.getElement(elementPath);
-    //   if (element == null) {
-    //     return;
-    //   }
-    //   element.stopBeingMoved();
-    //   element.state.movement.velocity = getTransform(velocity);
-    //   element.transform = getTransform(transform);
-    // };
-
-    // const startMovingFreely = (payload) => {
-    //   const [elementPath, transform, velocity] = payload;
-    //   const element = this.getElement(elementPath);
-    //   if (element == null) {
-    //     return;
-    //   }
-    //   element.transform = getTransform(transform);
-    //   element.state.movement.velocity = getTransform(velocity);
-    //   element.startMovingFreely();
-    // };
-    // const click = (payload) => {
-    //   const [id] = payload;
-    //   const element = document.getElementById(id);
-    //   if (element != null) {
-    //     element.click();
-    //   }
-    // };
-    // const elementClick = (payload) => {
-    //   const [elementPath, xLoc, yLoc] = payload;
-    //   const element = this.getElement(elementPath);
-    //   if (element != null) {
-    //     element.click(new Point(xLoc, yLoc));
-    //   }
-    // };
-    // const eqnNavClick = (payload) => {
-    //   const [direction, elementPath] = payload;
-    //   const element = this.getElement(elementPath);
-    //   if (element == null) {
-    //     // element.click();
-    //     return;
-    //   }
-    //   if (direction === 'next') { // $FlowFixMe
-    //     element.clickNext();
-    //   }
-    //   if (direction === 'prev') { // $FlowFixMe
-    //     element.clickPrev();
-    //   }
-    //   if (direction === 'refresh') { // $FlowFixMe
-    //     element.clickRefresh();
-    //   }
-    // };
 
     const exec = (payload) => {
       const [functionName, args] = payload;
-      // const element = this.getElement(elementPath);
-      // element.fnMap.exec(functionName, args);
       this.fnMap.exec(functionName, args);
       if (this.recorder.state === 'recording') {
         this.recorder.recordEvent('exec', payload);
@@ -769,12 +651,7 @@ class Figure {
 
     const autoExec = (payload) => {
       const [functionName, args] = payload;
-      // const element = this.getElement(elementPath);
-      // element.fnMap.exec(functionName, args);
       this.fnMap.exec(functionName, args);
-      // if (this.recorder.state === 'recording') {
-      //   this.recorder.recordEvent('exec', payload);
-      // }
     };
 
     this.recorder.addEventType('cursor', onCursor);
@@ -783,14 +660,6 @@ class Figure {
     this.recorder.addEventType('_autoCursorMove', onAutoCursorMove);
     this.recorder.addEventType('touch', onTouch);
     this.recorder.addEventType('_autoTouch', onAutoTouch);
-    // this.recorder.addEventType('moved', moved);
-    // this.recorder.addEventType('stopBeingMoved', stopBeingMoved);
-    // this.recorder.addEventType('startMovingFreely', startMovingFreely);
-    // this.recorder.addEventType('startBeingMoved', startBeingMoved);
-    // this.recorder.addEventType('click', click);
-    // this.recorder.addEventType('elementClick', elementClick);
-    // this.recorder.addEventType('elementTextClick', elementClick);
-    // this.recorder.addEventType('eqnNavClick', eqnNavClick);
     this.recorder.addEventType('exec', exec);
     this.recorder.addEventType('_autoExec', autoExec);
   }
@@ -842,8 +711,6 @@ class Figure {
       'lastDrawTime',
       'elements',
       'stateTime',
-      // 'beingMovedElements',
-      // 'beingTouchedElements',
       'mockPreviousTouchPoint',
       'isTouchDown',
     ], o);
@@ -876,12 +743,10 @@ class Figure {
       },
       velocity?: OBJ_ScenarioVelocity,
       maxDuration?: number,
-      // minDuration?: number,
       zeroDurationThreshold?: boolean,
       allDurationsSame?: boolean,
     } | 'dissolve' | 'animate' | 'instant' = 'instant',
   ) {
-    // console.log(stateIn)
     // $FlowFixMe
     const state = parseState(stateIn, this);
     let finishedFlag = false;
@@ -889,9 +754,6 @@ class Figure {
     const finished = () => {
       finishedFlag = true;
       this.state.preparingToSetState = false;
-      // if (window.asdf) {
-      //   debugger;
-      // }
       setState(this, state);
       this.beingMovedElements = this.beingMovedElements.filter(e => Object.keys(e).length > 0);
       this.beingTouchedElements = this.beingTouchedElements.filter(e => Object.keys(e).length > 0);
@@ -905,10 +767,7 @@ class Figure {
         this.fnMap.exec(this.setStateCallback);
       }
       this.animateNextFrame();
-      // this.setFirstTransform();
-      // console.log('triggered')
       this.subscriptions.publish('stateSet');
-      // console.log(this.elements._rightTri.isShown)
     };
 
     let options = {
@@ -936,7 +795,6 @@ class Figure {
       };
     }
 
-    // console.log(resumeSettings)
     if (typeof optionsIn === 'string') {
       options.how = optionsIn;
     } else {
@@ -987,7 +845,6 @@ class Figure {
         'now',
       );
     } else {
-      // this.figure.elements.freezePulseTransforms(false);
       this.elements.stop('freeze');
       this.dissolveToState({
         state,
@@ -1012,21 +869,10 @@ class Figure {
     done: ?(string | (() => void)),
     startTime: ?number | 'now' | 'prevFrame' | 'nextFrame' = null,
   ) {
-    // const defaultOptions = {
-    //   // delay: 0,
-    //   duration: 1,
-    // };
-    // if (optionsIn.velocity != null) {
-    //   defaultOptions.duration = null;
-    // }
-
-    // const options = joinObjects(optionsIn, optionsIn);
-    // countStart();
     const duration = this.elements.animateToState(
       state.elements, optionsIn, true, startTime,
     );
 
-    // countEnd();
     if (done != null) {
       if (duration === 0) {
         this.fnMap.exec(done);
@@ -1059,7 +905,6 @@ class Figure {
           callback: () => {
             this.elements.hideAll();
             this.elements.show();
-            // this.elements.setOpacity(1);
           },
         },
       )
@@ -1072,61 +917,12 @@ class Figure {
             done: options.done,
             startTime: options.startTime,
           });
-          // this.
         },
-        // duration: options.dissolveInDuration,
         duration: 0,
       })
       .start(options.startTime);
-    // console.log(this.elements)
-    // console.log(this.timeKeeper.now())
   }
 
-  // dissolveToComplete(optionsIn: {
-  //   dissolveOutDuration: number,
-  //   dissolveInDuration: number,
-  //   delay: Number,
-  //   done: ?(string | (() => void)),
-  //   startTime: ?number | 'now' | 'prev' | 'next',
-  // }) {
-  //   const options = joinObjects({}, {
-  //     dissolveOutDuration: 0.8,
-  //     dissolveInDuration: 0.8,
-  //     delay: 0.2,
-  //     done: null,
-  //     startTime: null,
-  //   }, optionsIn);
-  //   const state = this.getState({});
-  //   this.stop('complete');
-  //   const completeState = this.getState({});
-  //   this.setState(state, 'instant');
-  //   this.elements.animations.new()
-  //     .opacity({ duration: options.dissolveOutDuration, start: 1, target: 0.001 })
-  //     .trigger(
-  //       {
-  //         callback: () => {
-  //           this.elements.hideAll();
-  //           this.elements.show();
-  //           // this.elements.setOpacity(1);
-  //         },
-  //       },
-  //     )
-  //     .delay({ duration: options.delay })
-  //     .trigger({
-  //       callback: () => {
-  //         this.dissolveInToState({
-  //           state: completeState,
-  //           duration: options.dissolveInDuration,
-  //           done: options.done,
-  //           startTime: options.startTime,
-  //         });
-  //         // this.
-  //       },
-  //       // duration: options.dissolveInDuration,
-  //       duration: 0,
-  //     })
-  //     .start(options.startTime);
-  // }
 
 
   dissolveInToState(optionsIn: {
@@ -1163,12 +959,6 @@ class Figure {
     }
   }
 
-  addLegacy(
-    name: string,
-    figureElement: FigureElementPrimitive | FigureElementCollection,
-  ) {
-    this.elements.add(name, figureElement);
-  }
 
   /* eslint-disable max-len */
   /**
@@ -1329,7 +1119,6 @@ class Figure {
     // }
     return new FigurePrimitives(
       webgl, draw2D,
-      // this.draw2DFigures,
       this.htmlCanvas,
       this.limits,
       this.spaceTransforms,
@@ -1344,13 +1133,6 @@ class Figure {
     );
   }
 
-  // getEquations() {
-  //   const shapes = this.shapesLow;
-  //   // if (high) {
-  //   //   shapes = this.shapesHigh;
-  //   // }
-  //   return new FigureEquation(shapes, this.animateNextFrame.bind(this, true, 'equations'));
-  // }
 
   getObjects() {
     const shapes = this.shapesLow;
@@ -1401,7 +1183,6 @@ class Figure {
       y: { bottomLeft: this.limits.bottom, height: this.limits.height },
     };
 
-    // console.log(this.canvasLow)
     const canvasRect = this.canvasLow.getBoundingClientRect();
     const pixelSpace = {
       x: { bottomLeft: 0, width: canvasRect.width },
@@ -1424,51 +1205,13 @@ class Figure {
     };
   }
 
-  // startRecording() {
-  //   this.isRecording = true;
-  // }
-
-  // stopRecording() {
-  //   this.isRecording = false;
-  // }
 
   // deprecate
   // eslint-disable-next-line class-methods-use-this
   initialize() {
-    // const elements = this.elements.getAllElements();
-    // /* eslint-disable no-param-reassign */
-    // elements.forEach((element) => {
-    //   element.figure = this;
-    //   element.recorder = this.recorder;
-    //   element.animationFinishedCallback = this.animationFinished.bind(this, element);
-    // });
-    // this.elements.setFigure(this);
-    // // /* eslint-enable no-param-reassign */
-    // this.setFirstTransform();
-    // this.animateNextFrame();
-    // this.elements.setFigure({
-    //   limits: this.limits,
-    //   spaceTransforms: this.spaceTransforms,
-    //   animateNextFrame: this.animateNextFrame.bind(this),
-    //   animationFinished: this.animationFinished.bind(this),
-    //   recorder: this.recorder,
-    // });
-    // this.setFirstTransform();
-    // this.animateNextFrame();
   }
 
   initElements() {
-    // const elements = this.elements.getAllElements();
-    // /* eslint-disable no-param-reassign */
-    // elements.forEach((element) => {
-    //   element.figure = this;
-    //   element.recorder = this.recorder;
-    //   element.animationFinishedCallback = this.animationFinished.bind(this, element);
-    // });
-    // this.elements.setFigure(this);
-    // // /* eslint-enable no-param-reassign */
-    // this.setFirstTransform();
-    // this.animateNextFrame();
     this.elements.setFigure({
       limits: this.limits,
       spaceTransforms: this.spaceTransforms,
@@ -1476,7 +1219,6 @@ class Figure {
       animationFinished: this.animationFinished.bind(this),
       recorder: this.recorder,
       timeKeeper: this.timeKeeper,
-      // setDrawTimeout: this.setDrawTimeout,
     });
     this.setFirstTransform();
     this.animateNextFrame();
@@ -1486,10 +1228,6 @@ class Figure {
     this.elements = collection;
     this.animations = this.elements.animations;
     this.initElements();
-    // this.elements.setFigure(this);
-    // // /* eslint-enable no-param-reassign */
-    // this.setFirstTransform();
-    // this.animateNextFrame();
   }
 
   /**
@@ -1665,7 +1403,6 @@ class Figure {
   }
 
   unrenderAll() {
-    // console.log('unrender all', Object.keys(this.elements.drawOrder).length)
     for (let i = 0; i < this.elements.drawOrder.length; i += 1) {
       const element = this.elements.elements[this.elements.drawOrder[i]];
       element.unrender();
@@ -1674,7 +1411,6 @@ class Figure {
 
   // resize should only be called if the viewport size has changed.
   resize(skipHTMLTie: boolean = false) {
-    // console.log('resize')
     this.webglLow.resize();
     this.draw2DLow.resize();
     this.setSpaceTransforms();
@@ -1682,16 +1418,12 @@ class Figure {
       this.elements.updateLimits(this.limits, this.spaceTransforms);
     }
     this.sizeHtmlText();
-    // this.elements.resizeHtmlObject();
-    // this.updateHTMLElementTie();
     if (skipHTMLTie) {
       this.elements.resize();
     } else {
       this.elements.resize(this.canvasLow);
     }
     if (this.oldWidth !== this.canvasLow.clientWidth) {
-      // this.unrenderAll();
-      // console.log('updating width')
       this.renderAllElementsToTiedCanvases();
       this.oldWidth = this.canvasLow.clientWidth;
     }
@@ -1708,25 +1440,6 @@ class Figure {
       );
     }
   }
-
-  // simulateTouchDown(figurePoint: Point) {
-  //   // const pixelPoint = figurePoint.transformBy(this.spaceTransforms.figureToPixel.matrix());
-  //   // const clientPoint = this.pixelToClient(pixelPoint);
-  //   // this.touchDownHandler(clientPoint);
-
-  //   const pointer = this.getElement(this.cursorElementName);
-  //   if (pointer == null) {
-  //     return;
-  //   }
-  //   const up = pointer.getElement('up');
-  //   const down = pointer.getElement('down');
-  //   if (up == null || down == null) {
-  //     return;
-  //   }
-  //   up.hide();
-  //   down.show();
-  //   pointer.setPosition(figurePoint);
-  // }
 
   /**
    * Show specific elements within the figure
@@ -1829,8 +1542,6 @@ class Figure {
     autoEvent: boolean = false,
   ) {
     if (this.recorder.state === 'recording') {
-      // const pixelP = this.clientToPixel(clientPoint);
-      // const figurePoint = pixelP.transformBy(this.spaceTransforms.pixelToFigure.matrix());
       if (!autoEvent) {
         this.recorder.recordEvent('touch', ['down', figurePoint.x, figurePoint.y]);
       }
@@ -1855,8 +1566,6 @@ class Figure {
     this.isTouchDown = true;
 
     // Get the touched point in clip space
-    // const pixelPoint = this.clientToPixel(clientPoint);
-    // const glPoint = pixelPoint.transformBy(this.spaceTransforms.pixelToGL.matrix());
     const glPoint = figurePoint.transformBy(this.spaceTransforms.figureToGL.matrix());
 
     // Get all the figure elements that were touched at this point (element
@@ -1881,7 +1590,6 @@ class Figure {
       }
     }
 
-    // console.log(this.beingTouchedElements, this.beingMovedElements)
     if (this.beingMovedElements.length > 0) {
       this.animateNextFrame(true, 'touch down handler');
     }
@@ -1891,34 +1599,17 @@ class Figure {
     return false;
   }
 
-  // simulateTouchUp() {
-  //   // this.touchUpHandler();
-  //   const pointer = this.getElement(this.cursorElementName);
-  //   if (pointer == null) {
-  //     return;
-  //   }
-  //   const up = pointer.getElement('up');
-  //   const down = pointer.getElement('down');
-  //   if (up == null || down == null) {
-  //     return;
-  //   }
-  //   up.show();
-  //   down.hide();
-  // }
 
   // Handle touch up, or mouse click up events in the canvas. When an UP even
   // happens, the default behavior is to let any elements being moved to move
   // freely until they decelerate to 0.
   touchUpHandler(autoEvent: boolean = false) {
-    // console.log(this.beingMovedElements)
     if (this.recorder.state === 'recording' && !autoEvent) {
       this.recorder.recordEvent('touch', ['up']);
       if (this.cursorShown) {
         this.showCursor('up');
       }
     }
-    // console.log("before", this.elements._circle.transform.t())
-    // console.log(this.beingMovedElements)
     for (let i = 0; i < this.beingMovedElements.length; i += 1) {
       const element = this.beingMovedElements[i];
       if (element.state.isBeingMoved) {
@@ -1929,16 +1620,8 @@ class Figure {
     this.isTouchDown = false;
     this.beingMovedElements = [];
     this.beingTouchedElements = [];
-    // console.log("after", this.elements._circle.transform.t())
   }
 
-  // simulateCursorMove(figurePoint: Point) {
-  //   const pointer = this.getElement(this.cursorElementName);
-  //   if (pointer == null) {
-  //     return;
-  //   }
-  //   pointer.setPosition(figurePoint);
-  // }
 
   setCursor(p: Point, animateNextFrame: boolean = true) {
     const cursor = this.getElement(this.cursorElementName);
@@ -1946,7 +1629,6 @@ class Figure {
       return;
     }
     cursor.setPosition(p);
-    // console.log(p, pointer.isShown, pointer._up.isShown, pointer);
     if (animateNextFrame) {
       this.animateNextFrame();
     }
@@ -1972,30 +1654,10 @@ class Figure {
     previousFigurePoint: Point,
     currentFigurePoint: Point,
   ) {
-    // if (element.getPath().includes('move-all-angle')) {
-    //   debugger;
-    // }
     let center = element.getPosition('figure');
     if (center == null) {
       center = new Point(0, 0);
     }
-    // const center = centerFigureSpace
-    //   .transformBy(this.spaceTransforms.figureToPixel.matrix());
-    // const previousPixelPoint = this.clientToPixel(previousClientPoint);
-    // const currentPixelPoint = this.clientToPixel(currentClientPoint);
-
-    // const previousFigurePoint =
-    //   previousPixelPoint.transformBy(this.pixelToFigureSpaceTransform.matrix());
-    // const currentFigurePoint =
-    //   currentPixelPoint.transformBy(this.pixelToFigureSpaceTransform.matrix());
-    // const currentAngle = Math.atan2(
-    //   currentFigurePoint.y - center.y,
-    //   currentFigurePoint.x - center.x,
-    // );
-    // const previousAngle = Math.atan2(
-    //   previousFigurePoint.y - center.y,
-    //   previousFigurePoint.x - center.x,
-    // );
     const currentAngle = Math.atan2(
       currentFigurePoint.y - center.y,
       currentFigurePoint.x - center.x,
@@ -2011,12 +1673,6 @@ class Figure {
       rot = 0;
     }
     const newAngle = rot + diffAngle;
-    // if (newAngle < 0) {
-    //   newAngle += 2 * Math.PI;
-    // }
-    // if (newAngle > 2 * Math.PI) {
-    //   newAngle -= 2 * Math.PI;
-    // }
     transform.updateRotation(newAngle);
     element.moved(transform._dup());
   }
@@ -2027,28 +1683,16 @@ class Figure {
     previousFigurePoint: Point,
     currentFigurePoint: Point,
   ) {
-    // const previousPixelPoint = this.clientToPixel(previousClientPoint);
-    // const currentPixelPoint = this.clientToPixel(currentClientPoint);
-    // const previousFigurePoint =
-    //   previousPixelPoint.transformBy(this.spaceTransforms.pixelToFigure.matrix());
-    // const currentFigurePoint =
-    //   currentPixelPoint.transformBy(this.spaceTransforms.pixelToFigure.matrix());
     const m = element.spaceTransformMatrix('figure', 'local');
 
     const currentVertexSpacePoint = currentFigurePoint.transformBy(m);
     const previousVertexSpacePoint = previousFigurePoint.transformBy(m);
-    // const delta = currentFigurePoint.sub(previousFigurePoint);
     const elementSpaceDelta = currentVertexSpacePoint.sub(previousVertexSpacePoint);
-    // console.log(delta, elementSpaceDelta)
     const currentTransform = element.transform._dup();
     const currentTranslation = currentTransform.t();
     if (currentTranslation != null) {
       const newTranslation = currentTranslation.add(elementSpaceDelta);
       currentTransform.updateTranslation(newTranslation);
-      // if (window.asdf === 2) {
-      //   console.log(newTranslation)
-      //   console.log(currentTransform)
-      // }
       element.moved(currentTransform);
     }
   }
@@ -2060,18 +1704,7 @@ class Figure {
     currentFigurePoint: Point,
     type: 'x' | 'y' | '' = '',
   ) {
-    // const previousPixelPoint = this.clientToPixel(previousClientPoint);
-    // const currentPixelPoint = this.clientToPixel(currentClientPoint);
-
-    // const previousFigurePoint =
-    //   previousPixelPoint.transformBy(this.pixelToFigureSpaceTransform.matrix());
-    // const currentFigurePoint =
-    //   currentPixelPoint.transformBy(this.pixelToFigureSpaceTransform.matrix());
-
-    // const previousMag = previousFigurePoint.sub(center).distance();
-    // const currentMag = currentFigurePoint.sub(center).distance();
     const center = element.getPosition('figure');
-    // .transformBy(this.spaceTransforms.figureToPixel.matrix());
     const previousMag = previousFigurePoint.sub(center).distance();
     const currentMag = currentFigurePoint.sub(center).distance();
 
@@ -2092,29 +1725,6 @@ class Figure {
     }
   }
 
-  // getIsInTransition() {
-  //   return this.inTransition;
-  // }
-
-  // simulateTouchMove(
-  //   previousFigurePoint: Point,
-  //   currentFigurePoint: Point,
-  //   pointerElement: string = 'pointer',
-  // ) {
-  //   // const previousPixelPoint = previousFigurePoint
-  //   //   .transformBy(this.spaceTransforms.figureToPixel.matrix());
-  //   // const previousClientPoint = this.pixelToClient(previousPixelPoint);
-  //   // const currentPixelPoint = currentFigurePoint
-  //   //   .transformBy(this.spaceTransforms.figureToPixel.matrix());
-  //   // const currentClientPoint = this.pixelToClient(currentPixelPoint);
-  //   // this.touchMoveHandler(previousClientPoint, currentClientPoint);
-
-  //   const pointer = this.getElement(pointerElement);
-  //   if (pointer == null) {
-  //     return;
-  //   }
-  //   pointer.setPosition(currentFigurePoint);
-  // }
 
   touchMoveHandlerClient(previousClientPoint: Point, currentClientPoint: Point) {
     const currentPixelPoint = this.clientToPixel(currentClientPoint);
@@ -2141,31 +1751,18 @@ class Figure {
     fromAutoEvent: boolean = false,
   ): boolean {
     if (this.recorder.state === 'recording' && !fromAutoEvent) {
-      // const currentPixelPoint = this.clientToPixel(currentClientPoint);
-      // const figurePoint = currentPixelPoint
-      //   .transformBy(this.spaceTransforms.pixelToFigure.matrix());
       this.recorder.recordEvent('cursorMove', [currentFigurePoint.x, currentFigurePoint.y]);
       if (this.cursorShown) {
         this.setCursor(currentFigurePoint);
       }
     }
 
-    // this.currentCursorPoint.x = currentFigurePoint.x;
-    // this.currentCursorPoint.y = currentFigurePoint.y;
     this.previousCursorPoint.x = currentFigurePoint.x;
     this.previousCursorPoint.y = currentFigurePoint.y;
 
-    // console.log(currentClientPoint);
-    // if (this.inTransition) {
-    //   return false;
-    // }
-    // console.log(this.beingMovedElements.map(e => e.name))
     if (this.beingMovedElements.length === 0) {
       return false;
     }
-    // const previousPixelPoint = this.clientToPixel(previousClientPoint);
-    // const previousGLPoint =
-    //   previousPixelPoint.transformBy(this.spaceTransforms.pixelToGL.matrix());
     const previousGLPoint = previousFigurePoint
       .transformBy(this.spaceTransforms.figureToGL.matrix());
     // Go through each element being moved, get the current translation
@@ -2281,7 +1878,6 @@ class Figure {
       }
       return;
     }
-    // console.log('asdf')
     // Otherwise we are dissolving to complete
     const state = this.getState({});
     this.elements.stop('complete');
@@ -2301,32 +1897,19 @@ class Figure {
   // To add elements to a figure, either this method can be overridden,
   // or the `add` method can be used.
   createFigureElements() {
-    // this.elements = new FigureElementCollection();
     this.elements = this.collections.collection({ name: 'rootCollection' });
     this.animations = this.elements.animations;
     this.initElements();
-    // this.elements.setFigure({
-    //   limits: this.limits,
-    //   spaceTransforms: this.spaceTransforms,
-    //   animateNextFrame: this.animateNextFrame,
-    //   animationFinished: this.animationFinished.bind(this),
-    // });
-    // this.setFirstTransform();
-    // this.animateNextFrame();
-    // this.elements.figureLimits = this.limits;
   }
 
 
   setElementsToCollection(collection: FigureElementCollection) {
     this.elements = collection;
-    // this.elements.setDigram(this);
-    // this.setFirstTransform();
     this.animations = this.elements.animations;
     this.initElements();
   }
 
   clearContext(canvasIndex: number = 0) {
-    // console.log('clearContext')
     if (canvasIndex === 0) {
       this.webglLow.gl.clearColor(
         this.backgroundColor[0],
@@ -2335,43 +1918,19 @@ class Figure {
         this.backgroundColor[3],
       );
       this.webglLow.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
-      // gl.colorMask(true, true, true, false);
-      // this.webglLow.gl.colorMask(false, false, false, true);
-      // this.webglLow.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
     } else {
       this.webglOffscreen.gl.clearColor(0, 0, 0, 0);
       this.webglOffscreen.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
     }
-    // this.webglHigh.gl.clearColor(0, 0, 0, 0);
-    // this.webglHigh.gl.clear(this.webglHigh.gl.COLOR_BUFFER_BIT);
     this.elements.clear(canvasIndex);
   }
 
-  // scroll() {
-  //   if (this.scrollingFast === false) {
-  //     this.webglLow.gl.canvas.style.top = '-10000px';
-  //     this.renderAllElementsToTiedCanvases();
-  //     this.scrollingFast = true;
-  //     if (this.scrollTimeoutId) {
-  //       clearTimeout(this.scrollTimeoutId);
-  //       this.scrollTimeoutId = null;
-  //     }
-  //     this.scrollTimeoutId = setTimeout(this.centerDrawingLens.bind(this, true), 100);
-  //   }
-  // }
 
   drawNow(time: number = -1) {
     this.drawQueued = true;
     this.draw(time);
   }
 
-  // getPaused() {
-  //   return this.elements.getPaused();
-  // }
-
-  // getPauseState() {
-  //   return this.state.pause;
-  // }
 
   pause() {
     if (this.state.pause === 'pause' || this.state.pause === 'preparingToPause' || this.state.pause === 'preparingToUnpause') {
@@ -2382,45 +1941,6 @@ class Figure {
     this.clearDrawTimeout();
   }
 
-  // pauseLegacy(pauseSettings: TypePauseSettings = { simplePause: true }) {
-  //   // forcePause: boolean = true, clearAnimations: boolean = false) {
-  //   this.elements.pause(pauseSettings);
-  //   if (pauseSettings.simplePause != null && pauseSettings.simplePause) {
-  //     this.state.pause = 'paused';
-  //     this.pauseTime = this.timeKeeper.now() / 1000;
-  //     return;
-  //   }
-
-  //   const elements = this.elements.getAllElements();
-  //   let preparingToPauseCounter = 0;
-  //   const checkAllPaused = () => {
-  //     if (preparingToPauseCounter > 0) {
-  //       preparingToPauseCounter -= 1;
-  //     }
-  //     if (preparingToPauseCounter === 0) {
-  //       this.state.pause = 'paused';
-  //       this.isPaused = true;
-  //       this.subscriptions.publish('paused');
-  //     }
-  //   }
-  //   elements.forEach((element) => {
-  //     if (element.state.pause === 'preparingToPause') {
-  //       preparingToPauseCounter += 1;
-  //       element.subscriptions.add('paused', checkAllPaused, 1);
-  //     }
-  //   });
-  //   this.pauseTime = this.timeKeeper.now() / 1000;
-  //   if (preparingToPauseCounter === 0 && this.state.pause !== 'paused') {
-  //     checkAllPaused();
-  //   } else if (preparingToPauseCounter > 0) {
-  //     this.state.pause = 'preparingToPause';
-  //     this.subscriptions.publish('preparingToPause');
-  //   }
-  // }
-
-  // pauseAfterNextDraw() {
-  //   this.pauseAfterNextDrawFlag = true;
-  // }
 
   unpause() {
     if (this.state.pause === 'unpaused' || this.state.pause === 'preparingToPause' || this.state.pause === 'preparingToUnpause') {
@@ -2439,14 +1959,11 @@ class Figure {
     autoEvent: boolean = false,
   ) {
     const p = getPoint(figurePosition);
-    // const pixelPoint = p.transformBy(this.spaceTransforms.figureToPixel.m());
-    // const clientPoint = this.pixelToClient(pixelPoint);
     this.touchDownHandler(p, eventFromPlayback, autoEvent);
     this.mockPreviousTouchPoint = p;
     // $FlowFixMe
     if (this.elements.elements[this.cursorElementName] != null) {
       this.showCursor('down', p);
-      // cursor.setPosition(p);
     }
   }
 
@@ -2463,75 +1980,22 @@ class Figure {
     const p = getPoint(figurePosition);
     this.touchMoveHandler(this.mockPreviousTouchPoint, p, autoEvent);
     this.mockPreviousTouchPoint = p;
-    // const pixelPoint = p.transformBy(this.spaceTransforms.figureToPixel.m());
-    // const clientPoint = this.pixelToClient(pixelPoint);
-    // this.touchMoveHandler(this.mockPreviousTouchPoint, clientPoint);
-    // this.mockPreviousTouchPoint = clientPoint;
   }
 
-  // unpauseLegacy() {
-  //   this.elements.unpause();
-  //   const elements = this.elements.getAllElements();
-  //   let preparingToUnpauseCounter = 0;
-  //   const checkAllUnpaused = () => {
-  //     if (preparingToUnpauseCounter > 0) {
-  //       preparingToUnpauseCounter -= 1;
-  //     }
-  //     if (preparingToUnpauseCounter === 0) {
-  //       this.state.pause = 'unpaused';
-  //       this.isPaused = false;
-  //       this.elements.setTimeDelta(this.timeKeeper.now() / 1000 - this.pauseTime);
-  //       this.animateNextFrame();
-  //       this.subscriptions.publish('unpaused');
-  //     }
-  //   };
-  //   elements.forEach((element) => {
-  //     if (element.state.pause === 'preparingToUnpause') {
-  //       preparingToUnpauseCounter += 1;
-  //       element.subscriptions.add('unpaused', checkAllUnpaused, 1)
-  //     }
-  //   });
-  //   if (preparingToUnpauseCounter === 0 && this.state.pause !== 'unpaused') {
-  //     checkAllUnpaused();
-  //   } else if (preparingToUnpauseCounter > 0) {
-  //     this.state.pause = 'preparingToUnpause';
-  //     this.subscriptions.publish('preparingToUnpause');
-  //   }
-  //   // // this.state.pause = this.elements.getPause();
-  //   // this.pauseTime = performance.now() / 1000;
-
-
-  //   // this.elements.unpause();
-  //   // this.isPaused = false;
-  //   // this.elements.setTimeDelta(performance.now() / 1000 - this.pauseTime);
-  //   this.animateNextFrame();
-  // }
   clearDrawTimeout() {
     this.timeKeeper.clearTimeout(this.nextDrawTimer);
     this.nextDrawTimer = null;
   }
 
   draw(nowIn: number, canvasIndex: number = 0): void {
-    // const start = new Date().getTime();
-    // console.log('draw', this.elements._polygond6_5.transform.t())
-    // if (window.asdf == 2) {
-    //   window.qwer = 1;
-    // }
     this.clearDrawTimeout();
     let timer;
     if (FIGURE1DEBUG) {
       timer = new PerformanceTimer();
-      // window.figureOneDebug.frame = [];
-      // window.figureOneDebug.frame.push([performance.now(), '']);
-      // debugTimes.push([performance.now(), '']);
       window.figureOneDebug.draw = [];
       window.figureOneDebug.setupDraw = [];
       window.figureOneDebug.misc = [];
     }
-    // const t = performance.now();
-    // if ((nowIn - this.lastDrawTime ) * 1000 > 40) {
-    //   console.log((nowIn - this.lastDrawTime) * 1000)
-    // }
     if (this.state.pause === 'paused') {
       return;
     }
@@ -2566,22 +2030,15 @@ class Figure {
     // $FlowFixMe
     if (FIGURE1DEBUG) { timer.stamp('m1'); }
     this.clearContext(canvasIndex);
-    // console.log('really drawing')
-    // const startSetup = new Date().getTime();
     // $FlowFixMe
     if (FIGURE1DEBUG) { timer.stamp('clearContext'); }
-    // if (this.subscriptions.subscriptions.beforeDraw != null) {
-    //   console.log(this.subscriptions.subscriptions.beforeDraw.asdf)
-    // }
     this.subscriptions.publish('beforeDraw');
     // $FlowFixMe
     if (FIGURE1DEBUG) { timer.stamp('beforeDraw'); }
-    // console.log('drawMid', this.elements._polygond6_5.transform.t())
     this.elements.setupDraw(
       now,
       canvasIndex,
     );
-    // console.log('drawEnd', this.elements._polygond6_5.transform.t())
     // $FlowFixMe
     if (FIGURE1DEBUG) { timer.stamp('setupDraw'); }
 
@@ -2597,16 +2054,6 @@ class Figure {
       this.drawAnimationFrames -= 1;
       this.animateNextFrame(true, 'queued frames');
     }
-    // if (canvasIndex === 0) {
-    //   // this.webglLow.gl.clearColor(0, 0, 0, 0);
-    //   // this.webglLow.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
-    //   this.webglLow.gl.clearColor(1, 1, 1, 1);
-    //   this.webglLow.gl.colorMask(false, false, false, true);
-    //   this.webglLow.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
-    // } else {
-    //   this.webglOffscreen.gl.clearColor(0, 0, 0, 0);
-    //   this.webglOffscreen.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
-    // }
     this.subscriptions.publish('afterDraw');
     if (FIGURE1DEBUG) { // $FlowFixMe
       timer.stamp('afterDraw'); // $FlowFixMe
@@ -2618,7 +2065,6 @@ class Figure {
             window.figureOneDebug.cumTimes.reduce((sum, time) => sum + time) / 50,
             2,
           ),
-          // window.figureOneDebug.frameTime,
           { frameTotal: deltas[0] },
           { frame: deltas.slice(1) },
           { setupDraw: window.figureOneDebug.setupDraw },
@@ -2642,17 +2088,6 @@ class Figure {
     this.setDrawTimeout();
   }
 
-  // renderToImages() {
-  //   // console.log('visibility1')
-  //   this.drawTimeoutId = null;
-  //   // if (this.webglLow.gl.canvas.style.top !== '-10000px') {
-  //   //   this.webglLow.gl.canvas.style.top = '-10000px';
-  //   //   this.waitForFrames = 1;
-  //   // }
-  //   this.renderAllElementsToTiedCanvases();
-  //   // this.centerDrawingLens();
-  //   // this.webglLow.gl.canvas.style.visibility = 'visible';
-  // }
 
   centerDrawingLens(fromTimeOut: boolean = false) {
     if (fromTimeOut) {
@@ -2683,14 +2118,10 @@ class Figure {
   setDrawTimeout(
     timerDurationIn: number = -1,
   ) {
-    // const t = performance.now()
     let timerDuration = timerDurationIn;
     if (timerDuration < 0) {
       timerDuration = this.elements.getNextAnimationFinishTime();
-      // timerDuration = null;
     }
-    // const t1 = performance.now()
-    // const nextAnimationEnd = this.elements.getNextAnimationFinishTime();
     if (timerDuration != null && timerDuration > 0) {
       const timerStart = this.timeKeeper.now() / 1000;
       if (
@@ -2710,14 +2141,10 @@ class Figure {
         this.nextDrawTimer = this.timeKeeper.setTimeout(() => {
           this.nextDrawTimer = null;
           this.setupDraw();
-          // this.elements.setupDraw(this.timeKeeper.now() / 1000, 0);
-          // this.setDrawTimeout();
           this.animateNextFrame();
         }, timerDuration * 1000);
       }
     }
-    // const t2 = performance.now()
-    // window.figureOneDebug.misc.push(['setDrawTimeout', t2 - t, t1 - t, t2 - t1])
   }
 
   focusLost() {
@@ -2742,8 +2169,6 @@ class Figure {
    * Force figure to draw on next available animation frame.
    */
   animateNextFrame(draw: boolean = true, fromWhere: string = '') {
-    // console.log('from', fromWhere)
-    // console.trace();
     this.fromWhere = fromWhere;
     if (!this.drawQueued) {
       if (draw) {
@@ -2751,24 +2176,10 @@ class Figure {
       }
       this.timeKeeper.queueNextFrame(this.draw.bind(this));
     }
-
-    // this.setDrawTimeout();
   }
 
-  // animateNextFrameContinuous(method: () => void) {
-  //   this.timeKeeper.queueNextFrame((now) => {
-  //     const t = performance.now();
-  //     const lastTime = t - this.lastTime
-  //     this.lastTime = t;
-  //     method(now);
-  //     this.draw(now);
-  //     console.log(round(lastTime, 1), round(performance.now() - t, 1));
-  //     this.animateNextFrameContinuous(method);
-  //   });
-  // }
 
   isAnimating(): boolean {
-    // console.log('asdf')
     return this.elements.isAnimating();
   }
 
