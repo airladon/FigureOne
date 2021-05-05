@@ -113,7 +113,8 @@ function addPlayer() {
     // Uncomment this to update seek frames while seeking - though can be
     // performance intensive
     seekId = figure.subscriptions.add('beforeDraw', () => {
-      recorder.queueSeek(lastSeekTime);
+      // recorder.queueSeek(lastSeekTime);
+      recorder.seek(lastSeekTime);
       seekId = null;
     }, 1);
 
