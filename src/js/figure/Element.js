@@ -886,16 +886,9 @@ class FigureElement {
   }
 
   animationFinished(typeOfAnimation: 'pulse' | 'movingFreely' | 'animation' = 'animation') {
-    // console.log('element', this.name, this.animationFinishedCallback)
     this.fnMap.exec(this.animationFinishedCallback);
     this.subscriptions.publish('animationFinished', typeOfAnimation);
   }
-
-  // animationsFinishedCallback(element: FigureElement) {
-  //   if (this.parent != null) {
-  //     this.parent.animationsFinishedCallback(element);
-  //   }
-  // }
 
   animateNextFrame() {
     if (this.figure != null) {
@@ -2187,7 +2180,6 @@ class FigureElement {
       this.pulseSettings.A = mid;
       this.pulseSettings.B = range / 2;
       this.pulseSettings.C = Math.asin(round(startNormalized, 10));
-      // console.log(this.name, this.pulseSettings, range, min, mid, start, startNormalized)
     }
 
     this.pulseSettings.time = duration;
@@ -2204,8 +2196,6 @@ class FigureElement {
       this.pulseSettings.type = angle;
     }
     this.startPulsing(when);
-    // console.log(this.figure)
-    // this.figure.animateNextFrame();
     this.animateNextFrame();
   }
 
@@ -2926,7 +2916,6 @@ class FigureElement {
       return;
     }
 
-    // console.log(boundaryIn)
     if (boundaryIn === 'figure') {
       if (!(this.move.bounds instanceof TransformBounds)) {
         this.move.bounds = new TransformBounds(this.transform);
@@ -2953,17 +2942,6 @@ class FigureElement {
     if (bounds instanceof TransformBounds) {
       this.move.bounds = bounds;
     }
-    // if (includeSize) {
-    //   const rect = this.getRelativeBoundingRect('figure');
-    //   const b = this.move.bounds.getTranslation();
-    //   if (b != null) {
-    //     b.boundary.left -= rect.left;
-    //     b.boundary.bottom -= rect.bottom;
-    //     b.boundary.right -= rect.right;
-    //     b.boundary.top -= rect.top;
-    //     this.move.bounds.updateTranslation(b);
-    //   }
-    // }
   }
 
   getMoveBounds(): Bounds {
@@ -2977,7 +2955,6 @@ class FigureElement {
       // $FlowFixMe
       const dup = this.move.bounds._dup();
       const b = dup.getTranslation();
-      // console.log(rect)
       if (b != null) {
         b.boundary.left -= rect.left;
         b.boundary.bottom -= rect.bottom;
@@ -3026,30 +3003,6 @@ class FigureElement {
     this.subscriptions.publish('visibility');
     this.animateNextFrame();
   }
-
-  // /**
-  //  * `true` set this element as touchable and configures all parent elements
-  //  * to accept touches for their children
-  //  *
-  //  * `false` makes this element not touchable.
-  //  */
-  // setTouchable(touchable: boolean) {
-  //   if (touchable === false) {
-  //     this.isTouchable = false;
-  //     return;
-  //   }
-  //   this.setTouchable();
-  // }
-
-  // /**
-  //  * Make the touchable border of this element a rect encompassing it
-  //  * plus some `touchable` buffer on all sides.
-  //  */
-  // // eslint-disable-next-line no-unused-vars
-  // setTouchableRect(touchable: number = 0) {
-  //   // this.touchInBoundingRect = touchable;
-  //   this.setTouchable();
-  // }
 
   /**
    * `true` set this element as touchable and configures all parent elements
@@ -3160,12 +3113,6 @@ class FigureElement {
     this.subscriptions.publish('onClick', [drawPoint, this]);
   }
 
-  // setMovable(movable: boolean = true) {
-  //   if (movable) {
-  //     this.isTouchable = true;
-  //     this.isMovable = true;
-  //   }
-  // }
 
   /**
    * Get current transform of element.
@@ -3175,13 +3122,6 @@ class FigureElement {
     return this.transform;
   }
 
-  // isAnimating(): boolean {
-  //   // console.log(this.name, this.isShown, this.animations.isAnimating())
-  //   if (this.isShown === false) {
-  //     return false;
-  //   }
-  //   return this.animations.isAnimating();
-  // }
 
   /**
    * @return {boolean} `true` if element is moving
@@ -3216,9 +3156,6 @@ class FigureElement {
     return false;
   }
 
-  // isAnyElementAnimating() {
-  //   return this.isAnimating();
-  // }
 
   isAnyElementMoving() {
     return this.isMoving();
@@ -3233,28 +3170,6 @@ class FigureElement {
     // }
     const vertexLocation = glLocation.transformBy(this.spaceTransformMatrix('gl', 'draw'));
     const borders = this.getBorder('draw', 'touchBorder');
-    // if (this.touchInBoundingRect !== false) {
-    //   let buffer = 0;
-    //   if (typeof this.touchInBoundingRect === 'number') {
-    //     buffer = this.touchInBoundingRect;
-    //   }
-    //   const boundingRect = getBoundingRect(borders, buffer);
-    //   const {
-    //     left, bottom, right, top,
-    //   } = boundingRect;
-    //   borders = [[
-    //     new Point(left, bottom),
-    //     new Point(right, bottom),
-    //     new Point(right, top),
-    //     new Point(left, top),
-    //   ]];
-    // }
-    // console.log(this.name, this.parent)
-    // console.log(vertexLocation)
-    // console.log(borders)
-    // if (this.name === 'rotLine') {
-    //   debugger;
-    // }
     const holeBorders = this.getBorder('draw', 'holeBorder');
     for (let i = 0; i < borders.length; i += 1) {
       const border = borders[i];
@@ -3298,15 +3213,6 @@ class FigureElement {
     parentTransform: Array<Transform> = [new Transform()],
     isSame: boolean = false,
   ) {
-    // let isSame = true;
-    // if (this.parentTransform.length === parentTransform.length) {
-    //   for (let i = 0; i < this.parentTransform.length; i += 1) {
-    //     if (!this.parentTransform[i].isEqualTo(parentTransform[i])) {
-    //       isSame = false;
-    //       i = this.parentTransform.length;
-    //     }
-    //   }
-    // }
     if (isSame) {
       return isSame;
     }
@@ -3442,22 +3348,12 @@ class FigureElementPrimitive extends FigureElement {
     this.angleToDraw = angle;
   }
 
-  // setScenario(scenarioName: string) {
-  //   super.setScenario(scenarioName);
-  //   if (this.scenarios[scenarioName] != null) {
-  //     const target = this.getScenarioTarget(scenarioName);
-  //     if (target.color != null) {
-  //       this.setColor(target.color.slice());
-  //     }
-  //   }
-  // }
 
   click(glPoint: Point = new Point(0, 0)) {
     super.click(glPoint);
     if (this.drawingObject instanceof TextObjectBase) {
       this.drawingObject.click(
         glPoint.transformBy(this.spaceTransformMatrix('gl', 'draw')),
-        // this.lastDrawTransform.matrix(),
         this.fnMap,
       );
       if (this.recorder.state === 'recording') {
@@ -3466,30 +3362,13 @@ class FigureElementPrimitive extends FigureElement {
     }
   }
 
-  // updateContext(context: DrawContext2D) {
-  //   if (this.drawingObject instanceof TextObject) {
-  //     this.drawingObject.drawContext2D = context;
-  //   }
-  // }
 
   _dup(transform: Transform | null = null) {
-    // const vertices = this.drawingObject._dup();
     const primitive = new FigureElementPrimitive(this.drawingObject._dup());
-    // const primitive = new FigureElementPrimitive(
-    //   vertices,
-    //   transform,
-    //   color,
-    //   this.figureLimits._dup(),
-    // );
-    // primitive.pointsToDraw = this.pointsToDraw;
-    // primitive.angleToDraw = this.angleToDraw;
-    // primitive.copyFrom(this);
     duplicateFromTo(this, primitive, ['parent', 'figure', 'recorder', 'pulseDefault.centerOn', 'timeKeeper']);
     if (transform != null) {
       primitive.transform = transform._dup();
     }
-    // primitive.pulseDefault = {};
-    // duplicateFromTo(primitive.pulseDefault, this.pulseDefault, ['centerOn']);
     if (
       typeof this.pulseDefault !== 'string'
       && typeof this.pulseDefault !== 'function'
@@ -3548,9 +3427,6 @@ class FigureElementPrimitive extends FigureElement {
         this.drawingObject.setOpacity(opacity);
       }
       if (this.drawingObject instanceof HTMLObject) {
-        // this.drawingObject.element.style.color =
-        // colorArrayToRGBA([...this.color.slice(0, 2), opacity]);
-        // console.log(this.drawingObject.element)
         this.drawingObject.element.style.opacity = `${opacity}`;
       }
     }
@@ -3585,45 +3461,6 @@ class FigureElementPrimitive extends FigureElement {
       this.drawingObject.transformHtml(this.lastDrawTransform.matrix());
     }
   }
-
-  // hideAll() {
-  //   this.hide();
-  // }
-
-  // getBorder(
-  //   space: TypeSpace | Array<number> = 'local',
-  //   border: 'touchBorder' | 'border' | 'holeBorder' = 'border',
-  // ) {
-  //   let bordersToUse = this.drawingObject.border;
-  //   // if (border === 'border') {
-  //   //   if (this.border !== 'draw') {
-  //   //     bordersToUse = this.border;
-  //   // } else if (border === 'touchBorder') {
-
-  //   // }
-  //   if (border === 'touchBorder') {
-  //     bordersToUse = this.drawingObject.touchBorder;
-  //   }
-  //   if (border === 'holeBorder') {
-  //     bordersToUse = this.drawingObject.hole;
-  //   }
-  //   if (space === 'draw') {
-  //     return bordersToUse;
-  //   }
-  //   const transformedBorders = [];
-  //   let matrix;
-  //   if (Array.isArray(space)) {
-  //     matrix = m2.mul(space, this.getTransform().matrix());
-  //   } else {
-  //     matrix = this.spaceTransformMatrix('draw', space);
-  //   }
-  //   bordersToUse.forEach((b) => {
-  //     transformedBorders.push(
-  //       b.map(p => p.transformBy(matrix)),
-  //     );
-  //   });
-  //   return transformedBorders;
-  // }
 
 
   setFont(font: OBJ_Font, index: number = 0) {
