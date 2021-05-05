@@ -140,6 +140,27 @@ The tutorials introduce how to use FigureOne and many of the main concepts.
 ![](docs/examples/Holiday%20Equation/example.gif)
 
 
+## **[Interactive Video - Tiling](docs/examples/Interactive%20Video%20-%20Tiling)**
+
+![](docs/examples/Interactive%20Video%20-%20Tiling/example.gif)
+
+## **[Interactive Video - Trig 1 - Trig Functions](docs/examples/Interactive%20Video%20-%20Trig%201%20-%20Trig%20Functions)**
+
+
+![](docs/examples/Interactive%20Video%20-%20Trig%201%20-%20Trig%20Functions/example.gif)
+
+
+## **[Interactive Video - Trig 2 - Names](docs/examples/Interactive%20Video%20-%20Trig%202%20-%20Names)**
+
+
+![](docs/examples/Interactive%20Video%20-%20Trig%202%20-%20Names/example.gif)
+
+## **[Interactive Video - Trig 3 - Relationships](docs/examples/Interactive%20Video%20-%20Trig%203%20-%20Relationships)**
+
+
+![](docs/examples/Interactive%20Video%20-%20Trig%203%20-%20Relationships/example.gif)
+
+
 ## NPM Package
 
 On projects that are bundled with tools such as Webpack, it can be useful to use the FigureOne NPM package:
