@@ -54,50 +54,7 @@ And you will see:
 
 ![](./docs/example.gif)
 
-## Tutorials
-
-The tutorials introduce how to use FigureOne and many of the main concepts.
-
-### **[Simple shape](./docs/tutorials/01%20-%20Shape)** - Simple creation and drawing of figure element
-
-![](docs/tutorials/01%20-%20Shape/example.png)
-
-### **[Collections](./docs/tutorials/02%20-%20Collections)** - Collections of figure elements all move together
-
-![](docs/tutorials/02%20-%20Collections/example.gif)
-
-### **[Interactive Shape](./docs/tutorials/03%20-%20Interactive%20Shape)** - A shape that can be moved by the user
-
-![](docs/tutorials/03%20-%20Interactive%20Shape/example.gif)
-
-### **[Animation](./docs/tutorials/04%20-%20Animation)** - Animating a shape
-
-![](docs/tutorials/04%20-%20Animation/example.gif)
-
-### **[Simple Equation](./docs/tutorials/05%20-%20Simple%20Equation)** - Render a simple fraction
-
-![](docs/tutorials/05%20-%20Simple%20Equation/example.png)
-
-### **[Advanced Equation](./docs/tutorials/06%20-%20Advanced%20Equation)** - Render an equation with an integral, sum operator, subscripts and color
-
-![](docs/tutorials/06%20-%20Advanced%20Equation/example.png)
-
-### **[Equation Animation](./docs/tutorials/07%20-%20Animation%20between%20Equation%20Forms)** - Animation between two forms of an equation
-
-![](docs/tutorials/07%20-%20Animation%20between%20Equation%20Forms/example.gif)
-
-### **[Texture](./docs/tutorials/08%20-%20Texture)** - Using a texture instead of a color
-
-![](docs/tutorials/08%20-%20Texture/example.png)
-
-### **[Plot](./docs/tutorials/09%20-%20Plot)** - Automatically generated plot
-
-![](docs/tutorials/09%20-%20Plot/example.png)
-
-### **[Customized Plot](./docs/tutorials/10%20-%20Customized%20Plot)** - Plot with title, axis, trace and legend customizations
-
-![](docs/tutorials/10%20-%20Customized%20Plot/example.png)
-
+The [Tutorials](./docs/tutorials) build on this and introduce FigureOne's concepts and features in simplified examples.
 
 ## Examples
 
