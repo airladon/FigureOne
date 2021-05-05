@@ -25,5 +25,5 @@ __frames = [
   [0.5, 'touchUp'],
   [0.5, 'touchDown', [0, 0], 'Touch plot'],
   [0.5, 'touchMove', [0, 0.3], 'Move left'],
-  [0.5, 'touchUp'],  
+  [0.5, 'touchUp'],
 ];
