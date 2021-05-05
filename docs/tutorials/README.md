@@ -53,7 +53,7 @@ A customized plot with titles and a legend.
 ![](./10%20-%20Customized%20Plot/example.png)
 
 ## **[11 - Notifications](./11%20-%20Notifications)**
-Update text with coordinates of a moving ball using notifications.
+Update coordinates of a moving ball using notifications.
 
 ![](./11%20-%20Notifications/example.gif)
 

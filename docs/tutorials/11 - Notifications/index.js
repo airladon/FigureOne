@@ -1,6 +1,6 @@
 const figure = new Fig.Figure({ limits: [-2, -2, 4, 4] });
 
-// Create a movable ball and text that shows the balls coordinates
+// Create a movable ball and text that shows the ball's coordinates
 const [ball, text] = figure.add([
   {
     name: 'ball',
@@ -25,7 +25,7 @@ const [ball, text] = figure.add([
   },
 ]);
 
-// Subscribe to ball to receive the 'setTransform' notification. When ball's
+// Subscribe to ball's 'setTransform' event notification. When ball's
 // transform changes, get its new position and update the text.
 ball.notifications.add('setTransform', () => {
   // Get ball position and round to one decimal place

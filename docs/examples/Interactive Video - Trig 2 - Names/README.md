@@ -6,7 +6,7 @@ An FigureOne video showing where the trigonometric function names come from.
 
 The example is hosted [here](https://airladon.github.io/FigureOne/examples/Interactive%20Video%20-%20Trig%202%20-%20Names/index.html), where you can watch, listen and interact with the video.
 
-If you want to view it locally however, it is important to know that loading local files into a html can be prevented by web browser security settings, this example needs to be loaded from a web server.
+To view locally, the files will need to be served with a local web server (browser security settings will prevent loading local audio files directly).
 
 You can create a local web server and host the example by first cloning the repository:
 

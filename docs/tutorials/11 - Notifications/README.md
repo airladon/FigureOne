@@ -1,6 +1,6 @@
 # Tutorial 11 - Notifications
 
-Update text with coordinates of a moving ball using notifications.
+Update coordinates of a moving ball using notifications.
 
 Open `index.html` in a browser to view example.
 
@@ -11,7 +11,7 @@ Open `index.html` in a browser to view example.
 ```js
 const figure = new Fig.Figure({ limits: [-2, -2, 4, 4] });
 
-// Create a movable ball and text that shows the balls coordinates
+// Create a movable ball and text that shows the ball's coordinates
 const [ball, text] = figure.add([
   {
     name: 'ball',
