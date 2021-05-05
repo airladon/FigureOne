@@ -924,7 +924,6 @@ class Figure {
   }
 
 
-
   dissolveInToState(optionsIn: {
     state: Object,
     duration: number,

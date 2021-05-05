@@ -496,6 +496,7 @@ const cleanUIDs = (objectToClean: Object) => {
       cleanUIDs(value);
     }
     if (key === 'recorder' && objectToClean.recorder != null) {
+      // eslint-disable-next-line no-param-reassign
       objectToClean.recorder.figure = null;
     }
   }
@@ -1071,7 +1072,6 @@ class ObjectTracker {
     }
     // $FlowFixMe
     this.worker = new Worker();
-
   }
 
   getFromIndex(index: number) {

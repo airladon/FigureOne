@@ -329,7 +329,6 @@ export default class AnimationManager {
     }, ...options);
 
     return builder;
-
   }
 
   /**
