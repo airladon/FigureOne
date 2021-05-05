@@ -143,9 +143,6 @@ describe('Figure Equations From Object', () => {
     expect(Object.keys(eqn.elements).length).toBe(3);
     expect(eqn._a.drawingObject.text[0].text).toBe('a');
     expect(eqn._a.drawingObject.text[0].font.style).toBe('italic');
-    // expect(eqn.__2.drawingObject.text[0].font.style).toBe('normal');
-    // console.log(eqn._a.drawingObject.text[0])
-    // expect(eqn._a.drawingObject.text[0])
   });
   test('Multi add steps', () => {
     eqn.addElements(addElements.add1);

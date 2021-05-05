@@ -154,15 +154,6 @@ describe('Equation Functions - Matrix', () => {
         const e = eqn.eqn.functions;
         const matrix = e.matrix.bind(e);
         eqn.addElements(elements);
-        // eqn._a.drawingObject.scalingFactor = 1;
-        // eqn._b.drawingObject.scalingFactor = 1;
-        // eqn._c.drawingObject.scalingFactor = 1;
-        // eqn._d.drawingObject.scalingFactor = 1;
-        // eqn._a.drawingObject.setBorder();
-        // eqn._b.drawingObject.setBorder();
-        // eqn._c.drawingObject.setBorder();
-        // eqn._d.drawingObject.setBorder();
-        // console.log(eqn._a.drawingObject.border)
         eqn.addForms({
           base: {
             content: {
@@ -301,11 +292,6 @@ describe('Equation Functions - Matrix', () => {
       // of all columns becomes it.
       const newA = eqn._a.getBoundingRect('figure');
       const newB = eqn._b.getBoundingRect('figure');
-      // console.log(eqn._a.drawingObject.border);
-      // console.log(baseLeft)
-      // console.log(initialSpace)
-      // console.log(newA)
-      // console.log(newB)
       expect(round(newA.left))
         .toBe(round(baseLeft.right + initialSpace + (newB.height - newA.width) / 2));
     });

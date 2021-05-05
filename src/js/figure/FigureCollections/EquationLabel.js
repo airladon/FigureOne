@@ -198,7 +198,6 @@ export default class EquationLabel {
         form.elements[key].drawBorder = form.elements[key].drawingObject.textBorder; // $FlowFixMe
         form.elements[key].drawBorderBuffer = form.elements[key].drawingObject.textBorderBuffer;
       }
-      // console.log(form)
       form.arrange(
         this.eqn.eqn.scale,
         this.eqn.eqn.formDefaults.alignment.xAlign,

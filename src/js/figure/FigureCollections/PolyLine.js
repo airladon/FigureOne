@@ -295,7 +295,6 @@ function processArray(
   if (toProcessDefaults.label === null) {
     toProcessDefaults.label = { text: null };
   }
-  // console.log(toProcessDefaults, labels)
 
   let show;
   if (toProcessDefaults.show != null) {
@@ -329,7 +328,6 @@ function processArray(
         const text = labels[showIndex % labels.length];
         labelDefaults = { label: { text } };
       }
-      // console.log(labelDefaults)
       const o = joinObjects({}, defaultOptions, toProcessDefaults, labelDefaults, indexOptions);
       if (o.label != null) {
         out.push(joinObjects({}, { label: defaultLabelOptions }, o));

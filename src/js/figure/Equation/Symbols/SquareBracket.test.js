@@ -86,7 +86,6 @@ describe('Equation Symbols - Square Bracket', () => {
     // Snapshot test on most simple layout
     eqn.showForm('0');
     figure.setFirstTransform();
-    // console.log(eqn._left.drawingObject.points)
     expect(round(eqn._left.drawingObject.points)).toMatchSnapshot();
     expect(round(eqn._right.drawingObject.points)).toMatchSnapshot();
   });

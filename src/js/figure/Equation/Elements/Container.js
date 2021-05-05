@@ -87,7 +87,6 @@ export default class Container extends BaseEquationFunction {
     } else {
       fullBounds.copyFrom(containerBounds);
     }
-    // console.log(mainContent, containerBounds, fullBounds)
     if (inSize) {
       this.width = containerBounds.width;
       this.height = containerBounds.height;

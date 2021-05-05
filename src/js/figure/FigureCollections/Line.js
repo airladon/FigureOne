@@ -867,25 +867,6 @@ export default class CollectionsLine extends FigureElementCollection {
       p1 = l.pointAtPercent(-this.alignDraw);
     }
 
-    // if (align === 'start') {
-    //   this.line = new Line(this.line.p1, newLen, this.line.angle());
-    // } else if (align === 'end') {
-    //   this.line = new Line(
-    //     this.line.pointAtLength(this.line.length() - newLen),
-    //     newLen, this.line.angle(),
-    //   );
-    // } else if (align === 'center') {
-    //   this.line = new Line(
-    //     this.line.pointAtLength((this.line.length() - newLen) / 2),
-    //     newLen, this.line.angle(),
-    //   );
-    // } else if (typeof align === 'number') {
-    //   // console.log(align)
-    //   this.line = new Line(
-    //     this.line.pointAtLength((this.line.length() - newLen) * align),
-    //     newLen, this.line.angle(),
-    //   );
-    // }
     this.line = new Line(p1, length, r);
   }
 
@@ -910,9 +891,6 @@ export default class CollectionsLine extends FigureElementCollection {
   }
 
   stateSet() {
-    // if (this.name === 'rotator') {
-    //   debugger;
-    // }
     super.stateSet();
     this.setupLine();
   }
@@ -1096,55 +1074,6 @@ export default class CollectionsLine extends FigureElementCollection {
     }
   }
 
-  // getP1Position() {
-  //   const matrix = this.spaceTransformMatrix('draw', 'figure');
-  //   return new Point(this.localXPosition, 0).transformBy(matrix);
-  // }
-
-  // setMovableLength() {
-  //   // const elements = ['line', 'arrow1', 'arrow2'];
-  //   // if (this.multiMove.includeLabelInTouchBoundary) {
-  //   //   elements.push('label');
-  //   // }
-  //   // const touchBorder = getBoundingBorder(this.getBorder('draw', 'touchBorder', elements));
-  //   // const width = touchBorder[0].distance(touchBorder[1]);
-  //   // const height = touchBorder[0].distance(touchBorder[3]);
-  //   const r = 0.1;
-  //   if (this._startPad == null) {
-  //     const startPad = this.shapes.polygon({
-  //       position: new Point(this.localXPosition, 0),
-  //       radius: r,
-  //       sides: 8,
-  //       color: [0, 0, 1, 0.5],
-  //     });
-  //     // console.log(width, height)
-  //     // startPad.transform.updateScale(width, height);
-  //     // startPad.transform.updateTranslation(touchBorder[0]);
-  //     this.add('startPad', startPad);
-  //     startPad.setMovable();
-  //     startPad.move.type = 'translation';
-  //     // startPad.move.element = this;
-  //     let flag = 5;
-  //     startPad.subscriptions.add('setTransform', () => {
-  //       if (flag === 0) {
-  //         flag = 5;
-  //         const matrix = this.spaceTransformMatrix('figure', 'local');
-  //         const p = startPad.getPosition('figure').transformBy(matrix);
-  //         // const p = startPad.getPosition('draw')
-  //         // console.log(Math.round(p.x * 100) / 100 , Math.round(p.y * 100) / 100)
-  //         this.setEndPoints(p, this.line.p2._dup());
-  //       } else {
-  //         flag -= 1;
-  //       }
-  //       // const p = startPad.getPosition('figure');
-  //     });
-  //     startPad.drawingObject.border = [[]];
-  //   }
-  //   this.hasTouchableElements = true;
-  //   this.isTouchable = false;
-  //   this.isMovable = false;
-  //   // this.setLength(this.line.length());
-  // }
 
   // Private
   setMultiMovable(middleLengthPercent: number) {
@@ -1193,19 +1122,7 @@ export default class CollectionsLine extends FigureElementCollection {
    */
   updateMoveTransform(t: Transform = this.transform._dup()) {
     const r = t.r();
-    // const { bounds } = this.move;
-    // console.log('qqwer')
     if (r != null) {
-      // const w = Math.abs(this.line.length() / 2 * Math.cos(r));
-      // const h = Math.abs(this.line.length() / 2 * Math.sin(r));
-      // if (bounds instanceof TransformBounds) {
-      //   bounds.updateTranslation(new RectBounds({
-      //     left: bounds.left + w,
-      //     bottom: bounds.bottom + h,
-      //     right: bounds.right - w,
-      //     top: bounds.top - h,
-      //   }));
-      // }
       if (r > 2 * Math.PI) {
         this.transform.updateRotation(r - 2 * Math.PI);
       }
@@ -1273,7 +1190,6 @@ export default class CollectionsLine extends FigureElementCollection {
         this.updateMovePads();
       });
     } else {
-      // console.log(this.autoUpdateSubscriptionId)
       this.subscriptions.remove('setTransform', this.autoUpdateSubscriptionId);
       this.autoUpdateSubscriptionId = -1;
     }
@@ -1509,7 +1425,6 @@ export default class CollectionsLine extends FigureElementCollection {
         newLen, this.line.angle(),
       );
     } else if (typeof align === 'number') {
-      // console.log(align)
       this.line = new Line(
         this.line.pointAtLength((this.line.length() - newLen) * align),
         newLen, this.line.angle(),
@@ -1518,11 +1433,6 @@ export default class CollectionsLine extends FigureElementCollection {
     this.alignDraw = align;
     this.setupLine();
   }
-
-  // setRotation(angle: number) {
-  //   super.setRotation(angle);
-  //   this.line = new Line(this.)
-  // }
 
   setupLine() {
     const wasHidden = !this.isShown;
@@ -1640,7 +1550,6 @@ export default class CollectionsLine extends FigureElementCollection {
    */
   setEndPoints(p1: TypeParsablePoint, p2: TypeParsablePoint, offset: number = 0) {
     this.line = new Line(p1, p2).offset('positive', offset);
-    // console.log(p, q)
     this.setupLine();
   }
 

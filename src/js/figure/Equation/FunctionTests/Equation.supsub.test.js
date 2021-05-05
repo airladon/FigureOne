@@ -253,7 +253,6 @@ describe('Equation Functions - Superscript and Subscript', () => {
     figure.setFirstTransform();
     const baseB = eqn._b.getBoundingRect('figure');
     const baseC = eqn._c.getBoundingRect('figure');
-    // console.log(baseB)
     const withoutPos = elems.map(elem => round(elem.transform.mat).slice());
 
     // with reference positions
@@ -271,32 +270,15 @@ describe('Equation Functions - Superscript and Subscript', () => {
     figure.setFirstTransform();
     const newB = eqn._b.getBoundingRect('figure');
     const newC = eqn._c.getBoundingRect('figure');
-    // console.log(newB)
-
-    // const withSub = eqn.eqn.forms['0'].base.content[0].content[0].subscript;
-    // const withoutSub = eqn.eqn.forms.without.base.content[0].content[0].subscript;
-    // const withSup = eqn.eqn.forms['0'].base.content[0].content[0].subscript;
-    // const withoutSup = eqn.eqn.forms.without.base.content[0].content[0].subscript;
 
 
     // Check scaling was done correctly
-    // expect(round(withSub.height / withoutSub.height)).toBe(round(0.8 / 0.5));
-    // expect(round(withSup.height / withoutSup.height)).toBe(round(0.8 / 0.5));
     expect(round(baseB.width / newB.width)).toBe(round(0.5 / 0.8));
     expect(round(baseC.width / newC.width)).toBe(round(0.5 / 0.8));
 
     // Check xBias location was done correctly
     expect(round(newB.left - baseB.left)).toBe(0.3584);
     expect(round(newC.left - baseC.left)).toBe(0.5 * 0.7);
-
-    // expect(round(newB.bottom)).toBe(baseB.bottom)
-    // expect(round(withSub.location.x - withoutSub.location.x)).toBe(0.5);
-    // expect(round(withSup.location.x - withoutSup.location.x)).toBe(0.5);
-
-    // Check yBias location was done correctly
-    // subscript.height * 0.7 + this.subBias.y
-    // expect(round(withoutSub.location.y)).toBe(round(-withoutSub.ascent * 0.7 + 0));
-    // expect(round(withSub.location.y)).toBe(round(-withSub.ascent * 0.7 - 0.5));
   });
   test('Nested Subscript', () => {
     functions.sub();

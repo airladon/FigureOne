@@ -23,8 +23,6 @@ export default class Fraction extends BaseEquationFunction {
     const numeratorBounds = new Bounds();
     const denominatorBounds = new Bounds();
     const fullBounds = new Bounds();
-    // console.log(numeratorBounds)
-    // console.log(denominatorBounds)
     if (numerator != null) {
       numerator.calcSize(loc._dup(), scale);
       numeratorBounds.copyFrom(numerator.getBounds(fullContentBounds));
@@ -37,8 +35,6 @@ export default class Fraction extends BaseEquationFunction {
 
     this.location = location._dup();
 
-    // numerator.calcSize(location, scale);
-    // denominator.calcSize(location, scale);
 
     vinculumBounds.width = Math.max(
       numeratorBounds.width, denominatorBounds.width,
@@ -50,8 +46,6 @@ export default class Fraction extends BaseEquationFunction {
       );
     }
 
-    // const vSpaceNum = scale * numeratorSpace;
-    // const vSpaceDenom = scale * denominatorSpace;
     const lineVAboveBaseline = scale * offsetY / scaleModifier;
 
     const numeratorLoc = new Point(
@@ -64,16 +58,6 @@ export default class Fraction extends BaseEquationFunction {
       loc.y + lineVAboveBaseline - denominatorSpace * scale
         - denominatorBounds.ascent,
     );
-    // const xNumerator = (vinculumBounds.width - numeratorBounds.width) / 2;
-    // const xDenominator = (vinculumBounds.width - denominatorBounds.width) / 2;
-
-    // const lineWidth = Math.max(scale * 0.01, 0.008);
-
-    // const yNumerator = numeratorBounds.descent
-    //                     + vSpaceNum + lineVAboveBaseline;
-
-    // const yDenominator = denominatorBounds.ascent
-    //                      + vSpaceDenom - lineVAboveBaseline;
 
     let baselineOffset = 0;
     if (baseline === 'numerator' && numerator != null) {
@@ -95,16 +79,10 @@ export default class Fraction extends BaseEquationFunction {
 
     this.width = vinculumBounds.width;
     this.descent = loc.y - (denominatorLoc.y - denominatorBounds.descent);
-    // vSpaceNum + lineWidth / 2
-    //                - lineVAboveBaseline
-    //                + denominatorBounds.ascent + denominatorBounds.descent;
     if (this.descent < 0) {
       this.descent = 0;
     }
     this.ascent = (numeratorLoc.y + numeratorBounds.ascent) - loc.y;
-    // vSpaceNum + lineWidth / 2
-    //               + lineVAboveBaseline + numeratorBounds.ascent
-    //               + numeratorBounds.descent;
     this.height = this.descent + this.ascent;
 
     this.glyphLocations[0] = new Point(

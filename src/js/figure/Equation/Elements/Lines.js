@@ -103,7 +103,6 @@ export default class Lines extends BaseEquationFunction {
         }
         lineBounds.growWithSameBaseline(element.getBounds(false));
       }
-      // console.log(element.width, element.fullSize, element.getBounds(true), fullBounds)
     }
 
     this.width = lineBounds.width;

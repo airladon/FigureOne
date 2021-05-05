@@ -1211,9 +1211,6 @@ export class Equation extends FigureElementCollection {
           customProperties.target = currentForm.name;
         }
       }
-      // if (customProperties.target === 'cotan') {
-      //   debugger;
-      // }
       if (customProperties.start != null) {
         this.showForm(customProperties.start);
       }
@@ -1222,7 +1219,6 @@ export class Equation extends FigureElementCollection {
         callback: null,
         // delay: 0,
       }));
-      // console.log()
       return this.getRemainingAnimationTime(['_Equation', '_EquationColor']);
     });
     this.fnMap.add('_showForm', (percentage, customProperties) => {
@@ -1460,14 +1456,11 @@ export class Equation extends FigureElementCollection {
     if (fontDefinition.color == null) {
       fontDefinition.color = this.color;
     }
-    // console.log(textToUse, fontDefinition)
-    // const font = new FigureFont(fontDefinition);
     const p = this.shapes.text(
       {
         text: {
           text: textToUse,
           touchBorder: 0,
-          // touchBorder: options.touchBorder == null ? 0 : options.touchBorder,
         },
         position: new Point(0, 0),
         font: fontDefinition,
@@ -1477,9 +1470,6 @@ export class Equation extends FigureElementCollection {
         mods: {
           dimColor: this.dimColor.slice(),
         },
-        // border: 'draw',
-        // touchBorder: options.touchBorder == null ? 'buffer' : options.touchBorder,
-        // defaultTextTouchBorder: options.defaultTextTouchBorder,
       },
     );
     if (options.touchBorder != null) {
@@ -1520,24 +1510,19 @@ export class Equation extends FigureElementCollection {
     if (existingElement != null) {
       return existingElement;
     }
-    // console.log(this.name, key, this.dimColor.slice())
     // Check if the options has a symbol definition
     if (options.symbol != null && typeof options.symbol === 'string') {
       // debugger;
       const symbol = this.makeSymbolElem(options);
       if (symbol != null) {
-        // symbol.dimColor = this.dimColor.slice();
         this.add(key, symbol);
         return symbol;
       }
     }
     // Check the key is a symbol
     const cleanKey = key.replace(/^_*/, '');
-    // console.log(cleanKey)
     let symbol = this.eqn.symbols.get(cleanKey, options);
     if (symbol != null) {
-      // symbol.dimColor = this.dimColor.slice();
-      // console.log(symbol, symbol.color.slice())
       if (symbol.color[3] > 0.01 && options.color == null) {
         symbol.setColor(this.color);
       }
@@ -1548,11 +1533,9 @@ export class Equation extends FigureElementCollection {
       return symbol;
     }
     const ending = cleanKey.match(/_[^_]*$/);
-    // console.log(ending)
     if (ending != null) {
       symbol = this.eqn.symbols.get(ending[0].replace(/_/, ''), options);
       if (symbol != null) {
-        // symbol.dimColor = this.dimColor.slice();
         if (symbol.color[3] > 0.01 && options.color == null) {
           symbol.setColor(this.color);
         }
@@ -1634,7 +1617,6 @@ export class Equation extends FigureElementCollection {
       } else {
         let figureElem; // $FlowFixMe
         if (elem.symbol != null && typeof elem.symbol === 'string') {
-          // console.log(elem.symbol)
           // $FlowFixMe
           figureElem = this.makeSymbolElem(elem);
         } else {
@@ -1680,35 +1662,11 @@ export class Equation extends FigureElementCollection {
   setPosition(pointOrX: TypeParsablePoint | number, y: number = 0) {
     super.setPosition(pointOrX, y);
     const position = this.getPosition('figure');
-    // console.log(this.eqn, this.eqn.descriptionElement)
     if (this.eqn.descriptionElement != null) {
       this.eqn.descriptionElement.setPosition(position.add(this.eqn.descriptionPosition));
     }
   }
 
-  // scaleForm(name: string, scale: number, subForm: string = 'base') {
-  //   // console.log(name, this.form, formType, this.form[name][formType])
-  //   if (name in this.eqn.forms) {
-  //     if (subForm in this.eqn.forms[name]) {
-  //       this.eqn.forms[name][subForm].arrange(
-  //         scale,
-  //         this.eqn.formAlignment.xAlign,
-  //         this.eqn.formAlignment.yAlign,
-  //         this.eqn.formAlignment.fixTo,
-  //       );
-  //     }
-  //   }
-  // }
-
-  // scale(scale: number) {
-  //   Object.keys(this.form).forEach((name) => {
-  //     Object.keys(this.form[name]).forEach((formType) => {
-  //       if (formType !== 'name') {
-  //         this.scaleForm(name, scale, formType);
-  //       }
-  //     });
-  //   });
-  // }
 
   addPhrases(phrases: { [phraseName: string]: TypeEquationPhrase }) {
     Object.keys(phrases).forEach((phraseName) => {
@@ -1927,9 +1885,6 @@ export class Equation extends FigureElementCollection {
       description, modifiers, fromForm,
       onShow, onTransition, duration, translation,
     } = optionsToUse;
-    // this.eqn.forms[name].name = name;
-    // const form = this.eqn.forms[name];
-    // form[subForm] = this.createForm();
     const form = this.createForm();
     this.eqn.forms[name] = form;
     form.description = description;
@@ -1937,8 +1892,6 @@ export class Equation extends FigureElementCollection {
     form.name = name;
     form.duration = duration;
     form.translation = translation;
-    // console.log(name, translation)
-    // form.animation = animation;
     form.fromForm = fromForm;
     form.onShow = onShow;
     form.onTransition = onTransition;
@@ -2089,26 +2042,12 @@ export class Equation extends FigureElementCollection {
       this.fnMap.exec(form.onTransition); // $FlowFixMe
       this.fnMap.exec(form.onShow);
     }
-    // this.custom.settingForm = false;
   }
 
   showAll() {
     this.showForm();
   }
 
-  // show(
-  //   toShow: FigureElementPrimitive | FigureElementCollection | string
-  //     | Array<FigureElementPrimitive | FigureElementCollection | string> = [],
-  // ) {
-  //   // if (!this.custom.settingForm) {
-  //   //   if (Array.isArray(toShow) && toShow.length === 0) {
-  //   //     // console.log(this.eqn.currentForm)
-  //   //     this.showForm(this.eqn.currentForm, true, false);
-  //   //     return;
-  //   //   }
-  //   // }
-  //   super.show(toShow);
-  // }
 
   /**
    * Get an equation form object from a form name
@@ -2121,18 +2060,6 @@ export class Equation extends FigureElementCollection {
       return formOrName;
     }
     if (formOrName in this.eqn.forms) {
-      // let formTypeToUse = subForm;
-      // if (formTypeToUse == null) {
-      //   const possibleFormTypes     // $FlowFixMe
-      //     = this.eqn.subFormPriority.filter(fType => fType in this.eqn.forms[formOrName]);
-      //   if (possibleFormTypes.length) {
-      //     // eslint-disable-next-line prefer-destructuring
-      //     formTypeToUse = possibleFormTypes[0];
-      //   }
-      // }
-      // if (formTypeToUse != null) {
-      //   return this.eqn.forms[formOrName][formTypeToUse];
-      // }
       return this.eqn.forms[formOrName];
     }
     return null;
@@ -2215,7 +2142,6 @@ export class Equation extends FigureElementCollection {
     // }
 
     let { duration } = options;
-    // console.log(options)
     if (options.prioritizeFormDuration) {
       if (form.duration !== undefined) {
         duration = form.duration;
@@ -2261,29 +2187,16 @@ export class Equation extends FigureElementCollection {
     if (duration === 0) {
       this.showForm(form);
       this.fnMap.exec(options.callback);
-      // if (options.callback != null) {
-      //   options.callback();
-      // }
-      // if (form.onShow != null) {
-      // this.fnMap.exec(form.onTransition);
-      // this.fnMap.exec(form.onShow);
-      // }
     } else {
       this.eqn.isAnimating = true;
       this.fnMap.exec(onTransition);
       const end = () => {
         // $FlowFixMe
         this.fnMap.exec(form.onShow);
-        // }
         this.eqn.isAnimating = false;
         this.fnMap.exec(options.callback);
-        // if (options.callback != null) {
-        //   options.callback();
-        // }
       };
       if (options.animate === 'move') {
-        // console.log('move', duration, options, subForm.duration)
-        // console.log('******************* animate')
         form.animatePositionsTo(
           options.delay,
           options.dissolveOutTime,
@@ -2294,8 +2207,6 @@ export class Equation extends FigureElementCollection {
           false,
         );
       } else if (options.animate === 'dissolveInThenMove') {
-        // console.log('move', duration, options, subForm.duration)
-        // console.log('******************* animate')
         form.animatePositionsTo(
           options.delay,
           options.dissolveOutTime,
@@ -2363,7 +2274,6 @@ export class Equation extends FigureElementCollection {
           newEnd,
         );
       } else {
-        // console.log('******************* hideshow')
         form.allHideShow(
           options.delay,
           options.dissolveOutTime,

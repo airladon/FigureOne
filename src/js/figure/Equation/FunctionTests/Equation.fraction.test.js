@@ -334,7 +334,6 @@ describe('Equation Functions - Fraction', () => {
 
     // Check height is double the scaled form
     const sHeight = eqn.eqn.forms.s0.content[0].content[0].content[1].height;
-    // console.log(eqn.eqn.forms.s0.base.content[0].content[0])
     const nHeight = eqn.eqn.forms.n0.content[0].content[0].content[1].height;
     expect(round(nHeight / sHeight)).toBe(2);
   });

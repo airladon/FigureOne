@@ -114,7 +114,6 @@ export default class Symbol extends FigureElementPrimitive {
         this.updateSymbol(points, width, height, drawType);
         this._custom.options.staticHeight = height;
         this._custom.options.staticWidth = width;
-        // console.log('a', width, height)
         t.updateScale(width, height);
       } else {
         const [
@@ -128,13 +127,7 @@ export default class Symbol extends FigureElementPrimitive {
         };
         // $FlowFixMe
         this.updateSymbol(pointsNew, widthNew, heightNew, drawType);
-        // this.drawingObject.updatePoints(
-        //   pointsNew,
-        //   widthNew,
-        //   heightNew,
-        // );
         this._custom.scale = new Point(widthIn, heightIn);
-        // console.log('b', widthIn, heightIn, this.getPath())
         t.updateScale(widthIn, heightIn);
       }
       t.updateTranslation(location.x, location.y);

@@ -919,8 +919,6 @@ describe('Equation Functions - Ann', () => {
     const a = eqn._a.getBoundingRect('figure');
     const top = eqn._top.getBoundingRect('figure');
     const bottom = eqn._bottom.getBoundingRect('figure');
-    // console.log(a)
-    // console.log(bottom)
     expect(round(top.bottom)).toBe(a.top);
     expect(round(bottom.top)).toBe(round(a.bottom));
   });

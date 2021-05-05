@@ -114,22 +114,14 @@ class VertexObject extends DrawingObject {
 
   setupBuffer(numPoints: number = 0) {
     for (let glIndex = 0; glIndex < this.webgl.length; glIndex += 1) {
-      // console.log(glIndex)
       const gl = this.gl[glIndex];
       const webgl = this.webgl[glIndex];
-      // const texture = this.texture[glIndex];
-      // const buffer = this.buffer[glIndex];
       this.state = 'loaded';
       if (numPoints === 0) {
         this.numPoints = this.points.length / 2.0;
       } else {
         this.numPoints = numPoints;
       }
-
-      // if (this.texture && this.texture.points == null) {
-      //   this.texture.points = [];
-      //   this.createTextureMap();
-      // }
 
       const { texture } = this;
       if (texture != null) {
@@ -338,11 +330,6 @@ class VertexObject extends DrawingObject {
     count: number,
     // webglInstance: WebGLInstance = this.webgl,
   ) {
-    // if (window.asdf) {
-    //   console.log(transformMatrix, color, glIndex, count);
-    // }
-    // const tt = performance.now();
-    // const ttt = [];
     const gl = this.gl[glIndex];
     const webglInstance = this.webgl[glIndex];
 
@@ -368,7 +355,6 @@ class VertexObject extends DrawingObject {
       gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
       gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     }
-    // ttt.push(performance.now()-tt)
     // Turn on the attribute
     gl.enableVertexAttribArray(locations.a_position);
 
@@ -379,7 +365,6 @@ class VertexObject extends DrawingObject {
       locations.a_position,
       size, type, normalize, stride, offset,
     );
-    // ttt.push(performance.now()-tt)
 
     gl.uniformMatrix3fv(
       locations.u_matrix,
@@ -393,7 +378,6 @@ class VertexObject extends DrawingObject {
       locations.u_color,
       color[0], color[1], color[2], color[3],
     );  // Translate
-    // ttt.push(performance.now()-tt)
     const { texture } = this;
     if (texture != null) {
       // Textures
@@ -417,7 +401,6 @@ class VertexObject extends DrawingObject {
     if (texture) {
       gl.uniform1i(locations.u_use_texture, 1);
       const { index } = webglInstance.textures[texture.id];
-      // console.log(texture.id, index, webglInstance.textures)
       gl.uniform1i(locations.u_texture, index);
     } else {
       gl.uniform1i(locations.u_use_texture, 0);
@@ -428,8 +411,6 @@ class VertexObject extends DrawingObject {
     if (texture) {
       gl.disableVertexAttribArray(locations.a_texcoord);
     }
-    // ttt.push(performance.now()-tt)
-    // window.timeData.push(ttt);
   }
 
   transform(transformMatrix: Array<number>) {
@@ -445,19 +426,6 @@ class VertexObject extends DrawingObject {
       }
     }
   }
-
-
-  // calcBorder(lastDrawTransformMatrix: Array<number>) {
-  //   const glBorders = [];
-  //   this.border.forEach(border => {
-  //     const glBorder = [];
-  //     border.forEach(p => {
-  //       glBorder.push(p.transformBy(lastDrawTransformMatrix));
-  //     })
-  //     glBorders.push(glBorder);
-  //   });
-  //   return glBorders;
-  // }
 }
 
 export default VertexObject;

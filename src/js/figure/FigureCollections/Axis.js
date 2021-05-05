@@ -672,7 +672,6 @@ class CollectionsAxis extends FigureElementCollection {
       color: this.color,
     };
     const o = joinObjects({}, defaultOptions, optionsIn);
-    // console.log(o)
     const line = this.collections.primitives.line(o);
     this.line = o;
     this.add('line', line);

@@ -99,21 +99,9 @@ export default class FigureCollections {
     } else {
       optionsToUse = joinObjects({}, defaultOptions, transformOrPointOrOptions, ...moreOptions);
     }
-    // if (optionsToUse.border != null) {
-    //   optionsToUse.border = getBorder(optionsToUse.border);
-    // }
-    // if (optionsToUse.touchBorder != null) {
-    //   optionsToUse.touchBorder = getBorder(optionsToUse.touchBorder);
-    // }
-    // if (optionsToUse.holeBorder != null) {
-    //   optionsToUse.holeBorder = getBorder(optionsToUse.holeBorder);
-    // }
-    // console.log(optionsToUse.transform, transformOrPointOrOptions)
     const element = new FigureElementCollection(optionsToUse);
     element.timeKeeper = this.primitives.timeKeeper;
     element.dimColor = this.primitives.defaultDimColor.slice();
-    // console.log(element)
-    // element.setColor(color);
     if (
       optionsToUse.pulse != null
       && typeof element.pulseDefault !== 'function'
@@ -130,8 +118,6 @@ export default class FigureCollections {
    * Create a {@link CollectionsLine}.
    */
   line(...options: Array<COL_Line>) {
-    // const optionsToUse = Object.assign({}, ...options);
-    // console.log(Object.assign({}, ...options))
     const optionsToUse = joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options);
     return new CollectionsLine(
       this, this.isTouchDevice,

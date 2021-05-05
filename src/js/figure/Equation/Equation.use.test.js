@@ -863,7 +863,6 @@ describe('Different ways to make an equation', () => {
     expect(eqn.eqn.scale).toEqual(0.45);
     tools.cleanUIDs(eqn);
     eqn._a.parent = null;
-    // console.log(eqn._a)
     expect(eqn._a).toMatchSnapshot();
   });
   test('Separate All Text', () => {

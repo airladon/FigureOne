@@ -786,7 +786,6 @@ class CollectionsAngle extends FigureElementCollection {
     startAngle?: number,
     angle?: number,
   }) {
-    // console.log(this.lastLabelRotationOffset)
     const defaultOptions = {
       angle: 1,
       startAngle: this.startAngle,
@@ -1044,12 +1043,6 @@ class CollectionsAngle extends FigureElementCollection {
     if (optionsToUse.mods != null && optionsToUse.mods !== {}) {
       this.setProperties(optionsToUse.mods);
     }
-    // console.log(this.name, t.slice(-1)[0] - t[0], t.map((t1, index) => {
-    //   if (index === 0) {
-    //     return 0;
-    //   }
-    //   return t1 - t[index - 1];
-    // }))
   }
 
   _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
@@ -1124,8 +1117,6 @@ class CollectionsAngle extends FigureElementCollection {
     if (labelWasHidden && this._label != null) {
       this._label.hide();
     }
-    // console.log(this.getPath(), oldOpacity)
-    // this.setOpacity(oldOpacity);
   }
 
   getCornerPoints(length: number) {
@@ -1391,7 +1382,6 @@ class CollectionsAngle extends FigureElementCollection {
         }
         // $FlowFixMe
         const element = this[name];
-        // console.log(element)
         if (element) {
           if (show) {
             element.show();
@@ -1731,7 +1721,6 @@ class CollectionsAngle extends FigureElementCollection {
         let labelPosition = polarToRect(
           label.radius, angle * label.curvePosition,
         );
-        // console.log(label.curvePosition)
         let { orientation, location } = label;
         if (orientation === 'tangent') {
           orientation = 'baseToLine';

@@ -89,18 +89,6 @@ export default class Arrow extends Bracket {
       // $FlowFixMe
       rightPoints = rightPoints.map((p: Point) => p.transformBy(m));
     }
-    // let side = 'left';
-    // if (direction === 'up' || direction === 'down') {
-    //   side = 'left';
-    // } else if (direction === 'left' || direction === 'right') {
-    //   side = 'top';
-    // }
-    // return [points, widthIn, length];
-    // $FlowFixMe
-    // if (direction === 'up' || direction === 'down') {
-    //   // console.log(length, arrowWidth)
-    //   return [leftPoints, rightPoints, length, arrowWidth];
-    // }
     // $FlowFixMe
     return [leftPoints, rightPoints, arrowWidth, length];
   }

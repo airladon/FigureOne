@@ -53,9 +53,6 @@ describe('Equation Symbols - Brace', () => {
     // Snapshot test on most simple layout
     eqn.showForm('0');
     figure.setFirstTransform();
-    // console.log(eqn._left.getBoundingRect('figure'))
-    // console.log(eqn._right.transform)
-    // console.log(eqn._right.getBoundingRect('figure'))
     expect(round(eqn._left.drawingObject.points)).toMatchSnapshot();
     expect(round(eqn._right.drawingObject.points)).toMatchSnapshot();
   });
