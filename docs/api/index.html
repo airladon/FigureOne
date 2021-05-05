@@ -100,6 +100,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#get'
+                        class='regular pre-open'>
+                        #get
+                      </a></li>
+                      
+                      <li><a
                         href='#settouchable'
                         class='regular pre-open'>
                         #setTouchable
@@ -145,6 +151,24 @@
                         href='#animatenextframe'
                         class='regular pre-open'>
                         #animateNextFrame
+                      </a></li>
+                      
+                      <li><a
+                        href='#setmanualframes'
+                        class='regular pre-open'>
+                        #setManualFrames
+                      </a></li>
+                      
+                      <li><a
+                        href='#endmanualframes'
+                        class='regular pre-open'>
+                        #endManualFrames
+                      </a></li>
+                      
+                      <li><a
+                        href='#frame'
+                        class='regular pre-open'>
+                        #frame
                       </a></li>
                       
                     </ul>
@@ -218,6 +242,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#get'
+                        class='regular pre-open'>
+                        #get
+                      </a></li>
+                      
+                      <li><a
                         href='#settouchable'
                         class='regular pre-open'>
                         #setTouchable
@@ -263,6 +293,24 @@
                         href='#animatenextframe'
                         class='regular pre-open'>
                         #animateNextFrame
+                      </a></li>
+                      
+                      <li><a
+                        href='#setmanualframes'
+                        class='regular pre-open'>
+                        #setManualFrames
+                      </a></li>
+                      
+                      <li><a
+                        href='#endmanualframes'
+                        class='regular pre-open'>
+                        #endManualFrames
+                      </a></li>
+                      
+                      <li><a
+                        href='#frame'
+                        class='regular pre-open'>
+                        #frame
                       </a></li>
                       
                     </ul>
@@ -2088,6 +2136,94 @@
               
                 
                 <li><a
+                  href='#timekeeper'
+                  class=" toggle-sibling">
+                  TimeKeeper
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#timekeeperreset'
+                        class='regular pre-open'>
+                        #reset
+                      </a></li>
+                      
+                      <li><a
+                        href='#timekeepergetwhen'
+                        class='regular pre-open'>
+                        #getWhen
+                      </a></li>
+                      
+                      <li><a
+                        href='#timekeepersyncnow'
+                        class='regular pre-open'>
+                        #syncNow
+                      </a></li>
+                      
+                      <li><a
+                        href='#timekeepernow'
+                        class='regular pre-open'>
+                        #now
+                      </a></li>
+                      
+                      <li><a
+                        href='#timekeepersetspeed'
+                        class='regular pre-open'>
+                        #setSpeed
+                      </a></li>
+                      
+                      <li><a
+                        href='#timekeepersetmanualframes'
+                        class='regular pre-open'>
+                        #setManualFrames
+                      </a></li>
+                      
+                      <li><a
+                        href='#timekeeperendmanualframes'
+                        class='regular pre-open'>
+                        #endManualFrames
+                      </a></li>
+                      
+                      <li><a
+                        href='#timekeeperframe'
+                        class='regular pre-open'>
+                        #frame
+                      </a></li>
+                      
+                      <li><a
+                        href='#timekeepersettimeout'
+                        class='regular pre-open'>
+                        #setTimeout
+                      </a></li>
+                      
+                      <li><a
+                        href='#timekeepercleartimeout'
+                        class='regular pre-open'>
+                        #clearTimeout
+                      </a></li>
+                      
+                      <li><a
+                        href='#timekeeperqueuenextframe'
+                        class='regular pre-open'>
+                        #queueNextFrame
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
                   href='#animationbuilder'
                   class=" toggle-sibling">
                   AnimationBuilder
@@ -3275,9 +3411,21 @@
                       </a></li>
                       
                       <li><a
+                        href='#recorderstartstatesrecording'
+                        class='regular pre-open'>
+                        #startStatesRecording
+                      </a></li>
+                      
+                      <li><a
                         href='#recorderstoprecording'
                         class='regular pre-open'>
                         #stopRecording
+                      </a></li>
+                      
+                      <li><a
+                        href='#recorderstopstatesrecording'
+                        class='regular pre-open'>
+                        #stopStatesRecording
                       </a></li>
                       
                       <li><a
@@ -3308,6 +3456,12 @@
                         href='#recordertoggleplayback'
                         class='regular pre-open'>
                         #togglePlayback
+                      </a></li>
+                      
+                      <li><a
+                        href='#recorderresumeplayback'
+                        class='regular pre-open'>
+                        #resumePlayback
                       </a></li>
                       
                       <li><a
@@ -5679,20 +5833,21 @@ labeledLine.setMovable();</pre>
 canvas to the html <code>div</code> element with id <code>"figureOneContainer"</code>.</p>
 <p>The figure manages all drawing elements, renders the drawing elements
 on a browser's animation frames and listens for guestures from the user.</p>
-<p>The figure also has a recorder, allowing to record and playback states,
-and gestures - though this is not yet documented.</p>
+<p>The figure also has a recorder, allowing it to record and playback states,
+and gestures.</p>
 <p>To attach to a different <code>div</code>, use the <code>htmlId</code> property in the class
 constructor.</p>
 <p>If a figure is paused, then all drawing element animations will
 also be paused.</p>
-<p><code>Figure</code> has a number of convenience methods for create drawing elements
-already attached to the drawing canvases, and useful transforms for
-converting between the different spaces (e.g. pixel, GL, figure).</p>
+<p><code>Figure</code> has a number of convenience methods for creating drawing elements
+and useful transforms for converting between the different spaces (e.g.
+pixel, GL, figure).</p>
 <p>Notifications - The subscription manager property <code>subscriptions</code> will
 publish the following events:</p>
 <ul>
 <li><code>beforeDraw</code>: published before a frame is drawn</li>
 <li><code>afterDraw</code>: published after a frame is drawn</li>
+<li><code>resize</code>: published after a resize event, but before frame drawing</li>
 </ul>
 
   
@@ -5791,8 +5946,7 @@ figure.add(
       <span class="hljs-attr">sides</span>: <span class="hljs-number">6</span>,
     },
   },
-);
-figure.initialize();</pre>
+);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Alternately, an element can be added programatically</span>
@@ -6005,7 +6159,7 @@ if the navigator was added with <code>figure.addSlideNavigator</code>).</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>addCursor()</span>
+            <span class='code strong strong truncate'>addCursor(options)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -6013,7 +6167,8 @@ if the navigator was added with <code>figure.addSlideNavigator</code>).</p>
 
   
 
-  <p>Add cursor for recording interactive videos.</p>
+  <p>Add cursor for recording interactive videos. Cursor will be hidden when
+first added.</p>
 
   
   
@@ -6025,6 +6180,19 @@ if the navigator was added with <code>figure.addSlideNavigator</code>).</p>
   
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
   
 
   
@@ -6435,6 +6603,80 @@ array of paths.</p>
       </div>
     </div>
   
+    <div class='border-bottom' id='get'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>get(children)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Returns an array of result from
+<a href="#figureelementcollectiongetelement">getElement</a> calls on an
+array of paths. Same as <code>getElements</code> but more succinct</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>children</span> <code class='quiet'>(<a href="#typeelementpath">TypeElementPath</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#figureelement">FigureElement</a>></code>:
+        Array of
+
+<a href="#figureelementcollectiongetelement">getElement</a>
+ results
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='settouchable'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -6530,7 +6772,7 @@ automatically set this.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>nowIn</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
-            = <code>this.globalAnimation.now()/1000</code>)</code>
+            = <code>this.timeKeeper.now()/1000</code>)</code>
 	    
           </div>
           
@@ -6965,6 +7207,172 @@ automatically set this.</p>
       </div>
     </div>
   
+    <div class='border-bottom' id='setmanualframes'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setManualFrames()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Sets manual frames.</p>
+<p>Normally, a when a browser is ready to refresh the screen it will call
+FigureOne to do a draw. The time between frames is not fixed and depends on
+a number of factors. This is the most performant way to handle drawing.</p>
+<p>However, when debugging it can be useful to manually trigger a draw frame
+with a defined delta time from the last frame.</p>
+<p>This method turns on manual frames. Use <code>frame</code> to trigger a draw.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='endmanualframes'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>endManualFrames()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>End manual frames. Reverts drawing to when browser reqeusts it.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='frame'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>frame(timeStep)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Manually trigger a draw frame with a specified time step (in seconds) from
+the last draw frame. Can only be used when <code>setManualFrames()</code> has been
+called.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>timeStep</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    in seconds
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
 </div>
 
   
@@ -7057,6 +7465,18 @@ corner at (-1, -1), width 2, height 2)
         <div class='space-bottom0'>
           <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : default length to use for shapes
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>backgroundColor</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
+          : background color for the figure.
+Use 
+[r, g, b, 1]
+ for opaque and 
+[0, 0, 0, 0]
+ for transparent.
 
           
         </div>
@@ -8923,6 +9343,15 @@ to the screen or manages a HTML element
           <div>
             <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
             = <code>generateUniqueId(&#39;element_&#39;)</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>timeKeeper</span> <code class='quiet'>(<a href="#timekeeper">TimeKeeper</a>
+            = <code>new TimeKeeper()</code>)</code>
 	    
           </div>
           
@@ -28228,9 +28657,776 @@ array).</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>now</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
-            = <code>new GlobalAnimation().now()/1000</code>)</code>
+            = <code>this.timeKeeper.now()/1000</code>)</code>
 	    define this if you want remaining duration from a
 custom time
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='timekeeper'>
+      TimeKeeper
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>TimeKeeper keeps time for a figure, where time is the number of
+milliseconds after the page is loaded load.</p>
+<p>Time can be real time, sped up, slowed down or manually stepped.</p>
+<p>The current time can be accessed using the <code>now</code> method.</p>
+<p>In it's default form, <code>now</code> is the same as the system time
+<code>performance.now()</code> or the animation time sent through on frames requested
+from <code>requestAnimationFrame</code> .</p>
+<p>However, these system times diverge from <code>now</code> when TimeKeeper's time
+speed is changed, or manual time deltas are enabled.</p>
+<p>When time speed is n times faster than real time, <code>now</code> will report n times
+more passage of time from the page load than real time. So if the speed is
+set to 2, then <code>now</code> will report time passing twice as fast.</p>
+<p>If timeouts are needed in a figure's logic, use <code>figure.timeKeeper. setTimeout</code> and <code>figure.timeKeeper.clearTimeout</code> methods instead of the
+system equivalents so the timeouts follow figure time.</p>
+<p>TimeKeeper can also be used to synchronize times (for example, for multiple
+animations being started where it is desired they all have precisely the
+same start time). See <code>getWhen</code> method for information on how to retrieve a
+synchronized time</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='timekeeperreset'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>reset()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Reset TimeKeeper to 0 time.</p>
+<p>All ongoing timers will be cancelled, and all properties reset.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='timekeepergetwhen'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getWhen(when)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Current relative time now, of most recent animation frame or of most
+recent synchronized time.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>when</span> <code class='quiet'>(<a href="#typewhen">TypeWhen</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='timekeepersyncnow'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>syncNow()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Get synchronized relative now time.</p>
+<p>Each call of <code>now</code> when not using manual frames will result in a
+progressed time value in ms from the page load.</p>
+<p>This can be a challenge if you want to start two animations at precisely
+the same time.</p>
+<p>When syncNow is first called, the actual now time is returned. Each
+subsequent call of syncNow will return the same number. syncNow is reset
+on each animation frame, or after <code>TimeKeeper.syncNowTimeout</code> is ellapsed
+(defaults to 100ms).</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='timekeepernow'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>now(time)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Current relative time.</p>
+<p>If speed is 1 and manual frames have not been used, then this will return
+the time in ms after the page is loaded.</p>
+<p>If speed is not 1, or manual frames have been or are being used, then this
+will return the relative time in ms taking into account pauses and frame
+steps from any manual frames, and any speed changes.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>time</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    in ms from page load
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='timekeepersetspeed'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setSpeed(speedFactor)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Set the speed of time. 1 is normal timer, >1 is faster than normal time
+and &#x3C;1 is slower than normal time. The speed must be greater than 0.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>speedFactor</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>1</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='timekeepersetmanualframes'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setManualFrames()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Set manual frames.
+When set, all animation frames can only be initiated with <code>frame</code>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='timekeeperendmanualframes'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>endManualFrames()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>End manual frames.
+When ended, animation frames will again be triggered by
+requestAnimationFrame from the browser.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='timekeeperframe'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>frame(timeStepInSeconds)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Step manual frames by a delta time in seconds.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>timeStepInSeconds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='timekeepersettimeout'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setTimeout(callback, time, description, stateTimer, stateTime)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Use like normal setTimeout in javascript.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>callback</span> <code class='quiet'>(function (): void)</code>
+	    function to be called after some time
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>time</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    in ms
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>description</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+            = <code>&#39;&#39;</code>)</code>
+	    timer description useful for debugging but not
+requied ('')
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>stateTimer</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
+            = <code>false</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>stateTime</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+	    internal use only
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        unique identifier that can be used to clear timer with
+
+<code>clearTimeout</code>
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='timekeepercleartimeout'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>clearTimeout(id)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Clear a current timer (the callback will not be called).</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>id</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null))</code>
+	    timer identifier return from 
+<code>setTimeout</code>
+. If
+null, no action occurs.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='timekeeperqueuenextframe'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>queueNextFrame(func)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Queue function to be called the next time an animation frame is triggered</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>func</span> <code class='quiet'>(function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): void)</code>
+	    function that will be passed the
+current time as an input parameter when it is called
 
           </div>
           
@@ -43690,7 +44886,8 @@ elements are not available at instantiation.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>from</span> <code class='quiet'>((<code>"next"</code> | <code>"prev"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>))</code>
+            <span class='code bold'>from</span> <code class='quiet'>((<code>"next"</code> | <code>"prev"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)
+            = <code>null</code>)</code>
 	    this should generally not be used
 and will be set automatically
 
@@ -45291,6 +46488,12 @@ figure.fnMap.exec(<span class="hljs-string">'toConsole'</span>, <span class="hlj
 <h5>Full Screen Behavior in Safari</h5>
 <p>FigureOne is a javascript library that can be used in the browser, or in app frameworks that support javascript modules.</p>
 <p>On iOS devices, Safari allows traditional video content to fully cover the screen (without menu bars) in landscape mode. This isn't available for other web content, and so for FigureOne to emulate a video experience in the browser then either the video height needs to be reduced, or the top portion of the video should have limited interactivity (as touching the top of the screen in landscape can show the menus).</p>
+<h4>Important Note</h4>
+<p>To significanty reduce the size of the seek states, states are generally saved as a delta to some reference state which is generated when the recorder starts, or when triggered with <code>addCurrentStateAsReference</code>.</p>
+<blockquote>
+<p>Important note: within a state, if an array length is less than the length of the corresponding array in the reference state, then it will be padded with <code>undefined</code> elements to be the same length as in the reference.</p>
+</blockquote>
+<p>This isn't ideal, and will be fixed in a future release.</p>
 
   
 </section></div>
@@ -45352,6 +46555,7 @@ recording goes beyond the current duration</li>
 <li><code>preparingToPause</code></li>
 <li><code>playbackStopped</code></li>
 <li><code>seek</code></li>
+<li><code>recordingStatesComplete</code> - recording completed and recorded states ready</li>
 </ul>
 
   
@@ -45370,8 +46574,7 @@ recording goes beyond the current duration</li>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>singleton</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
-            = <code>false</code>)</code>
+            <span class='code bold'>timeKeeper</span> <code class='quiet'>(<a href="#timekeeper">TimeKeeper</a>)</code>
 	    
           </div>
           
@@ -45585,6 +46788,76 @@ notifications
       </div>
     </div>
   
+    <div class='border-bottom' id='recorderstartstatesrecording'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>startStatesRecording(frameTime)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Initiate states recording to generate seek frames. Any existing states
+will be removed before starting, so the initial state at time 0 must be in
+place (usually this means only start states recording when the figure is
+first created and not after any changes to the initial state have been
+made)</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>frameTime</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>0.1</code>)</code>
+	    time between draw frames in seconds. It can be
+sometimes be useful to have draw frames happen more frequently than the
+seek frames 
+[0.1s]
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='recorderstoprecording'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -45598,6 +46871,56 @@ notifications
   
 
   <p>Stop Recording</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='recorderstopstatesrecording'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>stopStatesRecording()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Cancel the states recording.</p>
+<p>Use this only for cancelling recording as states recording will be
+automatically stopped if the event and audio duration has been reached.</p>
 
   
   
@@ -45867,7 +47190,7 @@ as auto mouse events</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>allowPauseResume</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
-            = <code>true</code>)</code>
+            = <code>false</code>)</code>
 	    <code>true</code>
  to allow resuming from pause if a
 pause state exists
@@ -45924,6 +47247,54 @@ pause state exists
   
 
   <p>Toggle playback (if not recording)</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='recorderresumeplayback'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>resumePlayback()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Resume playback if paused.</p>
 
   
   
@@ -58466,8 +59837,7 @@ animation manager when it is finished (
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>now</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
-            = <code>new GlobalAnimation().now()/1000</code>)</code>
+            <span class='code bold'>now</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
 	    define this if you want remaining duration from a
 custom time
 
@@ -59274,6 +60644,25 @@ animation on cancel (
           : precision to do calculations to (
 <code>8</code>
 )
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>timeKeeper</span> <code class='quiet'>(TimeKeepr?)</code>
+          : animations need to be tied to a time
+reference. If this is not supplied, then the default browser time reference
+performance.now will be used and methods with 
+<a href="#typewhen">TypeWhen</a>
+ parameters
+will allow only 
+<code>'now'</code>
+ and 
+<code>'nextFrame'</code>
+ and not 
+<code>'lastFrame'</code>
+, 
+<code>'syncNow'</code>
 
           
         </div>
