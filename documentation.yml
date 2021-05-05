@@ -29,7 +29,7 @@ toc:
   - OBJ_Polygon
   - OBJ_Star
   - OBJ_Grid
-  - name: Collections
+  - name: Shape Collections
     file: ./docs/api/tutorials/collections/collections.md
   - OBJ_Collection
   - CollectionsLine
@@ -52,7 +52,6 @@ toc:
   - name: Animation
     file: ./docs/api/tutorials/animation/animation.md
   - AnimationManager
-  - TimeKeeper
   - AnimationBuilder
   - PositionAnimationStep
   - RotationAnimationStep
@@ -138,10 +137,12 @@ toc:
   - TypeSlideStateCallback
   - TypeSlideTransitionCallback
   - OBJ_EquationDefaults
+  - TypeTransitionDefinition
   - name: Interactive Video
     file: ./docs/api/tutorials/recorder/recorder.md
   - Recorder
   - FunctionMap
+  - TypeRecorderTime
   - name: 2D Geometry Tools
   - minAngleDiff
   - getTriangleCenter
@@ -169,6 +170,15 @@ toc:
   - DrawingObject
   - FigurePrimitives
   - TypeElementPath
+  - TimeKeeper
+  - OBJ_Subscriber
+  - OBJ_Subscribers
+  - Notification
+  - OBJ_Notifications
+  - NotificationManager
+  - FigureElement#setTransform
+  - OBJ_ElementPropertyMod
+  - OBJ_ElementMods
   - name: Misc Geometry
   - TypeParsablePoint
   - TypeParsableLine
@@ -252,6 +262,8 @@ toc:
   - FigureCollections
   - OBJ_ButtonColor
   - OBJ_LineMove
+  - TypeHAlign
+  - TypeVAlign
   - name: Misc Animation
   - AnimationStep
   - ElementAnimationStep
@@ -291,6 +303,14 @@ toc:
   - OBJ_GoToFormAnimationStep
   - NextFormAnimationStep
   - GoToFormAnimationStep
+  - EQN_TranslationStyles
+  - EQN_Line
+  - EQN_LineGlyphAlign
+  - EQN_UpdateElementText
+  - name: Misc SlideNavigator
+  - COL_SlideNavigatorButton
+  - COL_SlideNavigatorEqnDefaults
+  - OBJ_AnimationDefinition
 
 
   # - name: tools

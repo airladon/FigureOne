@@ -6069,14 +6069,8 @@ function getBorder(
   return border.map(b => b.map(p => getPoint(p)));
 }
 
-/**
- *
- */
 export type TypeXAlign = 'left' | 'right' | 'center' | 'string' | number;
 
-/**
- *
- */
 export type TypeYAlign = 'bottom' | 'top' | 'middle' | 'string' | number;
 
 function getPositionInRect(
