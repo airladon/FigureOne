@@ -391,7 +391,7 @@ figure.getElement('nav').loadSlides([
 */
 
 // Whenever the radius line moves, the angle, arc and sine line must be updated
-radiusLine.subscriptions.add('setTransform', () => {
+radiusLine.notifications.add('setTransform', () => {
   const a = radiusLine.getRotation();
   angle.setAngle({ angle: a });
   arc.setAngle({ angle: a });

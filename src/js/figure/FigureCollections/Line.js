@@ -832,7 +832,7 @@ export default class CollectionsLine extends FigureElementCollection {
     //   return new anim.TriggerAnimationStep(optionsToUse);
     // }
     this.fnMap.add('transformToLine', this.transformToLine.bind(this));
-    this.subscriptions.add('setTransform', 'transformToLine');
+    this.notifications.add('setTransform', 'transformToLine');
   }
 
   /** A line has:
@@ -1168,7 +1168,7 @@ export default class CollectionsLine extends FigureElementCollection {
       this.add('label', this.label.eqn);
     }
     // if (update) {
-    //   this.subscriptions.add('setTransform', () => {
+    //   this.notifications.add('setTransform', () => {
     //     this.updateLabel();
     //     this.updateMovePads();
     //   });
@@ -1185,12 +1185,12 @@ export default class CollectionsLine extends FigureElementCollection {
    */
   setAutoUpdate(update: boolean = true) {
     if (update) {
-      this.autoUpdateSubscriptionId = this.subscriptions.add('setTransform', () => {
+      this.autoUpdateSubscriptionId = this.notifications.add('setTransform', () => {
         this.updateLabel();
         this.updateMovePads();
       });
     } else {
-      this.subscriptions.remove('setTransform', this.autoUpdateSubscriptionId);
+      this.notifications.remove('setTransform', this.autoUpdateSubscriptionId);
       this.autoUpdateSubscriptionId = -1;
     }
   }

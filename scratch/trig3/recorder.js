@@ -65,7 +65,7 @@ function setupRecorder() {
     recorder.useAutoEvents = true;
   };
 
-  // Button state is updated from recorder subscriptions
+  // Button state is updated from recorder notifications
   function playbackStarted() {
     playPauseButton.classList.add('f1_playing');
     recordButton.classList.add('f1_player__button_disable');
@@ -85,10 +85,10 @@ function setupRecorder() {
     recordButton.innerHTML = 'Record';
     playPauseButton.classList.remove('f1_player__button_disable');
   }
-  recorder.subscriptions.add('playbackStopped', playbackStopped.bind(this));
-  recorder.subscriptions.add('playbackStarted', playbackStarted.bind(this));
-  recorder.subscriptions.add('recordingStarted', recordingStarted.bind(this));
-  recorder.subscriptions.add('recordingStopped', recordingStopped.bind(this));
+  recorder.notifications.add('playbackStopped', playbackStopped.bind(this));
+  recorder.notifications.add('playbackStarted', playbackStarted.bind(this));
+  recorder.notifications.add('recordingStarted', recordingStarted.bind(this));
+  recorder.notifications.add('recordingStopped', recordingStopped.bind(this));
 
   /*
   .##....##.########.##....##..######.
@@ -152,8 +152,8 @@ function setupRecorder() {
     updateTimeLabel(time);
   }
 
-  recorder.subscriptions.add('timeUpdate', t => setTime(t[0]));
-  recorder.subscriptions.add('durationUpdated', (d) => { state.duration = d; });
+  recorder.notifications.add('timeUpdate', t => setTime(t[0]));
+  recorder.notifications.add('durationUpdated', (d) => { state.duration = d; });
 
   /*
   ..######..########.########.##....##
@@ -183,9 +183,9 @@ function setupRecorder() {
     const time = percent * state.duration;
     lastSeekTime = time;
     if (seekId != null) {
-      figure.subscriptions.remove('beforeDraw', seekId);
+      figure.notifications.remove('beforeDraw', seekId);
     }
-    seekId = figure.subscriptions.add('beforeDraw', () => {
+    seekId = figure.notifications.add('beforeDraw', () => {
       recorder.seek(lastSeekTime);
       seekId = null;
     }, 1);

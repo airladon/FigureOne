@@ -39,10 +39,10 @@ The play/pause button toggles `Recorder` playing and pausing. When toggled, `Rec
 
   // The play/pause button picture will change on 'playbackStopped' and
   // 'playbackStarted' notifications from the recorder.
-  recorder.subscriptions.add(
+  recorder.notifications.add(
     'playbackStopped', () => playPauseButton.classList.remove('f1_playing'),
   );
-  recorder.subscriptions.add(
+  recorder.notifications.add(
     'playbackStarted', () => playPauseButton.classList.add('f1_playing'),
   );
 ```
@@ -92,8 +92,8 @@ Add an event listener to listen for when a user presses the space bar. On press,
 
   // On 'timeUpdate' and 'duration' notifications from recorder, update the
   // player seek bar and time label
-  recorder.subscriptions.add('timeUpdate', t => setTime(t[0], true));
-  recorder.subscriptions.add('durationUpdated', () => setTime());
+  recorder.notifications.add('timeUpdate', t => setTime(t[0], true));
+  recorder.notifications.add('durationUpdated', () => setTime());
 ```
 
 The function `setTime` sets the time in the playback control by updating the seek bar and time label. The function only updates the seekCircle position if the input parameter `fromRecorder` is `false`. This means, whenever the `Recorder` class sends a notification that results in the time being set ('timeUpdate' or 'durationUpdated'), then the seek circle will be set. However, if the circle is being dragged by a user, then only the time label will be updated.
@@ -128,9 +128,9 @@ Finally, the time label is updated.
 
     // Only ask the recorder to seek when a frame is about to be drawn.
     if (seekId != null) {
-      figure.subscriptions.remove('beforeDraw', seekId);
+      figure.notifications.remove('beforeDraw', seekId);
     }
-    seekId = figure.subscriptions.add('beforeDraw', () => {
+    seekId = figure.notifications.add('beforeDraw', () => {
       recorder.seek(lastSeekTime);
       seekId = null;
     }, 1);
@@ -297,10 +297,10 @@ Button state is updated from `Recorder` notifications. The play/pause button cre
     recordButton.innerHTML = 'Record';
     playPauseButton.classList.remove('f1_player__button_disable');
   }
-  recorder.subscriptions.add('playbackStopped', playbackStopped.bind(this));
-  recorder.subscriptions.add('playbackStarted', playbackStarted.bind(this));
-  recorder.subscriptions.add('recordingStarted', recordingStarted.bind(this));
-  recorder.subscriptions.add('recordingStopped', recordingStopped.bind(this));
+  recorder.notifications.add('playbackStopped', playbackStopped.bind(this));
+  recorder.notifications.add('playbackStarted', playbackStarted.bind(this));
+  recorder.notifications.add('recordingStarted', recordingStarted.bind(this));
+  recorder.notifications.add('recordingStopped', recordingStopped.bind(this));
 ```
 
 #### Keyboard Control

@@ -886,7 +886,7 @@ function rand2D(minX, minY, maxX, maxY) {
 /*!*******************************!*\
   !*** ./src/js/tools/tools.js ***!
   \*******************************/
-/*! exports provided: diffPathsToObj, diffObjToPaths, Console, classify, extractFrom, ObjectKeyPointer, getElement, addToObject, duplicateFromTo, isTouchDevice, generateUniqueId, joinObjects, cleanUIDs, loadRemote, loadRemoteCSS, deleteKeys, copyKeysFromTo, generateRandomString, duplicate, assignObjectFromTo, joinObjectsWithOptions, objectToPaths, getObjectDiff, updateObjFromPath, pathsToObj, UniqueMap, compressObject, refAndDiffToObject, uncompressObject, unminify, minify, ObjectTracker, download, Subscription, SubscriptionManager, getFromObject, splitString, PerformanceTimer */
+/*! exports provided: diffPathsToObj, diffObjToPaths, Console, classify, extractFrom, ObjectKeyPointer, getElement, addToObject, duplicateFromTo, isTouchDevice, generateUniqueId, joinObjects, cleanUIDs, loadRemote, loadRemoteCSS, deleteKeys, copyKeysFromTo, generateRandomString, duplicate, assignObjectFromTo, joinObjectsWithOptions, objectToPaths, getObjectDiff, updateObjFromPath, pathsToObj, UniqueMap, compressObject, refAndDiffToObject, uncompressObject, unminify, minify, ObjectTracker, download, Subscription, NotificationManager, getFromObject, splitString, PerformanceTimer */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -925,7 +925,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectTracker", function() { return ObjectTracker; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "download", function() { return download; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Subscription", function() { return Subscription; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SubscriptionManager", function() { return SubscriptionManager; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NotificationManager", function() { return NotificationManager; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getFromObject", function() { return getFromObject; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "splitString", function() { return splitString; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PerformanceTimer", function() { return PerformanceTimer; });
@@ -2150,7 +2150,7 @@ var ObjectTracker = /*#__PURE__*/function () {
  * Subscriber
  * @property {string | function(): void} callback callback to use when
  * subscription is published
- * @property {number} num number of subscriptions
+ * @property {number} num number of notifications
  */
 
 
@@ -2290,7 +2290,7 @@ var Subscription = /*#__PURE__*/function () {
  * Subscriptions managers can also be added to custom objects, but it will only
  * publish to subscribers when it is told to publish.
  *
- * @property {OBJ_Subscriptions} subscriptions
+ * @property {OBJ_Subscriptions} notifications
  * @property {FunctionMap} fnMap
  *
  * @example
@@ -2316,7 +2316,7 @@ var Subscription = /*#__PURE__*/function () {
  *
  * // Subscribe to ball1's `setTransform` publication, and use the set
  * transform to move ball2 with ball1
- * ball1.subscriptions.add('setTransform', (transform) => {
+ * ball1.notifications.add('setTransform', (transform) => {
  *   ball2.setTransform(transform[0]);
  * });
  *
@@ -2325,17 +2325,17 @@ var Subscription = /*#__PURE__*/function () {
  *   .position({ target: [1, 0], duration: 2 })
  *   .start();
  */
-var SubscriptionManager = /*#__PURE__*/function () {
+var NotificationManager = /*#__PURE__*/function () {
   /**
    * @param {FunctionMap} fnMap default function map to use. Function maps
    * need only be used with {@link Recorder}.
    */
-  function SubscriptionManager() {
+  function NotificationManager() {
     var fnMap = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new _FunctionMap__WEBPACK_IMPORTED_MODULE_1__["FunctionMap"]();
 
-    _classCallCheck(this, SubscriptionManager);
+    _classCallCheck(this, NotificationManager);
 
-    this.subscriptions = {};
+    this.notifications = {};
     this.fnMap = fnMap;
   }
   /**
@@ -2351,16 +2351,16 @@ var SubscriptionManager = /*#__PURE__*/function () {
    */
 
 
-  _createClass(SubscriptionManager, [{
+  _createClass(NotificationManager, [{
     key: "add",
     value: function add(subscriptionName, callback) {
       var numberOfSubscriptions = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : -1;
 
-      if (this.subscriptions[subscriptionName] == null) {
-        this.subscriptions[subscriptionName] = new Subscription(this.fnMap);
+      if (this.notifications[subscriptionName] == null) {
+        this.notifications[subscriptionName] = new Subscription(this.fnMap);
       }
 
-      return this.subscriptions[subscriptionName].add(callback, numberOfSubscriptions);
+      return this.notifications[subscriptionName].add(callback, numberOfSubscriptions);
     }
     /**
      * Publish to all subscribers
@@ -2372,8 +2372,8 @@ var SubscriptionManager = /*#__PURE__*/function () {
   }, {
     key: "publish",
     value: function publish(subscriptionName, payload) {
-      if (this.subscriptions[subscriptionName] != null) {
-        this.subscriptions[subscriptionName].publish(payload);
+      if (this.notifications[subscriptionName] != null) {
+        this.notifications[subscriptionName].publish(payload);
       }
     }
     /**
@@ -2385,12 +2385,12 @@ var SubscriptionManager = /*#__PURE__*/function () {
   }, {
     key: "remove",
     value: function remove(subscriptionName, subscriberId) {
-      if (this.subscriptions[subscriptionName] != null) {
-        var subscription = this.subscriptions[subscriptionName];
+      if (this.notifications[subscriptionName] != null) {
+        var subscription = this.notifications[subscriptionName];
         subscription.remove(subscriberId);
 
         if (subscription.order.length === 0) {
-          delete this.subscriptions[subscriptionName];
+          delete this.notifications[subscriptionName];
         }
       }
     } // eslint-disable-next-line class-methods-use-this
@@ -2402,7 +2402,7 @@ var SubscriptionManager = /*#__PURE__*/function () {
     }
   }]);
 
-  return SubscriptionManager;
+  return NotificationManager;
 }();
 
 function download(filename, text) {

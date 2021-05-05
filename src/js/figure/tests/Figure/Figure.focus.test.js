@@ -46,7 +46,7 @@ describe('Animate To State', () => {
     // p3 = c._p3;
     figure.initialize();
     drawCallback = jest.fn(() => {});
-    figure.subscriptions.add('beforeDraw', drawCallback);
+    figure.notifications.add('beforeDraw', drawCallback);
   });
   describe('Focus and focus loss simulation', () => {
     test('Focus not lost', () => {

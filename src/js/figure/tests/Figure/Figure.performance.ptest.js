@@ -37,7 +37,7 @@ describe('Performance Testing', () => {
           },
         },
       });
-      e.subscriptions.add('setTransform', () => addToCount());
+      e.notifications.add('setTransform', () => addToCount());
     }
   });
   describe('Animation', () => {

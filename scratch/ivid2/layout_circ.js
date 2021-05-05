@@ -1592,6 +1592,6 @@ function layoutCirc() {
   //     })
   //     .start();
   // })
-  rotator.subscriptions.add('setTransform', 'updateCircle');
-  rotatorFull.subscriptions.add('setTransform', 'updateCircle');
+  rotator.notifications.add('setTransform', 'updateCircle');
+  rotatorFull.notifications.add('setTransform', 'updateCircle');
 }

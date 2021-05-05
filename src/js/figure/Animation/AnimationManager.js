@@ -22,7 +22,7 @@ import type {
 // eslint-disable-next-line import/no-cycle
 import TimeKeeper from '../TimeKeeper';
 import {
-  joinObjects, duplicateFromTo, SubscriptionManager, PerformanceTimer,
+  joinObjects, duplicateFromTo, NotificationManager, PerformanceTimer,
 } from '../../tools/tools';
 import { getState } from '../Recorder/state';
 import { FunctionMap } from '../../tools/FunctionMap';
@@ -128,7 +128,7 @@ export type TypeAnimationManagerInputOptions = {
  * @param
  * @property {'animating' | 'idle' | 'waitingToStart'} state
  * @property {Array<AnimationStep>} animations
- * @property {SubscriptionManager} subscriptions
+ * @property {NotificationManager} notifications
  * @see {@link FigureElement}
  * @see {@link AnimationBuilder}
  * @example
@@ -211,7 +211,7 @@ export default class AnimationManager {
   state: 'animating' | 'idle' | 'waitingToStart';
   fnMap: FunctionMap;
   finishedCallback: ?(string | (() => void));
-  subscriptions: SubscriptionManager;
+  notifications: NotificationManager;
   options: {
     translation?: {
       style: 'curve' | 'linear',
@@ -260,7 +260,7 @@ export default class AnimationManager {
     this.options = { translation: {} };
     this.fnMap = new FunctionMap();
     this.finishedCallback = options.finishedCallback;
-    this.subscriptions = new SubscriptionManager();
+    this.notifications = new NotificationManager();
     this.customSteps = [];
     this.animationSpeed = 1;
     // this.setupAnimationSteps();
@@ -735,7 +735,7 @@ export default class AnimationManager {
       if (this.state === 'animating') {
         this.state = 'idle';
         callback = this.finishedCallback;
-        this.subscriptions.publish('finished');
+        this.notifications.publish('finished');
       }
       this.state = 'idle';
     }
@@ -783,7 +783,7 @@ export default class AnimationManager {
       if (this.state === 'animating') {
         this.state = 'idle';
         this.fnMap.exec(this.finishedCallback);
-        this.subscriptions.publish('finished');
+        this.notifications.publish('finished');
       }
       this.state = 'idle';
     }
@@ -869,7 +869,7 @@ export default class AnimationManager {
     }
     if (this.state === 'idle') {
       this.fnMap.exec(this.finishedCallback);
-      this.subscriptions.publish('finished');
+      this.notifications.publish('finished');
     }
     if (this.element != null) {
       this.element.animateNextFrame();
@@ -892,7 +892,7 @@ export default class AnimationManager {
     }
     if (this.state === 'idle') {
       this.fnMap.exec(this.finishedCallback);
-      this.subscriptions.publish('finished');
+      this.notifications.publish('finished');
     }
     if (this.element != null) {
       this.element.animateNextFrame();

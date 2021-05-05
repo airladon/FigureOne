@@ -137,7 +137,7 @@ function layoutRight() {
   });
   const [tri, rotLine, xLine] = rightTri.getElements(['tri', 'rotLine', 'x']);
   const radius = Math.sqrt(1.8 ** 2 + 0.9 ** 2);
-  rotLine.subscriptions.add('setTransform', () => {
+  rotLine.notifications.add('setTransform', () => {
     const r = rotLine.getRotation();
     const x = radius * Math.cos(r);
     const y = radius * Math.sin(r);

@@ -251,7 +251,7 @@ function layoutCirc() {
   addPulseFn('circPulseUnitHyp', 'unitHyp.label', 'right', 'bottom', 2.7);
   addPulseFn('circPulseX', 'xSide.label', 'center', 'top', 2);
   addPulseFn('circPulseY', 'ySide.label', 'left', 'middle', 2);
-  unitHyp.subscriptions.add('setTransform', () => {
+  unitHyp.notifications.add('setTransform', () => {
     unitHyp.updateLabel();
   });
 
@@ -291,6 +291,6 @@ function layoutCirc() {
   add('circSetState', () => {
     triToX(tri.customState.xLength);
   });
-  tri.subscriptions.add('setState', 'circSetState');
+  tri.notifications.add('setState', 'circSetState');
   triToX(dCos);
 }

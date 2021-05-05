@@ -1,5 +1,5 @@
 // @flow
-import { joinObjects, SubscriptionManager, joinObjectsWithOptions } from '../tools/tools';
+import { joinObjects, NotificationManager, joinObjectsWithOptions } from '../tools/tools';
 import { FigureElementCollection } from './Element';
 import type { FigureElement, TypeElementPath } from './Element';
 import type {
@@ -507,13 +507,13 @@ export type OBJ_SlideNavigator = {
  * `textElement` automatically, and will usually be more convenient than
  * manually creating them (unless custom buttons are needed).
  *
- * Notifications - The subscription manager property `subscriptions` will
+ * Notifications - The subscription manager property `notifications` will
  * publish the following events:
  * - `goToSlide`: published when slide changes - will pass slide index to
  * subscriber
  * - `steady`: steady state reached (slide transition complete)
  *
- * @property {SubscriptionManager} subscriptions subscription manager for
+ * @property {NotificationManager} notifications subscription manager for
  * element
  * @property {number} currentSlideIndex index of slide current shown
  * @property {boolean} inTransition `true` if slide current transitioning
@@ -530,7 +530,7 @@ export default class SlideNavigator {
   equationsOrder: Array<FigureElement>;
   equations: { [string]: FigureElement };
   collection: FigureElementCollection;
-  subscriptions: SubscriptionManager;
+  notifications: NotificationManager;
   from: 'prev' | 'next' | number;
   equationDefaults: {
     duration: number,
@@ -546,7 +546,7 @@ export default class SlideNavigator {
    * property.
    */
   constructor(options: OBJ_SlideNavigator | null = null) {
-    this.subscriptions = new SubscriptionManager();
+    this.notifications = new NotificationManager();
     this.inTransition = false;
     this.fromAutoSlide = false;
     if (options != null) {
@@ -863,7 +863,7 @@ export default class SlideNavigator {
       }
     }
     this.inTransition = false;
-    this.subscriptions.publish('steady');
+    this.notifications.publish('steady');
   }
 
   // Animations pass cancelled and force. As we need the force information, we
@@ -1014,7 +1014,7 @@ export default class SlideNavigator {
   }
 
   transition(from: 'next' | 'prev' | number) {
-    this.subscriptions.publish('beforeTransition');
+    this.notifications.publish('beforeTransition');
     this.from = from;
     if (from !== 'prev') {
       return this.transitionDone();
@@ -1113,7 +1113,7 @@ export default class SlideNavigator {
    * and will be set automatically
    */
   goToSlide(slideIndex: number, from: 'next' | 'prev' | number | null = null) {
-    this.subscriptions.publish('goToSlide', slideIndex);
+    this.notifications.publish('goToSlide', slideIndex);
     if (this.slides == null || this.slides.length === 0) {
       return;
     }

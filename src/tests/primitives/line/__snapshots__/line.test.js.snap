@@ -508,6 +508,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "Update1",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -683,34 +711,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -1547,6 +1547,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "arrow-bar",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -1722,34 +1750,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -2742,6 +2742,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "arrow-barb",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -2917,34 +2945,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -5331,6 +5331,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "arrow-circ",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -5506,34 +5534,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -6630,6 +6630,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "arrow-line",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -6805,34 +6833,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -9219,6 +9219,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "arrow-poly",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -9394,34 +9422,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -10362,6 +10362,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "arrow-revTri",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -10537,34 +10565,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -11349,6 +11349,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "arrow-tri",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -11524,34 +11552,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -12155,6 +12155,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "border-buffer",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -12330,34 +12358,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -12995,6 +12995,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "border-custom",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -13170,34 +13198,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -13848,6 +13848,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "border-custom2",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -14023,34 +14051,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -14631,6 +14631,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "border-draw",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -14806,34 +14834,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -15414,6 +15414,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "border-num",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -15589,34 +15617,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -16197,6 +16197,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "border-rect",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -16372,34 +16400,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -17151,6 +17151,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "dash",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -17326,34 +17354,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -18105,6 +18105,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "dash-neg",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -18280,34 +18308,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -19060,6 +19060,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "dash-offset",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -19235,34 +19263,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -20014,6 +20014,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "dash-pos",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -20189,34 +20217,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -20968,6 +20968,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "dash-widthIsNum",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -21143,34 +21171,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -21751,6 +21751,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "definition-length",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -21926,34 +21954,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -22534,6 +22534,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "definition-override",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -22709,34 +22737,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -23317,6 +23317,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "definition-points",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -23492,34 +23520,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -24117,6 +24117,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "drawBorder-custom",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -24292,34 +24320,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -24900,6 +24900,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "drawBorderBuffer-0",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -25075,34 +25103,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -25700,6 +25700,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "drawBorderBuffer-custom",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -25875,34 +25903,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -26483,6 +26483,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "drawBorderBuffer-number",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -26658,34 +26686,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -27480,6 +27480,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "linePrimitives-close",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -27655,34 +27683,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -28291,6 +28291,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "linePrimitives-open",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -28466,34 +28494,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -29074,6 +29074,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "touchBorder-border",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -29249,34 +29277,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -29857,6 +29857,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "touchBorder-buffer",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -30032,34 +30060,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -30656,6 +30656,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "touchBorder-custom",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -30831,34 +30859,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -31492,6 +31492,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "touchBorder-custom2",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -31667,34 +31695,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -32310,6 +32310,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "touchBorder-draw",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -32485,34 +32513,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -33116,6 +33116,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "touchBorder-num",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -33291,34 +33319,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -33922,6 +33922,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "touchBorder-rect",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -34097,34 +34125,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -34705,6 +34705,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "widthIs-mid",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -34880,34 +34908,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -35488,6 +35488,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "widthIs-neg",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -35663,34 +35691,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -36271,6 +36271,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "widthIs-num",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -36446,34 +36474,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",
@@ -37054,6 +37054,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "widthIs-pos",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": [Function],
   "opacity": 1,
@@ -37229,34 +37257,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",

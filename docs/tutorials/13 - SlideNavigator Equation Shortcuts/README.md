@@ -68,7 +68,7 @@ const nav = new Fig.SlideNavigator({
 nav.goToSlide(0);
 
 // Clicking on the equation progresses to the next slide, or next equation form
-eqn.subscriptions.add('onClick', () => nav.nextSlide());
+eqn.notifications.add('onClick', () => nav.nextSlide());
 
 
 ```

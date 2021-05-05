@@ -256,7 +256,7 @@ function fig1() {
   };
 
   // Update the figure every time the line is rotated
-  line.subscriptions.add('setTransform', () => update());
+  line.notifications.add('setTransform', () => update());
 
   // Initialization
   line.setRotation(5.2);

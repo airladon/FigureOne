@@ -33,10 +33,10 @@ Note however that figure state only captures some of the figure state. For each 
 * `isTouchable`
 * `state`
 * `move`
-* `subscriptions`
+* `notifications`
 * `customState`
 
-So that means if the element manages a drawingObject whose vertices change over time, then the vertices will need to be updated when state is set. Use the `setState` notification from the `subscriptions` property of the element to do this.
+So that means if the element manages a drawingObject whose vertices change over time, then the vertices will need to be updated when state is set. Use the `setState` notification from the `notifications` property of the element to do this.
 
 #### Video Track
 

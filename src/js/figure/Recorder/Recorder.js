@@ -4,7 +4,7 @@ import { Point } from '../../tools/g2';
 import { round } from '../../tools/math';
 import {
   duplicate, minify, unminify, joinObjects,
-  ObjectTracker, download, SubscriptionManager, // PerformanceTimer,
+  ObjectTracker, download, NotificationManager, // PerformanceTimer,
 } from '../../tools/tools';
 import TimeKeeper from '../TimeKeeper';
 // import type { FigureElement } from './Element';
@@ -203,7 +203,7 @@ function getMostRecentForTime(
  * - [Trig 2 - Names](https://github.com/airladon/FigureOne/docs/examples/Trig%202%20-%20Names/index.html)
  * - [Trig 3 - Relationships](https://github.com/airladon/FigureOne/docs/examples/Trig%203%20-%20Relationships/index.html)
  *
- * Notifications - The subscription manager property `subscriptions` will
+ * Notifications - The subscription manager property `notifications` will
  * publish the following events:
  * - `timeUpdate`: updated at period defined in property `timeUpdates`
  * - `durationUpdated`: updated whenever audio or video are loaded, or when
@@ -228,7 +228,7 @@ function getMostRecentForTime(
  * duration between recorded seek frames
  * @property {number} timeUpdates in seconds - how often to publish the
  * 'timeUpdate' notification
- * @property {SubscriptionManager} subscriptions - use to subscribe to
+ * @property {NotificationManager} notifications - use to subscribe to
  * notifications
  */
 class Recorder {
@@ -248,7 +248,7 @@ class Recorder {
     };
   };
 
-  subscriptions: SubscriptionManager;
+  notifications: NotificationManager;
 
   eventsToPlay: Array<string>;
 
@@ -310,7 +310,7 @@ class Recorder {
   }
 
   initialize() {
-    this.subscriptions = new SubscriptionManager();
+    this.notifications = new NotificationManager();
     this.events = {};
     this.eventsCache = {};
     this.reset();
@@ -369,7 +369,7 @@ class Recorder {
 
   setCurrentTime(time: number) {
     this.currentTime = time;
-    this.subscriptions.publish('timeUpdate', [time]);
+    this.notifications.publish('timeUpdate', [time]);
   }
 
   setVideoToNowDeltaTime(videoSeekTime: number = 0) {
@@ -442,10 +442,10 @@ class Recorder {
     this.audio = audio;
     this.audio.onloadedmetadata = () => {
       this.duration = this.calcDuration();
-      this.subscriptions.publish('durationUpdated', this.duration);
+      this.notifications.publish('durationUpdated', this.duration);
     };
     this.audio.oncanplaythrough = () => {
-      this.subscriptions.publish('audioLoaded');
+      this.notifications.publish('audioLoaded');
     };
   }
 
@@ -464,8 +464,8 @@ class Recorder {
       this.events[eventName].list = lists[eventName];
     });
     this.duration = this.calcDuration();
-    this.subscriptions.publish('eventsLoaded');
-    this.subscriptions.publish('durationUpdated', this.duration);
+    this.notifications.publish('eventsLoaded');
+    this.notifications.publish('durationUpdated', this.duration);
   }
 
   loadStates(
@@ -475,8 +475,8 @@ class Recorder {
   ) {
     this.states = this.decodeStates(statesIn, isMinified, isObjectForm);
     this.duration = this.calcDuration();
-    this.subscriptions.publish('statesLoaded');
-    this.subscriptions.publish('durationUpdated', this.duration);
+    this.notifications.publish('statesLoaded');
+    this.notifications.publish('durationUpdated', this.duration);
   }
 
   loadSavedData(
@@ -484,7 +484,7 @@ class Recorder {
   ) {
     this.loadStates(combined.states, true, true);
     this.loadEvents(combined.events, true);
-    this.subscriptions.publish('videoLoaded');
+    this.notifications.publish('videoLoaded');
   }
 
   encodeEvents(
@@ -650,7 +650,7 @@ class Recorder {
     // this.initializePlayback(fromTime);
     this.startEventsPlayback(fromTime);
     const audioStarted = this.startAudioPlayback(fromTime);
-    this.subscriptions.publish('recordingStarted');
+    this.notifications.publish('recordingStarted');
     this.startRecordingTime = fromTime;
     this.startTimeUpdates();
     if (!audioStarted) {
@@ -728,14 +728,14 @@ class Recorder {
           if (Math.ceil(this.duration) > this.duration) {
             const atEnd = this.duration <= this.getCurrentTime();
             this.duration = Math.ceil(this.duration);
-            this.subscriptions.publish('durationUpdated', this.duration);
+            this.notifications.publish('durationUpdated', this.duration);
             if (atEnd) {
               this.setCurrentTime(this.duration);
-              this.subscriptions.publish('timeUpdate', [this.duration]);
+              this.notifications.publish('timeUpdate', [this.duration]);
             }
           }
         }
-        this.subscriptions.publish('recordingStatesComplete');
+        this.notifications.publish('recordingStatesComplete');
       }
       this.duration = this.calcDuration();
     }
@@ -888,7 +888,7 @@ class Recorder {
       this.isAudioPlaying = false;
     }
     this.lastSeekTime = null;
-    this.subscriptions.publish('recordingStopped');
+    this.notifications.publish('recordingStopped');
   }
 
   /**
@@ -935,7 +935,7 @@ class Recorder {
     this.lastRecordTimeCount += 1;
     if (now > this.duration && this.figure.timeKeeper.manual === false) {
       this.duration = now;
-      this.subscriptions.publish('durationUpdated', this.duration);
+      this.notifications.publish('durationUpdated', this.duration);
     }
   }
 
@@ -985,7 +985,7 @@ class Recorder {
     this.lastRecordTimeCount += 1;
     if (time > this.duration && this.figure.timeKeeper.manual === false) {
       this.duration = time;
-      this.subscriptions.publish('durationUpdated', this.duration);
+      this.notifications.publish('durationUpdated', this.duration);
     }
   }
 
@@ -1304,7 +1304,7 @@ ${cursorData}
     this.setToTime(time);
     this.lastSeekTime = this.currentTime;
     this.figure.stop('freeze');
-    this.subscriptions.publish('seek', time);
+    this.notifications.publish('seek', time);
   }
 
   setToTime(timeIn: number, force: boolean = false) {
@@ -1547,14 +1547,14 @@ ${cursorData}
       if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
         this.finishPlaying();
       }
-      this.subscriptions.publish('playbackStarted');
+      this.notifications.publish('playbackStarted');
     };
 
     this.figure.setState(stateToStartFrom, this.settings.play);
     if (this.figure.state.preparingToSetState) {
       this.state = 'preparingToPlay';
-      this.subscriptions.publish('preparingToPlay');
-      this.figure.subscriptions.add('stateSet', finished, 1);
+      this.notifications.publish('preparingToPlay');
+      this.figure.notifications.add('stateSet', finished, 1);
     } else {
       finished();
     }
@@ -1651,7 +1651,7 @@ ${cursorData}
     this.timeUpdatesTimeoutID = this.timeKeeper.setTimeout(
       () => {
         this.setCurrentTime(this.getCurrentTime());
-        this.subscriptions.publish('timeUpdate', [this.getCurrentTime()]);
+        this.notifications.publish('timeUpdate', [this.getCurrentTime()]);
         this.startTimeUpdates();
       },
       this.timeUpdates,
@@ -1803,7 +1803,7 @@ ${cursorData}
       this.isAudioPlaying = false;
     }
     this.state = 'idle';
-    this.subscriptions.publish('playbackStopped');
+    this.notifications.publish('playbackStopped');
   }
 
   // On pause, animations and pauses can complete and clear:
@@ -1835,7 +1835,7 @@ ${cursorData}
 
     const pause = () => {
       this.state = 'idle';
-      this.subscriptions.publish('playbackStopped');
+      this.notifications.publish('playbackStopped');
       // this.figure.stop();
     };
     this.stopTimeouts();
@@ -1844,10 +1844,10 @@ ${cursorData}
       this.isAudioPlaying = false;
     }
 
-    this.figure.subscriptions.add('stopped', pause, 1);
+    this.figure.notifications.add('stopped', pause, 1);
     this.figure.stop(how);
     if (this.figure.state.preparingToStop) {
-      this.subscriptions.publish('preparingToPause');
+      this.notifications.publish('preparingToPause');
       this.state = 'preparingToPause';
     }
   }

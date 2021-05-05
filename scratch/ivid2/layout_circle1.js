@@ -1030,5 +1030,5 @@ function layoutCircle1() {
       })
       .start();
   })
-  rotator.subscriptions.add('setTransform', 'updateCircle');
+  rotator.notifications.add('setTransform', 'updateCircle');
 }

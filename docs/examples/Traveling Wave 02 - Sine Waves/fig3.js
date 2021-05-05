@@ -130,7 +130,7 @@ function fig3() {
   // Each time the mover is moved, the offset needs to be updated,
   // and the frequency/wavelength of the trace and in the equation
   // needs to be updated.
-  mover.subscriptions.add('setTransform', () => {
+  mover.notifications.add('setTransform', () => {
     offset += mover.getPosition().x;
     mover.transform.updateTranslation(0, 0.15);
     if (offset > 1) { offset = 1; }

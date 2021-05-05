@@ -498,7 +498,7 @@ function layoutCirc() {
     const [ang] = payload;
     rotator.setRotation(ang);
   });
-  rotator.subscriptions.add('setState', 'updateCircle');
+  rotator.notifications.add('setState', 'updateCircle');
 
   const add = (name, fn) => figure.fnMap.global.add(name, fn);
 
@@ -509,7 +509,7 @@ function layoutCirc() {
         .start();
     }
   });
-  rotator.subscriptions.add('setTransform', 'updateCircle');
+  rotator.notifications.add('setTransform', 'updateCircle');
   rotator.onClick = () => figure.stop('complete');
 
   const updateLabels = (triElement, el1, el2, el3, el4) => {
@@ -530,18 +530,18 @@ function layoutCirc() {
       el4.updateLabel(r);
     }
   };
-  triSinCos.subscriptions.add('setTransform', () => {
+  triSinCos.notifications.add('setTransform', () => {
     updateLabels(triSinCos, sin, cos, unitSinCos, thetaSinCos);
   });
-  triTanSec.subscriptions.add('setTransform', () => {
+  triTanSec.notifications.add('setTransform', () => {
     updateLabels(triTanSec, tan, sec, unitTanSec, thetaTanSec);
   });
-  triCotCsc.subscriptions.add('setTransform', () => {
+  triCotCsc.notifications.add('setTransform', () => {
     updateLabels(triCotCsc, cot, csc, unitCotCsc, thetaCotCsc);
   });
 
-  triCotCsc.subscriptions.add('setTransform', 'updateRotation');
-  triCotCsc.subscriptions.add('setState', 'updateRotation');
+  triCotCsc.notifications.add('setTransform', 'updateRotation');
+  triCotCsc.notifications.add('setState', 'updateRotation');
 
   rotator.setRotation(0.5);
 
@@ -658,7 +658,7 @@ function layoutCirc() {
   add('selectTanSec', () => selectTriangle(triTanSec));
   add('selectCotCsc', () => selectTriangle(triCotCsc));
 
-  circle.subscriptions.add('visibility', 'processButton');
+  circle.notifications.add('visibility', 'processButton');
   background.onClick = () => { selectTriangle(''); };
 
 
@@ -923,6 +923,6 @@ function layoutCirc() {
   pulseLabel('pulseCsc', csc, 'right', 'bottom');
   // add('pulseSin', () => triSinCos._sin._label.pulse({ scale: 1.8, xAlign: 'left' }));
 
-  figure.recorder.subscriptions.add('playbackStopped', 'unlockInput');
-  figure.recorder.subscriptions.add('seek', 'unlockInput');
+  figure.recorder.notifications.add('playbackStopped', 'unlockInput');
+  figure.recorder.notifications.add('seek', 'unlockInput');
 }

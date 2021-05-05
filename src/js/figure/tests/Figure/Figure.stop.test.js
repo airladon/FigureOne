@@ -31,8 +31,8 @@ describe('Figure Stop', () => {
     b = figure.elements._b;
     stoppedCallback = jest.fn();
     preparingToStopCallback = jest.fn();
-    figure.subscriptions.add('stopped', stoppedCallback);
-    figure.subscriptions.add('preparingToStop', preparingToStopCallback);
+    figure.notifications.add('stopped', stoppedCallback);
+    figure.notifications.add('preparingToStop', preparingToStopCallback);
     figure.initialize();
     figure.mock.timeStep(0);
   });

@@ -1087,7 +1087,7 @@ class ObjectTracker {
  * Subscriber
  * @property {string | function(): void} callback callback to use when
  * subscription is published
- * @property {number} num number of subscriptions
+ * @property {number} num number of notifications
  */
  type OBJ_Subscriber = {
    callback: string | () => void;
@@ -1111,7 +1111,7 @@ class ObjectTracker {
  * @property {OBJ_Subscribers} subscribers
  * @property {FunctionMap} fnMap
  */
-class Subscription {
+class Notification {
   fnMap: FunctionMap;
   subscribers: OBJ_Subscribers;
 
@@ -1201,28 +1201,28 @@ class Subscription {
  /**
  * Subscription Map.
  *
- * @property {Subscription} [_subscriptionName] each key in this object is a
- * unique subscription name associated with a subscription.
+ * @property {Notification} [_eventName] each key in this object is a
+ * unique notification name associated with an event.
  */
- type OBJ_Subscriptions = {
-   [subscriptionName: string]: Subscription;
+ type OBJ_Notifications = {
+   [notificationName: string]: Notification;
  };
 /**
- * Subscription manager.
+ * Notification manager.
  *
- * Publishes notifications to event subscribers.
+ * Publishes notifications of events to subscribers.
  *
  * {@link Figure}, {@link FigureElement}, {@link Recorder}, and
- * {@link SlideNavigator} all use subscription managers for event nofitications.
+ * {@link SlideNavigator} all use notification managers for event nofitications.
  *
- * Subscriptions managers can also be added to custom objects, but it will only
+ * Notification managers can also be added to custom objects, but will only
  * publish to subscribers when it is told to publish.
  *
- * @property {OBJ_Subscriptions} subscriptions
+ * @property {OBJ_Notifications} notifications
  * @property {FunctionMap} fnMap
  *
  * @example
- * // Subscribe to the `setTransform` subscription of `ball1` to move `ball2`
+ * // Subscribe to the `setTransform` notification of `ball1` to move `ball2`
  *
  * // Add ball1 and ball2 to the figure
  * const [ball1, ball2] = figure.add([
@@ -1242,9 +1242,9 @@ class Subscription {
  *   },
  * ]);
  *
- * // Subscribe to ball1's `setTransform` publication, and use the set
+ * // Subscribe to ball1's `setTransform` event notification, and use the set
  * transform to move ball2 with ball1
- * ball1.subscriptions.add('setTransform', (transform) => {
+ * ball1.notifications.add('setTransform', (transform) => {
  *   ball2.setTransform(transform[0]);
  * });
  *
@@ -1253,39 +1253,41 @@ class Subscription {
  *   .position({ target: [1, 0], duration: 2 })
  *   .start();
  */
-class SubscriptionManager {
+class NotificationManager {
   fnMap: FunctionMap;
-  subscriptions: OBJ_Subscriptions;
+  notifications: OBJ_Notifications;
 
   /**
    * @param {FunctionMap} fnMap default function map to use. Function maps
    * need only be used with {@link Recorder}.
    */
   constructor(fnMap: FunctionMap = new FunctionMap()) {
-    this.subscriptions = {};
+    this.notifications = {};
     this.fnMap = fnMap;
   }
 
   /**
-   * Add a subscriber to an event.
-   * @param {string} subscriptionName event name
+   * Subscribe to a notification.
+   * @param {string} name event notification name
    * @param {string | function(): void} callback to be called when events
-   * are published. If `string`, then {@link FunctionMap} of the {@link Figure}
-   * or {@link FigureElement} to which the subscription manager is a property
+   * occur. If `string`, then {@link FunctionMap} of the {@link Figure}
+   * or {@link FigureElement} to which the notification manager is a property
    * of will be used.
-   * @param {number} numberOfSubscriptions how many publications the
-   * subscription will receive. `-1` is no limit (`-1`).
+   * @param {number} num how many notifications the subscriber will receive.
+   * `num = 1` will mean only the first notification will be sent to the
+   * subscriber .`num = -1` means all notifications of the event will be sent
+   * to the subscriber (`-1`).
    * @return {number} subscriber id
    */
   add(
-    subscriptionName: string,
+    name: string,
     callback: string | () => void,
-    numberOfSubscriptions: number = -1,
+    num: number = -1,
   ) {
-    if (this.subscriptions[subscriptionName] == null) {
-      this.subscriptions[subscriptionName] = new Subscription(this.fnMap);
+    if (this.notifications[name] == null) {
+      this.notifications[name] = new Notification(this.fnMap);
     }
-    return this.subscriptions[subscriptionName].add(callback, numberOfSubscriptions);
+    return this.notifications[name].add(callback, num);
   }
 
   /**
@@ -1294,9 +1296,9 @@ class SubscriptionManager {
    * @param {string} subscriptionName
    * @param {any} payload payload to pass to subscribers
    */
-  publish(subscriptionName: string, payload: any) {
-    if (this.subscriptions[subscriptionName] != null) {
-      this.subscriptions[subscriptionName].publish(payload);
+  publish(eventName: string, payload: any) {
+    if (this.notifications[eventName] != null) {
+      this.notifications[eventName].publish(payload);
     }
   }
 
@@ -1305,12 +1307,12 @@ class SubscriptionManager {
    * @param {string} subsciptionName
    * @param {string | number} subscriberId
    */
-  remove(subscriptionName: string, subscriberId: string | number) {
-    if (this.subscriptions[subscriptionName] != null) {
-      const subscription = this.subscriptions[subscriptionName];
+  remove(eventName: string, subscriberId: string | number) {
+    if (this.notifications[eventName] != null) {
+      const subscription = this.notifications[eventName];
       subscription.remove(subscriberId);
       if (subscription.order.length === 0) {
-        delete this.subscriptions[subscriptionName];
+        delete this.notifications[eventName];
       }
     }
   }
@@ -1438,8 +1440,8 @@ export {
   UniqueMap, compressObject, refAndDiffToObject, uncompressObject,
   unminify, minify, ObjectTracker,
   download,
-  Subscription,
-  SubscriptionManager,
+  Notification,
+  NotificationManager,
   getFromObject,
   splitString, PerformanceTimer,
 };

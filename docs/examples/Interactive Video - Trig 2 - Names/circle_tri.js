@@ -327,6 +327,6 @@ function layoutCirc() {
   add('circSetState', () => {
     triToX(tri.customState.xLength);
   });
-  tri.subscriptions.add('setState', 'circSetState');
+  tri.notifications.add('setState', 'circSetState');
   triToX(dCos);
 }

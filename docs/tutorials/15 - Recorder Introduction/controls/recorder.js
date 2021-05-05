@@ -64,10 +64,10 @@ function addRecorder() {
     recordButton.innerHTML = 'Record';
     playPauseButton.classList.remove('f1_player__button_disable');
   }
-  recorder.subscriptions.add('playbackStopped', playbackStopped.bind(this));
-  recorder.subscriptions.add('playbackStarted', playbackStarted.bind(this));
-  recorder.subscriptions.add('recordingStarted', recordingStarted.bind(this));
-  recorder.subscriptions.add('recordingStopped', recordingStopped.bind(this));
+  recorder.notifications.add('playbackStopped', playbackStopped.bind(this));
+  recorder.notifications.add('playbackStarted', playbackStarted.bind(this));
+  recorder.notifications.add('recordingStarted', recordingStarted.bind(this));
+  recorder.notifications.add('recordingStopped', recordingStopped.bind(this));
 
   // Shortcut keys
   document.addEventListener('keypress', (event) => {

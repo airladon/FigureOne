@@ -376,7 +376,7 @@ export type SUB_PolylineUpdatePoints = [];
  * See {@link COL_Polyline} for the options that can be used when creating the
  * line.
  *
- * Available subscriptions:
+ * Available notifications:
  *   - `'updatePoints'`: {@link SUB_PolylineUpdatePoints}
  *
  * @see
@@ -875,7 +875,7 @@ export default class CollectionsPolyline extends FigureElementCollection {
     }
     if (this.updatePointsCallback != null && !doNotPublishUpdatePoints) {
       this.fnMap.exec(this.updatePointsCallback);
-      this.subscriptions.publish('updatePoints');
+      this.notifications.publish('updatePoints');
     }
   }
 

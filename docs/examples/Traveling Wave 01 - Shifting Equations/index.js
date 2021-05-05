@@ -466,7 +466,7 @@ const cycle = () => {
 };
 
 // Everytime the movePad changes, the trace needs to be updated
-movePad.subscriptions.add('setTransform', () => update());
+movePad.notifications.add('setTransform', () => update());
 
 // Helper function to animate moving marks in x
 const moveMarks = (xOffsetFrom, xOffsetTo = 0, type = 'G', skipAnimation = true) => {

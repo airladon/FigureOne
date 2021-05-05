@@ -290,8 +290,8 @@ function layoutRight() {
   });
   // Update the movePad whenever its transform is updated or a new state is set
   // (from the recorder seeking to a new state)
-  movePad.subscriptions.add('setTransform', 'updateMovePad');
-  movePad.subscriptions.add('setState', 'updateMovePad');
+  movePad.notifications.add('setTransform', 'updateMovePad');
+  movePad.notifications.add('setState', 'updateMovePad');
 
   // When the rotLine is updated, use it to move the movePad which will then
   // update the triangle
@@ -301,8 +301,8 @@ function layoutRight() {
     const r = rotLine.getRotation();
     movePad.setPosition(hyp * Math.cos(r), hyp * Math.sin(r));
   });
-  rotLine.subscriptions.add('setTransform', 'updateRotLine');
-  rotLine.subscriptions.add('setState', 'updateRotLine');
+  rotLine.notifications.add('setTransform', 'updateRotLine');
+  rotLine.notifications.add('setState', 'updateRotLine');
 
   // Animate the rotLine to a default angle
   figure.fnMap.global.add('rotateTri', () => {

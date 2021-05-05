@@ -129,7 +129,7 @@ function setupRecorder() {
     // console.log(lastSeekTime)
     // console.log(seekId)
     // if (seekId == null) {
-    //   seekId = figure.subscriptions.add('beforeDraw', () => {
+    //   seekId = figure.notifications.add('beforeDraw', () => {
     //     // console.log(lastSeekTime)
     //     const t = performance.now()
     //     recorder.seek(lastSeekTime);
@@ -186,11 +186,11 @@ function setupRecorder() {
   window.addEventListener('touchend', e => touchEndHandler(e), supportsPassive() ? { passive: false } : false);
   window.addEventListener('touchmove', e => touchMoveHandler(e), supportsPassive() ? { passive: false } : false);
 
-  recorder.subscriptions.add('timeUpdate', t => setTime(t[0]));
-  recorder.subscriptions.add('playbackStopped', playbackStopped.bind(this));
-  recorder.subscriptions.add('playbackStarted', playbackStarted.bind(this));
-  recorder.subscriptions.add('recordingStarted', recordingStarted.bind(this));
-  recorder.subscriptions.add('recordingStopped', recordingStopped.bind(this));
+  recorder.notifications.add('timeUpdate', t => setTime(t[0]));
+  recorder.notifications.add('playbackStopped', playbackStopped.bind(this));
+  recorder.notifications.add('playbackStarted', playbackStarted.bind(this));
+  recorder.notifications.add('recordingStarted', recordingStarted.bind(this));
+  recorder.notifications.add('recordingStopped', recordingStopped.bind(this));
 
   function togglePlayPause() {
     if (recorder.state === 'recording') {
@@ -221,7 +221,7 @@ function setupRecorder() {
   playPauseButton.onclick = () => togglePlayPause();
   recordButton.onclick = () => toggleRecord();
   saveButton.onclick = () => recorder.save();
-  recorder.subscriptions.add('durationUpdated', (d) => { state.duration = d; });
+  recorder.notifications.add('durationUpdated', (d) => { state.duration = d; });
 
   fetch('states.json')
     .then(response => response.json())

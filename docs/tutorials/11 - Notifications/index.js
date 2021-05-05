@@ -27,7 +27,7 @@ const [ball, text] = figure.add([
 
 // Subscribe to ball to receive the 'setTransform' notification. When ball's
 // transform changes, get its new position and update the text.
-ball.subscriptions.add('setTransform', () => {
+ball.notifications.add('setTransform', () => {
   // Get ball position and round to one decimal place
   const p = ball.getPosition().round(1);
   // Convert x and y to string with 1 decimal place

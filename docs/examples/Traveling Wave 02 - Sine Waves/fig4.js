@@ -208,7 +208,7 @@ function fig4() {
   // selected variable's offset and value need to be updated.
   // In addition, hint arrows should be hidden there is dragging the plot
   // in their direction will not result in meaningful change to the variable.
-  mover.subscriptions.add('setTransform', () => {
+  mover.notifications.add('setTransform', () => {
     const p = mover.getPosition();
     mover.transform.updateTranslation(0, 0);
     if (selected == null) {

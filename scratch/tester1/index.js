@@ -204,19 +204,19 @@ b0.setColor(color0);
 //   },
 // };
 // let timeoutId = null;
-// movePad.subscriptions.add('stopBeingMoved', () => {
+// movePad.notifications.add('stopBeingMoved', () => {
 //   if (enableMaxTime) {
 //     if (timeoutId != null) {
 //       clearTimeout(timeoutId);
 //       timeoutId = null;
 //     }
-//     movePad.subscriptions.add('stopBeingMoved', () => {
+//     movePad.notifications.add('stopBeingMoved', () => {
 //       timeoutId = setTimeout(() => time.pause(), 500);
 //     }, 1);
 //   }
 // });
 
-movePad.subscriptions.add('setTransform', () => {
+movePad.notifications.add('setTransform', () => {
   if (enableMaxTime && timeMax) {
     return;
   }
@@ -257,12 +257,12 @@ function update() {
 }
 
 // Before each draw, update the points
-figure.subscriptions.add('beforeDraw', () => {
+figure.notifications.add('beforeDraw', () => {
   update();
 });
 
 // After each draw, call a next animation frame so udpates happen on each frame
-figure.subscriptions.add('afterDraw', () => {
+figure.notifications.add('afterDraw', () => {
   figure.animateNextFrame();
 });
 

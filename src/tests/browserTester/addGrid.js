@@ -41,10 +41,10 @@ function __addGrid(__figure) {
   const __nav = __figure.getElement('nav');
 
   if (__nav != null && __nav.nav != null) {
-    __nav.nav.subscriptions.add('steady', () => {
+    __nav.nav.notifications.add('steady', () => {
       __figure.elements.exec(['show'], ['__minorGrid', '__majorGrid', '__origin']);
     });
-    __nav.nav.subscriptions.add('beforeTransition', () => {
+    __nav.nav.notifications.add('beforeTransition', () => {
       __figure.elements.exec(['show'], ['__minorGrid', '__majorGrid', '__origin']);
     });
   }

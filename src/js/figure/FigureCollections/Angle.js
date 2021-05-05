@@ -1071,12 +1071,12 @@ class CollectionsAngle extends FigureElementCollection {
    */
   setAutoUpdate(update: boolean = true) {
     if (update) {
-      this.autoUpdateSubscriptionId = this.subscriptions.add('setTransform', () => {
+      this.autoUpdateSubscriptionId = this.notifications.add('setTransform', () => {
         this.updateLabel(this.getRotation());
         // this.updateMovePads();
       });
     } else {
-      this.subscriptions.remove('setTransform', this.autoUpdateSubscriptionId);
+      this.notifications.remove('setTransform', this.autoUpdateSubscriptionId);
       this.autoUpdateSubscriptionId = -1;
     }
   }
@@ -1940,7 +1940,7 @@ class CollectionsAngle extends FigureElementCollection {
       anglePad.drawingObject.border = [[]];
       if (type === 'rotation') {
         // anglePad.move.element = this;
-        anglePad.subscriptions.add('beforeSetTransform', (transformToSet) => {
+        anglePad.notifications.add('beforeSetTransform', (transformToSet) => {
           const nextR = transformToSet[0].r();
           const currentR = anglePad.getRotation();
           const deltaR = nextR - currentR;
@@ -1948,7 +1948,7 @@ class CollectionsAngle extends FigureElementCollection {
           anglePad.cancelSetTransform = true;
         });
       } else {
-        anglePad.subscriptions.add('setTransform', () => {
+        anglePad.notifications.add('setTransform', () => {
           let angle = anglePad.getRotation();
           if (this.angle > 0) {
             angle = clipAngle(angle, '0to360');
@@ -1981,7 +1981,7 @@ class CollectionsAngle extends FigureElementCollection {
       // rotPad.touchBorder = 'drawBuffer';
       if (type === 'angle') {
         rotPad.move.element = this;
-        this.subscriptions.add('beforeSetTransform', (transformToSet) => {
+        this.notifications.add('beforeSetTransform', (transformToSet) => {
           // $FlowFixMe
           const nextR = transformToSet[0].r();
           const currentR = this.getRotation();

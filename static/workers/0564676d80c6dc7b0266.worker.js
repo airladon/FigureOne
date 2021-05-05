@@ -843,7 +843,7 @@ function rand2D(minX, minY, maxX, maxY) {
 /*!*******************************!*\
   !*** ./src/js/tools/tools.js ***!
   \*******************************/
-/*! exports provided: diffPathsToObj, diffObjToPaths, Console, classify, extractFrom, ObjectKeyPointer, getElement, addToObject, duplicateFromTo, isTouchDevice, generateUniqueId, joinObjects, cleanUIDs, loadRemote, loadRemoteCSS, deleteKeys, copyKeysFromTo, generateRandomString, duplicate, assignObjectFromTo, joinObjectsWithOptions, objectToPaths, getObjectDiff, updateObjFromPath, pathsToObj, UniqueMap, compressObject, refAndDiffToObject, uncompressObject, unminify, minify, ObjectTracker, download, Subscriber, SubscriptionManager, getFromObject, splitString, PerformanceTimer */
+/*! exports provided: diffPathsToObj, diffObjToPaths, Console, classify, extractFrom, ObjectKeyPointer, getElement, addToObject, duplicateFromTo, isTouchDevice, generateUniqueId, joinObjects, cleanUIDs, loadRemote, loadRemoteCSS, deleteKeys, copyKeysFromTo, generateRandomString, duplicate, assignObjectFromTo, joinObjectsWithOptions, objectToPaths, getObjectDiff, updateObjFromPath, pathsToObj, UniqueMap, compressObject, refAndDiffToObject, uncompressObject, unminify, minify, ObjectTracker, download, Subscriber, NotificationManager, getFromObject, splitString, PerformanceTimer */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -882,7 +882,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectTracker", function() { return ObjectTracker; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "download", function() { return download; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Subscriber", function() { return Subscriber; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SubscriptionManager", function() { return SubscriptionManager; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NotificationManager", function() { return NotificationManager; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getFromObject", function() { return getFromObject; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "splitString", function() { return splitString; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PerformanceTimer", function() { return PerformanceTimer; });
@@ -2160,43 +2160,43 @@ var Subscriber = /*#__PURE__*/function () {
   return Subscriber;
 }();
 
-var SubscriptionManager = /*#__PURE__*/function () {
-  function SubscriptionManager() {
+var NotificationManager = /*#__PURE__*/function () {
+  function NotificationManager() {
     var fnMap = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new _FunctionMap__WEBPACK_IMPORTED_MODULE_1__["FunctionMap"]();
 
-    _classCallCheck(this, SubscriptionManager);
+    _classCallCheck(this, NotificationManager);
 
-    this.subscriptions = {};
+    this.notifications = {};
     this.fnMap = fnMap;
   }
 
-  _createClass(SubscriptionManager, [{
+  _createClass(NotificationManager, [{
     key: "add",
     value: function add(subscriptionName, callback) {
       var numberOfSubscriptions = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : -1;
 
-      if (this.subscriptions[subscriptionName] == null) {
-        this.subscriptions[subscriptionName] = new Subscriber(this.fnMap);
+      if (this.notifications[subscriptionName] == null) {
+        this.notifications[subscriptionName] = new Subscriber(this.fnMap);
       }
 
-      return this.subscriptions[subscriptionName].add(callback, numberOfSubscriptions);
+      return this.notifications[subscriptionName].add(callback, numberOfSubscriptions);
     }
   }, {
     key: "publish",
     value: function publish(subscriptionName, payload) {
-      if (this.subscriptions[subscriptionName] != null) {
-        this.subscriptions[subscriptionName].publish(payload);
+      if (this.notifications[subscriptionName] != null) {
+        this.notifications[subscriptionName].publish(payload);
       }
     }
   }, {
     key: "remove",
     value: function remove(subscriptionName, id) {
-      if (this.subscriptions[subscriptionName] != null) {
-        var subscription = this.subscriptions[subscriptionName];
+      if (this.notifications[subscriptionName] != null) {
+        var subscription = this.notifications[subscriptionName];
         subscription.remove(id);
 
         if (subscription.order.length === 0) {
-          delete this.subscriptions[subscriptionName];
+          delete this.notifications[subscriptionName];
         }
       }
     } // eslint-disable-next-line class-methods-use-this
@@ -2208,7 +2208,7 @@ var SubscriptionManager = /*#__PURE__*/function () {
     }
   }]);
 
-  return SubscriptionManager;
+  return NotificationManager;
 }();
 
 function download(filename, text) {

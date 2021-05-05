@@ -465,7 +465,7 @@ function setupFigure() {
       },
       movePad,
     };
-    movePad.subscriptions.add('setTransform', () => {
+    movePad.notifications.add('setTransform', () => {
       if (maxTimeReached) {
         return;
       }
@@ -487,13 +487,13 @@ function setupFigure() {
   // then the other moves identically.
   medium1.custom.movePad.setMovable();
   medium2.custom.movePad.setMovable();
-  medium1.custom.movePad.subscriptions.add('setTransform', () => {
+  medium1.custom.movePad.notifications.add('setTransform', () => {
     if (medium1.custom.movePad.state.isBeingMoved || medium1.custom.movePad.state.isMovingFreely) {
       medium2.custom.stop();
       medium2.custom.movePad.setPosition(medium1.custom.movePad.transform.t());
     }
   });
-  medium2.custom.movePad.subscriptions.add('setTransform', () => {
+  medium2.custom.movePad.notifications.add('setTransform', () => {
     if (medium2.custom.movePad.state.isBeingMoved || medium2.custom.movePad.state.isMovingFreely) {
       medium1.custom.stop();
       medium1.custom.movePad.setPosition(medium2.custom.movePad.transform.t());
@@ -617,12 +617,12 @@ function setupFigure() {
   }
 
   // Before each draw, update the points
-  figure.subscriptions.add('beforeDraw', () => {
+  figure.notifications.add('beforeDraw', () => {
     update();
   });
 
   // After each draw, call a next animation frame so udpates happen on each frame
-  figure.subscriptions.add('afterDraw', () => {
+  figure.notifications.add('afterDraw', () => {
     figure.animateNextFrame();
   });
 
@@ -787,7 +787,7 @@ function setupFigure() {
   };
 
   // Reset the lastDisturbance timer if the movePad of the medium is moved
-  medium.custom.movePad.subscriptions.add('setTransform', () => {
+  medium.custom.movePad.notifications.add('setTransform', () => {
     if (medium.custom.movePad.state.isBeingMoved) {
       lastDisturbance = time.now();
       figure.elements.animations.cancel('pauseAfterDelay');
@@ -795,7 +795,7 @@ function setupFigure() {
     }
   });
 
-  medium1.custom.movePad.subscriptions.add('setTransform', () => {
+  medium1.custom.movePad.notifications.add('setTransform', () => {
     if (medium1.custom.movePad.state.isBeingMoved) {
       lastDisturbance = time.now();
       figure.elements.animations.cancel('pauseAfterDelay');
@@ -803,7 +803,7 @@ function setupFigure() {
     }
   });
 
-  medium2.custom.movePad.subscriptions.add('setTransform', () => {
+  medium2.custom.movePad.notifications.add('setTransform', () => {
     if (medium2.custom.movePad.state.isBeingMoved) {
       lastDisturbance = time.now();
       figure.elements.animations.cancel('pauseAfterDelay');

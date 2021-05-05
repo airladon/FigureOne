@@ -30,9 +30,9 @@ function sleep(ms) {
 // painted, so we resolve the promise with the 'afterDraw' notification
 async function frame(delta) {
   await page.evaluate(([d]) => new Promise((resolve) => {
-    figure.subscriptions.add('afterDraw', () => resolve(), 1);
+    figure.notifications.add('afterDraw', () => resolve(), 1);
     figure.timeKeeper.frame(d);
-    figure.recorder.subscriptions.publish('timeUpdate', [figure.recorder.getCurrentTime()]);
+    figure.recorder.notifications.publish('timeUpdate', [figure.recorder.getCurrentTime()]);
     figure.animateNextFrame();
     // resolve();
   }), [delta]);

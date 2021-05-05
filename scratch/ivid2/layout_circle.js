@@ -192,5 +192,5 @@ function layoutCircle() {
     cosLabel.setPosition([x / 2, -0.03]);
     lineLabel.setPosition([x / 2 - 0.02, y / 2 + 0.02]);
   });
-  line.subscriptions.add('setTransform', 'updateCircle');
+  line.notifications.add('setTransform', 'updateCircle');
 }

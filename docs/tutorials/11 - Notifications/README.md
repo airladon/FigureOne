@@ -4,7 +4,7 @@ Update text with coordinates of a moving ball using notifications.
 
 Open `index.html` in a browser to view example.
 
-![](example.png)
+![](example.gif)
 
 ## Code
 `index.js`
@@ -36,9 +36,9 @@ const [ball, text] = figure.add([
   },
 ]);
 
-// Subscribe to ball to receive the 'setTransform' notification. When ball's
+// Subscribe to ball's 'setTransform' event notification. When ball's
 // transform changes, get its new position and update the text.
-ball.subscriptions.add('setTransform', () => {
+ball.notifications.add('setTransform', () => {
   // Get ball position and round to one decimal place
   const p = ball.getPosition().round(1);
   // Convert x and y to string with 1 decimal place
@@ -54,12 +54,12 @@ Use notifications to get alerted to events.
 
 [FigureElement](https://airladon.github.io/FigureOne/api/#figureelement), [Figure](https://airladon.github.io/FigureOne/api/#figure), [Recorder](https://airladon.github.io/FigureOne/api/#recorder), and [SlideNavigator](https://airladon.github.io/FigureOne/api/#slidenavigator) all use notifications.
 
-To subscribe to a notification, use the notification name with a callback function to execute when the notification occurs.
+Subscribe a callback function to a notification of an event using the event name.
 
 ```js
-ball.subscriptions.add('setTransform', () => {...});
+ball.notifications.add('setTransform', () => {...});
 ```
 
-In this case, we are subscribing to the `'setTransform'` notification of the `ball` FigureElement. Whenever its transform changes, the notification will call our function that updates the text element with the latest coordinates of the ball.
+In this case, we are subscribing to the `'setTransform'` event notification of the `ball` FigureElement. Whenever ball's transform changes, our function that updates the text element with the latest coordinates of the ball will be called.
 
-See the api reference for more details on [SubscriptionManager](https://airladon.github.io/FigureOne/api/#subscriptionmanager).
+See the api reference for more details on [NotificationManager](https://airladon.github.io/FigureOne/api/#subscriptionmanager).

@@ -399,7 +399,7 @@ class CollectionsRectangle extends FigureElementCollection {
         .start();
       // this.animateNextFrame();
     };
-    this.subscriptions.add('onClick', () => {
+    this.notifications.add('onClick', () => {
       click('line');
       click('fill');
       click('label');

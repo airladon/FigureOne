@@ -205,13 +205,13 @@ function update() {
 }
 
 // Update the signal to the latest rotator value before each draw
-figure.subscriptions.add('beforeDraw', () => {
+figure.notifications.add('beforeDraw', () => {
   update();
 });
 
 // After each draw, call, queue the next animation, forcing a redraw on it.
 // Therefore, every frame the signal is updated and drawn.
-figure.subscriptions.add('afterDraw', () => {
+figure.notifications.add('afterDraw', () => {
   figure.animateNextFrame();
 });
 

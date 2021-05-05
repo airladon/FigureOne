@@ -673,8 +673,8 @@ function layoutCirc() {
     updateGeometry(Fig.tools.g2.clipAngle(rotator.transform.r(), '0to360'));
   };
   rotator.fnMap.add('updateGeometry', () => rotatorUpdateCircle());
-  rotator.subscriptions.add('setState', 'updateGeometry');
-  rotator.subscriptions.add('setTransform', 'updateGeometry');
+  rotator.notifications.add('setState', 'updateGeometry');
+  rotator.notifications.add('setTransform', 'updateGeometry');
   rotator.onClick = () => figure.stop('complete');
 
   // Helper function to add functions to the global function map
@@ -700,13 +700,13 @@ function layoutCirc() {
       el4.updateLabel(r);
     }
   };
-  triSinCos.subscriptions.add('setTransform', () => {
+  triSinCos.notifications.add('setTransform', () => {
     updateLabels(triSinCos, sin, cos, unitSinCos, thetaSinCos);
   });
-  triTanSec.subscriptions.add('setTransform', () => {
+  triTanSec.notifications.add('setTransform', () => {
     updateLabels(triTanSec, tan, sec, unitTanSec, thetaTanSec);
   });
-  triCotCsc.subscriptions.add('setTransform', () => {
+  triCotCsc.notifications.add('setTransform', () => {
     updateLabels(triCotCsc, cot, csc, unitCotCsc, thetaCotCsc);
   });
 
@@ -806,7 +806,7 @@ function layoutCirc() {
       arcButton._fill.setColor([1, 1, 1, 1]);
     }
   });
-  circle.subscriptions.add('visibility', 'processButton');
+  circle.notifications.add('visibility', 'processButton');
 
   // Reset button resets all triangles to their default positions and rotations
   reset.onClick = () => { figure.fnMap.exec('reset'); };
@@ -838,7 +838,7 @@ function layoutCirc() {
   // updated the appropriate triangle needs to be selected. This needs to happen
   // before other figure elements update, as when the button elements get
   // updated they will need to know which triangle is selected (if any)
-  figure.subscriptions.add('stateSetInit', () => {
+  figure.notifications.add('stateSetInit', () => {
     selectTriangle(geom.customState.selected);
   });
 
@@ -1150,6 +1150,6 @@ function layoutCirc() {
   pulseLabel('pulseSec', sec, 'right', 'bottom');
   pulseLabel('pulseCsc', csc, 'right', 'bottom');
 
-  figure.recorder.subscriptions.add('playbackStopped', 'unlockInput');
-  figure.recorder.subscriptions.add('seek', 'unlockInput');
+  figure.recorder.notifications.add('playbackStopped', 'unlockInput');
+  figure.recorder.notifications.add('seek', 'unlockInput');
 }

@@ -113,7 +113,7 @@ function __finish(__figure) {
           slideIndex += 1;
           setTimeout(() => {
             const loc = figure.getElement(__frames.next).getPosition('figure');
-            nav.subscriptions.add('steady', () => {
+            nav.notifications.add('steady', () => {
               setTimeout(() => {
                 steps = `${steps}[0, 'touchDown', [${round(loc.x, 2)}, ${round(loc.y, 2)}], 'Next Slide - ${slideIndex}', false],\n`;
                 steps = `${steps}[${getDeltaTime()}, 'touchUp', [0, 0], '', false],\n`;

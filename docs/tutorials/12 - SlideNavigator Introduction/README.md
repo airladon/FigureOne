@@ -153,7 +153,7 @@ const nav = new Fig.SlideNavigator({ collection: figure.elements, slides });
 nav.goToSlide(0);
 
 // Clicking on the equation progresses to the next slide, or next equation form
-eqn.subscriptions.add('onClick', () => nav.nextSlide());
+eqn.notifications.add('onClick', () => nav.nextSlide());
 ```
 
 ## Explanation
@@ -317,7 +317,7 @@ nav.goToSlide(0);
 Finally, we make it so the navigator progresses to the next slide every time the equation is touched.
 
 ```js
-eqn.subscriptions.add('onClick', () => nav.nextSlide());
+eqn.notifications.add('onClick', () => nav.nextSlide());
 ```
 
 ### It Gets Easier

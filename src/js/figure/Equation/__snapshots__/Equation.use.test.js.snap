@@ -18,20 +18,20 @@ FigureElementPrimitive {
       },
       "map": Object {},
     },
-    "options": Object {
-      "translation": Object {},
-    },
-    "recorder": undefined,
-    "state": "idle",
-    "subscriptions": SubscriptionManager {
+    "notifications": NotificationManager {
       "fnMap": FunctionMap {
         "global": GlobalFunctionMap {
           "map": Object {},
         },
         "map": Object {},
       },
-      "subscriptions": Object {},
+      "notifications": Object {},
     },
+    "options": Object {
+      "translation": Object {},
+    },
+    "recorder": undefined,
+    "state": "idle",
     "timeKeeper": TimeKeeper {
       "animateOnFrame": false,
       "drawQueue": Array [],
@@ -644,6 +644,34 @@ FigureElementPrimitive {
     "type": "translation",
   },
   "name": "a",
+  "notifications": NotificationManager {
+    "fnMap": FunctionMap {
+      "global": GlobalFunctionMap {
+        "map": Object {},
+      },
+      "map": Object {
+        "_elementPulseSettingsTransformMethod": Object {
+          "fn": [Function],
+        },
+        "tools.math.easeinout": Object {
+          "fn": [Function],
+        },
+        "tools.math.linear": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
+          "fn": [Function],
+        },
+        "tools.math.triangle": Object {
+          "fn": [Function],
+        },
+      },
+    },
+    "notifications": Object {},
+  },
   "onAdd": null,
   "onClick": null,
   "opacity": 1,
@@ -800,6 +828,15 @@ FigureElementPrimitive {
     "lastRecordTime": null,
     "lastRecordTimeCount": 0,
     "lastSeekTime": null,
+    "notifications": NotificationManager {
+      "fnMap": FunctionMap {
+        "global": GlobalFunctionMap {
+          "map": Object {},
+        },
+        "map": Object {},
+      },
+      "notifications": Object {},
+    },
     "pauseState": null,
     "precision": 8,
     "queueSeekId": null,
@@ -826,15 +863,6 @@ FigureElementPrimitive {
       "lastReferenceName": "__base",
       "precision": 8,
       "references": Object {},
-    },
-    "subscriptions": SubscriptionManager {
-      "fnMap": FunctionMap {
-        "global": GlobalFunctionMap {
-          "map": Object {},
-        },
-        "map": Object {},
-      },
-      "subscriptions": Object {},
     },
     "timeKeeper": TimeKeeper {
       "animateOnFrame": false,
@@ -944,34 +972,6 @@ FigureElementPrimitive {
     },
   },
   "stateProperties": Array [],
-  "subscriptions": SubscriptionManager {
-    "fnMap": FunctionMap {
-      "global": GlobalFunctionMap {
-        "map": Object {},
-      },
-      "map": Object {
-        "_elementPulseSettingsTransformMethod": Object {
-          "fn": [Function],
-        },
-        "tools.math.easeinout": Object {
-          "fn": [Function],
-        },
-        "tools.math.linear": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoid": Object {
-          "fn": [Function],
-        },
-        "tools.math.sinusoidAbs": Object {
-          "fn": [Function],
-        },
-        "tools.math.triangle": Object {
-          "fn": [Function],
-        },
-      },
-    },
-    "subscriptions": Object {},
-  },
   "tieToHTML": Object {
     "element": null,
     "scale": "fit",

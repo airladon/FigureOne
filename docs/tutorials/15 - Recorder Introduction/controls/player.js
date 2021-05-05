@@ -29,10 +29,10 @@ function addPlayer() {
 
   // The play/pause button picture will change on 'playbackStopped' and
   // 'playbackStarted' notifications from the recorder.
-  recorder.subscriptions.add(
+  recorder.notifications.add(
     'playbackStopped', () => playPauseButton.classList.remove('f1_playing'),
   );
-  recorder.subscriptions.add(
+  recorder.notifications.add(
     'playbackStarted', () => playPauseButton.classList.add('f1_playing'),
   );
 
@@ -73,10 +73,10 @@ function addPlayer() {
 
   // On 'timeUpdate' and 'duration' notifications from recorder, update the
   // player seek bar and time label
-  recorder.subscriptions.add('timeUpdate', t => setTime(t[0], true));
-  recorder.subscriptions.add('seek', t => setTime(t[0], false));
-  recorder.subscriptions.add('durationUpdated', () => setTime());
-  recorder.subscriptions.add('recordingStatesComplete', () => setTime(recorder.getCurrentTime(), false));
+  recorder.notifications.add('timeUpdate', t => setTime(t[0], true));
+  recorder.notifications.add('seek', t => setTime(t[0], false));
+  recorder.notifications.add('durationUpdated', () => setTime());
+  recorder.notifications.add('recordingStatesComplete', () => setTime(recorder.getCurrentTime(), false));
 
   /*
   ..######..########.########.##....##
@@ -107,12 +107,12 @@ function addPlayer() {
 
     // Only ask the recorder to seek when a frame is about to be drawn.
     if (seekId != null) {
-      figure.subscriptions.remove('beforeDraw', seekId);
+      figure.notifications.remove('beforeDraw', seekId);
     }
 
     // Uncomment this to update seek frames while seeking - though can be
     // performance intensive
-    seekId = figure.subscriptions.add('beforeDraw', () => {
+    seekId = figure.notifications.add('beforeDraw', () => {
       // recorder.queueSeek(lastSeekTime);
       recorder.seek(lastSeekTime);
       seekId = null;

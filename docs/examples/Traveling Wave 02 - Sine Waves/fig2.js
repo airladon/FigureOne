@@ -125,7 +125,7 @@ function fig2() {
 
   // Each time the mover is moved, the offset needs to be updated,
   // and the amplitude of the trace and in the equation needs to be updated.
-  mover.subscriptions.add('setTransform', () => {
+  mover.notifications.add('setTransform', () => {
     offset += mover.getPosition().y * 2;
     mover.transform.updateTranslation(0, 0);
     if (offset > 1) { offset = 1; }

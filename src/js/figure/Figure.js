@@ -14,7 +14,7 @@ import { FunctionMap } from '../tools/FunctionMap';
 import { setState, getState } from './Recorder/state';
 import parseState from './Recorder/parseState';
 import {
-  isTouchDevice, joinObjects, SubscriptionManager, Console, PerformanceTimer,
+  isTouchDevice, joinObjects, NotificationManager, Console, PerformanceTimer,
 } from '../tools/tools';
 import {
   FigureElementCollection, FigureElement,
@@ -157,7 +157,7 @@ export type OBJ_Figure = {
  * and useful transforms for converting between the different spaces (e.g.
  * pixel, GL, figure).
  *
- * Notifications - The subscription manager property `subscriptions` will
+ * Notifications - The subscription manager property `notifications` will
  * publish the following events:
  * - `beforeDraw`: published before a frame is drawn
  * - `afterDraw`: published after a frame is drawn
@@ -169,7 +169,7 @@ export type OBJ_Figure = {
  * as shapes, lines and grids
  * @property {FigureCollections} collections create figure collections such
  * as advanced lines, shapes, equations and plots
- * @property {SubscriptionManager} subscriptions subscription manager for
+ * @property {NotificationManager} notifications subscription manager for
  * element
  *
  * @example
@@ -303,7 +303,7 @@ class Figure {
   slideNavigatorElementName: string;
   isTouchDown: boolean;
   setStateCallback: ?(string | (() => void));
-  subscriptions: SubscriptionManager;
+  notifications: NotificationManager;
   mockPreviousTouchPoint: Point;
   shortcuts: Object;
   nextDrawTimer: number | null;
@@ -485,7 +485,7 @@ class Figure {
     this.beingTouchedElements = [];
     this.touchTopElementOnly = true;
     this.timeKeeper = new TimeKeeper();
-    this.subscriptions = new SubscriptionManager(this.fnMap);
+    this.notifications = new NotificationManager(this.fnMap);
     this.recorder = new Recorder(this.timeKeeper);
     this.recorder.figure = this;
     this.bindRecorder();
@@ -757,7 +757,7 @@ class Figure {
       setState(this, state);
       this.beingMovedElements = this.beingMovedElements.filter(e => Object.keys(e).length > 0);
       this.beingTouchedElements = this.beingTouchedElements.filter(e => Object.keys(e).length > 0);
-      this.subscriptions.publish('stateSetInit');
+      this.notifications.publish('stateSetInit');
       this.elements.setTimeDelta(this.timeKeeper.now() / 1000 - this.stateTime);
       this.elements.updateDrawTransforms([this.spaceTransforms.figureToGL]);
       this.elements.stateSet();
@@ -767,7 +767,7 @@ class Figure {
         this.fnMap.exec(this.setStateCallback);
       }
       this.animateNextFrame();
-      this.subscriptions.publish('stateSet');
+      this.notifications.publish('stateSet');
     };
 
     let options = {
@@ -858,7 +858,7 @@ class Figure {
 
     if (!finishedFlag) {
       this.state.preparingToSetState = true;
-      this.subscriptions.publish('preparingToSetState');
+      this.notifications.publish('preparingToSetState');
     }
     this.animateNextFrame();
   }
@@ -877,7 +877,7 @@ class Figure {
       if (duration === 0) {
         this.fnMap.exec(done);
       } else if (done != null) {
-        this.subscriptions.add('animationsFinished', done, 1);
+        this.notifications.add('animationsFinished', done, 1);
       }
     }
   }
@@ -953,7 +953,7 @@ class Figure {
       if (dissolveDuration === 0) {
         this.fnMap.exec(done);
       } else if (done != null) {
-        this.subscriptions.add('animationsFinished', done, 1);
+        this.notifications.add('animationsFinished', done, 1);
       }
     }
   }
@@ -1267,7 +1267,7 @@ class Figure {
       return;
     }
     this.fnMap.exec(this.animationFinishedCallback);
-    this.subscriptions.publish('animationsFinished');
+    this.notifications.publish('animationsFinished');
   }
 
   setFirstTransform() {
@@ -1426,7 +1426,7 @@ class Figure {
       this.renderAllElementsToTiedCanvases();
       this.oldWidth = this.canvasLow.clientWidth;
     }
-    this.subscriptions.publish('resize');
+    this.notifications.publish('resize');
     this.animateNextFrame(true, 'resize');
     this.drawAnimationFrames = 2;
     // this.renderAllElementsToTiedCanvases(true);
@@ -1837,7 +1837,7 @@ class Figure {
     how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel',
   ) {
     const stopped = () => {
-      this.subscriptions.publish('stopped');
+      this.notifications.publish('stopped');
       this.state.preparingToStop = false;
     };
     if (!this.elements.isAnimating()) {
@@ -1866,13 +1866,13 @@ class Figure {
       elements.forEach((element) => {
         if (element.state.preparingToStop) {
           preparingToStopCounter += 1;
-          element.subscriptions.add('stopped', checkAllStopped, 1);
+          element.notifications.add('stopped', checkAllStopped, 1);
         }
       });
       if (preparingToStopCounter === 0) {
         checkAllStopped();
       } else if (preparingToStopCounter > 0) {
-        this.subscriptions.publish('preparingToStop');
+        this.notifications.publish('preparingToStop');
         this.state.preparingToStop = true;
       }
       return;
@@ -1885,8 +1885,8 @@ class Figure {
     this.elements.stop('freeze');
     this.setState(completeState, 'dissolve');
     if (this.state.preparingToSetState) {
-      this.subscriptions.add('stateSet', stopped, 1);
-      this.subscriptions.publish('preparingToStop');
+      this.notifications.add('stateSet', stopped, 1);
+      this.notifications.publish('preparingToStop');
       this.state.preparingToStop = true;
     } else {
       stopped();
@@ -1949,7 +1949,7 @@ class Figure {
     this.isPaused = false;
     this.elements.setTimeDelta(this.timeKeeper.now() / 1000 - this.pauseTime);
     this.animateNextFrame();
-    this.subscriptions.publish('unpaused');
+    this.notifications.publish('unpaused');
   }
 
   touchDown(
@@ -2031,7 +2031,7 @@ class Figure {
     this.clearContext(canvasIndex);
     // $FlowFixMe
     if (FIGURE1DEBUG) { timer.stamp('clearContext'); }
-    this.subscriptions.publish('beforeDraw');
+    this.notifications.publish('beforeDraw');
     // $FlowFixMe
     if (FIGURE1DEBUG) { timer.stamp('beforeDraw'); }
     this.elements.setupDraw(
@@ -2053,7 +2053,7 @@ class Figure {
       this.drawAnimationFrames -= 1;
       this.animateNextFrame(true, 'queued frames');
     }
-    this.subscriptions.publish('afterDraw');
+    this.notifications.publish('afterDraw');
     if (FIGURE1DEBUG) { // $FlowFixMe
       timer.stamp('afterDraw'); // $FlowFixMe
       const deltas = timer.deltas();

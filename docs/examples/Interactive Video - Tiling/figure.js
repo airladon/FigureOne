@@ -115,14 +115,14 @@ figure.addCursor();
 const solution = figure.getElement('solutionButton');
 const reset = figure.getElement('resetButton');
 
-solution.subscriptions.add('onClick', () => {
+solution.notifications.add('onClick', () => {
   figure.elements.stop();
   figure.elements.animations.new()
     .scenarios({ target: 'solution', duration: 2 })
     .start();
 });
 
-reset.subscriptions.add('onClick', () => {
+reset.notifications.add('onClick', () => {
   figure.elements.stop();
   figure.elements.animations.new()
     .scenarios({ target: 'reset', duration: 2 })

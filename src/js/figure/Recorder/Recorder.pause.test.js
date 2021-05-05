@@ -46,7 +46,7 @@ describe('Animate To State', () => {
     preparingToPlayCallback = jest.fn();
     preparingToPauseCallback = jest.fn();
     playbackStoppedCallback = jest.fn();
-    const subs = recorder.subscriptions;
+    const subs = recorder.notifications;
     subs.add('playbackStarted', playbackStartedCallback);
     subs.add('playbackStopped', playbackStoppedCallback);
     subs.add('preparingToPause', preparingToPauseCallback);

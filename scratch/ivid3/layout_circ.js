@@ -1119,9 +1119,9 @@ function layoutCirc() {
       updateCircle(Fig.tools.g2.clipAngle(2 * Math.PI - rotQ4.transform.r(), '0to360'));
     }
   });
-  rotQ2.subscriptions.add('setTransform', 'updateCircle');
-  rotQ3.subscriptions.add('setTransform', 'updateCircle');
-  rotQ4.subscriptions.add('setTransform', 'updateCircle');
+  rotQ2.notifications.add('setTransform', 'updateCircle');
+  rotQ3.notifications.add('setTransform', 'updateCircle');
+  rotQ4.notifications.add('setTransform', 'updateCircle');
   rotator.fnMap.add('updateCircle', () => rotatorUpdateCircle());
   rotatorFull.fnMap.add('updateCircle', () => rotatorFullUpdateCircle());
   // symRot.fnMap.add('updateCircle', () => symRotatorUpdateCircle());
@@ -1145,8 +1145,8 @@ function layoutCirc() {
       updateCircle(ang);
     }
   });
-  rotator.subscriptions.add('setState', 'updateCircle');
-  rotatorFull.subscriptions.add('setState', 'updateCircle');
+  rotator.notifications.add('setState', 'updateCircle');
+  rotatorFull.notifications.add('setState', 'updateCircle');
 
   const addPulseFn = (name, element, xAlign, yAlign) => {
     figure.fnMap.global.add(name, () => {
@@ -1323,7 +1323,7 @@ function layoutCirc() {
       circle._triSym._xy._label.showForm('1');
     }
   };
-  circle._triSym.subscriptions.add('setTransform', () => updateTriSymLabels());
+  circle._triSym.notifications.add('setTransform', () => updateTriSymLabels());
   addPulseFn('circPulseTan', triTanSec._tan._label, 'left', 'middle');
   addPulseFn('circPulseTanTheta', circle._tanTheta._label, 'left', 'middle');
   addPulseFn('circPulseCot', triCotCsc._cot._label, 'center', 'bottom');
@@ -1360,9 +1360,9 @@ function layoutCirc() {
       circle._triSym._xy._label['__-y'].pulse({ scale: 2, xAlign: 'right', yAlign: 'top', duration: 1.5 });
     }
   });
-  rotator.subscriptions.add('setTransform', 'updateCircle');
-  rotatorFull.subscriptions.add('setTransform', 'updateCircle');
-  // symRot.subscriptions.add('setTransform', 'updateCircle');
+  rotator.notifications.add('setTransform', 'updateCircle');
+  rotatorFull.notifications.add('setTransform', 'updateCircle');
+  // symRot.notifications.add('setTransform', 'updateCircle');
   const updateRotation = () => {
     if (!triCotCsc.isShown) {
       return;
@@ -1381,6 +1381,6 @@ function layoutCirc() {
   };
   figure.fnMap.global.add('updateRotation', () => updateRotation());
   triCotCsc.fnMap.add('updateRotation', () => updateRotation());
-  triCotCsc.subscriptions.add('setTransform', 'updateRotation');
-  triCotCsc.subscriptions.add('setState', 'updateRotation');
+  triCotCsc.notifications.add('setTransform', 'updateRotation');
+  triCotCsc.notifications.add('setState', 'updateRotation');
 }

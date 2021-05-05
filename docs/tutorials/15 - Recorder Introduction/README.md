@@ -178,10 +178,10 @@ Figure state is captured and saved to the json video track to create the seek fr
 * `isTouchable`
 * `state`
 * `move`
-* `subscriptions`
+* `notifications`
 * `customState`
 
-For example, that means if the element manages a drawingObject whose vertices change over time, then it needs to udpate these when the state is set. Use the `setState` notification from the `subscriptions` property of the element to do this.
+For example, that means if the element manages a drawingObject whose vertices change over time, then it needs to udpate these when the state is set. Use the `setState` notification from the `notifications` property of the element to do this.
 
 
 ### Deploy

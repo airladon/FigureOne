@@ -25,7 +25,7 @@ import VertexObject from './DrawingObjects/VertexObject/VertexObject';
 import { TextObjectBase } from './DrawingObjects/TextObject/TextObject';
 // import type { OBJ_Font } from './DrawingObjects/TextObject/TextObject';
 import {
-  duplicateFromTo, joinObjects, joinObjectsWithOptions, SubscriptionManager,
+  duplicateFromTo, joinObjects, joinObjectsWithOptions, NotificationManager,
   generateUniqueId, PerformanceTimer,
 } from '../tools/tools';
 import { colorArrayToRGBA, areColorsWithinDelta } from '../tools/color';
@@ -447,7 +447,7 @@ type ElementState = {
  * the alpha channel of `color` to net a final opacity. Opacity should not be
  * set directly as it will be overwritten by dissolve animations.
  *
- * Notifications - The subscription manager property `subscriptions` will
+ * Notifications - The subscription manager property `notifications` will
  * publish the following events:
  * - `beforeSetTransform`: published just before the `transform` property is
  * changed
@@ -489,7 +489,7 @@ type ElementState = {
  * @property {Scenarios} scenarios scenario presets
  * @property {ElementState} state current state of element
  * @property {AnimationManager} animations element animation manager
- * @property {SubscriptionManager} subscriptions subscription manager for
+ * @property {NotificationManager} notifications subscription manager for
  * element
  * @property {FunctionMap} fnMap function map for use with {@link Recorder}
  * @property {Object} customState put any custom state information that needs
@@ -677,7 +677,7 @@ class FigureElement {
 
   // finishAnimationOnPause: boolean;
 
-  subscriptions: SubscriptionManager;
+  notifications: NotificationManager;
 
   lastDrawTime: number;
 
@@ -722,7 +722,7 @@ class FigureElement {
     this.transform = transform._dup();
     this.dependantTransform = false;
     this.fnMap = new FunctionMap();
-    this.subscriptions = new SubscriptionManager(this.fnMap);
+    this.notifications = new NotificationManager(this.fnMap);
     this.isMovable = false;
     this.isTouchable = false;
     this.touchPriority = false;
@@ -878,7 +878,7 @@ class FigureElement {
 
   animationFinished(typeOfAnimation: 'pulse' | 'movingFreely' | 'animation' = 'animation') {
     this.fnMap.exec(this.animationFinishedCallback);
-    this.subscriptions.publish('animationFinished', typeOfAnimation);
+    this.notifications.publish('animationFinished', typeOfAnimation);
   }
 
   animateNextFrame() {
@@ -957,7 +957,7 @@ class FigureElement {
         'pulseSettings',
         'setTransformCallback',
         'move',
-        'subscriptions',
+        'notifications',
         // 'finishAnimationOnPause',
         'pulseTransforms',
         'frozenPulseTransforms',
@@ -1015,7 +1015,7 @@ class FigureElement {
   }
 
   stateSet() {
-    this.subscriptions.publish('setState');
+    this.notifications.publish('setState');
   }
 
   // execFn(fn: string | Function | null, ...args: Array<any>) {
@@ -1497,7 +1497,7 @@ class FigureElement {
     if (this.move.transformClip != null) {
       const clip = this.fnMap.exec(this.move.transformClip, transform);
       if (clip instanceof Transform) {
-        this.subscriptions.publish('beforeSetTransform', [clip]);
+        this.notifications.publish('beforeSetTransform', [clip]);
         if (this.cancelSetTransform === false) {
           this.transform = clip;
         } else {
@@ -1507,7 +1507,7 @@ class FigureElement {
     } else {
       const bounds = this.getMoveBounds(); // $FlowFixMe
       const clip = bounds.clip(transform);
-      this.subscriptions.publish('beforeSetTransform', [clip]);
+      this.notifications.publish('beforeSetTransform', [clip]);
       if (this.cancelSetTransform === false) {
         this.transform = clip;
       } else {
@@ -1519,7 +1519,7 @@ class FigureElement {
       this.fnMap.exec(this.internalSetTransformCallback, this.transform);
     }
     if (publish) {
-      this.subscriptions.publish('setTransform', [this.transform]);
+      this.notifications.publish('setTransform', [this.transform]);
       this.fnMap.exec(this.setTransformCallback, this.transform);
     }
   }
@@ -1588,7 +1588,7 @@ class FigureElement {
     if (setDefault) {
       this.defaultColor = this.color.slice();
     }
-    this.subscriptions.publish('color');
+    this.notifications.publish('color');
     this.animateNextFrame();
   }
 
@@ -1838,7 +1838,7 @@ class FigureElement {
     this.state.movement.previousTime = this.timeKeeper.now() / 1000;
     this.state.isBeingMoved = true;
     this.unrender();
-    this.subscriptions.publish('startBeingMoved');
+    this.notifications.publish('startBeingMoved');
     if (this.recorder.state === 'recording') {
       this.recorder.recordEvent('startBeingMoved', [this.getPath()]);
     }
@@ -1877,7 +1877,7 @@ class FigureElement {
         this.state.movement.velocity = this.transform.zero();
       }
     }
-    this.subscriptions.publish('stopBeingMoved');
+    this.notifications.publish('stopBeingMoved');
     if (this.recorder.state === 'recording' && this.state.isBeingMoved) {
       this.recorder.recordEvent(
         'stopBeingMoved',
@@ -1933,7 +1933,7 @@ class FigureElement {
       this.move.freely.zeroVelocityThreshold,
       this.move.maxVelocity,
     );
-    this.subscriptions.publish('startMovingFreely');
+    this.notifications.publish('startMovingFreely');
     if (this.recorder.state === 'recording') {
       this.recorder.recordEvent(
         'startMovingFreely',
@@ -1969,7 +1969,7 @@ class FigureElement {
     if (wasMovingFreely) {
       this.fnMap.exec(this.animationFinishedCallback);
       this.animationFinished('movingFreely');
-      this.subscriptions.publish('stopMovingFreely');
+      this.notifications.publish('stopMovingFreely');
     }
     this.animateNextFrame();
   }
@@ -2222,9 +2222,9 @@ class FigureElement {
       this.fnMap.exec(callback, how);
     }
     if (wasPulsing) {
-      // this.subscriptions.publish('animationFinished', )
+      // this.notifications.publish('animationFinished', )
       this.animationFinished('pulse');
-      this.subscriptions.publish('stopPulsing');
+      this.notifications.publish('stopPulsing');
     }
     this.animateNextFrame();
   }
@@ -2248,28 +2248,28 @@ class FigureElement {
       toComplete -= 1;
       if (toComplete <= 0) {
         this.state.preparingToStop = false;
-        this.subscriptions.publish('stopped');
+        this.notifications.publish('stopped');
       }
     };
     if (how === 'animateToComplete' || how === 'dissolveToComplete') {
       if (this.animations.isAnimating()) {
         this.state.preparingToStop = true;
         toComplete += 1;
-        this.animations.subscriptions.add('finished', checkStop, 1);
+        this.animations.notifications.add('finished', checkStop, 1);
       }
       if (this.state.isPulsing) {
         this.state.preparingToStop = true;
         toComplete += 1;
-        this.subscriptions.add('stopPulsing', checkStop, 1);
+        this.notifications.add('stopPulsing', checkStop, 1);
       }
       if (this.state.isMovingFreely) {
         this.state.preparingToStop = true;
         toComplete += 1;
-        this.subscriptions.add('stopMovingFreely', checkStop, 1);
+        this.notifications.add('stopMovingFreely', checkStop, 1);
       }
     }
     if (this.state.preparingToStop) {
-      this.subscriptions.publish('preparingToStop');
+      this.notifications.publish('preparingToStop');
     }
     this.stopAnimating(how);
     this.stopMovingFreely(how);
@@ -2787,8 +2787,8 @@ class FigureElement {
         this.parent.show();
       }
     }
-    this.subscriptions.publish('show');
-    this.subscriptions.publish('visibility');
+    this.notifications.publish('show');
+    this.notifications.publish('visibility');
     this.animateNextFrame();
   }
 
@@ -2869,8 +2869,8 @@ class FigureElement {
    */
   hide(): void {
     this.isShown = false;
-    this.subscriptions.publish('hide');
-    this.subscriptions.publish('visibility');
+    this.notifications.publish('hide');
+    this.notifications.publish('visibility');
     this.animateNextFrame();
   }
 
@@ -2898,7 +2898,7 @@ class FigureElement {
       }
       this.fnMap.exec(this.onClick, drawPoint, this);
     }
-    this.subscriptions.publish('onClick', [drawPoint, this]);
+    this.notifications.publish('onClick', [drawPoint, this]);
   }
 
 
@@ -3189,7 +3189,7 @@ class FigureElementPrimitive extends FigureElement {
     if (setDefault) {
       this.defaultColor = this.color.slice();
     }
-    this.subscriptions.publish('color');
+    this.notifications.publish('color');
     if (this instanceof FigureElementPrimitive) {
       if (this.drawingObject instanceof TextObjectBase) {
         this.drawingObject.setColor(this.color);
@@ -3309,7 +3309,7 @@ class FigureElementPrimitive extends FigureElement {
         }
       } // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m1'); }
-      this.subscriptions.publish('beforeDraw', [now]);
+      this.notifications.publish('beforeDraw', [now]);
       if (this.beforeDrawCallback != null) {
         this.fnMap.exec(this.beforeDrawCallback, now);
       } // $FlowFixMe
@@ -3405,7 +3405,7 @@ class FigureElementPrimitive extends FigureElement {
         this.isRenderedAsImage = true;
         this.renderedOnNextDraw = false;
       }
-      this.subscriptions.publish('afterDraw', [now]);
+      this.notifications.publish('afterDraw', [now]);
       if (this.afterDrawCallback != null) {
         this.fnMap.exec(this.afterDrawCallback, now);
       }
@@ -4697,7 +4697,7 @@ class FigureElementCollection extends FigureElement {
       element.setColor(nonNullColor, setDefault);
     }
     this.color = nonNullColor.slice();
-    this.subscriptions.publish('color');
+    this.notifications.publish('color');
     if (setDefault) {
       this.defaultColor = this.color.slice();
     }
