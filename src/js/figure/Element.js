@@ -447,7 +447,7 @@ type ElementState = {
  * the alpha channel of `color` to net a final opacity. Opacity should not be
  * set directly as it will be overwritten by dissolve animations.
  *
- * Notifications - The subscription manager property `notifications` will
+ * Notifications - The notification manager property `notifications` will
  * publish the following events:
  * - `beforeSetTransform`: published just before the `transform` property is
  * changed
@@ -489,7 +489,7 @@ type ElementState = {
  * @property {Scenarios} scenarios scenario presets
  * @property {ElementState} state current state of element
  * @property {AnimationManager} animations element animation manager
- * @property {NotificationManager} notifications subscription manager for
+ * @property {NotificationManager} notifications notification manager for
  * element
  * @property {FunctionMap} fnMap function map for use with {@link Recorder}
  * @property {Object} customState put any custom state information that needs

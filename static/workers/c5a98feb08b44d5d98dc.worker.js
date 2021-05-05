@@ -175,12 +175,6 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-// import type { Transform } from '../tools/g2';
-// import { Point, getTransform, Transform } from '../tools/g2';
-// import { round } from '../tools/math';
-// import type { FigureElement } from './Element';
-// import GlobalAnimation from './webgl/GlobalAnimation';
-// Singleton class that contains projects global functions
 var GeneralFunctionMap = /*#__PURE__*/function () {
   function GeneralFunctionMap() {
     _classCallCheck(this, GeneralFunctionMap);
@@ -893,7 +887,7 @@ function rand2D(minX, minY, maxX, maxY) {
 /*!*******************************!*\
   !*** ./src/js/tools/tools.js ***!
   \*******************************/
-/*! exports provided: diffPathsToObj, diffObjToPaths, Console, classify, extractFrom, ObjectKeyPointer, getElement, addToObject, duplicateFromTo, isTouchDevice, generateUniqueId, joinObjects, cleanUIDs, loadRemote, loadRemoteCSS, deleteKeys, copyKeysFromTo, generateRandomString, duplicate, assignObjectFromTo, joinObjectsWithOptions, objectToPaths, getObjectDiff, updateObjFromPath, pathsToObj, UniqueMap, compressObject, refAndDiffToObject, uncompressObject, unminify, minify, ObjectTracker, download, Subscription, NotificationManager, getFromObject, splitString, PerformanceTimer */
+/*! exports provided: diffPathsToObj, diffObjToPaths, Console, classify, extractFrom, ObjectKeyPointer, getElement, addToObject, duplicateFromTo, isTouchDevice, generateUniqueId, joinObjects, cleanUIDs, loadRemote, loadRemoteCSS, deleteKeys, copyKeysFromTo, generateRandomString, duplicate, assignObjectFromTo, joinObjectsWithOptions, objectToPaths, getObjectDiff, updateObjFromPath, pathsToObj, UniqueMap, compressObject, refAndDiffToObject, uncompressObject, unminify, minify, ObjectTracker, download, Notification, NotificationManager, getFromObject, splitString, PerformanceTimer */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -931,7 +925,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "minify", function() { return minify; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectTracker", function() { return ObjectTracker; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "download", function() { return download; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Subscription", function() { return Subscription; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Notification", function() { return Notification; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NotificationManager", function() { return NotificationManager; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getFromObject", function() { return getFromObject; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "splitString", function() { return splitString; });
@@ -1471,8 +1465,14 @@ var cleanUIDs = function cleanUIDs(objectToClean) {
     var key = keys[i];
     var value = objectToClean[key];
 
-    if (_typeof(value) === 'object' && !Array.isArray(value) && value != null && typeof value !== 'function' && typeof value !== 'number' && typeof value !== 'boolean' && typeof value !== 'string') {
-      cleanUIDs(value);
+    if (_typeof(value) === 'object' && !Array.isArray(value) && value != null && typeof value !== 'function' && typeof value !== 'number' && typeof value !== 'boolean' && typeof value !== 'string' && key !== 'figure' // && key !== 'timeKeeper'
+    ) {
+        cleanUIDs(value);
+      }
+
+    if (key === 'recorder' && objectToClean.recorder != null) {
+      // eslint-disable-next-line no-param-reassign
+      objectToClean.recorder.figure = null;
     }
   }
 };
@@ -1583,9 +1583,6 @@ function compressObject(obj, map) {
   var uncompress = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
 
   if (typeof obj === 'string') {
-    // if (obj === 'do') {
-    //   console.log(obj, strValues, uncompress, map.get(obj))
-    // }
     if (strValues && uncompress) {
       return map.get(obj);
     }
@@ -1784,7 +1781,6 @@ function getObjectDiff(obj1In, diffs, obj2) {
 
 function updateObjFromPath(remainingPath, obj, value) {
   var remove = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-  // console.log(remainingPath)
   var fullP = remainingPath[0];
 
   if (fullP.length === 0) {
@@ -1803,14 +1799,11 @@ function updateObjFromPath(remainingPath, obj, value) {
   if (arrayStringIndeces) {
     var arrayIndeces = arrayStringIndeces.map(function (e) {
       return parseInt(e.replace(/\[|\]/g, ''), 10);
-    }); // console.log(arrayIndeces)
-    // return;
+    });
 
     if (obj[p] == null || !Array.isArray(obj[p])) {
       obj[p] = []; // eslint-disable-line no-param-reassign
-    } // console.log(obj)
-    // return
-
+    }
 
     var currentArray = obj[p];
     var index = 0;
@@ -1850,11 +1843,7 @@ function updateObjFromPath(remainingPath, obj, value) {
 
     updateObjFromPath(remainingPath.slice(1), currentArray[index], value, remove);
     return;
-  } // if (remainingPath.length === 1 && remove) {
-  //   console.log('asdf')
-  //   obj[p] = undefined;
-  // }
-
+  }
 
   if (remainingPath.length === 1) {
     obj[p] = value; // eslint-disable-line no-param-reassign
@@ -1891,9 +1880,7 @@ function refAndDiffToObject(referenceIn) {
 
   var processPaths = function processPaths(paths) {
     var remove = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-    // console.log(paths)
     Object.keys(paths).forEach(function (pathStr) {
-      // console.log(pathStr)
       var path = pathStr.split('.').filter(function (p) {
         return p.length > 0;
       });
@@ -1905,28 +1892,24 @@ function refAndDiffToObject(referenceIn) {
         updateObjFromPath(path, ref, value, remove);
       }
     });
-  }; // console.log(diffsIn)
-
+  };
 
   for (var _len3 = arguments.length, diffsIn = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
     diffsIn[_key3 - 1] = arguments[_key3];
   }
 
   diffsIn.forEach(function (diffIn) {
-    // console.log(diffIn)
     var added = diffIn.added,
         removed = diffIn.removed,
-        diff = diffIn.diff; // console.log(1, removed)
+        diff = diffIn.diff;
 
     if (removed != null) {
       processPaths(removed, true);
-    } // console.log(2)
-
+    }
 
     if (added != null) {
       processPaths(added);
-    } // console.log(3)
-
+    }
 
     if (diff != null) {
       processPaths(diff);
@@ -2078,12 +2061,8 @@ var ObjectTracker = /*#__PURE__*/function () {
   }, {
     key: "getDiffToReference",
     value: function getDiffToReference(obj, refName) {
-      // const s1 = performance.now()
-      var referenceChain = this.getReferenceChain(refName, []); // console.log('ref Chain', performance.now() - s1);
-      // const s2 = performance.now()
-
-      var diff = getObjectDiff(this.baseReference, referenceChain, obj, this.precision); // console.log('s2', performance.now() - s2);
-
+      var referenceChain = this.getReferenceChain(refName, []);
+      var diff = getObjectDiff(this.baseReference, referenceChain, obj, this.precision);
       return diff;
     }
   }, {
@@ -2131,10 +2110,7 @@ var ObjectTracker = /*#__PURE__*/function () {
       } // $FlowFixMe
 
 
-      this.worker = new Worker(); // // $FlowFixMe
-      // this.worker.addEventListener('message', function (event) {
-      //   console.log(event.data)
-      // });
+      this.worker = new Worker();
     }
   }, {
     key: "getFromIndex",
@@ -2167,14 +2143,14 @@ var ObjectTracker = /*#__PURE__*/function () {
  * @property {OBJ_Subscribers} subscribers
  * @property {FunctionMap} fnMap
  */
-var Subscription = /*#__PURE__*/function () {
+var Notification = /*#__PURE__*/function () {
   /**
    * @property {FunctionMap} fnMap Only needed for {@link Recorder}.
    */
-  function Subscription() {
+  function Notification() {
     var fnMap = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new _FunctionMap__WEBPACK_IMPORTED_MODULE_1__["FunctionMap"]();
 
-    _classCallCheck(this, Subscription);
+    _classCallCheck(this, Notification);
 
     this.fnMap = fnMap;
     this.subscribers = {};
@@ -2186,7 +2162,7 @@ var Subscription = /*#__PURE__*/function () {
    * @param {string} subscriptionName event name
    * @param {string | function(): void} callback to be called when events
    * are published. If `string`, then {@link FunctionMap} of the {@link Figure}
-   * or {@link FigureElement} to which the subscription manager is a property
+   * or {@link FigureElement} to which the notification manager is a property
    * of will be used.
    * @param {number} numberOfSubscriptions how many publications the
    * subscription will receive. `-1` is no limit (`-1`).
@@ -2194,7 +2170,7 @@ var Subscription = /*#__PURE__*/function () {
    */
 
 
-  _createClass(Subscription, [{
+  _createClass(Notification, [{
     key: "add",
     value: function add(callback) {
       var numberOfPublications = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : -1;
@@ -2276,32 +2252,32 @@ var Subscription = /*#__PURE__*/function () {
     }
   }]);
 
-  return Subscription;
+  return Notification;
 }();
 /**
 * Subscription Map.
 *
-* @property {Subscription} [_subscriptionName] each key in this object is a
-* unique subscription name associated with a subscription.
+* @property {Notification} [_eventName] each key in this object is a
+* unique notification name associated with an event.
 */
 
 
 /**
- * Subscription manager.
+ * Notification manager.
  *
- * Publishes notifications to event subscribers.
+ * Publishes notifications of events to subscribers.
  *
  * {@link Figure}, {@link FigureElement}, {@link Recorder}, and
- * {@link SlideNavigator} all use subscription managers for event nofitications.
+ * {@link SlideNavigator} all use notification managers for event nofitications.
  *
- * Subscriptions managers can also be added to custom objects, but it will only
+ * Notification managers can also be added to custom objects, but will only
  * publish to subscribers when it is told to publish.
  *
- * @property {OBJ_Subscriptions} notifications
+ * @property {OBJ_Notifications} notifications
  * @property {FunctionMap} fnMap
  *
  * @example
- * // Subscribe to the `setTransform` subscription of `ball1` to move `ball2`
+ * // Subscribe to the `setTransform` notification of `ball1` to move `ball2`
  *
  * // Add ball1 and ball2 to the figure
  * const [ball1, ball2] = figure.add([
@@ -2321,7 +2297,7 @@ var Subscription = /*#__PURE__*/function () {
  *   },
  * ]);
  *
- * // Subscribe to ball1's `setTransform` publication, and use the set
+ * // Subscribe to ball1's `setTransform` event notification, and use the set
  * transform to move ball2 with ball1
  * ball1.notifications.add('setTransform', (transform) => {
  *   ball2.setTransform(transform[0]);
@@ -2346,28 +2322,30 @@ var NotificationManager = /*#__PURE__*/function () {
     this.fnMap = fnMap;
   }
   /**
-   * Add a subscriber to an event.
-   * @param {string} subscriptionName event name
+   * Subscribe to a notification.
+   * @param {string} name event notification name
    * @param {string | function(): void} callback to be called when events
-   * are published. If `string`, then {@link FunctionMap} of the {@link Figure}
-   * or {@link FigureElement} to which the subscription manager is a property
+   * occur. If `string`, then {@link FunctionMap} of the {@link Figure}
+   * or {@link FigureElement} to which the notification manager is a property
    * of will be used.
-   * @param {number} numberOfSubscriptions how many publications the
-   * subscription will receive. `-1` is no limit (`-1`).
+   * @param {number} num how many notifications the subscriber will receive.
+   * `num = 1` will mean only the first notification will be sent to the
+   * subscriber .`num = -1` means all notifications of the event will be sent
+   * to the subscriber (`-1`).
    * @return {number} subscriber id
    */
 
 
   _createClass(NotificationManager, [{
     key: "add",
-    value: function add(subscriptionName, callback) {
-      var numberOfSubscriptions = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : -1;
+    value: function add(name, callback) {
+      var num = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : -1;
 
-      if (this.notifications[subscriptionName] == null) {
-        this.notifications[subscriptionName] = new Subscription(this.fnMap);
+      if (this.notifications[name] == null) {
+        this.notifications[name] = new Notification(this.fnMap);
       }
 
-      return this.notifications[subscriptionName].add(callback, numberOfSubscriptions);
+      return this.notifications[name].add(callback, num);
     }
     /**
      * Publish to all subscribers
@@ -2378,9 +2356,9 @@ var NotificationManager = /*#__PURE__*/function () {
 
   }, {
     key: "publish",
-    value: function publish(subscriptionName, payload) {
-      if (this.notifications[subscriptionName] != null) {
-        this.notifications[subscriptionName].publish(payload);
+    value: function publish(eventName, payload) {
+      if (this.notifications[eventName] != null) {
+        this.notifications[eventName].publish(payload);
       }
     }
     /**
@@ -2391,13 +2369,13 @@ var NotificationManager = /*#__PURE__*/function () {
 
   }, {
     key: "remove",
-    value: function remove(subscriptionName, subscriberId) {
-      if (this.notifications[subscriptionName] != null) {
-        var subscription = this.notifications[subscriptionName];
+    value: function remove(eventName, subscriberId) {
+      if (this.notifications[eventName] != null) {
+        var subscription = this.notifications[eventName];
         subscription.remove(subscriberId);
 
         if (subscription.order.length === 0) {
-          delete this.notifications[subscriptionName];
+          delete this.notifications[eventName];
         }
       }
     } // eslint-disable-next-line class-methods-use-this
@@ -2546,4 +2524,4 @@ var PerformanceTimer = /*#__PURE__*/function () {
 /***/ })
 
 /******/ });
-//# sourceMappingURL=3293a1d242a853902fe0.worker.js.map
+//# sourceMappingURL=c5a98feb08b44d5d98dc.worker.js.map

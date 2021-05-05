@@ -1134,7 +1134,7 @@ class Notification {
    * @param {string} subscriptionName event name
    * @param {string | function(): void} callback to be called when events
    * are published. If `string`, then {@link FunctionMap} of the {@link Figure}
-   * or {@link FigureElement} to which the subscription manager is a property
+   * or {@link FigureElement} to which the notification manager is a property
    * of will be used.
    * @param {number} numberOfSubscriptions how many publications the
    * subscription will receive. `-1` is no limit (`-1`).

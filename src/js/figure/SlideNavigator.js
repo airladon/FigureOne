@@ -507,13 +507,13 @@ export type OBJ_SlideNavigator = {
  * `textElement` automatically, and will usually be more convenient than
  * manually creating them (unless custom buttons are needed).
  *
- * Notifications - The subscription manager property `notifications` will
+ * Notifications - The notification manager property `notifications` will
  * publish the following events:
  * - `goToSlide`: published when slide changes - will pass slide index to
  * subscriber
  * - `steady`: steady state reached (slide transition complete)
  *
- * @property {NotificationManager} notifications subscription manager for
+ * @property {NotificationManager} notifications notification manager for
  * element
  * @property {number} currentSlideIndex index of slide current shown
  * @property {boolean} inTransition `true` if slide current transitioning

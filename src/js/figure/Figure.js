@@ -157,7 +157,7 @@ export type OBJ_Figure = {
  * and useful transforms for converting between the different spaces (e.g.
  * pixel, GL, figure).
  *
- * Notifications - The subscription manager property `notifications` will
+ * Notifications - The notification manager property `notifications` will
  * publish the following events:
  * - `beforeDraw`: published before a frame is drawn
  * - `afterDraw`: published after a frame is drawn
@@ -169,7 +169,7 @@ export type OBJ_Figure = {
  * as shapes, lines and grids
  * @property {FigureCollections} collections create figure collections such
  * as advanced lines, shapes, equations and plots
- * @property {NotificationManager} notifications subscription manager for
+ * @property {NotificationManager} notifications notification manager for
  * element
  *
  * @example

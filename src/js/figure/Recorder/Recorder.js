@@ -203,7 +203,7 @@ function getMostRecentForTime(
  * - [Trig 2 - Names](https://github.com/airladon/FigureOne/docs/examples/Trig%202%20-%20Names/index.html)
  * - [Trig 3 - Relationships](https://github.com/airladon/FigureOne/docs/examples/Trig%203%20-%20Relationships/index.html)
  *
- * Notifications - The subscription manager property `notifications` will
+ * Notifications - The notification manager property `notifications` will
  * publish the following events:
  * - `timeUpdate`: updated at period defined in property `timeUpdates`
  * - `durationUpdated`: updated whenever audio or video are loaded, or when

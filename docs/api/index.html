@@ -5842,7 +5842,7 @@ also be paused.</p>
 <p><code>Figure</code> has a number of convenience methods for creating drawing elements
 and useful transforms for converting between the different spaces (e.g.
 pixel, GL, figure).</p>
-<p>Notifications - The subscription manager property <code>subscriptions</code> will
+<p>Notifications - The notification manager property <code>subscriptions</code> will
 publish the following events:</p>
 <ul>
 <li><code>beforeDraw</code>: published before a frame is drawn</li>
@@ -5898,7 +5898,7 @@ as advanced lines, shapes, equations and plots
       
         <div class='space-bottom0'>
           <span class='code bold'>subscriptions</span> <code class='quiet'>(<a href="#subscriptionmanager">NotificationManager</a>)</code>
-          : subscription manager for
+          : notification manager for
 element
 
           
@@ -7549,7 +7549,7 @@ an element out transitions its opacity from its current value to 0.
 The <code>opacity</code> property is used when dissolving. The opacity is multiplied by
 the alpha channel of <code>color</code> to net a final opacity. Opacity should not be
 set directly as it will be overwritten by dissolve animations.</p>
-<p>Notifications - The subscription manager property <code>subscriptions</code> will
+<p>Notifications - The notification manager property <code>subscriptions</code> will
 publish the following events:</p>
 <ul>
 <li><code>beforeSetTransform</code>: published just before the <code>transform</code> property is
@@ -7710,7 +7710,7 @@ when undimming element
       
         <div class='space-bottom0'>
           <span class='code bold'>subscriptions</span> <code class='quiet'>(<a href="#subscriptionmanager">NotificationManager</a>)</code>
-          : subscription manager for
+          : notification manager for
 element
 
           
@@ -44626,7 +44626,7 @@ slides and step through them.</p>
 <p><a href="#collectionsslidenavigator">CollectionsSlideNavigator</a> creates the navigation buttons, and
 <code>textElement</code> automatically, and will usually be more convenient than
 manually creating them (unless custom buttons are needed).</p>
-<p>Notifications - The subscription manager property <code>subscriptions</code> will
+<p>Notifications - The notification manager property <code>subscriptions</code> will
 publish the following events:</p>
 <ul>
 <li><code>goToSlide</code>: published when slide changes - will pass slide index to
@@ -44678,7 +44678,7 @@ property.
       
         <div class='space-bottom0'>
           <span class='code bold'>subscriptions</span> <code class='quiet'>(<a href="#subscriptionmanager">NotificationManager</a>)</code>
-          : subscription manager for
+          : notification manager for
 element
 
           
@@ -46540,7 +46540,7 @@ examples on how this is done.</p>
 <li><a href="https://github.com/airladon/FigureOne/docs/examples/Trig%202%20-%20Names/index.html">Trig 2 - Names</a></li>
 <li><a href="https://github.com/airladon/FigureOne/docs/examples/Trig%203%20-%20Relationships/index.html">Trig 3 - Relationships</a></li>
 </ul>
-<p>Notifications - The subscription manager property <code>subscriptions</code> will
+<p>Notifications - The notification manager property <code>subscriptions</code> will
 publish the following events:</p>
 <ul>
 <li><code>timeUpdate</code>: updated at period defined in property <code>timeUpdates</code></li>
@@ -66731,7 +66731,7 @@ are published. If
 
 or 
 <a href="#figureelement">FigureElement</a>
- to which the subscription manager is a property
+ to which the notification manager is a property
 of will be used.
 
           </div>
@@ -67017,7 +67017,7 @@ unique subscription name associated with a subscription.
   <p>Subscription manager.</p>
 <p>Publishes notifications to event subscribers.</p>
 <p><a href="#figure">Figure</a>, <a href="#figureelement">FigureElement</a>, <a href="#recorder">Recorder</a>, and
-<a href="#slidenavigator">SlideNavigator</a> all use subscription managers for event nofitications.</p>
+<a href="#slidenavigator">SlideNavigator</a> all use notification managers for event nofitications.</p>
 <p>Subscriptions managers can also be added to custom objects, but it will only
 publish to subscribers when it is told to publish.</p>
 
@@ -67169,7 +67169,7 @@ are published. If
 
 or 
 <a href="#figureelement">FigureElement</a>
- to which the subscription manager is a property
+ to which the notification manager is a property
 of will be used.
 
           </div>
