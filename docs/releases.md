@@ -24,3 +24,25 @@
 * Add clicked position in element.click
 * Updates to automated testing of examples
 * Add summary gif to main readme
+
+
+## v0.7.0
+* Recorder class
+   - Creation and playback of interactive videos
+   - Allows recording of mouse movements
+* FunctionMap class
+   - Local and global maps of functions to unique string identifiers
+* GlobalAnimation renamed to TimeKeeper
+* TimeKeeper allows manual time steps and draw frames with `setManualFrames`
+* SlideNavigator
+   - Form and transitions can now be defined with an object
+   - fromForm uses form definitions from prior slides
+   - Accepts function maps
+   - Now accepts all equation options in equationDefaults
+* Add setToEnd in TriggerAnimationStep
+* Get equation form and phrase elements with `getFormElements` and `getPhraseElements`
+* Add element and elements to all animation steps
+* Fix xAlign and yAlign for pulse animation step
+* Fix inline symbol color definition (to not be overridden by equation color)
+* Eight new tutorials on NotificationManager, SlideNavigator and Recorder
+* Four new examples for Recorder (interactive video)
