@@ -56,6 +56,6 @@ figure.add(
 );
 const p = figure.getElement('p');
 
-figure.globalAnimation.setManualFrames();
-figure.globalAnimation.frame(0);
+figure.timeKeeper.setManualFrames();
+figure.timeKeeper.frame(0);
 figure.animateNextFrame();
