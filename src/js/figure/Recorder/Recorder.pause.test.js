@@ -49,7 +49,6 @@ describe('Animate To State', () => {
     const subs = recorder.subscriptions;
     subs.add('playbackStarted', playbackStartedCallback);
     subs.add('playbackStopped', playbackStoppedCallback);
-    // subs.add('playbackStopped', () => console.log(13));
     subs.add('preparingToPause', preparingToPauseCallback);
     subs.add('preparingToPlay', preparingToPlayCallback);
     recorder.stateTimeStep = 1;
@@ -607,22 +606,17 @@ describe('Animate To State', () => {
       recorder.addEventType('startPulse', startPulse.bind(this));
 
       figure.mock.timeStep(0);  // Ok
-      // console.log(a.drawTransforms[0].s().round(3).x)
       recorder.startRecording();
       figure.mock.timeStep(1);
-      // console.log(a.drawTransforms[0].s().round(3).x)
       startPulse();
       recorder.recordEvent('startPulse');
       figure.mock.timeStep(0);  // Ok
       figure.mock.timeStep(1);
-      // console.log(a.drawTransforms[0].s().round(3).x)
       figure.mock.timeStep(1);
       figure.mock.timeStep(1);
-      // console.log(a.drawTransforms[0].s().round(3).x)
       recorder.recordEvent('touch', ['up']);
       recorder.stopRecording();
       recorder.seek(0);
-      // console.log(a.drawTransforms[0].s().round(3).x)
 
       states = () => {
         const scale = a.drawTransforms[0].s().round(3).x;
@@ -2001,22 +1995,17 @@ describe('Animate To State', () => {
       recorder.addEventType('startPulse', startPulse.bind(this));
 
       figure.mock.timeStep(0);  // Ok
-      // console.log(a.drawTransforms[0].s().round(3).x)
       recorder.startRecording();
       figure.mock.timeStep(1);
-      // console.log(a.drawTransforms[0].s().round(3).x)
       startPulse();
       recorder.recordEvent('startPulse');
       figure.mock.timeStep(0);  // Ok
       figure.mock.timeStep(1);
-      // console.log(a.drawTransforms[0].s().round(3).x)
       figure.mock.timeStep(1);
       figure.mock.timeStep(1);
-      // console.log(a.drawTransforms[0].s().round(3).x)
       recorder.recordEvent('touch', ['up']);
       recorder.stopRecording();
       recorder.seek(0);
-      // console.log(a.drawTransforms[0].s().round(3).x)
 
       states = () => {
         const scale = a.drawTransforms[0].s().round(3).y;

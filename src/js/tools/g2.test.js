@@ -78,12 +78,10 @@ describe('g2 tests', () => {
     describe('180 deg separation', () => {
       test('180 - 0 = 180', () => {
         const res = minAngleDiff(Math.PI, 0);
-        // console.log("res:", res, round(res, 8))
         expect(round(res, 8)).toEqual(round(Math.PI, 8));
       });
       test('0 - 180 = -180', () => {
         const res = minAngleDiff(0, Math.PI);
-        // console.log("res:", res, round(res, 8))
         expect(round(res, 8)).toEqual(round(-Math.PI, 8));
       });
       test('90 - 270 = -180', () => {

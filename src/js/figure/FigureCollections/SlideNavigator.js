@@ -363,13 +363,6 @@ class CollectionsSlideNavigator extends FigureElementCollection {
     this.nav.prevSlide();
   }
 
-  // onAdd() {
-  //   console.log('asdf', this.parent)
-  //   if (this.nav.collection == null && this.parent != null) {
-  //     this.nav.collection = this.parent;
-  //     this.nav.setEquations();
-  //   }
-  // }
 
   addText(textOptions: OBJ_TextLines | string) {
     const defaultOptions = {

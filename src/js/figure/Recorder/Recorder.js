@@ -131,7 +131,6 @@ function getNextIndexForTime(
   earliestTime: boolean = true,
 ) {
   const nextIndex = getIndexRangeForTime(recordedData, time, startSearch, endSearch)[1];
-  // console.log(nextIndex)
   if (earliestTime) {
     return getIndexOfEarliestTime(recordedData, nextIndex);
   }
@@ -159,7 +158,6 @@ function getMostRecentForTime(
   let latestTime = null;
   let latestEventOrState = null;
   recordedData.forEach((data) => {
-    // console.log(data)
     const index = getPrevIndexForTime(data, time);
     if (index < 0) {
       return;
@@ -175,17 +173,6 @@ function getMostRecentForTime(
   });
   return latestEventOrState;
 }
-// function getTimeToIndex(
-//   recordedData: TypeEvents | TypeStateDiffs,
-//   eventIndex: number,
-//   time: number,
-// ) {
-//   if (eventIndex === -1 || eventIndex > recordedData.length - 1) {
-//     return -1;
-//   }
-//   const nextTime = recordedData[eventIndex][0];
-//   return nextTime - time;
-// }
 
 /**
  * The Recorder class provides functionality to record and playback video like
@@ -398,7 +385,6 @@ class Recorder {
     Object.keys(this.events).forEach((eventName) => {
       const event = this.events[eventName];
       if (event.list.length > 0) {
-        // console.log(eventsTime, eventName, event.list[event.list.length - 1])
         eventsTime = Math.max(eventsTime, event.list[event.list.length - 1][0]);
       }
     });
@@ -435,7 +421,6 @@ class Recorder {
     Object.keys(this.events).forEach((eventName) => {
       this.events[eventName].list = [];
     });
-    // this.events.list = [];
     this.eventsCache = {};
     this.stateIndex = -1;
     this.eventIndex = {};
@@ -443,7 +428,6 @@ class Recorder {
     this.videoToNowDelta = 0;
     this.state = 'idle';
     this.isAudioPlaying = false;
-    // this.currentTime = 0;
     this.setCurrentTime(0);
     this.duration = 0;
     this.reference = '__base';
@@ -672,7 +656,6 @@ class Recorder {
     if (!audioStarted) {
       this.pausePlayback();
     }
-    // console.log('recorder is', this.state);
   }
 
   /**
@@ -700,22 +683,18 @@ class Recorder {
     this.startRecording(0, Object.keys(this.events), true);
     // this.duration = duration;
     this.autoFrame(frameTime);
-    // console.log('recorder is', this.state);
   }
 
   autoFrame(frameTime: number = 0.1) {
-    // console.log(this.state)
     if (this.state === 'recording') {
       this.figure.animateNextFrame();
       this.figure.timeKeeper.frame(frameTime);
       if (this.getCurrentTime() <= this.duration) {
-        // console.log('auto')
         setTimeout(
           this.autoFrame.bind(this, frameTime),
           5,
         );
       } else {
-        // console.log('stopping')
         this.stopStatesRecording();
       }
     } else {
@@ -733,13 +712,11 @@ class Recorder {
   // $FlowFixMe
   parseMessage(event) {
     const { message, payload } = event.data;
-    // if (message === 'duration')
     if (message === 'cache') {
       this.statesCache = new ObjectTracker();
       this.statesCache.diffs = payload.diffs;
       this.statesCache.baseReference = payload.baseReference;
       this.statesCache.references = payload.references;
-      // console.log(payload)
       this.mergeEventsCache();
       this.mergeStatesCache();
       this.duration = this.calcDuration();
@@ -773,7 +750,6 @@ class Recorder {
         ignoreShown: true,
       });
       if (this.worker != null) {
-        // console.log('posting')
         this.worker.postMessage({
           message: 'addReference',
           payload: {
@@ -834,7 +810,6 @@ class Recorder {
         sliceEnd = -1;
       }
     }
-    // console.log(sliceStart, sliceEnd)
     let beforeEvents = [];
     let afterEvents = [];
     if (sliceStart >= 0) {
@@ -863,7 +838,6 @@ class Recorder {
       if (this.events[eventName] != null) {
         eventsList = this.events[eventName].list;
       }
-      // console.log(eventName)
       const merged = this.getMergedCacheArray(  // $FlowFixMe
         eventsList, eventsCacheList,
       );
@@ -886,7 +860,6 @@ class Recorder {
       return;
     }   // $FlowFixMe
     this.states.diffs = merged;
-    // this.states.baseReference = duplicate(this.statesCache.baseReference);
     // $FlowFixMe
     this.states.references = duplicate(this.statesCache.references);
   }
@@ -902,7 +875,6 @@ class Recorder {
    * Stop Recording
    */
   stopRecording() {
-    // this.currentTime = this.getCurrentTime();
     this.setCurrentTime(this.getCurrentTime());
     this.state = 'idle';
     this.stopTimeouts();
@@ -987,10 +959,6 @@ class Recorder {
         },
       });
     }
-    // this.statesCache.addReference(this.figure.getState({
-    //   precision: this.precision,
-    //   ignoreShown: true,
-    // }), refName, basedOn);
   }
 
   recordEvent(
@@ -998,8 +966,6 @@ class Recorder {
     payload: Array<string | number | Object>,
     time: number = this.getCurrentTime(),
   ) {
-    // console.log('record event', eventName)
-    // console.log(time)
     if (this.events[eventName] == null) {
       return;
     }
@@ -1025,12 +991,9 @@ class Recorder {
 
   // States are recorded every second
   queueRecordState(time: number = 0) {
-    // console.log(time)
     const recordAndQueue = () => {
       if (this.state === 'recording') {
-        // if (this.figure.getIsInTransition() === false) {
         this.recordCurrentState();
-        // }
         this.queueRecordState(this.stateTimeStep - this.getCurrentTime() % this.stateTimeStep);
       }
     };
@@ -1038,9 +1001,6 @@ class Recorder {
       recordAndQueue();
       return;
     }
-    // if (time < 1) {
-    //   return
-    // }
     this.timeoutID = this.timeKeeper.setTimeout(() => {
       recordAndQueue();
     }, round(time * 1000, 10), 'state', true);
@@ -1057,12 +1017,6 @@ class Recorder {
     const encodedEvents = this.encodeEvents();
     const combined = { states: encodedStates, events: encodedEvents };
     download(`${dateStr}_${location}.json`, JSON.stringify(combined));
-    // if (encodedStates != null) {
-    //   download(`${dateStr}_${location}_states.json`, JSON.stringify(encodedStates));
-    // }
-    // if (encodedEvents != null) {
-    //   download(`${dateStr}_${location}_events.json`, JSON.stringify(encodedEvents));
-    // }
   }
 
   show() {
@@ -1141,14 +1095,6 @@ ${cursorData}
     return out.join(',\n');
   }
 
-  // encodeMoveEvent(
-  //   eventName: string,
-  //   timePrecision: number = 2,
-  //   valuePrecision: number = 2,
-  //   minTimeStep: number = 0.01,
-  // ) {
-
-  // }
 
   encodeCursorEvent(
     eventName: string,
@@ -1356,13 +1302,9 @@ ${cursorData}
     }
     this.pauseState = null;
     this.setToTime(time);
-    // console.log(this.figure.elements.elements.eqn.isShown)
     this.lastSeekTime = this.currentTime;
     this.figure.stop('freeze');
-    // console.log('here', this.figure.elements.elements.eqn.isShown)
     this.subscriptions.publish('seek', time);
-    // console.log(this.figure.elements.elements.eqn.isShown)
-    // this.subscriptions.publish('timeUpdate', time);
   }
 
   setToTime(timeIn: number, force: boolean = false) {
@@ -1452,9 +1394,7 @@ ${cursorData}
 
     this.setCurrentTime(timeToUse);
 
-    // this.setCursor(timeToUse);
     this.figure.animateNextFrame();
-    // console.log(t.slice(-1)[0] - t[0], t[1]-t[0],t[2]-t[1],t[3]-t[2])
   }
 
   setCursor(time: number) {
@@ -1480,15 +1420,6 @@ ${cursorData}
     ) {
       return null;
     }
-    // let cursorEvents = this.events._autoCursor;
-    // let touchEvents = this.events._autoTouch;
-    // let cursorMoveEvents = this.events._autoCursorMove;
-    // if (!this.useAutoEvents) {
-    //   cursorEvents = this.events.cursor;
-    //   touchEvents = this.events.touch;
-    //   cursorMoveEvents = this.events.cursorMove;
-    // }
-    // console.log(this.useAutoEvents)
     const cursorEvent = getMostRecentForTime(
       [this.events.cursor.list, this.events._autoCursor.list], atTime,
     );
@@ -1499,15 +1430,11 @@ ${cursorData}
       [this.events.cursorMove.list, this.events._autoCursorMove.list], atTime,
     );
 
-    // const cursorIndex = getPrevIndexForTime(cursorEvents.list, atTime);
-    // const touchIndex = getPrevIndexForTime(touchEvents.list, atTime);
-    // const cursorMoveIndex = getPrevIndexForTime(cursorMoveEvents.list, atTime);
     let touchUp = null;
     let showCursor = null;
     let cursorPosition = null;
     let cursorTime = null;
     let cursorTimeCount = null;
-    // if (touchIndex !== -1) {
     if (touchEvent != null) {
       // const event = touchEvents.list[touchIndex]; // $FlowFixMe
       const [time, [upOrDown, x, y], timeCount] = touchEvent;
@@ -1563,10 +1490,7 @@ ${cursorData}
     let events = [];
     if (eventsIn != null && eventsIn.length > 0) {
       events = eventsIn;
-    // } else if (this.useAutoEvents) {
-    //   events = ['_autoExec', '_autoCursor', '_autoSlide', '_autoCursorMove', '_autoTouch'];
     } else {
-      // events = Object.keys(this.events).filter(eventName => !eventName.startsWith('_auto'));
       events = Object.keys(this.events);
     }
     return events;
@@ -1631,7 +1555,6 @@ ${cursorData}
       this.state = 'preparingToPlay';
       this.subscriptions.publish('preparingToPlay');
       this.figure.subscriptions.add('stateSet', finished, 1);
-      // console.log(this.figure.subscriptions.subscriptions.stateSet)
     } else {
       finished();
     }
@@ -1668,7 +1591,6 @@ ${cursorData}
       // minDuration: 0,
       duration: 0,
     };
-    // console.log(resumeSettings)
     if (typeof this.settings.play === 'string') {
       onResume.how = this.settings.play;
     } else {
@@ -1809,7 +1731,6 @@ ${cursorData}
       return;
     }
 
-    // console.log('play event', eventName);
     this.setEvent(eventName, index);
     this.figure.animateNextFrame();
     if (index + 1 === this.events[eventName].list.length) {
@@ -1863,7 +1784,6 @@ ${cursorData}
     // this.pausePlayback('cancel');
     // this.currentTime = this.getCurrentTime();
     this.setCurrentTime(this.getCurrentTime());
-    // console.log(this.currentTime)
     this.stop();
     return true;
   }
@@ -1914,7 +1834,6 @@ ${cursorData}
     });
 
     const pause = () => {
-      // console.log('pause')
       this.state = 'idle';
       this.subscriptions.publish('playbackStopped');
       // this.figure.stop();
@@ -1930,17 +1849,7 @@ ${cursorData}
     if (this.figure.state.preparingToStop) {
       this.subscriptions.publish('preparingToPause');
       this.state = 'preparingToPause';
-      // console.log('recorder prep to pause')
-      // this.figure.subscriptions.add('animationsFinished', pause, 1);
     }
-    // if (this.figure.isAnimating()) {
-    //   this.subscriptions.publish('preparingToPause');
-    //   this.state = 'preparingToPause';
-    //   // console.log('recorder prep to pause')
-    //   this.figure.subscriptions.add('animationsFinished', pause, 1);
-    // } else {
-    //   pause();
-    // }
   }
 
 
@@ -1964,7 +1873,6 @@ ${cursorData}
     // const t = performance.now()
     // this.figure.elements.setupDraw(this.figure.timeKeeper.now() / 1000);
     this.figure.setDrawTimeout(0.05);
-    // console.log(performance.now() - t);
     // $FlowFixMe
     event.playbackAction(event.list[index][1], event.list[index][0]);
   }

@@ -532,7 +532,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     glyph.width = spacedLine.angle();
     glyph.height = spacedLine.length();
     glyph.location = spacedLine.p1._dup();
-    glyph.glyph._custom.setSize(glyph.location, glyph.width, glyph.height);\
+    glyph.glyph._custom.setSize(glyph.location, glyph.width, glyph.height);
   }
 
   setVerticalGlyph(scale: number, contentBounds: Bounds, glyphName: 'left' | 'right') {

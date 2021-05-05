@@ -867,10 +867,6 @@ describe('Animationa and Movement', () => {
           .rotate(Math.PI / 2));
         figure.mock.timeStep(0);
         collection.setTouchable();
-        // collection.setupDraw(0);
-        // collection.draw(0, [identity]);
-        // figure.mock.timeStep(0);
-        // console.log(collection.getBoundingRect('figure', 'touchBorder'));
         expect(collection.isBeingTouched(new Point(0, 10))).toBe(true);
         expect(collection.isBeingTouched(new Point(1.049, 11.049))).toBe(true);
         expect(collection.isBeingTouched(new Point(1.051, 11.049))).toBe(false);

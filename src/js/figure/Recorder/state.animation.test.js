@@ -333,8 +333,6 @@ describe('Animation Step State', () => {
     // figure.mock.timeStep(0.1);
     // now = 0.5;
     figure.mock.timeStep(0.5);
-    // console.log(elem1.state.isPulsing)
-    // console.log(elem1.animations.animations[0].steps)
     expect(math.round(elem1.lastDrawPulseTransform.s().x)).toEqual(1.5);
     const state = figure.getState();
     // now = 1;

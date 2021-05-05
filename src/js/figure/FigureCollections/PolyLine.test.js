@@ -198,7 +198,6 @@ describe('Figure Objects PolyLine', () => {
     expect(tools.cleanUIDs(poly._line)).toMatchSnapshot();
     expect(poly._line.drawingObject.points).toHaveLength(points.length * 12);
     expect(Object.keys(poly.elements)).toHaveLength(1);
-    // console.log(Object.keys(poly.elements))
   });
   test('Number of points in line open', () => {
     const poly = ways.numPointsOpen();
@@ -230,7 +229,6 @@ describe('Figure Objects PolyLine', () => {
       expect(Object.keys(poly.elements)).toHaveLength(4);
       expect(Object.keys(poly.elements))
         .toEqual(['line', 'side01', 'side12', 'side20']);
-      // console.log(poly.elements.side01.line.p1)
       expect(poly.elements.side01.line.p1).toEqual(points[0]);
       expect(poly.elements.side01.line.p2).toEqual(points[1]);
       expect(poly.elements.side12.line.p1).toEqual(points[1]);

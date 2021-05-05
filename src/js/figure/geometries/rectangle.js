@@ -59,7 +59,6 @@ function getRectangleBorder(
       widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid' | number,
       width: number,
     },
-    // border: 'rect' | 'outline' | Array<Array<Point>>,
     drawBorderBuffer: number | Array<Array<Point>>,
     offset: Point,
   },
@@ -67,7 +66,6 @@ function getRectangleBorder(
   const {
     width, height, xAlign, yAlign,
   } = options;
-  // const { drawBorderBuffer } = options;
   let x = 0;
   let y = 0;
   if (xAlign === 'center') {
@@ -86,38 +84,6 @@ function getRectangleBorder(
   }
   const { radius, sides } = options.corner;
   const points = getRectPoints(width, height, sides, radius, x, y, options.offset);
-  // let lineDelta = 0;
-  // if (line != null && line.widthIs === 'mid') {
-  //   lineDelta = line.width / 2;
-  // }
-  // if (line != null && (line.widthIs === 'outside' || line.widthIs === 'negative')) {
-  //   lineDelta = line.width;
-  // }
-  // let outline: Array<Point>;
-  // if (lineDelta > 0) {
-  //   outline = getRectPoints(
-  //     width + lineDelta * 2,
-  //     height + lineDelta * 2,
-  //     sides, radius, x - lineDelta, y - lineDelta, options.offset,
-  //   );
-  // } else {  // $FlowFixMe
-  //   outline = points.map(p => p._dup());
-  // }
-
-  // const border = [outline];
-
-  // let bufferBorder = border;
-  // if (typeof drawBorderBuffer === 'number') {
-  //   bufferBorder = [getRectPoints(
-  //     width + lineDelta * 2 + drawBorderBuffer * 2,
-  //     height + lineDelta * 2 + drawBorderBuffer * 2,
-  //     sides, radius, x - lineDelta - drawBorderBuffer, y - lineDelta - drawBorderBuffer,
-  //     options.offset,
-  //   )];
-  // } else {
-  //   bufferBorder = drawBorderBuffer;
-  // }
-  // console.log(points)
   return points;
 }
 

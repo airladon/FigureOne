@@ -198,7 +198,6 @@ function orientArrow(
   },
 ) {
   let matrix;
-  // console.log(options.drawPosition)
   if (options.align === 'start') {
     matrix = new Transform()
       .translate(length, 0)
@@ -223,9 +222,6 @@ function orientArrow(
       .translate(options.drawPosition)
       .matrix();
   }
-  // const line = new Line(start, end);
-  // const matrix = new Transform().rotate(line.angle()).translate(start).matrix();
-  // const newPoints: Array<Point> = points.map(p => p.transformBy(matrix));
   const newBorder: Array<Point> = border.map(p => p.transformBy(matrix));
   const newTouchBorder: Array<Point> = touchBorder.map(p => p.transformBy(matrix));
   const newTail: Array<Point> = tail.map(p => p.transformBy(matrix));
@@ -1332,10 +1328,6 @@ function getPolygonTris(b: Array<Point>) {
     points.push(b[i - 1]);
     points.push(b[i]);
   }
-  // console.log(points)
-  // points.push(new Point(-radius, 0));
-  // points.push(b[b.length - 1]);
-  // points.push(b[0]);
   return points;
 }
 
@@ -1356,10 +1348,6 @@ function getArrowLength(options: {
     return getPolygonLength(options);
   }
   if (head === 'line') {
-    // const line = new Line([0, -width / 2], [length, 0]);
-    // const horizontal = new Line([0, -tailWidth], [length, -tailWidth]);
-    // const i = horizontal.intersectsWith(line).intersect;
-    // return length - i.x;
     return getLineLength(options);
   }
   if (head === 'reverseTriangle') {
@@ -1374,9 +1362,6 @@ function getArrowLength(options: {
   if (head === 'rectangle' || head === 'bar') {
     return getRectLength(options);
   }
-  // if (head === 'triangle' && reverse) {
-  //   return 0;
-  // }
   return [length, length, length];
 }
 

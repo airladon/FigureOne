@@ -153,7 +153,4 @@ function colorNames() {
   };
 }
 
-// function a(input) {
-//   console.log(input);
-// }
 export default colorNames;

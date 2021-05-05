@@ -45,8 +45,6 @@ function lineSegmentsToPoints(
   close: boolean,
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
   const tris = [];
-  // let border = [];
-  // console.log(lineSegments)
   let hole = [[]];
   const positiveBorder = [];
   const negativeBorder = [];
@@ -159,7 +157,6 @@ function lineSegmentsToPoints(
     }
   });
   let border = [[]];
-  // console.log(borderIs)
   if (borderIs === 'positive') {
     border = [positiveBorder];
   } else if (borderIs === 'negative') {
@@ -176,11 +173,9 @@ function lineSegmentsToPoints(
   } else if (Array.isArray(borderIs)) {
     border = borderIs;
   }
-  // console.log(border)
   if (Array.isArray(holeIs)) {
     hole = holeIs;
   }
-  // console.log(borderIs, border)
   return [tris, border, hole];
 }
 
@@ -360,11 +355,7 @@ function makeLineSegments(
         minPositiveOffset = Math.min(minPositiveOffset, minOffset);
       }
     }
-    // let negativeLine;
-    // let positiveLine;
     let offsetLine;
-    // console.log(widthIs)
-    // console.log(prevAngle, nextAngle)
     if (widthIs === 'negative') {
       if (cornerStyle === 'auto' && (isInside || prevAngle < Math.PI || nextAngle < Math.PI)) {
         offsetLine = current.offset('negative', minNegativeOffset);
@@ -373,22 +364,13 @@ function makeLineSegments(
       }
     } else if (widthIs === 'positive') {
       if (cornerStyle === 'auto' && (isInside || prevAngle > Math.PI || nextAngle > Math.PI)) {
-        // console.log('min')
         offsetLine = current.offset('positive', minPositiveOffset);
       } else {
         offsetLine = current.offset('positive', offset);
       }
-    // otherwise widthIs === 'mid'
     } else {
       offsetLine = current.offset('positive', offset);
     }
-    // if (cornerStyle === 'auto' && widthIs !== 'mid') {
-    //   negativeLine = current.offset('negative', minNegativeOffset);
-    //   positiveLine = current.offset('positive', minPositiveOffset);
-    // } else {
-    //   negativeLine = current.offset('negative', offset);
-    //   positiveLine = current.offset('positive', offset);
-    // }
     lineSegments[index].push(offsetLine);
   };
 
@@ -441,7 +423,6 @@ function makeLineSegments(
       segmentSides[i].reverse();
     }
   }
-  // console.log(idealLines, lineSegments, segmentSides)
   return [idealLines, lineSegments, segmentSides];
 }
 
@@ -511,7 +492,6 @@ function makeThickLine(
   if (typeof widthIs === 'number') {
     widthIs = 'mid';
   }
-  // console.log(points, idealLines, lineSegments)
 
   // Join line segments based on the angle between them
   const minAngle = minAngleIn == null ? 0 : minAngleIn;
@@ -520,12 +500,9 @@ function makeThickLine(
     const midNext = idealLines[nextIndex];
     const lineSegment = lineSegments[currentIndex][lineIndex];
     const lineSegmentNext = lineSegments[nextIndex][lineIndex];
-    // const [positive, mid, negative] = lineSegments[current];
-    // const [positiveNext, midNext, negativeNext] = lineSegments[next];
     const angle = threePointAngle(mid.p1, mid.p2, midNext.p2);
     // If the angle is less than 180, then the 'negative' line segments are
     // on the outside of the angle.
-    // console.log(currentIndex, lineIndex, angle)
     const segmentSide = segmentSides[currentIndex][lineIndex];
     if (0 < angle && angle < minAngle) {
       if (segmentSide === 'mid') {
@@ -558,17 +535,9 @@ function makeThickLine(
       }
     } else if (angle === Math.PI) {
       if (segmentSide === 'negative') {
-        // if (widthIsIn === 'inside') {
-        //   joinLinesObtuseInside(mid, midNext, lineSegment, lineSegmentNext);
-        // } else {
         joinLinesInPoint(lineSegment, lineSegmentNext, corner);
-        // }
       } else if (segmentSide === 'positive') {
-        // if (widthIsIn === 'inside') {
-        //   joinLinesObtuseInside(mid, midNext, lineSegment, lineSegmentNext);
-        // } else {
         joinLinesInPoint(lineSegment, lineSegmentNext, corner);
-        // }
       }
     // If the angle is greater than 180, then the positive side is on the
     // inside of the angle
@@ -593,8 +562,6 @@ function makeThickLine(
       }
     //
     } else if (Math.PI * 2 - minAngle < angle && angle < Math.PI * 2) {
-      // console.log('asdf', segmentSide);
-      // console.log(segmentSide)
       if (segmentSide === 'mid') {
         joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext, corner);
         // joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext);
@@ -603,90 +570,30 @@ function makeThickLine(
       } else if (segmentSide === 'positive') {
         joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext, linePrimitives);
       }
-      // console.log(lineSegment)
     } else if ((angle === Math.PI * 2 || angle === 0)) {
       // do nothing
 
-      // if (widthIs === 'mid') {
-      //   joinLinesInPoint(lineSegment, lineSegmentNext);
-      //   // joinLinesInPoint(lineSegment, lineSegmentNext);
-      // } else if (widthIs === 'negative') {
-      //   joinLinesInPoint(lineSegment, lineSegmentNext);
-      // } else if (widthIs === 'positive') {
-      //   joinLinesInPoint(lineSegment, lineSegmentNext);
-      // }
     }
-    // if (lineSegments.length >= 2) {
-    //   console.log(currentIndex, lineIndex, lineSegments[2][0]._dup())
-    // }
   };
 
   // Create fill triangles between the positive & mid, and negative and mid lines
   const cornerFills = [];
-  // const createFill = (currentIndex, nextIndex) => {
-  //   const mid = idealLines[currentIndex];
-  //   const midNext = idealLines[nextIndex];
-  //   const positive = lineSegments[currentIndex].slice(-1)[0];
-  //   const positiveNext = lineSegments[nextIndex].slice(-1)[0];
-  //   const negative = lineSegments[currentIndex][0];
-  //   const negativeNext = lineSegments[nextIndex][0];
-  //   const angle = threePointAngle(mid.p1, mid.p2, midNext.p2);
-  //   if (linePrimitives) {
-  //     for (let i = 0; i < lineSegments[currentIndex].length; i += 1) {
-  //       cornerFills.push(lineSegments[currentIndex][i].p2._dup());
-  //       cornerFills.push(lineSegments[nextIndex][i].p1._dup());
-  //     }
-  //   } else if (angle < Math.PI) {
-  //     if (widthIsIn !== 'inside') {
-  //       cornerFills.push(positive.p2._dup());
-  //       cornerFills.push(mid.p2._dup());
-  //       cornerFills.push(positiveNext.p1._dup());
-  //     }
-  //   } else if (angle > Math.PI) {
-  //     if (widthIsIn !== 'inside') {
-  //       cornerFills.push(negative.p2._dup());
-  //       cornerFills.push(mid.p2._dup());
-  //       cornerFills.push(negativeNext.p1._dup());
-  //     }
-  //   }
-  // };
 
   // NB: this all assumes the GL primitive is TRIANGLES. Thus the order the
   // triangles is drawn is not important, and so fills can happen in chunks.
   if (corner !== 'none') {
     for (let l = 0; l < lineNum; l += 1) {
       for (let i = 0; i < lineSegments.length - 1; i += 1) {
-        // if (l === 0 && linePrimitives) {
-        //   createFill(i, i + 1);
-        // } else {
         joinLineSegments(i, i + 1, l);
-        // }
-        // if (corner === 'auto') {
-        //   joinLineSegments(i, i + 1, l);
-        // } else if (l === 0 && linePrimitives) {
-        //   createFill(i, i + 1);
-        // }
       }
       if (close) {
-        // if (l === 0 && linePrimitives) {
-        //   createFill(lineSegments.length - 1, 0);
-        // } else {
         joinLineSegments(lineSegments.length - 1, 0, l);
-        // }
-        // if (corner === 'auto') {
-        //   joinLineSegments(lineSegments.length - 1, 0, l);
-        // } else if (l === 0 && linePrimitives) {
-        //   createFill(lineSegments.length - 1, 0);
-        // }
       }
     }
   }
   const [tris, border, hole] = lineSegmentsToPoints(
     lineSegments, linePrimitives, borderIs, holeIs, corner, close,
   );
-  // if (close === false) {
-  //   return [[...tris, ...cornerFills], [[...border[0]], [...hole]];
-  // }
   return [[...tris, ...cornerFills], border, hole];
 }
 
@@ -850,7 +757,6 @@ function makePolyLine(
   if (close === false && arrowIn != null) { // $FlowFixMe
     orderedPoints = shortenLineForArrows(pointsIn, arrow);
   }
-  // console.log(orderedPoints)
   // Convert line to line with corners
   if (cornerStyle === 'auto') {
     points = orderedPoints.map(p => p._dup());
@@ -892,12 +798,7 @@ function makePolyLine(
   // Get touch border if there is a buffer
   let touchBorder = border;
   if (typeof touchBorderBuffer === 'number' && touchBorderBuffer !== 0) {
-    // console.log(touchBorderBuffer)
     touchBorder = [];
-    // for (let i = 0; i < border.length; i += 1) {
-    //   touchBorder.push(getBufferBorder(border[i], touchBorderBuffer));
-    // }
-    // touchBorder = getBufferBorder(border[0], touchBorderBuffer);
     let widthIsBuffer = 0.5;
     const widthBuffer = width + touchBorderBuffer * 2;
     if (widthIs === 'positive') {
@@ -925,18 +826,9 @@ function makePolyLine(
       pointsToUse, widthBuffer, widthIsBuffer, widthIsIn === 'inside', close, cornerStyleToUse, minAutoCornerAngle,
       linePrimitives, lineNum, borderIsToUse, holeIs,
     );
-    // if (close === false) {
-
-    // }
   }
 
   const trisToUse = dash.length > 1 ? dashedTris : tris;
-  // if (dash.length > 1) {
-  //   if (arrow != null && close === false) {
-  //     return addArrows(arrow, dashedTris, border, touchBorder, hole);
-  //   }
-  //   return [dashedTris, border, touchBorder, hole];
-  // }
   if (arrowIn != null && close === false) {
     // eslint-disable-next-line no-use-before-define
     return addArrows(
@@ -947,9 +839,6 @@ function makePolyLine(
       onLine,
     );
   }
-  // if (close === false) {
-
-  // }
   return [trisToUse, border, touchBorder, hole];
 }
 

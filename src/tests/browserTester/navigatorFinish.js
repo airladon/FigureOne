@@ -40,10 +40,8 @@ function __finish(__figure) {
       __steps.push([t]);
     }
   }
-  // console.log(__steps)
   if (typeof process !== 'object') {
     // eslint-disable-next-line no-console
-    // console.log(__steps);
     const { nav } = figure.getElement(__frames.nav);
     const { slides, stop } = __frames;
     let lastSlide = slides.length - 1;

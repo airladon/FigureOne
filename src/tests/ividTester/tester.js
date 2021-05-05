@@ -166,7 +166,6 @@ async function tester(
     });
     test.each(playbackTests)('Play: %s',
       async (time) => {
-        // console.log(`Playback Test: ${time}`);
         const currentTime = await getCurrentTime();
         const deltaTime = time - currentTime;
         let d = deltaTime;
@@ -181,7 +180,6 @@ async function tester(
       });
     test.each(seekTests)('Seek: %s',
       async (seekTime) => {
-        // console.log(`Seek Test: ${seekTime}`);
         await seek(0);
         await frame(0);
         await seek(seekTime);
@@ -191,7 +189,6 @@ async function tester(
       });
     test.each(fromToTests)('From To: %s %s',
       async (fromTime, toTime) => {
-        // console.log(`FromTo Test: ${fromTime}, ${toTime}`);
         const seekTo = async (seekTimeIn, play) => {
           await seek(seekTimeIn);
           await frame(0);

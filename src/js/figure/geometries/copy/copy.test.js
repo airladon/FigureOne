@@ -10,7 +10,6 @@ describe('Copy tests', () => {
   describe('Copy Offset', () => {
     test('Simple', () => {
       const points = copyPoints([[0, 0]], [{ to: [1, 0] }]);
-      // console.log(points)
       expect(round(points[0])).toEqual(new Point(0, 0));
       expect(round(points[1])).toEqual(new Point(1, 0));
     });

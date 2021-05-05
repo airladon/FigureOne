@@ -315,8 +315,6 @@ describe('Figure', () => {
       d.draw(0);
       // Touch A
       const t1 = new Point(-0.001, -0.001);
-      // console.log(new Point(-0.001, -0.001).transformBy(d.figureToPixelSpaceTransform.matrix()))
-      // console.log(t1)
       // Move to 0.25, 0.25
       const t2 = new Point(0.25, 0.25);
       // A center will move to 0.25, 0.25
@@ -332,11 +330,9 @@ describe('Figure', () => {
       expect(d.beingMovedElements[0]).toBe(d.elements._a);
 
       // Move to 0.25, 0.25
-      // console.log(d.elements._a.transform)
       d.touchMoveHandler(t1, t2);
       expect(d.beingMovedElements).toHaveLength(1);
       expect(d.beingMovedElements[0]).toBe(d.elements._a);
-      // console.log(d.elements._a.transform)
       expect(d.elements._a.transform.t().round(2)).toEqual(a2);
 
       // Move beyond border - should stop at 0.75 as side length is 0.5
@@ -374,9 +370,7 @@ describe('Figure', () => {
       d.draw(1);
 
       // Move to 0.25, 0.25
-      // console.log(d.elements._c.transform)
       d.touchMoveHandler(t1, t2);
-      // console.log(d.elements._c.transform)
       expect(d.beingMovedElements).toHaveLength(2);
       expect(d.elements._a.transform.t().round(2)).toEqual(a2);
       expect(d.elements._c.transform.t().round(2)).toEqual(c2);
@@ -419,10 +413,6 @@ describe('Figure', () => {
       // C will get stuck at 3.5, 1.5
       const c3 = new Point(3.5, 1.5);
 
-      // console.log(t0)
-      // console.log(t1)
-      // console.log(t2)
-      // console.log(t3)
       d.touchDownHandler(t0);          // Touch -0.01, -0.01
       expect(d.beingMovedElements).toHaveLength(2);
       expect(d.beingMovedElements[1]).toBe(d.elements._a);
@@ -434,9 +424,6 @@ describe('Figure', () => {
       // debugger;
       d.touchMoveHandler(t0, t1);
       expect(d.beingMovedElements).toHaveLength(2);
-      // console.log(d.elements._a.getPosition())
-      // console.log(d.elements._c.getPosition())
-      // console.log(t1)
       expect(d.elements._a.transform.t().round(2)).toEqual(a1);
       expect(d.elements._c.transform.t().round(2)).toEqual(c1);
       d.draw(1);
@@ -445,9 +432,6 @@ describe('Figure', () => {
       // debugger
       d.touchMoveHandler(t1, t2);
       expect(d.beingMovedElements).toHaveLength(2);
-      // console.log(d.elements._a.getPosition())
-      // console.log(d.elements._c.getPosition())
-      // console.log(t2)
       expect(d.elements._a.transform.t().round(2)).toEqual(a2);
       expect(d.elements._c.transform.t().round(2)).toEqual(c2);
       d.draw(2);

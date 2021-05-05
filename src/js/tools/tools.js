@@ -596,9 +596,6 @@ function compressObject(
   uncompress: boolean = false,
 ) {
   if (typeof obj === 'string') {
-    // if (obj === 'do') {
-    //   console.log(obj, strValues, uncompress, map.get(obj))
-    // }
     if (strValues && uncompress) {
       return map.get(obj);
     }
@@ -789,7 +786,6 @@ function updateObjFromPath(
   value: any,
   remove: boolean = false,
 ) {
-  // console.log(remainingPath)
   const fullP = remainingPath[0];
   if (fullP.length === 0) {
     return;
@@ -803,13 +799,9 @@ function updateObjFromPath(
   }
   if (arrayStringIndeces) {
     const arrayIndeces = arrayStringIndeces.map(e => parseInt(e.replace(/\[|\]/g, ''), 10));
-    // console.log(arrayIndeces)
-    // return;
     if (obj[p] == null || !Array.isArray(obj[p])) {
       obj[p] = [];  // eslint-disable-line no-param-reassign
     }
-    // console.log(obj)
-    // return
     let currentArray = obj[p];
     let index = 0;
     for (let i = 0; i < arrayIndeces.length; i += 1) {
@@ -842,10 +834,6 @@ function updateObjFromPath(
     return;
   }
 
-  // if (remainingPath.length === 1 && remove) {
-  //   console.log('asdf')
-  //   obj[p] = undefined;
-  // }
   if (remainingPath.length === 1) {
     obj[p] = value;  // eslint-disable-line no-param-reassign
     return;
@@ -880,9 +868,7 @@ function refAndDiffToObject(
 ) {
   const ref = duplicate(referenceIn);
   const processPaths = (paths: Object, remove: boolean = false) => {
-    // console.log(paths)
     Object.keys(paths).forEach((pathStr) => {
-      // console.log(pathStr)
       const path = pathStr.split('.').filter(p => p.length > 0);
       const value = paths[pathStr];
       if (Array.isArray(value)) {
@@ -892,19 +878,14 @@ function refAndDiffToObject(
       }
     });
   };
-  // console.log(diffsIn)
   diffsIn.forEach((diffIn) => {
-    // console.log(diffIn)
     const { added, removed, diff } = diffIn;
-    // console.log(1, removed)
     if (removed != null) {
       processPaths(removed, true);
     }
-    // console.log(2)
     if (added != null) {
       processPaths(added);
     }
-    // console.log(3)
     if (diff != null) {
       processPaths(diff);
     }
@@ -1047,12 +1028,8 @@ class ObjectTracker {
     obj: Object,
     refName: string,
   ) {
-    // const s1 = performance.now()
     const referenceChain = this.getReferenceChain(refName, []);
-    // console.log('ref Chain', performance.now() - s1);
-    // const s2 = performance.now()
     const diff = getObjectDiff(this.baseReference, referenceChain, obj, this.precision);
-    // console.log('s2', performance.now() - s2);
     return diff;
   }
 
@@ -1095,10 +1072,6 @@ class ObjectTracker {
     // $FlowFixMe
     this.worker = new Worker();
 
-    // // $FlowFixMe
-    // this.worker.addEventListener('message', function (event) {
-    //   console.log(event.data)
-    // });
   }
 
   getFromIndex(index: number) {

@@ -278,7 +278,6 @@ figure.getElement('u4').custom.updateText({
   xAlign: 'right',
 });
 
-// console.log(figure.getElement('itb1'))
 
 for (let i = 0; i < index; i += 1) {
   const element = figure.elements.elements[figure.elements.drawOrder[i + 3]];

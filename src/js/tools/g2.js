@@ -772,7 +772,6 @@ class Point {
   getShaddowOnLine(l: Line, precision: number = 8) {
     const shaddow = new Line(this, 1, l.angle() + Math.PI / 2);
     const { intersect } = shaddow.intersectsWith(l);
-    // console.log(intersect, inLine, alongLine, )
     if (intersect != null && intersect.isWithinLine(l, precision)) {
       return intersect;
     }
@@ -3018,47 +3017,18 @@ class Transform {
     if (orderEnd < 0) {
       orderEndToUse = this.order.length + orderEnd;
     }
-    // if (window.asdf) {
-    //   console.log(this.name, orderStart, orderEnd, this.order)
-    //   // debugger;
-    // }
     let m = m2.identity();
     for (let i = orderEndToUse; i >= orderStart; i -= 1) {
       if (!this.order[i].isUnity()) {
-        // if (window.asdf) { console.log(i, this.order[i]) }
         m = m2.mul(m, this.order[i].matrix());
       }
     }
-    // window.asdf = false
     return m;
-    // this.mat = m2.copy(m);
-    // return m;
-    // this.mat = m;
   }
 
   calcAndSetMatrix() {
     this.mat = this.calcMatrix();
   }
-  // /**
-  //  * Transform matrix of the transform chain
-  //  * @return {Array<number>}
-  //  */
-  // calcMatrix(
-  //   orderStart: number = 0,
-  //   orderEnd: number = this.order.length - 1,
-  // ) {
-  //   let orderEndToUse = orderEnd;
-  //   if (orderEnd < 0) {
-  //     orderEndToUse = this.order.length + orderEnd;
-  //   }
-  //   let m = m2.identity();
-  //   for (let i = orderEndToUse; i >= orderStart; i -= 1) {
-  //     m = m2.mul(m, this.order[i].matrix());
-  //   }
-  //   // this.mat = m2.copy(m);
-  //   // return m;
-  //   this.mat = m;
-  // }
 
 
   update(index: number) {
@@ -5094,9 +5064,6 @@ class LineBounds extends Bounds {
       return position;
     }
     const p = getPoint(position);
-    // if (window.asdf) {
-    //   console.log(position, p)
-    // }
     return p.clipToLine(this.boundary, this.precision);
   }
 
@@ -5709,14 +5676,6 @@ function deceleratePoint(
   let position = positionIn._dup();
   if (bounds != null) {
     position = bounds.clip(positionIn);
-    // try {
-    //   position = bounds.clip(positionIn);
-    // } catch(error) {
-    //   console.log('error', error)
-    //   console.log('error - data', positionIn)
-    //   console.log('error - data', bounds)
-    //   debugger;
-    // }
   }
 
   // Initial Velocity
@@ -5756,13 +5715,6 @@ function deceleratePoint(
 
   // if we got here, the new position is out of bounds
   const bounceScaler = 1 - bounceLossIn;
-  // let result;
-  // try {
-  //   result = bounds.intersect(position, clipAngle(angle, '0to360'));
-  // } catch(error) {
-  //   console.log(error)
-  //   debugger;
-  // }
   const result = bounds.intersect(position, clipAngle(angle, '0to360'));
 
   // if newPosition is not contained within bounds, but the intersect distance

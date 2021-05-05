@@ -55,8 +55,6 @@ function getBufferBorder(
       } else {
         line = new Line(border[i - 1], border[i]);
       }
-      // console.log(bufferOffset)
-      // offsetLines.push(line.offset('negative', buffer));
       offsetLines.push(line.offset(bufferOffset, buffer));
     }
     for (let i = 0; i < offsetLines.length; i += 1) {

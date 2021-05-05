@@ -582,8 +582,6 @@ describe('Figure Recorder', () => {
         timeStep(1);
         // recorder.recordCurrentState();
         recorder.stopRecording();
-        // console.log(recorder.worker.cache.diffs[0])
-        // console.log(recorder.states.diffs[0])
 
         expect(recorder.states.diffs[0][0]).toBe(0);
         expect(recorder.states.diffs[0][2].diff).toEqual({
@@ -1431,8 +1429,6 @@ describe('Figure Recorder', () => {
 
       line.setPosition(10, 10);
       recorder.setState(0);
-      // console.log(recorder)
-      // console.log(line.transform)
       expect(line.getPosition().y).toBe(0);
       recorder.setState(1);
       expect(line.getPosition().y).toBe(1);

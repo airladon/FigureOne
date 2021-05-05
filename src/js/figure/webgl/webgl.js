@@ -168,14 +168,11 @@ function autoResize(event) {
   // let diagRect = document.getElementById('figure').getBoundingClientRect();
   // let textRect = document.getElementById('learning_text_container').getBoundingClientRect();
   // let canvRect = this.gl.canvas.getBoundingClientRect();
-  // // console.log(contRect)
-  // console.log(this.gl.canvas.getBoundingClientRect());
   // // this.gl.canvas.height = 500;
   // // this.gl.canvas.width = 500;
   // // this.gl.canvas.width=500;
   // // this.gl.viewport(diagRect.left, canvRect.height+canvRect.top, textRect.width, textRect.height); 
   // // this.gl.viewport(0,0,100,100);
-  // // console.log(document.getElementById('Figure').left);
 }
 
 
@@ -309,7 +306,6 @@ class WebGLInstance {
 
   resize() {
     var realToCSSPixels = window.devicePixelRatio;
-    // console.log("asdf");
     // Lookup the size the browser is displaying the canvas in CSS pixels
     // and compute a size needed to make our drawingbuffer match it in
     // device pixels.
@@ -317,7 +313,6 @@ class WebGLInstance {
       Math.floor(this.gl.canvas.clientWidth  * realToCSSPixels);
     var displayHeight =
       Math.floor(this.gl.canvas.clientHeight * realToCSSPixels);
-    // console.log('in webgl', displayWidth)
     // Check if the canvas is not the same size.
     if (this.gl.canvas.width  !== displayWidth
         || this.gl.canvas.height !== displayHeight) {

@@ -61,7 +61,6 @@ describe('Performance Testing', () => {
       const min = Math.min(...durations);
       const max = Math.max(...durations);
       const ave = durations.reduce((d, sum) => sum + d) / 100;
-      // console.log(min, max, ave, refTime / 10, refTime / 35)
       expect(max).toBeLessThan(refTime / 10);
       expect(min).toBeGreaterThan(refTime / 35);
       expect(ave).toBeLessThan(refTime / 20);

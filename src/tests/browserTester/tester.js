@@ -92,23 +92,19 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
       await page.evaluate(() => {
         clearTimeout(timeoutId);
         figure.timeKeeper.setManualFrames();
-        // console.log('set manual frames');
       });
       await frame(0);
-      // console.log('beforeAll done')
     });
     test.each(tests)('%s %s',
       async (time, description, deltaTime, action, location, snap) => {
         let d = deltaTime;
         if (intermitentTime > 0 && deltaTime > intermitentTime) {
           for (let i = intermitentTime; i <= deltaTime - intermitentTime; i += intermitentTime) {
-            // console.log('intermittent frame')
             await frame(intermitentTime);
             d = Math.round((d - intermitentTime) * 10) / 10;
           }
         }
         if (action !== 'delay') {
-          // console.log('real frame')
           await frame(d);
           await page.evaluate(([t, l]) => {
             if (t != null) {
@@ -123,7 +119,6 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
               }
             }
           }, [action, location]);
-          // console.log('post frame')
           await frame(0);
         }
         if (!snap) {

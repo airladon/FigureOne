@@ -103,14 +103,9 @@ figure.animateNextFrame();
         customSnapshotsDir: `${__dirname}/${snapshots}`,
       });
       if (remainingDuration > 0) {
-        // const num = 5;
         const timeStep = 0.5;
         const steps = Math.ceil(remainingDuration / timeStep) + 2;
         for (let i = 1; i <= steps; i += 1) {
-          // if (id.endsWith('1ff30952')) {
-          //   // console.log(timeStep, timeStep * i * 1000)
-          // }
-          // await page.evaluate(([t]) => figure.timeKeeper.frame(t), [timeStep]);
           await frame(timeStep);
           image = await page.screenshot();
           expect(image).toMatchImageSnapshot({
@@ -120,9 +115,6 @@ figure.animateNextFrame();
           });
         }
       }
-      // if (id.endsWith('1ff30952')) {
-      //   fs.writeFileSync(`${__dirname}/index.js`, `${start}\n${code}`);
-      // }
     });
 }
 

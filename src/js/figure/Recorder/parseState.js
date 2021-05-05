@@ -181,11 +181,6 @@ function parseState(state: Object, figure: Figure) {
   }
   const out = {};
   Object.keys(state).forEach((property) => {
-    // console.log('prop', state, property)
-    // if (property === 'element') {
-    //   console.log(state[property].name)
-    // }
-    // console.log(property)
     out[property] = parseState(state[property], figure);
   });
   return out;
