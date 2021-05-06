@@ -90,7 +90,7 @@ export default class AnimationStep {
       completeOnCancel: null,
       removeOnFinish: true,
       name: generateRandomString(),
-      duration: 0,
+      duration: 1,
       delay: 0,
       beforeFrame: null,
       afterFrame: null,

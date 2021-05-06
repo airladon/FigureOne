@@ -209,6 +209,9 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       'velocity', 'maxDuration', 'allDurationsSame', 'zeroDurationThreshold',
       'rotDirection', 'clipRotationTo', 'progression', // 'minDuration',
     ]);
+    if (this.scenario.velocity != null && AnimationStepOptionsIn.duration == null) {
+      this.duration = 0;
+    }
   }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
