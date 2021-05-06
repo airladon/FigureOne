@@ -30,21 +30,18 @@ Then in javascript, create a figure and a shape within it:
 const figure = new Fig.Figure();
 
 // Create the shape
-figure.add(
+const [tri] = figure.add(
   {
-    name: 'tri',
     method: 'triangle',
     options: {
-      width: 1,
-      height: 1,
       color: [1, 0, 0, 1],
     },
   },
 );
 
 // Animate the shape
-figure.getElement('tri').animations.new()
-  .position({ target: [1, 0], duration: 1 })
+tri.animations.new()
+  .position({ target: [0.5, 0], duration: 1 })
   .rotation({ target: Math.PI, duration: 2 })
   .position({ target: [0, 0], duration: 1 })
   .start();
