@@ -4,7 +4,6 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 // eslint-disable-next-line import/no-unresolved
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
-
 const buildPath = path.resolve(__dirname, 'package');
 
 const envConfig = {
@@ -16,6 +15,8 @@ const envConfig = {
     devtool: false,
     uglifySourceMap: false,
     output: 'figureone.min.js',
+    // workerPath: '/static/workers/',
+    // workerName: 'figureone.worker.js',
   },
   dev: {
     name: 'development',
@@ -25,6 +26,9 @@ const envConfig = {
     devtool: 'source-map',
     uglifySourceMap: false,
     output: 'index.js',
+    // workerPath: buildPath,
+    // workerName: 'figureone.worker.js',
+    // workerName: '[contenthash].worker.js',
   },
 };
 
@@ -97,6 +101,7 @@ module.exports = (env) => {
       'react-dom': 'ReactDOM',
     };
   }
+
   return {
     entry: './src/index.js',
     output: {
@@ -124,7 +129,10 @@ module.exports = (env) => {
             {
               loader: 'worker-loader',
               options: {
-                publicPath: '/static/workers/',
+                // Change this to 'fallback' in webpack 5
+                inline: true,
+                // publicPath: e.workerPath,
+                // name: e.workerName,
                 // filename: '[contenthash].worker.js',
               },
             },
