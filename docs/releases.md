@@ -46,3 +46,6 @@
 * Fix inline symbol color definition (to not be overridden by equation color)
 * Eight new tutorials on NotificationManager, SlideNavigator and Recorder
 * Four new examples for Recorder (interactive video)
+
+## v0.7.3
+* Fix event handling bug that wasn't disabling screen scroll when moving elements

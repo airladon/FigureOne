@@ -17,10 +17,10 @@
 .f1_player__button {
   display: table-cell;
   vertical-align: middle;
-  /* font-size: 1.3em; */
+  font-size: 1.3em;
   font-family: Arial, Helvetica, sans-serif;
   width: 3em;
-  /* padding-left: 1em; */
+  padding-left: 1em;
   padding-right: 1em;
   text-align: center
 }
@@ -88,13 +88,9 @@
 }
 
 @media only screen and (max-width: 1000px) and (-webkit-device-pixel-ratio : 3) {
-  /* .f1_player__button {
+  .f1_player__button {
       font-size: 2em;
   }
   #f1_player__time {
       width: 7em;
-  } */
-  #figureOneVideoControls {
-    font-size: 15px;
   }
-}

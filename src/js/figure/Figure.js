@@ -186,7 +186,7 @@ export type OBJ_Figure = {
  * <body>
  *     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
  *     </div>
- *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.7.2/figureone.min.js'></script>
+ *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.7.3/figureone.min.js'></script>
  *     <script type="text/javascript" src='./index.js'></script>
  * </body>
  * </html>
@@ -1528,7 +1528,7 @@ class Figure {
   touchDownHandlerClient(clientPoint: Point, eventFromPlayback: boolean = false) {
     const pixelP = this.clientToPixel(clientPoint);
     const figurePoint = pixelP.transformBy(this.spaceTransforms.pixelToFigure.matrix());
-    this.touchDownHandler(figurePoint, eventFromPlayback);
+    return this.touchDownHandler(figurePoint, eventFromPlayback);
   }
 
   // Handle touch down, or mouse click events within the canvas.
@@ -1732,7 +1732,7 @@ class Figure {
     const previousPixelPoint = this.clientToPixel(previousClientPoint);
     const previousFigurePoint = previousPixelPoint
       .transformBy(this.spaceTransforms.pixelToFigure.matrix());
-    this.touchMoveHandler(previousFigurePoint, currentFigurePoint);
+    return this.touchMoveHandler(previousFigurePoint, currentFigurePoint);
   }
 
 
