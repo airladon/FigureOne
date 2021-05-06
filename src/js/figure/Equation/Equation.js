@@ -199,7 +199,7 @@ export type EQN_EquationElements = {
  *        - `'baseline'`: default - the `fixTo` element y position at 0
  *
  * If `fixTo` is a Point, the equation is positioned at that point in the
- * equation's vertex space.
+ * equation's draw space.
  *  - xAlign:
  *    - `'left'`: The equation's left most element's left most point is at
  *              Point.x

@@ -1129,7 +1129,7 @@ export type OBJ_TriangleSideRotationAlignment = {
  * point of s3 is at y = 0. `'centroid'` is relative to the geometric center of
  * the triangle.
  *
- * Once a triangle is defined and positioned in vertex space, it can then be
+ * Once a triangle is defined and positioned in draw space, it can then be
  * copied (`copy`) if more than one triangle is desired.
  *
  * The triangle(s) can then be positioned (`position`) or transformed
@@ -1559,7 +1559,7 @@ export type OBJ_Arrow = {
  *
  * @property {string} text string to show
  * @property {OBJ_Font} [font] font to apply to string
- * @property {TypeParsablePoint} [location] vertex space location to draw text
+ * @property {TypeParsablePoint} [location] draw space location to draw text
  * (default: `[0, 0]`)
  * @property {'left' | 'right' | 'center'} [xAlign] how to align text
  * horizontally relative to `location` (default: from {@link OBJ_Text})

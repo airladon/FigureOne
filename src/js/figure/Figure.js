@@ -2218,7 +2218,7 @@ class Figure {
   /**
    * Sets manual frames.
    *
-   * Normally, a when a browser is ready to refresh the screen it will call
+   * Normally, when a browser is ready to refresh the screen it will call
    * FigureOne to do a draw. The time between frames is not fixed and depends on
    * a number of factors. This is the most performant way to handle drawing.
    *
