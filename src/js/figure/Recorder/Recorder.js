@@ -647,7 +647,6 @@ class Recorder {
     }
 
     this.eventsToPlay = whilePlaying;
-    // this.initializePlayback(fromTime);
     this.startEventsPlayback(fromTime);
     const audioStarted = this.startAudioPlayback(fromTime);
     this.notifications.publish('recordingStarted');
@@ -670,18 +669,12 @@ class Recorder {
    * seek frames [0.1s]
    */
   startStatesRecording(
-    // fromTime: number = 0,
-    // whilePlaying: Array<string> = [],
-    // includeStates: boolean = true,
     frameTime: number = 0.1,
   ) {
     this.states.reset();
     this.seek(0);
     this.figure.timeKeeper.setManualFrames();
-    // const { duration } = this;
-    // this.states.reset();
     this.startRecording(0, Object.keys(this.events), true);
-    // this.duration = duration;
     this.autoFrame(frameTime);
   }
 
