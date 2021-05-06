@@ -107,6 +107,9 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
       'velocity', 'rotDirection', 'clipRotationTo', 'maxDuration',
       'zeroDurationThreshold',  // 'minDuration',
     ]);
+    if (this.transform.velocity != null && ElementAnimationStepOptionsIn.duration == null) {
+      this.duration = 0;
+    }
   }
 
   // If spreading to more transforms, add transforms to before start and after finish.

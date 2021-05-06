@@ -35,7 +35,10 @@ import type { AnimationStartTime } from './AnimationManager';
  * @property {TimeKeepr} [timeKeeper] animations need to be tied to a time
  * reference. If this is not supplied, then the default browser time reference
  * performance.now will be used and methods with {@link TypeWhen} parameters
- * will allow only `'now'` and `'nextFrame'` and not `'lastFrame'`, `'syncNow'`
+ * will allow only `'now'` and `'nextFrame'` and not `'lastFrame'`, `'syncNow'`.
+ * When the animation step is created from an element in a figure (using
+ * `element.animations` or `element.animations.new()`), then the
+ * animation step will automatically inherit the figure's TimeKeeper.
  */
 export type OBJ_AnimationStep = {
   onFinish?: ?(boolean) => void;

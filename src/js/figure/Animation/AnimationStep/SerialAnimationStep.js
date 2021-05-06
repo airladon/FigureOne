@@ -73,7 +73,7 @@ export class SerialAnimationStep extends AnimationStep {
     stepsOrOptionsIn: Array<AnimationStep> | OBJ_SerialAnimationStep = {},
     ...optionsIn: Array<OBJ_SerialAnimationStep>
   ) {
-    const defaultOptions = { steps: [] };
+    const defaultOptions = { steps: [], duration: 0 };
     let options;
     if (Array.isArray(stepsOrOptionsIn)) {
       options = joinObjects({}, defaultOptions, ...optionsIn);

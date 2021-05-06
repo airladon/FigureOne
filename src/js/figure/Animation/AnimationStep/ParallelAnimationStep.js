@@ -62,7 +62,7 @@ export class ParallelAnimationStep extends AnimationStep {
     stepsOrOptionsIn: Array<AnimationStep | null> | OBJ_ParallelAnimationStep = {},
     ...optionsIn: Array<OBJ_ParallelAnimationStep>
   ) {
-    const defaultOptions = { steps: [] };
+    const defaultOptions = { steps: [], duration: 0 };
     let options;
     if (Array.isArray(stepsOrOptionsIn)) {
       options = joinObjects({}, defaultOptions, ...optionsIn);
