@@ -6,6 +6,16 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const buildPath = path.resolve(__dirname, 'package');
 
+/*
+Notes on worker:
+
+For dev, a separate worker file figureone.worker.js is loaded from the package
+folder. This only works when served from a HTTP server.
+
+For prod, the worker file is a blob inline in figureone.min.js. This does not
+work for dev, as when in dev it is also looking for a map file, whose path does
+not seem to be easily set up (at least for me) in the package folder.
+*/
 const envConfig = {
   prod: {
     name: 'production',
@@ -15,8 +25,9 @@ const envConfig = {
     devtool: false,
     uglifySourceMap: false,
     output: 'figureone.min.js',
-    // workerPath: '/static/workers/',
-    // workerName: 'figureone.worker.js',
+    workerPath: '/static/workers/',
+    workerName: 'figureone.worker.js',
+    workerInline: true,
   },
   dev: {
     name: 'development',
@@ -26,9 +37,9 @@ const envConfig = {
     devtool: 'source-map',
     uglifySourceMap: false,
     output: 'index.js',
-    // workerPath: buildPath,
-    // workerName: 'figureone.worker.js',
-    // workerName: '[contenthash].worker.js',
+    workerPath: '/package/',
+    workerName: 'figureone.worker.js',
+    workerInline: false,
   },
 };
 
@@ -130,9 +141,9 @@ module.exports = (env) => {
               loader: 'worker-loader',
               options: {
                 // Change this to 'fallback' in webpack 5
-                inline: true,
-                // publicPath: e.workerPath,
-                // name: e.workerName,
+                inline: e.workerInline,
+                publicPath: e.workerPath,
+                name: e.workerName,
                 // filename: '[contenthash].worker.js',
               },
             },

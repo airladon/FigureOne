@@ -26,7 +26,7 @@
 * Add summary gif to main readme
 
 
-## v0.7.0
+## v0.7.2
 * Recorder class
    - Creation and playback of interactive videos
    - Allows recording of mouse movements
