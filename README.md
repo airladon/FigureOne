@@ -66,7 +66,7 @@ See this example hosted [here](https://airladon.github.io/FigureOne/examples/Int
 
 ### **[Pythagorean Equation Animation](./docs/examples/Pythagorean%20Theorem)**
 
-See this example hosted [here](https://airladon.github.io/FigureOne/examples/Pythagorean%20Theorm/index.html).
+See this example hosted [here](https://airladon.github.io/FigureOne/examples/Pythagorean%20Theorem/index.html).
 
 ![](docs/examples/Pythagorean%20Theorem/example.gif)
 
