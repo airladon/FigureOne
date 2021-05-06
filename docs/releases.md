@@ -49,3 +49,6 @@
 
 ## v0.7.3
 * Fix event handling bug that wasn't disabling screen scroll when moving elements
+
+## v0.7.4
+* Fix recording states to ensure states are recorded after events when they occur at the same time

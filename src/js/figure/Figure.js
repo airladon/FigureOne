@@ -186,7 +186,7 @@ export type OBJ_Figure = {
  * <body>
  *     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
  *     </div>
- *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.7.3/figureone.min.js'></script>
+ *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.7.4/figureone.min.js'></script>
  *     <script type="text/javascript" src='./index.js'></script>
  * </body>
  * </html>
@@ -2218,7 +2218,7 @@ class Figure {
   /**
    * Sets manual frames.
    *
-   * Normally, a when a browser is ready to refresh the screen it will call
+   * Normally, when a browser is ready to refresh the screen it will call
    * FigureOne to do a draw. The time between frames is not fixed and depends on
    * a number of factors. This is the most performant way to handle drawing.
    *

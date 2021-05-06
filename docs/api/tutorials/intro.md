@@ -29,7 +29,7 @@ The drawn elements, the line and label, are primitives. They are created in the 
 
 <p style="text-align: center"><img src="./tutorials/ex1-collection.png"></p>
 
-The figure itself has limits that define the coordinate window that can be shown, in this case its bottom left is the origin, and it is 3 wide and 2 high. We want the collection to be rotated, with the center of rotation at the center of the figure. Therefore we apply a rotation and translation transform to the collection.
+The figure itself has limits that define the coordinate window that can be shown, in this case its bottom left is the origin, and it is 6 wide and 4 high. We want the collection to be rotated, with the center of rotation at the center of the figure. Therefore we apply a rotation and translation transform to the collection.
 
 <p style="text-align: center"><img src="./tutorials/ex1-figure.png"></p>
 
@@ -43,22 +43,22 @@ WebGL is rendered in a html [canvas](https://developer.mozilla.org/en-US/docs/We
 
 The [canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) element is defined in screen pixels. The WebGL view re-maps the canvas pixels to -1 to +1 coordinates in both the vertical and horizontal directions, independent on the aspect ratio of the canvas.
 
-When the canvas aspect ratio is not a square, or it is more convenient to create a figure in a coordinate space not mapped between -1 to +1, then it is useful to have a separate *figure space*. In the example above, the figure space re-maps the *GL space* to 0 to 3 in the horizontal and 0 to 2 in the vertical.
+When the canvas aspect ratio is not a square, or it is more convenient to create a figure in a coordinate space not mapped between -1 to +1, then it is useful to have a separate *figure space*. In the example above, the figure space re-maps the *GL space* to 0 to 6 in the horizontal and 0 to 4 in the vertical.
 
 These are three examples of different coordinate spaces - *pixel space*, *GL space* and *figure space*.
 
 If you want to move or modify an element, you need to think about what you want to modify it *relative* to. Do you want to move it relative to other elements in the figure? In other words, do you want to move it in *figure space*? Or do you want to move it relative to other elements within the parent, or local collection - *local space*. Alternately, you might want to modify the vertices of the shape, in *draw space*.
 
-In simple figures, where no collections are used, or collections don't transform their child elements you don't really need to think about what space you are working in. Figure space will be the same as local space and vertex space. You won't care about the higher level GL or pixel spaces.
+In simple figures, where no collections are used, or collections don't transform their child elements you don't really need to think about what space you are working in. Figure space will be the same as local space and draw space. You won't care about the higher level GL or pixel spaces.
 
 But if you have transformed collections, or if you are tying an element to a location on the screen you will need to convert points between the different spaces. In addition, it is useful to know about these different spaces as sometimes they are referred to in the documentation.
 
 One way to think about what space you are modifying is:
 * Elements that are direct children of the figure: element transforms are in figure space
 * Elements that are direct children of a collection: element transforms are in local space (the space of the parent colleciton)
-* Vertex definitions in element primitives: vertex space
+* Vertex definitions in element primitives: draw space
 
-For example, a square might be defined in vertex space as a square with length 1, centered around the origin.
+For example, a square might be defined in draw space as a square with length 1, centered around the origin.
 
 The transform of the figure element primitive that controls the square will move the square in *local space* - the space relative to all other elements that are the children of the same parent collection.
 
@@ -77,7 +77,7 @@ The "Labeled Line" collection will then cascade this transform with it's own rot
 
 The "Label" primitive has it's own transform that translates it to the middle of the horizontal line in *local* space. The transform will be combined with the one from its parent, creating a final transform to draw the label with.
 
-The primitive's shape or text definition never needs to change. At draw time, it is simply transformed by it's own transform and all the ancestors directly above it in the hierarchy. This is the same method used by WebGL as it reduces the amount of data that needs to be loaded into the graphics memory each draw frame. All the vertices of a shape are loaded into the graphics memory just once, and each frame just a transform is passed to inform the graphics processor how to orient the vertices.
+The primitive's shape or text definition never needs to change. At draw time, it is simply transformed by it's own transform and all the ancestors directly above it in the hierarchy. This is the same method used by WebGL as it reduces the amount of data that needs to be loaded into the graphics memory each draw frame. All the vertices of a shape are loaded into the graphics memory just once, and for each frame just a transform is passed to inform the graphics processor how to orient the vertices.
 
 If you have a dynamic shape whose vertices do change every frame (like a morphing animation), you can choose to load the vertices every frame. However, depending on the performance of the browser's host machine, and the number of vertices being adjusted, you might see a performance impact compared to a shape with a similar amount of vertices that do not change. That said, for shapes of **reasonable** size, this will not be a problem.
 
@@ -92,7 +92,7 @@ Finally, let's see the code for the example above. Two files, `index.html` and `
 <body>
     <div id="figureOneContainer" style="width: 1200px; height: 800px; background-color: white;">
     </div>
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.7.3/figureone.min.js'></script>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.7.4/figureone.min.js'></script>
     <script type="text/javascript" src='./index.js'></script>
 </body>
 </html>
@@ -143,7 +143,7 @@ figure.add(
 
 #### Using FigureOne
 
-The example above shows how a figure can be defined with simple javascript objects, able to be encoded simply in JSON. This means complex figures or modules can be shared and reused easily.
+The example above shows how a figure can be defined with simple javascript objects, that are able to be encoded in JSON. This means complex figures or modules can be shared and reused easily.
 
 For many uses, it is fine to fully define a figure and all its elements before a user interacts with it.
 

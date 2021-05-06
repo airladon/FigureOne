@@ -179,7 +179,22 @@ function layoutCirc() {
   const rot = name => ({
     name,
     method: 'primitives.generic',
-    options: { color: [0, 1, 0, 0] },
+    options: { color: [0, 1, 1, 0] },
+    mods: {
+      isMovable: true,
+      move: { type: 'rotation' },
+    },
+  });
+
+  // Helper function to make a background triangle rotator pad
+  const rotPad = name => ({
+    name,
+    method: 'primitives.polygon',
+    options: {
+      color: [0, 1, 0, 0],
+      radius: 0.3,
+      sides: 8,
+    },
     mods: {
       isMovable: true,
       move: { type: 'rotation' },
@@ -234,6 +249,25 @@ function layoutCirc() {
         lock: 'theta', lockHyp: false, center, x, y, unit: true, theta: true, lockPosition: [0, 0], angle: defaultAngle,
       },
     },
+  });
+
+  /**
+  * The background triangle is aligned with the visible triangle. It is a
+  * collection that has only rotator pads, but unlike the visible triangle
+  * these pads extend out beyond the triangle. All background triangles are
+  * under the visible triangles in the draw stack. The background triangle
+  * makes it possible to touch near a triangle vertex to rotate it, instead of
+  * only on the vertex. If however the touch is also on another visible
+  * triangle, then that visible triangle will get the touch priority.
+  */
+  const backgroundTri = name => ({
+    name,
+    method: 'collection',
+    elements: [
+      rotPad('rotTheta'),
+      rotPad('rotComp'),
+      rotPad('rotRight'),
+    ],
   });
 
   // Helper function that creates a definition object for a button collection
@@ -347,6 +381,11 @@ function layoutCirc() {
           },
         },
       },
+      // Three background triangles that have corner rotation pads that extend
+      // beyond the visible triangles
+      backgroundTri('triCotCscRotPads'),
+      backgroundTri('triTanSecRotPads'),
+      backgroundTri('triSinCosRotPads'),
       // Three main triangles that can be manipulated
       tri(
         'triCotCsc',
@@ -464,6 +503,9 @@ function layoutCirc() {
   const [triCotCsc] = get(['triCotCsc']);
   const [triSinCos] = get(['triSinCos']);
   const [triTanSec] = get(['triTanSec']);
+  const [triCotCscRotPads] = get(['triCotCscRotPads']);
+  const [triSinCosRotPads] = get(['triSinCosRotPads']);
+  const [triTanSecRotPads] = get(['triTanSecRotPads']);
   const [cos, sin] = get({ triSinCos: ['cos', 'sin'] });
   const [cot, csc] = get({ triCotCsc: ['cot', 'csc'] });
   const [tan, sec] = get({ triTanSec: ['tan', 'sec'] });
@@ -558,16 +600,22 @@ function layoutCirc() {
 
   // Update the points of the rotator for some specificed angle at
   // a vertex of a triangle
-  const setRotPad = (rotPad, vertex, startAngle, ang) => {
-    const rotPadRad = 0.3;
+  const setRotPad = (rotPadEl, vertex, startAngle, ang, rotPadRad = 0.3) => {
     const v = Fig.tools.g2.getPoint(vertex);
     const cosV = rotPadRad * Math.cos(startAngle);
     const sinV = rotPadRad * Math.sin(startAngle);
     const cosVStop = rotPadRad * Math.cos(startAngle + ang);
     const sinVStop = rotPadRad * Math.sin(startAngle + ang);
-    rotPad.custom.updatePoints({
+    rotPadEl.custom.updatePoints({
       points: [v, v.add(cosV, sinV), v.add(cosVStop, sinVStop)],
     });
+  };
+
+  // Update the positions of the background rot pads for each triangle
+  const setBackgroundRotPads = (backgroundTriangle, vTheta, vComp, vRight) => {
+    backgroundTriangle._rotTheta.setPosition(vTheta);
+    backgroundTriangle._rotComp.setPosition(vComp);
+    backgroundTriangle._rotRight.setPosition(vRight);
   };
 
   // Update the triangles for a some angle theta
@@ -634,17 +682,28 @@ function layoutCirc() {
     checkThetaAngleVisbility(thetaCotCsc, r < Math.PI / 2 - 0.2);
 
     // Update the rotator pads for all triangles
-    setRotPad(rotThetaSinCos, [-c1.x, -c1.y], 0, r);
-    setRotPad(rotThetaTanSec, [-c2.x, -c2.y], 0, r);
-    setRotPad(rotThetaCotCsc, [-c3.x, -c3.y], 0, r);
+    setRotPad(rotThetaSinCos, [-c1.x, -c1.y], 0, r, 0.35);
+    setRotPad(rotThetaTanSec, [-c2.x, -c2.y], 0, r, 0.35);
+    setRotPad(rotThetaCotCsc, [-c3.x, -c3.y], 0, r, 0.55);
 
     setRotPad(rotRightSinCos, [cosVal - c1.x, -c1.y], Math.PI / 2, Math.PI / 2);
     setRotPad(rotRightTanSec, [radius - c2.x, -c2.y], Math.PI / 2, Math.PI / 2);
-    setRotPad(rotRightCotCsc, [cotVal - c3.x, -c3.y], Math.PI / 2, Math.PI / 2);
+    setRotPad(rotRightCotCsc, [cotVal - c3.x, -c3.y], Math.PI / 2, Math.PI / 2, 0.45);
 
     setRotPad(rotCompSinCos, [cosVal - c1.x, sinVal - c1.y], Math.PI + r, Math.PI / 2 - r);
     setRotPad(rotCompTanSec, [radius - c2.x, tanVal - c2.y], Math.PI + r, Math.PI / 2 - r);
-    setRotPad(rotCompCotCsc, [cotVal - c3.x, radius - c3.y], Math.PI + r, Math.PI / 2 - r);
+    setRotPad(rotCompCotCsc, [cotVal - c3.x, radius - c3.y], Math.PI + r, Math.PI / 2 - r, 0.45);
+
+    // Update the rotator pads for the background triangles
+    setBackgroundRotPads(
+      triSinCosRotPads, [-c1.x, -c1.y], [cosVal - c1.x, -c1.y], [cosVal - c1.x, sinVal - c1.y],
+    );
+    setBackgroundRotPads(
+      triTanSecRotPads, [-c2.x, -c2.y], [radius - c2.x, -c2.y], [radius - c2.x, tanVal - c2.y],
+    );
+    setBackgroundRotPads(
+      triCotCscRotPads, [-c3.x, -c3.y], [cotVal - c3.x, -c3.y], [cotVal - c3.x, radius - c3.y],
+    );
 
 
     // Update the translation move pads for the three triangles
@@ -700,14 +759,20 @@ function layoutCirc() {
       el4.updateLabel(r);
     }
   };
+
+  // Whenever the triangles move or are rotated, then update the labels
+  // and move realign the background rotation pads
   triSinCos.notifications.add('setTransform', () => {
     updateLabels(triSinCos, sin, cos, unitSinCos, thetaSinCos);
+    triSinCosRotPads.setTransform(triSinCos.transform._dup());
   });
   triTanSec.notifications.add('setTransform', () => {
     updateLabels(triTanSec, tan, sec, unitTanSec, thetaTanSec);
+    triTanSecRotPads.setTransform(triTanSec.transform._dup());
   });
   triCotCsc.notifications.add('setTransform', () => {
     updateLabels(triCotCsc, cot, csc, unitCotCsc, thetaCotCsc);
+    triCotCscRotPads.setTransform(triCotCsc.transform._dup());
   });
 
 
@@ -874,7 +939,7 @@ function layoutCirc() {
 
   // Bind rotation and translation move elements to their respective
   // triangle collections. This could also be done in the object definition.
-  const bindMoveElements = (triangle, fn) => {
+  const bindMoveElements = (triangle, fn, backgroundTriangle) => {
     triangle._rotTheta.move.element = triangle.getPath();
     triangle._rotRight.move.element = triangle.getPath();
     triangle._rotComp.move.element = triangle.getPath();
@@ -883,10 +948,13 @@ function layoutCirc() {
     triangle._rotComp.onClick = fn;
     triangle._rotRight.onClick = fn;
     triangle._rotTheta.onClick = fn;
+    backgroundTriangle._rotTheta.move.element = triangle;
+    backgroundTriangle._rotComp.move.element = triangle;
+    backgroundTriangle._rotRight.move.element = triangle;
   };
-  bindMoveElements(triSinCos, 'selectSinCos');
-  bindMoveElements(triTanSec, 'selectTanSec');
-  bindMoveElements(triCotCsc, 'selectCotCsc');
+  bindMoveElements(triSinCos, 'selectSinCos', triSinCosRotPads);
+  bindMoveElements(triTanSec, 'selectTanSec', triTanSecRotPads);
+  bindMoveElements(triCotCsc, 'selectCotCsc', triCotCscRotPads);
 
   circle._movePad.move.element = circle.getPath();
 

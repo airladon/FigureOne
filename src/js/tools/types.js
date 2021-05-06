@@ -47,11 +47,11 @@ export type OBJ_CurvedCorner = {
  *
  * Text is drawn in a [Context2D canvas](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D) and so `family`, `style` and `weight` are any valid [options](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font).
  *
- * `size` is the vertex space size of the font.
+ * `size` is the draw space size of the font.
  *
  * @property {string} [family] The font family (`Times New Roman`)
  * @property {`normal` | `italic`} [style] (`normal`)
- * @property {number} [size] size of font in vertex space (`0.2`)
+ * @property {number} [size] size of font in draw space (`0.2`)
  * @property {'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'} [weight]
  * font weight (`200`)
  * @property {[number, number, number, number]} [color] Font color

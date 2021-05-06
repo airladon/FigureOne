@@ -60,6 +60,8 @@ Each triangle can be:
 * Moved by dragging it
 * Rotated by dragging its corner
 
+Each triangle has a background shaddow triangle that is always aligned with it, and contains rotation pads that extend beyond the triangle. This means the user can get close to the vertex and not have to touch it to rotate. All background rotation pads are beneath all the visible triangles in the draw stack so the visible triangles always get touch priority. This means if two triangles are near or on top of each other, touching one triangle will always move that triangle and not rotate a triangle nearby that is not being touched.
+
 
 The files in this examples are:
 * `setup.js` setup figure, define colors line widths and text helper functions
