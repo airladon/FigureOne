@@ -291,7 +291,7 @@ class TimeKeeper {
           nextTimer = { id, timer };
         } else if (timer.timeout < nextTimer.timer.timeout) {
           nextTimer = { id, timer };
-        } else if (timer.timeout === nextTimer.timer.timeout && timer.stateTimer) {
+        } else if (timer.timeout === nextTimer.timer.timeout && nextTimer.timer.stateTimer) {
           nextTimer = { id, timer };
         }
       }
