@@ -20,6 +20,7 @@ describe('Animation Examples', () => {
       {
         name: 'a',
         method: 'polygon',
+        options: { color: [0, 1, 0, 1] },
         mods: {
           scenarios: {
             s1: { position: [1, 1] },
@@ -159,6 +160,130 @@ describe('Animation Examples', () => {
           options: () => {
             a.animations.new()
               .then(a.animations.rotation({ target: 1 }))
+              .start();
+          },
+        },
+      },
+      color: {
+        builder: {
+          number: () => {
+            a.animations.new()
+              .color([1, 0, 0, 1])
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .color({ target: [1, 0, 0, 1] })
+              .start();
+          },
+        },
+        step: {
+          number: () => {
+            a.animations.new()
+              .then(a.animations.color([1, 0, 0, 1]))
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .then(a.animations.color({ target: [1, 0, 0, 1] }))
+              .start();
+          },
+        },
+      },
+      opacity: {
+        builder: {
+          number: () => {
+            a.animations.new()
+              .opacity(0)
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .opacity({ target: 0 })
+              .start();
+          },
+        },
+        step: {
+          number: () => {
+            a.animations.new()
+              .then(a.animations.opacity(0))
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .then(a.animations.opacity({ target: 0 }))
+              .start();
+          },
+        },
+      },
+      dissolveOut: {
+        builder: {
+          defaultDuration: () => {
+            a.animations.new()
+              .dissolveOut()
+              .start();
+          },
+          number: () => {
+            a.animations.new()
+              .dissolveOut(1)
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .dissolveOut({ duration: 1 })
+              .start();
+          },
+        },
+        step: {
+          defaultDuration: () => {
+            a.animations.new()
+              .then(a.animations.dissolveOut())
+              .start();
+          },
+          number: () => {
+            a.animations.new()
+              .then(a.animations.dissolveOut(1))
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .then(a.animations.dissolveOut({ duration: 1 }))
+              .start();
+          },
+        },
+      },
+      dissolveIn: {
+        builder: {
+          defaultDuration: () => {
+            a.animations.new()
+              .dissolveIn()
+              .start();
+          },
+          number: () => {
+            a.animations.new()
+              .dissolveIn(1)
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .dissolveIn({ duration: 1 })
+              .start();
+          },
+        },
+        step: {
+          defaultDuration: () => {
+            a.animations.new()
+              .then(a.animations.dissolveIn())
+              .start();
+          },
+          number: () => {
+            a.animations.new()
+              .then(a.animations.dissolveIn(1))
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .then(a.animations.dissolveIn({ duration: 1 }))
               .start();
           },
         },
@@ -337,6 +462,94 @@ describe('Animation Examples', () => {
     });
     test('step rotation options', () => {
       animations.rotation.step.options();
+    });
+  });
+  describe('color', () => {
+    afterEach(() => {
+      figure.mock.timeStep(0);
+      figure.mock.timeStep(0.5);
+      expect(round(a.color, 4)).toEqual([0.5, 0.5, 0, 1]);
+    });
+    test('builder color number', () => {
+      animations.color.builder.number();
+    });
+    test('builder color options', () => {
+      animations.color.builder.options();
+    });
+    test('step color number', () => {
+      animations.color.step.number();
+    });
+    test('step color options', () => {
+      animations.color.step.options();
+    });
+  });
+  describe('opacity', () => {
+    afterEach(() => {
+      figure.mock.timeStep(0);
+      figure.mock.timeStep(0.5);
+      expect(round(a.opacity, 4)).toEqual(0.5);
+    });
+    test('builder opacity number', () => {
+      animations.opacity.builder.number();
+    });
+    test('builder opacity options', () => {
+      animations.opacity.builder.options();
+    });
+    test('step opacity number', () => {
+      animations.opacity.step.number();
+    });
+    test('step opacity options', () => {
+      animations.opacity.step.options();
+    });
+  });
+  describe('dissolveOut', () => {
+    afterEach(() => {
+      figure.mock.timeStep(0);
+      figure.mock.timeStep(0.5);
+      expect(round(a.opacity, 4)).toEqual(0.5005);
+    });
+    test('builder opacity defaultDuration', () => {
+      animations.dissolveOut.builder.defaultDuration();
+    });
+    test('builder opacity number', () => {
+      animations.dissolveOut.builder.number();
+    });
+    test('builder dissolveOut options', () => {
+      animations.dissolveOut.builder.options();
+    });
+    test('step opacity defaultDuration', () => {
+      animations.dissolveOut.step.defaultDuration();
+    });
+    test('step dissolveOut number', () => {
+      animations.dissolveOut.step.number();
+    });
+    test('step dissolveOut options', () => {
+      animations.dissolveOut.step.options();
+    });
+  });
+  describe('dissolveIn', () => {
+    afterEach(() => {
+      figure.mock.timeStep(0);
+      figure.mock.timeStep(0.5);
+      expect(round(a.opacity, 4)).toEqual(0.5005);
+    });
+    test('builder opacity defaultDuration', () => {
+      animations.dissolveIn.builder.defaultDuration();
+    });
+    test('builder opacity number', () => {
+      animations.dissolveIn.builder.number();
+    });
+    test('builder dissolveIn options', () => {
+      animations.dissolveIn.builder.options();
+    });
+    test('step opacity defaultDuration', () => {
+      animations.dissolveIn.step.defaultDuration();
+    });
+    test('step dissolveIn number', () => {
+      animations.dissolveIn.step.number();
+    });
+    test('step dissolveIn options', () => {
+      animations.dissolveIn.step.options();
     });
   });
   describe('scale', () => {
