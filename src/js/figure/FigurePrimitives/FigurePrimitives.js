@@ -1140,8 +1140,8 @@ export type OBJ_TriangleSideRotationAlignment = {
  *
  * @property {Array<Point>} [points] defining points will take precedence over
  * all other ways to define a triangle.
- * @property {number} [width] (`1`)
- * @property {number} [height] (`1`)
+ * @property {number} [width]
+ * @property {number} [height]
  * @property {'left' | 'right' | 'center'} [top] (`center`)
  * @property {[number, number, number]} [SSS]
  * @property {[number, number, number]} [ASA]

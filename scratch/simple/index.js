@@ -1,15 +1,28 @@
 /* globals Fig */
 const figure = new Fig.Figure();
+figure.add(
+  {
+    name: 'c',
+    method: 'collection',
+    elements: [
+      {
+        name: 'tri',
+        method: 'triangle',
+        height: 0.4,
+        width: 0.4,
+      },
+      {
+        name: 'text',
+        method: 'text',
+        text: 'triangle',
+        position: [0, -0.4],
+        xAlign: 'center',
+      },
+    ],
+  },
+);
 
-// Create the shape
-const tri = figure.add({
-  method: 'triangle',
-  options: { color: [1, 0, 0, 1] },
-});
+const c = figure.get('c');
+const tri = figure.get('c.tri');
+const text = c.get('text');
 
-// Animate the shape
-tri.animations.new()
-  .position(0.5, 0)
-  .rotation(Math.PI)
-  .position(0, 0)
-  .start();

@@ -13,34 +13,28 @@ Open `index.html` in a browser to view example.
 // Initialize the figure with a default color
 const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
 
-figure.add(
+const c = figure.add(
   {
-    name: 'c',
     method: 'collection',
-    elements: [        // Add two elements to the collection
+    // Add two elements to the collection
+    elements: [
       {
-        name: 'tri',
         method: 'triangle',
-        options: {
-          height: 0.4,
-          width: 0.4,
-        },
+        height: 0.4,
+        width: 0.4,
       },
       {
-        name: 'text',
         method: 'text',
-        options: {
-          text: 'triangle',
-          position: [0, -0.4],
-          xAlign: 'center',
-        },
+        text: 'triangle',
+        position: [0, -0.4],
+        xAlign: 'center',
       },
     ],
   },
 );
 
 // When a collection rotates, then so does all its elements
-figure.getElement('c').animations.new()
+c.animations.new()
   .rotation({ target: Math.PI * 1.999, direction: 1, duration: 5 })
   .start();
 ```
@@ -49,28 +43,16 @@ figure.getElement('c').animations.new()
 
 There are two types of figure elements (subclasses of [FigureElement](https://airladon.github.io/FigureOne/api/#figureelement)):
 
-* [FigureElementPrimitive](https://airladon.github.io/FigureOne/api/#figureelementprimitive) - An object that manages a drawing primitive like a set of vertices, some text or a html element
-* [FigureElementCollection](https://airladon.github.io/FigureOne/api/#figureelementcollection) - An object that manages a group of drawing elements (can be both primitives and collections)
+* [FigureElementPrimitive](https://airladon.github.io/FigureOne/api/#figureelementprimitive) - An object that draws something to the screen
+* [FigureElementCollection](https://airladon.github.io/FigureOne/api/#figureelementcollection) - An object that manages a group of figure elements (either primitives or collections)
 
-All drawing elements have their own `transform` that *translates*, *rotates* and/or *scales* the element.
+All figure elements have their own `transform` that *translates*, *rotates* and/or *scales* the element.
 
-A drawing element in a collection will be transformed by both its own transform, and its parent collection's transform.
+A figure element in a collection will be transformed by both its own transform, and its parent collection's transform.
 
-That way, if drawing elements should be moved or scaled together, they can be added to a collection and that collection can collectively move/scale them.
+That way, if figure elements should be moved or scaled together, they can be added to a collection and that collection can collectively move/scale them.
 
-Thus, a drawing element in a hierarchy of collections will be transformed by the chain of all its hierarchical parents.
-
-This example also shows how a figure element can be accessed. The main [Figure](https://airladon.github.io/FigureOne/api/#figure) and all [FigureElementCollection](https://airladon.github.io/FigureOne/api/#figureelementcollection)s have a `getElement` method, to which a string can be passed with the element's name. In the example above, the collection element is retrieved by:
-
-```js
-figure.getElement('c')
-```
-
-`'.'` characters can be used to get elements within nested collections. So, if we wanted to retrieve the `'tri'`  element, we could use:
-
-```js
-figure.getElement('c.tri');
-```
+Thus, a figure element in a hierarchy of collections will be transformed by the chain of all its hierarchical parents.
 
 ## Alternative element creation
 
@@ -80,13 +62,11 @@ The above example can be rewritten as:
 
 ```js
 const tri = figure.primitives.triangle({
-  name: 'tri',
   height: 0.4,
   width: 0.4,
 });
 
 const text = figure.primitives.text({
-  name: 'text',
   text: 'triangle',
   position: [0, -0.4],
   xAlign: 'center',
@@ -98,4 +78,50 @@ const c = figure.collections.collection({
 c.add([tri, text]);
 
 figure.add(c);
+
+c.animations.new()
+  .rotation({ target: Math.PI * 1.999, direction: 1, duration: 5 })
+  .start();
+```
+
+## Element Access
+
+Any elements added into a figure are returned from the `figure.add` method. If an array of elements are added, then an array of elements will be returned.
+
+However, the children of the collection are not returned.
+
+Any figure elements that need to be accessed after creation should be given a name. That way they can be retrieved using the `get`, `getElement` or `getElements` methods in figure or a collection.
+
+For example, we could rewrite the above examples as:
+
+```js
+figure.add(
+  {
+    name: 'c',
+    method: 'collection',
+    elements: [
+      {
+        name: 'tri',
+        method: 'triangle',
+        height: 0.4,
+        width: 0.4,
+      },
+      {
+        name: 'text',
+        method: 'text',
+        text: 'triangle',
+        position: [0, -0.4],
+        xAlign: 'center',
+      },
+    ],
+  },
+);
+```
+
+The elements can then be returned with:
+
+```js
+const c = figure.get('c');
+const tri = figure.get('c.tri');
+const text = c.get('text');
 ```

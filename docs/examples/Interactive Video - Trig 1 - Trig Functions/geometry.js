@@ -186,6 +186,7 @@ function layoutRight() {
       },
     },
   });
+
   const [tri, xLine] = rightTri.getElements(['tri', 'x']);
   const [tri1] = rightTri.getElements(['tri1', 'tri2']);
   const [movePad] = rightTri.getElements(['movePad']);
