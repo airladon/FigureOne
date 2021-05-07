@@ -350,6 +350,7 @@ class UniqueIdGenerator {
     // If it doesn't, then setup some default values.
     if (singleton) {
       if (!UniqueIdGenerator.instance) {
+        UniqueIdGenerator.instance = this;
         this.initialize();
       }
       return UniqueIdGenerator.instance;
