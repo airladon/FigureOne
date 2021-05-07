@@ -61,3 +61,36 @@ The `mods` key in the circle definition can be used to set properties that belon
 In this case, we are setting the `isMovable` property to `true`, which will also set the `isTouchable` property. To turn touchability or movability on or off at a later stage with the element, use the [setTouchable](https://airladon.github.io/FigureOne/api/#figureelementsettouchable) and [setMovable](https://airladon.github.io/FigureOne/api/#figureelementsetmovable) methods instead of directly changing the properties. This is because the methods will navigate up the element's parents, setting all parents to allow touch events to propagate through to the element.
 
 Properties of [FigureElement](https://airladon.github.io/FigureOne/api/#figureelement) may also be *objects*. For example, all figure elements have a `move` object property that includes the properties `canBeMovedAfterLosingTouch` and `boundary`, as well as a number of others. Only the properties defined in `mods` will overwrite those in the figure element. Other properties that are not defined (including those within the `move` object) will retian their default values. Within this move object, we define the decelaration to be 0.5 figure units per second squared.
+
+## Options Object Alternate Definition
+
+When an element object definitions contains many complex elements, it can be useful to use a code editor's code folding feature to make a file more readable.
+
+All method specific parameters can also be defined in a dedicated `options` object property. So the above example would look like:
+
+```js
+// Create figure
+const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
+
+// Add circle to figure
+figure.add(
+  {
+    method: 'polygon',
+    options: {
+      sides: 100,
+      radius: 0.2,
+      touchBorder: 0.5,
+    }
+    mods: {
+      isMovable: true,
+      move: {
+        bounds: 'figure',
+        freely: { deceleration: 0.5 },
+      },
+    },
+  },
+);
+```
+
+An example of using code folding with `options` objects in each element object definition is:
+![](./codefolding.gif)
