@@ -1,5 +1,5 @@
 import {
-  Point, // Transform,
+  Point, Transform,
 } from '../../tools/g2';
 // import * as tools from '../../tools/tools';
 // import * as math from '../../tools/math';
@@ -163,6 +163,78 @@ describe('Animation Examples', () => {
           },
         },
       },
+      scenario: {
+        builder: {
+          name: () => {
+            a.animations.new()
+              .scenario('s1')
+              .start();
+          },
+          obj: () => {
+            a.animations.new()
+              .scenario({ position: [1, 1] })
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .scenario({ target: 's1' })
+              .start();
+          },
+        },
+        step: {
+          name: () => {
+            a.animations.new()
+              .then(a.animations.scenario('s1'))
+              .start();
+          },
+          obj: () => {
+            a.animations.new()
+              .then(a.animations.scenario({ position: [1, 1] }))
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .then(a.animations.scenario({ target: 's1' }))
+              .start();
+          },
+        },
+      },
+      transform: {
+        builder: {
+          arrayTransform: () => {
+            a.animations.new()
+              .transform([['s', 2, 2], ['r', 1], ['t', 1, 1]])
+              .start();
+          },
+          transform: () => {
+            a.animations.new()
+              .transform(new Transform().scale(2, 2).rotate(1).translate(1, 1))
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .transform({ target: [['s', 2, 2], ['r', 1], ['t', 1, 1]] })
+              .start();
+          },
+        },
+        step: {
+          arrayTransform: () => {
+            a.animations.new()
+              .transform([['s', 2, 2], ['r', 1], ['t', 1, 1]])
+              .start();
+          },
+          transform: () => {
+            a.animations.new()
+              .then(a.animations.transform(new Transform().scale(2, 2).rotate(1).translate(1, 1)))
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .transform({ target: [['s', 2, 2], ['r', 1], ['t', 1, 1]] })
+              .start();
+          },
+        },
+      },
     };
   });
   describe('position', () => {
@@ -194,6 +266,58 @@ describe('Animation Examples', () => {
     });
     test('step position options', () => {
       animations.position.step.options();
+    });
+  });
+  describe('scenario', () => {
+    afterEach(() => {
+      figure.mock.timeStep(0);
+      figure.mock.timeStep(0.5);
+      expect(a.getPosition().round(4)).toEqual(point(0.5));
+    });
+    test('builder scenario name', () => {
+      animations.scenario.builder.name();
+    });
+    test('builder scenario obj', () => {
+      animations.scenario.builder.obj();
+    });
+    test('builder scenario options', () => {
+      animations.scenario.builder.options();
+    });
+    test('step scenario name', () => {
+      animations.scenario.step.name();
+    });
+    test('step scenario obj', () => {
+      animations.scenario.step.obj();
+    });
+    test('step scenario options', () => {
+      animations.scenario.step.options();
+    });
+  });
+  describe('transform', () => {
+    afterEach(() => {
+      figure.mock.timeStep(0);
+      figure.mock.timeStep(0.5);
+      expect(a.getPosition().round(4)).toEqual(point(0.5));
+      expect(a.getScale().round(4)).toEqual(point(1.5));
+      expect(round(a.getRotation(), 4)).toEqual(0.5);
+    });
+    test('builder transform arrayTransform', () => {
+      animations.transform.builder.arrayTransform();
+    });
+    test('builder transform transform', () => {
+      animations.transform.builder.transform();
+    });
+    test('builder transform options', () => {
+      animations.transform.builder.options();
+    });
+    test('step transform arrayTransform', () => {
+      animations.transform.step.arrayTransform();
+    });
+    test('step transform transform', () => {
+      animations.transform.step.transform();
+    });
+    test('step transform options', () => {
+      animations.transform.step.options();
     });
   });
   describe('rotation', () => {

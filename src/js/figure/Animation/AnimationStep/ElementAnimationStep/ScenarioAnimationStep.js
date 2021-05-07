@@ -248,6 +248,8 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     ]);
     if (this.scenario.velocity != null && AnimationStepOptionsIn.duration == null) {
       this.duration = 0;
+    } else if (AnimationStepOptionsIn.duration == null) {
+      this.duration = 1;
     }
   }
 
