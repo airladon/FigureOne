@@ -1,0 +1,255 @@
+import {
+  Point, // Transform,
+} from '../../tools/g2';
+// import * as tools from '../../tools/tools';
+// import * as math from '../../tools/math';
+import { round } from '../../tools/math';
+import makeFigure from '../../__mocks__/makeFigure';
+
+const point = value => new Point(value, value);
+
+describe('Animation Examples', () => {
+  let figure;
+  let a;
+  let b;
+  let animations;
+  beforeEach(() => {
+    jest.useFakeTimers();
+    figure = makeFigure();
+    [a, b] = figure.add([
+      {
+        name: 'a',
+        method: 'polygon',
+        mods: {
+          scenarios: {
+            s1: { position: [1, 1] },
+            s2: { transform: [['t', 1, 1], ['r', 1], ['s', 2, 2]] },
+            s3: { color: [1, 0, 1, 1] },
+            s4: { isShown: false },
+          },
+        },
+      },
+      {
+        name: 'b',
+        method: 'polygon',
+      },
+    ]);
+    animations = {
+      position: {
+        builder: {
+          numbers: () => {
+            a.animations.new()
+              .position(1, 1)
+              .start();
+          },
+          arrayPoint: () => {
+            a.animations.new()
+              .position([1, 1])
+              .start();
+          },
+          point: () => {
+            a.animations.new()
+              .position(new Point(1, 1))
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .position({ target: [1, 1] })
+              .start();
+          },
+        },
+        step: {
+          numbers: () => {
+            a.animations.new()
+              .then(a.animations.position(1, 1))
+              .start();
+          },
+          arrayPoint: () => {
+            a.animations.new()
+              .then(a.animations.position([1, 1]))
+              .start();
+          },
+          point: () => {
+            a.animations.new()
+              .then(a.animations.position(new Point(1, 1)))
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .then(a.animations.position({ target: [1, 1] }))
+              .start();
+          },
+        },
+      },
+      scale: {
+        builder: {
+          numbers: () => {
+            a.animations.new()
+              .scale(2, 2)
+              .start();
+          },
+          arrayPoint: () => {
+            a.animations.new()
+              .scale([2, 2])
+              .start();
+          },
+          point: () => {
+            a.animations.new()
+              .scale(new Point(2, 2))
+              .start();
+          },
+          value: () => {
+            a.animations.new()
+              .scale(2)
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .scale({ target: [2, 2] })
+              .start();
+          },
+        },
+        step: {
+          numbers: () => {
+            a.animations.new()
+              .then(a.animations.scale(2, 2))
+              .start();
+          },
+          arrayPoint: () => {
+            a.animations.new()
+              .then(a.animations.scale([2, 2]))
+              .start();
+          },
+          point: () => {
+            a.animations.new()
+              .then(a.animations.scale(new Point(2, 2)))
+              .start();
+          },
+          value: () => {
+            a.animations.new()
+              .then(a.animations.scale(2))
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .then(a.animations.scale({ target: [2, 2] }))
+              .start();
+          },
+        },
+      },
+      rotation: {
+        builder: {
+          number: () => {
+            a.animations.new()
+              .rotation(1)
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .rotation({ target: 1 })
+              .start();
+          },
+        },
+        step: {
+          number: () => {
+            a.animations.new()
+              .then(a.animations.rotation(1))
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .then(a.animations.rotation({ target: 1 }))
+              .start();
+          },
+        },
+      },
+    };
+  });
+  describe('position', () => {
+    afterEach(() => {
+      figure.mock.timeStep(0);
+      figure.mock.timeStep(0.5);
+      expect(a.getPosition().round(4)).toEqual(point(0.5));
+    });
+    test('builder position numbers', () => {
+      animations.position.builder.numbers();
+    });
+    test('builder position arrayPoint', () => {
+      animations.position.builder.arrayPoint();
+    });
+    test('builder position point', () => {
+      animations.position.builder.point();
+    });
+    test('builder position options', () => {
+      animations.position.builder.options();
+    });
+    test('step position numbers', () => {
+      animations.position.step.numbers();
+    });
+    test('step position arrayPoint', () => {
+      animations.position.step.arrayPoint();
+    });
+    test('step position point', () => {
+      animations.position.step.point();
+    });
+    test('step position options', () => {
+      animations.position.step.options();
+    });
+  });
+  describe('rotation', () => {
+    afterEach(() => {
+      figure.mock.timeStep(0);
+      figure.mock.timeStep(0.5);
+      expect(round(a.getRotation(), 4)).toEqual(0.5);
+    });
+    test('builder rotation number', () => {
+      animations.rotation.builder.number();
+    });
+    test('builder rotation options', () => {
+      animations.rotation.builder.options();
+    });
+    test('step rotation number', () => {
+      animations.rotation.step.number();
+    });
+    test('step rotation options', () => {
+      animations.rotation.step.options();
+    });
+  });
+  describe('scale', () => {
+    afterEach(() => {
+      figure.mock.timeStep(0);
+      figure.mock.timeStep(0.5);
+      expect(a.getScale().round(4)).toEqual(point(1.5));
+    });
+    test('builder scale numbers', () => {
+      animations.scale.builder.numbers();
+    });
+    test('builder scale arrayPoint', () => {
+      animations.scale.builder.arrayPoint();
+    });
+    test('builder scale point', () => {
+      animations.scale.builder.point();
+    });
+    test('builder scale value', () => {
+      animations.scale.builder.value();
+    });
+    test('builder scale options', () => {
+      animations.scale.builder.options();
+    });
+    test('step scale numbers', () => {
+      animations.scale.step.numbers();
+    });
+    test('step scale arrayPoint', () => {
+      animations.scale.step.arrayPoint();
+    });
+    test('step scale point', () => {
+      animations.scale.step.point();
+    });
+    test('step scale value', () => {
+      animations.scale.step.value();
+    });
+    test('step scale options', () => {
+      animations.scale.step.options();
+    });
+  });
+});

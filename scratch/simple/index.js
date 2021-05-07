@@ -13,7 +13,8 @@ const [tri] = figure.add(
 
 // Animate the shape
 tri.animations.new()
-  .position(0.5, 0.5)
+  // .position(0.5, 0.5)
+  .position({ target: [1, 1] })
   .rotation(Math.PI)
   .position(0, 0)
   .start();

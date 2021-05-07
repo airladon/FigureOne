@@ -106,18 +106,22 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
 
   /**
    * Add a custom animation step that uses this element by default
-   * @param {OBJ_CustomAnimationStep} options
+   * @param {string | ((number) => void) | OBJ_CustomAnimationStep} callbackOrOptions
    * @return {AnimationBuilder}
    */
-  custom(...optionsIn: Array<OBJ_CustomAnimationStep>) {
-    if (this.element != null) {
-      const defaultOptions = { element: this.element, timeKeeper: this.timeKeeper };
-      const options = joinObjects({}, defaultOptions, ...optionsIn);
-      this.then(new animation.CustomAnimationStep(options));
-      // this.addStep(options, 'CustomAnimationStep', true);
+  custom(
+    callbackOrOptions: string | ((number) => void) | OBJ_CustomAnimationStep,
+  ) {
+    let optionsIn;
+    if (typeof callbackOrOptions === 'string' || typeof callbackOrOptions === 'function') {
+      optionsIn = { callback: callbackOrOptions };
     } else {
-      this.then(new animation.CustomAnimationStep(...optionsIn));
+      optionsIn = callbackOrOptions;
     }
+    const optionsToUse = joinObjects(
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, optionsIn,
+    );
+    this.then(new animation.CustomAnimationStep(optionsToUse));
     return this;
   }
 
