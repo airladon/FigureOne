@@ -3798,7 +3798,9 @@ class FigureElementCollection extends FigureElement {
     const addedElements = [];
     elements.forEach((elementDefinition, index) => {
       if (elementDefinition instanceof FigureElement) {
-        addedElements.push(...this.add(elementDefinition.name, elementDefinition));
+        addedElements.push( // $FlowFixMe
+          this.add(elementDefinition.name, elementDefinition),
+        );
         return;
       }
       // Extract the parameters from the layout object
@@ -3808,7 +3810,13 @@ class FigureElementCollection extends FigureElement {
       const addElementsKey = 'elements';
       const nameToUse = elementDefinition.name || generateUniqueId('primitive_');
       const pathToUse = elementDefinition.path;
-      const optionsToUse = elementDefinition.options;
+      let optionsToUse;
+      if (elementDefinition.options != null) {
+        optionsToUse = elementDefinition.options;
+      } else {
+        optionsToUse = elementDefinition;
+      }
+      // const optionsToUse = elementDefinition.options;
       const addElementsToUse = elementDefinition[addElementsKey];
       const methodPathToUse = elementDefinition.method;
       const elementModsToUse = elementDefinition.mods;
@@ -3890,9 +3898,7 @@ class FigureElementCollection extends FigureElement {
     if (addedElements.length === 1) {
       return addedElements[0];
     }
-    // if (addedElements.length === 0) {
-    //   return 
-    // }
+
     return addedElements;
   }
 
@@ -4366,6 +4372,22 @@ class FigureElementCollection extends FigureElement {
       shown.push(...element.getShown());
     });
     return shown;
+  }
+
+  /**
+   * Returns an array of result from
+   * [getElement](#figureelementcollectiongetelement) calls on an
+   * array of paths. Same as `getElements` but more succinct
+   *
+   * @param {TypeElementPath} children
+   * @return {Array<FigureElement>} Array of
+   * [getElement](#figureelementcollectiongetelement) results
+   */
+  get(children: TypeElementPath) {
+    if (typeof children === 'string') {
+      return this.getElement(children);
+    }
+    return this.getElements(children);
   }
 
   getUid(uid: string) {

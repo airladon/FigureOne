@@ -542,7 +542,7 @@ class Figure {
    * @return {CollectionsSlideNavigator}
    */
   addSlideNavigator(options: COL_SlideNavigator) {
-    const [nav] = this.add(joinObjects(
+    const nav = this.add(joinObjects(
       {},
       {
         name: '_nav_',

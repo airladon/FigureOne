@@ -30,13 +30,10 @@ const figure = new Fig.Figure();
 // Add a triangle
 figure.add(
   {
-    name: 'tri',
     method: 'triangle',
-    options: {
-      width: 1,
-      height: 1,
-      color: [1, 0, 0, 1],
-    },
+    width: 1,
+    height: 1,
+    color: [1, 0, 0, 1],
   },
 );
 
@@ -86,13 +83,10 @@ Next, a figure element in the shape of a triangle is added.
 ```js
 figure.add(
   {
-    name: 'tri',
     method: 'triangle',
-    options: {
-      width: 1,
-      height: 1,
-      color: [1, 0, 0, 1],
-    },
+    width: 1,
+    height: 1,
+    color: [1, 0, 0, 1],
   },
 );
 
@@ -100,10 +94,6 @@ figure.add(
 
 We are defining a *triangle* figure element using the `triangle` method with the parameters of `width`, `height`, and `color`.
 
-Options objects are used to define elements within a figure. Options objects can be as simple or complex as needed to customize the properties of an element. To keep options objects as small as possible, only the properties that need customization should be defined.
+The element is defined in a javascript object. There are many possible parameters that can define a triangle, but only the ones that need customization need to be used.
 
 The triangle's options object is [here](https://airladon.github.io/FigureOne/api/#obj_triangle).
-
-
-
-<!-- [link here](../../docs/README.md#TypeEquationPhrase) -->
