@@ -970,7 +970,8 @@ describe('Animationa and Movement', () => {
             },
           ],
         });
-        collection = figure.elements._c;
+        // console.log(collection === figure.elements._c)
+        // collection = figure.elements._c;
         figure.initialize();
         figure.setFirstTransform();
       };

@@ -331,7 +331,7 @@ function layoutCirc() {
   }
 
   // Add all the elements to the figure
-  const [geom] = figure.add({
+  const geom = figure.add({
     name: 'geom',
     method: 'collection',
     elements: [

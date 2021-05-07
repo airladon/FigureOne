@@ -24,7 +24,7 @@ describe('Performance Testing', () => {
     setTransformCount = 0;
     const addToCount = () => { setTransformCount += 1; };
     for (let i = 0; i < 100; i += 1) {
-      const [e] = figure.add({
+      const e = figure.add({
         name: `p${i}`,
         method: 'primitives.polygon',
         options: {

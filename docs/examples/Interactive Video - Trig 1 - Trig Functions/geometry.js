@@ -109,7 +109,7 @@ function layoutRight() {
       },
     },
   });
-  const [rightTri] = figure.add({
+  const rightTri = figure.add({
     name: 'rightTri',
     method: 'collection',
     elements: [

@@ -126,7 +126,7 @@ export type EQN_Symbol = {
  *
  * @example
  * // Define inline with reuse
- * const [eqn] = figure.add({
+ * const eqn = figure.add({
  *   method: 'equation',
  *   options: {
  *     forms: {
@@ -229,7 +229,7 @@ export type EQN_VinculumSymbol = {
  *
  * @example
  * // Define inline with reuse
- * const [eqn] = figure.add({
+ * const eqn = figure.add({
  *   method: 'equation',
  *   options: {
  *     forms: {
@@ -352,7 +352,7 @@ export type EQN_BoxSymbol = {
  *
  * @example
  * // Define inline with reuse
- * const [eqn] = figure.add({
+ * const eqn = figure.add({
  *   method: 'equation',
  *   options: {
  *     forms: {
@@ -468,7 +468,7 @@ export type EQN_ArrowSymbol = {
  *
  * @example
  * // Define inline with reuse
- * const [eqn] = figure.add({
+ * const eqn = figure.add({
  *   method: 'equation',
  *   options: {
  *     forms: {
@@ -581,7 +581,7 @@ export type EQN_SumSymbol ={
  *
  * @example
  * // Define inline with reuse
- * const [eqn] = figure.add({
+ * const eqn = figure.add({
  *   method: 'equation',
  *   options: {
  *     forms: {
@@ -734,7 +734,7 @@ export type EQN_ProdSymbol = {
  *
  * @example
  * // Define inline with reuse
- * const [eqn] = figure.add({
+ * const eqn = figure.add({
  *   method: 'equation',
  *   options: {
  *     forms: {
@@ -861,7 +861,7 @@ export type EQN_IntegralSymbol = {
  *
  * @example
  * // Define inline with reuse
- * const [eqn] = figure.add({
+ * const eqn = figure.add({
  *   method: 'equation',
  *   options: {
  *     forms: {
@@ -1030,7 +1030,7 @@ export type EQN_RadicalSymbol = {
  *
  * @example
  * // Define inline with reuse
- * const [eqn] = figure.add({
+ * const eqn = figure.add({
  *   method: 'equation',
  *   options: {
  *     forms: {
@@ -1429,7 +1429,7 @@ export type EQN_BraceSymbol = {
  *
  * @example
  * // Define inline with reuse
- * const [eqn] = figure.add({
+ * const eqn = figure.add({
  *   method: 'equation',
  *   options: {
  *     forms: {
@@ -1619,7 +1619,7 @@ export type EQN_SquareBracketSymbol = {
  *
  * @example
  * // Define inline with reuse
- * const [eqn] = figure.add({
+ * const eqn = figure.add({
  *   method: 'equation',
  *   options: {
  *     forms: {

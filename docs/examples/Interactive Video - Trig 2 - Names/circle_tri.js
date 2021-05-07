@@ -141,7 +141,7 @@ function layoutCirc() {
     };
   }
 
-  const [circle] = figure.add({
+  const circle = figure.add({
     name: 'circ',
     method: 'collection',
     elements: [

@@ -14,7 +14,7 @@ function layoutLines() {
   const angle = 1;
   const chordAngle = Math.asin(length / 2 / radius) * 2;
 
-  const [lines] = figure.add({
+  const lines = figure.add({
     name: 'lines',
     method: 'collection',
     options: {

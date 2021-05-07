@@ -570,7 +570,7 @@ class Figure {
    * @return {FigureElement} cursor element
    */
   addCursor(options: Object) {
-    const [cursor] = this.add(joinObjects(
+    const cursor = this.add(joinObjects(
       {},
       {
         name: '_cursor_',
@@ -963,11 +963,16 @@ class Figure {
   /**
    * Add a figure element to the root collection of the figure.
    *
+   * If adding an array of elements, then the added elements will be returned
+   * in an array (even if only one element is added). If not adding an array,
+   * then that single element will be returned.
+   *
    * @param {string | FigureElement | OBJ_AddElement | Array<FigureElement | OBJ_AddElement>} nameOrElementOrElementDefinition
     reference name of element
    * @param {FigureElement} elementToAdd element to add
    *
-   * @return {Array<FigureElement>} Array of added elements
+   * @return {Array<FigureElement> | FigureElement} added element, or array of
+   * added elements
    *
    * @example
    * // Add name and element
@@ -1086,6 +1091,9 @@ class Figure {
    * [getElement](#figureelementcollectiongetelement) results
    */
   get(children: TypeElementPath) {
+    if (typeof children === 'string') {
+      return this.getElement(children);
+    }
     return this.getElements(children);
   }
 
