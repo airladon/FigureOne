@@ -9,7 +9,7 @@ __duration = 5;
 __timeStep = 0.5;
 __frames = [
   [0, `
-    figure.getElement('c').animations.animations[0].startTime = null;
-    figure.getElement('c').animations.animations[0].steps[0].startTime = null;
+    c.animations.animations[0].startTime = null;
+    c.animations.animations[0].steps[0].startTime = null;
   `],
 ];

@@ -1,18 +1,44 @@
-/* globals Fig */
-const figure = new Fig.Figure();
-figure.add(
+// Initialize the figure with a default color
+const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
+
+// const c = figure.add(
+//   {
+//     // name: 'c',
+//     method: 'collection',
+//     // Add two elements to the collection
+//     elements: [
+//       {
+//         // name: 'tri',
+//         method: 'triangle',
+//         height: 0.4,
+//         width: 0.4,
+//       },
+//       {
+//         // name: 'text',
+//         method: 'text',
+//         text: 'triangle',
+//         position: [0, -0.4],
+//         xAlign: 'center',
+//       },
+//     ],
+//   },
+// );
+
+// // When a collection rotates, then so does all its elements
+// c.animations.new()
+//   .rotation({ target: Math.PI * 1.999, direction: 1, duration: 5 })
+//   .start();
+const c = figure.add(
   {
-    name: 'c',
     method: 'collection',
+    // Add two elements to the collection
     elements: [
       {
-        name: 'tri',
         method: 'triangle',
         height: 0.4,
         width: 0.4,
       },
       {
-        name: 'text',
         method: 'text',
         text: 'triangle',
         position: [0, -0.4],
@@ -22,7 +48,7 @@ figure.add(
   },
 );
 
-const c = figure.get('c');
-const tri = figure.get('c.tri');
-const text = c.get('text');
-
+// When a collection rotates, then so does all its elements
+c.animations.new()
+  .rotation({ target: Math.PI * 1.999, direction: 1, duration: 5 })
+  .start();

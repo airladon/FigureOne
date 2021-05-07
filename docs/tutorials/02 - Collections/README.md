@@ -90,7 +90,7 @@ Any elements added into a figure are returned from the `figure.add` method. If a
 
 However, the children of the collection are not returned.
 
-Any figure elements that need to be accessed after creation should be given a name. That way they can be retrieved using the `get`, `getElement` or `getElements` methods in figure or a collection.
+Any figure elements that need to be accessed after creation should be given a name (and all their hierarchical parents should also have a name). That way they can be retrieved using the `get`, `getElement` or `getElements` methods in figure or a collection.
 
 For example, we could rewrite the above examples as:
 
@@ -118,7 +118,7 @@ figure.add(
 );
 ```
 
-The elements can then be returned with:
+The elements can then be accessed with the `get` method.
 
 ```js
 const c = figure.get('c');
