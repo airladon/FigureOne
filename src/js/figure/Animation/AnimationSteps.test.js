@@ -22,6 +22,7 @@ describe('Animation Examples', () => {
         method: 'polygon',
         options: { color: [0, 1, 0, 1] },
         mods: {
+          dimColor: [1, 0, 0, 1],
           scenarios: {
             s1: { position: [1, 1] },
             s2: { transform: [['t', 1, 1], ['r', 1], ['s', 2, 2]] },
@@ -186,6 +187,84 @@ describe('Animation Examples', () => {
           options: () => {
             a.animations.new()
               .then(a.animations.color({ target: [1, 0, 0, 1] }))
+              .start();
+          },
+        },
+      },
+      dim: {
+        builder: {
+          defaultDuration: () => {
+            a.animations.new()
+              .dim()
+              .start();
+          },
+          number: () => {
+            a.animations.new()
+              .dim(1)
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .dim({ duration: 1 })
+              .start();
+          },
+        },
+        step: {
+          defaultDuration: () => {
+            a.animations.new()
+              .then(a.animations.dim())
+              .start();
+          },
+          number: () => {
+            a.animations.new()
+              .then(a.animations.dim(1))
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .then(a.animations.dim({ duration: 1 }))
+              .start();
+          },
+        },
+      },
+      undim: {
+        builder: {
+          defaultDuration: () => {
+            a.dim();
+            a.animations.new()
+              .undim()
+              .start();
+          },
+          number: () => {
+            a.dim();
+            a.animations.new()
+              .undim(1)
+              .start();
+          },
+          options: () => {
+            a.dim();
+            a.animations.new()
+              .undim({ duration: 1 })
+              .start();
+          },
+        },
+        step: {
+          defaultDuration: () => {
+            a.dim();
+            a.animations.new()
+              .then(a.animations.undim())
+              .start();
+          },
+          number: () => {
+            a.dim();
+            a.animations.new()
+              .then(a.animations.undim(1))
+              .start();
+          },
+          options: () => {
+            a.dim();
+            a.animations.new()
+              .then(a.animations.undim({ duration: 1 }))
               .start();
           },
         },
@@ -481,6 +560,56 @@ describe('Animation Examples', () => {
     });
     test('step color options', () => {
       animations.color.step.options();
+    });
+  });
+  describe('dim', () => {
+    afterEach(() => {
+      figure.mock.timeStep(0);
+      figure.mock.timeStep(0.5);
+      expect(round(a.color, 4)).toEqual([0.5, 0.5, 0, 1]);
+    });
+    test('builder dim defaultDuration', () => {
+      animations.dim.builder.defaultDuration();
+    });
+    test('builder dim number', () => {
+      animations.dim.builder.number();
+    });
+    test('builder dim options', () => {
+      animations.dim.builder.options();
+    });
+    test('step dim defaultDuration', () => {
+      animations.dim.step.defaultDuration();
+    });
+    test('step dim number', () => {
+      animations.dim.step.number();
+    });
+    test('step dim options', () => {
+      animations.dim.step.options();
+    });
+  });
+  describe('undim', () => {
+    afterEach(() => {
+      figure.mock.timeStep(0);
+      figure.mock.timeStep(0.5);
+      expect(round(a.color, 4)).toEqual([0.5, 0.5, 0, 1]);
+    });
+    test('builder undim defaultDuration', () => {
+      animations.undim.builder.defaultDuration();
+    });
+    test('builder undim number', () => {
+      animations.undim.builder.number();
+    });
+    test('builder undim options', () => {
+      animations.undim.builder.options();
+    });
+    test('step undim number', () => {
+      animations.undim.step.number();
+    });
+    test('step undim options', () => {
+      animations.undim.step.options();
+    });
+    test('step undim defaultDuration', () => {
+      animations.undim.step.defaultDuration();
     });
   });
   describe('opacity', () => {
