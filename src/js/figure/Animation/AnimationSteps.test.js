@@ -13,6 +13,8 @@ describe('Animation Examples', () => {
   let a;
   let b;
   let animations;
+  let callback;
+  let custom;
   beforeEach(() => {
     jest.useFakeTimers();
     figure = makeFigure();
@@ -36,6 +38,10 @@ describe('Animation Examples', () => {
         method: 'polygon',
       },
     ]);
+    callback = jest.fn(() => {});
+    custom = (percentage) => {
+      a.setPosition(percentage, percentage);
+    };
     animations = {
       position: {
         builder: {
@@ -434,7 +440,85 @@ describe('Animation Examples', () => {
           },
           options: () => {
             a.animations.new()
-              .transform({ target: [['s', 2, 2], ['r', 1], ['t', 1, 1]] })
+              .then(a.animations.transform({ target: [['s', 2, 2], ['r', 1], ['t', 1, 1]] }))
+              .start();
+          },
+        },
+      },
+      trigger: {
+        builder: {
+          callback: () => {
+            a.animations.new()
+              .trigger(callback)
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .trigger({ callback })
+              .start();
+          },
+        },
+        step: {
+          callback: () => {
+            a.animations.new()
+              .then(a.animations.trigger(callback))
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .then(a.animations.trigger({ callback }))
+              .start();
+          },
+        },
+      },
+      custom: {
+        builder: {
+          callback: () => {
+            a.animations.new()
+              .custom(custom)
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .custom({ callback: custom })
+              .start();
+          },
+        },
+        step: {
+          callback: () => {
+            a.animations.new()
+              .then(a.animations.custom(custom))
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .then(a.animations.custom({ callback: custom }))
+              .start();
+          },
+        },
+      },
+      scenarios: {
+        builder: {
+          name: () => {
+            a.animations.new()
+              .scenarios('s1')
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .scenarios({ target: 's1' })
+              .start();
+          },
+        },
+        step: {
+          name: () => {
+            a.animations.new()
+              .then(a.animations.scenarios('s1'))
+              .start();
+          },
+          options: () => {
+            a.animations.new()
+              .then(a.animations.scenarios({ target: 's1' }))
               .start();
           },
         },
@@ -495,6 +579,25 @@ describe('Animation Examples', () => {
     });
     test('step scenario options', () => {
       animations.scenario.step.options();
+    });
+  });
+  describe('scenarios', () => {
+    afterEach(() => {
+      figure.mock.timeStep(0);
+      figure.mock.timeStep(0.5);
+      expect(a.getPosition().round(4)).toEqual(point(0.5));
+    });
+    test('builder scenarios name', () => {
+      animations.scenarios.builder.name();
+    });
+    test('builder scenarios options', () => {
+      animations.scenarios.builder.options();
+    });
+    test('step scenarios name', () => {
+      animations.scenarios.step.name();
+    });
+    test('step scenarios options', () => {
+      animations.scenarios.step.options();
     });
   });
   describe('transform', () => {
@@ -716,6 +819,48 @@ describe('Animation Examples', () => {
     });
     test('step scale options', () => {
       animations.scale.step.options();
+    });
+  });
+  describe('trigger', () => {
+    beforeEach(() => {
+      expect(callback.mock.calls).toHaveLength(0);
+    });
+    afterEach(() => {
+      figure.mock.timeStep(0);
+      // figure.mock.timeStep(0.5);
+      // expect(round(a.getRotation(), 4)).toEqual(0.5);
+      expect(callback.mock.calls).toHaveLength(1);
+    });
+    test('builder trigger callback', () => {
+      animations.trigger.builder.callback();
+    });
+    test('builder trigger options', () => {
+      animations.trigger.builder.options();
+    });
+    test('step trigger callback', () => {
+      animations.trigger.step.callback();
+    });
+    test('step trigger options', () => {
+      animations.trigger.step.options();
+    });
+  });
+  describe('custom', () => {
+    afterEach(() => {
+      figure.mock.timeStep(0);
+      figure.mock.timeStep(0.5);
+      expect(a.getPosition().round(4)).toEqual(point(0.5));
+    });
+    test('builder custom callback', () => {
+      animations.custom.builder.callback();
+    });
+    test('builder custom options', () => {
+      animations.custom.builder.options();
+    });
+    test('step custom callback', () => {
+      animations.custom.step.callback();
+    });
+    test('step custom options', () => {
+      animations.custom.step.options();
     });
   });
 });

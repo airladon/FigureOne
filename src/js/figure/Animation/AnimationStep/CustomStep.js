@@ -80,6 +80,7 @@ export class CustomAnimationStep extends AnimationStep {
       callback: null,
       startPercent: 0,
       progression: 'linear',
+      duration: 1,
     };
     const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
     this.element = options.element;

@@ -18,6 +18,7 @@ import type {
   OBJ_TransformAnimationStep, OBJ_PulseTransformAnimationStep,
   OBJ_PulseAnimationStep, OBJ_ElementAnimationStep,
   OBJ_ScenarioAnimationStep, OBJ_ScenariosAnimationStep,
+  OBJ_CustomAnimationStep,
 } from './Animation';
 // eslint-disable-next-line import/no-cycle
 import TimeKeeper from '../TimeKeeper';
@@ -399,6 +400,26 @@ export default class AnimationManager {
       {}, { element: this.element, timeKeeper: this.timeKeeper }, optionsIn,
     );
     return new anim.TriggerAnimationStep(optionsToUse);
+  }
+
+  /**
+   * Add a custom animation step that uses this element by default
+   * @param {string | ((number) => void) | OBJ_CustomAnimationStep} callbackOrOptions
+   * @return {AnimationBuilder}
+   */
+  custom(
+    callbackOrOptions: string | ((number) => void) | OBJ_CustomAnimationStep,
+  ) {
+    let optionsIn;
+    if (typeof callbackOrOptions === 'string' || typeof callbackOrOptions === 'function') {
+      optionsIn = { callback: callbackOrOptions };
+    } else {
+      optionsIn = callbackOrOptions;
+    }
+    const optionsToUse = joinObjects(
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, optionsIn,
+    );
+    return new anim.CustomAnimationStep(optionsToUse);
   }
 
   /**
