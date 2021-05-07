@@ -5,7 +5,7 @@ import type {
 import PositionAnimationStep from './AnimationStep/ElementAnimationStep/PositionAnimationStep';
 
 import type {
-  OBJ_ScenarioAnimationStep,
+  OBJ_ScenarioAnimationStep, OBJ_ScenariosAnimationStep,
 } from './AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 import ScenarioAnimationStep from './AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 
@@ -120,6 +120,7 @@ export type {
   OBJ_ScaleAnimationStep, OBJ_PulseAnimationStep,
   OBJ_OpacityAnimationStep, OBJ_ScenarioAnimationStep,
   OBJ_PulseTransformAnimationStep, OBJ_ElementAnimationStep,
+  OBJ_ScenariosAnimationStep,
 };
 export {
   PositionAnimationStep, AnimationBuilder, ParallelAnimationStep, SerialAnimationStep,

@@ -87,6 +87,43 @@ export type OBJ_ScenarioAnimationStep = {
 } & OBJ_ElementAnimationStep;
 
 /**
+ * {@link ScenarioAnimationStep} options object
+ *
+ * @extends OBJ_ElementAnimationStep
+ *
+ * @property {string} [target]
+ * @property {null | string | OBJ_ScenarioVelocity} [velocity] velocity
+ * will override duration with a calculated duration based on
+ * the `start`, `target` and `velocity`. If `null` is used
+ * then `duration` will not be overriden. Any scenario velocity elements that
+ * are undefined will default to 1 (`null`)
+ * @property {number | null} [maxDuration] maximum duration to clip animation
+ * to where `null` is unlimited (`null`)
+ * @property {number} [zeroDurationThreshold] value considered 0 to stop
+ * animation - this is useful when numbers get very small and rounding problems
+ * with javascripts floating point implementation arise
+ * @property {OBJ_TranslationPath} [path] translation path style and options
+ * (`{ style: 'linear' }`)
+ * @property {0 | 1 | -1 | 2} [rotDirection] where `0` is quickest direction,
+ * `1` is positive of CCW direction, `-1` is negative of CW direction and `2` is
+ * whichever direction doesn't pass through angle 0.
+ * @property {'0to360' | '-180to180' | null} [clipRotationTo]
+ * @property {'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression} [progression]
+ * (`'easeinout'`)
+ */
+export type OBJ_ScenariosAnimationStep = {
+  target?: string;
+  velocity?: OBJ_ScenarioVelocity;
+  maxDuration?: number,
+  zeroDurationThreshold?: number,
+  allDurationsSame?: boolean,
+  path?: OBJ_TranslationPath,
+  rotDirection: 0 | 1 | -1 | 2;
+  clipRotationTo: '0to360' | '-180to180' | null;
+  progression: 'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression;
+} & OBJ_ElementAnimationStep;
+
+/**
  * Scenario Animation Step
  *
  * ![](./apiassets/scenario_animation.gif)

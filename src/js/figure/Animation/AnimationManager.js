@@ -17,7 +17,7 @@ import type {
   OBJ_PositionAnimationStep, OBJ_ColorAnimationStep, OBJ_OpacityAnimationStep,
   OBJ_TransformAnimationStep, OBJ_PulseTransformAnimationStep,
   OBJ_PulseAnimationStep, OBJ_ElementAnimationStep,
-  OBJ_ScenarioAnimationStep, OBJ_ParallelAnimationStep,
+  OBJ_ScenarioAnimationStep, OBJ_ScenariosAnimationStep,
 } from './Animation';
 // eslint-disable-next-line import/no-cycle
 import TimeKeeper from '../TimeKeeper';
@@ -28,19 +28,16 @@ import { getState } from '../Recorder/state';
 import { FunctionMap } from '../../tools/FunctionMap';
 import type { TypeWhen } from '../TimeKeeper';
 // import type { OBJ_AnimationStep } from './AnimationStep';
-import type { TypeParsablePoint } from '../../tools/g2';
+import type { TypeParsablePoint, TypeParsableTransform } from '../../tools/g2';
+import {
+  isParsablePoint, getPoint, isParsableTransform, getTransform,
+} from '../../tools/g2';
+import type { TypeColor } from '../../tools/types';
+import type { OBJ_Scenario } from '../Element';
 // import type Figure from '../Figure';
 
 const FIGURE1DEBUG = false;
 
-/**
- * Scenarios animation step options object
- * @extends OBJ_AnimationStep
- * @property {string} target name of scenario
- */
-export type OBJ_ScenariosAnimationStep = {
-  target: string;
-} & OBJ_AnimationStep;
 
 /**
  * Animation start time options.
@@ -338,9 +335,15 @@ export default class AnimationManager {
    *   .then(rot)
    *   .start();
    */
-  rotation(...options: Array<OBJ_RotationAnimationStep>) {
+  rotation(targetOrOptions: OBJ_RotationAnimationStep | number) {
+    let optionsIn;
+    if (typeof targetOrOptions === 'number') {
+      optionsIn = { target: targetOrOptions };
+    } else {
+      optionsIn = targetOrOptions;
+    }
     const optionsToUse = joinObjects(
-      {}, { element: this.element, timeKeeper: this.timeKeeper }, ...options,
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, optionsIn,
     );
     // return new anim.RotationAnimationStep(optionsToUse);
     return this.getStep(optionsToUse, 'RotationAnimationStep');
@@ -348,12 +351,28 @@ export default class AnimationManager {
 
   /**
    * Create a Scale animation step tied to this element
-   * @param {OBJ_ScaleAnimationStep} options
+   * @param {TypeParsablePoint | OBJ_ScaleAnimationStep | number} targetOrOptionsOrX
+   * when a number is used, it will apply to both x and y if y is null
+   * @param {number | null} y use a number to define the y scale, or use null
+   * to use the `x` value (`null`)
    * @return {ScaleAnimationStep}
    */
-  scale(...options: Array<OBJ_ScaleAnimationStep>) {
+  scale(
+    targetOrOptionsOrX: TypeParsablePoint | OBJ_ScaleAnimationStep | number,
+    y: null | number = null,
+  ) {
+    let optionsIn;
+    if (typeof targetOrOptionsOrX === 'number' && y == null) {
+      optionsIn = { target: [targetOrOptionsOrX, targetOrOptionsOrX] };
+    } else if (typeof targetOrOptionsOrX === 'number') {
+      optionsIn = { target: [targetOrOptionsOrX, y] };
+    } else if (isParsablePoint(targetOrOptionsOrX)) {  // $FlowFixMe
+      optionsIn = { target: getPoint(targetOrOptionsOrX) };
+    } else {
+      optionsIn = targetOrOptionsOrX;
+    }
     const optionsToUse = joinObjects(
-      {}, { element: this.element, timeKeeper: this.timeKeeper }, ...options,
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, optionsIn,
     );
     // return new anim.ScaleAnimationStep(optionsToUse);
     return this.getStep(optionsToUse, 'ScaleAnimationStep');
@@ -361,13 +380,23 @@ export default class AnimationManager {
 
   /**
    * Create a Trigger animation step
-   * @param {OBJ_TriggerAnimationStep | function(): void} options
+   * @param {OBJ_TriggerAnimationStep | function(): void | string} callbackOrOptions
+   * callback can be a function or an id to a function map
    * @return {TriggerAnimationStep}
    */
   // eslint-disable-next-line class-methods-use-this
-  trigger(options: (() => void) | Array<OBJ_TriggerAnimationStep>) {
+  trigger(callbackOrOptions: (() => void) | string | OBJ_TriggerAnimationStep) {
+    let optionsIn;
+    if (
+      typeof callbackOrOptions === 'function'
+      || typeof callbackOrOptions === 'string'
+    ) {
+      optionsIn = { callback: callbackOrOptions };
+    } else {
+      optionsIn = callbackOrOptions;
+    }
     const optionsToUse = joinObjects(
-      {}, { timeKeeper: this.timeKeeper }, options,
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, optionsIn,
     );
     return new anim.TriggerAnimationStep(optionsToUse);
   }
@@ -393,74 +422,97 @@ export default class AnimationManager {
         {}, { timeKeeper: this.timeKeeper }, delayOrOptions,
       );
     }
-    // const optionsToUse = joinObjects(
-    //   {}, { timeKeeper: this.timeKeeper }, options,
-    // );
     return new anim.DelayAnimationStep(optionsToUse);
   }
 
   /**
    * Create a Translation or Position animation step tied to this element
-   * @param {OBJ_PositionAnimationStep} options
+   * @param {OBJ_PositionAnimationStep | TypeParsablePoint | number} targetOrOptionsOrX
+   * @param {number} y define if `targetOrOptionsOrX` is x (number)
    * @return {PositionAnimationStep}
    */
-  translation(...options: Array<OBJ_PositionAnimationStep>) {
-    const optionsToUse = joinObjects(
-      {}, { element: this.element, timeKeeper: this.timeKeeper }, ...options,
-    );
-    // return new anim.PositionAnimationStep(optionsToUse);
-    return this.getStep(optionsToUse, 'PositionAnimationStep');
+  translation(
+    targetOrOptionsOrX: TypeParsablePoint | OBJ_PositionAnimationStep | number,
+    y: number = 0,
+  ) {
+    this.position(targetOrOptionsOrX, y);
   }
 
   /**
    * Create a Translation or Position animation step tied to this element
-   * @param {OBJ_PositionAnimationStep} options
+   * @param {OBJ_PositionAnimationStep | TypeParsablePoint | number} targetOrOptionsOrX
+   * @param {number} y define if `targetOrOptionsOrX` is x (number)
    * @return {PositionAnimationStep}
    */
-  position(...options: Array<OBJ_PositionAnimationStep>) {
+  position(
+    targetOrOptionsOrX: TypeParsablePoint | OBJ_PositionAnimationStep | number,
+    y: number = 0,
+  ) {
+    let optionsIn;
+    if (typeof targetOrOptionsOrX === 'number') {
+      optionsIn = { target: [targetOrOptionsOrX, y] };
+    } else if (isParsablePoint(targetOrOptionsOrX)) {  // $FlowFixMe
+      optionsIn = { target: getPoint(targetOrOptionsOrX) };
+    } else {
+      optionsIn = targetOrOptionsOrX;
+    }
     const optionsToUse = joinObjects(
-      {}, { element: this.element, timeKeeper: this.timeKeeper }, ...options,
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, optionsIn,
     );
-    // return new anim.PositionAnimationStep(optionsToUse);
     return this.getStep(optionsToUse, 'PositionAnimationStep');
   }
 
   /**
    * Create a Color animation step tied to this element
-   * @param {OBJ_ColorAnimationStep} options
+   * @param {OBJ_ColorAnimationStep | TypeColor} colorOrOptions
    * @return {ColorAnimationStep}
    */
-  color(...options: Array<OBJ_ColorAnimationStep>) {
+  color(colorOrOptions: OBJ_ColorAnimationStep | TypeColor) {
+    let optionsIn;
+    if (Array.isArray(colorOrOptions)) {
+      optionsIn = { target: colorOrOptions };
+    } else {
+      optionsIn = colorOrOptions;
+    }
     const optionsToUse = joinObjects(
-      {}, { element: this.element, timeKeeper: this.timeKeeper }, ...options,
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, optionsIn,
     );
-    // return new anim.ColorAnimationStep(optionsToUse);
     return this.getStep(optionsToUse, 'ColorAnimationStep');
   }
 
   /**
    * Create a Opacity animation step tied to this element
-   * @param {OBJ_OpacityAnimationStep} options
+   * @param {OBJ_OpacityAnimationStep | number} opacityOrOptions
    * @return {OpacityAnimationStep}
    */
-  opacity(...options: Array<OBJ_OpacityAnimationStep>) {
+  opacity(opacityOrOptions: OBJ_OpacityAnimationStep | number) {
+    let optionsIn;
+    if (typeof opacityOrOptions === 'number') {
+      optionsIn = { target: opacityOrOptions };
+    } else {
+      optionsIn = opacityOrOptions;
+    }
     const optionsToUse = joinObjects(
-      {}, { element: this.element, timeKeeper: this.timeKeeper }, ...options,
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, optionsIn,
     );
-    // return new anim.OpacityAnimationStep(optionsToUse);
     return this.getStep(optionsToUse, 'OpacityAnimationStep');
   }
 
   /**
    * Create a Transform animation step tied to this element
-   * @param {OBJ_TransformAnimationStep} options
+   * @param {OBJ_TransformAnimationStep | TypeParsableTransform} transformOrOptions
    * @return {TransformAnimationStep}
    */
-  transform(...options: Array<OBJ_TransformAnimationStep>) {
+  transform(transformOrOptions: OBJ_TransformAnimationStep | TypeParsableTransform) {
+    let optionsIn;
+    if (isParsableTransform(transformOrOptions)) {  // $FlowFixMe
+      optionsIn = { target: getTransform(transformOrOptions) };
+    } else {
+      optionsIn = transformOrOptions;
+    }
     const optionsToUse = joinObjects(
-      {}, { element: this.element, timeKeeper: this.timeKeeper }, ...options,
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, optionsIn,
     );
-    // return new anim.TransformAnimationStep(optionsToUse);
     return this.getStep(optionsToUse, 'TransformAnimationStep');
   }
 
@@ -472,16 +524,28 @@ export default class AnimationManager {
     return this.getStep(optionsToUse, 'PulseTransformAnimationStep');
   }
 
-  pulse(...options: Array<OBJ_PulseAnimationStep>) {
+  /**
+   * Create a pulse animation step tied to this element
+   * @param {OBJ_PulseAnimationStep | number} scaleOrOptions pulse scale
+   * (number) or pulse animation step options
+   * @return {PulseAnimationStep}
+   */
+  pulse(scaleOrOptions: OBJ_PulseAnimationStep | number) {
+    let optionsIn;
+    if (typeof scaleOrOptions === 'number') {
+      optionsIn = { scale: scaleOrOptions };
+    } else {
+      optionsIn = scaleOrOptions;
+    }
     const optionsToUse = joinObjects(
-      {}, { element: this.element, timeKeeper: this.timeKeeper }, ...options,
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, optionsIn,
     );
     // return new anim.PulseAnimationStep(optionsToUse);
     // return this.getStep(optionsToUse, 'PulseAnimationStep');
 
-    if (typeof optionsToUse.element === 'string' && this.element != null) {
-      optionsToUse.element = this.element.getElement(optionsToUse.element);
-    }
+    // if (typeof optionsToUse.element === 'string' && this.element != null) {
+    //   optionsToUse.element = this.element.getElement(optionsToUse.element);
+    // }
     // if (options.elements != null && options.element != null) {
     //   const elements = options.element.getElements(options.elements);
     //   const steps = [];
@@ -593,26 +657,54 @@ export default class AnimationManager {
 
   /**
    * Create a Scenario animation step tied to this element
-   * @param {OBJ_ScenarioAnimationStep} options
+   * @param {OBJ_ScenarioAnimationStep | OBJ_Scenario | string} scenarioOrOptions
    * @return {ScenarioAnimationStep}
    */
-  scenario(...options: Array<OBJ_ScenarioAnimationStep>) {
+  scenario(scenarioOrOptions: string | OBJ_Scenario | OBJ_ScenarioAnimationStep) {
+    let optionsIn;
+    if (typeof scenarioOrOptions === 'string') {
+      optionsIn = { target: scenarioOrOptions };  // $FlowFixMe
+    } else if (scenarioOrOptions.transform !== undefined) {
+      optionsIn = { target: scenarioOrOptions };
+    } else if (scenarioOrOptions.position !== undefined) {
+      optionsIn = { target: scenarioOrOptions };
+    } else if (scenarioOrOptions.rotation !== undefined) {
+      optionsIn = { target: scenarioOrOptions };
+    } else if (scenarioOrOptions.scale !== undefined) {
+      optionsIn = { target: scenarioOrOptions };
+    } else if (scenarioOrOptions.translation !== undefined) {
+      optionsIn = { target: scenarioOrOptions };
+    } else if (scenarioOrOptions.color !== undefined) {
+      optionsIn = { target: scenarioOrOptions };
+    } else if (scenarioOrOptions.isShown !== undefined) {
+      optionsIn = { target: scenarioOrOptions };
+    } else {
+      optionsIn = scenarioOrOptions;
+    }
     const optionsToUse = joinObjects(
-      {}, { element: this.element, timeKeeper: this.timeKeeper }, ...options,
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, optionsIn,
     );
-    // return new anim.ScenarioAnimationStep(optionsToUse);
     return this.getStep(optionsToUse, 'ScenarioAnimationStep');
   }
 
   /**
    * Create a Parallel animation step that animates
    * all child elements with the target scenario name
-   * @param {OBJ_ScenariosAnimationStep} options
+   * @param {string | OBJ_ScenariosAnimationStep} scenarioNameOrOptions
    * @return {ParallelAnimationStep}
    */
-  scenarios(...options: Array<OBJ_ParallelAnimationStep & OBJ_TransformAnimationStep>) {
-    const defaultOptions = { element: this.element, timeKeeper: this.timeKeeper };
-    const optionsToUse = joinObjects({}, defaultOptions, ...options);
+  scenarios(scenarioOrOptions: string | OBJ_ScenariosAnimationStep) {
+    let optionsIn;
+    if (typeof scenarioOrOptions === 'string') {
+      optionsIn = { target: scenarioOrOptions };
+    } else {
+      optionsIn = scenarioOrOptions;
+    }
+    const optionsToUse = joinObjects(
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, optionsIn,
+    );
+    // const defaultOptions = { element: this.element, timeKeeper: this.timeKeeper };
+    // const optionsToUse = joinObjects({}, defaultOptions, ...options);
     const elements = optionsToUse.element.getAllElementsWithScenario(optionsToUse.target);
     const steps = [];
     const simpleOptions = {};
@@ -630,42 +722,8 @@ export default class AnimationManager {
       'options',
       'element',
     ], options);
-    // if (this.element != null) {
-    //   state.element = {
-    //     f1Type: 'de',
-    //     state: this.element.getPath(),
-    //   };
-    // }
     return state;
   }
-
-  // _finishSetState(figure: Figure) {
-  //   for (let i = 0; i < this.animations.length; i += 1) {
-  //     const animationStepState = this.animations[i];
-  //     let animationStep = {};
-  //     if (animationStepState._stepType === 'builder') {
-  //       animationStep = new anim.AnimationBuilder();
-  //     }
-  //     if (animationStepState._stepType === 'position') {
-  //       animationStep = new anim.PositionAnimationStep();
-  //     }
-  //     joinObjects(animationStep, animationStepState);
-  //     animationStep._finishSetState(figure);
-  //     this.animations[i] = animationStep;
-  //   }
-  //   // this.animations.forEach((animation) => {
-  //   //   let animationStep = {};
-  //   //   if (animation.type === 'builder') {
-  //   //     animationStep = new anim.AnimationBuilder();
-  //   //   }
-  //   //   if (animation.type === 'position') {
-  //   //     animationStep = new anim.PositionAnimationStep();
-  //   //   }
-  //   //   joinObjects(animationStep, animation);
-  //   //   animation._finishSetState(figure);
-  //   //   // }
-  //   // });
-  // }
 
   setTimeDelta(delta: ?number) {
     this.animations.forEach((animation) => {

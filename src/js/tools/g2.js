@@ -3729,6 +3729,34 @@ export type TypeF1DefTransform = {
  */
 export type TypeParsableTransform = Array<string | ['s', number, number] | ['r', number] | ['t', number, number]> | string | Transform | TypeF1DefTransform;
 
+function isParsableTransform(value: any) {
+  if (value instanceof Transform) {
+    return true;
+  }
+  if (
+    Array.isArray(value)
+    && Array.isArray(value[0])
+    && (
+      value[0][0] === 'r' || value[0][0] === 's' || value[0][0] === 't'
+    )
+  ) {
+    return true;
+  }
+  if (value.f1Type != null && value.f1Type === 'tf') {
+    return true;
+  }
+  if (typeof value === 'string') {
+    let newValue;
+    try {
+      newValue = JSON.parse(value);
+    } catch {
+      return false;
+    }
+    return isParsableTransform(newValue);
+  }
+  return false;
+}
+
 function parseTransform<T>(inTransform: TypeParsableTransform, onFail: T): Transform | T | null {
   if (inTransform instanceof Transform) {
     return inTransform;
@@ -6169,4 +6197,6 @@ export {
   comparePoints,
   isBuffer,
   getPositionInRect,
+  isParsablePoint,
+  isParsableTransform,
 };
