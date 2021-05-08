@@ -62,4 +62,4 @@ ball.notifications.add('setTransform', () => {...});
 
 In this case, we are subscribing to the `'setTransform'` event notification of the `ball` FigureElement. Whenever ball's transform changes, our function that updates the text element with the latest coordinates of the ball will be called.
 
-See the api reference for more details on [NotificationManager](https://airladon.github.io/FigureOne/api/#subscriptionmanager).
+See the api reference for more details on [NotificationManager](https://airladon.github.io/FigureOne/api/#notificationmanager).
