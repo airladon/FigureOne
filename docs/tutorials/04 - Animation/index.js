@@ -19,10 +19,7 @@ const [s1, s2] = figure.add([
 
 
 // Dissolve in, rotate, then move to position
-s1.setOpacity(0.001);
-s2.setOpacity(0.001);
 s1.animations.new()
-  .delay(1)
   .dissolveIn()
   .rotation(Math.PI / 4)
   .position({ target: [0, 0], duration: 2 })
@@ -31,7 +28,6 @@ s1.animations.new()
 
 // Dissolve in, then rotate and move to position simultaneously
 s2.animations.new()
-  .delay(1)
   .dissolveIn()
   .inParallel([
     s2.animations.position({ target: [0, 0], duration: 3 }),
