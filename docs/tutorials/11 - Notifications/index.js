@@ -5,11 +5,9 @@ const [ball, text] = figure.add([
   {
     name: 'ball',
     method: 'primitives.polygon',
-    options: {
-      radius: 0.5,
-      sides: 100,
-      position: [0, 0],
-    },
+    radius: 0.5,
+    sides: 100,
+    position: [0, 0],
     mods: {
       isMovable: 'true',
     },
@@ -17,11 +15,9 @@ const [ball, text] = figure.add([
   {
     name: 'text ',
     method: 'primitives.text',
-    options: {
-      position: [0, -1.5],
-      text: '(0.0, 0.0)',
-      xAlign: 'center',
-    },
+    position: [0, -1.5],
+    text: '(0.0, 0.0)',
+    xAlign: 'center',
   },
 ]);
 
