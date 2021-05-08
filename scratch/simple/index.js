@@ -1,54 +1,44 @@
-// Initialize the figure with a default color
-const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
+const figure = new Fig.Figure();
 
-// const c = figure.add(
-//   {
-//     // name: 'c',
-//     method: 'collection',
-//     // Add two elements to the collection
-//     elements: [
-//       {
-//         // name: 'tri',
-//         method: 'triangle',
-//         height: 0.4,
-//         width: 0.4,
-//       },
-//       {
-//         // name: 'text',
-//         method: 'text',
-//         text: 'triangle',
-//         position: [0, -0.4],
-//         xAlign: 'center',
-//       },
-//     ],
-//   },
-// );
-
-// // When a collection rotates, then so does all its elements
-// c.animations.new()
-//   .rotation({ target: Math.PI * 1.999, direction: 1, duration: 5 })
-//   .start();
-const c = figure.add(
+// Add two squares to the figure
+const [s1, s2] = figure.add([
   {
-    method: 'collection',
-    // Add two elements to the collection
-    elements: [
-      {
-        method: 'triangle',
-        height: 0.4,
-        width: 0.4,
-      },
-      {
-        method: 'text',
-        text: 'triangle',
-        position: [0, -0.4],
-        xAlign: 'center',
-      },
-    ],
+    method: 'polygon',
+    sides: 4,
+    radius: 0.2,
+    position: [-0.4, 0],
+    color: [1, 0, 0, 1],
   },
-);
+  {
+    method: 'polygon',
+    sides: 4,
+    radius: 0.3,
+    position: [0.4, 0],
+    color: [0, 0, 1, 0.5],
+  },
+]);
 
-// When a collection rotates, then so does all its elements
-c.animations.new()
-  .rotation({ target: Math.PI * 1.999, direction: 1, duration: 5 })
+s2.hide();
+s1.animations.new()
+  .dissolveIn()
+  .rotation(Math.PI / 4)
+  .dissolveIn({ element: s2 })
+  .then(s2.animations.position({ target: [-0.4, 0], duration: 3 }))
   .start();
+
+// // Dissolve in, rotate, then move to position
+// s1.animations.new()
+//   .dissolveIn()
+//   .rotation(Math.PI / 4)
+//   .position({ target: [0, 0], duration: 2 })
+//   .start();
+
+
+// // Dissolve in, then rotate and move to position simultaneously
+// s2.animations.new()
+//   .dissolveIn()
+//   .inParallel([
+//     s2.animations.position({ target: [0, 0], duration: 3 }),
+//     s2.animations.rotation({ target: Math.PI / 4, duration: 3 }),
+//   ])
+//   .start();

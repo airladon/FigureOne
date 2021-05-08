@@ -3,13 +3,15 @@
 /* eslint-disable no-global-assign */
 
 __title = 'Tutorial - Animation';
-__duration = 12;
+__duration = 4;
 __timeStep = 0.5;
 __width = 500;
 __height = 500;
 __frames = [
   [0, `
-    figure.getElement('hexagon').animations.animations[0].startTime = null;
-    figure.getElement('hexagon').animations.animations[0].steps[0].startTime = null;
+    s1.animations.animations[0].startTime = null;
+    s1.animations.animations[0].steps[0].startTime = null;
+    s2.animations.animations[0].startTime = null;
+    s2.animations.animations[0].steps[0].startTime = null;
   `],
 ];
