@@ -6,11 +6,8 @@ const pow = () => {
   return xValues.map(x => [x, x ** 2]);
 };
 
-// Plot of single trace with auto axis scaling
+// Plot of single trace with auto axis generation
 figure.add({
-  name: 'plot',
   method: 'collections.plot',
-  options: {
-    trace: pow(),
-  },
+  trace: pow(),
 });
