@@ -3885,8 +3885,10 @@ class FigureElementCollection extends FigureElement {
         newElement.setScenario(firstScenario);
       }
 
-      if (`_${nameToUse}` in rootCollection
+      if (
+        `_${nameToUse}` in rootCollection
           && (addElementsToUse != null && addElementsToUse !== {})
+          && !methodPathToUse.endsWith('equation')
       ) {
         newElement.add(addElementsToUse);
         // addedElements.push(addElementsToUse);
