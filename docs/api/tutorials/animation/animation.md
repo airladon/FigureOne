@@ -2,7 +2,7 @@ Animations change figure elements over time.
 
 Each figure element has its own {@link AnimationManager} (`animations` property) that can coordinate animations for any element.
 
-An animation is a number of {@link AnimationStep}s in either series or parallel. The animation manager provides a way to create these steps, as well as build them into a complete animation.
+An animation is a number of {@link AnimationStep}s in either series or parallel. The animation manager provides a way to create these steps, build them into a complete animation, and then manage their execution.
 
 #### <a id="animation-boilerplate"></a> Animation Boilerplate
 To test examples within the 'Animation' section of the API reference create an `index.html` file and `index.js` file.
