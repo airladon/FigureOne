@@ -4,34 +4,28 @@ const figure = new Fig.Figure();
 // Figure consists of an equation and a description
 const [eqn, description] = figure.add([
   {
-    name: 'eqn',
     method: 'equation',
-    options: {
-      formDefaults: { alignment: { xAlign: 'center' } },
-      forms: {
-        0: ['a', '_ + ', 'b_1', '_ = ', 'c'],
-        1: ['a', '_ + ', 'b_1', '_ - b_2', '_ = ', 'c', '_ - ', 'b_3'],
-        2: ['a', '_ = ', 'c', '_ - ', 'b_3'],
-      },
-      formSeries: ['0', '1', '2'],
+    formDefaults: { alignment: { xAlign: 'center' } },
+    forms: {
+      0: ['a', '_ + ', 'b_1', '_ = ', 'c'],
+      1: ['a', '_ + ', 'b_1', '_ - b_2', '_ = ', 'c', '_ - ', 'b_3'],
+      2: ['a', '_ = ', 'c', '_ - ', 'b_3'],
     },
+    formSeries: ['0', '1', '2'],
     mods: {
       isTouchable: true,
       touchBorder: 0.1,
     },
   },
   {
-    name: 'description',
     method: 'primitives.textLines',
-    options: {
-      modifiers: {
-        a: { font: { family: 'Times New Roman', style: 'italic', size: 0.12 } },
-        b: { font: { family: 'Times New Roman', style: 'italic', size: 0.12 } },
-      },
-      xAlign: 'center',
-      font: { size: 0.1 },
-      position: [0, -0.5],
+    modifiers: {
+      a: { font: { family: 'Times New Roman', style: 'italic', size: 0.12 } },
+      b: { font: { family: 'Times New Roman', style: 'italic', size: 0.12 } },
     },
+    xAlign: 'center',
+    font: { size: 0.1 },
+    position: [0, -0.5],
   },
 ]);
 

@@ -84,7 +84,9 @@ c.animations.new()
   .start();
 ```
 
-## Element Access
+## Element Names
+
+Each element definition object accepts a `name` property. Many of the tutorials do not use the element name property, but as the figure becomes more complicated it can be useful for both code readability and element access.
 
 Any elements added into a figure are returned from the `figure.add` method. If an array of elements are added, then an array of elements will be returned.
 
