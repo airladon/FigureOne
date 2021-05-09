@@ -379,7 +379,7 @@ function setupFigure() {
       if (index === 0) { b.setColor(color0); }
     });
     balls.toFront(['ball0', 'ball40']);
-    const [tracker] = medium.add(ball(0, 'Tracker', ballSize));
+    const tracker = medium.add(ball(0, 'Tracker', ballSize));
     tracker.setColor(color3);
     const movePad = medium.getElement('movePad');
     const wavelength = medium.getElement('wavelength');
