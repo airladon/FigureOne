@@ -130,11 +130,11 @@ export type OBJ_LineStyleSimple_Defined = {
  * figure.add(
  *   {
  *     name: 'c',
- *     method: 'collection',
+ *     make: 'collection',
  *     elements: [         // add two elements to the collection
  *       {
  *         name: 'hex',
- *         method: 'polygon',
+ *         make: 'polygon',
  *         options: {
  *           sides: 6,
  *           radius: 0.5,
@@ -142,7 +142,7 @@ export type OBJ_LineStyleSimple_Defined = {
  *       },
  *       {
  *         name: 'text',
- *         method: 'text',
+ *         make: 'text',
  *         options: {
  *           text: 'hexagon',
  *           position: [0, -0.8],
@@ -380,7 +380,7 @@ export type OBJ_PulseScale = {
  * // Square and triangle
  * figure.add({
  *   name: 'squareAndTri',
- *   method: 'generic',
+ *   make: 'generic',
  *   options: {
  *     points: [
  *       [-1, 0.5], [-1, -0.5], [0, 0.5],
@@ -393,7 +393,7 @@ export type OBJ_PulseScale = {
  * // rhombus with larger touch borders
  * figure.add({
  *   name: 'rhombus',
- *   method: 'generic',
+ *   make: 'generic',
  *   options: {
  *     points: [
  *       [-0.5, -0.5], [0, 0.5], [1, 0.5],
@@ -415,7 +415,7 @@ export type OBJ_PulseScale = {
  * // Grid of triangles
  * figure.add({
  *   name: 'gridOfTris',
- *   method: 'generic',
+ *   make: 'generic',
  *   options: {
  *     points: [
  *       [-1, -1], [-0.7, -1], [-1, -0.7],
@@ -562,7 +562,7 @@ export type OBJ_Generic = {
  * figure.add(
  *   {
  *     name: 'p',
- *     method: 'polyline',
+ *     make: 'polyline',
  *     options: {
  *       points: [[-0.5, -0.5], [-0.1, 0.5], [0.3, -0.2], [0.5, 0.5]],
  *       width: 0.05,
@@ -575,7 +575,7 @@ export type OBJ_Generic = {
  * figure.add(
  *   {
  *     name: 'p',
- *     method: 'polyline',
+ *     make: 'polyline',
  *     options: {
  *       points: [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]],
  *       width: 0.05,
@@ -591,7 +591,7 @@ export type OBJ_Generic = {
  * figure.add(
  *  {
  *    name: 'p',
- *    method: 'polyline',
+ *    make: 'polyline',
  *    options: {
  *      points: [[-0.5, -0.5], [0.5, -0.5], [0, 0.5]],
  *      width: 0.05,
@@ -605,7 +605,7 @@ export type OBJ_Generic = {
  * // Zig zag with arrows
  * figure.add({
  *   name: 'arrowedLine',
- *   method: 'polyline',
+ *   make: 'polyline',
  *   options: {
  *     points: [[0, 0], [1, 0], [0, 0.7], [1, 0.7]],
  *     width: 0.05,
@@ -721,7 +721,7 @@ export type OBJ_LineStyle = {
  * // Simple filled hexagon
  * figure.add({
  *   name: 'hexagon',
- *   method: 'polygon',
+ *   make: 'polygon',
  *   options: {
  *     sides: 6,
  *     radius: 0.5,
@@ -744,7 +744,7 @@ export type OBJ_LineStyle = {
  * // Half octagon rotated
  * figure.add({
  *   name: 'halfOctagon',
- *   method: 'polygon',
+ *   make: 'polygon',
  *   options: {
  *     sides: 8,
  *     radius: 0.5,
@@ -810,7 +810,7 @@ type OBJ_Polygon_Defined = {
  * // Simple 5 pointed star
  * figure.add({
  *   name: 's',
- *   method: 'star',
+ *   make: 'star',
  *   options: {
  *     radius: 0.5,
  *     sides: 5,
@@ -821,7 +821,7 @@ type OBJ_Polygon_Defined = {
  * // 7 pointed dashed line star
  * figure.add({
  *   name: 's',
- *   method: 'star',
+ *   make: 'star',
  *   options: {
  *     radius: 0.5,
  *     innerRadius: 0.3,
@@ -837,7 +837,7 @@ type OBJ_Polygon_Defined = {
  * // Star surrounded by stars
  * figure.add({
  *   name: 's',
- *   method: 'star',
+ *   make: 'star',
  *   options: {
  *     radius: 0.1,
  *     sides: 5,
@@ -910,7 +910,7 @@ export type OBJ_Star_Defined = {
  * // Filled rectangle
  * figure.add({
  *   name: 'r',
- *   method: 'rectangle',
+ *   make: 'rectangle',
  *   options: {
  *     width: 1,
  *     height: 0.5,
@@ -921,7 +921,7 @@ export type OBJ_Star_Defined = {
  * // Corners with radius and dashed line
  * figure.add({
  *   name: 'r',
- *   method: 'rectangle',
+ *   make: 'rectangle',
  *   options: {
  *     width: 0.5,
  *     height: 0.5,
@@ -940,7 +940,7 @@ export type OBJ_Star_Defined = {
  * // Rectangle copies rotated
  * figure.add({
  *   name: 'r',
- *   method: 'rectangle',
+ *   make: 'rectangle',
  *   options: {
  *     width: 0.5,
  *     height: 0.5,
@@ -1010,7 +1010,7 @@ type OBJ_Rectangle_Defined = {
  * // Filled ellipse
  * figure.add({
  *   name: 'e',
- *   method: 'ellipse',
+ *   make: 'ellipse',
  *   options: {
  *     height: 1,
  *     width: 0.5,
@@ -1022,7 +1022,7 @@ type OBJ_Rectangle_Defined = {
  * // Dashed line circle
  * figure.add({
  *   name: 'e',
- *   method: 'ellipse',
+ *   make: 'ellipse',
  *   options: {
  *     height: 1,
  *     width: 1,
@@ -1038,7 +1038,7 @@ type OBJ_Rectangle_Defined = {
  * // Ellipse grid
  * figure.add({
  *   name: 'e',
- *   method: 'ellipse',
+ *   make: 'ellipse',
  *   options: {
  *     height: 0.08,
  *     width: 0.2,
@@ -1163,7 +1163,7 @@ export type OBJ_TriangleSideRotationAlignment = {
  * // Right angle triangle
  * figure.add({
  *   name: 't',
- *   method: 'triangle',
+ *   make: 'triangle',
  *   options: {
  *     width: 0.5,
  *     height: 1,
@@ -1188,7 +1188,7 @@ export type OBJ_TriangleSideRotationAlignment = {
  * // Star from 4 equilateral triangles
  * figure.add({
  *   name: 'star',
- *   method: 'triangle',
+ *   make: 'triangle',
  *   options: {
  *     SSS: [1, 1, 1],
  *     xAlign: 'centroid',
@@ -1273,7 +1273,7 @@ export type OBJ_Triangle = {
  * // Simple line defined by two points
  * figure.add({
  *   name: 'l',
- *   method: 'line',
+ *   make: 'line',
  *   options: {
  *     p1: [0, 0],
  *     p2: [0, 1],
@@ -1285,7 +1285,7 @@ export type OBJ_Triangle = {
  * // Dashed line defined by a point, a length and an angle
  * figure.add({
  *   name: 'l',
- *   method: 'line',
+ *   make: 'line',
  *   options: {
  *     p1: [0, 0],
  *     length: 1,
@@ -1299,7 +1299,7 @@ export type OBJ_Triangle = {
  * // Line with two different arrows on ends
  * figure.add({
  *   name: 'l',
- *   method: 'line',
+ *   make: 'line',
  *   options: {
  *     p1: [0, 0],
  *     p2: [0, 1],
@@ -1368,7 +1368,7 @@ export type OBJ_Line = {
  * // Grid defined by xStep and yStep
  * figure.add({
  *   name: 'g',
- *   method: 'grid',
+ *   make: 'grid',
  *   options: {
  *     bounds: [-0.5, -0.5, 1, 1],
  *     xStep: 0.25,
@@ -1396,7 +1396,7 @@ export type OBJ_Line = {
  * // Grid of grids
  * figure.add({
  *   name: 'g',
- *   method: 'grid',
+ *   make: 'grid',
  *   options: {
  *     bounds: [-0.7, -0.7, 0.6, 0.6],
  *     xNum: 4,
@@ -1487,7 +1487,7 @@ export type OBJ_Grid = {
  * // Triangle arrow with tail
  * figure.add({
  *   name: 'a',
- *   method: 'arrow',
+ *   make: 'arrow',
  *   options: {
  *     head: 'triangle',
  *     tail: 0.15,
@@ -1499,7 +1499,7 @@ export type OBJ_Grid = {
  * // Barb arrow with 0 tail
  * figure.add({
  *   name: 'a',
- *   method: 'arrow',
+ *   make: 'arrow',
  *   options: {
  *     head: 'barb',
  *     angle: Math.PI / 2,
@@ -1524,7 +1524,7 @@ export type OBJ_Grid = {
  * // Create arrow and copy to transforms
  * figure.add({
  *   name: 'a',
- *   method: 'arrow',
+ *   make: 'arrow',
  *   options: {
  *     head: 'barb',
  *     align: 'mid',
@@ -1636,7 +1636,7 @@ export type OBJ_TextDefinition = {
  * figure.add(
  *   {
  *     name: 't',
- *     method: 'text',
+ *     make: 'text',
  *     options: {
  *       text: 'hello',
  *       xAlign: 'center',
@@ -1650,7 +1650,7 @@ export type OBJ_TextDefinition = {
  * figure.add(
  *   {
  *     name: 't',
- *     method: 'text',
+ *     make: 'text',
  *     options: {
  *       text: [
  *         {
@@ -1759,7 +1759,7 @@ export type OBJ_TextLineDefinition = {
  * figure.add(
  *   {
  *     name: 'line',
- *     method: 'text.line',
+ *     make: 'text.line',
  *     options: {
  *       text: [
  *         'Hello ',
@@ -1924,7 +1924,7 @@ export type OBJ_TextModifiersDefinition = {
  * figure.add(
  *   {
  *     name: 't',
- *     method: 'text.lines',
+ *     make: 'text.lines',
  *     options: {
  *       text: [
  *         'First line',
@@ -1945,7 +1945,7 @@ export type OBJ_TextModifiersDefinition = {
  * figure.add(
  *   {
  *     name: 'lines',
- *     method: 'textLines',
+ *     make: 'textLines',
  *     options: {
  *        text: [
  *          'Lines justified to the left',

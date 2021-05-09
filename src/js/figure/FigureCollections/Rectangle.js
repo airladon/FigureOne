@@ -137,7 +137,7 @@ export type COL_Rectangle = {
  * // Simple rectangle
  * figure.add({
  *   name: 'rect',
- *   method: 'collections.rectangle',
+ *   make: 'collections.rectangle',
  *   options: {
  *     width: 2,
  *     height: 1,
@@ -167,7 +167,7 @@ export type COL_Rectangle = {
  * figure.add([
  *   {
  *     name: 'rect',
- *     method: 'collections.rectangle',
+ *     make: 'collections.rectangle',
  *     options: {
  *       color: [0.3, 0.3, 1, 1],
  *       line: { width: 0.01 },
@@ -175,7 +175,7 @@ export type COL_Rectangle = {
  *   },
  *   {
  *     name: 'eqn',
- *     method: 'equation',
+ *     make: 'equation',
  *     options: {
  *       forms: { 0: [{ frac: ['a', 'vinculum', 'b'] }, ' ', 'c'] },
  *       position: [1, 0],
@@ -201,7 +201,7 @@ export type COL_Rectangle = {
  * figure.add([
  *   {
  *     name: 'rect',
- *     method: 'collections.rectangle',
+ *     make: 'collections.rectangle',
  *     options: {
  *       width: 0.5,
  *       height: 0.3,

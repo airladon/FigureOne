@@ -20,11 +20,11 @@ describe('Figure Stop', () => {
     figure.add([
       {
         name: 'a',
-        method: 'polygon',
+        make: 'polygon',
       },
       {
         name: 'b',
-        method: 'polygon',
+        make: 'polygon',
       },
     ]);
     a = figure.elements._a;

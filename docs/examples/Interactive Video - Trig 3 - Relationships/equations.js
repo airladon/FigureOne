@@ -22,7 +22,7 @@ function makeEquation() {
 
   figure.add({
     name: 'eqn',
-    method: 'equation',
+    make: 'equation',
     options: {
       scale: 1.2,
       elements: {

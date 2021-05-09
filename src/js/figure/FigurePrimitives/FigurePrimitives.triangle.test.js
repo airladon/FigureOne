@@ -30,7 +30,7 @@ describe('Polyline', () => {
     addElement = (optionsName) => {
       figure.add(joinObjects({
         name: 't',
-        method: 'shapes.triangle',
+        make: 'shapes.triangle',
       }, options[optionsName]));
       figure.initialize();
       t = figure.elements._t;

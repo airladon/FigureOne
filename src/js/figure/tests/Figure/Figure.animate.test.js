@@ -20,15 +20,15 @@ describe('Animate To State', () => {
     figure.add([
       {
         name: 'c',
-        method: 'collection',
+        make: 'collection',
         elements: [
           {
             name: 'p2',
-            method: 'polygon',
+            make: 'polygon',
           },
           {
             name: 'p3',
-            method: 'polygon',
+            make: 'polygon',
             mods: {
               dependantTransform: true,
             },
@@ -37,7 +37,7 @@ describe('Animate To State', () => {
       },
       {
         name: 'p1',
-        method: 'polygon',
+        make: 'polygon',
       },
     ]);
     c = figure.elements._c;

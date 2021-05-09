@@ -562,7 +562,7 @@ export type OBJ_PulseAngleAnimationStep = {
  * // Angle with size label
  * figure.add({
  *   name: 'a',
- *   method: 'collections.angle',
+ *   make: 'collections.angle',
  *   options: {
  *     angle: Math.PI / 4,
  *     label: null,
@@ -596,7 +596,7 @@ export type OBJ_PulseAngleAnimationStep = {
  * // Multi colored angle with arrows and an equation label
  * figure.add({
  *   name: 'a',
- *   method: 'collections.angle',
+ *   make: 'collections.angle',
  *   options: {
  *     angle: Math.PI / 4 * 3,
  *     label: {
@@ -646,7 +646,7 @@ export type OBJ_PulseAngleAnimationStep = {
  * // Change angle animation
  * figure.add({
  *   name: 'a',
- *   method: 'collections.angle',
+ *   make: 'collections.angle',
  *   options: {
  *     angle: Math.PI / 4,
  *     label: null,
@@ -668,7 +668,7 @@ export type OBJ_PulseAngleAnimationStep = {
  * // Movable angle
  * figure.add({
  *   name: 'a',
- *   method: 'collections.angle',
+ *   make: 'collections.angle',
  *   options: {
  *     angle: Math.PI / 4 * 3,
  *     label: {

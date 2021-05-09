@@ -67,7 +67,7 @@ import type FigureCollections from './FigureCollections';
  * // Axis with no ticks
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
+ *   make: 'collections.axis',
  *   options: {
  *     length: 2,
  *   },
@@ -77,7 +77,7 @@ import type FigureCollections from './FigureCollections';
  * // Axis with default ticks
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
+ *   make: 'collections.axis',
  *   options: {
  *     length: 2,
  *     ticks: true,
@@ -88,7 +88,7 @@ import type FigureCollections from './FigureCollections';
  * // Axis ticks with custom step and color
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
+ *   make: 'collections.axis',
  *   options: {
  *     length: 2,
  *     ticks: { step: 0.5, color: [0, 0, 1, 1] },
@@ -99,7 +99,7 @@ import type FigureCollections from './FigureCollections';
  * // Axis with ticks between 0.2 and 0.8 below the line
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
+ *   make: 'collections.axis',
  *   options: {
  *     length: 2,
  *     ticks: {
@@ -117,7 +117,7 @@ import type FigureCollections from './FigureCollections';
  * // Axis with ticks at values
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
+ *   make: 'collections.axis',
  *   options: {
  *     length: 2,
  *     ticks: { values: [0, 0.2, 0.8, 1] },
@@ -210,7 +210,7 @@ export type OBJ_AxisTicks_Fixed = {
  * // By default labels are displayed if there are ticks
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
+ *   make: 'collections.axis',
  *   options: {
  *     length: 2,
  *     ticks: true,
@@ -221,7 +221,7 @@ export type OBJ_AxisTicks_Fixed = {
  * // If there are multiple ticks, then just the first are used to show labels
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
+ *   make: 'collections.axis',
  *   options: {
  *     length: 2,
  *     ticks: [
@@ -236,7 +236,7 @@ export type OBJ_AxisTicks_Fixed = {
  * // xAlign, yAlign and offset to make it look good.
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
+ *   make: 'collections.axis',
  *   options: {
  *     axis: 'x',
  *     length: 2,
@@ -257,7 +257,7 @@ export type OBJ_AxisTicks_Fixed = {
  * // Specific labels can be hidden
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
+ *   make: 'collections.axis',
  *   options: {
  *     length: 2,
  *     ticks: true,
@@ -269,7 +269,7 @@ export type OBJ_AxisTicks_Fixed = {
  * // Labels can be at specific values, and have a specific font
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
+ *   make: 'collections.axis',
  *   options: {
  *     length: 2,
  *     ticks: true,
@@ -285,7 +285,7 @@ export type OBJ_AxisTicks_Fixed = {
  * // then they will be drawn in the same format as the actual values.
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
+ *   make: 'collections.axis',
  *   options: {
  *     length: 2,
  *     ticks: true,
@@ -432,7 +432,7 @@ export type COL_Axis = {
  * // By default an axis is an 'x' axis
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
+ *   make: 'collections.axis',
  *   options: {
  *     ticks: true,
  *   },
@@ -460,7 +460,7 @@ export type COL_Axis = {
  * // An axis can have multiple sets of ticks and a title
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
+ *   make: 'collections.axis',
  *   options: {
  *     ticks: [
  *       { step: 0.2, length: 0.1 },
@@ -478,7 +478,7 @@ export type COL_Axis = {
  * // and have arrows
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
+ *   make: 'collections.axis',
  *   options: {
  *     length: 2.5,
  *     start: -130,
@@ -510,7 +510,7 @@ export type COL_Axis = {
  * // formatting
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
+ *   make: 'collections.axis',
  *   options: {
  *     stop: 2,
  *     ticks: { step: 0.5 },

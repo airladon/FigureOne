@@ -128,7 +128,7 @@ export type COL_Trace = {
  * // the line will be solid, and it will be plotted against the 'x' and 'y' axes.
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
+ *   make: 'collections.plot',
  *   options: {
  *     trace: pow(),
  *   },
@@ -138,7 +138,7 @@ export type COL_Trace = {
  * // Change the thickness and color of the line
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
+ *   make: 'collections.plot',
  *   options: {
  *     trace: {
  *       points: pow(),
@@ -154,7 +154,7 @@ export type COL_Trace = {
  * // Default Markers
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
+ *   make: 'collections.plot',
  *   options: {
  *     trace: {
  *       points: pow(2, 10, 1),
@@ -167,7 +167,7 @@ export type COL_Trace = {
  * // Custom Markers
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
+ *   make: 'collections.plot',
  *   options: {
  *     trace: {
  *       points: pow(2, 10, 1),
@@ -184,7 +184,7 @@ export type COL_Trace = {
  * // Line and markers
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
+ *   make: 'collections.plot',
  *   options: {
  *     trace: {
  *       points: pow(2, 10, 1),
@@ -201,7 +201,7 @@ export type COL_Trace = {
  * // Use names in trace definitions to customize legend
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
+ *   make: 'collections.plot',
  *   options: {
  *     trace: [
  *       pow(2),

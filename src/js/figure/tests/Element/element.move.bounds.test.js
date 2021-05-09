@@ -17,7 +17,7 @@ describe('Set Position with Bounds', () => {
     figure.add([
       {
         name: 'a',
-        method: 'polygon',
+        make: 'polygon',
         options: {
           radius: 1,
         },

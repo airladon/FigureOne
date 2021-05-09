@@ -3,7 +3,7 @@ const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
 
 figure.add(
   {
-    method: 'equation',
+    make: 'equation',
     // Equation elements are the individual terms in the equation
     elements: {
       a: 'a',

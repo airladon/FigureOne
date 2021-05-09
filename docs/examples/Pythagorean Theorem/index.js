@@ -18,7 +18,7 @@ const bc = (content, comment, symbol = null, scale = 0.6, inSize = false) => ({
 // Add the equation with all it's forms
 figure.add({
   name: 'eqn',
-  method: 'equation',
+  make: 'equation',
   options: {
     position: [0, -2],
     scale: 1.4,
@@ -88,7 +88,7 @@ eqn.setTouchable();
 // and rotation)
 const makeTriangle = (name, scenario) => ({
   name,
-  method: 'collections.polyline',
+  make: 'collections.polyline',
   options: {
     color: [1, 0, 0, 1],
     points: [[0, 0], [0, 1], [2, 0]],
@@ -156,7 +156,7 @@ setUpdate(tri4);
 figure.add([
   {
     name: 'start',
-    method: 'text',
+    make: 'text',
     options: {
       text: 'Touch here to start',
       position: [-0.4, -1],
@@ -166,7 +166,7 @@ figure.add([
   },
   {
     name: 'prev',
-    method: 'text',
+    make: 'text',
     options: {
       text: 'Touch equation to step forward, or touch here to step back',
       position: [0, -2.8],

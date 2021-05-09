@@ -27,7 +27,7 @@ if (typeof process === 'object') {
   figure.add([
     {
       name: 'origin',
-      method: 'polygon',
+      make: 'polygon',
       options: {
         radius: 0.01,
         line: { width: 0.01 },
@@ -37,7 +37,7 @@ if (typeof process === 'object') {
     },
     {
       name: 'grid',
-      method: 'grid',
+      make: 'grid',
       options: {
         bounds: [-figureWidth / 2, -figureHeight / 2, figureWidth, figureHeight],
         yStep: 0.1,
@@ -48,7 +48,7 @@ if (typeof process === 'object') {
     },
     {
       name: 'gridMajor',
-      method: 'grid',
+      make: 'grid',
       options: {
         bounds: [-figureWidth / 2, -figureHeight / 2, figureWidth, figureHeight],
         yStep: 0.5,
@@ -69,14 +69,14 @@ if (typeof process === 'object') {
 const xValues = tools.math.range(-4, 3.5, 1);
 const yValues = tools.math.range(3.5, -3.5, -1);
 let index = 0;
-const makeShape = (name, method, elements, options) => {
+const makeShape = (name, make, elements, options) => {
   const x = xValues[index % xValues.length];
   const y = yValues[Math.floor(index / xValues.length)];
   const indexName = `${index}`;
   index += 1;
   return {
     name,
-    method,
+    make,
     elements,
     options: tools.misc.joinObjects({}, {
       position: [x, y],
@@ -90,7 +90,7 @@ const makeShape = (name, method, elements, options) => {
 
 const elem = (name, options) => ({
   name,
-  method: 'polygon',
+  make: 'polygon',
   options: tools.misc.joinObjects({}, {
     radius: 0.1,
     position: [0, name === 'a' ? 0.2 : -0.2],

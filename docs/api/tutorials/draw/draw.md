@@ -47,7 +47,7 @@ Another way to create and add the same shape to the figure is to use the `Figure
 ```javascript
 figure.add({
   name: 'p',
-  method: 'polygon',
+  make: 'polygon',
   options: {
     radius: 0.2,
     color: [0, 0, 1, 1],
@@ -90,7 +90,7 @@ To draw this shape, you would need to draw the two triangles, which means drawin
 ```javascript
 figure.add({
   name: 'rectangle',
-  method: 'generic',
+  make: 'generic',
   options: {
     points: [
       [-2, -1], [-2, 1], [2, 1],
@@ -114,7 +114,7 @@ Therefore, to draw the same rectangle we would draw the first triangle with the 
 ```javascript
 figure.add({
   name: 'rectangle',
-  method: 'generic',
+  make: 'generic',
   options: {
     points: [
       [-2, 1], [-2, -1], [2, 1],  // first triangle
@@ -140,7 +140,7 @@ Therefore, to draw the same rectangle we would draw the first point 1, then comp
 ```javascript
 figure.add({
   name: 'rectangle',
-  method: 'generic',
+  make: 'generic',
   options: {
     points: [
       [-2, -1],         // first point (vertex 1)
@@ -170,7 +170,7 @@ For instance, to draw a rectangle outline:
 ```javascript
 figure.add({
   name: 'rectangle',
-  method: 'generic',
+  make: 'generic',
   options: {
     points: [
       [-2, -1], [-2, 1],  // left edge

@@ -117,7 +117,7 @@ require(['Fig'], function(Fig) {
 
     figure.add({
       name: 'eqn',
-      method: 'equation',
+      make: 'equation',
       options: {
         position: [-0.4, -0.1],
         scale: 2,

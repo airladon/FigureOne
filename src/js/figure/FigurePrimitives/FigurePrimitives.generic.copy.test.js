@@ -33,7 +33,7 @@ describe('Figure Primitive Generic Copy', () => {
     addElement = (copyOption) => {
       figure.add({
         name: 'a',
-        method: 'shapes.generic',
+        make: 'shapes.generic',
         options: {
           points: [[0, 0], [0.1, 0.1]],
           copy: copyOption,

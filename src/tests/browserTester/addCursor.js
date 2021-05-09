@@ -4,7 +4,7 @@
 function __addCursor(__figure) {
   __figure.add({
     name: '_cursor_',
-    method: 'collections.cursor',
+    make: 'collections.cursor',
     options: {
       position: [0, 0],
       color: [0.8, 0.8, 0, 1],

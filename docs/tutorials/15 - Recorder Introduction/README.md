@@ -75,7 +75,7 @@ const figure = new Fig.Figure();
 
 figure.add({
   name: 'ball',
-  method: 'primitives.polygon',
+  make: 'primitives.polygon',
   options: {
     radius: 0.3,
     sides: 100,

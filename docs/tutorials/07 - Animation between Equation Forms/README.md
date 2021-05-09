@@ -12,7 +12,7 @@ Open `index.html` in a browser to view example.
 const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
 const eqn = figure.add(
   {
-    method: 'equation',
+    make: 'equation',
     elements: {
       v: { symbol: 'vinculum' },
       equals: ' = ',

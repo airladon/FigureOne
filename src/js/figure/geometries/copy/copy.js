@@ -89,7 +89,7 @@ import {
  * // Grid copy
  * figure.add({
  *   name: 'triGrid',
- *   method: 'polygon',
+ *   make: 'polygon',
  *   options: {
  *     radius: 0.1,
  *     sides: 3,
@@ -114,7 +114,7 @@ import {
  * // Radial lines copy
  * figure.add({
  *   name: 'radialLines',
- *   method: 'generic',
+ *   make: 'generic',
  *   options: {
  *     points: [
  *       [-0.2, -0.1], [-0.2, 0.1], [0.2, 0.1],
@@ -138,7 +138,7 @@ import {
  * // Ring copy (without original shape)
  * figure.add({
  *   name: 'halfRings',
- *   method: 'polygon',
+ *   make: 'polygon',
  *   options: {
  *     radius: 0.1,
  *     sides: 20,

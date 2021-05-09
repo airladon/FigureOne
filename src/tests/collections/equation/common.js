@@ -12,7 +12,7 @@ function makeShape(name, options, mods, getPos) {
   index += 1;
   const o = {
     name,
-    method: 'collections.equation',
+    make: 'collections.equation',
     options: tools.misc.joinObjects({}, {
       color: [1, 0, 0, 0.9],
       position: [0, 0],

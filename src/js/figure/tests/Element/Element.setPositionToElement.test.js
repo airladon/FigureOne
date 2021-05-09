@@ -19,21 +19,21 @@ describe('Figure Recorder', () => {
     figure.add([
       {
         name: 'a',
-        method: 'collection',
+        make: 'collection',
         elements: [
           {
             name: 'a',
-            method: 'polygon',
+            make: 'polygon',
           },
         ],
       },
       {
         name: 'b',
-        method: 'collection',
+        make: 'collection',
         elements: [
           {
             name: 'b',
-            method: 'polygon',
+            make: 'polygon',
           },
         ],
       },

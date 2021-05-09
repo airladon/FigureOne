@@ -12,7 +12,7 @@ function makeShape(name, options, lineOptions, mods, getPos) {
   index += 1;
   const o = {
     name,
-    method: 'primitives.arrow',
+    make: 'primitives.arrow',
     options: tools.misc.joinObjects({}, {
       width: 0.4,
       length: 0.4,

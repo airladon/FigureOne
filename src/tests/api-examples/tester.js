@@ -35,7 +35,7 @@ const figure = new Fig.Figure({
 figure.add([
   {
     name: '__minorGrid',
-    method: 'primitives.grid',
+    make: 'primitives.grid',
     options: {
       position: [0, 0],
       color: [0.9, 0.9, 0.9, 1],
@@ -47,7 +47,7 @@ figure.add([
   },
   {
     name: '__majorGrid',
-    method: 'primitives.grid',
+    make: 'primitives.grid',
     options: {
       position: [0, 0],
       color: [0.9, 0.9, 0.9, 1],
@@ -59,7 +59,7 @@ figure.add([
   },
   {
     name: '__origin',
-    method: 'primitives.polygon',
+    make: 'primitives.polygon',
     options: {
       color: [0.9, 0.9, 0.9, 1],
       radius: 0.025,

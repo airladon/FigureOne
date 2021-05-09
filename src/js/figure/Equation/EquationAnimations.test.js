@@ -40,7 +40,7 @@ describe('Equation Animation', () => {
       simple: () => {
         figure.add([{
           name: 'eqn',
-          method: 'equation',
+          make: 'equation',
           options: {
             color: col(1),
             elements: {

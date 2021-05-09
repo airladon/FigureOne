@@ -30,7 +30,7 @@ const figure = new Fig.Figure();
 // Add a triangle
 figure.add(
   {
-    method: 'triangle',
+    make: 'triangle',
     width: 1,
     height: 1,
     color: [1, 0, 0, 1],
@@ -83,7 +83,7 @@ Next, a figure element in the shape of a triangle is added.
 ```js
 figure.add(
   {
-    method: 'triangle',
+    make: 'triangle',
     width: 1,
     height: 1,
     color: [1, 0, 0, 1],

@@ -104,11 +104,11 @@ const figure = new Fig.Figure({ limits: [0, 0, 6, 4 ]});
 figure.add(
   {
     name: 'labeledLine',
-    method: 'collections.collection',
+    make: 'collections.collection',
     elements: [
       {
         name: 'line',
-        method: 'primitives.line',
+        make: 'primitives.line',
         options: {
           p1: [0, 0],
           p2: [2, 0],
@@ -118,7 +118,7 @@ figure.add(
       },
       {
         name: 'label',
-        method: 'primitives.text',
+        make: 'primitives.text',
         options: {
           text: 'Line 1',
           position: [1, 0.1],

@@ -308,7 +308,7 @@ describe('Tools Lines', () => {
 // figure.add([
 //   {
 //     name: 'r',
-//     method: 'shapes.generic',
+//     make: 'shapes.generic',
 //     options: {
 //       points: out,
 //       drawType: 'triangles',

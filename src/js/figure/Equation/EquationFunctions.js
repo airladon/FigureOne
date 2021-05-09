@@ -89,7 +89,7 @@ export function getFigureElement(
  * @example
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: { equals: ' = ' },
  *     forms: {
@@ -178,7 +178,7 @@ export type TypeEquationPhrase =
  * // Example showing the difference between with and without container
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     forms: {
  *       // Container object definition
@@ -270,7 +270,7 @@ export type EQN_Container = {
  * figure.add([
  *   {
  *     name: 'rect1',
- *     method: 'equation',
+ *     make: 'equation',
  *     options: {
  *       forms: {
  *         0: [
@@ -320,7 +320,7 @@ export type EQN_Offset = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     forms: {
  *       1: { frac: ['a', 'vinculum', 'b'] },
@@ -333,7 +333,7 @@ export type EQN_Offset = {
  * // Example showing object and array fraction definitions, and nesting
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       v1: { symbol: 'vinculum' },
@@ -444,7 +444,7 @@ export type EQN_Fraction = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     forms: {
  *       2: ['a', { scale: ['b', 2] }, 'c'],
@@ -456,7 +456,7 @@ export type EQN_Fraction = {
  * // Some different bracket examples
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     forms: {
  *       // Default
@@ -544,7 +544,7 @@ export type EQN_Scale = {
  * @example
  * // Simple
  * figure.add({
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       lb: { symbol: 'bracket', side: 'left' },
@@ -560,7 +560,7 @@ export type EQN_Scale = {
  * // Some different bracket examples
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       lb: { symbol: 'bracket', side: 'left' },
@@ -662,7 +662,7 @@ export type EQN_Bracket = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     forms: {
  *       1: { root: ['radical', 'a'] },
@@ -675,7 +675,7 @@ export type EQN_Bracket = {
  * // Example showing object and array root definitions, and custom roots
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       r: { symbol: 'radical' },
@@ -799,7 +799,7 @@ export type EQN_Root = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       x: { symbol: 'strike', color: [0.6, 0.6, 0.6, 1] },
@@ -815,7 +815,7 @@ export type EQN_Root = {
  * // Some different strike examples
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       s1: { symbol: 'strike', color: [0.6, 0.6, 0.6, 1] },
@@ -915,7 +915,7 @@ export type EQN_Strike = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     forms: {
  *       1: { box: ['a', 'box', true, 0.1] },
@@ -928,7 +928,7 @@ export type EQN_Strike = {
  * // Some different box examples
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       box: { symbol: 'box' },
@@ -1096,7 +1096,7 @@ export type EQN_TouchBox = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       bar: { symbol: 'bar', side: 'top' },
@@ -1112,7 +1112,7 @@ export type EQN_TouchBox = {
  * // Some different bar examples
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       hBar: { symbol: 'bar', side: 'top' },
@@ -1266,7 +1266,7 @@ export type EQN_Bar = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     forms: {
  *       1: { int: ['int', 'x dx', 'a', 'b'] },
@@ -1279,7 +1279,7 @@ export type EQN_Bar = {
  * // Example showing different integral options
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       i: { symbol: 'int' },
@@ -1421,7 +1421,7 @@ export type EQN_Integral = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     forms: {
  *       1: { sumOf: ['sum', 'x', 'b', 'a'] },
@@ -1434,7 +1434,7 @@ export type EQN_Integral = {
  * // Example showing different options
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       s: { symbol: 'sum', draw: 'dynamic' },
@@ -1556,7 +1556,7 @@ export type EQN_SumOf = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     forms: {
  *       1: { prodOf: ['prod', 'x', 'b', 'a'] },
@@ -1569,7 +1569,7 @@ export type EQN_SumOf = {
  * // Example showing different options
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       p: { symbol: 'prod', draw: 'dynamic' },
@@ -1670,7 +1670,7 @@ export type EQN_ProdOf = {
  * //Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     forms: {
  *       1: { sub: ['x', '_2'] },
@@ -1683,7 +1683,7 @@ export type EQN_ProdOf = {
  * // Example showing different subscript options
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     forms: {
  *       // Object form
@@ -1748,7 +1748,7 @@ export type EQN_Subscript = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     forms: {
  *       1: { sup: ['e', 'x'] },
@@ -1761,7 +1761,7 @@ export type EQN_Subscript = {
  * // Examples of superscript animations
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     forms: {
  *       // Object form
@@ -1819,7 +1819,7 @@ export type EQN_Superscript = {
  * @example
  * // Simple
  * figure.add({
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     forms: {
  *       1: { supSub: ['x', 'b', 'a'] },
@@ -1831,7 +1831,7 @@ export type EQN_Superscript = {
  * // Example showing different super-sub script options
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     forms: {
  *       // Object form
@@ -1906,7 +1906,7 @@ export type EQN_SuperscriptSubscript = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     forms: {
  *       1: { topComment: ['radius', 'r = 1'] },
@@ -1919,7 +1919,7 @@ export type EQN_SuperscriptSubscript = {
  * // Some different comment examples
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       bBkt: { symbol: 'bracket', side: 'bottom' },
@@ -2015,7 +2015,7 @@ export type EQN_Comment = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       x: { symbol: 'strike', color: [0.6, 0.6, 0.6, 1] },
@@ -2031,7 +2031,7 @@ export type EQN_Comment = {
  * // Some different strike examples
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       s1: { symbol: 'strike', style: 'forward', color: [0.6, 0.6, 0.6, 1] },
@@ -2108,7 +2108,7 @@ export type EQN_StrikeComment = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     forms: {
  *       1: ['a', { pad: ['b', 0.1, 0.1, 0.1, 0.1] }, 'c'],
@@ -2121,7 +2121,7 @@ export type EQN_StrikeComment = {
  * // Some different padding examples
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     forms: {
  *       // No padding
@@ -2199,7 +2199,7 @@ export type EQN_Pad = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       lb: { symbol: 'squareBracket', side: 'left' },
@@ -2216,7 +2216,7 @@ export type EQN_Pad = {
  * // Some different equation examples
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       lb: { symbol: 'squareBracket', side: 'left' },
@@ -2374,7 +2374,7 @@ export type EQN_Line = {
  * // Two lines, array definition
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     forms: {
  *       0: {
@@ -2395,7 +2395,7 @@ export type EQN_Line = {
  * // Two lines animating to 1
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       equals1: ' = ',
@@ -2492,7 +2492,7 @@ export type EQN_Lines = {
  *
  * @example
  * figure.add({
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     forms: {
  *       form1: {
@@ -2514,7 +2514,7 @@ export type EQN_Lines = {
  *
  * @example
  * figure.add({
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     forms: {
  *       form1: {
@@ -2588,7 +2588,7 @@ export type EQN_Annotation = {
  * @example
  *  // surrounding content with a box glyph
  * figure.add({
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       box: { symbol: 'box', lineWidth: 0.005 },
@@ -2670,7 +2670,7 @@ export type EQN_EncompassGlyph = {
  *
  * @example
  * figure.add({
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       rb: { symbol: 'angleBracket', side: 'right', width: 0.1 },
@@ -2694,7 +2694,7 @@ export type EQN_EncompassGlyph = {
  *
  * @example
  * figure.add({
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       arrow: { symbol: 'arrow', direction: 'down' },
@@ -2738,7 +2738,7 @@ export type EQN_EncompassGlyph = {
  *
  * @example
  * figure.add({
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       brace: { symbol: 'brace', side: 'right', width: 0.05 },
@@ -2834,7 +2834,7 @@ export type EQN_LeftRightGlyph = {
  * separated from content by `space` and not annotations (false`)
  * @example
  * figure.add({
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       rarrow: { symbol: 'arrow', direction: 'right' },
@@ -2864,7 +2864,7 @@ export type EQN_LeftRightGlyph = {
  *
  * @example
  * figure.add({
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       brace: { symbol: 'brace', side: 'top' },
@@ -2958,7 +2958,7 @@ export type EQN_LineGlyphAlign = {
  * @example
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       l: {
@@ -3116,7 +3116,7 @@ export type EQN_Glyphs = {
  * // Some different annotation examples
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       bar: { symbol: 'bar', side: 'right' },

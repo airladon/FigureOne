@@ -33,7 +33,7 @@ const figure = new Fig.Figure();
 
 figure.add(
   {
-    method: 'rectangle',
+    make: 'rectangle',
     width: 1.8,
     height: 1.333,
     corner: { radius: 0.1, sides: 10 },

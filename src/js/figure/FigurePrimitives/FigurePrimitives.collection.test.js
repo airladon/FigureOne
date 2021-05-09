@@ -54,11 +54,11 @@ describe('Figure Primitives - Grid', () => {
     makeCollection = (option) => {
       figure.add({
         name: 'c',
-        method: 'collections.collection',
+        make: 'collections.collection',
         elements: [
           {
             name: 'p1',
-            method: 'polygon',
+            make: 'polygon',
             options: {
               position: [-1, 0],
               radius: 1,
@@ -66,7 +66,7 @@ describe('Figure Primitives - Grid', () => {
           },
           {
             name: 'p2',
-            method: 'polygon',
+            make: 'polygon',
             options: {
               position: [1, 0],
               radius: 1,

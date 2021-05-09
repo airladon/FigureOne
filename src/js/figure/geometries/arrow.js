@@ -52,7 +52,7 @@ export type TypeArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'p
  * // Line with triangle arrows on both ends
  * figure.add({
  *   name: 'a',
- *   method: 'polyline',
+ *   make: 'polyline',
  *   options: {
  *     points: [[0, 0], [1, 0]],
  *     width: 0.02,
@@ -64,7 +64,7 @@ export type TypeArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'p
  * // Line with customized barb arrow at end only
  * figure.add({
  *   name: 'a',
- *   method: 'shapes.line',
+ *   make: 'shapes.line',
  *   options: {
  *     p1: [0, 0],
  *     p2: [0, 1],
@@ -88,14 +88,14 @@ export type TypeArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'p
  * figure.add([
  *   {
  *     name: 'reference',
- *     method: 'polyline',
+ *     make: 'polyline',
  *     options: {
  *       points: [[0, 0.3], [0.5, 0.3]],
  *     },
  *   },
  *   {
  *     name: 'start',
- *     method: 'polyline',
+ *     make: 'polyline',
  *     options: {
  *       points: [[0, 0], [0.5, 0]],
  *       arrow: {
@@ -106,7 +106,7 @@ export type TypeArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'p
  *   },
  *   {
  *     name: 'mid',
- *     method: 'polyline',
+ *     make: 'polyline',
  *     options: {
  *       points: [[0, -0.3], [0.5, -0.3]],
  *       arrow: {
@@ -1602,7 +1602,7 @@ export {
 //   index += 1;
 //   return {
 //     name,
-//     method: 'shapes.arrow',
+//     make: 'shapes.arrow',
 //     options: {
 //       head,
 //       length,

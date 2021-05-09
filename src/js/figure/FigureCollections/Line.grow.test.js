@@ -16,7 +16,7 @@ describe('Grow Line', () => {
     figure.add([
       {
         name: 'a',
-        method: 'oline',
+        make: 'oline',
         options: {
           length: 2,
           width: 0.1,

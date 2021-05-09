@@ -9,7 +9,7 @@ const pow = (power = 2, stop = 10, step = 0.05) => {
 
 figure.add({
   name: 'plot',
-  method: 'collections.plot',
+  make: 'collections.plot',
   options: {
     trace: pow(),
     position: [-1, -1],

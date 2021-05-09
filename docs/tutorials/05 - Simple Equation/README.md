@@ -13,7 +13,7 @@ const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
 
 figure.add(
   {
-    method: 'equation',
+    make: 'equation',
     // Equation elements are the individual terms in the equation
     elements: {
       a: 'a',
@@ -76,7 +76,7 @@ As an example, the above example can be recreated by only defining the form - al
 ```js
 figure.add({
   name: 'eqn',
-  method: 'equation',
+  make: 'equation',
   options: {
     forms: {
       base: ['a', '_ = ', { frac: ['b', 'vinculum', 'c'] }],

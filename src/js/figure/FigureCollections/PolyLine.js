@@ -94,7 +94,7 @@ export type OBJ_PolylinePad = {};
  * // Hide pad 0, and make pad 2 blue and not filled
  * figure.add({
  *   name: 'p',
- *   method: 'collections.polyline',
+ *   make: 'collections.polyline',
  *   options: {
  *     points: [[0, 0], [2, 0], [2, 2], [-2, 1]],
  *     pad: {
@@ -115,7 +115,7 @@ export type OBJ_PolylinePad = {};
  * // Customization of side and angle annotations
  * figure.add({
  *   name: 'p',
- *   method: 'collections.polyline',
+ *   make: 'collections.polyline',
  *   options: {
  *     points: [[0, 0], [1, 0], [1, 1], [0, 1]],
  *     close: true,
@@ -388,7 +388,7 @@ export type SUB_PolylineUpdatePoints = [];
  * // Polyline with angle annotations
  * figure.add({
  *   name: 'p',
- *   method: 'collections.polyline',
+ *   make: 'collections.polyline',
  *   options: {
  *     points: [[1, 0], [0, 0], [0.5, 1], [1.5, 1]],
  *     arrow: 'triangle',
@@ -405,7 +405,7 @@ export type SUB_PolylineUpdatePoints = [];
  * // Triangle with unknown angle
  * figure.add({
  *   name: 'p',
- *   method: 'collections.polyline',
+ *   make: 'collections.polyline',
  *   options: {
  *     points: [[1, 1], [1, 0], [0, 0]],
  *     close: true,
@@ -429,7 +429,7 @@ export type SUB_PolylineUpdatePoints = [];
  * // Dimensioned square
  * figure.add({
  *   name: 'p',
- *   method: 'collections.polyline',
+ *   make: 'collections.polyline',
  *   options: {
  *     points: [[0, 1], [1, 1], [1, 0], [0, 0]],
  *     close: true,
@@ -456,7 +456,7 @@ export type SUB_PolylineUpdatePoints = [];
  * // User adjustable polyline
  * figure.add({
  *   name: 'p',
- *   method: 'collections.polyline',
+ *   make: 'collections.polyline',
  *   options: {
  *     points: [[-0.5, 1], [1, 1], [0, 0], [1, -0.5]],
  *     dash: [0.05, 0.02],
@@ -472,7 +472,7 @@ export type SUB_PolylineUpdatePoints = [];
  * // Annotations that automatically updates as user changes triangle
  * figure.add({
  *   name: 'p',
- *   method: 'collections.polyline',
+ *   make: 'collections.polyline',
  *   options: {
  *     points: [[-1, 1], [1, 1], [0, 0]],
  *     close: true,

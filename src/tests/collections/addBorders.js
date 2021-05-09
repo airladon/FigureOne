@@ -7,7 +7,7 @@ for (let i = 3; i < len; i += 1) {
   for (let j = 0; j < border.length; j += 1) {
     figure.add({
       name: `border${i}${j}`,
-      method: 'polyline',
+      make: 'polyline',
       options: {
         points: border[j],
         width: 0.01,
@@ -20,7 +20,7 @@ for (let i = 3; i < len; i += 1) {
   for (let j = 0; j < touchBorder.length; j += 1) {
     figure.add({
       name: `buffer${i}${j}`,
-      method: 'polyline',
+      make: 'polyline',
       options: {
         points: touchBorder[j],
         width: 0.01,

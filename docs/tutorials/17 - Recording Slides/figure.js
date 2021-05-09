@@ -5,7 +5,7 @@ const figure = new Fig.Figure();
 figure.add([
   {
     name: 'ball',
-    method: 'primitives.polygon',
+    make: 'primitives.polygon',
     options: {
       radius: 0.3,
       sides: 100,
@@ -18,7 +18,7 @@ figure.add([
   },
   {
     name: 'triangle',
-    method: 'primitives.triangle',
+    make: 'primitives.triangle',
     options: {
       width: 0.5,
       height: 0.5,

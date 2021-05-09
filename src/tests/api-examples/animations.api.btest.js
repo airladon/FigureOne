@@ -7,7 +7,7 @@ tester(
 figure.add(
   {
     name: 'p',
-    method: 'polygon',
+    make: 'polygon',
     options: {
       sides: 4,
       radius: 0.5,

@@ -188,7 +188,7 @@ function cleanTraces(
  * // Plot of single trace with auto axis scaling
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
+ *   make: 'collections.plot',
  *   options: {
  *     trace: pow(),
  *   },
@@ -200,7 +200,7 @@ function cleanTraces(
  * // markers
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
+ *   make: 'collections.plot',
  *   options: {
  *     width: 2,                                    // Plot width in figure
  *     height: 2,                                   // Plot height in figure
@@ -227,7 +227,7 @@ function cleanTraces(
  * // Multiple grids and simple titles
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
+ *   make: 'collections.plot',
  *   options: {
  *     width: 2,
  *     height: 2,
@@ -258,7 +258,7 @@ function cleanTraces(
  * // Title has a subtitle
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
+ *   make: 'collections.plot',
  *   options: {
  *     width: 2,
  *     height: 2,
@@ -285,7 +285,7 @@ function cleanTraces(
  * // Secondary y axis
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
+ *   make: 'collections.plot',
  *   options: {
  *     width: 2,
  *     height: 2,
@@ -333,7 +333,7 @@ function cleanTraces(
  * // can all be customized to create it.
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
+ *   make: 'collections.plot',
  *   options: {
  *     width: 3,
  *     height: 3,

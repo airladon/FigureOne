@@ -28,7 +28,7 @@ function layoutCirc() {
   ) {
     return {
       name,
-      method: 'primitives.line',
+      make: 'primitives.line',
       options: {
         p1, length, angle: ang, width, color, dash,
       },
@@ -62,7 +62,7 @@ function layoutCirc() {
     }
     return {
       name,
-      method: 'collections.line',
+      make: 'collections.line',
       options: {
         width,
         color,
@@ -88,7 +88,7 @@ function layoutCirc() {
   function arc(name, color, width = thin, sides = 100, angleToDraw = Math.PI * 2, rotation = 0) {
     return {
       name,
-      method: 'primitives.polygon',
+      make: 'primitives.polygon',
       options: {
         radius: rad, line: { width }, sides, angleToDraw: angleToDraw + 0.001, rotation, color,
       },
@@ -98,7 +98,7 @@ function layoutCirc() {
   // Helper function to create a right angle definition object
   const rightAngle = (name, position, startAngle, r = 0.15, color = colGrey) => ({
     name,
-    method: 'collections.angle',
+    make: 'collections.angle',
     options: {
       position,
       startAngle,
@@ -121,7 +121,7 @@ function layoutCirc() {
   ) {
     return {
       name,
-      method: 'collections.angle',
+      make: 'collections.angle',
       options: {
         color,
         curve: {
@@ -143,7 +143,7 @@ function layoutCirc() {
 
   const circle = figure.add({
     name: 'circ',
-    method: 'collection',
+    make: 'collection',
     elements: [
       // Unit circle arc and axes
       arc('arc', colGrey, thin, 300, Math.PI / 2, 0),
@@ -153,7 +153,7 @@ function layoutCirc() {
       // Main triangle
       {
         name: 'tri',
-        method: 'polyline',
+        make: 'polyline',
         options: {
           points: [
             [0, 0],
@@ -210,7 +210,7 @@ function layoutCirc() {
       // Center point
       {
         name: 'point',
-        method: 'polygon',
+        make: 'polygon',
         options: {
           sides: 30,
           radius: 0.02,
@@ -220,7 +220,7 @@ function layoutCirc() {
       },
       // {
       //   name: 'rotator',
-      //   method: 'collections.line',
+      //   make: 'collections.line',
       //   options: {
       //     length: rad,
       //     width: 0.1,

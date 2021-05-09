@@ -15,7 +15,7 @@ describe('Figure Recorder', () => {
     figure.add([
       {
         name: 'a',
-        method: 'polygon',
+        make: 'polygon',
         options: {
           color: [1, 0, 0, 1],
         },

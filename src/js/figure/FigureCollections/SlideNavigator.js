@@ -114,7 +114,7 @@ export type COL_SlideNavigator = {
  * figure.add([
  *   {
  *     name: 'eqn',
- *     method: 'equation',
+ *     make: 'equation',
  *     options: {
  *       formDefaults: { alignment: { xAlign: 'center' } },
  *       forms: {
@@ -127,7 +127,7 @@ export type COL_SlideNavigator = {
  *   },
  *   {
  *     name: 'nav',
- *     method: 'collections.slideNavigator',
+ *     make: 'collections.slideNavigator',
  *     options: {
  *       equation: 'eqn',
  *     },
@@ -139,7 +139,7 @@ export type COL_SlideNavigator = {
  * figure.add([
  *   {
  *     name: 'eqn',
- *     method: 'equation',
+ *     make: 'equation',
  *     options: {
  *       formDefaults: { alignment: { xAlign: 'center' } },
  *       forms: {
@@ -151,7 +151,7 @@ export type COL_SlideNavigator = {
  *   },
  *   {
  *     name: 'nav',
- *     method: 'collections.slideNavigator',
+ *     make: 'collections.slideNavigator',
  *     options: {
  *       equation: 'eqn',
  *       text: { position: [0, 0.3] },
@@ -172,7 +172,7 @@ export type COL_SlideNavigator = {
  * figure.add([
  *   {   // Square drawing
  *     name: 'square',
- *     method: 'primitives.rectangle',
+ *     make: 'primitives.rectangle',
  *     options: {
  *       width: 0.4,
  *       height: 0.4,
@@ -181,7 +181,7 @@ export type COL_SlideNavigator = {
  *   },
  *   {   // Side length label
  *     name: 'label',
- *     method: 'text',
+ *     make: 'text',
  *     options: {
  *       yAlign: 'middle',
  *       position: [0.3, 0],
@@ -190,7 +190,7 @@ export type COL_SlideNavigator = {
  *   },
  *   {   // Equation
  *     name: 'eqn',
- *     method: 'equation',
+ *     make: 'equation',
  *     options: {
  *       elements: {
  *         eq1: '  =  ',
@@ -212,7 +212,7 @@ export type COL_SlideNavigator = {
  *   },
  *   {   // Slide Navigator
  *     name: 'nav',
- *     method: 'collections.slideNavigator',
+ *     make: 'collections.slideNavigator',
  *     options: {
  *       equation: 'eqn',
  *       nextButton: { type: 'arrow', position: [1.2, -0.8] },

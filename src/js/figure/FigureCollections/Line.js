@@ -431,7 +431,7 @@ export type OBJ_PulseWidthAnimationStep = {
  * // Pulse an annotated line
  * figure.add({
  *   name: 'l',
- *   method: 'collections.line',
+ *   make: 'collections.line',
  *   options: {
  *     p1: [-1, 0],
  *     p2: [1, 0],
@@ -449,7 +449,7 @@ export type OBJ_PulseWidthAnimationStep = {
  * // Animate growing a line while showing it's length
  * figure.add({
  *   name: 'l',
- *   method: 'collections.line',
+ *   make: 'collections.line',
  *   options: {
  *     p1: [-1, 0],
  *     p2: [-0.5, 0],

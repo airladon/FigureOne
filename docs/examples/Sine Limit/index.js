@@ -24,7 +24,7 @@ const radius = 2;
 figure.add([
   {
     name: 'radius',
-    method: 'collections.line',
+    make: 'collections.line',
     options: {
       p1: origin,
       length: radius,
@@ -48,7 +48,7 @@ figure.add([
   },
   {
     name: 'angle',
-    method: 'collections.angle',
+    make: 'collections.angle',
     options: {
       corner: { length: 2 },
       curve: {
@@ -70,7 +70,7 @@ figure.add([
   },
   {
     name: 'arc',
-    method: 'collections.angle',
+    make: 'collections.angle',
     options: {
       curve: {
         radius: radius - 0.005,
@@ -90,7 +90,7 @@ figure.add([
   },
   {
     name: 'sine',
-    method: 'collections.line',
+    make: 'collections.line',
     options: {
       p1: [0, 0],
       p2: [0, 1],
@@ -142,7 +142,7 @@ const frac = (numerator, symbol, denominator, offsetY = 0.07) => ({
 figure.add([
   {
     name: 'eqn',
-    method: 'collections.equation',
+    make: 'collections.equation',
     options: {
       // Define the elements that require specific styling
       elements: {
@@ -206,7 +206,7 @@ figure.add([
   },
   {
     name: 'nav',
-    method: 'collections.slideNavigator',
+    make: 'collections.slideNavigator',
     options: {
       equation: 'eqn',
       prevButton: { position: [-1.5, -1.25] },

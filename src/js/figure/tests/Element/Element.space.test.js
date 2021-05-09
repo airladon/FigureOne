@@ -28,11 +28,11 @@ describe('Element Space Transforms', () => {
         figure.add([
           {
             name: 'c',
-            method: 'collection',
+            make: 'collection',
             elements: [
               {
                 name: 'a',
-                method: 'polygon',
+                make: 'polygon',
                 options: {
                   radius: 1,
                   sides: 4,
@@ -54,11 +54,11 @@ describe('Element Space Transforms', () => {
         figure.add([
           {
             name: 'c',
-            method: 'collection',
+            make: 'collection',
             elements: [
               {
                 name: 'a',
-                method: 'polygon',
+                make: 'polygon',
                 options: {
                   radius: 1,
                   sides: 4,
@@ -80,21 +80,21 @@ describe('Element Space Transforms', () => {
         figure.add([
           {
             name: 'c',
-            method: 'collection',
+            make: 'collection',
             options: {
               position: [0.5, 0],
             },
             elements: [
               {
                 name: 'c',
-                method: 'collection',
+                make: 'collection',
                 options: {
                   position: [0.5, 0],
                 },
                 elements: [
                   {
                     name: 'p',
-                    method: 'shapes.rectangle',
+                    make: 'shapes.rectangle',
                     options: {
                       width: 1,
                       height: 1,

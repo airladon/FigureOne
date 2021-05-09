@@ -21,7 +21,7 @@ describe('Animation Examples', () => {
     [a, b] = figure.add([
       {
         name: 'a',
-        method: 'polygon',
+        make: 'polygon',
         options: { color: [0, 1, 0, 1] },
         mods: {
           dimColor: [1, 0, 0, 1],
@@ -35,7 +35,7 @@ describe('Animation Examples', () => {
       },
       {
         name: 'b',
-        method: 'polygon',
+        make: 'polygon',
       },
     ]);
     callback = jest.fn(() => {});

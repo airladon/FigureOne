@@ -21,7 +21,7 @@ const figure = new Figure({
 figure.add([
   {
     name: 'origin',
-    method: 'polygon',
+    make: 'polygon',
     options: {
       radius: 0.01,
       line: { width: 0.01 },
@@ -31,7 +31,7 @@ figure.add([
   },
   {
     name: 'grid',
-    method: 'grid',
+    make: 'grid',
     options: {
       bounds: [-figureWidth / 2, -figureHeight / 2, figureWidth, figureHeight],
       yStep: 0.1,
@@ -42,7 +42,7 @@ figure.add([
   },
   {
     name: 'gridMajor',
-    method: 'grid',
+    make: 'grid',
     options: {
       bounds: [-figureWidth / 2, -figureHeight / 2, figureWidth, figureHeight],
       yStep: 0.5,

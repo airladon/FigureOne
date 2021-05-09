@@ -31,7 +31,7 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 figure.add([
   {
     name: 'origin',
-    method: 'polygon',
+    make: 'polygon',
     options: {
       radius: 0.01,
       line: { width: 0.01 },
@@ -41,7 +41,7 @@ figure.add([
   },
   {
     name: 'grid',
-    method: 'grid',
+    make: 'grid',
     options: {
       bounds: [-3, -3, 6, 6],
       yStep: 0.1,
@@ -52,7 +52,7 @@ figure.add([
   },
   {
     name: 'gridMajor',
-    method: 'grid',
+    make: 'grid',
     options: {
       bounds: [-3, -3, 6, 6],
       yStep: 0.5,
@@ -67,7 +67,7 @@ figure.add([
 figure.add(
   {
     name: 'p',
-    method: 'polygon',
+    make: 'polygon',
     options: {
       sides: 4,
       radius: 0.5,
@@ -114,7 +114,7 @@ An animation manager is tied to one element, but can be used to animate other el
 // add another element
 figure.add({
   name: 'q',
-  method: 'polygon',
+  make: 'polygon',
   options: {
     radius: 0.5, sides: 3, position: [-1, 0]
   },

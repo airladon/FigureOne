@@ -13,7 +13,7 @@ const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
 
 figure.add(
   {
-    method: 'equation',
+    make: 'equation',
     // Not all elements need to be defined. Some can be inferred from the
     // form definition.
     // Typically, if the element needs properties (like color), or it has

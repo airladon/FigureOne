@@ -22,7 +22,7 @@ function layoutCirc() {
   // Helper function for a simple line primitive definition object
   const line = (name, color, width = thick, p1 = [0, 0], length = 1, ang = 0, dash = []) => ({
     name,
-    method: 'primitives.line',
+    make: 'primitives.line',
     options: {
       p1, length, angle: ang, width, color, dash,
     },
@@ -31,7 +31,7 @@ function layoutCirc() {
   // Helper function for a labeled line definition object
   const lineWithLabel = (name, color, text, width = thick, p1, length, ang, location = 'negative') => ({
     name,
-    method: 'collections.line',
+    make: 'collections.line',
     options: {
       width,
       color,
@@ -53,7 +53,7 @@ function layoutCirc() {
   ) {
     return {
       name,
-      method: 'primitives.polygon',
+      make: 'primitives.polygon',
       options: {
         radius: rad, line: { width }, sides, angleToDraw: angleToDraw + 0.001, rotation, color,
       },
@@ -63,11 +63,11 @@ function layoutCirc() {
   // Helper function that creates a definition object that draws an eye icon
   const addEye = (name, position) => ({
     name,
-    method: 'collection',
+    make: 'collection',
     elements: [
       {
         name: 'eye1',
-        method: 'polygon',
+        make: 'polygon',
         options: {
           line: { width: medium },
           radius: 0.075,
@@ -79,7 +79,7 @@ function layoutCirc() {
       },
       {
         name: 'eye2',
-        method: 'polygon',
+        make: 'polygon',
         options: {
           line: { width: medium },
           radius: 0.075,
@@ -89,8 +89,8 @@ function layoutCirc() {
           position: [0, 0.043],
         },
       },
-      { name: 'center', method: 'polygon', options: { radius: 0.012, sides: 6 } },
-      { name: 'strike', method: 'line', options: { p1: [-0.05, -0.05], p2: [0.05, 0.05], width: medium } },
+      { name: 'center', make: 'polygon', options: { radius: 0.012, sides: 6 } },
+      { name: 'strike', make: 'line', options: { p1: [-0.05, -0.05], p2: [0.05, 0.05], width: medium } },
     ],
     options: {
       position,
@@ -106,11 +106,11 @@ function layoutCirc() {
   // Helper function that creates a definition object that draws a lock icon
   const addLock = (name, position) => ({
     name,
-    method: 'collection',
+    make: 'collection',
     elements: [
       {
         name: 'lock',
-        method: 'polygon',
+        make: 'polygon',
         options: {
           position: [0, 0.035],
           line: { width: medium },
@@ -121,7 +121,7 @@ function layoutCirc() {
       },
       {
         name: 'r',
-        method: 'collections.rectangle',
+        make: 'collections.rectangle',
         options: {
           width: 0.08,
           height: 0.07,
@@ -145,7 +145,7 @@ function layoutCirc() {
   // Helper function to make a right angle
   const rightAngle = (name, position, startAngle, r = 0.15, color = colGrey) => ({
     name,
-    method: 'collections.angle',
+    make: 'collections.angle',
     options: {
       position,
       startAngle,
@@ -162,7 +162,7 @@ function layoutCirc() {
   ) {
     return {
       name,
-      method: 'collections.angle',
+      make: 'collections.angle',
       options: {
         color: colTheta,
         curve: { width: 0.01, radius: rad, sides: 400 },
@@ -178,7 +178,7 @@ function layoutCirc() {
   // Helper function to make a rotation pad for a triangle
   const rot = name => ({
     name,
-    method: 'primitives.generic',
+    make: 'primitives.generic',
     options: { color: [0, 1, 1, 0] },
     mods: {
       isMovable: true,
@@ -189,7 +189,7 @@ function layoutCirc() {
   // Helper function to make a background triangle rotator pad
   const rotPad = name => ({
     name,
-    method: 'primitives.polygon',
+    make: 'primitives.polygon',
     options: {
       color: [0, 1, 0, 0],
       radius: 0.3,
@@ -223,13 +223,13 @@ function layoutCirc() {
    */
   const tri = (name, elements, position, rotation, center, x, y) => ({
     name,
-    method: 'collection',
+    make: 'collection',
     elements: [
       rightAngle('right', [0, radius], -Math.PI / 2),
       angle('theta', '\u03b8', 0.2, 0.5, [0, 0], 0, defaultAngle),
       {
         name: 'movePad',
-        method: 'primitives.generic',
+        make: 'primitives.generic',
         options: {
           points: [[0, 0], [0, 1], [1, 1]],
           color: [0, 0, 1, 0.3],
@@ -262,7 +262,7 @@ function layoutCirc() {
   */
   const backgroundTri = name => ({
     name,
-    method: 'collection',
+    make: 'collection',
     elements: [
       rotPad('rotTheta'),
       rotPad('rotComp'),
@@ -277,11 +277,11 @@ function layoutCirc() {
   ) {
     return {
       name,
-      method: 'collection',
+      make: 'collection',
       elements: [
         {
           name: 'rect',
-          method: 'collections.rectangle',
+          make: 'collections.rectangle',
           options: {
             width,
             height,
@@ -293,7 +293,7 @@ function layoutCirc() {
         },
         {
           name: 'label',
-          method: 'textLines',
+          make: 'textLines',
           options: {
             position:
             textPosition,
@@ -333,13 +333,13 @@ function layoutCirc() {
   // Add all the elements to the figure
   const geom = figure.add({
     name: 'geom',
-    method: 'collection',
+    make: 'collection',
     elements: [
       // When 'background' is touched, any selected triangle will be
       // deselected
       {
         name: 'background',
-        method: 'rectangle',
+        make: 'rectangle',
         options: {
           width: 6,
           height: 3,
@@ -352,14 +352,14 @@ function layoutCirc() {
       // A quarter circle with axes
       {
         name: 'circle',
-        method: 'collection',
+        make: 'collection',
         elements: [
           arc('circle', colGrey, thin, 100, Math.PI / 2, 0),
           line('x', colGrey, thin, [0, 0], radius, 0),
           line('y', colGrey, thin, [0, 0], radius, Math.PI / 2),
           {
             name: 'movePad',
-            method: 'primitives.polygon',
+            make: 'primitives.polygon',
             options: {
               sides: 16,
               radius: radius + 0.03,
@@ -420,7 +420,7 @@ function layoutCirc() {
       // elements when they are dragged over the same spot
       {
         name: 'angleBackground',
-        method: 'primitives.polygon',
+        make: 'primitives.polygon',
         options: {
           sides: 400,
           color: [1, 1, 1, 1],
@@ -442,11 +442,11 @@ function layoutCirc() {
       button('preset3', [-1.2, -1.2], '3', 0.25),
       {
         name: 'arcButton',
-        method: 'collection',
+        make: 'collection',
         elements: [
           {
             name: 'fill',
-            method: 'primitives.polygon',
+            make: 'primitives.polygon',
             options: {
               color: [1, 1, 1, 1],
               radius: 0.22,
@@ -475,7 +475,7 @@ function layoutCirc() {
       // draw stack so it is touched first before anything else
       {
         name: 'rotator',
-        method: 'collections.line',
+        make: 'collections.line',
         options: {
           length: radius * 0.5,
           width: 0.5,

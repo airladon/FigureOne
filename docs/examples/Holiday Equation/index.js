@@ -28,7 +28,7 @@ const sup = (content, superscript, offsetY = 0.05) => ({
 figure.add([
   {
     name: 'eqn',
-    method: 'collections.equation',
+    make: 'collections.equation',
     options: {
       scale: 1.1,
       color: [0.4, 0.4, 0.4, 1],
@@ -102,7 +102,7 @@ figure.add([
   },
   {
     name: 'nav',
-    method: 'collections.slideNavigator',
+    make: 'collections.slideNavigator',
     options: {
       equation: 'eqn',
       prevButton: { position: [-1.5, -0.7] },

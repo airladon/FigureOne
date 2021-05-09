@@ -81,7 +81,7 @@ describe('Figure Primitives Text', () => {
     loadText = (option) => {
       figure.add({
         name: 't',
-        method: 'text',
+        make: 'text',
         options: textOptions[option],
       });
       figure.initialize();

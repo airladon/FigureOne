@@ -1064,7 +1064,7 @@ export {
 // figure.add([
 //   {
 //     name: 'pad',
-//     method: 'polygon',
+//     make: 'polygon',
 //     options: {
 //       radius: 0.2,
 //       color: [0.5, 0.5, 0.5, 0.5],
@@ -1073,7 +1073,7 @@ export {
 //   },
 //   {
 //     name: 'r',
-//     method: 'polyline',
+//     make: 'polyline',
 //     options: {
 //       points: line,
 //       width: 0.03,
@@ -1086,7 +1086,7 @@ export {
 //   },
 //   {
 //     name: 'x2',
-//     method: 'line',
+//     make: 'line',
 //     options: {
 //       p1: [-1, 0],
 //       p2: [1, 0],
@@ -1111,7 +1111,7 @@ export {
 // Inside and dash
 // {
 //   name: 'r',
-//   method: 'polyline',
+//   make: 'polyline',
 //   options: {
 //     points: line,
 //     width: 0.03,

@@ -41,7 +41,7 @@ describe('Figure Equations From Object', () => {
           {
             path: '',
             name: 'group1',
-            method: 'collections.collection',
+            make: 'collections.collection',
             options: {
               transform: new Transform('group'),
             },
@@ -53,7 +53,7 @@ describe('Figure Equations From Object', () => {
           // 2. Method can be simplified if shortcut is defined in addElements
           {
             name: 'group2',
-            method: 'collection',
+            make: 'collection',
             options: {
               transform: new Transform('group'),
             },
@@ -68,7 +68,7 @@ describe('Figure Equations From Object', () => {
           // Start with a collection
           {
             name: 'group',
-            method: 'collections.collection',
+            make: 'collections.collection',
             options: {
               transform: new Transform('group'),
             },
@@ -76,7 +76,7 @@ describe('Figure Equations From Object', () => {
             elements: [
               {
                 name: 'group1',
-                method: 'collection',
+                make: 'collection',
               },
             ],
           },
@@ -84,7 +84,7 @@ describe('Figure Equations From Object', () => {
           {
             path: '_group',
             name: 'group2',
-            method: 'collections.collection',
+            make: 'collections.collection',
           },
         ], figure.elements);
         // The collection can be added to in secondary addElements
@@ -92,7 +92,7 @@ describe('Figure Equations From Object', () => {
           {
             path: '_group',
             name: 'group3',
-            method: 'collections.collection',
+            make: 'collections.collection',
           },
         ], figure.elements);
         // The collection can be added with relative path to the root collection
@@ -100,7 +100,7 @@ describe('Figure Equations From Object', () => {
           {
             path: 'group',
             name: 'group4',
-            method: 'collections.collection',
+            make: 'collections.collection',
           },
         ], figure.elements._group);
 
@@ -109,7 +109,7 @@ describe('Figure Equations From Object', () => {
           {
             path: 'group.group1',
             name: 'group11',
-            method: 'collections.collection',
+            make: 'collections.collection',
           },
         ], figure.elements);
       },
@@ -117,15 +117,15 @@ describe('Figure Equations From Object', () => {
         figure.add([
           {
             name: 'group',
-            method: 'collection',
+            make: 'collection',
             elements: [
               {
                 name: 'group1',
-                method: 'collection',
+                make: 'collection',
                 elements: [
                   {
                     name: 'group2',
-                    method: 'collection',
+                    make: 'collection',
                   },
                 ],
               },
@@ -169,7 +169,7 @@ describe('Figure Equations From Object', () => {
         figure.add([
           {
             name: 'testEqn',
-            method: 'addEquation',
+            make: 'addEquation',
             options: {
               elements: {
                 a: 'a',
@@ -183,26 +183,26 @@ describe('Figure Equations From Object', () => {
           },
           {
             name: 'tri',
-            method: 'collections.collection',
+            make: 'collections.collection',
             options: {
               transform: new Transform('iso').translate(0, 0),
             },
             elements: [
               {
                 name: 'line',
-                method: 'opolyline',
+                make: 'opolyline',
                 options: tri,
                 mods: { isTouchable: true },
               },
               {
                 name: 'side12',
-                method: 'oline',
+                make: 'oline',
                 options: tools.joinObjects({}, sideLength, side12),
                 mods: { isTouchable: true },
               },
               {
                 name: 'side23',
-                method: 'oline',
+                make: 'oline',
                 options: tools.joinObjects({}, sideLength, side23),
               },
             ],

@@ -35,14 +35,14 @@ function fig1() {
   fig.add([
     {
       name: 'unitCircle',
-      method: 'collection',
+      make: 'collection',
       options: {
         position: [0.9, 0],
       },
       elements: [
         {
           name: 'x',
-          method: 'line',
+          make: 'line',
           options: {
             length: r * 2,
             position: [-r, 0],
@@ -52,7 +52,7 @@ function fig1() {
         },
         {
           name: 'y',
-          method: 'line',
+          make: 'line',
           options: {
             length: r * 2,
             position: [0, -r],
@@ -63,7 +63,7 @@ function fig1() {
         },
         {
           name: 'circle',
-          method: 'polygon',
+          make: 'polygon',
           options: {
             radius: r,
             sides: 200,
@@ -73,7 +73,7 @@ function fig1() {
         },
         {
           name: 'sine',
-          method: 'collections.line',
+          make: 'collections.line',
           options: {
             maxLength: 3,
             width: 0.003,
@@ -90,7 +90,7 @@ function fig1() {
         },
         {
           name: 'theta',
-          method: 'collections.angle',
+          make: 'collections.angle',
           options: {
             color: [0, 0.4, 1, 1],
             curve: {
@@ -118,7 +118,7 @@ function fig1() {
         // cartesian axes
         {
           name: 'tracer',
-          method: 'collections.line',
+          make: 'collections.line',
           options: {
             width: 0.003,
             color: [1, 0, 0, 1],
@@ -127,7 +127,7 @@ function fig1() {
         // Movable radius line
         {
           name: 'line',
-          method: 'collections.line',
+          make: 'collections.line',
           options: {
             length: r,
             width: 0.015,
@@ -146,7 +146,7 @@ function fig1() {
   fig.add([
     {
       name: 'plot',
-      method: 'collections.plot',
+      make: 'collections.plot',
       options: {
         position: [-1.6, -r * 1],
         width: 1.6,
@@ -215,7 +215,7 @@ function fig1() {
   // Add equation
   fig.add({
     name: 'eqn',
-    method: 'equation',
+    make: 'equation',
     options: {
       elements: {
         sin: { style: 'normal' },

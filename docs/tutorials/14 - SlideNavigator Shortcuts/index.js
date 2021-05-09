@@ -6,14 +6,14 @@ const figure = new Fig.Figure();
 const [sq1, sq2] = figure.add([
   {
     name: 'sq1',
-    method: 'primitives.rectangle',
+    make: 'primitives.rectangle',
     options: {
       width: 0.4, height: 0.4, position: [-0.5, 0.5],
     },
   },
   {
     name: 'sq2',
-    method: 'primitives.rectangle',
+    make: 'primitives.rectangle',
     options: {
       width: 0.4, height: 0.4, position: [0.5, 0.5],
     },

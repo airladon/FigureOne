@@ -143,7 +143,7 @@ export type COL_PlotLegend = {
  * // By default, the legend will appear in the top right corner
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
+ *   make: 'collections.plot',
  *   options: {
  *     trace: [
  *       { points: pow(2), name: 'Power 2' },
@@ -162,7 +162,7 @@ export type COL_PlotLegend = {
  * // Change the line length, position and use a frame on the legend
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
+ *   make: 'collections.plot',
  *   options: {
  *     trace: [
  *       { points: pow(2), name: 'Power 2' },
@@ -185,7 +185,7 @@ export type COL_PlotLegend = {
  * // Make a horizontal legend
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
+ *   make: 'collections.plot',
  *   options: {
  *     trace: [
  *       { points: pow(2), name: 'Power 2' },
@@ -211,7 +211,7 @@ export type COL_PlotLegend = {
  * // Customize legend trace text
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
+ *   make: 'collections.plot',
  *   options: {
  *     trace: [
  *       { points: pow(2), name: 'Power 2' },
@@ -248,7 +248,7 @@ export type COL_PlotLegend = {
  * // Customize legend
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
+ *   make: 'collections.plot',
  *   options: {
  *     trace: [
  *       { points: pow(2), name: 'Power 2' },

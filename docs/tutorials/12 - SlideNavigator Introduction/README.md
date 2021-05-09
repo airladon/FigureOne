@@ -18,7 +18,7 @@ const figure = new Fig.Figure();
 const [eqn, description] = figure.add([
   {
     name: 'eqn',
-    method: 'equation',
+    make: 'equation',
     formDefaults: { alignment: { xAlign: 'center' } },
     forms: {
       0: ['a', '_ + ', 'b_1', '_ = ', 'c'],
@@ -33,7 +33,7 @@ const [eqn, description] = figure.add([
   },
   {
     name: 'description',
-    method: 'primitives.textLines',
+    make: 'primitives.textLines',
     modifiers: {
       a: { font: { family: 'Times New Roman', style: 'italic', size: 0.12 } },
       b: { font: { family: 'Times New Roman', style: 'italic', size: 0.12 } },

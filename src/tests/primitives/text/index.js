@@ -11,7 +11,7 @@ const figure = new Figure({
 figure.add([
   {
     name: 'origin',
-    method: 'polygon',
+    make: 'polygon',
     options: {
       radius: 0.01,
       line: { width: 0.01 },
@@ -21,7 +21,7 @@ figure.add([
   },
   {
     name: 'grid',
-    method: 'grid',
+    make: 'grid',
     options: {
       bounds: [-4.5, -4.5, 9, 9],
       yStep: 0.1,
@@ -32,7 +32,7 @@ figure.add([
   },
   {
     name: 'gridMajor',
-    method: 'grid',
+    make: 'grid',
     options: {
       bounds: [-4.5, -4.5, 9, 9],
       yStep: 0.5,
@@ -277,7 +277,7 @@ for (let i = 0; i < index; i += 1) {
   for (let j = 0; j < border.length; j += 1) {
     figure.add({
       name: `border${i}${j}`,
-      method: 'polyline',
+      make: 'polyline',
       options: {
         points: border[j],
         width: 0.01,
@@ -291,7 +291,7 @@ for (let i = 0; i < index; i += 1) {
   for (let j = 0; j < touchBorder.length; j += 1) {
     figure.add({
       name: `buffer${i}${j}`,
-      method: 'polyline',
+      make: 'polyline',
       options: {
         points: touchBorder[j],
         width: 0.01,
@@ -305,7 +305,7 @@ for (let i = 0; i < index; i += 1) {
   for (let j = 0; j < element.drawBorderBuffer.length; j += 1) {
     figure.add({
       name: `textBuffer${i}${j}`,
-      method: 'polyline',
+      make: 'polyline',
       options: {
         points: element.drawBorderBuffer[j],
         width: 0.01,

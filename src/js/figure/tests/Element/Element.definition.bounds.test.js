@@ -62,7 +62,7 @@ describe('Move Freely', () => {
       figure.add([
         {
           name: 'a',
-          method: 'polygon',
+          make: 'polygon',
           options: { radius: 0.2, sides: 4 },
           mods: {
             move: bounds[name],

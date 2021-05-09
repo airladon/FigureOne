@@ -19,7 +19,7 @@ function getShapes(getPos) {
     index += 1;
     const o = {
       name,
-      method: 'collections.line',
+      make: 'collections.line',
       options: tools.misc.joinObjects({}, {
         color: [1, 0, 0, 0.7],
         p1: [-0.2, 0],

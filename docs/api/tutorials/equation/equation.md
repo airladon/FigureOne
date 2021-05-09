@@ -178,7 +178,7 @@ Similar to shapes and text, the same equation above can be defined with an optio
 figure.add(
   {
     name: 'equation',
-    method: 'equation',
+    make: 'equation',
     options: {
       color: [1, 0, 0, 1],
       font: { size: 0.2 },
@@ -251,7 +251,7 @@ For instance, we can recreate the example above as:
 ```javascript
 figure.add({
   name: 'eqn',
-  method: 'equation',
+  make: 'equation',
   options: {
     elements: {
       times: ' \u00D7 ',
@@ -275,7 +275,7 @@ Elements defined inline can be used in other forms:
 ```javascript
 figure.add({
   name: 'eqn',
-  method: 'equation',
+  make: 'equation',
   options: {
     elements: {
       times: ' \u00D7 ',
@@ -302,7 +302,7 @@ Even symbols can be defined inline:
 ```javascript
 figure.add({
   name: 'eqn',
-  method: 'equation',
+  make: 'equation',
   options: {
     elements: {
       equals: ' = ',
@@ -323,7 +323,7 @@ Underscores after text can be used to create unique identifiers and therefore us
 ```javascript
 figure.add({
   name: 'eqn',
-  method: 'equation',
+  make: 'equation',
   options: {
     forms: {
       1: ['2', 'a', '_ = ', 'a_1', '_ + ', 'a_2'],
@@ -338,7 +338,7 @@ Underscores can also be used to give inline symbol definitions unqiue identifier
 ```javascript
 figure.add({
   name: 'eqn',
-  method: 'equation',
+  make: 'equation',
   options: {
     forms: {
       1: ['b', '_ = ', { frac: ['a', 'v_vinculum', 'c'] }],
@@ -364,7 +364,7 @@ Array definitions, or equation phrases, can also be spread over several lines to
 ```javascript
 figure.add({
   name: 'eqn',
-  method: 'equation',
+  make: 'equation',
   options: {
     elements: {
       v: { symbol: 'vinculum' },
@@ -426,7 +426,7 @@ Often different forms of an equation reuse equation phrases, like fractions. To 
 ```javascript
 figure.add({
   name: 'eqn',
-  method: 'equation',
+  make: 'equation',
   options: {
     elements: {
       v: { symbol: 'vinculum' },
@@ -464,7 +464,7 @@ In the last two examples, equation touchability was setup in the `mods` property
 ```js
 figure.add({
   name: 'eqn',
-  method: 'equation',
+  make: 'equation',
   options: {
     elements: {
       a: {

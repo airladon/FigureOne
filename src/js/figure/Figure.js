@@ -196,7 +196,7 @@ export type OBJ_Figure = {
  * figure.add(
  *   {
  *     name: 'p',
- *     method: 'polygon',
+ *     make: 'polygon',
  *     options: {
  *       radius: 0.5,
  *       sides: 6,
@@ -546,7 +546,7 @@ class Figure {
       {},
       {
         name: '_nav_',
-        method: 'collections.slideNavigator',
+        make: 'collections.slideNavigator',
       },
       { options },
     ));
@@ -574,7 +574,7 @@ class Figure {
       {},
       {
         name: '_cursor_',
-        method: 'collections.cursor',
+        make: 'collections.cursor',
         mods: { isShown: false },
       },
       { options },
@@ -988,7 +988,7 @@ class Figure {
    * // Element definition (if no name is provided, then name will
    * // be auto generated)
    * figure.add({
-   *   method: 'polygon',
+   *   make: 'polygon',
    *   options: { radius: 1 },
    * });
    *
@@ -998,7 +998,7 @@ class Figure {
    * figure.add([
    *   element,
    *   {
-   *     method: 'polygon',
+   *     make: 'polygon',
    *     options: { radius: 0.2, color: [0, 0, 1, 1] },
    *   },
    * ]);
@@ -1032,11 +1032,11 @@ class Figure {
    * figure.add(
    *   {
    *     name: 'c',
-   *     method: 'collection',
+   *     make: 'collection',
    *     elements: [
    *       {
    *         name: 'tri',
-   *         method: 'triangle',
+   *         make: 'triangle',
    *         options: {
    *           height: 0.4,
    *           width: 0.4,
@@ -1044,7 +1044,7 @@ class Figure {
    *       },
    *       {
    *         name: 'text',
-   *         method: 'text',
+   *         make: 'text',
    *         options: {
    *           text: 'triangle',
    *           position: [0, -0.4],

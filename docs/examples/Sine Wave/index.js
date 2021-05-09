@@ -89,7 +89,7 @@ const signal = new DynamicSignal(0, 10);
 // Helper method to create text buttons
 const button = (name, label, position) => ({
   name,
-  method: 'collections.rectangle',
+  make: 'collections.rectangle',
   options: {
     label: {
       text: label,
@@ -112,14 +112,14 @@ const button = (name, label, position) => ({
 figure.add([
   {
     name: 'diagram',
-    method: 'collection',
+    make: 'collection',
     options: {
       position: [-1, 0],
     },
     elements: [
       {
         name: 'x',
-        method: 'line',
+        make: 'line',
         options: {
           length: 3.6,
           position: [-r, 0],
@@ -129,7 +129,7 @@ figure.add([
       },
       {
         name: 'y',
-        method: 'line',
+        make: 'line',
         options: {
           length: r * 2,
           position: [0, -r],
@@ -140,7 +140,7 @@ figure.add([
       },
       {
         name: 'circle',
-        method: 'polygon',
+        make: 'polygon',
         options: {
           radius: r,
           sides: 70,
@@ -150,7 +150,7 @@ figure.add([
       },
       {
         name: 'sine',
-        method: 'collections.line',
+        make: 'collections.line',
         options: {
           maxLength: 3,
           width: 0.005,
@@ -160,7 +160,7 @@ figure.add([
       },
       {
         name: 'rotator',
-        method: 'line',
+        make: 'line',
         options: {
           length: r,
           width: 0.015,
@@ -173,7 +173,7 @@ figure.add([
       },
       {
         name: 'signalLine',
-        method: 'polyline',
+        make: 'polyline',
         options: {
           width: 0.01,
           simple: true,

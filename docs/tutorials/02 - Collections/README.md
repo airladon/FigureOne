@@ -15,16 +15,16 @@ const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
 
 const c = figure.add(
   {
-    method: 'collection',
+    make: 'collection',
     // Add two elements to the collection
     elements: [
       {
-        method: 'triangle',
+        make: 'triangle',
         height: 0.4,
         width: 0.4,
       },
       {
-        method: 'text',
+        make: 'text',
         text: 'triangle',
         position: [0, -0.4],
         xAlign: 'center',
@@ -100,17 +100,17 @@ For example, we could rewrite the above examples as:
 figure.add(
   {
     name: 'c',
-    method: 'collection',
+    make: 'collection',
     elements: [
       {
         name: 'tri',
-        method: 'triangle',
+        make: 'triangle',
         height: 0.4,
         width: 0.4,
       },
       {
         name: 'text',
-        method: 'text',
+        make: 'text',
         text: 'triangle',
         position: [0, -0.4],
         xAlign: 'center',

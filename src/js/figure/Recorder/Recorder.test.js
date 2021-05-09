@@ -40,7 +40,7 @@ describe('Figure Recorder', () => {
     figure.add([
       {
         name: 'a',
-        method: 'polygon',
+        make: 'polygon',
         options: {
           color: [1, 0, 0, 1],
           radius: 1,
@@ -49,7 +49,7 @@ describe('Figure Recorder', () => {
       },
       {
         name: '_cursor_',
-        method: 'collections.cursor',
+        make: 'collections.cursor',
         options: {
           width: 0.01,
           color: [0, 1, 0, 1],
@@ -1033,7 +1033,7 @@ describe('Figure Recorder', () => {
       recorder.reset();
       figure.add({
         name: 'line',
-        method: 'primitives.line',
+        make: 'primitives.line',
         options: {
           width: 0.01,
           p1: [0, 0],

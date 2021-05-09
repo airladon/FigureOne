@@ -26,7 +26,7 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 figure.add([
   {
     name: 'origin',
-    method: 'polygon',
+    make: 'polygon',
     options: {
       radius: 0.01,
       line: { width: 0.01 },
@@ -36,7 +36,7 @@ figure.add([
   },
   {
     name: 'gridMinor',
-    method: 'grid',
+    make: 'grid',
     options: {
       bounds: [-3, -3, 6, 6],
       yStep: 0.1,
@@ -47,7 +47,7 @@ figure.add([
   },
   {
     name: 'gridMajor',
-    method: 'grid',
+    make: 'grid',
     options: {
       bounds: [-3, -3, 6, 6],
       yStep: 0.5,
@@ -69,7 +69,7 @@ Let's start by creating a {@link FigureElementPrimitive} element that writes 'he
 figure.add(
   {
     name: 'simpleText',
-    method: 'text',
+    make: 'text',
     options: {
       text: 'hello world',
       xAlign: 'center',
@@ -87,7 +87,7 @@ As this is a {@link FigureElementPrimitive}, transforms can be applied to it, an
 figure.add(
   {
     name: 'spinner',
-    method: 'text',
+    make: 'text',
     options: {
       text: 'hello world',
       xAlign: 'center',
@@ -112,7 +112,7 @@ The same `text` method can be used to create text at different locations.
 figure.add(
   {
     name: 'compass',
-    method: 'text',
+    make: 'text',
     options: {
       text: [
         {
@@ -155,7 +155,7 @@ Alternately, `text.line` can be used as it will automatically layout the text el
 figure.add(
   {
     name: 'formattedLine',
-    method: 'text.line',
+    make: 'text.line',
     options: {
       line: [
         'hello ',
@@ -189,7 +189,7 @@ The same example above can be done with `text.lines`:
 figure.add(
   {
     name: 'formattedLine',
-    method: 'text.lines',
+    make: 'text.lines',
     options: {
       lines: [
         'hello |world| it is great to see you',
@@ -215,7 +215,7 @@ figure.setTouchable();
 figure.add(
   {
     name: 't',
-    method: 'text.lines',
+    make: 'text.lines',
     options: {
       lines: [
         'This is the |first| line',

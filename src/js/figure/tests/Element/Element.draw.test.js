@@ -25,7 +25,7 @@ describe('Element Drawing', () => {
     figure.add([
       {
         name: 'a',
-        method: 'polygon',
+        make: 'polygon',
       },
     ]);
     //   c = figure.elements._c;

@@ -8,6 +8,6 @@ const pow = () => {
 
 // Plot of single trace with auto axis generation
 figure.add({
-  method: 'collections.plot',
+  make: 'collections.plot',
   trace: pow(),
 });

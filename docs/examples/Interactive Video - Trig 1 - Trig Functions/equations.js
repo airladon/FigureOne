@@ -47,7 +47,7 @@ function makeEquation() {
 
   figure.add({
     name: 'eqn',
-    method: 'equation',
+    make: 'equation',
     options: {
       elements: {
         eq1: '=',

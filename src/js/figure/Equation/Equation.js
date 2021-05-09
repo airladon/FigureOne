@@ -227,12 +227,12 @@ export type EQN_EquationElements = {
  *
  * // Draw (0, 0) point in equation collection
  * figure.add({
- *   method: 'polygon', options: { radius: 0.01, color: [0, 0, 1, 1], sides: 9 },
+ *   make: 'polygon', options: { radius: 0.01, color: [0, 0, 1, 1], sides: 9 },
  * });
  * // Default alignment is left, baseline
  * figure.add([
  *   {
- *     method: 'equation',
+ *     make: 'equation',
  *     options: {
  *       forms: { 0: ['a', '_ = ', 'bg'] },
  *     },
@@ -242,12 +242,12 @@ export type EQN_EquationElements = {
  * @example
  * // Draw (0, 0) point in equation collection
  * figure.add({
- *   method: 'polygon', options: { radius: 0.01, color: [0, 0, 1, 1], sides: 9 },
+ *   make: 'polygon', options: { radius: 0.01, color: [0, 0, 1, 1], sides: 9 },
  * });
  * // Align with right, middle
  * figure.add([
  *   {
- *     method: 'equation',
+ *     make: 'equation',
  *     options: {
  *       forms: { 0: ['a', '_ = ', 'bg'] },
  *       formDefaults: {
@@ -263,12 +263,12 @@ export type EQN_EquationElements = {
  * @example
  * // Draw (0, 0) point in equation collection
  * figure.add({
- *   method: 'polygon', options: { radius: 0.01, color: [0, 0, 1, 1], sides: 9 },
+ *   make: 'polygon', options: { radius: 0.01, color: [0, 0, 1, 1], sides: 9 },
  * });
  * // Align with center of equals sign
  * figure.add([
  *   {
- *     method: 'equation',
+ *     make: 'equation',
  *     options: {
  *       forms: { 0: ['a', '_ = ', 'bg'] },
  *       formDefaults: {
@@ -286,11 +286,11 @@ export type EQN_EquationElements = {
  * // Draw (0, 0) and (0.2, 0.1) points
  * figure.add([
  *   {
- *     method: 'polygon',
+ *     make: 'polygon',
  *     options: { radius: 0.01, color: [0, 0, 1, 1], sides: 9 }
  *   },
  *   {
- *     method: 'polygon',
+ *     make: 'polygon',
  *     options: {
  *       radius: 0.01, color: [0, 0.8, 0, 1], sides: 9, position: [0.2, 0.1],
  *     },
@@ -299,7 +299,7 @@ export type EQN_EquationElements = {
  * // Align with point (0.2, 0.1) in the equation collection
  * figure.add([
  *   {
- *     method: 'equation',
+ *     make: 'equation',
  *     options: {
  *       forms: { 0: ['a', '_ = ', 'bg'] },
  *       formDefaults: {
@@ -479,7 +479,7 @@ export type EQN_FromForms = {
  * // of the elements is colored blue in one form and red in the other
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: { equals: ' = ', plus: ' + ', minus: ' \u2212 ' },
  *     forms: {
@@ -503,7 +503,7 @@ export type EQN_FromForms = {
  * // Example showing all form options
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     forms: {
  *       form1: {
@@ -814,7 +814,7 @@ type EQN_EquationGoToForm = {
  * // Example showing both ways to access GoToForm animation step
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: { times: ' \u00D7', equals: ' = ' },
  *     forms: {
@@ -862,7 +862,7 @@ class NextFormAnimationStep extends TriggerAnimationStep {
  * // Example showing both ways to access GoToForm animation step
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: { times: ' \u00D7', equals: ' = ' },
  *     forms: {
@@ -916,7 +916,7 @@ class GoToFormAnimationStep extends TriggerAnimationStep {
  * // Create with options definition
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
+ *   make: 'equation',
  *   options: {
  *     elements: {
  *       a: 'a',

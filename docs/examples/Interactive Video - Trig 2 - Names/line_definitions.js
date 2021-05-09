@@ -16,14 +16,14 @@ function layoutLines() {
 
   const lines = figure.add({
     name: 'lines',
-    method: 'collection',
+    make: 'collection',
     options: {
       position: [-1.5, 0.1],
     },
     elements: [
       {
         name: 'circle',
-        method: 'primitives.polygon',
+        make: 'primitives.polygon',
         options: {
           radius,
           line: { width: thin },
@@ -33,7 +33,7 @@ function layoutLines() {
       },
       {
         name: 'line',
-        method: 'primitives.line',
+        make: 'primitives.line',
         options: {
           transform: new Fig.Transform().translate(0, 0).rotate(0),
           angle: angle + Math.PI / 2,
@@ -48,7 +48,7 @@ function layoutLines() {
       },
       {
         name: 'tangentLine',
-        method: 'collections.line',
+        make: 'collections.line',
         options: {
           p1: [radius * rightScale, 0.8 * 1.3 / 2 * 1.453],
           p2: [radius * rightScale, 0],
@@ -63,7 +63,7 @@ function layoutLines() {
       },
       {
         name: 'radiusLine',
-        method: 'collections.line',
+        make: 'collections.line',
         options: {
           p1: [0, 0],
           p2: [radius * rightScale, 0],
@@ -78,7 +78,7 @@ function layoutLines() {
       },
       {
         name: 'dullChord',
-        method: 'primitives.line',
+        make: 'primitives.line',
         options: {
           p1: [radius * Math.cos(chordAngle / 2), radius * Math.sin(chordAngle / 2)],
           p2: [radius * Math.cos(-chordAngle / 2), radius * Math.sin(-chordAngle / 2)],
@@ -88,7 +88,7 @@ function layoutLines() {
       },
       {
         name: 'halfChord',
-        method: 'collections.line',
+        make: 'collections.line',
         options: {
           p1: [radius * Math.cos(chordAngle / 2), radius * Math.sin(chordAngle / 2)],
           p2: [radius * Math.cos(chordAngle / 2), 0],
@@ -98,7 +98,7 @@ function layoutLines() {
       },
       {
         name: 'bow',
-        method: 'primitives.polygon',
+        make: 'primitives.polygon',
         options: {
           angleToDraw: chordAngle,
           rotation: -chordAngle / 2,
@@ -152,7 +152,7 @@ function layoutLines() {
 
       {
         name: 'radius',
-        method: 'primitives.line',
+        make: 'primitives.line',
         options: {
           p1: [0, 0],
           p2: [radius * Math.cos(angle), radius * Math.sin(angle)],
@@ -162,7 +162,7 @@ function layoutLines() {
       },
       {
         name: 'rightAngle',
-        method: 'collections.angle',
+        make: 'collections.angle',
         options: {
           p1: [0, 0],
           p2: [radius * Math.cos(angle), radius * Math.sin(angle)],

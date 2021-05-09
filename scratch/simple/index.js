@@ -3,14 +3,14 @@ const figure = new Fig.Figure();
 // Add two squares to the figure
 const [s1, s2] = figure.add([
   {
-    method: 'polygon',
+    make: 'polygon',
     sides: 4,
     radius: 0.2,
     position: [-0.4, 0],
     color: [1, 0, 0, 1],
   },
   {
-    method: 'polygon',
+    make: 'polygon',
     sides: 4,
     radius: 0.3,
     position: [0.4, 0],
