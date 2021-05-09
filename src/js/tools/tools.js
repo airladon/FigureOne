@@ -1230,16 +1230,12 @@ class Notification {
  *   {
  *     name: 'ball1',
  *     make: 'primitives.polygon',
- *     options: {
- *       sides: 100, radius: 0.5, color: [1, 0, 0, 1],
- *     },
+ *     sides: 100, radius: 0.5, color: [1, 0, 0, 1],
  *   },
  *   {
  *     name: 'ball2',
  *     make: 'primitives.polygon',
- *     options: {
- *       sides: 100, radius: 0.3, color: [0, 0, 1, 1],
- *     },
+ *     sides: 100, radius: 0.3, color: [0, 0, 1, 1],
  *   },
  * ]);
  *

@@ -129,9 +129,7 @@ export type COL_Trace = {
  * figure.add({
  *   name: 'plot',
  *   make: 'collections.plot',
- *   options: {
- *     trace: pow(),
- *   },
+ *   trace: pow(),
  * });
  *
  * @example
@@ -139,14 +137,12 @@ export type COL_Trace = {
  * figure.add({
  *   name: 'plot',
  *   make: 'collections.plot',
- *   options: {
- *     trace: {
- *       points: pow(),
- *       line: {
- *         width: 0.03,
- *         color: [0, 0.8, 0.4, 1],
- *       }
- *     },
+ *   trace: {
+ *     points: pow(),
+ *     line: {
+ *       width: 0.03,
+ *       color: [0, 0.8, 0.4, 1],
+ *     }
  *   },
  * });
  *
@@ -155,11 +151,9 @@ export type COL_Trace = {
  * figure.add({
  *   name: 'plot',
  *   make: 'collections.plot',
- *   options: {
- *     trace: {
- *       points: pow(2, 10, 1),
- *       markers: true,
- *     },
+ *   trace: {
+ *     points: pow(2, 10, 1),
+ *     markers: true,
  *   },
  * });
  *
@@ -168,14 +162,12 @@ export type COL_Trace = {
  * figure.add({
  *   name: 'plot',
  *   make: 'collections.plot',
- *   options: {
- *     trace: {
- *       points: pow(2, 10, 1),
- *       markers: {
- *         radius: 0.035,
- *         sides: 20,
- *         line: { width: 0.01 },
- *       },
+ *   trace: {
+ *     points: pow(2, 10, 1),
+ *     markers: {
+ *       radius: 0.035,
+ *       sides: 20,
+ *       line: { width: 0.01 },
  *     },
  *   },
  * });
@@ -185,14 +177,12 @@ export type COL_Trace = {
  * figure.add({
  *   name: 'plot',
  *   make: 'collections.plot',
- *   options: {
- *     trace: {
- *       points: pow(2, 10, 1),
- *       line: { width: 0.01, dash: [0.02, 0.01] },
- *       markers: {
- *         radius: 0.035,
- *         sides: 20,
- *       },
+ *   trace: {
+ *     points: pow(2, 10, 1),
+ *     line: { width: 0.01, dash: [0.02, 0.01] },
+ *     markers: {
+ *       radius: 0.035,
+ *       sides: 20,
  *     },
  *   },
  * });
@@ -202,19 +192,17 @@ export type COL_Trace = {
  * figure.add({
  *   name: 'plot',
  *   make: 'collections.plot',
- *   options: {
- *     trace: [
- *       pow(2),
- *       { points: pow(2.5), name: 'Power 2.5' },
- *       {
- *         points: pow(3, 10, 1),
- *         name: 'Power 3',
- *         markers: { radius: 0.03 },
- *         line: { width: 0.01 },
- *       },
- *     ],
- *     legend: true,
- *   },
+ *   trace: [
+ *     pow(2),
+ *     { points: pow(2.5), name: 'Power 2.5' },
+ *     {
+ *       points: pow(3, 10, 1),
+ *       name: 'Power 3',
+ *       markers: { radius: 0.03 },
+ *       line: { width: 0.01 },
+ *     },
+ *   ],
+ *   legend: true,
  * });
  */
 // $FlowFixMe

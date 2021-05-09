@@ -432,14 +432,12 @@ export type OBJ_PulseWidthAnimationStep = {
  * figure.add({
  *   name: 'l',
  *   make: 'collections.line',
- *   options: {
- *     p1: [-1, 0],
- *     p2: [1, 0],
- *     arrow: 'triangle',
- *     label: {
- *       text: 'length',
- *       offset: 0.04,
- *     },
+ *   p1: [-1, 0],
+ *   p2: [1, 0],
+ *   arrow: 'triangle',
+ *   label: {
+ *     text: 'length',
+ *     offset: 0.04,
  *   },
  * });
  *
@@ -450,17 +448,15 @@ export type OBJ_PulseWidthAnimationStep = {
  * figure.add({
  *   name: 'l',
  *   make: 'collections.line',
- *   options: {
- *     p1: [-1, 0],
- *     p2: [-0.5, 0],
- *     align: 'start',
- *     arrow: { end: { head: 'barb', scale: 2 } },
- *     label: {
- *       text: null,
- *       offset: 0.03,
- *       precision: 2,
- *       location: 'start'
- *     },
+ *   p1: [-1, 0],
+ *   p2: [-0.5, 0],
+ *   align: 'start',
+ *   arrow: { end: { head: 'barb', scale: 2 } },
+ *   label: {
+ *     text: null,
+ *     offset: 0.03,
+ *     precision: 2,
+ *     location: 'start'
  *   },
  * });
  *

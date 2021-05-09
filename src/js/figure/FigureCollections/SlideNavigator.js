@@ -115,22 +115,18 @@ export type COL_SlideNavigator = {
  *   {
  *     name: 'eqn',
  *     make: 'equation',
- *     options: {
- *       formDefaults: { alignment: { xAlign: 'center' } },
- *       forms: {
- *         0: ['a', '_ + ', 'b', '_ = ', 'c'],
- *         1: ['a', '_ + ', 'b', '_ - b_1', '_ = ', 'c', '_ - ', 'b_2'],
- *         2: ['a', '_ = ', 'c', '_ - ', 'b_2'],
- *       },
- *       formSeries: ['0', '1', '2'],
+ *     formDefaults: { alignment: { xAlign: 'center' } },
+ *     forms: {
+ *       0: ['a', '_ + ', 'b', '_ = ', 'c'],
+ *       1: ['a', '_ + ', 'b', '_ - b_1', '_ = ', 'c', '_ - ', 'b_2'],
+ *       2: ['a', '_ = ', 'c', '_ - ', 'b_2'],
  *     },
+ *     formSeries: ['0', '1', '2'],
  *   },
  *   {
  *     name: 'nav',
  *     make: 'collections.slideNavigator',
- *     options: {
- *       equation: 'eqn',
- *     },
+ *     equation: 'eqn',
  *   },
  * ]);
  *
@@ -140,29 +136,25 @@ export type COL_SlideNavigator = {
  *   {
  *     name: 'eqn',
  *     make: 'equation',
- *     options: {
- *       formDefaults: { alignment: { xAlign: 'center' } },
- *       forms: {
- *         0: ['a', '_ + ', 'b', '_ = ', 'c'],
- *         1: ['a', '_ + ', 'b', '_ - b_1', '_ = ', 'c', '_ - ', 'b_2'],
- *         2: ['a', '_ = ', 'c', '_ - ', 'b_2'],
- *       },
+ *     formDefaults: { alignment: { xAlign: 'center' } },
+ *     forms: {
+ *       0: ['a', '_ + ', 'b', '_ = ', 'c'],
+ *       1: ['a', '_ + ', 'b', '_ - b_1', '_ = ', 'c', '_ - ', 'b_2'],
+ *       2: ['a', '_ = ', 'c', '_ - ', 'b_2'],
  *     },
  *   },
  *   {
  *     name: 'nav',
  *     make: 'collections.slideNavigator',
- *     options: {
- *       equation: 'eqn',
- *       text: { position: [0, 0.3] },
- *       slides: [
- *         { text: 'Start with the equation', form: '0' },
- *         { text: 'Subtract b from both sides' },
- *         { form: '1' },
- *         { text: 'The b terms cancel on the left hand side' },
- *         { form: '2' },
- *       ],
- *     },
+ *     equation: 'eqn',
+ *     text: { position: [0, 0.3] },
+ *     slides: [
+ *       { text: 'Start with the equation', form: '0' },
+ *       { text: 'Subtract b from both sides' },
+ *       { form: '1' },
+ *       { text: 'The b terms cancel on the left hand side' },
+ *       { form: '2' },
+ *     ],
  *   },
  * ]);
  *
@@ -173,52 +165,44 @@ export type COL_SlideNavigator = {
  *   {   // Square drawing
  *     name: 'square',
  *     make: 'primitives.rectangle',
- *     options: {
- *       width: 0.4,
- *       height: 0.4,
- *       line: { width: 0.005 },
- *     },
+ *     width: 0.4,
+ *     height: 0.4,
+ *     line: { width: 0.005 },
  *   },
  *   {   // Side length label
  *     name: 'label',
  *     make: 'text',
- *     options: {
- *       yAlign: 'middle',
- *       position: [0.3, 0],
- *       font: { size: 0.1 },
- *     },
+ *     yAlign: 'middle',
+ *     position: [0.3, 0],
+ *     font: { size: 0.1 },
  *   },
  *   {   // Equation
  *     name: 'eqn',
  *     make: 'equation',
- *     options: {
- *       elements: {
- *         eq1: '  =  ',
- *         eq2: '  =  ',
- *         eq3: '  =  ',
- *       },
- *       phrases: {
- *         sideSqrd: { sup: ['side', '_2'] },
- *         areaEqSide: [{ bottomComment: ['Area', 'square'] }, 'eq1', 'sideSqrd'],
- *       },
- *       formDefaults: { alignment: { xAlign: 'center' } },
- *       forms: {
- *         0: ['areaEqSide'],
- *         1: ['areaEqSide', 'eq2', { sup: ['_1', '_2_1'] }, 'eq3', '_1_1'],
- *         2: ['areaEqSide', 'eq2', { sup: ['_2_2', '_2_1'] }, 'eq3', '4'],
- *       },
- *       position: [0, -0.8],
+ *     elements: {
+ *       eq1: '  =  ',
+ *       eq2: '  =  ',
+ *       eq3: '  =  ',
  *     },
+ *     phrases: {
+ *       sideSqrd: { sup: ['side', '_2'] },
+ *       areaEqSide: [{ bottomComment: ['Area', 'square'] }, 'eq1', 'sideSqrd'],
+ *     },
+ *     formDefaults: { alignment: { xAlign: 'center' } },
+ *     forms: {
+ *       0: ['areaEqSide'],
+ *       1: ['areaEqSide', 'eq2', { sup: ['_1', '_2_1'] }, 'eq3', '_1_1'],
+ *       2: ['areaEqSide', 'eq2', { sup: ['_2_2', '_2_1'] }, 'eq3', '4'],
+ *     },
+ *     position: [0, -0.8],
  *   },
  *   {   // Slide Navigator
  *     name: 'nav',
  *     make: 'collections.slideNavigator',
- *     options: {
- *       equation: 'eqn',
- *       nextButton: { type: 'arrow', position: [1.2, -0.8] },
- *       prevButton: { type: 'arrow', position: [-1.2, -0.8] },
- *       text: { position: [0, 0.7], font: { size: 0.12 } },
- *     },
+ *     equation: 'eqn',
+ *     nextButton: { type: 'arrow', position: [1.2, -0.8] },
+ *     prevButton: { type: 'arrow', position: [-1.2, -0.8] },
+ *     text: { position: [0, 0.7], font: { size: 0.12 } },
  *   },
  * ]);
  *

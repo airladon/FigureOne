@@ -109,28 +109,22 @@ figure.add(
       {
         name: 'line',
         make: 'primitives.line',
-        options: {
-          p1: [0, 0],
-          p2: [2, 0],
-          width: 0.01,
-          color: [0, 0, 1, 1],
-        },
+        p1: [0, 0],
+        p2: [2, 0],
+        width: 0.01,
+        color: [0, 0, 1, 1],
       },
       {
         name: 'label',
         make: 'primitives.text',
-        options: {
-          text: 'Line 1',
-          position: [1, 0.1],
-          font: { color: [0, 0, 1, 1] },
-          xAlign: 'center',
-        },
+        text: 'Line 1',
+        position: [1, 0.1],
+        font: { color: [0, 0, 1, 1] },
+        xAlign: 'center',
       },
     ],
-    options: {
-      position: [3, 2],
-      touchBorder: 0.3,
-    },
+    position: [3, 2],
+    touchBorder: 0.3,
     mods: {
       isMovable: true,
       move: {

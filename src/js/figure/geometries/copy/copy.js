@@ -90,24 +90,22 @@ import {
  * figure.add({
  *   name: 'triGrid',
  *   make: 'polygon',
- *   options: {
- *     radius: 0.1,
- *     sides: 3,
- *     rotation: -Math.PI / 6,
- *     fill: 'tris',
- *     copy: [
- *       {
- *         along: 'x',
- *         num: 4,
- *         step: 0.3,
- *       },
- *       {
- *         along: 'y',
- *         num: 4,
- *         step: 0.3,
- *       },
- *     ],
- *   },
+ *   radius: 0.1,
+ *   sides: 3,
+ *   rotation: -Math.PI / 6,
+ *   fill: 'tris',
+ *   copy: [
+ *     {
+ *       along: 'x',
+ *       num: 4,
+ *       step: 0.3,
+ *     },
+ *     {
+ *       along: 'y',
+ *       num: 4,
+ *       step: 0.3,
+ *     },
+ *   ],
  * });
  *
  * @example
@@ -115,23 +113,21 @@ import {
  * figure.add({
  *   name: 'radialLines',
  *   make: 'generic',
- *   options: {
- *     points: [
- *       [-0.2, -0.1], [-0.2, 0.1], [0.2, 0.1],
- *       [-0.2, -0.1], [0.2, 0.1], [0.2, -0.1],
- *     ],
- *     copy: [
- *       {
- *         to: [[0.6, 0], [1.05, 0], [1.5, 0], [2.2, 0]],
- *       },
- *       {
- *         along: 'rotation',
- *         num: 5,
- *         step: Math.PI / 5,
- *         start: 1,              // only copy last step, not original points
- *       },
- *     ],
- *   },
+ *   points: [
+ *     [-0.2, -0.1], [-0.2, 0.1], [0.2, 0.1],
+ *     [-0.2, -0.1], [0.2, 0.1], [0.2, -0.1],
+ *   ],
+ *   copy: [
+ *     {
+ *       to: [[0.6, 0], [1.05, 0], [1.5, 0], [2.2, 0]],
+ *     },
+ *     {
+ *       along: 'rotation',
+ *       num: 5,
+ *       step: Math.PI / 5,
+ *       start: 1,              // only copy last step, not original points
+ *     },
+ *   ],
  * });
  *
  * @example
@@ -139,36 +135,34 @@ import {
  * figure.add({
  *   name: 'halfRings',
  *   make: 'polygon',
- *   options: {
- *     radius: 0.1,
- *     sides: 20,
- *     fill: 'tris',
- *     copy: [
- *       'ring1',               // marker 1
- *       {
- *         to: [0.5, 0],
- *         original: false,     // don't include the original shape
- *       },
- *       {
- *         along: 'rotation',
- *         num: 7,
- *         step: Math.PI / 7,
- *         start: 'ring1',      // copy only from marker 1
- *       },
- *       'ring2',               // marker 2
- *       {
- *         to: [1, 0],
- *         start: 0,            // make a copy of the original shape only
- *         end: 1,
- *       },
- *       {
- *         along: 'rotation',
- *         num: 15,
- *         step: Math.PI / 15,
- *         start: 'ring2',      // copy points from Marker 2 only
- *       },
- *     ],
- *   },
+ *   radius: 0.1,
+ *   sides: 20,
+ *   fill: 'tris',
+ *   copy: [
+ *     'ring1',               // marker 1
+ *     {
+ *       to: [0.5, 0],
+ *       original: false,     // don't include the original shape
+ *     },
+ *     {
+ *       along: 'rotation',
+ *       num: 7,
+ *       step: Math.PI / 7,
+ *       start: 'ring1',      // copy only from marker 1
+ *     },
+ *     'ring2',               // marker 2
+ *     {
+ *       to: [1, 0],
+ *       start: 0,            // make a copy of the original shape only
+ *       end: 1,
+ *     },
+ *     {
+ *       along: 'rotation',
+ *       num: 15,
+ *       step: Math.PI / 15,
+ *       start: 'ring2',      // copy points from Marker 2 only
+ *     },
+ *   ],
  * });
  */
 export type CPY_Step = {

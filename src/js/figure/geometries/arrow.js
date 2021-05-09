@@ -53,11 +53,9 @@ export type TypeArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'p
  * figure.add({
  *   name: 'a',
  *   make: 'polyline',
- *   options: {
- *     points: [[0, 0], [1, 0]],
- *     width: 0.02,
- *     arrow: 'triangle',
- *   },
+ *   points: [[0, 0], [1, 0]],
+ *   width: 0.02,
+ *   arrow: 'triangle',
  * });
  *
  * @example
@@ -65,21 +63,19 @@ export type TypeArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'p
  * figure.add({
  *   name: 'a',
  *   make: 'shapes.line',
- *   options: {
- *     p1: [0, 0],
- *     p2: [0, 1],
- *     width: 0.02,
- *     arrow: {
- *       end: {
- *         head: 'barb',
- *         width: 0.15,
- *         length: 0.25,
- *         barb: 0.05,
- *         scale: 2
- *       },
+ *   p1: [0, 0],
+ *   p2: [0, 1],
+ *   width: 0.02,
+ *   arrow: {
+ *     end: {
+ *       head: 'barb',
+ *       width: 0.15,
+ *       length: 0.25,
+ *       barb: 0.05,
+ *       scale: 2
  *     },
- *     dash: [0.02, 0.02],
  *   },
+ *   dash: [0.02, 0.02],
  * });
  *
  * @example
@@ -89,31 +85,25 @@ export type TypeArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'p
  *   {
  *     name: 'reference',
  *     make: 'polyline',
- *     options: {
- *       points: [[0, 0.3], [0.5, 0.3]],
- *     },
+ *     points: [[0, 0.3], [0.5, 0.3]],
  *   },
  *   {
  *     name: 'start',
  *     make: 'polyline',
- *     options: {
- *       points: [[0, 0], [0.5, 0]],
- *       arrow: {
- *         head: 'circle',
- *         radius: 0.1,
- *       },
+ *     points: [[0, 0], [0.5, 0]],
+ *     arrow: {
+ *       head: 'circle',
+ *       radius: 0.1,
  *     },
  *   },
  *   {
  *     name: 'mid',
  *     make: 'polyline',
- *     options: {
- *       points: [[0, -0.3], [0.5, -0.3]],
- *       arrow: {
- *         head: 'circle',
- *         radius: 0.1,
- *         align: 'mid',     // circle mid point is at line end
- *       },
+ *     points: [[0, -0.3], [0.5, -0.3]],
+ *     arrow: {
+ *       head: 'circle',
+ *       radius: 0.1,
+ *       align: 'mid',     // circle mid point is at line end
  *     },
  *   },
  * ]);
