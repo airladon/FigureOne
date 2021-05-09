@@ -2512,6 +2512,7 @@ export type EQN_Lines = {
  *   },
  * });
  *
+ * @example
  * figure.add({
  *   method: 'equation',
  *   options: {
