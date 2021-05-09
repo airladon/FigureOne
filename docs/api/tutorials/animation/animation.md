@@ -32,50 +32,41 @@ figure.add([
   {
     name: 'origin',
     make: 'polygon',
-    options: {
-      radius: 0.01,
-      line: { width: 0.01 },
-      sides: 10,
-      color: [0.7, 0.7, 0.7, 1]
-    },
+    radius: 0.01,
+    line: { width: 0.01 },
+    sides: 10,
+    color: [0.7, 0.7, 0.7, 1]
   },
   {
     name: 'grid',
     make: 'grid',
-    options: {
-      bounds: [-3, -3, 6, 6],
-      yStep: 0.1,
-      xStep: 0.1,
-      color: [0.7, 0.7, 0.7, 1],
-      line: { width: 0.001 },
-    },
+    bounds: [-3, -3, 6, 6],
+    yStep: 0.1,
+    xStep: 0.1,
+    color: [0.7, 0.7, 0.7, 1],
+    line: { width: 0.001 },
   },
   {
     name: 'gridMajor',
     make: 'grid',
-    options: {
-      bounds: [-3, -3, 6, 6],
-      yStep: 0.5,
-      xStep: 0.5,
-      color: [0.8, 0.8, 0.8, 1],
-      line: { width: 0.004 }
-    },
+    bounds: [-3, -3, 6, 6],
+    yStep: 0.5,
+    xStep: 0.5,
+    color: [0.8, 0.8, 0.8, 1],
+    line: { width: 0.004 }
   },
 ]);
 
 // shape to animate
-figure.add(
+const p = figure.add(
   {
     name: 'p',
     make: 'polygon',
-    options: {
-      sides: 4,
-      radius: 0.5,
-      position: [0, 0],
-    },
+    sides: 4,
+    radius: 0.5,
+    position: [0, 0],
   },
 );
-const p = figure.getElement('p');
 ```
 
 #### Animation Examples
@@ -112,15 +103,12 @@ p.animations.new()
 An animation manager is tied to one element, but can be used to animate other elements too
 ```javascript
 // add another element
-figure.add({
-  name: 'q',
+const q = figure.add({
   make: 'polygon',
-  options: {
-    radius: 0.5, sides: 3, position: [-1, 0]
-  },
+  radius: 0.5,
+  sides: 3,
+  position: [-1, 0]
 });
-
-const q = figure.getElement('q');
 
 // Use p animation manager to animate q
 p.animations.new()

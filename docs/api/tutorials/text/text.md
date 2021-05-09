@@ -27,34 +27,28 @@ figure.add([
   {
     name: 'origin',
     make: 'polygon',
-    options: {
-      radius: 0.01,
-      line: { width: 0.01 },
-      sides: 10,
-      color: [0.7, 0.7, 0.7, 1]
-    },
+    radius: 0.01,
+    line: { width: 0.01 },
+    sides: 10,
+    color: [0.7, 0.7, 0.7, 1]
   },
   {
     name: 'gridMinor',
     make: 'grid',
-    options: {
-      bounds: [-3, -3, 6, 6],
-      yStep: 0.1,
-      xStep: 0.1,
-      color: [0.7, 0.7, 0.7, 1],
-      line: { width: 0.001 },
-    },
+    bounds: [-3, -3, 6, 6],
+    yStep: 0.1,
+    xStep: 0.1,
+    color: [0.7, 0.7, 0.7, 1],
+    line: { width: 0.001 },
   },
   {
     name: 'gridMajor',
     make: 'grid',
-    options: {
-      bounds: [-3, -3, 6, 6],
-      yStep: 0.5,
-      xStep: 0.5,
-      color: [0.8, 0.8, 0.8, 1],
-      line: { width: 0.004 }
-    },
+    bounds: [-3, -3, 6, 6],
+    yStep: 0.5,
+    xStep: 0.5,
+    color: [0.8, 0.8, 0.8, 1],
+    line: { width: 0.004 },
   },
 ]);
 ```
@@ -70,11 +64,9 @@ figure.add(
   {
     name: 'simpleText',
     make: 'text',
-    options: {
-      text: 'hello world',
-      xAlign: 'center',
-      yAlign: 'middle',
-    },
+    text: 'hello world',
+    xAlign: 'center',
+    yAlign: 'middle',
   },
 );
 ```
@@ -88,20 +80,16 @@ figure.add(
   {
     name: 'spinner',
     make: 'text',
-    options: {
-      text: 'hello world',
-      xAlign: 'center',
-      yAlign: 'middle',
-      touchBorder: 0.5,   // add a touch buffer of 0.5 around the text
-    },
+    text: 'hello world',
+    xAlign: 'center',
+    yAlign: 'middle',
+    touchBorder: 0.5,   // add a touch buffer of 0.5 around the text
     mods: {
-      isTouchable: true,
       isMovable: true,
       move: { type: 'rotation' },
-    }
+    },
   },
 );
-figure.setTouchable();
 ```
 
 The same `text` method can be used to create text at different locations.
@@ -113,28 +101,26 @@ figure.add(
   {
     name: 'compass',
     make: 'text',
-    options: {
-      text: [
-        {
-          text: 'North',
-          location: [0, 0.5],
-        },
-        {
-          text: 'East',
-          location: [0.5, 0],
-        },
-        {
-          text: 'South',
-          location: [0, -0.5],
-        },
-        {
-          text: 'West',
-          location: [-0.5, 0],
-        },
-      ],
-      xAlign: 'center',
-      yAlign: 'middle',
-    },
+    text: [
+      {
+        text: 'North',
+        location: [0, 0.5],
+      },
+      {
+        text: 'East',
+        location: [0.5, 0],
+      },
+      {
+        text: 'South',
+        location: [0, -0.5],
+      },
+      {
+        text: 'West',
+        location: [-0.5, 0],
+      },
+    ],
+    xAlign: 'center',
+    yAlign: 'middle',
   },
 );
 ```
@@ -156,18 +142,16 @@ figure.add(
   {
     name: 'formattedLine',
     make: 'text.line',
-    options: {
-      line: [
-        'hello ',
-        {
-          text: 'world',
-          font: { color: [0, 0, 1, 1], style: 'italic' },
-        },
-        ' it is great to meet you',
-      ],
-      xAlign: 'center',
-      yAlign: 'middle',
-    },
+    text: [
+      'hello ',
+      {
+        text: 'world',
+        font: { color: [0, 0, 1, 1], style: 'italic' },
+      },
+      ' it is great to meet you',
+    ],
+    xAlign: 'center',
+    yAlign: 'middle',
   },
 );
 ```
@@ -190,21 +174,18 @@ figure.add(
   {
     name: 'formattedLine',
     make: 'text.lines',
-    options: {
-      lines: [
-        'hello |world| it is great to see you',
-      ],
-      modifiers: {
-        world: {
-          font: { color: [0, 0, 1, 1], style: 'italic' },
-        }
-      },
-      xAlign: 'center',
-      yAlign: 'middle',
+    text: [
+      'hello |world| it is great to see you',
+    ],
+    modifiers: {
+      world: {
+        font: { color: [0, 0, 1, 1], style: 'italic' },
+      }
     },
+    xAlign: 'center',
+    yAlign: 'middle',
   },
 );
-figure.setTouchable();
 ```
 
 `text.lines` also allows for multiple lines of text to be laid out and justified.
@@ -216,27 +197,25 @@ figure.add(
   {
     name: 't',
     make: 'text.lines',
-    options: {
-      lines: [
-        'This is the |first| line',
-        'This is the |second| line - and it is long',
-        'This is the |third| line'
-      ],
-      modifiers: {
-        first: {
-          font: { color: [0, 0, 1, 1], style: 'italic' },
-        },
-        second: {
-          font: { color: [0, 0.6, 0.6, 1], style: 'italic' },
-        },
-        third: {
-          font: { color: [1, 0, 1, 1], style: 'italic' },
-        },
+    text: [
+      'This is the |first| line',
+      'This is the |second| line - and it is long',
+      'This is the |third| line'
+    ],
+    modifiers: {
+      first: {
+        font: { color: [0, 0, 1, 1], style: 'italic' },
       },
-      xAlign: 'center',
-      yAlign: 'middle',
-      justify: 'center',
+      second: {
+        font: { color: [0, 0.6, 0.6, 1], style: 'italic' },
+      },
+      third: {
+        font: { color: [1, 0, 1, 1], style: 'italic' },
+      },
     },
+    xAlign: 'center',
+    yAlign: 'middle',
+    justify: 'center',
   },
 );
 ```
