@@ -133,16 +133,16 @@ export type OBJ_AnimationDefinition = Object;
  *   {
  *     name: 'rect1',
  *     make: 'primitives.rectangle',
- *     options: {
- *       width: 0.4, height: 0.4, position: [-0.5, 0.5],
- *     },
+ *     width: 0.4,
+ *     height: 0.4,
+ *     position: [-0.5, 0.5],
  *   },
  *   {
  *     name: 'rect2',
  *     make: 'primitives.rectangle',
- *     options: {
- *       width: 0.4, height: 0.4, position: [0.5, 0.5],
- *     },
+ *     width: 0.4,
+ *     height: 0.4,
+ *     position: [0.5, 0.5],
  *   },
  *   {
  *     name: 'nav',

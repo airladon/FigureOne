@@ -197,10 +197,8 @@ export type OBJ_Figure = {
  *   {
  *     name: 'p',
  *     make: 'polygon',
- *     options: {
- *       radius: 0.5,
- *       sides: 6,
- *     },
+ *     radius: 0.5,
+ *     sides: 6,
  *   },
  * );
  *
@@ -989,7 +987,7 @@ class Figure {
    * // be auto generated)
    * figure.add({
    *   make: 'polygon',
-   *   options: { radius: 1 },
+   *   radius: 1,
    * });
    *
    * @example
@@ -999,7 +997,8 @@ class Figure {
    *   element,
    *   {
    *     make: 'polygon',
-   *     options: { radius: 0.2, color: [0, 0, 1, 1] },
+   *     radius: 0.2,
+   *     color: [0, 0, 1, 1],
    *   },
    * ]);
    */
@@ -1037,19 +1036,15 @@ class Figure {
    *       {
    *         name: 'tri',
    *         make: 'triangle',
-   *         options: {
-   *           height: 0.4,
-   *           width: 0.4,
-   *         },
+   *         height: 0.4,
+   *         width: 0.4,
    *       },
    *       {
    *         name: 'text',
    *         make: 'text',
-   *         options: {
-   *           text: 'triangle',
-   *           position: [0, -0.4],
-   *           xAlign: 'center',
-   *         },
+   *         text: 'triangle',
+   *         position: [0, -0.4],
+   *         xAlign: 'center',
    *       },
    *     ],
    *   },

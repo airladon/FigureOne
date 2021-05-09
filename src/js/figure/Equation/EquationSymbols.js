@@ -103,13 +103,11 @@ export type EQN_Symbol = {
  * // Define as element
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     elements: {
- *       v: { symbol: 'vinculum' },
- *     },
- *     forms: {
- *       form1: { frac: ['a', 'v', 'b'] },
- *     },
+ *   elements: {
+ *     v: { symbol: 'vinculum' },
+ *   },
+ *   forms: {
+ *     form1: { frac: ['a', 'v', 'b'] },
  *   },
  * });
  *
@@ -117,10 +115,8 @@ export type EQN_Symbol = {
  * // Define inline simple one use
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { frac: ['a', 'vinculum', 'b'] },
- *     },
+ *   forms: {
+ *     form1: { frac: ['a', 'vinculum', 'b'] },
  *   },
  * });
  *
@@ -128,11 +124,9 @@ export type EQN_Symbol = {
  * // Define inline with reuse
  * const eqn = figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { frac: ['a', 'v1_vinculum', { frac: ['c', 'v2_vinculum', 'b'] }] },
- *       form2: { frac: [['a', 'ef'], 'v1', { frac: ['c', 'v2', 'd'] }] },
- *     },
+ *   forms: {
+ *     form1: { frac: ['a', 'v1_vinculum', { frac: ['c', 'v2_vinculum', 'b'] }] },
+ *     form2: { frac: [['a', 'ef'], 'v1', { frac: ['c', 'v2', 'd'] }] },
  *   },
  * });
  * eqn.animations.new()
@@ -143,10 +137,8 @@ export type EQN_Symbol = {
  * // Define inline with customization
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
+ *   forms: {
  *       form1: { frac: ['a', { vinculum: { lineWidth: 0.004 } }, 'b'] },
- *     },
  *   },
  * });
  */
@@ -206,13 +198,11 @@ export type EQN_VinculumSymbol = {
  * // Define in element
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     elements: {
- *       b: { symbol: 'box', lineWidth: 0.008 },
- *     },
- *     forms: {
- *       form1: { box: ['a', 'b', true, 0.1] },
- *     },
+ *   elements: {
+ *     b: { symbol: 'box', lineWidth: 0.008 },
+ *   },
+ *   forms: {
+ *     form1: { box: ['a', 'b', true, 0.1] },
  *   },
  * });
  *
@@ -220,10 +210,8 @@ export type EQN_VinculumSymbol = {
  * // Define inline simple one use
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { box: ['a', 'box', true, 0.1] },
- *     },
+ *   forms: {
+ *     form1: { box: ['a', 'box', true, 0.1] },
  *   },
  * });
  *
@@ -231,11 +219,9 @@ export type EQN_VinculumSymbol = {
  * // Define inline with reuse
  * const eqn = figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { box: ['a', 'b_box', false, 0.1] },
- *       form2: { box: ['a', 'b', false, 0.2] },
- *     },
+ *   forms: {
+ *     form1: { box: ['a', 'b_box', false, 0.1] },
+ *     form2: { box: ['a', 'b', false, 0.2] },
  *   },
  * });
  * eqn.animations.new()
@@ -246,10 +232,8 @@ export type EQN_VinculumSymbol = {
  * // Define inline with customization
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { box: ['a', { box: { lineWidth: 0.004 } }, true, 0.1] },
- *     },
+ *   forms: {
+ *     form1: { box: ['a', { box: { lineWidth: 0.004 } }, true, 0.1] },
  *   },
  * });
  */
@@ -329,13 +313,11 @@ export type EQN_BoxSymbol = {
  * // Define in element
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     elements: {
- *       rightArrow: { symbol: 'arrow', direction: 'right' },
- *     },
- *     forms: {
- *       form1: { bar: ['a', 'rightArrow', false, 0.05, 0.03] },
- *     },
+ *   elements: {
+ *     rightArrow: { symbol: 'arrow', direction: 'right' },
+ *   },
+ *   forms: {
+ *     form1: { bar: ['a', 'rightArrow', false, 0.05, 0.03] },
  *   },
  * });
  *
@@ -343,10 +325,8 @@ export type EQN_BoxSymbol = {
  * // Define inline simple one use
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { bar: ['a', 'arrow', false, 0.05, 0.03] },
- *     },
+ *   forms: {
+ *     form1: { bar: ['a', 'arrow', false, 0.05, 0.03] },
  *   },
  * });
  *
@@ -354,11 +334,9 @@ export type EQN_BoxSymbol = {
  * // Define inline with reuse
  * const eqn = figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { bar: ['a', 'ar_arrow', false, 0.05, 0] },
- *       form2: { bar: ['a', 'ar', false, 0.05, 0.1] },
- *     },
+ *   forms: {
+ *     form1: { bar: ['a', 'ar_arrow', false, 0.05, 0] },
+ *     form2: { bar: ['a', 'ar', false, 0.05, 0.1] },
  *   },
  * });
  * eqn.animations.new()
@@ -369,15 +347,13 @@ export type EQN_BoxSymbol = {
  * // Define inline with customization
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: {
- *         bar: {
- *           content: 'a',
- *           side: 'left',
- *           symbol: { arrow: { direction: 'up' } },
- *           overhang: 0.1,
- *         },
+ *   forms: {
+ *     form1: {
+ *       bar: {
+ *         content: 'a',
+ *         side: 'left',
+ *         symbol: { arrow: { direction: 'up' } },
+ *         overhang: 0.1,
  *       },
  *     },
  *   },
@@ -445,13 +421,11 @@ export type EQN_ArrowSymbol = {
  * // Define in element
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     elements: {
- *       sigma: { symbol: 'sum' },
- *     },
- *     forms: {
- *       form1: { sumOf: ['sigma', 'a', 'a = 0', 'n'] },
- *     },
+ *   elements: {
+ *     sigma: { symbol: 'sum' },
+ *   },
+ *   forms: {
+ *     form1: { sumOf: ['sigma', 'a', 'a = 0', 'n'] },
  *   },
  * });
  *
@@ -459,10 +433,8 @@ export type EQN_ArrowSymbol = {
  * // Define inline simple one use
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { sumOf: ['sum', 'a', 'a = 0', 'n'] },
- *     },
+ *   forms: {
+ *     form1: { sumOf: ['sum', 'a', 'a = 0', 'n'] },
  *   },
  * });
  *
@@ -470,11 +442,9 @@ export type EQN_ArrowSymbol = {
  * // Define inline with reuse
  * const eqn = figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { sumOf: ['s1_sum', 'a', 'a = 0', 'n'] },
- *       form2: { sumOf: ['s1', 'a', 'a = 0', 'm'] },
- *     },
+ *   forms: {
+ *     form1: { sumOf: ['s1_sum', 'a', 'a = 0', 'n'] },
+ *     form2: { sumOf: ['s1', 'a', 'a = 0', 'm'] },
  *   },
  * });
  * eqn.animations.new()
@@ -485,10 +455,8 @@ export type EQN_ArrowSymbol = {
  * // Define inline with customization
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { sumOf: [{ sum: { lineWidth: 0.01 } }, 'a', 'a = 0', 'n'] },
- *     },
+ *   forms: {
+ *     form1: { sumOf: [{ sum: { lineWidth: 0.01 } }, 'a', 'a = 0', 'n'] },
  *   },
  * });
  */
@@ -558,13 +526,11 @@ export type EQN_SumSymbol ={
  * // Define in element
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     elements: {
- *       sigma: { symbol: 'prod' },
- *     },
- *     forms: {
- *       form1: { prodOf: ['sigma', 'a', 'a = 0', 'n'] },
- *     },
+ *   elements: {
+ *     sigma: { symbol: 'prod' },
+ *   },
+ *   forms: {
+ *     form1: { prodOf: ['sigma', 'a', 'a = 0', 'n'] },
  *   },
  * });
  *
@@ -572,10 +538,8 @@ export type EQN_SumSymbol ={
  * // Define inline simple one use
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { prodOf: ['prod', 'a', 'a = 0', 'n'] },
- *     },
+ *   forms: {
+ *     form1: { prodOf: ['prod', 'a', 'a = 0', 'n'] },
  *   },
  * });
  *
@@ -583,11 +547,9 @@ export type EQN_SumSymbol ={
  * // Define inline with reuse
  * const eqn = figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { prodOf: ['p1_prod', 'a', 'a = 0', 'n'] },
- *       form2: { prodOf: ['p1', 'a', 'a = 0', 'm'] },
- *     },
+ *   forms: {
+ *     form1: { prodOf: ['p1_prod', 'a', 'a = 0', 'n'] },
+ *     form2: { prodOf: ['p1', 'a', 'a = 0', 'm'] },
  *   },
  * });
  * eqn.animations.new()
@@ -598,10 +560,8 @@ export type EQN_SumSymbol ={
  * // Define inline with customization
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { prodOf: [{ prod: { lineWidth: 0.01 } }, 'a', 'a = 0', 'n'] },
- *     },
+ *   forms: {
+ *     form1: { prodOf: [{ prod: { lineWidth: 0.01 } }, 'a', 'a = 0', 'n'] },
  *   },
  * });
  */
@@ -683,13 +643,11 @@ export type EQN_ProdSymbol = {
  * // Define in element
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     elements: {
- *       int: { symbol: 'int' },
- *     },
- *     forms: {
- *       form1: { int: ['int', 'x dx', 'a', 'b'] },
- *     },
+ *   elements: {
+ *     int: { symbol: 'int' },
+ *   },
+ *   forms: {
+ *     form1: { int: ['int', 'x dx', 'a', 'b'] },
  *   },
  * });
  *
@@ -697,13 +655,11 @@ export type EQN_ProdSymbol = {
  * // Triple Integral
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     elements: {
- *       int: { symbol: 'int', num: 3 },
- *     },
- *     forms: {
- *       form1: { int: ['int', 'dx dy dz'] },
- *     },
+ *   elements: {
+ *     int: { symbol: 'int', num: 3 },
+ *   },
+ *   forms: {
+ *     form1: { int: ['int', 'dx dy dz'] },
  *   },
  * });
  *
@@ -711,13 +667,11 @@ export type EQN_ProdSymbol = {
  * // Line Integral
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     elements: {
- *       int: { symbol: 'int', type: 'line' },
- *     },
- *     forms: {
- *       form1: { int: ['int', 'r dr'] },
- *     },
+ *   elements: {
+ *     int: { symbol: 'int', type: 'line' },
+ *   },
+ *   forms: {
+ *     form1: { int: ['int', 'r dr'] },
  *   },
  * });
  *
@@ -725,10 +679,8 @@ export type EQN_ProdSymbol = {
  * // Define inline simple one use
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { int: ['int', 'x dx', 'a', 'b'] },
- *     },
+ *   forms: {
+ *     form1: { int: ['int', 'x dx', 'a', 'b'] },
  *   },
  * });
  *
@@ -736,11 +688,9 @@ export type EQN_ProdSymbol = {
  * // Define inline with reuse
  * const eqn = figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { int: ['i1_int', 'x dx', 'a', 'b'] },
- *       form2: { int: ['i1', 'y dy', 'a', 'b'] },
- *     },
+ *   forms: {
+ *     form1: { int: ['i1_int', 'x dx', 'a', 'b'] },
+ *     form2: { int: ['i1', 'y dy', 'a', 'b'] },
  *   },
  * });
  * eqn.animations.new()
@@ -751,10 +701,8 @@ export type EQN_ProdSymbol = {
  * // Define inline with customization
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { int: [{ int: { serif: false } }, 'x dx', 'a', 'b'] },
- *     },
+ *   forms: {
+ *     form1: { int: [{ int: { serif: false } }, 'x dx', 'a', 'b'] },
  *   },
  * });
  */
@@ -838,13 +786,11 @@ export type EQN_IntegralSymbol = {
  * // Define in element
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     elements: {
- *       r: { symbol: 'radical' },
- *     },
- *     forms: {
- *       form1: { root: ['r', 'a', false, 0.05] },
- *     },
+ *   elements: {
+ *     r: { symbol: 'radical' },
+ *   },
+ *   forms: {
+ *     form1: { root: ['r', 'a', false, 0.05] },
  *   },
  * });
  *
@@ -852,10 +798,8 @@ export type EQN_IntegralSymbol = {
  * // Define inline simple one use
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { root: ['radical', 'a', false, 0.05] },
- *     },
+ *   forms: {
+ *     form1: { root: ['radical', 'a', false, 0.05] },
  *   },
  * });
  *
@@ -863,11 +807,9 @@ export type EQN_IntegralSymbol = {
  * // Define inline with reuse
  * const eqn = figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { root: ['r1_radical', 'a', false, 0.05] },
- *       form2: { root: ['r1', ['a', 'b'], false, 0.05] },
- *     },
+ *   forms: {
+ *     form1: { root: ['r1_radical', 'a', false, 0.05] },
+ *     form2: { root: ['r1', ['a', 'b'], false, 0.05] },
  *   },
  * });
  * eqn.animations.new()
@@ -878,10 +820,8 @@ export type EQN_IntegralSymbol = {
  * // Define inline with customization
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { root: [{ radical: { lineWidth: 0.005 } }, 'a', false, 0.05] },
- *     },
+ *   forms: {
+ *     form1: { root: [{ radical: { lineWidth: 0.005 } }, 'a', false, 0.05] },
  *   },
  * });
  */
@@ -965,13 +905,11 @@ export type EQN_RadicalSymbol = {
  * // Define in element
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     elements: {
- *       s: { symbol: 'strike', style: 'cross', lineWidth: 0.01 },
- *     },
- *     forms: {
- *       form1: { strike: ['ABC', 's'] },
- *     },
+ *   elements: {
+ *     s: { symbol: 'strike', style: 'cross', lineWidth: 0.01 },
+ *   },
+ *   forms: {
+ *     form1: { strike: ['ABC', 's'] },
  *   },
  * });
  *
@@ -979,13 +917,11 @@ export type EQN_RadicalSymbol = {
  * // Forward Strike
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     elements: {
- *       s: { symbol: 'strike', style: 'forward', lineWidth: 0.01 },
- *     },
- *     forms: {
- *       form1: { strike: ['ABC', 's'] },
- *     },
+ *   elements: {
+ *     s: { symbol: 'strike', style: 'forward', lineWidth: 0.01 },
+ *   },
+ *   forms: {
+ *     form1: { strike: ['ABC', 's'] },
  *   },
  * });
  *
@@ -993,13 +929,11 @@ export type EQN_RadicalSymbol = {
  * // Back Strike
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     elements: {
- *       s: { symbol: 'strike', style: 'back', lineWidth: 0.01 },
- *     },
- *     forms: {
- *       form1: { strike: ['ABC', 's'] },
- *     },
+ *   elements: {
+ *     s: { symbol: 'strike', style: 'back', lineWidth: 0.01 },
+ *   },
+ *   forms: {
+ *     form1: { strike: ['ABC', 's'] },
  *   },
  * });
  *
@@ -1007,13 +941,11 @@ export type EQN_RadicalSymbol = {
  * // Horizontal Slash
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     elements: {
- *       s: { symbol: 'strike', style: 'horizontal', lineWidth: 0.01 },
- *     },
- *     forms: {
- *       form1: { strike: ['ABC', 's'] },
- *     },
+ *   elements: {
+ *     s: { symbol: 'strike', style: 'horizontal', lineWidth: 0.01 },
+ *   },
+ *   forms: {
+ *     form1: { strike: ['ABC', 's'] },
  *   },
  * });
  *
@@ -1021,10 +953,8 @@ export type EQN_RadicalSymbol = {
  * // Define inline simple one use
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { strike: ['ABC', 'strike'] },
- *     },
+ *   forms: {
+ *     form1: { strike: ['ABC', 'strike'] },
  *   },
  * });
  *
@@ -1032,11 +962,9 @@ export type EQN_RadicalSymbol = {
  * // Define inline with reuse
  * const eqn = figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { strike: ['ABC', 's1_strike'] },
- *       form2: { strike: ['DEFGH', 's1'] },
- *     },
+ *   forms: {
+ *     form1: { strike: ['ABC', 's1_strike'] },
+ *     form2: { strike: ['DEFGH', 's1'] },
  *   },
  * });
  * eqn.animations.new()
@@ -1047,10 +975,8 @@ export type EQN_RadicalSymbol = {
  * // Define inline with customization
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { strike: ['ABC', { strike: { style: 'forward' } }] },
- *     },
+ *   forms: {
+ *     form1: { strike: ['ABC', { strike: { style: 'forward' } }] },
  *   },
  * });
  */
@@ -1118,14 +1044,12 @@ export type EQN_StrikeSymbol = {
  * // Define in element
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     elements: {
- *       lb: { symbol: 'bracket', side: 'left' },
- *       rb: { symbol: 'bracket', side: 'right' },
- *     },
- *     forms: {
- *       form1: { brac: ['lb', 'a', 'rb'] },
- *     },
+ *   elements: {
+ *     lb: { symbol: 'bracket', side: 'left' },
+ *     rb: { symbol: 'bracket', side: 'right' },
+ *   },
+ *   forms: {
+ *     form1: { brac: ['lb', 'a', 'rb'] },
  *   },
  * });
  *
@@ -1133,15 +1057,13 @@ export type EQN_StrikeSymbol = {
  * // Define inline
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: {
- *         brac: [
- *           { lb_bracket: { side: 'left' } },
- *           'a',
- *           { rb_bracket: { side: 'right' } },
- *         ],
- *       },
+ *   forms: {
+ *     form1: {
+ *       brac: [
+ *         { lb_bracket: { side: 'left' } },
+ *         'a',
+ *         { rb_bracket: { side: 'right' } },
+ *       ],
  *     },
  *   },
  * });
@@ -1202,14 +1124,12 @@ export type EQN_BracketSymbol = {
  * // Define in element
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     elements: {
- *       lb: { symbol: 'angleBracket', side: 'left' },
- *       rb: { symbol: 'angleBracket', side: 'right' },
- *     },
- *     forms: {
- *       form1: { brac: ['lb', 'a', 'rb'] },
- *     },
+ *   elements: {
+ *     lb: { symbol: 'angleBracket', side: 'left' },
+ *     rb: { symbol: 'angleBracket', side: 'right' },
+ *   },
+ *   forms: {
+ *     form1: { brac: ['lb', 'a', 'rb'] },
  *   },
  * });
  *
@@ -1217,15 +1137,13 @@ export type EQN_BracketSymbol = {
  * // Define inline
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: {
- *         brac: [
- *           { lb_angleBracket: { side: 'left' } },
- *           'a',
- *           { rb_angleBracket: { side: 'right' } },
- *         ],
- *       },
+ *   forms: {
+ *     form1: {
+ *       brac: [
+ *         { lb_angleBracket: { side: 'left' } },
+ *         'a',
+ *         { rb_angleBracket: { side: 'right' } },
+ *       ],
  *     },
  *   },
  * });
@@ -1308,14 +1226,12 @@ export type EQN_AngleBracketSymbol = {
  * // Define in element
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     elements: {
- *       lb: { symbol: 'brace', side: 'left' },
- *       rb: { symbol: 'brace', side: 'right' },
- *     },
- *     forms: {
- *       form1: { brac: ['lb', 'a', 'rb'] },
- *     },
+ *   elements: {
+ *     lb: { symbol: 'brace', side: 'left' },
+ *     rb: { symbol: 'brace', side: 'right' },
+ *   },
+ *   forms: {
+ *     form1: { brac: ['lb', 'a', 'rb'] },
  *   },
  * });
  *
@@ -1323,15 +1239,13 @@ export type EQN_AngleBracketSymbol = {
  * // Define inline
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: {
- *         brac: [
- *           { lb_brace: { side: 'left' } },
- *           'a',
- *           { rb_brace: { side: 'right' } },
- *         ],
- *       },
+ *   forms: {
+ *     form1: {
+ *       brac: [
+ *         { lb_brace: { side: 'left' } },
+ *         'a',
+ *         { rb_brace: { side: 'right' } },
+ *       ],
  *     },
  *   },
  * });
@@ -1399,13 +1313,11 @@ export type EQN_BraceSymbol = {
  * // Define in element
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     elements: {
- *       b: { symbol: 'bar', side: 'top' },
- *     },
- *     forms: {
- *       form1: { bar: ['a', 'b', false, 0.05, 0.03] },
- *     },
+ *   elements: {
+ *     b: { symbol: 'bar', side: 'top' },
+ *   },
+ *   forms: {
+ *     form1: { bar: ['a', 'b', false, 0.05, 0.03] },
  *   },
  * });
  *
@@ -1413,15 +1325,13 @@ export type EQN_BraceSymbol = {
  * // Define inline simple one use
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: {
- *         bar: {
- *           content: 'a',
- *           symbol: 'bar',
- *           side: 'left',
- *           overhang: 0.1,
- *         },
+ *   forms: {
+ *     form1: {
+ *       bar: {
+ *         content: 'a',
+ *         symbol: 'bar',
+ *         side: 'left',
+ *         overhang: 0.1,
  *       },
  *     },
  *   },
@@ -1431,11 +1341,9 @@ export type EQN_BraceSymbol = {
  * // Define inline with reuse
  * const eqn = figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { bar: ['a', { bar: { side: 'top' } }, false, 0.05, 0.03] },
- *       form2: { bar: [['a', 'bc'], { bar: { side: 'top' } }, false, 0.05, 0.03] },
- *     },
+ *   forms: {
+ *     form1: { bar: ['a', { bar: { side: 'top' } }, false, 0.05, 0.03] },
+ *     form2: { bar: [['a', 'bc'], { bar: { side: 'top' } }, false, 0.05, 0.03] },
  *   },
  * });
  * eqn.animations.new()
@@ -1446,10 +1354,8 @@ export type EQN_BraceSymbol = {
  * // Define inline with customization
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { bar: ['a', { bar: { side: 'top' } }, false, 0.05, 0.03] },
- *     },
+ *   forms: {
+ *     form1: { bar: ['a', { bar: { side: 'top' } }, false, 0.05, 0.03] },
  *   },
  * });
  */
@@ -1519,14 +1425,12 @@ export type EQN_BarSymbol = {
  * // Define in element
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     elements: {
- *       lb: { symbol: 'squareBracket', side: 'left' },
- *       rb: { symbol: 'squareBracket', side: 'right' },
- *     },
- *     forms: {
- *       form1: { brac: ['lb', 'a', 'rb'] },
- *     },
+ *   elements: {
+ *     lb: { symbol: 'squareBracket', side: 'left' },
+ *     rb: { symbol: 'squareBracket', side: 'right' },
+ *   },
+ *   forms: {
+ *     form1: { brac: ['lb', 'a', 'rb'] },
  *   },
  * });
  *
@@ -1534,15 +1438,13 @@ export type EQN_BarSymbol = {
  * // Define inline
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: {
- *         brac: [
- *           { lb_squareBracket: { side: 'left' } },
- *           'a',
- *           { rb_squareBracket: { side: 'right' } },
- *         ],
- *       },
+ *   forms: {
+ *     form1: {
+ *       brac: [
+ *         { lb_squareBracket: { side: 'left' } },
+ *         'a',
+ *         { rb_squareBracket: { side: 'right' } },
+ *       ],
  *     },
  *   },
  * });
@@ -1582,13 +1484,11 @@ export type EQN_SquareBracketSymbol = {
  * // Define in element
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     elements: {
- *       l: { symbol: 'line', arrow: 'barb', width: 0.005 },
- *     },
- *     forms: {
- *       form1: { topComment: ['a', 'b', 'l', 0.2, 0.2] },
- *     },
+ *   elements: {
+ *     l: { symbol: 'line', arrow: 'barb', width: 0.005 },
+ *   },
+ *   forms: {
+ *     form1: { topComment: ['a', 'b', 'l', 0.2, 0.2] },
  *   },
  * });
  *
@@ -1596,13 +1496,11 @@ export type EQN_SquareBracketSymbol = {
  * // Dashed line
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     elements: {
- *       l: { symbol: 'line', dash: [0.01, 0.01], width: 0.005 },
- *     },
- *     forms: {
- *       form1: { topComment: ['a', 'b', 'l', 0.2, 0.2] },
- *     },
+ *   elements: {
+ *     l: { symbol: 'line', dash: [0.01, 0.01], width: 0.005 },
+ *   },
+ *   forms: {
+ *     form1: { topComment: ['a', 'b', 'l', 0.2, 0.2] },
  *   },
  * });
  *
@@ -1610,10 +1508,8 @@ export type EQN_SquareBracketSymbol = {
  * // Define inline simple one use
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { topComment: ['a', 'b', 'line', 0.2, 0.2] },
- *     },
+ *   forms: {
+ *     form1: { topComment: ['a', 'b', 'line', 0.2, 0.2] },
  *   },
  * });
  *
@@ -1621,11 +1517,9 @@ export type EQN_SquareBracketSymbol = {
  * // Define inline with reuse
  * const eqn = figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { topComment: ['a', 'b', 'l1_line', 0.2, 0.2] },
- *       form2: { topComment: ['a', 'b', 'l1', 0.2, 0.2] },
- *     },
+ *   forms: {
+ *     form1: { topComment: ['a', 'b', 'l1_line', 0.2, 0.2] },
+ *     form2: { topComment: ['a', 'b', 'l1', 0.2, 0.2] },
  *   },
  * });
  * eqn.animations.new()
@@ -1636,10 +1530,8 @@ export type EQN_SquareBracketSymbol = {
  * // Define inline with customization
  * figure.add({
  *   make: 'equation',
- *   options: {
- *     forms: {
- *       form1: { topComment: ['a', 'b', { line: { arrow: 'barb' } }, 0.2, 0.2] },
- *     },
+ *   forms: {
+ *     form1: { topComment: ['a', 'b', { line: { arrow: 'barb' } }, 0.2, 0.2] },
  *   },
  * });
  *

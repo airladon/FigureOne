@@ -218,16 +218,12 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
  *
  * @example
  * // For all examples below, use this to add an element to the figure
- * figure.add({
- *   name: 'p',
+ * const p = figure.add({
  *   make: 'polygon',
- *   options: {
- *     radius: 0.3,
- *     line: { width: 0.05, },
- *   },
+ *   radius: 0.3,
+ *   line: { width: 0.05, },
  * });
  *
- * const p = figure.getElement('p');
  *
  * @example
  * // Scale pulse
@@ -3759,7 +3755,7 @@ class FigureElementCollection extends FigureElement {
    * const collection = figure.add({ make: 'collection' });
    * collection.add({
    *   make: 'polygon',
-   *   options: { radius: 1 },
+   *   radius: 1,
    * });
    *
    * @example
@@ -3770,7 +3766,8 @@ class FigureElementCollection extends FigureElement {
    *   polygon1,
    *   {
    *     make: 'polygon',
-   *     options: { radius: 0.2, color: [0, 0, 1, 1] },
+   *     radius: 0.2,
+   *     color: [0, 0, 1, 1],
    *   },
    * ]);
    */
@@ -4267,19 +4264,15 @@ class FigureElementCollection extends FigureElement {
    *       {
    *         name: 'tri',
    *         make: 'triangle',
-   *         options: {
-   *           height: 0.4,
-   *           width: 0.4,
-   *         },
+   *         height: 0.4,
+   *         width: 0.4,
    *       },
    *       {
    *         name: 'text',
    *         make: 'text',
-   *         options: {
-   *           text: 'triangle',
-   *           position: [0, -0.4],
-   *           xAlign: 'center',
-   *         },
+   *         text: 'triangle',
+   *         position: [0, -0.4],
+   *         xAlign: 'center',
    *       },
    *     ],
    *   },

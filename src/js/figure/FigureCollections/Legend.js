@@ -144,18 +144,16 @@ export type COL_PlotLegend = {
  * figure.add({
  *   name: 'plot',
  *   make: 'collections.plot',
- *   options: {
- *     trace: [
- *       { points: pow(2), name: 'Power 2' },
- *       { points: pow(2.5), name: 'Power 2.5' },
- *       {
- *         points: pow(3, 10, 0.5),
- *         name: 'Power 3',
- *         markers: { radius: 0.03, sides: 10 },
- *       },
- *     ],
- *     legend: true,
- *   },
+ *   trace: [
+ *     { points: pow(2), name: 'Power 2' },
+ *     { points: pow(2.5), name: 'Power 2.5' },
+ *     {
+ *       points: pow(3, 10, 0.5),
+ *       name: 'Power 3',
+ *       markers: { radius: 0.03, sides: 10 },
+ *     },
+ *   ],
+ *   legend: true,
  * });
  *
  * @example
@@ -163,21 +161,19 @@ export type COL_PlotLegend = {
  * figure.add({
  *   name: 'plot',
  *   make: 'collections.plot',
- *   options: {
- *     trace: [
- *       { points: pow(2), name: 'Power 2' },
- *       { points: pow(2.5), name: 'Power 2.5' },
- *       {
- *         points: pow(3, 10, 0.5),
- *         name: 'Power 3',
- *         markers: { radius: 0.03, sides: 10 },
- *       },
- *     ],
- *     legend: {
- *       length: 0.5,
- *       frame: [0.95, 0.95, 0.95, 1],
- *       position: [0.2, 1.8],
+ *   trace: [
+ *     { points: pow(2), name: 'Power 2' },
+ *     { points: pow(2.5), name: 'Power 2.5' },
+ *     {
+ *       points: pow(3, 10, 0.5),
+ *       name: 'Power 3',
+ *       markers: { radius: 0.03, sides: 10 },
  *     },
+ *   ],
+ *   legend: {
+ *     length: 0.5,
+ *     frame: [0.95, 0.95, 0.95, 1],
+ *     position: [0.2, 1.8],
  *   },
  * });
  *
@@ -186,23 +182,21 @@ export type COL_PlotLegend = {
  * figure.add({
  *   name: 'plot',
  *   make: 'collections.plot',
- *   options: {
- *     trace: [
- *       { points: pow(2), name: 'Power 2' },
- *       { points: pow(2.5), name: 'Power 2.5' },
- *       {
- *         points: pow(3, 10, 0.5),
- *         name: 'Power 3',
- *         markers: { radius: 0.03, sides: 10 },
- *       },
- *     ],
- *     legend: {
- *       offset: [0.9, 0],
- *       position: [-0.3, -0.5],
- *       frame: {
- *         line: { width: 0.005 },
- *         corner: { radius: 0.05, sides: 10 },
- *       },
+ *   trace: [
+ *     { points: pow(2), name: 'Power 2' },
+ *     { points: pow(2.5), name: 'Power 2.5' },
+ *     {
+ *       points: pow(3, 10, 0.5),
+ *       name: 'Power 3',
+ *       markers: { radius: 0.03, sides: 10 },
+ *     },
+ *   ],
+ *   legend: {
+ *     offset: [0.9, 0],
+ *     position: [-0.3, -0.5],
+ *     frame: {
+ *       line: { width: 0.005 },
+ *       corner: { radius: 0.05, sides: 10 },
  *     },
  *   },
  * });
@@ -212,32 +206,30 @@ export type COL_PlotLegend = {
  * figure.add({
  *   name: 'plot',
  *   make: 'collections.plot',
- *   options: {
- *     trace: [
- *       { points: pow(2), name: 'Power 2' },
- *       { points: pow(2.5), name: 'Power 2.5' },
- *       {
- *         points: pow(3, 10, 0.5),
- *         name: 'Power 3',
- *         markers: { radius: 0.03, sides: 10 },
- *       },
- *     ],
- *     legend: {
- *       offset: [0, -0.2],
- *       custom: {
- *         1: {
- *           font: { size: 0.1, style: 'italic', color: [1, 0, 0, 1] },
- *           text: {
- *             text: [
- *               'Power 2.5',
- *               {
- *                 text: 'Reference Trace',
- *                 font: { size: 0.06 },
- *                 lineSpace: 0.06,
- *               },
- *             ],
- *             justify: 'left',
- *           },
+ *   trace: [
+ *     { points: pow(2), name: 'Power 2' },
+ *     { points: pow(2.5), name: 'Power 2.5' },
+ *     {
+ *       points: pow(3, 10, 0.5),
+ *       name: 'Power 3',
+ *       markers: { radius: 0.03, sides: 10 },
+ *     },
+ *   ],
+ *   legend: {
+ *     offset: [0, -0.2],
+ *     custom: {
+ *       1: {
+ *         font: { size: 0.1, style: 'italic', color: [1, 0, 0, 1] },
+ *         text: {
+ *           text: [
+ *             'Power 2.5',
+ *             {
+ *               text: 'Reference Trace',
+ *               font: { size: 0.06 },
+ *               lineSpace: 0.06,
+ *             },
+ *           ],
+ *           justify: 'left',
  *         },
  *       },
  *     },
@@ -249,25 +241,23 @@ export type COL_PlotLegend = {
  * figure.add({
  *   name: 'plot',
  *   make: 'collections.plot',
- *   options: {
- *     trace: [
- *       { points: pow(2), name: 'Power 2' },
- *       { points: pow(2.5), name: 'Power 2.5' },
- *       {
- *         points: pow(3, 10, 0.5),
- *         name: 'Power 3',
- *         markers: { radius: 0.03, sides: 10 },
- *       },
- *     ],
- *     legend: {
- *       fontColorIsLineColor: true,
- *       length: 0,
- *       custom: {
- *         0: { position: [2, 0.2] },
- *         1: { position: [2, 0.7] },
- *         'Power 3': { position: [2, 2] },
- *       }
+ *   trace: [
+ *     { points: pow(2), name: 'Power 2' },
+ *     { points: pow(2.5), name: 'Power 2.5' },
+ *     {
+ *       points: pow(3, 10, 0.5),
+ *       name: 'Power 3',
+ *       markers: { radius: 0.03, sides: 10 },
  *     },
+ *   ],
+ *   legend: {
+ *     fontColorIsLineColor: true,
+ *     length: 0,
+ *     custom: {
+ *       0: { position: [2, 0.2] },
+ *       1: { position: [2, 0.7] },
+ *       'Power 3': { position: [2, 2] },
+ *     }
  *   },
  * });
  */

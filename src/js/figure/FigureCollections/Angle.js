@@ -563,18 +563,16 @@ export type OBJ_PulseAngleAnimationStep = {
  * figure.add({
  *   name: 'a',
  *   make: 'collections.angle',
- *   options: {
- *     angle: Math.PI / 4,
- *     label: null,
- *     curve: {
- *       radius: 0.5,
- *       width: 0.01,
- *     },
- *     corner: {
- *       width: 0.01,
- *       length: 1,
- *     },
- *   }
+ *   angle: Math.PI / 4,
+ *   label: null,
+ *   curve: {
+ *     radius: 0.5,
+ *     width: 0.01,
+ *   },
+ *   corner: {
+ *     width: 0.01,
+ *     length: 1,
+ *   },
  * });
  *
  * @example
@@ -597,32 +595,30 @@ export type OBJ_PulseAngleAnimationStep = {
  * figure.add({
  *   name: 'a',
  *   make: 'collections.angle',
- *   options: {
- *     angle: Math.PI / 4 * 3,
- *     label: {
- *       text: {
- *         elements: {
- *           theta: { text: '\u03b8', color: [1, 0, 1, 1] },
- *         },
- *         forms: {
- *           0: { frac: ['theta', 'vinculum', '2']},
- *         },
+ *   angle: Math.PI / 4 * 3,
+ *   label: {
+ *     text: {
+ *       elements: {
+ *         theta: { text: '\u03b8', color: [1, 0, 1, 1] },
  *       },
- *       offset: 0.05,
- *       location: 'inside',
- *       color: [0, 0, 1, 1],
+ *       forms: {
+ *         0: { frac: ['theta', 'vinculum', '2']},
+ *       },
  *     },
- *     curve: {
- *       radius: 0.5,
- *       width: 0.01,
- *     },
- *     arrow: 'barb',
- *     corner: {
- *       width: 0.01,
- *       length: 1,
- *       color: [0, 0.5, 0, 1],
- *     },
- *   }
+ *     offset: 0.05,
+ *     location: 'inside',
+ *     color: [0, 0, 1, 1],
+ *   },
+ *   curve: {
+ *     radius: 0.5,
+ *     width: 0.01,
+ *   },
+ *   arrow: 'barb',
+ *   corner: {
+ *     width: 0.01,
+ *     length: 1,
+ *     color: [0, 0.5, 0, 1],
+ *   },
  * });
  *
  * @example
@@ -647,18 +643,16 @@ export type OBJ_PulseAngleAnimationStep = {
  * figure.add({
  *   name: 'a',
  *   make: 'collections.angle',
- *   options: {
- *     angle: Math.PI / 4,
- *     label: null,
- *     curve: {
- *       radius: 0.5,
- *       width: 0.01,
- *     },
- *     corner: {
- *       width: 0.01,
- *       length: 1,
- *     },
- *   }
+ *   angle: Math.PI / 4,
+ *   label: null,
+ *   curve: {
+ *     radius: 0.5,
+ *     width: 0.01,
+ *   },
+ *   corner: {
+ *     width: 0.01,
+ *     length: 1,
+ *   },
  * });
  * figure.elements._a.animations.new()
  *   .angle({ start: Math.PI / 4, target: Math.PI / 4 * 3, duration: 3 })
@@ -669,26 +663,24 @@ export type OBJ_PulseAngleAnimationStep = {
  * figure.add({
  *   name: 'a',
  *   make: 'collections.angle',
- *   options: {
- *     angle: Math.PI / 4 * 3,
- *     label: {
- *       text: null,
- *       location: 'outside',
- *       orientation: 'horizontal',
- *       offset: 0.1,
- *       update: true,
- *       sides: 200,
- *     },
- *     curve: {
- *       radius: 0.3,
- *       fill: true,
- *     },
- *     corner: {
- *       width: 0.02,
- *       length: 1,
- *       color: [0.4, 0.4, 0.4, 1],
- *     },
- *   }
+ *   angle: Math.PI / 4 * 3,
+ *   label: {
+ *     text: null,
+ *     location: 'outside',
+ *     orientation: 'horizontal',
+ *     offset: 0.1,
+ *     update: true,
+ *     sides: 200,
+ *   },
+ *   curve: {
+ *     radius: 0.3,
+ *     fill: true,
+ *   },
+ *   corner: {
+ *     width: 0.02,
+ *     length: 1,
+ *     color: [0.4, 0.4, 0.4, 1],
+ *   },
  * });
  * figure.elements._a.setMovable({
  *   startArm: 'rotation',
