@@ -41,7 +41,8 @@ function fillFooter(path = '..') {
         ${link('Sine Wave')}
         ${link('Total Angle of a Polygon')}
         ${link('Traveling Wave 02 - Sine Waves')}
-        <div class="other-examples">Equation Navigation Examples</div>
+        <div class="other-examples">Equation Animation Examples</div>
+        ${link('Equation Animation')}
         ${link('Pythagorean Theorem')}
         ${link('Holiday Equation')}
         <div class="other-examples">Interactive Slide Show Examples</div>
