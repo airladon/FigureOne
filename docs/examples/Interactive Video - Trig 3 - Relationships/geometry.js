@@ -904,7 +904,9 @@ function layoutCirc() {
   // before other figure elements update, as when the button elements get
   // updated they will need to know which triangle is selected (if any)
   figure.notifications.add('stateSetInit', () => {
-    selectTriangle(geom.customState.selected);
+    if (typeof geom.customState.selected === 'string' && geom.customState.selected.length > 1) {
+      selectTriangle(geom.get(geom.customState.selected));
+    }
   });
 
   // If the background element is clicked, then deselect all triangles
