@@ -12,7 +12,7 @@ A dynamic angle that changes its size, position and orientation with user intera
 
 ### **[Equation Animation](examples/Equation%20Animation)**
 
-Demonstrator of equation animation
+Demonstrator of equation animation.
 
 ![](Equation%20Animation/example.gif)
 
