@@ -52,7 +52,7 @@ docker_run() {
       --name figureone_dev \
       --entrypoint $2 \
       figureone_dev \
-      -c $3 $4 $5 $6
+      $3 $4 $5 $6 $7 $8
     else
     docker run -it --rm \
       -v $HOST_PATH/package:/opt/app/package \
@@ -105,7 +105,7 @@ cp containers/figureone/Dockerfile Dockerfile
 docker build -t figureone_dev .
 rm Dockerfile
 
-docker_run "Dev Packaging" npm run webpack -- --env.mode=dev
+docker_run "Dev Packaging" npm run webpack -- --env mode=dev
 check_status "Dev Build"
 
 if [ $TESTING = 1 ];
