@@ -58,6 +58,12 @@ See this example hosted [here](https://airladon.github.io/FigureOne/examples/Int
 
 ![](docs/examples/Interactive%20Angle/example.gif)
 
+### **[Equation Animation](./docs/examples/Equation%20Animation)**
+
+See this example hosted [here](https://airladon.github.io/FigureOne/examples/Equation%20Animation/index.html).
+
+![](docs/examples/Equation%20Animation/example.gif)
+
 ### **[Pythagorean Equation Animation](./docs/examples/Pythagorean%20Theorem)**
 
 See this example hosted [here](https://airladon.github.io/FigureOne/examples/Pythagorean%20Theorem/index.html).

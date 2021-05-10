@@ -10,6 +10,13 @@ A dynamic angle that changes its size, position and orientation with user intera
 
 ![](Interactive%20Angle/example.gif)
 
+### **[Equation Animation](examples/Equation%20Animation)**
+
+Demonstrator of equation animation
+
+![](Equation%20Animation/example.gif)
+
+
 ## **[Pythagorean Equation Animation](Pythagorean%20Theorem)**
 
 Setup the problem with animation, then step through the working at your own pace.
