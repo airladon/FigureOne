@@ -27,7 +27,7 @@ const envConfig = {
     output: 'figureone.min.js',
     workerPath: '/static/workers/',
     workerName: 'figureone.worker.js',
-    workerInline: true,
+    workerInline: 'fallback',
   },
   dev: {
     name: 'development',
@@ -39,7 +39,7 @@ const envConfig = {
     output: 'index.js',
     workerPath: '/package/',
     workerName: 'figureone.worker.js',
-    workerInline: false,
+    workerInline: undefined,
   },
 };
 
@@ -140,10 +140,9 @@ module.exports = (env) => {
             {
               loader: 'worker-loader',
               options: {
-                // Change this to 'fallback' in webpack 5
                 inline: e.workerInline,
                 publicPath: e.workerPath,
-                name: e.workerName,
+                filename: e.workerName,
                 // filename: '[contenthash].worker.js',
               },
             },
