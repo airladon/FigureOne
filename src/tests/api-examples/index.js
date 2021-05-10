@@ -9,7 +9,7 @@ const figure = new Fig.Figure({
 figure.add([
   {
     name: '__minorGrid',
-    method: 'primitives.grid',
+    make: 'primitives.grid',
     options: {
       position: [0, 0],
       color: [0.9, 0.9, 0.9, 1],
@@ -21,7 +21,7 @@ figure.add([
   },
   {
     name: '__majorGrid',
-    method: 'primitives.grid',
+    make: 'primitives.grid',
     options: {
       position: [0, 0],
       color: [0.9, 0.9, 0.9, 1],
@@ -33,7 +33,7 @@ figure.add([
   },
   {
     name: '__origin',
-    method: 'primitives.polygon',
+    make: 'primitives.polygon',
     options: {
       color: [0.9, 0.9, 0.9, 1],
       radius: 0.025,
@@ -42,6 +42,11 @@ figure.add([
   },
 ]);
 
+
+const pow = (pow = 2, stop = 10, step = 0.05) => {
+  const xValues = Fig.tools.math.range(0, stop, step);
+  return xValues.map(x => new Fig.Point(x, x ** pow));
+}
 
 figure.timeKeeper.setManualFrames();
 figure.timeKeeper.frame(0);
