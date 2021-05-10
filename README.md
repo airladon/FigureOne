@@ -31,7 +31,7 @@ const figure = new Fig.Figure();
 
 // Create the shape
 const tri = figure.add({
-  element: 'triangle',
+  make: 'triangle',
   color: [1, 0, 0, 1],
 });
 
