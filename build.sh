@@ -52,7 +52,7 @@ docker_run() {
       --name figureone_dev \
       --entrypoint $2 \
       figureone_dev \
-      $3 $4 $5 $6 $7 $8
+      $3 $4 $5 $6 $7 $8 $9
     else
     docker run -it --rm \
       -v $HOST_PATH/package:/opt/app/package \
@@ -135,7 +135,7 @@ fi
 echo "${bold}${cyan}==================== Packaging =====================${reset}"
 # docker_run "Dev Packaging" npm run webpack
 docker_run "Dev Flow Packaging" npm run flowcopysource
-docker_run "Prod Packaging" npm run webpack -- --env.mode=prod --env.clean=0
+docker_run "Prod Packaging" npm run webpack -- --env mode=prod --env clean=0
 echo "${bold}${cyan}" moving package.json "${reset}"
 cat package.json | \
   sed '/devDependencies/,/}/d' | \
