@@ -1,5 +1,5 @@
-// const figure = new Fig.Figure();
-
+/* globals Fig */
+/* eslint-disable camelcase, no-param-reassign, object-curly-newline */
 const figure = new Fig.Figure();
 
 const eqn = figure.add({
@@ -10,20 +10,21 @@ const eqn = figure.add({
     rb: { symbol: 'bracket', side: 'right' },
     slb: { symbol: 'squareBracket', side: 'left' },
     srb: { symbol: 'squareBracket', side: 'right' },
-    int: { symbol: 'int' },
-    sigma: { symbol: 'sum' },
+    int: { symbol: 'int', serifSides: 20 },
+    sigma: { symbol: 'sum', sides: 10 },
     r: { symbol: 'radical' },
     v: { symbol: 'vinculum' },
     v2: { symbol: 'vinculum' },
-    brace: { symbol: 'brace', side: 'top', lineWidth: 0.01 },
+    brace: { symbol: 'brace', side: 'top' },
     arrow: { symbol: 'arrow', direction: 'right' },
-    s: { symbol: 'strike', lineWidth: 0.005 },
+    s: { symbol: 'strike', lineWidth: 0.01 },
   },
   // Use phrases to keep the forms a little cleaner
   phrases: {
     rootFrac: { frac: [{ root: { symbol: 'r', content: 'c', root: 'b' } }, 'v', { sub: ['a', 'd'] }] },
     aPlusD: ['a', '_ + ', 'd'],
   },
+  formDefaults: { alignment: { xAlign: 'center' } },
   // Forms that show how elements can move around, and symbols can grow or
   // shrink to fit
   forms: {
@@ -36,14 +37,11 @@ const eqn = figure.add({
     7: { sumOf: ['sigma', { frac: ['b', 'v', ['aPlusD', '_ + _2', 'c'], 0.8] }] },
     8: [{ bar: [['a', 'd'], 'arrow', 'top'] }, '   ', { strike: [['b', 'c'], 's'] }],
   },
+  scale: 1.3,
 });
 
-eqn.animations.new()
-  .nextForm({ delay: 1 })
-  .nextForm({ delay: 1 })
-  .nextForm({ delay: 1 })
-  .nextForm({ delay: 1 })
-  .nextForm({ delay: 1 })
-  .nextForm({ delay: 1 })
-  .nextForm({ delay: 1 })
-  .start();
+// Call nextForm forevermore
+let nextForm = () => {
+  eqn.nextForm({ delay: 1, callback: () => setTimeout(() => nextForm(), 10) });
+};
+nextForm();
