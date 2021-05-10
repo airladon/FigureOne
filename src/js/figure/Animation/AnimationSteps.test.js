@@ -11,14 +11,13 @@ const point = value => new Point(value, value);
 describe('Animation Examples', () => {
   let figure;
   let a;
-  let b;
   let animations;
   let callback;
   let custom;
   beforeEach(() => {
     jest.useFakeTimers();
     figure = makeFigure();
-    [a, b] = figure.add([
+    a = figure.add(
       {
         name: 'a',
         make: 'polygon',
@@ -33,11 +32,7 @@ describe('Animation Examples', () => {
           },
         },
       },
-      {
-        name: 'b',
-        make: 'polygon',
-      },
-    ]);
+    );
     callback = jest.fn(() => {});
     custom = (percentage) => {
       a.setPosition(percentage, percentage);
