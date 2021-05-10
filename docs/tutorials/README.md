@@ -18,7 +18,7 @@ This example shows a circle that can be moved in the container.
 ![](./03%20-%20Interactive%20Shape/example.gif)
 
 ## **[04 - Animation](./04%20-%20Animation)**
-A pentagon shape goes through a series of animation steps including translations, rotations, pulses, and dissolves.
+Introducing serial and parallel animations.
 
 ![](./04%20-%20Animation/example.gif)
 
