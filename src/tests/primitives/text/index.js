@@ -51,7 +51,7 @@ const xValues = tools.math.range(-4, 4, 1);
 const yValues = tools.math.range(4, -4, -1);
 let index = 0;
 const click = text => tools.misc.Console.bind(this, text);
-const makeShape = (name, method, options, lineOptions = null) => {
+const makeShape = (name, make, options, lineOptions = null) => {
   const x = xValues[index % xValues.length];
   const y = yValues[Math.floor(index / xValues.length)];
   // const name = `_${index}`;
@@ -66,7 +66,7 @@ const makeShape = (name, method, options, lineOptions = null) => {
   }
   return {
     name,
-    method,
+    make,
     options: tools.misc.joinObjects({}, {
       position: [x, y],
       line,

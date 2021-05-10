@@ -50,14 +50,14 @@ const figure = new Figure({
 const xValues = tools.math.range(-4, 3.5, 1);
 const yValues = tools.math.range(3.5, -3.5, -1);
 let index = 0;
-const makeShape = (method, options, mods) => {
+const makeShape = (make, options, mods) => {
   const x = xValues[index % xValues.length];
   const y = yValues[Math.floor(index / xValues.length)];
   const name = `_${index}`;
   index += 1;
   return {
     name,
-    method,
+    make,
     options: tools.misc.joinObjects({}, {
       position: [x, y],
     }, options),
