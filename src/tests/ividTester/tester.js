@@ -152,6 +152,7 @@ async function tester(
 
 
   jest.setTimeout(120000);
+  // eslint-disable-next-line jest/valid-title
   describe(title, () => {
     // Load page, set manual frames, remove audio, load video data file and play
     beforeAll(async () => {

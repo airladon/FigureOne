@@ -27,6 +27,7 @@ function staticTester(title, getShapes, updates = {}, getValues = {}, move = {})
     });
   });
 
+  // eslint-disable-next-line jest/valid-title
   describe(title, () => {
     let figure;
     beforeEach(() => {

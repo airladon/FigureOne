@@ -75,12 +75,9 @@ As an example, the above example can be recreated by only defining the form - al
 
 ```js
 figure.add({
-  name: 'eqn',
   make: 'equation',
-  options: {
-    forms: {
-      base: ['a', '_ = ', { frac: ['b', 'vinculum', 'c'] }],
-    },
+  forms: {
+    base: ['a', '_ = ', { frac: ['b', 'vinculum', 'c'] }],
   },
 });
 ```

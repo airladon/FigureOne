@@ -28,6 +28,7 @@ function tester(htmlFile, title, threshold = 0, width = 500, height = 500) {
   if (htmlFile.startsWith('http')) {
     file = htmlFile;
   }
+  // eslint-disable-next-line jest/valid-title
   describe(title, () => {
     test('transparency', async () => {
       await page.setViewportSize({ width, height });

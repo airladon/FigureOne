@@ -21,6 +21,7 @@ function testBrowserAnimation(title, file, duration, step) {
     }
   });
 
+  // eslint-disable-next-line jest/valid-title
   test(title, async () => {
     let image;
     await page.goto(file);
