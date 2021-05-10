@@ -16,7 +16,7 @@ The examples are also hosted on this repository's GitHub Pages site [here](https
 Load the FigureOne library into your HTML file:
 
 ```html
-<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.7.4/figureone.min.js'></script>
+<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.8.0/figureone.min.js'></script>
 ```
 
 Create a `div` element to attach the figure to:
