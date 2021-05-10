@@ -52,3 +52,11 @@
 
 ## v0.7.4
 * Fix recording states to ensure states are recorded after events when they occur at the same time
+
+## v0.8.0
+
+API cleanup
+
+* Options definition no longer requires a dedictated options object (though one can still be used)
+* Options definition object `method` property renamed to make 
+* All animation steps and animation builder steps now accept target as input as well as options definition object

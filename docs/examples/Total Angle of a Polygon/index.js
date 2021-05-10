@@ -22,7 +22,7 @@ const get = name => figure.getElement(name);
 // Helper function to create angle definition objects
 const angle = (p1, p2, p3, name, label, alpha = 1, fill = false, direction = 1) => ({
   name,
-  method: 'collections.angle',
+  make: 'collections.angle',
   options: {
     p1,
     p2,
@@ -88,7 +88,7 @@ figure.add([
   // Rectangle that highlights equation elements
   {
     name: 'highlightRect',
-    method: 'collections.rectangle',
+    make: 'collections.rectangle',
     options: {
       line: { width: 0.01 },
       width: 0,
@@ -107,7 +107,7 @@ figure.add([
   // Old polygon
   {
     name: 'old',
-    method: 'collections.polyline',
+    make: 'collections.polyline',
     options: {
       points: [p[0], p[1], p[2], p[4], p[5]],
       close: true,
@@ -123,7 +123,7 @@ figure.add([
   // New polygon
   {
     name: 'new',
-    method: 'collections.polyline',
+    make: 'collections.polyline',
     options: {
       points: [p[0], p[1], p[2], p[3], p[4], p[5]],
       dash: [0.05, 0.02],
@@ -139,7 +139,7 @@ figure.add([
   // Button to step through the equation
   {
     name: 'button',
-    method: 'collections.rectangle',
+    make: 'collections.rectangle',
     options: {
       width: 0.6,
       height: 0.3,
@@ -162,7 +162,7 @@ figure.add([
   // Equation Definition
   {
     name: 'eqn',
-    method: 'collections.equation',
+    make: 'collections.equation',
     options: {
       scale: 0.8,
       elements: {

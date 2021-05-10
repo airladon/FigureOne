@@ -20,7 +20,7 @@ describe('Text', () => {
     figure.add([
       {
         name: 'a',
-        method: 'text',
+        make: 'text',
         options: {
           text: 'a',
           xAlign: 'left',
@@ -29,7 +29,7 @@ describe('Text', () => {
       },
       {
         name: 'c',
-        method: 'text',
+        make: 'text',
         options: {
           text: 'c',
           xAlign: 'left',
@@ -39,11 +39,11 @@ describe('Text', () => {
       },
       {
         name: 'container',
-        method: 'collection',
+        make: 'collection',
         elements: [
           {
             name: 'a',
-            method: 'text',
+            make: 'text',
             options: {
               text: 'a',
               xAlign: 'left',
@@ -226,7 +226,7 @@ describe('Text Borders', () => {
     addElement = (option) => {
       figure.add({
         name: 't',
-        method: 'text',
+        make: 'text',
         options: options[option],
       });
       figure.initialize();

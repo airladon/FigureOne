@@ -206,7 +206,7 @@ describe('Figure Equations From Object', () => {
       //         },
       //       },
       //     },
-      //     method: {
+      //     make: {
       //       frac: {
       //         numerator: 'a',
       //         denominator: 'b',

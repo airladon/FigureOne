@@ -1,36 +1,31 @@
 const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
 
-figure.add(
+const eqn = figure.add(
   {
-    name: 'eqn',
-    method: 'equation',
-    options: {
-      elements: {
-        v: { symbol: 'vinculum' },
-        equals: ' = ',
-        times: ' \u00D7 ',
-        c: { color: [0, 0, 1, 1] },
-      },
+    make: 'equation',
+    elements: {
+      v: { symbol: 'vinculum' },
+      equals: ' = ',
+      times: ' \u00D7 ',
+      c: { color: [0, 0, 1, 1] },
+    },
 
-      // Align all forms to the 'equals' figure element
-      formDefaults: { alignment: { fixTo: 'equals' } },
+    // Align all forms to the 'equals' figure element
+    formDefaults: { alignment: { fixTo: 'equals' } },
 
-      // Define two different forms of the equation
-      forms: {
-        1: ['a', 'equals', { frac: ['b', 'v', 'c'] }],
-        2: {
-          content: ['c', 'times', 'a', 'equals', 'b'],
-          // Define how the 'c' element will move to this form
-          translation: {
-            c: { style: 'curved', direction: 'down', mag: 0.5 },
-          },
+    // Define two different forms of the equation
+    forms: {
+      1: ['a', 'equals', { frac: ['b', 'v', 'c'] }],
+      2: {
+        content: ['c', 'times', 'a', 'equals', 'b'],
+        // Define how the 'c' element will move to this form
+        translation: {
+          c: { style: 'curved', direction: 'down', mag: 0.5 },
         },
       },
     },
   },
 );
-
-const eqn = figure.getElement('eqn');
 
 // Show the equation form
 eqn.showForm('1');

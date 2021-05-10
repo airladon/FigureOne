@@ -5,7 +5,7 @@ function __addGrid(__figure) {
   __figure.add([
     {
       name: '__minorGrid',
-      method: 'primitives.grid',
+      make: 'primitives.grid',
       options: {
         position: [0, 0],
         color: [0.9, 0.9, 0.9, 1],
@@ -17,7 +17,7 @@ function __addGrid(__figure) {
     },
     {
       name: '__majorGrid',
-      method: 'primitives.grid',
+      make: 'primitives.grid',
       options: {
         position: [0, 0],
         color: [0.9, 0.9, 0.9, 1],
@@ -29,7 +29,7 @@ function __addGrid(__figure) {
     },
     {
       name: '__origin',
-      method: 'primitives.polygon',
+      make: 'primitives.polygon',
       options: {
         color: [0.9, 0.9, 0.9, 1],
         radius: 0.025,

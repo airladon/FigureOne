@@ -124,7 +124,7 @@ describe('Figure Primitives TextLine', () => {
     loadText = (option) => {
       figure.add({
         name: 't',
-        method: 'textLines',
+        make: 'textLines',
         options: textOptions[option],
       });
       figure.initialize();
@@ -546,7 +546,7 @@ describe('Text Borders', () => {
     addElement = (option) => {
       figure.add({
         name: 't',
-        method: 'text.lines',
+        make: 'text.lines',
         options: options[option],
       });
       figure.initialize();

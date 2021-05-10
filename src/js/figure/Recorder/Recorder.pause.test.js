@@ -28,11 +28,11 @@ describe('Animate To State', () => {
     figure.add([
       {
         name: 'a',
-        method: 'polygon',
+        make: 'polygon',
       },
       {
         name: 'b',
-        method: 'polygon',
+        make: 'polygon',
       },
     ]);
     a = figure.elements._a;
@@ -1981,7 +1981,7 @@ describe('Animate To State', () => {
     beforeEach(() => {
       figure.add([{
         name: 'l',
-        method: 'oline',
+        make: 'oline',
         options: {
           length: 1.2,
           width: 0.1,

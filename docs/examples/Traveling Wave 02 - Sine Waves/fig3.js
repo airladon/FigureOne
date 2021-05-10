@@ -36,7 +36,7 @@ function fig3() {
   // Add sine plot
   fig.add({
     name: 'plot',
-    method: 'collections.plot',
+    make: 'collections.plot',
     options: {
       width: 3.5,
       height: 1.3,
@@ -86,7 +86,7 @@ function fig3() {
   fig.add([
     {
       name: 'mover',
-      method: 'rectangle',
+      make: 'rectangle',
       options: {
         width: 3.5,
         height: 1.3,
@@ -101,7 +101,7 @@ function fig3() {
   // Add equation
   fig.add({
     name: 'eqn',
-    method: 'equation',
+    make: 'equation',
     options: {
       elements: {
         sin: { style: 'normal' },

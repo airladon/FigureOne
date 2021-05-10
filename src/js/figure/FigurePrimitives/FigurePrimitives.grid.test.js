@@ -45,7 +45,7 @@ describe('Figure Primitives - Grid', () => {
     const gridType = {
       baseNum: {
         name: 'grid',
-        method: 'grid',
+        make: 'grid',
         options: {
           bounds: new Rect(0, 0, 1, 1),
           xNum: 3,
@@ -58,7 +58,7 @@ describe('Figure Primitives - Grid', () => {
       },
       baseStep: {
         name: 'grid',
-        method: 'grid',
+        make: 'grid',
         options: {
           bounds: new Rect(0, 0, 1, 1),
           xStep: 0.5,
@@ -71,7 +71,7 @@ describe('Figure Primitives - Grid', () => {
       },
       xOnly: {
         name: 'grid',
-        method: 'grid',
+        make: 'grid',
         options: {
           bounds: new Rect(0, 0, 1, 1),
           xStep: 0.5,
@@ -84,7 +84,7 @@ describe('Figure Primitives - Grid', () => {
       },
       yOnly: {
         name: 'grid',
-        method: 'grid',
+        make: 'grid',
         options: {
           bounds: new Rect(0, 0, 1, 1),
           yStep: 0.5,
@@ -97,7 +97,7 @@ describe('Figure Primitives - Grid', () => {
       },
       stepZero: {
         name: 'grid',
-        method: 'grid',
+        make: 'grid',
         options: {
           bounds: new Rect(0, 0, 1, 1),
           xStep: 0,
@@ -110,7 +110,7 @@ describe('Figure Primitives - Grid', () => {
       },
       stepLargerThanBounds: {
         name: 'grid',
-        method: 'grid',
+        make: 'grid',
         options: {
           bounds: new Rect(0, 0, 1, 1),
           xStep: 2,
@@ -123,7 +123,7 @@ describe('Figure Primitives - Grid', () => {
       },
       numOverrideStep: {
         name: 'grid',
-        method: 'grid',
+        make: 'grid',
         options: {
           bounds: new Rect(0, 0, 1, 1),
           xStep: 0.1,
@@ -138,7 +138,7 @@ describe('Figure Primitives - Grid', () => {
       },
       defaultNum: {
         name: 'grid',
-        method: 'grid',
+        make: 'grid',
         options: {
           bounds: new Rect(0, 0, 1, 1),
           line: {
@@ -149,7 +149,7 @@ describe('Figure Primitives - Grid', () => {
       },
       oneNum: {
         name: 'grid',
-        method: 'grid',
+        make: 'grid',
         options: {
           bounds: new Rect(0, 0, 1, 1),
           xNum: 1,
@@ -162,7 +162,7 @@ describe('Figure Primitives - Grid', () => {
       },
       multiLine: {
         name: 'grid',
-        method: 'grid',
+        make: 'grid',
         options: {
           bounds: new Rect(0, 0, 1, 1),
           xNum: 1,
@@ -176,7 +176,7 @@ describe('Figure Primitives - Grid', () => {
       },
       triangles: {
         name: 'grid',
-        method: 'grid',
+        make: 'grid',
         options: {
           bounds: new Rect(0, 0, 1, 1),
           xNum: 1,

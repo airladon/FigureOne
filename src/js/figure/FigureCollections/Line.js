@@ -431,15 +431,13 @@ export type OBJ_PulseWidthAnimationStep = {
  * // Pulse an annotated line
  * figure.add({
  *   name: 'l',
- *   method: 'collections.line',
- *   options: {
- *     p1: [-1, 0],
- *     p2: [1, 0],
- *     arrow: 'triangle',
- *     label: {
- *       text: 'length',
- *       offset: 0.04,
- *     },
+ *   make: 'collections.line',
+ *   p1: [-1, 0],
+ *   p2: [1, 0],
+ *   arrow: 'triangle',
+ *   label: {
+ *     text: 'length',
+ *     offset: 0.04,
  *   },
  * });
  *
@@ -449,18 +447,16 @@ export type OBJ_PulseWidthAnimationStep = {
  * // Animate growing a line while showing it's length
  * figure.add({
  *   name: 'l',
- *   method: 'collections.line',
- *   options: {
- *     p1: [-1, 0],
- *     p2: [-0.5, 0],
- *     align: 'start',
- *     arrow: { end: { head: 'barb', scale: 2 } },
- *     label: {
- *       text: null,
- *       offset: 0.03,
- *       precision: 2,
- *       location: 'start'
- *     },
+ *   make: 'collections.line',
+ *   p1: [-1, 0],
+ *   p2: [-0.5, 0],
+ *   align: 'start',
+ *   arrow: { end: { head: 'barb', scale: 2 } },
+ *   label: {
+ *     text: null,
+ *     offset: 0.03,
+ *     precision: 2,
+ *     location: 'start'
  *   },
  * });
  *

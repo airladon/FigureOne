@@ -4,13 +4,10 @@ const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
 // Add circle to figure
 figure.add(
   {
-    name: 'circle',
-    method: 'polygon',
-    options: {
-      sides: 100,
-      radius: 0.2,
-      touchBorder: 0.5,
-    },
+    make: 'polygon',
+    sides: 100,
+    radius: 0.2,
+    touchBorder: 0.5,
     mods: {
       isMovable: true,
       move: {

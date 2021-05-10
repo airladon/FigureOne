@@ -23,7 +23,7 @@ describe('Polyline', () => {
     addElement = (optionsName) => {
       figure.add(joinObjects({
         name: 'p',
-        method: 'shapes.polygon',
+        make: 'shapes.polygon',
       }, options[optionsName]));
       figure.initialize();
       p = figure.elements._p;

@@ -1,26 +1,36 @@
 const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
 
-// Add a simple shape to the figure
-figure.add([
+const [s1, s2] = figure.add([
   {
-    name: 'hexagon',
-    method: 'polygon',
-    options: {
-      sides: 6,
-      radius: 0.2,
-    },
+    make: 'polygon',
+    sides: 4,
+    radius: 0.2,
+    position: [-0.4, 0],
+    color: [1, 0, 0, 1],
+  },
+  {
+    make: 'polygon',
+    sides: 4,
+    radius: 0.3,
+    position: [0.4, 0],
+    color: [0, 0, 1, 0.5],
   },
 ]);
 
-// Start a new animation
-figure.getElement('hexagon').animations.new()
-  .position({ target: [-0.4, -0.4], velocity: 0.3 })
-  .rotation({ delta: Math.PI / 2, duration: 1 })
-  .position({ target: [0, 0], velocity: 0.3 })
-  .pulse({ duration: 1 })
-  .rotation({ delta: Math.PI / 2, duration: 1 })
-  .dissolveOut({ duration: 1 })
-  .dissolveIn({ duration: 1 })
-  .position({ target: [-0.5, 0.5], velocity: 0.3 })
-  .position({ target: [0, 0], velocity: 0.3 })
+
+// Dissolve in, rotate, then move to position
+s1.animations.new()
+  .dissolveIn()
+  .rotation(Math.PI / 4)
+  .position({ target: [0, 0], duration: 2 })
+  .start();
+
+
+// Dissolve in, then rotate and move to position simultaneously
+s2.animations.new()
+  .dissolveIn()
+  .inParallel([
+    s2.animations.position({ target: [0, 0], duration: 3 }),
+    s2.animations.rotation({ target: Math.PI / 4, duration: 3 }),
+  ])
   .start();

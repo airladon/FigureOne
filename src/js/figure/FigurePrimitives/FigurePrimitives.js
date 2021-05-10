@@ -130,25 +130,21 @@ export type OBJ_LineStyleSimple_Defined = {
  * figure.add(
  *   {
  *     name: 'c',
- *     method: 'collection',
+ *     make: 'collection',
  *     elements: [         // add two elements to the collection
  *       {
  *         name: 'hex',
- *         method: 'polygon',
- *         options: {
- *           sides: 6,
- *           radius: 0.5,
- *         },
+ *         make: 'polygon',
+ *         sides: 6,
+ *         radius: 0.5,
  *       },
  *       {
  *         name: 'text',
- *         method: 'text',
- *         options: {
- *           text: 'hexagon',
- *           position: [0, -0.8],
- *           xAlign: 'center',
- *           font: { size: 0.3 },
- *         },
+ *         make: 'text',
+ *         text: 'hexagon',
+ *         position: [0, -0.8],
+ *         xAlign: 'center',
+ *         font: { size: 0.3 },
  *       },
  *     ],
  *   },
@@ -380,29 +376,25 @@ export type OBJ_PulseScale = {
  * // Square and triangle
  * figure.add({
  *   name: 'squareAndTri',
- *   method: 'generic',
- *   options: {
- *     points: [
- *       [-1, 0.5], [-1, -0.5], [0, 0.5],
- *       [0, 0.5], [-1, -0.5], [0, -0.5],
- *       [0, -0.5], [1, 0.5], [1, -0.5],
- *     ],
- *   },
+ *   make: 'generic',
+ *   points: [
+ *     [-1, 0.5], [-1, -0.5], [0, 0.5],
+ *     [0, 0.5], [-1, -0.5], [0, -0.5],
+ *     [0, -0.5], [1, 0.5], [1, -0.5],
+ *   ],
  * });
  * @example
  * // rhombus with larger touch borders
  * figure.add({
  *   name: 'rhombus',
- *   method: 'generic',
- *   options: {
- *     points: [
- *       [-0.5, -0.5], [0, 0.5], [1, 0.5],
- *       [-0.5, -0.5], [1, 0.5], [0.5, -0.5],
- *     ],
- *     border: [[
- *       [-1, -1], [-0.5, 1], [1.5, 1], [1, -1],
- *     ]],
- *   },
+ *   make: 'generic',
+ *   points: [
+ *     [-0.5, -0.5], [0, 0.5], [1, 0.5],
+ *     [-0.5, -0.5], [1, 0.5], [0.5, -0.5],
+ *   ],
+ *   border: [[
+ *     [-1, -1], [-0.5, 1], [1.5, 1], [1, -1],
+ *   ]],
  *   mods: {
  *     isMovable: true,
  *     move: {
@@ -415,16 +407,14 @@ export type OBJ_PulseScale = {
  * // Grid of triangles
  * figure.add({
  *   name: 'gridOfTris',
- *   method: 'generic',
- *   options: {
- *     points: [
- *       [-1, -1], [-0.7, -1], [-1, -0.7],
- *     ],
- *     copy: [
- *       { along: 'x', num: 5, step: 0.4 },
- *       { along: 'y', num: 5, step: 0.4 },
- *     ],
- *   },
+ *   make: 'generic',
+ *   points: [
+ *     [-1, -1], [-0.7, -1], [-1, -0.7],
+ *   ],
+ *   copy: [
+ *     { along: 'x', num: 5, step: 0.4 },
+ *     { along: 'y', num: 5, step: 0.4 },
+ *   ],
  * });
  */
 /* eslint-enable max-len */
@@ -562,11 +552,9 @@ export type OBJ_Generic = {
  * figure.add(
  *   {
  *     name: 'p',
- *     method: 'polyline',
- *     options: {
- *       points: [[-0.5, -0.5], [-0.1, 0.5], [0.3, -0.2], [0.5, 0.5]],
- *       width: 0.05,
- *     },
+ *     make: 'polyline',
+ *     points: [[-0.5, -0.5], [-0.1, 0.5], [0.3, -0.2], [0.5, 0.5]],
+ *     width: 0.05,
  *   },
  * );
  *
@@ -575,15 +563,13 @@ export type OBJ_Generic = {
  * figure.add(
  *   {
  *     name: 'p',
- *     method: 'polyline',
- *     options: {
- *       points: [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]],
- *       width: 0.05,
- *       dash: [0.17, 0.05, 0.05, 0.05],
- *       close: true,
- *       cornerStyle: 'radius',
- *       cornerSize: 0.1,
- *     },
+ *     make: 'polyline',
+ *     points: [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]],
+ *     width: 0.05,
+ *     dash: [0.17, 0.05, 0.05, 0.05],
+ *     close: true,
+ *     cornerStyle: 'radius',
+ *     cornerSize: 0.1,
  *   },
  * );
  * @example
@@ -591,33 +577,29 @@ export type OBJ_Generic = {
  * figure.add(
  *  {
  *    name: 'p',
- *    method: 'polyline',
- *    options: {
- *      points: [[-0.5, -0.5], [0.5, -0.5], [0, 0.5]],
- *      width: 0.05,
- *      close: true,
- *      cornersOnly: true,
- *      cornerLength: 0.2,
- *    },
+ *    make: 'polyline',
+ *    points: [[-0.5, -0.5], [0.5, -0.5], [0, 0.5]],
+ *    width: 0.05,
+ *    close: true,
+ *    cornersOnly: true,
+ *    cornerLength: 0.2,
  *  },
  *);
  * @example
  * // Zig zag with arrows
  * figure.add({
  *   name: 'arrowedLine',
- *   method: 'polyline',
- *   options: {
- *     points: [[0, 0], [1, 0], [0, 0.7], [1, 0.7]],
- *     width: 0.05,
- *     cornerStyle: 'fill',
- *     arrow: {
- *       scale: 0.7,
- *       start: {
- *         head: 'triangle',
- *         reverse: true,
- *       },
- *       end: 'barb',
+ *   make: 'polyline',
+ *   points: [[0, 0], [1, 0], [0, 0.7], [1, 0.7]],
+ *   width: 0.05,
+ *   cornerStyle: 'fill',
+ *   arrow: {
+ *     scale: 0.7,
+ *     start: {
+ *       head: 'triangle',
+ *       reverse: true,
  *     },
+ *     end: 'barb',
  *   },
  * });
  */
@@ -721,11 +703,9 @@ export type OBJ_LineStyle = {
  * // Simple filled hexagon
  * figure.add({
  *   name: 'hexagon',
- *   method: 'polygon',
- *   options: {
- *     sides: 6,
- *     radius: 0.5,
- *   },
+ *   make: 'polygon',
+ *   sides: 6,
+ *   radius: 0.5,
  * });
  *
  * @example
@@ -744,17 +724,15 @@ export type OBJ_LineStyle = {
  * // Half octagon rotated
  * figure.add({
  *   name: 'halfOctagon',
- *   method: 'polygon',
- *   options: {
- *     sides: 8,
- *     radius: 0.5,
- *     angleToDraw: Math.PI,
- *     line: {
- *       width: 0.03,
- *     },
- *     direction: -1,
- *     rotation: Math.PI / 2,
+ *   make: 'polygon',
+ *   sides: 8,
+ *   radius: 0.5,
+ *   angleToDraw: Math.PI,
+ *   line: {
+ *     width: 0.03,
  *   },
+ *   direction: -1,
+ *   rotation: Math.PI / 2,
  * });
  */
 export type OBJ_Polygon = {
@@ -810,26 +788,22 @@ type OBJ_Polygon_Defined = {
  * // Simple 5 pointed star
  * figure.add({
  *   name: 's',
- *   method: 'star',
- *   options: {
- *     radius: 0.5,
- *     sides: 5,
- *   },
+ *   make: 'star',
+ *   radius: 0.5,
+ *   sides: 5,
  * });
  *
  * @example
  * // 7 pointed dashed line star
  * figure.add({
  *   name: 's',
- *   method: 'star',
- *   options: {
- *     radius: 0.5,
- *     innerRadius: 0.3,
- *     sides: 7,
- *     line: {
- *       width: 0.02,
- *       dash: [0.05, 0.01],
- *     },
+ *   make: 'star',
+ *   radius: 0.5,
+ *   innerRadius: 0.3,
+ *   sides: 7,
+ *   line: {
+ *     width: 0.02,
+ *     dash: [0.05, 0.01],
  *   },
  * });
  *
@@ -837,30 +811,28 @@ type OBJ_Polygon_Defined = {
  * // Star surrounded by stars
  * figure.add({
  *   name: 's',
- *   method: 'star',
- *   options: {
- *     radius: 0.1,
- *     sides: 5,
- *     rotation: -Math.PI / 2,
- *     // line: { width: 0.01 },
- *     copy: [
- *       {
- *         to: [0.6, 0],
- *         original: false,
- *       },
- *       {
- *         along: 'rotation',
- *         num: 16,
- *         step: Math.PI * 2 / 16,
- *         start: 1,
- *       },
- *       {
- *         to: new Fig.Transform().scale(3, 3).rotate(Math.PI / 2),
- *         start: 0,
- *         end: 1,
- *       },
- *     ],
- *   },
+ *   make: 'star',
+ *   radius: 0.1,
+ *   sides: 5,
+ *   rotation: -Math.PI / 2,
+ *   // line: { width: 0.01 },
+ *   copy: [
+ *     {
+ *       to: [0.6, 0],
+ *       original: false,
+ *     },
+ *     {
+ *       along: 'rotation',
+ *       num: 16,
+ *       step: Math.PI * 2 / 16,
+ *       start: 1,
+ *     },
+ *     {
+ *       to: new Fig.Transform().scale(3, 3).rotate(Math.PI / 2),
+ *       start: 0,
+ *       end: 1,
+ *     },
+ *   ],
  * });
  */
 export type OBJ_Star = {
@@ -910,29 +882,25 @@ export type OBJ_Star_Defined = {
  * // Filled rectangle
  * figure.add({
  *   name: 'r',
- *   method: 'rectangle',
- *   options: {
- *     width: 1,
- *     height: 0.5,
- *   },
+ *   make: 'rectangle',
+ *   width: 1,
+ *   height: 0.5,
  * });
  *
  * @example
  * // Corners with radius and dashed line
  * figure.add({
  *   name: 'r',
- *   method: 'rectangle',
- *   options: {
- *     width: 0.5,
- *     height: 0.5,
- *     line: {
- *       width: 0.02,
- *       dash: [0.05, 0.03]
- *     },
- *     corner: {
- *       radius: 0.1,
- *       sides: 10,
- *     },
+ *   make: 'rectangle',
+ *   width: 0.5,
+ *   height: 0.5,
+ *   line: {
+ *     width: 0.02,
+ *     dash: [0.05, 0.03]
+ *   },
+ *   corner: {
+ *     radius: 0.1,
+ *     sides: 10,
  *   },
  * });
  *
@@ -940,18 +908,16 @@ export type OBJ_Star_Defined = {
  * // Rectangle copies rotated
  * figure.add({
  *   name: 'r',
- *   method: 'rectangle',
- *   options: {
- *     width: 0.5,
- *     height: 0.5,
- *     line: {
- *       width: 0.01,
- *     },
- *     copy: {
- *       along: 'rotation',
- *       num: 3,
- *       step: Math.PI / 2 / 3
- *     },
+ *   make: 'rectangle',
+ *   width: 0.5,
+ *   height: 0.5,
+ *   line: {
+ *     width: 0.01,
+ *   },
+ *   copy: {
+ *     along: 'rotation',
+ *     num: 3,
+ *     step: Math.PI / 2 / 3
  *   },
  * });
  */
@@ -1010,27 +976,23 @@ type OBJ_Rectangle_Defined = {
  * // Filled ellipse
  * figure.add({
  *   name: 'e',
- *   method: 'ellipse',
- *   options: {
- *     height: 1,
- *     width: 0.5,
- *     sides: 100,
- *   },
+ *   make: 'ellipse',
+ *   height: 1,
+ *   width: 0.5,
+ *   sides: 100,
  * });
  *
  * @example
  * // Dashed line circle
  * figure.add({
  *   name: 'e',
- *   method: 'ellipse',
- *   options: {
- *     height: 1,
- *     width: 1,
- *     sides: 100,
- *     line: {
- *       width: 0.02,
- *       dash: [0.05, 0.02],
- *     },
+ *   make: 'ellipse',
+ *   height: 1,
+ *   width: 1,
+ *   sides: 100,
+ *   line: {
+ *     width: 0.02,
+ *     dash: [0.05, 0.02],
  *   },
  * });
  *
@@ -1038,16 +1000,14 @@ type OBJ_Rectangle_Defined = {
  * // Ellipse grid
  * figure.add({
  *   name: 'e',
- *   method: 'ellipse',
- *   options: {
- *     height: 0.08,
- *     width: 0.2,
- *     sides: 20,
- *     copy: [
- *       { along: 'x', step: 0.25, num: 5 },
- *       { along: 'y', step: 0.15, num: 5 },
- *     ]
- *   },
+ *   make: 'ellipse',
+ *   height: 0.08,
+ *   width: 0.2,
+ *   sides: 20,
+ *   copy: [
+ *     { along: 'x', step: 0.25, num: 5 },
+ *     { along: 'y', step: 0.15, num: 5 },
+ *   ]
  * });
  */
 export type OBJ_Ellipse = {
@@ -1140,8 +1100,8 @@ export type OBJ_TriangleSideRotationAlignment = {
  *
  * @property {Array<Point>} [points] defining points will take precedence over
  * all other ways to define a triangle.
- * @property {number} [width] (`1`)
- * @property {number} [height] (`1`)
+ * @property {number} [width]
+ * @property {number} [height]
  * @property {'left' | 'right' | 'center'} [top] (`center`)
  * @property {[number, number, number]} [SSS]
  * @property {[number, number, number]} [ASA]
@@ -1163,23 +1123,19 @@ export type OBJ_TriangleSideRotationAlignment = {
  * // Right angle triangle
  * figure.add({
  *   name: 't',
- *   method: 'triangle',
- *   options: {
- *     width: 0.5,
- *     height: 1,
- *     top: 'right',
- *   },
+ *   make: 'triangle',
+ *   width: 0.5,
+ *   height: 1,
+ *   top: 'right',
  * });
  *
  * @example
  * // 30-60-90 triangle with dashed line
  * const t = figure.primitives.triangle({
- *   options: {
- *     ASA: [Math.PI / 2, 1, Math.PI / 6],
- *     line: {
- *       width: 0.02,
- *       dash: [0.12, 0.04],
- *     },
+ *   ASA: [Math.PI / 2, 1, Math.PI / 6],
+ *   line: {
+ *     width: 0.02,
+ *     dash: [0.12, 0.04],
  *   },
  * });
  * figure.elements.add('t', t);
@@ -1188,16 +1144,14 @@ export type OBJ_TriangleSideRotationAlignment = {
  * // Star from 4 equilateral triangles
  * figure.add({
  *   name: 'star',
- *   method: 'triangle',
- *   options: {
- *     SSS: [1, 1, 1],
- *     xAlign: 'centroid',
- *     yAlign: 'centroid',
- *     copy: {
- *       along: 'rotation',
- *       num: 3,
- *       step: Math.PI / 6,
- *     },
+ *   make: 'triangle',
+ *   SSS: [1, 1, 1],
+ *   xAlign: 'centroid',
+ *   yAlign: 'centroid',
+ *   copy: {
+ *     along: 'rotation',
+ *     num: 3,
+ *     step: Math.PI / 6,
  *   },
  * });
  */
@@ -1273,41 +1227,35 @@ export type OBJ_Triangle = {
  * // Simple line defined by two points
  * figure.add({
  *   name: 'l',
- *   method: 'line',
- *   options: {
- *     p1: [0, 0],
- *     p2: [0, 1],
- *     width: 0.02,
- *   },
+ *   make: 'line',
+ *   p1: [0, 0],
+ *   p2: [0, 1],
+ *   width: 0.02,
  * });
  *
  * @example
  * // Dashed line defined by a point, a length and an angle
  * figure.add({
  *   name: 'l',
- *   method: 'line',
- *   options: {
- *     p1: [0, 0],
- *     length: 1,
- *     angle: Math.PI / 2,
- *     width: 0.03,
- *     dash: [0.1, 0.02, 0.03, 0.02],
- *   },
+ *   make: 'line',
+ *   p1: [0, 0],
+ *   length: 1,
+ *   angle: Math.PI / 2,
+ *   width: 0.03,
+ *   dash: [0.1, 0.02, 0.03, 0.02],
  * });
  *
  * @example
  * // Line with two different arrows on ends
  * figure.add({
  *   name: 'l',
- *   method: 'line',
- *   options: {
- *     p1: [0, 0],
- *     p2: [0, 1],
- *     width: 0.03,
- *     arrow: {
- *       start: 'rectangle',
- *       end: 'barb',
- *     },
+ *   make: 'line',
+ *   p1: [0, 0],
+ *   p2: [0, 1],
+ *   width: 0.03,
+ *   arrow: {
+ *     start: 'rectangle',
+ *     end: 'barb',
  *   },
  * });
  */
@@ -1368,14 +1316,12 @@ export type OBJ_Line = {
  * // Grid defined by xStep and yStep
  * figure.add({
  *   name: 'g',
- *   method: 'grid',
- *   options: {
- *     bounds: [-0.5, -0.5, 1, 1],
- *     xStep: 0.25,
- *     yStep: 0.25,
- *     line: {
- *       width: 0.03,
- *     },
+ *   make: 'grid',
+ *   bounds: [-0.5, -0.5, 1, 1],
+ *   xStep: 0.25,
+ *   yStep: 0.25,
+ *   line: {
+ *     width: 0.03,
  *   },
  * });
  *
@@ -1396,19 +1342,17 @@ export type OBJ_Line = {
  * // Grid of grids
  * figure.add({
  *   name: 'g',
- *   method: 'grid',
- *   options: {
- *     bounds: [-0.7, -0.7, 0.6, 0.6],
- *     xNum: 4,
- *     yNum: 4,
- *     line: {
- *       width: 0.03,
- *     },
- *     copy: [
- *       { along: 'x', num: 1, step: 0.8},
- *       { along: 'y', num: 1, step: 0.8},
- *     ],
+ *   make: 'grid',
+ *   bounds: [-0.7, -0.7, 0.6, 0.6],
+ *   xNum: 4,
+ *   yNum: 4,
+ *   line: {
+ *     width: 0.03,
  *   },
+ *   copy: [
+ *     { along: 'x', num: 1, step: 0.8},
+ *     { along: 'y', num: 1, step: 0.8},
+ *   ],
  * });
  */
 export type OBJ_Grid = {
@@ -1487,24 +1431,20 @@ export type OBJ_Grid = {
  * // Triangle arrow with tail
  * figure.add({
  *   name: 'a',
- *   method: 'arrow',
- *   options: {
- *     head: 'triangle',
- *     tail: 0.15,
- *     length: 0.5,
- *   },
+ *   make: 'arrow',
+ *   head: 'triangle',
+ *   tail: 0.15,
+ *   length: 0.5,
  * });
  *
  * @example
  * // Barb arrow with 0 tail
  * figure.add({
  *   name: 'a',
- *   method: 'arrow',
- *   options: {
- *     head: 'barb',
- *     angle: Math.PI / 2,
- *     tail: 0,
- *   },
+ *   make: 'arrow',
+ *   head: 'barb',
+ *   angle: Math.PI / 2,
+ *   tail: 0,
  * });
  *
  * @example
@@ -1524,15 +1464,13 @@ export type OBJ_Grid = {
  * // Create arrow and copy to transforms
  * figure.add({
  *   name: 'a',
- *   method: 'arrow',
- *   options: {
- *     head: 'barb',
- *     align: 'mid',
- *     length: 0.7,
- *     copy: {
- *       to: transforms,
- *       original: false,
- *     },
+ *   make: 'arrow',
+ *   head: 'barb',
+ *   align: 'mid',
+ *   length: 0.7,
+ *   copy: {
+ *     to: transforms,
+ *     original: false,
  *   },
  * });
  */
@@ -1636,12 +1574,10 @@ export type OBJ_TextDefinition = {
  * figure.add(
  *   {
  *     name: 't',
- *     method: 'text',
- *     options: {
- *       text: 'hello',
- *       xAlign: 'center',
- *       yAlign: 'middle',
- *     },
+ *     make: 'text',
+ *     text: 'hello',
+ *     xAlign: 'center',
+ *     yAlign: 'middle',
  *   },
  * );
  *
@@ -1650,26 +1586,24 @@ export type OBJ_TextDefinition = {
  * figure.add(
  *   {
  *     name: 't',
- *     method: 'text',
- *     options: {
- *       text: [
- *         {
- *           text: 'hello',
- *           font: { style: 'italic', color: [0, 0.5, 1, 1], size: 0.1 },
- *           xAlign: 'left',
- *           yAlign: 'bottom',
- *           location: [-0.35, 0],
- *         },
- *         {
- *           text: 'world',
- *           location: [0, -0.1],
- *         },
- *       ],
- *       xAlign: 'center',
- *       yAlign: 'middle',
- *       font: { size: 0.3 },
- *       color: this.defaultColor,
- *     },
+ *     make: 'text',
+ *     text: [
+ *       {
+ *         text: 'hello',
+ *         font: { style: 'italic', color: [0, 0.5, 1, 1], size: 0.1 },
+ *         xAlign: 'left',
+ *         yAlign: 'bottom',
+ *         location: [-0.35, 0],
+ *       },
+ *       {
+ *         text: 'world',
+ *         location: [0, -0.1],
+ *       },
+ *     ],
+ *     xAlign: 'center',
+ *     yAlign: 'middle',
+ *     font: { size: 0.3 },
+ *     color: this.defaultColor,
  *   },
  * );
  */
@@ -1759,32 +1693,30 @@ export type OBJ_TextLineDefinition = {
  * figure.add(
  *   {
  *     name: 'line',
- *     method: 'text.line',
- *     options: {
- *       text: [
- *         'Hello ',
- *         {
- *           text: 'to the',
- *           font: {
- *             style: 'italic',
- *             color: [0, 0.5, 1, 1],
- *           },
+ *     make: 'text.line',
+ *     text: [
+ *       'Hello ',
+ *       {
+ *         text: 'to the',
+ *         font: {
+ *           style: 'italic',
+ *           color: [0, 0.5, 1, 1],
  *         },
- *         ' world',
- *         {
- *           text: '1',
- *           offset: [0, 0.1],
- *           font: { size: 0.1, color: [0, 0.6, 0, 1] },
- *         },
- *       ],
- *       xAlign: 'center',
- *       yAlign: 'bottom',
- *       font: {
- *         style: 'normal',
- *         size: 0.2,
  *       },
- *       color: this.defaultColor,
+ *       ' world',
+ *       {
+ *         text: '1',
+ *         offset: [0, 0.1],
+ *         font: { size: 0.1, color: [0, 0.6, 0, 1] },
+ *       },
+ *     ],
+ *     xAlign: 'center',
+ *     yAlign: 'bottom',
+ *     font: {
+ *       style: 'normal',
+ *       size: 0.2,
  *     },
+ *     color: this.defaultColor,
  *   },
  * );
  */
@@ -1924,19 +1856,17 @@ export type OBJ_TextModifiersDefinition = {
  * figure.add(
  *   {
  *     name: 't',
- *     method: 'text.lines',
- *     options: {
- *       text: [
- *         'First line',
- *         'This is the second line',
- *       ],
- *       font: {
- *         style: 'normal',
- *         size: 0.2,
- *       },
- *       justify: 'center',
- *       color: this.defaultColor,
+ *     make: 'text.lines',
+ *     text: [
+ *       'First line',
+ *       'This is the second line',
+ *     ],
+ *     font: {
+ *       style: 'normal',
+ *       size: 0.2,
  *     },
+ *     justify: 'center',
+ *     color: this.defaultColor,
  *   },
  * );
  *
@@ -1945,45 +1875,43 @@ export type OBJ_TextModifiersDefinition = {
  * figure.add(
  *   {
  *     name: 'lines',
- *     method: 'textLines',
- *     options: {
- *        text: [
- *          'Lines justified to the left',
- *          'A |line| with a |modified_phrase|',
- *          {
- *            text: 'A |line| with custom defaults',
- *            font: {
- *              style: 'italic',
- *              color: [0, 0.5, 1, 1],
- *            },
- *          },
- *        ],
- *        modifiers: {
- *          modified_phrase: {
- *            text: 'modified phrase',
- *            font: {
- *              style: 'italic',
- *              color: [0, 0.5, 1, 1],
- *            },
- *          },
- *          line: {
- *            font: {
- *              family: 'Times New Roman',
- *              color: [0, 0.6, 0, 1],
- *              style: 'italic',
- *            },
- *          },
- *        },
- *        font: {
- *          family: 'Helvetica Neue',
- *          weight: '200',
- *          style: 'normal',
- *          size: 0.2,
- *        },
- *        justify: 'left',
- *        lineSpace: -0.4,
- *        position: [-0.5, 0.1],
- *      },
+ *     make: 'textLines',
+ *     text: [
+ *       'Lines justified to the left',
+ *       'A |line| with a |modified_phrase|',
+ *       {
+ *         text: 'A |line| with custom defaults',
+ *         font: {
+ *           style: 'italic',
+ *           color: [0, 0.5, 1, 1],
+ *         },
+ *       },
+ *     ],
+ *     modifiers: {
+ *       modified_phrase: {
+ *         text: 'modified phrase',
+ *         font: {
+ *           style: 'italic',
+ *           color: [0, 0.5, 1, 1],
+ *         },
+ *       },
+ *       line: {
+ *         font: {
+ *           family: 'Times New Roman',
+ *           color: [0, 0.6, 0, 1],
+ *           style: 'italic',
+ *         },
+ *       },
+ *     },
+ *     font: {
+ *       family: 'Helvetica Neue',
+ *       weight: '200',
+ *       style: 'normal',
+ *       size: 0.2,
+ *     },
+ *     justify: 'left',
+ *     lineSpace: -0.4,
+ *     position: [-0.5, 0.1],
  *   },
  * );
  */

@@ -50,7 +50,7 @@ describe('Angle', () => {
     test('5 sides of 50 evenly', () => {
       figure.add({
         name: 'a',
-        method: 'angle',
+        make: 'angle',
         options: {
           angle: Math.PI / 5,
           curve: {
@@ -68,7 +68,7 @@ describe('Angle', () => {
       // So make the angle one half of one side larger = Math.PI / 50
       figure.add({
         name: 'a',
-        method: 'angle',
+        make: 'angle',
         options: {
           angle: Math.PI / 5 + Math.PI / 50,
           curve: {
@@ -157,7 +157,7 @@ describe('Angle', () => {
       create = (option) => {
         figure.add({
           name: 'a',
-          method: 'collections.angle',
+          make: 'collections.angle',
           options: figureOptions[option],
         });
         a = figure.getElement('a');

@@ -15,7 +15,7 @@ All examples are snippets which can be appended to the end of the `index.js` fil
 <body>
     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
     </div>
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.7.4/figureone.min.js'></script>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.8.0/figureone.min.js'></script>
     <script type="text/javascript" src='./index.js'></script>
 </body>
 </html>
@@ -47,18 +47,22 @@ Another way to create and add the same shape to the figure is to use the `Figure
 ```javascript
 figure.add({
   name: 'p',
-  method: 'polygon',
-  options: {
-    radius: 0.2,
-    color: [0, 0, 1, 1],
-    sides: 6,
-  },
+  make: 'polygon',
+  radius: 0.2,
+  color: [0, 0, 1, 1],
+  sides: 6,
 });
 ```
 
 Both ways create the same element. The first way is especially useful when extending shape creation classes, or creating elements dynamically. The second way can allow you to layout an entire figure in a single object that is compatible with JSON. This means it is relatively straight forward to share figure elements between projects. When using code folding in an IDE, the second way also makes it easy to work with a figure's with many elements by hiding elements that aren't being worked on.
 
 For most of the API reference, the second way will be used.
+
+Also note that for both examples the `name` property was used. It is often not necessary to use it, and it will only be used sometimes within the API reference. The three reasons to use it are:
+
+* Makes code more readable - especially for figures with lots of elements
+* Makes debugging easier
+* Naming elements makes accessing elements within a figure using the `get` method easier
 
 #### Built-in Shapes
 
@@ -72,6 +76,7 @@ There are several built in primitive shape methods that can be used to create co
 * <a href="#obj_polygon">polygon</a>
 * <a href="#obj_star">star</a>
 * <a href="#obj_grid">grid</a>
+
 
 #### Drawing a generic shape
 
@@ -90,14 +95,12 @@ To draw this shape, you would need to draw the two triangles, which means drawin
 ```javascript
 figure.add({
   name: 'rectangle',
-  method: 'generic',
-  options: {
-    points: [
-      [-2, -1], [-2, 1], [2, 1],
-      [-2, -1], [2, 1], [2, -1],
-    ],
-    drawType: 'triangles',
-  },
+  make: 'generic',
+  points: [
+    [-2, -1], [-2, 1], [2, 1],
+    [-2, -1], [2, 1], [2, -1],
+  ],
+  drawType: 'triangles',
 });
 ```
 
@@ -114,14 +117,12 @@ Therefore, to draw the same rectangle we would draw the first triangle with the 
 ```javascript
 figure.add({
   name: 'rectangle',
-  method: 'generic',
-  options: {
-    points: [
-      [-2, 1], [-2, -1], [2, 1],  // first triangle
-      [2, -1],                    // second triangle formed with vertices 1 and 3
-    ],
-    drawType: 'strip',
-  },
+  make: 'generic',
+  points: [
+    [-2, 1], [-2, -1], [2, 1],  // first triangle
+    [2, -1],                    // second triangle formed with vertices 1 and 3
+  ],
+  drawType: 'strip',
 });
 ```
 
@@ -140,15 +141,13 @@ Therefore, to draw the same rectangle we would draw the first point 1, then comp
 ```javascript
 figure.add({
   name: 'rectangle',
-  method: 'generic',
-  options: {
-    points: [
-      [-2, -1],         // first point (vertex 1)
-      [-2, 1], [2, 1],  // complete first triangle (vertices 2, 3)
-      [2, -1],          // second triangle formed with first and last vertex (1, 3)
-    ],
-    drawType: 'fan',
-  },
+  make: 'generic',
+  points: [
+    [-2, -1],         // first point (vertex 1)
+    [-2, 1], [2, 1],  // complete first triangle (vertices 2, 3)
+    [2, -1],          // second triangle formed with first and last vertex (1, 3)
+  ],
+  drawType: 'fan',
 });
 ```
 
@@ -170,15 +169,13 @@ For instance, to draw a rectangle outline:
 ```javascript
 figure.add({
   name: 'rectangle',
-  method: 'generic',
-  options: {
-    points: [
-      [-2, -1], [-2, 1],  // left edge
-      [-2, 1], [2, 1],    // top edge
-      [2, 1], [2, -1],    // right edge
-      [2, -1], [-2, -1],  // bottom edge
-    ],
-    drawType: 'lines',
-  },
+  make: 'generic',
+  points: [
+    [-2, -1], [-2, 1],  // left edge
+    [-2, 1], [2, 1],    // top edge
+    [2, 1], [2, -1],    // right edge
+    [2, -1], [-2, -1],  // bottom edge
+  ],
+  drawType: 'lines',
 });
 ```

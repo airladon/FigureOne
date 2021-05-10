@@ -1,5 +1,5 @@
 # Development environment for FigureOne:
-FROM airladon/pynode:python3.8.1-node12.16.0-npm6.13.7
+FROM airladon/pynode:python3.9.5-node16.1.0-npm7.12.0
 
 # ## General ##
 WORKDIR /opt/app
@@ -17,6 +17,9 @@ RUN apt-get update && \
    	 stable" && \
  		 apt-get update && \
  		 apt-get -y install docker-ce
+
+# Needed for flow it seems (try removing in the future)
+RUN apt-get update && apt-get install -y libatomic1
 
 
 # Install npm packages

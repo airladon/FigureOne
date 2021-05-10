@@ -40,7 +40,7 @@ function addEquation() {
   figure.add([
     {
       name: 'eqn',
-      method: 'collections.equation',
+      make: 'collections.equation',
       options: {
         color: colorText,
         dimColor: [0.65, 0.65, 0.65, 1],
@@ -305,7 +305,7 @@ function addEquation() {
     },
     {
       name: 'sideEqn',
-      method: 'equation',
+      make: 'equation',
       options: {
         elements: {
           equals: '  =  ',
@@ -335,7 +335,7 @@ function addEquation() {
     },
     {
       name: 'nav',
-      method: 'collections.slideNavigator',
+      make: 'collections.slideNavigator',
       options: {
         prevButton: {
           position: [-2.75, 1.5], type: 'arrow', length: 0.4, width: 0.8,

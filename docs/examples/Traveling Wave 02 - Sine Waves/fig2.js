@@ -37,7 +37,7 @@ function fig2() {
     // Add plot of sine function
     {
       name: 'plot',
-      method: 'collections.plot',
+      make: 'collections.plot',
       options: {
         width: 3.5,
         height: 1.5,
@@ -85,7 +85,7 @@ function fig2() {
     // Add mover figure element
     {
       name: 'mover',
-      method: 'rectangle',
+      make: 'rectangle',
       options: {
         width: 3.5,
         height: 1.5,
@@ -98,7 +98,7 @@ function fig2() {
     // Add equation
     {
       name: 'eqn',
-      method: 'equation',
+      make: 'equation',
       options: {
         elements: {
           sin: { style: 'normal' },

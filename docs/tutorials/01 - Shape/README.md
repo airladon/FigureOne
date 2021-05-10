@@ -15,7 +15,7 @@ Download `index.html` and `index.js` into the same folder and open `index.html` 
 <body>
     <div id="figureOneContainer" style="width: 500px; height: 500px; background-color: black;">
     </div>
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.7.4/figureone.min.js'></script>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.8.0/figureone.min.js'></script>
     <script type="text/javascript" src='./index.js'></script>
 </body>
 </html>
@@ -30,13 +30,10 @@ const figure = new Fig.Figure();
 // Add a triangle
 figure.add(
   {
-    name: 'tri',
-    method: 'triangle',
-    options: {
-      width: 1,
-      height: 1,
-      color: [1, 0, 0, 1],
-    },
+    make: 'triangle',
+    width: 1,
+    height: 1,
+    color: [1, 0, 0, 1],
   },
 );
 
@@ -52,7 +49,7 @@ In the HTML file, a `div` is created the figure will attach to.
 
 Then the FigureOne library is loaded.
 ```html
-<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.7.4/figureone.min.js'></script>
+<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.8.0/figureone.min.js'></script>
 ```
 In this case, the library is loaded from a CDN, but you could also run it from a local copy of the FigureOne library as well. For instance, if you cloned this repository, and wanted to run the local version you could use the line:
 ```html
@@ -86,13 +83,10 @@ Next, a figure element in the shape of a triangle is added.
 ```js
 figure.add(
   {
-    name: 'tri',
-    method: 'triangle',
-    options: {
-      width: 1,
-      height: 1,
-      color: [1, 0, 0, 1],
-    },
+    make: 'triangle',
+    width: 1,
+    height: 1,
+    color: [1, 0, 0, 1],
   },
 );
 
@@ -100,10 +94,6 @@ figure.add(
 
 We are defining a *triangle* figure element using the `triangle` method with the parameters of `width`, `height`, and `color`.
 
-Options objects are used to define elements within a figure. Options objects can be as simple or complex as needed to customize the properties of an element. To keep options objects as small as possible, only the properties that need customization should be defined.
+The element is defined in a javascript object. There are many possible parameters that can define a triangle, but only the ones that need customization need to be used.
 
 The triangle's options object is [here](https://airladon.github.io/FigureOne/api/#obj_triangle).
-
-
-
-<!-- [link here](../../docs/README.md#TypeEquationPhrase) -->

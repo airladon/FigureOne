@@ -71,7 +71,7 @@ function layoutRight() {
   });
   const similarTri = (name, scale, position, thetaDef, side) => ({
     name,
-    method: 'collections.polyline',
+    make: 'collections.polyline',
     options: {
       points: [[0, 0], [scale * 2, scale * 1.453], [scale * 2, 0]],
       close: true,
@@ -109,15 +109,15 @@ function layoutRight() {
       },
     },
   });
-  const [rightTri] = figure.add({
+  const rightTri = figure.add({
     name: 'rightTri',
-    method: 'collection',
+    make: 'collection',
     elements: [
       // Little dashed line that completes the angle theta annotation
       // when the angle extends beyond the triangle
       {
         name: 'x',
-        method: 'primitives.line',
+        make: 'primitives.line',
         options: {
           length: 0.3,
           width: 0.006,
@@ -137,7 +137,7 @@ function layoutRight() {
       // Movable line that rotates the hypotenuse changing the angle theta
       {
         name: 'rotLine',
-        method: 'primitives.line',
+        make: 'primitives.line',
         options: {
           length: 1,
           width: 0.1,
@@ -159,7 +159,7 @@ function layoutRight() {
       // Movable pad that moves the top vertex of the triangle
       {
         name: 'movePad',
-        method: 'primitives.polygon',
+        make: 'primitives.polygon',
         options: {
           radius: 0.1,
           color: [0, 0, 1, 0],
@@ -186,6 +186,7 @@ function layoutRight() {
       },
     },
   });
+
   const [tri, xLine] = rightTri.getElements(['tri', 'x']);
   const [tri1] = rightTri.getElements(['tri1', 'tri2']);
   const [movePad] = rightTri.getElements(['movePad']);

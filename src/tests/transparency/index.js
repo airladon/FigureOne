@@ -4,7 +4,7 @@ function makeFigure(backgroundColor, htmlId) {
 
   const text = (index, position, opacity) => ({
     name: `text${index}`,
-    method: 'text',
+    make: 'text',
     options: {
       text: 'L',
       font: { weight: '900' },
@@ -14,7 +14,7 @@ function makeFigure(backgroundColor, htmlId) {
   });
   const square = (index, position, opacity, height = 0.2, width = 0.2) => ({
     name: `square${index}`,
-    method: 'rectangle',
+    make: 'rectangle',
     options: {
       width,
       height,
@@ -25,7 +25,7 @@ function makeFigure(backgroundColor, htmlId) {
 
   const texture = (index, src, position, opacity, height = 0.4, width = 0.4) => ({
     name: `texture${index}`,
-    method: 'rectangle',
+    make: 'rectangle',
     options: {
       width,
       height,
@@ -43,7 +43,7 @@ function makeFigure(backgroundColor, htmlId) {
   figure.add([
     {
       name: '__minorGrid',
-      method: 'primitives.grid',
+      make: 'primitives.grid',
       options: {
         position: [0, 0],
         color: [0.9, 0.9, 0.9, 1],
@@ -55,7 +55,7 @@ function makeFigure(backgroundColor, htmlId) {
     },
     {
       name: '__majorGrid',
-      method: 'primitives.grid',
+      make: 'primitives.grid',
       options: {
         position: [0, 0],
         color: [0.9, 0.9, 0.9, 1],

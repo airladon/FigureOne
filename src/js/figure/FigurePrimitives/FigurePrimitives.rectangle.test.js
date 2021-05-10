@@ -22,7 +22,7 @@ describe('Polyline', () => {
     addElement = (optionsName) => {
       figure.add(joinObjects({
         name: 'r',
-        method: 'rectangle',
+        make: 'rectangle',
       }, options[optionsName]));
       figure.initialize();
       r = figure.elements._r;

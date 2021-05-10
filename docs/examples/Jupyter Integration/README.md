@@ -80,7 +80,7 @@ This cell will load `FigureOne`, and then hide this setup code as well.
 %%javascript
 require.config({ 
   paths: { 
-    Fig: 'https://cdn.jsdelivr.net/npm/figureone@0.7.4/figureone.min'
+    Fig: 'https://cdn.jsdelivr.net/npm/figureone@0.8.0/figureone.min'
   },
   scriptType: 'text/javascript'
 });
@@ -117,7 +117,7 @@ require(['Fig'], function(Fig) {
 
     figure.add({
       name: 'eqn',
-      method: 'equation',
+      make: 'equation',
       options: {
         position: [-0.4, -0.1],
         scale: 2,

@@ -12,7 +12,7 @@ function makeShape(name, options, mods, getPos) {
   index += 1;
   const o = {
     name,
-    method: 'collections.polyline',
+    make: 'collections.polyline',
     options: tools.misc.joinObjects({}, {
       color: [1, 0, 0, 0.7],
       width: 0.05,

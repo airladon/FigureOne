@@ -227,34 +227,30 @@ export type EQN_EquationElements = {
  *
  * // Draw (0, 0) point in equation collection
  * figure.add({
- *   method: 'polygon', options: { radius: 0.01, color: [0, 0, 1, 1], sides: 9 },
+ *   make: 'polygon', options: { radius: 0.01, color: [0, 0, 1, 1], sides: 9 },
  * });
  * // Default alignment is left, baseline
  * figure.add([
  *   {
- *     method: 'equation',
- *     options: {
- *       forms: { 0: ['a', '_ = ', 'bg'] },
- *     },
+ *     make: 'equation',
+ *     forms: { 0: ['a', '_ = ', 'bg'] },
  *   },
  * ]);
  *
  * @example
  * // Draw (0, 0) point in equation collection
  * figure.add({
- *   method: 'polygon', options: { radius: 0.01, color: [0, 0, 1, 1], sides: 9 },
+ *   make: 'polygon', options: { radius: 0.01, color: [0, 0, 1, 1], sides: 9 },
  * });
  * // Align with right, middle
  * figure.add([
  *   {
- *     method: 'equation',
- *     options: {
- *       forms: { 0: ['a', '_ = ', 'bg'] },
- *       formDefaults: {
- *         alignment: {
- *           xAlign: 'right',
- *           yAlign: 'middle',
- *         },
+ *     make: 'equation',
+ *     forms: { 0: ['a', '_ = ', 'bg'] },
+ *     formDefaults: {
+ *       alignment: {
+ *         xAlign: 'right',
+ *         yAlign: 'middle',
  *       },
  *     },
  *   },
@@ -263,20 +259,18 @@ export type EQN_EquationElements = {
  * @example
  * // Draw (0, 0) point in equation collection
  * figure.add({
- *   method: 'polygon', options: { radius: 0.01, color: [0, 0, 1, 1], sides: 9 },
+ *   make: 'polygon', options: { radius: 0.01, color: [0, 0, 1, 1], sides: 9 },
  * });
  * // Align with center of equals sign
  * figure.add([
  *   {
- *     method: 'equation',
- *     options: {
- *       forms: { 0: ['a', '_ = ', 'bg'] },
- *       formDefaults: {
- *         alignment: {
- *           fixTo: '_ = ',
- *           xAlign: 'center',
- *           yAlign: 'baseline',
- *         },
+ *     make: 'equation',
+ *     forms: { 0: ['a', '_ = ', 'bg'] },
+ *     formDefaults: {
+ *       alignment: {
+ *         fixTo: '_ = ',
+ *         xAlign: 'center',
+ *         yAlign: 'baseline',
  *       },
  *     },
  *   },
@@ -286,11 +280,11 @@ export type EQN_EquationElements = {
  * // Draw (0, 0) and (0.2, 0.1) points
  * figure.add([
  *   {
- *     method: 'polygon',
+ *     make: 'polygon',
  *     options: { radius: 0.01, color: [0, 0, 1, 1], sides: 9 }
  *   },
  *   {
- *     method: 'polygon',
+ *     make: 'polygon',
  *     options: {
  *       radius: 0.01, color: [0, 0.8, 0, 1], sides: 9, position: [0.2, 0.1],
  *     },
@@ -299,15 +293,13 @@ export type EQN_EquationElements = {
  * // Align with point (0.2, 0.1) in the equation collection
  * figure.add([
  *   {
- *     method: 'equation',
- *     options: {
- *       forms: { 0: ['a', '_ = ', 'bg'] },
- *       formDefaults: {
- *         alignment: {
- *           fixTo: [0.2, 0.1],
- *           xAlign: 'right',
- *           yAlign: 'baseline',
- *         },
+ *     make: 'equation',
+ *     forms: { 0: ['a', '_ = ', 'bg'] },
+ *     formDefaults: {
+ *       alignment: {
+ *         fixTo: [0.2, 0.1],
+ *         xAlign: 'right',
+ *         yAlign: 'baseline',
  *       },
  *     },
  *   },
@@ -479,21 +471,19 @@ export type EQN_FromForms = {
  * // of the elements is colored blue in one form and red in the other
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: { equals: ' = ', plus: ' + ', minus: ' \u2212 ' },
- *     forms: {
- *       form1: {
- *         content: ['a', 'plus', 'b', 'equals', 'c'],
- *         elementMods: {
- *           a: { color: [0, 0, 1, 1] },
- *         },
+ *   make: 'equation',
+ *   elements: { equals: ' = ', plus: ' + ', minus: ' \u2212 ' },
+ *   forms: {
+ *     form1: {
+ *       content: ['a', 'plus', 'b', 'equals', 'c'],
+ *       elementMods: {
+ *         a: { color: [0, 0, 1, 1] },
  *       },
- *       form2: {
- *         content: ['a', 'equals', 'c', 'minus', 'b'],
- *         elementMods: {
- *           a: { color: [1, 0, 0, 1] },
- *         },
+ *     },
+ *     form2: {
+ *       content: ['a', 'equals', 'c', 'minus', 'b'],
+ *       elementMods: {
+ *         a: { color: [1, 0, 0, 1] },
  *       },
  *     },
  *   },
@@ -503,50 +493,48 @@ export type EQN_FromForms = {
  * // Example showing all form options
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     forms: {
- *       form1: {
- *         content: ['a', 'b', 'c'],
- *         subForm: 'deg',
- *         scale: 1.2,
- *         alignment: {
- *           fixTo: 'b',
- *           xAlign: 'center',
- *           yAlign: 'bottom',
+ *   make: 'equation',
+ *   forms: {
+ *     form1: {
+ *       content: ['a', 'b', 'c'],
+ *       subForm: 'deg',
+ *       scale: 1.2,
+ *       alignment: {
+ *         fixTo: 'b',
+ *         xAlign: 'center',
+ *         yAlign: 'bottom',
+ *       },
+ *       description: '|Form| 1 |description|',
+ *       modifiers: {
+ *         Form: { font: { color: [0, 0, 1, 0] } },
+ *       },
+ *       elementMods: {
+ *         a: {
+ *           color: [0, 0, 1, 1],
+ *           isTouchable: true,
  *         },
- *         description: '|Form| 1 |description|',
- *         modifiers: {
- *           Form: { font: { color: [0, 0, 1, 0] } },
+ *       },
+ *       duration: 1,
+ *       translation: {
+ *         a: {
+ *           style: 'curved',
+ *           direction: 'up',
+ *           mag: 0.95,
  *         },
- *         elementMods: {
- *           a: {
- *             color: [0, 0, 1, 1],
- *             isTouchable: true,
- *           },
- *         },
- *         duration: 1,
+ *         b: ['curved', 'down', 0.45],
+ *       },
+ *       fromPrev: {
+ *         duration: null,
  *         translation: {
- *           a: {
- *             style: 'curved',
- *             direction: 'up',
- *             mag: 0.95,
- *           },
- *           b: ['curved', 'down', 0.45],
+ *           a: ['curved', 'down', 0.2],
+ *           b: ['curved', 'down', 0.2],
  *         },
- *         fromPrev: {
- *           duration: null,
- *           translation: {
- *             a: ['curved', 'down', 0.2],
- *             b: ['curved', 'down', 0.2],
- *           },
- *         },
- *         fromNext: {
- *           duration: 2,
- *           translation: {
- *             a: ['curved', 'down', 0.2],
- *             b: ['curved', 'down', 0.2],
- *           },
+ *       },
+ *       fromNext: {
+ *         duration: 2,
+ *         translation: {
+ *           a: ['curved', 'down', 0.2],
+ *           b: ['curved', 'down', 0.2],
  *         },
  *       },
  *     },
@@ -814,16 +802,14 @@ type EQN_EquationGoToForm = {
  * // Example showing both ways to access GoToForm animation step
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: { times: ' \u00D7', equals: ' = ' },
- *     forms: {
- *       0: ['a', 'equals', 'b', 'times', ' ', '_1'],
- *       1: ['a', 'equals', 'b', 'times', { strike: [[' ', '_1'], 'strike'] }],
- *       2: ['a', 'equals', 'b'],
- *     },
- *     formSeries: ['0', '1', '2'],
+ *   make: 'equation',
+ *   elements: { times: ' \u00D7', equals: ' = ' },
+ *   forms: {
+ *     0: ['a', 'equals', 'b', 'times', ' ', '_1'],
+ *     1: ['a', 'equals', 'b', 'times', { strike: [[' ', '_1'], 'strike'] }],
+ *     2: ['a', 'equals', 'b'],
  *   },
+ *   formSeries: ['0', '1', '2'],
  * });
  * const e = figure.getElement('eqn');
  * e.showForm('0');
@@ -862,14 +848,12 @@ class NextFormAnimationStep extends TriggerAnimationStep {
  * // Example showing both ways to access GoToForm animation step
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: { times: ' \u00D7', equals: ' = ' },
- *     forms: {
- *       0: ['a', 'equals', 'b', 'times', ' ', '_1'],
- *       1: ['a', 'equals', 'b', 'times', { strike: [[' ', '_1'], 'strike'] }],
- *       2: ['a', 'equals', 'b'],
- *     }
+ *   make: 'equation',
+ *   elements: { times: ' \u00D7', equals: ' = ' },
+ *   forms: {
+ *     0: ['a', 'equals', 'b', 'times', ' ', '_1'],
+ *     1: ['a', 'equals', 'b', 'times', { strike: [[' ', '_1'], 'strike'] }],
+ *     2: ['a', 'equals', 'b'],
  *   },
  * });
  * const e = figure.getElement('eqn');
@@ -916,18 +900,16 @@ class GoToFormAnimationStep extends TriggerAnimationStep {
  * // Create with options definition
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       a: 'a',
- *       b: { color: [0, 0, 1, 1] },
- *       c: 'c',
- *       equals: ' = ',
- *       plus: ' + ',
- *     },
- *     forms: {
- *       1: ['a', 'equals', 'b', 'plus', 'c'],
- *     },
+ *   make: 'equation',
+ *   elements: {
+ *     a: 'a',
+ *     b: { color: [0, 0, 1, 1] },
+ *     c: 'c',
+ *     equals: ' = ',
+ *     plus: ' + ',
+ *   },
+ *   forms: {
+ *     1: ['a', 'equals', 'b', 'plus', 'c'],
  *   },
  * });
  *

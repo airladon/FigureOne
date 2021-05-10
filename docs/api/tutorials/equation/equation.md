@@ -29,7 +29,7 @@ All examples are snippets which can be appended to the end of the `index.js` fil
 <body>
     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
     </div>
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.7.4/figureone.min.js'></script>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.8.0/figureone.min.js'></script>
     <script type="text/javascript" src='./index.js'></script>
 </body>
 </html>
@@ -175,36 +175,32 @@ equation.goToForm({
 Similar to shapes and text, the same equation above can be defined with an options object. For complicated equations, options objects can be used with code folding in an IDE to more easily read and navigate an equation definition. Also, because object form is JSON compatible, complex equations can be easily shared.
 
 ```javascript
-figure.add(
+const equation = figure.add(
   {
-    name: 'equation',
-    method: 'equation',
-    options: {
-      color: [1, 0, 0, 1],
-      font: { size: 0.2 },
-      elements: {
-        a: 'a',
-        b: 'b',
-        c: { text: 'c', color: [0, 0, 1, 1] },
-        v: { symbol: 'vinculum'},
-        equals: ' = ',
-        times: ' \u00D7 ',  // unicode times symbol
-      },
-      forms: {
-        a: ['a', 'equals', 'b', 'times', 'c'],
-        b: ['b', 'equals', { frac: ['a', 'v', 'c'] }],
-        bCurve: {
-        content: ['b', 'equals', { frac: ['a', 'v', 'c'] }],
-          translation: {
-            a: { style: 'curve', direction: 'up', mag: 0.8 },
-            b: { style: 'curve', direction: 'down', mag: 1.2 },
-          },
+  make: 'equation',
+    color: [1, 0, 0, 1],
+    font: { size: 0.2 },
+    elements: {
+      a: 'a',
+      b: 'b',
+      c: { text: 'c', color: [0, 0, 1, 1] },
+      v: { symbol: 'vinculum'},
+      equals: ' = ',
+      times: ' \u00D7 ',  // unicode times symbol
+    },
+    forms: {
+      a: ['a', 'equals', 'b', 'times', 'c'],
+      b: ['b', 'equals', { frac: ['a', 'v', 'c'] }],
+      bCurve: {
+      content: ['b', 'equals', { frac: ['a', 'v', 'c'] }],
+        translation: {
+          a: { style: 'curve', direction: 'up', mag: 0.8 },
+          b: { style: 'curve', direction: 'down', mag: 1.2 },
         },
       },
     },
   },
 );
-const equation = figure.getElement('equation')
 equation.showForm('a');
 ```
 
@@ -249,19 +245,15 @@ Equation elements can all be defined in the `elements` property. However, simple
 
 For instance, we can recreate the example above as:
 ```javascript
-figure.add({
-  name: 'eqn',
-  method: 'equation',
-  options: {
-    elements: {
-      times: ' \u00D7 ',
-      equals: ' = ',
-      c: { color: [0, 0, 1, 1] },
-    },
-    forms: {
-      // 'a', 'b', and 'c' are defined inline
-      1: ['a', 'equals', 'b', 'times', 'c'],
-    },
+const equation = figure.add({
+  make: 'equation',
+  elements: {
+    times: ' \u00D7 ',
+    equals: ' = ',
+    c: { color: [0, 0, 1, 1] },
+  },
+  forms: {
+    1: ['a', 'equals', 'b', 'times', 'c'],
   },
 });
 ```
@@ -273,23 +265,20 @@ Elements 'a' and 'b' are defined inline. 'c' is still defined in the `elements` 
 Elements defined inline can be used in other forms:
 
 ```javascript
-figure.add({
-  name: 'eqn',
-  method: 'equation',
-  options: {
-    elements: {
-      times: ' \u00D7 ',
-      equals: ' = ',
-      v: { symbol: 'vinculum' },
-    },
-    forms: {
-      1: ['a', 'equals', 'b', 'times', 'c'],
-      2: ['b', 'equals', { frac: ['a', 'v', 'c'] }],
-    },
+const eqn = figure.add({
+  make: 'equation',
+  elements: {
+    times: ' \u00D7 ',
+    equals: ' = ',
+    v: { symbol: 'vinculum' },
+  },
+  forms: {
+    1: ['a', 'equals', 'b', 'times', 'c'],
+    2: ['b', 'equals', { frac: ['a', 'v', 'c'] }],
   },
 });
-figure.elements._eqn.showForm('1');
-figure.elements._eqn.goToForm({
+eqn.showForm('1');
+eqn.goToForm({
   form: 2,
   animate: 'move',
   delay: 1,
@@ -301,15 +290,12 @@ figure.elements._eqn.goToForm({
 Even symbols can be defined inline:
 ```javascript
 figure.add({
-  name: 'eqn',
-  method: 'equation',
-  options: {
-    elements: {
-      equals: ' = ',
-    },
-    forms: {
-      1: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
-    },
+  make: 'equation',
+  elements: {
+    equals: ' = ',
+  },
+  forms: {
+    1: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
   },
 });
 ```
@@ -322,12 +308,9 @@ Underscores after text can be used to create unique identifiers and therefore us
 
 ```javascript
 figure.add({
-  name: 'eqn',
-  method: 'equation',
-  options: {
-    forms: {
-      1: ['2', 'a', '_ = ', 'a_1', '_ + ', 'a_2'],
-    },
+  make: 'equation',
+  forms: {
+    1: ['2', 'a', '_ = ', 'a_1', '_ + ', 'a_2'],
   },
 });
 ```
@@ -336,17 +319,15 @@ figure.add({
 
 Underscores can also be used to give inline symbol definitions unqiue identifiers. In this case, the text before the underscore is the unique identifier, and the text after defines the symbol.
 ```javascript
-figure.add({
+const eqn = figure.add({
   name: 'eqn',
-  method: 'equation',
-  options: {
-    forms: {
-      1: ['b', '_ = ', { frac: ['a', 'v_vinculum', 'c'] }],
-      2: ['c', '_ = ', { frac: ['a', 'v', 'b'] }],
-    },
+  make: 'equation',
+  forms: {
+    1: ['b', '_ = ', { frac: ['a', 'v_vinculum', 'c'] }],
+    2: ['c', '_ = ', { frac: ['a', 'v', 'b'] }],
   },
 });
-figure.elements._eqn.goToForm({
+eqn.goToForm({
   form: '2',
   animate: 'move',
   delay: 1,
@@ -363,49 +344,50 @@ Array definitions, or equation phrases, can also be spread over several lines to
 
 ```javascript
 figure.add({
+  // name needs to be defined as it is used to get the element in the onClick method
   name: 'eqn',
-  method: 'equation',
-  options: {
-    elements: {
-      v: { symbol: 'vinculum' },
-    },
-    forms: {
-      // Array definition for simple fraction
-      1: { frac: ['a', 'v', 'b']},
-      // Object definition for fraction with complex phrases
-      2: {
-        frac: {
-          numerator: ['a', '_ + ', 'c'],
-          symbol: 'v',
-          denominator: ['t', { sub: ['b', '2'] }],
-        },
-      },
-      // Array definition split over several lines
-      3: {
-        frac: [
-          ['a', '_ + ', 'x'],
-          'v',
-          ['t', { sub: ['b', '3'] }],
-        ],
-      },
-      // Object definition when additional options are needed
-      4: {
-        frac: {
-          numerator: 'a',
-          symbol: 'v',
-          denominator: 'b',
-          numeratorSpace: 0.07,
-          denominatorSpace: 0.07,
-          overhang: 0.1,
-          scale: 1.5,
-        },
-      },
-    },
-    formSeries: ['1', '2', '3', '4'],
+  make: 'equation',
+  elements: {
+    v: { symbol: 'vinculum' },
   },
+  forms: {
+    // Array definition for simple fraction
+    1: { frac: ['a', 'v', 'b']},
+    // Object definition for fraction with complex phrases
+    2: {
+      frac: {
+        numerator: ['a', '_ + ', 'c'],
+        symbol: 'v',
+        denominator: ['t', { sub: ['b', '2'] }],
+      },
+    },
+    // Array definition split over several lines
+    3: {
+      frac: [
+        ['a', '_ + ', 'x'],
+        'v',
+        ['t', { sub: ['b', '3'] }],
+      ],
+    },
+    // Object definition when additional options are needed
+    4: {
+      frac: {
+        numerator: 'a',
+        symbol: 'v',
+        denominator: 'b',
+        numeratorSpace: 0.07,
+        denominatorSpace: 0.07,
+        overhang: 0.1,
+        scale: 1.5,
+      },
+    },
+  },
+  formSeries: ['1', '2', '3', '4'],
   mods: {
     isTouchable: true,
-    onClick: () => figure.getElement('eqn').nextForm(),
+    // eqn isn't instantiated when this is defined, so need to use the element's name
+    // to get the element at click time
+    onClick: () => figure.get('eqn').nextForm(),
     touchBorder: 0.5,
   }
 });
@@ -426,27 +408,25 @@ Often different forms of an equation reuse equation phrases, like fractions. To 
 ```javascript
 figure.add({
   name: 'eqn',
-  method: 'equation',
-  options: {
-    elements: {
-      v: { symbol: 'vinculum' },
-      times: ' \u00d7 ',
-      div: ' \u00f7 ',
-      lb: { symbol: 'bracket', side: 'left' },
-      rb: { symbol: 'bracket', side: 'right' },
-    },
-    phrases: {
-      ac: ['a', '_ + ', 'c'],
-      // Phrases can be nested
-      br: { brac: ['lb', 'ac', 'rb'] },
-    },
-    forms: {
-      1: ['d', 'times', 'br'],
-      2: ['d', 'times', { bottomComment: ['br', ['div', 'b']] }],
-      3: ['d', 'times', { frac: ['ac', 'v', 'b']},],
-    },
-    formSeries: ['1', '2', '3'],
+  make: 'equation',
+  elements: {
+    v: { symbol: 'vinculum' },
+    times: ' \u00d7 ',
+    div: ' \u00f7 ',
+    lb: { symbol: 'bracket', side: 'left' },
+    rb: { symbol: 'bracket', side: 'right' },
   },
+  phrases: {
+    ac: ['a', '_ + ', 'c'],
+    // Phrases can be nested
+    br: { brac: ['lb', 'ac', 'rb'] },
+  },
+  forms: {
+    1: ['d', 'times', 'br'],
+    2: ['d', 'times', { bottomComment: ['br', ['div', 'b']] }],
+    3: ['d', 'times', { frac: ['ac', 'v', 'b']},],
+  },
+  formSeries: ['1', '2', '3'],
   mods: {
     onClick: () => figure.getElement('eqn').nextForm(),
     touchBorder: 0.5,
@@ -463,27 +443,24 @@ In the last two examples, equation touchability was setup in the `mods` property
 
 ```js
 figure.add({
-  name: 'eqn',
-  method: 'equation',
-  options: {
-    elements: {
-      a: {
-        mods: {
-          isTouchable: true, touchBorder: 0.1, onClick: () => console.log('a'),
-        },
+  make: 'equation',
+  elements: {
+    a: {
+      mods: {
+        isTouchable: true, touchBorder: 0.1, onClick: () => console.log('a'),
       },
-      b: {
-        isTouchable: true, touchBorder: 0.1, onClick: () => console.log('b'),
-      },
-      c: {
-        isTouchable: true, touchBorder: 0.1, onClick: () => console.log('c'),
-      },
-      times: ' \u00d7 ',
-      equals: ' = ',
     },
-    forms: {
-      1: ['a', 'equals', 'b', 'times', 'c'],
+    b: {
+      isTouchable: true, touchBorder: 0.1, onClick: () => console.log('b'),
     },
+    c: {
+      isTouchable: true, touchBorder: 0.1, onClick: () => console.log('c'),
+    },
+    times: ' \u00d7 ',
+    equals: ' = ',
+  },
+  forms: {
+    1: ['a', 'equals', 'b', 'times', 'c'],
   },
 });
 ```

@@ -330,7 +330,7 @@ describe('Figure Objects PolyLine', () => {
   describe('Figure Level', () => {
     test('Pad change shape', () => {
       figure.add({
-        method: 'collections.polyline',
+        make: 'collections.polyline',
         name: 'a',
         options: {
           points,
@@ -359,7 +359,7 @@ describe('Figure Objects PolyLine', () => {
     });
     test('Pad Move freely along line shape', () => {
       figure.add({
-        method: 'opolyline',
+        make: 'opolyline',
         name: 'a',
         options: {
           points: [

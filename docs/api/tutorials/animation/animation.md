@@ -2,7 +2,7 @@ Animations change figure elements over time.
 
 Each figure element has its own {@link AnimationManager} (`animations` property) that can coordinate animations for any element.
 
-An animation is a number of {@link AnimationStep}s in either series or parallel. The animation manager provides a way to create these steps, as well as build them into a complete animation.
+An animation is a number of {@link AnimationStep}s in either series or parallel. The animation manager provides a way to create these steps, build them into a complete animation, and then manage their execution.
 
 #### <a id="animation-boilerplate"></a> Animation Boilerplate
 To test examples within the 'Animation' section of the API reference create an `index.html` file and `index.js` file.
@@ -16,7 +16,7 @@ All examples are snippets which can be appended to the end of the `index.js` fil
 <body>
     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
     </div>
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.7.4/figureone.min.js'></script>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.8.0/figureone.min.js'></script>
     <script type="text/javascript" src='./index.js'></script>
 </body>
 </html>
@@ -31,51 +31,42 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 figure.add([
   {
     name: 'origin',
-    method: 'polygon',
-    options: {
-      radius: 0.01,
-      line: { width: 0.01 },
-      sides: 10,
-      color: [0.7, 0.7, 0.7, 1]
-    },
+    make: 'polygon',
+    radius: 0.01,
+    line: { width: 0.01 },
+    sides: 10,
+    color: [0.7, 0.7, 0.7, 1]
   },
   {
     name: 'grid',
-    method: 'grid',
-    options: {
-      bounds: [-3, -3, 6, 6],
-      yStep: 0.1,
-      xStep: 0.1,
-      color: [0.7, 0.7, 0.7, 1],
-      line: { width: 0.001 },
-    },
+    make: 'grid',
+    bounds: [-3, -3, 6, 6],
+    yStep: 0.1,
+    xStep: 0.1,
+    color: [0.7, 0.7, 0.7, 1],
+    line: { width: 0.001 },
   },
   {
     name: 'gridMajor',
-    method: 'grid',
-    options: {
-      bounds: [-3, -3, 6, 6],
-      yStep: 0.5,
-      xStep: 0.5,
-      color: [0.8, 0.8, 0.8, 1],
-      line: { width: 0.004 }
-    },
+    make: 'grid',
+    bounds: [-3, -3, 6, 6],
+    yStep: 0.5,
+    xStep: 0.5,
+    color: [0.8, 0.8, 0.8, 1],
+    line: { width: 0.004 }
   },
 ]);
 
 // shape to animate
-figure.add(
+const p = figure.add(
   {
     name: 'p',
-    method: 'polygon',
-    options: {
-      sides: 4,
-      radius: 0.5,
-      position: [0, 0],
-    },
+    make: 'polygon',
+    sides: 4,
+    radius: 0.5,
+    position: [0, 0],
   },
 );
-const p = figure.getElement('p');
 ```
 
 #### Animation Examples
@@ -112,15 +103,12 @@ p.animations.new()
 An animation manager is tied to one element, but can be used to animate other elements too
 ```javascript
 // add another element
-figure.add({
-  name: 'q',
-  method: 'polygon',
-  options: {
-    radius: 0.5, sides: 3, position: [-1, 0]
-  },
+const q = figure.add({
+  make: 'polygon',
+  radius: 0.5,
+  sides: 3,
+  position: [-1, 0]
 });
-
-const q = figure.getElement('q');
 
 // Use p animation manager to animate q
 p.animations.new()

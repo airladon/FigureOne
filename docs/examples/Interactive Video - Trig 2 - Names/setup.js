@@ -45,7 +45,7 @@ colHyp = color3;
 
 summary = (name, position, text, modifiers = {}) => ({
   name,
-  method: 'primitives.textLines',
+  make: 'primitives.textLines',
   options: {
     text,
     modifiers,
@@ -61,7 +61,7 @@ summary = (name, position, text, modifiers = {}) => ({
 
 centerText = (name, text, modifiers = {}, position = [0, 0], size = 0.2) => ({
   name,
-  method: 'textLines',
+  make: 'textLines',
   options: {
     text,
     modifiers,
@@ -85,7 +85,7 @@ centerText = (name, text, modifiers = {}, position = [0, 0], size = 0.2) => ({
 
 leftText = (name, text, modifiers = {}, position, size = 0.2, scenarios = {}) => ({
   name,
-  method: 'textLines',
+  make: 'textLines',
   options: {
     text,
     modifiers,

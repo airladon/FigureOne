@@ -35,7 +35,7 @@ const figure = new Fig.Figure({
 figure.add([
   {
     name: '__minorGrid',
-    method: 'primitives.grid',
+    make: 'primitives.grid',
     options: {
       position: [0, 0],
       color: [0.9, 0.9, 0.9, 1],
@@ -47,7 +47,7 @@ figure.add([
   },
   {
     name: '__majorGrid',
-    method: 'primitives.grid',
+    make: 'primitives.grid',
     options: {
       position: [0, 0],
       color: [0.9, 0.9, 0.9, 1],
@@ -59,7 +59,7 @@ figure.add([
   },
   {
     name: '__origin',
-    method: 'primitives.polygon',
+    make: 'primitives.polygon',
     options: {
       color: [0.9, 0.9, 0.9, 1],
       radius: 0.025,
@@ -108,6 +108,7 @@ figure.animateNextFrame();
         for (let i = 1; i <= steps; i += 1) {
           await frame(timeStep);
           image = await page.screenshot();
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(image).toMatchImageSnapshot({
             customSnapshotIdentifier: `${id}-${zeroPad(Math.floor(timeStep * i * 1000), 5)}`,
             failureThreshold: threshold,

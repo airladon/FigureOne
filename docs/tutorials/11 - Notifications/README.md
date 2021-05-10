@@ -15,24 +15,20 @@ const figure = new Fig.Figure({ limits: [-2, -2, 4, 4] });
 const [ball, text] = figure.add([
   {
     name: 'ball',
-    method: 'primitives.polygon',
-    options: {
-      radius: 0.5,
-      sides: 100,
-      position: [0, 0],
-    },
+    make: 'primitives.polygon',
+    radius: 0.5,
+    sides: 100,
+    position: [0, 0],
     mods: {
       isMovable: 'true',
     },
   },
   {
     name: 'text ',
-    method: 'primitives.text',
-    options: {
-      position: [0, -1.5],
-      text: '(0.0, 0.0)',
-      xAlign: 'center',
-    },
+    make: 'primitives.text',
+    position: [0, -1.5],
+    text: '(0.0, 0.0)',
+    xAlign: 'center',
   },
 ]);
 
@@ -62,4 +58,4 @@ ball.notifications.add('setTransform', () => {...});
 
 In this case, we are subscribing to the `'setTransform'` event notification of the `ball` FigureElement. Whenever ball's transform changes, our function that updates the text element with the latest coordinates of the ball will be called.
 
-See the api reference for more details on [NotificationManager](https://airladon.github.io/FigureOne/api/#subscriptionmanager).
+See the api reference for more details on [NotificationManager](https://airladon.github.io/FigureOne/api/#notificationmanager).

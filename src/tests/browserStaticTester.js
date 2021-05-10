@@ -17,6 +17,7 @@ page.on('console', (msg) => {
 
 function browserStaticTester(title, file) {
   jest.setTimeout(120000);
+  // eslint-disable-next-line jest/valid-title
   test(title, async () => {
     await page.goto(file);
     const dimensions = await page.evaluate(() => ({

@@ -94,19 +94,17 @@ export type OBJ_PolylinePad = {};
  * // Hide pad 0, and make pad 2 blue and not filled
  * figure.add({
  *   name: 'p',
- *   method: 'collections.polyline',
- *   options: {
- *     points: [[0, 0], [2, 0], [2, 2], [-2, 1]],
- *     pad: {
- *       radius: 0.2,            // OBJ_Polygon
- *       color: [1, 0, 0, 1],    // OBJ_Polygon
- *       touchBorder: 0.1,       // OBJ_Polygon
- *       isMovable: true,
- *       hide: [0],
- *       2: {                    // Custom pad 2 properties
- *         color: [0, 0, 1, 1],  // Make blue
- *         line: { width: 0.01 } // Use an outline instead of a fill
- *       },
+ *   make: 'collections.polyline',
+ *   points: [[0, 0], [2, 0], [2, 2], [-2, 1]],
+ *   pad: {
+ *     radius: 0.2,            // OBJ_Polygon
+ *     color: [1, 0, 0, 1],    // OBJ_Polygon
+ *     touchBorder: 0.1,       // OBJ_Polygon
+ *     isMovable: true,
+ *     hide: [0],
+ *     2: {                    // Custom pad 2 properties
+ *       color: [0, 0, 1, 1],  // Make blue
+ *       line: { width: 0.01 } // Use an outline instead of a fill
  *     },
  *   }
  * });
@@ -115,30 +113,28 @@ export type OBJ_PolylinePad = {};
  * // Customization of side and angle annotations
  * figure.add({
  *   name: 'p',
- *   method: 'collections.polyline',
- *   options: {
- *     points: [[0, 0], [1, 0], [1, 1], [0, 1]],
- *     close: true,
- *     side: {
- *       showLine: false,
- *       label: {
- *         text: null,                 // By default, sides are length values
- *         location: 'negative',
- *       },
- *       0: { label: { text: 'a' } },  // Side 0 is 'a' instead of length
+ *   make: 'collections.polyline',
+ *   points: [[0, 0], [1, 0], [1, 1], [0, 1]],
+ *   close: true,
+ *   side: {
+ *     showLine: false,
+ *     label: {
+ *       text: null,                 // By default, sides are length values
+ *       location: 'negative',
  *     },
- *     angle: {
- *       label: {
- *         text: '?',
- *         offset: 0.05,
- *       },
- *       curve: {
- *         radius: 0.25,
- *       },
- *       direction: 'negative',
- *       show: [2],                   // Only show angle annotation for angle 2
+ *     0: { label: { text: 'a' } },  // Side 0 is 'a' instead of length
+ *   },
+ *   angle: {
+ *     label: {
+ *       text: '?',
+ *       offset: 0.05,
  *     },
- *   }
+ *     curve: {
+ *       radius: 0.25,
+ *     },
+ *     direction: 'negative',
+ *     show: [2],                   // Only show angle annotation for angle 2
+ *   },
  * });
  */
 export type OBJ_PolylineCustomization = {
@@ -388,15 +384,13 @@ export type SUB_PolylineUpdatePoints = [];
  * // Polyline with angle annotations
  * figure.add({
  *   name: 'p',
- *   method: 'collections.polyline',
- *   options: {
- *     points: [[1, 0], [0, 0], [0.5, 1], [1.5, 1]],
- *     arrow: 'triangle',
- *     angle: {
- *       label: null,
- *       curve: {
- *         radius: 0.3,
- *       },
+ *   make: 'collections.polyline',
+ *   points: [[1, 0], [0, 0], [0.5, 1], [1.5, 1]],
+ *   arrow: 'triangle',
+ *   angle: {
+ *     label: null,
+ *     curve: {
+ *       radius: 0.3,
  *     },
  *   }
  * });
@@ -405,66 +399,60 @@ export type SUB_PolylineUpdatePoints = [];
  * // Triangle with unknown angle
  * figure.add({
  *   name: 'p',
- *   method: 'collections.polyline',
- *   options: {
- *     points: [[1, 1], [1, 0], [0, 0]],
- *     close: true,
- *     side: {
- *       label: null,
+ *   make: 'collections.polyline',
+ *   points: [[1, 1], [1, 0], [0, 0]],
+ *   close: true,
+ *   side: {
+ *     label: null,
+ *   },
+ *   angle: {
+ *     label: {
+ *       text: '?',
+ *       offset: 0.05,
  *     },
- *     angle: {
- *       label: {
- *         text: '?',
- *         offset: 0.05,
- *       },
- *       curve: {
- *         radius: 0.4,
- *       },
- *       show: [1],
+ *     curve: {
+ *       radius: 0.4,
  *     },
- *   }
+ *     show: [1],
+ *   },
  * });
  *
  * @example
  * // Dimensioned square
  * figure.add({
  *   name: 'p',
- *   method: 'collections.polyline',
- *   options: {
- *     points: [[0, 1], [1, 1], [1, 0], [0, 0]],
- *     close: true,
- *     side: {
- *       showLine: true,
- *       offset: 0.2,
- *       color: [0, 0, 1, 1],
- *       arrow: 'barb',
- *       width: 0.01,
- *       label: null,
- *       dash: [0.05, 0.02],
- *       0: { label: { text: 'a' } },    // Customize side 0
+ *   make: 'collections.polyline',
+ *   points: [[0, 1], [1, 1], [1, 0], [0, 0]],
+ *   close: true,
+ *   side: {
+ *     showLine: true,
+ *     offset: 0.2,
+ *     color: [0, 0, 1, 1],
+ *     arrow: 'barb',
+ *     width: 0.01,
+ *     label: null,
+ *     dash: [0.05, 0.02],
+ *     0: { label: { text: 'a' } },    // Customize side 0
+ *   },
+ *   angle: {
+ *     curve: {
+ *       autoRightAngle: true,
+ *       radius: 0.3,
  *     },
- *     angle: {
- *       curve: {
- *         autoRightAngle: true,
- *         radius: 0.3,
- *       },
- *     },
- *   }
+ *   },
  * });
  *
  * @example
  * // User adjustable polyline
  * figure.add({
  *   name: 'p',
- *   method: 'collections.polyline',
- *   options: {
- *     points: [[-0.5, 1], [1, 1], [0, 0], [1, -0.5]],
- *     dash: [0.05, 0.02],
- *     pad: {
- *       radius: 0.2,
- *       color: [1, 0, 0, 0.5],    // make alpha 0 to hide pad
- *       isMovable: true,
- *     },
+ *   make: 'collections.polyline',
+ *   points: [[-0.5, 1], [1, 1], [0, 0], [1, -0.5]],
+ *   dash: [0.05, 0.02],
+ *   pad: {
+ *     radius: 0.2,
+ *     color: [1, 0, 0, 0.5],    // make alpha 0 to hide pad
+ *     isMovable: true,
  *   },
  * });
  *
@@ -472,35 +460,33 @@ export type SUB_PolylineUpdatePoints = [];
  * // Annotations that automatically updates as user changes triangle
  * figure.add({
  *   name: 'p',
- *   method: 'collections.polyline',
- *   options: {
- *     points: [[-1, 1], [1, 1], [0, 0]],
- *     close: true,
- *     makeValid: {
- *       shape: 'triangle',
- *       hide: {
- *         minAngle: Math.PI / 8,
- *       },
+ *   make: 'collections.polyline',
+ *   points: [[-1, 1], [1, 1], [0, 0]],
+ *   close: true,
+ *   makeValid: {
+ *     shape: 'triangle',
+ *     hide: {
+ *       minAngle: Math.PI / 8,
  *     },
- *     side: {
- *       showLine: true,
- *       offset: 0.2,
- *       color: [0.3, 0.6, 1, 1],
- *       arrow: 'barb',
- *       width: 0.01,
- *       label: {
- *         text: null,
- *       },
+ *   },
+ *   side: {
+ *     showLine: true,
+ *     offset: 0.2,
+ *     color: [0.3, 0.6, 1, 1],
+ *     arrow: 'barb',
+ *     width: 0.01,
+ *     label: {
+ *       text: null,
  *     },
- *     angle: {
- *       label: null,
- *       curve: { radius: 0.25 },
- *     },
- *     pad: {
- *       radius: 0.4,
- *       color: [1, 0, 0, 0.005],
- *       isMovable: true,
- *     },
+ *   },
+ *   angle: {
+ *     label: null,
+ *     curve: { radius: 0.25 },
+ *   },
+ *   pad: {
+ *     radius: 0.4,
+ *     color: [1, 0, 0, 0.005],
+ *     isMovable: true,
  *   },
  * });
  */

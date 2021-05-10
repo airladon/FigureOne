@@ -89,21 +89,19 @@ export function getFigureElement(
  * @example
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: { equals: ' = ' },
- *     forms: {
- *       form1: 'a',
- *       form2: ['a', 'equals', 'b'],
- *       form3: [{
- *         frac: {
- *           numerator: 'a',
- *           symbol: 'vinculum',
- *           denominator: 'c',
- *         },
- *       }, 'equals', 'b'],
- *       form4: { frac: ['a', 'vinculum', 'c'] },
- *     },
+ *   make: 'equation',
+ *   elements: { equals: ' = ' },
+ *   forms: {
+ *     form1: 'a',
+ *     form2: ['a', 'equals', 'b'],
+ *     form3: [{
+ *       frac: {
+ *         numerator: 'a',
+ *         symbol: 'vinculum',
+ *         denominator: 'c',
+ *       },
+ *     }, 'equals', 'b'],
+ *     form4: { frac: ['a', 'vinculum', 'c'] },
  *   },
  * });
  *
@@ -178,27 +176,25 @@ export type TypeEquationPhrase =
  * // Example showing the difference between with and without container
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     forms: {
- *       // Container object definition
- *       1: [
- *         'length',
- *         {
- *           container: {
- *             content: 'width',
- *             width: 0.5,
- *           },
+ *   make: 'equation',
+ *   forms: {
+ *     // Container object definition
+ *     1: [
+ *       'length',
+ *       {
+ *         container: {
+ *           content: 'width',
+ *           width: 0.5,
  *         },
- *         'height',
- *       ],
- *       // Container array definition
- *       2: ['length', { container: ['w', 0.5] }, 'height'],
- *       // No container
- *       3: ['length', ' ', 'w', ' ', 'height']
- *     },
- *     formSeries: ['1', '2', '3'],
+ *       },
+ *       'height',
+ *     ],
+ *     // Container array definition
+ *     2: ['length', { container: ['w', 0.5] }, 'height'],
+ *     // No container
+ *     3: ['length', ' ', 'w', ' ', 'height']
  *   },
+ *   formSeries: ['1', '2', '3'],
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
@@ -270,14 +266,12 @@ export type EQN_Container = {
  * figure.add([
  *   {
  *     name: 'rect1',
- *     method: 'equation',
- *     options: {
- *       forms: {
- *         0: [
- *           'a', '_ = ', 'n',
- *           { offset: ['for a > 0', [0.3, 0]] },
- *         ],
- *       },
+ *     make: 'equation',
+ *     forms: {
+ *       0: [
+ *         'a', '_ = ', 'n',
+ *         { offset: ['for a > 0', [0.3, 0]] },
+ *       ],
  *     },
  *   },
  * ]);
@@ -320,11 +314,9 @@ export type EQN_Offset = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     forms: {
- *       1: { frac: ['a', 'vinculum', 'b'] },
- *     },
+ *   make: 'equation',
+ *   forms: {
+ *     1: { frac: ['a', 'vinculum', 'b'] },
  *   },
  * });
  * figure.elements._eqn.showForm('1');
@@ -333,35 +325,33 @@ export type EQN_Offset = {
  * // Example showing object and array fraction definitions, and nesting
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       v1: { symbol: 'vinculum' },
- *       v2: { symbol: 'vinculum' },
- *       plus: '  +  ',
- *     },
- *     forms: {
- *       // Fraction object form
- *       1: {
- *         frac: {
- *           numerator: 'a',
- *           denominator: 'b',
- *           symbol: 'v1',
- *         },
- *       },
- *       // Fraction array form
- *       2: { frac: ['a', 'v1', 'd'] },
- *       // Nested
- *       3: {
- *         frac: {
- *           numerator: [{ frac: ['a', 'v1', 'd', 0.7] }, 'plus', '_1'],
- *           symbol: 'v2',
- *           denominator: 'b',
- *         }
- *       },
- *     },
- *     formSeries: ['1', '2', '3'],
+ *   make: 'equation',
+ *   elements: {
+ *     v1: { symbol: 'vinculum' },
+ *     v2: { symbol: 'vinculum' },
+ *     plus: '  +  ',
  *   },
+ *   forms: {
+ *     // Fraction object form
+ *     1: {
+ *       frac: {
+ *         numerator: 'a',
+ *         denominator: 'b',
+ *         symbol: 'v1',
+ *       },
+ *     },
+ *     // Fraction array form
+ *     2: { frac: ['a', 'v1', 'd'] },
+ *     // Nested
+ *     3: {
+ *       frac: {
+ *         numerator: [{ frac: ['a', 'v1', 'd', 0.7] }, 'plus', '_1'],
+ *         symbol: 'v2',
+ *         denominator: 'b',
+ *       }
+ *     },
+ *   },
+ *   formSeries: ['1', '2', '3'],
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
@@ -444,11 +434,9 @@ export type EQN_Fraction = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     forms: {
- *       2: ['a', { scale: ['b', 2] }, 'c'],
- *     },
+ *   make: 'equation',
+ *   forms: {
+ *     2: ['a', { scale: ['b', 2] }, 'c'],
  *   },
  * });
  * figure.elements._eqn.showForm('1');
@@ -456,29 +444,27 @@ export type EQN_Fraction = {
  * // Some different bracket examples
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     forms: {
- *       // Default
- *       1: ['a', 'b', 'c'],
- *       // Array definition magnify
- *       2: ['a', { scale: ['b', 2] }, 'c'],
- *       // Object definition shrink
- *       3: [
- *         'a',
- *         {
- *           scale: {
- *             content: ['b', 1],
- *             scale: 0.5,
- *           },
+ *   make: 'equation',
+ *   forms: {
+ *     // Default
+ *     1: ['a', 'b', 'c'],
+ *     // Array definition magnify
+ *     2: ['a', { scale: ['b', 2] }, 'c'],
+ *     // Object definition shrink
+ *     3: [
+ *       'a',
+ *       {
+ *         scale: {
+ *           content: ['b', 1],
+ *           scale: 0.5,
  *         },
- *         'c',
- *       ],
- *       // Back to start
- *       4: ['a', { scale: ['b', 1] }, 'c'],
- *     },
- *     formSeries: ['1', '2', '3']
+ *       },
+ *       'c',
+ *     ],
+ *     // Back to start
+ *     4: ['a', { scale: ['b', 1] }, 'c'],
  *   },
+ *   formSeries: ['1', '2', '3']
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
@@ -544,15 +530,13 @@ export type EQN_Scale = {
  * @example
  * // Simple
  * figure.add({
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       lb: { symbol: 'bracket', side: 'left' },
- *       rb: { symbol: 'bracket', side: 'right' },
- *     },
- *     forms: {
- *       1: ['a', { brac: ['lb', ['b', '_ + ', 'c'], 'rb'] }],
- *     },
+ *   make: 'equation',
+ *   elements: {
+ *     lb: { symbol: 'bracket', side: 'left' },
+ *     rb: { symbol: 'bracket', side: 'right' },
+ *   },
+ *   forms: {
+ *     1: ['a', { brac: ['lb', ['b', '_ + ', 'c'], 'rb'] }],
  *   },
  * });
  *
@@ -560,31 +544,29 @@ export type EQN_Scale = {
  * // Some different bracket examples
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       lb: { symbol: 'bracket', side: 'left' },
- *       rb: { symbol: 'bracket', side: 'right' },
- *       lsb: { symbol: 'squareBracket', side: 'left' },
- *       rsb: { symbol: 'squareBracket', side: 'right' },
- *       leftBrace: { }
- *     },
- *     forms: {
- *       // Array definition
- *       1: ['a', { brac: ['lb', ['b', '_ + ', 'c'], 'rb'] }],
- *       // Object definition
- *       2: ['a', {
- *         brac: {
- *           left: 'lb',
- *           content: { frac: ['b', 'vinculum', 'c'] },
- *           right: 'rb',
- *         },
- *       }],
- *       // Square brackets
- *       3: ['a', { brac: ['lsb', ['b', '_ + ', 'c'], 'rsb'] }],
- *     },
- *     formSeries: ['1', '2', '3']
+ *   make: 'equation',
+ *   elements: {
+ *     lb: { symbol: 'bracket', side: 'left' },
+ *     rb: { symbol: 'bracket', side: 'right' },
+ *     lsb: { symbol: 'squareBracket', side: 'left' },
+ *     rsb: { symbol: 'squareBracket', side: 'right' },
+ *     leftBrace: { }
  *   },
+ *   forms: {
+ *     // Array definition
+ *     1: ['a', { brac: ['lb', ['b', '_ + ', 'c'], 'rb'] }],
+ *     // Object definition
+ *     2: ['a', {
+ *       brac: {
+ *         left: 'lb',
+ *         content: { frac: ['b', 'vinculum', 'c'] },
+ *         right: 'rb',
+ *       },
+ *     }],
+ *     // Square brackets
+ *     3: ['a', { brac: ['lsb', ['b', '_ + ', 'c'], 'rsb'] }],
+ *   },
+ *   formSeries: ['1', '2', '3']
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
@@ -662,11 +644,9 @@ export type EQN_Bracket = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     forms: {
- *       1: { root: ['radical', 'a'] },
- *     },
+ *   make: 'equation',
+ *   forms: {
+ *     1: { root: ['radical', 'a'] },
  *   },
  * });
  * figure.elements._eqn.showForm('1');
@@ -675,28 +655,26 @@ export type EQN_Bracket = {
  * // Example showing object and array root definitions, and custom roots
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       r: { symbol: 'radical' },
- *       plus: '  +  ',
- *     },
- *     formDefaults: { alignment: { fixTo: 'd' } },
- *     forms: {
- *       // Root object form
- *       1: {
- *         root: {
- *           symbol: 'r',
- *           content: ['a', 'plus', 'd'],
- *         },
- *       },
- *       // Root array form
- *       2: { root: ['r', 'd'] },
- *       // Cube root
- *       3: { root: { content: 'd', symbol: 'r', root: '_3' } },
- *     },
- *     formSeries: ['1', '2', '3'],
+ *   make: 'equation',
+ *   elements: {
+ *     r: { symbol: 'radical' },
+ *     plus: '  +  ',
  *   },
+ *   formDefaults: { alignment: { fixTo: 'd' } },
+ *   forms: {
+ *     // Root object form
+ *     1: {
+ *       root: {
+ *         symbol: 'r',
+ *         content: ['a', 'plus', 'd'],
+ *       },
+ *     },
+ *     // Root array form
+ *     2: { root: ['r', 'd'] },
+ *     // Cube root
+ *     3: { root: { content: 'd', symbol: 'r', root: '_3' } },
+ *   },
+ *   formSeries: ['1', '2', '3'],
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
@@ -799,14 +777,12 @@ export type EQN_Root = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       x: { symbol: 'strike', color: [0.6, 0.6, 0.6, 1] },
- *     },
- *     forms: {
- *       1: [{ strike: ['a', 'x']}, ' ', 'b'],
- *     },
+ *   make: 'equation',
+ *   elements: {
+ *     x: { symbol: 'strike', color: [0.6, 0.6, 0.6, 1] },
+ *   },
+ *   forms: {
+ *     1: [{ strike: ['a', 'x']}, ' ', 'b'],
  *   },
  * });
  * figure.elements._eqn.showForm('1');
@@ -815,38 +791,36 @@ export type EQN_Root = {
  * // Some different strike examples
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       s1: { symbol: 'strike', color: [0.6, 0.6, 0.6, 1] },
- *       s2: { symbol: 'strike', style: 'forward', color: [0.6, 0.6, 0.6, 1] },
- *     },
- *     forms: {
- *       // Array definition
- *       1: [{ strike: ['a', 's1']}, ' ', 'b'],
- *       // Object definition
- *       2: {
- *         strike: {
- *           content: ['a', '_ + ', 'b'],
- *           symbol: 's1',
- *         },
- *       },
- *       // Additional options to make strike overhang more
- *       3: {
- *         strike: {
- *           content: ['a', 'b'],
- *           symbol: 's1',
- *           topSpace: 0.2,
- *           rightSpace: 0.2,
- *           leftSpace: 0.2,
- *           bottomSpace: 0.2,
- *         },
- *       },
- *       // Forward strike
- *       4: { strike: [['a', '_ +', 'b'], 's2'] },
- *     },
- *     formSeries: ['1', '2', '3', '4']
+ *   make: 'equation',
+ *   elements: {
+ *     s1: { symbol: 'strike', color: [0.6, 0.6, 0.6, 1] },
+ *     s2: { symbol: 'strike', style: 'forward', color: [0.6, 0.6, 0.6, 1] },
  *   },
+ *   forms: {
+ *     // Array definition
+ *     1: [{ strike: ['a', 's1']}, ' ', 'b'],
+ *     // Object definition
+ *     2: {
+ *       strike: {
+ *         content: ['a', '_ + ', 'b'],
+ *         symbol: 's1',
+ *       },
+ *     },
+ *     // Additional options to make strike overhang more
+ *     3: {
+ *       strike: {
+ *         content: ['a', 'b'],
+ *         symbol: 's1',
+ *         topSpace: 0.2,
+ *         rightSpace: 0.2,
+ *         leftSpace: 0.2,
+ *         bottomSpace: 0.2,
+ *       },
+ *     },
+ *     // Forward strike
+ *     4: { strike: [['a', '_ +', 'b'], 's2'] },
+ *   },
+ *   formSeries: ['1', '2', '3', '4']
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
@@ -915,11 +889,9 @@ export type EQN_Strike = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     forms: {
- *       1: { box: ['a', 'box', true, 0.1] },
- *     },
+ *   make: 'equation',
+ *   forms: {
+ *     1: { box: ['a', 'box', true, 0.1] },
  *   },
  * });
  * figure.elements._eqn.showForm('1');
@@ -928,45 +900,43 @@ export type EQN_Strike = {
  * // Some different box examples
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       box: { symbol: 'box' },
- *     },
- *     forms: {
- *       // Array equation
- *       1: ['a', { box: ['b', 'box'] }, 'c'],
- *       // Object definition
- *       2: {
- *         box: {
- *           content: ['a', 'b', 'c'],
- *           symbol: 'box',
- *         },
+ *   make: 'equation',
+ *   elements: {
+ *     box: { symbol: 'box' },
+ *   },
+ *   forms: {
+ *     // Array equation
+ *     1: ['a', { box: ['b', 'box'] }, 'c'],
+ *     // Object definition
+ *     2: {
+ *       box: {
+ *         content: ['a', 'b', 'c'],
+ *         symbol: 'box',
  *       },
- *       // Additional options for layout
- *       3: {
+ *     },
+ *     // Additional options for layout
+ *     3: {
+ *       box: {
+ *         content: ['a', 'b', 'c'],
+ *         symbol: 'box',
+ *         space: 0.2,
+ *       },
+ *     },
+ *     // Box is included in the layout spacing
+ *     4: [
+ *       'a',
+ *       {
  *         box: {
- *           content: ['a', 'b', 'c'],
+ *           content: 'b',
  *           symbol: 'box',
  *           space: 0.2,
+ *           inSize: true,
  *         },
  *       },
- *       // Box is included in the layout spacing
- *       4: [
- *         'a',
- *         {
- *           box: {
- *             content: 'b',
- *             symbol: 'box',
- *             space: 0.2,
- *             inSize: true,
- *           },
- *         },
- *         'c'
- *       ],
- *     },
- *     formSeries: ['1', '2', '3', '4']
+ *       'c'
+ *     ],
  *   },
+ *   formSeries: ['1', '2', '3', '4']
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
@@ -1096,14 +1066,12 @@ export type EQN_TouchBox = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       bar: { symbol: 'bar', side: 'top' },
- *     },
- *     forms: {
- *       1: { bar: ['a', 'bar', 'top'] },
- *     },
+ *   make: 'equation',
+ *   elements: {
+ *     bar: { symbol: 'bar', side: 'top' },
+ *   },
+ *   forms: {
+ *     1: { bar: ['a', 'bar', 'top'] },
  *   },
  * });
  * figure.elements._eqn.showForm('1');
@@ -1112,44 +1080,42 @@ export type EQN_TouchBox = {
  * // Some different bar examples
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       hBar: { symbol: 'bar', side: 'top' },
- *       vBar: { symbol: 'bar', side: 'right' },
- *       hArrow: { symbol: 'arrow', direction: 'right' },
- *     },
- *     forms: {
- *       // Array equation
- *       1: { bar: [['a', 'b'], 'hBar', 'top'] },
- *       // Object definition
- *       2: {
- *         bar: {
- *           content: ['a', 'b'],
- *           symbol: 'hBar',
- *           side: 'bottom',
- *         },
- *       },
- *       // Additional options for layout
- *       3: {
- *         bar: {
- *           content: ['a', 'b'],
- *           symbol: 'vBar',
- *           side: 'right',
- *           overhang: 0.1,
- *         },
- *       },
- *       // Vector arrow
- *       4: {
- *         bar: {
- *           content: ['a', 'b'],
- *           symbol: 'hArrow',
- *           side: 'top',
- *         },
- *       },
- *     },
- *     formSeries: ['1', '2', '3', '4']
+ *   make: 'equation',
+ *   elements: {
+ *     hBar: { symbol: 'bar', side: 'top' },
+ *     vBar: { symbol: 'bar', side: 'right' },
+ *     hArrow: { symbol: 'arrow', direction: 'right' },
  *   },
+ *   forms: {
+ *     // Array equation
+ *     1: { bar: [['a', 'b'], 'hBar', 'top'] },
+ *     // Object definition
+ *     2: {
+ *       bar: {
+ *         content: ['a', 'b'],
+ *         symbol: 'hBar',
+ *         side: 'bottom',
+ *       },
+ *     },
+ *     // Additional options for layout
+ *     3: {
+ *       bar: {
+ *         content: ['a', 'b'],
+ *         symbol: 'vBar',
+ *         side: 'right',
+ *         overhang: 0.1,
+ *       },
+ *     },
+ *     // Vector arrow
+ *     4: {
+ *       bar: {
+ *         content: ['a', 'b'],
+ *         symbol: 'hArrow',
+ *         side: 'top',
+ *       },
+ *     },
+ *   },
+ *   formSeries: ['1', '2', '3', '4']
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
@@ -1266,11 +1232,9 @@ export type EQN_Bar = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     forms: {
- *       1: { int: ['int', 'x dx', 'a', 'b'] },
- *     },
+ *   make: 'equation',
+ *   forms: {
+ *     1: { int: ['int', 'x dx', 'a', 'b'] },
  *   },
  * });
  * figure.elements._eqn.showForm('1');
@@ -1279,42 +1243,40 @@ export type EQN_Bar = {
  * // Example showing different integral options
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       i: { symbol: 'int' },
- *       // ic: { symbol: 'int', num: 1, type: 'line' },
- *     },
- *     formDefaults: { alignment: { fixTo: 'x' } },
- *     forms: {
- *       // Root object form
- *       1: {
- *         int: {
- *           symbol: 'i',
- *           content: ['x', ' ', 'dx'],
- *           from: 'a',
- *           to: 'b',
- *         },
- *       },
- *       // Root array form
- *       2: { int: ['i', ['x', '  ', '+', ' ', '_1', ' ', 'dx'], 'a', 'b'] },
- *       // Indefinite tripple integral
- *       3: { int: ['i', ['x', '  ', '+', ' ', '_1', ' ', 'dx']] },
- *       // Custom spacing
- *       4: {
- *         int: {
- *           symbol: 'i',
- *           content: ['x', '  ', '+', ' ', '_1', ' ', 'dx'],
- *           to: 'b',
- *           from: { frac: ['a', 'vinculum', 'd + 2'] },
- *           topSpace: 0.2,
- *           bottomSpace: 0.2,
- *           limitsAroundContent: false,
- *         },
- *       },
- *     },
- *     formSeries: ['1', '2', '3', '4'],
+ *   make: 'equation',
+ *   elements: {
+ *     i: { symbol: 'int' },
+ *     // ic: { symbol: 'int', num: 1, type: 'line' },
  *   },
+ *   formDefaults: { alignment: { fixTo: 'x' } },
+ *   forms: {
+ *     // Root object form
+ *     1: {
+ *       int: {
+ *         symbol: 'i',
+ *         content: ['x', ' ', 'dx'],
+ *         from: 'a',
+ *         to: 'b',
+ *       },
+ *     },
+ *     // Root array form
+ *     2: { int: ['i', ['x', '  ', '+', ' ', '_1', ' ', 'dx'], 'a', 'b'] },
+ *     // Indefinite tripple integral
+ *     3: { int: ['i', ['x', '  ', '+', ' ', '_1', ' ', 'dx']] },
+ *     // Custom spacing
+ *     4: {
+ *       int: {
+ *         symbol: 'i',
+ *         content: ['x', '  ', '+', ' ', '_1', ' ', 'dx'],
+ *         to: 'b',
+ *         from: { frac: ['a', 'vinculum', 'd + 2'] },
+ *         topSpace: 0.2,
+ *         bottomSpace: 0.2,
+ *         limitsAroundContent: false,
+ *       },
+ *     },
+ *   },
+ *   formSeries: ['1', '2', '3', '4'],
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
@@ -1421,11 +1383,9 @@ export type EQN_Integral = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     forms: {
- *       1: { sumOf: ['sum', 'x', 'b', 'a'] },
- *     },
+ *   make: 'equation',
+ *   forms: {
+ *     1: { sumOf: ['sum', 'x', 'b', 'a'] },
  *   },
  * });
  * figure.elements._eqn.showForm('1');
@@ -1434,38 +1394,36 @@ export type EQN_Integral = {
  * // Example showing different options
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       s: { symbol: 'sum', draw: 'dynamic' },
- *       inf: '\u221e',
- *     },
- *     forms: {
- *       // Object form
- *       1: {
- *         sumOf: {
- *           symbol: 's',
- *           content: [{ sup: ['x', 'n'] }],
- *           from: ['n_1', ' ', '=', ' ', '_0'],
- *           to: '_10',
- *         },
- *       },
- *       // Array form
- *       2: { sumOf: ['s', [{ sup: ['x', 'm'] }], 'm_1', null]},
- *       // Styling with options
- *       3: {
- *         sumOf: {
- *           symbol: 's',
- *           content: { frac: [['x', ' ', '+', ' ', 'm'], 'vinculum', 'a'] },
- *           from: ['m_1', ' ', '=', ' ', '_0'],
- *           to: 'inf',
- *           fromScale: 0.8,
- *           toScale: 0.8,
- *         },
- *       },
- *     },
- *     formSeries: ['1', '2', '3'],
+ *   make: 'equation',
+ *   elements: {
+ *     s: { symbol: 'sum', draw: 'dynamic' },
+ *     inf: '\u221e',
  *   },
+ *   forms: {
+ *     // Object form
+ *     1: {
+ *       sumOf: {
+ *         symbol: 's',
+ *         content: [{ sup: ['x', 'n'] }],
+ *         from: ['n_1', ' ', '=', ' ', '_0'],
+ *         to: '_10',
+ *       },
+ *     },
+ *     // Array form
+ *     2: { sumOf: ['s', [{ sup: ['x', 'm'] }], 'm_1', null]},
+ *     // Styling with options
+ *     3: {
+ *       sumOf: {
+ *         symbol: 's',
+ *         content: { frac: [['x', ' ', '+', ' ', 'm'], 'vinculum', 'a'] },
+ *         from: ['m_1', ' ', '=', ' ', '_0'],
+ *         to: 'inf',
+ *         fromScale: 0.8,
+ *         toScale: 0.8,
+ *       },
+ *     },
+ *   },
+ *   formSeries: ['1', '2', '3'],
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
@@ -1556,11 +1514,9 @@ export type EQN_SumOf = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     forms: {
- *       1: { prodOf: ['prod', 'x', 'b', 'a'] },
- *     },
+ *   make: 'equation',
+ *   forms: {
+ *     1: { prodOf: ['prod', 'x', 'b', 'a'] },
  *   },
  * });
  * figure.elements._eqn.showForm('1');
@@ -1569,38 +1525,36 @@ export type EQN_SumOf = {
  * // Example showing different options
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       p: { symbol: 'prod', draw: 'dynamic' },
- *       inf: '\u221e',
- *     },
- *     forms: {
- *       // Object form
- *       1: {
- *         prodOf: {
- *           symbol: 'p',
- *           content: [{ sup: ['x', 'n'] }],
- *           from: ['n_1', ' ', '=', ' ', '_0'],
- *           to: '_10',
- *         },
- *       },
- *       // Array form
- *       2: { prodOf: ['p', [{ sup: ['x', 'm'] }], 'm_1', null]},
- *       // Styling with options
- *       3: {
- *         prodOf: {
- *           symbol: 'p',
- *           content: { frac: [['x', ' ', '+', ' ', 'm'], 'vinculum', 'a'] },
- *           from: ['m_1', ' ', '=', ' ', '_0'],
- *           to: 'inf',
- *           fromScale: 0.8,
- *           toScale: 0.8,
- *         },
- *       },
- *     },
- *     formSeries: ['1', '2', '3'],
+ *   make: 'equation',
+ *   elements: {
+ *     p: { symbol: 'prod', draw: 'dynamic' },
+ *     inf: '\u221e',
  *   },
+ *   forms: {
+ *     // Object form
+ *     1: {
+ *       prodOf: {
+ *         symbol: 'p',
+ *         content: [{ sup: ['x', 'n'] }],
+ *         from: ['n_1', ' ', '=', ' ', '_0'],
+ *         to: '_10',
+ *       },
+ *     },
+ *     // Array form
+ *     2: { prodOf: ['p', [{ sup: ['x', 'm'] }], 'm_1', null]},
+ *     // Styling with options
+ *     3: {
+ *       prodOf: {
+ *         symbol: 'p',
+ *         content: { frac: [['x', ' ', '+', ' ', 'm'], 'vinculum', 'a'] },
+ *         from: ['m_1', ' ', '=', ' ', '_0'],
+ *         to: 'inf',
+ *         fromScale: 0.8,
+ *         toScale: 0.8,
+ *       },
+ *     },
+ *   },
+ *   formSeries: ['1', '2', '3'],
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
@@ -1670,11 +1624,9 @@ export type EQN_ProdOf = {
  * //Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     forms: {
- *       1: { sub: ['x', '_2'] },
- *     },
+ *   make: 'equation',
+ *   forms: {
+ *     1: { sub: ['x', '_2'] },
  *   },
  * });
  * figure.elements._eqn.showForm('1');
@@ -1683,30 +1635,28 @@ export type EQN_ProdOf = {
  * // Example showing different subscript options
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     forms: {
- *       // Object form
- *       1: {
- *         sub: {
- *           content: 'x',
- *           subscript: 'b',
- *         },
- *       },
- *       // Array form
- *       2: [{ sub: ['x', 'b'] }, ' ', { sub: ['y', 'd'] }],
- *       3: { sub: ['x', ['b', '  ', '+', '  ', 'd']] },
- *       // Subscript offset to adjust layout to keep animation smooth
- *       4: {
- *         sub: {
- *           content: 'x',
- *           subscript: { frac: [['b', '  ', '+', '  ', 'd'], 'vinculum', '_2'] },
- *           offset: [-0.025, -0.02],
- *         },
+ *   make: 'equation',
+ *   forms: {
+ *     // Object form
+ *     1: {
+ *       sub: {
+ *         content: 'x',
+ *         subscript: 'b',
  *       },
  *     },
- *     formSeries: ['1', '2', '3', '4'],
+ *     // Array form
+ *     2: [{ sub: ['x', 'b'] }, ' ', { sub: ['y', 'd'] }],
+ *     3: { sub: ['x', ['b', '  ', '+', '  ', 'd']] },
+ *     // Subscript offset to adjust layout to keep animation smooth
+ *     4: {
+ *       sub: {
+ *         content: 'x',
+ *         subscript: { frac: [['b', '  ', '+', '  ', 'd'], 'vinculum', '_2'] },
+ *         offset: [-0.025, -0.02],
+ *       },
+ *     },
  *   },
+ *   formSeries: ['1', '2', '3', '4'],
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
@@ -1748,11 +1698,9 @@ export type EQN_Subscript = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     forms: {
- *       1: { sup: ['e', 'x'] },
- *     },
+ *   make: 'equation',
+ *   forms: {
+ *     1: { sup: ['e', 'x'] },
  *   },
  * });
  * figure.elements._eqn.showForm('1');
@@ -1761,22 +1709,20 @@ export type EQN_Subscript = {
  * // Examples of superscript animations
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     forms: {
- *       // Object form
- *       1: {
- *         sup: {
- *           content: 'e',
- *           superscript: 'x',
- *         },
+ *   make: 'equation',
+ *   forms: {
+ *     // Object form
+ *     1: {
+ *       sup: {
+ *         content: 'e',
+ *         superscript: 'x',
  *       },
- *       // Array form
- *       2: [{ sup: ['e', 'x'] }, '  ', { sup: ['e_1', 'y'] }],
- *       3: { sup: ['e', ['x', '  ', '+', '  ', 'y']] },
  *     },
- *     formSeries: ['1', '2', '3'],
+ *     // Array form
+ *     2: [{ sup: ['e', 'x'] }, '  ', { sup: ['e_1', 'y'] }],
+ *     3: { sup: ['e', ['x', '  ', '+', '  ', 'y']] },
  *   },
+ *   formSeries: ['1', '2', '3'],
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
@@ -1819,11 +1765,9 @@ export type EQN_Superscript = {
  * @example
  * // Simple
  * figure.add({
- *   method: 'equation',
- *   options: {
- *     forms: {
- *       1: { supSub: ['x', 'b', 'a'] },
- *     },
+ *   make: 'equation',
+ *   forms: {
+ *     1: { supSub: ['x', 'b', 'a'] },
  *   },
  * });
  *
@@ -1831,23 +1775,21 @@ export type EQN_Superscript = {
  * // Example showing different super-sub script options
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     forms: {
- *       // Object form
- *       1: {
- *         supSub: {
- *           content: 'x',
- *           superscript: 'b',
- *           subscript: 'a',
- *         },
+ *   make: 'equation',
+ *   forms: {
+ *     // Object form
+ *     1: {
+ *       supSub: {
+ *         content: 'x',
+ *         superscript: 'b',
+ *         subscript: 'a',
  *       },
- *       // Array form
- *       2: [{ supSub: ['x', 'b', 'a'] }, '  ', { supSub: ['x_1', 'c', 'a_1'] }],
- *       3: { supSub: ['x', ['b', '  ', '+', '  ', 'c'], 'a'] },
  *     },
- *     formSeries: ['1', '2', '3'],
+ *     // Array form
+ *     2: [{ supSub: ['x', 'b', 'a'] }, '  ', { supSub: ['x_1', 'c', 'a_1'] }],
+ *     3: { supSub: ['x', ['b', '  ', '+', '  ', 'c'], 'a'] },
  *   },
+ *   formSeries: ['1', '2', '3'],
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
@@ -1906,11 +1848,9 @@ export type EQN_SuperscriptSubscript = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     forms: {
- *       1: { topComment: ['radius', 'r = 1'] },
- *     },
+ *   make: 'equation',
+ *   forms: {
+ *     1: { topComment: ['radius', 'r = 1'] },
  *   },
  * });
  * figure.elements._eqn.showForm('1');
@@ -1919,45 +1859,43 @@ export type EQN_SuperscriptSubscript = {
  * // Some different comment examples
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       bBkt: { symbol: 'bracket', side: 'bottom' },
- *       tBrc: { symbol: 'brace', side: 'top' },
- *       bSqr: { symbol: 'squareBracket', side: 'bottom' },
- *     },
- *     forms: {
- *       // Array equation
- *       1: { topComment: ['a \u00d7 b \u00d7 c', 'b = 1, c = 1', 'tBrc'] },
- *       // Object definition
- *       2: {
- *         bottomComment: {
- *           content: 'a \u00d7 b \u00d7 c',
- *           symbol: 'bBkt',
- *           comment: 'b = 1, c = 1',
- *         },
- *       },
- *       // Additional options for layout
- *       3: {
- *         bottomComment: {
- *           content: 'a \u00d7 b \u00d7 c',
- *           symbol: 'bSqr',
- *           comment: 'b = 1, c = 1',
- *           contentSpace: 0.1,
- *           commentSpace: 0.1,
- *           scale: 0.7,
- *         },
- *       },
- *       // Just comment
- *       4: {
- *         bottomComment: {
- *           content: 'a \u00d7 b \u00d7 c',
- *           comment: 'for a > 3',
- *         },
- *       },
- *     },
- *     formSeries: ['1', '2', '3', '4']
+ *   make: 'equation',
+ *   elements: {
+ *     bBkt: { symbol: 'bracket', side: 'bottom' },
+ *     tBrc: { symbol: 'brace', side: 'top' },
+ *     bSqr: { symbol: 'squareBracket', side: 'bottom' },
  *   },
+ *   forms: {
+ *     // Array equation
+ *     1: { topComment: ['a \u00d7 b \u00d7 c', 'b = 1, c = 1', 'tBrc'] },
+ *     // Object definition
+ *     2: {
+ *       bottomComment: {
+ *         content: 'a \u00d7 b \u00d7 c',
+ *         symbol: 'bBkt',
+ *         comment: 'b = 1, c = 1',
+ *       },
+ *     },
+ *     // Additional options for layout
+ *     3: {
+ *       bottomComment: {
+ *         content: 'a \u00d7 b \u00d7 c',
+ *         symbol: 'bSqr',
+ *         comment: 'b = 1, c = 1',
+ *         contentSpace: 0.1,
+ *         commentSpace: 0.1,
+ *         scale: 0.7,
+ *       },
+ *     },
+ *     // Just comment
+ *     4: {
+ *       bottomComment: {
+ *         content: 'a \u00d7 b \u00d7 c',
+ *         comment: 'for a > 3',
+ *       },
+ *     },
+ *   },
+ *   formSeries: ['1', '2', '3', '4']
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
@@ -2015,14 +1953,12 @@ export type EQN_Comment = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       x: { symbol: 'strike', color: [0.6, 0.6, 0.6, 1] },
- *     },
- *     forms: {
- *       1: { topStrike: ['radius', 'x', 'radius = 1'] },
- *     },
+ *   make: 'equation',
+ *   elements: {
+ *     x: { symbol: 'strike', color: [0.6, 0.6, 0.6, 1] },
+ *   },
+ *   forms: {
+ *     1: { topStrike: ['radius', 'x', 'radius = 1'] },
  *   },
  * });
  * figure.elements._eqn.showForm('1');
@@ -2031,36 +1967,34 @@ export type EQN_Comment = {
  * // Some different strike examples
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       s1: { symbol: 'strike', style: 'forward', color: [0.6, 0.6, 0.6, 1] },
- *     },
- *     forms: {
- *       // Array equation
- *       1: { topStrike: ['radius', 's1', 'radius = 1'] },
- *       // Object definition
- *       2: {
- *         bottomStrike: {
- *           content: 'radius',
- *           symbol: 's1',
- *           comment: 'radius = 1',
- *         },
- *       },
- *       // Additional options for layout
- *       3: {
- *         bottomStrike: {
- *           content: 'radius',
- *           comment: 'radius = 1',
- *           symbol: 's1',
- *           scale: 0.8,
- *           space: 0.1,
- *           commentSpace: 0.01,
- *         },
- *       },
- *     },
- *     formSeries: ['1', '2', '3']
+ *   make: 'equation',
+ *   elements: {
+ *     s1: { symbol: 'strike', style: 'forward', color: [0.6, 0.6, 0.6, 1] },
  *   },
+ *   forms: {
+ *     // Array equation
+ *     1: { topStrike: ['radius', 's1', 'radius = 1'] },
+ *     // Object definition
+ *     2: {
+ *       bottomStrike: {
+ *         content: 'radius',
+ *         symbol: 's1',
+ *         comment: 'radius = 1',
+ *       },
+ *     },
+ *     // Additional options for layout
+ *     3: {
+ *       bottomStrike: {
+ *         content: 'radius',
+ *         comment: 'radius = 1',
+ *         symbol: 's1',
+ *         scale: 0.8,
+ *         space: 0.1,
+ *         commentSpace: 0.01,
+ *       },
+ *     },
+ *   },
+ *   formSeries: ['1', '2', '3']
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
@@ -2108,11 +2042,9 @@ export type EQN_StrikeComment = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     forms: {
- *       1: ['a', { pad: ['b', 0.1, 0.1, 0.1, 0.1] }, 'c'],
- *     },
+ *   make: 'equation',
+ *   forms: {
+ *     1: ['a', { pad: ['b', 0.1, 0.1, 0.1, 0.1] }, 'c'],
  *   },
  * });
  * figure.elements._eqn.showForm('1');
@@ -2121,28 +2053,26 @@ export type EQN_StrikeComment = {
  * // Some different padding examples
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     forms: {
- *       // No padding
- *       1: ['a', 'b', 'c'],
- *       // Array form
- *       2: ['a', { pad: ['b', 0.1, 0.1, 0.1, 0.1] }, 'c'],
- *       // Object form
- *       3: [
- *         'a',
- *         {
- *           pad: {
- *             content: 'b',
- *             left: 0.3,
- *             right: 0.1,
- *           },
+ *   make: 'equation',
+ *   forms: {
+ *     // No padding
+ *     1: ['a', 'b', 'c'],
+ *     // Array form
+ *     2: ['a', { pad: ['b', 0.1, 0.1, 0.1, 0.1] }, 'c'],
+ *     // Object form
+ *     3: [
+ *       'a',
+ *       {
+ *         pad: {
+ *           content: 'b',
+ *           left: 0.3,
+ *           right: 0.1,
  *         },
- *         'c',
- *       ],
- *     },
- *     formSeries: ['1', '2', '3'],
+ *       },
+ *       'c',
+ *     ],
  *   },
+ *   formSeries: ['1', '2', '3'],
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
@@ -2199,15 +2129,13 @@ export type EQN_Pad = {
  * // Simple
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       lb: { symbol: 'squareBracket', side: 'left' },
- *       rb: { symbol: 'squareBracket', side: 'right' },
- *     },
- *     forms: {
- *       1: { matrix: [[2, 2], 'lb', ['a', 'b', 'c', 'd'], 'rb'] },
- *     },
+ *   make: 'equation',
+ *   elements: {
+ *     lb: { symbol: 'squareBracket', side: 'left' },
+ *     rb: { symbol: 'squareBracket', side: 'right' },
+ *   },
+ *   forms: {
+ *     1: { matrix: [[2, 2], 'lb', ['a', 'b', 'c', 'd'], 'rb'] },
  *   },
  * });
  * figure.elements._eqn.showForm('1');
@@ -2216,53 +2144,51 @@ export type EQN_Pad = {
  * // Some different equation examples
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       lb: { symbol: 'squareBracket', side: 'left' },
- *       rb: { symbol: 'squareBracket', side: 'right' },
- *       v: { symbol: 'vinculum' },
- *     },
- *     phrases: {
- *       f: { frac: ['a', 'v', 'b'] },
- *     },
- *     forms: {
- *       // Array equation 2x2 matrix
- *       1: { matrix: [[2, 2], 'lb', ['a', 'b', 'c', 'd'], 'rb'] },
- *       // Object definition vector
- *       2: {
- *         matrix: {
- *           content: ['a', 'b', 'c', 'd'],
- *           left: 'lb',
- *           right: 'rb',
- *           order: [1, 4],
- *         },
- *       },
- *       // Additional options for layout
- *       3: {
- *         matrix: {
- *           content: ['f', 'wxyz', 'c', 'd'],
- *           symbol: 'bSqr',
- *           left: 'lb',
- *           right: 'rb',
- *           order: [2, 2],
- *         },
- *       },
- *       // Fixed size matrix cells
- *       4: {
- *         matrix: {
- *           content: ['f', 'wxyz', 'c', 'd'],
- *           symbol: 'bSqr',
- *           left: 'lb',
- *           right: 'rb',
- *           order: [2, 2],
- *           fit: [0.2, 0.2],
- *           yAlign: 'middle',
- *         },
- *       },
- *     },
- *     formSeries: ['1', '2', '3', '4']
+ *   make: 'equation',
+ *   elements: {
+ *     lb: { symbol: 'squareBracket', side: 'left' },
+ *     rb: { symbol: 'squareBracket', side: 'right' },
+ *     v: { symbol: 'vinculum' },
  *   },
+ *   phrases: {
+ *     f: { frac: ['a', 'v', 'b'] },
+ *   },
+ *   forms: {
+ *     // Array equation 2x2 matrix
+ *     1: { matrix: [[2, 2], 'lb', ['a', 'b', 'c', 'd'], 'rb'] },
+ *     // Object definition vector
+ *     2: {
+ *       matrix: {
+ *         content: ['a', 'b', 'c', 'd'],
+ *         left: 'lb',
+ *         right: 'rb',
+ *         order: [1, 4],
+ *       },
+ *     },
+ *     // Additional options for layout
+ *     3: {
+ *       matrix: {
+ *         content: ['f', 'wxyz', 'c', 'd'],
+ *         symbol: 'bSqr',
+ *         left: 'lb',
+ *         right: 'rb',
+ *         order: [2, 2],
+ *       },
+ *     },
+ *     // Fixed size matrix cells
+ *     4: {
+ *       matrix: {
+ *         content: ['f', 'wxyz', 'c', 'd'],
+ *         symbol: 'bSqr',
+ *         left: 'lb',
+ *         right: 'rb',
+ *         order: [2, 2],
+ *         fit: [0.2, 0.2],
+ *         yAlign: 'middle',
+ *       },
+ *     },
+ *   },
+ *   formSeries: ['1', '2', '3', '4']
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
@@ -2374,19 +2300,17 @@ export type EQN_Line = {
  * // Two lines, array definition
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     forms: {
- *       0: {
- *         lines: [
- *           [
- *             ['a', '_ = ', 'b', '_ + _1', 'c', '_ - _1', 'd'],
- *             ['_ + _2', 'e', '_ - _2', 'f'],
- *           ],
- *           'right',
- *           0.2,
+ *   make: 'equation',
+ *   forms: {
+ *     0: {
+ *       lines: [
+ *         [
+ *           ['a', '_ = ', 'b', '_ + _1', 'c', '_ - _1', 'd'],
+ *           ['_ + _2', 'e', '_ - _2', 'f'],
  *         ],
- *       },
+ *         'right',
+ *         0.2,
+ *       ],
  *     },
  *   },
  * });
@@ -2395,31 +2319,29 @@ export type EQN_Line = {
  * // Two lines animating to 1
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       equals1: ' = ',
- *       equals2: ' = ',
- *     },
- *     forms: {
- *       0: {
- *         lines: {
- *           content: [
- *             {
- *               content: ['a_1', 'equals1', 'b', '_ + ', 'c'],
- *               justify: 'equals1',
- *             },
- *             {
- *               content: ['d', '_ - ', 'e', 'equals2', 'a_2'],
- *               justify: 'equals2',
- *             },
- *           ],
- *           space: 0.08,
- *           justify: 'element',
- *         },
+ *   make: 'equation',
+ *   elements: {
+ *     equals1: ' = ',
+ *     equals2: ' = ',
+ *   },
+ *   forms: {
+ *     0: {
+ *       lines: {
+ *         content: [
+ *           {
+ *             content: ['a_1', 'equals1', 'b', '_ + ', 'c'],
+ *             justify: 'equals1',
+ *           },
+ *           {
+ *             content: ['d', '_ - ', 'e', 'equals2', 'a_2'],
+ *             justify: 'equals2',
+ *           },
+ *         ],
+ *         space: 0.08,
+ *         justify: 'element',
  *       },
- *       1: ['d', '_ - ', 'e', 'equals1', 'b', '_ + ', 'c'],
  *     },
+ *     1: ['d', '_ - ', 'e', 'equals1', 'b', '_ + ', 'c'],
  *   },
  * });
  *
@@ -2492,49 +2414,46 @@ export type EQN_Lines = {
  *
  * @example
  * figure.add({
- *   method: 'equation',
- *   options: {
- *     forms: {
- *       form1: {
- *         annotate: {
- *           content: 'a',
- *           annotation: {
- *             content: 'b',
- *             xPosition: 'left',
- *             yPosition: 'top',
- *             xAlign: 'right',
- *             yAlign: 'bottom',
- *             scale: 0.5,
- *           },
+ *   make: 'equation',
+ *   forms: {
+ *     form1: {
+ *       annotate: {
+ *         content: 'a',
+ *         annotation: {
+ *           content: 'b',
+ *           xPosition: 'left',
+ *           yPosition: 'top',
+ *           xAlign: 'right',
+ *           yAlign: 'bottom',
+ *           scale: 0.5,
  *         },
  *       },
  *     },
  *   },
  * });
  *
+ * @example
  * figure.add({
- *   method: 'equation',
- *   options: {
- *     forms: {
- *       form1: {
- *         annotate: {
- *           content: 'a',
- *           annotations: [
- *             {
- *               content: 'b',
- *               xPosition: 'left',
- *               yPosition: 'bottom',
- *               xAlign: 'right',
- *               yAlign: 'top',
- *               scale: 0.5,
- *             },
- *             {
- *               content: 'c',
- *               offset: [0, 0.05],
- *               scale: 0.5,
- *             },
- *           ],
- *         },
+ *   make: 'equation',
+ *   forms: {
+ *     form1: {
+ *       annotate: {
+ *         content: 'a',
+ *         annotations: [
+ *           {
+ *             content: 'b',
+ *             xPosition: 'left',
+ *             yPosition: 'bottom',
+ *             xAlign: 'right',
+ *             yAlign: 'top',
+ *             scale: 0.5,
+ *           },
+ *           {
+ *             content: 'c',
+ *             offset: [0, 0.05],
+ *             scale: 0.5,
+ *           },
+ *         ],
  *       },
  *     },
  *   },
@@ -2587,24 +2506,22 @@ export type EQN_Annotation = {
  * @example
  *  // surrounding content with a box glyph
  * figure.add({
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       box: { symbol: 'box', lineWidth: 0.005 },
- *     },
- *     forms: {
- *       form1: {
- *         annotate: {
- *           content: 'a',
- *           glyphs: {
- *             encompass: {
- *               symbol: 'box',
- *               space: 0.1, // e.g. only, this will be overwritten by next props
- *               topSpace: 0.1,
- *               rightSpace: 0.1,
- *               bottomSpace: 0.1,
- *               leftSpace: 0.1,
- *             },
+ *   make: 'equation',
+ *   elements: {
+ *     box: { symbol: 'box', lineWidth: 0.005 },
+ *   },
+ *   forms: {
+ *     form1: {
+ *       annotate: {
+ *         content: 'a',
+ *         glyphs: {
+ *           encompass: {
+ *             symbol: 'box',
+ *             space: 0.1, // e.g. only, this will be overwritten by next props
+ *             topSpace: 0.1,
+ *             rightSpace: 0.1,
+ *             bottomSpace: 0.1,
+ *             leftSpace: 0.1,
  *           },
  *         },
  *       },
@@ -2669,21 +2586,19 @@ export type EQN_EncompassGlyph = {
  *
  * @example
  * figure.add({
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       rb: { symbol: 'angleBracket', side: 'right', width: 0.1 },
- *     },
- *     forms: {
- *       form1: {
- *         annotate: {
- *           content: 'a',
- *           glyphs: {
- *             right: {
- *               symbol: 'rb',
- *               space: 0.05,
- *               overhang: 0.1,
- *             },
+ *   make: 'equation',
+ *   elements: {
+ *     rb: { symbol: 'angleBracket', side: 'right', width: 0.1 },
+ *   },
+ *   forms: {
+ *     form1: {
+ *       annotate: {
+ *         content: 'a',
+ *         glyphs: {
+ *           right: {
+ *             symbol: 'rb',
+ *             space: 0.05,
+ *             overhang: 0.1,
  *           },
  *         },
  *       },
@@ -2693,41 +2608,39 @@ export type EQN_EncompassGlyph = {
  *
  * @example
  * figure.add({
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       arrow: { symbol: 'arrow', direction: 'down' },
- *     },
- *     forms: {
- *       form1: {
- *         annotate: {
- *           content: 'a',
- *           glyphs: {
- *             left: {
- *               symbol: 'arrow',
- *               space: 0.05,
- *               overhang: 0.1,
- *               annotations: [
- *                 {
- *                   content: 'b',
- *                   xPosition: 'center',
- *                   yPosition: 'top',
- *                   xAlign: 'center',
- *                   yAlign: 'bottom',
- *                   scale: 0.7,
- *                   offset: [0, 0.05],
- *                 },
- *                 {
- *                   content: 'n',
- *                   xPosition: 'center',
- *                   yPosition: 'bottom',
- *                   xAlign: 'center',
- *                   yAlign: 'top',
- *                   scale: 0.7,
- *                   offset: [0, -0.05],
- *                 },
- *               ],
- *             },
+ *   make: 'equation',
+ *   elements: {
+ *     arrow: { symbol: 'arrow', direction: 'down' },
+ *   },
+ *   forms: {
+ *     form1: {
+ *       annotate: {
+ *         content: 'a',
+ *         glyphs: {
+ *           left: {
+ *             symbol: 'arrow',
+ *             space: 0.05,
+ *             overhang: 0.1,
+ *             annotations: [
+ *               {
+ *                 content: 'b',
+ *                 xPosition: 'center',
+ *                 yPosition: 'top',
+ *                 xAlign: 'center',
+ *                 yAlign: 'bottom',
+ *                 scale: 0.7,
+ *                 offset: [0, 0.05],
+ *               },
+ *               {
+ *                 content: 'n',
+ *                 xPosition: 'center',
+ *                 yPosition: 'bottom',
+ *                 xAlign: 'center',
+ *                 yAlign: 'top',
+ *                 scale: 0.7,
+ *                 offset: [0, -0.05],
+ *               },
+ *             ],
  *           },
  *         },
  *       },
@@ -2737,39 +2650,37 @@ export type EQN_EncompassGlyph = {
  *
  * @example
  * figure.add({
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       brace: { symbol: 'brace', side: 'right', width: 0.05 },
- *     },
- *     forms: {
- *       form1: {
- *         annotate: {
- *           content: 'c',
- *           glyphs: {
- *             left: {
- *               symbol: 'brace',
- *               space: 0.05,
- *               overhang: 0.2,
- *               annotations: [
- *                 {
- *                   content: 'a',
- *                   xPosition: 'left',
- *                   yPosition: 'top',
- *                   xAlign: 'right',
- *                   yAlign: 'middle',
- *                   offset: [-0.05, 0],
- *                 },
- *                 {
- *                   content: 'b',
- *                   xPosition: 'left',
- *                   yPosition: 'bottom',
- *                   xAlign: 'right',
- *                   yAlign: 'middle',
- *                   offset: [-0.05, 0],
- *                 },
- *               ],
- *             },
+ *   make: 'equation',
+ *   elements: {
+ *     brace: { symbol: 'brace', side: 'right', width: 0.05 },
+ *   },
+ *   forms: {
+ *     form1: {
+ *       annotate: {
+ *         content: 'c',
+ *         glyphs: {
+ *           left: {
+ *             symbol: 'brace',
+ *             space: 0.05,
+ *             overhang: 0.2,
+ *             annotations: [
+ *               {
+ *                 content: 'a',
+ *                 xPosition: 'left',
+ *                 yPosition: 'top',
+ *                 xAlign: 'right',
+ *                 yAlign: 'middle',
+ *                 offset: [-0.05, 0],
+ *               },
+ *               {
+ *                 content: 'b',
+ *                 xPosition: 'left',
+ *                 yPosition: 'bottom',
+ *                 xAlign: 'right',
+ *                 yAlign: 'middle',
+ *                 offset: [-0.05, 0],
+ *               },
+ *             ],
  *           },
  *         },
  *       },
@@ -2833,27 +2744,25 @@ export type EQN_LeftRightGlyph = {
  * separated from content by `space` and not annotations (false`)
  * @example
  * figure.add({
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       rarrow: { symbol: 'arrow', direction: 'right' },
- *       larrow: { symbol: 'arrow', direction: 'left' },
- *     },
- *     forms: {
- *       form1: {
- *         annotate: {
- *           content: 'a',
- *           glyphs: {
- *             top: {
- *               symbol: 'rarrow',
- *               space: 0.05,
- *               overhang: 0.1,
- *             },
- *             bottom: {
- *               symbol: 'larrow',
- *               space: 0.05,
- *               overhang: 0.02,
- *             },
+ *   make: 'equation',
+ *   elements: {
+ *     rarrow: { symbol: 'arrow', direction: 'right' },
+ *     larrow: { symbol: 'arrow', direction: 'left' },
+ *   },
+ *   forms: {
+ *     form1: {
+ *       annotate: {
+ *         content: 'a',
+ *         glyphs: {
+ *           top: {
+ *             symbol: 'rarrow',
+ *             space: 0.05,
+ *             overhang: 0.1,
+ *           },
+ *           bottom: {
+ *             symbol: 'larrow',
+ *             space: 0.05,
+ *             overhang: 0.02,
  *           },
  *         },
  *       },
@@ -2863,39 +2772,37 @@ export type EQN_LeftRightGlyph = {
  *
  * @example
  * figure.add({
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       brace: { symbol: 'brace', side: 'top' },
- *     },
- *     forms: {
- *       form1: {
- *         annotate: {
- *           content: ['2_1', 'x_1'],
- *           glyphs: {
- *             bottom: {
- *               symbol: 'brace',
- *               space: 0.05,
- *               overhang: 0.2,
- *               annotations: [
- *                 {
- *                   content: '2_2',
- *                   xPosition: 'left',
- *                   yPosition: 'bottom',
- *                   xAlign: 'center',
- *                   yAlign: 'baseline',
- *                   offset: [0, -0.2],
- *                 },
- *                 {
- *                   content: 'x_2',
- *                   xPosition: 'right',
- *                   yPosition: 'bottom',
- *                   xAlign: 'center',
- *                   yAlign: 'baseline',
- *                   offset: [0, -0.2],
- *                 },
- *               ],
- *             },
+ *   make: 'equation',
+ *   elements: {
+ *     brace: { symbol: 'brace', side: 'top' },
+ *   },
+ *   forms: {
+ *     form1: {
+ *       annotate: {
+ *         content: ['2_1', 'x_1'],
+ *         glyphs: {
+ *           bottom: {
+ *             symbol: 'brace',
+ *             space: 0.05,
+ *             overhang: 0.2,
+ *             annotations: [
+ *               {
+ *                 content: '2_2',
+ *                 xPosition: 'left',
+ *                 yPosition: 'bottom',
+ *                 xAlign: 'center',
+ *                 yAlign: 'baseline',
+ *                 offset: [0, -0.2],
+ *               },
+ *               {
+ *                 content: 'x_2',
+ *                 xPosition: 'right',
+ *                 yPosition: 'bottom',
+ *                 xAlign: 'center',
+ *                 yAlign: 'baseline',
+ *                 offset: [0, -0.2],
+ *               },
+ *             ],
  *           },
  *         },
  *       },
@@ -2957,43 +2864,41 @@ export type EQN_LineGlyphAlign = {
  * @example
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       l: {
- *         symbol: 'line',
- *         width: 0.005,
- *         dash: [0.005, 0.005],
- *         arrow: { start: 'barb' },
- *       },
+ *   make: 'equation',
+ *   elements: {
+ *     l: {
+ *       symbol: 'line',
+ *       width: 0.005,
+ *       dash: [0.005, 0.005],
+ *       arrow: { start: 'barb' },
  *     },
- *     forms: {
- *       0: {
- *         annotate: {
- *           content: 'abc',
- *           annotation: {
- *             content: 'def',
- *             xPosition: 'right',
- *             yPosition: 'top',
- *             xAlign: 'left',
- *             yAlign: 'bottom',
- *             scale: 0.6,
- *             offset: [0.2, 0.2],
- *           },
- *           glyphs: {
- *             line: {
- *               annotationIndex: 0,
- *               symbol: 'l',
- *               content: {
- *                 xAlign: 'right',
- *                 yAlign: 'top',
- *                 space: 0.02,
- *               },
- *               annotation: {
- *                 xAlign: 'left',
- *                 yAlign: 'bottom',
- *                 space: 0.02,
- *               },
+ *   },
+ *   forms: {
+ *     0: {
+ *       annotate: {
+ *         content: 'abc',
+ *         annotation: {
+ *           content: 'def',
+ *           xPosition: 'right',
+ *           yPosition: 'top',
+ *           xAlign: 'left',
+ *           yAlign: 'bottom',
+ *           scale: 0.6,
+ *           offset: [0.2, 0.2],
+ *         },
+ *         glyphs: {
+ *           line: {
+ *             annotationIndex: 0,
+ *             symbol: 'l',
+ *             content: {
+ *               xAlign: 'right',
+ *               yAlign: 'top',
+ *               space: 0.02,
+ *             },
+ *             annotation: {
+ *               xAlign: 'left',
+ *               yAlign: 'bottom',
+ *               space: 0.02,
  *             },
  *           },
  *         },
@@ -3115,17 +3020,31 @@ export type EQN_Glyphs = {
  * // Some different annotation examples
  * figure.add({
  *   name: 'eqn',
- *   method: 'equation',
- *   options: {
- *     elements: {
- *       bar: { symbol: 'bar', side: 'right' },
+ *   make: 'equation',
+ *   elements: {
+ *     bar: { symbol: 'bar', side: 'right' },
+ *   },
+ *   forms: {
+ *     // Single annotation
+ *     1: {
+ *       annotate: {
+ *         content: 'a',
+ *         annotation: {
+ *           content: 'bbb',
+ *           yPosition: 'top',
+ *           yAlign: 'bottom',
+ *           xPosition: 'left',
+ *           xAlign: 'right',
+ *           scale: 0.5,
+ *         },
+ *       },
  *     },
- *     forms: {
- *       // Single annotation
- *       1: {
- *         annotate: {
- *           content: 'a',
- *           annotation: {
+ *     // Multiple annotations
+ *     2: {
+ *       annotate: {
+ *         content: 'a',
+ *         annotations: [
+ *           {
  *             content: 'bbb',
  *             yPosition: 'top',
  *             yAlign: 'bottom',
@@ -3133,56 +3052,40 @@ export type EQN_Glyphs = {
  *             xAlign: 'right',
  *             scale: 0.5,
  *           },
- *         },
+ *           {
+ *             content: 'ccc',
+ *             xPosition: 'right',
+ *             yPosition: 'middle',
+ *             xAlign: 'left',
+ *             yAlign: 'middle',
+ *             scale: 0.5,
+ *             offset: [0.05, 0],
+ *           },
+ *         ],
  *       },
- *       // Multiple annotations
- *       2: {
- *         annotate: {
- *           content: 'a',
- *           annotations: [
- *             {
+ *     },
+ *     // With glyph
+ *     3: {
+ *       annotate: {
+ *         content: 'a',
+ *         glyphs: {
+ *           left:{
+ *             symbol: 'bar',
+ *             overhang: 0.1,
+ *             annotation: {
  *               content: 'bbb',
- *               yPosition: 'top',
- *               yAlign: 'bottom',
- *               xPosition: 'left',
- *               xAlign: 'right',
- *               scale: 0.5,
- *             },
- *             {
- *               content: 'ccc',
  *               xPosition: 'right',
- *               yPosition: 'middle',
+ *               yPosition: 'bottom',
  *               xAlign: 'left',
  *               yAlign: 'middle',
  *               scale: 0.5,
- *               offset: [0.05, 0],
- *             },
- *           ],
- *         },
- *       },
- *       // With glyph
- *       3: {
- *         annotate: {
- *           content: 'a',
- *           glyphs: {
- *             left:{
- *               symbol: 'bar',
- *               overhang: 0.1,
- *               annotation: {
- *                 content: 'bbb',
- *                 xPosition: 'right',
- *                 yPosition: 'bottom',
- *                 xAlign: 'left',
- *                 yAlign: 'middle',
- *                 scale: 0.5,
- *               },
  *             },
  *           },
  *         },
  *       },
  *     },
- *     formSeries: ['1', '2', '3'],
  *   },
+ *   formSeries: ['1', '2', '3'],
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();

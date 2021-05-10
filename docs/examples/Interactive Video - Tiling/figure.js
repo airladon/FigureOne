@@ -5,7 +5,7 @@ const figure = new Fig.Figure();
 function button(name, text, position) {
   return {
     name,
-    method: 'primitives.text',
+    make: 'primitives.text',
     options: {
       text, position, xAlign: 'center', font: { size: 0.1 },
     },
@@ -19,11 +19,11 @@ function makePolygon(
 ) {
   return {
     name,
-    method: 'collection',
+    make: 'collection',
     elements: [
       {
         name: 'fill',
-        method: 'primitives.polygon',
+        make: 'primitives.polygon',
         options: { radius, color, sides },
         mods: {
           isMovable: true,
@@ -35,7 +35,7 @@ function makePolygon(
       },
       {
         name: 'movePad',
-        method: 'primitives.polygon',
+        make: 'primitives.polygon',
         options: { radius: radius * 0.7, sides },
         mods: {
           isMovable: true,
@@ -45,7 +45,7 @@ function makePolygon(
       },
       {
         name: 'border',
-        method: 'primitives.polygon',
+        make: 'primitives.polygon',
         options: {
           radius: radius - 0.0015,
           sides,

@@ -4,24 +4,20 @@ const figure = new Fig.Figure({ limits: [-2, -2, 4, 4] });
 const [ball, text] = figure.add([
   {
     name: 'ball',
-    method: 'primitives.polygon',
-    options: {
-      radius: 0.5,
-      sides: 100,
-      position: [0, 0],
-    },
+    make: 'primitives.polygon',
+    radius: 0.5,
+    sides: 100,
+    position: [0, 0],
     mods: {
       isMovable: 'true',
     },
   },
   {
     name: 'text ',
-    method: 'primitives.text',
-    options: {
-      position: [0, -1.5],
-      text: '(0.0, 0.0)',
-      xAlign: 'center',
-    },
+    make: 'primitives.text',
+    position: [0, -1.5],
+    text: '(0.0, 0.0)',
+    xAlign: 'center',
   },
 ]);
 

@@ -137,11 +137,9 @@ export type COL_Rectangle = {
  * // Simple rectangle
  * figure.add({
  *   name: 'rect',
- *   method: 'collections.rectangle',
- *   options: {
- *     width: 2,
- *     height: 1,
- *   },
+ *   make: 'collections.rectangle',
+ *   width: 2,
+ *   height: 1,
  * });
  *
  * @example
@@ -167,20 +165,16 @@ export type COL_Rectangle = {
  * figure.add([
  *   {
  *     name: 'rect',
- *     method: 'collections.rectangle',
- *     options: {
- *       color: [0.3, 0.3, 1, 1],
- *       line: { width: 0.01 },
- *     },
+ *     make: 'collections.rectangle',
+ *     color: [0.3, 0.3, 1, 1],
+ *     line: { width: 0.01 },
  *   },
  *   {
  *     name: 'eqn',
- *     method: 'equation',
- *     options: {
- *       forms: { 0: [{ frac: ['a', 'vinculum', 'b'] }, ' ', 'c'] },
- *       position: [1, 0],
- *       scale: 1.5,
- *     },
+ *     make: 'equation',
+ *     forms: { 0: [{ frac: ['a', 'vinculum', 'b'] }, ' ', 'c'] },
+ *     position: [1, 0],
+ *     scale: 1.5,
  *   }
  * ]);
  *
@@ -201,17 +195,15 @@ export type COL_Rectangle = {
  * figure.add([
  *   {
  *     name: 'rect',
- *     method: 'collections.rectangle',
- *     options: {
- *       width: 0.5,
- *       height: 0.3,
- *       color: [0.3, 0.3, 0.3, 1],
- *       label: 'Save',
- *       corner: { radius: 0.05, sides: 10 },
- *       fill: [0.9, 0.9, 0.9, 1],
- *       button: {
- *         fill: [0.95, 0.95, 0.95, 1],
- *       },
+ *     make: 'collections.rectangle',
+ *     width: 0.5,
+ *     height: 0.3,
+ *     color: [0.3, 0.3, 0.3, 1],
+ *     label: 'Save',
+ *     corner: { radius: 0.05, sides: 10 },
+ *     fill: [0.9, 0.9, 0.9, 1],
+ *     button: {
+ *       fill: [0.95, 0.95, 0.95, 1],
  *     },
  *     mods: {
  *       isTouchable: true,

@@ -128,25 +128,21 @@ export type COL_Trace = {
  * // the line will be solid, and it will be plotted against the 'x' and 'y' axes.
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
- *   options: {
- *     trace: pow(),
- *   },
+ *   make: 'collections.plot',
+ *   trace: pow(),
  * });
  *
  * @example
  * // Change the thickness and color of the line
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
- *   options: {
- *     trace: {
- *       points: pow(),
- *       line: {
- *         width: 0.03,
- *         color: [0, 0.8, 0.4, 1],
- *       }
- *     },
+ *   make: 'collections.plot',
+ *   trace: {
+ *     points: pow(),
+ *     line: {
+ *       width: 0.03,
+ *       color: [0, 0.8, 0.4, 1],
+ *     }
  *   },
  * });
  *
@@ -154,12 +150,10 @@ export type COL_Trace = {
  * // Default Markers
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
- *   options: {
- *     trace: {
- *       points: pow(2, 10, 1),
- *       markers: true,
- *     },
+ *   make: 'collections.plot',
+ *   trace: {
+ *     points: pow(2, 10, 1),
+ *     markers: true,
  *   },
  * });
  *
@@ -167,15 +161,13 @@ export type COL_Trace = {
  * // Custom Markers
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
- *   options: {
- *     trace: {
- *       points: pow(2, 10, 1),
- *       markers: {
- *         radius: 0.035,
- *         sides: 20,
- *         line: { width: 0.01 },
- *       },
+ *   make: 'collections.plot',
+ *   trace: {
+ *     points: pow(2, 10, 1),
+ *     markers: {
+ *       radius: 0.035,
+ *       sides: 20,
+ *       line: { width: 0.01 },
  *     },
  *   },
  * });
@@ -184,15 +176,13 @@ export type COL_Trace = {
  * // Line and markers
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
- *   options: {
- *     trace: {
- *       points: pow(2, 10, 1),
- *       line: { width: 0.01, dash: [0.02, 0.01] },
- *       markers: {
- *         radius: 0.035,
- *         sides: 20,
- *       },
+ *   make: 'collections.plot',
+ *   trace: {
+ *     points: pow(2, 10, 1),
+ *     line: { width: 0.01, dash: [0.02, 0.01] },
+ *     markers: {
+ *       radius: 0.035,
+ *       sides: 20,
  *     },
  *   },
  * });
@@ -201,20 +191,18 @@ export type COL_Trace = {
  * // Use names in trace definitions to customize legend
  * figure.add({
  *   name: 'plot',
- *   method: 'collections.plot',
- *   options: {
- *     trace: [
- *       pow(2),
- *       { points: pow(2.5), name: 'Power 2.5' },
- *       {
- *         points: pow(3, 10, 1),
- *         name: 'Power 3',
- *         markers: { radius: 0.03 },
- *         line: { width: 0.01 },
- *       },
- *     ],
- *     legend: true,
- *   },
+ *   make: 'collections.plot',
+ *   trace: [
+ *     pow(2),
+ *     { points: pow(2.5), name: 'Power 2.5' },
+ *     {
+ *       points: pow(3, 10, 1),
+ *       name: 'Power 3',
+ *       markers: { radius: 0.03 },
+ *       line: { width: 0.01 },
+ *     },
+ *   ],
+ *   legend: true,
  * });
  */
 // $FlowFixMe

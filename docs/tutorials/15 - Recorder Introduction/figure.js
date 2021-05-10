@@ -4,7 +4,7 @@ const figure = new Fig.Figure();
 // Add movable ball to figure
 figure.add({
   name: 'ball',
-  method: 'primitives.polygon',
+  make: 'primitives.polygon',
   options: {
     radius: 0.3,
     sides: 100,

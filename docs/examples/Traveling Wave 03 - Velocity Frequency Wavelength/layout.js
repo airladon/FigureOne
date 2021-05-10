@@ -35,7 +35,7 @@ function setupFigure() {
   // Title text on the first slide
   figure.add({
     name: 'title',
-    method: 'primitives.textLines',
+    make: 'primitives.textLines',
     options: {
       text: [
         'Traveling Sine Waves',
@@ -64,7 +64,7 @@ function setupFigure() {
   // Text on the last slide summarizing the learnings
   figure.add({
     name: 'summary',
-    method: 'primitives.textLines',
+    make: 'primitives.textLines',
     options: {
       text: [
         { text: 'Summary', font: { size: 0.25 }, justify: 'center' },
@@ -109,7 +109,7 @@ function setupFigure() {
   */
   const button = (name, position, text) => ({
     name,
-    method: 'collections.rectangle',
+    make: 'collections.rectangle',
     options: {
       button: true,
       line: { width: 0.005 },
@@ -169,7 +169,7 @@ function setupFigure() {
   */
   const axisLabel = (name, position, col, text) => ({
     name,
-    method: 'primitives.textLine',
+    make: 'primitives.textLine',
     options: {
       text,
       position,
@@ -182,7 +182,7 @@ function setupFigure() {
 
   const label = (name, position, col, text) => ({
     name,
-    method: 'primitives.textLines',
+    make: 'primitives.textLines',
     options: {
       text,
       position,
@@ -226,12 +226,12 @@ function setupFigure() {
   figure.add([
     {
       name: 'arrow1',
-      method: 'collections.line',
+      make: 'collections.line',
       options: { width: 0.006, color: color1, arrow: { end: 'barb' } },
     },
     {
       name: 'arrow2',
-      method: 'collections.line',
+      make: 'collections.line',
       options: { width: 0.006, color: color1, arrow: { end: 'barb' } },
     },
   ]);
@@ -249,7 +249,7 @@ function setupFigure() {
   // Axis helper functions
   const xAxis = (name, title, units, length, maxValue) => ({
     name,
-    method: 'collections.axis',
+    make: 'collections.axis',
     options: {
       start: 0,
       stop: maxValue + 0.1,
@@ -265,7 +265,7 @@ function setupFigure() {
 
   const yAxis = (name, title, units, A, yAxisTitleSide) => ({
     name: 'yAxis',
-    method: 'collections.axis',
+    make: 'collections.axis',
     options: {
       axis: 'y',
       start: -A - 0.05,
@@ -291,7 +291,7 @@ function setupFigure() {
   // Particle creater
   const ball = (x, index, radius, sides = 20) => ({
     name: `ball${index}`,
-    method: 'primitives.polygon',
+    make: 'primitives.polygon',
     options: {
       sides,
       radius,
@@ -307,7 +307,7 @@ function setupFigure() {
   const addMedium = (name, length, maxValue, A, defaultPosition, yAxisTitle) => {
     figure.add({
       name,
-      method: 'collection',
+      make: 'collection',
       options: {
         transform: new Transform().scale(1, 1).translate(0, 0),
       },
@@ -316,7 +316,7 @@ function setupFigure() {
         yAxis('yAxis', 'y', '', A, yAxisTitle),
         {
           name: 'balls',
-          method: 'collection',
+          make: 'collection',
           options: {
             transform: new Transform(),
           },
@@ -324,7 +324,7 @@ function setupFigure() {
         // movePad moves the first particle in the medium
         {
           name: 'movePad',
-          method: 'primitives.polygon',
+          make: 'primitives.polygon',
           options: {
             radius: 0.4,
             sides: 8,
@@ -343,7 +343,7 @@ function setupFigure() {
         // Arrowed line showing a wavelength of a sine wave
         {
           name: 'wavelength',
-          method: 'collections.line',
+          make: 'collections.line',
           options: {
             width: 0.01,
             color: color1,
@@ -379,7 +379,7 @@ function setupFigure() {
       if (index === 0) { b.setColor(color0); }
     });
     balls.toFront(['ball0', 'ball40']);
-    const [tracker] = medium.add(ball(0, 'Tracker', ballSize));
+    const tracker = medium.add(ball(0, 'Tracker', ballSize));
     tracker.setColor(color3);
     const movePad = medium.getElement('movePad');
     const wavelength = medium.getElement('wavelength');
@@ -512,13 +512,13 @@ function setupFigure() {
   const addTimePlot = (name, length, maxValue, recording, A, defaultPosition) => {
     figure.add({
       name,
-      method: 'collection',
+      make: 'collection',
       elements: [
         xAxis('xAxis', 't', '', length, maxValue),
         yAxis('yAxis', 'y', '', A, true),
         {
           name: 'trace',
-          method: 'polyline',
+          make: 'polyline',
           options: {
             simple: true,
             width: 0.01,

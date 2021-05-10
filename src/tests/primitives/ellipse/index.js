@@ -11,7 +11,7 @@ const figure = new Figure({
 figure.add([
   {
     name: 'origin',
-    method: 'polygon',
+    make: 'polygon',
     options: {
       radius: 0.01,
       line: { width: 0.01 },
@@ -21,7 +21,7 @@ figure.add([
   },
   {
     name: 'grid',
-    method: 'grid',
+    make: 'grid',
     options: {
       bounds: [-4.5, -4.5, 9, 9],
       yStep: 0.1,
@@ -32,7 +32,7 @@ figure.add([
   },
   {
     name: 'gridMajor',
-    method: 'grid',
+    make: 'grid',
     options: {
       bounds: [-4.5, -4.5, 9, 9],
       yStep: 0.5,
@@ -50,7 +50,7 @@ figure.add([
 const xValues = tools.math.range(-4, 4, 1);
 const yValues = tools.math.range(4, -4, -1);
 let index = 0;
-const makeShape = (method, options, lineOptions = null) => {
+const makeShape = (make, options, lineOptions = null) => {
   const x = xValues[index % xValues.length];
   const y = yValues[Math.floor(index / xValues.length)];
   const name = `_${index}`;
@@ -64,7 +64,7 @@ const makeShape = (method, options, lineOptions = null) => {
   }
   return {
     name,
-    method,
+    make,
     options: tools.misc.joinObjects({}, {
       position: [x, y],
       line,
@@ -137,7 +137,7 @@ for (let i = 0; i < index; i += 1) {
   for (let j = 0; j < element.drawBorder.length; j += 1) {
     figure.add({
       name: `border${i}${j}`,
-      method: 'polyline',
+      make: 'polyline',
       options: {
         points: element.drawBorder[j],
         width: 0.01,
@@ -150,7 +150,7 @@ for (let i = 0; i < index; i += 1) {
   for (let j = 0; j < element.drawBorderBuffer.length; j += 1) {
     figure.add({
       name: `buffer${i}${j}`,
-      method: 'polyline',
+      make: 'polyline',
       options: {
         points: element.drawBorderBuffer[j],
         width: 0.01,

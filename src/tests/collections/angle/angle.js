@@ -12,7 +12,7 @@ function makeAngle(name, options, mods, getPos) {
   index += 1;
   const o = {
     name,
-    method: 'collections.angle',
+    make: 'collections.angle',
     options: tools.misc.joinObjects({}, {
       color: [1, 0, 0, 0.7],
       position: [0, 0],

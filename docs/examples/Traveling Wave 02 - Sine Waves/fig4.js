@@ -56,7 +56,7 @@ function fig4() {
   // Helper function to create the hint arrows
   const arrow = (name, angle, position) => ({
     name,
-    method: 'primitives.arrow',
+    make: 'primitives.arrow',
     options: {
       color: [0.7, 0.7, 0.7, 0.9],
       head: 'triangle',
@@ -74,7 +74,7 @@ function fig4() {
   fig.add([
     {
       name: 'mover',
-      method: 'rectangle',
+      make: 'rectangle',
       options: {
         width: 3.3,
         height: 1.4,
@@ -93,7 +93,7 @@ function fig4() {
   // Main plot
   fig.add({
     name: 'plot',
-    method: 'collections.plot',
+    make: 'collections.plot',
     options: {
       width: 3.3,
       height: 1.4,
@@ -144,7 +144,7 @@ function fig4() {
   // Equation
   fig.add({
     name: 'eqn',
-    method: 'equation',
+    make: 'equation',
     options: {
       elements: {
         sin: { style: 'normal' },

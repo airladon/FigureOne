@@ -28,7 +28,7 @@ describe('Seek', () => {
     figure.add([
       {
         name: 'a',
-        method: 'polygon',
+        make: 'polygon',
         options: {
           radius: 1,
           sides: 4,
@@ -37,7 +37,7 @@ describe('Seek', () => {
       },
       {
         name: 'b',
-        method: 'polygon',
+        make: 'polygon',
       },
     ]);
     a = figure.elements._a;

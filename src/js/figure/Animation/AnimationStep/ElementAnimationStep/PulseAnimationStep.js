@@ -79,7 +79,7 @@ export type OBJ_PulseAnimationStep = {
  * The options are the same as those in the * <a href="#figureelementpulse">pulse</a> method.
  *
  * @extends ElementAnimationStep
- * @param {OBJ_RotationAnimationStep} options
+ * @param {OBJ_PulseAnimationStep} options
  *
  *
  * @see To test examples, append them to the

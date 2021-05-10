@@ -7,7 +7,7 @@ function layout() {
   ]);
   figure.add({
     name: 'cursor',
-    method: 'collections.cursor',
+    make: 'collections.cursor',
     options: {
       color: [0, 0.5, 1, 0.7],
       radius: 0.15,
@@ -32,7 +32,7 @@ layout();
 function makeSlides() {
   figure.add({
     name: 'nav',
-    method: 'collections.slideNavigator',
+    make: 'collections.slideNavigator',
     options: {
       nextButton: { position: [3.8, 0], width: 0.2, height: 0.2 },
       prevButton: { position: [-3.8, 0], width: 0.2, height: 0.2 },

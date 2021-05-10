@@ -3,7 +3,7 @@ const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1] })
 // Movable angle
 figure.add({
   name: 'a',
-  method: 'collections.angle',
+  make: 'collections.angle',
   options: {
     angle: Math.PI / 4 * 3,
     label: {

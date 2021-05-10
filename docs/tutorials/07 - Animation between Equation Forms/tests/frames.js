@@ -9,10 +9,10 @@ __duration = 3.5;
 __timeStep = 0.5;
 __frames = [
   [0, `
-    figure.getElement('eqn.a').animations.setTimeDelta(null)
-    figure.getElement('eqn.v').animations.setTimeDelta(null)
-    figure.getElement('eqn.b').animations.setTimeDelta(null)
-    figure.getElement('eqn.c').animations.setTimeDelta(null)
-    figure.getElement('eqn.times').animations.setTimeDelta(null)
+    eqn._a.animations.setTimeDelta(null)
+    eqn._v.animations.setTimeDelta(null)
+    eqn._b.animations.setTimeDelta(null)
+    eqn._c.animations.setTimeDelta(null)
+    eqn._times.animations.setTimeDelta(null)
   `],
 ];

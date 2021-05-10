@@ -13,7 +13,7 @@ const pow = (power = 2, stop = 10, step = 0.05) => {
 
 figure.add({
   name: 'plot',
-  method: 'collections.plot',
+  make: 'collections.plot',
   options: {
     width: 2,                                    // Plot width in figure
     height: 2,                                   // Plot height in figure

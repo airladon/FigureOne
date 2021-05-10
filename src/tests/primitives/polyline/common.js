@@ -12,7 +12,7 @@ function makeShape(name, options, mods, getPos) {
   index += 1;
   const o = {
     name,
-    method: 'primitives.polyline',
+    make: 'primitives.polyline',
     options: tools.misc.joinObjects({}, {
       points: [[0, 0], [0.5, 0], [0, 0.5]],
       width: 0.05,

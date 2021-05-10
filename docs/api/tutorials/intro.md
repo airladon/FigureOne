@@ -92,7 +92,7 @@ Finally, let's see the code for the example above. Two files, `index.html` and `
 <body>
     <div id="figureOneContainer" style="width: 1200px; height: 800px; background-color: white;">
     </div>
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.7.4/figureone.min.js'></script>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.8.0/figureone.min.js'></script>
     <script type="text/javascript" src='./index.js'></script>
 </body>
 </html>
@@ -104,33 +104,27 @@ const figure = new Fig.Figure({ limits: [0, 0, 6, 4 ]});
 figure.add(
   {
     name: 'labeledLine',
-    method: 'collections.collection',
+    make: 'collections.collection',
     elements: [
       {
         name: 'line',
-        method: 'primitives.line',
-        options: {
-          p1: [0, 0],
-          p2: [2, 0],
-          width: 0.01,
-          color: [0, 0, 1, 1],
-        },
+        make: 'primitives.line',
+        p1: [0, 0],
+        p2: [2, 0],
+        width: 0.01,
+        color: [0, 0, 1, 1],
       },
       {
         name: 'label',
-        method: 'primitives.text',
-        options: {
-          text: 'Line 1',
-          position: [1, 0.1],
-          font: { color: [0, 0, 1, 1] },
-          xAlign: 'center',
-        },
+        make: 'primitives.text',
+        text: 'Line 1',
+        position: [1, 0.1],
+        font: { color: [0, 0, 1, 1] },
+        xAlign: 'center',
       },
     ],
-    options: {
-      position: [3, 2],
-      touchBorder: 0.3,
-    },
+    position: [3, 2],
+    touchBorder: 0.3,
     mods: {
       isMovable: true,
       move: {

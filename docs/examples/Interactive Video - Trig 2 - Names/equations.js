@@ -52,7 +52,7 @@ function makeEquation() {
 
   figure.add({
     name: 'eqn',
-    method: 'equation',
+    make: 'equation',
     options: {
       elements: {
         eq1: '=',
@@ -254,7 +254,7 @@ function makeEquation() {
   // names that can be animated to show where they come from
   figure.add({
     name: 'eqn2',
-    method: 'equation',
+    make: 'equation',
     options: {
       textFont: { style: 'normal' },
       elements: {

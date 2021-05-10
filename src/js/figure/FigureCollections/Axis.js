@@ -67,49 +67,41 @@ import type FigureCollections from './FigureCollections';
  * // Axis with no ticks
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
- *   options: {
- *     length: 2,
- *   },
+ *   make: 'collections.axis',
+ *   length: 2,
  * });
  *
  * @example
  * // Axis with default ticks
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
- *   options: {
- *     length: 2,
- *     ticks: true,
- *   },
+ *   make: 'collections.axis',
+ *   length: 2,
+ *   ticks: true,
  * });
  *
  * @example
  * // Axis ticks with custom step and color
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
- *   options: {
- *     length: 2,
- *     ticks: { step: 0.5, color: [0, 0, 1, 1] },
- *   },
+ *   make: 'collections.axis',
+ *   length: 2,
+ *   ticks: { step: 0.5, color: [0, 0, 1, 1] },
  * });
  *
  * @example
  * // Axis with ticks between 0.2 and 0.8 below the line
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
- *   options: {
- *     length: 2,
- *     ticks: {
- *       start: 0.2,
- *       stop: 0.8,
- *       step: 0.2,
- *       length: 0.15,
- *       offset: -0.2,
- *       dash: [0.01, 0.01]
- *     },
+ *   make: 'collections.axis',
+ *   length: 2,
+ *   ticks: {
+ *     start: 0.2,
+ *     stop: 0.8,
+ *     step: 0.2,
+ *     length: 0.15,
+ *     offset: -0.2,
+ *     dash: [0.01, 0.01]
  *   },
  * });
  *
@@ -117,11 +109,9 @@ import type FigureCollections from './FigureCollections';
  * // Axis with ticks at values
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
- *   options: {
- *     length: 2,
- *     ticks: { values: [0, 0.2, 0.8, 1] },
- *   },
+ *   make: 'collections.axis',
+ *   length: 2,
+ *   ticks: { values: [0, 0.2, 0.8, 1] },
  * });
  */
 export type OBJ_AxisTicks = {
@@ -210,25 +200,21 @@ export type OBJ_AxisTicks_Fixed = {
  * // By default labels are displayed if there are ticks
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
- *   options: {
- *     length: 2,
- *     ticks: true,
- *   },
+ *   make: 'collections.axis',
+ *   length: 2,
+ *   ticks: true,
  * });
  *
  * @example
  * // If there are multiple ticks, then just the first are used to show labels
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
- *   options: {
- *     length: 2,
- *     ticks: [
- *       { step: 0.5 },
- *       { step: 0.1, length: 0.05, offset: 0 },
- *     ],
- *   },
+ *   make: 'collections.axis',
+ *   length: 2,
+ *   ticks: [
+ *     { step: 0.5 },
+ *     { step: 0.1, length: 0.05, offset: 0 },
+ *   ],
  * });
  *
  * @example
@@ -236,20 +222,18 @@ export type OBJ_AxisTicks_Fixed = {
  * // xAlign, yAlign and offset to make it look good.
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
- *   options: {
- *     axis: 'x',
- *     length: 2,
- *     start: 10000,
- *     stop: 20000,
- *     ticks: true,
- *     labels: {
- *       precision: 0,
- *       rotation: Math.PI / 4,
- *       yAlign: 'middle',
- *       xAlign: 'right',
- *       space: 0.05,
- *     },
+ *   make: 'collections.axis',
+ *   axis: 'x',
+ *   length: 2,
+ *   start: 10000,
+ *   stop: 20000,
+ *   ticks: true,
+ *   labels: {
+ *     precision: 0,
+ *     rotation: Math.PI / 4,
+ *     yAlign: 'middle',
+ *     xAlign: 'right',
+ *     space: 0.05,
  *   },
  * });
  *
@@ -257,26 +241,22 @@ export type OBJ_AxisTicks_Fixed = {
  * // Specific labels can be hidden
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
- *   options: {
- *     length: 2,
- *     ticks: true,
- *     labels: { hide: 0 },
- *   },
+ *   make: 'collections.axis',
+ *   length: 2,
+ *   ticks: true,
+ *   labels: { hide: 0 },
  * });
  *
  * @example
  * // Labels can be at specific values, and have a specific font
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
- *   options: {
- *     length: 2,
- *     ticks: true,
- *     labels: {
- *       values: [0, 0.6],
- *       font: { color: [0, 0, 1, 1], size: 0.15 },
- *     },
+ *   make: 'collections.axis',
+ *   length: 2,
+ *   ticks: true,
+ *   labels: {
+ *     values: [0, 0.6],
+ *     font: { color: [0, 0, 1, 1], size: 0.15 },
  *   },
  * });
  *
@@ -285,15 +265,13 @@ export type OBJ_AxisTicks_Fixed = {
  * // then they will be drawn in the same format as the actual values.
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
- *   options: {
- *     length: 2,
- *     ticks: true,
- *     labels: {
- *       values: null,
- *       text: ['0', null, 'AB', '0.6', 0.8, null],
- *       format: 'exp',
- *     },
+ *   make: 'collections.axis',
+ *   length: 2,
+ *   ticks: true,
+ *   labels: {
+ *     values: null,
+ *     text: ['0', null, 'AB', '0.6', 0.8, null],
+ *     format: 'exp',
  *   },
  * });
  */
@@ -432,10 +410,8 @@ export type COL_Axis = {
  * // By default an axis is an 'x' axis
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
- *   options: {
- *     ticks: true,
- *   },
+ *   make: 'collections.axis',
+ *   ticks: true,
  * });
  * ```
  * ![](./apiassets/advaxis_ex1.png)
@@ -460,14 +436,12 @@ export type COL_Axis = {
  * // An axis can have multiple sets of ticks and a title
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
- *   options: {
- *     ticks: [
- *       { step: 0.2, length: 0.1 },
- *       { step: 0.05, length: 0.05, offset: 0 },
- *     ],
- *     title: 'time (s)',
- *   },
+ *   make: 'collections.axis',
+ *   ticks: [
+ *     { step: 0.2, length: 0.1 },
+ *     { step: 0.05, length: 0.05, offset: 0 },
+ *   ],
+ *   title: 'time (s)',
  * });
  * ```
  * ![](./apiassets/advaxis_ex3.png)
@@ -478,27 +452,25 @@ export type COL_Axis = {
  * // and have arrows
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
- *   options: {
- *     length: 2.5,
- *     start: -130,
- *     stop: 130,
- *     line: {
- *       dash: [0.01, 0.01],
- *       arrow: 'barb',
- *     },
- *     ticks: {
- *       start: -100,
- *       stop: 100,
- *       step: 25,
- *       dash: [0.01, 0.01],
- *     },
- *     labels: { precision: 0 },
- *     title: {
- *       font: { style: 'italic' },
- *       text: 'x',
- *       position: [2.65, 0.03],
- *     },
+ *   make: 'collections.axis',
+ *   length: 2.5,
+ *   start: -130,
+ *   stop: 130,
+ *   line: {
+ *     dash: [0.01, 0.01],
+ *     arrow: 'barb',
+ *   },
+ *   ticks: {
+ *     start: -100,
+ *     stop: 100,
+ *     step: 25,
+ *     dash: [0.01, 0.01],
+ *   },
+ *   labels: { precision: 0 },
+ *   title: {
+ *     font: { style: 'italic' },
+ *     text: 'x',
+ *     position: [2.65, 0.03],
  *   },
  * });
  * ```
@@ -510,25 +482,23 @@ export type COL_Axis = {
  * // formatting
  * figure.add({
  *   name: 'x',
- *   method: 'collections.axis',
- *   options: {
- *     stop: 2,
- *     ticks: { step: 0.5 },
- *     grid: [
- *       { step: 0.5, length: 1, color: [0.5, 0.5, 0.5, 1] },
- *       { step: 0.1, length: 1, dash: [0.01, 0.01], color: [0.7, 0.7, 0.7, 1] },
+ *   make: 'collections.axis',
+ *   stop: 2,
+ *   ticks: { step: 0.5 },
+ *   grid: [
+ *     { step: 0.5, length: 1, color: [0.5, 0.5, 0.5, 1] },
+ *     { step: 0.1, length: 1, dash: [0.01, 0.01], color: [0.7, 0.7, 0.7, 1] },
+ *   ],
+ *   title: {
+ *     font: { color: [0.4, 0.4, 0.4, 1] },
+ *     text: [
+ *       'Total Time',
+ *       {
+ *         text: 'in seconds',
+ *         font: { size: 0.1 },
+ *         lineSpace: 0.12,
+ *       },
  *     ],
- *     title: {
- *       font: { color: [0.4, 0.4, 0.4, 1] },
- *       text: [
- *         'Total Time',
- *         {
- *           text: 'in seconds',
- *           font: { size: 0.1 },
- *           lineSpace: 0.12,
- *         },
- *       ],
- *     },
  *   },
  * });
  * ```

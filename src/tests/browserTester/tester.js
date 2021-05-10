@@ -85,6 +85,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
     file = htmlFile;
   }
   lastTime = -1;
+  // eslint-disable-next-line jest/valid-title
   describe(__title, () => {
     beforeAll(async () => {
       await page.setViewportSize({ width: __width || 500, height: __height || 375 });
@@ -128,6 +129,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
         // await sleep(50);
         if (time !== lastTime) {
           const image = await page.screenshot();
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(image).toMatchImageSnapshot({
             customSnapshotIdentifier: `${zeroPad(Math.round(time * 1000), 5)}-${description}`,
             failureThreshold: threshold,

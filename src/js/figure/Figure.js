@@ -186,7 +186,7 @@ export type OBJ_Figure = {
  * <body>
  *     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
  *     </div>
- *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.7.4/figureone.min.js'></script>
+ *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.8.0/figureone.min.js'></script>
  *     <script type="text/javascript" src='./index.js'></script>
  * </body>
  * </html>
@@ -196,11 +196,9 @@ export type OBJ_Figure = {
  * figure.add(
  *   {
  *     name: 'p',
- *     method: 'polygon',
- *     options: {
- *       radius: 0.5,
- *       sides: 6,
- *     },
+ *     make: 'polygon',
+ *     radius: 0.5,
+ *     sides: 6,
  *   },
  * );
  *
@@ -542,11 +540,11 @@ class Figure {
    * @return {CollectionsSlideNavigator}
    */
   addSlideNavigator(options: COL_SlideNavigator) {
-    const [nav] = this.add(joinObjects(
+    const nav = this.add(joinObjects(
       {},
       {
         name: '_nav_',
-        method: 'collections.slideNavigator',
+        make: 'collections.slideNavigator',
       },
       { options },
     ));
@@ -570,11 +568,11 @@ class Figure {
    * @return {FigureElement} cursor element
    */
   addCursor(options: Object) {
-    const [cursor] = this.add(joinObjects(
+    const cursor = this.add(joinObjects(
       {},
       {
         name: '_cursor_',
-        method: 'collections.cursor',
+        make: 'collections.cursor',
         mods: { isShown: false },
       },
       { options },
@@ -963,11 +961,16 @@ class Figure {
   /**
    * Add a figure element to the root collection of the figure.
    *
+   * If adding an array of elements, then the added elements will be returned
+   * in an array (even if only one element is added). If not adding an array,
+   * then that single element will be returned.
+   *
    * @param {string | FigureElement | OBJ_AddElement | Array<FigureElement | OBJ_AddElement>} nameOrElementOrElementDefinition
     reference name of element
    * @param {FigureElement} elementToAdd element to add
    *
-   * @return {Array<FigureElement>} Array of added elements
+   * @return {Array<FigureElement> | FigureElement} added element, or array of
+   * added elements
    *
    * @example
    * // Add name and element
@@ -983,8 +986,8 @@ class Figure {
    * // Element definition (if no name is provided, then name will
    * // be auto generated)
    * figure.add({
-   *   method: 'polygon',
-   *   options: { radius: 1 },
+   *   make: 'polygon',
+   *   radius: 1,
    * });
    *
    * @example
@@ -993,8 +996,9 @@ class Figure {
    * figure.add([
    *   element,
    *   {
-   *     method: 'polygon',
-   *     options: { radius: 0.2, color: [0, 0, 1, 1] },
+   *     make: 'polygon',
+   *     radius: 0.2,
+   *     color: [0, 0, 1, 1],
    *   },
    * ]);
    */
@@ -1027,24 +1031,20 @@ class Figure {
    * figure.add(
    *   {
    *     name: 'c',
-   *     method: 'collection',
+   *     make: 'collection',
    *     elements: [
    *       {
    *         name: 'tri',
-   *         method: 'triangle',
-   *         options: {
-   *           height: 0.4,
-   *           width: 0.4,
-   *         },
+   *         make: 'triangle',
+   *         height: 0.4,
+   *         width: 0.4,
    *       },
    *       {
    *         name: 'text',
-   *         method: 'text',
-   *         options: {
-   *           text: 'triangle',
-   *           position: [0, -0.4],
-   *           xAlign: 'center',
-   *         },
+   *         make: 'text',
+   *         text: 'triangle',
+   *         position: [0, -0.4],
+   *         xAlign: 'center',
    *       },
    *     ],
    *   },
@@ -1086,6 +1086,9 @@ class Figure {
    * [getElement](#figureelementcollectiongetelement) results
    */
   get(children: TypeElementPath) {
+    if (typeof children === 'string') {
+      return this.getElement(children);
+    }
     return this.getElements(children);
   }
 

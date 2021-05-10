@@ -16,7 +16,7 @@ The examples are also hosted on this repository's GitHub Pages site [here](https
 Load the FigureOne library into your HTML file:
 
 ```html
-<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.7.4/figureone.min.js'></script>
+<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.8.0/figureone.min.js'></script>
 ```
 
 Create a `div` element to attach the figure to:
@@ -30,21 +30,18 @@ Then in javascript, create a figure and a shape within it:
 const figure = new Fig.Figure();
 
 // Create the shape
-const [tri] = figure.add(
-  {
-    method: 'triangle',
-    options: {
-      color: [1, 0, 0, 1],
-    },
-  },
-);
+const tri = figure.add({
+  element: 'triangle',
+  color: [1, 0, 0, 1],
+});
 
 // Animate the shape
 tri.animations.new()
-  .position({ target: [0.5, 0], duration: 1 })
-  .rotation({ target: Math.PI, duration: 2 })
-  .position({ target: [0, 0], duration: 1 })
+  .position(0.5, 0)
+  .rotation(Math.PI)
+  .position(0, 0)
   .start();
+
 ```
 
 And you will see:

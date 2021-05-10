@@ -57,7 +57,7 @@ describe('Generic', () => {
     addElement = (optionsName) => {
       figure.add(joinObjects({
         name: 'g',
-        method: 'generic',
+        make: 'generic',
       }, options[optionsName]));
       figure.initialize();
       g = figure.elements._g;

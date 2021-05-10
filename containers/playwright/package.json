@@ -8,7 +8,8 @@
   },
   "scripts": {
     "jest": "jest --runInBand",
-    "http-server": "node_modules/http-server/bin/http-server --cors='*' &"
+    "http-server": "node_modules/http-server/bin/http-server --cors='*' &",
+    "http-server-quiet": "node_modules/http-server/bin/http-server --cors='*' -s &"
   },
   "keywords": [],
   "author": "",

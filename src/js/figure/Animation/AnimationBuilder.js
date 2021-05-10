@@ -2,6 +2,7 @@
 // import * as tools from '../../tools/math';
 // eslint-disable-next-line import/no-cycle
 import { FigureElement } from '../Element';
+import type { OBJ_Scenario } from '../Element';
 import type { OBJ_SerialAnimationStep } from './AnimationStep/SerialAnimationStep';
 import type {
   OBJ_PositionAnimationStep, OBJ_ParallelAnimationStep,
@@ -12,10 +13,13 @@ import type {
   OBJ_PulseAnimationStep, OBJ_OpacityAnimationStep,
   OBJ_PulseTransformAnimationStep,
   AnimationStep, OBJ_ScenarioAnimationStep, OBJ_ElementAnimationStep,
+  OBJ_ScenariosAnimationStep,
 } from './Animation';
+import type { TypeParsablePoint, TypeParsableTransform } from '../../tools/g2';
 // eslint-disable-next-line import/no-cycle
 import * as animation from './Animation';
 import { joinObjects, duplicateFromTo } from '../../tools/tools';
+import type { TypeColor } from '../../tools/types';
 
 /**
  * Animation builder options object
@@ -102,65 +106,83 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
 
   /**
    * Add a custom animation step that uses this element by default
-   * @param {OBJ_CustomAnimationStep} options
+   * @param {string | ((number) => void) | OBJ_CustomAnimationStep} callbackOrOptions
    * @return {AnimationBuilder}
    */
-  custom(...optionsIn: Array<OBJ_CustomAnimationStep>) {
-    if (this.element != null) {
-      const defaultOptions = { element: this.element, timeKeeper: this.timeKeeper };
-      const options = joinObjects({}, defaultOptions, ...optionsIn);
-      this.then(new animation.CustomAnimationStep(options));
-      // this.addStep(options, 'CustomAnimationStep', true);
+  custom(
+    callbackOrOptions: string | ((number) => void) | OBJ_CustomAnimationStep,
+  ) {
+    let optionsIn;
+    if (typeof callbackOrOptions === 'string' || typeof callbackOrOptions === 'function') {
+      optionsIn = { callback: callbackOrOptions };
     } else {
-      this.then(new animation.CustomAnimationStep(...optionsIn));
+      optionsIn = callbackOrOptions;
     }
+    const optionsToUse = joinObjects(
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, optionsIn,
+    );
+    this.then(new animation.CustomAnimationStep(optionsToUse));
     return this;
   }
 
   /**
    * Add a rotation animation step that uses this element by default
-   * @param {OBJ_RotationAnimationStep} options
+   * @param {OBJ_RotationAnimationStep | number} targetOrOptions
    * @return {AnimationBuilder}
    */
-  rotation(...options: Array<OBJ_RotationAnimationStep>) {
-    return this.addStep('rotation', ...options);
+  rotation(targetOrOptions: OBJ_RotationAnimationStep | number) {
+    return this.addStep('rotation', targetOrOptions);
   }
 
 
   /**
    * Add a position animation step that uses this element by default
-   * @param {OBJ_PositionAnimationStep} options
+   * @param {TypeParsablePoint | OBJ_PositionAnimationStep | number} targetOrOptionsOrX
+   * @param {number} y define if `targetOrOptionsOrX` is x (number)
    * @return {AnimationBuilder}
    */
-  position(...options: Array<OBJ_PositionAnimationStep>) {
-    return this.addStep('position', ...options);
+  position(
+    targetOrOptionsOrX: TypeParsablePoint | OBJ_PositionAnimationStep | number,
+    y: number = 0,
+  ) {
+    return this.addStep('position', targetOrOptionsOrX, y);
   }
 
   /**
    * Add a translation animation step that uses this element by default
-   * @param {OBJ_PositionAnimationStep} options
+   * @param {TypeParsablePoint | OBJ_PositionAnimationStep | number} targetOrOptionsOrX
+   * @param {number} y define if `targetOrOptionsOrX` is x (number)
    * @return {AnimationBuilder}
    */
-  translation(...options: Array<OBJ_PositionAnimationStep>) {
-    return this.position(...options);
+  translation(
+    targetOrOptionsOrX: TypeParsablePoint | OBJ_PositionAnimationStep | number,
+    y: number = 0,
+  ) {
+    return this.position(targetOrOptionsOrX, y);
   }
 
   /**
    * Add a scale animation step that uses this element by default
-   * @param {OBJ_ScaleAnimationStep} options
+   * @param {TypeParsablePoint | OBJ_ScaleAnimationStep | number} targetOrOptionsOrX
+   * when a number is used, it will apply to both x and y if y is null
+   * @param {number | null} y use a number to define the y scale, or use null
+   * to use the `x` value (`null`)
    * @return {AnimationBuilder}
    */
-  scale(...options: Array<OBJ_ScaleAnimationStep>) {
-    return this.addStep('scale', ...options);
+  scale(
+    targetOrOptionsOrX: TypeParsablePoint | OBJ_ScaleAnimationStep | number,
+    y: null | number = null,
+  ) {
+    return this.addStep('scale', targetOrOptionsOrX, y);
   }
 
   /**
    * Add a transform animation step that uses this element by default
-   * @param {OBJ_ScaleAnimaOBJ_TransformAnimationStepionStep} options
+   * @param {OBJ_TransformAnimationStep | TypeParsableTransform} transformOrOptions
    * @return {AnimationBuilder}
    */
-  transform(...options: Array<OBJ_TransformAnimationStep>) {
-    return this.addStep('transform', ...options);
+  transform(transformOrOptions: OBJ_TransformAnimationStep | TypeParsableTransform) {
+    return this.addStep('transform', transformOrOptions);
   }
 
   pulseTransforms(...options: Array<OBJ_PulseTransformAnimationStep>) {
@@ -169,47 +191,40 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
 
   /**
    * Add a scenario animation step that uses this element by default
-   * @param {OBJ_ScenarioAnimationStep} options
+   * @param {OBJ_ScenarioAnimationStep | OBJ_Scenario | string} scenarioOrOptions
    * @return {AnimationBuilder}
    */
   scenario(
-    ...options: Array<OBJ_ScenarioAnimationStep & { scenario: string }>
+    scenarioOrOptions: string | OBJ_Scenario | OBJ_ScenarioAnimationStep,
   ) {
-    return this.addStep('scenario', ...options);
+    return this.addStep('scenario', scenarioOrOptions);
   }
 
   /**
    * Add a scenarios animation step that uses this element by default
-   * @param {OBJ_ScenariosAnimationStep} options
+   * @param {string | OBJ_ScenariosAnimationStep} scenarioNameOrOptions
    * @return {AnimationBuilder}
    */
-  scenarios(    // eslint-disable-next-line max-len
-    ...options: Array<OBJ_TransformAnimationStep & OBJ_ParallelAnimationStep>
-  ) {
-    if (this.element != null) {
-      const defaultOptions = { element: this.element, timeKeeper: this.timeKeeper };
-      const optionsToUse = joinObjects({}, defaultOptions, ...options);
-      this.then(optionsToUse.element.animations.scenarios(optionsToUse));
-    }
-    return this;
+  scenarios(scenarioOrOptions: string | OBJ_ScenariosAnimationStep) {
+    return this.addStep('scenarios', scenarioOrOptions);
   }
 
   /**
    * Add a color animation step that uses this element by default
-   * @param {OBJ_ColorAnimationStep} options
+   * @param {OBJ_ColorAnimationStep | TypeColor} colorOrOptions
    * @return {AnimationBuilder}
    */
-  color(...options: Array<OBJ_ColorAnimationStep>) {
-    return this.addStep('color', ...options);
+  color(colorOrOptions: OBJ_ColorAnimationStep | TypeColor) {
+    return this.addStep('color', colorOrOptions);
   }
 
   /**
    * Add an opacity animation step that uses this element by default
-   * @param {OBJ_OpacityAnimationStep} options
+   * @param {OBJ_OpacityAnimationStep | number} opacityOrOptions
    * @return {AnimationBuilder}
    */
-  opacity(...options: Array<OBJ_OpacityAnimationStep>) {
-    return this.addStep('opacity', ...options);
+  opacity(opacityOrOptions: OBJ_OpacityAnimationStep | number) {
+    return this.addStep('opacity', opacityOrOptions);
   }
 
   /**
@@ -235,9 +250,9 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   }
 
   /* eslint-disable no-param-reassign */
-  addStep(animName: string, options: Object) {
+  addStep(animName: string, ...params: Array<any>) {
     if (this.element != null) { // $FlowFixMe
-      this.then(this.element.animations[animName](options));
+      this.then(this.element.animations[animName](...params));
     }
     return this;
   }
@@ -246,19 +261,18 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
 
   /**
    * Add an dim animation step that uses this element by default
-   * @param {OBJ_ElementAnimationStep} durationOrOptions
+   * @param {OBJ_ElementAnimationStep | number} durationOrOptions
    * @return {AnimationBuilder}
    */
   dim(
     durationOrOptions: number | OBJ_ElementAnimationStep = {},
-    // ...args: Array<OBJ_ElementAnimationStep>
   ) {
     return this.addStep('dim', durationOrOptions);
   }
 
   /**
    * Add an undim animation step that uses this element by default
-   * @param {OBJ_ElementAnimationStep} durationOrOptions
+   * @param {OBJ_ElementAnimationStep | number} durationOrOptions
    * @return {AnimationBuilder}
    */
   undim(
@@ -270,34 +284,48 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
 
   /**
    * Add a delay animation step
-   * @param {OBJ_AnimationStep} durationOrOptions
+   * @param {OBJ_AnimationStep | number} delayOrOptions
    * @return {AnimationBuilder}
    */
   delay(
     delayOrOptions: number | OBJ_AnimationStep = {},
-    ...args: Array<OBJ_AnimationStep>
   ) {
-    this.then(animation.delay(delayOrOptions, { timeKeeper: this.timeKeeper }, ...args));
+    let optionsToUse;
+    if (typeof delayOrOptions === 'number') {
+      optionsToUse = joinObjects(
+        {}, { timeKeeper: this.timeKeeper }, { duration: delayOrOptions },
+      );
+    } else {
+      optionsToUse = joinObjects(
+        {}, { timeKeeper: this.timeKeeper }, delayOrOptions,
+      );
+    }
+    this.then(animation.delay(optionsToUse));
     return this;
   }
 
   /**
    * Add a trigger animation step
-   * @param {OBJ_TriggerAnimationStep} triggerOrOptions
+   * @param {OBJ_TriggerAnimationStep | function(): void | string} callbackOrOptions
+   * callback can be a function or an id to a function map
    * @return {AnimationBuilder}
    */
   trigger(
-    triggerOrOptions: Function | OBJ_TriggerAnimationStep = {},
-    ...args: Array<OBJ_TriggerAnimationStep>
+    callbackOrOptions: (() => void) | string | OBJ_TriggerAnimationStep,
   ) {
-    if (this.element != null) {
-      const defaultOptions = { element: this.element, timeKeeper: this.timeKeeper };
-      const optionsToUse = joinObjects({}, defaultOptions, ...args);
-      this.then(animation.trigger(triggerOrOptions, optionsToUse));
+    let optionsIn;
+    if (
+      typeof callbackOrOptions === 'function'
+      || typeof callbackOrOptions === 'string'
+    ) {
+      optionsIn = { callback: callbackOrOptions };
     } else {
-      this.then(animation.trigger(triggerOrOptions, ...args));
+      optionsIn = callbackOrOptions;
     }
-    // this.then(animation.trigger(triggerOrOptionsIn, ...optionsIn));
+    const optionsToUse = joinObjects(
+      {}, { element: this.element, timeKeeper: this.timeKeeper }, optionsIn,
+    );
+    this.then(animation.trigger(optionsToUse));
     return this;
   }
 
@@ -328,8 +356,14 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
-  pulse(...optionsIn: Array<OBJ_PulseAnimationStep>) {
-    return this.addStep('pulse', ...optionsIn);
+  /**
+   * Add a pulse animation step
+   * @param {OBJ_PulseAnimationStep | number} scaleOrOptions pulse scale
+   * (number) or pulse animation step options
+   * @return {PulseAnimationStep}
+   */
+  pulse(scaleOrOptions: OBJ_PulseAnimationStep | number) {
+    return this.addStep('pulse', scaleOrOptions);
   }
 
   reset() {

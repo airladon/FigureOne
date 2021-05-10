@@ -4,13 +4,10 @@ const figure = new Fig.Figure();
 // Add a triangle
 figure.add(
   {
-    name: 'tri',
-    method: 'triangle',
-    options: {
-      width: 1,
-      height: 1,
-      color: [1, 0, 0, 1],
-    },
+    make: 'triangle',
+    width: 1,
+    height: 1,
+    color: [1, 0, 0, 1],
   },
 );
 

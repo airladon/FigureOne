@@ -63,14 +63,12 @@ export default class ElementAnimationStep extends AnimationStep {
       element: null,
       type: 'custom',
       progression: defaultProgression,
-      duration: 0,
     };
 
     const options = joinObjects({}, defaultOptions, optionsIn);
     this.element = options.element;
     this.type = options.type;
     this.onFinish = options.onFinish;
-    this.duration = options.duration;
     this.progression = options.progression;
     if (this.progression === 'linear') {
       this.progression = 'tools.math.linear';

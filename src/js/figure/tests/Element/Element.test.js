@@ -952,14 +952,14 @@ describe('Animationa and Movement', () => {
         // });
         collection = figure.add({
           name: 'c',
-          method: 'collection',
+          make: 'collection',
           options: {
             transform: cTransform,
           },
           elements: [
             {
               name: 'square',
-              method: 'polygon',
+              make: 'polygon',
               options: {
                 radius: Math.sqrt(2) * 0.1,
                 line: { width: 0.01 },
@@ -970,7 +970,8 @@ describe('Animationa and Movement', () => {
             },
           ],
         });
-        collection = figure.elements._c;
+        // console.log(collection === figure.elements._c)
+        // collection = figure.elements._c;
         figure.initialize();
         figure.setFirstTransform();
       };
@@ -1036,14 +1037,14 @@ describe('Animationa and Movement', () => {
     test('two squares', () => {
       figure.add({
         name: 'coll',
-        method: 'collection',
+        make: 'collection',
         options: {
           transform: new Transform().scale(2, 2).rotate(0).translate(0.5, 0.5),
         },
         elements: [
           {
             name: 'square1',
-            method: 'polygon',
+            make: 'polygon',
             options: {
               radius: Math.sqrt(2) * 0.1,
               line: { width: 0.01 },
@@ -1054,7 +1055,7 @@ describe('Animationa and Movement', () => {
           },
           {
             name: 'square2',
-            method: 'polygon',
+            make: 'polygon',
             options: {
               radius: Math.sqrt(2) * 0.1,
               line: { width: 0.01 },

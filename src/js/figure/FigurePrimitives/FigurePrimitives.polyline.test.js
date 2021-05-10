@@ -18,7 +18,7 @@ describe('Polyline', () => {
     addElement = (optionsName) => {
       figure.add(joinObjects({
         name: 'p',
-        method: 'shapes.polyline',
+        make: 'shapes.polyline',
       }, options[optionsName]));
       figure.initialize();
       p = figure.elements._p;

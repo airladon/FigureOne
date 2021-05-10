@@ -52,34 +52,30 @@ export type TypeArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'p
  * // Line with triangle arrows on both ends
  * figure.add({
  *   name: 'a',
- *   method: 'polyline',
- *   options: {
- *     points: [[0, 0], [1, 0]],
- *     width: 0.02,
- *     arrow: 'triangle',
- *   },
+ *   make: 'polyline',
+ *   points: [[0, 0], [1, 0]],
+ *   width: 0.02,
+ *   arrow: 'triangle',
  * });
  *
  * @example
  * // Line with customized barb arrow at end only
  * figure.add({
  *   name: 'a',
- *   method: 'shapes.line',
- *   options: {
- *     p1: [0, 0],
- *     p2: [0, 1],
- *     width: 0.02,
- *     arrow: {
- *       end: {
- *         head: 'barb',
- *         width: 0.15,
- *         length: 0.25,
- *         barb: 0.05,
- *         scale: 2
- *       },
+ *   make: 'shapes.line',
+ *   p1: [0, 0],
+ *   p2: [0, 1],
+ *   width: 0.02,
+ *   arrow: {
+ *     end: {
+ *       head: 'barb',
+ *       width: 0.15,
+ *       length: 0.25,
+ *       barb: 0.05,
+ *       scale: 2
  *     },
- *     dash: [0.02, 0.02],
  *   },
+ *   dash: [0.02, 0.02],
  * });
  *
  * @example
@@ -88,32 +84,26 @@ export type TypeArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'p
  * figure.add([
  *   {
  *     name: 'reference',
- *     method: 'polyline',
- *     options: {
- *       points: [[0, 0.3], [0.5, 0.3]],
- *     },
+ *     make: 'polyline',
+ *     points: [[0, 0.3], [0.5, 0.3]],
  *   },
  *   {
  *     name: 'start',
- *     method: 'polyline',
- *     options: {
- *       points: [[0, 0], [0.5, 0]],
- *       arrow: {
- *         head: 'circle',
- *         radius: 0.1,
- *       },
+ *     make: 'polyline',
+ *     points: [[0, 0], [0.5, 0]],
+ *     arrow: {
+ *       head: 'circle',
+ *       radius: 0.1,
  *     },
  *   },
  *   {
  *     name: 'mid',
- *     method: 'polyline',
- *     options: {
- *       points: [[0, -0.3], [0.5, -0.3]],
- *       arrow: {
- *         head: 'circle',
- *         radius: 0.1,
- *         align: 'mid',     // circle mid point is at line end
- *       },
+ *     make: 'polyline',
+ *     points: [[0, -0.3], [0.5, -0.3]],
+ *     arrow: {
+ *       head: 'circle',
+ *       radius: 0.1,
+ *       align: 'mid',     // circle mid point is at line end
  *     },
  *   },
  * ]);
@@ -1602,7 +1592,7 @@ export {
 //   index += 1;
 //   return {
 //     name,
-//     method: 'shapes.arrow',
+//     make: 'shapes.arrow',
 //     options: {
 //       head,
 //       length,

@@ -37,7 +37,7 @@ const brac = (left, content, right, outsideSpace = 0.025) => ({
 
 const makeEqn = (name, funcName, bottomX, color, space) => ({
   name,
-  method: 'collections.equation',
+  make: 'collections.equation',
   options: {
     elements: {
       value: '0',
@@ -72,14 +72,14 @@ const makeEqn = (name, funcName, bottomX, color, space) => ({
 
 const makeMark = (name, color = greyColor, radius = 0.02) => ({
   name,
-  method: 'primitives.polygon',
+  make: 'primitives.polygon',
   options: { radius, sides: 20, color },
 });
 
 figure.add([
   {
     name: 'diagram',
-    method: 'collection',
+    make: 'collection',
     mods: {
       scenarios: {
         default: { position: [-1.3, -0.8], scale: 1 },
@@ -89,7 +89,7 @@ figure.add([
     elements: [
       {
         name: 'plot',
-        method: 'collections.plot',
+        make: 'collections.plot',
         options: {
           width: plotWidth,
           height: plotHeight,
@@ -153,7 +153,7 @@ figure.add([
       },
       {
         name: 'movePad',
-        method: 'primitives.rectangle',
+        make: 'primitives.rectangle',
         options: {
           width: 2,
           height: plotHeight + 0.2,
@@ -175,7 +175,7 @@ figure.add([
       },
       {
         name: 'distance',
-        method: 'collections.line',
+        make: 'collections.line',
         options: {
           width: 0.006,
           dash: [0.01, 0.005],
@@ -190,7 +190,7 @@ figure.add([
       makeMark('markG', primaryCol),
       {
         name: 'marks',
-        method: 'collection',
+        make: 'collection',
         elements: [
           makeMark('markG1', primaryCol),
           makeMark('markG2', primaryCol),
@@ -210,7 +210,7 @@ figure.add([
       },
       {
         name: 'gLine',
-        method: 'collections.line',
+        make: 'collections.line',
         options: {
           width: 0.006,
           dash: [0.02, 0.005],
@@ -220,7 +220,7 @@ figure.add([
       },
       {
         name: 'fLine',
-        method: 'collections.line',
+        make: 'collections.line',
         options: {
           width: 0.006,
           dash: [0.02, 0.005],
@@ -240,7 +240,7 @@ figure.add([
   },
   {
     name: 'title',
-    method: 'primitives.text',
+    make: 'primitives.text',
     options: {
       text: 'Equation Shifting',
       xAlign: 'center',
@@ -250,7 +250,7 @@ figure.add([
   },
   {
     name: 'highlighter',
-    method: 'collections.rectangle',
+    make: 'collections.rectangle',
     options: {
       line: { width: 0.005 },
       color: greyColor,
@@ -258,7 +258,7 @@ figure.add([
   },
   {
     name: 'eqn',
-    method: 'collections.equation',
+    make: 'collections.equation',
     options: {
       elements: {
         value2: '0.0',
@@ -319,7 +319,7 @@ figure.add([
   },
   {
     name: 'nav',
-    method: 'collections.slideNavigator',
+    make: 'collections.slideNavigator',
     options: {
       prevButton: { position: [-1.7, -1.3] },
       nextButton: { position: [1.7, -1.3] },

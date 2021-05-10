@@ -16,19 +16,19 @@ describe('Move Freely', () => {
     figure.add([
       {
         name: 'primitive',
-        method: 'polygon',
+        make: 'polygon',
       },
       {
         name: 'polyline',
-        method: 'opolyline',
+        make: 'opolyline',
       },
       {
         name: 'line',
-        method: 'oline',
+        make: 'oline',
       },
       {
         name: 'angle',
-        method: 'angle',
+        make: 'angle',
       },
     ]);
     figure.initialize();

@@ -350,6 +350,7 @@ class UniqueIdGenerator {
     // If it doesn't, then setup some default values.
     if (singleton) {
       if (!UniqueIdGenerator.instance) {
+        UniqueIdGenerator.instance = this;
         this.initialize();
       }
       return UniqueIdGenerator.instance;
@@ -1228,17 +1229,13 @@ class Notification {
  * const [ball1, ball2] = figure.add([
  *   {
  *     name: 'ball1',
- *     method: 'primitives.polygon',
- *     options: {
- *       sides: 100, radius: 0.5, color: [1, 0, 0, 1],
- *     },
+ *     make: 'primitives.polygon',
+ *     sides: 100, radius: 0.5, color: [1, 0, 0, 1],
  *   },
  *   {
  *     name: 'ball2',
- *     method: 'primitives.polygon',
- *     options: {
- *       sides: 100, radius: 0.3, color: [0, 0, 1, 1],
- *     },
+ *     make: 'primitives.polygon',
+ *     sides: 100, radius: 0.3, color: [0, 0, 1, 1],
  *   },
  * ]);
  *

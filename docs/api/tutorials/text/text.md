@@ -13,7 +13,7 @@ All examples are snippets which can be appended to the end of the `index.js` fil
 <body>
     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
     </div>
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.7.4/figureone.min.js'></script>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.8.0/figureone.min.js'></script>
     <script type="text/javascript" src='./index.js'></script>
 </body>
 </html>
@@ -26,35 +26,29 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 figure.add([
   {
     name: 'origin',
-    method: 'polygon',
-    options: {
-      radius: 0.01,
-      line: { width: 0.01 },
-      sides: 10,
-      color: [0.7, 0.7, 0.7, 1]
-    },
+    make: 'polygon',
+    radius: 0.01,
+    line: { width: 0.01 },
+    sides: 10,
+    color: [0.7, 0.7, 0.7, 1]
   },
   {
     name: 'gridMinor',
-    method: 'grid',
-    options: {
-      bounds: [-3, -3, 6, 6],
-      yStep: 0.1,
-      xStep: 0.1,
-      color: [0.7, 0.7, 0.7, 1],
-      line: { width: 0.001 },
-    },
+    make: 'grid',
+    bounds: [-3, -3, 6, 6],
+    yStep: 0.1,
+    xStep: 0.1,
+    color: [0.7, 0.7, 0.7, 1],
+    line: { width: 0.001 },
   },
   {
     name: 'gridMajor',
-    method: 'grid',
-    options: {
-      bounds: [-3, -3, 6, 6],
-      yStep: 0.5,
-      xStep: 0.5,
-      color: [0.8, 0.8, 0.8, 1],
-      line: { width: 0.004 }
-    },
+    make: 'grid',
+    bounds: [-3, -3, 6, 6],
+    yStep: 0.5,
+    xStep: 0.5,
+    color: [0.8, 0.8, 0.8, 1],
+    line: { width: 0.004 },
   },
 ]);
 ```
@@ -69,12 +63,10 @@ Let's start by creating a {@link FigureElementPrimitive} element that writes 'he
 figure.add(
   {
     name: 'simpleText',
-    method: 'text',
-    options: {
-      text: 'hello world',
-      xAlign: 'center',
-      yAlign: 'middle',
-    },
+    make: 'text',
+    text: 'hello world',
+    xAlign: 'center',
+    yAlign: 'middle',
   },
 );
 ```
@@ -87,21 +79,17 @@ As this is a {@link FigureElementPrimitive}, transforms can be applied to it, an
 figure.add(
   {
     name: 'spinner',
-    method: 'text',
-    options: {
-      text: 'hello world',
-      xAlign: 'center',
-      yAlign: 'middle',
-      touchBorder: 0.5,   // add a touch buffer of 0.5 around the text
-    },
+    make: 'text',
+    text: 'hello world',
+    xAlign: 'center',
+    yAlign: 'middle',
+    touchBorder: 0.5,   // add a touch buffer of 0.5 around the text
     mods: {
-      isTouchable: true,
       isMovable: true,
       move: { type: 'rotation' },
-    }
+    },
   },
 );
-figure.setTouchable();
 ```
 
 The same `text` method can be used to create text at different locations.
@@ -112,29 +100,27 @@ The same `text` method can be used to create text at different locations.
 figure.add(
   {
     name: 'compass',
-    method: 'text',
-    options: {
-      text: [
-        {
-          text: 'North',
-          location: [0, 0.5],
-        },
-        {
-          text: 'East',
-          location: [0.5, 0],
-        },
-        {
-          text: 'South',
-          location: [0, -0.5],
-        },
-        {
-          text: 'West',
-          location: [-0.5, 0],
-        },
-      ],
-      xAlign: 'center',
-      yAlign: 'middle',
-    },
+    make: 'text',
+    text: [
+      {
+        text: 'North',
+        location: [0, 0.5],
+      },
+      {
+        text: 'East',
+        location: [0.5, 0],
+      },
+      {
+        text: 'South',
+        location: [0, -0.5],
+      },
+      {
+        text: 'West',
+        location: [-0.5, 0],
+      },
+    ],
+    xAlign: 'center',
+    yAlign: 'middle',
   },
 );
 ```
@@ -155,19 +141,17 @@ Alternately, `text.line` can be used as it will automatically layout the text el
 figure.add(
   {
     name: 'formattedLine',
-    method: 'text.line',
-    options: {
-      line: [
-        'hello ',
-        {
-          text: 'world',
-          font: { color: [0, 0, 1, 1], style: 'italic' },
-        },
-        ' it is great to meet you',
-      ],
-      xAlign: 'center',
-      yAlign: 'middle',
-    },
+    make: 'text.line',
+    text: [
+      'hello ',
+      {
+        text: 'world',
+        font: { color: [0, 0, 1, 1], style: 'italic' },
+      },
+      ' it is great to meet you',
+    ],
+    xAlign: 'center',
+    yAlign: 'middle',
   },
 );
 ```
@@ -189,22 +173,19 @@ The same example above can be done with `text.lines`:
 figure.add(
   {
     name: 'formattedLine',
-    method: 'text.lines',
-    options: {
-      lines: [
-        'hello |world| it is great to see you',
-      ],
-      modifiers: {
-        world: {
-          font: { color: [0, 0, 1, 1], style: 'italic' },
-        }
-      },
-      xAlign: 'center',
-      yAlign: 'middle',
+    make: 'text.lines',
+    text: [
+      'hello |world| it is great to see you',
+    ],
+    modifiers: {
+      world: {
+        font: { color: [0, 0, 1, 1], style: 'italic' },
+      }
     },
+    xAlign: 'center',
+    yAlign: 'middle',
   },
 );
-figure.setTouchable();
 ```
 
 `text.lines` also allows for multiple lines of text to be laid out and justified.
@@ -215,28 +196,26 @@ figure.setTouchable();
 figure.add(
   {
     name: 't',
-    method: 'text.lines',
-    options: {
-      lines: [
-        'This is the |first| line',
-        'This is the |second| line - and it is long',
-        'This is the |third| line'
-      ],
-      modifiers: {
-        first: {
-          font: { color: [0, 0, 1, 1], style: 'italic' },
-        },
-        second: {
-          font: { color: [0, 0.6, 0.6, 1], style: 'italic' },
-        },
-        third: {
-          font: { color: [1, 0, 1, 1], style: 'italic' },
-        },
+    make: 'text.lines',
+    text: [
+      'This is the |first| line',
+      'This is the |second| line - and it is long',
+      'This is the |third| line'
+    ],
+    modifiers: {
+      first: {
+        font: { color: [0, 0, 1, 1], style: 'italic' },
       },
-      xAlign: 'center',
-      yAlign: 'middle',
-      justify: 'center',
+      second: {
+        font: { color: [0, 0.6, 0.6, 1], style: 'italic' },
+      },
+      third: {
+        font: { color: [1, 0, 1, 1], style: 'italic' },
+      },
     },
+    xAlign: 'center',
+    yAlign: 'middle',
+    justify: 'center',
   },
 );
 ```
