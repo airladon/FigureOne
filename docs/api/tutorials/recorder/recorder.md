@@ -4,7 +4,7 @@ The evolution of this is interactive video, enabled by the <a href="#recorder">R
 
 * record and playback events, such as function calls, mouse movements, mouse clicks and slide navigation - these can either be recorded by a user, or programmed for specific times
 * overlay an audio track on playback
-* record entire figure state at regular intervals (like 1 second) as seek frames for the video
+* record entire figure state at regular intervals (e.g. 1 second) as seek frames for the video
 * allow a user to pause video at any time and interact with the figure in its current state - on resuming playback, the figure will revert to its paused state
 
 As such, the animation in FigureOne can be overlaid with audio to create a video like experience. Except in this case, content on the screen can be just as rich and interactive as that created normally with FigureOne.
@@ -78,17 +78,17 @@ The audio track of both traditional and interactive video is similar, and has th
 
 A traditional video track needs to store information for each pixel on each frame of the video. While significant compression is achieved in modern video, video file sizes are still considerable. For 1080p video at 30 fps it may take upwards of 20MB/minute, and for 4k video upwards of 90MB/minute. Traditional video is both resolution and frame rate dependent. As such, videos are often encoded with multiple resolutions for efficient deployment to clients with different screen resolutions and bandwidth capabilities.
 
-In comparison, a FigureOne video track stores just the construction information of the figure elements on the screen, and how they are animating. This information can be stored as zipped json data, and is small. It is neither resolution nor frame rate dependant. For example, the video data of example [Trig 2 - Names](https://github.com/airladon/FigureOne/docs/examples/trig%202%20-%20-Names/index.html) is just 64kB for 4:27 minutes of video. Compared with what might be closer to 90MB for 1080p, this is a 1500x saving. In this case, the audio is the largest component of the video package at 2.1MB.
+In comparison, a FigureOne video track stores just the construction information of the figure elements on the screen, and how they are animating. This information can be stored as zipped json data, and is small. It is neither resolution nor frame rate dependant. For example, the compressed video data of example [Trig 2 - Names](https://github.com/airladon/FigureOne/docs/examples/trig%202%20-%20-Names/index.html) is just 69kB for 4:27 minutes of video. Compared with what might be closer to 90MB for 1080p, this is a 1500x saving. In this case, the audio is the largest component of the video package at 2.1MB.
 
 Thus, you might say that FigureOne video is video for the size of an audio file.
 
-A helpful analogy comparing traditional video to FigureOne interactive video is that of a bitmap image file (traditional video) to vector image file (FigureOne interactive video).
+A helpful analogy comparing traditional video to FigureOne interactive video is that of a bitmap image file (traditional video) to a vector image file (FigureOne interactive video).
 
 #### Disadvantages compared to Traditional Video
 
 ##### Creation Complexity
 
-A FigureOne interactive video is created using javascript code. Though much can be simplified down to json like objects, it is still useful to have some programming experience.
+A FigureOne interactive video is created using javascript code. Though much can be simplified down to json like objects, it is still useful to have some programming experience - especially for complex interactivity.
 
 In comparison, traditional videos can be created by a broader range of people with relatively easy to use equipment and video editing software.
 
@@ -96,7 +96,7 @@ In comparison, traditional videos can be created by a broader range of people wi
 
 The complexity of the video content (number of different colored pixels and how often they change) on a traditional video impacts the size of the video, but has less impact on the final performance of displaying the video on the client device. Most client devices have significant optization at the OS and often hardware level to make playing video fast and smooth.
 
-FigureOne interactive video is not a standard, and its performance is limited by the client device's browser performance. On each video frame, FigureOne needs to calculate the video state and render it to the screen. To achive relatively smooth video, FigureOne needs render a frame in less than 20ms.
+FigureOne interactive video is not a standard, and its performance is limited by the client's browser performance. On each video frame, FigureOne needs to calculate the video state and render it to the screen. To achive relatively smooth video, FigureOne needs render a frame in less than 15-20ms.
 
 FigureOne uses WebGL for hardware accelarated graphics performance and so complex figures with lots vertices and animations can be created to perform well (>25 fps) on low end, or old client devices. However, if a figure contains hundreds of different elements, all shown and moving at the same time, then care needs to be taken to optimize the video for performance. As the content complexity increases significantly, the creation complexity increases to keep performance acceptable.
 
