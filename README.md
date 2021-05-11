@@ -1,15 +1,27 @@
 # FigureOne
 
-Draw, animate and interact with shapes, text, plots and equations. Create interactive slide shows, and interactive videos.
+Draw, animate and interact with shapes, text, plots and equations.
 
-The library used to draw interactive slides at <a href="https://www.thisiget.com">thisiget.com</a>.
+
+This JavaScript library can be used for making *animated* and/or *interactive* content for the web including:
+* Diagrams
+* Equations
+* Plots
+* Presentations or slide shows
+* Video-like experiences
+
+> Note: for the video-like experiences, FigureOne creates a custom vector video format which is interactive, resolution independent, and a fraction of the size of an normal *audio* track. This results in very low bandwidth video. For example, 4 minutes of animated content might result in a video track 80KB in size. See below for some examples of interactive videos. More information on this can be found in the [API Reference](https://airladon.github.io/FigureOne/api/#interactive-video).
+
+FigureOne can also be used to create animations (like equation animations) that can then be screen captured and merged into a standard video file.
+
 
 See the [Tutorials](./docs/tutorials), [API Reference](https://airladon.github.io/FigureOne/api/) and [Examples](./docs/examples) and you'll be making beautiful, interactive figures in no time.
 
-The examples are also hosted on this repository's GitHub Pages site [here](https://airladon.github.io/FigureOne/).
+The examples are also hosted (and thus can be directly interacted with) on this repository's GitHub Pages site [here](https://airladon.github.io/FigureOne/).
 
 ![](docs/summary.gif)
 
+The library used to draw interactive slides at <a href="https://www.thisiget.com">thisiget.com</a>.
 
 ## Getting Started
 
@@ -48,7 +60,7 @@ And you will see:
 
 ![](./docs/example.gif)
 
-The [Tutorials](./docs/tutorials) build on this and introduce FigureOne's concepts and features in simplified examples.
+The [Tutorials](./docs/tutorials) build on this and introduce FigureOne's concepts and features in simplified examples. The [API Reference](https://airladon.github.io/FigureOne/api/) describes these concepts in more depth as well as provides detailed API documentation. Consider reviewing these first before diving into the code of the examples below.
 
 ## Examples
 

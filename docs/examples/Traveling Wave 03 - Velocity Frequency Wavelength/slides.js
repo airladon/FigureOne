@@ -125,7 +125,7 @@ function addSlides() {
     steadyState: () => {
       medium.custom.balls.dim();
       layout.reset();
-      layout.unpause();
+      // layout.unpause();
       medium.custom.recording.reset((timeStep, num) => {
         const y = Array(num);
         for (let i = 0; i < num; i += 1) {
@@ -134,9 +134,11 @@ function addSlides() {
         return y.reverse();
       });
       layout.sineWave(medium);
+      layout.time.pause();
     },
     leaveState: () => {
       layout.reset();
+      // layout.unpause();
     },
   });
 
