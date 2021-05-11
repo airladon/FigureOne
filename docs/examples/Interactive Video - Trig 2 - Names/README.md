@@ -32,7 +32,7 @@ You can then open a browser and paste `http://localhost:8080/docs/examples/Inter
 
 ### Explanation
 
-The video is not interactive, but it does highlight potential bandwidth savings. All data files (including the video track) can be compressed to 70KB for a 4:26 video. In comparison the audio track is 2.1MB. The video is resolution independant.
+The video is not interactive, but it does highlight potential bandwidth savings. All data files (including the video track) can be compressed to 69KB for a 4:26 video. In comparison the audio track is 2.1MB. The video is resolution independant.
 
 This FigureOne interactive video is an extension of [tutorial 17](../../tutorials/15%20-%20Recording%20Slides) and [tutorial 18](../../tutorials/15%20-%20Recording%20Slides) as it uses [SlideNavigator](https://airladon.github.io/FigureOne/api/#slidenavigator) to manage major state transitions in the video.
 

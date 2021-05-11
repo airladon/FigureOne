@@ -10,7 +10,7 @@ This JavaScript library can be used for making *animated* and/or *interactive* c
 * Presentations or slide shows
 * Video-like experiences
 
-> Note: for the video-like experiences, FigureOne creates a custom vector video format which is interactive, resolution independent, and a fraction of the size of an normal *audio* track. This results in very low bandwidth video. For example, 4 minutes of animated content might result in a video track 80KB in size. See below for some examples of interactive videos. More information on this, and the trade-offs with traditional video can be found in the [API Reference](https://airladon.github.io/FigureOne/api/#interactive-video).
+> Note: for the video-like experiences, FigureOne creates a custom vector video format which is interactive, resolution independent, and a fraction of the size of an normal *audio* track. This results in very low bandwidth video. For example, 4 minutes of animated content might result in a video track 70KB in size. See below for some examples of interactive videos. More information on this, and the trade-offs with traditional video can be found in the [API Reference](https://airladon.github.io/FigureOne/api/#interactive-video).
 
 FigureOne can also be used to create animations (like equation animations) that can then be screen captured and merged into a standard video file.
 
@@ -73,6 +73,8 @@ See this example hosted [here](https://airladon.github.io/FigureOne/examples/Int
 ### **[Equation Animation](./docs/examples/Equation%20Animation)**
 
 See this example hosted [here](https://airladon.github.io/FigureOne/examples/Equation%20Animation/index.html).
+
+> Note: This is an animated gif, whose encoding makes the text look less smooth than in the actual hosted example.
 
 ![](docs/examples/Equation%20Animation/example.gif)
 
