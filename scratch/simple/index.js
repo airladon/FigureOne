@@ -18,19 +18,20 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 //   fillCenter: true,
 // });
 
-// Arc line
-figure.add({
-  make: 'arc',
-  angle: Math.PI / 3,
-  radius: 1,
-  line: { width: 0.05, widthIs: 'inside' },
-});
-
-// // Arc dashed line
+// // Arc line
 // figure.add({
 //   make: 'arc',
-//   angle: Math.PI * 3 / 2,
+//   angle: Math.PI / 3,
 //   radius: 1,
-//   sides: 100,
-//   line: { width: 0.05, dash: [0.3, 0.1, 0.1, 0.1] },
+//   line: { width: 0.05, widthIs: 'inside' },
 // });
+
+// Arc dashed line
+figure.add({
+  make: 'arc',
+  angle: Math.PI * 3 / 2,
+  radius: 1,
+  sides: 100,
+  line: { width: 0.05, dash: [0.3, 0.1, 0.1, 0.1] },
+  direction: -1,
+});

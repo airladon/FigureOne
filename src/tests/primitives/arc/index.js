@@ -102,6 +102,7 @@ const arcs = [
   makeArc('fillCenter', { fillCenter: true }),
   makeArc('offset', { offset: [0.1, 0.1] }),
   makeArc('border', { drawBorderBuffer: 0.05 }),
+  makeArc('direction', { direction: -1 }),
 
   makeArc('line 1_3pi', { angle: Math.PI / 3 }, {}),
   makeArc('line 4_3pi', { angle: Math.PI / 3 * 4 }, {}),
@@ -109,6 +110,7 @@ const arcs = [
   makeArc('line sides', { angle: Math.PI / 3 * 4, sides: 10 }, {}),
   makeArc('line startAngle', { startAngle: Math.PI / 3 }, {}),
   makeArc('line offset', { offset: [0.1, 0.1] }, {}),
+  makeArc('line direction', { direction: -1 }, {}),
 
   makeArc('inside', {}, { widthIs: 'inside' }),
   makeArc('outside', {}, { widthIs: 'outside' }),

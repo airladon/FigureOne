@@ -1042,41 +1042,40 @@ export type OBJ_Ellipse = {
  * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
- * // Filled arc
+ * // Simple fill
  * figure.add({
- *   name: 'e',
  *   make: 'arc',
- *   startAngle: 0,
- *   angle: 2
- *   sides: 100,
+ *   angle: Math.PI * 2 / 3,
+ *   radius: 1,
  * });
  *
  * @example
- * // Dashed line circle
+ * // Fill to center
  * figure.add({
- *   name: 'e',
  *   make: 'arc',
- *   height: 1,
- *   width: 1,
- *   sides: 100,
- *   line: {
- *     width: 0.02,
- *     dash: [0.05, 0.02],
- *   },
+ *   angle: Math.PI * 2 / 3,
+ *   startAngle: Math.PI / 3,
+ *   radius: 1,
+ *   fillCenter: true,
  * });
  *
  * @example
- * // Ellipse grid
+ * // Arc line
  * figure.add({
- *   name: 'e',
- *   make: 'ellipse',
- *   height: 0.08,
- *   width: 0.2,
- *   sides: 20,
- *   copy: [
- *     { along: 'x', step: 0.25, num: 5 },
- *     { along: 'y', step: 0.15, num: 5 },
- *   ]
+ *   make: 'arc',
+ *   angle: Math.PI / 3,
+ *   radius: 1,
+ *   line: { width: 0.05, widthIs: 'inside' },
+ * });
+ *
+ * @example
+ * // Arc dashed line
+ * figure.add({
+ *   make: 'arc',
+ *   angle: Math.PI * 3 / 2,
+ *   radius: 1,
+ *   sides: 100,
+ *   line: { width: 0.05, dash: [0.3, 0.1, 0.1, 0.1] },
  * });
  */
 export type OBJ_Arc = {
