@@ -57,6 +57,7 @@ import { rectangleBorderToTris, getRectangleBorder } from '../geometries/rectang
 import { ellipseBorderToTris, getEllipseBorder } from '../geometries/ellipse';
 import { arcBorderToTris, getArcBorder } from '../geometries/arc';
 import type { OBJ_Ellipse_Defined } from '../geometries/ellipse';
+import type { OBJ_Arc_Defined } from '../geometries/arc';
 import { getTriangleBorder, getTriangleDirection } from '../geometries/triangle';
 import type { OBJ_Triangle_Defined } from '../geometries/triangle';
 import { getArrow, defaultArrowOptions, getArrowTris } from '../geometries/arrow';
