@@ -28,22 +28,26 @@ function getArcBorder(options: OBJ_Arc_Defined): Array<Point> {
   const numSidesInCircle = sides / angle * Math.PI * 2;
   const apothem = radius * Math.cos(Math.PI / numSidesInCircle);
   const deltaAngle = angle / (sides);
+
+  const start = angle >= 0 ? startAngle : startAngle + angle;
+  const dAngle = angle >= 0 ? deltaAngle : -deltaAngle;
+
   if (options.line == null && options.fillCenter) {
     points.push(offset._dup());
   }
   points.push(new Point(
-    apothem * Math.cos(startAngle),
-    apothem * Math.sin(startAngle),
+    apothem * Math.cos(start),
+    apothem * Math.sin(start),
   ).add(offset));
   for (let i = 0; i < sides; i += 1) {
     points.push(new Point(
-      radius * Math.cos(startAngle + deltaAngle / 2 + deltaAngle * i) + offset.x,
-      radius * Math.sin(startAngle + deltaAngle / 2 + deltaAngle * i) + offset.y,
+      radius * Math.cos(start + dAngle / 2 + dAngle * i) + offset.x,
+      radius * Math.sin(start + dAngle / 2 + dAngle * i) + offset.y,
     ));
   }
   points.push(new Point(
-    apothem * Math.cos(startAngle + angle),
-    apothem * Math.sin(startAngle + angle),
+    apothem * Math.cos(start + dAngle * sides),
+    apothem * Math.sin(start + dAngle * sides),
   ).add(offset));
   return points;
 }
