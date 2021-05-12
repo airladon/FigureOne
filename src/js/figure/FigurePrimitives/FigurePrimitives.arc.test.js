@@ -46,7 +46,7 @@ describe('Polyline', () => {
     fillCenterPoints = [
       0, 0, 0.92, 0, 0.92, 0.38, 0, 0, 0.92, 0.38, 0.38, 0.92, 0, 0, 0.38,
       0.92, -0.38, 0.92, 0, 0, -0.38, 0.92, -0.92, 0.38, 0, 0, -0.92, 0.38,
-      -0.92, 0
+      -0.92, 0,
     ];
     fillCenterBorder = [
       new Point(0, 0),
@@ -118,7 +118,7 @@ describe('Polyline', () => {
       new Point(0.15, 0.36),
       new Point(0.36, 0.15),
       new Point(0.36, 0),
-    ]
+    ];
   });
   describe('Filled', () => {
     beforeEach(() => {
@@ -208,7 +208,7 @@ describe('Polyline', () => {
     });
     test('Update', () => {
       addElement('buffer');
-      p.custom.updatePoints({ radius: 0.5 }); 
+      p.custom.updatePoints({ radius: 0.5 });
       expect(round(p.getBorder('draw', 'border'), 2)).toEqual([lineUpdate]);
     });
   });
