@@ -73,6 +73,7 @@ There are several built in primitive shape methods that can be used to create co
 * <a href="#obj_triangle">triangle</a>
 * <a href="#obj_rectangle">rectangle</a>
 * <a href="#obj_ellipse">ellipse</a>
+* <a href="#obj_arc">arc</a>
 * <a href="#obj_polygon">polygon</a>
 * <a href="#obj_star">star</a>
 * <a href="#obj_grid">grid</a>

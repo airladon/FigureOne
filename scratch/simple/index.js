@@ -6,7 +6,7 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 // figure.add({
 //   make: 'arc',
 //   angle: Math.PI * 2 / 3,
-//   sides: 20,
+//   radius: 1,
 // });
 
 // // Fill to center
@@ -14,31 +14,23 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 //   make: 'arc',
 //   angle: Math.PI * 2 / 3,
 //   startAngle: Math.PI / 3,
-//   sides: 20,
+//   radius: 1,
 //   fillCenter: true,
 // });
 
 // Arc line
 figure.add({
   make: 'arc',
-  angle: Math.PI, // * 2 / 3,
-  sides: 4,
+  angle: Math.PI / 3,
   radius: 1,
-  line: { width: 0.2, widthIs: 'inside' },
-  color: [1, 0, 0, 0.5],
+  line: { width: 0.05, widthIs: 'inside' },
 });
 
-// Arc dashed line
-figure.add({
-  make: 'arc',
-  angle: Math.PI, // * 3 / 2,
-  radius: 1,
-  sides: 100,
-  line: { width: 0.05, dash: [0.3, 0.1, 0.1, 0.1] },
-});
-
+// // Arc dashed line
 // figure.add({
 //   make: 'arc',
-//   angle: Math.PI,
-//   sides: 4,
+//   angle: Math.PI * 3 / 2,
+//   radius: 1,
+//   sides: 100,
+//   line: { width: 0.05, dash: [0.3, 0.1, 0.1, 0.1] },
 // });

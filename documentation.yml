@@ -26,6 +26,7 @@ toc:
   - OBJ_Triangle
   - OBJ_Rectangle
   - OBJ_Ellipse
+  - OBJ_Arc
   - OBJ_Polygon
   - OBJ_Star
   - OBJ_Grid
