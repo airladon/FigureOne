@@ -3,8 +3,8 @@
 const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 }, backgroundColor: [1, 1, 0.9, 1] });
 
 const { rand } = Fig.tools.math;
-
-for (let i = 0; i < 500; i += 1) {
+figure.debug = true;
+for (let i = 0; i < 2000; i += 1) {
   const radius = Fig.tools.math.rand(0.1, 0.2);
   const color = [rand(0, 1), rand(0, 1), rand(0, 1), 0.5];
   const position = [rand(-2.9 + radius, 2.9 - radius), rand(-2.9 + radius, 2.9 - radius)];
@@ -12,8 +12,8 @@ for (let i = 0; i < 500; i += 1) {
     make: 'polygon',
     radius,
     color,
-    sides: 6,
-    transform: [['r', 0], ['t', position[0], position[1]]],
+    sides: 20,
+    transform: [['t', position[0], position[1]]],
     mods: {
     //   move: {
     //     freely: { deceleration: 0.00001, bounceLoss: 0.00001 },
@@ -22,7 +22,7 @@ for (let i = 0; i < 500; i += 1) {
     //   isMovable: true,
       customState: { radius },
       state: {
-        movement: { velocity: new Fig.Transform().rotate(rand(-0.7, 0.7)).translate(rand(-0.3, 0.3), rand(-0.3, 0.3)) },
+        movement: { velocity: new Fig.Transform().translate(rand(-0.3, 0.3), rand(-0.3, 0.3)) },
       },
     },
   });
@@ -36,28 +36,26 @@ for (let i = 0; i < 500; i += 1) {
         const now = figure.timeKeeper.now() / 1000;
         const deltaTime = now - e.customState.lastTime;
         e.customState.lastTime = now;
+        const { velocity } = e.state.movement;
+        const { transform } = e;
 
-        // const currentPosition = e.transform.order[0].x;
-        e.transform.order[1].x = e.transform.order[1].x + e.state.movement.velocity.order[1].x * deltaTime;
-        e.transform.order[1].y = e.transform.order[1].y + e.state.movement.velocity.order[1].y * deltaTime;
-        e.transform.order[0].r = e.transform.order[0].r + e.state.movement.velocity.order[0].r * deltaTime;
-        if (e.transform.order[1].x <= -3 + radius) {
-          e.state.movement.velocity.order[1].x = Math.abs(e.state.movement.velocity.order[1].x);
-          e.state.movement.velocity.order[1].r = Math.abs(e.state.movement.velocity.order[1].r);
+        transform.order[0].x += velocity.order[0].x * deltaTime;
+        transform.order[0].y += velocity.order[0].y * deltaTime;
+        if (transform.order[0].x <= -3 + radius) {
+          velocity.order[0].x = Math.abs(velocity.order[0].x);
         }
-        if (e.transform.order[1].x >= 3 - radius) {
-          e.state.movement.velocity.order[1].x = -Math.abs(e.state.movement.velocity.order[1].x);
-          e.state.movement.velocity.order[1].r = -Math.abs(e.state.movement.velocity.order[1].r);
+        if (transform.order[0].x >= 3 - radius) {
+          velocity.order[0].x = -Math.abs(velocity.order[0].x);
         }
-        if (e.transform.order[1].y <= -3 + radius) {
-          e.state.movement.velocity.order[1].y = Math.abs(e.state.movement.velocity.order[1].y);
-          e.state.movement.velocity.order[1].r = Math.abs(e.state.movement.velocity.order[1].r);
+        if (transform.order[0].y <= -3 + radius) {
+          velocity.order[0].y = Math.abs(velocity.order[0].y);
         }
-        if (e.transform.order[1].y >= 3 - radius) {
-          e.state.movement.velocity.order[1].y = -Math.abs(e.state.movement.velocity.order[1].y);
-          e.state.movement.velocity.order[1].r = -Math.abs(e.state.movement.velocity.order[1].r);
+        if (transform.order[0].y >= 3 - radius) {
+          velocity.order[0].y = -Math.abs(velocity.order[0].y);
         }
-    }, duration: 100 })
-    .start()
+    }, duration: 10 })
+    .start();
 }
+figure.debug = true;
+figure.elements.transform = new Fig.Transform();
 figure.animateNextFrame();

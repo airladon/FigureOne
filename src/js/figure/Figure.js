@@ -35,7 +35,7 @@ import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnim
 import type { TypeColor, OBJ_Font } from '../tools/types';
 import type { COL_SlideNavigator } from './FigureCollections/SlideNavigator';
 
-const FIGURE1DEBUG = false;
+const FIGURE1DEBUG = true;
 
 
 /**
@@ -308,6 +308,7 @@ class Figure {
   nextDrawTimerStart: number;
   nextDrawTimerDuration: number;
   focused: boolean;
+  debug: boolean;
 
   animations: AnimationManager;
 
@@ -334,6 +335,7 @@ class Figure {
       },
       backgroundColor: [1, 1, 1, 1],
     };
+    this.debug = false;
     this.fnMap = new FunctionMap();
     this.isPaused = false;
     this.scrolled = false;
@@ -1992,7 +1994,7 @@ class Figure {
   draw(nowIn: number, canvasIndex: number = 0): void {
     this.clearDrawTimeout();
     let timer;
-    if (FIGURE1DEBUG) {
+    if (this.debug || FIGURE1DEBUG) {
       timer = new PerformanceTimer();
       window.figureOneDebug.draw = [];
       window.figureOneDebug.setupDraw = [];
@@ -2057,7 +2059,7 @@ class Figure {
       this.animateNextFrame(true, 'queued frames');
     }
     this.notifications.publish('afterDraw');
-    if (FIGURE1DEBUG) { // $FlowFixMe
+    if (FIGURE1DEBUG || this.debug) { // $FlowFixMe
       timer.stamp('afterDraw'); // $FlowFixMe
       const deltas = timer.deltas();
       if (window.figureOneDebug.cumTimes.length > 50) {
@@ -2076,6 +2078,9 @@ class Figure {
         window.figureOneDebug.cumTimes = [];
       } else {
         window.figureOneDebug.cumTimes.push(deltas[0]);
+      }
+      if (this.debug) {
+        console.log(deltas[0], deltas[4][1], deltas[5][1]);
       }
       window.figureOneDebug.history.push({
         now: this.timeKeeper.now(),
