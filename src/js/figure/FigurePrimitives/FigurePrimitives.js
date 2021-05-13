@@ -55,7 +55,9 @@ import { makePolyLine, makePolyLineCorners, makeFastPolyLine } from '../geometri
 import { getPolygonPoints, getTrisFillPolygon } from '../geometries/polygon/polygon';
 import { rectangleBorderToTris, getRectangleBorder } from '../geometries/rectangle';
 import { ellipseBorderToTris, getEllipseBorder } from '../geometries/ellipse';
+import { arcBorderToTris, getArcBorder } from '../geometries/arc';
 import type { OBJ_Ellipse_Defined } from '../geometries/ellipse';
+import type { OBJ_Arc_Defined } from '../geometries/arc';
 import { getTriangleBorder, getTriangleDirection } from '../geometries/triangle';
 import type { OBJ_Triangle_Defined } from '../geometries/triangle';
 import { getArrow, defaultArrowOptions, getArrowTris } from '../geometries/arrow';
@@ -1018,6 +1020,74 @@ export type OBJ_Ellipse = {
   sides?: number,
   line?: OBJ_LineStyleSimple,
   drawBorderBuffer?: TypeParsableBorder | number,
+} & OBJ_Generic;
+
+/**
+ * Arc shape options object that extends {@link OBJ_Generic} (without
+ * `drawType`)
+ *
+ * ![](./apiassets/arc.png)
+ *
+ * @property {number} [radius]
+ * @property {number} [sides] (`20`)
+ * @property {number} [startAngle] (`0`)
+ * @property {number} [angle] (`1`)
+ * @property {OBJ_LineStyleSimple} [line] line style options
+ * @property {number | TypeParsableBorder} [drawBorderBuffer]
+ * override the OBJ_Generic `drawBorderBuffer` with `number` to make the
+ * drawBorderBuffer a ellipse that is `number` thicker around its border (`0`)
+ *
+ * @extends OBJ_Generic
+ *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Simple fill
+ * figure.add({
+ *   make: 'arc',
+ *   angle: Math.PI * 2 / 3,
+ *   radius: 1,
+ * });
+ *
+ * @example
+ * // Fill to center
+ * figure.add({
+ *   make: 'arc',
+ *   angle: Math.PI * 2 / 3,
+ *   startAngle: Math.PI / 3,
+ *   radius: 1,
+ *   fillCenter: true,
+ * });
+ *
+ * @example
+ * // Arc line
+ * figure.add({
+ *   make: 'arc',
+ *   angle: Math.PI / 3,
+ *   radius: 1,
+ *   line: { width: 0.05, widthIs: 'inside' },
+ * });
+ *
+ * @example
+ * // Arc dashed line
+ * figure.add({
+ *   make: 'arc',
+ *   angle: Math.PI * 3 / 2,
+ *   radius: 1,
+ *   sides: 100,
+ *   line: { width: 0.05, dash: [0.3, 0.1, 0.1, 0.1] },
+ * });
+ */
+export type OBJ_Arc = {
+  radius?: number,
+  sides?: number,
+  startAngle?: number,
+  angle?: number,
+  line?: OBJ_LineStyleSimple,
+  offset?: TypeParsablePoint,
+  drawBorderBuffer?: TypeParsableBorder | number,
+  fillCenter?: boolean,
 } & OBJ_Generic;
 
 /**
@@ -2667,6 +2737,42 @@ export default class FigurePrimitives {
     };
     element.custom.getFill = (border: Array<Point>) => [
       ellipseBorderToTris(border),
+      'triangles',
+    ];
+    // element.custom.getLine = (o: OBJ_PolyLineTris) => this.getPolylineTris(o);
+    element.custom.updatePoints(joinObjects({}, ...options));
+    return element;
+  }
+
+  /**
+   * {@link FigureElementPrimitive} that draws an ellipse.
+   * @see {@link OBJ_Arc} for options and examples.
+   */
+  arc(...options: Array<OBJ_Arc>) {
+    const element = this.genericBase('arc', {
+      radius: this.defaultLength / 2,
+      sides: 20,
+      startAngle: 0,
+      angle: 1,
+      offset: [0, 0],
+      fillCenter: false,
+    }, joinObjects({}, ...options));
+
+    element.custom.getBorder = (o: OBJ_Arc_Defined) => {
+      if (o.line != null && o.line.widthIs === 'inside') {
+        o.line.widthIs = 'positive';
+      }
+      if (o.line != null && o.line.widthIs === 'outside') {
+        o.line.widthIs = 'negative';
+      }
+      if (o.offset != null) {
+        o.offset = getPoint(o.offset);
+      }
+      element.custom.close = false;
+      return [o, getArcBorder(o)];
+    };
+    element.custom.getFill = (border: Array<Point>) => [
+      arcBorderToTris(border),
       'triangles',
     ];
     // element.custom.getLine = (o: OBJ_PolyLineTris) => this.getPolylineTris(o);

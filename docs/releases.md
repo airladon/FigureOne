@@ -60,3 +60,7 @@ API cleanup
 * Options definition no longer requires a dedictated options object (though one can still be used)
 * Options definition object `method` property renamed to make 
 * All animation steps and animation builder steps now accept target as input as well as options definition object
+
+## v0.8.1
+
+* Add arc primitive shape

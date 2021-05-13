@@ -43,11 +43,6 @@ describe('Polyline', () => {
       new Point(0, 0.612),
       new Point(-1.12, 0.052),
       new Point(-1.12, -0.052),
-    // buffer = [
-    //   new Point(1.1, 0),
-    //   new Point(0, 0.6),
-    //   new Point(-1.1, 0),
-    //   new Point(0, -0.6),
     ];
     rect = [
       new Point(-1, -0.5),

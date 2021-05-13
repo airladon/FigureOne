@@ -4,7 +4,7 @@ import * as g2 from  '../../../../src/js/tools/g2';
 global.Fig = {
   Figure: () => makeFigure(),
   tools: { g2 },
-  range,
+  // range,
 };
 
 global.figure = {};
