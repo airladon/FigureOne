@@ -35,7 +35,7 @@ import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnim
 import type { TypeColor, OBJ_Font } from '../tools/types';
 import type { COL_SlideNavigator } from './FigureCollections/SlideNavigator';
 
-const FIGURE1DEBUG = true;
+const FIGURE1DEBUG = false;
 
 
 /**
@@ -308,7 +308,14 @@ class Figure {
   nextDrawTimerStart: number;
   nextDrawTimerDuration: number;
   focused: boolean;
-  debug: boolean;
+  frameRate: {
+    information: string,
+    history: Array<Array<number>>,
+    num: number,
+  };
+  // frameRateInformation: string;
+  // frameRateHistory: Array<number>;
+  // frameRate
 
   animations: AnimationManager;
 
@@ -335,7 +342,11 @@ class Figure {
       },
       backgroundColor: [1, 1, 1, 1],
     };
-    this.debug = false;
+    this.frameRate = {
+      information: null,
+      num: 1,
+      history: [],
+    };
     this.fnMap = new FunctionMap();
     this.isPaused = false;
     this.scrolled = false;
@@ -1994,7 +2005,7 @@ class Figure {
   draw(nowIn: number, canvasIndex: number = 0): void {
     this.clearDrawTimeout();
     let timer;
-    if (this.debug || FIGURE1DEBUG) {
+    if (this.elements.__frameRate_ != null || FIGURE1DEBUG) {
       timer = new PerformanceTimer();
       window.figureOneDebug.draw = [];
       window.figureOneDebug.setupDraw = [];
@@ -2032,23 +2043,26 @@ class Figure {
     }
     this.drawQueued = false;
     // $FlowFixMe
-    if (FIGURE1DEBUG) { timer.stamp('m1'); }
+    if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('m1'); }
     this.clearContext(canvasIndex);
     // $FlowFixMe
-    if (FIGURE1DEBUG) { timer.stamp('clearContext'); }
+    if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('clearContext'); }
     this.notifications.publish('beforeDraw');
     // $FlowFixMe
-    if (FIGURE1DEBUG) { timer.stamp('beforeDraw'); }
+    if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('beforeDraw'); }
+    if (this.elements.__frameRate_ != null && this.frameRate.information != null) {
+      this.elements.__frameRate_.custom.updateText({ text: this.frameRate.information });
+    }
     this.elements.setupDraw(
       now,
       canvasIndex,
     );
     // $FlowFixMe
-    if (FIGURE1DEBUG) { timer.stamp('setupDraw'); }
+    if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('setupDraw'); }
 
     this.elements.draw(now, [this.spaceTransforms.figureToGL], 1, canvasIndex);
     // $FlowFixMe
-    if (FIGURE1DEBUG) { timer.stamp('draw'); }
+    if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('draw'); }
 
     if (this.elements.isAnyElementMoving()) {
       this.animateNextFrame(true, 'is moving');
@@ -2059,38 +2073,81 @@ class Figure {
       this.animateNextFrame(true, 'queued frames');
     }
     this.notifications.publish('afterDraw');
-    if (FIGURE1DEBUG || this.debug) { // $FlowFixMe
+    if (FIGURE1DEBUG || this.elements.__frameRate_ != null) { // $FlowFixMe
       timer.stamp('afterDraw'); // $FlowFixMe
       const deltas = timer.deltas();
-      if (window.figureOneDebug.cumTimes.length > 50) {
-        Console(
-          '>>>>>>>>>>> Total',
-          round(
-            window.figureOneDebug.cumTimes.reduce((sum, time) => sum + time) / 50,
-            2,
-          ),
-          { frameTotal: deltas[0] },
-          { frame: deltas.slice(1) },
-          { setupDraw: window.figureOneDebug.setupDraw },
-          { draw: window.figureOneDebug.draw },
-          { misc: window.figureOneDebug.misc },
-        );
-        window.figureOneDebug.cumTimes = [];
-      } else {
-        window.figureOneDebug.cumTimes.push(deltas[0]);
+      if (FIGURE1DEBUG) {
+        if (window.figureOneDebug.cumTimes.length > 50) {
+          Console(
+            '>>>>>>>>>>> Total',
+            round(
+              window.figureOneDebug.cumTimes.reduce((sum, time) => sum + time) / 50,
+              2,
+            ),
+            { frameTotal: deltas[0] },
+            { frame: deltas.slice(1) },
+            { setupDraw: window.figureOneDebug.setupDraw },
+            { draw: window.figureOneDebug.draw },
+            { misc: window.figureOneDebug.misc },
+          );
+          window.figureOneDebug.cumTimes = [];
+        } else {
+          window.figureOneDebug.cumTimes.push(deltas[0]);
+        }
+        // }
+        window.figureOneDebug.history.push({
+          now: this.timeKeeper.now(),
+          frameTotal: deltas[0],
+          frame: deltas.slice(1),
+          setupDraw: window.figureOneDebug.setupDraw,
+          draw: window.figureOneDebug.draw,
+          misc: window.figureOneDebug.misc,
+          animationManager: window.figureOneDebug.animationManager,
+        });
       }
-      if (this.debug) {
-        console.log(deltas[0], deltas[4][1], deltas[5][1]);
+      if (this.elements.__frameRate_ != null) {
+        const timeBetweenFrames = (this.timeKeeper.now() - this.timeKeeper.lastDrawTime) / 1000;
+        // const frameRate = 1 / timeBetweenFrames;
+        const totalDrawTime = deltas[0];
+        const setupDrawTime = deltas[4][1];
+        const drawTime = deltas[5][1];
+        this.frameRate.history.push([timeBetweenFrames, totalDrawTime, setupDrawTime, drawTime]);
+        if (this.frameRate.history.length === this.frameRate.num) {
+          const averages = this.frameRate.history.reduce(
+            (a, c) => [a[0] + c[0], a[1] + c[1], a[2] + c[2], a[3] + c[3]],
+            [0, 0, 0, 0],
+          );
+          const maximums = this.frameRate.history.reduce(
+            (a, c) => [
+              c[0] > a[0] ? c[0] : a[0],
+              c[1] > a[1] ? c[1] : a[1],
+              c[2] > a[2] ? c[2] : a[2],
+              c[3] > a[3] ? c[3] : a[3],
+            ],
+            [0, 0, 0, 0],
+          );
+          const { num } = this.frameRate;
+          const ave = [
+            round(1 / (averages[0] / num), 0).toFixed(0).padStart(3),
+            round(averages[1] / num, 1).toFixed(1).padStart(5),
+            round(averages[2] / num, 1).toFixed(1).padStart(5),
+            round(averages[3] / num, 1).toFixed(1).padStart(5),
+          ];
+          const max = [
+            round(1 / (maximums[0]), 0).toFixed(0).padStart(3),
+            round(maximums[1], 1).toFixed(1).padStart(5),
+            round(maximums[2], 1).toFixed(1).padStart(5),
+            round(maximums[3], 1).toFixed(1).padStart(5),
+          ];
+          this.frameRate.information = [
+            `Ave:  ${ave[0]} fps, ${ave[1]} ms, (${ave[2]}, ${ave[3]})`,
+            `Max: ${max[0]} fps, ${max[1]} ms, (${max[2]}, ${max[3]})`,
+          ];
+          this.frameRate.history = [];
+        } else {
+          this.frameRateInformation = null;
+        }
       }
-      window.figureOneDebug.history.push({
-        now: this.timeKeeper.now(),
-        frameTotal: deltas[0],
-        frame: deltas.slice(1),
-        setupDraw: window.figureOneDebug.setupDraw,
-        draw: window.figureOneDebug.draw,
-        misc: window.figureOneDebug.misc,
-        animationManager: window.figureOneDebug.animationManager,
-      });
     }
     this.setDrawTimeout();
   }
@@ -2255,6 +2312,36 @@ class Figure {
    */
   frame(timeStep: number) {
     this.timeKeeper.frame(timeStep);
+  }
+
+  addFrameRate(numFrames: number = 1, options: OBJ_Text = {}) {
+    this.frameRate.num = numFrames;
+    const frame = this.add(joinObjects(
+      {},
+      {
+        name: '_frameRate_',
+        make: 'primitives.textLines',
+        // mods: { isShown: true },
+        text: ['Ave:', 'Max:'],
+        position: [
+          this.limits.left,
+          this.limits.bottom,
+        ],
+        xAlign: 'left',
+        yAlign: 'bottom',
+        font: { size: this.limits.width / 30 },
+      },
+      options,
+    ));
+    window.figureOneDebug = {
+      cumTimes: [],
+      draw: [],
+      setupDraw: [],
+      misc: [],
+      history: [],
+      animationManager: [],
+    };
+    return frame;
   }
 }
 

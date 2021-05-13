@@ -683,6 +683,8 @@ class FigureElement {
 
   recorder: Recorder;
   timeKeeper: TimeKeeper;
+
+  simple: boolean;
   // scenarioSet: {
   //   quiz1: [
   //     { element: xyz, position: (), scale: (), rotation: (), length: () }
@@ -1490,8 +1492,7 @@ class FigureElement {
    * @param {Transform} transform
    */
   setTransform(transform: Transform, publish: boolean = true): void {
-    console.log('a')
-    if (this.move.transformClip != null) {
+    if (this.simple === false && this.move.transformClip != null) {
       const clip = this.fnMap.exec(this.move.transformClip, transform);
       if (clip instanceof Transform) {
         this.notifications.publish('beforeSetTransform', [clip]);
@@ -1501,7 +1502,7 @@ class FigureElement {
           this.cancelSetTransform = false;
         }
       }
-    } else {
+    } else if (this.simple === false) {
       const bounds = this.getMoveBounds(); // $FlowFixMe
       const clip = bounds.clip(transform);
       this.notifications.publish('beforeSetTransform', [clip]);
@@ -1510,8 +1511,13 @@ class FigureElement {
       } else {
         this.cancelSetTransform = false;
       }
+    } else {
+      this.notifications.publish('beforeSetTransform', [transform]);
+      this.transform = transform;
     }
-    this.updateDrawTransforms(this.parentTransform, false);
+    if (this.simple === false) {
+      this.updateDrawTransforms(this.parentTransform, false);
+    }
     if (this.internalSetTransformCallback) {
       this.fnMap.exec(this.internalSetTransformCallback, this.transform);
     }
@@ -4060,6 +4066,7 @@ class FigureElementCollection extends FigureElement {
       this.lastDrawTransform = newTransforms[0];
       this.parentTransform = parentTransform;
       // $FlowFixMe
+
       if (FIGURE1DEBUG) { timer.stamp('m2'); }
       this.pulseTransforms = this.getPulseTransforms(now); // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m3'); }
