@@ -718,6 +718,7 @@ class FigureElement {
     this.name = name;
     this.uid = (Math.random() * 1e18).toString(36);
     this.isShown = true;
+    this.simple = false;
     this.transform = transform._dup();
     this.dependantTransform = false;
     this.fnMap = new FunctionMap();
@@ -841,7 +842,7 @@ class FigureElement {
     this.state = {
       isBeingMoved: false,
       isMovingFreely: false,
-      isChanging: true,
+      isChanging: false,
       movement: {
         previousTime: null,
         previousTransform: this.transform._dup(),

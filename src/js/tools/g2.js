@@ -5731,8 +5731,8 @@ function deceleratePoint(
   } else {
     bounds = boundsIn;
   }
-  if (round(deceleration, precision) === 0) {
-    if (bounceLossIn === 0 || bounds.isZero()) {
+  if (round(decelerationIn, precision) === 0) {
+    if (bounceLossIn === 0 || bounds == null || !bounds.isDefined()) {
       if (deltaTimeIn == null) {
         return {
           velocity: velocityIn,
@@ -5900,7 +5900,7 @@ function decelerateValue(
 ) {
   let bounds = boundsIn;
   if (round(deceleration, precision) === 0) {
-    if (bounceLoss === 0 || boundsIn == null || (boundsIn != null && bounds.isZero())) {
+    if (bounceLoss === 0 || boundsIn == null || (boundsIn != null && !bounds.isDefined())) {
       if (deltaTime == null) {
         return {
           velocity,
