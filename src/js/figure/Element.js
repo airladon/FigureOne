@@ -403,6 +403,7 @@ type ElementPulseState = {
 type ElementState = {
   isBeingMoved: boolean,
   isMovingFreely: boolean,
+  isChanging: boolean,
   movement: ElementMovementState,
   isPulsing: boolean,
   pulse: ElementPulseState,
@@ -840,6 +841,7 @@ class FigureElement {
     this.state = {
       isBeingMoved: false,
       isMovingFreely: false,
+      isChanging: true,
       movement: {
         previousTime: null,
         previousTransform: this.transform._dup(),
@@ -2308,6 +2310,9 @@ class FigureElement {
   }
 
   getNextAnimationFinishTime() {
+    if (this.simple) {
+      return 0;
+    }
     const t1 = this.getRemainingMovingFreelyTime();
     const t2 = this.getRemainingPulseTime();
     const t3 = this.animations.getNextAnimationFinishTime();
@@ -2925,6 +2930,9 @@ class FigureElement {
    * @return {boolean} `true` if element is moving
    */
   isMoving(): boolean {
+    if (this.state.isChanging) {
+      return true;
+    }
     if (this.isShown === false) {
       return false;
     }
@@ -4941,21 +4949,26 @@ class FigureElementCollection extends FigureElement {
   }
 
   getNextAnimationFinishTime() {
+    if (this.simple) {
+      return 0;
+    }
     // const elements = this.getAllElements();
     let remainingTime = super.getNextAnimationFinishTime();
     for (let i = 0; i < this.drawOrder.length; i += 1) {
-      const element = this.elements[this.drawOrder[i]];
-      const duration = element.getNextAnimationFinishTime();
-      if (
-        (remainingTime == null && duration != null && duration > 0)
-        || (
-          remainingTime != null
-          && duration != null
-          && duration < remainingTime
-          && duration > 0
-        )
-      ) {
-        remainingTime = duration;
+      if (!this.elements[this.drawOrder[i]].simple) {
+        const element = this.elements[this.drawOrder[i]];
+        const duration = element.getNextAnimationFinishTime();
+        if (
+          (remainingTime == null && duration != null && duration > 0)
+          || (
+            remainingTime != null
+            && duration != null
+            && duration < remainingTime
+            && duration > 0
+          )
+        ) {
+          remainingTime = duration;
+        }
       }
     }
     return remainingTime;

@@ -2149,7 +2149,7 @@ class Figure {
         }
       }
     }
-    // this.setDrawTimeout();
+    this.setDrawTimeout();
   }
 
 

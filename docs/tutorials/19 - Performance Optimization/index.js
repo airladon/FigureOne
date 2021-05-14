@@ -62,8 +62,10 @@ for (let i = 0; i < 400; i += 1) {
     transform: [['t', rand(-2.9 + r, 2.9 - r), rand(-2.7 + r, 2.9 - r)]],
     mods: {
       simple: true,
+      custom: { velocity: [rand(-0.15, 0.15), rand(-0.15, 0.15)]},
       state: {
-        movement: { velocity: [['t', rand(-0.15, 0.15), rand(-0.15, 0.15)]] },
+        // movement: { velocity: [['t', rand(-0.15, 0.15), rand(-0.15, 0.15)]] },
+        isChanging: true,
       },
     },
   });
@@ -101,40 +103,34 @@ for (let i = 0; i < 400; i += 1) {
     // const now = now / 1000;
     const deltaTime = now - e.customState.lastTime;
     e.customState.lastTime = now;
-    const { velocity } = e.state.movement;
+    const { velocity } = e.custom;
     const { transform } = e;
-
-    transform.order[0].x += velocity.order[0].x * deltaTime;
-    transform.order[0].y += velocity.order[0].y * deltaTime;
+    transform.order[0].x += velocity[0] * deltaTime;
+    transform.order[0].y += velocity[1] * deltaTime;
     if (transform.order[0].x <= -3 + r) {
-      velocity.order[0].x = Math.abs(velocity.order[0].x);
+      velocity[0] = Math.abs(velocity[0]);
     }
     if (transform.order[0].x >= 3 - r) {
-      velocity.order[0].x = -Math.abs(velocity.order[0].x);
+      velocity[0] = -Math.abs(velocity[0]);
     }
     if (transform.order[0].y <= -3 + r) {
-      velocity.order[0].y = Math.abs(velocity.order[0].y);
+      velocity[1] = Math.abs(velocity[1]);
     }
     if (transform.order[0].y >= 3 - r) {
-      velocity.order[0].y = -Math.abs(velocity.order[0].y);
+      velocity[1] = -Math.abs(velocity[1]);
     }
   };
-  e.decelerate = () => {
-    return { duration: 0 };
-  }
 
   e.draw = (now, parentTransform) => {
     const { x, y } = e.transform.order[0];
     const mat = Fig.tools.m2.mul(parentTransform[0].matrix(), [1, 0, x, 0, 1, y, 0, 0, 1]);
-    // const mat = e.transform.matrix();
-    // console.log(e.transform.t())
     e.drawingObject.drawWithTransformMatrix(
       mat, e.color, 0, e.drawingObject.numPoints,
     );
   };
 
 
-  e.startMovingFreely();
+  // e.startMovingFreely();
   // e.animations.new()
   //   .custom({
   //     callback: () => {
