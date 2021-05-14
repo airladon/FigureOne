@@ -1551,6 +1551,10 @@ class FigureElement {
         this.state.movement.previousTime = now;
         return;
       }
+      // console.log(this.state.movement.velocity)
+      if (Array.isArray(this.state.movement.velocity)) {
+        this.state.movement.velocity = getTransform(this.state.movement.velocity);
+      }
       // If got here, then we are now after the first frame, so calculate
       // the delta time from this frame to the previous
       const deltaTime = now - this.state.movement.previousTime;
@@ -1786,7 +1790,7 @@ class FigureElement {
   // transform and movement velocity
   decelerate(deltaTime: number | null = null): Object {
     const bounds = this.getMoveBounds();
-
+    // console.log(deltaTime)
     const next = this.transform.decelerate(
       this.state.movement.velocity,
       this.move.freely.deceleration,
@@ -1932,6 +1936,9 @@ class FigureElement {
     }
     this.state.isMovingFreely = true;
     this.state.movement.previousTime = this.timeKeeper.now() / 1000;
+    if (Array.isArray(this.state.movement.velocity)) {
+      this.state.movement.velocity = getTransform(this.state.movement.velocity);
+    }
     this.state.movement.velocity = this.state.movement.velocity.clipMag(
       this.move.freely.zeroVelocityThreshold,
       this.move.maxVelocity,
@@ -2305,7 +2312,7 @@ class FigureElement {
     const t2 = this.getRemainingPulseTime();
     const t3 = this.animations.getNextAnimationFinishTime();
     let t = null;
-    if (t1 > 0) {
+    if (t1 != null && t1 > 0) {
       t = t1;
     }
     if (t2 > 0) {

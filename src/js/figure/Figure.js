@@ -2003,7 +2003,6 @@ class Figure {
   }
 
   draw(nowIn: number, canvasIndex: number = 0): void {
-    this.clearDrawTimeout();
     let timer;
     if (this.elements.__frameRate_ != null || FIGURE1DEBUG) {
       timer = new PerformanceTimer();
@@ -2011,6 +2010,7 @@ class Figure {
       window.figureOneDebug.setupDraw = [];
       window.figureOneDebug.misc = [];
     }
+    this.clearDrawTimeout();
     if (this.state.pause === 'paused') {
       return;
     }
@@ -2314,7 +2314,41 @@ class Figure {
     this.timeKeeper.frame(timeStep);
   }
 
-  addFrameRate(numFrames: number = 1, options: OBJ_Text = {}) {
+  /**
+   * Add a frame rate annotation to the figure.
+   *
+   * Each time the browser requests FigureOne to paint the screen, FigureOne
+   * performs two main tasks:
+   * - setup the figure for a draw (setupDraw) - all visible figure elements
+   *   are iterated through and if they are animating or moving then their next
+   *   animation or movement frame is calculated
+   * - draw the figure elements (draw)
+   *
+   * Frame rate is determined by FigureOne's total frame processing time
+   * (setupDraw time + draw time), and how frequently a browser requests
+   * FigureOne to draw a frame.
+   *
+   * The frame rate will not be faster than the browser wants, but it can be
+   * slower if the total frame processing time is too long.
+   *
+   * The frame rate and time durations are reported as both an average, and
+   * worst case (max). The averaging is done over `numFrames` number of frames.
+   *
+   * The screen output is then:
+   * - Ave: F fsp, T ms (S, D)
+   * - Max: F fsp, T ms (S, D)
+   *
+   * Where:
+   * - F: Frames per second
+   * - T: Total frame processing time
+   * - S: setupDraw processing time
+   * - D: draw processing time
+   *
+   * Note: FigureOne only requests animation frame notifications from the
+   * browser when an element is animating or moving. If everything is still,
+   * then the frame rate will be 0.
+   */
+  addFrameRate(numFrames: number = 10, options: OBJ_Text = {}) {
     this.frameRate.num = numFrames;
     const frame = this.add(joinObjects(
       {},

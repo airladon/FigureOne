@@ -2841,6 +2841,29 @@ export type TypeTransformValue = number | Array<number> | {
   rotation?: number,
 };
 
+function isTransformArrayZero(
+  transformValue: TypeTransformValue,
+  threshold: number = 0.00001,
+) {
+  const isZero = v => v > -threshold && v < threshold ? true : false;
+  const isArrayZero = (values) => {
+    for (let i = 0; i < values.length; i += 1) {
+      if (!isZero(values[i])) {
+        return false;
+      }
+      return true;
+    }
+  };
+  if (typeof transformValue === 'number') {
+    return isZero(transformValue);
+  }
+  if (Array.isArray(transformValue)) {
+    return isArrayZero(transformValue);
+  }
+  const values = Object.values(transformValue);
+  return isArrayZero(values);
+}
+
 /**
  * Object that represents a chain of {@link Rotation}, {@link Translation} and
  * {@link Scale} transforms
@@ -4350,6 +4373,11 @@ class Bounds {
   }
 
   // eslint-disable-next-line class-methods-use-this
+  isDefined() {
+    return false;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
   // clipVelocity(velocity: TypeParsablePoint | number) {
   //   if (typeof velocity === 'number') {
   //     return velocity;
@@ -4389,6 +4417,13 @@ class RangeBounds extends Bounds {
       max: options.max,
     };
     super(boundary, options.bounds, options.precision);
+  }
+
+  isDefined() {
+    if (this.min == null && this.max == null) {
+      return false;
+    }
+    return true;
   }
 
   _dup() {
@@ -4585,6 +4620,13 @@ class RectBounds extends Bounds {
       bottom: options.bottom,
     };
     super(boundary, options.bounds, options.precision);
+  }
+
+  isDefined() {
+    if (this.left == null && this.right == null && this.top == null && this.bottom == null) {
+      return false;
+    }
+    return true;
   }
 
   _dup() {
@@ -5048,6 +5090,10 @@ class LineBounds extends Bounds {
       boundary = new Line(options.p1, options.mag, options.angle, options.ends);
     }
     super(boundary, options.bounds, options.precision);
+  }
+
+  isDefined() {
+    return true;
   }
 
   _dup() {
@@ -5656,7 +5702,7 @@ class TransformBounds extends Bounds {
 function deceleratePoint(
   positionIn: Point,
   velocityIn: Point,
-  deceleration: number,
+  decelerationIn: number,
   deltaTimeIn: number | null = null,
   boundsIn: ?Bounds = null,  // ?(Rect | Line) = null,
   bounceLossIn: number = 0,
@@ -5677,6 +5723,24 @@ function deceleratePoint(
     });
   } else {
     bounds = boundsIn;
+  }
+  if (round(deceleration, precision) === 0) {
+    if (bounceLossIn === 0 || bounds.isZero()) {
+      if (deltaTimeIn == null) {
+        return {
+          velocity: velocityIn,
+          position: positionIn,
+          duration: null,
+        };
+      }
+      // const { mag, angle } = velocityIn.toPolar();
+      // const distanceTravelled = mag * deltaTimeIn;
+      // return {
+      //   velocity: velocityIn,
+      //   position: polarToRect(distanceTravelled, angle).add(positionIn),
+      //   duration: null,
+      // };
+    }
   }
   // clip velocity to the dimension of interest
   let velocity = velocityIn;    // $FlowFixMe
@@ -5713,6 +5777,7 @@ function deceleratePoint(
 
   let deltaTime = deltaTimeIn;
 
+  const deceleration = Math.max(decelerationIn, 0.0000001);
   if (deltaTime == null || deltaTime > Math.abs(deltaV / deceleration)) {
     deltaTime = Math.abs(deltaV / deceleration);
   }
@@ -5827,6 +5892,23 @@ function decelerateValue(
   precision: number = 8,
 ) {
   let bounds = boundsIn;
+  if (round(deceleration, precision) === 0) {
+    if (bounceLoss === 0 || boundsIn == null || (boundsIn != null && bounds.isZero())) {
+      if (deltaTime == null) {
+        return {
+          velocity,
+          value,
+          duration: null,
+        };
+      }
+      // const distanceTravelled = velocity * deltaTime;
+      // return {
+      //   velocity,
+      //   position: value + distanceTravelled,
+      //   duration: null,
+      // };
+    }
+  }
   if (boundsIn != null) {
     // let { min, max } = boundsIn.boundary;
     // if (min == null) {
