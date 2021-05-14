@@ -257,7 +257,7 @@ class WebGLInstance {
 
   useProgram(programIndex: number) {
     const program = this.programs[programIndex];
-    if (this.lastUsedProgram !== program) {
+    if (this.lastUsedProgram !== program.program) {
       this.gl.useProgram(program.program);
       this.lastUsedProgram = program.program;
     }

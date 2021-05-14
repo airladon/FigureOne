@@ -2,6 +2,7 @@
 
 import * as g2 from './js/tools/g2';
 import * as math from './js/tools/math';
+import * as m2 from './js/tools/m2';
 import Figure from './js/figure/Figure';
 import TimeKeeper from './js/figure/TimeKeeper';
 import { Recorder } from './js/figure/Recorder/Recorder';
@@ -82,6 +83,7 @@ const tools = {
   html,
   misc,
   lines,
+  m2,
 };
 
 /**

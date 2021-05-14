@@ -3441,6 +3441,13 @@ class Transform {
   transform(initialTransform: Transform) {
     const t = new Transform([], this.name);
     t.order = initialTransform.order.concat(this.order);
+    // t.order = Array(initialTransform.order.length + this.order.length);
+    // for (let i = 0; i < initialTransform.order.length; i += 1) {
+    //   t.order[i] = initialTransform.order[i];
+    // }
+    // for (let i = 0; i < this.order.length; i += 1) {
+    //   t.order[i + initialTransform.order.length] = this.order[i];
+    // }
     t.mat = m2.mul(this.matrix(), initialTransform.matrix());
     return t;
   }

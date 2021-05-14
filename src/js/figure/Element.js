@@ -3325,9 +3325,13 @@ class FigureElementPrimitive extends FigureElement {
       } // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('beforeDraw'); }
 
-      this.animations.nextFrame(now); // $FlowFixMe
+      if (this.animations.animations.length > 0) {
+        this.animations.nextFrame(now); // $FlowFixMe
+      }
       if (FIGURE1DEBUG) { timer.stamp('animations'); }
-      this.nextMovingFreelyFrame(now);
+      if (this.state.isMovingFreely) {
+        this.nextMovingFreelyFrame(now);
+      }
 
       if (FIGURE1DEBUG) { // $FlowFixMe
         timer.stamp('animations'); // $FlowFixMe
@@ -3388,7 +3392,6 @@ class FigureElementPrimitive extends FigureElement {
 
       this.pulseTransforms = this.getPulseTransforms(now); // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m3'); }
-
       this.drawTransforms = this.getDrawTransforms(newTransforms); // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m4'); }
 

@@ -52,7 +52,7 @@ const { rand } = Fig.tools.math;
 //   return new Promise(resolve => setTimeout(resolve, ms));
 // }
 
-for (let i = 0; i < 100; i += 1) {
+for (let i = 0; i < 400; i += 1) {
   const r = rand(0.1, 0.2);
   const e = figure.add({
     make: 'polygon',
@@ -94,6 +94,45 @@ for (let i = 0; i < 100; i += 1) {
       duration: 0,
     };
   };
+  e.setupDraw = (now) => {
+    if (e.customState.lastTime == null) {
+      e.customState.lastTime = now;
+    }
+    // const now = now / 1000;
+    const deltaTime = now - e.customState.lastTime;
+    e.customState.lastTime = now;
+    const { velocity } = e.state.movement;
+    const { transform } = e;
+
+    transform.order[0].x += velocity.order[0].x * deltaTime;
+    transform.order[0].y += velocity.order[0].y * deltaTime;
+    if (transform.order[0].x <= -3 + r) {
+      velocity.order[0].x = Math.abs(velocity.order[0].x);
+    }
+    if (transform.order[0].x >= 3 - r) {
+      velocity.order[0].x = -Math.abs(velocity.order[0].x);
+    }
+    if (transform.order[0].y <= -3 + r) {
+      velocity.order[0].y = Math.abs(velocity.order[0].y);
+    }
+    if (transform.order[0].y >= 3 - r) {
+      velocity.order[0].y = -Math.abs(velocity.order[0].y);
+    }
+  };
+  e.decelerate = () => {
+    return { duration: 0 };
+  }
+
+  e.draw = (now, parentTransform) => {
+    const { x, y } = e.transform.order[0];
+    const mat = Fig.tools.m2.mul(parentTransform[0].matrix(), [1, 0, x, 0, 1, y, 0, 0, 1]);
+    // const mat = e.transform.matrix();
+    // console.log(e.transform.t())
+    e.drawingObject.drawWithTransformMatrix(
+      mat, e.color, 0, e.drawingObject.numPoints,
+    );
+  };
+
 
   e.startMovingFreely();
   // e.animations.new()
