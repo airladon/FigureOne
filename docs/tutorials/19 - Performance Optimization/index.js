@@ -67,33 +67,33 @@ for (let i = 0; i < 400; i += 1) {
       },
     },
   });
-  e.decelerate = (deltaTime) => {
-    const velocity = e.state.movement.velocity._dup();
-    const transform = e.transform._dup();
-    transform.order[0].x += velocity.order[0].x * deltaTime;
-    transform.order[0].y += velocity.order[0].y * deltaTime;
-    if (transform.order[0].x <= -3 + r) {
-      velocity.order[0].x = Math.abs(velocity.order[0].x);
-    }
-    if (transform.order[0].x >= 3 - r) {
-      velocity.order[0].x = -Math.abs(velocity.order[0].x);
-    }
-    if (transform.order[0].y <= -2.7 + r) {
-      velocity.order[0].y = Math.abs(velocity.order[0].y);
-    }
-    if (transform.order[0].y >= 3 - r) {
-      velocity.order[0].y = -Math.abs(velocity.order[0].y);
-    }
-    // let k = 0;
-    // for (let j = 0; j < 1000000; j += 1) {
-    //   k += 1;
-    // }
-    return {
-      velocity,
-      transform,
-      duration: 0,
-    };
-  };
+  // e.decelerate = (deltaTime) => {
+  //   const velocity = e.state.movement.velocity._dup();
+  //   const transform = e.transform._dup();
+  //   transform.order[0].x += velocity.order[0].x * deltaTime;
+  //   transform.order[0].y += velocity.order[0].y * deltaTime;
+  //   if (transform.order[0].x <= -3 + r) {
+  //     velocity.order[0].x = Math.abs(velocity.order[0].x);
+  //   }
+  //   if (transform.order[0].x >= 3 - r) {
+  //     velocity.order[0].x = -Math.abs(velocity.order[0].x);
+  //   }
+  //   if (transform.order[0].y <= -2.7 + r) {
+  //     velocity.order[0].y = Math.abs(velocity.order[0].y);
+  //   }
+  //   if (transform.order[0].y >= 3 - r) {
+  //     velocity.order[0].y = -Math.abs(velocity.order[0].y);
+  //   }
+  //   // let k = 0;
+  //   // for (let j = 0; j < 1000000; j += 1) {
+  //   //   k += 1;
+  //   // }
+  //   return {
+  //     velocity,
+  //     transform,
+  //     duration: 0,
+  //   };
+  // };
   e.setupDraw = (now) => {
     if (e.customState.lastTime == null) {
       e.customState.lastTime = now;
