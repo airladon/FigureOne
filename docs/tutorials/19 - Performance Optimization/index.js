@@ -52,17 +52,18 @@ const { rand } = Fig.tools.math;
 //   return new Promise(resolve => setTimeout(resolve, ms));
 // }
 
-for (let i = 0; i < 400; i += 1) {
+for (let i = 0; i < 1; i += 1) {
   const r = rand(0.1, 0.2);
+  const p = [rand(-2.9 + r, 2.9 - r), rand(-2.7 + r, 2.9 - r)];
   const e = figure.add({
     make: 'polygon',
     radius: r,
     sides: 20,
     color: [rand(0, 1), rand(0, 1), rand(0, 1), 0.7],
-    transform: [['t', rand(-2.9 + r, 2.9 - r), rand(-2.7 + r, 2.9 - r)]],
+    transform: [['t', p[0], p[1]]],
     mods: {
       simple: true,
-      custom: { velocity: [rand(-0.15, 0.15), rand(-0.15, 0.15)]},
+      custom: { velocity: [rand(-0.55, -0.45), rand(-0.55, 0.15)]},
       state: {
         // movement: { velocity: [['t', rand(-0.15, 0.15), rand(-0.15, 0.15)]] },
         isChanging: true,
@@ -120,6 +121,60 @@ for (let i = 0; i < 400; i += 1) {
       velocity[1] = -Math.abs(velocity[1]);
     }
   };
+  e.custom.startTime = null;
+  e.setupDraw = (now) => {
+    const mod = (a, b) => a % b;
+    if (e.custom.startTime == null) {
+      e.custom.startTime = figure.timeKeeper.now();
+    }
+    if (e.customState.lastTime == null) {
+      e.customState.lastTime = now;
+    }
+    const u_time = (figure.timeKeeper.now() - e.custom.startTime) / 1000;
+    // const now = now / 1000;
+    // const deltaTime = now - e.customState.lastTime;
+    e.customState.lastTime = now;
+    const a_vel = Fig.getPoint(e.custom.velocity);
+    const a_position = Fig.getPoint(p);
+    let xDirection = 1.0;
+    if (a_vel.x < 0.0) {
+      xDirection = -1.0;
+    }
+    const xOffset = Math.abs(a_position.x - xDirection * 3.0);
+    const xTotalDistance = Math.abs(a_vel.x * u_time);
+    let xNumBounces = 0;
+    if (xTotalDistance > xOffset) {
+      xNumBounces = 1;
+    }
+    xNumBounces += Math.floor(Math.abs((xTotalDistance - xOffset)) / 6.0);
+    const xLastDirection = (mod(xNumBounces, 2.0) === 0.0) ? xDirection : -xDirection;
+    let xLastWall = a_position.x;
+    let xRemainderDistance = xTotalDistance;
+    if (xNumBounces > 0.0) {
+      xLastWall = (mod(xNumBounces, 2.0) == 0.0) ? -xDirection * 3.0 : xDirection * 3.0;
+      xRemainderDistance = mod(xTotalDistance - xOffset, 6.0);
+    }
+    // console.log(p[0], xOffset, xDirection, xTotalDistance, xNumBounces, xLastWall, xRemainderDistance)
+    const x = xLastWall + xRemainderDistance * xLastDirection;
+    e.transform.order[0].x = x;
+    // console.log(x)
+    // console.log(x)
+    // float xDirection = 1.0;
+    // if (a_vel.x < 0.0) {
+    //   xDirection = -1.0;
+    // }
+    // float xOffset = a_position.x - xDirection * 3.0;
+    // float xTotalDistance = a_vel.x * u_time;
+    // float xNumBounces = floor((xTotalDistance - abs(xOffset)) / 6.0);
+    // float xLastDirection = (mod(xNumBounces, 2.0) == 0.0) ? xDirection : -xDirection;
+    // float xLastWall = a_position.x;
+    // float xRemainderDistance = xTotalDistance;
+    // if (xNumBounces > 0.0) {
+    //   xLastWall = (mod(xNumBounces, 2.0) == 0.0) ? -xDirection * 3.0 : xDirection * 3.0;
+    //   xRemainderDistance = mod(xTotalDistance - abs(xOffset), 6.0);
+    // }
+    // float x = xLastWall + xTotalDistance * xLastDirection;
+  }
 
   e.draw = (now, parentTransform) => {
     const { x, y } = e.transform.order[0];
@@ -128,6 +183,7 @@ for (let i = 0; i < 400; i += 1) {
       mat, e.color, 0, e.drawingObject.numPoints,
     );
   };
+
 
 
   // e.startMovingFreely();
@@ -164,4 +220,5 @@ for (let i = 0; i < 400; i += 1) {
 }
 figure.addFrameRate(20);
 figure.elements.transform = new Fig.Transform();
+// figure.setManualFrames();
 figure.animateNextFrame();
