@@ -31,6 +31,51 @@ const { rand } = Fig.tools.math;
 // figure.addFrameRate();
 const element = figure.add({
   make: 'gl',
+  // vertexShader: 'simple2',
+  vertexShader: {
+    src: `attribute vec2 a_position;
+attribute vec4 a_col;
+attribute vec2 a_vel;
+attribute vec2 a_center;
+attribute float a_radius;
+varying vec4 v_col;
+uniform mat3 u_matrix;
+uniform float u_z;
+uniform float u_time;
+float modI(float a,float b) {
+  float m=a-floor((a+0.5)/b)*b;
+  return floor(m+0.5);
+}
+float calc(float limit, float pos, float center, float vel) {
+  float xDirection = 1.0;
+  if (vel < 0.0) {
+    xDirection = -1.0;
+  }
+  float xOffset = abs(center - xDirection * limit);
+  float xTotalDistance = abs(vel * u_time);
+  float xNumBounces = 0.0;
+  if (xTotalDistance > xOffset) {
+    xNumBounces = 1.0;
+  }
+  xNumBounces = xNumBounces + floor(abs((xTotalDistance - xOffset)) / (2.0 * limit));
+  float xLastDirection = (mod(xNumBounces, 2.0) == 0.0) ? xDirection : -xDirection;
+  float xLastWall = center;
+  float xRemainderDistance = xTotalDistance;
+  if (xNumBounces > 0.0) {
+    xLastWall = (mod(xNumBounces, 2.0) == 0.0) ? -xDirection * limit : xDirection * limit;
+    xRemainderDistance = mod(xTotalDistance - xOffset, 2.0 * limit);
+  }
+  float x = xLastWall + xRemainderDistance * xLastDirection + pos - center;
+  return x;
+}
+void main() {
+  float x = calc(3.0 - a_radius, a_position.x, a_center.x, a_vel.x);
+  float y = calc(3.0 - a_radius, a_position.y, a_center.y, a_vel.y);
+  gl_Position = vec4((u_matrix * vec3(x, y, 1)).xy, u_z, 1);
+  v_col = a_col;
+}`,
+    vars: ['a_position', 'a_col', 'a_vel', 'a_center', 'a_radius', 'u_matrix', 'u_z', 'u_time'],
+  },
   mods: { state: { isChanging: true } },
 });
 

@@ -48,8 +48,8 @@ class GLObject extends DrawingObject {
 
   constructor(
     webgl: WebGLInstance,
-    vertexShader: string = 'simple',
-    fragmentShader: string = 'simple',
+    vertexShader: string | { src: string, vars: Array<string> } = 'simple',
+    fragmentShader: string | { src: string, vars: Array<string> } = 'simple',
   ) {
     super();
     // this.numPoints = 0;

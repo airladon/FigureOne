@@ -2241,6 +2241,8 @@ export default class FigurePrimitives {
       name: generateUniqueId('primitive_'),
       color: this.defaultColor,
       transform: new Transform('gl').standard(),
+      vertexShader: 'simple1',
+      fragShader: 'simple1',
       texture: {
         src: '',
         mapTo: new Rect(-1, -1, 2, 2),
@@ -2258,8 +2260,8 @@ export default class FigurePrimitives {
 
     const glObject = new GLObject(
       this.webgl[0],
-      'simple2',
-      'simple1',
+      options.vertexShader,
+      options.fragShader,
     );
     const element = new FigureElementPrimitive(
       glObject, options.transform, options.color, this.figureLimits, null, options.name,

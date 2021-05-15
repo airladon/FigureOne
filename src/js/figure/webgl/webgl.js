@@ -227,8 +227,8 @@ class WebGLInstance {
   }
 
   getProgram(
-    vertexShader: string,
-    fragmentShader: string,
+    vertexShader: string | { src: string, vars: Array<string> },
+    fragmentShader: string | { src: string, vars: Array<string> },
   ) {
     for (let i = 0; i < this.programs.length; i += 1) {
       const program = this.programs[i];
@@ -239,6 +239,7 @@ class WebGLInstance {
       }
     }
     const shaders = getShaders(vertexShader, fragmentShader);
+    console.log(shaders)
     const newProgram = createProgramFromScripts(
       this.gl,
       shaders.vertexSource,
@@ -249,7 +250,7 @@ class WebGLInstance {
       vertexShader,
       fragmentShader,
       program: newProgram,
-      locations: getGLLocations(this.gl, newProgram, shaders.varNames),
+      locations: getGLLocations(this.gl, newProgram, shaders.vars),
     };
     this.programs.push(programDetails);
     return this.programs.length - 1;
