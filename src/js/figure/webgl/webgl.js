@@ -239,7 +239,6 @@ class WebGLInstance {
       }
     }
     const shaders = getShaders(vertexShader, fragmentShader);
-    console.log(shaders)
     const newProgram = createProgramFromScripts(
       this.gl,
       shaders.vertexSource,

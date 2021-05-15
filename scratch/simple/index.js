@@ -29,11 +29,7 @@ const { rand } = Fig.tools.math;
 //   e.startMovingFreely();
 // }
 // figure.addFrameRate();
-const element = figure.add({
-  make: 'gl',
-  // vertexShader: 'simple2',
-  vertexShader: {
-    src: `attribute vec2 a_position;
+const vertexShader = `attribute vec2 a_position;
 attribute vec4 a_col;
 attribute vec2 a_vel;
 attribute vec2 a_center;
@@ -42,15 +38,8 @@ varying vec4 v_col;
 uniform mat3 u_matrix;
 uniform float u_z;
 uniform float u_time;
-float modI(float a,float b) {
-  float m=a-floor((a+0.5)/b)*b;
-  return floor(m+0.5);
-}
 float calc(float limit, float pos, float center, float vel) {
-  float xDirection = 1.0;
-  if (vel < 0.0) {
-    xDirection = -1.0;
-  }
+  float xDirection = vel / abs(vel);
   float xOffset = abs(center - xDirection * limit);
   float xTotalDistance = abs(vel * u_time);
   float xNumBounces = 0.0;
@@ -73,7 +62,12 @@ void main() {
   float y = calc(3.0 - a_radius, a_position.y, a_center.y, a_vel.y);
   gl_Position = vec4((u_matrix * vec3(x, y, 1)).xy, u_z, 1);
   v_col = a_col;
-}`,
+}`;
+
+const element = figure.add({
+  make: 'gl',
+  vertexShader: {
+    src: vertexShader,
     vars: ['a_position', 'a_col', 'a_vel', 'a_center', 'a_radius', 'u_matrix', 'u_z', 'u_time'],
   },
   mods: { state: { isChanging: true } },
