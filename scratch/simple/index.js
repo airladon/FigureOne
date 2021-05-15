@@ -120,6 +120,14 @@ figure.addFrameRate();
 figure.animateNextFrame();
 
 
+const p = figure.add({
+  make: 'gl',
+  vertexShader: 'withTexture',
+  fragShader: 'withTexture',
+});
+p.drawingObject.addVertices([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1]);
+p.drawingObject.addTexture('./texture.jpg');
+console.log(p.drawingObject)
 // for (let i = 0; i < 100; i += 1) {
 //   const r = rand(0.1, 0.2);
 //   const e = figure.add({

@@ -93,7 +93,6 @@ function createProgram(
   if (success) {
     return program;
   }
-
   gl.deleteProgram(program);
   return null;
 }
@@ -124,6 +123,7 @@ function createProgramFromScripts(
   // create GLSL shaders, upload the GLSL source, compile the shaders
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
+
 
   // Link the two shaders into a program
   if (vertexShader && fragmentShader) {

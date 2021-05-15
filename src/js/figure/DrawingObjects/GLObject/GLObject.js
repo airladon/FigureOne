@@ -3,7 +3,7 @@
 // import * as g2 from '../g2';
 import * as m2 from '../../../tools/m2';
 import WebGLInstance from '../../webgl/webgl';
-import { Point } from '../../../tools/g2';
+import { Rect } from '../../../tools/g2';
 // import type { TypeParsablePoint } from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
 // import type { CPY_Step } from '../../geometries/copy/copy';
@@ -19,18 +19,26 @@ import type { TypeColor } from '../../../tools/types';
 class GLObject extends DrawingObject {
   gl: Array<WebGLRenderingContext>;    // shortcut for the webgl context
   webgl: Array<WebGLInstance>;         // webgl instance for a html canvas
-  glPrimitive: number;                  // primitive tyle (e.g. TRIANGLE_STRIP)
-  // buffer: Array<WebGLBuffer>;          // Vertex buffer
 
-  // points: Array<number>;        // Primitive vertices of shape
-  // numPoints: number;            // Number of primative vertices
   z: number;
+  texture: ?{
+    id: string;
+    src?: ?string;
+    data?: ?Object;
+    points: Array<number>;
+    buffer?: Array<WebGLBuffer>;
+    type: 'canvasText' | 'image';
+    repeat?: boolean;
+  };
+
   buffers: {
     [bufferName: string]: {
       buffer: Array<number>,
       size: number,
     };
   };
+
+  vertices: Array<number>;
 
   uniforms: {
     [uniformName: string]: {
@@ -48,8 +56,8 @@ class GLObject extends DrawingObject {
 
   constructor(
     webgl: WebGLInstance,
-    vertexShader: string | { src: string, vars: Array<string> } = 'simple',
-    fragmentShader: string | { src: string, vars: Array<string> } = 'simple',
+    vertexShader: string | { src: string, vars: Array<string> } = 'withTexture',
+    fragmentShader: string | { src: string, vars: Array<string> } = 'withTexture',
   ) {
     super();
     // this.numPoints = 0;
@@ -61,11 +69,176 @@ class GLObject extends DrawingObject {
     this.buffers = {};
     this.numVertices = 0;
     this.uniforms = {};
+    this.texture = null;
   }
 
-  addVertices(points: Array<number>) {
-    this.addBuffer('a_position', 2, points);
-    this.numVertices = points.length / 2;
+  addTextureToBuffer(
+    glTexture: WebGLTexture,
+    image: Object, // image data
+    repeat?: boolean,
+  ) {
+    function isPowerOf2(value) {
+      // eslint-disable-next-line no-bitwise
+      return (value & (value - 1)) === 0;
+    }
+    const { texture, gl, webgl } = this;
+    if (texture != null) {
+      const { index } = webgl.textures[texture.id];
+      gl.activeTexture(gl.TEXTURE0 + index);
+      gl.bindTexture(gl.TEXTURE_2D, glTexture);
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+      gl.texImage2D(
+        gl.TEXTURE_2D, 0, gl.RGBA,
+        gl.RGBA, gl.UNSIGNED_BYTE, image,
+      );
+      // Check if the image is a power of 2 in both dimensions.
+      if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+        // Yes, it's a power of 2. Generate mips.
+        gl.generateMipmap(gl.TEXTURE_2D);
+        if (repeat != null && repeat === true) {
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+        } else {
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        }
+      } else {
+        // No, it's not a power of 2. Turn off mips and set wrapping to clamp to edge
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      }
+    }
+  }
+
+  addTexture(
+    location: string,
+    mapTo: Rect = new Rect(-1, -1, 2, 2),
+    mapFrom: Rect = new Rect(0, 0, 1, 1),
+    repeat: boolean = false,
+  ) {
+    if (this.texture == null) {
+      this.texture = {
+        id: location,
+        mapTo,
+        mapFrom,
+        repeat,
+        src: location,
+        points: [],
+        buffer: this.gl.createBuffer(),
+      };
+      this.createTextureMap(
+        mapTo.left, mapTo.right,
+        mapTo.bottom, mapTo.top,
+        mapFrom.left, mapFrom.right,
+        mapFrom.bottom, mapFrom.top,
+      );
+    }
+
+    const { texture, gl, webgl } = this;
+    // $FlowFixMe
+    gl.bindBuffer(gl.ARRAY_BUFFER, texture.buffer);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array(texture.points),
+      gl.STATIC_DRAW,
+    );
+    if (
+      !(texture.id in webgl.textures)
+      || (
+        texture.id in webgl.textures
+        && webgl.textures[texture.id].glTexture == null
+      )
+    ) {
+      const glTexture = gl.createTexture();
+      webgl.addTexture(texture.id, glTexture, texture.type);
+      gl.activeTexture(
+        gl.TEXTURE0 + webgl.textures[texture.id].index,
+      );
+      gl.bindTexture(gl.TEXTURE_2D, glTexture);
+      const { src } = texture;
+      if (src && texture.data == null) {
+        // Fill the texture with a 1x1 blue pixel.
+        gl.texImage2D(
+          gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0,
+          gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 255, 100]),
+        );
+        const image = new Image();
+        image.src = src;
+
+        this.state = 'loading';
+        webgl.textures[texture.id].state = 'loading';
+        webgl.textures[texture.id].onLoad.push(this.executeOnLoad.bind(this));
+        image.addEventListener('load', () => {
+          // Now that the image has loaded make copy it to the texture.
+          texture.data = image;
+          this.addTextureToBuffer(
+            glTexture, texture.data, texture.repeat,
+          );
+          // if (this.onLoad != null) {
+          webgl.onLoad(texture.id);
+          // this.onLoad();
+          // }
+          this.state = 'loaded';
+          webgl.textures[texture.id].state = 'loaded';
+        });
+      } else if (texture.data != null) {
+        this.addTextureToBuffer(
+          glTexture, texture.data, texture.repeat,
+        );
+      }
+    } else if (texture.id in webgl.textures) {
+      if (webgl.textures[texture.id].state === 'loading') {
+        this.state = 'loading';
+        webgl.textures[texture.id].onLoad.push(this.executeOnLoad.bind(this));
+      } else {
+        this.state = 'loaded';
+      }
+    }
+  }
+
+  // A texture map is a texture coords point that lines up with the texture
+  // vertex point. So, if the vertex shape is rectangular, centered at the
+  // origin and wants to incorporate the entire texture, then the map would
+  // be:
+  // vertex space            texture space
+  // this.points         this.texture.points
+  //    -1,  -1,                  0,  0
+  //    -1,   1,                  0,  1
+  //     1,   1,                  1,  1
+  //     1,  -1,                  1,  0
+  createTextureMap(
+    xMinGL: number = -1,
+    xMaxGL: number = 1,
+    yMinGL: number = -1,
+    yMaxGL: number = 1,
+    xMinTex: number = 0,
+    xMaxTex: number = 1,
+    yMinTex: number = 0,
+    yMaxTex: number = 1,
+  ) {
+    const glWidth = xMaxGL - xMinGL;
+    const glHeight = yMaxGL - yMinGL;
+    const texWidth = xMaxTex - xMinTex;
+    const texHeight = yMaxTex - yMinTex;
+    const { texture } = this;
+    if (texture != null) {
+      texture.points = [];
+      for (let i = 0; i < this.vertices.length; i += 2) {
+        const x = this.vertices[i];
+        const y = this.vertices[i + 1];
+        const texNormX = (x - xMinGL) / glWidth;
+        const texNormY = (y - yMinGL) / glHeight;
+        texture.points.push(texNormX * texWidth + xMinTex);
+        texture.points.push(texNormY * texHeight + yMinTex);
+      }
+    }
+  }
+
+  addVertices(vertices: Array<number>) {
+    this.vertices = vertices;
+    this.addBuffer('a_position', 2, vertices);
+    this.numVertices = vertices.length / 2;
   }
 
   addBuffer(name: string, size: number, data: Array<number>) {
@@ -78,22 +251,40 @@ class GLObject extends DrawingObject {
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
   }
 
-  setupBuffers(numVertices: number, buffers: {
-    data: Array<number>,
-    size: number,
-    locationName: string
-  }) {
-    this.state = 'loading';
-    Object.keys(buffers).forEach((bufferName) => {
-      this.addBuffer(bufferName, size, buffers[bufferName].buffer);
-    });
-    this.numVertices = numVertices;
-    this.state = 'loaded';
-  }
+  // setupBuffers(numVertices: number, buffers: {
+  //   data: Array<number>,
+  //   size: number,
+  //   locationName: string
+  // }) {
+  //   this.state = 'loading';
+  //   Object.keys(buffers).forEach((bufferName) => {
+  //     this.addBuffer(bufferName, buffers[bufferName].size, buffers[bufferName].buffer);
+  //   });
+  //   this.numVertices = numVertices;
+  //   this.state = 'loaded';
+  // }
 
   executeOnLoad() {
     if (this.onLoad != null) {
       this.onLoad();
+    }
+  }
+
+  resetTextureBuffer() {
+    const { texture, webgl, gl } = this;
+    if (texture) {
+      if (webgl.textures[texture.id].glTexture != null) {
+        gl.activeTexture(gl.TEXTURE0 + webgl.textures[texture.id].index);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+        // gl.deleteTexture(webgl.textures[texture.id].glTexture);
+        webgl.textures[texture.id].glTexture = null;
+      }
+      if (texture.buffer != null) {
+        gl.deleteBuffer(texture.buffer);
+        // $FlowFixMe
+        texture.buffer = null;
+      }
+      // texture.glTexture = null;
     }
   }
 
@@ -104,6 +295,7 @@ class GLObject extends DrawingObject {
       gl.deleteBuffer(buffer);
     });
     this.buffers = {};
+    this.resetTextureBuffers();
   }
 
   changeBuffer(name: string, data: Array<number>) {
@@ -182,22 +374,51 @@ class GLObject extends DrawingObject {
       color[0], color[1], color[2], color[3],
     );
 
+    const { texture } = this;
+    if (texture != null) {
+      // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+      const texSize = 2;          // 2 components per iteration
+      const texType = gl.FLOAT;   // the data is 32bit floats
+      const texNormalize = false; // don't normalize the data
+      const texStride = 0;
+      // 0 = move forward size * sizeof(type) each iteration to get
+      // the next position
+      const texOffset = 0;        // start at the beginning of the buffer
+
+      gl.enableVertexAttribArray(locations.a_texcoord);
+      // $FlowFixMe
+      gl.bindBuffer(gl.ARRAY_BUFFER, texture.buffer);
+      gl.vertexAttribPointer(
+        locations.a_texcoord, texSize, texType,
+        texNormalize, texStride, texOffset,
+      );
+      gl.uniform1i(locations.u_use_texture, 1);
+      const { index } = webglInstance.textures[texture.id];
+      gl.uniform1i(locations.u_texture, index);
+    } else {
+      gl.uniform1i(locations.u_use_texture, 0);
+    }
+
     gl.drawArrays(gl.TRIANGLES, offset, count);
+
+    if (texture) {
+      gl.disableVertexAttribArray(locations.a_texcoord);
+    }
   }
 
-  transform(transformMatrix: Array<number>) {
-    for (let i = 0; i < this.points.length; i += 2) {
-      let p = new Point(this.points[i], this.points[i + 1]);
-      p = p.transformBy(transformMatrix);
-      this.points[i] = p.x;
-      this.points[i + 1] = p.y;
-    }
-    for (let b = 0; b < this.border.length; b += 1) {
-      for (let p = 0; p < this.border[b].length; p += 1) {
-        this.border[b][p] = this.border[b][p].transformBy(transformMatrix);
-      }
-    }
-  }
+  // transform(transformMatrix: Array<number>) {
+  //   for (let i = 0; i < this.points.length; i += 2) {
+  //     let p = new Point(this.points[i], this.points[i + 1]);
+  //     p = p.transformBy(transformMatrix);
+  //     this.points[i] = p.x;
+  //     this.points[i + 1] = p.y;
+  //   }
+  //   for (let b = 0; b < this.border.length; b += 1) {
+  //     for (let p = 0; p < this.border[b].length; p += 1) {
+  //       this.border[b][p] = this.border[b][p].transformBy(transformMatrix);
+  //     }
+  //   }
+  // }
 }
 
 export default GLObject;
