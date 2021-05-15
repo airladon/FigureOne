@@ -40,27 +40,51 @@ float modI(float a,float b) {
   float m=a-floor((a+0.5)/b)*b;
   return floor(m+0.5);
 }
-void main() {
-  float xLimit = 3.0 - a_radius;
+float calc(float limit, float pos, float center, float vel) {
   float xDirection = 1.0;
-  if (a_vel.x < 0.0) {
+  if (vel < 0.0) {
     xDirection = -1.0;
   }
-  float xOffset = abs(a_center.x - xDirection * xLimit);
-  float xTotalDistance = abs(a_vel.x * u_time);
+  float xOffset = abs(center - xDirection * limit);
+  float xTotalDistance = abs(vel * u_time);
   float xNumBounces = 0.0;
   if (xTotalDistance > xOffset) {
     xNumBounces = 1.0;
   }
-  xNumBounces = xNumBounces + floor(abs((xTotalDistance - xOffset)) / (2.0 * xLimit));
+  xNumBounces = xNumBounces + floor(abs((xTotalDistance - xOffset)) / (2.0 * limit));
   float xLastDirection = (mod(xNumBounces, 2.0) == 0.0) ? xDirection : -xDirection;
-  float xLastWall = a_center.x;
+  float xLastWall = center;
   float xRemainderDistance = xTotalDistance;
   if (xNumBounces > 0.0) {
-    xLastWall = (mod(xNumBounces, 2.0) == 0.0) ? -xDirection * xLimit : xDirection * xLimit;
-    xRemainderDistance = mod(xTotalDistance - xOffset, 2.0 * xLimit);
+    xLastWall = (mod(xNumBounces, 2.0) == 0.0) ? -xDirection * limit : xDirection * limit;
+    xRemainderDistance = mod(xTotalDistance - xOffset, 2.0 * limit);
   }
-  float x = xLastWall + xRemainderDistance * xLastDirection + a_position.x - a_center.x;
+  float x = xLastWall + xRemainderDistance * xLastDirection + pos - center;
+  return x;
+}
+void main() {
+  // float xLimit = 3.0 - a_radius;
+  // float xDirection = 1.0;
+  // if (a_vel.x < 0.0) {
+  //   xDirection = -1.0;
+  // }
+  // float xOffset = abs(a_center.x - xDirection * xLimit);
+  // float xTotalDistance = abs(a_vel.x * u_time);
+  // float xNumBounces = 0.0;
+  // if (xTotalDistance > xOffset) {
+  //   xNumBounces = 1.0;
+  // }
+  // xNumBounces = xNumBounces + floor(abs((xTotalDistance - xOffset)) / (2.0 * xLimit));
+  // float xLastDirection = (mod(xNumBounces, 2.0) == 0.0) ? xDirection : -xDirection;
+  // float xLastWall = a_center.x;
+  // float xRemainderDistance = xTotalDistance;
+  // if (xNumBounces > 0.0) {
+  //   xLastWall = (mod(xNumBounces, 2.0) == 0.0) ? -xDirection * xLimit : xDirection * xLimit;
+  //   xRemainderDistance = mod(xTotalDistance - xOffset, 2.0 * xLimit);
+  // }
+  // float x = xLastWall + xRemainderDistance * xLastDirection + a_position.x - a_center.x;
+  float x = calc(3.0 - a_radius, a_position.x, a_center.x, a_vel.x);
+  float y = calc(3.0 - a_radius, a_position.y, a_center.y, a_vel.y);
 
   // float xDirection = (a_vel.x > 0) ? 1 : -1;
   // float yDirection = (a_vel.y > 0) ? 1 : -1;
@@ -87,7 +111,7 @@ void main() {
   // float x = xLastWall + xTotalDistance * xLastDirection;
   // float y = yLastWall + yTotalDistance * yLastDirection;
   // float x = a_vel.x * u_time + a_position.x;
-  float y = a_vel.y * u_time + a_position.y;
+  // float y = a_vel.y * u_time + a_position.y;
   gl_Position = vec4((u_matrix * vec3(x, y, 1)).xy, u_z, 1);
   v_col = a_col;
 }`,

@@ -57,11 +57,6 @@ for (let i = 0; i < 1000; i += 1) {
   }
 }
 element.drawingObject.addVertices(points);
-// element.drawingObject.addVertices([0, 0, 1, 0, 1, 1]);
-// element.color = [1, 0, 0, 1];
-// console.log(points)
-console.log(points)
-console.log(centers)
 element.drawingObject.addBuffer('a_col', 4, colors);
 element.drawingObject.addBuffer('a_vel', 2, velocities);
 element.drawingObject.addBuffer('a_center', 2, centers);
