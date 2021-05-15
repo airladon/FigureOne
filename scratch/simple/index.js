@@ -38,9 +38,10 @@ const points = [];
 const velocities = [];
 const colors = [];
 const centers = [];
-const sides = 3;
+const radii = [];
+const sides = 20;
 const step = Math.PI * 2 / (sides);
-for (let i = 0; i < 10; i += 1) {
+for (let i = 0; i < 1000; i += 1) {
   const r = rand(0.1, 0.2);
   const p = [rand(-3 + r, 3 - r), rand(-3 + r, 3 - r)];
   const v = [rand(-0.15, 0.15), rand(-0.15, 0.15)];
@@ -51,6 +52,7 @@ for (let i = 0; i < 10; i += 1) {
     points.push(r * Math.cos(step * (j + 1)) + p[0], r * Math.sin(step * (j + 1)) + p[1]);
     velocities.push(v[0], v[1], v[0], v[1], v[0], v[1]);
     centers.push(p[0], p[1], p[0], p[1], p[0], p[1]);
+    radii.push(r, r, r);
     colors.push(...color, ...color, ...color);
   }
 }
@@ -63,6 +65,7 @@ console.log(centers)
 element.drawingObject.addBuffer('a_col', 4, colors);
 element.drawingObject.addBuffer('a_vel', 2, velocities);
 element.drawingObject.addBuffer('a_center', 2, centers);
+element.drawingObject.addBuffer('a_radius', 1, radii);
 element.drawingObject.addUniform('u_time', [0]);
 let startTime = null;
 figure.notifications.add('beforeDraw', () => {

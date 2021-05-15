@@ -31,6 +31,7 @@ attribute vec2 a_position;
 attribute vec4 a_col;
 attribute vec2 a_vel;
 attribute vec2 a_center;
+attribute float a_radius;
 varying vec4 v_col;
 uniform mat3 u_matrix;
 uniform float u_z;
@@ -40,23 +41,24 @@ float modI(float a,float b) {
   return floor(m+0.5);
 }
 void main() {
+  float xLimit = 3.0 - a_radius;
   float xDirection = 1.0;
   if (a_vel.x < 0.0) {
     xDirection = -1.0;
   }
-  float xOffset = abs(a_center.x - xDirection * 3.0);
+  float xOffset = abs(a_center.x - xDirection * xLimit);
   float xTotalDistance = abs(a_vel.x * u_time);
   float xNumBounces = 0.0;
   if (xTotalDistance > xOffset) {
     xNumBounces = 1.0;
   }
-  xNumBounces = xNumBounces + floor(abs((xTotalDistance - xOffset)) / 6.0);
+  xNumBounces = xNumBounces + floor(abs((xTotalDistance - xOffset)) / (2.0 * xLimit));
   float xLastDirection = (mod(xNumBounces, 2.0) == 0.0) ? xDirection : -xDirection;
   float xLastWall = a_center.x;
   float xRemainderDistance = xTotalDistance;
   if (xNumBounces > 0.0) {
-    xLastWall = (mod(xNumBounces, 2.0) == 0.0) ? -xDirection * 3.0 : xDirection * 3.0;
-    xRemainderDistance = mod(xTotalDistance - xOffset, 6.0);
+    xLastWall = (mod(xNumBounces, 2.0) == 0.0) ? -xDirection * xLimit : xDirection * xLimit;
+    xRemainderDistance = mod(xTotalDistance - xOffset, 2.0 * xLimit);
   }
   float x = xLastWall + xRemainderDistance * xLastDirection + a_position.x - a_center.x;
 
@@ -89,7 +91,7 @@ void main() {
   gl_Position = vec4((u_matrix * vec3(x, y, 1)).xy, u_z, 1);
   v_col = a_col;
 }`,
-    varNames: ['a_position', 'a_col', 'a_vel', 'a_center', 'u_matrix', 'u_z', 'u_time'],
+    varNames: ['a_position', 'a_col', 'a_vel', 'a_center', 'a_radius', 'u_matrix', 'u_z', 'u_time'],
   },
   simple3: {
     source: `
