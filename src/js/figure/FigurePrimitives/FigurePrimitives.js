@@ -21,6 +21,7 @@ import DrawContext2D from '../DrawContext2D';
 import * as tools from '../../tools/math';
 import { generateUniqueId, joinObjects } from '../../tools/tools';
 import DrawingObject from '../DrawingObjects/DrawingObject';
+import GLObject from '../DrawingObjects/GLObject/GLObject';
 // import VertexObject from '../DrawingObjects/VertexObject/VertexObject';
 // import {
 //   PolyLine, PolyLineCorners,
@@ -2229,6 +2230,84 @@ export default class FigurePrimitives {
     this.timeKeeper = timeKeeper;
     this.recorder = recorder;
     // this.draw2DFigures = draw2DFigures;
+  }
+
+  /**
+   * {@link FigureElementPrimitive} that draws a generic shape.
+   * @see {@link OBJ_Generic} for options and examples.
+   */
+  gl(...optionsIn: Array<OBJ_Generic>) {
+    const defaultOptions = {
+      name: generateUniqueId('primitive_'),
+      color: this.defaultColor,
+      transform: new Transform('gl').standard(),
+      texture: {
+        src: '',
+        mapTo: new Rect(-1, -1, 2, 2),
+        mapFrom: new Rect(0, 0, 1, 1),
+        repeat: false,
+        onLoad: this.animateNextFrame,
+      },
+    };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    options.transform = getTransform(options.transform);
+    if (options.position != null) {
+      options.position = getPoint(options.position);
+      options.transform.updateTranslation(options.position);
+    }
+
+    const glObject = new GLObject(
+      this.webgl[0],
+      'simple2',
+      'simple1',
+    );
+    const element = new FigureElementPrimitive(
+      glObject, options.transform, options.color, this.figureLimits, null, options.name,
+    );
+    element.dimColor = this.defaultDimColor.slice();
+
+    // element.custom.updateGeneric = function update(updateOptions: {
+    //   points?: Array<TypeParsablePoint>,
+    //   drawBorder?: TypeParsableBorder,
+    //   drawBorderBuffer?: TypeParsableBorder,
+    //   border?: TypeParsableBorder | 'draw' | 'buffer' | 'rect' | number,
+    //   touchBorder?: TypeParsableBorder | 'draw' | 'border' | 'rect' | number | 'buffer',
+    //   holeBorder?: TypeParsableBorder,
+    //   copy?: Array<CPY_Step>,
+    //   drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
+    // }) {
+    //   const o = updateOptions;
+    //   if (o.copy != null && !Array.isArray(o.copy)) {
+    //     o.copy = [o.copy];
+    //   }
+    //   if (o.points != null) { // $FlowFixMe
+    //     o.points = getPoints(o.points);
+    //   }
+    //   if (o.drawBorder != null) { // $FlowFixMe
+    //     element.drawBorder = getBorder(o.drawBorder);
+    //   } else if (o.points != null) {
+    //     element.drawBorder = [o.points];
+    //   }
+    //   if (o.drawBorderBuffer != null) { // $FlowFixMe
+    //     element.drawBorderBuffer = getBorder(o.drawBorderBuffer);
+    //   } else element.drawBorderBuffer = element.drawBorder;
+    //   if (o.border != null) { // $FlowFixMe
+    //     element.border = getBorder(o.border);
+    //   }
+    //   if (o.touchBorder != null) { // $FlowFixMe
+    //     element.touchBorder = getBorder(o.touchBorder);
+    //   }
+    //   if (o.holeBorder != null) { // $FlowFixMe
+    //     element.holeBorder = getBorder(o.holeBorder);
+    //   }
+    //   element.drawingObject.change(o);
+    // };
+    // element.custom.updateGeneric(options);
+    // element.custom.updatePoints = element.custom.updateGeneric;
+    element.timeKeeper = this.timeKeeper;
+    element.recorder = this.recorder;
+    setupPulse(element, options);
+    return element;
   }
 
   /**

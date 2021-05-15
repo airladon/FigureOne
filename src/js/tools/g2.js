@@ -2845,14 +2845,14 @@ function isTransformArrayZero(
   transformValue: TypeTransformValue,
   threshold: number = 0.00001,
 ) {
-  const isZero = v => v > -threshold && v < threshold ? true : false;
+  const isZero = v => (v > -threshold && v < threshold);
   const isArrayZero = (values) => {
     for (let i = 0; i < values.length; i += 1) {
       if (!isZero(values[i])) {
         return false;
       }
-      return true;
     }
+    return true;
   };
   if (typeof transformValue === 'number') {
     return isZero(transformValue);
@@ -5099,6 +5099,7 @@ class LineBounds extends Bounds {
     super(boundary, options.bounds, options.precision);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   isDefined() {
     return true;
   }
@@ -6288,4 +6289,5 @@ export {
   getPositionInRect,
   isParsablePoint,
   isParsableTransform,
+  isTransformArrayZero,
 };

@@ -238,13 +238,13 @@ class WebGLInstance {
         return i;
       }
     }
-
     const shaders = getShaders(vertexShader, fragmentShader);
     const newProgram = createProgramFromScripts(
       this.gl,
       shaders.vertexSource,
       shaders.fragmentSource,
     );
+
     const programDetails = {
       vertexShader,
       fragmentShader,

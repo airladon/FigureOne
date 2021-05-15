@@ -11,6 +11,37 @@ const vertex = {
         + '}',
     varNames: ['a_position', 'u_matrix', 'u_z'],
   },
+  simple1: {
+    source:
+        `
+attribute vec2 a_position;
+attribute vec4 a_col;
+varying vec4 v_col;
+uniform mat3 u_matrix;
+uniform float u_z;
+void main() {
+  gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, u_z, 1);
+  v_col = a_col;
+}`,
+    varNames: ['a_position', 'a_col', 'u_matrix', 'u_z'],
+  },
+  simple2: {
+    source: `
+attribute vec2 a_position;
+attribute vec4 a_col;
+attribute vec2 a_vel;
+varying vec4 v_col;
+uniform mat3 u_matrix;
+uniform float u_z;
+uniform float u_time;
+void main() {
+  float x = a_vel.x * u_time + a_position.x;
+  float y = a_vel.y * u_time + a_position.y;
+  gl_Position = vec4((u_matrix * vec3(x, y, 1)).xy, u_z, 1);
+  v_col = a_col;
+}`,
+    varNames: ['a_position', 'a_col', 'a_vel', 'u_matrix', 'u_z', 'u_time'],
+  },
   withTexture: {
     source:
         'attribute vec2 a_position;'
@@ -33,6 +64,17 @@ const fragment = {
       + 'uniform vec4 u_color;'
       + 'void main() {'
         + 'gl_FragColor = u_color;'
+        + 'gl_FragColor.rgb *= gl_FragColor.a;'
+      + '}',
+    varNames: ['u_color'],
+  },
+  simple1: {
+    source:
+      'precision mediump float;'
+      + 'uniform vec4 u_color;'
+      + 'varying vec4 v_col;'
+      + 'void main() {'
+        + 'gl_FragColor = v_col;'
         + 'gl_FragColor.rgb *= gl_FragColor.a;'
       + '}',
     varNames: ['u_color'],
