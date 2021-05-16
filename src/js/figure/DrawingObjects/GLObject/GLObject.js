@@ -11,7 +11,9 @@ import type { TypeColor } from '../../../tools/types';
 
 export type TypeGLBufferType = 'BYTE' | 'UNSIGNED_BYTE' | 'SHORT' | 'UNSIGNED_SHORT' | 'FLOAT';
 
-export type TypeGLBufferUSage = 'STATIC' | 'DYNAMIC';
+export type TypeGLBufferUsage = 'STATIC' | 'DYNAMIC';
+
+export type TypeGLUniform = 'FLOAT' | 'FLOAT_ARRAY' | 'INT' | 'INT_ARRAY';
 
 class GLObject extends DrawingObject {
   gl: Array<WebGLRenderingContext>;
@@ -243,9 +245,9 @@ class GLObject extends DrawingObject {
     }
   }
 
-  addVertices(vertices: Array<number>) {
+  addVertices(vertices: Array<number>, usage: TypeGLBufferUsage = 'STATIC') {
     this.vertices = vertices;
-    this.addBuffer('a_position', 2, vertices);
+    this.addBuffer('a_position', 2, vertices, 'FLOAT', false, 0, 0, usage);
     this.numVertices = vertices.length / 2;
   }
 
@@ -257,7 +259,7 @@ class GLObject extends DrawingObject {
     normalize: boolean = false,
     stride: number = 0,
     offset: number = 0,
-    usageIn: TypeGLBufferUSage = 'STATIC',
+    usageIn: TypeGLBufferUsage = 'STATIC',
   ) {
     const { gl } = this;
     let processedData;
@@ -266,8 +268,6 @@ class GLObject extends DrawingObject {
       processedData = new Float32Array(data);
     } else if (typeIn === 'UNSIGNED_BYTE') {
       processedData = new Uint8Array(data);
-      console.log(data)
-      console.log(processedData)
       type = gl.UNSIGNED_BYTE;
     } else if (typeIn === 'BYTE') {
       processedData = new Int8Array(data);
@@ -278,6 +278,8 @@ class GLObject extends DrawingObject {
     } else if (typeIn === 'UNSIGNED_SHORT') {
       processedData = new Uint16Array(data);
       type = gl.UNSIGNED_SHORT;
+    } else {
+      throw new Error(`GLObject addBuffer usage needs to be FLOAT, BYTE, SHORT, UNSIGNED_BYTE or UNSIGNED_SHORT - received: "${typeIn}"`);
     }
     let usage = gl.STATIC_DRAW;
     if (usageIn === 'DYNAMIC') {
@@ -330,7 +332,14 @@ class GLObject extends DrawingObject {
     this.resetTextureBuffers();
   }
 
-  changeBuffer(name: string, data: Array<number>) {
+  updateVertices(vertices: Array<number>) {
+    this.vertices = vertices;
+    this.gl.deleteBuffer(this.buffers.a_position.buffer);
+    this.addBuffer('a_position', 2, vertices);
+    this.numVertices = vertices.length / 2;
+  }
+
+  updateBuffer(name: string, data: Array<number>) {
     this.gl.deleteBuffer(this.buffers[name].buffer);
     this.addBuffer(name, this.buffers[name].size, data);
   }
@@ -340,8 +349,124 @@ class GLObject extends DrawingObject {
     ];
   }
 
-  addUniform(uniformName: string, initialValue: Array<number>) {
-    this.uniforms[uniformName] = initialValue;
+  // addUniform(
+  //   uniformName: string,
+  //   type: TypeGLUniform = 'FLOAT',
+  //   value: number | Array<number> = 0,
+  // ) {
+  //   let method;
+  //   let arrayMethod = false;
+  //   const v = Array.isArray(value) ? value : [value];
+  //   if (type === 'FLOAT') {
+  //     method = `uniform${v.length.toString()}f`;
+  //   } else if (type === 'FLOAT_ARRAY') {
+  //     method = `uniform${v.length.toString()}fv`;
+  //     arrayMethod = true;
+  //   } else if (type === 'INT_ARRAY') {
+  //     method = `uniform${v.length.toString()}iv`;
+  //     arrayMethod = true;
+  //   } else if (type === 'INT') {
+  //     method = `uniform${v.length.toString()}i`;
+  //   }
+  //   this.uniforms[uniformName] = {
+  //     value: v,
+  //     type,
+  //     method,
+  //     arrayMethod,
+  //   };
+  // }
+
+  /**
+   * Add a uniform.
+   *
+   * @param {string} uniformName The variable name used in the shader
+   * @param {1 | 2 | 3 | 4} length (1) number of values in uniform
+   * @param {'FLOAT' | 'FLOAT_VECTOR' | 'INT' | 'INT_VECTOR'} type type of
+   * value. Use '_VECTOR' suffix if using vector methods on the uniform in the
+   * shader.
+   */
+  addUniform(
+    uniformName: string,
+    length: 1 | 2 | 3 | 4 = 1,
+    type: 'FLOAT' | 'FLOAT_VECTOR' | 'INT' | 'INT_VECTOR' = 'FLOAT',
+  ) {
+    this.uniforms[uniformName] = {
+      value: Array(length),
+      method: this[`uploadUniform${length.toString()}${type[0].toLowerCase()}${type.endsWith('VECTOR') ? 'v' : ''}`].bind(this),
+    };
+  }
+
+  uploadUniform1f(location: WebGLUniformLocation, name: string) {
+    this.gl.uniform1f(location, this.uniforms[name].value[0]);
+  }
+
+  uploadUniform2f(location: WebGLUniformLocation, name: string) {
+    this.gl.uniform2f(location, this.uniforms[name].value[0], this.uniforms[name].value[1]);
+  }
+
+  uploadUniform3f(location: WebGLUniformLocation, name: string) {
+    // eslint-disable-next-line max-len
+    this.gl.uniform3f(location, this.uniforms[name].value[0], this.uniforms[name].value[1], this.uniforms[name].value[2]);
+  }
+
+  uploadUniform4f(location: WebGLUniformLocation, name: string) {
+    // eslint-disable-next-line max-len
+    this.gl.uniform4f(location, this.uniforms[name].value[0], this.uniforms[name].value[1], this.uniforms[name].value[2], this.uniforms[name].value[3]);
+  }
+
+  uploadUniform1fv(location: WebGLUniformLocation, name: string) {
+    this.gl.uniform1fv(location, this.uniforms[name].value);
+  }
+
+  uploadUniform2fv(location: WebGLUniformLocation, name: string) {
+    this.gl.uniform2fv(location, this.uniforms[name].value);
+  }
+
+  uploadUniform3fv(location: WebGLUniformLocation, name: string) {
+    this.gl.uniform3fv(location, this.uniforms[name].value);
+  }
+
+  uploadUniform4fv(location: WebGLUniformLocation, name: string) {
+    this.gl.uniform4fv(location, this.uniforms[name].value);
+  }
+
+  uploadUniform1iv(location: WebGLUniformLocation, name: string) {
+    this.gl.uniform1iv(location, new Int32Array(this.uniforms[name].value));
+  }
+
+  uploadUniform2iv(location: WebGLUniformLocation, name: string) {
+    this.gl.uniform2iv(location, new Int32Array(this.uniforms[name].value));
+  }
+
+  uploadUniform3iv(location: WebGLUniformLocation, name: string) {
+    this.gl.uniform3iv(location, new Int32Array(this.uniforms[name].value));
+  }
+
+  uploadUniform4iv(location: WebGLUniformLocation, name: string) {
+    this.gl.uniform4iv(location, new Int32Array(this.uniforms[name].value));
+  }
+
+  uploadUniform1i(location: WebGLUniformLocation, name: string) {
+    this.gl.uniform1i(location, this.uniforms[name].value[0]);
+  }
+
+  uploadUniform2i(location: WebGLUniformLocation, name: string) {
+    this.gl.uniform2i(location, this.uniforms[name].value[0], this.uniforms[name].value[1]);
+  }
+
+  uploadUniform3i(location: WebGLUniformLocation, name: string) {
+    // eslint-disable-next-line max-len
+    this.gl.uniform3i(location, this.uniforms[name].value[0], this.uniforms[name].value[1], this.uniforms[name].value[2]);
+  }
+
+  uploadUniform4i(location: WebGLUniformLocation, name: string) {
+    // eslint-disable-next-line max-len
+    this.gl.uniform4i(location, this.uniforms[name].value[0], this.uniforms[name].value[1], this.uniforms[name].value[2], this.uniforms[name].value[3]);
+  }
+
+
+  updateUniform(uniformName: string, value: number | Array<number>) {
+    this.uniforms[uniformName].value = Array.isArray(value) ? value : [value];
   }
 
   drawWithTransformMatrix(
@@ -378,16 +503,8 @@ class GLObject extends DrawingObject {
     );
 
     Object.keys(this.uniforms).forEach((uniformName) => {
-      const value = this.uniforms[uniformName];
-      if (value.length === 1) {
-        gl.uniform1f(locations[uniformName], value[0]);
-      } else if (value.length === 2) {
-        gl.uniform2f(locations[uniformName], value[0], value[1]);
-      } else if (value.length === 3) {
-        gl.uniform3f(locations[uniformName], value[0], value[1], value[2]);
-      } else if (value.length === 4) {
-        gl.uniform4f(locations[uniformName], value[0], value[1], value[2], value[3]);
-      }
+      const { method } = this.uniforms[uniformName];
+      method(locations[uniformName], uniformName);
     });
 
     gl.uniform1f(locations.u_z, this.z);

@@ -100,7 +100,7 @@ element.drawingObject.addBuffer('a_col', 4, colors, 'UNSIGNED_BYTE', true);
 element.drawingObject.addBuffer('a_vel', 2, velocities);
 element.drawingObject.addBuffer('a_center', 2, centers);
 element.drawingObject.addBuffer('a_radius', 1, radii);
-element.drawingObject.addUniform('u_time', [0]);
+element.drawingObject.addUniform('u_time');
 let startTime = null;
 figure.notifications.add('beforeDraw', () => {
   if (startTime == null) {
@@ -108,15 +108,9 @@ figure.notifications.add('beforeDraw', () => {
   }
   const deltaTime = (figure.timeKeeper.now() - startTime) / 1000;
   // console.log(deltaTime)
-  element.drawingObject.uniforms['u_time'] = [deltaTime];
+  element.drawingObject.uniforms['u_time'].value = [deltaTime];
 });
 figure.addFrameRate();
-//   [
-//     1, 0, 0, 1,
-//     0, 1, 0, 1,
-//     0, 0, 1, 1,
-//   ],
-// );
 figure.animateNextFrame();
 
 
@@ -125,9 +119,18 @@ const p = figure.add({
   vertexShader: 'withTexture',
   fragShader: 'withTexture',
 });
-p.drawingObject.addVertices([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1]);
+p.drawingObject.addVertices([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1], 'DYNAMIC');
 p.drawingObject.addTexture('./texture.jpg');
-console.log(p.drawingObject)
+
+p.animations.new()
+  .custom({
+    callback: (percent) => {
+      p.drawingObject.updateVertices([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1].map(v => v + percent))
+    },
+    duration: 10,
+  })
+  .start();
+
 // for (let i = 0; i < 100; i += 1) {
 //   const r = rand(0.1, 0.2);
 //   const e = figure.add({
