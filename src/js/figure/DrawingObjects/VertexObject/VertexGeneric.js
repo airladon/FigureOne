@@ -85,7 +85,7 @@ class VertexGeneric extends GLObject {
 
   // $FlowFixMe
   change(options: {
-    points?: Array<Point>,
+    vertices?: Array<Point>,
     copy?: Array<CPY_Step>,
     drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
     texture?: {
@@ -101,7 +101,7 @@ class VertexGeneric extends GLObject {
 
     const previousNumVertices = this.numVertices;
     if (points != null) {
-      this.points = points;
+      this.vertices = points;
     }
     if (drawType != null) {
       if (drawType === 'lines') {
@@ -117,7 +117,7 @@ class VertexGeneric extends GLObject {
     if (copy != null) {
       this.copy = copy;
     }
-    const newVerts = copyPoints(this.points, this.copy);
+    const newVerts = copyPoints(this.vertices, this.copy);
     const vertices = Array(newVerts.length * 2);
     for (let i = 0; i < newVerts.length; i += 1) {
       vertices[i * 2] = newVerts[i].x;

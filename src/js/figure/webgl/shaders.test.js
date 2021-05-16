@@ -6,6 +6,6 @@ describe('Shaders', () => {
     expect(typeof shaders.vertexSource).toBe('string');
     expect(typeof shaders.fragmentSource).toBe('string');
     const vNames = ['a_position', 'u_matrix', 'u_z', 'u_color'];
-    expect(shaders.varNames).toEqual(vNames);
+    expect(shaders.vars).toEqual(vNames);
   });
 });

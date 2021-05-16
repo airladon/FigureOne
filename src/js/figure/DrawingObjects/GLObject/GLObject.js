@@ -53,7 +53,7 @@ class GLObject extends DrawingObject {
     };
   };
 
-  vertices: Array<number>;
+  points: Array<number>;
 
   uniforms: {
     [uniformName: string]: {
@@ -266,9 +266,9 @@ class GLObject extends DrawingObject {
     const { texture } = this;
     if (texture != null) {
       texture.points = [];
-      for (let i = 0; i < this.vertices.length; i += 2) {
-        const x = this.vertices[i];
-        const y = this.vertices[i + 1];
+      for (let i = 0; i < this.points.length; i += 2) {
+        const x = this.points[i];
+        const y = this.points[i + 1];
         const texNormX = (x - xMinGL) / glWidth;
         const texNormY = (y - yMinGL) / glHeight;
         texture.points.push(texNormX * texWidth + xMinTex);
@@ -278,7 +278,7 @@ class GLObject extends DrawingObject {
   }
 
   addVertices(vertices: Array<number>, usage: TypeGLBufferUsage = 'STATIC') {
-    this.vertices = vertices;
+    this.points = vertices;
     this.addBuffer('a_position', 2, vertices, 'FLOAT', false, 0, 0, usage);
     this.numVertices = vertices.length / 2;
   }
@@ -383,7 +383,7 @@ class GLObject extends DrawingObject {
   }
 
   updateVertices(vertices: Array<number>) {
-    this.vertices = vertices;
+    this.points = vertices;
     this.numVertices = vertices.length / 2;
     this.updateBuffer('a_position', vertices);
   }
