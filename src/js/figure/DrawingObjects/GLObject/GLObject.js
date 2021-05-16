@@ -481,10 +481,10 @@ class GLObject extends DrawingObject {
   drawWithTransformMatrix(
     transformMatrix: Array<number>,
     color: TypeColor,
+    numDrawVertices: number = this.numVertices,
   ) {
     const { gl } = this;
     const webglInstance = this.webgl;
-    const count = this.numVertices;
 
     const locations = webglInstance.useProgram(this.programIndex);
 
@@ -548,7 +548,7 @@ class GLObject extends DrawingObject {
       gl.uniform1i(locations.u_use_texture, 0);
     }
 
-    gl.drawArrays(this.glPrimitive, 0, count);
+    gl.drawArrays(this.glPrimitive, 0, numDrawVertices);
 
     if (texture) {
       gl.disableVertexAttribArray(locations.a_texcoord);

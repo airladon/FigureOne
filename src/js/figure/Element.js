@@ -21,7 +21,8 @@ import * as m2 from '../tools/m2';
 import * as math from '../tools/math';
 import HTMLObject from './DrawingObjects/HTMLObject/HTMLObject';
 import DrawingObject from './DrawingObjects/DrawingObject';
-import VertexObject from './DrawingObjects/VertexObject/VertexObject';
+import VertexGeneric from './DrawingObjects/VertexObject/VertexGeneric';
+import GLObject from './DrawingObjects/GLObject/GLObject';
 import { TextObjectBase } from './DrawingObjects/TextObject/TextObject';
 // import type { OBJ_Font } from './DrawingObjects/TextObject/TextObject';
 import {
@@ -3368,8 +3369,8 @@ class FigureElementPrimitive extends FigureElement {
       if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
       // if (FIGURE1DEBUG) { debugTimes.push([performance.now(), '']); }
       let pointCount = -1;
-      if (this.drawingObject instanceof VertexObject) {
-        pointCount = this.drawingObject.numPoints;
+      if (this.drawingObject instanceof VertexGeneric) {
+        pointCount = this.drawingObject.numVertices;
         if (this.angleToDraw !== -1) {
           pointCount = this.drawingObject.getPointCountForAngle(this.angleToDraw);
         }
@@ -3379,6 +3380,8 @@ class FigureElementPrimitive extends FigureElement {
         if (this.pointsToDraw !== -1) {
           pointCount = this.pointsToDraw;
         }
+      } else if (this.drawingObject instanceof GLObject) {
+        pointCount = this.drawingObject.numVertices;
       } else {
         pointCount = 1;
       } // $FlowFixMe
@@ -3413,7 +3416,7 @@ class FigureElementPrimitive extends FigureElement {
       if (pointCount > 0) {
         this.drawTransforms.forEach((t) => {
           this.drawingObject.drawWithTransformMatrix(
-            t.matrix(), colorToUse, canvasIndex, pointCount,
+            t.matrix(), colorToUse, pointCount,
           );
         });
       }  // $FlowFixMe

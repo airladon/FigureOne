@@ -131,11 +131,21 @@ p.animations.new()
   })
   .start();
 
-// const q = figure.add({
-//   make: 'polygon',
-//   radius: 0.4,
-//   sides: 6,
-// });
+const q = figure.add({
+  make: 'polygon',
+  radius: 0.4,
+  sides: 6,
+  // texture: { src: './texture.jpg' },
+});
+
+q.animations.new()
+  .custom({
+    callback: (percent) => {
+      q.custom.updatePoints({ radius: percent, sides: Math.floor(percent * 10 + 3), sidesToDraw: Math.floor(percent * 10 + 3) });
+    },
+    duration: 10,
+  })
+  .start();
 
 // for (let i = 0; i < 100; i += 1) {
 //   const r = rand(0.1, 0.2);

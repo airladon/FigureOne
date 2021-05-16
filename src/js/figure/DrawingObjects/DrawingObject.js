@@ -129,7 +129,7 @@ class DrawingObject {
   drawWithTransformMatrix(
     transformMatrix: Array<number>,
     color: TypeColor,
-    canvasIndex: number,
+    // canvasIndex: number,
     numPoints: number,
   ) {
   }

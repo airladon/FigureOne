@@ -37,7 +37,7 @@ class VertexGeneric extends GLObject {
     if (textureLocation !== '') {
       super(webgl, 'withTexture', 'withTexture');
     } else {
-      super(webgl);
+      super(webgl, 'simple', 'simple');
     }
     this.points = [];
     this.copy = [];
@@ -70,6 +70,17 @@ class VertexGeneric extends GLObject {
     }
 
     // this.setupBuffer();
+  }
+
+  getPointCountForAngle(drawAngle: number = Math.PI * 2) {
+    // return this.numPoints * drawAngle / (Math.PI * 2);
+    return this.numVertices;
+  }
+
+  // Abstract method - should be reimplemented for any vertexObjects that
+  // eslint-disable-next-line no-unused-vars
+  getPointCountForLength(drawLength: number) {
+    return this.numVertices;
   }
 
   // $FlowFixMe
@@ -106,14 +117,14 @@ class VertexGeneric extends GLObject {
     if (copy != null) {
       this.copy = copy;
     }
-    const newVerts = copyPoints(this.vertices, this.copy);
+    const newVerts = copyPoints(this.points, this.copy);
     const vertices = Array(newVerts.length * 2);
     for (let i = 0; i < newVerts.length; i += 1) {
       vertices[i * 2] = newVerts[i].x;
       vertices[i * 2 + 1] = newVerts[i].y;
     }
-    console.log(vertices)
     this.updateVertices(vertices);
+    // this.numVertices = vertices.length;
     // this.vertices = [];
     // newVerts.forEach((v) => {
     //   this.vertices.push(v.x);

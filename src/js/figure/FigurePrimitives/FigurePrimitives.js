@@ -2337,7 +2337,7 @@ export default class FigurePrimitives {
     }
 
     const element = Generic(
-      this.webgl,
+      this.webgl[0],
       options.color,
       options.transform,
       this.limits,
@@ -3185,7 +3185,7 @@ export default class FigurePrimitives {
 
   textGL(options: Object) {
     return Text(
-      this.webgl,
+      this.webgl[0],
       this.limits,
       options,
     );

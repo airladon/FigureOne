@@ -1647,7 +1647,7 @@ export default class EquationSymbols {
     };
     const optionsToUse = joinObjects(defaultOptions, options);
     return (new VinculumNew(
-      this.shapes.webgl,
+      this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('VinculumSymbol').scale(1, 1).translate(0, 0),
       this.shapes.limits,
@@ -1669,7 +1669,7 @@ export default class EquationSymbols {
     };
     const optionsToUse = joinObjects(defaultOptions, optionsIn);
     return (new Box(
-      this.shapes.webgl,
+      this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('Box').scale(1, 1).translate(0, 0),
       this.shapes.limits,
@@ -1690,7 +1690,7 @@ export default class EquationSymbols {
     };
     const optionsToUse = joinObjects(defaultOptions, optionsIn);
     return (new Line(
-      this.shapes.webgl,
+      this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('Line').scale(1, 1).translate(0, 0),
       this.shapes.limits,
@@ -1713,7 +1713,7 @@ export default class EquationSymbols {
     const optionsToUse = joinObjects(defaultOptions, optionsIn);
 
     return (new Box(
-      this.shapes.webgl,
+      this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('TouchBox').scale(1, 1).translate(0, 0),
       this.shapes.limits,
@@ -1741,7 +1741,7 @@ export default class EquationSymbols {
       optionsToUse.side = 'left';
     }
     return (new Arrow(
-      this.shapes.webgl,
+      this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('ArrowSymbol').scale(1, 1).translate(0, 0),
       this.shapes.limits,
@@ -1764,7 +1764,7 @@ export default class EquationSymbols {
     const optionsToUse = joinObjects(defaultOptions, options);
 
     return (new Sum(
-      this.shapes.webgl,
+      this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('sum').scale(1, 1).translate(0, 0),
       this.shapes.limits,
@@ -1785,7 +1785,7 @@ export default class EquationSymbols {
     const optionsToUse = joinObjects(defaultOptions, options);
 
     return (new Product(
-      this.shapes.webgl,
+      this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('Sum').scale(1, 1).translate(0, 0),
       this.shapes.limits,
@@ -1816,7 +1816,7 @@ export default class EquationSymbols {
     const optionsToUse = joinObjects(defaultOptions, options);
 
     return new Integral(
-      this.shapes.webgl,
+      this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('Integral').scale(1, 1).translate(0, 0),
       this.shapes.limits,
@@ -1870,7 +1870,7 @@ export default class EquationSymbols {
     }
     const optionsToUse = joinObjects(defaultOptions, optionsIn);
     return new Radical(
-      this.shapes.webgl,
+      this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('bracket').scale(1, 1).translate(0, 0),
       this.shapes.limits,
@@ -1892,7 +1892,7 @@ export default class EquationSymbols {
     };
     const optionsToUse = joinObjects(defaultOptions, options);
     return new Strike(
-      this.shapes.webgl,
+      this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('bracket').scale(1, 1).translate(0, 0),
       this.shapes.limits,
@@ -1945,7 +1945,7 @@ export default class EquationSymbols {
     };
     const optionsToUse = joinObjects(defaultOptions, options);
     return (new Bracket(
-      this.shapes.webgl,
+      this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('bracket').scale(1, 1).translate(0, 0),
       this.shapes.limits,
@@ -1965,7 +1965,7 @@ export default class EquationSymbols {
     };
     const optionsToUse = joinObjects(defaultOptions, options);
     return (new AngleBracket(
-      this.shapes.webgl,
+      this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('bar').scale(1, 1).translate(0, 0),
       this.shapes.limits,
@@ -1988,7 +1988,7 @@ export default class EquationSymbols {
     };
     const optionsToUse = joinObjects(defaultOptions, options);
     return (new Brace(
-      this.shapes.webgl,
+      this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('brace').scale(1, 1).translate(0, 0),
       this.shapes.limits,
@@ -2007,7 +2007,7 @@ export default class EquationSymbols {
     };
     const optionsToUse = joinObjects(defaultOptions, options);
     return (new Bar(
-      this.shapes.webgl,
+      this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('bar').scale(1, 1).translate(0, 0),
       this.shapes.limits,
@@ -2033,7 +2033,7 @@ export default class EquationSymbols {
     //   optionsToUse.endLineWidth = optionsToUse.lineWidth * 0.7;
     // }
     return (new SquareBracket(
-      this.shapes.webgl,
+      this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('bar').scale(1, 1).translate(0, 0),
       this.shapes.limits,
