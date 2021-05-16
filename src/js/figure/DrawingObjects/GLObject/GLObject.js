@@ -121,6 +121,29 @@ class GLObject extends DrawingObject {
     }
   }
 
+  updateTextureMap() {
+    if (this.texture.buffer != null) {
+      this.gl.deleteBuffer(this.texture.buffer);
+      this.texture.buffer = this.gl.createBuffer();
+    }
+    this.createTextureMap(
+      this.texture.mapTo.left, this.texture.mapTo.right,
+      this.texture.mapTo.bottom, this.texture.mapTo.top,
+      this.texture.mapFrom.left, this.texture.mapFrom.right,
+      this.texture.mapFrom.bottom, this.texture.mapFrom.top,
+    );
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.texture.buffer);
+    this.gl.bufferData(
+      this.gl.ARRAY_BUFFER,
+      new Float32Array(this.texture.points),
+      this.gl.STATIC_DRAW,
+    );
+  }
+
+
+  /**
+   * Buffer a texture for the shape to be painted with.
+   */
   addTexture(
     location: string,
     mapTo: Rect = new Rect(-1, -1, 2, 2),
@@ -137,22 +160,17 @@ class GLObject extends DrawingObject {
         points: [],
         buffer: this.gl.createBuffer(),
       };
-      this.createTextureMap(
-        mapTo.left, mapTo.right,
-        mapTo.bottom, mapTo.top,
-        mapFrom.left, mapFrom.right,
-        mapFrom.bottom, mapFrom.top,
-      );
     }
 
     const { texture, gl, webgl } = this;
     // $FlowFixMe
-    gl.bindBuffer(gl.ARRAY_BUFFER, texture.buffer);
-    gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Float32Array(texture.points),
-      gl.STATIC_DRAW,
-    );
+    this.updateTextureMap();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, texture.buffer);
+    // gl.bufferData(
+    //   gl.ARRAY_BUFFER,
+    //   new Float32Array(texture.points),
+    //   gl.STATIC_DRAW,
+    // );
     if (
       !(texture.id in webgl.textures)
       || (
@@ -262,31 +280,27 @@ class GLObject extends DrawingObject {
     usageIn: TypeGLBufferUsage = 'STATIC',
   ) {
     const { gl } = this;
-    let processedData;
-    let type = gl.FLOAT;
-    if (typeIn === 'FLOAT') {
-      processedData = new Float32Array(data);
-    } else if (typeIn === 'UNSIGNED_BYTE') {
-      processedData = new Uint8Array(data);
-      type = gl.UNSIGNED_BYTE;
-    } else if (typeIn === 'BYTE') {
-      processedData = new Int8Array(data);
-      type = gl.BYTE;
-    } else if (typeIn === 'SHORT') {
-      processedData = new Int16Array(data);
-      type = gl.SHORT;
-    } else if (typeIn === 'UNSIGNED_SHORT') {
-      processedData = new Uint16Array(data);
-      type = gl.UNSIGNED_SHORT;
-    } else {
-      throw new Error(`GLObject addBuffer usage needs to be FLOAT, BYTE, SHORT, UNSIGNED_BYTE or UNSIGNED_SHORT - received: "${typeIn}"`);
-    }
     let usage = gl.STATIC_DRAW;
     if (usageIn === 'DYNAMIC') {
       usage = gl.DYNAMIC_DRAW;
     }
+    let type;
+    if (typeIn === 'FLOAT') {
+      type = gl.FLOAT;
+    } else if (typeIn === 'UNSIGNED_BYTE') {
+      type = gl.UNSIGNED_BYTE;
+    } else if (typeIn === 'BYTE') {
+      type = gl.BYTE;
+    } else if (typeIn === 'SHORT') {
+      type = gl.SHORT;
+    } else if (typeIn === 'UNSIGNED_SHORT') {
+      type = gl.UNSIGNED_SHORT;
+    } else {
+      throw new Error(`GLObject addBuffer usage needs to be FLOAT, BYTE, SHORT, UNSIGNED_BYTE or UNSIGNED_SHORT - received: "${typeIn}"`);
+    }
     this.buffers[name] = {
-      buffer: gl.createBuffer(),
+      // buffer: gl.createBuffer(),
+      buffer: null,
       size,
       type,
       normalize,
@@ -294,6 +308,28 @@ class GLObject extends DrawingObject {
       offset,
       usage,
     };
+    this.fillBuffer(name, data);
+  }
+
+  fillBuffer(
+    name: string,
+    data: Array<number>,
+  ) {
+    const { gl } = this;
+    let processedData;
+    const { type, usage } = this.buffers[name];
+    if (type === gl.FLOAT) {
+      processedData = new Float32Array(data);
+    } else if (type === gl.UNSIGNED_BYTE) {
+      processedData = new Uint8Array(data);
+    } else if (type === gl.BYTE) {
+      processedData = new Int8Array(data);
+    } else if (type === gl.SHORT) {
+      processedData = new Int16Array(data);
+    } else if (type === gl.UNSIGNED_SHORT) {
+      processedData = new Uint16Array(data);
+    }
+    this.buffers[name].buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers[name].buffer);
     gl.bufferData(gl.ARRAY_BUFFER, processedData, usage);
   }
@@ -325,8 +361,8 @@ class GLObject extends DrawingObject {
   resetBuffers() {
     const { gl } = this;
     Object.keys(this.buffers).forEach((bufferName) => {
-      const { buffer } = this.buffers[bufferName];
-      gl.deleteBuffer(buffer);
+      gl.deleteBuffer(this.buffers[bufferName].buffer);
+      this.buffers[bufferName].buffer = null;
     });
     this.buffers = {};
     this.resetTextureBuffers();
@@ -334,47 +370,20 @@ class GLObject extends DrawingObject {
 
   updateVertices(vertices: Array<number>) {
     this.vertices = vertices;
-    this.gl.deleteBuffer(this.buffers.a_position.buffer);
-    this.addBuffer('a_position', 2, vertices);
     this.numVertices = vertices.length / 2;
+    this.updateBuffer('a_position', vertices);
   }
 
   updateBuffer(name: string, data: Array<number>) {
     this.gl.deleteBuffer(this.buffers[name].buffer);
-    this.addBuffer(name, this.buffers[name].size, data);
+    this.buffers[name].buffer = null;
+    this.fillBuffer(name, data);
   }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(),
     ];
   }
-
-  // addUniform(
-  //   uniformName: string,
-  //   type: TypeGLUniform = 'FLOAT',
-  //   value: number | Array<number> = 0,
-  // ) {
-  //   let method;
-  //   let arrayMethod = false;
-  //   const v = Array.isArray(value) ? value : [value];
-  //   if (type === 'FLOAT') {
-  //     method = `uniform${v.length.toString()}f`;
-  //   } else if (type === 'FLOAT_ARRAY') {
-  //     method = `uniform${v.length.toString()}fv`;
-  //     arrayMethod = true;
-  //   } else if (type === 'INT_ARRAY') {
-  //     method = `uniform${v.length.toString()}iv`;
-  //     arrayMethod = true;
-  //   } else if (type === 'INT') {
-  //     method = `uniform${v.length.toString()}i`;
-  //   }
-  //   this.uniforms[uniformName] = {
-  //     value: v,
-  //     type,
-  //     method,
-  //     arrayMethod,
-  //   };
-  // }
 
   /**
    * Add a uniform.

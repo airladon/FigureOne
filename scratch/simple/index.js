@@ -125,11 +125,17 @@ p.drawingObject.addTexture('./texture.jpg');
 p.animations.new()
   .custom({
     callback: (percent) => {
-      p.drawingObject.updateVertices([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1].map(v => v + percent))
+      p.drawingObject.updateVertices([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1].map(v => v + percent));
     },
     duration: 10,
   })
   .start();
+
+// const q = figure.add({
+//   make: 'polygon',
+//   radius: 0.4,
+//   sides: 6,
+// });
 
 // for (let i = 0; i < 100; i += 1) {
 //   const r = rand(0.1, 0.2);

@@ -28,7 +28,7 @@ export default function Generic(
   name: string = '',
 ) {
   const generic = new VertexGeneric(
-    webgl,
+    webgl[0],
     // vertices,
     // border,
     // touchBorder,
