@@ -9,18 +9,17 @@ import DrawingObject from '../DrawingObject';
 // import type { CPY_Step } from '../../geometries/copy/copy';
 import type { TypeColor } from '../../../tools/types';
 
-// Base clase of all shape objects made from verteces for webgl.
-// The job of a VertexObject is to:
-//  - Have the points of a object/shape
-//  - Have the shape's border (used to determine whether a location is
-//    within the shape)
-//  - Setup the webgl buffer
-//  - Draw the shape
+export type TypeGLBufferType = 'BYTE' | 'UNSIGNED_BYTE' | 'SHORT' | 'UNSIGNED_SHORT' | 'FLOAT';
+
+export type TypeGLBufferUSage = 'STATIC' | 'DYNAMIC';
+
 class GLObject extends DrawingObject {
-  gl: Array<WebGLRenderingContext>;    // shortcut for the webgl context
-  webgl: Array<WebGLInstance>;         // webgl instance for a html canvas
+  gl: Array<WebGLRenderingContext>;
+  webgl: Array<WebGLInstance>;
+  glPrimitive: number;
 
   z: number;
+
   texture: ?{
     id: string;
     src?: ?string;
@@ -33,8 +32,13 @@ class GLObject extends DrawingObject {
 
   buffers: {
     [bufferName: string]: {
-      buffer: Array<number>,
+      buffer: WebGLBuffer,
       size: number,
+      type: TypeGLBufferType,
+      normalize: boolean,
+      stride: number,
+      offset: number,
+      usage: TypeGLBufferUsage,
     };
   };
 
@@ -60,8 +64,8 @@ class GLObject extends DrawingObject {
     fragmentShader: string | { src: string, vars: Array<string> } = 'withTexture',
   ) {
     super();
-    // this.numPoints = 0;
     this.gl = webgl.gl;
+    this.glPrimitive = this.gl.TRIANGLES;
     this.webgl = webgl;
     this.z = 0;
     this.programIndex = this.webgl.getProgram(vertexShader, fragmentShader);
@@ -70,6 +74,10 @@ class GLObject extends DrawingObject {
     this.numVertices = 0;
     this.uniforms = {};
     this.texture = null;
+  }
+
+  setZ(z: number) {
+    this.z = z;
   }
 
   addTextureToBuffer(
@@ -241,28 +249,52 @@ class GLObject extends DrawingObject {
     this.numVertices = vertices.length / 2;
   }
 
-  addBuffer(name: string, size: number, data: Array<number>) {
+  addBuffer(
+    name: string,
+    size: number,
+    data: Array<number>,
+    typeIn: TypeGLBufferType = 'FLOAT',
+    normalize: boolean = false,
+    stride: number = 0,
+    offset: number = 0,
+    usageIn: TypeGLBufferUSage = 'STATIC',
+  ) {
     const { gl } = this;
+    let processedData;
+    let type = gl.FLOAT;
+    if (typeIn === 'FLOAT') {
+      processedData = new Float32Array(data);
+    } else if (typeIn === 'UNSIGNED_BYTE') {
+      processedData = new Uint8Array(data);
+      console.log(data)
+      console.log(processedData)
+      type = gl.UNSIGNED_BYTE;
+    } else if (typeIn === 'BYTE') {
+      processedData = new Int8Array(data);
+      type = gl.BYTE;
+    } else if (typeIn === 'SHORT') {
+      processedData = new Int16Array(data);
+      type = gl.SHORT;
+    } else if (typeIn === 'UNSIGNED_SHORT') {
+      processedData = new Uint16Array(data);
+      type = gl.UNSIGNED_SHORT;
+    }
+    let usage = gl.STATIC_DRAW;
+    if (usageIn === 'DYNAMIC') {
+      usage = gl.DYNAMIC_DRAW;
+    }
     this.buffers[name] = {
       buffer: gl.createBuffer(),
       size,
+      type,
+      normalize,
+      stride,
+      offset,
+      usage,
     };
     gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers[name].buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, processedData, usage);
   }
-
-  // setupBuffers(numVertices: number, buffers: {
-  //   data: Array<number>,
-  //   size: number,
-  //   locationName: string
-  // }) {
-  //   this.state = 'loading';
-  //   Object.keys(buffers).forEach((bufferName) => {
-  //     this.addBuffer(bufferName, buffers[bufferName].size, buffers[bufferName].buffer);
-  //   });
-  //   this.numVertices = numVertices;
-  //   this.state = 'loaded';
-  // }
 
   executeOnLoad() {
     if (this.onLoad != null) {
@@ -300,7 +332,7 @@ class GLObject extends DrawingObject {
 
   changeBuffer(name: string, data: Array<number>) {
     this.gl.deleteBuffer(this.buffers[name].buffer);
-    this.addBuffer(name, data);
+    this.addBuffer(name, this.buffers[name].size, data);
   }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
@@ -315,21 +347,10 @@ class GLObject extends DrawingObject {
   drawWithTransformMatrix(
     transformMatrix: Array<number>,
     color: TypeColor,
-    // glIndex: number,
-    // count: number = this.numVertices,
-    // webglInstance: WebGLInstance = this.webgl,
   ) {
     const { gl } = this;
     const webglInstance = this.webgl;
     const count = this.numVertices;
-
-    // const size = 2;         // 2 components per iteration
-    const type = gl.FLOAT;   // the data is 32bit floats
-    const normalize = false;    // don't normalize the data
-    // 0 = move forward size * sizeof(type) each iteration to get
-    // the next position
-    const stride = 0;
-    const offset = 0;       // start at the beginning of the buffer
 
     const locations = webglInstance.useProgram(this.programIndex);
 
@@ -337,7 +358,9 @@ class GLObject extends DrawingObject {
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 
     Object.keys(this.buffers).forEach((bufferName) => {
-      const { buffer, size } = this.buffers[bufferName];
+      const {
+        buffer, size, type, stride, offset, normalize,
+      } = this.buffers[bufferName];
       gl.enableVertexAttribArray(locations[bufferName]);
       // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
       gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
@@ -399,26 +422,12 @@ class GLObject extends DrawingObject {
       gl.uniform1i(locations.u_use_texture, 0);
     }
 
-    gl.drawArrays(gl.TRIANGLES, offset, count);
+    gl.drawArrays(this.glPrimitive, 0, count);
 
     if (texture) {
       gl.disableVertexAttribArray(locations.a_texcoord);
     }
   }
-
-  // transform(transformMatrix: Array<number>) {
-  //   for (let i = 0; i < this.points.length; i += 2) {
-  //     let p = new Point(this.points[i], this.points[i + 1]);
-  //     p = p.transformBy(transformMatrix);
-  //     this.points[i] = p.x;
-  //     this.points[i + 1] = p.y;
-  //   }
-  //   for (let b = 0; b < this.border.length; b += 1) {
-  //     for (let p = 0; p < this.border[b].length; p += 1) {
-  //       this.border[b][p] = this.border[b][p].transformBy(transformMatrix);
-  //     }
-  //   }
-  // }
 }
 
 export default GLObject;

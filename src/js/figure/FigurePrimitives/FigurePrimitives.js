@@ -2241,8 +2241,8 @@ export default class FigurePrimitives {
       name: generateUniqueId('primitive_'),
       color: this.defaultColor,
       transform: new Transform('gl').standard(),
-      vertexShader: 'simple1',
-      fragShader: 'simple1',
+      vertexShader: 'gradient',
+      fragShader: 'gradient',
       texture: {
         src: '',
         mapTo: new Rect(-1, -1, 2, 2),

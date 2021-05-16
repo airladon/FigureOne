@@ -84,7 +84,7 @@ for (let i = 0; i < 1000; i += 1) {
   const r = rand(0.1, 0.2);
   const p = [rand(-3 + r, 3 - r), rand(-3 + r, 3 - r)];
   const v = [rand(-0.15, 0.15), rand(-0.15, 0.15)];
-  const color = [rand(0, 1), rand(0, 1), rand(0, 1), rand(0, 1)];
+  const color = [rand(0, 255), rand(0, 255), rand(0, 255), rand(0, 255)];
   for (let j = 0; j < sides; j += 1) {
     points.push(p[0], p[1]);
     points.push(r * Math.cos(step * j) + p[0], r * Math.sin(step * j) + p[1]);
@@ -96,7 +96,7 @@ for (let i = 0; i < 1000; i += 1) {
   }
 }
 element.drawingObject.addVertices(points);
-element.drawingObject.addBuffer('a_col', 4, colors);
+element.drawingObject.addBuffer('a_col', 4, colors, 'UNSIGNED_BYTE', true);
 element.drawingObject.addBuffer('a_vel', 2, velocities);
 element.drawingObject.addBuffer('a_center', 2, centers);
 element.drawingObject.addBuffer('a_radius', 1, radii);

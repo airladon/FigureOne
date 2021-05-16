@@ -11,7 +11,7 @@ const vertex = {
         + '}',
     vars: ['a_position', 'u_matrix', 'u_z'],
   },
-  simple1: {
+  gradient: {
     src:
         `
 attribute vec2 a_position;
@@ -51,7 +51,7 @@ const fragment = {
       + '}',
     vars: ['u_color'],
   },
-  simple1: {
+  gradient: {
     src:
       'precision mediump float;'
       + 'uniform vec4 u_color;'
