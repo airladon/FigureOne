@@ -280,6 +280,82 @@ export type OBJ_PulseScale = {
   frequency?: number,
 };
 
+/**
+ * GL buffer.
+ *
+ * @property {string} name name of attribute in shader
+ * @property {number} size number of values per attribute
+ * @property {Array<number>} data array of values
+ * @property {TypeGLBufferType} [type] (`'FLOAT'`)
+ * @property {boolean} [normalize] (`false`)
+ * @property {number} [stride] (`0`)
+ * @property {number} [offset] (`0`)
+ * @property {TypeGLBufferUsage} [usage] (`'STATIC'`)
+ */
+export type OBJ_GLBuffer = {
+  name: string,
+  size: number,
+  data: Array<number>,
+  type: TypeGLBufferType,
+  normalize: boolean,
+  stride: number,
+  offset: number,
+  usage: TypeGLBufferUsage,
+};
+
+/**
+ * GL vertex - associated with attribute 'a_position' in shader.
+ *
+ * Assumes buffer parameters of:
+ * - name: 'a_position'
+ * - size: 2
+ * - type: 'FLOAT'
+ * - normalize: false
+ * - stride: 0
+ * - offset: 0
+ *
+ * @property {Array<number>} data array of values
+ * @property {TypeGLBufferUsage} [usage] (`'STATIC'`)
+ */
+export type OBJ_GLVertexBuffer = {
+  data: Array<number>,
+  usage: TypeGLBufferUsage,
+};
+
+/**
+ * GL Uniform
+ * @property {string} name name of uniform in shader
+ * @property {1 | 2 | 3 | 4} length
+ * @property {TypeGLUniform} type
+ */
+export type OBJ_GLUniform = {
+  name: string,
+  length: 1 | 2 | 3 | 4,
+  type: TypeGLUniform,
+};
+
+/**
+ *
+ * @property {string} [name]
+ * @property {string} [vertexShader]
+ * @property {string} [fragShader]
+ * @property {OBJ_Texture} [texture]
+ * @property {OBJ_GLVertexBuffer} [vertices]
+ * @property {Array<OBJ_GLBuffer>} [buffers]
+ * @property {Array<OBJ_GLUniform>} [uniforms]
+ * @property {'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'} [glPrimitive]
+ */
+export type OBJ_GLPrimitive = {
+  name?: string,
+  vertexShader?: string,
+  fragShader?: string,
+  texture?: OBJ_Texture,
+  vertices?: OBJ_GLVertexBuffer,
+  buffers?: Array<OBJ_GLBuffer>,
+  uniforms?: Array<OBJ_GLUniform>,
+  glPrimitive?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
+};
+
 /* eslint-disable max-len */
 /**
  * ![](./apiassets/generic.png)
@@ -2236,11 +2312,10 @@ export default class FigurePrimitives {
    * {@link FigureElementPrimitive} that draws a generic shape.
    * @see {@link OBJ_Generic} for options and examples.
    */
-  gl(...optionsIn: Array<OBJ_Generic>) {
+  gl(...optionsIn: Array<OBJ_GLPrimitive>) {
     const defaultOptions = {
       name: generateUniqueId('primitive_'),
       color: this.defaultColor,
-      transform: new Transform('gl').standard(),
       vertexShader: 'gradient',
       fragShader: 'gradient',
       texture: {
@@ -2250,6 +2325,7 @@ export default class FigurePrimitives {
         repeat: false,
         onLoad: this.animateNextFrame,
       },
+      glPrimitive: 'TRIANGLES',
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
     options.transform = getTransform(options.transform);
@@ -2263,9 +2339,47 @@ export default class FigurePrimitives {
       options.vertexShader,
       options.fragShader,
     );
+    glObject.setPrimitive(options.glPrimitive);
+    if (options.buffers != null) {
+      options.buffers.forEach((buffer) => {
+        const defaultBuffer = {
+          type: 'FLOAT',
+          normalize: false,
+          stride: 0,
+          offset: 0,
+          usage: 'STATIC',
+        };
+        const b = joinObjects({}, defaultBuffer, buffer);
+        glObject.addBuffer(
+          b.name, b.size, b.data, b.type,
+          b.normalize, b.stride, b.offset, b.usageIn,
+        );
+      });
+      if (options.uniforms) {
+        options.uniforms.forEach((uniform) => {
+          const defaultUniform = {
+            type: 'FLOAT',
+            length: 1,
+          };
+          const u = joinObjects({}, defaultUniform, uniform);
+          glObject.addUniform(
+            u.name, u.length, u.type,
+          );
+        });
+      }
+      if (options.texture.src !== '') {
+        const t = options.texture;
+        glObject.addTexture(
+          t.src, t.mapTo, t.mapFrom, t.repeat,
+        );
+      }
+    }
     const element = new FigureElementPrimitive(
       glObject, options.transform, options.color, this.figureLimits, null, options.name,
     );
+    element.custom.updateBuffer = element.drawingObject.updateBuffer.bind(element);
+    element.custom.updateVertices = element.drawingObject.updateVertices.bind(element);
+    element.custom.updateUniform = element.drawingObject.updateUniform.bind(element);
     element.dimColor = this.defaultDimColor.slice();
 
     // element.custom.updateGeneric = function update(updateOptions: {

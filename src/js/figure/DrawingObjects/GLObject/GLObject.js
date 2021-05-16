@@ -9,10 +9,19 @@ import DrawingObject from '../DrawingObject';
 // import type { CPY_Step } from '../../geometries/copy/copy';
 import type { TypeColor } from '../../../tools/types';
 
+/**
+ * `'BYTE' | 'UNSIGNED_BYTE' | 'SHORT' | 'UNSIGNED_SHORT' | 'FLOAT'`
+ */
 export type TypeGLBufferType = 'BYTE' | 'UNSIGNED_BYTE' | 'SHORT' | 'UNSIGNED_SHORT' | 'FLOAT';
 
+/**
+ * `'STATIC' | 'DYNAMIC'`
+ */
 export type TypeGLBufferUsage = 'STATIC' | 'DYNAMIC';
 
+/**
+ * `'FLOAT' | 'FLOAT_ARRAY' | 'INT' | 'INT_ARRAY'`
+ */
 export type TypeGLUniform = 'FLOAT' | 'FLOAT_ARRAY' | 'INT' | 'INT_ARRAY';
 
 class GLObject extends DrawingObject {
@@ -77,6 +86,11 @@ class GLObject extends DrawingObject {
     this.uniforms = {};
     this.texture = null;
   }
+
+  setPrimitive(primitiveType: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES') {
+    this.glPrimitive = this.gl[primitiveType];
+  }
+
 
   setZ(z: number) {
     this.z = z;
@@ -397,7 +411,7 @@ class GLObject extends DrawingObject {
   addUniform(
     uniformName: string,
     length: 1 | 2 | 3 | 4 = 1,
-    type: 'FLOAT' | 'FLOAT_VECTOR' | 'INT' | 'INT_VECTOR' = 'FLOAT',
+    type: TypeGLUniform = 'FLOAT',
   ) {
     this.uniforms[uniformName] = {
       value: Array(length),
