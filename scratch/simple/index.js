@@ -64,15 +64,6 @@ void main() {
   v_col = a_col;
 }`;
 
-const element = figure.add({
-  make: 'gl',
-  vertexShader: {
-    src: vertexShader,
-    vars: ['a_position', 'a_col', 'a_vel', 'a_center', 'a_radius', 'u_matrix', 'u_z', 'u_time'],
-  },
-  mods: { state: { isChanging: true } },
-});
-
 const points = [];
 const velocities = [];
 const colors = [];
@@ -95,19 +86,34 @@ for (let i = 0; i < 1000; i += 1) {
     colors.push(...color, ...color, ...color);
   }
 }
-element.drawingObject.addVertices(points);
-element.drawingObject.addBuffer('a_col', 4, colors, 'UNSIGNED_BYTE', true);
-element.drawingObject.addBuffer('a_vel', 2, velocities);
-element.drawingObject.addBuffer('a_center', 2, centers);
-element.drawingObject.addBuffer('a_radius', 1, radii);
-element.drawingObject.addUniform('u_time');
+
+const element = figure.add({
+  make: 'gl',
+  vertexShader: {
+    src: vertexShader,
+    vars: ['a_position', 'a_col', 'a_vel', 'a_center', 'a_radius', 'u_matrix', 'u_z', 'u_time'],
+  },
+  vertices: { data: points },
+  buffers: [
+    {
+      name: 'a_col', size: 4, data: colors, type: 'UNSIGNED_BYTE', normalize: true,
+    },
+    { name: 'a_vel', data: velocities },
+    { name: 'a_center', data: centers },
+    { name: 'a_radius', data: radii, size: 1 },
+  ],
+  uniforms: [
+    { name: 'u_time' },
+  ],
+  mods: { state: { isChanging: true } },
+});
+
 let startTime = null;
 figure.notifications.add('beforeDraw', () => {
   if (startTime == null) {
     startTime = figure.timeKeeper.now();
   }
   const deltaTime = (figure.timeKeeper.now() - startTime) / 1000;
-  // console.log(deltaTime)
   element.drawingObject.uniforms['u_time'].value = [deltaTime];
 });
 figure.addFrameRate();

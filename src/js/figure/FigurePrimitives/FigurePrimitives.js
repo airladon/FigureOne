@@ -284,8 +284,8 @@ export type OBJ_PulseScale = {
  * GL buffer.
  *
  * @property {string} name name of attribute in shader
- * @property {number} size number of values per attribute
  * @property {Array<number>} data array of values
+ * @property {number} [size] number of values per attribute (`2`)
  * @property {TypeGLBufferType} [type] (`'FLOAT'`)
  * @property {boolean} [normalize] (`false`)
  * @property {number} [stride] (`0`)
@@ -294,13 +294,13 @@ export type OBJ_PulseScale = {
  */
 export type OBJ_GLBuffer = {
   name: string,
-  size: number,
   data: Array<number>,
-  type: TypeGLBufferType,
-  normalize: boolean,
-  stride: number,
-  offset: number,
-  usage: TypeGLBufferUsage,
+  size?: number,
+  type?: TypeGLBufferType,
+  normalize?: boolean,
+  stride?: number,
+  offset?: number,
+  usage?: TypeGLBufferUsage,
 };
 
 /**
@@ -2340,6 +2340,10 @@ export default class FigurePrimitives {
       options.fragShader,
     );
     glObject.setPrimitive(options.glPrimitive);
+    if (options.vertices != null) {
+      const size = options.vertices.size != null ? options.vertices.size : 2;
+      glObject.addVertices(options.vertices.data, size);
+    }
     if (options.buffers != null) {
       options.buffers.forEach((buffer) => {
         const defaultBuffer = {
@@ -2348,6 +2352,7 @@ export default class FigurePrimitives {
           stride: 0,
           offset: 0,
           usage: 'STATIC',
+          size: 2,
         };
         const b = joinObjects({}, defaultBuffer, buffer);
         glObject.addBuffer(
@@ -2355,7 +2360,7 @@ export default class FigurePrimitives {
           b.normalize, b.stride, b.offset, b.usageIn,
         );
       });
-      if (options.uniforms) {
+      if (options.uniforms != null) {
         options.uniforms.forEach((uniform) => {
           const defaultUniform = {
             type: 'FLOAT',
