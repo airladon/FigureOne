@@ -18,7 +18,7 @@ import {
 import DrawContext2D from './js/figure/DrawContext2D';
 import WebGLInstance from './js/figure/webgl/webgl';
 import DrawingObject from './js/figure/DrawingObjects/DrawingObject';
-import VertexObject from './js/figure/DrawingObjects/VertexObject/VertexObject';
+import VertexGeneric from './js/figure/DrawingObjects/VertexObject/VertexGeneric';
 import {
   TextObject, FigureText, FigureFont,
 } from './js/figure/DrawingObjects/TextObject/TextObject';
@@ -107,7 +107,7 @@ const Fig = {
   WebGLInstance,
   //
   DrawingObject,
-  VertexObject,
+  VertexGeneric,
   TextObject,
   FigureText,
   FigureFont,

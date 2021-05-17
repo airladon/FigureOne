@@ -3058,7 +3058,7 @@ class FigureElement {
  * Primitive figure element
  *
  * A primitive figure element is one that handles an object (`drawingObject`)
- * that draws to the screen. This object may be a {@link VertexObject}, a
+ * that draws to the screen. This object may be a {@link GLObject}, a
  * {@link TextObject} or a {@link HTMLObject}}.
  *
  * @class
@@ -3478,7 +3478,7 @@ class FigureElementPrimitive extends FigureElement {
         yMulToUse = yMultiplier;
       }
     }
-    if (this.drawingObject instanceof VertexObject) {
+    if (this.drawingObject instanceof VertexGeneric) {
       for (let b = 0; b < this.drawingObject.border.length; b += 1) {
         const border = this.drawingObject.border[b];
         for (let i = 0; i < border.length; i += 1) {

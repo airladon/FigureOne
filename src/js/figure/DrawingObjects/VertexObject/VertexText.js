@@ -4,7 +4,7 @@ import {
   Point,
 } from '../../../tools/g2';
 import WebGLInstance from '../../webgl/webgl';
-import VertexObject from './VertexObject';
+import VertexGeneric from './VertexGeneric';
 import { generateUniqueId, joinObjects } from '../../../tools/tools';
 import { round } from '../../../tools/math';
 // import { identity } from '../../../tools/m2';
@@ -29,7 +29,7 @@ type TypeVertexInputTextOptions = {
 //   yAlign: 'top' | 'bottom' | 'middle' | 'baseline',
 // };
 
-class VertexText extends VertexObject {
+class VertexText extends VertexGeneric {
   glPrimitive: number;  // WebGL primitive used
   text: number;       // radius from center to outside of polygon
   center: Point;        // center point

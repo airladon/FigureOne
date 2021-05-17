@@ -69,13 +69,13 @@ const velocities = [];
 const colors = [];
 const centers = [];
 const radii = [];
-const sides = 20;
+const sides = 4;
 const step = Math.PI * 2 / (sides);
-for (let i = 0; i < 1000; i += 1) {
+for (let i = 0; i < 20000; i += 1) {
   const r = rand(0.1, 0.2);
   const p = [rand(-3 + r, 3 - r), rand(-3 + r, 3 - r)];
   const v = [rand(-0.15, 0.15), rand(-0.15, 0.15)];
-  const color = [rand(0, 255), rand(0, 255), rand(0, 255), rand(0, 255)];
+  const color = [rand(0, 255), rand(0, 255), rand(0, 255), 255];
   for (let j = 0; j < sides; j += 1) {
     points.push(p[0], p[1]);
     points.push(r * Math.cos(step * j) + p[0], r * Math.sin(step * j) + p[1]);
@@ -120,38 +120,38 @@ figure.addFrameRate();
 figure.animateNextFrame();
 
 
-const p = figure.add({
-  make: 'gl',
-  vertexShader: 'withTexture',
-  fragShader: 'withTexture',
-});
-p.drawingObject.addVertices([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1], 'DYNAMIC');
-p.drawingObject.addTexture('./texture.jpg');
+// const p = figure.add({
+//   make: 'gl',
+//   vertexShader: 'withTexture',
+//   fragShader: 'withTexture',
+// });
+// p.drawingObject.addVertices([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1], 'DYNAMIC');
+// p.drawingObject.addTexture('./texture.jpg');
 
-p.animations.new()
-  .custom({
-    callback: (percent) => {
-      p.drawingObject.updateVertices([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1].map(v => v + percent));
-    },
-    duration: 10,
-  })
-  .start();
+// p.animations.new()
+//   .custom({
+//     callback: (percent) => {
+//       p.drawingObject.updateVertices([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1].map(v => v + percent));
+//     },
+//     duration: 10,
+//   })
+//   .start();
 
-const q = figure.add({
-  make: 'polygon',
-  radius: 0.4,
-  sides: 6,
-  // texture: { src: './texture.jpg' },
-});
+// const q = figure.add({
+//   make: 'polygon',
+//   radius: 0.4,
+//   sides: 6,
+//   // texture: { src: './texture.jpg' },
+// });
 
-q.animations.new()
-  .custom({
-    callback: (percent) => {
-      q.custom.updatePoints({ radius: percent, sides: Math.floor(percent * 10 + 3), sidesToDraw: Math.floor(percent * 10 + 3) });
-    },
-    duration: 10,
-  })
-  .start();
+// q.animations.new()
+//   .custom({
+//     callback: (percent) => {
+//       q.custom.updatePoints({ radius: percent, sides: Math.floor(percent * 10 + 3), sidesToDraw: Math.floor(percent * 10 + 3) });
+//     },
+//     duration: 10,
+//   })
+//   .start();
 
 // for (let i = 0; i < 100; i += 1) {
 //   const r = rand(0.1, 0.2);
