@@ -32,16 +32,41 @@ attribute vec2 a_position;
 attribute vec2 a_center;
 uniform mat3 u_matrix;
 uniform vec3 u_charge1;
+uniform vec3 u_charge2;
+
+vec2 polarToRect(float mag, float angle) {
+  return vec2(mag * cos(angle), mag * sin(angle));
+}
+
+vec2 rectToPolar(float x, float y) {
+  return vec2(sqrt(x * x + y * y), atan(y, x));
+}
+
+vec2 fromCharge(vec3 charge) {
+  float angle = atan(charge.y - a_center.y, charge.x - a_center.x);
+  float dist = distance(charge.xy, a_center.xy);
+  float q = charge.z / pow(dist, 2.0);
+  return polarToRect(q, angle);
+}
 
 void main() {
   mat3 centerToOrigin = mat3(1, 0, 0, 0, 1, 0, -a_center.x, -a_center.y, 1);
   mat3 originToCenter = mat3(1, 0, 0, 0, 1, 0, a_center.x, a_center.y, 1);
   vec2 centerOffset = vec2(a_center.x - a_position.x, a_center.y - a_position.y);
-  float angle = atan(u_charge1.y - a_center.y, u_charge1.x - a_center.x);
-  float dist = distance(u_charge1.xy, a_center.xy);
-  float scale = min(1.0 / (dist + 0.00001), 1.5);
+
+  vec2 c1 = fromCharge(u_charge1);
+  vec2 c2 = fromCharge(u_charge2);
+  vec2 sum = c1 + c2;
+  vec2 charge = rectToPolar(sum.x, sum.y);
+  float mag = charge.x;
+  float angle = charge.y;
+  // float scale = mag;
+  float scale = max(min(mag / 2.0, 2.0), 0.5);
   float s = sin(angle);
   float c = cos(angle);
+
+
+
   mat3 scaleRotation = mat3(c * scale, s * scale, 0, -s * scale, c * scale, 0, 0, 0, 1);
   vec3 final = originToCenter * scaleRotation * centerToOrigin * vec3(a_position.x, a_position.y, 1);
 
@@ -105,7 +130,7 @@ const element = figure.add({
   make: 'gl',
   vertexShader: {
     src: vertexShader,
-    vars: ['a_position', 'a_center', 'u_matrix', 'u_charge1'],
+    vars: ['a_position', 'a_center', 'u_matrix', 'u_charge1', 'u_charge2'],
   },
   vertices: { data: points },
   buffers: [
@@ -118,6 +143,7 @@ const element = figure.add({
   ],
   uniforms: [
     { name: 'u_charge1', length: 3 },
+    { name: 'u_charge2', length: 3 },
   ],
   color: [0, 0, 1, 1],
   mods: { state: { isChanging: true } },
@@ -134,10 +160,29 @@ const charge1 = figure.add({
   },
 });
 
+const charge2 = figure.add({
+  make: 'polygon',
+  sides: 20,
+  radius: 0.2,
+  color: [1, 0, 1, 1],
+  mods: {
+    isMovable: true,
+    move: { bounds: 'figure' },
+  },
+});
+
 charge1.notifications.add('setTransform', () => {
   const p = charge1.getPosition();
   element.custom.updateUniform('u_charge1', [p.x, p.y, 1]);
 });
+
+charge2.notifications.add('setTransform', () => {
+  const p = charge2.getPosition();
+  element.custom.updateUniform('u_charge2', [p.x, p.y, 1]);
+});
+
+charge1.setPosition(-0.5, 0);
+charge2.setPosition(0.5, 0);
 
 // let startTime = null;
 // figure.notifications.add('beforeDraw', () => {
