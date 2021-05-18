@@ -1891,7 +1891,7 @@ class FigureElement {
     const prevTransform = this.transform._dup();
     this.setTransform(newTransform._dup());
     let tBounds;
-    if (this.move.bounds != null) {  // $FlowFixMe
+    if (this.move.bounds != null && this.move.bounds !== 'none') {  // $FlowFixMe
       tBounds = this.move.bounds.getTranslation();
     }
     // In a finite rect bounds, if we calculate the velocity from the clipped

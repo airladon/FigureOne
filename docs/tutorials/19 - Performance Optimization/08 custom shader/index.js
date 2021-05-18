@@ -1,4 +1,4 @@
-// const figure = new Fig.Figure();
+/* globals Fig */
 
 const figure = new Fig.Figure({
   limits: [-3, -3, 6, 6],
@@ -108,7 +108,7 @@ figure.notifications.add('beforeDraw', () => {
     startTime = figure.timeKeeper.now();
   }
   const deltaTime = (figure.timeKeeper.now() - startTime) / 1000;
-  element.drawingObject.uniforms['u_time'].value = [deltaTime];
+  element.drawingObject.uniforms.u_time.value = [deltaTime];
 });
 figure.addFrameRate();
 figure.animateNextFrame();

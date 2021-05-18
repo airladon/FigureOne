@@ -1,3 +1,5 @@
+/* globals Fig */
+
 const figure = new Fig.Figure({
   limits: [-3, -3, 6, 6],
   backgroundColor: [1, 1, 0.9, 1],
