@@ -59,9 +59,12 @@ void main() {
   vec2 sum = c1 + c2;
   vec2 charge = rectToPolar(sum.x, sum.y);
   float mag = charge.x;
+  // float mag = 10.0 * log(charge.x) / log(10.0) / 2.0;
   float angle = charge.y;
   // float scale = mag;
-  float scale = max(min(mag / 2.0, 2.0), 0.5);
+  // float scale = max(min(mag / 2.0, 2.0), 0.5);
+  float scale = min(sqrt(mag), 2.0);
+
   float s = sin(angle);
   float c = cos(angle);
 
