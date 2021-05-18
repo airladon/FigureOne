@@ -5057,7 +5057,7 @@ class FigureElementCollection extends FigureElement {
     const elements = this.getAllElements();
     let remainingTime = super.getRemainingAnimationTime(animationNames);
     for (let i = 0; i < elements.length; i += 1) {
-      const element = this.elements[i];
+      const element = elements[i];
       const duration = element.animations.getRemainingTime(animationNames);
       if (duration == null) {
         return null;
