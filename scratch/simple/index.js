@@ -6,38 +6,7 @@ const figure = new Fig.Figure({
 });
 const { rand } = Fig.tools.math;
 
-// const num = 10;
-// for (let i = 0; i < num; i += 1) {
-//   const r = rand(0.1, 0.2);
-//   const e = figure.add({
-//     make: 'polygon',
-//     radius: r,
-//     color: [rand(0, 1), rand(0, 1), rand(0, 1), 0.7],
-//     rotation: Math.PI / 4,
-//     // transform: [['t', rand(-2.9 + r, 2.9 - r), rand(-2.7 + r, 2.9 - r)]],
-//     position: [rand(-2.9 + r, 2.9 - r), rand(-2.7 + r, 2.9 - r)],
-//     mods: {
-//       move: {
-//         freely: { deceleration: 0, bounceLoss: 0 },
-//         bounds: 'figure',
-//       },
-//       state: {
-//         movement: { velocity: [['s', 0, 0], ['r', 0], ['t', rand(-0.3, 0.3), rand(-0.3, 0.3)]] },
-//       },
-//     },
-//   });
-//   e.startMovingFreely();
-// }
-// figure.addFrameRate();
-const vertexShader = `attribute vec2 a_position;
-attribute vec4 a_col;
-attribute vec2 a_vel;
-attribute vec2 a_center;
-attribute float a_radius;
-varying vec4 v_col;
-uniform mat3 u_matrix;
-uniform float u_z;
-uniform float u_time;
+/**
 float calc(float limit, float pos, float center, float vel) {
   float xDirection = vel / abs(vel);
   float xOffset = abs(center - xDirection * limit);
@@ -57,65 +26,127 @@ float calc(float limit, float pos, float center, float vel) {
   float x = xLastWall + xRemainderDistance * xLastDirection + pos - center;
   return x;
 }
+ */
+const vertexShader = `
+attribute vec2 a_position;
+attribute vec2 a_center;
+uniform mat3 u_matrix;
+uniform vec3 u_charge1;
+
 void main() {
-  float x = calc(3.0 - a_radius, a_position.x, a_center.x, a_vel.x);
-  float y = calc(3.0 - a_radius, a_position.y, a_center.y, a_vel.y);
-  gl_Position = vec4((u_matrix * vec3(x, y, 1)).xy, u_z, 1);
-  v_col = a_col;
+  mat3 centerToOrigin = mat3(1, 0, 0, 0, 1, 0, -a_center.x, -a_center.y, 1);
+  mat3 originToCenter = mat3(1, 0, 0, 0, 1, 0, a_center.x, a_center.y, 1);
+  vec2 centerOffset = vec2(a_center.x - a_position.x, a_center.y - a_position.y);
+  float angle = atan(u_charge1.y - a_center.y, u_charge1.x - a_center.x);
+  float dist = distance(u_charge1.xy, a_center.xy);
+  float scale = min(1.0 / (dist + 0.00001), 1.5);
+  float s = sin(angle);
+  float c = cos(angle);
+  mat3 scaleRotation = mat3(c * scale, s * scale, 0, -s * scale, c * scale, 0, 0, 0, 1);
+  vec3 final = originToCenter * scaleRotation * centerToOrigin * vec3(a_position.x, a_position.y, 1);
+
+  gl_Position = vec4((u_matrix * vec3(final.x, final.y, 1)).xy, 0, 1);
 }`;
 
 const points = [];
-const velocities = [];
-const colors = [];
 const centers = [];
-const radii = [];
-const sides = 4;
-const step = Math.PI * 2 / (sides);
-for (let i = 0; i < 20000; i += 1) {
-  const r = rand(0.1, 0.2);
-  const p = [rand(-3 + r, 3 - r), rand(-3 + r, 3 - r)];
-  const v = [rand(-0.15, 0.15), rand(-0.15, 0.15)];
-  const color = [rand(0, 255), rand(0, 255), rand(0, 255), 255];
-  for (let j = 0; j < sides; j += 1) {
-    points.push(p[0], p[1]);
-    points.push(r * Math.cos(step * j) + p[0], r * Math.sin(step * j) + p[1]);
-    points.push(r * Math.cos(step * (j + 1)) + p[0], r * Math.sin(step * (j + 1)) + p[1]);
-    velocities.push(v[0], v[1], v[0], v[1], v[0], v[1]);
-    centers.push(p[0], p[1], p[0], p[1], p[0], p[1]);
-    radii.push(r, r, r);
-    colors.push(...color, ...color, ...color);
+const tWidth = 0.02;
+const tLength = 0.06;
+const hWidth = 0.06;
+const hLength = 0.08;
+const step = 0.2;
+const halfLength = (tLength + hLength) / 2;
+// console.log(halfLength)
+for (
+  let x = -2.9;
+  x < 2.9 + step / 2;
+  x += step
+) {
+  for (let y = -2.9; y < 2.9 + step / 2; y += step) {
+    points.push(
+      // Head
+      halfLength + x, y,
+      halfLength + x - hLength, y + hWidth,
+      halfLength + x - hLength, y - hWidth,
+      // Tail 1
+      halfLength + x - hLength, y + tWidth,
+      halfLength + x - hLength - tLength, y + tWidth,
+      halfLength + x - hLength - tLength, y - tWidth,
+      // Tail 2
+      halfLength + x - hLength, y + tWidth,
+      halfLength + x - hLength - tLength, y - tWidth,
+      halfLength + x - hLength, y - tWidth,
+    );
+    centers.push(
+      x, y, x, y, x, y,
+      x, y, x, y, x, y,
+      x, y, x, y, x, y,
+    );
   }
 }
+// for (let i = 0; i < 20000; i += 1) {
+//   points.push()
+//   const r = rand(0.1, 0.2);
+//   const p = [rand(-3 + r, 3 - r), rand(-3 + r, 3 - r)];
+//   const v = [rand(-0.15, 0.15), rand(-0.15, 0.15)];
+//   const color = [rand(0, 255), rand(0, 255), rand(0, 255), 255];
+//   for (let j = 0; j < sides; j += 1) {
+//     points.push(p[0], p[1]);
+//     points.push(r * Math.cos(step * j) + p[0], r * Math.sin(step * j) + p[1]);
+//     points.push(r * Math.cos(step * (j + 1)) + p[0], r * Math.sin(step * (j + 1)) + p[1]);
+//     velocities.push(v[0], v[1], v[0], v[1], v[0], v[1]);
+//     centers.push(p[0], p[1], p[0], p[1], p[0], p[1]);
+//     radii.push(r, r, r);
+//     colors.push(...color, ...color, ...color);
+//   }
+// }
 
 const element = figure.add({
   make: 'gl',
   vertexShader: {
     src: vertexShader,
-    vars: ['a_position', 'a_col', 'a_vel', 'a_center', 'a_radius', 'u_matrix', 'u_z', 'u_time'],
+    vars: ['a_position', 'a_center', 'u_matrix', 'u_charge1'],
   },
   vertices: { data: points },
   buffers: [
-    {
-      name: 'a_col', size: 4, data: colors, type: 'UNSIGNED_BYTE', normalize: true,
-    },
-    { name: 'a_vel', data: velocities },
+  //   {
+  //     name: 'a_col', size: 4, data: colors, type: 'UNSIGNED_BYTE', normalize: true,
+  //   },
+  //   { name: 'a_vel', data: velocities },
     { name: 'a_center', data: centers },
-    { name: 'a_radius', data: radii, size: 1 },
+  //   { name: 'a_radius', data: radii, size: 1 },
   ],
   uniforms: [
-    { name: 'u_time' },
+    { name: 'u_charge1', length: 3 },
   ],
+  color: [0, 0, 1, 1],
   mods: { state: { isChanging: true } },
 });
 
-let startTime = null;
-figure.notifications.add('beforeDraw', () => {
-  if (startTime == null) {
-    startTime = figure.timeKeeper.now();
-  }
-  const deltaTime = (figure.timeKeeper.now() - startTime) / 1000;
-  element.drawingObject.uniforms['u_time'].value = [deltaTime];
+const charge1 = figure.add({
+  make: 'polygon',
+  sides: 20,
+  radius: 0.2,
+  color: [1, 0, 0, 1],
+  mods: {
+    isMovable: true,
+    move: { bounds: 'figure' },
+  },
 });
+
+charge1.notifications.add('setTransform', () => {
+  const p = charge1.getPosition();
+  element.custom.updateUniform('u_charge1', [p.x, p.y, 1]);
+});
+
+// let startTime = null;
+// figure.notifications.add('beforeDraw', () => {
+//   if (startTime == null) {
+//     startTime = figure.timeKeeper.now();
+//   }
+//   const deltaTime = (figure.timeKeeper.now() - startTime) / 1000;
+//   element.drawingObject.uniforms['u_time'].value = [deltaTime];
+// });
 figure.addFrameRate();
 figure.animateNextFrame();
 
