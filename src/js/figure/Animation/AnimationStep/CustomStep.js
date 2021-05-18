@@ -23,6 +23,7 @@ export type OBJ_CustomAnimationStep = {
   callback?: string | ((number) => void);
   startPercent?: number;
   progression?: 'linear' | 'easeinout' | 'easein' | 'easeout' | (number) => number;
+  duration?: number | null,
 } & OBJ_AnimationStep;
 
 /**
@@ -168,9 +169,14 @@ export class CustomAnimationStep extends AnimationStep {
   }
 
   setFrame(deltaTime: number) {
-    const percentTime = deltaTime / this.duration;
-    const percentComplete = this.getPercentComplete(percentTime);
-    const cancelled = this.fnExec(this.callback, percentComplete, this.customProperties);
+    let cancelled;
+    if (this.duration == null) {
+      cancelled = this.fnExec(this.callback, deltaTime, this.customProperties);
+    } else {
+      const percentTime = deltaTime / this.duration;
+      const percentComplete = this.getPercentComplete(percentTime);
+      cancelled = this.fnExec(this.callback, percentComplete, this.customProperties);
+    }
     if (cancelled) {
       this.duration = deltaTime;
     }

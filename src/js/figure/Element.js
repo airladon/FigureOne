@@ -2353,25 +2353,40 @@ class FigureElement {
       return 0;
     }
     const t1 = this.getRemainingMovingFreelyTime();
+    // if (t1 == null) {
+    //   return null;
+    // }
     const t2 = this.getRemainingPulseTime();
+    // if (t2 == null) {
+    //   return null;
+    // }
     const t3 = this.animations.getNextAnimationFinishTime();
-    let t = null;
+    // if (t3 == null) {
+    //   return null;
+    // }
+    let t;
     if (t1 != null && t1 > 0) {
       t = t1;
     }
-    if (t2 > 0) {
-      if (t == null) {
+    if (t2 != null && t2 > 0) {
+      if (t === undefined) {
         t = t2;
       } else if (t2 < t) {
         t = t2;
       }
     }
     if (t3 != null && t3 > 0) {
-      if (t == null) {
+      if (t === undefined) {
         t = t3;
       } else if (t3 < t) {
         t = t3;
       }
+    }
+    if (t === undefined) {
+      if (t1 === null || t2 === null || t3 === null) {
+        return null;
+      }
+      return 0;
     }
     return t;
   }
@@ -5006,25 +5021,39 @@ class FigureElementCollection extends FigureElement {
       return 0;
     }
     // const elements = this.getAllElements();
-    let remainingTime = super.getNextAnimationFinishTime();
+    let minRemainingTime = null;
+    const thisRemainingTime = super.getNextAnimationFinishTime();
+    let isZero = false;
+    let isNull = false;
+    if (thisRemainingTime === 0) {
+      isZero = true;
+    } else if (thisRemainingTime === null) {
+      isNull = true;
+    } else {
+      minRemainingTime = thisRemainingTime;
+    }
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       if (!this.elements[this.drawOrder[i]].simple) {
         const element = this.elements[this.drawOrder[i]];
         const duration = element.getNextAnimationFinishTime();
-        if (
-          (remainingTime == null && duration != null && duration > 0)
-          || (
-            remainingTime != null
-            && duration != null
-            && duration < remainingTime
-            && duration > 0
-          )
-        ) {
-          remainingTime = duration;
+        if (duration === null) {
+          isNull = true;
+        } else if (duration === 0) {
+          isZero = true;
+        } else if (minRemainingTime == null) {
+          minRemainingTime = duration;
+        } else if (duration < minRemainingTime) {
+          minRemainingTime = duration;
         }
       }
     }
-    return remainingTime;
+    if (minRemainingTime == null) {
+      if (isNull) {
+        return null;
+      }
+      return 0;
+    }
+    return minRemainingTime;
   }
 
   getRemainingAnimationTime(
@@ -5034,6 +5063,9 @@ class FigureElementCollection extends FigureElement {
     let remainingTime = super.getRemainingAnimationTime(animationNames);
     elements.forEach((element) => {
       const duration = element.animations.getRemainingTime(animationNames);
+      if (duration == null) {
+        return null;
+      }
       if (duration > remainingTime) {
         remainingTime = duration;
       }

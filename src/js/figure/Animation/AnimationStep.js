@@ -237,6 +237,12 @@ export default class AnimationStep {
    * custom time
    */
   getRemainingTime(now: number) {
+    if (this.state !== 'animating' && this.state !== 'waitingToStart') {
+      return 0;
+    }
+    if (this.duration == null) {
+      return null;
+    }
     const totalDuration = this.getTotalDuration();
     if (this.startTime == null) {
       if (this.state === 'animating' || this.state === 'waitingToStart') {
@@ -249,6 +255,9 @@ export default class AnimationStep {
   }
 
   getTotalDuration() {
+    if (this.duration == null) {
+      return null;
+    }
     return this.duration + this.startDelay;
   }
 

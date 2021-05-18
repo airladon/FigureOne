@@ -3678,7 +3678,7 @@ class Transform {
     bounceLossIn: TypeTransformValue,
     zeroVelocityThresholdIn: TypeTransformValue,
     precision: number = 8,
-  ): { velocity: Transform, transform: Transform, duration: number } {
+  ): { velocity: Transform, transform: Transform, duration: null | number } {
     const deceleration = transformValueToArray(decelerationIn, this);
     const bounceLoss = transformValueToArray(bounceLossIn, this);
     const zeroVelocityThreshold = transformValueToArray(zeroVelocityThresholdIn, this);
@@ -5749,7 +5749,7 @@ function deceleratePoint(
   precision: number = 8,
 ): {
   velocity: Point,
-  duration: number,
+  duration: null | number,
   position: Point,
 } {
   let bounds;
@@ -5908,6 +5908,13 @@ function deceleratePoint(
       intersectPoint, rectBounceVelocity, deceleration, deltaTimeIn,
       bounds, bounceLossIn, zeroVelocityThreshold, precision,
     );
+    if (newStop.duration == null) {
+      return {
+        duration: null,
+        position: newStop.position,
+        velocity: new Point(0, 0),
+      };
+    }
     return {
       duration: t + newStop.duration,
       position: newStop.position,
@@ -6008,6 +6015,13 @@ function decelerateIndependantPoint(
     value.y, velocity.y, deceleration, deltaTime,
     yBounds, bounceLoss, zeroVelocityThreshold, precision,
   );
+  if (xResult.duration == null || yResult.duration == null) {
+    return {
+      duration: null,
+      point: new Point(xResult.value, yResult.value),
+      velocity: new Point(xResult.velocity, yResult.velocity),
+    };
+  }
 
   return {
     duration: Math.max(xResult.duration, yResult.duration),

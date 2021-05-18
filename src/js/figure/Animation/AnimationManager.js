@@ -980,12 +980,16 @@ export default class AnimationManager {
 
   getTotalDuration() {
     let duration = 0;
-    this.animations.forEach((animation) => {
+    for (let i = 0; i < this.animations.length; i += 1) {
+      const animation = this.animations[i];
       const animationDuration = animation.getTotalDuration();
+      if (animationDuration == null) {
+        return null;
+      }
       if (animationDuration > duration) {
         duration = animationDuration;
       }
-    });
+    }
     return duration;
   }
 
@@ -1018,25 +1022,30 @@ export default class AnimationManager {
   }
 
   getNextAnimationFinishTime(now: number = this.timeKeeper.now() / 1000): null | number {
-    let remainingTime = null;
-    this.animations.forEach((animation) => {
+    let remainingTime = 0;
+    for (let i = 0; i < this.animations.length; i += 1) {
+    // this.animations.forEach((animation) => {
+      const animation = this.animations[i];
       const animationRemainingTime = animation.getRemainingTime(now);
+      if (animationRemainingTime == null) {
+        return null;
+      }
       if (
+        // (
+        //   // animationRemainingTime != null
+        //   // && remainingTime == null
+        //   && animationRemainingTime > 0
+        // )
         (
-          animationRemainingTime != null
-          && remainingTime == null
-          && animationRemainingTime > 0
-        )
-        || (
-          animationRemainingTime != null
-          && remainingTime != null
-          && animationRemainingTime > 0
+          // animationRemainingTime != null
+          // && remainingTime != null
+          animationRemainingTime > 0
           && animationRemainingTime < remainingTime
         )
       ) {
         remainingTime = animationRemainingTime;
       }
-    });
+    }
     return remainingTime;
   }
 

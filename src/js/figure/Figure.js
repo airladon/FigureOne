@@ -1258,20 +1258,30 @@ class Figure {
     }
     let remainingTime = 0;
 
-    elements.forEach((element) => {
+    for (let i = 0; i < elements.length; i += 1) {
+      const element = elements[i];
       const elementRemainingTime = element.animations.getRemainingTime([], now);
+      if (elementRemainingTime == null) {
+        return null;
+      }
       if (elementRemainingTime > remainingTime) {
         remainingTime = elementRemainingTime;
       }
       const remainingPulseTime = element.getRemainingPulseTime(now);
+      if (remainingPulseTime == null) {
+        return null;
+      }
       if (remainingPulseTime > remainingTime) {
         remainingTime = remainingPulseTime;
       }
       const remainingMovingFreelyTime = element.getRemainingMovingFreelyTime(now);
+      if (remainingMovingFreelyTime == null) {
+        return null;
+      }
       if (remainingMovingFreelyTime > remainingTime) {
         remainingTime = remainingMovingFreelyTime;
       }
-    });
+    }
     return remainingTime;
   }
 
@@ -2189,8 +2199,13 @@ class Figure {
     let timerDuration = timerDurationIn;
     if (timerDuration < 0) {
       timerDuration = this.elements.getNextAnimationFinishTime();
+      // console.log(timerDuration)
     }
-    if (timerDuration != null && timerDuration > 0.00000001) {
+    // console.log(timerDuration)
+    if (timerDuration == null) {
+      timerDuration = 0.1;
+    }
+    if (timerDuration > 0.00000001) {
       const timerStart = this.timeKeeper.now() / 1000;
       if (
         (this.nextDrawTimer == null && timerDuration > 0)
