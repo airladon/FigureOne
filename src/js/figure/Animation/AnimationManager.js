@@ -1022,31 +1022,26 @@ export default class AnimationManager {
   }
 
   getNextAnimationFinishTime(now: number = this.timeKeeper.now() / 1000): null | number {
-    let remainingTime = 0;
+    let minRemainingTime;
+    let isNull = false;
     for (let i = 0; i < this.animations.length; i += 1) {
-    // this.animations.forEach((animation) => {
       const animation = this.animations[i];
       const animationRemainingTime = animation.getRemainingTime(now);
-      if (animationRemainingTime == null) {
-        return null;
-      }
-      if (
-        // (
-        //   // animationRemainingTime != null
-        //   // && remainingTime == null
-        //   && animationRemainingTime > 0
-        // )
-        (
-          // animationRemainingTime != null
-          // && remainingTime != null
-          animationRemainingTime > 0
-          && animationRemainingTime < remainingTime
-        )
-      ) {
-        remainingTime = animationRemainingTime;
+      if (animationRemainingTime === null) {
+        isNull = true;
+      } else if (animationRemainingTime > 0 && minRemainingTime === undefined) {
+        minRemainingTime = animationRemainingTime;
+      } else if (animationRemainingTime > 0 && animationRemainingTime < minRemainingTime) {
+        minRemainingTime = animationRemainingTime;
       }
     }
-    return remainingTime;
+    if (minRemainingTime === undefined) {
+      if (isNull) {
+        return null;
+      }
+      return 0;
+    }
+    return minRemainingTime;
   }
 
   addTo(name: string) {

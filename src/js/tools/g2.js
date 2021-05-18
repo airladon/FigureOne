@@ -3708,7 +3708,7 @@ class Transform {
     bounceLoss: TypeTransformValue,
     zeroVelocityThreshold: TypeTransformValue,
     precision: number = 8,
-  ): { velocity: Transform, transform: Transform, duration: number } {
+  ): { velocity: Transform, transform: Transform, duration: null | number } {
     return this.decelerate(
       velocity, deceleration, null, bounds, bounceLoss, zeroVelocityThreshold,
       precision,
@@ -6137,7 +6137,7 @@ function decelerateTransform(
       newVTransformation = new Rotation(result.velocity);
     }
     if (deltaTime === null) {
-      if (result.duration > duration) {
+      if (result.duration == null || result.duration > duration) {
         ({ duration } = result);
       }
     }
