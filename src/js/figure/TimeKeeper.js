@@ -365,7 +365,6 @@ class TimeKeeper {
 
 
   draw() {
-    this.old = performance.now()
     this.animationId = null;
     this.clearTimeout(this.syncNowTimer);
     this.updateSyncNow = true;
@@ -373,7 +372,6 @@ class TimeKeeper {
     this.nextDrawQueue = [];
     this.updateNow();
     const nowSeconds = this.now() * 0.001;
-    // console.log(this.old, this.nowTime, nowSeconds)
     for (let i = 0; i < this.drawQueue.length; i += 1) {
       this.drawQueue[i](nowSeconds);
     }

@@ -152,6 +152,18 @@ class DrawingObject {
     return 0;
   }
 
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  updateVertices(vertices: Array<number>) {
+  }
+
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  updateBuffer(name: string, data: Array<number>) {
+  }
+
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  updateUniform(uniformName: string, value: number | Array<number>) {
+  }
+
   // getRelativeBoundingRect(transformMatrix: Array<number> | null = null): Rect {
   //   const location = this.getLocation(transformMatrix);
   //   const absoluteBoundaries =

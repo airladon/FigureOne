@@ -3355,8 +3355,8 @@ class FigureElementPrimitive extends FigureElement {
 
   setupDraw(now: number = 0) {
     if (this.isShown) {
-      let timer;
-      if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
+      // let timer;
+      // if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
       this.lastDrawTime = now;
       if (this.isRenderedAsImage === true) {
         if (this.willStartAnimating()) {
@@ -3365,33 +3365,33 @@ class FigureElementPrimitive extends FigureElement {
           return;
         }
       } // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m1'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m1'); }
       this.notifications.publish('beforeDraw', [now]);
       if (this.beforeDrawCallback != null) {
         this.fnMap.exec(this.beforeDrawCallback, now);
       } // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('beforeDraw'); }
+      // if (FIGURE1DEBUG) { timer.stamp('beforeDraw'); }
 
       if (this.animations.animations.length > 0) {
         this.animations.nextFrame(now); // $FlowFixMe
       }
-      if (FIGURE1DEBUG) { timer.stamp('animations'); }
+      // if (FIGURE1DEBUG) { timer.stamp('animations'); }
       if (this.state.isMovingFreely) {
         this.nextMovingFreelyFrame(now);
       }
 
-      if (FIGURE1DEBUG) { // $FlowFixMe
-        timer.stamp('animations'); // $FlowFixMe
-        const deltas = timer.deltas();
-        if (window.figureOneDebug == null) {
-          window.figureOneDebug = { setupDraw: [] };
-        }
-        window.figureOneDebug.setupDraw.push([
-          this.getPath(),
-          deltas[0],
-          deltas.slice(1),
-        ]);
-      }
+      // if (FIGURE1DEBUG) { // $FlowFixMe
+      //   timer.stamp('animations'); // $FlowFixMe
+      //   const deltas = timer.deltas();
+      //   if (window.figureOneDebug == null) {
+      //     window.figureOneDebug = { setupDraw: [] };
+      //   }
+      //   window.figureOneDebug.setupDraw.push([
+      //     this.getPath(),
+      //     deltas[0],
+      //     deltas.slice(1),
+      //   ]);
+      // }
     }
   }
 
@@ -3399,11 +3399,11 @@ class FigureElementPrimitive extends FigureElement {
     now: number,
     parentTransform: Array<Transform> = [new Transform()],
     parentOpacity: number = 1,
-    canvasIndex: number = 0,
+    // canvasIndex: number = 0,
   ) {
     if (this.isShown) {
-      let timer;
-      if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
+      // let timer;
+      // if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
       // if (FIGURE1DEBUG) { debugTimes.push([performance.now(), '']); }
       let pointCount = -1;
       if (this.drawingObject instanceof VertexGeneric) {
@@ -3422,7 +3422,7 @@ class FigureElementPrimitive extends FigureElement {
       } else {
         pointCount = 1;
       } // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m1'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m1'); }
 
       const colorToUse = [
         this.color[0], this.color[1], this.color[2], this.color[3] * this.opacity * parentOpacity,
@@ -3436,7 +3436,7 @@ class FigureElementPrimitive extends FigureElement {
       // eslint-disable-next-line prefer-destructuring
       this.parentTransform = parentTransform;
       // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m2'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m2'); }
 
       this.lastDrawElementTransformPosition = {
         parentCount: parentTransform[0].order.length,
@@ -3444,15 +3444,15 @@ class FigureElementPrimitive extends FigureElement {
       };
 
       this.pulseTransforms = this.getPulseTransforms(now); // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m3'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m3'); }
       this.drawTransforms = this.getDrawTransforms(newTransforms); // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m4'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m4'); }
       // this.drawTransforms = newTransforms;
 
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawTransform = newTransforms[0];
       // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m5'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m5'); }
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawPulseTransform = this.drawTransforms[0];
       if (pointCount > 0) {
@@ -4116,8 +4116,8 @@ class FigureElementCollection extends FigureElement {
     canvasIndex: number = 0,
   ) {
     if (this.isShown) {
-      let timer;
-      if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
+      // let timer;
+      // if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
 
       this.lastDrawElementTransformPosition = {
         parentCount: parentTransform[0].order.length,
@@ -4126,39 +4126,39 @@ class FigureElementCollection extends FigureElement {
       const transform = this.getTransform();
       const newTransforms = transformBy(parentTransform, [transform]);
       // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m1'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m1'); }
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawTransform = newTransforms[0];
       this.parentTransform = parentTransform;
       // $FlowFixMe
 
-      if (FIGURE1DEBUG) { timer.stamp('m2'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m2'); }
       this.pulseTransforms = this.getPulseTransforms(now); // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m3'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m3'); }
       this.drawTransforms = this.getDrawTransforms(newTransforms); // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m4'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m4'); }
 
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawPulseTransform = this.drawTransforms[0];
 
       const opacityToUse = this.color[3] * this.opacity * parentOpacity;
       this.lastDrawOpacity = opacityToUse; // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m5'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m5'); }
 
-      let drawTimer;
-      if (FIGURE1DEBUG) { drawTimer = new PerformanceTimer(); }
+      // let drawTimer;
+      // if (FIGURE1DEBUG) { drawTimer = new PerformanceTimer(); }
       for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
         this.elements[this.drawOrder[i]].draw(
           now, this.drawTransforms, opacityToUse, canvasIndex,
         ); // $FlowFixMe
-        if (FIGURE1DEBUG) { drawTimer.stamp(this.elements[this.drawOrder[i]].name); }
+        // if (FIGURE1DEBUG) { drawTimer.stamp(this.elements[this.drawOrder[i]].name); }
       } // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m6'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m6'); }
       if (this.unrenderNextDraw) {
         this.clearRender();
         this.unrenderNextDraw = false;
       } // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m7'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m7'); }
       if (this.renderedOnNextDraw) {
         this.isRenderedAsImage = true;
         this.renderedOnNextDraw = false;
@@ -4166,18 +4166,18 @@ class FigureElementCollection extends FigureElement {
       if (this.afterDrawCallback != null) {
         this.fnMap.exec(this.afterDrawCallback, now);
       }
-      if (FIGURE1DEBUG) { // $FlowFixMe
-        timer.stamp('m8'); // $FlowFixMe
-        const deltas = timer.deltas(); // $FlowFixMe
-        const drawDeltas = drawTimer.deltas();
-        window.figureOneDebug.draw.push([
-          '>>',
-          this.getPath(),
-          deltas[0],
-          deltas.slice(1),
-          drawDeltas,
-        ]);
-      }
+      // if (FIGURE1DEBUG) { // $FlowFixMe
+      //   timer.stamp('m8'); // $FlowFixMe
+      //   const deltas = timer.deltas(); // $FlowFixMe
+      //   const drawDeltas = drawTimer.deltas();
+      //   window.figureOneDebug.draw.push([
+      //     '>>',
+      //     this.getPath(),
+      //     deltas[0],
+      //     deltas.slice(1),
+      //     drawDeltas,
+      //   ]);
+      // }
     }
   }
 
@@ -4660,6 +4660,7 @@ class FigureElementCollection extends FigureElement {
       matrix = this.spaceTransformMatrix('draw', space);
     }
     const borderPoints = this.getBorderPoints(border, children, shownOnly);
+    // $FlowFixMe
     return borderPoints.map(b => b.map(p => getPoint(p).transformBy(matrix)));
   }
 

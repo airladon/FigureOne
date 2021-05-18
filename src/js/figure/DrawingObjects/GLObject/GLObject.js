@@ -25,8 +25,8 @@ export type TypeGLBufferUsage = 'STATIC' | 'DYNAMIC';
 export type TypeGLUniform = 'FLOAT' | 'FLOAT_ARRAY' | 'INT' | 'INT_ARRAY';
 
 class GLObject extends DrawingObject {
-  gl: Array<WebGLRenderingContext>;
-  webgl: Array<WebGLInstance>;
+  gl: WebGLRenderingContext;
+  webgl: WebGLInstance;
   glPrimitive: number;
 
   z: number;
@@ -36,20 +36,23 @@ class GLObject extends DrawingObject {
     src?: ?string;
     data?: ?Object;
     points: Array<number>;
-    buffer?: Array<WebGLBuffer>;
+    buffer?: ?WebGLBuffer;
     type: 'canvasText' | 'image';
     repeat?: boolean;
+    mapTo: Rect,
+    mapFrom: Rect,
+    data?: ?Image,
   };
 
   buffers: {
     [bufferName: string]: {
       buffer: WebGLBuffer,
       size: number,
-      type: TypeGLBufferType,
+      type: number,
       normalize: boolean,
       stride: number,
       offset: number,
-      usage: TypeGLBufferUsage,
+      usage: number,
     };
   };
 
@@ -58,6 +61,7 @@ class GLObject extends DrawingObject {
   uniforms: {
     [uniformName: string]: {
       value: Array<number>,
+      method: (location: WebGLUniformLocation, name: string) => void,
     },
   }
 
@@ -65,7 +69,7 @@ class GLObject extends DrawingObject {
 
   state: 'loading' | 'loaded';
 
-  programIndex: Array<number>;
+  programIndex: number;
   onLoad: ?(() => void);
 
 
@@ -87,8 +91,24 @@ class GLObject extends DrawingObject {
     this.texture = null;
   }
 
-  setPrimitive(primitiveType: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES') {
-    this.glPrimitive = this.gl[primitiveType];
+  setPrimitive(primitiveType: 'TRIANGLES' | 'POINTS' | 'TRIANGLE_FAN' | 'TRIANGLE_STRIP' | 'LINES' | 'LINE_LOOP' | 'LINE_STRIP') {
+    if (primitiveType === 'TRIANGLES') {
+      this.glPrimitive = this.gl.TRIANGLES;
+    } else if (primitiveType === 'LINES') {
+      this.glPrimitive = this.gl.LINES;
+    } else if (primitiveType === 'TRIANGLE_FAN') {
+      this.glPrimitive = this.gl.TRIANGLE_FAN;
+    } else if (primitiveType === 'TRIANGLE_STRIP') {
+      this.glPrimitive = this.gl.TRIANGLE_STRIP;
+    } else if (primitiveType === 'POINTS') {
+      this.glPrimitive = this.gl.POINTS;
+    } else if (primitiveType === 'LINE_LOOP') {
+      this.glPrimitive = this.gl.LINE_LOOP;
+    } else if (primitiveType === 'LINE_STRIP') {
+      this.glPrimitive = this.gl.LINE_STRIP;
+    } else {
+      throw new Error(`Primitive type can only be ['TRIANGLES' | 'POINTS' | 'TRIANGLE_FAN' | 'TRIANGLE_STRIP' | 'LINES' | 'LINE_LOOP' | 'LINE_STRIP']. Input primitive type was: '${primitiveType}'`);
+    }
   }
 
 
@@ -136,20 +156,24 @@ class GLObject extends DrawingObject {
   }
 
   updateTextureMap() {
-    if (this.texture.buffer != null) {
-      this.gl.deleteBuffer(this.texture.buffer);
-      this.texture.buffer = this.gl.createBuffer();
+    const { texture } = this;
+    if (texture == null) {
+      return;
+    }
+    if (texture.buffer != null) {
+      this.gl.deleteBuffer(texture.buffer);
+      texture.buffer = this.gl.createBuffer();
     }
     this.createTextureMap(
-      this.texture.mapTo.left, this.texture.mapTo.right,
-      this.texture.mapTo.bottom, this.texture.mapTo.top,
-      this.texture.mapFrom.left, this.texture.mapFrom.right,
-      this.texture.mapFrom.bottom, this.texture.mapFrom.top,
+      texture.mapTo.left, texture.mapTo.right,
+      texture.mapTo.bottom, texture.mapTo.top,
+      texture.mapFrom.left, texture.mapFrom.right,
+      texture.mapFrom.bottom, texture.mapFrom.top,
     );
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.texture.buffer);
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, texture.buffer);
     this.gl.bufferData(
       this.gl.ARRAY_BUFFER,
-      new Float32Array(this.texture.points),
+      new Float32Array(texture.points),
       this.gl.STATIC_DRAW,
     );
   }
@@ -173,10 +197,16 @@ class GLObject extends DrawingObject {
         src: location,
         points: [],
         buffer: this.gl.createBuffer(),
+        type: 'image',
+        data: null,
       };
     }
 
     const { texture, gl, webgl } = this;
+    if (texture == null) {
+      return;
+    }
+
     // $FlowFixMe
     this.updateTextureMap();
     // gl.bindBuffer(gl.ARRAY_BUFFER, texture.buffer);
@@ -213,6 +243,7 @@ class GLObject extends DrawingObject {
         webgl.textures[texture.id].onLoad.push(this.executeOnLoad.bind(this));
         image.addEventListener('load', () => {
           // Now that the image has loaded make copy it to the texture.
+          // $FlowFixMe
           texture.data = image;
           this.addTextureToBuffer(
             glTexture, texture.data, texture.repeat,
@@ -379,7 +410,7 @@ class GLObject extends DrawingObject {
       this.buffers[bufferName].buffer = null;
     });
     this.buffers = {};
-    this.resetTextureBuffers();
+    this.resetTextureBuffer();
   }
 
   updateVertices(vertices: Array<number>) {
@@ -414,7 +445,7 @@ class GLObject extends DrawingObject {
     type: TypeGLUniform = 'FLOAT',
   ) {
     this.uniforms[uniformName] = {
-      value: Array(length),
+      value: Array(length), // $FlowFixMe
       method: this[`uploadUniform${length.toString()}${type[0].toLowerCase()}${type.endsWith('VECTOR') ? 'v' : ''}`].bind(this),
     };
   }

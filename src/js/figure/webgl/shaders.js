@@ -11,7 +11,7 @@ const vertex = {
         + '}',
     vars: ['a_position', 'u_matrix', 'u_z'],
   },
-  gradient: {
+  vertexColor: {
     src:
         `
 attribute vec2 a_position;
@@ -51,7 +51,7 @@ const fragment = {
       + '}',
     vars: ['u_color'],
   },
-  gradient: {
+  vertexColor: {
     src:
       'precision mediump float;'
       + 'uniform vec4 u_color;'
@@ -107,14 +107,20 @@ const getShaders = (
   let vertexSource = '';
   let fragmentSource = '';
   const vars = [];
-  if (typeof vName === 'string' && vertex[vName] != null) {
+  if (typeof vName === 'string') {
+    if (vertex[vName] == null) {
+      throw new Error(`Built in vertex shader does not exist: ${vName}`);
+    }
     vertexSource = vertex[vName].src;
     vars.push(...vertex[vName].vars);
   } else {
     vertexSource = vName.src;
     vars.push(...vName.vars);
   }
-  if (typeof fName === 'string' && fragment[fName] != null) {
+  if (typeof fName === 'string') {
+    if (fragment[fName] == null) {
+      throw new Error(`Built in fragment shader does not exist: ${fName}`);
+    }
     fragmentSource = fragment[fName].src;
     vars.push(...fragment[fName].vars);
   } else {

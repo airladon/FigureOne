@@ -10,7 +10,7 @@ import WebGLInstance from '../webgl/webgl';
 import type { TypeColor } from '../../tools/types';
 
 export default function Generic(
-  webgl: Array<WebGLInstance>,
+  webgl: WebGLInstance,
   // vertices: Array<Point>,
   // border: Array<Array<Point>> | 'points' | 'rect',
   // touchBorder: Array<Array<Point>> | 'rect' | 'border' | 'none',

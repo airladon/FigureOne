@@ -28,7 +28,7 @@ import { Recorder } from './Recorder/Recorder';
 import Gesture from './Gesture';
 import DrawContext2D from './DrawContext2D';
 import FigurePrimitives from './FigurePrimitives/FigurePrimitives';
-import type { OBJ_Polyline } from './FigurePrimitives/FigurePrimitives';
+import type { OBJ_Polyline, OBJ_TextLinesDefinition, OBJ_TextLines } from './FigurePrimitives/FigurePrimitives';
 import FigureCollections from './FigureCollections/FigureCollections';
 import AnimationManager from './Animation/AnimationManager';
 import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
@@ -309,7 +309,7 @@ class Figure {
   nextDrawTimerDuration: number;
   focused: boolean;
   frameRate: {
-    information: string,
+    information: null | Array<string | OBJ_TextLinesDefinition>,
     history: Array<Array<number>>,
     num: number,
   };
@@ -324,6 +324,7 @@ class Figure {
     preparingToStop: boolean;
     preparingToSetState: boolean;
   };
+
   // pauseAfterNextDrawFlag: boolean;
 
   constructor(options: OBJ_Figure = {}) {
@@ -2004,6 +2005,7 @@ class Figure {
 
   draw(nowIn: number, canvasIndex: number = 0): void {
     let timer;
+    // $FlowFixMe
     if (this.elements.__frameRate_ != null || FIGURE1DEBUG) {
       timer = new PerformanceTimer();
       window.figureOneDebug.draw = [];
@@ -2050,7 +2052,9 @@ class Figure {
     this.notifications.publish('beforeDraw');
     // $FlowFixMe
     if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('beforeDraw'); }
+    // $FlowFixMe
     if (this.elements.__frameRate_ != null && this.frameRate.information != null) {
+      // $FlowFixMe
       this.elements.__frameRate_.custom.updateText({ text: this.frameRate.information });
     }
     this.elements.setupDraw(
@@ -2072,7 +2076,7 @@ class Figure {
       this.drawAnimationFrames -= 1;
       this.animateNextFrame(true, 'queued frames');
     }
-    this.notifications.publish('afterDraw');
+    this.notifications.publish('afterDraw'); // $FlowFixMe
     if (FIGURE1DEBUG || this.elements.__frameRate_ != null) { // $FlowFixMe
       timer.stamp('afterDraw'); // $FlowFixMe
       const deltas = timer.deltas();
@@ -2105,11 +2109,13 @@ class Figure {
           animationManager: window.figureOneDebug.animationManager,
         });
       }
+      // $FlowFixMe
       if (this.elements.__frameRate_ != null) {
-        const timeBetweenFrames = (this.timeKeeper.now() - this.timeKeeper.lastDrawTime) / 1000;
+        const timeBetweenFrames =
+          (this.timeKeeper.now() - (this.timeKeeper.lastDrawTime || 0)) / 1000;
         // const frameRate = 1 / timeBetweenFrames;
-        const totalDrawTime = deltas[0];
-        const setupDrawTime = deltas[4][1];
+        const totalDrawTime = deltas[0];  // $FlowFixMe
+        const setupDrawTime = deltas[4][1]; // $FlowFixMe
         const drawTime = deltas[5][1];
         this.frameRate.history.push([timeBetweenFrames, totalDrawTime, setupDrawTime, drawTime]);
         if (this.frameRate.history.length === this.frameRate.num) {
@@ -2144,8 +2150,6 @@ class Figure {
             `Max: ${max[0]} fps, ${max[1]} ms, (${max[2]}, ${max[3]})`,
           ];
           this.frameRate.history = [];
-        } else {
-          this.frameRateInformation = null;
         }
       }
     }
@@ -2348,7 +2352,7 @@ class Figure {
    * browser when an element is animating or moving. If everything is still,
    * then the frame rate will be 0.
    */
-  addFrameRate(numFrames: number = 10, options: OBJ_Text = {}) {
+  addFrameRate(numFrames: number = 10, options: OBJ_TextLines = {}) {
     this.frameRate.num = numFrames;
     const frame = this.add(joinObjects(
       {},

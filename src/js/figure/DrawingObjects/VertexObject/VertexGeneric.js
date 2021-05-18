@@ -14,7 +14,7 @@ class VertexGeneric extends GLObject {
   width: number;
   close: boolean;
   copy: Array<CPY_Step>;
-  points: Array<Point>;
+  vertices: Array<Point>;
   texOptions: {
     location: string,
     mapFrom: Rect,
@@ -72,6 +72,7 @@ class VertexGeneric extends GLObject {
     // this.setupBuffer();
   }
 
+  // eslint-disable-next-line no-unused-vars
   getPointCountForAngle(drawAngle: number = Math.PI * 2) {
     // return this.numPoints * drawAngle / (Math.PI * 2);
     return this.numVertices;
@@ -85,7 +86,7 @@ class VertexGeneric extends GLObject {
 
   // $FlowFixMe
   change(options: {
-    vertices?: Array<Point>,
+    points?: Array<Point>,
     copy?: Array<CPY_Step>,
     drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
     texture?: {
@@ -133,16 +134,16 @@ class VertexGeneric extends GLObject {
     if (this.texture != null && this.numVertices !== previousNumVertices) {
       this.updateTextureMap();
     }
-    // if (texture != null) {
-    //   if (texture.mapTo != null) {
-    //     texture.mapTo = getRect(texture.mapTo);
-    //   }
-    //   if (texture.mapFrom != null) {
-    //     texture.mapFrom = getRect(texture.mapFrom);
-    //   }
-    //   this.texOptions = joinObjects({}, this.texOptions, texture);
-    //   this.setupTexture();
-    // }
+    if (texture != null) {
+      if (texture.mapTo != null) {
+        texture.mapTo = getRect(texture.mapTo);
+      }
+      if (texture.mapFrom != null) {
+        texture.mapFrom = getRect(texture.mapFrom);
+      }
+      this.texOptions = joinObjects({}, this.texOptions, texture);
+      this.updateTextureMap();
+    }
 
     // this.resetBuffer();
   }

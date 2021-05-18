@@ -1,7 +1,7 @@
 // @flow
 
 import {
-  Point,
+  Point, Rect,
 } from '../../../tools/g2';
 import WebGLInstance from '../../webgl/webgl';
 import VertexGeneric from './VertexGeneric';
@@ -51,11 +51,11 @@ class VertexText extends VertexGeneric {
   width: number;
 
   constructor(
-    webgl: Array<WebGLInstance>,
+    webgl: WebGLInstance,
     textOptions: TypeVertexInputTextOptions,
-  ) {
+  ) { // $FlowFixMe
     super(webgl, 'withTexture', 'text');
-    this.glPrimitive = webgl[0].gl.TRIANGLE_FAN;
+    this.glPrimitive = webgl.gl.TRIANGLE_FAN;
 
     const defaultTextOptions = {
       text: 'DEFAULT_TEXT',
@@ -78,10 +78,21 @@ class VertexText extends VertexGeneric {
     this.canvas = document.createElement('canvas');
     this.canvas.id = options.id;
     this.ctx = this.canvas.getContext('2d');
+    // this.texture = {
+    //   id: options.id,
+    //   points: [],
+    //   type: 'canvasText',
+    // };
     this.texture = {
       id: options.id,
+      mapTo: new Rect(-1, -1, 2, 2),
+      mapFrom: new Rect(0, 0, 1, 1),
+      repeat: false,
+      src: '',
       points: [],
-      type: 'canvasText',
+      buffer: this.gl.createBuffer(),
+      type: 'image',
+      data: null,
     };
     this.type = 'vertexText';
     this.drawTextIntoBuffer();
@@ -145,9 +156,9 @@ class VertexText extends VertexGeneric {
       ];
       texture.data = this.ctx.canvas;
       if (texture.buffer) {
-        this.resetBuffer();
+        this.resetBuffers();
       } else {
-        this.setupBuffer();
+        // this.setupBuffer();
       }
     }
   }

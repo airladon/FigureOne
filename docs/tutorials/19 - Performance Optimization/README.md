@@ -440,7 +440,7 @@ The fragment shader accepts a color uniform (`u_color`) and then colors all the 
 
 
 FigureOne also has two more pairs of built in shaders:
-* `'gradient'` - color can be defined for each vertex. When colors are different between vertices, a color gradient is formed.
+* `'vertexColor'` - color can be defined for each vertex. When colors are different between vertices, a color gradient is formed.
 * `'texture'` - a texture (image) can be used to color the shape
 
 #### Example Shader
@@ -671,7 +671,7 @@ const element = figure.add({
     vars: ['a_position', 'a_color', 'a_velocity', 'a_center', 'a_radius', 'u_matrix', 'u_time'],
   },
   // Built in shader that allows for colored vertices
-  fragShader: 'gradient',
+  fragShader: 'vertexColor',
   // Define buffers and uniforms
   vertices: { data: points },
   buffers: [

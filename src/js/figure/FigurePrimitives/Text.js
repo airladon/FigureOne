@@ -22,7 +22,7 @@ type TypeTextInputOptions = {
 };
 
 function Text(
-  webgl: Array<WebGLInstance>,
+  webgl: WebGLInstance,
   figureLimits: Rect,
   optionsIn: TypeTextInputOptions,
 ) {

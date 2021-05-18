@@ -22,6 +22,7 @@ import * as tools from '../../tools/math';
 import { generateUniqueId, joinObjects } from '../../tools/tools';
 import DrawingObject from '../DrawingObjects/DrawingObject';
 import GLObject from '../DrawingObjects/GLObject/GLObject';
+import type { TypeGLUniform, TypeGLBufferType, TypeGLBufferUsage } from '../DrawingObjects/GLObject/GLObject';
 // import VertexObject from '../DrawingObjects/VertexObject/VertexObject';
 // import {
 //   PolyLine, PolyLineCorners,
@@ -2316,8 +2317,8 @@ export default class FigurePrimitives {
     const defaultOptions = {
       name: generateUniqueId('primitive_'),
       color: this.defaultColor,
-      vertexShader: 'gradient',
-      fragShader: 'gradient',
+      vertexShader: 'simple',
+      fragShader: 'simple',
       texture: {
         src: '',
         mapTo: new Rect(-1, -1, 2, 2),
@@ -2341,8 +2342,8 @@ export default class FigurePrimitives {
     );
     glObject.setPrimitive(options.glPrimitive);
     if (options.vertices != null) {
-      const size = options.vertices.size != null ? options.vertices.size : 2;
-      glObject.addVertices(options.vertices.data, size);
+      // const size = options.vertices.size != null ? options.vertices.size : 2;
+      glObject.addVertices(options.vertices.data, options.vertices.usage);
     }
     if (options.buffers != null) {
       options.buffers.forEach((buffer) => {
@@ -2380,7 +2381,7 @@ export default class FigurePrimitives {
       }
     }
     const element = new FigureElementPrimitive(
-      glObject, options.transform, options.color, this.figureLimits, null, options.name,
+      glObject, options.transform, options.color, this.limits, null, options.name,
     );
     element.custom.updateBuffer = element.drawingObject.updateBuffer.bind(element);
     element.custom.updateVertices = element.drawingObject.updateVertices.bind(element);

@@ -2857,8 +2857,8 @@ function isTransformArrayZero(
   transformValue: TypeTransformValue,
   threshold: number = 0.00001,
 ) {
-  const isZero = v => (v > -threshold && v < threshold);
-  const isArrayZero = (values) => {
+  const isZero = (v: number) => (v > -threshold && v < threshold);
+  const isArrayZero = (values: Array<number>) => {
     for (let i = 0; i < values.length; i += 1) {
       if (!isZero(values[i])) {
         return false;
@@ -2872,7 +2872,9 @@ function isTransformArrayZero(
   if (Array.isArray(transformValue)) {
     return isArrayZero(transformValue);
   }
-  const values = Object.values(transformValue);
+  // $FlowFixMe
+  const values = Object.values(transformValue).filter(v => v != null);
+  // $FlowFixMe
   return isArrayZero(values);
 }
 
@@ -2895,7 +2897,6 @@ class Transform {
   custom: ?Object;
 
   orderType: ['t', 'r', 's', 't']
-  order: [[number, number, number] | null]
 
   /**
    * @param {Array<Translation | Rotation | Scale> | string} chainOrName chain
@@ -4452,7 +4453,7 @@ class RangeBounds extends Bounds {
   }
 
   isDefined() {
-    if (this.min == null && this.max == null) {
+    if (this.boundary.min == null && this.boundary.max == null) {
       return false;
     }
     return true;
@@ -4655,7 +4656,12 @@ class RectBounds extends Bounds {
   }
 
   isDefined() {
-    if (this.left == null && this.right == null && this.top == null && this.bottom == null) {
+    if (
+      this.boundary.left == null
+      && this.boundary.right == null
+      && this.boundary.top == null
+      && this.boundary.bottom == null
+    ) {
       return false;
     }
     return true;
@@ -5926,7 +5932,11 @@ function decelerateValue(
 ) {
   let bounds = boundsIn;
   if (round(deceleration, precision) === 0) {
-    if (bounceLoss === 0 || boundsIn == null || (boundsIn != null && !bounds.isDefined())) {
+    if (
+      bounceLoss === 0
+      || boundsIn == null
+      || (boundsIn != null && !boundsIn.isDefined())
+    ) {
       if (deltaTime == null) {
         return {
           velocity,

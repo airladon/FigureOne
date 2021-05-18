@@ -81,7 +81,7 @@ const element = figure.add({
     vars: ['a_position', 'a_color', 'a_velocity', 'a_center', 'a_radius', 'u_matrix', 'u_time'],
   },
   // Built in shader that allows for colored vertices
-  fragShader: 'gradient',
+  fragShader: 'vertexColor',
   // Define buffers and uniforms
   vertices: { data: points },
   buffers: [
