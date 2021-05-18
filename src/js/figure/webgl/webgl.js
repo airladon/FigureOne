@@ -89,12 +89,17 @@ function createProgram(
   gl.attachShader(program, vertexShader);
   gl.attachShader(program, fragmentShader);
   gl.linkProgram(program);
-  const success = gl.getProgramParameter(program, gl.LINK_STATUS);
-  if (success) {
-    return program;
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    const info = gl.getProgramInfoLog(program);
+    throw new Error(`Could not compile WebGL program. \n\n ${info}`);
   }
-  gl.deleteProgram(program);
-  return null;
+  return program;
+  // const success = gl.getProgramParameter(program, gl.LINK_STATUS);
+  // if (success) {
+  //   return program;
+  // }
+  // gl.deleteProgram(program);
+  // return null;
 }
 
 
@@ -106,9 +111,10 @@ function createShader(gl: WebGLRenderingContext, type, source) {
   if (success) {
     return shader;
   }
+  throw new Error(`Could not compile shader: ${source}`);
 
-  gl.deleteShader(shader);
-  return null;
+  // gl.deleteShader(shader);
+  // return null;
 }
 
 
@@ -123,6 +129,7 @@ function createProgramFromScripts(
   // create GLSL shaders, upload the GLSL source, compile the shaders
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
+
 
 
   // Link the two shaders into a program

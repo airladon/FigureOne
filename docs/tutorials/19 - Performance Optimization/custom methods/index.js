@@ -45,6 +45,8 @@ for (let i = 0; i < 400; i += 1) {
     if (transform.order[0].y >= 3 - r) {
       velocity[1] = -Math.abs(velocity[1]);
     }
+    transform.mat = [1, 0, transform.order[0].x, 0, 1, transform.order[0].y, 0, 0, 1];
+    // transform.calcAndSetMatrix();
   };
 
   e.draw = (now, parentTransform) => {

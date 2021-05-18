@@ -11,7 +11,6 @@ for (let i = 0; i < n; i += 1) {
     make: 'polygon',
     radius: r,
     color: [rand(0, 1), rand(0, 1), rand(0, 1), 0.7],
-    rotation: Math.PI / 4,
     transform: [['t', rand(-2.9 + r, 2.9 - r), rand(-2.7 + r, 2.9 - r)]],
     mods: {
       move: {
@@ -26,7 +25,7 @@ for (let i = 0; i < n; i += 1) {
   e.startMovingFreely();
 }
 
-for (let i = 0; i < 150; i += 1) {
+for (let i = 0; i < 250; i += 1) {
   const r = rand(0.1, 0.2);
   figure.add({
     make: 'polygon',

@@ -10,9 +10,8 @@ for (let i = 0; i < n; i += 1) {
   const e = figure.add({
     make: 'polygon',
     radius: r,
-    sides: 100,
+    sides: 200,
     color: [rand(0, 1), rand(0, 1), rand(0, 1), 0.7],
-    rotation: Math.PI / 4,
     transform: [['t', rand(-2.9 + r, 2.9 - r), rand(-2.7 + r, 2.9 - r)]],
     mods: {
       move: {

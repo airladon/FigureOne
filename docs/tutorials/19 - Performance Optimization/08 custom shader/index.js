@@ -6,7 +6,8 @@ const figure = new Fig.Figure({
 });
 const { rand } = Fig.tools.math;
 
-const vertexShader = `attribute vec2 a_position;
+const vertexShader = `
+attribute vec2 a_position;
 attribute vec4 a_col;
 attribute vec2 a_vel;
 attribute vec2 a_center;
@@ -48,7 +49,7 @@ const centers = [];
 const radii = [];
 const sides = 20;
 const step = Math.PI * 2 / (sides);
-for (let i = 0; i < 50000; i += 1) {
+for (let i = 0; i < 1000; i += 1) {
   const r = rand(0.02, 0.04);
   const p = [rand(-3 + r, 3 - r), rand(-3 + r, 3 - r)];
   const v = [rand(-0.15, 0.15), rand(-0.15, 0.15)];

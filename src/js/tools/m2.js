@@ -44,7 +44,12 @@ function translationMatrix(tx: number, ty: number) {
   ];
 }
 function translate(m: Array<number>, tx: number, ty: number) {
-  return mul(m, translationMatrix(tx, ty));
+  // return mul(m, translationMatrix(tx, ty));
+  return [
+    m[0], m[1], m[2] + m[0] * tx + m[1] * ty,
+    m[3], m[4], m[5] + m[3] * tx + m[4] * ty,
+    m[6], m[7], m[8] + m[6] * tx + m[7] * ty,
+  ];
 }
 function rotationMatrix(angle: number) {
   const c = Math.cos(angle);
@@ -56,7 +61,14 @@ function rotationMatrix(angle: number) {
   ];
 }
 function rotate(m: Array<number>, angle: number) {
-  return mul(m, rotationMatrix(angle));
+  // return mul(m, rotationMatrix(angle));
+  const c = Math.cos(angle);
+  const s = Math.sin(angle);
+  return [
+    m[0] * c + m[1] * s, m[0] * -s + m[1] * c, m[2],
+    m[3] * c + m[4] * s, m[3] * -s + m[4] * c, m[5],
+    m[6] * c + m[7] * s, m[6] * -s + m[7] * c, m[8],
+  ];
 }
 
 function scaleMatrix(sx: number, sy: number) {
@@ -68,7 +80,12 @@ function scaleMatrix(sx: number, sy: number) {
 }
 
 function scale(m: Array<number>, sx: number, sy: number) {
-  return mul(m, scaleMatrix(sx, sy));
+  // return mul(m, scaleMatrix(sx, sy));
+  return [
+    m[0] * sx, m[1] * sy, m[2],
+    m[3] * sx, m[4] * sy, m[5],
+    m[6] * sx, m[7] * sy, m[8],
+  ];
 }
 
 function transform(m: Array<number>, px: number, py: number) {

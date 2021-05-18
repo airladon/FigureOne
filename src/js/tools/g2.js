@@ -2464,6 +2464,10 @@ class Rotation {
     return m2.rotationMatrix(this.r);
   }
 
+  transform(m: Array<number>) {
+    return m2.rotate(m, this.r);
+  }
+
   /**
    * Subtract `rotToSub` from this rotation
    * @return {Rotation}
@@ -2590,6 +2594,10 @@ class Translation extends Point {
    */
   matrix(): Array<number> {
     return m2.translationMatrix(this.x, this.y);
+  }
+
+  transform(m: Array<number>) {
+    return m2.translate(m, this.x, this.y);
   }
 
   /**
@@ -2753,6 +2761,10 @@ class Scale extends Point {
     return m2.scaleMatrix(this.x, this.y);
   }
 
+  transform(m: Array<number>) {
+    return m2.scale(m, this.x, this.y);
+  }
+
   /**
    * Subtract `scaleToSub` from this scale
    * @return {Scale}
@@ -2881,6 +2893,9 @@ class Transform {
   name: string;
   _type: 'transform';
   custom: ?Object;
+
+  orderType: ['t', 'r', 's', 't']
+  order: [[number, number, number] | null]
 
   /**
    * @param {Array<Translation | Rotation | Scale> | string} chainOrName chain
@@ -3044,6 +3059,7 @@ class Transform {
     for (let i = orderEndToUse; i >= orderStart; i -= 1) {
       if (!this.order[i].isUnity()) {
         m = m2.mul(m, this.order[i].matrix());
+        // m = this.order[i].transform(m);
       }
     }
     return m;
@@ -3639,8 +3655,17 @@ class Transform {
    * Return a duplicate transform.
    */
   _dup(): Transform {
-    const t = new Transform(this.order, this.name);
+    const t = new Transform();
+    t.name = this.name;
+    t.order = this.order.map(o => o._dup());
+    t.mat = this.mat.slice();
     t.index = this.index;
+    // // this.order = order.slice();
+    // this.index = this.order.length;
+    // this._type = 'transform';
+    // this.calcAndSetMatrix();
+    // const t = new Transform(this.order, this.name);
+    // t.index = this.index;
     return t;
   }
 

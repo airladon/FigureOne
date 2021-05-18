@@ -130,6 +130,22 @@ export type TypeElementPath = string
                               | Array<TypeElementPath>;
 /* eslint-enable no-use-before-define */
 
+function transformByMatrix(
+  inputTransforms: Array<Array<number>>,
+  copyTransforms: Array<Array<number>>,
+) {
+  if (copyTransforms.length === 0) {
+    return inputTransforms;
+  }
+  const newTransforms = [];
+  for (let i = 0; i < inputTransforms.length; i += 1) {
+    for (let j = 0; j < copyTransforms.length; j += 1) {
+      newTransforms.push(m2.mul(inputTransforms[i], copyTransforms[j]));
+    }
+  }
+  return newTransforms;
+}
+
 const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Transform>) => {
   const newTransforms = [];
   if (copyTransforms.length === 0) {
@@ -1398,6 +1414,22 @@ class FigureElement {
     return drawTransforms;
   }
 
+  getDrawTransformsMatrix(initialTransforms: Array<Array<number>>) {
+    let drawTransforms = initialTransforms;
+    if (this.copyTransforms.length > 0) {
+      drawTransforms = transformByMatrix(drawTransforms, this.copyTransforms.map(t => t.mat));
+    }
+    if (this.pulseTransforms.length > 0) {
+      drawTransforms = transformByMatrix(drawTransforms, this.pulseTransforms.map(t => t.mat));
+    }
+    if (this.frozenPulseTransforms.length > 0) {
+      drawTransforms = transformByMatrix(
+        drawTransforms, this.frozenPulseTransforms.map(t => t.mat),
+      );
+    }
+    return drawTransforms;
+  }
+
   exec(
     execFunctionAndArgs: string | Array<string | Object>,
   ) {
@@ -1496,7 +1528,7 @@ class FigureElement {
    * @param {Transform} transform
    */
   setTransform(transform: Transform, publish: boolean = true): void {
-    if (this.simple === false && this.move.transformClip != null) {
+    if (this.move.transformClip != null) {
       const clip = this.fnMap.exec(this.move.transformClip, transform);
       if (clip instanceof Transform) {
         this.notifications.publish('beforeSetTransform', [clip]);
@@ -1506,7 +1538,7 @@ class FigureElement {
           this.cancelSetTransform = false;
         }
       }
-    } else if (this.simple === false) {
+    } else if (this.move.bounds !== 'none' && this.move.bounds != null) {
       const bounds = this.getMoveBounds(); // $FlowFixMe
       const clip = bounds.clip(transform);
       this.notifications.publish('beforeSetTransform', [clip]);
@@ -2313,6 +2345,11 @@ class FigureElement {
 
   getNextAnimationFinishTime() {
     if (this.simple) {
+      if (
+        this.state.isMovingFreely || this.state.isChanging || this.animations.state === 'animating'
+      ) {
+        return 0.1;
+      }
       return 0;
     }
     const t1 = this.getRemainingMovingFreelyTime();
@@ -3387,10 +3424,14 @@ class FigureElementPrimitive extends FigureElement {
       } // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m1'); }
 
-      const colorToUse = [...this.color.slice(0, 3), this.color[3] * this.opacity * parentOpacity];
+      const colorToUse = [
+        this.color[0], this.color[1], this.color[2], this.color[3] * this.opacity * parentOpacity,
+      ];
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawOpacity = colorToUse[3];
-      const transform = this.getTransform()._dup();
+      // const transform = this.getTransform()._dup();
+      const transform = this.getTransform();
+      // const transform = this.transform._dup();
       const newTransforms = transformBy(parentTransform, [transform]);
       // eslint-disable-next-line prefer-destructuring
       this.parentTransform = parentTransform;
@@ -3406,6 +3447,7 @@ class FigureElementPrimitive extends FigureElement {
       if (FIGURE1DEBUG) { timer.stamp('m3'); }
       this.drawTransforms = this.getDrawTransforms(newTransforms); // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m4'); }
+      // this.drawTransforms = newTransforms;
 
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawTransform = newTransforms[0];
@@ -3420,30 +3462,30 @@ class FigureElementPrimitive extends FigureElement {
           );
         });
       }  // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m6'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m6'); }
 
-      if (this.unrenderNextDraw) {
-        this.clearRender();
-        this.unrenderNextDraw = false;
-      }
-      if (this.renderedOnNextDraw) {
-        this.isRenderedAsImage = true;
-        this.renderedOnNextDraw = false;
-      }
-      this.notifications.publish('afterDraw', [now]);
-      if (this.afterDrawCallback != null) {
-        this.fnMap.exec(this.afterDrawCallback, now);
-      }
+      // if (this.unrenderNextDraw) {
+      //   this.clearRender();
+      //   this.unrenderNextDraw = false;
+      // }
+      // if (this.renderedOnNextDraw) {
+      //   this.isRenderedAsImage = true;
+      //   this.renderedOnNextDraw = false;
+      // }
+      // this.notifications.publish('afterDraw', [now]);
+      // if (this.afterDrawCallback != null) {
+      //   this.fnMap.exec(this.afterDrawCallback, now);
+      // }
 
-      if (FIGURE1DEBUG) { // $FlowFixMe
-        timer.stamp('m7'); // $FlowFixMe
-        const deltas = timer.deltas();
-        window.figureOneDebug.draw.push([
-          this.getPath(),
-          deltas[0],
-          deltas.slice(1),
-        ]);
-      }
+      // if (FIGURE1DEBUG) { // $FlowFixMe
+      //   timer.stamp('m7'); // $FlowFixMe
+      //   const deltas = timer.deltas();
+      //   window.figureOneDebug.draw.push([
+      //     this.getPath(),
+      //     deltas[0],
+      //     deltas.slice(1),
+      //   ]);
+      // }
     }
   }
 
@@ -4955,6 +4997,11 @@ class FigureElementCollection extends FigureElement {
 
   getNextAnimationFinishTime() {
     if (this.simple) {
+      if (
+        this.state.isMovingFreely || this.state.isChanging || this.animations.state === 'animating'
+      ) {
+        return 0.1;
+      }
       return 0;
     }
     // const elements = this.getAllElements();
