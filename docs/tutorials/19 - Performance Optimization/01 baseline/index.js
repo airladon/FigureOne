@@ -7,7 +7,7 @@ const { rand } = Fig.tools.math;
 // Add n polygons, each of which has a random size, start position and
 // velocity. They move freely and bounce off the figure boundaries without
 // deceleration.
-const n = 25;
+const n = 100;
 for (let i = 0; i < n; i += 1) {
   const r = rand(0.1, 0.2);
   const e = figure.add({

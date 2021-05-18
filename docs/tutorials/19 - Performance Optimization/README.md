@@ -98,9 +98,9 @@ for (let i = 0; i < n; i += 1) {
 figure.addFrameRate(10);
 ```
 
-FigureOne can display animation metrics by using the `addFrameRate` method.
+![](baseline.gif)
 
-![](addframerate.png)
+FigureOne can display animation metrics by using the `addFrameRate` method.
 
 It will show the average and worst case values of the frame rate, the total time it takes to process a draw, and then the times for setupDraw and draw.
 
@@ -113,6 +113,7 @@ This makes it very easy for a user to define an object and have it move freely, 
 ### Performance
 
 The average frame rates and FigureOne processing times per frame on the test devices are (for n=100 squares):
+
 * 2016 Chromebook: 6 fps at ~73ms per frame
 * 2014 iPad: 27 fps at ~11ms per frame
 * 2019 iPhone: 52 fps at ~3ms per frame
@@ -171,6 +172,8 @@ for (let i = 0; i < 250; i += 1) {
 figure.addFrameRate(10);
 ```
 
+![](n1s250.gif)
+
 It also DOES NOT mean the Chromebook can only support 25 *simple* elements (squares are two triangles, and so defined with 6 vertices).
 
 If instead we make 25 independently moving elements each with 200 sides (5000 triangles, 30000 vertices), we can still achieve 20 fps.
@@ -199,6 +202,8 @@ for (let i = 0; i < n; i += 1) {
   e.startMovingFreely();
 }
 ```
+
+![](n25sides200.gif)
 
 ### Optimization
 
@@ -346,6 +351,8 @@ for (let i = 0; i < 400; i += 1) {
 This draw method is super simple, and will stop an element from being able to pulse, or use the `getPosition` or `getBorder` methods.
 
 It almost halves the draw time however, so we can then increase `n` to `400` and still achieve 20 fps on the Chromebook.
+
+![](customdraw.gif)
 
 ### Level 3 - Custom Shaders
 
@@ -544,6 +551,8 @@ figure.animateNextFrame();
 
 ```
 
+![](custom_shader_intro.gif)
+
 The `'gl'` FigureElementPrimitive has options that allows us to define the shaders, and any attributes and uniforms.
 
 This code essentially explodes 10,000 circles (polygons with 20 sides each, thus 200,000 vertices). Our performance numbers are:
@@ -556,7 +565,7 @@ Note here, the iPad is the "worst" performer, though at 36 fps it is more than a
 
 It gets interesting if we increase n:
 
-For `n = 100,000` (2,000,000 vertices):
+For `n = 100,000` (6,000,000 vertices):
 * Chromebook: 40 fps at 2.5 ms processing time
 * iPad: 10 fps at 3.6ms processing time
 * iPhone: 30 fps at 1ms processing time
@@ -577,44 +586,148 @@ As shaders need to be deterministic, the bouncing is going to require logic to:
 
 The x and y components of position and velocity are independant of each other and so can be calculated separately.
 
-The final vertex shader is then:
+The final program is then:
 
-```c
+```js
+
+const figure = new Fig.Figure({
+  limits: [-3, -3, 6, 6],
+  backgroundColor: [1, 1, 0.9, 1],
+});
+const { rand } = Fig.tools.math;
+
+const vertexShader = `
 attribute vec2 a_position;
-attribute vec4 a_col;
-attribute vec2 a_vel;
+attribute vec4 a_color;
+attribute vec2 a_velocity;
 attribute vec2 a_center;
 attribute float a_radius;
 varying vec4 v_col;
 uniform mat3 u_matrix;
-uniform float u_z;
 uniform float u_time;
 
 float calc(float limit, float pos, float center, float vel) {
-  float xDirection = vel / abs(vel);
-  float xOffset = abs(center - xDirection * limit);
-  float xTotalDistance = abs(vel * u_time);
-  float xNumBounces = 0.0;
-  if (xTotalDistance > xOffset) {
-    xNumBounces = 1.0;
+  float vDirection = vel / abs(vel);
+  float offset = abs(center - vDirection * limit);
+  float totalDistance = abs(vel * u_time);
+  float numBounces = 0.0;
+  if (totalDistance > offset) {
+    numBounces = 1.0;
   }
-  xNumBounces = xNumBounces + floor(abs((xTotalDistance - xOffset)) / (2.0 * limit));
-  float xLastDirection = (mod(xNumBounces, 2.0) == 0.0) ? xDirection : -xDirection;
+  numBounces = numBounces + floor(abs((totalDistance - offset)) / (2.0 * limit));
+  float xLastDirection = (mod(numBounces, 2.0) == 0.0) ? vDirection : -vDirection;
   float xLastWall = center;
-  float xRemainderDistance = xTotalDistance;
-  if (xNumBounces > 0.0) {
-    xLastWall = (mod(xNumBounces, 2.0) == 0.0) ? -xDirection * limit : xDirection * limit;
-    xRemainderDistance = mod(xTotalDistance - xOffset, 2.0 * limit);
+  float xRemainderDistance = totalDistance;
+  if (numBounces > 0.0) {
+    xLastWall = (mod(numBounces, 2.0) == 0.0) ? -vDirection * limit : vDirection * limit;
+    xRemainderDistance = mod(totalDistance - offset, 2.0 * limit);
   }
   float x = xLastWall + xRemainderDistance * xLastDirection + pos - center;
   return x;
 }
 void main() {
-  float x = calc(3.0 - a_radius, a_position.x, a_center.x, a_vel.x);
-  float y = calc(3.0 - a_radius, a_position.y, a_center.y, a_vel.y);
-  gl_Position = vec4((u_matrix * vec3(x, y, 1)).xy, u_z, 1);
-  v_col = a_col;
+  float x = calc(3.0 - a_radius, a_position.x, a_center.x, a_velocity.x);
+  float y = calc(3.0 - a_radius, a_position.y, a_center.y, a_velocity.y);
+  gl_Position = vec4((u_matrix * vec3(x, y, 1)).xy, 0, 1);
+  v_col = a_color;
+}`;
+
+const points = [];
+const velocities = [];
+const colors = [];
+const centers = [];
+const radii = [];
+const sides = 20;
+const step = Math.PI * 2 / (sides);
+for (let i = 0; i < 10000; i += 1) {
+  // Each shape gets a random radius, initial position, initial velocity and
+  // color
+  const r = rand(0.05, 0.1);
+  const p = [rand(-3 + r, 3 - r), rand(-3 + r, 3 - r)];
+  const v = [rand(-0.15, 0.15), rand(-0.15, 0.15)];
+  const color = [rand(0, 255), rand(0, 255), rand(0, 255), rand(0, 255)];
+
+  // Define all the vertices of the shape. Each side will have an associated
+  // triangle formed with the center of the polygon. Thus, each side of the
+  // shape will have three associated vertices. Each vertex will then have an
+  // associated radius, center point, velocity and color.
+  for (let j = 0; j < sides; j += 1) {
+    points.push(p[0], p[1]);
+    points.push(r * Math.cos(step * j) + p[0], r * Math.sin(step * j) + p[1]);
+    points.push(r * Math.cos(step * (j + 1)) + p[0], r * Math.sin(step * (j + 1)) + p[1]);
+    velocities.push(v[0], v[1], v[0], v[1], v[0], v[1]);
+    centers.push(p[0], p[1], p[0], p[1], p[0], p[1]);
+    radii.push(r, r, r);
+    colors.push(...color, ...color, ...color);
+  }
 }
+
+const element = figure.add({
+  make: 'gl',
+  // Define the custom shader and variables (u_matrix is the element transform
+  // matrix)
+  vertexShader: {
+    src: vertexShader,
+    vars: ['a_position', 'a_color', 'a_velocity', 'a_center', 'a_radius', 'u_matrix', 'u_time'],
+  },
+  // Built in shader that allows for colored vertices
+  fragShader: 'gradient',
+  // Define buffers and uniforms
+  vertices: { data: points },
+  buffers: [
+    {
+      name: 'a_color', size: 4, data: colors, type: 'UNSIGNED_BYTE', normalize: true,
+    },
+    { name: 'a_velocity', data: velocities },
+    { name: 'a_center', data: centers },
+    { name: 'a_radius', data: radii, size: 1 },
+  ],
+  uniforms: [
+    { name: 'u_time' },
+  ],
+  // The animation will continue forever
+  mods: { state: { isChanging: true } },
+});
+
+// Before each draw, we want to update the u_time value with the time
+// delta between this frame and the start of the animation - it will
+// then be passed to the vertex shader by FigureOne
+let startTime = null;
+figure.notifications.add('beforeDraw', () => {
+  if (startTime == null) {
+    startTime = figure.timeKeeper.now();
+  }
+  const deltaTime = (figure.timeKeeper.now() - startTime) / 1000;
+  element.drawingObject.uniforms['u_time'].value = [deltaTime];
+});
+figure.addFrameRate();
+figure.animateNextFrame();
 ```
 
-Of note
+![](n10000.gif)
+
+The performance of this on each device for n = 10,000 is:
+
+* Chromebook: 55 fps at 1.5ms processing time
+* iPad: 25 fps at 1ms processing time
+* iPhone: 57 fps at 0.7ms
+
+The maxium number of polygons that can still accomodate a smooth visualization for each device is:
+
+* Chromebook: n = 70,000 (4.2 million vertices)
+* iPad: n = 20,000 (1.2 million vertices)
+* iPhone: n = 30,000 (1.8 million vertices)
+
+Note, the performance of this example is lower than the previous exploding example because the shader calculation is more complex. Remember that the shader is run on each vertex, and we are talking millions of vertices now.
+
+### Conclusions
+
+FigureOne is optimized to be easy to use, but sufficiently performant for a large range of Figures, even on low end devices.
+
+That said, there may be situations where many elements are needed on the screen and the performance on low end devices is insufficient.
+
+Depending on the figure, this tutorial has shown three ways to potentially improve performance
+* Simplify the figure definitions
+* Override the `setupDraw` and `draw` methods of key elements to implement efficient animations
+* Use WebGL shaders to render special effects or thousands of shapes at once very efficiently
+

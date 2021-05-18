@@ -30,7 +30,7 @@ const points = [];
 const velocities = [];
 const sides = 20;
 const step = Math.PI * 2 / (sides);
-for (let i = 0; i < 100000; i += 1) {
+for (let i = 0; i < 10000; i += 1) {
   const r = rand(0.02, 0.05);
   const p = [rand(-1, 1), rand(-1, 1)];
   const v = [rand(-0.15, 0.15) * r * 50, rand(-0.15, 0.15) * r * 50];
@@ -50,7 +50,7 @@ const element = figure.add({
     src: vertexShader,
     vars: ['a_position', 'a_velocity', 'u_matrix', 'u_time'],
   },
-  // Build in shader with one color for all vertices
+  // Built in shader with one color for all vertices
   fragShader: 'simple',
   // Define buffers and uniforms
   vertices: { data: points },
