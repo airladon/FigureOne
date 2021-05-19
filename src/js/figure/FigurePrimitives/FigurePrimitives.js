@@ -2397,6 +2397,7 @@ export default class FigurePrimitives {
     element.custom.updateVertices =
       element.drawingObject.updateVertices.bind(element.drawingObject);
     element.custom.updateUniform = element.drawingObject.updateUniform.bind(element.drawingObject);
+    element.custom.getUniform = element.drawingObject.getUniform.bind(element.drawingObject);
     element.dimColor = this.defaultDimColor.slice();
 
     // element.custom.updateGeneric = function update(updateOptions: {

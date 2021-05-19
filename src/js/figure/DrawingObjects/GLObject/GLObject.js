@@ -431,6 +431,14 @@ class GLObject extends DrawingObject {
   }
 
   /**
+   * Get the current value of a uniform
+   */
+  getUniform(uniformName: string) {
+    const uniform = this.uniforms[uniformName];
+    return uniform.value;
+  }
+
+  /**
    * Add a uniform.
    *
    * @param {string} uniformName The variable name used in the shader
@@ -445,7 +453,7 @@ class GLObject extends DrawingObject {
     type: TypeGLUniform = 'FLOAT',
   ) {
     this.uniforms[uniformName] = {
-      value: Array(length), // $FlowFixMe
+      value: Array(length).fill(0), // $FlowFixMe
       method: this[`uploadUniform${length.toString()}${type[0].toLowerCase()}${type.endsWith('VECTOR') ? 'v' : ''}`].bind(this),
     };
   }

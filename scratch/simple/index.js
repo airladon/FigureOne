@@ -75,25 +75,18 @@ void main() {
   vec2 c20 = fromCharge(u_charge20);
 
   vec2 sum = c1 + c2 + c3 + c4 + c5 + c6 + c7 + c8 + c9 + c10 + c11 + c12 + c13 + c14 + c15 + c16 + c17 + c18 + c19 + c20;
-  // vec2 sum = c1 + c2 + c3 + c4 + c5 + c6 + c7 + c8 + c9 + c10;
   vec2 charge = rectToPolar(sum.x, sum.y);
   float mag = charge.x;
   float angle = charge.y;
-  // float mag = 10.0 * log(charge.x) / log(10.0) / 2.0;
-  // float scale = max(min(mag / 2.0, 2.0), 0.5);
-  // float scale = max(0.5, min(sqrt(mag), 1.5));
   float normCharge = (max(0.0, min(sqrt(mag), u_norm))  - 0.0)/ u_norm;
   float scale = 1.0;
   if (u_scaleArrow == 1.0) {
     scale = normCharge * 1.5 + 0.25;
   }
 
-
   float s = sin(angle);
   float c = cos(angle);
-
-
-  mat3 scaleRotation = mat3(c * scale, s * scale, 0, -s * scale, c * scale, 0, 0, 0, 1);
+  mat3 scaleRotation = mat3(c * 1.0, s * 1.0, 0, -s * scale, c * scale, 0, 0, 0, 1);
   vec3 final = originToCenter * scaleRotation * centerToOrigin * vec3(a_position.x, a_position.y, 1);
 
   gl_Position = vec4((u_matrix * vec3(final.x, final.y, 1)).xy, 0, 1);
@@ -195,7 +188,6 @@ const field = figure.add({
     { name: 'u_charge19', length: 3 },
     { name: 'u_charge20', length: 3 },
   ],
-  // mods: { state: { isChanging: true } },
 });
 
 const charges = [];
@@ -216,7 +208,7 @@ for (let i = 1; i <= 20; i += 1) {
         name: 'border',
         sides: 20,
         radius: chargeRadius,
-        color: [1, 1, 1, 1],
+        color: [0, 0, 0, 0.5],
         line: { width: 0.005 },
       },
       {
@@ -234,11 +226,10 @@ for (let i = 1; i <= 20; i += 1) {
         p2: [0, chargeRadius / 3],
         width: 0.01,
         color: [0, 0, 0, 1],
-      }
+      },
     ],
     mods: {
       isMovable: true,
-      move: { bounds: 'figure' },
       custom: { q: 1 },
     },
   });
@@ -246,302 +237,287 @@ for (let i = 1; i <= 20; i += 1) {
     const p = charge.getPosition();
     field.custom.updateUniform(`u_charge${i}`, [p.x, p.y, charge.custom.q]);
   });
-  charge.custom.setCharge = (q) => {
-    charge.custom.q = q;
+  charge.custom.animateTo = (position, q, duration) => {
+    let targetColor = [0, 0, 0, 0];
     if (q > 0) {
-      charge._fill.setColor([q, 0, 0, 1]);
-      charge._border.setColor([0.5, 0, 0, 1]);
-      charge._positiveLine.show();
-      charge.setOpacity(1);
+      targetColor = [q, 0, 0, 1];
     } else if (q < 0) {
-      charge._fill.setColor([0, -q / 0.7, 0, 1]);
-      charge._border.setColor([0, 0.5, 0, 1]);
-      charge._positiveLine.hide();
-      charge.setOpacity(1);
-    } else {
-      charge.setOpacity(0.001);
+      targetColor = [0, -q, 0, 1];
     }
+    if (duration === 0) {
+      charge.custom.q = q;
+      charge.setPosition(position);
+      charge._fill.setColor(targetColor);
+      if (charge < 0) {
+        charge._positiveLine.setOpacity(0);
+      } else {
+        charge._positiveLine.setOpacity(1);
+      }
+      return;
+    }
+    const startCharge = charge.custom.q;
+    const deltaCharge = q - startCharge;
+    let colorAnimationStep = null;
+    let signAnimationStep = null;
+    if (startCharge < 0 && q > 0) {
+      signAnimationStep = charge._positiveLine.animations.opacity({ target: 1, duration });
+    } else if (startCharge > 0 && q < 0) {
+      signAnimationStep = charge._positiveLine.animations.opacity({ target: 0, duration });
+    } else if (q < 0) {
+      charge._positiveLine.setOpacity(0);
+    } else {
+      charge._positiveLine.setOpacity(1);
+    }
+    colorAnimationStep = charge._fill.animations.new()
+      .color({ target: targetColor, duration });
+    charge.animations.new()
+      .inParallel([
+        signAnimationStep,
+        colorAnimationStep,
+        charge.animations.position({ target: position, duration }),
+        charge.animations.custom({
+          callback: (p) => {
+            charge.custom.q = p * deltaCharge + startCharge;
+          },
+          duration,
+        }),
+      ])
+      .start();
   };
+  // charge.custom.setCharge = (q) => {
+  //   charge.custom.q = q;
+  //   if (q > 0) {
+  //     charge._fill.setColor([q, 0, 0, 1]);
+  //     charge._positiveLine.show();
+  //     charge.setOpacity(1);
+  //   } else if (q < 0) {
+  //     charge._fill.setColor([0, -q / 0.7, 0, 1]);
+  //     charge._positiveLine.hide();
+  //     charge.setOpacity(1);
+  //   } else {
+  //     charge.setOpacity(0.001);
+  //   }
+  // };
   charges.push(charge);
   charge.setPosition(0, 0);
 }
 
-const cycleButton = figure.add({
+const animateNorm = (target, duration = 4) => {
+  const [start] = field.custom.getUniform('u_norm');
+  const delta = target - start;
+  figure.animations.new()
+    .custom({
+      callback: (p) => {
+        field.custom.updateUniform('u_norm', delta * p + start);
+      },
+      duration,
+    })
+    .start();
+};
+
+const makeButton = (text, width, position) => figure.add({
   make: 'collections.rectangle',
   button: true,
-  fill: [0, 0, 0, 0.7],
+  fill: [0.4, 0.4, 0.4, 0.7],
   label: {
-    text: 'Cycle',
+    text,
     font: { color: [1, 1, 1, 1] },
   },
-  corner: { radius: 0.2, sides: 5 },
-  width: 1,
+  corner: { radius: 0.1, sides: 5 },
+  width,
   height: 0.5,
-  position: [2.3, -2.5],
+  position,
   mods: {
     isTouchable: true,
   },
-});
+})
+// const cycleButton = figure.add({
+//   make: 'collections.rectangle',
+//   button: true,
+//   fill: [0.4, 0.4, 0.4, 0.7],
+//   label: {
+//     text: 'Next',
+//     font: { color: [1, 1, 1, 1] },
+//   },
+//   corner: { radius: 0.1, sides: 5 },
+//   width: 1,
+//   height: 0.5,
+//   position: [2.3, -2.5],
+//   mods: {
+//     isTouchable: true,
+//   },
+// });
+const nextButton = makeButton('Next', 1, [2.3, -2.5]);
+const prevButton = makeButton('Prev', 1, [-2.3, -2.5]);
+const scaleButton = makeButton('Scale', 0.8, [2.3, 2.5]);
 
-const goToCircle = () => {
-  const radius = 2;
-  const center = [0, 0];
-  const angleStep = Math.PI * 2 / charges.length;
-  for (let i = 0; i < charges.length; i += 1) {
-    const charge = charges[i];
-    charge.custom.setCharge(-1);
-    field.custom.updateUniform('u_norm', 4);
-    charge.animations.new()
-      .position({
-        target: [
-          center[0],
-          center[1],
-        ],
-        duration: 2,
-      })
-      .position({
-        target: [
-          radius * Math.cos(angleStep * i) + center[0],
-          radius * Math.sin(angleStep * i) + center[1],
-        ],
-        duration: 2,
-      })
-      .start();
+// const scaleButton = figure.add({
+//   make: 'collections.rectangle',
+//   button: true,
+//   fill: [0.4, 0.4, 0.4, 0.7],
+//   label: {
+//     text: 'Scale',
+//     font: { color: [1, 1, 1, 1] },
+//   },
+//   corner: { radius: 0.1, sides: 5 },
+//   width: 1,
+//   height: 0.5,
+//   position: [-2.3, -2.5],
+//   mods: {
+//     isTouchable: true,
+//   },
+// });
+
+scaleButton.onClick = () => {
+  const [scaleArrow] = field.custom.getUniform('u_scaleArrow');
+  if (scaleArrow === 1) {
+    field.custom.updateUniform('u_scaleArrow', 0);
+  } else {
+    field.custom.updateUniform('u_scaleArrow', 1);
   }
 };
 
-const goToCapacitor = () => {
-  const separation = 0.2;
-  const length = 2 + step;
-  const lenStep = length / charges.length * 2;
-  let start = -length / 2;
-  let y = -separation / 2 - step * 1.5;
-  let count = 0;
-  field.custom.updateUniform('u_norm', 7);
-  for (let i = 0; i < charges.length; i += 1) {
-    const charge = charges[i];
-    charge.custom.setCharge(1);
-    if (i === charges.length / 2) {
-      start = -length / 2;
-      y = separation / 2 + step * 1.5;
-      count = 0;
-    }
-    if (i >= charges.length / 2) {
-      charge.custom.setCharge(-1);
-    }
-    charge.animations.new()
-      .position({
-        target: [start + count * lenStep, y],
-        duration: 2,
-      })
-      .start();
-    count += 1;
+const deltaAngle = Math.PI * 2 / charges.length;
+
+const singleCharge = (q, duration = 4) => {
+  charges[0].custom.animateTo([0, 0], q, duration);
+  animateNorm(2, duration);
+  for (let i = 1; i < charges.length; i += 1) {
+    charges[i].custom.animateTo([5, 0], 0, duration);
   }
 };
 
-const goToLine = () => {
+const twoCharges = (q1, q2, duration = 4) => {
+  charges[0].custom.animateTo([-1, 0], q1, duration);
+  charges[1].custom.animateTo([1, 0], q2, duration);
+  animateNorm(2, duration);
+  for (let i = 2; i < charges.length; i += 1) {
+    charges[i].custom.animateTo([5, 5], 0, duration);
+  }
+};
+
+const line = (duration = 4) => {
   const length = 3;
   const lenStep = length / charges.length;
-  field.custom.updateUniform('u_norm', 5);
+  // field.custom.updateUniform('u_norm', 5);
+  animateNorm(5, duration);
   for (let i = 0; i < charges.length; i += 1) {
     const charge = charges[i];
-    charge.custom.setCharge(1);
-    charge.custom.charge = 1;
-    charge.animations.new()
-      .position({
-        target: [-length / 2 + i * lenStep, 0],
-        duration: 2,
-      })
-      .start();
+    charge.custom.animateTo([-length / 2 + i * lenStep, 0], 1, duration);
   }
 };
 
-const goToBipolarLine = () => {
+const bipolarLine = (duration = 4) => {
   const length = 3;
   const lenStep = length / charges.length;
-  field.custom.updateUniform('u_norm', 4);
+  // field.custom.updateUniform('u_norm', 4);
+  animateNorm(4, duration);
   for (let i = 0; i < charges.length; i += 1) {
     const charge = charges[i];
     const x = -length / 2 + i * lenStep;
-    const normX = x / (length / 2);
-    charge.custom.setCharge(normX);
-    // if (i >= charges.length / 2) {
-    //   charge.custom.setCharge(-1);
-    // }
-    charge.animations.new()
-      .position({
-        target: [-length / 2 + i * lenStep, 0],
-        duration: 2,
-      })
-      .start();
+    const normX = x < 0 ? -1 : 1;
+    charge.custom.animateTo([-length / 2 + i * lenStep, 0], normX, duration);
   }
 };
 
-const cycle = [goToBipolarLine.bind(this), goToCapacitor.bind(this), goToCircle.bind(this)];
-let cycleIndex = 0;
-cycleButton.onClick = () => {
-  figure.stop();
-  console.log('asdf')
-  cycle[cycleIndex]();
-  cycleIndex = (cycleIndex + 1) % cycle.length;
+const capacitor = (duration = 4) => {
+  const separation = 0.2;
+  const length = 2 + step;
+  const lenStep = length / charges.length * 2;
+  const start = -length / 2;
+  const y = -separation / 2 - step * 1.5;
+  // field.custom.updateUniform('u_norm', 7);
+  animateNorm(7, duration);
+  for (let i = 0; i < charges.length; i += 1) {
+    const charge = charges[i];
+    if (i >= charges.length / 2) {
+      charge.custom.animateTo([start + (i - charges.length / 2) * lenStep, y], 1, duration);
+    } else {
+      charge.custom.animateTo([start + i * lenStep, -y], -1, duration);
+    }
+  }
 };
-goToBipolarLine();
-// const charge2 = figure.add({
-//   make: 'polygon',
-//   sides: 20,
-//   radius: 0.15,
-//   color: [1, 0, 1, 1],
-//   mods: {
-//     isMovable: true,
-//     move: { bounds: 'figure' },
-//   },
-// });
 
-// const charge3 = figure.add({
-//   make: 'polygon',
-//   sides: 20,
-//   radius: 0.2,
-//   color: [1, 0, 1, 1],
-//   mods: {
-//     isMovable: true,
-//     move: { bounds: 'figure' },
-//   },
-// });
+const linePoint = (duration = 4) => {
+  const length = 3;
+  const lenStep = length / charges.length;
+  animateNorm(4, duration);
+  charges[0].custom.animateTo([0.1, 1], -1, 4);
+  charges[1].custom.animateTo([-0.1, 1], -1, 4);
+  for (let i = 2; i < charges.length; i += 1) {
+    const charge = charges[i];
+    const x = -length / 2 + i * lenStep;
+    charge.custom.animateTo([-length / 2 + i * lenStep, -1], 1, duration);
+  }
+}
 
-// charge1.notifications.add('setTransform', () => {
-//   const p = charge1.getPosition();
-//   field.custom.updateUniform('u_charge1', [p.x, p.y, 1]);
-// });
 
-// charge2.notifications.add('setTransform', () => {
-//   const p = charge2.getPosition();
-//   element.custom.updateUniform('u_charge2', [p.x, p.y, -1]);
-// });
+const circle = (radius, duration = 4) => {
+  const center = [0, 0];
+  const angleStep = Math.PI * 2 / charges.length;
+  animateNorm(4, duration);
+  for (let i = 0; i < charges.length; i += 1) {
+    const x = radius * Math.cos(angleStep * i) + center[0];
+    const y = radius * Math.sin(angleStep * i) + center[1];
+    charges[i].custom.animateTo([x, y], 1, duration);
+  }
+};
 
-// charge3.notifications.add('setTransform', () => {
-//   const p = charge3.getPosition();
-//   element.custom.updateUniform('u_charge3', [p.x, p.y, -1]);
-// });
+const square = (radius, duration = 4) => {
+  const center = [0, 0];
+  const angleStep = Math.PI * 2 / charges.length;
+  const hSide = 1.7;
+  animateNorm(4, duration);
+  for (let i = 0; i < charges.length; i += 1) {
+    const angle = angleStep * i;
+    let p;
+    if (angle <= Math.PI / 4 || angle > Math.PI / 4 * 7) {
+      p = [hSide, hSide * Math.tan(angle)];
+    } else if (angle <= Math.PI / 4 * 3) {
+      p = [hSide / Math.tan(angle), hSide];
+    } else if (angle <= Math.PI / 4 * 5) {
+      p = [-hSide, -hSide * Math.tan(angle)];
+    } else {
+      p = [-hSide / Math.tan(angle), -hSide];
+    }
+    p[0] += center[0];
+    p[1] += center[1];
+    charges[i].custom.animateTo(p, 1, duration);
+  }
+};
 
-// charge1.setPosition(-0.7, 0);
-// charge2.setPosition(0.7, 0);
-// charge3.setPosition(0, 0);
+const cycle = [
+  singleCharge.bind(this, 1),
+  singleCharge.bind(this, -1, 2),
+  twoCharges.bind(this, -1, 1),
+  twoCharges.bind(this, 1, 1, 2),
+  line.bind(this),
+  bipolarLine.bind(this),
+  capacitor.bind(this),
+  linePoint.bind(this),
+  circle.bind(this, 0.8),
+  circle.bind(this, 2),
+  square.bind(this),
+];
+let cycleIndex = 0;
+nextButton.onClick = () => {
+  figure.stop();
+  cycleIndex = (cycleIndex + 1) % cycle.length;
+  cycle[cycleIndex]();
+};
 
-// let startTime = null;
-// figure.notifications.add('beforeDraw', () => {
-//   if (startTime == null) {
-//     startTime = figure.timeKeeper.now();
-//   }
-//   const deltaTime = (figure.timeKeeper.now() - startTime) / 1000;
-//   element.drawingObject.uniforms['u_time'].value = [deltaTime];
-// });
+prevButton.onClick = () => {
+  figure.stop();
+  let prevIndex = cycleIndex - 1;
+  if (prevIndex < 0) {
+    prevIndex = cycle.length - 1;
+  }
+  cycleIndex = cycleIndex - 1 < 0 ? cycle.length - 1 : cycleIndex - 1;
+  cycle[cycleIndex]();
+};
+
+singleCharge(1, 0);
+
 figure.addFrameRate();
 figure.animateNextFrame();
 
-
-// const p = figure.add({
-//   make: 'gl',
-//   vertexShader: 'withTexture',
-//   fragShader: 'withTexture',
-// });
-// p.drawingObject.addVertices([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1], 'DYNAMIC');
-// p.drawingObject.addTexture('./texture.jpg');
-
-// p.animations.new()
-//   .custom({
-//     callback: (percent) => {
-//       p.drawingObject.updateVertices([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1].map(v => v + percent));
-//     },
-//     duration: 10,
-//   })
-//   .start();
-
-// const q = figure.add({
-//   make: 'polygon',
-//   radius: 0.4,
-//   sides: 6,
-//   // texture: { src: './texture.jpg' },
-// });
-
-// q.animations.new()
-//   .custom({
-//     callback: (percent) => {
-//       q.custom.updatePoints({ radius: percent, sides: Math.floor(percent * 10 + 3), sidesToDraw: Math.floor(percent * 10 + 3) });
-//     },
-//     duration: 10,
-//   })
-//   .start();
-
-// for (let i = 0; i < 100; i += 1) {
-//   const r = rand(0.1, 0.2);
-//   const e = figure.add({
-//     make: 'polygon',
-//     radius: r,
-//     color: [rand(0, 1), rand(0, 1), rand(0, 1), 0.7],
-//     transform: [['t', rand(-2.9 + r, 2.9 - r), rand(-2.7 + r, 2.9 - r)]],
-//     mods: {
-//       simple: true,
-//       state: {
-//         movement: { velocity: [['t', rand(-0.3, 0.3), rand(-0.3, 0.3)]] },
-//       },
-//     },
-//   });
-//   e.decelerate = (deltaTime) => {
-//     const velocity = e.state.movement.velocity._dup();
-//     const transform = e.transform._dup();
-//     transform.order[0].x += velocity.order[0].x * deltaTime;
-//     transform.order[0].y += velocity.order[0].y * deltaTime;
-//     if (transform.order[0].x <= -3 + r) {
-//       velocity.order[0].x = Math.abs(velocity.order[0].x);
-//     }
-//     if (transform.order[0].x >= 3 - r) {
-//       velocity.order[0].x = -Math.abs(velocity.order[0].x);
-//     }
-//     if (transform.order[0].y <= -2.7 + r) {
-//       velocity.order[0].y = Math.abs(velocity.order[0].y);
-//     }
-//     if (transform.order[0].y >= 3 - r) {
-//       velocity.order[0].y = -Math.abs(velocity.order[0].y);
-//     }
-//     return {
-//       velocity,
-//       transform,
-//       duration: 0,
-//     };
-//   };
-
-//   e.startMovingFreely();
-//   // e.animations.new()
-//   //   .custom({
-//   //     callback: () => {
-//   //       if (e.customState.lastTime == null) {
-//   //         e.customState.lastTime = figure.timeKeeper.now() / 1000;
-//   //       }
-//   //       const now = figure.timeKeeper.now() / 1000;
-//   //       const deltaTime = now - e.customState.lastTime;
-//   //       e.customState.lastTime = now;
-//   //       const { velocity } = e.state.movement;
-//   //       const { transform } = e;
-
-//   //       transform.order[0].x += velocity.order[0].x * deltaTime;
-//   //       transform.order[0].y += velocity.order[0].y * deltaTime;
-//   //       if (transform.order[0].x <= -3 + radius) {
-//   //         velocity.order[0].x = Math.abs(velocity.order[0].x);
-//   //       }
-//   //       if (transform.order[0].x >= 3 - radius) {
-//   //         velocity.order[0].x = -Math.abs(velocity.order[0].x);
-//   //       }
-//   //       if (transform.order[0].y <= -3 + radius) {
-//   //         velocity.order[0].y = Math.abs(velocity.order[0].y);
-//   //       }
-//   //       if (transform.order[0].y >= 3 - radius) {
-//   //         velocity.order[0].y = -Math.abs(velocity.order[0].y);
-//   //       }
-//   //     },
-//   //     duration: 10,
-//   //   })
-//   //   .start();
-// }
-// figure.addFrameRate();
-// figure.elements.transform = new Fig.Transform();
-// figure.animateNextFrame();
