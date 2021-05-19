@@ -2,7 +2,7 @@
 
 const figure = new Fig.Figure({
   limits: [-3, -3, 6, 6],
-  backgroundColor: [1, 1, 0.9, 1],
+  backgroundColor: [0, 0, 0, 1],
 });
 const { rand } = Fig.tools.math;
 
@@ -33,6 +33,8 @@ attribute vec2 a_center;
 uniform mat3 u_matrix;
 uniform vec3 u_charge1;
 uniform vec3 u_charge2;
+// uniform vec3 u_charge3;
+varying vec4 v_col;
 
 vec2 polarToRect(float mag, float angle) {
   return vec2(mag * cos(angle), mag * sin(angle));
@@ -56,6 +58,7 @@ void main() {
 
   vec2 c1 = fromCharge(u_charge1);
   vec2 c2 = fromCharge(u_charge2);
+  // vec2 c3 = fromCharge(u_charge3);
   vec2 sum = c1 + c2;
   vec2 charge = rectToPolar(sum.x, sum.y);
   float mag = charge.x;
@@ -63,7 +66,10 @@ void main() {
   float angle = charge.y;
   // float scale = mag;
   // float scale = max(min(mag / 2.0, 2.0), 0.5);
-  float scale = min(sqrt(mag), 2.0);
+  // float scale = max(0.5, min(sqrt(mag), 1.5));
+  float scale = 1.0;
+  float normCharge = (max(0.0, min(sqrt(mag), 2.0))  - 0.0)/ 2.0;
+
 
   float s = sin(angle);
   float c = cos(angle);
@@ -74,14 +80,15 @@ void main() {
   vec3 final = originToCenter * scaleRotation * centerToOrigin * vec3(a_position.x, a_position.y, 1);
 
   gl_Position = vec4((u_matrix * vec3(final.x, final.y, 1)).xy, 0, 1);
+  v_col = vec4(normCharge, 0.2, 1.0 - normCharge, 1);
 }`;
 
 const points = [];
 const centers = [];
-const tWidth = 0.02;
-const tLength = 0.06;
-const hWidth = 0.06;
-const hLength = 0.08;
+const tWidth = 0.01;
+const tLength = 0.08;
+const hWidth = 0.03;
+const hLength = 0.05;
 const step = 0.2;
 const halfLength = (tLength + hLength) / 2;
 // console.log(halfLength)
@@ -133,8 +140,13 @@ const element = figure.add({
   make: 'gl',
   vertexShader: {
     src: vertexShader,
-    vars: ['a_position', 'a_center', 'u_matrix', 'u_charge1', 'u_charge2'],
+    vars: [
+      'a_position', 'a_center', 'u_matrix', 'u_charge1',
+      'u_charge2',
+      // 'u_charge3',
+    ],
   },
+  fragShader: 'vertexColor',
   vertices: { data: points },
   buffers: [
   //   {
@@ -147,6 +159,7 @@ const element = figure.add({
   uniforms: [
     { name: 'u_charge1', length: 3 },
     { name: 'u_charge2', length: 3 },
+    // { name: 'u_charge3', length: 3 },
   ],
   color: [0, 0, 1, 1],
   mods: { state: { isChanging: true } },
@@ -155,7 +168,7 @@ const element = figure.add({
 const charge1 = figure.add({
   make: 'polygon',
   sides: 20,
-  radius: 0.2,
+  radius: 0.15,
   color: [1, 0, 0, 1],
   mods: {
     isMovable: true,
@@ -166,13 +179,24 @@ const charge1 = figure.add({
 const charge2 = figure.add({
   make: 'polygon',
   sides: 20,
-  radius: 0.2,
+  radius: 0.15,
   color: [1, 0, 1, 1],
   mods: {
     isMovable: true,
     move: { bounds: 'figure' },
   },
 });
+
+// const charge3 = figure.add({
+//   make: 'polygon',
+//   sides: 20,
+//   radius: 0.2,
+//   color: [1, 0, 1, 1],
+//   mods: {
+//     isMovable: true,
+//     move: { bounds: 'figure' },
+//   },
+// });
 
 charge1.notifications.add('setTransform', () => {
   const p = charge1.getPosition();
@@ -181,11 +205,17 @@ charge1.notifications.add('setTransform', () => {
 
 charge2.notifications.add('setTransform', () => {
   const p = charge2.getPosition();
-  element.custom.updateUniform('u_charge2', [p.x, p.y, 1]);
+  element.custom.updateUniform('u_charge2', [p.x, p.y, -1]);
 });
 
-charge1.setPosition(-0.5, 0);
-charge2.setPosition(0.5, 0);
+// charge3.notifications.add('setTransform', () => {
+//   const p = charge3.getPosition();
+//   element.custom.updateUniform('u_charge3', [p.x, p.y, -1]);
+// });
+
+charge1.setPosition(-0.7, 0);
+charge2.setPosition(0.7, 0);
+// charge3.setPosition(0, 0);
 
 // let startTime = null;
 // figure.notifications.add('beforeDraw', () => {

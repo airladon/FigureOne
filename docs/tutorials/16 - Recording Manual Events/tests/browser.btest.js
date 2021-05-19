@@ -1,4 +1,4 @@
-const { tester } = require('../../../../src/tests/ividTester/tester.js');
+const { tester } = require('../../../../src/tests/ividTester/tester');
 
 tester({
   title: 'Tutorial 16',

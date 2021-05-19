@@ -43,7 +43,7 @@ async function frame(delta) {
 }
 
 function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish = 'finish') {
-  require('./start.js');
+  require('./start');
   if (framesFile != null && framesFile !== '') {
     require(framesFile);
   }

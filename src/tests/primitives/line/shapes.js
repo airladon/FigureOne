@@ -1,7 +1,7 @@
 let tools;
 if (typeof process === 'object') {
   // eslint-disable-next-line global-require
-  tools = require('../../../index.js').default.tools;
+  tools = require('../../../index').default.tools;
 } else {
   // eslint-disable-next-line no-undef
   tools = Fig.tools;

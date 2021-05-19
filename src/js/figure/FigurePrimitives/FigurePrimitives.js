@@ -13,6 +13,7 @@ import type {
   TypeParsableBorder, TypeParsableBuffer,
 } from '../../tools/g2';
 import { setHTML } from '../../tools/htmlGenerator';
+// eslint-disable-next-line import/no-cycle
 import {
   FigureElementPrimitive, FigureElement,
 } from '../Element';
@@ -20,7 +21,9 @@ import WebGLInstance from '../webgl/webgl';
 import DrawContext2D from '../DrawContext2D';
 import * as tools from '../../tools/math';
 import { generateUniqueId, joinObjects } from '../../tools/tools';
+// eslint-disable-next-line import/no-cycle
 import DrawingObject from '../DrawingObjects/DrawingObject';
+// eslint-disable-next-line import/no-cycle
 import GLObject from '../DrawingObjects/GLObject/GLObject';
 import type { TypeGLUniform, TypeGLBufferType, TypeGLBufferUsage } from '../DrawingObjects/GLObject/GLObject';
 // import VertexObject from '../DrawingObjects/VertexObject/VertexObject';
@@ -36,6 +39,7 @@ import type { TypeGLUniform, TypeGLBufferType, TypeGLBufferUsage } from '../Draw
 // import DashedLine from '../FigureElements/DashedLine';
 // import RectangleFilled from '../FigureElements/RectangleFilled';
 // import Rectangle from '../FigureElements/Rectangle';
+// eslint-disable-next-line import/no-cycle
 import Generic from './Generic';
 // import Box from '../FigureElements/Box';
 // import type { TypeRectangleFilledReference } from '../FigureElements/RectangleFilled';
@@ -43,25 +47,31 @@ import Generic from './Generic';
 // import Arrow from '../FigureElements/Arrow';
 // import { AxisProperties } from '../FigureElements/Plot/AxisProperties';
 // import Axis from '../FigureElements/Plot/Axis';
+// eslint-disable-next-line import/no-cycle
 import Text from './Text';
 // import {
 //   FigureText, FigureFont, TextObject, LinesObject,
 // } from '../DrawingObjects/TextObject/TextObject';
-
+// eslint-disable-next-line import/no-cycle
 import {
   TextObject, TextLineObject, TextLinesObject,
 } from '../DrawingObjects/TextObject/TextObject';
+// eslint-disable-next-line import/no-cycle
 import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
 import type { OBJ_SpaceTransforms } from '../Figure';
+// eslint-disable-next-line import/no-cycle
 import { makePolyLine, makePolyLineCorners, makeFastPolyLine } from '../geometries/lines/lines';
 import { getPolygonPoints, getTrisFillPolygon } from '../geometries/polygon/polygon';
 import { rectangleBorderToTris, getRectangleBorder } from '../geometries/rectangle';
+// eslint-disable-next-line import/no-cycle
 import { ellipseBorderToTris, getEllipseBorder } from '../geometries/ellipse';
+// eslint-disable-next-line import/no-cycle
 import { arcBorderToTris, getArcBorder } from '../geometries/arc';
 import type { OBJ_Ellipse_Defined } from '../geometries/ellipse';
 import type { OBJ_Arc_Defined } from '../geometries/arc';
 import { getTriangleBorder, getTriangleDirection } from '../geometries/triangle';
 import type { OBJ_Triangle_Defined } from '../geometries/triangle';
+// eslint-disable-next-line import/no-cycle
 import { getArrow, defaultArrowOptions, getArrowTris } from '../geometries/arrow';
 import type { OBJ_LineArrows, TypeArrowHead } from '../geometries/arrow';
 import getLine from '../geometries/line';

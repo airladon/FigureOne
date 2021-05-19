@@ -7,7 +7,7 @@
 
 if (typeof process === 'object') {
   /* eslint-disable global-require, no-unused-vars, vars-on-top, no-var */
-  var { tools } = require('../../../../index.js').default;
+  var { tools } = require('../../../../index').default;
 }
 
 

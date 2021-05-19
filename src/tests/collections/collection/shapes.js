@@ -4,8 +4,8 @@ let Figure;
 let figure;
 if (typeof process === 'object') {
   /* eslint-disable global-require */
-  tools = require('../../../index.js').default.tools;
-  Figure = require('../../../index.js').default.Figure;
+  tools = require('../../../index').default.tools;
+  Figure = require('../../../index').default.Figure;
 } else {
   /* global Fig */
   tools = Fig.tools;

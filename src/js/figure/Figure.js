@@ -12,10 +12,12 @@ import type { TypeParsableRect, TypeParsablePoint } from '../tools/g2';
 import { round } from '../tools/math';
 import { FunctionMap } from '../tools/FunctionMap';
 import { setState, getState } from './Recorder/state';
+// eslint-disable-next-line import/no-cycle
 import parseState from './Recorder/parseState';
 import {
   isTouchDevice, joinObjects, NotificationManager, Console, PerformanceTimer,
 } from '../tools/tools';
+// eslint-disable-next-line import/no-cycle
 import {
   FigureElementCollection, FigureElement,
 } from './Element';
@@ -23,13 +25,17 @@ import type {
   OBJ_AddElement, TypeElementPath,
 } from './Element';
 import TimeKeeper from './TimeKeeper';
+// eslint-disable-next-line import/no-cycle
 import { Recorder } from './Recorder/Recorder';
 // eslint-disable-next-line import/no-cycle
 import Gesture from './Gesture';
 import DrawContext2D from './DrawContext2D';
+// eslint-disable-next-line import/no-cycle
 import FigurePrimitives from './FigurePrimitives/FigurePrimitives';
 import type { OBJ_Polyline, OBJ_TextLinesDefinition, OBJ_TextLines } from './FigurePrimitives/FigurePrimitives';
+// eslint-disable-next-line import/no-cycle
 import FigureCollections from './FigureCollections/FigureCollections';
+// eslint-disable-next-line import/no-cycle
 import AnimationManager from './Animation/AnimationManager';
 import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 import type { TypeColor, OBJ_Font } from '../tools/types';
