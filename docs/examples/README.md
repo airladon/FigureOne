@@ -96,3 +96,11 @@ Interactive video showing how three similar triangles can be arranged to find ma
 
 
 ![](Interactive%20Video%20-%20Trig%203%20-%20Relationships/example.gif)
+
+
+## **[Electric Field](Electric%20Field)**
+
+Demonstrator of how shaders can be used to animate over 1000 elements simultaneously and still get excellent performance on low end clients.
+
+![](Electric%20Field/example.gif)
+

@@ -164,6 +164,10 @@ class DrawingObject {
   updateUniform(uniformName: string, value: number | Array<number>) {
   }
 
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  getUniform(uniformName: string) {
+  }
+
   // getRelativeBoundingRect(transformMatrix: Array<number> | null = null): Rect {
   //   const location = this.getLocation(transformMatrix);
   //   const absoluteBoundaries =

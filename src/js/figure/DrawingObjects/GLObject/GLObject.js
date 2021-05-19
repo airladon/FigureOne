@@ -434,7 +434,7 @@ class GLObject extends DrawingObject {
    * Get the current value of a uniform
    */
   getUniform(uniformName: string) {
-    const uniform = this.uniforms[uniformName];
+    const uniform = this.uniforms[uniformName]; // $FlowFixMe
     return uniform.value;
   }
 
@@ -442,20 +442,26 @@ class GLObject extends DrawingObject {
    * Add a uniform.
    *
    * @param {string} uniformName The variable name used in the shader
-   * @param {1 | 2 | 3 | 4} length (1) number of values in uniform
+   * @param {1 | 2 | 3 | 4} length (`1`) number of values in uniform
    * @param {'FLOAT' | 'FLOAT_VECTOR' | 'INT' | 'INT_VECTOR'} type type of
    * value. Use '_VECTOR' suffix if using vector methods on the uniform in the
-   * shader.
+   * shader (`'FLOAT'`).
+   * @param {number | Array<number> | null} initialValue initial value to use
+   * for uniform - if null then uniform will be all 0 (`null`)
    */
   addUniform(
     uniformName: string,
     length: 1 | 2 | 3 | 4 = 1,
     type: TypeGLUniform = 'FLOAT',
+    initialValue: number | Array<number> | null = null,
   ) {
     this.uniforms[uniformName] = {
       value: Array(length).fill(0), // $FlowFixMe
       method: this[`uploadUniform${length.toString()}${type[0].toLowerCase()}${type.endsWith('VECTOR') ? 'v' : ''}`].bind(this),
     };
+    if (initialValue != null) {
+      this.updateUniform(uniformName, initialValue);
+    }
   }
 
   uploadUniform1f(location: WebGLUniformLocation, name: string) {

@@ -1,4 +1,4 @@
-// const figure = new Fig.Figure();
+/* globals Fig */
 
 const figure = new Fig.Figure({
   limits: [-3, -3, 6, 6],
