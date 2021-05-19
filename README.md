@@ -28,7 +28,7 @@ The library used to draw interactive slides at <a href="https://www.thisiget.com
 Load the FigureOne library into your HTML file:
 
 ```html
-<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.8.1/figureone.min.js'></script>
+<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.9.0/figureone.min.js'></script>
 ```
 
 Create a `div` element to attach the figure to:

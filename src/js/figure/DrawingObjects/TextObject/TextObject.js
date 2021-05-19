@@ -792,7 +792,7 @@ class TextObjectBase extends DrawingObject {
     ctx.restore();
   }
 
-  clear(contextIndex: number = 0) {
+  clear() {
     const { ctx } = this.drawContext2D[0];
     const t = this.lastDrawTransform;
     ctx.save();

@@ -2384,7 +2384,8 @@ export default class FigurePrimitives {
       glObject, options.transform, options.color, this.limits, null, options.name,
     );
     element.custom.updateBuffer = element.drawingObject.updateBuffer.bind(element.drawingObject);
-    element.custom.updateVertices = element.drawingObject.updateVertices.bind(element.drawingObject);
+    element.custom.updateVertices =
+      element.drawingObject.updateVertices.bind(element.drawingObject);
     element.custom.updateUniform = element.drawingObject.updateUniform.bind(element.drawingObject);
     element.dimColor = this.defaultDimColor.slice();
 
