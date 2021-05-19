@@ -6137,6 +6137,7 @@ function decelerateTransform(
       newVTransformation = new Rotation(result.velocity);
     }
     if (deltaTime === null) {
+      // $FlowFixMe
       if (result.duration == null || result.duration > duration) {
         ({ duration } = result);
       }
