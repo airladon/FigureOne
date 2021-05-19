@@ -1304,10 +1304,10 @@ class FigureElement {
     }
 
     if (scenarioAnimation != null) {
-      duration = Math.max(duration, scenarioAnimation.getTotalDuration());
+      duration = Math.max(duration, scenarioAnimation.getTotalDuration() || 0);
     }
     if (pulseAnimation != null) {
-      duration = Math.max(duration, pulseAnimation.getTotalDuration());
+      duration = Math.max(duration, pulseAnimation.getTotalDuration() || 0);
     }
 
     return duration;
