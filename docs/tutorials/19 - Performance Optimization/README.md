@@ -366,24 +366,24 @@ It almost halves the draw time however, so we can then increase `n` to `400` and
 
 Customing WebGL shaders brings the next level of performance.
 
-It is not in the scope of this tutorial to explain what WebGL is, and how to use it. There are many good resources on the web that already do this - for example [WebGLFundamentals](https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html).
+It is not in the scope of this tutorial to explain what WebGL is, and how to use it. There are many good resources on the web that already do this - for example [WebGLFundamentals](https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html) gives an excellent introduction to WebGL and this [quick reference guid](https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf) is useful to refer to especially when writing shaders.
 
 To briefly summarize how WebGL is typically used to draw and move a shape:
 * Vertices of multiple triangles arranged to form a shape are defined in JavaScript
 * JavaScript uses the native WebGL library to load the vertex data into a GPU memory buffer
 * JavaScript tracks where the shape is, and its current color
 * Each time a frame is drawn, JavaScript uses the native WebGL libraries to pass a transform that describes where the shape is to the GPU, and an array that describes it's current color
-* The GPU executes the *vertex shader* - a user defined program that determines the final position of a vertex. In this case, the vertex shader program would take the position of the original vertex and transform it with the updated transform for the frame. The vertex shader is executed in parallel on the GPU's of cores for each vertex.
-* The GPU executes the *fragment shader* a user defined program that determines the color of each pixel on the screen - based on the final position of the vertices, and the overal shape color passed from the CPU
+* The GPU executes the *vertex shader* - a user defined program that determines the final position of each vertex. In this case, the vertex shader program would take the position of an original vertex in the GPU memory buffer and transform it with the updated transform for the frame passed from Javascript. The vertex shader is executed on each vertex in parallel on the GPU's multiple cores.
+* The GPU executes the *fragment shader* - a user defined program that determines the color of each pixel on the screen, based on the final position of the vertices, and the color of each vertex or an overall shape color for the frame passed from JavaScript
 * On each draw frame, the only data passed between the CPU and GPU is the updated transform matrix for the shape, and a single color - 13 numbers in total for a 2D rendering. This means shapes with thousands or hundreds of thousands of vertices stay unmodified in the GPU memory buffer and can be rendered relatively quickly - even on low end devices
 
 This is a relatively simple example, but it describes how the majority of FigureOnePrimitives use WebGL to render to the screen. FigureOnePrimitives track the position, rotation, scale and color of a shape, and pass this information to WebGL on every draw frame. Users of FigureOne only need to know how to change these properties of a shape and FigureOne does the rest.
 
-However, FigureOne also allows users to define custom shaders. Custom shaders can be used to do more than just transform and color the vertices. They can use a number of different algorithms to apply different visual effects, or can be used to apply vertex specific transforms and colors.
+However, FigureOne also allows users to define custom shaders. Custom shaders can be used to do more than just transform and color the vertices. They can use a number of different algorithms to apply different visual effects, or can be used to apply *vertex specific* transforms and colors.
 
 Our example of many different shapes all moving independently and bouncing of boundaries is a great use case for a custom shader.
 
-While shaders are powerful tools, they are only good for a set of problems - especially problems that are deterministic and can be pre-planned.
+While shaders are powerful tools, they are only good for a finite set of problems - in particular problems that are deterministic and can be pre-planned.
 
 To understand why, let's consider some of their challenges:
 * You can only pass data to a shader - you cannot retrieve data from it (thus state changed by a shader cannot be fed back to a JavaScript program)
@@ -396,13 +396,13 @@ This means for our example, we cannot use shaders to incrementally update the po
 
 #### Attributes, Uniforms and Varyings
 
-The data passed between parts of a WebGL program has three different names:
+The data passed between parts of a WebGL program have three different names:
 
 An *attribute* is data loaded into a GPU buffer, usually at the start of a program, for the vertex shader. It is usually a long array of values that represent the vertices of a shape, and vertex specific properties. A vertex shader instance will only have access to a single vertex and its associated attributes.
 
 A *uniform* is the data passed from CPU to GPU at frame draw time. Each uniform can only be 1 to 4 values long. Uniforms are available to all vertices in the vertex shader and all pixels in the fragment shader.
 
-A *varying* is data passed from the vertex shader to the fragment shader. The vertex shader will define a *varying* for the current vertex it is operating on. The fragment shader will operate on a pixel that will typically be inside a triangle defined with three vertices. The varying value for each of the three pixels will be interpolated to a single value passed to the fragment shader. For example, if each pixel has a different color and the color is passed as a varying from the vertex shader to the fragment shader, then the fragment shader will recieive a color that is the average of the three colors weighted by the position of the pixel relative to the three pixels.
+A *varying* is data passed from the vertex shader to the fragment shader. The vertex shader will define a *varying* for the current vertex it is operating on. The fragment shader will operate on a pixel that will typically be inside a triangle defined with three vertices. The varying value for each of the three vertices will be interpolated to a single value passed to the fragment shader. For example, if each vertex has a different color and the color is passed as a varying from the vertex shader to the fragment shader, then the fragment shader will recieive a color that is the average of the three colors weighted by the position of the pixel relative to the three pixels.
 
 #### Shader Language
 
@@ -410,7 +410,7 @@ A shader is written in strongly typed C.
 
 Shaders are relatively small programs, but can be a handful to get working - mostly because its very hard to debug them. The programs are compiled in the GPU, and the only information you get is whether the shader compiled successfully, and the colors on the screen. There aren't debuggers or print statements to step through the program.
 
-> Note: One way to debug a shader program is to use color. For example, if you want to check the number value of a variable in a vertex shader, you could pass the number to the fragment shader and map values to colors.
+> Note: One way to debug a shader program is to use color. For example, if you want to check the number value of a variable in a vertex shader, you could pass the number to the fragment shader and map values to colors. If however the shader is not compiling, one strategy is simply to go back to a version of the shader that did compile and add one change at a time, compiling each time.
 
 FigureOne's default shaders are below:
 
@@ -571,9 +571,9 @@ This code essentially explodes 10,000 circles (polygons with 20 sides each, thus
 * iPad: 36 fps at 2ms processing time
 * iPhone: 57 fps at 1ms processing time
 
-Note here, the iPad is the "worst" performer, though at 36 fps it is more than adequate. As the shapes leave the screen, meaning less shapes need to be drawn to the screen, the iPads numbers quickyl rise to the low 50s as well.
+Note here, the iPad is the "worst" performer, though at 36 fps it is more than adequate. As the shapes leave the screen, meaning less shapes need to be drawn to the screen, the iPads numbers quickly rise to the low 50 fps as well.
 
-It gets interesting if we increase n:
+It gets interesting if we increase `n`:
 
 For `n = 100,000` (6,000,000 vertices):
 * Chromebook: 40 fps at 2.5 ms processing time
@@ -586,15 +586,15 @@ Interestingly, when we increase the number of shapes to 100,000 the Chromebook s
 #### Final Shader
 
 Let's now add logic to the shaders that:
-* incorporate bouncing off the boundaries
+* incorporates bouncing off the boundaries
 * allows for each shape to have a different color
 
 As shaders need to be deterministic, the bouncing is going to require logic to:
 * Determine the total distance travelled by the ball at some time
-* Determine how many bounces of walls this would result in, based on the initial position and velocity
+* Determine how many bounces off walls this would result in, based on the initial position and velocity
 * Determine the current position from the distance travelled from the last wall bounce
 
-The x and y components of position and velocity are independant of each other and so can be calculated separately.
+The x and y components of position and velocity are independant and so can be calculated separately.
 
 The final program is then:
 
@@ -730,7 +730,7 @@ The maxium number of polygons that can still accomodate a smooth visualization f
 * iPad: n = 20,000 (1.2 million vertices)
 * iPhone: n = 30,000 (1.8 million vertices)
 
-Note, the performance of this example is lower than the previous exploding example because the shader calculation is more complex. Remember that the shader is run on each vertex, and we are talking millions of vertices now.
+Note, the performance of this example is lower than the previous exploding example because the shader calculation is more complex. Remember that the shader is run on each vertex, and we are operating on millions of vertices.
 
 ### Conclusions
 
