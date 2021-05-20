@@ -23,7 +23,7 @@ FigureOne only draws to the screen when:
 
 If a figure element is being changed, then at the end of each draw, FigureOne will determine whether its elements are still changing, and if they are request a notification from the browser for the next screen refresh. When that notification occurs, FigureOne will draw again and the cycle repeats.
 
-Browsers will ideally refresh their screen between 30 and 60 times per second. To refresh 30 times a second means FigureOne needs to complete processing a draw a good amount less than 1/30s (<33ms) for smooth animations.
+Browsers will ideally refresh their screen between 30 and 60 times per second. To refresh 30 times a second means FigureOne needs to complete processing a draw in less than 1/30s (<33ms) for smooth animations.
 
 > Note: How much less than 33ms depends on a number of factors including, but not limited to, the client performance, browser, other tasks (like if mouse/touch movements are also being processed), and the complexity of drawing (remember that after the FigureOne processing is done, the GPU then has to render to the screen - if there are many vertices and/or complex shaders then it will need more time).
 
@@ -61,7 +61,6 @@ We can do this easily with FigureOne by creating 100 squares, each of which:
 * is bounded to the figure bounds
 * is set to move freely
 
-Path: `./01 baseline/`
 ```js
 const figure = new Fig.Figure({
   limits: [-3, -3, 6, 6],
@@ -97,6 +96,8 @@ for (let i = 0; i < n; i += 1) {
 // frame rate in last 10 frames
 figure.addFrameRate(10);
 ```
+
+The files for this are [here](./01 baseline). 
 
 ![](baseline.gif)
 
