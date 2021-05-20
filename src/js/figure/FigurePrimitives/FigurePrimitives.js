@@ -346,6 +346,7 @@ export type OBJ_GLUniform = {
 };
 
 /**
+ * GLPrimitive allows shader customization.
  *
  * @property {string} [name]
  * @property {string} [vertexShader]

@@ -23,7 +23,7 @@ FigureOne only draws to the screen when:
 
 If a figure element is being changed, then at the end of each draw, FigureOne will determine whether its elements are still changing, and if they are request a notification from the browser for the next screen refresh. When that notification occurs, FigureOne will draw again and the cycle repeats.
 
-Browsers will ideally refresh their screen between 30 and 60 times per second. To refresh 30 times a second means FigureOne needs to complete processing a draw a good amount less than 1/30s (<33ms) for smooth animations.
+Browsers will ideally refresh their screen between 30 and 60 times per second. To refresh 30 times a second means FigureOne needs to complete processing a draw in less than 1/30s (<33ms) for smooth animations.
 
 > Note: How much less than 33ms depends on a number of factors including, but not limited to, the client performance, browser, other tasks (like if mouse/touch movements are also being processed), and the complexity of drawing (remember that after the FigureOne processing is done, the GPU then has to render to the screen - if there are many vertices and/or complex shaders then it will need more time).
 
@@ -61,7 +61,6 @@ We can do this easily with FigureOne by creating 100 squares, each of which:
 * is bounded to the figure bounds
 * is set to move freely
 
-Path: `./01 baseline/`
 ```js
 const figure = new Fig.Figure({
   limits: [-3, -3, 6, 6],
@@ -98,7 +97,10 @@ for (let i = 0; i < n; i += 1) {
 figure.addFrameRate(10);
 ```
 
-![](baseline.gif)
+![](./01%20baseline/example.gif)
+
+The files for this are [here](./01%20baseline). 
+
 
 FigureOne can display animation metrics by using the `addFrameRate` method.
 
@@ -106,13 +108,13 @@ It will show the average and worst case values of the frame rate, the total time
 
 In this case, the statistics is for the last 10 frames.
 
-This example is has been chosen because FigureOne's calculations for moving freely and bouncing of boundaries are generalized for any shape. As FigureOne doesn't inherently know the properties of a shape, it must go through and calculate the boundary of a shape to know when a shape's boundary is meeting the figure boundary. By default, FigureOne also doesn't know how a user has changed a shape (or it's transform, or parent's transform) between each frame, and so must do this per frame.
+This example has been chosen because FigureOne's calculations for moving freely and bouncing off boundaries are generalized for any shape. As FigureOne doesn't inherently know the properties of a shape, it must go through and calculate the boundary of a shape to know when a shape's boundary is meeting the figure boundary. By default, FigureOne also doesn't know how a user has changed a shape (or it's transform, or parent's transform) between each frame, and so must do this per frame.
 
 This makes it very easy for a user to define an object and have it move freely, but it is not as efficient as the user specifying the algorithm to both move freely and bounce for a specific shape. While this doesn't matter normally, when applying this to many shapes, performance can be impacted on lower-end devices.
 
 ### Performance
 
-The average frame rates and FigureOne processing times per frame on the test devices are (for n=100 squares):
+The average frame rates and FigureOne processing times per frame on the test devices for the baseline `n=100` squares are:
 
 * 2016 Chromebook: 6 fps at ~73ms per frame
 * 2014 iPad: 27 fps at ~11ms per frame
@@ -120,24 +122,22 @@ The average frame rates and FigureOne processing times per frame on the test dev
 
 Visually, the iPad and iPhone look good, but the Chromebook is not smooth.
 
-This gives us an initial feeling of how much time FigureOne can have to achieve some frame rate.
+This gives us an initial feeling of how much time FigureOne can actually use per frame.
 
 For instance, FigureOne takes 11ms to process a frame on the iPad. If this were the only processing needed by the browser to render a frame, then we could expect frame rates of 1 / 0.077 = 91 fps (which would then be browser limited back to 60 fps). But we are only seeing 27 fps. This shows FigureOne does not have the whole 33ms to render at 30 fps, but rather will have something closer to 10ms.
 
 But the iPad is not our low end target. On the Chromebook we need to scale the number of squares back to 25 (`n=25`) to achieve just 20-25 fps.
 
-For `n=25` (path: `./02 n is 25/`), the Chromebook takes 18ms to process a frame, the iPad takes 5ms, and the iPhone takes 3ms.
+For `n=25` [here](./02%20n%20is%2025), the Chromebook takes 18ms to process a frame, the iPad takes 5ms, and the iPhone takes 3ms.
 
 ### Is 25 elements the max then?
 
 This DOES NOT mean the Chromebook can only support 25 FigureOne elements.
 
-For instance, if we change n to 1, and then add another 250 static elements to the screen, the Chromebook can support 20 fps. Remember, each of the 25 elements is performing an unnecessarily expensive (because it is generic) algorithm to move freely and bounce of the boundaries.
+For instance, if we change n to 1, and then add another 250 static elements to the screen, the Chromebook can support 20 fps. Remember, each of the 25 elements is performing an unnecessarily expensive (because it is generic) algorithm to move freely and bounce off the boundaries.
 
 
-Path: `./03 n1 static250/`
 ```js
-// baseline_03_n_1_static_150.js
 const n = 1;
 for (let i = 0; i < n; i += 1) {
   const r = rand(0.1, 0.2);
@@ -172,13 +172,15 @@ for (let i = 0; i < 250; i += 1) {
 figure.addFrameRate(10);
 ```
 
-![](n1s250.gif)
+![](./03%20n1%20static250/example.gif)
+
+The files for this are [here](./03%20n1%20static250/).
 
 It also DOES NOT mean the Chromebook can only support 25 *simple* elements (squares are two triangles, and so defined with 6 vertices).
 
-If instead we make 25 independently moving elements each with 200 sides (5000 triangles, 30000 vertices), we can still achieve 20 fps.
+If instead we make 25 independently moving elements each with 200 sides (5,000 triangles, 30,000 vertices), we can still achieve 20 fps.
 
-Path: `./04 n25 sides100/`
+
 ```js
 const n = 25;
 for (let i = 0; i < n; i += 1) {
@@ -203,7 +205,9 @@ for (let i = 0; i < n; i += 1) {
 }
 ```
 
-![](n25sides200.gif)
+![](./04%20n25%20sides200/example.gif)
+
+The files for this are [here](./04%20n25%20sides200).
 
 ### Optimization
 
@@ -213,25 +217,26 @@ However, there are situations where more performance is needed.
 
 There are three levels of optimization that can be performed on the default elements, each of which is more complex than the last, but will result in better performance.
 
-In fact, by the end of this tutorial we will have 25,000 circles (20 sided polygons) bouncing of walls on the Chromebook at 25 fps.
+In fact, by the end of this tutorial we will have 70,000 circles (20 sided polygons) bouncing of walls on the Chromebook at 25 fps.
 
 ### Level 1 - Keep it Simple
 
 The first optimization is to make FigureElements as simple as possible.
 
-1) Minimize the FigureElementCollection depth
-2) Minimize the transform size
+1) Minimize the FigureElementCollection tree depth
+2) Minimize the per transform size
 3) Make as few elements as possible touchable
 4) Simplify the touch borders, or use separate, more simple invisible touch elements
 5) Minimize changing element vertices - try to do everything by just changing transforms
 
-1) and 2) relate to how transforms are cascaded on every draw frame. Each FigureElement has a transform, which by default will be three scale, rotation and translation transforms chained. On each draw frame, all parent transforms are cascaded with the FigureElement transform. While for many situations this is trivial for even low-end processors, when using many elements, or when elements have many parents, the time to make all these calculations can become noticable on older, low-end clients.
+
+Items 1) and 2) relate to how transforms are cascaded on every draw frame. Each FigureElement has a transform, which by default will be three chained transforms: a scale, rotation and translation. On each draw frame, all parent transforms are cascaded with the FigureElement transform. While for many situations this is trivial for even low-end processors, when using many elements, or when elements have many parents, the time to make all these calculations can become noticable on older, low-end clients.
 
 In all the examples above, we have already done this optimization by placing all FigureElements in the root collection of the figure, and limiting the element's transform to just a single translation step.
 
-3) and 4) relate to interactivity. Determining whether a touch event has happened within the borders of a shape can be expensive if the border is complex. If there are hundreds of shapes that need to be checked, then the time it takes to do this can become noticable.
+Items 3) and 4) relate to interactivity. Determining whether a touch event has happened within the borders of a shape can be expensive if the border is complex. If there are hundreds of shapes that need to be checked, then the time it takes to do this can become noticable.
 
-5) relates to how WebGL works. WebGL can handle hundreds of thousands of vertices, even on low end devices, by leveraging the GPU to parallelize position and color calculations. For optimal performance, a shape's vertices should be defined once, and then any changes to that shape captured with a transformation matrix that can 
+Item 5) relates to how WebGL works. WebGL can handle hundreds of thousands of vertices, even on low end devices, by leveraging the GPU to parallelize position and color calculations. For optimal performance, a shape's vertices should be defined once, and then any changes to that shape captured with a transformation matrix. Morphing the shapes vertices individually on a per frame basis is possible (and cannot be avoided sometimes), but should be limited to shapes with fewer vertices.
 
 ### Level 2 - Custom `setupDraw` and `draw` Methods
 
@@ -247,7 +252,6 @@ If instead we treat a FigureElement as simply a holder of a shape, and create ou
 
 We start by replacing just the setupDraw method. In the new `setupDraw` we will move the squares manually and change the velocities so they bounce of the boundaries when they come to them.
 
-Path: `05 custom setupdraw`
 ```js
 const figure = new Fig.Figure({
   limits: [-3, -3, 6, 6],
@@ -312,6 +316,8 @@ figure.elements.transform = new Fig.Transform();
 figure.animateNextFrame();
 ```
 
+The files for this are [here](./05%20custom%20setupdraw).
+
 We have increased the performance, and so we can now increase the number of squares until the Chromebook is once again at 20 fps. So for `n = 250`
 * 2016 Chromebook: 20 fps at ~20ms per frame
 * 2014 iPad: 35 fps at ~9ms per frame
@@ -328,7 +334,6 @@ Now that we are drawing a lot of elements on the screen, the `draw` method start
 
 The `draw` method takes a parent transform, and chains that with the element's transform, and any other transforms that modify the element (like pulse or copy transforms). Once again, the generalization of the default `draw` method has some inefficiencies which we can overcome for our specific case.
 
-Path `06 custom draw`
 ```js
 for (let i = 0; i < 400; i += 1) {
   ...
@@ -348,34 +353,37 @@ for (let i = 0; i < 400; i += 1) {
 }
 ```
 
+The files for this are [here](./06%20custom%20draw).
+
+
 This draw method is super simple, and will stop an element from being able to pulse, or use the `getPosition` or `getBorder` methods.
 
 It almost halves the draw time however, so we can then increase `n` to `400` and still achieve 20 fps on the Chromebook.
 
-![](customdraw.gif)
+![](./06%20custom%20draw/example.gif)
 
 ### Level 3 - Custom Shaders
 
 Customing WebGL shaders brings the next level of performance.
 
-It is not in the scope of this tutorial to explain what WebGL is, and how to use it. There are many good resources on the web that already do this - for example [WebGLFundamentals](https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html).
+It is not in the scope of this tutorial to explain what WebGL is, and how to use it. There are many good resources on the web that already do this - for example [WebGLFundamentals](https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html) gives an excellent introduction to WebGL and this [quick reference guid](https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf) is useful to refer to especially when writing shaders.
 
 To briefly summarize how WebGL is typically used to draw and move a shape:
 * Vertices of multiple triangles arranged to form a shape are defined in JavaScript
 * JavaScript uses the native WebGL library to load the vertex data into a GPU memory buffer
 * JavaScript tracks where the shape is, and its current color
 * Each time a frame is drawn, JavaScript uses the native WebGL libraries to pass a transform that describes where the shape is to the GPU, and an array that describes it's current color
-* The GPU executes the *vertex shader* - a user defined program that determines the final position of a vertex. In this case, the vertex shader program would take the position of the original vertex and transform it with the updated transform for the frame. The vertex shader is executed in parallel on the GPU's of cores for each vertex.
-* The GPU executes the *fragment shader* a user defined program that determines the color of each pixel on the screen - based on the final position of the vertices, and the overal shape color passed from the CPU
+* The GPU executes the *vertex shader* - a user defined program that determines the final position of each vertex. In this case, the vertex shader program would take the position of an original vertex in the GPU memory buffer and transform it with the updated transform for the frame passed from Javascript. The vertex shader is executed on each vertex in parallel on the GPU's multiple cores.
+* The GPU executes the *fragment shader* - a user defined program that determines the color of each pixel on the screen, based on the final position of the vertices, and the color of each vertex or an overall shape color for the frame passed from JavaScript
 * On each draw frame, the only data passed between the CPU and GPU is the updated transform matrix for the shape, and a single color - 13 numbers in total for a 2D rendering. This means shapes with thousands or hundreds of thousands of vertices stay unmodified in the GPU memory buffer and can be rendered relatively quickly - even on low end devices
 
 This is a relatively simple example, but it describes how the majority of FigureOnePrimitives use WebGL to render to the screen. FigureOnePrimitives track the position, rotation, scale and color of a shape, and pass this information to WebGL on every draw frame. Users of FigureOne only need to know how to change these properties of a shape and FigureOne does the rest.
 
-However, FigureOne also allows users to define custom shaders. Custom shaders can be used to do more than just transform and color the vertices. They can use a number of different algorithms to apply different visual effects, or can be used to apply vertex specific transforms and colors.
+However, FigureOne also allows users to define custom shaders. Custom shaders can be used to do more than just transform and color the vertices. They can use a number of different algorithms to apply different visual effects, or can be used to apply *vertex specific* transforms and colors.
 
 Our example of many different shapes all moving independently and bouncing of boundaries is a great use case for a custom shader.
 
-While shaders are powerful tools, they are only good for a set of problems - especially problems that are deterministic and can be pre-planned.
+While shaders are powerful tools, they are only good for a finite set of problems - in particular problems that are deterministic and can be pre-planned.
 
 To understand why, let's consider some of their challenges:
 * You can only pass data to a shader - you cannot retrieve data from it (thus state changed by a shader cannot be fed back to a JavaScript program)
@@ -388,13 +396,13 @@ This means for our example, we cannot use shaders to incrementally update the po
 
 #### Attributes, Uniforms and Varyings
 
-The data passed between parts of a WebGL program has three different names:
+The data passed between parts of a WebGL program have three different names:
 
 An *attribute* is data loaded into a GPU buffer, usually at the start of a program, for the vertex shader. It is usually a long array of values that represent the vertices of a shape, and vertex specific properties. A vertex shader instance will only have access to a single vertex and its associated attributes.
 
 A *uniform* is the data passed from CPU to GPU at frame draw time. Each uniform can only be 1 to 4 values long. Uniforms are available to all vertices in the vertex shader and all pixels in the fragment shader.
 
-A *varying* is data passed from the vertex shader to the fragment shader. The vertex shader will define a *varying* for the current vertex it is operating on. The fragment shader will operate on a pixel that will typically be inside a triangle defined with three vertices. The varying value for each of the three pixels will be interpolated to a single value passed to the fragment shader. For example, if each pixel has a different color and the color is passed as a varying from the vertex shader to the fragment shader, then the fragment shader will recieive a color that is the average of the three colors weighted by the position of the pixel relative to the three pixels.
+A *varying* is data passed from the vertex shader to the fragment shader. The vertex shader will define a *varying* for the current vertex it is operating on. The fragment shader will operate on a pixel that will typically be inside a triangle defined with three vertices. The varying value for each of the three vertices will be interpolated to a single value passed to the fragment shader. For example, if each vertex has a different color and the color is passed as a varying from the vertex shader to the fragment shader, then the fragment shader will recieive a color that is the average of the three colors weighted by the position of the pixel relative to the three pixels.
 
 #### Shader Language
 
@@ -402,7 +410,7 @@ A shader is written in strongly typed C.
 
 Shaders are relatively small programs, but can be a handful to get working - mostly because its very hard to debug them. The programs are compiled in the GPU, and the only information you get is whether the shader compiled successfully, and the colors on the screen. There aren't debuggers or print statements to step through the program.
 
-> Note: One way to debug a shader program is to use color. For example, if you want to check the number value of a variable in a vertex shader, you could pass the number to the fragment shader and map values to colors.
+> Note: One way to debug a shader program is to use color. For example, if you want to check the number value of a variable in a vertex shader, you could pass the number to the fragment shader and map values to colors. If however the shader is not compiling, one strategy is simply to go back to a version of the shader that did compile and add one change at a time, compiling each time.
 
 FigureOne's default shaders are below:
 
@@ -551,7 +559,9 @@ figure.animateNextFrame();
 
 ```
 
-![](custom_shader_intro.gif)
+The files for this are [here](./07%20custom%20shader%20intro).
+
+![](07%20custom%20shader%20intro/example.gif)
 
 The `'gl'` FigureElementPrimitive has options that allows us to define the shaders, and any attributes and uniforms.
 
@@ -561,9 +571,9 @@ This code essentially explodes 10,000 circles (polygons with 20 sides each, thus
 * iPad: 36 fps at 2ms processing time
 * iPhone: 57 fps at 1ms processing time
 
-Note here, the iPad is the "worst" performer, though at 36 fps it is more than adequate. As the shapes leave the screen, meaning less shapes need to be drawn to the screen, the iPads numbers quickyl rise to the low 50s as well.
+Note here, the iPad is the "worst" performer, though at 36 fps it is more than adequate. As the shapes leave the screen, meaning less shapes need to be drawn to the screen, the iPads numbers quickly rise to the low 50 fps as well.
 
-It gets interesting if we increase n:
+It gets interesting if we increase `n`:
 
 For `n = 100,000` (6,000,000 vertices):
 * Chromebook: 40 fps at 2.5 ms processing time
@@ -576,15 +586,15 @@ Interestingly, when we increase the number of shapes to 100,000 the Chromebook s
 #### Final Shader
 
 Let's now add logic to the shaders that:
-* incorporate bouncing off the boundaries
+* incorporates bouncing off the boundaries
 * allows for each shape to have a different color
 
 As shaders need to be deterministic, the bouncing is going to require logic to:
 * Determine the total distance travelled by the ball at some time
-* Determine how many bounces of walls this would result in, based on the initial position and velocity
+* Determine how many bounces off walls this would result in, based on the initial position and velocity
 * Determine the current position from the distance travelled from the last wall bounce
 
-The x and y components of position and velocity are independant of each other and so can be calculated separately.
+The x and y components of position and velocity are independant and so can be calculated separately.
 
 The final program is then:
 
@@ -704,7 +714,9 @@ figure.addFrameRate();
 figure.animateNextFrame();
 ```
 
-![](n10000.gif)
+The files for this are [here](./08%20custom%20shader).
+
+![](./08%20custom%20shader/example.gif)
 
 The performance of this on each device for n = 10,000 is:
 
@@ -718,7 +730,7 @@ The maxium number of polygons that can still accomodate a smooth visualization f
 * iPad: n = 20,000 (1.2 million vertices)
 * iPhone: n = 30,000 (1.8 million vertices)
 
-Note, the performance of this example is lower than the previous exploding example because the shader calculation is more complex. Remember that the shader is run on each vertex, and we are talking millions of vertices now.
+Note, the performance of this example is lower than the previous exploding example because the shader calculation is more complex. Remember that the shader is run on each vertex, and we are operating on millions of vertices.
 
 ### Conclusions
 

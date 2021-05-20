@@ -91,3 +91,8 @@ Create an interactive video from recorded SlideNavigator progressions.
 Create an interactive video from with minimal manual recording
 
 ![](./18%20-%20Recording%20Planned%20Events/example.gif)
+
+## **[19 - Performance Optimization](./19%20-%20Performance%20Optimization)**
+Optimizing performance for complex figures.
+
+![](./19%20-%20Performance%20Optimization/example.gif)
