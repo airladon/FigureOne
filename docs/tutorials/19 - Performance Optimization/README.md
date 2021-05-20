@@ -128,18 +128,16 @@ For instance, FigureOne takes 11ms to process a frame on the iPad. If this were 
 
 But the iPad is not our low end target. On the Chromebook we need to scale the number of squares back to 25 (`n=25`) to achieve just 20-25 fps.
 
-For `n=25` [here](./02%20n%20is%2025`), the Chromebook takes 18ms to process a frame, the iPad takes 5ms, and the iPhone takes 3ms.
+For `n=25` [here](./02%20n%20is%2025), the Chromebook takes 18ms to process a frame, the iPad takes 5ms, and the iPhone takes 3ms.
 
 ### Is 25 elements the max then?
 
 This DOES NOT mean the Chromebook can only support 25 FigureOne elements.
 
-For instance, if we change n to 1, and then add another 250 static elements to the screen, the Chromebook can support 20 fps. Remember, each of the 25 elements is performing an unnecessarily expensive (because it is generic) algorithm to move freely and bounce of the boundaries.
+For instance, if we change n to 1, and then add another 250 static elements to the screen, the Chromebook can support 20 fps. Remember, each of the 25 elements is performing an unnecessarily expensive (because it is generic) algorithm to move freely and bounce off the boundaries.
 
 
-Path: `./03 n1 static250/`
 ```js
-// baseline_03_n_1_static_150.js
 const n = 1;
 for (let i = 0; i < n; i += 1) {
   const r = rand(0.1, 0.2);
@@ -174,13 +172,15 @@ for (let i = 0; i < 250; i += 1) {
 figure.addFrameRate(10);
 ```
 
-![](n1s250.gif)
+![](./03%20n1%20static250/example.gif)
+
+The files for this are [here](./03%20n1%20static250/).
 
 It also DOES NOT mean the Chromebook can only support 25 *simple* elements (squares are two triangles, and so defined with 6 vertices).
 
-If instead we make 25 independently moving elements each with 200 sides (5000 triangles, 30000 vertices), we can still achieve 20 fps.
+If instead we make 25 independently moving elements each with 200 sides (5,000 triangles, 30,000 vertices), we can still achieve 20 fps.
 
-Path: `./04 n25 sides100/`
+
 ```js
 const n = 25;
 for (let i = 0; i < n; i += 1) {
@@ -205,7 +205,9 @@ for (let i = 0; i < n; i += 1) {
 }
 ```
 
-![](n25sides200.gif)
+![](./04%20n25%20sides200/example.gif)
+
+The files for this are [here](./04%20n25%20sides200).
 
 ### Optimization
 
@@ -249,7 +251,6 @@ If instead we treat a FigureElement as simply a holder of a shape, and create ou
 
 We start by replacing just the setupDraw method. In the new `setupDraw` we will move the squares manually and change the velocities so they bounce of the boundaries when they come to them.
 
-Path: `05 custom setupdraw`
 ```js
 const figure = new Fig.Figure({
   limits: [-3, -3, 6, 6],
@@ -314,6 +315,8 @@ figure.elements.transform = new Fig.Transform();
 figure.animateNextFrame();
 ```
 
+The files for this are [here](./05%20custom%20setupdraw).
+
 We have increased the performance, and so we can now increase the number of squares until the Chromebook is once again at 20 fps. So for `n = 250`
 * 2016 Chromebook: 20 fps at ~20ms per frame
 * 2014 iPad: 35 fps at ~9ms per frame
@@ -330,7 +333,6 @@ Now that we are drawing a lot of elements on the screen, the `draw` method start
 
 The `draw` method takes a parent transform, and chains that with the element's transform, and any other transforms that modify the element (like pulse or copy transforms). Once again, the generalization of the default `draw` method has some inefficiencies which we can overcome for our specific case.
 
-Path `06 custom draw`
 ```js
 for (let i = 0; i < 400; i += 1) {
   ...
@@ -350,11 +352,14 @@ for (let i = 0; i < 400; i += 1) {
 }
 ```
 
+The files for this are [here](./06%20custom%20draw).
+
+
 This draw method is super simple, and will stop an element from being able to pulse, or use the `getPosition` or `getBorder` methods.
 
 It almost halves the draw time however, so we can then increase `n` to `400` and still achieve 20 fps on the Chromebook.
 
-![](customdraw.gif)
+![](./06%20custom%20draw/example)
 
 ### Level 3 - Custom Shaders
 
@@ -553,7 +558,9 @@ figure.animateNextFrame();
 
 ```
 
-![](custom_shader_intro.gif)
+The files for this are [here](./07%20custom%20shader%20intro).
+
+![](07%20custom%20shader%20intro/example.gif)
 
 The `'gl'` FigureElementPrimitive has options that allows us to define the shaders, and any attributes and uniforms.
 
@@ -706,7 +713,9 @@ figure.addFrameRate();
 figure.animateNextFrame();
 ```
 
-![](n10000.gif)
+The files for this are [here](./08%20custom%20shader).
+
+![](./08%20custom%20shader/example.gif)
 
 The performance of this on each device for n = 10,000 is:
 
