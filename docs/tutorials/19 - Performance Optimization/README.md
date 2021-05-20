@@ -97,10 +97,10 @@ for (let i = 0; i < n; i += 1) {
 figure.addFrameRate(10);
 ```
 
+![](./01%20baseline/example.gif)
+
 The files for this are [here](./01%20baseline). 
 
-
-![](baseline.gif)
 
 FigureOne can display animation metrics by using the `addFrameRate` method.
 
