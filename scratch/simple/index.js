@@ -74,7 +74,8 @@ for (let i = 0; i < n; i += 1) {
   const x = -Math.PI * 0.9 + Math.PI * 2 * 0.9 / n * i;
   // const center1 = [rand(-2, 2), rand(-2, 2)];
   // points1.push(...makeShape(center1));
-  const center1 = [rand(-2, 2), 0];
+  // const center1 = [rand(-2, 2), 0];
+  const center1 = [x, 0];
   points1.push(...makeShape(center1));
   const center2 = [
     0.9 * Math.cos(Math.PI * 2 / n * i + Math.PI / 4),
@@ -172,7 +173,7 @@ const m = figure.add({
     step0: points1,
     step1: points2,
     step2: points3,
-    step4: points4,
+    step3: points4,
   },
   // color: {
   //   step0: [],
@@ -181,20 +182,10 @@ const m = figure.add({
   // },
   color: [1, 0, 0, 1],
 });
-m.custom.setShape('step0');
-m.custom.update('step0', 'step1', 0.4);
-m.animations.new()
-  .custom(
-    {
-      callback: (p) => {
-        m.custom.update('step0', 'step1', p);
-      },
-      duration: 2,
-    },
-  )
-  .start();
 
-// console.log(points1)
-// console.log(points2)
-// console.log(points3)
-// console.log(points4)
+m.animations.new()
+  .morph({ start: 'step0', target: 'step1', duration: 1 })
+  .morph({ start: 'step1', target: 'step2', duration: 1 })
+  .morph({ start: 'step2', target: 'step3', duration: 1 })
+  .morph({ start: 'step3', target: 'step0', duration: 1 })
+  .start();

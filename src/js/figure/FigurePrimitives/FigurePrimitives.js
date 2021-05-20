@@ -26,6 +26,7 @@ import DrawingObject from '../DrawingObjects/DrawingObject';
 // eslint-disable-next-line import/no-cycle
 import GLObject from '../DrawingObjects/GLObject/GLObject';
 import type { TypeGLUniform, TypeGLBufferType, TypeGLBufferUsage } from '../DrawingObjects/GLObject/GLObject';
+import { CustomAnimationStep } from '../Animation/Animation';
 // import VertexObject from '../DrawingObjects/VertexObject/VertexObject';
 // import {
 //   PolyLine, PolyLineCorners,
@@ -2480,6 +2481,26 @@ export default class FigurePrimitives {
     };
     element.custom.setShape(Object.keys(shapeNameMap)[0]);
 
+    element.fnMap.add('_morphCallback', (percentage: number, customProperties: Object) => {
+      const { start, target } = customProperties;
+      element.custom.update(start, target, percentage);
+    });
+    element.animations.morph = (...opt) => {
+      const o = joinObjects({}, {
+        element,
+      }, ...opt);
+      o.customProperties = {
+        start: o.start == null ? Object.keys(shapeNameMap)[0] : o.start,
+        target: o.target == null ? Object.keys(shapeNameMap)[1] : o.target,
+      };
+      o.callback = '_morphCallback';
+      o.timeKeeper = this.timeKeeper;
+      return new CustomAnimationStep(o);
+    };
+    element.animations.customSteps.push({
+      step: element.animations.morph.bind(this),
+      name: 'morph',
+    });
     element.timeKeeper = this.timeKeeper;
     element.recorder = this.recorder;
     setupPulse(element, options);
