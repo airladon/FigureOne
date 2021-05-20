@@ -217,25 +217,26 @@ However, there are situations where more performance is needed.
 
 There are three levels of optimization that can be performed on the default elements, each of which is more complex than the last, but will result in better performance.
 
-In fact, by the end of this tutorial we will have 25,000 circles (20 sided polygons) bouncing of walls on the Chromebook at 25 fps.
+In fact, by the end of this tutorial we will have 70,000 circles (20 sided polygons) bouncing of walls on the Chromebook at 25 fps.
 
 ### Level 1 - Keep it Simple
 
 The first optimization is to make FigureElements as simple as possible.
 
-1) Minimize the FigureElementCollection depth
-2) Minimize the transform size
+1) Minimize the FigureElementCollection tree depth
+2) Minimize the per transform size
 3) Make as few elements as possible touchable
 4) Simplify the touch borders, or use separate, more simple invisible touch elements
 5) Minimize changing element vertices - try to do everything by just changing transforms
 
-1) and 2) relate to how transforms are cascaded on every draw frame. Each FigureElement has a transform, which by default will be three scale, rotation and translation transforms chained. On each draw frame, all parent transforms are cascaded with the FigureElement transform. While for many situations this is trivial for even low-end processors, when using many elements, or when elements have many parents, the time to make all these calculations can become noticable on older, low-end clients.
+
+Items 1) and 2) relate to how transforms are cascaded on every draw frame. Each FigureElement has a transform, which by default will be three chained transforms: a scale, rotation and translation. On each draw frame, all parent transforms are cascaded with the FigureElement transform. While for many situations this is trivial for even low-end processors, when using many elements, or when elements have many parents, the time to make all these calculations can become noticable on older, low-end clients.
 
 In all the examples above, we have already done this optimization by placing all FigureElements in the root collection of the figure, and limiting the element's transform to just a single translation step.
 
-3) and 4) relate to interactivity. Determining whether a touch event has happened within the borders of a shape can be expensive if the border is complex. If there are hundreds of shapes that need to be checked, then the time it takes to do this can become noticable.
+Items 3) and 4) relate to interactivity. Determining whether a touch event has happened within the borders of a shape can be expensive if the border is complex. If there are hundreds of shapes that need to be checked, then the time it takes to do this can become noticable.
 
-5) relates to how WebGL works. WebGL can handle hundreds of thousands of vertices, even on low end devices, by leveraging the GPU to parallelize position and color calculations. For optimal performance, a shape's vertices should be defined once, and then any changes to that shape captured with a transformation matrix that can 
+Item 5) relates to how WebGL works. WebGL can handle hundreds of thousands of vertices, even on low end devices, by leveraging the GPU to parallelize position and color calculations. For optimal performance, a shape's vertices should be defined once, and then any changes to that shape captured with a transformation matrix. Morphing the shapes vertices individually on a per frame basis is possible (and cannot be avoided sometimes), but should be limited to shapes with fewer vertices.
 
 ### Level 2 - Custom `setupDraw` and `draw` Methods
 
@@ -359,7 +360,7 @@ This draw method is super simple, and will stop an element from being able to pu
 
 It almost halves the draw time however, so we can then increase `n` to `400` and still achieve 20 fps on the Chromebook.
 
-![](./06%20custom%20draw/example)
+![](./06%20custom%20draw/example.gif)
 
 ### Level 3 - Custom Shaders
 
