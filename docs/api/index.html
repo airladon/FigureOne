@@ -3828,6 +3828,46 @@
               
                 
                 <li><a
+                  href='#globject'
+                  class=" toggle-sibling">
+                  GLObject
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#globjectaddtexture'
+                        class='regular pre-open'>
+                        #addTexture
+                      </a></li>
+                      
+                      <li><a
+                        href='#globjectgetuniform'
+                        class='regular pre-open'>
+                        #getUniform
+                      </a></li>
+                      
+                      <li><a
+                        href='#globjectadduniform'
+                        class='regular pre-open'>
+                        #addUniform
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
                   href='#figureprimitives'
                   class=" toggle-sibling">
                   FigurePrimitives
@@ -5775,46 +5815,6 @@
                   OBJ_AnimationDefinition
                   
                 </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#globject'
-                  class=" toggle-sibling">
-                  GLObject
-                  <span class='icon'>▸</span>
-                </a>
-                
-                <div class='toggle-target display-none'>
-                  
-                  
-                    <ul class='list-reset py1-ul pl1'>
-                      <li class='h5'><span>Instance members</span></li>
-                      
-                      <li><a
-                        href='#globjectaddtexture'
-                        class='regular pre-open'>
-                        #addTexture
-                      </a></li>
-                      
-                      <li><a
-                        href='#globjectgetuniform'
-                        class='regular pre-open'>
-                        #getUniform
-                      </a></li>
-                      
-                      <li><a
-                        href='#globjectadduniform'
-                        class='regular pre-open'>
-                        #addUniform
-                      </a></li>
-                      
-                    </ul>
-                  
-                  
-                  
-                </div>
                 
                 </li>
               
@@ -48095,7 +48095,14 @@ rotation direction and normalized from 0 to Math.PI * 2.</p>
   </h2>
 
   
-    
+    <p>WebGL utilizes hardware acceleration to draw very complex shapes - even on low end devices. Most FigureOne FigureElementPrimitives interface directly with WebGL to render the shapes, and as such a user doesn't need to know anything about WebGL to use FigureOne.</p>
+<p>FigureOne also provides a FigureElementPrimitive (<code>GLPrimitive</code>) with direct access to WebGL shaders and buffers. This means a user with some WebGL experience can write custom shaders which may dramatically increase the performance of a particularly complicated figure, or a figure with special graphical effects.</p>
+<p>It is not in the scope of this API reference to explain what WebGL is, and how to use it. There are many good resources on the web that already do this - for example <a href="https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html">WebGLFundamentals</a> gives an excellent introduction to WebGL and this <a href="https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf">quick reference guid</a> is useful to refer to especially when writing shaders. A WebGL API reference is <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext">here</a>.</p>
+<p>For more detailed information on how to create a FigureOne <code>GLPrimitive</code>, and customize shaders and buffers see <a href="https://github.com/airladon/FigureOne/tree/master/docs/tutorials/19%20-%20Performance%20Optimization">this tutorial</a>.</p>
+<p><img src="../tutorials/19%20-%20Performance%20Optimization/08%20custom%20shader/example.gif" alt=""></p>
+<p>Another example of a <code>GLPrimitive</code> in action is from the FigureOne examples <a href="https://github.com/airladon/FigureOne/tree/master/docs/examples/Electric%20Field/">here</a>.</p>
+<p><img src="../examples/Electric%20Field/example.gif" alt=""></p>
+
   
 </section></div>
           
@@ -48114,7 +48121,8 @@ rotation direction and normalized from 0 to Math.PI * 2.</p>
   </div>
   
 
-  
+  <p>GLPrimitive allows shader customization.</p>
+
   
   
 
@@ -49850,6 +49858,349 @@ touched
   
 
   
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='globject'>
+      GLObject
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>FigureElementPrimitive that can be used to utilize custom shaders for WebGL.</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#drawingobject">DrawingObject</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>webgl</span> <code class='quiet'>(WebGLInstance)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>vertexShader</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | {src: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, vars: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>})
+            = <code>&#39;withTexture&#39;</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>fragmentShader</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | {src: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, vars: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>})
+            = <code>&#39;withTexture&#39;</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='globjectaddtexture'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>addTexture(location, mapTo, mapFrom, repeat)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Buffer a texture for the shape to be painted with.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>location</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>mapTo</span> <code class='quiet'>(<a href="#rect">Rect</a>
+            = <code>new Rect(-1,-1,2,2)</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>mapFrom</span> <code class='quiet'>(<a href="#rect">Rect</a>
+            = <code>new Rect(0,0,1,1)</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>repeat</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
+            = <code>false</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='globjectgetuniform'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getUniform(uniformName)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Get the current value of a uniform</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>uniformName</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='globjectadduniform'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>addUniform(uniformName, length, type, initialValue)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Add a uniform.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>uniformName</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    The variable name used in the shader
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>length</span> <code class='quiet'>((<code>1</code> | <code>2</code> | <code>3</code> | <code>4</code>)
+            = <code>1</code>)</code>
+	    (
+<code>1</code>
+) number of values in uniform
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>type</span> <code class='quiet'>((<code>"FLOAT"</code> | <code>"FLOAT_VECTOR"</code> | <code>"INT"</code> | <code>"INT_VECTOR"</code>)
+            = <code>&#39;FLOAT&#39;</code>)</code>
+	    type of
+value. Use '_VECTOR' suffix if using vector methods on the uniform in the
+shader (
+<code>'FLOAT'</code>
+).
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>initialValue</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>> | null)
+            = <code>null</code>)</code>
+	    initial value to use
+for uniform - if null then uniform will be all 0 (
+<code>null</code>
+)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
 
   
 
@@ -69176,349 +69527,6 @@ where duration is undim duration</li>
   
 
   
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='globject'>
-      GLObject
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>FigureElementPrimitive that can be used to utilize custom shaders for WebGL.</p>
-
-  
-  
-    <p>
-      Extends
-      
-        <a href="#drawingobject">DrawingObject</a>
-      
-    </p>
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>webgl</span> <code class='quiet'>(WebGLInstance)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>vertexShader</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | {src: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, vars: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>})
-            = <code>&#39;withTexture&#39;</code>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>fragmentShader</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | {src: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, vars: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>})
-            = <code>&#39;withTexture&#39;</code>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
-    <div class="clearfix">
-  
-    <div class='border-bottom' id='globjectaddtexture'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>addTexture(location, mapTo, mapFrom, repeat)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>Buffer a texture for the shape to be painted with.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>location</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>mapTo</span> <code class='quiet'>(<a href="#rect">Rect</a>
-            = <code>new Rect(-1,-1,2,2)</code>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>mapFrom</span> <code class='quiet'>(<a href="#rect">Rect</a>
-            = <code>new Rect(0,0,1,1)</code>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>repeat</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
-            = <code>false</code>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='globjectgetuniform'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getUniform(uniformName)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>Get the current value of a uniform</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>uniformName</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='globjectadduniform'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>addUniform(uniformName, length, type, initialValue)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>Add a uniform.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>uniformName</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-	    The variable name used in the shader
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>length</span> <code class='quiet'>((<code>1</code> | <code>2</code> | <code>3</code> | <code>4</code>)
-            = <code>1</code>)</code>
-	    (
-<code>1</code>
-) number of values in uniform
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>type</span> <code class='quiet'>((<code>"FLOAT"</code> | <code>"FLOAT_VECTOR"</code> | <code>"INT"</code> | <code>"INT_VECTOR"</code>)
-            = <code>&#39;FLOAT&#39;</code>)</code>
-	    type of
-value. Use '_VECTOR' suffix if using vector methods on the uniform in the
-shader (
-<code>'FLOAT'</code>
-).
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>initialValue</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>> | null)
-            = <code>null</code>)</code>
-	    initial value to use
-for uniform - if null then uniform will be all 0 (
-<code>null</code>
-)
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-</div>
 
   
 
