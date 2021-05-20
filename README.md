@@ -154,6 +154,13 @@ See this example hosted [here](https://airladon.github.io/FigureOne/examples/Int
 
 ![](docs/examples/Interactive%20Video%20-%20Trig%203%20-%20Relationships/example.gif)
 
+## **[Electric Field](Electric%20Field)**
+
+See this example hosted [here](https://airladon.github.io/FigureOne/examples/Electric%20Field/index.html).
+
+Demonstrator of how shaders can be used to animate over 1000 elements simultaneously and still get excellent performance on low end clients.
+
+![](docs/examples/Electric%20Field/example.gif)
 
 ## NPM Package
 
