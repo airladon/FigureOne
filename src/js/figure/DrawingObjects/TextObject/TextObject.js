@@ -697,10 +697,10 @@ class TextObjectBase extends DrawingObject {
   drawWithTransformMatrix(
     transformMatrix: Array<number>,
     color: TypeColor = [1, 1, 1, 1],
-    contextIndex: number = 0,
+    // contextIndex: number = 0,
   ) {
-    const drawContext2D = this.drawContext2D[contextIndex];
-    const { ctx } = this.drawContext2D[contextIndex];
+    const drawContext2D = this.drawContext2D[0];
+    const { ctx } = this.drawContext2D[0];
     ctx.save();
 
     // Scaling factor used to ensure font size is >> 1 pixel
@@ -792,8 +792,8 @@ class TextObjectBase extends DrawingObject {
     ctx.restore();
   }
 
-  clear(contextIndex: number = 0) {
-    const { ctx } = this.drawContext2D[contextIndex];
+  clear() {
+    const { ctx } = this.drawContext2D[0];
     const t = this.lastDrawTransform;
     ctx.save();
     ctx.transform(t[0], t[3], t[1], t[4], t[2], t[5]);

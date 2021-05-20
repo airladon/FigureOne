@@ -89,13 +89,17 @@ function createProgram(
   gl.attachShader(program, vertexShader);
   gl.attachShader(program, fragmentShader);
   gl.linkProgram(program);
-  const success = gl.getProgramParameter(program, gl.LINK_STATUS);
-  if (success) {
-    return program;
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    const info = gl.getProgramInfoLog(program);
+    throw new Error(`Could not compile WebGL program. \n\n ${info || ''}`);
   }
-
-  gl.deleteProgram(program);
-  return null;
+  return program;
+  // const success = gl.getProgramParameter(program, gl.LINK_STATUS);
+  // if (success) {
+  //   return program;
+  // }
+  // gl.deleteProgram(program);
+  // return null;
 }
 
 
@@ -107,9 +111,10 @@ function createShader(gl: WebGLRenderingContext, type, source) {
   if (success) {
     return shader;
   }
+  throw new Error(`Could not compile shader: ${source}`);
 
-  gl.deleteShader(shader);
-  return null;
+  // gl.deleteShader(shader);
+  // return null;
 }
 
 
@@ -124,6 +129,7 @@ function createProgramFromScripts(
   // create GLSL shaders, upload the GLSL source, compile the shaders
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
+
 
   // Link the two shaders into a program
   if (vertexShader && fragmentShader) {
@@ -191,8 +197,8 @@ class WebGLInstance {
     };
   };
   programs: Array<{
-    vertexShader: string,
-    fragmentShader: string,
+    vertexShader: string | { src: string, vars: Array<string>},
+    fragmentShader: string| { src: string, vars: Array<string>},
     locations: Object,
     program: WebGLProgram;
   }>;
@@ -227,8 +233,8 @@ class WebGLInstance {
   }
 
   getProgram(
-    vertexShader: string,
-    fragmentShader: string,
+    vertexShader: string | { src: string, vars: Array<string> },
+    fragmentShader: string | { src: string, vars: Array<string> },
   ) {
     for (let i = 0; i < this.programs.length; i += 1) {
       const program = this.programs[i];
@@ -238,18 +244,18 @@ class WebGLInstance {
         return i;
       }
     }
-
     const shaders = getShaders(vertexShader, fragmentShader);
     const newProgram = createProgramFromScripts(
       this.gl,
       shaders.vertexSource,
       shaders.fragmentSource,
     );
+
     const programDetails = {
       vertexShader,
       fragmentShader,
       program: newProgram,
-      locations: getGLLocations(this.gl, newProgram, shaders.varNames),
+      locations: getGLLocations(this.gl, newProgram, shaders.vars),
     };
     this.programs.push(programDetails);
     return this.programs.length - 1;
@@ -257,7 +263,7 @@ class WebGLInstance {
 
   useProgram(programIndex: number) {
     const program = this.programs[programIndex];
-    if (this.lastUsedProgram !== program) {
+    if (this.lastUsedProgram !== program.program) {
       this.gl.useProgram(program.program);
       this.lastUsedProgram = program.program;
     }

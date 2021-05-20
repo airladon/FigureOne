@@ -1,4 +1,4 @@
-const { tester } = require('./tester.js');
+const { tester } = require('./tester');
 
 tester(
   'collections',

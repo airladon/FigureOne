@@ -1,10 +1,10 @@
 // @flow
 
 import {
-  Point,
+  Point, Rect,
 } from '../../../tools/g2';
 import WebGLInstance from '../../webgl/webgl';
-import VertexObject from './VertexObject';
+import VertexGeneric from './VertexGeneric';
 import { generateUniqueId, joinObjects } from '../../../tools/tools';
 import { round } from '../../../tools/math';
 // import { identity } from '../../../tools/m2';
@@ -29,7 +29,7 @@ type TypeVertexInputTextOptions = {
 //   yAlign: 'top' | 'bottom' | 'middle' | 'baseline',
 // };
 
-class VertexText extends VertexObject {
+class VertexText extends VertexGeneric {
   glPrimitive: number;  // WebGL primitive used
   text: number;       // radius from center to outside of polygon
   center: Point;        // center point
@@ -51,11 +51,11 @@ class VertexText extends VertexObject {
   width: number;
 
   constructor(
-    webgl: Array<WebGLInstance>,
+    webgl: WebGLInstance,
     textOptions: TypeVertexInputTextOptions,
-  ) {
+  ) { // $FlowFixMe
     super(webgl, 'withTexture', 'text');
-    this.glPrimitive = webgl[0].gl.TRIANGLE_FAN;
+    this.glPrimitive = webgl.gl.TRIANGLE_FAN;
 
     const defaultTextOptions = {
       text: 'DEFAULT_TEXT',
@@ -78,10 +78,21 @@ class VertexText extends VertexObject {
     this.canvas = document.createElement('canvas');
     this.canvas.id = options.id;
     this.ctx = this.canvas.getContext('2d');
+    // this.texture = {
+    //   id: options.id,
+    //   points: [],
+    //   type: 'canvasText',
+    // };
     this.texture = {
       id: options.id,
+      mapTo: new Rect(-1, -1, 2, 2),
+      mapFrom: new Rect(0, 0, 1, 1),
+      repeat: false,
+      src: '',
       points: [],
-      type: 'canvasText',
+      buffer: this.gl.createBuffer(),
+      type: 'image',
+      data: null,
     };
     this.type = 'vertexText';
     this.drawTextIntoBuffer();
@@ -145,9 +156,9 @@ class VertexText extends VertexObject {
       ];
       texture.data = this.ctx.canvas;
       if (texture.buffer) {
-        this.resetBuffer();
+        this.resetBuffers();
       } else {
-        this.setupBuffer();
+        // this.setupBuffer();
       }
     }
   }

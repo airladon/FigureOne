@@ -10,11 +10,15 @@ import { joinObjects } from '../../tools/tools';
 // } from '../Element';
 import DrawContext2D from '../DrawContext2D';
 // import EquationNavigator from './EquationNavigator';
+// eslint-disable-next-line import/no-cycle
 import CollectionsLine from './Line';
+// eslint-disable-next-line import/no-cycle
 import CollectionsAngle from './Angle';
 // eslint-disable-next-line import/no-cycle
 import CollectionsPolyline from './PolyLine';
+// eslint-disable-next-line import/no-cycle
 import CollectionsAxis from './Axis';
+// eslint-disable-next-line import/no-cycle
 import CollectionsTrace from './Trace';
 import type { COL_Line } from './Line';
 import type { COL_Angle } from './Angle';
@@ -24,17 +28,24 @@ import type { COL_Axis } from './Axis';
 import type { COL_Trace } from './Trace';
 import type { COL_Plot } from './Plot';
 import type { COL_Rectangle } from './Rectangle';
+// eslint-disable-next-line import/no-cycle
 import EquationLabel from './EquationLabel';
+// eslint-disable-next-line import/no-cycle
 import CollectionsPlot from './Plot';
+// eslint-disable-next-line import/no-cycle
 import CollectionsPlotLegend from './Legend';
+// eslint-disable-next-line import/no-cycle
 import CollectionsRectangle from './Rectangle';
 import type { EQN_Equation } from '../Equation/Equation';
+// eslint-disable-next-line import/no-cycle
 import { Equation } from '../Equation/Equation';
 import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitives';
 // import EqnNavigator from './EqnNavigator';
 // import type { TypeNavigatorOptions } from './EqnNavigator';
+// eslint-disable-next-line import/no-cycle
 import SlideNavigator from './SlideNavigator';
 import type { COL_SlideNavigator } from './SlideNavigator';
+// eslint-disable-next-line import/no-cycle
 import {
   FigureElementCollection,
 } from '../Element';

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>FigureOne</title>
+    <meta name='description' content='Javascript library to draw, animate and interact with shapes, text, plots and equations.'>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link href='../../style.css' rel='stylesheet'>
+    <link href='../examples.css' rel='stylesheet'>
+  </head>
+  <body>
+    <div id="header"></div>
+    <div class="example">
+      <!-- *************************************************************** -->
+      <!-- ************    Example Specific HTML Start     *************** -->
+      <!-- *************************************************************** -->
+
+      <p class="instructions">
+          Move the charges to see how the electric field changes. Use the Next and Prev buttons to see different configurations of charges.
+        </p>
+
+      <div class="wrapper wrapper_1_1">
+          <div id="figureOneContainer" class="container container_1_1"></div>
+      </div>
+
+      <!-- *************************************************************** -->
+      <!-- ************    Example Specific HTML End     *************** -->
+      <!-- *************************************************************** -->
+
+    </div>
+    <div id="footer"></div>
+
+    <!-- **********    Choose local or remote package     *************** -->
+
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.9.0/figureone.min.js'></script>
+
+    <!-- <script type="text/javascript" src='../../../package/index.js'></script> -->
+    <!-- ***************************************************************** -->
+
+    <script type="text/javascript" src="../../fill.js"></script>
+    <script>fillHeader('Example - Electric Field', 'Electric Field');</script>
+    <script>fillFooter('..')</script>
+
+    <!-- ***************    Example Specific Scripts     ***************** -->
+    <script type="text/javascript" src='./index.js'></script>
+  </body>
+</html>

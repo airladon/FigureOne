@@ -2,6 +2,7 @@
 
 import * as g2 from './js/tools/g2';
 import * as math from './js/tools/math';
+import * as m2 from './js/tools/m2';
 import Figure from './js/figure/Figure';
 import TimeKeeper from './js/figure/TimeKeeper';
 import { Recorder } from './js/figure/Recorder/Recorder';
@@ -17,7 +18,7 @@ import {
 import DrawContext2D from './js/figure/DrawContext2D';
 import WebGLInstance from './js/figure/webgl/webgl';
 import DrawingObject from './js/figure/DrawingObjects/DrawingObject';
-import VertexObject from './js/figure/DrawingObjects/VertexObject/VertexObject';
+import VertexGeneric from './js/figure/DrawingObjects/VertexObject/VertexGeneric';
 import {
   TextObject, FigureText, FigureFont,
 } from './js/figure/DrawingObjects/TextObject/TextObject';
@@ -82,6 +83,7 @@ const tools = {
   html,
   misc,
   lines,
+  m2,
 };
 
 /**
@@ -105,7 +107,7 @@ const Fig = {
   WebGLInstance,
   //
   DrawingObject,
-  VertexObject,
+  VertexGeneric,
   TextObject,
   FigureText,
   FigureFont,

@@ -1,4 +1,4 @@
-const { tester } = require('../../../browserTester/tester.js');
+const { tester } = require('../../../browserTester/tester');
 
 tester(
   `${__dirname}/index.html`,

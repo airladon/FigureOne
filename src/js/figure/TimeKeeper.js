@@ -376,7 +376,7 @@ class TimeKeeper {
       this.drawQueue[i](nowSeconds);
     }
     this.drawQueue = [];
-    this.lastDrawTime = this.nowTime;
+    this.lastDrawTime = nowSeconds * 1000;
   }
 
   /**

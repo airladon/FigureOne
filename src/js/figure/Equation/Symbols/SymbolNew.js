@@ -17,7 +17,7 @@ import type {
 
 export default class Symbol extends FigureElementPrimitive {
   constructor(
-    webgl: Array<WebGLInstance>,
+    webgl: WebGLInstance,
     color: TypeColor,
     transformOrLocation: Transform | Point,
     figureLimits: Rect,

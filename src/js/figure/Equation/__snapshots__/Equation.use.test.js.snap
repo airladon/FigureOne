@@ -891,8 +891,10 @@ FigureElementPrimitive {
   "scenarios": Object {},
   "setPointsFromDefinition": null,
   "setTransformCallback": null,
+  "simple": false,
   "state": Object {
     "isBeingMoved": false,
+    "isChanging": false,
     "isMovingFreely": false,
     "isPulsing": false,
     "movement": Object {

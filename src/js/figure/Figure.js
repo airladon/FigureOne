@@ -12,10 +12,12 @@ import type { TypeParsableRect, TypeParsablePoint } from '../tools/g2';
 import { round } from '../tools/math';
 import { FunctionMap } from '../tools/FunctionMap';
 import { setState, getState } from './Recorder/state';
+// eslint-disable-next-line import/no-cycle
 import parseState from './Recorder/parseState';
 import {
   isTouchDevice, joinObjects, NotificationManager, Console, PerformanceTimer,
 } from '../tools/tools';
+// eslint-disable-next-line import/no-cycle
 import {
   FigureElementCollection, FigureElement,
 } from './Element';
@@ -23,13 +25,17 @@ import type {
   OBJ_AddElement, TypeElementPath,
 } from './Element';
 import TimeKeeper from './TimeKeeper';
+// eslint-disable-next-line import/no-cycle
 import { Recorder } from './Recorder/Recorder';
 // eslint-disable-next-line import/no-cycle
 import Gesture from './Gesture';
 import DrawContext2D from './DrawContext2D';
+// eslint-disable-next-line import/no-cycle
 import FigurePrimitives from './FigurePrimitives/FigurePrimitives';
-import type { OBJ_Polyline } from './FigurePrimitives/FigurePrimitives';
+import type { OBJ_Polyline, OBJ_TextLinesDefinition, OBJ_TextLines } from './FigurePrimitives/FigurePrimitives';
+// eslint-disable-next-line import/no-cycle
 import FigureCollections from './FigureCollections/FigureCollections';
+// eslint-disable-next-line import/no-cycle
 import AnimationManager from './Animation/AnimationManager';
 import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 import type { TypeColor, OBJ_Font } from '../tools/types';
@@ -186,7 +192,7 @@ export type OBJ_Figure = {
  * <body>
  *     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
  *     </div>
- *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.8.1/figureone.min.js'></script>
+ *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.9.0/figureone.min.js'></script>
  *     <script type="text/javascript" src='./index.js'></script>
  * </body>
  * </html>
@@ -308,6 +314,14 @@ class Figure {
   nextDrawTimerStart: number;
   nextDrawTimerDuration: number;
   focused: boolean;
+  frameRate: {
+    information: null | Array<string | OBJ_TextLinesDefinition>,
+    history: Array<Array<number>>,
+    num: number,
+  };
+  // frameRateInformation: string;
+  // frameRateHistory: Array<number>;
+  // frameRate
 
   animations: AnimationManager;
 
@@ -316,6 +330,7 @@ class Figure {
     preparingToStop: boolean;
     preparingToSetState: boolean;
   };
+
   // pauseAfterNextDrawFlag: boolean;
 
   constructor(options: OBJ_Figure = {}) {
@@ -333,6 +348,11 @@ class Figure {
         opacity: 1,
       },
       backgroundColor: [1, 1, 1, 1],
+    };
+    this.frameRate = {
+      information: null,
+      num: 1,
+      history: [],
     };
     this.fnMap = new FunctionMap();
     this.isPaused = false;
@@ -1244,20 +1264,30 @@ class Figure {
     }
     let remainingTime = 0;
 
-    elements.forEach((element) => {
+    for (let i = 0; i < elements.length; i += 1) {
+      const element = elements[i];
       const elementRemainingTime = element.animations.getRemainingTime([], now);
+      if (elementRemainingTime == null) {
+        return null;
+      }
       if (elementRemainingTime > remainingTime) {
         remainingTime = elementRemainingTime;
       }
       const remainingPulseTime = element.getRemainingPulseTime(now);
+      if (remainingPulseTime == null) {
+        return null;
+      }
       if (remainingPulseTime > remainingTime) {
         remainingTime = remainingPulseTime;
       }
       const remainingMovingFreelyTime = element.getRemainingMovingFreelyTime(now);
+      if (remainingMovingFreelyTime == null) {
+        return null;
+      }
       if (remainingMovingFreelyTime > remainingTime) {
         remainingTime = remainingMovingFreelyTime;
       }
-    });
+    }
     return remainingTime;
   }
 
@@ -1990,14 +2020,15 @@ class Figure {
   }
 
   draw(nowIn: number, canvasIndex: number = 0): void {
-    this.clearDrawTimeout();
     let timer;
-    if (FIGURE1DEBUG) {
+    // $FlowFixMe
+    if (this.elements.__frameRate_ != null || FIGURE1DEBUG) {
       timer = new PerformanceTimer();
       window.figureOneDebug.draw = [];
       window.figureOneDebug.setupDraw = [];
       window.figureOneDebug.misc = [];
     }
+    this.clearDrawTimeout();
     if (this.state.pause === 'paused') {
       return;
     }
@@ -2030,23 +2061,28 @@ class Figure {
     }
     this.drawQueued = false;
     // $FlowFixMe
-    if (FIGURE1DEBUG) { timer.stamp('m1'); }
+    if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('m1'); }
     this.clearContext(canvasIndex);
     // $FlowFixMe
-    if (FIGURE1DEBUG) { timer.stamp('clearContext'); }
+    if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('clearContext'); }
     this.notifications.publish('beforeDraw');
     // $FlowFixMe
-    if (FIGURE1DEBUG) { timer.stamp('beforeDraw'); }
+    if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('beforeDraw'); }
+    // $FlowFixMe
+    if (this.elements.__frameRate_ != null && this.frameRate.information != null) {
+      // $FlowFixMe
+      this.elements.__frameRate_.custom.updateText({ text: this.frameRate.information });
+    }
     this.elements.setupDraw(
       now,
       canvasIndex,
     );
     // $FlowFixMe
-    if (FIGURE1DEBUG) { timer.stamp('setupDraw'); }
+    if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('setupDraw'); }
 
     this.elements.draw(now, [this.spaceTransforms.figureToGL], 1, canvasIndex);
     // $FlowFixMe
-    if (FIGURE1DEBUG) { timer.stamp('draw'); }
+    if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('draw'); }
 
     if (this.elements.isAnyElementMoving()) {
       this.animateNextFrame(true, 'is moving');
@@ -2056,36 +2092,82 @@ class Figure {
       this.drawAnimationFrames -= 1;
       this.animateNextFrame(true, 'queued frames');
     }
-    this.notifications.publish('afterDraw');
-    if (FIGURE1DEBUG) { // $FlowFixMe
+    this.notifications.publish('afterDraw'); // $FlowFixMe
+    if (FIGURE1DEBUG || this.elements.__frameRate_ != null) { // $FlowFixMe
       timer.stamp('afterDraw'); // $FlowFixMe
       const deltas = timer.deltas();
-      if (window.figureOneDebug.cumTimes.length > 50) {
-        Console(
-          '>>>>>>>>>>> Total',
-          round(
-            window.figureOneDebug.cumTimes.reduce((sum, time) => sum + time) / 50,
-            2,
-          ),
-          { frameTotal: deltas[0] },
-          { frame: deltas.slice(1) },
-          { setupDraw: window.figureOneDebug.setupDraw },
-          { draw: window.figureOneDebug.draw },
-          { misc: window.figureOneDebug.misc },
-        );
-        window.figureOneDebug.cumTimes = [];
-      } else {
-        window.figureOneDebug.cumTimes.push(deltas[0]);
+      if (FIGURE1DEBUG) {
+        if (window.figureOneDebug.cumTimes.length > 50) {
+          Console(
+            '>>>>>>>>>>> Total',
+            round(
+              window.figureOneDebug.cumTimes.reduce((sum, time) => sum + time) / 50,
+              2,
+            ),
+            { frameTotal: deltas[0] },
+            { frame: deltas.slice(1) },
+            { setupDraw: window.figureOneDebug.setupDraw },
+            { draw: window.figureOneDebug.draw },
+            { misc: window.figureOneDebug.misc },
+          );
+          window.figureOneDebug.cumTimes = [];
+        } else {
+          window.figureOneDebug.cumTimes.push(deltas[0]);
+        }
+        // }
+        window.figureOneDebug.history.push({
+          now: this.timeKeeper.now(),
+          frameTotal: deltas[0],
+          frame: deltas.slice(1),
+          setupDraw: window.figureOneDebug.setupDraw,
+          draw: window.figureOneDebug.draw,
+          misc: window.figureOneDebug.misc,
+          animationManager: window.figureOneDebug.animationManager,
+        });
       }
-      window.figureOneDebug.history.push({
-        now: this.timeKeeper.now(),
-        frameTotal: deltas[0],
-        frame: deltas.slice(1),
-        setupDraw: window.figureOneDebug.setupDraw,
-        draw: window.figureOneDebug.draw,
-        misc: window.figureOneDebug.misc,
-        animationManager: window.figureOneDebug.animationManager,
-      });
+      // $FlowFixMe
+      if (this.elements.__frameRate_ != null) {
+        const timeBetweenFrames =
+          (this.timeKeeper.now() - (this.timeKeeper.lastDrawTime || 0)) / 1000;
+        // const frameRate = 1 / timeBetweenFrames;
+        const totalDrawTime = deltas[0];  // $FlowFixMe
+        const setupDrawTime = deltas[4][1]; // $FlowFixMe
+        const drawTime = deltas[5][1];
+        this.frameRate.history.push([timeBetweenFrames, totalDrawTime, setupDrawTime, drawTime]);
+        if (this.frameRate.history.length === this.frameRate.num) {
+          const averages = this.frameRate.history.reduce(
+            (a, c) => [a[0] + c[0], a[1] + c[1], a[2] + c[2], a[3] + c[3]],
+            [0, 0, 0, 0],
+          );
+          const maximums = this.frameRate.history.reduce(
+            (a, c) => [
+              c[0] > a[0] ? c[0] : a[0],
+              c[1] > a[1] ? c[1] : a[1],
+              c[2] > a[2] ? c[2] : a[2],
+              c[3] > a[3] ? c[3] : a[3],
+            ],
+            [0, 0, 0, 0],
+          );
+          const { num } = this.frameRate;
+          const ave = [
+            round(1 / (averages[0] / num), 0).toFixed(0).padStart(3),
+            round(averages[1] / num, 1).toFixed(1).padStart(5),
+            round(averages[2] / num, 1).toFixed(1).padStart(5),
+            round(averages[3] / num, 1).toFixed(1).padStart(5),
+          ];
+          const max = [
+            round(1 / (maximums[0]), 0).toFixed(0).padStart(3),
+            round(maximums[1], 1).toFixed(1).padStart(5),
+            round(maximums[2], 1).toFixed(1).padStart(5),
+            round(maximums[3], 1).toFixed(1).padStart(5),
+          ];
+          this.frameRate.information = [
+            `Ave:  ${ave[0]} fps, ${ave[1]} ms, (${ave[2]}, ${ave[3]})`,
+            `Max: ${max[0]} fps, ${max[1]} ms, (${max[2]}, ${max[3]})`,
+          ];
+          this.frameRate.history = [];
+        }
+      }
     }
     this.setDrawTimeout();
   }
@@ -2123,8 +2205,13 @@ class Figure {
     let timerDuration = timerDurationIn;
     if (timerDuration < 0) {
       timerDuration = this.elements.getNextAnimationFinishTime();
+      // console.log(timerDuration)
     }
-    if (timerDuration != null && timerDuration > 0.00000001) {
+    // console.log(timerDuration)
+    if (timerDuration == null) {
+      timerDuration = 0.1;
+    }
+    if (timerDuration > 0.00000001) {
       const timerStart = this.timeKeeper.now() / 1000;
       if (
         (this.nextDrawTimer == null && timerDuration > 0)
@@ -2250,6 +2337,70 @@ class Figure {
    */
   frame(timeStep: number) {
     this.timeKeeper.frame(timeStep);
+  }
+
+  /**
+   * Add a frame rate annotation to the figure.
+   *
+   * Each time the browser requests FigureOne to paint the screen, FigureOne
+   * performs two main tasks:
+   * - setup the figure for a draw (setupDraw) - all visible figure elements
+   *   are iterated through and if they are animating or moving then their next
+   *   animation or movement frame is calculated
+   * - draw the figure elements (draw)
+   *
+   * Frame rate is determined by FigureOne's total frame processing time
+   * (setupDraw time + draw time), and how frequently a browser requests
+   * FigureOne to draw a frame.
+   *
+   * The frame rate will not be faster than the browser wants, but it can be
+   * slower if the total frame processing time is too long.
+   *
+   * The frame rate and time durations are reported as both an average, and
+   * worst case (max). The averaging is done over `numFrames` number of frames.
+   *
+   * The screen output is then:
+   * - Ave: F fsp, T ms (S, D)
+   * - Max: F fsp, T ms (S, D)
+   *
+   * Where:
+   * - F: Frames per second
+   * - T: Total frame processing time
+   * - S: setupDraw processing time
+   * - D: draw processing time
+   *
+   * Note: FigureOne only requests animation frame notifications from the
+   * browser when an element is animating or moving. If everything is still,
+   * then the frame rate will be 0.
+   */
+  addFrameRate(numFrames: number = 10, options: OBJ_TextLines = {}) {
+    this.frameRate.num = numFrames;
+    const frame = this.add(joinObjects(
+      {},
+      {
+        name: '_frameRate_',
+        make: 'primitives.textLines',
+        // mods: { isShown: true },
+        text: ['Ave:', 'Max:'],
+        position: [
+          this.limits.left,
+          this.limits.bottom,
+        ],
+        xAlign: 'left',
+        yAlign: 'bottom',
+        font: { size: this.limits.width / 30 },
+      },
+      options,
+    ));
+    window.figureOneDebug = {
+      cumTimes: [],
+      draw: [],
+      setupDraw: [],
+      misc: [],
+      history: [],
+      animationManager: [],
+    };
+    return frame;
   }
 }
 

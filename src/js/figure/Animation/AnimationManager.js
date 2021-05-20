@@ -980,12 +980,16 @@ export default class AnimationManager {
 
   getTotalDuration() {
     let duration = 0;
-    this.animations.forEach((animation) => {
+    for (let i = 0; i < this.animations.length; i += 1) {
+      const animation = this.animations[i];
       const animationDuration = animation.getTotalDuration();
+      if (animationDuration == null) {
+        return null;
+      }
       if (animationDuration > duration) {
         duration = animationDuration;
       }
-    });
+    }
     return duration;
   }
 
@@ -1018,26 +1022,26 @@ export default class AnimationManager {
   }
 
   getNextAnimationFinishTime(now: number = this.timeKeeper.now() / 1000): null | number {
-    let remainingTime = null;
-    this.animations.forEach((animation) => {
+    let minRemainingTime;
+    let isNull = false;
+    for (let i = 0; i < this.animations.length; i += 1) {
+      const animation = this.animations[i];
       const animationRemainingTime = animation.getRemainingTime(now);
-      if (
-        (
-          animationRemainingTime != null
-          && remainingTime == null
-          && animationRemainingTime > 0
-        )
-        || (
-          animationRemainingTime != null
-          && remainingTime != null
-          && animationRemainingTime > 0
-          && animationRemainingTime < remainingTime
-        )
-      ) {
-        remainingTime = animationRemainingTime;
+      if (animationRemainingTime === null) {
+        isNull = true;
+      } else if (animationRemainingTime > 0 && minRemainingTime === undefined) {
+        minRemainingTime = animationRemainingTime;
+      } else if (animationRemainingTime > 0 && animationRemainingTime < minRemainingTime) {
+        minRemainingTime = animationRemainingTime;
       }
-    });
-    return remainingTime;
+    }
+    if (minRemainingTime === undefined) {
+      if (isNull) {
+        return null;
+      }
+      return 0;
+    }
+    return minRemainingTime;
   }
 
   addTo(name: string) {

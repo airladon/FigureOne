@@ -5,12 +5,12 @@ import {
 // import type { TypeParsablePoint } from '../../../tools/g2';
 import { joinObjects } from '../../../tools/tools';
 import WebGLInstance from '../../webgl/webgl';
-import VertexObject from './VertexObject';
+import GLObject from '../GLObject/GLObject';
 import { copyPoints } from '../../geometries/copy/copy';
 import type { CPY_Step } from '../../geometries/copy/copy';
 
 
-class VertexGeneric extends VertexObject {
+class VertexGeneric extends GLObject {
   width: number;
   close: boolean;
   copy: Array<CPY_Step>;
@@ -25,7 +25,7 @@ class VertexGeneric extends VertexObject {
   // borderToPoint: TypeBorderToPoint;
 
   constructor(
-    webgl: Array<WebGLInstance>,
+    webgl: WebGLInstance,
     // vertices: Array<Point>,
     // drawType: 'triangles' | 'strip' | 'fan' | 'lines',
     textureLocation: string = '',
@@ -37,9 +37,9 @@ class VertexGeneric extends VertexObject {
     if (textureLocation !== '') {
       super(webgl, 'withTexture', 'withTexture');
     } else {
-      super(webgl);
+      super(webgl, 'simple', 'simple');
     }
-    this.vertices = [];
+    this.points = [];
     this.copy = [];
     // this.change({
     //   points: vertices,
@@ -48,26 +48,40 @@ class VertexGeneric extends VertexObject {
     // });
 
     // this.setupTexture(textureLocation, textureVertexSpace, textureCoords, textureRepeat);
+    this.addVertices([]);
     if (textureLocation !== '') {
-      this.texOptions = {
-        location: textureLocation,
-        mapTo: textureVertexSpace,
-        mapFrom: textureCoords,
-        repeat: textureRepeat,
-      };
-      this.texture = {
-        id: this.texOptions.location,
-        src: this.texOptions.location,
-        type: 'image',
-        points: [],
-        repeat: this.texOptions.repeat,
-      };
-      this.setupTexture(
-        // textureLocation, textureVertexSpace, textureCoords, textureRepeat
-      );
+      this.addTexture(textureLocation, textureVertexSpace, textureCoords, textureRepeat);
+      // this.texOptions = {
+      //   location: textureLocation,
+      //   mapTo: textureVertexSpace,
+      //   mapFrom: textureCoords,
+      //   repeat: textureRepeat,
+      // };
+      // this.texture = {
+      //   id: this.texOptions.location,
+      //   src: this.texOptions.location,
+      //   type: 'image',
+      //   points: [],
+      //   repeat: this.texOptions.repeat,
+      // };
+      // this.setupTexture(
+      //   // textureLocation, textureVertexSpace, textureCoords, textureRepeat
+      // );
     }
 
-    this.setupBuffer();
+    // this.setupBuffer();
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  getPointCountForAngle(drawAngle: number = Math.PI * 2) {
+    // return this.numPoints * drawAngle / (Math.PI * 2);
+    return this.numVertices;
+  }
+
+  // Abstract method - should be reimplemented for any vertexObjects that
+  // eslint-disable-next-line no-unused-vars
+  getPointCountForLength(drawLength: number) {
+    return this.numVertices;
   }
 
   // $FlowFixMe
@@ -86,29 +100,40 @@ class VertexGeneric extends VertexObject {
       points, drawType, copy, texture,
     } = options;
 
+    const previousNumVertices = this.numVertices;
     if (points != null) {
       this.vertices = points;
     }
     if (drawType != null) {
       if (drawType === 'lines') {
-        this.glPrimitive = this.gl[0].LINES;
+        this.glPrimitive = this.gl.LINES;
       } else if (drawType === 'strip') {
-        this.glPrimitive = this.gl[0].TRIANGLE_STRIP;
+        this.glPrimitive = this.gl.TRIANGLE_STRIP;
       } else if (drawType === 'fan') {
-        this.glPrimitive = this.gl[0].TRIANGLE_FAN;
+        this.glPrimitive = this.gl.TRIANGLE_FAN;
       } else {
-        this.glPrimitive = this.gl[0].TRIANGLES;
+        this.glPrimitive = this.gl.TRIANGLES;
       }
     }
     if (copy != null) {
       this.copy = copy;
     }
     const newVerts = copyPoints(this.vertices, this.copy);
-    this.points = [];
-    newVerts.forEach((v) => {
-      this.points.push(v.x);
-      this.points.push(v.y);
-    });
+    const vertices = Array(newVerts.length * 2);
+    for (let i = 0; i < newVerts.length; i += 1) {
+      vertices[i * 2] = newVerts[i].x;
+      vertices[i * 2 + 1] = newVerts[i].y;
+    }
+    this.updateVertices(vertices);
+    // this.numVertices = vertices.length;
+    // this.vertices = [];
+    // newVerts.forEach((v) => {
+    //   this.vertices.push(v.x);
+    //   this.vertices.push(v.y);
+    // });
+    if (this.texture != null && this.numVertices !== previousNumVertices) {
+      this.updateTextureMap();
+    }
     if (texture != null) {
       if (texture.mapTo != null) {
         texture.mapTo = getRect(texture.mapTo);
@@ -117,35 +142,35 @@ class VertexGeneric extends VertexObject {
         texture.mapFrom = getRect(texture.mapFrom);
       }
       this.texOptions = joinObjects({}, this.texOptions, texture);
-      this.setupTexture();
+      this.updateTextureMap();
     }
 
-    this.resetBuffer();
+    // this.resetBuffer();
   }
 
-  setupTexture(
-    // textureLocation: string = '',
-    // textureVertexSpace: Rect = new Rect(-1, -1, 2, 2),
-    // textureCoords: Rect = new Rect(0, 0, 1, 1),
-    // textureRepeat: boolean = false,
-  ) {
-    if (this.texOptions.location) {
-      // this.texture = {
-      //   id: textureLocation,
-      //   src: textureLocation,
-      //   type: 'image',
-      //   points: [],
-      //   repeat: textureRepeat,
-      // };
+  // setupTexture(
+  //   // textureLocation: string = '',
+  //   // textureVertexSpace: Rect = new Rect(-1, -1, 2, 2),
+  //   // textureCoords: Rect = new Rect(0, 0, 1, 1),
+  //   // textureRepeat: boolean = false,
+  // ) {
+  //   if (this.texOptions.location) {
+  //     // this.texture = {
+  //     //   id: textureLocation,
+  //     //   src: textureLocation,
+  //     //   type: 'image',
+  //     //   points: [],
+  //     //   repeat: textureRepeat,
+  //     // };
 
-      this.createTextureMap(
-        this.texOptions.mapTo.left, this.texOptions.mapTo.right,
-        this.texOptions.mapTo.bottom, this.texOptions.mapTo.top,
-        this.texOptions.mapFrom.left, this.texOptions.mapFrom.right,
-        this.texOptions.mapFrom.bottom, this.texOptions.mapFrom.top,
-      );
-    }
-  }
+  //     this.createTextureMap(
+  //       this.texOptions.mapTo.left, this.texOptions.mapTo.right,
+  //       this.texOptions.mapTo.bottom, this.texOptions.mapTo.top,
+  //       this.texOptions.mapFrom.left, this.texOptions.mapFrom.right,
+  //       this.texOptions.mapFrom.bottom, this.texOptions.mapFrom.top,
+  //     );
+  //   }
+  // }
 
   // setupPoints(
   // ) {

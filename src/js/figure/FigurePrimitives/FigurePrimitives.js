@@ -13,6 +13,7 @@ import type {
   TypeParsableBorder, TypeParsableBuffer,
 } from '../../tools/g2';
 import { setHTML } from '../../tools/htmlGenerator';
+// eslint-disable-next-line import/no-cycle
 import {
   FigureElementPrimitive, FigureElement,
 } from '../Element';
@@ -20,7 +21,11 @@ import WebGLInstance from '../webgl/webgl';
 import DrawContext2D from '../DrawContext2D';
 import * as tools from '../../tools/math';
 import { generateUniqueId, joinObjects } from '../../tools/tools';
+// eslint-disable-next-line import/no-cycle
 import DrawingObject from '../DrawingObjects/DrawingObject';
+// eslint-disable-next-line import/no-cycle
+import GLObject from '../DrawingObjects/GLObject/GLObject';
+import type { TypeGLUniform, TypeGLBufferType, TypeGLBufferUsage } from '../DrawingObjects/GLObject/GLObject';
 // import VertexObject from '../DrawingObjects/VertexObject/VertexObject';
 // import {
 //   PolyLine, PolyLineCorners,
@@ -34,6 +39,7 @@ import DrawingObject from '../DrawingObjects/DrawingObject';
 // import DashedLine from '../FigureElements/DashedLine';
 // import RectangleFilled from '../FigureElements/RectangleFilled';
 // import Rectangle from '../FigureElements/Rectangle';
+// eslint-disable-next-line import/no-cycle
 import Generic from './Generic';
 // import Box from '../FigureElements/Box';
 // import type { TypeRectangleFilledReference } from '../FigureElements/RectangleFilled';
@@ -41,25 +47,31 @@ import Generic from './Generic';
 // import Arrow from '../FigureElements/Arrow';
 // import { AxisProperties } from '../FigureElements/Plot/AxisProperties';
 // import Axis from '../FigureElements/Plot/Axis';
+// eslint-disable-next-line import/no-cycle
 import Text from './Text';
 // import {
 //   FigureText, FigureFont, TextObject, LinesObject,
 // } from '../DrawingObjects/TextObject/TextObject';
-
+// eslint-disable-next-line import/no-cycle
 import {
   TextObject, TextLineObject, TextLinesObject,
 } from '../DrawingObjects/TextObject/TextObject';
+// eslint-disable-next-line import/no-cycle
 import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
 import type { OBJ_SpaceTransforms } from '../Figure';
+// eslint-disable-next-line import/no-cycle
 import { makePolyLine, makePolyLineCorners, makeFastPolyLine } from '../geometries/lines/lines';
 import { getPolygonPoints, getTrisFillPolygon } from '../geometries/polygon/polygon';
 import { rectangleBorderToTris, getRectangleBorder } from '../geometries/rectangle';
+// eslint-disable-next-line import/no-cycle
 import { ellipseBorderToTris, getEllipseBorder } from '../geometries/ellipse';
+// eslint-disable-next-line import/no-cycle
 import { arcBorderToTris, getArcBorder } from '../geometries/arc';
 import type { OBJ_Ellipse_Defined } from '../geometries/ellipse';
 import type { OBJ_Arc_Defined } from '../geometries/arc';
 import { getTriangleBorder, getTriangleDirection } from '../geometries/triangle';
 import type { OBJ_Triangle_Defined } from '../geometries/triangle';
+// eslint-disable-next-line import/no-cycle
 import { getArrow, defaultArrowOptions, getArrowTris } from '../geometries/arrow';
 import type { OBJ_LineArrows, TypeArrowHead } from '../geometries/arrow';
 import getLine from '../geometries/line';
@@ -277,6 +289,82 @@ export type OBJ_PulseScale = {
   duration?: number,
   scale?: number,
   frequency?: number,
+};
+
+/**
+ * GL buffer.
+ *
+ * @property {string} name name of attribute in shader
+ * @property {Array<number>} data array of values
+ * @property {number} [size] number of values per attribute (`2`)
+ * @property {TypeGLBufferType} [type] (`'FLOAT'`)
+ * @property {boolean} [normalize] (`false`)
+ * @property {number} [stride] (`0`)
+ * @property {number} [offset] (`0`)
+ * @property {TypeGLBufferUsage} [usage] (`'STATIC'`)
+ */
+export type OBJ_GLBuffer = {
+  name: string,
+  data: Array<number>,
+  size?: number,
+  type?: TypeGLBufferType,
+  normalize?: boolean,
+  stride?: number,
+  offset?: number,
+  usage?: TypeGLBufferUsage,
+};
+
+/**
+ * GL vertex - associated with attribute 'a_position' in shader.
+ *
+ * Assumes buffer parameters of:
+ * - name: 'a_position'
+ * - size: 2
+ * - type: 'FLOAT'
+ * - normalize: false
+ * - stride: 0
+ * - offset: 0
+ *
+ * @property {Array<number>} data array of values
+ * @property {TypeGLBufferUsage} [usage] (`'STATIC'`)
+ */
+export type OBJ_GLVertexBuffer = {
+  data: Array<number>,
+  usage: TypeGLBufferUsage,
+};
+
+/**
+ * GL Uniform
+ * @property {string} name name of uniform in shader
+ * @property {1 | 2 | 3 | 4} length
+ * @property {TypeGLUniform} type
+ */
+export type OBJ_GLUniform = {
+  name: string,
+  length: 1 | 2 | 3 | 4,
+  type: TypeGLUniform,
+};
+
+/**
+ *
+ * @property {string} [name]
+ * @property {string} [vertexShader]
+ * @property {string} [fragShader]
+ * @property {OBJ_Texture} [texture]
+ * @property {OBJ_GLVertexBuffer} [vertices]
+ * @property {Array<OBJ_GLBuffer>} [buffers]
+ * @property {Array<OBJ_GLUniform>} [uniforms]
+ * @property {'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'} [glPrimitive]
+ */
+export type OBJ_GLPrimitive = {
+  name?: string,
+  vertexShader?: string,
+  fragShader?: string,
+  texture?: OBJ_Texture,
+  vertices?: OBJ_GLVertexBuffer,
+  buffers?: Array<OBJ_GLBuffer>,
+  uniforms?: Array<OBJ_GLUniform>,
+  glPrimitive?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
 };
 
 /* eslint-disable max-len */
@@ -2235,6 +2323,131 @@ export default class FigurePrimitives {
    * {@link FigureElementPrimitive} that draws a generic shape.
    * @see {@link OBJ_Generic} for options and examples.
    */
+  gl(...optionsIn: Array<OBJ_GLPrimitive>) {
+    const defaultOptions = {
+      name: generateUniqueId('primitive_'),
+      color: this.defaultColor,
+      vertexShader: 'simple',
+      fragShader: 'simple',
+      texture: {
+        src: '',
+        mapTo: new Rect(-1, -1, 2, 2),
+        mapFrom: new Rect(0, 0, 1, 1),
+        repeat: false,
+        onLoad: this.animateNextFrame,
+      },
+      glPrimitive: 'TRIANGLES',
+    };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    options.transform = getTransform(options.transform);
+    if (options.position != null) {
+      options.position = getPoint(options.position);
+      options.transform.updateTranslation(options.position);
+    }
+
+    const glObject = new GLObject(
+      this.webgl[0],
+      options.vertexShader,
+      options.fragShader,
+    );
+    glObject.setPrimitive(options.glPrimitive);
+    if (options.vertices != null) {
+      // const size = options.vertices.size != null ? options.vertices.size : 2;
+      glObject.addVertices(options.vertices.data, options.vertices.usage);
+    }
+    if (options.buffers != null) {
+      options.buffers.forEach((buffer) => {
+        const defaultBuffer = {
+          type: 'FLOAT',
+          normalize: false,
+          stride: 0,
+          offset: 0,
+          usage: 'STATIC',
+          size: 2,
+        };
+        const b = joinObjects({}, defaultBuffer, buffer);
+        glObject.addBuffer(
+          b.name, b.size, b.data, b.type,
+          b.normalize, b.stride, b.offset, b.usageIn,
+        );
+      });
+      if (options.uniforms != null) {
+        options.uniforms.forEach((uniform) => {
+          const defaultUniform = {
+            type: 'FLOAT',
+            length: 1,
+          };
+          const u = joinObjects({}, defaultUniform, uniform);
+          glObject.addUniform(
+            u.name, u.length, u.type,
+          );
+        });
+      }
+      if (options.texture.src !== '') {
+        const t = options.texture;
+        glObject.addTexture(
+          t.src, t.mapTo, t.mapFrom, t.repeat,
+        );
+      }
+    }
+    const element = new FigureElementPrimitive(
+      glObject, options.transform, options.color, this.limits, null, options.name,
+    );
+    element.custom.updateBuffer = element.drawingObject.updateBuffer.bind(element.drawingObject);
+    element.custom.updateVertices =
+      element.drawingObject.updateVertices.bind(element.drawingObject);
+    element.custom.updateUniform = element.drawingObject.updateUniform.bind(element.drawingObject);
+    element.custom.getUniform = element.drawingObject.getUniform.bind(element.drawingObject);
+    element.dimColor = this.defaultDimColor.slice();
+
+    // element.custom.updateGeneric = function update(updateOptions: {
+    //   points?: Array<TypeParsablePoint>,
+    //   drawBorder?: TypeParsableBorder,
+    //   drawBorderBuffer?: TypeParsableBorder,
+    //   border?: TypeParsableBorder | 'draw' | 'buffer' | 'rect' | number,
+    //   touchBorder?: TypeParsableBorder | 'draw' | 'border' | 'rect' | number | 'buffer',
+    //   holeBorder?: TypeParsableBorder,
+    //   copy?: Array<CPY_Step>,
+    //   drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
+    // }) {
+    //   const o = updateOptions;
+    //   if (o.copy != null && !Array.isArray(o.copy)) {
+    //     o.copy = [o.copy];
+    //   }
+    //   if (o.points != null) { // $FlowFixMe
+    //     o.points = getPoints(o.points);
+    //   }
+    //   if (o.drawBorder != null) { // $FlowFixMe
+    //     element.drawBorder = getBorder(o.drawBorder);
+    //   } else if (o.points != null) {
+    //     element.drawBorder = [o.points];
+    //   }
+    //   if (o.drawBorderBuffer != null) { // $FlowFixMe
+    //     element.drawBorderBuffer = getBorder(o.drawBorderBuffer);
+    //   } else element.drawBorderBuffer = element.drawBorder;
+    //   if (o.border != null) { // $FlowFixMe
+    //     element.border = getBorder(o.border);
+    //   }
+    //   if (o.touchBorder != null) { // $FlowFixMe
+    //     element.touchBorder = getBorder(o.touchBorder);
+    //   }
+    //   if (o.holeBorder != null) { // $FlowFixMe
+    //     element.holeBorder = getBorder(o.holeBorder);
+    //   }
+    //   element.drawingObject.change(o);
+    // };
+    // element.custom.updateGeneric(options);
+    // element.custom.updatePoints = element.custom.updateGeneric;
+    element.timeKeeper = this.timeKeeper;
+    element.recorder = this.recorder;
+    setupPulse(element, options);
+    return element;
+  }
+
+  /**
+   * {@link FigureElementPrimitive} that draws a generic shape.
+   * @see {@link OBJ_Generic} for options and examples.
+   */
   generic(...optionsIn: Array<OBJ_Generic>) {
     const defaultOptions = {
       name: generateUniqueId('primitive_'),
@@ -2256,7 +2469,7 @@ export default class FigurePrimitives {
     }
 
     const element = Generic(
-      this.webgl,
+      this.webgl[0],
       options.color,
       options.transform,
       this.limits,
@@ -3104,7 +3317,7 @@ export default class FigurePrimitives {
 
   textGL(options: Object) {
     return Text(
-      this.webgl,
+      this.webgl[0],
       this.limits,
       options,
     );

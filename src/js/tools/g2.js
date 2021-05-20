@@ -2464,6 +2464,10 @@ class Rotation {
     return m2.rotationMatrix(this.r);
   }
 
+  transform(m: Array<number>) {
+    return m2.rotate(m, this.r);
+  }
+
   /**
    * Subtract `rotToSub` from this rotation
    * @return {Rotation}
@@ -2590,6 +2594,10 @@ class Translation extends Point {
    */
   matrix(): Array<number> {
     return m2.translationMatrix(this.x, this.y);
+  }
+
+  transform(m: Array<number>) {
+    return m2.translate(m, this.x, this.y);
   }
 
   /**
@@ -2753,6 +2761,10 @@ class Scale extends Point {
     return m2.scaleMatrix(this.x, this.y);
   }
 
+  transform(m: Array<number>) {
+    return m2.scale(m, this.x, this.y);
+  }
+
   /**
    * Subtract `scaleToSub` from this scale
    * @return {Scale}
@@ -2841,6 +2853,31 @@ export type TypeTransformValue = number | Array<number> | {
   rotation?: number,
 };
 
+function isTransformArrayZero(
+  transformValue: TypeTransformValue,
+  threshold: number = 0.00001,
+) {
+  const isZero = (v: number) => (v > -threshold && v < threshold);
+  const isArrayZero = (values: Array<number>) => {
+    for (let i = 0; i < values.length; i += 1) {
+      if (!isZero(values[i])) {
+        return false;
+      }
+    }
+    return true;
+  };
+  if (typeof transformValue === 'number') {
+    return isZero(transformValue);
+  }
+  if (Array.isArray(transformValue)) {
+    return isArrayZero(transformValue);
+  }
+  // $FlowFixMe
+  const values = Object.values(transformValue).filter(v => v != null);
+  // $FlowFixMe
+  return isArrayZero(values);
+}
+
 /**
  * Object that represents a chain of {@link Rotation}, {@link Translation} and
  * {@link Scale} transforms
@@ -2858,6 +2895,8 @@ class Transform {
   name: string;
   _type: 'transform';
   custom: ?Object;
+
+  orderType: ['t', 'r', 's', 't']
 
   /**
    * @param {Array<Translation | Rotation | Scale> | string} chainOrName chain
@@ -3021,6 +3060,7 @@ class Transform {
     for (let i = orderEndToUse; i >= orderStart; i -= 1) {
       if (!this.order[i].isUnity()) {
         m = m2.mul(m, this.order[i].matrix());
+        // m = this.order[i].transform(m);
       }
     }
     return m;
@@ -3418,6 +3458,13 @@ class Transform {
   transform(initialTransform: Transform) {
     const t = new Transform([], this.name);
     t.order = initialTransform.order.concat(this.order);
+    // t.order = Array(initialTransform.order.length + this.order.length);
+    // for (let i = 0; i < initialTransform.order.length; i += 1) {
+    //   t.order[i] = initialTransform.order[i];
+    // }
+    // for (let i = 0; i < this.order.length; i += 1) {
+    //   t.order[i + initialTransform.order.length] = this.order[i];
+    // }
     t.mat = m2.mul(this.matrix(), initialTransform.matrix());
     return t;
   }
@@ -3609,8 +3656,17 @@ class Transform {
    * Return a duplicate transform.
    */
   _dup(): Transform {
-    const t = new Transform(this.order, this.name);
+    const t = new Transform();
+    t.name = this.name;
+    t.order = this.order.map(o => o._dup());
+    t.mat = this.mat.slice();
     t.index = this.index;
+    // // this.order = order.slice();
+    // this.index = this.order.length;
+    // this._type = 'transform';
+    // this.calcAndSetMatrix();
+    // const t = new Transform(this.order, this.name);
+    // t.index = this.index;
     return t;
   }
 
@@ -3622,7 +3678,7 @@ class Transform {
     bounceLossIn: TypeTransformValue,
     zeroVelocityThresholdIn: TypeTransformValue,
     precision: number = 8,
-  ): { velocity: Transform, transform: Transform, duration: number } {
+  ): { velocity: Transform, transform: Transform, duration: null | number } {
     const deceleration = transformValueToArray(decelerationIn, this);
     const bounceLoss = transformValueToArray(bounceLossIn, this);
     const zeroVelocityThreshold = transformValueToArray(zeroVelocityThresholdIn, this);
@@ -3652,7 +3708,7 @@ class Transform {
     bounceLoss: TypeTransformValue,
     zeroVelocityThreshold: TypeTransformValue,
     precision: number = 8,
-  ): { velocity: Transform, transform: Transform, duration: number } {
+  ): { velocity: Transform, transform: Transform, duration: null | number } {
     return this.decelerate(
       velocity, deceleration, null, bounds, bounceLoss, zeroVelocityThreshold,
       precision,
@@ -4350,6 +4406,11 @@ class Bounds {
   }
 
   // eslint-disable-next-line class-methods-use-this
+  isDefined() {
+    return false;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
   // clipVelocity(velocity: TypeParsablePoint | number) {
   //   if (typeof velocity === 'number') {
   //     return velocity;
@@ -4389,6 +4450,13 @@ class RangeBounds extends Bounds {
       max: options.max,
     };
     super(boundary, options.bounds, options.precision);
+  }
+
+  isDefined() {
+    if (this.boundary.min == null && this.boundary.max == null) {
+      return false;
+    }
+    return true;
   }
 
   _dup() {
@@ -4585,6 +4653,18 @@ class RectBounds extends Bounds {
       bottom: options.bottom,
     };
     super(boundary, options.bounds, options.precision);
+  }
+
+  isDefined() {
+    if (
+      this.boundary.left == null
+      && this.boundary.right == null
+      && this.boundary.top == null
+      && this.boundary.bottom == null
+    ) {
+      return false;
+    }
+    return true;
   }
 
   _dup() {
@@ -5048,6 +5128,11 @@ class LineBounds extends Bounds {
       boundary = new Line(options.p1, options.mag, options.angle, options.ends);
     }
     super(boundary, options.bounds, options.precision);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  isDefined() {
+    return true;
   }
 
   _dup() {
@@ -5656,7 +5741,7 @@ class TransformBounds extends Bounds {
 function deceleratePoint(
   positionIn: Point,
   velocityIn: Point,
-  deceleration: number,
+  decelerationIn: number,
   deltaTimeIn: number | null = null,
   boundsIn: ?Bounds = null,  // ?(Rect | Line) = null,
   bounceLossIn: number = 0,
@@ -5664,7 +5749,7 @@ function deceleratePoint(
   precision: number = 8,
 ): {
   velocity: Point,
-  duration: number,
+  duration: null | number,
   position: Point,
 } {
   let bounds;
@@ -5677,6 +5762,24 @@ function deceleratePoint(
     });
   } else {
     bounds = boundsIn;
+  }
+  if (round(decelerationIn, precision) === 0) {
+    if (bounceLossIn === 0 || bounds == null || !bounds.isDefined()) {
+      if (deltaTimeIn == null) {
+        return {
+          velocity: velocityIn,
+          position: positionIn,
+          duration: null,
+        };
+      }
+      // const { mag, angle } = velocityIn.toPolar();
+      // const distanceTravelled = mag * deltaTimeIn;
+      // return {
+      //   velocity: velocityIn,
+      //   position: polarToRect(distanceTravelled, angle).add(positionIn),
+      //   duration: null,
+      // };
+    }
   }
   // clip velocity to the dimension of interest
   let velocity = velocityIn;    // $FlowFixMe
@@ -5713,6 +5816,7 @@ function deceleratePoint(
 
   let deltaTime = deltaTimeIn;
 
+  const deceleration = Math.max(decelerationIn, 0.0000001);
   if (deltaTime == null || deltaTime > Math.abs(deltaV / deceleration)) {
     deltaTime = Math.abs(deltaV / deceleration);
   }
@@ -5804,6 +5908,13 @@ function deceleratePoint(
       intersectPoint, rectBounceVelocity, deceleration, deltaTimeIn,
       bounds, bounceLossIn, zeroVelocityThreshold, precision,
     );
+    if (newStop.duration == null) {
+      return {
+        duration: null,
+        position: newStop.position,
+        velocity: new Point(0, 0),
+      };
+    }
     return {
       duration: t + newStop.duration,
       position: newStop.position,
@@ -5827,6 +5938,27 @@ function decelerateValue(
   precision: number = 8,
 ) {
   let bounds = boundsIn;
+  if (round(deceleration, precision) === 0) {
+    if (
+      bounceLoss === 0
+      || boundsIn == null
+      || (boundsIn != null && !boundsIn.isDefined())
+    ) {
+      if (deltaTime == null) {
+        return {
+          velocity,
+          value,
+          duration: null,
+        };
+      }
+      // const distanceTravelled = velocity * deltaTime;
+      // return {
+      //   velocity,
+      //   position: value + distanceTravelled,
+      //   duration: null,
+      // };
+    }
+  }
   if (boundsIn != null) {
     // let { min, max } = boundsIn.boundary;
     // if (min == null) {
@@ -5883,6 +6015,13 @@ function decelerateIndependantPoint(
     value.y, velocity.y, deceleration, deltaTime,
     yBounds, bounceLoss, zeroVelocityThreshold, precision,
   );
+  if (xResult.duration == null || yResult.duration == null) {
+    return {
+      duration: null,
+      point: new Point(xResult.value, yResult.value),
+      velocity: new Point(xResult.velocity, yResult.velocity),
+    };
+  }
 
   return {
     duration: Math.max(xResult.duration, yResult.duration),
@@ -5998,7 +6137,8 @@ function decelerateTransform(
       newVTransformation = new Rotation(result.velocity);
     }
     if (deltaTime === null) {
-      if (result.duration > duration) {
+      // $FlowFixMe
+      if (result.duration == null || result.duration > duration) {
         ({ duration } = result);
       }
     }
@@ -6199,4 +6339,5 @@ export {
   getPositionInRect,
   isParsablePoint,
   isParsableTransform,
+  isTransformArrayZero,
 };

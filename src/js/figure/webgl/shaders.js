@@ -2,17 +2,31 @@
 
 const vertex = {
   simple: {
-    source:
+    src:
         'attribute vec2 a_position;'
         + 'uniform mat3 u_matrix;'
         + 'uniform float u_z;'
         + 'void main() {'
           + 'gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, u_z, 1);'
         + '}',
-    varNames: ['a_position', 'u_matrix', 'u_z'],
+    vars: ['a_position', 'u_matrix', 'u_z'],
+  },
+  vertexColor: {
+    src:
+        `
+attribute vec2 a_position;
+attribute vec4 a_col;
+varying vec4 v_col;
+uniform mat3 u_matrix;
+uniform float u_z;
+void main() {
+  gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, u_z, 1);
+  v_col = a_col;
+}`,
+    vars: ['a_position', 'a_col', 'u_matrix', 'u_z'],
   },
   withTexture: {
-    source:
+    src:
         'attribute vec2 a_position;'
         + 'attribute vec2 a_texcoord;'
         + 'uniform mat3 u_matrix;'
@@ -22,23 +36,34 @@ const vertex = {
           + 'gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, u_z, 1);'
           + 'v_texcoord = a_texcoord;'
         + '}',
-    varNames: ['a_position', 'a_texcoord', 'u_matrix', 'u_z'],
+    vars: ['a_position', 'a_texcoord', 'u_matrix', 'u_z'],
   },
 };
 
 const fragment = {
   simple: {
-    source:
+    src:
       'precision mediump float;'
       + 'uniform vec4 u_color;'
       + 'void main() {'
         + 'gl_FragColor = u_color;'
         + 'gl_FragColor.rgb *= gl_FragColor.a;'
       + '}',
-    varNames: ['u_color'],
+    vars: ['u_color'],
+  },
+  vertexColor: {
+    src:
+      'precision mediump float;'
+      + 'uniform vec4 u_color;'
+      + 'varying vec4 v_col;'
+      + 'void main() {'
+        + 'gl_FragColor = v_col;'
+        + 'gl_FragColor.rgb *= gl_FragColor.a;'
+      + '}',
+    vars: ['u_color'],
   },
   withTexture: {
-    source:
+    src:
       'precision mediump float;'
       + 'uniform vec4 u_color;'
       + 'uniform int u_use_texture;'
@@ -52,10 +77,10 @@ const fragment = {
           + 'gl_FragColor.rgb *= gl_FragColor.a;'
         + '}'
       + '}',
-    varNames: ['u_color', 'u_use_texture', 'u_texture'],
+    vars: ['u_color', 'u_use_texture', 'u_texture'],
   },
   text: {
-    source:
+    src:
       'precision mediump float;'
       + 'uniform vec4 u_color;'
       + 'uniform sampler2D u_texture;'
@@ -71,23 +96,54 @@ const fragment = {
         + 'vec4 c = texture2D(u_texture, v_texcoord);'
         + 'gl_FragColor = vec4(c.a * u_color.rgb, c.a * u_color.a);'
       + '}',
-    varNames: ['u_color', 'u_texture'],
+    vars: ['u_color', 'u_texture'],
   },
 };
 
-const getShaders = (vName: string = 'simple', fName: string = 'simple') => {
-  if (Object.hasOwnProperty.call(vertex, vName) && Object.hasOwnProperty.call(fragment, fName)) {
-    return {
-      vertexSource: vertex[vName].source,
-      fragmentSource: fragment[fName].source,
-      varNames: vertex[vName].varNames.concat(fragment[fName].varNames),
-    };
+const getShaders = (
+  vName: string | { src: string, vars: Array<string> } = 'simple',
+  fName: string | { src: string, vars: Array<string> } = 'simple',
+) => {
+  let vertexSource = '';
+  let fragmentSource = '';
+  const vars = [];
+  if (typeof vName === 'string') {
+    if (vertex[vName] == null) {
+      throw new Error(`Built in vertex shader does not exist: ${vName}`);
+    }
+    vertexSource = vertex[vName].src;
+    vars.push(...vertex[vName].vars);
+  } else {
+    vertexSource = vName.src;
+    vars.push(...vName.vars);
+  }
+  if (typeof fName === 'string') {
+    if (fragment[fName] == null) {
+      throw new Error(`Built in fragment shader does not exist: ${fName}`);
+    }
+    fragmentSource = fragment[fName].src;
+    vars.push(...fragment[fName].vars);
+  } else {
+    fragmentSource = fName.src;
+    vars.push(...fName.vars);
   }
   return {
-    vertexSource: '',
-    fragmentSource: '',
-    varNames: [],
+    vertexSource,
+    fragmentSource,
+    vars,
   };
+  // if (Object.hasOwnProperty.call(vertex, vName) && Object.hasOwnProperty.call(fragment, fName)) {
+  //   return {
+  //     vertexSource: vertex[vName].source,
+  //     fragmentSource: fragment[fName].source,
+  //     vars: vertex[vName].vars.concat(fragment[fName].vars),
+  //   };
+  // }
+  // return {
+  //   vertexSource: '',
+  //   fragmentSource: '',
+  //   vars: [],
+  // };
 };
 
 export default getShaders;

@@ -229,14 +229,25 @@ export class SerialAnimationStep extends AnimationStep {
 
   getTotalDuration() {
     let totalDuration = 0;
-    this.steps.forEach((step) => {
+    for (let i = 0; i < this.steps.length; i += 1) {
+      const step = this.steps[i];
+      const stepDuration = step.getTotalDuration();
+      if (stepDuration == null) {
+        return null;
+      }
       totalDuration += step.getTotalDuration();
-    });
+    }
     return totalDuration;
   }
 
   getRemainingTime(now: number) {
+    if (this.state !== 'animating' && this.state !== 'waitingToStart') {
+      return 0;
+    }
     const totalDuration = this.getTotalDuration();
+    if (totalDuration == null) {
+      return null;
+    }
     if (this.startTime == null) {
       if (this.state === 'animating' || this.state === 'waitingToStart') {
         return totalDuration;

@@ -1,7 +1,7 @@
 import makeFigure from '../../../js/__mocks__/makeFigure';
 
-const { shapes } = require('./shapes.js');
-const { updates } = require('./updates.js');
+const { shapes } = require('./shapes');
+const { updates } = require('./updates');
 
 const tests = shapes.map(s => [s.name, s]);
 

@@ -21,7 +21,8 @@ import * as m2 from '../tools/m2';
 import * as math from '../tools/math';
 import HTMLObject from './DrawingObjects/HTMLObject/HTMLObject';
 import DrawingObject from './DrawingObjects/DrawingObject';
-import VertexObject from './DrawingObjects/VertexObject/VertexObject';
+import VertexGeneric from './DrawingObjects/VertexObject/VertexGeneric';
+import GLObject from './DrawingObjects/GLObject/GLObject';
 import { TextObjectBase } from './DrawingObjects/TextObject/TextObject';
 // import type { OBJ_Font } from './DrawingObjects/TextObject/TextObject';
 import {
@@ -128,6 +129,22 @@ export type TypeElementPath = string
                               | FigureElement
                               | Array<TypeElementPath>;
 /* eslint-enable no-use-before-define */
+
+function transformByMatrix(
+  inputTransforms: Array<Array<number>>,
+  copyTransforms: Array<Array<number>>,
+) {
+  if (copyTransforms.length === 0) {
+    return inputTransforms;
+  }
+  const newTransforms = [];
+  for (let i = 0; i < inputTransforms.length; i += 1) {
+    for (let j = 0; j < copyTransforms.length; j += 1) {
+      newTransforms.push(m2.mul(inputTransforms[i], copyTransforms[j]));
+    }
+  }
+  return newTransforms;
+}
 
 const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Transform>) => {
   const newTransforms = [];
@@ -403,6 +420,7 @@ type ElementPulseState = {
 type ElementState = {
   isBeingMoved: boolean,
   isMovingFreely: boolean,
+  isChanging: boolean,
   movement: ElementMovementState,
   isPulsing: boolean,
   pulse: ElementPulseState,
@@ -683,6 +701,8 @@ class FigureElement {
 
   recorder: Recorder;
   timeKeeper: TimeKeeper;
+
+  simple: boolean;
   // scenarioSet: {
   //   quiz1: [
   //     { element: xyz, position: (), scale: (), rotation: (), length: () }
@@ -715,6 +735,7 @@ class FigureElement {
     this.name = name;
     this.uid = (Math.random() * 1e18).toString(36);
     this.isShown = true;
+    this.simple = false;
     this.transform = transform._dup();
     this.dependantTransform = false;
     this.fnMap = new FunctionMap();
@@ -838,6 +859,7 @@ class FigureElement {
     this.state = {
       isBeingMoved: false,
       isMovingFreely: false,
+      isChanging: false,
       movement: {
         previousTime: null,
         previousTransform: this.transform._dup(),
@@ -1282,10 +1304,10 @@ class FigureElement {
     }
 
     if (scenarioAnimation != null) {
-      duration = Math.max(duration, scenarioAnimation.getTotalDuration());
+      duration = Math.max(duration, scenarioAnimation.getTotalDuration() || 0);
     }
     if (pulseAnimation != null) {
-      duration = Math.max(duration, pulseAnimation.getTotalDuration());
+      duration = Math.max(duration, pulseAnimation.getTotalDuration() || 0);
     }
 
     return duration;
@@ -1389,6 +1411,22 @@ class FigureElement {
     }
     // drawTransforms = transformBy(drawTransforms, this.pulseTransforms);
     // drawTransforms = transformBy(drawTransforms, this.frozenPulseTransforms);
+    return drawTransforms;
+  }
+
+  getDrawTransformsMatrix(initialTransforms: Array<Array<number>>) {
+    let drawTransforms = initialTransforms;
+    if (this.copyTransforms.length > 0) {
+      drawTransforms = transformByMatrix(drawTransforms, this.copyTransforms.map(t => t.mat));
+    }
+    if (this.pulseTransforms.length > 0) {
+      drawTransforms = transformByMatrix(drawTransforms, this.pulseTransforms.map(t => t.mat));
+    }
+    if (this.frozenPulseTransforms.length > 0) {
+      drawTransforms = transformByMatrix(
+        drawTransforms, this.frozenPulseTransforms.map(t => t.mat),
+      );
+    }
     return drawTransforms;
   }
 
@@ -1500,7 +1538,7 @@ class FigureElement {
           this.cancelSetTransform = false;
         }
       }
-    } else {
+    } else if (this.move.bounds !== 'none' && this.move.bounds != null) {
       const bounds = this.getMoveBounds(); // $FlowFixMe
       const clip = bounds.clip(transform);
       this.notifications.publish('beforeSetTransform', [clip]);
@@ -1509,8 +1547,13 @@ class FigureElement {
       } else {
         this.cancelSetTransform = false;
       }
+    } else {
+      this.notifications.publish('beforeSetTransform', [transform]);
+      this.transform = transform;
     }
-    this.updateDrawTransforms(this.parentTransform, false);
+    if (this.simple === false) {
+      this.updateDrawTransforms(this.parentTransform, false);
+    }
     if (this.internalSetTransformCallback) {
       this.fnMap.exec(this.internalSetTransformCallback, this.transform);
     }
@@ -1543,6 +1586,10 @@ class FigureElement {
       if (this.state.movement.previousTime == null) {
         this.state.movement.previousTime = now;
         return;
+      }
+      // console.log(this.state.movement.velocity)
+      if (Array.isArray(this.state.movement.velocity)) {
+        this.state.movement.velocity = getTransform(this.state.movement.velocity);
       }
       // If got here, then we are now after the first frame, so calculate
       // the delta time from this frame to the previous
@@ -1779,7 +1826,7 @@ class FigureElement {
   // transform and movement velocity
   decelerate(deltaTime: number | null = null): Object {
     const bounds = this.getMoveBounds();
-
+    // console.log(deltaTime)
     const next = this.transform.decelerate(
       this.state.movement.velocity,
       this.move.freely.deceleration,
@@ -1844,7 +1891,7 @@ class FigureElement {
     const prevTransform = this.transform._dup();
     this.setTransform(newTransform._dup());
     let tBounds;
-    if (this.move.bounds != null) {  // $FlowFixMe
+    if (this.move.bounds != null && this.move.bounds !== 'none') {  // $FlowFixMe
       tBounds = this.move.bounds.getTranslation();
     }
     // In a finite rect bounds, if we calculate the velocity from the clipped
@@ -1925,6 +1972,9 @@ class FigureElement {
     }
     this.state.isMovingFreely = true;
     this.state.movement.previousTime = this.timeKeeper.now() / 1000;
+    if (Array.isArray(this.state.movement.velocity)) {
+      this.state.movement.velocity = getTransform(this.state.movement.velocity);
+    }
     this.state.movement.velocity = this.state.movement.velocity.clipMag(
       this.move.freely.zeroVelocityThreshold,
       this.move.maxVelocity,
@@ -2294,26 +2344,49 @@ class FigureElement {
   }
 
   getNextAnimationFinishTime() {
+    if (this.simple) {
+      if (
+        this.state.isMovingFreely || this.state.isChanging || this.animations.state === 'animating'
+      ) {
+        return 0.1;
+      }
+      return 0;
+    }
     const t1 = this.getRemainingMovingFreelyTime();
+    // if (t1 == null) {
+    //   return null;
+    // }
     const t2 = this.getRemainingPulseTime();
+    // if (t2 == null) {
+    //   return null;
+    // }
     const t3 = this.animations.getNextAnimationFinishTime();
-    let t = null;
-    if (t1 > 0) {
+    // if (t3 == null) {
+    //   return null;
+    // }
+    let t;
+    if (t1 != null && t1 > 0) {
       t = t1;
     }
-    if (t2 > 0) {
-      if (t == null) {
+    if (t2 != null && t2 > 0) {
+      if (t === undefined) {
         t = t2;
       } else if (t2 < t) {
         t = t2;
       }
     }
     if (t3 != null && t3 > 0) {
-      if (t == null) {
+      if (t === undefined) {
         t = t3;
       } else if (t3 < t) {
         t = t3;
       }
+    }
+    if (t === undefined) {
+      if (t1 === null || t2 === null || t3 === null) {
+        return null;
+      }
+      return 0;
     }
     return t;
   }
@@ -2911,6 +2984,9 @@ class FigureElement {
    * @return {boolean} `true` if element is moving
    */
   isMoving(): boolean {
+    if (this.state.isChanging) {
+      return true;
+    }
     if (this.isShown === false) {
       return false;
     }
@@ -3034,7 +3110,7 @@ class FigureElement {
  * Primitive figure element
  *
  * A primitive figure element is one that handles an object (`drawingObject`)
- * that draws to the screen. This object may be a {@link VertexObject}, a
+ * that draws to the screen. This object may be a {@link GLObject}, a
  * {@link TextObject} or a {@link HTMLObject}}.
  *
  * @class
@@ -3294,8 +3370,8 @@ class FigureElementPrimitive extends FigureElement {
 
   setupDraw(now: number = 0) {
     if (this.isShown) {
-      let timer;
-      if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
+      // let timer;
+      // if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
       this.lastDrawTime = now;
       if (this.isRenderedAsImage === true) {
         if (this.willStartAnimating()) {
@@ -3304,29 +3380,33 @@ class FigureElementPrimitive extends FigureElement {
           return;
         }
       } // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m1'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m1'); }
       this.notifications.publish('beforeDraw', [now]);
       if (this.beforeDrawCallback != null) {
         this.fnMap.exec(this.beforeDrawCallback, now);
       } // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('beforeDraw'); }
+      // if (FIGURE1DEBUG) { timer.stamp('beforeDraw'); }
 
-      this.animations.nextFrame(now); // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('animations'); }
-      this.nextMovingFreelyFrame(now);
-
-      if (FIGURE1DEBUG) { // $FlowFixMe
-        timer.stamp('animations'); // $FlowFixMe
-        const deltas = timer.deltas();
-        if (window.figureOneDebug == null) {
-          window.figureOneDebug = { setupDraw: [] };
-        }
-        window.figureOneDebug.setupDraw.push([
-          this.getPath(),
-          deltas[0],
-          deltas.slice(1),
-        ]);
+      if (this.animations.animations.length > 0) {
+        this.animations.nextFrame(now); // $FlowFixMe
       }
+      // if (FIGURE1DEBUG) { timer.stamp('animations'); }
+      if (this.state.isMovingFreely) {
+        this.nextMovingFreelyFrame(now);
+      }
+
+      // if (FIGURE1DEBUG) { // $FlowFixMe
+      //   timer.stamp('animations'); // $FlowFixMe
+      //   const deltas = timer.deltas();
+      //   if (window.figureOneDebug == null) {
+      //     window.figureOneDebug = { setupDraw: [] };
+      //   }
+      //   window.figureOneDebug.setupDraw.push([
+      //     this.getPath(),
+      //     deltas[0],
+      //     deltas.slice(1),
+      //   ]);
+      // }
     }
   }
 
@@ -3334,15 +3414,15 @@ class FigureElementPrimitive extends FigureElement {
     now: number,
     parentTransform: Array<Transform> = [new Transform()],
     parentOpacity: number = 1,
-    canvasIndex: number = 0,
+    // canvasIndex: number = 0,
   ) {
     if (this.isShown) {
-      let timer;
-      if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
+      // let timer;
+      // if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
       // if (FIGURE1DEBUG) { debugTimes.push([performance.now(), '']); }
       let pointCount = -1;
-      if (this.drawingObject instanceof VertexObject) {
-        pointCount = this.drawingObject.numPoints;
+      if (this.drawingObject instanceof VertexGeneric) {
+        pointCount = this.drawingObject.numVertices;
         if (this.angleToDraw !== -1) {
           pointCount = this.drawingObject.getPointCountForAngle(this.angleToDraw);
         }
@@ -3352,20 +3432,26 @@ class FigureElementPrimitive extends FigureElement {
         if (this.pointsToDraw !== -1) {
           pointCount = this.pointsToDraw;
         }
+      } else if (this.drawingObject instanceof GLObject) {
+        pointCount = this.drawingObject.numVertices;
       } else {
         pointCount = 1;
       } // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m1'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m1'); }
 
-      const colorToUse = [...this.color.slice(0, 3), this.color[3] * this.opacity * parentOpacity];
+      const colorToUse = [
+        this.color[0], this.color[1], this.color[2], this.color[3] * this.opacity * parentOpacity,
+      ];
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawOpacity = colorToUse[3];
-      const transform = this.getTransform()._dup();
+      // const transform = this.getTransform()._dup();
+      const transform = this.getTransform();
+      // const transform = this.transform._dup();
       const newTransforms = transformBy(parentTransform, [transform]);
       // eslint-disable-next-line prefer-destructuring
       this.parentTransform = parentTransform;
       // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m2'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m2'); }
 
       this.lastDrawElementTransformPosition = {
         parentCount: parentTransform[0].order.length,
@@ -3373,48 +3459,48 @@ class FigureElementPrimitive extends FigureElement {
       };
 
       this.pulseTransforms = this.getPulseTransforms(now); // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m3'); }
-
+      // if (FIGURE1DEBUG) { timer.stamp('m3'); }
       this.drawTransforms = this.getDrawTransforms(newTransforms); // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m4'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m4'); }
+      // this.drawTransforms = newTransforms;
 
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawTransform = newTransforms[0];
       // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m5'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m5'); }
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawPulseTransform = this.drawTransforms[0];
       if (pointCount > 0) {
         this.drawTransforms.forEach((t) => {
           this.drawingObject.drawWithTransformMatrix(
-            t.matrix(), colorToUse, canvasIndex, pointCount,
+            t.matrix(), colorToUse, pointCount,
           );
         });
       }  // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m6'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m6'); }
 
-      if (this.unrenderNextDraw) {
-        this.clearRender();
-        this.unrenderNextDraw = false;
-      }
-      if (this.renderedOnNextDraw) {
-        this.isRenderedAsImage = true;
-        this.renderedOnNextDraw = false;
-      }
-      this.notifications.publish('afterDraw', [now]);
-      if (this.afterDrawCallback != null) {
-        this.fnMap.exec(this.afterDrawCallback, now);
-      }
+      // if (this.unrenderNextDraw) {
+      //   this.clearRender();
+      //   this.unrenderNextDraw = false;
+      // }
+      // if (this.renderedOnNextDraw) {
+      //   this.isRenderedAsImage = true;
+      //   this.renderedOnNextDraw = false;
+      // }
+      // this.notifications.publish('afterDraw', [now]);
+      // if (this.afterDrawCallback != null) {
+      //   this.fnMap.exec(this.afterDrawCallback, now);
+      // }
 
-      if (FIGURE1DEBUG) { // $FlowFixMe
-        timer.stamp('m7'); // $FlowFixMe
-        const deltas = timer.deltas();
-        window.figureOneDebug.draw.push([
-          this.getPath(),
-          deltas[0],
-          deltas.slice(1),
-        ]);
-      }
+      // if (FIGURE1DEBUG) { // $FlowFixMe
+      //   timer.stamp('m7'); // $FlowFixMe
+      //   const deltas = timer.deltas();
+      //   window.figureOneDebug.draw.push([
+      //     this.getPath(),
+      //     deltas[0],
+      //     deltas.slice(1),
+      //   ]);
+      // }
     }
   }
 
@@ -3449,7 +3535,7 @@ class FigureElementPrimitive extends FigureElement {
         yMulToUse = yMultiplier;
       }
     }
-    if (this.drawingObject instanceof VertexObject) {
+    if (this.drawingObject instanceof VertexGeneric) {
       for (let b = 0; b < this.drawingObject.border.length; b += 1) {
         const border = this.drawingObject.border[b];
         for (let i = 0; i < border.length; i += 1) {
@@ -3919,6 +4005,7 @@ class FigureElementCollection extends FigureElement {
       polygon: shapes.polygon.bind(shapes),
       rectangle: shapes.rectangle.bind(shapes),
       ellipse: shapes.ellipse.bind(shapes),
+      gl: shapes.gl.bind(shapes),
       arc: shapes.arc.bind(shapes),
       triangle: shapes.triangle.bind(shapes),
       generic: shapes.generic.bind(shapes),
@@ -4044,8 +4131,8 @@ class FigureElementCollection extends FigureElement {
     canvasIndex: number = 0,
   ) {
     if (this.isShown) {
-      let timer;
-      if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
+      // let timer;
+      // if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
 
       this.lastDrawElementTransformPosition = {
         parentCount: parentTransform[0].order.length,
@@ -4054,38 +4141,39 @@ class FigureElementCollection extends FigureElement {
       const transform = this.getTransform();
       const newTransforms = transformBy(parentTransform, [transform]);
       // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m1'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m1'); }
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawTransform = newTransforms[0];
       this.parentTransform = parentTransform;
       // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m2'); }
+
+      // if (FIGURE1DEBUG) { timer.stamp('m2'); }
       this.pulseTransforms = this.getPulseTransforms(now); // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m3'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m3'); }
       this.drawTransforms = this.getDrawTransforms(newTransforms); // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m4'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m4'); }
 
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawPulseTransform = this.drawTransforms[0];
 
       const opacityToUse = this.color[3] * this.opacity * parentOpacity;
       this.lastDrawOpacity = opacityToUse; // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m5'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m5'); }
 
-      let drawTimer;
-      if (FIGURE1DEBUG) { drawTimer = new PerformanceTimer(); }
+      // let drawTimer;
+      // if (FIGURE1DEBUG) { drawTimer = new PerformanceTimer(); }
       for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
         this.elements[this.drawOrder[i]].draw(
           now, this.drawTransforms, opacityToUse, canvasIndex,
         ); // $FlowFixMe
-        if (FIGURE1DEBUG) { drawTimer.stamp(this.elements[this.drawOrder[i]].name); }
+        // if (FIGURE1DEBUG) { drawTimer.stamp(this.elements[this.drawOrder[i]].name); }
       } // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m6'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m6'); }
       if (this.unrenderNextDraw) {
         this.clearRender();
         this.unrenderNextDraw = false;
       } // $FlowFixMe
-      if (FIGURE1DEBUG) { timer.stamp('m7'); }
+      // if (FIGURE1DEBUG) { timer.stamp('m7'); }
       if (this.renderedOnNextDraw) {
         this.isRenderedAsImage = true;
         this.renderedOnNextDraw = false;
@@ -4093,18 +4181,18 @@ class FigureElementCollection extends FigureElement {
       if (this.afterDrawCallback != null) {
         this.fnMap.exec(this.afterDrawCallback, now);
       }
-      if (FIGURE1DEBUG) { // $FlowFixMe
-        timer.stamp('m8'); // $FlowFixMe
-        const deltas = timer.deltas(); // $FlowFixMe
-        const drawDeltas = drawTimer.deltas();
-        window.figureOneDebug.draw.push([
-          '>>',
-          this.getPath(),
-          deltas[0],
-          deltas.slice(1),
-          drawDeltas,
-        ]);
-      }
+      // if (FIGURE1DEBUG) { // $FlowFixMe
+      //   timer.stamp('m8'); // $FlowFixMe
+      //   const deltas = timer.deltas(); // $FlowFixMe
+      //   const drawDeltas = drawTimer.deltas();
+      //   window.figureOneDebug.draw.push([
+      //     '>>',
+      //     this.getPath(),
+      //     deltas[0],
+      //     deltas.slice(1),
+      //     drawDeltas,
+      //   ]);
+      // }
     }
   }
 
@@ -4587,6 +4675,7 @@ class FigureElementCollection extends FigureElement {
       matrix = this.spaceTransformMatrix('draw', space);
     }
     const borderPoints = this.getBorderPoints(border, children, shownOnly);
+    // $FlowFixMe
     return borderPoints.map(b => b.map(p => getPoint(p).transformBy(matrix)));
   }
 
@@ -4923,24 +5012,43 @@ class FigureElementCollection extends FigureElement {
   }
 
   getNextAnimationFinishTime() {
-    // const elements = this.getAllElements();
-    let remainingTime = super.getNextAnimationFinishTime();
-    for (let i = 0; i < this.drawOrder.length; i += 1) {
-      const element = this.elements[this.drawOrder[i]];
-      const duration = element.getNextAnimationFinishTime();
+    if (this.simple) {
       if (
-        (remainingTime == null && duration != null && duration > 0)
-        || (
-          remainingTime != null
-          && duration != null
-          && duration < remainingTime
-          && duration > 0
-        )
+        this.state.isMovingFreely || this.state.isChanging || this.animations.state === 'animating'
       ) {
-        remainingTime = duration;
+        return 0.1;
+      }
+      return 0;
+    }
+    // const elements = this.getAllElements();
+    let minRemainingTime = null;
+    const thisRemainingTime = super.getNextAnimationFinishTime();
+    let isNull = false;
+    if (thisRemainingTime === null) {
+      isNull = true;
+    } else if (thisRemainingTime > 0) {
+      minRemainingTime = thisRemainingTime;
+    }
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      if (!this.elements[this.drawOrder[i]].simple) {
+        const element = this.elements[this.drawOrder[i]];
+        const duration = element.getNextAnimationFinishTime();
+        if (duration === null) {
+          isNull = true;
+        } else if (duration > 0 && minRemainingTime == null) {
+          minRemainingTime = duration;
+        } else if (duration > 0 && duration < minRemainingTime) {
+          minRemainingTime = duration;
+        }
       }
     }
-    return remainingTime;
+    if (minRemainingTime == null) {
+      if (isNull) {
+        return null;
+      }
+      return 0;
+    }
+    return minRemainingTime;
   }
 
   getRemainingAnimationTime(
@@ -4948,12 +5056,16 @@ class FigureElementCollection extends FigureElement {
   ) {
     const elements = this.getAllElements();
     let remainingTime = super.getRemainingAnimationTime(animationNames);
-    elements.forEach((element) => {
+    for (let i = 0; i < elements.length; i += 1) {
+      const element = elements[i];
       const duration = element.animations.getRemainingTime(animationNames);
+      if (duration == null) {
+        return null;
+      }
       if (duration > remainingTime) {
         remainingTime = duration;
       }
-    });
+    }
     return remainingTime;
   }
 
