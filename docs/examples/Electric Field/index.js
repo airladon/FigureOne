@@ -486,8 +486,6 @@ const cycle = [
   singleCharge.bind(this, 1),
   singleCharge.bind(this, -1, 2),
   twoCharges.bind(this, -1, 1),
-  capacitor.bind(this, -1, 0.15),
-  circle.bind(this, 2),
   twoCharges.bind(this, 1, 1, 2),
   line.bind(this),
   bipolarLine.bind(this),
