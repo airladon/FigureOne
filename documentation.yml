@@ -153,6 +153,7 @@ toc:
   - threePointAngleMin
   - clipAngle
   - name: Shaders
+    file: ./docs/api/tutorials/shaders/shaders.md
   - OBJ_GLPrimitive
   - OBJ_GLBuffer
   - OBJ_GLVertexBuffer
@@ -177,6 +178,7 @@ toc:
   - ElementPulseState
   - ElementState
   - DrawingObject
+  - GLObject
   - FigurePrimitives
   - TypeElementPath
   - TimeKeeper
