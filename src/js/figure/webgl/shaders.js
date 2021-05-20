@@ -38,6 +38,46 @@ void main() {
         + '}',
     vars: ['a_position', 'a_texcoord', 'u_matrix', 'u_z'],
   },
+  morph4: {
+    src: `
+attribute vec2 a_pos0;
+attribute vec2 a_pos1;
+attribute vec2 a_pos2;
+attribute vec2 a_pos3;
+uniform mat3 u_matrix;
+uniform float u_percent;
+uniform int u_from;
+uniform int u_to;
+
+void main() {
+  vec2 fromPos = a_pos0;
+  vec2 toPos = a_pos1;
+  vec2 positions[4];
+
+  positions[0] = a_pos0;
+  positions[1] = a_pos1;
+  positions[2] = a_pos2;
+  positions[3] = a_pos3;
+
+  for (int i = 0; i < 4; i++) {
+    if (u_from == i) {
+      fromPos = positions[i];
+      break;
+    }
+  }
+  for (int i = 0; i < 4; i++) {
+    if (u_to == i) {
+      toPos = positions[i];
+      break;
+    }
+  }
+
+  vec2 newPosition = (toPos - fromPos) * u_percent + fromPos;
+  gl_Position = vec4((u_matrix * vec3(newPosition.xy, 1)).xy, 0, 1);
+}
+`,
+    vars: ['a_pos0', 'a_pos1', 'a_pos2', 'a_pos3', 'u_matrix', 'u_percent', 'u_from', 'u_to'],
+  },
 };
 
 const fragment = {

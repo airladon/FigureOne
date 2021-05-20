@@ -368,6 +368,11 @@ export type OBJ_GLPrimitive = {
   glPrimitive?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
 };
 
+export type OBJ_Morph = {
+  name?: string,
+  pointArrays: Array<Array<number>>,
+  color: TypeColor | Array<Array<TypeColor>>,
+}
 /* eslint-disable max-len */
 /**
  * ![](./apiassets/generic.png)
@@ -2401,44 +2406,80 @@ export default class FigurePrimitives {
     element.custom.getUniform = element.drawingObject.getUniform.bind(element.drawingObject);
     element.dimColor = this.defaultDimColor.slice();
 
-    // element.custom.updateGeneric = function update(updateOptions: {
-    //   points?: Array<TypeParsablePoint>,
-    //   drawBorder?: TypeParsableBorder,
-    //   drawBorderBuffer?: TypeParsableBorder,
-    //   border?: TypeParsableBorder | 'draw' | 'buffer' | 'rect' | number,
-    //   touchBorder?: TypeParsableBorder | 'draw' | 'border' | 'rect' | number | 'buffer',
-    //   holeBorder?: TypeParsableBorder,
-    //   copy?: Array<CPY_Step>,
-    //   drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
-    // }) {
-    //   const o = updateOptions;
-    //   if (o.copy != null && !Array.isArray(o.copy)) {
-    //     o.copy = [o.copy];
-    //   }
-    //   if (o.points != null) { // $FlowFixMe
-    //     o.points = getPoints(o.points);
-    //   }
-    //   if (o.drawBorder != null) { // $FlowFixMe
-    //     element.drawBorder = getBorder(o.drawBorder);
-    //   } else if (o.points != null) {
-    //     element.drawBorder = [o.points];
-    //   }
-    //   if (o.drawBorderBuffer != null) { // $FlowFixMe
-    //     element.drawBorderBuffer = getBorder(o.drawBorderBuffer);
-    //   } else element.drawBorderBuffer = element.drawBorder;
-    //   if (o.border != null) { // $FlowFixMe
-    //     element.border = getBorder(o.border);
-    //   }
-    //   if (o.touchBorder != null) { // $FlowFixMe
-    //     element.touchBorder = getBorder(o.touchBorder);
-    //   }
-    //   if (o.holeBorder != null) { // $FlowFixMe
-    //     element.holeBorder = getBorder(o.holeBorder);
-    //   }
-    //   element.drawingObject.change(o);
-    // };
-    // element.custom.updateGeneric(options);
-    // element.custom.updatePoints = element.custom.updateGeneric;
+    element.timeKeeper = this.timeKeeper;
+    element.recorder = this.recorder;
+    setupPulse(element, options);
+    return element;
+  }
+
+  /**
+   * {@link FigureElementPrimitive} that draws a generic shape.
+   * @see {@link OBJ_Generic} for options and examples.
+   */
+  morph(...optionsIn: Array<OBJ_Morph>) {
+    const defaultOptions = {
+      name: generateUniqueId('primitive_'),
+      color: this.defaultColor,
+      vertexShader: 'morph4',
+      fragShader: 'simple',
+      points: {},
+      glPrimitive: 'TRIANGLES',
+    };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    options.transform = getTransform(options.transform);
+    if (options.position != null) {
+      options.position = getPoint(options.position);
+      options.transform.updateTranslation(options.position);
+    }
+
+    const glObject = new GLObject(
+      this.webgl[0],
+      options.vertexShader,
+      options.fragShader,
+    );
+    glObject.setPrimitive(options.glPrimitive);
+
+    const shapeNameMap = {};
+    Object.keys(options.points).forEach((shapeName, index) => {
+      const points = options.points[shapeName];
+      const attribute = `a_pos${index}`;
+      shapeNameMap[shapeName] = index;
+      glObject.numVertices = options.points[shapeName].length / 2;
+      const defaultBuffer = {
+        type: 'FLOAT',
+        normalize: false,
+        stride: 0,
+        offset: 0,
+        usage: 'STATIC',
+        size: 2,
+      };
+      const b = joinObjects({}, defaultBuffer);
+      glObject.addBuffer(
+        attribute, b.size, points, b.type,
+        b.normalize, b.stride, b.offset, b.usageIn,
+      );
+    });
+    glObject.addUniform('u_from', 1, 'INT');
+    glObject.addUniform('u_to', 1, 'INT');
+    glObject.addUniform('u_percent', 1, 'FLOAT');
+
+    const element = new FigureElementPrimitive(
+      glObject, options.transform, options.color, this.limits, null, options.name,
+    );
+    element.dimColor = this.defaultDimColor.slice();
+    element.custom.shapeNameMap = shapeNameMap;
+    element.custom.update = (fromShape, toShape, percent) => {
+      glObject.updateUniform('u_from', element.custom.shapeNameMap[fromShape]);
+      glObject.updateUniform('u_to', element.custom.shapeNameMap[toShape]);
+      glObject.updateUniform('u_percent', percent);
+    };
+    element.custom.setShape = (shapeName) => {
+      glObject.updateUniform('u_from', element.custom.shapeNameMap[shapeName]);
+      glObject.updateUniform('u_to', element.custom.shapeNameMap[shapeName]);
+      glObject.updateUniform('u_percent', 0);
+    };
+    element.custom.setShape(Object.keys(shapeNameMap)[0]);
+
     element.timeKeeper = this.timeKeeper;
     element.recorder = this.recorder;
     setupPulse(element, options);
