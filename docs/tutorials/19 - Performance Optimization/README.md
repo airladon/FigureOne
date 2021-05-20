@@ -108,13 +108,13 @@ It will show the average and worst case values of the frame rate, the total time
 
 In this case, the statistics is for the last 10 frames.
 
-This example is has been chosen because FigureOne's calculations for moving freely and bouncing of boundaries are generalized for any shape. As FigureOne doesn't inherently know the properties of a shape, it must go through and calculate the boundary of a shape to know when a shape's boundary is meeting the figure boundary. By default, FigureOne also doesn't know how a user has changed a shape (or it's transform, or parent's transform) between each frame, and so must do this per frame.
+This example has been chosen because FigureOne's calculations for moving freely and bouncing off boundaries are generalized for any shape. As FigureOne doesn't inherently know the properties of a shape, it must go through and calculate the boundary of a shape to know when a shape's boundary is meeting the figure boundary. By default, FigureOne also doesn't know how a user has changed a shape (or it's transform, or parent's transform) between each frame, and so must do this per frame.
 
 This makes it very easy for a user to define an object and have it move freely, but it is not as efficient as the user specifying the algorithm to both move freely and bounce for a specific shape. While this doesn't matter normally, when applying this to many shapes, performance can be impacted on lower-end devices.
 
 ### Performance
 
-The average frame rates and FigureOne processing times per frame on the test devices are (for n=100 squares):
+The average frame rates and FigureOne processing times per frame on the test devices for the baseline `n=100` squares are:
 
 * 2016 Chromebook: 6 fps at ~73ms per frame
 * 2014 iPad: 27 fps at ~11ms per frame
@@ -122,13 +122,13 @@ The average frame rates and FigureOne processing times per frame on the test dev
 
 Visually, the iPad and iPhone look good, but the Chromebook is not smooth.
 
-This gives us an initial feeling of how much time FigureOne can have to achieve some frame rate.
+This gives us an initial feeling of how much time FigureOne can actually use per frame.
 
 For instance, FigureOne takes 11ms to process a frame on the iPad. If this were the only processing needed by the browser to render a frame, then we could expect frame rates of 1 / 0.077 = 91 fps (which would then be browser limited back to 60 fps). But we are only seeing 27 fps. This shows FigureOne does not have the whole 33ms to render at 30 fps, but rather will have something closer to 10ms.
 
 But the iPad is not our low end target. On the Chromebook we need to scale the number of squares back to 25 (`n=25`) to achieve just 20-25 fps.
 
-For `n=25` (path: `./02 n is 25/`), the Chromebook takes 18ms to process a frame, the iPad takes 5ms, and the iPhone takes 3ms.
+For `n=25` [here](./02%20n%20is%2025`), the Chromebook takes 18ms to process a frame, the iPad takes 5ms, and the iPhone takes 3ms.
 
 ### Is 25 elements the max then?
 
