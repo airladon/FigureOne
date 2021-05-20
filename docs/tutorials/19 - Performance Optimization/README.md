@@ -97,7 +97,8 @@ for (let i = 0; i < n; i += 1) {
 figure.addFrameRate(10);
 ```
 
-The files for this are [here](./01 baseline). 
+The files for this are [here](./01%20baseline). 
+
 
 ![](baseline.gif)
 
