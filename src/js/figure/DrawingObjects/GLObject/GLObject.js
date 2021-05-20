@@ -24,6 +24,10 @@ export type TypeGLBufferUsage = 'STATIC' | 'DYNAMIC';
  */
 export type TypeGLUniform = 'FLOAT' | 'FLOAT_ARRAY' | 'INT' | 'INT_ARRAY';
 
+/**
+ * FigureElementPrimitive that can be used to utilize custom shaders for WebGL.
+ *
+ */
 class GLObject extends DrawingObject {
   gl: WebGLRenderingContext;
   webgl: WebGLInstance;

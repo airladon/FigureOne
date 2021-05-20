@@ -152,6 +152,14 @@ toc:
   - threePointAngle
   - threePointAngleMin
   - clipAngle
+  - name: Shaders
+  - OBJ_GLPrimitive
+  - OBJ_GLBuffer
+  - OBJ_GLVertexBuffer
+  - OBJ_GLUniform
+  - TypeGLBufferType
+  - TypeGLBufferUsage
+  - TypeGLUniform
   - name: Math tools
   - round
   - range

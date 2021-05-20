@@ -64,3 +64,11 @@ API cleanup
 ## v0.8.1
 
 * Add arc primitive shape
+
+## 0.9.0
+
+* Add `simple` property to element
+* Make deceleration more efficient and able to support deceleration === 0
+* Add GL primitive, that can define shaders, buffers and uniforms directly
+* Add tutorial `Performance Optimization`
+* Add example `Electric Field` for shader example
