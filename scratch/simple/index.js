@@ -10,97 +10,161 @@ const { rand } = Fig.tools.math;
 const img = new Image();
 img.src = './logo.png';
 
-img.addEventListener('load', () => {
-  // console.log(img.data);
+const r = 0.015;
+const makeShape = center => [
+  center[0] - r / 2, center[1] - r / 2,
+  center[0] + r / 2, center[1] - r / 2,
+  center[0] + r / 2, center[1] + r / 2,
+  center[0] - r / 2, center[1] - r / 2,
+  center[0] + r / 2, center[1] + r / 2,
+  center[0] - r / 2, center[1] + r / 2,
+];
+const makeColors = c => [...c, ...c, ...c, ...c, ...c, ...c];
+
+function getImagePointsAndColors(
+  image, xBottom, yBottom, xWidth, yHeight, xDither = 0, yDither = 0,
+) {
+  const { width, height } = img;
   const canvas = document.createElement('canvas');
-  const res = 256;
-  canvas.width = res;
-  canvas.height = res;
+  canvas.width = width;
+  canvas.height = height;
   const context = canvas.getContext('2d');
   context.drawImage(img, 0, 0);
-  const imgData = context.getImageData(0, 0, res, res).data;
-  // console.log(imgData)
+  const imgData = context.getImageData(0, 0, width, height).data;
+  const points = [];
+  const colors = [];
+  for (let h = 0; h < width; h += 1) {
+    for (let w = 0; w < height; w += 1) {
+      points.push(...makeShape([
+        xBottom + w / width * xWidth + rand(-xDither, xDither),
+        yBottom + yHeight - h / height * yHeight + rand(-yDither, yDither),
+      ]));
+      const pixelIndex = h * width * 4 + w * 4;
+      const pixel = [
+        imgData[pixelIndex] / 255,
+        imgData[pixelIndex + 1] / 255,
+        imgData[pixelIndex + 2] / 255,
+        imgData[pixelIndex + 3] / 255,
+      ];
+      colors.push(...makeColors(pixel));
+    }
+  }
+  return [points, colors];
+}
+
+function pointsToVertices(points) {
+  const vertices = [];
+  for (let i = 0; i < points.length; i += 1) {
+    vertices.push(...makeShape(points[i]));
+  }
+  return vertices;
+}
+
+function lineToPoints(
+  linePoints, // : Array<[number, number]>,
+  numPoints, // : number,
+  close = false, // : boolean = false,
+) {
+  let cumDistance = 0;
+  const distances = Array(linePoints.length).fill(0);
+  const cumDistances = Array(linePoints.length).fill(0); 
+  for (let i = 1; i < linePoints.length; i += 1) {
+    const p = [linePoints[i][0], linePoints[i][1]];
+    const q = [linePoints[i - 1][0], linePoints[i - 1][1]];
+    const distance = Math.sqrt(((p[0] - q[0]) ** 2) + ((p[1] - q[1]) ** 2));
+    cumDistance += distance;
+    distances[i] = distance;
+    cumDistances[i] = cumDistance;
+  }
+  if (close) {
+    const p = [linePoints[0][0], linePoints[0][1]];
+    const q = [linePoints[linePoints.length - 1][0], linePoints[linePoints.length - 1][1]];
+    const distance = Math.sqrt(((p[0] - q[0]) ** 2) + ((p[1] - q[1]) ** 2));
+    cumDistance += distance;
+    distances[0] = distance;
+    cumDistances[0] = cumDistance;
+  }
+  const distanceStep = cumDistance / (numPoints - 1);
+  const points = Array(numPoints);
+  let nextLinePointIndex = 1;
+  let currLinePointIndex = 0;
+  for (let i = 0; i < numPoints; i += 1) {
+    const currentCumDist = i * distanceStep;
+    if (i === 0) {
+      points[i] = linePoints[i];
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+    while (cumDistances[nextLinePointIndex] < currentCumDist) {
+      if (nextLinePointIndex === linePoints.length - 1) {
+        nextLinePointIndex = 0;
+      } else {
+        nextLinePointIndex += 1;
+      }
+      currLinePointIndex += 1;
+    }
+    const remainingDistance = cumDistances[nextLinePointIndex] - currentCumDist;
+    const remainingPercent = 1 - remainingDistance / distances[nextLinePointIndex];
+    const q = linePoints[currLinePointIndex];
+    const p = linePoints[nextLinePointIndex];
+    points[i] = [
+      (p[0] - q[0]) * remainingPercent + q[0],
+      (p[1] - q[1]) * remainingPercent + q[1],
+    ];
+  }
+  return pointsToVertices(points);
+}
+
+const makePolygon = (radius, sides, numPoints) => {
+  const points = [];
+  const dAngle = Math.PI * 2 / sides;
+  for (let i = 0; i < sides; i += 1) {
+    points.push([
+      radius * Math.cos(dAngle * i),
+      radius * Math.sin(dAngle * i),
+    ]);
+  }
+  return lineToPoints(points, numPoints, true);
+};
+
+img.addEventListener('load', () => {
+  const [imagePoints, colors] = getImagePointsAndColors(img, -2, -2, 4, 4, 0.01, 0.01);
+  const n = imagePoints.length / 2 / 6;
+  const square = lineToPoints([[1, 1], [-1, 1], [-1, -1], [1, -1]], n, true);
+  const circle = makePolygon(0.9, 20, n);
+  // console.log(square)
+  // console.log(circle)
+  // console.log(imagePoints)
+
   const points1 = [];
-  const points2 = [];
-  const points3 = [];
-  const points4 = [];
   const colors1 = [];
   const colors2 = [];
   const colors3 = [];
-  const colors4 = [];
-  const r = 0.015;
-  const makeShape = center => [
-    center[0] - r / 2, center[1] - r / 2,
-    center[0] + r / 2, center[1] - r / 2,
-    center[0] + r / 2, center[1] + r / 2,
-    center[0] - r / 2, center[1] - r / 2,
-    center[0] + r / 2, center[1] + r / 2,
-    center[0] - r / 2, center[1] + r / 2,
-  ];
-  const makeColors = c => [...c, ...c, ...c, ...c, ...c, ...c];
-  const n = res * res;
-  const s = 1;
   for (let i = 0; i < n; i += 1) {
-    const x = -Math.PI * 0.9 + Math.PI * 2 * 0.9 / n * i;
     const center1 = [rand(-2, 2), rand(-2, 2)];
     points1.push(...makeShape(center1));
-    const center2 = [
-      0.9 * Math.cos(Math.PI * 2 / n * i + Math.PI / 4),
-      0.9 * Math.sin(Math.PI * 2 / n * i + Math.PI / 4),
-    ];
-    points2.push(...makeShape(center2));
-    let center3;
-    if (i < n / 4) {
-      center3 = [s / 2 - s / (n / 4) * i, s / 2];
-    } else if (i < n / 2) {
-      center3 = [-s / 2, s / 2 - s / (n / 4) * (i % (n / 4))];
-    } else if (i < n / 4 * 3) {
-      center3 = [-s / 2 + s / (n / 4) * (i % (n / 4)), -s / 2];
-    } else {
-      center3 = [s / 2, -s / 2 + s / (n / 4) * (i % (n / 4))];
-    }
-    points3.push(...makeShape(center3));
-    const p4 = [-2.5 + (i % res) / res * 5 + rand(-0.01, 0.01), 2.5 - (Math.floor(i / res) / res * 5) + rand(-0.01, 0.01)];
-    // console.log(p4)
-    // points4.push(...makeShape([p4.x, p4.y]));
-    points4.push(...makeShape(p4));
     colors1.push(...makeColors([1, 0, 0, 1]));
     colors2.push(...makeColors([0, 1, 0, 1]));
-    // colors4.push(...makeColors([1, 1, 0, 1]));
-    // colors3.push(...makeColors([imgData[i] / 255, imgData[n][1] / 255, imgData[n][2] / 255, 1]));
     colors3.push(...makeColors([1, 1, 0, 1]));
-    // colors4.push(...makeColors([0, 0, 1, 1]));
-
-    // colors4.push(...makeColors([imgData[i * 4] / 255, imgData[i * 4 + 1] / 255, imgData[i * 4 + 2] / 255, 1]))
-    let pixel = [imgData[i * 4], imgData[i * 4 + 1], imgData[i * 4 + 2], 1];
-    // let pixel = context.getImageData(i % res, Math.floor(i / res), 1, 1).data;
-    // if (pixel[2] < 100) {
-    //   pixel = [0, 0, 0, 0];
-    // }
-    colors4.push(...makeColors([pixel[0] / 255, pixel[1] / 255, pixel[2] / 255, 1]))
   }
-  console.log(context.getImageData(50, 50, 1, 1).data);
-  console.log(context.canvas.width, context.canvas.height)
-  console.log(colors4)
-  // console.log(colors1)
-  // console.log(colors4)
-  // console.log(imgData)
+  // console.log(points1)
 
   const m = figure.add({
     make: 'morph',
-    names: ['step0', 'step1', 'step2', 'step3'],
-    points: [points1, points2, points3, points4],
-    color: [colors4, colors4, colors3, colors4],
-    // color: [1, 0, 0, 1],
+    names: ['rand', 'circle', 'square', 'image'],
+    points: [points1, circle, square, imagePoints],
+    color: [colors, colors, colors, colors],
   });
 
   m.animations.new()
-    .delay(2)
-    .morph({ start: 'step0', target: 'step3', duration: 3, progression: 'easeinout' })
-    .delay(2)
-    .morph({ start: 'step3', target: 'step1', duration: 3 })
-    .morph({ start: 'step1', target: 'step2', duration: 1 })
-    .morph({ start: 'step2', target: 'step0', duration: 4 })
+    .delay(1)
+    .morph({
+      start: 'rand', target: 'image', duration: 3, progression: 'easeinout',
+    })
+    .delay(1)
+    .morph({ start: 'image', target: 'square', duration: 3 })
+    .morph({ start: 'square', target: 'circle', duration: 1 })
+    .morph({ start: 'circle', target: 'rand', duration: 4 })
     // .delay(2)
     // .morph({ start: 'step3', target: 'step0', duration: 2 })
     .start();
