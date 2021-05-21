@@ -78,6 +78,74 @@ void main() {
 `,
     vars: ['a_pos0', 'a_pos1', 'a_pos2', 'a_pos3', 'u_matrix', 'u_percent', 'u_from', 'u_to'],
   },
+  morpher: (num: number, vertexColor: boolean) => {
+    let aPosDefs = '';
+    let aPosArray = `vec2 fromPos = a_pos0;\n  vec2 toPos = a_pos1;\n  vec2 positions[${num}];\n`;
+    let aColDefs = '';
+    let aColArray = '';
+    const vars = ['u_matrix', 'u_percent'];
+    if (vertexColor) {
+      aColArray = `vec4 fromCol = a_col0;\n vec4 toCol = a_col1;\n vec4 colors[${num}];`;
+    }
+    for (let i = 0; i < num; i += 1) {
+      vars.push(`a_pos${i}`);
+      aPosDefs = `${aPosDefs}attribute vec2 a_pos${i};\n`;
+      aPosArray = `${aPosArray}  positions[${i}] = a_pos${i};\n`;
+      if (vertexColor) {
+        aColDefs = `${aColDefs}attribute vec4 a_col${i};\n`;
+        aColArray = `${aColArray}  colors[${i}] = a_col${i};\n`;
+        vars.push(`a_col${i}`);
+      }
+    }
+    let toCol = '';
+    let fromCol = '';
+    let uniforms = '';
+    // let varyings = '';
+    let setVarying = '';
+    if (vertexColor) {
+      vars.push('u_to');
+      vars.push('u_from');
+      aColDefs = `${aColDefs}varying vec4 v_col;\n`;
+      toCol = 'toCol = colors[i];\n';
+      fromCol = 'fromCol = colors[i];\n';
+      uniforms = '  uniform int u_from;\n  uniform int u_to;\n';
+      // varyings = '  varying vec4 v_col;\n';
+      setVarying = 'v_col = (toCol - fromCol) * u_percent + fromCol;\n';
+    }
+
+    const src = `
+${aPosDefs}
+${aColDefs}
+uniform mat3 u_matrix;
+uniform float u_percent;
+${uniforms}
+
+void main() {
+  ${aPosArray}
+  ${aColArray}
+
+  for (int i = 0; i < ${num}; i++) {
+    if (u_from == i) {
+      fromPos = positions[i];
+      ${fromCol}
+      break;
+    }
+  }
+  for (int i = 0; i < ${num}; i++) {
+    if (u_to == i) {
+      toPos = positions[i];
+      ${toCol}
+      break;
+    }
+  }
+
+  vec2 newPosition = (toPos - fromPos) * u_percent + fromPos;
+  gl_Position = vec4((u_matrix * vec3(newPosition.xy, 1)).xy, 0, 1);
+  ${setVarying}
+}
+`;
+    return { src, vars };
+  },
   morph4VertexColor: {
     src: `
 attribute vec2 a_pos0;
@@ -208,6 +276,10 @@ const getShaders = (
     }
     vertexSource = vertex[vName].src;
     vars.push(...vertex[vName].vars);
+  } else if (Array.isArray(vName)) {
+    const shader = vertex[vName[0]](...vName.slice(1));
+    vertexSource = shader.src;
+    vars.push(...shader.vars);
   } else {
     vertexSource = vName.src;
     vars.push(...vName.vars);

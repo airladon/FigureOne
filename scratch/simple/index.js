@@ -18,7 +18,7 @@ img.addEventListener('load', () => {
   canvas.height = res;
   const context = canvas.getContext('2d');
   context.drawImage(img, 0, 0);
-  // const imgData = context.getImageData(0, 0, res, res).data;
+  const imgData = context.getImageData(0, 0, res, res).data;
   // console.log(imgData)
   const points1 = [];
   const points2 = [];
@@ -28,7 +28,7 @@ img.addEventListener('load', () => {
   const colors2 = [];
   const colors3 = [];
   const colors4 = [];
-  const r = 0.02;
+  const r = 0.015;
   const makeShape = center => [
     center[0] - r / 2, center[1] - r / 2,
     center[0] + r / 2, center[1] - r / 2,
@@ -42,7 +42,7 @@ img.addEventListener('load', () => {
   const s = 1;
   for (let i = 0; i < n; i += 1) {
     const x = -Math.PI * 0.9 + Math.PI * 2 * 0.9 / n * i;
-    const center1 = [rand(-2, 2), 0];
+    const center1 = [rand(-2, 2), rand(-2, 2)];
     points1.push(...makeShape(center1));
     const center2 = [
       0.9 * Math.cos(Math.PI * 2 / n * i + Math.PI / 4),
@@ -60,7 +60,7 @@ img.addEventListener('load', () => {
       center3 = [s / 2, -s / 2 + s / (n / 4) * (i % (n / 4))];
     }
     points3.push(...makeShape(center3));
-    const p4 = [-2.5 + (i % res) / res * 5, 2.5 - (Math.floor(i / res) / res * 5)];
+    const p4 = [-2.5 + (i % res) / res * 5 + rand(-0.01, 0.01), 2.5 - (Math.floor(i / res) / res * 5) + rand(-0.01, 0.01)];
     // console.log(p4)
     // points4.push(...makeShape([p4.x, p4.y]));
     points4.push(...makeShape(p4));
@@ -72,13 +72,16 @@ img.addEventListener('load', () => {
     // colors4.push(...makeColors([0, 0, 1, 1]));
 
     // colors4.push(...makeColors([imgData[i * 4] / 255, imgData[i * 4 + 1] / 255, imgData[i * 4 + 2] / 255, 1]))
-    let pixel = context.getImageData(i % res, Math.floor(i / res), 1, 1).data;
-    if (pixel[2] < 100) {
-      pixel = [0, 0, 0, 0];
-    }
-    colors4.push(...makeColors(pixel.map(p => p / 255)))
+    let pixel = [imgData[i * 4], imgData[i * 4 + 1], imgData[i * 4 + 2], 1];
+    // let pixel = context.getImageData(i % res, Math.floor(i / res), 1, 1).data;
+    // if (pixel[2] < 100) {
+    //   pixel = [0, 0, 0, 0];
+    // }
+    colors4.push(...makeColors([pixel[0] / 255, pixel[1] / 255, pixel[2] / 255, 1]))
   }
+  console.log(context.getImageData(50, 50, 1, 1).data);
   console.log(context.canvas.width, context.canvas.height)
+  console.log(colors4)
   // console.log(colors1)
   // console.log(colors4)
   // console.log(imgData)
@@ -91,18 +94,20 @@ img.addEventListener('load', () => {
       step2: points3,
       step3: points4,
     },
-    color: { step0: colors1, step1: colors2, step2: colors3, step3: colors4 },
+    color: { step0: colors4, step1: colors2, step2: colors3, step3: colors4 },
     // color: [1, 0, 0, 1],
   });
 
   m.animations.new()
     .delay(2)
     .morph({ start: 'step0', target: 'step3', duration: 3 })
-    .delay(1)
-    .morph({ start: 'step3', target: 'step0', duration: 3 })
+    // .delay(2)
+    // .morph({ start: 'step3', target: 'step0', duration: 3 })
     // .morph({ start: 'step1', target: 'step2', duration: 1 })
     // .morph({ start: 'step2', target: 'step3', duration: 4 })
     // .delay(2)
     // .morph({ start: 'step3', target: 'step0', duration: 2 })
     .start();
 }, false);
+
+figure.addFrameRate(10, { font: { color: [1, 1, 1, 1] } });

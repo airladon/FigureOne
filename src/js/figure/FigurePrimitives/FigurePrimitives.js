@@ -2421,14 +2421,14 @@ export default class FigurePrimitives {
     const defaultOptions = {
       name: generateUniqueId('primitive_'),
       color: this.defaultColor,
-      vertexShader: 'morph4',
+      vertexShader: ['morpher', 4, true],
       fragShader: 'simple',
       points: {},
       glPrimitive: 'TRIANGLES',
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
     if (!Array.isArray(options.color)) {
-      options.vertexShader = 'morph4VertexColor';
+      options.vertexShader = ['morpher', 4, true];
       options.fragShader = 'vertexColor';
     }
     options.transform = getTransform(options.transform);
