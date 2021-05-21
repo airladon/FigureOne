@@ -59,7 +59,11 @@ const points1 = [];
 const points2 = [];
 const points3 = [];
 const points4 = [];
-const r = 0.03;
+const colors1 = [];
+const colors2 = [];
+const colors3 = [];
+const colors4 = [];
+const r = 0.02;
 const makeShape = center => [
   center[0] - r / 2, center[1] - r / 2,
   center[0] + r / 2, center[1] - r / 2,
@@ -68,7 +72,7 @@ const makeShape = center => [
   center[0] + r / 2, center[1] + r / 2,
   center[0] - r / 2, center[1] + r / 2,
 ];
-const n = 1000;
+const n = 10000;
 const s = 1;
 for (let i = 0; i < n; i += 1) {
   const x = -Math.PI * 0.9 + Math.PI * 2 * 0.9 / n * i;
@@ -94,7 +98,12 @@ for (let i = 0; i < n; i += 1) {
   }
   points3.push(...makeShape(center3));
   // points4.push(...makeShape([x, Math.sin(Math.PI * 2 / 4 * x)]));
-  points4.push(...makeShape([rand(-2, 2), rand(-2, 2)]));
+  const p4 = Fig.tools.g2.polarToRect(rand(-3, 3), rand(-3, 3));
+  points4.push(...makeShape([p4.x, p4.y]));
+  colors1.push([1, 0, 0, 1]);
+  colors2.push([0, 1, 0, 1]);
+  colors3.push([0, 0, 1, 1]);
+  colors4.push([0, 1, 1, 1]);
 }
 
 // The `field` FigureElement has the arrow grid within it.
@@ -184,6 +193,7 @@ const m = figure.add({
 });
 
 m.animations.new()
+  .delay(1)
   .morph({ start: 'step0', target: 'step1', duration: 1 })
   .morph({ start: 'step1', target: 'step2', duration: 1 })
   .morph({ start: 'step2', target: 'step3', duration: 1 })
