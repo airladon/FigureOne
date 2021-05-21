@@ -373,6 +373,7 @@ export type OBJ_Morph = {
   name?: string,
   pointArrays: Array<Array<number>>,
   color: TypeColor | Array<Array<TypeColor>>,
+  names: Array<string>,
 }
 /* eslint-disable max-len */
 /**
@@ -2421,35 +2422,46 @@ export default class FigurePrimitives {
     const defaultOptions = {
       name: generateUniqueId('primitive_'),
       color: this.defaultColor,
-      vertexShader: ['morpher', 4, true],
-      fragShader: 'simple',
-      points: {},
+      // vertexShader: ['morpher', 4, true],
+      // fragShader: 'simple',
+      points: [],
       glPrimitive: 'TRIANGLES',
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
-    if (!Array.isArray(options.color)) {
-      options.vertexShader = ['morpher', 4, true];
-      options.fragShader = 'vertexColor';
-    }
+    // if (!Array.isArray(options.color)) {
+    //   options.vertexShader = ['morpher', 4, true];
+    //   options.fragShader = 'vertexColor';
+    // }
     options.transform = getTransform(options.transform);
     if (options.position != null) {
       options.position = getPoint(options.position);
       options.transform.updateTranslation(options.position);
     }
 
+    let colorVertex = false;
+    let fragShader = 'simple';
+    if (Array.isArray(options.color[0])) {
+      colorVertex = true;
+      fragShader = 'vertexColor';
+    }
+    // let vertexShader = ['morpher', 2, false];
+    // let fragShader = 'simple';
+    // if (options.points.length > )
+
     const glObject = new GLObject(
       this.webgl[0],
-      options.vertexShader,
-      options.fragShader,
+      ['morpher', options.points.length, colorVertex],
+      fragShader,
     );
     glObject.setPrimitive(options.glPrimitive);
 
     const shapeNameMap = {};
-    Object.keys(options.points).forEach((shapeName, index) => {
-      const points = options.points[shapeName];
+    if (options.names != null) {
+      options.names.forEach((name, index) => { shapeNameMap[name] = index; });
+    }
+    options.points.forEach((points, index) => {
       const attribute = `a_pos${index}`;
-      shapeNameMap[shapeName] = index;
-      glObject.numVertices = options.points[shapeName].length / 2;
+      glObject.numVertices = points.length / 2;
       const defaultBuffer = {
         type: 'FLOAT',
         normalize: false,
@@ -2464,11 +2476,30 @@ export default class FigurePrimitives {
         b.normalize, b.stride, b.offset, b.usageIn,
       );
     });
-    if (!Array.isArray(options.color)) {
-      Object.keys(options.color).forEach((shapeName, index) => {
-        const colors = options.color[shapeName];
+    // Object.keys(options.points).forEach((shapeName, index) => {
+    //   const points = options.points[shapeName];
+    //   const attribute = `a_pos${index}`;
+    //   shapeNameMap[shapeName] = index;
+    //   glObject.numVertices = options.points[shapeName].length / 2;
+    //   const defaultBuffer = {
+    //     type: 'FLOAT',
+    //     normalize: false,
+    //     stride: 0,
+    //     offset: 0,
+    //     usage: 'STATIC',
+    //     size: 2,
+    //   };
+    //   const b = joinObjects({}, defaultBuffer);
+    //   glObject.addBuffer(
+    //     attribute, b.size, points, b.type,
+    //     b.normalize, b.stride, b.offset, b.usageIn,
+    //   );
+    // });
+    if (colorVertex) {
+      options.color.forEach((colors, index) => {
+        // const colors = options.color[shapeName];
         const attribute = `a_col${index}`;
-        shapeNameMap[shapeName] = index;
+        // shapeNameMap[shapeName] = index;
         const defaultBuffer = {
           type: 'FLOAT',
           normalize: false,
@@ -2494,17 +2525,24 @@ export default class FigurePrimitives {
     );
     element.dimColor = this.defaultDimColor.slice();
     element.custom.shapeNameMap = shapeNameMap;
-    element.custom.update = (fromShape, toShape, percent) => {
-      glObject.updateUniform('u_from', element.custom.shapeNameMap[fromShape]);
-      glObject.updateUniform('u_to', element.custom.shapeNameMap[toShape]);
+    const getIndex = (shapeNameOrIndex: string | number) => {
+      if (typeof shapeNameOrIndex === 'string') {
+        return shapeNameMap[shapeNameOrIndex];
+      }
+      return shapeNameOrIndex;
+    };
+    // eslint-disable-next-line max-len
+    element.custom.update = (fromShape: string | number, toShape: string | number, percent: number) => {
+      glObject.updateUniform('u_from', getIndex(fromShape));
+      glObject.updateUniform('u_to', getIndex(toShape));
       glObject.updateUniform('u_percent', percent);
     };
-    element.custom.setShape = (shapeName) => {
-      glObject.updateUniform('u_from', element.custom.shapeNameMap[shapeName]);
-      glObject.updateUniform('u_to', element.custom.shapeNameMap[shapeName]);
+    element.custom.setShape = (shape: string | number) => {
+      glObject.updateUniform('u_from', getIndex(shape));
+      glObject.updateUniform('u_to', getIndex(shape));
       glObject.updateUniform('u_percent', 0);
     };
-    element.custom.setShape(Object.keys(shapeNameMap)[0]);
+    element.custom.setShape(0);
 
     element.fnMap.add('_morphCallback', (percentage: number, customProperties: Object) => {
       const { start, target } = customProperties;
@@ -2515,8 +2553,8 @@ export default class FigurePrimitives {
         element,
       }, ...opt);
       o.customProperties = {
-        start: o.start == null ? Object.keys(shapeNameMap)[0] : o.start,
-        target: o.target == null ? Object.keys(shapeNameMap)[1] : o.target,
+        start: o.start == null ? 0 : o.start,
+        target: o.target == null ? 1 : o.target,
       };
       o.callback = '_morphCallback';
       o.timeKeeper = this.timeKeeper;

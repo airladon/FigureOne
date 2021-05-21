@@ -197,8 +197,8 @@ class WebGLInstance {
     };
   };
   programs: Array<{
-    vertexShader: string | { src: string, vars: Array<string>},
-    fragmentShader: string| { src: string, vars: Array<string>},
+    vertexShader: string | { src: string, vars: Array<string>} | Array<string | bool | number>,
+    fragmentShader: string| { src: string, vars: Array<string>} | Array<string | bool | number>,
     locations: Object,
     program: WebGLProgram;
   }>;
@@ -233,8 +233,8 @@ class WebGLInstance {
   }
 
   getProgram(
-    vertexShader: string | { src: string, vars: Array<string> },
-    fragmentShader: string | { src: string, vars: Array<string> },
+    vertexShader: string | { src: string, vars: Array<string> } | Array<string | number | boolean>,
+    fragmentShader: string | { src: string, vars: Array<string> } | Array<string | number | boolean>,
   ) {
     for (let i = 0; i < this.programs.length; i += 1) {
       const program = this.programs[i];

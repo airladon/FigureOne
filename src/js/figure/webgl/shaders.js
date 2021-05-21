@@ -97,19 +97,16 @@ void main() {
         vars.push(`a_col${i}`);
       }
     }
+    const uniforms = 'uniform int u_from;\nuniform int u_to;\n';
+    vars.push('u_to');
+    vars.push('u_from');
     let toCol = '';
     let fromCol = '';
-    let uniforms = '';
-    // let varyings = '';
     let setVarying = '';
     if (vertexColor) {
-      vars.push('u_to');
-      vars.push('u_from');
       aColDefs = `${aColDefs}varying vec4 v_col;\n`;
       toCol = 'toCol = colors[i];\n';
       fromCol = 'fromCol = colors[i];\n';
-      uniforms = '  uniform int u_from;\n  uniform int u_to;\n';
-      // varyings = '  varying vec4 v_col;\n';
       setVarying = 'v_col = (toCol - fromCol) * u_percent + fromCol;\n';
     }
 
@@ -264,8 +261,8 @@ const fragment = {
 };
 
 const getShaders = (
-  vName: string | { src: string, vars: Array<string> } = 'simple',
-  fName: string | { src: string, vars: Array<string> } = 'simple',
+  vName: string | { src: string, vars: Array<string> } | Array<string | number | boolean> = 'simple',
+  fName: string | { src: string, vars: Array<string> } | Array<string | number | boolean> = 'simple',
 ) => {
   let vertexSource = '';
   let fragmentSource = '';
@@ -276,13 +273,15 @@ const getShaders = (
     }
     vertexSource = vertex[vName].src;
     vars.push(...vertex[vName].vars);
-  } else if (Array.isArray(vName)) {
+  } else if (Array.isArray(vName) && typeof vName[0] === 'string') {
     const shader = vertex[vName[0]](...vName.slice(1));
     vertexSource = shader.src;
     vars.push(...shader.vars);
-  } else {
+  } else if (!Array.isArray(vName)) {
     vertexSource = vName.src;
     vars.push(...vName.vars);
+  } else {  // $FlowFixMe
+    throw new Error(`Vertex shader definition incorrect: ${vName}`);
   }
   if (typeof fName === 'string') {
     if (fragment[fName] == null) {
@@ -290,10 +289,21 @@ const getShaders = (
     }
     fragmentSource = fragment[fName].src;
     vars.push(...fragment[fName].vars);
-  } else {
+  } else if (Array.isArray(fName) && typeof fName[0] === 'string') {
+    const shader = vertex[fName[0]](...fName.slice(1));
+    fragmentSource = shader.src;
+    vars.push(...shader.vars);
+  } else if (!Array.isArray(fName)) {
     fragmentSource = fName.src;
     vars.push(...fName.vars);
+  } else {  // $FlowFixMe
+    throw new Error(`Fragment shader definition incorrect: ${fName}`);
   }
+  // } else {
+  //   fragmentSource = fName.src;
+  //   vars.push(...fName.vars);
+  // }
+  // console.log(vertexSource, vars)
   return {
     vertexSource,
     fragmentSource,

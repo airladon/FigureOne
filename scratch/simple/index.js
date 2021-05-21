@@ -88,23 +88,19 @@ img.addEventListener('load', () => {
 
   const m = figure.add({
     make: 'morph',
-    points: {
-      step0: points1,
-      step1: points2,
-      step2: points3,
-      step3: points4,
-    },
-    color: { step0: colors4, step1: colors2, step2: colors3, step3: colors4 },
+    names: ['step0', 'step1', 'step2', 'step3'],
+    points: [points1, points2, points3, points4],
+    color: [colors4, colors4, colors3, colors4],
     // color: [1, 0, 0, 1],
   });
 
   m.animations.new()
     .delay(2)
-    .morph({ start: 'step0', target: 'step3', duration: 3 })
-    // .delay(2)
-    // .morph({ start: 'step3', target: 'step0', duration: 3 })
-    // .morph({ start: 'step1', target: 'step2', duration: 1 })
-    // .morph({ start: 'step2', target: 'step3', duration: 4 })
+    .morph({ start: 'step0', target: 'step3', duration: 3, progression: 'easeinout' })
+    .delay(2)
+    .morph({ start: 'step3', target: 'step1', duration: 3 })
+    .morph({ start: 'step1', target: 'step2', duration: 1 })
+    .morph({ start: 'step2', target: 'step0', duration: 4 })
     // .delay(2)
     // .morph({ start: 'step3', target: 'step0', duration: 2 })
     .start();

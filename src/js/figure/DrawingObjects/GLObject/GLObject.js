@@ -79,8 +79,8 @@ class GLObject extends DrawingObject {
 
   constructor(
     webgl: WebGLInstance,
-    vertexShader: string | { src: string, vars: Array<string> } = 'withTexture',
-    fragmentShader: string | { src: string, vars: Array<string> } = 'withTexture',
+    vertexShader: string | { src: string, vars: Array<string> } | Array<string | number | boolean> = 'withTexture',
+    fragmentShader: string | { src: string, vars: Array<string> } | Array<string | number | boolean> = 'withTexture',
   ) {
     super();
     this.gl = webgl.gl;
