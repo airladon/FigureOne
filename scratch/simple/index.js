@@ -7,8 +7,10 @@ const figure = new Fig.Figure({
 
 const { rand } = Fig.tools.math;
 
-const img = new Image();
-img.src = './logo.png';
+const img1 = new Image();
+img1.src = './star.png';
+const img2 = new Image();
+img2.src = './esclamation.png';
 
 const r = 0.015;
 const makeShape = center => [
@@ -21,15 +23,19 @@ const makeShape = center => [
 ];
 const makeColors = c => [...c, ...c, ...c, ...c, ...c, ...c];
 
+// function processImage(image, ) {
+
+// }
+
 function getImagePointsAndColors(
   image, xBottom, yBottom, xWidth, yHeight, xDither = 0, yDither = 0,
 ) {
-  const { width, height } = img;
+  const { width, height } = image;
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
   const context = canvas.getContext('2d');
-  context.drawImage(img, 0, 0);
+  context.drawImage(image, 0, 0);
   const imgData = context.getImageData(0, 0, width, height).data;
   const points = [];
   const colors = [];
@@ -127,9 +133,11 @@ const makePolygon = (radius, sides, numPoints) => {
   return lineToPoints(points, numPoints, true);
 };
 
-img.addEventListener('load', () => {
-  const [imagePoints, colors] = getImagePointsAndColors(img, -2, -2, 4, 4, 0.01, 0.01);
-  const n = imagePoints.length / 2 / 6;
+
+function loaded() {
+  const [image1, colors] = getImagePointsAndColors(img1, -2, -2, 4, 4, 0.01, 0.01);
+  const [image2, colors2] = getImagePointsAndColors(img2, -2, -2, 4, 4, 0.01, 0.01);
+  const n = image1.length / 2 / 6;
   const square = lineToPoints([[1, 1], [-1, 1], [-1, -1], [1, -1]], n, true);
   const circle = makePolygon(0.9, 20, n);
   // console.log(square)
@@ -138,36 +146,54 @@ img.addEventListener('load', () => {
 
   const points1 = [];
   const colors1 = [];
-  const colors2 = [];
+  // const colors2 = [];
   const colors3 = [];
   for (let i = 0; i < n; i += 1) {
     const center1 = [rand(-2, 2), rand(-2, 2)];
     points1.push(...makeShape(center1));
     colors1.push(...makeColors([1, 0, 0, 1]));
-    colors2.push(...makeColors([0, 1, 0, 1]));
+    // colors2.push(...makeColors([0, 1, 0, 1]));
     colors3.push(...makeColors([1, 1, 0, 1]));
   }
   // console.log(points1)
 
   const m = figure.add({
     make: 'morph',
-    names: ['rand', 'circle', 'square', 'image'],
-    points: [points1, circle, square, imagePoints],
-    color: [colors, colors, colors, colors],
+    names: ['rand', 'circle', 'square', 'image1', 'image2'],
+    points: [points1, circle, square, image1, image2],
+    color: [colors1, colors3, colors3, colors, colors2],
   });
 
   m.animations.new()
     .delay(1)
     .morph({
-      start: 'rand', target: 'image', duration: 3, progression: 'easeinout',
+      start: 'rand', target: 'image1', duration: 3, progression: 'easeinout',
     })
     .delay(1)
-    .morph({ start: 'image', target: 'square', duration: 3 })
+    .morph({ start: 'image1', target: 'image2', duration: 3 })
+    .morph({ start: 'image2', target: 'square', duration: 3 })
     .morph({ start: 'square', target: 'circle', duration: 1 })
     .morph({ start: 'circle', target: 'rand', duration: 4 })
     // .delay(2)
     // .morph({ start: 'step3', target: 'step0', duration: 2 })
     .start();
+}
+
+let counter = 0;
+
+img1.addEventListener('load', () => {
+  counter += 1;
+  if (counter === 2) {
+    loaded();
+  }
 }, false);
+
+img2.addEventListener('load', () => {
+  counter += 1;
+  if (counter === 2) {
+    loaded();
+  }
+}, false);
+
 
 figure.addFrameRate(10, { font: { color: [1, 1, 1, 1] } });
