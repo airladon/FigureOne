@@ -78,6 +78,61 @@ void main() {
 `,
     vars: ['a_pos0', 'a_pos1', 'a_pos2', 'a_pos3', 'u_matrix', 'u_percent', 'u_from', 'u_to'],
   },
+  morph4VertexColor: {
+    src: `
+attribute vec2 a_pos0;
+attribute vec2 a_pos1;
+attribute vec2 a_pos2;
+attribute vec2 a_pos3;
+attribute vec4 a_col0;
+attribute vec4 a_col1;
+attribute vec4 a_col2;
+attribute vec4 a_col3;
+uniform mat3 u_matrix;
+uniform float u_percent;
+uniform int u_from;
+uniform int u_to;
+varying vec4 v_col;
+
+void main() {
+  vec2 fromPos = a_pos0;
+  vec2 toPos = a_pos1;
+  vec2 positions[4];
+  positions[0] = a_pos0;
+  positions[1] = a_pos1;
+  positions[2] = a_pos2;
+  positions[3] = a_pos3;
+
+  vec4 fromCol = a_col0;
+  vec4 toCol = a_col1;
+  vec4 colors[4];
+  colors[0] = a_col0;
+  colors[1] = a_col1;
+  colors[2] = a_col2;
+  colors[3] = a_col3;
+
+  for (int i = 0; i < 4; i++) {
+    if (u_from == i) {
+      fromPos = positions[i];
+      fromCol = colors[i];
+      break;
+    }
+  }
+  for (int i = 0; i < 4; i++) {
+    if (u_to == i) {
+      toPos = positions[i];
+      toCol = colors[i];
+      break;
+    }
+  }
+
+  vec2 newPosition = (toPos - fromPos) * u_percent + fromPos;
+  gl_Position = vec4((u_matrix * vec3(newPosition.xy, 1)).xy, 0, 1);
+  v_col = (toCol - fromCol) * u_percent + fromCol;
+}
+`,
+    vars: ['a_pos0', 'a_pos1', 'a_pos2', 'a_pos3', 'a_col0', 'a_col1', 'a_col2', 'a_col3', 'u_matrix', 'u_percent', 'u_from', 'u_to'],
+  },
 };
 
 const fragment = {

@@ -72,6 +72,7 @@ const makeShape = center => [
   center[0] + r / 2, center[1] + r / 2,
   center[0] - r / 2, center[1] + r / 2,
 ];
+const makeColors = c => [...c, ...c, ...c, ...c, ...c, ...c];
 const n = 10000;
 const s = 1;
 for (let i = 0; i < n; i += 1) {
@@ -100,10 +101,10 @@ for (let i = 0; i < n; i += 1) {
   // points4.push(...makeShape([x, Math.sin(Math.PI * 2 / 4 * x)]));
   const p4 = Fig.tools.g2.polarToRect(rand(-3, 3), rand(-3, 3));
   points4.push(...makeShape([p4.x, p4.y]));
-  colors1.push([1, 0, 0, 1]);
-  colors2.push([0, 1, 0, 1]);
-  colors3.push([0, 0, 1, 1]);
-  colors4.push([0, 1, 1, 1]);
+  colors1.push(...makeColors([1, 0, 0, 1]));
+  colors2.push(...makeColors([0, 1, 0, 1]));
+  colors3.push(...makeColors([0, 0, 1, 1]));
+  colors4.push(...makeColors([0, 1, 1, 1]));
 }
 
 // The `field` FigureElement has the arrow grid within it.
@@ -184,12 +185,13 @@ const m = figure.add({
     step2: points3,
     step3: points4,
   },
+  color: { step0: colors1, step1: colors2, step2: colors3, step3: colors4 },
   // color: {
   //   step0: [],
   //   step1: [],
   //   step2: [],
   // },
-  color: [1, 0, 0, 1],
+  // color: [1, 0, 0, 1],
 });
 
 m.animations.new()

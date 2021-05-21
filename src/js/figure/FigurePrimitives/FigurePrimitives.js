@@ -2427,6 +2427,10 @@ export default class FigurePrimitives {
       glPrimitive: 'TRIANGLES',
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
+    if (!Array.isArray(options.color)) {
+      options.vertexShader = 'morph4VertexColor';
+      options.fragShader = 'vertexColor';
+    }
     options.transform = getTransform(options.transform);
     if (options.position != null) {
       options.position = getPoint(options.position);
@@ -2460,6 +2464,27 @@ export default class FigurePrimitives {
         b.normalize, b.stride, b.offset, b.usageIn,
       );
     });
+    if (!Array.isArray(options.color)) {
+      Object.keys(options.color).forEach((shapeName, index) => {
+        const colors = options.color[shapeName];
+        const attribute = `a_col${index}`;
+        shapeNameMap[shapeName] = index;
+        const defaultBuffer = {
+          type: 'FLOAT',
+          normalize: false,
+          stride: 0,
+          offset: 0,
+          usage: 'STATIC',
+          size: 4,
+        };
+        const b = joinObjects({}, defaultBuffer);
+        glObject.addBuffer(
+          attribute, b.size, colors, b.type,
+          b.normalize, b.stride, b.offset, b.usageIn,
+        );
+      });
+      options.color = this.defaultColor;
+    }
     glObject.addUniform('u_from', 1, 'INT');
     glObject.addUniform('u_to', 1, 'INT');
     glObject.addUniform('u_percent', 1, 'FLOAT');
