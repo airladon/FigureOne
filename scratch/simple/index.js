@@ -8,11 +8,11 @@ const figure = new Fig.Figure({
 const { rand } = Fig.tools.math;
 
 const img1 = new Image();
-img1.src = './star.png';
+img1.src = './text.png';
 const img2 = new Image();
-img2.src = './esclamation.png';
+img2.src = './text1.png';
 
-const r = 0.015;
+const r = 0.007;
 const makeShape = center => [
   center[0] - r / 2, center[1] - r / 2,
   center[0] + r / 2, center[1] - r / 2,
@@ -23,9 +23,92 @@ const makeShape = center => [
 ];
 const makeColors = c => [...c, ...c, ...c, ...c, ...c, ...c];
 
-// function processImage(image, ) {
 
-// }
+function processImage(
+  image, maxPoints, xBottom, yBottom, xWidth, xDither = 0,
+) {
+  const { width, height } = image;
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const context = canvas.getContext('2d');
+  context.drawImage(image, 0, 0);
+  const imgData = context.getImageData(0, 0, width, height).data;
+  const yHeight = xWidth / width * height;
+  const yDither = xDither;
+  // First scan through horizontal lines and get line length and total length
+  // of pixels that are not transparent
+  const linePixelCount = [];
+  let totalPixelCount = 0;
+  for (let h = 0; h < height; h += 1) {
+    linePixelCount.push(0);
+    for (let w = 0; w < width; w += 1) {
+      const pixelIndex = h * width * 4 + w * 4;
+      const transparency = imgData[pixelIndex + 3];
+      if (transparency > 1) {
+        linePixelCount[h] += 1;
+        totalPixelCount += 1;
+      }
+    }
+  }
+  console.log(totalPixelCount)
+  // const pointsPerPixel = maxPoints / totalPixelCount;
+  const points = [];
+  const colors = [];
+  /*
+  - If pointsPerPixel = 1, then each pixel defines a point
+  - If pointsPerPixel < 1, then align first point with first pixel,
+    and then keep a points counter and pixel counter. For each pixel, catch up the number of points that are needed to until the pointsCount/pixelCounter ratio > pointsPerPixel
+  */
+  // let remainingPoints = maxPoints;
+  // let remainingPixels = totalPixelCount;
+  let pointsCounter = 0;
+  let pixelCounter = 0;
+  for (let h = 0; h < height; h += 1) {
+    // const pointsPerPixel = remainingPoints / remainingPixels;
+    // let pointsForLine = Fig.math.round(linePixelCount[h] * pointsPerPixel);
+    // if (pointsForLine > remainingPoints) {
+    //   pointsForLine = remainingPoints;
+    // }
+    // let remainingLinePixels = 0;
+    // let cumLinePoints = 0;
+    for (let w = 0; w < width; w += 1) {
+      const pixelIndex = h * width * 4 + w * 4;
+      const transparency = imgData[pixelIndex + 3];
+      if (transparency > 1) {
+        const pixel = [
+          // imgData[pixelIndex] / 255,
+          // imgData[pixelIndex + 1] / 255,
+          // imgData[pixelIndex + 2] / 255,
+          // transparency,
+          1, 0, 0, transparency,
+        ];
+        pixelCounter += 1;
+        const point = [
+          xBottom + w / width * xWidth + rand(-xDither, xDither),
+          yBottom + yHeight - h / height * yHeight + rand(-yDither, yDither),
+        ];
+        // if (transparency < 100) {
+        //   if (pointsCounter / pixelCounter < maxPoints / totalPixelCount) {
+        //     pointsCounter += 1;
+        //     points.push(...makeShape(point));
+        //     colors.push(...makeColors(pixel));
+        //   }
+        // } else {
+        while (pointsCounter / pixelCounter < maxPoints / totalPixelCount) {
+          pointsCounter += 1;
+          points.push(...makeShape(point));
+          colors.push(...makeColors(pixel));
+        }
+        // }
+      }
+    }
+  }
+  console.log(pointsCounter, maxPoints)
+  // console.log(points);
+
+  return [points, colors];
+}
 
 function getImagePointsAndColors(
   image, xBottom, yBottom, xWidth, yHeight, xDither = 0, yDither = 0,
@@ -135,9 +218,12 @@ const makePolygon = (radius, sides, numPoints) => {
 
 
 function loaded() {
-  const [image1, colors] = getImagePointsAndColors(img1, -2, -2, 4, 4, 0.01, 0.01);
-  const [image2, colors2] = getImagePointsAndColors(img2, -2, -2, 4, 4, 0.01, 0.01);
+  // const [image1, colors] = getImagePointsAndColors(img1, -2, -2, 4, 4, 0.01, 0.01);
+  const [image1, colors] = processImage(img1, 40000, -1.5, -0.5, 3, 0.01, 0.01);
   const n = image1.length / 2 / 6;
+  const [image2, colors2] = processImage(img2, n, -1.5, -0.5, 3, 0.01, 0.01);
+  // console.log(testImage)
+  // const [image2, colors2] = getImagePointsAndColors(img2, -2, -2, 4, 4, 0.01, 0.01);
   const square = lineToPoints([[1, 1], [-1, 1], [-1, -1], [1, -1]], n, true);
   const circle = makePolygon(0.9, 20, n);
   // console.log(square)
@@ -170,12 +256,12 @@ function loaded() {
       start: 'rand', target: 'image1', duration: 3, progression: 'easeinout',
     })
     .delay(1)
-    .morph({ start: 'image1', target: 'image2', duration: 3 })
-    .morph({ start: 'image2', target: 'square', duration: 3 })
-    .morph({ start: 'square', target: 'circle', duration: 1 })
-    .morph({ start: 'circle', target: 'rand', duration: 4 })
-    // .delay(2)
-    // .morph({ start: 'step3', target: 'step0', duration: 2 })
+    .morph({ start: 'image1', target: 'image2', duration: 1 })
+    .delay(1)
+    // .morph({ start: 'image2', target: 'square', duration: 1 })
+    // .delay(1)
+    // .morph({ start: 'square', target: 'circle', duration: 1 })
+    // .morph({ start: 'circle', target: 'rand', duration: 4 })
     .start();
 }
 
