@@ -8,12 +8,12 @@ const figure = new Fig.Figure({
 const { rand } = Fig.tools.math;
 
 const img1 = new Image();
-img1.src = './duck.png';
+img1.src = './logo.png';
 const img2 = new Image();
 img2.src = './star.png';
 
-const r = 0.007;
-const makeShape = center => [
+// const r = 0.015;
+const makeShape = (center, r = 0.015) => [
   center[0] - r / 2, center[1] - r / 2,
   center[0] + r / 2, center[1] - r / 2,
   center[0] + r / 2, center[1] + r / 2,
@@ -25,7 +25,7 @@ const makeColors = c => [...c, ...c, ...c, ...c, ...c, ...c];
 
 
 function processImage(
-  image, maxPoints, xBottom, yBottom, xWidth, xDither = 0,
+  image, maxPoints, xBottom, yBottom, xWidth, xDither = 0, rad = 0.015,
 ) {
   const { width, height } = image;
   const canvas = document.createElement('canvas');
@@ -49,7 +49,7 @@ function processImage(
       const transparency = imgData[pixelIndex + 3];
       if (transparency > 1) {
         linePixelCount[h] += 1;
-        totalPixelCount += 1;
+        // totalPixelCount += 1;
         pixels.push([w, h]);
         pixelColors.push([
           imgData[pixelIndex] / 255,
@@ -60,7 +60,6 @@ function processImage(
       }
     }
   }
-  console.log(totalPixelCount)
   // const pointsPerPixel = maxPoints / totalPixelCount;
   const points = [];
   const colors = [];
@@ -80,7 +79,7 @@ function processImage(
       xBottom + pixel[0] / width * xWidth + rand(-xDither, xDither),
       yBottom + yHeight - pixel[1] / height * yHeight + rand(-yDither, yDither),
     ];
-    points.push(...makeShape(point));
+    points.push(...makeShape(point, rad));
     colors.push(...makeColors(color));
   }
 
@@ -140,9 +139,10 @@ function processImage(
 }
 
 function getImagePointsAndColors(
-  image, xBottom, yBottom, xWidth, yHeight, xDither = 0, yDither = 0,
+  image, xBottom, yBottom, xWidth, yHeight, xDither = 0, rad = 0.015,
 ) {
   const { width, height } = image;
+  const yDither = xDither;
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
@@ -156,7 +156,7 @@ function getImagePointsAndColors(
       points.push(...makeShape([
         xBottom + w / width * xWidth + rand(-xDither, xDither),
         yBottom + yHeight - h / height * yHeight + rand(-yDither, yDither),
-      ]));
+      ], rad));
       const pixelIndex = h * width * 4 + w * 4;
       const pixel = [
         imgData[pixelIndex] / 255,
@@ -170,10 +170,10 @@ function getImagePointsAndColors(
   return [points, colors];
 }
 
-function pointsToVertices(points) {
+function pointsToVertices(points, rad = 0.015) {
   const vertices = [];
   for (let i = 0; i < points.length; i += 1) {
-    vertices.push(...makeShape(points[i]));
+    vertices.push(...makeShape(points[i], rad));
   }
   return vertices;
 }
@@ -182,6 +182,7 @@ function lineToPoints(
   linePoints, // : Array<[number, number]>,
   numPoints, // : number,
   close = false, // : boolean = false,
+  rad = 0.015,
 ) {
   let cumDistance = 0;
   const distances = Array(linePoints.length).fill(0);
@@ -213,7 +214,7 @@ function lineToPoints(
       // eslint-disable-next-line no-continue
       continue;
     }
-    while (cumDistances[nextLinePointIndex] < currentCumDist) {
+    while (cumDistances[nextLinePointIndex] < currentCumDist && nextLinePointIndex > 0) {
       if (nextLinePointIndex === linePoints.length - 1) {
         nextLinePointIndex = 0;
       } else {
@@ -230,10 +231,10 @@ function lineToPoints(
       (p[1] - q[1]) * remainingPercent + q[1],
     ];
   }
-  return pointsToVertices(points);
+  return pointsToVertices(points, rad);
 }
 
-const makePolygon = (radius, sides, numPoints) => {
+const makePolygon = (radius, sides, numPoints, rad = 0.015) => {
   const points = [];
   const dAngle = Math.PI * 2 / sides;
   for (let i = 0; i < sides; i += 1) {
@@ -242,19 +243,22 @@ const makePolygon = (radius, sides, numPoints) => {
       radius * Math.sin(dAngle * i),
     ]);
   }
-  return lineToPoints(points, numPoints, true);
+  return lineToPoints(points, numPoints, true, rad);
 };
 
 
 function loaded() {
-  // const [image1, colors] = getImagePointsAndColors(img1, -2, -2, 4, 4, 0.01, 0.01);
-  const n = 5000;
-  const [image1, colors] = processImage(img1, 40000, -1, -0.5, 2, 0.01, 0.01);
-  const [image2, colors2] = processImage(img2, n, -1, -0.5, 2, 0.01, 0.01);
+  const [image1, colors] = getImagePointsAndColors(img1, -2, -2, 4, 4, 0.005, 0.015);
+  const n = image1.length / 2 / 6;
+  // const [image1, colors] = processImage(img1, n, -2, -2, 4, 0, 0);
+  const [image2, colors2] = processImage(img2, n, -2, -2, 4, 0.01, 0.007);
+  // console.log('asdf2')
   // console.log(testImage)
   // const [image2, colors2] = getImagePointsAndColors(img2, -2, -2, 4, 4, 0.01, 0.01);
   const square = lineToPoints([[1, 1], [-1, 1], [-1, -1], [1, -1]], n, true);
+  console.log(1)
   const circle = makePolygon(0.9, 20, n);
+  console.log(2)
   // console.log(square)
   // console.log(circle)
   // console.log(imagePoints)
