@@ -1,5 +1,6 @@
 import * as morph from './morph';
 import getImageData from './getImageData';
+import { round } from './math';
 
 import 'regenerator-runtime/runtime';
 // import { round } from './math';
@@ -37,6 +38,13 @@ const fourByFour = [
   0, 0, 0, 0,
   0, 0, 0, 0,
 ];
+
+const black = round([0, 0, 0, 1]);
+const red = round([128 / 255, 0, 0, 1]);
+const blue = round([0, 0, 253 / 255, 128 / 255]);
+const transparent = round([0, 0, 0, 0]);
+
+const fourByFourNorm = fourByFour.map(c => c / 255);
 
 const twoByFour = [
   // row 1
@@ -111,36 +119,31 @@ describe('Morph', () => {
         [0, 2], [1, 2], [2, 2], [3, 2],
         [0, 3], [1, 3], [2, 3], [3, 3],
       ]);
-      expect(pixelColors).toEqual([
-        [0, 0, 0, 255], [0, 0, 0, 255],
-        [128, 0, 0, 255], [128, 0, 0, 255],
-        [0, 0, 0, 255], [0, 0, 0, 255],
-        [128, 0, 0, 255], [128, 0, 0, 255],
-        [0, 0, 253, 128], [0, 0, 253, 128],
-        [0, 0, 0, 0], [0, 0, 0, 0],
-        [0, 0, 253, 128], [0, 0, 253, 128],
-        [0, 0, 0, 0], [0, 0, 0, 0],
+      expect(round(pixelColors)).toEqual([
+        black, black, red, red,
+        black, black, red, red,
+        blue, blue, transparent, transparent,
+        blue, blue, transparent, transparent,
       ]);
     });
     test('Red Filter 2x2', () => {
       const {
         max, min, pixels, pixelColors,
-      } = morph.getPixels(fourByFour, 4, 4, c => c[0] >= 128);
+      } = morph.getPixels(fourByFour, 4, 4, c => c[0] >= 127 / 255);
       expect(max).toEqual([3, 1]);
       expect(min).toEqual([2, 0]);
       expect(pixels).toEqual([
         [2, 0], [3, 0],
         [2, 1], [3, 1],
       ]);
-      expect(pixelColors).toEqual([
-        [128, 0, 0, 255], [128, 0, 0, 255],
-        [128, 0, 0, 255], [128, 0, 0, 255],
+      expect(round(pixelColors)).toEqual([
+        red, red, red, red,
       ]);
     });
     test('Too Red Filter 2x2', () => {
       const {
         max, min, pixels, pixelColors,
-      } = morph.getPixels(fourByFour, 4, 4, c => c[0] >= 129);
+      } = morph.getPixels(fourByFour, 4, 4, c => c[0] >= 0.51);
       expect(max).toEqual([0, 0]);
       expect(min).toEqual([4, 4]);
       expect(pixels).toEqual([]);
@@ -149,24 +152,24 @@ describe('Morph', () => {
     test('Opaque Filter', () => {
       const {
         max, min, pixels, pixelColors,
-      } = morph.getPixels(fourByFour, 4, 4, c => c[3] === 255);
+      } = morph.getPixels(fourByFour, 4, 4, c => c[3] === 1);
       expect(max).toEqual([3, 1]);
       expect(min).toEqual([0, 0]);
       expect(pixels).toEqual([
         [0, 0], [1, 0], [2, 0], [3, 0],
         [0, 1], [1, 1], [2, 1], [3, 1],
       ]);
-      expect(pixelColors).toEqual([
-        [0, 0, 0, 255], [0, 0, 0, 255],
-        [128, 0, 0, 255], [128, 0, 0, 255],
-        [0, 0, 0, 255], [0, 0, 0, 255],
-        [128, 0, 0, 255], [128, 0, 0, 255],
+      expect(round(pixelColors)).toEqual([
+        black, black,
+        red, red,
+        black, black,
+        red, red,
       ]);
     });
     test('Semi Transparent Filter 2x2', () => {
       const {
         max, min, pixels, pixelColors,
-      } = morph.getPixels(fourByFour, 4, 4, c => c[3] > 0);
+      } = morph.getPixels(fourByFour, 4, 4, c => c[3] >= 128 / 255);
       expect(max).toEqual([3, 3]);
       expect(min).toEqual([0, 0]);
       expect(pixels).toEqual([
@@ -175,13 +178,13 @@ describe('Morph', () => {
         [0, 2], [1, 2],
         [0, 3], [1, 3],
       ]);
-      expect(pixelColors).toEqual([
-        [0, 0, 0, 255], [0, 0, 0, 255],
-        [128, 0, 0, 255], [128, 0, 0, 255],
-        [0, 0, 0, 255], [0, 0, 0, 255],
-        [128, 0, 0, 255], [128, 0, 0, 255],
-        [0, 0, 253, 128], [0, 0, 253, 128],
-        [0, 0, 253, 128], [0, 0, 253, 128],
+      expect(round(pixelColors)).toEqual([
+        black, black,
+        red, red,
+        black, black,
+        red, red,
+        blue, blue,
+        blue, blue,
       ]);
     });
     test('No Filter 2x4', () => {
@@ -195,23 +198,23 @@ describe('Morph', () => {
         [0, 1], [1, 1], [2, 1], [3, 1],
       ]);
       expect(pixelColors).toEqual([
-        [0, 0, 0, 255], [0, 0, 0, 255],
-        [128, 0, 0, 255], [128, 0, 0, 255],
-        [0, 0, 253, 128], [0, 0, 253, 128],
+        [0, 0, 0, 1], [0, 0, 0, 1],
+        [128 / 255, 0, 0, 1], [128 / 255, 0, 0, 1],
+        [0, 0, 253 / 255, 128 / 255], [0, 0, 253 / 255, 128 / 255],
         [0, 0, 0, 0], [0, 0, 0, 0],
       ]);
     });
     test('Red Filter 2x4', () => {
       const {
         max, min, pixels, pixelColors,
-      } = morph.getPixels(twoByFour, 4, 2, c => c[0] > 0);
+      } = morph.getPixels(twoByFour, 4, 2, c => c[0] > 0.5 / 255);
       expect(max).toEqual([3, 0]);
       expect(min).toEqual([2, 0]);
       expect(pixels).toEqual([
         [2, 0], [3, 0],
       ]);
-      expect(pixelColors).toEqual([
-        [128, 0, 0, 255], [128, 0, 0, 255],
+      expect(round(pixelColors)).toEqual([
+        red, red,
       ]);
     });
   });
@@ -232,7 +235,7 @@ describe('Morph', () => {
         -0.5, -0.25, -0.25, -0.25, 0, -0.25, 0.25, -0.25,
       ];
       expect(expectedPoints).toEqual(points);
-      expect(colors).toEqual(fourByFour);
+      expect(colors).toEqual(fourByFourNorm);
     });
     test('random, no filter', () => {
       const [points, colors] = morph.getImage({
@@ -259,10 +262,10 @@ describe('Morph', () => {
             && pointPairs[i][1] === expectedPoints[j][1]
           ) {
             indeces[j] = i;
-            expect(colors[i * 4]).toBe(fourByFour[j * 4]);
-            expect(colors[i * 4 + 1]).toBe(fourByFour[j * 4 + 1]);
-            expect(colors[i * 4 + 2]).toBe(fourByFour[j * 4 + 2]);
-            expect(colors[i * 4 + 3]).toBe(fourByFour[j * 4 + 3]);
+            expect(round(colors[i * 4])).toBe(round(fourByFour[j * 4] / 255));
+            expect(round(colors[i * 4 + 1])).toBe(round(fourByFour[j * 4 + 1] / 255));
+            expect(round(colors[i * 4 + 2])).toBe(round(fourByFour[j * 4 + 2] / 255));
+            expect(round(colors[i * 4 + 3])).toBe(round(fourByFour[j * 4 + 3] / 255));
           }
         }
       }
@@ -282,7 +285,7 @@ describe('Morph', () => {
         -0.5, 0.25,
       ];
       expect(expectedPoints).toEqual(points);
-      expect(colors).toEqual(fourByFour.slice(0, 5 * 4));
+      expect(round(colors)).toEqual(round(fourByFourNorm.slice(0, 5 * 4)));
     });
     test('random, maxPoints', () => {
       const [points, colors] = morph.getImage({
@@ -310,10 +313,10 @@ describe('Morph', () => {
             && pointPairs[i][1] === expectedPoints[j][1]
           ) {
             indeces[j] = i;
-            expect(colors[i * 4]).toBe(fourByFour[j * 4]);
-            expect(colors[i * 4 + 1]).toBe(fourByFour[j * 4 + 1]);
-            expect(colors[i * 4 + 2]).toBe(fourByFour[j * 4 + 2]);
-            expect(colors[i * 4 + 3]).toBe(fourByFour[j * 4 + 3]);
+            expect(round(colors[i * 4])).toBe(round(fourByFour[j * 4] / 255));
+            expect(round(colors[i * 4 + 1])).toBe(round(fourByFour[j * 4 + 1] / 255));
+            expect(round(colors[i * 4 + 2])).toBe(round(fourByFour[j * 4 + 2] / 255));
+            expect(round(colors[i * 4 + 3])).toBe(round(fourByFour[j * 4 + 3] / 255));
           }
         }
       }
@@ -326,14 +329,27 @@ describe('Morph', () => {
         image: { width: 4, height: 4 },
         makeVertices: p => p,
         distribution: 'raster',
-        filter: c => c[3] < 200,
+        filter: c => c[3] < 200 / 255,
       });
       const expectedPoints = [
         -0.5, 0, -0.25, 0, 0, 0, 0.25, 0,
         -0.5, -0.25, -0.25, -0.25, 0, -0.25, 0.25, -0.25,
       ];
       expect(expectedPoints).toEqual(points);
-      expect(colors).toEqual(fourByFour.slice(32));
+      expect(colors).toEqual(fourByFourNorm.slice(32));
+    });
+    test('raster, pointSize default', () => {
+      const [points, colors] = morph.getImage({
+        image: { width: 4, height: 4 },
+        distribution: 'raster',
+      });
+      console.log(points)
+      // const expectedPoints = [
+      //   -0.5, 0, -0.25, 0, 0, 0, 0.25, 0,
+      //   -0.5, -0.25, -0.25, -0.25, 0, -0.25, 0.25, -0.25,
+      // ];
+      // expect(expectedPoints).toEqual(points);
+      // expect(colors).toEqual(fourByFour.slice(32));
     });
   });
 });

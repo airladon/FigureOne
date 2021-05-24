@@ -38,10 +38,10 @@ function getPixels(
     for (let w = 0; w < imageWidth; w += 1) {
       const pixelIndex = h * imageWidth * 4 + w * 4;
       const pixelColor = [
-        data[pixelIndex],
-        data[pixelIndex + 1],
-        data[pixelIndex + 2],
-        data[pixelIndex + 3],
+        data[pixelIndex] / 255,
+        data[pixelIndex + 1] / 255,
+        data[pixelIndex + 2] / 255,
+        data[pixelIndex + 3] / 255,
       ];
       if (filter(pixelColor)) {
         // filter[0] <= pixelColor[0]
@@ -122,7 +122,7 @@ function getImage(options: OBJ_GetImage) {
     dither: 0,
     width: null,
     height: null,
-    pointSize: 0.01,
+    // pointSize: null,
     makeVertices: makeShape.bind(this),
     makeColors: makeColors.bind(this),
   };
@@ -214,13 +214,13 @@ function getImage(options: OBJ_GetImage) {
     }
     // console.log(i, index, indeces[i])
     const pixel = pixels[index];
-    const color = pixelColors[index].map(c => c / 255);
+    const color = pixelColors[index];
     const point = [
       p.x + pixel[0] * pixelWidth + rand(-o.dither, o.dither),
       p.y + height - pixel[1] * pixelHeight + rand(-o.dither, o.dither),
     ];
 
-    const pointVertices = o.makeVertices(point, o.pointSize);
+    const pointVertices = o.makeVertices(point, o.pointSize || pixelWidth);
     const pointColors = o.makeColors(color, pointVertices.length / 2);
     points.push(...pointVertices);
     colors.push(...pointColors);

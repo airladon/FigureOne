@@ -449,7 +449,7 @@ function loaded() {
     image: img1,
     // maxPoints: n,
     width: 1,
-    pointSize: 0.015,
+    // pointSize: 0.005,
     filter: c => c[3] > 0,
     // xAlign: 'center',
     // yAlign: 'middle',
@@ -504,7 +504,7 @@ function loaded() {
     .morph({
       start: 'rand', target: 'image1', duration: 3, progression: 'easeinout',
     })
-    .delay(1)
+    .delay(4)
     .morph({
       start: 'image1', target: 'image2', duration: 1, progression: 'easeinout',
     })
