@@ -489,6 +489,50 @@ describe('Morph', () => {
         0, -1, 1, 0, 0, 0,
       ], [0, 0]));
     });
+    test('raster, align to filter 2', () => {
+      const [points] = morph.getImage({
+        image: { width: 4, height: 4 },
+        distribution: 'raster',
+        width: 1.2,
+        xAlign: 'center',
+        yAlign: 'middle',
+        alignFrom: 'filter',
+      });
+      expect(round(points.slice(0, 12))).toEqual([
+        -0.8, 0.4, -0.4, 0.4, -0.4, 0.8,
+        -0.8, 0.4, -0.4, 0.8, -0.8, 0.8,
+      ]);
+      expect(round(points.slice(180, 192))).toEqual([
+        0.4, -0.8, 0.8, -0.8, 0.8, -0.4,
+        0.4, -0.8, 0.8, -0.4, 0.4, -0.4,
+      ]);
+    });
+    test('raster, align to filter 3', () => {
+      const [points] = morph.getImage({
+        image: { width: 4, height: 4 },
+        distribution: 'raster',
+        width: 1,
+        xAlign: 'center',
+        yAlign: 'middle',
+        alignFrom: 'filter',
+        filter: c => c[3] < 0.1,
+      });
+      // transparent part of image is 2 x 2 pixels
+      // image will be drawn to figure width/height of 1 / 1
+      // from center of pixels
+      // Therefore each pixel will have a 1.0 side length
+      // with centers at -0.5, 0.5
+      // and boundaries at -1, 0, 1
+      //
+      expect(round(points.slice(0, 12))).toEqual(offset([
+        -1, 0, 0, 0, 0, 1,
+        -1, 0, 0, 1, -1, 1,
+      ], [0, 0]));
+      expect(round(points.slice(36, 48))).toEqual(offset([
+        0, -1, 1, -1, 1, 0,
+        0, -1, 1, 0, 0, 0,
+      ], [0, 0]));
+    });
   });
 });
 

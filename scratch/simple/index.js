@@ -435,6 +435,12 @@ figure.add({
   line: { width: 0.007 },
   color: [1, 1, 0, 1],
 });
+figure.add({
+  make: 'rectangle',
+  width: 0.01,
+  height: 0.01,
+  color: [1, 1, 0, 1],
+});
 function loaded() {
   // const [image1, colors] = getImagePointsAndColors(img1, -2, -2, 4, 4, 0.005, 0.015);
   // const n = image1.length / 2 / 6;
@@ -449,12 +455,11 @@ function loaded() {
   //   // distribution: 'raster',
   // });
   // const n = 5000;
-  console.log('asdf')
   const [image1, colors] = Fig.tools.morph.getImage({
     image: img1,
     // maxPoints: n,
     // width: 1,
-    // pointSize: 0.005,
+    // pointSize: 0.1,
     filter: c => c[3] > 0,
     xAlign: 'center',
     yAlign: 'middle',
@@ -491,7 +496,7 @@ function loaded() {
   const colors3 = [];
   for (let i = 0; i < n; i += 1) {
     const center1 = [rand(-2, 2), rand(-2, 2)];
-    points1.push(...makeShape(center1, 0.005));
+    points1.push(...makeShape(center1, 0.01));
     colors1.push(...makeColors([1, 0, 0, 1]));
     // colors2.push(...makeColors([0, 1, 0, 1]));
     colors3.push(...makeColors([1, 0, 1, 1]));

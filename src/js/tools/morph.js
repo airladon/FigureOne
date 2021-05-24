@@ -155,7 +155,6 @@ function getImage(options: OBJ_GetImage) {
     pixelsHeight = max[1] - min[1];
     pixelOffset = [-min[0], min[1]];
   }
-  console.log(pixelsWidth, pixelsHeight, pixelOffset, imageWidth, imageHeight);
 
   let { width, height } = o;
   if (o.height == null && o.width == null) {
@@ -166,7 +165,6 @@ function getImage(options: OBJ_GetImage) {
   } else if (o.width != null && o.height == null) {
     height = o.width / pixelsWidth * pixelsHeight;
   }
-  console.log(width, height)
 
   const pixelWidth = width / pixelsWidth;
   const pixelHeight = height / pixelsHeight;
