@@ -104,11 +104,11 @@ const twoByFour = [
 //   0, 0, 0, 0,
 // ];
 
-const offset = (points, offset) => {
+const offset = (points, offsetBy) => {
   const offsetPoints = [];
   for (let i = 0; i < points.length; i += 2) {
-    offsetPoints.push(round(points[i] + offset[0]));
-    offsetPoints.push(round(points[i + 1] + offset[1]));
+    offsetPoints.push(round(points[i] + offsetBy[0]));
+    offsetPoints.push(round(points[i + 1] + offsetBy[1]));
   }
   return offsetPoints;
 };
@@ -237,14 +237,15 @@ describe('Morph', () => {
         makeVertices: p => p,
         distribution: 'raster',
         // pointSize: 0,
+        width: 1,
       });
       const expectedPoints = [
-        -0.5, 0.5, -0.25, 0.5, 0, 0.5, 0.25, 0.5,
-        -0.5, 0.25, -0.25, 0.25, 0, 0.25, 0.25, 0.25,
-        -0.5, 0, -0.25, 0, 0, 0, 0.25, 0,
-        -0.5, -0.25, -0.25, -0.25, 0, -0.25, 0.25, -0.25,
+        -0.5, 0.5, -0.17, 0.5, 0.17, 0.5, 0.5, 0.5,
+        -0.5, 0.17, -0.17, 0.17, 0.17, 0.17, 0.5, 0.17,
+        -0.5, -0.17, -0.17, -0.17, 0.17, -0.17, 0.5, -0.17,
+        -0.5, -0.5, -0.17, -0.5, 0.17, -0.5, 0.5, -0.5,
       ];
-      expect(expectedPoints).toEqual(points);
+      expect(expectedPoints).toEqual(round(points, 2));
       expect(colors).toEqual(fourByFourNorm);
     });
     test('random, no filter', () => {
@@ -252,13 +253,12 @@ describe('Morph', () => {
         image: { width: 4, height: 4 },
         makeVertices: p => p,
         distribution: 'random',
-        // pointSize: 0,
       });
       const expectedPoints = [
-        [-0.5, 0.5], [-0.25, 0.5], [0, 0.5], [0.25, 0.5],
-        [-0.5, 0.25], [-0.25, 0.25], [0, 0.25], [0.25, 0.25],
-        [-0.5, 0], [-0.25, 0], [0, 0], [0.25, 0],
-        [-0.5, -0.25], [-0.25, -0.25], [0, -0.25], [0.25, -0.25],
+        [-0.5, 0.5], [-0.17, 0.5], [0.17, 0.5], [0.5, 0.5],
+        [-0.5, 0.17], [-0.17, 0.17], [0.17, 0.17], [0.5, 0.17],
+        [-0.5, -0.17], [-0.17, -0.17], [0.17, -0.17], [0.5, -0.17],
+        [-0.5, -0.5], [-0.17, -0.5], [0.17, -0.5], [0.5, -0.5],
       ];
       const pointPairs = [];
       for (let i = 0; i < points.length; i += 2) {
@@ -269,8 +269,8 @@ describe('Morph', () => {
       for (let i = 0; i < pointPairs.length; i += 1) {
         for (let j = 0; j < expectedPoints.length; j += 1) {
           if (
-            pointPairs[i][0] === expectedPoints[j][0]
-            && pointPairs[i][1] === expectedPoints[j][1]
+            round(pointPairs[i][0], 2) === expectedPoints[j][0]
+            && round(pointPairs[i][1], 2) === expectedPoints[j][1]
           ) {
             indeces[j] = i;
             expect(round(colors[i * 4])).toBe(round(fourByFour[j * 4] / 255));
@@ -280,7 +280,6 @@ describe('Morph', () => {
           }
         }
       }
-
       expect(Object.keys(indeces)).toHaveLength(expectedPoints.length);
       expect(colors.length).toEqual(fourByFour.length);
     });
@@ -293,10 +292,10 @@ describe('Morph', () => {
         // pointSize: 0,
       });
       const expectedPoints = [
-        -0.5, 0.5, -0.25, 0.5, 0, 0.5, 0.25, 0.5,
-        -0.5, 0.25,
+        -0.5, 0.5, -0.17, 0.5, 0.17, 0.5, 0.5, 0.5,
+        -0.5, 0.17,
       ];
-      expect(expectedPoints).toEqual(points);
+      expect(expectedPoints).toEqual(round(points, 2));
       expect(round(colors)).toEqual(round(fourByFourNorm.slice(0, 5 * 4)));
     });
     test('random, maxPoints', () => {
@@ -308,10 +307,10 @@ describe('Morph', () => {
         // pointSize: 0,
       });
       const expectedPoints = [
-        [-0.5, 0.5], [-0.25, 0.5], [0, 0.5], [0.25, 0.5],
-        [-0.5, 0.25], [-0.25, 0.25], [0, 0.25], [0.25, 0.25],
-        [-0.5, 0], [-0.25, 0], [0, 0], [0.25, 0],
-        [-0.5, -0.25], [-0.25, -0.25], [0, -0.25], [0.25, -0.25],
+        [-0.5, 0.5], [-0.17, 0.5], [0.17, 0.5], [0.5, 0.5],
+        [-0.5, 0.17], [-0.17, 0.17], [0.17, 0.17], [0.5, 0.17],
+        [-0.5, -0.17], [-0.17, -0.17], [0.17, -0.17], [0.5, -0.17],
+        [-0.5, -0.5], [-0.17, -0.5], [0.17, -0.5], [0.5, -0.5],
       ];
       const pointPairs = [];
       for (let i = 0; i < points.length; i += 2) {
@@ -322,8 +321,8 @@ describe('Morph', () => {
       for (let i = 0; i < pointPairs.length; i += 1) {
         for (let j = 0; j < expectedPoints.length; j += 1) {
           if (
-            pointPairs[i][0] === expectedPoints[j][0]
-            && pointPairs[i][1] === expectedPoints[j][1]
+            round(pointPairs[i][0], 2) === expectedPoints[j][0]
+            && round(pointPairs[i][1], 2) === expectedPoints[j][1]
           ) {
             indeces[j] = i;
             expect(round(colors[i * 4])).toBe(round(fourByFour[j * 4] / 255));
@@ -343,13 +342,13 @@ describe('Morph', () => {
         makeVertices: p => p,
         distribution: 'raster',
         filter: c => c[3] < 200 / 255,
-        width: 1.2,
+        width: 1,
       });
       const expectedPoints = [
-        -0.5, 0, -0.25, 0, 0, 0, 0.25, 0,
-        -0.5, -0.25, -0.25, -0.25, 0, -0.25, 0.25, -0.25,
+        -0.5, -0.17, -0.17, -0.17, 0.17, -0.17, 0.5, -0.17,
+        -0.5, -0.5, -0.17, -0.5, 0.17, -0.5, 0.5, -0.5,
       ];
-      expect(expectedPoints).toEqual(points);
+      expect(expectedPoints).toEqual(round(points, 2));
       expect(colors).toEqual(fourByFourNorm.slice(32));
     });
     test('raster, pointSize default', () => {
@@ -470,7 +469,7 @@ describe('Morph', () => {
         width: 1,
         xAlign: 'center',
         yAlign: 'middle',
-        alignFrom: 'filter',
+        align: 'filteredImage',
         filter: c => c[0] > 0.4,
       });
       // red part of image is 2 x 2 pixels
@@ -496,7 +495,7 @@ describe('Morph', () => {
         width: 1.2,
         xAlign: 'center',
         yAlign: 'middle',
-        alignFrom: 'filter',
+        align: 'filteredImage',
       });
       expect(round(points.slice(0, 12))).toEqual([
         -0.8, 0.4, -0.4, 0.4, -0.4, 0.8,
@@ -514,7 +513,7 @@ describe('Morph', () => {
         width: 1,
         xAlign: 'center',
         yAlign: 'middle',
-        alignFrom: 'filter',
+        align: 'filteredImage',
         filter: c => c[3] < 0.1,
       });
       // transparent part of image is 2 x 2 pixels

@@ -84,7 +84,7 @@ function getPixels(
  * @property {number | null} [maxPoints]
  * @property {TypeHAlign} [xAlign]
  * @property {TypeVAlign} [yAlign]
- * @property {'image' | 'filter'} [alignFrom]
+ * @property {'image' | 'filteredImage'} [align]
  * @property {'raster' | 'random'} [distribution]
  * @property {'none' | Array<number>} [filter]
  * @property {TypeParsablePoint} [offset]
@@ -100,7 +100,7 @@ export type OBJ_GetImage = {
  maxPoints?: number | null,
  xAlign?: TypeHAlign,
  yAlign?: TypeVAlign,
- alignFrom?: 'image' | 'filter',
+ align?: 'image' | 'filteredImage',
  distribution?: 'raster' | 'random',
  filter?: 'none' | Array<number>,
  offset?: TypeParsablePoint,
@@ -115,7 +115,7 @@ function getImage(options: OBJ_GetImage) {
     maxPoints: null,
     xAlign: 'center',
     yAlign: 'middle',
-    alignFrom: 'image',
+    align: 'image',
     distribution: 'random',
     filter: () => true,
     offset: [0, 0],
@@ -131,10 +131,6 @@ function getImage(options: OBJ_GetImage) {
   const imageHeight = image.height;
   const imageWidth = image.width;
   const { filter } = o;
-  // let filter = () => true;
-  // if (typeof o.filter === 'function') {
-  //   filter = o.filter;
-  // }
 
   const data = getImageData(image);
 
@@ -150,7 +146,7 @@ function getImage(options: OBJ_GetImage) {
   let pixelsWidth = imageWidth - 1;
   let pixelsHeight = imageHeight - 1;
   let pixelOffset = [0, 0];
-  if (o.alignFrom === 'filter') {
+  if (o.align === 'filteredImage') {
     pixelsWidth = max[0] - min[0];
     pixelsHeight = max[1] - min[1];
     pixelOffset = [-min[0], min[1]];
@@ -172,7 +168,6 @@ function getImage(options: OBJ_GetImage) {
   const offset = getPoint(o.offset);
   const { xAlign, yAlign } = o;
 
-  // const bounds = this.getBoundingRect(space, border, children, shownOnly);
   // p is Bottom left corner
   const p = new Point(0, 0);
   if (xAlign === 'left') {
@@ -198,14 +193,6 @@ function getImage(options: OBJ_GetImage) {
     p.y = offset.y - parseFloat(yAlign);
   }
 
-  // let pointSizeX = o.pointSize;
-  // let pointSizeY = o.pointSize;
-  // if (o.pointSize == null) {
-  //   pointSizeX = pixelWidth;
-  //   pointSizeY = pixelHeight;
-  // }
-  // p.x += pointSizeX / 2;
-  // p.y += pointSizeY / 2;
   const points = [];
   const colors = [];
   const pixelIndeces = Array(pixels.length);
@@ -213,6 +200,10 @@ function getImage(options: OBJ_GetImage) {
     pixelIndeces[i] = i;
   }
   let indeces = pixelIndeces.slice();
+  const dithering = Array(indeces.length);
+  for (let i = 0; i < dithering.length; i += 1) {
+    dithering[i] = [rand(-o.dither, o.dither), rand(-o.dither, o.dither)];
+  }
   for (let i = 0; i < maxPoints; i += 1) {
     if (indeces.length === 0) {
       indeces = pixelIndeces.slice();
@@ -227,8 +218,8 @@ function getImage(options: OBJ_GetImage) {
     const pixel = pixels[index];
     const color = pixelColors[index];
     const point = [
-      p.x + pixel[0] * pixelWidth + pixelOffset[0] * pixelWidth + rand(-o.dither, o.dither),
-      p.y + height - pixel[1] * pixelHeight + pixelOffset[1] * pixelHeight + rand(-o.dither, o.dither),
+      p.x + pixel[0] * pixelWidth + pixelOffset[0] * pixelWidth + dithering[index][0],
+      p.y + height - pixel[1] * pixelHeight + pixelOffset[1] * pixelHeight + dithering[index][1],
     ];
 
     const pointVertices = o.makeVertices(point, o.pointSize || pixelWidth);
