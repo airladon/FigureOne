@@ -443,17 +443,17 @@ function loaded() {
   //   filter: [0, 0, 0, 1],
   //   // distribution: 'raster',
   // });
-  const n = 5000;
+  // const n = 5000;
   console.log('asdf')
   const [image1, colors] = Fig.tools.morph.getImage({
     image: img1,
-    maxPoints: n,
+    // maxPoints: n,
     width: 1,
-    pointSize: 0.01,
-    filter: [0, 0, 0, 1],
-    xAlign: 'center',
-    yAlign: 'middle',
-    dither: 0.01,
+    pointSize: 0.015,
+    filter: c => c[3] > 0,
+    // xAlign: 'center',
+    // yAlign: 'middle',
+    // dither: 0.01,
     alignFrom: 'filter',
     offset: [0, 0],
     // distribution: 'raster',
@@ -467,15 +467,14 @@ function loaded() {
   //   yAlign: 'middle',
   //   distribution: 'raster',
   // });
-  // const n = image1.length / 2 / 6;
+  console.log(colors)
+  const n = image1.length / 2 / 6;
   const [image2, colors2] = processImage(img2, n, -1, -1, 1, 0.01, 0.01);
   // console.log('asdf2')
   // console.log(testImage)
   // const [image2, colors2] = getImagePointsAndColors(img2, -2, -2, 4, 4, 0.01, 0.01);
   const square = lineToPoints([[1, 1], [-1, 1], [-1, -1], [1, -1]], n, true);
-  console.log(1)
   const circle = makePolygon(0.9, 20, n);
-  console.log(2)
   // console.log(square)
   // console.log(circle)
   // console.log(imagePoints)
@@ -489,7 +488,7 @@ function loaded() {
     points1.push(...makeShape(center1, 0.005));
     colors1.push(...makeColors([1, 0, 0, 1]));
     // colors2.push(...makeColors([0, 1, 0, 1]));
-    colors3.push(...makeColors([1, 1, 0, 1]));
+    colors3.push(...makeColors([1, 0, 1, 1]));
   }
   // console.log(points1)
 

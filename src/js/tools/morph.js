@@ -4,6 +4,9 @@ import type { TypeColor } from './types';
 import { rand, randInt } from './math';
 import { joinObjectsWithOptions } from './tools';
 import { Point, getPoint } from './g2';
+import type { TypeParsablePoint } from './g2';
+import type { TypeHAlign, TypeVAlign } from '../figure/Equation/EquationForm';
+import getImageData from './getImageData';
 
 const makeShape = (center, r = 0.015) => [
   center[0] - r / 2, center[1] - r / 2,
@@ -13,14 +16,19 @@ const makeShape = (center, r = 0.015) => [
   center[0] + r / 2, center[1] + r / 2,
   center[0] - r / 2, center[1] + r / 2,
 ];
-const makeColors = c => [...c, ...c, ...c, ...c, ...c, ...c];
-
+const makeColors = (c, num) => {
+  const colors = [];
+  for (let i = 0; i < num; i += 1) {
+    colors.push(...c);
+  }
+  return colors;
+};
 
 function getPixels(
   data: Uint8ClampedArray,
   imageWidth: number,
   imageHeight: number,
-  filter: TypeColor,
+  filter: ([number, number, number, number]) => boolean,
 ) {
   const pixels = [];
   const pixelColors = [];
@@ -35,12 +43,12 @@ function getPixels(
         data[pixelIndex + 2],
         data[pixelIndex + 3],
       ];
-      if (
-        filter[0] <= pixelColor[0]
-        && filter[1] <= pixelColor[1]
-        && filter[2] <= pixelColor[2]
-        && filter[3] <= pixelColor[3]
-      ) {
+      if (filter(pixelColor)) {
+        // filter[0] <= pixelColor[0]
+        // && filter[1] <= pixelColor[1]
+        // && filter[2] <= pixelColor[2]
+        // && filter[3] <= pixelColor[3]
+      // ) {
         pixels.push([w, h]);
         pixelColors.push(pixelColor);
         min[0] = w < min[0] ? w : min[0];
@@ -58,17 +66,18 @@ function getPixels(
   };
 }
 
-function getImageData(image: Image, filter: TypeColor = [0, 0, 0, 0]) {
-  const imageWidth = image.width;
-  const imageHeight = image.height;
-  const canvas = document.createElement('canvas');
-  canvas.width = imageWidth;
-  canvas.height = imageHeight;
-  const context = canvas.getContext('2d');
-  context.drawImage(image, 0, 0);
-  const { data } = context.getImageData(0, 0, imageWidth, imageHeight);
-  return getPixels(data, imageWidth, imageHeight, filter);
-}
+
+// function getImageData(image: Image) {
+//   const imageWidth = image.width;
+//   const imageHeight = image.height;
+//   const canvas = document.createElement('canvas');
+//   canvas.width = imageWidth;
+//   canvas.height = imageHeight;
+//   const context = canvas.getContext('2d');
+//   context.drawImage(image, 0, 0);
+//   return context.getImageData(0, 0, imageWidth, imageHeight).data;
+// }
+
 
 /**
  * @property {Image} [image]
@@ -83,32 +92,55 @@ function getImageData(image: Image, filter: TypeColor = [0, 0, 0, 0]) {
  * @property {number | null} [width]
  * @property {number | null} [height]
  * @property {number} [pointSize]
+ * @property {function([number, number], number): Array<number>} [makeVertices]
+ * @property {function([number, number, number, number], number): Array<number>} [makeColors]
  */
-function getImage(options) {
+export type OBJ_GetImage = {
+ image: Image,
+ maxPoints?: number | null,
+ xAlign?: TypeHAlign,
+ yAlign?: TypeVAlign,
+ alignFrom?: 'image' | 'filter',
+ distribution?: 'raster' | 'random',
+ filter?: 'none' | Array<number>,
+ offset?: TypeParsablePoint,
+ dither?: number,
+ width?: number | null,
+ height?: number | null,
+ pointSize?: number,
+};
+
+function getImage(options: OBJ_GetImage) {
   const defaultOptions = {
     maxPoints: null,
     xAlign: 'center',
     yAlign: 'middle',
     alignFrom: 'image',
     distribution: 'random',
-    filter: 'none',
+    filter: () => true,
     offset: [0, 0],
     dither: 0,
     width: null,
     height: null,
     pointSize: 0.01,
+    makeVertices: makeShape.bind(this),
+    makeColors: makeColors.bind(this),
   };
   const o = joinObjectsWithOptions({ except: 'image' }, {}, defaultOptions, options);
   const { image } = options;
   const imageHeight = image.height;
   const imageWidth = image.width;
-  let filter = [0, 0, 0, 0];
-  if (Array.isArray(o.filter)) {
-    filter = o.filter;
-  }
+  const { filter } = o;
+  // let filter = () => true;
+  // if (typeof o.filter === 'function') {
+  //   filter = o.filter;
+  // }
+
+  const data = getImageData(image);
+
   const {
     min, max, pixels, pixelColors,
-  } = getImageData(image, filter);
+  } = getPixels(data, imageWidth, imageHeight, filter);
 
   let maxPoints = pixels.length;
   if (o.maxPoints != null) {
@@ -176,31 +208,28 @@ function getImage(options) {
     }
     let index = indeces[i]; // o.distribution = 'raster'
     if (o.distribution === 'random') {
-      index = indeces[randInt(0, indeces.length - 1)];
-      indeces.splice(index, 1);
+      const indecesIndex = randInt(0, indeces.length - 1);
+      index = indeces[indecesIndex];
+      indeces.splice(indecesIndex, 1);
     }
     // console.log(i, index, indeces[i])
     const pixel = pixels[index];
-    const color = pixelColors[index];
+    const color = pixelColors[index].map(c => c / 255);
     const point = [
       p.x + pixel[0] * pixelWidth + rand(-o.dither, o.dither),
       p.y + height - pixel[1] * pixelHeight + rand(-o.dither, o.dither),
     ];
-    // indeces = indeces.splice(index, 1);
 
-    // console.log(i)
-    // if (i < 10) {
-    //   console.log(point)
-    //   console.log(color)
-    // }
-    points.push(...makeShape(point, o.pointSize));
-    colors.push(...makeColors(color));
+    const pointVertices = o.makeVertices(point, o.pointSize);
+    const pointColors = o.makeColors(color, pointVertices.length / 2);
+    points.push(...pointVertices);
+    colors.push(...pointColors);
   }
   return [points, colors];
 }
 
 export {
-  getImageData,
+  // getImageData,
   getPixels,
   getImage,
 };
