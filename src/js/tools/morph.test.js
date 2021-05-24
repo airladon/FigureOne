@@ -104,6 +104,15 @@ const twoByFour = [
 //   0, 0, 0, 0,
 // ];
 
+const offset = (points, offset) => {
+  const offsetPoints = [];
+  for (let i = 0; i < points.length; i += 2) {
+    offsetPoints.push(round(points[i] + offset[0]));
+    offsetPoints.push(round(points[i + 1] + offset[1]));
+  }
+  return offsetPoints;
+};
+
 // morph.getImageData = () => fourByFour;
 describe('Morph', () => {
   describe('getPixels', () => {
@@ -227,6 +236,7 @@ describe('Morph', () => {
         image: { width: 4, height: 4 },
         makeVertices: p => p,
         distribution: 'raster',
+        // pointSize: 0,
       });
       const expectedPoints = [
         -0.5, 0.5, -0.25, 0.5, 0, 0.5, 0.25, 0.5,
@@ -242,6 +252,7 @@ describe('Morph', () => {
         image: { width: 4, height: 4 },
         makeVertices: p => p,
         distribution: 'random',
+        // pointSize: 0,
       });
       const expectedPoints = [
         [-0.5, 0.5], [-0.25, 0.5], [0, 0.5], [0.25, 0.5],
@@ -279,6 +290,7 @@ describe('Morph', () => {
         makeVertices: p => p,
         distribution: 'raster',
         maxPoints: 5,
+        // pointSize: 0,
       });
       const expectedPoints = [
         -0.5, 0.5, -0.25, 0.5, 0, 0.5, 0.25, 0.5,
@@ -293,6 +305,7 @@ describe('Morph', () => {
         makeVertices: p => p,
         distribution: 'random',
         maxPoints: 5,
+        // pointSize: 0,
       });
       const expectedPoints = [
         [-0.5, 0.5], [-0.25, 0.5], [0, 0.5], [0.25, 0.5],
@@ -330,6 +343,7 @@ describe('Morph', () => {
         makeVertices: p => p,
         distribution: 'raster',
         filter: c => c[3] < 200 / 255,
+        width: 1.2,
       });
       const expectedPoints = [
         -0.5, 0, -0.25, 0, 0, 0, 0.25, 0,
@@ -339,17 +353,141 @@ describe('Morph', () => {
       expect(colors).toEqual(fourByFourNorm.slice(32));
     });
     test('raster, pointSize default', () => {
-      const [points, colors] = morph.getImage({
+      const [points] = morph.getImage({
         image: { width: 4, height: 4 },
         distribution: 'raster',
+        width: 1.2,
       });
-      console.log(points)
-      // const expectedPoints = [
-      //   -0.5, 0, -0.25, 0, 0, 0, 0.25, 0,
-      //   -0.5, -0.25, -0.25, -0.25, 0, -0.25, 0.25, -0.25,
-      // ];
-      // expect(expectedPoints).toEqual(points);
-      // expect(colors).toEqual(fourByFour.slice(32));
+      // image is 4 x 4 pixels
+      // image will be drawn to figure width/height of 1.2 / 1.2
+      // from center of pixels
+      // Therefore each pixel will have a 0.4 side length
+      // with centers at -0.6, -0.2, 0.2, 0.6
+      // and boundaries at -0.8, -0.4, 0, 0.4, 0.8
+      //
+      // NB: pixels are drawn as:
+      //     6 ---- 3,5
+      //     |    /  |
+      //     |  /    |
+      //    1,4 ---- 2
+      //
+      // And the order of pixels is from top left to bottom right
+      expect(round(points.slice(0, 12))).toEqual([
+        -0.8, 0.4, -0.4, 0.4, -0.4, 0.8,
+        -0.8, 0.4, -0.4, 0.8, -0.8, 0.8,
+      ]);
+      expect(round(points.slice(180, 192))).toEqual([
+        0.4, -0.8, 0.8, -0.8, 0.8, -0.4,
+        0.4, -0.8, 0.8, -0.4, 0.4, -0.4,
+      ]);
+    });
+    test('raster, pointSize smaller', () => {
+      const [points] = morph.getImage({
+        image: { width: 4, height: 4 },
+        distribution: 'raster',
+        width: 1.2,
+        pointSize: 0.2,
+      });
+      expect(round(points.slice(0, 12))).toEqual([
+        -0.7, 0.5, -0.5, 0.5, -0.5, 0.7,
+        -0.7, 0.5, -0.5, 0.7, -0.7, 0.7,
+      ]);
+      expect(round(points.slice(180, 192))).toEqual([
+        0.5, -0.7, 0.7, -0.7, 0.7, -0.5,
+        0.5, -0.7, 0.7, -0.5, 0.5, -0.5,
+      ]);
+    });
+    test('raster, pointSize larger', () => {
+      const [points] = morph.getImage({
+        image: { width: 4, height: 4 },
+        distribution: 'raster',
+        width: 1.2,
+        pointSize: 0.6,
+      });
+      expect(round(points.slice(0, 12))).toEqual([
+        -0.9, 0.3, -0.3, 0.3, -0.3, 0.9,
+        -0.9, 0.3, -0.3, 0.9, -0.9, 0.9,
+      ]);
+      expect(round(points.slice(180, 192))).toEqual([
+        0.3, -0.9, 0.9, -0.9, 0.9, -0.3,
+        0.3, -0.9, 0.9, -0.3, 0.3, -0.3,
+      ]);
+    });
+    test('raster, center at [0.5, 0.1]', () => {
+      const [points] = morph.getImage({
+        image: { width: 4, height: 4 },
+        distribution: 'raster',
+        width: 1.2,
+        offset: [0.5, 0.1],
+      });
+      expect(round(points.slice(0, 12))).toEqual(offset([
+        -0.8, 0.4, -0.4, 0.4, -0.4, 0.8,
+        -0.8, 0.4, -0.4, 0.8, -0.8, 0.8,
+      ], [0.5, 0.1]));
+      expect(round(points.slice(180, 192))).toEqual(offset([
+        0.4, -0.8, 0.8, -0.8, 0.8, -0.4,
+        0.4, -0.8, 0.8, -0.4, 0.4, -0.4,
+      ], [0.5, 0.1]));
+    });
+    test('raster, left, bottom', () => {
+      const [points] = morph.getImage({
+        image: { width: 4, height: 4 },
+        distribution: 'raster',
+        width: 1.2,
+        xAlign: 'left',
+        yAlign: 'bottom',
+      });
+      expect(round(points.slice(0, 12))).toEqual(offset([
+        -0.8, 0.4, -0.4, 0.4, -0.4, 0.8,
+        -0.8, 0.4, -0.4, 0.8, -0.8, 0.8,
+      ], [0.6, 0.6]));
+      expect(round(points.slice(180, 192))).toEqual(offset([
+        0.4, -0.8, 0.8, -0.8, 0.8, -0.4,
+        0.4, -0.8, 0.8, -0.4, 0.4, -0.4,
+      ], [0.6, 0.6]));
+    });
+    test('raster, top, right', () => {
+      const [points] = morph.getImage({
+        image: { width: 4, height: 4 },
+        distribution: 'raster',
+        width: 1.2,
+        xAlign: 'right',
+        yAlign: 'top',
+      });
+      expect(round(points.slice(0, 12))).toEqual(offset([
+        -0.8, 0.4, -0.4, 0.4, -0.4, 0.8,
+        -0.8, 0.4, -0.4, 0.8, -0.8, 0.8,
+      ], [-0.6, -0.6]));
+      expect(round(points.slice(180, 192))).toEqual(offset([
+        0.4, -0.8, 0.8, -0.8, 0.8, -0.4,
+        0.4, -0.8, 0.8, -0.4, 0.4, -0.4,
+      ], [-0.6, -0.6]));
+    });
+    test('raster, align to filter', () => {
+      const [points] = morph.getImage({
+        image: { width: 4, height: 4 },
+        distribution: 'raster',
+        width: 1,
+        xAlign: 'center',
+        yAlign: 'middle',
+        alignFrom: 'filter',
+        filter: c => c[0] > 0.4,
+      });
+      // red part of image is 2 x 2 pixels
+      // image will be drawn to figure width/height of 1 / 1
+      // from center of pixels
+      // Therefore each pixel will have a 1.0 side length
+      // with centers at -0.5, 0.5
+      // and boundaries at -1, 0, 1
+      //
+      expect(round(points.slice(0, 12))).toEqual(offset([
+        -1, 0, 0, 0, 0, 1,
+        -1, 0, 0, 1, -1, 1,
+      ], [0, 0]));
+      expect(round(points.slice(36, 48))).toEqual(offset([
+        0, -1, 1, -1, 1, 0,
+        0, -1, 1, 0, 0, 0,
+      ], [0, 0]));
     });
   });
 });

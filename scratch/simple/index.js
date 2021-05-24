@@ -173,7 +173,6 @@ function getImage(options = {}) {
     pixelIndeces[i] = i;
   }
   let indeces = pixelIndeces.slice();
-  console.log(indeces)
   for (let i = 0; i < maxPoints; i += 1) {
     if (indeces.length === 0) {
       indeces = pixelIndeces.slice();
@@ -429,7 +428,13 @@ const makePolygon = (radius, sides, numPoints, rad = 0.015) => {
   return lineToPoints(points, numPoints, true, rad);
 };
 
-
+figure.add({
+  make: 'rectangle',
+  width: 1,
+  height: 1,
+  line: { width: 0.007 },
+  color: [1, 1, 0, 1],
+});
 function loaded() {
   // const [image1, colors] = getImagePointsAndColors(img1, -2, -2, 4, 4, 0.005, 0.015);
   // const n = image1.length / 2 / 6;
@@ -448,13 +453,14 @@ function loaded() {
   const [image1, colors] = Fig.tools.morph.getImage({
     image: img1,
     // maxPoints: n,
-    width: 1,
+    // width: 1,
     // pointSize: 0.005,
     filter: c => c[3] > 0,
-    // xAlign: 'center',
-    // yAlign: 'middle',
+    xAlign: 'center',
+    yAlign: 'middle',
     // dither: 0.01,
     alignFrom: 'filter',
+    width: 1,
     offset: [0, 0],
     // distribution: 'raster',
   });

@@ -147,12 +147,16 @@ function getImage(options: OBJ_GetImage) {
     maxPoints = o.maxPoints;
   }
 
-  let pixelsWidth = imageWidth;
-  let pixelsHeight = imageHeight;
+  let pixelsWidth = imageWidth - 1;
+  let pixelsHeight = imageHeight - 1;
+  let pixelOffset = [0, 0];
   if (o.alignFrom === 'filter') {
     pixelsWidth = max[0] - min[0];
     pixelsHeight = max[1] - min[1];
+    pixelOffset = [-min[0], -min[1]];
   }
+  console.log(pixelsWidth, pixelsHeight, pixelOffset);
+
   let { width, height } = o;
   if (o.height == null && o.width == null) {
     height = 1;
@@ -162,6 +166,7 @@ function getImage(options: OBJ_GetImage) {
   } else if (o.width != null && o.height == null) {
     height = o.width / pixelsWidth * pixelsHeight;
   }
+  console.log(width, height)
 
   const pixelWidth = width / pixelsWidth;
   const pixelHeight = height / pixelsHeight;
@@ -195,6 +200,14 @@ function getImage(options: OBJ_GetImage) {
     p.y = offset.y - parseFloat(yAlign);
   }
 
+  // let pointSizeX = o.pointSize;
+  // let pointSizeY = o.pointSize;
+  // if (o.pointSize == null) {
+  //   pointSizeX = pixelWidth;
+  //   pointSizeY = pixelHeight;
+  // }
+  // p.x += pointSizeX / 2;
+  // p.y += pointSizeY / 2;
   const points = [];
   const colors = [];
   const pixelIndeces = Array(pixels.length);
@@ -216,8 +229,8 @@ function getImage(options: OBJ_GetImage) {
     const pixel = pixels[index];
     const color = pixelColors[index];
     const point = [
-      p.x + pixel[0] * pixelWidth + rand(-o.dither, o.dither),
-      p.y + height - pixel[1] * pixelHeight + rand(-o.dither, o.dither),
+      p.x + pixel[0] * pixelWidth + pixelOffset[0] * pixelWidth + rand(-o.dither, o.dither),
+      p.y + height - pixel[1] * pixelHeight + pixelOffset[1] * pixelHeight + rand(-o.dither, o.dither),
     ];
 
     const pointVertices = o.makeVertices(point, o.pointSize || pixelWidth);
