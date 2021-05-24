@@ -2422,16 +2422,11 @@ export default class FigurePrimitives {
     const defaultOptions = {
       name: generateUniqueId('primitive_'),
       color: this.defaultColor,
-      // vertexShader: ['morpher', 4, true],
-      // fragShader: 'simple',
       points: [],
       glPrimitive: 'TRIANGLES',
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
-    // if (!Array.isArray(options.color)) {
-    //   options.vertexShader = ['morpher', 4, true];
-    //   options.fragShader = 'vertexColor';
-    // }
+
     options.transform = getTransform(options.transform);
     if (options.position != null) {
       options.position = getPoint(options.position);
@@ -2444,9 +2439,6 @@ export default class FigurePrimitives {
       colorVertex = true;
       fragShader = 'vertexColor';
     }
-    // let vertexShader = ['morpher', 2, false];
-    // let fragShader = 'simple';
-    // if (options.points.length > )
 
     const glObject = new GLObject(
       this.webgl[0],
@@ -2476,30 +2468,9 @@ export default class FigurePrimitives {
         b.normalize, b.stride, b.offset, b.usageIn,
       );
     });
-    // Object.keys(options.points).forEach((shapeName, index) => {
-    //   const points = options.points[shapeName];
-    //   const attribute = `a_pos${index}`;
-    //   shapeNameMap[shapeName] = index;
-    //   glObject.numVertices = options.points[shapeName].length / 2;
-    //   const defaultBuffer = {
-    //     type: 'FLOAT',
-    //     normalize: false,
-    //     stride: 0,
-    //     offset: 0,
-    //     usage: 'STATIC',
-    //     size: 2,
-    //   };
-    //   const b = joinObjects({}, defaultBuffer);
-    //   glObject.addBuffer(
-    //     attribute, b.size, points, b.type,
-    //     b.normalize, b.stride, b.offset, b.usageIn,
-    //   );
-    // });
     if (colorVertex) {
       options.color.forEach((colors, index) => {
-        // const colors = options.color[shapeName];
         const attribute = `a_col${index}`;
-        // shapeNameMap[shapeName] = index;
         const defaultBuffer = {
           type: 'FLOAT',
           normalize: false,

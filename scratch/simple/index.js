@@ -8,9 +8,12 @@ const figure = new Fig.Figure({
 const { rand } = Fig.tools.math;
 
 const img1 = new Image();
-img1.src = './logo.png';
+img1.src = './question.png';
 const img2 = new Image();
-img2.src = './star.png';
+img2.src = './esclamation.png';
+
+const testImg = new Image();
+testImg.src = './morph.test.png';
 
 // const r = 0.015;
 const makeShape = (center, r = 0.015) => [
@@ -23,6 +26,186 @@ const makeShape = (center, r = 0.015) => [
 ];
 const makeColors = c => [...c, ...c, ...c, ...c, ...c, ...c];
 
+/**
+ */
+// function getImage(options: {
+//   image: Image,
+//   maxPoints: number | null,
+//   xAlign: TypeHAlign,
+//   yAlign: TypeVAlign,
+//   alignFrom: 'image' | 'filter',
+//   distribution: 'raster' | 'random',
+//   filter: 'none' | Array<number>,
+//   offset: TypeParsablePoint,
+//   dither: number,
+//   width: number | null,
+//   height: number | null,
+//   pointSize: number,
+// }) {
+/**
+ * @property {Image} [image]
+ * @property {number | null} [maxPoints]
+ * @property {TypeHAlign} [xAlign]
+ * @property {TypeVAlign} [yAlign]
+ * @property {'image' | 'filter'} [alignFrom]
+ * @property {'raster' | 'random'} [distribution]
+ * @property {'none' | Array<number>} [filter]
+ * @property {TypeParsablePoint} [offset]
+ * @property {number} [dither]
+ * @property {number | null} [width]
+ * @property {number | null} [height]
+ * @property {number} [pointSize]
+ */
+function getImage(options = {}) {
+  const defaultOptions = {
+    maxPoints: null,
+    xAlign: 'center',
+    yAlign: 'middle',
+    // alignFrom: 'filter',
+    distribution: 'random',
+    filter: 'none',
+    offset: [0, 0],
+    dither: 0,
+    width: null,
+    height: null,
+    pointSize: 0.01,
+  };
+  const o = Fig.tools.misc.joinObjectsWithOptions({ except: 'image' }, {}, defaultOptions, options);
+  const { image } = options;
+  const imageWidth = image.width;
+  const imageHeight = image.height;
+  const canvas = document.createElement('canvas');
+  canvas.width = imageWidth;
+  canvas.height = imageHeight;
+  const context = canvas.getContext('2d');
+  context.drawImage(image, 0, 0);
+  const { data } = context.getImageData(0, 0, imageWidth, imageHeight);
+  const pixels = [];
+  const pixelColors = [];
+  let filter = [0, 0, 0, 0];
+  if (Array.isArray(o.filter)) {
+    filter = o.filter;
+  }
+  let min = [imageWidth, imageHeight];
+  let max = [0, 0];
+  for (let h = 0; h < imageHeight; h += 1) {
+    for (let w = 0; w < imageWidth; w += 1) {
+      const pixelIndex = h * imageWidth * 4 + w * 4;
+      const pixelColor = [
+        data[pixelIndex],
+        data[pixelIndex + 1],
+        data[pixelIndex + 2],
+        data[pixelIndex + 3],
+      ];
+      if (
+        filter[0] <= pixelColor[0]
+        && filter[1] <= pixelColor[1]
+        && filter[2] <= pixelColor[2]
+        && filter[3] <= pixelColor[3]
+      ) {
+        pixels.push([w, h]);
+        pixelColors.push(pixelColor);
+        min[0] = w < min[0] ? w : min[0];
+        min[1] = h < min[1] ? h : min[1];
+        max[0] = w > max[0] ? w : max[0];
+        max[1] = h > max[1] ? h : max[1];
+      }
+    }
+  }
+  let maxPoints = pixels.length;
+  if (o.maxPoints != null) {
+    maxPoints = o.maxPoints;
+  }
+  if (o.distribution === 'raster') {
+    min = [0, 0];
+    max = [imageWidth, imageHeight];
+  }
+
+  let height;
+  let width;
+  // let bottom;
+  // let left;
+  if (o.height == null && o.width == null) {
+    height = 1;
+    width = height / imageHeight * imageWidth;
+  } else if (o.height != null) {
+    width = o.height / imageHeight * imageWidth;
+    height = o.height;
+  } else if (o.width != null) {
+    height = o.width / imageWidth * imageHeight;
+    width = o.width;
+  } else if (o.width != null && o.height != null) {
+    width = o.width;
+    height = o.height;
+  }
+  const offset = Fig.tools.g2.getPoint(o.offset);
+  const { xAlign, yAlign } = o;
+  // const bounds = this.getBoundingRect(space, border, children, shownOnly);
+  // p is Bottom left corner
+  const p = new Fig.Point(0, 0);
+  if (xAlign === 'left') {
+    p.x = offset.x;
+  } else if (xAlign === 'right') {
+    p.x = offset.x - width;
+  } else if (xAlign === 'center') {
+    p.x = offset.x - width / 2;
+  } else if (typeof xAlign === 'number') {
+    p.x = offset.x + width * xAlign;
+  } else if (xAlign != null && xAlign.slice(-1)[0] === 'o') {
+    p.x = offset.x + parseFloat(xAlign);
+  }
+  if (yAlign === 'top') {
+    p.y = offset.y + height;
+  } else if (yAlign === 'bottom') {
+    p.y = offset.y;
+  } else if (yAlign === 'middle') {
+    p.y = offset.y + height / 2;
+  } else if (typeof yAlign === 'number') {
+    p.y = offset.y + height * yAlign;
+  } else if (yAlign != null && yAlign.slice(-1)[0] === 'o') {
+    p.y = offset.y + parseFloat(yAlign);
+  }
+
+  const points = [];
+  const colors = [];
+  const pixelIndeces = Array(pixels.length);
+  for (let i = 0; i < pixels.length; i += 1) {
+    pixelIndeces[i] = i;
+  }
+  let indeces = pixelIndeces.slice();
+  console.log(indeces)
+  for (let i = 0; i < maxPoints; i += 1) {
+    if (indeces.length === 0) {
+      indeces = pixelIndeces.slice();
+    }
+    let index;
+    if (o.distribution === 'raster') {
+      index = indeces[i];
+    } else if (o.distribution === 'random') {
+      index = indeces[Fig.tools.math.randInt(0, indeces.length - 1)];
+    }
+    const pixel = pixels[index];
+    const color = pixelColors[index];
+    const point = [
+      p.x + pixel[0] / imageWidth * width + rand(-o.dither, o.dither),
+      p.y + height - pixel[1] / imageHeight * height + rand(-o.dither, o.dither),
+    ];
+    // TODO need to remove index from indeces
+    indeces = indeces.splice(index, 1);
+
+    // console.log(i)
+    // if (i < 10) {
+    //   console.log(point)
+    //   console.log(color)
+    // }
+    points.push(...makeShape(point, o.pointSize));
+    colors.push(...makeColors(color));
+  }
+  console.log(indeces)
+  return [points, colors];
+}
+
+// getImage();
 
 function processImage(
   image, maxPoints, xBottom, yBottom, xWidth, xDither = 0, rad = 0.015,
@@ -248,10 +431,44 @@ const makePolygon = (radius, sides, numPoints, rad = 0.015) => {
 
 
 function loaded() {
-  const [image1, colors] = getImagePointsAndColors(img1, -2, -2, 4, 4, 0.005, 0.015);
-  const n = image1.length / 2 / 6;
-  // const [image1, colors] = processImage(img1, n, -2, -2, 4, 0, 0);
-  const [image2, colors2] = processImage(img2, n, -2, -2, 4, 0.01, 0.007);
+  // const [image1, colors] = getImagePointsAndColors(img1, -2, -2, 4, 4, 0.005, 0.015);
+  // const n = image1.length / 2 / 6;
+  // const n = 1000;
+  // const [image1, colors] = processImage(img1, n, -1, -1, 1, 0.01, 0.01);
+  // const [image1, colors] = getImage({
+  //   image: img1,
+  //   // maxPoints: n,
+  //   width: 1,
+  //   pointSize: 0.01,
+  //   filter: [0, 0, 0, 1],
+  //   // distribution: 'raster',
+  // });
+  const n = 5000;
+  console.log('asdf')
+  const [image1, colors] = Fig.tools.morph.getImage({
+    image: img1,
+    maxPoints: n,
+    width: 1,
+    pointSize: 0.01,
+    filter: [0, 0, 0, 1],
+    xAlign: 'center',
+    yAlign: 'middle',
+    dither: 0.01,
+    alignFrom: 'filter',
+    offset: [0, 0],
+    // distribution: 'raster',
+  });
+  // const [image2, colors2] = Fig.tools.morph.getImage({
+  //   image: img2,
+  //   width: 1,
+  //   pointSize: 0.01,
+  //   filter: [0, 0, 0, 1],
+  //   xAlign: 'center',
+  //   yAlign: 'middle',
+  //   distribution: 'raster',
+  // });
+  // const n = image1.length / 2 / 6;
+  const [image2, colors2] = processImage(img2, n, -1, -1, 1, 0.01, 0.01);
   // console.log('asdf2')
   // console.log(testImage)
   // const [image2, colors2] = getImagePointsAndColors(img2, -2, -2, 4, 4, 0.01, 0.01);
@@ -269,7 +486,7 @@ function loaded() {
   const colors3 = [];
   for (let i = 0; i < n; i += 1) {
     const center1 = [rand(-2, 2), rand(-2, 2)];
-    points1.push(...makeShape(center1));
+    points1.push(...makeShape(center1, 0.005));
     colors1.push(...makeColors([1, 0, 0, 1]));
     // colors2.push(...makeColors([0, 1, 0, 1]));
     colors3.push(...makeColors([1, 1, 0, 1]));
@@ -289,12 +506,21 @@ function loaded() {
       start: 'rand', target: 'image1', duration: 3, progression: 'easeinout',
     })
     .delay(1)
-    .morph({ start: 'image1', target: 'image2', duration: 1 })
+    .morph({
+      start: 'image1', target: 'image2', duration: 1, progression: 'easeinout',
+    })
     .delay(1)
-    // .morph({ start: 'image2', target: 'square', duration: 1 })
-    // .delay(1)
-    // .morph({ start: 'square', target: 'circle', duration: 1 })
-    // .morph({ start: 'circle', target: 'rand', duration: 4 })
+    .morph({
+      start: 'image2', target: 'square', duration: 1, progression: 'easeinout',
+    })
+    .delay(1)
+    .morph({
+      start: 'square', target: 'circle', duration: 1, progression: 'easeinout',
+    })
+    .delay(1)
+    .morph({
+      start: 'circle', target: 'rand', duration: 4, progression: 'easeinout',
+    })
     .start();
 }
 
@@ -316,3 +542,13 @@ img2.addEventListener('load', () => {
 
 
 figure.addFrameRate(10, { font: { color: [1, 1, 1, 1] } });
+
+// image = testImg
+// const imageWidth = image.width;
+// const imageHeight = image.height;
+// const canvas = document.createElement('canvas');
+// canvas.width = imageWidth;
+// canvas.height = imageHeight;
+// const context = canvas.getContext('2d');
+// context.drawImage(image, 0, 0);
+// const { data } = context.getImageData(0, 0, imageWidth, imageHeight);
