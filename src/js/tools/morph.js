@@ -153,9 +153,9 @@ function getImage(options: OBJ_GetImage) {
   if (o.alignFrom === 'filter') {
     pixelsWidth = max[0] - min[0];
     pixelsHeight = max[1] - min[1];
-    pixelOffset = [-min[0], -min[1]];
+    pixelOffset = [-min[0], min[1]];
   }
-  console.log(pixelsWidth, pixelsHeight, pixelOffset);
+  console.log(pixelsWidth, pixelsHeight, pixelOffset, imageWidth, imageHeight);
 
   let { width, height } = o;
   if (o.height == null && o.width == null) {

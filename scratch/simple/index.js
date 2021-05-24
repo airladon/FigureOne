@@ -460,7 +460,7 @@ function loaded() {
     yAlign: 'middle',
     // dither: 0.01,
     alignFrom: 'filter',
-    width: 1,
+    height: 1,
     offset: [0, 0],
     // distribution: 'raster',
   });
