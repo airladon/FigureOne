@@ -113,7 +113,7 @@ const offset = (points, offsetBy) => {
   return offsetPoints;
 };
 
-// morph.getImageData = () => fourByFour;
+// morph.imageToPointsData = () => fourByFour;
 describe('Morph', () => {
   describe('getPixels', () => {
     test('No Filter 4x4', () => {
@@ -232,11 +232,10 @@ describe('Morph', () => {
       getImageData.mockImplementation(() => fourByFour);
     });
     test('raster, no filter', () => {
-      const [points, colors] = morph.getImage({
+      const [points, colors] = morph.imageToPoints({
         image: { width: 4, height: 4 },
-        makeVertices: p => p,
+        makePoints: p => p,
         distribution: 'raster',
-        // pointSize: 0,
         width: 1,
       });
       const expectedPoints = [
@@ -249,9 +248,9 @@ describe('Morph', () => {
       expect(colors).toEqual(fourByFourNorm);
     });
     test('random, no filter', () => {
-      const [points, colors] = morph.getImage({
+      const [points, colors] = morph.imageToPoints({
         image: { width: 4, height: 4 },
-        makeVertices: p => p,
+        makePoints: p => p,
         distribution: 'random',
       });
       const expectedPoints = [
@@ -284,9 +283,9 @@ describe('Morph', () => {
       expect(colors.length).toEqual(fourByFour.length);
     });
     test('raster, maxPoints', () => {
-      const [points, colors] = morph.getImage({
+      const [points, colors] = morph.imageToPoints({
         image: { width: 4, height: 4 },
-        makeVertices: p => p,
+        makePoints: p => p,
         distribution: 'raster',
         maxPoints: 5,
         // pointSize: 0,
@@ -299,9 +298,9 @@ describe('Morph', () => {
       expect(round(colors)).toEqual(round(fourByFourNorm.slice(0, 5 * 4)));
     });
     test('random, maxPoints', () => {
-      const [points, colors] = morph.getImage({
+      const [points, colors] = morph.imageToPoints({
         image: { width: 4, height: 4 },
-        makeVertices: p => p,
+        makePoints: p => p,
         distribution: 'random',
         maxPoints: 5,
         // pointSize: 0,
@@ -337,9 +336,9 @@ describe('Morph', () => {
       expect(colors.length).toEqual(20);
     });
     test('raster, filter', () => {
-      const [points, colors] = morph.getImage({
+      const [points, colors] = morph.imageToPoints({
         image: { width: 4, height: 4 },
-        makeVertices: p => p,
+        makePoints: p => p,
         distribution: 'raster',
         filter: c => c[3] < 200 / 255,
         width: 1,
@@ -352,7 +351,7 @@ describe('Morph', () => {
       expect(colors).toEqual(fourByFourNorm.slice(32));
     });
     test('raster, pointSize default', () => {
-      const [points] = morph.getImage({
+      const [points] = morph.imageToPoints({
         image: { width: 4, height: 4 },
         distribution: 'raster',
         width: 1.2,
@@ -381,7 +380,7 @@ describe('Morph', () => {
       ]);
     });
     test('raster, pointSize smaller', () => {
-      const [points] = morph.getImage({
+      const [points] = morph.imageToPoints({
         image: { width: 4, height: 4 },
         distribution: 'raster',
         width: 1.2,
@@ -397,7 +396,7 @@ describe('Morph', () => {
       ]);
     });
     test('raster, pointSize larger', () => {
-      const [points] = morph.getImage({
+      const [points] = morph.imageToPoints({
         image: { width: 4, height: 4 },
         distribution: 'raster',
         width: 1.2,
@@ -413,11 +412,11 @@ describe('Morph', () => {
       ]);
     });
     test('raster, center at [0.5, 0.1]', () => {
-      const [points] = morph.getImage({
+      const [points] = morph.imageToPoints({
         image: { width: 4, height: 4 },
         distribution: 'raster',
         width: 1.2,
-        offset: [0.5, 0.1],
+        position: [0.5, 0.1],
       });
       expect(round(points.slice(0, 12))).toEqual(offset([
         -0.8, 0.4, -0.4, 0.4, -0.4, 0.8,
@@ -429,7 +428,7 @@ describe('Morph', () => {
       ], [0.5, 0.1]));
     });
     test('raster, left, bottom', () => {
-      const [points] = morph.getImage({
+      const [points] = morph.imageToPoints({
         image: { width: 4, height: 4 },
         distribution: 'raster',
         width: 1.2,
@@ -446,7 +445,7 @@ describe('Morph', () => {
       ], [0.6, 0.6]));
     });
     test('raster, top, right', () => {
-      const [points] = morph.getImage({
+      const [points] = morph.imageToPoints({
         image: { width: 4, height: 4 },
         distribution: 'raster',
         width: 1.2,
@@ -463,7 +462,7 @@ describe('Morph', () => {
       ], [-0.6, -0.6]));
     });
     test('raster, align to filter', () => {
-      const [points] = morph.getImage({
+      const [points] = morph.imageToPoints({
         image: { width: 4, height: 4 },
         distribution: 'raster',
         width: 1,
@@ -489,7 +488,7 @@ describe('Morph', () => {
       ], [0, 0]));
     });
     test('raster, align to filter 2', () => {
-      const [points] = morph.getImage({
+      const [points] = morph.imageToPoints({
         image: { width: 4, height: 4 },
         distribution: 'raster',
         width: 1.2,
@@ -507,7 +506,7 @@ describe('Morph', () => {
       ]);
     });
     test('raster, align to filter 3', () => {
-      const [points] = morph.getImage({
+      const [points] = morph.imageToPoints({
         image: { width: 4, height: 4 },
         distribution: 'raster',
         width: 1,
@@ -531,6 +530,85 @@ describe('Morph', () => {
         0, -1, 1, -1, 1, 0,
         0, -1, 1, 0, 0, 0,
       ], [0, 0]));
+    });
+    test('excessPoints, raster, repeat', () => {
+      const [points, colors] = morph.imageToPoints({
+        image: { width: 4, height: 4 },
+        distribution: 'raster',
+        width: 1,
+        excessPoints: 'repeat',
+        maxPoints: 16 * 2,
+        makePoints: p => p,
+      });
+      const expectedPoints = [
+        -0.5, 0.5, -0.17, 0.5, 0.17, 0.5, 0.5, 0.5,
+        -0.5, 0.17, -0.17, 0.17, 0.17, 0.17, 0.5, 0.17,
+        -0.5, -0.17, -0.17, -0.17, 0.17, -0.17, 0.5, -0.17,
+        -0.5, -0.5, -0.17, -0.5, 0.17, -0.5, 0.5, -0.5,
+        -0.5, 0.5, -0.17, 0.5, 0.17, 0.5, 0.5, 0.5,
+        -0.5, 0.17, -0.17, 0.17, 0.17, 0.17, 0.5, 0.17,
+        -0.5, -0.17, -0.17, -0.17, 0.17, -0.17, 0.5, -0.17,
+        -0.5, -0.5, -0.17, -0.5, 0.17, -0.5, 0.5, -0.5,
+      ];
+      expect(expectedPoints).toEqual(round(points, 2));
+      expect(colors).toEqual([...fourByFourNorm, ...fourByFourNorm]);
+    });
+    test('excessPoints, raster, repeatOpaqueOnly', () => {
+      const [points, colors] = morph.imageToPoints({
+        image: { width: 4, height: 4 },
+        distribution: 'raster',
+        width: 1,
+        excessPoints: 'repeatOpaqueOnly',
+        maxPoints: 16 * 2,
+        makePoints: p => p,
+      });
+      const expectedPoints = [
+        -0.5, 0.5, -0.17, 0.5, 0.17, 0.5, 0.5, 0.5,
+        -0.5, 0.17, -0.17, 0.17, 0.17, 0.17, 0.5, 0.17,
+        -0.5, -0.17, -0.17, -0.17, 0.17, -0.17, 0.5, -0.17,
+        -0.5, -0.5, -0.17, -0.5, 0.17, -0.5, 0.5, -0.5,
+        //
+        -0.5, 0.5, -0.17, 0.5, 0.17, 0.5, 0.5, 0.5,
+        -0.5, 0.17, -0.17, 0.17, 0.17, 0.17, 0.5, 0.17,
+        -0.5, 0.5, -0.17, 0.5, 0.17, 0.5, 0.5, 0.5,
+        -0.5, 0.17, -0.17, 0.17, 0.17, 0.17, 0.5, 0.17,
+      ];
+      expect(expectedPoints).toEqual(round(points, 2));
+      expect(colors).toEqual([
+        ...fourByFourNorm,
+        ...fourByFourNorm.slice(0, 32),
+        ...fourByFourNorm.slice(0, 32),
+      ]);
+    });
+    test('excessPoints, raster, lastOpaque', () => {
+      const [points, colors] = morph.imageToPoints({
+        image: { width: 4, height: 4 },
+        distribution: 'raster',
+        width: 1,
+        excessPoints: 'lastOpaque',
+        maxPoints: 16 * 2,
+        makePoints: p => p,
+      });
+      const expectedPoints = [
+        -0.5, 0.5, -0.17, 0.5, 0.17, 0.5, 0.5, 0.5,
+        -0.5, 0.17, -0.17, 0.17, 0.17, 0.17, 0.5, 0.17,
+        -0.5, -0.17, -0.17, -0.17, 0.17, -0.17, 0.5, -0.17,
+        -0.5, -0.5, -0.17, -0.5, 0.17, -0.5, 0.5, -0.5,
+        //
+        0.5, 0.17, 0.5, 0.17, 0.5, 0.17, 0.5, 0.17,
+        0.5, 0.17, 0.5, 0.17, 0.5, 0.17, 0.5, 0.17,
+        0.5, 0.17, 0.5, 0.17, 0.5, 0.17, 0.5, 0.17,
+        0.5, 0.17, 0.5, 0.17, 0.5, 0.17, 0.5, 0.17,
+      ];
+      expect(expectedPoints).toEqual(round(points, 2));
+      const fillRed = [];
+      for (let i = 0; i < 16; i += 1) {
+        fillRed.push(...red);
+      }
+      expect(round(colors)).toEqual(round([
+        ...fourByFourNorm,
+        ...fillRed,
+      ]));
     });
   });
 });
