@@ -27,6 +27,7 @@ import DrawingObject from '../DrawingObjects/DrawingObject';
 import GLObject from '../DrawingObjects/GLObject/GLObject';
 import type { TypeGLUniform, TypeGLBufferType, TypeGLBufferUsage } from '../DrawingObjects/GLObject/GLObject';
 import { CustomAnimationStep } from '../Animation/Animation';
+import FigureElementPrimitiveMorph from './FigureElementPrimitiveMorph';
 // import VertexObject from '../DrawingObjects/VertexObject/VertexObject';
 // import {
 //   PolyLine, PolyLineCorners,
@@ -369,12 +370,61 @@ export type OBJ_GLPrimitive = {
   glPrimitive?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
 };
 
+/**
+ * Morph primitive
+ *
+ * The morph primitive is optimized to animate hundreds of thousands of points
+ * with minimal performance impact.
+ *
+ * Multiple arrays of points can be defined, and the translation of
+ * corresponding points in two arrays can be animated.
+ *
+ * Being able to accomodate so many points means this primitive can be used to
+ * efficiently morph shapes.
+ *
+ * All points in all point arrays can be assigned an individual color if
+ * desired. Use `color: TypeColor` to assign all points in all arrays the same
+ * color, `color: Array<TypeColor>` to assign all points in each array a
+ * specific color, `color: Array<Array<TypeColor>>` to assign each point in
+ * each array a specific color, and `color: Array<TypeColor | Array<TypeColor>`
+ * to assign some point arrays with one color, and others with a specific color
+ * per point.
+ *
+ * A point array is an array of numbers representing consecutive x, y points.
+ * For example, [x1, y1, x2, y2, ...].
+ *
+ * A color array is an array of numbers representing the color of each points.
+ * For example, [r1, g1, b1, a1, r2, g2, b2, a2, ...].
+ *
+ * If `color` is an array of colors and/or color arrays, then the its length
+ * must be equal to the number of point Arrays. The colors in the array will be
+ * matched up with the corresponding point arrays in `points`.
+ *
+ * Note, while animation is efficient, loading or generating hundreds of
+ * thousands of points when first instantiated can become a bottleneck on lower
+ * end systems, and may need to be accounted for (like letting the user know
+ * that loading is happening).
+ *
+ * @property {string} name primitive name
+ * @property {Array<Array<number>>} pointArrays point arrays to morph between.
+ * Each point array is an array of consecutive x, y values of points. For
+ * example: [x1, y1, x2, y2, x3, y3, ...].
+ * @property {TypeColor | Array<TypeColor | Array<TypeColor>>} color colors to
+ * be assigned to the points
+ * @property {Array<String>} names optional names for each point array. Names
+ * can be used when using the morph animation step instead of point array
+ * indeces.
+ * @property {'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'} [glPrimitive]
+ * glPrimitive is the same for all point arrays (`'TRIANGLES'`)
+ */
 export type OBJ_Morph = {
   name?: string,
   pointArrays: Array<Array<number>>,
-  color: TypeColor | Array<Array<TypeColor>>,
+  color: TypeColor | Array<TypeColor | Array<TypeColor>>,
   names: Array<string>,
+  glPrimitive: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
 }
+
 /* eslint-disable max-len */
 /**
  * ![](./apiassets/generic.png)
@@ -2415,7 +2465,52 @@ export default class FigurePrimitives {
   }
 
   /**
-   * {@link FigureElementPrimitive} that draws a generic shape.
+   * {@link FigureElementPrimitive} that can efficiently translate large numbers
+   * of points.
+   *
+   * The morph primitive is optimized to animate hundreds of thousands of points
+   * with minimal performance impact.
+   *
+   * Multiple arrays of points can be defined, and the translation of
+   * corresponding points in two arrays can be animated.
+   *
+   * Being able to accomodate so many points means this primitive can be used to
+   * efficiently morph shapes.
+   *
+   * All points in all point arrays can be assigned an individual color if
+   * desired. Use `color: TypeColor` to assign all points in all arrays the same
+   * color, `color: Array<TypeColor>` to assign all points in each array a
+   * specific color, `color: Array<Array<TypeColor>>` to assign each point in
+   * each array a specific color, and
+   * `color: Array<TypeColor | Array<TypeColor>` to assign some point arrays
+   * with one color, and others with a specific color per point.
+   *
+   * A point array is an array of numbers representing consecutive x, y points.
+   * For example, [x1, y1, x2, y2, ...].
+   *
+   * A color array is an array of numbers representing the color of each points.
+   * For example, [r1, g1, b1, a1, r2, g2, b2, a2, ...].
+   *
+   * If `color` is an array of colors and/or color arrays, then the its length
+   * must be equal to the number of point Arrays. The colors in the array will
+   * be matched up with the corresponding point arrays in `points`.
+   *
+   * This element's specialty is creating a visual effect, and so does not
+   * automatically calculate touch borders, and doesn't allow for color changes
+   * (with the `setColor`, `dim`, and `undim` methods). If touch borders are
+   * desired then either setup touch borders manually, or use a different
+   * element as a touch pad.
+   *
+   * This element comes with two specialized methods and an animation step:
+   *  - `setPoints` - sets points to a point array
+   *  - `setPointsBetwee` - sets points to a position between two point arrays
+   *  - `animations.morph` - morph between `start` and `target`
+   *
+   * Note, while animation is efficient, loading or generating hundreds of
+   * thousands of points when first instantiated can be slow on lower
+   * end systems, and may need to be accounted for (like letting the user know
+   * that loading is ongoing).
+   *
    * @see {@link OBJ_Generic} for options and examples.
    */
   morph(...optionsIn: Array<OBJ_Morph>) {
@@ -2424,6 +2519,7 @@ export default class FigurePrimitives {
       color: this.defaultColor,
       points: [],
       glPrimitive: 'TRIANGLES',
+      position: [0, 0],
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
 
@@ -2491,33 +2587,16 @@ export default class FigurePrimitives {
     glObject.addUniform('u_to', 1, 'INT');
     glObject.addUniform('u_percent', 1, 'FLOAT');
 
-    const element = new FigureElementPrimitive(
+    const element = new FigureElementPrimitiveMorph(
       glObject, options.transform, options.color, this.limits, null, options.name,
     );
-    element.dimColor = this.defaultDimColor.slice();
-    element.custom.shapeNameMap = shapeNameMap;
-    const getIndex = (shapeNameOrIndex: string | number) => {
-      if (typeof shapeNameOrIndex === 'string') {
-        return shapeNameMap[shapeNameOrIndex];
-      }
-      return shapeNameOrIndex;
-    };
-    // eslint-disable-next-line max-len
-    element.custom.update = (fromShape: string | number, toShape: string | number, percent: number) => {
-      glObject.updateUniform('u_from', getIndex(fromShape));
-      glObject.updateUniform('u_to', getIndex(toShape));
-      glObject.updateUniform('u_percent', percent);
-    };
-    element.custom.setShape = (shape: string | number) => {
-      glObject.updateUniform('u_from', getIndex(shape));
-      glObject.updateUniform('u_to', getIndex(shape));
-      glObject.updateUniform('u_percent', 0);
-    };
-    element.custom.setShape(0);
+    element.shapeNameMap = shapeNameMap;
+
+    element.setPoints(0);
 
     element.fnMap.add('_morphCallback', (percentage: number, customProperties: Object) => {
       const { start, target } = customProperties;
-      element.custom.update(start, target, percentage);
+      element.setPointsBetween(start, target, percentage);
     });
     element.animations.morph = (...opt) => {
       const o = joinObjects({}, {

@@ -8,14 +8,27 @@ import type { TypeParsablePoint } from './g2';
 import type { TypeHAlign, TypeVAlign } from '../figure/Equation/EquationForm';
 import getImageData from './getImageData';
 
-const makeSquare = (center, r = 0.015) => [
-  center[0] - r / 2, center[1] - r / 2,
-  center[0] + r / 2, center[1] - r / 2,
-  center[0] + r / 2, center[1] + r / 2,
-  center[0] - r / 2, center[1] - r / 2,
-  center[0] + r / 2, center[1] + r / 2,
-  center[0] - r / 2, center[1] + r / 2,
-];
+/**
+ * Create a square with two triangles, centered at some point with some
+ * side length.
+ *
+ * @param {TypeParsablePoint} center
+ * @param {number} sideLength
+ * @return {Array<number>} array of interlaced x and y components of 6 vertices
+ * (12 numbers total)
+ */
+function makeSquare(center: TypeParsablePoint, sideLength: number = 0.01) {
+  const c = getPoint(center);
+  return [
+    c.x - sideLength / 2, c.y - sideLength / 2,
+    c.x + sideLength / 2, c.y - sideLength / 2,
+    c.x + sideLength / 2, c.y + sideLength / 2,
+    c.x - sideLength / 2, c.y - sideLength / 2,
+    c.x + sideLength / 2, c.y + sideLength / 2,
+    c.x - sideLength / 2, c.y + sideLength / 2,
+  ];
+}
+
 const makeColors = (c, num) => {
   const colors = [];
   for (let i = 0; i < num; i += 1) {
@@ -127,7 +140,7 @@ export type OBJ_ImageToPoints = {
 };
 
 /**
- * `getImage` maps the pixels of an image to points of a shape that will be
+ * `imageToPoints` maps the pixels of an image to points of a shape that will be
  * used to draw that pixel.
  *
  * All pixels in an image can be returned, or a `filter` function can be used
@@ -143,6 +156,9 @@ export type OBJ_ImageToPoints = {
  * This method is useful for including images in morphing effects. It should
  * not be used to simply show an image (use a texture with some
  * FigureElementPrimitive for this).
+ *
+ * @param {OBJ_ImageToPoints} options
+ * @return {[Array<number>, Array<number>]} [vertices, colors]
  */
 function imageToPoints(options: OBJ_ImageToPoints) {
   const defaultOptions = {
@@ -319,85 +335,371 @@ function imageToPoints(options: OBJ_ImageToPoints) {
   return [points, colors];
 }
 
-function pointsToVertices(points, rad = 0.015) {
-  const vertices = [];
-  for (let i = 0; i < points.length; i += 1) {
-    vertices.push(...makeSquare(points[i], rad));
-  }
-  return vertices;
-}
+// function pointsToVertices(points, rad = 0.015) {
+//   const vertices = [];
+//   for (let i = 0; i < points.length; i += 1) {
+//     vertices.push(...makeSquare(points[i], rad));
+//   }
+//   return vertices;
+// }
 
+/**
+ * Options obect for lineToPoints that evenly distributes points along a line
+ *
+ * @property {Array<TypeParsablePoint>} line array of points representing a
+ * polyline
+ * @property {number} maxPoints number of points to distribute along line
+ * @property {boolean} close define open or closed polyline
+ * @property {number} pointSize size of point
+ * @property {function([number, number], number): Array<number>} makePoints
+ * function that makes the shape around each point. By default a square
+ * centered at the point with side length `pointSize` is made. Function input
+ * parameters are the point coordinate tuple and `pointSize`. Funciton must
+ * return an array of numbers representing interlaced x, y values of each
+ * vertex of the shape.
+ * @property {function(number, [number, number], number, number, number): Array<number>} makeColors
+ * function that makes the colors of each vertex of the shape around a point.
+ * Function input parameters are the number of shape vertices to be colored,
+ * the center point coordinate, the previous polyline point index, the
+ * cumulative length from the start of the polyline, and the percentLength from
+ * the start of the polyline. The function must return an array of rgba color
+ * values for each shape vertex.
+ */
 export type OBJ_LineToPoints = {
   line: Array<TypeParsablePoint>,
-  maxPoints: number,
-  close: boolean,
-  pointSize: number,
-  makeColors?: (TypeColor, number) => Array<number>,
+  maxPoints?: number,
+  close?: boolean,
+  pointSize?: number,
   makePoints?: ([number, number], number) => Array<number>,
+  makeColors?: (number, [number, number], number, number, number) => Array<number>,
 };
+
+/**
+ * `lineToPoints` divides a polyline into equall spaced points.
+ *
+ * The polyline (`line`) is defined by an array of points.
+ *
+ * The polyline can be closed or open.
+ *
+ * This method is useful for morphing between line shapes.
+ *
+ * @param {OBJ_LineToPoints} options
+ * @return {[Array<number>, Array<number>]} [vertices, colors]
+ */
 function lineToPoints(options: OBJ_LineToPoints) {
   const defaultOptions = {
     maxPoints: null,
     close: false,
-    pointSize: null,
+    pointSize: 0.01,
     makePoints: makeSquare.bind(this),
-    makeColors: makeColors.bind(this),
+    makeColors: null,
   };
   const o = joinObjects({}, defaultOptions, options);
-  const linePoints = o.line;
-  const { close, maxPoints } = o;
+  const linePoints = o.line.map(p => getPoint(p));
+  const { close } = o;
+
+  // Calculate the cumulative distance of the polyline, and create
+  // an array of distances between neighboring points, and the cumulative
+  // distance at each point
   let cumDistance = 0;
   const distances = Array(linePoints.length).fill(0);
   const cumDistances = Array(linePoints.length).fill(0);
   for (let i = 1; i < linePoints.length; i += 1) {
-    const p = [linePoints[i][0], linePoints[i][1]];
-    const q = [linePoints[i - 1][0], linePoints[i - 1][1]];
+    const p = [linePoints[i].x, linePoints[i].y];
+    const q = [linePoints[i - 1].x, linePoints[i - 1].y];
     const distance = Math.sqrt(((p[0] - q[0]) ** 2) + ((p[1] - q[1]) ** 2));
     cumDistance += distance;
     distances[i] = distance;
     cumDistances[i] = cumDistance;
   }
   if (close) {
-    const p = [linePoints[0][0], linePoints[0][1]];
-    const q = [linePoints[linePoints.length - 1][0], linePoints[linePoints.length - 1][1]];
+    const p = [linePoints[0].x, linePoints[0].y];
+    const q = [linePoints[linePoints.length - 1].x, linePoints[linePoints.length - 1].y];
     const distance = Math.sqrt(((p[0] - q[0]) ** 2) + ((p[1] - q[1]) ** 2));
     cumDistance += distance;
     distances[0] = distance;
     cumDistances[0] = cumDistance;
   }
+
+  // Get the number of points to output, and the distance between them
+  let numPoints = linePoints.length;
+  if (o.maxPoints != null) {
+    numPoints = o.maxPoints;
+  }
   const distanceStep = cumDistance / (numPoints - 1);
-  const points = Array(numPoints);
+
+  // Final points
+  const points = [];
+  const colors = [];
   let nextLinePointIndex = 1;
   let currLinePointIndex = 0;
   for (let i = 0; i < numPoints; i += 1) {
+    // Current cumulative distance for this point
     const currentCumDist = i * distanceStep;
+    let point;
     if (i === 0) {
-      points[i] = linePoints[i];
+      point = [linePoints[i].x, linePoints[i].y];
       // eslint-disable-next-line no-continue
-      continue;
-    }
-    while (cumDistances[nextLinePointIndex] < currentCumDist && nextLinePointIndex > 0) {
-      if (nextLinePointIndex === linePoints.length - 1) {
-        nextLinePointIndex = 0;
-      } else {
-        nextLinePointIndex += 1;
+      // continue;
+    } else {
+      // Increment `nextLinePointIndex` until it is larger than the
+      // current cumulative distance (taking into account a close)
+      while (cumDistances[nextLinePointIndex] < currentCumDist && nextLinePointIndex > 0) {
+        if (nextLinePointIndex === linePoints.length - 1) {
+          nextLinePointIndex = 0;
+        } else {
+          nextLinePointIndex += 1;
+        }
+        currLinePointIndex += 1;
       }
-      currLinePointIndex += 1;
+      // Remaining distance between the current cumulative distance and the next
+      // polyline point cumulative distance
+      const remainingDistance = cumDistances[nextLinePointIndex] - currentCumDist;
+      // Percent of distance between current and next polyline point
+      const remainingPercent = 1 - remainingDistance / distances[nextLinePointIndex];
+      const q = linePoints[currLinePointIndex];
+      const p = linePoints[nextLinePointIndex];
+      // points[i] = [
+      point = [
+        (p.x - q.x) * remainingPercent + q.x,
+        (p.y - q.y) * remainingPercent + q.y,
+      ];
     }
-    const remainingDistance = cumDistances[nextLinePointIndex] - currentCumDist;
-    const remainingPercent = 1 - remainingDistance / distances[nextLinePointIndex];
-    const q = linePoints[currLinePointIndex];
-    const p = linePoints[nextLinePointIndex];
-    points[i] = [
-      (p[0] - q[0]) * remainingPercent + q[0],
-      (p[1] - q[1]) * remainingPercent + q[1],
-    ];
+    const pointVertices = o.makePoints(point, o.pointSize);
+    let pointColors = [];
+    if (o.makeColors != null) {
+      pointColors = o.makeColors(
+        pointVertices.length / 2, point, currLinePointIndex,
+        currentCumDist, currentCumDist / cumDistance,
+      );
+    }
+    points.push(...pointVertices);
+    colors.push(...pointColors);
   }
-  return pointsToVertices(points, rad);
+  return [points, colors];
 }
+
+/**
+ * Options object to calculate vertices of a polygon
+ *
+ * @property {number} [radius] radius of polygon (`1`)
+ * @property {number} [sides] number of polygon sides (`4`)
+ * @property {TypeParsablePoint} [position] center position of polygon (`[0, 0]`)
+ * @property {number} [rotation] polygon rotation (first vertex will be along
+ * the positive x axis) (`0`)
+ */
+export type OBJ_GetPolygonVertices = {
+  radius: number,
+  sides: number,
+  position: TypeParsablePoint,
+  rotation: number,
+};
+
+/**
+ * Calculate vertices of a polygon
+ *
+ * @param {OBJ_GetPolygonVertices} options
+ * @return {Array<[number, number]>} Array of vertices represented by [x, y]
+ * tuples
+ */
+const getPolygonVertices = (options: OBJ_GetPolygonVertices) => {
+  const defaultOptions = {
+    sides: 4,
+    rotation: 0,
+    radius: 1,
+    position: [0, 0],
+  };
+  const o = joinObjects({}, defaultOptions, options);
+  const position = getPoint(o.position);
+  const points = [];
+  const dAngle = Math.PI * 2 / o.sides;
+  for (let i = 0; i < o.sides; i += 1) {
+    points.push([
+      o.radius * Math.cos(dAngle * i + o.rotation) + position.x,
+      o.radius * Math.sin(dAngle * i + o.rotation) + position.y,
+    ]);
+  }
+  return points;
+};
+
+/**
+ * Options object to generate random points within a polygon.
+ *
+ * @property {number} [maxPoints] number of points to generate (`10`)
+ * @property {number} [pointSize] size of each point (`0.01`)
+ * @property {number} [radius] radius of polygon (`1`)
+ * @property {number} [sides] number of polygon sides (`4`)
+ * @property {TypeParsablePoint} [position] center position of polygon (`[0, 0]`)
+ * @property {number} [rotation] polygon rotation (first vertex will be along
+ * the positive x axis) (`0`)
+ * @property {function([number, number], number): Array<number>} [makePoints]
+ * use this function to customize point creation. By default a square of two
+ * triangles is created (six vertices). The function takes as input the [x, y]
+ * position of the center point and `pointSize` and outputs an array of vertices
+ * of triangles with interlaced x and y coordinates. For example:
+ * [x1, y1, x2, y2, x3, y3, ....]
+ */
+export type OBJ_PolygonFillPoints = {
+  radius?: number,
+  sides?: number,
+  position?: TypeParsablePoint,
+  rotation?: number,
+  maxPoints?: number,
+  pointSize?: number,
+  makePoints?: ([number, number], number) => Array<number>,
+};
+
+/**
+ * Generate random points within a polygon.
+ *
+ * @param {OBJ_PolygonFillPoints} polygonFillPoints
+ * @return {Array<number>} array of interlaced x and y coordinates of vertices
+ */
+const polygonFillPoints = (options: OBJ_PolygonFillPoints) => {
+  const defaultOptions = {
+    sides: 4,
+    rotation: 0,
+    radius: 1,
+    position: [0, 0],
+    maxPoints: 10,
+    pointSize: 0.01,
+    makePoints: makeSquare.bind(this),
+  };
+  const o = joinObjects({}, defaultOptions, options);
+  const position = getPoint(o.position);
+  const points = [];
+  const apothem = o.radius * Math.cos(Math.PI / o.sides);
+
+  for (let i = 0; i < o.maxPoints; i += 1) {
+    const angle = rand(0, Math.PI * 2);
+    const sideAngle = Math.PI * 2 / o.sides;
+    const lastVertex = Math.floor(angle / sideAngle) * sideAngle;
+    const angleDelta = Math.abs(angle - lastVertex - sideAngle / 2);
+    const radiusMax = apothem / Math.cos(angleDelta);
+    // This is a dodgey way to try and even out the distribution so there isn't
+    // clumping at the center. Todo in future is make a linear propbability
+    // distribution
+    const radius = rand(rand(0, radiusMax / 2), radiusMax);
+    points.push(...o.makePoints([
+      radius * Math.cos(angle + o.rotation) + position.x,
+      radius * Math.sin(angle + o.rotation) + position.y,
+    ]));
+  }
+  return points;
+};
+
+/**
+ * Options object to generate random points within a circle.
+ *
+ * @property {number} [maxPoints] number of points to generate (`10`)
+ * @property {number} [pointSize] size of each point (`0.01`)
+ * @property {number} [radius] radius of polygon (`1`)
+ * @property {TypeParsablePoint} [position] center position of polygon (`[0, 0]`)
+ * @property {function([number, number], number): Array<number>} [makePoints]
+ * use this function to customize point creation. By default a square of two
+ * triangles is created (six vertices). The function takes as input the [x, y]
+ * position of the center point and `pointSize` and outputs an array of vertices
+ * of triangles with interlaced x and y coordinates. For example:
+ * [x1, y1, x2, y2, x3, y3, ....]
+ */
+export type OBJ_CircleFillPoints = {
+  radius?: number,
+  position?: TypeParsablePoint,
+  maxPoints?: number,
+  makePoints?: ([number, number], number) => Array<number>,
+  pointSize?: number,
+};
+
+/**
+ * Generate random points within a circle.
+ *
+ * @param {OBJ_CircleFillPoints} circleFillPoints
+ * @return {Array<number>} array of interlaced x and y coordinates of vertices
+ */
+const circleFillPoints = (options: OBJ_CircleFillPoints) => {
+  const defaultOptions = {
+    radius: 1,
+    position: [0, 0],
+    maxPoints: 10,
+    pointSize: 0.01,
+    makePoints: makeSquare.bind(this),
+  };
+  const o = joinObjects({}, defaultOptions, options);
+  const position = getPoint(o.position);
+  const points = [];
+
+  for (let i = 0; i < o.maxPoints; i += 1) {
+    const angle = rand(0, Math.PI * 2);
+    // This is a dodgey way to try and even out the distribution so there isn't
+    // clumping at the center. Todo in future is make a linear propbability
+    // distribution
+    const radius = rand(rand(0, o.radius / 2), o.radius);
+    points.push(...o.makePoints([
+      radius * Math.cos(angle + o.rotation) + position.x,
+      radius * Math.sin(angle + o.rotation) + position.y,
+    ], o.pointSize));
+  }
+  return points;
+};
+
+
+/**
+ * Options object to generate random points within a circle.
+ *
+ * @property {number} [maxPoints] number of points to generate (`10`)
+ * @property {number} [pointSize] size of each point (`0.01`)
+ * @property {number} [width] width of rectangle (`1`)
+ * @property {number} [height] height of rectangle (`1`)
+ * @property {TypeParsablePoint} [position] center position of polygon (`[0, 0]`)
+ * @property {function([number, number], number): Array<number>} [makePoints]
+ * use this function to customize point creation. By default a square of two
+ * triangles is created (six vertices). The function takes as input the [x, y]
+ * position of the center point and `pointSize` and outputs an array of vertices
+ * of triangles with interlaced x and y coordinates. For example:
+ * [x1, y1, x2, y2, x3, y3, ....]
+ */
+export type OBJ_RectangleFillPoints = {
+  width?: number,
+  height?: number,
+  position?: TypeParsablePoint,
+  maxPoints?: number,
+  makePoints?: ([number, number], number) => Array<number>,
+  pointSize?: number,
+};
+
+/**
+ * Generate random points within a rectangle.
+ *
+ * @param {OBJ_CircleFillPoints} circleFillPoints
+ * @return {Array<number>} array of interlaced x and y coordinates of vertices
+ */
+const rectangleFillPoints = (options: OBJ_CircleFillPoints) => {
+  const defaultOptions = {
+    width: 1,
+    height: 1,
+    position: [0, 0],
+    maxPoints: 10,
+    pointSize: 0.01,
+    makePoints: makeSquare.bind(this),
+  };
+  const o = joinObjects({}, defaultOptions, options);
+  const position = getPoint(o.position);
+  const points = [];
+
+  for (let i = 0; i < o.maxPoints; i += 1) {
+    const x = rand(-o.width / 2, o.width / 2) + position.x;
+    const y = rand(-o.height / 2, o.height / 2) + position.y;
+    points.push(...o.makePoints([x, y], o.pointSize));
+  }
+  return points;
+};
 
 export {
   lineToPoints,
   getPixels,
   imageToPoints,
+  getPolygonVertices,
+  polygonFillPoints,
+  circleFillPoints,
+  rectangleFillPoints,
 };

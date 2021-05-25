@@ -8,12 +8,12 @@ const figure = new Fig.Figure({
 const { rand } = Fig.tools.math;
 
 const img1 = new Image();
-img1.src = './question.png';
+img1.src = './logo.png';
 const img2 = new Image();
-img2.src = './esclamation.png';
+img2.src = './question.png';
 
-const testImg = new Image();
-testImg.src = './morph.test.png';
+// const testImg = new Image();
+// testImg.src = './morph.test.png';
 
 // const r = 0.015;
 const makeShape = (center, r = 0.015) => [
@@ -26,96 +26,6 @@ const makeShape = (center, r = 0.015) => [
 ];
 const makeColors = c => [...c, ...c, ...c, ...c, ...c, ...c];
 
-
-function pointsToVertices(points, rad = 0.015) {
-  const vertices = [];
-  for (let i = 0; i < points.length; i += 1) {
-    vertices.push(...makeShape(points[i], rad));
-  }
-  return vertices;
-}
-
-function lineToPoints(
-  linePoints, // : Array<[number, number]>,
-  numPoints, // : number,
-  close = false, // : boolean = false,
-  rad = 0.015,
-) {
-  let cumDistance = 0;
-  const distances = Array(linePoints.length).fill(0);
-  const cumDistances = Array(linePoints.length).fill(0); 
-  for (let i = 1; i < linePoints.length; i += 1) {
-    const p = [linePoints[i][0], linePoints[i][1]];
-    const q = [linePoints[i - 1][0], linePoints[i - 1][1]];
-    const distance = Math.sqrt(((p[0] - q[0]) ** 2) + ((p[1] - q[1]) ** 2));
-    cumDistance += distance;
-    distances[i] = distance;
-    cumDistances[i] = cumDistance;
-  }
-  if (close) {
-    const p = [linePoints[0][0], linePoints[0][1]];
-    const q = [linePoints[linePoints.length - 1][0], linePoints[linePoints.length - 1][1]];
-    const distance = Math.sqrt(((p[0] - q[0]) ** 2) + ((p[1] - q[1]) ** 2));
-    cumDistance += distance;
-    distances[0] = distance;
-    cumDistances[0] = cumDistance;
-  }
-  const distanceStep = cumDistance / (numPoints - 1);
-  const points = Array(numPoints);
-  let nextLinePointIndex = 1;
-  let currLinePointIndex = 0;
-  for (let i = 0; i < numPoints; i += 1) {
-    const currentCumDist = i * distanceStep;
-    if (i === 0) {
-      points[i] = linePoints[i];
-      // eslint-disable-next-line no-continue
-      continue;
-    }
-    while (cumDistances[nextLinePointIndex] < currentCumDist && nextLinePointIndex > 0) {
-      if (nextLinePointIndex === linePoints.length - 1) {
-        nextLinePointIndex = 0;
-      } else {
-        nextLinePointIndex += 1;
-      }
-      currLinePointIndex += 1;
-    }
-    const remainingDistance = cumDistances[nextLinePointIndex] - currentCumDist;
-    const remainingPercent = 1 - remainingDistance / distances[nextLinePointIndex];
-    const q = linePoints[currLinePointIndex];
-    const p = linePoints[nextLinePointIndex];
-    points[i] = [
-      (p[0] - q[0]) * remainingPercent + q[0],
-      (p[1] - q[1]) * remainingPercent + q[1],
-    ];
-  }
-  return pointsToVertices(points, rad);
-}
-
-const makePolygon = (radius, sides, numPoints, rad = 0.015) => {
-  const points = [];
-  const dAngle = Math.PI * 2 / sides;
-  for (let i = 0; i < sides; i += 1) {
-    points.push([
-      radius * Math.cos(dAngle * i),
-      radius * Math.sin(dAngle * i),
-    ]);
-  }
-  return lineToPoints(points, numPoints, true, rad);
-};
-
-figure.add({
-  make: 'rectangle',
-  width: 1,
-  height: 1,
-  line: { width: 0.007 },
-  color: [1, 1, 0, 1],
-});
-figure.add({
-  make: 'rectangle',
-  width: 0.01,
-  height: 0.01,
-  color: [1, 1, 0, 1],
-});
 function loaded() {
   const [image1, colors] = Fig.tools.morph.imageToPoints({
     image: img1,
@@ -123,7 +33,9 @@ function loaded() {
     xAlign: 'center',
     yAlign: 'middle',
     align: 'filteredImage',
-    height: 1,
+    height: 3,
+    dither: 0.01,
+    pointSize: 0.015,
     offset: [0, 0],
   });
 
@@ -139,8 +51,43 @@ function loaded() {
     // distribution: 'raster',
   });
 
-  const square = lineToPoints([[1, 1], [-1, 1], [-1, -1], [1, -1]], n, true);
-  const circle = makePolygon(0.9, 20, n);
+  const [square] = Fig.tools.morph.lineToPoints({
+    line: [[1, 1], [-1, 1], [-1, -1], [1, -1]],
+    maxPoints: n,
+    close: true,
+  });
+  // const square = lineToPoints([[1, 1], [-1, 1], [-1, -1], [1, -1]], n, true);
+  const [circle] = Fig.tools.morph.lineToPoints({
+    line: Fig.tools.morph.getPolygonVertices({ radius: 0.9, sides: 100, rotation: Math.PI / 2 }),
+    maxPoints: n,
+    close: true,
+  });
+
+  const [sine] = Fig.tools.morph.lineToPoints({
+    line: Fig.tools.math.range(-2, 2, 0.02).map(x => [x, Math.sin(10 * (x || 0.00001)) / (10 * (x || 0.00001))]),
+    maxPoints: n,
+    pointSize: 0.02,
+    // close: true,
+  });
+
+  const [line] = Fig.tools.morph.lineToPoints({
+    line: [[-2, 0], [2, 0]],
+    maxPoints: n,
+  });
+
+  const [sine1] = Fig.tools.morph.lineToPoints({
+    line: Fig.tools.math.range(-2, 2, 0.02).map(x => [x, Math.sin(Math.PI * 4 * ((x - 1) || 0.00001)) / (Math.PI * 4 * ((x - 1) || 0.00001))]),
+    maxPoints: n,
+    // close: true,
+  });
+
+  const poly = Fig.tools.morph.rectangleFillPoints({
+    maxPoints: n,
+    width: 8,
+    height: 8,
+  });
+
+  // const circle = makePolygon(0.9, 20, n);
   // console.log(square)
   // console.log(circle)
   // console.log(imagePoints)
@@ -154,38 +101,58 @@ function loaded() {
     points1.push(...makeShape(center1, 0.01));
     colors1.push(...makeColors([1, 0, 0, 1]));
     // colors2.push(...makeColors([0, 1, 0, 1]));
-    colors3.push(...makeColors([1, 0, 1, 1]));
+    colors3.push(...makeColors([47 / 255, 111 / 255, 227 / 255, 1]));
   }
   // console.log(points1)
 
   const m = figure.add({
     make: 'morph',
-    names: ['rand', 'circle', 'square', 'image1', 'image2'],
-    points: [points1, circle, square, image1, image2],
-    color: [colors1, colors3, colors3, colors, colors2],
+    names: ['rand', 'circle', 'square', 'image1', 'image2', 'sine', 'poly'],
+    points: [points1, circle, square, image1, image2, sine, poly],
+    color: [colors1, colors3, colors3, colors, colors2, colors3, colors3],
   });
 
   m.animations.new()
+    // .delay(1)
+    // .morph({
+    //   start: 'rand', target: 'image1', duration: 3, progression: 'easeinout',
+    // })
+    // .delay(1)
+    // .morph({
+    //   start: 'image1', target: 'image2', duration: 1, progression: 'easeinout',
+    // })
+    // .delay(1)
+    // .morph({
+    //   start: 'image2', target: 'square', duration: 1, progression: 'easeinout',
+    // })
+    // .delay(1)
+    // .morph({
+    //   start: 'square', target: 'circle', duration: 1, progression: 'easeinout',
+    // })
+    // .delay(1)
+    // .morph({
+    //   start: 'circle', target: 'sine', duration: 4, progression: 'easeinout',
+    // })
+    // .delay(1)
+    .morph({
+      start: 'poly', target: 'sine', duration: 4, progression: 'easeinout',
+    })
     .delay(1)
     .morph({
-      start: 'rand', target: 'image1', duration: 3, progression: 'easeinout',
-    })
-    .delay(4)
-    .morph({
-      start: 'image1', target: 'image2', duration: 1, progression: 'easeinout',
+      start: 'sine', target: 'image1', duration: 4, progression: 'easeinout',
     })
     .delay(1)
     .morph({
-      start: 'image2', target: 'square', duration: 1, progression: 'easeinout',
+      start: 'image1', target: 'image2', duration: 4, progression: 'easeinout',
     })
     .delay(1)
-    .morph({
-      start: 'square', target: 'circle', duration: 1, progression: 'easeinout',
-    })
-    .delay(1)
-    .morph({
-      start: 'circle', target: 'rand', duration: 4, progression: 'easeinout',
-    })
+    // .morph({
+    //   start: 'rand', target: 'image2', duration: 4, progression: 'easeinout',
+    // })
+    // .delay(1)
+    // .morph({
+    //   start: 'sine1', target: 'rand', duration: 4, progression: 'easeinout',
+    // })
     .start();
 }
 

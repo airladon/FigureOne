@@ -611,5 +611,14 @@ describe('Morph', () => {
       ]));
     });
   });
+  describe('lineToPoints', () => {
+    test('simple', () => {
+      const line = [[0, 0], [1, 0]];
+      const [points] = morph.lineToPoints({
+        line, maxPoints: 3, makePoints: p => p,
+      });
+      expect(points).toEqual([0, 0, 0.5, 0, 1, 0]);
+    });
+  });
 });
 
