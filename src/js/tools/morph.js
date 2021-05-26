@@ -10,15 +10,14 @@ import getImageData from './getImageData';
 import { makeFastPolyLine } from '../figure/geometries/lines/lines';
 
 /**
- * Create a square with two triangles, centered at some point with some
- * side length.
+ * Create a square fill from two triangles
  *
  * @param {TypeParsablePoint} center
  * @param {number} sideLength
  * @return {Array<number>} array of interlaced x and y components of 6 vertices
  * (12 numbers total)
  */
-function makeSquare(center: TypeParsablePoint, sideLength: number = 0.01) {
+function squareFill(center: TypeParsablePoint, sideLength: number = 0.01) {
   const c = getPoint(center);
   return [
     c.x - sideLength / 2, c.y - sideLength / 2,
@@ -30,14 +29,109 @@ function makeSquare(center: TypeParsablePoint, sideLength: number = 0.01) {
   ];
 }
 
-const makeColors = (c, num) => {
+/**
+ * Create a hexagon fill from four triangles (12 vertices)
+ *
+ * @param {TypeParsablePoint} center
+ * @param {number} radius
+ * @return {Array<number>} array of interlaced x and y components of 12 vertices
+ * (24 numbers total)
+ */
+function hexFill(center: TypeParsablePoint, radius: number = 0.01) {
+  const c = getPoint(center);
+  const a = Math.PI * 2 / 6;
+  const points = [
+    [radius + c.x, c.y],
+    [radius * Math.cos(a) + c.x, radius * Math.sin(a) + c.y],
+    [radius * Math.cos(a * 2) + c.x, radius * Math.sin(a * 2) + c.y],
+    [radius * Math.cos(a * 3) + c.x, radius * Math.sin(a * 3) + c.y],
+    [radius * Math.cos(a * 4) + c.x, radius * Math.sin(a * 4) + c.y],
+    [radius * Math.cos(a * 5) + c.x, radius * Math.sin(a * 5) + c.y],
+  ];
+  return [
+    points[0][0], points[0][1],
+    points[1][0], points[1][1],
+    points[2][0], points[2][1],
+    //
+    points[0][0], points[0][1],
+    points[2][0], points[2][1],
+    points[3][0], points[3][1],
+    //
+    points[0][0], points[0][1],
+    points[3][0], points[3][1],
+    points[4][0], points[4][1],
+    //
+    points[0][0], points[0][1],
+    points[4][0], points[4][1],
+    points[5][0], points[5][1],
+  ];
+}
+
+/**
+ * Create a polygon fill with n sides from n-2 triangles - (3 * (n-2) vertices)
+ *
+ * @param {TypeParsablePoint} center
+ * @param {number} sideLength
+ * @return {Array<number>} array of interlaced x and y components of vertices
+ */
+function polygonFill(sides: number, center: TypeParsablePoint, radius: number = 0.01) {
+  const c = getPoint(center);
+  const a = Math.PI * 2 / sides;
+  const points = [];
+  for (let i = 0; i < sides; i += 1) {
+    points.push(
+      [radius * Math.cos(a * i) + c.x, radius * Math.sin(a * i) + c.y],
+    );
+  }
+  const vertices = [];
+  for (let i = 1; i < sides - 1; i += 1) {
+    vertices.push(...[
+      points[0][0], points[0][1],
+      points[i][0], points[i][1],
+      points[i + 1][0], points[i + 1][1],
+    ]);
+  }
+  return vertices;
+}
+
+// Determine which shape function to use
+function processShapeFunction(
+  makePoints: ((TypeParsablePoint, number) => Array<number>) | 'square' | 'hex' | number,
+) {
+  if (typeof makePoints === 'number' && makePoints > 2) {
+    if (makePoints === 4) {
+      return squareFill.bind(this);
+    }
+    if (makePoints === 6) {
+      return hexFill.bind(this);
+    }
+    return polygonFill.bind(this, makePoints);
+  }
+  if (makePoints === 'hex') {
+    return hexFill.bind(this);
+  }
+  if (typeof makePoints === 'function') {
+    return makePoints;
+  }
+  return squareFill.bind(this);
+}
+
+/**
+ * Create an array of `num` copies of the same color
+ *
+ * @param {TypeColor} color
+ * @param {number} numCopies
+ * @return {Array<number>} color copies juxtaposed in single array
+ */
+const makeColors = (color: TypeColor, numCopies: number) => {
   const colors = [];
-  for (let i = 0; i < num; i += 1) {
-    colors.push(...c);
+  for (let i = 0; i < numCopies; i += 1) {
+    colors.push(...color);
   }
   return colors;
 };
 
+// Get pixels from image data, where pixels may be filtered.
 function getPixels(
   data: Uint8ClampedArray,
   imageWidth: number,
@@ -110,11 +204,12 @@ function getPixels(
  * filtered out
  * @property {number} [dither] Add a random offset to each point to create a
  * dither effect
- * @property {function([number, number], number): Array<number>} [makePoints]
- * use this function to customize point creation. By default a square of two
- * triangles is created (six vertices). The function takes as input the [x, y]
- * position of the center point and `pointSize` and outputs an array of vertices
- * of triangles with x and y coordinates interlaced. For example:
+ * @property {function([number, number], number): Array<number> | number} [shape]
+ * By default a square of two triangles is created (six vertices). Use a
+ * `number` to create a regular polygon with `number` sides. Use a custom
+ * function to make a custom shape. The function takes as input the [x, y]
+ * position of the center point and `size` and outputs an array of interlaced
+ * x and y coordinates of triangle vertices. For example:
  * [x1, y1, x2, y2, x3, y3, ....]
  * @property {function(TypeColor, number): Array<number>} [makeColors]
  * use this function to customze color mapping. The function takes as input the
@@ -122,7 +217,7 @@ function getPixels(
  * outputs an array of colors for each vertex. For example:
  * [r1, b1, g1, a1, r2, g2, b, a2, ...]
  */
-export type OBJ_ImageToPoints = {
+export type OBJ_ImageToShapes = {
  image: Image,
  maxPoints?: number | null,
  xAlign?: TypeHAlign,
@@ -137,7 +232,7 @@ export type OBJ_ImageToPoints = {
  pointSize?: number,
  excessPoints?: 'repeatOpaqueOnly' | 'lastOpaque' | 'repeat',
  makeColors?: (TypeColor, number) => Array<number>,
- makePoints?: ([number, number], number) => Array<number>,
+ shape?: 'square' | 'hex' | ([number, number], number) => Array<number>,
 };
 
 /**
@@ -158,10 +253,10 @@ export type OBJ_ImageToPoints = {
  * not be used to simply show an image (use a texture with some
  * FigureElementPrimitive for this).
  *
- * @param {OBJ_ImageToPoints} options
+ * @param {OBJ_ImageToShapes} options
  * @return {[Array<number>, Array<number>]} [vertices, colors]
  */
-function imageToPoints(options: OBJ_ImageToPoints) {
+function imageToShapes(options: OBJ_ImageToShapes) {
   const defaultOptions = {
     maxPoints: null,
     xAlign: 'center',
@@ -174,7 +269,7 @@ function imageToPoints(options: OBJ_ImageToPoints) {
     width: null,
     height: null,
     excessPoints: 'repeatOpaqueOnly',
-    makePoints: makeSquare.bind(this),
+    shape: 'square',
     makeColors: makeColors.bind(this),
   };
   const o = joinObjectsWithOptions({ except: 'image' }, {}, defaultOptions, options);
@@ -182,6 +277,7 @@ function imageToPoints(options: OBJ_ImageToPoints) {
   const imageHeight = image.height;
   const imageWidth = image.width;
   const { filter } = o;
+  const shape = processShapeFunction(o.shape);
 
   // Get array of pixel colors from top left to bottom right
   const data = getImageData(image);
@@ -328,7 +424,7 @@ function imageToPoints(options: OBJ_ImageToPoints) {
     ];
 
     // Create the vertices from the center point
-    const pointVertices = o.makePoints(point, o.pointSize || pixelWidth);
+    const pointVertices = shape(point, o.pointSize || pixelWidth);
     let pointColors = [];
     if (o.makeColors != null) {
       pointColors = o.makeColors(color, pointVertices.length / 2);
@@ -342,7 +438,7 @@ function imageToPoints(options: OBJ_ImageToPoints) {
 // function pointsToVertices(points, rad = 0.015) {
 //   const vertices = [];
 //   for (let i = 0; i < points.length; i += 1) {
-//     vertices.push(...makeSquare(points[i], rad));
+//     vertices.push(...squareFill(points[i], rad));
 //   }
 //   return vertices;
 // }
@@ -392,14 +488,12 @@ function _segmentPolyline(
   // const colors = [];
   let nextLinePointIndex = 1;
   let currLinePointIndex = 0;
-  for (let i = 0; i < numPoints; i += 1) {
+  for (let i = 0; i < numPoints - 1; i += 1) {
     // Current cumulative distance for this point
     const currentCumDist = i * distanceStep;
     let point;
     if (i === 0) {
       point = new Point(linePoints[i].x, linePoints[i].y);
-      // eslint-disable-next-line no-continue
-      // continue;
     } else {
       // Increment `nextLinePointIndex` until it is larger than the
       // current cumulative distance (taking into account a close)
@@ -418,13 +512,17 @@ function _segmentPolyline(
       const remainingPercent = 1 - remainingDistance / distances[nextLinePointIndex];
       const q = linePoints[currLinePointIndex];
       const p = linePoints[nextLinePointIndex];
-      // points[i] = [
       point = new Point(
         (p.x - q.x) * remainingPercent + q.x,
         (p.y - q.y) * remainingPercent + q.y,
       );
     }
     points.push(point);
+  }
+  if (close) {
+    points.push(linePoints[0]._dup());
+  } else {
+    points.push(linePoints[linePoints.length - 1]._dup());
   }
   return [points, cumDistance, distanceStep];
 }
@@ -437,7 +535,7 @@ function _segmentPolyline(
  * @property {number} num number of shapes to distribute along line
  * @property {boolean} close define open or closed polyline
  * @property {number} size size of point
- * @property {function([number, number], number): Array<number>} makeShape
+ * @property {function([number, number], number): Array<number>} shape
  * function that makes the shape around each point. By default a square
  * centered at the point with side length `size` is made. Function input
  * parameters are the point coordinate tuple and `size`. Funciton must
@@ -456,7 +554,7 @@ export type OBJ_LineToPoints = {
   num?: number,
   close?: boolean,
   size?: number,
-  makeShape?: ([number, number], number) => Array<number>,
+  shape?: ([number, number], number) => Array<number>,
   makeColors?: (number, [number, number], number, number, number) => Array<number>,
 };
 
@@ -477,22 +575,48 @@ function polylineToShapes(options: OBJ_LineToPoints) {
     num: null,
     close: false,
     size: 0.01,
-    makeShape: makeSquare.bind(this),
+    shape: squareFill.bind(this),
     makeColors: null,
   };
   const o = joinObjects({}, defaultOptions, options);
+  const shape = processShapeFunction(o.shape);
   const linePoints = o.polyline.map(p => getPoint(p));
   const vertices = [];
   const colors = [];
   const [centerPoints, cumDistance, distanceStep] = _segmentPolyline(linePoints, o.num, o.close);
   for (let i = 0; i < centerPoints.length; i += 1) {
     const center = centerPoints[i];
-    const shapeVertices = o.makeShape(center, o.size);
+    const shapeVertices = shape(center, o.size);
     let vertexColors = [];
     const currentCumDist = i * distanceStep;
     if (o.makeColors != null) {
       vertexColors = o.makeColors(
         shapeVertices.length / 2, center, currentCumDist, currentCumDist / cumDistance,
+      );
+    }
+    vertices.push(...shapeVertices);
+    colors.push(...vertexColors);
+  }
+  return [vertices, colors];
+}
+
+function pointsToShapes(options) {
+  const defaultOptions = {
+    size: 0.01,
+    shape: squareFill.bind(this),
+    makeColors: null,
+  };
+  const o = joinObjects({}, defaultOptions, options);
+  const shape = processShapeFunction(o.shape);
+  const vertices = [];
+  const colors = [];
+  for (let i = 0; i < o.points.length; i += 1) {
+    const point = o.points[i];
+    const shapeVertices = shape(point, o.size);
+    let vertexColors = [];
+    if (o.makeColors != null) {
+      vertexColors = o.makeColors(
+        shapeVertices.length / 2, point,
       );
     }
     vertices.push(...shapeVertices);
@@ -516,30 +640,30 @@ function segmentPolyline(options: OBJ_LineToPoints) {
   const [
     segmentedPolyline, cumDistance, distanceStep,
   ] = _segmentPolyline(linePoints, o.close ? o.num - 1 : o.num, false);
-
   const colors = [];
-  const [stripPoints] = makeFastPolyLine(segmentedPolyline, o.width, false);
+  let [stripPoints] = makeFastPolyLine(segmentedPolyline, o.width, false);
+  stripPoints = stripPoints.map(p => p.round());
   const vertices = Array(stripPoints.length / 4 * 6 * 2);
   let index = 0;
   for (let i = 0; i < stripPoints.length - 2; i += 2) {
-    // const p1 = stripPoints[i];
-    // const p2 = stripPoints[i + 1];
-    // const p3 = stripPoints[i + 2];
-    // const p4 = stripPoints[i + 3];
-    // let leftMostPair = [p1, p2];
-    // if (p3.x < Math.min(p3.))
-    vertices[index] = stripPoints[i].x;
-    vertices[index + 1] = stripPoints[i].y;
-    vertices[index + 2] = stripPoints[i + 1].x;
-    vertices[index + 3] = stripPoints[i + 1].y;
-    vertices[index + 4] = stripPoints[i + 2].x;
-    vertices[index + 5] = stripPoints[i + 2].y;
-    vertices[index + 6] = stripPoints[i + 1].x;
-    vertices[index + 7] = stripPoints[i + 1].y;
-    vertices[index + 8] = stripPoints[i + 3].x;
-    vertices[index + 9] = stripPoints[i + 3].y;
-    vertices[index + 10] = stripPoints[i + 2].x;
-    vertices[index + 11] = stripPoints[i + 2].y;
+    const points = [
+      stripPoints[i],
+      stripPoints[i + 1],
+      stripPoints[i + 2],
+      stripPoints[i + 3],
+    ];
+    vertices[index] = points[0].x;
+    vertices[index + 1] = points[0].y;
+    vertices[index + 2] = points[1].x;
+    vertices[index + 3] = points[1].y;
+    vertices[index + 4] = points[2].x;
+    vertices[index + 5] = points[2].y;
+    vertices[index + 6] = points[1].x;
+    vertices[index + 7] = points[1].y;
+    vertices[index + 8] = points[3].x;
+    vertices[index + 9] = points[3].y;
+    vertices[index + 10] = points[2].x;
+    vertices[index + 11] = points[2].y;
     index += 12;
   }
   if (o.makeColors != null) {
@@ -643,12 +767,13 @@ const polygonCloudPoints = (options: OBJ_PolygonCloudPoints) => {
     position: [0, 0],
     maxPoints: 10,
     pointSize: 0.01,
-    makePoints: makeSquare.bind(this),
+    makePoints: squareFill.bind(this),
   };
   const o = joinObjects({}, defaultOptions, options);
   const position = getPoint(o.position);
   const points = [];
   const apothem = o.radius * Math.cos(Math.PI / o.sides);
+  const makePoints = processShapeFunction(o.makePoints);
 
   for (let i = 0; i < o.maxPoints; i += 1) {
     const angle = rand(0, Math.PI * 2);
@@ -660,7 +785,7 @@ const polygonCloudPoints = (options: OBJ_PolygonCloudPoints) => {
     // clumping at the center. Todo in future is make a linear propbability
     // distribution
     const radius = rand(rand(0, radiusMax / 2), radiusMax);
-    points.push(...o.makePoints([
+    points.push(...makePoints([
       radius * Math.cos(angle + o.rotation) + position.x,
       radius * Math.sin(angle + o.rotation) + position.y,
     ]));
@@ -702,11 +827,12 @@ const circleCloudPoints = (options: OBJ_CircleCloudPoints) => {
     position: [0, 0],
     maxPoints: 10,
     pointSize: 0.01,
-    makePoints: makeSquare.bind(this),
+    makePoints: squareFill.bind(this),
   };
   const o = joinObjects({}, defaultOptions, options);
   const position = getPoint(o.position);
   const points = [];
+  const makePoints = processShapeFunction(o.makePoints);
 
   for (let i = 0; i < o.maxPoints; i += 1) {
     const angle = rand(0, Math.PI * 2);
@@ -714,7 +840,7 @@ const circleCloudPoints = (options: OBJ_CircleCloudPoints) => {
     // clumping at the center. Todo in future is make a linear propbability
     // distribution
     const radius = rand(rand(0, o.radius / 2), o.radius);
-    points.push(...o.makePoints([
+    points.push(...makePoints([
       radius * Math.cos(angle) + position.x,
       radius * Math.sin(angle) + position.y,
     ], o.pointSize));
@@ -760,27 +886,29 @@ const rectangleCloudPoints = (options: OBJ_RectangleCloudPoints) => {
     position: [0, 0],
     maxPoints: 10,
     pointSize: 0.01,
-    makePoints: makeSquare.bind(this),
+    makePoints: squareFill.bind(this),
   };
   const o = joinObjects({}, defaultOptions, options);
   const position = getPoint(o.position);
   const points = [];
+  const makePoints = processShapeFunction(o.makePoints);
 
   for (let i = 0; i < o.maxPoints; i += 1) {
     const x = rand(-o.width / 2, o.width / 2) + position.x;
     const y = rand(-o.height / 2, o.height / 2) + position.y;
-    points.push(...o.makePoints([x, y], o.pointSize));
+    points.push(...makePoints([x, y], o.pointSize));
   }
   return points;
 };
 
 export {
+  segmentPolyline,
+  pointsToShapes,
   polylineToShapes,
+  imageToShapes,
   getPixels,
-  imageToPoints,
   getPolygonCorners,
   polygonCloudPoints,
   circleCloudPoints,
   rectangleCloudPoints,
-  segmentPolyline,
 };
