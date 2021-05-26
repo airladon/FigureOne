@@ -7,6 +7,7 @@ import { Point, getPoint } from './g2';
 import type { TypeParsablePoint } from './g2';
 import type { TypeHAlign, TypeVAlign } from '../figure/Equation/EquationForm';
 import getImageData from './getImageData';
+import { makeFastPolyLine } from '../figure/geometries/lines/lines';
 
 /**
  * Create a square with two triangles, centered at some point with some
@@ -346,64 +347,8 @@ function imageToPoints(options: OBJ_ImageToPoints) {
 //   return vertices;
 // }
 
-/**
- * Options obect for lineToPoints that evenly distributes points along a line
- *
- * @property {Array<TypeParsablePoint>} line array of points representing a
- * polyline
- * @property {number} maxPoints number of points to distribute along line
- * @property {boolean} close define open or closed polyline
- * @property {number} pointSize size of point
- * @property {function([number, number], number): Array<number>} makePoints
- * function that makes the shape around each point. By default a square
- * centered at the point with side length `pointSize` is made. Function input
- * parameters are the point coordinate tuple and `pointSize`. Funciton must
- * return an array of numbers representing interlaced x, y values of each
- * vertex of the shape.
- * @property {function(number, [number, number], number, number, number): Array<number>} makeColors
- * function that makes the colors of each vertex of the shape around a point.
- * Function input parameters are the number of shape vertices to be colored,
- * the center point coordinate, the previous polyline point index, the
- * cumulative length from the start of the polyline, and the percentLength from
- * the start of the polyline. The function must return an array of rgba color
- * values for each shape vertex.
- */
-export type OBJ_LineToPoints = {
-  line: Array<TypeParsablePoint>,
-  maxPoints?: number,
-  close?: boolean,
-  pointSize?: number,
-  makePoints?: ([number, number], number) => Array<number>,
-  makeColors?: (number, [number, number], number, number, number) => Array<number>,
-};
-
-/**
- * `lineToPoints` divides a polyline into equall spaced points.
- *
- * The polyline (`line`) is defined by an array of points.
- *
- * The polyline can be closed or open.
- *
- * This method is useful for morphing between line shapes.
- *
- * @param {OBJ_LineToPoints} options
- * @return {[Array<number>, Array<number>]} [vertices, colors]
- */
-function lineToPoints(options: OBJ_LineToPoints) {
-  const defaultOptions = {
-    maxPoints: null,
-    close: false,
-    pointSize: 0.01,
-    makePoints: makeSquare.bind(this),
-    makeColors: null,
-  };
-  const o = joinObjects({}, defaultOptions, options);
-  const linePoints = o.line.map(p => getPoint(p));
-  const { close } = o;
-
-  // Calculate the cumulative distance of the polyline, and create
-  // an array of distances between neighboring points, and the cumulative
-  // distance at each point
+function getPolylineStats(polyline: Array<Point>, close: boolean) {
+  const linePoints = polyline;
   let cumDistance = 0;
   const distances = Array(linePoints.length).fill(0);
   const cumDistances = Array(linePoints.length).fill(0);
@@ -423,17 +368,28 @@ function lineToPoints(options: OBJ_LineToPoints) {
     distances[0] = distance;
     cumDistances[0] = cumDistance;
   }
+  return [cumDistance, cumDistances, distances];
+}
+
+function _segmentPolyline(
+  polyline: Array<Point>,
+  maxPoints: null | number = null,
+  close: boolean = false,
+): [Array<Point>, number, number] {
+  const linePoints = polyline;
+
+  const [cumDistance, cumDistances, distances] = getPolylineStats(linePoints, close);
 
   // Get the number of points to output, and the distance between them
   let numPoints = linePoints.length;
-  if (o.maxPoints != null) {
-    numPoints = o.maxPoints;
+  if (maxPoints != null) {
+    numPoints = maxPoints;
   }
   const distanceStep = cumDistance / (numPoints - 1);
 
   // Final points
   const points = [];
-  const colors = [];
+  // const colors = [];
   let nextLinePointIndex = 1;
   let currLinePointIndex = 0;
   for (let i = 0; i < numPoints; i += 1) {
@@ -441,7 +397,7 @@ function lineToPoints(options: OBJ_LineToPoints) {
     const currentCumDist = i * distanceStep;
     let point;
     if (i === 0) {
-      point = [linePoints[i].x, linePoints[i].y];
+      point = new Point(linePoints[i].x, linePoints[i].y);
       // eslint-disable-next-line no-continue
       // continue;
     } else {
@@ -463,23 +419,141 @@ function lineToPoints(options: OBJ_LineToPoints) {
       const q = linePoints[currLinePointIndex];
       const p = linePoints[nextLinePointIndex];
       // points[i] = [
-      point = [
+      point = new Point(
         (p.x - q.x) * remainingPercent + q.x,
         (p.y - q.y) * remainingPercent + q.y,
-      ];
-    }
-    const pointVertices = o.makePoints(point, o.pointSize);
-    let pointColors = [];
-    if (o.makeColors != null) {
-      pointColors = o.makeColors(
-        pointVertices.length / 2, point, currLinePointIndex,
-        currentCumDist, currentCumDist / cumDistance,
       );
     }
-    points.push(...pointVertices);
-    colors.push(...pointColors);
+    points.push(point);
   }
-  return [points, colors];
+  return [points, cumDistance, distanceStep];
+}
+
+/**
+ * Options obect for lineToShapes that evenly distributes shapes along a line
+ *
+ * @property {Array<TypeParsablePoint>} line array of points representing a
+ * polyline where each point is a corner in the line
+ * @property {number} num number of shapes to distribute along line
+ * @property {boolean} close define open or closed polyline
+ * @property {number} size size of point
+ * @property {function([number, number], number): Array<number>} makeShape
+ * function that makes the shape around each point. By default a square
+ * centered at the point with side length `size` is made. Function input
+ * parameters are the point coordinate tuple and `size`. Funciton must
+ * return an array of numbers representing interlaced x, y values of each
+ * vertex of the shape.
+ * @property {function(number, [number, number], number, number, number): Array<number>} makeColors
+ * function that makes the colors of each vertex of the shape around a point.
+ * Function input parameters are the number of shape vertices to be colored,
+ * the center point coordinate, the previous polyline point index, the
+ * cumulative length from the start of the polyline, and the percentLength from
+ * the start of the polyline. The function must return an array of rgba color
+ * values for each shape vertex.
+ */
+export type OBJ_LineToPoints = {
+  line: Array<TypeParsablePoint>,
+  num?: number,
+  close?: boolean,
+  size?: number,
+  makeShape?: ([number, number], number) => Array<number>,
+  makeColors?: (number, [number, number], number, number, number) => Array<number>,
+};
+
+/**
+ * `lineToShapes` divides a polyline into equall spaced points.
+ *
+ * The polyline (`line`) is defined by an array of points.
+ *
+ * The polyline can be closed or open.
+ *
+ * This method is useful for morphing between line shapes.
+ *
+ * @param {OBJ_LineToPoints} options
+ * @return {[Array<number>, Array<number>]} [vertices, colors]
+ */
+function polylineToShapes(options: OBJ_LineToPoints) {
+  const defaultOptions = {
+    num: null,
+    close: false,
+    size: 0.01,
+    makeShape: makeSquare.bind(this),
+    makeColors: null,
+  };
+  const o = joinObjects({}, defaultOptions, options);
+  const linePoints = o.polyline.map(p => getPoint(p));
+  const vertices = [];
+  const colors = [];
+  const [centerPoints, cumDistance, distanceStep] = _segmentPolyline(linePoints, o.num, o.close);
+  for (let i = 0; i < centerPoints.length; i += 1) {
+    const center = centerPoints[i];
+    const shapeVertices = o.makeShape(center, o.size);
+    let vertexColors = [];
+    const currentCumDist = i * distanceStep;
+    if (o.makeColors != null) {
+      vertexColors = o.makeColors(
+        shapeVertices.length / 2, center, currentCumDist, currentCumDist / cumDistance,
+      );
+    }
+    vertices.push(...shapeVertices);
+    colors.push(...vertexColors);
+  }
+  return [vertices, colors];
+}
+
+function segmentPolyline(options: OBJ_LineToPoints) {
+  const defaultOptions = {
+    num: null,
+    close: false,
+    width: 0.01,
+    makeColors: null,
+  };
+  const o = joinObjects({}, defaultOptions, options);
+  const linePoints = o.polyline.map(p => getPoint(p));
+  if (o.close) {
+    linePoints.push(linePoints[0]._dup());
+  }
+  const [
+    segmentedPolyline, cumDistance, distanceStep,
+  ] = _segmentPolyline(linePoints, o.close ? o.num - 1 : o.num, false);
+
+  const colors = [];
+  const [stripPoints] = makeFastPolyLine(segmentedPolyline, o.width, false);
+  const vertices = Array(stripPoints.length / 4 * 6 * 2);
+  let index = 0;
+  for (let i = 0; i < stripPoints.length - 2; i += 2) {
+    // const p1 = stripPoints[i];
+    // const p2 = stripPoints[i + 1];
+    // const p3 = stripPoints[i + 2];
+    // const p4 = stripPoints[i + 3];
+    // let leftMostPair = [p1, p2];
+    // if (p3.x < Math.min(p3.))
+    vertices[index] = stripPoints[i].x;
+    vertices[index + 1] = stripPoints[i].y;
+    vertices[index + 2] = stripPoints[i + 1].x;
+    vertices[index + 3] = stripPoints[i + 1].y;
+    vertices[index + 4] = stripPoints[i + 2].x;
+    vertices[index + 5] = stripPoints[i + 2].y;
+    vertices[index + 6] = stripPoints[i + 1].x;
+    vertices[index + 7] = stripPoints[i + 1].y;
+    vertices[index + 8] = stripPoints[i + 3].x;
+    vertices[index + 9] = stripPoints[i + 3].y;
+    vertices[index + 10] = stripPoints[i + 2].x;
+    vertices[index + 11] = stripPoints[i + 2].y;
+    index += 12;
+  }
+  if (o.makeColors != null) {
+    for (let i = 1; i < segmentedPolyline.length; i += 1) {
+      const endPoint = segmentedPolyline[i];
+      const currentCumDist = i * distanceStep;
+      const vertexColors = o.makeColors(
+        6, endPoint, currentCumDist, currentCumDist / cumDistance,
+      );
+      colors.push(...vertexColors);
+    }
+  }
+
+  return [vertices, colors];
 }
 
 /**
@@ -490,12 +564,14 @@ function lineToPoints(options: OBJ_LineToPoints) {
  * @property {TypeParsablePoint} [position] center position of polygon (`[0, 0]`)
  * @property {number} [rotation] polygon rotation (first vertex will be along
  * the positive x axis) (`0`)
+ * @property {1 | -1} [direction] 1 is CCW, -1 is CW (`1`)
  */
 export type OBJ_GetPolygonVertices = {
   radius: number,
   sides: number,
   position: TypeParsablePoint,
   rotation: number,
+  direction: 1 | -1,
 };
 
 /**
@@ -511,6 +587,7 @@ const getPolygonCorners = (options: OBJ_GetPolygonVertices) => {
     rotation: 0,
     radius: 1,
     position: [0, 0],
+    direction: 1,
   };
   const o = joinObjects({}, defaultOptions, options);
   const position = getPoint(o.position);
@@ -518,8 +595,8 @@ const getPolygonCorners = (options: OBJ_GetPolygonVertices) => {
   const dAngle = Math.PI * 2 / o.sides;
   for (let i = 0; i < o.sides; i += 1) {
     points.push([
-      o.radius * Math.cos(dAngle * i + o.rotation) + position.x,
-      o.radius * Math.sin(dAngle * i + o.rotation) + position.y,
+      o.radius * Math.cos(o.direction * (dAngle * i + o.rotation)) + position.x,
+      o.radius * Math.sin(o.direction * (dAngle * i + o.rotation)) + position.y,
     ]);
   }
   return points;
@@ -698,11 +775,12 @@ const rectangleCloudPoints = (options: OBJ_RectangleCloudPoints) => {
 };
 
 export {
-  lineToPoints,
+  polylineToShapes,
   getPixels,
   imageToPoints,
   getPolygonCorners,
   polygonCloudPoints,
   circleCloudPoints,
   rectangleCloudPoints,
+  segmentPolyline,
 };

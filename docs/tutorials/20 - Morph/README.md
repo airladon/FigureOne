@@ -21,7 +21,7 @@ const { lineToPoints, getPolygonCorners } = Fig.tools.morph;
 const { range } = Fig.tools.math;
 
 // Number of points - each point will define a square of six vertices
-const n = 100;
+const n = 10000;
 
 // Generate a line of points along a sinc function
 const sinc = (xIn, a, b) => {
@@ -69,21 +69,28 @@ morpher.animations.new()
 ```
 ## Explanation
 
-For best performance, figure elements should have their vertices defined once at initialization, and then transformed as a group on a per frame basis.
+The most performant way to animate complex shapes in FigureOne is to define their vertices once at initialization, and then animate one transform that positions, rotations and scales all shape vertices on a per frame basis. This is tied to how WebGL works, where all the vertices are stored in a GPU memory buffer and so can be quickly accessed on a per frame basis.
 
-There are times however, when it is desirable to change the vertices relative to each other. For a small to medium number of vertices, the vertices can be changed without noticeable performance change - usually with a FigureElement's `update` or `updatePoints` method. However, for shapes with many vertices that are changing on a per frame basis, this may not be sufficiently performant on lower end clients.
+There are times however, when it is desirable to change the vertices relative to each other. For a small to medium number of vertices, the vertices can be changed (changed in javascript and then moved to the GPU memory buffer) without noticeable performance change - usually with a FigureElement's `update` or `updatePoints` method. However, for shapes with many vertices (tens of thousands) that are changing on a per frame basis, this may not be sufficiently performant on lower end clients.
 
 Two possible scenarios for wanting a shape's vertices to change relative to each other (the shape to morph) are:
 * A specific animation desire
 * Unpredictable user interaction defines a shape's form
 
-The FigureElementPrimitiveMorph element can address the first animation case.
+The [FigureElementPrimitiveMorph](https://airladon.github.io/FigureOne/api/#figureelementprimitivemorph) element can address the first animation case, by loading several different vertex configurations at intialization (instead of just one) into the GPU memory buffer. Animation between configurations can then occur all in the GPU and be very efficient, even for hundreds of thousands of vertices.
 
-### Initialization
+In fact, the performance bottleneck will be generating the points to start with. Whether loading them directly from a file, or calculating them at instantiation, generating so many points takes time and letting a user know that the figure is loading may be required.
 
-On initialization, a number of different point arrays are defined and loaded. The different point arrays define different positions of the same shape vertices. 
 
-In this example, we are defining three different sets of 100 points
+### Summary
+
+In this tutorial we will create a line of "points", where each point is actually a square formed with two triangles and six vertices.
+
+The points will be close together, and will actually appear like a line.
+
+On initialization, a number of different point arrays are defined and loaded. The different point arrays define different positions of the same shape vertices.
+
+In this example, we are defining a shape with 10,000 
 
 
 

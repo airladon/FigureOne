@@ -4,6 +4,10 @@ import { CustomAnimationStep } from '../Animation/AnimationStep/CustomStep';
 import AnimationManager from '../Animation/AnimationManager';
 import type { OBJ_AnimationStep } from '../Animation/AnimationStep';
 
+
+/**
+ * FigureElementPrimitiveMorph is a primitive for morphin vertices.
+ */
 // $FlowFixMe
 export default class FigureElementPrimitiveMorph extends FigureElementPrimitive {
   shapeNameMap: {
