@@ -2519,6 +2519,7 @@ export default class FigurePrimitives {
       color: this.defaultColor,
       points: [],
       glPrimitive: 'TRIANGLES',
+      transform: new Transform('morph').scale(1, 1).rotate(0).translate(0, 0),
       position: [0, 0],
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -2600,6 +2601,7 @@ export default class FigurePrimitives {
     });
     element.animations.morph = (...opt) => {
       const o = joinObjects({}, {
+        progression: 'easeinout',
         element,
       }, ...opt);
       o.customProperties = {

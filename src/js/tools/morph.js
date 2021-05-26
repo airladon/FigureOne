@@ -328,7 +328,10 @@ function imageToPoints(options: OBJ_ImageToPoints) {
 
     // Create the vertices from the center point
     const pointVertices = o.makePoints(point, o.pointSize || pixelWidth);
-    const pointColors = o.makeColors(color, pointVertices.length / 2);
+    let pointColors = [];
+    if (o.makeColors != null) {
+      pointColors = o.makeColors(color, pointVertices.length / 2);
+    }
     points.push(...pointVertices);
     colors.push(...pointColors);
   }
@@ -502,7 +505,7 @@ export type OBJ_GetPolygonVertices = {
  * @return {Array<[number, number]>} Array of vertices represented by [x, y]
  * tuples
  */
-const getPolygonVertices = (options: OBJ_GetPolygonVertices) => {
+const getPolygonCorners = (options: OBJ_GetPolygonVertices) => {
   const defaultOptions = {
     sides: 4,
     rotation: 0,
@@ -539,7 +542,7 @@ const getPolygonVertices = (options: OBJ_GetPolygonVertices) => {
  * of triangles with interlaced x and y coordinates. For example:
  * [x1, y1, x2, y2, x3, y3, ....]
  */
-export type OBJ_PolygonFillPoints = {
+export type OBJ_PolygonCloudPoints = {
   radius?: number,
   sides?: number,
   position?: TypeParsablePoint,
@@ -552,10 +555,10 @@ export type OBJ_PolygonFillPoints = {
 /**
  * Generate random points within a polygon.
  *
- * @param {OBJ_PolygonFillPoints} polygonFillPoints
+ * @param {OBJ_PolygonCloudPoints} polygonCloudPoints
  * @return {Array<number>} array of interlaced x and y coordinates of vertices
  */
-const polygonFillPoints = (options: OBJ_PolygonFillPoints) => {
+const polygonCloudPoints = (options: OBJ_PolygonCloudPoints) => {
   const defaultOptions = {
     sides: 4,
     rotation: 0,
@@ -589,7 +592,7 @@ const polygonFillPoints = (options: OBJ_PolygonFillPoints) => {
 };
 
 /**
- * Options object to generate random points within a circle.
+ * Options object to generate random cloud of points within a circle.
  *
  * @property {number} [maxPoints] number of points to generate (`10`)
  * @property {number} [pointSize] size of each point (`0.01`)
@@ -602,7 +605,7 @@ const polygonFillPoints = (options: OBJ_PolygonFillPoints) => {
  * of triangles with interlaced x and y coordinates. For example:
  * [x1, y1, x2, y2, x3, y3, ....]
  */
-export type OBJ_CircleFillPoints = {
+export type OBJ_CircleCloudPoints = {
   radius?: number,
   position?: TypeParsablePoint,
   maxPoints?: number,
@@ -613,10 +616,10 @@ export type OBJ_CircleFillPoints = {
 /**
  * Generate random points within a circle.
  *
- * @param {OBJ_CircleFillPoints} circleFillPoints
+ * @param {OBJ_CircleCloudPoints} options
  * @return {Array<number>} array of interlaced x and y coordinates of vertices
  */
-const circleFillPoints = (options: OBJ_CircleFillPoints) => {
+const circleCloudPoints = (options: OBJ_CircleCloudPoints) => {
   const defaultOptions = {
     radius: 1,
     position: [0, 0],
@@ -635,8 +638,8 @@ const circleFillPoints = (options: OBJ_CircleFillPoints) => {
     // distribution
     const radius = rand(rand(0, o.radius / 2), o.radius);
     points.push(...o.makePoints([
-      radius * Math.cos(angle + o.rotation) + position.x,
-      radius * Math.sin(angle + o.rotation) + position.y,
+      radius * Math.cos(angle) + position.x,
+      radius * Math.sin(angle) + position.y,
     ], o.pointSize));
   }
   return points;
@@ -658,7 +661,7 @@ const circleFillPoints = (options: OBJ_CircleFillPoints) => {
  * of triangles with interlaced x and y coordinates. For example:
  * [x1, y1, x2, y2, x3, y3, ....]
  */
-export type OBJ_RectangleFillPoints = {
+export type OBJ_RectangleCloudPoints = {
   width?: number,
   height?: number,
   position?: TypeParsablePoint,
@@ -670,10 +673,10 @@ export type OBJ_RectangleFillPoints = {
 /**
  * Generate random points within a rectangle.
  *
- * @param {OBJ_CircleFillPoints} circleFillPoints
+ * @param {OBJ_RectangleCloudPoints} options
  * @return {Array<number>} array of interlaced x and y coordinates of vertices
  */
-const rectangleFillPoints = (options: OBJ_CircleFillPoints) => {
+const rectangleCloudPoints = (options: OBJ_RectangleCloudPoints) => {
   const defaultOptions = {
     width: 1,
     height: 1,
@@ -698,8 +701,8 @@ export {
   lineToPoints,
   getPixels,
   imageToPoints,
-  getPolygonVertices,
-  polygonFillPoints,
-  circleFillPoints,
-  rectangleFillPoints,
+  getPolygonCorners,
+  polygonCloudPoints,
+  circleCloudPoints,
+  rectangleCloudPoints,
 };
