@@ -236,16 +236,16 @@ export type OBJ_ImageToShapes = {
 };
 
 /**
- * `imageToPoints` maps the pixels of an image to points of a shape that will be
- * used to draw that pixel.
+ * `imageToShapes` maps the pixels of an image to shapes that will be
+ * used to draw those pixels.
  *
  * All pixels in an image can be returned, or a `filter` function can be used
  * to only return desired pixels.
  *
- * The return points can be rasterized in order (raster from top left to bottom
- * right) or in a random order.
+ * The shapes can be rasterized in order (raster from top left to bottom
+ * right) or returned in a random order.
  *
- * The final points are mapped to a defined width and height, and aligned to a
+ * The shapes are mapped to a `width` and `height`, and aligned to a
  * position relative to either all pixels in the original image, or just the
  * filtered pixels.
  *
@@ -600,7 +600,7 @@ function polylineToShapes(options: OBJ_LineToPoints) {
   return [vertices, colors];
 }
 
-function pointsToShapes(options) {
+function pointsToShapes(options: OBJ_PointsToShapes) {
   const defaultOptions = {
     size: 0.01,
     shape: squareFill.bind(this),
@@ -788,7 +788,7 @@ const polygonCloudPoints = (options: OBJ_PolygonCloudPoints) => {
     points.push(...makePoints([
       radius * Math.cos(angle + o.rotation) + position.x,
       radius * Math.sin(angle + o.rotation) + position.y,
-    ]));
+    ], o.pointSize));
   }
   return points;
 };
@@ -879,7 +879,7 @@ export type OBJ_RectangleCloudPoints = {
  * @param {OBJ_RectangleCloudPoints} options
  * @return {Array<number>} array of interlaced x and y coordinates of vertices
  */
-const rectangleCloudPoints = (options: OBJ_RectangleCloudPoints) => {
+const rectangleCloudShapes = (options: OBJ_RectangleCloudPoints) => {
   const defaultOptions = {
     width: 1,
     height: 1,
@@ -910,5 +910,5 @@ export {
   getPolygonCorners,
   polygonCloudPoints,
   circleCloudPoints,
-  rectangleCloudPoints,
+  rectangleCloudShapes,
 };

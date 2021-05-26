@@ -493,7 +493,7 @@ describe('Math tools testing', () => {
       const r = range(0, 1, 0.5);
       expect(r).toEqual([0, 0.5, 1]);
     });
-    test.only('negative', () => {
+    test('negative', () => {
       const r = range(1, 0, -0.5);
       expect(r).toEqual([1, 0.5, 0]);
     });
