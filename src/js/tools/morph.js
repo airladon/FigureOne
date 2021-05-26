@@ -172,49 +172,51 @@ function getPixels(
 
 /**
  * @property {Image} [image]
- * @property {number | null} [maxPoints] maximum number of points to return -
+ * @property {number | null} [num] maximum number of shapes to return -
  * `null` defaults to the number of pixels (or filtered pixels if a filter is
  * used) (`null`)
- * @property {'repeatOpaqueOnly' | 'lastOpaque' | 'repeat'} [excessPoints] if
- * maxPoints is greater than the number of pixels, then either `'repeat'` the
- * points from the pixels, repeat only the opaque pixels `'repeatOpaqueOnly'`
- * or put all execess points on the `'lastOpaque'` pixel. Note, repeating
- * pixels that are semitransparent will effectively put multiple pixels on top
- * of each other, reducing the transparency of the pixel (`'repeatOpaqueOnly'`).
+ * @property {'repeatOpaqueOnly' | 'lastOpaque' | 'repeat'} [excess] if
+ * num is greater than the number of pixels, then either `'repeat'` the
+ * shapes from all the pixels again, repeat the shapes from only the opaque
+ * pixels `'repeatOpaqueOnly'` or put all execess shapes on the `'lastOpaque'`
+ * pixel. Note, repeating pixels that are semitransparent will effectively put
+ * multiple pixels on top of each other, reducing the transparency of the pixel
+ * (`'repeatOpaqueOnly'`).
  * @property {function(TypeColor, [number, number]) => boolean} [filter]
  * filter function with pixel color and pixel position input parameters. Return
- * `true` to keep pixel. Pixel position is (0, 0) in top left corner
- * (`() => true`)
- * @property {'raster' | 'random'} [distribution] Returned points are randomly
+ * `true` to keep pixel. Pixel position is (0, 0) in top left corner and
+ * (pixelsWidth, pixelsHeight) in the bottom right (`() => true`)
+ * @property {'raster' | 'random'} [distribution] Returned shapes are randomly
  * distributed throughout shape (`'random'`) or rasterized in order from top
  * left to bottom right of image (or filtered image) (`random`)
  * @property {number | null} [width] width to map image pixels to. Width is
  * between center of most left to most right pixels
  * @property {number | null} [height] height to map image pixels to. Height is
  * between center of most bottom to most top pixels
- * @property {number} [pointSize] point size to map pixel to. Final points will
- * have a width of `width + pointSize` center of points are used to determine
- * `width` and `height`.
- * @property {TypeParsablePoint} [position] position to place points at
- * @property {TypeHAlign} [xAlign] align points horizontally around `position`
- * @property {TypeVAlign} [yAlign] align points vertically around `position`
- * @property {'image' | 'filteredImage'} [align] `image` will align the points
- * relative to all image pixels (even if some have been filtered out).
- * `filteredImage` will align the points to just the ones that were not
- * filtered out
- * @property {number} [dither] Add a random offset to each point to create a
+ * @property {number} [size] shape size to map pixel to. Final points will
+ * have a width of `width + size` center of points are used to determine
+ * `width` and `height`. Default shape is a square, and default size
+ * (if left undefined) is the size needed to make adjacent square shapes
+ * touch
+ * @property {TypeParsablePoint} [position] position to place shapes at
+ * @property {TypeHAlign} [xAlign] align shapes horizontally around `position`
+ * @property {TypeVAlign} [yAlign] align shapes vertically around `position`
+ * @property {'image' | 'filteredImage'} [align] `image` will align the shapes
+ * as if there were no pixels filtered out. `filteredImage` will align to only
+ * the shapes that exist.
+ * @property {number} [dither] Add a random offset to each shape to create a
  * dither effect
- * @property {function([number, number], number): Array<number> | number} [shape]
+ * @property {function(Point, number): Array<number> | number} [shape]
  * By default a square of two triangles is created (six vertices). Use a
  * `number` to create a regular polygon with `number` sides. Use a custom
  * function to make a custom shape. The function takes as input the [x, y]
- * position of the center point and `size` and outputs an array of interlaced
- * x and y coordinates of triangle vertices. For example:
+ * position of the point to build the shape around, and `size`. It outputs an
+ * array of interlaced x and y coordinates of triangle vertices - i.e.:
  * [x1, y1, x2, y2, x3, y3, ....]
  * @property {function(TypeColor, number): Array<number>} [makeColors]
  * use this function to customze color mapping. The function takes as input the
  * pixel's color, and the number of vertices that need to be colored. It
- * outputs an array of colors for each vertex. For example:
+ * outputs an array of colors for each vertex - i.e.:
  * [r1, b1, g1, a1, r2, g2, b, a2, ...]
  */
 export type OBJ_ImageToShapes = {
@@ -229,25 +231,25 @@ export type OBJ_ImageToShapes = {
  dither?: number,
  width?: number | null,
  height?: number | null,
- pointSize?: number,
- excessPoints?: 'repeatOpaqueOnly' | 'lastOpaque' | 'repeat',
+ size?: number,
+ excess?: 'repeatOpaqueOnly' | 'lastOpaque' | 'repeat',
  makeColors?: (TypeColor, number) => Array<number>,
- shape?: 'square' | 'hex' | ([number, number], number) => Array<number>,
+ shape?: number | (Point, number) => Array<number>,
 };
 
 /**
  * `imageToShapes` maps the pixels of an image to shapes that will be
  * used to draw those pixels.
  *
- * All pixels in an image can be returned, or a `filter` function can be used
- * to only return desired pixels.
+ * All pixels in an image can be made shapes, or a `filter` function can be used
+ * to only use desired pixels.
  *
  * The shapes can be rasterized in order (raster from top left to bottom
- * right) or returned in a random order.
+ * right) or be in a random order.
  *
- * The shapes are mapped to a `width` and `height`, and aligned to a
- * position relative to either all pixels in the original image, or just the
- * filtered pixels.
+ * The image pixel centers are mapped to some `width` and `height` and aligned
+ * to a position relative to either all pixels in the original image, or just
+ * the filtered pixels. The shapes are centered on the pixel centers.
  *
  * This method is useful for including images in morphing effects. It should
  * not be used to simply show an image (use a texture with some
@@ -258,7 +260,7 @@ export type OBJ_ImageToShapes = {
  */
 function imageToShapes(options: OBJ_ImageToShapes) {
   const defaultOptions = {
-    maxPoints: null,
+    num: null,
     xAlign: 'center',
     yAlign: 'middle',
     align: 'image',
@@ -268,7 +270,7 @@ function imageToShapes(options: OBJ_ImageToShapes) {
     dither: 0,
     width: null,
     height: null,
-    excessPoints: 'repeatOpaqueOnly',
+    excess: 'repeatOpaqueOnly',
     shape: 'square',
     makeColors: makeColors.bind(this),
   };
@@ -290,8 +292,8 @@ function imageToShapes(options: OBJ_ImageToShapes) {
 
   // By default, the maxPoints value is the number of pixels
   let maxPoints = pixels.length;
-  if (o.maxPoints != null) {
-    maxPoints = o.maxPoints;
+  if (o.num != null) {
+    maxPoints = o.num;
   }
 
   // The pixel centers will be mapped to point centers.
@@ -394,11 +396,11 @@ function imageToShapes(options: OBJ_ImageToShapes) {
   // Create the final points and colors
   for (let i = 0; i < maxPoints; i += 1) {
     // If the indeces have been depleted, then get new ones based on the
-    // `excessPoints` option
+    // `excess` option
     if (indeces.length === 0) {
-      if (o.excessPoints === 'lastOpaque') {
+      if (o.excess === 'lastOpaque') {
         indeces = Array(maxPoints - i).fill(opaquePixelIndeces.slice(-1)[0]);
-      } else if (o.excessPoints === 'repeatOpaqueOnly') {
+      } else if (o.excess === 'repeatOpaqueOnly') {
         indeces = opaquePixelIndeces.slice();
       } else {
         indeces = pixelIndeces.slice();
@@ -418,13 +420,13 @@ function imageToShapes(options: OBJ_ImageToShapes) {
     // Create the center point from the pixel position and color
     const pixel = pixels[index];
     const color = pixelColors[index];
-    const point = [
+    const point = new Point(
       p.x + pixel[0] * pixelWidth + pixelOffset[0] * pixelWidth + dithering[index][0],
       p.y + height - pixel[1] * pixelHeight + pixelOffset[1] * pixelHeight + dithering[index][1],
-    ];
+    );
 
     // Create the vertices from the center point
-    const pointVertices = shape(point, o.pointSize || pixelWidth);
+    const pointVertices = shape(point, o.size || pixelWidth);
     let pointColors = [];
     if (o.makeColors != null) {
       pointColors = o.makeColors(color, pointVertices.length / 2);
@@ -467,25 +469,25 @@ function getPolylineStats(polyline: Array<Point>, close: boolean) {
   return [cumDistance, cumDistances, distances];
 }
 
+// Break a polyline into a polyline with `num` equal length segments
 function _segmentPolyline(
-  polyline: Array<Point>,
-  maxPoints: null | number = null,
+  polylinePoints: Array<Point>,
+  num: null | number = null,
   close: boolean = false,
 ): [Array<Point>, number, number] {
-  const linePoints = polyline;
+  const linePoints = polylinePoints;
 
   const [cumDistance, cumDistances, distances] = getPolylineStats(linePoints, close);
 
   // Get the number of points to output, and the distance between them
   let numPoints = linePoints.length;
-  if (maxPoints != null) {
-    numPoints = maxPoints;
+  if (num != null) {
+    numPoints = num;
   }
   const distanceStep = cumDistance / (numPoints - 1);
 
   // Final points
   const points = [];
-  // const colors = [];
   let nextLinePointIndex = 1;
   let currLinePointIndex = 0;
   for (let i = 0; i < numPoints - 1; i += 1) {
@@ -520,7 +522,7 @@ function _segmentPolyline(
     points.push(point);
   }
   if (close) {
-    points.push(linePoints[0]._dup());
+    // points.push(linePoints[0]._dup());
   } else {
     points.push(linePoints[linePoints.length - 1]._dup());
   }
@@ -528,49 +530,54 @@ function _segmentPolyline(
 }
 
 /**
- * Options obect for lineToShapes that evenly distributes shapes along a line
+ * Options obect for {@link polylineToShapes} that evenly distributes shapes
+ * along a line
  *
- * @property {Array<TypeParsablePoint>} line array of points representing a
+ * @property {Array<TypeParsablePoint>} points array of points representing a
  * polyline where each point is a corner in the line
  * @property {number} num number of shapes to distribute along line
- * @property {boolean} close define open or closed polyline
- * @property {number} size size of point
- * @property {function([number, number], number): Array<number>} shape
- * function that makes the shape around each point. By default a square
- * centered at the point with side length `size` is made. Function input
- * parameters are the point coordinate tuple and `size`. Funciton must
- * return an array of numbers representing interlaced x, y values of each
- * vertex of the shape.
- * @property {function(number, [number, number], number, number, number): Array<number>} makeColors
- * function that makes the colors of each vertex of the shape around a point.
+ * @property {boolean} close `true` closes the polyline
+ * @property {number} size size of shape
+ * @property {function(Point, number): Array<number> | number} [shape]
+ * By default a square of two triangles is created (six vertices). Use a
+ * `number` to create a regular polygon with `number` sides. Use a custom
+ * function to make a custom shape. The function takes as input the [x, y]
+ * position of the point to build the shape around, and `size`. It outputs an
+ * array of interlaced x and y coordinates of triangle vertices - i.e.:
+ * [x1, y1, x2, y2, x3, y3, ....]
+ * @property {function(number, Point, number, number, number): Array<number>} makeColors
+ * function that creates colors for each vertex of the shape.
  * Function input parameters are the number of shape vertices to be colored,
  * the center point coordinate, the previous polyline point index, the
  * cumulative length from the start of the polyline, and the percentLength from
- * the start of the polyline. The function must return an array of rgba color
- * values for each shape vertex.
+ * the start of the polyline. The function must return a single array
+ * containing all vertex colors.
  */
-export type OBJ_LineToPoints = {
-  line: Array<TypeParsablePoint>,
+export type OBJ_PolylineToShapes = {
+  points: Array<TypeParsablePoint>,
   num?: number,
   close?: boolean,
   size?: number,
-  shape?: ([number, number], number) => Array<number>,
-  makeColors?: (number, [number, number], number, number, number) => Array<number>,
+  shape?: number | (Point, number) => Array<number>,
+  makeColors?: (number, Point, number, number, number) => Array<number>,
 };
 
 /**
- * `lineToShapes` divides a polyline into equall spaced points.
+ * `polylineToShapes` distributes a number of shapes equally along a polyline.
  *
- * The polyline (`line`) is defined by an array of points.
+ * The polyline is defined by an array of points, where each point is a corner
+ * in the polyline
+ *
+ * The start and ends of the polyline each have a centered shape
  *
  * The polyline can be closed or open.
  *
- * This method is useful for morphing between line shapes.
+ * This method is useful for morphing between shapes.
  *
- * @param {OBJ_LineToPoints} options
+ * @param {OBJ_PolylineToShapes} options
  * @return {[Array<number>, Array<number>]} [vertices, colors]
  */
-function polylineToShapes(options: OBJ_LineToPoints) {
+function polylineToShapes(options: OBJ_PolylineToShapes) {
   const defaultOptions = {
     num: null,
     close: false,
@@ -580,10 +587,10 @@ function polylineToShapes(options: OBJ_LineToPoints) {
   };
   const o = joinObjects({}, defaultOptions, options);
   const shape = processShapeFunction(o.shape);
-  const linePoints = o.polyline.map(p => getPoint(p));
+  const points = o.points.map(p => getPoint(p));
   const vertices = [];
   const colors = [];
-  const [centerPoints, cumDistance, distanceStep] = _segmentPolyline(linePoints, o.num, o.close);
+  const [centerPoints, cumDistance, distanceStep] = _segmentPolyline(points, o.num, o.close);
   for (let i = 0; i < centerPoints.length; i += 1) {
     const center = centerPoints[i];
     const shapeVertices = shape(center, o.size);
@@ -600,6 +607,39 @@ function polylineToShapes(options: OBJ_LineToPoints) {
   return [vertices, colors];
 }
 
+/**
+ * Options obect for {@link pointsToShapes} that creates a shape at each point
+ *
+ * @property {Array<TypeParsablePoint>} points array of points to create shapes
+ * at
+ * @property {number} size size of shape
+ * @property {function(Point, number): Array<number> | number} [shape]
+ * By default a square of two triangles is created (six vertices). Use a
+ * `number` to create a regular polygon with `number` sides. Use a custom
+ * function to make a custom shape. The function takes as input the [x, y]
+ * position of the point to build the shape around, and `size`. It outputs an
+ * array of interlaced x and y coordinates of triangle vertices - i.e.:
+ * [x1, y1, x2, y2, x3, y3, ....]
+ * @property {function(number, Point): Array<number>} makeColors
+ * function that creates colors for each vertex of the shape.
+ * Function input parameters are the number of shape vertices to be colored,
+ * and the position of the shape. The function must return a single array
+ * containing all vertex colors.
+ */
+export type OBJ_PointsToShapes = {
+  points: Array<TypeParsablePoint>,
+  size?: number,
+  shape?: number | (Point, number) => Array<number>,
+  makeColors?: (number, Point, number, number, number) => Array<number>,
+};
+/**
+ * `pointsToShapes` creates shapes at each point input.
+ *
+ * This method is useful for morphing between shapes.
+ *
+ * @param {OBJ_PointsToShapes} options
+ * @return {[Array<number>, Array<number>]} [vertices, colors]
+ */
 function pointsToShapes(options: OBJ_PointsToShapes) {
   const defaultOptions = {
     size: 0.01,
@@ -611,7 +651,7 @@ function pointsToShapes(options: OBJ_PointsToShapes) {
   const vertices = [];
   const colors = [];
   for (let i = 0; i < o.points.length; i += 1) {
-    const point = o.points[i];
+    const point = getPoint(o.points[i]);
     const shapeVertices = shape(point, o.size);
     let vertexColors = [];
     if (o.makeColors != null) {
@@ -625,24 +665,8 @@ function pointsToShapes(options: OBJ_PointsToShapes) {
   return [vertices, colors];
 }
 
-function segmentPolyline(options: OBJ_LineToPoints) {
-  const defaultOptions = {
-    num: null,
-    close: false,
-    width: 0.01,
-    makeColors: null,
-  };
-  const o = joinObjects({}, defaultOptions, options);
-  const linePoints = o.polyline.map(p => getPoint(p));
-  if (o.close) {
-    linePoints.push(linePoints[0]._dup());
-  }
-  const [
-    segmentedPolyline, cumDistance, distanceStep,
-  ] = _segmentPolyline(linePoints, o.close ? o.num - 1 : o.num, false);
-  const colors = [];
-  let [stripPoints] = makeFastPolyLine(segmentedPolyline, o.width, false);
-  stripPoints = stripPoints.map(p => p.round());
+function stripPolylineToTriangles(stripPointsIn: Array<Point>) {
+  const stripPoints = stripPointsIn.map(p => p.round());
   const vertices = Array(stripPoints.length / 4 * 6 * 2);
   let index = 0;
   for (let i = 0; i < stripPoints.length - 2; i += 2) {
@@ -666,12 +690,63 @@ function segmentPolyline(options: OBJ_LineToPoints) {
     vertices[index + 11] = points[2].y;
     index += 12;
   }
+  return vertices;
+}
+
+function polyline(options: OBJ_SegmentPolyline) {
+  const defaultOptions = {
+    num: null,
+    close: false,
+    width: 0.01,
+    makeColors: null,
+  };
+  const o = joinObjectsWithOptions({ except: 'points' }, {}, defaultOptions, options);
+  const linePoints = options.points.map(p => getPoint(p));
+  let num = 0;
+  let segmentedPolyline;
+  // debugger;
+  if (o.num == null) {
+    segmentedPolyline = linePoints;
+    num = linePoints.length;
+  } else {
+    num = o.num;
+    [segmentedPolyline] = _segmentPolyline(linePoints, num, o.close);
+  }
+  const colors = [];
+  let [stripPoints] = makeFastPolyLine(segmentedPolyline, o.width, o.close);
+  if (o.close) {
+    stripPoints.splice(-2, 2);
+  }
+  stripPoints = stripPoints.map(p => p.round());
+  const vertices = Array(stripPoints.length * 6 * 2);
+  let index = 0;
+  for (let i = 0; i < stripPoints.length - 2; i += 4) {
+    const points = [
+      stripPoints[i],
+      stripPoints[i + 1],
+      stripPoints[i + 2],
+      stripPoints[i + 3],
+    ];
+    vertices[index] = points[0].x;
+    vertices[index + 1] = points[0].y;
+    vertices[index + 2] = points[1].x;
+    vertices[index + 3] = points[1].y;
+    vertices[index + 4] = points[2].x;
+    vertices[index + 5] = points[2].y;
+    vertices[index + 6] = points[1].x;
+    vertices[index + 7] = points[1].y;
+    vertices[index + 8] = points[3].x;
+    vertices[index + 9] = points[3].y;
+    vertices[index + 10] = points[2].x;
+    vertices[index + 11] = points[2].y;
+    index += 12;
+  }
   if (o.makeColors != null) {
     for (let i = 1; i < segmentedPolyline.length; i += 1) {
       const endPoint = segmentedPolyline[i];
-      const currentCumDist = i * distanceStep;
+      // const currentCumDist = i * distanceStep;
       const vertexColors = o.makeColors(
-        6, endPoint, currentCumDist, currentCumDist / cumDistance,
+        6, endPoint,
       );
       colors.push(...vertexColors);
     }
@@ -902,7 +977,7 @@ const rectangleCloudShapes = (options: OBJ_RectangleCloudPoints) => {
 };
 
 export {
-  segmentPolyline,
+  polyline,
   pointsToShapes,
   polylineToShapes,
   imageToShapes,

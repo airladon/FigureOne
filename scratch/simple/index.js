@@ -30,7 +30,7 @@ function loaded() {
 
   const [image2, colors2] = Fig.tools.morph.imageToShapes({
     image: img2,
-    maxPoints: n,
+    num: n,
     filter: c => c[3] > 0,
     xAlign: 'center',
     yAlign: 'middle',
@@ -39,8 +39,8 @@ function loaded() {
   });
 
   const randPoints = Fig.tools.morph.rectangleCloudShapes({
-    width: 2,
-    height: 2,
+    width: 6,
+    height: 6,
     maxPoints: n,
   });
 

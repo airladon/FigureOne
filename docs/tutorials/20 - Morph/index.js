@@ -2,7 +2,7 @@
 const figure = new Fig.Figure();
 
 // Helper functions that can create point fields
-const { polylineToShapes, getPolygonCorners, pointsToShapes } = Fig.tools.morph;
+const { polylineToShapes, getPolygonCorners, pointsToShapes, polyline } = Fig.tools.morph;
 
 // Helper function to make a range of values
 const { range } = Fig.tools.math;
@@ -17,30 +17,57 @@ const sinc = (xIn, a, b) => {
 };
 
 // Generate sinc trace
-const xValues = range(-0.8, 0.8, 0.01);
-const [sincPoints] = polylineToShapes({
-  polyline: xValues.map(x => [x, sinc(x, 0.6, 20)]),
-  num: n,
-  size: 0.04,
-  shape: 15,
+// const xValues = range(-0.8, 0.8, 0.01);
+// const [sincPoints] = polylineToShapes({
+//   points: xValues.map(x => [x, sinc(x, 0.6, 20)]),
+//   num: n,
+//   size: 0.04,
+//   shape: 15,
+// });
+
+// // Generate a line of points along a square
+// const [squarePoints] = polylineToShapes({
+//   points: [[0.5, 0.5], [-0.5, 0.5], [-0.5, -0.5], [0.5, -0.5]],
+//   num: n,
+//   size: 0.04,
+//   close: true,
+//   shape: 15,
+// });
+
+// // Generate a line of points along a circle
+// const [circlePoints] = polylineToShapes({
+//   points: getPolygonCorners({ radius: 0.5, sides: 50, rotation: Math.PI / 4 }),
+//   num: n,
+//   size: 0.04,
+//   close: true,
+//   shape: 15,
+// });
+const [sincPoints] = polyline({
+  // points: xValues.map(x => [x, sinc(x, 0.6, 20)]),
+  points: [
+    [-0.8, 0], [-0.6, 0.4], [-0.4, 0], [-0.2, 0.4], [0, 0],
+    [0.2, 0.4], [0.4, 0], [0.6, 0.4], [0.8, 0],
+  ],
+  width: 0.05,
+  num: 90,
 });
 
-// Generate a line of points along a square
-const [squarePoints] = polylineToShapes({
-  polyline: [[0.5, 0.5], [-0.5, 0.5], [-0.5, -0.5], [0.5, -0.5]],
-  num: n,
-  size: 0.04,
+const [squarePoints] = polyline({
+  // points: xValues.map(x => [x, sinc(x, 0.3, 20)]),
+  points: getPolygonCorners({ radius: 0.5, sides: 50 }),
+  width: 0.05,
+  num: 9,
   close: true,
-  shape: 15,
 });
 
-// Generate a line of points along a circle
-const [circlePoints] = polylineToShapes({
-  polyline: getPolygonCorners({ radius: 0.5, sides: 50, rotation: Math.PI / 4 }),
-  num: n,
-  size: 0.04,
+const [circlePoints] = polyline({
+  // points: xValues.map(x => [x, sinc(x, 0.8, 20)]),
+  // width: 0.05,
+  // num: 8,
+  points: getPolygonCorners({ radius: 0.5, sides: 4 }),
+  width: 0.05,
+  num: 9,
   close: true,
-  shape: 15,
 });
 
 const morpher = figure.add({
