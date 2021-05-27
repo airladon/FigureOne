@@ -25,7 +25,7 @@ var seed = xmur3("figureone");
 Math.random = mulberry32(seed());
 
 // ********************************
-
+let sleepTime = 0;
 const figure = new Fig.Figure({
   limits: [-3, -2.25, 6, 4.5],
   color: [1, 0, 0, 1],
@@ -68,7 +68,6 @@ figure.add([
     },
   },
 ]);
-
 
 
 figure.timeKeeper.setManualFrames();

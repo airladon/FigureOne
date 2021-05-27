@@ -12,6 +12,10 @@ function zeroPad(num, places) {
   return Array(+(zero > 0 && zero)).join('0') + num;
 }
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // We only want to return from this function after the canvas has actually been
 // painted, so we resolve the promise with the 'afterDraw' notification
 async function frame(delta) {
@@ -22,7 +26,7 @@ async function frame(delta) {
   }), [delta]);
 }
 
-function tester(snapshots, path, initialization = '', threshold = 0) {
+function tester(snapshots, path, initialization = '', threshold = 0, afterLoad = '') {
   const examples = getExamples(path);
   const start = `
 // Replace Math.random with something deterministic
@@ -51,7 +55,7 @@ var seed = xmur3("figureone");
 Math.random = mulberry32(seed());
 
 // ********************************
-
+let sleepTime = 0;
 const figure = new Fig.Figure({
   limits: [-3, -2.25, 6, 4.5],
   color: [1, 0, 0, 1],
@@ -118,9 +122,14 @@ figure.animateNextFrame();
         figure.timeKeeper.setManualFrames();
       });
       await frame(0);
-      await page.evaluate(([c]) => {
+      await page.evaluate(([c, d]) => {
         eval(c);
-      }, [code]);
+        eval(d);
+      }, [code, afterLoad]);
+      const sleepTime = await page.evaluate(() => sleepTime);
+      if (sleepTime > 0) {
+        await sleep(sleepTime);
+      }
       await frame(0);
       const remainingDuration = await page.evaluate(() => figure.getRemainingAnimationTime());
       let image = await page.screenshot();
