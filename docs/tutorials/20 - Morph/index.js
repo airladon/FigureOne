@@ -48,24 +48,24 @@ const [sincPoints] = polyline({
     [-0.8, 0], [-0.6, 0.4], [-0.4, 0], [-0.2, 0.4], [0, 0],
     [0.2, 0.4], [0.4, 0], [0.6, 0.4], [0.8, 0],
   ],
-  width: 0.05,
-  num: 90,
+  width: 0.02,
+  num: 9,
 });
 
 const [squarePoints] = polyline({
   // points: xValues.map(x => [x, sinc(x, 0.3, 20)]),
   points: getPolygonCorners({ radius: 0.5, sides: 50 }),
-  width: 0.05,
+  width: 0.02,
   num: 9,
   close: true,
 });
 
 const [circlePoints] = polyline({
   // points: xValues.map(x => [x, sinc(x, 0.8, 20)]),
-  // width: 0.05,
+  // width: 0.02,
   // num: 8,
   points: getPolygonCorners({ radius: 0.5, sides: 4 }),
-  width: 0.05,
+  width: 0.02,
   num: 9,
   close: true,
 });
