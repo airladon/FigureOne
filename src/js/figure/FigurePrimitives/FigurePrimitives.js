@@ -371,39 +371,7 @@ export type OBJ_GLPrimitive = {
 };
 
 /**
- * Morph primitive
- *
- * The morph primitive is optimized to animate hundreds of thousands of points
- * with minimal performance impact.
- *
- * Multiple arrays of points can be defined, and the translation of
- * corresponding points in two arrays can be animated.
- *
- * Being able to accomodate so many points means this primitive can be used to
- * efficiently morph shapes.
- *
- * All points in all point arrays can be assigned an individual color if
- * desired. Use `color: TypeColor` to assign all points in all arrays the same
- * color, `color: Array<TypeColor>` to assign all points in each array a
- * specific color, `color: Array<Array<TypeColor>>` to assign each point in
- * each array a specific color, and `color: Array<TypeColor | Array<TypeColor>`
- * to assign some point arrays with one color, and others with a specific color
- * per point.
- *
- * A point array is an array of numbers representing consecutive x, y points.
- * For example, [x1, y1, x2, y2, ...].
- *
- * A color array is an array of numbers representing the color of each points.
- * For example, [r1, g1, b1, a1, r2, g2, b2, a2, ...].
- *
- * If `color` is an array of colors and/or color arrays, then the its length
- * must be equal to the number of point Arrays. The colors in the array will be
- * matched up with the corresponding point arrays in `points`.
- *
- * Note, while animation is efficient, loading or generating hundreds of
- * thousands of points when first instantiated can become a bottleneck on lower
- * end systems, and may need to be accounted for (like letting the user know
- * that loading is happening).
+ * {@link morph} options object.
  *
  * @property {string} name primitive name
  * @property {Array<Array<number>>} pointArrays point arrays to morph between.
@@ -2465,53 +2433,9 @@ export default class FigurePrimitives {
   }
 
   /**
-   * {@link FigureElementPrimitive} that can efficiently translate large numbers
-   * of points.
-   *
-   * The morph primitive is optimized to animate hundreds of thousands of points
-   * with minimal performance impact.
-   *
-   * Multiple arrays of points can be defined, and the translation of
-   * corresponding points in two arrays can be animated.
-   *
-   * Being able to accomodate so many points means this primitive can be used to
-   * efficiently morph shapes.
-   *
-   * All points in all point arrays can be assigned an individual color if
-   * desired. Use `color: TypeColor` to assign all points in all arrays the same
-   * color, `color: Array<TypeColor>` to assign all points in each array a
-   * specific color, `color: Array<Array<TypeColor>>` to assign each point in
-   * each array a specific color, and
-   * `color: Array<TypeColor | Array<TypeColor>` to assign some point arrays
-   * with one color, and others with a specific color per point.
-   *
-   * A point array is an array of numbers representing consecutive x, y points.
-   * For example, [x1, y1, x2, y2, ...].
-   *
-   * A color array is an array of numbers representing the color of each points.
-   * For example, [r1, g1, b1, a1, r2, g2, b2, a2, ...].
-   *
-   * If `color` is an array of colors and/or color arrays, then the its length
-   * must be equal to the number of point Arrays. The colors in the array will
-   * be matched up with the corresponding point arrays in `points`.
-   *
-   * This element's specialty is creating a visual effect, and so does not
-   * automatically calculate touch borders, and doesn't allow for color changes
-   * (with the `setColor`, `dim`, and `undim` methods). If touch borders are
-   * desired then either setup touch borders manually, or use a different
-   * element as a touch pad.
-   *
-   * This element comes with two specialized methods and an animation step:
-   *  - `setPoints` - sets points to a point array
-   *  - `setPointsBetwee` - sets points to a position between two point arrays
-   *  - `animations.morph` - morph between `start` and `target`
-   *
-   * Note, while animation is efficient, loading or generating hundreds of
-   * thousands of points when first instantiated can be slow on lower
-   * end systems, and may need to be accounted for (like letting the user know
-   * that loading is ongoing).
-   *
-   * @see {@link OBJ_Generic} for options and examples.
+   * {@link FigureElementPrimitive} that draws a generic shape.
+   * @see {@link FigureElementPrimitiveMorph} and {@link OBJ_Morph} for
+   * examples and options.
    */
   morph(...optionsIn: Array<OBJ_Morph>) {
     const defaultOptions = {
@@ -2566,7 +2490,17 @@ export default class FigurePrimitives {
       );
     });
     if (colorVertex) {
-      options.color.forEach((colors, index) => {
+      options.color.forEach((colorsIn, index) => {
+        let colors = colorsIn;
+        if (colors.length === 4) {
+          colors = Array(4 * glObject.numVertices);
+          for (let i = 0; i < colors.length; i += 4) {
+            colors[i] = colorsIn[0];
+            colors[i + 1] = colorsIn[1];
+            colors[i + 2] = colorsIn[2];
+            colors[i + 3] = colorsIn[3];
+          }
+        }
         const attribute = `a_col${index}`;
         const defaultBuffer = {
           type: 'FLOAT',

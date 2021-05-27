@@ -241,6 +241,8 @@ export type OBJ_ImageToShapes = {
  * `imageToShapes` maps the pixels of an image to shapes that will be
  * used to draw those pixels.
  *
+ * ![](./apiassets/imagetoshapes.gif)
+ *
  * All pixels in an image can be made shapes, or a `filter` function can be used
  * to only use desired pixels.
  *
@@ -257,6 +259,38 @@ export type OBJ_ImageToShapes = {
  *
  * @param {OBJ_ImageToShapes} options
  * @return {[Array<number>, Array<number>]} [vertices, colors]
+ *
+ * @example
+ * const figure = new Fig.Figure();
+ * const { imageToShapes, rectangleCloudShapes } = Fig.tools.morph;
+ *
+ * const image = new Image();
+ * image.src = './logo.png';
+ * image.onload = () => {
+ *   const [logo, logoColors] = imageToShapes({
+ *     image,
+ *     width: 0.7,
+ *     height: 0.7,
+ *     filter: c => c[3] > 0,
+ *   });
+ *
+ *   const cloud = rectangleCloudShapes({
+ *     width: 2,
+ *     height: 2,
+ *     num: logo.length / 2 / 6,
+ *   });
+ *
+ *   const m = figure.add({
+ *     make: 'morph',
+ *     points: [cloud, logo],
+ *     color: [logoColors, logoColors],
+ *   });
+ *
+ *   m.animations.new()
+ *     .delay(1)
+ *     .morph({ start: 0, target: 1, duration: 2 })
+ *     .start();
+ * };
  */
 function imageToShapes(options: OBJ_ImageToShapes) {
   const defaultOptions = {
@@ -723,10 +757,42 @@ export type OBJ_PointsToShapes = {
 /**
  * `pointsToShapes` creates shapes at each point input.
  *
+ * ![](./apiassets/pointstoshapes.gif)
+ *
  * This method is useful for morphing between shapes.
  *
  * @param {OBJ_PointsToShapes} options
  * @return {[Array<number>, Array<number>]} [vertices, colors]
+ *
+ * @example
+ * const figure = new Fig.Figure();
+ * const { pointsToShapes } = Fig.tools.morph;
+ *
+ * const xValues = Fig.tools.math.range(-0.8, 0.8, 0.001);
+ * const sinc = (xIn, a, b, c) => {
+ *   const x = (xIn + c) === 0 ? 0.00001 : xIn + c;
+ *   return a * Math.sin(b * x) / (b * x);
+ * };
+ *
+ * const [trace1] = pointsToShapes({
+ *   points: xValues.map(x => [x, sinc(x, 0.5, 20, 0)]),
+ *   shape: 'hex',
+ * });
+ *
+ * const [trace2] = pointsToShapes({
+ *   points: xValues.map(x => [x, 0.4 * Math.sin(x * 2 * Math.PI / 0.5)]),
+ *   shape: 'hex',
+ * });
+ *
+ * const m = figure.add({
+ *   make: 'morph',
+ *   points: [trace1, trace2],
+ *   color: [1, 0, 0, 1],
+ * });
+ *
+ * m.animations.new()
+ *   .morph({ start: 0, target: 1, duration: 2 })
+ *   .start();
  */
 function pointsToShapes(options: OBJ_PointsToShapes) {
   const defaultOptions = {
@@ -878,7 +944,7 @@ function polyline(options: OBJ_MorphPolyline) {
  * the positive x axis) (`0`)
  * @property {1 | -1} [direction] 1 is CCW, -1 is CW (`1`)
  */
-export type OBJ_GetPolygonVertices = {
+export type OBJ_GetPolygonCorners = {
   radius: number,
   sides: number,
   position: TypeParsablePoint,
@@ -889,11 +955,11 @@ export type OBJ_GetPolygonVertices = {
 /**
  * Calculate vertices of a polygon
  *
- * @param {OBJ_GetPolygonVertices} options
+ * @param {OBJ_GetPolygonCorners} options
  * @return {Array<Point>} Array of vertices
  * tuples
  */
-const getPolygonCorners = (options: OBJ_GetPolygonVertices) => {
+const getPolygonCorners = (options: OBJ_GetPolygonCorners) => {
   const defaultOptions = {
     sides: 4,
     rotation: 0,
@@ -945,8 +1011,36 @@ export type OBJ_PolygonCloudShapes = {
 /**
  * Generate random points within a polygon.
  *
+ * ![](./apiassets/polygoncloudshapes.gif)
+ *
  * @param {OBJ_PolygonCloudShapes} polygonCloudPoints
  * @return {Array<number>} array of interlaced x and y coordinates of vertices
+ *
+ * @example
+ * const figure = new Fig.Figure();
+ * const { polygonCloudShapes } = Fig.tools.morph;
+ *
+ * const cloud1 = polygonCloudShapes({
+ *   num: 2000,
+ *   radius: 0.5,
+ *   sides: 5,
+ * });
+ *
+ * const cloud2 = polygonCloudShapes({
+ *   num: 2000,
+ *   radius: 0.5,
+ *   sides: 100,
+ * });
+ *
+ * const m = figure.add({
+ *   make: 'morph',
+ *   points: [cloud1, cloud2],
+ *   color: [1, 0, 0, 1],
+ * });
+ *
+ * m.animations.new()
+ *   .morph({ start: 0, target: 1, duration: 2 })
+ *   .start();
  */
 const polygonCloudShapes = (options: OBJ_PolygonCloudShapes) => {
   const defaultOptions = {
@@ -1008,8 +1102,34 @@ export type OBJ_CircleCloudShapes = {
 /**
  * Generate random points within a circle.
  *
+ * ![](./apiassets/circlecloudshapes.gif)
+ *
  * @param {OBJ_CircleCloudShapes} options
  * @return {Array<number>} array of interlaced x and y coordinates of vertices
+ *
+ * @example
+ * const figure = new Fig.Figure();
+ * const { circleCloudShapes } = Fig.tools.morph;
+ *
+ * const cloud1 = circleCloudShapes({
+ *   num: 2000,
+ *   radius: 2,
+ * });
+ *
+ * const cloud2 = circleCloudShapes({
+ *   num: 2000,
+ *   radius: 0.5,
+ * });
+ *
+ * const m = figure.add({
+ *   make: 'morph',
+ *   points: [cloud1, cloud2],
+ *   color: [1, 0, 0, 1],
+ * });
+ *
+ * m.animations.new()
+ *   .morph({ start: 0, target: 1, duration: 2 })
+ *   .start();
  */
 const circleCloudShapes = (options: OBJ_CircleCloudShapes) => {
   const defaultOptions = {
@@ -1067,8 +1187,37 @@ export type OBJ_RectangleCloudShapes = {
 /**
  * Generate random points within a rectangle.
  *
+ * ![](./apiassets/rectanglecloudshapes.gif)
+ *
  * @param {OBJ_RectangleCloudShapes} options
  * @return {Array<number>} array of interlaced x and y coordinates of vertices
+ *
+ * @example
+ * const figure = new Fig.Figure();
+ * const { rectangleCloudShapes } = Fig.tools.morph;
+ *
+ * const cloud1 = rectangleCloudShapes({
+ *   num: 1000,
+ *   width: 0.5,
+ *   height: 0.5,
+ *   position: [-0.5, 0],
+ * });
+ *
+ * const cloud2 = rectangleCloudShapes({
+ *   num: 1000,
+ *   width: 0.7,
+ *   height: 0.7,
+ * });
+ *
+ * const m = figure.add({
+ *   make: 'morph',
+ *   points: [cloud1, cloud2],
+ *   color: [1, 0, 0, 1],
+ * });
+ *
+ * m.animations.new()
+ *   .morph({ start: 0, target: 1, duration: 2 })
+ *   .start();
  */
 const rectangleCloudShapes = (options: OBJ_RectangleCloudShapes) => {
   const defaultOptions = {

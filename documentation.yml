@@ -127,6 +127,22 @@ toc:
   - EQN_SquareBracketSymbol
   - EQN_RadicalSymbol
   - EQN_LineSymbol
+  - name: Morphing
+    file: ./docs/api/tutorials/morph/morph.md
+  - FigureElementPrimitiveMorph
+  - OBJ_Morph
+  - pointsToShapes
+  - OBJ_PointsToShapes
+  - polylineToShapes
+  - OBJ_PolylineToShapes
+  - imageToShapes
+  - OBJ_ImageToShapes
+  - polygonCloudShapes
+  - OBJ_PolygonCloudShapes
+  - circleCloudShapes
+  - OBJ_CircleCloudShapes
+  - rectangleCloudShapes
+  - OBJ_RectangleCloudShapes
   - name: Slide Navigator
   - SlideNavigator
   - OBJ_SlideNavigator
@@ -144,14 +160,6 @@ toc:
   - Recorder
   - FunctionMap
   - TypeRecorderTime
-  - name: 2D Geometry Tools
-  - minAngleDiff
-  - getTriangleCenter
-  - polarToRect
-  - rectToPolar
-  - threePointAngle
-  - threePointAngleMin
-  - clipAngle
   - name: Shaders
     file: ./docs/api/tutorials/shaders/shaders.md
   - OBJ_GLPrimitive
@@ -161,6 +169,14 @@ toc:
   - TypeGLBufferType
   - TypeGLBufferUsage
   - TypeGLUniform
+  - name: 2D Geometry Tools
+  - minAngleDiff
+  - getTriangleCenter
+  - polarToRect
+  - rectToPolar
+  - threePointAngle
+  - threePointAngleMin
+  - clipAngle
   - name: Math tools
   - round
   - range
@@ -318,6 +334,15 @@ toc:
   - EQN_Line
   - EQN_LineGlyphAlign
   - EQN_UpdateElementText
+  - name: Misc Morphing
+  - polyline
+  - OBJ_MorphPolyline
+  - getPolygonCorners
+  - OBJ_GetPolygonCorners
+  - squareFill
+  - hexFill
+  - polygonFill
+  - makeColors
   - name: Misc SlideNavigator
   - COL_SlideNavigatorButton
   - COL_SlideNavigatorEqnDefaults

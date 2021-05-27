@@ -1,13 +1,10 @@
 /* globals Fig */
 const figure = new Fig.Figure();
 
-// Helper functions that can create point fields
 const { polylineToShapes, getPolygonCorners } = Fig.tools.morph;
-
-// Helper function to make a range of values
 const { range } = Fig.tools.math;
 
-// Number of points - each point will define a square of six vertices
+// Number of shapes that make up the lines
 const n = 300;
 
 // Generate a line of points along a sinc function
@@ -16,7 +13,7 @@ const sinc = (xIn, a, b) => {
   return a * Math.sin(b * x) / (b * x);
 };
 
-// Generate sinc trace
+// Generate line of shapes along a sinc function
 const xValues = range(-0.8, 0.8, 0.01);
 const [sincPoints] = polylineToShapes({
   points: xValues.map(x => [x, sinc(x, 0.6, 20)]),
@@ -25,7 +22,7 @@ const [sincPoints] = polylineToShapes({
   shape: 15,
 });
 
-// Generate a line of points along a square
+// Generate a line of shapes along a square
 const [squarePoints] = polylineToShapes({
   points: [[0.5, 0.5], [-0.5, 0.5], [-0.5, -0.5], [0.5, -0.5]],
   num: n,
@@ -34,7 +31,7 @@ const [squarePoints] = polylineToShapes({
   shape: 15,
 });
 
-// Generate a line of points along a circle
+// Generate a line of shapes along a circle
 const [circlePoints] = polylineToShapes({
   points: getPolygonCorners({ radius: 0.5, sides: 50, rotation: Math.PI / 4 }),
   num: n,
@@ -43,20 +40,19 @@ const [circlePoints] = polylineToShapes({
   shape: 15,
 });
 
-
 const morpher = figure.add({
   make: 'morph',
   names: ['sinc', 'square', 'circle'],
   points: [sincPoints, squarePoints, circlePoints],
   color: [1, 0, 0, 1],
-  position: [0, 0],
 });
 
 // Animate morph
 morpher.animations.new()
   .delay(1)
-  .morph({ start: 'sinc', target: 'square', duration: 5 })
+  .morph({ start: 'sinc', target: 'square', duration: 2 })
   .morph({ start: 'square', target: 'circle', duration: 2 })
+  .morph({ start: 'circle', target: 'sinc', duration: 2 })
   .start();
 
-figure.addFrameRate(10);
+// figure.addFrameRate(10);
