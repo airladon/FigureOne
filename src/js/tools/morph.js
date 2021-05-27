@@ -608,8 +608,6 @@ export type OBJ_PolylineToShapes = {
  * @return {[Array<number>, Array<number>]} [vertices, colors]
  *
  * @example
- * const figure = new Fig.Figure();
- *
  * const { polylineToShapes, getPolygonCorners } = Fig.tools.morph;
  *
  * const [square] = polylineToShapes({
@@ -638,8 +636,6 @@ export type OBJ_PolylineToShapes = {
  *   .start();
  *
  * @example
- * const figure = new Fig.Figure();
- *
  * const { polylineToShapes, getPolygonCorners } = Fig.tools.morph;
  *
  * const [square] = polylineToShapes({
@@ -668,8 +664,6 @@ export type OBJ_PolylineToShapes = {
  *   .start();
  *
  * @example
- * const figure = new Fig.Figure();
- *
  * const { polylineToShapes, getPolygonCorners } = Fig.tools.morph;
  *
  * const [square] = polylineToShapes({
@@ -679,7 +673,7 @@ export type OBJ_PolylineToShapes = {
  * });
  *
  * const [circle] = polylineToShapes({
- *   points: getPolygonCorners({ radius: 0.25, sides: 100, rotation: Math.PI / 4 }) * ,
+ *   points: getPolygonCorners({ radius: 0.25, sides: 100, rotation: Math.PI / 4 }),
  *   num: 500,
  *   close: true,
  * });
@@ -765,7 +759,6 @@ export type OBJ_PointsToShapes = {
  * @return {[Array<number>, Array<number>]} [vertices, colors]
  *
  * @example
- * const figure = new Fig.Figure();
  * const { pointsToShapes } = Fig.tools.morph;
  *
  * const xValues = Fig.tools.math.range(-0.8, 0.8, 0.001);
@@ -959,7 +952,7 @@ export type OBJ_GetPolygonCorners = {
  * @return {Array<Point>} Array of vertices
  * tuples
  */
-const getPolygonCorners = (options: OBJ_GetPolygonCorners) => {
+function getPolygonCorners(options: OBJ_GetPolygonCorners) {
   const defaultOptions = {
     sides: 4,
     rotation: 0,
@@ -978,7 +971,7 @@ const getPolygonCorners = (options: OBJ_GetPolygonCorners) => {
     ));
   }
   return points;
-};
+}
 
 /**
  * Options object to generate shapes at random positions within a polygon.
@@ -1017,7 +1010,6 @@ export type OBJ_PolygonCloudShapes = {
  * @return {Array<number>} array of interlaced x and y coordinates of vertices
  *
  * @example
- * const figure = new Fig.Figure();
  * const { polygonCloudShapes } = Fig.tools.morph;
  *
  * const cloud1 = polygonCloudShapes({
@@ -1042,7 +1034,7 @@ export type OBJ_PolygonCloudShapes = {
  *   .morph({ start: 0, target: 1, duration: 2 })
  *   .start();
  */
-const polygonCloudShapes = (options: OBJ_PolygonCloudShapes) => {
+function polygonCloudShapes(options: OBJ_PolygonCloudShapes) {
   const defaultOptions = {
     sides: 4,
     rotation: 0,
@@ -1074,7 +1066,7 @@ const polygonCloudShapes = (options: OBJ_PolygonCloudShapes) => {
     ], o.size));
   }
   return points;
-};
+}
 
 /**
  * Options object to generate shapes at random positions within a circle.
@@ -1108,7 +1100,6 @@ export type OBJ_CircleCloudShapes = {
  * @return {Array<number>} array of interlaced x and y coordinates of vertices
  *
  * @example
- * const figure = new Fig.Figure();
  * const { circleCloudShapes } = Fig.tools.morph;
  *
  * const cloud1 = circleCloudShapes({
@@ -1131,7 +1122,7 @@ export type OBJ_CircleCloudShapes = {
  *   .morph({ start: 0, target: 1, duration: 2 })
  *   .start();
  */
-const circleCloudShapes = (options: OBJ_CircleCloudShapes) => {
+function circleCloudShapes(options: OBJ_CircleCloudShapes) {
   const defaultOptions = {
     radius: 1,
     position: [0, 0],
@@ -1156,7 +1147,7 @@ const circleCloudShapes = (options: OBJ_CircleCloudShapes) => {
     ], o.size));
   }
   return points;
-};
+}
 
 
 /**
@@ -1193,7 +1184,6 @@ export type OBJ_RectangleCloudShapes = {
  * @return {Array<number>} array of interlaced x and y coordinates of vertices
  *
  * @example
- * const figure = new Fig.Figure();
  * const { rectangleCloudShapes } = Fig.tools.morph;
  *
  * const cloud1 = rectangleCloudShapes({
@@ -1219,7 +1209,7 @@ export type OBJ_RectangleCloudShapes = {
  *   .morph({ start: 0, target: 1, duration: 2 })
  *   .start();
  */
-const rectangleCloudShapes = (options: OBJ_RectangleCloudShapes) => {
+function rectangleCloudShapes(options: OBJ_RectangleCloudShapes) {
   const defaultOptions = {
     width: 1,
     height: 1,
@@ -1239,7 +1229,7 @@ const rectangleCloudShapes = (options: OBJ_RectangleCloudShapes) => {
     points.push(...shape([x, y], o.size));
   }
   return points;
-};
+}
 
 export {
   polyline,

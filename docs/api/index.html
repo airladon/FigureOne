@@ -44415,10 +44415,10 @@ line.animations.new()
 <li>Memory: each frame, all vertices need to be transferred from a CPU related memory location to a GPU memory buffer</li>
 </ol>
 <p>In this example 1) is probably more expensive than 2), but there will be other times where 2) is more expensive than 1).</p>
-<p>So <code>updatePoints</code> is a easy and sufficient way to morph many things, but it will struggle when the number of vertices gets too high.</p>
+<p>So <code>updatePoints</code> is an easy and sufficient way to morph many things, but it will struggle when the number of vertices gets too high.</p>
 <h3>FigureElementPrimitive Morph</h3>
-<p>FigureOne has a FigureElementPrimitive <a href="morph">morph</a> optimized for morphing many vertices.</p>
-<p>At initialization, multiple arrays are defined, and then loaded into GPU memory buffers. <a href="morph">morph</a> then animates between these point arrays by translating corresponding points in the GPU. This means on each animation frame there are no calculations done in the CPU, and no large memory buffers being transferred to the GPU.</p>
+<p>FigureOne has a <a href="#figureelementprimitivemorph">FigureElementPrimitiveMorph</a> optimized for morphing many vertices.</p>
+<p>At initialization, multiple arrays are defined, and then loaded into GPU memory buffers. <a href="#figureelementprimitivemorph">FigureElementPrimitiveMorph</a> then animates between these point arrays by translating corresponding points in the GPU. This means on each animation frame there are no calculations done in the CPU, and no large memory buffers being transferred to the GPU.</p>
 <p>As a result, hundreds of thousands of points can be morphed with minimal performance impact - even on low end clients.</p>
 <p>A simple example using morph on just three vertices is:</p>
 <pre class='hljs'><span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure();
@@ -44437,7 +44437,7 @@ tri.animations.new()
   .start();</pre>
 <p><img src="./tutorials/morph/simplemorph.gif" alt=""></p>
 <p>The <code>points</code> property defines the different vertex configurations. The first array of points, representing the first vertex configuration is <code>[0, 0, 0.5, 0, 0.5, 0.5]</code> which defines three points <code>[0, 0]</code>, <code>[0.5, 0]</code>,  and <code>[0.5, 0.5]</code>.</p>
-<p>The <code>morph</code> primitive comes with a built-in morph animation step, which can animate between configurations. This animation step is only available to <a href="morph">morph</a> primitives.</p>
+<p>The <code>morph</code> primitive comes with a built-in morph animation step, which can animate between configurations. This animation step is only available to <a href="#figureelementprimitivemorph">FigureElementPrimitiveMorph</a> primitives.</p>
 <p>Let's now recreate the line to wave example above using morph.</p>
 <pre class='hljs'><span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure();
 
@@ -44481,7 +44481,7 @@ m.animations.new()
 <h3>Tips for Morphing Lines</h3>
 <p>It will often take fewer vertices to construct a polyline with rectangular line segments between polyline corners, compared to a string of shapes along the polyline. This is especially the case when the polyline has straight segments that are longer than the required distance between shapes needed to make the line look smooth (usually a fraction of the shape with).</p>
 <p>Nevertheless, most times it will be better to use a string of shapes to represent a morphing line, as the line will look more natural during the morph.</p>
-<p>The <a href="morph">morph</a> primitive linearly translates all vertices from one location to another. If a rectangular line segment's angle changes significantly, the transition between the two states may involve the rectange width temporarily reducing.</p>
+<p>The <a href="#figureelementprimitivemorph">FigureElementPrimitiveMorph</a> primitive linearly translates all vertices from one location to another. If a rectangular line segment's angle changes significantly, the transition between the two states may involve the rectange width temporarily reducing.</p>
 <p>An extreme example is when we change angle by 180º:</p>
 <pre class='hljs'><span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure();
 <span class="hljs-keyword">const</span> { polyline } = Fig.tools.morph;
@@ -44805,7 +44805,6 @@ image.onload = <span class="hljs-function">() =&gt;</span> {
     <span class="hljs-attr">size</span>: <span class="hljs-number">0.005</span>,
   });
 
-  <span class="hljs-comment">// Generate a line of shapes along a circle</span>
   <span class="hljs-keyword">const</span> xValues = range(-<span class="hljs-number">0.8</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0.001</span>);
   <span class="hljs-keyword">const</span> [sine] = polylineToShapes({
     <span class="hljs-attr">points</span>: xValues.map(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> [x, <span class="hljs-number">0.3</span> * <span class="hljs-built_in">Math</span>.sin(x * <span class="hljs-number">2</span> * <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">0.4</span>)]),

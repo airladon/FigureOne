@@ -47,13 +47,13 @@ There are two reasons for this:
 
 In this example 1) is probably more expensive than 2), but there will be other times where 2) is more expensive than 1).
 
-So `updatePoints` is a easy and sufficient way to morph many things, but it will struggle when the number of vertices gets too high.
+So `updatePoints` is an easy and sufficient way to morph many things, but it will struggle when the number of vertices gets too high.
 
 ### FigureElementPrimitive Morph
 
-FigureOne has a FigureElementPrimitive {@link morph} optimized for morphing many vertices.
+FigureOne has a {@link FigureElementPrimitiveMorph} optimized for morphing many vertices.
 
-At initialization, multiple arrays are defined, and then loaded into GPU memory buffers. {@link morph} then animates between these point arrays by translating corresponding points in the GPU. This means on each animation frame there are no calculations done in the CPU, and no large memory buffers being transferred to the GPU.
+At initialization, multiple arrays are defined, and then loaded into GPU memory buffers. {@link FigureElementPrimitiveMorph} then animates between these point arrays by translating corresponding points in the GPU. This means on each animation frame there are no calculations done in the CPU, and no large memory buffers being transferred to the GPU.
 
 As a result, hundreds of thousands of points can be morphed with minimal performance impact - even on low end clients.
 
@@ -80,7 +80,7 @@ tri.animations.new()
 
 The `points` property defines the different vertex configurations. The first array of points, representing the first vertex configuration is `[0, 0, 0.5, 0, 0.5, 0.5]` which defines three points `[0, 0]`, `[0.5, 0]`,  and `[0.5, 0.5]`. 
 
-The `morph` primitive comes with a built-in morph animation step, which can animate between configurations. This animation step is only available to {@link morph} primitives.
+The `morph` primitive comes with a built-in morph animation step, which can animate between configurations. This animation step is only available to {@link FigureElementPrimitiveMorph} primitives.
 
 Let's now recreate the line to wave example above using morph.
 
@@ -140,7 +140,7 @@ It will often take fewer vertices to construct a polyline with rectangular line 
 
 Nevertheless, most times it will be better to use a string of shapes to represent a morphing line, as the line will look more natural during the morph.
 
-The {@link morph} primitive linearly translates all vertices from one location to another. If a rectangular line segment's angle changes significantly, the transition between the two states may involve the rectange width temporarily reducing.
+The {@link FigureElementPrimitiveMorph} primitive linearly translates all vertices from one location to another. If a rectangular line segment's angle changes significantly, the transition between the two states may involve the rectange width temporarily reducing.
 
 An extreme example is when we change angle by 180º:
 

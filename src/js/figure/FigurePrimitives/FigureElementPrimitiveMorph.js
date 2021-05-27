@@ -135,7 +135,6 @@ import type { OBJ_AnimationStep } from '../Animation/AnimationStep';
    *     size: 0.005,
    *   });
    *
-   *   // Generate a line of shapes along a circle
    *   const xValues = range(-0.8, 0.8, 0.001);
    *   const [sine] = polylineToShapes({
    *     points: xValues.map(x => [x, 0.3 * Math.sin(x * 2 * Math.PI / 0.4)]),

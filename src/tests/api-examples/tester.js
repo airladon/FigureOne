@@ -25,6 +25,33 @@ async function frame(delta) {
 function tester(snapshots, path, initialization = '', threshold = 0) {
   const examples = getExamples(path);
   const start = `
+// Replace Math.random with something deterministic
+// ********************************
+// From: https://stackoverflow.com/questions/521295/seeding-the-random-number-generator-in-javascript
+function xmur3(str) {
+  for(var i = 0, h = 1779033703 ^ str.length; i < str.length; i++)
+    h = Math.imul(h ^ str.charCodeAt(i), 3432918353),
+    h = h << 13 | h >>> 19;
+  return function() {
+    h = Math.imul(h ^ h >>> 16, 2246822507);
+    h = Math.imul(h ^ h >>> 13, 3266489909);
+    return (h ^= h >>> 16) >>> 0;
+  }
+}
+function mulberry32(a) {
+  return function() {
+    var t = a += 0x6D2B79F5;
+    t = Math.imul(t ^ t >>> 15, t | 1);
+    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  }
+}
+
+var seed = xmur3("figureone");
+Math.random = mulberry32(seed());
+
+// ********************************
+
 const figure = new Fig.Figure({
   limits: [-3, -2.25, 6, 4.5],
   color: [1, 0, 0, 1],
@@ -86,7 +113,7 @@ figure.animateNextFrame();
     async (id, code) => {
       await jestPlaywright.resetBrowser();
       await page.setViewportSize({ width: 500, height: 375 });
-      await page.goto(`file://${__dirname}/index.html`);
+      await page.goto(`localhost:8080//${__dirname}/index.html`);
       await page.evaluate(() => {
         figure.timeKeeper.setManualFrames();
       });

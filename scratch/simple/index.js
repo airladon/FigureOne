@@ -1,44 +1,30 @@
-
 const figure = new Fig.Figure();
-const { imageToShapes, circleCloudShapes, polylineToShapes } = Fig.tools.morph;
-const { range } = Fig.tools.math;
+const { pointsToShapes } = Fig.tools.morph;
 
-const image = new Image();
-image.src = './logocolored.png';
-image.onload = () => {
-  const [logo, logoColors] = imageToShapes({
-    image,
-    width: 2,
-    height: 2,
-    dither: 0.003,
-  });
-
-  const n = logo.length / 2 / 6;
-  const cloud = circleCloudShapes({
-    radius: 3,
-    num: n,
-    size: 0.005,
-  });
-
-  // Generate a line of shapes along a circle
-  const xValues = range(-0.8, 0.8, 0.001);
-  const [sine] = polylineToShapes({
-    points: xValues.map(x => [x, 0.3 * Math.sin(x * 2 * Math.PI / 0.4)]),
-    num: n,
-    size: 0.01,
-  });
-
-  const m = figure.add({
-    make: 'morph',
-    points: [cloud, logo, sine],
-    names: ['cloud', 'logo', 'sine'],
-    color: [logoColors, logoColors, [0, 0, 1, 1]],
-  });
-
-  m.setPoints('sine');
-  m.animations.new()
-    .delay(1)
-    .morph({ start: 'sine', target: 'cloud', duration: 2 })
-    .morph({ start: 'cloud', target: 'logo', duration: 2 })
-    .start();
+const xValues = Fig.tools.math.range(-0.8, 0.8, 0.001);
+const sinc = (xIn, a, b, c) => {
+  const x = (xIn + c) === 0 ? 0.00001 : xIn + c;
+  return a * Math.sin(b * x) / (b * x);
 };
+
+const [trace1] = pointsToShapes({
+  points: xValues.map(x => [x, sinc(x, 0.5, 20, 0)]),
+  shape: 'hex',
+});
+
+const [trace2] = pointsToShapes({
+  points: xValues.map(x => [x, 0.4 * Math.sin(x * 2 * Math.PI / 0.5)]),
+  shape: 'hex',
+});
+
+const m = figure.add({
+  make: 'morph',
+  points: [trace1, trace2],
+  color: [1, 0, 0, 1],
+});
+
+m.animations.new()
+  .morph({ start: 0, target: 1, duration: 2 })
+  .start();
+
+console.log(figure.getRemainingAnimationTime())
