@@ -17,7 +17,7 @@ const sinc = (xIn, a, b) => {
 };
 
 // Generate sinc trace
-// const xValues = range(-0.8, 0.8, 0.01);
+const xValues = range(-0.8, 0.8, 0.01);
 // const [sincPoints] = polylineToShapes({
 //   points: xValues.map(x => [x, sinc(x, 0.6, 20)]),
 //   num: n,
@@ -42,32 +42,61 @@ const sinc = (xIn, a, b) => {
 //   close: true,
 //   shape: 15,
 // });
-const [sincPoints] = polyline({
-  // points: xValues.map(x => [x, sinc(x, 0.6, 20)]),
-  points: [
-    [-0.8, 0], [-0.6, 0.4], [-0.4, 0], [-0.2, 0.4], [0, 0],
-    [0.2, 0.4], [0.4, 0], [0.6, 0.4], [0.8, 0],
-  ],
-  width: 0.02,
-  num: 9,
+const sincPoints = polyline({
+  points: xValues.map(x => [x, sinc(x, 0.6, 20)]),
+  // points: [
+  //   [-0.8, 0], [-0.6, 0.4], [-0.4, 0], [-0.2, 0.4], [0, 0],
+  //   [0.2, 0.4], [0.4, 0], [0.6, 0.4], [0.8, 0],
+  // ],
+  close: true,
+  width: 0.03,
+  simple: true,
+  num: 999,
 });
+// console.log(sincPoints)
+// const [squarePoints] = polyline({
+//   points: xValues.map(x => [x, 0.4 * Math.sin(x * Math.PI * 2 / 1)]),
+//   // points: [
+//   //   [-0.8, 0], [-0.6, 0.4], [-0.4, 0], [-0.2, 0.4], [0, 0],
+//   //   [0.2, 0.4], [0.4, 0], [0.6, 0.4], [0.8, 0],
+//   // ],
+//   // close: true,
+//   width: 0.01,
+//   simple: true,
+//   num: 999,
+// });
 
-const [squarePoints] = polyline({
+// const [circlePoints] = polyline({
+//   points: xValues.map(x => [x, 0.4 * Math.sin(x * Math.PI * 2 / 2)]),
+//   // points: [
+//   //   [-0.8, 0], [-0.6, 0.4], [-0.4, 0], [-0.2, 0.4], [0, 0],
+//   //   [0.2, 0.4], [0.4, 0], [0.6, 0.4], [0.8, 0],
+//   // ],
+//   // close: true,
+//   width: 0.01,
+//   simple: true,
+//   num: 999,
+// });
+
+const squarePoints = polyline({
   // points: xValues.map(x => [x, sinc(x, 0.3, 20)]),
   points: getPolygonCorners({ radius: 0.5, sides: 50 }),
-  width: 0.02,
-  num: 9,
+  width: 0.03,
+  num: 999,
   close: true,
+  simple: true,
 });
+// console.log(squarePoints)
 
-const [circlePoints] = polyline({
+const circlePoints = polyline({
   // points: xValues.map(x => [x, sinc(x, 0.8, 20)]),
-  // width: 0.02,
-  // num: 8,
+  // width: 0.03,
+  // nu1:,
   points: getPolygonCorners({ radius: 0.5, sides: 4 }),
-  width: 0.02,
-  num: 9,
+  width: 0.03,
+  num: 999,
   close: true,
+  simple: true,
 });
 
 const morpher = figure.add({

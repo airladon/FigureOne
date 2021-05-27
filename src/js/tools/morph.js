@@ -406,7 +406,6 @@ function imageToShapes(options: OBJ_ImageToShapes) {
         indeces = pixelIndeces.slice();
       }
     }
-
     // Get the pixel index to create the point with
     let index = indeces[0];
     if (o.distribution === 'random') {
@@ -416,7 +415,6 @@ function imageToShapes(options: OBJ_ImageToShapes) {
     } else {
       indeces.splice(0, 1);
     }
-
     // Create the center point from the pixel position and color
     const pixel = pixels[index];
     const color = pixelColors[index];
@@ -424,7 +422,6 @@ function imageToShapes(options: OBJ_ImageToShapes) {
       p.x + pixel[0] * pixelWidth + pixelOffset[0] * pixelWidth + dithering[index][0],
       p.y + height - pixel[1] * pixelHeight + pixelOffset[1] * pixelHeight + dithering[index][1],
     );
-
     // Create the vertices from the center point
     const pointVertices = shape(point, o.size || pixelWidth);
     let pointColors = [];
@@ -437,16 +434,9 @@ function imageToShapes(options: OBJ_ImageToShapes) {
   return [points, colors];
 }
 
-// function pointsToVertices(points, rad = 0.015) {
-//   const vertices = [];
-//   for (let i = 0; i < points.length; i += 1) {
-//     vertices.push(...squareFill(points[i], rad));
-//   }
-//   return vertices;
-// }
 
-function getPolylineStats(polyline: Array<Point>, close: boolean) {
-  const linePoints = polyline;
+function getPolylineStats(polylinePoints: Array<Point>, close: boolean) {
+  const linePoints = polylinePoints;
   let cumDistance = 0;
   const distances = Array(linePoints.length).fill(0);
   const cumDistances = Array(linePoints.length).fill(0);
@@ -665,46 +655,62 @@ function pointsToShapes(options: OBJ_PointsToShapes) {
   return [vertices, colors];
 }
 
-function stripPolylineToTriangles(stripPointsIn: Array<Point>) {
-  const stripPoints = stripPointsIn.map(p => p.round());
-  const vertices = Array(stripPoints.length / 4 * 6 * 2);
-  let index = 0;
-  for (let i = 0; i < stripPoints.length - 2; i += 2) {
-    const points = [
-      stripPoints[i],
-      stripPoints[i + 1],
-      stripPoints[i + 2],
-      stripPoints[i + 3],
-    ];
-    vertices[index] = points[0].x;
-    vertices[index + 1] = points[0].y;
-    vertices[index + 2] = points[1].x;
-    vertices[index + 3] = points[1].y;
-    vertices[index + 4] = points[2].x;
-    vertices[index + 5] = points[2].y;
-    vertices[index + 6] = points[1].x;
-    vertices[index + 7] = points[1].y;
-    vertices[index + 8] = points[3].x;
-    vertices[index + 9] = points[3].y;
-    vertices[index + 10] = points[2].x;
-    vertices[index + 11] = points[2].y;
-    index += 12;
-  }
-  return vertices;
+/**
+ * Options object for `polyline` in morph tools.
+ *
+ * @property {Array<TypeParsablePoint>} points points that define the polyline
+ * @property {number | null} [num] split the polyline into `num` equal
+ * segments. Use `null` or leave undefined to not split the polyline
+ * @property {boolean} [close] `true` to close the polyline
+ * @property {number} [width] width of the polyline
+ * @property {boolean} [simple] `false` fills corners.
+ */
+export type OBJ_MorphPolyline = {
+  points: Array<TypeParsablePoint>,
+  num?: number,
+  close?: boolean,
+  width?: number,
+  simple?: boolean,
 }
 
-function polyline(options: OBJ_SegmentPolyline) {
+/**
+ * Creates triangles to the width of a polyline.
+ *
+ * A polyline is defined by a series of points.
+ *
+ * The polyline can either be converted directly to triangles that create
+ * its width (`num` undefined), or split into `num` equal segments first.
+ *
+ * `simple` polylines are rectangles formed between two points in a polyline
+ * or segmented polyline. When there are bends in the line, gaps will form on
+ * the outside border. These gaps will become more visible as the line gets
+ * thicker.
+ *
+ * When `simple = false`, each corner has an additional two triangles to fill
+ * in the gaps.
+ *
+ * The final number of vertices depends on `simple`, `num` and `close`. Each
+ * line segment as 6 vertices. Each corner fill has 6 vertices. If `num` is
+ * `undefined` or `null` then the total number of line segments will be
+ * `points.length` + 1.
+ *
+ * This method is useful for morphing between lines, but is of limited use. If
+ * the line segments gradient change quadrants, then the line thicknesses will
+ * change during morphing. Especially for thick lines, it will often be better
+ * to use `polylineToShapes`.
+ *
+ */
+function polyline(options: OBJ_MorphPolyline) {
   const defaultOptions = {
     num: null,
     close: false,
     width: 0.01,
-    makeColors: null,
+    simple: false,
   };
   const o = joinObjectsWithOptions({ except: 'points' }, {}, defaultOptions, options);
   const linePoints = options.points.map(p => getPoint(p));
   let num = 0;
   let segmentedPolyline;
-  // debugger;
   if (o.num == null) {
     segmentedPolyline = linePoints;
     num = linePoints.length;
@@ -712,14 +718,36 @@ function polyline(options: OBJ_SegmentPolyline) {
     num = o.num;
     [segmentedPolyline] = _segmentPolyline(linePoints, num, o.close);
   }
-  const colors = [];
   let [stripPoints] = makeFastPolyLine(segmentedPolyline, o.width, o.close);
   if (o.close) {
     stripPoints.splice(-2, 2);
   }
   stripPoints = stripPoints.map(p => p.round());
-  const vertices = Array(stripPoints.length * 6 * 2);
+  let vertices;
+  if (o.simple) {
+    vertices = Array(stripPoints.length * 6 * 2);
+  } else if (o.close) {
+    vertices = Array(stripPoints.length * 12 * 2 + 6);
+  } else {
+    vertices = Array(stripPoints.length * 12 * 2);
+  }
   let index = 0;
+  const fillVertices = (p1, p2, p3, p4, p5, p6) => {
+    vertices[index] = p1.x;
+    vertices[index + 1] = p1.y;
+    vertices[index + 2] = p2.x;
+    vertices[index + 3] = p2.y;
+    vertices[index + 4] = p3.x;
+    vertices[index + 5] = p3.y;
+    vertices[index + 6] = p4.x;
+    vertices[index + 7] = p4.y;
+    vertices[index + 8] = p5.x;
+    vertices[index + 9] = p5.y;
+    vertices[index + 10] = p6.x;
+    vertices[index + 11] = p6.y;
+    index += 12;
+  };
+
   for (let i = 0; i < stripPoints.length - 2; i += 4) {
     const points = [
       stripPoints[i],
@@ -727,32 +755,19 @@ function polyline(options: OBJ_SegmentPolyline) {
       stripPoints[i + 2],
       stripPoints[i + 3],
     ];
-    vertices[index] = points[0].x;
-    vertices[index + 1] = points[0].y;
-    vertices[index + 2] = points[1].x;
-    vertices[index + 3] = points[1].y;
-    vertices[index + 4] = points[2].x;
-    vertices[index + 5] = points[2].y;
-    vertices[index + 6] = points[1].x;
-    vertices[index + 7] = points[1].y;
-    vertices[index + 8] = points[3].x;
-    vertices[index + 9] = points[3].y;
-    vertices[index + 10] = points[2].x;
-    vertices[index + 11] = points[2].y;
-    index += 12;
-  }
-  if (o.makeColors != null) {
-    for (let i = 1; i < segmentedPolyline.length; i += 1) {
-      const endPoint = segmentedPolyline[i];
-      // const currentCumDist = i * distanceStep;
-      const vertexColors = o.makeColors(
-        6, endPoint,
+    fillVertices(points[0], points[1], points[2], points[1], points[3], points[2]);
+    if (!o.simple && i < stripPoints.length - 4) {
+      fillVertices(
+        points[2], points[3], stripPoints[i + 4], points[2], points[3], stripPoints[i + 5],
       );
-      colors.push(...vertexColors);
+    } else if (!o.simple && o.close) {
+      fillVertices(
+        points[2], points[3], stripPoints[0], points[2], points[3], stripPoints[1],
+      );
     }
   }
 
-  return [vertices, colors];
+  return vertices;
 }
 
 /**
@@ -777,7 +792,7 @@ export type OBJ_GetPolygonVertices = {
  * Calculate vertices of a polygon
  *
  * @param {OBJ_GetPolygonVertices} options
- * @return {Array<[number, number]>} Array of vertices represented by [x, y]
+ * @return {Array<Point>} Array of vertices
  * tuples
  */
 const getPolygonCorners = (options: OBJ_GetPolygonVertices) => {
@@ -793,56 +808,57 @@ const getPolygonCorners = (options: OBJ_GetPolygonVertices) => {
   const points = [];
   const dAngle = Math.PI * 2 / o.sides;
   for (let i = 0; i < o.sides; i += 1) {
-    points.push([
+    points.push(new Point(
       o.radius * Math.cos(o.direction * (dAngle * i + o.rotation)) + position.x,
       o.radius * Math.sin(o.direction * (dAngle * i + o.rotation)) + position.y,
-    ]);
+    ));
   }
   return points;
 };
 
 /**
- * Options object to generate random points within a polygon.
+ * Options object to generate shapes at random positions within a polygon.
  *
- * @property {number} [maxPoints] number of points to generate (`10`)
- * @property {number} [pointSize] size of each point (`0.01`)
+ * @property {number} [num] number of shapes to generate (`10`)
+ * @property {number} [size] size of each shape (`0.01`)
  * @property {number} [radius] radius of polygon (`1`)
  * @property {number} [sides] number of polygon sides (`4`)
  * @property {TypeParsablePoint} [position] center position of polygon (`[0, 0]`)
  * @property {number} [rotation] polygon rotation (first vertex will be along
  * the positive x axis) (`0`)
- * @property {function([number, number], number): Array<number>} [makePoints]
- * use this function to customize point creation. By default a square of two
- * triangles is created (six vertices). The function takes as input the [x, y]
- * position of the center point and `pointSize` and outputs an array of vertices
- * of triangles with interlaced x and y coordinates. For example:
+ * @property {function(Point, number): Array<number> | number} [shape]
+ * By default a square of two triangles is created (six vertices). Use a
+ * `number` to create a regular polygon with `number` sides. Use a custom
+ * function to make a custom shape. The function takes as input the [x, y]
+ * position of the point to build the shape around, and `size`. It outputs an
+ * array of interlaced x and y coordinates of triangle vertices - i.e.:
  * [x1, y1, x2, y2, x3, y3, ....]
  */
-export type OBJ_PolygonCloudPoints = {
+export type OBJ_PolygonCloudShapes = {
   radius?: number,
   sides?: number,
   position?: TypeParsablePoint,
   rotation?: number,
-  maxPoints?: number,
-  pointSize?: number,
-  makePoints?: ([number, number], number) => Array<number>,
+  num?: number,
+  size?: number,
+  shape?: number | ((Point, number) => Array<number>),
 };
 
 /**
  * Generate random points within a polygon.
  *
- * @param {OBJ_PolygonCloudPoints} polygonCloudPoints
+ * @param {OBJ_PolygonCloudShapes} polygonCloudPoints
  * @return {Array<number>} array of interlaced x and y coordinates of vertices
  */
-const polygonCloudPoints = (options: OBJ_PolygonCloudPoints) => {
+const polygonCloudShapes = (options: OBJ_PolygonCloudShapes) => {
   const defaultOptions = {
     sides: 4,
     rotation: 0,
     radius: 1,
     position: [0, 0],
-    maxPoints: 10,
-    pointSize: 0.01,
-    makePoints: squareFill.bind(this),
+    num: 10,
+    size: 0.01,
+    shape: squareFill.bind(this),
   };
   const o = joinObjects({}, defaultOptions, options);
   const position = getPoint(o.position);
@@ -850,7 +866,7 @@ const polygonCloudPoints = (options: OBJ_PolygonCloudPoints) => {
   const apothem = o.radius * Math.cos(Math.PI / o.sides);
   const makePoints = processShapeFunction(o.makePoints);
 
-  for (let i = 0; i < o.maxPoints; i += 1) {
+  for (let i = 0; i < o.num; i += 1) {
     const angle = rand(0, Math.PI * 2);
     const sideAngle = Math.PI * 2 / o.sides;
     const lastVertex = Math.floor(angle / sideAngle) * sideAngle;
@@ -863,115 +879,117 @@ const polygonCloudPoints = (options: OBJ_PolygonCloudPoints) => {
     points.push(...makePoints([
       radius * Math.cos(angle + o.rotation) + position.x,
       radius * Math.sin(angle + o.rotation) + position.y,
-    ], o.pointSize));
+    ], o.size));
   }
   return points;
 };
 
 /**
- * Options object to generate random cloud of points within a circle.
+ * Options object to generate shapes at random positions within a circle.
  *
- * @property {number} [maxPoints] number of points to generate (`10`)
- * @property {number} [pointSize] size of each point (`0.01`)
- * @property {number} [radius] radius of polygon (`1`)
- * @property {TypeParsablePoint} [position] center position of polygon (`[0, 0]`)
- * @property {function([number, number], number): Array<number>} [makePoints]
- * use this function to customize point creation. By default a square of two
- * triangles is created (six vertices). The function takes as input the [x, y]
- * position of the center point and `pointSize` and outputs an array of vertices
- * of triangles with interlaced x and y coordinates. For example:
+ * @property {number} [num] number of shapes to generate (`10`)
+ * @property {number} [pointSize] size of each shape (`0.01`)
+ * @property {number} [radius] radius of circle (`1`)
+ * @property {TypeParsablePoint} [position] center position of circle (`[0, 0]`)
+ * @property {function(Point, number): Array<number> | number} [shape]
+ * By default a square of two triangles is created (six vertices). Use a
+ * `number` to create a regular polygon with `number` sides. Use a custom
+ * function to make a custom shape. The function takes as input the [x, y]
+ * position of the point to build the shape around, and `size`. It outputs an
+ * array of interlaced x and y coordinates of triangle vertices - i.e.:
  * [x1, y1, x2, y2, x3, y3, ....]
  */
-export type OBJ_CircleCloudPoints = {
+export type OBJ_CircleCloudShapes = {
   radius?: number,
   position?: TypeParsablePoint,
-  maxPoints?: number,
-  makePoints?: ([number, number], number) => Array<number>,
-  pointSize?: number,
+  num?: number,
+  shape?: ([number, number], number) => Array<number>,
+  size?: number,
 };
 
 /**
  * Generate random points within a circle.
  *
- * @param {OBJ_CircleCloudPoints} options
+ * @param {OBJ_CircleCloudShapes} options
  * @return {Array<number>} array of interlaced x and y coordinates of vertices
  */
-const circleCloudPoints = (options: OBJ_CircleCloudPoints) => {
+const circleCloudShapes = (options: OBJ_CircleCloudShapes) => {
   const defaultOptions = {
     radius: 1,
     position: [0, 0],
-    maxPoints: 10,
-    pointSize: 0.01,
-    makePoints: squareFill.bind(this),
+    num: 10,
+    size: 0.01,
+    shape: squareFill.bind(this),
   };
   const o = joinObjects({}, defaultOptions, options);
   const position = getPoint(o.position);
   const points = [];
-  const makePoints = processShapeFunction(o.makePoints);
+  const shape = processShapeFunction(o.shape);
 
-  for (let i = 0; i < o.maxPoints; i += 1) {
+  for (let i = 0; i < o.num; i += 1) {
     const angle = rand(0, Math.PI * 2);
     // This is a dodgey way to try and even out the distribution so there isn't
     // clumping at the center. Todo in future is make a linear propbability
     // distribution
     const radius = rand(rand(0, o.radius / 2), o.radius);
-    points.push(...makePoints([
+    points.push(...shape([
       radius * Math.cos(angle) + position.x,
       radius * Math.sin(angle) + position.y,
-    ], o.pointSize));
+    ], o.size));
   }
   return points;
 };
 
 
 /**
- * Options object to generate random points within a circle.
+ * Options object to generate shapes at random positions within a rectangle.
  *
- * @property {number} [maxPoints] number of points to generate (`10`)
- * @property {number} [pointSize] size of each point (`0.01`)
+ * @property {number} [maxPoints] number of shapes to generate (`10`)
+ * @property {number} [pointSize] size of each shape (`0.01`)
  * @property {number} [width] width of rectangle (`1`)
  * @property {number} [height] height of rectangle (`1`)
- * @property {TypeParsablePoint} [position] center position of polygon (`[0, 0]`)
- * @property {function([number, number], number): Array<number>} [makePoints]
- * use this function to customize point creation. By default a square of two
- * triangles is created (six vertices). The function takes as input the [x, y]
- * position of the center point and `pointSize` and outputs an array of vertices
- * of triangles with interlaced x and y coordinates. For example:
+ * @property {TypeParsablePoint} [position] center position of rectangle (`[0, 0]`)
+ * @property {function(Point, number): Array<number> | number} [shape]
+ * By default a square of two triangles is created (six vertices). Use a
+ * `number` to create a regular polygon with `number` sides. Use a custom
+ * function to make a custom shape. The function takes as input the [x, y]
+ * position of the point to build the shape around, and `size`. It outputs an
+ * array of interlaced x and y coordinates of triangle vertices - i.e.:
  * [x1, y1, x2, y2, x3, y3, ....]
  */
-export type OBJ_RectangleCloudPoints = {
+export type OBJ_RectangleCloudShapes = {
   width?: number,
   height?: number,
   position?: TypeParsablePoint,
-  maxPoints?: number,
-  makePoints?: ([number, number], number) => Array<number>,
-  pointSize?: number,
+  num?: number,
+  shape?: ([number, number], number) => Array<number>,
+  size?: number,
 };
 
 /**
  * Generate random points within a rectangle.
  *
- * @param {OBJ_RectangleCloudPoints} options
+ * @param {OBJ_RectangleCloudShapes} options
  * @return {Array<number>} array of interlaced x and y coordinates of vertices
  */
-const rectangleCloudShapes = (options: OBJ_RectangleCloudPoints) => {
+const rectangleCloudShapes = (options: OBJ_RectangleCloudShapes) => {
   const defaultOptions = {
     width: 1,
     height: 1,
     position: [0, 0],
-    maxPoints: 10,
-    pointSize: 0.01,
-    makePoints: squareFill.bind(this),
+    num: 10,
+    size: 0.01,
+    shape: squareFill.bind(this),
   };
   const o = joinObjects({}, defaultOptions, options);
   const position = getPoint(o.position);
   const points = [];
-  const makePoints = processShapeFunction(o.makePoints);
+  const shape = processShapeFunction(o.shape);
 
-  for (let i = 0; i < o.maxPoints; i += 1) {
+  for (let i = 0; i < o.num; i += 1) {
     const x = rand(-o.width / 2, o.width / 2) + position.x;
     const y = rand(-o.height / 2, o.height / 2) + position.y;
-    points.push(...makePoints([x, y], o.pointSize));
+    points.push(...shape([x, y], o.size));
   }
   return points;
 };
@@ -983,7 +1001,7 @@ export {
   imageToShapes,
   getPixels,
   getPolygonCorners,
-  polygonCloudPoints,
-  circleCloudPoints,
+  polygonCloudShapes,
+  circleCloudShapes,
   rectangleCloudShapes,
 };
