@@ -555,6 +555,12 @@ export type OBJ_PolylineToShapes = {
 /**
  * `polylineToShapes` distributes a number of shapes equally along a polyline.
  *
+ * ![](./apiassets/polylineToShapes.gif)
+ *
+ * ![](./apiassets/polylineToShapes2.gif)
+ *
+ * ![](./apiassets/polylineToShapes3.gif)
+ *
  * The polyline is defined by an array of points, where each point is a corner
  * in the polyline
  *
@@ -566,10 +572,102 @@ export type OBJ_PolylineToShapes = {
  *
  * @param {OBJ_PolylineToShapes} options
  * @return {[Array<number>, Array<number>]} [vertices, colors]
+ *
+ * @example
+ * const figure = new Fig.Figure();
+ *
+ * const { polylineToShapes, getPolygonCorners } = Fig.tools.morph;
+ *
+ * const [square] = polylineToShapes({
+ *   points: [[0.5, 0], [0, 0.5], [-0.5, 0], [0, -0.5]],
+ *   num: 50,
+ *   size: 0.03,
+ *   close: true,
+ * });
+ *
+ *
+ * const [circle] = polylineToShapes({
+ *   points: getPolygonCorners({ radius: 0.5, sides: 30 }),
+ *   num: 50,
+ *   size: 0.03,
+ *   close: true,
+ * });
+ *
+ * const m = figure.add({
+ *   make: 'morph',
+ *   points: [square, circle],
+ *   color: [1, 0, 0, 1],
+ * });
+ *
+ * m.animations.new()
+ *   .morph({ start:0, target: 1, duration: 2 })
+ *   .start();
+ *
+ * @example
+ * const figure = new Fig.Figure();
+ *
+ * const { polylineToShapes, getPolygonCorners } = Fig.tools.morph;
+ *
+ * const [square] = polylineToShapes({
+ *   points: [[-0.5, 0], [0.5, 0]],
+ *   num: 500,
+ *   size: 0.02,
+ *   shape: 'hex',
+ * });
+ *
+ * const [circle] = polylineToShapes({
+ *   points: getPolygonCorners({ radius: 0.5, sides: 6, rotation: Math.PI / 2 }),
+ *   num: 500,
+ *   size: 0.02,
+ *   close: true,
+ *   shape: 'hex',
+ * });
+ *
+ * const m = figure.add({
+ *   make: 'morph',
+ *   points: [square, circle],
+ *   color: [1, 0, 0, 1],
+ * });
+ *
+ * m.animations.new()
+ *   .morph({ start:0, target: 1, duration: 2 })
+ *   .start();
+ *
+ * @example
+ * const figure = new Fig.Figure();
+ *
+ * const { polylineToShapes, getPolygonCorners } = Fig.tools.morph;
+ *
+ * const [square] = polylineToShapes({
+ *   points: getPolygonCorners({ radius: 0.5, sides: 4, rotation: Math.PI / 4 }),
+ *   num: 500,
+ *   close: true,
+ * });
+ *
+ * const [circle] = polylineToShapes({
+ *   points: getPolygonCorners({ radius: 0.25, sides: 100, rotation: Math.PI / 4 }) * ,
+ *   num: 500,
+ *   close: true,
+ * });
+ *
+ * for (let i = 0; i < 10; i += 1) {
+ *   const m = figure.add({
+ *     make: 'morph',
+ *     points: [square, circle],
+ *     position: [0.2 - i / 30, 0.2 - i / 30],
+ *     color: [1 - i / 10, 0, i / 10, 1],
+ *   });
+ *
+ *   m.animations.new()
+ *     .delay(2 - i / 10)
+ *     .morph({ start: 0, target: 1, duration: 2 })
+ *     .delay(2)
+ *     .morph({ start: 1, target: 0, duration: 2 })
+ *     .start();
+ * }
  */
 function polylineToShapes(options: OBJ_PolylineToShapes) {
   const defaultOptions = {
-    num: null,
     close: false,
     size: 0.01,
     shape: squareFill.bind(this),
