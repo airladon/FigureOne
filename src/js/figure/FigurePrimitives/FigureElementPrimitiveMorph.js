@@ -57,8 +57,6 @@ import type { OBJ_AnimationStep } from '../Animation/AnimationStep';
    * that loading is ongoing).
    *
    * @example
-   * const figure = new Fig.Figure();
-   *
    * const { polylineToShapes, getPolygonCorners } = Fig.tools.morph;
    * const { range } = Fig.tools.math;
    *
@@ -114,7 +112,6 @@ import type { OBJ_AnimationStep } from '../Animation/AnimationStep';
    *   .start();
    *
    * @example
-   * const figure = new Fig.Figure();
    * const { imageToShapes, circleCloudShapes, polylineToShapes } = Fig.tools.morph;
    * const { range } = Fig.tools.math;
    *
