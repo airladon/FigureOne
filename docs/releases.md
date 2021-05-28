@@ -73,7 +73,7 @@ API cleanup
 * Add tutorial `Performance Optimization`
 * Add example `Electric Field` for shader example
 
-## 0.9.1
+## 0.10.0
 * Add morph primitive for morphing hundreds of thousands of vertices efficiently.
 * Add morphing helper functions:
    - pointsToShapes
