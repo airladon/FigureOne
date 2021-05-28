@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-conditional-expect */
 import * as morph from './morph';
 import getImageData from './getImageData';
 import { round } from './math';

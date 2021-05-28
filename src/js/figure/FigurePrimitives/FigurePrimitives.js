@@ -26,7 +26,9 @@ import DrawingObject from '../DrawingObjects/DrawingObject';
 // eslint-disable-next-line import/no-cycle
 import GLObject from '../DrawingObjects/GLObject/GLObject';
 import type { TypeGLUniform, TypeGLBufferType, TypeGLBufferUsage } from '../DrawingObjects/GLObject/GLObject';
+// eslint-disable-next-line import/no-cycle
 import { CustomAnimationStep } from '../Animation/Animation';
+// eslint-disable-next-line import/no-cycle
 import FigureElementPrimitiveMorph from './FigureElementPrimitiveMorph';
 // import VertexObject from '../DrawingObjects/VertexObject/VertexObject';
 // import {
@@ -2495,9 +2497,10 @@ export default class FigurePrimitives {
         if (colors.length === 4) {
           colors = Array(4 * glObject.numVertices);
           for (let i = 0; i < colors.length; i += 4) {
-            colors[i] = colorsIn[0];
-            colors[i + 1] = colorsIn[1];
-            colors[i + 2] = colorsIn[2];
+            // eslint-disable-next-line
+            colors[i] = colorsIn[0];      // eslint-disable-next-line
+            colors[i + 1] = colorsIn[1];  // eslint-disable-next-line
+            colors[i + 2] = colorsIn[2];  // eslint-disable-next-line
             colors[i + 3] = colorsIn[3];
           }
         }
