@@ -38,6 +38,166 @@ void main() {
         + '}',
     vars: ['a_position', 'a_texcoord', 'u_matrix', 'u_z'],
   },
+  morph4: {
+    src: `
+attribute vec2 a_pos0;
+attribute vec2 a_pos1;
+attribute vec2 a_pos2;
+attribute vec2 a_pos3;
+uniform mat3 u_matrix;
+uniform float u_percent;
+uniform int u_from;
+uniform int u_to;
+
+void main() {
+  vec2 fromPos = a_pos0;
+  vec2 toPos = a_pos1;
+  vec2 positions[4];
+
+  positions[0] = a_pos0;
+  positions[1] = a_pos1;
+  positions[2] = a_pos2;
+  positions[3] = a_pos3;
+
+  for (int i = 0; i < 4; i++) {
+    if (u_from == i) {
+      fromPos = positions[i];
+      break;
+    }
+  }
+  for (int i = 0; i < 4; i++) {
+    if (u_to == i) {
+      toPos = positions[i];
+      break;
+    }
+  }
+
+  vec2 newPosition = (toPos - fromPos) * u_percent + fromPos;
+  gl_Position = vec4((u_matrix * vec3(newPosition.xy, 1)).xy, 0, 1);
+}
+`,
+    vars: ['a_pos0', 'a_pos1', 'a_pos2', 'a_pos3', 'u_matrix', 'u_percent', 'u_from', 'u_to'],
+  },
+  morpher: (num: number, vertexColor: boolean) => {
+    let aPosDefs = '';
+    let aPosArray = `vec2 fromPos = a_pos0;\n  vec2 toPos = a_pos1;\n  vec2 positions[${num}];\n`;
+    let aColDefs = '';
+    let aColArray = '';
+    const vars = ['u_matrix', 'u_percent'];
+    if (vertexColor) {
+      aColArray = `vec4 fromCol = a_col0;\n vec4 toCol = a_col1;\n vec4 colors[${num}];`;
+    }
+    for (let i = 0; i < num; i += 1) {
+      vars.push(`a_pos${i}`);
+      aPosDefs = `${aPosDefs}attribute vec2 a_pos${i};\n`;
+      aPosArray = `${aPosArray}  positions[${i}] = a_pos${i};\n`;
+      if (vertexColor) {
+        aColDefs = `${aColDefs}attribute vec4 a_col${i};\n`;
+        aColArray = `${aColArray}  colors[${i}] = a_col${i};\n`;
+        vars.push(`a_col${i}`);
+      }
+    }
+    const uniforms = 'uniform int u_from;\nuniform int u_to;\n';
+    vars.push('u_to');
+    vars.push('u_from');
+    let toCol = '';
+    let fromCol = '';
+    let setVarying = '';
+    if (vertexColor) {
+      aColDefs = `${aColDefs}varying vec4 v_col;\n`;
+      toCol = 'toCol = colors[i];\n';
+      fromCol = 'fromCol = colors[i];\n';
+      setVarying = 'v_col = (toCol - fromCol) * u_percent + fromCol;\n';
+    }
+
+    const src = `
+${aPosDefs}
+${aColDefs}
+uniform mat3 u_matrix;
+uniform float u_percent;
+${uniforms}
+
+void main() {
+  ${aPosArray}
+  ${aColArray}
+
+  for (int i = 0; i < ${num}; i++) {
+    if (u_from == i) {
+      fromPos = positions[i];
+      ${fromCol}
+      break;
+    }
+  }
+  for (int i = 0; i < ${num}; i++) {
+    if (u_to == i) {
+      toPos = positions[i];
+      ${toCol}
+      break;
+    }
+  }
+
+  vec2 newPosition = (toPos - fromPos) * u_percent + fromPos;
+  gl_Position = vec4((u_matrix * vec3(newPosition.xy, 1)).xy, 0, 1);
+  ${setVarying}
+}
+`;
+    return { src, vars };
+  },
+  morph4VertexColor: {
+    src: `
+attribute vec2 a_pos0;
+attribute vec2 a_pos1;
+attribute vec2 a_pos2;
+attribute vec2 a_pos3;
+attribute vec4 a_col0;
+attribute vec4 a_col1;
+attribute vec4 a_col2;
+attribute vec4 a_col3;
+uniform mat3 u_matrix;
+uniform float u_percent;
+uniform int u_from;
+uniform int u_to;
+varying vec4 v_col;
+
+void main() {
+  vec2 fromPos = a_pos0;
+  vec2 toPos = a_pos1;
+  vec2 positions[4];
+  positions[0] = a_pos0;
+  positions[1] = a_pos1;
+  positions[2] = a_pos2;
+  positions[3] = a_pos3;
+
+  vec4 fromCol = a_col0;
+  vec4 toCol = a_col1;
+  vec4 colors[4];
+  colors[0] = a_col0;
+  colors[1] = a_col1;
+  colors[2] = a_col2;
+  colors[3] = a_col3;
+
+  for (int i = 0; i < 4; i++) {
+    if (u_from == i) {
+      fromPos = positions[i];
+      fromCol = colors[i];
+      break;
+    }
+  }
+  for (int i = 0; i < 4; i++) {
+    if (u_to == i) {
+      toPos = positions[i];
+      toCol = colors[i];
+      break;
+    }
+  }
+
+  vec2 newPosition = (toPos - fromPos) * u_percent + fromPos;
+  gl_Position = vec4((u_matrix * vec3(newPosition.xy, 1)).xy, 0, 1);
+  v_col = (toCol - fromCol) * u_percent + fromCol;
+}
+`,
+    vars: ['a_pos0', 'a_pos1', 'a_pos2', 'a_pos3', 'a_col0', 'a_col1', 'a_col2', 'a_col3', 'u_matrix', 'u_percent', 'u_from', 'u_to'],
+  },
 };
 
 const fragment = {
@@ -101,8 +261,8 @@ const fragment = {
 };
 
 const getShaders = (
-  vName: string | { src: string, vars: Array<string> } = 'simple',
-  fName: string | { src: string, vars: Array<string> } = 'simple',
+  vName: string | { src: string, vars: Array<string> } | Array<string | number | boolean> = 'simple',
+  fName: string | { src: string, vars: Array<string> } | Array<string | number | boolean> = 'simple',
 ) => {
   let vertexSource = '';
   let fragmentSource = '';
@@ -113,9 +273,15 @@ const getShaders = (
     }
     vertexSource = vertex[vName].src;
     vars.push(...vertex[vName].vars);
-  } else {
+  } else if (Array.isArray(vName) && typeof vName[0] === 'string') {
+    const shader = vertex[vName[0]](...vName.slice(1));
+    vertexSource = shader.src;
+    vars.push(...shader.vars);
+  } else if (!Array.isArray(vName)) {
     vertexSource = vName.src;
     vars.push(...vName.vars);
+  } else {  // $FlowFixMe
+    throw new Error(`Vertex shader definition incorrect: ${vName}`);
   }
   if (typeof fName === 'string') {
     if (fragment[fName] == null) {
@@ -123,10 +289,21 @@ const getShaders = (
     }
     fragmentSource = fragment[fName].src;
     vars.push(...fragment[fName].vars);
-  } else {
+  } else if (Array.isArray(fName) && typeof fName[0] === 'string') {
+    const shader = vertex[fName[0]](...fName.slice(1));
+    fragmentSource = shader.src;
+    vars.push(...shader.vars);
+  } else if (!Array.isArray(fName)) {
     fragmentSource = fName.src;
     vars.push(...fName.vars);
+  } else {  // $FlowFixMe
+    throw new Error(`Fragment shader definition incorrect: ${fName}`);
   }
+  // } else {
+  //   fragmentSource = fName.src;
+  //   vars.push(...fName.vars);
+  // }
+  // console.log(vertexSource, vars)
   return {
     vertexSource,
     fragmentSource,

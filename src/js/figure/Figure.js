@@ -192,7 +192,7 @@ export type OBJ_Figure = {
  * <body>
  *     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
  *     </div>
- *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.9.0/figureone.min.js'></script>
+ *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.10.0/figureone.min.js'></script>
  *     <script type="text/javascript" src='./index.js'></script>
  * </body>
  * </html>

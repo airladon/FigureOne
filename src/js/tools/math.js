@@ -323,10 +323,16 @@ function sinusoidAbs(
 function range(start: number, stop: number, step: number = 1, precision: number = 8) {
   const out = [];
   if (stop > start) {
+    if (step <= 0) {
+      return [];
+    }
     for (let i = start; i <= stop; i = round(i + step, precision)) {
       out.push(i);
     }
   } else {
+    if (step >= 0) {
+      return [];
+    }
     for (let i = start; i >= stop; i = round(i + step, precision)) {
       out.push(i);
     }

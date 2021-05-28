@@ -1,7 +1,7 @@
 import {
   round, decelerate, easeinout, clipMag, clipValue, randInt, rand,
   randElement, removeRandElement, randElements, easein, easeout,
-  sinusoid, roundNum, linear, randSign, rand2D, triangle,
+  sinusoid, roundNum, linear, randSign, rand2D, triangle, range,
 } from './math';
 
 describe('Math tools testing', () => {
@@ -486,6 +486,16 @@ describe('Math tools testing', () => {
         }
       }
       expect(isValidResult).toBe(true);
+    });
+  });
+  describe('Range', () => {
+    test('positive', () => {
+      const r = range(0, 1, 0.5);
+      expect(r).toEqual([0, 0.5, 1]);
+    });
+    test('negative', () => {
+      const r = range(1, 0, -0.5);
+      expect(r).toEqual([1, 0.5, 0]);
     });
   });
 });

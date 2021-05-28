@@ -72,3 +72,14 @@ API cleanup
 * Add GL primitive, that can define shaders, buffers and uniforms directly
 * Add tutorial `Performance Optimization`
 * Add example `Electric Field` for shader example
+
+## 0.10.0
+* Add morph primitive for morphing hundreds of thousands of vertices efficiently.
+* Add morphing helper functions:
+   - pointsToShapes
+   - polylineToShapes
+   - imageToShapes
+   - polygonCloudeShapes
+   - circleCloudShapes
+   - rectangleCloudShapes
+   - getPolygonCorners

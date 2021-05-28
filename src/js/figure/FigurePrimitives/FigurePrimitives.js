@@ -26,6 +26,10 @@ import DrawingObject from '../DrawingObjects/DrawingObject';
 // eslint-disable-next-line import/no-cycle
 import GLObject from '../DrawingObjects/GLObject/GLObject';
 import type { TypeGLUniform, TypeGLBufferType, TypeGLBufferUsage } from '../DrawingObjects/GLObject/GLObject';
+// eslint-disable-next-line import/no-cycle
+import { CustomAnimationStep } from '../Animation/Animation';
+// eslint-disable-next-line import/no-cycle
+import FigureElementPrimitiveMorph from './FigureElementPrimitiveMorph';
 // import VertexObject from '../DrawingObjects/VertexObject/VertexObject';
 // import {
 //   PolyLine, PolyLineCorners,
@@ -367,6 +371,29 @@ export type OBJ_GLPrimitive = {
   uniforms?: Array<OBJ_GLUniform>,
   glPrimitive?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
 };
+
+/**
+ * {@link morph} options object.
+ *
+ * @property {string} name primitive name
+ * @property {Array<Array<number>>} pointArrays point arrays to morph between.
+ * Each point array is an array of consecutive x, y values of points. For
+ * example: [x1, y1, x2, y2, x3, y3, ...].
+ * @property {TypeColor | Array<TypeColor | Array<TypeColor>>} color colors to
+ * be assigned to the points
+ * @property {Array<String>} names optional names for each point array. Names
+ * can be used when using the morph animation step instead of point array
+ * indeces.
+ * @property {'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'} [glPrimitive]
+ * glPrimitive is the same for all point arrays (`'TRIANGLES'`)
+ */
+export type OBJ_Morph = {
+  name?: string,
+  pointArrays: Array<Array<number>>,
+  color: TypeColor | Array<TypeColor | Array<TypeColor>>,
+  names: Array<string>,
+  glPrimitive: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
+}
 
 /* eslint-disable max-len */
 /**
@@ -2401,44 +2428,131 @@ export default class FigurePrimitives {
     element.custom.getUniform = element.drawingObject.getUniform.bind(element.drawingObject);
     element.dimColor = this.defaultDimColor.slice();
 
-    // element.custom.updateGeneric = function update(updateOptions: {
-    //   points?: Array<TypeParsablePoint>,
-    //   drawBorder?: TypeParsableBorder,
-    //   drawBorderBuffer?: TypeParsableBorder,
-    //   border?: TypeParsableBorder | 'draw' | 'buffer' | 'rect' | number,
-    //   touchBorder?: TypeParsableBorder | 'draw' | 'border' | 'rect' | number | 'buffer',
-    //   holeBorder?: TypeParsableBorder,
-    //   copy?: Array<CPY_Step>,
-    //   drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
-    // }) {
-    //   const o = updateOptions;
-    //   if (o.copy != null && !Array.isArray(o.copy)) {
-    //     o.copy = [o.copy];
-    //   }
-    //   if (o.points != null) { // $FlowFixMe
-    //     o.points = getPoints(o.points);
-    //   }
-    //   if (o.drawBorder != null) { // $FlowFixMe
-    //     element.drawBorder = getBorder(o.drawBorder);
-    //   } else if (o.points != null) {
-    //     element.drawBorder = [o.points];
-    //   }
-    //   if (o.drawBorderBuffer != null) { // $FlowFixMe
-    //     element.drawBorderBuffer = getBorder(o.drawBorderBuffer);
-    //   } else element.drawBorderBuffer = element.drawBorder;
-    //   if (o.border != null) { // $FlowFixMe
-    //     element.border = getBorder(o.border);
-    //   }
-    //   if (o.touchBorder != null) { // $FlowFixMe
-    //     element.touchBorder = getBorder(o.touchBorder);
-    //   }
-    //   if (o.holeBorder != null) { // $FlowFixMe
-    //     element.holeBorder = getBorder(o.holeBorder);
-    //   }
-    //   element.drawingObject.change(o);
-    // };
-    // element.custom.updateGeneric(options);
-    // element.custom.updatePoints = element.custom.updateGeneric;
+    element.timeKeeper = this.timeKeeper;
+    element.recorder = this.recorder;
+    setupPulse(element, options);
+    return element;
+  }
+
+  /**
+   * {@link FigureElementPrimitive} that draws a generic shape.
+   * @see {@link FigureElementPrimitiveMorph} and {@link OBJ_Morph} for
+   * examples and options.
+   */
+  morph(...optionsIn: Array<OBJ_Morph>) {
+    const defaultOptions = {
+      name: generateUniqueId('primitive_'),
+      color: this.defaultColor,
+      points: [],
+      glPrimitive: 'TRIANGLES',
+      transform: new Transform('morph').scale(1, 1).rotate(0).translate(0, 0),
+      position: [0, 0],
+    };
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
+
+    options.transform = getTransform(options.transform);
+    if (options.position != null) {
+      options.position = getPoint(options.position);
+      options.transform.updateTranslation(options.position);
+    }
+
+    let colorVertex = false;
+    let fragShader = 'simple';
+    if (Array.isArray(options.color[0])) {
+      colorVertex = true;
+      fragShader = 'vertexColor';
+    }
+
+    const glObject = new GLObject(
+      this.webgl[0],
+      ['morpher', options.points.length, colorVertex],
+      fragShader,
+    );
+    glObject.setPrimitive(options.glPrimitive);
+
+    const shapeNameMap = {};
+    if (options.names != null) {
+      options.names.forEach((name, index) => { shapeNameMap[name] = index; });
+    }
+    options.points.forEach((points, index) => {
+      const attribute = `a_pos${index}`;
+      glObject.numVertices = points.length / 2;
+      const defaultBuffer = {
+        type: 'FLOAT',
+        normalize: false,
+        stride: 0,
+        offset: 0,
+        usage: 'STATIC',
+        size: 2,
+      };
+      const b = joinObjects({}, defaultBuffer);
+      glObject.addBuffer(
+        attribute, b.size, points, b.type,
+        b.normalize, b.stride, b.offset, b.usageIn,
+      );
+    });
+    if (colorVertex) {
+      options.color.forEach((colorsIn, index) => {
+        let colors = colorsIn;
+        if (colors.length === 4) {
+          colors = Array(4 * glObject.numVertices);
+          for (let i = 0; i < colors.length; i += 4) {
+            // eslint-disable-next-line
+            colors[i] = colorsIn[0];      // eslint-disable-next-line
+            colors[i + 1] = colorsIn[1];  // eslint-disable-next-line
+            colors[i + 2] = colorsIn[2];  // eslint-disable-next-line
+            colors[i + 3] = colorsIn[3];
+          }
+        }
+        const attribute = `a_col${index}`;
+        const defaultBuffer = {
+          type: 'FLOAT',
+          normalize: false,
+          stride: 0,
+          offset: 0,
+          usage: 'STATIC',
+          size: 4,
+        };
+        const b = joinObjects({}, defaultBuffer);
+        glObject.addBuffer(
+          attribute, b.size, colors, b.type,
+          b.normalize, b.stride, b.offset, b.usageIn,
+        );
+      });
+      options.color = this.defaultColor;
+    }
+    glObject.addUniform('u_from', 1, 'INT');
+    glObject.addUniform('u_to', 1, 'INT');
+    glObject.addUniform('u_percent', 1, 'FLOAT');
+
+    const element = new FigureElementPrimitiveMorph(
+      glObject, options.transform, options.color, this.limits, null, options.name,
+    );
+    element.shapeNameMap = shapeNameMap;
+
+    element.setPoints(0);
+
+    element.fnMap.add('_morphCallback', (percentage: number, customProperties: Object) => {
+      const { start, target } = customProperties;
+      element.setPointsBetween(start, target, percentage);
+    });
+    element.animations.morph = (...opt) => {
+      const o = joinObjects({}, {
+        progression: 'easeinout',
+        element,
+      }, ...opt);
+      o.customProperties = {
+        start: o.start == null ? 0 : o.start,
+        target: o.target == null ? 1 : o.target,
+      };
+      o.callback = '_morphCallback';
+      o.timeKeeper = this.timeKeeper;
+      return new CustomAnimationStep(o);
+    };
+    element.animations.customSteps.push({
+      step: element.animations.morph.bind(this),
+      name: 'morph',
+    });
     element.timeKeeper = this.timeKeeper;
     element.recorder = this.recorder;
     setupPulse(element, options);
