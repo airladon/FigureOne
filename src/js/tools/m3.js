@@ -108,7 +108,7 @@ function rotationMatrixZ(angle: number): Type3DMatrix {
   ];
 }
 
-function rotationMatrixXYZ(rx: number, ry: number, rz: number): Type3DMatrix {
+function rotationMatrix(rx: number, ry: number, rz: number): Type3DMatrix {
   const cx = Math.cos(rx);
   const sx = Math.sin(rx);
   const cy = Math.cos(ry);
@@ -141,7 +141,7 @@ function rotationMatrixVector(angle: number, x: number, y: number, z: number): T
 }
 
 function rotate(m: Type3DMatrix, rx: number, ry: number, rz: number): Type3DMatrix {
-  return mul(m, rotationMatrixXYZ(rx, ry, rz));
+  return mul(m, rotationMatrix(rx, ry, rz));
   // const c = Math.cos(angle);
   // const s = Math.sin(angle);
   // return [
@@ -195,7 +195,7 @@ export {
   rotationMatrixX,
   rotationMatrixY,
   rotationMatrixZ,
-  rotationMatrixXYZ,
+  rotationMatrix,
   rotationMatrixVector,
   rotationMatrixUnitVector,
 };

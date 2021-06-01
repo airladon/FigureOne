@@ -93,8 +93,8 @@ describe('g2 Point', () => {
     let p3;
     beforeEach(() => {
       p0 = new Point(0, 0);
-      p1 = new Point(1, 1);
-      p2 = new Point(-1, -1);
+      p1 = new Point(1, 1, 1);
+      p2 = new Point(-1, -1, -1);
       p3 = new Point(-1, 1);
     });
     test('Unclipped points number input', () => {
@@ -107,14 +107,14 @@ describe('g2 Point', () => {
       expect(p2.clip(-2, -0.5)).toEqual(p2);
     });
     test('Unclipped points Point input', () => {
-      expect(p0.clip(new Point(-2, -2), new Point(2, 2))).toEqual(p0);
-      expect(p1.clip(new Point(-2, -2), new Point(2, 2))).toEqual(p1);
-      expect(p2.clip(new Point(-2, -2), new Point(2, 2))).toEqual(p2);
-      expect(p3.clip(new Point(-2, -2), new Point(2, 2))).toEqual(p3);
+      expect(p0.clip(new Point(-2, -2, -2), new Point(2, 2, 2))).toEqual(p0);
+      expect(p1.clip(new Point(-2, -2, -2), new Point(2, 2, 2))).toEqual(p1);
+      expect(p2.clip(new Point(-2, -2, -2), new Point(2, 2, 2))).toEqual(p2);
+      expect(p3.clip(new Point(-2, -2, -2), new Point(2, 2, 2))).toEqual(p3);
 
-      expect(p1.clip(new Point(0.5, 0.5), new Point(2, 2))).toEqual(p1);
-      expect(p2.clip(new Point(-2, -2), new Point(-0.5, -0.5))).toEqual(p2);
-      expect(p3.clip(new Point(-2, 0.5), new Point(-0.5, 2))).toEqual(p3);
+      expect(p1.clip(new Point(0.5, 0.5, 0.5), new Point(2, 2, 2))).toEqual(p1);
+      expect(p2.clip(new Point(-2, -2, -2), new Point(-0.5, -0.5, -0.5))).toEqual(p2);
+      expect(p3.clip(new Point(-2, 0.5, 0), new Point(-0.5, 2, 0))).toEqual(p3);
     });
     test('Unclipped points null input', () => {
       expect(p0.clip(null, null)).toEqual(p0);
@@ -123,14 +123,14 @@ describe('g2 Point', () => {
       expect(p3.clip(null, null)).toEqual(p3);
     });
     test('Clipped points number input', () => {
-      expect(p0.clip(-2, -1)).toEqual(new Point(-1, -1));
-      expect(p0.clip(1, 2)).toEqual(new Point(1, 1));
-      expect(p1.clip(-3, -2)).toEqual(new Point(-2, -2));
-      expect(p1.clip(2, 3)).toEqual(new Point(2, 2));
-      expect(p2.clip(-3, -2)).toEqual(new Point(-2, -2));
-      expect(p2.clip(2, 3)).toEqual(new Point(2, 2));
-      expect(p3.clip(-2, 0)).toEqual(new Point(-1, 0));
-      expect(p3.clip(0, 2)).toEqual(new Point(0, 1));
+      expect(p0.clip(-2, -1)).toEqual(new Point(-1, -1, -1));
+      expect(p0.clip(1, 2)).toEqual(new Point(1, 1, 1));
+      expect(p1.clip(-3, -2)).toEqual(new Point(-2, -2, -2));
+      expect(p1.clip(2, 3)).toEqual(new Point(2, 2, 2));
+      expect(p2.clip(-3, -2)).toEqual(new Point(-2, -2, -2));
+      expect(p2.clip(2, 3)).toEqual(new Point(2, 2, 2));
+      expect(p3.clip(-2, 0)).toEqual(new Point(-1, 0, 0));
+      expect(p3.clip(0, 2)).toEqual(new Point(0, 1, 0));
     });
     test('Fully clipped points Point input', () => {
       expect(p0.clip(new Point(-2, -2), new Point(-1, -1)))
@@ -159,9 +159,9 @@ describe('g2 Point', () => {
         .toEqual(new Point(0, 1));
     });
     test('Partial clipped with null', () => {
-      expect(p0.clip(null, -1)).toEqual(new Point(-1, -1));
-      expect(p0.clip(-1, null)).toEqual(new Point(0, 0));
-      expect(p0.clip(1, null)).toEqual(new Point(1, 1));
+      expect(p0.clip(null, -1)).toEqual(new Point(-1, -1, -1));
+      expect(p0.clip(-1, null)).toEqual(new Point(0, 0, 0));
+      expect(p0.clip(1, null)).toEqual(new Point(1, 1, 1));
     });
   });
   describe('Points can be scaled', () => {

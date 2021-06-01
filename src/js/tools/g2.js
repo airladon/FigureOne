@@ -552,116 +552,116 @@ class Point extends Point3 {
     return new Point(this.x * scalar, this.y * scalar);
   }
 
-  /**
-   * Subtract (x, y) values or a {@link Point} and return the difference as a new {@link Point}
-   * @example
-   * p = new Point(3, 3);
-   * d = p.sub(1, 1)
-   * // d = Point{x: 2, y: 2}
-   *
-   * p = new Point(3, 3);
-   * q = new Point(1, 1);
-   * d = p.sub(q)
-   * // d = Point{x: 2, y: 2}
-   */
-  sub(pointOrX: Point | number, y: number = 0): Point {
-    if (pointOrX instanceof Point) {
-      return new Point(this.x - pointOrX.x, this.y - pointOrX.y);
-    }
-    return new Point(this.x - pointOrX, this.y - y);
-  }
+  // /**
+  //  * Subtract (x, y) values or a {@link Point} and return the difference as a new {@link Point}
+  //  * @example
+  //  * p = new Point(3, 3);
+  //  * d = p.sub(1, 1)
+  //  * // d = Point{x: 2, y: 2}
+  //  *
+  //  * p = new Point(3, 3);
+  //  * q = new Point(1, 1);
+  //  * d = p.sub(q)
+  //  * // d = Point{x: 2, y: 2}
+  //  */
+  // sub(pointOrX: Point | number, y: number = 0): Point {
+  //   if (pointOrX instanceof Point) {
+  //     return new Point(this.x - pointOrX.x, this.y - pointOrX.y);
+  //   }
+  //   return new Point(this.x - pointOrX, this.y - y);
+  // }
 
-  /**
-   * Add (x, y) values or a {@link Point} and return the sum as a new {@link Point}
-   * @example
-   * p = new Point(3, 3);
-   * d = p.add(1, 1)
-   * // d = Point{x: 4, y: 4}
-   *
-   * p = new Point(3, 3);
-   * q = new Point(1, 1);
-   * d = p.add(q)
-   * // d = Point{x: 4, y: 4}
-   */
-  add(pointOrX: Point | number, y: number = 0): Point {
-    if (pointOrX instanceof Point) {
-      return new Point(this.x + pointOrX.x, this.y + pointOrX.y);
-    }
-    return new Point(this.x + pointOrX, this.y + y);
-  }
+  // /**
+  //  * Add (x, y) values or a {@link Point} and return the sum as a new {@link Point}
+  //  * @example
+  //  * p = new Point(3, 3);
+  //  * d = p.add(1, 1)
+  //  * // d = Point{x: 4, y: 4}
+  //  *
+  //  * p = new Point(3, 3);
+  //  * q = new Point(1, 1);
+  //  * d = p.add(q)
+  //  * // d = Point{x: 4, y: 4}
+  //  */
+  // add(pointOrX: Point | number, y: number = 0): Point {
+  //   if (pointOrX instanceof Point) {
+  //     return new Point(this.x + pointOrX.x, this.y + pointOrX.y);
+  //   }
+  //   return new Point(this.x + pointOrX, this.y + y);
+  // }
 
-  /**
-   * Return the distance between the point and the origin
-   * @example
-   * p = new Point(1, 1);
-   * d = p.distance();
-   * // d = 1.4142135623730951
-   */
-  distance(toPointIn: TypeParsablePoint | null = null): number {
-    if (toPointIn == null) {
-      return Math.sqrt(this.x * this.x + this.y * this.y);
-    }
-    const toPoint = getPoint(toPointIn);
-    if (toPoint == null) {
-      return this.distance();
-    }
-    return this.sub(toPoint).distance();
-  }
+  // /**
+  //  * Return the distance between the point and the origin
+  //  * @example
+  //  * p = new Point(1, 1);
+  //  * d = p.distance();
+  //  * // d = 1.4142135623730951
+  //  */
+  // distance(toPointIn: TypeParsablePoint | null = null): number {
+  //   if (toPointIn == null) {
+  //     return Math.sqrt(this.x * this.x + this.y * this.y);
+  //   }
+  //   const toPoint = getPoint(toPointIn);
+  //   if (toPoint == null) {
+  //     return this.distance();
+  //   }
+  //   return this.sub(toPoint).distance();
+  // }
 
-  /**
-   * Return a new point with (x, y) values rounded to some precision
-   * @example
-   * p = new Point(1.234, 1.234);
-   * q = p.round(2);
-   * // q = Point{x: 1.23, y: 1.23}
-   */
-  round(precision: number = 8): Point {
-    return new Point(roundNum(this.x, precision), roundNum(this.y, precision));
-  }
+  // /**
+  //  * Return a new point with (x, y) values rounded to some precision
+  //  * @example
+  //  * p = new Point(1.234, 1.234);
+  //  * q = p.round(2);
+  //  * // q = Point{x: 1.23, y: 1.23}
+  //  */
+  // round(precision: number = 8): Point {
+  //   return new Point(roundNum(this.x, precision), roundNum(this.y, precision));
+  // }
 
-  /**
-   * Return a new point that is clipped to min and max values from the origin.
-   *
-   * Use a point as a parameter to define different (x, y) min/max values,
-   * a number to define the same (x, y) min/max values, or null to have no
-   * min/max values.
-   * @example
-   * p = new Point(2, 2);
-   * q = p.clip(1, 1);
-   * // q = Point{x: 1, y: 1}
-   *
-   * p = new Point(2, 2);
-   * q = p.clip(1, null);
-   * // q = Point{x: 1, y: 2}
-   *
-   * p = new Point(-2, -2);
-   * minClip = new Point(-1, -1.5);
-   * q = p.clip(minClip, null);
-   * // q = Point{x: -1, y: -1.5}
-   */
-  clip(min: Point | number | null, max: Point | number | null): Point {
-    let minX;
-    let minY;
-    let maxX;
-    let maxY;
-    if (min instanceof Point) {
-      minX = min.x;
-      minY = min.y;
-    } else {
-      minX = min;
-      minY = min;
-    }
-    if (max instanceof Point) {
-      maxX = max.x;
-      maxY = max.y;
-    } else {
-      maxX = max;
-      maxY = max;
-    }
-    const x = clipValue(this.x, minX, maxX);
-    const y = clipValue(this.y, minY, maxY);
-    return new Point(x, y);
-  }
+  // /**
+  //  * Return a new point that is clipped to min and max values from the origin.
+  //  *
+  //  * Use a point as a parameter to define different (x, y) min/max values,
+  //  * a number to define the same (x, y) min/max values, or null to have no
+  //  * min/max values.
+  //  * @example
+  //  * p = new Point(2, 2);
+  //  * q = p.clip(1, 1);
+  //  * // q = Point{x: 1, y: 1}
+  //  *
+  //  * p = new Point(2, 2);
+  //  * q = p.clip(1, null);
+  //  * // q = Point{x: 1, y: 2}
+  //  *
+  //  * p = new Point(-2, -2);
+  //  * minClip = new Point(-1, -1.5);
+  //  * q = p.clip(minClip, null);
+  //  * // q = Point{x: -1, y: -1.5}
+  //  */
+  // clip(min: Point | number | null, max: Point | number | null): Point {
+  //   let minX;
+  //   let minY;
+  //   let maxX;
+  //   let maxY;
+  //   if (min instanceof Point) {
+  //     minX = min.x;
+  //     minY = min.y;
+  //   } else {
+  //     minX = min;
+  //     minY = min;
+  //   }
+  //   if (max instanceof Point) {
+  //     maxX = max.x;
+  //     maxY = max.y;
+  //   } else {
+  //     maxX = max;
+  //     maxY = max;
+  //   }
+  //   const x = clipValue(this.x, minX, maxX);
+  //   const y = clipValue(this.y, minY, maxY);
+  //   return new Point(x, y);
+  // }
 
   /**
    * Transform the point with a 3x3 matrix (2 dimensional transform)
@@ -678,11 +678,11 @@ class Point extends Point3 {
     return new Point(transformedPoint[0], transformedPoint[1]);
   }
 
-  quadraticBezier(p1: Point, p2: Point, t: number) {
-    const bx = quadraticBezier(this.x, p1.x, p2.x, t);
-    const by = quadraticBezier(this.y, p1.y, p2.y, t);
-    return new Point(bx, by);
-  }
+  // quadraticBezier(p1: Point, p2: Point, t: number) {
+  //   const bx = quadraticBezier(this.x, p1.x, p2.x, t);
+  //   const by = quadraticBezier(this.y, p1.y, p2.y, t);
+  //   return new Point(bx, by);
+  // }
 
   /**
    * Rotate a point some angle around a center point

@@ -5,6 +5,7 @@ import {
 } from './math';
 import type { Type3DMatrix } from './m3';
 import * as m3 from './m3';
+import { Line } from './g2';
 
 export type Type3Components = [number, number, number];
 export type ScaleTransform3DComponent = ['s', number, number, number];
@@ -41,9 +42,12 @@ type TypeF1DefPoint3 = {
   state: [number, number, number],
 };
 
+function quadraticBezier(P0: number, P1: number, P2: number, t: number) {
+  return (1 - t) * ((1 - t) * P0 + t * P1) + t * ((1 - t) * P1 + t * P2);
+}
 
 function parsePoint3(pIn: TypeParsablePoint3): Point3 {
-  if (pIn instanceof Point3) {
+  if (pIn instanceof Point3 || typeof pIn === 'object') {
     return pIn;
   }
   if (pIn == null) {
@@ -154,7 +158,7 @@ class Point3 {
   }
 
   _dup(): Point3 {
-    return new Point3(this.x, this.y, this.z);
+    return new this.constructor(this.x, this.y, this.z);
   }
 
   _state(options: { precision: number }) {
@@ -178,7 +182,7 @@ class Point3 {
    * // s = Point{x: 3, y: 3, z: 3};
    */
   scale(scalar: number): Point3 {
-    return new Point3(this.x * scalar, this.y * scalar, this.z * scalar);
+    return new this.constructor(this.x * scalar, this.y * scalar, this.z * scalar);
   }
 
   /**
@@ -194,10 +198,10 @@ class Point3 {
    * // d = Point{x: 2, y: 2, z: 2}
    */
   sub(pointOrX: Point3 | number, y: number = 0, z: number = 0): Point3 {
-    if (pointOrX instanceof Point3) {
-      return new Point3(this.x - pointOrX.x, this.y - pointOrX.y, this.z - pointOrX.z);
+    if (typeof pointOrX === 'number') {
+      return new this.constructor(this.x - pointOrX, this.y - y, this.z - z);
     }
-    return new Point3(this.x - pointOrX, this.y - y, this.z - z);
+    return new this.constructor(this.x - pointOrX.x, this.y - pointOrX.y, this.z - pointOrX.z);
   }
 
   /**
@@ -213,10 +217,10 @@ class Point3 {
    * // d = Point{x: 4, y: 4, z: 4}
    */
   add(pointOrX: Point3 | number, y: number = 0, z: number = 0): Point3 {
-    if (pointOrX instanceof Point3) {
-      return new Point3(this.x + pointOrX.x, this.y + pointOrX.y, this.z + pointOrX.z);
+    if (typeof pointOrX === 'number') {
+      return new this.constructor(this.x + pointOrX, this.y + y, this.z + z);
     }
-    return new Point3(this.x + pointOrX, this.y + y, this.z + z);
+    return new this.constructor(this.x + pointOrX.x, this.y + pointOrX.y, this.z + pointOrX.z);
   }
 
   /**
@@ -245,7 +249,7 @@ class Point3 {
    * // q = Point{x: 1.23, y: 1.23, z: 1.23}
    */
   round(precision: number = 8): Point3 {
-    return new Point3(
+    return new this.constructor(
       roundNum(this.x, precision),
       roundNum(this.y, precision),
       roundNum(this.z, precision),
@@ -279,28 +283,28 @@ class Point3 {
     let maxX;
     let maxY;
     let maxZ;
-    if (min instanceof Point3) {
-      minX = min.x;
-      minY = min.y;
-      minZ = min.z;
-    } else {
+    if (typeof min === 'number' || min == null) {
       minX = min;
       minY = min;
       minZ = min;
-    }
-    if (max instanceof Point3) {
-      maxX = max.x;
-      maxY = max.y;
-      maxZ = max.z;
     } else {
+      minX = min.x;
+      minY = min.y;
+      minZ = min.z;
+    }
+    if (typeof max === 'number' || max == null) {
       maxX = max;
       maxY = max;
       maxZ = max;
+    } else {
+      maxX = max.x;
+      maxY = max.y;
+      maxZ = max.z;
     }
     const x = clipValue(this.x, minX, maxX);
     const y = clipValue(this.y, minY, maxY);
     const z = clipValue(this.z, minZ, maxZ);
-    return new Point3(x, y, z);
+    return new this.constructor(x, y, z);
   }
 
   /**
@@ -315,8 +319,479 @@ class Point3 {
    */
   transformBy(matrix: Type3DMatrix): Point3 {
     const transformedPoint = m3.transform(matrix, this.x, this.y, this.z);
-    return new Point3(transformedPoint[0], transformedPoint[1], transformedPoint[2]);
+    return new this.constructor(transformedPoint[0], transformedPoint[1], transformedPoint[2]);
   }
+
+  quadraticBezier(p1: Point3, p2: Point3, t: number) {
+    const bx = quadraticBezier(this.x, p1.x, p2.x, t);
+    const by = quadraticBezier(this.y, p1.y, p2.y, t);
+    const bz = quadraticBezier(this.z, p1.z, p2.z, t);
+    return new this.constructor(bx, by, bz);
+  }
+
+  /**
+   * Rotate a point some angle around a point
+   * @param angle - in radians
+   * @example
+   * // Rotate a point around the origin
+   * p = new Point(1, 0);
+   * q = p.rotate(Math.PI)
+   * // q = Point{x: -1, y: 0}
+   *
+   * // Rotate a point around (1, 1)
+   * p = new Point(2, 1);
+   * q = p.rotate(Math.PI, new Point(1, 1))
+   * // q = Point{x: 0, y: 1}
+   */
+  rotate(
+    angle: number | Type3DComponents,
+    center?: TypeParsablePoint3 = new Point(0, 0, 0),
+  ): Point3 {
+    let a = [0, 0, 0];
+    if (typeof angle === 'number') {
+      a[2] = angle;
+    } else {
+      a = angle;
+    }
+    // const c = Math.cos(angle);
+    // const s = Math.sin(angle);
+    // const matrix = [c, -s,
+    //                 s, c]; // eslint-disable-line indent
+    // const centerPoint = center;
+    // const pt = this.sub(centerPoint);
+    // return new Point(
+    //   matrix[0] * pt.x + matrix[1] * pt.y + centerPoint.x,
+    //   matrix[2] * pt.x + matrix[3] * pt.y + centerPoint.y
+    // );
+    const c = getPoint3(center);
+    const centered = this.sub(getPoint3(c));
+    const rotated = centered.transformBy(m3.rotationMatrix(a[0], a[1], a[2]));
+
+    return rotated.add(c);
+  }
+
+  /**
+   * Compare two points for equality to some precision
+   * @example
+   * p = new Point(1.123, 1.123);
+   * q = new Point(1.124, 1.124);
+   * p.isEqualTo(q)
+   * // false
+   *
+   * p.isEqualTo(q, 2)
+   * // true
+   */
+  isEqualTo(p: Point3, precision?: number = 8) {
+    let pr = this;
+    let qr = p;
+
+    if (typeof precision === 'number') {
+      pr = this.round(precision);
+      qr = qr.round(precision);
+    }
+    if (pr.x !== qr.x && pr.y !== qr.y && pr.z !== qr.z) {
+      return false;
+    }
+    return true;
+  }
+
+  isWithinDelta(p: Point3, delta: number = 0.0000001) {
+    const dX = Math.abs(this.x - p.x);
+    const dY = Math.abs(this.y - p.y);
+    const dZ = Math.abs(this.z - p.z);
+    if (dX > delta || dY > delta || dZ > delta) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Compare two points for unequality to some precision
+   * @example
+   * p = new Point(1.123, 1.123);
+   * q = new Point(1.124, 1.124);
+   * p.isNotEqualTo(q)
+   * // true
+   *
+   * p.isNotEqualTo(q, 2)
+   * // false
+   */
+  isNotEqualTo(p: Point3, precision?: number) {
+    return !this.isEqualTo(p, precision);
+  }
+
+  isNotWithinDelta(p: Point3, delta: number = 0.0000001) {
+    return !this.isWithinDelta(p, delta);
+  }
+
+  isWithinLine(l: Line, precision?: number) {
+    return l.hasPointOn(this, precision);
+  }
+
+  getShaddowOnLine(l: Line, precision: number = 8) {
+    const shaddow = new Line(this, 1, l.angle() + Math.PI / 2);
+    const { intersect } = shaddow.intersectsWith(l);
+    if (intersect != null && intersect.isWithinLine(l, precision)) {
+      return intersect;
+    }
+    return null;
+  }
+
+  shaddowIsOnLine(l: Line, precision: number = 8) {
+    const intersect = this.getShaddowOnLine(l, precision);
+    if (intersect != null) {
+      return true;
+    }
+    return false;
+  }
+
+  clipToLine(l: Line, precision: number = 8) {
+    if (l.hasPointOn(this, precision)) {
+      return this._dup();
+    }
+    const shaddow = this.getShaddowOnLine(l, precision);
+    if (shaddow != null) {
+      return shaddow;
+    }
+    const d1 = this.distance(l.p1);
+    const d2 = this.distance(l.p2);
+    if (d1 <= d2) {
+      return l.p1._dup();
+    }
+    return l.p2._dup();
+  }
+
+  isOnUnboundLine(l: Line, precision?: number) {
+    return l.hasPointAlong(this, precision);
+  }
+
+  static isLeft(p0: Point, p1: Point, p2: Point) {
+    return (
+      (p1.x - p0.x) * (p2.y - p0.y) - (p2.x - p0.x) * (p1.y - p0.y)
+    );
+  }
+
+  isInPolygon(polygonVertices: Array<Point3>) {
+    let windingNumber = 0;
+    let n = polygonVertices.length - 1;
+    const v = polygonVertices.slice();
+    const p = this;
+    let popLastPoint = false;
+    // polygonVertices needs to have the last vertex the same as the first vertex
+    if (v[0].isNotEqualTo(v[n])) {
+      v.push(v[0]);
+      popLastPoint = true;
+      n += 1;
+    }
+    for (let i = 0; i < n; i += 1) {
+      if (v[i].y <= p.y) {
+        if (v[i + 1].y > p.y) {                // an upward crossing
+          if (Point.isLeft(v[i], v[i + 1], p) > 0) { // P left of  edge
+            windingNumber += 1;                // have  a valid up intersect
+          }
+        }
+      } else if (v[i + 1].y <= p.y) {           // start y > P.y (no test needed)
+        // a downward crossing
+        if (Point.isLeft(v[i], v[i + 1], p) < 0) {    // P right of  edge
+          windingNumber -= 1;      // have  a valid down intersect
+        }
+      }
+    }
+    if (popLastPoint) {
+      v.pop();
+    }
+    if (windingNumber === 0) {
+      return false;
+    }
+    return true;
+  }
+
+  isOnPolygon(polygonVertices: Array<Point3>) {
+    let popLastPoint = false;
+    const p = this;
+    let n = polygonVertices.length - 1;   // Number of sides
+    const v = polygonVertices.slice();
+
+    // polygonVertices needs to have the last vertex the same as the first vertex
+    if (v[0].isNotEqualTo(v[n])) {
+      v.push(v[0]);
+      popLastPoint = true;
+      n += 1;
+    }
+
+    for (let i = 0; i < n; i += 1) {
+      // if(p.isEqualTo(v[i])) {
+      //   return true;
+      // }
+      const l = new Line(v[i], v[i + 1]);
+      if (p.isWithinLine(l)) {
+        if (popLastPoint) {
+          v.pop();
+        }
+        return true;
+      }
+    }
+    if (p.isInPolygon(polygonVertices)) {
+      if (popLastPoint) {
+        v.pop();
+      }
+      return true;
+    }
+
+    if (popLastPoint) {
+      v.pop();
+    }
+    return false;
+  }
+
+  toPolar() {
+    const r = Math.sqrt(this.x ** 2 + this.y ** 2 + this.z ** 2);
+    const phi = Math.atan2(this.y, this.x);
+    const theta = Math.acos(this.z / r);
+    return {
+      mag: r,
+      angle: phi,
+      phi,
+      theta,
+      r,
+    };
+  }
+
+  toDelta(
+    delta: Point3,
+    percent: number,
+    translationStyle: 'linear' | 'curved' | 'curve' = 'linear',  // $FlowFixMe
+    translationOptions: OBJ_TranslationPath = {
+      magnitude: 0.5,
+      offset: 0.5,
+      controlPoint: null,
+    },
+  ) {
+    const pathPoint = translationPath(
+      translationStyle,
+      this._dup(), delta, percent,
+      translationOptions,
+    );
+    return pathPoint;
+  }
+}
+
+function linearPath(
+  start: Point,
+  delta: Point,
+  percent: number,
+) {
+  return start.add(delta.x * percent, delta.y * percent);
+}
+
+// type linearPathOptionsType = {
+// };
+
+/**
+ * Curved translation path options, that defineds the control
+ * point of a quadratic bezier curve.
+ *
+ * Use `controlPoint` to define the control point directly. This
+ * will override all other properties.
+ *
+ * Otherwise `direction`, `magnitude` and `offset` can be used
+ * to calculate the control point based on the start and end
+ * points of the curve.
+ *
+ * The control point is calculated by:
+ * - Define a line from start to target - it will have length `d`
+ * - Define a point `P` on the line
+ * - Define a control line from point `P` with length `d` and some
+ *   angle delta from the original line.
+ *
+ * The properties then customize this calculation:
+ * - `magnitude` will scale the distance d
+ * - `offset` will define where on the line point `P` is where `0.5` is
+ *   the midpoint and `0.1` is 10% along the line from the start location
+ * - `direction` will define which side of the line the control line should be
+ *   drawn
+ * - `angle` defines the angle delta between the line and the control line - by
+ *    default this a right angle (Math.PI / 2)
+ *
+ * The directions `'up'`, `'down'`, `'left'`, `'right'` all reference the side
+ * of the line. The `'positive'`
+ * direction is the side of the line that the line would move toward when
+ * rotated in the positive direction around the start point. The
+ * '`negative`' side of the line is then the opposite side.
+ *
+ * These directions only work when the `angle` is between `0` and `Math.PI`.
+ *
+ * @property {TypeParsablePoint | null} controlPoint
+ * @property {number} magnitude
+ * @property {number} offset
+ * @property {number} angle (`Math.PI / 2`)
+ * @property {'positive' | 'negative' | 'up' | 'left' | 'down' | 'right'} direction
+ */
+export type OBJ_QuadraticBezier = {
+  // path: '(Point, Point, number) => Point';
+  controlPoint: TypeParsablePoint | null;
+  angle: number;
+  magnitude: number;
+  offset: number;
+  direction: 'up' | 'left' | 'down' | 'right' | 'positive' | 'negative';
+};
+
+/**
+ * Translation path options object
+ */
+export type OBJ_TranslationPath = {
+  style: 'curve' | 'linear' | 'curved',
+  // curve options
+  angle?: number,
+  magnitude?: number,
+  offset?: number,
+  controlPoint?: TypeParsablePoint | null,
+  direction?: 'positive' | 'negative' | 'up' | 'down' | 'left' | 'right',
+}
+
+
+// export type pathOptionsType = OBJ_QuadraticBezier & linearPathOptionsType;
+
+function curvedPath(
+  start: Point,
+  delta: Point,
+  percent: number,
+  options: OBJ_TranslationPath,
+) {
+  const o = options;
+
+  let { controlPoint } = options;
+
+  if (controlPoint == null) {
+    let angleDelta = Math.PI / 2;
+    if (o.angle != null) {
+      angleDelta = o.angle;
+    }
+    let offsetToUse = 0;
+    if (o.offset != null) {
+      offsetToUse = o.offset;
+    }
+    if (o.direction == null) {
+      o.direction = 'positive';
+    }
+    let magToUse = 1;
+    if (o.magnitude != null) {
+      magToUse = o.magnitude;
+    }
+    const displacementLine = new Line(start, start.add(delta));
+    const lineAngle = clipAngle(displacementLine.angle(), '0to360');
+    const linePoint = start.add(new Point(delta.x * offsetToUse, delta.y * offsetToUse));
+
+    // norm line angle is between 0 and 180
+    let normLineAngle = lineAngle; // clipAngle(lineAngle, '0to360');
+    if (normLineAngle >= Math.PI) {
+      normLineAngle -= Math.PI;
+    }
+    // if (lineAngle < 0) {
+    //   lineAngle += Math.PI;
+    // }
+    let controlAngle = lineAngle + angleDelta;
+    const { direction } = o;
+
+    if (direction === 'positive') {
+      controlAngle = lineAngle + angleDelta;
+    } else if (direction === 'negative') {
+      controlAngle = lineAngle - angleDelta;
+    } else if (direction === 'up') {
+      if (lineAngle <= Math.PI / 2 || lineAngle >= Math.PI / 2 * 3) {
+        controlAngle = lineAngle + angleDelta;
+      } else {
+        controlAngle = lineAngle - angleDelta;
+      }
+    } else if (direction === 'down') {
+      if (lineAngle <= Math.PI / 2 || lineAngle >= Math.PI / 2 * 3) {
+        controlAngle = lineAngle - angleDelta;
+      } else {
+        controlAngle = lineAngle + angleDelta;
+      }
+    } else if (direction === 'left') {
+      if (lineAngle <= Math.PI) {
+        controlAngle = lineAngle + angleDelta;
+      } else {
+        controlAngle = lineAngle - angleDelta;
+      }
+    } else if (direction === 'right') {
+      if (lineAngle <= Math.PI) {
+        controlAngle = lineAngle - angleDelta;
+      } else {
+        controlAngle = lineAngle + angleDelta;
+      }
+    }
+
+    const dist = magToUse * displacementLine.length();
+    controlPoint = new Point(
+      linePoint.x + dist * Math.cos(controlAngle),
+      linePoint.y + dist * Math.sin(controlAngle),
+      // midPoint.x + dist * xDelta,
+      // midPoint.y + dist * yDelta,
+    );
+  }
+
+  const p0 = start;
+  const p1 = getPoint3(controlPoint);
+  const p2 = start.add(delta);
+  const t = percent;
+  const bx = quadraticBezier(p0.x, p1.x, p2.x, t);
+  const by = quadraticBezier(p0.y, p1.y, p2.y, t);
+  return new Point(bx, by);
+}
+
+
+function translationPath(
+  pathType: 'linear' | 'curved' | 'curve' = 'linear',
+  start: Point,
+  delta: Point,
+  percent: number,
+  options: OBJ_TranslationPath,
+) {
+  if (pathType === 'linear') {
+    return linearPath(start, delta, percent);
+  }
+  if (pathType === 'curved' || pathType === 'curve') {
+    return curvedPath(start, delta, percent, options);
+  }
+  return new Point(0, 0);
+}
+
+function clipAngle(
+  angleToClip: number,
+  clipTo: '0to360' | '-180to180' | null | '-360to360' | '-360to0',
+) {
+  if (clipTo === null) {
+    return angleToClip;
+  }
+  // Modular 2π gives -360to360
+  let angle = angleToClip % (Math.PI * 2);
+  if (clipTo === '0to360') {
+    if (angle < 0) {
+      angle += Math.PI * 2;
+    }
+    if (angle >= Math.PI * 2) {
+      angle -= Math.PI * 2;
+    }
+  }
+  if (clipTo === '-180to180') {
+    if (angle < -Math.PI) {
+      angle += Math.PI * 2;
+    }
+    if (angle >= Math.PI) {
+      angle -= Math.PI * 2;
+    }
+  }
+  if (clipTo === '-360to0') {
+    if (angle > 0) {
+      angle -= Math.PI * 2;
+    }
+    if (angle <= -Math.PI * 2) {
+      angle += Math.PI * 2;
+    }
+  }
+  return angle;
 }
 
 
