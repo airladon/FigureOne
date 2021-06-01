@@ -160,7 +160,7 @@ function scaleMatrix(sx: number, sy: number, sz: number): Type3DMatrix {
   ];
 }
 
-function scale(m: Array<number>, sx: number, sy: number, sz: number): Type3DMatrix {
+function scale(m: Type3DMatrix, sx: number, sy: number, sz: number): Type3DMatrix {
   // return mul(m, scaleMatrix(sx, sy));
   return [
     m[0] * sx, m[1] * sy, m[2] * sz, m[3],
@@ -170,7 +170,7 @@ function scale(m: Array<number>, sx: number, sy: number, sz: number): Type3DMatr
   ];
 }
 
-function transform(m: Array<number>, px: number, py: number, pz: number): [number, number, number] {
+function transform(m: Type3DMatrix, px: number, py: number, pz: number): [number, number, number] {
   return [
     (m[0] * px) + (m[1] * py) + (m[2] * pz) + m[3],
     (m[4] * px) + (m[5] * py) + m[6] * pz + m[7],

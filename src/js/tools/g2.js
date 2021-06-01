@@ -5,6 +5,7 @@ import {
 } from './math';
 import { joinObjects } from './tools';
 import * as m2 from './m2';
+import { Point3 } from './g3';
 // import { joinObjects } from './tools';
 
 
@@ -485,15 +486,15 @@ function getRect(r: TypeParsableRect): Rect {
  * // add to another point (3, 1) which will result in (3, 3)
  * const q = p.add(3, 1);
  */
-class Point {
-  /**
-   * x value of point
-  */
-  x: number;
+class Point extends Point3 {
+  // /**
+  //  * x value of point
+  // */
+  // x: number;
 
-  /** y value of point */
-  y: number;
-  _type: 'point';
+  // /** y value of point */
+  // y: number;
+  // _type: 'point';
 
   /**
    * Return a point at (0, 0)
@@ -509,17 +510,17 @@ class Point {
     return new Point(1, 1);
   }
 
-  /**
-   * Constructor
-   * @constructor
-   * @param x x coordinate of point
-   * @param y y coordinate of point
-   */
-  constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
-    this._type = 'point';
-  }
+  // /**
+  //  * Constructor
+  //  * @constructor
+  //  * @param x x coordinate of point
+  //  * @param y y coordinate of point
+  //  */
+  // constructor(x: number, y: number) {
+  //   this.x = x;
+  //   this.y = y;
+  //   this._type = 'point';
+  // }
 
   _state(options: { precision: number }) {
     // const { precision } = options;
