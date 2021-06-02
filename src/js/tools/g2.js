@@ -94,7 +94,9 @@ type TypeF1DefPoint = {
  * A {@link Point} can be defined in several ways
  * - As a Point: new Point()
  * - As an x, y tuple: [number, number]
+ * - As an x, y, z tuple: [number, number, number]
  * - As an x, y string: '[number, number]'
+ * - As an x, y, z string: '[number, number, number]'
  * - As a definition object: { f1Type: 'p', state: [number, number] }
  }
  * @example
@@ -104,9 +106,9 @@ type TypeF1DefPoint = {
  * p3 = '[2, 3]';
  * p4 = { f1Type: 'p', state: [2, 3] };
  */
-export type TypeParsablePoint = [number, number] | [number, number, number]
+export type TypeParsablePoint = Type2Components
+                                | Type3Components
                                 | Point
-                                // | { x: number, y: number}
                                 | string
                                 | TypeF1DefPoint;
 // point can be defined as:
@@ -119,7 +121,7 @@ function parsePoint(pIn: TypeParsablePoint): Point {
   }
   if (pIn == null) {
     // return new Point(0, 0);
-    throw new Error(`FigureOne could not parse point with no input: ${pIn}`);
+    throw new Error(`FigureOne could not parse point with no input: '${pIn}'`);
   }
 
   let p = pIn;
@@ -127,7 +129,7 @@ function parsePoint(pIn: TypeParsablePoint): Point {
     try {
       p = JSON.parse(p);
     } catch {
-      throw new Error(`FigureOne could not parse point from string: ${p}`);
+      throw new Error(`FigureOne could not parse point from string: '${p}'`);
     }
   }
 
@@ -139,9 +141,9 @@ function parsePoint(pIn: TypeParsablePoint): Point {
       if (p.length === 2 && typeof p[0] === 'number') {
         return new Point(p[0], p[1], 0);
       }
-      throw new Error(`FigureOne could not parse point from array: ${pIn}`);
+      throw new Error(`FigureOne could not parse point from array: '${JSON.stringify(pIn)}'`);
     } catch { // $FlowFixMe
-      throw new Error(`FigureOne could not parse point from array: ${pIn}`);
+      throw new Error(`FigureOne could not parse point from array: '${JSON.stringify(pIn)}'`);
     }
   }
 
@@ -577,10 +579,14 @@ class Point {
     this._type = 'point';
     if (Array.isArray(xOrArray)) {
       try {
-        const [_x, _y, _z] = xOrArray;
+        const [_x, _y] = xOrArray;
+        let _z = 0;
+        if (xOrArray.length === 3) {
+          [, , _z] = xOrArray;
+        }
         this.x = _x;
         this.y = _y;
-        this.z = _z || 0;
+        this.z = _z;
       } catch {
         if (xOrArray.length !== 3) {
           throw new Error(`FigureOne Point creation failed - array definition must have length of 3: ${xOrArray}`);
@@ -592,18 +598,6 @@ class Point {
     this.y = y;
     this.z = z;
   }
-
-  // /**
-  //  * Constructor
-  //  * @constructor
-  //  * @param x x coordinate of point
-  //  * @param y y coordinate of point
-  //  */
-  // constructor(x: number, y: number) {
-  //   this.x = x;
-  //   this.y = y;
-  //   this._type = 'point';
-  // }
 
   _state(options: { precision: number }) {
     // const { precision } = options;
