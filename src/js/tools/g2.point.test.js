@@ -393,12 +393,6 @@ describe('g2 Point', () => {
       const json = '[1, 1]';
       expect(getPoint(json)).toEqual(new Point(1, 1));
     });
-    test('Fail nothing', () => {
-      expect(getPoint()).toEqual(new Point(0, 0));
-    });
-    test('Fail bad json', () => {
-      expect(getPoint('asdf')).toEqual(new Point(0, 0));
-    });
   });
   describe('getPoints', () => {
     test('Array', () => {
@@ -419,12 +413,6 @@ describe('g2 Point', () => {
     });
     test('Single Array', () => {
       const p0 = [0, 0];
-      const points = getPoints([p0]);
-      expect(points).toHaveLength(1);
-      expect(points[0]).toEqual(new Point(0, 0));
-    });
-    test('Single Def', () => {
-      const p0 = new Point(0, 0)._def;
       const points = getPoints([p0]);
       expect(points).toHaveLength(1);
       expect(points[0]).toEqual(new Point(0, 0));

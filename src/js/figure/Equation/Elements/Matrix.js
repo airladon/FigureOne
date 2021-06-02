@@ -1,7 +1,7 @@
 
 // @flow
 import {
-  Point, parsePoint,
+  Point, isPoint, getPoint,
 } from '../../../tools/g2';
 import Bounds from './Bounds';
 import { Elements } from './Element';
@@ -121,11 +121,14 @@ export default class Matrix extends BaseEquationFunction {
       let dim;
       if (fit === 'max') {
         dim = new Point(maxDim, maxDim);
+      } else if (isPoint(fit)) {
+        dim = getPoint(fit);
       } else {
-        dim = parsePoint(fit);
-        if (dim == null) {
-          dim = new Point(0, 0);
-        }
+        dim = new Point(0, 0);
+        // dim = parsePoint(fit);
+        // if (dim == null) {
+        //   dim = new Point(0, 0);
+        // }
       }
       for (let row = 0; row < numRows; row += 1) {
         rowBounds.heights[row] = dim.y;

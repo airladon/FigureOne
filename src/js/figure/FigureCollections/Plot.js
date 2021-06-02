@@ -3,7 +3,7 @@
 // import Figure from '../Figure';
 import {
   Transform, Point,
-  getPoint, parsePoint,
+  getPoint, isPoint,
   comparePoints, Rect,
 } from '../../tools/g2';
 import type { TypeParsablePoint } from '../../tools/g2';
@@ -104,7 +104,7 @@ function cleanTraces(
     traces = [tracesIn];
   } else if (tracesIn.length === 0) {
     traces = []; // $FlowFixMe
-  } else if (parsePoint(tracesIn[0]) instanceof Point) {
+  } else if (isPoint(tracesIn[0])) {
     traces = [{ points: tracesIn }];
   } else {
     tracesIn.forEach((trace) => {

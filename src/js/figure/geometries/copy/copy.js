@@ -2,7 +2,7 @@
 // @flow
 /* eslint-disable camelcase */
 import {
-  Transform, Point, polarToRect, getBoundingRect, getPoints, getPoint,
+  Transform, Point, polarToRect, getBoundingRect, getPoints, getPoint, getScale,
 } from '../../../tools/g2';
 
 import type { TypeParsablePoint } from '../../../tools/g2';

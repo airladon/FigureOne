@@ -1,6 +1,6 @@
 // @flow
 import {
-  Transform, Point, getMaxTimeFromVelocity, getPoint,
+  Transform, Point, getMaxTimeFromVelocity, getScale,
 } from '../../../../tools/g2';
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
@@ -109,13 +109,13 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
     // $FlowFixMe
     this.scale = {};
     if (options.start != null) {
-      options.start = getPoint(options.start);
+      options.start = getScale(options.start);
     }
     if (options.target != null) {
-      options.target = getPoint(options.target);
+      options.target = getScale(options.target);
     }
     if (options.delta != null) {
-      options.delta = getPoint(options.delta);
+      options.delta = getScale(options.delta);
     }
 
     copyKeysFromTo(options, this.scale, [
@@ -167,7 +167,7 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
       && target != null
       && start != null
     ) {
-      const velocityToUse = getPoint(velocity);
+      const velocityToUse = getScale(velocity);
       // if (typeof velocity === 'number') {
       //   velocityToUse = new Point(velocity, velocity);
       // }

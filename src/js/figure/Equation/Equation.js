@@ -1,6 +1,6 @@
 // @flow
 import {
-  Point, Transform, parsePoint, getPoint, getTransform,
+  Point, Transform, isPoint, getPoint, getTransform,
 } from '../../tools/g2';
 import { joinObjects, joinObjectsWithOptions } from '../../tools/tools';
 // import { RGBToArray } from '../../tools/color';
@@ -1089,10 +1089,14 @@ export class Equation extends FigureElementCollection {
       optionsToUse.transform = getTransform(optionsToUse.transform);
     }
 
-    optionsToUse.formDefaults.alignment.fixTo = parsePoint(
-      optionsToUse.formDefaults.alignment.fixTo,
-      optionsToUse.formDefaults.alignment.fixTo,
-    );
+    if (isPoint(optionsToUse.formDefaults.alignment.fixTo)) {
+      optionsToUse.formDefaults.alignment.fixTo
+        = getPoint(optionsToUse.formDefaults.alignment.fixTo);
+    }
+    // optionsToUse.formDefaults.alignment.fixTo = parsePoint(
+    //   optionsToUse.formDefaults.alignment.fixTo,
+    //   optionsToUse.formDefaults.alignment.fixTo,
+    // );
     // optionsToUse.defaultFormAlignment.fixTo = parsePoint(
     //   optionsToUse.defaultFormAlignment.fixTo,
     //   optionsToUse.defaultFormAlignment.fixTo,
@@ -1466,6 +1470,7 @@ export class Equation extends FigureElementCollection {
     if (options.mods != null) {
       p.setProperties(options.mods);
     }
+
     return p;
   }
 
@@ -1727,10 +1732,11 @@ export class Equation extends FigureElementCollection {
     fixTo: FigureElementCollection
           | FigureElementPrimitive
           | string | Point | null,
+    formElements: Array<FigureElementPrimitive | FigureElementCollection>,
   ): FigureElementPrimitive | FigureElementCollection | Point {
     if (typeof fixTo === 'string') {
       const element = getFigureElement(this, fixTo);
-      if (element != null) {
+      if (element != null && formElements.indexOf(element) >= 0) {
         return element;
       }
       return new Point(0, 0);
@@ -1931,8 +1937,9 @@ export class Equation extends FigureElementCollection {
       });
     }
 
-    optionsToUse.alignment.fixTo = this.checkFixTo(optionsToUse.alignment.fixTo);
     form.content = content;
+    const elements = form.getAllElements();
+    optionsToUse.alignment.fixTo = this.checkFixTo(optionsToUse.alignment.fixTo, elements);
     form.arrange(
       optionsToUse.scale,
       optionsToUse.alignment.xAlign,

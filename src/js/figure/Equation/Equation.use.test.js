@@ -155,7 +155,7 @@ describe('Different ways to make an equation', () => {
               // In this case, we want the different forms to be alighned around
               // the `equals` element - so as we animate between forms the
               // `equals` element will stay in place.
-              fixTo: ['equals'],
+              fixTo: 'equals',
               xAlign: 'center',
               yAlign: 'middle',
             },
@@ -640,10 +640,9 @@ describe('Different ways to make an equation', () => {
       const a = eqn._a.getBoundingRect('figure');
       const equals = eqn._equals.getBoundingRect('figure');
       const hello = eqn._hello.getBoundingRect('figure');
-      const w = a.width + equals.width + hello.width;
-      expect(round(a.left, 4)).toBe(round(-w / 2, 4));
+      expect(round(a.left, 4)).toBe(round(-equals.width / 2 - a.width, 4));
       expect(round(equals.left, 4)).toBe(round(a.right, 4));
-      expect(round(hello.right, 4)).toBe(round(w / 2, 4));
+      expect(round(hello.right, 4)).toBe(round(equals.width / 2 + hello.width, 4));
     });
     test('inlineMultiDefinition', () => {
       eqn.showForm('inlineMultiDefinition');

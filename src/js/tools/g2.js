@@ -113,7 +113,65 @@ export type TypeParsablePoint = [number, number]
 //    - Point instance
 //    - [1, 1]
 //    - { f1Type: 'p', def: [1, 1]}
-function parsePoint<T>(pIn: TypeParsablePoint, onFail: T): Point | T | null {
+function parsePoint(pIn: TypeParsablePoint): Point {
+  if (pIn instanceof Point) {
+    return pIn;
+  }
+  if (pIn == null) {
+    // return new Point(0, 0);
+    throw new Error(`FigureOne could not parse point with no input: ${pIn}`);
+  }
+
+  let p = pIn;
+  if (typeof p === 'string') {
+    try {
+      p = JSON.parse(p);
+    } catch {
+      throw new Error(`FigureOne could not parse point from string: ${p}`);
+    }
+  }
+
+  if (Array.isArray(p)) {
+    try {
+      if (p.length === 3) {
+        return new Point(p[0], p[1], p[2]);
+      }
+      return new Point(p[0], p[1], 0);
+    } catch { // $FlowFixMe
+      throw new Error(`FigureOne could not parse point from array: ${pIn}`);
+    }
+  }
+
+  if (p.f1Type != null) {
+    if (
+      p.f1Type === 'p'
+      && p.state != null
+      && Array.isArray([p.state])
+    ) {
+      if (p.state.length === 3) {
+        const [x, y, z] = p.state;
+        return new Point(x, y, z);
+      }
+      if (p.state.length === 2) {
+        const [x, y] = p.state;
+        return new Point(x, y);
+      }
+    } // $FlowFixMe
+    throw new Error(`FigureOne could not parse point from state: ${pIn}`);
+  } // $FlowFixMe
+  throw new Error(`FigureOne could not parse point: ${pIn}`);
+}
+
+function isPoint(pIn: any) {
+  try {
+    parsePoint(pIn);
+  } catch {
+    return false;
+  }
+  return true;
+}
+
+function parsePointLegacy<T>(pIn: TypeParsablePoint, onFail: T): Point | T | null {
   if (pIn instanceof Point) {
     return pIn;
   }
@@ -509,13 +567,14 @@ class Point {
     return new Point(1, 1, 1);
   }
 
-  constructor(xOrArray: Type3DComponents | number, y: number, z: number = 0) {
+  constructor(xOrArray: Type3DComponents | Type2DComponents | number, y: number, z: number = 0) {
     this._type = 'point';
     if (Array.isArray(xOrArray)) {
       try {
-        this.x = xOrArray[0];
-        this.y = xOrArray[1];
-        this.z = xOrArray[2];
+        const [_x, _y, _z] = xOrArray;
+        this.x = _x;
+        this.y = _y;
+        this.z = _z || 0;
       } catch {
         if (xOrArray.length !== 3) {
           throw new Error(`FigureOne Point creation failed - array definition must have length of 3: ${xOrArray}`);
@@ -6380,4 +6439,5 @@ export {
   isParsablePoint,
   isParsableTransform,
   isTransformArrayZero,
+  isPoint,
 };

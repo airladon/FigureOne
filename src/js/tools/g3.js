@@ -34,6 +34,7 @@ export type Type3DComponents = [number, number, number];
  * p4 = { f1Type: 'p', state: [2, 3, 4] };
  */
 export type TypeParsablePoint = Type3Components
+                                | Type2Components
                                 | Point
                                 | string
                                 | TypeF1DefPoint;
@@ -43,9 +44,9 @@ type TypeF1DefPoint = {
   state: [number, number, number],
 };
 
-function quadraticBezier(P0: number, P1: number, P2: number, t: number) {
-  return (1 - t) * ((1 - t) * P0 + t * P1) + t * ((1 - t) * P1 + t * P2);
-}
+// function quadraticBezier(P0: number, P1: number, P2: number, t: number) {
+//   return (1 - t) * ((1 - t) * P0 + t * P1) + t * ((1 - t) * P1 + t * P2);
+// }
 
 function parsePoint(pIn: TypeParsablePoint): Point {
   if (pIn instanceof Point || typeof pIn === 'object') {
@@ -582,224 +583,6 @@ class Point {
     );
     return pathPoint;
   }
-}
-
-function linearPath(
-  start: Point,
-  delta: Point,
-  percent: number,
-) {
-  return start.add(delta.x * percent, delta.y * percent);
-}
-
-// type linearPathOptionsType = {
-// };
-
-/**
- * Curved translation path options, that defineds the control
- * point of a quadratic bezier curve.
- *
- * Use `controlPoint` to define the control point directly. This
- * will override all other properties.
- *
- * Otherwise `direction`, `magnitude` and `offset` can be used
- * to calculate the control point based on the start and end
- * points of the curve.
- *
- * The control point is calculated by:
- * - Define a line from start to target - it will have length `d`
- * - Define a point `P` on the line
- * - Define a control line from point `P` with length `d` and some
- *   angle delta from the original line.
- *
- * The properties then customize this calculation:
- * - `magnitude` will scale the distance d
- * - `offset` will define where on the line point `P` is where `0.5` is
- *   the midpoint and `0.1` is 10% along the line from the start location
- * - `direction` will define which side of the line the control line should be
- *   drawn
- * - `angle` defines the angle delta between the line and the control line - by
- *    default this a right angle (Math.PI / 2)
- *
- * The directions `'up'`, `'down'`, `'left'`, `'right'` all reference the side
- * of the line. The `'positive'`
- * direction is the side of the line that the line would move toward when
- * rotated in the positive direction around the start point. The
- * '`negative`' side of the line is then the opposite side.
- *
- * These directions only work when the `angle` is between `0` and `Math.PI`.
- *
- * @property {TypeParsablePoint | null} controlPoint
- * @property {number} magnitude
- * @property {number} offset
- * @property {number} angle (`Math.PI / 2`)
- * @property {'positive' | 'negative' | 'up' | 'left' | 'down' | 'right'} direction
- */
-export type OBJ_QuadraticBezier = {
-  // path: '(Point, Point, number) => Point';
-  controlPoint: TypeParsablePoint | null;
-  angle: number;
-  magnitude: number;
-  offset: number;
-  direction: 'up' | 'left' | 'down' | 'right' | 'positive' | 'negative';
-};
-
-/**
- * Translation path options object
- */
-export type OBJ_TranslationPath = {
-  style: 'curve' | 'linear' | 'curved',
-  // curve options
-  angle?: number,
-  magnitude?: number,
-  offset?: number,
-  controlPoint?: TypeParsablePoint | null,
-  direction?: 'positive' | 'negative' | 'up' | 'down' | 'left' | 'right',
-}
-
-
-// export type pathOptionsType = OBJ_QuadraticBezier & linearPathOptionsType;
-
-function curvedPath(
-  start: Point,
-  delta: Point,
-  percent: number,
-  options: OBJ_TranslationPath,
-) {
-  const o = options;
-
-  let { controlPoint } = options;
-
-  if (controlPoint == null) {
-    let angleDelta = Math.PI / 2;
-    if (o.angle != null) {
-      angleDelta = o.angle;
-    }
-    let offsetToUse = 0;
-    if (o.offset != null) {
-      offsetToUse = o.offset;
-    }
-    if (o.direction == null) {
-      o.direction = 'positive';
-    }
-    let magToUse = 1;
-    if (o.magnitude != null) {
-      magToUse = o.magnitude;
-    }
-    const displacementLine = new Line(start, start.add(delta));
-    const lineAngle = clipAngle(displacementLine.angle(), '0to360');
-    const linePoint = start.add(new Point(delta.x * offsetToUse, delta.y * offsetToUse));
-
-    // norm line angle is between 0 and 180
-    let normLineAngle = lineAngle; // clipAngle(lineAngle, '0to360');
-    if (normLineAngle >= Math.PI) {
-      normLineAngle -= Math.PI;
-    }
-    // if (lineAngle < 0) {
-    //   lineAngle += Math.PI;
-    // }
-    let controlAngle = lineAngle + angleDelta;
-    const { direction } = o;
-
-    if (direction === 'positive') {
-      controlAngle = lineAngle + angleDelta;
-    } else if (direction === 'negative') {
-      controlAngle = lineAngle - angleDelta;
-    } else if (direction === 'up') {
-      if (lineAngle <= Math.PI / 2 || lineAngle >= Math.PI / 2 * 3) {
-        controlAngle = lineAngle + angleDelta;
-      } else {
-        controlAngle = lineAngle - angleDelta;
-      }
-    } else if (direction === 'down') {
-      if (lineAngle <= Math.PI / 2 || lineAngle >= Math.PI / 2 * 3) {
-        controlAngle = lineAngle - angleDelta;
-      } else {
-        controlAngle = lineAngle + angleDelta;
-      }
-    } else if (direction === 'left') {
-      if (lineAngle <= Math.PI) {
-        controlAngle = lineAngle + angleDelta;
-      } else {
-        controlAngle = lineAngle - angleDelta;
-      }
-    } else if (direction === 'right') {
-      if (lineAngle <= Math.PI) {
-        controlAngle = lineAngle - angleDelta;
-      } else {
-        controlAngle = lineAngle + angleDelta;
-      }
-    }
-
-    const dist = magToUse * displacementLine.length();
-    controlPoint = new Point(
-      linePoint.x + dist * Math.cos(controlAngle),
-      linePoint.y + dist * Math.sin(controlAngle),
-      // midPoint.x + dist * xDelta,
-      // midPoint.y + dist * yDelta,
-    );
-  }
-
-  const p0 = start;
-  const p1 = getPoint(controlPoint);
-  const p2 = start.add(delta);
-  const t = percent;
-  const bx = quadraticBezier(p0.x, p1.x, p2.x, t);
-  const by = quadraticBezier(p0.y, p1.y, p2.y, t);
-  return new Point(bx, by);
-}
-
-
-function translationPath(
-  pathType: 'linear' | 'curved' | 'curve' = 'linear',
-  start: Point,
-  delta: Point,
-  percent: number,
-  options: OBJ_TranslationPath,
-) {
-  if (pathType === 'linear') {
-    return linearPath(start, delta, percent);
-  }
-  if (pathType === 'curved' || pathType === 'curve') {
-    return curvedPath(start, delta, percent, options);
-  }
-  return new Point(0, 0);
-}
-
-function clipAngle(
-  angleToClip: number,
-  clipTo: '0to360' | '-180to180' | null | '-360to360' | '-360to0',
-) {
-  if (clipTo === null) {
-    return angleToClip;
-  }
-  // Modular 2π gives -360to360
-  let angle = angleToClip % (Math.PI * 2);
-  if (clipTo === '0to360') {
-    if (angle < 0) {
-      angle += Math.PI * 2;
-    }
-    if (angle >= Math.PI * 2) {
-      angle -= Math.PI * 2;
-    }
-  }
-  if (clipTo === '-180to180') {
-    if (angle < -Math.PI) {
-      angle += Math.PI * 2;
-    }
-    if (angle >= Math.PI) {
-      angle -= Math.PI * 2;
-    }
-  }
-  if (clipTo === '-360to0') {
-    if (angle > 0) {
-      angle -= Math.PI * 2;
-    }
-    if (angle <= -Math.PI * 2) {
-      angle += Math.PI * 2;
-    }
-  }
-  return angle;
 }
 
 
