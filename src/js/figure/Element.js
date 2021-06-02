@@ -17,6 +17,8 @@ import type {
 } from '../tools/g2';
 import { Recorder } from './Recorder/Recorder';
 import * as m2 from '../tools/m2';
+import type { Type3DMatrix } from '../tools/m3';
+import type { Type2DMatrix } from '../tools/m2';
 // import type { pathOptionsType, TypeRotationDirection } from '../tools/g2';
 import * as math from '../tools/math';
 import HTMLObject from './DrawingObjects/HTMLObject/HTMLObject';
@@ -2424,7 +2426,7 @@ class FigureElement {
     );
   }
 
-  spaceTransformMatrix(from: string, to: string) {
+  spaceTransformMatrix(from: string, to: string): Type3DMatrix | Type2DMatrix {
     // All Vertex related conversions
     if (from === to) {
       return new Transform().identity().matrix();

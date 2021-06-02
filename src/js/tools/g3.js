@@ -17,7 +17,7 @@ export type CustomTransform3DComponent = ['r', number, number, number, number, n
 // eslint-disable-next-line max-len
 export type Transform3DDefinition = Array<ScaleTransform3DComponent | TranslateTransform3DComponent | RotateTransform3DComponent | CustomTransform3DComponent>;
 
-export type Type3DComponents = [number, number, number];
+export type Type2Components = [number, number];
 
 /**
  * A {@link Point} can be defined in several ways
@@ -143,7 +143,7 @@ class Point {
   z: number;
   _type: string;
 
-  constructor(xOrArray: Type3DComponents | number, y: number, z: number = 0) {
+  constructor(xOrArray: Type3Components | number, y: number, z: number = 0) {
     this._type = 'point';
     if (Array.isArray(xOrArray)) {
       try {
@@ -353,7 +353,7 @@ class Point {
    * // q = Point{x: 0, y: 1}
    */
   rotate(
-    angle: number | Type3DComponents,
+    angle: number | Type3Components,
     center?: TypeParsablePoint = new Point(0, 0, 0),
   ): Point {
     let a = [0, 0, 0];
@@ -590,7 +590,7 @@ class Point {
 // class Transform3D {
 //   mat: Array<number>;
 //   // order: Array<'t' | 'r' | 's' | 'c'>;
-//   // values: Array<Type3DComponents | Type3DMatrix>;
+//   // values: Array<Type3Components | Type3DMatrix>;
 //   order: Array<Transform3DDefinition>;
 //   name: string;
 
@@ -604,7 +604,7 @@ class Point {
 //   updateScale(x: number, y: number, z: number, index: number) {}
 //   updateRotation(x: number, y: number, z: number, index: number) {}
 //   _calcMatrix() {}
-//   udpate(index: number, value: Type3DComponents | Type3DMatrix) {}
+//   udpate(index: number, value: Type3Components | Type3DMatrix) {}
 //   getScale(index: number) {}
 //   getTranslation(index: number) {}
 //   getRotation(index: number) {}

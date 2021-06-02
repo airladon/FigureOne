@@ -6,9 +6,9 @@ import {
 import { joinObjects } from './tools';
 import * as m2 from './m2';
 import * as m3 from './m3';
-import { Type3DMatrix } from './m3';
-import { Type2DMatrix } from './m2';
-// import { Point3 } from './g3';
+import type { Type3DMatrix } from './m3';
+import type { Type2DMatrix } from './m2';
+import type { Type3Components, Type2Components } from './g3';
 // import { joinObjects } from './tools';
 
 
@@ -104,7 +104,7 @@ type TypeF1DefPoint = {
  * p3 = '[2, 3]';
  * p4 = { f1Type: 'p', state: [2, 3] };
  */
-export type TypeParsablePoint = [number, number]
+export type TypeParsablePoint = [number, number] | [number, number, number]
                                 | Point
                                 // | { x: number, y: number}
                                 | string
@@ -171,57 +171,57 @@ function isPoint(pIn: any) {
   return true;
 }
 
-function parsePointLegacy<T>(pIn: TypeParsablePoint, onFail: T): Point | T | null {
-  if (pIn instanceof Point) {
-    return pIn;
-  }
-  let onFailToUse = onFail;
-  if (onFailToUse == null) {
-    onFailToUse = null;
-  }
-  if (pIn == null) {
-    return onFailToUse;
-  }
+// function parsePointLegacy<T>(pIn: TypeParsablePoint, onFail: T): Point | T | null {
+//   if (pIn instanceof Point) {
+//     return pIn;
+//   }
+//   let onFailToUse = onFail;
+//   if (onFailToUse == null) {
+//     onFailToUse = null;
+//   }
+//   if (pIn == null) {
+//     return onFailToUse;
+//   }
 
-  let p = pIn;
-  if (typeof p === 'string') {
-    try {
-      p = JSON.parse(p);
-    } catch {
-      return onFailToUse;
-    }
-  }
+//   let p = pIn;
+//   if (typeof p === 'string') {
+//     try {
+//       p = JSON.parse(p);
+//     } catch {
+//       return onFailToUse;
+//     }
+//   }
 
-  if (Array.isArray(p)) {
-    if (p.length === 2 && typeof p[0] === 'number' && typeof p[1] === 'number') {
-      return new Point(p[0], p[1]);
-    }
-    return onFailToUse;
-  }
+//   if (Array.isArray(p)) {
+//     if (p.length === 2 && typeof p[0] === 'number' && typeof p[1] === 'number') {
+//       return new Point(p[0], p[1]);
+//     }
+//     return onFailToUse;
+//   }
 
-  if (p.f1Type != null) {
-    if (
-      p.f1Type === 'p'
-      && p.state != null
-      && Array.isArray([p.state])
-      && p.state.length === 2
-    ) {
-      const [x, y] = p.state;
-      return new Point(x, y);
-    }
-    return onFailToUse;
-  }
-  if (typeof p === 'number') {
-    return new Point(p, p);
-  }
-  // if (typeof (p) === 'object') {
-  //   const keys = Object.keys(p);
-  //   if (keys.indexOf('x') > -1 && keys.indexOf('y') > -1) {
-  //     return new Point(p.x, p.y);
-  //   }
-  // }
-  return onFailToUse;
-}
+//   if (p.f1Type != null) {
+//     if (
+//       p.f1Type === 'p'
+//       && p.state != null
+//       && Array.isArray([p.state])
+//       && p.state.length === 2
+//     ) {
+//       const [x, y] = p.state;
+//       return new Point(x, y);
+//     }
+//     return onFailToUse;
+//   }
+//   if (typeof p === 'number') {
+//     return new Point(p, p);
+//   }
+//   // if (typeof (p) === 'object') {
+//   //   const keys = Object.keys(p);
+//   //   if (keys.indexOf('x') > -1 && keys.indexOf('y') > -1) {
+//   //     return new Point(p.x, p.y);
+//   //   }
+//   // }
+//   return onFailToUse;
+// }
 
 /**
  * Parse a {@link TypeParsablePoint} and return a {@link Point}.
@@ -243,7 +243,10 @@ function getPoint(p: TypeParsablePoint): Point {
  */
 function getPoints(points: TypeParsablePoint | Array<TypeParsablePoint>): Array<Point> {
   if (Array.isArray(points)) {
-    if (points.length === 2 && typeof points[0] === 'number') { // $FlowFixMe
+    if (
+      (points.length === 2 || points.length === 3)
+      && typeof points[0] === 'number'
+    ) {
       return [getPoint(points)];
     } // $FlowFixMe
     return points.map(p => getPoint(p));
@@ -567,7 +570,7 @@ class Point {
     return new Point(1, 1, 1);
   }
 
-  constructor(xOrArray: Type3DComponents | Type2DComponents | number, y: number, z: number = 0) {
+  constructor(xOrArray: Type3Components | Type2Components | number, y: number, z: number = 0) {
     this._type = 'point';
     if (Array.isArray(xOrArray)) {
       try {
