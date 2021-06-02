@@ -5,7 +5,10 @@ import {
 } from './math';
 import { joinObjects } from './tools';
 import * as m2 from './m2';
-import { Point3 } from './g3';
+import * as m3 from './m3';
+import { Type3DMatrix } from './m3';
+import { Type2DMatrix } from './m2';
+// import { Point3 } from './g3';
 // import { joinObjects } from './tools';
 
 
@@ -486,28 +489,43 @@ function getRect(r: TypeParsableRect): Rect {
  * // add to another point (3, 1) which will result in (3, 3)
  * const q = p.add(3, 1);
  */
-class Point extends Point3 {
-  // /**
-  //  * x value of point
-  // */
-  // x: number;
-
-  // /** y value of point */
-  // y: number;
-  // _type: 'point';
+class Point {
+  x: number;
+  y: number;
+  z: number;
+  _type: 'point';
 
   /**
    * Return a point at (0, 0)
    */
   static zero(): Point {
-    return new Point(0, 0);
+    return new Point(0, 0, 0);
   }
 
   /**
    * Return a point at (1, 1)
    */
   static Unity(): Point {
-    return new Point(1, 1);
+    return new Point(1, 1, 1);
+  }
+
+  constructor(xOrArray: Type3DComponents | number, y: number, z: number = 0) {
+    this._type = 'point';
+    if (Array.isArray(xOrArray)) {
+      try {
+        this.x = xOrArray[0];
+        this.y = xOrArray[1];
+        this.z = xOrArray[2];
+      } catch {
+        if (xOrArray.length !== 3) {
+          throw new Error(`FigureOne Point creation failed - array definition must have length of 3: ${xOrArray}`);
+        }
+      }
+      return;
+    }
+    this.x = xOrArray;
+    this.y = y;
+    this.z = z;
   }
 
   // /**
@@ -538,154 +556,170 @@ class Point extends Point3 {
    * Return a duplicate of the {@link Point} object
    */
   _dup(): Point {
-    return new Point(this.x, this.y);
+    return new this.constructor(this.x, this.y, this.z);
   }
 
   /**
    * Scale x and y values of point by scalar
    * @example
-   * p = new Point(1, 1);
+   * p = new Point(1, 1, 1);
    * s = p.scale(3);
-   * // s = Point{x: 3, y: 3};
+   * // s = Point{x: 3, y: 3, z: 3};
    */
   scale(scalar: number): Point {
-    return new Point(this.x * scalar, this.y * scalar);
+    return new this.constructor(this.x * scalar, this.y * scalar, this.z * scalar);
   }
 
-  // /**
-  //  * Subtract (x, y) values or a {@link Point} and return the difference as a new {@link Point}
-  //  * @example
-  //  * p = new Point(3, 3);
-  //  * d = p.sub(1, 1)
-  //  * // d = Point{x: 2, y: 2}
-  //  *
-  //  * p = new Point(3, 3);
-  //  * q = new Point(1, 1);
-  //  * d = p.sub(q)
-  //  * // d = Point{x: 2, y: 2}
-  //  */
-  // sub(pointOrX: Point | number, y: number = 0): Point {
-  //   if (pointOrX instanceof Point) {
-  //     return new Point(this.x - pointOrX.x, this.y - pointOrX.y);
-  //   }
-  //   return new Point(this.x - pointOrX, this.y - y);
-  // }
-
-  // /**
-  //  * Add (x, y) values or a {@link Point} and return the sum as a new {@link Point}
-  //  * @example
-  //  * p = new Point(3, 3);
-  //  * d = p.add(1, 1)
-  //  * // d = Point{x: 4, y: 4}
-  //  *
-  //  * p = new Point(3, 3);
-  //  * q = new Point(1, 1);
-  //  * d = p.add(q)
-  //  * // d = Point{x: 4, y: 4}
-  //  */
-  // add(pointOrX: Point | number, y: number = 0): Point {
-  //   if (pointOrX instanceof Point) {
-  //     return new Point(this.x + pointOrX.x, this.y + pointOrX.y);
-  //   }
-  //   return new Point(this.x + pointOrX, this.y + y);
-  // }
-
-  // /**
-  //  * Return the distance between the point and the origin
-  //  * @example
-  //  * p = new Point(1, 1);
-  //  * d = p.distance();
-  //  * // d = 1.4142135623730951
-  //  */
-  // distance(toPointIn: TypeParsablePoint | null = null): number {
-  //   if (toPointIn == null) {
-  //     return Math.sqrt(this.x * this.x + this.y * this.y);
-  //   }
-  //   const toPoint = getPoint(toPointIn);
-  //   if (toPoint == null) {
-  //     return this.distance();
-  //   }
-  //   return this.sub(toPoint).distance();
-  // }
-
-  // /**
-  //  * Return a new point with (x, y) values rounded to some precision
-  //  * @example
-  //  * p = new Point(1.234, 1.234);
-  //  * q = p.round(2);
-  //  * // q = Point{x: 1.23, y: 1.23}
-  //  */
-  // round(precision: number = 8): Point {
-  //   return new Point(roundNum(this.x, precision), roundNum(this.y, precision));
-  // }
-
-  // /**
-  //  * Return a new point that is clipped to min and max values from the origin.
-  //  *
-  //  * Use a point as a parameter to define different (x, y) min/max values,
-  //  * a number to define the same (x, y) min/max values, or null to have no
-  //  * min/max values.
-  //  * @example
-  //  * p = new Point(2, 2);
-  //  * q = p.clip(1, 1);
-  //  * // q = Point{x: 1, y: 1}
-  //  *
-  //  * p = new Point(2, 2);
-  //  * q = p.clip(1, null);
-  //  * // q = Point{x: 1, y: 2}
-  //  *
-  //  * p = new Point(-2, -2);
-  //  * minClip = new Point(-1, -1.5);
-  //  * q = p.clip(minClip, null);
-  //  * // q = Point{x: -1, y: -1.5}
-  //  */
-  // clip(min: Point | number | null, max: Point | number | null): Point {
-  //   let minX;
-  //   let minY;
-  //   let maxX;
-  //   let maxY;
-  //   if (min instanceof Point) {
-  //     minX = min.x;
-  //     minY = min.y;
-  //   } else {
-  //     minX = min;
-  //     minY = min;
-  //   }
-  //   if (max instanceof Point) {
-  //     maxX = max.x;
-  //     maxY = max.y;
-  //   } else {
-  //     maxX = max;
-  //     maxY = max;
-  //   }
-  //   const x = clipValue(this.x, minX, maxX);
-  //   const y = clipValue(this.y, minY, maxY);
-  //   return new Point(x, y);
-  // }
-
   /**
-   * Transform the point with a 3x3 matrix (2 dimensional transform)
+   * Subtract (x, y, z) values or a {@link Point} and return the difference as a new {@link Point}
    * @example
-   * // Transform a point with a (2, 2) translation then 90º rotation
-   * p = new Point(1, 1);
-   * m = new Transform().translate(2, 2).rotate(Math.PI / 2).matrix();
-   * // m = [0, -1, -2, 1, 0, 2, 0, 0, 1]
-   * q = p.transformBy(m)
-   * // q = Point{x: -3, y: 3}
+   * p = new Point(3, 3, 3);
+   * d = p.sub(1, 1, 1)
+   * // d = Point{x: 2, y: 2, z: 2}
+   *
+   * p = new Point(3, 3, 3);
+   * q = new Point(1, 1, 1);
+   * d = p.sub(q)
+   * // d = Point{x: 2, y: 2, z: 2}
    */
-  transformBy(matrix: Array<number>): Point {
-    const transformedPoint = m2.transform(matrix, this.x, this.y);
-    return new Point(transformedPoint[0], transformedPoint[1]);
+  sub(pointOrX: Point | number, y: number = 0, z: number = 0): Point {
+    if (typeof pointOrX === 'number') {
+      return new this.constructor(this.x - pointOrX, this.y - y, this.z - z);
+    }
+    return new this.constructor(this.x - pointOrX.x, this.y - pointOrX.y, this.z - pointOrX.z);
   }
 
-  // quadraticBezier(p1: Point, p2: Point, t: number) {
-  //   const bx = quadraticBezier(this.x, p1.x, p2.x, t);
-  //   const by = quadraticBezier(this.y, p1.y, p2.y, t);
-  //   return new Point(bx, by);
-  // }
+  /**
+   * Add (x, y, z) values or a {@link Point} and return the sum as a new {@link Point}
+   * @example
+   * p = new Point(3, 3, 3);
+   * d = p.add(1, 1, 1)
+   * // d = Point{x: 4, y: 4, z: 4}
+   *
+   * p = new Point(3, 3, 3);
+   * q = new Point(1, 1, 1);
+   * d = p.add(q)
+   * // d = Point{x: 4, y: 4, z: 4}
+   */
+  add(pointOrX: Point | number, y: number = 0, z: number = 0): Point {
+    if (typeof pointOrX === 'number') {
+      return new this.constructor(this.x + pointOrX, this.y + y, this.z + z);
+    }
+    return new this.constructor(this.x + pointOrX.x, this.y + pointOrX.y, this.z + pointOrX.z);
+  }
 
   /**
-   * Rotate a point some angle around a center point
+   * Return the distance between two points (or point and origin if no input
+   * supplied)
+   * @example
+   * p = new Point(1, 1, 1);
+   * q = new Point(0, 0, 0);
+   * d = q.distance(p);
+   * // d = 1.7320508075688772
+   *
+   */
+  distance(toPointIn: TypeParsablePoint): number {
+    if (toPointIn == null) {
+      return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+    }
+    const p = getPoint(toPointIn);
+    return Math.sqrt((this.x - p.x) ** 2 + (this.y - p.y) ** 2 + (this.z - p.z) ** 2);
+  }
+
+  /**
+   * Return a new point with (x, y, z) values rounded to some precision
+   * @example
+   * p = new Point(1.234, 1.234, 1.234);
+   * q = p.round(2);
+   * // q = Point{x: 1.23, y: 1.23, z: 1.23}
+   */
+  round(precision: number = 8): Point {
+    return new this.constructor(
+      roundNum(this.x, precision),
+      roundNum(this.y, precision),
+      roundNum(this.z, precision),
+    );
+  }
+
+  /**
+   * Return a new point that is clipped to min and max values from the origin.
+   *
+   * Use a point as a parameter to define different (x, y) min/max values,
+   * a number to define the same (x, y) min/max values, or null to have no
+   * min/max values.
+   * @example
+   * p = new Point(2, 2);
+   * q = p.clip(1, 1);
+   * // q = Point{x: 1, y: 1}
+   *
+   * p = new Point(2, 2);
+   * q = p.clip(1, null);
+   * // q = Point{x: 1, y: 2}
+   *
+   * p = new Point(-2, -2);
+   * minClip = new Point(-1, -1.5);
+   * q = p.clip(minClip, null);
+   * // q = Point{x: -1, y: -1.5}
+   */
+  clip(min: Point | number | null, max: Point | number | null): Point {
+    let minX;
+    let minY;
+    let minZ;
+    let maxX;
+    let maxY;
+    let maxZ;
+    if (typeof min === 'number' || min == null) {
+      minX = min;
+      minY = min;
+      minZ = min;
+    } else {
+      minX = min.x;
+      minY = min.y;
+      minZ = min.z;
+    }
+    if (typeof max === 'number' || max == null) {
+      maxX = max;
+      maxY = max;
+      maxZ = max;
+    } else {
+      maxX = max.x;
+      maxY = max.y;
+      maxZ = max.z;
+    }
+    const x = clipValue(this.x, minX, maxX);
+    const y = clipValue(this.y, minY, maxY);
+    const z = clipValue(this.z, minZ, maxZ);
+    return new this.constructor(x, y, z);
+  }
+
+  /**
+   * Transform the point with a 4x4 matrix (3 dimensional transform)
+   * @example
+   * // Transform a point with a (2, 2, 0) translation then 90º z rotation
+   * p = new Point(1, 1);
+   * m = new Transform3().translate(2, 2, 0).rotate(0, 0, Math.PI / 2).matrix();
+   * // m = [0, -1, 0, -2, 1, 0, 0, 2, 0, 0, 0, 1]
+   * q = p.transformBy(m)
+   * // q = Point{x: -3, y: 3, 0}
+  */
+  transformBy(matrix: Type3DMatrix | Type2DMatrix): Point {
+    if (matrix.length === 9) {
+      const transformedPoint = m2.transform(matrix, this.x, this.y);
+      return new Point(transformedPoint[0], transformedPoint[1]);
+    }
+    const transformedPoint = m3.transform(matrix, this.x, this.y, this.z);
+    return new this.constructor(transformedPoint[0], transformedPoint[1], transformedPoint[2]);
+  }
+
+  quadraticBezier(p1: Point, p2: Point, t: number) {
+    const bx = quadraticBezier(this.x, p1.x, p2.x, t);
+    const by = quadraticBezier(this.y, p1.y, p2.y, t);
+    const bz = quadraticBezier(this.z, p1.z, p2.z, t);
+    return new this.constructor(bx, by, bz);
+  }
+
+  /**
+   * Rotate a point some angle around a point
    * @param angle - in radians
    * @example
    * // Rotate a point around the origin
@@ -698,17 +732,21 @@ class Point extends Point3 {
    * q = p.rotate(Math.PI, new Point(1, 1))
    * // q = Point{x: 0, y: 1}
    */
-  rotate(angle: number, center?: Point = new Point(0, 0)): Point {
-    const c = Math.cos(angle);
-    const s = Math.sin(angle);
-    const matrix = [c, -s,
-                    s, c]; // eslint-disable-line indent
-    const centerPoint = center;
-    const pt = this.sub(centerPoint);
-    return new Point(
-      matrix[0] * pt.x + matrix[1] * pt.y + centerPoint.x,
-      matrix[2] * pt.x + matrix[3] * pt.y + centerPoint.y
-    );
+  rotate(
+    angle: number | Type3DComponents,
+    center?: TypeParsablePoint = new Point(0, 0, 0),
+  ): Point {
+    let a = [0, 0, 0];
+    if (typeof angle === 'number') {
+      a[2] = angle;
+    } else {
+      a = angle;
+    }
+    const c = getPoint(center);
+    const centered = this.sub(c);
+    const rotated = centered.transformBy(m3.rotationMatrix(a[0], a[1], a[2]));
+
+    return rotated.add(c);
   }
 
   /* eslint-enable comma-dangle */
@@ -732,16 +770,17 @@ class Point extends Point3 {
       pr = this.round(precision);
       qr = qr.round(precision);
     }
-    if (pr.x === qr.x && pr.y === qr.y) {
-      return true;
+    if (pr.x !== qr.x || pr.y !== qr.y || pr.z !== qr.z) {
+      return false;
     }
-    return false;
+    return true;
   }
 
   isWithinDelta(p: Point, delta: number = 0.0000001) {
     const dX = Math.abs(this.x - p.x);
     const dY = Math.abs(this.y - p.y);
-    if (dX > delta || dY > delta) {
+    const dZ = Math.abs(this.z - p.z);
+    if (dX > delta || dY > delta || dZ > delta) {
       return false;
     }
     return true;

@@ -114,6 +114,11 @@ describe('m3', () => {
     const transformMatrix = m3.rotate(m3.identity(), 0, Math.PI / 2, 0);
     expect(round(m3.transform(transformMatrix, 1, 0, 1))).toEqual([1, 0, -1]);
   });
+  test('Rotate (1, 0, 0) by 30 deg around z', () => {
+    const transformMatrix = m3.rotate(m3.identity(), 0, 0, Math.PI / 6);
+    expect(round(m3.transform(transformMatrix, 1, 0, 0)))
+      .toEqual(round([Math.cos(Math.PI / 6), Math.sin(Math.PI / 6), 0]));
+  });
 
   // // Scale a point
   test('Scale (1, 1, 1) by 1', () => {

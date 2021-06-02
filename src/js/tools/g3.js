@@ -5,6 +5,7 @@ import {
 } from './math';
 import type { Type3DMatrix } from './m3';
 import * as m3 from './m3';
+import * as m2 from './m2';
 import { Line } from './g2';
 
 export type Type3Components = [number, number, number];
@@ -19,8 +20,8 @@ export type Transform3DDefinition = Array<ScaleTransform3DComponent | TranslateT
 export type Type3DComponents = [number, number, number];
 
 /**
- * A {@link Point3} can be defined in several ways
- * - As a Point3: new Point3()
+ * A {@link Point} can be defined in several ways
+ * - As a Point: new Point()
  * - As an x, y, z tuple: [number, number, number]
  * - As an x, y, z string: '[number, number, number]'
  * - As a definition object: { f1Type: 'p3', state: [number, number, number] }
@@ -32,12 +33,12 @@ export type Type3DComponents = [number, number, number];
  * p3 = '[2, 3, 4]';
  * p4 = { f1Type: 'p', state: [2, 3, 4] };
  */
-export type TypeParsablePoint3 = Type3Components
-                                | Point3
+export type TypeParsablePoint = Type3Components
+                                | Point
                                 | string
-                                | TypeF1DefPoint3;
+                                | TypeF1DefPoint;
 
-type TypeF1DefPoint3 = {
+type TypeF1DefPoint = {
   f1Type: 'p3',
   state: [number, number, number],
 };
@@ -46,8 +47,8 @@ function quadraticBezier(P0: number, P1: number, P2: number, t: number) {
   return (1 - t) * ((1 - t) * P0 + t * P1) + t * ((1 - t) * P1 + t * P2);
 }
 
-function parsePoint3(pIn: TypeParsablePoint3): Point3 {
-  if (pIn instanceof Point3 || typeof pIn === 'object') {
+function parsePoint(pIn: TypeParsablePoint): Point {
+  if (pIn instanceof Point || typeof pIn === 'object') {
     return pIn;
   }
   if (pIn == null) {
@@ -65,7 +66,10 @@ function parsePoint3(pIn: TypeParsablePoint3): Point3 {
 
   if (Array.isArray(p)) {
     try {
-      return new Point3(p[0], p[1], p[2]);
+      if (p.length === 3) {
+        return new Point(p[0], p[1], p[2]);
+      }
+      return new Point(p[0], p[1], 0);
     } catch { // $FlowFixMe
       throw new Error(`FigureOne could not parse point from array: ${pIn}`);
     }
@@ -79,7 +83,7 @@ function parsePoint3(pIn: TypeParsablePoint3): Point3 {
       && p.state.length === 3
     ) {
       const [x, y, z] = p.state;
-      return new Point3(x, y, z);
+      return new Point(x, y, z);
     } // $FlowFixMe
     throw new Error(`FigureOne could not parse point from state: ${pIn}`);
   } // $FlowFixMe
@@ -90,14 +94,14 @@ function parsePoint3(pIn: TypeParsablePoint3): Point3 {
  * Parse a {@link TypeParsablePoint} and return a {@link Point}.
  * @return {Point}
  */
-function getPoint3(p: TypeParsablePoint3): Point3 {
+function getPoint(p: TypeParsablePoint): Point {
   // if (p)
-  // let parsedPoint = parsePoint3(p);
+  // let parsedPoint = parsePoint(p);
   // if (parsedPoint == null) {
-  //   parsedPoint = new Point3(0, 0, 0);
+  //   parsedPoint = new Point(0, 0, 0);
   // }
   // return parsedPoint;
-  return parsePoint3(p);
+  return parsePoint(p);
 }
 
 
@@ -106,14 +110,14 @@ function getPoint3(p: TypeParsablePoint3): Point3 {
  * returning an array of points.
  * @return {Array<Point>}
  */
-function getPoints3(points: TypeParsablePoint3 | Array<TypeParsablePoint3>): Array<Point3> {
+function getPoints3(points: TypeParsablePoint | Array<TypeParsablePoint>): Array<Point> {
   if (Array.isArray(points)) {
     if (points.length === 3 && typeof points[0] === 'number') {   // $FlowFixMe
-      return [getPoint3(points)];
+      return [getPoint(points)];
     } // $FlowFixMe
-    return points.map(p => getPoint3(p));
+    return points.map(p => getPoint(p));
   }
-  return [getPoint3(points)];
+  return [getPoint(points)];
 }
 
 
@@ -132,7 +136,7 @@ function getPrecision(
   return precisionToUse;
 }
 
-class Point3 {
+class Point {
   x: number;
   y: number;
   z: number;
@@ -157,7 +161,7 @@ class Point3 {
     this.z = z;
   }
 
-  _dup(): Point3 {
+  _dup(): Point {
     return new this.constructor(this.x, this.y, this.z);
   }
 
@@ -181,12 +185,12 @@ class Point3 {
    * s = p.scale(3);
    * // s = Point{x: 3, y: 3, z: 3};
    */
-  scale(scalar: number): Point3 {
+  scale(scalar: number): Point {
     return new this.constructor(this.x * scalar, this.y * scalar, this.z * scalar);
   }
 
   /**
-   * Subtract (x, y, z) values or a {@link Point3} and return the difference as a new {@link Point3}
+   * Subtract (x, y, z) values or a {@link Point} and return the difference as a new {@link Point}
    * @example
    * p = new Point(3, 3, 3);
    * d = p.sub(1, 1, 1)
@@ -197,7 +201,7 @@ class Point3 {
    * d = p.sub(q)
    * // d = Point{x: 2, y: 2, z: 2}
    */
-  sub(pointOrX: Point3 | number, y: number = 0, z: number = 0): Point3 {
+  sub(pointOrX: Point | number, y: number = 0, z: number = 0): Point {
     if (typeof pointOrX === 'number') {
       return new this.constructor(this.x - pointOrX, this.y - y, this.z - z);
     }
@@ -205,18 +209,18 @@ class Point3 {
   }
 
   /**
-   * Add (x, y, z) values or a {@link Point3} and return the sum as a new {@link Point3}
+   * Add (x, y, z) values or a {@link Point} and return the sum as a new {@link Point}
    * @example
-   * p = new Point3(3, 3, 3);
+   * p = new Point(3, 3, 3);
    * d = p.add(1, 1, 1)
    * // d = Point{x: 4, y: 4, z: 4}
    *
-   * p = new Point3(3, 3, 3);
-   * q = new Point3(1, 1, 1);
+   * p = new Point(3, 3, 3);
+   * q = new Point(1, 1, 1);
    * d = p.add(q)
    * // d = Point{x: 4, y: 4, z: 4}
    */
-  add(pointOrX: Point3 | number, y: number = 0, z: number = 0): Point3 {
+  add(pointOrX: Point | number, y: number = 0, z: number = 0): Point {
     if (typeof pointOrX === 'number') {
       return new this.constructor(this.x + pointOrX, this.y + y, this.z + z);
     }
@@ -227,17 +231,17 @@ class Point3 {
    * Return the distance between two points (or point and origin if no input
    * supplied)
    * @example
-   * p = new Point3(1, 1, 1);
-   * q = new Point3(0, 0, 0);
+   * p = new Point(1, 1, 1);
+   * q = new Point(0, 0, 0);
    * d = q.distance(p);
    * // d = 1.7320508075688772
    *
    */
-  distance(toPointIn: TypeParsablePoint3): number {
+  distance(toPointIn: TypeParsablePoint): number {
     if (toPointIn == null) {
       return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
-    const p = getPoint3(toPointIn);
+    const p = getPoint(toPointIn);
     return Math.sqrt((this.x - p.x) ** 2 + (this.y - p.y) ** 2 + (this.z - p.z) ** 2);
   }
 
@@ -248,7 +252,7 @@ class Point3 {
    * q = p.round(2);
    * // q = Point{x: 1.23, y: 1.23, z: 1.23}
    */
-  round(precision: number = 8): Point3 {
+  round(precision: number = 8): Point {
     return new this.constructor(
       roundNum(this.x, precision),
       roundNum(this.y, precision),
@@ -276,7 +280,7 @@ class Point3 {
    * q = p.clip(minClip, null);
    * // q = Point{x: -1, y: -1.5}
    */
-  clip(min: Point3 | number | null, max: Point3 | number | null): Point3 {
+  clip(min: Point | number | null, max: Point | number | null): Point {
     let minX;
     let minY;
     let minZ;
@@ -317,12 +321,16 @@ class Point3 {
    * q = p.transformBy(m)
    * // q = Point{x: -3, y: 3, 0}
    */
-  transformBy(matrix: Type3DMatrix): Point3 {
+  transformBy(matrix: Type3DMatrix | Type2DMatrix): Point {
+    if (matrix.length === 9) {
+      const transformedPoint = m2.transform(matrix, this.x, this.y);
+      return new Point(transformedPoint[0], transformedPoint[1]);
+    }
     const transformedPoint = m3.transform(matrix, this.x, this.y, this.z);
     return new this.constructor(transformedPoint[0], transformedPoint[1], transformedPoint[2]);
   }
 
-  quadraticBezier(p1: Point3, p2: Point3, t: number) {
+  quadraticBezier(p1: Point, p2: Point, t: number) {
     const bx = quadraticBezier(this.x, p1.x, p2.x, t);
     const by = quadraticBezier(this.y, p1.y, p2.y, t);
     const bz = quadraticBezier(this.z, p1.z, p2.z, t);
@@ -345,8 +353,8 @@ class Point3 {
    */
   rotate(
     angle: number | Type3DComponents,
-    center?: TypeParsablePoint3 = new Point(0, 0, 0),
-  ): Point3 {
+    center?: TypeParsablePoint = new Point(0, 0, 0),
+  ): Point {
     let a = [0, 0, 0];
     if (typeof angle === 'number') {
       a[2] = angle;
@@ -363,8 +371,8 @@ class Point3 {
     //   matrix[0] * pt.x + matrix[1] * pt.y + centerPoint.x,
     //   matrix[2] * pt.x + matrix[3] * pt.y + centerPoint.y
     // );
-    const c = getPoint3(center);
-    const centered = this.sub(getPoint3(c));
+    const c = getPoint(center);
+    const centered = this.sub(c);
     const rotated = centered.transformBy(m3.rotationMatrix(a[0], a[1], a[2]));
 
     return rotated.add(c);
@@ -381,7 +389,7 @@ class Point3 {
    * p.isEqualTo(q, 2)
    * // true
    */
-  isEqualTo(p: Point3, precision?: number = 8) {
+  isEqualTo(p: Point, precision?: number = 8) {
     let pr = this;
     let qr = p;
 
@@ -389,13 +397,13 @@ class Point3 {
       pr = this.round(precision);
       qr = qr.round(precision);
     }
-    if (pr.x !== qr.x && pr.y !== qr.y && pr.z !== qr.z) {
+    if (pr.x !== qr.x || pr.y !== qr.y || pr.z !== qr.z) {
       return false;
     }
     return true;
   }
 
-  isWithinDelta(p: Point3, delta: number = 0.0000001) {
+  isWithinDelta(p: Point, delta: number = 0.0000001) {
     const dX = Math.abs(this.x - p.x);
     const dY = Math.abs(this.y - p.y);
     const dZ = Math.abs(this.z - p.z);
@@ -416,11 +424,11 @@ class Point3 {
    * p.isNotEqualTo(q, 2)
    * // false
    */
-  isNotEqualTo(p: Point3, precision?: number) {
+  isNotEqualTo(p: Point, precision?: number) {
     return !this.isEqualTo(p, precision);
   }
 
-  isNotWithinDelta(p: Point3, delta: number = 0.0000001) {
+  isNotWithinDelta(p: Point, delta: number = 0.0000001) {
     return !this.isWithinDelta(p, delta);
   }
 
@@ -471,7 +479,7 @@ class Point3 {
     );
   }
 
-  isInPolygon(polygonVertices: Array<Point3>) {
+  isInPolygon(polygonVertices: Array<Point>) {
     let windingNumber = 0;
     let n = polygonVertices.length - 1;
     const v = polygonVertices.slice();
@@ -506,7 +514,7 @@ class Point3 {
     return true;
   }
 
-  isOnPolygon(polygonVertices: Array<Point3>) {
+  isOnPolygon(polygonVertices: Array<Point>) {
     let popLastPoint = false;
     const p = this;
     let n = polygonVertices.length - 1;   // Number of sides
@@ -558,7 +566,7 @@ class Point3 {
   }
 
   toDelta(
-    delta: Point3,
+    delta: Point,
     percent: number,
     translationStyle: 'linear' | 'curved' | 'curve' = 'linear',  // $FlowFixMe
     translationOptions: OBJ_TranslationPath = {
@@ -733,7 +741,7 @@ function curvedPath(
   }
 
   const p0 = start;
-  const p1 = getPoint3(controlPoint);
+  const p1 = getPoint(controlPoint);
   const p2 = start.add(delta);
   const t = percent;
   const bx = quadraticBezier(p0.x, p1.x, p2.x, t);
@@ -830,7 +838,7 @@ function clipAngle(
 // }
 
 export {
-  Point3,
-  getPoint3,
+  Point,
+  getPoint,
   getPoints3,
 };

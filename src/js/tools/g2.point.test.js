@@ -21,7 +21,7 @@ describe('g2 Point', () => {
     });
     test('unity point', () => {
       const p = Point.Unity();
-      expect(p).toEqual(new Point(1, 1));
+      expect(p).toEqual(new Point(1, 1, 1));
     });
   });
 

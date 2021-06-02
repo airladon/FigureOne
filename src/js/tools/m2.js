@@ -1,6 +1,11 @@
 // @flow
 
 // 2D Matrix functions
+export type Type2DMatrix = [
+  number, number, number,
+  number, number, number,
+  number, number, number,
+];
 
 function mul(a: Array<number>, b: Array<number>) {
   return [
