@@ -110,7 +110,10 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
           await page.evaluate(([t, l]) => {
             if (t != null) {
               if (t.startsWith('touch')) {
-                const loc = Fig.tools.g2.getPoint(l || [0, 0]);
+                let loc;
+                if (Fig.tools.g2.isParsablePoint(l)) {
+                  loc = Fig.tools.g2.getPoint(l || [0, 0]);
+                }
                 figure[t](loc);
                 if (Array.isArray(l) && l.length === 2) {
                   figure.setCursor(loc);

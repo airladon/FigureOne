@@ -54,7 +54,10 @@ function __finish(__figure) {
           }
           if (action != null) {
             if (action.startsWith('touch')) {
-              const loc = Fig.tools.g2.getPoint(location || [0, 0]);
+              let loc;
+              if (Fig.tools.g2.isParsablePoint(location)) {
+                loc = Fig.tools.g2.getPoint(location || [0, 0]);
+              }
               setTimeout(() => {
                 __figure[action](loc);
               }, cumTime * 1000);
