@@ -1,7 +1,7 @@
 
 // @flow
 import {
-  Point, isPoint, getPoint,
+  Point, isParsablePoint, getPoint,
 } from '../../../tools/g2';
 import Bounds from './Bounds';
 import { Elements } from './Element';
@@ -121,7 +121,7 @@ export default class Matrix extends BaseEquationFunction {
       let dim;
       if (fit === 'max') {
         dim = new Point(maxDim, maxDim);
-      } else if (isPoint(fit)) {
+      } else if (isParsablePoint(fit)) {
         dim = getPoint(fit);
       } else {
         dim = new Point(0, 0);

@@ -133,10 +133,13 @@ function parsePoint(pIn: TypeParsablePoint): Point {
 
   if (Array.isArray(p)) {
     try {
-      if (p.length === 3) {
+      if (p.length === 3 && typeof p[0] === 'number') {
         return new Point(p[0], p[1], p[2]);
       }
-      return new Point(p[0], p[1], 0);
+      if (p.length === 2 && typeof p[0] === 'number') {
+        return new Point(p[0], p[1], 0);
+      }
+      throw new Error(`FigureOne could not parse point from array: ${pIn}`);
     } catch { // $FlowFixMe
       throw new Error(`FigureOne could not parse point from array: ${pIn}`);
     }
@@ -162,7 +165,7 @@ function parsePoint(pIn: TypeParsablePoint): Point {
   throw new Error(`FigureOne could not parse point: ${pIn}`);
 }
 
-function isPoint(pIn: any) {
+function isParsablePoint(pIn: any) {
   try {
     parsePoint(pIn);
   } catch {
@@ -246,7 +249,7 @@ function getPoints(points: TypeParsablePoint | Array<TypeParsablePoint>): Array<
     if (
       (points.length === 2 || points.length === 3)
       && typeof points[0] === 'number'
-    ) {
+    ) { // $FlowFixMe
       return [getPoint(points)];
     } // $FlowFixMe
     return points.map(p => getPoint(p));
@@ -6281,31 +6284,31 @@ function getTriangleCenter(
   return new Point(Ox, Oy);
 }
 
-function isParsablePoint(value: any) {
-  if (
-    Array.isArray(value) && value.length === 2
-    && typeof value[0] === 'number'
-    && typeof value[1] === 'number'
-  ) {
-    return true;
-  }
-  if (value instanceof Point) {
-    return true;
-  }
-  if (value.f1Type != null && value.f1Type === 'p') {
-    return true;
-  }
-  if (typeof value === 'string' && value.charAt(0) === '[') {
-    let newValue;
-    try {
-      newValue = JSON.parse(value);
-    } catch {
-      return false;
-    }
-    return isParsablePoint(newValue);
-  }
-  return false;
-}
+// function isParsablePoint(value: any) {
+//   if (
+//     Array.isArray(value) && value.length === 2
+//     && typeof value[0] === 'number'
+//     && typeof value[1] === 'number'
+//   ) {
+//     return true;
+//   }
+//   if (value instanceof Point) {
+//     return true;
+//   }
+//   if (value.f1Type != null && value.f1Type === 'p') {
+//     return true;
+//   }
+//   if (typeof value === 'string' && value.charAt(0) === '[') {
+//     let newValue;
+//     try {
+//       newValue = JSON.parse(value);
+//     } catch {
+//       return false;
+//     }
+//     return isParsablePoint(newValue);
+//   }
+//   return false;
+// }
 
 
 /**
@@ -6442,5 +6445,4 @@ export {
   isParsablePoint,
   isParsableTransform,
   isTransformArrayZero,
-  isPoint,
 };

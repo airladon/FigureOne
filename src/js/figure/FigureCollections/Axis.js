@@ -834,6 +834,7 @@ class CollectionsAxis extends FigureElementCollection {
       xAlign: this.axis === 'x' ? 'center' : 'right',
       yAlign: this.axis === 'x' ? 'baseline' : 'middle',
       rotation: 0,
+      offset: [0, 0],
     };
     let optionsToUse;
     if (Array.isArray(optionsIn)) {

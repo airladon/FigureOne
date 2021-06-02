@@ -70,18 +70,10 @@ figure.add([
 ]);
 
 
-figure.add(
-  {
-    name: 'p',
-    make: 'polygon',
-    options: {
-      sides: 4,
-      radius: 0.5,
-      position: [0, 0],
-    },
-  },
-);
-const p = figure.getElement('p');
+const pow = (pow = 2, stop = 10, step = 0.05) => {
+  const xValues = Fig.tools.math.range(0, stop, step);
+  return xValues.map(x => new Fig.Point(x, x ** pow));
+}
 
 figure.timeKeeper.setManualFrames();
 figure.timeKeeper.frame(0);

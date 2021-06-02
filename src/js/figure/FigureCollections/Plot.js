@@ -3,7 +3,7 @@
 // import Figure from '../Figure';
 import {
   Transform, Point,
-  getPoint, isPoint,
+  getPoint, isParsablePoint,
   comparePoints, Rect,
 } from '../../tools/g2';
 import type { TypeParsablePoint } from '../../tools/g2';
@@ -104,7 +104,7 @@ function cleanTraces(
     traces = [tracesIn];
   } else if (tracesIn.length === 0) {
     traces = []; // $FlowFixMe
-  } else if (isPoint(tracesIn[0])) {
+  } else if (isParsablePoint(tracesIn[0])) {
     traces = [{ points: tracesIn }];
   } else {
     tracesIn.forEach((trace) => {
@@ -493,6 +493,7 @@ class CollectionsPlot extends FigureElementCollection {
     this.axes = [];
     this.traces = [];
 
+    // console.log(options.trace)
     const [traces, bounds] = cleanTraces(options.trace);
 
     if (options.frame != null && options.frame !== false) {

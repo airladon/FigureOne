@@ -313,7 +313,7 @@ function makeLineSegments(
   for (let i = 0; i < points.length - 1; i += 1) {
     idealLines.push(makeLine(points[i], points[i + 1]));
   }
-  if (close) {
+  if (close && points.length > 1) {
     idealLines.push(makeLine(points[points.length - 1], points[0]));
   }
   const segmentSides = [];
@@ -491,6 +491,10 @@ function makeThickLine(
   let widthIs = widthIsIn;
   if (typeof widthIs === 'number') {
     widthIs = 'mid';
+  }
+
+  if (idealLines.length === 0) {
+    return [[], [], []];
   }
 
   // Join line segments based on the angle between them

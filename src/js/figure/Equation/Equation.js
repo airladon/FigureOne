@@ -1,6 +1,6 @@
 // @flow
 import {
-  Point, Transform, isPoint, getPoint, getTransform,
+  Point, Transform, isParsablePoint, getPoint, getTransform,
 } from '../../tools/g2';
 import { joinObjects, joinObjectsWithOptions } from '../../tools/tools';
 // import { RGBToArray } from '../../tools/color';
@@ -1089,7 +1089,7 @@ export class Equation extends FigureElementCollection {
       optionsToUse.transform = getTransform(optionsToUse.transform);
     }
 
-    if (isPoint(optionsToUse.formDefaults.alignment.fixTo)) {
+    if (isParsablePoint(optionsToUse.formDefaults.alignment.fixTo)) {
       optionsToUse.formDefaults.alignment.fixTo
         = getPoint(optionsToUse.formDefaults.alignment.fixTo);
     }
