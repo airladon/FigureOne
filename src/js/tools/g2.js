@@ -2997,7 +2997,7 @@ export type Transform3DComponent = ScaleTransform3DComponent
   | CustomTransform3DComponent;
 export type TransformDefinition = Array<TransformComponent>;
 
-function parseComponent(component: TransformComponent): Transform3DComponent {
+function parseTransformComponent(component: TransformComponent): Transform3DComponent {
   const [type] = component;
   if (type === 't') {
     if (component.length === 4) {
@@ -3026,7 +3026,7 @@ function parseComponent(component: TransformComponent): Transform3DComponent {
   if (type === 'c') {
     return component;
   }
-  throw new Error(`Could not parse transform component ${component}`);
+  throw new Error(`Could not parse transform component ${JSON.stringify(component)}`);
 }
 
 function getTransformComponentMatrix(component: Transform3DComponent) {
@@ -3094,6 +3094,17 @@ class Transform {
       // }
       // debugger;
       this.order = chainOrName.map(t => t._dup());
+      this.def = chainOrName.map((t) => {
+        if (t instanceof Translation) {
+          return ['t', t.x, t.y, 0];
+        }
+        if (t instanceof Scale) {
+          return ['s', t.x, t.y, 1];
+        }
+        if (t instanceof Rotation) {
+          return ['r', 0, 0, t.r];
+        }
+      });
       // this.def = chainOrName.map(t => parseTransformComponent(t));
       this.name = name;
     }
@@ -3149,6 +3160,7 @@ class Transform {
       order.push(translation);
     } else {
       this.order[this.index] = translation;
+      this.def[this.index] = ['t', translation.x, translation.y, 0];
       this.index += 1;
       this.calcAndSetMatrix();
       return this;
@@ -3169,6 +3181,7 @@ class Transform {
       order.push(rotation);
     } else {
       this.order[this.index] = rotation;
+      this.def[this.index] = ['r', 0, 0, rotation.r];
       this.index += 1;
       this.calcAndSetMatrix();
       return this;
@@ -3191,6 +3204,7 @@ class Transform {
       order.push(scale);
     } else {
       this.order[this.index] = scale;
+      this.def[this.index] = ['s', scale.x, scale.y, 1];
       this.index += 1;
       this.calcAndSetMatrix();
       return this;
@@ -3261,11 +3275,12 @@ class Transform {
    */
   t(translationIndex: number = 0): ?Point {
     let count = 0;
-    for (let i = 0; i < this.order.length; i += 1) {
-      const t = this.order[i];
-      if (t instanceof Translation) {
+    for (let i = 0; i < this.def.length; i += 1) {
+      const [type] = this.def[i];
+      if (type === 't') {
         if (count === translationIndex) {
-          return new Point(t.x, t.y);
+          const [, x, y, z] = this.def[i];
+          return new Point(x, y, z);
         }
         count += 1;
       }
@@ -3302,6 +3317,11 @@ class Transform {
       if (t instanceof Translation) {
         if (count === actualIndex) {
           this.order[i] = new Translation(x, yOrIndex, this.name);
+          if (x instanceof Point) {
+            this.def[i] = ['t', x.x, x.y, 0];
+          } else {
+            this.def[i] = ['t', x, yOrIndex, 0];
+          }
           this.calcAndSetMatrix();
           return this;
         }
@@ -3835,6 +3855,7 @@ class Transform {
     t.order = this.order.map(o => o._dup());
     t.mat = this.mat.slice();
     t.index = this.index;
+    t.def = this.def.map(d => d.slice());
     // // this.order = order.slice();
     // this.index = this.order.length;
     // this._type = 'transform';

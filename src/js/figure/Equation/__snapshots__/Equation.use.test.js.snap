@@ -106,6 +106,26 @@ FigureElementPrimitive {
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
+        "def": Array [
+          Array [
+            "s",
+            1,
+            1,
+            1,
+          ],
+          Array [
+            "r",
+            0,
+            0,
+            0,
+          ],
+          Array [
+            "t",
+            0,
+            0,
+            0,
+          ],
+        ],
         "index": 3,
         "mat": Array [
           1,
@@ -546,6 +566,26 @@ FigureElementPrimitive {
   "lastDrawOpacity": 1,
   "lastDrawPulseTransform": Transform {
     "_type": "transform",
+    "def": Array [
+      Array [
+        "s",
+        1,
+        1,
+        1,
+      ],
+      Array [
+        "r",
+        0,
+        0,
+        0,
+      ],
+      Array [
+        "t",
+        0,
+        0,
+        0,
+      ],
+    ],
     "index": 3,
     "mat": Array [
       1,
@@ -583,6 +623,7 @@ FigureElementPrimitive {
   "lastDrawTime": 0,
   "lastDrawTransform": Transform {
     "_type": "transform",
+    "def": Array [],
     "index": 0,
     "mat": Array [
       0.45,
@@ -718,6 +759,7 @@ FigureElementPrimitive {
   "parentTransform": Array [
     Transform {
       "_type": "transform",
+      "def": Array [],
       "index": 0,
       "mat": Array [
         1,
@@ -945,6 +987,26 @@ FigureElementPrimitive {
       "previousTime": null,
       "previousTransform": Transform {
         "_type": "transform",
+        "def": Array [
+          Array [
+            "s",
+            1,
+            1,
+            1,
+          ],
+          Array [
+            "r",
+            0,
+            0,
+            0,
+          ],
+          Array [
+            "t",
+            0,
+            0,
+            0,
+          ],
+        ],
         "index": 3,
         "mat": Array [
           1,
@@ -981,6 +1043,26 @@ FigureElementPrimitive {
       },
       "velocity": Transform {
         "_type": "transform",
+        "def": Array [
+          Array [
+            "s",
+            0,
+            0,
+            1,
+          ],
+          Array [
+            "r",
+            0,
+            0,
+            0,
+          ],
+          Array [
+            "t",
+            0,
+            0,
+            0,
+          ],
+        ],
         "index": 3,
         "mat": Array [
           0,
@@ -1056,6 +1138,26 @@ FigureElementPrimitive {
   "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
+    "def": Array [
+      Array [
+        "s",
+        1,
+        1,
+        1,
+      ],
+      Array [
+        "r",
+        0,
+        0,
+        0,
+      ],
+      Array [
+        "t",
+        0,
+        0,
+        0,
+      ],
+    ],
     "index": 3,
     "mat": Array [
       0.45,
