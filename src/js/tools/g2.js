@@ -3452,13 +3452,19 @@ class Transform {
   r(rotationIndex: number = 0): ?number {
     let count = 0;
     for (let i = 0; i < this.order.length; i += 1) {
-      const t = this.order[i];
-      if (t instanceof Rotation) {
+      if (this.def[i][0] === 'r') {
         if (count === rotationIndex) {
-          return t.r;
+          return this.def[i][3];
         }
         count += 1;
       }
+      // const t = this.order[i];
+      // if (t instanceof Rotation) {
+      //   if (count === rotationIndex) {
+      //     return t.r;
+      //   }
+      //   count += 1;
+      // }
     }
     return null;
   }
@@ -3475,6 +3481,7 @@ class Transform {
       if (t instanceof Rotation) {
         if (count === index) {
           this.order[i] = new Rotation(r, this.name);
+          this.def[i] = ['r', 0, 0, r, this.name];
           this.calcAndSetMatrix();
           return this;
         }

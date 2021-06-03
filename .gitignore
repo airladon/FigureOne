@@ -12,3 +12,4 @@ events.json
 untracked/*
 tests/audio-track.mp3
 tests/video-track.mp3
+src/tests/api-examples/index.js
