@@ -3050,6 +3050,20 @@ function getTransformComponentMatrix(component: Transform3DComponent) {
   }
 }
 
+function makeTransformComponent(
+  component: Transform3DComponent,
+  operation: (index: number) => number,
+) {
+  const newDef = Array(component.length);
+  // eslint-disable-next-line prefer-destructuring
+  newDef[0] = component[0];
+  newDef[newDef.length - 1] = component[component.length - 1];
+  for (let j = 1; j < component.length - 1; j += 1) {
+    newDef[j] = operation(j);
+  }
+  return newDef;
+}
+
 /**
  * Object that represents a chain of {@link Rotation}, {@link Translation} and
  * {@link Scale} transforms
@@ -3655,14 +3669,18 @@ class Transform {
       if (this.def[i][0] !== transformToSubtract.def[i][0]) {
         throw new Error(`Cannot subtract transforms with different shapes: '${this.def}' - '${transformToSubtract.def}'`);
       }
-      const newDef = Array(this.def[i].length);
-      // eslint-disable-next-line prefer-destructuring
-      newDef[0] = this.def[i][0];
-      newDef[newDef.length - 1] = this.name;
-      for (let j = 1; j < this.def[i].length - 1; j += 1) {
-        newDef[j] = this.def[i][j] - transformToSubtract.def[i][j];
-      }
-      def.push(newDef);
+      def.push(makeTransformComponent(
+        this.def[i],
+        j => this.def[i][j] - transformToSubtract.def[i][j],
+      ));
+      // const newDef = Array(this.def[i].length);
+      // // eslint-disable-next-line prefer-destructuring
+      // newDef[0] = this.def[i][0];
+      // newDef[newDef.length - 1] = this.name;
+      // for (let j = 1; j < this.def[i].length - 1; j += 1) {
+      //   newDef[j] = this.def[i][j] - transformToSubtract.def[i][j];
+      // }
+      // def.push(newDef);
     }
     return this.createFromDef(def, this.name);
   }
@@ -3683,14 +3701,18 @@ class Transform {
       if (this.def[i][0] !== transformToAdd.def[i][0]) {
         throw new Error(`Cannot add transforms with different shapes: '${this.def}' - '${transformToAdd.def}'`);
       }
-      const newDef = Array(this.def[i].length);
-      // eslint-disable-next-line prefer-destructuring
-      newDef[0] = this.def[i][0];
-      newDef[newDef.length - 1] = this.name;
-      for (let j = 1; j < this.def[i].length - 1; j += 1) {
-        newDef[j] = this.def[i][j] + transformToAdd.def[i][j];
-      }
-      def.push(newDef);
+      def.push(makeTransformComponent(
+        this.def[i],
+        j => this.def[i][j] + transformToAdd.def[i][j],
+      ));
+      // const newDef = Array(this.def[i].length);
+      // // eslint-disable-next-line prefer-destructuring
+      // newDef[0] = this.def[i][0];
+      // newDef[newDef.length - 1] = this.name;
+      // for (let j = 1; j < this.def[i].length - 1; j += 1) {
+      //   newDef[j] = this.def[i][j] + transformToAdd.def[i][j];
+      // }
+      // def.push(newDef);
     }
     return this.createFromDef(def, this.name);
   }
@@ -3709,14 +3731,18 @@ class Transform {
       if (this.def[i][0] !== transformToMultiply.def[i][0]) {
         throw new Error(`Cannot multiply transforms with different shapes: '${this.def}' - '${transformToMultiply.def}'`);
       }
-      const newDef = Array(this.def[i].length);
-      // eslint-disable-next-line prefer-destructuring
-      newDef[0] = this.def[i][0];
-      newDef[newDef.length - 1] = this.name;
-      for (let j = 1; j < this.def[i].length - 1; j += 1) {
-        newDef[j] = this.def[i][j] * transformToMultiply.def[i][j];
-      }
-      def.push(newDef);
+      def.push(makeTransformComponent(
+        this.def[i],
+        j => this.def[i][j] * transformToMultiply.def[i][j],
+      ));
+      // const newDef = Array(this.def[i].length);
+      // // eslint-disable-next-line prefer-destructuring
+      // newDef[0] = this.def[i][0];
+      // newDef[newDef.length - 1] = this.name;
+      // for (let j = 1; j < this.def[i].length - 1; j += 1) {
+      //   newDef[j] = this.def[i][j] * transformToMultiply.def[i][j];
+      // }
+      // def.push(newDef);
     }
     return this.createFromDef(def, this.name);
   }
@@ -3770,14 +3796,18 @@ class Transform {
   round(precision: number = 8): Transform {
     const def = [];
     for (let i = 0; i < this.def.length; i += 1) {
-      const newDef = Array(this.def[i].length);
-      // eslint-disable-next-line prefer-destructuring
-      newDef[0] = this.def[i][0];
-      newDef[newDef.length - 1] = this.name;
-      for (let j = 1; j < this.def[i].length - 1; j += 1) {
-        newDef[j] = roundNum(this.def[i][j], precision);
-      }
-      def.push(newDef);
+      def.push(makeTransformComponent(
+        this.def[i],
+        j => round(this.def[i][j], precision),
+      ));
+      // const newDef = Array(this.def[i].length);
+      // // eslint-disable-next-line prefer-destructuring
+      // newDef[0] = this.def[i][0];
+      // newDef[newDef.length - 1] = this.name;
+      // for (let j = 1; j < this.def[i].length - 1; j += 1) {
+      //   newDef[j] = roundNum(this.def[i][j], precision);
+      // }
+      // def.push(newDef);
       // order.push(this.def[i].round(precision));
     }
     return this.createFromDef(def, this.name);
@@ -3802,31 +3832,44 @@ class Transform {
     if (!this.isSimilarTo(minTransform) || !this.isSimilarTo(maxTransform)) {
       return this._dup();
     }
-    const order = [];
-    for (let i = 0; i < this.order.length; i += 1) {
-      const t = this.order[i];
-      const min = minTransform.order[i];
-      const max = maxTransform.order[i];
-      if (t instanceof Translation
-          && min instanceof Translation
-          && max instanceof Translation) {
-        const x = clipValue(t.x, min.x, max.x);
-        const y = clipValue(t.y, min.y, max.y);
-        order.push(new Translation(x, y, this.name));
-      } else if (t instanceof Rotation
-                 && min instanceof Rotation
-                 && max instanceof Rotation) {
-        order.push(new Rotation(clipValue(t.r, min.r, max.r), this.name));
-      } else if (t instanceof Scale
-                 && min instanceof Scale
-                 && max instanceof Scale) {
-        const x = clipValue(t.x, min.x, max.x);
-        const y = clipValue(t.y, min.y, max.y);
-        order.push(new Scale(x, y, this.name));
+    const def = [];
+    for (let i = 0; i < this.def.length; i += 1) {
+      const t = this.def[i];
+      if (t[0] !== minTransform.def[i][0] || t[0] !== maxTransform.def[i][0]) {
+        throw new Error(`Cannot clip transforms of different shapes: transform: '${this.def}', min: '${minTransform.def}', max: '${maxTransform}'`);
       }
+      def.push(makeTransformComponent(
+        this.def[i],
+        j => clipValue(this.def[i][j], minTransform.def[i][j], maxTransform.def[i][j]),
+      ));
     }
 
-    const clippedTransform = new Transform(order, this.name);
+    // const order = [];
+    // for (let i = 0; i < this.order.length; i += 1) {
+    //   const t = this.order[i];
+    //   const min = minTransform.order[i];
+    //   const max = maxTransform.order[i];
+    //   if (t instanceof Translation
+    //       && min instanceof Translation
+    //       && max instanceof Translation) {
+    //     const x = clipValue(t.x, min.x, max.x);
+    //     const y = clipValue(t.y, min.y, max.y);
+    //     order.push(new Translation(x, y, this.name));
+    //   } else if (t instanceof Rotation
+    //              && min instanceof Rotation
+    //              && max instanceof Rotation) {
+    //     order.push(new Rotation(clipValue(t.r, min.r, max.r), this.name));
+    //   } else if (t instanceof Scale
+    //              && min instanceof Scale
+    //              && max instanceof Scale) {
+    //     const x = clipValue(t.x, min.x, max.x);
+    //     const y = clipValue(t.y, min.y, max.y);
+    //     order.push(new Scale(x, y, this.name));
+    //   }
+    // }
+
+    // const clippedTransform = new Transform(order, this.name);
+    const clippedTransform = this.createFromDef(def, this.name);
     if (limitLine != null) {
       const t = clippedTransform.t();
       if (t != null) {
