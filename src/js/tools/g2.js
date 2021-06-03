@@ -3114,6 +3114,22 @@ class Transform {
     this.calcAndSetMatrix();
   }
 
+  createFromDef(def: TransformDefinition, name: string) {
+    const order = [];
+    for (let i = 0; i < def.length; i += 1) {
+      const [type] = def[i];
+      if (type === 't') {
+        order.push(new Translation(def[i][1], def[i][2], name));
+      } else if (type === 's') {
+        order.push(new Scale(def[i][1], def[i][2], name));
+      }
+      if (type === 'r') {
+        order.push(new Rotation(def[i][3], name));
+      }
+    }
+    return new Transform(order, name);
+  }
+
 
   _state(options: { precision: number } = { precision: 8 }) {
     // const { precision } = options;
@@ -3558,7 +3574,7 @@ class Transform {
           return false;
         }
       } else if (thisType === 'c') {
-        for (let j = 1; j < thisType.length; j += 1) {
+        for (let j = 1; j < thisTrans.length - 1; j += 1) {
           if (roundNum(thisTrans[j], precision) !== roundNum(compare[j], precision)) {
             return false;
           }
@@ -3592,24 +3608,31 @@ class Transform {
     if (!this.isSimilarTo(transformToCompare)) {
       return false;
     }
-    for (let i = 0; i < this.order.length; i += 1) {
-      const compare = transformToCompare.order[i];
-      const thisTrans = this.order[i];
-      if (thisTrans.constructor.name !== compare.constructor.name) {
+    for (let i = 0; i < this.def.length; i += 1) {
+      const compare = transformToCompare.def[i];
+      const thisTrans = this.def[i];
+      const [thisType] = thisTrans;
+      const [compareType] = compare;
+      if (thisType !== compareType) {
         return false;
       }
-      if ((thisTrans instanceof Translation && compare instanceof Translation
-      ) || (
-        thisTrans instanceof Scale && compare instanceof Scale
-      )) {
-        if (compare.isNotWithinDelta(thisTrans, delta)) {
+      if (thisType === 't' || thisType === 's' || thisType === 'r') {
+        const [, x, y, z] = thisTrans;
+        const [, x1, y1, z1] = compare;
+        if (Math.abs(x - x1) > delta) {
           return false;
         }
-      }
-      if (thisTrans instanceof Rotation) {  // $FlowFixMe
-        const dR = Math.abs(compare.r - thisTrans.r);
-        if (dR > delta) {
+        if (Math.abs(y - y1) > delta) {
           return false;
+        }
+        if (Math.abs(z - z1) > delta) {
+          return false;
+        }
+      } else if (thisType === 'c') {
+        for (let j = 1; j < thisTrans.length - 1; j += 1) {
+          if (Math.abs(thisTrans[j] - compare[j])) {
+            return false;
+          }
         }
       }
     }
@@ -3630,12 +3653,21 @@ class Transform {
     if (!this.isSimilarTo(transformToSubtract)) {
       return new Transform(this.order, this.name);
     }
-    const order = [];
-    for (let i = 0; i < this.order.length; i += 1) {
+    const def = [];
+    for (let i = 0; i < this.def.length; i += 1) {
+      const subtracted = Array(this.def[i].length);
+      // eslint-disable-next-line prefer-destructuring
+      subtracted[0] = this.def[i][0];
+      subtracted[subtracted.length - 1] = this.name;
+      for (let j = 1; j < this.def[i].length - 1; j += 1) {
+        subtracted[j] = this.def[i][j] - transformToSubtract.def[i][j];
+      }
+      def.push(subtracted);
       // $FlowFixMe (this is already fixed in isSimilarTo check above)
-      order.push(this.order[i].sub(transformToSubtract.order[i]));
+      // order.push(this.order[i].sub(transformToSubtract.order[i]));
     }
-    return new Transform(order, this.name);
+    return this.createFromDef(def, this.name);
+    // return new Transform(order, this.name);
   }
 
   // Add a transform to the current one.
