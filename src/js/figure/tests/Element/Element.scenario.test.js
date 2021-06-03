@@ -73,17 +73,17 @@ describe('Figure Recorder', () => {
       expect(a.getRotation()).toBe(1);
     });
     test('Scale', () => {
-      expect(a.getScale()).toEqual(new Point(1, 1));
+      expect(a.getScale()).toEqual(new Point(1, 1, 1));
       a.setScenario({ scale: [2, 2] });
-      expect(a.getScale()).toEqual(new Point(2, 2));
+      expect(a.getScale()).toEqual(new Point(2, 2, 1));
     });
     test('Transform', () => {
       expect(a.getPosition()).toEqual(new Point(0, 0));
-      expect(a.getScale()).toEqual(new Point(1, 1));
+      expect(a.getScale()).toEqual(new Point(1, 1, 1));
       expect(a.getRotation()).toBe(0);
       a.setScenario({ transform: new Transform().scale(2, 2).rotate(0.5).translate(1, 1) });
       expect(a.getPosition()).toEqual(new Point(1, 1));
-      expect(a.getScale()).toEqual(new Point(2, 2));
+      expect(a.getScale()).toEqual(new Point(2, 2, 1));
       expect(a.getRotation()).toBe(0.5);
     });
     test('Transform with overrides', () => {
@@ -94,7 +94,7 @@ describe('Figure Recorder', () => {
         rotation: 4,
       });
       expect(a.getPosition()).toEqual(new Point(2, 2));
-      expect(a.getScale()).toEqual(new Point(3, 3));
+      expect(a.getScale()).toEqual(new Point(3, 3, 1));
       expect(a.getRotation()).toBe(4);
     });
     test('Name', () => {
@@ -142,7 +142,7 @@ describe('Figure Recorder', () => {
       expect(a.scenarios.s1.color).toEqual([0, 1, 0, 1]);
       expect(a.scenarios.s1.isShown).toEqual(true);
       expect(a.scenarios.s1.position).toEqual(new Point(1, 5));
-      expect(a.scenarios.s1.scale).toEqual(new Point(2, 2));
+      expect(a.scenarios.s1.scale).toEqual(new Point(2, 2, 1));
       expect(a.scenarios.s1.rotation).toBe(3);
       expect(Object.keys(a.scenarios.s1)).toHaveLength(6);
     });

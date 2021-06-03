@@ -252,7 +252,7 @@ describe('Animationa and Movement', () => {
         expect(element.state.isMovingFreely).toBe(true);
         let vel = element.state.movement.velocity;
         expect(vel.t().round(2)).toEqual(new Point(9.55, 19.11));
-        expect(vel.s().round(2)).toEqual(new Point(-1, 0));
+        expect(vel.s().round(2)).toEqual(new Point(-1, 0, 1));
         expect(vel.r()).toBe(0);
         element.transform.name = '';
         expect(element.transform.round(2)).toEqual(new Transform()
@@ -262,7 +262,7 @@ describe('Animationa and Movement', () => {
         figure.mock.timeStep(1);
         vel = element.state.movement.velocity;
         expect(vel.t().round(2)).toEqual(new Point(9.11, 18.21));
-        expect(vel.s().round(2)).toEqual(new Point(0, 0));
+        expect(vel.s().round(2)).toEqual(new Point(0, 0, 1));
         expect(vel.r()).toBe(0);
         expect(callback.mock.calls).toHaveLength(0);
 
@@ -292,7 +292,7 @@ describe('Animationa and Movement', () => {
         let vel = element.state.movement.velocity;
 
         expect(vel.t().round(2)).toEqual(new Point(10, -10));
-        expect(vel.s().round(2)).toEqual(new Point(20, -20));
+        expect(vel.s().round(2)).toEqual(new Point(20, -20, 1));
         expect(vel.r()).toBe(10);
 
         // element.setupDraw(identity, 0);
@@ -305,7 +305,7 @@ describe('Animationa and Movement', () => {
         vel = element.state.movement.velocity;
 
         expect(vel.t().round(2)).toEqual(new Point(6.47, -6.47));
-        expect(vel.s().round(2)).toEqual(new Point(15, -15));
+        expect(vel.s().round(2)).toEqual(new Point(15, -15, 1));
         expect(vel.r()).toBe(5.001);
 
         // element.setupDraw(identity, 5.001);
@@ -313,7 +313,7 @@ describe('Animationa and Movement', () => {
         vel = element.state.movement.velocity;
 
         expect(vel.t().round(2)).toEqual(new Point(6.46, -6.46));
-        expect(vel.s().round(2)).toEqual(new Point(0, 0));
+        expect(vel.s().round(2)).toEqual(new Point(0, 0, 1));
         expect(vel.r()).toBe(0);
 
         // element.setupDraw(identity, 9.13);

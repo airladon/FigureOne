@@ -7,6 +7,7 @@ import { round } from '../../tools/math';
 import makeFigure from '../../__mocks__/makeFigure';
 
 const point = value => new Point(value, value);
+const scale = value => new Point(value, value, 1);
 
 describe('Animation Examples', () => {
   let figure;
@@ -600,7 +601,7 @@ describe('Animation Examples', () => {
       figure.mock.timeStep(0);
       figure.mock.timeStep(0.5);
       expect(a.getPosition().round(4)).toEqual(point(0.5));
-      expect(a.getScale().round(4)).toEqual(point(1.5));
+      expect(a.getScale().round(4)).toEqual(scale(1.5));
       expect(round(a.getRotation(), 4)).toEqual(0.5);
     });
     test('builder transform arrayTransform', () => {
@@ -783,7 +784,7 @@ describe('Animation Examples', () => {
     afterEach(() => {
       figure.mock.timeStep(0);
       figure.mock.timeStep(0.5);
-      expect(a.getScale().round(4)).toEqual(point(1.5));
+      expect(a.getScale().round(4)).toEqual(scale(1.5));
     });
     test('builder scale numbers', () => {
       animations.scale.builder.numbers();

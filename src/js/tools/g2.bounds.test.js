@@ -1364,7 +1364,7 @@ describe('Bounds', () => {
         const above = t.constant(5);
         const c = bounds.clip(above);
         expect(c.t()).toEqual(new Point(1, 2));
-        expect(c.s()).toEqual(new Point(3, 3));
+        expect(c.s()).toEqual(new Point(3, 3, 1));
         expect(c.r()).toBe(4);
       });
       test('Nulls in bounds', () => {
@@ -1377,7 +1377,7 @@ describe('Bounds', () => {
         const above = t.constant(5);
         const c = bounds.clip(above);
         expect(c.t()).toEqual(new Point(5, 5));
-        expect(c.s()).toEqual(new Point(5, 5));
+        expect(c.s()).toEqual(new Point(5, 5, 1));
         expect(c.r()).toBe(4);
       });
     });

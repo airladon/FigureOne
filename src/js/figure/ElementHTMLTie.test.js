@@ -132,58 +132,58 @@ describe('Figure html element tie', () => {
   });
   test('Basic', () => {
     scenarios.simple();
-    expect(square.getScale()).toEqual(new Point(1, 1));
+    expect(square.getScale()).toEqual(new Point(1, 1, 1));
     expect(square.getPosition()).toEqual(new Point(0, 0));
     figure.resize();
-    expect(square.getScale()).toEqual(new Point(0.1, 0.1));
+    expect(square.getScale()).toEqual(new Point(0.1, 0.1, 1));
     expect(square.getPosition()).toEqual(new Point(-0.9, 0.9));
   });
   test('Figure portrait, element landscape, fit, no window', () => {
     scenarios.figurePortraitElementLandscapeFit();
     figure.resize();
-    expect(square.getScale()).toEqual(new Point(0.1, 0.05));
+    expect(square.getScale()).toEqual(new Point(0.1, 0.05, 1));
     expect(square.getPosition()).toEqual(new Point(1 / 5 - 1, 1 - 1 / 20));
   });
   test('Figure landscape, element portrait, fit, no window', () => {
     scenarios.figureLandscapeElementPortraitFit();
     figure.resize();
-    expect(square.getScale()).toEqual(new Point(0.05, 0.1));
+    expect(square.getScale()).toEqual(new Point(0.05, 0.1, 1));
     expect(square.getPosition()).toEqual(new Point(-0.95, 0.8));
   });
   test('Figure portrait, element landscape, window wider landscape, fit', () => {
     scenarios.figurePortraitElementLandscapeWindowWiderLandscapeFit();
     figure.resize();
-    expect(square.getScale()).toEqual(new Point(0.2, 0.1));
+    expect(square.getScale()).toEqual(new Point(0.2, 0.1, 1));
     expect(square.getPosition()).toEqual(new Point(-0.8, 0.95));
   });
   test('Figure portrait, element landscape, max, no window', () => {
     scenarios.figurePortraitElementLandscapeMax();
     figure.resize();
-    expect(square.getScale()).toEqual(new Point(0.2, 0.1));
+    expect(square.getScale()).toEqual(new Point(0.2, 0.1, 1));
     expect(square.getPosition()).toEqual(new Point(1 / 5 - 1, 1 - 1 / 20));
   });
   test('Figure landscape, element portrait, max, no window', () => {
     scenarios.figureLandscapeElementPortraitMax();
     figure.resize();
-    expect(square.getScale()).toEqual(new Point(0.1, 0.2));
+    expect(square.getScale()).toEqual(new Point(0.1, 0.2, 1));
     expect(square.getPosition()).toEqual(new Point(-0.95, 0.8));
   });
   test('Figure portrait, element landscape, window wider landscape, stretch', () => {
     scenarios.figurePortraitElementLandscapeWindowWiderLandscapeStretch();
     figure.resize();
-    expect(square.getScale()).toEqual(new Point(0.2, 0.5));
+    expect(square.getScale()).toEqual(new Point(0.2, 0.5, 1));
     expect(square.getPosition()).toEqual(new Point(-0.8, 0.95));
   });
   test('Figure portrait, element landscape, window wider landscape, pixels', () => {
     scenarios.figurePortraitElementLandscapeWindowWiderLandscapePixels();
     figure.resize();
-    expect(square.getScale()).toEqual(new Point(0.2, 0.1));
+    expect(square.getScale()).toEqual(new Point(0.2, 0.1, 1));
     expect(square.getPosition()).toEqual(new Point(-0.8, 0.95));
   });
   test('Complex', () => {
     scenarios.complex();
     figure.resize();
-    expect(square.getScale()).toEqual(new Point(0.2, 0.05));
+    expect(square.getScale()).toEqual(new Point(0.2, 0.05, 1));
     expect(square.getPosition()).toEqual(new Point(-1.56, 0.94));
   });
 });

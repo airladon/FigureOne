@@ -5,6 +5,8 @@ import {
 } from './g2';
 import { round } from './math';
 
+/* eslint-disable object-curly-newline */
+
 describe('Transform', () => {
   describe('Create', () => {
     test('Create rotation', () => {
@@ -193,9 +195,9 @@ describe('Transform', () => {
         .scale(0, 0).translate(2, 2).rotate(1)
         .scale(1, 1)
         .rotate(2);
-      expect(t.s()).toEqual({ x: 0, y: 0, z: 0, _type: 'point' });
-      expect(t.s(0)).toEqual({ x: 0, y: 0, z: 0, _type: 'point' });
-      expect(t.s(1)).toEqual({ x: 1, y: 1, z: 0, _type: 'point' });
+      expect(t.s()).toEqual({ x: 0, y: 0, z: 1, _type: 'point' });
+      expect(t.s(0)).toEqual({ x: 0, y: 0, z: 1, _type: 'point' });
+      expect(t.s(1)).toEqual({ x: 1, y: 1, z: 1, _type: 'point' });
       expect(t.s(2)).toEqual(null);
     });
     test('Update scale', () => {
@@ -204,20 +206,20 @@ describe('Transform', () => {
         .scale(1, 1)
         .rotate(2);
       t.updateScale(new Point(2, 2));
-      expect(t.s()).toEqual({ x: 2, y: 2, z: 0, _type: 'point' });
+      expect(t.s()).toEqual({ x: 2, y: 2, z: 1, _type: 'point' });
 
       t.updateScale(3, 3);
-      expect(t.s()).toEqual({ x: 3, y: 3, z: 0, _type: 'point' });
+      expect(t.s()).toEqual({ x: 3, y: 3, z: 1, _type: 'point' });
 
       t.updateScale(4, 4, 0);
-      expect(t.s()).toEqual({ x: 4, y: 4, z: 0, _type: 'point' });
+      expect(t.s()).toEqual({ x: 4, y: 4, z: 1, _type: 'point' });
 
       t.updateScale(5, 5, 1);
-      expect(t.s(1)).toEqual({ x: 5, y: 5, z: 0, _type: 'point' });
+      expect(t.s(1)).toEqual({ x: 5, y: 5, z: 1, _type: 'point' });
 
       t.updateScale(5, 5, 2);
-      expect(t.s(0)).toEqual({ x: 4, y: 4, z: 0, _type: 'point' });
-      expect(t.s(1)).toEqual({ x: 5, y: 5, z: 0, _type: 'point' });
+      expect(t.s(0)).toEqual({ x: 4, y: 4, z: 1, _type: 'point' });
+      expect(t.s(1)).toEqual({ x: 5, y: 5, z: 1, _type: 'point' });
     });
   });
   describe('Functions', () => {
@@ -279,7 +281,7 @@ describe('Transform', () => {
       const t1 = new Transform().scale(1, 2).rotate(3).translate(4, 5);
       const t2 = new Transform().scale(0, 1).rotate(2).translate(3, 4);
       const ts = t1.sub(t2);
-      expect(ts.s()).toEqual(new Point(1, 1));
+      expect(ts.s()).toEqual(new Point(1, 1, 1));
       expect(ts.r()).toEqual(1);
       expect(ts.t()).toEqual(new Point(1, 1));
     });
@@ -302,7 +304,7 @@ describe('Transform', () => {
       const t1 = new Transform().scale(1, 2).rotate(3).translate(4, 5);
       const t2 = new Transform().scale(0, 1).rotate(2).translate(3, 4);
       const ts = t1.add(t2);
-      expect(ts.s()).toEqual(new Point(1, 3));
+      expect(ts.s()).toEqual(new Point(1, 3, 1));
       expect(ts.r()).toEqual(5);
       expect(ts.t()).toEqual(new Point(7, 9));
     });
@@ -325,7 +327,7 @@ describe('Transform', () => {
       const t1 = new Transform().scale(1, 2).rotate(3).translate(4, 5);
       const t2 = new Transform().scale(0, 1).rotate(2).translate(3, 4);
       const ts = t1.mul(t2);
-      expect(ts.s()).toEqual(new Point(0, 2));
+      expect(ts.s()).toEqual(new Point(0, 2, 1));
       expect(ts.r()).toEqual(6);
       expect(ts.t()).toEqual(new Point(12, 20));
     });
@@ -382,17 +384,17 @@ describe('Transform', () => {
         .rotate(1.123456789)
         .translate(1.123456789, 1.12345678);
       let tr = t1.round();
-      expect(tr.s()).toEqual(new Point(1.12345679, 1.12345678));
+      expect(tr.s()).toEqual(new Point(1.12345679, 1.12345678, 1));
       expect(tr.r()).toEqual(1.12345679);
       expect(tr.t()).toEqual(new Point(1.12345679, 1.12345678));
 
       tr = t1.round(2);
-      expect(tr.s()).toEqual(new Point(1.12, 1.12));
+      expect(tr.s()).toEqual(new Point(1.12, 1.12, 1));
       expect(tr.r()).toEqual(1.12);
       expect(tr.t()).toEqual(new Point(1.12, 1.12));
 
       tr = t1.round(0);
-      expect(tr.s()).toEqual(new Point(1, 1));
+      expect(tr.s()).toEqual(new Point(1, 1, 1));
       expect(tr.r()).toEqual(1);
       expect(tr.t()).toEqual(new Point(1, 1));
     });
@@ -412,9 +414,9 @@ describe('Transform', () => {
       const clipZero = 0.1;
       const clipMax = 20;
       let tc = t1.clipMag(clipZero, clipMax, false);
-      expect(tc.s(0)).toEqual(new Point(20, 20));
-      expect(tc.s(1)).toEqual(new Point(0, 0));
-      expect(tc.s(2)).toEqual(new Point(20, 0));
+      expect(tc.s(0)).toEqual(new Point(20, 20, 1));
+      expect(tc.s(1)).toEqual(new Point(0, 0, 1));
+      expect(tc.s(2)).toEqual(new Point(20, 0, 1));
       expect(tc.r(0)).toBe(20);
       expect(tc.r(1)).toBe(20);
       expect(tc.r(2)).toBe(0);
@@ -426,9 +428,9 @@ describe('Transform', () => {
 
       // vector clipping
       tc = t1.clipMag(clipZero, clipMax);
-      expect(tc.s(0)).toEqual(new Point(20, 20));
-      expect(tc.s(1)).toEqual(new Point(0, 0));
-      expect(tc.s(2)).toEqual(new Point(20, 0));
+      expect(tc.s(0)).toEqual(new Point(20, 20, 1));
+      expect(tc.s(1)).toEqual(new Point(0, 0, 1));
+      expect(tc.s(2)).toEqual(new Point(20, 0, 1));
       expect(tc.r(0)).toBe(20);
       expect(tc.r(1)).toBe(20);
       expect(tc.r(2)).toBe(0);
@@ -476,10 +478,10 @@ describe('Transform', () => {
       const max = 20;
       const v = t1.velocity(t0, deltaTime, zero, max);
 
-      expect(v.s(0).round()).toEqual(new Point(-1, 1));
-      expect(v.s(1).round()).toEqual(new Point(0, 0));
-      expect(v.s(2).round(4)).toEqual(new Point(14.1422, 14.1422));
-      expect(v.s(3).round(4)).toEqual(new Point(-14.1422, -14.1422));
+      expect(v.s(0).round()).toEqual(new Point(-1, 1, 1));
+      expect(v.s(1).round()).toEqual(new Point(0, 0, 1));
+      expect(v.s(2).round(4)).toEqual(new Point(14.1422, 14.1422, 1));
+      expect(v.s(3).round(4)).toEqual(new Point(-14.1422, -14.1422, 1));
       expect(v.r(0)).toBe(-1);
       expect(v.r(1)).toBe(0);
       expect(v.r(2)).toBe(20);
@@ -509,7 +511,7 @@ describe('Transform', () => {
       test('t0 not similar to t1', () => {
         t1 = new Transform().rotate(1).scale(1, 1).translate(1, 1);
         const v = t1.velocity(t0, deltaTime, zero, max);
-        expect(v.s()).toEqual(new Point(0, 0));
+        expect(v.s()).toEqual(new Point(0, 0, 1));
         expect(v.r()).toEqual(0);
         expect(v.t()).toEqual(new Point(0, 0));
       });
@@ -710,7 +712,7 @@ describe('Transform', () => {
     test('Named Array', () => {
       const t = getTransform([['t', 1], 'Name1', ['s', 0.5]]);
       expect(t.t()).toEqual(new Point(1, 1));
-      expect(t.s()).toEqual(new Point(0.5, 0.5));
+      expect(t.s()).toEqual(new Point(0.5, 0.5, 1));
       expect(t.order).toHaveLength(2);
       expect(t.name).toBe('Name1');
     });
@@ -718,7 +720,7 @@ describe('Transform', () => {
       const tIn = new Transform().translate(1, 0.5).scale(1, 1).rotate(0.5);
       const t = getTransform(tIn._state());
       expect(t.t()).toEqual(new Point(1, 0.5));
-      expect(t.s()).toEqual(new Point(1, 1));
+      expect(t.s()).toEqual(new Point(1, 1, 1));
       expect(t.r()).toEqual(0.5);
       expect(t.order).toHaveLength(3);
     });
@@ -726,7 +728,7 @@ describe('Transform', () => {
       const tIn = new Transform('Name1').translate(1, 0.5).scale(1, 1).rotate(0.5);
       const t = getTransform(tIn._state());
       expect(t.t()).toEqual(new Point(1, 0.5));
-      expect(t.s()).toEqual(new Point(1, 1));
+      expect(t.s()).toEqual(new Point(1, 1, 1));
       expect(t.r()).toEqual(0.5);
       expect(t.order).toHaveLength(3);
       expect(t.name).toBe('Name1');
@@ -735,7 +737,7 @@ describe('Transform', () => {
       const tIn = '["Name1", ["t", 1, 0.5], ["s", 1, 1], ["r", 0.5]]';
       const t = getTransform(tIn);
       expect(t.t()).toEqual(new Point(1, 0.5));
-      expect(t.s()).toEqual(new Point(1, 1));
+      expect(t.s()).toEqual(new Point(1, 1, 1));
       expect(t.r()).toEqual(0.5);
       expect(t.order).toHaveLength(3);
       expect(t.name).toBe('Name1');

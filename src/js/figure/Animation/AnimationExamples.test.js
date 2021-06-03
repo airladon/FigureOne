@@ -13,6 +13,7 @@ jest.mock('../webgl/webgl');
 jest.mock('../DrawContext2D');
 
 const point = value => new Point(value, value);
+const scale = value => new Point(value, value, 1);
 
 describe('Animation Examples', () => {
   let figure;
@@ -35,8 +36,8 @@ describe('Animation Examples', () => {
     p2 = new Point(2, 2);
     r1 = 1;
     r2 = 2;
-    s1 = new Point(1, 1);
-    s2 = new Point(2, 2);
+    s1 = new Point(1, 1, 1);
+    s2 = new Point(2, 2, 1);
     t1 = new Transform().scale(s1).rotate(r1).translate(p1);
     t2 = new Transform().scale(s2).rotate(r2).translate(p2);
     customFunction = () => {};
@@ -374,27 +375,27 @@ describe('Animation Examples', () => {
       tester = () => {
         figure.draw(0);
         expect(elem1.getPosition().round(4)).toEqual(point(0));
-        expect(elem1.getScale().round(4)).toEqual(point(0));
+        expect(elem1.getScale().round(4)).toEqual(scale(0));
         expect(math.round(elem1.getRotation(), 2)).toEqual(0);
         figure.draw(0.5);
         expect(elem1.getPosition().round(4)).toEqual(point(0.5));
-        expect(elem1.getScale().round(4)).toEqual(point(0.5));
+        expect(elem1.getScale().round(4)).toEqual(scale(0.5));
         expect(math.round(elem1.getRotation(), 2)).toEqual(0.5);
         figure.draw(1);
         expect(elem1.getPosition().round(4)).toEqual(point(1));
-        expect(elem1.getScale().round(4)).toEqual(point(1));
+        expect(elem1.getScale().round(4)).toEqual(scale(1));
         expect(math.round(elem1.getRotation(), 2)).toEqual(1);
         figure.draw(1.5);
         expect(elem1.getPosition().round(4)).toEqual(point(1.5));
-        expect(elem1.getScale().round(4)).toEqual(point(1.5));
+        expect(elem1.getScale().round(4)).toEqual(scale(1.5));
         expect(math.round(elem1.getRotation(), 2)).toEqual(1.5);
         figure.draw(2);
         expect(elem1.getPosition().round(4)).toEqual(point(2));
-        expect(elem1.getScale().round(4)).toEqual(point(2));
+        expect(elem1.getScale().round(4)).toEqual(scale(2));
         expect(math.round(elem1.getRotation(), 2)).toEqual(2);
         figure.draw(2.5);
         expect(elem1.getPosition().round(4)).toEqual(point(2));
-        expect(elem1.getScale().round(4)).toEqual(point(2));
+        expect(elem1.getScale().round(4)).toEqual(scale(2));
         expect(math.round(elem1.getRotation(), 2)).toEqual(2);
       };
     });

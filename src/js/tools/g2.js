@@ -2977,10 +2977,10 @@ function isTransformArrayZero(
   return isArrayZero(values);
 }
 
-export type ScaleTransform3DComponent = ['s', number, number, number];
-export type TranslateTransform3DComponent = ['t', number, number, number];
-export type RotateTransform3DComponent = ['r', number, number, number];
-export type CustomTransform3DComponent = ['r', number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number];
+export type ScaleTransform3DComponent = ['s', number, number, number, string];
+export type TranslateTransform3DComponent = ['t', number, number, number, string];
+export type RotateTransform3DComponent = ['r', number, number, number, string];
+export type CustomTransform3DComponent = ['c', number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, string];
 export type ScaleTransform2DComponent = ['s', number, number];
 export type TranslateTransform2DComponent = ['t', number, number];
 export type RotateTransform2DComponent = ['r', number];
@@ -3096,13 +3096,13 @@ class Transform {
       this.order = chainOrName.map(t => t._dup());
       this.def = chainOrName.map((t) => {
         if (t instanceof Translation) {
-          return ['t', t.x, t.y, 0];
+          return ['t', t.x, t.y, 0, name];
         }
         if (t instanceof Scale) {
-          return ['s', t.x, t.y, 1];
+          return ['s', t.x, t.y, 1, name];
         }
         if (t instanceof Rotation) {
-          return ['r', 0, 0, t.r];
+          return ['r', 0, 0, t.r, name];
         }
       });
       // this.def = chainOrName.map(t => parseTransformComponent(t));
@@ -3160,7 +3160,7 @@ class Transform {
       order.push(translation);
     } else {
       this.order[this.index] = translation;
-      this.def[this.index] = ['t', translation.x, translation.y, 0];
+      this.def[this.index] = ['t', translation.x, translation.y, 0, name];
       this.index += 1;
       this.calcAndSetMatrix();
       return this;
@@ -3181,7 +3181,7 @@ class Transform {
       order.push(rotation);
     } else {
       this.order[this.index] = rotation;
-      this.def[this.index] = ['r', 0, 0, rotation.r];
+      this.def[this.index] = ['r', 0, 0, rotation.r, name];
       this.index += 1;
       this.calcAndSetMatrix();
       return this;
@@ -3204,7 +3204,7 @@ class Transform {
       order.push(scale);
     } else {
       this.order[this.index] = scale;
-      this.def[this.index] = ['s', scale.x, scale.y, 1];
+      this.def[this.index] = ['s', scale.x, scale.y, 1, name];
       this.index += 1;
       this.calcAndSetMatrix();
       return this;
@@ -3297,6 +3297,7 @@ class Transform {
       const transformStep = this.order[i];
       if (transformStep instanceof Rotation) {
         transformStep.r = clipAngle(transformStep.r, clipTo);
+        this.def[i][3] = clipAngle(transformStep.r, clipTo);
       }
     }
   }
@@ -3318,9 +3319,9 @@ class Transform {
         if (count === actualIndex) {
           this.order[i] = new Translation(x, yOrIndex, this.name);
           if (x instanceof Point) {
-            this.def[i] = ['t', x.x, x.y, 0];
+            this.def[i] = ['t', x.x, x.y, 0, this.name];
           } else {
-            this.def[i] = ['t', x, yOrIndex, 0];
+            this.def[i] = ['t', x, yOrIndex, 0, this.name];
           }
           this.calcAndSetMatrix();
           return this;
@@ -3341,10 +3342,12 @@ class Transform {
   s(scaleIndex: number = 0): ?Point {
     let count = 0;
     for (let i = 0; i < this.order.length; i += 1) {
-      const t = this.order[i];
-      if (t instanceof Scale) {
+      // const t = this.order[i];
+      const [type] = this.def[i];
+      if (type === 's') {
         if (count === scaleIndex) {
-          return new Point(t.x, t.y);
+          const [, x, y, z] = this.def[i];
+          return new Point(x, y, z);
         }
         count += 1;
       }
@@ -3375,9 +3378,13 @@ class Transform {
       const stepDelta = delta.order[i];
       if (stepStart instanceof Scale && stepDelta instanceof Scale) {
         calcTransform.order[i] = stepStart.add(stepDelta.mul(percent));
+        const s = stepStart.add(stepDelta.mul(percent));
+        calcTransform.def[i] = ['s', s.x, s.y, 1, stepStart.name];
       }
       if (stepStart instanceof Rotation && stepDelta instanceof Rotation) {
         calcTransform.order[i] = new Rotation(stepStart.r + stepDelta.r * percent, stepStart.name);
+        const r = stepStart.r + stepDelta.r * percent;
+        calcTransform.def[i] = ['r', 0, 0, r, stepStart.name];
       }
       if (stepStart instanceof Translation && stepDelta instanceof Translation) {
         calcTransform.order[i] =
@@ -3386,6 +3393,12 @@ class Transform {
             stepStart, stepDelta, percent,
             translationOptions,
           ), 0, stepStart.name);
+        const t = translationPath(
+          translationStyle,
+          stepStart, stepDelta, percent,
+          translationOptions,
+        );
+        calcTransform.def[i] = ['t', t.x, t.y, t.z, stepStart.name];
       }
     }
     return calcTransform;
@@ -3399,7 +3412,7 @@ class Transform {
   updateScale(x: number | Point, yOrIndex: ?number = null, index: number = 0) {
     let count = 0;
     let actualIndex = index;
-    let scale = new Point(1, 1);
+    let scale = new Point(1, 1, 1);
     if (x instanceof Point) {
       if (yOrIndex == null) {
         actualIndex = 0;
@@ -3419,6 +3432,7 @@ class Transform {
       if (t instanceof Scale) {
         if (count === actualIndex) {
           this.order[i] = new Scale(scale.x, scale.y, this.name);
+          this.def[i] = ['s', scale.x, scale.y, 1, this.name];
           this.calcAndSetMatrix();
           return this;
         }
@@ -3652,6 +3666,7 @@ class Transform {
   transform(initialTransform: Transform) {
     const t = new Transform([], this.name);
     t.order = initialTransform.order.concat(this.order);
+    t.def = initialTransform.def.concat(this.def.map(d => d.slice()));
     // t.order = Array(initialTransform.order.length + this.order.length);
     // for (let i = 0; i < initialTransform.order.length; i += 1) {
     //   t.order[i] = initialTransform.order[i];
@@ -3676,6 +3691,7 @@ class Transform {
   transformBy(t: Transform): Transform {
     const t1 = new Transform([], this.name);
     t1.order = this.order.concat(t.order);
+    t.def = this.def.concat(t.def);
     t1.mat = m2.mul(t.matrix(), this.matrix());
     return t1;
   }

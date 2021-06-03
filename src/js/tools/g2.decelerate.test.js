@@ -792,11 +792,11 @@ describe('Decelerate Transform', () => {
 
     expect(round(result.duration)).toBe(1);
     expect(result.velocity.t().round(3)).toEqual(new Point(4.293, 4.293));
-    expect(result.velocity.s().round()).toEqual(new Point(4, 4));
+    expect(result.velocity.s().round()).toEqual(new Point(4, 4, 1));
     expect(round(result.velocity.r())).toEqual(4);
     expect(result.transform.t().round(3)).toEqual(new Point(4.646, 4.646));
     // scale starts at 1
-    expect(result.transform.s().round()).toEqual(new Point(5.5, 5.5));
+    expect(result.transform.s().round()).toEqual(new Point(5.5, 5.5, 1));
     expect(round(result.transform.r())).toEqual(4.5);
   });
   test('Position, Scale Rotation - bounce', () => {
@@ -820,11 +820,11 @@ describe('Decelerate Transform', () => {
 
     expect(round(result.duration)).toBe(2);
     expect(result.velocity.t().round(3)).toEqual(new Point(-3.586, -3.586));
-    expect(result.velocity.s().round()).toEqual(new Point(-3, -3));
+    expect(result.velocity.s().round()).toEqual(new Point(-3, -3, 1));
     expect(round(result.velocity.r())).toEqual(-3);
     expect(result.transform.t().round(3)).toEqual(new Point(0.414, 0.414));
     // scale starts at 1
-    expect(result.transform.s().round()).toEqual(new Point(2, 2));
+    expect(result.transform.s().round()).toEqual(new Point(2, 2, 1));
     expect(round(result.transform.r())).toEqual(1);
   });
   test('Position, Scale Rotation - bounce with loss', () => {
@@ -869,11 +869,11 @@ describe('Decelerate Transform', () => {
     expect(round(result.duration)).toBe(2);
     expect(result.velocity.t().round(3))
       .toEqual(new Point(-1.4 / Math.sqrt(2), -1.4 / Math.sqrt(2)).round(3));
-    expect(result.velocity.s().round()).toEqual(new Point(-2.2, -2.2));
+    expect(result.velocity.s().round()).toEqual(new Point(-2.2, -2.2, 1));
     expect(round(result.velocity.r())).toEqual(-1.8);
     expect(result.transform.t().round(3))
       .toEqual(new Point(2.6 / Math.sqrt(2), 2.6 / Math.sqrt(2)).round(3));
-    expect(result.transform.s().round()).toEqual(new Point(2.8, 2.8));
+    expect(result.transform.s().round()).toEqual(new Point(2.8, 2.8, 1));
     expect(round(result.transform.r())).toEqual(2.2);
   });
   test('Position, Scale Rotation - Change z', () => {
@@ -906,11 +906,11 @@ describe('Decelerate Transform', () => {
     expect(round(result.duration)).toBe(4.9);
     expect(result.velocity.t().round(3))
       .toEqual(new Point(0, 0).round(3));
-    expect(result.velocity.s().round()).toEqual(new Point(0, 0));
+    expect(result.velocity.s().round()).toEqual(new Point(0, 0, 1));
     expect(round(result.velocity.r())).toEqual(0);
     expect(result.transform.t().round(3))
       .toEqual(new Point(12.455 / Math.sqrt(2), 12.455 / Math.sqrt(2)).round(3));
-    expect(result.transform.s().round()).toEqual(new Point(13.48, 13.48));
+    expect(result.transform.s().round()).toEqual(new Point(13.48, 13.48, 1));
     expect(round(result.transform.r())).toEqual(12.495);
   });
   test('Position, Scale Rotation - Change d', () => {
@@ -940,11 +940,11 @@ describe('Decelerate Transform', () => {
     expect(round(result.duration, 3)).toBe(7.143);
     expect(result.velocity.t().round(3))
       .toEqual(new Point(0, 0).round(3));
-    expect(result.velocity.s().round()).toEqual(new Point(0, 0));
+    expect(result.velocity.s().round()).toEqual(new Point(0, 0, 1));
     expect(round(result.velocity.r())).toEqual(0);
     expect(result.transform.t().round(3))
       .toEqual(new Point(17.857 / Math.sqrt(2), 17.857 / Math.sqrt(2)).round(3));
-    expect(result.transform.s().round(3)).toEqual(new Point(14.889, 14.889));
+    expect(result.transform.s().round(3)).toEqual(new Point(14.889, 14.889, 1));
     expect(round(result.transform.r())).toEqual(15.625);
   });
 });
@@ -961,11 +961,11 @@ describe('Decelerate Transform from Transform', () => {
 
     expect(round(result.duration)).toBe(1);
     expect(result.velocity.t().round(3)).toEqual(new Point(4.293, 4.293));
-    expect(result.velocity.s().round()).toEqual(new Point(4, 4));
+    expect(result.velocity.s().round()).toEqual(new Point(4, 4, 1));
     expect(round(result.velocity.r())).toEqual(4);
     expect(result.transform.t().round(3)).toEqual(new Point(4.646, 4.646));
     // scale starts at 1
-    expect(result.transform.s().round()).toEqual(new Point(5.5, 5.5));
+    expect(result.transform.s().round()).toEqual(new Point(5.5, 5.5, 1));
     expect(round(result.transform.r())).toEqual(4.5);
   });
   test('Position, Scale Rotation - bounce', () => {
@@ -989,11 +989,11 @@ describe('Decelerate Transform from Transform', () => {
 
     expect(round(result.duration)).toBe(2);
     expect(result.velocity.t().round(3)).toEqual(new Point(-3.586, -3.586));
-    expect(result.velocity.s().round()).toEqual(new Point(-3, -3));
+    expect(result.velocity.s().round()).toEqual(new Point(-3, -3, 1));
     expect(round(result.velocity.r())).toEqual(-3);
     expect(result.transform.t().round(3)).toEqual(new Point(0.414, 0.414));
     // scale starts at 1
-    expect(result.transform.s().round()).toEqual(new Point(2, 2));
+    expect(result.transform.s().round()).toEqual(new Point(2, 2, 1));
     expect(round(result.transform.r())).toEqual(1);
   });
 });
