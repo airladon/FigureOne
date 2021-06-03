@@ -3650,11 +3650,14 @@ class Transform {
    * @see <a href="#transformissimilarto">Transform.isSimilarTo</a>
    */
   sub(transformToSubtract: Transform = new Transform()): Transform {
-    if (!this.isSimilarTo(transformToSubtract)) {
-      return new Transform(this.order, this.name);
-    }
+    // if (!this.isSimilarTo(transformToSubtract)) {
+    //   return new Transform(this.order, this.name);
+    // }
     const def = [];
     for (let i = 0; i < this.def.length; i += 1) {
+      if (this.def[i][0] !== transformToSubtract.def[i][0]) {
+        throw new Error(`Cannot subtract transforms with different shapes: '${this.def}' - '${transformToSubtract.def}'`);
+      }
       const subtracted = Array(this.def[i].length);
       // eslint-disable-next-line prefer-destructuring
       subtracted[0] = this.def[i][0];
