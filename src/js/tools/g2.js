@@ -3677,17 +3677,6 @@ class Transform {
    * {@link Scale} and {@link Translation} transform elements
    * @see <a href="#transformissimilarto">Transform.isSimilarTo</a>
    */
-  // add(transformToAdd: Transform = new Transform()): Transform {
-  //   if (!this.isSimilarTo(transformToAdd)) {
-  //     return new Transform(this.order, this.name);
-  //   }
-  //   const order = [];
-  //   for (let i = 0; i < this.order.length; i += 1) {
-  //     // $FlowFixMe (this is already fixed in isSimilarTo check above)
-  //     order.push(this.order[i].add(transformToAdd.order[i]));
-  //   }
-  //   return new Transform(order, this.name);
-  // }
   add(transformToAdd: Transform = new Transform()): Transform {
     const def = [];
     for (let i = 0; i < this.def.length; i += 1) {
@@ -3714,17 +3703,6 @@ class Transform {
    * {@link Scale} and {@link Translation} transform elements
    * @see <a href="#transformissimilarto">Transform.isSimilarTo</a>
    */
-  // mul(transformToMul: Transform = new Transform()): Transform {
-  //   if (!this.isSimilarTo(transformToMul)) {
-  //     return new Transform(this.order, this.name);
-  //   }
-  //   const order = [];
-  //   for (let i = 0; i < this.order.length; i += 1) {
-  //     // $FlowFixMe (this is already fixed in isSimilarTo check above)
-  //     order.push(this.order[i].mul(transformToMul.order[i]));
-  //   }
-  //   return new Transform(order, this.name);
-  // }
   mul(transformToMultiply: Transform = new Transform()): Transform {
     const def = [];
     for (let i = 0; i < this.def.length; i += 1) {
@@ -3790,11 +3768,20 @@ class Transform {
    * Return a duplicate transform with all values rounded
    */
   round(precision: number = 8): Transform {
-    const order = [];
-    for (let i = 0; i < this.order.length; i += 1) {
-      order.push(this.order[i].round(precision));
+    const def = [];
+    for (let i = 0; i < this.def.length; i += 1) {
+      const newDef = Array(this.def[i].length);
+      // eslint-disable-next-line prefer-destructuring
+      newDef[0] = this.def[i][0];
+      newDef[newDef.length - 1] = this.name;
+      for (let j = 1; j < this.def[i].length - 1; j += 1) {
+        newDef[j] = roundNum(this.def[i][j], precision);
+      }
+      def.push(newDef);
+      // order.push(this.def[i].round(precision));
     }
-    return new Transform(order, this.name);
+    return this.createFromDef(def, this.name);
+    // return new Transform(order, this.name);
   }
 
   /**
