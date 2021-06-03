@@ -306,15 +306,8 @@ describe('Transform', () => {
       const t1 = new Transform().scale(1, 2).rotate(3).translate(4, 5);
       const t2 = new Transform().rotate(0, 1).rotate(2).translate(3, 4);
       const t3 = new Transform().scale(0, 1).rotate(2);
-      let ts = t1.add(t2);
-      expect(ts.s()).toEqual(t1.s());
-      expect(ts.r()).toEqual(t1.r());
-      expect(ts.t()).toEqual(t1.t());
-
-      ts = t1.add(t3);
-      expect(ts.s()).toEqual(t1.s());
-      expect(ts.r()).toEqual(t1.r());
-      expect(ts.t()).toEqual(t1.t());
+      expect(() => t1.add(t2)).toThrow();
+      expect(() => t1.add(t3)).toThrow();
     });
     test('Multiply happy case', () => {
       const t1 = new Transform().scale(1, 2).rotate(3).translate(4, 5);
@@ -329,15 +322,17 @@ describe('Transform', () => {
       const t1 = new Transform().scale(1, 2).rotate(3).translate(4, 5);
       const t2 = new Transform().rotate(0, 1).rotate(2).translate(3, 4);
       const t3 = new Transform().scale(0, 1).rotate(2);
-      let ts = t1.mul(t2);
-      expect(ts.s()).toEqual(t1.s());
-      expect(ts.r()).toEqual(t1.r());
-      expect(ts.t()).toEqual(t1.t());
+      expect(() => t1.mul(t2)).toThrow();
+      expect(() => t1.mul(t3)).toThrow();
+      // let ts = t1.mul(t2);
+      // expect(ts.s()).toEqual(t1.s());
+      // expect(ts.r()).toEqual(t1.r());
+      // expect(ts.t()).toEqual(t1.t());
 
-      ts = t1.mul(t3);
-      expect(ts.s()).toEqual(t1.s());
-      expect(ts.r()).toEqual(t1.r());
-      expect(ts.t()).toEqual(t1.t());
+      // ts = t1.mul(t3);
+      // expect(ts.s()).toEqual(t1.s());
+      // expect(ts.r()).toEqual(t1.r());
+      // expect(ts.t()).toEqual(t1.t());
     });
     test('Transform', () => {
       const t1 = new Transform().translate(1, 0);

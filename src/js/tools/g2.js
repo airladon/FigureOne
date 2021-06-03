@@ -3650,27 +3650,21 @@ class Transform {
    * @see <a href="#transformissimilarto">Transform.isSimilarTo</a>
    */
   sub(transformToSubtract: Transform = new Transform()): Transform {
-    // if (!this.isSimilarTo(transformToSubtract)) {
-    //   return new Transform(this.order, this.name);
-    // }
     const def = [];
     for (let i = 0; i < this.def.length; i += 1) {
       if (this.def[i][0] !== transformToSubtract.def[i][0]) {
         throw new Error(`Cannot subtract transforms with different shapes: '${this.def}' - '${transformToSubtract.def}'`);
       }
-      const subtracted = Array(this.def[i].length);
+      const newDef = Array(this.def[i].length);
       // eslint-disable-next-line prefer-destructuring
-      subtracted[0] = this.def[i][0];
-      subtracted[subtracted.length - 1] = this.name;
+      newDef[0] = this.def[i][0];
+      newDef[newDef.length - 1] = this.name;
       for (let j = 1; j < this.def[i].length - 1; j += 1) {
-        subtracted[j] = this.def[i][j] - transformToSubtract.def[i][j];
+        newDef[j] = this.def[i][j] - transformToSubtract.def[i][j];
       }
-      def.push(subtracted);
-      // $FlowFixMe (this is already fixed in isSimilarTo check above)
-      // order.push(this.order[i].sub(transformToSubtract.order[i]));
+      def.push(newDef);
     }
     return this.createFromDef(def, this.name);
-    // return new Transform(order, this.name);
   }
 
   // Add a transform to the current one.
@@ -3683,16 +3677,33 @@ class Transform {
    * {@link Scale} and {@link Translation} transform elements
    * @see <a href="#transformissimilarto">Transform.isSimilarTo</a>
    */
+  // add(transformToAdd: Transform = new Transform()): Transform {
+  //   if (!this.isSimilarTo(transformToAdd)) {
+  //     return new Transform(this.order, this.name);
+  //   }
+  //   const order = [];
+  //   for (let i = 0; i < this.order.length; i += 1) {
+  //     // $FlowFixMe (this is already fixed in isSimilarTo check above)
+  //     order.push(this.order[i].add(transformToAdd.order[i]));
+  //   }
+  //   return new Transform(order, this.name);
+  // }
   add(transformToAdd: Transform = new Transform()): Transform {
-    if (!this.isSimilarTo(transformToAdd)) {
-      return new Transform(this.order, this.name);
+    const def = [];
+    for (let i = 0; i < this.def.length; i += 1) {
+      if (this.def[i][0] !== transformToAdd.def[i][0]) {
+        throw new Error(`Cannot add transforms with different shapes: '${this.def}' - '${transformToAdd.def}'`);
+      }
+      const newDef = Array(this.def[i].length);
+      // eslint-disable-next-line prefer-destructuring
+      newDef[0] = this.def[i][0];
+      newDef[newDef.length - 1] = this.name;
+      for (let j = 1; j < this.def[i].length - 1; j += 1) {
+        newDef[j] = this.def[i][j] + transformToAdd.def[i][j];
+      }
+      def.push(newDef);
     }
-    const order = [];
-    for (let i = 0; i < this.order.length; i += 1) {
-      // $FlowFixMe (this is already fixed in isSimilarTo check above)
-      order.push(this.order[i].add(transformToAdd.order[i]));
-    }
-    return new Transform(order, this.name);
+    return this.createFromDef(def, this.name);
   }
 
   // transform step wise multiplication
@@ -3703,16 +3714,33 @@ class Transform {
    * {@link Scale} and {@link Translation} transform elements
    * @see <a href="#transformissimilarto">Transform.isSimilarTo</a>
    */
-  mul(transformToMul: Transform = new Transform()): Transform {
-    if (!this.isSimilarTo(transformToMul)) {
-      return new Transform(this.order, this.name);
+  // mul(transformToMul: Transform = new Transform()): Transform {
+  //   if (!this.isSimilarTo(transformToMul)) {
+  //     return new Transform(this.order, this.name);
+  //   }
+  //   const order = [];
+  //   for (let i = 0; i < this.order.length; i += 1) {
+  //     // $FlowFixMe (this is already fixed in isSimilarTo check above)
+  //     order.push(this.order[i].mul(transformToMul.order[i]));
+  //   }
+  //   return new Transform(order, this.name);
+  // }
+  mul(transformToMultiply: Transform = new Transform()): Transform {
+    const def = [];
+    for (let i = 0; i < this.def.length; i += 1) {
+      if (this.def[i][0] !== transformToMultiply.def[i][0]) {
+        throw new Error(`Cannot multiply transforms with different shapes: '${this.def}' - '${transformToMultiply.def}'`);
+      }
+      const newDef = Array(this.def[i].length);
+      // eslint-disable-next-line prefer-destructuring
+      newDef[0] = this.def[i][0];
+      newDef[newDef.length - 1] = this.name;
+      for (let j = 1; j < this.def[i].length - 1; j += 1) {
+        newDef[j] = this.def[i][j] * transformToMultiply.def[i][j];
+      }
+      def.push(newDef);
     }
-    const order = [];
-    for (let i = 0; i < this.order.length; i += 1) {
-      // $FlowFixMe (this is already fixed in isSimilarTo check above)
-      order.push(this.order[i].mul(transformToMul.order[i]));
-    }
-    return new Transform(order, this.name);
+    return this.createFromDef(def, this.name);
   }
 
   /**
