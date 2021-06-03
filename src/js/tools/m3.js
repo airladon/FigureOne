@@ -280,6 +280,107 @@ function inverse(A: Array<number>) {
   ];
 }
 
+// function lu(A: Array<number>) {
+//   let n;
+//   if (A.length === 9 ) {
+//     n = 3;
+//   }
+//   if (A.length === 16) {
+//     n = 4;
+//   } else {
+//     n = Math.sqrt(A.length);
+//   }
+//   const a = new Array(n).fill(0).map(() => new Array(n).fill(0));
+//   // Fill augmented matrix (with matrix plus identity)
+//   let index = 0;
+//   for (let i = 0; i < n; i += 1) {
+//     for (let j = 0; j < n; j += 1) {
+//       a[i][j] = A[index];
+//       index += 1;
+//     }
+//   }
+//   console.log(a[0].slice())
+//   console.log(a[1].slice())
+//   console.log(a[2].slice())
+
+//   const p = new Array(n + 1).fill(0);
+
+//   for (let i = 0; i <= n; i += 1) {
+//     p[i] = i; // Unit permutation matrix, P[N] initialized with N
+//   }
+
+//   for (let i = 0; i < n; i += 1) {
+//     let maxA = 0.0;
+//     let imax = i;
+
+//     for (let k = i; k < n; k += 1) {
+//       const absA = Math.abs(a[k][i]);
+//       if (absA > maxA) {
+//         maxA = absA;
+//         imax = k;
+//       }
+//     }
+
+//     if (maxA < 0.0000001) {
+//       return 0; // failure, matrix is degenerate
+//     }
+
+//     if (imax !== i) {
+//       // pivoting P
+//       const j = p[i];
+//       p[i] = p[imax];
+//       p[imax] = j;
+
+//       // pivoting rows of A
+//       const ptr = a[i].slice();
+//       a[i] = a[imax].slice();
+//       a[imax] = ptr;
+
+//       // counting pivots starting from N (for determinant)
+//       p[n] += 1;
+//     }
+
+//     for (let j = i + 1; j < n; j += 1) {
+//       a[j][i] /= a[i][i];
+
+//       for (let k = i + 1; k < n; k += 1) {
+//         a[j][k] -= a[j][i] * a[i][k];
+//       }
+//     }
+//   }
+//   return [a, p];
+// }
+
+// function lupInvert(a: Array<Array<number>>, p: Array<number>) {
+//   const n = a.length;
+
+//   const inv = new Array(n).fill(0).map(() => new Array(n).fill(0));
+//   for (let j = 0; j < n; j += 1) {
+//     for (let i = 0; i < n; i += 1) {
+//       inv[i][j] = p[i] === j ? 1 : 0;
+
+//       for (let k = 0; k < i; k += 1) {
+//         inv[i][j] -= a[i][k] * inv[k][j];
+//       }
+//     }
+
+//     for (let i = n - 1; i >= 0; i -= 1) {
+//       for (let k = i + 1; k < n; k += 1) {
+//         inv[i][j] -= a[i][k] * inv[k][j];
+//       }
+//       inv[i][j] /= a[i][i];
+//     }
+//   }
+//   const final = Array(n * n).fill(0);
+//   let index = 0;
+//   for (let i = 0; i < n; i += 1) {
+//     for (let j = 0; j < n; j += 1) {
+//       final[index] = inv[i][j];
+//       index += 1;
+//     }
+//   }
+//   return final;
+// }
 
 export {
   mul,
@@ -299,4 +400,6 @@ export {
   rotationMatrixVector,
   rotationMatrixUnitVector,
   inverse,
+  // lu,
+  // lupInvert,
 };
