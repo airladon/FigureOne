@@ -178,139 +178,22 @@ function transform(m: Type3DMatrix, px: number, py: number, pz: number): [number
   ];
 }
 
+// Guass-Jordan Elimination
+function inverse(A: Array<number>) {
+  const a = [
+    [A[0], A[1], A[2], 1, 0, 0],
+    [A[3], A[4], A[5], 0, 1, 0],
+    [A[6], A[7], A[8], 0, 0, 1],
+  ];
 
-// function inverse(matrix: Array<Array<number>>, order: number) {
-//   const n = order;
-//   const lu = Array(n).fill(Array(n).fill(0));
-//   let sum = 0;
-//   for (let i = 0; i < n; i += 1) {
-//     for (let j = i; j < n; j += 1) {
-//       sum = 0;
-//       for (let k = 0; k < i; k += 1) {
-//         sum += lu[i][k] * lu[k][j];
-//       }
-//       lu[i][j] = matrix[i][j] - sum;
-//     }
-//     for (let j = i + 1; j < n; j += 1) {
-//       sum = 0;
-//       for (let k = 0; k < i; k += 1) {
-//         sum += lu[j][k] * lu[k][i];
-//       }
-//       lu[j][i] = (1 / lu[i][i]) * (matrix[j][i] - sum);
-//     }
-//   }
-
-//   console.log(lu)
-//   // // lu = L+U-I
-//   // // find solution of Ly = b
-//   // let y = Array(n).fill(0);
-//   // for (let i = 0; i < n; i += 1)
-//   // {
-//   //   sum = 0;
-//   //   for (let k = 0; k < i; k += 1)
-//   //       sum += lu[i][k] * y[k];
-//   //   y[i] = rightPart[i] - sum;
-//   // }
-//   // // find solution of Ux = y
-//   // double[] x = new double[n];
-//   // for (int i = n - 1; i >= 0; i--)
-//   // {
-//   //     sum = 0;
-//   //     for (int k = i + 1; k < n; k += 1)
-//   //         sum += lu[i, k] * x[k];
-//   //     x[i] = (1 / lu[i, i]) * (y[i] - sum);
-//   // }
-//   // return x;
-// }
-
-// function lu(A: Array<Array<number>>) {
-//   const N = A.length;
-
-//   // const A = Array(N).fill(Array(N).fill(0));
-
-//   const Tol = 0.000001;
-//   const P = Array(N + 1);
-//   for (let i = 0; i <= N; i += 1) {
-//     P[i] = i;
-//   }
-
-//   for (let i = 0; i < N; i += 1) {
-//     let maxA = 0;
-//     let imax = i;
-
-//     for (let k = i; k < N; k += 1) {
-//       const absA = Math.abs(A[k][i]);
-//       if (absA > maxA) {
-//         maxA = absA;
-//         imax = k;
-//       }
-//     }
-
-//     if (maxA < Tol) {
-//       return 0; // failure, matrix is degenerate
-//     }
-
-//     if (imax !== i) {
-//       // pivoting P
-//       const j = P[i];
-//       P[i] = P[imax];
-//       P[imax] = j;
-
-//       // pivoting rows of A
-//       const ptr = A[i].slice();
-//       A[i] = A[imax].slice();
-//       A[imax] = ptr.slice();
-
-//       // counting pivots starting from N (for determinant)
-//       P[N] += 1;
-//     }
-
-//     for (let j = i + 1; j < N; j += 1) {
-//       A[j][i] /= A[i][i];
-//       for (let k = i + 1; k < N; k += 1) {
-//         A[j][k] -= A[j][i] * A[i][k];
-//       }
-//     }
-//   }
-
-//   return [A, P];  // decomposition done 
-// }
-
-// function invert(A, P) {
-//   const N = A.length;
-//   const IA = Array(N).fill(Array(N).fill(0));
-//   for (let j = 0; j < N; j += 1) {
-//     console.log(IA[0])
-//     console.log(IA[1])
-//     console.log(IA[2])
-//     for (let i = 0; i < N; i += 1) {
-//       IA[i][j] = P[i] === j ? 1.0 : 0.0;
-
-//       for (let k = 0; k < i; k += 1) {
-//         IA[i][j] -= A[i][k] * IA[k][j];
-//       }
-//     }
-
-//     for (let i = N - 1; i >= 0; i -= 1) {
-//       for (let k = i + 1; k < N; k += 1) {
-//         IA[i][j] -= A[i][k] * IA[k][j];
-//       }
-
-//       IA[i][j] /= A[i][i];
-//     }
-//   }
-//   return IA;
-// }
-
-function inverse(A: Array<Array<number>>) {
-  const a = A.map(row => row.slice());
   const m = a.length;
   const n = a[0].length;
   let h = 0;
   let k = 0;
 
+  // Guassian Elimination
+  // from https://en.wikipedia.org/wiki/Gaussian_elimination
   while (h < m && k < n) {
-    /* Find the k-th pivot: */
     let iMax = h;
     for (let i = h; i < m; i += 1) {
       const value = Math.abs(a[i][k]);
@@ -319,29 +202,24 @@ function inverse(A: Array<Array<number>>) {
       }
     }
     if (a[iMax][k] === 0) {
-      /* No pivot in this column, pass to next column */
       k += 1;
     } else {
       const temp = a[h].slice();
       a[h] = a[iMax].slice();
       a[iMax] = temp;
-      /* Do for all rows below pivot: */
       for (let i = h + 1; i < m; i += 1) {
         const f = a[i][k] / a[h][k];
-        /* Fill with zeros the lower part of pivot column: */
         a[i][k] = 0;
-        /* Do for all remaining elements in current row: */
         for (let j = k + 1; j < n; j += 1) {
           a[i][j] -= a[h][j] * f;
         }
-        /* Increase pivot row and column */
       }
       h += 1;
       k += 1;
     }
   }
 
-  // Now back substitution
+  // Back substitution
   for (let row = m - 1; row >= 0; row -= 1) {
     for (let r = m - 1; r > row; r -= 1) {
       const s = a[row][r] / a[r][r];
@@ -354,7 +232,11 @@ function inverse(A: Array<Array<number>>) {
       a[row][col] *= s;
     }
   }
-  return a;
+  return [
+    a[0][3], a[0][4], a[0][5],
+    a[1][3], a[1][4], a[1][5],
+    a[2][3], a[2][4], a[2][5],
+  ];
 }
 
 export {
@@ -375,7 +257,4 @@ export {
   rotationMatrixVector,
   rotationMatrixUnitVector,
   inverse,
-  lu,
-  invert,
-  reduce,
 };

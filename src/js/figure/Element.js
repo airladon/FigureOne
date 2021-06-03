@@ -17,6 +17,7 @@ import type {
 } from '../tools/g2';
 import { Recorder } from './Recorder/Recorder';
 import * as m2 from '../tools/m2';
+import * as m3 from '../tools/m3';
 import type { Type3DMatrix } from '../tools/m3';
 import type { Type2DMatrix } from '../tools/m2';
 // import type { pathOptionsType, TypeRotationDirection } from '../tools/g2';
@@ -2448,19 +2449,19 @@ class FigureElement {
     }
     if (from === 'pixel' && to === 'draw') {
       return m2.mul(
-        // m2.inverse(this.lastDrawTransform.matrix()),
-        this.lastDrawTransform.calcInverseMatrix(),
+        m3.inverse(this.lastDrawTransform.matrix()),
+        // this.lastDrawTransform.calcInverseMatrix(),
         this.figure.spaceTransforms.pixelToGL.matrix(),
       );
     }
     if (from === 'gl' && to === 'draw') {
-      return m2.inverse(this.lastDrawTransform.matrix());
+      return m3.inverse(this.lastDrawTransform.matrix());
     }
     if (from === 'figure' && to === 'draw') {
-      return m2.inverse(this.lastDrawTransform.calcMatrix(0, -3));
+      return m3.inverse(this.lastDrawTransform.calcMatrix(0, -3));
     }
     if (from === 'local' && to === 'draw') {
-      return m2.inverse(this.getTransform().matrix());
+      return m3.inverse(this.getTransform().matrix());
     }
 
     // Remaining Local related conversions
@@ -2478,15 +2479,15 @@ class FigureElement {
     }
     if (from === 'pixel' && to === 'local') {
       return m2.mul(
-        m2.inverse(this.lastDrawTransform.calcMatrix(this.transform.order.length)),
+        m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.order.length)),
         this.figure.spaceTransforms.pixelToGL.matrix(),
       );
     }
     if (from === 'gl' && to === 'local') {
-      return m2.inverse(this.lastDrawTransform.calcMatrix(this.transform.order.length));
+      return m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.order.length));
     }
     if (from === 'figure' && to === 'local') {
-      return m2.inverse(this.lastDrawTransform.calcMatrix(this.transform.order.length, -3));
+      return m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.order.length, -3));
     }
 
     // Remaining Figure related conversions
@@ -2732,7 +2733,7 @@ class FigureElement {
     const figureToGLSpace = spaceToSpaceTransform(figureSpace, glSpace);
     const glLocation = figurePosition.transformBy(figureToGLSpace.matrix());
     const t = new Transform(this.lastDrawTransform.order.slice(this.transform.order.length));
-    const newLocation = glLocation.transformBy(m2.inverse(t.matrix()));
+    const newLocation = glLocation.transformBy(m3.inverse(t.matrix()));
     this.setPosition(newLocation._dup());
   }
 
