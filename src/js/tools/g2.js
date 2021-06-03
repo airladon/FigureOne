@@ -2977,6 +2977,79 @@ function isTransformArrayZero(
   return isArrayZero(values);
 }
 
+export type ScaleTransform3DComponent = ['s', number, number, number];
+export type TranslateTransform3DComponent = ['t', number, number, number];
+export type RotateTransform3DComponent = ['r', number, number, number];
+export type CustomTransform3DComponent = ['r', number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number];
+export type ScaleTransform2DComponent = ['s', number, number];
+export type TranslateTransform2DComponent = ['t', number, number];
+export type RotateTransform2DComponent = ['r', number];
+// export type CustomTransform2DComponent = ['r', number, number, number, number, number, number, number, number, number];
+
+export type TransformComponent = ScaleTransform3DComponent | ScaleTransform2DComponent
+  | TranslateTransform3DComponent | TranslateTransform2DComponent
+  | RotateTransform3DComponent | RotateTransform2DComponent
+  | CustomTransform3DComponent;
+
+export type Transform3DComponent = ScaleTransform3DComponent
+  | TranslateTransform3DComponent
+  | RotateTransform3DComponent
+  | CustomTransform3DComponent;
+export type TransformDefinition = Array<TransformComponent>;
+
+function parseComponent(component: TransformComponent): Transform3DComponent {
+  const [type] = component;
+  if (type === 't') {
+    if (component.length === 4) {
+      return component;
+    }
+    const [, x, y] = component;
+    return ['t', x, y, 0];
+  }
+
+  if (type === 'r') {
+    if (component.length === 4) {
+      return component;
+    }
+    const [, r] = component;
+    return ['r', 0, 0, r];
+  }
+
+  if (type === 's') {
+    if (component.length === 4) {
+      return component;
+    }
+    const [, x, y] = component;
+    return ['s', x, y, 0];
+  }
+
+  if (type === 'c') {
+    return component;
+  }
+  throw new Error(`Could not parse transform component ${component}`);
+}
+
+function getTransformComponentMatrix(component: Transform3DComponent) {
+  const [type] = component;
+  if (type === 't') {
+    const [, x, y, z] = component;
+    return m3.translationMatrix(x, y, z);
+  }
+
+  if (type === 'r') {
+    const [, rx, ry, rz] = component;
+    return m3.rotationMatrix(rx, ry, rz);
+  }
+
+  if (type === 's') {
+    const [, sx, sy, sz] = component;
+    return m3.rotationMatrix(sx, sy, sz);
+  }
+  if (type === 'c') {
+    return component.slice(1);
+  }
+}
+
 /**
  * Object that represents a chain of {@link Rotation}, {@link Translation} and
  * {@link Scale} transforms
@@ -2988,14 +3061,13 @@ function isTransformArrayZero(
  * const t1 = new Transform().scale(2, 2).rotate(Math.PI).translate(1, 1)
  */
 class Transform {
+  def: TransformDefinition;
   order: Array<Translation | Rotation | Scale>;
   mat: Array<number>;
   index: number;
+  translationIndex: number;
   name: string;
   _type: 'transform';
-  custom: ?Object;
-
-  orderType: ['t', 'r', 's', 't']
 
   /**
    * @param {Array<Translation | Rotation | Scale> | string} chainOrName chain
@@ -3004,9 +3076,10 @@ class Transform {
    * @param {string} name transform name if `chainOrName` defines initializing
    * transforms
    */
-  constructor(chainOrName: Array<Translation | Rotation | Scale> | string = [], name: string = '') {
+  constructor(chainOrName: Array<TransformComponent> | string = [], name: string = '') {
     if (typeof chainOrName === 'string') {
       this.order = [];
+      this.def = [];
       this.name = chainOrName;
     } else {
       // for (let i = 0; i < orderOrName.length; i += 1 ) {
@@ -3021,6 +3094,7 @@ class Transform {
       // }
       // debugger;
       this.order = chainOrName.map(t => t._dup());
+      // this.def = chainOrName.map(t => parseTransformComponent(t));
       this.name = name;
     }
     // this.order = order.slice();
@@ -3028,6 +3102,7 @@ class Transform {
     this._type = 'transform';
     this.calcAndSetMatrix();
   }
+
 
   _state(options: { precision: number } = { precision: 8 }) {
     // const { precision } = options;
@@ -3160,6 +3235,23 @@ class Transform {
       if (!this.order[i].isUnity()) {
         m = m2.mul(m, this.order[i].matrix());
         // m = this.order[i].transform(m);
+      }
+    }
+    return m;
+  }
+
+  calcInverseMatrix(
+    orderStart: number = 0,
+    orderEnd: number = this.order.length - 1,
+  ) {
+    let orderEndToUse = orderEnd;
+    if (orderEnd < 0) {
+      orderEndToUse = this.order.length + orderEnd;
+    }
+    let m = m2.identity();
+    for (let i = orderStart; i < orderEndToUse; i += 1) {
+      if (!this.order[i].isUnity()) {
+        m = m2.mul(m, this.order[i].matrix());
       }
     }
     return m;

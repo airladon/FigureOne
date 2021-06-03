@@ -3,6 +3,7 @@
 import * as g2 from './js/tools/g2';
 import * as math from './js/tools/math';
 import * as m2 from './js/tools/m2';
+import * as m3 from './js/tools/m3';
 import * as morph from './js/tools/morph';
 import Figure from './js/figure/Figure';
 import TimeKeeper from './js/figure/TimeKeeper';
@@ -79,6 +80,7 @@ export type {
 const tools = {
   math,
   g2,
+  m3,
   color,
   css,
   html,

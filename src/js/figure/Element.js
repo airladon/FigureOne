@@ -2448,7 +2448,8 @@ class FigureElement {
     }
     if (from === 'pixel' && to === 'draw') {
       return m2.mul(
-        m2.inverse(this.lastDrawTransform.matrix()),
+        // m2.inverse(this.lastDrawTransform.matrix()),
+        this.lastDrawTransform.calcInverseMatrix(),
         this.figure.spaceTransforms.pixelToGL.matrix(),
       );
     }

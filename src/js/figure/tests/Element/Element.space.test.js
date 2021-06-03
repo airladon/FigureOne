@@ -142,7 +142,7 @@ describe('Element Space Transforms', () => {
     test('Vertex to Pixel', () => {
       expect(get(a, [0, 0], 'draw', 'pixel')).toEqual(getP(833.333, 500));
     });
-    test('Pixel to Vertex', () => {
+    test.only('Pixel to Vertex', () => {
       expect(get(a, [0, 0], 'pixel', 'draw')).toEqual(getP(-5, 3));
     });
     // Remaining Local
