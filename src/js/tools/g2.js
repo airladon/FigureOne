@@ -3240,23 +3240,6 @@ class Transform {
     return m;
   }
 
-  calcInverseMatrix(
-    orderStart: number = 0,
-    orderEnd: number = this.order.length - 1,
-  ) {
-    let orderEndToUse = orderEnd;
-    if (orderEnd < 0) {
-      orderEndToUse = this.order.length + orderEnd;
-    }
-    let m = m2.identity();
-    for (let i = orderStart; i < orderEndToUse; i += 1) {
-      if (!this.order[i].isUnity()) {
-        m = m2.mul(m, this.order[i].matrix());
-      }
-    }
-    return m;
-  }
-
   calcAndSetMatrix() {
     this.mat = this.calcMatrix();
   }

@@ -178,16 +178,57 @@ function transform(m: Type3DMatrix, px: number, py: number, pz: number): [number
   ];
 }
 
+
+function inverse3(m: Array<number>) {
+  const det = (m[0] * ((m[4] * m[8]) - (m[7] * m[5]))) - // eslint-disable-line
+              (m[1] * ((m[3] * m[8]) - (m[5] * m[6]))) + // eslint-disable-line
+              (m[2] * ((m[3] * m[7]) - (m[4] * m[6])));
+  const invdet = 1 / det;
+
+  const minv00 = ((m[4] * m[8]) - (m[7] * m[5])) * invdet;
+  const minv01 = ((m[2] * m[7]) - (m[1] * m[8])) * invdet;
+  const minv02 = ((m[1] * m[5]) - (m[2] * m[4])) * invdet;
+  const minv10 = ((m[5] * m[6]) - (m[3] * m[8])) * invdet;
+  const minv11 = ((m[0] * m[8]) - (m[2] * m[6])) * invdet;
+  const minv12 = ((m[3] * m[2]) - (m[0] * m[5])) * invdet;
+  const minv20 = ((m[3] * m[7]) - (m[6] * m[4])) * invdet;
+  const minv21 = ((m[6] * m[1]) - (m[0] * m[7])) * invdet;
+  const minv22 = ((m[0] * m[4]) - (m[3] * m[1])) * invdet;
+
+  return [
+    minv00, minv01, minv02,
+    minv10, minv11, minv12,
+    minv20, minv21, minv22,
+  ];
+}
+
 // Guass-Jordan Elimination
 function inverse(A: Array<number>) {
-  const a = [
-    [A[0], A[1], A[2], 1, 0, 0],
-    [A[3], A[4], A[5], 0, 1, 0],
-    [A[6], A[7], A[8], 0, 0, 1],
-  ];
+  let m;
+  if (A.length === 9 ) {
+    m = 3;
+    return inverse3(A);
+  }
+  if (A.length === 16) {
+    m = 4;
+  } else {
+    m = Math.sqrt(A.length);
+  }
+  const n = m * 2;
+  const a = new Array(m).fill(0).map(() => new Array(n).fill(0));
+  let index = 0;
 
-  const m = a.length;
-  const n = a[0].length;
+  // Fill augmented matrix (with matrix plus identity)
+  for (let i = 0; i < m; i += 1) {
+    for (let j = 0; j < n / 2; j += 1) {
+      a[i][j] = A[index];
+      index += 1;
+    }
+    for (let j = n / 2; j < n; j += 1) {
+      a[i][j] = i === j - n / 2 ? 1 : 0;
+    }
+  }
+
   let h = 0;
   let k = 0;
 
@@ -238,6 +279,7 @@ function inverse(A: Array<number>) {
     a[2][3], a[2][4], a[2][5],
   ];
 }
+
 
 export {
   mul,
