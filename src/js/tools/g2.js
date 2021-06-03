@@ -3514,12 +3514,11 @@ class Transform {
    * @return {boolean}
    */
   isSimilarTo(transformToCompare: Transform): boolean {
-    if (transformToCompare.order.length !== this.order.length) {
+    if (transformToCompare.def.length !== this.def.length) {
       return false;
     }
-    for (let i = 0; i < this.order.length; i += 1) {
-      if (this.order[i].constructor.name !==
-          transformToCompare.order[i].constructor.name) {
+    for (let i = 0; i < this.def.length; i += 1) {
+      if (this.def[i][0] !== transformToCompare.def[i][0]) {
         return false;
       }
     }
@@ -3538,25 +3537,46 @@ class Transform {
     if (!this.isSimilarTo(transformToCompare)) {
       return false;
     }
-    for (let i = 0; i < this.order.length; i += 1) {
-      const compare = transformToCompare.order[i];
-      const thisTrans = this.order[i];
-      if (thisTrans.constructor.name !== compare.constructor.name) {
+    for (let i = 0; i < this.def.length; i += 1) {
+      const compare = transformToCompare.def[i];
+      const thisTrans = this.def[i];
+      const [thisType] = thisTrans;
+      const [compareType] = compare;
+      if (thisType !== compareType) {
         return false;
       }
-      if ((thisTrans instanceof Translation && compare instanceof Translation
-      ) || (
-        thisTrans instanceof Scale && compare instanceof Scale
-      )) {
-        if (compare.isNotEqualTo(thisTrans, precision)) {
+      if (thisType === 't' || thisType === 's' || thisType === 'r') {
+        const [, x, y, z] = thisTrans;
+        const [, x1, y1, z1] = compare;
+        if (roundNum(x, precision) !== roundNum(x1, precision)) {
           return false;
         }
-      }
-      if (thisTrans instanceof Rotation) {  // $FlowFixMe
-        if (roundNum(compare.r, precision) !== roundNum(thisTrans.r, precision)) {
+        if (roundNum(y, precision) !== roundNum(y1, precision)) {
           return false;
         }
+        if (roundNum(z, precision) !== roundNum(z1, precision)) {
+          return false;
+        }
+      } else if (thisType === 'c') {
+        for (let j = 1; j < thisType.length; j += 1) {
+          if (roundNum(thisTrans[j], precision) !== roundNum(compare[j], precision)) {
+            return false;
+          }
+        }
       }
+      // if ((thisTrans instanceof Translation && compare instanceof Translation
+      // ) || (
+      //   thisTrans instanceof Scale && compare instanceof Scale
+      // )) {
+      //   if (compare.isNotEqualTo(thisTrans, precision)) {
+      //     return false;
+      //   }
+      // }
+      // if (thisTrans instanceof Rotation) {  // $FlowFixMe
+      //   if (roundNum(compare.r, precision) !== roundNum(thisTrans.r, precision)) {
+      //     return false;
+      //   }
+      // }
     }
     return true;
   }
