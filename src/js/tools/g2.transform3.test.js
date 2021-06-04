@@ -114,7 +114,7 @@ describe('Transform', () => {
       expect(t.r()).toBe(1);
       expect(t.r(0)).toBe(1);
       expect(t.r(1)).toBe(2);
-      expect(t.r(2)).toBe(null);
+      expect(() => t.r(2)).toThrow();
     });
     test('Update rotation', () => {
       const t = new Transform()
@@ -211,7 +211,7 @@ describe('Transform', () => {
       expect(t.t()).toEqual({ x: 0, y: 0, z: 0, _type: 'point' });
       expect(t.t(0)).toEqual({ x: 0, y: 0, z: 0, _type: 'point' });
       expect(t.t(1)).toEqual({ x: 1, y: 1, z: 0, _type: 'point' });
-      expect(t.t(2)).toEqual(null);
+      expect(() => t.t(2)).toThrow();
     });
     test('Update translation', () => {
       const t = new Transform()
@@ -240,7 +240,7 @@ describe('Transform', () => {
       expect(t.s()).toEqual({ x: 0, y: 0, z: 1, _type: 'point' });
       expect(t.s(0)).toEqual({ x: 0, y: 0, z: 1, _type: 'point' });
       expect(t.s(1)).toEqual({ x: 1, y: 1, z: 1, _type: 'point' });
-      expect(t.s(2)).toEqual(null);
+      expect(() => t.s(2)).toThrow()
     });
     test('Update scale', () => {
       const t = new Transform()
@@ -258,6 +258,140 @@ describe('Transform', () => {
 
       t.updateScale([5, 5], 1);
       expect(t.s(1)).toEqual({ x: 5, y: 5, z: 1, _type: 'point' });
+
+      expect(() => t.updateScale(5, 5, 2)).toThrow();
+    });
+  });
+  describe.only('Update and get 3D', () => {
+    test('Update R in S, R, T', () => {
+      const t = new Transform().scale(2, 2, 2).rotate(0, 0, Math.PI).translate(1, 1, 1);
+      t.update(1).rotate(0, 0, Math.PI / 2);
+      const p0 = new Point(1, 0, 0);
+      const p1 = p0.transformBy(t.matrix());
+      expect(p1.round()).toEqual(new Point(1, 3, 1));
+    });
+    test('Get rotation', () => {
+      const t = new Transform().scale(2, 2).rotate(1, 2, 3).translate(1, 1)
+        .rotate(2);
+      expect(t.r3()).toEqual(new Point(1, 2, 3));
+      expect(t.r3(0)).toEqual(new Point(1, 2, 3));
+      expect(t.r3(1)).toEqual(new Point(0, 0, 2));
+      expect(() => t.r3(2)).toThrow();
+    });
+    test('Update rotation', () => {
+      const t = new Transform()
+        .scale(2, 2)
+        .rotate(1, 2, 3)
+        .translate(1, 1)
+        .rotate(4, 5, 6);
+      t.updateRotation([2, 3, 4]);
+      expect(t.r3()).toEqual(new Point(2, 3, 4));
+
+      t.updateRotation(5, 0);
+      expect(t.r3(0)).toEqual(new Point(0, 0, 5));
+
+      t.updateRotation([6, 7, 8], 1);
+      expect(t.r3(1)).toEqual(new Point(6, 7, 8));
+
+      expect(() => t.updateRotation(7, 2)).toThrow();
+    });
+    test('Update rotation checking matrix', () => {
+      const t = new Transform().rotate(0);
+      const matrix = t.m();
+      t.updateRotation([1, 2, 3]);
+      expect(t.m()).not.toEqual(matrix);
+      expect(t.m()).toEqual(new Transform().rotate(1, 2, 3).m());
+    });
+    test('Update rotation at index matrix', () => {
+      const t = new Transform().rotate(0).rotate(1, 2, 3);
+      const matrix = t.m();
+      t.updateRotation([2, 1, 0]);
+      expect(t.m()).not.toEqual(matrix);
+      expect(t.m()).toEqual(new Transform().rotate(2, 1, 0).rotate(1, 2, 3).m());
+    });
+    test('Update translation checking matrix', () => {
+      const t = new Transform().translate(0, 0, 0);
+      const matrix = t.m();
+      t.updateTranslation([1, 2, 3]);
+      expect(t.m()).not.toEqual(matrix);
+      expect(t.m()).toEqual(new Transform().translate(1, 2, 3).m());
+    });
+    test('Update translation at index', () => {
+      const t = new Transform().translate(1, 1, 1).translate(-1, 1, 2);
+      const matrix = t.m();
+      t.updateTranslation([1, 1, 0], 1);
+      expect(t.m()).not.toEqual(matrix);
+      expect(t.m()).toEqual(new Transform().translate(2, 2, 1).m());
+    });
+    test('Update scale checking matrix', () => {
+      const t = new Transform().scale(0, 0, 0);
+      const matrix = t.m();
+      t.updateScale([1, 2, 3]);
+      expect(t.m()).not.toEqual(matrix);
+      expect(t.m()).toEqual(new Transform().scale(1, 2, 3).m());
+    });
+    test('Update scale at index', () => {
+      const t = new Transform().scale(1, 2, 3).scale(-1, 1, -2);
+      const matrix = t.m();
+      t.updateScale([1, 1, 1], 1);
+      expect(t.m()).not.toEqual(matrix);
+      expect(t.m()).toEqual(new Transform().scale(1, 2, 3).m());
+    });
+    test('Get translation', () => {
+      const t = new Transform()
+        .translate(0, 0, 0).scale(2, 2, 2).rotate(1)
+        .translate(1, 1, 1)
+        .rotate(2);
+      expect(t.t()).toEqual(new Point(0, 0, 0));
+      expect(t.t(0)).toEqual(new Point(0, 0, 0));
+      expect(t.t(1)).toEqual(new Point(1, 1, 1));
+      expect(() => t.t(2)).toThrow();
+    });
+    test('Update translation', () => {
+      const t = new Transform()
+        .translate(0, 0, 0).scale(2).rotate(1)
+        .translate(1, 1, 1)
+        .rotate(2);
+      t.updateTranslation(new Point(2, 2, 2));
+      expect(t.t()).toEqual({ x: 2, y: 2, z: 2, _type: 'point' });
+
+      t.updateTranslation([3, 3, 3]);
+      expect(t.t()).toEqual({ x: 3, y: 3, z: 3, _type: 'point' });
+
+      t.updateTranslation([4, 4, 4], 0);
+      expect(t.t()).toEqual({ x: 4, y: 4, z: 4, _type: 'point' });
+
+      t.updateTranslation([5, 5, 5], 1);
+      expect(t.t(1)).toEqual({ x: 5, y: 5, z: 5, _type: 'point' });
+
+      expect(() => t.updateTranslation([5, 5, 5], 2)).toThrow();
+    });
+    test('Get Scale', () => {
+      const t = new Transform()
+        .scale(0, 0, 0).translate(2, 2, 2).rotate(1)
+        .scale(1, 2, 3)
+        .rotate(2);
+      expect(t.s()).toEqual({ x: 0, y: 0, z: 0, _type: 'point' });
+      expect(t.s(0)).toEqual({ x: 0, y: 0, z: 0, _type: 'point' });
+      expect(t.s(1)).toEqual({ x: 1, y: 2, z: 3, _type: 'point' });
+      expect(() => t.s(2)).toThrow();
+    });
+    test('Update scale', () => {
+      const t = new Transform()
+        .scale(0, 0, 0).translate(2, 2, 2).rotate(1)
+        .scale(1, 2, 3)
+        .rotate(2);
+      t.updateScale([2, 1, -1]);
+      expect(t.s()).toEqual({ x: 2, y: 1, z: -1, _type: 'point' });
+
+      t.updateScale([2, 3, 4]);
+      expect(t.s()).toEqual({ x: 2, y: 3, z: 4, _type: 'point' });
+
+      t.updateScale([4, 5, 6], 0);
+      expect(t.s()).toEqual({ x: 4, y: 5, z: 6, _type: 'point' });
+
+      t.updateScale([5, 4, 3], 1);
+      expect(t.s(1)).toEqual({ x: 5, y: 4, z: 3, _type: 'point' });
 
       expect(() => t.updateScale(5, 5, 2)).toThrow();
     });

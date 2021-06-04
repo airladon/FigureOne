@@ -3362,7 +3362,7 @@ class Transform {
         count += 1;
       }
     }
-    return null;
+    throw new Error(`Cannot get ${translationIndex}-index translation from transform`);
   }
 
   /**
@@ -3474,7 +3474,7 @@ class Transform {
         count += 1;
       }
     }
-    return null;
+    throw new Error(`Cannot get ${scaleIndex}-index scale from transform`);
   }
 
   /**
@@ -3588,7 +3588,7 @@ class Transform {
         count += 1;
       }
     }
-    return null;
+    throw new Error(`Cannot get ${rotationIndex}-index rotation from transform`);
   }
 
   r3(rotationIndex: number = 0) {
@@ -3602,7 +3602,7 @@ class Transform {
         count += 1;
       }
     }
-    return null;
+    throw new Error(`Cannot get ${rotationIndex}-index rotation from transform`);
   }
 
   /**
