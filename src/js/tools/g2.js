@@ -4849,6 +4849,7 @@ class RangeBounds extends Bounds {
     const clipped = p._dup();
     clipped.x = clipValue(p.x, this.boundary.min, this.boundary.max);
     clipped.y = clipValue(p.y, this.boundary.min, this.boundary.max);
+    clipped.z = clipValue(p.z, this.boundary.min, this.boundary.max);
     return clipped;
   }
 }
@@ -5939,13 +5940,21 @@ class TransformBounds extends Bounds {
     for (let i = 0; i < t.def.length; i += 1) {
       const transformElement = t.def[i];
       const b = this.boundary[i];                       // $FlowFixMe
-      if (transformElement instanceof Rotation) {
-        if (b != null && !b.contains(transformElement.r)) {
-          return false;
-        }
-      } else if (b != null && !b.contains(new Point(transformElement.x, transformElement.y))) {
+      if (
+        b != null
+        && !b.contains(new Point(
+          transformElement[1], transformElement[2], transformElement[3],
+        ))
+      ) {
         return false;
       }
+      // if (transformElement[0] === 'r') {
+      //   if (b != null && !b.contains(transformElement.r)) {
+      //     return false;
+      //   }
+      // } else if (b != null && !b.contains(new Point(transformElement.x, transformElement.y))) {
+      //   return false;
+      // }
     }
     return true;
   }

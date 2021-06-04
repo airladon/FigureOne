@@ -921,11 +921,11 @@ class FigureElement {
         if (bounds instanceof TransformBounds) {
           for (let i = 0; i < bounds.boundary.length; i += 1) {
             const bound = bounds.boundary[i];
-            const order = bounds.order[i];
+            const def = bounds.def[i];
             if (
               bounds.boundary[i] != null
               && bound instanceof RangeBounds
-              && (order === 't' || order === 's')
+              && (def === 't' || def === 's')
             ) {
               bounds.boundary[i] = new RectBounds({
                 left: bound.boundary.min,
@@ -1848,10 +1848,6 @@ class FigureElement {
 
   updateLastDrawTransform() {
     const transform = this.getTransform();
-    // transform.order.forEach((t, index) => {
-    //   this.lastDrawTransform.order[index] = t._dup();
-    //   this.lastDrawTransform.def[index] = transform.def[index].slice();
-    // });
     transform.def.forEach((t, index) => {
       this.lastDrawTransform.def[index] = t.slice();
     });
@@ -1860,7 +1856,7 @@ class FigureElement {
 
   getParentLastDrawTransform() {
     const { parentCount } = this.lastDrawElementTransformPosition;
-    return new Transform(this.lastDrawTransform.order.slice(-parentCount));
+    return new Transform(this.lastDrawTransform.def.slice(-parentCount));
   }
 
   /**
@@ -2472,26 +2468,26 @@ class FigureElement {
     if (from === 'local' && to === 'pixel') {
       return m2.mul(
         this.figure.spaceTransforms.glToPixel.matrix(),
-        this.lastDrawTransform.calcMatrix(this.transform.order.length),
+        this.lastDrawTransform.calcMatrix(this.transform.def.length),
       );
     }
     if (from === 'local' && to === 'gl') {
-      return this.lastDrawTransform.calcMatrix(this.transform.order.length);
+      return this.lastDrawTransform.calcMatrix(this.transform.def.length);
     }
     if (from === 'local' && to === 'figure') {
-      return this.lastDrawTransform.calcMatrix(this.transform.order.length, -3);
+      return this.lastDrawTransform.calcMatrix(this.transform.def.length, -3);
     }
     if (from === 'pixel' && to === 'local') {
       return m2.mul(
-        m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.order.length)),
+        m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.def.length)),
         this.figure.spaceTransforms.pixelToGL.matrix(),
       );
     }
     if (from === 'gl' && to === 'local') {
-      return m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.order.length));
+      return m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.def.length));
     }
     if (from === 'figure' && to === 'local') {
-      return m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.order.length, -3));
+      return m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.def.length, -3));
     }
 
     // Remaining Figure related conversions
@@ -2736,7 +2732,7 @@ class FigureElement {
     };
     const figureToGLSpace = spaceToSpaceTransform(figureSpace, glSpace);
     const glLocation = figurePosition.transformBy(figureToGLSpace.matrix());
-    const t = new Transform(this.lastDrawTransform.order.slice(this.transform.order.length));
+    const t = new Transform(this.lastDrawTransform.def.slice(this.transform.def.length));
     const newLocation = glLocation.transformBy(m3.inverse(t.matrix()));
     this.setPosition(newLocation._dup());
   }
@@ -3085,8 +3081,8 @@ class FigureElement {
     const newTransforms = transformBy(parentTransform, [transform]);
     this.parentTransform = parentTransform;
     this.lastDrawElementTransformPosition = {
-      parentCount: parentTransform[0].order.length,
-      elementCount: this.transform.order.length,
+      parentCount: parentTransform[0].def.length,
+      elementCount: this.transform.def.length,
     };
     this.pulseTransforms = this.getPulseTransforms(
       this.timeKeeper.now() / 1000,
@@ -3462,8 +3458,8 @@ class FigureElementPrimitive extends FigureElement {
       // if (FIGURE1DEBUG) { timer.stamp('m2'); }
 
       this.lastDrawElementTransformPosition = {
-        parentCount: parentTransform[0].order.length,
-        elementCount: this.transform.order.length,
+        parentCount: parentTransform[0].def.length,
+        elementCount: this.transform.def.length,
       };
 
       this.pulseTransforms = this.getPulseTransforms(now); // $FlowFixMe
@@ -3514,8 +3510,8 @@ class FigureElementPrimitive extends FigureElement {
 
   setFirstTransform(parentTransform: Transform = new Transform()) {
     this.lastDrawElementTransformPosition = {
-      parentCount: parentTransform.order.length,
-      elementCount: this.transform.order.length,
+      parentCount: parentTransform.def.length,
+      elementCount: this.transform.def.length,
     };
     this.parentTransform = [parentTransform];
     const firstTransform = parentTransform.transform(this.getTransform());
@@ -4144,8 +4140,8 @@ class FigureElementCollection extends FigureElement {
       // if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
 
       this.lastDrawElementTransformPosition = {
-        parentCount: parentTransform[0].order.length,
-        elementCount: this.transform.order.length,
+        parentCount: parentTransform[0].def.length,
+        elementCount: this.transform.def.length,
       };
       const transform = this.getTransform();
       const newTransforms = transformBy(parentTransform, [transform]);

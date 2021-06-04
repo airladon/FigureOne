@@ -49,9 +49,9 @@ describe('Element Drawing', () => {
       .scale(1, 1, 'Figure')
       .translate(0, 0, 'Figure');
     // LastDrawTransform
-    expect(a.lastDrawTransform.order).toEqual(expectedDrawTransform.order);
+    expect(a.lastDrawTransform.def).toEqual(expectedDrawTransform.def);
     // Actual transform(s) drawn (in this case just one as no copies or pulse multipliers)
-    expect(a.drawTransforms[0].order).toEqual(expectedDrawTransform.order);
+    expect(a.drawTransforms[0].def).toEqual(expectedDrawTransform.def);
     // Transform matrix sent to gl
     expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls).toHaveLength(1);
     expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls[0][2])
@@ -81,9 +81,9 @@ describe('Element Drawing', () => {
     );
 
     // LastDrawTransform
-    expect(a.lastDrawTransform.order).toEqual(expectedLastDrawTransform.order);
+    expect(a.lastDrawTransform.def).toEqual(expectedLastDrawTransform.def);
     // Actual transform(s) drawn (in this case just one as no copies or pulse multipliers)
-    expect(a.drawTransforms[0].order).toEqual(expectedDrawTransform.order);
+    expect(a.drawTransforms[0].def).toEqual(expectedDrawTransform.def);
     // Transform matrix sent to gl
     expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls).toHaveLength(2);
     expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls[1][2])
@@ -114,10 +114,10 @@ describe('Element Drawing', () => {
     ];
 
     // LastDrawTransform
-    expect(a.lastDrawTransform.order).toEqual(expectedLastDrawTransform.order);
+    expect(a.lastDrawTransform.def).toEqual(expectedLastDrawTransform.def);
     // Actual transform(s) drawn (in this case just one as no copies or pulse multipliers)
-    expect(a.drawTransforms[0].order).toEqual(expectedDrawTransforms[0].order);
-    expect(a.drawTransforms[1].order).toEqual(expectedDrawTransforms[1].order);
+    expect(a.drawTransforms[0].def).toEqual(expectedDrawTransforms[0].def);
+    expect(a.drawTransforms[1].def).toEqual(expectedDrawTransforms[1].def);
     // Transform matrix sent to gl
     expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls).toHaveLength(2);
     expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls[0][2])

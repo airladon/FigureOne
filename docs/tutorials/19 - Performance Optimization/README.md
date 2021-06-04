@@ -292,13 +292,13 @@ for (let i = 0; i < 250; i += 1) {
     const { transform } = e;
 
     // Calculate the new position coordinates
-    const x = transform.order[0].x + velocity[0] * deltaTime;
-    const y = transform.order[0].y + velocity[1] * deltaTime;
+    const x = transform.def[0][1] + velocity[0] * deltaTime;
+    const y = transform.def[0][2] + velocity[1] * deltaTime;
 
     // Manually update the transform and resulting matrix for the new position
-    transform.order[0].x = x;
-    transform.order[0].y = y;
-    transform.mat = [1, 0, transform.order[0].x, 0, 1, transform.order[0].y, 0, 0, 1];
+    transform.def[0][1] = x;
+    transform.def[0][2] = y;
+    transform.mat = [1, 0, transform.def[0][1], 0, 1, transform.def[0][2], 0, 0, 1];
 
     // If the shape is on or crossing a boundary, then set the
     // velocity sign so it bounces back into the figure.
@@ -340,7 +340,7 @@ for (let i = 0; i < 400; i += 1) {
   // Override element draw method
   e.draw = (now, parentTransform) => {
     // Get the current position directly
-    const { x, y } = e.transform.order[0];
+    const [, x, y] = e.transform.def[0];
 
     // Cacluate the draw matrix as efficiently as possible
     const mat = Fig.tools.m2.mul(parentTransform[0].mat, [1, 0, x, 0, 1, y, 0, 0, 1]);

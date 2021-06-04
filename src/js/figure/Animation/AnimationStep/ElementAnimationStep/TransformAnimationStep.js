@@ -227,19 +227,19 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     // if delta is null, then calculate it from start and target
     if (this.transform.delta == null && this.transform.target != null) {
       const delta = this.transform.target.sub(this.transform.start);
-      delta.order.forEach((deltaStep, index) => {
-        const startStep = this.transform.start.order[index];
-        const targetStep = this.transform.target.order[index];
-        if (deltaStep instanceof Rotation
-          && startStep instanceof Rotation
-          && targetStep instanceof Rotation) {
+      delta.def.forEach((deltaStep, index) => {
+        const startStep = this.transform.start.def[index];
+        const targetStep = this.transform.target.def[index];
+        if (deltaStep[0] === 'r'
+          && startStep[0] === 'r'
+          && targetStep[0] === 'r') {
           const rotDiff = getDeltaAngle(
-            startStep.r,
-            targetStep.r,
+            startStep[3],
+            targetStep[3],
             this.transform.rotDirection,
           );
           // eslint-disable-next-line no-param-reassign
-          deltaStep.r = rotDiff;
+          deltaStep[3] = rotDiff;
         }
       });
       this.transform.delta = delta;

@@ -665,7 +665,6 @@ describe('Transform', () => {
       const b = t._dup();
       expect(t).toEqual(b);
       expect(t).not.toBe(b);
-      // expect(t.order).not.toBe(b.order);
     });
     test('Velocity - Happy case', () => {
       const deltaTime = 1;

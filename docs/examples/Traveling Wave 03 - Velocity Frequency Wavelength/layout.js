@@ -398,7 +398,7 @@ function setupFigure() {
       // updates all the particles with their current displacement.
       update: (deltaTime) => {
         // Get movePad displacement
-        const { y } = movePad.transform.order[2];
+        const y = movePad.transform.def[2][2];
         // Record the displacement
         medium.custom.recording.record(y, deltaTime);
 
