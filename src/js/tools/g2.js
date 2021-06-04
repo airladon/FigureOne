@@ -3276,14 +3276,30 @@ class Transform {
   ) {
     let orderEndToUse = orderEnd;
     if (orderEnd < 0) {
-      orderEndToUse = this.order.length + orderEnd;
+      orderEndToUse = this.def.length + orderEnd;
     }
     let m = m2.identity();
     for (let i = orderEndToUse; i >= orderStart; i -= 1) {
-      if (!this.order[i].isUnity()) {
-        m = m2.mul(m, this.order[i].matrix());
-        // m = this.order[i].transform(m);
+      // let n1 = this.order[i].matrix();
+      // let n2;
+      // if (!this.order[i].isUnity()) {
+      //   m = m2.mul(m, this.order[i].matrix());
+      //   // m = this.order[i].transform(m);
+      // }
+      const [type, x, y, z] = this.def[i];
+      if (type === 't' && (x !== 0 || y !== 0 || z !== 0)) {
+        // n2 = m2.translationMatrix(x, y);
+        // if (x !== 0 && y !== 0 && z !== 0) {
+        m = m2.mul(m, m2.translationMatrix(x, y));
+        // }
+      } else if (type === 's' && (x !== 1 || y !== 1 || z !== 1)) {
+        // n2 = m2.scaleMatrix(x, y);
+        m = m2.mul(m, m2.scaleMatrix(x, y));
+      } else if (type === 'r' && (x !== 0 || y !== 0 || z !== 0)) {
+        // n2 = m2.rotationMatrix(x, y);
+        m = m2.mul(m, m2.rotationMatrix(z));
       }
+      // console.log(type, n1, n2)
     }
     return m;
   }

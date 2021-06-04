@@ -1848,8 +1848,12 @@ class FigureElement {
 
   updateLastDrawTransform() {
     const transform = this.getTransform();
-    transform.order.forEach((t, index) => {
-      this.lastDrawTransform.order[index] = t._dup();
+    // transform.order.forEach((t, index) => {
+    //   this.lastDrawTransform.order[index] = t._dup();
+    //   this.lastDrawTransform.def[index] = transform.def[index].slice();
+    // });
+    transform.def.forEach((t, index) => {
+      this.lastDrawTransform.def[index] = t.slice();
     });
     this.lastDrawTransform.calcAndSetMatrix();
   }
