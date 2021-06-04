@@ -4072,18 +4072,33 @@ class Transform {
    * identity transforms.
    */
   identity() {
-    const order = [];
-    for (let i = 0; i < this.order.length; i += 1) {
-      const t = this.order[i];
-      if (t instanceof Translation) {
-        order.push(new Translation(0, 0, this.name));
-      } else if (t instanceof Rotation) {
-        order.push(new Rotation(0, this.name));
-      } else if (t instanceof Scale) {
-        order.push(new Scale(1, 1, this.name));
+    const def = [];
+    for (let i = 0; i < this.def.length; i += 1) {
+      const [type] = this.def[i];
+      if (type === 't' || type === 'r') {
+        def.push([type, 0, 0, 0, this.name]);
+      } else if (type === 's') {
+        def.push([type, 1, 1, 1, this.name]);
+      } else if (type === 'c' && this.def[i].length === 18) {
+        def.push([
+          'c',
+          1, 0, 0, 0,
+          0, 1, 0, 0,
+          0, 0, 1, 0,
+          0, 0, 0, 1,
+          this.name,
+        ]);
+      } else if (type === 'c' && this.def[i].length === 11) {
+        def.push([
+          'c',
+          1, 0, 0,
+          0, 1, 0,
+          0, 0, 1,
+          this.name,
+        ]);
       }
     }
-    return new Transform(order, this.name);
+    return this.createFromDef(def, this.name);
   }
 }
 
