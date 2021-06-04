@@ -1460,7 +1460,7 @@ class CollectionsAngle extends FigureElementCollection {
       } else {
         _arrow1.show();
         // $FlowFixMe
-        _arrow1.transform.updateTranslation(this.arrow.start.radius, 0);
+        _arrow1.transform.updateTranslation([this.arrow.start.radius, 0]);
         // $FlowFixMe
         const arrowLengthAngle = this.arrow.start.height / this.arrow.start.radius;
         let curveToLine;    // $FlowFixMe
@@ -1572,13 +1572,13 @@ class CollectionsAngle extends FigureElementCollection {
     const { _side1, side1 } = this;
     if (_side1 && side1) {
       // _side1.transform.updateRotation(this.rotation);
-      _side1.transform.updateScale(side1.length, 1);
+      _side1.transform.updateScale([side1.length, 1]);
     }
 
     const { _side2, side2 } = this;
     if (_side2 && side2) {
       _side2.transform.updateRotation(this.angle);
-      _side2.transform.updateScale(side2.length, 1);
+      _side2.transform.updateScale([side2.length, 1]);
     }
 
     this.updateMovePads();

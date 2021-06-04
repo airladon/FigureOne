@@ -269,7 +269,9 @@ function getPoints(points: TypeParsablePoint | Array<TypeParsablePoint>): Array<
 function getScale(s: TypeParsablePoint | number) {
   let parsedPoint;
   if (typeof s === 'number') {
-    parsedPoint = new Point(s, s);
+    parsedPoint = new Point(s, s, s);
+  } else if (Array.isArray(s) && s.length === 2) {
+    parsedPoint = new Point(s[0], s[1], 1);
   } else {
     parsedPoint = getPoint(s);
   }
@@ -766,6 +768,7 @@ class Point {
       const transformedPoint = m2.transform(matrix, this.x, this.y);
       return new Point(transformedPoint[0], transformedPoint[1]);
     }
+    // const transformedPoint = m3.transform(matrix, this.x, this.y, this.z);
     const transformedPoint = m3.transform(matrix, this.x, this.y, this.z);
     return new this.constructor(transformedPoint[0], transformedPoint[1], transformedPoint[2]);
   }
@@ -2977,10 +2980,10 @@ function isTransformArrayZero(
   return isArrayZero(values);
 }
 
-export type ScaleTransform3DComponent = ['s', number, number, number, string];
-export type TranslateTransform3DComponent = ['t', number, number, number, string];
-export type RotateTransform3DComponent = ['r', number, number, number, string];
-export type CustomTransform3DComponent = ['c', number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, string];
+export type ScaleTransform3DComponent = ['s', number, number, number];
+export type TranslateTransform3DComponent = ['t', number, number, number];
+export type RotateTransform3DComponent = ['r', number, number, number];
+export type CustomTransform3DComponent = ['c', number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number];
 export type ScaleTransform2DComponent = ['s', number, number];
 export type TranslateTransform2DComponent = ['t', number, number];
 export type RotateTransform2DComponent = ['r', number];
@@ -2997,58 +3000,58 @@ export type Transform3DComponent = ScaleTransform3DComponent
   | CustomTransform3DComponent;
 export type TransformDefinition = Array<TransformComponent>;
 
-function parseTransformComponent(component: TransformComponent): Transform3DComponent {
-  const [type] = component;
-  if (type === 't') {
-    if (component.length === 4) {
-      return component;
-    }
-    const [, x, y] = component;
-    return ['t', x, y, 0];
-  }
+// function parseTransformComponent(component: TransformComponent): Transform3DComponent {
+//   const [type] = component;
+//   if (type === 't') {
+//     if (component.length === 4) {
+//       return component;
+//     }
+//     const [, x, y] = component;
+//     return ['t', x, y, 0];
+//   }
 
-  if (type === 'r') {
-    if (component.length === 4) {
-      return component;
-    }
-    const [, r] = component;
-    return ['r', 0, 0, r];
-  }
+//   if (type === 'r') {
+//     if (component.length === 4) {
+//       return component;
+//     }
+//     const [, r] = component;
+//     return ['r', 0, 0, r];
+//   }
 
-  if (type === 's') {
-    if (component.length === 4) {
-      return component;
-    }
-    const [, x, y] = component;
-    return ['s', x, y, 0];
-  }
+//   if (type === 's') {
+//     if (component.length === 4) {
+//       return component;
+//     }
+//     const [, x, y] = component;
+//     return ['s', x, y, 0];
+//   }
 
-  if (type === 'c') {
-    return component;
-  }
-  throw new Error(`Could not parse transform component ${JSON.stringify(component)}`);
-}
+//   if (type === 'c') {
+//     return component;
+//   }
+//   throw new Error(`Could not parse transform component ${JSON.stringify(component)}`);
+// }
 
-function getTransformComponentMatrix(component: Transform3DComponent) {
-  const [type] = component;
-  if (type === 't') {
-    const [, x, y, z] = component;
-    return m3.translationMatrix(x, y, z);
-  }
+// function getTransformComponentMatrix(component: Transform3DComponent) {
+//   const [type] = component;
+//   if (type === 't') {
+//     const [, x, y, z] = component;
+//     return m3.translationMatrix(x, y, z);
+//   }
 
-  if (type === 'r') {
-    const [, rx, ry, rz] = component;
-    return m3.rotationMatrix(rx, ry, rz);
-  }
+//   if (type === 'r') {
+//     const [, rx, ry, rz] = component;
+//     return m3.rotationMatrix(rx, ry, rz);
+//   }
 
-  if (type === 's') {
-    const [, sx, sy, sz] = component;
-    return m3.rotationMatrix(sx, sy, sz);
-  }
-  if (type === 'c') {
-    return component.slice(1);
-  }
-}
+//   if (type === 's') {
+//     const [, sx, sy, sz] = component;
+//     return m3.rotationMatrix(sx, sy, sz);
+//   }
+//   if (type === 'c') {
+//     return component.slice(1);
+//   }
+// }
 
 function makeTransformComponent(
   component: Transform3DComponent,
@@ -3076,7 +3079,7 @@ function makeTransformComponent(
  */
 class Transform {
   def: TransformDefinition;
-  order: Array<Translation | Rotation | Scale>;
+  // order: Array<Translation | Rotation | Scale>;
   mat: Array<number>;
   index: number;
   translationIndex: number;
@@ -3090,11 +3093,11 @@ class Transform {
    * @param {string} name transform name if `chainOrName` defines initializing
    * transforms
    */
-  constructor(chainOrName: Array<TransformComponent> | string = [], name: string = '') {
-    if (typeof chainOrName === 'string') {
-      this.order = [];
+  constructor(defOrName: TransformDefinition | string = '', name: string = '') {
+    if (typeof defOrName === 'string') {
+      // this.order = [];
       this.def = [];
-      this.name = chainOrName;
+      this.name = defOrName;
     } else {
       // for (let i = 0; i < orderOrName.length; i += 1 ) {
       //   const t = orderOrName[i];
@@ -3107,54 +3110,45 @@ class Transform {
       //   }
       // }
       // debugger;
-      this.order = chainOrName.map(t => t._dup());
-      this.def = chainOrName.map((t) => {
-        if (t instanceof Translation) {
-          return ['t', t.x, t.y, 0, name];
-        }
-        if (t instanceof Scale) {
-          return ['s', t.x, t.y, 1, name];
-        }
-        if (t instanceof Rotation) {
-          return ['r', 0, 0, t.r, name];
-        }
-      });
+      // this.order = chainOrName.map(t => t._dup());
+      this.def = defOrName.map(d => d.slice());
       // this.def = chainOrName.map(t => parseTransformComponent(t));
       this.name = name;
     }
     // this.order = order.slice();
-    this.index = this.order.length;
+    this.index = this.def.length;
     this._type = 'transform';
     this.calcAndSetMatrix();
   }
 
-  createFromDef(def: TransformDefinition, name: string) {
-    const order = [];
-    for (let i = 0; i < def.length; i += 1) {
-      const [type] = def[i];
-      if (type === 't') {
-        const t = new Translation(def[i][1], def[i][2], name);
-        // t.z = def[i][3];
-        order.push(t);
-      } else if (type === 's') {
-        const s = new Scale(def[i][1], def[i][2], name);
-        // s.z = def[i][3];
-        order.push(s);
-      }
-      if (type === 'r') {
-        order.push(new Rotation(def[i][3], name));
-      }
-    }
-    return new Transform(order, name);
-  }
+  // createFromDef(def: TransformDefinition, name: string) {
+  //   const order = [];
+  //   for (let i = 0; i < def.length; i += 1) {
+  //     const [type] = def[i];
+  //     if (type === 't') {
+  //       const t = new Translation(def[i][1], def[i][2], name);
+  //       // t.z = def[i][3];
+  //       order.push(t);
+  //     } else if (type === 's') {
+  //       const s = new Scale(def[i][1], def[i][2], name);
+  //       // s.z = def[i][3];
+  //       order.push(s);
+  //     }
+  //     if (type === 'r') {
+  //       order.push(new Rotation(def[i][3], name));
+  //     }
+  //   }
+  //   return new Transform(order, name);
+  // }
 
 
   _state(options: { precision: number } = { precision: 8 }) {
     // const { precision } = options;
-    const out = [];
-    this.order.forEach((transformElement) => {
-      out.push(transformElement._state(options));
-    });
+    // const out = [];
+    // this.order.forEach((transformElement) => {
+    //   out.push(transformElement._state(options));
+    // });
+    // this.def.forEach(d => out.push)
     // if (this.name !== '') {
     //   // return [this.name, ...out];
     //   out = [this.name, ...out];
@@ -3163,7 +3157,7 @@ class Transform {
       f1Type: 'tf',
       state: [
         this.name,
-        ...out,
+        ...this.def.slice(),
       ],
     };
   }
@@ -3174,7 +3168,7 @@ class Transform {
    * @return {Transform}
    */
   standard() {
-    return this.scale(1, 1).rotate(0).translate(0, 0);
+    return this.scale(1, 1, 1).rotate(0, 0, 0).translate(0, 0, 0);
   }
 
   /**
@@ -3183,23 +3177,32 @@ class Transform {
    * @return {Transform}
    */
   translate(
-    xOrTranslation: number | Point | TypeF1DefTranslation,
+    xOrTranslation: number | Point,
     y: number = 0,
-    name: string = this.name,
+    z: number = 0,
+    // name: string = this.name,
   ) {
-    const translation = new Translation(xOrTranslation, y, name);
-    const order = this.order.slice();
-
-    if (this.index === this.order.length) {
-      order.push(translation);
-    } else {
-      this.order[this.index] = translation;
-      this.def[this.index] = ['t', translation.x, translation.y, 0, name];
-      this.index += 1;
-      this.calcAndSetMatrix();
-      return this;
+    let _x = xOrTranslation;
+    let _y = y;
+    let _z = z;
+    if (typeof xOrTranslation !== 'number') {
+      _x = xOrTranslation.x;
+      _y = xOrTranslation.y;
+      _z = xOrTranslation.z;
     }
-    return new Transform(order, name);
+    const t = ['t', _x, _y, _z];
+    // const translation = new Translation(xOrTranslation, y, name);
+    // const order = this.order.slice();
+
+    if (this.index === this.def.length) {
+      this.def.push(t);
+    } else {
+      this.def[this.index] = t;
+    }
+    this.index += 1;
+    this.calcAndSetMatrix();
+    return this;
+    // return new Transform(order, name);
   }
 
   /**
@@ -3207,22 +3210,31 @@ class Transform {
    * @param {number} r
    * @return {Transform}
    */
-  rotate(r: number | TypeF1DefRotation, name: string = this.name) {
-    const rotation = new Rotation(r, name);
-    // rotation.name = name;
-    const order = this.order.slice();
-    if (this.index === this.order.length) {
-      order.push(rotation);
+  rotate(rOrRxOrPoint: number | Point, ry: number | null = null, rz: number = 0) {
+    let _rx = rOrRxOrPoint;
+    let _ry = ry;
+    let _rz = rz;
+    if (typeof rOrRxOrPoint === 'number') {
+      if (ry == null) {
+        _rx = 0;
+        _ry = 0;
+        _rz = rOrRxOrPoint;
+      }
     } else {
-      this.order[this.index] = rotation;
-      this.def[this.index] = ['r', 0, 0, rotation.r, name];
-      this.index += 1;
-      this.calcAndSetMatrix();
-      return this;
+      _rx = rOrRxOrPoint.x;
+      _ry = rOrRxOrPoint.y;
+      _rz = rOrRxOrPoint.z;
     }
-    // this.order.push(new Rotation(r));
-    // this.calcMatrix();
-    return new Transform(order, name);
+    const r = ['r', _rx, _ry, _rz];
+
+    if (this.index === this.def.length) {
+      this.def.push(r);
+    } else {
+      this.def[this.index] = r;
+    }
+    this.index += 1;
+    this.calcAndSetMatrix();
+    return this;
   }
 
   /**
@@ -3230,20 +3242,35 @@ class Transform {
    * @param {number | Point} xOrScale
    * @return {Transform}
    */
-  scale(xOrScale: number | Point | TypeF1DefScale, y: number = 0, name: string = this.name) {
-    const scale = new Scale(xOrScale, y, name);
-    const order = this.order.slice();
-
-    if (this.index === this.order.length) {
-      order.push(scale);
+  scale(
+    sOrSxOrPoint: number | Point,
+    sy: number | null = null,
+    sz: number = 1,
+  ) {
+    let _sx = sOrSxOrPoint;
+    let _sy = sy;
+    let _sz = sz;
+    if (typeof sOrSxOrPoint === 'number') {
+      if (sy == null) {
+        _sx = sOrSxOrPoint;
+        _sy = sOrSxOrPoint;
+        _sz = sOrSxOrPoint;
+      }
     } else {
-      this.order[this.index] = scale;
-      this.def[this.index] = ['s', scale.x, scale.y, 1, name];
-      this.index += 1;
-      this.calcAndSetMatrix();
-      return this;
+      _sx = sOrSxOrPoint.x;
+      _sy = sOrSxOrPoint.y;
+      _sz = sOrSxOrPoint.z;
     }
-    return new Transform(order, name);
+    const s = ['s', _sx, _sy, _sz];
+
+    if (this.index === this.def.length) {
+      this.def.push(s);
+    } else {
+      this.def[this.index] = s;
+    }
+    this.index += 1;
+    this.calcAndSetMatrix();
+    return this;
   }
 
   /**
@@ -3271,33 +3298,33 @@ class Transform {
    * @return {Array<number>}
    */
   calcMatrix(
-    orderStart: number = 0,
-    orderEnd: number = this.order.length - 1,
+    defStart: number = 0,
+    defEnd: number = this.def.length - 1,
   ) {
-    let orderEndToUse = orderEnd;
-    if (orderEnd < 0) {
-      orderEndToUse = this.def.length + orderEnd;
+    let defEndToUse = defEnd;
+    if (defEnd < 0) {
+      defEndToUse = this.def.length + defEnd;
     }
-    let m = m2.identity();
-    for (let i = orderEndToUse; i >= orderStart; i -= 1) {
+    let m = m3.identity();
+    for (let i = defEndToUse; i >= defStart; i -= 1) {
       // let n1 = this.order[i].matrix();
       // let n2;
       // if (!this.order[i].isUnity()) {
-      //   m = m2.mul(m, this.order[i].matrix());
+      //   m = m3.mul(m, this.order[i].matrix());
       //   // m = this.order[i].transform(m);
       // }
       const [type, x, y, z] = this.def[i];
       if (type === 't' && (x !== 0 || y !== 0 || z !== 0)) {
-        // n2 = m2.translationMatrix(x, y);
+        // n2 = m3.translationMatrix(x, y);
         // if (x !== 0 && y !== 0 && z !== 0) {
-        m = m2.mul(m, m2.translationMatrix(x, y));
+        m = m3.mul(m, m3.translationMatrix(x, y, z));
         // }
       } else if (type === 's' && (x !== 1 || y !== 1 || z !== 1)) {
-        // n2 = m2.scaleMatrix(x, y);
-        m = m2.mul(m, m2.scaleMatrix(x, y));
+        // n2 = m3.scaleMatrix(x, y);
+        m = m3.mul(m, m3.scaleMatrix(x, y, z));
       } else if (type === 'r' && (x !== 0 || y !== 0 || z !== 0)) {
-        // n2 = m2.rotationMatrix(x, y);
-        m = m2.mul(m, m2.rotationMatrix(z));
+        // n2 = m3.rotationMatrix(x, y);
+        m = m3.mul(m, m3.rotationMatrix(x, y, z));
       }
       // console.log(type, n1, n2)
     }
@@ -3310,7 +3337,7 @@ class Transform {
 
 
   update(index: number) {
-    if (index < this.order.length) {
+    if (index < this.def.length) {
       this.index = index;
     }
     return this;
@@ -3357,30 +3384,75 @@ class Transform {
    * {@link Translation} transform where n = `index`
    * @return {Transform}
    */
-  updateTranslation(x: number | Point, yOrIndex: number = 0, index: number = 0) {
+  updateTranslation(
+    p: TypeParsablePoint,
+    index: number = 0,
+  ) {
+    return this.updateComponent('t', getPoint(p), index);
+    // let count = 0;
+    // let actualIndex = translationIndex;
+    // let _x = xOrPoint;
+    // let _y = yOrIndex;
+    // let _z = z;
+    // if (typeof xOrPoint !== 'number') {
+    //   const p = getPoint(xOrPoint);
+    //   actualIndex = yOrIndex;
+    //   _x = p.x;
+    //   _y = p.y;
+    //   _z = p.z;
+    // }
+    // for (let i = 0; i < this.def.length; i += 1) {
+    //   const [type] = this.def[i];
+    //   if (type === 't') {
+    //     if (count === actualIndex) {
+    //       this.def[i] = ['t', _x, _y, _z];
+    //       this.calcAndSetMatrix();
+    //       return this;
+    //     }
+    //     count += 1;
+    //   }
+    // }
+    // throw new Error(`Cannot update translation in transform: ${this.def}`);
+  }
+
+  updateComponent(
+    type: 't' | 's' | 'r',
+    p: Point,
+    index: number,
+  ) {
     let count = 0;
-    let actualIndex = index;
-    if (x instanceof Point) {
-      actualIndex = yOrIndex;
-    }
-    for (let i = 0; i < this.order.length; i += 1) {
-      const t = this.order[i];
-      if (t instanceof Translation) {
-        if (count === actualIndex) {
-          this.order[i] = new Translation(x, yOrIndex, this.name);
-          if (x instanceof Point) {
-            this.def[i] = ['t', x.x, x.y, 0, this.name];
-          } else {
-            this.def[i] = ['t', x, yOrIndex, 0, this.name];
-          }
+    // let actualIndex = translationIndex;
+    // let _x = xOrPoint;
+    // let _y = yOrIndex;
+    // let _z = z;
+    // if (typeof xOrPoint !== 'number') {
+    //   const p = getPoint(xOrPoint);
+    //   actualIndex = yOrIndex;
+    //   _x = p.x;
+    //   _y = p.y;
+    //   _z = p.z;
+    // }
+    for (let i = 0; i < this.def.length; i += 1) {
+      const [componentType] = this.def[i];
+      if (componentType === type) {
+        if (count === index) {
+          this.def[i] = [type, p.x, p.y, p.z];
           this.calcAndSetMatrix();
           return this;
         }
         count += 1;
       }
     }
-    return this;
+    let message = 'translation';
+    if (type === 'r') {
+      message = 'rotation';
+    }
+    if (type === 's') {
+      message = 'scale';
+    }
+    throw new Error(`Cannot update ${message} in transform: ${this.def}`);
   }
+
 
   /**
    * Retrieve the nth {@link Scale} transform value from this transform
@@ -3391,7 +3463,7 @@ class Transform {
    */
   s(scaleIndex: number = 0): ?Point {
     let count = 0;
-    for (let i = 0; i < this.order.length; i += 1) {
+    for (let i = 0; i < this.def.length; i += 1) {
       // const t = this.order[i];
       const [type] = this.def[i];
       if (type === 's') {
@@ -3459,38 +3531,45 @@ class Transform {
    * {@link Scale} transform where n = `index`
    * @return {Transform}
    */
-  updateScale(x: number | Point, yOrIndex: ?number = null, index: number = 0) {
-    let count = 0;
-    let actualIndex = index;
-    let scale = new Point(1, 1, 1);
-    if (x instanceof Point) {
-      if (yOrIndex == null) {
-        actualIndex = 0;
-      } else {
-        actualIndex = yOrIndex;
-      }
-      scale = x;
-    } else if (yOrIndex == null) {
-      scale.x = x;
-      scale.y = x;
-    } else {
-      scale.x = x;
-      scale.y = yOrIndex;
-    }
-    for (let i = 0; i < this.order.length; i += 1) {
-      const t = this.order[i];
-      if (t instanceof Scale) {
-        if (count === actualIndex) {
-          this.order[i] = new Scale(scale.x, scale.y, this.name);
-          this.def[i] = ['s', scale.x, scale.y, 1, this.name];
-          this.calcAndSetMatrix();
-          return this;
-        }
-        count += 1;
-      }
-    }
-    return this;
+  updateScale(
+    s: number | TypeParsablePoint,
+    index: number = 0,
+  ) {
+    return this.updateComponent('s', getScale(s), index);
   }
+
+  // updateScale1(x: number | Point, yOrIndex: ?number = null, index: number = 0) {
+  //   let count = 0;
+  //   let actualIndex = index;
+  //   let scale = new Point(1, 1, 1);
+  //   if (x instanceof Point) {
+  //     if (yOrIndex == null) {
+  //       actualIndex = 0;
+  //     } else {
+  //       actualIndex = yOrIndex;
+  //     }
+  //     scale = x;
+  //   } else if (yOrIndex == null) {
+  //     scale.x = x;
+  //     scale.y = x;
+  //   } else {
+  //     scale.x = x;
+  //     scale.y = yOrIndex;
+  //   }
+  //   for (let i = 0; i < this.order.length; i += 1) {
+  //     const t = this.order[i];
+  //     if (t instanceof Scale) {
+  //       if (count === actualIndex) {
+  //         this.order[i] = new Scale(scale.x, scale.y, this.name);
+  //         this.def[i] = ['s', scale.x, scale.y, 1, this.name];
+  //         this.calcAndSetMatrix();
+  //         return this;
+  //       }
+  //       count += 1;
+  //     }
+  //   }
+  //   return this;
+  // }
 
   /**
    * Retrieve the nth {@link Rotation} transform value from this transform
@@ -3501,20 +3580,27 @@ class Transform {
    */
   r(rotationIndex: number = 0): ?number {
     let count = 0;
-    for (let i = 0; i < this.order.length; i += 1) {
+    for (let i = 0; i < this.def.length; i += 1) {
       if (this.def[i][0] === 'r') {
         if (count === rotationIndex) {
           return this.def[i][3];
         }
         count += 1;
       }
-      // const t = this.order[i];
-      // if (t instanceof Rotation) {
-      //   if (count === rotationIndex) {
-      //     return t.r;
-      //   }
-      //   count += 1;
-      // }
+    }
+    return null;
+  }
+
+  r3(rotationIndex: number = 0) {
+    let count = 0;
+    for (let i = 0; i < this.def.length; i += 1) {
+      if (this.def[i][0] === 'r') {
+        if (count === rotationIndex) {
+          const [, x, y, z] = this.def[i];
+          return new Point(x, y, z);
+        }
+        count += 1;
+      }
     }
     return null;
   }
@@ -3524,22 +3610,31 @@ class Transform {
    * {@link Rotation} transform where n = `index`
    * @return {Transform}
    */
-  updateRotation(r: number, index: number = 0) {
-    let count = 0;
-    for (let i = 0; i < this.order.length; i += 1) {
-      const t = this.order[i];
-      if (t instanceof Rotation) {
-        if (count === index) {
-          this.order[i] = new Rotation(r, this.name);
-          this.def[i] = ['r', 0, 0, r, this.name];
-          this.calcAndSetMatrix();
-          return this;
-        }
-        count += 1;
-      }
+  updateRotation(
+    r: number | TypeParsablePoint,
+    index: number = 0,
+  ) {
+    if (typeof r === 'number') {
+      return this.updateComponent('r', getPoint([0, 0, r]), index);
     }
-    return this;
+    return this.updateComponent('r', getPoint(r), index);
   }
+  // updateRotation(r: number, index: number = 0) {
+  //   let count = 0;
+  //   for (let i = 0; i < this.order.length; i += 1) {
+  //     const t = this.order[i];
+  //     if (t instanceof Rotation) {
+  //       if (count === index) {
+  //         this.order[i] = new Rotation(r, this.name);
+  //         this.def[i] = ['r', 0, 0, r, this.name];
+  //         this.calcAndSetMatrix();
+  //         return this;
+  //       }
+  //       count += 1;
+  //     }
+  //   }
+  //   return this;
+  // }
 
   /**
    * Return the matrix that respresents the cascaded transform chain

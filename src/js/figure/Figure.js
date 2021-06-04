@@ -1747,11 +1747,11 @@ class Figure {
       const newScaleX = currentScale.x * currentMag / previousMag;
       const newScaleY = currentScale.y * currentMag / previousMag;
       if (type === 'x') {
-        currentTransform.updateScale(newScaleX, 1);
+        currentTransform.updateScale([newScaleX, 1]);
       } else if (type === 'y') {
-        currentTransform.updateScale(1, newScaleY);
+        currentTransform.updateScale([1, newScaleY]);
       } else {
-        currentTransform.updateScale(newScaleX, newScaleY);
+        currentTransform.updateScale([newScaleX, newScaleY]);
       }
       element.moved(currentTransform);
     }

@@ -127,7 +127,7 @@ function fig2() {
   // and the amplitude of the trace and in the equation needs to be updated.
   mover.notifications.add('setTransform', () => {
     offset += mover.getPosition().y * 2;
-    mover.transform.updateTranslation(0, 0);
+    mover.transform.updateTranslation([0, 0]);
     if (offset > 1) { offset = 1; }
     if (offset < -1) { offset = -1; }
     let sign = '';

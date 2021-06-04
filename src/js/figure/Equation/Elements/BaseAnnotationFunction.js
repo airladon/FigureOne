@@ -211,8 +211,8 @@ function setPositionsForGlyphs(glyphs: EQN_Glyphs) {
     }
     const glyph = glyphs[key];
     const t = glyph.glyph.transform._dup();
-    t.updateScale(glyph.width, glyph.height);
-    t.updateTranslation(glyph.location.x, glyph.location.y);
+    t.updateScale([glyph.width, glyph.height]);
+    t.updateTranslation([glyph.location.x, glyph.location.y]);
     glyph.glyph.setTransform(t);
     setPositionsForAnnotations(glyph.annotations);
   });

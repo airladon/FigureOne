@@ -1439,7 +1439,7 @@ export default class CollectionsLine extends FigureElementCollection {
     const set = (key, x) => {
       // $FlowFixMe
       if (this[`_${key}`] != null) {  // $FlowFixMe
-        this[`_${key}`].transform.updateTranslation(x);
+        this[`_${key}`].transform.updateTranslation([x, 0]);
       }
     };
     let xPosition = 0;
@@ -1473,7 +1473,7 @@ export default class CollectionsLine extends FigureElementCollection {
     straightLineLength = Math.max(straightLineLength, 0);
     const line = this._line;
     if (line) {
-      line.transform.updateTranslation(xPosition + startOffset);
+      line.transform.updateTranslation([xPosition + startOffset, 0]);
       line.custom.updatePoints({ p1: [0, 0], p2: [straightLineLength, 0], dash: this.dash });
       // if (Array.isArray(this.dash) && this.dash.length > 0) {
       //   line.lengthToDraw = straightLineLength;
@@ -1515,7 +1515,7 @@ export default class CollectionsLine extends FigureElementCollection {
     const movePad = this._movePad;
     if (movePad) {
       const midWidth = this.multiMove.midLength * this.line.length();
-      movePad.transform.updateScale(midWidth, height);
+      movePad.transform.updateScale([midWidth, height]);
       // const p = movePad.getPosition();
       movePad.setPosition(
         this.localXPosition + this.line.length() / 2 - midWidth / 2,
@@ -1524,13 +1524,13 @@ export default class CollectionsLine extends FigureElementCollection {
     }
     const rotPad = this._rotPad;
     if (rotPad) {
-      rotPad.transform.updateScale(width, height);
+      rotPad.transform.updateScale([width, height]);
       // const p = rotPad.getPosition();
       rotPad.setPosition(touchBorder[0].x, touchBorder[0].y);
     }
     const startPad = this._startPad;
     if (startPad) {
-      startPad.transform.updateTranslation(this.localXPosition, 0);
+      startPad.transform.updateTranslation([this.localXPosition, 0]);
     }
   }
 

@@ -111,8 +111,8 @@ class Element implements ElementInterface {
     if (content instanceof FigureElementCollection
         || content instanceof FigureElementPrimitive) {
       // Update translation and scale
-      content.transform.updateTranslation(location.x, location.y);
-      content.transform.updateScale(scale, scale);
+      content.transform.updateTranslation([location.x, location.y]);
+      content.transform.updateScale([scale, scale]);
       content.updateLastDrawTransform();
       if (content.internalSetTransformCallback != null) {
         this.fnMap.exec(content.internalSetTransformCallback, content.transform);
@@ -170,8 +170,8 @@ class Element implements ElementInterface {
     const { content } = this;
     if (content instanceof FigureElementCollection
         || content instanceof FigureElementPrimitive) {
-      content.transform.updateTranslation(this.location.x, this.location.y);
-      content.transform.updateScale(this.scale, this.scale);
+      content.transform.updateTranslation([this.location.x, this.location.y]);
+      content.transform.updateScale([this.scale, this.scale]);
       content.updateLastDrawTransform();
     }
   }

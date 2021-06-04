@@ -210,7 +210,7 @@ function fig4() {
   // in their direction will not result in meaningful change to the variable.
   mover.notifications.add('setTransform', () => {
     const p = mover.getPosition();
-    mover.transform.updateTranslation(0, 0);
+    mover.transform.updateTranslation([0, 0]);
     if (selected == null) {
       return;
     }

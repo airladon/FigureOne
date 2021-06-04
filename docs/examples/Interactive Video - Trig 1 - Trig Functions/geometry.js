@@ -280,10 +280,10 @@ function layoutRight() {
     const hyp = Math.sqrt(x ** 2 + y ** 2);
     const minHypotenuse = 1.3;
     if (hyp < minHypotenuse) {
-      movePad.transform.updateTranslation(
+      movePad.transform.updateTranslation([
         minHypotenuse * Math.cos(angle),
         minHypotenuse * Math.sin(angle),
-      );
+      ]);
     }
     rotLine.transform.updateRotation(angle);
     rotLine.custom.updatePoints({ length: Math.max(hyp, minHypotenuse) });

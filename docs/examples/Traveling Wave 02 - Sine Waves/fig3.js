@@ -132,7 +132,7 @@ function fig3() {
   // needs to be updated.
   mover.notifications.add('setTransform', () => {
     offset += mover.getPosition().x;
-    mover.transform.updateTranslation(0, 0.15);
+    mover.transform.updateTranslation([0, 0.15]);
     if (offset > 1) { offset = 1; }
     if (offset < -1) { offset = -1; }
     const newR = offset * 3 + 5;

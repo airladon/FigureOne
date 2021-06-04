@@ -142,7 +142,7 @@ describe('Transfrom Animation Unit', () => {
   });
   test('Animation flow curve', () => {
     const start = element.transform.zero();
-    const target = element.transform._dup().updateTranslation(1, 1);
+    const target = element.transform._dup().updateTranslation([1, 1]);
     const step = new TransformAnimationStep({
       element,
       duration: 1,

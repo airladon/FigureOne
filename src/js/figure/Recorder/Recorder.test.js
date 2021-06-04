@@ -1047,11 +1047,11 @@ describe('Figure Recorder', () => {
       state1 = figure.getState();
 
       line = figure.getElement('line');
-      line.transform.updateTranslation(0, 1);
+      line.transform.updateTranslation([0, 1]);
       global.performance.now = () => 2000;
       state2 = figure.getState();
 
-      line.transform.updateTranslation(0, 2);
+      line.transform.updateTranslation([0, 2]);
       global.performance.now = () => 3000;
       state3 = figure.getState();
       // recorder.states = {

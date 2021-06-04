@@ -124,8 +124,8 @@ export default class BaseEquationFunction extends Elements {
     this.glyphs.forEach((glyph, index) => {
       if (glyph != null) {
         const t = glyph.getTransform()._dup();
-        t.updateTranslation(this.glyphLocations[index].x, this.glyphLocations[index].y);
-        t.updateScale(this.glyphWidths[index], this.glyphHeights[index]);
+        t.updateTranslation([this.glyphLocations[index].x, this.glyphLocations[index].y]);
+        t.updateScale([this.glyphWidths[index], this.glyphHeights[index]]);
         glyph.setTransform(t);
       }
     });
