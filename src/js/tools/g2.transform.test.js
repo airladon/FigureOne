@@ -351,7 +351,7 @@ describe('Transform', () => {
     test('Zero', () => {
       const t1 = new Transform().scale(1, 1).rotate(1).translate(1, 1);
       const t2 = t1.zero();
-      expect(t2).toEqual(t1.sub(t1));
+      expect(t2.isZero()).toBe(true);
     });
     test('isZero', () => {
       const t1 = new Transform().scale(1, 1).rotate(1).translate(1, 1);
@@ -364,7 +364,8 @@ describe('Transform', () => {
     test('Constant', () => {
       const t1 = new Transform().scale(1, 1).rotate(1).translate(1, 1);
       const t2 = t1.constant(2);
-      expect(t2).toEqual(t1.add(t1));
+      // This will need to change when 3D is properly supported
+      expect(t2.def).toEqual([['s', 2, 2, 1, ''], ['r', 0, 0, 2, ''], ['t', 2, 2, 0, '']]);
     });
     test('Rounding', () => {
       const t1 = new Transform()

@@ -3133,9 +3133,13 @@ class Transform {
     for (let i = 0; i < def.length; i += 1) {
       const [type] = def[i];
       if (type === 't') {
-        order.push(new Translation(def[i][1], def[i][2], name));
+        const t = new Translation(def[i][1], def[i][2], name);
+        // t.z = def[i][3];
+        order.push(t);
       } else if (type === 's') {
-        order.push(new Scale(def[i][1], def[i][2], name));
+        const s = new Scale(def[i][1], def[i][2], name);
+        // s.z = def[i][3];
+        order.push(s);
       }
       if (type === 'r') {
         order.push(new Rotation(def[i][3], name));
@@ -3843,32 +3847,6 @@ class Transform {
         j => clipValue(this.def[i][j], minTransform.def[i][j], maxTransform.def[i][j]),
       ));
     }
-
-    // const order = [];
-    // for (let i = 0; i < this.order.length; i += 1) {
-    //   const t = this.order[i];
-    //   const min = minTransform.order[i];
-    //   const max = maxTransform.order[i];
-    //   if (t instanceof Translation
-    //       && min instanceof Translation
-    //       && max instanceof Translation) {
-    //     const x = clipValue(t.x, min.x, max.x);
-    //     const y = clipValue(t.y, min.y, max.y);
-    //     order.push(new Translation(x, y, this.name));
-    //   } else if (t instanceof Rotation
-    //              && min instanceof Rotation
-    //              && max instanceof Rotation) {
-    //     order.push(new Rotation(clipValue(t.r, min.r, max.r), this.name));
-    //   } else if (t instanceof Scale
-    //              && min instanceof Scale
-    //              && max instanceof Scale) {
-    //     const x = clipValue(t.x, min.x, max.x);
-    //     const y = clipValue(t.y, min.y, max.y);
-    //     order.push(new Scale(x, y, this.name));
-    //   }
-    // }
-
-    // const clippedTransform = new Transform(order, this.name);
     const clippedTransform = this.createFromDef(def, this.name);
     if (limitLine != null) {
       const t = clippedTransform.t();
@@ -3898,53 +3876,43 @@ class Transform {
     maxTransform: TypeTransformValue,
     vector: boolean = true,
   ): Transform {
-    // const min = 0.00001;
-    // const max = 1 / min;
-    // const zeroS = zeroThresholdTransform.s() || new Point(min, min);
-    // const zeroR = zeroThresholdTransform.r() || min;
-    // const zeroT = zeroThresholdTransform.t() || new Point(min, min);
-    // const maxS = maxTransform.s() || new Point(max, max);
-    // const maxR = maxTransform.r() || max;
-    // const maxT = maxTransform.t() || new Point(max, max);
-    // if (!this.isSimilarTo(zeroThresholdTransform) ||
-    //     !this.isSimilarTo(maxTransform)) {
-    //   return new Transform(this.order);
-    // }
-    const order = [];
-    const z = transformValueToArray(zeroThresholdTransform, this);
-    // const max = maxTransform;
+    // const order = [];
+    const zero = transformValueToArray(zeroThresholdTransform, this);
     const max = transformValueToArray(maxTransform, this);
+    const def = [];
 
-    for (let i = 0; i < this.order.length; i += 1) {
-      const t = this.order[i];
-      if (t instanceof Translation) {
-        if (vector) {
-          const { mag, angle } = t.toPolar();
-          const clipM = clipMag(mag, z[i], max[i]);
-          order.push(new Translation(
-            clipM * Math.cos(angle),
-            clipM * Math.sin(angle),
-            this.name,
-          ));
-        } else {
-          const x = clipMag(t.x, z[i], max[i]);
-          const y = clipMag(t.y, z[i], max[i]);
-          order.push(new Translation(x, y, this.name));
-        }
-      } else if (t instanceof Rotation) {
-        const r = clipMag(t.r, z[i], max[i]);
-        order.push(new Rotation(r, this.name));
-      } else if (t instanceof Scale) {
-        const x = clipMag(t.x, z[i], max[i]);
-        const y = clipMag(t.y, z[i], max[i]);
-        order.push(new Scale(x, y, this.name));
+    for (let i = 0; i < this.def.length; i += 1) {
+      const t = this.def[i];
+      const [type, x, y, z] = t;
+      if (type === 't' && vector) {
+        // if (vector) {
+        const { r, phi, theta } = rectToPolar(x, y, z);
+        const rc = clipMag(r, zero[i], max[i]);
+        const xc = rc * Math.cos(phi) * Math.sin(theta);
+        const yc = rc * Math.sin(phi) * Math.sin(theta);
+        const zc = rc * Math.cos(theta);
+        def.push(['t', xc, yc, zc, this.name]);
+      } else if (type === 'r' || type === 's' || type === 't') {
+        const xc = clipMag(x, zero[i], max[i]);
+        const yc = clipMag(y, zero[i], max[i]);
+        const zc = clipMag(z, zero[i], max[i]);
+        def.push([t[0], xc, yc, zc, this.name]);
       }
     }
-    return new Transform(order, this.name);
+    return this.createFromDef(def, this.name);
   }
 
   constant(constant: number = 0): Transform {
     const order = [];
+    // const def = [];
+    // for (let i = 0; i < this.def.length; i += 1) {
+    //   def.push(makeTransformComponent(
+    //     this.def[i],
+    //     () => constant,
+    //   ));
+    // }
+    // console.log(def)
+    // console.log(this.createFromDef(def, this.name))
     for (let i = 0; i < this.order.length; i += 1) {
       const t = this.order[i];
       if (t instanceof Translation) {
@@ -3956,6 +3924,16 @@ class Transform {
       }
     }
     return new Transform(order, this.name);
+    // Only needed temporarily until z is properly supported
+    // const t = this.createFromDef(def, this.name);
+    // for (let i = 0; i < t.def.length; i += 1) {
+    //   if (t.def[i][0] === 's') {
+    //     t.order[i].z = constant;
+    //     t.def[i][3] = constant;
+    //   }
+    // }
+    // return t;
+    // return this.createFromDef(def, this.name);
   }
 
   zero(): Transform {
@@ -3967,6 +3945,26 @@ class Transform {
    * `zeroThreshold`
    */
   isZero(zeroThreshold: number = 0): boolean {
+    // for (let i = 0; i < this.def.length; i += 1) {
+    //   const [type, x, y, z] = this.def[i];
+    //   if (type === 't' || type === 's') {
+    //     if (
+    //       Math.abs(x) > zeroThreshold
+    //       || Math.abs(y) > zeroThreshold
+    //       || Math.abs(z) > zeroThreshold) {
+    //       return false;
+    //     }
+    //   } else if (type === 'r') {
+    //     if (
+    //       clipAngle(x, '0to360') > zeroThreshold
+    //       || clipAngle(y, '0to360') > zeroThreshold
+    //       || clipAngle(z, '0to360') > zeroThreshold
+    //     ) {
+    //       return false;
+    //     }
+    //   }
+    // }
+
     for (let i = 0; i < this.order.length; i += 1) {
       const t = this.order[i];
       if (t instanceof Translation || t instanceof Scale) {
@@ -4319,10 +4317,10 @@ function polarToRect(mag: number, angle: number) {
 * console.log(p);
 * // {mag: 1, angle: 1.5707963267948966}
  */
-function rectToPolar(x: number | Point, y: number = 0) {
+function rectToPolar(x: number | Point, y: number = 0, z: number = 0) {
   let rect;
   if (typeof x === 'number') {
-    rect = new Point(x, y);
+    rect = new Point(x, y, z);
   } else {
     rect = x;
   }
@@ -4331,11 +4329,16 @@ function rectToPolar(x: number | Point, y: number = 0) {
   if (angle < 0) {
     angle += Math.PI * 2;
   }
+  const theta = Math.acos(z / mag);
   return {
     mag,
     angle,
+    phi: angle,
+    theta,
+    r: mag,
   };
 }
+
 
 /**
  * Buffer for rectangle, where `left`, `bottom`, `right` and `top` are
