@@ -3903,7 +3903,6 @@ class Transform {
   }
 
   constant(constant: number = 0): Transform {
-    const order = [];
     // const def = [];
     // for (let i = 0; i < this.def.length; i += 1) {
     //   def.push(makeTransformComponent(
@@ -3911,8 +3910,10 @@ class Transform {
     //     () => constant,
     //   ));
     // }
-    // console.log(def)
-    // console.log(this.createFromDef(def, this.name))
+    // const t = this.createFromDef(def, this.name);
+    // return t;
+
+    const order = [];
     for (let i = 0; i < this.order.length; i += 1) {
       const t = this.order[i];
       if (t instanceof Translation) {
@@ -3924,16 +3925,6 @@ class Transform {
       }
     }
     return new Transform(order, this.name);
-    // Only needed temporarily until z is properly supported
-    // const t = this.createFromDef(def, this.name);
-    // for (let i = 0; i < t.def.length; i += 1) {
-    //   if (t.def[i][0] === 's') {
-    //     t.order[i].z = constant;
-    //     t.def[i][3] = constant;
-    //   }
-    // }
-    // return t;
-    // return this.createFromDef(def, this.name);
   }
 
   zero(): Transform {
@@ -3964,6 +3955,7 @@ class Transform {
     //     }
     //   }
     // }
+    // return true;
 
     for (let i = 0; i < this.order.length; i += 1) {
       const t = this.order[i];
