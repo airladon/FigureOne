@@ -3060,8 +3060,7 @@ function makeTransformComponent(
   const newDef = Array(component.length);
   // eslint-disable-next-line prefer-destructuring
   newDef[0] = component[0];
-  newDef[newDef.length - 1] = component[component.length - 1];
-  for (let j = 1; j < component.length - 1; j += 1) {
+  for (let j = 1; j < component.length; j += 1) {
     newDef[j] = operation(j);
   }
   return newDef;
@@ -3658,7 +3657,7 @@ class Transform {
    * chain.
    * @return {boolean}
    */
-  isSimilarTo(transformToCompare: Transform): boolean {
+  isEqualShapeTo(transformToCompare: Transform): boolean {
     if (transformToCompare.def.length !== this.def.length) {
       return false;
     }
@@ -3679,7 +3678,7 @@ class Transform {
     // if (transformToCompare.order.length !== this.order.length) {
     //   return false;
     // }
-    if (!this.isSimilarTo(transformToCompare)) {
+    if (!this.isEqualShapeTo(transformToCompare)) {
       return false;
     }
     for (let i = 0; i < this.def.length; i += 1) {
@@ -3709,19 +3708,6 @@ class Transform {
           }
         }
       }
-      // if ((thisTrans instanceof Translation && compare instanceof Translation
-      // ) || (
-      //   thisTrans instanceof Scale && compare instanceof Scale
-      // )) {
-      //   if (compare.isNotEqualTo(thisTrans, precision)) {
-      //     return false;
-      //   }
-      // }
-      // if (thisTrans instanceof Rotation) {  // $FlowFixMe
-      //   if (roundNum(compare.r, precision) !== roundNum(thisTrans.r, precision)) {
-      //     return false;
-      //   }
-      // }
     }
     return true;
   }
@@ -3734,7 +3720,7 @@ class Transform {
    * @return {boolean}
    */
   isWithinDelta(transformToCompare: Transform, delta: number = 0.00000001) {
-    if (!this.isSimilarTo(transformToCompare)) {
+    if (!this.isEqualShapeTo(transformToCompare)) {
       return false;
     }
     for (let i = 0; i < this.def.length; i += 1) {
@@ -3776,7 +3762,7 @@ class Transform {
    * element in this transform chain. Both transform
    * chains must be similar and have the same order of {@link Rotation},
    * {@link Scale} and {@link Translation} transform elements
-   * @see <a href="#transformissimilarto">Transform.isSimilarTo</a>
+   * @see <a href="#transformissimilarto">Transform.isEqualShapeTo</a>
    */
   sub(transformToSubtract: Transform = new Transform()): Transform {
     const def = [];
@@ -3788,16 +3774,8 @@ class Transform {
         this.def[i],
         j => this.def[i][j] - transformToSubtract.def[i][j],
       ));
-      // const newDef = Array(this.def[i].length);
-      // // eslint-disable-next-line prefer-destructuring
-      // newDef[0] = this.def[i][0];
-      // newDef[newDef.length - 1] = this.name;
-      // for (let j = 1; j < this.def[i].length - 1; j += 1) {
-      //   newDef[j] = this.def[i][j] - transformToSubtract.def[i][j];
-      // }
-      // def.push(newDef);
     }
-    return this.createFromDef(def, this.name);
+    return new Transform(def, this.name);
   }
 
   // Add a transform to the current one.
@@ -3808,7 +3786,7 @@ class Transform {
    * element in this transform chain. Both transform
    * chains must be similar and have the same order of {@link Rotation},
    * {@link Scale} and {@link Translation} transform elements
-   * @see <a href="#transformissimilarto">Transform.isSimilarTo</a>
+   * @see <a href="#transformissimilarto">Transform.isEqualShapeTo</a>
    */
   add(transformToAdd: Transform = new Transform()): Transform {
     const def = [];
@@ -3820,16 +3798,8 @@ class Transform {
         this.def[i],
         j => this.def[i][j] + transformToAdd.def[i][j],
       ));
-      // const newDef = Array(this.def[i].length);
-      // // eslint-disable-next-line prefer-destructuring
-      // newDef[0] = this.def[i][0];
-      // newDef[newDef.length - 1] = this.name;
-      // for (let j = 1; j < this.def[i].length - 1; j += 1) {
-      //   newDef[j] = this.def[i][j] + transformToAdd.def[i][j];
-      // }
-      // def.push(newDef);
     }
-    return this.createFromDef(def, this.name);
+    return new Transform(def, this.name);
   }
 
   // transform step wise multiplication
@@ -3838,7 +3808,7 @@ class Transform {
    * element in this transform chain. Both transform
    * chains must be similar and have the same order of {@link Rotation},
    * {@link Scale} and {@link Translation} transform elements
-   * @see <a href="#transformissimilarto">Transform.isSimilarTo</a>
+   * @see <a href="#transformissimilarto">Transform.isEqualShapeTo</a>
    */
   mul(transformToMultiply: Transform = new Transform()): Transform {
     const def = [];
@@ -3850,16 +3820,8 @@ class Transform {
         this.def[i],
         j => this.def[i][j] * transformToMultiply.def[i][j],
       ));
-      // const newDef = Array(this.def[i].length);
-      // // eslint-disable-next-line prefer-destructuring
-      // newDef[0] = this.def[i][0];
-      // newDef[newDef.length - 1] = this.name;
-      // for (let j = 1; j < this.def[i].length - 1; j += 1) {
-      //   newDef[j] = this.def[i][j] * transformToMultiply.def[i][j];
-      // }
-      // def.push(newDef);
     }
-    return this.createFromDef(def, this.name);
+    return new Transform(def, this.name);
   }
 
   /**
@@ -3874,16 +3836,8 @@ class Transform {
    */
   transform(initialTransform: Transform) {
     const t = new Transform([], this.name);
-    t.order = initialTransform.order.concat(this.order);
-    t.def = initialTransform.def.concat(this.def.map(d => d.slice()));
-    // t.order = Array(initialTransform.order.length + this.order.length);
-    // for (let i = 0; i < initialTransform.order.length; i += 1) {
-    //   t.order[i] = initialTransform.order[i];
-    // }
-    // for (let i = 0; i < this.order.length; i += 1) {
-    //   t.order[i + initialTransform.order.length] = this.order[i];
-    // }
-    t.mat = m2.mul(this.matrix(), initialTransform.matrix());
+    t.def = initialTransform.def.map(d => d.slice()).concat(this.def.map(d => d.slice()));
+    t.mat = m3.mul(this.matrix(), initialTransform.matrix());
     return t;
   }
 
@@ -3899,9 +3853,8 @@ class Transform {
    */
   transformBy(t: Transform): Transform {
     const t1 = new Transform([], this.name);
-    t1.order = this.order.concat(t.order);
-    t.def = this.def.concat(t.def);
-    t1.mat = m2.mul(t.matrix(), this.matrix());
+    t1.def = this.def.map(d => d.slice()).concat(t.def.map(d => d.slice()));
+    t1.mat = m3.mul(t.matrix(), this.matrix());
     return t1;
   }
 
@@ -3915,17 +3868,8 @@ class Transform {
         this.def[i],
         j => round(this.def[i][j], precision),
       ));
-      // const newDef = Array(this.def[i].length);
-      // // eslint-disable-next-line prefer-destructuring
-      // newDef[0] = this.def[i][0];
-      // newDef[newDef.length - 1] = this.name;
-      // for (let j = 1; j < this.def[i].length - 1; j += 1) {
-      //   newDef[j] = roundNum(this.def[i][j], precision);
-      // }
-      // def.push(newDef);
-      // order.push(this.def[i].round(precision));
     }
-    return this.createFromDef(def, this.name);
+    return new Transform(def, this.name);
     // return new Transform(order, this.name);
   }
 
@@ -3937,14 +3881,14 @@ class Transform {
    *
    * Use `limitLine` to clip the first {@link Translation} transform in the
    * chain to within a {@link Line}.
-   * @see <a href="#transformissimilarto">Transform.isSimilarTo</a>
+   * @see <a href="#transformissimilarto">Transform.isEqualShapeTo</a>
    */
   clip(
     minTransform: Transform,
     maxTransform: Transform,
     limitLine: null | Line,
   ) {
-    if (!this.isSimilarTo(minTransform) || !this.isSimilarTo(maxTransform)) {
+    if (!this.isEqualShapeTo(minTransform) || !this.isEqualShapeTo(maxTransform)) {
       return this._dup();
     }
     const def = [];
@@ -4010,32 +3954,31 @@ class Transform {
         def.push([t[0], xc, yc, zc, this.name]);
       }
     }
-    return this.createFromDef(def, this.name);
+    return new Transform(def, this.name);
   }
 
   constant(constant: number = 0): Transform {
-    // const def = [];
-    // for (let i = 0; i < this.def.length; i += 1) {
-    //   def.push(makeTransformComponent(
-    //     this.def[i],
-    //     () => constant,
-    //   ));
-    // }
-    // const t = this.createFromDef(def, this.name);
-    // return t;
-
-    const order = [];
-    for (let i = 0; i < this.order.length; i += 1) {
-      const t = this.order[i];
-      if (t instanceof Translation) {
-        order.push(new Translation(constant, constant, this.name));
-      } else if (t instanceof Rotation) {
-        order.push(new Rotation(constant, this.name));
-      } else if (t instanceof Scale) {
-        order.push(new Scale(constant, constant, this.name));
-      }
+    const def = [];
+    for (let i = 0; i < this.def.length; i += 1) {
+      def.push(makeTransformComponent(
+        this.def[i],
+        () => constant,
+      ));
     }
-    return new Transform(order, this.name);
+    return new Transform(def, this.name);
+
+    // const order = [];
+    // for (let i = 0; i < this.order.length; i += 1) {
+    //   const t = this.order[i];
+    //   if (t instanceof Translation) {
+    //     order.push(new Translation(constant, constant, this.name));
+    //   } else if (t instanceof Rotation) {
+    //     order.push(new Rotation(constant, this.name));
+    //   } else if (t instanceof Scale) {
+    //     order.push(new Scale(constant, constant, this.name));
+    //   }
+    // }
+    // return new Transform(order, this.name);
   }
 
   zero(): Transform {
@@ -4047,40 +3990,40 @@ class Transform {
    * `zeroThreshold`
    */
   isZero(zeroThreshold: number = 0): boolean {
-    // for (let i = 0; i < this.def.length; i += 1) {
-    //   const [type, x, y, z] = this.def[i];
-    //   if (type === 't' || type === 's') {
-    //     if (
-    //       Math.abs(x) > zeroThreshold
-    //       || Math.abs(y) > zeroThreshold
-    //       || Math.abs(z) > zeroThreshold) {
-    //       return false;
-    //     }
-    //   } else if (type === 'r') {
-    //     if (
-    //       clipAngle(x, '0to360') > zeroThreshold
-    //       || clipAngle(y, '0to360') > zeroThreshold
-    //       || clipAngle(z, '0to360') > zeroThreshold
-    //     ) {
-    //       return false;
-    //     }
-    //   }
-    // }
-    // return true;
-
-    for (let i = 0; i < this.order.length; i += 1) {
-      const t = this.order[i];
-      if (t instanceof Translation || t instanceof Scale) {
-        if (Math.abs(t.x) > zeroThreshold || Math.abs(t.y) > zeroThreshold) {
+    for (let i = 0; i < this.def.length; i += 1) {
+      const [type, x, y, z] = this.def[i];
+      if (type === 't' || type === 's') {
+        if (
+          Math.abs(x) > zeroThreshold
+          || Math.abs(y) > zeroThreshold
+          || Math.abs(z) > zeroThreshold) {
           return false;
         }
-      } else if (t instanceof Rotation) {
-        if (clipAngle(t.r, '0to360') > zeroThreshold) {
+      } else if (type === 'r') {
+        if (
+          clipAngle(x, '0to360') > zeroThreshold
+          || clipAngle(y, '0to360') > zeroThreshold
+          || clipAngle(z, '0to360') > zeroThreshold
+        ) {
           return false;
         }
       }
     }
     return true;
+
+    // for (let i = 0; i < this.order.length; i += 1) {
+    //   const t = this.order[i];
+    //   if (t instanceof Translation || t instanceof Scale) {
+    //     if (Math.abs(t.x) > zeroThreshold || Math.abs(t.y) > zeroThreshold) {
+    //       return false;
+    //     }
+    //   } else if (t instanceof Rotation) {
+    //     if (clipAngle(t.r, '0to360') > zeroThreshold) {
+    //       return false;
+    //     }
+    //   }
+    // }
+    // return true;
   }
 
   /**
@@ -4089,7 +4032,7 @@ class Transform {
   _dup(): Transform {
     const t = new Transform();
     t.name = this.name;
-    t.order = this.order.map(o => o._dup());
+    // t.order = this.order.map(o => o._dup());
     t.mat = this.mat.slice();
     t.index = this.index;
     t.def = this.def.map(d => d.slice());
@@ -4158,7 +4101,7 @@ class Transform {
     maxTransform: TypeTransformValue,
   ): Transform {
     const order = [];
-    if (!this.isSimilarTo(previousTransform)) {
+    if (!this.isEqualShapeTo(previousTransform)) {
       return this.zero();
     }
 
@@ -5900,15 +5843,15 @@ function transformValueToArray(
   const order = [];
   // debugger;
   if (typeof transformValue === 'number') {
-    for (let i = 0; i < transform.order.length; i += 1) {
+    for (let i = 0; i < transform.def.length; i += 1) {
       order.push(transformValue);
     }
     return order;
   }
 
-  for (let i = 0; i < transform.order.length; i += 1) {
-    const transformation = transform.order[i];
-    if (transformation instanceof Translation) {
+  for (let i = 0; i < transform.def.length; i += 1) {
+    const transformation = transform.def[i];
+    if (transformation[0] === 't') {
       let value = 0;
       if (transformValue.position != null) {
         value = transformValue.position;
@@ -5917,13 +5860,13 @@ function transformValueToArray(
         value = transformValue.translation;
       }
       order.push(value);
-    } else if (transformation instanceof Scale) {
+    } else if (transformation[0] === 's') {
       let value = 0;
       if (transformValue.scale != null) {
         value = transformValue.scale;
       }
       order.push(value);
-    } else if (transformation instanceof Rotation) {
+    } else if (transformation[0] === 'r') {
       let value = 0;
       if (transformValue.rotation != null) {
         value = transformValue.rotation;
