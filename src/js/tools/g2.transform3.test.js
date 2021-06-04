@@ -8,7 +8,7 @@ import { round } from './math';
 /* eslint-disable object-curly-newline */
 
 describe('Transform', () => {
-  describe.only('Create 2D', () => {
+  describe('Create 2D', () => {
     test('Create rotation', () => {
       const t = new Transform().rotate(Math.PI / 2);
       const p0 = new Point(1, 0);
@@ -54,7 +54,7 @@ describe('Transform', () => {
       expect(p1.round()).toEqual(new Point(-8, 3));
     });
   });
-  describe.only('Create 3D', () => {
+  describe('Create 3D', () => {
     test('Create rotation', () => {
       const t = new Transform().rotate(0, 0, Math.PI / 2);
       const p0 = new Point(1, 0, 0);
@@ -100,7 +100,7 @@ describe('Transform', () => {
       expect(p1.round()).toEqual(new Point(-12, 3, 2.5));
     });
   });
-  describe.only('Update and get 2D', () => {
+  describe('Update and get 2D', () => {
     test('Update R in S, R, T', () => {
       const t = new Transform().scale(2, 2).rotate(Math.PI).translate(1, 1);
       t.update(1).rotate(Math.PI / 2);
@@ -262,7 +262,7 @@ describe('Transform', () => {
       expect(() => t.updateScale(5, 5, 2)).toThrow();
     });
   });
-  describe.only('Update and get 3D', () => {
+  describe('Update and get 3D', () => {
     test('Update R in S, R, T', () => {
       const t = new Transform().scale(2, 2, 2).rotate(0, 0, Math.PI).translate(1, 1, 1);
       t.update(1).rotate(0, 0, Math.PI / 2);
@@ -396,7 +396,7 @@ describe('Transform', () => {
       expect(() => t.updateScale(5, 5, 2)).toThrow();
     });
   });
-  describe.only('Functions', () => {
+  describe('Functions', () => {
     test('isEqualTo 2D', () => {
       const t1 = new Transform().scale(1, 1).rotate(1).translate(1, 1);
       const e1 = new Transform().scale(1, 1).rotate(1).translate(1, 1);
@@ -697,10 +697,10 @@ describe('Transform', () => {
       const max = 20;
       const v = t1.velocity(t0, deltaTime, zero, max);
 
-      expect(v.s(0).round()).toEqual(new Point(-1, 1, 1));
-      expect(v.s(1).round()).toEqual(new Point(0, 0, 1));
-      expect(v.s(2).round(4)).toEqual(new Point(14.1422, 14.1422, 1));
-      expect(v.s(3).round(4)).toEqual(new Point(-14.1422, -14.1422, 1));
+      expect(v.s(0).round()).toEqual(new Point(-1, 1, 0));
+      expect(v.s(1).round()).toEqual(new Point(0, 0, 0));
+      expect(v.s(2).round(4)).toEqual(new Point(14.1422, 14.1422, 0));
+      expect(v.s(3).round(4)).toEqual(new Point(-14.1422, -14.1422, 0));
       expect(v.r(0)).toBe(-1);
       expect(v.r(1)).toBe(0);
       expect(v.r(2)).toBe(20);
@@ -729,10 +729,7 @@ describe('Transform', () => {
       });
       test('t0 not similar to t1', () => {
         t1 = new Transform().rotate(1).scale(1, 1).translate(1, 1);
-        const v = t1.velocity(t0, deltaTime, zero, max);
-        expect(v.s()).toEqual(new Point(0, 0, 1));
-        expect(v.r()).toEqual(0);
-        expect(v.t()).toEqual(new Point(0, 0));
+        expect(() => t1.velocity(t0, deltaTime, zero, max)).toThrow();
       });
     });
     // Calculation for deceleration:
@@ -765,9 +762,9 @@ describe('Transform', () => {
       test('Simple deceleration', () => {
         const n = t.decelerate(v, d, 1, {}, {}, z);     // next v and t
         expect(n.velocity.round()).toEqual(new Transform()
-          .scale(9, 9).rotate(9).translate(9, 9));
+          .scale(9, 9, 0).rotate(9).translate(9, 9, 0));
         expect(n.transform).toEqual(new Transform()
-          .scale(9.5, 9.5).rotate(9.5).translate(9.5, 9.5));
+          .scale(9.5, 9.5, 1).rotate(9.5).translate(9.5, 9.5));
       });
       test('Negatives in deceleration and velocity', () => {
         // d = new TransformLimit(Math.sqrt(2), 1, Math.sqrt(2));
@@ -775,9 +772,9 @@ describe('Transform', () => {
         v = new Transform().scale(10, -10).rotate(-10).translate(10, -10);
         const n = t.decelerate(v, d, 1, {}, {}, z);     // next v and t
         expect(n.velocity.round()).toEqual(new Transform()
-          .scale(9, -9).rotate(-9).translate(9, -9));
+          .scale(9, -9, 0).rotate(-9).translate(9, -9));
         expect(n.transform.round()).toEqual(new Transform()
-          .scale(9.5, -9.5).rotate(-9.5).translate(9.5, -9.5));
+          .scale(9.5, -9.5, 1).rotate(-9.5).translate(9.5, -9.5));
       });
       test('Zero thresholds', () => {
         // d = new TransformLimit(Math.sqrt(2), 1, Math.sqrt(2));
@@ -785,9 +782,9 @@ describe('Transform', () => {
         // z = new TransformLimit(5, 5, 5);
         const n = t.decelerate(v, d, 10, {}, {}, z);     // next v and t
         expect(n.velocity.round()).toEqual(new Transform()
-          .scale(0, 0).rotate(0).translate(0, 0));
+          .scale(0, 0, 0).rotate(0).translate(0, 0));
         expect(n.transform.round()).toEqual(new Transform()
-          .scale(37.5, -37.5).rotate(-37.5).translate(43.75, -43.75));
+          .scale(37.5, -37.5, 1).rotate(-37.5).translate(43.75, -43.75));
       });
     });
     describe('Clipping', () => {
@@ -829,110 +826,19 @@ describe('Transform', () => {
         t1 = new Transform().scale(1.5, 0).rotate(2).translate(1.5, 0);
         expect(t0.clip(min, max)).toEqual(t1);
       });
-      test('Remove string', () => {
-        const ta = new Transform('a').scale(1, 1).rotate(1).translate(1, 1);
-        const tb = new Transform('b').scale(-1, -1).rotate(-1).translate(-1, -1);
-        const tab = ta.transform(tb);
-        expect(tab.order).toHaveLength(6);
-        const tabRemoveA = tab.remove('a');
-        expect(tabRemoveA.order).toHaveLength(3);
-        expect(tabRemoveA.order[0].name).toBe('b');
-        expect(tabRemoveA.order[0].x).toBe(-1);
-      });
-      test('Remove Array', () => {
-        const ta = new Transform('a').scale(1, 1).rotate(1).translate(1, 1);
-        const tb = new Transform('b').scale(-1, -1).rotate(-1).translate(-1, -1);
-        const tc = new Transform('c').scale(-2, -2).rotate(-2).translate(-2, -2);
-        const tab = ta.transform(tb).transform(tc);
-        expect(tab.order).toHaveLength(9);
-        const tabRemoveA = tab.remove('a');
-        expect(tabRemoveA.order).toHaveLength(6);
-        expect(tabRemoveA.order[0].name).toBe('c');
-      });
-    });
-  });
-  describe('Translation', () => {
-    test('Simple', () => {
-      const t = new Translation(1, 1);
-      expect(t.x).toBe(1);
-      expect(t.y).toBe(1);
-    });
-    test('Def', () => {
-      const tDef = new Translation(1, 1)._state();
-      const t = new Translation(tDef);
-      expect(t.x).toBe(1);
-      expect(t.y).toBe(1);
-    });
-    test('JSON Def', () => {
-      const json = '{ "f1Type": "t", "state": ["", 1, 1] }';
-      const t = new Translation(json);
-      expect(t.x).toBe(1);
-      expect(t.y).toBe(1);
-    });
-    test('JSON', () => {
-      const json = '[1, 1]';
-      const t = new Translation(json);
-      expect(t.x).toBe(1);
-      expect(t.y).toBe(1);
-    });
-  });
-  describe('Scale', () => {
-    test('Simple', () => {
-      const s = new Scale(2, 3);
-      expect(s.x).toBe(2);
-      expect(s.y).toBe(3);
-    });
-    test('Def', () => {
-      const sDef = new Scale(2, 3)._state();
-      const s = new Scale(sDef);
-      expect(s.x).toBe(2);
-      expect(s.y).toBe(3);
-    });
-    test('JSON Def', () => {
-      const json = '{ "f1Type": "s", "state": ["", 2, 3] }';
-      const s = new Scale(json);
-      expect(s.x).toBe(2);
-      expect(s.y).toBe(3);
-    });
-    test('JSON', () => {
-      const json = '[2, 3]';
-      const s = new Scale(json);
-      expect(s.x).toBe(2);
-      expect(s.y).toBe(3);
-    });
-  });
-  describe('Rotation', () => {
-    test('Simple', () => {
-      const r = new Rotation(1);
-      expect(r.r).toBe(1);
-    });
-    test('Def', () => {
-      const rDef = new Rotation(1)._state();
-      const r = new Rotation(rDef);
-      expect(r.r).toBe(1);
-    });
-    test('JSON Def', () => {
-      const json = '{ "f1Type": "r", "state": ["", 1] }';
-      const r = new Rotation(json);
-      expect(r.r).toBe(1);
-    });
-    test('JSON', () => {
-      const json = '1';
-      const r = new Rotation(json);
-      expect(r.r).toBe(1);
     });
   });
   describe('Get Transform', () => {
     test('Array', () => {
       const t = getTransform([['t', 1, 2]]);
       expect(t.t()).toEqual(new Point(1, 2));
-      expect(t.order).toHaveLength(1);
+      expect(t.def).toHaveLength(1);
     });
     test('Named Array', () => {
       const t = getTransform([['t', 1], 'Name1', ['s', 0.5]]);
-      expect(t.t()).toEqual(new Point(1, 1));
-      expect(t.s()).toEqual(new Point(0.5, 0.5, 1));
-      expect(t.order).toHaveLength(2);
+      expect(t.t()).toEqual(new Point(1, 1, 1));
+      expect(t.s()).toEqual(new Point(0.5, 0.5, 0.5));
+      expect(t.def).toHaveLength(2);
       expect(t.name).toBe('Name1');
     });
     test('Def', () => {
@@ -941,7 +847,7 @@ describe('Transform', () => {
       expect(t.t()).toEqual(new Point(1, 0.5));
       expect(t.s()).toEqual(new Point(1, 1, 1));
       expect(t.r()).toEqual(0.5);
-      expect(t.order).toHaveLength(3);
+      expect(t.def).toHaveLength(3);
     });
     test('Named String Def', () => {
       const tIn = new Transform('Name1').translate(1, 0.5).scale(1, 1).rotate(0.5);
@@ -949,7 +855,7 @@ describe('Transform', () => {
       expect(t.t()).toEqual(new Point(1, 0.5));
       expect(t.s()).toEqual(new Point(1, 1, 1));
       expect(t.r()).toEqual(0.5);
-      expect(t.order).toHaveLength(3);
+      expect(t.def).toHaveLength(3);
       expect(t.name).toBe('Name1');
     });
     test('Named String from String', () => {
@@ -958,20 +864,17 @@ describe('Transform', () => {
       expect(t.t()).toEqual(new Point(1, 0.5));
       expect(t.s()).toEqual(new Point(1, 1, 1));
       expect(t.r()).toEqual(0.5);
-      expect(t.order).toHaveLength(3);
+      expect(t.def).toHaveLength(3);
       expect(t.name).toBe('Name1');
     });
     test('Fail undefined', () => {
-      const t = getTransform();
-      expect(t.order).toHaveLength(0);
+      expect(() => t = getTransform()).toThrow();
     });
     test('Fail bad json', () => {
-      const t = getTransform('asdf');
-      expect(t.order).toHaveLength(0);
+      expect(() => getTransform('asdf')).toThrow();
     });
     test('Fail bad value', () => {
-      const t = getTransform(1);
-      expect(t.order).toHaveLength(0);
+      expect(() => getTransform(1)).toThrow();
     });
   });
 });
