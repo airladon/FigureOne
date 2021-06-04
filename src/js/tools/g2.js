@@ -6246,20 +6246,26 @@ function decelerateIndependantPoint(
   velocity: Point,
   deceleration: number,
   deltaTime: number | null = null,
-  boundsIn: ?RectBounds = null,
+  boundsIn: ?(RectBounds | RangeBounds) = null,
   bounceLoss: number = 0,
   zeroVelocityThreshold: number = 0,
   precision: number = 8,
 ) {
   let xBounds = null;
   let yBounds = null;
-  if (boundsIn != null) {
+  let zBounds = null;
+  if (boundsIn != null && boundsIn instanceof RectBounds) {
     xBounds = new RangeBounds({
       min: boundsIn.boundary.left, max: boundsIn.boundary.right,
     });
     yBounds = new RangeBounds({
       min: boundsIn.boundary.bottom, max: boundsIn.boundary.top,
     });
+  }
+  if (boundsIn != null && boundsIn instanceof RangeBounds) {
+    xBounds = boundsIn;
+    yBounds = boundsIn;
+    zBounds = boundsIn;
   }
 
   const xResult = decelerateValue(
@@ -6272,8 +6278,9 @@ function decelerateIndependantPoint(
   );
   const zResult = decelerateValue(
     value.z, velocity.z, deceleration, deltaTime,
-    null, bounceLoss, zeroVelocityThreshold, precision,
+    zBounds, bounceLoss, zeroVelocityThreshold, precision,
   );
+
   if (xResult.duration == null || yResult.duration == null || zResult.duration == null) {
     return {
       duration: null,
@@ -6344,8 +6351,6 @@ function decelerateTransform(
       );
       newTransformation = ['t', result.position.x, result.position.y, result.position.z];
       newVTransformation = ['t', result.velocity.x, result.velocity.y, result.velocity.z];
-      // newTransformation = new Translation(result.position.x, result.position.y);
-      // newVTransformation = new Translation(result.velocity.x, result.velocity.y);
     } else if (transformation[0] === 's' || transformation[0] === 'r') {
       result = decelerateIndependantPoint( // $FlowFixMe
         new Point(transformation[1], transformation[2], transformation[3]),
@@ -6362,17 +6367,7 @@ function decelerateTransform(
         transformation[0],
         result.velocity.x, result.velocity.y, result.velocity.z,
       ];
-      // newTransformation = new Scale(result.point.x, result.point.y);
-      // newVTransformation = new Scale(result.velocity.x, result.velocity.y);
-    } // else {
-    //   result = decelerateValue( // $FlowFixMe
-    //     transformation.r, velocity.order[i].r, deceleration[i], deltaTime,   // $FlowFixMe
-    //     bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
-    //     precision,
-    //   );
-    //   newTransformation = new Rotation(result.value);
-    //   newVTransformation = new Rotation(result.velocity);
-    // }
+    }
     if (deltaTime === null) {
       // $FlowFixMe
       if (result.duration == null || result.duration > duration) {
