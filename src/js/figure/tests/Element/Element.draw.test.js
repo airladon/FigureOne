@@ -2,8 +2,8 @@ import {
   Transform,
 } from '../../../tools/g2';
 import {
-  t,
-} from '../../../tools/m2';
+  transpose,
+} from '../../../tools/m3';
 // import {
 //   round,
 // } from '../tools/math';
@@ -40,14 +40,14 @@ describe('Element Drawing', () => {
     figure.setFirstTransform();
     figure.mock.timeStep(0);
     const expectedDrawTransform = new Transform()
-      .scale(1, 1, 'polygon')
-      .rotate(0, 'polygon')
-      .translate(1, 1, 'polygon')
-      .scale(1, 1, 'collection')
-      .rotate(0, 'collection')
-      .translate(0, 0, 'collection')
-      .scale(1, 1, 'Figure')
-      .translate(0, 0, 'Figure');
+      .scale(1, 1)
+      .rotate(0)
+      .translate(1, 1)
+      .scale(1, 1)
+      .rotate(0)
+      .translate(0, 0)
+      .scale(1, 1)
+      .translate(0, 0);
     // LastDrawTransform
     expect(a.lastDrawTransform.def).toEqual(expectedDrawTransform.def);
     // Actual transform(s) drawn (in this case just one as no copies or pulse multipliers)
@@ -55,7 +55,7 @@ describe('Element Drawing', () => {
     // Transform matrix sent to gl
     expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls).toHaveLength(1);
     expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls[0][2])
-      .toEqual(t(expectedDrawTransform.matrix()));
+      .toEqual(transpose(expectedDrawTransform.matrix()));
   });
   test('Pulse', () => {
     a.setPosition(1, 1);
@@ -65,14 +65,14 @@ describe('Element Drawing', () => {
     figure.mock.timeStep(0);
     figure.mock.timeStep(0.5);
     const expectedLastDrawTransform = new Transform()
-      .scale(1, 1, 'polygon')
-      .rotate(0, 'polygon')
-      .translate(1, 1, 'polygon')
-      .scale(1, 1, 'collection')
-      .rotate(0, 'collection')
-      .translate(0, 0, 'collection')
-      .scale(1, 1, 'Figure')
-      .translate(0, 0, 'Figure');
+      .scale(1, 1)
+      .rotate(0)
+      .translate(1, 1)
+      .scale(1, 1)
+      .rotate(0)
+      .translate(0, 0)
+      .scale(1, 1)
+      .translate(0, 0);
     const expectedDrawTransform = expectedLastDrawTransform.transform(
       new Transform()
         .translate(-0, -0)
@@ -87,7 +87,7 @@ describe('Element Drawing', () => {
     // Transform matrix sent to gl
     expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls).toHaveLength(2);
     expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls[1][2])
-      .toEqual(t(expectedDrawTransform.matrix()));
+      .toEqual(transpose(expectedDrawTransform.matrix()));
   });
   test('Copies', () => {
     const t1 = new Transform().translate(1, 1);
@@ -100,14 +100,14 @@ describe('Element Drawing', () => {
     figure.setFirstTransform();
     figure.mock.timeStep(0);
     const expectedLastDrawTransform = new Transform()
-      .scale(1, 1, 'polygon')
-      .rotate(0, 'polygon')
-      .translate(0, 0, 'polygon')
-      .scale(1, 1, 'collection')
-      .rotate(0, 'collection')
-      .translate(0, 0, 'collection')
-      .scale(1, 1, 'Figure')
-      .translate(0, 0, 'Figure');
+      .scale(1, 1)
+      .rotate(0)
+      .translate(0, 0)
+      .scale(1, 1)
+      .rotate(0)
+      .translate(0, 0)
+      .scale(1, 1)
+      .translate(0, 0);
     const expectedDrawTransforms = [
       expectedLastDrawTransform.transform(t1),
       expectedLastDrawTransform.transform(t2),
@@ -121,8 +121,8 @@ describe('Element Drawing', () => {
     // Transform matrix sent to gl
     expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls).toHaveLength(2);
     expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls[0][2])
-      .toEqual(t(expectedDrawTransforms[0].matrix()));
+      .toEqual(transpose(expectedDrawTransforms[0].matrix()));
     expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls[1][2])
-      .toEqual(t(expectedDrawTransforms[1].matrix()));
+      .toEqual(transpose(expectedDrawTransforms[1].matrix()));
   });
 });

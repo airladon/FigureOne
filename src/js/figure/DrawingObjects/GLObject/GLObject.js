@@ -571,7 +571,7 @@ class GLObject extends DrawingObject {
     gl.uniformMatrix3fv(
       locations.u_matrix,
       false,
-      m3.transform(transformMatrix),
+      m3.transpose(transformMatrix),
     );
 
     Object.keys(this.uniforms).forEach((uniformName) => {
