@@ -3107,9 +3107,25 @@ class Transform {
       //   }
       // }
       // debugger;
-      this.def = defOrName.map(d => d.slice());
+      const result = parseArrayTransformDefinition(defOrName);
+      this.def = result.def;
+      // for (let i = 0; i < defOrName.length; i += 1) {
+      //   const [type, x, y, z] = defOrName[i];
+      //   if (type === 'r') {
+      //     if (defOrName.length === 2) {
+      //       this.def.push(['r', 0, 0, x]);
+      //     } else {
+      //       this.def.push()
+      //     }
+      //   }
+      // }
+      // this.def = defOrName.map(d => d.slice());
       // this.def = chainOrName.map(t => parseTransformComponent(t));
-      this.name = name;
+      if (name === '' && result.name != null && result.name.length > 0) {
+        this.name = result.name;
+      } else {
+        this.name = name;
+      }
     }
     this.index = this.def.length;
     this._type = 'transform';
@@ -4041,6 +4057,32 @@ function isParsableTransform(value: any) {
   return false;
 }
 
+function parseArrayTransformDefinition(defIn: TransformDefinition) {
+  const def = [];
+  let name = '';
+  for (let i = 0; i < defIn.length; i += 1) {
+    if (typeof defIn[i] === 'string') {
+      name = defIn[i];
+      continue;
+    }
+    const [type, x, y, z] = defIn[i];
+    if (defIn[i].length === 4) {
+      def.push(defIn[i])
+    } else if (defIn[i].length === 3 && type === 't') {
+      def.push(['t', x, y, 0]);
+    } else if (defIn[i].length === 3 && type === 's') {
+      def.push(['s', x, y, 1]);
+    } else if (defIn[i].length === 2 && type === 's') {
+      def.push(['s', x, x, x]);
+    } else if (defIn[i].length === 2 && type === 'r') {
+      def.push(['r', 0, 0, x]);
+    } else {
+      throw new Error(`Cannot parse transform array definition: ${defIn}`);
+    }
+  }
+  return { name, def };
+}
+
 function parseTransform(inTransform: TypeParsableTransform): Transform {
   if (inTransform instanceof Transform) {
     return inTransform;
@@ -4066,27 +4108,34 @@ function parseTransform(inTransform: TypeParsableTransform): Transform {
   }
 
   if (Array.isArray(tToUse)) {
-    const t = new Transform();
-    tToUse.forEach((transformElement) => {
-      if (typeof transformElement === 'string') {
-        t.name = transformElement;
-        return;
-      }
-      if (transformElement.length === 4) {
-        t.def.push(transformElement);
-        return;
-      }
-      if (transformElement.length === 3) {
-        if (transformElement[0] === 's') {
-          t.def.push([...transformElement, 1]);
-        } else {
-          t.def.push([...transformElement, 0]);
-        }
-        return;
-      }
-      const [type, value] = transformElement;
-      t.def.push([type, value, value, value]);
-    });
+    // const { name, def } = cleanArrayTransfromDefinition
+    const t = new Transform(tToUse);
+
+    // tToUse.forEach((transformElement) => {
+    //   if (typeof transformElement === 'string') {
+    //     t.name = transformElement;
+    //     return;
+    //   }
+    //   if (transformElement.length === 4) {
+    //     t.def.push(transformElement);
+    //     return;
+    //   }
+    //   if (transformElement.length === 3) {
+    //     if (transformElement[0] === 's') {
+    //       t.def.push([...transformElement, 1]);
+    //     } else {
+    //       t.def.push([...transformElement, 0]);
+    //     }
+    //     return;
+    //   }
+    //   if (transformElement.length === 2 && transformElement[0] === 'r') {
+    //     const r = transformElement[1];
+    //     t.def.push(['r', r, r, r]);
+    //     return;
+    //   }
+    //   const [type, value] = transformElement;
+    //   t.def.push([type, value, value, value]);
+    // });
     return t;
   }
   const { f1Type, state } = tToUse;
