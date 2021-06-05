@@ -4077,7 +4077,7 @@ function parseArrayTransformDefinition(defIn: TransformDefinition) {
     } else if (defIn[i].length === 2 && type === 'r') {
       def.push(['r', 0, 0, x]);
     } else {
-      throw new Error(`Cannot parse transform array definition: ${defIn}`);
+      throw new Error(`Cannot parse transform array definition: ${JSON.stringify(defIn)}`);
     }
   }
   return { name, def };

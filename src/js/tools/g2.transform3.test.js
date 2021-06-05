@@ -834,8 +834,8 @@ describe('Transform', () => {
       expect(t.def).toHaveLength(1);
     });
     test('Named Array', () => {
-      const t = getTransform([['t', 1], 'Name1', ['s', 0.5]]);
-      expect(t.t()).toEqual(new Point(1, 1, 1));
+      const t = getTransform([['t', 1, 1], 'Name1', ['s', 0.5]]);
+      expect(t.t()).toEqual(new Point(1, 1, 0));
       expect(t.s()).toEqual(new Point(0.5, 0.5, 0.5));
       expect(t.def).toHaveLength(2);
       expect(t.name).toBe('Name1');
