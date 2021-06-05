@@ -304,16 +304,16 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     if (velocity.transform != null) {
       transformVelocity = getTransform(velocity.transform)._dup();
     }
-    if (velocity.position != null) {
+    if (velocity.position != null && transformVelocity.hasComponent('t')) {
       transformVelocity.updateTranslation(getScale(velocity.position));
     }
-    if (velocity.translation != null) {
+    if (velocity.translation != null && transformVelocity.hasComponent('t')) {
       transformVelocity.updateTranslation(getScale(velocity.translation));
     }
-    if (velocity.scale != null) {
+    if (velocity.scale != null && transformVelocity.hasComponent('s')) {
       transformVelocity.updateScale(getScale(velocity.scale));
     }
-    if (velocity.rotation != null) {
+    if (velocity.rotation != null && transformVelocity.hasComponent('r')) {
       transformVelocity.updateRotation(velocity.rotation);
     }
 

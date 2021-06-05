@@ -3161,6 +3161,27 @@ class Transform {
     return this.scale(1, 1, 1).rotate(0, 0, 0).translate(0, 0, 0);
   }
 
+  hasComponent(component: 'r' | 's' | 't') {
+    for (let i = 0; i < this.def.length; i += 1) {
+      if (this.def[i][0] === component) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  hasRotation() {
+    return this.hasComponent('r');
+  }
+
+  hasScale() {
+    return this.hasComponent('s');
+  }
+
+  hasTranslation() {
+    return this.hasComponent('t');
+  }
+
   /**
    * Return a duplicate transform with an added {@link Translation} transform
    * @param {number | Point} xOrTranslation
