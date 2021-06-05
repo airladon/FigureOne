@@ -2365,6 +2365,7 @@ export default class FigurePrimitives {
         onLoad: this.animateNextFrame,
       },
       glPrimitive: 'TRIANGLES',
+      transform: [['s', 1], ['r', 0, 0, 0], ['t', 0, 0, 0]],
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
     options.transform = getTransform(options.transform);
