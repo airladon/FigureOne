@@ -130,8 +130,12 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
    * @param {OBJ_RotationAnimationStep | number} targetOrOptions
    * @return {AnimationBuilder}
    */
-  rotation(targetOrOptions: OBJ_RotationAnimationStep | number) {
-    return this.addStep('rotation', targetOrOptions);
+  rotation(
+    targetOrOptions: OBJ_RotationAnimationStep | number,
+    ry: number | null = null,
+    rz: number = 0,
+  ) {
+    return this.addStep('rotation', targetOrOptions, ry, rz);
   }
 
 
@@ -144,8 +148,9 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   position(
     targetOrOptionsOrX: TypeParsablePoint | OBJ_PositionAnimationStep | number,
     y: number = 0,
+    z: number = 0,
   ) {
-    return this.addStep('position', targetOrOptionsOrX, y);
+    return this.addStep('position', targetOrOptionsOrX, y, z);
   }
 
   /**
@@ -157,8 +162,9 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   translation(
     targetOrOptionsOrX: TypeParsablePoint | OBJ_PositionAnimationStep | number,
     y: number = 0,
+    z: number = 0,
   ) {
-    return this.position(targetOrOptionsOrX, y);
+    return this.position(targetOrOptionsOrX, y, z);
   }
 
   /**
@@ -172,8 +178,9 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   scale(
     targetOrOptionsOrX: TypeParsablePoint | OBJ_ScaleAnimationStep | number,
     y: null | number = null,
+    z: number = 0,
   ) {
-    return this.addStep('scale', targetOrOptionsOrX, y);
+    return this.addStep('scale', targetOrOptionsOrX, y, z);
   }
 
   /**

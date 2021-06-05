@@ -13,7 +13,7 @@ jest.mock('../webgl/webgl');
 jest.mock('../DrawContext2D');
 
 const point = value => new Point(value, value);
-const scale = value => new Point(value, value, 1);
+const scale = value => new Point(value, value, value);
 
 describe('Animation Examples', () => {
   let figure;
@@ -37,7 +37,7 @@ describe('Animation Examples', () => {
     r1 = 1;
     r2 = 2;
     s1 = new Point(1, 1, 1);
-    s2 = new Point(2, 2, 1);
+    s2 = new Point(2, 2, 2);
     t1 = new Transform().scale(s1).rotate(r1).translate(p1);
     t2 = new Transform().scale(s2).rotate(r2).translate(p2);
     customFunction = () => {};

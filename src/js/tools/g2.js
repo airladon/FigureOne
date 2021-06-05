@@ -1362,22 +1362,18 @@ function getDeltaAngle(
   }
 
   return target - start;
+}
 
-  // if (rotDirection === 2) {
-  //   if (target > start) {
-  //     return target - start;
-  //   }
-  // }
-  // if (rotDirection === 2) {
-  //   if (start + rotDiff < 0) {
-  //     rotDiff = Math.PI * 2 + rotDiff;
-  //   } else if (start + rotDiff > Math.PI * 2) {
-  //     rotDiff = -(Math.PI * 2 - rotDiff);
-  //   }
-  // } else if (rotDiff * rotDirection < 0) {
-  //   rotDiff = rotDirection * Math.PI * 2.0 + rotDiff;
-  // }
-  // return rotDiff;
+function getDeltaAngle3D(
+  startAngle: Point,
+  targetAngle: Point,
+  rotDirection: TypeRotationDirection = 0,
+) {
+  const delta = new Point(0, 0, 0);
+  delta.x = getDeltaAngle(startAngle.x, targetAngle.x, rotDirection);
+  delta.y = getDeltaAngle(startAngle.y, targetAngle.y, rotDirection);
+  delta.z = getDeltaAngle(startAngle.z, targetAngle.z, rotDirection);
+  return delta;
 }
 
 // Line definition: Ax + By = C
@@ -6585,6 +6581,7 @@ export {
   polarToRect,
   rectToPolar,
   getDeltaAngle,
+  getDeltaAngle3D,
   normAngleTo90,
   threePointAngle,
   threePointAngleMin,

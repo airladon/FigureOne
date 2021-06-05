@@ -336,10 +336,18 @@ export default class AnimationManager {
    *   .then(rot)
    *   .start();
    */
-  rotation(targetOrOptions: OBJ_RotationAnimationStep | number) {
+  rotation(
+    targetOrOptions: OBJ_RotationAnimationStep | number,
+    ry: number | null = null,
+    rz: number = 0,
+  ) {
     let optionsIn;
     if (typeof targetOrOptions === 'number') {
-      optionsIn = { target: targetOrOptions };
+      if (ry == null) {
+        optionsIn = { target: [0, 0, targetOrOptions] };
+      } else {
+        optionsIn = { target: [targetOrOptions, ry, rz] };
+      }
     } else {
       optionsIn = targetOrOptions;
     }
@@ -361,12 +369,13 @@ export default class AnimationManager {
   scale(
     targetOrOptionsOrX: TypeParsablePoint | OBJ_ScaleAnimationStep | number,
     y: null | number = null,
+    z: number = 0,
   ) {
     let optionsIn;
     if (typeof targetOrOptionsOrX === 'number' && y == null) {
-      optionsIn = { target: [targetOrOptionsOrX, targetOrOptionsOrX] };
+      optionsIn = { target: [targetOrOptionsOrX, targetOrOptionsOrX, targetOrOptionsOrX] };
     } else if (typeof targetOrOptionsOrX === 'number') {
-      optionsIn = { target: [targetOrOptionsOrX, y] };
+      optionsIn = { target: [targetOrOptionsOrX, y, z] };
     } else if (isParsablePoint(targetOrOptionsOrX)) {  // $FlowFixMe
       optionsIn = { target: getPoint(targetOrOptionsOrX) };
     } else {
@@ -455,8 +464,9 @@ export default class AnimationManager {
   translation(
     targetOrOptionsOrX: TypeParsablePoint | OBJ_PositionAnimationStep | number,
     y: number = 0,
+    z: number = 0,
   ) {
-    this.position(targetOrOptionsOrX, y);
+    this.position(targetOrOptionsOrX, y, z);
   }
 
   /**
@@ -468,10 +478,11 @@ export default class AnimationManager {
   position(
     targetOrOptionsOrX: TypeParsablePoint | OBJ_PositionAnimationStep | number,
     y: number = 0,
+    z: number = 0,
   ) {
     let optionsIn;
     if (typeof targetOrOptionsOrX === 'number') {
-      optionsIn = { target: [targetOrOptionsOrX, y] };
+      optionsIn = { target: [targetOrOptionsOrX, y, z] };
     } else if (isParsablePoint(targetOrOptionsOrX)) {  // $FlowFixMe
       optionsIn = { target: getPoint(targetOrOptionsOrX) };
     } else {

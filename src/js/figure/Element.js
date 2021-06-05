@@ -2648,6 +2648,20 @@ class FigureElement {
     return rotation;
   }
 
+  getRotation3(normalize: '0to360' | '-180to180' | '' = '') {
+    const r = this.transform.r3();
+    let rotation = [0, 0, 0];
+    if (r != null) {
+      rotation = r;
+    }
+    if (normalize !== '' && r != null) {
+      rotation[0] = clipAngle(r[0], normalize);
+      rotation[1] = clipAngle(r[1], normalize);
+      rotation[2] = clipAngle(r[2], normalize);
+    }
+    return new Point(rotation);
+  }
+
   // /**
   //  * Get position relative to bounding rect.
   //  *

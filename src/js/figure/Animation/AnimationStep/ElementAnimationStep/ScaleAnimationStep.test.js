@@ -21,11 +21,11 @@ describe('Scale Animation Step', () => {
       elem1.animations.nextFrame(0);
       expect(elem1.getScale().round(4)).toEqual(new Point(1, 1, 1));
       elem1.animations.nextFrame(0.5);
-      expect(elem1.getScale().round(4)).toEqual(new Point(1.5, 1.5, 1));
+      expect(elem1.getScale().round(4)).toEqual(new Point(1.5, 1.5, 1.5));
       elem1.animations.nextFrame(1.0);
-      expect(elem1.getScale().round(4)).toEqual(new Point(2, 2, 1));
+      expect(elem1.getScale().round(4)).toEqual(new Point(2, 2, 2));
       elem1.animations.nextFrame(1.1);
-      expect(elem1.getScale().round(4)).toEqual(new Point(2, 2, 1));
+      expect(elem1.getScale().round(4)).toEqual(new Point(2, 2, 2));
     };
   });
   test('Simple scale', () => {
@@ -47,7 +47,7 @@ describe('Scale Animation Step', () => {
   });
   test('Simple scale with point', () => {
     elem1.animations.new()
-      .scale({ target: new Point(2, 2), duration: 1, progression: 'linear' })
+      .scale({ target: new Point(2, 2, 2), duration: 1, progression: 'linear' })
       .start();
     tester();
   });
