@@ -267,9 +267,11 @@ export default class RotationAnimationStep extends ElementAnimationStep {
   setToEnd() {
     const { element } = this;
     if (element != null) {
-      element.transform.updateRotation(clipAngle(
-        this.rotation.target, this.rotation.clipTo,
-      ));
+      element.transform.updateRotation([
+        clipAngle(this.rotation.target.x, this.rotation.clipTo),
+        clipAngle(this.rotation.target.y, this.rotation.clipTo),
+        clipAngle(this.rotation.target.z, this.rotation.clipTo),
+      ]);
       this.fnExec(element.setTransformCallback, element.transform);
     }
   }

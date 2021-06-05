@@ -608,6 +608,7 @@ class Point {
       state: [
         roundNum(this.x, precision),
         roundNum(this.y, precision),
+        roundNum(this.z, precision),
       ],
     };
   }
@@ -4142,7 +4143,7 @@ function parseTransform(inTransform: TypeParsableTransform): Transform {
     && state != null
     && Array.isArray(state)
   ) {
-    const t = new Transform(tToUse.state.slice(1), tToUse.state[0]);
+    const t = new Transform(state.slice(1), tToUse.state[0]);
     // t.name = ;
     // t.def = ;
     // for (let i = 1; i < tToUse.state.length; i += 1) {
