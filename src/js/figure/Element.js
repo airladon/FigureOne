@@ -1477,10 +1477,10 @@ class FigureElement {
    * definition
    * @param {number} y y coordinate if `pointOrX` is just the x coordinate (`0`)
    */
-  setPosition(pointOrX: TypeParsablePoint | number, y: number = 0) {
+  setPosition(pointOrX: TypeParsablePoint | number, y: number = 0, z: number = 0) {
     let position;
     if (typeof pointOrX === 'number') {
-      position = new Point(pointOrX, y);
+      position = new Point(pointOrX, y, z);
     } else {
       position = getPoint(pointOrX);
     }
@@ -1493,8 +1493,18 @@ class FigureElement {
    * Conveniently set the first `rotation` of the element's `transform`.
    * @param {number} rotation
    */
-  setRotation(rotation: number) {
+  setRotation(rOrRx: number | TypeParsablePoint, ry: number | null = null, rz: number = 0) {
     const currentTransform = this.transform._dup();
+    let rotation;
+    if (typeof rOrRx === 'number') {
+      if (ry == null) {
+        rotation = rOrRx;
+      } else {
+        rotation = new Point(rOrRx, ry, rz);
+      }
+    } else {
+      rotation = rOrRx;
+    }
     currentTransform.updateRotation(rotation);
     this.setTransform(currentTransform);
   }
@@ -1506,13 +1516,13 @@ class FigureElement {
    * `y` is null, then both `x` and `y` will be equally scaled
    * @param {number | null} y y coordinate if `scaleOrX` is a `number` (`null`)
    */
-  setScale(scaleOrX: TypeParsablePoint | number, y: ?number = null) {
+  setScale(scaleOrX: TypeParsablePoint | number, y: ?number = null, z: number = 1) {
     let scale;
     if (typeof scaleOrX === 'number') {
       if (typeof y === 'number') {
-        scale = new Point(scaleOrX, y);
+        scale = new Point(scaleOrX, y, z);
       } else {
-        scale = new Point(scaleOrX, scaleOrX);
+        scale = new Point(scaleOrX, scaleOrX, scaleOrX);
       }
     } else {
       scale = getPoint(scaleOrX);

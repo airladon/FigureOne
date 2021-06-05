@@ -94,7 +94,7 @@ describe('Figure Recorder', () => {
         rotation: 4,
       });
       expect(a.getPosition()).toEqual(new Point(2, 2));
-      expect(a.getScale()).toEqual(new Point(3, 3, 1));
+      expect(a.getScale()).toEqual(new Point(3, 3, 3));
       expect(a.getRotation()).toBe(4);
     });
     test('Name', () => {
