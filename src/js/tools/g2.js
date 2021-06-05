@@ -1019,7 +1019,7 @@ function linearPath(
   delta: Point,
   percent: number,
 ) {
-  return start.add(delta.x * percent, delta.y * percent);
+  return start.add(delta.x * percent, delta.y * percent, delta.z * percent);
 }
 
 // type linearPathOptionsType = {
@@ -3451,19 +3451,20 @@ class Transform {
           stepDelta[1] * percent + stepStart[1],
           stepDelta[2] * percent + stepStart[2],
           stepDelta[3] * percent + stepStart[3],
-        ]; stepStart.add(stepDelta.mul(percent));
+        ];
       }
-      if (stepStart === 't' && stepDelta === 't') {
+      if (stepStart[0] === 't' && stepDelta[0] === 't') {
         const start = new Point(stepStart[1], stepStart[2], stepStart[3]);
-        const delta = new Point(stepDelta[1], stepDelta[2], stepDelta[3]);
+        const sDelta = new Point(stepDelta[1], stepDelta[2], stepDelta[3]);
         const p = translationPath(
           translationStyle,
-          start, delta, percent,
+          start, sDelta, percent,
           translationOptions,
         );
         calcTransform.def[i] = ['t', p.x, p.y, p.z];
       }
     }
+    calcTransform.calcAndSetMatrix();
     return calcTransform;
   }
 

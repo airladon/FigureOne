@@ -125,6 +125,7 @@ describe('Transfrom Animation Unit', () => {
 
     let remainingTime;
     remainingTime = step.nextFrame(100.1);
+
     expect(step.element.transform.round(4)).toEqual(start.constant(0.1));
     expect(math.round(remainingTime)).toBe(-0.9);
 
