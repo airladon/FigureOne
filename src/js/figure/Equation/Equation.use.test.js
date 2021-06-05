@@ -90,7 +90,7 @@ describe('Different ways to make an equation', () => {
           // Note, scale will not impact dynamic symbol line widths.
           scale: 1,
           // equation transform
-          transform: [['s', 1], ['r', 0], ['t', [0, 0]]],
+          transform: [['s', 1], ['r', 0], ['t', 0, 0]],
           // equation position - will override translation in transform
           position: [0, 0],
           // Elements can be defined inline in `forms` or defined here. Define

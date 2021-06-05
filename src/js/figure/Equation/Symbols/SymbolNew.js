@@ -191,10 +191,10 @@ export default class Symbol extends FigureElementPrimitive {
       const t = this.transform._dup();
       const s = t.s();
       if (s != null) {
-        t.updateScale(
+        t.updateScale([
           s.x / this._custom.options.staticWidth,
           s.y / this._custom.options.staticHeight,
-        );
+        ]);
       }
       return t;
     }
