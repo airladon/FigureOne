@@ -10,7 +10,7 @@ import webgl from '../../../__mocks__/WebGLInstanceMock';
 import {
   linear, round,
 } from '../../../tools/math';
-import * as m2 from '../../../tools/m2';
+import * as m3 from '../../../tools/m3';
 import makeFigure from '../../../__mocks__/makeFigure';
 // import Figure from './Figure';
 
@@ -232,10 +232,9 @@ describe('Animationa and Movement', () => {
       });
       test('Deceleration', () => {
         const callback = jest.fn();
-        const initialV = new Transform().scale(-2, 1).rotate(0).translate(10, 20);
+        const initialV = new Transform().scale(-2, 1, 0).rotate(0).translate(10, 20);
         // const decel = new TransformLimit(1, 2, 1);
         const decel = { scale: 1, rotation: 2, translation: 1 };
-
         element.state.movement.velocity = initialV;
         element.move.freely.deceleration = decel;
 
@@ -252,7 +251,7 @@ describe('Animationa and Movement', () => {
         expect(element.state.isMovingFreely).toBe(true);
         let vel = element.state.movement.velocity;
         expect(vel.t().round(2)).toEqual(new Point(9.55, 19.11));
-        expect(vel.s().round(2)).toEqual(new Point(-1, 0, 1));
+        expect(vel.s().round(2)).toEqual(new Point(-1, 0, 0));
         expect(vel.r()).toBe(0);
         element.transform.name = '';
         expect(element.transform.round(2)).toEqual(new Transform()
@@ -262,7 +261,7 @@ describe('Animationa and Movement', () => {
         figure.mock.timeStep(1);
         vel = element.state.movement.velocity;
         expect(vel.t().round(2)).toEqual(new Point(9.11, 18.21));
-        expect(vel.s().round(2)).toEqual(new Point(0, 0, 1));
+        expect(vel.s().round(2)).toEqual(new Point(0, 0, 0));
         expect(vel.r()).toBe(0);
         expect(callback.mock.calls).toHaveLength(0);
 
@@ -292,7 +291,7 @@ describe('Animationa and Movement', () => {
         let vel = element.state.movement.velocity;
 
         expect(vel.t().round(2)).toEqual(new Point(10, -10));
-        expect(vel.s().round(2)).toEqual(new Point(20, -20, 1));
+        expect(vel.s().round(2)).toEqual(new Point(20, -20, 0));
         expect(vel.r()).toBe(10);
 
         // element.setupDraw(identity, 0);
@@ -305,7 +304,7 @@ describe('Animationa and Movement', () => {
         vel = element.state.movement.velocity;
 
         expect(vel.t().round(2)).toEqual(new Point(6.47, -6.47));
-        expect(vel.s().round(2)).toEqual(new Point(15, -15, 1));
+        expect(vel.s().round(2)).toEqual(new Point(15, -15, 0));
         expect(vel.r()).toBe(5.001);
 
         // element.setupDraw(identity, 5.001);
@@ -313,7 +312,7 @@ describe('Animationa and Movement', () => {
         vel = element.state.movement.velocity;
 
         expect(vel.t().round(2)).toEqual(new Point(6.46, -6.46));
-        expect(vel.s().round(2)).toEqual(new Point(0, 0, 1));
+        expect(vel.s().round(2)).toEqual(new Point(0, 0, 0));
         expect(vel.r()).toBe(0);
 
         // element.setupDraw(identity, 9.13);
@@ -349,7 +348,7 @@ describe('Animationa and Movement', () => {
           element.moved(new Transform()
             .scale(1, 1).rotate(1).translate(1, -1));
           expect(element.state.movement.velocity.round()).toEqual(new Transform()
-            .scale(0, 0).rotate(1).translate(1, -1));
+            .scale(0, 0, 0).rotate(1).translate(1, -1));
         });
       });
     });
@@ -376,14 +375,14 @@ describe('Animationa and Movement', () => {
         figure.mock.timeStep(0.5);
         pulseTransform = new Transform()
           .scale(1.1, 1.1).rotate(0).translate(0, 0);
-        expectM = m2.mul(element.transform.matrix(), pulseTransform.matrix());
+        expectM = m3.mul(element.transform.matrix(), pulseTransform.matrix());
         expect(round(element.lastDrawPulseTransform.matrix())).toEqual(expectM);
 
         // element.setupDraw(identity, 1);
         figure.mock.timeStep(0.5);
         pulseTransform = new Transform()
           .scale(1, 1).rotate(0).translate(0, 0);
-        expectM = m2.mul(element.transform.matrix(), pulseTransform.matrix());
+        expectM = m3.mul(element.transform.matrix(), pulseTransform.matrix());
         expect(element.lastDrawPulseTransform.matrix()).toEqual(expectM);
         expect(element.state.isPulsing).toBe(false);
 
@@ -411,13 +410,13 @@ describe('Animationa and Movement', () => {
         const maxPulseTransform = new Transform()
           .scale(1.2, 1.2).rotate(0).translate(0, 0);
         // (Point.zero(), 0, new Point(1.2, 1.2));
-        const maxM = m2.mul(element.transform.matrix(), maxPulseTransform.matrix());
+        const maxM = m3.mul(element.transform.matrix(), maxPulseTransform.matrix());
         expect(round(draw.mock.calls[6][0], 3)).toEqual(round(maxM, 3));
 
         const minPulseTransform = new Transform()
           .scale(0.8, 0.8).rotate(0).translate(0, 0);
         // Point.zero(), 0, new Point(0.8, 0.8));
-        const minM = m2.mul(element.transform.matrix(), minPulseTransform.matrix());
+        const minM = m3.mul(element.transform.matrix(), minPulseTransform.matrix());
         expect(round(draw.mock.calls[10][0], 3)).toEqual(round(minM, 3));
       });
     });
@@ -742,7 +741,7 @@ describe('Animationa and Movement', () => {
         .scale(1, 1).rotate(0.1).translate(0.5, 0));
       expect(collection.transform.round()).toEqual(new Transform()
         .scale(1, 1).rotate(0.1).translate(0.5, 0));
-      const velocity = new Transform().scale(0, 0).rotate(0.1).translate(-0.5, 0);
+      const velocity = new Transform().scale(0, 0, 0).rotate(0.1).translate(-0.5, 0);
       expect(collection.state.movement.velocity.isEqualTo(velocity)).toBe(true);
 
       const moveFreeProps = collection.move.freely;
@@ -771,7 +770,7 @@ describe('Animationa and Movement', () => {
       // collection.draw(11);
       figure.mock.timeStep(1);
       expect(collection.state.movement.velocity.round()).toEqual(new Transform()
-        .scale(0, 0).rotate(0.09).translate(0, 0));
+        .scale(0, 0, 0).rotate(0.09).translate(0, 0));
       expect(collection.transform.round()).toEqual(new Transform()
         .scale(1, 1).rotate(0.195).translate(0.38, 0));
 

@@ -3821,12 +3821,12 @@ class Transform {
         const xc = rc * Math.cos(phi) * Math.sin(theta);
         const yc = rc * Math.sin(phi) * Math.sin(theta);
         const zc = rc * Math.cos(theta);
-        def.push(['t', xc, yc, zc, this.name]);
+        def.push(['t', xc, yc, zc]);
       } else if (type === 'r' || type === 's' || type === 't') {
         const xc = clipMag(x, zero[i], max[i]);
         const yc = clipMag(y, zero[i], max[i]);
         const zc = clipMag(z, zero[i], max[i]);
-        def.push([t[0], xc, yc, zc, this.name]);
+        def.push([t[0], xc, yc, zc]);
       }
     }
     return new Transform(def, this.name);
@@ -3968,9 +3968,9 @@ class Transform {
     for (let i = 0; i < this.def.length; i += 1) {
       const [type] = this.def[i];
       if (type === 't' || type === 'r') {
-        def.push([type, 0, 0, 0, this.name]);
+        def.push([type, 0, 0, 0]);
       } else if (type === 's') {
-        def.push([type, 1, 1, 1, this.name]);
+        def.push([type, 1, 1, 1]);
       } else if (type === 'c' && this.def[i].length === 18) {
         def.push([
           'c',
@@ -3990,7 +3990,7 @@ class Transform {
         ]);
       }
     }
-    return this.createFromDef(def, this.name);
+    return new Transform(def, this.name);
   }
 }
 
