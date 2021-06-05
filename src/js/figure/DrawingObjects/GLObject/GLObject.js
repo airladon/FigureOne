@@ -1,7 +1,7 @@
 // @flow
 
 // import * as g2 from '../g2';
-import * as m2 from '../../../tools/m2';
+import * as m3 from '../../../tools/m3';
 import WebGLInstance from '../../webgl/webgl';
 import { Rect } from '../../../tools/g2';
 // import type { TypeParsablePoint } from '../../../tools/g2';
@@ -571,7 +571,7 @@ class GLObject extends DrawingObject {
     gl.uniformMatrix3fv(
       locations.u_matrix,
       false,
-      m2.t(transformMatrix),
+      m3.transform(transformMatrix),
     );
 
     Object.keys(this.uniforms).forEach((uniformName) => {

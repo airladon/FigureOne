@@ -205,7 +205,7 @@ function inverse3(m: Array<number>) {
 // Guass-Jordan Elimination
 function inverse(A: Array<number>) {
   let m;
-  if (A.length === 9 ) {
+  if (A.length === 9) {
     m = 3;
     return inverse3(A);
   }
@@ -214,6 +214,7 @@ function inverse(A: Array<number>) {
   } else {
     m = Math.sqrt(A.length);
   }
+
   const n = m * 2;
   const a = new Array(m).fill(0).map(() => new Array(n).fill(0));
   let index = 0;
@@ -273,11 +274,21 @@ function inverse(A: Array<number>) {
       a[row][col] *= s;
     }
   }
-  return [
-    a[0][3], a[0][4], a[0][5],
-    a[1][3], a[1][4], a[1][5],
-    a[2][3], a[2][4], a[2][5],
-  ];
+  if (m === 3) {
+    return [
+      a[0][3], a[0][4], a[0][5],
+      a[1][3], a[1][4], a[1][5],
+      a[2][3], a[2][4], a[2][5],
+    ];
+  }
+  if (m === 4) {
+    return [
+      a[0][4], a[0][5], a[0][6], a[0][7],
+      a[1][4], a[1][5], a[1][6], a[1][7],
+      a[2][4], a[2][5], a[2][6], a[2][7],
+      a[3][4], a[3][5], a[3][6], a[3][7],
+    ];
+  }
 }
 
 // function lu(A: Array<number>) {

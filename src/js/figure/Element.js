@@ -2433,7 +2433,7 @@ class FigureElement {
       return new Transform().identity().matrix();
     }
     if (from === 'draw' && to === 'pixel') {
-      return m2.mul(
+      return m3.mul(
         this.figure.spaceTransforms.glToPixel.matrix(),
         this.lastDrawTransform.matrix(),
       );
@@ -2448,7 +2448,7 @@ class FigureElement {
       return this.getTransform().matrix();
     }
     if (from === 'pixel' && to === 'draw') {
-      return m2.mul(
+      return m3.mul(
         m3.inverse(this.lastDrawTransform.matrix()),
         // this.lastDrawTransform.calcInverseMatrix(),
         this.figure.spaceTransforms.pixelToGL.matrix(),
@@ -2466,7 +2466,7 @@ class FigureElement {
 
     // Remaining Local related conversions
     if (from === 'local' && to === 'pixel') {
-      return m2.mul(
+      return m3.mul(
         this.figure.spaceTransforms.glToPixel.matrix(),
         this.lastDrawTransform.calcMatrix(this.transform.def.length),
       );
@@ -2478,7 +2478,7 @@ class FigureElement {
       return this.lastDrawTransform.calcMatrix(this.transform.def.length, -3);
     }
     if (from === 'pixel' && to === 'local') {
-      return m2.mul(
+      return m3.mul(
         m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.def.length)),
         this.figure.spaceTransforms.pixelToGL.matrix(),
       );
@@ -2555,7 +2555,7 @@ class FigureElement {
     const transformedBorders = [];
     let matrix;
     if (Array.isArray(space)) {
-      matrix = m2.mul(space, this.getTransform().matrix());
+      matrix = m3.mul(space, this.getTransform().matrix());
     } else {
       matrix = this.spaceTransformMatrix('draw', space);
     }
@@ -4675,7 +4675,7 @@ class FigureElementCollection extends FigureElement {
     }
     let matrix;
     if (Array.isArray(space)) {
-      matrix = m2.mul(space, this.getTransform().matrix());
+      matrix = m3.mul(space, this.getTransform().matrix());
     } else {
       matrix = this.spaceTransformMatrix('draw', space);
     }
