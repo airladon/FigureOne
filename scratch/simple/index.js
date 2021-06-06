@@ -20,3 +20,8 @@ figure.add({
   ],
   legend: true,
 });
+
+// figure.add({
+//   make: 'text',
+//   text: 'asdf',
+// });

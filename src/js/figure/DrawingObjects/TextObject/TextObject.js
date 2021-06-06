@@ -1,6 +1,7 @@
 // @flow
 
 import * as m2 from '../../../tools/m2';
+import * as m3 from '../../../tools/m3';
 import {
   Point, getPoint, Rect, getBoundingBorder, getBorder, isBuffer,
 } from '../../../tools/g2';
@@ -731,7 +732,25 @@ class TextObjectBase extends DrawingObject {
     // pixel space
     //   - Flip the y translation
     //   - Reverse rotation
-    const tm = transformMatrix;
+    // const tm = transformMatrix;
+    const tma = m3.mul([
+      1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 0, 0,
+      0, 0, 0, 1,
+    ], transformMatrix);
+    const tm = [
+      tma[0], tma[1], tma[3],
+      tma[4], tma[5], tma[7],
+      tma[8], tma[9], tma[11],
+    ];
+    // console.log(tm)
+    // console.log(m3.mul([
+    //   1, 0, 0, 0,
+    //   0, 1, 0, 0,
+    //   0, 0, 0, 0,
+    //   0, 0, 0, 1,
+    // ], tm))
     const elementToGLMatrix = [
       tm[0], -tm[1], tm[2],
       -tm[3], tm[4], tm[5] * -1,

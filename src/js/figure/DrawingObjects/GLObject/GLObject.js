@@ -568,7 +568,7 @@ class GLObject extends DrawingObject {
       );
     });
 
-    gl.uniformMatrix3fv(
+    gl.uniformMatrix4fv(
       locations.u_matrix,
       false,
       m3.transpose(transformMatrix),
