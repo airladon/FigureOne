@@ -105,5 +105,18 @@ describe('Move Freely', () => {
       expect(round(a.getRemainingMovingFreelyTime(), 3)).toBe(0);
       expect(a.state.isMovingFreely).toBe(false);
     });
+    test('Move and pause, so no extra free movement', () => {
+      expect(a.getPosition().round(3)).toEqual(new Point(0, 0));
+      figure.mock.touchDown([0, 0]);
+      figure.mock.timeStep(0.1);
+      figure.mock.touchMove([1, 0]);
+      expect(a.getPosition().round(3)).toEqual(new Point(1, 0));
+      figure.mock.timeStep(0.1);
+      figure.mock.touchMove([1, 0]);
+      expect(a.getPosition().round(3)).toEqual(new Point(1, 0));
+      figure.mock.timeStep(0.1);
+      figure.mock.touchUp();
+      expect(a.getPosition().round(3)).toEqual(new Point(1, 0));
+    });
   });
 });

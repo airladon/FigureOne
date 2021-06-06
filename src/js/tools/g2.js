@@ -3990,7 +3990,6 @@ class Transform {
     }
 
     const v = new Transform(def);
-
     return v.clipMag(zeroThreshold, maxTransform);
   }
 
@@ -4297,6 +4296,15 @@ function rectToPolar(x: number | Point, y: number = 0, z: number = 0) {
     rect = x;
   }
   const mag = rect.distance();
+  if (mag === 0) {
+    return {
+      mag: 0,
+      angle: 0,
+      phi: 0,
+      theta: 0,
+      r: 0,
+    };
+  }
   let angle = Math.atan2(rect.y, rect.x);
   if (angle < 0) {
     angle += Math.PI * 2;
