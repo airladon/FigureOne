@@ -17,10 +17,10 @@ const vertex = {
 attribute vec2 a_position;
 attribute vec4 a_col;
 varying vec4 v_col;
-uniform mat3 u_matrix;
+uniform mat4 u_matrix;
 uniform float u_z;
 void main() {
-  gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, u_z, 1);
+  gl_Position = u_matrix * vec4(a_position.xy, u_z, 1);
   v_col = a_col;
 }`,
     vars: ['a_position', 'a_col', 'u_matrix', 'u_z'],
@@ -29,11 +29,11 @@ void main() {
     src:
         'attribute vec2 a_position;'
         + 'attribute vec2 a_texcoord;'
-        + 'uniform mat3 u_matrix;'
+        + 'uniform mat4 u_matrix;'
         + 'uniform float u_z;'
         + 'varying vec2 v_texcoord;'
         + 'void main() {'
-          + 'gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, u_z, 1);'
+          + 'gl_Position = u_matrix * vec4(a_position.xy, u_z, 1);'
           + 'v_texcoord = a_texcoord;'
         + '}',
     vars: ['a_position', 'a_texcoord', 'u_matrix', 'u_z'],
@@ -44,7 +44,7 @@ attribute vec2 a_pos0;
 attribute vec2 a_pos1;
 attribute vec2 a_pos2;
 attribute vec2 a_pos3;
-uniform mat3 u_matrix;
+uniform mat4 u_matrix;
 uniform float u_percent;
 uniform int u_from;
 uniform int u_to;
@@ -73,7 +73,7 @@ void main() {
   }
 
   vec2 newPosition = (toPos - fromPos) * u_percent + fromPos;
-  gl_Position = vec4((u_matrix * vec3(newPosition.xy, 1)).xy, 0, 1);
+  gl_Position = u_matrix * vec4(newPosition.xy, u_z, 1);
 }
 `,
     vars: ['a_pos0', 'a_pos1', 'a_pos2', 'a_pos3', 'u_matrix', 'u_percent', 'u_from', 'u_to'],
@@ -113,7 +113,7 @@ void main() {
     const src = `
 ${aPosDefs}
 ${aColDefs}
-uniform mat3 u_matrix;
+uniform mat4 u_matrix;
 uniform float u_percent;
 ${uniforms}
 
@@ -137,7 +137,7 @@ void main() {
   }
 
   vec2 newPosition = (toPos - fromPos) * u_percent + fromPos;
-  gl_Position = vec4((u_matrix * vec3(newPosition.xy, 1)).xy, 0, 1);
+  gl_Position = u_matrix * vec4(newPosition.xy, 0, 1);
   ${setVarying}
 }
 `;
@@ -192,7 +192,7 @@ void main() {
   }
 
   vec2 newPosition = (toPos - fromPos) * u_percent + fromPos;
-  gl_Position = vec4((u_matrix * vec3(newPosition.xy, 1)).xy, 0, 1);
+  gl_Position = u_matrix * vec4(newPosition.xy, u_z, 1);
   v_col = (toCol - fromCol) * u_percent + fromCol;
 }
 `,
