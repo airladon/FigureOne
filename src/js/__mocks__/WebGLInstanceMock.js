@@ -13,6 +13,7 @@ const webgl = {
     enableVertexAttribArray: () => {},
     vertexAttribPointer: () => {},
     uniformMatrix3fv: jest.fn(),
+    uniformMatrix4fv: jest.fn(),
     uniform4f: () => {},
     uniform1f: () => {},
     uniform1i: () => {},

@@ -32,11 +32,11 @@ describe('Element Drawing', () => {
     a = figure.elements._a;
     //   b = c._b;
     figure.initialize();
-    figure.webglLow.gl.uniformMatrix3fv.mockClear();
+    figure.webglLow.gl.uniformMatrix4fv.mockClear();
   });
   test('Simple', () => {
     a.setPosition(1, 1);
-    expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls).toHaveLength(0);
+    expect(figure.webglLow.gl.uniformMatrix4fv.mock.calls).toHaveLength(0);
     figure.setFirstTransform();
     figure.mock.timeStep(0);
     const expectedDrawTransform = new Transform()
@@ -53,13 +53,13 @@ describe('Element Drawing', () => {
     // Actual transform(s) drawn (in this case just one as no copies or pulse multipliers)
     expect(a.drawTransforms[0].def).toEqual(expectedDrawTransform.def);
     // Transform matrix sent to gl
-    expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls).toHaveLength(1);
-    expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls[0][2])
+    expect(figure.webglLow.gl.uniformMatrix4fv.mock.calls).toHaveLength(1);
+    expect(figure.webglLow.gl.uniformMatrix4fv.mock.calls[0][2])
       .toEqual(transpose(expectedDrawTransform.matrix()));
   });
   test('Pulse', () => {
     a.setPosition(1, 1);
-    expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls).toHaveLength(0);
+    expect(figure.webglLow.gl.uniformMatrix4fv.mock.calls).toHaveLength(0);
     figure.setFirstTransform();
     a.pulse({ duaration: 1, scale: 1.5 });
     figure.mock.timeStep(0);
@@ -85,8 +85,8 @@ describe('Element Drawing', () => {
     // Actual transform(s) drawn (in this case just one as no copies or pulse multipliers)
     expect(a.drawTransforms[0].def).toEqual(expectedDrawTransform.def);
     // Transform matrix sent to gl
-    expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls).toHaveLength(2);
-    expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls[1][2])
+    expect(figure.webglLow.gl.uniformMatrix4fv.mock.calls).toHaveLength(2);
+    expect(figure.webglLow.gl.uniformMatrix4fv.mock.calls[1][2])
       .toEqual(transpose(expectedDrawTransform.matrix()));
   });
   test('Copies', () => {
@@ -96,7 +96,7 @@ describe('Element Drawing', () => {
       t1._dup(),
       t2._dup(),
     ];
-    expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls).toHaveLength(0);
+    expect(figure.webglLow.gl.uniformMatrix4fv.mock.calls).toHaveLength(0);
     figure.setFirstTransform();
     figure.mock.timeStep(0);
     const expectedLastDrawTransform = new Transform()
@@ -119,10 +119,10 @@ describe('Element Drawing', () => {
     expect(a.drawTransforms[0].def).toEqual(expectedDrawTransforms[0].def);
     expect(a.drawTransforms[1].def).toEqual(expectedDrawTransforms[1].def);
     // Transform matrix sent to gl
-    expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls).toHaveLength(2);
-    expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls[0][2])
+    expect(figure.webglLow.gl.uniformMatrix4fv.mock.calls).toHaveLength(2);
+    expect(figure.webglLow.gl.uniformMatrix4fv.mock.calls[0][2])
       .toEqual(transpose(expectedDrawTransforms[0].matrix()));
-    expect(figure.webglLow.gl.uniformMatrix3fv.mock.calls[1][2])
+    expect(figure.webglLow.gl.uniformMatrix4fv.mock.calls[1][2])
       .toEqual(transpose(expectedDrawTransforms[1].matrix()));
   });
 });
