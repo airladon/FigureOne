@@ -7,7 +7,7 @@ tester(
   0,
   `
 if (typeof image !== 'undefined') {
-  sleepTime = 1000;
+  sleepTime = 2000;
 }
 `,
 );
