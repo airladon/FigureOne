@@ -34,7 +34,7 @@ const loaded = () => {
 
   m.animations.new()
     .delay(1)
-    .morph({ start: 0, target: 1, duration: 2 })
+    .morph({ start: 0, target: 1, duration: 30 })
     .start();
 };
 

@@ -44,7 +44,12 @@ for (let i = 0; i < 250; i += 1) {
     // Manually update the transform and resulting matrix for the new position
     transform.def[0][1] = x;
     transform.def[0][2] = y;
-    transform.mat = [1, 0, transform.def[0][1], 0, 1, transform.def[0][2], 0, 0, 1];
+    transform.mat = [
+      1, 0, 0, transform.def[0][1],
+      0, 1, 0, transform.def[0][2],
+      0, 0, 1, 0,
+      0, 0, 0, 1,
+    ];
 
     // If the shape is on or crossing a boundary, then set the
     // velocity sign so it bounces back into the figure.

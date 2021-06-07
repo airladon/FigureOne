@@ -15,12 +15,12 @@ const { rand } = Fig.tools.math;
 const vertexShader = `
 attribute vec2 a_position;
 attribute vec2 a_velocity;
-uniform mat3 u_matrix;
+uniform mat4 u_matrix;
 uniform float u_time;
 void main() {
   float x = a_position.x + a_velocity.x * u_time;
   float y = a_position.y + a_velocity.y * u_time;
-  gl_Position = vec4((u_matrix * vec3(x, y, 1)).xy, 0, 1);
+  gl_Position = u_matrix * vec4(x, y, 0, 1);
 }`;
 
 // Create vertices for 10,000 polygons. Each polygon is 20 triangles.

@@ -298,7 +298,12 @@ for (let i = 0; i < 250; i += 1) {
     // Manually update the transform and resulting matrix for the new position
     transform.def[0][1] = x;
     transform.def[0][2] = y;
-    transform.mat = [1, 0, transform.def[0][1], 0, 1, transform.def[0][2], 0, 0, 1];
+    transform.mat = [
+      1, 0, 0, transform.def[0][1],
+      0, 1, 0, transform.def[0][2],
+      0, 0, 1, 0,
+      0, 0, 0, 1,
+    ];
 
     // If the shape is on or crossing a boundary, then set the
     // velocity sign so it bounces back into the figure.
@@ -339,11 +344,8 @@ for (let i = 0; i < 400; i += 1) {
   ...
   // Override element draw method
   e.draw = (now, parentTransform) => {
-    // Get the current position directly
-    const [, x, y] = e.transform.def[0];
-
     // Cacluate the draw matrix as efficiently as possible
-    const mat = Fig.tools.m2.mul(parentTransform[0].mat, [1, 0, x, 0, 1, y, 0, 0, 1]);
+    const mat = Fig.tools.m3.mul(parentTransform[0].mat, e.transform.mat);
 
     // Draw
     e.drawingObject.drawWithTransformMatrix(
@@ -495,12 +497,12 @@ const { rand } = Fig.tools.math;
 const vertexShader = `
 attribute vec2 a_position;
 attribute vec2 a_velocity;
-uniform mat3 u_matrix;
+uniform mat4 u_matrix;
 uniform float u_time;
 void main() {
   float x = a_position.x + a_velocity.x * u_time;
   float y = a_position.y + a_velocity.y * u_time;
-  gl_Position = vec4((u_matrix * vec3(x, y, 1)).xy, 0, 1);
+  gl_Position = u_matrix * vec4(x, y, 0, 1);
 }`;
 
 // Create vertices for 10,000 polygons. Each polygon is 20 triangles.
@@ -613,7 +615,7 @@ attribute vec2 a_velocity;
 attribute vec2 a_center;
 attribute float a_radius;
 varying vec4 v_col;
-uniform mat3 u_matrix;
+uniform mat4 u_matrix;
 uniform float u_time;
 
 float calc(float limit, float pos, float center, float vel) {
@@ -638,7 +640,7 @@ float calc(float limit, float pos, float center, float vel) {
 void main() {
   float x = calc(3.0 - a_radius, a_position.x, a_center.x, a_velocity.x);
   float y = calc(3.0 - a_radius, a_position.y, a_center.y, a_velocity.y);
-  gl_Position = vec4((u_matrix * vec3(x, y, 1)).xy, 0, 1);
+  gl_Position = u_matrix * vec4(x, y, 0, 1);
   v_col = a_color;
 }`;
 

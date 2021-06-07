@@ -44,7 +44,12 @@ for (let i = 0; i < 400; i += 1) {
     // Manually update the transform and resulting matrix for the new position
     transform.def[0][1] = x;
     transform.def[0][2] = y;
-    transform.mat = [1, 0, transform.def[0][1], 0, 1, transform.def[0][2], 0, 0, 1];
+    transform.mat = [
+      1, 0, 0, transform.def[0][1],
+      0, 1, 0, transform.def[0][2],
+      0, 0, 1, 0,
+      0, 0, 0, 1,
+    ];
 
     // If the shape is on or crossing a boundary, then set the
     // velocity sign so it bounces back into the figure.
@@ -59,11 +64,8 @@ for (let i = 0; i < 400; i += 1) {
 
   // Override element draw method
   e.draw = (now, parentTransform) => {
-    // Get the current position directly
-    const [, x, y] = e.transform.def[0];
-
     // Cacluate the draw matrix as efficiently as possible
-    const mat = Fig.tools.m2.mul(parentTransform[0].mat, [1, 0, x, 0, 1, y, 0, 0, 1]);
+    const mat = Fig.tools.m3.mul(parentTransform[0].mat, e.transform.mat);
 
     // Draw
     e.drawingObject.drawWithTransformMatrix(

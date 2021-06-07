@@ -13,7 +13,7 @@ attribute vec2 a_velocity;
 attribute vec2 a_center;
 attribute float a_radius;
 varying vec4 v_col;
-uniform mat3 u_matrix;
+uniform mat4 u_matrix;
 uniform float u_time;
 
 float calc(float limit, float pos, float center, float vel) {
@@ -38,7 +38,7 @@ float calc(float limit, float pos, float center, float vel) {
 void main() {
   float x = calc(3.0 - a_radius, a_position.x, a_center.x, a_velocity.x);
   float y = calc(3.0 - a_radius, a_position.y, a_center.y, a_velocity.y);
-  gl_Position = vec4((u_matrix * vec3(x, y, 1)).xy, 0, 1);
+  gl_Position = u_matrix * vec4(x, y, 0, 1);
   v_col = a_color;
 }`;
 
