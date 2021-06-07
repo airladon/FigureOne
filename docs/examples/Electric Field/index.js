@@ -19,7 +19,7 @@ const figure = new Fig.Figure({
 const vertexShader = `
 attribute vec2 a_position;
 attribute vec2 a_center;
-uniform mat3 u_matrix;
+uniform mat4 u_matrix;
 uniform float u_norm;
 uniform float u_scaleArrow;
 uniform vec3 u_charge1;
@@ -116,7 +116,7 @@ void main() {
   vec3 final = originToCenter * scaleRotation * centerToOrigin * vec3(a_position.x, a_position.y, 1);
 
   // Final position
-  gl_Position = vec4((u_matrix * final).xy, 0, 1);
+  gl_Position = u_matrix * vec4(final.xy, 0, 1);
 
   // Set the color based on the normalized charge between red (high charge
   // magnitude) and blue (low charge magnitude)
