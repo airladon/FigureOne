@@ -1,8 +1,7 @@
 // @flow
 import {
   Transform, getScale, getTransform,
-  Rotation, getDeltaAngle, getMaxTimeFromVelocity,
-  Scale, Translation,
+  getDeltaAngle, getMaxTimeFromVelocity,
 } from '../../../../tools/g2';
 import type {
   TypeParsablePoint, TypeParsableTransform, OBJ_TranslationPath,
