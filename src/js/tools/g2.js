@@ -3054,7 +3054,7 @@ export type Transform3DDefinition = Array<Transform3DComponent>;
 function makeTransformComponent(
   component: Transform3DComponent,
   operation: (index: number) => number,
-) {
+): Transform3DComponent {
   const newDef = Array(component.length);
   // eslint-disable-next-line prefer-destructuring
   newDef[0] = component[0];
@@ -3382,7 +3382,7 @@ class Transform {
     for (let i = 0; i < this.def.length; i += 1) {
       const [componentType] = this.def[i];
       if (componentType === type) {
-        if (count === index) {
+        if (count === index) { // $FlowFixMe
           this.def[i] = [type, p.x, p.y, p.z];
           this.calcAndSetMatrix();
           return this;
@@ -3397,7 +3397,7 @@ class Transform {
     if (type === 's') {
       message = 'scale';
     }
-    throw new Error(`Cannot update ${message} in transform: ${this.def}`);
+    throw new Error(`Cannot update ${message} in transform: ${JSON.stringify(this.def)}`);
   }
 
 
@@ -3442,10 +3442,10 @@ class Transform {
       const stepDelta = delta.def[i];
       if (
         (stepStart[0] === 's' && stepDelta[0] === 's')
-        ||
-        (stepStart[0] === 'r' && stepDelta[0] === 'r')
+        || (stepStart[0] === 'r' && stepDelta[0] === 'r')
       ) {
-        calcTransform.def[i] = [
+        // $FlowFixMe
+        calcTransform.def[i] = [ // $FlowFixMe
           stepStart[0],
           stepDelta[1] * percent + stepStart[1],
           stepDelta[2] * percent + stepStart[2],
@@ -3659,13 +3659,13 @@ class Transform {
     const def = [];
     for (let i = 0; i < this.def.length; i += 1) {
       if (this.def[i][0] !== transformToSubtract.def[i][0]) {
-        throw new Error(`Cannot subtract transforms with different shapes: '${this.def}' - '${transformToSubtract.def}'`);
+        throw new Error(`Cannot subtract transforms with different shapes: '${JSON.stringify(this.def)}' - '${JSON.stringify(transformToSubtract.def)}'`);
       }
       def.push(makeTransformComponent(
-        this.def[i],
+        this.def[i],  // $FlowFixMe
         j => this.def[i][j] - transformToSubtract.def[i][j],
       ));
-    }
+    }  // $FlowFixMe
     return new Transform(def, this.name);
   }
 
@@ -3683,10 +3683,10 @@ class Transform {
     const def = [];
     for (let i = 0; i < this.def.length; i += 1) {
       if (this.def[i][0] !== transformToAdd.def[i][0]) {
-        throw new Error(`Cannot add transforms with different shapes: '${this.def}' - '${transformToAdd.def}'`);
+        throw new Error(`Cannot add transforms with different shapes: '${JSON.stringify(this.def)}' - '${JSON.stringify(transformToAdd.def)}'`);
       }
       def.push(makeTransformComponent(
-        this.def[i],
+        this.def[i],  // $FlowFixMe
         j => this.def[i][j] + transformToAdd.def[i][j],
       ));
     }
@@ -3705,10 +3705,10 @@ class Transform {
     const def = [];
     for (let i = 0; i < this.def.length; i += 1) {
       if (this.def[i][0] !== transformToMultiply.def[i][0]) {
-        throw new Error(`Cannot multiply transforms with different shapes: '${this.def}' - '${transformToMultiply.def}'`);
+        throw new Error(`Cannot multiply transforms with different shapes: '${JSON.stringify(this.def)}' - '${JSON.stringify(transformToMultiply.def)}'`);
       }
       def.push(makeTransformComponent(
-        this.def[i],
+        this.def[i],  // $FlowFixMe
         j => this.def[i][j] * transformToMultiply.def[i][j],
       ));
     }
@@ -3726,7 +3726,7 @@ class Transform {
    * const t = translation.transform(rotation)
    */
   transform(initialTransform: Transform) {
-    const t = new Transform([], this.name);
+    const t = new Transform([], this.name); // $FlowFixMe
     t.def = initialTransform.def.map(d => d.slice()).concat(this.def.map(d => d.slice()));
     t.mat = m3.mul(this.matrix(), initialTransform.matrix());
     return t;
@@ -3743,7 +3743,7 @@ class Transform {
    * const t = rotation.transformBy(translation)
    */
   transformBy(t: Transform): Transform {
-    const t1 = new Transform([], this.name);
+    const t1 = new Transform([], this.name); // $FlowFixMe
     t1.def = this.def.map(d => d.slice()).concat(t.def.map(d => d.slice()));
     t1.mat = m3.mul(t.matrix(), this.matrix());
     return t1;
@@ -3756,7 +3756,7 @@ class Transform {
     const def = [];
     for (let i = 0; i < this.def.length; i += 1) {
       def.push(makeTransformComponent(
-        this.def[i],
+        this.def[i], // $FlowFixMe
         j => round(this.def[i][j], precision),
       ));
     }
@@ -3786,10 +3786,10 @@ class Transform {
     for (let i = 0; i < this.def.length; i += 1) {
       const t = this.def[i];
       if (t[0] !== minTransform.def[i][0] || t[0] !== maxTransform.def[i][0]) {
-        throw new Error(`Cannot clip transforms of different shapes: transform: '${this.def}', min: '${minTransform.def}', max: '${maxTransform}'`);
+        throw new Error(`Cannot clip transforms of different shapes: transform: '${JSON.stringify(this.def)}', min: '${JSON.stringify(minTransform.def)}', max: '${JSON.stringify(maxTransform)}'`);
       }
       def.push(makeTransformComponent(
-        this.def[i],
+        this.def[i], // $FlowFixMe
         j => clipValue(this.def[i][j], minTransform.def[i][j], maxTransform.def[i][j]),
       ));
     }
@@ -3842,7 +3842,8 @@ class Transform {
         const xc = clipMag(x, zero[i], max[i]);
         const yc = clipMag(y, zero[i], max[i]);
         const zc = clipMag(z, zero[i], max[i]);
-        def.push([t[0], xc, yc, zc]);
+        // $FlowFixMe
+        def.push([type, xc, yc, zc]);
       }
     }
     return new Transform(def, this.name);
@@ -3895,7 +3896,7 @@ class Transform {
    */
   _dup(): Transform {
     const t = new Transform();
-    t.name = this.name;
+    t.name = this.name; // $FlowFixMe
     t.mat = this.mat.slice();
     t.index = this.index;
     t.def = this.def.map(d => d.slice());
@@ -3959,12 +3960,12 @@ class Transform {
   ): Transform {
     const def = [];
     if (!this.isEqualShapeTo(previousTransform)) {
-      throw new Error(`Cannot calculate velocity for transform - shapes are different: ${previousTransform.def}, ${this.def}`);
+      throw new Error(`Cannot calculate velocity for transform - shapes are different: ${JSON.stringify(previousTransform.def)}, ${JSON.stringify(this.def)}`);
     }
 
     const deltaTransform = this.sub(previousTransform);
     for (let i = 0; i < deltaTransform.def.length; i += 1) {
-      const t = deltaTransform.def[i];
+      const t = deltaTransform.def[i]; // $FlowFixMe
       if (t[0] === 't' || t[0] === 's' || t[0] === 'r') {
         def.push([t[0], t[1] / deltaTime, t[2] / deltaTime, t[3] / deltaTime]);
       }
@@ -3982,9 +3983,9 @@ class Transform {
     const def = [];
     for (let i = 0; i < this.def.length; i += 1) {
       const [type] = this.def[i];
-      if (type === 't' || type === 'r') {
+      if (type === 't' || type === 'r') { // $FlowFixMe
         def.push([type, 0, 0, 0]);
-      } else if (type === 's') {
+      } else if (type === 's') { // $FlowFixMe
         def.push([type, 1, 1, 1]);
       } else if (type === 'c' && this.def[i].length === 18) {
         def.push([
@@ -4011,7 +4012,7 @@ class Transform {
 
 export type TypeF1DefTransform = {
   f1Type: 'tf',
-  state: Array<string | TypeF1DefTranslation | TypeF1DefRotation | TypeF1DefScale>,
+  state: TypeTransform3DDefinition,
 };
 
 /**
@@ -4061,12 +4062,12 @@ function parseArrayTransformDefinition(defIn: TransformDefinition) {
   let name = '';
   for (let i = 0; i < defIn.length; i += 1) {
     if (typeof defIn[i] === 'string') {
-      name = defIn[i];
+      name = defIn[i];  // eslint-disable-next-line no-continue
       continue;
-    }
+    } // $FlowFixMe
     const [type, x, y, z] = defIn[i];
     if (defIn[i].length === 4) {
-      def.push(defIn[i])
+      def.push(defIn[i]);
     } else if (defIn[i].length === 3 && type === 't') {
       def.push(['t', x, y, 0]);
     } else if (defIn[i].length === 3 && type === 's') {
