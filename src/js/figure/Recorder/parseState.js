@@ -53,15 +53,6 @@ function parseState(state: Object, figure: Figure) {
     if (state.f1Type === 'tf') {
       return getTransform(state);
     }
-    if (state.f1Type === 't') {
-      return new Translation(state);
-    }
-    if (state.f1Type === 's') {
-      return new Scale(state);
-    }
-    if (state.f1Type === 'r') {
-      return new Rotation(state);
-    }
     if (state.f1Type === 'l') {
       return getLine(state);
     }
