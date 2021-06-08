@@ -2384,6 +2384,10 @@ export default class FigurePrimitives {
       // const size = options.vertices.size != null ? options.vertices.size : 2;
       glObject.addVertices(options.vertices.data, options.vertices.usage);
     }
+    if (options.vertices3 != null) {
+      // const size = options.vertices.size != null ? options.vertices.size : 2;
+      glObject.addVertices3(options.vertices3.data, options.vertices3.usage);
+    }
     if (options.buffers != null) {
       options.buffers.forEach((buffer) => {
         const defaultBuffer = {

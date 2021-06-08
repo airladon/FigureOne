@@ -11,6 +11,15 @@ const vertex = {
         + '}',
     vars: ['a_position', 'u_matrix', 'u_z'],
   },
+  simple3D: {
+    src:
+        'attribute vec3 a_position;'
+        + 'uniform mat4 u_matrix;'
+        + 'void main() {'
+          + 'gl_Position = u_matrix * vec4(a_position.xyz, 1);'
+        + '}',
+    vars: ['a_position', 'u_matrix'],
+  },
   vertexColor: {
     src:
         `
@@ -21,6 +30,19 @@ uniform mat4 u_matrix;
 uniform float u_z;
 void main() {
   gl_Position = u_matrix * vec4(a_position.xy, u_z, 1);
+  v_col = a_col;
+}`,
+    vars: ['a_position', 'a_col', 'u_matrix', 'u_z'],
+  },
+  vertexColor3D: {
+    src:
+        `
+attribute vec3 a_position;
+attribute vec4 a_col;
+varying vec4 v_col;
+uniform mat4 u_matrix;
+void main() {
+  gl_Position = u_matrix * vec4(a_position.xyz, 1);
   v_col = a_col;
 }`,
     vars: ['a_position', 'a_col', 'u_matrix', 'u_z'],

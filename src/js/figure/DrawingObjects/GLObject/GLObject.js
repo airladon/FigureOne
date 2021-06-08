@@ -318,6 +318,12 @@ class GLObject extends DrawingObject {
     this.numVertices = vertices.length / 2;
   }
 
+  addVertices3(vertices: Array<number>, usage: TypeGLBufferUsage = 'STATIC') {
+    this.points = vertices;
+    this.addBuffer('a_position', 3, vertices, 'FLOAT', false, 0, 0, usage);
+    this.numVertices = vertices.length / 3;
+  }
+
   addBuffer(
     name: string,
     size: number,
@@ -420,6 +426,12 @@ class GLObject extends DrawingObject {
   updateVertices(vertices: Array<number>) {
     this.points = vertices;
     this.numVertices = vertices.length / 2;
+    this.updateBuffer('a_position', vertices);
+  }
+
+  updateVertices3(vertices: Array<number>) {
+    this.points = vertices;
+    this.numVertices = vertices.length / 3;
     this.updateBuffer('a_position', vertices);
   }
 
@@ -553,6 +565,8 @@ class GLObject extends DrawingObject {
 
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+    // gl.enable(gl.CULL_FACE);
+    gl.enable(gl.DEPTH_TEST);
 
     Object.keys(this.buffers).forEach((bufferName) => {
       const {

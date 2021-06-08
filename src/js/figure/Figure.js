@@ -1950,7 +1950,7 @@ class Figure {
         this.backgroundColor[2],
         this.backgroundColor[3],
       );
-      this.webglLow.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
+      this.webglLow.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT | this.webglLow.gl.DEPTH_BUFFER_BIT);
     } else {
       this.webglOffscreen.gl.clearColor(0, 0, 0, 0);
       this.webglOffscreen.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
@@ -2082,7 +2082,8 @@ class Figure {
     if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('setupDraw'); }
 
     const projection = this.spaceTransforms.figureToGL;
-    const camera = new Transform().rotate(Math.PI / 3 * this.timeKeeper.now() / 10000, Math.PI / 3 * this.timeKeeper.now() / 10000, 0);
+    // Math.PI / 3 * this.timeKeeper.now() / 20000
+    const camera = new Transform().rotate(0, 0, 0);
     const projectionView = new Transform().custom(m3.mul(projection.mat, m3.inverse(camera.mat)));
     this.elements.draw(now, [projectionView], 1, canvasIndex);
     // this.elements.draw(now, [this.spaceTransforms.figureToGL], 1, canvasIndex);
