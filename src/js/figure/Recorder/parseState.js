@@ -10,7 +10,7 @@ import {
 import type Figure from '../Figure';
 
 import {
-  getPoint, getTransform, getRect, getLine, Translation, Rotation, Scale,
+  getPoint, getTransform, getRect, getLine,
   getBounds,
 } from '../../tools/g2';
 
