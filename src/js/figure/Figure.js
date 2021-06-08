@@ -7,6 +7,7 @@ import {
   spaceToSpaceTransform, minAngleDiff,
   getPoint,
 } from '../tools/g2';
+import * as m3 from '../tools/m3';
 import type { TypeParsableRect, TypeParsablePoint } from '../tools/g2';
 // import * as math from '../tools/math';
 import { round } from '../tools/math';
@@ -2080,7 +2081,19 @@ class Figure {
     // $FlowFixMe
     if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('setupDraw'); }
 
-    this.elements.draw(now, [this.spaceTransforms.figureToGL], 1, canvasIndex);
+    const projection = this.spaceTransforms.figureToGL;
+    const camera = new Transform().rotate(Math.PI / 3 * this.timeKeeper.now() / 10000, Math.PI / 3 * this.timeKeeper.now() / 10000, 0);
+    const projectionView = new Transform().custom(m3.mul(projection.mat, m3.inverse(camera.mat)));
+    this.elements.draw(now, [projectionView], 1, canvasIndex);
+    // this.elements.draw(now, [this.spaceTransforms.figureToGL], 1, canvasIndex);
+    // this.elements.draw(now, [
+    //   new Transform().custom([
+    //     1, 0, 0, 0,
+    //     0, 1, 0, 0,
+    //     0, 0, 1, 0,
+    //     0, 0, 0, 1,
+    //   ]),
+    // ], 1, canvasIndex);
     // $FlowFixMe
     if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('draw'); }
 

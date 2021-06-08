@@ -3227,6 +3227,20 @@ class Transform {
     return this;
   }
 
+  custom(matrix: Type3DMatrix) {
+    if (matrix.length !== 16) {
+      throw new Error(`Transform custom matrices must be 16 elements (${matrix.length} input): ${JSON.stringify(matrix)}`);
+    }
+    if (this.index === this.def.length) { // $FlowFixMe
+      this.def.push(['c', ...matrix]);
+    } else { // $FlowFixMe
+      this.def[this.index] = ['c', ...matrix];
+    }
+    this.index += 1;
+    this.calcAndSetMatrix();
+    return this;
+  }
+
   /**
    * Return a duplicate transform with an added {@link Scale} transform
    * @param {number | Point} xOrScale
@@ -3304,6 +3318,8 @@ class Transform {
         m = m3.mul(m, m3.scaleMatrix(x, y, z));
       } else if (type === 'r' && (x !== 0 || y !== 0 || z !== 0)) {
         m = m3.mul(m, m3.rotationMatrix(x, y, z));
+      } else if (type === 'c') {
+        m = m3.mul(m, this.def[i].slice(1));
       }
     }
     return m;

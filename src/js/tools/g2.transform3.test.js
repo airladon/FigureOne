@@ -99,6 +99,20 @@ describe('Transform', () => {
       const p1 = p0.transformBy(t1.matrix());
       expect(p1.round()).toEqual(new Point(-12, 3, 2.5));
     });
+    test('Create Custom', () => {
+      const t = new Transform().custom([
+        1, 0, 0, 0,
+        0, 2, 0, 0,
+        0, 0, 3, 0,
+        0, 0, 0, 1,
+      ]);
+      expect(t.mat).toEqual([
+        1, 0, 0, 0,
+        0, 2, 0, 0,
+        0, 0, 3, 0,
+        0, 0, 0, 1,
+      ]);
+    });
   });
   describe('Update and get 2D', () => {
     test('Update R in S, R, T', () => {
