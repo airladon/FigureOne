@@ -8,9 +8,10 @@ import * as m2 from './m2';
 import * as m3 from './m3';
 import type { Type3DMatrix } from './m3';
 import type { Type2DMatrix } from './m2';
-import type { Type3Components, Type2Components } from './g3';
 // import { joinObjects } from './tools';
 
+export type Type3Components = [number, number, number];
+export type Type2Components = [number, number];
 
 function quadraticBezier(P0: number, P1: number, P2: number, t: number) {
   return (1 - t) * ((1 - t) * P0 + t * P1) + t * ((1 - t) * P1 + t * P2);
@@ -590,7 +591,7 @@ class Point {
         this.z = _z;
       } catch {
         if (xOrArray.length !== 3) {
-          throw new Error(`FigureOne Point creation failed - array definition must have length of 3: ${xOrArray}`);
+          throw new Error(`FigureOne Point creation failed - array definition must have length of 3: ${JSON.stringify(xOrArray)}`);
         }
       }
       return;
@@ -795,7 +796,7 @@ class Point {
    * // q = Point{x: 0, y: 1}
    */
   rotate(
-    angle: number | Type3DComponents,
+    angle: number | Type3Components,
     center?: TypeParsablePoint = new Point(0, 0, 0),
   ): Point {
     let a = [0, 0, 0];
@@ -2493,456 +2494,456 @@ function getLine(l: TypeParsableLine): Line {
   return parsedLine;
 }
 
-type TypeF1DefRotation = {
-  f1Type: 'r',
-  state: [string, number],
-};
+// type TypeF1DefRotation = {
+//   f1Type: 'r',
+//   state: [string, number],
+// };
 
-/**
- * Rotation transform element
- */
-class Rotation {
-  r: number;
-  name: string;
-  /**
-   * @param {number | string} rotationAngle
-   * @param {string} name name to give to rotation to identify it in a more
-   * complex {@link Transform}
-   */
-  constructor(rotationAngle: number | TypeF1DefRotation | string, name: string = '') {
-    let nameToUse: string = name;
-    let angle = rotationAngle;
-    if (typeof angle === 'string') {
-      try {
-        angle = JSON.parse(angle);
-      } catch {
-        angle = 0;
-      }
-    }
+// /**
+//  * Rotation transform element
+//  */
+// class Rotation {
+//   r: number;
+//   name: string;
+//   /**
+//    * @param {number | string} rotationAngle
+//    * @param {string} name name to give to rotation to identify it in a more
+//    * complex {@link Transform}
+//    */
+//   constructor(rotationAngle: number | TypeF1DefRotation | string, name: string = '') {
+//     let nameToUse: string = name;
+//     let angle = rotationAngle;
+//     if (typeof angle === 'string') {
+//       try {
+//         angle = JSON.parse(angle);
+//       } catch {
+//         angle = 0;
+//       }
+//     }
 
-    if (typeof angle === 'number') {
-      this.r = angle;
-    } else if (
-      angle.f1Type != null
-      && angle.f1Type === 'r'
-      && angle.state != null
-      && Array.isArray(angle.state)
-      && angle.state.length === 2
-    ) {
-      const [n, r] = angle.state;
-      nameToUse = n;
-      this.r = r;
-    } else {
-      this.r = 0;
-    }
-    this.name = nameToUse;
-  }
+//     if (typeof angle === 'number') {
+//       this.r = angle;
+//     } else if (
+//       angle.f1Type != null
+//       && angle.f1Type === 'r'
+//       && angle.state != null
+//       && Array.isArray(angle.state)
+//       && angle.state.length === 2
+//     ) {
+//       const [n, r] = angle.state;
+//       nameToUse = n;
+//       this.r = r;
+//     } else {
+//       this.r = 0;
+//     }
+//     this.name = nameToUse;
+//   }
 
-  isUnity() {
-    if (this.r !== 0) {
-      return false;
-    }
-    return true;
-  }
+//   isUnity() {
+//     if (this.r !== 0) {
+//       return false;
+//     }
+//     return true;
+//   }
 
-  _state(options: { precision: number }) {
-    // const { precision } = options;
-    const precision = getPrecision(options);
-    return {
-      f1Type: 'r',
-      state: [this.name, roundNum(this.r, precision)],
-    };
-  }
+//   _state(options: { precision: number }) {
+//     // const { precision } = options;
+//     const precision = getPrecision(options);
+//     return {
+//       f1Type: 'r',
+//       state: [this.name, roundNum(this.r, precision)],
+//     };
+//   }
 
-  /**
-   * Return a rotation matrix representing the rotation
-   * @return {Array<number>}
-   */
-  matrix(): Array<number> {
-    return m2.rotationMatrix(this.r);
-  }
+//   /**
+//    * Return a rotation matrix representing the rotation
+//    * @return {Type3DMatrix}
+//    */
+//   matrix(): Type3DMatrix {
+//     return m2.rotationMatrix(this.r);
+//   }
 
-  transform(m: Array<number>) {
-    return m2.rotate(m, this.r);
-  }
+//   transform(m: Type3DMatrix) {
+//     return m2.rotate(m, this.r);
+//   }
 
-  /**
-   * Subtract `rotToSub` from this rotation
-   * @return {Rotation}
-   */
-  sub(rotToSub: Rotation = new Rotation(0, this.name)): Rotation {
-    return new Rotation(this.r - rotToSub.r, this.name);
-  }
+//   /**
+//    * Subtract `rotToSub` from this rotation
+//    * @return {Rotation}
+//    */
+//   sub(rotToSub: Rotation = new Rotation(0, this.name)): Rotation {
+//     return new Rotation(this.r - rotToSub.r, this.name);
+//   }
 
-  /**
-   * Round this rotation to some `precision`
-   * @return {Rotation}
-   */
-  round(precision: number = 8): Rotation {
-    return new Rotation(roundNum(this.r, precision), this.name);
-  }
+//   /**
+//    * Round this rotation to some `precision`
+//    * @return {Rotation}
+//    */
+//   round(precision: number = 8): Rotation {
+//     return new Rotation(roundNum(this.r, precision), this.name);
+//   }
 
-  /**
-   * Add `rotToAdd` to this rotation
-   * @return {Rotation}
-   */
-  add(rotToAdd: Rotation = new Rotation(0, this.name)): Rotation {
-    return new Rotation(this.r + rotToAdd.r, this.name);
-  }
+//   /**
+//    * Add `rotToAdd` to this rotation
+//    * @return {Rotation}
+//    */
+//   add(rotToAdd: Rotation = new Rotation(0, this.name)): Rotation {
+//     return new Rotation(this.r + rotToAdd.r, this.name);
+//   }
 
-  /**
-   * Multiply `rotToMul` to this rotation
-   * @return {Rotation}
-   */
-  mul(rotToMul: Rotation = new Rotation(1, this.name)): Rotation {
-    return new Rotation(this.r * rotToMul.r, this.name);
-  }
+//   /**
+//    * Multiply `rotToMul` to this rotation
+//    * @return {Rotation}
+//    */
+//   mul(rotToMul: Rotation = new Rotation(1, this.name)): Rotation {
+//     return new Rotation(this.r * rotToMul.r, this.name);
+//   }
 
-  /**
-   * Return a duplicate rotation
-   * @return {Rotation}
-   */
-  _dup() {
-    return new Rotation(this.r, this.name);
-  }
-}
+//   /**
+//    * Return a duplicate rotation
+//    * @return {Rotation}
+//    */
+//   _dup() {
+//     return new Rotation(this.r, this.name);
+//   }
+// }
 
 
-type TypeF1DefTranslation = {
-  f1Type: 't',
-  state: [string, number, number],
-};
+// type TypeF1DefTranslation = {
+//   f1Type: 't',
+//   state: [string, number, number],
+// };
 
-/**
- * Translation transform element
- */
-class Translation extends Point {
-  x: number;
-  y: number;
-  name: string;
+// /**
+//  * Translation transform element
+//  */
+// class Translation extends Point {
+//   x: number;
+//   y: number;
+//   name: string;
 
-  /**
-   * @param {Point | number} txOrTranslation translation or x value of
-   * translation
-   * @param {number} ty y value of translation (only used if `txOrTranslation`
-   * is a `number`)
-   * @param {string} name name to identify translation when included in a more
-   * complex {@link Transform}
-   */
-  constructor(
-    txOrTranslation: Point | number | TypeF1DefTranslation,
-    ty: number = 0,
-    name: string = '',
-  ) {
-    let nameToUse: string = name;
-    let tx = txOrTranslation;
-    let tyToUse = ty;
-    if (typeof tx === 'string') {
-      try {
-        tx = JSON.parse(tx);
-      } catch {
-        tx = 0;
-      }
-      if (Array.isArray(tx) && tx.length === 2) {
-        [tx, tyToUse] = tx;
-      }
-    }
-    if (tx instanceof Point) {
-      super(tx.x, tx.y);
-    } else if (typeof tx === 'number') {
-      super(tx, tyToUse);
-    } else if (
-      tx.f1Type != null
-      && tx.f1Type === 't'
-      && tx.state != null
-      && Array.isArray(tx.state)
-      && tx.state.length === 3
-    ) {
-      const [n, x, y] = tx.state;
-      nameToUse = n;
-      super(x, y);
-    } else {
-      super(0, 0);
-    }
-    this.name = nameToUse;
-  }
+//   /**
+//    * @param {Point | number} txOrTranslation translation or x value of
+//    * translation
+//    * @param {number} ty y value of translation (only used if `txOrTranslation`
+//    * is a `number`)
+//    * @param {string} name name to identify translation when included in a more
+//    * complex {@link Transform}
+//    */
+//   constructor(
+//     txOrTranslation: Point | number | TypeF1DefTranslation,
+//     ty: number = 0,
+//     name: string = '',
+//   ) {
+//     let nameToUse: string = name;
+//     let tx = txOrTranslation;
+//     let tyToUse = ty;
+//     if (typeof tx === 'string') {
+//       try {
+//         tx = JSON.parse(tx);
+//       } catch {
+//         tx = 0;
+//       }
+//       if (Array.isArray(tx) && tx.length === 2) {
+//         [tx, tyToUse] = tx;
+//       }
+//     }
+//     if (tx instanceof Point) {
+//       super(tx.x, tx.y);
+//     } else if (typeof tx === 'number') {
+//       super(tx, tyToUse);
+//     } else if (
+//       tx.f1Type != null
+//       && tx.f1Type === 't'
+//       && tx.state != null
+//       && Array.isArray(tx.state)
+//       && tx.state.length === 3
+//     ) {
+//       const [n, x, y] = tx.state;
+//       nameToUse = n;
+//       super(x, y);
+//     } else {
+//       super(0, 0);
+//     }
+//     this.name = nameToUse;
+//   }
 
-  isUnity() {
-    if (this.x !== 0 || this.y !== 0) {
-      return false;
-    }
-    return true;
-  }
+//   isUnity() {
+//     if (this.x !== 0 || this.y !== 0) {
+//       return false;
+//     }
+//     return true;
+//   }
 
-  _state(options: { precision: number }) {
-    const precision = getPrecision(options);
-    return {
-      f1Type: 't',
-      state: [
-        this.name,
-        roundNum(this.x, precision),
-        roundNum(this.y, precision),
-      ],
-    };
-  }
+//   _state(options: { precision: number }) {
+//     const precision = getPrecision(options);
+//     return {
+//       f1Type: 't',
+//       state: [
+//         this.name,
+//         roundNum(this.x, precision),
+//         roundNum(this.y, precision),
+//       ],
+//     };
+//   }
 
-  /**
-   * Returns a translation matrix
-   * @return {Array<number>}
-   */
-  matrix(): Array<number> {
-    return m2.translationMatrix(this.x, this.y);
-  }
+//   /**
+//    * Returns a translation matrix
+//    * @return {Type3DMatrix}
+//    */
+//   matrix(): Type3DMatrix {
+//     return m2.translationMatrix(this.x, this.y);
+//   }
 
-  transform(m: Array<number>) {
-    return m2.translate(m, this.x, this.y);
-  }
+//   transform(m: Array<number>) {
+//     return m2.translate(m, this.x, this.y);
+//   }
 
-  /**
-   * Subtract `translationToSub` from this translation
-   * @return {Translation}
-   */
-  sub(
-    translationToSub: Translation | Point | number = new Translation(0, 0),
-    y: number = 0,
-  ): Translation {
-    let t = new Point(0, 0);
-    if (typeof translationToSub === 'number') {
-      t = new Translation(translationToSub, y);
-    } else {
-      t = translationToSub;
-    }
-    return new Translation(
-      this.x - t.x,
-      this.y - t.y,
-      this.name,
-    );
-  }
+//   /**
+//    * Subtract `translationToSub` from this translation
+//    * @return {Translation}
+//    */
+//   sub(
+//     translationToSub: Translation | Point | number = new Translation(0, 0),
+//     y: number = 0,
+//   ): Translation {
+//     let t = new Point(0, 0);
+//     if (typeof translationToSub === 'number') {
+//       t = new Translation(translationToSub, y);
+//     } else {
+//       t = translationToSub;
+//     }
+//     return new Translation(
+//       this.x - t.x,
+//       this.y - t.y,
+//       this.name,
+//     );
+//   }
 
-  /**
-   * Add `translationToAdd` to this translation
-   * @return {Translation}
-   */
-  add(
-    translationToAdd: Translation | Point | number = new Translation(0, 0),
-    y: number = 0,
-  ): Translation {
-    let t = new Point(0, 0);
-    if (typeof translationToAdd === 'number') {
-      t = new Translation(translationToAdd, y);
-    } else {
-      t = translationToAdd;
-    }
-    return new Translation(
-      this.x + t.x,
-      this.y + t.y,
-      this.name,
-    );
-  }
+//   /**
+//    * Add `translationToAdd` to this translation
+//    * @return {Translation}
+//    */
+//   add(
+//     translationToAdd: Translation | Point | number = new Translation(0, 0),
+//     y: number = 0,
+//   ): Translation {
+//     let t = new Point(0, 0);
+//     if (typeof translationToAdd === 'number') {
+//       t = new Translation(translationToAdd, y);
+//     } else {
+//       t = translationToAdd;
+//     }
+//     return new Translation(
+//       this.x + t.x,
+//       this.y + t.y,
+//       this.name,
+//     );
+//   }
 
-  /**
-   * Multiply `translationToMul` to this translation
-   * @return {Translation}
-   */
-  mul(translationToMul: Translation = new Translation(1, 1)): Translation {
-    return new Translation(
-      this.x * translationToMul.x,
-      this.y * translationToMul.y,
-      this.name,
-    );
-  }
+//   /**
+//    * Multiply `translationToMul` to this translation
+//    * @return {Translation}
+//    */
+//   mul(translationToMul: Translation = new Translation(1, 1)): Translation {
+//     return new Translation(
+//       this.x * translationToMul.x,
+//       this.y * translationToMul.y,
+//       this.name,
+//     );
+//   }
 
-  /**
-   * Round this translation to some `precision`
-   * @return {Translation}
-   */
-  round(precision: number = 8): Translation {
-    return new Translation(
-      roundNum(this.x, precision),
-      roundNum(this.y, precision),
-      this.name,
-    );
-  }
+//   /**
+//    * Round this translation to some `precision`
+//    * @return {Translation}
+//    */
+//   round(precision: number = 8): Translation {
+//     return new Translation(
+//       roundNum(this.x, precision),
+//       roundNum(this.y, precision),
+//       this.name,
+//     );
+//   }
 
-  /**
-   * Return a duplicate translation
-   */
-  _dup() {
-    return new Translation(this.x, this.y, this.name);
-  }
-}
+//   /**
+//    * Return a duplicate translation
+//    */
+//   _dup() {
+//     return new Translation(this.x, this.y, this.name);
+//   }
+// }
 
-type TypeF1DefScale = {
-  f1Type: 't',
-  state: [string, number, number],
-};
+// type TypeF1DefScale = {
+//   f1Type: 't',
+//   state: [string, number, number],
+// };
 
-/**
- * Scale transform element
- */
-class Scale extends Point {
-  x: number;
-  y: number;
-  name: string;
+// /**
+//  * Scale transform element
+//  */
+// class Scale extends Point {
+//   x: number;
+//   y: number;
+//   name: string;
 
-  /**
-   * @param {Point | number} sxOrScale scale or x value of
-   * scale
-   * @param {number} ty y value of scale (only used if `sxOrScale`
-   * is a `number`)
-   * @param {string} name name to identify scale when included in a more
-   * complex {@link Transform}
-   */
-  constructor(sxOrScale: Point | number | TypeF1DefScale, sy: ?number, nameIn: string = '') {
-    let name: string = nameIn;
-    let sx = sxOrScale;
-    let syToUse = sy;
-    if (typeof sx === 'string') {
-      try {
-        sx = JSON.parse(sx);
-      } catch {
-        sx = 0;
-      }
-      if (Array.isArray(sx) && sx.length === 2) {
-        [sx, syToUse] = sx;
-      }
-    }
-    if (sx instanceof Point) {
-      super(sx.x, sx.y);
-    } else if (typeof sx === 'number') {
-      if (syToUse != null) {
-        super(sx, syToUse);
-      } else {
-        super(sx, sx);
-      }
-    } else if (
-      sx.f1Type != null
-      && sx.f1Type === 's'
-      && sx.state != null
-      && Array.isArray(sx.state)
-      && sx.state.length === 3
-    ) {
-      const [n, x, y] = sx.state;
-      name = n;
-      super(x, y);
-    } else {
-      super(1, 1);
-    }
-    this.name = name;
-  }
+//   /**
+//    * @param {Point | number} sxOrScale scale or x value of
+//    * scale
+//    * @param {number} ty y value of scale (only used if `sxOrScale`
+//    * is a `number`)
+//    * @param {string} name name to identify scale when included in a more
+//    * complex {@link Transform}
+//    */
+//   constructor(sxOrScale: Point | number | TypeF1DefScale, sy: ?number, nameIn: string = '') {
+//     let name: string = nameIn;
+//     let sx = sxOrScale;
+//     let syToUse = sy;
+//     if (typeof sx === 'string') {
+//       try {
+//         sx = JSON.parse(sx);
+//       } catch {
+//         sx = 0;
+//       }
+//       if (Array.isArray(sx) && sx.length === 2) {
+//         [sx, syToUse] = sx;
+//       }
+//     }
+//     if (sx instanceof Point) {
+//       super(sx.x, sx.y);
+//     } else if (typeof sx === 'number') {
+//       if (syToUse != null) {
+//         super(sx, syToUse);
+//       } else {
+//         super(sx, sx);
+//       }
+//     } else if (
+//       sx.f1Type != null
+//       && sx.f1Type === 's'
+//       && sx.state != null
+//       && Array.isArray(sx.state)
+//       && sx.state.length === 3
+//     ) {
+//       const [n, x, y] = sx.state;
+//       name = n;
+//       super(x, y);
+//     } else {
+//       super(1, 1);
+//     }
+//     this.name = name;
+//   }
 
-  isUnity() {
-    if (this.x !== 1 || this.y !== 1) {
-      return false;
-    }
-    return true;
-  }
+//   isUnity() {
+//     if (this.x !== 1 || this.y !== 1) {
+//       return false;
+//     }
+//     return true;
+//   }
 
-  _state(options: { precision: number }) {
-    // const { precision } = options;
-    const precision = getPrecision(options);
-    return {
-      f1Type: 's',
-      state: [
-        this.name,
-        roundNum(this.x, precision),
-        roundNum(this.y, precision),
-      ],
-    };
-  }
+//   _state(options: { precision: number }) {
+//     // const { precision } = options;
+//     const precision = getPrecision(options);
+//     return {
+//       f1Type: 's',
+//       state: [
+//         this.name,
+//         roundNum(this.x, precision),
+//         roundNum(this.y, precision),
+//       ],
+//     };
+//   }
 
-  /**
-   * Returns a scale matrix
-   * @return {Array<number>}
-   */
-  matrix(): Array<number> {
-    return m2.scaleMatrix(this.x, this.y);
-  }
+//   /**
+//    * Returns a scale matrix
+//    * @return {Array<number>}
+//    */
+//   matrix(): Array<number> {
+//     return m2.scaleMatrix(this.x, this.y);
+//   }
 
-  transform(m: Array<number>) {
-    return m2.scale(m, this.x, this.y);
-  }
+//   transform(m: Array<number>) {
+//     return m2.scale(m, this.x, this.y);
+//   }
 
-  /**
-   * Subtract `scaleToSub` from this scale
-   * @return {Scale}
-   */
-  sub(
-    scaleToSub: Scale | Point | number = new Scale(0, 0),
-    y: number = 0,
-  ): Scale {
-    let s = new Point(0, 0);
-    if (typeof scaleToSub === 'number') {
-      s = new Scale(scaleToSub, y);
-    } else {
-      s = scaleToSub;
-    }
-    return new Scale(
-      this.x - s.x,
-      this.y - s.y,
-      this.name,
-    );
-  }
+//   /**
+//    * Subtract `scaleToSub` from this scale
+//    * @return {Scale}
+//    */
+//   sub(
+//     scaleToSub: Scale | Point | number = new Scale(0, 0),
+//     y: number = 0,
+//   ): Scale {
+//     let s = new Point(0, 0);
+//     if (typeof scaleToSub === 'number') {
+//       s = new Scale(scaleToSub, y);
+//     } else {
+//       s = scaleToSub;
+//     }
+//     return new Scale(
+//       this.x - s.x,
+//       this.y - s.y,
+//       this.name,
+//     );
+//   }
 
-  /**
-   * Round this scale to some `precision`
-   * @return {Scale}
-   */
-  round(precision: number = 8): Scale {
-    return new Scale(
-      roundNum(this.x, precision),
-      roundNum(this.y, precision),
-      this.name,
-    );
-  }
+//   /**
+//    * Round this scale to some `precision`
+//    * @return {Scale}
+//    */
+//   round(precision: number = 8): Scale {
+//     return new Scale(
+//       roundNum(this.x, precision),
+//       roundNum(this.y, precision),
+//       this.name,
+//     );
+//   }
 
-  /**
-   * Add `scaleToAdd` to this scale
-   * @return {Scale}
-   */
-  add(
-    scaleToAdd: Scale | Point | number = new Scale(0, 0),
-    y: number = 0,
-  ): Scale {
-    let s = new Point(0, 0);
-    if (typeof scaleToAdd === 'number') {
-      s = new Scale(scaleToAdd, y);
-    } else {
-      s = scaleToAdd;
-    }
-    return new Scale(
-      this.x + s.x,
-      this.y + s.y,
-      this.name,
-    );
-  }
+//   /**
+//    * Add `scaleToAdd` to this scale
+//    * @return {Scale}
+//    */
+//   add(
+//     scaleToAdd: Scale | Point | number = new Scale(0, 0),
+//     y: number = 0,
+//   ): Scale {
+//     let s = new Point(0, 0);
+//     if (typeof scaleToAdd === 'number') {
+//       s = new Scale(scaleToAdd, y);
+//     } else {
+//       s = scaleToAdd;
+//     }
+//     return new Scale(
+//       this.x + s.x,
+//       this.y + s.y,
+//       this.name,
+//     );
+//   }
 
-  /**
-   * Multiply `scaleToMul` to this scale
-   * @return {Scale}
-   */
-  mul(scaleToMul: Scale | Point | number = new Scale(1, 1)): Scale {
-    if (scaleToMul instanceof Scale || scaleToMul instanceof Point) {
-      return new Scale(
-        this.x * scaleToMul.x,
-        this.y * scaleToMul.y,
-      );
-    }
-    return new Scale(
-      this.x * scaleToMul,
-      this.y * scaleToMul,
-      this.name,
-    );
-  }
+//   /**
+//    * Multiply `scaleToMul` to this scale
+//    * @return {Scale}
+//    */
+//   mul(scaleToMul: Scale | Point | number = new Scale(1, 1)): Scale {
+//     if (scaleToMul instanceof Scale || scaleToMul instanceof Point) {
+//       return new Scale(
+//         this.x * scaleToMul.x,
+//         this.y * scaleToMul.y,
+//       );
+//     }
+//     return new Scale(
+//       this.x * scaleToMul,
+//       this.y * scaleToMul,
+//       this.name,
+//     );
+//   }
 
-  /**
-   * Return a duplicate of this scale
-   * @return {Scale}
-   */
-  _dup() {
-    return new Scale(this.x, this.y, this.name);
-  }
-}
+//   /**
+//    * Return a duplicate of this scale
+//    * @return {Scale}
+//    */
+//   _dup() {
+//     return new Scale(this.x, this.y, this.name);
+//   }
+// }
 
 export type TypeTransformValue = number | Array<number> | {
   scale?: number,
@@ -2983,7 +2984,6 @@ export type CustomTransform3DComponent = ['c', number, number, number, number, n
 export type ScaleTransform2DComponent = ['s', number, number];
 export type TranslateTransform2DComponent = ['t', number, number];
 export type RotateTransform2DComponent = ['r', number];
-// export type CustomTransform2DComponent = ['r', number, number, number, number, number, number, number, number, number];
 
 export type TransformComponent = ScaleTransform3DComponent | ScaleTransform2DComponent
   | TranslateTransform3DComponent | TranslateTransform2DComponent
@@ -2994,7 +2994,9 @@ export type Transform3DComponent = ScaleTransform3DComponent
   | TranslateTransform3DComponent
   | RotateTransform3DComponent
   | CustomTransform3DComponent;
+
 export type TransformDefinition = Array<TransformComponent>;
+export type Transform3DDefinition = Array<Transform3DComponent>;
 
 // function parseTransformComponent(component: TransformComponent): Transform3DComponent {
 //   const [type] = component;
@@ -3073,9 +3075,9 @@ function makeTransformComponent(
  * const t1 = new Transform().scale(2, 2).rotate(Math.PI).translate(1, 1)
  */
 class Transform {
-  def: TransformDefinition;
+  def: Transform3DDefinition;
   // order: Array<Translation | Rotation | Scale>;
-  mat: Array<number>;
+  mat: Type3DMatrix;
   index: number;
   translationIndex: number;
   name: string;
@@ -3093,31 +3095,8 @@ class Transform {
       this.def = [];
       this.name = defOrName;
     } else {
-      // for (let i = 0; i < orderOrName.length; i += 1 ) {
-      //   const t = orderOrName[i];
-      //   if (
-      //     !(t instanceof Translation)
-      //     && !(t instanceof Scale)
-      //     && !(t instanceof Rotation)
-      //   ) {
-      //     debugger;
-      //   }
-      // }
-      // debugger;
       const result = parseArrayTransformDefinition(defOrName);
       this.def = result.def;
-      // for (let i = 0; i < defOrName.length; i += 1) {
-      //   const [type, x, y, z] = defOrName[i];
-      //   if (type === 'r') {
-      //     if (defOrName.length === 2) {
-      //       this.def.push(['r', 0, 0, x]);
-      //     } else {
-      //       this.def.push()
-      //     }
-      //   }
-      // }
-      // this.def = defOrName.map(d => d.slice());
-      // this.def = chainOrName.map(t => parseTransformComponent(t));
       if (name === '' && result.name != null && result.name.length > 0) {
         this.name = result.name;
       } else {
@@ -3131,17 +3110,17 @@ class Transform {
 
   _state(options: { precision: number } = { precision: 8 }) {
     const { precision } = options;
-    const outDef = []
+    const outDef = [];
     for (let i = 0; i < this.def.length; i += 1) {
       const component = [];
       for (let j = 0; j < this.def[i].length; j += 1) {
         if (j === 0) {
           component.push(this.def[i][0]);
-        } else {
+        } else {  // $FlowFixMe
           component.push(roundNum(this.def[i][j], precision));
         }
       }
-      outDef.push(component)
+      outDef.push(component);
     }
     return {
       f1Type: 'tf',
@@ -3193,13 +3172,15 @@ class Transform {
     z: number = 0,
     // name: string = this.name,
   ) {
-    let _x = xOrTranslation;
+    let _x;
     let _y = y;
     let _z = z;
     if (typeof xOrTranslation !== 'number') {
       _x = xOrTranslation.x;
       _y = xOrTranslation.y;
       _z = xOrTranslation.z;
+    } else {
+      _x = xOrTranslation;
     }
     const t = ['t', _x, _y, _z];
 
@@ -3236,9 +3217,9 @@ class Transform {
     }
     const r = ['r', _rx, _ry, _rz];
 
-    if (this.index === this.def.length) {
+    if (this.index === this.def.length) { // $FlowFixMe
       this.def.push(r);
-    } else {
+    } else { // $FlowFixMe
       this.def[this.index] = r;
     }
     this.index += 1;
@@ -3272,9 +3253,9 @@ class Transform {
     }
     const s = ['s', _sx, _sy, _sz];
 
-    if (this.index === this.def.length) {
+    if (this.index === this.def.length) { // $FlowFixMe
       this.def.push(s);
-    } else {
+    } else { // $FlowFixMe
       this.def[this.index] = s;
     }
     this.index += 1;
@@ -3304,12 +3285,12 @@ class Transform {
 
   /**
    * Transform matrix of the transform chain
-   * @return {Array<number>}
+   * @return {Type3DMatrix}
    */
   calcMatrix(
     defStart: number = 0,
     defEnd: number = this.def.length - 1,
-  ) {
+  ): Type3DMatrix {
     let defEndToUse = defEnd;
     if (defEnd < 0) {
       defEndToUse = this.def.length + defEnd;
@@ -3550,17 +3531,17 @@ class Transform {
 
   /**
    * Return the matrix that respresents the cascaded transform chain
-   * @return {Array<number>}
+   * @return {Type3DMatrix}
    */
-  m(): Array<number> {
+  m(): Type3DMatrix {
     return this.mat;
   }
 
   /**
    * Return the matrix that respresents the cascaded transform chain
-   * @return {Array<number>}
+   * @return {Type3DMatrix}
    */
-  matrix(): Array<number> {
+  matrix(): Type3DMatrix {
     return this.mat;
   }
 
@@ -6599,9 +6580,9 @@ export {
   normAngle,
   Transform,
   Rect,
-  Translation,
-  Scale,
-  Rotation,
+  // Translation,
+  // Scale,
+  // Rotation,
   spaceToSpaceTransform,
   getBoundingRect,
   linearPath,
