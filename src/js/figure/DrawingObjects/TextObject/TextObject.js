@@ -771,7 +771,7 @@ class TextObjectBase extends DrawingObject {
       tma[12] / p[3], tma[13] / p[3], tma[15] / p[3],
     ];
 
-    // Use this to position text and give it perspective scale only
+    // // Use this to position text and give it perspective scale only
     // const tm = [
     //   1 / p[3], 0, tma[3] / p[3],
     //   0, 1 / p[3], tma[7] / p[3],

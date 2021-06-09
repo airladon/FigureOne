@@ -198,7 +198,7 @@ const loaded = () => {
   //   .start();
   // figure.updateProjection({ type: 'orthographic' });
   figure.elements.animations.new()
-    .rotation({ target: [0, Math.PI * 0.9, 0], duration: 10 })
+    .rotation({ target: [Math.PI * 0.5, Math.PI * 0.9, 0], duration: 10 })
     .start();
 
   figure.updateProjection({ type: 'perspective', near: 0.1, far: 3, aspectRatio: 1, fieldOfView: Math.PI * 0.4 });
