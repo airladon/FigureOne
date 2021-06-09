@@ -178,7 +178,7 @@ const loaded = () => {
     transform: [['r', 0, 0, 0], ['t', 0, 0, 0]],
   });
 
-  const l = new Fig.Point(-1, 0, 0).normalize();
+  const l = new Fig.Point(1, 0, 0).normalize();
   b.custom.updateUniform('u_reverseLightDirection', [l.x, l.y, l.z]);
   b.custom.updateUniform('u_diffuseLight', 0.4);
   // b.drawingObject.uniforms.u_reverseLightDirection.value = [0, 0, 1];
@@ -198,7 +198,7 @@ const loaded = () => {
   //   .start();
   // figure.updateProjection({ type: 'orthographic' });
   figure.elements.animations.new()
-    .rotation({ target: [Math.PI * 0.5, Math.PI * 0.9, 0], duration: 10 })
+    .rotation({ target: [0, Math.PI * 0.9, 0], duration: 10 })
     .start();
 
   figure.updateProjection({ type: 'perspective', near: 0.1, far: 3, aspectRatio: 1, fieldOfView: Math.PI * 0.4 });

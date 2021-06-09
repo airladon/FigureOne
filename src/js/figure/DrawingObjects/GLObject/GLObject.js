@@ -584,6 +584,14 @@ class GLObject extends DrawingObject {
       );
     });
 
+    if (locations.u_worldInverseTranspose != null) {
+      gl.uniformMatrix4fv(
+        locations.u_worldInverseTranspose,
+        false,
+        m3.inverse(transformMatrix),
+      );
+    }
+
     gl.uniformMatrix4fv(
       locations.u_matrix,
       false,
