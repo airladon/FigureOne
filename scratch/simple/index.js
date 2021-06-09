@@ -170,7 +170,7 @@ const loaded = () => {
         type: 'FLOAT_VECTOR',
       },
       {
-        name: 'u_diffuseLight',
+        name: 'u_minLight',
         length: 1,
         type: 'FLOAT',
       },
@@ -183,7 +183,7 @@ const loaded = () => {
 
   const l = new Fig.Point(1, 1, 1).normalize();
   b.custom.updateUniform('u_reverseLightDirection', [l.x, l.y, l.z]);
-  b.custom.updateUniform('u_diffuseLight', 0.4);
+  b.custom.updateUniform('u_minLight', 0.4);
   // b.drawingObject.uniforms.u_reverseLightDirection.value = [0, 0, 1];
   m.animations.new()
     .delay(1)

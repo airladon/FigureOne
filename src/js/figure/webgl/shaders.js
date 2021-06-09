@@ -261,21 +261,20 @@ const fragment = {
     vars: ['u_color'],
   },
   simpleLight: {
-    src:
-      'precision mediump float;'
-      + 'uniform vec4 u_color;'
-      + 'varying vec3 v_norm;'
-      + 'uniform vec3 u_reverseLightDirection;'
-      + 'uniform float u_diffuseLight;'
-      + 'void main() {'
-        + 'vec3 normal = normalize(v_norm);'
-        + 'float light = dot(normal, u_reverseLightDirection);'
-        + 'gl_FragColor = u_color;'
-        + 'gl_FragColor = vec4(1, 0, 0, 1);'
-        + 'gl_FragColor.rgb *= gl_FragColor.a;'
-        + 'gl_FragColor.rgb *= max((light + 1.0) / 2.0, u_diffuseLight);'
-      + '}',
-    vars: ['u_color', 'u_reverseLightDirection', 'u_diffuseLight'],
+    src: `
+precision mediump float;
+uniform vec4 u_color;
+varying vec3 v_norm;
+uniform vec3 u_reverseLightDirection;
+uniform float u_minLight;
+void main() {
+  vec3 normal = normalize(v_norm);
+  float light = dot(normal, u_reverseLightDirection);
+  gl_FragColor = u_color;
+  gl_FragColor.rgb *= gl_FragColor.a;
+  gl_FragColor.rgb *= max((light + 1.0) / 2.0, u_minLight);
+}`,
+    vars: ['u_color', 'u_reverseLightDirection', 'u_minLight'],
   },
   vertexColor: {
     src:
