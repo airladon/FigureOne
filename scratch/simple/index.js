@@ -158,8 +158,8 @@ const loaded = () => {
         size: 3,
         data: [
           ...nx,
-            ...ny,
-            ...nz,
+          ...ny,
+          ...nz,
         ],
       },
     ],
@@ -192,16 +192,18 @@ const loaded = () => {
   //   .camera({ target: [['r', -0.2, -Math.PI * 1.2, 0], ['t', 0, 0, 0]], duration: 6 })
   //   // .camera({ target: [['r', 0, 0, 0], ['t', 0, 0, -1]], duration: 6 })
   //   .start();
-  figure.elements.transform = new Fig.Transform().translate(0, 0).rotate(0).translate(0, 0, -1);
+  // figure.elements.transform = new Fig.Transform().translate(0, 0).rotate(0).translate(0, 0, -1);
   b.animations.new()
-    .rotation({ target: [0, Math.PI * 4.9, 0], direction: 1, duration: 10 })
+    .rotation({ target: [0, Math.PI * 1.9, 0], direction: 1, duration: 10 })
     .start();
+  // figure.updateProjection({ type: 'orthographic' });
   // figure.elements.animations.new()
   //   // .rotation({ target: [0, Math.PI * 0.9, 0], duration: 5 })
   //   .transform({ target: [['t', 0, 0, 2], ['r', 0, Math.PI * 0.9, 0], ['t', 0, 0, -2]], duration: 5})
   //   .start();
-  figure.updateProjection({ type: 'perspective', near: 0.1, far: 10, aspectRatio: 1, fieldOfView: Math.PI * 0.5 });
-  figure.updateCamera(new Fig.Transform().rotate(0).translate(0, 0, 1));
+  figure.updateProjection({ type: 'perspective', near: 0.1, far: 3, aspectRatio: 1, fieldOfView: Math.PI * 0.4 });
+  // figure.updateProjection({ near: 1, far: 4 });
+  figure.updateCamera({ position: [0, 0, 1.1] });
 };
 
 micImage.onload = loaded.bind(this);

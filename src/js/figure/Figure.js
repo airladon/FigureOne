@@ -74,6 +74,12 @@ export type OBJ_ProjectionOptions = {
   far?: number,
 };
 
+export type OBJ_Camera = {
+  position: TypeParsablePoint,
+  lookAt: TypeParsablePoint,
+  up: TypeParsablePoint,
+};
+
 /**
  * Space Transforms
  *
@@ -350,7 +356,7 @@ class Figure {
     num: number,
   };
 
-  cameraTransform: Transform;
+  camera: OBJ_Camera;
   viewMatrix: Type3DMatrix;
   projection: OBJ_Projection;
   projectionMatrix: Type3DMatrix;
@@ -400,7 +406,8 @@ class Figure {
     this.nextDrawTimer = null;
     this.nextDrawTimerStart = 0;
     this.nextDrawTimerDuration = 0;
-    this.updateCamera(new Transform().rotate(0).translate(0, 0));
+    this.camera = { position: [0, 0, 2], lookAt: [0, 0, 0], up: [0, 1, 0] };
+    this.updateCamera();
     this.projection = {
       left: -1,
       right: 1,
@@ -1976,22 +1983,29 @@ class Figure {
   }
 
   setupAnimations() {
-    this.elements.fnMap.add('_cameraCallback', (percentage: number, customProperties: Object) => {
-      const { delta, start } = customProperties;
-      const next = start.toDelta(
-        delta, percentage, 'linear', { style: 'linear' },
-      );
-      this.updateCamera(next);
+    this.elements.fnMap.add('_cameraCallback', (p: number, customProperties: Object) => {
+      const { start, target } = customProperties;
+      this.camera = {
+        position: start.position.add(target.position.sub(start.position).scale(p)),
+        lookAt: start.lookAt.add(target.lookAt.sub(start.lookAt).scale(p)),
+        up: start.up.add(target.up.sub(start.up).scale(p)),
+      };
+      this.updateCamera();
     });
     this.animations.camera = (...opt) => {
       const o = joinObjects({}, {
         progression: 'easeinout',
       }, ...opt);
       o.customProperties = {
-        start: o.start == null ? this.cameraTransform._dup() : getTransform(o.start),
-        target: o.target == null ? this.cameraTransform._dup() : getTransform(o.target),
+        start: joinObjects({}, this.camera, o.start || {}),
+        target: joinObjects({}, this.camera, o.start || {}),
       };
-      o.customProperties.delta = o.customProperties.target.sub(o.customProperties.start);
+      o.start.position = getPoint(o.start.position);
+      o.start.lookAt = getPoint(o.start.lookAt);
+      o.start.up = getPoint(o.start.up);
+      o.target.position = getPoint(o.target.position);
+      o.target.lookAt = getPoint(o.target.lookAt);
+      o.target.up = getPoint(o.target.up);
       o.callback = '_cameraCallback';
       o.timeKeeper = this.timeKeeper;
       return new CustomAnimationStep(o);
@@ -2097,9 +2111,15 @@ class Figure {
     this.nextDrawTimer = null;
   }
 
-  updateCamera(cameraTransform: Transform) {
-    this.cameraTransform = cameraTransform._dup();
-    this.viewMatrix = m3.inverse(this.cameraTransform.mat);
+  updateCamera(options: OBJ_CameraOptions = {}) {
+    joinObjects(this.camera, options);
+    const cameraMatrix = m3.lookAt(
+      getPoint(this.camera.position).toArray(),
+      getPoint(this.camera.lookAt).toArray(),
+      getPoint(this.camera.up).toArray(),
+    );
+    console.log(cameraMatrix);
+    this.viewMatrix = m3.inverse(cameraMatrix);
   }
 
   updateProjection(options: OBJ_ProjectionOptions) {

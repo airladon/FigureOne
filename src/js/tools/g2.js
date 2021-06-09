@@ -601,6 +601,10 @@ class Point {
     this.z = z;
   }
 
+  toArray() {
+    return [this.x, this.y, this.z];
+  }
+
   _state(options: { precision: number }) {
     // const { precision } = options;
     const precision = getPrecision(options);

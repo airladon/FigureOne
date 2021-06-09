@@ -202,6 +202,43 @@ function perspective(
   ];
 }
 
+function crossProduct(a, b) {
+  return [
+    a[1] * b[2] - a[2] * b[1],
+    a[2] * b[0] - a[0] * b[2],
+    a[0] * b[1] - a[1] * b[0],
+  ];
+}
+
+function subtract(a, b) {
+  return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+}
+
+function normalize(v) {
+  const length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+  if (length > 0.00001) {
+    return [v[0] / length, v[1] / length, v[2] / length];
+  }
+  return [0, 0, 0];
+}
+
+function lookAt(
+  cameraPosition: [number, number, number],
+  target: [number, number, number],
+  up: [number, number, number],
+) {
+  const zAxis = normalize(subtract(cameraPosition, target));
+  const xAxis = normalize(crossProduct(up, zAxis));
+  const yAxis = normalize(crossProduct(zAxis, xAxis));
+
+  return [
+    xAxis[0], yAxis[0], zAxis[0], cameraPosition[0],
+    xAxis[1], yAxis[1], zAxis[1], cameraPosition[1],
+    xAxis[2], yAxis[2], zAxis[2], cameraPosition[2],
+    0, 0, 0, 1,
+  ];
+}
+
 
 function inverse3(m: Array<number>) {
   const det = (m[0] * ((m[4] * m[8]) - (m[7] * m[5]))) - // eslint-disable-line
@@ -437,6 +474,7 @@ export {
   inverse,
   orthographic,
   perspective,
+  lookAt,
   // lu,
   // lupInvert,
 };
