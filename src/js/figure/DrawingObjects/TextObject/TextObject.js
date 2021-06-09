@@ -729,6 +729,22 @@ class TextObjectBase extends DrawingObject {
       0, 0, 1,
     ];
 
+    const modelViewProjection = m3.mul(m3.mul(projectionMatrix, viewMatrix), transformMatrix);
+    const p = m3.transformVector(modelViewProjection, [0, 0, 0, 1]);
+    // const p = m3.
+    // const elementToPixelMatrix = [
+    //   sx, 0, (p[0] + 1) / 2 * drawContext2D.canvas.offsetWidth,
+    //   0, sy, (p[1] + 1) / 2 * drawContext2D.canvas.offsetHeight,
+    //   0, 0, 1,
+    // ];
+
+    // const tm = [
+    //   1, 0, p[0],
+    //   0, 1, p[1],
+    //   0, 0, 1,
+    // ];
+
+
     // The incoming transform matrix transforms elementSpace to glSpace.
     // Modify the incoming transformMatrix to be compatible with
     // pixel space
@@ -738,26 +754,30 @@ class TextObjectBase extends DrawingObject {
     const tma = m3.mul([
       1, 0, 0, 0,
       0, 1, 0, 0,
-      0, 0, 0, 0,
+      0, 0, 1, 0,
       0, 0, 0, 1,
     ], m3.mul(m3.mul(projectionMatrix, viewMatrix), transformMatrix));
+    // // Use this to fully transform text
     // const tm = [
-    //   tma[0], tma[1], tma[3],
-    //   tma[4], tma[5], tma[7],
-    //   tma[8], tma[9], tma[11],
+    //   tma[0] / p[3], tma[1] / p[3], tma[3] / p[3],
+    //   tma[4] / p[3], tma[5] / p[3], tma[7] / p[3],
+    //   tma[12] / p[3], tma[13] / p[3], tma[15] / p[3],
     // ];
+
+    // Use this to fully transform text, but always keep scale positive
     const tm = [
-      1, 0, tma[3],
-      0, 1, tma[7],
-      0, 0, 1,
+      Math.abs(tma[0] / p[3]), tma[1] / p[3], tma[3] / p[3],
+      tma[4] / p[3], Math.abs(tma[5] / p[3]), tma[7] / p[3],
+      tma[12] / p[3], tma[13] / p[3], tma[15] / p[3],
     ];
-    // console.log(tm)
-    // console.log(m3.mul([
-    //   1, 0, 0, 0,
-    //   0, 1, 0, 0,
-    //   0, 0, 0, 0,
-    //   0, 0, 0, 1,
-    // ], tm))
+
+    // Use this to position text and give it perspective scale only
+    // const tm = [
+    //   1 / p[3], 0, tma[3] / p[3],
+    //   0, 1 / p[3], tma[7] / p[3],
+    //   0, 0, tma[15] / p[3],
+    // ];
+
     const elementToGLMatrix = [
       tm[0], -tm[1], tm[2],
       -tm[3], tm[4], tm[5] * -1,

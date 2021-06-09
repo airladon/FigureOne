@@ -41,10 +41,10 @@ const loaded = () => {
   // });
   figure.add({
     make: 'text',
-    text: 'a',
+    text: 'B',
     xAlign: 'center',
     yAlign: 'top',
-    position: [0.5, 0, 0.1],
+    position: [0.5, 0, 0],
   });
 
   const col = (c, numVertices) => {
@@ -193,17 +193,28 @@ const loaded = () => {
   //   // .camera({ target: [['r', 0, 0, 0], ['t', 0, 0, -1]], duration: 6 })
   //   .start();
   // figure.elements.transform = new Fig.Transform().translate(0, 0).rotate(0).translate(0, 0, -1);
-  b.animations.new()
-    .rotation({ target: [0, Math.PI * 1.9, 0], direction: 1, duration: 10 })
-    .start();
-  // figure.updateProjection({ type: 'orthographic' });
-  // figure.elements.animations.new()
-  //   // .rotation({ target: [0, Math.PI * 0.9, 0], duration: 5 })
-  //   .transform({ target: [['t', 0, 0, 2], ['r', 0, Math.PI * 0.9, 0], ['t', 0, 0, -2]], duration: 5})
+  // b.animations.new()
+  //   .rotation({ target: [0, Math.PI * 1.9, 0], direction: 1, duration: 20 })
   //   .start();
+  // figure.updateProjection({ type: 'orthographic' });
+  figure.elements.animations.new()
+    .rotation({ target: [0, Math.PI * 0.9, 0], duration: 10 })
+    .start();
+
   figure.updateProjection({ type: 'perspective', near: 0.1, far: 3, aspectRatio: 1, fieldOfView: Math.PI * 0.4 });
-  // figure.updateProjection({ near: 1, far: 4 });
+  // figure.updateProjection({ near: 0.1, far: 4 });
   figure.updateCamera({ position: [0, 0, 1.1] });
+  // figure.animations.new()
+  //   .custom({
+  //     callback: (p) => {
+  //       const angle = p * Math.PI * 2;
+  //       const x = 1.1 * Math.sin(angle);
+  //       const z = 1.1 * Math.cos(angle);
+  //       figure.updateCamera({ position: [x, 0, z]});
+  //     },
+  //     duration: 10,
+  //   })
+  //   .start();
 };
 
 micImage.onload = loaded.bind(this);

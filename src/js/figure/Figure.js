@@ -2118,7 +2118,6 @@ class Figure {
       getPoint(this.camera.lookAt).toArray(),
       getPoint(this.camera.up).toArray(),
     );
-    console.log(cameraMatrix);
     this.viewMatrix = m3.inverse(cameraMatrix);
   }
 

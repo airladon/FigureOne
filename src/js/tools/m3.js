@@ -178,6 +178,17 @@ function transform(m: Type3DMatrix, px: number, py: number, pz: number): [number
   ];
 }
 
+function transformVector(m, v) {
+  const a = [0, 0, 0, 0];
+  for (let i = 0; i < 4; i += 1) {
+    a[i] = 0.0;
+    for (let j = 0; j < 4; j += 1) {
+      a[i] += v[j] * m[j * 4 + i];
+    }
+  }
+  return a;
+}
+
 function orthographic(
   left: number, right: number, bottom: number, top: number, near: number, far: number,
 ) {
@@ -475,6 +486,7 @@ export {
   orthographic,
   perspective,
   lookAt,
+  transformVector,
   // lu,
   // lupInvert,
 };
