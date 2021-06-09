@@ -812,6 +812,11 @@ class Point {
     return rotated.add(c);
   }
 
+  normalize() {
+    const dist = this.distance();
+    return new Point(this.x / dist, this.y / dist, this.z / dist);
+  }
+
   /* eslint-enable comma-dangle */
 
   /**
@@ -4270,10 +4275,17 @@ function comparePoints(
  * console.log(p);
  * // Point {x: 1, y: 1)
  */
-function polarToRect(mag: number, angle: number) {
+function polarToRect(mag: number, angle: number, theta: number | null = null) {
+  if (theta === null) {
+    return new Point(
+      mag * Math.cos(angle),
+      mag * Math.sin(angle),
+    );
+  }
   return new Point(
-    mag * Math.cos(angle),
-    mag * Math.sin(angle),
+    mag * Math.cos(angle) * Math.sin(theta),
+    mag * Math.sin(angle) * Math.sin(theta),
+    mag * Math.cos(theta),
   );
 }
 

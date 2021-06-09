@@ -20,9 +20,9 @@ export type TypeGLBufferType = 'BYTE' | 'UNSIGNED_BYTE' | 'SHORT' | 'UNSIGNED_SH
 export type TypeGLBufferUsage = 'STATIC' | 'DYNAMIC';
 
 /**
- * `'FLOAT' | 'FLOAT_ARRAY' | 'INT' | 'INT_ARRAY'`
+ * `'FLOAT' | 'FLOAT_VECTOR' | 'INT' | 'INT_VECTOR'`
  */
-export type TypeGLUniform = 'FLOAT' | 'FLOAT_ARRAY' | 'INT' | 'INT_ARRAY';
+export type TypeGLUniform = 'FLOAT' | 'FLOAT_VECTOR' | 'INT' | 'INT_VECTOR';
 
 /**
  * FigureElementPrimitive that can be used to utilize custom shaders for WebGL.

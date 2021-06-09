@@ -5,7 +5,7 @@ import WebGLInstance from './webgl/webgl';
 import {
   Rect, Point, Transform, getRect,
   spaceToSpaceTransform, minAngleDiff,
-  getPoint,
+  getPoint, getTransform,
 } from '../tools/g2';
 import * as m3 from '../tools/m3';
 import type { TypeParsableRect, TypeParsablePoint } from '../tools/g2';
@@ -18,6 +18,7 @@ import parseState from './Recorder/parseState';
 import {
   isTouchDevice, joinObjects, NotificationManager, Console, PerformanceTimer,
 } from '../tools/tools';
+import { CustomAnimationStep } from './Animation/Animation';
 // eslint-disable-next-line import/no-cycle
 import {
   FigureElementCollection, FigureElement,
@@ -320,6 +321,7 @@ class Figure {
     history: Array<Array<number>>,
     num: number,
   };
+  camera: Transform;
   // frameRateInformation: string;
   // frameRateHistory: Array<number>;
   // frameRate
@@ -366,6 +368,7 @@ class Figure {
     this.nextDrawTimer = null;
     this.nextDrawTimerStart = 0;
     this.nextDrawTimerDuration = 0;
+    this.camera = new Transform().rotate(0);
     // this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
@@ -1250,6 +1253,7 @@ class Figure {
   setElements(collection: FigureElementCollection) {
     this.elements = collection;
     this.animations = this.elements.animations;
+    this.setupAnimations();
     this.initElements();
   }
 
@@ -1927,11 +1931,39 @@ class Figure {
     }
   }
 
+  setupAnimations() {
+    this.elements.fnMap.add('_cameraCallback', (percentage: number, customProperties: Object) => {
+      const { delta, start } = customProperties;
+      const next = start.toDelta(
+        delta, percentage, 'linear', { style: 'linear' },
+      );
+      this.camera = next;
+    });
+    this.animations.camera = (...opt) => {
+      const o = joinObjects({}, {
+        progression: 'easeinout',
+      }, ...opt);
+      o.customProperties = {
+        start: o.start == null ? this.camera._dup() : getTransform(o.start),
+        target: o.target == null ? this.camera._dup() : getTransform(o.target),
+      };
+      o.customProperties.delta = o.customProperties.target.sub(o.customProperties.start);
+      o.callback = '_cameraCallback';
+      o.timeKeeper = this.timeKeeper;
+      return new CustomAnimationStep(o);
+    };
+    this.animations.customSteps.push({
+      step: this.animations.camera.bind(this),
+      name: 'camera',
+    });
+  }
+
   // To add elements to a figure, either this method can be overridden,
   // or the `add` method can be used.
   createFigureElements() {
     this.elements = this.collections.collection({ name: 'rootCollection' });
     this.animations = this.elements.animations;
+    this.setupAnimations();
     this.initElements();
   }
 
@@ -1939,6 +1971,7 @@ class Figure {
   setElementsToCollection(collection: FigureElementCollection) {
     this.elements = collection;
     this.animations = this.elements.animations;
+    this.setupAnimations();
     this.initElements();
   }
 
@@ -2083,8 +2116,8 @@ class Figure {
 
     const projection = this.spaceTransforms.figureToGL;
     // Math.PI / 3 * this.timeKeeper.now() / 20000
-    const camera = new Transform().rotate(0, 0, 0);
-    const projectionView = new Transform().custom(m3.mul(projection.mat, m3.inverse(camera.mat)));
+    // const camera = new Transform().rotate(0, 0, 0);
+    const projectionView = new Transform().custom(m3.mul(projection.mat, m3.inverse(this.camera.mat)));
     this.elements.draw(now, [projectionView], 1, canvasIndex);
     // this.elements.draw(now, [this.spaceTransforms.figureToGL], 1, canvasIndex);
     // this.elements.draw(now, [

@@ -20,6 +20,18 @@ const vertex = {
         + '}',
     vars: ['a_position', 'u_matrix'],
   },
+  simple3DLight: {
+    src:
+        'attribute vec3 a_position;'
+        + 'attribute vec3 a_norm;'
+        + 'varying vec3 v_norm;'
+        + 'uniform mat4 u_matrix;'
+        + 'void main() {'
+          + 'gl_Position = u_matrix * vec4(a_position.xyz, 1);'
+          + 'v_norm = a_norm;'
+        + '}',
+    vars: ['a_position', 'u_matrix', 'a_norm'],
+  },
   vertexColor: {
     src:
         `
@@ -232,6 +244,23 @@ const fragment = {
         + 'gl_FragColor.rgb *= gl_FragColor.a;'
       + '}',
     vars: ['u_color'],
+  },
+  simpleLight: {
+    src:
+      'precision mediump float;'
+      + 'uniform vec4 u_color;'
+      + 'varying vec3 v_norm;'
+      + 'uniform vec3 u_reverseLightDirection;'
+      + 'uniform float u_diffuseLight;'
+      + 'void main() {'
+        + 'vec3 normal = normalize(v_norm);'
+        + 'float light = dot(normal, u_reverseLightDirection);'
+        + 'gl_FragColor = u_color;'
+        + 'gl_FragColor = vec4(1, 0, 0, 1);'
+        + 'gl_FragColor.rgb *= gl_FragColor.a;'
+        + 'gl_FragColor.rgb *= max((light + 1.0) / 2.0, u_diffuseLight);'
+      + '}',
+    vars: ['u_color', 'u_reverseLightDirection', 'u_diffuseLight'],
   },
   vertexColor: {
     src:
