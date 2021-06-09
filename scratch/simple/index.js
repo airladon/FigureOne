@@ -187,9 +187,10 @@ const loaded = () => {
     .morph({ start: 0, target: 1, duration: 6 })
     .start();
 
-  figure.camera = new Fig.Transform([['r', -0.2, 0, 0]]);
+  figure.cameraTransform = new Fig.Transform([['r', -0.2, 0, 0], ['t', 0, 0, 0]]);
   figure.animations.new()
-    .camera({ target: [['r', -0.2, -Math.PI * 1.2, 0]], duration: 6 })
+    // .camera({ target: [['r', -0.2, -Math.PI * 1.2, 0], ['t', 0, 0, -1]], duration: 6 })
+    .camera({ target: [['r', 0, 0, 0], ['t', 0, 0, -1]], duration: 6 })
     .start();
   // m.animations.new()
   //   .rotation({ target: [Math.PI / 3, Math.PI / 3, 0], duration: 2 })

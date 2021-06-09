@@ -321,7 +321,8 @@ class Figure {
     history: Array<Array<number>>,
     num: number,
   };
-  camera: Transform;
+  cameraTransform: Transform;
+  viewMatrix: Type3DMatrix;
   // frameRateInformation: string;
   // frameRateHistory: Array<number>;
   // frameRate
@@ -368,7 +369,7 @@ class Figure {
     this.nextDrawTimer = null;
     this.nextDrawTimerStart = 0;
     this.nextDrawTimerDuration = 0;
-    this.camera = new Transform().rotate(0);
+    this.updateCamera(new Transform().rotate(0).translate(0, 0));
     // this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
@@ -1937,15 +1938,15 @@ class Figure {
       const next = start.toDelta(
         delta, percentage, 'linear', { style: 'linear' },
       );
-      this.camera = next;
+      this.updateCamera(next);
     });
     this.animations.camera = (...opt) => {
       const o = joinObjects({}, {
         progression: 'easeinout',
       }, ...opt);
       o.customProperties = {
-        start: o.start == null ? this.camera._dup() : getTransform(o.start),
-        target: o.target == null ? this.camera._dup() : getTransform(o.target),
+        start: o.start == null ? this.cameraTransform._dup() : getTransform(o.start),
+        target: o.target == null ? this.cameraTransform._dup() : getTransform(o.target),
       };
       o.customProperties.delta = o.customProperties.target.sub(o.customProperties.start);
       o.callback = '_cameraCallback';
@@ -2053,6 +2054,11 @@ class Figure {
     this.nextDrawTimer = null;
   }
 
+  updateCamera(cameraTransform: Transform) {
+    this.cameraTransform = cameraTransform._dup();
+    this.viewMatrix = m3.inverse(this.cameraTransform.mat);
+  }
+
   draw(nowIn: number, canvasIndex: number = 0): void {
     let timer;
     // $FlowFixMe
@@ -2115,13 +2121,13 @@ class Figure {
     if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('setupDraw'); }
 
     const projection = this.spaceTransforms.figureToGL;
+    console.log(projection)
     // Math.PI / 3 * this.timeKeeper.now() / 20000
     // const camera = new Transform().rotate(0, 0, 0);
-    const projectionView = new Transform().custom(m3.inverse(this.camera.mat)).custom(projection.mat);
     this.elements.draw(
       now,
       projection.mat,
-      m3.inverse(this.camera.mat),
+      this.viewMatrix,
       [new Transform()],
       1,
       canvasIndex,
