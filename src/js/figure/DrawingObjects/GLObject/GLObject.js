@@ -592,6 +592,13 @@ class GLObject extends DrawingObject {
       );
     }
 
+    if (locations.u_lightWorldPosition != null) {
+      gl.uniform3fv(
+        locations.u_lightWorldPosition,
+        getPoint(drawGlobals.light.point).toArray(),
+      );
+    }
+
     if (locations.u_minLight != null) {
       gl.uniform1f(
         locations.u_minLight,
@@ -615,9 +622,9 @@ class GLObject extends DrawingObject {
       );
     }
 
-    if (locations.u_matrix != null) {  // $FlowFixMe
+    if (locations.u_worldMatrix != null) {  // $FlowFixMe
       gl.uniformMatrix4fv(
-        locations.u_matrix,
+        locations.u_worldMatrix,
         false,
         m3.transpose(worldMatrix),
       );

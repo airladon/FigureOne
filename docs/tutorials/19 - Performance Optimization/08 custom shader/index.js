@@ -13,7 +13,7 @@ attribute vec2 a_velocity;
 attribute vec2 a_center;
 attribute float a_radius;
 varying vec4 v_col;
-uniform mat4 u_matrix;
+uniform mat4 u_worldMatrix;
 uniform float u_time;
 
 float calc(float limit, float pos, float center, float vel) {
@@ -38,7 +38,7 @@ float calc(float limit, float pos, float center, float vel) {
 void main() {
   float x = calc(3.0 - a_radius, a_position.x, a_center.x, a_velocity.x);
   float y = calc(3.0 - a_radius, a_position.y, a_center.y, a_velocity.y);
-  gl_Position = u_matrix * vec4(x, y, 0, 1);
+  gl_Position = u_worldMatrix * vec4(x, y, 0, 1);
   v_col = a_color;
 }`;
 
@@ -74,11 +74,11 @@ for (let i = 0; i < 10000; i += 1) {
 
 const element = figure.add({
   make: 'gl',
-  // Define the custom shader and variables (u_matrix is the element transform
+  // Define the custom shader and variables (u_worldMatrix is the element transform
   // matrix)
   vertexShader: {
     src: vertexShader,
-    vars: ['a_position', 'a_color', 'a_velocity', 'a_center', 'a_radius', 'u_matrix', 'u_time'],
+    vars: ['a_position', 'a_color', 'a_velocity', 'a_center', 'a_radius', 'u_worldMatrix', 'u_time'],
   },
   // Built in shader that allows for colored vertices
   fragShader: 'vertexColor',

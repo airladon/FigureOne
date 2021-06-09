@@ -420,11 +420,11 @@ Vertex Shader:
 
 ```c
 attribute vec2 a_position;
-uniform mat3 u_matrix;
+uniform mat3 u_worldMatrix;
 uniform float u_z;
 
 void main() {
-  gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, u_z, 1);'
+  gl_Position = vec4((u_worldMatrix * vec3(a_position, 1)).xy, u_z, 1);'
 }
 ```
 
@@ -439,7 +439,7 @@ void main() {
 }
 ```
 
-The vertex shader takes in the vertex location (`a_position`) and transforms it by some transform matrix (`u_matrix`). Here the `a_` and `u_` prefixes denote attributes and uniforms respectively.
+The vertex shader takes in the vertex location (`a_position`) and transforms it by some transform matrix (`u_worldMatrix`). Here the `a_` and `u_` prefixes denote attributes and uniforms respectively.
 
 These shaders are 2D shaders, but everything in WebGL is in 3D space, meaning a z coordinate (`u_z`) is also needed. In this case the z coordinate can be used to position shapes over other shapes.
 
@@ -468,13 +468,13 @@ Thus our vertex shader will be:
 ```c
 attribute vec2 a_position;
 attribute vec2 a_velocity;
-uniform mat3 u_matrix;
+uniform mat3 u_worldMatrix;
 uniform float u_time;
 
 void main() {
   float x = a_position.x + a_velocity.x * u_time;
   float y = a_position.y + a_velocity.y * u_time;
-  gl_Position = vec4((u_matrix * vec3(x, y, 1)).xy, 0, 1);
+  gl_Position = vec4((u_worldMatrix * vec3(x, y, 1)).xy, 0, 1);
 ```
 
 We will not use a customized fragment shader for this example, and so all shapes will be the same color.
@@ -497,12 +497,12 @@ const { rand } = Fig.tools.math;
 const vertexShader = `
 attribute vec2 a_position;
 attribute vec2 a_velocity;
-uniform mat4 u_matrix;
+uniform mat4 u_worldMatrix;
 uniform float u_time;
 void main() {
   float x = a_position.x + a_velocity.x * u_time;
   float y = a_position.y + a_velocity.y * u_time;
-  gl_Position = u_matrix * vec4(x, y, 0, 1);
+  gl_Position = u_worldMatrix * vec4(x, y, 0, 1);
 }`;
 
 // Create vertices for 10,000 polygons. Each polygon is 20 triangles.
@@ -528,11 +528,11 @@ for (let i = 0; i < 10000; i += 1) {
 
 const element = figure.add({
   make: 'gl',
-  // Define the custom shader and variables (u_matrix is the element transform
+  // Define the custom shader and variables (u_worldMatrix is the element transform
   // matrix)
   vertexShader: {
     src: vertexShader,
-    vars: ['a_position', 'a_velocity', 'u_matrix', 'u_time'],
+    vars: ['a_position', 'a_velocity', 'u_worldMatrix', 'u_time'],
   },
   // Build in shader with one color for all vertices
   fragShader: 'simple',
@@ -615,7 +615,7 @@ attribute vec2 a_velocity;
 attribute vec2 a_center;
 attribute float a_radius;
 varying vec4 v_col;
-uniform mat4 u_matrix;
+uniform mat4 u_worldMatrix;
 uniform float u_time;
 
 float calc(float limit, float pos, float center, float vel) {
@@ -640,7 +640,7 @@ float calc(float limit, float pos, float center, float vel) {
 void main() {
   float x = calc(3.0 - a_radius, a_position.x, a_center.x, a_velocity.x);
   float y = calc(3.0 - a_radius, a_position.y, a_center.y, a_velocity.y);
-  gl_Position = u_matrix * vec4(x, y, 0, 1);
+  gl_Position = u_worldMatrix * vec4(x, y, 0, 1);
   v_col = a_color;
 }`;
 
@@ -676,11 +676,11 @@ for (let i = 0; i < 10000; i += 1) {
 
 const element = figure.add({
   make: 'gl',
-  // Define the custom shader and variables (u_matrix is the element transform
+  // Define the custom shader and variables (u_worldMatrix is the element transform
   // matrix)
   vertexShader: {
     src: vertexShader,
-    vars: ['a_position', 'a_color', 'a_velocity', 'a_center', 'a_radius', 'u_matrix', 'u_time'],
+    vars: ['a_position', 'a_color', 'a_velocity', 'a_center', 'a_radius', 'u_worldMatrix', 'u_time'],
   },
   // Built in shader that allows for colored vertices
   fragShader: 'vertexColor',

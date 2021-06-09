@@ -4,27 +4,45 @@ const vertex = {
   simple: {
     src:
         'attribute vec2 a_position;'
-        + 'uniform mat4 u_matrix;'
+        + 'uniform mat4 u_worldMatrix;'
         + 'uniform mat4 u_projectionMatrix;'
         + 'uniform mat4 u_viewMatrix;'
         + 'uniform float u_z;'
         + 'void main() {'
-          + 'gl_Position = u_projectionMatrix * u_viewMatrix * u_matrix * vec4(a_position.xy, u_z, 1);'
+          + 'gl_Position = u_projectionMatrix * u_viewMatrix * u_worldMatrix * vec4(a_position.xy, u_z, 1);'
         + '}',
-    vars: ['a_position', 'u_matrix', 'u_projectionMatrix', 'u_viewMatrix'],
+    vars: ['a_position', 'u_worldMatrix', 'u_projectionMatrix', 'u_viewMatrix'],
   },
   simple3D: {
     src:
         'attribute vec3 a_position;'
-        + 'uniform mat4 u_matrix;'
+        + 'uniform mat4 u_worldMatrix;'
         + 'uniform mat4 u_projectionMatrix;'
         + 'uniform mat4 u_viewMatrix;'
         + 'void main() {'
-          + 'gl_Position = u_projectionMatrix * u_viewMatrix * u_matrix * vec4(a_position.xyz, 1);'
+          + 'gl_Position = u_projectionMatrix * u_viewMatrix * u_worldMatrix * vec4(a_position.xyz, 1);'
         + '}',
-    vars: ['a_position', 'u_matrix', 'u_projectionMatrix', 'u_viewMatrix'],
+    vars: ['a_position', 'u_worldMatrix', 'u_projectionMatrix', 'u_viewMatrix'],
   },
-  simple3DLight: {
+  pointLight: {
+    src: `
+attribute vec4 a_position;
+attribute vec3 a_norm;
+varying vec3 v_norm;
+uniform vec3 u_lightWorldPosition;
+uniform mat4 u_worldMatrix;
+uniform mat4 u_worldViewProjectionMatrix;
+uniform mat4 u_worldInverseTranspose;
+varying vec3 v_surfaceToLight;
+void main() {
+  gl_Position = u_worldViewProjectionMatrix * a_position;
+  v_norm = mat3(u_worldInverseTranspose) * a_norm;
+  vec3 surfaceWorldPosition = (u_worldMatrix * a_position).xyz;
+  v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
+}`,
+    vars: ['a_position', 'a_norm', 'u_worldViewProjectionMatrix', 'u_worldInverseTranspose', 'u_lightWorldPosition', 'u_worldMatrix'],
+  },
+  directionalLight: {
     src: `
 attribute vec3 a_position;
 attribute vec3 a_norm;
@@ -43,15 +61,15 @@ void main() {
 attribute vec2 a_position;
 attribute vec4 a_col;
 varying vec4 v_col;
-uniform mat4 u_matrix;
+uniform mat4 u_worldMatrix;
 uniform mat4 u_projectionMatrix;
 uniform mat4 u_viewMatrix;
 uniform float u_z;
 void main() {
-  gl_Position = u_projectionMatrix * u_viewMatrix * u_matrix * vec4(a_position.xy, u_z, 1);
+  gl_Position = u_projectionMatrix * u_viewMatrix * u_worldMatrix * vec4(a_position.xy, u_z, 1);
   v_col = a_col;
 }`,
-    vars: ['a_position', 'a_col', 'u_matrix', 'u_z', 'u_projectionMatrix', 'u_viewMatrix'],
+    vars: ['a_position', 'a_col', 'u_worldMatrix', 'u_z', 'u_projectionMatrix', 'u_viewMatrix'],
   },
   vertexColor3D: {
     src:
@@ -59,29 +77,29 @@ void main() {
 attribute vec3 a_position;
 attribute vec4 a_col;
 varying vec4 v_col;
-uniform mat4 u_matrix;
+uniform mat4 u_worldMatrix;
 uniform mat4 u_projectionMatrix;
 uniform mat4 u_viewMatrix;
 void main() {
-  gl_Position = u_projectionMatrix * u_viewMatrix * u_matrix * vec4(a_position.xyz, 1);
+  gl_Position = u_projectionMatrix * u_viewMatrix * u_worldMatrix * vec4(a_position.xyz, 1);
   v_col = a_col;
 }`,
-    vars: ['a_position', 'a_col', 'u_matrix', 'u_projectionMatrix', 'u_viewMatrix'],
+    vars: ['a_position', 'a_col', 'u_worldMatrix', 'u_projectionMatrix', 'u_viewMatrix'],
   },
   withTexture: {
     src:
         'attribute vec2 a_position;'
         + 'attribute vec2 a_texcoord;'
-        + 'uniform mat4 u_matrix;'
+        + 'uniform mat4 u_worldMatrix;'
         + 'uniform mat4 u_projectionMatrix;'
         + 'uniform mat4 u_viewMatrix;'
         + 'uniform float u_z;'
         + 'varying vec2 v_texcoord;'
         + 'void main() {'
-          + 'gl_Position = u_projectionMatrix * u_viewMatrix * u_matrix * vec4(a_position.xy, u_z, 1);'
+          + 'gl_Position = u_projectionMatrix * u_viewMatrix * u_worldMatrix * vec4(a_position.xy, u_z, 1);'
           + 'v_texcoord = a_texcoord;'
         + '}',
-    vars: ['a_position', 'a_texcoord', 'u_matrix', 'u_z', 'u_projectionMatrix', 'u_viewMatrix'],
+    vars: ['a_position', 'a_texcoord', 'u_worldMatrix', 'u_z', 'u_projectionMatrix', 'u_viewMatrix'],
   },
   morph4: {
     src: `
@@ -89,7 +107,7 @@ attribute vec2 a_pos0;
 attribute vec2 a_pos1;
 attribute vec2 a_pos2;
 attribute vec2 a_pos3;
-uniform mat4 u_matrix;
+uniform mat4 u_worldMatrix;
 uniform mat4 u_projectionMatrix;
 uniform mat4 u_viewMatrix;
 uniform float u_percent;
@@ -120,17 +138,17 @@ void main() {
   }
 
   vec2 newPosition = (toPos - fromPos) * u_percent + fromPos;
-  gl_Position = u_matrix * vec4(newPosition.xy, u_z, 1);
+  gl_Position = u_worldMatrix * vec4(newPosition.xy, u_z, 1);
 }
 `,
-    vars: ['a_pos0', 'a_pos1', 'a_pos2', 'a_pos3', 'u_matrix', 'u_percent', 'u_from', 'u_to'],
+    vars: ['a_pos0', 'a_pos1', 'a_pos2', 'a_pos3', 'u_worldMatrix', 'u_percent', 'u_from', 'u_to'],
   },
   morpher: (num: number, vertexColor: boolean) => {
     let aPosDefs = '';
     let aPosArray = `vec2 fromPos = a_pos0;\n  vec2 toPos = a_pos1;\n  vec2 positions[${num}];\n`;
     let aColDefs = '';
     let aColArray = '';
-    const vars = ['u_matrix', 'u_percent', 'u_projectionMatrix', 'u_viewMatrix'];
+    const vars = ['u_worldMatrix', 'u_percent', 'u_projectionMatrix', 'u_viewMatrix'];
     if (vertexColor) {
       aColArray = `vec4 fromCol = a_col0;\n vec4 toCol = a_col1;\n vec4 colors[${num}];`;
     }
@@ -160,7 +178,7 @@ void main() {
     const src = `
 ${aPosDefs}
 ${aColDefs}
-uniform mat4 u_matrix;
+uniform mat4 u_worldMatrix;
 uniform mat4 u_projectionMatrix;
 uniform mat4 u_viewMatrix;
 uniform float u_percent;
@@ -186,7 +204,7 @@ void main() {
   }
 
   vec2 newPosition = (toPos - fromPos) * u_percent + fromPos;
-  gl_Position = u_projectionMatrix * u_viewMatrix * u_matrix * vec4(newPosition.xy, 0, 1);
+  gl_Position = u_projectionMatrix * u_viewMatrix * u_worldMatrix * vec4(newPosition.xy, 0, 1);
   ${setVarying}
 }
 `;
@@ -202,7 +220,7 @@ attribute vec4 a_col0;
 attribute vec4 a_col1;
 attribute vec4 a_col2;
 attribute vec4 a_col3;
-uniform mat3 u_matrix;
+uniform mat3 u_worldMatrix;
 uniform float u_percent;
 uniform int u_from;
 uniform int u_to;
@@ -241,11 +259,11 @@ void main() {
   }
 
   vec2 newPosition = (toPos - fromPos) * u_percent + fromPos;
-  gl_Position = u_matrix * vec4(newPosition.xy, u_z, 1);
+  gl_Position = u_worldMatrix * vec4(newPosition.xy, u_z, 1);
   v_col = (toCol - fromCol) * u_percent + fromCol;
 }
 `,
-    vars: ['a_pos0', 'a_pos1', 'a_pos2', 'a_pos3', 'a_col0', 'a_col1', 'a_col2', 'a_col3', 'u_matrix', 'u_percent', 'u_from', 'u_to'],
+    vars: ['a_pos0', 'a_pos1', 'a_pos2', 'a_pos3', 'a_col0', 'a_col1', 'a_col2', 'a_col3', 'u_worldMatrix', 'u_percent', 'u_from', 'u_to'],
   },
 };
 
@@ -260,7 +278,7 @@ const fragment = {
       + '}',
     vars: ['u_color'],
   },
-  simpleLight: {
+  directionalLight: {
     src: `
 precision mediump float;
 uniform vec4 u_color;
@@ -275,6 +293,24 @@ void main() {
   gl_FragColor.rgb *= max((light + 1.0) / 2.0, u_minLight);
 }`,
     vars: ['u_color', 'u_directionalLight', 'u_minLight'],
+  },
+  pointLight: {
+    src: `
+precision mediump float;
+uniform vec4 u_color;
+varying vec3 v_norm;
+varying vec3 v_surfaceToLight;
+uniform float u_minLight;
+void main() {
+  vec3 normal = normalize(v_norm);
+  vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
+  float light = dot(normal, surfaceToLightDirection);
+  gl_FragColor = u_color;
+  gl_FragColor.rgb *= gl_FragColor.a;
+  // gl_FragColor.rgb *= max((light + 1.0) / 2.0, u_minLight);
+  gl_FragColor.rgb *= max((light + 1.0) / 2.0, u_minLight);
+}`,
+    vars: ['u_color', 'u_minLight'],
   },
   vertexColor: {
     src:

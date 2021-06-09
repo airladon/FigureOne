@@ -115,27 +115,14 @@ const loaded = () => {
   };
   const [rx, nx] = makeRod(0.5, 0.01, 20, 0, Math.PI / 2, 0);
   const [ry, ny] = makeRod(0.5, 0.005, 10, -Math.PI / 2, 0, 0);
-  const [rz, nz] = makeRod(0.5, 0.02, 30, 0, 0, 0);
-  // const [ry, ny] = makeRod(0.5, 0.03, 10, Math.PI / 2, Math.PI / 2);
-  // const [rz, nz] = makeRod(0.5, 0.03, 10, 0, 0);
+  const [rz, nz] = makeRod(0.5, 0.05, 30, 0, 0, 0);
+  const [box, nBox] = makeRod(0.3, 0.3, 4, 0, Math.PI / 2, 0);
   const b = figure.add({
     make: 'gl',
     color: [1, 0, 1, 1],
-    vertexShader: 'simple3DLight',
-    fragShader: 'simpleLight',
+    vertexShader: 'pointLight',
+    fragShader: 'pointLight',
     vertices3: {
-      // data: [
-      //   0, 0, 0, v, 0, 0, v, h, 0,
-      //   0, 0, 0, v, h, 0, 0, h, 0,
-      //   0, 0, 0, 0, h, 0, 0, h, v,
-      //   0, 0, 0, 0, h, v, 0, 0, v,
-      //   0, 0, 0, h, 0, 0, h, v, 0,
-      //   0, 0, 0, h, v, 0, 0, v, 0,
-      //   // v, 0, 0, v, v, 0, v, v, v,
-      //   // v, 0, 0, v, v, v, v, 0, v,
-      //   // 0, 0, 0, 0, v, 0, 0, v, v,
-      //   // 0, 0, 0, 0, v, v, 0, 0, v,
-      // ],
       data: [
         ...rx,
         ...ry,
@@ -143,16 +130,6 @@ const loaded = () => {
       ],
     },
     buffers: [
-      // {
-      //   name: 'a_col',
-      //   size: 4,
-      //   data: [
-      //     ...col([1, 0, 0, 1], 6 * 4),
-      //     // ...col([0, 0.5, 0, 1], 6),
-      //     // ...col([0, 0, 1, 1], 6),
-      //     // ...col([0.6, 0, 0, 1]),
-      //   ],
-      // },
       {
         name: 'a_norm',
         size: 3,
@@ -163,30 +140,37 @@ const loaded = () => {
         ],
       },
     ],
-    // uniforms: [
-    //   {
-    //     name: 'u_reverseLightDirection',
-    //     length: 3,
-    //     type: 'FLOAT_VECTOR',
-    //   },
-    //   {
-    //     name: 'u_minLight',
-    //     length: 1,
-    //     type: 'FLOAT',
-    //   },
-    // ],
+    transform: [['r', 0, 0, 0], ['t', 0, 0, 0]],
+  });
+  const b1 = figure.add({
+    make: 'gl',
+    color: [1, 0, 0, 1],
+    vertexShader: 'directionalLight',
+    fragShader: 'directionalLight',
+    vertices3: {
+      data: [
+        ...box,
+      ],
+    },
+    buffers: [
+      {
+        name: 'a_norm',
+        size: 3,
+        data: [
+          ...nBox,
+        ],
+      },
+    ],
     transform: [['r', 0, 0, 0], ['t', 0, 0, 0]],
   });
 
   // Directional Light * 2
   // Point Light * 2
 
-  // const l = new Fig.Point(1, 1, 1).normalize();
-  // b.custom.updateUniform('u_reverseLightDirection', [l.x, l.y, l.z]);
-  // b.custom.updateUniform('u_minLight', 0.4);
   figure.light.directional = [1, 1, 1];
-  figure.light.min = 0.4;
-  // b.drawingObject.uniforms.u_reverseLightDirection.value = [0, 0, 1];
+  figure.light.min = 0;
+  figure.light.point = [0.3, 0.1, 1];
+
   m.animations.new()
     .delay(1)
     .morph({ start: 0, target: 1, duration: 6 })

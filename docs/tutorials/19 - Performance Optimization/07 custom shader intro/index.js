@@ -15,12 +15,12 @@ const { rand } = Fig.tools.math;
 const vertexShader = `
 attribute vec2 a_position;
 attribute vec2 a_velocity;
-uniform mat4 u_matrix;
+uniform mat4 u_worldMatrix;
 uniform float u_time;
 void main() {
   float x = a_position.x + a_velocity.x * u_time;
   float y = a_position.y + a_velocity.y * u_time;
-  gl_Position = u_matrix * vec4(x, y, 0, 1);
+  gl_Position = u_worldMatrix * vec4(x, y, 0, 1);
 }`;
 
 // Create vertices for 10,000 polygons. Each polygon is 20 triangles.
@@ -46,11 +46,11 @@ for (let i = 0; i < 10000; i += 1) {
 
 const element = figure.add({
   make: 'gl',
-  // Define the custom shader and variables (u_matrix is the element transform
+  // Define the custom shader and variables (u_worldMatrix is the element transform
   // matrix)
   vertexShader: {
     src: vertexShader,
-    vars: ['a_position', 'a_velocity', 'u_matrix', 'u_time'],
+    vars: ['a_position', 'a_velocity', 'u_worldMatrix', 'u_time'],
   },
   // Built in shader with one color for all vertices
   fragShader: 'simple',

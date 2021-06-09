@@ -367,7 +367,7 @@
 //     );
 
 //     gl.uniformMatrix3fv(
-//       locations.u_matrix,
+//       locations.u_worldMatrix,
 //       false,
 //       m2.t(transformMatrix),
 //     );  // Translate
