@@ -3096,6 +3096,8 @@ class Transform {
    * transforms
    */
   constructor(defOrName: TransformDefinition | string = '', name: string = '') {
+    this.def = [];
+    this.name = '';
     if (typeof defOrName === 'string') {
       this.def = [];
       this.name = defOrName;

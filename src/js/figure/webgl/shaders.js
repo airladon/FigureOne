@@ -5,20 +5,24 @@ const vertex = {
     src:
         'attribute vec2 a_position;'
         + 'uniform mat4 u_matrix;'
+        + 'uniform mat4 u_projectionMatrix;'
+        + 'uniform mat4 u_viewMatrix;'
         + 'uniform float u_z;'
         + 'void main() {'
-          + 'gl_Position = u_matrix * vec4(a_position.xy, u_z, 1);'
+          + 'gl_Position = u_projectionMatrix * u_viewMatrix * u_matrix * vec4(a_position.xy, u_z, 1);'
         + '}',
-    vars: ['a_position', 'u_matrix', 'u_z'],
+    vars: ['a_position', 'u_matrix', 'u_projectionMatrix', 'u_viewMatrix'],
   },
   simple3D: {
     src:
         'attribute vec3 a_position;'
         + 'uniform mat4 u_matrix;'
+        + 'uniform mat4 u_projectionMatrix;'
+        + 'uniform mat4 u_viewMatrix;'
         + 'void main() {'
-          + 'gl_Position = u_matrix * vec4(a_position.xyz, 1);'
+          + 'gl_Position = u_projectionMatrix * u_viewMatrix * u_matrix * vec4(a_position.xyz, 1);'
         + '}',
-    vars: ['a_position', 'u_matrix'],
+    vars: ['a_position', 'u_matrix', 'u_projectionMatrix', 'u_viewMatrix'],
   },
   simple3DLight: {
     src:
@@ -26,11 +30,13 @@ const vertex = {
         + 'attribute vec3 a_norm;'
         + 'varying vec3 v_norm;'
         + 'uniform mat4 u_matrix;'
+        + 'uniform mat4 u_projectionMatrix;'
+        + 'uniform mat4 u_viewMatrix;'
         + 'void main() {'
-          + 'gl_Position = u_matrix * vec4(a_position.xyz, 1);'
+          + 'gl_Position = u_projectionMatrix * u_viewMatrix * u_matrix * vec4(a_position.xyz, 1);'
           + 'v_norm = a_norm;'
         + '}',
-    vars: ['a_position', 'u_matrix', 'a_norm'],
+    vars: ['a_position', 'u_matrix', 'a_norm', 'u_projectionMatrix', 'u_viewMatrix'],
   },
   vertexColor: {
     src:
@@ -39,12 +45,14 @@ attribute vec2 a_position;
 attribute vec4 a_col;
 varying vec4 v_col;
 uniform mat4 u_matrix;
+uniform mat4 u_projectionMatrix;
+uniform mat4 u_viewMatrix;
 uniform float u_z;
 void main() {
-  gl_Position = u_matrix * vec4(a_position.xy, u_z, 1);
+  gl_Position = u_projectionMatrix * u_viewMatrix * u_matrix * vec4(a_position.xy, u_z, 1);
   v_col = a_col;
 }`,
-    vars: ['a_position', 'a_col', 'u_matrix', 'u_z'],
+    vars: ['a_position', 'a_col', 'u_matrix', 'u_z', 'u_projectionMatrix', 'u_viewMatrix'],
   },
   vertexColor3D: {
     src:
@@ -53,24 +61,28 @@ attribute vec3 a_position;
 attribute vec4 a_col;
 varying vec4 v_col;
 uniform mat4 u_matrix;
+uniform mat4 u_projectionMatrix;
+uniform mat4 u_viewMatrix;
 void main() {
-  gl_Position = u_matrix * vec4(a_position.xyz, 1);
+  gl_Position = u_projectionMatrix * u_viewMatrix * u_matrix * vec4(a_position.xyz, 1);
   v_col = a_col;
 }`,
-    vars: ['a_position', 'a_col', 'u_matrix', 'u_z'],
+    vars: ['a_position', 'a_col', 'u_matrix', 'u_projectionMatrix', 'u_viewMatrix'],
   },
   withTexture: {
     src:
         'attribute vec2 a_position;'
         + 'attribute vec2 a_texcoord;'
         + 'uniform mat4 u_matrix;'
+        + 'uniform mat4 u_projectionMatrix;'
+        + 'uniform mat4 u_viewMatrix;'
         + 'uniform float u_z;'
         + 'varying vec2 v_texcoord;'
         + 'void main() {'
-          + 'gl_Position = u_matrix * vec4(a_position.xy, u_z, 1);'
+          + 'gl_Position = u_projectionMatrix * u_viewMatrix * u_matrix * vec4(a_position.xy, u_z, 1);'
           + 'v_texcoord = a_texcoord;'
         + '}',
-    vars: ['a_position', 'a_texcoord', 'u_matrix', 'u_z'],
+    vars: ['a_position', 'a_texcoord', 'u_matrix', 'u_z', 'u_projectionMatrix', 'u_viewMatrix'],
   },
   morph4: {
     src: `
@@ -79,6 +91,8 @@ attribute vec2 a_pos1;
 attribute vec2 a_pos2;
 attribute vec2 a_pos3;
 uniform mat4 u_matrix;
+uniform mat4 u_projectionMatrix;
+uniform mat4 u_viewMatrix;
 uniform float u_percent;
 uniform int u_from;
 uniform int u_to;
@@ -117,7 +131,7 @@ void main() {
     let aPosArray = `vec2 fromPos = a_pos0;\n  vec2 toPos = a_pos1;\n  vec2 positions[${num}];\n`;
     let aColDefs = '';
     let aColArray = '';
-    const vars = ['u_matrix', 'u_percent'];
+    const vars = ['u_matrix', 'u_percent', 'u_projectionMatrix', 'u_viewMatrix'];
     if (vertexColor) {
       aColArray = `vec4 fromCol = a_col0;\n vec4 toCol = a_col1;\n vec4 colors[${num}];`;
     }
@@ -148,6 +162,8 @@ void main() {
 ${aPosDefs}
 ${aColDefs}
 uniform mat4 u_matrix;
+uniform mat4 u_projectionMatrix;
+uniform mat4 u_viewMatrix;
 uniform float u_percent;
 ${uniforms}
 
@@ -171,7 +187,7 @@ void main() {
   }
 
   vec2 newPosition = (toPos - fromPos) * u_percent + fromPos;
-  gl_Position = u_matrix * vec4(newPosition.xy, 0, 1);
+  gl_Position = u_projectionMatrix * u_viewMatrix * u_matrix * vec4(newPosition.xy, 0, 1);
   ${setVarying}
 }
 `;

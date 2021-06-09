@@ -3,6 +3,7 @@
 import {
   Point, // Rect, getBoundingRect,
 } from '../../tools/g2';
+import type { Type3DMatrix } from '../../tools/g2';
 // import type {
 //   TypeParsablePoint
 // } from '../../tools/g2';
@@ -127,6 +128,8 @@ class DrawingObject {
 
   /* eslint-disable class-methods-use-this, no-unused-vars */
   drawWithTransformMatrix(
+    projection: Type3DMatrix,
+    view: Type3DMatrix,
     transformMatrix: Array<number>,
     color: TypeColor,
     // canvasIndex: number,

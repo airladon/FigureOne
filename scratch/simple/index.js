@@ -42,10 +42,11 @@ const loaded = () => {
   figure.add({
     make: 'text',
     text: 'a',
-    position: [0.5, 0, -0.2],
+    xAlign: 'center',
+    yAlign: 'top',
+    position: [0.5, 0, 0.1],
   });
-  const v = 0.5;
-  const h = 0.05;
+
   const col = (c, numVertices) => {
     let out = [];
     for (let i = 0; i < numVertices; i += 1) {
@@ -183,7 +184,7 @@ const loaded = () => {
   // b.drawingObject.uniforms.u_reverseLightDirection.value = [0, 0, 1];
   m.animations.new()
     .delay(1)
-    .morph({ start: 0, target: 1, duration: 2 })
+    .morph({ start: 0, target: 1, duration: 6 })
     .start();
 
   figure.camera = new Fig.Transform([['r', -0.2, 0, 0]]);

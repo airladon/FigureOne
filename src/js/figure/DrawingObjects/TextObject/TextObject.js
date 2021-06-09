@@ -5,7 +5,7 @@ import * as m3 from '../../../tools/m3';
 import {
   Point, getPoint, Rect, getBoundingBorder, getBorder, isBuffer,
 } from '../../../tools/g2';
-import type { TypeParsablePoint, TypeParsableBuffer } from '../../../tools/g2';
+import type { TypeParsablePoint, TypeParsableBuffer, Type3DMatrix } from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
 import DrawContext2D from '../../DrawContext2D';
 import { joinObjects, splitString } from '../../../tools/tools';
@@ -696,6 +696,8 @@ class TextObjectBase extends DrawingObject {
   //   - scaledPixelSpace
   //
   drawWithTransformMatrix(
+    projectionMatrix: Type3DMatrix,
+    viewMatrix: Type3DMatrix,
     transformMatrix: Array<number>,
     color: TypeColor = [1, 1, 1, 1],
     // contextIndex: number = 0,
@@ -738,11 +740,16 @@ class TextObjectBase extends DrawingObject {
       0, 1, 0, 0,
       0, 0, 0, 0,
       0, 0, 0, 1,
-    ], transformMatrix);
+    ], m3.mul(m3.mul(projectionMatrix, viewMatrix), transformMatrix));
+    // const tm = [
+    //   tma[0], tma[1], tma[3],
+    //   tma[4], tma[5], tma[7],
+    //   tma[8], tma[9], tma[11],
+    // ];
     const tm = [
-      tma[0], tma[1], tma[3],
-      tma[4], tma[5], tma[7],
-      tma[8], tma[9], tma[11],
+      1, 0, tma[3],
+      0, 1, tma[7],
+      0, 0, 1,
     ];
     // console.log(tm)
     // console.log(m3.mul([

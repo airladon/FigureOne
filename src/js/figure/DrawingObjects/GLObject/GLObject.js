@@ -554,6 +554,8 @@ class GLObject extends DrawingObject {
   }
 
   drawWithTransformMatrix(
+    projectionMatrix: Type3DMatrix,
+    viewMatrix: Type3DMatrix,
     transformMatrix: Array<number>,
     color: TypeColor,
     numDrawVertices: number = this.numVertices,
@@ -586,6 +588,18 @@ class GLObject extends DrawingObject {
       locations.u_matrix,
       false,
       m3.transpose(transformMatrix),
+    );
+
+    gl.uniformMatrix4fv(
+      locations.u_projectionMatrix,
+      false,
+      m3.transpose(projectionMatrix),
+    );
+
+    gl.uniformMatrix4fv(
+      locations.u_viewMatrix,
+      false,
+      m3.transpose(viewMatrix),
     );
 
     Object.keys(this.uniforms).forEach((uniformName) => {
