@@ -113,9 +113,9 @@ const loaded = () => {
     }
     return [vertices, norms];
   };
-  const [rx, nx] = makeRod(0.5, 0.01, 10, 0, Math.PI / 2, 0);
+  const [rx, nx] = makeRod(0.5, 0.01, 20, 0, Math.PI / 2, 0);
   const [ry, ny] = makeRod(0.5, 0.005, 10, -Math.PI / 2, 0, 0);
-  const [rz, nz] = makeRod(0.5, 0.02, 10, 0, 0, 0);
+  const [rz, nz] = makeRod(0.5, 0.02, 30, 0, 0, 0);
   // const [ry, ny] = makeRod(0.5, 0.03, 10, Math.PI / 2, Math.PI / 2);
   // const [rz, nz] = makeRod(0.5, 0.03, 10, 0, 0);
   const b = figure.add({
@@ -178,7 +178,7 @@ const loaded = () => {
     transform: [['r', 0, 0, 0], ['t', 0, 0, 0]],
   });
 
-  const l = new Fig.Point(1, 0, 0).normalize();
+  const l = new Fig.Point(1, 1, 1).normalize();
   b.custom.updateUniform('u_reverseLightDirection', [l.x, l.y, l.z]);
   b.custom.updateUniform('u_diffuseLight', 0.4);
   // b.drawingObject.uniforms.u_reverseLightDirection.value = [0, 0, 1];
