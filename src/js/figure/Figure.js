@@ -2117,7 +2117,7 @@ class Figure {
     const projection = this.spaceTransforms.figureToGL;
     // Math.PI / 3 * this.timeKeeper.now() / 20000
     // const camera = new Transform().rotate(0, 0, 0);
-    const projectionView = new Transform().custom(m3.mul(projection.mat, m3.inverse(this.camera.mat)));
+    const projectionView = new Transform().custom(m3.inverse(this.camera.mat)).custom(projection.mat);
     this.elements.draw(now, [projectionView], 1, canvasIndex);
     // this.elements.draw(now, [this.spaceTransforms.figureToGL], 1, canvasIndex);
     // this.elements.draw(now, [

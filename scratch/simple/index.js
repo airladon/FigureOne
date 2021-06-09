@@ -119,7 +119,7 @@ const loaded = () => {
   // const [rz, nz] = makeRod(0.5, 0.03, 10, 0, 0);
   const b = figure.add({
     make: 'gl',
-    color: [1, 0, 0, 1],
+    color: [1, 0, 1, 1],
     vertexShader: 'simple3DLight',
     fragShader: 'simpleLight',
     vertices3: {
@@ -188,7 +188,7 @@ const loaded = () => {
 
   figure.camera = new Fig.Transform([['r', -0.2, 0, 0]]);
   figure.animations.new()
-    .camera({ target: [['r', -0.2, -Math.PI * 2, 0]], duration: 5 })
+    .camera({ target: [['r', -0.2, -Math.PI * 1.2, 0]], duration: 6 })
     .start();
   // m.animations.new()
   //   .rotation({ target: [Math.PI / 3, Math.PI / 3, 0], duration: 2 })
