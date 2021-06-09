@@ -265,16 +265,16 @@ const fragment = {
 precision mediump float;
 uniform vec4 u_color;
 varying vec3 v_norm;
-uniform vec3 u_reverseLightDirection;
+uniform vec3 u_directionalLight;
 uniform float u_minLight;
 void main() {
   vec3 normal = normalize(v_norm);
-  float light = dot(normal, u_reverseLightDirection);
+  float light = dot(normal, u_directionalLight);
   gl_FragColor = u_color;
   gl_FragColor.rgb *= gl_FragColor.a;
   gl_FragColor.rgb *= max((light + 1.0) / 2.0, u_minLight);
 }`,
-    vars: ['u_color', 'u_reverseLightDirection', 'u_minLight'],
+    vars: ['u_color', 'u_directionalLight', 'u_minLight'],
   },
   vertexColor: {
     src:

@@ -5,7 +5,7 @@ import * as m3 from '../../../tools/m3';
 import type { OBJ_DrawGlobals } from '../../Figure';
 import type { Type3DMatrix } from '../../../tools/m3';
 import WebGLInstance from '../../webgl/webgl';
-import { Rect } from '../../../tools/g2';
+import { Rect, getPoint } from '../../../tools/g2';
 // import type { TypeParsablePoint } from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
 // import type { CPY_Step } from '../../geometries/copy/copy';
@@ -584,6 +584,20 @@ class GLObject extends DrawingObject {
         size, type, normalize, stride, offset,
       );
     });
+
+    if (locations.u_directionalLight != null) {
+      gl.uniform3fv(
+        locations.u_directionalLight,
+        getPoint(drawGlobals.light.directional).normalize().toArray(),
+      );
+    }
+
+    if (locations.u_minLight != null) {
+      gl.uniform1f(
+        locations.u_minLight,
+        drawGlobals.light.min,
+      );
+    }
 
     if (locations.u_worldInverseTranspose != null) {  // $FlowFixMe
       gl.uniformMatrix4fv(

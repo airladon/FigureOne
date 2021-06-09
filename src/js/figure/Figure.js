@@ -92,7 +92,7 @@ export type OBJ_DrawGlobals = {
   viewProjectionMatrix: Type3DMatrix,
   light: {
     directional: TypeParsablePoint,
-    diffuse: number,
+    min: number,
     point: TypeParsablePoint,
   }
 }
@@ -377,6 +377,11 @@ class Figure {
   viewMatrix: Type3DMatrix;
   projection: OBJ_Projection;
   projectionMatrix: Type3DMatrix;
+  light: {
+    directional: TypeParsablePoint,
+    min: number,
+    point: TypeParsablePoint,
+  };
 
   // frameRateInformation: string;
   // frameRateHistory: Array<number>;
@@ -436,6 +441,11 @@ class Figure {
       type: 'orthographic',
       fieldOfView: 47 * Math.PI / 180,
       aspectRatio: 1,
+    };
+    this.light = {
+      directional: [1, 1, 1],
+      min: 0.4,
+      point: [10, 10, 10],
     };
     this.updateProjection({});
     // this.oldScrollY = 0;
@@ -2228,6 +2238,7 @@ class Figure {
         projectionMatrix: this.projectionMatrix,
         viewMatrix: this.viewMatrix,
         viewProjectionMatrix: m3.mul(this.projectionMatrix, this.viewMatrix),
+        light: this.light,
       },
       [new Transform()],
       1,

@@ -163,27 +163,29 @@ const loaded = () => {
         ],
       },
     ],
-    uniforms: [
-      {
-        name: 'u_reverseLightDirection',
-        length: 3,
-        type: 'FLOAT_VECTOR',
-      },
-      {
-        name: 'u_minLight',
-        length: 1,
-        type: 'FLOAT',
-      },
-    ],
+    // uniforms: [
+    //   {
+    //     name: 'u_reverseLightDirection',
+    //     length: 3,
+    //     type: 'FLOAT_VECTOR',
+    //   },
+    //   {
+    //     name: 'u_minLight',
+    //     length: 1,
+    //     type: 'FLOAT',
+    //   },
+    // ],
     transform: [['r', 0, 0, 0], ['t', 0, 0, 0]],
   });
 
   // Directional Light * 2
   // Point Light * 2
 
-  const l = new Fig.Point(1, 1, 1).normalize();
-  b.custom.updateUniform('u_reverseLightDirection', [l.x, l.y, l.z]);
-  b.custom.updateUniform('u_minLight', 0.4);
+  // const l = new Fig.Point(1, 1, 1).normalize();
+  // b.custom.updateUniform('u_reverseLightDirection', [l.x, l.y, l.z]);
+  // b.custom.updateUniform('u_minLight', 0.4);
+  figure.light.directional = [1, 1, 1];
+  figure.light.min = 0.4;
   // b.drawingObject.uniforms.u_reverseLightDirection.value = [0, 0, 1];
   m.animations.new()
     .delay(1)
