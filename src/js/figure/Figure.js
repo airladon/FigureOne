@@ -8,7 +8,7 @@ import {
   getPoint, getTransform,
 } from '../tools/g2';
 import * as m3 from '../tools/m3';
-import type { TypeParsableRect, TypeParsablePoint } from '../tools/g2';
+import type { TypeParsableRect, TypeParsablePoint, Type3DMatrix } from '../tools/g2';
 // import * as math from '../tools/math';
 import { round } from '../tools/math';
 import { FunctionMap } from '../tools/FunctionMap';
@@ -45,6 +45,34 @@ import type { COL_SlideNavigator } from './FigureCollections/SlideNavigator';
 
 const FIGURE1DEBUG = false;
 
+export type OBJ_Projection = {
+  type: 'orthographic' | 'perspective',
+  // orthographic
+  left: number,
+  right: number,
+  bottom: number,
+  top: number,
+
+  // perspective
+  aspectRatio: number,
+  fieldOfView: number,
+
+  // both
+  near: number,
+  far: number,
+};
+
+export type OBJ_ProjectionOptions = {
+  type?: 'orthographic' | 'perspective',
+  left?: number,
+  right?: number,
+  bottom?: number,
+  top?: number,
+  aspectRatio?: number,
+  fieldOfView?: number,
+  near?: number,
+  far?: number,
+};
 
 /**
  * Space Transforms
@@ -321,8 +349,11 @@ class Figure {
     history: Array<Array<number>>,
     num: number,
   };
+
   cameraTransform: Transform;
   viewMatrix: Type3DMatrix;
+  projection: OBJ_Projection;
+  projectionMatrix: Type3DMatrix;
   // frameRateInformation: string;
   // frameRateHistory: Array<number>;
   // frameRate
@@ -370,6 +401,18 @@ class Figure {
     this.nextDrawTimerStart = 0;
     this.nextDrawTimerDuration = 0;
     this.updateCamera(new Transform().rotate(0).translate(0, 0));
+    this.projection = {
+      left: -1,
+      right: 1,
+      bottom: -1,
+      top: 1,
+      near: -1,
+      far: 1,
+      type: 'orthographic',
+      fieldOfView: 47 * Math.PI / 180,
+      aspectRatio: 1,
+    };
+    this.updateProjection({});
     // this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
@@ -2059,6 +2102,25 @@ class Figure {
     this.viewMatrix = m3.inverse(this.cameraTransform.mat);
   }
 
+  updateProjection(options: OBJ_ProjectionOptions) {
+    this.projection = joinObjects({}, this.projection, options);
+    if (this.projection.type === 'orthographic') {
+      const {
+        left, right, near, far, bottom, top,
+      } = this.projection;
+      this.projectionMatrix = m3.orthographic(
+        left, right, bottom, top, near, far,
+      );
+    } else if (this.projection.type === 'perspective') {
+      const {
+        fieldOfView, aspectRatio, near, far,
+      } = this.projection;
+      this.projectionMatrix = m3.perspective(
+        fieldOfView, aspectRatio, near, far,
+      );
+    }
+  }
+
   draw(nowIn: number, canvasIndex: number = 0): void {
     let timer;
     // $FlowFixMe
@@ -2120,13 +2182,12 @@ class Figure {
     // $FlowFixMe
     if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('setupDraw'); }
 
-    const projection = this.spaceTransforms.figureToGL;
-    console.log(projection)
+    // const projection = this.spaceTransforms.figureToGL;
     // Math.PI / 3 * this.timeKeeper.now() / 20000
     // const camera = new Transform().rotate(0, 0, 0);
     this.elements.draw(
       now,
-      projection.mat,
+      this.projectionMatrix,
       this.viewMatrix,
       [new Transform()],
       1,

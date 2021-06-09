@@ -178,6 +178,30 @@ function transform(m: Type3DMatrix, px: number, py: number, pz: number): [number
   ];
 }
 
+function orthographic(
+  left: number, right: number, bottom: number, top: number, near: number, far: number,
+) {
+  return [
+    2 / (right - left), 0, 0, (left + right) / (left - right),
+    0, 2 / (top - bottom), 0, (bottom + top) / (bottom - top),
+    0, 0, 2 / (near - far), (near + far) / (near - far),
+    0, 0, 0, 1,
+  ];
+}
+
+function perspective(
+  fieldOfView: number, aspectRatio: number, near: number, far: number,
+) {
+  const f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfView);
+  const rangeInv = 1.0 / (near - far);
+  return [
+    f / aspectRatio, 0, 0, 0,
+    0, f, 0, 0,
+    0, 0, (near + far) * rangeInv, near * far * rangeInv * 2,
+    0, 0, -1, 0,
+  ];
+}
+
 
 function inverse3(m: Array<number>) {
   const det = (m[0] * ((m[4] * m[8]) - (m[7] * m[5]))) - // eslint-disable-line
@@ -411,6 +435,8 @@ export {
   rotationMatrixVector,
   rotationMatrixUnitVector,
   inverse,
+  orthographic,
+  perspective,
   // lu,
   // lupInvert,
 };

@@ -114,8 +114,8 @@ const loaded = () => {
     return [vertices, norms];
   };
   const [rx, nx] = makeRod(0.5, 0.01, 10, 0, Math.PI / 2, 0);
-  const [ry, ny] = makeRod(0.5, 0.01, 10, -Math.PI / 2, 0, 0);
-  const [rz, nz] = makeRod(0.5, 0.01, 10, 0, 0, 0);
+  const [ry, ny] = makeRod(0.5, 0.005, 10, -Math.PI / 2, 0, 0);
+  const [rz, nz] = makeRod(0.5, 0.02, 10, 0, 0, 0);
   // const [ry, ny] = makeRod(0.5, 0.03, 10, Math.PI / 2, Math.PI / 2);
   // const [rz, nz] = makeRod(0.5, 0.03, 10, 0, 0);
   const b = figure.add({
@@ -175,7 +175,7 @@ const loaded = () => {
         type: 'FLOAT',
       },
     ],
-    transform: [['t', 0, 0, 0.1]],
+    transform: [['r', 0, 0, 0], ['t', 0, 0, 0]],
   });
 
   const l = new Fig.Point(-1, 0, 0).normalize();
@@ -187,14 +187,21 @@ const loaded = () => {
     .morph({ start: 0, target: 1, duration: 6 })
     .start();
 
-  figure.cameraTransform = new Fig.Transform([['r', -0.2, 0, 0], ['t', 0, 0, 0]]);
-  figure.animations.new()
-    // .camera({ target: [['r', -0.2, -Math.PI * 1.2, 0], ['t', 0, 0, -1]], duration: 6 })
-    .camera({ target: [['r', 0, 0, 0], ['t', 0, 0, -1]], duration: 6 })
-    .start();
-  // m.animations.new()
-  //   .rotation({ target: [Math.PI / 3, Math.PI / 3, 0], duration: 2 })
+  // figure.cameraTransform = new Fig.Transform([['r', -0.2, 0, 0], ['t', 0, 0, 0]]);
+  // figure.animations.new()
+  //   .camera({ target: [['r', -0.2, -Math.PI * 1.2, 0], ['t', 0, 0, 0]], duration: 6 })
+  //   // .camera({ target: [['r', 0, 0, 0], ['t', 0, 0, -1]], duration: 6 })
   //   .start();
+  figure.elements.transform = new Fig.Transform().translate(0, 0).rotate(0).translate(0, 0, -1);
+  b.animations.new()
+    .rotation({ target: [0, Math.PI * 4.9, 0], direction: 1, duration: 10 })
+    .start();
+  // figure.elements.animations.new()
+  //   // .rotation({ target: [0, Math.PI * 0.9, 0], duration: 5 })
+  //   .transform({ target: [['t', 0, 0, 2], ['r', 0, Math.PI * 0.9, 0], ['t', 0, 0, -2]], duration: 5})
+  //   .start();
+  figure.updateProjection({ type: 'perspective', near: 0.1, far: 10, aspectRatio: 1, fieldOfView: Math.PI * 0.5 });
+  figure.updateCamera(new Fig.Transform().rotate(0).translate(0, 0, 1));
 };
 
 micImage.onload = loaded.bind(this);
