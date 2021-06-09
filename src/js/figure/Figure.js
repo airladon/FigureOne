@@ -80,6 +80,23 @@ export type OBJ_Camera = {
   up: TypeParsablePoint,
 };
 
+export type OBJ_CameraOptions = {
+  position?: TypeParsablePoint,
+  lookAt?: TypeParsablePoint,
+  up?: TypeParsablePoint,
+};
+
+export type OBJ_DrawGlobals = {
+  projectionMatrix: Type3DMatrix,
+  viewMatrix: Type3DMatrix,
+  viewProjectionMatrix: Type3DMatrix,
+  light: {
+    directional: TypeParsablePoint,
+    diffuse: number,
+    point: TypeParsablePoint,
+  }
+}
+
 /**
  * Space Transforms
  *
@@ -360,6 +377,7 @@ class Figure {
   viewMatrix: Type3DMatrix;
   projection: OBJ_Projection;
   projectionMatrix: Type3DMatrix;
+
   // frameRateInformation: string;
   // frameRateHistory: Array<number>;
   // frameRate
@@ -2206,8 +2224,11 @@ class Figure {
     // const camera = new Transform().rotate(0, 0, 0);
     this.elements.draw(
       now,
-      this.projectionMatrix,
-      this.viewMatrix,
+      {
+        projectionMatrix: this.projectionMatrix,
+        viewMatrix: this.viewMatrix,
+        viewProjectionMatrix: m3.mul(this.projectionMatrix, this.viewMatrix),
+      },
       [new Transform()],
       1,
       canvasIndex,

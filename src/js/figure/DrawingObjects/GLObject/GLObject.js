@@ -2,6 +2,8 @@
 
 // import * as g2 from '../g2';
 import * as m3 from '../../../tools/m3';
+import type { OBJ_DrawGlobals } from '../../Figure';
+import type { Type3DMatrix } from '../../../tools/m3';
 import WebGLInstance from '../../webgl/webgl';
 import { Rect } from '../../../tools/g2';
 // import type { TypeParsablePoint } from '../../../tools/g2';
@@ -554,9 +556,8 @@ class GLObject extends DrawingObject {
   }
 
   drawWithTransformMatrix(
-    projectionMatrix: Type3DMatrix,
-    viewMatrix: Type3DMatrix,
-    transformMatrix: Array<number>,
+    drawGlobals: OBJ_DrawGlobals,
+    worldMatrix: Type3DMatrix,
     color: TypeColor,
     numDrawVertices: number = this.numVertices,
   ) {
@@ -584,31 +585,45 @@ class GLObject extends DrawingObject {
       );
     });
 
-    if (locations.u_worldInverseTranspose != null) {
+    if (locations.u_worldInverseTranspose != null) {  // $FlowFixMe
       gl.uniformMatrix4fv(
         locations.u_worldInverseTranspose,
         false,
-        m3.inverse(transformMatrix),
+        m3.inverse(worldMatrix),
       );
     }
 
-    gl.uniformMatrix4fv(
-      locations.u_matrix,
-      false,
-      m3.transpose(transformMatrix),
-    );
+    if (locations.u_worldViewProjectionMatrix != null) {  // $FlowFixMe
+      gl.uniformMatrix4fv(
+        locations.u_worldViewProjectionMatrix,
+        false,
+        m3.transpose(m3.mul(drawGlobals.viewProjectionMatrix, worldMatrix)),
+      );
+    }
 
-    gl.uniformMatrix4fv(
-      locations.u_projectionMatrix,
-      false,
-      m3.transpose(projectionMatrix),
-    );
+    if (locations.u_matrix != null) {  // $FlowFixMe
+      gl.uniformMatrix4fv(
+        locations.u_matrix,
+        false,
+        m3.transpose(worldMatrix),
+      );
+    }
 
-    gl.uniformMatrix4fv(
-      locations.u_viewMatrix,
-      false,
-      m3.transpose(viewMatrix),
-    );
+    if (locations.u_projectionMatrix != null) {  // $FlowFixMe
+      gl.uniformMatrix4fv(
+        locations.u_projectionMatrix,
+        false,
+        m3.transpose(drawGlobals.projectionMatrix),
+      );
+    }
+
+    if (locations.u_viewMatrix != null) {  // $FlowFixMe
+      gl.uniformMatrix4fv(
+        locations.u_viewMatrix,
+        false,
+        m3.transpose(drawGlobals.viewMatrix),
+      );
+    }
 
     Object.keys(this.uniforms).forEach((uniformName) => {
       const { method } = this.uniforms[uniformName];
@@ -654,5 +669,6 @@ class GLObject extends DrawingObject {
     }
   }
 }
+
 
 export default GLObject;

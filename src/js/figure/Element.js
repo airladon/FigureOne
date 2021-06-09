@@ -3440,8 +3440,9 @@ class FigureElementPrimitive extends FigureElement {
 
   draw(
     now: number,
-    projection: Type3DMatrix,
-    view: Type3DMatrix,
+    drawGlobals: OBJ_DrawGlobals,
+    // projection: Type3DMatrix,
+    // view: Type3DMatrix,
     parentTransform: Array<Transform> = [new Transform()],
     parentOpacity: number = 1,
     // canvasIndex: number = 0,
@@ -3503,7 +3504,7 @@ class FigureElementPrimitive extends FigureElement {
       if (pointCount > 0) {
         this.drawTransforms.forEach((t) => {
           this.drawingObject.drawWithTransformMatrix(
-            projection, view, t.matrix(), colorToUse, pointCount,
+            drawGlobals, t.matrix(), colorToUse, pointCount,
           );
         });
       }  // $FlowFixMe
@@ -4157,8 +4158,7 @@ class FigureElementCollection extends FigureElement {
 
   draw(
     now: number,
-    projection: Type3DMatrix,
-    view: Type3DMatrix,
+    drawGlobals: OBJ_DrawGlobals,
     parentTransform: Array<Transform> = [new Transform()],
     parentOpacity: number = 1,
     canvasIndex: number = 0,
@@ -4196,7 +4196,7 @@ class FigureElementCollection extends FigureElement {
       // if (FIGURE1DEBUG) { drawTimer = new PerformanceTimer(); }
       for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
         this.elements[this.drawOrder[i]].draw(
-          now, projection, view, this.drawTransforms, opacityToUse, canvasIndex,
+          now, drawGlobals, this.drawTransforms, opacityToUse, canvasIndex,
         ); // $FlowFixMe
         // if (FIGURE1DEBUG) { drawTimer.stamp(this.elements[this.drawOrder[i]].name); }
       } // $FlowFixMe

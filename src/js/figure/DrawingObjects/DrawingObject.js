@@ -3,7 +3,8 @@
 import {
   Point, // Rect, getBoundingRect,
 } from '../../tools/g2';
-import type { Type3DMatrix } from '../../tools/g2';
+import type { Type3DMatrix } from '../../tools/m3';
+import type { OBJ_DrawGlobals } from '../Figure';
 // import type {
 //   TypeParsablePoint
 // } from '../../tools/g2';
@@ -128,9 +129,8 @@ class DrawingObject {
 
   /* eslint-disable class-methods-use-this, no-unused-vars */
   drawWithTransformMatrix(
-    projection: Type3DMatrix,
-    view: Type3DMatrix,
-    transformMatrix: Array<number>,
+    drawGlobals: OBJ_DrawGlobals,
+    transformMatrix: Type3DMatrix,
     color: TypeColor,
     // canvasIndex: number,
     numPoints: number,

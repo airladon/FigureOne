@@ -5,7 +5,9 @@ import * as m3 from '../../../tools/m3';
 import {
   Point, getPoint, Rect, getBoundingBorder, getBorder, isBuffer,
 } from '../../../tools/g2';
-import type { TypeParsablePoint, TypeParsableBuffer, Type3DMatrix } from '../../../tools/g2';
+import type { TypeParsablePoint, TypeParsableBuffer } from '../../../tools/g2';
+import type { OBJ_DrawGlobals } from '../../Figure';
+import type { Type3DMatrix } from '../../../tools/m3';
 import DrawingObject from '../DrawingObject';
 import DrawContext2D from '../../DrawContext2D';
 import { joinObjects, splitString } from '../../../tools/tools';
@@ -696,9 +698,8 @@ class TextObjectBase extends DrawingObject {
   //   - scaledPixelSpace
   //
   drawWithTransformMatrix(
-    projectionMatrix: Type3DMatrix,
-    viewMatrix: Type3DMatrix,
-    transformMatrix: Array<number>,
+    drawGlobals: OBJ_DrawGlobals,
+    worldMatrix: Type3DMatrix,
     color: TypeColor = [1, 1, 1, 1],
     // contextIndex: number = 0,
   ) {
@@ -729,34 +730,22 @@ class TextObjectBase extends DrawingObject {
       0, 0, 1,
     ];
 
-    const modelViewProjection = m3.mul(m3.mul(projectionMatrix, viewMatrix), transformMatrix);
-    const p = m3.transformVector(modelViewProjection, [0, 0, 0, 1]);
-    // const p = m3.
-    // const elementToPixelMatrix = [
-    //   sx, 0, (p[0] + 1) / 2 * drawContext2D.canvas.offsetWidth,
-    //   0, sy, (p[1] + 1) / 2 * drawContext2D.canvas.offsetHeight,
-    //   0, 0, 1,
-    // ];
+    const worldViewProjectionMatrix = m3.mul(drawGlobals.viewProjectionMatrix, worldMatrix);
 
-    // const tm = [
-    //   1, 0, p[0],
-    //   0, 1, p[1],
-    //   0, 0, 1,
-    // ];
-
+    const p = m3.transformVector(worldViewProjectionMatrix, [0, 0, 0, 1]);
 
     // The incoming transform matrix transforms elementSpace to glSpace.
-    // Modify the incoming transformMatrix to be compatible with
+    // Modify the incoming worldMatrix to be compatible with
     // pixel space
     //   - Flip the y translation
     //   - Reverse rotation
-    // const tm = transformMatrix;
+    // const tm = worldMatrix;
     const tma = m3.mul([
       1, 0, 0, 0,
       0, 1, 0, 0,
       0, 0, 1, 0,
       0, 0, 0, 1,
-    ], m3.mul(m3.mul(projectionMatrix, viewMatrix), transformMatrix));
+    ], worldViewProjectionMatrix);
     // // Use this to fully transform text
     // const tm = [
     //   tma[0] / p[3], tma[1] / p[3], tma[3] / p[3],

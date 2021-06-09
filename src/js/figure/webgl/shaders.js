@@ -29,15 +29,13 @@ const vertex = {
 attribute vec3 a_position;
 attribute vec3 a_norm;
 varying vec3 v_norm;
-uniform mat4 u_matrix;
-uniform mat4 u_projectionMatrix;
-uniform mat4 u_viewMatrix;
+uniform mat4 u_worldViewProjectionMatrix;
 uniform mat4 u_worldInverseTranspose;
 void main() {
-  gl_Position = u_projectionMatrix * u_viewMatrix * u_matrix * vec4(a_position.xyz, 1);
+  gl_Position = u_worldViewProjectionMatrix * vec4(a_position.xyz, 1);
   v_norm = mat3(u_worldInverseTranspose) * a_norm;
 }`,
-    vars: ['a_position', 'u_matrix', 'a_norm', 'u_projectionMatrix', 'u_viewMatrix', 'u_worldInverseTranspose'],
+    vars: ['a_position', 'a_norm', 'u_worldViewProjectionMatrix', 'u_worldInverseTranspose'],
   },
   vertexColor: {
     src:

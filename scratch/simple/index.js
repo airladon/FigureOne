@@ -178,6 +178,9 @@ const loaded = () => {
     transform: [['r', 0, 0, 0], ['t', 0, 0, 0]],
   });
 
+  // Directional Light * 2
+  // Point Light * 2
+
   const l = new Fig.Point(1, 1, 1).normalize();
   b.custom.updateUniform('u_reverseLightDirection', [l.x, l.y, l.z]);
   b.custom.updateUniform('u_diffuseLight', 0.4);
