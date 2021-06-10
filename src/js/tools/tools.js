@@ -341,6 +341,9 @@ class UniqueIdGenerator {
   seeds: {
     [seedString: string]: number,
   };
+  colorSeeds: {
+    [seedString: string]: number,
+  };
 
   // All slides, events and states are relative to 0, where 0 is the start of a recording.
   // Slides, events and states do not have to have a 0 time,
@@ -360,6 +363,7 @@ class UniqueIdGenerator {
 
   initialize() {
     this.seeds = {};
+    this.colorSeeds = {};
   }
 
   getId(seed: string) {
@@ -370,25 +374,29 @@ class UniqueIdGenerator {
     this.seeds[seed] += 1;
     return id;
   }
+
+  getColor(seed: string) {
+    if (this.colorSeeds[seed] == null) {
+      this.colorSeeds[seed] = 1;
+    }
+    const id = this.colorSeeds[seed];
+    const color = [
+      ((id >> 0) & 0xFF) / 0xFF,
+      ((id >> 8) & 0xFF) / 0xFF,
+      ((id >> 16) & 0xFF) / 0xFF,
+      ((id >> 24) & 0xFF) / 0xFF,
+    ];
+    this.colorSeeds[seed] += 1;
+    return color;
+  }
 }
 
 function generateUniqueId(seed: string = '') {
   return new UniqueIdGenerator().getId(seed);
-  // const randomString = s => `${s}${Math.floor(Math.random() * 1000000)}`;
-  // let seedToUse = seed;
-  // if (seedToUse.length === 0) {
-  //   seedToUse = 'id_random_';
-  // }
-  // let idExists = true;
-  // let newId = randomString(seedToUse);
-  // while (idExists) {
-  //   newId = randomString(seedToUse);
-  //   const element = document.getElementById(newId);
-  //   if (element == null) {
-  //     idExists = false;
-  //   }
-  // }
-  // return newId;
+}
+
+function generateUniqueColor(seed: string = '') {
+  return new UniqueIdGenerator().getColor(seed);
 }
 
 function isTouchDevice() {
@@ -1441,5 +1449,6 @@ export {
   NotificationManager,
   getFromObject,
   splitString, PerformanceTimer,
+  generateUniqueColor,
 };
 

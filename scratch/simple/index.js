@@ -113,9 +113,9 @@ const loaded = () => {
     }
     return [vertices, norms];
   };
-  const [rx, nx] = makeRod(0.5, 0.05, 10, 0, Math.PI / 2, 0);
-  const [ry, ny] = makeRod(0.5, 0.05, 10, -Math.PI / 2, 0, 0);
-  const [rz, nz] = makeRod(0.5, 0.05, 10, 0, 0, 0);
+  const [rx, nx] = makeRod(0.5, 0.05, 50, 0, Math.PI / 2, 0);
+  const [ry, ny] = makeRod(0.5, 0.05, 50, -Math.PI / 2, 0, 0);
+  const [rz, nz] = makeRod(0.5, 0.05, 50, 0, 0, 0);
   const cx = col([1, 0, 0, 1], rx.length / 3);
   const cy = col([0, 1, 0, 1], ry.length / 3);
   const cz = col([0, 0, 1, 1], rz.length / 3);
@@ -170,6 +170,8 @@ const loaded = () => {
   figure.elements.animations.new()
     .rotation({ target: [0, Math.PI * 0.9, 0], duration: 10 })
     .start();
+
+    b.setTouchable();
 
   figure.updateProjection({ type: 'perspective', near: 0.1, far: 3, aspectRatio: 1, fieldOfView: Math.PI * 0.4 });
   // figure.updateProjection({ near: 0.1, far: 4 });

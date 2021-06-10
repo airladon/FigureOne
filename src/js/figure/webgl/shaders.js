@@ -192,6 +192,15 @@ const vertex = {
         + '}',
     vars: ['a_position', 'u_worldMatrix', 'u_projectionMatrix', 'u_viewMatrix'],
   },
+  selector: {
+    src: `
+attribute vec4 a_position; 
+uniform mat4 u_worldViewProjectionMatrix;
+void main() {
+  gl_Position = u_worldViewProjectionMatrix * a_position;
+}`,
+    vars: ['a_position', 'u_worldViewProjectionMatrix'],
+  },
   noLight: {
     src:
         'attribute vec3 a_position;'
@@ -491,6 +500,16 @@ void main() {
 }`,
     vars: ['u_color', 'u_minLight'],
   },
+  selector: {
+    src: `
+precision mediump float;
+uniform vec4 u_color;
+void main() {
+  // gl_FragColor = vec4(1, 0, 0, 1);
+  gl_FragColor = u_color;
+}`,
+    vars: ['u_color'],
+  },
   vertexColor: {
     src:
       'precision mediump float;'
@@ -589,7 +608,9 @@ const getShaders = (
   //   fragmentSource = fName.src;
   //   vars.push(...fName.vars);
   // }
-  // console.log(vertexSource, vars)
+  console.log(vName, fName)
+  console.log(vertexSource)
+  console.log(fragmentSource, vars)
   return {
     vertexSource,
     fragmentSource,

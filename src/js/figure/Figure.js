@@ -1644,6 +1644,7 @@ class Figure {
 
   touchDownHandlerClient(clientPoint: Point, eventFromPlayback: boolean = false) {
     const pixelP = this.clientToPixel(clientPoint);
+    this.getSelectionPixel(pixelP.x, pixelP.y);
     const figurePoint = pixelP.transformBy(this.spaceTransforms.pixelToFigure.matrix());
     return this.touchDownHandler(figurePoint, eventFromPlayback);
   }
@@ -2063,6 +2064,9 @@ class Figure {
 
   clearContext(canvasIndex: number = 0) {
     if (canvasIndex === 0) {
+      const { gl } = this.webglLow;
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
       this.webglLow.gl.clearColor(
         this.backgroundColor[0],
         this.backgroundColor[1],
@@ -2075,6 +2079,35 @@ class Figure {
       this.webglOffscreen.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
     }
     this.elements.clear(canvasIndex);
+  }
+
+  setupForSelectionDraw(canvasIndex: number = 0) {
+    if (canvasIndex === 0) {
+      const { gl } = this.webglLow;
+      gl.bindFramebuffer(gl.FRAMEBUFFER, this.webglLow.targetTexture.fb);
+      gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+      // gl.enable(gl.CULL_FACE);
+      gl.enable(gl.DEPTH_TEST);
+      // Clear the canvas AND the depth buffer.
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    }
+  }
+
+  getSelectionPixel(xPixel: number, yPixel: number) {
+    const { gl } = this.webglLow;
+    gl.bindFramebuffer(gl.FRAMEBUFFER, this.webglLow.targetTexture.fb);
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    const data = new Uint8Array(4);
+    gl.readPixels(
+      xPixel,            // x
+      yPixel,            // y
+      1,                 // width
+      1,                 // height
+      gl.RGBA,           // format
+      gl.UNSIGNED_BYTE,  // type
+      data,              // typed array to hold result
+    );
+    console.log(data);
   }
 
 
@@ -2211,9 +2244,7 @@ class Figure {
     this.drawQueued = false;
     // $FlowFixMe
     if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('m1'); }
-    this.clearContext(canvasIndex);
-    // $FlowFixMe
-    if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('clearContext'); }
+
     this.notifications.publish('beforeDraw');
     // $FlowFixMe
     if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('beforeDraw'); }
@@ -2229,12 +2260,10 @@ class Figure {
     // $FlowFixMe
     if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('setupDraw'); }
 
-    // const projection = this.spaceTransforms.figureToGL;
-    // Math.PI / 3 * this.timeKeeper.now() / 20000
-    // const camera = new Transform().rotate(0, 0, 0);
+    // this.setupForSelectionDraw();
+    this.clearContext(canvasIndex);
     this.elements.draw(
-      now,
-      {
+      now, {
         projectionMatrix: this.projectionMatrix,
         viewMatrix: this.viewMatrix,
         viewProjectionMatrix: m3.mul(this.projectionMatrix, this.viewMatrix),
@@ -2242,8 +2271,29 @@ class Figure {
       },
       [new Transform()],
       1,
-      canvasIndex,
+      true,
     );
+
+    // this.clearContext(canvasIndex);
+    // // $FlowFixMe
+    // if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('clearContext'); }
+    // // const projection = this.spaceTransforms.figureToGL;
+    // // Math.PI / 3 * this.timeKeeper.now() / 20000
+    // // const camera = new Transform().rotate(0, 0, 0);
+    // this.elements.draw(
+    //   now,
+    //   {
+    //     projectionMatrix: this.projectionMatrix,
+    //     viewMatrix: this.viewMatrix,
+    //     viewProjectionMatrix: m3.mul(this.projectionMatrix, this.viewMatrix),
+    //     light: this.light,
+    //   },
+    //   [new Transform()],
+    //   1,
+    //   canvasIndex,
+    // );
+
+
     // this.elements.draw(now, [this.spaceTransforms.figureToGL], 1, canvasIndex);
     // this.elements.draw(now, [
     //   new Transform().custom([

@@ -2,6 +2,7 @@
 
 import getShaders from './shaders';
 import type { TypeFragShader, TypeVertexShader } from './shaders';
+import TargetTexture from './target';
 
 const glMock = {
   TRIANGLES: 1,
@@ -204,6 +205,8 @@ class WebGLInstance {
     program: WebGLProgram;
   }>;
 
+  targetTexture: TargetTexture;
+
   addTexture(
     id: string,
     glTexture: WebGLTexture,
@@ -307,7 +310,7 @@ class WebGLInstance {
       // $FlowFixMe
       this.gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA)
       this.gl.enable(gl.BLEND);
-
+      this.targetTexture = new TargetTexture(this);
     }
   }
 
@@ -330,6 +333,8 @@ class WebGLInstance {
     }
 
     this.gl.viewport(0, 0, this.gl.drawingBufferWidth, this.gl.drawingBufferHeight);
+    if (this.targetTexture != null)
+    this.targetTexture.setFramebufferAttachmentSizes(this.gl.canvas.width, this.gl.canvas.height);
   }
   // resize() {
   //   var width = this.gl.canvas.clientWidth;

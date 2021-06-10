@@ -77,6 +77,7 @@ class GLObject extends DrawingObject {
   state: 'loading' | 'loaded';
 
   programIndex: number;
+  selectorProgramIndex: number;
   onLoad: ?(() => void);
 
 
@@ -86,6 +87,8 @@ class GLObject extends DrawingObject {
       color: 'uniform', dimension: 2, normals: false, light: null,
     },
     fragmentShader: TypeFragShader = { color: 'uniform', light: null },
+    selectorVertexShader: TypeVertexShader = 'selector',
+    selectorFragShader: TypeFragShader = 'selector',
   ) {
     super();
     this.gl = webgl.gl;
@@ -98,6 +101,7 @@ class GLObject extends DrawingObject {
     this.numVertices = 0;
     this.uniforms = {};
     this.texture = null;
+    this.selectorProgramIndex = this.webgl.getProgram(selectorVertexShader, selectorFragShader);
   }
 
   setPrimitive(primitiveType: 'TRIANGLES' | 'POINTS' | 'TRIANGLE_FAN' | 'TRIANGLE_STRIP' | 'LINES' | 'LINE_LOOP' | 'LINE_STRIP') {
@@ -575,7 +579,12 @@ class GLObject extends DrawingObject {
     worldMatrix: Type3DMatrix,
     color: TypeColor,
     numDrawVertices: number = this.numVertices,
+    targetTexture: boolean = false,
   ) {
+    if (targetTexture) {
+      this.drawToSelectorTexture(drawGlobals, worldMatrix, color, numDrawVertices);
+      return;
+    }
     const { gl } = this;
     const webglInstance = this.webgl;
 
@@ -703,6 +712,188 @@ class GLObject extends DrawingObject {
     if (texture) {
       gl.disableVertexAttribArray(locations.a_texcoord);
     }
+  }
+
+  drawToSelectorTexture(
+    drawGlobals: OBJ_DrawGlobals,
+    worldMatrix: Type3DMatrix,
+    color: TypeColor,
+    numDrawVertices: number = this.numVertices,
+  ) {
+    // const { gl } = this;
+    // const webglInstance = this.webgl;
+
+    // // const locations = webglInstance.useProgram(this.selectorProgramIndex);
+    // const locations = webglInstance.useProgram(this.programIndex);
+
+    // // gl.enable(gl.CULL_FACE);
+    // gl.enable(gl.DEPTH_TEST);
+
+    // Object.keys(this.buffers).forEach((bufferName) => {
+    //   // if (bufferName === 'a_position') {
+    //   //   return;
+    //   // }
+    //   const {
+    //     buffer, size, type, stride, offset, normalize,
+    //   } = this.buffers[bufferName];
+    //   gl.enableVertexAttribArray(locations[bufferName]);
+    //   // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
+    //   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    //   // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+    //   gl.vertexAttribPointer(
+    //     locations[bufferName],
+    //     size, type, normalize, stride, offset,
+    //   );
+    // });
+
+    // if (locations.u_worldViewProjectionMatrix != null) {  // $FlowFixMe
+    //   gl.uniformMatrix4fv(
+    //     locations.u_worldViewProjectionMatrix,
+    //     false,
+    //     m3.transpose(m3.mul(drawGlobals.viewProjectionMatrix, worldMatrix)),
+    //   );
+    // }
+
+    // if (locations.u_worldMatrix != null) {  // $FlowFixMe
+    //   gl.uniformMatrix4fv(
+    //     locations.u_worldMatrix,
+    //     false,
+    //     m3.transpose(worldMatrix),
+    //   );
+    // }
+
+    // if (locations.u_projectionMatrix != null) {  // $FlowFixMe
+    //   gl.uniformMatrix4fv(
+    //     locations.u_projectionMatrix,
+    //     false,
+    //     m3.transpose(drawGlobals.projectionMatrix),
+    //   );
+    // }
+
+    // if (locations.u_viewMatrix != null) {  // $FlowFixMe
+    //   gl.uniformMatrix4fv(
+    //     locations.u_viewMatrix,
+    //     false,
+    //     m3.transpose(drawGlobals.viewMatrix),
+    //   );
+    // }
+
+    // Object.keys(this.uniforms).forEach((uniformName) => {
+    //   const { method } = this.uniforms[uniformName];
+    //   method(locations[uniformName], uniformName);
+    // });
+
+    // gl.uniform1f(locations.u_z, this.z);
+
+    // gl.uniform4f(
+    //   locations.u_color,
+    //   color[0], color[1], color[2], color[3],
+    //   // 1, 0, 0, 1,
+    // );
+    // // console.log(color)
+
+    const { gl } = this;
+    const webglInstance = this.webgl;
+
+    const locations = webglInstance.useProgram(this.selectorProgramIndex);
+
+    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
+    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+    // gl.enable(gl.CULL_FACE);
+    gl.enable(gl.DEPTH_TEST);
+
+    Object.keys(this.buffers).forEach((bufferName) => {
+      if (bufferName !== 'a_position') {
+        return;
+      }
+      const {
+        buffer, size, type, stride, offset, normalize,
+      } = this.buffers[bufferName];
+      gl.enableVertexAttribArray(locations[bufferName]);
+      // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+      gl.vertexAttribPointer(
+        locations[bufferName],
+        size, type, normalize, stride, offset,
+      );
+    });
+
+    if (locations.u_directionalLight != null) {
+      console.log('asdfasdf')
+      gl.uniform3fv(
+        locations.u_directionalLight,
+        getPoint(drawGlobals.light.directional).normalize().toArray(),
+      );
+    }
+
+    if (locations.u_lightWorldPosition != null) {
+      gl.uniform3fv(
+        locations.u_lightWorldPosition,
+        getPoint(drawGlobals.light.point).toArray(),
+      );
+    }
+
+    if (locations.u_minLight != null) {
+      gl.uniform1f(
+        locations.u_minLight,
+        drawGlobals.light.min,
+      );
+    }
+
+    if (locations.u_worldInverseTranspose != null) {  // $FlowFixMe
+      gl.uniformMatrix4fv(
+        locations.u_worldInverseTranspose,
+        false,
+        m3.inverse(worldMatrix),
+      );
+    }
+
+    if (locations.u_worldViewProjectionMatrix != null) {  // $FlowFixMe
+      gl.uniformMatrix4fv(
+        locations.u_worldViewProjectionMatrix,
+        false,
+        m3.transpose(m3.mul(drawGlobals.viewProjectionMatrix, worldMatrix)),
+      );
+    }
+
+    if (locations.u_worldMatrix != null) {  // $FlowFixMe
+      gl.uniformMatrix4fv(
+        locations.u_worldMatrix,
+        false,
+        m3.transpose(worldMatrix),
+      );
+    }
+
+    if (locations.u_projectionMatrix != null) {  // $FlowFixMe
+      gl.uniformMatrix4fv(
+        locations.u_projectionMatrix,
+        false,
+        m3.transpose(drawGlobals.projectionMatrix),
+      );
+    }
+
+    if (locations.u_viewMatrix != null) {  // $FlowFixMe
+      gl.uniformMatrix4fv(
+        locations.u_viewMatrix,
+        false,
+        m3.transpose(drawGlobals.viewMatrix),
+      );
+    }
+
+    Object.keys(this.uniforms).forEach((uniformName) => {
+      const { method } = this.uniforms[uniformName];
+      method(locations[uniformName], uniformName);
+    });
+
+    gl.uniform1f(locations.u_z, this.z);
+
+    gl.uniform4f(
+      locations.u_color,
+      color[0], color[1], color[2], color[3],
+    );
+
+    gl.drawArrays(this.glPrimitive, 0, numDrawVertices);
   }
 }
 

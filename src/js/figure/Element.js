@@ -30,7 +30,7 @@ import { TextObjectBase } from './DrawingObjects/TextObject/TextObject';
 // import type { OBJ_Font } from './DrawingObjects/TextObject/TextObject';
 import {
   duplicateFromTo, joinObjects, joinObjectsWithOptions, NotificationManager,
-  generateUniqueId, PerformanceTimer,
+  generateUniqueId, PerformanceTimer, generateUniqueColor,
 } from '../tools/tools';
 import { colorArrayToRGBA, areColorsWithinDelta } from '../tools/color';
 import TimeKeeper from './TimeKeeper';
@@ -706,6 +706,7 @@ class FigureElement {
   timeKeeper: TimeKeeper;
 
   simple: boolean;
+  uniqueColor: null | TypeColor;
   // scenarioSet: {
   //   quiz1: [
   //     { element: xyz, position: (), scale: (), rotation: (), length: () }
@@ -737,6 +738,7 @@ class FigureElement {
     // name
     this.name = name;
     this.uid = (Math.random() * 1e18).toString(36);
+    this.uniqueColor = null;
     this.isShown = true;
     this.simple = false;
     this.transform = transform._dup();
@@ -2895,9 +2897,12 @@ class FigureElement {
    *
    * `false` makes this element not touchable.
    */
-  setTouchable(makeThisElementTouchable: boolean = true) {
+  setTouchable(makeThisElementTouchable: boolean = true, colorSeed: string = 'default') {
     if (makeThisElementTouchable) {
       this.isTouchable = true;
+      if (this.uniqueColor == null) {
+        this.setUniqueColor(generateUniqueColor(colorSeed));
+      }
     } else {
       this.hasTouchableElements = true;
     }
@@ -3056,6 +3061,9 @@ class FigureElement {
     const vertexLocation = glLocation.transformBy(this.spaceTransformMatrix('gl', 'draw'));
     const borders = this.getBorder('draw', 'touchBorder');
     const holeBorders = this.getBorder('draw', 'holeBorder');
+    if (borders == null || holeBorder == null) {
+      return false;
+    }
     for (let i = 0; i < borders.length; i += 1) {
       const border = borders[i];
       if (border.length > 2) {
@@ -3242,6 +3250,10 @@ class FigureElementPrimitive extends FigureElement {
         this.recorder.recordEvent('elementTextClick', [this.getPath(), glPoint.x, glPoint.y]);
       }
     }
+  }
+
+  setUniqueColor(color: null | TypeColor) {
+    this.uniqueColor = color == null ? null : color.slice();
   }
 
 
@@ -3445,9 +3457,13 @@ class FigureElementPrimitive extends FigureElement {
     // view: Type3DMatrix,
     parentTransform: Array<Transform> = [new Transform()],
     parentOpacity: number = 1,
+    targetTexture: boolean = false,
     // canvasIndex: number = 0,
   ) {
     if (this.isShown) {
+      if (targetTexture && !this.isTouchable) {
+        return;
+      }
       // let timer;
       // if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
       // if (FIGURE1DEBUG) { debugTimes.push([performance.now(), '']); }
@@ -3470,9 +3486,15 @@ class FigureElementPrimitive extends FigureElement {
       } // $FlowFixMe
       // if (FIGURE1DEBUG) { timer.stamp('m1'); }
 
-      const colorToUse = [
+      let colorToUse = [
         this.color[0], this.color[1], this.color[2], this.color[3] * this.opacity * parentOpacity,
       ];
+      if (targetTexture) {
+        if (this.uniqueColor == null) {
+          this.setUniqueColor(generateUniqueColor());
+        }
+        colorToUse = this.uniqueColor;
+      }
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawOpacity = colorToUse[3];
       // const transform = this.getTransform()._dup();
@@ -3504,7 +3526,7 @@ class FigureElementPrimitive extends FigureElement {
       if (pointCount > 0) {
         this.drawTransforms.forEach((t) => {
           this.drawingObject.drawWithTransformMatrix(
-            drawGlobals, t.matrix(), colorToUse, pointCount,
+            drawGlobals, t.matrix(), colorToUse, pointCount, targetTexture,
           );
         });
       }  // $FlowFixMe
@@ -4161,9 +4183,13 @@ class FigureElementCollection extends FigureElement {
     drawGlobals: OBJ_DrawGlobals,
     parentTransform: Array<Transform> = [new Transform()],
     parentOpacity: number = 1,
-    canvasIndex: number = 0,
+    // canvasIndex: number = 0,
+    targetTexture: boolean = false,
   ) {
     if (this.isShown) {
+      if (targetTexture && !this.isTouchable && !this.hasTouchableElements) {
+        return;
+      }
       // let timer;
       // if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
       this.lastDrawElementTransformPosition = {
@@ -4196,7 +4222,7 @@ class FigureElementCollection extends FigureElement {
       // if (FIGURE1DEBUG) { drawTimer = new PerformanceTimer(); }
       for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
         this.elements[this.drawOrder[i]].draw(
-          now, drawGlobals, this.drawTransforms, opacityToUse, canvasIndex,
+          now, drawGlobals, this.drawTransforms, opacityToUse, targetTexture,
         ); // $FlowFixMe
         // if (FIGURE1DEBUG) { drawTimer.stamp(this.elements[this.drawOrder[i]].name); }
       } // $FlowFixMe
@@ -4767,6 +4793,14 @@ class FigureElementCollection extends FigureElement {
       p.y = bounds.bottom + bounds.height * yAlign;
     }
     return p;
+  }
+
+  setUniqueColor(color: null | TypeColor) {
+    this.uniqueColor = color == null ? null : color.slice();
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      element.setUniqueColor(color);
+    }
   }
 
   updateLimits(
