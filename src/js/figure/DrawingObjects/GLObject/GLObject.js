@@ -820,7 +820,6 @@ class GLObject extends DrawingObject {
     });
 
     if (locations.u_directionalLight != null) {
-      console.log('asdfasdf')
       gl.uniform3fv(
         locations.u_directionalLight,
         getPoint(drawGlobals.light.directional).normalize().toArray(),
@@ -890,7 +889,8 @@ class GLObject extends DrawingObject {
 
     gl.uniform4f(
       locations.u_color,
-      color[0], color[1], color[2], color[3],
+      // color[0], color[1], color[2], color[3],
+      1, 0, 0, 1,
     );
 
     gl.drawArrays(this.glPrimitive, 0, numDrawVertices);
