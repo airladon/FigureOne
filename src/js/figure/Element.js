@@ -706,7 +706,23 @@ class FigureElement {
   timeKeeper: TimeKeeper;
 
   simple: boolean;
+
+  // TODO - Remove
   uniqueColor: null | TypeColor;
+
+  // TODO
+  touch: {
+    color: null | TypeColor;  // integer color ([255, 255, 255, 255])
+    enabled: boolean;
+    scale: TypeParsablePoint;
+  }
+
+  // TODO
+  move: {
+    line: Line,
+    plane: Plane, // arbitrary or normal plane
+  }
+
   // scenarioSet: {
   //   quiz1: [
   //     { element: xyz, position: (), scale: (), rotation: (), length: () }
