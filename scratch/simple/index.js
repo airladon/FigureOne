@@ -154,7 +154,7 @@ const loaded = () => {
 
   m.animations.new()
     .delay(1)
-    .morph({ start: 0, target: 1, duration: 6 })
+    .morph({ start: 0, target: 1, duration: 3 })
     .start();
 
   // figure.cameraTransform = new Fig.Transform([['r', -0.2, 0, 0], ['t', 0, 0, 0]]);
@@ -168,7 +168,7 @@ const loaded = () => {
   //   .start();
   // figure.updateProjection({ type: 'orthographic' });
   figure.elements.animations.new()
-    .rotation({ target: [0, Math.PI * 0.9, 0], duration: 10 })
+    .rotation({ target: [0, Math.PI * 0.9, 0], duration: 3 })
     .start();
 
     b.setTouchable();

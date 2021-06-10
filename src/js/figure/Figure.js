@@ -2107,34 +2107,20 @@ class Figure {
       1,
       true,
     );
-    // const { gl } = this.webglLow;
-    // gl.bindFramebuffer(gl.FRAMEBUFFER, this.webglLow.targetTexture.fb);
-    // gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    const x = xPixel / gl.canvas.offsetWidth * gl.canvas.width;
+    const y = gl.canvas.height - yPixel * gl.canvas.height / gl.canvas.clientHeight - 1;
     const data = new Uint8Array(4);
     gl.readPixels(
-      xPixel,            // x
-      yPixel,            // y
+      x,            // x
+      y,            // y
       1,                 // width
       1,                 // height
       gl.RGBA,           // format
       gl.UNSIGNED_BYTE,  // type
       data,              // typed array to hold result
     );
-    console.log(xPixel, yPixel, data);
-    // const data1 = new Uint8Array(gl.canvas.width * gl.canvas.height * 4);
-    // gl.readPixels(
-    //   0, 0, gl.canvas.width, gl.canvas.height,
-    //   gl.RGBA,           // format
-    //   gl.UNSIGNED_BYTE,  // type
-    //   data1,              // typed array to hold result
-    // );
-    // const d = [];
-    // for (let i = 0; i < data1.length; i += 4) {
-    //   if (data1[i] !== 0) {
-    //     d.push(data1.slice(i, 4));
-    //   }
-    // }
-    // console.log(d)
+    console.log(data);
+    this.animateNextFrame();
   }
 
 
@@ -2287,32 +2273,32 @@ class Figure {
     // $FlowFixMe
     if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('setupDraw'); }
 
-    this.setupForSelectionDraw();
-    // this.clearContext(canvasIndex);
-    this.elements.draw(
-      now, {
-        projectionMatrix: this.projectionMatrix,
-        viewMatrix: this.viewMatrix,
-        viewProjectionMatrix: m3.mul(this.projectionMatrix, this.viewMatrix),
-        light: this.light,
-      },
-      [new Transform()],
-      1,
-      true,
-    );
+    // this.setupForSelectionDraw();
+    // // this.clearContext(canvasIndex);
+    // this.elements.draw(
+    //   now, {
+    //     projectionMatrix: this.projectionMatrix,
+    //     viewMatrix: this.viewMatrix,
+    //     viewProjectionMatrix: m3.mul(this.projectionMatrix, this.viewMatrix),
+    //     light: this.light,
+    //   },
+    //   [new Transform()],
+    //   1,
+    //   true,
+    // );
 
-    const { gl } = this.webglLow;
-    const d = new Uint8Array(4);
-    gl.readPixels(
-      gl.canvas.width / 3,            // x
-      gl.canvas.height / 2,            // y
-      1,                 // width
-      1,                 // height
-      gl.RGBA,           // format
-      gl.UNSIGNED_BYTE,  // type
-      d,              // typed array to hold result
-    );
-    console.log(d)
+    // const { gl } = this.webglLow;
+    // const d = new Uint8Array(4);
+    // gl.readPixels(
+    //   gl.canvas.width / 3,            // x
+    //   gl.canvas.height / 2,            // y
+    //   1,                 // width
+    //   1,                 // height
+    //   gl.RGBA,           // format
+    //   gl.UNSIGNED_BYTE,  // type
+    //   d,              // typed array to hold result
+    // );
+    // console.log(d)
 
     this.clearContext(canvasIndex);
     // $FlowFixMe

@@ -720,6 +720,7 @@ class GLObject extends DrawingObject {
     color: TypeColor,
     numDrawVertices: number = this.numVertices,
   ) {
+    console.log('to texture')
     // const { gl } = this;
     // const webglInstance = this.webgl;
 
