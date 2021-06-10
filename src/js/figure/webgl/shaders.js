@@ -1,6 +1,33 @@
 // @flow
 import { joinObjects } from '../../tools/tools';
 
+/**
+ * Vertex shader composition
+ */
+export type OBJ_VertexShader = {
+  light?: 'point' | 'directional' | null,
+  normals?: boolean,
+  color?: 'vertex' | 'uniform' | 'texture',
+  dimension?: 2 | 3,
+};
+
+export type TypeVertexShader = string
+  | { src: string, vars?: Array<string> }
+  | Array<string | number | boolean>
+  | OBJ_VertexShader;
+/**
+ * Fragment shader composition
+ */
+export type OBJ_FragShader = {
+  light?: 'point' | 'directional' | null,
+  color?: 'vertex' | 'uniform' | 'texture',
+};
+
+export type TypeFragShader = string
+  | { src: string, vars?: Array<string> }
+  | Array<string | number | boolean>
+  | OBJ_FragShader;
+
 function composeVertexShader(
   options: {
     dimension: 2 | 3,
@@ -514,8 +541,8 @@ void main() {
 };
 
 const getShaders = (
-  vName: string | { src: string, vars: Array<string> } | Array<string | number | boolean> = 'simple',
-  fName: string | { src: string, vars: Array<string> } | Array<string | number | boolean> = 'simple',
+  vName: TypeVertexShader = 'simple',
+  fName: TypeFragShader = 'simple',
 ) => {
   let vertexSource = '';
   let fragmentSource = '';
@@ -530,9 +557,9 @@ const getShaders = (
     const shader = vertex[vName[0]](...vName.slice(1));
     vertexSource = shader.src;
     vars.push(...shader.vars);
-  } else if (!Array.isArray(vName) && vName.src != null && vName.vars != null) {
-    vertexSource = vName.src;
-    vars.push(...vName.vars);
+  } else if (!Array.isArray(vName) && vName.src != null) {
+    vertexSource = vName.src; // $FlowFixMe
+    vars.push(...(vName.vars || []));
   } else if (typeof vName === 'object') { // $FlowFixMe
     [vertexSource, vars] = composeVertexShader(vName);
   } else {  // $FlowFixMe
@@ -549,8 +576,8 @@ const getShaders = (
     fragmentSource = shader.src;
     vars.push(...shader.vars);
   } else if (!Array.isArray(fName) && fName.src != null) {
-    fragmentSource = fName.src;
-    vars.push(...fName.vars);
+    fragmentSource = fName.src; // $FlowFixMe
+    vars.push(...(fName.vars || []));
   } else if (typeof fName === 'object') {
     let fVars; // $FlowFixMe
     [fragmentSource, fVars] = composeFragShader(fName);

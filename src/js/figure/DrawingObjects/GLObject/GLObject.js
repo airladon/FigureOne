@@ -5,6 +5,7 @@ import * as m3 from '../../../tools/m3';
 import type { OBJ_DrawGlobals } from '../../Figure';
 import type { Type3DMatrix } from '../../../tools/m3';
 import WebGLInstance from '../../webgl/webgl';
+import type { TypeFragShader, TypeVertexShader } from '../../webgl/shaders';
 import { Rect, getPoint } from '../../../tools/g2';
 // import type { TypeParsablePoint } from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
@@ -81,8 +82,10 @@ class GLObject extends DrawingObject {
 
   constructor(
     webgl: WebGLInstance,
-    vertexShader: string | { src: string, vars: Array<string> } | Array<string | number | boolean> = 'withTexture',
-    fragmentShader: string | { src: string, vars: Array<string> } | Array<string | number | boolean> = 'withTexture',
+    vertexShader: TypeVertexShader = {
+      color: 'uniform', dimension: 2, normals: false, light: null,
+    },
+    fragmentShader: TypeFragShader = { color: 'uniform', light: null },
   ) {
     super();
     this.gl = webgl.gl;

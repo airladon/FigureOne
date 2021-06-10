@@ -178,7 +178,7 @@ function transform(m: Type3DMatrix, px: number, py: number, pz: number): [number
   ];
 }
 
-function transformVector(m, v) {
+function transformVector(m: Type3DMatrix, v: [number, number, number, number]) {
   const a = [0, 0, 0, 0];
   for (let i = 0; i < 4; i += 1) {
     a[i] = 0.0;

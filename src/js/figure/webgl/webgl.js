@@ -1,6 +1,7 @@
 // @flow
 
 import getShaders from './shaders';
+import type { TypeFragShader, TypeVertexShader } from './shaders';
 
 const glMock = {
   TRIANGLES: 1,
@@ -233,8 +234,8 @@ class WebGLInstance {
   }
 
   getProgram(
-    vertexShader: string | { src: string, vars: Array<string> } | Array<string | number | boolean>,
-    fragmentShader: string | { src: string, vars: Array<string> } | Array<string | number | boolean>,
+    vertexShader: TypeVertexShader,
+    fragmentShader: TypeFragShader,
   ) {
     for (let i = 0; i < this.programs.length; i += 1) {
       const program = this.programs[i];
