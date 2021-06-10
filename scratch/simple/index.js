@@ -113,15 +113,21 @@ const loaded = () => {
     }
     return [vertices, norms];
   };
-  const [rx, nx] = makeRod(0.5, 0.01, 20, 0, Math.PI / 2, 0);
-  const [ry, ny] = makeRod(0.5, 0.005, 10, -Math.PI / 2, 0, 0);
-  const [rz, nz] = makeRod(0.5, 0.05, 30, 0, 0, 0);
-  const [box, nBox] = makeRod(0.3, 0.3, 4, 0, Math.PI / 2, 0);
+  const [rx, nx] = makeRod(0.5, 0.05, 10, 0, Math.PI / 2, 0);
+  const [ry, ny] = makeRod(0.5, 0.05, 10, -Math.PI / 2, 0, 0);
+  const [rz, nz] = makeRod(0.5, 0.05, 10, 0, 0, 0);
   const b = figure.add({
     make: 'gl',
     color: [1, 0, 1, 1],
-    vertexShader: 'pointLight',
-    fragShader: 'pointLight',
+    vertexShader: {
+      dimension: 3,
+      normals: true,
+      light: 'directional',
+    },
+    fragShader: {
+      dimension: 3,
+      light: 'directional',
+    },
     vertices3: {
       data: [
         ...rx,
@@ -137,27 +143,6 @@ const loaded = () => {
           ...nx,
           ...ny,
           ...nz,
-        ],
-      },
-    ],
-    transform: [['r', 0, 0, 0], ['t', 0, 0, 0]],
-  });
-  const b1 = figure.add({
-    make: 'gl',
-    color: [1, 0, 0, 1],
-    vertexShader: 'directionalLight',
-    fragShader: 'directionalLight',
-    vertices3: {
-      data: [
-        ...box,
-      ],
-    },
-    buffers: [
-      {
-        name: 'a_norm',
-        size: 3,
-        data: [
-          ...nBox,
         ],
       },
     ],

@@ -1,4 +1,166 @@
 // @flow
+import { joinObjects } from '../../tools/tools';
+
+function composeVertexShader(
+  options: {
+    dimension: 2 | 3,
+    normals: boolean,
+    vertexColor: boolean,
+    light: null | 'point ' | 'directional',
+    texture: boolean,
+  } = {}
+) {
+  const defaultOptions = {
+    dimension: 2,
+    normals: false,
+    vertexColor: false,
+    light: null,
+    texture: false,
+  };
+  const {
+    dimension, normals, vertexColor, light, texture,
+  } = joinObjects(defaultOptions, options);
+  let src = 'uniform mat4 u_worldViewProjectionMatrix;\n';
+  const vars = ['u_worldViewProjectionMatrix'];
+
+  // Vertex position
+  if (dimension === 2) {
+    src += 'attribute vec2 a_position;\n';
+    src += 'uniform float u_z;'
+    vars.push('a_position', 'u_z');
+  } else if (dimension === 3) {
+    src += 'attribute vec4 a_position;\n';
+    vars.push('a_position');
+  }
+
+  if (texture) {
+    src += 'attribute vec2 a_texcoord;\n';
+    src += 'varying vec2 v_texcoord;\n';
+  }
+
+  // Vertex color
+  if (vertexColor) {
+    src += 'attribute vec4 a_col\n';
+    src += 'varying vec4 v_col\n';
+    vars.push('a_col');
+  }
+
+  // Normals
+  if (normals) {
+    src += 'attribute vec3 a_norm;\n';
+    src += 'varying vec3 v_norm;\n';
+    src += 'uniform mat4 u_worldInverseTranspose;\n';
+    vars.push('u_worldInverseTranspose', 'a_norm');
+  }
+
+  // Direcitonal Light
+  if (light === 'point') {
+    src += 'uniform vec3 u_lightWorldPosition;\n';
+    src += 'uniform mat4 u_worldMatrix;\n';
+    src += 'varying vec3 v_surfaceToLight;\n';
+    vars.push('u_lightWorldPosition', 'u_worldMatrix');
+  }
+
+  // Main Program
+  src += 'void main() {\n';
+
+  // Dimensional gl_Position
+  if (dimension === 2) {
+    src += '  gl_Position = u_worldViewProjectionMatrix * vec4(a_position.xy, u_z, 1);\n';
+  } else {
+    src += '  gl_Position = u_worldViewProjectionMatrix * a_position;\n';
+  }
+
+  if (vertexColor) {
+    src += '  v_col = a_col;\n';
+  }
+
+  if (normals) {
+    src += '  v_norm = mat3(u_worldInverseTranspose) * a_norm;\n';
+  }
+
+  if (light === 'point') {
+    src += '  vec3 surfaceWorldPosition = (u_worldMatrix * a_position).xyz;\n';
+    src += '  v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;\n';
+  }
+
+  if (texture) {
+    src += '  v_texcoord = a_texcoord;\n';
+  }
+  src += '}\n';
+
+  return [src, vars];
+}
+
+function composeFragShader(
+  options: {
+    vertexColor: boolean,
+    light: null | 'point ' | 'directional',
+    texture: boolean,
+  } = {},
+) {
+  const defaultOptions = {
+    vertexColor: false,
+    light: null,
+    texture: false,
+  };
+  const {
+    vertexColor, light, texture,
+  } = joinObjects(defaultOptions, options);
+
+  let src = '\nprecision mediump float;\n';
+  src += 'uniform vec4 u_color;\n';
+  const vars = ['u_color'];
+
+  if (vertexColor) {
+    src += 'varying vec4 v_col;\n';
+    vars.push('v_col');
+  }
+
+  if (light === 'directional') {
+    src += 'varying vec3 v_norm;\n';
+    src += 'uniform vec3 u_directionalLight;\n';
+    src += 'uniform float u_minLight;\n';
+    vars.push('u_minLight', 'u_directionalLight');
+  } else if (light === 'point') {
+    src += 'varying vec3 v_norm;\n';
+    src += 'varying vec3 v_surfaceToLight;\n';
+    src += 'uniform float u_minLight;\n';
+    vars.push('u_minLight');
+  }
+
+  if (texture) {
+    src += 'uniform sampler2D u_texture;';
+    src += 'varying vec2 v_texcoord;';
+  }
+
+  // Main Program
+  src += 'void main() {\n';
+  if (vertexColor) {
+    src += '  gl_FragColor = v_col;\n';
+  } else {
+    src += '  gl_FragColor = u_color;\n';
+  }
+  if (texture) {
+    src += '  gl_FragColor = texture2D(u_texture, v_texcoord) * u_color.a;\n';
+  }
+
+  src += '  gl_FragColor.rgb *= gl_FragColor.a;\n';
+  if (light === 'directional') {
+    src += '  vec3 normal = normalize(v_norm);\n';
+    src += '  float light = dot(normal, u_directionalLight);\n';
+    src += '  gl_FragColor.rgb *= max((light + 1.0) / 2.0, u_minLight);\n';
+  } else if (light === 'point') {
+    src += '  vec3 normal = normalize(v_norm);\n';
+    src += '  vec3 surfaceToLightDirection = normalize(v_surfaceToLight);\n';
+    src += '  float light = dot(normal, surfaceToLightDirection);\n';
+    src += '  gl_FragColor.rgb *= max((light + 1.0) / 2.0, u_minLight);\n';
+  }
+
+  src += '}\n';
+
+  return [src, vars];
+}
 
 const vertex = {
   simple: {
@@ -13,7 +175,7 @@ const vertex = {
         + '}',
     vars: ['a_position', 'u_worldMatrix', 'u_projectionMatrix', 'u_viewMatrix'],
   },
-  simple3D: {
+  noLight: {
     src:
         'attribute vec3 a_position;'
         + 'uniform mat4 u_worldMatrix;'
@@ -44,13 +206,13 @@ void main() {
   },
   directionalLight: {
     src: `
-attribute vec3 a_position;
+attribute vec4 a_position;
 attribute vec3 a_norm;
 varying vec3 v_norm;
 uniform mat4 u_worldViewProjectionMatrix;
 uniform mat4 u_worldInverseTranspose;
 void main() {
-  gl_Position = u_worldViewProjectionMatrix * vec4(a_position.xyz, 1);
+  gl_Position = u_worldViewProjectionMatrix * a_position;
   v_norm = mat3(u_worldInverseTranspose) * a_norm;
 }`,
     vars: ['a_position', 'a_norm', 'u_worldViewProjectionMatrix', 'u_worldInverseTranspose'],
@@ -367,7 +529,7 @@ const getShaders = (
 ) => {
   let vertexSource = '';
   let fragmentSource = '';
-  const vars = [];
+  let vars = [];
   if (typeof vName === 'string') {
     if (vertex[vName] == null) {
       throw new Error(`Built in vertex shader does not exist: ${vName}`);
@@ -378,9 +540,12 @@ const getShaders = (
     const shader = vertex[vName[0]](...vName.slice(1));
     vertexSource = shader.src;
     vars.push(...shader.vars);
-  } else if (!Array.isArray(vName)) {
+  } else if (!Array.isArray(vName) && vName.src != null && vName.vars != null) {
     vertexSource = vName.src;
     vars.push(...vName.vars);
+  } else if (typeof vName === 'object') {
+    [vertexSource, vars] = composeVertexShader(vName);
+    console.log(fragmentSource, vars)
   } else {  // $FlowFixMe
     throw new Error(`Vertex shader definition incorrect: ${vName}`);
   }
@@ -394,9 +559,14 @@ const getShaders = (
     const shader = vertex[fName[0]](...fName.slice(1));
     fragmentSource = shader.src;
     vars.push(...shader.vars);
-  } else if (!Array.isArray(fName)) {
+  } else if (!Array.isArray(fName) && fName.src != null) {
     fragmentSource = fName.src;
     vars.push(...fName.vars);
+  } else if (typeof fName === 'object') {
+    let fVars;
+    [fragmentSource, fVars] = composeFragShader(fName);
+    vars.push(...fVars)
+    console.log(fragmentSource, vars)
   } else {  // $FlowFixMe
     throw new Error(`Fragment shader definition incorrect: ${fName}`);
   }
