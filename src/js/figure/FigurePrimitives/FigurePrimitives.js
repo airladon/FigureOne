@@ -2381,12 +2381,19 @@ export default class FigurePrimitives {
     );
     glObject.setPrimitive(options.glPrimitive);
     if (options.vertices != null) {
-      // const size = options.vertices.size != null ? options.vertices.size : 2;
       glObject.addVertices(options.vertices.data, options.vertices.usage);
     }
     if (options.vertices3 != null) {
-      // const size = options.vertices.size != null ? options.vertices.size : 2;
       glObject.addVertices3(options.vertices3.data, options.vertices3.usage);
+    }
+    if (options.normals != null) {
+      glObject.addNormals(options.normals.data, options.normals.usage);
+    }
+    if (options.colors != null) {
+      glObject.addColors(options.colors.data, options.colors.usage);
+    }
+    if (options.colorsNorm != null) {
+      glObject.addColorsNorm(options.colorsNorm.data, options.colcolorsNormors.usage);
     }
     if (options.buffers != null) {
       options.buffers.forEach((buffer) => {

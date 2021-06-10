@@ -116,6 +116,9 @@ const loaded = () => {
   const [rx, nx] = makeRod(0.5, 0.05, 10, 0, Math.PI / 2, 0);
   const [ry, ny] = makeRod(0.5, 0.05, 10, -Math.PI / 2, 0, 0);
   const [rz, nz] = makeRod(0.5, 0.05, 10, 0, 0, 0);
+  const cx = col([1, 0, 0, 1], rx.length / 3);
+  const cy = col([0, 1, 0, 1], ry.length / 3);
+  const cz = col([0, 0, 1, 1], rz.length / 3);
   const b = figure.add({
     make: 'gl',
     color: [1, 0, 1, 1],
@@ -123,29 +126,22 @@ const loaded = () => {
       dimension: 3,
       normals: true,
       light: 'directional',
+      color: 'vertex',
     },
     fragShader: {
       dimension: 3,
       light: 'directional',
+      color: 'vertex',
     },
     vertices3: {
-      data: [
-        ...rx,
-        ...ry,
-        ...rz,
-      ],
+      data: [...rx, ...ry, ...rz],
     },
-    buffers: [
-      {
-        name: 'a_norm',
-        size: 3,
-        data: [
-          ...nx,
-          ...ny,
-          ...nz,
-        ],
-      },
-    ],
+    normals: {
+      data: [...nx, ...ny, ...nz],
+    },
+    colors: {
+      data: [...cx, ...cy, ...cz],
+    },
     transform: [['r', 0, 0, 0], ['t', 0, 0, 0]],
   });
 

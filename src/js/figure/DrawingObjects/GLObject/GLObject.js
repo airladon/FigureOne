@@ -326,6 +326,18 @@ class GLObject extends DrawingObject {
     this.numVertices = vertices.length / 3;
   }
 
+  addNormals(normals: Array<number>, usage: TypeGLBufferUsage = 'STATIC') {
+    this.addBuffer('a_norm', 3, normals, 'FLOAT', false, 0, 0, usage);
+  }
+
+  addColors(colors: Array<number>, usage: TypeGLBufferUsage = 'STATIC') {
+    this.addBuffer('a_col', 4, colors, 'FLOAT', false, 0, 0, usage);
+  }
+
+  addColorsNorm(colors: Array<number>, usage: TypeGLBufferUsage = 'STATIC') {
+    this.addBuffer('a_col', 4, colors, 'UNSIGNED_BYTE', true, 0, 0, usage);
+  }
+
   addBuffer(
     name: string,
     size: number,

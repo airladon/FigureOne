@@ -5,43 +5,38 @@ function composeVertexShader(
   options: {
     dimension: 2 | 3,
     normals: boolean,
-    vertexColor: boolean,
+    color: 'vertex' | 'uniform' | 'texture',
     light: null | 'point ' | 'directional',
-    texture: boolean,
-  } = {}
+  } = {},
 ) {
   const defaultOptions = {
     dimension: 2,
     normals: false,
-    vertexColor: false,
+    color: 'uniform',
     light: null,
-    texture: false,
   };
   const {
-    dimension, normals, vertexColor, light, texture,
+    dimension, normals, light, color,
   } = joinObjects(defaultOptions, options);
-  let src = 'uniform mat4 u_worldViewProjectionMatrix;\n';
+  let src = '\nuniform mat4 u_worldViewProjectionMatrix;\n';
   const vars = ['u_worldViewProjectionMatrix'];
 
   // Vertex position
   if (dimension === 2) {
     src += 'attribute vec2 a_position;\n';
-    src += 'uniform float u_z;'
+    src += 'uniform float u_z;';
     vars.push('a_position', 'u_z');
   } else if (dimension === 3) {
     src += 'attribute vec4 a_position;\n';
     vars.push('a_position');
   }
 
-  if (texture) {
+  if (color === 'texture') {
     src += 'attribute vec2 a_texcoord;\n';
     src += 'varying vec2 v_texcoord;\n';
-  }
-
-  // Vertex color
-  if (vertexColor) {
-    src += 'attribute vec4 a_col\n';
-    src += 'varying vec4 v_col\n';
+  } else if (color === 'vertex') {
+    src += 'attribute vec4 a_col;\n';
+    src += 'varying vec4 v_col;\n';
     vars.push('a_col');
   }
 
@@ -71,7 +66,9 @@ function composeVertexShader(
     src += '  gl_Position = u_worldViewProjectionMatrix * a_position;\n';
   }
 
-  if (vertexColor) {
+  if (color === 'texture') {
+    src += '  v_texcoord = a_texcoord;\n';
+  } else if (color === 'vertex') {
     src += '  v_col = a_col;\n';
   }
 
@@ -84,9 +81,6 @@ function composeVertexShader(
     src += '  v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;\n';
   }
 
-  if (texture) {
-    src += '  v_texcoord = a_texcoord;\n';
-  }
   src += '}\n';
 
   return [src, vars];
@@ -94,27 +88,28 @@ function composeVertexShader(
 
 function composeFragShader(
   options: {
-    vertexColor: boolean,
     light: null | 'point ' | 'directional',
-    texture: boolean,
+    color: 'vertex' | 'uniform' | 'texture',
   } = {},
 ) {
   const defaultOptions = {
-    vertexColor: false,
+    color: 'uniform',
     light: null,
-    texture: false,
   };
   const {
-    vertexColor, light, texture,
+    light, color,
   } = joinObjects(defaultOptions, options);
 
   let src = '\nprecision mediump float;\n';
   src += 'uniform vec4 u_color;\n';
   const vars = ['u_color'];
 
-  if (vertexColor) {
+  if (color === 'vertex') {
     src += 'varying vec4 v_col;\n';
     vars.push('v_col');
+  } else if (color === 'texture') {
+    src += 'uniform sampler2D u_texture;';
+    src += 'varying vec2 v_texcoord;';
   }
 
   if (light === 'directional') {
@@ -129,19 +124,14 @@ function composeFragShader(
     vars.push('u_minLight');
   }
 
-  if (texture) {
-    src += 'uniform sampler2D u_texture;';
-    src += 'varying vec2 v_texcoord;';
-  }
 
   // Main Program
   src += 'void main() {\n';
-  if (vertexColor) {
+  if (color === 'vertex') {
     src += '  gl_FragColor = v_col;\n';
-  } else {
+  } else if (color === 'uniform') {
     src += '  gl_FragColor = u_color;\n';
-  }
-  if (texture) {
+  } else if (color === 'texture') {
     src += '  gl_FragColor = texture2D(u_texture, v_texcoord) * u_color.a;\n';
   }
 
@@ -543,9 +533,8 @@ const getShaders = (
   } else if (!Array.isArray(vName) && vName.src != null && vName.vars != null) {
     vertexSource = vName.src;
     vars.push(...vName.vars);
-  } else if (typeof vName === 'object') {
+  } else if (typeof vName === 'object') { // $FlowFixMe
     [vertexSource, vars] = composeVertexShader(vName);
-    console.log(fragmentSource, vars)
   } else {  // $FlowFixMe
     throw new Error(`Vertex shader definition incorrect: ${vName}`);
   }
@@ -563,10 +552,9 @@ const getShaders = (
     fragmentSource = fName.src;
     vars.push(...fName.vars);
   } else if (typeof fName === 'object') {
-    let fVars;
+    let fVars; // $FlowFixMe
     [fragmentSource, fVars] = composeFragShader(fName);
-    vars.push(...fVars)
-    console.log(fragmentSource, vars)
+    vars.push(...fVars);
   } else {  // $FlowFixMe
     throw new Error(`Fragment shader definition incorrect: ${fName}`);
   }
