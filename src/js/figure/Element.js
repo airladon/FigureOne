@@ -3126,6 +3126,23 @@ class FigureElement {
     this.lastDrawPulseTransform = this.drawTransforms[0];
     return isSame;
   }
+
+  setUniqueColor(color: null | TypeColor) {
+    this.uniqueColor = color == null ? null : color.slice();
+  }
+
+  isUniqueColor(color: TypeColor) {
+    if (
+      this.uniqueColor == null
+      || this.uniqueColor[0] !== color[0]
+      || this.uniqueColor[1] !== color[1]
+      || this.uniqueColor[2] !== color[2]
+      || this.uniqueColor[3] !== color[3]
+    ) {
+      return false;
+    }
+    return true;
+  }
 }
 
 
@@ -3250,10 +3267,6 @@ class FigureElementPrimitive extends FigureElement {
         this.recorder.recordEvent('elementTextClick', [this.getPath(), glPoint.x, glPoint.y]);
       }
     }
-  }
-
-  setUniqueColor(color: null | TypeColor) {
-    this.uniqueColor = color == null ? null : color.slice();
   }
 
 
@@ -3493,7 +3506,7 @@ class FigureElementPrimitive extends FigureElement {
         if (this.uniqueColor == null) {
           this.setUniqueColor(generateUniqueColor());
         }
-        colorToUse = this.uniqueColor;
+        colorToUse = this.uniqueColor.map(c => c / 255);
       }
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawOpacity = colorToUse[3];
@@ -4796,11 +4809,24 @@ class FigureElementCollection extends FigureElement {
   }
 
   setUniqueColor(color: null | TypeColor) {
-    this.uniqueColor = color == null ? null : color.slice();
+    super.setUniqueColor(color);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       element.setUniqueColor(color);
     }
+  }
+
+  getUniqueColorElement(color: null | TypeColor) {
+    if (super.isUniqueColor(color)) {
+      return this;
+    }
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (element.isUniqueColor(color)) {
+        return element;
+      }
+    }
+    return null;
   }
 
   updateLimits(

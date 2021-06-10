@@ -505,7 +505,6 @@ void main() {
 precision mediump float;
 uniform vec4 u_color;
 void main() {
-  // gl_FragColor = vec4(1, 0, 0, 1);
   gl_FragColor = u_color;
 }`,
     vars: ['u_color'],
@@ -608,9 +607,6 @@ const getShaders = (
   //   fragmentSource = fName.src;
   //   vars.push(...fName.vars);
   // }
-  console.log(vName, fName)
-  console.log(vertexSource)
-  console.log(fragmentSource, vars)
   return {
     vertexSource,
     fragmentSource,

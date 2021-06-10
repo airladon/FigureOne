@@ -1644,7 +1644,7 @@ class Figure {
 
   touchDownHandlerClient(clientPoint: Point, eventFromPlayback: boolean = false) {
     const pixelP = this.clientToPixel(clientPoint);
-    this.getSelectionPixel(pixelP.x, pixelP.y);
+    console.log(this.getSelectionPixel(pixelP.x, pixelP.y));
     const figurePoint = pixelP.transformBy(this.spaceTransforms.pixelToFigure.matrix());
     return this.touchDownHandler(figurePoint, eventFromPlayback);
   }
@@ -2101,7 +2101,7 @@ class Figure {
         projectionMatrix: this.projectionMatrix,
         viewMatrix: this.viewMatrix,
         viewProjectionMatrix: m3.mul(this.projectionMatrix, this.viewMatrix),
-        light: this.light,
+        // light: this.light,
       },
       [new Transform()],
       1,
@@ -2111,16 +2111,11 @@ class Figure {
     const y = gl.canvas.height - yPixel * gl.canvas.height / gl.canvas.clientHeight - 1;
     const data = new Uint8Array(4);
     gl.readPixels(
-      x,            // x
-      y,            // y
-      1,                 // width
-      1,                 // height
-      gl.RGBA,           // format
-      gl.UNSIGNED_BYTE,  // type
-      data,              // typed array to hold result
+      x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, data,
     );
-    console.log(data);
+    // Uncomment this to see touchable elements in their touch colors
     this.animateNextFrame();
+    return this.elements.getUniqueColorElement(data);
   }
 
 

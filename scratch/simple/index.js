@@ -145,6 +145,29 @@ const loaded = () => {
     transform: [['r', 0, 0, 0], ['t', 0, 0, 0]],
   });
 
+  const [cP, cN] = makeRod(0.3, 0.3, 4, 0, 0, 0);
+  const c = figure.add({
+    make: 'gl',
+    color: [0, 1, 1, 1],
+    vertexShader: {
+      dimension: 3,
+      normals: true,
+      light: 'directional',
+    },
+    fragShader: {
+      dimension: 3,
+      light: 'directional',
+    },
+    vertices3: {
+      data: cP,
+    },
+    normals: {
+      data: cN,
+    },
+    transform: [['t', 0.5, 0, 0]],
+  });
+  c.setTouchable();
+
   // Directional Light * 2
   // Point Light * 2
 

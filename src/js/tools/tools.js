@@ -376,16 +376,52 @@ class UniqueIdGenerator {
   }
 
   getColor(seed: string) {
+    const initialColors = [
+      [255, 0, 0, 255],
+      [0, 255, 0, 255],
+      [0, 0, 255, 255],
+      [255, 0, 255, 255],
+      [0, 255, 255, 255],
+      [255, 255, 0, 255],
+      [100, 0, 0, 255],
+      [0, 100, 0, 255],
+      [0, 0, 100, 255],
+      [100, 0, 100, 255],
+      [0, 100, 100, 255],
+      [100, 100, 0, 255],
+    ];
     if (this.colorSeeds[seed] == null) {
-      this.colorSeeds[seed] = 1;
+      this.colorSeeds[seed] = 0;
     }
     const id = this.colorSeeds[seed];
+    if (id < initialColors.length) {
+      this.colorSeeds[seed] += 1;
+      return initialColors[id];
+    }
     const color = [
-      ((id >> 0) & 0xFF) / 0xFF,
-      ((id >> 8) & 0xFF) / 0xFF,
-      ((id >> 16) & 0xFF) / 0xFF,
-      ((id >> 24) & 0xFF) / 0xFF,
+      ((id >> 0) & 0xFF),
+      ((id >> 8) & 0xFF),
+      ((id >> 16) & 0xFF),
+      ((id >> 24) & 0xFF),
     ];
+    if (
+      (color[0] === 255 || color[0] === 0 || color[0] === 100)
+      && (color[1] === 255 || color[1] === 0 || color[1] === 100)
+      && (color[2] === 255 || color[2] === 0 || color[2] === 100)
+      && (color[3] === 255 || color[3] === 0 || color[3] === 100)
+    ) {
+      for (let i = 0; i < initialColors.length; i += 1) {
+        if (
+          initialColors[i][0] === color[0]
+          && initialColors[i][1] === color[1]
+          && initialColors[i][2] === color[2]
+          && initialColors[i][3] === color[3]
+        ) {
+          this.colorSeeds[seed] += 1;
+          return this.getColor(seed);
+        }
+      }
+    }
     this.colorSeeds[seed] += 1;
     return color;
   }

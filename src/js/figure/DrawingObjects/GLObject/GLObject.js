@@ -581,14 +581,19 @@ class GLObject extends DrawingObject {
     numDrawVertices: number = this.numVertices,
     targetTexture: boolean = false,
   ) {
-    if (targetTexture) {
-      this.drawToSelectorTexture(drawGlobals, worldMatrix, color, numDrawVertices);
-      return;
-    }
+    // if (targetTexture) {
+    //   this.drawToSelectorTexture(drawGlobals, worldMatrix, color, numDrawVertices);
+    //   return;
+    // }
     const { gl } = this;
     const webglInstance = this.webgl;
 
-    const locations = webglInstance.useProgram(this.programIndex);
+    let locations;
+    if (targetTexture) {
+      locations = webglInstance.useProgram(this.selectorProgramIndex);
+    } else {
+      locations = webglInstance.useProgram(this.programIndex);
+    }
 
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
@@ -596,6 +601,9 @@ class GLObject extends DrawingObject {
     gl.enable(gl.DEPTH_TEST);
 
     Object.keys(this.buffers).forEach((bufferName) => {
+      if (targetTexture && bufferName !== 'a_position') {
+        return;
+      }
       const {
         buffer, size, type, stride, offset, normalize,
       } = this.buffers[bufferName];
@@ -720,79 +728,6 @@ class GLObject extends DrawingObject {
     color: TypeColor,
     numDrawVertices: number = this.numVertices,
   ) {
-    console.log('to texture')
-    // const { gl } = this;
-    // const webglInstance = this.webgl;
-
-    // // const locations = webglInstance.useProgram(this.selectorProgramIndex);
-    // const locations = webglInstance.useProgram(this.programIndex);
-
-    // // gl.enable(gl.CULL_FACE);
-    // gl.enable(gl.DEPTH_TEST);
-
-    // Object.keys(this.buffers).forEach((bufferName) => {
-    //   // if (bufferName === 'a_position') {
-    //   //   return;
-    //   // }
-    //   const {
-    //     buffer, size, type, stride, offset, normalize,
-    //   } = this.buffers[bufferName];
-    //   gl.enableVertexAttribArray(locations[bufferName]);
-    //   // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
-    //   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    //   // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-    //   gl.vertexAttribPointer(
-    //     locations[bufferName],
-    //     size, type, normalize, stride, offset,
-    //   );
-    // });
-
-    // if (locations.u_worldViewProjectionMatrix != null) {  // $FlowFixMe
-    //   gl.uniformMatrix4fv(
-    //     locations.u_worldViewProjectionMatrix,
-    //     false,
-    //     m3.transpose(m3.mul(drawGlobals.viewProjectionMatrix, worldMatrix)),
-    //   );
-    // }
-
-    // if (locations.u_worldMatrix != null) {  // $FlowFixMe
-    //   gl.uniformMatrix4fv(
-    //     locations.u_worldMatrix,
-    //     false,
-    //     m3.transpose(worldMatrix),
-    //   );
-    // }
-
-    // if (locations.u_projectionMatrix != null) {  // $FlowFixMe
-    //   gl.uniformMatrix4fv(
-    //     locations.u_projectionMatrix,
-    //     false,
-    //     m3.transpose(drawGlobals.projectionMatrix),
-    //   );
-    // }
-
-    // if (locations.u_viewMatrix != null) {  // $FlowFixMe
-    //   gl.uniformMatrix4fv(
-    //     locations.u_viewMatrix,
-    //     false,
-    //     m3.transpose(drawGlobals.viewMatrix),
-    //   );
-    // }
-
-    // Object.keys(this.uniforms).forEach((uniformName) => {
-    //   const { method } = this.uniforms[uniformName];
-    //   method(locations[uniformName], uniformName);
-    // });
-
-    // gl.uniform1f(locations.u_z, this.z);
-
-    // gl.uniform4f(
-    //   locations.u_color,
-    //   color[0], color[1], color[2], color[3],
-    //   // 1, 0, 0, 1,
-    // );
-    // // console.log(color)
-
     const { gl } = this;
     const webglInstance = this.webgl;
 
@@ -888,10 +823,11 @@ class GLObject extends DrawingObject {
 
     gl.uniform1f(locations.u_z, this.z);
 
+    console.log(color)
     gl.uniform4f(
       locations.u_color,
-      // color[0], color[1], color[2], color[3],
-      1, 0, 0, 1,
+      color[0], color[1], color[2], color[3],
+      // 1, 0, 0, 1,
     );
 
     gl.drawArrays(this.glPrimitive, 0, numDrawVertices);
