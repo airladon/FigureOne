@@ -2093,6 +2093,9 @@ class Figure {
     }
   }
 
+  // TODO in future - convert this to just one pixel as in
+  // https://webglfundamentals.org/webgl/lessons/webgl-picking.html
+  // but make sure it also works for orthographic projection
   getSelectionPixel(xPixel: number, yPixel: number) {
     const { gl } = this.webglLow;
     this.setupForSelectionDraw();
