@@ -432,25 +432,8 @@ class Figure {
     this.nextDrawTimer = null;
     this.nextDrawTimerStart = 0;
     this.nextDrawTimerDuration = 0;
-    this.camera = { position: [0, 0, 2], lookAt: [0, 0, 0], up: [0, 1, 0] };
-    this.setCamera();
-    this.projection = {
-      left: -1,
-      right: 1,
-      bottom: -1,
-      top: 1,
-      near: -1,
-      far: 1,
-      type: 'orthographic',
-      fieldOfView: 47 * Math.PI / 180,
-      aspectRatio: 1,
-    };
-    this.light = {
-      directional: [1, 1, 1],
-      min: 0.4,
-      point: [10, 10, 10],
-    };
-    this.setProjection({});
+    this.projectionMatrix = new Transform().matrix();
+    this.viewMatrix = new Transform().matrix();
     // this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
@@ -631,6 +614,25 @@ class Figure {
       this.elements.figureLimits = this.limits;
       this.initElements();
     }
+    this.camera = { position: [0, 0, 2], lookAt: [0, 0, 0], up: [0, 1, 0] };
+    this.setCamera();
+    this.projection = {
+      left: -1,
+      right: 1,
+      bottom: -1,
+      top: 1,
+      near: -1,
+      far: 1,
+      type: 'orthographic',
+      fieldOfView: 47 * Math.PI / 180,
+      aspectRatio: 1,
+    };
+    this.light = {
+      directional: [1, 1, 1],
+      min: 0.4,
+      point: [10, 10, 10],
+    };
+    this.setProjection({});
     this.waitForFrames = 0;
     this.scrollingFast = false;
     this.scrollTimeoutId = null;
@@ -1303,6 +1305,24 @@ class Figure {
       z: { min: -1, span: 2 },
     };
 
+    // const figureToGLMatrix = m3.mul(
+    //   this.projectionMatrix,
+    //   m3.mul(
+    //     this.viewMatrix,
+    //     spaceToSpaceTransform(figureSpace, glSpace).matrix(),
+    //   ),
+    // );
+    // const figureToPixelMatrix = m3.mul(
+    //   spaceToSpaceTransform(glSpace, pixelSpace).matrix(),
+    //   figureToGLMatrix,
+    // );
+    const figureToPixelMatrix = m3.mul(
+      spaceToSpaceTransform(glSpace, pixelSpace).matrix(),
+      m3.mul(
+        this.projectionMatrix,
+        this.viewMatrix,
+      ),
+    );
     this.spaceTransforms = {
       figureToGL: spaceToSpaceTransform(figureSpace, glSpace, 'Figure'),
       glToFigure: spaceToSpaceTransform(glSpace, figureSpace),
@@ -1310,6 +1330,8 @@ class Figure {
       figureToPixel: spaceToSpaceTransform(figureSpace, pixelSpace),
       pixelToGL: spaceToSpaceTransform(pixelSpace, glSpace),
       glToPixel: spaceToSpaceTransform(glSpace, pixelSpace),
+      // figureToGLMatrix,
+      figureToPixelMatrix,
     };
   }
 
@@ -1649,7 +1671,11 @@ class Figure {
     const pixelP = this.clientToPixel(clientPoint);
     const e = this.getSelectionPixel(pixelP.x, pixelP.y);
     if (e != null) {
-      console.log(e.name);
+      // console.log(e.getPosition('figure'))
+      // console.log(this.spaceTransforms.figureToPixelMatrix);
+      const p = e.getPosition('figure').transformBy(this.spaceTransforms.figureToPixelMatrix).round(0);
+      const q = pixelP.round(0);
+      console.log(e.name, [p.x, p.y], [q.x, q.y]);
     }
     const figurePoint = pixelP.transformBy(this.spaceTransforms.pixelToFigure.matrix());
     return this.touchDownHandler(figurePoint, eventFromPlayback);
@@ -2197,6 +2223,7 @@ class Figure {
       getPoint(this.camera.up).toArray(),
     );
     this.viewMatrix = m3.inverse(cameraMatrix);
+    this.setSpaceTransforms();
   }
 
   setProjection(options: OBJ_ProjectionOptions) {
@@ -2216,6 +2243,7 @@ class Figure {
         fieldOfView, aspectRatio, near, far,
       );
     }
+    this.setSpaceTransforms();
   }
 
   draw(nowIn: number, canvasIndex: number = 0): void {
