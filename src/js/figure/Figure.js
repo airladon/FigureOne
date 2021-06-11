@@ -1673,7 +1673,24 @@ class Figure {
     if (e != null) {
       // console.log(e.getPosition('figure'))
       // console.log(this.spaceTransforms.figureToPixelMatrix);
-      const p = e.getPosition('figure').transformBy(this.spaceTransforms.figureToPixelMatrix).round(0);
+      const drawPosition = e.getPosition('draw');
+      const worldViewProjectionMatrix = m3.mul(
+        m3.mul(
+          this.projectionMatrix,
+          this.viewMatrix,
+        ),
+        e.lastDrawTransform.matrix(),
+      );
+      const n = m3.transformVector(worldViewProjectionMatrix, [0, 0, 0, 1]);
+      const perspectiveWVPMatrix = worldViewProjectionMatrix.map(a => a / n[3]);
+      const drawToPixel = m3.mul(this.spaceTransforms.glToPixel.matrix(), perspectiveWVPMatrix);
+
+      // console.log(drawPosition);
+      // console.log(worldViewProjectionMatrix);
+      // console.log(n);
+      // console.log(perspectiveWVPMatrix);
+      const p = drawPosition.transformBy(drawToPixel);
+      // const p = e.getPosition('figure').transformBy(this.spaceTransforms.figureToPixelMatrix).round(0);
       const q = pixelP.round(0);
       console.log(e.name, [p.x, p.y], [q.x, q.y]);
     }
