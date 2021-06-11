@@ -106,7 +106,6 @@ export type OBJ_DrawGlobals = {
  * @property {Transform} figureToPixel
  * @property {Transform} pixelToGL
  * @property {Transform} glToPixel
- * @property {Transform} figureToCSSPercent
  */
 export type OBJ_SpaceTransforms = {
   glToFigure: Transform;
@@ -115,9 +114,13 @@ export type OBJ_SpaceTransforms = {
   figureToPixel: Transform;
   pixelToGL: Transform;
   glToPixel: Transform;
-  figureToCSSPercent: Transform;
 }
 
+export type OBJ_FigureLimits = {
+  x: { min: number, max: number },
+  y: { min: number, max: number },
+  z: { min: number, max: number },
+}
 
 export type OBJ_FigureForElement = {
   limits: Rect,
@@ -1278,25 +1281,26 @@ class Figure {
     // this.webglHigh.gl.getExtension('WEBGL_lose_context').loseContext();
   }
 
+  /*
+  Pixel to Figure is in the z = 0 plane.
+  */
   setSpaceTransforms() {
     const glSpace = {
-      x: { bottomLeft: -1, width: 2 },
-      y: { bottomLeft: -1, height: 2 },
+      x: { min: -1, span: 2 },
+      y: { min: -1, span: 2 },
+      z: { min: -1, span: 2 },
     };
     const figureSpace = {
-      x: { bottomLeft: this.limits.left, width: this.limits.width },
-      y: { bottomLeft: this.limits.bottom, height: this.limits.height },
+      x: { min: this.limits.left, span: this.limits.width },
+      y: { min: this.limits.bottom, span: this.limits.height },
+      z: { min: -1, span: 2 },
     };
 
     const canvasRect = this.canvasLow.getBoundingClientRect();
     const pixelSpace = {
-      x: { bottomLeft: 0, width: canvasRect.width },
-      y: { bottomLeft: canvasRect.height, height: -canvasRect.height },
-    };
-
-    const percentSpace = {
-      x: { bottomLeft: 0, width: 1 },
-      y: { bottomLeft: 1, height: -1 },
+      x: { min: 0, span: canvasRect.width },
+      y: { min: canvasRect.height, span: -canvasRect.height },
+      z: { min: -1, span: 2 },
     };
 
     this.spaceTransforms = {
@@ -1306,7 +1310,6 @@ class Figure {
       figureToPixel: spaceToSpaceTransform(figureSpace, pixelSpace),
       pixelToGL: spaceToSpaceTransform(pixelSpace, glSpace),
       glToPixel: spaceToSpaceTransform(glSpace, pixelSpace),
-      figureToCSSPercent: spaceToSpaceTransform(figureSpace, percentSpace),
     };
   }
 
@@ -2110,7 +2113,7 @@ class Figure {
       1,
       true,
     );
-    const x = xPixel / gl.canvas.offsetWidth * gl.canvas.width;
+    const x = xPixel / gl.canvas.clientWidth * gl.canvas.width;
     const y = gl.canvas.height - yPixel * gl.canvas.height / gl.canvas.clientHeight - 1;
     const data = new Uint8Array(4);
     gl.readPixels(

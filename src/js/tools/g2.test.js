@@ -111,16 +111,19 @@ describe('g2 tests', () => {
   describe('Space to space transform', () => {
     let t;
     const pixelSpace = {
-      x: { bottomLeft: 0, width: 1000 },
-      y: { bottomLeft: 500, height: -500 },
+      x: { min: 0, span: 1000 },
+      y: { min: 500, span: -500 },
+      z: { min: -1, span: 2 },
     };
     const glSpace = {
-      x: { bottomLeft: -1, width: 2 },
-      y: { bottomLeft: -1, height: 2 },
+      x: { min: -1, span: 2 },
+      y: { min: -1, span: 2 },
+      z: { min: -1, span: 2 },
     };
     const d1Space = {
-      x: { bottomLeft: 0, width: 4 },
-      y: { bottomLeft: 0, height: 2 },
+      x: { min: 0, span: 4 },
+      y: { min: 0, span: 2 },
+      z: { min: -1, span: 2 },
     };
     describe('Pixel to GL', () => {
       beforeEach(() => {

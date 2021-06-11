@@ -3077,7 +3077,7 @@ class FigureElement {
     const vertexLocation = glLocation.transformBy(this.spaceTransformMatrix('gl', 'draw'));
     const borders = this.getBorder('draw', 'touchBorder');
     const holeBorders = this.getBorder('draw', 'holeBorder');
-    if (borders == null || holeBorder == null) {
+    if (borders == null || holeBorders == null) {
       return false;
     }
     for (let i = 0; i < borders.length; i += 1) {

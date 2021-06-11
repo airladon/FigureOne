@@ -4215,39 +4215,46 @@ function getTransform(t: TypeParsableTransform): Transform {
 
 function spaceToSpaceTransform(
   s1: {
-    x: {bottomLeft: number, width: number},
-    y: {bottomLeft: number, height: number}
+    x: { min: number, span: number },
+    y: { min: number, span: number },
+    z: { min: number, span: number },
   },
   s2: {
-    x: {bottomLeft: number, width: number},
-    y: {bottomLeft: number, height: number}
+    x: { min: number, span: number },
+    y: { min: number, span: number },
+    z: { min: number, span: number },
   },
   name: string = '',
 ) {
-  const xScale = s2.x.width / s1.x.width;
-  const yScale = s2.y.height / s1.y.height;
+  const xScale = s2.x.span / s1.x.span;
+  const yScale = s2.y.span / s1.y.span;
+  const zScale = s2.z.span / s1.z.span;
   const t = new Transform(name)
-    .scale(xScale, yScale)
+    .scale(xScale, yScale, zScale)
     .translate(
-      s2.x.bottomLeft - s1.x.bottomLeft * xScale,
-      s2.y.bottomLeft - s1.y.bottomLeft * yScale,
+      s2.x.min - s1.x.min * xScale,
+      s2.y.min - s1.y.min * yScale,
+      s2.z.min - s1.z.min * zScale,
     );
   return t;
 }
 
 function spaceToSpaceScale(
   s1: {
-    x: {bottomLeft: number, width: number},
-    y: {bottomLeft: number, height: number}
+    x: { bottomLeft: number, width: number },
+    y: { bottomLeft: number, height: number },
+    z: { bottomLeft: number, height: number },
   },
   s2: {
-    x: {bottomLeft: number, width: number},
-    y: {bottomLeft: number, height: number}
+    x: { bottomLeft: number, width: number },
+    y: { bottomLeft: number, height: number },
+    z: { bottomLeft: number, height: number },
   },
 ) {
   const xScale = s2.x.width / s1.x.width;
   const yScale = s2.y.height / s1.y.height;
-  return new Point(xScale, yScale);
+  const zScale = s2.z.height / s1.z.height;
+  return new Point(xScale, yScale, zScale);
 }
 
 function comparePoints(
