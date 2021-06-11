@@ -526,6 +526,8 @@ class FigureElement {
   lastDrawTransform: Transform; // Transform matrix used in last draw
   lastDrawPulseTransform: Transform; // Transform matrix used in last draw
   parentTransform: Array<Transform>;
+  lastScene: null | Scene;
+
   // transformUpdated: boolean;
   // lastDrawParentTransform: Transform;
   // lastDrawElementTransform: Transform;
@@ -778,6 +780,7 @@ class FigureElement {
     this.afterDrawCallback = null;
     this.internalSetTransformCallback = null;
     this.lastDrawTransform = this.transform._dup();
+    this.lastScene = null;
     this.parentTransform = [new Transform()];
     this.lastDrawPulseTransform = this.transform._dup();
     this.onClick = null;
@@ -2427,10 +2430,10 @@ class FigureElement {
 
   updateLimits(
     limits: Rect,
-    transforms: OBJ_SpaceTransforms = this.figureTransforms,
+    // transforms: OBJ_SpaceTransforms = this.figureTransforms,
   ) {
     this.figureLimits = limits;
-    this.figureTransforms = transforms;
+    // this.figureTransforms = transforms;
   }
 
 
@@ -2441,49 +2444,87 @@ class FigureElement {
   }
 
 
-  getPixelToVertexSpaceScale() {
-    const pixelToFigure = this.figureTransforms.pixelToFigure.matrix();
-    const figureToVertex = this.spaceTransformMatrix('figure', 'draw');
-    const scaleX = pixelToFigure[0] * figureToVertex[0];
-    const scaleY = pixelToFigure[4] * figureToVertex[4];
-    return new Point(scaleX, scaleY);
-  }
+  // getPixelToVertexSpaceScale() {
+  //   const pixelToFigure = this.figureTransforms.pixelToFigure.matrix();
+  //   const figureToVertex = this.spaceTransformMatrix('figure', 'draw');
+  //   const scaleX = pixelToFigure[0] * figureToVertex[0];
+  //   const scaleY = pixelToFigure[4] * figureToVertex[4];
+  //   return new Point(scaleX, scaleY);
+  // }
 
-  getVertexToPixelSpaceScale() {
-    const pixelToVertexSpaceScale = this.getPixelToVertexSpaceScale();
-    return new Point(
-      1 / pixelToVertexSpaceScale.x,
-      1 / pixelToVertexSpaceScale.y,
-    );
-  }
+  // getVertexToPixelSpaceScale() {
+  //   const pixelToVertexSpaceScale = this.getPixelToVertexSpaceScale();
+  //   return new Point(
+  //     1 / pixelToVertexSpaceScale.x,
+  //     1 / pixelToVertexSpaceScale.y,
+  //   );
+  // }
 
   spaceTransformMatrix(from: string, to: string): Type3DMatrix | Type2DMatrix {
     // All Vertex related conversions
     if (from === to) {
       return new Transform().identity().matrix();
     }
+    let figureToGLMatrix: Type3DMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
+    if (this.lastScene != null) {
+      figureToGLMatrix = this.lastScene.viewProjectionMatrix;
+    }
+    // From Draw Up
     if (from === 'draw' && to === 'pixel') {
       return m3.mul(
-        this.figure.spaceTransforms.glToPixel.matrix(),
-        this.lastDrawTransform.matrix(),
+        this.figure.spaceTransformMatrix('gl', 'pixel'),
+        m3.mul(
+          figureToGLMatrix,
+          this.lastDrawTransform.matrix(),
+        ),
       );
     }
     if (from === 'draw' && to === 'gl') {
-      return this.lastDrawTransform.matrix();
+      return m3.mul(
+        figureToGLMatrix,
+        this.lastDrawTransform.matrix(),
+      );
     }
     if (from === 'draw' && to === 'figure') {
-      return this.lastDrawTransform.calcMatrix(0, -3);
+      return this.lastDrawTransform.matrix();
     }
     if (from === 'draw' && to === 'local') {
       return this.getTransform().matrix();
     }
-    if (from === 'pixel' && to === 'draw') {
+
+    // From Local Up
+    if (from === 'local' && to === 'pixel') {
       return m3.mul(
-        m3.inverse(this.lastDrawTransform.matrix()),
-        // this.lastDrawTransform.calcInverseMatrix(),
-        this.figure.spaceTransforms.pixelToGL.matrix(),
+        this.figure.spaceTransformMatrix('gl', 'pixel'),
+        m3.mul(
+          figureToGLMatrix,
+          this.lastDrawTransform.calcMatrix(this.transform.def.length),
+        ),
       );
+      // return m3.mul(
+      //   this.figure.spaceTransforms.glToPixel.matrix(),
+      //   this.lastDrawTransform.calcMatrix(this.transform.def.length),
+      // );
     }
+    if (from === 'local' && to === 'gl') {
+      return m3.mul(
+        figureToGLMatrix,
+        this.lastDrawTransform.calcMatrix(this.transform.def.length),
+      );
+      // return this.lastDrawTransform.calcMatrix(this.transform.def.length);
+    }
+    if (from === 'local' && to === 'figure') {
+      return this.lastDrawTransform.calcMatrix(this.transform.def.length);
+    }
+
+
+    // if (from === 'pixel' && to === 'draw') {
+    //   return m3.mul(
+    //     m3.inverse(this.lastDrawTransform.matrix()),
+    //     // this.lastDrawTransform.calcInverseMatrix(),
+    //     this.figure.spaceTransforms.pixelToGL.matrix(),
+    //   );
+    // }
     if (from === 'gl' && to === 'draw') {
       return m3.inverse(this.lastDrawTransform.matrix());
     }
@@ -2495,52 +2536,41 @@ class FigureElement {
     }
 
     // Remaining Local related conversions
-    if (from === 'local' && to === 'pixel') {
-      return m3.mul(
-        this.figure.spaceTransforms.glToPixel.matrix(),
-        this.lastDrawTransform.calcMatrix(this.transform.def.length),
-      );
-    }
-    if (from === 'local' && to === 'gl') {
-      return this.lastDrawTransform.calcMatrix(this.transform.def.length);
-    }
-    if (from === 'local' && to === 'figure') {
-      return this.lastDrawTransform.calcMatrix(this.transform.def.length, -3);
-    }
-    if (from === 'pixel' && to === 'local') {
-      return m3.mul(
-        m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.def.length)),
-        this.figure.spaceTransforms.pixelToGL.matrix(),
-      );
-    }
+    // if (from === 'pixel' && to === 'local') {
+    //   return m3.mul(
+    //     m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.def.length)),
+    //     this.figure.spaceTransforms.pixelToGL.matrix(),
+    //   );
+    // }
     if (from === 'gl' && to === 'local') {
       return m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.def.length));
     }
     if (from === 'figure' && to === 'local') {
-      return m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.def.length, -3));
+      return m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.def.length));
+      // return m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.def.length, -3));
     }
 
     // Remaining Figure related conversions
     if (from === 'figure' && to === 'gl') {
-      return this.figure.spaceTransforms.figureToGL.matrix();
+      return this.figure.spaceTransformMatrix('figure', 'gl');
     }
     if (from === 'figure' && to === 'pixel') {
-      return this.figure.spaceTransforms.figureToPixel.matrix();
+      return this.figure.spaceTransformMatrix('figure', 'pixel');
     }
-    if (from === 'gl' && to === 'figure') {
-      return this.figure.spaceTransforms.glToFigure.matrix();
-    }
-    if (from === 'pixel' && to === 'figure') {
-      return this.figure.spaceTransforms.pixelToFigure.matrix();
-    }
+    // if (from === 'gl' && to === 'figure') {
+    //   return this.figure.spaceTransforms.glToFigure.matrix();
+    // }
+    // if (from === 'pixel' && to === 'figure') {
+    //   return this.figure.spaceTransforms.pixelToFigure.matrix();
+    // }
 
     // Remaining GL related conversions
     if (from === 'gl' && to === 'pixel') {
-      return this.figure.spaceTransforms.glToPixel.matrix();
+      return this.figure.spaceTransformMatrix('gl', 'pixel');
     }
-    if (from === 'pixel' && to === 'gl') {
-      return this.figure.spaceTransforms.pixelToGL.matrix();
-    }
+    // if (from === 'pixel' && to === 'gl') {
+    //   return this.figure.spaceTransforms.pixelToGL.matrix();
+    // }
     return new Transform().identity().matrix();
   }
 
@@ -3550,6 +3580,7 @@ class FigureElementPrimitive extends FigureElement {
 
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawTransform = newTransforms[0];
+      this.lastScene = this.scene || scene;
       // $FlowFixMe
       // if (FIGURE1DEBUG) { timer.stamp('m5'); }
       // eslint-disable-next-line prefer-destructuring
@@ -3558,7 +3589,7 @@ class FigureElementPrimitive extends FigureElement {
       if (pointCount > 0) {
         this.drawTransforms.forEach((t) => {
           this.drawingObject.drawWithTransformMatrix(
-            this.scene || scene, t.matrix(), colorToUse, pointCount, targetTexture,
+            this.lastScene, t.matrix(), colorToUse, pointCount, targetTexture,
           );
         });
       }  // $FlowFixMe
@@ -4234,6 +4265,7 @@ class FigureElementCollection extends FigureElement {
       // if (FIGURE1DEBUG) { timer.stamp('m1'); }
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawTransform = newTransforms[0];
+      this.lastScene = this.scene || scene;
       this.parentTransform = parentTransform;
       // $FlowFixMe
 
@@ -4254,7 +4286,7 @@ class FigureElementCollection extends FigureElement {
       // if (FIGURE1DEBUG) { drawTimer = new PerformanceTimer(); }
       for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
         this.elements[this.drawOrder[i]].draw(
-          now, this.scene || scene, this.drawTransforms, opacityToUse, targetTexture,
+          now, this.lastScene, this.drawTransforms, opacityToUse, targetTexture,
         ); // $FlowFixMe
         // if (FIGURE1DEBUG) { drawTimer.stamp(this.elements[this.drawOrder[i]].name); }
       } // $FlowFixMe
@@ -4850,14 +4882,14 @@ class FigureElementCollection extends FigureElement {
 
   updateLimits(
     limits: Rect,
-    transforms: OBJ_SpaceTransforms = this.figureTransforms,
+    // transforms: OBJ_SpaceTransforms = this.figureTransforms,
   ) {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       element.updateLimits(limits, transforms);
     }
     this.figureLimits = limits;
-    this.figureTransforms = transforms;
+    // this.figureTransforms = transforms;
   }
 
   updateHTMLElementTie(

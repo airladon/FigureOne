@@ -151,18 +151,12 @@ export default function makeFigure(
       const p = getPoint(figurePosition);
       figure.touchDownHandler(p);
       figure.mock.previousTouchPoint = p;
-      // const pixelPoint = p.transformBy(figure.spaceTransforms.figureToPixel.m());
-      // const clientPoint = figure.pixelToClient(pixelPoint);
-      // figure.touchDownHandlerClient(clientPoint);
-      // figure.mock.previousTouchPoint = clientPoint;
     },
     touchUp: () => {
       figure.touchUpHandler();
     },
     touchMove: (figurePosition) => {
       const p = getPoint(figurePosition);
-      // const pixelPoint = p.transformBy(figure.spaceTransforms.figureToPixel.m());
-      // const clientPoint = figure.pixelToClient(pixelPoint);
       figure.touchMoveHandler(figure.mock.previousTouchPoint, p);
       figure.mock.previousTouchPoint = p;
     },

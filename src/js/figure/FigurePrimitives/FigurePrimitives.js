@@ -2289,7 +2289,7 @@ export default class FigurePrimitives {
   draw2D: Array<DrawContext2D>;
   htmlCanvas: HTMLElement;
   limits: Rect;
-  spaceTransforms: OBJ_SpaceTransforms;
+  // spaceTransforms: OBJ_SpaceTransforms;
   animateNextFrame: Function;
   draw2DFigures: Object;
   defaultColor: Array<number>;
@@ -2309,7 +2309,7 @@ export default class FigurePrimitives {
     // draw2DFigures: Object,
     htmlCanvas: HTMLElement,
     limits: Rect,
-    spaceTransforms: OBJ_SpaceTransforms,
+    // spaceTransforms: OBJ_SpaceTransforms,
     animateNextFrame: Function,
     defaultColor: Array<number>,
     defaultDimColor: Array<number>,
@@ -2336,7 +2336,7 @@ export default class FigurePrimitives {
     this.htmlCanvas = htmlCanvas;
     this.limits = limits;
     this.animateNextFrame = animateNextFrame;
-    this.spaceTransforms = spaceTransforms;
+    // this.spaceTransforms = spaceTransforms;
     this.defaultColor = defaultColor;
     this.defaultDimColor = defaultDimColor;
     this.defaultFont = defaultFont;

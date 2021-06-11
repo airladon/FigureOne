@@ -71,6 +71,9 @@ export type OBJ_SpaceTransforms = {
   figureToPixel: Transform;
   pixelToGL: Transform;
   glToPixel: Transform;
+  glToPixelMatrix: Type3DMatrix;
+  figureToGLMatrix: Type3DMatrix;
+  figureToPixelMatrix: Type3DMatrix;
 }
 
 export type OBJ_FigureLimits = {
@@ -81,7 +84,7 @@ export type OBJ_FigureLimits = {
 
 export type OBJ_FigureForElement = {
   limits: Rect,
-  spaceTransforms: OBJ_SpaceTransforms,
+  spaceTransformMatrix: (string, string) => Type3DMatrix,
   animateNextFrame: (?boolean, ?string) => void,
   animationFinished: () => void,
   recorder: Recorder,
@@ -282,12 +285,6 @@ class Figure {
   backgroundColor: Array<number>;
   fontScale: number;
   // layout: Object;
-
-  /**
-   * Useful transforms between spaces at the figure level and above.
-   * @property {OBJ_SpaceTransforms} spaceTransforms
-   */
-  spaceTransforms: OBJ_SpaceTransforms;
 
   // oldScrollY: number;
   lastDrawTime: number;
@@ -543,8 +540,7 @@ class Figure {
       this.gesture = new Gesture(this);
     }
 
-    this.scene = new Scene(optionsToUse.scene, this.setSpaceTransforms.bind(this));
-    this.setSpaceTransforms();
+    this.scene = new Scene(optionsToUse.scene);
     this.previousCursorPoint = new Point(0, 0);
     this.isTouchDown = false;
     // this.pauseAfterNextDrawFlag = false;
@@ -769,7 +765,7 @@ class Figure {
       return;
     }
 
-    const matrix = this.spaceTransforms.pixelToFigure.matrix();
+    const matrix = this.spaceTransformMatrix('pixel', 'figure');
     this.defaultLineWidth = Math.abs(matrix[0]);
   }
 
@@ -858,7 +854,7 @@ class Figure {
       this.beingTouchedElements = this.beingTouchedElements.filter(e => Object.keys(e).length > 0);
       this.notifications.publish('stateSetInit');
       this.elements.setTimeDelta(this.timeKeeper.now() / 1000 - this.stateTime);
-      this.elements.updateDrawTransforms([this.spaceTransforms.figureToGL]);
+      this.elements.updateDrawTransforms([new Transform()]);
       this.elements.stateSet();
       this.elements.setPointsFromDefinition();
       this.elements.setPrimitiveColors();
@@ -1224,7 +1220,6 @@ class Figure {
       webgl, draw2D,
       this.htmlCanvas,
       this.limits,
-      this.spaceTransforms,
       this.animateNextFrame.bind(this, true, 'getShapes'),
       this.defaultColor,
       this.defaultDimColor,
@@ -1276,21 +1271,10 @@ class Figure {
     // this.webglHigh.gl.getExtension('WEBGL_lose_context').loseContext();
   }
 
-  /*
-  Pixel to Figure is in the z = 0 plane.
-  */
-  setSpaceTransforms() {
-    const glSpace = {
-      x: { min: -1, span: 2 },
-      y: { min: -1, span: 2 },
-      z: { min: -1, span: 2 },
-    };
-    const figureSpace = {
-      x: { min: this.scene.left, span: this.scene.right - this.scene.left },
-      y: { min: this.scene.bottom, span: this.scene.top - this.scene.bottom },
-      z: { min: -1, span: 2 },
-    };
-
+  spaceTransformMatrix(from: string, to: string) {
+    if (from === to) {
+      return m3.identity();
+    }
     const canvasRect = this.canvasLow.getBoundingClientRect();
     const pixelSpace = {
       x: { min: 0, span: canvasRect.width },
@@ -1298,45 +1282,38 @@ class Figure {
       z: { min: -1, span: 2 },
     };
 
-    // const figureToGLMatrix = m3.mul(
-    //   this.projectionMatrix,
-    //   m3.mul(
-    //     this.viewMatrix,
-    //     spaceToSpaceTransform(figureSpace, glSpace).matrix(),
-    //   ),
-    // );
-    // const figureToPixelMatrix = m3.mul(
-    //   spaceToSpaceTransform(glSpace, pixelSpace).matrix(),
-    //   figureToGLMatrix,
-    // );
-    // const figureViewProjectionMatrix = m3.mul(
-    //     m3.mul(
-    //       this.projectionMatrix,
-    //       this.viewMatrix,
-    //     ),
-    //     e.lastDrawTransform.matrix(),
-    //   );
-    //   const n = m3.transformVector(worldViewProjectionMatrix, [0, 0, 0, 1]);
-    //   const perspectiveWVPMatrix = worldViewProjectionMatrix.map(a => a / n[3]);
-    //   const drawToPixel = m3.mul(this.spaceTransforms.glToPixel.matrix(), perspectiveWVPMatrix);
+    const glSpace = {
+      x: { min: -1, span: 2 },
+      y: { min: -1, span: 2 },
+      z: { min: -1, span: 2 },
+    };
+
+    const glToPixelMatrix = spaceToSpaceTransform(glSpace, pixelSpace).matrix();
+    if (from === 'gl' && to === 'pixel') {
+      return glToPixelMatrix;
+    }
+    const figureToGLMatrix = m3.dup(this.scene.viewProjectionMatrix);
+    if (from === 'figure' && to === 'gl') {
+      return figureToGLMatrix;
+    }
 
     const figureToPixelMatrix = m3.mul(
-      spaceToSpaceTransform(glSpace, pixelSpace).matrix(),
-      m3.mul(
-        this.scene.projectionMatrix,
-        this.scene.viewMatrix,
-      ),
+      glToPixelMatrix,
+      figureToGLMatrix,
     );
-    this.spaceTransforms = {
-      figureToGL: spaceToSpaceTransform(figureSpace, glSpace, 'Figure'),
-      glToFigure: spaceToSpaceTransform(glSpace, figureSpace),
-      pixelToFigure: spaceToSpaceTransform(pixelSpace, figureSpace),
-      figureToPixel: spaceToSpaceTransform(figureSpace, pixelSpace),
-      pixelToGL: spaceToSpaceTransform(pixelSpace, glSpace),
-      glToPixel: spaceToSpaceTransform(glSpace, pixelSpace),
-      // figureToGLMatrix,
-      figureToPixelMatrix,
-    };
+    if (from === 'figure' && to === 'pixel') {
+      return figureToPixelMatrix;
+    }
+
+    if (from === 'gl' && to === 'figure') {
+      return m3.inverse(figureToGLMatrix);
+    }
+
+    if (from === 'pixel' && to === 'figure') {
+      return m3.identity();
+    }
+
+    throw new Error(`Invalid space transform matrix inputs: from: '${from}', to: '${to}'`);
   }
 
 
@@ -1348,7 +1325,7 @@ class Figure {
   initElements() {
     this.elements.setFigure({
       limits: this.limits,
-      spaceTransforms: this.spaceTransforms,
+      spaceTransformMatrix: this.spaceTransformMatrix.bind(this),
       animateNextFrame: this.animateNextFrame.bind(this),
       animationFinished: this.animationFinished.bind(this),
       recorder: this.recorder,
@@ -1417,13 +1394,12 @@ class Figure {
   }
 
   setFirstTransform() {
-    this.elements.setFirstTransform(this.spaceTransforms.figureToGL);
+    this.elements.setFirstTransform(new Transform());
   }
 
   updateLimits(limits: TypeParsableRect) {
     const l = getRect(limits);
     this.limits = l._dup();
-    // this.setSpaceTransforms();
   }
 
   // Renders all tied elements in the first level of figure elements
@@ -1558,9 +1534,8 @@ class Figure {
   resize(skipHTMLTie: boolean = false) {
     this.webglLow.resize();
     this.draw2DLow.resize();
-    this.setSpaceTransforms();
     if (this.elements != null) {
-      this.elements.updateLimits(this.limits, this.spaceTransforms);
+      this.elements.updateLimits(this.limits);
     }
     this.sizeHtmlText();
     if (skipHTMLTie) {
@@ -1676,7 +1651,6 @@ class Figure {
     const e = this.getSelectionPixel(pixelP.x, pixelP.y);
     if (e != null) {
       // console.log(e.getPosition('figure'))
-      // console.log(this.spaceTransforms.figureToPixelMatrix);
       const drawPosition = e.getPosition('draw');
       const worldViewProjectionMatrix = m3.mul(
         m3.mul(
@@ -1687,14 +1661,16 @@ class Figure {
       );
       const n = m3.transformVector(worldViewProjectionMatrix, [0, 0, 0, 1]);
       const perspectiveWVPMatrix = worldViewProjectionMatrix.map(a => a / n[3]);
-      const drawToPixel = m3.mul(this.spaceTransforms.glToPixel.matrix(), perspectiveWVPMatrix);
+      const drawToPixel = m3.mul(this.spaceTransformMatrix('gl', 'pixel'), perspectiveWVPMatrix);
 
       const p = drawPosition.transformBy(drawToPixel);
 
       const q = pixelP.round(0);
       console.log(e.name, [p.x, p.y], [q.x, q.y]);
+      console.log(e.getPosition('pixel'))
     }
-    const figurePoint = pixelP.transformBy(this.spaceTransforms.pixelToFigure.matrix());
+
+    const figurePoint = pixelP.transformBy(this.spaceTransformMatrix('pixel', 'figure'));
     return this.touchDownHandler(figurePoint, eventFromPlayback);
   }
 
@@ -1732,7 +1708,7 @@ class Figure {
     this.isTouchDown = true;
 
     // Get the touched point in clip space
-    const glPoint = figurePoint.transformBy(this.spaceTransforms.figureToGL.matrix());
+    const glPoint = figurePoint.transformBy(this.spaceTransformMatrix('figure', 'gl'));
 
     // Get all the figure elements that were touched at this point (element
     // must have isTouchable = true to be considered)
@@ -1803,7 +1779,7 @@ class Figure {
   touchFreeHandler(clientPoint: Point) {
     if (this.recorder.state === 'recording') {
       const pixelP = this.clientToPixel(clientPoint);
-      const figurePoint = pixelP.transformBy(this.spaceTransforms.pixelToFigure.matrix());
+      const figurePoint = pixelP.transformBy(this.spaceTransformMatrix('pixel', 'figure'));
       this.previousCursorPoint = figurePoint;
       if (this.cursorShown) {
         this.recorder.recordEvent('cursorMove', [figurePoint.x, figurePoint.y]);
@@ -1895,10 +1871,10 @@ class Figure {
   touchMoveHandlerClient(previousClientPoint: Point, currentClientPoint: Point) {
     const currentPixelPoint = this.clientToPixel(currentClientPoint);
     const currentFigurePoint = currentPixelPoint
-      .transformBy(this.spaceTransforms.pixelToFigure.matrix());
+      .transformBy(this.spaceTransformMatrix('pixel', 'figure'));
     const previousPixelPoint = this.clientToPixel(previousClientPoint);
     const previousFigurePoint = previousPixelPoint
-      .transformBy(this.spaceTransforms.pixelToFigure.matrix());
+      .transformBy(this.spaceTransformMatrix('pixel', 'figure'));
     return this.touchMoveHandler(previousFigurePoint, currentFigurePoint);
   }
 
@@ -1930,7 +1906,7 @@ class Figure {
       return false;
     }
     const previousGLPoint = previousFigurePoint
-      .transformBy(this.spaceTransforms.figureToGL.matrix());
+      .transformBy(this.spaceTransformMatrix('figure', 'gl'));
     // Go through each element being moved, get the current translation
     for (let i = 0; i < this.beingMovedElements.length; i += 1) {
       const element = this.beingMovedElements[i];
@@ -2152,7 +2128,6 @@ class Figure {
       0,
       this.scene,
       [new Transform()],
-      // [this.spaceTransforms.figureToGL],
       1,
       true,
     );
@@ -2229,37 +2204,6 @@ class Figure {
     this.nextDrawTimer = null;
   }
 
-  // setCamera(options: OBJ_CameraOptions = {}) {
-  //   joinObjects(this.camera, options);
-  //   const cameraMatrix = m3.lookAt(
-  //     getPoint(this.camera.position).toArray(),
-  //     getPoint(this.camera.lookAt).toArray(),
-  //     getPoint(this.camera.up).toArray(),
-  //   );
-  //   this.viewMatrix = m3.inverse(cameraMatrix);
-  //   this.setSpaceTransforms();
-  // }
-
-  // setProjection(options: OBJ_ProjectionOptions) {
-  //   this.projection = joinObjects({}, this.projection, options);
-  //   if (this.projection.type === 'orthographic') {
-  //     const {
-  //       left, right, near, far, bottom, top,
-  //     } = this.projection;
-  //     this.projectionMatrix = m3.orthographic(
-  //       left, right, bottom, top, near, far,
-  //     );
-  //   } else if (this.projection.type === 'perspective') {
-  //     const {
-  //       fieldOfView, aspectRatio, near, far,
-  //     } = this.projection;
-  //     this.projectionMatrix = m3.perspective(
-  //       fieldOfView, aspectRatio, near, far,
-  //     );
-  //   }
-  //   this.setSpaceTransforms();
-  // }
-
   draw(nowIn: number, canvasIndex: number = 0): void {
     let timer;
     // $FlowFixMe
@@ -2319,58 +2263,17 @@ class Figure {
     // $FlowFixMe
     if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('setupDraw'); }
 
-    // this.setupForSelectionDraw();
-    // // this.clearContext(canvasIndex);
-    // this.elements.draw(
-    //   now, {
-    //     projectionMatrix: this.projectionMatrix,
-    //     viewMatrix: this.viewMatrix,
-    //     viewProjectionMatrix: m3.mul(this.projectionMatrix, this.viewMatrix),
-    //     light: this.light,
-    //   },
-    //   [new Transform()],
-    //   1,
-    //   true,
-    // );
-
-    // const { gl } = this.webglLow;
-    // const d = new Uint8Array(4);
-    // gl.readPixels(
-    //   gl.canvas.width / 3,            // x
-    //   gl.canvas.height / 2,            // y
-    //   1,                 // width
-    //   1,                 // height
-    //   gl.RGBA,           // format
-    //   gl.UNSIGNED_BYTE,  // type
-    //   d,              // typed array to hold result
-    // );
-    // console.log(d)
-
     this.clearContext(canvasIndex);
     // $FlowFixMe
     if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('clearContext'); }
-    // const projection = this.spaceTransforms.figureToGL;
-    // Math.PI / 3 * this.timeKeeper.now() / 20000
-    // const camera = new Transform().rotate(0, 0, 0);
     this.elements.draw(
       now,
       this.scene,
       [new Transform()],
-      // [this.spaceTransforms.figureToGL],
       1,
       false,
     );
 
-
-    // this.elements.draw(now, [this.spaceTransforms.figureToGL], 1, canvasIndex);
-    // this.elements.draw(now, [
-    //   new Transform().custom([
-    //     1, 0, 0, 0,
-    //     0, 1, 0, 0,
-    //     0, 0, 1, 0,
-    //     0, 0, 0, 1,
-    //   ]),
-    // ], 1, canvasIndex);
     // $FlowFixMe
     if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('draw'); }
 

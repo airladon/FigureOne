@@ -124,10 +124,10 @@ describe('Figure', () => {
       figure.touchTopElementOnly = false;
       figure.elements = collection;
       figure.dToGL = (x, y) => new Point(x, y)
-        .transformBy(figure.spaceTransforms.figureToGL.matrix());
+        .transformBy(figure.spaceTransformMatrix('figure', 'gl'));
       figure.dToP = (p) => {
         const pixel = p
-          .transformBy(figure.spaceTransforms.figureToPixel.matrix());
+          .transformBy(figure.spaceTransformMatrix('figure', 'pixel'));
         return pixel.add(new Point(figure.canvasLow.left, figure.canvasLow.top));
       };
       figures[key] = figure;

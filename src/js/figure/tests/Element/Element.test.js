@@ -435,7 +435,7 @@ describe('Animationa and Movement', () => {
         figure.elements.add('square', square);
         figure.initialize();
         glPoint = (x, y) => new Point(x, y)
-          .transformBy(figure.spaceTransforms.figureToGL.matrix());
+          .transformBy(figure.spaceTransformMatrix('figure', 'gl'));
       });
       test('Inside square and border', () => {
         expect(square.isBeingTouched(glPoint(0, 0))).toBe(true);
