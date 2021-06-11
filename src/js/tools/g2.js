@@ -2362,6 +2362,21 @@ class Line {
   }
 }
 
+function dotProduct(a: Array<number>, b: Array<number>) {
+  if (a.length !== b.length) {
+    throw new Error(`Dot product can only be performed on vectors with same length: '${a}', '${b}'`);
+  }
+  let sum = 0;
+  for (let i = 0; i < a.length; i += 1) {
+    sum += a[i] * b[i];
+  }
+  return sum;
+}
+
+function dotProduct3(a: Type3Components, b: Type3Components) {
+  return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+}
+
 class Vector extends Line {
   i: number;
   j: number;
@@ -6611,6 +6626,115 @@ function getPositionInRect(
 //   return borderOut;
 // }
 
+export type TypeParsablePlane = [TypeParsablePoint, TypeParsablePoint] | Plane | string;
+
+function parsePlane(pIn: TypeParsablePlane): Plane {
+  if (pIn instanceof Plane) {
+    return pIn;
+  }
+  if (pIn == null) {
+    throw new Error(`FigureOne could not parse plane with no input: '${pIn}'`);
+  }
+
+  let p = pIn;
+  if (typeof p === 'string') {
+    try {
+      p = JSON.parse(p);
+    } catch {
+      throw new Error(`FigureOne could not parse plane from string: '${p}'`);
+    }
+  }
+
+  if (Array.isArray(p) && p.length === 2) {
+    const p0 = getPoint(p[0]);
+    const n = getPoint(p[1]);
+    return [p0, n];
+  }
+
+  if (p.f1Type != null) {
+    if (
+      p.f1Type === 'pl'
+      && p.state != null
+      && Array.isArray([p.state])
+    ) {
+      const [p0, n] = p.state;
+      return [getPoint(p0), getPoint(n)];
+    } // $FlowFixMe
+    throw new Error(`FigureOne could not parse point from state: ${pIn}`);
+  } // $FlowFixMe
+  throw new Error(`FigureOne could not parse point: ${pIn}`);
+}
+
+function isParsablePlane(pIn: any) {
+  try {
+    parsePlane(pIn);
+  } catch {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Parse a {@link TypeParsablePoint} and return a {@link Point}.
+ * @return {Point}
+ */
+function getPlane(p: TypeParsablePlane): Plane {
+  const [p0, n] = parsePlane(p);
+  return new Plane(p0, n);
+}
+
+class Plane {
+  p0: Point;  // Reference point
+  n: Point;   // Normal
+
+  constructor(
+    p0OrDef: TypeParsablePlane | TypeParsablePoint = [[0, 0, 0], [0, 0, 1]],
+    normal: null | TypeParsablePoint = null,
+  ) {
+    if (normal == null) {
+      const [p0, n] = parsePlane(p0OrDef);
+      this.p0 = p0;
+      this.n = n;
+    } else {
+      this.p0 = getPoint(p0OrDef);
+      this.n = getPoint(normal);
+    }
+  }
+
+  _dup() {
+    return new Plane(this.p0, this.n);
+  }
+
+  _state(options: { precision: number }) {
+    const precision = getPrecision(options);
+    return {
+      f1Type: 'pl',
+      state: [
+        [
+          roundNum(this.p0.x, precision),
+          roundNum(this.p0.y, precision),
+          roundNum(this.p0.z, precision),
+        ],
+        [
+          roundNum(this.n.x, precision),
+          roundNum(this.n.y, precision),
+          roundNum(this.n.z, precision),
+        ],
+      ],
+    };
+  }
+
+  hasPointOn(p: TypeParsablePoint, precision: number = 8) {
+    const pnt = getPoint(p);
+    const pDelta = pnt.sub(this.p0);
+    const d = roundNum(dotProduct3(pDelta.toArray(), this.n.toArray()), precision);
+    if (d === 0) {
+      return true;
+    }
+    return false;
+  }
+}
+
 export {
   // point,
   Point,
@@ -6672,4 +6796,8 @@ export {
   isParsablePoint,
   isParsableTransform,
   isTransformArrayZero,
+  Plane,
+  getPlane,
+  dotProduct,
+  dotProduct3,
 };

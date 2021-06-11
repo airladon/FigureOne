@@ -808,6 +808,7 @@ class Figure {
       'stateTime',
       'mockPreviousTouchPoint',
       'isTouchDown',
+      'scene',
     ], o);
     state.beingTouchedElements = [];
     state.beingMovedElements = [];
@@ -854,7 +855,7 @@ class Figure {
       this.beingTouchedElements = this.beingTouchedElements.filter(e => Object.keys(e).length > 0);
       this.notifications.publish('stateSetInit');
       this.elements.setTimeDelta(this.timeKeeper.now() / 1000 - this.stateTime);
-      this.elements.updateDrawTransforms([new Transform()]);
+      this.elements.updateDrawTransforms([new Transform()], this.scene);
       this.elements.stateSet();
       this.elements.setPointsFromDefinition();
       this.elements.setPrimitiveColors();

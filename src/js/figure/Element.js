@@ -992,6 +992,7 @@ class FigureElement {
         'defaultColor',
         'transform',
         '_custom',
+        'scene',
         // 'lastDrawTransform',
         // 'parentTransform',
         'isShown',
@@ -1588,7 +1589,7 @@ class FigureElement {
       this.transform = transform;
     }
     if (this.simple === false) {
-      this.updateDrawTransforms(this.parentTransform, false);
+      this.updateDrawTransforms(this.parentTransform, this.lastScene, false);
     }
     if (this.internalSetTransformCallback) {
       this.fnMap.exec(this.internalSetTransformCallback, this.transform);
@@ -3152,6 +3153,7 @@ class FigureElement {
 
   updateDrawTransforms(
     parentTransform: Array<Transform> = [new Transform()],
+    scene: Scene,
     isSame: boolean = false,
   ) {
     if (isSame) {
@@ -3164,6 +3166,7 @@ class FigureElement {
       parentCount: parentTransform[0].def.length,
       elementCount: this.transform.def.length,
     };
+    this.lastScene = this.scene || scene;
     this.pulseTransforms = this.getPulseTransforms(
       this.timeKeeper.now() / 1000,
     ); // $FlowFixMe
@@ -4694,12 +4697,13 @@ class FigureElementCollection extends FigureElement {
 
   updateDrawTransforms(
     parentTransform: Array<Transform> = [new Transform()],
+    scene: Scene,
     isSame: boolean = false,
   ) {
     super.updateDrawTransforms(parentTransform, isSame);
     for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
       this.elements[this.drawOrder[i]].updateDrawTransforms(
-        this.drawTransforms, isSame,
+        this.drawTransforms, this.lastScene, isSame,
       );
     }
   }
