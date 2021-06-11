@@ -23,7 +23,7 @@ import type { Type3DMatrix } from './m3';
 // };
 
 export type OBJ_Projection = {
-  type?: 'orthographic' | 'perspective' | '2D',
+  style?: 'orthographic' | 'perspective' | '2D',
   left?: number,
   right?: number,
   bottom?: number,
@@ -177,6 +177,7 @@ export default class Scene {
     joinObjects(this, defaultOptions, options);
     this.calcProjectionMatrix();
     this.calcViewMatrix();
+    this.calcViewProjectionMatrix();
     this.onUpdate = onUpdate;
   }
 
@@ -188,6 +189,7 @@ export default class Scene {
       this.projectionMatrix = m3.orthographic(
         left, right, bottom, top, near, far,
       );
+      return;
     }
     const {
       fieldOfView, aspectRatio, near, far,

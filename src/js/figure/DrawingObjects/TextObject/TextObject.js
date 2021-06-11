@@ -733,7 +733,6 @@ class TextObjectBase extends DrawingObject {
     const worldViewProjectionMatrix = m3.mul(scene.viewProjectionMatrix, worldMatrix);
 
     const p = m3.transformVector(worldViewProjectionMatrix, [0, 0, 0, 1]);
-
     // The incoming transform matrix transforms elementSpace to glSpace.
     // Modify the incoming worldMatrix to be compatible with
     // pixel space

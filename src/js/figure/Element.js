@@ -3554,6 +3554,7 @@ class FigureElementPrimitive extends FigureElement {
       // if (FIGURE1DEBUG) { timer.stamp('m5'); }
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawPulseTransform = this.drawTransforms[0];
+      // console.log(this.scene)
       if (pointCount > 0) {
         this.drawTransforms.forEach((t) => {
           this.drawingObject.drawWithTransformMatrix(

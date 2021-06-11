@@ -178,16 +178,28 @@ figure.add({
   xAlign: 'center',
 });
 
+const k = figure.add({
+  make: 'text',
+  text: 'a',
+  position: [0.5, 0, 0],
+  xAlign: 'center',
+});
+k.scene = new Fig.Scene({ left: -2, right: 2, bottom: -1, top: 1 });
+
 figure.scene.light.directional = [1, 1, 1];
 figure.scene.light.min = 0;
 figure.scene.light.point = [0.3, 0.1, 1];
 
 
-figure.scene.setCamera({ position: [0.2, 0.2, 2] });
-figure.scene.setProjection({ type: 'perspective', near: 1.03, far: 3, aspectRatio: 2, fieldOfView: Math.PI * 0.4 });
+// figure.scene.setCamera({ position: [0.2, 0.2, 2] });
+// figure.scene.setProjection({ style: 'perspective', near: 1.03, far: 3, aspectRatio: 2, fieldOfView: Math.PI * 0.4 });
 
-// figure.setCamera({ position: [0, 0, 1.1] });
-// figure.setProjection({ near: 0.1, far: 4, left: -3, right: 1, bottom: -1, top: 1 });
+figure.scene.setCamera({ position: [0, 0, 1.1] });
+
+figure.scene.setProjection({
+  style: 'orthographic', near: 0.1, far: 4, left: -2, right: 2, bottom: -1, top: 1,
+});
+// console.log('asdf')
 
 // figure.elements.animations.new()
 //   .rotation({ target: [0.5, 0.5, 0], duration: 5 })
