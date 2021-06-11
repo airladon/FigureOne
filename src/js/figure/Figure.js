@@ -7,6 +7,8 @@ import {
   spaceToSpaceTransform, minAngleDiff,
   getPoint, getTransform,
 } from '../tools/g2';
+import Scene from '../tools/scene';
+import type { OBJ_Scene } from '../tools/scene';
 import * as m3 from '../tools/m3';
 import type { TypeParsableRect, TypeParsablePoint, Type3DMatrix } from '../tools/g2';
 // import * as math from '../tools/math';
@@ -45,105 +47,12 @@ import type { COL_SlideNavigator } from './FigureCollections/SlideNavigator';
 
 const FIGURE1DEBUG = false;
 
-export type OBJ_Projection = {
-  type: 'orthographic' | 'perspective',
-  // orthographic
-  left: number,
-  right: number,
-  bottom: number,
-  top: number,
-
-  // perspective
-  aspectRatio: number,
-  fieldOfView: number,
-
-  // both
-  near: number,
-  far: number,
-};
-
-export type OBJ_ProjectionOptions = {
-  type?: 'orthographic' | 'perspective',
-  left?: number,
-  right?: number,
-  bottom?: number,
-  top?: number,
-  aspectRatio?: number,
-  fieldOfView?: number,
-  near?: number,
-  far?: number,
-};
-
-export type OBJ_Camera = {
-  position: TypeParsablePoint,
-  lookAt: TypeParsablePoint,
-  up: TypeParsablePoint,
-};
-
-export type OBJ_CameraOptions = {
-  position?: TypeParsablePoint,
-  lookAt?: TypeParsablePoint,
-  up?: TypeParsablePoint,
-};
-
-export type OBJ_LightOptions = {
-  directional?: TypeParsablePoint,
-  ambient?: number,
-  point?: TypeParsablePoint,
-}
-
-export type OBJ_Light = {
-  directional: TypeParsablePoint,
-  ambient: number,
-  point: TypeParsablePoint,
-}
-
-export type OBJ_SceneOptions = {
-  style?: '2D' | 'orthographic' | 'perspective',
-  left?: number,
-  right?: number,
-  bottom?: number,
-  top?: number,
-
-  // 3D
-  near?: number,
-  far?: number,
-  camera?: OBJ_CameraOptions,
-
-  // Perspective
-  aspectRatio?: number,
-  fieldOfView?: number,
-
-  // Light
-  light?: OBJ_LightOptions,
-}
-
-export type OBJ_Scene = {
-  style: '2D' | 'orthographic' | 'perspective',
-  left: number,
-  right: number,
-  bottom: number,
-  top: number,
-
-  // 3D
-  near: number,
-  far: number,
-  camera: OBJ_Camera,
-
-  // Perspective
-  aspectRatio: number,
-  fieldOfView: number,
-
-  // Light
-  light: OBJ_Light,
-}
-
-export type OBJ_DrawGlobals = {
-  projectionMatrix: Type3DMatrix,
-  viewMatrix: Type3DMatrix,
-  viewProjectionMatrix: Type3DMatrix,
-  light: OBJ_Light
-}
+// export type OBJ_DrawGlobals = {
+//   projectionMatrix: Type3DMatrix,
+//   viewMatrix: Type3DMatrix,
+//   viewProjectionMatrix: Type3DMatrix,
+//   light: OBJ_Light
+// }
 
 /**
  * Space Transforms
@@ -194,7 +103,7 @@ export type OBJ_FigureForElement = {
  */
 export type OBJ_Figure = {
   htmlId?: string,
-  limits?: TypeParsableRect,
+  // limits?: TypeParsableRect,
   scene?: OBJ_Scene,
   color?: TypeColor,
   font?: OBJ_Font,
@@ -425,12 +334,13 @@ class Figure {
     num: number,
   };
 
-  camera: OBJ_Camera;
-  viewMatrix: Type3DMatrix;
-  projection: OBJ_Projection;
-  projectionMatrix: Type3DMatrix;
-  light: OBJ_Light;
-  scene: OBJ_Scene;
+  // camera: OBJ_Camera;
+  // viewMatrix: Type3DMatrix;
+  // projection: OBJ_Projection;
+  // projectionMatrix: Type3DMatrix;
+  // light: OBJ_Light;
+  // scene: OBJ_Scene;
+  scene: Scene;
 
   // frameRateInformation: string;
   // frameRateHistory: Array<number>;
@@ -461,6 +371,13 @@ class Figure {
         opacity: 1,
       },
       backgroundColor: [1, 1, 1, 1],
+      scene: {
+        style: '2D',
+        left: -1,
+        right: 1,
+        bottom: -1,
+        top: 1,
+      },
     };
     this.frameRate = {
       information: null,
@@ -478,34 +395,35 @@ class Figure {
     this.nextDrawTimer = null;
     this.nextDrawTimerStart = 0;
     this.nextDrawTimerDuration = 0;
-    this.scene = {
-      style: '2D',
-      left: -1,
-      right: 1,
-      bottom: -1,
-      top: 1,
-      near: 1,
-      far: 3,
-      camera: {
-        position: [0, 0, 3],
-        lookAt: [0, 0],
-        up: [0, 1, 0],
-      },
-      aspectRatio: 1,
-      fieldOfView: 1,
-      light: {
-        directional: [1, 1, 1],
-        ambient: 0.4,
-        point: [10, 10, 10],
-      },
-    };
-    this.projectionMatrix = new Transform().matrix();
-    this.viewMatrix = new Transform().matrix();
+    // this.scene = {
+    //   style: '2D',
+    //   left: -1,
+    //   right: 1,
+    //   bottom: -1,
+    //   top: 1,
+    //   near: 1,
+    //   far: 3,
+    //   camera: {
+    //     position: [0, 0, 3],
+    //     lookAt: [0, 0],
+    //     up: [0, 1, 0],
+    //   },
+    //   aspectRatio: 1,
+    //   fieldOfView: 1,
+    //   light: {
+    //     directional: [1, 1, 1],
+    //     ambient: 0.4,
+    //     point: [10, 10, 10],
+    //   },
+    // };
+    // this.projectionMatrix = new Transform().matrix();
+    // this.viewMatrix = new Transform().matrix();
     // this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
       htmlId, limits,
     } = optionsToUse;
+
     this.defaultColor = optionsToUse.color;
     // this.defaultLineWidth = optionsToUse.lineWidth;
     if (optionsToUse.font.color == null) {
@@ -625,6 +543,8 @@ class Figure {
       this.gesture = new Gesture(this);
     }
 
+    this.scene = new Scene(optionsToUse.scene, this.setSpaceTransforms.bind(this));
+    this.setSpaceTransforms();
     this.previousCursorPoint = new Point(0, 0);
     this.isTouchDown = false;
     // this.pauseAfterNextDrawFlag = false;
@@ -681,25 +601,25 @@ class Figure {
       this.elements.figureLimits = this.limits;
       this.initElements();
     }
-    this.camera = { position: [0, 0, 2], lookAt: [0, 0, 0], up: [0, 1, 0] };
-    this.setCamera();
-    this.projection = {
-      left: -1,
-      right: 1,
-      bottom: -1,
-      top: 1,
-      near: -1,
-      far: 1,
-      type: 'orthographic',
-      fieldOfView: 47 * Math.PI / 180,
-      aspectRatio: 1,
-    };
-    this.light = {
-      directional: [1, 1, 1],
-      min: 0.4,
-      point: [10, 10, 10],
-    };
-    this.setProjection({});
+    // this.camera = { position: [0, 0, 2], lookAt: [0, 0, 0], up: [0, 1, 0] };
+    // this.setCamera();
+    // this.projection = {
+    //   left: -1,
+    //   right: 1,
+    //   bottom: -1,
+    //   top: 1,
+    //   near: -1,
+    //   far: 1,
+    //   type: 'orthographic',
+    //   fieldOfView: 47 * Math.PI / 180,
+    //   aspectRatio: 1,
+    // };
+    // this.light = {
+    //   directional: [1, 1, 1],
+    //   min: 0.4,
+    //   point: [10, 10, 10],
+    // };
+    // this.setProjection({});
     this.waitForFrames = 0;
     this.scrollingFast = false;
     this.scrollTimeoutId = null;
@@ -764,11 +684,11 @@ class Figure {
     return this.getElement(this.cursorElementName);
   }
 
-  setScene(options: OBJ_SceneOptions) {
-    const o = joinobjects({}, this.scene, options);
+  // setScene(options: OBJ_SceneOptions) {
+  //   const o = joinobjects({}, this.scene, options);
 
 
-  }
+  // }
 
   bindRecorder() {
     const onCursor = (payload) => {
@@ -1366,8 +1286,8 @@ class Figure {
       z: { min: -1, span: 2 },
     };
     const figureSpace = {
-      x: { min: this.limits.left, span: this.limits.width },
-      y: { min: this.limits.bottom, span: this.limits.height },
+      x: { min: this.scene.left, span: this.scene.right - this.scene.left },
+      y: { min: this.scene.bottom, span: this.scene.top - this.scene.bottom },
       z: { min: -1, span: 2 },
     };
 
@@ -1403,8 +1323,8 @@ class Figure {
     const figureToPixelMatrix = m3.mul(
       spaceToSpaceTransform(glSpace, pixelSpace).matrix(),
       m3.mul(
-        this.projectionMatrix,
-        this.viewMatrix,
+        this.scene.projectionMatrix,
+        this.scene.viewMatrix,
       ),
     );
     this.spaceTransforms = {
@@ -1503,7 +1423,7 @@ class Figure {
   updateLimits(limits: TypeParsableRect) {
     const l = getRect(limits);
     this.limits = l._dup();
-    this.setSpaceTransforms();
+    // this.setSpaceTransforms();
   }
 
   // Renders all tied elements in the first level of figure elements
@@ -2147,20 +2067,20 @@ class Figure {
   setupAnimations() {
     this.elements.fnMap.add('_cameraCallback', (p: number, customProperties: Object) => {
       const { start, target } = customProperties;
-      this.camera = {
+      const camera = {
         position: start.position.add(target.position.sub(start.position).scale(p)),
         lookAt: start.lookAt.add(target.lookAt.sub(start.lookAt).scale(p)),
         up: start.up.add(target.up.sub(start.up).scale(p)),
       };
-      this.setCamera();
+      this.scene.setCamera(camera);
     });
     this.animations.camera = (...opt) => {
       const o = joinObjects({}, {
         progression: 'easeinout',
       }, ...opt);
       o.customProperties = {
-        start: joinObjects({}, this.camera, o.start || {}),
-        target: joinObjects({}, this.camera, o.target || {}),
+        start: joinObjects({}, this.scene.camera, o.start || {}),
+        target: joinObjects({}, this.scene.camera, o.target || {}),
       };
       o.customProperties.start.position = getPoint(o.customProperties.start.position);
       o.customProperties.start.lookAt = getPoint(o.customProperties.start.lookAt);
@@ -2317,36 +2237,36 @@ class Figure {
     this.nextDrawTimer = null;
   }
 
-  setCamera(options: OBJ_CameraOptions = {}) {
-    joinObjects(this.camera, options);
-    const cameraMatrix = m3.lookAt(
-      getPoint(this.camera.position).toArray(),
-      getPoint(this.camera.lookAt).toArray(),
-      getPoint(this.camera.up).toArray(),
-    );
-    this.viewMatrix = m3.inverse(cameraMatrix);
-    this.setSpaceTransforms();
-  }
+  // setCamera(options: OBJ_CameraOptions = {}) {
+  //   joinObjects(this.camera, options);
+  //   const cameraMatrix = m3.lookAt(
+  //     getPoint(this.camera.position).toArray(),
+  //     getPoint(this.camera.lookAt).toArray(),
+  //     getPoint(this.camera.up).toArray(),
+  //   );
+  //   this.viewMatrix = m3.inverse(cameraMatrix);
+  //   this.setSpaceTransforms();
+  // }
 
-  setProjection(options: OBJ_ProjectionOptions) {
-    this.projection = joinObjects({}, this.projection, options);
-    if (this.projection.type === 'orthographic') {
-      const {
-        left, right, near, far, bottom, top,
-      } = this.projection;
-      this.projectionMatrix = m3.orthographic(
-        left, right, bottom, top, near, far,
-      );
-    } else if (this.projection.type === 'perspective') {
-      const {
-        fieldOfView, aspectRatio, near, far,
-      } = this.projection;
-      this.projectionMatrix = m3.perspective(
-        fieldOfView, aspectRatio, near, far,
-      );
-    }
-    this.setSpaceTransforms();
-  }
+  // setProjection(options: OBJ_ProjectionOptions) {
+  //   this.projection = joinObjects({}, this.projection, options);
+  //   if (this.projection.type === 'orthographic') {
+  //     const {
+  //       left, right, near, far, bottom, top,
+  //     } = this.projection;
+  //     this.projectionMatrix = m3.orthographic(
+  //       left, right, bottom, top, near, far,
+  //     );
+  //   } else if (this.projection.type === 'perspective') {
+  //     const {
+  //       fieldOfView, aspectRatio, near, far,
+  //     } = this.projection;
+  //     this.projectionMatrix = m3.perspective(
+  //       fieldOfView, aspectRatio, near, far,
+  //     );
+  //   }
+  //   this.setSpaceTransforms();
+  // }
 
   draw(nowIn: number, canvasIndex: number = 0): void {
     let timer;
@@ -2442,14 +2362,9 @@ class Figure {
     // const camera = new Transform().rotate(0, 0, 0);
     this.elements.draw(
       now,
-      {
-        projectionMatrix: this.projectionMatrix,
-        viewMatrix: this.viewMatrix,
-        viewProjectionMatrix: m3.mul(this.projectionMatrix, this.viewMatrix),
-        light: this.light,
-      },
-      // [new Transform()],
-      [this.spaceTransforms.figureToGL],
+      this.scene,
+      [new Transform()],
+      // [this.spaceTransforms.figureToGL],
       1,
       false,
     );

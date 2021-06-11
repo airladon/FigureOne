@@ -7,6 +7,7 @@ import {
   TransformBounds, RectBounds, RangeBounds, getBounds,
   getBoundingBorder, isBuffer, getBorder,
 } from '../tools/g2';
+import type Scene from '../tools/scene';
 import { round } from '../tools/math';
 // import { areColorsSame } from '../tools/color';
 import { getState } from './Recorder/state';
@@ -566,6 +567,7 @@ class FigureElement {
   interactiveLocation: Point;   // this is in vertex space
   // recorder: Recorder;
   figure: OBJ_FigureForElement;
+  scene: null | Scene;
   // move: {
   //   bounds: TransformBounds,
   //   transformClip: string | (?(Transform) => Transform);
@@ -3481,7 +3483,7 @@ class FigureElementPrimitive extends FigureElement {
 
   draw(
     now: number,
-    drawGlobals: OBJ_DrawGlobals,
+    scene: Scene,
     // projection: Type3DMatrix,
     // view: Type3DMatrix,
     parentTransform: Array<Transform> = [new Transform()],
@@ -3555,7 +3557,7 @@ class FigureElementPrimitive extends FigureElement {
       if (pointCount > 0) {
         this.drawTransforms.forEach((t) => {
           this.drawingObject.drawWithTransformMatrix(
-            drawGlobals, t.matrix(), colorToUse, pointCount, targetTexture,
+            this.scene || scene, t.matrix(), colorToUse, pointCount, targetTexture,
           );
         });
       }  // $FlowFixMe
@@ -4209,7 +4211,7 @@ class FigureElementCollection extends FigureElement {
 
   draw(
     now: number,
-    drawGlobals: OBJ_DrawGlobals,
+    scene: Scene,
     parentTransform: Array<Transform> = [new Transform()],
     parentOpacity: number = 1,
     // canvasIndex: number = 0,
@@ -4251,7 +4253,7 @@ class FigureElementCollection extends FigureElement {
       // if (FIGURE1DEBUG) { drawTimer = new PerformanceTimer(); }
       for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
         this.elements[this.drawOrder[i]].draw(
-          now, drawGlobals, this.drawTransforms, opacityToUse, targetTexture,
+          now, this.scene || scene, this.drawTransforms, opacityToUse, targetTexture,
         ); // $FlowFixMe
         // if (FIGURE1DEBUG) { drawTimer.stamp(this.elements[this.drawOrder[i]].name); }
       } // $FlowFixMe

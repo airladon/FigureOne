@@ -6,7 +6,7 @@ import {
   Point, getPoint, Rect, getBoundingBorder, getBorder, isBuffer,
 } from '../../../tools/g2';
 import type { TypeParsablePoint, TypeParsableBuffer } from '../../../tools/g2';
-import type { OBJ_DrawGlobals } from '../../Figure';
+import type Scene from '../../../tools/scene';
 import type { Type3DMatrix } from '../../../tools/m3';
 import DrawingObject from '../DrawingObject';
 import DrawContext2D from '../../DrawContext2D';
@@ -698,7 +698,7 @@ class TextObjectBase extends DrawingObject {
   //   - scaledPixelSpace
   //
   drawWithTransformMatrix(
-    drawGlobals: OBJ_DrawGlobals,
+    scene: Scene,
     worldMatrix: Type3DMatrix,
     color: TypeColor = [1, 1, 1, 1],
     // contextIndex: number = 0,
@@ -730,7 +730,7 @@ class TextObjectBase extends DrawingObject {
       0, 0, 1,
     ];
 
-    const worldViewProjectionMatrix = m3.mul(drawGlobals.viewProjectionMatrix, worldMatrix);
+    const worldViewProjectionMatrix = m3.mul(scene.viewProjectionMatrix, worldMatrix);
 
     const p = m3.transformVector(worldViewProjectionMatrix, [0, 0, 0, 1]);
 

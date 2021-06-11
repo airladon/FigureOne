@@ -152,7 +152,7 @@ export default class Scene {
   viewProjectionMatrix: Type3DMatrix;
   onUpdate: null | (() => void);
 
-  constructor(options: OBJ_Scene, onUpdate: null | (() => void) = null ) {
+  constructor(options: OBJ_Scene, onUpdate: null | (() => void) = null) {
     const defaultOptions = {
       style: '2D',
       left: -1,
@@ -175,6 +175,8 @@ export default class Scene {
       },
     };
     joinObjects(this, defaultOptions, options);
+    this.calcProjectionMatrix();
+    this.calcViewMatrix();
     this.onUpdate = onUpdate;
   }
 
@@ -193,7 +195,6 @@ export default class Scene {
     this.projectionMatrix = m3.perspective(
       fieldOfView, aspectRatio, near, far,
     );
-    this.calcViewProjectionMatrix();
   }
 
   calcViewMatrix() {
@@ -203,7 +204,6 @@ export default class Scene {
       getPoint(this.camera.up).toArray(),
     );
     this.viewMatrix = m3.inverse(this.cameraMatrix);
-    this.calcViewProjectionMatrix();
   }
 
   calcViewProjectionMatrix() {
@@ -238,26 +238,31 @@ export default class Scene {
   setCamera(options: OBJ_Camera) {
     joinObjects(this.camera, options);
     this.calcViewMatrix();
+    this.calcViewProjectionMatrix();
   }
 
   setProjection(options: OBJ_Projection) {
     joinObjects(this, options);
     this.calcProjectionMatrix();
+    this.calcViewProjectionMatrix();
   }
 
   set2D(options: OBJ_2DScene) {
     joinObjects(this, { style: '2D' }, options);
     this.calcProjectionMatrix();
+    this.calcViewProjectionMatrix();
   }
 
   setOrthographic(options: OBJ_OrthographicScene) {
     joinObjects(this, { style: 'orthographic' }, options);
     this.calcProjectionMatrix();
+    this.calcViewProjectionMatrix();
   }
 
   setPerspective(options: OBJ_PerspectiveScene) {
     joinObjects(this, { style: 'perspective' }, options);
     this.calcProjectionMatrix();
+    this.calcViewProjectionMatrix();
   }
 
   setLight(options: OBJ_Light) {
