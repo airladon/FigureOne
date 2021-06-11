@@ -2087,14 +2087,14 @@ class Figure {
       }, ...opt);
       o.customProperties = {
         start: joinObjects({}, this.camera, o.start || {}),
-        target: joinObjects({}, this.camera, o.start || {}),
+        target: joinObjects({}, this.camera, o.target || {}),
       };
-      o.start.position = getPoint(o.start.position);
-      o.start.lookAt = getPoint(o.start.lookAt);
-      o.start.up = getPoint(o.start.up);
-      o.target.position = getPoint(o.target.position);
-      o.target.lookAt = getPoint(o.target.lookAt);
-      o.target.up = getPoint(o.target.up);
+      o.customProperties.start.position = getPoint(o.customProperties.start.position);
+      o.customProperties.start.lookAt = getPoint(o.customProperties.start.lookAt);
+      o.customProperties.start.up = getPoint(o.customProperties.start.up);
+      o.customProperties.target.position = getPoint(o.customProperties.target.position);
+      o.customProperties.target.lookAt = getPoint(o.customProperties.target.lookAt);
+      o.customProperties.target.up = getPoint(o.customProperties.target.up);
       o.callback = '_cameraCallback';
       o.timeKeeper = this.timeKeeper;
       return new CustomAnimationStep(o);

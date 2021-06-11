@@ -177,13 +177,17 @@ figure.light.min = 0;
 figure.light.point = [0.3, 0.1, 1];
 
 
-figure.setCamera({ position: [0.2, 0.2, 2] });
-figure.setProjection({ type: 'perspective', near: 1.03, far: 3, aspectRatio: 1, fieldOfView: Math.PI * 0.4 });
+// figure.setCamera({ position: [0.2, 0.2, 2] });
+// figure.setProjection({ type: 'perspective', near: 1.03, far: 3, aspectRatio: 2, fieldOfView: Math.PI * 0.4 });
 
-// figure.setCamera({ position: [0.5, 0.5, 1.1] });
-// figure.setProjection({ near: 0.1, far: 4 });
+figure.setCamera({ position: [0, 0, 1.1] });
+figure.setProjection({ near: 0.1, far: 4, left: -3, right: 1, bottom: -1, top: 1 });
 
 // figure.elements.animations.new()
-//   .rotation({ target: [0, Math.PI / 2, 0], duration: 5 })
+//   .rotation({ target: [0.5, 0.5, 0], duration: 5 })
 //   .start()
+figure.animations.new()
+  .camera({ target: { position: [0.5, 0.5, 1.1] }, duration: 5 })
+  .camera({ target: { position: [1, 1, 1.1] }, duration: 5 })
+  .start();
 
