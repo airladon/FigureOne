@@ -5,7 +5,7 @@
 // } from '../Element';
 import Figure from '../figure/Figure';
 import {
-  Rect, getPoint, Point,
+  Rect, getPoint, Point, getRect,
 } from '../tools/g2';
 import webgl from './WebGLInstanceMock';
 import DrawContext2D from './DrawContext2DMock';
@@ -23,8 +23,8 @@ const generateRandomStringMock = jest.spyOn(tools, 'generateRandomString');
 generateRandomStringMock.mockImplementation(() => '000000');
 
 export default function makeFigure(
-  inputCanvas = new Rect(100, -300, 1000, 500),
-  inputLimits = new Rect(-1, -1, 2, 2),
+  inputCanvasIn = new Rect(100, -300, 1000, 500),
+  inputLimitsIn = new Rect(-1, -1, 2, 2),
 ) {
   document.body.innerHTML =
     '<div id="c">'
@@ -40,6 +40,8 @@ export default function makeFigure(
     + '  </canvas>'
     + '</div>';
   // canvas = document.getElementById('c');
+  const inputCanvas = getRect(inputCanvasIn);
+  const inputLimits = getRect(inputLimitsIn);
   const definition = {
     width: inputCanvas.width,
     height: inputCanvas.height,
@@ -98,7 +100,6 @@ export default function makeFigure(
   figure.collectionsLow = figure.getObjects(false);
   figure.collectionsHigh = figure.getObjects(true);
   figure.collections = figure.collectionsLow;
-  figure.setSpaceTransforms();
   figure.createFigureElements();
   figure.defaultLineWidth = 0.01;
   figure.primitives.defaultLineWidth = 0.01;
