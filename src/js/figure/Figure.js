@@ -86,15 +86,63 @@ export type OBJ_CameraOptions = {
   up?: TypeParsablePoint,
 };
 
+export type OBJ_LightOptions = {
+  directional?: TypeParsablePoint,
+  ambient?: number,
+  point?: TypeParsablePoint,
+}
+
+export type OBJ_Light = {
+  directional: TypeParsablePoint,
+  ambient: number,
+  point: TypeParsablePoint,
+}
+
+export type OBJ_SceneOptions = {
+  style?: '2D' | 'orthographic' | 'perspective',
+  left?: number,
+  right?: number,
+  bottom?: number,
+  top?: number,
+
+  // 3D
+  near?: number,
+  far?: number,
+  camera?: OBJ_CameraOptions,
+
+  // Perspective
+  aspectRatio?: number,
+  fieldOfView?: number,
+
+  // Light
+  light?: OBJ_LightOptions,
+}
+
+export type OBJ_Scene = {
+  style: '2D' | 'orthographic' | 'perspective',
+  left: number,
+  right: number,
+  bottom: number,
+  top: number,
+
+  // 3D
+  near: number,
+  far: number,
+  camera: OBJ_Camera,
+
+  // Perspective
+  aspectRatio: number,
+  fieldOfView: number,
+
+  // Light
+  light: OBJ_Light,
+}
+
 export type OBJ_DrawGlobals = {
   projectionMatrix: Type3DMatrix,
   viewMatrix: Type3DMatrix,
   viewProjectionMatrix: Type3DMatrix,
-  light: {
-    directional: TypeParsablePoint,
-    min: number,
-    point: TypeParsablePoint,
-  }
+  light: OBJ_Light
 }
 
 /**
@@ -147,6 +195,7 @@ export type OBJ_FigureForElement = {
 export type OBJ_Figure = {
   htmlId?: string,
   limits?: TypeParsableRect,
+  scene?: OBJ_Scene,
   color?: TypeColor,
   font?: OBJ_Font,
   lineWidth?: number,
@@ -380,11 +429,8 @@ class Figure {
   viewMatrix: Type3DMatrix;
   projection: OBJ_Projection;
   projectionMatrix: Type3DMatrix;
-  light: {
-    directional: TypeParsablePoint,
-    min: number,
-    point: TypeParsablePoint,
-  };
+  light: OBJ_Light;
+  scene: OBJ_Scene;
 
   // frameRateInformation: string;
   // frameRateHistory: Array<number>;
@@ -432,6 +478,27 @@ class Figure {
     this.nextDrawTimer = null;
     this.nextDrawTimerStart = 0;
     this.nextDrawTimerDuration = 0;
+    this.scene = {
+      style: '2D',
+      left: -1,
+      right: 1,
+      bottom: -1,
+      top: 1,
+      near: 1,
+      far: 3,
+      camera: {
+        position: [0, 0, 3],
+        lookAt: [0, 0],
+        up: [0, 1, 0],
+      },
+      aspectRatio: 1,
+      fieldOfView: 1,
+      light: {
+        directional: [1, 1, 1],
+        ambient: 0.4,
+        point: [10, 10, 10],
+      },
+    };
     this.projectionMatrix = new Transform().matrix();
     this.viewMatrix = new Transform().matrix();
     // this.oldScrollY = 0;
@@ -695,6 +762,12 @@ class Figure {
    */
   getCursor() {
     return this.getElement(this.cursorElementName);
+  }
+
+  setScene(options: OBJ_SceneOptions) {
+    const o = joinobjects({}, this.scene, options);
+
+
   }
 
   bindRecorder() {

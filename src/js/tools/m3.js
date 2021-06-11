@@ -274,8 +274,9 @@ function inverse3(m: Array<number>) {
   ];
 }
 
+
 // Guass-Jordan Elimination
-function inverse(A: Array<number>) {
+function inverseN(A: Array<number>) {
   let m;
   if (A.length === 9) {
     m = 3;
@@ -361,6 +362,26 @@ function inverse(A: Array<number>) {
       a[3][4], a[3][5], a[3][6], a[3][7],
     ];
   }
+
+  index = 0;
+  const B = Array(m * m);
+  for (let i = 0; i < m; i += 1) {
+    for (let j = m; j < m * 2; j += 1) {
+      B[index] = a[i][j];
+      index += 1;
+    }
+  }
+  return B;
+}
+
+function inverse(A: Type3DMatrix): Type3DMatrix {
+  // $FlowFixMe
+  return inverseN(A);
+}
+
+function dup(A: Type3DMatrix): Type3DMatrix {
+  // $FlowFixMe
+  return A.slice();
 }
 
 // function lu(A: Array<number>) {
@@ -487,6 +508,7 @@ export {
   perspective,
   lookAt,
   transformVector,
+  dup,
   // lu,
   // lupInvert,
 };
