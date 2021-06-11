@@ -1,6 +1,6 @@
 /* globals Fig */
 const  { Point } = Fig;
-const figure = new Fig.Figure({ limits: [-2, -2, 4, 4], backgroundColor: [1, 0.9, 0.9, 1] });
+const figure = new Fig.Figure({ limits: [-1, -1, 2, 2], backgroundColor: [1, 0.9, 0.9, 1] });
 
 const col = (c, numVertices) => {
   let out = [];

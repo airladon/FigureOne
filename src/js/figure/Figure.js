@@ -1316,6 +1316,17 @@ class Figure {
     //   spaceToSpaceTransform(glSpace, pixelSpace).matrix(),
     //   figureToGLMatrix,
     // );
+    // const figureViewProjectionMatrix = m3.mul(
+    //     m3.mul(
+    //       this.projectionMatrix,
+    //       this.viewMatrix,
+    //     ),
+    //     e.lastDrawTransform.matrix(),
+    //   );
+    //   const n = m3.transformVector(worldViewProjectionMatrix, [0, 0, 0, 1]);
+    //   const perspectiveWVPMatrix = worldViewProjectionMatrix.map(a => a / n[3]);
+    //   const drawToPixel = m3.mul(this.spaceTransforms.glToPixel.matrix(), perspectiveWVPMatrix);
+
     const figureToPixelMatrix = m3.mul(
       spaceToSpaceTransform(glSpace, pixelSpace).matrix(),
       m3.mul(
@@ -2155,7 +2166,8 @@ class Figure {
         viewProjectionMatrix: m3.mul(this.projectionMatrix, this.viewMatrix),
         // light: this.light,
       },
-      [new Transform()],
+      // [new Transform()],
+      [this.spaceTransforms.figureToGL],
       1,
       true,
     );
@@ -2363,7 +2375,8 @@ class Figure {
         viewProjectionMatrix: m3.mul(this.projectionMatrix, this.viewMatrix),
         light: this.light,
       },
-      [new Transform()],
+      // [new Transform()],
+      [this.spaceTransforms.figureToGL],
       1,
       false,
     );
