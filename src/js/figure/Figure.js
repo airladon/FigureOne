@@ -1680,8 +1680,8 @@ class Figure {
       const drawPosition = e.getPosition('draw');
       const worldViewProjectionMatrix = m3.mul(
         m3.mul(
-          this.projectionMatrix,
-          this.viewMatrix,
+          this.scene.projectionMatrix,
+          this.scene.viewMatrix,
         ),
         e.lastDrawTransform.matrix(),
       );
@@ -1689,12 +1689,8 @@ class Figure {
       const perspectiveWVPMatrix = worldViewProjectionMatrix.map(a => a / n[3]);
       const drawToPixel = m3.mul(this.spaceTransforms.glToPixel.matrix(), perspectiveWVPMatrix);
 
-      // console.log(drawPosition);
-      // console.log(worldViewProjectionMatrix);
-      // console.log(n);
-      // console.log(perspectiveWVPMatrix);
       const p = drawPosition.transformBy(drawToPixel);
-      // const p = e.getPosition('figure').transformBy(this.spaceTransforms.figureToPixelMatrix).round(0);
+
       const q = pixelP.round(0);
       console.log(e.name, [p.x, p.y], [q.x, q.y]);
     }
@@ -2153,14 +2149,10 @@ class Figure {
     const { gl } = this.webglLow;
     this.setupForSelectionDraw();
     this.elements.draw(
-      0, {
-        projectionMatrix: this.projectionMatrix,
-        viewMatrix: this.viewMatrix,
-        viewProjectionMatrix: m3.mul(this.projectionMatrix, this.viewMatrix),
-        // light: this.light,
-      },
-      // [new Transform()],
-      [this.spaceTransforms.figureToGL],
+      0,
+      this.scene,
+      [new Transform()],
+      // [this.spaceTransforms.figureToGL],
       1,
       true,
     );
