@@ -188,4 +188,62 @@ describe('Line3', () => {
       expect(l.hasPointOn([1.1, 1, 1])).toBe(false);
     });
   });
+  describe('distanceToPoint', () => {
+    test('[0, 0, 0], [1, 0, 0]', () => {
+      const l = new Line3([0, 0, 0], [1, 0, 0]);
+      // On line
+      expect(round(l.distanceToPoint([0, 0, 0]))).toBe(0);
+      expect(round(l.distanceToPoint([1, 0, 0]))).toBe(0);
+      expect(round(l.distanceToPoint([0.5, 0, 0]))).toBe(0);
+      // Off ends of line
+      expect(round(l.distanceToPoint([-1, 0, 0]))).toBe(0);
+      expect(round(l.distanceToPoint([2, 0, 0]))).toBe(0);
+      // Off line
+      expect(round(l.distanceToPoint([0, 1, 0]))).toBe(1);
+      expect(round(l.distanceToPoint([0, 1, 1]))).toBe(round(Math.sqrt(2)));
+      expect(round(l.distanceToPoint([0, 0, 0.1]))).toBe(round(0.1));
+      expect(round(l.distanceToPoint([1, 1, 0]))).toBe(round(1));
+    });
+    test('[-1, -1, -1], [-2, -2, -2]', () => {
+      const l = new Line3([-1, -1, -1], [-2, -2, -2]);
+      // On line
+      expect(round(l.distanceToPoint([-1, -1, -1]))).toBe(0);
+      expect(round(l.distanceToPoint([-2, -2, -2]))).toBe(0);
+      expect(round(l.distanceToPoint([-1.5, -1.5, -1.5]))).toBe(0);
+      // Off ends of line
+      expect(round(l.distanceToPoint([0, 0, 0]))).toBe(0);
+      expect(round(l.distanceToPoint([-10, -10, -10]))).toBe(0);
+      // Off line
+      expect(round(l.distanceToPoint([-1, 1, 0]))).toBe(round(Math.sqrt(2)));
+    });
+  });
+  describe('isParallelWith', () => {
+    test('[0, 0, 0], [1, 0, 0]', () => {
+      const l = new Line3([0, 0, 0], [1, 0, 0]);
+      // Same Line
+      expect(l.isParallelWith(new Line3([0, 0, 0], [1, 0, 0]))).toBe(true);
+      expect(l.reverse().isParallelWith(new Line3([0, 0, 0], [1, 0, 0]))).toBe(true);
+      // Collinear
+      expect(l.isParallelWith(new Line3([-10, 0, 0], [-11, 0, 0]))).toBe(true);
+      // Parallel
+      expect(l.isParallelWith(new Line3([0, 1, 0], [1, 1, 0]))).toBe(true);
+      expect(l.isParallelWith(new Line3([0, 1, 1], [1, 1, 1]))).toBe(true);
+      // Not parallel
+      expect(l.isParallelWith(new Line3([0, 1, 0], [1, 1, 1]))).toBe(false);
+      expect(l.isParallelWith(new Line3([0, 0, 0], [1, 0, 0.1]))).toBe(false);
+    });
+    test('[0, 0, 0], [1, 1, 1]', () => {
+      const l = new Line3([0, 0, 0], [1, 1, 1]);
+      // Same Line
+      expect(l.isParallelWith(new Line3([0, 0, 0], [1, 1, 1]))).toBe(true);
+      expect(l.reverse().isParallelWith(new Line3([0, 0, 0], [1, 1, 1]))).toBe(true);
+      // Collinear
+      expect(l.isParallelWith(new Line3([-10, -10, -10], [-11, -11, -11]))).toBe(true);
+      // Parallel
+      expect(l.isParallelWith(new Line3([0, 1, 1], [1, 2, 2]))).toBe(true);
+      // Not parallel
+      expect(l.isParallelWith(new Line3([0, 1, 0], [1, 1, 1]))).toBe(false);
+      expect(l.isParallelWith(new Line3([0, 0, 0], [1, 0, 0.1]))).toBe(false);
+    });
+  });
 });

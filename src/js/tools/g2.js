@@ -693,13 +693,38 @@ class Point {
   }
 
   /**
-   * Dot product of two points.
-   *
-   * This is used where each point represents a vector.
+   * Dot product of two points representing vectors.
    */
   dotProduct(p: TypeParsablePoint) {
     const q = getPoint(p);
     return dotProduct3([this.x, this.y, this.z], [q.x, q.y, q.z]);
+  }
+
+  /**
+   * Cross product of two points representing vectors.
+   */
+  crossProduct(p: TypeParsablePoint) {
+    const q = getPoint(p);
+    return new Point(
+      this.y * q.z - this.z * q.y,
+      -(this.x * q.z - this.z * q.x),
+      this.x * q.y - this.y * q.x,
+    );
+  }
+
+  /**
+   * Returns `true` if the x, y, z components of the point when rounded
+   * with `precision` are zero.
+   */
+  isZero(precision: number = 8) {
+    if (
+      round(this.x, precision) === 0
+      && round(this.y, precision) === 0
+      && round(this.z, precision) === 0
+    ) {
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -2492,6 +2517,13 @@ class Line3 {
   }
 
   /**
+   * Get the unit vector of the line from p1.
+   */
+  unitVector() {
+    return this.p2.sub(this.p1).normalize();
+  }
+
+  /**
    * Get p1 or p2
    * @return {Point}
    */
@@ -2618,7 +2650,7 @@ class Line3 {
     if (this.p1.isEqualTo(point, precision)) {
       return true;
     }
-    const n = this.p2.sub(this.p1).normalize();
+    const n = this.unitVector();
     const m = getPoint(point).sub(this.p1).normalize();
     // const d = round(dotProduct3(m.toArray(), n.toArray()), precision);
     const d = round(m.dotProduct(n), precision);
@@ -2642,7 +2674,7 @@ class Line3 {
     if (this.p1.isEqualTo(p, precision)) {
       return true;
     }
-    const n = this.p2.sub(this.p1).normalize();
+    const n = this.unitVector();
     const M = p.sub(this.p1);
     const m = M.normalize();
     const d = round(m.dotProduct(n), precision);
@@ -2661,49 +2693,28 @@ class Line3 {
    * @return {number}
    */
   distanceToPoint(point: TypeParsablePoint, precision?: number = 8) {
+    // Equation from https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
+    const n = this.unitVector();
     const p = getPoint(point);
-    return roundNum(
-      Math.abs(this.A * p.x + this.B * p.y - this.C) / Math.sqrt(this.A ** 2 + this.B ** 2),
-      precision,
-    );
+    const a = this.p1;
+    return p.sub(a).sub(n.scale(p.sub(a).dotProduct(n))).distance();
   }
 
-  // /**
-  //  * `true` if `point` is on the line.
-  //  *
-  //  * If the line has 2 or 1 finite ends, point must be on or between the
-  //  * defined ends.
-  //  * @return {boolean}
-  //  */
-  // hasPointOn(point: TypeParsablePoint, precision?: number = 8) {
-  //   const p = getPoint(point);
-  //   if (this.hasPointAlong(p, precision)) {
-  //     if (this.ends === 2) {
-  //       if (pointinRect(p, this.p1, this.p2, precision)) {
-  //         return true;
-  //       }
-  //       return false;
-  //     }
-  //     if (this.ends === 1) {
-  //       if (this.p1.isEqualTo(p, precision)) {
-  //         return true;
-  //       }
-  //       const p1ToP = new Line(this.p1, p);
-  //       if (round(clipAngle(p1ToP.ang, '0to360'), precision) === round(clipAngle(this.ang, '0to360'), precision)) {
-  //         return true;
-  //       }
-  //       return false;
-  //     }
-  //     return true;  // if this.ends === 0 and point is along, then it is on.
-  //   }
-  //   return false;
-  // }
+  isParallelWith(line2: Line, precision: number = 8) {
+    const n = this.unitVector();
+    const m = line2.unitVector();
+    const crossProduct = n.crossProduct(m);
+    if (crossProduct.isZero(precision)) {
+      return true;
+    }
+    return false;
+  }
 
   /**
    * `true` if two lines are equal to within some rounding `precision`.
    * @return {boolean}
    */
-  isEqualTo(line2: Line, precision?: number = 8) {
+  isEqualTo(line2: Line3, precision?: number = 8) {
     const l1 = this;
     const l2 = line2;
     if (l1.ends !== l2.ends) {
@@ -2731,6 +2742,9 @@ class Line3 {
 
     // otherwise ends === 0
     if (!l1.hasPointOn(l2.p1)) {
+      return false;
+    }
+    if (!l1.hasPointOn(l2.p2)) {
       return false;
     }
     return true;
@@ -2764,7 +2778,7 @@ class Line3 {
       if (l1.p1.isNotWithinDelta(l2.p1, delta)) {
         return false;
       }
-      if (!l1.hasPointOn(l2.p2, delta)) {
+      if (!l1.hasPointOn(l2.p2)) {
         return false;
       }
       return true;
@@ -2772,6 +2786,9 @@ class Line3 {
 
     // otherwise ends === 0
     if (!l1.hasPointOn(l2.p1)) {
+      return false;
+    }
+    if (!l1.hasPointOn(l2.p2)) {
       return false;
     }
     return true;
@@ -2926,20 +2943,20 @@ class Line3 {
     return new Line(p1, p2, 0, this.ends);
   }
 
-  // If two lines are parallel, their determinant is 0
-  /**
-   * `true` if this line is parralel with `line2`
-   * @return {boolean}
-   */
-  isParallelWith(line2: Line, precision: number = 8) {
-    const l2 = line2; // line2.round(precision);
-    const l1 = this;  // this.round(precision);
-    const det = l1.A * l2.B - l2.A * l1.B;
-    if (roundNum(det, precision) === 0) {
-      return true;
-    }
-    return false;
-  }
+  // // If two lines are parallel, their determinant is 0
+  // /**
+  //  * `true` if this line is parralel with `line2`
+  //  * @return {boolean}
+  //  */
+  // isParallelWith(line2: Line, precision: number = 8) {
+  //   const l2 = line2; // line2.round(precision);
+  //   const l1 = this;  // this.round(precision);
+  //   const det = l1.A * l2.B - l2.A * l1.B;
+  //   if (roundNum(det, precision) === 0) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   // This needs to be tested somewhere as p1ToShaddow = line was updated
   shaddowOn(l: Line, precision: number = 8) {
@@ -3314,6 +3331,7 @@ function dotProduct(a: Array<number>, b: Array<number>) {
 function dotProduct3(a: Type3Components, b: Type3Components) {
   return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 }
+
 
 class Vector extends Line {
   i: number;
