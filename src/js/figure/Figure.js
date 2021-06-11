@@ -433,7 +433,7 @@ class Figure {
     this.nextDrawTimerStart = 0;
     this.nextDrawTimerDuration = 0;
     this.camera = { position: [0, 0, 2], lookAt: [0, 0, 0], up: [0, 1, 0] };
-    this.updateCamera();
+    this.setCamera();
     this.projection = {
       left: -1,
       right: 1,
@@ -450,7 +450,7 @@ class Figure {
       min: 0.4,
       point: [10, 10, 10],
     };
-    this.updateProjection({});
+    this.setProjection({});
     // this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
@@ -1647,7 +1647,10 @@ class Figure {
 
   touchDownHandlerClient(clientPoint: Point, eventFromPlayback: boolean = false) {
     const pixelP = this.clientToPixel(clientPoint);
-    console.log(this.getSelectionPixel(pixelP.x, pixelP.y));
+    const e = this.getSelectionPixel(pixelP.x, pixelP.y);
+    if (e != null) {
+      console.log(e.name);
+    }
     const figurePoint = pixelP.transformBy(this.spaceTransforms.pixelToFigure.matrix());
     return this.touchDownHandler(figurePoint, eventFromPlayback);
   }
@@ -2022,7 +2025,7 @@ class Figure {
         lookAt: start.lookAt.add(target.lookAt.sub(start.lookAt).scale(p)),
         up: start.up.add(target.up.sub(start.up).scale(p)),
       };
-      this.updateCamera();
+      this.setCamera();
     });
     this.animations.camera = (...opt) => {
       const o = joinObjects({}, {
@@ -2186,7 +2189,7 @@ class Figure {
     this.nextDrawTimer = null;
   }
 
-  updateCamera(options: OBJ_CameraOptions = {}) {
+  setCamera(options: OBJ_CameraOptions = {}) {
     joinObjects(this.camera, options);
     const cameraMatrix = m3.lookAt(
       getPoint(this.camera.position).toArray(),
@@ -2196,7 +2199,7 @@ class Figure {
     this.viewMatrix = m3.inverse(cameraMatrix);
   }
 
-  updateProjection(options: OBJ_ProjectionOptions) {
+  setProjection(options: OBJ_ProjectionOptions) {
     this.projection = joinObjects({}, this.projection, options);
     if (this.projection.type === 'orthographic') {
       const {

@@ -115,7 +115,7 @@ describe('Figure', () => {
           color: [0, 0, 1, 1],
         });
         squareElement.isMovable = true;
-        squareElement.isTouchable = true;
+        squareElement.setTouchable();
         squareElement.move.bounds = 'figure';
         squares[sKey] = squareElement;
         collection.add(sKey, squareElement);

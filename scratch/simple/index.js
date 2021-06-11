@@ -189,16 +189,16 @@ const loaded = () => {
   // b.animations.new()
   //   .rotation({ target: [0, Math.PI * 1.9, 0], direction: 1, duration: 20 })
   //   .start();
-  // figure.updateProjection({ type: 'orthographic' });
+  // figure.setProjection({ type: 'orthographic' });
   figure.elements.animations.new()
     .rotation({ target: [0, Math.PI * 0.9, 0], duration: 3 })
     .start();
 
     b.setTouchable();
 
-  figure.updateProjection({ type: 'perspective', near: 0.1, far: 3, aspectRatio: 1, fieldOfView: Math.PI * 0.4 });
-  // figure.updateProjection({ near: 0.1, far: 4 });
-  figure.updateCamera({ position: [0, 0, 1.1] });
+  figure.setProjection({ type: 'perspective', near: 0.1, far: 3, aspectRatio: 1, fieldOfView: Math.PI * 0.4 });
+  // figure.setProjection({ near: 0.1, far: 4 });
+  figure.setCamera({ position: [0, 0, 1.1] });
   // figure.animations.new()
   //   .custom({
   //     callback: (p) => {
