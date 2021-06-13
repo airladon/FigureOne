@@ -1,5 +1,5 @@
 import {
-  Line3, Point,
+  Line3, Point, getPoint,
 } from './g2';
 import { round } from './math';
 
@@ -7,15 +7,84 @@ const point = (x, y, z) => new Point(x, y, z);
 
 describe('Line3', () => {
   describe('Creation', () => {
-    test('(0,0,0) (0,0,1)', () => {
+    test('Two Points (0,0,0) (0,0,1)', () => {
       const l = new Line3([0, 0, 0], [0, 0, 1]);
       expect(l.p1).toEqual(point(0, 0, 0));
       expect(l.p2).toEqual(point(0, 0, 1));
+      expect(l.ends).toBe(2);
     });
-    test('(1,2,3) (-1,2,4)', () => {
+    test('Two Points (1,2,3) (-1,2,4)', () => {
       const l = new Line3([1, 2, 3], [-1, 2, 4]);
       expect(l.p1).toEqual(point(1, 2, 3));
       expect(l.p2).toEqual(point(-1, 2, 4));
+      expect(l.ends).toBe(2);
+    });
+    test('Point, Mag, Theta, Phi', () => {
+      const l = new Line3({
+        p1: [0, 0, 0],
+        mag: 2,
+        theta: Math.PI / 2,
+        phi: Math.PI / 2,
+      });
+      expect(l.p1).toEqual(point(0, 0, 0));
+      expect(l.p2.round()).toEqual(point(0, 2, 0));
+      expect(l.ends).toBe(2);
+    });
+    test('2D Point, Angle', () => {
+      const l = new Line3({
+        p1: [0, 0],
+        mag: 2,
+        angle: Math.PI / 2,
+      });
+      expect(l.p1).toEqual(point(0, 0, 0));
+      expect(l.p2.round()).toEqual(point(0, 2, 0));
+      expect(l.ends).toBe(2);
+    });
+    test('2D Point, Angle 2', () => {
+      const l = new Line3({
+        p1: [0, 0],
+        mag: 2 * Math.sqrt(2),
+        angle: Math.PI / 4,
+      });
+      expect(l.p1).toEqual(point(0, 0, 0));
+      expect(l.p2.round()).toEqual(point(2, 2, 0));
+      expect(l.ends).toBe(2);
+    });
+    test('Mag and Direction Vector', () => {
+      const l = new Line3({
+        p1: [0, 0, 0],
+        mag: Math.sqrt(8),
+        direction: [1, 1, 0],
+      });
+      expect(l.p1).toEqual(point(0, 0, 0));
+      expect(l.p2.round()).toEqual(point(2, 2, 0));
+      expect(l.ends).toBe(2);
+    });
+    test('Mag and Direction Vector 2', () => {
+      const l = new Line3({
+        p1: [0, 0, 0],
+        mag: Math.sqrt(3 * 2 * 2),
+        direction: [1, 1, 1],
+      });
+      expect(l.p1).toEqual(point(0, 0, 0));
+      expect(l.p2.round()).toEqual(point(2, 2, 2));
+      expect(l.ends).toBe(2);
+    });
+    test('Ends', () => {
+      const l = new Line3([0, 0, 0], [1, 1, 1], 1);
+      expect(l.p1).toEqual(point(0, 0, 0));
+      expect(l.p2.round()).toEqual(point(1, 1, 1));
+      expect(l.ends).toBe(1);
+    });
+    test('Options Ends override', () => {
+      const l = new Line3({
+        p1: [0, 0, 0],
+        p2: [1, 1, 1],
+        ends: 1,
+      }, [], 0);
+      expect(l.p1).toEqual(point(0, 0, 0));
+      expect(l.p2.round()).toEqual(point(1, 1, 1));
+      expect(l.ends).toBe(1);
     });
   });
   describe('Distance and Angles', () => {
@@ -159,7 +228,7 @@ describe('Line3', () => {
       expect(l.hasPointOn([1.1, 1, 1])).toBe(false);
     });
     test('one end [1, 1, 1], [2, 2, 2]', () => {
-      const l = new Line3([1, 1, 1], [2, 2, 2], 0, 0, 1);
+      const l = new Line3([1, 1, 1], [2, 2, 2], 1);
       // Along Line
       expect(l.hasPointOn([1, 1, 1])).toBe(true);
       expect(l.hasPointOn([1.5, 1.5, 1.5])).toBe(true);
@@ -173,7 +242,7 @@ describe('Line3', () => {
       expect(l.hasPointOn([1.1, 1, 1])).toBe(false);
     });
     test('no ends [1, 1, 1], [2, 2, 2]', () => {
-      const l = new Line3([1, 1, 1], [2, 2, 2], 0, 0, 0);
+      const l = new Line3([1, 1, 1], [2, 2, 2], 0);
       // Along Line
       expect(l.hasPointOn([1, 1, 1])).toBe(true);
       expect(l.hasPointOn([1.5, 1.5, 1.5])).toBe(true);
@@ -331,32 +400,32 @@ describe('Line3', () => {
     });
     describe('1 end', () => {
       test('Line 1 is same as Line 2', () => {
-        const l1 = new Line3([0, 0, 0], [1, 1, 1], 0, 0, 1);
-        const l2 = new Line3([0, 0, 0], [1, 1, 1], 0, 0, 1);
+        const l1 = new Line3([0, 0, 0], [1, 1, 1], 1);
+        const l2 = new Line3([0, 0, 0], [1, 1, 1], 1);
         expect(l1.isEqualTo(l2)).toBe(true);
         expect(l1.isAlongLine(l2)).toBe(true);
         expect(l1.isWithinLine(l2)).toBe(true);
         expect(l1.hasLineWithin(l2)).toBe(true);
       });
       test('Line 1 is same as Line 2 but with different definition', () => {
-        const l1 = new Line3([0, 0, 0], [1, 1, 1], 0, 0, 1);
-        const l2 = new Line3([0, 0, 0], [2, 2, 2], 0, 0, 1);
+        const l1 = new Line3([0, 0, 0], [1, 1, 1], 1);
+        const l2 = new Line3([0, 0, 0], [2, 2, 2], 1);
         expect(l1.isEqualTo(l2)).toBe(true);
         expect(l1.isAlongLine(l2)).toBe(true);
         expect(l1.isWithinLine(l2)).toBe(true);
         expect(l1.hasLineWithin(l2)).toBe(true);
       });
       test('Line 1 infinite, Line 2 finite, same definition', () => {
-        const l1 = new Line3([0, 0, 0], [1, 1, 1], 0, 0, 1);
-        const l2 = new Line3([0, 0, 0], [1, 1, 1], 0, 0, 2);
+        const l1 = new Line3([0, 0, 0], [1, 1, 1], 1);
+        const l2 = new Line3([0, 0, 0], [1, 1, 1], 2);
         expect(l1.isEqualTo(l2)).toBe(false);
         expect(l1.isAlongLine(l2)).toBe(true);
         expect(l1.isWithinLine(l2)).toBe(false);
         expect(l1.hasLineWithin(l2)).toBe(true);
       });
       test('Line 1 infinite, Line 2 infinite, different ends', () => {
-        const l1 = new Line3([0, 0, 0], [1, 1, 1], 0, 0, 1);
-        const l2 = new Line3([0.5, 0.5, 0.5], [1, 1, 1], 0, 0, 1);
+        const l1 = new Line3([0, 0, 0], [1, 1, 1], 1);
+        const l2 = new Line3([0.5, 0.5, 0.5], [1, 1, 1], 1);
         expect(l1.isEqualTo(l2)).toBe(false);
         expect(l1.isAlongLine(l2)).toBe(true);
         expect(l1.isWithinLine(l2)).toBe(false);
@@ -365,40 +434,40 @@ describe('Line3', () => {
     });
     describe('0 ends', () => {
       test('Line 1 is same as Line 2', () => {
-        const l1 = new Line3([0, 0, 0], [1, 1, 1], 0, 0, 0);
-        const l2 = new Line3([0, 0, 0], [1, 1, 1], 0, 0, 0);
+        const l1 = new Line3([0, 0, 0], [1, 1, 1], 0);
+        const l2 = new Line3([0, 0, 0], [1, 1, 1], 0);
         expect(l1.isEqualTo(l2)).toBe(true);
         expect(l1.isAlongLine(l2)).toBe(true);
         expect(l1.isWithinLine(l2)).toBe(true);
         expect(l1.hasLineWithin(l2)).toBe(true);
       });
       test('Line 1 is same as Line 2 but with different definition', () => {
-        const l1 = new Line3([0, 0, 0], [1, 1, 1], 0, 0, 0);
-        const l2 = new Line3([0.5, 0.5, 0.5], [1, 1, 1], 0, 0, 0);
+        const l1 = new Line3([0, 0, 0], [1, 1, 1], 0);
+        const l2 = new Line3([0.5, 0.5, 0.5], [1, 1, 1], 0);
         expect(l1.isEqualTo(l2)).toBe(true);
         expect(l1.isAlongLine(l2)).toBe(true);
         expect(l1.isWithinLine(l2)).toBe(true);
         expect(l1.hasLineWithin(l2)).toBe(true);
       });
       test('Line 1 is different to Line 2', () => {
-        const l1 = new Line3([0, 0, 0], [1, 1, 1], 0, 0, 0);
-        const l2 = new Line3([0, 1, 0], [1, 1, 1], 0, 0, 0);
+        const l1 = new Line3([0, 0, 0], [1, 1, 1], 0);
+        const l2 = new Line3([0, 1, 0], [1, 1, 1], 0);
         expect(l1.isEqualTo(l2)).toBe(false);
         expect(l1.isAlongLine(l2)).toBe(false);
         expect(l1.isWithinLine(l2)).toBe(false);
         expect(l1.hasLineWithin(l2)).toBe(false);
       });
       test('Line 1 has 0 ends, line2 has 1 end and is within', () => {
-        const l1 = new Line3([0, 0, 0], [1, 1, 1], 0, 0, 0);
-        const l2 = new Line3([-10, -10, -10], [0, 0, 0], 0, 0, 1);
+        const l1 = new Line3([0, 0, 0], [1, 1, 1], 0);
+        const l2 = new Line3([-10, -10, -10], [0, 0, 0], 1);
         expect(l1.isEqualTo(l2)).toBe(false);
         expect(l1.isAlongLine(l2)).toBe(true);
         expect(l1.isWithinLine(l2)).toBe(false);
         expect(l1.hasLineWithin(l2)).toBe(true);
       });
       test('Line 1 has 0 ends, line2 has 2 end and is within', () => {
-        const l1 = new Line3([0, 0, 0], [1, 1, 1], 0, 0, 0);
-        const l2 = new Line3([-10, -10, -10], [0, 0, 0], 0, 0, 2);
+        const l1 = new Line3([0, 0, 0], [1, 1, 1], 0);
+        const l2 = new Line3([-10, -10, -10], [0, 0, 0], 2);
         expect(l1.isEqualTo(l2)).toBe(false);
         expect(l1.isAlongLine(l2)).toBe(true);
         expect(l1.isWithinLine(l2)).toBe(false);
@@ -431,109 +500,145 @@ describe('Line3', () => {
       const d = l1.distanceToLine(l2);
       expect(round(d)).toBe(0);
     });
-  })
+  });
   describe('Lines can intersect with other lines', () => {
-    let check;
-    beforeEach(() => {
-      check = (l1, l2, alongLine, inLine, intersect) => {
+    // let check;
+    // beforeEach(() => {
+    //   check = (l1, l2, onLines, collinear, intersect) => {
+    //     const res = l1.intersectsWith(l2);
+    //     expect(res.collinear).toBe(collinear);
+    //     expect(res.withinLine).toBe(onLines);
+    //     if (res.intersect == null) {
+    //       expect(intersect == null).toBe(true);
+    //     } else {
+    //       expect(res.intersect.round()).toEqual(getPoint(intersect));
+    //     }
+    //   };
+    // });
+    describe('Lines with two ends', () => {
+      test('On line intersect 2D', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
+        const l2 = new Line3(new Point(1, -1, 0), new Point(1, 1, 0));
         const res = l1.intersectsWith(l2);
-        expect(res.alongLine).toBe(alongLine);
-        expect(res.withinLine).toBe(inLine);
-        if (res.intersect == null) {
-          expect(intersect == null).toBe(true);
-        } else {
-          expect(res.intersect.round()).toEqual(getPoint(intersect));
-        }
-      };
+        expect(res.intersect).toEqual(new Point(1, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(false);
+      });
+      test('On line intersect 3D', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 2, 2));
+        const l2 = new Line3(new Point(1, 1, 0), new Point(1, 1, 2));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(1, 1, 1));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(false);
+      });
+      test('On line intersect negative', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(-2, -2, -2));
+        const l2 = new Line3(new Point(-1, -1, 0), new Point(-1, -1, -2));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(-1, -1, -1));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(false);
+      });
+      test('On line intersect non zero', () => {
+        const l1 = new Line3(new Point(1, 1, 1), new Point(-2, -2, -2));
+        const l2 = new Line3(new Point(-1, -1, 2), new Point(-1, -1, -2));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(-1, -1, -1));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(false);
+      });
+      test('Off line intersect 2D', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
+        const l2 = new Line3(new Point(1, -1, 0), new Point(1, -0.5, 0));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(1, 0));
+        expect(res.onLines).toBe(false);
+        expect(res.collinear).toBe(false);
+      });
+      test('Off line intersect 3D', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 2, 2));
+        const l2 = new Line3(new Point(1, 1, 0), new Point(1, 1, 0.5));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(1, 1, 1));
+        expect(res.onLines).toBe(false);
+        expect(res.collinear).toBe(false);
+      });
+      test('Parallel 2D', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
+        const l2 = new Line3(new Point(0, 1, 0), new Point(2, 1, 0));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toBe(undefined);
+        expect(res.onLines).toBe(false);
+        expect(res.collinear).toBe(false);
+      });
+      test('Parallel 3D', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 2, 2));
+        const l2 = new Line3(new Point(1, 0, 0), new Point(3, 2, 2));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toBe(undefined);
+        expect(res.onLines).toBe(false);
+        expect(res.collinear).toBe(false);
+      });
+      test('skew', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
+        const l2 = new Line3(new Point(1, -1, 1), new Point(1, 1, 1));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toBe(undefined);
+        expect(res.onLines).toBe(false);
+        expect(res.collinear).toBe(false);
+      });
+      test('Collinear No Overlap', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
+        const l2 = new Line3(new Point(-2, 0, 0), new Point(-1, 0, 0));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(-0.5, 0, 0));
+        expect(res.onLines).toBe(false);
+        expect(res.collinear).toBe(true);
+      });
+      // test('Collinear Ends Overlap', () => {
+      //   const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
+      //   const l2 = new Line3(new Point(-2, 0, 0), new Point(0, 0, 0));
+      //   const res = l1.intersectsWith(l2);
+      //   expect(res.intersect).toBe(new Point(0, 0, 0));
+      //   expect(res.onLines).toBe(true);
+      //   expect(res.collinear).toBe(true);
+      // });
+      // test('Collinear Ends Overlap 2', () => {
+      //   const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
+      //   const l2 = new Line3(new Point(2, 0, 0), new Point(3, 0, 0));
+      //   const res = l1.intersectsWith(l2);
+      //   expect(res.intersect).toBe(new Point(0, 0, 0));
+      //   expect(res.onLines).toBe(true);
+      //   expect(res.collinear).toBe(true);
+      // });
+      // test('Collinear Partial Overlap', () => {
+      //   const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
+      //   const l2 = new Line3(new Point(-2, 0, 0), new Point(1, 0, 0));
+      //   const res = l1.intersectsWith(l2);
+      //   expect(res.intersect).toBe(new Point(0, 0, 0));
+      //   expect(res.onLines).toBe(true);
+      //   expect(res.collinear).toBe(true);
+      // });
     });
-    test('Two finite lines, on line intersect', () => {
-      const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
-      const l2 = new Line3(new Point(1, -1, 0), new Point(1, 1, 0));
-      const res = l1.intersectsWith(l2);
-      expect(res.intersect).toEqual(new Point(1, 0, 0));
-      expect(res.onLines).toBe(true);
-      expect(res.collinear).toBe(false);
+    describe('Lines with 2 and 1 ends', () => {
+      test('On line intersect 2D', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 2);
+        const l2 = new Line3(new Point(1, -1, 0), new Point(1, -0.5, 0), 1);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(1, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(false);
+      });
+      test('Off line intersect 2D', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 2);
+        const l2 = new Line3(new Point(1, 1, 0), new Point(1, 1.5, 0), 1);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(1, 0, 0));
+        expect(res.onLines).toBe(false);
+        expect(res.collinear).toBe(false);
+      });
     });
-    test('Two finite lines, offline intersect', () => {
-      const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
-      const l2 = new Line3(new Point(1, -1, 0), new Point(1, -0.5, 0));
-      const res = l1.intersectsWith(l2);
-      expect(res.intersect).toEqual(new Point(1, 0));
-      expect(res.onLines).toBe(false);
-      expect(res.collinear).toBe(false);
-    });
-    test('Two finite lines, parallel', () => {
-      const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
-      const l2 = new Line3(new Point(0, 1, 0), new Point(2, 1, 0));
-      const res = l1.intersectsWith(l2);
-      expect(res.intersect).toBe(undefined);
-      expect(res.onLines).toBe(false);
-      expect(res.collinear).toBe(false);
-    });
-
-    test('Two finite lines, skew', () => {
-      const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
-      const l2 = new Line3(new Point(1, -1, 1), new Point(1, 1, 1));
-      const res = l1.intersectsWith(l2);
-      expect(res.intersect).toBe(undefined);
-      expect(res.onLines).toBe(false);
-      expect(res.collinear).toBe(false);
-    });
-    // test('Line 0, 0<>2, 0 with 4, 0<>5, 0 has as intersection at 3, 0', () => {
-    //   const l1 = new Line(new Point(0, 0), new Point(2, 0));
-    //   const l2 = new Line(new Point(4, 0), new Point(5, 0));
-    //   const res = l1.intersectsWith(l2);
-    //   expect(res.alongLine).toEqual(true);
-    //   expect(res.withinLine).toEqual(false);
-    //   expect(res.intersect).toEqual(new Point(3, 0));
-    // });
-    // test('Line 1, 0<>2, 0 with 0, 0<>4, 0 has as intersection at 2.75, 0', () => {
-    //   const l1 = new Line(new Point(1, 0), new Point(2, 0));
-    //   const l2 = new Line(new Point(0, 0), new Point(4, 0));
-    //   const res = l1.intersectsWith(l2);
-    //   expect(res.alongLine).toEqual(true);
-    //   expect(res.withinLine).toEqual(true);
-    //   expect(res.intersect.round()).toEqual(new Point(1.75, 0));
-    // });
-    // test('Line 0, 0<>2, 0 with 1, 0<>4, 0 has as intersection at 1.5, 0', () => {
-    //   const l1 = new Line(new Point(0, 0), new Point(2, 0));
-    //   const l2 = new Line(new Point(1, 0), new Point(4, 0));
-    //   const res = l1.intersectsWith(l2);
-    //   expect(res.alongLine).toEqual(true);
-    //   expect(res.withinLine).toEqual(true);
-    //   expect(res.intersect.round()).toEqual(new Point(1.5, 0));
-    // });
-    // test('Line 1, 0<>2, 0 with 1, 0<>4, 0 has as intersection at 1.5, 0', () => {
-    //   const l1 = new Line(new Point(1, 0), new Point(2, 0));
-    //   const l2 = new Line(new Point(1, 0), new Point(4, 0));
-    //   const res = l1.intersectsWith(l2);
-    //   expect(res.alongLine).toEqual(true);
-    //   expect(res.withinLine).toEqual(true);
-    //   expect(res.intersect.round()).toEqual(new Point(2, 0));
-    // });
-    // test('Line 1, 0<>2, 0 with 2, 0<>3, 0 has as intersection at 2, 0', () => {
-    //   const l1 = new Line(new Point(1, 0), new Point(2, 0));
-    //   const l2 = new Line(new Point(2, 0), new Point(3, 0));
-    //   const res = l1.intersectsWith(l2);
-    //   expect(res.alongLine).toEqual(true);
-    //   expect(res.withinLine).toEqual(true);
-    //   expect(res.intersect.round()).toEqual(new Point(2, 0));
-    // });
-    // // 0.804, y: 0.04029297190976889
-    // test('Line 1, 0<>2, 0 with 2, 0<>3, 0 has as intersection at (2, 0) 2', () => {
-    //   const l1 = new Line(
-    //     new Point(0.804, 0.04029297190976889),
-    //     new Point(0.804, 0.05036621488721111),
-    //   );
-    //   const l2 = new Line(
-    //     new Point(0.804, 0.05036621488721111),
-    //     new Point(0.804, 0.06043945786465334),
-    //   );
-    //   const res = l1.intersectsWith(l2);
-    //   expect(res.alongLine).toEqual(true);
-    //   expect(res.withinLine).toEqual(true);
-    //   expect(res.intersect).toEqual(new Point(0.804, 0.05036621488721111));
-    // });
     // describe('Both lines have 2 ends', () => {
     //   describe('Lines are parallel', () => {
     //     test('horizontal', () => {

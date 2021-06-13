@@ -2423,6 +2423,18 @@ function sphericalToCartesian(
     r * Math.cos(theta),
   );
 }
+
+export type GEO_Line = {
+  p1?: TypeParsablePoint,
+  p2?: TypeParsablePoint,
+  mag?: number,
+  theta?: number,
+  angle?: number,
+  phi?: number,
+  direction?: TypeParsablePoint,
+  ends?: 0 | 1 | 2,
+};
+
 class Line3 {
   p1: Point;
   p2: Point;
@@ -2442,19 +2454,39 @@ class Line3 {
    * that goes through both first and second points to infinity.
    */
   constructor(
-    p1: TypeParsablePoint,
-    p2OrMag: TypeParsablePoint | number,
-    theta: number = 0,
-    phi: number = 0,
+    p1OrOptions: TypeParsablePoint | GEO_Line,
+    p2: TypeParsablePoint,
     ends: 2 | 1 | 0 = 2,
   ) {
-    this.p1 = getPoint(p1);
-    if (typeof p2OrMag === 'number') {
-      this.p2 = this.p1.add(sphericalToCartesian(p2OrMag, theta, phi));
+    if (p1OrOptions instanceof Point || Array.isArray(p1OrOptions) || typeof p1OrOptions === 'string') {
+      this.p1 = getPoint(p1OrOptions);
+      this.p2 = getPoint(p2);
+      this.ends = ends;
     } else {
-      this.p2 = getPoint(p2OrMag);
+      const defaultOptions = {
+        p1: new Point(0, 0, 0),
+        mag: 1,
+        theta: 0,
+        phi: 0,
+        ends: 2,
+      };
+      const o = joinObjects({}, defaultOptions, p1OrOptions);
+      this.p1 = getPoint(o.p1);
+      this.ends = o.ends;
+      if (o.p2 != null) {
+        this.p2 = getPoint(o.p2);
+      } else if (o.direction != null) {
+        this.p2 = getPoint(o.direction).normalize().scale(o.mag).add(this.p1);
+      } else if (o.angle != null) {
+        this.p2 = this.p1.add(
+          o.mag * Math.cos(o.angle),
+          o.mag * Math.sin(o.angle),
+          0,
+        );
+      } else {
+        this.p2 = this.p1.add(sphericalToCartesian(o.mag, o.theta, o.phi));
+      }
     }
-    this.ends = ends;
     // this.setupLine();
   }
 
@@ -2495,7 +2527,7 @@ class Line3 {
   // }
 
   _dup() {
-    return new Line3(this.p1, this.p2, 0, 0, this.ends);
+    return new Line3(this.p1, this.p2, this.ends);
   }
 
   /**
@@ -2535,72 +2567,72 @@ class Line3 {
   }
 
   reverse() {
-    return new Line3(this.p2, this.p1, 0, 0, this.ends);
+    return new Line3(this.p2, this.p1, this.ends);
   }
 
-  /**
-   * Get the y coordinate of a point on the line with a given x coordinate
-   * @return {number | null} where `null` is returned if the line is vertical
-   */
-  getYFromX(x: number) {
-    if (this.B !== 0) {
-      return (this.C - this.A * x) / this.B;
-    }
-    return null;
-  }
+  // /**
+  //  * Get the y coordinate of a point on the line with a given x coordinate
+  //  * @return {number | null} where `null` is returned if the line is vertical
+  //  */
+  // getYFromX(x: number) {
+  //   if (this.B !== 0) {
+  //     return (this.C - this.A * x) / this.B;
+  //   }
+  //   return null;
+  // }
 
-  /**
-   * Get the x coordinate of a point on the line with a given y coordinate
-   * @return {number | null} where `null` is returned if the line is horiztonal
-   */
-  getXFromY(y: number) {
-    if (this.A !== 0) {
-      return (this.C - this.B * y) / this.A;
-    }
-    return null;
-  }
+  // /**
+  //  * Get the x coordinate of a point on the line with a given y coordinate
+  //  * @return {number | null} where `null` is returned if the line is horiztonal
+  //  */
+  // getXFromY(y: number) {
+  //   if (this.A !== 0) {
+  //     return (this.C - this.B * y) / this.A;
+  //   }
+  //   return null;
+  // }
 
-  /**
-   * Get the y intercept (at x = 0) of line
-   * @return {number | null} where `null` is returned if the line is vertical
-   */
-  getYIntercept() {
-    return this.getYFromX(0);
-  }
+  // /**
+  //  * Get the y intercept (at x = 0) of line
+  //  * @return {number | null} where `null` is returned if the line is vertical
+  //  */
+  // getYIntercept() {
+  //   return this.getYFromX(0);
+  // }
 
-  /**
-   * Get the x intercept (at y = 0) of line
-   * @return {number | null} where `null` is returned if the line is horizontal
-   */
-  getXIntercept() {
-    return this.getXFromY(0);
-  }
+  // /**
+  //  * Get the x intercept (at y = 0) of line
+  //  * @return {number | null} where `null` is returned if the line is horizontal
+  //  */
+  // getXIntercept() {
+  //   return this.getXFromY(0);
+  // }
 
-  /**
-   * Get the gradient of the line
-   * @return {number}
-   */
-  getGradient() {
-    if (this.B === 0) {
-      return null;
-    }
-    return -this.A / this.B;
-  }
+  // /**
+  //  * Get the gradient of the line
+  //  * @return {number}
+  //  */
+  // getGradient() {
+  //   if (this.B === 0) {
+  //     return null;
+  //   }
+  //   return -this.A / this.B;
+  // }
 
-  /**
-   * Get the angle of the line from p1 to p2
-   * @return {number}
-   */
-  angle() {
-    return this.ang;
-  }
+  // /**
+  //  * Get the angle of the line from p1 to p2
+  //  * @return {number}
+  //  */
+  // angle() {
+  //   return this.ang;
+  // }
 
   /**
    * Return a duplicate line with values rounded to `precision`
    * @return {Line}
    */
   round(precision?: number = 8) {
-    return new Line3(this.p1.round(precision), this.p2.round(precision), 0, 0, this.ends);
+    return new Line3(this.p1.round(precision), this.p2.round(precision), this.ends);
   }
 
   /**
@@ -2919,6 +2951,9 @@ class Line3 {
     return new Line3(intersect, projection);
   }
 
+  /**
+   * Perpendicular distance between two lines extended to infinity
+   */
   distanceToLine(l: Line3, precision: number = 8) {
     const u1 = this.unitVector();
     const u2 = l.unitVector();
@@ -2926,22 +2961,12 @@ class Line3 {
     const u1CrossU2 = u1.crossProduct(u2);
     // If the lines are parallel, then return the distance between parallel lines
     if (u1CrossU2.isZero(precision)) {
+      // https://www.geeksforgeeks.org/shortest-distance-between-two-lines-in-3d-space-class-12-maths/
       return u1.crossProduct(l.p1.sub(this.p1)).distance() / u1.distance();
     }
+    // https://vicrucann.github.io/tutorials/3d-geometry-algorithms/
     return d.dotProduct(u1CrossU2) / u1CrossU2.distance();
   }
-
-  // At two lines intersection, the x and y values must be equal
-  //   A1x + B1y = C1 => y = -A1/B1x + C1/B1      - Eq 1
-  //   A2x + B2y = C2 => y = -A2/B2x + C2/B2      - Eq 2
-  // Right hand sides are equal:
-  //   -A1/B1x + C1/B1 = -A2/B2x + C2/B2
-  //   x(-A1/B1 + A2/B2) = C2/B2 - C1/B1
-  //   x(-A1B2 + A2B1)/B1B2 = (C2B1 - C1B2)/B1B2
-  //   x = (C2B1 - C1B2) / (-A1B2 + A2B1)
-  //   y = -A1/B1x + C1/B1
-  // If however B1 is 0, then y can be found from eqn 2
-  //   y = -A2/B2x + C2/B2
 
   /**
    * The intersection between this line and `line2`.
@@ -2970,36 +2995,39 @@ class Line3 {
     const l2 = line2; // line2.round(precision);
     const l1 = this;  // this.round(precision);
 
+    const collinear = l1.isAlongLine(l2, precision);
     // If the distance between lines is 0, then they intersect
-    if (l1.distanceToLine(l2, precision) === 0) {
+    if (!collinear && l1.distanceToLine(l2, precision) === 0) {
       const C = this.p1;
       const D = l2.p1;
       const e = this.unitVector();
       const f = l2.unitVector();
       const g = D.sub(C);
-      const fg = f.crossProduct(g).normalize();
-      const fe = f.crossProduct(e).normalize();
+      const fg = f.crossProduct(g);
+      const fe = f.crossProduct(e);
       const h = fg.distance();
       const k = fe.distance();
       if (h === 0 || k === 0) {
-        return { intersect: undefined, collinear: false, onLines: false };
+        return { intersect: undefined, collinear, onLines: false };
       }
       const l = e.scale(h / k);
       let i;
-      if (fg.isEqualTo(fe, precision)) {
+      // console.log(C.add(l));
+      // console.log(C.sub(l));
+      if (fg.normalize().isEqualTo(fe.normalize(), precision)) {
         i = C.add(l);
       } else {
         i = C.sub(l);
       }
       if (l1.hasPointOn(i, precision) && l2.hasPointOn(i, precision)) {
-        return { intersect: i, collinear: false, onLines: true };
+        return { intersect: i, collinear, onLines: true };
       }
       return { collinear: false, onLines: false, intersect: i };
     }
 
     // If the lines are parallel, but not collinear, then there is no intersect
-    if (!l1.isAlongLine(l2, precision)) {
-      return { intersect: undefined, collinear: false, onLines: false };
+    if (!collinear) {
+      return { intersect: undefined, collinear, onLines: false };
     }
 
     // If lines are collinear they could be either:
@@ -3016,24 +3044,26 @@ class Line3 {
     if (
       !l2P1OnL1 && !l2P2OnL1 && !l1P2OnL2 && !l1P1OnL2
     ) {
-      let closestL1 = 1;
-      let closestL2 = 1;
       const d11 = l1.p1.distance(l2.p1);
       const d12 = l1.p1.distance(l2.p2);
-      if (d12 < d11) {
-        closestL1 = 2;
-      }
       const d21 = l1.p2.distance(l2.p1);
       const d22 = l1.p2.distance(l2.p2);
-      if (d22 < d21) {
-        closestL2 = 2;
+      const min = Math.min(d21, d22, d11, d12);
+      let intersect;
+      if (min === d11) {
+        intersect = new Line3(l1.p1, l2.p1).midPoint();
+      } else if (min === d12) {
+        intersect = new Line3(l1.p1, l2.p2).midPoint();
+      } else if (min === d21) {
+        intersect = new Line3(l1.p2, l2.p1).midPoint();
+      } else if (min === d22) {
+        intersect = new Line3(l1.p2, l2.p2).midPoint();
       }
-      const intercept = new Line3(l1.getPoint(closestL1), l2.getPoint(closestL2)).midPoint();
-      return { intercept, collinear: true, onLines: false };
+      return { intersect, collinear: true, onLines: false };
     }
 
     // The remaining case is equal, partially or fully  overlapping
-    return { intercept: l1.p1._dup(), collinear: true, onLines: true };
+    return { intersect: l1.p1._dup(), collinear: true, onLines: true };
   }
 }
 
