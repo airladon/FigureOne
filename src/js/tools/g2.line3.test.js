@@ -588,7 +588,7 @@ describe('Line3', () => {
         expect(res.onLines).toBe(false);
         expect(res.collinear).toBe(false);
       });
-      test('Collinear No Overlap', () => {
+      test('Collinear No Overlap 1', () => {
         const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
         const l2 = new Line3(new Point(-2, 0, 0), new Point(-1, 0, 0));
         const res = l1.intersectsWith(l2);
@@ -596,30 +596,86 @@ describe('Line3', () => {
         expect(res.onLines).toBe(false);
         expect(res.collinear).toBe(true);
       });
-      // test('Collinear Ends Overlap', () => {
-      //   const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
-      //   const l2 = new Line3(new Point(-2, 0, 0), new Point(0, 0, 0));
-      //   const res = l1.intersectsWith(l2);
-      //   expect(res.intersect).toBe(new Point(0, 0, 0));
-      //   expect(res.onLines).toBe(true);
-      //   expect(res.collinear).toBe(true);
-      // });
-      // test('Collinear Ends Overlap 2', () => {
-      //   const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
-      //   const l2 = new Line3(new Point(2, 0, 0), new Point(3, 0, 0));
-      //   const res = l1.intersectsWith(l2);
-      //   expect(res.intersect).toBe(new Point(0, 0, 0));
-      //   expect(res.onLines).toBe(true);
-      //   expect(res.collinear).toBe(true);
-      // });
-      // test('Collinear Partial Overlap', () => {
-      //   const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
-      //   const l2 = new Line3(new Point(-2, 0, 0), new Point(1, 0, 0));
-      //   const res = l1.intersectsWith(l2);
-      //   expect(res.intersect).toBe(new Point(0, 0, 0));
-      //   expect(res.onLines).toBe(true);
-      //   expect(res.collinear).toBe(true);
-      // });
+      test('Collinear No Overlap 2', () => {
+        const l1 = new Line3(new Point(2, 0, 0), new Point(0, 0, 0));
+        const l2 = new Line3(new Point(-2, 0, 0), new Point(-1, 0, 0));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(-0.5, 0, 0));
+        expect(res.onLines).toBe(false);
+        expect(res.collinear).toBe(true);
+      });
+      test('Collinear No Overlap 3', () => {
+        const l1 = new Line3(new Point(2, 0, 0), new Point(0, 0, 0));
+        const l2 = new Line3(new Point(-1, 0, 0), new Point(-2, 0, 0));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(-0.5, 0, 0));
+        expect(res.onLines).toBe(false);
+        expect(res.collinear).toBe(true);
+      });
+      test('Collinear No Overlap 4', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
+        const l2 = new Line3(new Point(-1, 0, 0), new Point(-2, 0, 0));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(-0.5, 0, 0));
+        expect(res.onLines).toBe(false);
+        expect(res.collinear).toBe(true);
+      });
+      test('Collinear Ends Overlap', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
+        const l2 = new Line3(new Point(-2, 0, 0), new Point(0, 0, 0));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(0, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(true);
+      });
+      test('Collinear Ends Overlap 2', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
+        const l2 = new Line3(new Point(2, 0, 0), new Point(3, 0, 0));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(0, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(true);
+      });
+      test('Collinear Ends Overlap 3', () => {
+        const l1 = new Line3(new Point(2, 0, 0), new Point(0, 0, 0));
+        const l2 = new Line3(new Point(0, 0, 0), new Point(-2, 0, 0));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(2, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(true);
+      });
+      test('Collinear Partial Overlap 1', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
+        const l2 = new Line3(new Point(-2, 0, 0), new Point(1, 0, 0));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(0, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(true);
+      });
+      test('Collinear Partial Overlap 2', () => {
+        const l1 = new Line3(new Point(2, 0, 0), new Point(0, 0, 0));
+        const l2 = new Line3(new Point(-2, 0, 0), new Point(1, 0, 0));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(2, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(true);
+      });
+      test('Collinear Full Overlap', () => {
+        const l1 = new Line3(new Point(2, 0, 0), new Point(0, 0, 0));
+        const l2 = new Line3(new Point(1, 0, 0), new Point(0.5, 0, 0));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(2, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(true);
+      });
+      test('Equal', () => {
+        const l1 = new Line3(new Point(2, 0, 0), new Point(0, 0, 0));
+        const l2 = new Line3(new Point(2, 0, 0), new Point(0, 0, 0));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(2, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(true);
+      });
     });
     describe('Lines with 2 and 1 ends', () => {
       test('On line intersect 2D', () => {
@@ -630,6 +686,30 @@ describe('Line3', () => {
         expect(res.onLines).toBe(true);
         expect(res.collinear).toBe(false);
       });
+      test('On line intersect 2D Reverse', () => {
+        const l2 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 2);
+        const l1 = new Line3(new Point(1, -1, 0), new Point(1, -0.5, 0), 1);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(1, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(false);
+      });
+      test('On line intersect 3D', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 2, 2), 2);
+        const l2 = new Line3(new Point(1, 0, 0), new Point(1, 0.5, 0.5), 1);
+        const res = l1.intersectsWith(l2);
+        expect(round(res.intersect)).toEqual(new Point(1, 1, 1));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(false);
+      });
+      test('On line intersect 3D Reverse', () => {
+        const l2 = new Line3(new Point(0, 0, 0), new Point(2, 2, 2), 2);
+        const l1 = new Line3(new Point(1, 0, 0), new Point(1, 0.5, 0.5), 1);
+        const res = l1.intersectsWith(l2);
+        expect(round(res.intersect)).toEqual(new Point(1, 1, 1));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(false);
+      });
       test('Off line intersect 2D', () => {
         const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 2);
         const l2 = new Line3(new Point(1, 1, 0), new Point(1, 1.5, 0), 1);
@@ -637,6 +717,274 @@ describe('Line3', () => {
         expect(res.intersect).toEqual(new Point(1, 0, 0));
         expect(res.onLines).toBe(false);
         expect(res.collinear).toBe(false);
+      });
+      test('Off line intersect 3D', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 2, 2), 2);
+        const l2 = new Line3(new Point(1, 0.5, 0.5), new Point(1, 0, 0), 1);
+        const res = l1.intersectsWith(l2);
+        expect(round(res.intersect)).toEqual(new Point(1, 1, 1));
+        expect(res.onLines).toBe(false);
+        expect(res.collinear).toBe(false);
+      });
+      test('Collinear No Overlap 1', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 1);
+        const l2 = new Line3(new Point(-2, 0, 0), new Point(-1, 0, 0));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(-0.5, 0, 0));
+        expect(res.onLines).toBe(false);
+        expect(res.collinear).toBe(true);
+      });
+      test('Collinear No Overlap 2', () => {
+        const l1 = new Line3(new Point(2, 0, 0), new Point(0, 0, 0));
+        const l2 = new Line3(new Point(-1, 0, 0), new Point(-2, 0, 0), 1);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(-0.5, 0, 0));
+        expect(res.onLines).toBe(false);
+        expect(res.collinear).toBe(true);
+      });
+      test('Collinear Ends Overlap', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 1);
+        const l2 = new Line3(new Point(-2, 0, 0), new Point(0, 0, 0));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(0, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(true);
+      });
+      test('Collinear Ends Overlap 2', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
+        const l2 = new Line3(new Point(2, 0, 0), new Point(3, 0, 0), 1);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(0, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(true);
+      });
+      test('Collinear Partial Overlap 1', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 1);
+        const l2 = new Line3(new Point(-2, 0, 0), new Point(1, 0, 0));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(0, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(true);
+      });
+      test('Collinear Partial Overlap 2', () => {
+        const l1 = new Line3(new Point(2, 0, 0), new Point(0, 0, 0));
+        const l2 = new Line3(new Point(1, 0, 0), new Point(-2, 0, 0), 1);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(2, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(true);
+      });
+    });
+    describe('Lines 1 ends', () => {
+      test('On line intersect 2D', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 1);
+        const l2 = new Line3(new Point(1, -1, 0), new Point(1, -0.5, 0), 1);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(1, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(false);
+      });
+      test('On line intersect 2D Reverse', () => {
+        const l2 = new Line3(new Point(0, 0, 0), new Point(0.5, 0, 0), 1);
+        const l1 = new Line3(new Point(1, -1, 0), new Point(1, -0.5, 0), 1);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(1, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(false);
+      });
+      test('On line intersect 3D', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 2, 2), 1);
+        const l2 = new Line3(new Point(1, 0, 0), new Point(1, 0.5, 0.5), 1);
+        const res = l1.intersectsWith(l2);
+        expect(round(res.intersect)).toEqual(new Point(1, 1, 1));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(false);
+      });
+      test('On line intersect 3D Reverse', () => {
+        const l2 = new Line3(new Point(0, 0, 0), new Point(0.1, 0.1, 0.1), 1);
+        const l1 = new Line3(new Point(1, 0, 0), new Point(1, 0.5, 0.5), 1);
+        const res = l1.intersectsWith(l2);
+        expect(round(res.intersect)).toEqual(new Point(1, 1, 1));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(false);
+      });
+      test('Off line intersect 2D', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 1);
+        const l2 = new Line3(new Point(1, 1, 0), new Point(1, 1.5, 0), 1);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(1, 0, 0));
+        expect(res.onLines).toBe(false);
+        expect(res.collinear).toBe(false);
+      });
+      test('Off line intersect 3D', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 2, 2), 1);
+        const l2 = new Line3(new Point(1, 0.5, 0.5), new Point(1, 0, 0), 1);
+        const res = l1.intersectsWith(l2);
+        expect(round(res.intersect)).toEqual(new Point(1, 1, 1));
+        expect(res.onLines).toBe(false);
+        expect(res.collinear).toBe(false);
+      });
+      test('Collinear No Overlap 1', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 1);
+        const l2 = new Line3(new Point(-1, 0, 0), new Point(-2, 0, 0), 1);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(-0.5, 0, 0));
+        expect(res.onLines).toBe(false);
+        expect(res.collinear).toBe(true);
+      });
+      test('Collinear Ends Overlap', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 1);
+        const l2 = new Line3(new Point(0, 0, 0), new Point(-2, 0, 0), 1);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(0, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(true);
+      });
+      test('Collinear Ends Overlap 2', () => {
+        const l1 = new Line3(new Point(2, 0, 0), new Point(0, 0, 0), 1);
+        const l2 = new Line3(new Point(2, 0, 0), new Point(3, 0, 0), 1);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(2, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(true);
+      });
+      test('Collinear Partial Overlap 1', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 1);
+        const l2 = new Line3(new Point(1, 0, 0), new Point(-2, 0, 0), 1);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(0, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(true);
+      });
+      test('Collinear Partial Overlap 2', () => {
+        const l1 = new Line3(new Point(2, 0, 0), new Point(0, 0, 0), 1);
+        const l2 = new Line3(new Point(1, 0, 0), new Point(1.5, 0, 0), 1);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(2, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(true);
+      });
+    });
+    describe('Lines with 0, 1 and 2 ends', () => {
+      test('On line intersect 2D, Ends: 0 & 2', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 0);
+        const l2 = new Line3(new Point(1, -1, 0), new Point(1, 0.5, 0), 2);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(1, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(false);
+      });
+      test('Off line intersect 2D, Ends: 0 & 2', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 0);
+        const l2 = new Line3(new Point(1, -1, 0), new Point(1, -0.5, 0), 2);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(1, 0, 0));
+        expect(res.onLines).toBe(false);
+        expect(res.collinear).toBe(false);
+      });
+      test('On line intersect 2D, Ends: 0 & 1', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 0);
+        const l2 = new Line3(new Point(1, -1, 0), new Point(1, -0.5, 0), 1);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(1, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(false);
+      });
+      test('Off line intersect 2D, Ends: 0 & 1', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 0);
+        const l2 = new Line3(new Point(1, -1, 0), new Point(1, -1.5, 0), 1);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(1, 0, 0));
+        expect(res.onLines).toBe(false);
+        expect(res.collinear).toBe(false);
+      });
+      test('On line intersect 2D, Ends: 0 & 0', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 0);
+        const l2 = new Line3(new Point(1, -1, 0), new Point(1, -0.5, 0), 0);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(1, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(false);
+      });
+      test('On line intersect 2D, Ends: 0 & 0 - 2', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 0);
+        const l2 = new Line3(new Point(1, -1, 0), new Point(1, -1.5, 0), 0);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(1, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(false);
+      });
+      test('Parallel: 0 & 0', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 0);
+        const l2 = new Line3(new Point(1, 0, 1), new Point(2, 0, 1), 0);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(undefined);
+        expect(res.onLines).toBe(false);
+        expect(res.collinear).toBe(false);
+      });
+      test('Skew: 0 & 0', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 0);
+        const l2 = new Line3(new Point(1, 0, 1), new Point(2, 1, 1), 0);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(undefined);
+        expect(res.onLines).toBe(false);
+        expect(res.collinear).toBe(false);
+      });
+      test('On line intersect 3D, Ends: 0 & 2', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 2, 2), 0);
+        const l2 = new Line3(new Point(1, 0, 0), new Point(1, 1.5, 1.5), 2);
+        const res = l1.intersectsWith(l2);
+        expect(round(res.intersect)).toEqual(new Point(1, 1, 1));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(false);
+      });
+      test('On line intersect 3D, Ends: 0 & 1', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 2, 2), 0);
+        const l2 = new Line3(new Point(1, 0, 0), new Point(1, 0.5, 0.5), 1);
+        const res = l1.intersectsWith(l2);
+        expect(round(res.intersect)).toEqual(new Point(1, 1, 1));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(false);
+      });
+      test('Off line intersect 3D, Ends: 0 & 2', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 2, 2), 0);
+        const l2 = new Line3(new Point(1, 0, 0), new Point(1, 0.5, 0.5), 2);
+        const res = l1.intersectsWith(l2);
+        expect(round(res.intersect)).toEqual(new Point(1, 1, 1));
+        expect(res.onLines).toBe(false);
+        expect(res.collinear).toBe(false);
+      });
+      test('Off line intersect 3D, Ends: 0 & 1', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 2, 2), 0);
+        const l2 = new Line3(new Point(1, 0, 0), new Point(1, -0.5, -0.5), 1);
+        const res = l1.intersectsWith(l2);
+        expect(round(res.intersect)).toEqual(new Point(1, 1, 1));
+        expect(res.onLines).toBe(false);
+        expect(res.collinear).toBe(false);
+      });
+      test('Collinear Full Overlap, Ends: 0 & 2', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 0);
+        const l2 = new Line3(new Point(4, 0, 0), new Point(5, 0, 0), 2);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(0, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(true);
+      });
+      test('Collinear Full Overlap, Ends: 0 & 1', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 0);
+        const l2 = new Line3(new Point(4, 0, 0), new Point(5, 0, 0), 1);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(0, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(true);
+      });
+      test('Collinear Full Overlap, Ends: 0 & 0', () => {
+        const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0), 0);
+        const l2 = new Line3(new Point(4, 0, 0), new Point(5, 0, 0), 0);
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(0, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(true);
       });
     });
     // describe('Both lines have 2 ends', () => {

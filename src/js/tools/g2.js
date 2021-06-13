@@ -2852,7 +2852,7 @@ class Line3 {
     const n = this.unitVector();
     const m = line2.unitVector();
     const d = round(m.dotProduct(n), precision);
-    if (d !== 1 && d === -1) {
+    if (d !== 1 && d !== -1) {
       return false;
     }
     return this.hasPointAlong(line2.p1, precision);
@@ -3025,7 +3025,8 @@ class Line3 {
       return { collinear: false, onLines: false, intersect: i };
     }
 
-    // If the lines are parallel, but not collinear, then there is no intersect
+    // If the lines not collinear, but do not have an intersect, then
+    // they are skew or parallel
     if (!collinear) {
       return { intersect: undefined, collinear, onLines: false };
     }
