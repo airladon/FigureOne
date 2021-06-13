@@ -406,6 +406,32 @@ describe('Line3', () => {
       });
     });
   });
+  describe('Distance between lines', () => {
+    test('Two parallel lines', () => {
+      const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
+      const l2 = new Line3(new Point(0, 0, 1), new Point(2, 0, 1));
+      const d = l1.distanceToLine(l2);
+      expect(round(d)).toBe(1);
+    });
+    test('Two parallel lines 2', () => {
+      const l1 = new Line3(new Point(1, 0, 1), new Point(2, 0, 2));
+      const l2 = new Line3(new Point(1, 1, 1), new Point(2, 1, 2));
+      const d = l1.distanceToLine(l2);
+      expect(round(d)).toBe(1);
+    });
+    test('Two skew lines 2', () => {
+      const l1 = new Line3(new Point(0, 0, 0), new Point(1, 0, 0));
+      const l2 = new Line3(new Point(0, -1, 1), new Point(0, 1, 1));
+      const d = l1.distanceToLine(l2);
+      expect(round(d)).toBe(1);
+    });
+    test('Intersecting Lines', () => {
+      const l1 = new Line3(new Point(0, 0, 0), new Point(1, 0, 0));
+      const l2 = new Line3(new Point(0, -1, 0), new Point(0, 1, 0));
+      const d = l1.distanceToLine(l2);
+      expect(round(d)).toBe(0);
+    });
+  })
   describe('Lines can intersect with other lines', () => {
     let check;
     beforeEach(() => {
@@ -420,29 +446,39 @@ describe('Line3', () => {
         }
       };
     });
-    test('Line 0, 0<>2, 0 with 1, -1<>1, 1 has intersection 1, 0', () => {
+    test('Two finite lines, on line intersect', () => {
       const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
       const l2 = new Line3(new Point(1, -1, 0), new Point(1, 1, 0));
       const res = l1.intersectsWith(l2);
-      expect(res.collinear).toEqual(false);
-      expect(res.onLines).toEqual(true);
       expect(res.intersect).toEqual(new Point(1, 0, 0));
+      expect(res.onLines).toBe(true);
+      expect(res.collinear).toBe(false);
     });
-    // test('Line 0, 0<>2, 0 with 1, -1<>1, -0.5 has intersection 1, 0 which is outside the line definition', () => {
-    //   const l1 = new Line(new Point(0, 0), new Point(2, 0));
-    //   const l2 = new Line(new Point(1, -1), new Point(1, -0.5));
-    //   const res = l1.intersectsWith(l2);
-    //   expect(res.alongLine).toEqual(true);
-    //   expect(res.withinLine).toEqual(false);
-    //   expect(res.intersect).toEqual(new Point(1, 0));
-    // });
-    // test('Line 0, 0<>2, 0 with 0, 1<>2, 1 has no intersection', () => {
-    //   const l1 = new Line(new Point(0, 0), new Point(2, 0));
-    //   const l2 = new Line(new Point(0, 1), new Point(2, 1));
-    //   const res = l1.intersectsWith(l2);
-    //   expect(res.alongLine).toEqual(false);
-    //   expect(res.withinLine).toEqual(false);
-    // });
+    test('Two finite lines, offline intersect', () => {
+      const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
+      const l2 = new Line3(new Point(1, -1, 0), new Point(1, -0.5, 0));
+      const res = l1.intersectsWith(l2);
+      expect(res.intersect).toEqual(new Point(1, 0));
+      expect(res.onLines).toBe(false);
+      expect(res.collinear).toBe(false);
+    });
+    test('Two finite lines, parallel', () => {
+      const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
+      const l2 = new Line3(new Point(0, 1, 0), new Point(2, 1, 0));
+      const res = l1.intersectsWith(l2);
+      expect(res.intersect).toBe(undefined);
+      expect(res.onLines).toBe(false);
+      expect(res.collinear).toBe(false);
+    });
+
+    test('Two finite lines, skew', () => {
+      const l1 = new Line3(new Point(0, 0, 0), new Point(2, 0, 0));
+      const l2 = new Line3(new Point(1, -1, 1), new Point(1, 1, 1));
+      const res = l1.intersectsWith(l2);
+      expect(res.intersect).toBe(undefined);
+      expect(res.onLines).toBe(false);
+      expect(res.collinear).toBe(false);
+    });
     // test('Line 0, 0<>2, 0 with 4, 0<>5, 0 has as intersection at 3, 0', () => {
     //   const l1 = new Line(new Point(0, 0), new Point(2, 0));
     //   const l2 = new Line(new Point(4, 0), new Point(5, 0));

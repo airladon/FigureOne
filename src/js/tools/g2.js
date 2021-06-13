@@ -2808,7 +2808,7 @@ class Line3 {
    * `true` if this line is within `line2`
    * @return {boolean}
    */
-  hasLineWithin(line2: Line, precision: number = 8) {
+  hasLineWithin(line2: Line3, precision: number = 8) {
     return line2.isWithinLine(this, precision);
   }
 
@@ -2816,7 +2816,7 @@ class Line3 {
    * `true` if this line is along the infinite length of `line2`
    * @return {boolean}
    */
-  isAlongLine(line2: Line, precision: number = 8) {
+  isAlongLine(line2: Line3, precision: number = 8) {
     const n = this.unitVector();
     const m = line2.unitVector();
     const d = round(m.dotProduct(n), precision);
@@ -2898,7 +2898,7 @@ class Line3 {
       this.p2.x + dist * Math.cos(offsetAngle),
       this.p2.y + dist * Math.sin(offsetAngle),
     );
-    return new Line(p1, p2, 0, this.ends);
+    return new Line3(p1, p2, 0, this.ends);
   }
 
   // This needs to be tested somewhere as p1ToShaddow = line was updated
@@ -2916,7 +2916,19 @@ class Line3 {
       this.p1.x + dist * 2 * Math.cos(p1ToShaddow.ang),
       this.p1.y + dist * 2 * Math.sin(p1ToShaddow.ang),
     );
-    return new Line(intersect, projection);
+    return new Line3(intersect, projection);
+  }
+
+  distanceToLine(l: Line3, precision: number = 8) {
+    const u1 = this.unitVector();
+    const u2 = l.unitVector();
+    const d = l.p1.sub(this.p1);
+    const u1CrossU2 = u1.crossProduct(u2);
+    // If the lines are parallel, then return the distance between parallel lines
+    if (u1CrossU2.isZero(precision)) {
+      return u1.crossProduct(l.p1.sub(this.p1)).distance() / u1.distance();
+    }
+    return d.dotProduct(u1CrossU2) / u1CrossU2.distance();
   }
 
   // At two lines intersection, the x and y values must be equal
@@ -2954,13 +2966,12 @@ class Line3 {
    * If either line has zero length, then an exception will be thrown.
    * @return {Intersect}
    */
-  intersectsWith(line2: Line, precision: number = 8): Intersect {
+  intersectsWith(line2: Line3, precision: number = 8): Intersect {
     const l2 = line2; // line2.round(precision);
     const l1 = this;  // this.round(precision);
 
-    // If the lines are not parallel, they will either have zero or one
-    // intersect points
-    if (!l1.isParallelWith(l2, precision)) {
+    // If the distance between lines is 0, then they intersect
+    if (l1.distanceToLine(l2, precision) === 0) {
       const C = this.p1;
       const D = l2.p1;
       const e = this.unitVector();
@@ -2987,7 +2998,7 @@ class Line3 {
     }
 
     // If the lines are parallel, but not collinear, then there is no intersect
-    if (!l1.isAlongLine(2, precision)) {
+    if (!l1.isAlongLine(l2, precision)) {
       return { intersect: undefined, collinear: false, onLines: false };
     }
 
