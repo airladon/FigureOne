@@ -209,3 +209,58 @@ figure.animations.new()
   .camera({ target: { position: [1, 1, 1.1] }, duration: 5 })
   .start();
 
+
+
+function Node(val) {
+  this.val = val;
+  this.left = null;
+  this.right = null;
+}
+
+function show(n) {
+  const out = [];
+  if (n != null) {
+    out.push(...show(n.left));
+    out.push(n.val);
+    out.push(...show(n.right));
+  }
+  return out;
+}
+
+function insert(root, val) {
+  if (root == null) {
+    return new Node(val);
+  }
+  if (val < root.val) {
+    root.left = insert(root.left, val);
+  } else if (val > root.val) {
+    root.right = insert(root.right, val);
+  }
+  return root;
+}
+
+const root = insert(null, 5);
+insert(root, 2);
+insert(root, 10);
+insert(root, -10);
+insert(root, 4);
+insert(root, 8);
+insert(root, 12);
+
+function min(n) {
+  if (n.left != null) {
+    return min(n.left);
+  }
+  return n.val;
+}
+
+function max(n) {
+  if (n.right != null) {
+    return max(n.right);
+  }
+  return n.val;
+}
+
+console.log(show(root))
+console.log(min(root))
+console.log(max(root))

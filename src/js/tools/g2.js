@@ -2600,7 +2600,7 @@ class Line3 {
    * @return {Line}
    */
   round(precision?: number = 8) {
-    return new Line(this.p1.round(precision), this.p2.round(precision), 0, 0, this.ends);
+    return new Line3(this.p1.round(precision), this.p2.round(precision), 0, 0, this.ends);
   }
 
   /**
@@ -2817,55 +2817,13 @@ class Line3 {
    * @return {boolean}
    */
   isAlongLine(line2: Line, precision: number = 8) {
-    const l1 = this.round(precision);
-    const l2 = line2.round(precision);
-    // If A and B are zero, then this is not a line
-    if ((l1.A === 0 && l1.B === 0)
-      || (l2.A === 0 && l2.B === 0)) {
+    const n = this.unitVector();
+    const m = line2.unitVector();
+    const d = round(m.dotProduct(n), precision);
+    if (d !== 1 && d === -1) {
       return false;
     }
-    // If A is 0, then it must be 0 on the other line. Similar with B
-    if (l1.A !== 0) {
-      const scale = l2.A / l1.A;
-      if (l1.B * scale !== l2.B) {
-        return false;
-      }
-      if (l1.C * scale !== l2.C) {
-        return false;
-      }
-      return true;
-    }
-    if (l2.A !== 0) {
-      const scale = l1.A / l2.A;
-      if (l2.B * scale !== l1.B) {
-        return false;
-      }
-      if (l2.C * scale !== l1.C) {
-        return false;
-      }
-      return true;
-    }
-    if (l1.B !== 0) {
-      const scale = l2.B / l1.B;
-      if (l1.A * scale !== l2.A) {
-        return false;
-      }
-      if (l1.C * scale !== l2.C) {
-        return false;
-      }
-      return true;
-    }
-    if (l2.B !== 0) {
-      const scale = l1.B / l2.B;
-      if (l2.A * scale !== l1.A) {
-        return false;
-      }
-      if (l2.C * scale !== l1.C) {
-        return false;
-      }
-      return true;
-    }
-    return true;
+    return this.hasPointAlong(line2.p1, precision);
   }
 
   /**
@@ -2943,21 +2901,6 @@ class Line3 {
     return new Line(p1, p2, 0, this.ends);
   }
 
-  // // If two lines are parallel, their determinant is 0
-  // /**
-  //  * `true` if this line is parralel with `line2`
-  //  * @return {boolean}
-  //  */
-  // isParallelWith(line2: Line, precision: number = 8) {
-  //   const l2 = line2; // line2.round(precision);
-  //   const l1 = this;  // this.round(precision);
-  //   const det = l1.A * l2.B - l2.A * l1.B;
-  //   if (roundNum(det, precision) === 0) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
   // This needs to be tested somewhere as p1ToShaddow = line was updated
   shaddowOn(l: Line, precision: number = 8) {
     const { intersect } = this.intersectsWith(l, precision);
@@ -2991,329 +2934,95 @@ class Line3 {
   /**
    * The intersection between this line and `line2`.
    *
-   * The returned result is an {@link Intersect} object with keys `intersect`,
-   * `alongLine` and `withinLine`. The `intersect` is found by extending both
-   * lines to infinity and recording where they cross. If the two lines never
-   * cross, and are not collinear, then the result will be `undefined`.
-   * `alongLine` and `withinLine` can then be used as metadata to defermine if
-   * the intersection is within finite lines or not.
+   * The returned result is an {@link Intersect} object with the keys
+   * `intersect`, `offLine` and `colinear`.
    *
-   * The properties of the two lines, such as whether they have zero, finite,
-   * or infinite length, and are parallel or collinear will define the result.
+   * If no intersect exists, then `intersect` will be undefined.
    *
-   * If the lines are not parallel and/or collinear then the returned intercept
-   * will be the point where the two lines, extended to infinity, cross. The
-   * `withinLine` returned property can then be used to determine if the
-   * intercept point is within this line.
+   * If an intersect exists, and the intersect is within both lines, then
+   * `offLine` will be `true`. If at least one of the lines needs to be extended
+   * to reach the intersect point, then `offLine` will be `false`.
    *
-   * If one of the lines has zero length, then `intersect` will only be
-   * defined if p1 of the zero length line lies along the other line.
+   * If the lines are collinear but do not overlap, then the intersect point
+   * will be the midpoint between the two closest ends. `offLine` will be `true`
+   * and `collinear` will be `true`.
    *
-   * If both of the lines have zero length, then `intersect` will only be
-   * defined if p1 of both lines is the same.
+   * If the lines are collinear and overlap fully (or are equal), then the
+   * intersect will be p1 of the calling line, `offLine` will be `false` and
+   * `collinear` will be `true`.
    *
-   * If the lines are parallel and not collinear, then `intercept` will be
-   * undefined.
-   *
-   * If lines are collinear then the `intercept` point will be defined by how
-   * many finite ends the lines have and wheter the lines are overlapping or
-   * not
-   *
-   * Lines are equal:
-   *    - 0 ends: take the yIntercept (or xIntercept if vertical)
-   *    - 1 ends: take the p1 point
-   *    - 2 ends: take the midPoint
-   *
-   * One line within the other: take mid point between mid points
-   *    - 2 ends around 2 ends: take the midPoint of the two midPoints
-   *    - 0 ends around 2 ends: take the midPoint of the 2 ends
-   *    - 0 ends around 1 ends: take the p1 of the 1 ends
-   *    - 1 end around 1 end: take the midPoint between the p1s
-   *    - 1 end around 2 ends: take the midPoint of the two ends
-   *
-   * Lines are not overlapping:
-   *    - Both 2 ends - take midPoint between 2 closest ends
-   *    - Both 1 ends - take midPoint between 2 p1s
-   *    - One 1 end and 2 end - take midPoint between p1 and closest point
-   *
-   * Lines are partially overlapping:
-   *    - Both 2 ends - take midPoint between 2 overlapping ends
-   *    - Both 1 ends - take midPoint between both p1s
-   *    - One 1 end and 2 end - take midPoint between overlapping end and p1
+   * If either line has zero length, then an exception will be thrown.
    * @return {Intersect}
    */
   intersectsWith(line2: Line, precision: number = 8): Intersect {
     const l2 = line2; // line2.round(precision);
     const l1 = this;  // this.round(precision);
 
-    const d1 = roundNum(this.distance, precision);
-    const d2 = roundNum(l2.distance, precision);
-    if (d1 === 0 || d2 === 0) {
+    // If the lines are not parallel, they will either have zero or one
+    // intersect points
+    if (!l1.isParallelWith(l2, precision)) {
+      const C = this.p1;
+      const D = l2.p1;
+      const e = this.unitVector();
+      const f = l2.unitVector();
+      const g = D.sub(C);
+      const fg = f.crossProduct(g).normalize();
+      const fe = f.crossProduct(e).normalize();
+      const h = fg.distance();
+      const k = fe.distance();
+      if (h === 0 || k === 0) {
+        return { intersect: undefined, collinear: false, onLines: false };
+      }
+      const l = e.scale(h / k);
       let i;
-      let alongLine = false;
-      let withinLine = false;
-      if (d1 === 0 && d2 === 0) {
-        if (l1.p1.isEqualTo(l2.p1, precision)) {
-          i = l1.p1._dup();
-          alongLine = true;
-          withinLine = true;
-        }
+      if (fg.isEqualTo(fe, precision)) {
+        i = C.add(l);
+      } else {
+        i = C.sub(l);
       }
-      if (d1 > 0) {
-        if (l1.hasPointOn(l2.p1, precision)) {
-          i = l2.p1._dup();
-          withinLine = true;
-          alongLine = true;
-        } else if (l1.hasPointAlong(l2.p1, precision)) {
-          i = l2.p1._dup();
-          alongLine = true;
-        }
+      if (l1.hasPointOn(i, precision) && l2.hasPointOn(i, precision)) {
+        return { intersect: i, collinear: false, onLines: true };
       }
-      if (d2 > 0) {
-        if (l2.hasPointOn(l1.p1, precision)) {
-          i = l1.p1._dup();
-          withinLine = true;
-          alongLine = true;
-        } else if (l2.hasPointAlong(l1.p1, precision)) {
-          i = l1.p1._dup();
-          alongLine = true;
-        }
-      }
-      return {
-        intersect: i,
-        alongLine,
-        withinLine,
-      };
+      return { collinear: false, onLines: false, intersect: i };
     }
 
-    if (!l1.isParallelWith(l2)) {
-      let i;
-      if (roundNum(l1.A, precision) === 0 && roundNum(l2.B, precision) === 0) {
-        i = new Point(l2.p1.x, l1.p1.y);
-      } else if (roundNum(l1.B, precision) === 0 && roundNum(l2.A, precision) === 0) {
-        i = new Point(l1.p1.x, l2.p1.y);
-      // if l1.B is 0, then l1 has constant x
-      } else if (roundNum(l1.B, precision) === 0) {
-        const x = (l2.C * l1.B - l1.C * l2.B) / (-l1.A * l2.B + l2.A * l1.B);
-        const y = -l2.A / l2.B * x + l2.C / l2.B;
-        i = new Point(x, y);
-      } else {
-        const x = (l2.C * l1.B - l1.C * l2.B) / (-l1.A * l2.B + l2.A * l1.B);
-        const y = -l1.A / l1.B * x + l1.C / l1.B;
-        i = new Point(x, y);
-      }
-      if (
-        l1.hasPointOn(i, precision) && l2.hasPointOn(i, precision)
-      ) {
-        return {
-          alongLine: true,
-          withinLine: true,
-          intersect: i,
-        };
-      }
-      return {
-        alongLine: true,
-        withinLine: false,
-        intersect: i,
-      };
-    }
-    if (!l1.isAlongLine(l2, precision)) {
-      return {
-        alongLine: false,
-        withinLine: false,
-        intersect: undefined,
-      };
+    // If the lines are parallel, but not collinear, then there is no intersect
+    if (!l1.isAlongLine(2, precision)) {
+      return { intersect: undefined, collinear: false, onLines: false };
     }
 
     // If lines are collinear they could be either:
-    //   - equal:
-    //      - 0 ends: take the yIntercept (or xIntercept if vertical)
-    //      - 1 ends: take the p1 point
-    //      - 2 ends: take the midPoint
-    //   - one within the other: take mid point between mid points
-    //      - 2 ends around 2 ends: take the midPoint of the two midPoints
-    //      - 0 ends around 2 ends: take the midPoint of the 2 ends
-    //      - 0 ends around 1 ends: take the p1 of the 1 ends
-    //      - 1 end around 1 end: take the midPoint between the p1s
-    //      - 1 end around 2 ends: take the midPoint of the two ends
-    //   - not overlapping:
-    //      - Both 2 ends - take midPoint between 2 closest ends
-    //      - Both 1 ends - take midPoint between 2 p1s
-    //      - One 1 end and 2 end - take midPoint between p1 and closest point
-    //   - partially overlapping:
-    //      - Both 2 ends - take midPoint between 2 overlapping ends
-    //      - Both 1 ends - take midPoint between both p1s
-    //      - One 1 end and 2 end - take midPoint between overlapping end and p1
+    //   - equal
+    //   - one fully within the other
+    //   - partially overlapping
+    //   - not overlapping
+    const l1P1OnL2 = l2.hasPointOn(l1.p1, precision);
+    const l1P2OnL2 = l2.hasPointOn(l1.p2, precision);
+    const l2P1OnL1 = l1.hasPointOn(l2.p1, precision);
+    const l2P2OnL1 = l1.hasPointOn(l2.p2, precision);
 
-    // If Equal
-    const xIntercept = this.getXIntercept();
-    const yIntercept = this.getYIntercept();
-    let defaultIntercept;
-    if (yIntercept != null) {
-      defaultIntercept = new Point(0, yIntercept);
-    } else if (xIntercept != null) {
-      defaultIntercept = new Point(xIntercept, 0);
-    } else {
-      defaultIntercept = new Point(0, 0);
-    }
-    // const defaultIntercept = yIntercept == null ? new Point(
-    // xIntercept == null ? 0 : xIntercept, 0) : new Point(0, yIntercept);
-
-    if (l1.isEqualTo(l2, precision)) {
-      let i;
-      if (l1.ends === 2) {
-        i = l1.midPoint();
-      } else if (l1.ends === 1) {
-        i = l1.p1._dup();
-      } else {
-        i = defaultIntercept;
+    // Not overlapping - return midpoint between two closest ends
+    if (
+      !l2P1OnL1 && !l2P2OnL1 && !l1P2OnL2 && !l1P1OnL2
+    ) {
+      let closestL1 = 1;
+      let closestL2 = 1;
+      const d11 = l1.p1.distance(l2.p1);
+      const d12 = l1.p1.distance(l2.p2);
+      if (d12 < d11) {
+        closestL1 = 2;
       }
-      return {
-        alongLine: true,
-        withinLine: true,
-        intersect: i,
-      };
-    }
-
-    // If one line is fully within the other
-    let i;
-    const lineIsWithin = (li1, li2) => {
-      // If fully overlapping
-      if (li1.hasLineWithin(li2, precision)) {
-        if (li1.ends === 2) {
-          i = new Line(li1.midPoint(), li2.midPoint()).midPoint();
-        }
-        if (li1.ends === 1 && li2.ends === 1) {
-          i = new Line(li1.p1, li2.p1);
-        }
-        if (li1.ends === 1 && li2.ends === 2) {
-          i = li2.midPoint();
-        }
-        if (li1.ends === 0 && li2.ends === 2) {
-          i = li2.midPoint();
-        }
-        if (li1.ends === 0 && li2.ends === 1) {
-          i = li2.p1._dup();
-        }
-        if (li1.ends > li2.ends) {
-          if (li1.ends === 2) {
-            i = li1.midPoint();
-          } else {
-            i = li1.p1;
-          }
-        }
-        if (li1.ends === 1 && li2.ends === 1) {
-          i = new Line(li1.p1, li2.p1).midPoint();
-        }
-        return true;
+      const d21 = l1.p2.distance(l2.p1);
+      const d22 = l1.p2.distance(l2.p2);
+      if (d22 < d21) {
+        closestL2 = 2;
       }
-      return false;
-    };
-    if (lineIsWithin(l1, l2)) {
-      return { alongLine: true, withinLine: true, intersect: i };
-    }
-    if (lineIsWithin(l2, l1)) {
-      return { alongLine: true, withinLine: true, intersect: i };
+      const intercept = new Line3(l1.getPoint(closestL1), l2.getPoint(closestL2)).midPoint();
+      return { intercept, collinear: true, onLines: false };
     }
 
-    // Two finite lines
-    if (l1.ends === 2 && l2.ends === 2) {
-      // Not overlapping
-      if (
-        !l1.p1.isWithinLine(l2, precision)
-        && !l1.p2.isWithinLine(l2, precision)
-        && !l2.p1.isWithinLine(l1, precision)
-        && !l2.p2.isWithinLine(l1, precision)
-      ) {
-        const line11 = new Line(l1.p1, l2.p1);
-        const line12 = new Line(l1.p1, l2.p2);
-        const line21 = new Line(l1.p2, l2.p1);
-        const line22 = new Line(l1.p2, l2.p2);
-
-        i = line11.midPoint();
-        let len = line11.length();
-        if (line12.length() < len) {
-          i = line12.midPoint();
-          len = line12.length();
-        }
-        if (line21.length() < len) {
-          i = line21.midPoint();
-          len = line21.length();
-        }
-        if (line22.length() < len) {
-          i = line22.midPoint();
-          len = line22.length();
-        }
-        return {
-          alongLine: true,
-          withinLine: false,
-          intersect: i,
-        };
-      }
-      // Partial overlap
-      if (l1.p1.isWithinLine(l2, precision)) {
-        if (l2.p1.isWithinLine(l1, precision)) {
-          i = new Line(l1.p1, l2.p1).midPoint();
-        } else {
-          i = new Line(l1.p1, l2.p2).midPoint();
-        }
-      } else if (l2.p1.isWithinLine(l1, precision)) {
-        i = new Line(l1.p2, l2.p1).midPoint();
-      } else {
-        i = new Line(l1.p2, l2.p2).midPoint();
-      }
-      return {
-        alongLine: true,
-        withinLine: true,
-        intersect: i,
-      };
-    }
-
-    // Two 1 end lines
-    if (l1.ends === 1 && l2.ends === 1) {
-      // Both not overlapping and partial overlap will have an intersect as
-      // the midPoint between the p1s
-      return {
-        alongLine: true,
-        withinLine: false,
-        intersect: new Line(l1.p1, l2.p1).midPoint(),
-      };
-    }
-
-    // One 1 end, one 2 end is the only remaining possibility
-    let withinLine = false;
-    const checkOverlap = (li1: Line, li2: Line) => {
-      // partial overlap
-      if (li1.p1.isWithinLine(li2)) {
-        withinLine = true;
-        if (li2.p1.isWithinLine(li1)) {
-          i = new Line(li1.p1, li2.p1).midPoint();
-        } else {
-          i = new Line(li1.p1, li2.p2).midPoint();
-        }
-      // No Overlap
-      } else {
-        withinLine = false;
-        const l11 = new Line(li1.p1, li2.p1);
-        const l12 = new Line(li1.p1, li2.p2);
-
-        if (l11.length() < l12.length()) {
-          i = l11.midPoint();
-        } else {
-          i = l12.midPoint();
-        }
-      }
-    };
-    if (l1.ends === 1 && l2.ends === 2) {
-      checkOverlap(l1, l2);
-    } else {
-      checkOverlap(l2, l1);
-    }
-    return {
-      alongLine: true,
-      withinLine,
-      intersect: i,
-    };
+    // The remaining case is equal, partially or fully  overlapping
+    return { intercept: l1.p1._dup(), collinear: true, onLines: true };
   }
 }
 
