@@ -2900,55 +2900,31 @@ class Line3 {
    * @return  {Line}
    */
   offset(
-    direction: 'left' | 'right' | 'top' | 'bottom' | 'positive' | 'negative',
-    dist: number,
+    direction: TypeParsablePoint,
+    dist: number | null = null,
+    perpendicular: boolean = true,
   ) {
-    let normalizedAngle = this.ang;
-    if (normalizedAngle >= Math.PI) {
-      normalizedAngle -= Math.PI;
+    let distToUse;
+    const dir = getPoint(direction);
+    if (dist == null) {
+      distToUse = dir.distance();
+    } else {
+      distToUse = dist;
     }
-    if (normalizedAngle < 0) {
-      normalizedAngle += Math.PI;
-    }
-    let offsetAngle = normalizedAngle - Math.PI / 2;
-    if (direction === 'positive') {
-      offsetAngle = clipAngle(this.ang, '0to360') + Math.PI / 2;
-    } else if (direction === 'negative') {
-      offsetAngle = clipAngle(this.ang, '0to360') - Math.PI / 2;
-    } else if (normalizedAngle < Math.PI / 2) {
-      if (direction === 'left' || direction === 'top') {
-        offsetAngle = normalizedAngle + Math.PI / 2;
-      }
-    } else if (direction === 'left' || direction === 'bottom') {
-      offsetAngle = normalizedAngle + Math.PI / 2;
-    }
-    const p1 = new Point(
-      this.p1.x + dist * Math.cos(offsetAngle),
-      this.p1.y + dist * Math.sin(offsetAngle),
-    );
-    const p2 = new Point(
-      this.p2.x + dist * Math.cos(offsetAngle),
-      this.p2.y + dist * Math.sin(offsetAngle),
-    );
-    return new Line3(p1, p2, 0, this.ends);
-  }
 
-  // This needs to be tested somewhere as p1ToShaddow = line was updated
-  shaddowOn(l: Line, precision: number = 8) {
-    const { intersect } = this.intersectsWith(l, precision);
-    if (intersect == null) {
-      return null;
+    const d = dir.normalize().scale(distToUse);
+
+    if (perpendicular === false) {
+      const p1 = this.p1.add(d);
+      const p2 = this.p2.add(d);
+      return new Line3(p1, p2, this.ends);
     }
-    const perpendicular = new Line(intersect, 1, l.ang + Math.PI / 2);
-    const shaddow = this.p1.getShaddowOnLine(perpendicular, precision);
-    const p1ToShaddow = new Line(this.p1, shaddow);
-    const dist = p1ToShaddow.distance;
-    // const distance = shaddow.distance(this.p1);
-    const projection = new Point(
-      this.p1.x + dist * 2 * Math.cos(p1ToShaddow.ang),
-      this.p1.y + dist * 2 * Math.sin(p1ToShaddow.ang),
-    );
-    return new Line3(intersect, projection);
+    const u = this.unitVector();
+    const normal = d.crossProduct(u);
+    const perp = u.crossProduct(normal).normalize().scale(distToUse);
+    const p1 = this.p1.add(perp);
+    const p2 = this.p2.add(perp);
+    return new Line3(p1, p2, this.ends);
   }
 
   /**
