@@ -7520,6 +7520,24 @@ class Plane {
     return new Line3({ p1: p0, direction: u, ends: 0 });
   }
 
+  /**
+   * Returns the intersect point for a line (extended to infinity) with a plane.
+   */
+  lineIntersect(line: Line3, precision: number = 8) {
+    // https://vicrucann.github.io/tutorials/3d-geometry-algorithms/
+    const l = line;
+    if (round(this.n.dotProduct(l.vector()), precision) === 0) {
+      return null;
+    }
+    const C = this.p;
+    const F = l.p1;
+    const N = l.p2;
+    const FN = N.sub(F);
+    const { n } = this;
+    const x = C.sub(N).dotProduct(n) / FN.dotProduct(n);
+    return FN.scale(x).add(N);
+  }
+
   // lineIntersection(l: TypeParsableLine, precision: number = 8) {
 
   // }

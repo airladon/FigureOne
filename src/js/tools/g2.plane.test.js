@@ -1,5 +1,5 @@
 import {
-  Plane, getPlane, Point,
+  Plane, getPlane, Point, Line3
 } from './g2';
 // import { round } from './math';
 
@@ -186,6 +186,50 @@ describe('Plane', () => {
       const q = new Plane([0, 0, 0], [1, 0, 0]);
       const l = p.intersectsWith(q);
       expect(l).toBe(null);
+    });
+  });
+  describe('line intersect', () => {
+    test('YZ plane with x axis, intercept in line', () => {
+      const YZ = new Plane([0, 0, 0], [1, 0, 0]);
+      const x = new Line3([-1, 0, 0], [1, 0, 0]);
+      const i = YZ.lineIntersect(x);
+      expect(i.round()).toEqual(point(0, 0, 0));
+    });
+    test('YZ plane with x axis, intercept off line', () => {
+      const YZ = new Plane([0, 0, 0], [1, 0, 0]);
+      const x = new Line3([0.5, 0, 0], [1, 0, 0]);
+      const i = YZ.lineIntersect(x);
+      expect(i.round()).toEqual(point(0, 0, 0));
+    });
+    test('YZ plane with x axis, intercept off line reverse', () => {
+      const YZ = new Plane([0, 0, 0], [1, 0, 0]);
+      const x = new Line3([-0.5, 0, 0], [-1, 0, 0]);
+      const i = YZ.lineIntersect(x);
+      expect(i.round()).toEqual(point(0, 0, 0));
+    });
+    test('YZ plane with 3D line on plane', () => {
+      const YZ = new Plane([0, 0, 0], [1, 0, 0]);
+      const x = new Line3([0, 1, 1], [1, 2, 3]);
+      const i = YZ.lineIntersect(x);
+      expect(i.round()).toEqual(point(0, 1, 1));
+    });
+    test('YZ plane with 3D line off plane', () => {
+      const YZ = new Plane([0, 0, 0], [1, 0, 0]);
+      const x = new Line3([1, 1, 0], [2, 1, 0]);
+      const i = YZ.lineIntersect(x);
+      expect(i.round()).toEqual(point(0, 1, 0));
+    });
+    test('Parallel off plane', () => {
+      const YZ = new Plane([0, 0, 0], [1, 0, 0]);
+      const x = new Line3([1, 1, 0], [1, 2, 0]);
+      const i = YZ.lineIntersect(x);
+      expect(i).toBe(null);
+    });
+    test('Parallel off plane', () => {
+      const YZ = new Plane([0, 0, 0], [1, 0, 0]);
+      const x = new Line3([0, 1, 3], [0, 2, -1]);
+      const i = YZ.lineIntersect(x);
+      expect(i).toBe(null);
     });
   });
 });
