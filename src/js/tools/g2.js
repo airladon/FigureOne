@@ -7520,13 +7520,22 @@ class Plane {
     return new Line3({ p1: p0, direction: u, ends: 0 });
   }
 
+  isParallelToLine(line: Line3, precision: number = 8) {
+    const l = line;
+    const d = round(this.n.dotProduct(l.vector()), precision);
+    if (d === 0) {
+      return true;
+    }
+    return false;
+  }
+
   /**
    * Returns the intersect point for a line (extended to infinity) with a plane.
    */
   lineIntersect(line: Line3, precision: number = 8) {
     // https://vicrucann.github.io/tutorials/3d-geometry-algorithms/
     const l = line;
-    if (round(this.n.dotProduct(l.vector()), precision) === 0) {
+    if (this.isParallelToLine(line, precision)) {
       return null;
     }
     const C = this.p;
@@ -7536,6 +7545,29 @@ class Plane {
     const { n } = this;
     const x = C.sub(N).dotProduct(n) / FN.dotProduct(n);
     return FN.scale(x).add(N);
+  }
+
+  hasLineOn(line: Line3, precision: number = 8) {
+    const l = line;
+    if (!this.isParallelToLine(l, precision)) {
+      return false;
+    }
+    if (!this.hasPointOn(l.p1, precision)) {
+      return false;
+    }
+    return true;
+  }
+
+  pointProjection(p: TypeParsablePoint) {
+    // https://stackoverflow.com/questions/9605556/how-to-project-a-point-onto-a-plane-in-3d - Mr H
+    const o = this.p;
+    const { n } = this;
+    return p.sub(n.scale(n.dotProduct(p.sub(o))));
+  }
+
+  distanceToPoint(p: TypeParsablePoint) {
+    const projection = this.pointProjection(p);
+    return projection.distance(p);
   }
 
   // lineIntersection(l: TypeParsableLine, precision: number = 8) {

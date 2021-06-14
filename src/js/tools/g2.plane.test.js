@@ -1,7 +1,7 @@
 import {
-  Plane, getPlane, Point, Line3
+  Plane, getPlane, Point, Line3,
 } from './g2';
-// import { round } from './math';
+import { round } from './math';
 
 const point = (x, y, z) => new Point(x, y, z);
 
@@ -225,11 +225,52 @@ describe('Plane', () => {
       const i = YZ.lineIntersect(x);
       expect(i).toBe(null);
     });
-    test('Parallel off plane', () => {
+    test('Parallel on plane', () => {
       const YZ = new Plane([0, 0, 0], [1, 0, 0]);
       const x = new Line3([0, 1, 3], [0, 2, -1]);
       const i = YZ.lineIntersect(x);
       expect(i).toBe(null);
+    });
+  });
+  describe('has line on', () => {
+    test('YZ plane, y axis line', () => {
+      const YZ = new Plane([0, 0, 0], [1, 0, 0]);
+      const y = new Line3([0, 0, 0], [0, 1, 0]);
+      expect(YZ.hasLineOn(y)).toBe(true);
+    });
+    test('YZ plane, yz line', () => {
+      const YZ = new Plane([0, 0, 0], [1, 0, 0]);
+      const yz = new Line3([0, 2, 4], [0, -1, 10]);
+      expect(YZ.hasLineOn(yz)).toBe(true);
+    });
+    test('YZ plane, x line', () => {
+      const YZ = new Plane([0, 0, 0], [1, 0, 0]);
+      const x = new Line3([0, 0, 0], [1, 0, 0]);
+      expect(YZ.hasLineOn(x)).toBe(false);
+    });
+  });
+  describe('distance to point', () => {
+    test('YZ plane, point at x = 1', () => {
+      const YZ = new Plane([0, 0, 0], [1, 0, 0]);
+      const p = new Point([1, 0, 0]);
+      expect(round(YZ.distanceToPoint(p))).toBe(1);
+    });
+    test('YZ plane, point at x = 10', () => {
+      const YZ = new Plane([0, 0, 0], [1, 0, 0]);
+      const p = new Point([-5, -10, 100]);
+      expect(round(YZ.distanceToPoint(p))).toBe(5);
+    });
+  });
+  describe('point projection', () => {
+    test('YZ plane off plane', () => {
+      const YZ = new Plane([0, 0, 0], [1, 0, 0]);
+      const p = new Point([100, 3, -10]);
+      expect(YZ.pointProjection(p).round()).toEqual(point(0, 3, -10));
+    });
+    test('YZ plane on plane', () => {
+      const YZ = new Plane([0, 0, 0], [1, 0, 0]);
+      const p = new Point([0, 3, -10]);
+      expect(YZ.pointProjection(p).round()).toEqual(point(0, 3, -10));
     });
   });
 });
