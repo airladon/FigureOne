@@ -7476,6 +7476,50 @@ class Plane {
     return false;
   }
 
+  intersectsWith(plane: Plane, precision: number = 8) {
+    // https://vicrucann.github.io/tutorials/3d-geometry-algorithms/
+    const p = getPlane(plane);
+    if (this.isParallelTo(p, precision)) {
+      return null;
+    }
+    const u = this.n.crossProduct(p.n).normalize();
+    const ax = Math.abs(u.x);
+    const ay = Math.abs(u.y);
+    const az = Math.abs(u.z);
+
+    let max;
+    if (ax > ay) {
+      max = ax > az ? 1 : 3;
+    } else {
+      max = ay > az ? 2 : 3;
+    }
+
+    const n1 = this.n;
+    const n2 = p.n;
+
+    const d1 = -n1.dotProduct(this.p);
+    const d2 = -n2.dotProduct(p.p);
+    let xi;
+    let yi;
+    let zi;
+
+    if (max === 1) {
+      xi = 0;
+      yi = (d2 * n1.z - d1 * n2.z) / u.x;
+      zi = (d1 * n2.y - d2 * n1.y) / u.x;
+    } else if (max === 2) {
+      xi = (d1 * n2.z - d2 * n1.z) / u.y;
+      yi = 0;
+      zi = (d2 * n1.x - d1 * n2.x) / u.y;
+    } else {
+      xi = (d2 * n1.y - d1 * n2.y) / u.z;
+      yi = (d1 * n2.x - d2 * n1.x) / u.z;
+      zi = 0;
+    }
+    const p0 = new Point(xi, yi, zi);
+    return new Line3({ p1: p0, direction: u, ends: 0 });
+  }
+
   // lineIntersection(l: TypeParsableLine, precision: number = 8) {
 
   // }

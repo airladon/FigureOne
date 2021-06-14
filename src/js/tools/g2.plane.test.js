@@ -144,5 +144,48 @@ describe('Plane', () => {
       const q = new Plane([0, 0, 0], [1, 0, 0]);
       expect(p.isEqualTo(q)).toBe(true);
     });
+    test('Different planes - parallel', () => {
+      const p = new Plane([1, 0, 0], [1, 0, 0]);
+      const q = new Plane([0, 0, 0], [1, 0, 0]);
+      expect(p.isEqualTo(q)).toBe(false);
+    });
+    test('Different planes - same point', () => {
+      const p = new Plane([0, 0, 0], [0, 1, 0]);
+      const q = new Plane([0, 0, 0], [1, 0, 0]);
+      expect(p.isEqualTo(q)).toBe(false);
+    });
+    test('Different planes - different point', () => {
+      const p = new Plane([1, 0, 0], [0, 1, 0]);
+      const q = new Plane([0, 0, 0], [1, 0, 0]);
+      expect(p.isEqualTo(q)).toBe(false);
+    });
+  });
+  describe('Plane Intersection', () => {
+    test('XZ and XY planes', () => {
+      const p = new Plane([0, 0, 0], [0, 1, 0]);
+      const q = new Plane([0, 0, 0], [0, 0, 1]);
+      const l = p.intersectsWith(q);
+      expect(l.hasPointOn([0, 0, 0])).toBe(true);
+      expect(l.hasPointOn([1, 0, 0])).toBe(true);
+    });
+    test('Offset YZ and XY planes', () => {
+      const p = new Plane([1, 0, 0], [1, 0, 0]);
+      const q = new Plane([0, 0, 1], [0, 0, 1]);
+      const l = p.intersectsWith(q);
+      expect(l.hasPointOn([1, 0, 1])).toBe(true);
+      expect(l.hasPointOn([1, 1, 1])).toBe(true);
+    });
+    test('Parallel Planes', () => {
+      const p = new Plane([1, 0, 0], [1, 0, 0]);
+      const q = new Plane([0, 0, 0], [1, 0, 0]);
+      const l = p.intersectsWith(q);
+      expect(l).toBe(null);
+    });
+    test('Same Planes', () => {
+      const p = new Plane([0, 0, 0], [1, 0, 0]);
+      const q = new Plane([0, 0, 0], [1, 0, 0]);
+      const l = p.intersectsWith(q);
+      expect(l).toBe(null);
+    });
   });
 });
