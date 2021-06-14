@@ -88,7 +88,7 @@ function getPrecision(
 
 type TypeF1DefPoint = {
   f1Type: 'p',
-  state: [number, number],
+  state: [number, number, number],
 };
 
 /**
