@@ -869,9 +869,17 @@ class Point {
    * p.isEqualTo(q, 2)
    * // true
    */
-  isEqualTo(p: TypeParsablePoint, precision?: number = 8) {
+  isEqualTo(
+    p: TypeParsablePoint,
+    precision: number = 8,
+    delta: boolean = false,
+  ) {
     let pr = this;
     let qr = getPoint(p);
+
+    if (delta) {
+      return this.isWithinDelta(qr, precision);
+    }
 
     if (typeof precision === 'number') {
       pr = this.round(precision);
@@ -904,8 +912,8 @@ class Point {
    * p.isNotEqualTo(q, 2)
    * // false
    */
-  isNotEqualTo(p: Point, precision?: number) {
-    return !this.isEqualTo(p, precision);
+  isNotEqualTo(p: Point, precision: number, delta: boolean = false) {
+    return !this.isEqualTo(p, precision, delta);
   }
 
   isNotWithinDelta(p: Point, delta: number = 0.0000001) {
@@ -2398,7 +2406,7 @@ class Line {
 }
 
 function cartesianToSpherical(
-  xOrPoint: TypeParsablePoint | number, y: number, z: number,
+  xOrPoint: TypeParsablePoint | number, y: number = 0, z: number = 0,
 ) {
   let _x;
   let _y = y;
@@ -2553,6 +2561,13 @@ class Line3 {
    */
   unitVector() {
     return this.p2.sub(this.p1).normalize();
+  }
+
+  /**
+   * Get the vector of the line from p1.
+   */
+  vector() {
+    return this.p2.sub(this.p1);
   }
 
   /**
@@ -2724,7 +2739,7 @@ class Line3 {
    * Perpendicular distance from `point` to line
    * @return {number}
    */
-  distanceToPoint(point: TypeParsablePoint, precision?: number = 8) {
+  distanceToPoint(point: TypeParsablePoint) {
     // Equation from https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
     const n = this.unitVector();
     const p = getPoint(point);
@@ -2732,7 +2747,7 @@ class Line3 {
     return p.sub(a).sub(n.scale(p.sub(a).dotProduct(n))).distance();
   }
 
-  isParallelWith(line2: Line, precision: number = 8) {
+  isParallelTo(line2: Line, precision: number = 8) {
     const n = this.unitVector();
     const m = line2.unitVector();
     const crossProduct = n.crossProduct(m);
@@ -2746,24 +2761,30 @@ class Line3 {
    * `true` if two lines are equal to within some rounding `precision`.
    * @return {boolean}
    */
-  isEqualTo(line2: Line3, precision?: number = 8) {
+  isEqualTo(line2: Line3, precision: number = 8, delta: boolean = false) {
     const l1 = this;
     const l2 = line2;
     if (l1.ends !== l2.ends) {
       return false;
     }
     if (l1.ends === 2) {
-      if (l1.p1.isNotEqualTo(l2.p1, precision) && l1.p1.isNotEqualTo(l2.p2, precision)) {
+      if (
+        l1.p1.isNotEqualTo(l2.p1, precision, delta)
+        && l1.p1.isNotEqualTo(l2.p2, precision, delta)
+      ) {
         return false;
       }
-      if (l1.p2.isNotEqualTo(l2.p1, precision) && l1.p2.isNotEqualTo(l2.p2, precision)) {
+      if (
+        l1.p2.isNotEqualTo(l2.p1, precision, delta)
+        && l1.p2.isNotEqualTo(l2.p2, precision, delta)
+      ) {
         return false;
       }
       return true;
     }
 
     if (l1.ends === 1) {
-      if (l1.p1.isNotEqualTo(l2.p1, precision)) {
+      if (l1.p1.isNotEqualTo(l2.p1, precision, delta)) {
         return false;
       }
       if (!l1.hasPointOn(l2.p2, precision)) {
@@ -2773,58 +2794,58 @@ class Line3 {
     }
 
     // otherwise ends === 0
-    if (!l1.hasPointOn(l2.p1)) {
+    if (!l1.hasPointOn(l2.p1, precision)) {
       return false;
     }
-    if (!l1.hasPointOn(l2.p2)) {
-      return false;
-    }
-    return true;
-  }
-
-  /**
-   * `true` if two lines are within a delta of each other.
-   *
-   * This is distinct from a rounding precision as it is an absolute
-   * delta.
-   *
-   * @return {boolean}
-   */
-  isWithinDelta(line2: Line, delta: number = 0.00000001) {
-    const l1 = this;
-    const l2 = line2;
-    if (l1.ends !== l2.ends) {
-      return false;
-    }
-    if (l1.ends === 2) {
-      if (l1.p1.isNotWithinDelta(l2.p1, delta) && l1.p1.isNotWithinDelta(l2.p2, delta)) {
-        return false;
-      }
-      if (l1.p2.isNotWithinDelta(l2.p1, delta) && l1.p2.isNotWithinDelta(l2.p2, delta)) {
-        return false;
-      }
-      return true;
-    }
-
-    if (l1.ends === 1) {
-      if (l1.p1.isNotWithinDelta(l2.p1, delta)) {
-        return false;
-      }
-      if (!l1.hasPointOn(l2.p2)) {
-        return false;
-      }
-      return true;
-    }
-
-    // otherwise ends === 0
-    if (!l1.hasPointOn(l2.p1)) {
-      return false;
-    }
-    if (!l1.hasPointOn(l2.p2)) {
+    if (!l1.hasPointOn(l2.p2, precision)) {
       return false;
     }
     return true;
   }
+
+  // /**
+  //  * `true` if two lines are within a delta of each other.
+  //  *
+  //  * This is distinct from a rounding precision as it is an absolute
+  //  * delta.
+  //  *
+  //  * @return {boolean}
+  //  */
+  // isWithinDelta(line2: Line, delta: number = 0.00000001) {
+  //   const l1 = this;
+  //   const l2 = line2;
+  //   if (l1.ends !== l2.ends) {
+  //     return false;
+  //   }
+  //   if (l1.ends === 2) {
+  //     if (l1.p1.isNotWithinDelta(l2.p1, delta) && l1.p1.isNotWithinDelta(l2.p2, delta)) {
+  //       return false;
+  //     }
+  //     if (l1.p2.isNotWithinDelta(l2.p1, delta) && l1.p2.isNotWithinDelta(l2.p2, delta)) {
+  //       return false;
+  //     }
+  //     return true;
+  //   }
+
+  //   if (l1.ends === 1) {
+  //     if (l1.p1.isNotWithinDelta(l2.p1, delta)) {
+  //       return false;
+  //     }
+  //     if (!l1.hasPointOn(l2.p2)) {
+  //       return false;
+  //     }
+  //     return true;
+  //   }
+
+  //   // otherwise ends === 0
+  //   if (!l1.hasPointOn(l2.p1)) {
+  //     return false;
+  //   }
+  //   if (!l1.hasPointOn(l2.p2)) {
+  //     return false;
+  //   }
+  //   return true;
+  // }
 
   // isWithinLine
   // hasLineWithin
@@ -2849,6 +2870,10 @@ class Line3 {
    * @return {boolean}
    */
   isAlongLine(line2: Line3, precision: number = 8) {
+    return this.isCollinearTo(line2, precision);
+  }
+
+  isCollinearTo(line2: Line3, precision: number = 8) {
     const n = this.unitVector();
     const m = line2.unitVector();
     const d = round(m.dotProduct(n), precision);
@@ -2942,6 +2967,13 @@ class Line3 {
     }
     // https://vicrucann.github.io/tutorials/3d-geometry-algorithms/
     return d.dotProduct(u1CrossU2) / u1CrossU2.distance();
+  }
+
+  pointProjection(p: TypeParsablePoint, precision: number = 8) {
+    // https://en.wikipedia.org/wiki/Vector_projection#Vector_projection_2
+    const a = getPoint(p).sub(this.p1);
+    const b = this.vector();
+    return this.pointAtPercent(a.dotProduct(b) / b.dotProduct(b));
   }
 
   /**
@@ -7309,7 +7341,9 @@ function getPositionInRect(
 //   return borderOut;
 // }
 
-export type TypeParsablePlane = [TypeParsablePoint, TypeParsablePoint] | Plane | string;
+export type TypeParsablePlane = [TypeParsablePoint, TypeParsablePoint]
+                | [TypeParsablePoint, TypeParsablePoint, TypeParsablePoint] |
+                Plane | string;
 
 function parsePlane(pIn: TypeParsablePlane): Plane {
   if (pIn instanceof Plane) {
@@ -7329,19 +7363,20 @@ function parsePlane(pIn: TypeParsablePlane): Plane {
   }
 
   if (Array.isArray(p) && p.length === 2) {
-    const p0 = getPoint(p[0]);
-    const n = getPoint(p[1]);
-    return [p0, n];
+    return new Plane(p[0], p[1]);
+  }
+  if (Array.isArray(p) && p.length === 3) {
+    return new Plane(p[0], p[1], p[2]);
   }
 
   if (p.f1Type != null) {
     if (
       p.f1Type === 'pl'
       && p.state != null
-      && Array.isArray([p.state])
+      && Array.isArray(p.state)
     ) {
       const [p0, n] = p.state;
-      return [getPoint(p0), getPoint(n)];
+      return new Plane(p0, n);
     } // $FlowFixMe
     throw new Error(`FigureOne could not parse point from state: ${pIn}`);
   } // $FlowFixMe
@@ -7362,30 +7397,33 @@ function isParsablePlane(pIn: any) {
  * @return {Point}
  */
 function getPlane(p: TypeParsablePlane): Plane {
-  const [p0, n] = parsePlane(p);
-  return new Plane(p0, n);
+  return parsePlane(p);
 }
 
 class Plane {
-  p0: Point;  // Reference point
+  p: Point;  // Reference point
   n: Point;   // Normal
 
   constructor(
-    p0OrDef: TypeParsablePlane | TypeParsablePoint = [[0, 0, 0], [0, 0, 1]],
-    normal: null | TypeParsablePoint = null,
+    p1OrDef: TypeParsablePlane | TypeParsablePoint = [[0, 0, 0], [0, 0, 1]],
+    normalOrP2: null | TypeParsablePoint = null,
+    p3: null | TypeParsablePoint = null,
   ) {
-    if (normal == null) {
-      const [p0, n] = parsePlane(p0OrDef);
-      this.p0 = p0;
-      this.n = n;
+    if (normalOrP2 == null && p3 == null) {
+      return parsePlane(p1OrDef);
+    }
+    if (p3 == null) {
+      this.p = getPoint(p1OrDef);
+      this.n = getPoint(normalOrP2).normalize();
     } else {
-      this.p0 = getPoint(p0OrDef);
-      this.n = getPoint(normal);
+      this.p = getPoint(p1OrDef);
+      const p2 = getPoint(normalOrP2);
+      this.n = p2.sub(this.p).crossProduct(getPoint(p3).sub(this.p)).normalize();
     }
   }
 
   _dup() {
-    return new Plane(this.p0, this.n);
+    return new Plane(this.p, this.n);
   }
 
   _state(options: { precision: number }) {
@@ -7394,9 +7432,9 @@ class Plane {
       f1Type: 'pl',
       state: [
         [
-          roundNum(this.p0.x, precision),
-          roundNum(this.p0.y, precision),
-          roundNum(this.p0.z, precision),
+          roundNum(this.p.x, precision),
+          roundNum(this.p.y, precision),
+          roundNum(this.p.z, precision),
         ],
         [
           roundNum(this.n.x, precision),
@@ -7409,7 +7447,7 @@ class Plane {
 
   hasPointOn(p: TypeParsablePoint, precision: number = 8) {
     const pnt = getPoint(p);
-    const pDelta = pnt.sub(this.p0);
+    const pDelta = pnt.sub(this.p);
     const d = roundNum(dotProduct3(pDelta.toArray(), this.n.toArray()), precision);
     if (d === 0) {
       return true;
@@ -7417,9 +7455,30 @@ class Plane {
     return false;
   }
 
-  lineIntersection(l: TypeParsableLine, precision: number = 8) {
-
+  /**
+   * Two planes are considered equal if they are parallel, and the same
+   * point exists on both planes.
+   */
+  isEqualTo(plane: TypeParsablePlane, precision: number = 8) {
+    const p = getPlane(plane);
+    if (this.hasPointOn(p.p, precision) && this.isParallelTo(p, precision)) {
+      return true;
+    }
+    return false;
   }
+
+  isParallelTo(plane: TypeParsablePlane, precision: number = 8) {
+    const p = getPlane(plane);
+    const d = round(this.n.dotProduct(p.n), precision);
+    if (d === 1 || d === -1) {
+      return true;
+    }
+    return false;
+  }
+
+  // lineIntersection(l: TypeParsableLine, precision: number = 8) {
+
+  // }
 }
 
 export {

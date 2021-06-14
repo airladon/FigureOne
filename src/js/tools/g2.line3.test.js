@@ -286,33 +286,33 @@ describe('Line3', () => {
       expect(round(l.distanceToPoint([-1, 1, 0]))).toBe(round(Math.sqrt(2)));
     });
   });
-  describe('isParallelWith', () => {
+  describe('isParallelTo', () => {
     test('[0, 0, 0], [1, 0, 0]', () => {
       const l = new Line3([0, 0, 0], [1, 0, 0]);
       // Same Line
-      expect(l.isParallelWith(new Line3([0, 0, 0], [1, 0, 0]))).toBe(true);
-      expect(l.reverse().isParallelWith(new Line3([0, 0, 0], [1, 0, 0]))).toBe(true);
+      expect(l.isParallelTo(new Line3([0, 0, 0], [1, 0, 0]))).toBe(true);
+      expect(l.reverse().isParallelTo(new Line3([0, 0, 0], [1, 0, 0]))).toBe(true);
       // Collinear
-      expect(l.isParallelWith(new Line3([-10, 0, 0], [-11, 0, 0]))).toBe(true);
+      expect(l.isParallelTo(new Line3([-10, 0, 0], [-11, 0, 0]))).toBe(true);
       // Parallel
-      expect(l.isParallelWith(new Line3([0, 1, 0], [1, 1, 0]))).toBe(true);
-      expect(l.isParallelWith(new Line3([0, 1, 1], [1, 1, 1]))).toBe(true);
+      expect(l.isParallelTo(new Line3([0, 1, 0], [1, 1, 0]))).toBe(true);
+      expect(l.isParallelTo(new Line3([0, 1, 1], [1, 1, 1]))).toBe(true);
       // Not parallel
-      expect(l.isParallelWith(new Line3([0, 1, 0], [1, 1, 1]))).toBe(false);
-      expect(l.isParallelWith(new Line3([0, 0, 0], [1, 0, 0.1]))).toBe(false);
+      expect(l.isParallelTo(new Line3([0, 1, 0], [1, 1, 1]))).toBe(false);
+      expect(l.isParallelTo(new Line3([0, 0, 0], [1, 0, 0.1]))).toBe(false);
     });
     test('[0, 0, 0], [1, 1, 1]', () => {
       const l = new Line3([0, 0, 0], [1, 1, 1]);
       // Same Line
-      expect(l.isParallelWith(new Line3([0, 0, 0], [1, 1, 1]))).toBe(true);
-      expect(l.reverse().isParallelWith(new Line3([0, 0, 0], [1, 1, 1]))).toBe(true);
+      expect(l.isParallelTo(new Line3([0, 0, 0], [1, 1, 1]))).toBe(true);
+      expect(l.reverse().isParallelTo(new Line3([0, 0, 0], [1, 1, 1]))).toBe(true);
       // Collinear
-      expect(l.isParallelWith(new Line3([-10, -10, -10], [-11, -11, -11]))).toBe(true);
+      expect(l.isParallelTo(new Line3([-10, -10, -10], [-11, -11, -11]))).toBe(true);
       // Parallel
-      expect(l.isParallelWith(new Line3([0, 1, 1], [1, 2, 2]))).toBe(true);
+      expect(l.isParallelTo(new Line3([0, 1, 1], [1, 2, 2]))).toBe(true);
       // Not parallel
-      expect(l.isParallelWith(new Line3([0, 1, 0], [1, 1, 1]))).toBe(false);
-      expect(l.isParallelWith(new Line3([0, 0, 0], [1, 0, 0.1]))).toBe(false);
+      expect(l.isParallelTo(new Line3([0, 1, 0], [1, 1, 1]))).toBe(false);
+      expect(l.isParallelTo(new Line3([0, 0, 0], [1, 0, 0.1]))).toBe(false);
     });
   });
   describe('Lines can be compared to other lines', () => {
@@ -989,27 +989,50 @@ describe('Line3', () => {
     });
   });
   describe('offset', () => {
-    describe('perpendicular', () => {
-      test('direction and mag - actually perp', () => {
-        const l = new Line3([0, 0, 0], [1, 0, 0]);
-        const o = l.offset([0, 1, 0], 2);
-        expect(o).toEqual(new Line3([0, 2, 0], [1, 2, 0]));
-      });
-      test('direction only - actually perp', () => {
-        const l = new Line3([0, 0, 0], [1, 0, 0]);
-        const o = l.offset([0, 2, 0]);
-        expect(o).toEqual(new Line3([0, 2, 0], [1, 2, 0]));
-      });
-      test('direction and mag', () => {
-        const l = new Line3([0, 0, 0], [1, 0, 0]);
-        const o = l.offset([1, 1, 0], 2);
-        expect(o).toEqual(new Line3([0, 2, 0], [1, 2, 0]));
-      });
-      test('direction only', () => {
-        const l = new Line3([0, 0, 0], [1, 0, 0]);
-        const o = l.offset([2, 2, 0]);
-        expect(o.round()).toEqual(new Line3([0, 2 * Math.sqrt(2), 0], [1, 2 * Math.sqrt(2), 0]).round());
-      });
+    test('direction and mag - actually perp', () => {
+      const l = new Line3([0, 0, 0], [1, 0, 0]);
+      const o = l.offset([0, 1, 0], 2);
+      expect(o).toEqual(new Line3([0, 2, 0], [1, 2, 0]));
+    });
+    test('direction only - actually perp', () => {
+      const l = new Line3([0, 0, 0], [1, 0, 0]);
+      const o = l.offset([0, 2, 0]);
+      expect(o).toEqual(new Line3([0, 2, 0], [1, 2, 0]));
+    });
+    test('direction and mag', () => {
+      const l = new Line3([0, 0, 0], [1, 0, 0]);
+      const o = l.offset([1, 1, 0], 2);
+      expect(o).toEqual(new Line3([0, 2, 0], [1, 2, 0]));
+    });
+    test('direction only', () => {
+      const l = new Line3([0, 0, 0], [1, 0, 0]);
+      const o = l.offset([2, 2, 0]);
+      expect(o.round())
+        .toEqual(new Line3([0, 2 * Math.sqrt(2), 0], [1, 2 * Math.sqrt(2), 0]).round());
+    });
+  });
+  describe('Point Projection', () => {
+    test('1D', () => {
+      const l = new Line3([0, 0, 0], [1, 0, 0]);
+      const p = l.pointProjection([0.5, 0.5, 0]);
+      expect(p.round()).toEqual(new Point(0.5, 0, 0))
+    });
+
+    test('1D off origin', () => {
+      const l = new Line3([0, 1, 0], [1, 1, 0]);
+      const p = l.pointProjection([0.5, 0.5, 0]);
+      expect(p.round()).toEqual(new Point(0.5, 1, 0));
+    });
+
+    test('2D', () => {
+      const l = new Line3([-1, -1, 0], [1, 1, 0]);
+      const p = l.pointProjection([-1, 1, 0]);
+      expect(p.round()).toEqual(new Point(0, 0, 0));
+    });
+    test('3D', () => {
+      const l = new Line3([-1, -1, -1], [1, 1, 1]);
+      const p = l.pointProjection([-1, 1, 0]);
+      expect(p.round()).toEqual(new Point(0, 0, 0));
     });
   });
 });

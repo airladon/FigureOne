@@ -206,45 +206,89 @@ describe('g2 Point', () => {
   });
 
   describe('Points can be compared to other points', () => {
-    test('(0, 0) == (0, 0)', () => {
-      const p = new Point(0, 0);
-      const q = new Point(0, 0);
-      expect(p.isEqualTo(q)).toEqual(true);
+    describe('precision', () => {
+      test('(0, 0) == (0, 0)', () => {
+        const p = new Point(0, 0);
+        const q = new Point(0, 0);
+        expect(p.isEqualTo(q)).toEqual(true);
+      });
+      test('(-1, 4) == (-1, 4)', () => {
+        const p = new Point(-1, 4);
+        const q = new Point(-1, 4);
+        expect(p.isEqualTo(q)).toEqual(true);
+      });
+      test('(0, 0) != (1, 0)', () => {
+        const p = new Point(0, 0);
+        const q = new Point(1, 0);
+        expect(p.isEqualTo(q)).toEqual(false);
+      });
+      test('0.001, 0.001 != 0, 0 with precision 3', () => {
+        const p = new Point(0.001, 0.001);
+        const q = new Point(0, 0);
+        expect(p.isEqualTo(q, 3)).toEqual(false);
+      });
+      test('(0.001, 0.001) == (0, 0) with precision 2', () => {
+        const p = new Point(0.001, 0.001);
+        const q = new Point(0, 0);
+        expect(p.isEqualTo(q, 2)).toEqual(true);
+      });
+      test('(-0, 0) == (0, 0)', () => {
+        const p = new Point(-0, 0);
+        const q = new Point(0, 0);
+        expect(p.isEqualTo(q)).toEqual(true);
+      });
+      test('(0, 0) != (1, 0) using isNotEqualTo', () => {
+        const p = new Point(0, 0);
+        const q = new Point(1, 0);
+        expect(p.isNotEqualTo(q)).toEqual(true);
+      });
+      test('(0, 0) == (0.1, 0) with precision of 0', () => {
+        const p = new Point(0, 0);
+        const q = new Point(0.1, 0);
+        expect(p.isEqualTo(q, 0)).toEqual(true);
+      });
     });
-    test('(-1, 4) == (-1, 4)', () => {
-      const p = new Point(-1, 4);
-      const q = new Point(-1, 4);
-      expect(p.isEqualTo(q)).toEqual(true);
-    });
-    test('(0, 0) != (1, 0)', () => {
-      const p = new Point(0, 0);
-      const q = new Point(1, 0);
-      expect(p.isEqualTo(q)).toEqual(false);
-    });
-    test('0.001, 0.001 != 0, 0 with precision 3', () => {
-      const p = new Point(0.001, 0.001);
-      const q = new Point(0, 0);
-      expect(p.isEqualTo(q, 3)).toEqual(false);
-    });
-    test('(0.001, 0.001) == (0, 0) with precision 2', () => {
-      const p = new Point(0.001, 0.001);
-      const q = new Point(0, 0);
-      expect(p.isEqualTo(q, 2)).toEqual(true);
-    });
-    test('(-0, 0) == (0, 0)', () => {
-      const p = new Point(-0, 0);
-      const q = new Point(0, 0);
-      expect(p.isEqualTo(q)).toEqual(true);
-    });
-    test('(0, 0) != (1, 0) using isNotEqualTo', () => {
-      const p = new Point(0, 0);
-      const q = new Point(1, 0);
-      expect(p.isNotEqualTo(q)).toEqual(true);
-    });
-    test('(0, 0) == (0.1, 0) with precision of 0', () => {
-      const p = new Point(0, 0);
-      const q = new Point(0.1, 0);
-      expect(p.isEqualTo(q, 0)).toEqual(true);
+    describe('Delta', () => {
+      test('(0, 0) == (0, 0)', () => {
+        const p = new Point(0, 0);
+        const q = new Point(0, 0);
+        expect(p.isEqualTo(q, 0, true)).toEqual(true);
+      });
+      test('(-1, 4) == (-1, 4)', () => {
+        const p = new Point(-1, 4);
+        const q = new Point(-1, 4);
+        expect(p.isEqualTo(q, 0, true)).toEqual(true);
+      });
+      test('(0, 0) != (1, 0)', () => {
+        const p = new Point(0, 0);
+        const q = new Point(1, 0);
+        expect(p.isEqualTo(q, 0, true)).toEqual(false);
+      });
+      test('0.001, 0.001 != 0, 0 with precision 3', () => {
+        const p = new Point(0.001, 0.001);
+        const q = new Point(0, 0);
+        expect(p.isEqualTo(q, 0, true)).toEqual(false);
+      });
+      test('(0.001, 0.001) == (0, 0) with precision 2', () => {
+        const p = new Point(0.001, 0.001);
+        const q = new Point(0, 0);
+        expect(p.isEqualTo(q, 0.001, true)).toEqual(true);
+      });
+      test('(-0, 0) == (0, 0)', () => {
+        const p = new Point(-0, 0);
+        const q = new Point(0, 0);
+        expect(p.isEqualTo(q, 0, true)).toEqual(true);
+      });
+      test('(0, 0) != (1, 0) using isNotEqualTo', () => {
+        const p = new Point(0, 0);
+        const q = new Point(1, 0);
+        expect(p.isNotEqualTo(q, 0, true)).toEqual(true);
+      });
+      test('(0, 0) == (0.1, 0) with precision of 0', () => {
+        const p = new Point(0, 0);
+        const q = new Point(0.1, 0);
+        expect(p.isEqualTo(q, 0.1, true)).toEqual(true);
+      });
     });
   });
 

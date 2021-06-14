@@ -5,39 +5,54 @@ import {
 
 const point = (x, y, z) => new Point(x, y, z);
 
-describe('Rect', () => {
+describe('Plane', () => {
   describe('Creation', () => {
     test('(0,0,0) (0,0,1)', () => {
       const p = new Plane([0, 0, 0], [0, 0, 1]);
-      expect(p.p0).toEqual(point(0, 0, 0));
+      expect(p.p).toEqual(point(0, 0, 0));
       expect(p.n).toEqual(point(0, 0, 1));
     });
     test('(1,2,3) (-1,2,4)', () => {
       const p = new Plane([1, 2, 3], [-1, 2, 4]);
-      expect(p.p0).toEqual(point(1, 2, 3));
-      expect(p.n).toEqual(point(-1, 2, 4));
+      expect(p.p).toEqual(point(1, 2, 3));
+      expect(p.n.round()).toEqual(point(-1, 2, 4).normalize().round());
+    });
+    test('Three points', () => {
+      const p = new Plane([0, 0, 0], [1, 0, 0], [1, 1, 0]);
+      expect(p.p).toEqual(point(0, 0, 0));
+      expect(p.n.round()).toEqual(point(0, 0, 1).normalize());
+    });
+    test('ParsablePlane - three points', () => {
+      const p = new Plane([[0, 0, 0], [1, 0, 0], [1, 1, 0]]);
+      expect(p.p).toEqual(point(0, 0, 0));
+      expect(p.n.round()).toEqual(point(0, 0, 1).normalize());
+    });
+    test('Parsable Plane - point, normal', () => {
+      const p = new Plane([[1, 2, 3], [-1, 2, 4]]);
+      expect(p.p).toEqual(point(1, 2, 3));
+      expect(p.n.round()).toEqual(point(-1, 2, 4).normalize().round());
     });
   });
-  describe('getRect', () => {
+  describe('getPlane', () => {
     test('Array definition', () => {
       const p = new Plane([[1, 0, 0], [0, 0, 1]]);
-      expect(p.p0).toEqual(point(1, 0, 0));
+      expect(p.p).toEqual(point(1, 0, 0));
       expect(p.n).toEqual(point(0, 0, 1));
     });
     test('Def definition', () => {
       const pDef = new Plane([[1, 0, 0], [0, 0, 1]])._state();
       const p = getPlane(pDef);
-      expect(p.p0).toEqual(point(1, 0, 0));
+      expect(p.p).toEqual(point(1, 0, 0));
       expect(p.n).toEqual(point(0, 0, 1));
     });
     test('JSON definition', () => {
       const p = getPlane('{ "f1Type": "pl", "state": [[1, 0, 0], [0, 0, 1]] }');
-      expect(p.p0).toEqual(point(1, 0, 0));
+      expect(p.p).toEqual(point(1, 0, 0));
       expect(p.n).toEqual(point(0, 0, 1));
     });
     test('JSON array', () => {
       const p = getPlane('[[1, 0, 0], [0, 0, 1]]');
-      expect(p.p0).toEqual(point(1, 0, 0));
+      expect(p.p).toEqual(point(1, 0, 0));
       expect(p.n).toEqual(point(0, 0, 1));
     });
     test('Fail undefined', () => {
@@ -89,6 +104,45 @@ describe('Rect', () => {
       expect(p.hasPointOn([-2, 0.5, -5])).toBe(false);
       expect(p.hasPointOn([-2, -0.5, 5])).toBe(false);
       expect(p.hasPointOn([0, 0, 0.001], 3)).toBe(false);
+    });
+  });
+  describe('Is Parallel To', () => {
+    test('normals along x', () => {
+      const p = new Plane([0, 0, 0], [1, 0, 0]);
+      const q = new Plane([10, 0, 0], [1, 0, 0]);
+      expect(p.isParallelTo(q)).toBe(true);
+    });
+    test('normals along x, y, z', () => {
+      const p = new Plane([1, 1, 1], [2, 2, 2]);
+      const q = new Plane([10, 10, 10], [8, 8, 8]);
+      expect(p.isParallelTo(q)).toBe(true);
+    });
+    test('Same', () => {
+      const p = new Plane([1, 1, 1], [2, 2, 2]);
+      const q = new Plane([1, 1, 1], [2, 2, 2]);
+      expect(p.isParallelTo(q)).toBe(true);
+    });
+    test('Not Parallel', () => {
+      const p = new Plane([1, 1, 1], [2, 2, 2.1]);
+      const q = new Plane([1, 1, 1], [2, 2, 2]);
+      expect(p.isParallelTo(q)).toBe(false);
+    });
+  });
+  describe('Is Equal To', () => {
+    test('Same planes', () => {
+      const p = new Plane([0, 0, 0], [1, 0, 0]);
+      const q = new Plane([0, 0, 0], [1, 0, 0]);
+      expect(p.isEqualTo(q)).toBe(true);
+    });
+    test('Same planes, opposite directions', () => {
+      const p = new Plane([0, 0, 0], [-1, 0, 0]);
+      const q = new Plane([0, 0, 0], [1, 0, 0]);
+      expect(p.isEqualTo(q)).toBe(true);
+    });
+    test('Same planes, opposite directions, different reference points', () => {
+      const p = new Plane([0, 1, 1], [-1, 0, 0]);
+      const q = new Plane([0, 0, 0], [1, 0, 0]);
+      expect(p.isEqualTo(q)).toBe(true);
     });
   });
 });
