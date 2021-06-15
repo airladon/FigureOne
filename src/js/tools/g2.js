@@ -6,7 +6,6 @@ import type { TypeParsablePoint } from './geometry/Point';
 import {
   getPoint, isParsablePoint, getPoints, getScale, parsePoint, Point,
 } from './geometry/Point';
-import { clipAngle } from './geometry/common';
 import { toDelta } from './geometry/Path';
 import { Plane, getPlane, isParsablePlane } from './geometry/Plane';
 import type { TypeParsablePlane } from './geometry/Plane';
@@ -25,6 +24,11 @@ import { rectToPolar, polarToRect } from './geometry/coordinates';
 import {
   RectBounds, LineBounds, Bounds, TransformBounds, RangeBounds, getBounds,
 } from './geometry/Bounds';
+import {
+  deg, minAngleDiff, getDeltaAngle3D, getDeltaAngle, normAngleTo90,
+  threePointAngle, threePointAngleMin, normAngle, clipAngle,
+} from './geometry/angle';
+import type { TypeRotationDirection } from './geometry/angle';
 
 
 type Type3Components = [number, number, number];
@@ -39,130 +43,8 @@ export type {
   Type3Components,
   Type2Components,
   TypeParsablePlane,
+  TypeRotationDirection,
 };
-
-// function distance(p1: Point, p2: Point) {
-//   return Math.sqrt(((p2.x - p1.x) ** 2) + ((p2.y - p1.y) ** 2));
-// }
-
-function deg(angle: number) {
-  return angle * 180 / Math.PI;
-}
-
-/**
- * Get the minimum absolute angle difference between two angles
- *
- * @example
- * const minAngleDiff = Fig.minAngleDiff;
- * const d1 = minAngleDiff(0.1, 0.2);
- * console.log(d1);
- * // -0.1
- *
- * const d2 = minAngleDiff(0.2, 0.1);
- * console.log(d2);
- * // 0.1
- *
- * const d3 = minAngleDiff(0.1, -0.1);
- * console.log(d3);
- * // 0.2
- */
-function minAngleDiff(angle1: number, angle2: number) {
-  if (angle1 === angle2) {
-    return 0;
-  }
-  return Math.atan2(Math.sin(angle1 - angle2), Math.cos(angle1 - angle2));
-}
-
-function normAngle(angle: number) {
-  let newAngle = angle;
-  while (newAngle >= Math.PI * 2.0) {
-    newAngle -= Math.PI * 2.0;
-  }
-  while (newAngle < 0) {
-    newAngle += Math.PI * 2.0;
-  }
-  return newAngle;
-}
-
-function normAngleTo90(angle: number) {
-  let newAngle = normAngle(angle);
-  if (newAngle > Math.PI / 2 && newAngle < Math.PI) {
-    newAngle += Math.PI;
-  }
-  if (newAngle === Math.PI) {
-    newAngle = 0;
-  }
-  if (newAngle > Math.PI && newAngle < Math.PI * 3 / 2) {
-    newAngle -= Math.PI;
-  }
-  return newAngle;
-}
-
-export type TypeRotationDirection = 0 | 1 | 2 | -1;
-
-// 0 is quickest direction
-// 1 is positive direction CCW
-// -1 is negative direction CW
-// 2 is not through 0
-// 3 is numerical
-function getDeltaAngle(
-  startAngle: number,
-  targetAngle: number,
-  rotDirection: TypeRotationDirection = 0,
-) {
-  const start = normAngle(startAngle);
-  const target = normAngle(targetAngle);
-  let dir = rotDirection;
-
-  if (start === target) {
-    return 0;
-  }
-
-  if (dir === 2) {
-    if (start > target) {
-      dir = -1;
-    } else {
-      dir = 1;
-    }
-  }
-
-  if (dir === 0) {
-    return minAngleDiff(target, start);
-  }
-
-  if (dir === 1) {
-    if (start > target) {
-      return Math.PI * 2 - start + target;
-    }
-  }
-
-  if (dir === -1) {
-    if (target > start) {
-      return -start - (Math.PI * 2 - target);
-    }
-  }
-
-  return target - start;
-}
-
-function getDeltaAngle3D(
-  startAngle: Point,
-  targetAngle: Point,
-  rotDirection: TypeRotationDirection = 0,
-) {
-  const delta = new Point(0, 0, 0);
-  delta.x = getDeltaAngle(startAngle.x, targetAngle.x, rotDirection);
-  delta.y = getDeltaAngle(startAngle.y, targetAngle.y, rotDirection);
-  delta.z = getDeltaAngle(startAngle.z, targetAngle.z, rotDirection);
-  return delta;
-}
-
-// export type TypeTransformValue = number | Array<number> | {
-//   scale?: number,
-//   position?: number,
-//   translation?: number,
-//   rotation?: number,
-// };
 
 function isTransformArrayZero(
   transformValue: TypeTransformValue,
@@ -408,74 +290,6 @@ function getBoundingBorder(
   ];
 }
 
-// // Finds the min angle between three points
-// function threePointAngleMin(p2: Point, p1: Point, p3: Point) {
-//   const p12 = distance(p1, p2);
-//   const p13 = distance(p1, p3);
-//   const p23 = distance(p2, p3);
-//   return Math.acos((p12 ** 2 + p13 ** 2 - p23 ** 2) / (2 * p12 * p13));
-// }
-
-// Finds the angle between three points for p12 to p13 in the positive
-// angle direction
-
-/**
- * Returns the angle from the line (p1, p2) to the line (p1, p3) in the positive
- * rotation direction and normalized from 0 to Math.PI * 2.
- *
- * @example
- * const threePointAngle = Fig.threePointAngle;
- * const getPoint = Fig.getPoint;
- *
- * const p1 = threePointAngle(getPoint([1, 0]), getPoint([0, 0]), getPoint([0, 1]));
- * console.log(p1);
- * // 1.5707963267948966
- *
- * const p2 = threePointAngle(getPoint([0, 1]), getPoint([0, 0]), getPoint([1, 0]));
- * console.log(p2);
- * // 4.71238898038469
- */
-function threePointAngle(p2: Point, p1: Point, p3: Point) {
-  const r12 = p2.sub(p1);
-  const r13 = p3.sub(p1);
-  // const p12 = distance(p1, p2);
-  // const p13 = distance(p1, p3);
-  // const p23 = distance(p2, p3);
-  // const minAngle = Math.acos((p12 ** 2 + p13 ** 2 - p23 ** 2) / (2 * p12 * p13));
-  let angle12 = r12.toPolar().angle;
-  let angle13 = r13.toPolar().angle;
-  angle13 -= angle12;
-  angle12 = 0;
-  return clipAngle(angle13, '0to360');
-}
-
-/**
- * Returns the minimum angle from the line (p1, p2) to the line (p1, p3).
- *
- * @example
- * const threePointAngleMin = Fig.threePointAngleMin;
- * const getPoint = Fig.getPoint;
- *
- * const p1 = threePointAngleMin(getPoint([1, 0]), getPoint([0, 0]), getPoint([0, 1]));
- * console.log(p1);
-// 1.5707963267948966
- *
- * const p2 = threePointAngleMin(getPoint([0, 1]), getPoint([0, 0]), getPoint([1, 0]));
- * console.log(p2);
- * // -1.5707963267948966
- */
-function threePointAngleMin(p2: Point, p1: Point, p3: Point) {
-  const a12 = clipAngle(Math.atan2(p2.y - p1.y, p2.x - p1.x), '0to360');
-  const a13 = clipAngle(Math.atan2(p3.y - p1.y, p3.x - p1.x), '0to360');
-  let delta = a13 - a12;
-  if (delta > Math.PI) {
-    delta = -(Math.PI * 2 - delta);
-  } else if (delta < -Math.PI) {
-    delta = Math.PI * 2 + delta;
-  }
-  return delta;
-}
-
 function randomPoint(withinRect: Rect) {
   const randPoint = rand2D(
     withinRect.left,
@@ -507,7 +321,7 @@ function getMaxTimeFromVelocity(
         (v[0] === 't' || v[0] === 's')
       ) {
         for (let i = 1; i < 4; i += 1) {
-          if (v[i] !== 0) {
+          if (v[i] !== 0) {  // $FlowFixMe
             const t = Math.abs(delta[i] / v[i]);
             time = t > time ? t : time;
           }
@@ -517,12 +331,12 @@ function getMaxTimeFromVelocity(
     const start = startTransform.def[index];
     const target = stopTransform.def[index];
     if (delta[0] === 'r' && start[0] === 'r' && target[0] === 'r') {
-      for (let i = 1; i < 4; i += 1) {
+      for (let i = 1; i < 4; i += 1) {  // $FlowFixMe
         const rotDiff = getDeltaAngle(start[i], target[i], rotDirection);
         // eslint-disable-next-line no-param-reassign
         // delta = rotDiff;
         const v = velocityTransformToUse.def[index][i];
-        if (v !== 0) {
+        if (v !== 0) {  // $FlowFixMe
           const rTime = Math.abs(rotDiff / v);
           time = rTime > time ? rTime : time;
         }
@@ -537,7 +351,7 @@ function getMoveTime(
   stopTransform: Transform | Array<Transform>,
   rotDirection: 0 | 1 | -1 | 2 = 0,
   translationVelocity: Point = new Point(0.25, 0.25),   // 0.5 figure units/s
-  rotationVelocity: number = 2 * Math.PI / 6,    // 60º/s
+  rotationVelocity: Point = new Point(0, 0, 2 * Math.PI / 6),    // 60º/s
   scaleVelocity: Point = new Point(1, 1),   // 100%/s
 ) {
   let startTransforms: Array<Transform>;
@@ -625,8 +439,6 @@ function getTriangleCenter(
   const Oy = (A.y + B.y + C.y) / 3;
   return new Point(Ox, Oy);
 }
-
-
 
 /**
  * A border is an array of points defining a contigous, closed border.
@@ -729,10 +541,7 @@ export {
   RectBounds,
   LineBounds,
   RangeBounds,
-  // ValueBounds,
   TransformBounds,
-  // Vector,
-  // transformValueToArray,
   getBounds,
   Bounds,
   getTriangleCenter,
@@ -747,6 +556,5 @@ export {
   Plane,
   getPlane,
   isParsablePlane,
-  // Line3,
   toDelta,
 };

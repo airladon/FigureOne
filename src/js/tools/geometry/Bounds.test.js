@@ -4,7 +4,7 @@ import { Line } from './Line';
 import {
   RectBounds, LineBounds, RangeBounds, TransformBounds, getBounds,
 } from './Bounds';
-import { clipAngle } from './common';
+import { clipAngle } from './angle';
 import { round } from '../math';
 
 describe('Bounds', () => {

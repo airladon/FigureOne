@@ -7,7 +7,8 @@ import type {
   TypeParsablePoint,
 } from './Point';
 import { joinObjects } from '../tools';
-import { sphericalToCartesian, getPrecision, clipAngle } from './common';
+import { sphericalToCartesian, getPrecision } from './common';
+import { clipAngle } from './angle';
 import { roundNum } from '../math';
 
 export type OBJ_Line = {

@@ -3,7 +3,8 @@
 import { Point, getPoint } from './Point';
 import type { TypeParsablePoint } from './Point';
 import { Line } from './Line';
-import { clipAngle, quadraticBezier } from './common';
+import { quadraticBezier } from './common';
+import { clipAngle } from './angle';
 
 /**
  * A path can be:

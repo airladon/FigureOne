@@ -3,7 +3,8 @@
 import { Point, getPoint } from './Point';
 import { Rect } from './Rect';
 import { joinObjects } from '../tools';
-import { getPrecision, clipAngle } from './common';
+import { getPrecision } from './common';
+import { clipAngle } from './angle';
 import { Line, getLine } from './Line';
 import { Transform } from './Transform';
 import { roundNum, round, clipValue } from '../math';

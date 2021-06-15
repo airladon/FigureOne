@@ -4,7 +4,7 @@ import {
   roundNum, round, clipValue, clipMag,
 } from '../math';
 import * as m3 from '../m3';
-import { clipAngle } from './common';
+import { clipAngle } from './angle';
 import { translationPath } from './Path';
 import { Point, getPoint, getScale } from './Point';
 import { Line } from './Line';

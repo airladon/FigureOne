@@ -43,65 +43,10 @@ function sphericalToCartesian(
   ];
 }
 
-/**
- * Clip and angle between 0 and 2π (`'0to360'`) or -π to π (`'-180to180'`).
- * `null` will return the angle between -2π to 2π.
- * @example
- * const clipAngle = Fig.clipAngle
- *
- * const a1 = clipAngle(Math.PI / 2 * 5, '0to360');
- * console.log(a1);
- * // 1.5707963267948966
- *
- * const a2 = clipAngle(Math.PI / 4 * 5, '-180to180');
- * console.log(a2);
- * // -2.356194490192345
- *
- * const a3 = clipAngle(-Math.PI / 4 * 10, null);
- * console.log(a3);
- * // -1.5707963267948966
- */
-function clipAngle(
-  angleToClip: number,
-  clipTo: '0to360' | '-180to180' | null | '-360to360' | '-360to0',
-) {
-  if (clipTo === null) {
-    return angleToClip;
-  }
-  // Modular 2π gives -360to360
-  let angle = angleToClip % (Math.PI * 2);
-  if (clipTo === '0to360') {
-    if (angle < 0) {
-      angle += Math.PI * 2;
-    }
-    if (angle >= Math.PI * 2) {
-      angle -= Math.PI * 2;
-    }
-  }
-  if (clipTo === '-180to180') {
-    if (angle < -Math.PI) {
-      angle += Math.PI * 2;
-    }
-    if (angle >= Math.PI) {
-      angle -= Math.PI * 2;
-    }
-  }
-  if (clipTo === '-360to0') {
-    if (angle > 0) {
-      angle -= Math.PI * 2;
-    }
-    if (angle <= -Math.PI * 2) {
-      angle += Math.PI * 2;
-    }
-  }
-  return angle;
-}
-
 export {
   getPrecision,
   dotProduct,
   quadraticBezier,
   cartesianToSpherical,
   sphericalToCartesian,
-  clipAngle,
 };

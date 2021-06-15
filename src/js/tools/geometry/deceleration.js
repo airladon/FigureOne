@@ -3,7 +3,7 @@ import { Point } from './Point';
 import { round } from '../math';
 import { Transform, transformValueToArray } from './Transform';
 import { polarToRect } from './coordinates';
-import { clipAngle } from './common';
+import { clipAngle } from './angle';
 import {
   RectBounds, RangeBounds, LineBounds, Bounds, TransformBounds,
 } from './Bounds';
