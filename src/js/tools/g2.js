@@ -3554,7 +3554,7 @@ class Transform {
         const perpLine = new Line(t, 1, limitLine.angle() + Math.PI / 2);
         const { intersect } = perpLine.intersectsWith(limitLine);
         if (intersect) {
-          if (intersect.isWithinLine(limitLine, 4)) {
+          if (limitLine.hasPointOn(intersect, 4)) {
             clippedTransform.updateTranslation(intersect);
           } else {
             const p1Dist = distance(intersect, limitLine.p1);
@@ -5238,7 +5238,7 @@ class LineBounds extends Bounds {
       return false;
     }
     const p = getPoint(position);
-    return p.isWithinLine(this.boundary, this.precision);
+    return this.boundary.hasPointOn(p, this.precision);
   }
 
   clip(position: number | TypeParsablePoint) {
@@ -5246,7 +5246,7 @@ class LineBounds extends Bounds {
       return position;
     }
     const p = getPoint(position);
-    return p.clipToLine(this.boundary, this.precision);
+    return this.boundary.clipPoint(p, this.precision);
   }
 
   // The intersect of a Line Boundary can be its finite end points

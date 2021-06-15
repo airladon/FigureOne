@@ -687,6 +687,24 @@ class Line {
     // The remaining case is equal, partially or fully  overlapping
     return { intersect: l1.p1._dup(), collinear: true, onLines: true };
   }
+
+  clipPoint(point: TypeParsablePoint, precision: number = 8) {
+    // const p = getPoint(point);
+    if (this.hasPointOn(point, precision)) {
+      return point._dup();
+    }
+    const projection = this.pointProjection(point);
+    if (this.hasPointOn(projection, precision)) {
+      return projection;
+    }
+
+    const d1 = projection.distance(this.p1);
+    const d2 = projection.distance(this.p2);
+    if (d1 <= d2) {
+      return this.p1._dup();
+    }
+    return this.p2._dup();
+  }
 }
 
 export {

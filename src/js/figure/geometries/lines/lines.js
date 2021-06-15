@@ -290,11 +290,11 @@ function joinLinesObtuseInside(
     return;
   }
   let intercept = inside.intersectsWith(midNext);
-  if (intercept.intersect != null && intercept.intersect.isWithinLine(midNext, 8)) {
+  if (intercept.intersect != null && midNext.hasPointOn(intercept.intersect, 8)) {
     inside.setP2(intercept.intersect);
   }
   intercept = insideNext.intersectsWith(mid);
-  if (intercept.intersect != null && intercept.intersect.isWithinLine(mid, 8)) {
+  if (intercept.intersect != null && mid.hasPointOn(intercept.intersect, 8)) {
     insideNext.setP1(intercept.intersect);
   }
 }
