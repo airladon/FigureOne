@@ -191,7 +191,9 @@ class Plane {
       zi = 0;
     }
     const p0 = new Point(xi, yi, zi);
-    return new Line({ p1: p0, direction: u, ends: 0 });
+    return new Line({
+      p1: p0, direction: u, length: 1, ends: 0,
+    });
   }
 
   isParallelToLine(line: TypeParsableLine, precision: number = 8) {
@@ -243,10 +245,6 @@ class Plane {
     const projection = this.pointProjection(p);
     return projection.distance(p);
   }
-
-  // lineIntersection(l: TypeParsableLine, precision: number = 8) {
-
-  // }
 }
 
 export {

@@ -475,7 +475,7 @@ class Line {
    * @return {boolean}
    */
   isAlongLine(line: TypeParsableLine, precision: number = 8) {
-    return this.isCollinearTo(getLine(line), precision);
+    return this.isCollinearTo(line, precision);
   }
 
   isCollinearTo(line: TypeParsableLine, precision: number = 8) {
@@ -486,7 +486,7 @@ class Line {
     if (d !== 1 && d !== -1) {
       return false;
     }
-    return this.hasPointAlong(l, precision);
+    return this.hasPointAlong(l.p1, precision);
   }
 
   /**

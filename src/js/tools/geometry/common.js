@@ -1,4 +1,6 @@
 // @flow
+import type { Type3Components } from './types';
+
 function getPrecision(
   options?: { precision: number },
   defaultPrecision: number = 8,
