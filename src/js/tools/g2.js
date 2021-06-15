@@ -7,7 +7,9 @@ import {
   getPoint, isParsablePoint, getPoints, getScale, parsePoint, Point,
 } from './geometry/Point';
 import { toDelta } from './geometry/Path';
-import { Plane, getPlane, isParsablePlane } from './geometry/Plane';
+import {
+  Plane, getPlane, isParsablePlane, getNormal,
+} from './geometry/Plane';
 import type { TypeParsablePlane } from './geometry/Plane';
 import { Line, getLine } from './geometry/Line';
 import {
@@ -30,6 +32,7 @@ import {
   threePointAngle, threePointAngleMin, normAngle, clipAngle,
 } from './geometry/angle';
 import type { TypeRotationDirection } from './geometry/angle';
+import { sphericalToCartesian, cartesianToSpherical } from './geometry/common';
 
 
 type Type3Components = [number, number, number];
@@ -559,4 +562,7 @@ export {
   getPlane,
   isParsablePlane,
   toDelta,
+  sphericalToCartesian,
+  cartesianToSpherical,
+  getNormal,
 };

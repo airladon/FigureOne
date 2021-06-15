@@ -1,7 +1,7 @@
 // @flow
 /* eslint-disable no-use-before-define */
 import { Line, getLine } from './Line';
-import { Point, getPoint } from './Point';
+import { Point, getPoint, getPoints } from './Point';
 import { round } from '../math';
 import { getPrecision, dotProduct } from './common';
 import type { TypeParsablePoint } from './Point';
@@ -259,8 +259,23 @@ class Plane {
   }
 }
 
+function getNormal(
+  p1OrPoints: TypeParsablePoint | [TypeParsablePoint, TypeParsablePoint, TypeParsablePoint],
+  p2: TypeParsablePoint,
+  p3: TypeParsablePoint,
+) {
+  let p = getPoints(p1OrPoints);
+  if (p.length === 1) {
+    p = [p[0], getPoint(p2), getPoint(p3)];
+  }
+  const m = p[1].sub(p[0]);
+  const n = p[2].sub(p[0]);
+  return m.crossProduct(n).normalize();
+}
+
 export {
   isParsablePlane,
   Plane,
   getPlane,
+  getNormal,
 };

@@ -1,5 +1,6 @@
 /* globals Fig */
-const  { Point } = Fig;
+const { sphericalToCartesian, getNormal } = Fig.tools.g2;
+const { Point, getPoint } = Fig;
 const figure = new Fig.Figure({ limits: [-1, -1, 2, 2], backgroundColor: [1, 0.9, 0.9, 1] });
 
 const col = (c, numVertices) => {
@@ -11,47 +12,67 @@ const col = (c, numVertices) => {
 };
 
 const makeSphere = (radius, sides) => {
-  const arc = [];
+  // const arc = [];
   const dTheta = Math.PI / sides;
   const dPhi = dTheta;
   const arcs = [];
+  const trueNorms = [];
   const points = [];
   const normals = [];
   for (let phi = 0; phi < Math.PI * 2 + 0.0001; phi += dPhi) {
     const thetaArc = [];
+    const trueNormsArc = [];
     for (let theta = 0; theta < Math.PI + 0.0001; theta += dTheta) {
       thetaArc.push(new Point(
         radius * Math.cos(phi) * Math.sin(theta),
         radius * Math.sin(phi) * Math.sin(theta),
         radius * Math.cos(theta),
       ));
+      trueNormsArc.push(getPoint(sphericalToCartesian(1, theta, phi)));
     }
     arcs.push(thetaArc);
+    trueNorms.push(trueNormsArc);
   }
+  // console.log(trueNorms)
 
   for (let p = 0; p < sides * 2; p += 1) {
     for (let t = 0; t < sides; t += 1) {
       points.push(arcs[p][t]);
-      points.push(arcs[p + 1][t + 1]);
       points.push(arcs[p][t + 1]);
-      points.push(arcs[p][t]);
-      points.push(arcs[p + 1][t]);
       points.push(arcs[p + 1][t + 1]);
-      const normalPhi = p * dPhi + dPhi / 2;
-      const normalTheta = t * dTheta + dTheta / 2;
-      const normal = new Point(
-        Math.cos(normalPhi) * Math.sin(normalTheta),
-        Math.sin(normalPhi) * Math.sin(normalTheta),
-        Math.cos(normalTheta),
-      );
-      normals.push(normal._dup());
-      normals.push(normal._dup());
-      normals.push(normal._dup());
-      normals.push(normal._dup());
-      normals.push(normal._dup());
-      normals.push(normal._dup());
+      points.push(arcs[p][t]);
+      points.push(arcs[p + 1][t + 1]);
+      points.push(arcs[p + 1][t]);
+      // const normalPhi = p * dPhi + dPhi / 2;
+      // const normalTheta = t * dTheta + dTheta / 2;
+      // const normal = new Point(
+      //   Math.cos(normalPhi) * Math.sin(normalTheta),
+      //   Math.sin(normalPhi) * Math.sin(normalTheta),
+      //   Math.cos(normalTheta),
+      // );
+      // normals.push(normal._dup());
+      // normals.push(normal._dup());
+      // normals.push(normal._dup());
+      // normals.push(normal._dup());
+      // normals.push(normal._dup());
+      // normals.push(normal._dup());
+
+      normals.push(trueNorms[p][t]);
+      normals.push(trueNorms[p][t + 1]);
+      normals.push(trueNorms[p + 1][t + 1]);
+      normals.push(trueNorms[p][t]);
+      normals.push(trueNorms[p + 1][t + 1]);
+      normals.push(trueNorms[p + 1][t]);
+      // const normal = getNormal(arcs[p][t], arcs[p][t + 1], arcs[p + 1][t + 1]);
+      // normals.push(normal._dup());
+      // normals.push(normal._dup());
+      // normals.push(normal._dup());
+      // normals.push(normal._dup());
+      // normals.push(normal._dup());
+      // normals.push(normal._dup());
     }
   }
+  // console.log(normals)
   const vertices = [];
   const norms = [];
   for (let i = 0; i < points.length; i += 1) {
@@ -63,7 +84,8 @@ const makeSphere = (radius, sides) => {
     norms.push(normals[i].z);
   }
   return [vertices, norms];
-}
+};
+
 makeSphere(1, 2);
 const makeRod = (length, radius, sides, rx, ry, rz) => {
   const corners = Fig.tools.morph.getPolygonCorners({ radius, sides });
@@ -150,7 +172,7 @@ makeAxis('y', [0, 1, 0, 1], -Math.PI / 2, 0, 0, [0, -0.5, 0]);
 makeAxis('z', [0, 0, 1, 1], 0, 0, 0, [0, 0, -0.5]);
 
 const addSphere = (name, position, color) => {
-  const [sx, sn] = makeSphere(0.05, 20);
+  const [sx, sn] = makeSphere(0.05, 10);
   const s = figure.add({
     name,
     make: 'gl',

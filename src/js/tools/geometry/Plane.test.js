@@ -1,5 +1,5 @@
 import {
-  Plane, getPlane,
+  Plane, getPlane, getNormal,
 } from './Plane';
 import { Line } from './Line';
 import { Point } from './Point';
@@ -290,6 +290,16 @@ describe('Plane', () => {
       const YZ = new Plane([0, 0, 0], [1, 0, 0]);
       const p = new Point([0, 3, -10]);
       expect(YZ.pointProjection(p).round()).toEqual(point(0, 3, -10));
+    });
+  });
+  describe('getNormal', () => {
+    test('z', () => {
+      const n = getNormal([0, 0, 0], [1, 0, 0], [0, 1, 0]);
+      expect(n.round()).toEqual(point(0, 0, 1));
+    });
+    test('-z', () => {
+      const n = getNormal([0, 0, 0], [0, 1, 0], [1, 0, 0]);
+      expect(n.round()).toEqual(point(0, 0, -1));
     });
   });
 });

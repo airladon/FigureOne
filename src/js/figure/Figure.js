@@ -1272,7 +1272,7 @@ class Figure {
     // this.webglHigh.gl.getExtension('WEBGL_lose_context').loseContext();
   }
 
-  spaceTransformMatrix(from: string, to: string) {
+  spaceTransformMatrix(from: string, to: string, projectTo: TypeParsablePlane = [[0, 0, 0], [0, 0, 1]]) {
     if (from === to) {
       return m3.identity();
     }
