@@ -535,7 +535,7 @@ class Line {
     dist: number | null = null,
     perpendicular: boolean = true,
   ) {
-    if (typeof direction === 'string') {
+    if (typeof direction === 'string') {  // $FlowFixMe
       return this.offset2D(direction, dist);
     }
     let distToUse;

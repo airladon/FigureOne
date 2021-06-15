@@ -1,6 +1,6 @@
 import {
   Rect, getRect,
-} from './g2';
+} from './Rect';
 // import { round } from './math';
 
 describe('Rect', () => {
