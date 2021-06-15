@@ -20,6 +20,9 @@ import {
   Plane, getPlane, isParsablePlane,
 } from './geometry/Plane';
 import type { TypeParsablePlane } from './geometry/Plane';
+import {
+  Line, getLine,
+} from './geometry/Line';
 
 // import { joinObjects } from './tools';
 
@@ -156,22 +159,24 @@ class Rect {
     const p = getPoint(point);
     const center = this.center();
     const centerToP = new Line(center, p);
-    const centerOut = new Line(center, this.width + this.height, centerToP.angle());
+    const centerOut = new Line(
+      { p1: center, length: this.width + this.height, angle: centerToP.angle() },
+    );
     const left = new Line([this.left, this.bottom], [this.left, this.top]);
     let i = centerOut.intersectsWith(left);
-    if (i.withinLine) { return i.intersect; }
+    if (i.onLines) { return i.intersect; }
 
     const top = new Line([this.left, this.top], [this.right, this.top]);
     i = centerOut.intersectsWith(top);
-    if (i.withinLine) { return i.intersect; }
+    if (i.onLines) { return i.intersect; }
 
     const right = new Line([this.right, this.top], [this.right, this.bottom]);
     i = centerOut.intersectsWith(right);
-    if (i.withinLine) { return i.intersect; }
+    if (i.onLines) { return i.intersect; }
 
     const bottom = new Line([this.left, this.bottom], [this.right, this.bottom]);
     i = centerOut.intersectsWith(bottom);
-    if (i.withinLine) { return i.intersect; }
+    if (i.onLines) { return i.intersect; }
     return null;
   }
 
@@ -187,13 +192,13 @@ class Rect {
     const bottom = new Line([this.left, this.bottom], [this.right, this.bottom]);
     const intersects = [];
     const leftIntersect = l.intersectsWith(left);
-    if (leftIntersect.withinLine) { intersects.push(leftIntersect.intersect); }
+    if (leftIntersect.onLines) { intersects.push(leftIntersect.intersect); }
     const topIntersect = l.intersectsWith(top);
-    if (topIntersect.withinLine) { intersects.push(topIntersect.intersect); }
+    if (topIntersect.onLines) { intersects.push(topIntersect.intersect); }
     const bottomIntersect = l.intersectsWith(bottom);
-    if (bottomIntersect.withinLine) { intersects.push(bottomIntersect.intersect); }
+    if (bottomIntersect.onLines) { intersects.push(bottomIntersect.intersect); }
     const rightIntersect = l.intersectsWith(right);
-    if (rightIntersect.withinLine) { intersects.push(rightIntersect.intersect); }
+    if (rightIntersect.onLines) { intersects.push(rightIntersect.intersect); }
     return intersects;
   }
 
@@ -484,923 +489,923 @@ type Intersect = {
   withinLine: boolean,
 }
 
-/**
- * Object representing a line.
- *
- * A line is defined by two points, or a point and the distance and
- * angle to another point.
- *
- * A finite line exists only between these two points.
- *
- * An infinite line can extend beyond either or both of the points to infinity.
- *
- * A line can also be defined as an infinite line by saying it extends beyond one
- * @example
- * // get Line from Fig
- * const { Line } = Fig;
- *
- * // define a finite line from [0, 0] to [1, 0] with a point, magnitude and
- * // angle
- * const l1 = new Line([0, 0], 1, 0)
- *
- * // define a finite line from [0, 0] to [1, 0] with two points
- * const l2 = new Line([0, 0], [1, 0])
- *
- * // define an infinite line from [0, 0], through [1, 0] and to infinity
- * const l3 = new Line([0, 0], [1, 0], 1)
- *
- * // define an infinite line trough [0, 0] and [1, 0]
- * const l4 = new Line([0, 0], [1, 0], 0)
- */
-class Line {
-  p1: Point;
-  p2: Point;
-  ang: number;
-  A: number;
-  B: number;
-  C: number;
-  distance: number;
-  ends: 2 | 1 | 0;
+// /**
+//  * Object representing a line.
+//  *
+//  * A line is defined by two points, or a point and the distance and
+//  * angle to another point.
+//  *
+//  * A finite line exists only between these two points.
+//  *
+//  * An infinite line can extend beyond either or both of the points to infinity.
+//  *
+//  * A line can also be defined as an infinite line by saying it extends beyond one
+//  * @example
+//  * // get Line from Fig
+//  * const { Line } = Fig;
+//  *
+//  * // define a finite line from [0, 0] to [1, 0] with a point, magnitude and
+//  * // angle
+//  * const l1 = new Line([0, 0], 1, 0)
+//  *
+//  * // define a finite line from [0, 0] to [1, 0] with two points
+//  * const l2 = new Line([0, 0], [1, 0])
+//  *
+//  * // define an infinite line from [0, 0], through [1, 0] and to infinity
+//  * const l3 = new Line([0, 0], [1, 0], 1)
+//  *
+//  * // define an infinite line trough [0, 0] and [1, 0]
+//  * const l4 = new Line([0, 0], [1, 0], 0)
+//  */
+// class Line {
+//   p1: Point;
+//   p2: Point;
+//   ang: number;
+//   A: number;
+//   B: number;
+//   C: number;
+//   distance: number;
+//   ends: 2 | 1 | 0;
 
-  /**
-   * @param {0 | 1 | 2} ends number of ends the line has. `2` ends is a finite
-   * line. `1` end is an infinite line that terminates at the first point, and
-   * goes through the second point to infinity. `0` ends is an infinite line
-   * that goes through both first and second points to infinity.
-   */
-  constructor(
-    p1: TypeParsablePoint,
-    p2OrMag: TypeParsablePoint | number | null,
-    angle: number = 0,
-    ends: 2 | 1 | 0 = 2,
-  ) {
-    this.p1 = getPoint(p1);
-    if (p2OrMag == null) {
-      this.ang = angle;
-      this.p2 = this.p1.add(1 * Math.cos(this.ang), 1 * Math.sin(this.ang));
-    } else if (typeof p2OrMag === 'number') {
-      this.p2 = this.p1.add(
-        p2OrMag * Math.cos(angle),
-        p2OrMag * Math.sin(angle),
-      );
-      this.ang = angle;
-    } else {
-      this.p2 = getPoint(p2OrMag);
-      this.ang = Math.atan2(this.p2.y - this.p1.y, this.p2.x - this.p1.x);
-    }
-    this.ends = ends;
-    this.setupLine();
-  }
+//   /**
+//    * @param {0 | 1 | 2} ends number of ends the line has. `2` ends is a finite
+//    * line. `1` end is an infinite line that terminates at the first point, and
+//    * goes through the second point to infinity. `0` ends is an infinite line
+//    * that goes through both first and second points to infinity.
+//    */
+//   constructor(
+//     p1: TypeParsablePoint,
+//     p2OrMag: TypeParsablePoint | number | null,
+//     angle: number = 0,
+//     ends: 2 | 1 | 0 = 2,
+//   ) {
+//     this.p1 = getPoint(p1);
+//     if (p2OrMag == null) {
+//       this.ang = angle;
+//       this.p2 = this.p1.add(1 * Math.cos(this.ang), 1 * Math.sin(this.ang));
+//     } else if (typeof p2OrMag === 'number') {
+//       this.p2 = this.p1.add(
+//         p2OrMag * Math.cos(angle),
+//         p2OrMag * Math.sin(angle),
+//       );
+//       this.ang = angle;
+//     } else {
+//       this.p2 = getPoint(p2OrMag);
+//       this.ang = Math.atan2(this.p2.y - this.p1.y, this.p2.x - this.p1.x);
+//     }
+//     this.ends = ends;
+//     this.setupLine();
+//   }
 
-  _state(options: { precision: number }) {
-    // const { precision } = options;
-    const precision = getPrecision(options);
-    return {
-      f1Type: 'l',
-      state: [
-        [roundNum(this.p1.x, precision), roundNum(this.p1.y, precision)],
-        [roundNum(this.p2.x, precision), roundNum(this.p2.y, precision)],
-        this.ends,
-      ],
-    };
-  }
+//   _state(options: { precision: number }) {
+//     // const { precision } = options;
+//     const precision = getPrecision(options);
+//     return {
+//       f1Type: 'l',
+//       state: [
+//         [roundNum(this.p1.x, precision), roundNum(this.p1.y, precision)],
+//         [roundNum(this.p2.x, precision), roundNum(this.p2.y, precision)],
+//         this.ends,
+//       ],
+//     };
+//   }
 
-  setupLine() {
-    this.A = this.p2.y - this.p1.y;
-    this.B = this.p1.x - this.p2.x;
-    this.C = this.A * this.p1.x + this.B * this.p1.y;
-    this.distance = distance(this.p1, this.p2);
-  }
+//   setupLine() {
+//     this.A = this.p2.y - this.p1.y;
+//     this.B = this.p1.x - this.p2.x;
+//     this.C = this.A * this.p1.x + this.B * this.p1.y;
+//     this.distance = distance(this.p1, this.p2);
+//   }
 
-  _dup() {
-    return new Line(this.p1, this.p2, 0, this.ends);
-  }
+//   _dup() {
+//     return new Line(this.p1, this.p2, 0, this.ends);
+//   }
 
-  /**
-   * Change p1 of the line
-   */
-  setP1(p1: TypeParsablePoint) {
-    this.p1 = getPoint(p1);
-    this.ang = Math.atan2(this.p2.y - this.p1.y, this.p2.x - this.p1.x);
-    this.setupLine();
-  }
+//   /**
+//    * Change p1 of the line
+//    */
+//   setP1(p1: TypeParsablePoint) {
+//     this.p1 = getPoint(p1);
+//     this.ang = Math.atan2(this.p2.y - this.p1.y, this.p2.x - this.p1.x);
+//     this.setupLine();
+//   }
 
-  /**
-   * Change p2 of the line
-   */
-  setP2(p2: Point | [number, number]) {
-    this.p2 = getPoint(p2);
-    this.ang = Math.atan2(this.p2.y - this.p1.y, this.p2.x - this.p1.x);
-    this.setupLine();
-  }
+//   /**
+//    * Change p2 of the line
+//    */
+//   setP2(p2: Point | [number, number]) {
+//     this.p2 = getPoint(p2);
+//     this.ang = Math.atan2(this.p2.y - this.p1.y, this.p2.x - this.p1.x);
+//     this.setupLine();
+//   }
 
-  /**
-   * Get p1 or p2
-   * @return {Point}
-   */
-  getPoint(index: 1 | 2 = 1) {
-    if (index === 2) {
-      return this.p2;
-    }
-    return this.p1;
-  }
+//   /**
+//    * Get p1 or p2
+//    * @return {Point}
+//    */
+//   getPoint(index: 1 | 2 = 1) {
+//     if (index === 2) {
+//       return this.p2;
+//     }
+//     return this.p1;
+//   }
 
-  reverse() {
-    return new Line(this.p2, this.p1, 0, this.ends);
-  }
+//   reverse() {
+//     return new Line(this.p2, this.p1, 0, this.ends);
+//   }
 
-  /**
-   * Get the y coordinate of a point on the line with a given x coordinate
-   * @return {number | null} where `null` is returned if the line is vertical
-   */
-  getYFromX(x: number) {
-    if (this.B !== 0) {
-      return (this.C - this.A * x) / this.B;
-    }
-    return null;
-  }
+//   /**
+//    * Get the y coordinate of a point on the line with a given x coordinate
+//    * @return {number | null} where `null` is returned if the line is vertical
+//    */
+//   getYFromX(x: number) {
+//     if (this.B !== 0) {
+//       return (this.C - this.A * x) / this.B;
+//     }
+//     return null;
+//   }
 
-  /**
-   * Get the x coordinate of a point on the line with a given y coordinate
-   * @return {number | null} where `null` is returned if the line is horiztonal
-   */
-  getXFromY(y: number) {
-    if (this.A !== 0) {
-      return (this.C - this.B * y) / this.A;
-    }
-    return null;
-  }
+//   /**
+//    * Get the x coordinate of a point on the line with a given y coordinate
+//    * @return {number | null} where `null` is returned if the line is horiztonal
+//    */
+//   getXFromY(y: number) {
+//     if (this.A !== 0) {
+//       return (this.C - this.B * y) / this.A;
+//     }
+//     return null;
+//   }
 
-  /**
-   * Get the y intercept (at x = 0) of line
-   * @return {number | null} where `null` is returned if the line is vertical
-   */
-  getYIntercept() {
-    return this.getYFromX(0);
-  }
+//   /**
+//    * Get the y intercept (at x = 0) of line
+//    * @return {number | null} where `null` is returned if the line is vertical
+//    */
+//   getYIntercept() {
+//     return this.getYFromX(0);
+//   }
 
-  /**
-   * Get the x intercept (at y = 0) of line
-   * @return {number | null} where `null` is returned if the line is horizontal
-   */
-  getXIntercept() {
-    return this.getXFromY(0);
-  }
+//   /**
+//    * Get the x intercept (at y = 0) of line
+//    * @return {number | null} where `null` is returned if the line is horizontal
+//    */
+//   getXIntercept() {
+//     return this.getXFromY(0);
+//   }
 
-  /**
-   * Get the gradient of the line
-   * @return {number}
-   */
-  getGradient() {
-    if (this.B === 0) {
-      return null;
-    }
-    return -this.A / this.B;
-  }
+//   /**
+//    * Get the gradient of the line
+//    * @return {number}
+//    */
+//   getGradient() {
+//     if (this.B === 0) {
+//       return null;
+//     }
+//     return -this.A / this.B;
+//   }
 
-  /**
-   * Get the angle of the line from p1 to p2
-   * @return {number}
-   */
-  angle() {
-    return this.ang;
-  }
+//   /**
+//    * Get the angle of the line from p1 to p2
+//    * @return {number}
+//    */
+//   angle() {
+//     return this.ang;
+//   }
 
-  /**
-   * Return a duplicate line with values rounded to `precision`
-   * @return {Line}
-   */
-  round(precision?: number = 8) {
-    const lineRounded = new Line(this.p1, this.p2, 0, this.ends);
-    lineRounded.A = roundNum(lineRounded.A, precision);
-    lineRounded.B = roundNum(lineRounded.B, precision);
-    lineRounded.C = roundNum(lineRounded.C, precision);
-    lineRounded.ang = roundNum(lineRounded.ang, precision);
-    lineRounded.distance = roundNum(lineRounded.distance, precision);
-    return lineRounded;
-  }
+//   /**
+//    * Return a duplicate line with values rounded to `precision`
+//    * @return {Line}
+//    */
+//   round(precision?: number = 8) {
+//     const lineRounded = new Line(this.p1, this.p2, 0, this.ends);
+//     lineRounded.A = roundNum(lineRounded.A, precision);
+//     lineRounded.B = roundNum(lineRounded.B, precision);
+//     lineRounded.C = roundNum(lineRounded.C, precision);
+//     lineRounded.ang = roundNum(lineRounded.ang, precision);
+//     lineRounded.distance = roundNum(lineRounded.distance, precision);
+//     return lineRounded;
+//   }
 
-  /**
-   * Return the distance between p1 and p2. Note, for infinite lines
-   * this will still return the distance between p1 and p2 that defines
-   * the line.
-   * @return {number}
-   */
-  length() {
-    // return this.p1.sub(this.p2).distance();
-    return this.distance;
-  }
+//   /**
+//    * Return the distance between p1 and p2. Note, for infinite lines
+//    * this will still return the distance between p1 and p2 that defines
+//    * the line.
+//    * @return {number}
+//    */
+//   length() {
+//     // return this.p1.sub(this.p2).distance();
+//     return this.distance;
+//   }
 
-  /* eslint-disable comma-dangle */
-  /**
-   * Return the midpoint between p1 and p2.
-   * @return {Point}
-   */
-  midPoint() {
-    // const length = this.length();
-    // const direction = this.p2.sub(this.p1);
-    // const angle = Math.atan2(direction.y, direction.x);
-    // const midPoint = point(
-    //   this.p1.x + length / 2 * Math.cos(angle),
-    //   this.p1.y + length / 2 * Math.sin(angle)
-    // );
-    // return midPoint;
-    return this.pointAtPercent(0.5);
-  }
+//   /* eslint-disable comma-dangle */
+//   /**
+//    * Return the midpoint between p1 and p2.
+//    * @return {Point}
+//    */
+//   midPoint() {
+//     // const length = this.length();
+//     // const direction = this.p2.sub(this.p1);
+//     // const angle = Math.atan2(direction.y, direction.x);
+//     // const midPoint = point(
+//     //   this.p1.x + length / 2 * Math.cos(angle),
+//     //   this.p1.y + length / 2 * Math.sin(angle)
+//     // );
+//     // return midPoint;
+//     return this.pointAtPercent(0.5);
+//   }
 
-  /**
-   * Return the point along some percent of the distance between p1 and p2.
-   * @return {Point}
-   */
-  pointAtPercent(percent: number) {
-    const length = this.length();
-    const direction = this.p2.sub(this.p1);
-    const angle = Math.atan2(direction.y, direction.x);
-    const p = new Point(
-      this.p1.x + length * percent * Math.cos(angle),
-      this.p1.y + length * percent * Math.sin(angle)
-    );
-    return p;
-  }
+//   /**
+//    * Return the point along some percent of the distance between p1 and p2.
+//    * @return {Point}
+//    */
+//   pointAtPercent(percent: number) {
+//     const length = this.length();
+//     const direction = this.p2.sub(this.p1);
+//     const angle = Math.atan2(direction.y, direction.x);
+//     const p = new Point(
+//       this.p1.x + length * percent * Math.cos(angle),
+//       this.p1.y + length * percent * Math.sin(angle)
+//     );
+//     return p;
+//   }
 
-  /**
-   * Return the point along the line at some length from p1
-   * @return {Point}
-   */
-  pointAtLength(length: number) {
-    const totalLength = this.p2.sub(this.p1).distance();
-    return this.pointAtPercent(length / totalLength);
-    // const angle = Math.atan2(direction.y, direction.x);
-    // const p = new Point(
-    //   this.p1.x + length * Math.cos(angle),
-    //   this.p1.y + length * Math.sin(angle)
-    // );
-    // return p;
-  }
-  /* eslint-enable comma-dangle */
+//   /**
+//    * Return the point along the line at some length from p1
+//    * @return {Point}
+//    */
+//   pointAtLength(length: number) {
+//     const totalLength = this.p2.sub(this.p1).distance();
+//     return this.pointAtPercent(length / totalLength);
+//     // const angle = Math.atan2(direction.y, direction.x);
+//     // const p = new Point(
+//     //   this.p1.x + length * Math.cos(angle),
+//     //   this.p1.y + length * Math.sin(angle)
+//     // );
+//     // return p;
+//   }
+//   /* eslint-enable comma-dangle */
 
-  /**
-   * `true` if `point` is along the line extended to infinity on both ends
-   * @return {boolean}
-   */
-  hasPointAlong(point: TypeParsablePoint, precision?: number = 8) {
-    const p = getPoint(point);
-    if (precision === undefined || precision === null) {
-      if (this.C === this.A * p.x + this.B * p.y) {
-        return true;
-      }
-    } else if (
-      roundNum(this.C, precision) === roundNum(this.A * p.x + this.B * p.y, precision)
-    ) {
-      return true;
-    }
-    return false;
-  }
+//   /**
+//    * `true` if `point` is along the line extended to infinity on both ends
+//    * @return {boolean}
+//    */
+//   hasPointAlong(point: TypeParsablePoint, precision?: number = 8) {
+//     const p = getPoint(point);
+//     if (precision === undefined || precision === null) {
+//       if (this.C === this.A * p.x + this.B * p.y) {
+//         return true;
+//       }
+//     } else if (
+//       roundNum(this.C, precision) === roundNum(this.A * p.x + this.B * p.y, precision)
+//     ) {
+//       return true;
+//     }
+//     return false;
+//   }
 
 
-  /**
-   * Perpendicular distance from `point` to line
-   * @return {number}
-   */
-  distanceToPoint(point: TypeParsablePoint, precision?: number = 8) {
-    const p = getPoint(point);
-    return roundNum(
-      Math.abs(this.A * p.x + this.B * p.y - this.C) / Math.sqrt(this.A ** 2 + this.B ** 2),
-      precision,
-    );
-  }
+//   /**
+//    * Perpendicular distance from `point` to line
+//    * @return {number}
+//    */
+//   distanceToPoint(point: TypeParsablePoint, precision?: number = 8) {
+//     const p = getPoint(point);
+//     return roundNum(
+//       Math.abs(this.A * p.x + this.B * p.y - this.C) / Math.sqrt(this.A ** 2 + this.B ** 2),
+//       precision,
+//     );
+//   }
 
-  /**
-   * `true` if `point` is on the line.
-   *
-   * If the line has 2 or 1 finite ends, point must be on or between the
-   * defined ends.
-   * @return {boolean}
-   */
-  hasPointOn(point: TypeParsablePoint, precision?: number = 8) {
-    const p = getPoint(point);
-    if (this.hasPointAlong(p, precision)) {
-      if (this.ends === 2) {
-        if (pointinRect(p, this.p1, this.p2, precision)) {
-          return true;
-        }
-        return false;
-      }
-      if (this.ends === 1) {
-        if (this.p1.isEqualTo(p, precision)) {
-          return true;
-        }
-        const p1ToP = new Line(this.p1, p);
-        if (round(clipAngle(p1ToP.ang, '0to360'), precision) === round(clipAngle(this.ang, '0to360'), precision)) {
-          return true;
-        }
-        return false;
-      }
-      return true;  // if this.ends === 0 and point is along, then it is on.
-    }
-    return false;
-  }
+//   /**
+//    * `true` if `point` is on the line.
+//    *
+//    * If the line has 2 or 1 finite ends, point must be on or between the
+//    * defined ends.
+//    * @return {boolean}
+//    */
+//   hasPointOn(point: TypeParsablePoint, precision?: number = 8) {
+//     const p = getPoint(point);
+//     if (this.hasPointAlong(p, precision)) {
+//       if (this.ends === 2) {
+//         if (pointinRect(p, this.p1, this.p2, precision)) {
+//           return true;
+//         }
+//         return false;
+//       }
+//       if (this.ends === 1) {
+//         if (this.p1.isEqualTo(p, precision)) {
+//           return true;
+//         }
+//         const p1ToP = new Line(this.p1, p);
+//         if (round(clipAngle(p1ToP.ang, '0to360'), precision) === round(clipAngle(this.ang, '0to360'), precision)) {
+//           return true;
+//         }
+//         return false;
+//       }
+//       return true;  // if this.ends === 0 and point is along, then it is on.
+//     }
+//     return false;
+//   }
 
-  /**
-   * `true` if two lines are equal to within some rounding `precision`.
-   * @return {boolean}
-   */
-  isEqualTo(line2: Line, precision?: number = 8) {
-    const l1 = this;
-    const l2 = line2;
-    if (l1.ends !== l2.ends) {
-      return false;
-    }
-    if (l1.ends === 2) {
-      if (l1.p1.isNotEqualTo(l2.p1, precision) && l1.p1.isNotEqualTo(l2.p2, precision)) {
-        return false;
-      }
-      if (l1.p2.isNotEqualTo(l2.p1, precision) && l1.p2.isNotEqualTo(l2.p2, precision)) {
-        return false;
-      }
-      return true;
-    }
+//   /**
+//    * `true` if two lines are equal to within some rounding `precision`.
+//    * @return {boolean}
+//    */
+//   isEqualTo(line2: Line, precision?: number = 8) {
+//     const l1 = this;
+//     const l2 = line2;
+//     if (l1.ends !== l2.ends) {
+//       return false;
+//     }
+//     if (l1.ends === 2) {
+//       if (l1.p1.isNotEqualTo(l2.p1, precision) && l1.p1.isNotEqualTo(l2.p2, precision)) {
+//         return false;
+//       }
+//       if (l1.p2.isNotEqualTo(l2.p1, precision) && l1.p2.isNotEqualTo(l2.p2, precision)) {
+//         return false;
+//       }
+//       return true;
+//     }
 
-    if (l1.ends === 1) {
-      if (l1.p1.isNotEqualTo(l2.p1, precision)) {
-        return false;
-      }
-      if (!l1.hasPointOn(l2.p2, precision)) {
-        return false;
-      }
-      return true;
-    }
+//     if (l1.ends === 1) {
+//       if (l1.p1.isNotEqualTo(l2.p1, precision)) {
+//         return false;
+//       }
+//       if (!l1.hasPointOn(l2.p2, precision)) {
+//         return false;
+//       }
+//       return true;
+//     }
 
-    // otherwise ends === 0
-    if (!l1.hasPointOn(l2.p1)) {
-      return false;
-    }
-    return true;
-  }
+//     // otherwise ends === 0
+//     if (!l1.hasPointOn(l2.p1)) {
+//       return false;
+//     }
+//     return true;
+//   }
 
-  /**
-   * `true` if two lines are within a delta of each other.
-   *
-   * This is distinct from a rounding precision as it is an absolute
-   * delta.
-   *
-   * @return {boolean}
-   */
-  isWithinDelta(line2: Line, delta: number = 0.00000001) {
-    const l1 = this;
-    const l2 = line2;
-    if (l1.ends !== l2.ends) {
-      return false;
-    }
-    if (l1.ends === 2) {
-      if (l1.p1.isNotWithinDelta(l2.p1, delta) && l1.p1.isNotWithinDelta(l2.p2, delta)) {
-        return false;
-      }
-      if (l1.p2.isNotWithinDelta(l2.p1, delta) && l1.p2.isNotWithinDelta(l2.p2, delta)) {
-        return false;
-      }
-      return true;
-    }
+//   /**
+//    * `true` if two lines are within a delta of each other.
+//    *
+//    * This is distinct from a rounding precision as it is an absolute
+//    * delta.
+//    *
+//    * @return {boolean}
+//    */
+//   isWithinDelta(line2: Line, delta: number = 0.00000001) {
+//     const l1 = this;
+//     const l2 = line2;
+//     if (l1.ends !== l2.ends) {
+//       return false;
+//     }
+//     if (l1.ends === 2) {
+//       if (l1.p1.isNotWithinDelta(l2.p1, delta) && l1.p1.isNotWithinDelta(l2.p2, delta)) {
+//         return false;
+//       }
+//       if (l1.p2.isNotWithinDelta(l2.p1, delta) && l1.p2.isNotWithinDelta(l2.p2, delta)) {
+//         return false;
+//       }
+//       return true;
+//     }
 
-    if (l1.ends === 1) {
-      if (l1.p1.isNotWithinDelta(l2.p1, delta)) {
-        return false;
-      }
-      if (!l1.hasPointOn(l2.p2, delta)) {
-        return false;
-      }
-      return true;
-    }
+//     if (l1.ends === 1) {
+//       if (l1.p1.isNotWithinDelta(l2.p1, delta)) {
+//         return false;
+//       }
+//       if (!l1.hasPointOn(l2.p2, delta)) {
+//         return false;
+//       }
+//       return true;
+//     }
 
-    // otherwise ends === 0
-    if (!l1.hasPointOn(l2.p1)) {
-      return false;
-    }
-    return true;
-  }
+//     // otherwise ends === 0
+//     if (!l1.hasPointOn(l2.p1)) {
+//       return false;
+//     }
+//     return true;
+//   }
 
-  // isWithinLine
-  // hasLineWithin
-  // isAlongLine
-  // isParrallelToLine
-  // isPerpendicularToLine
+//   // isWithinLine
+//   // hasLineWithin
+//   // isAlongLine
+//   // isParrallelToLine
+//   // isPerpendicularToLine
 
-  // hasLineOn(line2: Line, precision: number = 8) {
-  //   return line2.isOn(this, precision);
-  // }
+//   // hasLineOn(line2: Line, precision: number = 8) {
+//   //   return line2.isOn(this, precision);
+//   // }
 
-  /**
-   * `true` if this line is within `line2`
-   * @return {boolean}
-   */
-  hasLineWithin(line2: Line, precision: number = 8) {
-    return line2.isWithinLine(this, precision);
-  }
+//   /**
+//    * `true` if this line is within `line2`
+//    * @return {boolean}
+//    */
+//   hasLineWithin(line2: Line, precision: number = 8) {
+//     return line2.isWithinLine(this, precision);
+//   }
 
-  /**
-   * `true` if this line is along the infinite length of `line2`
-   * @return {boolean}
-   */
-  isAlongLine(line2: Line, precision: number = 8) {
-    const l1 = this.round(precision);
-    const l2 = line2.round(precision);
-    // If A and B are zero, then this is not a line
-    if ((l1.A === 0 && l1.B === 0)
-      || (l2.A === 0 && l2.B === 0)) {
-      return false;
-    }
-    // If A is 0, then it must be 0 on the other line. Similar with B
-    if (l1.A !== 0) {
-      const scale = l2.A / l1.A;
-      if (l1.B * scale !== l2.B) {
-        return false;
-      }
-      if (l1.C * scale !== l2.C) {
-        return false;
-      }
-      return true;
-    }
-    if (l2.A !== 0) {
-      const scale = l1.A / l2.A;
-      if (l2.B * scale !== l1.B) {
-        return false;
-      }
-      if (l2.C * scale !== l1.C) {
-        return false;
-      }
-      return true;
-    }
-    if (l1.B !== 0) {
-      const scale = l2.B / l1.B;
-      if (l1.A * scale !== l2.A) {
-        return false;
-      }
-      if (l1.C * scale !== l2.C) {
-        return false;
-      }
-      return true;
-    }
-    if (l2.B !== 0) {
-      const scale = l1.B / l2.B;
-      if (l2.A * scale !== l1.A) {
-        return false;
-      }
-      if (l2.C * scale !== l1.C) {
-        return false;
-      }
-      return true;
-    }
-    return true;
-  }
+//   /**
+//    * `true` if this line is along the infinite length of `line2`
+//    * @return {boolean}
+//    */
+//   isAlongLine(line2: Line, precision: number = 8) {
+//     const l1 = this.round(precision);
+//     const l2 = line2.round(precision);
+//     // If A and B are zero, then this is not a line
+//     if ((l1.A === 0 && l1.B === 0)
+//       || (l2.A === 0 && l2.B === 0)) {
+//       return false;
+//     }
+//     // If A is 0, then it must be 0 on the other line. Similar with B
+//     if (l1.A !== 0) {
+//       const scale = l2.A / l1.A;
+//       if (l1.B * scale !== l2.B) {
+//         return false;
+//       }
+//       if (l1.C * scale !== l2.C) {
+//         return false;
+//       }
+//       return true;
+//     }
+//     if (l2.A !== 0) {
+//       const scale = l1.A / l2.A;
+//       if (l2.B * scale !== l1.B) {
+//         return false;
+//       }
+//       if (l2.C * scale !== l1.C) {
+//         return false;
+//       }
+//       return true;
+//     }
+//     if (l1.B !== 0) {
+//       const scale = l2.B / l1.B;
+//       if (l1.A * scale !== l2.A) {
+//         return false;
+//       }
+//       if (l1.C * scale !== l2.C) {
+//         return false;
+//       }
+//       return true;
+//     }
+//     if (l2.B !== 0) {
+//       const scale = l1.B / l2.B;
+//       if (l2.A * scale !== l1.A) {
+//         return false;
+//       }
+//       if (l2.C * scale !== l1.C) {
+//         return false;
+//       }
+//       return true;
+//     }
+//     return true;
+//   }
 
-  /**
-   * `true` if this line is contained within `line2`
-   * @return {boolean}
-   */
-  isWithinLine(line2: Line, precision: number = 8) {
-    const l1 = this.round(precision);
-    const l2 = line2.round(precision);
-    if (!l1.isAlongLine(l2, precision)) {
-      return false;
-    }
-    if (line2.ends === 0) {
-      return true;
-    }
-    const withinEnds = () => l2.hasPointOn(this.p1, precision) && l2.hasPointOn(this.p2, precision);
-    if (this.ends < line2.ends) {
-      return false;
-    }
-    if (this.ends === 2) {
-      return withinEnds();
-    }
-    return withinEnds();
-  }
+//   /**
+//    * `true` if this line is contained within `line2`
+//    * @return {boolean}
+//    */
+//   isWithinLine(line2: Line, precision: number = 8) {
+//     const l1 = this.round(precision);
+//     const l2 = line2.round(precision);
+//     if (!l1.isAlongLine(l2, precision)) {
+//       return false;
+//     }
+//     if (line2.ends === 0) {
+//       return true;
+//     }
+//     const withinEnds = () => l2.hasPointOn(this.p1, precision) && l2.hasPointOn(this.p2, precision);
+//     if (this.ends < line2.ends) {
+//       return false;
+//     }
+//     if (this.ends === 2) {
+//       return withinEnds();
+//     }
+//     return withinEnds();
+//   }
 
-  // left, right, top, bottom is relative to cartesian coordinates
-  // 'outside' is the outside of a polygon defined in the positive direction
-  // (CCW).
-  /**
-   * Create a line that is offset by some distance from this line.
-   *
-   * `'left'`, `'right'`, `'top'` and `'bottom'` are relative to cartesian
-   * coordinates.
-   *
-   * `'positive'` to the right of a vertical line defined from bottom to top and
-   * above a horizontal line defined from right to left. Another way to think of
-   * it is if lines are used to create a polygon in the positive rotation
-   * direction (CCW), the the `'positive'` side will be on the outside of the
-   * polygon.
-   *
-   * `'negative'` is then the inside of the same polygon.
-   * @return  {Line}
-   */
-  offset(
-    direction: 'left' | 'right' | 'top' | 'bottom' | 'positive' | 'negative',
-    dist: number,
-  ) {
-    let normalizedAngle = this.ang;
-    if (normalizedAngle >= Math.PI) {
-      normalizedAngle -= Math.PI;
-    }
-    if (normalizedAngle < 0) {
-      normalizedAngle += Math.PI;
-    }
-    let offsetAngle = normalizedAngle - Math.PI / 2;
-    if (direction === 'positive') {
-      offsetAngle = clipAngle(this.ang, '0to360') + Math.PI / 2;
-    } else if (direction === 'negative') {
-      offsetAngle = clipAngle(this.ang, '0to360') - Math.PI / 2;
-    } else if (normalizedAngle < Math.PI / 2) {
-      if (direction === 'left' || direction === 'top') {
-        offsetAngle = normalizedAngle + Math.PI / 2;
-      }
-    } else if (direction === 'left' || direction === 'bottom') {
-      offsetAngle = normalizedAngle + Math.PI / 2;
-    }
-    const p1 = new Point(
-      this.p1.x + dist * Math.cos(offsetAngle),
-      this.p1.y + dist * Math.sin(offsetAngle),
-    );
-    const p2 = new Point(
-      this.p2.x + dist * Math.cos(offsetAngle),
-      this.p2.y + dist * Math.sin(offsetAngle),
-    );
-    return new Line(p1, p2, 0, this.ends);
-  }
+//   // left, right, top, bottom is relative to cartesian coordinates
+//   // 'outside' is the outside of a polygon defined in the positive direction
+//   // (CCW).
+//   /**
+//    * Create a line that is offset by some distance from this line.
+//    *
+//    * `'left'`, `'right'`, `'top'` and `'bottom'` are relative to cartesian
+//    * coordinates.
+//    *
+//    * `'positive'` to the right of a vertical line defined from bottom to top and
+//    * above a horizontal line defined from right to left. Another way to think of
+//    * it is if lines are used to create a polygon in the positive rotation
+//    * direction (CCW), the the `'positive'` side will be on the outside of the
+//    * polygon.
+//    *
+//    * `'negative'` is then the inside of the same polygon.
+//    * @return  {Line}
+//    */
+//   offset(
+//     direction: 'left' | 'right' | 'top' | 'bottom' | 'positive' | 'negative',
+//     dist: number,
+//   ) {
+//     let normalizedAngle = this.ang;
+//     if (normalizedAngle >= Math.PI) {
+//       normalizedAngle -= Math.PI;
+//     }
+//     if (normalizedAngle < 0) {
+//       normalizedAngle += Math.PI;
+//     }
+//     let offsetAngle = normalizedAngle - Math.PI / 2;
+//     if (direction === 'positive') {
+//       offsetAngle = clipAngle(this.ang, '0to360') + Math.PI / 2;
+//     } else if (direction === 'negative') {
+//       offsetAngle = clipAngle(this.ang, '0to360') - Math.PI / 2;
+//     } else if (normalizedAngle < Math.PI / 2) {
+//       if (direction === 'left' || direction === 'top') {
+//         offsetAngle = normalizedAngle + Math.PI / 2;
+//       }
+//     } else if (direction === 'left' || direction === 'bottom') {
+//       offsetAngle = normalizedAngle + Math.PI / 2;
+//     }
+//     const p1 = new Point(
+//       this.p1.x + dist * Math.cos(offsetAngle),
+//       this.p1.y + dist * Math.sin(offsetAngle),
+//     );
+//     const p2 = new Point(
+//       this.p2.x + dist * Math.cos(offsetAngle),
+//       this.p2.y + dist * Math.sin(offsetAngle),
+//     );
+//     return new Line(p1, p2, 0, this.ends);
+//   }
 
-  // If two lines are parallel, their determinant is 0
-  /**
-   * `true` if this line is parralel with `line2`
-   * @return {boolean}
-   */
-  isParallelWith(line2: Line, precision: number = 8) {
-    const l2 = line2; // line2.round(precision);
-    const l1 = this;  // this.round(precision);
-    const det = l1.A * l2.B - l2.A * l1.B;
-    if (roundNum(det, precision) === 0) {
-      return true;
-    }
-    return false;
-  }
+//   // If two lines are parallel, their determinant is 0
+//   /**
+//    * `true` if this line is parralel with `line2`
+//    * @return {boolean}
+//    */
+//   isParallelWith(line2: Line, precision: number = 8) {
+//     const l2 = line2; // line2.round(precision);
+//     const l1 = this;  // this.round(precision);
+//     const det = l1.A * l2.B - l2.A * l1.B;
+//     if (roundNum(det, precision) === 0) {
+//       return true;
+//     }
+//     return false;
+//   }
 
-  // This needs to be tested somewhere as p1ToShaddow = line was updated
-  shaddowOn(l: Line, precision: number = 8) {
-    const { intersect } = this.intersectsWith(l, precision);
-    if (intersect == null) {
-      return null;
-    }
-    const perpendicular = new Line(intersect, 1, l.ang + Math.PI / 2);
-    const shaddow = this.p1.getShaddowOnLine(perpendicular, precision);
-    const p1ToShaddow = new Line(this.p1, shaddow);
-    const dist = p1ToShaddow.distance;
-    // const distance = shaddow.distance(this.p1);
-    const projection = new Point(
-      this.p1.x + dist * 2 * Math.cos(p1ToShaddow.ang),
-      this.p1.y + dist * 2 * Math.sin(p1ToShaddow.ang),
-    );
-    return new Line(intersect, projection);
-  }
+//   // This needs to be tested somewhere as p1ToShaddow = line was updated
+//   shaddowOn(l: Line, precision: number = 8) {
+//     const { intersect } = this.intersectsWith(l, precision);
+//     if (intersect == null) {
+//       return null;
+//     }
+//     const perpendicular = new Line(intersect, 1, l.ang + Math.PI / 2);
+//     const shaddow = this.p1.getShaddowOnLine(perpendicular, precision);
+//     const p1ToShaddow = new Line(this.p1, shaddow);
+//     const dist = p1ToShaddow.distance;
+//     // const distance = shaddow.distance(this.p1);
+//     const projection = new Point(
+//       this.p1.x + dist * 2 * Math.cos(p1ToShaddow.ang),
+//       this.p1.y + dist * 2 * Math.sin(p1ToShaddow.ang),
+//     );
+//     return new Line(intersect, projection);
+//   }
 
-  // At two lines intersection, the x and y values must be equal
-  //   A1x + B1y = C1 => y = -A1/B1x + C1/B1      - Eq 1
-  //   A2x + B2y = C2 => y = -A2/B2x + C2/B2      - Eq 2
-  // Right hand sides are equal:
-  //   -A1/B1x + C1/B1 = -A2/B2x + C2/B2
-  //   x(-A1/B1 + A2/B2) = C2/B2 - C1/B1
-  //   x(-A1B2 + A2B1)/B1B2 = (C2B1 - C1B2)/B1B2
-  //   x = (C2B1 - C1B2) / (-A1B2 + A2B1)
-  //   y = -A1/B1x + C1/B1
-  // If however B1 is 0, then y can be found from eqn 2
-  //   y = -A2/B2x + C2/B2
+//   // At two lines intersection, the x and y values must be equal
+//   //   A1x + B1y = C1 => y = -A1/B1x + C1/B1      - Eq 1
+//   //   A2x + B2y = C2 => y = -A2/B2x + C2/B2      - Eq 2
+//   // Right hand sides are equal:
+//   //   -A1/B1x + C1/B1 = -A2/B2x + C2/B2
+//   //   x(-A1/B1 + A2/B2) = C2/B2 - C1/B1
+//   //   x(-A1B2 + A2B1)/B1B2 = (C2B1 - C1B2)/B1B2
+//   //   x = (C2B1 - C1B2) / (-A1B2 + A2B1)
+//   //   y = -A1/B1x + C1/B1
+//   // If however B1 is 0, then y can be found from eqn 2
+//   //   y = -A2/B2x + C2/B2
 
-  /**
-   * The intersection between this line and `line2`.
-   *
-   * The returned result is an {@link Intersect} object with keys `intersect`,
-   * `alongLine` and `withinLine`. The `intersect` is found by extending both
-   * lines to infinity and recording where they cross. If the two lines never
-   * cross, and are not collinear, then the result will be `undefined`.
-   * `alongLine` and `withinLine` can then be used as metadata to defermine if
-   * the intersection is within finite lines or not.
-   *
-   * The properties of the two lines, such as whether they have zero, finite,
-   * or infinite length, and are parallel or collinear will define the result.
-   *
-   * If the lines are not parallel and/or collinear then the returned intercept
-   * will be the point where the two lines, extended to infinity, cross. The
-   * `withinLine` returned property can then be used to determine if the
-   * intercept point is within this line.
-   *
-   * If one of the lines has zero length, then `intersect` will only be
-   * defined if p1 of the zero length line lies along the other line.
-   *
-   * If both of the lines have zero length, then `intersect` will only be
-   * defined if p1 of both lines is the same.
-   *
-   * If the lines are parallel and not collinear, then `intercept` will be
-   * undefined.
-   *
-   * If lines are collinear then the `intercept` point will be defined by how
-   * many finite ends the lines have and wheter the lines are overlapping or
-   * not
-   *
-   * Lines are equal:
-   *    - 0 ends: take the yIntercept (or xIntercept if vertical)
-   *    - 1 ends: take the p1 point
-   *    - 2 ends: take the midPoint
-   *
-   * One line within the other: take mid point between mid points
-   *    - 2 ends around 2 ends: take the midPoint of the two midPoints
-   *    - 0 ends around 2 ends: take the midPoint of the 2 ends
-   *    - 0 ends around 1 ends: take the p1 of the 1 ends
-   *    - 1 end around 1 end: take the midPoint between the p1s
-   *    - 1 end around 2 ends: take the midPoint of the two ends
-   *
-   * Lines are not overlapping:
-   *    - Both 2 ends - take midPoint between 2 closest ends
-   *    - Both 1 ends - take midPoint between 2 p1s
-   *    - One 1 end and 2 end - take midPoint between p1 and closest point
-   *
-   * Lines are partially overlapping:
-   *    - Both 2 ends - take midPoint between 2 overlapping ends
-   *    - Both 1 ends - take midPoint between both p1s
-   *    - One 1 end and 2 end - take midPoint between overlapping end and p1
-   * @return {Intersect}
-   */
-  intersectsWith(line2: Line, precision: number = 8): Intersect {
-    const l2 = line2; // line2.round(precision);
-    const l1 = this;  // this.round(precision);
+//   /**
+//    * The intersection between this line and `line2`.
+//    *
+//    * The returned result is an {@link Intersect} object with keys `intersect`,
+//    * `alongLine` and `withinLine`. The `intersect` is found by extending both
+//    * lines to infinity and recording where they cross. If the two lines never
+//    * cross, and are not collinear, then the result will be `undefined`.
+//    * `alongLine` and `withinLine` can then be used as metadata to defermine if
+//    * the intersection is within finite lines or not.
+//    *
+//    * The properties of the two lines, such as whether they have zero, finite,
+//    * or infinite length, and are parallel or collinear will define the result.
+//    *
+//    * If the lines are not parallel and/or collinear then the returned intercept
+//    * will be the point where the two lines, extended to infinity, cross. The
+//    * `withinLine` returned property can then be used to determine if the
+//    * intercept point is within this line.
+//    *
+//    * If one of the lines has zero length, then `intersect` will only be
+//    * defined if p1 of the zero length line lies along the other line.
+//    *
+//    * If both of the lines have zero length, then `intersect` will only be
+//    * defined if p1 of both lines is the same.
+//    *
+//    * If the lines are parallel and not collinear, then `intercept` will be
+//    * undefined.
+//    *
+//    * If lines are collinear then the `intercept` point will be defined by how
+//    * many finite ends the lines have and wheter the lines are overlapping or
+//    * not
+//    *
+//    * Lines are equal:
+//    *    - 0 ends: take the yIntercept (or xIntercept if vertical)
+//    *    - 1 ends: take the p1 point
+//    *    - 2 ends: take the midPoint
+//    *
+//    * One line within the other: take mid point between mid points
+//    *    - 2 ends around 2 ends: take the midPoint of the two midPoints
+//    *    - 0 ends around 2 ends: take the midPoint of the 2 ends
+//    *    - 0 ends around 1 ends: take the p1 of the 1 ends
+//    *    - 1 end around 1 end: take the midPoint between the p1s
+//    *    - 1 end around 2 ends: take the midPoint of the two ends
+//    *
+//    * Lines are not overlapping:
+//    *    - Both 2 ends - take midPoint between 2 closest ends
+//    *    - Both 1 ends - take midPoint between 2 p1s
+//    *    - One 1 end and 2 end - take midPoint between p1 and closest point
+//    *
+//    * Lines are partially overlapping:
+//    *    - Both 2 ends - take midPoint between 2 overlapping ends
+//    *    - Both 1 ends - take midPoint between both p1s
+//    *    - One 1 end and 2 end - take midPoint between overlapping end and p1
+//    * @return {Intersect}
+//    */
+//   intersectsWith(line2: Line, precision: number = 8): Intersect {
+//     const l2 = line2; // line2.round(precision);
+//     const l1 = this;  // this.round(precision);
 
-    const d1 = roundNum(this.distance, precision);
-    const d2 = roundNum(l2.distance, precision);
-    if (d1 === 0 || d2 === 0) {
-      let i;
-      let alongLine = false;
-      let withinLine = false;
-      if (d1 === 0 && d2 === 0) {
-        if (l1.p1.isEqualTo(l2.p1, precision)) {
-          i = l1.p1._dup();
-          alongLine = true;
-          withinLine = true;
-        }
-      }
-      if (d1 > 0) {
-        if (l1.hasPointOn(l2.p1, precision)) {
-          i = l2.p1._dup();
-          withinLine = true;
-          alongLine = true;
-        } else if (l1.hasPointAlong(l2.p1, precision)) {
-          i = l2.p1._dup();
-          alongLine = true;
-        }
-      }
-      if (d2 > 0) {
-        if (l2.hasPointOn(l1.p1, precision)) {
-          i = l1.p1._dup();
-          withinLine = true;
-          alongLine = true;
-        } else if (l2.hasPointAlong(l1.p1, precision)) {
-          i = l1.p1._dup();
-          alongLine = true;
-        }
-      }
-      return {
-        intersect: i,
-        alongLine,
-        withinLine,
-      };
-    }
+//     const d1 = roundNum(this.distance, precision);
+//     const d2 = roundNum(l2.distance, precision);
+//     if (d1 === 0 || d2 === 0) {
+//       let i;
+//       let alongLine = false;
+//       let withinLine = false;
+//       if (d1 === 0 && d2 === 0) {
+//         if (l1.p1.isEqualTo(l2.p1, precision)) {
+//           i = l1.p1._dup();
+//           alongLine = true;
+//           withinLine = true;
+//         }
+//       }
+//       if (d1 > 0) {
+//         if (l1.hasPointOn(l2.p1, precision)) {
+//           i = l2.p1._dup();
+//           withinLine = true;
+//           alongLine = true;
+//         } else if (l1.hasPointAlong(l2.p1, precision)) {
+//           i = l2.p1._dup();
+//           alongLine = true;
+//         }
+//       }
+//       if (d2 > 0) {
+//         if (l2.hasPointOn(l1.p1, precision)) {
+//           i = l1.p1._dup();
+//           withinLine = true;
+//           alongLine = true;
+//         } else if (l2.hasPointAlong(l1.p1, precision)) {
+//           i = l1.p1._dup();
+//           alongLine = true;
+//         }
+//       }
+//       return {
+//         intersect: i,
+//         alongLine,
+//         withinLine,
+//       };
+//     }
 
-    if (!l1.isParallelWith(l2)) {
-      let i;
-      if (roundNum(l1.A, precision) === 0 && roundNum(l2.B, precision) === 0) {
-        i = new Point(l2.p1.x, l1.p1.y);
-      } else if (roundNum(l1.B, precision) === 0 && roundNum(l2.A, precision) === 0) {
-        i = new Point(l1.p1.x, l2.p1.y);
-      // if l1.B is 0, then l1 has constant x
-      } else if (roundNum(l1.B, precision) === 0) {
-        const x = (l2.C * l1.B - l1.C * l2.B) / (-l1.A * l2.B + l2.A * l1.B);
-        const y = -l2.A / l2.B * x + l2.C / l2.B;
-        i = new Point(x, y);
-      } else {
-        const x = (l2.C * l1.B - l1.C * l2.B) / (-l1.A * l2.B + l2.A * l1.B);
-        const y = -l1.A / l1.B * x + l1.C / l1.B;
-        i = new Point(x, y);
-      }
-      if (
-        l1.hasPointOn(i, precision) && l2.hasPointOn(i, precision)
-      ) {
-        return {
-          alongLine: true,
-          withinLine: true,
-          intersect: i,
-        };
-      }
-      return {
-        alongLine: true,
-        withinLine: false,
-        intersect: i,
-      };
-    }
-    if (!l1.isAlongLine(l2, precision)) {
-      return {
-        alongLine: false,
-        withinLine: false,
-        intersect: undefined,
-      };
-    }
+//     if (!l1.isParallelWith(l2)) {
+//       let i;
+//       if (roundNum(l1.A, precision) === 0 && roundNum(l2.B, precision) === 0) {
+//         i = new Point(l2.p1.x, l1.p1.y);
+//       } else if (roundNum(l1.B, precision) === 0 && roundNum(l2.A, precision) === 0) {
+//         i = new Point(l1.p1.x, l2.p1.y);
+//       // if l1.B is 0, then l1 has constant x
+//       } else if (roundNum(l1.B, precision) === 0) {
+//         const x = (l2.C * l1.B - l1.C * l2.B) / (-l1.A * l2.B + l2.A * l1.B);
+//         const y = -l2.A / l2.B * x + l2.C / l2.B;
+//         i = new Point(x, y);
+//       } else {
+//         const x = (l2.C * l1.B - l1.C * l2.B) / (-l1.A * l2.B + l2.A * l1.B);
+//         const y = -l1.A / l1.B * x + l1.C / l1.B;
+//         i = new Point(x, y);
+//       }
+//       if (
+//         l1.hasPointOn(i, precision) && l2.hasPointOn(i, precision)
+//       ) {
+//         return {
+//           alongLine: true,
+//           withinLine: true,
+//           intersect: i,
+//         };
+//       }
+//       return {
+//         alongLine: true,
+//         withinLine: false,
+//         intersect: i,
+//       };
+//     }
+//     if (!l1.isAlongLine(l2, precision)) {
+//       return {
+//         alongLine: false,
+//         withinLine: false,
+//         intersect: undefined,
+//       };
+//     }
 
-    // If lines are collinear they could be either:
-    //   - equal:
-    //      - 0 ends: take the yIntercept (or xIntercept if vertical)
-    //      - 1 ends: take the p1 point
-    //      - 2 ends: take the midPoint
-    //   - one within the other: take mid point between mid points
-    //      - 2 ends around 2 ends: take the midPoint of the two midPoints
-    //      - 0 ends around 2 ends: take the midPoint of the 2 ends
-    //      - 0 ends around 1 ends: take the p1 of the 1 ends
-    //      - 1 end around 1 end: take the midPoint between the p1s
-    //      - 1 end around 2 ends: take the midPoint of the two ends
-    //   - not overlapping:
-    //      - Both 2 ends - take midPoint between 2 closest ends
-    //      - Both 1 ends - take midPoint between 2 p1s
-    //      - One 1 end and 2 end - take midPoint between p1 and closest point
-    //   - partially overlapping:
-    //      - Both 2 ends - take midPoint between 2 overlapping ends
-    //      - Both 1 ends - take midPoint between both p1s
-    //      - One 1 end and 2 end - take midPoint between overlapping end and p1
+//     // If lines are collinear they could be either:
+//     //   - equal:
+//     //      - 0 ends: take the yIntercept (or xIntercept if vertical)
+//     //      - 1 ends: take the p1 point
+//     //      - 2 ends: take the midPoint
+//     //   - one within the other: take mid point between mid points
+//     //      - 2 ends around 2 ends: take the midPoint of the two midPoints
+//     //      - 0 ends around 2 ends: take the midPoint of the 2 ends
+//     //      - 0 ends around 1 ends: take the p1 of the 1 ends
+//     //      - 1 end around 1 end: take the midPoint between the p1s
+//     //      - 1 end around 2 ends: take the midPoint of the two ends
+//     //   - not overlapping:
+//     //      - Both 2 ends - take midPoint between 2 closest ends
+//     //      - Both 1 ends - take midPoint between 2 p1s
+//     //      - One 1 end and 2 end - take midPoint between p1 and closest point
+//     //   - partially overlapping:
+//     //      - Both 2 ends - take midPoint between 2 overlapping ends
+//     //      - Both 1 ends - take midPoint between both p1s
+//     //      - One 1 end and 2 end - take midPoint between overlapping end and p1
 
-    // If Equal
-    const xIntercept = this.getXIntercept();
-    const yIntercept = this.getYIntercept();
-    let defaultIntercept;
-    if (yIntercept != null) {
-      defaultIntercept = new Point(0, yIntercept);
-    } else if (xIntercept != null) {
-      defaultIntercept = new Point(xIntercept, 0);
-    } else {
-      defaultIntercept = new Point(0, 0);
-    }
-    // const defaultIntercept = yIntercept == null ? new Point(
-    // xIntercept == null ? 0 : xIntercept, 0) : new Point(0, yIntercept);
+//     // If Equal
+//     const xIntercept = this.getXIntercept();
+//     const yIntercept = this.getYIntercept();
+//     let defaultIntercept;
+//     if (yIntercept != null) {
+//       defaultIntercept = new Point(0, yIntercept);
+//     } else if (xIntercept != null) {
+//       defaultIntercept = new Point(xIntercept, 0);
+//     } else {
+//       defaultIntercept = new Point(0, 0);
+//     }
+//     // const defaultIntercept = yIntercept == null ? new Point(
+//     // xIntercept == null ? 0 : xIntercept, 0) : new Point(0, yIntercept);
 
-    if (l1.isEqualTo(l2, precision)) {
-      let i;
-      if (l1.ends === 2) {
-        i = l1.midPoint();
-      } else if (l1.ends === 1) {
-        i = l1.p1._dup();
-      } else {
-        i = defaultIntercept;
-      }
-      return {
-        alongLine: true,
-        withinLine: true,
-        intersect: i,
-      };
-    }
+//     if (l1.isEqualTo(l2, precision)) {
+//       let i;
+//       if (l1.ends === 2) {
+//         i = l1.midPoint();
+//       } else if (l1.ends === 1) {
+//         i = l1.p1._dup();
+//       } else {
+//         i = defaultIntercept;
+//       }
+//       return {
+//         alongLine: true,
+//         withinLine: true,
+//         intersect: i,
+//       };
+//     }
 
-    // If one line is fully within the other
-    let i;
-    const lineIsWithin = (li1, li2) => {
-      // If fully overlapping
-      if (li1.hasLineWithin(li2, precision)) {
-        if (li1.ends === 2) {
-          i = new Line(li1.midPoint(), li2.midPoint()).midPoint();
-        }
-        if (li1.ends === 1 && li2.ends === 1) {
-          i = new Line(li1.p1, li2.p1);
-        }
-        if (li1.ends === 1 && li2.ends === 2) {
-          i = li2.midPoint();
-        }
-        if (li1.ends === 0 && li2.ends === 2) {
-          i = li2.midPoint();
-        }
-        if (li1.ends === 0 && li2.ends === 1) {
-          i = li2.p1._dup();
-        }
-        if (li1.ends > li2.ends) {
-          if (li1.ends === 2) {
-            i = li1.midPoint();
-          } else {
-            i = li1.p1;
-          }
-        }
-        if (li1.ends === 1 && li2.ends === 1) {
-          i = new Line(li1.p1, li2.p1).midPoint();
-        }
-        return true;
-      }
-      return false;
-    };
-    if (lineIsWithin(l1, l2)) {
-      return { alongLine: true, withinLine: true, intersect: i };
-    }
-    if (lineIsWithin(l2, l1)) {
-      return { alongLine: true, withinLine: true, intersect: i };
-    }
+//     // If one line is fully within the other
+//     let i;
+//     const lineIsWithin = (li1, li2) => {
+//       // If fully overlapping
+//       if (li1.hasLineWithin(li2, precision)) {
+//         if (li1.ends === 2) {
+//           i = new Line(li1.midPoint(), li2.midPoint()).midPoint();
+//         }
+//         if (li1.ends === 1 && li2.ends === 1) {
+//           i = new Line(li1.p1, li2.p1);
+//         }
+//         if (li1.ends === 1 && li2.ends === 2) {
+//           i = li2.midPoint();
+//         }
+//         if (li1.ends === 0 && li2.ends === 2) {
+//           i = li2.midPoint();
+//         }
+//         if (li1.ends === 0 && li2.ends === 1) {
+//           i = li2.p1._dup();
+//         }
+//         if (li1.ends > li2.ends) {
+//           if (li1.ends === 2) {
+//             i = li1.midPoint();
+//           } else {
+//             i = li1.p1;
+//           }
+//         }
+//         if (li1.ends === 1 && li2.ends === 1) {
+//           i = new Line(li1.p1, li2.p1).midPoint();
+//         }
+//         return true;
+//       }
+//       return false;
+//     };
+//     if (lineIsWithin(l1, l2)) {
+//       return { alongLine: true, withinLine: true, intersect: i };
+//     }
+//     if (lineIsWithin(l2, l1)) {
+//       return { alongLine: true, withinLine: true, intersect: i };
+//     }
 
-    // Two finite lines
-    if (l1.ends === 2 && l2.ends === 2) {
-      // Not overlapping
-      if (
-        !l1.p1.isWithinLine(l2, precision)
-        && !l1.p2.isWithinLine(l2, precision)
-        && !l2.p1.isWithinLine(l1, precision)
-        && !l2.p2.isWithinLine(l1, precision)
-      ) {
-        const line11 = new Line(l1.p1, l2.p1);
-        const line12 = new Line(l1.p1, l2.p2);
-        const line21 = new Line(l1.p2, l2.p1);
-        const line22 = new Line(l1.p2, l2.p2);
+//     // Two finite lines
+//     if (l1.ends === 2 && l2.ends === 2) {
+//       // Not overlapping
+//       if (
+//         !l1.p1.isWithinLine(l2, precision)
+//         && !l1.p2.isWithinLine(l2, precision)
+//         && !l2.p1.isWithinLine(l1, precision)
+//         && !l2.p2.isWithinLine(l1, precision)
+//       ) {
+//         const line11 = new Line(l1.p1, l2.p1);
+//         const line12 = new Line(l1.p1, l2.p2);
+//         const line21 = new Line(l1.p2, l2.p1);
+//         const line22 = new Line(l1.p2, l2.p2);
 
-        i = line11.midPoint();
-        let len = line11.length();
-        if (line12.length() < len) {
-          i = line12.midPoint();
-          len = line12.length();
-        }
-        if (line21.length() < len) {
-          i = line21.midPoint();
-          len = line21.length();
-        }
-        if (line22.length() < len) {
-          i = line22.midPoint();
-          len = line22.length();
-        }
-        return {
-          alongLine: true,
-          withinLine: false,
-          intersect: i,
-        };
-      }
-      // Partial overlap
-      if (l1.p1.isWithinLine(l2, precision)) {
-        if (l2.p1.isWithinLine(l1, precision)) {
-          i = new Line(l1.p1, l2.p1).midPoint();
-        } else {
-          i = new Line(l1.p1, l2.p2).midPoint();
-        }
-      } else if (l2.p1.isWithinLine(l1, precision)) {
-        i = new Line(l1.p2, l2.p1).midPoint();
-      } else {
-        i = new Line(l1.p2, l2.p2).midPoint();
-      }
-      return {
-        alongLine: true,
-        withinLine: true,
-        intersect: i,
-      };
-    }
+//         i = line11.midPoint();
+//         let len = line11.length();
+//         if (line12.length() < len) {
+//           i = line12.midPoint();
+//           len = line12.length();
+//         }
+//         if (line21.length() < len) {
+//           i = line21.midPoint();
+//           len = line21.length();
+//         }
+//         if (line22.length() < len) {
+//           i = line22.midPoint();
+//           len = line22.length();
+//         }
+//         return {
+//           alongLine: true,
+//           withinLine: false,
+//           intersect: i,
+//         };
+//       }
+//       // Partial overlap
+//       if (l1.p1.isWithinLine(l2, precision)) {
+//         if (l2.p1.isWithinLine(l1, precision)) {
+//           i = new Line(l1.p1, l2.p1).midPoint();
+//         } else {
+//           i = new Line(l1.p1, l2.p2).midPoint();
+//         }
+//       } else if (l2.p1.isWithinLine(l1, precision)) {
+//         i = new Line(l1.p2, l2.p1).midPoint();
+//       } else {
+//         i = new Line(l1.p2, l2.p2).midPoint();
+//       }
+//       return {
+//         alongLine: true,
+//         withinLine: true,
+//         intersect: i,
+//       };
+//     }
 
-    // Two 1 end lines
-    if (l1.ends === 1 && l2.ends === 1) {
-      // Both not overlapping and partial overlap will have an intersect as
-      // the midPoint between the p1s
-      return {
-        alongLine: true,
-        withinLine: false,
-        intersect: new Line(l1.p1, l2.p1).midPoint(),
-      };
-    }
+//     // Two 1 end lines
+//     if (l1.ends === 1 && l2.ends === 1) {
+//       // Both not overlapping and partial overlap will have an intersect as
+//       // the midPoint between the p1s
+//       return {
+//         alongLine: true,
+//         withinLine: false,
+//         intersect: new Line(l1.p1, l2.p1).midPoint(),
+//       };
+//     }
 
-    // One 1 end, one 2 end is the only remaining possibility
-    let withinLine = false;
-    const checkOverlap = (li1: Line, li2: Line) => {
-      // partial overlap
-      if (li1.p1.isWithinLine(li2)) {
-        withinLine = true;
-        if (li2.p1.isWithinLine(li1)) {
-          i = new Line(li1.p1, li2.p1).midPoint();
-        } else {
-          i = new Line(li1.p1, li2.p2).midPoint();
-        }
-      // No Overlap
-      } else {
-        withinLine = false;
-        const l11 = new Line(li1.p1, li2.p1);
-        const l12 = new Line(li1.p1, li2.p2);
+//     // One 1 end, one 2 end is the only remaining possibility
+//     let withinLine = false;
+//     const checkOverlap = (li1: Line, li2: Line) => {
+//       // partial overlap
+//       if (li1.p1.isWithinLine(li2)) {
+//         withinLine = true;
+//         if (li2.p1.isWithinLine(li1)) {
+//           i = new Line(li1.p1, li2.p1).midPoint();
+//         } else {
+//           i = new Line(li1.p1, li2.p2).midPoint();
+//         }
+//       // No Overlap
+//       } else {
+//         withinLine = false;
+//         const l11 = new Line(li1.p1, li2.p1);
+//         const l12 = new Line(li1.p1, li2.p2);
 
-        if (l11.length() < l12.length()) {
-          i = l11.midPoint();
-        } else {
-          i = l12.midPoint();
-        }
-      }
-    };
-    if (l1.ends === 1 && l2.ends === 2) {
-      checkOverlap(l1, l2);
-    } else {
-      checkOverlap(l2, l1);
-    }
-    return {
-      alongLine: true,
-      withinLine,
-      intersect: i,
-    };
-  }
-}
+//         if (l11.length() < l12.length()) {
+//           i = l11.midPoint();
+//         } else {
+//           i = l12.midPoint();
+//         }
+//       }
+//     };
+//     if (l1.ends === 1 && l2.ends === 2) {
+//       checkOverlap(l1, l2);
+//     } else {
+//       checkOverlap(l2, l1);
+//     }
+//     return {
+//       alongLine: true,
+//       withinLine,
+//       intersect: i,
+//     };
+//   }
+// }
 
 function cartesianToSpherical(
   xOrPoint: TypeParsablePoint | number, y: number = 0, z: number = 0,
@@ -1429,649 +1434,649 @@ function sphericalToCartesian(
   );
 }
 
-export type GEO_Line = {
-  p1?: TypeParsablePoint,
-  p2?: TypeParsablePoint,
-  mag?: number,
-  theta?: number,
-  angle?: number,
-  phi?: number,
-  direction?: TypeParsablePoint,
-  ends?: 0 | 1 | 2,
-};
+// export type GEO_Line = {
+//   p1?: TypeParsablePoint,
+//   p2?: TypeParsablePoint,
+//   mag?: number,
+//   theta?: number,
+//   angle?: number,
+//   phi?: number,
+//   direction?: TypeParsablePoint,
+//   ends?: 0 | 1 | 2,
+// };
 
-class Line3 {
-  p1: Point;
-  p2: Point;
-  // ang: number;  // angle of line projected to the XY plane
-  // phi: number;
-  // theta: number;
-  // A: number;
-  // B: number;
-  // C: number;
-  // distance: number;
-  ends: 2 | 1 | 0;
+// class Line3 {
+//   p1: Point;
+//   p2: Point;
+//   // ang: number;  // angle of line projected to the XY plane
+//   // phi: number;
+//   // theta: number;
+//   // A: number;
+//   // B: number;
+//   // C: number;
+//   // distance: number;
+//   ends: 2 | 1 | 0;
 
-  /**
-   * @param {0 | 1 | 2} ends number of ends the line has. `2` ends is a finite
-   * line. `1` end is an infinite line that terminates at the first point, and
-   * goes through the second point to infinity. `0` ends is an infinite line
-   * that goes through both first and second points to infinity.
-   */
-  constructor(
-    p1OrOptions: TypeParsablePoint | GEO_Line,
-    p2: TypeParsablePoint,
-    ends: 2 | 1 | 0 = 2,
-  ) {
-    if (p1OrOptions instanceof Point || Array.isArray(p1OrOptions) || typeof p1OrOptions === 'string') {
-      this.p1 = getPoint(p1OrOptions);
-      this.p2 = getPoint(p2);
-      this.ends = ends;
-    } else {
-      const defaultOptions = {
-        p1: new Point(0, 0, 0),
-        mag: 1,
-        theta: 0,
-        phi: 0,
-        ends: 2,
-      };
-      const o = joinObjects({}, defaultOptions, p1OrOptions);
-      this.p1 = getPoint(o.p1);
-      this.ends = o.ends;
-      if (o.p2 != null) {
-        this.p2 = getPoint(o.p2);
-      } else if (o.direction != null) {
-        this.p2 = getPoint(o.direction).normalize().scale(o.mag).add(this.p1);
-      } else if (o.angle != null) {
-        this.p2 = this.p1.add(
-          o.mag * Math.cos(o.angle),
-          o.mag * Math.sin(o.angle),
-          0,
-        );
-      } else {
-        this.p2 = this.p1.add(sphericalToCartesian(o.mag, o.theta, o.phi));
-      }
-    }
-    // this.setupLine();
-  }
+//   /**
+//    * @param {0 | 1 | 2} ends number of ends the line has. `2` ends is a finite
+//    * line. `1` end is an infinite line that terminates at the first point, and
+//    * goes through the second point to infinity. `0` ends is an infinite line
+//    * that goes through both first and second points to infinity.
+//    */
+//   constructor(
+//     p1OrOptions: TypeParsablePoint | GEO_Line,
+//     p2: TypeParsablePoint,
+//     ends: 2 | 1 | 0 = 2,
+//   ) {
+//     if (p1OrOptions instanceof Point || Array.isArray(p1OrOptions) || typeof p1OrOptions === 'string') {
+//       this.p1 = getPoint(p1OrOptions);
+//       this.p2 = getPoint(p2);
+//       this.ends = ends;
+//     } else {
+//       const defaultOptions = {
+//         p1: new Point(0, 0, 0),
+//         mag: 1,
+//         theta: 0,
+//         phi: 0,
+//         ends: 2,
+//       };
+//       const o = joinObjects({}, defaultOptions, p1OrOptions);
+//       this.p1 = getPoint(o.p1);
+//       this.ends = o.ends;
+//       if (o.p2 != null) {
+//         this.p2 = getPoint(o.p2);
+//       } else if (o.direction != null) {
+//         this.p2 = getPoint(o.direction).normalize().scale(o.mag).add(this.p1);
+//       } else if (o.angle != null) {
+//         this.p2 = this.p1.add(
+//           o.mag * Math.cos(o.angle),
+//           o.mag * Math.sin(o.angle),
+//           0,
+//         );
+//       } else {
+//         this.p2 = this.p1.add(sphericalToCartesian(o.mag, o.theta, o.phi));
+//       }
+//     }
+//     // this.setupLine();
+//   }
 
-  _state(options: { precision: number }) {
-    // const { precision } = options;
-    const precision = getPrecision(options);
-    return {
-      f1Type: 'l',
-      state: [
-        [
-          roundNum(this.p1.x, precision),
-          roundNum(this.p1.y, precision),
-          roundNum(this.p1.z, precision),
-        ],
-        [
-          roundNum(this.p2.x, precision),
-          roundNum(this.p2.y, precision),
-          roundNum(this.p2.z, precision),
-        ],
-        this.ends,
-      ],
-    };
-  }
+//   _state(options: { precision: number }) {
+//     // const { precision } = options;
+//     const precision = getPrecision(options);
+//     return {
+//       f1Type: 'l',
+//       state: [
+//         [
+//           roundNum(this.p1.x, precision),
+//           roundNum(this.p1.y, precision),
+//           roundNum(this.p1.z, precision),
+//         ],
+//         [
+//           roundNum(this.p2.x, precision),
+//           roundNum(this.p2.y, precision),
+//           roundNum(this.p2.z, precision),
+//         ],
+//         this.ends,
+//       ],
+//     };
+//   }
 
-  theta() {
-    return cartesianToSpherical(this.p2.sub(this.p1))[1];
-  }
+//   theta() {
+//     return cartesianToSpherical(this.p2.sub(this.p1))[1];
+//   }
 
-  phi() {
-    return cartesianToSpherical(this.p2.sub(this.p1))[2];
-  }
+//   phi() {
+//     return cartesianToSpherical(this.p2.sub(this.p1))[2];
+//   }
 
-  // setupLine() {
-  //   this.A = this.p2.y - this.p1.y;
-  //   this.B = this.p1.x - this.p2.x;
-  //   this.C = this.A * this.p1.x + this.B * this.p1.y;
-  //   this.distance = distance(this.p1, this.p2);
-  // }
+//   // setupLine() {
+//   //   this.A = this.p2.y - this.p1.y;
+//   //   this.B = this.p1.x - this.p2.x;
+//   //   this.C = this.A * this.p1.x + this.B * this.p1.y;
+//   //   this.distance = distance(this.p1, this.p2);
+//   // }
 
-  _dup() {
-    return new Line3(this.p1, this.p2, this.ends);
-  }
+//   _dup() {
+//     return new Line3(this.p1, this.p2, this.ends);
+//   }
 
-  /**
-   * Change p1 of the line
-   */
-  setP1(p1: TypeParsablePoint) {
-    this.p1 = getPoint(p1);
-    // this.ang = Math.atan2(this.p2.y - this.p1.y, this.p2.x - this.p1.x);
-    // this.setupLine();
-  }
+//   /**
+//    * Change p1 of the line
+//    */
+//   setP1(p1: TypeParsablePoint) {
+//     this.p1 = getPoint(p1);
+//     // this.ang = Math.atan2(this.p2.y - this.p1.y, this.p2.x - this.p1.x);
+//     // this.setupLine();
+//   }
 
-  /**
-   * Change p2 of the line
-   */
-  setP2(p2: Point | [number, number]) {
-    this.p2 = getPoint(p2);
-    // this.ang = Math.atan2(this.p2.y - this.p1.y, this.p2.x - this.p1.x);
-    // this.setupLine();
-  }
+//   /**
+//    * Change p2 of the line
+//    */
+//   setP2(p2: Point | [number, number]) {
+//     this.p2 = getPoint(p2);
+//     // this.ang = Math.atan2(this.p2.y - this.p1.y, this.p2.x - this.p1.x);
+//     // this.setupLine();
+//   }
 
-  /**
-   * Get the unit vector of the line from p1.
-   */
-  unitVector() {
-    return this.p2.sub(this.p1).normalize();
-  }
+//   /**
+//    * Get the unit vector of the line from p1.
+//    */
+//   unitVector() {
+//     return this.p2.sub(this.p1).normalize();
+//   }
 
-  /**
-   * Get the vector of the line from p1.
-   */
-  vector() {
-    return this.p2.sub(this.p1);
-  }
+//   /**
+//    * Get the vector of the line from p1.
+//    */
+//   vector() {
+//     return this.p2.sub(this.p1);
+//   }
 
-  /**
-   * Get p1 or p2
-   * @return {Point}
-   */
-  getPoint(index: 1 | 2 = 1) {
-    if (index === 2) {
-      return this.p2;
-    }
-    return this.p1;
-  }
+//   /**
+//    * Get p1 or p2
+//    * @return {Point}
+//    */
+//   getPoint(index: 1 | 2 = 1) {
+//     if (index === 2) {
+//       return this.p2;
+//     }
+//     return this.p1;
+//   }
 
-  reverse() {
-    return new Line3(this.p2, this.p1, this.ends);
-  }
+//   reverse() {
+//     return new Line3(this.p2, this.p1, this.ends);
+//   }
 
-  // /**
-  //  * Get the y coordinate of a point on the line with a given x coordinate
-  //  * @return {number | null} where `null` is returned if the line is vertical
-  //  */
-  // getYFromX(x: number) {
-  //   if (this.B !== 0) {
-  //     return (this.C - this.A * x) / this.B;
-  //   }
-  //   return null;
-  // }
+//   // /**
+//   //  * Get the y coordinate of a point on the line with a given x coordinate
+//   //  * @return {number | null} where `null` is returned if the line is vertical
+//   //  */
+//   // getYFromX(x: number) {
+//   //   if (this.B !== 0) {
+//   //     return (this.C - this.A * x) / this.B;
+//   //   }
+//   //   return null;
+//   // }
 
-  // /**
-  //  * Get the x coordinate of a point on the line with a given y coordinate
-  //  * @return {number | null} where `null` is returned if the line is horiztonal
-  //  */
-  // getXFromY(y: number) {
-  //   if (this.A !== 0) {
-  //     return (this.C - this.B * y) / this.A;
-  //   }
-  //   return null;
-  // }
+//   // /**
+//   //  * Get the x coordinate of a point on the line with a given y coordinate
+//   //  * @return {number | null} where `null` is returned if the line is horiztonal
+//   //  */
+//   // getXFromY(y: number) {
+//   //   if (this.A !== 0) {
+//   //     return (this.C - this.B * y) / this.A;
+//   //   }
+//   //   return null;
+//   // }
 
-  // /**
-  //  * Get the y intercept (at x = 0) of line
-  //  * @return {number | null} where `null` is returned if the line is vertical
-  //  */
-  // getYIntercept() {
-  //   return this.getYFromX(0);
-  // }
+//   // /**
+//   //  * Get the y intercept (at x = 0) of line
+//   //  * @return {number | null} where `null` is returned if the line is vertical
+//   //  */
+//   // getYIntercept() {
+//   //   return this.getYFromX(0);
+//   // }
 
-  // /**
-  //  * Get the x intercept (at y = 0) of line
-  //  * @return {number | null} where `null` is returned if the line is horizontal
-  //  */
-  // getXIntercept() {
-  //   return this.getXFromY(0);
-  // }
+//   // /**
+//   //  * Get the x intercept (at y = 0) of line
+//   //  * @return {number | null} where `null` is returned if the line is horizontal
+//   //  */
+//   // getXIntercept() {
+//   //   return this.getXFromY(0);
+//   // }
 
-  // /**
-  //  * Get the gradient of the line
-  //  * @return {number}
-  //  */
-  // getGradient() {
-  //   if (this.B === 0) {
-  //     return null;
-  //   }
-  //   return -this.A / this.B;
-  // }
+//   // /**
+//   //  * Get the gradient of the line
+//   //  * @return {number}
+//   //  */
+//   // getGradient() {
+//   //   if (this.B === 0) {
+//   //     return null;
+//   //   }
+//   //   return -this.A / this.B;
+//   // }
 
-  // /**
-  //  * Get the angle of the line from p1 to p2
-  //  * @return {number}
-  //  */
-  // angle() {
-  //   return this.ang;
-  // }
+//   // /**
+//   //  * Get the angle of the line from p1 to p2
+//   //  * @return {number}
+//   //  */
+//   // angle() {
+//   //   return this.ang;
+//   // }
 
-  /**
-   * Return a duplicate line with values rounded to `precision`
-   * @return {Line}
-   */
-  round(precision?: number = 8) {
-    return new Line3(this.p1.round(precision), this.p2.round(precision), this.ends);
-  }
+//   /**
+//    * Return a duplicate line with values rounded to `precision`
+//    * @return {Line}
+//    */
+//   round(precision?: number = 8) {
+//     return new Line3(this.p1.round(precision), this.p2.round(precision), this.ends);
+//   }
 
-  /**
-   * Return the distance between p1 and p2. Note, for infinite lines
-   * this will still return the distance between p1 and p2 that defines
-   * the line.
-   * @return {number}
-   */
-  length() {
-    const p = this.p2.sub(this.p1);
-    return Math.sqrt(p.x * p.x + p.y * p.y + p.z * p.z);
-  }
+//   /**
+//    * Return the distance between p1 and p2. Note, for infinite lines
+//    * this will still return the distance between p1 and p2 that defines
+//    * the line.
+//    * @return {number}
+//    */
+//   length() {
+//     const p = this.p2.sub(this.p1);
+//     return Math.sqrt(p.x * p.x + p.y * p.y + p.z * p.z);
+//   }
 
-  /* eslint-disable comma-dangle */
-  /**
-   * Return the midpoint between p1 and p2.
-   * @return {Point}
-   */
-  midPoint() {
-    return this.pointAtPercent(0.5);
-  }
+//   /* eslint-disable comma-dangle */
+//   /**
+//    * Return the midpoint between p1 and p2.
+//    * @return {Point}
+//    */
+//   midPoint() {
+//     return this.pointAtPercent(0.5);
+//   }
 
-  /**
-   * Return the point along some percent of the distance between p1 and p2.
-   * @return {Point}
-   */
-  pointAtPercent(percent: number) {
-    const length = this.length();
-    const n = this.p2.sub(this.p1).normalize();
-    return this.p1.add(n.scale(length * percent));
-  }
+//   /**
+//    * Return the point along some percent of the distance between p1 and p2.
+//    * @return {Point}
+//    */
+//   pointAtPercent(percent: number) {
+//     const length = this.length();
+//     const n = this.p2.sub(this.p1).normalize();
+//     return this.p1.add(n.scale(length * percent));
+//   }
 
-  /**
-   * Return the point along the line at some length from p1
-   * @return {Point}
-   */
-  pointAtLength(length: number) {
-    return this.pointAtPercent(length / this.length());
-  }
-  /* eslint-enable comma-dangle */
+//   /**
+//    * Return the point along the line at some length from p1
+//    * @return {Point}
+//    */
+//   pointAtLength(length: number) {
+//     return this.pointAtPercent(length / this.length());
+//   }
+//   /* eslint-enable comma-dangle */
 
-  /**
-   * `true` if `point` is along the line extended to infinity on both ends
-   * @return {boolean}
-   */
-  hasPointAlong(point: TypeParsablePoint, precision?: number = 8) {
-    if (this.p1.isEqualTo(point, precision)) {
-      return true;
-    }
-    const n = this.unitVector();
-    const m = getPoint(point).sub(this.p1).normalize();
-    // const d = round(dotProduct3(m.toArray(), n.toArray()), precision);
-    const d = round(m.dotProduct(n), precision);
-    if (d === 1 || d === -1) {
-      return true;
-    }
-    return false;
-  }
+//   /**
+//    * `true` if `point` is along the line extended to infinity on both ends
+//    * @return {boolean}
+//    */
+//   hasPointAlong(point: TypeParsablePoint, precision?: number = 8) {
+//     if (this.p1.isEqualTo(point, precision)) {
+//       return true;
+//     }
+//     const n = this.unitVector();
+//     const m = getPoint(point).sub(this.p1).normalize();
+//     // const d = round(dotProduct3(m.toArray(), n.toArray()), precision);
+//     const d = round(m.dotProduct(n), precision);
+//     if (d === 1 || d === -1) {
+//       return true;
+//     }
+//     return false;
+//   }
 
-  /**
-   * `true` if `point` is on the line.
-   * If the line has 2 or 1 finite ends, point must be on or between the
-   * defined ends.
-   * @return {boolean}
-   */
-  hasPointOn(point: TypeParsablePoint, precision?: number = 8) {
-    const p = getPoint(point);
-    if (this.ends === 0) {
-      return this.hasPointAlong(p, precision);
-    }
-    if (this.p1.isEqualTo(p, precision)) {
-      return true;
-    }
-    const n = this.unitVector();
-    const M = p.sub(this.p1);
-    const m = M.normalize();
-    const d = round(m.dotProduct(n), precision);
-    if (
-      d === 1
-      && (round(M.distance(), precision) <= round(this.length(), precision) || this.ends === 1)
-    ) {
-      return true;
-    }
-    return false;
-  }
+//   /**
+//    * `true` if `point` is on the line.
+//    * If the line has 2 or 1 finite ends, point must be on or between the
+//    * defined ends.
+//    * @return {boolean}
+//    */
+//   hasPointOn(point: TypeParsablePoint, precision?: number = 8) {
+//     const p = getPoint(point);
+//     if (this.ends === 0) {
+//       return this.hasPointAlong(p, precision);
+//     }
+//     if (this.p1.isEqualTo(p, precision)) {
+//       return true;
+//     }
+//     const n = this.unitVector();
+//     const M = p.sub(this.p1);
+//     const m = M.normalize();
+//     const d = round(m.dotProduct(n), precision);
+//     if (
+//       d === 1
+//       && (round(M.distance(), precision) <= round(this.length(), precision) || this.ends === 1)
+//     ) {
+//       return true;
+//     }
+//     return false;
+//   }
 
 
-  /**
-   * Perpendicular distance from `point` to line
-   * @return {number}
-   */
-  distanceToPoint(point: TypeParsablePoint) {
-    // Equation from https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
-    const n = this.unitVector();
-    const p = getPoint(point);
-    const a = this.p1;
-    return p.sub(a).sub(n.scale(p.sub(a).dotProduct(n))).distance();
-  }
+//   /**
+//    * Perpendicular distance from `point` to line
+//    * @return {number}
+//    */
+//   distanceToPoint(point: TypeParsablePoint) {
+//     // Equation from https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
+//     const n = this.unitVector();
+//     const p = getPoint(point);
+//     const a = this.p1;
+//     return p.sub(a).sub(n.scale(p.sub(a).dotProduct(n))).distance();
+//   }
 
-  isParallelTo(line2: Line, precision: number = 8) {
-    const n = this.unitVector();
-    const m = line2.unitVector();
-    const crossProduct = n.crossProduct(m);
-    if (crossProduct.isZero(precision)) {
-      return true;
-    }
-    return false;
-  }
+//   isParallelTo(line2: Line, precision: number = 8) {
+//     const n = this.unitVector();
+//     const m = line2.unitVector();
+//     const crossProduct = n.crossProduct(m);
+//     if (crossProduct.isZero(precision)) {
+//       return true;
+//     }
+//     return false;
+//   }
 
-  /**
-   * `true` if two lines are equal to within some rounding `precision`.
-   * @return {boolean}
-   */
-  isEqualTo(line2: Line3, precision: number = 8, delta: boolean = false) {
-    const l1 = this;
-    const l2 = line2;
-    if (l1.ends !== l2.ends) {
-      return false;
-    }
-    if (l1.ends === 2) {
-      if (
-        l1.p1.isNotEqualTo(l2.p1, precision, delta)
-        && l1.p1.isNotEqualTo(l2.p2, precision, delta)
-      ) {
-        return false;
-      }
-      if (
-        l1.p2.isNotEqualTo(l2.p1, precision, delta)
-        && l1.p2.isNotEqualTo(l2.p2, precision, delta)
-      ) {
-        return false;
-      }
-      return true;
-    }
+//   /**
+//    * `true` if two lines are equal to within some rounding `precision`.
+//    * @return {boolean}
+//    */
+//   isEqualTo(line2: Line3, precision: number = 8, delta: boolean = false) {
+//     const l1 = this;
+//     const l2 = line2;
+//     if (l1.ends !== l2.ends) {
+//       return false;
+//     }
+//     if (l1.ends === 2) {
+//       if (
+//         l1.p1.isNotEqualTo(l2.p1, precision, delta)
+//         && l1.p1.isNotEqualTo(l2.p2, precision, delta)
+//       ) {
+//         return false;
+//       }
+//       if (
+//         l1.p2.isNotEqualTo(l2.p1, precision, delta)
+//         && l1.p2.isNotEqualTo(l2.p2, precision, delta)
+//       ) {
+//         return false;
+//       }
+//       return true;
+//     }
 
-    if (l1.ends === 1) {
-      if (l1.p1.isNotEqualTo(l2.p1, precision, delta)) {
-        return false;
-      }
-      if (!l1.hasPointOn(l2.p2, precision)) {
-        return false;
-      }
-      return true;
-    }
+//     if (l1.ends === 1) {
+//       if (l1.p1.isNotEqualTo(l2.p1, precision, delta)) {
+//         return false;
+//       }
+//       if (!l1.hasPointOn(l2.p2, precision)) {
+//         return false;
+//       }
+//       return true;
+//     }
 
-    // otherwise ends === 0
-    if (!l1.hasPointOn(l2.p1, precision)) {
-      return false;
-    }
-    if (!l1.hasPointOn(l2.p2, precision)) {
-      return false;
-    }
-    return true;
-  }
+//     // otherwise ends === 0
+//     if (!l1.hasPointOn(l2.p1, precision)) {
+//       return false;
+//     }
+//     if (!l1.hasPointOn(l2.p2, precision)) {
+//       return false;
+//     }
+//     return true;
+//   }
 
-  // /**
-  //  * `true` if two lines are within a delta of each other.
-  //  *
-  //  * This is distinct from a rounding precision as it is an absolute
-  //  * delta.
-  //  *
-  //  * @return {boolean}
-  //  */
-  // isWithinDelta(line2: Line, delta: number = 0.00000001) {
-  //   const l1 = this;
-  //   const l2 = line2;
-  //   if (l1.ends !== l2.ends) {
-  //     return false;
-  //   }
-  //   if (l1.ends === 2) {
-  //     if (l1.p1.isNotWithinDelta(l2.p1, delta) && l1.p1.isNotWithinDelta(l2.p2, delta)) {
-  //       return false;
-  //     }
-  //     if (l1.p2.isNotWithinDelta(l2.p1, delta) && l1.p2.isNotWithinDelta(l2.p2, delta)) {
-  //       return false;
-  //     }
-  //     return true;
-  //   }
+//   // /**
+//   //  * `true` if two lines are within a delta of each other.
+//   //  *
+//   //  * This is distinct from a rounding precision as it is an absolute
+//   //  * delta.
+//   //  *
+//   //  * @return {boolean}
+//   //  */
+//   // isWithinDelta(line2: Line, delta: number = 0.00000001) {
+//   //   const l1 = this;
+//   //   const l2 = line2;
+//   //   if (l1.ends !== l2.ends) {
+//   //     return false;
+//   //   }
+//   //   if (l1.ends === 2) {
+//   //     if (l1.p1.isNotWithinDelta(l2.p1, delta) && l1.p1.isNotWithinDelta(l2.p2, delta)) {
+//   //       return false;
+//   //     }
+//   //     if (l1.p2.isNotWithinDelta(l2.p1, delta) && l1.p2.isNotWithinDelta(l2.p2, delta)) {
+//   //       return false;
+//   //     }
+//   //     return true;
+//   //   }
 
-  //   if (l1.ends === 1) {
-  //     if (l1.p1.isNotWithinDelta(l2.p1, delta)) {
-  //       return false;
-  //     }
-  //     if (!l1.hasPointOn(l2.p2)) {
-  //       return false;
-  //     }
-  //     return true;
-  //   }
+//   //   if (l1.ends === 1) {
+//   //     if (l1.p1.isNotWithinDelta(l2.p1, delta)) {
+//   //       return false;
+//   //     }
+//   //     if (!l1.hasPointOn(l2.p2)) {
+//   //       return false;
+//   //     }
+//   //     return true;
+//   //   }
 
-  //   // otherwise ends === 0
-  //   if (!l1.hasPointOn(l2.p1)) {
-  //     return false;
-  //   }
-  //   if (!l1.hasPointOn(l2.p2)) {
-  //     return false;
-  //   }
-  //   return true;
-  // }
+//   //   // otherwise ends === 0
+//   //   if (!l1.hasPointOn(l2.p1)) {
+//   //     return false;
+//   //   }
+//   //   if (!l1.hasPointOn(l2.p2)) {
+//   //     return false;
+//   //   }
+//   //   return true;
+//   // }
 
-  // isWithinLine
-  // hasLineWithin
-  // isAlongLine
-  // isParrallelToLine
-  // isPerpendicularToLine
+//   // isWithinLine
+//   // hasLineWithin
+//   // isAlongLine
+//   // isParrallelToLine
+//   // isPerpendicularToLine
 
-  // hasLineOn(line2: Line, precision: number = 8) {
-  //   return line2.isOn(this, precision);
-  // }
+//   // hasLineOn(line2: Line, precision: number = 8) {
+//   //   return line2.isOn(this, precision);
+//   // }
 
-  /**
-   * `true` if this line is within `line2`
-   * @return {boolean}
-   */
-  hasLineWithin(line2: Line3, precision: number = 8) {
-    return line2.isWithinLine(this, precision);
-  }
+//   /**
+//    * `true` if this line is within `line2`
+//    * @return {boolean}
+//    */
+//   hasLineWithin(line2: Line3, precision: number = 8) {
+//     return line2.isWithinLine(this, precision);
+//   }
 
-  /**
-   * `true` if this line is along the infinite length of `line2`
-   * @return {boolean}
-   */
-  isAlongLine(line2: Line3, precision: number = 8) {
-    return this.isCollinearTo(line2, precision);
-  }
+//   /**
+//    * `true` if this line is along the infinite length of `line2`
+//    * @return {boolean}
+//    */
+//   isAlongLine(line2: Line3, precision: number = 8) {
+//     return this.isCollinearTo(line2, precision);
+//   }
 
-  isCollinearTo(line2: Line3, precision: number = 8) {
-    const n = this.unitVector();
-    const m = line2.unitVector();
-    const d = round(m.dotProduct(n), precision);
-    if (d !== 1 && d !== -1) {
-      return false;
-    }
-    return this.hasPointAlong(line2.p1, precision);
-  }
+//   isCollinearTo(line2: Line3, precision: number = 8) {
+//     const n = this.unitVector();
+//     const m = line2.unitVector();
+//     const d = round(m.dotProduct(n), precision);
+//     if (d !== 1 && d !== -1) {
+//       return false;
+//     }
+//     return this.hasPointAlong(line2.p1, precision);
+//   }
 
-  /**
-   * `true` if this line is contained within `line2`
-   * @return {boolean}
-   */
-  isWithinLine(line2: Line, precision: number = 8) {
-    const l1 = this.round(precision);
-    const l2 = line2.round(precision);
-    if (!l1.isAlongLine(l2, precision)) {
-      return false;
-    }
-    if (line2.ends === 0) {
-      return true;
-    }
-    const withinEnds = () => l2.hasPointOn(this.p1, precision) && l2.hasPointOn(this.p2, precision);
-    if (this.ends < line2.ends) {
-      return false;
-    }
-    if (this.ends === 2) {
-      return withinEnds();
-    }
-    return withinEnds();
-  }
+//   /**
+//    * `true` if this line is contained within `line2`
+//    * @return {boolean}
+//    */
+//   isWithinLine(line2: Line, precision: number = 8) {
+//     const l1 = this.round(precision);
+//     const l2 = line2.round(precision);
+//     if (!l1.isAlongLine(l2, precision)) {
+//       return false;
+//     }
+//     if (line2.ends === 0) {
+//       return true;
+//     }
+//     const withinEnds = () => l2.hasPointOn(this.p1, precision) && l2.hasPointOn(this.p2, precision);
+//     if (this.ends < line2.ends) {
+//       return false;
+//     }
+//     if (this.ends === 2) {
+//       return withinEnds();
+//     }
+//     return withinEnds();
+//   }
 
-  // left, right, top, bottom is relative to cartesian coordinates
-  // 'outside' is the outside of a polygon defined in the positive direction
-  // (CCW).
-  /**
-   * Create a line that is offset by some distance from this line.
-   *
-   * `'left'`, `'right'`, `'top'` and `'bottom'` are relative to cartesian
-   * coordinates.
-   *
-   * `'positive'` to the right of a vertical line defined from bottom to top and
-   * above a horizontal line defined from right to left. Another way to think of
-   * it is if lines are used to create a polygon in the positive rotation
-   * direction (CCW), the the `'positive'` side will be on the outside of the
-   * polygon.
-   *
-   * `'negative'` is then the inside of the same polygon.
-   * @return  {Line}
-   */
-  offset(
-    direction: TypeParsablePoint,
-    dist: number | null = null,
-    perpendicular: boolean = true,
-  ) {
-    let distToUse;
-    const dir = getPoint(direction);
-    if (dist == null) {
-      distToUse = dir.distance();
-    } else {
-      distToUse = dist;
-    }
+//   // left, right, top, bottom is relative to cartesian coordinates
+//   // 'outside' is the outside of a polygon defined in the positive direction
+//   // (CCW).
+//   /**
+//    * Create a line that is offset by some distance from this line.
+//    *
+//    * `'left'`, `'right'`, `'top'` and `'bottom'` are relative to cartesian
+//    * coordinates.
+//    *
+//    * `'positive'` to the right of a vertical line defined from bottom to top and
+//    * above a horizontal line defined from right to left. Another way to think of
+//    * it is if lines are used to create a polygon in the positive rotation
+//    * direction (CCW), the the `'positive'` side will be on the outside of the
+//    * polygon.
+//    *
+//    * `'negative'` is then the inside of the same polygon.
+//    * @return  {Line}
+//    */
+//   offset(
+//     direction: TypeParsablePoint,
+//     dist: number | null = null,
+//     perpendicular: boolean = true,
+//   ) {
+//     let distToUse;
+//     const dir = getPoint(direction);
+//     if (dist == null) {
+//       distToUse = dir.distance();
+//     } else {
+//       distToUse = dist;
+//     }
 
-    const d = dir.normalize().scale(distToUse);
+//     const d = dir.normalize().scale(distToUse);
 
-    if (perpendicular === false) {
-      const p1 = this.p1.add(d);
-      const p2 = this.p2.add(d);
-      return new Line3(p1, p2, this.ends);
-    }
-    const u = this.unitVector();
-    const normal = d.crossProduct(u);
-    const perp = u.crossProduct(normal).normalize().scale(distToUse);
-    const p1 = this.p1.add(perp);
-    const p2 = this.p2.add(perp);
-    return new Line3(p1, p2, this.ends);
-  }
+//     if (perpendicular === false) {
+//       const p1 = this.p1.add(d);
+//       const p2 = this.p2.add(d);
+//       return new Line3(p1, p2, this.ends);
+//     }
+//     const u = this.unitVector();
+//     const normal = d.crossProduct(u);
+//     const perp = u.crossProduct(normal).normalize().scale(distToUse);
+//     const p1 = this.p1.add(perp);
+//     const p2 = this.p2.add(perp);
+//     return new Line3(p1, p2, this.ends);
+//   }
 
-  /**
-   * Perpendicular distance between two lines extended to infinity
-   */
-  distanceToLine(l: Line3, precision: number = 8) {
-    const u1 = this.unitVector();
-    const u2 = l.unitVector();
-    const d = l.p1.sub(this.p1);
-    const u1CrossU2 = u1.crossProduct(u2);
-    // If the lines are parallel, then return the distance between parallel lines
-    if (u1CrossU2.isZero(precision)) {
-      // https://www.geeksforgeeks.org/shortest-distance-between-two-lines-in-3d-space-class-12-maths/
-      return u1.crossProduct(l.p1.sub(this.p1)).distance() / u1.distance();
-    }
-    // https://vicrucann.github.io/tutorials/3d-geometry-algorithms/
-    return d.dotProduct(u1CrossU2) / u1CrossU2.distance();
-  }
+//   /**
+//    * Perpendicular distance between two lines extended to infinity
+//    */
+//   distanceToLine(l: Line3, precision: number = 8) {
+//     const u1 = this.unitVector();
+//     const u2 = l.unitVector();
+//     const d = l.p1.sub(this.p1);
+//     const u1CrossU2 = u1.crossProduct(u2);
+//     // If the lines are parallel, then return the distance between parallel lines
+//     if (u1CrossU2.isZero(precision)) {
+//       // https://www.geeksforgeeks.org/shortest-distance-between-two-lines-in-3d-space-class-12-maths/
+//       return u1.crossProduct(l.p1.sub(this.p1)).distance() / u1.distance();
+//     }
+//     // https://vicrucann.github.io/tutorials/3d-geometry-algorithms/
+//     return d.dotProduct(u1CrossU2) / u1CrossU2.distance();
+//   }
 
-  pointProjection(p: TypeParsablePoint, precision: number = 8) {
-    // https://en.wikipedia.org/wiki/Vector_projection#Vector_projection_2
-    const a = getPoint(p).sub(this.p1);
-    const b = this.vector();
-    return this.pointAtPercent(a.dotProduct(b) / b.dotProduct(b));
-  }
+//   pointProjection(p: TypeParsablePoint, precision: number = 8) {
+//     // https://en.wikipedia.org/wiki/Vector_projection#Vector_projection_2
+//     const a = getPoint(p).sub(this.p1);
+//     const b = this.vector();
+//     return this.pointAtPercent(a.dotProduct(b) / b.dotProduct(b));
+//   }
 
-  /**
-   * The intersection between this line and `line2`.
-   *
-   * The returned result is an {@link Intersect} object with the keys
-   * `intersect`, `offLine` and `colinear`.
-   *
-   * If no intersect exists, then `intersect` will be undefined.
-   *
-   * If an intersect exists, and the intersect is within both lines, then
-   * `offLine` will be `true`. If at least one of the lines needs to be extended
-   * to reach the intersect point, then `offLine` will be `false`.
-   *
-   * If the lines are collinear but do not overlap, then the intersect point
-   * will be the midpoint between the two closest ends. `offLine` will be `true`
-   * and `collinear` will be `true`.
-   *
-   * If the lines are collinear and overlap fully (or are equal), then the
-   * intersect will be p1 of the calling line, `offLine` will be `false` and
-   * `collinear` will be `true`.
-   *
-   * If either line has zero length, then an exception will be thrown.
-   * @return {Intersect}
-   */
-  intersectsWith(line2: Line3, precision: number = 8): Intersect {
-    const l2 = line2; // line2.round(precision);
-    const l1 = this;  // this.round(precision);
+//   /**
+//    * The intersection between this line and `line2`.
+//    *
+//    * The returned result is an {@link Intersect} object with the keys
+//    * `intersect`, `offLine` and `colinear`.
+//    *
+//    * If no intersect exists, then `intersect` will be undefined.
+//    *
+//    * If an intersect exists, and the intersect is within both lines, then
+//    * `offLine` will be `true`. If at least one of the lines needs to be extended
+//    * to reach the intersect point, then `offLine` will be `false`.
+//    *
+//    * If the lines are collinear but do not overlap, then the intersect point
+//    * will be the midpoint between the two closest ends. `offLine` will be `true`
+//    * and `collinear` will be `true`.
+//    *
+//    * If the lines are collinear and overlap fully (or are equal), then the
+//    * intersect will be p1 of the calling line, `offLine` will be `false` and
+//    * `collinear` will be `true`.
+//    *
+//    * If either line has zero length, then an exception will be thrown.
+//    * @return {Intersect}
+//    */
+//   intersectsWith(line2: Line3, precision: number = 8): Intersect {
+//     const l2 = line2; // line2.round(precision);
+//     const l1 = this;  // this.round(precision);
 
-    const collinear = l1.isAlongLine(l2, precision);
-    // If the distance between lines is 0, then they intersect
-    if (!collinear && l1.distanceToLine(l2, precision) === 0) {
-      const C = this.p1;
-      const D = l2.p1;
-      const e = this.unitVector();
-      const f = l2.unitVector();
-      const g = D.sub(C);
-      const fg = f.crossProduct(g);
-      const fe = f.crossProduct(e);
-      const h = fg.distance();
-      const k = fe.distance();
-      if (h === 0 || k === 0) {
-        return { intersect: undefined, collinear, onLines: false };
-      }
-      const l = e.scale(h / k);
-      let i;
-      // console.log(C.add(l));
-      // console.log(C.sub(l));
-      if (fg.normalize().isEqualTo(fe.normalize(), precision)) {
-        i = C.add(l);
-      } else {
-        i = C.sub(l);
-      }
-      if (l1.hasPointOn(i, precision) && l2.hasPointOn(i, precision)) {
-        return { intersect: i, collinear, onLines: true };
-      }
-      return { collinear: false, onLines: false, intersect: i };
-    }
+//     const collinear = l1.isAlongLine(l2, precision);
+//     // If the distance between lines is 0, then they intersect
+//     if (!collinear && l1.distanceToLine(l2, precision) === 0) {
+//       const C = this.p1;
+//       const D = l2.p1;
+//       const e = this.unitVector();
+//       const f = l2.unitVector();
+//       const g = D.sub(C);
+//       const fg = f.crossProduct(g);
+//       const fe = f.crossProduct(e);
+//       const h = fg.distance();
+//       const k = fe.distance();
+//       if (h === 0 || k === 0) {
+//         return { intersect: undefined, collinear, onLines: false };
+//       }
+//       const l = e.scale(h / k);
+//       let i;
+//       // console.log(C.add(l));
+//       // console.log(C.sub(l));
+//       if (fg.normalize().isEqualTo(fe.normalize(), precision)) {
+//         i = C.add(l);
+//       } else {
+//         i = C.sub(l);
+//       }
+//       if (l1.hasPointOn(i, precision) && l2.hasPointOn(i, precision)) {
+//         return { intersect: i, collinear, onLines: true };
+//       }
+//       return { collinear: false, onLines: false, intersect: i };
+//     }
 
-    // If the lines not collinear, but do not have an intersect, then
-    // they are skew or parallel
-    if (!collinear) {
-      return { intersect: undefined, collinear, onLines: false };
-    }
+//     // If the lines not collinear, but do not have an intersect, then
+//     // they are skew or parallel
+//     if (!collinear) {
+//       return { intersect: undefined, collinear, onLines: false };
+//     }
 
-    // If lines are collinear they could be either:
-    //   - equal
-    //   - one fully within the other
-    //   - partially overlapping
-    //   - not overlapping
-    const l1P1OnL2 = l2.hasPointOn(l1.p1, precision);
-    const l1P2OnL2 = l2.hasPointOn(l1.p2, precision);
-    const l2P1OnL1 = l1.hasPointOn(l2.p1, precision);
-    const l2P2OnL1 = l1.hasPointOn(l2.p2, precision);
+//     // If lines are collinear they could be either:
+//     //   - equal
+//     //   - one fully within the other
+//     //   - partially overlapping
+//     //   - not overlapping
+//     const l1P1OnL2 = l2.hasPointOn(l1.p1, precision);
+//     const l1P2OnL2 = l2.hasPointOn(l1.p2, precision);
+//     const l2P1OnL1 = l1.hasPointOn(l2.p1, precision);
+//     const l2P2OnL1 = l1.hasPointOn(l2.p2, precision);
 
-    // Not overlapping - return midpoint between two closest ends
-    if (
-      !l2P1OnL1 && !l2P2OnL1 && !l1P2OnL2 && !l1P1OnL2
-    ) {
-      const d11 = l1.p1.distance(l2.p1);
-      const d12 = l1.p1.distance(l2.p2);
-      const d21 = l1.p2.distance(l2.p1);
-      const d22 = l1.p2.distance(l2.p2);
-      const min = Math.min(d21, d22, d11, d12);
-      let intersect;
-      if (min === d11) {
-        intersect = new Line3(l1.p1, l2.p1).midPoint();
-      } else if (min === d12) {
-        intersect = new Line3(l1.p1, l2.p2).midPoint();
-      } else if (min === d21) {
-        intersect = new Line3(l1.p2, l2.p1).midPoint();
-      } else if (min === d22) {
-        intersect = new Line3(l1.p2, l2.p2).midPoint();
-      }
-      return { intersect, collinear: true, onLines: false };
-    }
+//     // Not overlapping - return midpoint between two closest ends
+//     if (
+//       !l2P1OnL1 && !l2P2OnL1 && !l1P2OnL2 && !l1P1OnL2
+//     ) {
+//       const d11 = l1.p1.distance(l2.p1);
+//       const d12 = l1.p1.distance(l2.p2);
+//       const d21 = l1.p2.distance(l2.p1);
+//       const d22 = l1.p2.distance(l2.p2);
+//       const min = Math.min(d21, d22, d11, d12);
+//       let intersect;
+//       if (min === d11) {
+//         intersect = new Line3(l1.p1, l2.p1).midPoint();
+//       } else if (min === d12) {
+//         intersect = new Line3(l1.p1, l2.p2).midPoint();
+//       } else if (min === d21) {
+//         intersect = new Line3(l1.p2, l2.p1).midPoint();
+//       } else if (min === d22) {
+//         intersect = new Line3(l1.p2, l2.p2).midPoint();
+//       }
+//       return { intersect, collinear: true, onLines: false };
+//     }
 
-    // The remaining case is equal, partially or fully  overlapping
-    return { intersect: l1.p1._dup(), collinear: true, onLines: true };
-  }
-}
+//     // The remaining case is equal, partially or fully  overlapping
+//     return { intersect: l1.p1._dup(), collinear: true, onLines: true };
+//   }
+// }
 
 function dotProduct(a: Array<number>, b: Array<number>) {
   if (a.length !== b.length) {
@@ -2089,146 +2094,146 @@ function dotProduct3(a: Type3Components, b: Type3Components) {
 }
 
 
-class Vector extends Line {
-  i: number;
-  j: number;
+// class Vector extends Line {
+//   i: number;
+//   j: number;
 
-  constructor(
-    p1OrLine: TypeParsablePoint | Line,
-    p2OrMag: TypeParsablePoint | number,
-    angle: number = 0,
-  ) {
-    if (p1OrLine instanceof Line) {
-      super(p1OrLine.p1, p1OrLine.distance, p1OrLine.ang);
-    } else {
-      super(p1OrLine, p2OrMag, angle);
-    }
-    this.i = this.distance * Math.cos(this.ang);
-    this.j = this.distance * Math.sin(this.ang);
-  }
+//   constructor(
+//     p1OrLine: TypeParsablePoint | Line,
+//     p2OrMag: TypeParsablePoint | number,
+//     angle: number = 0,
+//   ) {
+//     if (p1OrLine instanceof Line) {
+//       super({ p1: p1OrLine.p1, length: p1OrLine.length(), angle: p1OrLine.angle() });
+//     } else {
+//       super({ p1: p1OrLine, length: p2OrMag, angle });
+//     }
+//     this.i = this.length() * Math.cos(this.angle());
+//     this.j = this.length() * Math.sin(this.angle());
+//   }
 
-  unit() {
-    return new Vector(this.p1, 1, this.ang);
-  }
+//   unit() {
+//     return new Vector(this.p1, 1, this.angle());
+//   }
 
-  dotProduct(v: Vector, precision: number = 8) {
-    return roundNum(this.i * v.i + this.j * v.j, precision);
-  }
-}
+//   dotProduct(v: Vector, precision: number = 8) {
+//     return roundNum(this.i * v.i + this.j * v.j, precision);
+//   }
+// }
 
-function line(p1: Point, p2: Point) {
-  return new Line(p1, p2);
-}
-
-
-type TypeF1DefLine = {
-  f1Type: 'l',
-  state: [[number, number], [number, number], 2 | 1 | 0],
-};
+// function line(p1: Point, p2: Point) {
+//   return new Line(p1, p2);
+// }
 
 
-/**
- * A {@link Line} is defined with either two points, or a point, magbintude and angle.
- * The end definitions define if the line is finite or infinite. And end
- * definition of `2` means both ends are finite and the line stops at its
- * definition. `1` means the first end is finite, and the line extends through
- * the second point to infinity. `0` means the line extends through both
- * points to infinite on either side.
- *
- * A line can be defined in several ways.
- *
- * As a Line: `new Line()`
- * - As two points: `[{@link TypeParsablePoint}, {@link TypeParsablePoint}]`
- * - As two points and end definitions:
- *   `[{@link TypeParsablePoint}, {@link TypeParsablePoint}, 2 | 1 | 0]`
- * - As a point, mag angle: `[{@link TypeParsablePoint}, number, number]`
- * - As a point, mag angle and end definitions: '[number, number, 2, 1, 0]'
- * - As a definition object where state is
- *   [[p1.x, p1.y], [p2.x, p2.y], endDefinition]:
- *   { f1Type: 'l', state: [[number, number], [number, number], 2 | 1 | 0 }
- * @example
- * // l1, l2, l3, l4, l5 and l6 are all the same if parsed by `getLine`
- * l1 = new Line([0, 0], [2, 2]);
- * l2 = new Line([0, 0], 2 * Math.sqrt(2), Math.PI / 4);
- * l3 = new Line([0, 0], [2, 2], 2);
- * l4 = [[0, 0], [2, 2]];
- * l5 = [[0, 0], 2 * Math.sqrt(2), Math.PI / 4];
- * l6 = [[0, 0], [2, 2], 2];
- */
-export type TypeParsableLine = [TypeParsablePoint, TypeParsablePoint, 2 | 1 | 0]
-                                | [TypeParsablePoint, TypeParsablePoint]
-                                | [TypeParsablePoint, number, number, 2 | 1 | 0]
-                                | [TypeParsablePoint, number, number]
-                                | TypeF1DefLine
-                                | Line;
-// line can be defined as:
-//    - [[0, 0], [1, 0]]
-//    - [[0, 0], 1, 0]
+// type TypeF1DefLine = {
+//   f1Type: 'l',
+//   state: [[number, number], [number, number], 2 | 1 | 0],
+// };
 
-function parseLine<T>(lIn: TypeParsableLine, onFail: T): Line | T | null {
-  if (lIn instanceof Line) {
-    return lIn;
-  }
-  let onFailToUse = onFail;
-  if (onFailToUse == null) {
-    onFailToUse = null;
-  }
 
-  if (lIn == null) {
-    return onFailToUse;
-  }
+// /**
+//  * A {@link Line} is defined with either two points, or a point, magbintude and angle.
+//  * The end definitions define if the line is finite or infinite. And end
+//  * definition of `2` means both ends are finite and the line stops at its
+//  * definition. `1` means the first end is finite, and the line extends through
+//  * the second point to infinity. `0` means the line extends through both
+//  * points to infinite on either side.
+//  *
+//  * A line can be defined in several ways.
+//  *
+//  * As a Line: `new Line()`
+//  * - As two points: `[{@link TypeParsablePoint}, {@link TypeParsablePoint}]`
+//  * - As two points and end definitions:
+//  *   `[{@link TypeParsablePoint}, {@link TypeParsablePoint}, 2 | 1 | 0]`
+//  * - As a point, mag angle: `[{@link TypeParsablePoint}, number, number]`
+//  * - As a point, mag angle and end definitions: '[number, number, 2, 1, 0]'
+//  * - As a definition object where state is
+//  *   [[p1.x, p1.y], [p2.x, p2.y], endDefinition]:
+//  *   { f1Type: 'l', state: [[number, number], [number, number], 2 | 1 | 0 }
+//  * @example
+//  * // l1, l2, l3, l4, l5 and l6 are all the same if parsed by `getLine`
+//  * l1 = new Line([0, 0], [2, 2]);
+//  * l2 = new Line([0, 0], 2 * Math.sqrt(2), Math.PI / 4);
+//  * l3 = new Line([0, 0], [2, 2], 2);
+//  * l4 = [[0, 0], [2, 2]];
+//  * l5 = [[0, 0], 2 * Math.sqrt(2), Math.PI / 4];
+//  * l6 = [[0, 0], [2, 2], 2];
+//  */
+// export type TypeParsableLine = [TypeParsablePoint, TypeParsablePoint, 2 | 1 | 0]
+//                                 | [TypeParsablePoint, TypeParsablePoint]
+//                                 | [TypeParsablePoint, number, number, 2 | 1 | 0]
+//                                 | [TypeParsablePoint, number, number]
+//                                 | TypeF1DefLine
+//                                 | Line;
+// // line can be defined as:
+// //    - [[0, 0], [1, 0]]
+// //    - [[0, 0], 1, 0]
 
-  let l = lIn;
-  if (typeof l === 'string') {
-    try {
-      l = JSON.parse(l);
-    } catch {
-      return onFailToUse;
-    }
-  }
+// function parseLine<T>(lIn: TypeParsableLine, onFail: T): Line | T | null {
+//   if (lIn instanceof Line) {
+//     return lIn;
+//   }
+//   let onFailToUse = onFail;
+//   if (onFailToUse == null) {
+//     onFailToUse = null;
+//   }
 
-  if (Array.isArray(l)) {
-    if (l.length === 4) {
-      return new Line(getPoint(l[0]), l[1], l[2], l[3]);
-    }
-    if (l.length === 3) {
-      if (typeof l[1] === 'number') {
-        return new Line(getPoint(l[0]), l[1], l[2]);
-      } // $FlowFixMe
-      return new Line(getPoint(l[0]), getPoint(l[1]), 0, l[2]);
-    }
-    if (l.length === 2) {
-      return new Line(getPoint(l[0]), getPoint(l[1]));
-    }
-    return onFailToUse;
-  }
-  if (l.f1Type != null) {
-    if (
-      l.f1Type === 'l'
-      && l.state != null
-      && Array.isArray([l.state])
-      && l.state.length === 3
-    ) {
-      const [p1, p2, ends] = l.state;
-      return new Line(getPoint(p1), getPoint(p2), 0, ends);
-    }
-    return onFailToUse;
-  }
-  return onFailToUse;
-}
+//   if (lIn == null) {
+//     return onFailToUse;
+//   }
 
-/**
- * Convert a parsable line definition to a {@link Line}.
- * @param {TypeParsableLine} l parsable line definition
- * @return {Line} `Line` object
- */
-function getLine(l: TypeParsableLine): Line {
-  let parsedLine = parseLine(l);
-  if (parsedLine == null) {
-    parsedLine = new Line(new Point(0, 0), new Point(1, 0));
-  }
-  return parsedLine;
-}
+//   let l = lIn;
+//   if (typeof l === 'string') {
+//     try {
+//       l = JSON.parse(l);
+//     } catch {
+//       return onFailToUse;
+//     }
+//   }
+
+//   if (Array.isArray(l)) {
+//     if (l.length === 4) {
+//       return new Line(getPoint(l[0]), l[1], l[2], l[3]);
+//     }
+//     if (l.length === 3) {
+//       if (typeof l[1] === 'number') {
+//         return new Line(getPoint(l[0]), l[1], l[2]);
+//       } // $FlowFixMe
+//       return new Line(getPoint(l[0]), getPoint(l[1]), 0, l[2]);
+//     }
+//     if (l.length === 2) {
+//       return new Line(getPoint(l[0]), getPoint(l[1]));
+//     }
+//     return onFailToUse;
+//   }
+//   if (l.f1Type != null) {
+//     if (
+//       l.f1Type === 'l'
+//       && l.state != null
+//       && Array.isArray([l.state])
+//       && l.state.length === 3
+//     ) {
+//       const [p1, p2, ends] = l.state;
+//       return new Line(getPoint(p1), getPoint(p2), 0, ends);
+//     }
+//     return onFailToUse;
+//   }
+//   return onFailToUse;
+// }
+
+// /**
+//  * Convert a parsable line definition to a {@link Line}.
+//  * @param {TypeParsableLine} l parsable line definition
+//  * @return {Line} `Line` object
+//  */
+// function getLine(l: TypeParsableLine): Line {
+//   let parsedLine = parseLine(l);
+//   if (parsedLine == null) {
+//     parsedLine = new Line(new Point(0, 0), new Point(1, 0));
+//   }
+//   return parsedLine;
+// }
 
 // type TypeF1DefRotation = {
 //   f1Type: 'r',
@@ -3551,7 +3556,7 @@ class Transform {
     if (limitLine != null) {
       const t = clippedTransform.t();
       if (t != null) {
-        const perpLine = new Line(t, 1, limitLine.angle() + Math.PI / 2);
+        const perpLine = new Line({ p1: t, length: 1, angle: limitLine.angle() + Math.PI / 2 });
         const { intersect } = perpLine.intersectsWith(limitLine);
         if (intersect) {
           if (limitLine.hasPointOn(intersect, 4)) {
@@ -4840,13 +4845,19 @@ class RectBounds extends Bounds {
           return new Line([h, bottom], [h, top]);
         }
         if (bottom == null && top != null) {
-          return new Line([h, top], null, -Math.PI / 2, 1);
+          return new Line({
+            p1: [h, top], length: 1, angle: -Math.PI / 2, ends: 1,
+          });
         }
         if (bottom != null && top == null) {
-          return new Line([h, bottom], null, Math.PI / 2, 1);
+          return new Line({
+            p1: [h, bottom], length: 1, angle: Math.PI / 2, ends: 1,
+          });
         }
         if (bottom == null && top == null) {
-          return new Line([h, 0], null, Math.PI / 2, 0);
+          return new Line({
+            p1: [h, 0], length: 1, angle: Math.PI / 2, ends: 0,
+          });
         }
       }
       return null;
@@ -4857,13 +4868,19 @@ class RectBounds extends Bounds {
           return new Line([left, v], [right, v]);
         }
         if (left == null && right != null) {
-          return new Line([right, v], null, -Math.PI, 1);
+          return new Line({
+            p1: [right, v], length: 1, angle: -Math.PI, ends: 1,
+          });
         }
         if (left != null && right == null) {
-          return new Line([left, v], null, 0, 1);
+          return new Line({
+            p1: [left, v], length: 1, angle: 0, ends: 1,
+          });
         }
         if (left == null && right == null) {
-          return new Line([0, v], null, Math.PI, 0);
+          return new Line({
+            p1: [0, v], length: 1, angle: Math.PI, ends: 0,
+          });
         }
       }
       return null;
@@ -4876,7 +4893,9 @@ class RectBounds extends Bounds {
     const boundRight = calcHBound(right);
 
     // Get the closest boundary intersect
-    const trajectory = new Line(p, null, direction, 1);
+    const trajectory = new Line({
+      p1: p, length: 1, angle: direction, ends: 1,
+    });
     const getIntersect = (boundLine: Line | null, id) => {
       if (boundLine == null) {
         return null;
@@ -4889,7 +4908,7 @@ class RectBounds extends Bounds {
         };
       }
       const result = trajectory.intersectsWith(boundLine, this.precision);
-      if (result.withinLine && result.intersect != null) {
+      if (result.onLines && result.intersect != null) {
         return {
           intersect: result.intersect,
           distance: round(p.distance(result.intersect), this.precision),
@@ -5192,9 +5211,13 @@ class LineBounds extends Bounds {
     if (options.line != null) {
       boundary = getLine(options.line);
     } else if (options.p1 != null && options.p2 != null) {
-      boundary = new Line(options.p1, options.p2, 0, options.ends);
+      boundary = new Line({
+        p1: options.p1, p2: options.p2, ends: options.ends,
+      });
     } else if (options.p1 != null) {
-      boundary = new Line(options.p1, options.mag, options.angle, options.ends);
+      boundary = new Line({
+        p1: options.p1, length: options.mag, angle: options.angle, ends: options.ends,
+      });
     }
     super(boundary, options.bounds, options.precision);
   }
@@ -5210,8 +5233,8 @@ class LineBounds extends Bounds {
       precision: this.precision,
       p1: this.boundary.p1._dup(),
       p2: this.boundary.p2._dup(),
-      mag: this.boundary.distance,
-      angle: this.boundary.ang,
+      mag: this.boundary.length(),
+      angle: this.boundary.angle(),
       ends: this.boundary.ends,
     });
   }
@@ -5283,7 +5306,7 @@ class LineBounds extends Bounds {
     const b = this.boundary;
     const p1 = this.boundary.p1._dup();
     const p2 = this.boundary.p2._dup();
-    const angleDelta = round(Math.abs(clipAngle(direction, '0to360') - clipAngle(b.ang, '0to360')), this.precision);
+    const angleDelta = round(Math.abs(clipAngle(direction, '0to360') - clipAngle(b.angle(), '0to360')), this.precision);
 
     const d1 = p.distance(p1);
     const d2 = p.distance(p2);
@@ -5292,13 +5315,13 @@ class LineBounds extends Bounds {
     // result can be given immediately
     if (p.isEqualTo(p1, this.precision)) {
       if (this.bounds === 'inside' && angleDelta !== 0) {
-        return { intersect: p1, distance: 0, reflection: b.ang };
+        return { intersect: p1, distance: 0, reflection: b.angle() };
       }
       if (this.bounds === 'outside' && angleDelta !== 0) {
         return { intersect: null, distance: 0, reflection: direction };
       }
       if (this.bounds === 'outside' && angleDelta === 0) {
-        return { intersect: p1, distance: 0, reflection: b.ang + Math.PI };
+        return { intersect: p1, distance: 0, reflection: b.angle() + Math.PI };
       }
     }
 
@@ -5318,13 +5341,13 @@ class LineBounds extends Bounds {
     // p1, the answer can be given now
     if (p.isEqualTo(p2, this.precision)) {
       if (this.bounds === 'inside' && angleDelta === 0) {
-        return { intersect: p2, distance: 0, reflection: b.ang + Math.PI };
+        return { intersect: p2, distance: 0, reflection: b.angle() + Math.PI };
       }
       if (this.bounds === 'outside' && angleDelta === 0) {
         return { intersect: null, distance: 0, reflection: direction };
       }
       if (this.bounds === 'outside' && angleDelta !== 0) {
-        return { intersect: p2, distance: 0, reflection: b.ang };
+        return { intersect: p2, distance: 0, reflection: b.angle() };
       }
       // return { intersect: p2, distance: 0, reflection };
     }
@@ -5360,9 +5383,9 @@ class LineBounds extends Bounds {
       return velocity;
     }
     const v = getPoint(velocity); // $FlowFixMe
-    const unitVector = new Vector(this.boundary).unit();
-    let projection = unitVector.dotProduct(new Vector([0, 0], v));
-    let { ang } = this.boundary;
+    const unitVector = this.boundary.unitVector();
+    let projection = unitVector.dotProduct(v);
+    let ang = this.boundary.angle();
     if (projection < -1) {
       ang += Math.PI;
       projection = -projection;
@@ -6331,7 +6354,7 @@ function getPositionInRect(
 export {
   // point,
   Point,
-  line,
+  // line,
   Line,
   distance,
   minAngleDiff,
@@ -6376,7 +6399,7 @@ export {
   RangeBounds,
   // ValueBounds,
   TransformBounds,
-  Vector,
+  // Vector,
   transformValueToArray,
   getBounds,
   Bounds,
@@ -6394,6 +6417,6 @@ export {
   isParsablePlane,
   dotProduct,
   dotProduct3,
-  Line3,
+  // Line3,
   toDelta,
 };

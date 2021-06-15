@@ -1160,8 +1160,8 @@ describe('g2 Line', () => {
       expect(l2.round().A).toBe(l1.round().A);
       expect(l2.round().B).toBe(l1.round().B);
       expect(l2.round().C).toBe(l1.round().C);
-      expect(l2.round().ang).toBe(l1.round().ang);
-      expect(l2.round().distance).toBe(l1.round().distance);
+      expect(l2.round().angle()).toBe(l1.round().angle());
+      expect(l2.round().length()).toBe(l1.round().length());
     });
     test('One End Line Points with same angle', () => {
       const l1 = new Line([0, 0], [1, 0], 0, 1);

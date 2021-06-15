@@ -595,7 +595,8 @@ describe('Calculate Stop', () => {
       // s = v0*t + 0.5*acc*t^2 = 5 - 0.5 = 4.5
       // Therefore end point will be 4.5 - (12.5 - 4.5) = -3.5
       expect(duration).toBe(5);
-      const shaddow = position.getShaddowOnLine(bounds.boundary);
+      // const shaddow = position.getShaddowOnLine(bounds.boundary);
+      const shaddow = bounds.boundary.pointProjection(position);
       expect(shaddow.round(4)).toEqual(new Point(-3.5, 0));
     });
     test('45º No bounce', () => {
@@ -610,7 +611,8 @@ describe('Calculate Stop', () => {
       const bounceLoss = 0;
       const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       expect(duration).toBe(5);
-      const shaddow = position.getShaddowOnLine(bounds.boundary);
+      // const shaddow = position.getShaddowOnLine(bounds.boundary);
+      const shaddow = bounds.boundary.pointProjection(position);
       expect(shaddow.round(3)).toEqual(new Point(12.5, 0));
     });
     test('45º One bounce', () => {
@@ -625,7 +627,8 @@ describe('Calculate Stop', () => {
       const bounceLoss = 0;
       const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
       expect(duration).toBe(5);
-      const shaddow = position.getShaddowOnLine(bounds.boundary);
+      // const shaddow = position.getShaddowOnLine(bounds.boundary);
+      const shaddow = bounds.boundary.pointProjection(position);
       expect(shaddow.round(3)).toEqual(new Point(-3.5, 0));
     });
     test('0º One bounce on 45º line', () => {
@@ -640,7 +643,7 @@ describe('Calculate Stop', () => {
       });
       const bounceLoss = 0;
       const { duration, position } = deceleratePoint(p, v, deceleration, null, bounds, bounceLoss);
-      expect(duration).toBe(5);
+      expect(round(duration)).toBe(5);
       // const xDistance = 12.5;
       const _4_5 = 4.5 * Math.cos(Math.PI / 4);
       const _8 = 8 * Math.cos(Math.PI / 4);
@@ -917,7 +920,8 @@ describe('Decelerate Transform', () => {
   });
   test('Position, Scale Rotation - Change d', () => {
     const t = new Transform().scale(1, 1).rotate(0).translate(0, 0);
-    const v = new Transform().scale(5, 5, 0).rotate(5).translate(5 / Math.sqrt(2), 5 / Math.sqrt(2));
+    const v = new Transform()
+      .scale(5, 5, 0).rotate(5).translate(5 / Math.sqrt(2), 5 / Math.sqrt(2));
     const d = [0.9, 0.8, 0.7];
     const z = [0, 0, 0];
     const bounceLoss = [0, 0, 0];

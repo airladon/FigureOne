@@ -76,11 +76,11 @@ function getBufferBorder(
         }
         if (intersect.intersect.distance(borderPoint) > buffer * 1.2) {
           const borderToBuffer = new Line(borderPoint, intersect.intersect);
-          const perpLine = new Line(
-            borderToBuffer.pointAtLength(buffer * 1.2),
-            1,
-            borderToBuffer.angle() + Math.PI / 2,
-          );
+          const perpLine = new Line({
+            p1: borderToBuffer.pointAtLength(buffer * 1.2),
+            length: 1,
+            angle: borderToBuffer.angle() + Math.PI / 2,
+          });
           const prevIntersect = prevLine.intersectsWith(perpLine);
           const nextIntersect = currentLine.intersectsWith(perpLine);
           if (prevIntersect.intersect != null && nextIntersect.intersect != null) {

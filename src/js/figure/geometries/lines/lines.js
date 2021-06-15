@@ -186,7 +186,7 @@ function joinLinesInPoint(
   corner: 'fill' | 'auto' | 'none',
 ) {
   const intersect = line1.intersectsWith(lineNext);
-  if (!intersect.withinLine && corner === 'fill') {
+  if (!intersect.onLines && corner === 'fill') {
     return;
   }
   if (intersect.intersect != null) {
@@ -225,10 +225,10 @@ function joinLinesInTangent(
   corner: 'fill' | 'auto' | 'none',
 ) {
   const angle = threePointAngleMin(mid.p1, mid.p2, midNext.p2);
-  const tangent = new Line(mid.p2, 1, mid.angle() + angle / 2 + Math.PI / 2);
+  const tangent = new Line({ p1: mid.p2, length: 1, angle: mid.angle() + angle / 2 + Math.PI / 2 });
   const intercept = outside.intersectsWith(tangent);
   const interceptNext = outsideNext.intersectsWith(tangent);
-  // if (intercept.withinLine === false && interceptNext.withinLine === false) {
+  // if (intercept.onLines === false && interceptNext.onLines === false) {
   //   const i = outside.intersectsWith(outsideNext);
   //   if (i.intersect != null) {
   //     outside.setP2(i.intersect);
@@ -258,19 +258,19 @@ function joinLinesAcuteInside(
   linePrimitives: boolean,
 ) {
   const insideIntercept = inside.intersectsWith(insideNext);
-  const { withinLine, intersect } = insideIntercept;
-  if (withinLine && intersect != null) {
+  const { onLines, intersect } = insideIntercept;
+  if (onLines && intersect != null) {
     inside.setP2(intersect);
     insideNext.setP1(intersect);
     return;
   }
   if (!linePrimitives) {
     let intercept = inside.intersectsWith(midNext);
-    if (intercept.intersect != null && intercept.withinLine) {
+    if (intercept.intersect != null && intercept.onLines) {
       inside.setP2(intercept.intersect);
     }
     intercept = insideNext.intersectsWith(mid);
-    if (intercept.intersect != null && intercept.withinLine) {
+    if (intercept.intersect != null && intercept.onLines) {
       insideNext.setP1(intercept.intersect);
     }
   }
@@ -283,8 +283,8 @@ function joinLinesObtuseInside(
   insideNext: Line,
 ) {
   const insideIntercept = inside.intersectsWith(insideNext);
-  const { withinLine, intersect } = insideIntercept;
-  if (withinLine && intersect != null) {
+  const { onLines, intersect } = insideIntercept;
+  if (onLines && intersect != null) {
     inside.setP2(intersect);
     insideNext.setP1(intersect);
     return;
@@ -926,7 +926,7 @@ function addArrows(
   if (start != null) {
     let startArrowLine = new Line(startArrowIn[0], startArrowIn[1]);
     const startLineMid = new Line(updatedTriangles[0], updatedTriangles[2]).midPoint();
-    startArrowLine = new Line(startLineMid, startArrowLine.length(), startArrowLine.angle());
+    startArrowLine = new Line({ p1: startLineMid, length: startArrowLine.length(), angle: startArrowLine.angle() });
     const startArrow = [startArrowLine.p1, startArrowLine.p2];
     const [border, touchBorder, tail] = getArrow(joinObjects(
       {},
@@ -955,7 +955,9 @@ function addArrows(
     const l = count;
     let endArrowLine = new Line(endArrowIn[0], endArrowIn[1]);
     const endLineMid = new Line(updatedTriangles[l - 2], updatedTriangles[l - 1]).midPoint();
-    endArrowLine = new Line(endLineMid, endArrowLine.length(), endArrowLine.angle());
+    endArrowLine = new Line({
+      p1: endLineMid, length: endArrowLine.length(), angle: endArrowLine.angle(),
+    });
     const endArrow = [endArrowLine.p1, endArrowLine.p2];
     const [border, touchBorder, tail] = getArrow(joinObjects(
       {},

@@ -327,7 +327,7 @@ function getLineFromOptions(options: {
   if (o.p1 != null && o.p2 != null) {
     line = new Line(o.p1, o.p2);
   } else {
-    line = new Line(o.p1, o.length, o.angle);
+    line = new Line({ p1: o.p1, length: o.length, angle: o.angle });
   }
   if (o.offset !== 0) {
     line = line.offset('positive', o.offset);
@@ -851,7 +851,7 @@ export default class CollectionsLine extends FigureElementCollection {
     const r = this.transform.r() || 0;
     const t = this.transform.t() || new Point(0, 0);
     const length = this.line.length();
-    const l = new Line(t, length, r);
+    const l = new Line({ p1: t, length, angle: r });
     let p1 = [0, 0];
     if (this.alignDraw === 'start') {
       p1 = t._dup();
@@ -863,7 +863,7 @@ export default class CollectionsLine extends FigureElementCollection {
       p1 = l.pointAtPercent(-this.alignDraw);
     }
 
-    this.line = new Line(p1, length, r);
+    this.line = new Line({ p1, length, angle: r });
   }
 
   _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
@@ -1409,22 +1409,27 @@ export default class CollectionsLine extends FigureElementCollection {
       newLen = 0.0000001;
     }
     if (align === 'start') {
-      this.line = new Line(this.line.p1, newLen, this.line.angle());
+      this.line = new Line({
+        p1: this.line.p1, length: newLen, angle: this.line.angle(),
+      });
     } else if (align === 'end') {
-      this.line = new Line(
-        this.line.pointAtLength(this.line.length() - newLen),
-        newLen, this.line.angle(),
-      );
+      this.line = new Line({
+        p1: this.line.pointAtLength(this.line.length() - newLen),
+        length: newLen,
+        angle: this.line.angle(),
+      });
     } else if (align === 'center') {
-      this.line = new Line(
-        this.line.pointAtLength((this.line.length() - newLen) / 2),
-        newLen, this.line.angle(),
-      );
+      this.line = new Line({
+        p1: this.line.pointAtLength((this.line.length() - newLen) / 2),
+        length: newLen,
+        angle: this.line.angle(),
+      });
     } else if (typeof align === 'number') {
-      this.line = new Line(
-        this.line.pointAtLength((this.line.length() - newLen) * align),
-        newLen, this.line.angle(),
-      );
+      this.line = new Line({
+        p1: this.line.pointAtLength((this.line.length() - newLen) * align),
+        length: newLen,
+        angle: this.line.angle(),
+      });
     }
     this.alignDraw = align;
     this.setupLine();

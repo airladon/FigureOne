@@ -113,11 +113,13 @@ export default class Sum extends Symbol {
     const tipWidth = lineWidth * 0.6;
 
     const lineA = new Line(new Point(0, 0), new Point(a, e));
-    const CxOffset = thick2 / Math.sin(lineA.ang);
-    const lineC = new Line(new Point(CxOffset, 0), height, lineA.ang);
+    const CxOffset = thick2 / Math.sin(lineA.angle());
+    const lineC = new Line({ p1: new Point(CxOffset, 0), length: height, angle: lineA.angle() });
     const lineB = new Line(new Point(0, height), new Point(a, e));
-    const DxOffset = -thick1 / Math.sin(lineB.ang);
-    const lineD = new Line(new Point(DxOffset, height), height, lineB.ang);
+    const DxOffset = -thick1 / Math.sin(lineB.angle());
+    const lineD = new Line({
+      p1: new Point(DxOffset, height), length: height, angle: lineB.angle(),
+    });
 
     const intersection = lineC.intersectsWith(lineD).intersect;
 
@@ -128,12 +130,15 @@ export default class Sum extends Symbol {
       p1.x - (cBottom - thick3) / Math.tan(bottomTipAngle), thick3,
     );
     const p4 = new Point(0, 0);
-    const p5 = new Point(thick2 / Math.sin(lineA.ang) + thick3 / Math.tan(lineA.ang), thick3);
+    const p5 = new Point(
+      thick2 / Math.sin(lineA.angle()) + thick3 / Math.tan(lineA.angle()),
+      thick3,
+    );
     const p6 = new Point(a, e);
     const p7 = intersection;
     const p8 = new Point(0, height);
     const p9 = new Point(
-      -thick1 / Math.sin(lineB.ang) - thick2 / Math.tan(lineB.ang),
+      -thick1 / Math.sin(lineB.angle()) - thick2 / Math.tan(lineB.angle()),
       height - thick2,
     );
     const p10 = new Point(width - bTop, height);

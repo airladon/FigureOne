@@ -31,7 +31,9 @@ describe('Tools Lines', () => {
     });
     test('simple negative 45º', () => {
       const line1 = new Line(new Point(0, 0), new Point(0, 1));
-      const line2 = new Line(line1.p2._dup(), 1, Math.PI / 2 - Math.PI / 4 * 3);
+      const line2 = new Line({
+        p1: line1.p2._dup(), length: 1, angle: Math.PI / 2 - Math.PI / 4 * 3,
+      });
       const offsetLine1 = line1.offset('negative', 0.1);
       const offsetLine2 = line2.offset('negative', 0.1);
       const [tris] = makePolyLine(

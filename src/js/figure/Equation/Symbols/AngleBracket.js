@@ -86,9 +86,9 @@ export default class Bar extends Bracket {
     // const { side } = options;
     const { lineWidth, width } = this.getVerticalDefaultValues(height, widthIn, options);
     const line = new Line(new Point(0, 0), new Point(width, height / 2));
-    const theta = Math.acos(lineWidth / line.distance);
+    const theta = Math.acos(lineWidth / line.length());
     const beta = Math.PI / 2 - theta;
-    const alpha = line.ang + beta;
+    const alpha = line.angle() + beta;
     const tipWidth = width - height / 2 / Math.tan(alpha);
 
     const leftPoints = [

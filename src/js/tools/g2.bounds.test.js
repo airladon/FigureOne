@@ -780,7 +780,7 @@ describe('Bounds', () => {
       });
       describe('Intersect', () => {
         test('Inside Bounds', () => {
-          // // From origin horiztonal and vertical
+          // From origin horiztonal and vertical
           check([0, 0], 0, [10, 0], Math.PI, 10);
           check([0, 0], Math.PI / 2, [0, 10], -Math.PI / 2, 10);
           check([0, 0], Math.PI, null, Math.PI, 0);
@@ -1024,7 +1024,7 @@ describe('Bounds', () => {
           expect(bounds.boundary.p1).toEqual(new Point(0, 0));
           expect(bounds.boundary.p2).toEqual(new Point(2, 0));
           expect(bounds.boundary.ends).toBe(2);
-          expect(bounds.boundary.round(3).ang).toBe(0);
+          expect(bounds.boundary.round(3).angle()).toBe(0);
           expect(bounds.precision).toBe(5);
         });
         test('2 Points Extended', () => {
@@ -1068,7 +1068,7 @@ describe('Bounds', () => {
           expect(bounds.boundary.p1).toEqual(new Point(0, 0));
           expect(bounds.boundary.p2).toEqual(new Point(2, 0));
           expect(bounds.boundary.ends).toBe(1);
-          expect(bounds.boundary.round(3).ang).toBe(0);
+          expect(bounds.boundary.round(3).angle()).toBe(0);
           expect(bounds.precision).toBe(5);
         });
         test('2 Points Extended', () => {
@@ -1090,7 +1090,7 @@ describe('Bounds', () => {
         });
         test('From Line', () => {
           bounds = new LineBounds({
-            line: new Line([0, 0], [2, 0], 0, 1),
+            line: new Line([0, 0], [2, 0], 1),
             precision: 5,
           });
         });

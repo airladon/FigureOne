@@ -372,7 +372,7 @@ class CollectionsTrace extends FigureElementCollection {
     ];
     bounds.forEach((bound) => {
       const i = line.intersectsWith(bound);
-      if (i.withinLine) {
+      if (i.onLines) {
         result = true;
         intersect.push(i.intersect);
       }

@@ -7,7 +7,7 @@ import type {
   TypeParsablePoint,
 } from './Point';
 import { joinObjects } from '../tools';
-import { sphericalToCartesian, getPrecision } from './common';
+import { sphericalToCartesian, getPrecision, clipAngle } from './common';
 import { roundNum } from '../math';
 
 export type OBJ_Line = {
@@ -531,10 +531,13 @@ class Line {
    * @return  {Line}
    */
   offset(
-    direction: TypeParsablePoint,
+    direction: TypeParsablePoint | 'left' | 'right' | 'top' | 'bottom' | 'positive' | 'negative',
     dist: number | null = null,
     perpendicular: boolean = true,
   ) {
+    if (typeof direction === 'string') {
+      return this.offset2D(direction, dist);
+    }
     let distToUse;
     const dir = getPoint(direction);
     if (dist == null) {
@@ -555,6 +558,57 @@ class Line {
     const perp = u.crossProduct(normal).normalize().scale(distToUse);
     const p1 = this.p1.add(perp);
     const p2 = this.p2.add(perp);
+    return new Line(p1, p2, this.ends);
+  }
+
+  /**
+   * Create a line that is offset by some distance from this line.
+   *
+   * `'left'`, `'right'`, `'top'` and `'bottom'` are relative to cartesian
+   * coordinates.
+   *
+   * `'positive'` to the right of a vertical line defined from bottom to top and
+   * above a horizontal line defined from right to left. Another way to think of
+   * it is if lines are used to create a polygon in the positive rotation
+   * direction (CCW), the the `'positive'` side will be on the outside of the
+   * polygon.
+   *
+   * `'negative'` is then the inside of the same polygon.
+   * @return  {Line}
+   */
+  offset2D(
+    direction: 'left' | 'right' | 'top' | 'bottom' | 'positive' | 'negative',
+    dist: number,
+  ) {
+    let normalizedAngle = this.angle();
+    if (normalizedAngle >= Math.PI) {
+      normalizedAngle -= Math.PI;
+    }
+    if (normalizedAngle < 0) {
+      normalizedAngle += Math.PI;
+    }
+    let offsetAngle = normalizedAngle - Math.PI / 2;
+    if (direction === 'positive') {
+      offsetAngle = clipAngle(this.angle(), '0to360') + Math.PI / 2;
+    } else if (direction === 'negative') {
+      offsetAngle = clipAngle(this.angle(), '0to360') - Math.PI / 2;
+    } else if (normalizedAngle < Math.PI / 2) {
+      if (direction === 'left' || direction === 'top') {
+        offsetAngle = normalizedAngle + Math.PI / 2;
+      }
+    } else if (direction === 'left' || direction === 'bottom') {
+      offsetAngle = normalizedAngle + Math.PI / 2;
+    }
+    const p1 = new Point(
+      this.p1.x + dist * Math.cos(offsetAngle),
+      this.p1.y + dist * Math.sin(offsetAngle),
+      0,
+    );
+    const p2 = new Point(
+      this.p2.x + dist * Math.cos(offsetAngle),
+      this.p2.y + dist * Math.sin(offsetAngle),
+      0,
+    );
     return new Line(p1, p2, this.ends);
   }
 
