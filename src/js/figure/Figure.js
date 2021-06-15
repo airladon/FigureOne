@@ -5,7 +5,7 @@ import WebGLInstance from './webgl/webgl';
 import {
   Rect, Point, Transform, getRect,
   spaceToSpaceTransform, minAngleDiff,
-  getPoint, getTransform,
+  getPoint, Line, getPlane,
 } from '../tools/g2';
 import Scene from '../tools/scene';
 import type { OBJ_Scene } from '../tools/scene';
@@ -1289,6 +1289,10 @@ class Figure {
       z: { min: -1, span: 2 },
     };
 
+    if (from === 'pixel' && to === 'gl') {
+      return spaceToSpaceTransform(pixelSpace, glSpace).matrix();
+    }
+
     const glToPixelMatrix = spaceToSpaceTransform(glSpace, pixelSpace).matrix();
     if (from === 'gl' && to === 'pixel') {
       return glToPixelMatrix;
@@ -1315,6 +1319,16 @@ class Figure {
     }
 
     throw new Error(`Invalid space transform matrix inputs: from: '${from}', to: '${to}'`);
+  }
+
+  pixelToPlane(pixel: TypeParsablePoint, plane: TypeParsablePlane) {
+    const glPoint1 = getPoint(pixel).transformBy(this.spaceTransformMatrix('pixel', 'gl'));
+    const glPoint2 = glPoint1.sub(0, 0, 1);
+    const glToFigureMatrix = this.spaceTransformMatrix('gl', 'figure');
+    const fPoint1 = glPoint1.transformBy(glToFigureMatrix);
+    const fPoint2 = glPoint2.transformBy(glToFigureMatrix);
+    const p = getPlane(plane);
+    return p.lineIntersect([fPoint1, fPoint2]);
   }
 
 
@@ -1670,6 +1684,7 @@ class Figure {
       console.log(e.name, [p.x, p.y], [q.x, q.y]);
       console.log(e.getPosition('pixel'))
     }
+    console.log('xy', this.pixelToPlane(pixelP, [[0, 0, 0], [0, 0, 1]]));
 
     const figurePoint = pixelP.transformBy(this.spaceTransformMatrix('pixel', 'figure'));
     return this.touchDownHandler(figurePoint, eventFromPlayback);
