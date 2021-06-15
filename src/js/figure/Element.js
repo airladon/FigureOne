@@ -5,7 +5,7 @@ import {
   spaceToSpaceTransform, getBoundingRect,
   clipAngle, getPoint, getTransform, getScale,
   TransformBounds, RectBounds, RangeBounds, getBounds,
-  getBoundingBorder, isBuffer, getBorder,
+  getBoundingBorder, isBuffer, getBorder, decelerateTransform,
 } from '../tools/g2';
 import type Scene from '../tools/scene';
 import { round } from '../tools/math';
@@ -1865,7 +1865,8 @@ class FigureElement {
   decelerate(deltaTime: number | null = null): Object {
     const bounds = this.getMoveBounds();
     // console.log(deltaTime)
-    const next = this.transform.decelerate(
+    const next = decelerateTransform(
+      this.transform,
       this.state.movement.velocity,
       this.move.freely.deceleration,
       deltaTime,  // $FlowFixMe

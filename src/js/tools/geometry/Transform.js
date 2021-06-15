@@ -1,6 +1,8 @@
 // @flow
 /* eslint-disable no-use-before-define */
-import { roundNum, round, clipValue, clipMag } from '../math';
+import {
+  roundNum, round, clipValue, clipMag,
+} from '../math';
 import * as m3 from '../m3';
 import { clipAngle } from './common';
 import { translationPath } from './Path';
@@ -10,38 +12,28 @@ import { rectToPolar } from './coordinates';
 import type { Type3DMatrix } from '../m3';
 import type { TypeParsablePoint } from './Point';
 import type { OBJ_TranslationPath } from './Path';
-// eslint-disable-next-line import/no-cycle
-import { TransformBounds } from '../g2';
-import type { TypeTransformBoundsDefinition } from '../g2';
-// eslint-disable-next-line import/no-cycle
-import { deceleratePoint, decelerateIndependantPoint } from './deceleration';
 
 
-export type ScaleTransform3DComponent = ['s', number, number, number];
-export type TranslateTransform3DComponent = ['t', number, number, number];
-export type RotateTransform3DComponent = ['r', number, number, number];
-export type CustomTransform3DComponent = ['c', number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number];
-export type ScaleTransform2DComponent = ['s', number, number];
-export type TranslateTransform2DComponent = ['t', number, number];
-export type RotateTransform2DComponent = ['r', number];
+export type ScaleTransformComponent = ['s', number, number, number];
+export type TranslateTransformComponent = ['t', number, number, number];
+export type RotateTransformComponent = ['r', number, number, number];
+export type CustomTransformComponent = ['c', number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number];
+// export type ScaleTransform2DComponent = ['s', number, number];
+// export type TranslateTransform2DComponent = ['t', number, number];
+// export type RotateTransform2DComponent = ['r', number];
 
-export type TransformComponent = ScaleTransform3DComponent | ScaleTransform2DComponent
-  | TranslateTransform3DComponent | TranslateTransform2DComponent
-  | RotateTransform3DComponent | RotateTransform2DComponent
-  | CustomTransform3DComponent;
+export type TransformComponent = ScaleTransformComponent
+  | TranslateTransformComponent
+  | RotateTransformComponent
+  | CustomTransformComponent;
 
-export type Transform3DComponent = ScaleTransform3DComponent
-  | TranslateTransform3DComponent
-  | RotateTransform3DComponent
-  | CustomTransform3DComponent;
+// export type TransformComponent = ScaleTransformComponent
+//   | TranslateTransformComponent
+//   | RotateTransformComponent
+//   | CustomTransformComponent;
 
 export type TransformDefinition = Array<TransformComponent>;
-export type Transform3DDefinition = Array<Transform3DComponent>;
-
-type TypeTransformDeceleration = Array<number>;
-type TypeTransformBounds = Array<Bounds | null>;
-type TypeTransformZeroThreshold = Array<number>;
-type TypeTransformBounce = Array<number>;
+// export type TransformDefinition = Array<TransformComponent>;
 
 export type TypeTransformValue = number | Array<number> | {
   scale?: number,
@@ -55,15 +47,15 @@ function distance(p1: Point, p2: Point) {
 }
 
 function makeTransformComponent(
-  component: Transform3DComponent,
+  component: TransformComponent,
   operation: (index: number) => number,
-): Transform3DComponent {
+): TransformComponent {
   const newDef = Array(component.length);
   // eslint-disable-next-line prefer-destructuring
   newDef[0] = component[0];
   for (let j = 1; j < component.length; j += 1) {
     newDef[j] = operation(j);
-  }
+  }  // $FlowFixMe
   return newDef;
 }
 
@@ -78,7 +70,7 @@ function makeTransformComponent(
  * const t1 = new Transform().scale(2, 2).rotate(Math.PI).translate(1, 1)
  */
 class Transform {
-  def: Transform3DDefinition;
+  def: TransformDefinition;
   // order: Array<Translation | Rotation | Scale>;
   mat: Type3DMatrix;
   index: number;
@@ -323,7 +315,7 @@ class Transform {
         m = m3.mul(m, m3.scaleMatrix(x, y, z));
       } else if (type === 'r' && (x !== 0 || y !== 0 || z !== 0)) {
         m = m3.mul(m, m3.rotationMatrix(x, y, z));
-      } else if (type === 'c') {
+      } else if (type === 'c') {  // $FlowFixMe
         m = m3.mul(m, this.def[i].slice(1));
       }
     }
@@ -919,54 +911,9 @@ class Transform {
     const t = new Transform();
     t.name = this.name; // $FlowFixMe
     t.mat = this.mat.slice();
-    t.index = this.index;
+    t.index = this.index;  // $FlowFixMe
     t.def = this.def.map(d => d.slice());
     return t;
-  }
-
-  decelerate(
-    velocity: Transform,
-    decelerationIn: TypeTransformValue,
-    deltaTime: number | null,
-    boundsIn: TypeTransformBounds | TypeTransformBoundsDefinition | 'none',
-    bounceLossIn: TypeTransformValue,
-    zeroVelocityThresholdIn: TypeTransformValue,
-    precision: number = 8,
-  ): { velocity: Transform, transform: Transform, duration: null | number } {
-    const deceleration = transformValueToArray(decelerationIn, this);
-    const bounceLoss = transformValueToArray(bounceLossIn, this);
-    const zeroVelocityThreshold = transformValueToArray(zeroVelocityThresholdIn, this);
-    let bounds;
-    if (boundsIn instanceof TransformBounds) {
-      bounds = boundsIn;
-    } else if (boundsIn === 'none') {
-      bounds = new TransformBounds(this);
-    } else {
-      bounds = new TransformBounds(this, boundsIn);
-    }
-    // const bounds = getTransformBoundsLimit(boundsIn, this);
-    const result = decelerateTransform(
-      this, velocity, deceleration, deltaTime, bounds, bounceLoss, zeroVelocityThreshold, precision,
-    );
-    return {
-      velocity: result.velocity,
-      transform: result.transform,
-      duration: result.duration,
-    };
-  }
-
-  timeToZeroV(
-    velocity: Transform,
-    deceleration: TypeTransformValue,
-    bounds: TypeTransformBounds | TypeTransformBoundsDefinition,
-    bounceLoss: TypeTransformValue,
-    zeroVelocityThreshold: TypeTransformValue,
-    precision: number = 8,
-  ): { velocity: Transform, transform: Transform, duration: null | number } {
-    return this.decelerate(
-      velocity, deceleration, null, bounds, bounceLoss, zeroVelocityThreshold,
-      precision,
-    );
   }
 
   // Return the velocity of each element in the transform
@@ -987,7 +934,7 @@ class Transform {
     const deltaTransform = this.sub(previousTransform);
     for (let i = 0; i < deltaTransform.def.length; i += 1) {
       const t = deltaTransform.def[i]; // $FlowFixMe
-      if (t[0] === 't' || t[0] === 's' || t[0] === 'r') {
+      if (t[0] === 't' || t[0] === 's' || t[0] === 'r') {  // $FlowFixMe
         def.push([t[0], t[1] / deltaTime, t[2] / deltaTime, t[3] / deltaTime]);
       }
     }
@@ -1015,7 +962,6 @@ class Transform {
           0, 1, 0, 0,
           0, 0, 1, 0,
           0, 0, 0, 1,
-          this.name,
         ]);
       } else if (type === 'c' && this.def[i].length === 11) {
         def.push([
@@ -1023,10 +969,9 @@ class Transform {
           1, 0, 0,
           0, 1, 0,
           0, 0, 1,
-          this.name,
         ]);
       }
-    }
+    }  // $FlowFixMe
     return new Transform(def, this.name);
   }
 }
@@ -1086,7 +1031,7 @@ function parseArrayTransformDefinition(defIn: TransformDefinition) {
       name = defIn[i];  // eslint-disable-next-line no-continue
       continue;
     } // $FlowFixMe
-    const [type, x, y, z] = defIn[i];
+    const [type, x, y] = defIn[i];
     if (defIn[i].length === 4) {
       def.push(defIn[i]);
     } else if (defIn[i].length === 3 && type === 't') {
@@ -1111,13 +1056,6 @@ function parseTransform(inTransform: TypeParsableTransform): Transform {
   if (inTransform == null) {
     throw new Error(`FigureOne could not parse transform with no input: '${JSON.stringify(inTransform)}'`);
   }
-  // let onFailToUse = onFail;
-  // if (onFailToUse == null) {
-  //   onFailToUse = null;
-  // }
-  // if (inTransform == null) {
-  //   return onFailToUse;
-  // }
 
   let tToUse = inTransform;
   if (typeof tToUse === 'string') {
@@ -1128,35 +1066,8 @@ function parseTransform(inTransform: TypeParsableTransform): Transform {
     }
   }
 
-  if (Array.isArray(tToUse)) {
-    // const { name, def } = cleanArrayTransfromDefinition
+  if (Array.isArray(tToUse)) { // $FlowFixMe
     const t = new Transform(tToUse);
-
-    // tToUse.forEach((transformElement) => {
-    //   if (typeof transformElement === 'string') {
-    //     t.name = transformElement;
-    //     return;
-    //   }
-    //   if (transformElement.length === 4) {
-    //     t.def.push(transformElement);
-    //     return;
-    //   }
-    //   if (transformElement.length === 3) {
-    //     if (transformElement[0] === 's') {
-    //       t.def.push([...transformElement, 1]);
-    //     } else {
-    //       t.def.push([...transformElement, 0]);
-    //     }
-    //     return;
-    //   }
-    //   if (transformElement.length === 2 && transformElement[0] === 'r') {
-    //     const r = transformElement[1];
-    //     t.def.push(['r', r, r, r]);
-    //     return;
-    //   }
-    //   const [type, value] = transformElement;
-    //   t.def.push([type, value, value, value]);
-    // });
     return t;
   }
   const { f1Type, state } = tToUse;
@@ -1165,29 +1076,8 @@ function parseTransform(inTransform: TypeParsableTransform): Transform {
     && f1Type === 'tf'
     && state != null
     && Array.isArray(state)
-  ) {
+  ) {  // $FlowFixMe
     const t = new Transform(state.slice(1), tToUse.state[0]);
-    // t.name = ;
-    // t.def = ;
-    // for (let i = 1; i < tToUse.state.length; i += 1) {
-    //   t.def.push(tToUse.state[i])
-    // }
-    // tToUse.state.forEach((transformElement) => {
-    //   if (typeof transformElement === 'string') {
-    //     t.name = transformElement;
-    //     return;
-    //   }
-    //   const teF1Type = transformElement.f1Type;
-    //   if (teF1Type != null) {
-    //     if (teF1Type === 's') {  // $FlowFixMe
-    //       t = t.scale(transformElement);
-    //     } else if (teF1Type === 't') {  // $FlowFixMe
-    //       t = t.translate(transformElement);
-    //     } else if (teF1Type === 'r') {  // $FlowFixMe
-    //       t = t.rotate(transformElement);
-    //     }
-    //   }
-    // });
     return t;
   }
   throw new Error(`FigureOne could not parse transform: '${JSON.stringify(inTransform)}'`);
@@ -1253,82 +1143,10 @@ function transformValueToArray(
 }
 
 
-function decelerateTransform(
-  transform: Transform,
-  velocity: Transform,
-  deceleration: TypeTransformDeceleration,
-  deltaTime: number | null,
-  boundsIn: TransformBounds | TypeTransformBoundsDefinition,
-  bounceLoss: TypeTransformBounce,
-  zeroVelocityThreshold: TypeTransformZeroThreshold,
-  precision: number = 8,
-) {
-  let duration = 0;
-  const newDef = [];
-  const newVDef = [];
-
-  let bounds;
-  if (boundsIn instanceof TransformBounds) {
-    bounds = boundsIn;
-  } else {
-    bounds = new TransformBounds(transform, boundsIn);
-  }
-  for (let i = 0; i < transform.def.length; i += 1) {
-    const transformation = transform.def[i];
-    let result;
-    let newTransformation;
-    let newVTransformation;
-    if (transformation[0] === 't') {
-      result = deceleratePoint( // $FlowFixMe
-        new Point(transformation[1], transformation[2], transformation[3]),
-        new Point(velocity.def[i][1], velocity.def[i][2], velocity.def[i][3]),
-        deceleration[i], deltaTime,
-        bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
-        precision,
-      );
-      newTransformation = ['t', result.position.x, result.position.y, result.position.z];
-      newVTransformation = ['t', result.velocity.x, result.velocity.y, result.velocity.z];
-    } else if (transformation[0] === 's' || transformation[0] === 'r') {
-      result = decelerateIndependantPoint( // $FlowFixMe
-        new Point(transformation[1], transformation[2], transformation[3]),
-        new Point(velocity.def[i][1], velocity.def[i][2], velocity.def[i][3]),
-        deceleration[i], deltaTime, // $FlowFixMe
-        bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
-        precision,
-      );
-      newTransformation = [
-        transformation[0],
-        result.point.x, result.point.y, result.point.z,
-      ];
-      newVTransformation = [
-        transformation[0],
-        result.velocity.x, result.velocity.y, result.velocity.z,
-      ];
-    }
-    if (deltaTime === null) {
-      // $FlowFixMe
-      if (result.duration == null || result.duration > duration) {
-        ({ duration } = result);
-      }
-    }
-    newVDef.push(newVTransformation);
-    newDef.push(newTransformation);
-  }
-
-  if (deltaTime != null) {
-    duration = deltaTime;
-  }
-  return {
-    transform: new Transform(newDef, transform.name),
-    velocity: new Transform(newVDef, transform.name),
-    duration,
-  };
-}
-
 export {
   getTransform,
   Transform,
   isParsableTransform,
-  decelerateTransform,
+  transformValueToArray,
 };
 

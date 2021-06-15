@@ -1,9 +1,12 @@
+import { Point } from './Point';
+import { Transform } from './Transform';
 import {
-  Point, RectBounds, LineBounds, RangeBounds,
+  RangeBounds, RectBounds, LineBounds,
+} from './Bounds';
+import {
   deceleratePoint, decelerateValue, decelerateTransform,
-  Transform,
-} from './g2';
-import { round } from './math';
+} from './deceleration';
+import { round } from '../math';
 
 describe('Decelerate Value', () => {
   describe('No Bounds', () => {
@@ -963,7 +966,7 @@ describe('Decelerate Transform from Transform', () => {
     const bounceLoss = { position: 0, scale: 0, rotation: 0 };
     const bounds = {};
     const deltaTime = 1;
-    const result = t.decelerate(v, d, deltaTime, bounds, bounceLoss, z);
+    const result = decelerateTransform(t, v, d, deltaTime, bounds, bounceLoss, z);
 
     expect(round(result.duration)).toBe(1);
     expect(result.velocity.t().round(3)).toEqual(new Point(4.293, 4.293));
@@ -991,7 +994,7 @@ describe('Decelerate Transform from Transform', () => {
     };
     // const bounds = [null, null, null];
     const deltaTime = 2;
-    const result = t.decelerate(v, d, deltaTime, bounds, bounceLoss, z);
+    const result = decelerateTransform(t, v, d, deltaTime, bounds, bounceLoss, z);
 
     expect(round(result.duration)).toBe(2);
     expect(result.velocity.t().round(3)).toEqual(new Point(-3.586, -3.586));

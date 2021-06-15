@@ -1,9 +1,11 @@
+import { Point, getPoint } from './Point';
+import { Transform } from './Transform';
+import { Line } from './Line';
 import {
-  Point, Transform, getPoint, Line,
-  RectBounds, LineBounds, RangeBounds, TransformBounds,
-  clipAngle, getBounds,
-} from './g2';
-import { round } from './math';
+  RectBounds, LineBounds, RangeBounds, TransformBounds, getBounds,
+} from './Bounds';
+import { clipAngle } from './common';
+import { round } from '../math';
 
 describe('Bounds', () => {
   let bounds;

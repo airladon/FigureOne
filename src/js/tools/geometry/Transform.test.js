@@ -1,9 +1,7 @@
-import {
-  Point, Transform,
-  // TransformLimit,
-  getTransform, Translation, Rotation, Scale,
-} from './g2';
-import { round } from './math';
+import { Point } from './Point';
+import { Transform, getTransform } from './Transform';
+import { decelerateTransform } from './deceleration';
+import { round } from '../math';
 
 /* eslint-disable object-curly-newline */
 
@@ -254,7 +252,7 @@ describe('Transform', () => {
       expect(t.s()).toEqual({ x: 0, y: 0, z: 1, _type: 'point' });
       expect(t.s(0)).toEqual({ x: 0, y: 0, z: 1, _type: 'point' });
       expect(t.s(1)).toEqual({ x: 1, y: 1, z: 1, _type: 'point' });
-      expect(() => t.s(2)).toThrow()
+      expect(() => t.s(2)).toThrow();
     });
     test('Update scale', () => {
       const t = new Transform()
@@ -609,7 +607,7 @@ describe('Transform', () => {
       const t1 = new Transform().scale(1, 1).rotate(1).translate(1, 1);
       const t2 = t1.constant(2);
       // This will need to change when 3D is properly supported
-      expect(t2.def).toEqual([['s', 2, 2, 2,], ['r', 2, 2, 2], ['t', 2, 2, 2]]);
+      expect(t2.def).toEqual([['s', 2, 2, 2], ['r', 2, 2, 2], ['t', 2, 2, 2]]);
     });
     test('Rounding', () => {
       const t1 = new Transform()
@@ -773,7 +771,7 @@ describe('Transform', () => {
         // Transform().scale(5, 5).rotate(5).translate(5, 5);
       });
       test('Simple deceleration', () => {
-        const n = t.decelerate(v, d, 1, {}, {}, z);     // next v and t
+        const n = decelerateTransform(t, v, d, 1, {}, {}, z);     // next v and t
         expect(n.velocity.round()).toEqual(new Transform()
           .scale(9, 9, 0).rotate(9).translate(9, 9, 0));
         expect(n.transform).toEqual(new Transform()
@@ -783,7 +781,7 @@ describe('Transform', () => {
         // d = new TransformLimit(Math.sqrt(2), 1, Math.sqrt(2));
         // d = { scale: Math.sqrt(2), translation: Math.sqrt(2), rotation: 1 };
         v = new Transform().scale(10, -10).rotate(-10).translate(10, -10);
-        const n = t.decelerate(v, d, 1, {}, {}, z);     // next v and t
+        const n = decelerateTransform(t, v, d, 1, {}, {}, z);     // next v and t
         expect(n.velocity.round()).toEqual(new Transform()
           .scale(9, -9, 0).rotate(-9).translate(9, -9));
         expect(n.transform.round()).toEqual(new Transform()
@@ -793,7 +791,7 @@ describe('Transform', () => {
         // d = new TransformLimit(Math.sqrt(2), 1, Math.sqrt(2));
         v = new Transform().scale(10, -10).rotate(-10).translate(10, -10);
         // z = new TransformLimit(5, 5, 5);
-        const n = t.decelerate(v, d, 10, {}, {}, z);     // next v and t
+        const n = decelerateTransform(t, v, d, 10, {}, {}, z);     // next v and t
         expect(n.velocity.round()).toEqual(new Transform()
           .scale(0, 0, 0).rotate(0).translate(0, 0));
         expect(n.transform.round()).toEqual(new Transform()
@@ -881,7 +879,7 @@ describe('Transform', () => {
       expect(t.name).toBe('Name1');
     });
     test('Fail undefined', () => {
-      expect(() => t = getTransform()).toThrow();
+      expect(() => getTransform()).toThrow();
     });
     test('Fail bad json', () => {
       expect(() => getTransform('asdf')).toThrow();
