@@ -288,13 +288,13 @@ class Line {
   //   return -this.A / this.B;
   // }
 
-  // /**
-  //  * Get the angle of the line from p1 to p2
-  //  * @return {number}
-  //  */
-  // angle() {
-  //   return this.ang;
-  // }
+  /**
+   * Get the angle of the line from p1 to p2
+   * @return {number}
+   */
+  angle() {
+    return Math.atan2(this.p2.y - this.p1.y, this.p2.x - this.p1.x);
+  }
 
   /**
    * Return a duplicate line with values rounded to `precision`

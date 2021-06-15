@@ -2,6 +2,7 @@
 
 import * as m2 from '../../../tools/m2';
 import * as m3 from '../../../tools/m3';
+import { isPointInPolygon } from '../../../tools/geometry/polygon';
 import {
   Point, getPoint, Rect, getBoundingBorder, getBorder, isBuffer,
 } from '../../../tools/g2';
@@ -562,7 +563,7 @@ class TextObjectBase extends DrawingObject {
   click(p: Point, fnMap: FunctionMap) {
     this.text.forEach((text) => {
       if (text.onClick != null) {
-        if (p.isInPolygon(text.textBorderBuffer)) {
+        if (isPointInPolygon(p, text.textBorderBuffer)) {
           fnMap.exec(text.onClick, fnMap);
         }
       }

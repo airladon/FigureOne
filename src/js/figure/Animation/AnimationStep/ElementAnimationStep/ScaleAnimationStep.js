@@ -1,6 +1,6 @@
 // @flow
 import {
-  Transform, Point, getMaxTimeFromVelocity, getScale,
+  Transform, Point, getMaxTimeFromVelocity, getScale, toDelta,
 } from '../../../../tools/g2';
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
@@ -193,7 +193,7 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
     const p = percentComplete;
 
     if (this.scale.start != null && this.scale.delta != null) {
-      const next = this.scale.start.toDelta(this.scale.delta, p);
+      const next = toDelta(this.scale.start, this.scale.delta, p);
       if (this.element != null) {
         this.element.setScale(next);
       }

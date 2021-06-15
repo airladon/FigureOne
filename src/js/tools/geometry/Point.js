@@ -706,5 +706,6 @@ export {
   getPoint,
   getScale,
   getPoints,
+  parsePoint,
   Point,
 };

@@ -16,6 +16,7 @@ import type {
   TypeTransformValue, TypeTransformBoundsDefinition,
   TypeBorder, TypeParsableBuffer, Bounds,
 } from '../tools/g2';
+import { isPointInPolygon } from '../tools/geometry/polygon';
 import { Recorder } from './Recorder/Recorder';
 import * as m2 from '../tools/m2';
 import * as m3 from '../tools/m3';
@@ -3116,7 +3117,7 @@ class FigureElement {
     for (let i = 0; i < borders.length; i += 1) {
       const border = borders[i];
       if (border.length > 2) {
-        if (vertexLocation.isInPolygon(border)) {
+        if (isPointInPolygon(vertexLocation, border)) {
           let isTouched = true;
           // $FlowFixMe
           if (this.cannotTouchHole) {
@@ -3124,7 +3125,7 @@ class FigureElement {
               const holeBorder = holeBorders[j];
               if (holeBorder.length > 2) {
                 if (Array.isArray(holeBorder) && holeBorder.length > 2) {
-                  if (vertexLocation.isInPolygon(holeBorder)) {
+                  if (isPointInPolygon(vertexLocation, holeBorder)) {
                     isTouched = false;
                     j = holeBorders.length;
                   }

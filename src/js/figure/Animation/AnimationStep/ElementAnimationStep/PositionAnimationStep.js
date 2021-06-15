@@ -1,6 +1,6 @@
 // @flow
 import {
-  Transform, Point, getMaxTimeFromVelocity, getPoint, getScale,
+  Transform, Point, getMaxTimeFromVelocity, getPoint, getScale, toDelta,
 } from '../../../../tools/g2';
 import type { OBJ_TranslationPath } from '../../../../tools/g2';
 import {
@@ -243,7 +243,8 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     const p = percentComplete;
 
     if (this.position.delta != null && this.position.start != null) {
-      const next = this.position.start.toDelta(
+      const next = toDelta(
+        this.position.start,
         this.position.delta, p,
         this.position.path.style,
         this.position.path,
