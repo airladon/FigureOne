@@ -24,6 +24,7 @@ import { rectToPolar, polarToRect } from './geometry/coordinates';
 import {
   RectBounds, LineBounds, Bounds, TransformBounds, RangeBounds, getBounds,
 } from './geometry/Bounds';
+import type { TypeTransformBoundsDefinition } from './geometry/Bounds';
 import {
   deg, minAngleDiff, getDeltaAngle3D, getDeltaAngle, normAngleTo90,
   threePointAngle, threePointAngleMin, normAngle, clipAngle,
@@ -44,6 +45,7 @@ export type {
   Type2Components,
   TypeParsablePlane,
   TypeRotationDirection,
+  TypeTransformBoundsDefinition,
 };
 
 function isTransformArrayZero(

@@ -78,6 +78,18 @@ class Plane {
   p: Point;  // Point on plane
   n: Point;  // Plane normal
 
+  static xy() {
+    return new Plane([0, 0, 0], [0, 0, 1]);
+  }
+
+  static xz() {
+    return new Plane([0, 0, 0], [0, 1, 0]);
+  }
+
+  static yz() {
+    return new Plane([0, 0, 0], [1, 0, 0]);
+  }
+
   constructor(  // $FlowFixMe
     p1OrDef: TypeParsablePlane | TypeParsablePoint = [[0, 0, 0], [0, 0, 1]],
     normalOrP2: null | TypeParsablePoint = null,

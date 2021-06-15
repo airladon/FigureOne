@@ -18,10 +18,8 @@ import type {
 } from '../tools/g2';
 import { isPointInPolygon } from '../tools/geometry/polygon';
 import { Recorder } from './Recorder/Recorder';
-import * as m2 from '../tools/m2';
 import * as m3 from '../tools/m3';
 import type { Type3DMatrix } from '../tools/m3';
-import type { Type2DMatrix } from '../tools/m2';
 // import type { pathOptionsType, TypeRotationDirection } from '../tools/g2';
 import * as math from '../tools/math';
 import HTMLObject from './DrawingObjects/HTMLObject/HTMLObject';
@@ -145,7 +143,7 @@ function transformByMatrix(
   const newTransforms = [];
   for (let i = 0; i < inputTransforms.length; i += 1) {
     for (let j = 0; j < copyTransforms.length; j += 1) {
-      newTransforms.push(m2.mul(inputTransforms[i], copyTransforms[j]));
+      newTransforms.push(m3.mul(inputTransforms[i], copyTransforms[j]));
     }
   }
   return newTransforms;
@@ -1445,14 +1443,14 @@ class FigureElement {
   getDrawTransformsMatrix(initialTransforms: Array<Array<number>>) {
     let drawTransforms = initialTransforms;
     if (this.copyTransforms.length > 0) {
-      drawTransforms = transformByMatrix(drawTransforms, this.copyTransforms.map(t => t.mat));
+      drawTransforms = transformByMatrix(drawTransforms, this.copyTransforms.map(t => t.matrix()));
     }
     if (this.pulseTransforms.length > 0) {
-      drawTransforms = transformByMatrix(drawTransforms, this.pulseTransforms.map(t => t.mat));
+      drawTransforms = transformByMatrix(drawTransforms, this.pulseTransforms.map(t => t.matrix()));
     }
     if (this.frozenPulseTransforms.length > 0) {
       drawTransforms = transformByMatrix(
-        drawTransforms, this.frozenPulseTransforms.map(t => t.mat),
+        drawTransforms, this.frozenPulseTransforms.map(t => t.matrix()),
       );
     }
     return drawTransforms;
@@ -2463,7 +2461,7 @@ class FigureElement {
   //   );
   // }
 
-  spaceTransformMatrix(from: string, to: string): Type3DMatrix | Type2DMatrix {
+  spaceTransformMatrix(from: string, to: string): Type3DMatrix {
     // All Vertex related conversions
     if (from === to) {
       return new Transform().identity().matrix();

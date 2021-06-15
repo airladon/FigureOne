@@ -35,6 +35,23 @@ describe('Plane', () => {
       expect(p.n.round()).toEqual(point(-1, 2, 4).normalize().round());
     });
   });
+  describe('Default planes', () => {
+    test('xy', () => {
+      const xy = Plane.xy();
+      expect(xy.p).toEqual(point(0, 0, 0));
+      expect(xy.n).toEqual(point(0, 0, 1));
+    });
+    test('xz', () => {
+      const xz = Plane.xz();
+      expect(xz.p).toEqual(point(0, 0, 0));
+      expect(xz.n).toEqual(point(0, 1, 0));
+    });
+    test('yz', () => {
+      const yz = Plane.yz();
+      expect(yz.p).toEqual(point(0, 0, 0));
+      expect(yz.n).toEqual(point(1, 0, 0));
+    });
+  });
   describe('getPlane', () => {
     test('Array definition', () => {
       const p = new Plane([[1, 0, 0], [0, 0, 1]]);
