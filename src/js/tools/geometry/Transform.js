@@ -518,10 +518,11 @@ class Transform {
   }
 
   /**
-   * Return an interpolated transform between this transform and `delta` at
-   * some `percent` between the two.
+   * Return a linearly interpolated transform between this transform and
+   * `delta` at some `percent` between the two.
    *
-   * Interpolation can either be `'linear'` or '`curved'`.
+   * For translation transform components, interpolation can either be
+   * `'linear'` or '`curved'`.
    * @return {Transform}
    */
   toDelta(
@@ -530,23 +531,21 @@ class Transform {
     translationStyle: 'linear' | 'curved' | 'curve',
     translationOptions: OBJ_TranslationPath,
   ) {
-    const calcTransform = this._dup();
+    const out = this._dup();
     for (let i = 0; i < this.def.length; i += 1) {
       const stepStart = this.def[i];
       const stepDelta = delta.def[i];
       if (
-        (stepStart[0] === 's' && stepDelta[0] === 's')
-        || (stepStart[0] === 'r' && stepDelta[0] === 'r')
+        stepStart[0] === stepDelta[0]
+        && stepStart[0] !== 't'
+        && stepStart.length === stepDelta.length
       ) {
         // $FlowFixMe
-        calcTransform.def[i] = [ // $FlowFixMe
+        out.def[i] = [
           stepStart[0],
-          stepDelta[1] * percent + stepStart[1],
-          stepDelta[2] * percent + stepStart[2],
-          stepDelta[3] * percent + stepStart[3],
+          ...stepDelta.slice(1).map((d, i) => d * percent + stepStart[i + 1]),
         ];
-      }
-      if (stepStart[0] === 't' && stepDelta[0] === 't') {
+      } else if (stepStart[0] === 't' && stepDelta[0] === 't') {
         const start = new Point(stepStart[1], stepStart[2], stepStart[3]);
         const sDelta = new Point(stepDelta[1], stepDelta[2], stepDelta[3]);
         const p = translationPath(
@@ -554,11 +553,11 @@ class Transform {
           start, sDelta, percent,
           translationOptions,
         );
-        calcTransform.def[i] = ['t', p.x, p.y, p.z];
+        out.def[i] = ['t', p.x, p.y, p.z];
       }
     }
-    calcTransform.calcAndSetMatrix();
-    return calcTransform;
+    out.calcAndSetMatrix();
+    return out;
   }
 
   /**
@@ -642,34 +641,18 @@ class Transform {
    * @return {boolean}
    */
   isEqualTo(transformToCompare: Transform, precision: number = 8): boolean {
-    if (!this.isEqualShapeTo(transformToCompare)) {
+    if (transformToCompare.def.length !== this.def.length) {
       return false;
     }
     for (let i = 0; i < this.def.length; i += 1) {
-      const compare = transformToCompare.def[i];
-      const thisTrans = this.def[i];
-      const [thisType] = thisTrans;
-      const [compareType] = compare;
-      if (thisType !== compareType) {
+      const a = this.def[i];
+      const b = transformToCompare.def[i];
+      if (a[0] !== b[0]) {
         return false;
       }
-      if (thisType === 't' || thisType === 's' || thisType === 'r') {
-        const [, x, y, z] = thisTrans;
-        const [, x1, y1, z1] = compare;
-        if (roundNum(x, precision) !== roundNum(x1, precision)) {
+      for (let j = 1; j < a.length; j += 1) {
+        if (roundNum(a[j], precision) !== roundNum(b[j], precision)) {
           return false;
-        }
-        if (roundNum(y, precision) !== roundNum(y1, precision)) {
-          return false;
-        }
-        if (roundNum(z, precision) !== roundNum(z1, precision)) {
-          return false;
-        }
-      } else if (thisType === 'c') {
-        for (let j = 1; j < thisTrans.length - 1; j += 1) {
-          if (roundNum(thisTrans[j], precision) !== roundNum(compare[j], precision)) {
-            return false;
-          }
         }
       }
     }
@@ -683,44 +666,26 @@ class Transform {
    * be more useful than rounding when values are close to rounding thresholds.
    * @return {boolean}
    */
-  isWithinDelta(transformToCompare: Transform, delta: number = 0.00000001) {
-    if (!this.isEqualShapeTo(transformToCompare)) {
+  isWithinDelta(transformToCompare: Transform, delta: number = 0.00000001): boolean {
+    if (transformToCompare.def.length !== this.def.length) {
       return false;
     }
     for (let i = 0; i < this.def.length; i += 1) {
-      const compare = transformToCompare.def[i];
-      const thisTrans = this.def[i];
-      const [thisType] = thisTrans;
-      const [compareType] = compare;
-      if (thisType !== compareType) {
+      const a = this.def[i];
+      const b = transformToCompare.def[i];
+      if (a[0] !== b[0]) {
         return false;
       }
-      if (thisType === 't' || thisType === 's' || thisType === 'r') {
-        const [, x, y, z] = thisTrans;
-        const [, x1, y1, z1] = compare;
-        if (Math.abs(x - x1) > delta) {
+      for (let j = 1; j < a.length; j += 1) {
+        if (Math.abs(a[j] - b[j]) > delta) {
           return false;
-        }
-        if (Math.abs(y - y1) > delta) {
-          return false;
-        }
-        if (Math.abs(z - z1) > delta) {
-          return false;
-        }
-      } else if (thisType === 'c') {
-        for (let j = 1; j < thisTrans.length - 1; j += 1) {
-          if (Math.abs(thisTrans[j] - compare[j])) {
-            return false;
-          }
         }
       }
     }
     return true;
   }
 
-  // Subtract a transform from the current one.
-  // If the two transforms have different order types, then just return
-  // the current transform.
+
   /**
    * Subtract each chain element in `transformToSubtract` from each chain
    * element in this transform chain. Both transform
@@ -729,17 +694,27 @@ class Transform {
    * @see <a href="#transformissimilarto">Transform.isEqualShapeTo</a>
    */
   sub(transformToSubtract: Transform = new Transform()): Transform {
+    if (!this.isEqualShapeTo(transformToSubtract)) {
+      throw new Error(`Cannot subtract transforms of different shape: '${this.def}', '${transformToSubtract.def}'`);
+    }
     const def = [];
     for (let i = 0; i < this.def.length; i += 1) {
-      if (this.def[i][0] !== transformToSubtract.def[i][0]) {
-        throw new Error(`Cannot subtract transforms with different shapes: '${JSON.stringify(this.def)}' - '${JSON.stringify(transformToSubtract.def)}'`);
-      }
-      def.push(makeTransformComponent(
-        this.def[i],  // $FlowFixMe
-        j => this.def[i][j] - transformToSubtract.def[i][j],
-      ));
-    }  // $FlowFixMe
+      const a = this.def[i];
+      const b = transformToSubtract.def[i];
+      def.push([a[0], ...a.slice(1).map((v, j) => v - b[j + 1])]);
+    }
     return new Transform(def, this.name);
+    // const def = [];
+    // for (let i = 0; i < this.def.length; i += 1) {
+    //   if (this.def[i][0] !== transformToSubtract.def[i][0]) {
+    //     throw new Error(`Cannot subtract transforms with different shapes: '${JSON.stringify(this.def)}' - '${JSON.stringify(transformToSubtract.def)}'`);
+    //   }
+    //   def.push(makeTransformComponent(
+    //     this.def[i],  // $FlowFixMe
+    //     j => this.def[i][j] - transformToSubtract.def[i][j],
+    //   ));
+    // }  // $FlowFixMe
+    // return new Transform(def, this.name);
   }
 
   // Add a transform to the current one.
@@ -753,17 +728,30 @@ class Transform {
    * @see <a href="#transformissimilarto">Transform.isEqualShapeTo</a>
    */
   add(transformToAdd: Transform = new Transform()): Transform {
+    if (!this.isEqualShapeTo(transformToAdd)) {
+      throw new Error(`Cannot add transforms of different shape: '${this.def}', '${transformToAdd.def}'`);
+    }
     const def = [];
     for (let i = 0; i < this.def.length; i += 1) {
-      if (this.def[i][0] !== transformToAdd.def[i][0]) {
-        throw new Error(`Cannot add transforms with different shapes: '${JSON.stringify(this.def)}' - '${JSON.stringify(transformToAdd.def)}'`);
-      }
-      def.push(makeTransformComponent(
-        this.def[i],  // $FlowFixMe
-        j => this.def[i][j] + transformToAdd.def[i][j],
-      ));
+      const a = this.def[i];
+      const b = transformToAdd.def[i];
+      def.push([a[0], ...a.slice(1).map((v, j) => v + b[j + 1])]);
     }
     return new Transform(def, this.name);
+    // if (!this.isEqualShapeTo(transformToAdd)) {
+    //   throw new Error(`Cannot add transforms of different shape: '${this.def}', '${transformToAdd.def}'`);
+    // }
+    // const def = [];
+    // for (let i = 0; i < this.def.length; i += 1) {
+    //   if (this.def[i][0] !== transformToAdd.def[i][0]) {
+    //     throw new Error(`Cannot add transforms with different shapes: '${JSON.stringify(this.def)}' - '${JSON.stringify(transformToAdd.def)}'`);
+    //   }
+    //   def.push(makeTransformComponent(
+    //     this.def[i],  // $FlowFixMe
+    //     j => this.def[i][j] + transformToAdd.def[i][j],
+    //   ));
+    // }
+    // return new Transform(def, this.name);
   }
 
   // transform step wise multiplication
@@ -775,17 +763,28 @@ class Transform {
    * @see <a href="#transformissimilarto">Transform.isEqualShapeTo</a>
    */
   mul(transformToMultiply: Transform = new Transform()): Transform {
+    if (!this.isEqualShapeTo(transformToAdd)) {
+      throw new Error(`Cannot multiply transforms of different shape: '${this.def}', '${transformToAdd.def}'`);
+    }
     const def = [];
     for (let i = 0; i < this.def.length; i += 1) {
-      if (this.def[i][0] !== transformToMultiply.def[i][0]) {
-        throw new Error(`Cannot multiply transforms with different shapes: '${JSON.stringify(this.def)}' - '${JSON.stringify(transformToMultiply.def)}'`);
-      }
-      def.push(makeTransformComponent(
-        this.def[i],  // $FlowFixMe
-        j => this.def[i][j] * transformToMultiply.def[i][j],
-      ));
+      const a = this.def[i];
+      const b = transformToAdd.def[i];
+      def.push([a[0], ...a.slice(1).map((v, j) => v * b[j + 1])]);
     }
     return new Transform(def, this.name);
+
+    // const def = [];
+    // for (let i = 0; i < this.def.length; i += 1) {
+    //   if (this.def[i][0] !== transformToMultiply.def[i][0]) {
+    //     throw new Error(`Cannot multiply transforms with different shapes: '${JSON.stringify(this.def)}' - '${JSON.stringify(transformToMultiply.def)}'`);
+    //   }
+    //   def.push(makeTransformComponent(
+    //     this.def[i],  // $FlowFixMe
+    //     j => this.def[i][j] * transformToMultiply.def[i][j],
+    //   ));
+    // }
+    // return new Transform(def, this.name);
   }
 
   /**
@@ -830,7 +829,7 @@ class Transform {
     for (let i = 0; i < this.def.length; i += 1) {
       def.push(makeTransformComponent(
         this.def[i], // $FlowFixMe
-        j => round(this.def[i][j], precision),
+        j => roundNum(this.def[i][j], precision),
       ));
     }
     return new Transform(def, this.name);
@@ -841,7 +840,7 @@ class Transform {
    * Return a duplicate transform that is clipped to `minTransform` and
    * `maxTransform`. Both `minTransform` and `maxTransform` must be similar
    * to this transform meaning they must all share the same order of
-   * {@link Rotation}, {@link Scale} and {@link Translation} transform elements.
+   * transform components.
    *
    * Use `limitLine` to clip the first {@link Translation} transform in the
    * chain to within a {@link Line}.
@@ -853,8 +852,9 @@ class Transform {
     limitLine: null | Line,
   ) {
     if (!this.isEqualShapeTo(minTransform) || !this.isEqualShapeTo(maxTransform)) {
-      return this._dup();
+      throw new Error(`Cannot clip transforms of different shape: t: '${this.def}', min: '${minTransform.def}', max: '${maxTransform.def}'`);
     }
+
     const def = [];
     for (let i = 0; i < this.def.length; i += 1) {
       const t = this.def[i];
