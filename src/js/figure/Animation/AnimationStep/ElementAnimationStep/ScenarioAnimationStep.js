@@ -297,7 +297,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       return [this.duration, this.duration, this.duration];
     }
 
-    let transformVelocity = element.transform._dup().constant(1);
+    let transformVelocity = element.transform.identity();
     const colorVelocity = velocity.color == null ? 1 : velocity.color;
     const opacityVelocity = velocity.opacity == null ? 1 : velocity.opacity;
 
@@ -313,9 +313,30 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     if (velocity.scale != null && transformVelocity.hasComponent('s')) {
       transformVelocity.updateScale(getScale(velocity.scale));
     }
-    if (velocity.rotation != null && transformVelocity.hasComponent('r')) {
-      transformVelocity.updateRotation(velocity.rotation);
+    if (velocity.rotation != null) {
+      for (let i = 0; i < transformVelocity.def.length; i += 1) {
+        const [type] = transformVelocity.def[i];
+        if (type === 'r') {
+          transformVelocity.def[i] = ['r', velocity.rotation];
+        }
+        if (type === 'rs') {
+          transformVelocity.def[i] = ['rs', velocity.rotation, velocity.rotation];
+        }
+        if (type === 'rc') {
+          transformVelocity.def[i] = ['rc', velocity.rotation, velocity.rotation, velocity.rotation];
+        }
+        if (type === 'rd') {
+          transformVelocity.def[i] = ['rc', velocity.rotation, velocity.rotation, velocity.rotation];
+        }
+        if (type === 'ra') {
+          transformVelocity.def[i] = ['ra', velocity.rotation, velocity.rotation, velocity.rotation, velocity.rotation];
+        }
+      }
+      transformVelocity.calcAndSetMatrix();
     }
+    // if (velocity.rotation != null && transformVelocity.hasComponent('r')) {
+    //   transformVelocity.updateRotation(velocity.rotation);
+    // }
 
     let transformDuration = 0;
     const startTransform = start.transform;

@@ -16,9 +16,8 @@ describe('Figure Recorder', () => {
       {
         name: 'a',
         make: 'polygon',
-        options: {
-          color: [1, 0, 0, 1],
-        },
+        color: [1, 0, 0, 1],
+        transform: [['s', 1, 1], ['r', 0], ['t', 0, 0]],
       },
     ]);
     figure.initialize();

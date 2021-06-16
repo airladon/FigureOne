@@ -10,7 +10,7 @@ import { toDelta } from './geometry/Path';
 import {
   Plane, getPlane, isParsablePlane, getNormal,
 } from './geometry/Plane';
-import type { TypeParsablePlane } from './geometry/Plane';
+import type { TypeParsablePlane, OBJ_TranslationPath } from './geometry/Plane';
 import { Line, getLine } from './geometry/Line';
 import {
   Transform, getTransform, isParsableTransform,
@@ -50,6 +50,7 @@ export type {
   TypeParsablePlane,
   TypeRotationDirection,
   TypeTransformBoundsDefinition,
+  OBJ_TranslationPath,
 };
 
 function isTransformArrayZero(

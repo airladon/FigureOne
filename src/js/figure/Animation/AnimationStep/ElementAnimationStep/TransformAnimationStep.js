@@ -1,7 +1,7 @@
 // @flow
 import {
   Transform,
-  Rotation, getDeltaAngle, getMaxTimeFromVelocity,
+  getDeltaAngle, getMaxTimeFromVelocity,
   getTransform,
 } from '../../../../tools/g2';
 import type { OBJ_TranslationPath } from '../../../../tools/g2';
@@ -227,20 +227,24 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     // if delta is null, then calculate it from start and target
     if (this.transform.delta == null && this.transform.target != null) {
       const delta = this.transform.target.sub(this.transform.start);
+      const direction = this.transform;
       delta.def.forEach((deltaStep, index) => {
-        const startStep = this.transform.start.def[index];
-        const targetStep = this.transform.target.def[index];
-        if (deltaStep[0] === 'r'
-          && startStep[0] === 'r'
-          && targetStep[0] === 'r') {
-          const rotDiff = getDeltaAngle(
-            startStep[3],
-            targetStep[3],
-            this.transform.rotDirection,
-          );
-          // eslint-disable-next-line no-param-reassign
-          deltaStep[3] = rotDiff;
+        const start = this.transform.start.def[index];
+        const target = this.transform.target.def[index];
+        /* eslint-disable no-param-reassign */
+        if (deltaStep[0] === 'r') {
+          deltaStep[1] = getDeltaAngle(start[1], target[1], direction);
+        } else if (deltaStep[0] === 'rs') {
+          deltaStep[1] = getDeltaAngle(start[1], target[1], direction);
+          deltaStep[2] = getDeltaAngle(start[2], target[2], direction);
+        } else if (deltaStep[0] === 'rc') {
+          deltaStep[1] = getDeltaAngle(start[1], target[1], direction);
+          deltaStep[2] = getDeltaAngle(start[2], target[2], direction);
+          deltaStep[3] = getDeltaAngle(start[3], target[3], direction);
+        } else if (deltaStep[0] === 'ra') {
+          deltaStep[4] = getDeltaAngle(start[4], target[4], direction);
         }
+        /* eslint-enable no-param-reassign */
       });
       this.transform.delta = delta;
     } else if (this.transform.delta != null) {

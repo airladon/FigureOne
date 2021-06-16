@@ -15,7 +15,7 @@ const col = (c, numVertices) => {
 const makeRod = (length, radius, sides, rx, ry, rz) => {
   const corners = Fig.tools.morph.getPolygonCorners({ radius, sides });
   const cornersZ = corners.map(c => c.add(0, 0, length));
-  const t = new Fig.Transform().rotate(rx, ry, rz);
+  const t = new Fig.Transform().rotate('xyz', rx, ry, rz);
   const tc = corners.map(c => c.transformBy(t.mat));
   const tcZ = cornersZ.map(c => c.transformBy(t.mat));
   const frontNormal = new Fig.Point(0, 0, -1).transformBy(t.mat);
@@ -98,7 +98,7 @@ makeAxis('z', [0, 0, 1, 1], 0, 0, 0, [0, 0, -0.5]);
 
 const addSphere = (name, position, color) => {
   // const [sx, sn] = makeSphere(0.05, 10);
-  const [sx, sn] = sphere({ radius: 0.05, sides: 4, normals: 'curved' });
+  const [sx, sn] = sphere({ radius: 0.05, sides: 10, normals: 'curved' });
   const s = figure.add({
     name,
     make: 'gl',

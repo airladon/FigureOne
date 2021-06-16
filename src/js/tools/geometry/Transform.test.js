@@ -51,6 +51,24 @@ describe('Transform', () => {
       const p1 = p0.transformBy(t1.matrix());
       expect(p1.round()).toEqual(new Point(-8, 3));
     });
+    test('Create axis angle rotation', () => {
+      const t1 = new Transform().rotate('axis', [0, 1, 0], Math.PI / 2);
+      const p0 = new Point(1, 0, 0);
+      const p1 = p0.transformBy(t1.matrix());
+      expect(p1.round()).toEqual(new Point(0, 0, -1));
+    });
+    test('Create direction rotation', () => {
+      const t1 = new Transform().rotate('dir', [0, 1, 0]);
+      const p0 = new Point(1, 0, 0);
+      const p1 = p0.transformBy(t1.matrix());
+      expect(p1.round()).toEqual(new Point(0, 1, 0));
+    });
+    test('Create spherical rotation', () => {
+      const t1 = new Transform().rotate('sph', 0, Math.PI / 2);
+      const p0 = new Point(1, 0, 0);
+      const p1 = p0.transformBy(t1.matrix());
+      expect(p1.round()).toEqual(new Point(0, 0, 1));
+    });
   });
   describe('Create 3D', () => {
     test('Create rotation', () => {

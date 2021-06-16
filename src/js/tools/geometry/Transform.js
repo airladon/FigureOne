@@ -359,11 +359,11 @@ class Transform {
       } else if (type === 'rc') {
         m = m3.mul(m, m3.rotationMatrixXYZ(x, y, z));
       } else if (type === 'rd') {
-        m = m3.mul(m, m3.rotationMatrixDirection(x, y, z));
+        m = m3.mul(m, m3.rotationMatrixDirection([x, y, z]));
       } else if (type === 'rs') {
         m = m3.mul(m, m3.rotationMatrixSpherical(x, y));
       } else if (type === 'ra') {
-        m = m3.mul(m, m3.rotationMatrixAxis(x, y, z, this.def[i][4]));
+        m = m3.mul(m, m3.rotationMatrixAxis([x, y, z], this.def[i][4]));
       } else if (type === 'c') {  // $FlowFixMe
         m = m3.mul(m, this.def[i].slice(1));
       }
