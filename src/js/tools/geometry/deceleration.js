@@ -335,7 +335,11 @@ function decelerateTransform(
       );
       newTransformation = ['t', result.position.x, result.position.y, result.position.z];
       newVTransformation = ['t', result.velocity.x, result.velocity.y, result.velocity.z];
-    } else if (transformation[0] === 's' || transformation[0] === 'r') {
+    } else if (
+      transformation[0] === 's'
+      || transformation[0] === 'rc'
+      || transformation[0] === 'rd'
+    ) {
       result = decelerateIndependantPoint( // $FlowFixMe
         new Point(transformation[1], transformation[2], transformation[3]),
         new Point(velocity.def[i][1], velocity.def[i][2], velocity.def[i][3]),
@@ -351,6 +355,70 @@ function decelerateTransform(
         transformation[0],
         result.velocity.x, result.velocity.y, result.velocity.z,
       ];
+    } else if (
+      transformation[0] === 'r'
+    ) {
+      result = decelerateValue( // $FlowFixMe
+        transformation[1],
+        velocity.def[i][1],
+        deceleration[i], deltaTime, // $FlowFixMe
+        bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
+        precision,
+      );
+      newTransformation = [
+        transformation[0],
+        result.value,
+      ];
+      newVTransformation = [
+        transformation[0],
+        result.velocity,
+      ];
+    } else if (
+      transformation[0] === 'rs'
+    ) {
+      result = decelerateIndependantPoint( // $FlowFixMe
+        new Point(transformation[1], transformation[2], 0),
+        new Point(velocity.def[i][1], velocity.def[i][2], 0),
+        deceleration[i], deltaTime, // $FlowFixMe
+        bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
+        precision,
+      );
+      newTransformation = [
+        transformation[0],
+        result.point.x, result.point.y,
+      ];
+      newVTransformation = [
+        transformation[0],
+        result.velocity.x, result.velocity.y,
+      ];
+    } else if (
+      transformation[0] === 'ra'
+    ) {
+      const result1 = decelerateIndependantPoint( // $FlowFixMe
+        new Point(transformation[1], transformation[2], transformation[3]),
+        new Point(velocity.def[i][1], velocity.def[i][2], velocity.def[i][3]),
+        deceleration[i], deltaTime, // $FlowFixMe
+        bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
+        precision,
+      );
+      const result2 = decelerateValue( // $FlowFixMe
+        transformation[4],
+        velocity.def[i][4],
+        deceleration[i], deltaTime, // $FlowFixMe
+        bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
+        precision,
+      );
+      newTransformation = [
+        transformation[0],
+        result1.point.x, result1.point.y, result1.point.z, result2.value,
+      ];
+      newVTransformation = [
+        transformation[0],
+        result1.velocity.x, result1.velocity.y, result1.velocity.z, result2.value,
+      ];
+      result = {
+        duration: Math.max(result1.duration, result2.duration),
+      };
     }
     if (deltaTime === null) { // $FlowFixMe
       if (result.duration == null || result.duration > duration) {

@@ -1,13 +1,13 @@
 // @flow
 /* eslint-disable no-use-before-define */
 import {
-  roundNum, round, clipValue, clipMag,
+  roundNum, clipMag,
 } from '../math';
 import * as m3 from '../m3';
 import { clipAngle } from './angle';
 import { translationPath } from './Path';
 import { Point, getPoint, getScale } from './Point';
-import { Line } from './Line';
+// import { Line } from './Line';
 import { rectToPolar } from './coordinates';
 import type { Type3DMatrix } from '../m3';
 import type { TypeParsablePoint } from './Point';
@@ -47,16 +47,16 @@ export type TypeTransformValue = number | Array<number> | {
   rotation?: number,
 };
 
-function distance(p1: Point, p2: Point) {
-  return Math.sqrt(((p2.x - p1.x) ** 2) + ((p2.y - p1.y) ** 2));
-}
+// function distance(p1: Point, p2: Point) {
+//   return Math.sqrt(((p2.x - p1.x) ** 2) + ((p2.y - p1.y) ** 2));
+// }
 
-export type TypeRotationDefinition = number // 2D
-  | ['2D', number] // 2D
-  | ['xyz', TypeParsablePoint]
-  | ['axis', TypeParsablePoint, number]
-  | ['dir', TypeParsablePoint]
-  | ['sph', number, number]
+// export type TypeRotationDefinition = number // 2D
+//   | ['r', number] // 2D
+//   | ['xyz', TypeParsablePoint]
+//   | ['axis', TypeParsablePoint, number]
+//   | ['dir', TypeParsablePoint]
+//   | ['sph', number, number]
 
 type TypeTransformComponentType = 't' | 'c' | 's' | 'r' | 'ra' | 'rd' | 'rc' | 'rs';
 // function parseRotation(rDef: TypeRor)
@@ -188,17 +188,6 @@ class Transform {
     };
   }
 
-  // Deprecate
-  // /**
-  //  * Return a standard unity transform chain that includes scale, rotation and
-  //  * translation blocks
-  //  * @return {Transform}
-  //  */
-  // standard() {
-  //   return this.scale(1, 1, 1).rotate('xyz', 0, 0, 0).translate(0, 0, 0);
-  //   // return this.translate(0, 0, 0);
-  // }
-
   hasComponent(component: TypeTransformComponentType) {
     for (let i = 0; i < this.def.length; i += 1) {
       if (this.def[i][0] === component) {
@@ -208,25 +197,13 @@ class Transform {
     return false;
   }
 
-  // hasRotation() {
-  //   return this.hasComponent('r');
-  // }
-
-  // hasScale() {
-  //   return this.hasComponent('s');
-  // }
-
-  // hasTranslation() {
-  //   return this.hasComponent('t');
-  // }
-
   setComponent(index: number, def: TypeTransformComponent) {
     this.def[index] = def;
     this.calcAndSetMatrix();
     return this;
   }
 
-  addComponent(index: number, def: TypeTransformComponent) {
+  addComponent(def: TypeTransformComponent) {
     this.def.push(def);
     this.calcAndSetMatrix();
     return this;
@@ -238,7 +215,7 @@ class Transform {
    * @return {Transform}
    */
   translate(
-    xOrTranslation: number | Point,
+    xOrTranslation: number | Point = 0,
     y: number = 0,
     z: number = 0,
     // name: string = this.name,
@@ -301,7 +278,7 @@ class Transform {
     r4: number | null = null,
   ) {
     const def = parseRotation(typeOr2DRotation, r1, r2, r3, r4);
-    this.addCOmponent(def);
+    return this.addComponent(def);
   }
 
   custom(matrix: Type3DMatrix) {
@@ -378,15 +355,15 @@ class Transform {
       } else if (type === 's' && (x !== 1 || y !== 1 || z !== 1)) {
         m = m3.mul(m, m3.scaleMatrix(x, y, z));
       } else if (type === 'r') {
-        m = m3.mul(m, m3.rotationMatrixXYZ(0, 0, this.def[1]));
+        m = m3.mul(m, m3.rotationMatrixXYZ(0, 0, x));
       } else if (type === 'rc') {
-        m = m3.mul(m, m3.rotationMatrixXYZ(this.def[1], this.def[2], this.def[3]));
+        m = m3.mul(m, m3.rotationMatrixXYZ(x, y, z));
       } else if (type === 'rd') {
-        m = m3.mul(m, m3.rotationMatrixDirection(this.def[1], this.def[2], this.def[3]));
+        m = m3.mul(m, m3.rotationMatrixDirection(x, y, z));
       } else if (type === 'rs') {
-        m = m3.mul(m, m3.rotationMatrixSpherical(this.def[1], this.def[2]));
+        m = m3.mul(m, m3.rotationMatrixSpherical(x, y));
       } else if (type === 'ra') {
-        m = m3.mul(m, m3.rotationMatrixAxis(this.def[1], this.def[2], this.def[3], this.def[4]));
+        m = m3.mul(m, m3.rotationMatrixAxis(x, y, z, this.def[i][4]));
       } else if (type === 'c') {  // $FlowFixMe
         m = m3.mul(m, this.def[i].slice(1));
       }
@@ -480,20 +457,21 @@ class Transform {
     p: TypeParsablePoint,
     n: number = 0,
   ) {
-    return this.updateComponent(['t', ...getPoint(p).ToArray()], n);
+    return this.updateComponent(['t', ...getPoint(p).toArray()], n);
   }
 
   updateComponent(
-    type: TypeTransformComponentType,
-    defValues: Array<number>,
+    // type: TypeTransformComponentType,
+    def: TypeTransformComponent,
     n: number,
   ) {
     let count = 0;
     for (let i = 0; i < this.def.length; i += 1) {
-      const [componentType] = this.def[i];
-      if (componentType[0] === type[0]) {
+      // Only the first letter of the types are compared so
+      // any rotation can override any existing rotation
+      if (def[0][0] === this.def[i][0][0]) {
         if (count === n) { // $FlowFixMe
-          this.def[i] = [type, ...defValues];
+          this.def[i] = def.slice();
           this.calcAndSetMatrix();
           return this;
         }
@@ -543,7 +521,7 @@ class Transform {
         // $FlowFixMe
         out.def[i] = [
           stepStart[0],
-          ...stepDelta.slice(1).map((d, i) => d * percent + stepStart[i + 1]),
+          ...stepDelta.slice(1).map((d, j) => d * percent + stepStart[j + 1]),
         ];
       } else if (stepStart[0] === 't' && stepDelta[0] === 't') {
         const start = new Point(stepStart[1], stepStart[2], stepStart[3]);
@@ -582,7 +560,18 @@ class Transform {
    */
   r(rotationIndex: number = 0): ?number {
     const i = this.getComponentIndex('r', rotationIndex);
-    return this.def[i][3];
+    const r = this.def[i];
+    const [type] = r;
+    if (type === 'r') {
+      return r[1];
+    }
+    if (type === 'rs') {
+      return [r[1], r[2]];
+    }
+    if (type === 'rc' || type === 'rd') {
+      return new Point(r[1], r[2], r[3]);
+    }
+    return [new Point(r[1], r[2], r[3]), r[4]];
   }
 
   /**
@@ -595,7 +584,7 @@ class Transform {
     n: number = 0,
   ) {
     if (typeof r === 'number') {
-      return this.updateComponent('r', getPoint([0, 0, r]).toArray(), n);
+      return this.updateComponent(['r', r], n);
     }
     const def = parseRotation(...r);
     return this.updateComponent(def, n);
@@ -704,17 +693,6 @@ class Transform {
       def.push([a[0], ...a.slice(1).map((v, j) => v - b[j + 1])]);
     }
     return new Transform(def, this.name);
-    // const def = [];
-    // for (let i = 0; i < this.def.length; i += 1) {
-    //   if (this.def[i][0] !== transformToSubtract.def[i][0]) {
-    //     throw new Error(`Cannot subtract transforms with different shapes: '${JSON.stringify(this.def)}' - '${JSON.stringify(transformToSubtract.def)}'`);
-    //   }
-    //   def.push(makeTransformComponent(
-    //     this.def[i],  // $FlowFixMe
-    //     j => this.def[i][j] - transformToSubtract.def[i][j],
-    //   ));
-    // }  // $FlowFixMe
-    // return new Transform(def, this.name);
   }
 
   // Add a transform to the current one.
@@ -738,20 +716,6 @@ class Transform {
       def.push([a[0], ...a.slice(1).map((v, j) => v + b[j + 1])]);
     }
     return new Transform(def, this.name);
-    // if (!this.isEqualShapeTo(transformToAdd)) {
-    //   throw new Error(`Cannot add transforms of different shape: '${this.def}', '${transformToAdd.def}'`);
-    // }
-    // const def = [];
-    // for (let i = 0; i < this.def.length; i += 1) {
-    //   if (this.def[i][0] !== transformToAdd.def[i][0]) {
-    //     throw new Error(`Cannot add transforms with different shapes: '${JSON.stringify(this.def)}' - '${JSON.stringify(transformToAdd.def)}'`);
-    //   }
-    //   def.push(makeTransformComponent(
-    //     this.def[i],  // $FlowFixMe
-    //     j => this.def[i][j] + transformToAdd.def[i][j],
-    //   ));
-    // }
-    // return new Transform(def, this.name);
   }
 
   // transform step wise multiplication
@@ -763,28 +727,16 @@ class Transform {
    * @see <a href="#transformissimilarto">Transform.isEqualShapeTo</a>
    */
   mul(transformToMultiply: Transform = new Transform()): Transform {
-    if (!this.isEqualShapeTo(transformToAdd)) {
-      throw new Error(`Cannot multiply transforms of different shape: '${this.def}', '${transformToAdd.def}'`);
+    if (!this.isEqualShapeTo(transformToMultiply)) {
+      throw new Error(`Cannot multiply transforms of different shape: '${this.def}', '${transformToMultiply.def}'`);
     }
     const def = [];
     for (let i = 0; i < this.def.length; i += 1) {
       const a = this.def[i];
-      const b = transformToAdd.def[i];
+      const b = transformToMultiply.def[i];
       def.push([a[0], ...a.slice(1).map((v, j) => v * b[j + 1])]);
     }
     return new Transform(def, this.name);
-
-    // const def = [];
-    // for (let i = 0; i < this.def.length; i += 1) {
-    //   if (this.def[i][0] !== transformToMultiply.def[i][0]) {
-    //     throw new Error(`Cannot multiply transforms with different shapes: '${JSON.stringify(this.def)}' - '${JSON.stringify(transformToMultiply.def)}'`);
-    //   }
-    //   def.push(makeTransformComponent(
-    //     this.def[i],  // $FlowFixMe
-    //     j => this.def[i][j] * transformToMultiply.def[i][j],
-    //   ));
-    // }
-    // return new Transform(def, this.name);
   }
 
   /**
@@ -836,59 +788,55 @@ class Transform {
     // return new Transform(order, this.name);
   }
 
-  /**
-   * Return a duplicate transform that is clipped to `minTransform` and
-   * `maxTransform`. Both `minTransform` and `maxTransform` must be similar
-   * to this transform meaning they must all share the same order of
-   * transform components.
-   *
-   * Use `limitLine` to clip the first {@link Translation} transform in the
-   * chain to within a {@link Line}.
-   * @see <a href="#transformissimilarto">Transform.isEqualShapeTo</a>
-   */
-  clip(
-    minTransform: Transform,
-    maxTransform: Transform,
-    limitLine: null | Line,
-  ) {
-    if (!this.isEqualShapeTo(minTransform) || !this.isEqualShapeTo(maxTransform)) {
-      throw new Error(`Cannot clip transforms of different shape: t: '${this.def}', min: '${minTransform.def}', max: '${maxTransform.def}'`);
-    }
+  // // Deprecate
+  // /**
+  //  * Return a duplicate transform that is clipped to `minTransform` and
+  //  * `maxTransform`. Both `minTransform` and `maxTransform` must be similar
+  //  * to this transform meaning they must all share the same order of
+  //  * transform components.
+  //  *
+  //  * Use `limitLine` to clip the first {@link Translation} transform in the
+  //  * chain to within a {@link Line}.
+  //  */
+  // clip(
+  //   minTransform: Transform,
+  //   maxTransform: Transform,
+  //   limitLine: null | Line,
+  // ) {
+  //   if (!this.isEqualShapeTo(minTransform) || !this.isEqualShapeTo(maxTransform)) {
+  //     throw new Error(`Cannot clip transforms of different shape: t: '${this.def}', min: '${minTransform.def}', max: '${maxTransform.def}'`);
+  //   }
 
-    const def = [];
-    for (let i = 0; i < this.def.length; i += 1) {
-      const t = this.def[i];
-      if (t[0] !== minTransform.def[i][0] || t[0] !== maxTransform.def[i][0]) {
-        throw new Error(`Cannot clip transforms of different shapes: transform: '${JSON.stringify(this.def)}', min: '${JSON.stringify(minTransform.def)}', max: '${JSON.stringify(maxTransform)}'`);
-      }
-      def.push(makeTransformComponent(
-        this.def[i], // $FlowFixMe
-        j => clipValue(this.def[i][j], minTransform.def[i][j], maxTransform.def[i][j]),
-      ));
-    }
-    const clippedTransform = new Transform(def, this.name);
-    if (limitLine != null) {
-      const t = clippedTransform.t();
-      if (t != null) {
-        const perpLine = new Line({ p1: t, length: 1, angle: limitLine.angle() + Math.PI / 2 });
-        const { intersect } = perpLine.intersectsWith(limitLine);
-        if (intersect) {
-          if (limitLine.hasPointOn(intersect, 4)) {
-            clippedTransform.updateTranslation(intersect);
-          } else {
-            const p1Dist = distance(intersect, limitLine.p1);
-            const p2Dist = distance(intersect, limitLine.p2);
-            if (p1Dist < p2Dist) {
-              clippedTransform.updateTranslation(limitLine.p1);
-            } else {
-              clippedTransform.updateTranslation(limitLine.p2);
-            }
-          }
-        }
-      }
-    }
-    return clippedTransform;
-  }
+  //   const def = [];
+  //   for (let i = 0; i < this.def.length; i += 1) {
+  //     def.push(makeTransformComponent(
+  //       this.def[i], // $FlowFixMe
+  //       j => clipValue(this.def[i][j], minTransform.def[i][j], maxTransform.def[i][j]),
+  //     ));
+  //   }
+  //   const clippedTransform = new Transform(def, this.name);
+  //   if (limitLine != null) {
+  //     const t = clippedTransform.t();
+  //     if (t != null) {
+  //       const perpLine = new Line({ p1: t, length: 1, angle: limitLine.angle() + Math.PI / 2 });
+  //       const { intersect } = perpLine.intersectsWith(limitLine);
+  //       if (intersect) {
+  //         if (limitLine.hasPointOn(intersect, 4)) {
+  //           clippedTransform.updateTranslation(intersect);
+  //         } else {
+  //           const p1Dist = distance(intersect, limitLine.p1);
+  //           const p2Dist = distance(intersect, limitLine.p2);
+  //           if (p1Dist < p2Dist) {
+  //             clippedTransform.updateTranslation(limitLine.p1);
+  //           } else {
+  //             clippedTransform.updateTranslation(limitLine.p2);
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  //   return clippedTransform;
+  // }
 
   clipMag(
     zeroThresholdTransform: TypeTransformValue,
@@ -911,12 +859,16 @@ class Transform {
         const yc = rc * Math.sin(phi) * Math.sin(theta);
         const zc = rc * Math.cos(theta);
         def.push(['t', xc, yc, zc]);
-      } else if (type === 'r' || type === 's' || type === 't') {
-        const xc = clipMag(x, zero[i], max[i]);
-        const yc = clipMag(y, zero[i], max[i]);
-        const zc = clipMag(z, zero[i], max[i]);
+      } else if (type !== 'c') {
+        def.push(makeTransformComponent(
+          t, // $FlowFixMe
+          j => clipMag(t[j], zero[i], max[i]),
+        ));
+        // const xc = clipMag(x, zero[i], max[i]);
+        // const yc = clipMag(y, zero[i], max[i]);
+        // const zc = clipMag(z, zero[i], max[i]);
         // $FlowFixMe
-        def.push([type, xc, yc, zc]);
+        // def.push([type, xc, yc, zc]);
       }
     }
     return new Transform(def, this.name);
@@ -943,19 +895,37 @@ class Transform {
    */
   isZero(zeroThreshold: number = 0): boolean {
     for (let i = 0; i < this.def.length; i += 1) {
-      const [type, x, y, z] = this.def[i];
-      if (type === 't' || type === 's') {
+      const [type, x, y, z, a] = this.def[i];
+      if (type === 't' || type === 's' || type === 'rd') {
         if (
           Math.abs(x) > zeroThreshold
           || Math.abs(y) > zeroThreshold
           || Math.abs(z) > zeroThreshold) {
           return false;
         }
-      } else if (type === 'r') {
+      } else if (type === 'r' && clipAngle(x, '0to360') > zeroThreshold) {
+        return false;
+      } else if (type === 'rc') {
         if (
           clipAngle(x, '0to360') > zeroThreshold
           || clipAngle(y, '0to360') > zeroThreshold
           || clipAngle(z, '0to360') > zeroThreshold
+        ) {
+          return false;
+        }
+      } else if (type === 'rs') {
+        if (
+          clipAngle(x, '0to360') > zeroThreshold
+          || clipAngle(y, '0to360') > zeroThreshold
+        ) {
+          return false;
+        }
+      } else if (type === 'ra') {
+        if (
+          Math.abs(x) > zeroThreshold
+          || Math.abs(y) > zeroThreshold
+          || Math.abs(z) > zeroThreshold
+          || clipAngle(a, '0to360') > zeroThreshold
         ) {
           return false;
         }
@@ -994,9 +964,12 @@ class Transform {
     const deltaTransform = this.sub(previousTransform);
     for (let i = 0; i < deltaTransform.def.length; i += 1) {
       const t = deltaTransform.def[i]; // $FlowFixMe
-      if (t[0] === 't' || t[0] === 's' || t[0] === 'r') {  // $FlowFixMe
-        def.push([t[0], t[1] / deltaTime, t[2] / deltaTime, t[3] / deltaTime]);
-      }
+      def.push(makeTransformComponent(
+        t, j => t[j] / deltaTime,
+      ));
+      // if (t[0] === 't' || t[0] === 's' || t[0] === 'r') {  // $FlowFixMe
+      //   def.push([t[0], t[1] / deltaTime, t[2] / deltaTime, t[3] / deltaTime]);
+      // }
     }
 
     const v = new Transform(def);
@@ -1011,24 +984,27 @@ class Transform {
     const def = [];
     for (let i = 0; i < this.def.length; i += 1) {
       const [type] = this.def[i];
-      if (type === 't' || type === 'r') { // $FlowFixMe
+      if (type === 't') { // $FlowFixMe
         def.push([type, 0, 0, 0]);
       } else if (type === 's') { // $FlowFixMe
         def.push([type, 1, 1, 1]);
-      } else if (type === 'c' && this.def[i].length === 18) {
+      } else if (type === 'r') { // $FlowFixMe
+        def.push([type, 0]);
+      } else if (type === 'rs') { // $FlowFixMe
+        def.push([type, 0, 0]);
+      } else if (type === 'rc') { // $FlowFixMe
+        def.push([type, 0, 0, 0]);
+      } else if (type === 'rd') { // $FlowFixMe
+        def.push([type, 1, 0, 0]);
+      } else if (type === 'ra') { // $FlowFixMe
+        def.push([type, 1, 0, 0, 0]);
+      } else if (type === 'c') {
         def.push([
           'c',
           1, 0, 0, 0,
           0, 1, 0, 0,
           0, 0, 1, 0,
           0, 0, 0, 1,
-        ]);
-      } else if (type === 'c' && this.def[i].length === 11) {
-        def.push([
-          'c',
-          1, 0, 0,
-          0, 1, 0,
-          0, 0, 1,
         ]);
       }
     }  // $FlowFixMe
@@ -1184,8 +1160,8 @@ function transformValueToArray(
   }
 
   for (let i = 0; i < transform.def.length; i += 1) {
-    const transformation = transform.def[i];
-    if (transformation[0] === 't') {
+    const type = transform.def[i][0];
+    if (type === 't') {
       let value = 0;
       if (transformValue.position != null) {
         value = transformValue.position;
@@ -1194,16 +1170,22 @@ function transformValueToArray(
         value = transformValue.translation;
       }
       def.push(value);
-    } else if (transformation[0] === 's') {
+    } else if (type === 's') {
       let value = 0;
       if (transformValue.scale != null) {
         value = transformValue.scale;
       }
       def.push(value);
-    } else if (transformation[0] === 'r') {
+    } else if (type[0] === 'r') {
       let value = 0;
       if (transformValue.rotation != null) {
         value = transformValue.rotation;
+      }
+      def.push(value);
+    } else if (type[0] === 'x') {
+      let value = 0;
+      if (transformValue.custom != null) {
+        value = transformValue.custom;
       }
       def.push(value);
     }

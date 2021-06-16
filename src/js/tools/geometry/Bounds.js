@@ -1314,22 +1314,24 @@ class TransformBounds extends Bounds {
   contains(t: Transform) {
     for (let i = 0; i < t.def.length; i += 1) {
       const transformElement = t.def[i];
+      const [type] = transformElement;
       const b = this.boundary[i];                       // $FlowFixMe
-      if (
-        b != null
-        && !b.contains(new Point(
-          transformElement[1], transformElement[2], transformElement[3],
-        ))
-      ) {
-        return false;
+      if (b != null) {
+        if (
+          (type === 'rc' || type === 't' || type === 's' || type === 'rd')
+          && !b.contains(new Point(
+            transformElement[1], transformElement[2], transformElement[3],
+          ))
+        ) {
+          return false;
+        }
+        if (
+          type === 'r'
+          && !b.contains(transformElement[1])
+        ) {
+          return false;
+        }
       }
-      // if (transformElement[0] === 'r') {
-      //   if (b != null && !b.contains(transformElement.r)) {
-      //     return false;
-      //   }
-      // } else if (b != null && !b.contains(new Point(transformElement.x, transformElement.y))) {
-      //   return false;
-      // }
     }
     return true;
   }

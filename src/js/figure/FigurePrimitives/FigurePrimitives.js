@@ -1750,7 +1750,7 @@ export type OBJ_TextDefinition = {
  * @property {TypeParsableTransform} [transform]
  * @property {boolean} [fixColor] If `true`, {@link FigureElement}`.setColor`
  * method will not change the color of text
- * (default: `Transform('text').standard()`)
+ * (default: `Transform('text').translate()`)
  *
  * @see To test examples, append them to the
  * <a href="#text-boilerplate">boilerplate</a>
@@ -1869,7 +1869,7 @@ export type OBJ_TextLineDefinition = {
  * @property {TypeParsablePoint} [position] if defined, overrides translation
  * in transform
  * @property {TypeParsableTransform} [transform]
- * (`Transform('text').standard()`)
+ * (`Transform('text').translate()`)
  *
  * @see To test examples, append them to the
  * <a href="#text-boilerplate">boilerplate</a>
@@ -2032,7 +2032,7 @@ export type OBJ_TextModifiersDefinition = {
  * @property {TypeParsablePoint} [position] if defined, overrides translation
  * in transform
  * @property {TypeParsableTransform} [transform]
- * (`Transform('text').standard()`)
+ * (`Transform('text').translate()`)
  *
  * @see To test examples, append them to the
  * <a href="#text-boilerplate">boilerplate</a>
@@ -2579,7 +2579,7 @@ export default class FigurePrimitives {
     const defaultOptions = {
       name: generateUniqueId('primitive_'),
       color: this.defaultColor,
-      transform: new Transform('generic').standard(),
+      transform: new Transform('generic').translate(),
       texture: {
         src: '',
         mapTo: new Rect(-1, -1, 2, 2),
@@ -2732,7 +2732,7 @@ export default class FigurePrimitives {
   polyline(...optionsIn: Array<OBJ_Polyline>) {
     const options = joinObjects({}, ...optionsIn);
     const element = this.generic({
-      transform: new Transform('polyline').standard(),
+      transform: new Transform('polyline').translate(),
       border: 'draw',
       touchBorder: 'border',   // $FlowFixMe
       holeBorder: [[]],
@@ -2845,7 +2845,7 @@ export default class FigurePrimitives {
     optionsIn: Object,
   ) {
     const element = this.generic({
-      transform: new Transform(name).standard(),
+      transform: new Transform(name).translate(),
       border: 'draw',
       touchBorder: 'border',   // $FlowFixMe
       holeBorder: [[]],
@@ -3225,7 +3225,7 @@ export default class FigurePrimitives {
    */
   grid(...optionsIn: Array<OBJ_Grid>) {
     const element = this.generic({
-      transform: new Transform('grid').standard(),
+      transform: new Transform('grid').translate(),
       border: 'draw',
       touchBorder: 'border', // $FlowFixMe
       holeBorder: [[]],
@@ -3359,7 +3359,7 @@ export default class FigurePrimitives {
     const element = this.polyline(joinObjects(
       {},
       {
-        transform: new Transform('line').standard(),
+        transform: new Transform('line').translate(),
       },
       ...options,
       {
@@ -3491,7 +3491,7 @@ export default class FigurePrimitives {
 
     // // Define standard transform if no transform was input
     // if (options.transform == null) {
-    //   options.transform = new Transform('text').standard();
+    //   options.transform = new Transform('text').translate();
     // } else {
     //   options.transform = getTransform(options.transform);
     // }
@@ -3531,7 +3531,7 @@ export default class FigurePrimitives {
     const options = optionsIn;
     // Define standard transform if no transform was input
     if (options.transform == null) {
-      options.transform = new Transform('text').standard();
+      options.transform = new Transform('text').translate();
     } else {
       options.transform = getTransform(options.transform);
     }

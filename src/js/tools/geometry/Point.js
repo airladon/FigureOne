@@ -481,7 +481,7 @@ class Point {
     }
     const c = getPoint(center);
     const centered = this.sub(c);
-    const rotated = centered.transformBy(m3.rotationMatrix(a[0], a[1], a[2]));
+    const rotated = centered.transformBy(m3.rotationMatrixXYZ(a[0], a[1], a[2]));
 
     return rotated.add(c);
   }
