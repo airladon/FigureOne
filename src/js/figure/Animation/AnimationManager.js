@@ -337,17 +337,11 @@ export default class AnimationManager {
    *   .start();
    */
   rotation(
-    targetOrOptions: OBJ_RotationAnimationStep | number,
-    ry: number | null = null,
-    rz: number = 0,
+    targetOrOptions: OBJ_RotationAnimationStep | number | TypeRotationDefinition,
   ) {
     let optionsIn;
-    if (typeof targetOrOptions === 'number') {
-      if (ry == null) {
-        optionsIn = { target: [0, 0, targetOrOptions] };
-      } else {
-        optionsIn = { target: [targetOrOptions, ry, rz] };
-      }
+    if (typeof targetOrOptions === 'number' || Array.isArray(targetOrOptions)) {
+      optionsIn = { target: targetOrOptions };
     } else {
       optionsIn = targetOrOptions;
     }

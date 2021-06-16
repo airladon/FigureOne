@@ -1,6 +1,6 @@
 // @flow
 import {
-  Transform, getDeltaAngle3D, getMaxTimeFromVelocity, clipAngle, getPoint, getScale, Point,
+  Transform, getDeltaAngle, getMaxTimeFromVelocity, clipAngle, getPoint, getScale, Point,
 } from '../../../../tools/g2';
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
@@ -11,15 +11,37 @@ import type {
 import ElementAnimationStep from '../ElementAnimationStep';
 import type { AnimationStartTime } from '../../AnimationManager';
 
+type TypeRotation = number
+                  | [number, number]
+                  | TypeParsablePoint
+                  | [TypeParsablePoint, number]
+                  | [number, number, number, number];
+
+function parseRotation(r: TypeRotation) {
+  if (typeof r === 'number') {
+    return [r];
+  }
+  if (r.length === 4) {
+    return r;
+  }
+  if (r.length === 2) {
+    if (typeof r[0] === 'number') {
+      return r;
+    }
+    return [...getPoint(r[0]).toArray(), r[1]];
+  }
+  return getPoint(r).toArray();
+}
+
 /**
  * {@link RotationAnimationStep} step options object
  *
  * @extends OBJ_ElementAnimationStep
  *
- * @property {number} [start] start rotation - current rotation used if
+ * @property {TypeRotation} [start] start rotation - current rotation used if
  * undefined
- * @property {number} [target] target rotation - will overwrite `delta` rotation
- * @property {number} [delta] delta rotation that can be used instead of `target`
+ * @property {TypeRotation} [target] target rotation - will overwrite `delta` rotation
+ * @property {TypeRotation} [delta] delta rotation that can be used instead of `target`
  * @property {null | number} [velocity] velocity of rotation overrides
  * `duration` - `null` to use `duration` (`null`)
  * @property {0 | 1 | -1 | 2} [direction] where `0` is quickest direction, `1`
@@ -32,9 +54,9 @@ import type { AnimationStartTime } from '../../AnimationManager';
  * @see {@link RotationAnimationStep} for description and examples
  */
 export type OBJ_RotationAnimationStep = {
-  start?: number;      // default is element transform
-  target?: number;     // Either target or delta must be defined
-  delta?: number;      // delta overrides target if both are defined
+  start?: TypeRotation;      // default is element transform
+  target?: TypeRotation;     // Either target or delta must be defined
+  delta?: TypeRotation;      // delta overrides target if both are defined
   // 1 is CCW, -1 is CW, 0 is fastest, 2 is not through 0
   direction: 0 | 1 | -1 | 2;
   clipTo: '0to360' | '-180to180' | null;
@@ -103,11 +125,11 @@ export type OBJ_RotationAnimationStep = {
  */
 export default class RotationAnimationStep extends ElementAnimationStep {
   rotation: {
-    start: Point;  // null means use element transform when unit is started
-    delta: Point;
-    target: Point;
+    start: Array<number>;  // null means use element transform when unit is started
+    delta: Array<number>;
+    target: Array<number>;
     direction: 0 | 1 | -1 | 2;
-    velocity: ?Point;
+    velocity: Array<number> | number;
     maxDuration: ?number;
     clipTo: '0to360' | '-180to180' | null;
   };
@@ -134,32 +156,15 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     const options = joinObjects({}, defaultTransformOptions, ...optionsIn);
 
     if (options.start != null) {
-      if (typeof options.start === 'number') {
-        options.start = new Point(0, 0, options.start);
-      } else {
-        options.start = getPoint(options.start);
-      }
+      options.start = parseRotation(options.start);
     }
     if (options.target != null) {
-      if (typeof options.target === 'number') {
-        options.target = new Point(0, 0, options.target);
-      } else {
-        options.target = getPoint(options.target);
-      }
+      options.target = parseRotation(options.target);
     }
     if (options.delta != null) {
-      if (typeof options.delta === 'number') {
-        options.delta = new Point(0, 0, options.delta);
-      } else {
-        options.delta = getPoint(options.delta);
-      }
+      options.delta = parseRotation(options.delta);
     }
-    // if (options.target != null) {
-    //   options.target = getPoint(options.target);
-    // }
-    // if (options.delta != null) {
-    //   options.delta = getPoint(options.delta);
-    // }
+
     // $FlowFixMe
     this.rotation = {};
     copyKeysFromTo(options, this.rotation, [
@@ -187,37 +192,55 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     super.start(startTime);
     if (this.rotation.start === null) {
       if (this.element != null) {
-        this.rotation.start = this.element.transform.r3();
+        this.rotation.start = this.element.transform.rArray();
       } else {
         this.duration = 0;
         return;
       }
     }
+    const {
+      start, target, direction, velocity,
+    } = this.rotation;
     // if delta is null, then calculate it from start and target
     if (this.rotation.delta == null && this.rotation.target != null) {
-      const delta = getDeltaAngle3D(
-        this.rotation.start,
-        this.rotation.target,
-        this.rotation.direction,
-      );
+      let delta = target.map((t, k) => getDeltaAngle(start[k], t, direction));
+      if (this.element != null) {
+        const i = this.element.transform.getComponentIndex('r');
+        const type = this.element.transform.def[i][0];
+        if (type === 'rd') {
+          delta = target.map((t, k) => t - start[k]);
+        } else if (type === 'ra') {
+          delta[0] = target[0] - start[0];
+          delta[1] = target[1] - start[1];
+          delta[2] = target[2] - start[2];
+        }
+      }
       this.rotation.delta = delta;
       // this.rotation.delta = this.rotation.target - this.rotation.start;
     } else if (this.rotation.delta != null) {
-      this.rotation.target = this.rotation.start.add(this.rotation.delta);
+      this.rotation.target = start.map((s, k) => s + this.rotation.delta[k]);
     } else {
       this.duration = 0;
     }
 
     // If Velocity is defined, then use it to calculate duration
-    const { target, start, velocity } = this.rotation;
     if (velocity != null && start != null && target != null) {
-      const velocityToUse = getScale(velocity);
-      this.duration = getMaxTimeFromVelocity(
-        new Transform().rotate(start),
-        new Transform().rotate(target),
-        new Transform().rotate(velocityToUse),
-        this.rotation.direction,
-      );
+      // const velocityToUse = getScale(velocity);
+      let v;
+      if (typeof velocity === 'number') {
+        v = start.map(() => velocity);
+      } else {
+        v = velocity;
+      }
+      const durations = start.map((s, k) => (target[k] - s) / v[k]);
+      this.duration = Math.max(durations);
+      // const velocityToUse = start.map(() => velocity);
+      // this.duration = getMaxTimeFromVelocity(
+      //   new Transform().rotate(start),
+      //   new Transform().rotate(target),
+      //   new Transform().rotate(velocityToUse),
+      //   this.rotation.direction,
+      // );
     }
     if (this.rotation.maxDuration != null) {
       if (this.duration > this.rotation.maxDuration) {
@@ -253,13 +276,17 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     const percentTime = deltaTime / (this.duration + 0.000001);
     const percentComplete = this.getPercentComplete(percentTime);
     const p = percentComplete;
-    const nextR = this.rotation.start.add(this.rotation.delta.scale(p));
-    // let nextR = this.rotation.start + this.rotation.delta * p;
-    nextR.x = clipAngle(nextR.x, this.rotation.clipTo);
-    nextR.y = clipAngle(nextR.y, this.rotation.clipTo);
-    nextR.z = clipAngle(nextR.z, this.rotation.clipTo);
+    const { start, delta } = this.rotation;
+    const nextR = start.map((s, k) => clipAngle(s + delta[k] * p, this.rotation.clipTo));
     const { element } = this;
     if (element != null) {
+      const i = this.element.transform.getComponentIndex('r');
+      const type = this.element.transform.def[i][0];
+      if (type === 'rd' || type === 'ra') {
+        nextR[0] = start[0] + delta[0] * p;
+        nextR[1] = start[1] + delta[1] * p;
+        nextR[2] = start[2] + delta[2] * p;
+      }
       element.setRotation(nextR);
     }
   }
@@ -267,11 +294,8 @@ export default class RotationAnimationStep extends ElementAnimationStep {
   setToEnd() {
     const { element } = this;
     if (element != null) {
-      element.transform.updateRotation([
-        clipAngle(this.rotation.target.x, this.rotation.clipTo),
-        clipAngle(this.rotation.target.y, this.rotation.clipTo),
-        clipAngle(this.rotation.target.z, this.rotation.clipTo),
-      ]);
+      element.transform.updateRotationValues(0, this.rotation.target);
+      element.transform.clipRotation(this.rotation.clipTo);
       this.fnExec(element.setTransformCallback, element.transform);
     }
   }

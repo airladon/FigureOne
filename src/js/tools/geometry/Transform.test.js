@@ -292,7 +292,7 @@ describe('Transform', () => {
       expect(t.r()).toEqual(new Point(1, 2, 3));
       expect(t.r(0)).toEqual(new Point(1, 2, 3));
       expect(t.r(1)).toEqual(2);
-      expect(() => t.r3(2)).toThrow();
+      expect(() => t.r(2)).toThrow();
     });
     test('Update rotation', () => {
       const t = new Transform()

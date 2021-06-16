@@ -102,10 +102,10 @@ export default class Radical extends Symbol {
     const line46 = new Line(p4, p6);
     const line68 = new Line(p6, p8);
 
-    const line02Offset = line02.offsetXY('top', lineWidth);
-    const line24Offset = line24.offsetXY('top', lineWidth2);
-    const line46Offset = line46.offsetXY('top', lineWidth);
-    const line68Offset = line68.offsetXY('top', lineWidth);
+    const line02Offset = line02.offset('top', lineWidth);
+    const line24Offset = line24.offset('top', lineWidth2);
+    const line46Offset = line46.offset('top', lineWidth);
+    const line68Offset = line68.offset('top', lineWidth);
 
     const p1 = line02Offset.p1._dup();
     const p3 = line02Offset.intersectsWith(line24Offset).intersect;

@@ -1644,7 +1644,7 @@ export type OBJ_Grid = {
  * const s = [0.5, 0.8, 0.4, 0.6, 0.8, 0.6, 0.5, 0.8, 0.6];
  * const transforms = [];
  * for (let i = 0; i < 9; i += 1) {
- *   transforms.push(new Fig.Transform().scale(s[i], s[i]).rotate(r[i]).translate(x[i], y[i]));
+ *   transforms.push(new Fig.Transform().scale(s[i], s[i]).rotate(r[i])x[i], y[i]));
  * }
  *
  * // Create arrow and copy to transforms
@@ -1750,7 +1750,7 @@ export type OBJ_TextDefinition = {
  * @property {TypeParsableTransform} [transform]
  * @property {boolean} [fixColor] If `true`, {@link FigureElement}`.setColor`
  * method will not change the color of text
- * (default: `Transform('text').translate()`)
+ * (default: `Transform('text'))`)
  *
  * @see To test examples, append them to the
  * <a href="#text-boilerplate">boilerplate</a>
@@ -1869,7 +1869,7 @@ export type OBJ_TextLineDefinition = {
  * @property {TypeParsablePoint} [position] if defined, overrides translation
  * in transform
  * @property {TypeParsableTransform} [transform]
- * (`Transform('text').translate()`)
+ * (`Transform('text'))`)
  *
  * @see To test examples, append them to the
  * <a href="#text-boilerplate">boilerplate</a>
@@ -2032,7 +2032,7 @@ export type OBJ_TextModifiersDefinition = {
  * @property {TypeParsablePoint} [position] if defined, overrides translation
  * in transform
  * @property {TypeParsableTransform} [transform]
- * (`Transform('text').translate()`)
+ * (`Transform('text'))`)
  *
  * @see To test examples, append them to the
  * <a href="#text-boilerplate">boilerplate</a>
@@ -2255,7 +2255,7 @@ function parsePoints(
 //   if (options.position != null) {
 //     const p = getPoint(options.position);
 //     if (options.transform == null) {
-//       options.transform = new Transform('processOptions').translate(0, 0);
+//       options.transform = new Transform('processOptions')0, 0);
 //     }
 //     options.transform.updateTranslation(p);
 //   }
@@ -2579,7 +2579,7 @@ export default class FigurePrimitives {
     const defaultOptions = {
       name: generateUniqueId('primitive_'),
       color: this.defaultColor,
-      transform: new Transform('generic').translate(),
+      transform: new Transform('generic').scale(1).rotate(0).translate(),
       texture: {
         src: '',
         mapTo: new Rect(-1, -1, 2, 2),
@@ -2732,7 +2732,7 @@ export default class FigurePrimitives {
   polyline(...optionsIn: Array<OBJ_Polyline>) {
     const options = joinObjects({}, ...optionsIn);
     const element = this.generic({
-      transform: new Transform('polyline').translate(),
+      transform: new Transform('polyline').scale(1).rotate(0).translate(),
       border: 'draw',
       touchBorder: 'border',   // $FlowFixMe
       holeBorder: [[]],
@@ -2845,7 +2845,7 @@ export default class FigurePrimitives {
     optionsIn: Object,
   ) {
     const element = this.generic({
-      transform: new Transform(name).translate(),
+      transform: new Transform(name).scale(1).rotate(0).translate(),
       border: 'draw',
       touchBorder: 'border',   // $FlowFixMe
       holeBorder: [[]],
@@ -3225,7 +3225,7 @@ export default class FigurePrimitives {
    */
   grid(...optionsIn: Array<OBJ_Grid>) {
     const element = this.generic({
-      transform: new Transform('grid').translate(),
+      transform: new Transform('grid').scale(1).rotate(0).translate(),
       border: 'draw',
       touchBorder: 'border', // $FlowFixMe
       holeBorder: [[]],
@@ -3359,7 +3359,7 @@ export default class FigurePrimitives {
     const element = this.polyline(joinObjects(
       {},
       {
-        transform: new Transform('line').translate(),
+        transform: new Transform('line').scale(1).rotate(0).translate(),
       },
       ...options,
       {
@@ -3531,7 +3531,7 @@ export default class FigurePrimitives {
     const options = optionsIn;
     // Define standard transform if no transform was input
     if (options.transform == null) {
-      options.transform = new Transform('text').translate();
+      options.transform = new Transform('text').scale(1).rotate(0).translate();
     } else {
       options.transform = getTransform(options.transform);
     }

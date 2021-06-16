@@ -57,6 +57,16 @@ export type TypeTransformValue = number | Array<number> | {
 //   | ['axis', TypeParsablePoint, number]
 //   | ['dir', TypeParsablePoint]
 //   | ['sph', number, number]
+type TypeRotationComponentName = '2D' | 'xyz' | 'axis' | 'dir' | 'sph';
+
+type TypeRotationDefinition = ['2D', number]
+  | ['xyz', TypeParsablePoint]
+  | ['xyz', number, number, number]
+  | ['axis', TypeParsablePoint, number]
+  | ['axis', number, number, number, number]
+  | ['dir', TypeParsablePoint]
+  | ['dir', number, number, number]
+  | ['sph', number, number]
 
 type TypeTransformComponentType = 't' | 'c' | 's' | 'r' | 'ra' | 'rd' | 'rc' | 'rs';
 // function parseRotation(rDef: TypeRor)
@@ -66,16 +76,19 @@ type TypeTransformComponentType = 't' | 'c' | 's' | 'r' | 'ra' | 'rd' | 'rc' | '
 // transform.r() get first r
 
 function parseRotation(
-  typeOr2DRotation: number | '2D' | 'xyz' | 'axis' | 'dir' | 'sph',
+  typeOr2DOrDef: number | TypeRotationComponentName | TypeRotationDefinition,
   r1: number | TypeParsablePoint | null = null,
   r2: number | null = null,
   r3: number | null = null,
   r4: number | null = null,
 ) {
-  if (typeof typeOr2DRotation === 'number') {
-    return ['r', typeOr2DRotation];
+  if (typeof typeOr2DOrDef === 'number') {
+    return ['r', typeOr2DOrDef];
   }
-  const type = typeOr2DRotation;
+  if (Array.isArray(typeOr2DOrDef)) {
+    return parseRotation(...typeOr2DOrDef);
+  }
+  const type = typeOr2DOrDef;
   if (type === '2D' && typeof r1 === 'number') {
     return ['r', r1];
   }
@@ -103,7 +116,7 @@ function parseRotation(
   } else if (type === 'axis' && typeof r2 === 'number') {
     return ['ra', ...getPoint(r1).toArray(), r2];
   }
-  throw new Error(`Could not parse rotation '${typeOr2DRotation}', '${r1}', '${r2}', '${r3}', '${r4}'`);
+  throw new Error(`Could not parse rotation '${typeOr2DOrDef}', '${r1}', '${r2}', '${r3}', '${r4}'`);
 }
 
 function makeTransformComponent(
@@ -383,19 +396,19 @@ class Transform {
   //   return this;
   // }
 
-  getComponentIndex(type: TypeTransformComponentType, index: number = 0) {
+  getComponentIndex(type: TypeTransformComponentType, n: number = 0) {
     let count = 0;
     for (let i = 0; i < this.def.length; i += 1) {
       // Checking only the first letter of type so the first rotation will be
       // returned independant of the type of rotation
       if (this.def[i][0][0] === type[0]) {
-        if (count === index) {
+        if (count === n) {
           return i;
         }
         count += 1;
       }
     }
-    throw new Error(`Cannot get type '${type}' at index '${index}' from transform '${JSON.stringify(this.def)}'`);
+    throw new Error(`Cannot get type '${type}-${n}' from transform '${JSON.stringify(this.def)}'`);
   }
 
   /**
@@ -478,7 +491,7 @@ class Transform {
         count += 1;
       }
     }
-    throw new Error(`Cannot update ${type}-${n} in transform: ${JSON.stringify(this.def)}`);
+    throw new Error(`Cannot update '${type}-${n}' in transform: ${JSON.stringify(this.def)}`);
   }
 
 
@@ -558,7 +571,7 @@ class Transform {
    * then `null` will be returned.
    * @return {Point | null}
    */
-  r(rotationIndex: number = 0): ?number {
+  r(rotationIndex: number = 0) {
     const i = this.getComponentIndex('r', rotationIndex);
     const r = this.def[i];
     const [type] = r;
@@ -574,20 +587,45 @@ class Transform {
     return [new Point(r[1], r[2], r[3]), r[4]];
   }
 
+  rArray(rotationIndex: number = 0) {
+    const i = this.getComponentIndex('r', rotationIndex);
+    const r = this.def[i];
+    const [type] = r;
+    if (type === 'r') {
+      return [r[1]];
+    }
+    if (type === 'rs') {
+      return [r[1], r[2]];
+    }
+    if (type === 'rc' || type === 'rd') {
+      return [r[1], r[2], r[3]];
+    }
+    return [r[1], r[2], r[3], r[4]];
+  }
+
   /**
    * Return a duplicate transform chain with an updated the nth
    * {@link Rotation} transform component
    * @return {Transform}
    */
   updateRotation(
-    r: number | [TypeParsablePoint],
+    r: number | TypeRotationDefinition,
     n: number = 0,
   ) {
     if (typeof r === 'number') {
       return this.updateComponent(['r', r], n);
     }
-    const def = parseRotation(...r);
+    const def = parseRotation(r);
     return this.updateComponent(def, n);
+  }
+
+  updateRotationValues(
+    n: number = 0,
+    values: Array<number>
+  ) {
+    const i = this.getComponentIndex('r', n);
+    const type = this.def[i][0];
+    return this.updateComponent([type, ...values], n)
   }
 
   /**
