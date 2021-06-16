@@ -1,6 +1,7 @@
 /* globals Fig */
-const { sphericalToCartesian, getNormal } = Fig.tools.g2;
-const { Point, getPoint } = Fig;
+const { sphericalToCartesian, getNormal, sphere } = Fig.tools.g2;
+const { Point, getPoint, getTransform } = Fig;
+const { m3 } = Fig.tools;
 const figure = new Fig.Figure({ limits: [-1, -1, 2, 2], backgroundColor: [1, 0.9, 0.9, 1] });
 
 const col = (c, numVertices) => {
@@ -11,82 +12,6 @@ const col = (c, numVertices) => {
   return out;
 };
 
-const makeSphere = (radius, sides) => {
-  // const arc = [];
-  const dTheta = Math.PI / sides;
-  const dPhi = dTheta;
-  const arcs = [];
-  const trueNorms = [];
-  const points = [];
-  const normals = [];
-  for (let phi = 0; phi < Math.PI * 2 + 0.0001; phi += dPhi) {
-    const thetaArc = [];
-    const trueNormsArc = [];
-    for (let theta = 0; theta < Math.PI + 0.0001; theta += dTheta) {
-      thetaArc.push(new Point(
-        radius * Math.cos(phi) * Math.sin(theta),
-        radius * Math.sin(phi) * Math.sin(theta),
-        radius * Math.cos(theta),
-      ));
-      trueNormsArc.push(getPoint(sphericalToCartesian(1, theta, phi)));
-    }
-    arcs.push(thetaArc);
-    trueNorms.push(trueNormsArc);
-  }
-  // console.log(trueNorms)
-
-  for (let p = 0; p < sides * 2; p += 1) {
-    for (let t = 0; t < sides; t += 1) {
-      points.push(arcs[p][t]);
-      points.push(arcs[p][t + 1]);
-      points.push(arcs[p + 1][t + 1]);
-      points.push(arcs[p][t]);
-      points.push(arcs[p + 1][t + 1]);
-      points.push(arcs[p + 1][t]);
-      // const normalPhi = p * dPhi + dPhi / 2;
-      // const normalTheta = t * dTheta + dTheta / 2;
-      // const normal = new Point(
-      //   Math.cos(normalPhi) * Math.sin(normalTheta),
-      //   Math.sin(normalPhi) * Math.sin(normalTheta),
-      //   Math.cos(normalTheta),
-      // );
-      // normals.push(normal._dup());
-      // normals.push(normal._dup());
-      // normals.push(normal._dup());
-      // normals.push(normal._dup());
-      // normals.push(normal._dup());
-      // normals.push(normal._dup());
-
-      normals.push(trueNorms[p][t]);
-      normals.push(trueNorms[p][t + 1]);
-      normals.push(trueNorms[p + 1][t + 1]);
-      normals.push(trueNorms[p][t]);
-      normals.push(trueNorms[p + 1][t + 1]);
-      normals.push(trueNorms[p + 1][t]);
-      // const normal = getNormal(arcs[p][t], arcs[p][t + 1], arcs[p + 1][t + 1]);
-      // normals.push(normal._dup());
-      // normals.push(normal._dup());
-      // normals.push(normal._dup());
-      // normals.push(normal._dup());
-      // normals.push(normal._dup());
-      // normals.push(normal._dup());
-    }
-  }
-  // console.log(normals)
-  const vertices = [];
-  const norms = [];
-  for (let i = 0; i < points.length; i += 1) {
-    vertices.push(points[i].x);
-    vertices.push(points[i].y);
-    vertices.push(points[i].z);
-    norms.push(normals[i].x);
-    norms.push(normals[i].y);
-    norms.push(normals[i].z);
-  }
-  return [vertices, norms];
-};
-
-makeSphere(1, 2);
 const makeRod = (length, radius, sides, rx, ry, rz) => {
   const corners = Fig.tools.morph.getPolygonCorners({ radius, sides });
   const cornersZ = corners.map(c => c.add(0, 0, length));
@@ -172,7 +97,8 @@ makeAxis('y', [0, 1, 0, 1], -Math.PI / 2, 0, 0, [0, -0.5, 0]);
 makeAxis('z', [0, 0, 1, 1], 0, 0, 0, [0, 0, -0.5]);
 
 const addSphere = (name, position, color) => {
-  const [sx, sn] = makeSphere(0.05, 10);
+  // const [sx, sn] = makeSphere(0.05, 10);
+  const [sx, sn] = sphere({ radius: 0.05, sides: 4, normals: 'curved' });
   const s = figure.add({
     name,
     make: 'gl',
@@ -197,6 +123,15 @@ figure.add({
   make: 'text',
   text: 'a',
   position: [0.5, 0, 0],
+  xAlign: 'center',
+});
+
+figure.add({
+  make: 'polygon',
+  radius: 0.5,
+  sides: 5,
+  color: [1, 1, 0, 0.7],
+  // position: [0.5, 0, 0],
   xAlign: 'center',
 });
 
@@ -226,63 +161,25 @@ figure.scene.setProjection({
 // figure.elements.animations.new()
 //   .rotation({ target: [0.5, 0.5, 0], duration: 5 })
 //   .start()
-figure.animations.new()
-  .camera({ target: { position: [0.5, 0.5, 1.1] }, duration: 5 })
-  .camera({ target: { position: [1, 1, 1.1] }, duration: 5 })
+
+// figure.animations.new()
+//   .camera({ target: { position: [0.5, 0.5, 1.1] }, duration: 5 })
+//   .camera({ target: { position: [1, 1, 1.1] }, duration: 5 })
+//   .start();
+
+figure.elements.animations.new()
+  .custom({
+    callback: (p) => {
+      figure.elements.transform = getTransform([['c', ...m3.rotationMatrixVectorToVector([1, 0, 0], [1 - p, p, p])]]);
+    },
+    duration: 10,
+  })
+  // .custom({
+  //   callback: (p) => {
+  //     figure.elements.transform = getTransform([['c', ...m3.rotationMatrixAxisAngle([1, 1, 0], p * 2)]]);
+  //   },
+  //   duration: 10,
+  // })
+  // .rotation({ target: [1, 1, 1], duration: 10 })
   .start();
 
-
-
-function Node(val) {
-  this.val = val;
-  this.left = null;
-  this.right = null;
-}
-
-function show(n) {
-  const out = [];
-  if (n != null) {
-    out.push(...show(n.left));
-    out.push(n.val);
-    out.push(...show(n.right));
-  }
-  return out;
-}
-
-function insert(root, val) {
-  if (root == null) {
-    return new Node(val);
-  }
-  if (val < root.val) {
-    root.left = insert(root.left, val);
-  } else if (val > root.val) {
-    root.right = insert(root.right, val);
-  }
-  return root;
-}
-
-const root = insert(null, 5);
-insert(root, 2);
-insert(root, 10);
-insert(root, -10);
-insert(root, 4);
-insert(root, 8);
-insert(root, 12);
-
-function min(n) {
-  if (n.left != null) {
-    return min(n.left);
-  }
-  return n.val;
-}
-
-function max(n) {
-  if (n.right != null) {
-    return max(n.right);
-  }
-  return n.val;
-}
-
-console.log(show(root))
-console.log(min(root))
-console.log(max(root))

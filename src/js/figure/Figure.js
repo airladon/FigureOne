@@ -374,6 +374,8 @@ class Figure {
         right: 1,
         bottom: -1,
         top: 1,
+        // near: 0.1,
+        // far: 4,
       },
     };
     this.frameRate = {
@@ -1280,7 +1282,7 @@ class Figure {
     const pixelSpace = {
       x: { min: 0, span: canvasRect.width },
       y: { min: canvasRect.height, span: -canvasRect.height },
-      z: { min: -1, span: 2 },
+      z: { min: -1, span: 1 },
     };
 
     const glSpace = {
@@ -1307,7 +1309,12 @@ class Figure {
       figureToGLMatrix,
     );
     if (from === 'figure' && to === 'pixel') {
-      return figureToPixelMatrix;
+      return m3.mul([
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 0, 0,
+        0, 0, 0, 1,
+      ], figureToPixelMatrix);
     }
 
     if (from === 'gl' && to === 'figure') {
@@ -1684,7 +1691,7 @@ class Figure {
       console.log(e.name, [p.x, p.y], [q.x, q.y]);
       console.log(e.getPosition('pixel'))
     }
-    console.log('xy', this.pixelToPlane(pixelP, [[0, 0, 0], [0, 0, 1]]));
+    console.log('xz', this.pixelToPlane(pixelP, [[0, 0, 0], [1, 0, 0]]));
 
     const figurePoint = pixelP.transformBy(this.spaceTransformMatrix('pixel', 'figure'));
     return this.touchDownHandler(figurePoint, eventFromPlayback);

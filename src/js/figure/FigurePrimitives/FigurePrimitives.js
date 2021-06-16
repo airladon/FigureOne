@@ -62,7 +62,7 @@ import {
 } from '../DrawingObjects/TextObject/TextObject';
 // eslint-disable-next-line import/no-cycle
 import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
-import type { OBJ_SpaceTransforms } from '../Figure';
+// import type { OBJ_SpaceTransforms } from '../Figure';
 // eslint-disable-next-line import/no-cycle
 import { makePolyLine, makePolyLineCorners, makeFastPolyLine } from '../geometries/lines/lines';
 import { getPolygonPoints, getTrisFillPolygon } from '../geometries/polygon/polygon';
@@ -2355,8 +2355,8 @@ export default class FigurePrimitives {
     const defaultOptions = {
       name: generateUniqueId('primitive_'),
       color: this.defaultColor,
-      vertexShader: 'simple',
-      fragShader: 'simple',
+      vertexShader: { dimension: 2 },
+      fragShader: { color: 'uniform' },
       texture: {
         src: '',
         mapTo: new Rect(-1, -1, 2, 2),

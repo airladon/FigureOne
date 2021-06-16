@@ -1,5 +1,30 @@
 // @flow
 
+// 3D Vector functions
+function crossProduct(a, b) {
+  return [
+    a[1] * b[2] - a[2] * b[1],
+    a[2] * b[0] - a[0] * b[2],
+    a[0] * b[1] - a[1] * b[0],
+  ];
+}
+
+function dotProduct(a, b) {
+  return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+}
+
+function subtract(a, b) {
+  return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+}
+
+function normalize(v) {
+  const length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+  if (length > 0.00001) {
+    return [v[0] / length, v[1] / length, v[2] / length];
+  }
+  return [0, 0, 0];
+}
+
 // 3D Matrix functions
 export type Type3DMatrix = [
   number, number, number, number,
@@ -123,6 +148,38 @@ function rotationMatrix(rx: number, ry: number, rz: number): Type3DMatrix {
   ];
 }
 
+// https://en.wikipedia.org/wiki/Rotation_matrix#In_three_dimensions
+function rotationMatrixAxisAngle(
+  axis: [number, number, number],
+  angle: number,
+) {
+  const c = Math.cos(angle);
+  const s = Math.sin(angle);
+  const [x, y, z] = normalize(axis);
+  const C = 1 - c;
+  return [
+    x * x * C + c, x * y * C - z * s, x * z * C + y * s, 0,
+    y * x * C + z * s, y * y * C + c, y * z * C - x * s, 0,
+    z * x * C - y * s, z * y * C + x * s, z * z * C + c, 0,
+    0, 0, 0, 1,
+  ];
+}
+
+function rotationMatrixVectorToVector(
+  fromVector: [number, number, number],
+  toVector: [number, number, number],
+) {
+  const dist = v => Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+  const axis = crossProduct(fromVector, toVector);
+  const d = dotProduct(fromVector, toVector);
+  const angle = Math.acos(d / (dist(fromVector) * dist(toVector)));
+  return rotationMatrixAxisAngle(axis, angle);
+}
+
+// function rotationMatrixThetaPhi(theta: number, phi: number) {
+
+// }
+
 function rotationMatrixUnitVector(angle: number, x: number, y: number, z: number): Type3DMatrix {
   const c = Math.cos(angle);
   const s = Math.sin(angle);
@@ -213,25 +270,6 @@ function perspective(
   ];
 }
 
-function crossProduct(a, b) {
-  return [
-    a[1] * b[2] - a[2] * b[1],
-    a[2] * b[0] - a[0] * b[2],
-    a[0] * b[1] - a[1] * b[0],
-  ];
-}
-
-function subtract(a, b) {
-  return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
-}
-
-function normalize(v) {
-  const length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
-  if (length > 0.00001) {
-    return [v[0] / length, v[1] / length, v[2] / length];
-  }
-  return [0, 0, 0];
-}
 
 function lookAt(
   cameraPosition: [number, number, number],
@@ -509,6 +547,8 @@ export {
   lookAt,
   transformVector,
   dup,
+  rotationMatrixAxisAngle,
+  rotationMatrixVectorToVector,
   // lu,
   // lupInvert,
 };

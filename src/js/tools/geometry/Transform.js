@@ -1032,7 +1032,7 @@ function parseArrayTransformDefinition(defIn: TransformDefinition) {
       continue;
     } // $FlowFixMe
     const [type, x, y] = defIn[i];
-    if (defIn[i].length === 4) {
+    if (defIn[i].length === 4 || defIn[i].length === 17) {
       def.push(defIn[i]);
     } else if (defIn[i].length === 3 && type === 't') {
       def.push(['t', x, y, 0]);

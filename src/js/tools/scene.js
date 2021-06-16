@@ -159,10 +159,10 @@ export default class Scene {
       right: 1,
       bottom: -1,
       top: 1,
-      near: 1,
-      far: 3,
+      near: 0.1,
+      far: 10,
       camera: {
-        position: [0, 0, 3],
+        position: [0, 0, 2],
         lookAt: [0, 0],
         up: [0, 1, 0],
       },

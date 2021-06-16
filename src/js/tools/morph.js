@@ -982,11 +982,11 @@ function polyline(options: OBJ_MorphPolyline) {
  * @property {1 | -1} [direction] 1 is CCW, -1 is CW (`1`)
  */
 export type OBJ_GetPolygonCorners = {
-  radius: number,
-  sides: number,
-  position: TypeParsablePoint,
-  rotation: number,
-  direction: 1 | -1,
+  radius?: number,
+  sides?: number,
+  position?: TypeParsablePoint,
+  rotation?: number,
+  direction?: 1 | -1,
 };
 
 /**
