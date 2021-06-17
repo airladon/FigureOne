@@ -1,10 +1,6 @@
 // @flow
-import { getPoint, getPoints, Point } from '../geometry/Point';
-import type { TypeParsablePoint } from '../geometry/Point';
-import { joinObjects } from '../tools';
+import { Point } from '../geometry/Point';
 import { getNormal } from '../geometry/Plane';
-import { Transform } from '../geometry/Transform';
-import type { TypeRotationDefinition } from '../geometry/Transform';
 
 /*
 A surface is defined by a grid of points.
@@ -122,66 +118,6 @@ Which means the normals for vertex a1 will be:
 - curve: cc + pc + cp + pp
  */
 
-/**
- * Options object for {@link lathe}.
- *
- * @property {Array<TypeParsablePoint>} profile XY plane profile to be rotated
- * around the x axis
- * @property {number} [sides] number of sides in lathe rotation
- * @property {'flat' | 'curveProfile' | 'curveLathe' | 'curve'} [normals] how
- * the normals for each vertex should be combined
- * @property {number} [rotation] initial angle of the lathe rotation
- * @property {TypeRotationDefinition} [axis] orient the final vertices by
- * rotating their definition around the x axis to an arbitrary rotation
- * @property {TypeParsablePoint} [position] offset the final vertices such that
- * the original (0, 0) point moves to position (this step happens after the
- * rotation)
- */
-export type OBJ_Lathe = {
-  sides?: number,
-  profile?: Array<TypeParsablePoint>,
-  normals?: 'flat' | 'curveProfile' | 'curveLathe' | 'curve',
-  axis?: TypeRotationDefinition,
-  rotation?: number,
-  position?: TypeParsablePoint,
-}
-
-export type OBJ_LatheDefined = {
-  sides: number,
-  profile: Array<Point>,
-  normals: 'flat' | 'curveProfile' | 'curveLathe' | 'curve',
-  matrix: Type3DMatrix,
-  rotation: number,
-  position: Point,
-}
-
-
-// // Return a 2D matrix where a column represents the same profile x position, and
-// // a row represents the same lathe rotation position.
-// function getGrid(o: OBJ_LatheDefined) {
-//   const points = [];
-//   const {
-//     profile, sides, rotation, matrix,
-//   } = o;
-//   const dAngle = Math.PI * 2 / sides;
-//   for (let i = 0; i < sides + 1; i += 1) {
-//     const profilePoints = [];
-//     for (let j = 0; j < profile.length; j += 1) {
-//       let p = new Point(
-//         profile[j].x,
-//         profile[j].y * Math.cos(dAngle * i + rotation),
-//         profile[j].y * Math.sin(dAngle * i + rotation),
-//       );
-//       if (o.axis !== 0) {
-//         p = p.transformBy(matrix);
-//       }
-//       profilePoints.push(p.add(o.position));
-//     }
-//     points.push(profilePoints);
-//   }
-//   return points;
-// }
-
 
 // Along a row, there will be profilePoints - 1 segements
 // Along a rotation, there will be sides segments
@@ -264,7 +200,7 @@ function getFlatNormals(
 function getCurveNormals(
   surfaceNormals: Array<Array<Point>>,
   surfacePoints: Array<Array<Point>>,
-  curve: 'curveProfile' | 'curveLathe' | 'curve',
+  curve: 'curveColumns' | 'curveRows' | 'curve',
   closeRows: boolean,
   closeColumns: boolean,
 ) {
@@ -352,13 +288,13 @@ function getCurveNormals(
       let a2n = cc;
       let b1n = cc;
       let b2n = cc;
-      if (curve === 'curveLathe' || curve === 'curve') {
+      if (curve === 'curveRows' || curve === 'curve') {
         a1n = a1n.add(pc);
         a2n = a2n.add(pc);
         b1n = b1n.add(nc);
         b2n = b2n.add(nc);
       }
-      if (curve === 'curveProfile' || curve === 'curve') {
+      if (curve === 'curveColumns' || curve === 'curve') {
         a1n = a1n.add(cp);
         b1n = b1n.add(cp);
         a2n = a2n.add(cn);
@@ -387,82 +323,6 @@ function getCurveNormals(
     }
   }
   return normals;
-}
-
-/**
- * Create a 3D surface by rotating a 2D profile around an axis (analagous to a
- * lathe machine).
- *
- * A profile is defined in the XY plane, and then rotated around the x axis.
- *
- * The resulting points can oriented and positioned by defining a rotation and
- * position. The rotation rotates the x axis (around which the profile was
- * rotated) to any direction. The position then offsets the transformed points
- * in 3D space, there the original (0, 0, [0]) point is translated to
- * (position.x, position.y, position.z)
- *
- * All profile points must have a y value that is not 0, with the exceptions of
- * the ends which can be 0.
- *
- * Normals for each vertex are returned which are either flat, averaged along
- * the profile ('curveProfile'), averaged along the direction of lathe rotation
- * ('curveLathe'), or averaged by all surfaces touching the vertex ('curve').
- *
- * @param {OBJ_Lathe} options
- * @return {[Array<number>, Array<number>]} array of vertices and array of
- * normals
- */
-function lathe(options: OBJ_Lathe) {
-  const o = joinObjects(
-    {
-      sides: 10,
-      normals: 'curved',
-      ends: true,
-      position: [0, 0, 0],
-      axis: 0,
-      rotation: 0,
-    },
-    options,
-  );
-  o.position = getPoint(o.position);
-  if (o.profile == null) {
-    o.profile = getPoints([0, 0.1, 0], [1, 0.2, 0]);
-  } else {
-    o.profile = getPoints(o.profile);
-  }
-
-  const {
-    sides, profile, rotation, normals,
-  } = o;
-
-  const matrix = new Transform().rotate(o.axis).matrix();
-  const defined = {
-    sides,
-    profile,
-    normals,
-    matrix,
-    position: o.position,
-    rotation,
-  };
-  let startZero = false;
-  let endZero = false;
-  if (profile[0].y === 0) {
-    startZero = true;
-  }
-  if (profile[profile.length - 1].y === 0) {
-    endZero = true;
-  }
-
-  const points = getLathePoints(defined);
-  const surfaceNormals = getSurfaceNormals(points);
-  const triangles = getTriangles(points, startZero, endZero);
-  let norms;
-  if (normals === 'flat') {
-    norms = getFlatNormals(surfaceNormals, startZero, endZero);
-  } else {
-    norms = getCurveNormals(surfaceNormals, startZero, endZero, normals);
-  }
-  return [triangles, norms];
 }
 
 export {
