@@ -188,6 +188,5 @@ export default function cube(options: OBJ_Cube) {
     ...yNegNormal.slice(),
     ...yNegNormal.slice(),
   ];
-  console.log(points, normals)
   return [points, normals];
 }
