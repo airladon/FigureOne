@@ -334,7 +334,7 @@ function getCurveNormals(
  * @return {[Array<number>, Array<number>]} array of vertices and array of
  * normals
  */
-export default function lathe(options: OBJ_Lathe) {
+function lathe(options: OBJ_Lathe) {
   const o = joinObjects(
     {
       sides: 10,
@@ -386,3 +386,8 @@ export default function lathe(options: OBJ_Lathe) {
   }
   return [triangles, norms];
 }
+
+export {
+  lathe,
+  getLathePoints,
+};

@@ -34,7 +34,8 @@ import {
 import type { TypeRotationDirection } from './geometry/angle';
 import { sphericalToCartesian, cartesianToSpherical } from './geometry/common';
 import sphere from './3d/sphere';
-import lathe from './3d/lathe';
+import { lathe } from './3d/lathe';
+import rod from './3d/rod';
 import { polygon } from './geometry/polygon';
 
 
@@ -572,4 +573,5 @@ export {
   sphere,
   lathe,
   polygon,
+  rod,
 };

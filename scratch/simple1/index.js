@@ -1,5 +1,5 @@
 /* globals Fig */
-const { sphericalToCartesian, getNormal, sphere, lathe, polygon } = Fig.tools.g2;
+const { sphericalToCartesian, getNormal, sphere, lathe, polygon, rod } = Fig.tools.g2;
 const { Point, getPoint, getTransform } = Fig;
 const { m3 } = Fig.tools;
 const figure = new Fig.Figure({ limits: [-1, -1, 2, 2], backgroundColor: [1, 0.9, 0.9, 1] });
@@ -131,9 +131,10 @@ const [lv, ln] = lathe({
   profile: polygon({ radius: 0.1, center: [0, 0.5], sides: 20, direction: -1 }),
   // profile: [[0, 0, 0], [0.5, 0.3, 0], [0.7, 0, 0]],
   sides: 20,
-  normals: 'flat',
+  normals: 'curve',
   // rotation: ['dir', 1, -1, 0.5],
 });
+
 figure.add({
   make: 'gl',
   vertexShader,
@@ -143,6 +144,26 @@ figure.add({
   color: [1, 0, 0, 1],
   position: [0, 0, 0],
 });
+
+
+const [rv, rn] = rod({
+  sides: 30,
+  line: [[0, 0, 0], [0.5, 0, 0]],
+  radius: 0.2,
+  normals: 'curve',
+  rotation: Math.PI / 4,
+});
+
+figure.add({
+  make: 'gl',
+  vertexShader,
+  fragShader,
+  vertices3: { data: rv },
+  normals: { data: rn },
+  color: [0.8, 0, 1, 1],
+  position: [0, 0, 0],
+});
+
 
 figure.add({
   make: 'text',
