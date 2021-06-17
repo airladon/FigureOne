@@ -1,11 +1,50 @@
 // @flow
-import { Point } from './Point';
+import { Point, getPoint } from './Point';
+import { Transform } from './Transform';
 import { Line } from './Line';
+import { joinObjects } from '../tools';
 
 function isLeft(p0: Point, p1: Point, p2: Point) {
   return (
     (p1.x - p0.x) * (p2.y - p0.y) - (p2.x - p0.x) * (p1.y - p0.y)
   );
+}
+
+export type OBJ_Polygon = {
+  sides?: number,
+  radius?: number,
+  center?: number,
+  rotation?: TypeRotationDefinition,
+  close?: boolean,
+  rotationOffset?: number,
+  direction?: 1 | -1,
+};
+
+function polygon(options: OBJ_Polygon) {
+  const o = joinObjects({
+    sides: 4,
+    radius: 1,
+    center: [0, 0, 0],
+    rotation: 0,
+    close: true,
+    rotationOffset: 0,
+    direction: 1,
+  }, options);
+  o.center = getPoint(o.center);
+  const {
+    sides, radius, center, rotation, close, rotationOffset, direction,
+  } = o;
+
+  const dAngle = Math.PI * 2 / sides;
+  const matrix = new Transform().rotate(rotation).matrix();
+  const points = [];
+  for (let i = 0; i < sides + close ? 1 : 0; i += 1) {
+    points.push(new Point(
+      radius * Math.cos(direction * (dAngle * i + rotationOffset)),
+      radius * Math.sin(direction * (dAngle * i + rotationOffset)),
+    ).transformBy(matrix).add(center));
+  }
+  return points;
 }
 
 function isPointInPolygon(point: Point, polygon: Array<Point>) {
@@ -81,4 +120,5 @@ function isPointOnPolygon(point: Point, polygon: Array<Point>) {
 export {
   isPointInPolygon,
   isPointOnPolygon,
+  polygon,
 };

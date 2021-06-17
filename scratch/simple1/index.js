@@ -1,5 +1,5 @@
 /* globals Fig */
-const { sphericalToCartesian, getNormal, sphere, lathe } = Fig.tools.g2;
+const { sphericalToCartesian, getNormal, sphere, lathe, polygon } = Fig.tools.g2;
 const { Point, getPoint, getTransform } = Fig;
 const { m3 } = Fig.tools;
 const figure = new Fig.Figure({ limits: [-1, -1, 2, 2], backgroundColor: [1, 0.9, 0.9, 1] });
@@ -121,14 +121,17 @@ addSphere('zNeg', [0, 0, -0.95], [0, 0, 1, 1]);
 
 const r1 = 0.01;
 const r2 = 0.02;
+
 const [lv, ln] = lathe({
   // profile: [[0, 0.02, 0], [0.399, 0.099, 0], [0.4, 0.1, 0], [0.499, 0.05, 0], [0.5, 0.05, 0], [0.5, 0.0499, 0], [0.5, 0, 0]],
   // profile: [[0, 0.001, 0], [0.399, 0.1, 0], [0.4, 0.1, 0], [0.4, 0.099, 0], [0.4, 0, 0]],
   // profile: [[0, 0, 0], [0.4, r1, 0], [0.4, 0, 0]],
-  profile: [[0, 0], [0, r1], [0.5, r1], [0.5, r2], [0.6, 0]],
-  sides: 6,
-  normals: 'curved',
-  rotation: ['dir', 1, -1, 0.5],
+  // profile: [[0, 0], [0, r1], [0.5, r1], [0.5, r2], [0.6, 0]],
+  // profile: [[0, 0.5], [0, 0.6], [0.1, 0.6], [0.1, 0.5], [0, 0.5]],
+  profile: polygon({ radius: 0.1, center: [0, 0.5], sides: 20, direction: -1 }),
+  sides: 50,
+  normals: 'curved2',
+  // rotation: ['dir', 1, -1, 0.5],
 });
 figure.add({
   make: 'gl',

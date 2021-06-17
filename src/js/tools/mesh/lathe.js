@@ -5,6 +5,9 @@ import { joinObjects } from '../tools';
 import { getNormal } from '../geometry/Plane';
 import { Transform } from '../geometry/Transform';
 
+/**
+ * Create a surface by lathing a profile.
+ */
 export type OBJ_LatheMesh = {
   sides?: number,
   profile?: Array<TypeParsablePoint>,
