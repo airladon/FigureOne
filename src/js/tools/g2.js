@@ -34,6 +34,7 @@ import {
 import type { TypeRotationDirection } from './geometry/angle';
 import { sphericalToCartesian, cartesianToSpherical } from './geometry/common';
 import sphere from './mesh/sphere';
+import lathe from './mesh/lathe';
 
 
 type Type3Components = [number, number, number];
@@ -568,4 +569,5 @@ export {
   cartesianToSpherical,
   getNormal,
   sphere,
+  lathe,
 };
