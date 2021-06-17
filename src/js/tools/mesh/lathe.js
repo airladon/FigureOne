@@ -57,6 +57,21 @@ export default function lathe (options: OBJ_LatheMesh) {
   // const triangleNorms = [];
   const triangles = [];
   const norms = [];
+  const quadNorms = [];
+  const quadNorms1 = [];
+  const qNorms = [];
+  const triNorms = [];
+  for (let i = 0; i < sides + 1; i += 1) {
+    const q = [];
+    const q1 = [];
+    for (let j = 0; j < profile.length; j += 1) {
+      q.push([]);
+      q1.push([]);
+    }
+    quadNorms.push(q);
+    qNorms.push(q1);
+  }
+
   for (let i = 0; i < sides; i += 1) {
     for (let j = 0; j < profile.length - 1; j += 1) {
       const a1 = points[i][j];
@@ -65,13 +80,73 @@ export default function lathe (options: OBJ_LatheMesh) {
       const b2 = points[i + 1][j + 1];
       triangles.push(...a1.toArray(), ...b2.toArray(), ...a2.toArray());
       triangles.push(...a1.toArray(), ...b1.toArray(), ...b2.toArray());
-      // if (normals === 'flat') {
-        const n = getNormal(a1, b1, a2).toArray();
+      const norm = getNormal(a1, b1, a2);
+      if (normals === 'curvedAll') {
+        quadNorms[i][j].push(norm);
+        quadNorms[i][j + 1].push(norm);
+        quadNorms[i + 1][j].push(norm);
+        quadNorms[i + 1][j + 1].push(norm);
+      }
+      if (normals === 'curved') {
+        let prevNorm;
+        let nextNorm;
+        if (i === 0) {
+          prevNorm = getNormal(points[sides - 2][j], a1, a2);
+          nextNorm = getNormal(b1, points[i + 2][j + 1], b2);
+        } else if (i === sides - 1) {
+          prevNorm = getNormal(points[i - 1][j], a1, a2);
+          nextNorm = getNormal(b1, points[1][j + 1], b2);
+        } else {
+          prevNorm = getNormal(points[i - 1][j], a1, a2);
+          nextNorm = getNormal(b1, points[i + 2][j + 1], b2);
+        }
+        const aNorm = norm.add(prevNorm).normalize().toArray();
+        const bNorm = norm.add(nextNorm).normalize().toArray();
+        norms.push(...aNorm, ...bNorm, ...aNorm, ...aNorm, ...bNorm, ...bNorm);
+      }
+      const n = norm.normalize().toArray();
+      if (normals === 'flat') {
         norms.push(...n, ...n, ...n, ...n, ...n, ...n);
-      // }
+      }
     }
   }
 
+  if (normals === 'curvedAll') {
+    for (let i = 0; i < sides + 1; i += 1) {
+      for (let j = 0; j < profile.length; j += 1) {
+        let n = quadNorms[i][j][0];
+        for (let k = 1; k < quadNorms[i][j].length; k += 1) {
+          n = n.add(quadNorms[i][j][k]);
+        }
+        if (i === 0) {
+          for (let k = 1; k < quadNorms[sides - 1][j].length; k += 1) {
+            n = n.add(quadNorms[sides - 1][j][k]);
+          }
+        }
+        if (i === sides - 1) {
+          for (let k = 1; k < quadNorms[0][j].length; k += 1) {
+            n = n.add(quadNorms[0][j][k]);
+          }
+        }
+        qNorms[i][j] = n.normalize();
+      }
+    }
+    // console.log(quadNorms)
+    // return
+    for (let i = 0; i < sides; i += 1) {
+      for (let j = 0; j < profile.length - 1; j += 1) {
+        norms.push(
+          ...qNorms[i][j].toArray(),
+          ...qNorms[i + 1][j + 1].toArray(),
+          ...qNorms[i][j + 1].toArray(),
+          ...qNorms[i][j].toArray(),
+          ...qNorms[i + 1][j].toArray(),
+          ...qNorms[i + 1][j + 1].toArray(),
+        );
+      }
+    }
+  }
+  console.log(triangles.length)
   // const end1 = getPolygonCorners({ radius: profile[0].y, sides, rotation: latheRotation }).map(p => new Point(0, p.x, -p.y));
   // const end2 = getPolygonCorners({ radius: profile.slice(-1)[0].y, sides, rotation: latheRotation }).map(p => new Point(0, p.x, -p.y));;
   // // const t = new Fig.Transform().rotate(rx, ry, rz);
