@@ -7,7 +7,7 @@ import { joinObjects } from '../tools';
 export type OBJ_SphereMesh = {
   sides?: number,
   radius?: number,
-  normals?: 'curved' | 'flat',
+  normals?: 'curve' | 'flat',
   center?: TypeParsablePoint,
 }
 
@@ -16,7 +16,7 @@ export default function sphere(options: OBJ_SphereMesh) {
     {
       sides: 10,
       radius: 1,
-      normals: 'curved',
+      normals: 'curve',
     },
     options,
   );
@@ -52,7 +52,7 @@ export default function sphere(options: OBJ_SphereMesh) {
       points.push(...arcs[p][t]);
       points.push(...arcs[p + 1][t + 1]);
       points.push(...arcs[p + 1][t]);
-      if (normals === 'curved') {
+      if (normals === 'curve') {
         norms.push(...curvedNormals[p][t]);
         norms.push(...curvedNormals[p][t + 1]);
         norms.push(...curvedNormals[p + 1][t + 1]);

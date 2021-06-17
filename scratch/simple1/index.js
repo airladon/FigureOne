@@ -97,8 +97,7 @@ makeAxis('y', [0, 1, 0, 1], -Math.PI / 2, 0, 0, [0, -0.5, 0]);
 makeAxis('z', [0, 0, 1, 1], 0, 0, 0, [0, 0, -0.5]);
 
 const addSphere = (name, position, color) => {
-  // const [sx, sn] = makeSphere(0.05, 10);
-  const [sx, sn] = sphere({ radius: 0.05, sides: 10, normals: 'curved' });
+  const [sx, sn] = sphere({ radius: 0.05, sides: 10, normals: 'curve' });
   const s = figure.add({
     name,
     make: 'gl',
