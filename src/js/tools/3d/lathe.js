@@ -220,99 +220,99 @@ function getLathePoints(o: OBJ_LatheDefined) {
 //   return normals;
 // }
 
-// function getCurveNormals(
-//   surfaceNormals: Array<Array<Point>>,
-//   startZero: false,
-//   endZero: false,
-//   curve: 'curveProfile' | 'curveLathe' | 'curve',
-// ) {
-//   const profileSegments = surfaceNormals[0].length;
-//   const sides = surfaceNormals.length;
-//   const normals = [];
-//   let pp;
-//   let cp;
-//   let np;
-//   let pc;
-//   let cc;
-//   let nc;
-//   let pn;
-//   let cn;
-//   let nn;
-//   let nextProfileIndex;
-//   let prevProfileIndex;
-//   let nextSideIndex;
-//   let prevSideIndex;
-//   for (let i = 0; i < sides; i += 1) {
-//     for (let j = 0; j < profileSegments; j += 1) {
-//       if (i > 0) {
-//         prevSideIndex = i - 1;
-//       } else {
-//         prevSideIndex = profileSegments - 2;
-//       }
-//       if (i < sides - 1) {
-//         nextSideIndex = i + 1;
-//       } else {
-//         nextSideIndex = 1;
-//       }
-//       if (j > 0) {
-//         prevProfileIndex = j - 1;
-//         pp = surfaceNormals[prevSideIndex][prevProfileIndex];
-//         cp = surfaceNormals[i][prevProfileIndex];
-//         np = surfaceNormals[nextSideIndex][prevProfileIndex];
-//       }
-//       if (j < profileSegments - 1) {
-//         nextProfileIndex = j + 1;
-//         pn = surfaceNormals[prevSideIndex][nextProfileIndex];
-//         cn = surfaceNormals[i][nextProfileIndex];
-//         nn = surfaceNormals[nextSideIndex][nextProfileIndex];
-//       }
-//       pc = surfaceNormals[prevSideIndex][j];
-//       cc = surfaceNormals[i][j];
-//       nc = surfaceNormals[nextSideIndex][j];
-//       let a1n = cc;
-//       let a2n = cc;
-//       let b1n = cc;
-//       let b2n = cc;
-//       if (curve === 'curveLathe' || curve === 'curve') {
-//         a1n = a1n.add(pc);
-//         a2n = a2n.add(pc);
-//         b1n = b1n.add(nc);
-//         b2n = b2n.add(nc);
-//       }
-//       if (curve === 'curveAxis' || curve === 'curve') {
-//         if (j > 0) {
-//           a1n = a1n.add(cp);
-//           b1n = b1n.add(np);
-//         }
-//         if (j < profileSegments - 1) {
-//           a2n = a2n.add(cn);
-//           b2n = b2n.add(nn);
-//         }
-//       }
-//       if (curve === 'curve') {
-//         if (j > 0) {
-//           a1n = a1n.add(pp);
-//           b1n = b1n.add(cp);
-//         }
-//         if (j < profileSegments - 1) {
-//           a2n = a2n.add(pn);
-//           b2n = b2n.add(nn);
-//         }
-//       }
-//       a1n = a1n.normalize().toArray();
-//       a2n = a2n.normalize().toArray();
-//       b1n = b1n.normalize().toArray();
-//       b2n = b2n.normalize().toArray();
-//       if ((j === profileSegments - 1 && !endZero) || j < profileSegments - 1) {
-//         normals.push(...a1n, ...b2n, ...a2n);
-//       }
-//       if ((j === 0 && !startZero) || j > 0) {
-//         normals.push(...a1n, ...b1n, ...b2n);
-//       }
-//     }
-//   }
-//   return normals;
-// }
+function getCurveNormalsLegacy(
+  surfaceNormals: Array<Array<Point>>,
+  startZero: false,
+  endZero: false,
+  curve: 'curveProfile' | 'curveLathe' | 'curve',
+) {
+  const profileSegments = surfaceNormals[0].length;
+  const sides = surfaceNormals.length;
+  const normals = [];
+  let pp;
+  let cp;
+  let np;
+  let pc;
+  let cc;
+  let nc;
+  let pn;
+  let cn;
+  let nn;
+  let nextProfileIndex;
+  let prevProfileIndex;
+  let nextSideIndex;
+  let prevSideIndex;
+  for (let i = 0; i < sides; i += 1) {
+    for (let j = 0; j < profileSegments; j += 1) {
+      if (i > 0) {
+        prevSideIndex = i - 1;
+      } else {
+        prevSideIndex = profileSegments - 2;
+      }
+      if (i < sides - 1) {
+        nextSideIndex = i + 1;
+      } else {
+        nextSideIndex = 1;
+      }
+      if (j > 0) {
+        prevProfileIndex = j - 1;
+        pp = surfaceNormals[prevSideIndex][prevProfileIndex];
+        cp = surfaceNormals[i][prevProfileIndex];
+        np = surfaceNormals[nextSideIndex][prevProfileIndex];
+      }
+      if (j < profileSegments - 1) {
+        nextProfileIndex = j + 1;
+        pn = surfaceNormals[prevSideIndex][nextProfileIndex];
+        cn = surfaceNormals[i][nextProfileIndex];
+        nn = surfaceNormals[nextSideIndex][nextProfileIndex];
+      }
+      pc = surfaceNormals[prevSideIndex][j];
+      cc = surfaceNormals[i][j];
+      nc = surfaceNormals[nextSideIndex][j];
+      let a1n = cc;
+      let a2n = cc;
+      let b1n = cc;
+      let b2n = cc;
+      if (curve === 'curveLathe' || curve === 'curve') {
+        a1n = a1n.add(pc);
+        a2n = a2n.add(pc);
+        b1n = b1n.add(nc);
+        b2n = b2n.add(nc);
+      }
+      if (curve === 'curveAxis' || curve === 'curve') {
+        if (j > 0) {
+          a1n = a1n.add(cp);
+          b1n = b1n.add(np);
+        }
+        if (j < profileSegments - 1) {
+          a2n = a2n.add(cn);
+          b2n = b2n.add(nn);
+        }
+      }
+      if (curve === 'curve') {
+        if (j > 0) {
+          a1n = a1n.add(pp);
+          b1n = b1n.add(cp);
+        }
+        if (j < profileSegments - 1) {
+          a2n = a2n.add(pn);
+          b2n = b2n.add(nn);
+        }
+      }
+      a1n = a1n.normalize().toArray();
+      a2n = a2n.normalize().toArray();
+      b1n = b1n.normalize().toArray();
+      b2n = b2n.normalize().toArray();
+      if ((j === profileSegments - 1 && !endZero) || j < profileSegments - 1) {
+        normals.push(...a1n, ...b2n, ...a2n);
+      }
+      if ((j === 0 && !startZero) || j > 0) {
+        normals.push(...a1n, ...b1n, ...b2n);
+      }
+    }
+  }
+  return normals;
+}
 
 /**
  * Create a 3D surface by rotating a 2D profile around an axis (analagous to a
@@ -369,14 +369,14 @@ function lathe(options: OBJ_Lathe) {
     position: o.position,
     rotation,
   };
-  // let startZero = false;
-  // let endZero = false;
-  // if (profile[0].y === 0) {
-  //   startZero = true;
-  // }
-  // if (profile[profile.length - 1].y === 0) {
-  //   endZero = true;
-  // }
+  let startZero = false;
+  let endZero = false;
+  if (profile[0].y === 0) {
+    startZero = true;
+  }
+  if (profile[profile.length - 1].y === 0) {
+    endZero = true;
+  }
 
   const points = getLathePoints(defined);
   const surfaceNormals = getSurfaceNormals(points);
@@ -385,7 +385,14 @@ function lathe(options: OBJ_Lathe) {
   if (normals === 'flat') {
     norms = getFlatNormals(surfaceNormals, points);
   } else {
-    norms = getCurveNormals(surfaceNormals, points, normals, true, false);
+    norms = getCurveNormals(
+      surfaceNormals,
+      points,
+      normals,
+      true,
+      profile[0].isEqualTo(profile[profile.length - 1]),
+    );
+    // norms = getCurveNormalsLegacy(surfaceNormals, startZero, endZero, normals);
   }
   return [triangles, norms];
 }

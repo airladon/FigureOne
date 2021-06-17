@@ -268,8 +268,8 @@ function getCurveNormals(
   closeRows: boolean,
   closeColumns: boolean,
 ) {
-  const profileSegments = surfaceNormals[0].length;
-  const sides = surfaceNormals.length;
+  const rows = surfacePoints.length;
+  const cols = surfacePoints[0].length;
   const normals = [];
   let pp;
   let cp;
@@ -284,56 +284,56 @@ function getCurveNormals(
   let prevProfileIndex;
   let nextSideIndex;
   let prevSideIndex;
-  for (let i = 0; i < sides; i += 1) {
-    for (let j = 0; j < profileSegments; j += 1) {
+  for (let r = 0; r < rows - 1; r += 1) {
+    for (let c = 0; c < cols - 1; c += 1) {
       nc = new Point(0, 0, 0);
       nn = new Point(0, 0, 0);
       np = new Point(0, 0, 0);
       cn = new Point(0, 0, 0);
-      cc = surfaceNormals[i][j];
+      cc = surfaceNormals[r][c];
       cp = new Point(0, 0, 0);
       pn = new Point(0, 0, 0);
       pc = new Point(0, 0, 0);
       pp = new Point(0, 0, 0);
-      if (i > 0) {
-        prevSideIndex = i - 1;
+      if (r > 0) {
+        prevSideIndex = r - 1;
       } else if (closeColumns) {
-        prevSideIndex = sides - 1;
+        prevSideIndex = surfaceNormals.length - 1;
       } else {
         prevSideIndex = null;
       }
-      if (i < sides - 1) {
-        nextSideIndex = i + 1;
+      if (r < rows - 2) {
+        nextSideIndex = r + 1;
       } else if (closeColumns) {
-        nextSideIndex = 1;
+        nextSideIndex = 0;
       } else {
         nextSideIndex = null;
       }
-      if (j > 0) {
-        prevProfileIndex = j - 1;
+      if (c > 0) {
+        prevProfileIndex = c - 1;
       } else if (closeRows) {
-        prevProfileIndex = profileSegments - 1;
+        prevProfileIndex = surfaceNormals[0].length - 1;
       } else {
         prevProfileIndex = null;
       }
-      if (j < profileSegments - 1) {
-        nextProfileIndex = j + 1;
+      if (c < cols - 2) {
+        nextProfileIndex = c + 1;
       } else if (closeRows) {
-        nextProfileIndex = 1;
+        nextProfileIndex = 0;
       } else {
         nextProfileIndex = null;
       }
       if (prevSideIndex != null) {
-        pc = surfaceNormals[prevSideIndex][j];
+        pc = surfaceNormals[prevSideIndex][c];
       }
       if (prevProfileIndex != null) {
-        cp = surfaceNormals[i][prevProfileIndex];
+        cp = surfaceNormals[r][prevProfileIndex];
       }
       if (nextSideIndex != null) {
-        nc = surfaceNormals[nextSideIndex][j];
+        nc = surfaceNormals[nextSideIndex][c];
       }
       if (nextProfileIndex != null) {
-        cp = surfaceNormals[i][nextProfileIndex];
+        cn = surfaceNormals[r][nextProfileIndex];
       }
       if (prevSideIndex != null && prevProfileIndex != null) {
         pp = surfaceNormals[prevSideIndex][prevProfileIndex];
@@ -359,33 +359,25 @@ function getCurveNormals(
         b2n = b2n.add(nc);
       }
       if (curve === 'curveProfile' || curve === 'curve') {
-        // if (j > 0) {
-          a1n = a1n.add(cp);
-          b1n = b1n.add(cp);
-        // }
-        // if (j < profileSegments - 1) {
-          a2n = a2n.add(cn);
-          b2n = b2n.add(cn);
-        // }
+        a1n = a1n.add(cp);
+        b1n = b1n.add(cp);
+        a2n = a2n.add(cn);
+        b2n = b2n.add(cn);
       }
       if (curve === 'curve') {
-        // if (j > 0) {
-          a1n = a1n.add(pp);
-          b1n = b1n.add(np);
-        // }
-        // if (j < profileSegments - 1) {
-          a2n = a2n.add(pn);
-          b2n = b2n.add(nn);
-        // }
+        a1n = a1n.add(pp);
+        b1n = b1n.add(np);
+        a2n = a2n.add(pn);
+        b2n = b2n.add(nn);
       }
       a1n = a1n.normalize().toArray();
       a2n = a2n.normalize().toArray();
       b1n = b1n.normalize().toArray();
       b2n = b2n.normalize().toArray();
-      const a1 = surfacePoints[i][j];
-      const a2 = surfacePoints[i][j + 1];
-      const b1 = surfacePoints[i + 1][j];
-      const b2 = surfacePoints[i + 1][j + 1];
+      const a1 = surfacePoints[r][c];
+      const a2 = surfacePoints[r][c + 1];
+      const b1 = surfacePoints[r + 1][c];
+      const b2 = surfacePoints[r + 1][c + 1];
       if (!a1.isEqualTo(a2) && !b2.isEqualTo(a2)) {
         normals.push(...a1n, ...b2n, ...a2n);
       }

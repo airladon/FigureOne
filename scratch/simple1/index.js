@@ -130,7 +130,7 @@ const [lv, ln] = lathe({
   profile: polygon({ radius: 0.1, center: [0, 0.5], sides: 6, direction: -1 }),
   // profile: [[0, 0, 0], [0.5, 0.3, 0], [0.7, 0, 0]],
   sides: 12,
-  normals: 'curveProfile',
+  normals: 'curve',
   // rotation: ['dir', 1, -1, 0.5],
 });
 
