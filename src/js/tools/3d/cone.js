@@ -4,29 +4,28 @@ import type { TypeParsableLine } from '../geometry/Line';
 import { joinObjects } from '../tools';
 import { lathe } from './lathe';
 
-export type OBJ_Rod = {
+export type OBJ_Cone = {
   sides?: number,
   radius?: number,
   normals?: 'curve' | 'flat',
   line?: TypeParsableLine | number,
-  ends?: boolean | 1 | 2,
   length?: number,
+  rotation?: number,
 }
 
-export default function rod(options: OBJ_Rod) {
+export default function cone(options: OBJ_Cone) {
   const o = joinObjects(
     {
       sides: 10,
       radius: 0.1,
       normals: 'curve',
-      ends: true,
       rotation: 0,
       length: 1,
     },
     options,
   );
   const {
-    ends, rotation, sides, radius, normals, length,
+    rotation, sides, radius, normals, length,
   } = o;
   let line;
   if (o.line == null) {
@@ -35,13 +34,7 @@ export default function rod(options: OBJ_Rod) {
     line = getLine(o.line);
   }
   const profile = [];
-  if (ends || ends === 1) {
-    profile.push([0, 0]);
-  }
-  profile.push([0, radius], [line.length(), radius]);
-  if (ends || ends === 2) {
-    profile.push([line.length(), 0]);
-  }
+  profile.push([0, 0], [0, radius], [line.length(), 0]);
 
   return lathe({
     sides,
