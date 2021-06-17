@@ -14,9 +14,9 @@ export type OBJ_Polygon = {
   sides?: number,
   radius?: number,
   center?: number,
-  rotation?: TypeRotationDefinition,
+  axis?: TypeRotationDefinition,
   close?: boolean,
-  rotationOffset?: number,
+  rotation?: number,
   direction?: 1 | -1,
 };
 
@@ -25,23 +25,23 @@ function polygon(options: OBJ_Polygon) {
     sides: 4,
     radius: 1,
     center: [0, 0, 0],
-    rotation: 0,
+    axis: 0,
     close: true,
-    rotationOffset: 0,
+    rotation: 0,
     direction: 1,
   }, options);
   o.center = getPoint(o.center);
   const {
-    sides, radius, center, rotation, close, rotationOffset, direction,
+    sides, radius, center, axis, close, rotation, direction,
   } = o;
 
   const dAngle = Math.PI * 2 / sides;
-  const matrix = new Transform().rotate(rotation).matrix();
+  const matrix = new Transform().rotate(axis).matrix();
   const points = [];
   for (let i = 0; i < sides + close ? 1 : 0; i += 1) {
     points.push(new Point(
-      radius * Math.cos(direction * (dAngle * i + rotationOffset)),
-      radius * Math.sin(direction * (dAngle * i + rotationOffset)),
+      radius * Math.cos(direction * (dAngle * i + rotation)),
+      radius * Math.sin(direction * (dAngle * i + rotation)),
     ).transformBy(matrix).add(center));
   }
   return points;

@@ -4,6 +4,7 @@ import type { TypeParsablePoint } from '../geometry/Point';
 import { joinObjects } from '../tools';
 import { getNormal } from '../geometry/Plane';
 import { Transform } from '../geometry/Transform';
+import type { TypeRotationDefinition } from '../geometry/Transform';
 
 /**
  * Create a surface by lathing a profile.
@@ -12,9 +13,9 @@ export type OBJ_LatheMesh = {
   sides?: number,
   profile?: Array<TypeParsablePoint>,
   normals?: 'curved' | 'flat' | 'curved2',
-  position?: TypeParsablePoint,
-  rotation?: TypeRotationDefinition,
-  latheRotation?: number,
+  // position?: TypeParsablePoint,
+  axis?: TypeRotationDefinition,
+  rotation?: number,
 }
 
 /**
@@ -32,8 +33,8 @@ export default function lathe(options: OBJ_LatheMesh) {
       normals: 'curved',
       ends: true,
       position: [0, 0, 0],
+      axis: 0,
       rotation: 0,
-      latheRotation: 0,
     },
     options,
   );
@@ -45,19 +46,32 @@ export default function lathe(options: OBJ_LatheMesh) {
   }
 
   const {
-    sides, profile, latheRotation, normals,
+    sides, profile, rotation, normals,
   } = o;
   const points = [];
   const dAngle = Math.PI * 2 / sides;
-  const matrix = new Transform().rotate(o.rotation).matrix();
+  const matrix = new Transform().rotate(o.axis).matrix();
+  let start0 = false;
+  let end0 = false;
+  if (profile[0].y === 0) {
+    start0 = true;
+  }
+  if (profile[profile.length - 1].y === 0) {
+    end0 = true;
+  }
+  console.log(end0, start0)
   for (let i = 0; i < sides + 1; i += 1) {
     const profilePoints = [];
     for (let j = 0; j < profile.length; j += 1) {
-      profilePoints.push(getPoint([
+      let p = getPoint([
         profile[j].x,
-        Math.max(profile[j].y, 0.00001) * Math.cos(dAngle * i + latheRotation),
-        Math.max(profile[j].y, 0.00001) * Math.sin(dAngle * i + latheRotation),
-      ]).transformBy(matrix).add(o.position));
+        Math.max(profile[j].y, -0.00001) * Math.cos(dAngle * i + rotation),
+        Math.max(profile[j].y, -0.00001) * Math.sin(dAngle * i + rotation),
+      ]);
+      if (o.axis !== 0) {
+        p = p.transformBy(matrix);
+      }
+      profilePoints.push(p.add(o.position));
     }
     points.push(profilePoints);
   }
@@ -85,9 +99,15 @@ export default function lathe(options: OBJ_LatheMesh) {
       const a2 = points[i][j + 1];
       const b1 = points[i + 1][j];
       const b2 = points[i + 1][j + 1];
-      triangles.push(...a1.toArray(), ...b2.toArray(), ...a2.toArray());
-      triangles.push(...a1.toArray(), ...b1.toArray(), ...b2.toArray());
-      const norm = getNormal(a1, b1, a2);
+      let norm;
+      if ((j === profile.length - 2 && !end0) || j < profile.length - 2) {
+        triangles.push(...a1.toArray(), ...b2.toArray(), ...a2.toArray());
+        norm = getNormal(a1, b2, a2);
+      }
+      if ((j === 0 && !start0) || j > 0) {
+        triangles.push(...a1.toArray(), ...b1.toArray(), ...b2.toArray());
+        norm = getNormal(a1, b1, b2);
+      }
       if (normals === 'curved2') {
         quadNorms[i][j].push(norm);
         quadNorms[i][j + 1].push(norm);
@@ -97,23 +117,42 @@ export default function lathe(options: OBJ_LatheMesh) {
       if (normals === 'curved') {
         let prevNorm;
         let nextNorm;
+        let nextI = i + 2;
+        let prevI = i - 1;
         if (i === 0) {
-          prevNorm = getNormal(points[sides - 2][j], a1, a2);
-          nextNorm = getNormal(b1, points[i + 2][j + 1], b2);
-        } else if (i === sides - 1) {
-          prevNorm = getNormal(points[i - 1][j], a1, a2);
-          nextNorm = getNormal(b1, points[1][j + 1], b2);
+          prevI = sides - 2;
+        }
+        if (i === sides - 1) {
+          nextI = 1;
+        }
+        if (j === 0) {
+          prevNorm = getNormal(points[prevI][j], a2, points[prevI][j + 1]);
+          nextNorm = getNormal(b1, points[nextI][j + 1], b2);
+        } else if (j === profile.length - 2) {
+          prevNorm = getNormal(points[prevI][j], a1, a2);
+          nextNorm = getNormal(b1, points[nextI][j], points[nextI][j + 1]);
         } else {
-          prevNorm = getNormal(points[i - 1][j], a1, a2);
-          nextNorm = getNormal(b1, points[i + 2][j + 1], b2);
+          prevNorm = getNormal(points[prevI][j], a1, a2);
+          nextNorm = getNormal(b1, points[nextI][j + 1], b2);
         }
         const aNorm = norm.add(prevNorm).normalize().toArray();
         const bNorm = norm.add(nextNorm).normalize().toArray();
-        norms.push(...aNorm, ...bNorm, ...aNorm, ...aNorm, ...bNorm, ...bNorm);
+        if ((j === profile.length - 2 && !end0) || j < profile.length - 2) {
+          norms.push(...aNorm, ...bNorm, ...aNorm);
+        }
+        if ((j === 0 && !start0) || j > 0) {
+          norms.push(...aNorm, ...bNorm, ...bNorm);
+        }
       }
       const n = norm.normalize().toArray();
       if (normals === 'flat') {
-        norms.push(...n, ...n, ...n, ...n, ...n, ...n);
+        if ((j === profile.length - 2 && !end0) || j < profile.length - 2) {
+          norms.push(...n, ...n, ...n);
+        }
+        if ((j === 0 && !start0) || j > 0) {
+          norms.push(...n, ...n, ...n);
+        }
+        // norms.push(...n, ...n, ...n, ...n, ...n, ...n);
       }
     }
   }
@@ -142,17 +181,23 @@ export default function lathe(options: OBJ_LatheMesh) {
     // return
     for (let i = 0; i < sides; i += 1) {
       for (let j = 0; j < profile.length - 1; j += 1) {
-        norms.push(
-          ...qNorms[i][j].toArray(),
-          ...qNorms[i + 1][j + 1].toArray(),
-          ...qNorms[i][j + 1].toArray(),
-          ...qNorms[i][j].toArray(),
-          ...qNorms[i + 1][j].toArray(),
-          ...qNorms[i + 1][j + 1].toArray(),
-        );
+        if ((j === profile.length - 2 && !end0) || j < profile.length - 2) {
+          norms.push(
+            ...qNorms[i][j].toArray(),
+            ...qNorms[i + 1][j + 1].toArray(),
+            ...qNorms[i][j + 1].toArray(),
+          );
+        }
+        if ((j === 0 && !start0) || j > 0) {
+          norms.push(
+            ...qNorms[i][j].toArray(),
+            ...qNorms[i + 1][j].toArray(),
+            ...qNorms[i + 1][j + 1].toArray(),
+          );
+        }
       }
     }
   }
-  
+  console.log(triangles.length)
   return [triangles, norms];
 }

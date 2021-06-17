@@ -129,8 +129,9 @@ const [lv, ln] = lathe({
   // profile: [[0, 0], [0, r1], [0.5, r1], [0.5, r2], [0.6, 0]],
   // profile: [[0, 0.5], [0, 0.6], [0.1, 0.6], [0.1, 0.5], [0, 0.5]],
   profile: polygon({ radius: 0.1, center: [0, 0.5], sides: 20, direction: -1 }),
-  sides: 50,
-  normals: 'curved2',
+  // profile: [[0, 0, 0], [0.5, 0.3, 0], [0.7, 0, 0]],
+  sides: 20,
+  normals: 'flat',
   // rotation: ['dir', 1, -1, 0.5],
 });
 figure.add({
