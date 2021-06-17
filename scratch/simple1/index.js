@@ -1,5 +1,5 @@
 /* globals Fig */
-const { sphericalToCartesian, getNormal, sphere, lathe, polygon, cone } = Fig.tools.g2;
+const { sphericalToCartesian, getNormal, sphere, lathe, polygon, cone, cube } = Fig.tools.g2;
 const { Point, getPoint, getTransform } = Fig;
 const { m3 } = Fig.tools;
 const figure = new Fig.Figure({ limits: [-1, -1, 2, 2], backgroundColor: [1, 0.9, 0.9, 1] });
@@ -145,11 +145,10 @@ figure.add({
 });
 
 
-const [rv, rn] = cone({
-  sides: 10,
-  line: [[0.5, 0.5, 0.5], [0, 0, 0]],
-  radius: 0.2,
-  normals: 'flat',
+const [rv, rn] = cube({
+  side: 0.2,
+  position: [0.3, 0, 0],
+  rotation: ['sph', Math.PI / 4, 0],
 });
 
 figure.add({

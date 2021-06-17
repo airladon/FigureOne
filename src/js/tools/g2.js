@@ -38,6 +38,7 @@ import { lathe } from './3d/lathe';
 import cone from './3d/cone';
 import rod from './3d/rod';
 import { polygon } from './geometry/polygon';
+import cube from './3d/cube';
 
 
 type Type3Components = [number, number, number];
@@ -576,4 +577,5 @@ export {
   polygon,
   rod,
   cone,
+  cube,
 };

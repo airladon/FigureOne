@@ -8,7 +8,7 @@ export type OBJ_SphereMesh = {
   sides?: number,
   radius?: number,
   normals?: 'curve' | 'flat',
-  center?: TypeParsablePoint,
+  position?: TypeParsablePoint,
 }
 
 export default function sphere(options: OBJ_SphereMesh) {
@@ -21,11 +21,11 @@ export default function sphere(options: OBJ_SphereMesh) {
     options,
   );
   const { sides, radius, normals } = o;
-  let center;
-  if (o.center == null) {
-    center = [0, 0, 0];
+  let position;
+  if (o.position == null) {
+    position = [0, 0, 0];
   } else {
-    center = getPoint(o.center).toArray();
+    position = getPoint(o.position).toArray();
   }
   const dTheta = Math.PI / sides;
   const dPhi = dTheta;
@@ -37,7 +37,7 @@ export default function sphere(options: OBJ_SphereMesh) {
     const thetaArc = [];
     const curvedNormalsArc = [];
     for (let theta = 0; theta < Math.PI + 0.0001; theta += dTheta) {
-      thetaArc.push(sphericalToCartesian(radius, theta, phi).map((v, i) => v + center[i]));
+      thetaArc.push(sphericalToCartesian(radius, theta, phi).map((v, i) => v + position[i]));
       curvedNormalsArc.push(sphericalToCartesian(1, theta, phi));
     }
     arcs.push(thetaArc);
