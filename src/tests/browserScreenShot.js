@@ -1,4 +1,4 @@
-/* global page figure Fig testCases */
+/* global page figure Fig testCases, runTestCase */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable jest/no-export */
 // eslint-disable-next-line import/no-unresolved
@@ -36,19 +36,7 @@ function browserScreenShot(title, file, testCase = '', duration = 0, step = 1) {
     await page.evaluate((tc) => {
       figure.timeKeeper.setManualFrames();
       figure.timeKeeper.frame(0);
-      function processArray(_a, _o) {
-        const next = _a[0];
-        if (_a.length === 1) {
-          return _o[next];
-        }
-        return processArray(_a.slice(1), _o[next]);
-      }
-      if (Array.isArray(tc)) {
-        processArray(tc, testCases)();
-      } else if (tc !== '') {
-        // eslint-disable-next-line
-        testCases[tc]();
-      }
+      runTestCase(tc, testCases);
       figure.animateNextFrame();
     }, testCase);
     delay(100);

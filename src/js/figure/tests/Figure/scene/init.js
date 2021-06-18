@@ -47,26 +47,35 @@ const fragShader = {
 };
 
 
-const addAxis = (name, direction, color) => {
-  const [p, n] = rod({ radius: 0.02, sides: 10, line: [[0, 0, 0], [0.7, 0, 0]] });
+const addAxis = (name, direction, color, includeArrow = false) => {
+  const [p, n] = rod({ radius: 0.03, sides: 10, line: [[0, 0, 0], [0.7, 0, 0]] });
+  let cn = [];
+  let cnNormals = [];
+  if (includeArrow) {
+    [cn, cnNormals] = cone({
+      radius: 0.06,
+      sides: 10,
+      line: [[0.7, 0, 0], [0.85, 0, 0]],
+    });
+  }
   const r = figure.add({
     name,
     make: 'gl',
     vertexShader,
     fragShader,
-    vertices3: { data: p },
-    normals: { data: n },
+    vertices3: { data: [...p, ...cn] },
+    normals: { data: [...n, ...cnNormals] },
     color,
-    transform: [['rd', ...direction]]
+    transform: [['rd', ...direction]],
   });
   r.setTouchable();
 };
-addAxis('xPos', [1, 0, 0], [1, 0, 0, 1]);
-addAxis('xNeg', [-1, 0, 0], [0.7, 0, 0, 1]);
-addAxis('yPos', [0, 1, 0], [0, 1, 0, 1]);
-addAxis('yNeg', [0, -1, 0], [0, 0.5, 0, 1]);
-addAxis('zPos', [0, 0, 1], [0.3, 0.3, 1, 1]);
-addAxis('zNeg', [0, 0, -1], [0, 0, 0.8, 1]);
+addAxis('xPos', [1, 0, 0], [1, 0, 0, 1], true);
+addAxis('xNeg', [-1, 0, 0], [1, 0, 0, 1]);
+addAxis('yPos', [0, 1, 0], [0, 1, 0, 1], true);
+addAxis('yNeg', [0, -1, 0], [0, 1, 0, 1]);
+addAxis('zPos', [0, 0, 1], [0, 0, 1, 1], true);
+addAxis('zNeg', [0, 0, -1], [0, 0, 1, 1]);
 
 
 const [cv, cn] = cone({

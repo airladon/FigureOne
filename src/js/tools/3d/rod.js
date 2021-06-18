@@ -18,7 +18,7 @@ export default function rod(options: OBJ_Rod) {
     {
       sides: 10,
       radius: 0.1,
-      normals: 'curve',
+      normals: 'flat',
       ends: true,
       rotation: 0,
       length: 1,
