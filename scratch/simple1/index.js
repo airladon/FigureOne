@@ -187,7 +187,7 @@ const k = figure.add({
 k.scene = new Fig.Scene({ left: -2, right: 2, bottom: -1, top: 1 });
 
 figure.scene.light.directional = [1, 1, 1];
-figure.scene.light.min = 0;
+figure.scene.light.ambient = 0;
 figure.scene.light.point = [0.3, 0.1, 1];
 
 

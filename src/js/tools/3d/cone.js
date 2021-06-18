@@ -18,7 +18,7 @@ export default function cone(options: OBJ_Cone) {
     {
       sides: 10,
       radius: 0.1,
-      normals: 'curve',
+      normals: 'flat',
       rotation: 0,
       length: 1,
     },

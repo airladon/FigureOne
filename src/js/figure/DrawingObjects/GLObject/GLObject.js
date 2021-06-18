@@ -634,7 +634,7 @@ class GLObject extends DrawingObject {
     if (locations.u_minLight != null) {
       gl.uniform1f(
         locations.u_minLight,
-        scene.light.min,
+        scene.light.ambient,
       );
     }
 

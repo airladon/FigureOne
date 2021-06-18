@@ -1,6 +1,6 @@
 /* globals Fig */
 const figure = new Fig.Figure();
-const { rod, sphere } = Fig.tools.g2;
+const { rod, cone } = Fig.tools.g2;
 
 
 const screenGrid = figure.add({
@@ -37,14 +37,23 @@ figure.add({
   xAlign: 'center',
 });
 
+const vertexShader = {
+  dimension: 3,
+  normals: true,
+  light: 'directional',
+};
+const fragShader = {
+  light: 'directional',
+};
+
 
 const addAxis = (name, direction, color) => {
   const [p, n] = rod({ radius: 0.02, sides: 10, line: [[0, 0, 0], [0.7, 0, 0]] });
   const r = figure.add({
     name,
     make: 'gl',
-    vertexShader: { dimension: 3, light: 'directional', normals: true },
-    fragShader: { light: 'directional' },
+    vertexShader,
+    fragShader,
     vertices3: { data: p },
     normals: { data: n },
     color,
@@ -58,3 +67,20 @@ addAxis('yPos', [0, 1, 0], [0, 1, 0, 1]);
 addAxis('yNeg', [0, -1, 0], [0, 0.5, 0, 1]);
 addAxis('zPos', [0, 0, 1], [0.3, 0.3, 1, 1]);
 addAxis('zNeg', [0, 0, -1], [0, 0, 0.8, 1]);
+
+
+const [cv, cn] = cone({
+  line: [[0, 0, 0], [0, 0.3, 0]],
+  radius: 0.1,
+  sides: 4,
+});
+
+figure.add({
+  make: 'gl',
+  vertexShader,
+  fragShader,
+  vertices3: { data: cv },
+  normals: { data: cn },
+  color: [0, 1, 1, 1],
+  position: [0, 0, 0.5],
+});
