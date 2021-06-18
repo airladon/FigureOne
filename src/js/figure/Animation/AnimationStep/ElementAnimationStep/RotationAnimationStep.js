@@ -1,6 +1,6 @@
 // @flow
 import {
-  Transform, getDeltaAngle, getMaxTimeFromVelocity, clipAngle, getPoint, getScale, Point,
+  getDeltaAngle, clipAngle, getPoint,
 } from '../../../../tools/g2';
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,

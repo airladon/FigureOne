@@ -1,8 +1,9 @@
-const { browserStaticTester } = require('../../../../../tests/browserAnimationTester');
+const { browserScreenShot } = require('../../../../../tests/browserScreenShot');
 
-browserStaticTester(
+browserScreenShot(
   'Figure Space',
   `file:/${__dirname}/space.html`,
-  5,
+  'basic',
+  0,
   0.5,
 );

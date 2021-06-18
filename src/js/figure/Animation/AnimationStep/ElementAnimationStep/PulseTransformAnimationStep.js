@@ -4,7 +4,7 @@ import {
   getDeltaAngle, getMaxTimeFromVelocity,
 } from '../../../../tools/g2';
 import type {
-  TypeParsablePoint, TypeParsableTransform, OBJ_TranslationPath,
+  TypeParsablePoint, TypeParsableTransform,
 } from '../../../../tools/g2';
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
