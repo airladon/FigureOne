@@ -1,4 +1,4 @@
-/* global page figure Fig testCases, runTestCase */
+/* global page figure testCases, runTestCase */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable jest/no-export */
 // eslint-disable-next-line import/no-unresolved
@@ -10,14 +10,15 @@ function browserScreenShot(title, file, testCase = '', duration = 0, step = 1) {
   jest.setTimeout(120000);
 
   function delay(time) {
-    return new Promise(function(resolve) {
-      setTimeout(resolve, time)
+    return new Promise((resolve) => {
+      setTimeout(resolve, time);
     });
   }
 
   page.on('console', async (msg) => {
     const msgType = msg.type();
     const args = await Promise.all(msg.args().map(jsHandle => jsHandle.jsonValue()));
+    // eslint-disable-next-line no-console
     console[msgType](...args);
   });
 
@@ -36,7 +37,9 @@ function browserScreenShot(title, file, testCase = '', duration = 0, step = 1) {
     await page.evaluate((tc) => {
       figure.timeKeeper.setManualFrames();
       figure.timeKeeper.frame(0);
-      runTestCase(tc, testCases);
+      if (tc !== '') {
+        runTestCase(tc, testCases);
+      }
       figure.animateNextFrame();
     }, testCase);
     delay(100);
