@@ -5,6 +5,7 @@
 testCases = {
   beforeEach: () => {
     figure.scene = new Fig.Scene();
+    figure.get('cube').hide();
   },
   '2D': {
     standard: () => {
@@ -84,6 +85,19 @@ testCases = {
         figure.scene.setLight({ directional: [0, 0, 1], ambient: 0.7 });
       },
     },
+    pointLight: {
+      beforeEach: () => {
+        figure.get('cube').show();
+      },
+      'point light close': () => {
+        figure.scene.setCamera({ position: [0, 0, 2] });
+        figure.scene.setLight({ point: [-0.3, 0.3, 1.1], ambient: 0 });
+      },
+      'point light further': () => {
+        figure.scene.setCamera({ position: [0, 0, 2] });
+        figure.scene.setLight({ point: [-0.3, 0.3, 1.4], ambient: 0 });
+      },
+    },
   },
   perspective: {
     'camera position 0.5, 0.5, 2, wide angle': () => {
@@ -123,5 +137,5 @@ if (typeof process === 'object') {
     return runTestCase(tc.slice(1), tcs[next]);
   }
 
-  runTestCase(['perspective', 'camera position 0.5, 0.5, 2, telephoto'], testCases);
+  runTestCase(['ortho', 'pointLight', 'point light further'], testCases);
 }

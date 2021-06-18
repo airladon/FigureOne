@@ -93,3 +93,19 @@ figure.add({
   color: [0, 1, 1, 1],
   position: [0, 0, 0.5],
 });
+
+const [cubeV, cubeN] = Fig.tools.g2.cube({
+  side: 1,
+});
+
+figure.add({
+  name: 'cube',
+  make: 'gl',
+  vertexShader: { dimension: 3, light: 'point', normals: true },
+  fragShader: { light: 'point' },
+  vertices3: { data: cubeV },
+  normals: { data: cubeN },
+  color: [1, 0, 0, 1],
+  position: [0, 0, 0.5],
+});
+

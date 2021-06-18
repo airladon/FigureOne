@@ -1,5 +1,6 @@
 const { browserScreenShot } = require('../../../../../tests/browserScreenShot');
 const { testCases } = require('./index.js');
+
 const title = 'Scene';
 
 function processTests(o, path) {
@@ -21,14 +22,3 @@ function processTests(o, path) {
 }
 
 processTests(testCases, []);
-// Object.keys(testCases).forEach((testCase) => {
-//   browserScreenShot(
-//     'scene',
-//     `http://localhost:8080/${__dirname}/index.html`,
-//     testCase,
-//     0,
-//     0.5,
-//   );
-// });
-
-

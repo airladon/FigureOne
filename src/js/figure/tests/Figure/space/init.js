@@ -1,6 +1,6 @@
 /* globals Fig */
 const figure = new Fig.Figure();
-const { rod, sphere } = Fig.tools.g2;
+const { rod } = Fig.tools.g2;
 
 
 const screenGrid = figure.add({
@@ -48,7 +48,7 @@ const addAxis = (name, direction, color) => {
     vertices3: { data: p },
     normals: { data: n },
     color,
-    transform: [['rd', ...direction]]
+    transform: [['rd', ...direction]],
   });
   r.setTouchable();
 };
