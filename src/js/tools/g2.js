@@ -34,11 +34,12 @@ import {
 import type { TypeRotationDirection } from './geometry/angle';
 import { sphericalToCartesian, cartesianToSpherical } from './geometry/common';
 import sphere from './3d/sphere';
-import { lathe } from './3d/lathe';
+import { lathe, getLathePoints } from './3d/lathe';
 import cone from './3d/cone';
 import rod from './3d/rod';
 import { polygon } from './geometry/polygon';
 import cube from './3d/cube';
+import * as surface from './3d/surface';
 
 
 type Type3Components = [number, number, number];
@@ -578,4 +579,6 @@ export {
   rod,
   cone,
   cube,
+  surface,
+  getLathePoints,
 };

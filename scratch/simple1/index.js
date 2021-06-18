@@ -1,6 +1,6 @@
 /* globals Fig */
-const { sphericalToCartesian, getNormal, sphere, lathe, polygon, cone, cube } = Fig.tools.g2;
-const { Point, getPoint, getTransform } = Fig;
+const { sphere, lathe, polygon, cone, cube, rod, getLathePoints, surface } = Fig.tools.g2;
+const { getTransform } = Fig;
 const { m3 } = Fig.tools;
 const figure = new Fig.Figure({ limits: [-1, -1, 2, 2], backgroundColor: [1, 0.9, 0.9, 1] });
 
@@ -12,64 +12,64 @@ const col = (c, numVertices) => {
   return out;
 };
 
-const makeRod = (length, radius, sides, rx, ry, rz) => {
-  const corners = Fig.tools.morph.getPolygonCorners({ radius, sides });
-  const cornersZ = corners.map(c => c.add(0, 0, length));
-  const t = new Fig.Transform().rotate('xyz', rx, ry, rz);
-  const tc = corners.map(c => c.transformBy(t.mat));
-  const tcZ = cornersZ.map(c => c.transformBy(t.mat));
-  const frontNormal = new Fig.Point(0, 0, -1).transformBy(t.mat);
-  const backNormal = new Fig.Point(0, 0, 1).transformBy(t.mat);
-  const sideNormals = [];
-  const delta = Math.PI * 2 / sides / 2;
-  for (let i = 0; i < sides; i += 1) {
-    const angle = delta + i * delta * 2;
-    const normal = Fig.tools.g2.polarToRect(1, angle);
-    sideNormals.push(normal.transformBy(t.mat));
-  }
-  const points = [];
-  const normals = [];
-  for (let i = 0; i < sides; i += 1) {
-    const next = i === corners.length - 1 ? 0 : i + 1;
-    points.push(new Fig.Point(0, 0, 0).transformBy(t.mat));
-    points.push(tc[i]._dup());
-    points.push(tc[next]._dup());
-    normals.push(frontNormal._dup());
-    normals.push(frontNormal._dup());
-    normals.push(frontNormal._dup());
-  }
-  for (let i = 0; i < corners.length; i += 1) {
-    const next = i === corners.length - 1 ? 0 : i + 1;
-    points.push(tc[i]._dup(), tcZ[i]._dup(), tcZ[next]._dup());
-    points.push(tc[i]._dup(), tcZ[next]._dup(), tc[next]._dup());
-    normals.push(sideNormals[i]._dup());
-    normals.push(sideNormals[i]._dup());
-    normals.push(sideNormals[i]._dup());
-    normals.push(sideNormals[i]._dup());
-    normals.push(sideNormals[i]._dup());
-    normals.push(sideNormals[i]._dup());
-  }
-  for (let i = 0; i < sides; i += 1) {
-    const next = i === corners.length - 1 ? 0 : i + 1;
-    points.push(new Fig.Point(0, 0, length).transformBy(t.mat));
-    points.push(tcZ[i]);
-    points.push(tcZ[next]);
-    normals.push(backNormal._dup());
-    normals.push(backNormal._dup());
-    normals.push(backNormal._dup());
-  }
-  const vertices = [];
-  const norms = [];
-  for (let i = 0; i < points.length; i += 1) {
-    vertices.push(points[i].x);
-    vertices.push(points[i].y);
-    vertices.push(points[i].z);
-    norms.push(normals[i].x);
-    norms.push(normals[i].y);
-    norms.push(normals[i].z);
-  }
-  return [vertices, norms];
-};
+// const makeRod = (length, radius, sides, rx, ry, rz) => {
+//   const corners = Fig.tools.morph.getPolygonCorners({ radius, sides });
+//   const cornersZ = corners.map(c => c.add(0, 0, length));
+//   const t = new Fig.Transform().rotate('xyz', rx, ry, rz);
+//   const tc = corners.map(c => c.transformBy(t.mat));
+//   const tcZ = cornersZ.map(c => c.transformBy(t.mat));
+//   const frontNormal = new Fig.Point(0, 0, -1).transformBy(t.mat);
+//   const backNormal = new Fig.Point(0, 0, 1).transformBy(t.mat);
+//   const sideNormals = [];
+//   const delta = Math.PI * 2 / sides / 2;
+//   for (let i = 0; i < sides; i += 1) {
+//     const angle = delta + i * delta * 2;
+//     const normal = Fig.tools.g2.polarToRect(1, angle);
+//     sideNormals.push(normal.transformBy(t.mat));
+//   }
+//   const points = [];
+//   const normals = [];
+//   for (let i = 0; i < sides; i += 1) {
+//     const next = i === corners.length - 1 ? 0 : i + 1;
+//     points.push(new Fig.Point(0, 0, 0).transformBy(t.mat));
+//     points.push(tc[i]._dup());
+//     points.push(tc[next]._dup());
+//     normals.push(frontNormal._dup());
+//     normals.push(frontNormal._dup());
+//     normals.push(frontNormal._dup());
+//   }
+//   for (let i = 0; i < corners.length; i += 1) {
+//     const next = i === corners.length - 1 ? 0 : i + 1;
+//     points.push(tc[i]._dup(), tcZ[i]._dup(), tcZ[next]._dup());
+//     points.push(tc[i]._dup(), tcZ[next]._dup(), tc[next]._dup());
+//     normals.push(sideNormals[i]._dup());
+//     normals.push(sideNormals[i]._dup());
+//     normals.push(sideNormals[i]._dup());
+//     normals.push(sideNormals[i]._dup());
+//     normals.push(sideNormals[i]._dup());
+//     normals.push(sideNormals[i]._dup());
+//   }
+//   for (let i = 0; i < sides; i += 1) {
+//     const next = i === corners.length - 1 ? 0 : i + 1;
+//     points.push(new Fig.Point(0, 0, length).transformBy(t.mat));
+//     points.push(tcZ[i]);
+//     points.push(tcZ[next]);
+//     normals.push(backNormal._dup());
+//     normals.push(backNormal._dup());
+//     normals.push(backNormal._dup());
+//   }
+//   const vertices = [];
+//   const norms = [];
+//   for (let i = 0; i < points.length; i += 1) {
+//     vertices.push(points[i].x);
+//     vertices.push(points[i].y);
+//     vertices.push(points[i].z);
+//     norms.push(normals[i].x);
+//     norms.push(normals[i].y);
+//     norms.push(normals[i].z);
+//   }
+//   return [vertices, norms];
+// };
 const vertexShader = {
   dimension: 3,
   normals: true,
@@ -78,23 +78,53 @@ const vertexShader = {
 const fragShader = {
   light: 'directional',
 };
-const makeAxis = (name, color, rx, ry, rz, position) => {
-  const [vertices, normals] = makeRod(1, 0.01, 20, rx, ry, rz);
-  const a = figure.add({
+// const makeAxis = (name, color, rx, ry, rz, position) => {
+//   const [vertices, normals] = makeRod(1, 0.01, 20, rx, ry, rz);
+//   const a = figure.add({
+//     name,
+//     make: 'gl',
+//     vertexShader,
+//     fragShader,
+//     vertices3: { data: vertices },
+//     normals: { data: normals },
+//     color,
+//     position,
+//   });
+//   a.setTouchable();
+// };
+// makeAxis('x', [1, 0, 0, 1], 0, Math.PI / 2, 0, [-0.5, 0, 0]);
+// makeAxis('y', [0, 1, 0, 1], -Math.PI / 2, 0, 0, [0, -0.5, 0]);
+// makeAxis('z', [0, 0, 1, 1], 0, 0, 0, [0, 0, -0.5]);
+
+const addAxis = (name, direction, color, includeArrow = false) => {
+  const [p, n] = rod({ radius: 0.03, sides: 10, line: [[0, 0, 0], [1, 0, 0]] });
+  let cn = [];
+  let cnNormals = [];
+  if (includeArrow) {
+    [cn, cnNormals] = cone({
+      radius: 0.06,
+      sides: 10,
+      line: [[0.7, 0, 0], [0.85, 0, 0]],
+    });
+  }
+  const r = figure.add({
     name,
     make: 'gl',
     vertexShader,
     fragShader,
-    vertices3: { data: vertices },
-    normals: { data: normals },
+    vertices3: { data: [...p, ...cn] },
+    normals: { data: [...n, ...cnNormals] },
     color,
-    position,
+    transform: [['rd', ...direction]],
   });
-  a.setTouchable();
+  r.setTouchable();
 };
-makeAxis('x', [1, 0, 0, 1], 0, Math.PI / 2, 0, [-0.5, 0, 0]);
-makeAxis('y', [0, 1, 0, 1], -Math.PI / 2, 0, 0, [0, -0.5, 0]);
-makeAxis('z', [0, 0, 1, 1], 0, 0, 0, [0, 0, -0.5]);
+addAxis('xPos', [1, 0, 0], [1, 0, 0, 1], true);
+addAxis('xNeg', [-1, 0, 0], [1, 0, 0, 1]);
+addAxis('yPos', [0, 1, 0], [0, 1, 0, 1], true);
+addAxis('yNeg', [0, -1, 0], [0, 1, 0, 1]);
+addAxis('zPos', [0, 0, 1], [0, 0, 1, 1], true);
+addAxis('zNeg', [0, 0, -1], [0, 0, 1, 1]);
 
 const addSphere = (name, position, color) => {
   const [sx, sn] = sphere({ radius: 0.05, sides: 10, normals: 'curve' });
@@ -127,7 +157,7 @@ const [lv, ln] = lathe({
   // profile: [[0, 0, 0], [0.4, r1, 0], [0.4, 0, 0]],
   // profile: [[0, 0], [0, r1], [0.5, r1], [0.5, r2], [0.6, 0]],
   // profile: [[0, 0.5], [0, 0.6], [0.1, 0.6], [0.1, 0.5], [0, 0.5]],
-  profile: polygon({ radius: 0.1, center: [0, 0.5], sides: 6, direction: -1 }),
+  profile: polygon({ radius: 0.1, center: [0, 0.5], sides: 12, direction: -1 }),
   // profile: [[0, 0, 0], [0.5, 0.3, 0], [0.7, 0, 0]],
   sides: 12,
   normals: 'flat',
@@ -226,3 +256,26 @@ figure.elements.animations.new()
   // .rotation({ target: [1, 1, 1], duration: 10 })
   .start();
 
+
+
+const surfacePoints = getLathePoints({
+  // profile: Fig.getPoints([[0, 0], [0.2, 0.2], [0.6, 0.2], [0.8, 0]]),
+  profile: Fig.getPoints(polygon({ radius: 0.1, center: [0, 0.5], sides: 12, direction: -1 })),
+  sides: 12,
+  rotation: 0,
+  position: new Fig.Point(0, 0, 0),
+  matrix: new Fig.Transform().matrix(),
+  axis: 1,
+});
+const lines = surface.getLines(surfacePoints);
+console.log(surfacePoints)
+figure.add({
+  make: 'gl',
+  glPrimitive: 'LINES',
+  vertexShader: { dimension: 3 },
+  // fragShader,
+  vertices3: { data: lines },
+  // normals: { data: ln },
+  color: [0, 0, 0, 1],
+  position: [0, 0, 0],
+});

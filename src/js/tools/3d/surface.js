@@ -170,6 +170,31 @@ function getTriangles(
   return triangles;
 }
 
+function getLines(
+  surfacePoints: Array<Array<Point>>,
+) {
+  const rows = surfacePoints.length;
+  const cols = surfacePoints[0].length;
+  const lines = [];
+  for (let r = 0; r < rows - 1; r += 1) {
+    for (let c = 0; c < cols - 1; c += 1) {
+      const a1 = surfacePoints[r][c];
+      const a2 = surfacePoints[r][c + 1];
+      const b1 = surfacePoints[r + 1][c];
+      const b2 = surfacePoints[r + 1][c + 1];
+      lines.push(...a1.toArray(), ...a2.toArray());
+      lines.push(...a1.toArray(), ...b1.toArray());
+      if (c === cols - 2) {
+        lines.push(...a2.toArray(), ...b2.toArray());
+      }
+      if (r === rows - 2) {
+        lines.push(...b1.toArray(), ...b2.toArray());
+      }
+    }
+  }
+  return lines;
+}
+
 function getFlatNormals(
   surfaceNormals: Array<Array<Point>>,
   surfacePoints: Array<Array<Point>>,
@@ -330,4 +355,5 @@ export {
   getFlatNormals,
   getCurveNormals,
   getSurfaceNormals,
+  getLines,
 };
