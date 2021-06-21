@@ -291,6 +291,7 @@ class Transform {
     r4: number | null = null,
   ) {
     const def = parseRotation(typeOr2DRotation, r1, r2, r3, r4);
+
     return this.addComponent(def);
   }
 
@@ -373,6 +374,7 @@ class Transform {
         m = m3.mul(m, m3.rotationMatrixXYZ(x, y, z));
       } else if (type === 'rd') {
         m = m3.mul(m, m3.rotationMatrixDirection([x, y, z]));
+        console.log([x, y, z], m)
       } else if (type === 'rs') {
         m = m3.mul(m, m3.rotationMatrixSpherical(x, y));
       } else if (type === 'ra') {

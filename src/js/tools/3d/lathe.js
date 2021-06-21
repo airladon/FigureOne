@@ -198,8 +198,10 @@ function lathe(options: OBJ_Lathe) {
   const {
     sides, profile, rotation,
   } = o;
-
+  console.log(o.axis[1])
   const matrix = new Transform().rotate(o.axis).matrix();
+  console.log(matrix)
+
   const defined = {
     sides,
     profile,

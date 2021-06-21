@@ -1907,7 +1907,7 @@ class Figure {
     previousGLPoint: Point,
     currentGLPoint: Point,
   ) {
-    const previousLocalPoint = element.glToPlane(previousGLPoint)
+    const previousLocalPoint = element.glToPlane(previousGLPoint);
     const currentLocalPoint = element.glToPlane(currentGLPoint);
 
     const center = element.getPosition('local');
@@ -1926,6 +1926,7 @@ class Figure {
       rot = 0;
     }
     const newAngle = rot + diffAngle;
+    // console.log(rot, diffAngle, newAngle);
     transform.updateRotation(newAngle);
     element.moved(transform);
   }
@@ -1938,7 +1939,6 @@ class Figure {
   ) {
     const previousLocalPoint = element.glToPlane(previousGLPoint)
     const currentLocalPoint = element.glToPlane(currentGLPoint);
-    // console.log(currentGLPoint.round(1), currentLocalPoint.round(1))
     const delta = currentLocalPoint.sub(previousLocalPoint);
     const transform = element.transform._dup();
     const translation = transform.t();

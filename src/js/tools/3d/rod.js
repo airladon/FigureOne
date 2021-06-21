@@ -34,6 +34,7 @@ export default function rod(options: OBJ_Rod) {
   } else {
     line = getLine(o.line);
   }
+
   const profile = [];
   if (ends || ends === 1) {
     profile.push([0, 0]);

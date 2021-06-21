@@ -97,7 +97,7 @@ const fragShader = {
 // makeAxis('z', [0, 0, 1, 1], 0, 0, 0, [0, 0, -0.5]);
 
 const addAxis = (name, direction, color, includeArrow = false) => {
-  const [p, n] = rod({ radius: 0.03, sides: 10, line: [[0, 0, 0], [0.7, 0, 0]] });
+  const [p, n] = rod({ radius: 0.03, sides: 10, line: [[0, 0, 0], direction] });
   let cn = [];
   let cnNormals = [];
   if (includeArrow) {
@@ -115,16 +115,16 @@ const addAxis = (name, direction, color, includeArrow = false) => {
     vertices3: { data: [...p, ...cn] },
     normals: { data: [...n, ...cnNormals] },
     color,
-    transform: [['rd', ...direction]],
+    // transform: [['rd', ...direction]],
   });
   r.setTouchable();
 };
-addAxis('xPosAxis', [1, 0, 0], [1, 0, 0, 1], true);
-addAxis('xNegAxis', [-1, 0, 0], [1, 0, 0, 1]);
-addAxis('yPosAxis', [0, 1, 0], [0, 1, 0, 1], true);
-addAxis('yNegAxis', [0, -1, 0], [0, 1, 0, 1]);
-addAxis('zPosAxis', [0, 0, 1], [0, 0, 1, 1], true);
-addAxis('zNegAxis', [0, 0, -1], [0, 0, 1, 1]);
+addAxis('xPosAxis', [0.7, 0, 0], [1, 0, 0, 1], true);
+addAxis('xNegAxis', [-0.7, 0.0000001, 0], [1, 0, 0, 1]);
+// addAxis('yPosAxis', [0, 0.7, 0], [0, 1, 0, 1], true);
+// addAxis('yNegAxis', [0, -0.7, 0], [0, 1, 0, 1]);
+// addAxis('zPosAxis', [0, 0, 0.7], [0, 0, 1, 1], true);
+// addAxis('zNegAxis', [0, 0, -0.7], [0, 0, 1, 1]);
 
 const addSphere = (name, position, color) => {
   const [sx, sn] = sphere({ radius: 0.05, sides: 10, normals: 'curve' });
@@ -151,6 +151,9 @@ addSphere('zNeg', [0, 0, -0.95], [0, 0, 1, 1]);
 const r1 = 0.01;
 const r2 = 0.02;
 
+const xAxis = figure.getElement('xPosAxis');
+xAxis.move.type = 'rotation';
+xAxis.setMovable();
 // const [lv, ln] = lathe({
 //   // profile: [[0, 0.02, 0], [0.399, 0.099, 0], [0.4, 0.1, 0], [0.499, 0.05, 0], [0.5, 0.05, 0], [0.5, 0.0499, 0], [0.5, 0, 0]],
 //   // profile: [[0, 0.001, 0], [0.399, 0.1, 0], [0.4, 0.1, 0], [0.4, 0.099, 0], [0.4, 0, 0]],
@@ -189,9 +192,10 @@ const cube = figure.add({
   vertices3: { data: rv },
   normals: { data: rn },
   color: [0, 1, 1, 1],
-  position: [0, 0, 0],
+  position: [0.5, 0, 0],
 });
 cube.setMovable();
+cube.move.plane = Fig.tools.g2.getPlane([[0.5, 0, 0], [1, 0, 0]]);
 
 
 figure.add({
@@ -206,7 +210,6 @@ figure.add({
   radius: 0.5,
   sides: 5,
   color: [1, 1, 0, 0.7],
-  // position: [0.5, 0, 0],
   xAlign: 'center',
 });
 

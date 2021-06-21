@@ -176,6 +176,8 @@ function rotationMatrixAxis(
   return rotationMatrixUnitAxis(normalize(axis), angle);
 }
 
+// TODO - this will likely fail when the vectors are parallel - see
+// rotationMatrixDirection for clue to fix
 function rotationMatrixVectorToVector(
   fromVector: [number, number, number],
   toVector: [number, number, number],
@@ -189,6 +191,14 @@ function rotationMatrixVectorToVector(
 function rotationMatrixDirection(
   vector: [number, number, number],
 ) {
+  // If x is the dominant term, then the crossProducts and dotProducts are
+  // going to be error prone as the vector will be close to collinear with
+  // [1, 0, 0]. Therefore, if the x term accounts for 99.9% of the magnitude,
+  // then make the rotation axis the z+ axis, and set the rotation to 0 if
+  // vector.x is positive and π if vector.x is negative.
+  if (Math.abs(vector[0]) / length(vector) > 0.999) {
+    return rotationMatrixAxis([0, 0, 1], vector[0] > 0 ? 0 : Math.PI);
+  }
   const axis = crossProduct([1, 0, 0], vector);
   const d = dotProduct([1, 0, 0], vector);
   const angle = Math.acos(d / length(vector));
