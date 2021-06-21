@@ -6,6 +6,7 @@ import {
   clipAngle, getPoint, getTransform, getScale,
   TransformBounds, RectBounds, RangeBounds, getBounds,
   getBoundingBorder, isBuffer, getBorder, decelerateTransform,
+  getPlane, Plane,
 } from '../tools/g2';
 import type Scene from '../tools/scene';
 import { round } from '../tools/math';
@@ -319,6 +320,43 @@ type OBJ_ElementMoveFreely = {
   callback: ?(string | ((boolean) => void)),
 }
 
+/*
+An element can be 'moved' (transformed) by touching on it and dragging.
+
+The element can either be translated or rotated.
+
+A user can only move an element in a single plane:
+- Translation: within the plane
+- Rotation: around the normal of the plane
+
+Movement range can be bounded:
+- Translation: By some rectangle in the plane, or along a line in the plane
+- Rotation: Between some min and max values of rotation
+
+When the object is released, it may continue to move freely with the velocity of
+its last movement. The velocity may deccelerate to zero over time.
+
+Velocity is defined as a number or point and relates to:
+- Translation: x, y, z component velocities
+- Rotation: angular velocity
+
+Deceleration is defined with a number and relates to:
+- Translation: velocity vector magnitude reduction
+- Rotation: velocity value reduction
+
+If bounded, then the object may bounce of the bounds where each bounce may
+incurr some decceleration. A bounce is a reversing of the velocity.
+
+Movement happens with deltas. The in plane delta between the last movement
+position and the current movement position is used to delta the translation or
+rotation.
+
+Only one element (the closest element under the touch pixel) can be touched at
+any time.
+
+To scale an object, use an invisible translation pad?
+*/
+
 /**
  * Figure element move parameters
  *
@@ -333,17 +371,16 @@ type OBJ_ElementMoveFreely = {
  * @property {FigureElement | null} element
  */
 type OBJ_ElementMove = {
-  bounds: TransformBounds | 'none' | 'figure',
-  // boundsToUse: TransformBounds,
-  sizeInBounds: boolean,
-  // limits: TransformBounds,
-  // includeSize: boolean,
-  transformClip: string | (?(Transform) => Transform);
+  type: 'rotation' | 'translation' | 'position' | 'scale',
+  bounds: RectBounds | LineBounds | RangeBounds | null,
+  plane: Plane,
   maxVelocity: TypeTransformValue;
   freely: OBJ_ElementMoveFreely,
   canBeMovedAfterLosingTouch: boolean;
   type: 'rotation' | 'translation' | 'scaleX' | 'scaleY' | 'scale';
   element: FigureElement | null | string;
+  // Deprecate
+  sizeInBounds: boolean,
 };
 
 /* eslint-enable no-use-before-define */
@@ -820,7 +857,9 @@ class FigureElement {
       this.figureLimits = this.figure.limits._dup();
     }
     this.move = {
-      bounds: 'none',
+      // bounds: 'none',
+      bounds: null,
+      plane: new Plane([0, 0, 0], [0, 0, 1]),
       sizeInBounds: false,
       maxVelocity: 5,
       freely: {
@@ -832,7 +871,7 @@ class FigureElement {
       canBeMovedAfterLosingTouch: true,
       type: 'translation',
       element: null,
-      transformClip: null,
+      // transformClip: null,
     };
 
     this.scenarios = {};
@@ -888,7 +927,7 @@ class FigureElement {
       movement: {
         previousTime: null,
         previousTransform: this.transform._dup(),
-        velocity: this.transform.zero(),
+        velocity: 0,
       },
 
       isPulsing: false,
@@ -1564,17 +1603,7 @@ class FigureElement {
    * @param {Transform} transform
    */
   setTransform(transform: Transform, publish: boolean = true): void {
-    if (this.move.transformClip != null) {
-      const clip = this.fnMap.exec(this.move.transformClip, transform);
-      if (clip instanceof Transform) {
-        this.notifications.publish('beforeSetTransform', [clip]);
-        if (this.cancelSetTransform === false) {
-          this.transform = clip;
-        } else {
-          this.cancelSetTransform = false;
-        }
-      }
-    } else if (this.move.bounds !== 'none' && this.move.bounds != null) {
+    if (this.move.bounds !== 'none' && this.move.bounds != null) {
       const bounds = this.getMoveBounds(); // $FlowFixMe
       const clip = bounds.clip(transform);
       this.notifications.publish('beforeSetTransform', [clip]);
@@ -2544,7 +2573,9 @@ class FigureElement {
     //   );
     // }
     if (from === 'gl' && to === 'local') {
-      return m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.def.length));
+      const glToFigureMatrix = m3.inverse(figureToGLMatrix);
+      const figureToLocalMatrix = m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.def.length));
+      return m3.mul(figureToLocalMatrix, glToFigureMatrix);
     }
     if (from === 'figure' && to === 'local') {
       return m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.def.length));
@@ -2573,6 +2604,19 @@ class FigureElement {
     //   return this.figure.spaceTransforms.pixelToGL.matrix();
     // }
     return new Transform().identity().matrix();
+  }
+
+  glToPlane(
+    glPoint: TypeParsablePoint,
+    plane: TypeParsablePlane = this.move.plane,
+  ) {
+    const glPoint1 = getPoint(glPoint);
+    const glPoint2 = glPoint1.sub(0, 0, 1);
+    const glToLocalMatrix = this.spaceTransformMatrix('gl', 'local');
+    const fPoint1 = glPoint1.transformBy(glToLocalMatrix);
+    const fPoint2 = glPoint2.transformBy(glToLocalMatrix);
+    const p = getPlane(plane);
+    return p.lineIntersect([fPoint1, fPoint2]);
   }
 
   pointFromSpaceToSpace(
@@ -3183,6 +3227,9 @@ class FigureElement {
   }
 
   isUniqueColor(color: TypeColor) {
+    if (this.isTouchable === false) {
+      return false;
+    }
     if (
       this.uniqueColor == null
       || this.uniqueColor[0] !== color[0]

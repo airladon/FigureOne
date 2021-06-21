@@ -1,5 +1,5 @@
 /* globals Fig */
-const { sphere, lathe, polygon, cone, cube, rod, getLathePoints, surface } = Fig.tools.g2;
+const { sphere, lathe, polygon, cone, rod, getLathePoints, surface } = Fig.tools.g2;
 const { getTransform } = Fig;
 const { m3 } = Fig.tools;
 const figure = new Fig.Figure({ limits: [-1, -1, 2, 2], backgroundColor: [1, 0.9, 0.9, 1] });
@@ -85,7 +85,7 @@ const fragShader = {
 //     make: 'gl',
 //     vertexShader,
 //     fragShader,
-//     vertices3: { data: vertices },
+//     vertices3: { data: vertices },figure2DPoint
 //     normals: { data: normals },
 //     color,
 //     position,
@@ -97,7 +97,7 @@ const fragShader = {
 // makeAxis('z', [0, 0, 1, 1], 0, 0, 0, [0, 0, -0.5]);
 
 const addAxis = (name, direction, color, includeArrow = false) => {
-  const [p, n] = rod({ radius: 0.03, sides: 10, line: [[0, 0, 0], [1, 0, 0]] });
+  const [p, n] = rod({ radius: 0.03, sides: 10, line: [[0, 0, 0], [0.7, 0, 0]] });
   let cn = [];
   let cnNormals = [];
   if (includeArrow) {
@@ -119,12 +119,12 @@ const addAxis = (name, direction, color, includeArrow = false) => {
   });
   r.setTouchable();
 };
-addAxis('xPos', [1, 0, 0], [1, 0, 0, 1], true);
-addAxis('xNeg', [-1, 0, 0], [1, 0, 0, 1]);
-addAxis('yPos', [0, 1, 0], [0, 1, 0, 1], true);
-addAxis('yNeg', [0, -1, 0], [0, 1, 0, 1]);
-addAxis('zPos', [0, 0, 1], [0, 0, 1, 1], true);
-addAxis('zNeg', [0, 0, -1], [0, 0, 1, 1]);
+addAxis('xPosAxis', [1, 0, 0], [1, 0, 0, 1], true);
+addAxis('xNegAxis', [-1, 0, 0], [1, 0, 0, 1]);
+addAxis('yPosAxis', [0, 1, 0], [0, 1, 0, 1], true);
+addAxis('yNegAxis', [0, -1, 0], [0, 1, 0, 1]);
+addAxis('zPosAxis', [0, 0, 1], [0, 0, 1, 1], true);
+addAxis('zNegAxis', [0, 0, -1], [0, 0, 1, 1]);
 
 const addSphere = (name, position, color) => {
   const [sx, sn] = sphere({ radius: 0.05, sides: 10, normals: 'curve' });
@@ -151,45 +151,47 @@ addSphere('zNeg', [0, 0, -0.95], [0, 0, 1, 1]);
 const r1 = 0.01;
 const r2 = 0.02;
 
-const [lv, ln] = lathe({
-  // profile: [[0, 0.02, 0], [0.399, 0.099, 0], [0.4, 0.1, 0], [0.499, 0.05, 0], [0.5, 0.05, 0], [0.5, 0.0499, 0], [0.5, 0, 0]],
-  // profile: [[0, 0.001, 0], [0.399, 0.1, 0], [0.4, 0.1, 0], [0.4, 0.099, 0], [0.4, 0, 0]],
-  // profile: [[0, 0, 0], [0.4, r1, 0], [0.4, 0, 0]],
-  // profile: [[0, 0], [0, r1], [0.5, r1], [0.5, r2], [0.6, 0]],
-  // profile: [[0, 0.5], [0, 0.6], [0.1, 0.6], [0.1, 0.5], [0, 0.5]],
-  profile: polygon({ radius: 0.1, center: [0, 0.5], sides: 12, direction: -1 }),
-  // profile: [[0, 0, 0], [0.5, 0.3, 0], [0.7, 0, 0]],
-  sides: 12,
-  normals: 'flat',
-  // rotation: ['dir', 1, -1, 0.5],
-});
+// const [lv, ln] = lathe({
+//   // profile: [[0, 0.02, 0], [0.399, 0.099, 0], [0.4, 0.1, 0], [0.499, 0.05, 0], [0.5, 0.05, 0], [0.5, 0.0499, 0], [0.5, 0, 0]],
+//   // profile: [[0, 0.001, 0], [0.399, 0.1, 0], [0.4, 0.1, 0], [0.4, 0.099, 0], [0.4, 0, 0]],
+//   // profile: [[0, 0, 0], [0.4, r1, 0], [0.4, 0, 0]],
+//   // profile: [[0, 0], [0, r1], [0.5, r1], [0.5, r2], [0.6, 0]],
+//   // profile: [[0, 0.5], [0, 0.6], [0.1, 0.6], [0.1, 0.5], [0, 0.5]],
+//   profile: polygon({ radius: 0.1, center: [0, 0.5], sides: 12, direction: -1 }),
+//   // profile: [[0, 0, 0], [0.5, 0.3, 0], [0.7, 0, 0]],
+//   sides: 12,
+//   normals: 'flat',
+//   // rotation: ['dir', 1, -1, 0.5],
+// });
 
-figure.add({
-  make: 'gl',
-  vertexShader,
-  fragShader,
-  vertices3: { data: lv },
-  normals: { data: ln },
-  color: [1, 0, 0, 1],
-  position: [0, 0, 0],
-});
+// figure.add({
+//   make: 'gl',
+//   vertexShader,
+//   fragShader,
+//   vertices3: { data: lv },
+//   normals: { data: ln },
+//   color: [1, 0, 0, 1],
+//   position: [0, 0, 0],
+// });
 
 
-const [rv, rn] = cube({
+const [rv, rn] = Fig.tools.g2.cube({
   side: 0.2,
-  position: [0.3, 0, 0],
-  rotation: ['sph', Math.PI / 4, 0],
+  position: [0, 0, 0],
+  // rotation: ['sph', Math.PI / 4, 0],
 });
 
-figure.add({
+const cube = figure.add({
+  name: 'cube',
   make: 'gl',
   vertexShader,
   fragShader,
   vertices3: { data: rv },
   normals: { data: rn },
-  color: [0.8, 0, 1, 1],
+  color: [0, 1, 1, 1],
   position: [0, 0, 0],
 });
+cube.setMovable();
 
 
 figure.add({
@@ -216,7 +218,7 @@ const k = figure.add({
 });
 k.scene = new Fig.Scene({ left: -2, right: 2, bottom: -1, top: 1 });
 
-figure.scene.light.directional = [1, 1, 1];
+figure.scene.light.directional = [0.7, 0.5, 1];
 figure.scene.light.ambient = 0;
 figure.scene.light.point = [0.3, 0.1, 1];
 
@@ -224,7 +226,7 @@ figure.scene.light.point = [0.3, 0.1, 1];
 // figure.scene.setCamera({ position: [0.2, 0.2, 2] });
 // figure.scene.setProjection({ style: 'perspective', near: 1.03, far: 3, aspectRatio: 2, fieldOfView: Math.PI * 0.4 });
 
-figure.scene.setCamera({ position: [0, 0, 1.1] });
+figure.scene.setCamera({ position: [0.5, 0.5, 1.1] });
 
 figure.scene.setProjection({
   style: 'orthographic', near: 0.1, far: 4, left: -2, right: 2, bottom: -1, top: 1,
@@ -240,42 +242,42 @@ figure.scene.setProjection({
 //   .camera({ target: { position: [1, 1, 1.1] }, duration: 5 })
 //   .start();
 
-figure.elements.animations.new()
-  .custom({
-    callback: (p) => {
-      figure.elements.transform = getTransform([['c', ...m3.rotationMatrixVectorToVector([1, 0, 0], [1 - p, p, p])]]);
-    },
-    duration: 10,
-  })
-  // .custom({
-  //   callback: (p) => {
-  //     figure.elements.transform = getTransform([['c', ...m3.rotationMatrixAxisAngle([1, 1, 0], p * 2)]]);
-  //   },
-  //   duration: 10,
-  // })
-  // .rotation({ target: [1, 1, 1], duration: 10 })
-  .start();
+// figure.elements.animations.new()
+//   .custom({
+//     callback: (p) => {
+//       figure.elements.transform = getTransform([['c', ...m3.rotationMatrixVectorToVector([1, 0, 0], [1 - p, p, p])]]);
+//     },
+//     duration: 10,
+//   })
+//   // .custom({
+//   //   callback: (p) => {
+//   //     figure.elements.transform = getTransform([['c', ...m3.rotationMatrixAxisAngle([1, 1, 0], p * 2)]]);
+//   //   },
+//   //   duration: 10,
+//   // })
+//   // .rotation({ target: [1, 1, 1], duration: 10 })
+//   .start();
 
 
 
-const surfacePoints = getLathePoints({
-  // profile: Fig.getPoints([[0, 0], [0.2, 0.2], [0.6, 0.2], [0.8, 0]]),
-  profile: Fig.getPoints(polygon({ radius: 0.1, center: [0, 0.5], sides: 12, direction: -1 })),
-  sides: 12,
-  rotation: 0,
-  position: new Fig.Point(0, 0, 0),
-  matrix: new Fig.Transform().matrix(),
-  axis: 1,
-});
-const lines = surface.getLines(surfacePoints);
-console.log(surfacePoints)
-figure.add({
-  make: 'gl',
-  glPrimitive: 'LINES',
-  vertexShader: { dimension: 3 },
-  // fragShader,
-  vertices3: { data: lines },
-  // normals: { data: ln },
-  color: [0, 0, 0, 1],
-  position: [0, 0, 0],
-});
+// const surfacePoints = getLathePoints({
+//   // profile: Fig.getPoints([[0, 0], [0.2, 0.2], [0.6, 0.2], [0.8, 0]]),
+//   profile: Fig.getPoints(polygon({ radius: 0.1, center: [0, 0.5], sides: 12, direction: -1 })),
+//   sides: 12,
+//   rotation: 0,
+//   position: new Fig.Point(0, 0, 0),
+//   matrix: new Fig.Transform().matrix(),
+//   axis: 1,
+// });
+// const lines = surface.getLines(surfacePoints);
+// console.log(surfacePoints)
+// figure.add({
+//   make: 'gl',
+//   glPrimitive: 'LINES',
+//   vertexShader: { dimension: 3 },
+//   // fragShader,
+//   vertices3: { data: lines },
+//   // normals: { data: ln },
+//   color: [0, 0, 0, 1],
+//   position: [0, 0, 0],
+// });

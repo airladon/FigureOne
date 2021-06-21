@@ -402,7 +402,8 @@ class UniqueIdGenerator {
       ((id >> 0) & 0xFF),
       ((id >> 8) & 0xFF),
       ((id >> 16) & 0xFF),
-      ((id >> 24) & 0xFF),
+      255,
+      // ((id >> 24) & 0xFF),
     ];
     if (
       (color[0] === 255 || color[0] === 0 || color[0] === 100)
@@ -422,6 +423,7 @@ class UniqueIdGenerator {
         }
       }
     }
+    console.log(this.colorSeeds[seed], color)
     this.colorSeeds[seed] += 1;
     return color;
   }

@@ -167,20 +167,10 @@ class RangeBounds extends Bounds {
       return false;
     }
     const p = getPoint(position);
-    if (this.contains(p.x) && this.contains(p.y)) {
+    if (this.contains(p.x) && this.contains(p.y) && this.contains(p.z)) {
       return true;
     }
     return false;
-    // const p = getPoint(position);
-    // if (
-    //   (this.boundary.min == null
-    //     || (p.x >= this.boundary.min && p.y >= this.boundary.min))
-    //   && (this.boundary.max == null
-    //     || (p.x <= this.boundary.max && p.y <= this.boundary.max))
-    // ) {
-    //   return true;
-    // }
-    // return false;
   }
 
   intersect(

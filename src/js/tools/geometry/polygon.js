@@ -47,10 +47,10 @@ function polygon(options: OBJ_Polygon) {
   return points;
 }
 
-function isPointInPolygon(point: Point, polygon: Array<Point>) {
+function isPointInPolygon(point: Point, polygonCorners: Array<Point>) {
   let windingNumber = 0;
-  let n = polygon.length - 1;
-  const v = polygon.slice();
+  let n = polygonCorners.length - 1;
+  const v = polygonCorners.slice();
   const p = point;
   let popLastPoint = false;
   // polygon needs to have the last vertex the same as the first vertex
@@ -82,13 +82,13 @@ function isPointInPolygon(point: Point, polygon: Array<Point>) {
   return true;
 }
 
-function isPointOnPolygon(point: Point, polygon: Array<Point>) {
+function isPointOnPolygon(point: Point, polygonCorners: Array<Point>) {
   let popLastPoint = false;
   const p = point;
-  let n = polygon.length - 1;   // Number of sides
-  const v = polygon.slice();
+  let n = polygonCorners.length - 1;   // Number of sides
+  const v = polygonCorners.slice();
 
-  // polygon needs to have the last vertex the same as the first vertex
+  // polygonCorners needs to have the last vertex the same as the first vertex
   if (v[0].isNotEqualTo(v[n])) {
     v.push(v[0]);
     popLastPoint = true;
@@ -104,7 +104,7 @@ function isPointOnPolygon(point: Point, polygon: Array<Point>) {
       return true;
     }
   }
-  if (isPointInPolygon(p, polygon)) {
+  if (isPointInPolygon(p, polygonCorners)) {
     if (popLastPoint) {
       v.pop();
     }
