@@ -491,7 +491,7 @@ class Transform {
         count += 1;
       }
     }
-    throw new Error(`Cannot update '${type}-${n}' in transform: ${JSON.stringify(this.def)}`);
+    throw new Error(`Cannot update '${def}-${n}' in transform: ${JSON.stringify(this.def)}`);
   }
 
 
@@ -621,11 +621,11 @@ class Transform {
 
   updateRotationValues(
     n: number = 0,
-    values: Array<number>
+    values: Array<number>,
   ) {
     const i = this.getComponentIndex('r', n);
     const type = this.def[i][0];
-    return this.updateComponent([type, ...values], n)
+    return this.updateComponent([type, ...values], n);
   }
 
   /**
