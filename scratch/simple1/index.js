@@ -104,7 +104,7 @@ const addAxis = (name, direction, color, includeArrow = false) => {
     [cn, cnNormals] = cone({
       radius: 0.06,
       sides: 10,
-      line: [[0.7, 0, 0], [0.85, 0, 0]],
+      line: { p1: direction, direction, length: 0.15 },
     });
   }
   const r = figure.add({
@@ -120,11 +120,11 @@ const addAxis = (name, direction, color, includeArrow = false) => {
   r.setTouchable();
 };
 addAxis('xPosAxis', [0.7, 0, 0], [1, 0, 0, 1], true);
-addAxis('xNegAxis', [-0.7, 0.0000001, 0], [1, 0, 0, 1]);
-// addAxis('yPosAxis', [0, 0.7, 0], [0, 1, 0, 1], true);
-// addAxis('yNegAxis', [0, -0.7, 0], [0, 1, 0, 1]);
-// addAxis('zPosAxis', [0, 0, 0.7], [0, 0, 1, 1], true);
-// addAxis('zNegAxis', [0, 0, -0.7], [0, 0, 1, 1]);
+addAxis('xNegAxis', [-0.7, 0, 0], [1, 0, 0, 1]);
+addAxis('yPosAxis', [0, 0.7, 0], [0, 1, 0, 1], true);
+addAxis('yNegAxis', [0, -0.7, 0], [0, 1, 0, 1]);
+addAxis('zPosAxis', [0, 0, 0.7], [0, 0, 1, 1], true);
+addAxis('zNegAxis', [0, 0, -0.7], [0, 0, 1, 1]);
 
 const addSphere = (name, position, color) => {
   const [sx, sn] = sphere({ radius: 0.05, sides: 10, normals: 'curve' });
@@ -195,7 +195,8 @@ const cube = figure.add({
   position: [0.5, 0, 0],
 });
 cube.setMovable();
-cube.move.plane = Fig.tools.g2.getPlane([[0.5, 0, 0], [1, 0, 0]]);
+cube.move.type = 'scaleZ';
+// cube.move.plane = Fig.tools.g2.getPlane([[0.5, 0, 0], [1, 0, 0]]);
 
 
 figure.add({

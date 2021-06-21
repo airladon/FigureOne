@@ -423,7 +423,6 @@ class UniqueIdGenerator {
         }
       }
     }
-    console.log(this.colorSeeds[seed], color)
     this.colorSeeds[seed] += 1;
     return color;
   }

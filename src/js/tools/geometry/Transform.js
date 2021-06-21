@@ -374,7 +374,6 @@ class Transform {
         m = m3.mul(m, m3.rotationMatrixXYZ(x, y, z));
       } else if (type === 'rd') {
         m = m3.mul(m, m3.rotationMatrixDirection([x, y, z]));
-        console.log([x, y, z], m)
       } else if (type === 'rs') {
         m = m3.mul(m, m3.rotationMatrixSpherical(x, y));
       } else if (type === 'ra') {
