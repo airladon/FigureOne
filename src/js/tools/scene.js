@@ -1,6 +1,6 @@
 // @flow
 import type { TypeParsablePoint } from './g2';
-import { getPoint } from './g2';
+import { getPoint, Plane } from './g2';
 import { joinObjects } from './tools';
 import * as m3 from './m3';
 import type { Type3DMatrix } from './m3';
@@ -206,12 +206,38 @@ export default class Scene {
       getPoint(this.camera.up).toArray(),
     );
     this.viewMatrix = m3.inverse(this.cameraMatrix);
+    this.cameraPosition = getPoint(this.camera.position);
+    this.cameraVector = getPoint(this.camera.lookAt).sub(this.cameraPosition).normalize();
   }
 
   calcViewProjectionMatrix() {
     this.viewProjectionMatrix = m3.mul(this.projectionMatrix, this.viewMatrix);
     if (this.onUpdate != null) {
       this.onUpdate();
+    }
+    this.upVector = getPoint(this.camera.up).normalize();
+    this.rightVector = this.cameraVector
+      .crossProduct(this.upVector).normalize();
+    this.nearCenter = this.cameraPosition
+      .add(this.cameraVector.scale(this.near));
+    this.farCenter = this.cameraPosition
+      .add(this.cameraVector.scale(this.far));
+    this.nearPlane = new Plane(this.nearCenter, this.cameraVector);
+    this.farPlane = new Plane(this.farCenter, this.cameraVector);
+    if (this.style === 'perspective') {
+      // this.topNear = Math.tan(this.fieldOfView * 0.5) * this.near;
+      // this.topFar = Math.tan(this.fieldOfView * 0.5) * this.far;
+      // this.rightNear = this.aspectRatio * this.topNear;
+      // this.rightFar = this.aspectRatio * this.topFar;
+      this.heightNear = Math.tan(this.fieldOfView * 0.5) * this.near * 2;
+      this.heightFar = Math.tan(this.fieldOfView * 0.5) * this.far * 2;
+      this.widthNear = this.aspectRatio * this.heightNear;
+      this.widthFar = this.aspectRatio * this.heightFar;
+    } else {
+      this.heightNear = this.top - this.bottom;
+      this.widthNear = this.right - this.left;
+      this.heightFar = this.heightNear;
+      this.widthFar = this.widthNear;
     }
   }
 
@@ -220,22 +246,22 @@ export default class Scene {
     return matrix.slice();
   }
 
-  setProjectionMatrix(matrix: Type3DMatrix) {
-    this.projectionMatrix = this.dupMatrix(matrix);
-    this.calcViewProjectionMatrix();
-  }
+  // setProjectionMatrix(matrix: Type3DMatrix) {
+  //   this.projectionMatrix = this.dupMatrix(matrix);
+  //   this.calcViewProjectionMatrix();
+  // }
 
-  setCameraMatrix(matrix: Type3DMatrix) {
-    this.cameraMatrix = this.dupMatrix(matrix);
-    this.viewMatrix = m3.inverse(this.cameraMatrix);
-    this.calcViewProjectionMatrix();
-  }
+  // setCameraMatrix(matrix: Type3DMatrix) {
+  //   this.cameraMatrix = this.dupMatrix(matrix);
+  //   this.viewMatrix = m3.inverse(this.cameraMatrix);
+  //   this.calcViewProjectionMatrix();
+  // }
 
-  setViewMatrix(matrix: Type3DMatrix) {
-    this.viewMatrix = this.dupMatrix(matrix);
-    this.cameraMatrix = m3.inverse(this.viewMatrix);
-    this.calcViewProjectionMatrix();
-  }
+  // setViewMatrix(matrix: Type3DMatrix) {
+  //   this.viewMatrix = this.dupMatrix(matrix);
+  //   this.cameraMatrix = m3.inverse(this.viewMatrix);
+  //   this.calcViewProjectionMatrix();
+  // }
 
   setCamera(options: OBJ_Camera) {
     joinObjects(this.camera, options);

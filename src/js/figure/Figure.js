@@ -1329,7 +1329,12 @@ class Figure {
     }
 
     if (from === 'gl' && to === 'figure') {
-      return m3.inverse(figureToGLMatrix);
+      const glToFigureMatrix = m3.mul(
+        this.scene.cameraMatrix,
+        m3.inverse(this.scene.projectionMatrix),
+      );
+      // return m3.inverse(figureToGLMatrix);
+      return glToFigureMatrix;
     }
 
     if (from === 'gl' && to === 'figure2D') {
@@ -1349,10 +1354,12 @@ class Figure {
     figureToLocalMatrix: Type3DMatrix = m3.identity(),
   ) {
     const glPoint1 = getPoint(pixel).transformBy(this.spaceTransformMatrix('pixel', 'gl'));
-    const glPoint2 = glPoint1.sub(0, 0, 1);
+    const glPoint2 = glPoint1.sub(0, 0, 0.01);
+    console.log(glPoint1.toArray(), glPoint2.toArray())
     const glToFigureMatrix = this.spaceTransformMatrix('gl', 'figure');
     const fPoint1 = glPoint1.transformBy(m3.mul(figureToLocalMatrix, glToFigureMatrix));
     const fPoint2 = glPoint2.transformBy(m3.mul(figureToLocalMatrix, glToFigureMatrix));
+    console.log(fPoint1.toArray(), fPoint2.toArray())
     const p = getPlane(plane);
     return p.lineIntersect([fPoint1, fPoint2]);
   }
@@ -1361,13 +1368,48 @@ class Figure {
     glPoint: TypeParsablePoint,
     plane: TypeParsablePlane,
   ) {
-    const glPoint1 = getPoint(glPoint);
-    const glPoint2 = glPoint1.sub(0, 0, 1);
-    const glToFigureMatrix = this.spaceTransformMatrix('gl', 'figure');
-    const fPoint1 = glPoint1.transformBy(glToFigureMatrix);
-    const fPoint2 = glPoint2.transformBy(glToFigureMatrix);
-    const p = getPlane(plane);
-    return p.lineIntersect([fPoint1, fPoint2]);
+
+    const gl = getPoint(glPoint);
+    const nearPoint = this.scene.rightVector
+      .scale(this.scene.widthNear / 2 * gl.x)
+      .add(this.scene.upVector.scale(this.scene.heightNear / 2 * gl.y))
+      .add(this.scene.nearCenter);
+    const farPoint = this.scene.rightVector
+      .scale(this.scene.widthFar / 2 * gl.x)
+      .add(this.scene.upVector.scale(this.scene.heightFar / 2 * gl.y))
+      .add(this.scene.farCenter);
+    // const plane = getPlane([[0, 0, 0], [0, 0, 1]]);
+    console.log(nearPoint.round(2).toArray(), farPoint.round(2).toArray())
+    return getPlane(plane).lineIntersect([nearPoint, farPoint]);
+
+    // if (this.scene.style === 'orthographic' || this.scene.style === '2D') {
+    //   const glPoint1 = getPoint(glPoint);
+    //   const glPoint2 = glPoint1.add(0, 0, 1);
+    //   const glToFigureMatrix = this.spaceTransformMatrix('gl', 'figure');
+    //   const fPoint1 = glPoint1.transformBy(glToFigureMatrix);
+    //   const fPoint2 = glPoint2.transformBy(glToFigureMatrix);
+    //   const p = getPlane(plane);
+    //   return p.lineIntersect([fPoint1, fPoint2]);
+    // }
+    // // const glPoint1 = getPoint(glPoint);
+    // // const glPoint2 = glPoint1.add(0, 0, 0.1);
+    // // const glToFigureMatrix = this.spaceTransformMatrix('gl', 'figure');
+    // // console.log(glToFigureMatrix)
+    // // const fPoint1 = glPoint1.transformBy(glToFigureMatrix);
+    // // const fPoint2 = glPoint2.transformBy(glToFigureMatrix);
+    // // const p = getPlane(plane);
+    // // return p.lineIntersect([fPoint1, fPoint2]);
+    // const gl = getPoint(glPoint);
+    // const nearPoint = this.scene.rightVector
+    //   .scale(this.scene.rightNear * gl.x)
+    //   .add(this.scene.upVector.scale(this.scene.topNear * gl.y))
+    //   .add(this.scene.nearCenter);
+    // const farPoint = this.scene.rightVector
+    //   .scale(this.scene.rightFar * gl.x)
+    //   .add(this.scene.upVector.scale(this.scene.topFar * gl.y))
+    //   .add(this.scene.farCenter);
+    // // const plane = getPlane([[0, 0, 0], [0, 0, 1]]);
+    // return getPlane(plane).lineIntersect([nearPoint, farPoint]);
   }
 
 
@@ -1703,6 +1745,54 @@ class Figure {
   touchDownHandlerClient(clientPoint: Point, eventFromPlayback: boolean = false) {
     const pixelP = this.clientToPixel(clientPoint);
     const glPoint = pixelP.transformBy(this.spaceTransformMatrix('pixel', 'gl'));
+    glPoint.z = -1;
+    // console.log(pixelP, glPoint, this.pixelToPlane(pixelP, [[0,0,0], [0, 0, 1]]))
+
+    // const zeroPoint = new Point(0, 0, 0).transformBy(this.scene.viewProjectionMatrix);
+    // const onePoint = new Point(1, 1, 0).transformBy(this.scene.viewProjectionMatrix);
+
+    // // near
+    // const aspect = this.scene.aspectRatio;
+    // const topNear = Math.tan(this.scene.fieldOfView * 0.5) * this.scene.near;
+    // // const bottomNear = -topNear;
+    // // const leftNear = aspect * bottomNear;
+    // const rightNear = aspect * topNear;
+    // // const width = Math.abs(right - left);
+    // // const height = Math.abs(top - bottom);
+    // const topFar = Math.tan(this.scene.fieldOfView * 0.5) * this.scene.far;
+    // const rightFar = aspect * topFar;
+
+    // const cameraPosition = getPoint(this.scene.camera.position);
+    // const cameraVector = getPoint(this.scene.camera.lookAt)
+    //   .sub(cameraPosition).normalize();
+    // const upVector = getPoint(this.scene.camera.up).normalize();
+    // const rightVector = cameraVector.crossProduct(upVector).normalize();
+    // const nearCenter = cameraPosition.add(cameraVector.scale(this.scene.near));
+    // const farCenter = cameraPosition.add(cameraVector.scale(this.scene.far));
+    // const nearPoint = rightVector
+    //   .scale(rightNear * glPoint.x)
+    //   .add(upVector.scale(topNear * glPoint.y))
+    //   .add(nearCenter);
+    // const farPoint = rightVector
+    //   .scale(rightFar * glPoint.x)
+    //   .add(upVector.scale(topFar * glPoint.y))
+    //   .add(farCenter);
+    // const plane = getPlane([[0, 0, 0], [0, 0, 1]]);
+    // console.log(cameraVector, upVector, rightVector, topNear, rightNear)
+    // console.log(plane.lineIntersect([nearPoint, farPoint]));
+
+    // const nearPoint = this.scene.rightVector
+    //   .scale(this.scene.rightNear * glPoint.x)
+    //   .add(this.scene.upVector.scale(this.scene.topNear * glPoint.y))
+    //   .add(this.scene.nearCenter);
+    // const farPoint = this.scene.rightVector
+    //   .scale(this.scene.rightFar * glPoint.x)
+    //   .add(this.scene.upVector.scale(this.scene.topFar * glPoint.y))
+    //   .add(this.scene.farCenter);
+    // const plane = getPlane([[0, 0, 0], [0, 0, 1]]);
+    // const intersect = plane.lineIntersect([nearPoint, farPoint]);
+    // console.log(intersect)
+    console.log(this.glToPlane(glPoint, [[0, 0, 0], [0, 0, 1]]))
     this.touchDownHandler(glPoint, eventFromPlayback);
     return true;
     // if (e != null) {
@@ -1937,8 +2027,9 @@ class Figure {
     previousGLPoint: Point,
     currentGLPoint: Point,
   ) {
-    const previousLocalPoint = element.glToPlane(previousGLPoint)
+    const previousLocalPoint = element.glToPlane(previousGLPoint);
     const currentLocalPoint = element.glToPlane(currentGLPoint);
+    console.log(currentGLPoint.round(4).toArray(), currentLocalPoint.round(4).toArray())
     const delta = currentLocalPoint.sub(previousLocalPoint);
     const transform = element.transform._dup();
     const translation = transform.t();
@@ -2003,6 +2094,8 @@ class Figure {
     const previousPixelPoint = this.clientToPixel(previousClientPoint);
     const previousGLPoint = previousPixelPoint
       .transformBy(this.spaceTransformMatrix('pixel', 'gl'));
+    currentGLPoint.z = -1;
+    previousGLPoint.z = -1;
     return this.touchMoveHandler(previousGLPoint, currentGLPoint);
   }
 

@@ -12,64 +12,28 @@ const col = (c, numVertices) => {
   return out;
 };
 
-// const makeRod = (length, radius, sides, rx, ry, rz) => {
-//   const corners = Fig.tools.morph.getPolygonCorners({ radius, sides });
-//   const cornersZ = corners.map(c => c.add(0, 0, length));
-//   const t = new Fig.Transform().rotate('xyz', rx, ry, rz);
-//   const tc = corners.map(c => c.transformBy(t.mat));
-//   const tcZ = cornersZ.map(c => c.transformBy(t.mat));
-//   const frontNormal = new Fig.Point(0, 0, -1).transformBy(t.mat);
-//   const backNormal = new Fig.Point(0, 0, 1).transformBy(t.mat);
-//   const sideNormals = [];
-//   const delta = Math.PI * 2 / sides / 2;
-//   for (let i = 0; i < sides; i += 1) {
-//     const angle = delta + i * delta * 2;
-//     const normal = Fig.tools.g2.polarToRect(1, angle);
-//     sideNormals.push(normal.transformBy(t.mat));
-//   }
-//   const points = [];
-//   const normals = [];
-//   for (let i = 0; i < sides; i += 1) {
-//     const next = i === corners.length - 1 ? 0 : i + 1;
-//     points.push(new Fig.Point(0, 0, 0).transformBy(t.mat));
-//     points.push(tc[i]._dup());
-//     points.push(tc[next]._dup());
-//     normals.push(frontNormal._dup());
-//     normals.push(frontNormal._dup());
-//     normals.push(frontNormal._dup());
-//   }
-//   for (let i = 0; i < corners.length; i += 1) {
-//     const next = i === corners.length - 1 ? 0 : i + 1;
-//     points.push(tc[i]._dup(), tcZ[i]._dup(), tcZ[next]._dup());
-//     points.push(tc[i]._dup(), tcZ[next]._dup(), tc[next]._dup());
-//     normals.push(sideNormals[i]._dup());
-//     normals.push(sideNormals[i]._dup());
-//     normals.push(sideNormals[i]._dup());
-//     normals.push(sideNormals[i]._dup());
-//     normals.push(sideNormals[i]._dup());
-//     normals.push(sideNormals[i]._dup());
-//   }
-//   for (let i = 0; i < sides; i += 1) {
-//     const next = i === corners.length - 1 ? 0 : i + 1;
-//     points.push(new Fig.Point(0, 0, length).transformBy(t.mat));
-//     points.push(tcZ[i]);
-//     points.push(tcZ[next]);
-//     normals.push(backNormal._dup());
-//     normals.push(backNormal._dup());
-//     normals.push(backNormal._dup());
-//   }
-//   const vertices = [];
-//   const norms = [];
-//   for (let i = 0; i < points.length; i += 1) {
-//     vertices.push(points[i].x);
-//     vertices.push(points[i].y);
-//     vertices.push(points[i].z);
-//     norms.push(normals[i].x);
-//     norms.push(normals[i].y);
-//     norms.push(normals[i].z);
-//   }
-//   return [vertices, norms];
-// };
+figure.add({
+  make: 'grid',
+  bounds: [-1, -1, 2, 2],
+  xStep: 0.1,
+  yStep: 0.1,
+  line: { width: 0.005 },
+  color: [0.8, 0.8, 0.8, 1],
+  position: [0, 0, 0],
+  xAlign: 'center',
+});
+
+figure.add({
+  make: 'grid',
+  bounds: [-1, -1, 2, 2],
+  xStep: 0.5,
+  yStep: 0.5,
+  line: { width: 0.007 },
+  color: [0.5, 0.5, 0.5, 1],
+  position: [0, 0, 0],
+  xAlign: 'center',
+});
+
 const vertexShader = {
   dimension: 3,
   normals: true,
@@ -141,12 +105,12 @@ const addSphere = (name, position, color) => {
   s.setTouchable();
 };
 
-addSphere('xPos', [0.95, 0, 0], [1, 0.5, 0.5, 1]);
-addSphere('xNeg', [-0.95, 0, 0], [1, 0, 0, 1]);
-addSphere('yPos', [0, 0.95, 0], [0, 1, 0, 1]);
-addSphere('yNeg', [0, -0.95, 0], [0, 0.5, 0, 1]);
-addSphere('zPos', [0, 0, 0.95], [0.5, 0.5, 1, 1]);
-addSphere('zNeg', [0, 0, -0.95], [0, 0, 1, 1]);
+addSphere('xPos', [1, 0, 0], [1, 0.5, 0.5, 1]);
+addSphere('xNeg', [-1, 0, 0], [1, 0, 0, 1]);
+addSphere('yPos', [0, 1, 0], [0, 1, 0, 1]);
+addSphere('yNeg', [0, -1, 0], [0, 0.5, 0, 1]);
+addSphere('zPos', [0, 0, 1], [0.5, 0.5, 1, 1]);
+addSphere('zNeg', [0, 0, -1], [0, 0, 1, 1]);
 
 const r1 = 0.01;
 const r2 = 0.02;
@@ -192,10 +156,10 @@ const cube = figure.add({
   vertices3: { data: rv },
   normals: { data: rn },
   color: [0, 1, 1, 1],
-  position: [0.5, 0, 0],
+  // position: [0.5, 0, 0],
 });
 cube.setMovable();
-cube.move.type = 'scaleZ';
+cube.move.type = 'translation';
 // cube.move.plane = Fig.tools.g2.getPlane([[0.5, 0, 0], [1, 0, 0]]);
 
 
@@ -227,14 +191,13 @@ figure.scene.light.ambient = 0;
 figure.scene.light.point = [0.3, 0.1, 1];
 
 
-// figure.scene.setCamera({ position: [0.2, 0.2, 2] });
-// figure.scene.setProjection({ style: 'perspective', near: 1.03, far: 3, aspectRatio: 2, fieldOfView: Math.PI * 0.4 });
+figure.scene.setCamera({ position: [1, 1, 3] });
 
-figure.scene.setCamera({ position: [0.5, 0.5, 1.1] });
+figure.scene.setProjection({ style: 'perspective', near: 1, far: 10, aspectRatio: 2, fieldOfView: Math.PI * 0.2 });
 
-figure.scene.setProjection({
-  style: 'orthographic', near: 0.1, far: 4, left: -2, right: 2, bottom: -1, top: 1,
-});
+// figure.scene.setProjection({
+//   style: 'orthographic', near: 1, far: 5, left: -2, right: 2, bottom: -1, top: 1,
+// });
 // console.log('asdf')
 
 // figure.elements.animations.new()
