@@ -555,6 +555,7 @@ class Figure {
     // this.inTransition = false;
     this.beingMovedElement = null;
     this.beingTouchedElement = null;
+    this.moveBuffer = [];
     // this.touchTopElementOnly = true;
     this.timeKeeper = new TimeKeeper();
     this.notifications = new NotificationManager(this.fnMap);
@@ -1351,17 +1352,10 @@ class Figure {
   pixelToPlane(
     pixel: TypeParsablePoint,
     plane: TypeParsablePlane,
-    figureToLocalMatrix: Type3DMatrix = m3.identity(),
+    // figureToLocalMatrix: Type3DMatrix = m3.identity(),
   ) {
-    const glPoint1 = getPoint(pixel).transformBy(this.spaceTransformMatrix('pixel', 'gl'));
-    const glPoint2 = glPoint1.sub(0, 0, 0.01);
-    console.log(glPoint1.toArray(), glPoint2.toArray())
-    const glToFigureMatrix = this.spaceTransformMatrix('gl', 'figure');
-    const fPoint1 = glPoint1.transformBy(m3.mul(figureToLocalMatrix, glToFigureMatrix));
-    const fPoint2 = glPoint2.transformBy(m3.mul(figureToLocalMatrix, glToFigureMatrix));
-    console.log(fPoint1.toArray(), fPoint2.toArray())
-    const p = getPlane(plane);
-    return p.lineIntersect([fPoint1, fPoint2]);
+    const glPoint = getPoint(pixel).transformBy(this.spaceTransformMatrix('pixel', 'gl'));
+    return this.glToPlane(glPoint, plane);
   }
 
   glToPlane(
@@ -1376,35 +1370,6 @@ class Figure {
       .add(this.scene.rightVector.scale(this.scene.widthFar / 2 * gl.x))
       .add(this.scene.upVector.scale(this.scene.heightFar / 2 * gl.y));
     return getPlane(plane).lineIntersect([nearPoint, farPoint]);
-
-    // if (this.scene.style === 'orthographic' || this.scene.style === '2D') {
-    //   const glPoint1 = getPoint(glPoint);
-    //   const glPoint2 = glPoint1.add(0, 0, 1);
-    //   const glToFigureMatrix = this.spaceTransformMatrix('gl', 'figure');
-    //   const fPoint1 = glPoint1.transformBy(glToFigureMatrix);
-    //   const fPoint2 = glPoint2.transformBy(glToFigureMatrix);
-    //   const p = getPlane(plane);
-    //   return p.lineIntersect([fPoint1, fPoint2]);
-    // }
-    // // const glPoint1 = getPoint(glPoint);
-    // // const glPoint2 = glPoint1.add(0, 0, 0.1);
-    // // const glToFigureMatrix = this.spaceTransformMatrix('gl', 'figure');
-    // // console.log(glToFigureMatrix)
-    // // const fPoint1 = glPoint1.transformBy(glToFigureMatrix);
-    // // const fPoint2 = glPoint2.transformBy(glToFigureMatrix);
-    // // const p = getPlane(plane);
-    // // return p.lineIntersect([fPoint1, fPoint2]);
-    // const gl = getPoint(glPoint);
-    // const nearPoint = this.scene.rightVector
-    //   .scale(this.scene.rightNear * gl.x)
-    //   .add(this.scene.upVector.scale(this.scene.topNear * gl.y))
-    //   .add(this.scene.nearCenter);
-    // const farPoint = this.scene.rightVector
-    //   .scale(this.scene.rightFar * gl.x)
-    //   .add(this.scene.upVector.scale(this.scene.topFar * gl.y))
-    //   .add(this.scene.farCenter);
-    // // const plane = getPlane([[0, 0, 0], [0, 0, 1]]);
-    // return getPlane(plane).lineIntersect([nearPoint, farPoint]);
   }
 
 
@@ -1931,6 +1896,16 @@ class Figure {
   //   return false;
   // }
 
+  flushMoveBuffer() {
+    if (this.moveBuffer.length > 0) {
+      this.touchMoveHandler(
+        this.moveBuffer[0][0],
+        this.moveBuffer[this.moveBuffer.length - 1][1],
+        false,
+      );
+      this.moveBuffer = [];
+    }
+  }
 
   // Handle touch up, or mouse click up events in the canvas. When an UP even
   // happens, the default behavior is to let any elements being moved to move
@@ -1942,6 +1917,7 @@ class Figure {
         this.showCursor('up');
       }
     }
+    this.flushMoveBuffer();
     if (
       this.beingMovedElement != null
       && this.beingMovedElement.state.isBeingMoved
@@ -2023,9 +1999,9 @@ class Figure {
     previousGLPoint: Point,
     currentGLPoint: Point,
   ) {
+    console.log('translate')
     const previousLocalPoint = element.glToPlane(previousGLPoint);
     const currentLocalPoint = element.glToPlane(currentGLPoint);
-    console.log(currentGLPoint.round(4).toArray(), currentLocalPoint.round(4).toArray())
     const delta = currentLocalPoint.sub(previousLocalPoint);
     const transform = element.transform._dup();
     const translation = transform.t();
@@ -2092,7 +2068,10 @@ class Figure {
       .transformBy(this.spaceTransformMatrix('pixel', 'gl'));
     currentGLPoint.z = -1;
     previousGLPoint.z = -1;
-    return this.touchMoveHandler(previousGLPoint, currentGLPoint);
+    if (this.beingMovedElement == null || this.beingMovedElement === this.elements) {
+      return this.touchMoveHandler(previousGLPoint, currentGLPoint);
+    }
+    this.moveBuffer.push([previousGLPoint, currentGLPoint]);
   }
 
 
@@ -2510,7 +2489,6 @@ class Figure {
     if (nowIn === -1) {
       now = this.lastDrawTime;
     }
-
     this.lastDrawTime = now;
 
     if (this.scrolled === true) {
@@ -2534,6 +2512,7 @@ class Figure {
       return;
     }
     this.drawQueued = false;
+    this.flushMoveBuffer();
     // $FlowFixMe
     if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('m1'); }
 

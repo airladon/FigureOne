@@ -2621,7 +2621,13 @@ class FigureElement {
     const farPoint = this.lastScene.farCenter
       .add(this.lastScene.rightVector.scale(this.lastScene.widthFar / 2 * gl.x))
       .add(this.lastScene.upVector.scale(this.lastScene.heightFar / 2 * gl.y));
-    return getPlane(plane).lineIntersect([nearPoint, farPoint]);
+    const p = getPlane(plane);
+    const localToFigureMatrix = this.spaceTransformMatrix('local', 'figure');
+    const figurePlane = new Plane(
+      p.p.transformBy(localToFigureMatrix),
+      p.n.transformBy(localToFigureMatrix),
+    );
+    return figurePlane.lineIntersect([nearPoint, farPoint]);
 
     // const gl = getPoint(glPoint);
     // const nearPoint = this.lastScene.rightVector

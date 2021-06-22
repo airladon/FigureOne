@@ -116,26 +116,6 @@ addAxis('zPosAxis', [0, 0, 0.7], [0, 0, 1, 1], true);
 addAxis('zNegAxis', [0, 0, -0.7], [0, 0, 1, 1]);
 
 
-/* Test Rod */
-
-// const tr = addAxis('tr', [1, 0, 0], [1, 0, 0, 1], false);
-// tr.setPosition(0.5, 0, 0.5);
-// tr.setRotation(['dir', [0, 0, -1]]);
-const [pTr, nTr] = rod({ radius: 0.03, sides: 10, line: [[0, 0, 0], [1, 0, 0]] });
-const r = figure.add({
-  name: 'tr',
-  make: 'gl',
-  vertexShader,
-  fragShader,
-  vertices3: { data: [...pTr] },
-  normals: { data: [...nTr] },
-  color: [1, 0, 0, 1],
-  // transform: [['rd', ...direction]],
-});
-r.setTouchable();
-r.setPosition(0.5, 0.5, 0);
-r.setRotation(['dir', [0, 0, -1]]);
-/* */
 const addSphere = (name, position, color) => {
   const [sx, sn] = sphere({ radius: 0.05, sides: 10, normals: 'curve' });
   const s = figure.add({
