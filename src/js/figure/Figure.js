@@ -1305,7 +1305,7 @@ class Figure {
         min: this.scene.bottom,
         span: this.scene.top - this.scene.bottom,
       },
-      z: { min: -1, spacn: 2 },
+      z: { min: -1, space: 2 },
     }
 
     if (from === 'pixel' && to === 'gl') {
@@ -1317,6 +1317,9 @@ class Figure {
       return glToPixelMatrix;
     }
     const figureToGLMatrix = m3.dup(this.scene.viewProjectionMatrix);
+    if (this.scene.style === '2D') {
+      figureToGLMatrix[11] = 0;
+    }
     if (from === 'figure' && to === 'gl') {
       return figureToGLMatrix;
     }
@@ -1330,12 +1333,12 @@ class Figure {
     }
 
     if (from === 'gl' && to === 'figure') {
-      const glToFigureMatrix = m3.mul(
-        this.scene.cameraMatrix,
-        m3.inverse(this.scene.projectionMatrix),
-      );
-      // return m3.inverse(figureToGLMatrix);
-      return glToFigureMatrix;
+      // const glToFigureMatrix = m3.mul(
+      //   this.scene.cameraMatrix,
+      //   m3.inverse(this.scene.projectionMatrix),
+      // );
+      return m3.inverse(figureToGLMatrix);
+      // return glToFigureMatrix;
     }
 
     if (from === 'gl' && to === 'figure2D') {
@@ -1925,18 +1928,11 @@ class Figure {
       this.beingMovedElement.stopBeingMoved();
       this.beingMovedElement.startMovingFreely();
     }
-    // for (let i = 0; i < this.beingMovedElements.length; i += 1) {
-    //   const element = this.beingMovedElements[i];
-    //   if (element.state.isBeingMoved) {
-    //     element.stopBeingMoved();
-    //     element.startMovingFreely();
-    //   }
-    // }
+
     this.isTouchDown = false;
     this.beingMovedElement = null;
     this.beingTouchedElement = null;
   }
-
 
   setCursor(p: Point, animateNextFrame: boolean = true) {
     const cursor = this.getElement(this.cursorElementName);

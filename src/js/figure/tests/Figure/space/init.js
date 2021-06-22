@@ -1,7 +1,6 @@
 /* globals Fig */
 const figure = new Fig.Figure();
-const { rod } = Fig.tools.g2;
-
+const { rod, cone } = Fig.tools.g2;
 
 const screenGrid = figure.add({
   make: 'grid',
@@ -37,24 +36,81 @@ figure.add({
   xAlign: 'center',
 });
 
+const vertexShader = {
+  dimension: 3,
+  normals: true,
+  light: 'directional',
+};
+const fragShader = {
+  light: 'directional',
+};
 
-const addAxis = (name, direction, color) => {
-  const [p, n] = rod({ radius: 0.02, sides: 10, line: [[0, 0, 0], [0.7, 0, 0]] });
+
+const addAxis = (name, direction, color, includeArrow = false) => {
+  const [p, n] = rod({
+    radius: 0.02, sides: 10, line: [[0, 0, 0], [includeArrow ? 0.85 : 1, 0, 0]],
+  });
+  let cn = [];
+  let cnNormals = [];
+  if (includeArrow) {
+    [cn, cnNormals] = cone({
+      radius: 0.06,
+      sides: 10,
+      line: [[0.85, 0, 0], [1, 0, 0]],
+    });
+  }
   const r = figure.add({
     name,
     make: 'gl',
-    vertexShader: { dimension: 3, light: 'directional', normals: true },
-    fragShader: { light: 'directional' },
-    vertices3: { data: p },
-    normals: { data: n },
+    vertexShader,
+    fragShader,
+    vertices3: { data: [...p, ...cn] },
+    normals: { data: [...n, ...cnNormals] },
     color,
     transform: [['rd', ...direction]],
   });
   r.setTouchable();
 };
-addAxis('xPos', [1, 0, 0], [1, 0, 0, 1]);
-addAxis('xNeg', [-1, 0, 0], [0.7, 0, 0, 1]);
-addAxis('yPos', [0, 1, 0], [0, 1, 0, 1]);
-addAxis('yNeg', [0, -1, 0], [0, 0.5, 0, 1]);
-addAxis('zPos', [0, 0, 1], [0.3, 0.3, 1, 1]);
-addAxis('zNeg', [0, 0, -1], [0, 0, 0.8, 1]);
+addAxis('xPos', [1, 0, 0], [1, 0, 0, 1], true);
+addAxis('xNeg', [-1, 0, 0], [1, 0, 0, 1]);
+addAxis('yPos', [0, 1, 0], [0, 1, 0, 1], true);
+addAxis('yNeg', [0, -1, 0], [0, 1, 0, 1]);
+addAxis('zPos', [0, 0, 1], [0, 0, 1, 1], true);
+addAxis('zNeg', [0, 0, -1], [0, 0, 1, 1]);
+
+figure.add([
+  {
+    name: 'cursorContainer',
+    make: 'collection',
+    elements: [
+      {
+        name: 'cursor',
+        make: 'polygon',
+        radius: 0.05,
+        color: [0.5, 0.5, 1, 1],
+        sides: 4,
+        position: [0, 0, 1],
+      },
+    ],
+  },
+  {
+    name: 'markContainer',
+    make: 'collection',
+    elements: [
+      {
+        name: 'mark',
+        make: 'polygon',
+        radius: 0.1,
+        sides: 20,
+        color: [1, 0.3, 0.3, 1],
+      },
+    ],
+  },
+]);
+
+
+const mark = figure.get('markContainer.mark');
+const cursor = figure.get('cursorContainer.cursor');
+const markContainer = figure.get('markContainer');
+const cursorContainer = figure.get('cursorContainer');
+cursorContainer.scene = new Fig.Scene();

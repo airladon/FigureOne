@@ -163,7 +163,7 @@ export default class Scene {
       far: 10,
       camera: {
         position: [0, 0, 2],
-        lookAt: [0, 0],
+        lookAt: [0, 0, 0],
         up: [0, 1, 0],
       },
       aspectRatio: 1,

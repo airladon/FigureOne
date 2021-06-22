@@ -1,6 +1,7 @@
 import {
   Point, Rect,
 } from '../../../tools/g2';
+import Scene from '../../../tools/scene';
 // import {
 //   round,
 // } from '../tools/math';
@@ -23,8 +24,11 @@ describe('Element Space Transforms', () => {
       simple: () => {
         figure = makeFigure(
           new Rect(0, 0, 1000, 1000),
-          new Rect(-3, -3, 6, 6),
+          // new Rect(-3, -3, 6, 6),
         );
+        figure.scene = new Scene({
+          style: '2D', left: -3, right: 3, bottom: -3, top: 3,
+        });
         figure.add([
           {
             name: 'c',
@@ -45,6 +49,7 @@ describe('Element Space Transforms', () => {
             },
           },
         ]);
+        figure.updateDrawTransforms()
       },
       rectangleOffZero: () => {
         figure = makeFigure(
@@ -121,28 +126,28 @@ describe('Element Space Transforms', () => {
     beforeEach(() => {
       create('simple');
     });
-    test('Vertex to Local', () => {
+    test('Draw to Local', () => {
       expect(get(a, [0, 0], 'draw', 'local')).toEqual(getP(1, 0));
     });
-    test('Local to Vertex', () => {
+    test('Local to Draw', () => {
       expect(get(a, [0, 0], 'local', 'draw')).toEqual(getP(-1, 0));
     });
-    test('Vertex to Figure', () => {
+    test('Draw to Figure', () => {
       expect(get(a, [0, 0], 'draw', 'figure')).toEqual(getP(2, 0));
     });
-    test('Figure to Vertex', () => {
+    test('Figure to Draw', () => {
       expect(get(a, [0, 0], 'figure', 'draw')).toEqual(getP(-2, 0));
     });
-    test('Vertex to GL', () => {
+    test.only('Draw to GL', () => {
       expect(get(a, [0, 0], 'draw', 'gl')).toEqual(getP(0.667, 0));
     });
-    test('GL to Vertex', () => {
+    test('GL to Draw', () => {
       expect(get(a, [0, 0], 'gl', 'draw')).toEqual(getP(-2, 0));
     });
-    test('Vertex to Pixel', () => {
+    test('Draw to Pixel', () => {
       expect(get(a, [0, 0], 'draw', 'pixel')).toEqual(getP(833.333, 500));
     });
-    test('Pixel to Vertex', () => {
+    test('Pixel to Draw', () => {
       expect(get(a, [0, 0], 'pixel', 'draw')).toEqual(getP(-5, 3));
     });
     // Remaining Local
@@ -191,16 +196,16 @@ describe('Element Space Transforms', () => {
     beforeEach(() => {
       create('rectangleOffZero');
     });
-    test('Vertex to Figure', () => {
+    test('Draw to Figure', () => {
       expect(get(a, [0, 0], 'draw', 'figure')).toEqual(getP(1.768, 1.768));
     });
-    test('Figure to Vertex', () => {
+    test('Figure to Draw', () => {
       expect(get(a, [0, 0], 'figure', 'draw')).toEqual(getP(-5, 0));
     });
-    test('Vertex to Pixel', () => {
+    test('Draw to Pixel', () => {
       expect(get(a, [0, 0], 'draw', 'pixel')).toEqual(getP(191.942, 308.058));
     });
-    test('Pixel to Vertex', () => {
+    test('Pixel to Draw', () => {
       expect(get(a, [0, 0], 'pixel', 'draw')).toEqual(getP(0.657, 2.828));
     });
   });

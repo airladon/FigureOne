@@ -816,6 +816,7 @@ class FigureElement {
     this.afterDrawCallback = null;
     this.internalSetTransformCallback = null;
     this.lastDrawTransform = this.transform._dup();
+    this.scene = null;
     this.lastScene = null;
     this.parentTransform = [new Transform()];
     this.lastDrawPulseTransform = this.transform._dup();
@@ -2498,6 +2499,10 @@ class FigureElement {
     let figureToGLMatrix: Type3DMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
     if (this.lastScene != null) {
       figureToGLMatrix = this.lastScene.viewProjectionMatrix;
+      if (this.lastScene.style === '2D') {
+        figureToGLMatrix[11] = 0;
+      }
+      // console.log(figureToGLMatrix)
     }
     // From Draw Up
     if (from === 'draw' && to === 'pixel') {
@@ -2510,6 +2515,7 @@ class FigureElement {
       );
     }
     if (from === 'draw' && to === 'gl') {
+      console.log(figureToGLMatrix);
       return m3.mul(
         figureToGLMatrix,
         this.lastDrawTransform.matrix(),
@@ -2578,7 +2584,9 @@ class FigureElement {
         this.lastScene.cameraMatrix,
         m3.inverse(this.lastScene.projectionMatrix),
       );
-      const figureToLocalMatrix = m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.def.length));
+      const figureToLocalMatrix = m3.inverse(
+        this.lastDrawTransform.calcMatrix(this.transform.def.length),
+      );
       return m3.mul(figureToLocalMatrix, glToFigureMatrix);
     }
     if (from === 'figure' && to === 'local') {
@@ -3254,7 +3262,7 @@ class FigureElement {
       parentCount: parentTransform[0].def.length,
       elementCount: this.transform.def.length,
     };
-    this.lastScene = this.scene || scene;
+    this.lastScene = this.scene != null ? this.scene : scene;
     this.pulseTransforms = this.getPulseTransforms(
       this.timeKeeper.now() / 1000,
     ); // $FlowFixMe
@@ -3674,7 +3682,7 @@ class FigureElementPrimitive extends FigureElement {
 
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawTransform = newTransforms[0];
-      this.lastScene = this.scene || scene;
+      this.lastScene = this.scene != null ? this.scene : scene;
       // $FlowFixMe
       // if (FIGURE1DEBUG) { timer.stamp('m5'); }
       // eslint-disable-next-line prefer-destructuring
@@ -4359,7 +4367,7 @@ class FigureElementCollection extends FigureElement {
       // if (FIGURE1DEBUG) { timer.stamp('m1'); }
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawTransform = newTransforms[0];
-      this.lastScene = this.scene || scene;
+      this.lastScene = this.scene != null ? this.scene : scene;
       this.parentTransform = parentTransform;
       // $FlowFixMe
 
@@ -4791,7 +4799,7 @@ class FigureElementCollection extends FigureElement {
     scene: Scene,
     isSame: boolean = false,
   ) {
-    super.updateDrawTransforms(parentTransform, isSame);
+    super.updateDrawTransforms(parentTransform, scene, isSame);
     for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
       this.elements[this.drawOrder[i]].updateDrawTransforms(
         this.drawTransforms, this.lastScene, isSame,
