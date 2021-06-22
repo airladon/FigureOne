@@ -1368,18 +1368,13 @@ class Figure {
     glPoint: TypeParsablePoint,
     plane: TypeParsablePlane,
   ) {
-
     const gl = getPoint(glPoint);
-    const nearPoint = this.scene.rightVector
-      .scale(this.scene.widthNear / 2 * gl.x)
-      .add(this.scene.upVector.scale(this.scene.heightNear / 2 * gl.y))
-      .add(this.scene.nearCenter);
-    const farPoint = this.scene.rightVector
-      .scale(this.scene.widthFar / 2 * gl.x)
-      .add(this.scene.upVector.scale(this.scene.heightFar / 2 * gl.y))
-      .add(this.scene.farCenter);
-    // const plane = getPlane([[0, 0, 0], [0, 0, 1]]);
-    console.log(nearPoint.round(2).toArray(), farPoint.round(2).toArray())
+    const nearPoint = this.scene.nearCenter
+      .add(this.scene.rightVector.scale(this.scene.widthNear / 2 * gl.x))
+      .add(this.scene.upVector.scale(this.scene.heightNear / 2 * gl.y));
+    const farPoint = this.scene.farCenter
+      .add(this.scene.rightVector.scale(this.scene.widthFar / 2 * gl.x))
+      .add(this.scene.upVector.scale(this.scene.heightFar / 2 * gl.y));
     return getPlane(plane).lineIntersect([nearPoint, farPoint]);
 
     // if (this.scene.style === 'orthographic' || this.scene.style === '2D') {
@@ -1792,7 +1787,8 @@ class Figure {
     // const plane = getPlane([[0, 0, 0], [0, 0, 1]]);
     // const intersect = plane.lineIntersect([nearPoint, farPoint]);
     // console.log(intersect)
-    console.log(this.glToPlane(glPoint, [[0, 0, 0], [0, 0, 1]]))
+    // console.log(this.glToPlane(glPoint, [[0, 0, 0], [0, 0, 1]]))
+    console.log(this.glToPlane(glPoint, [[0, 0, 0], [0, 0, 1]]));
     this.touchDownHandler(glPoint, eventFromPlayback);
     return true;
     // if (e != null) {
@@ -1851,7 +1847,7 @@ class Figure {
     this.isTouchDown = true;
 
     const element = this.getSelectionFromGL(glPoint);
-    console.log(element)
+    // console.log(element)
     if (element == null) {
       return false;
     }

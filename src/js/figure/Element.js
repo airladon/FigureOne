@@ -2615,16 +2615,25 @@ class FigureElement {
     plane: TypeParsablePlane = this.move.plane,
   ) {
     const gl = getPoint(glPoint);
-    const nearPoint = this.lastScene.rightVector
-      .scale(this.lastScene.widthNear / 2 * gl.x)
-      .add(this.lastScene.upVector.scale(this.lastScene.heightNear / 2 * gl.y))
-      .add(this.lastScene.nearCenter);
-    const farPoint = this.lastScene.rightVector
-      .scale(this.lastScene.widthFar / 2 * gl.x)
-      .add(this.lastScene.upVector.scale(this.lastScene.heightFar / 2 * gl.y))
-      .add(this.lastScene.farCenter);
-    // const plane = getPlane([[0, 0, 0], [0, 0, 1]]);
+    const nearPoint = this.lastScene.nearCenter
+      .add(this.lastScene.rightVector.scale(this.lastScene.widthNear / 2 * gl.x))
+      .add(this.lastScene.upVector.scale(this.lastScene.heightNear / 2 * gl.y));
+    const farPoint = this.lastScene.farCenter
+      .add(this.lastScene.rightVector.scale(this.lastScene.widthFar / 2 * gl.x))
+      .add(this.lastScene.upVector.scale(this.lastScene.heightFar / 2 * gl.y));
     return getPlane(plane).lineIntersect([nearPoint, farPoint]);
+
+    // const gl = getPoint(glPoint);
+    // const nearPoint = this.lastScene.rightVector
+    //   .scale(this.lastScene.widthNear / 2 * gl.x)
+    //   .add(this.lastScene.upVector.scale(this.lastScene.heightNear / 2 * gl.y))
+    //   .add(this.lastScene.nearCenter);
+    // const farPoint = this.lastScene.rightVector
+    //   .scale(this.lastScene.widthFar / 2 * gl.x)
+    //   .add(this.lastScene.upVector.scale(this.lastScene.heightFar / 2 * gl.y))
+    //   .add(this.lastScene.farCenter);
+    // // const plane = getPlane([[0, 0, 0], [0, 0, 1]]);
+    // return getPlane(plane).lineIntersect([nearPoint, farPoint]);
 
     // if (this.scene.style === 'orthographic' || this.scene.style === '2D') {
     //   const glPoint1 = getPoint(glPoint);

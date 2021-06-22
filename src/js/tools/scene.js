@@ -215,9 +215,9 @@ export default class Scene {
     if (this.onUpdate != null) {
       this.onUpdate();
     }
-    this.upVector = getPoint(this.camera.up).normalize();
     this.rightVector = this.cameraVector
-      .crossProduct(this.upVector).normalize();
+      .crossProduct(getPoint(this.camera.up)).normalize();
+    this.upVector = this.rightVector.crossProduct(this.cameraVector).normalize();
     this.nearCenter = this.cameraPosition
       .add(this.cameraVector.scale(this.near));
     this.farCenter = this.cameraPosition
@@ -225,10 +225,6 @@ export default class Scene {
     this.nearPlane = new Plane(this.nearCenter, this.cameraVector);
     this.farPlane = new Plane(this.farCenter, this.cameraVector);
     if (this.style === 'perspective') {
-      // this.topNear = Math.tan(this.fieldOfView * 0.5) * this.near;
-      // this.topFar = Math.tan(this.fieldOfView * 0.5) * this.far;
-      // this.rightNear = this.aspectRatio * this.topNear;
-      // this.rightFar = this.aspectRatio * this.topFar;
       this.heightNear = Math.tan(this.fieldOfView * 0.5) * this.near * 2;
       this.heightFar = Math.tan(this.fieldOfView * 0.5) * this.far * 2;
       this.widthNear = this.aspectRatio * this.heightNear;

@@ -12,6 +12,30 @@ const col = (c, numVertices) => {
   return out;
 };
 
+const screenGrid = figure.add({
+  make: 'grid',
+  bounds: [-2, -1, 4, 2],
+  xStep: 0.5,
+  yStep: 0.5,
+  line: { width: 0.005 },
+  color: [0.5, 0.5, 1, 1],
+  position: [0, 0, -3],
+  xAlign: 'center',
+});
+screenGrid.scene = new Fig.Scene();
+screenGrid.scene.setPerspective({ style: '2D', left: -2, right: 2, bottom: -1, top: 1 });
+const screenMinorGrid = figure.add({
+  make: 'grid',
+  bounds: [-2, -1, 4, 2],
+  xStep: 0.1,
+  yStep: 0.1,
+  line: { width: 0.005 },
+  color: [0.85, 0.85, 1, 1],
+  position: [0, 0, -3],
+  xAlign: 'center',
+});
+screenMinorGrid.scene = screenGrid.scene;
+
 figure.add({
   make: 'grid',
   bounds: [-1, -1, 2, 2],
@@ -82,6 +106,7 @@ const addAxis = (name, direction, color, includeArrow = false) => {
     // transform: [['rd', ...direction]],
   });
   r.setTouchable();
+  return r;
 };
 addAxis('xPosAxis', [0.7, 0, 0], [1, 0, 0, 1], true);
 addAxis('xNegAxis', [-0.7, 0, 0], [1, 0, 0, 1]);
@@ -90,6 +115,27 @@ addAxis('yNegAxis', [0, -0.7, 0], [0, 1, 0, 1]);
 addAxis('zPosAxis', [0, 0, 0.7], [0, 0, 1, 1], true);
 addAxis('zNegAxis', [0, 0, -0.7], [0, 0, 1, 1]);
 
+
+/* Test Rod */
+
+// const tr = addAxis('tr', [1, 0, 0], [1, 0, 0, 1], false);
+// tr.setPosition(0.5, 0, 0.5);
+// tr.setRotation(['dir', [0, 0, -1]]);
+const [pTr, nTr] = rod({ radius: 0.03, sides: 10, line: [[0, 0, 0], [1, 0, 0]] });
+const r = figure.add({
+  name: 'tr',
+  make: 'gl',
+  vertexShader,
+  fragShader,
+  vertices3: { data: [...pTr] },
+  normals: { data: [...nTr] },
+  color: [1, 0, 0, 1],
+  // transform: [['rd', ...direction]],
+});
+r.setTouchable();
+r.setPosition(0.5, 0.5, 0);
+r.setRotation(['dir', [0, 0, -1]]);
+/* */
 const addSphere = (name, position, color) => {
   const [sx, sn] = sphere({ radius: 0.05, sides: 10, normals: 'curve' });
   const s = figure.add({
