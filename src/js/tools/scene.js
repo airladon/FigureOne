@@ -1,6 +1,6 @@
 // @flow
 import type { TypeParsablePoint } from './g2';
-import { getPoint, Plane } from './g2';
+import { getPoint, Plane, Point } from './g2';
 import { joinObjects } from './tools';
 import * as m3 from './m3';
 import type { Type3DMatrix } from './m3';
@@ -204,6 +204,7 @@ export default class Scene {
       );
       return;
     }
+
     const {
       fieldOfView, aspectRatio, near, far,
     } = this;
@@ -225,6 +226,8 @@ export default class Scene {
 
   calcViewProjectionMatrix() {
     this.viewProjectionMatrix = m3.mul(this.projectionMatrix, this.viewMatrix);
+    this.inverseViewProjectionMatrix = m3.inverse(this.viewProjectionMatrix);
+
     if (this.onUpdate != null) {
       this.onUpdate();
     }
@@ -308,5 +311,110 @@ export default class Scene {
 
   setLight(options: OBJ_Light) {
     joinObjects(this.light, options);
+  }
+
+  /*
+  Consider several spaces:
+  - model space: where the vertices are drawn
+  - world space: how the model is oriented relative to the world
+  - camera space: how the world is offset so a camera at (0, 0, 0) looks
+    like a camera at some coordinate (x, y, z)
+  - clip space: camera space projected into -1 to 1 for x, y, z
+
+  For perspective projection, the coordinates of a point in clip space depend
+  on the z value of the point in camera space. Therefore there isn't one
+  matrix that can do any point conversion.
+
+  This means mathematically you need a different projection matrix for each
+  point in space on a different z plane relative to the camera.
+
+  However, in WebGL, a single projectionMatrix (or viewProjectionMatrix) CAN be
+  used beacuse:
+  - WebGL uses homogenous coordinates
+  - the perspective projection matrix is used to setup the w coordinate to be
+    the negative z coordinate of the camera point (or world point) it is
+    transforming
+  - In the vertex shader, WebGL automatically divides gl_Position.xyz by
+    gl_Position.w
+  - So effectively each point's z value is handled.
+
+  However, when a user wants to convert world space or camera space to clip
+  space, then the division of the w coordinate will have to be done for each
+  point.
+  */
+  figureToGL(figurePoint: TypeParsablePoint) {
+    const fp = getPoint(figurePoint);
+    if (this.style === '2D' || this.style === 'orthographic') {
+      return getPoint(figurePoint).transformBy(this.viewProjectionMatrix);
+    }
+    const p = m3.transformVector(this.viewProjectionMatrix, [fp.x, fp.y, fp.z, 1]);
+    return new Point(p[0] / p[3], p[1] / p[3], p[2] / p[3]);
+  }
+
+  /*
+  When a user wants to convert clip space to world space, then it is not as
+  simple as doing the reverse process for figureToGL (world space to clip
+  space).
+
+  This is because the w coorinate which scaled each component above is not
+  known.
+
+  A perspective projection matrix is an efficient way to convert a point
+  in camera space, to clip space.
+
+  The actual equations for doing this are:
+
+  fovY = field of view in the y direction
+  a = aspect ratio (width / height)
+  x, y, z = camera space x, y, z coorindate
+  f = 1 / tan(fovY / 2)
+  far = z far
+  near = z near
+
+  clipY = yf / -z
+  clipX = xf/a / -z
+  clipZ = [2 * near * far / (near - far)  +  (far + near) / (near - far) * z] / -z
+
+  if we make r = 1 / (near - far) we get:
+  clipZ = [2 * near * far * r  +  (far + near) * r * z] / -z
+
+  simplify further:
+  nf2r = 2 * near * far * r
+  npfr = (far + near) * r
+
+  Thus:
+  clipZ = [fn2r + fnpr * z] / -z
+
+  And so we can solve of x, y, z from clipX, clipY, clipZ:
+  z = -nf2r / (clipZ + npfr)
+  x = -clipX / (f/a) * z
+  y = -clipY / f * z
+
+  The perspective matrix contains all of these terms:
+  f/a     0          0                 0
+  0       f          0                 0
+  0       0     (near + far) * r       near * far * 2 * r
+  0       0          -1                0
+
+  This conversion is done from clip space to camera space. To move from
+  camera space to world space, transform by the inverted viewMatrix (which
+  is the camera matrix).
+
+  More detailed information breaking down the perspective matrix
+  https://stackoverflow.com/questions/28286057/trying-to-understand-the-math-behind-the-perspective-matrix-in-webgl/28301213#28301213
+  */
+  glToFigure(glPoint: TypeParsablePoint) {
+    const clip = getPoint(glPoint);
+    if (this.style === '2D' || this.style === 'orthographic') {
+      return getPoint(clip).transformBy(this.inverseViewProjectionMatrix);
+    }
+    const fOna = this.projectionMatrix[0];
+    const f = this.projectionMatrix[5];
+    const npfr = this.projectionMatrix[10];
+    const nf2r = this.projectionMatrix[11];
+    const cameraZ = -nf2r / (clip.z + npfr);
+    const cameraX = -clip.x * cameraZ / fOna;
+    const cameraY = -clip.y * cameraZ / f;
+    return new Point(cameraX, cameraY, cameraZ).transformBy(this.cameraMatrix);
   }
 }

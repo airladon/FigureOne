@@ -1319,10 +1319,13 @@ class Figure {
     if (from === 'gl' && to === 'pixel') {
       return glToPixelMatrix;
     }
-    const figureToGLMatrix = m3.dup(this.scene.viewProjectionMatrix);
-    if (this.scene.style === '2D') {
-      figureToGLMatrix[11] = 0;
-    }
+    // const p = m3.transformVector(this.scene.viewProjectionMatrix, [0, 0, 0, 1]);
+    // const figureToGLMatrix = this.scene.viewProjectionMatrix.map(n => n / p[3]);
+    // if (this.scene.style === '2D') {
+    //   figureToGLMatrix[11] = 0;
+    // }
+    // figureToGLMatrix = figureToGLMatrix.map(n => n / figureToGLMatrix[15]);
+    const figureToGLMatrix = this.scene.viewProjectionMatrix;
     if (from === 'figure' && to === 'gl') {
       return figureToGLMatrix;
     }

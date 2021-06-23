@@ -248,9 +248,16 @@ testCases = {
     posPos: () => {
       mark.setPosition([1, 0]);
       const p = mark.getPosition('gl');
-      console.log(p)
-      console.log(Fig.getPoint([0, 0]).transformBy(mark.spaceTransformMatrix('draw', 'gl')))
-      console.log(mark.spaceTransformMatrix('figure', 'gl'))
+      const mat1 = mark.spaceTransformMatrix('figure', 'gl');
+      const mat2 = figure.scene.viewProjectionMatrix;
+      console.log(Fig.getPoint([0, 0]).transformBy(mat1))
+      console.log(Fig.getPoint([0, 0]).transformBy(mat2))
+      console.log(Fig.getPoint([0, 0, 0]).transformBy(mat1).transformBy(mark.spaceTransformMatrix('gl', 'figure')))
+      console.log(Fig.getPoint([0, 0, 0]).transformBy(mark.spaceTransformMatrix('gl', 'figure')))
+      console.log(Fig.getPoint([0, 0, 0]).transformBy(figure.spaceTransformMatrix('gl', 'figure')))
+      // console.log(p)
+      // console.log(Fig.getPoint([0, 0]).transformBy(mark.spaceTransformMatrix('draw', 'gl')))
+      // console.log(mark.spaceTransformMatrix('figure', 'gl'))
       cursor.setPosition(p.transformBy(cursor.spaceTransformMatrix('gl', 'local')).add(0, 0, 0));
     },
   //   posNeg: () => {
@@ -284,5 +291,5 @@ if (typeof process === 'object') {
     return runTestCase(tc.slice(1), tcs[next]);
   }
 
-  runTestCase(['perspective xy', 'posPos'], testCases);
+  runTestCase(['perspective xy', 'glToPlane negNeg'], testCases);
 }

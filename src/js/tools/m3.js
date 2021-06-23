@@ -249,12 +249,23 @@ function transform(m: Type3DMatrix, px: number, py: number, pz: number): [number
   ];
 }
 
-function transformVector(m: Type3DMatrix, v: [number, number, number, number]) {
+function transformVectorT(m: Type3DMatrix, v: [number, number, number, number]) {
   const a = [0, 0, 0, 0];
   for (let i = 0; i < 4; i += 1) {
     a[i] = 0.0;
     for (let j = 0; j < 4; j += 1) {
       a[i] += v[j] * m[j * 4 + i];
+    }
+  }
+  return a;
+}
+
+function transformVector(m: Type3DMatrix, v: [number, number, number, number]) {
+  const a = [0, 0, 0, 0];
+  for (let i = 0; i < 4; i += 1) {
+    a[i] = 0.0;
+    for (let j = 0; j < 4; j += 1) {
+      a[i] += v[j] * m[i * 4 + j];
     }
   }
   return a;
@@ -461,5 +472,6 @@ export {
   perspective,
   lookAt,
   transformVector,
+  transformVectorT,
   dup,
 };

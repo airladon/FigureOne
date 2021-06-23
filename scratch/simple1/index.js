@@ -23,7 +23,7 @@ const screenGrid = figure.add({
   xAlign: 'center',
 });
 screenGrid.scene = new Fig.Scene();
-screenGrid.scene.setPerspective({ style: '2D', left: -2, right: 2, bottom: -1, top: 1 });
+screenGrid.scene.setProjection({ style: '2D', left: -2, right: 2, bottom: -1, top: 1 });
 const screenMinorGrid = figure.add({
   make: 'grid',
   bounds: [-2, -1, 4, 2],
@@ -66,23 +66,6 @@ const vertexShader = {
 const fragShader = {
   light: 'directional',
 };
-// const makeAxis = (name, color, rx, ry, rz, position) => {
-//   const [vertices, normals] = makeRod(1, 0.01, 20, rx, ry, rz);
-//   const a = figure.add({
-//     name,
-//     make: 'gl',
-//     vertexShader,
-//     fragShader,
-//     vertices3: { data: vertices },figure2DPoint
-//     normals: { data: normals },
-//     color,
-//     position,
-//   });
-//   a.setTouchable();
-// };
-// makeAxis('x', [1, 0, 0, 1], 0, Math.PI / 2, 0, [-0.5, 0, 0]);
-// makeAxis('y', [0, 1, 0, 1], -Math.PI / 2, 0, 0, [0, -0.5, 0]);
-// makeAxis('z', [0, 0, 1, 1], 0, 0, 0, [0, 0, -0.5]);
 
 const addAxis = (name, direction, color, includeArrow = false) => {
   const [p, n] = rod({ radius: 0.03, sides: 10, line: [[0, 0, 0], direction] });
@@ -217,60 +200,75 @@ figure.scene.light.ambient = 0;
 figure.scene.light.point = [0.3, 0.1, 1];
 
 
-figure.scene.setCamera({ position: [1, 1, 3] });
+figure.scene.setCamera({ position: [1, 1, 1.2] });
 
-figure.scene.setProjection({ style: 'perspective', near: 1, far: 10, aspectRatio: 2, fieldOfView: Math.PI * 0.2 });
+// figure.scene.setProjection({ style: 'orthographic', near: 1, far: 10, left: -2, right: 2, bottom: -1, top: 1 });
 
-// figure.scene.setProjection({
-//   style: 'orthographic', near: 1, far: 5, left: -2, right: 2, bottom: -1, top: 1,
-// });
-// console.log('asdf')
+figure.scene.setProjection({ style: 'perspective', near: 1, far: 2.5, aspectRatio: 2, fieldOfView: Math.PI * 0.4 });
 
-// figure.elements.animations.new()
-//   .rotation({ target: [0.5, 0.5, 0], duration: 5 })
-//   .start()
+console.log(new Fig.Point(0, 0, 0).transformBy(figure.spaceTransformMatrix('figure', 'gl')));
+console.log(new Fig.Point(-0.15, -1, 0).transformBy(figure.spaceTransformMatrix('figure', 'gl')));
+console.log(new Fig.Point(1, 0.6, 0).transformBy(figure.spaceTransformMatrix('figure', 'gl')));
+// console.log(new Fig.Point(0, 0, 0).transformBy(figure.scene.viewProjectionMatrix));
 
-// figure.animations.new()
-//   .camera({ target: { position: [0.5, 0.5, 1.1] }, duration: 5 })
-//   .camera({ target: { position: [1, 1, 1.1] }, duration: 5 })
-//   .start();
+// console.log(new Fig.Point(0, 0, 0).transformBy(figure.scene.viewProjectionMatrix).transformBy(figure.spaceTransformMatrix('gl', 'figure')));
+// console.log(new Fig.Point(0, 0, 0).transformBy(figure.scene.viewProjectionMatrix).transformBy(Fig.tools.m3.inverse(figure.scene.viewProjectionMatrix)));
 
-// figure.elements.animations.new()
-//   .custom({
-//     callback: (p) => {
-//       figure.elements.transform = getTransform([['c', ...m3.rotationMatrixVectorToVector([1, 0, 0], [1 - p, p, p])]]);
-//     },
-//     duration: 10,
-//   })
-//   // .custom({
-//   //   callback: (p) => {
-//   //     figure.elements.transform = getTransform([['c', ...m3.rotationMatrixAxisAngle([1, 1, 0], p * 2)]]);
-//   //   },
-//   //   duration: 10,
-//   // })
-//   // .rotation({ target: [1, 1, 1], duration: 10 })
-//   .start();
+// console.log(new Fig.Point(-0.15, -1, 0).transformBy(figure.scene.viewProjectionMatrix));
+// console.log(new Fig.Point(-0.15, -1, 0).transformBy(figure.spaceTransformMatrix('figure', 'gl')));
 
+// console.log(Fig.tools.m3.transform(figure.scene.viewProjectionMatrix, 1, 0.6, 0))
+// console.log(Fig.tools.m3.transform(figure.scene.viewProjectionMatrix, -0.15, -1, 0))
+console.log(Fig.tools.m3.transformVector(figure.scene.viewProjectionMatrix, [-0.15, -1, 0, 1]))
+console.log(Fig.tools.m3.transformVector(figure.scene.viewProjectionMatrix, [1, 0.6, 0, 1]))
+console.log(Fig.tools.m3.transform(figure.scene.viewProjectionMatrix, -0.15, -1, 0))
+console.log(Fig.tools.m3.transform(figure.scene.viewProjectionMatrix, 1, 0.6, 0))
+// console.log(p)
 
+const c = new Fig.Point(-0.15, -1, 0).transformBy(figure.scene.viewMatrix);
+const cameraZ = c.z;
+const cameraX = c.x;
+const cameraY = c.y;
+const matrix0 = figure.scene.projectionMatrix[0];
+const matrix5 = figure.scene.projectionMatrix[5];
+const matrix10 = figure.scene.projectionMatrix[10];
+const matrix11 = -1;
+const matrix14 = figure.scene.projectionMatrix[11];
+const clipY = cameraY * matrix5 / cameraZ * matrix11;
+const clipX = cameraX * matrix0 / cameraZ * matrix11;
+const clipZ = (matrix10 * cameraZ + matrix14) / (cameraZ * matrix11)
+console.log(clipX, clipY, clipZ)
+console.log(c)
+console.log(c.transformBy([
+  matrix0, 0, 0, 0,
+  0, matrix5, 0, 0,
+  0, 0, matrix10, matrix14,
+  0, 0, matrix11, 0,
+]))
+const q = m3.transformVector(figure.scene.viewProjectionMatrix, [-0.15, -1, 0, 1])
+const qClip = q.map(n => n/ q[3]);
+console.log(qClip);
+const r = m3.transformVector(figure.scene.viewProjectionMatrix, [1, 0.6, 0, 1])
+const rClip = r.map(n => n/ r[3])
+// console.log(rClip);
+// console.log(Fig.getPoint(rClip.slice(0, 3)).transformBy(m3.inverse(figure.scene.viewProjectionMatrix)))
+// console.log(Fig.getPoint(qClip.slice(0, 3)).transformBy(m3.inverse(figure.scene.viewProjectionMatrix)))
 
-// const surfacePoints = getLathePoints({
-//   // profile: Fig.getPoints([[0, 0], [0.2, 0.2], [0.6, 0.2], [0.8, 0]]),
-//   profile: Fig.getPoints(polygon({ radius: 0.1, center: [0, 0.5], sides: 12, direction: -1 })),
-//   sides: 12,
-//   rotation: 0,
-//   position: new Fig.Point(0, 0, 0),
-//   matrix: new Fig.Transform().matrix(),
-//   axis: 1,
-// });
-// const lines = surface.getLines(surfacePoints);
-// console.log(surfacePoints)
-// figure.add({
-//   make: 'gl',
-//   glPrimitive: 'LINES',
-//   vertexShader: { dimension: 3 },
-//   // fragShader,
-//   vertices3: { data: lines },
-//   // normals: { data: ln },
-//   color: [0, 0, 0, 1],
-//   position: [0, 0, 0],
-// });
+const cz = matrix14 / (matrix11 * rClip[2] - matrix10);
+const cx = rClip[0] * cz / matrix11 / matrix0;
+const cy = rClip[1] * cz / matrix11 / matrix5;
+console.log(m3.transform(figure.scene.cameraMatrix, cx, cy, cz))
+
+const cz1 = matrix14 / (matrix11 * qClip[2] - matrix10);
+const cx1 = qClip[0] * cz1 / matrix11 / matrix0;
+const cy1 = qClip[1] * cz1 / matrix11 / matrix5;
+console.log(m3.transform(figure.scene.cameraMatrix, cx1, cy1, cz1))
+
+const a = figure.scene.figureToGL([1, 0.6, 0])
+const b = figure.scene.figureToGL([-0.15, -1, 0])
+const a1 = figure.scene.glToFigure(a);
+const b1 = figure.scene.glToFigure(b);
+console.log(a1)
+console.log(a)
+console.log(b1)
+console.log(b)

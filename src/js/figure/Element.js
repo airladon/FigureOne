@@ -2516,7 +2516,7 @@ class FigureElement {
       throw new Error(`Scene is null for element ${this.getPath()} and all it's parents `);
     }
     figureToGLMatrix = scene.viewProjectionMatrix;
-    console.log(scene)
+    // console.log(scene)
 
     // From Draw Up
     if (from === 'draw' && to === 'pixel') {
@@ -2529,8 +2529,8 @@ class FigureElement {
       );
     }
     if (from === 'draw' && to === 'gl') {
-      console.log(figureToGLMatrix)
-      console.log(this.lastDrawTransform)
+      // console.log(figureToGLMatrix)
+      // console.log(this.lastDrawTransform)
       return m3.mul(
         figureToGLMatrix,
         this.lastDrawTransform.matrix(),
@@ -2616,6 +2616,9 @@ class FigureElement {
     if (from === 'figure' && to === 'pixel') {
       return this.figure.spaceTransformMatrix('figure', 'pixel');
     }
+    if (from === 'gl' && to === 'figure') {
+      return this.figure.spaceTransformMatrix('gl', 'figure');
+    }
     // if (from === 'gl' && to === 'figure') {
     //   return this.figure.spaceTransforms.glToFigure.matrix();
     // }
@@ -2689,6 +2692,7 @@ class FigureElement {
     // // const plane = getPlane([[0, 0, 0], [0, 0, 1]]);
     // return getPlane(plane).lineIntersect([nearPoint, farPoint]);
   }
+
 
   pointFromSpaceToSpace(
     point: TypeParsablePoint,
