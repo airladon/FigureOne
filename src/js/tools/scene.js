@@ -152,8 +152,9 @@ export default class Scene {
   viewProjectionMatrix: Type3DMatrix;
   onUpdate: null | (() => void);
 
-  constructor(options: OBJ_Scene, onUpdate: null | (() => void) = null) {
-    const defaultOptions = {
+  // eslint-disable-next-line class-methods-use-this
+  defaultOptions() {
+    return {
       style: '2D',
       left: -1,
       right: 1,
@@ -174,11 +175,23 @@ export default class Scene {
         point: [10, 10, 10],
       },
     };
+  }
+
+  constructor(options: OBJ_Scene, onUpdate: null | (() => void) = null) {
+    const defaultOptions = this.defaultOptions();
     joinObjects(this, defaultOptions, options);
     this.calcProjectionMatrix();
     this.calcViewMatrix();
     this.calcViewProjectionMatrix();
     this.onUpdate = onUpdate;
+  }
+
+  reset(options: OBJ_Scene) {
+    const defaultOptions = this.defaultOptions();
+    joinObjects(this, defaultOptions, options);
+    this.calcProjectionMatrix();
+    this.calcViewMatrix();
+    this.calcViewProjectionMatrix();
   }
 
   calcProjectionMatrix() {
@@ -214,6 +227,9 @@ export default class Scene {
     this.viewProjectionMatrix = m3.mul(this.projectionMatrix, this.viewMatrix);
     if (this.onUpdate != null) {
       this.onUpdate();
+    }
+    if (this.style === '2D') {
+      this.viewProjectionMatrix[11] = 0;
     }
     this.rightVector = this.cameraVector
       .crossProduct(getPoint(this.camera.up)).normalize();

@@ -598,6 +598,7 @@ class Figure {
       // eslint-disable-next-line new-cap
       this.elements = new optionsToUse.elements(this);
       this.elements.figureLimits = this.limits;
+      this.elements.scene = this.scene;
       this.initElements();
     }
     // this.camera = { position: [0, 0, 2], lookAt: [0, 0, 0], up: [0, 1, 0] };
@@ -1313,6 +1314,8 @@ class Figure {
     }
 
     const glToPixelMatrix = spaceToSpaceTransform(glSpace, pixelSpace).matrix();
+    glToPixelMatrix[10] = 0;
+    glToPixelMatrix[11] = 0;
     if (from === 'gl' && to === 'pixel') {
       return glToPixelMatrix;
     }
@@ -1397,6 +1400,7 @@ class Figure {
   setElements(collection: FigureElementCollection) {
     this.elements = collection;
     this.animations = this.elements.animations;
+    this.elements.scene = this.scene;
     this.setupAnimations();
     this.initElements();
   }
@@ -2332,6 +2336,7 @@ class Figure {
   // or the `add` method can be used.
   createFigureElements() {
     this.elements = this.collections.collection({ name: 'rootCollection' });
+    this.elements.scene = this.scene;
     this.animations = this.elements.animations;
     this.setupAnimations();
     this.initElements();
@@ -2340,6 +2345,7 @@ class Figure {
 
   setElementsToCollection(collection: FigureElementCollection) {
     this.elements = collection;
+    this.elements.scene = this.scene;
     this.animations = this.elements.animations;
     this.setupAnimations();
     this.initElements();

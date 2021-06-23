@@ -8,7 +8,7 @@ import {
   getBoundingBorder, isBuffer, getBorder, decelerateTransform,
   getPlane, Plane,
 } from '../tools/g2';
-import type Scene from '../tools/scene';
+import Scene from '../tools/scene';
 import { round } from '../tools/math';
 // import { areColorsSame } from '../tools/color';
 import { getState } from './Recorder/state';
@@ -970,6 +970,10 @@ class FigureElement {
     }
   }
 
+  setScene(options: OBJ_Scene) {
+    this.scene = new Scene(options);
+  }
+
   setProperties(properties: Object, exceptIn: Array<string> | string = []) {
     let except = exceptIn;
     if (properties.move != null) {
@@ -1139,6 +1143,16 @@ class FigureElement {
     if (this.state.movement.previousTime != null) {
       this.state.movement.previousTime += delta;
     }
+  }
+
+  getScene() {
+    if (this.scene != null) {
+      return this.scene;
+    }
+    if (this.parent != null) {
+      return this.parent.getScene();
+    }
+    return null;
   }
 
 
@@ -2497,13 +2511,12 @@ class FigureElement {
       return new Transform().identity().matrix();
     }
     let figureToGLMatrix: Type3DMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
-    if (this.lastScene != null) {
-      figureToGLMatrix = this.lastScene.viewProjectionMatrix;
-      if (this.lastScene.style === '2D') {
-        figureToGLMatrix[11] = 0;
-      }
-      // console.log(figureToGLMatrix)
+    const scene = this.getScene();
+    if (scene == null) {
+      throw new Error(`Scene is null for element ${this.getPath()} and all it's parents `);
     }
+    figureToGLMatrix = scene.viewProjectionMatrix;
+
     // From Draw Up
     if (from === 'draw' && to === 'pixel') {
       return m3.mul(
@@ -2515,7 +2528,6 @@ class FigureElement {
       );
     }
     if (from === 'draw' && to === 'gl') {
-      console.log(figureToGLMatrix);
       return m3.mul(
         figureToGLMatrix,
         this.lastDrawTransform.matrix(),
@@ -2579,11 +2591,11 @@ class FigureElement {
     //   );
     // }
     if (from === 'gl' && to === 'local') {
-      // const glToFigureMatrix = m3.inverse(figureToGLMatrix);
-      const glToFigureMatrix = m3.mul(
-        this.lastScene.cameraMatrix,
-        m3.inverse(this.lastScene.projectionMatrix),
-      );
+      const glToFigureMatrix = m3.inverse(figureToGLMatrix);
+      // const glToFigureMatrix = m3.mul(
+      //   scene.cameraMatrix,
+      //   m3.inverse(scene.projectionMatrix),
+      // );
       const figureToLocalMatrix = m3.inverse(
         this.lastDrawTransform.calcMatrix(this.transform.def.length),
       );
@@ -2604,9 +2616,9 @@ class FigureElement {
     // if (from === 'gl' && to === 'figure') {
     //   return this.figure.spaceTransforms.glToFigure.matrix();
     // }
-    // if (from === 'pixel' && to === 'figure') {
-    //   return this.figure.spaceTransforms.pixelToFigure.matrix();
-    // }
+    if (from === 'pixel' && to === 'figure') {
+      return this.figure.spaceTransforms.pixelToFigure.matrix();
+    }
 
     // Remaining GL related conversions
     if (from === 'gl' && to === 'pixel') {
@@ -2623,12 +2635,16 @@ class FigureElement {
     plane: TypeParsablePlane = this.move.plane,
   ) {
     const gl = getPoint(glPoint);
-    const nearPoint = this.lastScene.nearCenter
-      .add(this.lastScene.rightVector.scale(this.lastScene.widthNear / 2 * gl.x))
-      .add(this.lastScene.upVector.scale(this.lastScene.heightNear / 2 * gl.y));
-    const farPoint = this.lastScene.farCenter
-      .add(this.lastScene.rightVector.scale(this.lastScene.widthFar / 2 * gl.x))
-      .add(this.lastScene.upVector.scale(this.lastScene.heightFar / 2 * gl.y));
+    const scene = this.getScene();
+    if (scene == null) {
+      throw new Error(`Scene is null for element ${this.getPath()} and all it's parents `);
+    }
+    const nearPoint = scene.nearCenter
+      .add(scene.rightVector.scale(scene.widthNear / 2 * gl.x))
+      .add(scene.upVector.scale(scene.heightNear / 2 * gl.y));
+    const farPoint = scene.farCenter
+      .add(scene.rightVector.scale(scene.widthFar / 2 * gl.x))
+      .add(scene.upVector.scale(scene.heightFar / 2 * gl.y));
     const p = getPlane(plane);
     const localToFigureMatrix = this.spaceTransformMatrix('local', 'figure');
     const figurePlane = new Plane(
@@ -3682,7 +3698,8 @@ class FigureElementPrimitive extends FigureElement {
 
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawTransform = newTransforms[0];
-      this.lastScene = this.scene != null ? this.scene : scene;
+      const sceneToUse = this.scene != null ? this.scene : scene;
+      this.lastScene = sceneToUse;
       // $FlowFixMe
       // if (FIGURE1DEBUG) { timer.stamp('m5'); }
       // eslint-disable-next-line prefer-destructuring
@@ -3691,7 +3708,7 @@ class FigureElementPrimitive extends FigureElement {
       if (pointCount > 0) {
         this.drawTransforms.forEach((t) => {
           this.drawingObject.drawWithTransformMatrix(
-            this.lastScene, t.matrix(), colorToUse, pointCount, targetTexture,
+            sceneToUse, t.matrix(), colorToUse, pointCount, targetTexture,
           );
         });
       }  // $FlowFixMe
@@ -4367,7 +4384,8 @@ class FigureElementCollection extends FigureElement {
       // if (FIGURE1DEBUG) { timer.stamp('m1'); }
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawTransform = newTransforms[0];
-      this.lastScene = this.scene != null ? this.scene : scene;
+      const sceneToUse = this.scene != null ? this.scene : scene;
+      this.lastScene = sceneToUse;
       this.parentTransform = parentTransform;
       // $FlowFixMe
 
@@ -4388,7 +4406,7 @@ class FigureElementCollection extends FigureElement {
       // if (FIGURE1DEBUG) { drawTimer = new PerformanceTimer(); }
       for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
         this.elements[this.drawOrder[i]].draw(
-          now, this.lastScene, this.drawTransforms, opacityToUse, targetTexture,
+          now, sceneToUse, this.drawTransforms, opacityToUse, targetTexture,
         ); // $FlowFixMe
         // if (FIGURE1DEBUG) { drawTimer.stamp(this.elements[this.drawOrder[i]].name); }
       } // $FlowFixMe
@@ -4801,8 +4819,9 @@ class FigureElementCollection extends FigureElement {
   ) {
     super.updateDrawTransforms(parentTransform, scene, isSame);
     for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
+      const s = this.scene != null ? this.scene : scene;
       this.elements[this.drawOrder[i]].updateDrawTransforms(
-        this.drawTransforms, this.lastScene, isSame,
+        this.drawTransforms, s, isSame,
       );
     }
   }

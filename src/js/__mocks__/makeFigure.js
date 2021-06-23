@@ -24,7 +24,7 @@ generateRandomStringMock.mockImplementation(() => '000000');
 
 export default function makeFigure(
   inputCanvasIn = new Rect(100, -300, 1000, 500),
-  inputLimitsIn = new Rect(-1, -1, 2, 2),
+  scene = {},
 ) {
   document.body.innerHTML =
     '<div id="c">'
@@ -41,11 +41,11 @@ export default function makeFigure(
     + '</div>';
   // canvas = document.getElementById('c');
   const inputCanvas = getRect(inputCanvasIn);
-  const inputLimits = getRect(inputLimitsIn);
+  // const inputLimits = getRect(inputLimitsIn);
   const definition = {
     width: inputCanvas.width,
     height: inputCanvas.height,
-    limits: inputLimits,
+    limits: new Rect(-1, -1, 2, 2),
   };
 
   const canvasMock = {
@@ -79,7 +79,9 @@ export default function makeFigure(
     appendChild: () => {},
   };
   const { limits } = definition;
-  const figure = new Figure({ htmlId: 'c', limits, color: [1, 0, 0, 1] });
+  const figure = new Figure({
+    htmlId: 'c', limits, color: [1, 0, 0, 1], scene,
+  });
   figure.webglLow = webgl;
   figure.webglHigh = webgl;
   figure.webgl = webgl;

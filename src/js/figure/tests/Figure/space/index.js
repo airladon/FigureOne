@@ -1,11 +1,13 @@
-/* globals Fig figure testCases cursor mark markContainer cursorContainer*/
+/* globals Fig figure testCases cursor mark markContainer cursorContainer gridMinor gridMajor */
 /* eslint-disable no-global-assign, no-inner-declarations */
 
 
 testCases = {
   beforeEach: () => {
-    figure.scene = new Fig.Scene();
-    cursorContainer.scene = new Fig.Scene();
+    figure.scene.reset();
+    cursorContainer.setScene();
+    gridMinor.setPosition(0, 0, 0);
+    gridMajor.setPosition(0, 0, 0);
   },
   '2D conversions': {
     beforeEach: () => {
@@ -145,6 +147,75 @@ testCases = {
       cursor.setPosition(p.transformBy(cursor.spaceTransformMatrix('gl', 'local')));
     },
   },
+  'ortho xy': {
+    beforeEach: () => {
+      figure.scene.setProjection({
+        left: -1, right: 1, bottom: -1, top: 1, near: 0.1, far: 4,
+      });
+      figure.scene.setCamera({
+        position: [1, 1, 2], lookAt: [0, 0, 0], up: [0, 1, 0],
+      });
+      figure.elements.updateDrawTransforms([new Fig.Transform()], figure.scene);
+    },
+    posPos: () => {
+      mark.setPosition([0.5, 0.5]);
+      const p = mark.getPosition('gl');
+      cursor.setPosition(p.transformBy(cursor.spaceTransformMatrix('gl', 'local')).add(0, 0, 0.5));
+    },
+    negNeg: () => {
+      mark.setPosition([-0.5, -0.5]);
+      const p = mark.getPosition('gl');
+      cursor.setPosition(p.transformBy(cursor.spaceTransformMatrix('gl', 'local')).add(0, 0, 0.5));
+    },
+    zero: () => {
+      mark.setPosition([0, 0]);
+      const p = mark.getPosition('gl');
+      cursor.setPosition(p.transformBy(cursor.spaceTransformMatrix('gl', 'local')).add(0, 0, 0.5));
+    },
+    'glToPlane posPos': () => {
+      cursor.setPosition(0.5, 0.5, 2);
+      const gl = Fig.getPoint([0.5, 0.5, 0]);
+      mark.setPosition(mark.glToPlane(gl, [[0, 0, 0], [0, 0, 1]]));
+    },
+    'glToPlane negNeg': () => {
+      cursor.setPosition(-0.5, -0.5, 2);
+      const gl = Fig.getPoint([-0.5, -0.5, 0]);
+      mark.setPosition(mark.glToPlane(gl, [[0, 0, 0], [0, 0, 1]]));
+    },
+    'glToPlane negPos': () => {
+      cursor.setPosition(-0.5, 0.5, 2);
+      const gl = Fig.getPoint([-0.5, 0.5, 0]);
+      mark.setPosition(mark.glToPlane(gl, [[0, 0, 0], [0, 0, 1]]));
+    },
+  },
+  'ortho xy zPos': {
+    beforeEach: () => {
+      figure.scene.setProjection({
+        left: -1, right: 1, bottom: -1, top: 1, near: 0.1, far: 4,
+      });
+      figure.scene.setCamera({
+        position: [1, 1, 2], lookAt: [0, 0, 0], up: [0, 1, 0],
+      });
+      figure.elements.updateDrawTransforms([new Fig.Transform()], figure.scene);
+      gridMinor.setPosition(0, 0, 0.5);
+      gridMajor.setPosition(0, 0, 0.5);
+    },
+    posPos: () => {
+      mark.setPosition([0.5, 0.5, 0.5]);
+      const p = mark.getPosition('gl');
+      cursor.setPosition(p.transformBy(cursor.spaceTransformMatrix('gl', 'local')).add(0, 0, 0.5));
+    },
+    'glToPlane negPos': () => {
+      cursor.setPosition(-0.5, 0.5, 2);
+      const gl = Fig.getPoint([-0.5, 0.5, 0]);
+      mark.setPosition(mark.glToPlane(gl, [[0, 0, 0], [0, 0, 1]]));
+    },
+    'glToPlane posNeg': () => {
+      cursor.setPosition(0.5, -0.5, 2);
+      const gl = Fig.getPoint([0.5, -0.5, 0]);
+      mark.setPosition(mark.glToPlane(gl, [[0, 0, 0], [0, 0, 1]]));
+    },
+  },
 };
 
 if (typeof process === 'object') {
@@ -170,5 +241,5 @@ if (typeof process === 'object') {
     return runTestCase(tc.slice(1), tcs[next]);
   }
 
-  runTestCase(['2D conversions', 'figure to gl'], testCases);
+  runTestCase(['ortho xy zPos', 'glToPlane posNeg'], testCases);
 }

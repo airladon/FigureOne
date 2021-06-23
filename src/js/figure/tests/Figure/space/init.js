@@ -14,7 +14,8 @@ const screenGrid = figure.add({
 });
 screenGrid.scene = new Fig.Scene();
 
-figure.add({
+const gridMinor = figure.add({
+  name: 'gridMinor',
   make: 'grid',
   bounds: [-1, -1, 2, 2],
   xStep: 0.1,
@@ -25,7 +26,8 @@ figure.add({
   xAlign: 'center',
 });
 
-figure.add({
+const gridMajor = figure.add({
+  name: 'gridMajor',
   make: 'grid',
   bounds: [-1, -1, 2, 2],
   xStep: 0.5,
