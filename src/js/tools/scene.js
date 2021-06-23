@@ -240,6 +240,7 @@ export default class Scene {
       .add(this.cameraVector.scale(this.far));
     this.nearPlane = new Plane(this.nearCenter, this.cameraVector);
     this.farPlane = new Plane(this.farCenter, this.cameraVector);
+
     if (this.style === 'perspective') {
       this.heightNear = Math.tan(this.fieldOfView * 0.5) * this.near * 2;
       this.heightFar = Math.tan(this.fieldOfView * 0.5) * this.far * 2;

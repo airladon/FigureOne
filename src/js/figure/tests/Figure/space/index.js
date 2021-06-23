@@ -8,6 +8,10 @@ testCases = {
     cursorContainer.setScene();
     gridMinor.setPosition(0, 0, 0);
     gridMajor.setPosition(0, 0, 0);
+    mark.setPosition(0, 0, 0);
+    markContainer.setPosition(0, 0, 0);
+    cursorContainer.setPosition(0, 0, 0);
+    cursor.setPosition(0, 0, 0);
   },
   '2D conversions': {
     beforeEach: () => {
@@ -75,7 +79,7 @@ testCases = {
       figure.scene.setProjection({
         left: -1, right: 1, bottom: -1, top: 1,
       });
-      figure.elements.updateDrawTransforms([new Fig.Transform()], figure.scene);
+      // figure.elements.updateDrawTransforms([new Fig.Transform()], figure.scene);
     },
     posPos: () => {
       mark.setPosition([0.5, 0.5]);
@@ -113,7 +117,7 @@ testCases = {
       figure.scene.setProjection({
         left: -2, right: 2, bottom: -2, top: 2,
       });
-      figure.elements.updateDrawTransforms([new Fig.Transform()], figure.scene);
+      // figure.elements.updateDrawTransforms([new Fig.Transform()], figure.scene);
     },
     toGL: () => {
       mark.setPosition([-0.8, 0.8]);
@@ -126,7 +130,7 @@ testCases = {
       figure.scene.setProjection({
         left: -0.5, right: 0.5, bottom: -0.5, top: 0.5,
       });
-      figure.elements.updateDrawTransforms([new Fig.Transform()], figure.scene);
+      // figure.elements.updateDrawTransforms([new Fig.Transform()], figure.scene);
     },
     toGL: () => {
       mark.setPosition([-0.2, 0.2]);
@@ -155,7 +159,7 @@ testCases = {
       figure.scene.setCamera({
         position: [1, 1, 2], lookAt: [0, 0, 0], up: [0, 1, 0],
       });
-      figure.elements.updateDrawTransforms([new Fig.Transform()], figure.scene);
+      // figure.elements.updateDrawTransforms([new Fig.Transform()], figure.scene);
     },
     posPos: () => {
       mark.setPosition([0.5, 0.5]);
@@ -216,6 +220,45 @@ testCases = {
       mark.setPosition(mark.glToPlane(gl, [[0, 0, 0], [0, 0, 1]]));
     },
   },
+  'perspective xy': {
+    beforeEach: () => {
+      figure.scene.setProjection({
+        style: 'perspective', fieldOfView: 0.8, near: 0.1, far: 5, aspectRatio: 1,
+      });
+      figure.scene.setCamera({
+        position: [1, 1, 3], lookAt: [0, 0, 0], up: [0, 1, 0],
+      });
+      // figure.elements.updateDrawTransforms([new Fig.Transform()], figure.scene);
+    },
+    'glToPlane negPos': () => {
+      cursor.setPosition(-0.5, 0.5, 2);
+      const gl = Fig.getPoint([-0.5, 0.5, 0]);
+      mark.setPosition(mark.glToPlane(gl, [[0, 0, 0], [0, 0, 1]]));
+    },
+    'glToPlane posPos': () => {
+      cursor.setPosition(0.5, 0.5, 2);
+      const gl = Fig.getPoint([0.5, 0.5, 0]);
+      mark.setPosition(mark.glToPlane(gl, [[0, 0, 0], [0, 0, 1]]));
+    },
+    'glToPlane negNeg': () => {
+      cursor.setPosition(-0.5, -0.5, 2);
+      const gl = Fig.getPoint([-0.5, -0.5, 0]);
+      mark.setPosition(mark.glToPlane(gl, [[0, 0, 0], [0, 0, 1]]));
+    },
+    posPos: () => {
+      mark.setPosition([1, 0]);
+      const p = mark.getPosition('gl');
+      console.log(p)
+      console.log(Fig.getPoint([0, 0]).transformBy(mark.spaceTransformMatrix('draw', 'gl')))
+      console.log(mark.spaceTransformMatrix('figure', 'gl'))
+      cursor.setPosition(p.transformBy(cursor.spaceTransformMatrix('gl', 'local')).add(0, 0, 0));
+    },
+  //   posNeg: () => {
+  //     mark.setPosition([-0.8, -0.8]);
+  //     const p = mark.getPosition('gl');
+  //     cursor.setPosition(p.transformBy(cursor.spaceTransformMatrix('gl', 'local')).add(0, 0, 0));
+  //   },
+  },
 };
 
 if (typeof process === 'object') {
@@ -241,5 +284,5 @@ if (typeof process === 'object') {
     return runTestCase(tc.slice(1), tcs[next]);
   }
 
-  runTestCase(['ortho xy zPos', 'glToPlane posNeg'], testCases);
+  runTestCase(['perspective xy', 'posPos'], testCases);
 }

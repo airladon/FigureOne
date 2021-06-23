@@ -2516,6 +2516,7 @@ class FigureElement {
       throw new Error(`Scene is null for element ${this.getPath()} and all it's parents `);
     }
     figureToGLMatrix = scene.viewProjectionMatrix;
+    console.log(scene)
 
     // From Draw Up
     if (from === 'draw' && to === 'pixel') {
@@ -2528,6 +2529,8 @@ class FigureElement {
       );
     }
     if (from === 'draw' && to === 'gl') {
+      console.log(figureToGLMatrix)
+      console.log(this.lastDrawTransform)
       return m3.mul(
         figureToGLMatrix,
         this.lastDrawTransform.matrix(),

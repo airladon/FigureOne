@@ -104,7 +104,7 @@ figure.add([
         make: 'polygon',
         radius: 0.1,
         sides: 20,
-        color: [1, 0.3, 0.3, 1],
+        color: [1, 0.3, 0.3, 0.5],
       },
     ],
   },
