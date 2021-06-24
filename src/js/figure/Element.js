@@ -2531,6 +2531,59 @@ class FigureElement {
   //   );
   // }
 
+  /**
+   * Transform a point between 'draw', 'local', 'figure', 'gl' and 'pixel'
+   * spaces.
+   *
+   * `plane` is only needed when converting from pixel space (a 2D space) to
+   * 'figure', 'local' or 'draw' spaces (a 3D space). A ray from the pixel is
+   * drawn into the screen
+   * and the intersection with the defined `plane` is returned.
+   *
+   * 'pixel' to 'gl' is also a 2D to 3D transformation, but in this case the
+   * XY plane at z = 0 is used in gl space.
+   *
+   * @param {TypeParsablePoint} point
+   * @param {'figure' | 'gl' | 'pixel'} fromSpace space to convert point from
+   * @param {'figure' | 'gl' | 'pixel'} toSpace space to convert point to
+   * @param {TypeParsablePlane} plane figure space intersection plane for
+   * 'pixel' to 'figure' conversion
+   */
+  transformPoint(
+    point: TypeParsablePoint,
+    fromSpace: 'draw' | 'local' | 'figure' | 'gl' | 'pixel',
+    toSpace: 'draw' | 'local' | 'figure' | 'gl' | 'pixel',
+    toSpacePlane: TypeParsablePlane = [[0, 0, 0], [0, 0, 1]],
+  ) {
+    const scene = this.getScene();
+    if (scene == null) {
+      throw new Error(`Scene is null for element ${this.getPath()} and all it's parents `);
+    }
+    const p = getPoint(point);
+    if (
+      scene.style === '2D'
+      || (fromSpace === 'gl' && toSpace === 'pixel')
+      || (fromSpace === 'figure' && toSpace === 'pixel')
+      || (fromSpace === 'pixel' && toSpace === 'gl')
+      || (
+        scene.style === 'orthographic'
+        && (
+          (fromSpace === 'gl' && toSpace === 'figure')
+          || (fromSpace === 'figure' && toSpace === 'gl')
+        )
+      )
+    ) {
+      const m = this.spaceTransformMatrix(fromSpace, toSpace);
+      return p.transformBy(m);
+    }
+
+    // Moving from pixel space to figure space in 3D requires a plane
+    // in figure space to cut through
+    if (fromSpace === 'pixel' && toSpace === 'figure') {
+      return this.pixelToPlane(p, plane);
+    }
+
+
   spaceTransformMatrix(from: string, to: string): Type3DMatrix {
     // All Vertex related conversions
     if (from === to) {
@@ -2543,9 +2596,23 @@ class FigureElement {
       throw new Error(`Scene is null for element ${this.getPath()} and all it's parents `);
     }
     const figureToGLMatrix = scene.viewProjectionMatrix;
-    // console.log(scene)
 
+    // Up Space Conversions
     // From Draw Up
+    if (from === 'draw' && to === 'local') {
+      return this.getTransform().matrix();
+    }
+    if (from === 'draw' && to === 'figure') {
+      return this.getFigureTransform().matrix();
+    }
+    // Only works for '2D' and 'orthographic' projections
+    if (from === 'draw' && to === 'gl') {
+      return m3.mul(
+        scene.viewProjectionMatrix,
+        this.getFigureTransform().matrix(),
+      );
+    }
+    // Only works for '2D' and 'orthographic' projections
     if (from === 'draw' && to === 'pixel') {
       return m3.mul(
         this.figure.spaceTransformMatrix('gl', 'pixel'),
@@ -2556,51 +2623,105 @@ class FigureElement {
         ),
       );
     }
-    if (from === 'draw' && to === 'gl') {
-      // console.log(figureToGLMatrix)
-      // console.log(this.lastDrawTransform)
-      return m3.mul(
-        scene.viewProjectionMatrix,
-        // this.lastDrawTransform.matrix(),
-        this.getFigureTransform().matrix(),
-      );
-    }
-    if (from === 'draw' && to === 'figure') {
-      // return this.lastDrawTransform.matrix();
-      return this.getFigureTransform().matrix();
-    }
-    if (from === 'draw' && to === 'local') {
-      return this.getTransform().matrix();
-    }
+    
 
     // From Local Up
+    if (from === 'local' && to === 'figure') {
+      return this.getLocalToFigureTransform().matrix();
+    }
+    // Only works for '2D' and 'orthographic' projections
+    if (from === 'local' && to === 'gl') {
+      return m3.mul(
+        figureToGLMatrix,
+        this.getLocalToFigureTransform().matrix(),
+      );
+    }
+    // Only works for '2D' and 'orthographic' projections
     if (from === 'local' && to === 'pixel') {
       return m3.mul(
         this.figure.spaceTransformMatrix('gl', 'pixel'),
         m3.mul(
           figureToGLMatrix,
-          // this.lastDrawTransform.calcMatrix(this.transform.def.length),
           this.getLocalToFigureTransform().matrix(),
         ),
       );
-      // return m3.mul(
-      //   this.figure.spaceTransforms.glToPixel.matrix(),
-      //   this.lastDrawTransform.calcMatrix(this.transform.def.length),
-      // );
-    }
-    if (from === 'local' && to === 'gl') {
-      return m3.mul(
-        figureToGLMatrix,
-        // this.lastDrawTransform.calcMatrix(this.transform.def.length),
-        this.getLocalToFigureTransform().matrix(),
-      );
-      // return this.lastDrawTransform.calcMatrix(this.transform.def.length);
-    }
-    if (from === 'local' && to === 'figure') {
-      // return this.lastDrawTransform.calcMatrix(this.transform.def.length);
-      return this.getLocalToFigureTransform().matrix();
     }
 
+    // From figure Up
+    // Only works for '2D' and 'orthographic' projections
+    if (from === 'figure' && to === 'gl') {
+      return figureToGLMatrix;
+    }
+    // Only works for '2D' and 'orthographic' projections
+    if (from === 'figure' && to === 'pixel') {
+      return this.figure.spaceTransformMatrix('figure', 'pixel');
+    }
+
+    // From GL Up
+    if (from === 'gl' && to === 'pixel') {
+      return this.figure.spaceTransformMatrix('gl', 'pixel');
+    }
+
+    // Down Space Conversions
+    // Pixel and down
+    // Always returns gl XY plane at z = 0
+    if (from === 'pixel' && to === 'gl') {
+      return this.figure.spaceTransformMatrix('pixel', 'gl');
+    }
+
+    // Only works for 2D projection
+    if (from === 'pixel' && to === 'figure') {
+      return this.figure.spaceTransformMatrix('pixel', 'figure');
+    }
+
+    // Only works for 2D projection
+    if (from === 'pixel' && to === 'local') {
+      return m3.mul(
+        m3.inverse(this.getLocalToFigureTransform().matrix()),
+        this.figure.spaceTransforms.pixelToGL.matrix(),
+      );
+    }
+
+    // Only works for 2D projection
+    if (from === 'pixel' && to === 'draw') {
+      return m3.mul(
+        m3.inverse(this.getFigureTransform().matrix()),
+        this.figure.spaceTransforms.pixelToGL.matrix(),
+      );
+    }
+
+    // GL Down
+    // Works only for 2D and orthographic projections
+    if (from === 'gl' && to === 'figure') {
+      return m3.inverse(figureToGLMatrix);
+    }
+
+    // Works only for 2D and orthographic projections
+    if (from === 'gl' && to === 'local') {
+      const glToFigureMatrix = m3.inverse(figureToGLMatrix);
+      const figureToLocalMatrix = m3.inverse(
+        this.getLocalToFigureTransform().matrix(),
+      );
+      return m3.mul(figureToLocalMatrix, glToFigureMatrix);
+    }
+
+    // Works only for 2D and orthographic projections
+    if (from === 'gl' && to === 'draw') {
+      const glToFigureMatrix = m3.inverse(figureToGLMatrix);
+      const figureToDrawMatrix = m3.inverse(
+        this.getFigureTransform().matrix(),
+      );
+      return m3.mul(figureToDrawMatrix, glToFigureMatrix);
+    }
+
+    // Figure Down
+    if (from === 'figure' && to === 'local') {
+      return m3.inverse(this.getLocalToFigureTransform().matrix());
+    }
+
+    if (from === 'figure' && to === 'draw') {
+      return m3.inverse(this.getFigureTransform().matrix());
+    }
 
     // if (from === 'pixel' && to === 'draw') {
     //   return m3.mul(
@@ -2653,14 +2774,7 @@ class FigureElement {
       // return m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.def.length, -3));
     }
 
-    // Remaining Figure related conversions
-    if (from === 'figure' && to === 'gl') {
-      // return this.figure.spaceTransformMatrix('figure', 'gl');
-      return figureToGLMatrix;
-    }
-    if (from === 'figure' && to === 'pixel') {
-      return this.figure.spaceTransformMatrix('figure', 'pixel');
-    }
+    
     if (from === 'gl' && to === 'figure') {
       return m3.inverse(figureToGLMatrix);
       // return this.figure.spaceTransformMatrix('gl', 'figure');
@@ -2673,9 +2787,7 @@ class FigureElement {
     }
 
     // Remaining GL related conversions
-    if (from === 'gl' && to === 'pixel') {
-      return this.figure.spaceTransformMatrix('gl', 'pixel');
-    }
+    
     // if (from === 'pixel' && to === 'gl') {
     //   return this.figure.spaceTransforms.pixelToGL.matrix();
     // }

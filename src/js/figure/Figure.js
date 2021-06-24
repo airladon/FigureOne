@@ -1331,7 +1331,7 @@ class Figure {
       z: { min: -1, space: 2 },
     };
 
-    // Always returns gl z value of 0
+    // Always returns gl XY plane at z = 0
     if (from === 'pixel' && to === 'gl') {
       return spaceToSpaceTransform(pixelSpace, glSpace).matrix();
     }
@@ -1446,16 +1446,42 @@ class Figure {
 
   pixelToPlane(
     pixel: TypeParsablePoint,
-    plane: TypeParsablePlane,
+    figureSpacePlane: TypeParsablePlane,
     // figureToLocalMatrix: Type3DMatrix = m3.identity(),
   ) {
     const glPoint = getPoint(pixel).transformBy(this.spaceTransformMatrix('pixel', 'gl'));
     return this.glToPlane(glPoint, plane);
   }
 
+  /*
+  A figure is projected into clip space (gl space) through a view matrix
+  and projection matrix.
+
+  The view matrix simulates a camera at some postion with some orientation
+  looking at the figure.
+
+  The projection matrix transforms all vertices that are to be seen to within
+  the GL coordinates (-1 to +1)
+
+  The near plane (gl space z = -1) represents a rectange in figure space where
+  the center of the rectangle is the point between the camera position and the
+  look at point a distance `near` from the camera. `scene.rightVector` and
+  `scene.upVector` define the figure space directions of gl space x+ and y+.
+
+  Therefore, a point on the near gl plane can be converted to figure space by
+  scaling the `scene.rightVector` and `scene.upVector`s and adding them to the
+  `scene.nearCenter`.
+
+  A similar process can be done with the far gl plane.
+
+  Therefore, this method takes the XY coordinate of a GL point and draws a line
+  from -1 to 1 in z in GL space. The near point (z = -1) and far point (z = 1)
+  is transformed into figure space. The line in figure space is then
+  intersected with a plane in figure space.
+  */
   glToPlane(
     glPoint: TypeParsablePoint,
-    plane: TypeParsablePlane,
+    figureSpacePlane: TypeParsablePlane,
   ) {
     const gl = getPoint(glPoint);
     const nearPoint = this.scene.nearCenter
@@ -1464,7 +1490,7 @@ class Figure {
     const farPoint = this.scene.farCenter
       .add(this.scene.rightVector.scale(this.scene.widthFar / 2 * gl.x))
       .add(this.scene.upVector.scale(this.scene.heightFar / 2 * gl.y));
-    return getPlane(plane).lineIntersect([nearPoint, farPoint]);
+    return getPlane(figureSpacePlane).lineIntersect([nearPoint, farPoint]);
   }
 
 
