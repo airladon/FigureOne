@@ -86,6 +86,7 @@ export default function makeFigure(
   figure.webglHigh = webgl;
   figure.webgl = webgl;
   figure.canvasLow = canvasMock;
+  figure.webglLow.gl.canvas = canvasMock;
   figure.canvasHigh = canvasMock;
   figure.htmlCanvas = htmlCanvasMock;
   figure.isTouchDevice = false;

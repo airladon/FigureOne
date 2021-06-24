@@ -769,8 +769,9 @@ class Figure {
       return;
     }
 
-    const matrix = this.spaceTransformMatrix('pixel', 'figure');
-    this.defaultLineWidth = Math.abs(matrix[0]);
+    const zero = this.transformPoint([0, 0], 'gl', 'figure');
+    const one = this.transformPoint([1, 0], 'gl', 'figure');
+    this.defaultLineWidth = Math.abs(one.distance(zero) / 10);
   }
 
   setDefaultLength(userInputLength: number | null) {
@@ -1300,8 +1301,8 @@ class Figure {
    *   `transformPoint` for each point to be transformed.
    */
   spaceTransformMatrix(
-    from: 'figure' | 'gl' | '',
-    to: string,
+    from: 'figure' | 'gl' | 'pixel',
+    to: 'figure' | 'gl' | 'pixel',
   ) {
     if (from === to) {
       return m3.identity();
@@ -1310,7 +1311,7 @@ class Figure {
     const pixelSpace = {
       x: { min: 0, span: canvasRect.width },
       y: { min: canvasRect.height, span: -canvasRect.height },
-      z: { min: -1, span: 1 },
+      z: { min: -1, span: 2 },
     };
 
     const glSpace = {
@@ -1328,14 +1329,13 @@ class Figure {
         min: this.scene.bottom,
         span: this.scene.top - this.scene.bottom,
       },
-      z: { min: -1, space: 2 },
+      z: { min: -1, span: 2 },
     };
 
     // Always returns gl XY plane at z = 0
     if (from === 'pixel' && to === 'gl') {
       return spaceToSpaceTransform(pixelSpace, glSpace).matrix();
     }
-
     // Only works for 2D projection
     if (from === 'pixel' && to === 'figure') {
       if (this.scene.style === '2D') {
@@ -1386,17 +1386,14 @@ class Figure {
    * Transform a point between 'figure', 'gl' and 'pixel' spaces.
    *
    * `plane` is only needed when converting from pixel space (a 2D space) to
-   * 'figure' space (a 3D space). A ray from the pixel is drawn into the screen
-   * and the intersection with the defined `plane` is returned.
-   *
-   * 'pixel' to 'gl' is also a 2D to 3D transformation, but in this case the
-   * XY plane at z = 0 is used in gl space.
+   * 'figure' space or 'gl' space (a 3D space). A ray from the pixel is drawn
+   * into the screen and the intersection with the defined `plane` is returned.
    *
    * @param {TypeParsablePoint} point
    * @param {'figure' | 'gl' | 'pixel'} fromSpace space to convert point from
    * @param {'figure' | 'gl' | 'pixel'} toSpace space to convert point to
    * @param {TypeParsablePlane} plane figure space intersection plane for
-   * 'pixel' to 'figure' conversion
+   * 'pixel' to 'figure' conversion (default: xy plane at z = 0)
    */
   transformPoint(
     point: TypeParsablePoint,
@@ -1408,13 +1405,12 @@ class Figure {
     if (
       this.scene.style === '2D'
       || (fromSpace === 'gl' && toSpace === 'pixel')
-      || (fromSpace === 'figure' && toSpace === 'pixel')
-      || (fromSpace === 'pixel' && toSpace === 'gl')
       || (
         this.scene.style === 'orthographic'
         && (
           (fromSpace === 'gl' && toSpace === 'figure')
           || (fromSpace === 'figure' && toSpace === 'gl')
+          || (fromSpace === 'figure' && toSpace === 'pixel')
         )
       )
     ) {
@@ -1428,6 +1424,12 @@ class Figure {
       return this.pixelToPlane(p, plane);
     }
 
+    // Moving from pixel space to gl space in 3D requires a plane
+    // in gl space to cut through
+    if (fromSpace === 'pixel' && toSpace === 'gl') {
+      return this.pixelToGLPlane(p, plane);
+    }
+
     // If scene.style === 'perspective', then special functions are needed
     // to convert between gl and figure space the transform matrix depends on
     // the point's z coordinate relative to the camera
@@ -1437,6 +1439,11 @@ class Figure {
 
     if (fromSpace === 'figure' && toSpace === 'gl') {
       return this.scene.figureToGl(p);
+    }
+
+    if (fromSpace === 'figure' && toSpace === 'pixel') {
+      const gl = this.scene.figureToGl(p);
+      return this.transformPoint(gl, 'gl', 'pixel');
     }
 
     // If we got here then all combinations of fromSpace and toSpace should
@@ -1450,7 +1457,7 @@ class Figure {
     // figureToLocalMatrix: Type3DMatrix = m3.identity(),
   ) {
     const glPoint = getPoint(pixel).transformBy(this.spaceTransformMatrix('pixel', 'gl'));
-    return this.glToPlane(glPoint, plane);
+    return this.glToPlane(glPoint, figureSpacePlane);
   }
 
   /*
@@ -1491,6 +1498,17 @@ class Figure {
       .add(this.scene.rightVector.scale(this.scene.widthFar / 2 * gl.x))
       .add(this.scene.upVector.scale(this.scene.heightFar / 2 * gl.y));
     return getPlane(figureSpacePlane).lineIntersect([nearPoint, farPoint]);
+  }
+
+  pixelToGLPlane(
+    pixelPoint: TypeParsablePoint,
+    glSpacePlane: TypeParsablePlane,
+  ) {
+    const pixel = getPoint(pixelPoint);
+    const gl = pixel.transformBy(this.spaceTransformMatrix('pixel', 'gl'));
+    const nearPoint = new Point(gl.x, gl.y, -1);
+    const farPoint = new Point(gl.x, gl.y, 1);
+    return getPlane(glSpacePlane).lineIntersect([nearPoint, farPoint]);
   }
 
 
@@ -1919,7 +1937,7 @@ class Figure {
     }
 
     // this.currentCursorPoint = figurePoint._dup();
-    this.previousCursorPoint = glPoint.transformBy(this.spaceTransformMatrix('gl', 'figure2D'));
+    this.previousCursorPoint = this.transformPoint(glPoint, 'gl', 'figure');
 
     if (this.isPaused) {
       this.unpause();

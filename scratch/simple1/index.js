@@ -200,15 +200,15 @@ figure.scene.light.ambient = 0;
 figure.scene.light.point = [0.3, 0.1, 1];
 
 
-figure.scene.setCamera({ position: [1, 1, 1.2] });
+figure.scene.setCamera({ position: [2, 2, 2] });
 
-// figure.scene.setProjection({ style: 'orthographic', near: 1, far: 10, left: -2, right: 2, bottom: -1, top: 1 });
+figure.scene.setProjection({ style: 'orthographic', near: 1, far: 10, left: -2, right: 2, bottom: -1, top: 1 });
 
-figure.scene.setProjection({ style: 'perspective', near: 1, far: 2.5, aspectRatio: 2, fieldOfView: Math.PI * 0.4 });
+// figure.scene.setProjection({ style: 'perspective', near: 1, far: 2.5, aspectRatio: 2, fieldOfView: Math.PI * 0.4 });
 
-console.log(new Fig.Point(0, 0, 0).transformBy(figure.spaceTransformMatrix('figure', 'gl')));
-console.log(new Fig.Point(-0.15, -1, 0).transformBy(figure.spaceTransformMatrix('figure', 'gl')));
-console.log(new Fig.Point(1, 0.6, 0).transformBy(figure.spaceTransformMatrix('figure', 'gl')));
+// console.log(new Fig.Point(0, 0, 0).transformBy(figure.spaceTransformMatrix('figure', 'gl')));
+// console.log(new Fig.Point(-0.15, -1, 0).transformBy(figure.spaceTransformMatrix('figure', 'gl')));
+// console.log(new Fig.Point(1, 0.6, 0).transformBy(figure.spaceTransformMatrix('figure', 'gl')));
 // console.log(new Fig.Point(0, 0, 0).transformBy(figure.scene.viewProjectionMatrix));
 
 // console.log(new Fig.Point(0, 0, 0).transformBy(figure.scene.viewProjectionMatrix).transformBy(figure.spaceTransformMatrix('gl', 'figure')));

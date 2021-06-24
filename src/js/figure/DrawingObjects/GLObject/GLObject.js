@@ -104,6 +104,10 @@ class GLObject extends DrawingObject {
     this.selectorProgramIndex = this.webgl.getProgram(selectorVertexShader, selectorFragShader);
   }
 
+  getCanvas() {
+    return this.gl.canvas;
+  }
+
   setPrimitive(primitiveType: 'TRIANGLES' | 'POINTS' | 'TRIANGLE_FAN' | 'TRIANGLE_STRIP' | 'LINES' | 'LINE_LOOP' | 'LINE_STRIP') {
     if (primitiveType === 'TRIANGLES') {
       this.glPrimitive = this.gl.TRIANGLES;

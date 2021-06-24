@@ -555,6 +555,10 @@ class TextObjectBase extends DrawingObject {
     this.layoutText();
   }
 
+  getCanvas() {
+    return this.drawContext2D.canvas;
+  }
+
 
   // eslint-disable-next-line class-methods-use-this
   setTextLocations() {

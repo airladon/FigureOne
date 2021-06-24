@@ -113,6 +113,9 @@ class DrawingObject {
   update(options: Object) {
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  getCanvas() {}
+
 
   // getBoundaries(transformMatrix: null | Array<number> = null): Array<Array<Point>> {
   //   return getBounds(this.border, transformMatrix);
