@@ -859,7 +859,7 @@ class Figure {
       // this.beingTouchedElements = this.beingTouchedElements.filter(e => Object.keys(e).length > 0);
       this.notifications.publish('stateSetInit');
       this.elements.setTimeDelta(this.timeKeeper.now() / 1000 - this.stateTime);
-      this.elements.updateDrawTransforms([new Transform()], this.scene);
+      // this.elements.updateDrawTransforms([new Transform()], this.scene);
       this.elements.stateSet();
       this.elements.setPointsFromDefinition();
       this.elements.setPrimitiveColors();
@@ -1276,10 +1276,32 @@ class Figure {
     // this.webglHigh.gl.getExtension('WEBGL_lose_context').loseContext();
   }
 
+  /**
+   * Return matrix that can convert between 'pixel', 'figure' and 'gl' spaces.
+   *
+   * These matrices would be generally used to transform points between spaces.
+   * `transformPoint` can be used to do this for individual points, but if
+   * converting many points, then generating the transform matrix once and
+   * applying it to each point can be more efficient.
+   *
+   * Depending on the type of figure scene, not all space combinations are
+   * possible.
+   *
+   * For 2D scenes, all combinations are possible.
+   *
+   * For 3D scenes:
+   * - 'pixel' to 'gl' will transform a point in pixel space to a point on the
+   *    XY plane at Z = 0 in GL space.
+   * - 'pixel' to 'figure' is not valid. Use `transformPoint` instead where a
+   *   plane can be defined to intersect with.
+   * - Conversions between 'gl' and 'figure' are only valid for 'orthographic'
+   *   projections. For perspective projections, the transform matrix is not
+   *   general and depends coordinates of the point to be transformed. Use
+   *   `transformPoint` for each point to be transformed.
+   */
   spaceTransformMatrix(
-    from: string,
+    from: 'figure' | 'gl' | '',
     to: string,
-    // projectTo: TypeParsablePlane = [[0, 0, 0], [0, 0, 1]]
   ) {
     if (from === to) {
       return m3.identity();
@@ -1307,10 +1329,39 @@ class Figure {
         span: this.scene.top - this.scene.bottom,
       },
       z: { min: -1, space: 2 },
-    }
+    };
 
+    // Always returns gl z value of 0
     if (from === 'pixel' && to === 'gl') {
       return spaceToSpaceTransform(pixelSpace, glSpace).matrix();
+    }
+
+    // Only works for 2D projection
+    if (from === 'pixel' && to === 'figure') {
+      if (this.scene.style === '2D') {
+        return spaceToSpaceTransform(pixelSpace, figure2DSpace).matrix();
+      }
+      throw new Error('Cannot create a transform matrix from pixel to figure spaces as converting from 2D to 3D');
+    }
+
+    // Only works for 2D and orthographic projection
+    const figureToGLMatrix = this.scene.viewProjectionMatrix;
+    if (from === 'figure' && to === 'gl') {
+      if (this.scene.style === 'perspective') {
+        throw new Error('Cannot create a transform matrix from figure space to GL space for a perspective scene as transform is dependent on coordinates of point being transformed.');
+      }
+      return figureToGLMatrix;
+    }
+
+    // Only works for orthographic projection
+    if (from === 'gl' && to === 'figure') {
+      if (this.scene.style === '2D') {
+        return spaceToSpaceTransform(glSpace, figure2DSpace).matrix();
+      }
+      if (this.scene.style === 'perspective') {
+        throw new Error('Cannot create a transform matrix from GL space to figure space for a perspective scene as transform is dependent on coordinates of point being transformed.');
+      }
+      return m3.inverse(figureToGLMatrix);
     }
 
     const glToPixelMatrix = spaceToSpaceTransform(glSpace, pixelSpace).matrix();
@@ -1318,16 +1369,6 @@ class Figure {
     glToPixelMatrix[11] = 0;
     if (from === 'gl' && to === 'pixel') {
       return glToPixelMatrix;
-    }
-    // const p = m3.transformVector(this.scene.viewProjectionMatrix, [0, 0, 0, 1]);
-    // const figureToGLMatrix = this.scene.viewProjectionMatrix.map(n => n / p[3]);
-    // if (this.scene.style === '2D') {
-    //   figureToGLMatrix[11] = 0;
-    // }
-    // figureToGLMatrix = figureToGLMatrix.map(n => n / figureToGLMatrix[15]);
-    const figureToGLMatrix = this.scene.viewProjectionMatrix;
-    if (from === 'figure' && to === 'gl') {
-      return figureToGLMatrix;
     }
 
     const figureToPixelMatrix = m3.mul(
@@ -1338,24 +1379,69 @@ class Figure {
       return figureToPixelMatrix;
     }
 
-    if (from === 'gl' && to === 'figure') {
-      // const glToFigureMatrix = m3.mul(
-      //   this.scene.cameraMatrix,
-      //   m3.inverse(this.scene.projectionMatrix),
-      // );
-      return m3.inverse(figureToGLMatrix);
-      // return glToFigureMatrix;
-    }
-
-    if (from === 'gl' && to === 'figure2D') {
-      return spaceToSpaceTransform(glSpace, figure2DSpace).matrix();
-    }
-
-    if (from === 'pixel' && to === 'figure') {
-      return m3.identity();
-    }
-
     throw new Error(`Invalid space transform matrix inputs: from: '${from}', to: '${to}'`);
+  }
+
+  /**
+   * Transform a point between 'figure', 'gl' and 'pixel' spaces.
+   *
+   * `plane` is only needed when converting from pixel space (a 2D space) to
+   * 'figure' space (a 3D space). A ray from the pixel is drawn into the screen
+   * and the intersection with the defined `plane` is returned.
+   *
+   * 'pixel' to 'gl' is also a 2D to 3D transformation, but in this case the
+   * XY plane at z = 0 is used in gl space.
+   *
+   * @param {TypeParsablePoint} point
+   * @param {'figure' | 'gl' | 'pixel'} fromSpace space to convert point from
+   * @param {'figure' | 'gl' | 'pixel'} toSpace space to convert point to
+   * @param {TypeParsablePlane} plane figure space intersection plane for
+   * 'pixel' to 'figure' conversion
+   */
+  transformPoint(
+    point: TypeParsablePoint,
+    fromSpace: 'figure' | 'gl' | 'pixel',
+    toSpace: 'figure' | 'gl' | 'pixel',
+    plane: TypeParsablePlane = [[0, 0, 0], [0, 0, 1]],
+  ) {
+    const p = getPoint(point);
+    if (
+      this.scene.style === '2D'
+      || (fromSpace === 'gl' && toSpace === 'pixel')
+      || (fromSpace === 'figure' && toSpace === 'pixel')
+      || (fromSpace === 'pixel' && toSpace === 'gl')
+      || (
+        this.scene.style === 'orthographic'
+        && (
+          (fromSpace === 'gl' && toSpace === 'figure')
+          || (fromSpace === 'figure' && toSpace === 'gl')
+        )
+      )
+    ) {
+      const m = this.spaceTransformMatrix(fromSpace, toSpace);
+      return p.transformBy(m);
+    }
+
+    // Moving from pixel space to figure space in 3D requires a plane
+    // in figure space to cut through
+    if (fromSpace === 'pixel' && toSpace === 'figure') {
+      return this.pixelToPlane(p, plane);
+    }
+
+    // If scene.style === 'perspective', then special functions are needed
+    // to convert between gl and figure space the transform matrix depends on
+    // the point's z coordinate relative to the camera
+    if (fromSpace === 'gl' && toSpace === 'figure') {
+      return this.scene.glToFigure(p);
+    }
+
+    if (fromSpace === 'figure' && toSpace === 'gl') {
+      return this.scene.figureToGl(p);
+    }
+
+    // If we got here then all combinations of fromSpace and toSpace should
+    // have been covered, which means at least one string is incorrect
+    throw new Error(`Figure.transformPoint space definition error -'${fromSpace}', '${toSpace}'`);
   }
 
   pixelToPlane(

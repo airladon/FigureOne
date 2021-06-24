@@ -46,10 +46,10 @@ describe('Element Drawing', () => {
       .scale(1, 1)
       .rotate(0)
       .translate(0, 0)
-      .scale(1, 1)
-      .translate(0, 0);
+      // .scale(1, 1)
+      // .translate(0, 0);
     // LastDrawTransform
-    expect(a.lastDrawTransform.def).toEqual(expectedDrawTransform.def);
+    expect(a.getDrawToFigureTransformDef()).toEqual(expectedDrawTransform.def);
     // Actual transform(s) drawn (in this case just one as no copies or pulse multipliers)
     expect(a.drawTransforms[0].def).toEqual(expectedDrawTransform.def);
     // Transform matrix sent to gl
@@ -71,8 +71,8 @@ describe('Element Drawing', () => {
       .scale(1, 1)
       .rotate(0)
       .translate(0, 0)
-      .scale(1, 1)
-      .translate(0, 0);
+      // .scale(1, 1)
+      // .translate(0, 0);
     const expectedDrawTransform = expectedLastDrawTransform.transform(
       new Transform()
         .translate(-0, -0)
@@ -81,7 +81,7 @@ describe('Element Drawing', () => {
     );
 
     // LastDrawTransform
-    expect(a.lastDrawTransform.def).toEqual(expectedLastDrawTransform.def);
+    expect(a.getDrawToFigureTransformDef()).toEqual(expectedLastDrawTransform.def);
     // Actual transform(s) drawn (in this case just one as no copies or pulse multipliers)
     expect(a.drawTransforms[0].def).toEqual(expectedDrawTransform.def);
     // Transform matrix sent to gl
@@ -106,15 +106,15 @@ describe('Element Drawing', () => {
       .scale(1, 1)
       .rotate(0)
       .translate(0, 0)
-      .scale(1, 1)
-      .translate(0, 0);
+      // .scale(1, 1)
+      // .translate(0, 0);
     const expectedDrawTransforms = [
       expectedLastDrawTransform.transform(t1),
       expectedLastDrawTransform.transform(t2),
     ];
 
     // LastDrawTransform
-    expect(a.lastDrawTransform.def).toEqual(expectedLastDrawTransform.def);
+    expect(a.getDrawToFigureTransformDef()).toEqual(expectedLastDrawTransform.def);
     // Actual transform(s) drawn (in this case just one as no copies or pulse multipliers)
     expect(a.drawTransforms[0].def).toEqual(expectedDrawTransforms[0].def);
     expect(a.drawTransforms[1].def).toEqual(expectedDrawTransforms[1].def);

@@ -559,7 +559,7 @@ class FigureElement {
   copyTransforms: Array<Transform>;
   drawTransforms: Array<Transform>;
 
-  lastDrawTransform: Transform; // Transform matrix used in last draw
+  // lastDrawTransform: Transform; // Transform matrix used in last draw
   lastDrawPulseTransform: Transform; // Transform matrix used in last draw
   parentTransform: Array<Transform>;
   lastScene: null | Scene;
@@ -568,7 +568,7 @@ class FigureElement {
   // lastDrawParentTransform: Transform;
   // lastDrawElementTransform: Transform;
   // lastDrawPulseTransform: Transform;
-  lastDrawElementTransformPosition: {parentCount: number, elementCount: number};
+  // lastDrawElementTransformPosition: {parentCount: number, elementCount: number};
 
   lastDrawOpacity: number;
 
@@ -815,16 +815,16 @@ class FigureElement {
     this.beforeDrawCallback = null;
     this.afterDrawCallback = null;
     this.internalSetTransformCallback = null;
-    this.lastDrawTransform = this.transform._dup();
+    // this.lastDrawTransform = this.transform._dup();
     this.scene = null;
     this.lastScene = null;
     this.parentTransform = [new Transform()];
     this.lastDrawPulseTransform = this.transform._dup();
     this.onClick = null;
-    this.lastDrawElementTransformPosition = {
-      parentCount: 0,
-      elementCount: 0,
-    };
+    // this.lastDrawElementTransformPosition = {
+    //   parentCount: 0,
+    //   elementCount: 0,
+    // };
     this.custom = {};
     this._custom = {};
     this.customState = {};
@@ -1155,6 +1155,31 @@ class FigureElement {
     return null;
   }
 
+  getDrawToFigureTransformDef() {
+    if (this.parent != null) {
+      return [...this.transform.def, ...this.parent.getDrawToFigureTransformDef()];
+    }
+    return this.transform.def;
+  }
+
+  getLocalToFigureTransformDef() {
+    if (this.parent != null) {
+      return this.parent.getDrawToFigureTransformDef();
+    }
+    return [];
+  }
+
+  getLocalToFigureTransform() {
+    if (this.parent != null) {
+      return new Transform(this.getLocalToFigureTransformDef());
+    }
+    return new Transform();
+  }
+
+  getFigureTransform() {
+    return new Transform(this.getDrawToFigureTransformDef());
+  }
+
 
   // Space definition:
   //   * Pixel space: css pixels
@@ -1300,10 +1325,11 @@ class FigureElement {
         center.x - scaleX * (this.tieToHTML.window.left + this.tieToHTML.window.width / 2),
         center.y - scaleY * (this.tieToHTML.window.bottom + this.tieToHTML.window.height / 2),
       );
-      this.setFirstTransform(this.getParentLastDrawTransform());
+      // this.setFirstTransform(this.getParentLastDrawTransform());
     }
   }
 
+  // Deprecate
   // eslint-disable-next-line no-unused-vars, class-methods-use-this
   setFirstTransform(parentTransform: Transform) {
   }
@@ -1631,9 +1657,9 @@ class FigureElement {
       this.notifications.publish('beforeSetTransform', [transform]);
       this.transform = transform;
     }
-    if (this.simple === false) {
-      this.updateDrawTransforms(this.parentTransform, this.lastScene, false);
-    }
+    // if (this.simple === false) {
+    //   this.updateDrawTransforms(this.parentTransform, this.lastScene, false);
+    // }
     if (this.internalSetTransformCallback) {
       this.fnMap.exec(this.internalSetTransformCallback, this.transform);
     }
@@ -1924,18 +1950,18 @@ class FigureElement {
   }
 
 
-  updateLastDrawTransform() {
-    const transform = this.getTransform();
-    transform.def.forEach((t, index) => {
-      this.lastDrawTransform.def[index] = t.slice();
-    });
-    this.lastDrawTransform.calcAndSetMatrix();
-  }
+  // updateLastDrawTransform() {
+  //   const transform = this.getTransform();
+  //   transform.def.forEach((t, index) => {
+  //     this.lastDrawTransform.def[index] = t.slice();
+  //   });
+  //   this.lastDrawTransform.calcAndSetMatrix();
+  // }
 
-  getParentLastDrawTransform() {
-    const { parentCount } = this.lastDrawElementTransformPosition;
-    return new Transform(this.lastDrawTransform.def.slice(-parentCount));
-  }
+  // getParentLastDrawTransform() {
+  //   const { parentCount } = this.lastDrawElementTransformPosition;
+  //   return new Transform(this.lastDrawTransform.def.slice(-parentCount));
+  // }
 
   /**
    * Return figure path of element
@@ -2510,12 +2536,13 @@ class FigureElement {
     if (from === to) {
       return new Transform().identity().matrix();
     }
-    let figureToGLMatrix: Type3DMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
+
+    // let figureToGLMatrix: Type3DMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
     const scene = this.getScene();
     if (scene == null) {
       throw new Error(`Scene is null for element ${this.getPath()} and all it's parents `);
     }
-    figureToGLMatrix = scene.viewProjectionMatrix;
+    const figureToGLMatrix = scene.viewProjectionMatrix;
     // console.log(scene)
 
     // From Draw Up
@@ -2523,8 +2550,9 @@ class FigureElement {
       return m3.mul(
         this.figure.spaceTransformMatrix('gl', 'pixel'),
         m3.mul(
-          figureToGLMatrix,
-          this.lastDrawTransform.matrix(),
+          scene.viewProjectionMatrix,
+          // this.lastDrawTransform.matrix(),
+          this.getFigureTransform().matrix(),
         ),
       );
     }
@@ -2532,12 +2560,14 @@ class FigureElement {
       // console.log(figureToGLMatrix)
       // console.log(this.lastDrawTransform)
       return m3.mul(
-        figureToGLMatrix,
-        this.lastDrawTransform.matrix(),
+        scene.viewProjectionMatrix,
+        // this.lastDrawTransform.matrix(),
+        this.getFigureTransform().matrix(),
       );
     }
     if (from === 'draw' && to === 'figure') {
-      return this.lastDrawTransform.matrix();
+      // return this.lastDrawTransform.matrix();
+      return this.getFigureTransform().matrix();
     }
     if (from === 'draw' && to === 'local') {
       return this.getTransform().matrix();
@@ -2549,7 +2579,8 @@ class FigureElement {
         this.figure.spaceTransformMatrix('gl', 'pixel'),
         m3.mul(
           figureToGLMatrix,
-          this.lastDrawTransform.calcMatrix(this.transform.def.length),
+          // this.lastDrawTransform.calcMatrix(this.transform.def.length),
+          this.getLocalToFigureTransform().matrix(),
         ),
       );
       // return m3.mul(
@@ -2560,12 +2591,14 @@ class FigureElement {
     if (from === 'local' && to === 'gl') {
       return m3.mul(
         figureToGLMatrix,
-        this.lastDrawTransform.calcMatrix(this.transform.def.length),
+        // this.lastDrawTransform.calcMatrix(this.transform.def.length),
+        this.getLocalToFigureTransform().matrix(),
       );
       // return this.lastDrawTransform.calcMatrix(this.transform.def.length);
     }
     if (from === 'local' && to === 'figure') {
-      return this.lastDrawTransform.calcMatrix(this.transform.def.length);
+      // return this.lastDrawTransform.calcMatrix(this.transform.def.length);
+      return this.getLocalToFigureTransform().matrix();
     }
 
 
@@ -2577,10 +2610,18 @@ class FigureElement {
     //   );
     // }
     if (from === 'gl' && to === 'draw') {
-      return m3.inverse(this.lastDrawTransform.matrix());
+      // return m3.inverse(this.lastDrawTransform.matrix());
+      return m3.inverse(m3.mul(
+        scene.viewProjectionMatrix,
+        // this.lastDrawTransform.matrix(),
+        this.getFigureTransform().matrix(),
+      ));
     }
     if (from === 'figure' && to === 'draw') {
-      return m3.inverse(this.lastDrawTransform.calcMatrix(0, -3));
+      // return m3.inverse(this.lastDrawTransform.calcMatrix(0, -3));
+      return m3.inverse(
+        this.getFigureTransform().matrix(),
+      );
     }
     if (from === 'local' && to === 'draw') {
       return m3.inverse(this.getTransform().matrix());
@@ -2600,24 +2641,29 @@ class FigureElement {
       //   m3.inverse(scene.projectionMatrix),
       // );
       const figureToLocalMatrix = m3.inverse(
-        this.lastDrawTransform.calcMatrix(this.transform.def.length),
+        // this.lastDrawTransform.calcMatrix(this.transform.def.length),
+        this.getLocalToFigureTransform().matrix(),
       );
       return m3.mul(figureToLocalMatrix, glToFigureMatrix);
     }
     if (from === 'figure' && to === 'local') {
-      return m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.def.length));
+      return m3.inverse(
+        this.getLocalToFigureTransform().matrix(),
+      );
       // return m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.def.length, -3));
     }
 
     // Remaining Figure related conversions
     if (from === 'figure' && to === 'gl') {
-      return this.figure.spaceTransformMatrix('figure', 'gl');
+      // return this.figure.spaceTransformMatrix('figure', 'gl');
+      return figureToGLMatrix;
     }
     if (from === 'figure' && to === 'pixel') {
       return this.figure.spaceTransformMatrix('figure', 'pixel');
     }
     if (from === 'gl' && to === 'figure') {
-      return this.figure.spaceTransformMatrix('gl', 'figure');
+      return m3.inverse(figureToGLMatrix);
+      // return this.figure.spaceTransformMatrix('gl', 'figure');
     }
     // if (from === 'gl' && to === 'figure') {
     //   return this.figure.spaceTransforms.glToFigure.matrix();
@@ -2926,7 +2972,8 @@ class FigureElement {
     };
     const figureToGLSpace = spaceToSpaceTransform(figureSpace, glSpace);
     const glLocation = figurePosition.transformBy(figureToGLSpace.matrix());
-    const t = new Transform(this.lastDrawTransform.def.slice(this.transform.def.length));
+    // const t = new Transform(this.lastDrawTransform.def.slice(this.transform.def.length));
+    const t = this.getLocalToFigureTransform();
     const newLocation = glLocation.transformBy(m3.inverse(t.matrix()));
     this.setPosition(newLocation._dup());
   }
@@ -3270,32 +3317,32 @@ class FigureElement {
     return [];
   }
 
-  updateDrawTransforms(
-    parentTransform: Array<Transform> = [new Transform()],
-    scene: Scene,
-    isSame: boolean = false,
-  ) {
-    if (isSame) {
-      return isSame;
-    }
-    const transform = this.getTransform()._dup();
-    const newTransforms = transformBy(parentTransform, [transform]);
-    this.parentTransform = parentTransform;
-    this.lastDrawElementTransformPosition = {
-      parentCount: parentTransform[0].def.length,
-      elementCount: this.transform.def.length,
-    };
-    this.lastScene = this.scene != null ? this.scene : scene;
-    this.pulseTransforms = this.getPulseTransforms(
-      this.timeKeeper.now() / 1000,
-    ); // $FlowFixMe
-    this.drawTransforms = this.getDrawTransforms(newTransforms);
-    // eslint-disable-next-line prefer-destructuring
-    this.lastDrawTransform = newTransforms[0];
-    // eslint-disable-next-line prefer-destructuring
-    this.lastDrawPulseTransform = this.drawTransforms[0];
-    return isSame;
-  }
+  // updateDrawTransforms(
+  //   parentTransform: Array<Transform> = [new Transform()],
+  //   scene: Scene,
+  //   isSame: boolean = false,
+  // ) {
+  //   if (isSame) {
+  //     return isSame;
+  //   }
+  //   const transform = this.getTransform()._dup();
+  //   const newTransforms = transformBy(parentTransform, [transform]);
+  //   this.parentTransform = parentTransform;
+  //   this.lastDrawElementTransformPosition = {
+  //     parentCount: parentTransform[0].def.length,
+  //     elementCount: this.transform.def.length,
+  //   };
+  //   this.lastScene = this.scene != null ? this.scene : scene;
+  //   this.pulseTransforms = this.getPulseTransforms(
+  //     this.timeKeeper.now() / 1000,
+  //   ); // $FlowFixMe
+  //   this.drawTransforms = this.getDrawTransforms(newTransforms);
+  //   // eslint-disable-next-line prefer-destructuring
+  //   this.lastDrawTransform = newTransforms[0];
+  //   // eslint-disable-next-line prefer-destructuring
+  //   this.lastDrawPulseTransform = this.drawTransforms[0];
+  //   return isSame;
+  // }
 
   setUniqueColor(color: null | TypeColor) {
     this.uniqueColor = color == null ? null : color.slice();
@@ -3526,7 +3573,8 @@ class FigureElementPrimitive extends FigureElement {
       // Therefore, should use figure.setFirstTransform before using this,
       // or in the future remove this line, and the line in hide(), and
       // somehow do the hide in the draw call
-      this.drawingObject.transformHtml(this.lastDrawTransform.matrix());
+      // this.drawingObject.transformHtml(this.lastDrawTransform.matrix());
+      this.drawingObject.transformHtml(this.getFigureTransform().matrix());
     }
   }
 
@@ -3534,7 +3582,8 @@ class FigureElementPrimitive extends FigureElement {
     super.hide();
     if (this.drawingObject instanceof HTMLObject) {
       this.drawingObject.show = false;
-      this.drawingObject.transformHtml(this.lastDrawTransform.matrix());
+      // this.drawingObject.transformHtml(this.lastDrawTransform.matrix());
+      this.drawingObject.transformHtml(this.getFigureTransform().matrix());
     }
   }
 
@@ -3547,7 +3596,8 @@ class FigureElementPrimitive extends FigureElement {
 
   resizeHtmlObject() {
     if (this.drawingObject instanceof HTMLObject) {
-      this.drawingObject.transformHtml(this.lastDrawTransform.matrix());
+      // this.drawingObject.transformHtml(this.lastDrawTransform.matrix());
+      this.drawingObject.transformHtml(this.getFigureTransform().matrix());
     }
   }
 
@@ -3692,10 +3742,10 @@ class FigureElementPrimitive extends FigureElement {
       // $FlowFixMe
       // if (FIGURE1DEBUG) { timer.stamp('m2'); }
 
-      this.lastDrawElementTransformPosition = {
-        parentCount: parentTransform[0].def.length,
-        elementCount: this.transform.def.length,
-      };
+      // this.lastDrawElementTransformPosition = {
+      //   parentCount: parentTransform[0].def.length,
+      //   elementCount: this.transform.def.length,
+      // };
 
       this.pulseTransforms = this.getPulseTransforms(now); // $FlowFixMe
       // if (FIGURE1DEBUG) { timer.stamp('m3'); }
@@ -3704,7 +3754,7 @@ class FigureElementPrimitive extends FigureElement {
       // this.drawTransforms = newTransforms;
 
       // eslint-disable-next-line prefer-destructuring
-      this.lastDrawTransform = newTransforms[0];
+      // this.lastDrawTransform = newTransforms[0];
       const sceneToUse = this.scene != null ? this.scene : scene;
       this.lastScene = sceneToUse;
       // $FlowFixMe
@@ -3747,16 +3797,16 @@ class FigureElementPrimitive extends FigureElement {
   }
 
   setFirstTransform(parentTransform: Transform = new Transform()) {
-    this.lastDrawElementTransformPosition = {
-      parentCount: parentTransform.def.length,
-      elementCount: this.transform.def.length,
-    };
-    this.parentTransform = [parentTransform];
-    const firstTransform = parentTransform.transform(this.getTransform());
-    this.lastDrawTransform = firstTransform._dup();
-    if (this.drawingObject instanceof HTMLObject) {
-      this.drawingObject.transformHtml(firstTransform.matrix());
-    }
+    // this.lastDrawElementTransformPosition = {
+    //   parentCount: parentTransform.def.length,
+    //   elementCount: this.transform.def.length,
+    // };
+    // this.parentTransform = [parentTransform];
+    // const firstTransform = parentTransform.transform(this.getTransform());
+    // this.lastDrawTransform = firstTransform._dup();
+    // if (this.drawingObject instanceof HTMLObject) {
+    //   this.drawingObject.transformHtml(firstTransform.matrix());
+    // }
     this.checkMoveBounds();
   }
 
@@ -4044,7 +4094,7 @@ class FigureElementCollection extends FigureElement {
     if (this.figure != null) {
       element.setFigure(this.figure);
     }
-    element.setFirstTransform(this.lastDrawTransform);
+    // element.setFirstTransform(this.lastDrawTransform);
     this.animateNextFrame();
     return element;
   }
@@ -4381,16 +4431,16 @@ class FigureElementCollection extends FigureElement {
       }
       // let timer;
       // if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
-      this.lastDrawElementTransformPosition = {
-        parentCount: parentTransform[0].def.length,
-        elementCount: this.transform.def.length,
-      };
+      // this.lastDrawElementTransformPosition = {
+      //   parentCount: parentTransform[0].def.length,
+      //   elementCount: this.transform.def.length,
+      // };
       const transform = this.getTransform();
       const newTransforms = transformBy(parentTransform, [transform]);
       // $FlowFixMe
       // if (FIGURE1DEBUG) { timer.stamp('m1'); }
       // eslint-disable-next-line prefer-destructuring
-      this.lastDrawTransform = newTransforms[0];
+      // this.lastDrawTransform = newTransforms[0];
       const sceneToUse = this.scene != null ? this.scene : scene;
       this.lastScene = sceneToUse;
       this.parentTransform = parentTransform;
@@ -4819,29 +4869,29 @@ class FigureElementCollection extends FigureElement {
     }
   }
 
-  updateDrawTransforms(
-    parentTransform: Array<Transform> = [new Transform()],
-    scene: Scene,
-    isSame: boolean = false,
-  ) {
-    super.updateDrawTransforms(parentTransform, scene, isSame);
-    for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
-      const s = this.scene != null ? this.scene : scene;
-      this.elements[this.drawOrder[i]].updateDrawTransforms(
-        this.drawTransforms, s, isSame,
-      );
-    }
-  }
+  // updateDrawTransforms(
+  //   parentTransform: Array<Transform> = [new Transform()],
+  //   scene: Scene,
+  //   isSame: boolean = false,
+  // ) {
+  //   super.updateDrawTransforms(parentTransform, scene, isSame);
+  //   for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
+  //     const s = this.scene != null ? this.scene : scene;
+  //     this.elements[this.drawOrder[i]].updateDrawTransforms(
+  //       this.drawTransforms, s, isSame,
+  //     );
+  //   }
+  // }
 
   setFirstTransform(parentTransform: Transform = new Transform()) {
-    const firstTransform = parentTransform.transform(this.getTransform());
-    this.lastDrawTransform = firstTransform._dup();
-    this.parentTransform = [parentTransform];
+    // const firstTransform = parentTransform.transform(this.getTransform());
+    // this.lastDrawTransform = firstTransform._dup();
+    // this.parentTransform = [parentTransform];
 
-    for (let i = 0; i < this.drawOrder.length; i += 1) {
-      const element = this.elements[this.drawOrder[i]];
-      element.setFirstTransform(firstTransform);
-    }
+    // for (let i = 0; i < this.drawOrder.length; i += 1) {
+    //   const element = this.elements[this.drawOrder[i]];
+    //   element.setFirstTransform(firstTransform);
+    // }
     this.checkMoveBounds();
   }
 

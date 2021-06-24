@@ -368,15 +368,15 @@ class Transform {
         m = m3.mul(m, m3.translationMatrix(x, y, z));
       } else if (type === 's' && (x !== 1 || y !== 1 || z !== 1)) {
         m = m3.mul(m, m3.scaleMatrix(x, y, z));
-      } else if (type === 'r') {
+      } else if (type === 'r' && x !== 0) {
         m = m3.mul(m, m3.rotationMatrixXYZ(0, 0, x));
-      } else if (type === 'rc') {
+      } else if (type === 'rc' && (x !== 0 || y !== 0 || z !== 0)) {
         m = m3.mul(m, m3.rotationMatrixXYZ(x, y, z));
-      } else if (type === 'rd') {
+      } else if (type === 'rd' && (x !== 1 || y !== 0 || z !== 0)) {
         m = m3.mul(m, m3.rotationMatrixDirection([x, y, z]));
-      } else if (type === 'rs') {
+      } else if (type === 'rs' && (x !== 0 || y !== 0)) {
         m = m3.mul(m, m3.rotationMatrixSpherical(x, y));
-      } else if (type === 'ra') {
+      } else if (type === 'ra' && this.def[i][4] !== 0) {
         m = m3.mul(m, m3.rotationMatrixAxis([x, y, z], this.def[i][4]));
       } else if (type === 'c') {  // $FlowFixMe
         m = m3.mul(m, this.def[i].slice(1));

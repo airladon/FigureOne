@@ -369,7 +369,7 @@ describe('Animationa and Movement', () => {
         element.pulse({ duration: 1, scale: 1.1 });
         // element.setupDraw(identity, 0);
         expect(element.state.pulse.startTime).toBe(0);
-        expect(element.lastDrawTransform.matrix()).toEqual(element.transform.matrix());
+        expect(element.getFigureTransform().matrix()).toEqual(element.transform.matrix());
 
         // element.setupDraw(identity, 0.5);
         figure.mock.timeStep(0.5);
