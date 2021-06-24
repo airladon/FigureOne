@@ -2,11 +2,9 @@ const { sphere, cone, rod } = Fig.tools.g2;
 
 const figure = new Fig.Figure({
   scene: {
-    style: 'orthographic',
-    left: -2,
-    right: 2,
-    bottom: -2,
-    top: 2,
+    style: 'perspective',
+    fieldOfView: 0.8,
+    aspectRatio: 1,
     camera: {
       position: [3, 3, 3],
       lookAt: [0, 0, 0],
@@ -25,7 +23,7 @@ const screenGrid = figure.add({
   yStep: 1,
   line: { width: 0.005 },
   color: [0.5, 0.5, 1, 1],
-  position: [0, 0, -3],
+  position: [0, 0, -4.5],
   xAlign: 'center',
 });
 screenGrid.scene = new Fig.Scene();
@@ -37,7 +35,7 @@ const screenMinorGrid = figure.add({
   yStep: 0.2,
   line: { width: 0.005 },
   color: [0.85, 0.85, 1, 1],
-  position: [0, 0, -3],
+  position: [0, 0, -4.5],
   xAlign: 'center',
 });
 screenMinorGrid.scene = screenGrid.scene;

@@ -412,6 +412,7 @@ export default class Scene {
     const f = this.projectionMatrix[5];
     const npfr = this.projectionMatrix[10];
     const nf2r = this.projectionMatrix[11];
+
     const cameraZ = -nf2r / (clip.z + npfr);
     const cameraX = -clip.x * cameraZ / fOna;
     const cameraY = -clip.y * cameraZ / f;

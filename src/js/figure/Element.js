@@ -2613,11 +2613,11 @@ class FigureElement {
       || (fromSpace === 'gl' && toSpace === 'draw')
       || (fromSpace === 'gl' && toSpace === 'figure')
     ) {
-      const f = this.scene.glToFigure(p);
+      const f = scene.glToFigure(p);
       if (toSpace === 'figure') {
         return f;
       }
-      return this.transformPoint(f, 'figure', toSpace)
+      return this.transformPoint(f, 'figure', toSpace);
     }
 
     if (
@@ -2627,9 +2627,9 @@ class FigureElement {
     ) {
       let f = p;
       if (fromSpace !== 'figure') {
-        f = this.transformPoint(p, 'figure');
+        f = this.transformPoint(p, fromSpace, 'figure');
       }
-      return this.scene.figureToGl(f);
+      return scene.figureToGL(f);
     }
 
     if (
@@ -2639,9 +2639,9 @@ class FigureElement {
     ) {
       let f = p;
       if (fromSpace !== 'figure') {
-        f = this.transformPoint(p, 'figure');
+        f = this.transformPoint(p, fromSpace, 'figure');
       }
-      const gl = this.scene.figureToGl(f);
+      const gl = scene.figureToGL(f);
       return this.transformPoint(gl, 'gl', 'pixel');
     }
 
@@ -2695,7 +2695,7 @@ class FigureElement {
       glToPixel[10] = 0;
       glToPixel[11] = 0;
       return glToPixel;
-    }
+    };
 
     const figureToPixelMatrix = () => m3.mul(
       glToPixelMatrix(),

@@ -64,6 +64,27 @@ describe('Element Space Transforms', () => {
         );
         figure.add(collection);
       },
+      perspective: () => {
+        // Position camera, near and far planes so origin is at z = 0.6666 in
+        // gl space - note in perspective space z compresses the further from
+        // the camera you go
+        figure = makeFigure(
+          new Rect(0, 0, 1000, 1000),
+          {
+            style: 'perspective',
+            fieldOfView: 0.8,
+            aspectRatio: 1,
+            camera: {
+              position: [3, 3, 3],
+              lookAt: [0, 0, 0],
+              up: [0, 1, 0],
+            },
+            near: Math.sqrt(3),
+            far: Math.sqrt(3) * 5,
+          },
+        );
+        figure.add(collection);
+      },
     };
     create = (option) => {
       figureOptions[option]();
@@ -214,6 +235,81 @@ describe('Element Space Transforms', () => {
 
       expect(get(a, [0, 1, 1], 'figure', 'pixel', 0)).toEqual(getP(500 - 500 * 0.354, 500 - 500 * 0.204, 0));
       expect(get(a, [500 - 500 * 0.354, 500 - 500 * 0.204], 'pixel', 'figure', 2, [[0, 0, 1], [0, 0, 1]])).toEqual(getP(0, 1, 1));
+    });
+    test('GL to Pixel', () => {
+      expect(get(a, [0, 0, 0], 'gl', 'pixel')).toEqual(getP(500, 500));
+      expect(get(a, [500, 500], 'pixel', 'gl', 2)).toEqual(getP(0, 0, 0));
+
+      expect(get(a, [0, 1, 1], 'gl', 'pixel', 0)).toEqual(getP(500, 0, 0));
+      expect(get(a, [500, 0], 'pixel', 'gl', 2, [[0, 0, 1], [0, 0, 1]])).toEqual(getP(0, 1, 1));
+    });
+  });
+  describe('Perspective', () => {
+    beforeEach(() => {
+      create('perspective');
+    });
+    test('Draw to Local', () => {
+      expect(get(a, [0, 0, 0], 'draw', 'local')).toEqual(getP(1, 0, 0));
+      expect(get(a, [1, 0, 0], 'local', 'draw')).toEqual(getP(0, 0, 0));
+
+      expect(get(a, [0, 1, 1], 'draw', 'local')).toEqual(getP(1, 1, 1));
+      expect(get(a, [1, 1, 1], 'local', 'draw')).toEqual(getP(0, 1, 1));
+    });
+    test('Draw to Figure', () => {
+      expect(get(a, [0, 0, 0], 'draw', 'figure')).toEqual(getP(2, 0, 0));
+      expect(get(a, [2, 0, 0], 'figure', 'draw')).toEqual(getP(0, 0, 0));
+
+      expect(get(a, [0, 1, 1], 'draw', 'figure')).toEqual(getP(2, 1, 1));
+      expect(get(a, [2, 1, 1], 'figure', 'draw')).toEqual(getP(0, 1, 1));
+    });
+    test('Draw to GL', () => {
+      expect(get(a, [0, 0, 0], 'draw', 'gl')).toEqual(getP(0.828, -0.478, 0.429));
+      expect(get(a, [0.828, -0.478, 0.429], 'gl', 'draw', 2)).toEqual(getP(0, 0, 0));
+
+      expect(get(a, [0, 1, 1], 'draw', 'gl')).toEqual(getP(0.579, -0.334, 0));
+      expect(get(a, [0.579, -0.334, 0], 'gl', 'draw', 2)).toEqual(getP(0, 1, 1));
+    });
+    test('Draw to Pixel', () => {
+      expect(get(a, [0, 0, 0], 'draw', 'pixel', 0)).toEqual(getP(500 + 0.828 * 500, 500 + 0.478 * 500, 0, 0));
+      expect(get(a, [500 + 0.828 * 500, 500 + 0.478 * 500], 'pixel', 'draw', 2)).toEqual(getP(0, 0, 0));
+
+      expect(get(a, [0, 1, 1], 'draw', 'pixel', 0)).toEqual(getP(500 + 0.579 * 500, 500 + 0.334 * 500, 0, 0));
+      expect(get(a, [500 + 0.579 * 500, 500 + 0.334 * 500], 'pixel', 'draw', 2, [[0, 0, 1], [0, 0, 1]])).toEqual(getP(0, 1, 1, 0));
+    });
+    test('Local to Figure', () => {
+      expect(get(a, [0, 0, 0], 'local', 'figure')).toEqual(getP(1, 0, 0));
+      expect(get(a, [1, 0, 0], 'figure', 'local')).toEqual(getP(0, 0, 0));
+
+      expect(get(a, [0, 1, 1], 'local', 'figure')).toEqual(getP(1, 1, 1));
+      expect(get(a, [1, 1, 1], 'figure', 'local')).toEqual(getP(0, 1, 1));
+    });
+    test('Local to GL', () => {
+      expect(get(a, [0, 0, 0], 'local', 'gl')).toEqual(getP(0.362, -0.209, 0.563));
+      expect(get(a, [0.362, -0.209, 0.563], 'gl', 'local', 2)).toEqual(getP(0, 0, 0));
+
+      expect(get(a, [0, 1, 1], 'local', 'gl')).toEqual(getP(0, 0, 0.25));
+      expect(get(a, [0, 0, 0.25], 'gl', 'local', 2)).toEqual(getP(0, 1, 1));
+    });
+    test('Local to pixel', () => {
+      expect(get(a, [0, 0, 0], 'local', 'pixel', 0)).toEqual(getP(500 + 500 * 0.362, 500 + 500 * 0.209, 0, 0));
+      expect(get(a, [500 + 500 * 0.362, 500 + 500 * 0.209], 'pixel', 'local', 2)).toEqual(getP(0, 0, 0));
+
+      expect(get(a, [0, 1, 1], 'local', 'pixel')).toEqual(getP(500, 500, 0));
+      expect(get(a, [500, 500], 'pixel', 'local', 2, [[0, 0, 1], [0, 0, 1]])).toEqual(getP(0, 1, 1));
+    });
+    test('Figure to GL', () => {
+      expect(get(a, [0, 0, 0], 'figure', 'gl')).toEqual(getP(0, 0, 0.667));
+      expect(get(a, [0, 0, 0.667], 'gl', 'figure', 2)).toEqual(getP(0, 0, 0));
+
+      expect(get(a, [0, 1, 1], 'figure', 'gl')).toEqual(getP(-0.414, 0.239, 0.429));
+      expect(get(a, [-0.414, 0.239, 0.429], 'gl', 'figure', 2)).toEqual(getP(0, 1, 1));
+    });
+    test('Figure to Pixel', () => {
+      expect(get(a, [0, 0, 0], 'figure', 'pixel')).toEqual(getP(500, 500));
+      expect(get(a, [500, 500], 'pixel', 'figure', 2)).toEqual(getP(0, 0, 0));
+
+      expect(get(a, [0, 1, 1], 'figure', 'pixel', 0)).toEqual(getP(500 - 500 * 0.414, 500 - 500 * 0.239, 0, 0));
+      expect(get(a, [500 - 500 * 0.414, 500 - 500 * 0.239], 'pixel', 'figure', 2, [[0, 0, 1], [0, 0, 1]])).toEqual(getP(0, 1, 1));
     });
     test('GL to Pixel', () => {
       expect(get(a, [0, 0, 0], 'gl', 'pixel')).toEqual(getP(500, 500));
