@@ -374,8 +374,6 @@ class Figure {
         right: 1,
         bottom: -1,
         top: 1,
-        // near: 0.1,
-        // far: 4,
       },
     };
     this.frameRate = {
@@ -394,30 +392,6 @@ class Figure {
     this.nextDrawTimer = null;
     this.nextDrawTimerStart = 0;
     this.nextDrawTimerDuration = 0;
-    // this.scene = {
-    //   style: '2D',
-    //   left: -1,
-    //   right: 1,
-    //   bottom: -1,
-    //   top: 1,
-    //   near: 1,
-    //   far: 3,
-    //   camera: {
-    //     position: [0, 0, 3],
-    //     lookAt: [0, 0],
-    //     up: [0, 1, 0],
-    //   },
-    //   aspectRatio: 1,
-    //   fieldOfView: 1,
-    //   light: {
-    //     directional: [1, 1, 1],
-    //     ambient: 0.4,
-    //     point: [10, 10, 10],
-    //   },
-    // };
-    // this.projectionMatrix = new Transform().matrix();
-    // this.viewMatrix = new Transform().matrix();
-    // this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
       htmlId, limits,
@@ -545,18 +519,15 @@ class Figure {
     this.scene = new Scene(optionsToUse.scene);
     this.previousCursorPoint = new Point(0, 0);
     this.isTouchDown = false;
-    // this.pauseAfterNextDrawFlag = false;
     this.fontScale = optionsToUse.fontScale;
     this.updateLimits(limits);
     this.setDefaultLineWidth(options.lineWidth || null);
     this.setDefaultLength(options.length || null);
     this.drawQueued = false;
     this.lastDrawTime = 0;
-    // this.inTransition = false;
     this.beingMovedElement = null;
     this.beingTouchedElement = null;
     this.moveBuffer = [];
-    // this.touchTopElementOnly = true;
     this.timeKeeper = new TimeKeeper();
     this.notifications = new NotificationManager(this.fnMap);
     this.recorder = new Recorder(this.timeKeeper);
@@ -564,14 +535,9 @@ class Figure {
     this.bindRecorder();
     this.pauseTime = this.timeKeeper.now() / 1000;
     this.shapesLow = this.getShapes();
-    // this.shapesHigh = this.getShapes(true);
     this.shapes = this.shapesLow;
     this.primitives = this.shapes;
-    // this.equationLow = this.getEquations();
-    // this.equationHigh = this.getEquations(true);
-    // this.equation = this.equationLow;
     this.collectionsLow = this.getObjects();
-    // this.collectionsHigh = this.getObjects(true);
     this.collections = this.collectionsLow;
     this.createFigureElements();
     if (this.elements.name === '') {
@@ -598,29 +564,8 @@ class Figure {
       // eslint-disable-next-line new-cap
       this.elements = new optionsToUse.elements(this);
       this.elements.figureLimits = this.limits;
-      // this.elements.scene = this.scene;
-      // this.elements.getCanvas = () => this.canvasLow;
       this.initElements();
     }
-    // this.camera = { position: [0, 0, 2], lookAt: [0, 0, 0], up: [0, 1, 0] };
-    // this.setCamera();
-    // this.projection = {
-    //   left: -1,
-    //   right: 1,
-    //   bottom: -1,
-    //   top: 1,
-    //   near: -1,
-    //   far: 1,
-    //   type: 'orthographic',
-    //   fieldOfView: 47 * Math.PI / 180,
-    //   aspectRatio: 1,
-    // };
-    // this.light = {
-    //   directional: [1, 1, 1],
-    //   min: 0.4,
-    //   point: [10, 10, 10],
-    // };
-    // this.setProjection({});
     this.waitForFrames = 0;
     this.scrollingFast = false;
     this.scrollTimeoutId = null;
@@ -732,12 +677,12 @@ class Figure {
     };
     const onCursorMove = (payload) => {
       const [x, y] = payload;
-      this.setCursor(new Point(x, y));
+      this.setCursorGLPoint(new Point(x, y));
       this.touchMove(new Point(x, y));
     };
     const onAutoCursorMove = (payload) => {
       const [x, y] = payload;
-      this.setCursor(new Point(x, y));
+      this.setCursorGLPoint(new Point(x, y));
       this.touchMove(new Point(x, y), true);
     };
 
@@ -770,9 +715,10 @@ class Figure {
       return;
     }
 
-    const zero = this.transformPoint([0, 0], 'gl', 'figure');
-    const one = this.transformPoint([1, 0], 'gl', 'figure');
-    this.defaultLineWidth = Math.abs(one.distance(zero) / 10);
+    this.defaultLineWidth = this.limits.width / 40;
+    // const zero = this.transformPoint([0, 0], 'gl', 'figure');
+    // const one = this.transformPoint([1, 0], 'gl', 'figure');
+    // this.defaultLineWidth = Math.abs(one.distance(zero) / 10);
   }
 
   setDefaultLength(userInputLength: number | null) {
@@ -1305,82 +1251,83 @@ class Figure {
     from: 'figure' | 'gl' | 'pixel',
     to: 'figure' | 'gl' | 'pixel',
   ) {
-    if (from === to) {
-      return m3.identity();
-    }
-    const canvasRect = this.canvasLow.getBoundingClientRect();
-    const pixelSpace = {
-      x: { min: 0, span: canvasRect.width },
-      y: { min: canvasRect.height, span: -canvasRect.height },
-      z: { min: -1, span: 2 },
-    };
+    return this.elements.spaceTransformMatrix(from, to);
+    // if (from === to) {
+    //   return m3.identity();
+    // }
+    // const canvasRect = this.canvasLow.getBoundingClientRect();
+    // const pixelSpace = {
+    //   x: { min: 0, span: canvasRect.width },
+    //   y: { min: canvasRect.height, span: -canvasRect.height },
+    //   z: { min: -1, span: 2 },
+    // };
 
-    const glSpace = {
-      x: { min: -1, span: 2 },
-      y: { min: -1, span: 2 },
-      z: { min: -1, span: 2 },
-    };
+    // const glSpace = {
+    //   x: { min: -1, span: 2 },
+    //   y: { min: -1, span: 2 },
+    //   z: { min: -1, span: 2 },
+    // };
 
-    const figure2DSpace = {
-      x: {
-        min: this.scene.left,
-        span: this.scene.right - this.scene.left,
-      },
-      y: {
-        min: this.scene.bottom,
-        span: this.scene.top - this.scene.bottom,
-      },
-      z: { min: -1, span: 2 },
-    };
+    // const figure2DSpace = {
+    //   x: {
+    //     min: this.scene.left,
+    //     span: this.scene.right - this.scene.left,
+    //   },
+    //   y: {
+    //     min: this.scene.bottom,
+    //     span: this.scene.top - this.scene.bottom,
+    //   },
+    //   z: { min: -1, span: 2 },
+    // };
 
-    // Always returns gl XY plane at z = 0
-    if (from === 'pixel' && to === 'gl') {
-      return spaceToSpaceTransform(pixelSpace, glSpace).matrix();
-    }
-    // Only works for 2D projection
-    if (from === 'pixel' && to === 'figure') {
-      if (this.scene.style === '2D') {
-        return spaceToSpaceTransform(pixelSpace, figure2DSpace).matrix();
-      }
-      throw new Error('Cannot create a transform matrix from pixel to figure spaces as converting from 2D to 3D');
-    }
+    // // Always returns gl XY plane at z = 0
+    // if (from === 'pixel' && to === 'gl') {
+    //   return spaceToSpaceTransform(pixelSpace, glSpace).matrix();
+    // }
+    // // Only works for 2D projection
+    // if (from === 'pixel' && to === 'figure') {
+    //   if (this.scene.style === '2D') {
+    //     return spaceToSpaceTransform(pixelSpace, figure2DSpace).matrix();
+    //   }
+    //   throw new Error('Cannot create a transform matrix from pixel to figure spaces as converting from 2D to 3D');
+    // }
 
-    // Only works for 2D and orthographic projection
-    const figureToGLMatrix = this.scene.viewProjectionMatrix;
-    if (from === 'figure' && to === 'gl') {
-      if (this.scene.style === 'perspective') {
-        throw new Error('Cannot create a transform matrix from figure space to GL space for a perspective scene as transform is dependent on coordinates of point being transformed.');
-      }
-      return figureToGLMatrix;
-    }
+    // // Only works for 2D and orthographic projection
+    // const figureToGLMatrix = this.scene.viewProjectionMatrix;
+    // if (from === 'figure' && to === 'gl') {
+    //   if (this.scene.style === 'perspective') {
+    //     throw new Error('Cannot create a transform matrix from figure space to GL space for a perspective scene as transform is dependent on coordinates of point being transformed.');
+    //   }
+    //   return figureToGLMatrix;
+    // }
 
-    // Only works for orthographic projection
-    if (from === 'gl' && to === 'figure') {
-      if (this.scene.style === '2D') {
-        return spaceToSpaceTransform(glSpace, figure2DSpace).matrix();
-      }
-      if (this.scene.style === 'perspective') {
-        throw new Error('Cannot create a transform matrix from GL space to figure space for a perspective scene as transform is dependent on coordinates of point being transformed.');
-      }
-      return m3.inverse(figureToGLMatrix);
-    }
+    // // Only works for orthographic projection
+    // if (from === 'gl' && to === 'figure') {
+    //   if (this.scene.style === '2D') {
+    //     return spaceToSpaceTransform(glSpace, figure2DSpace).matrix();
+    //   }
+    //   if (this.scene.style === 'perspective') {
+    //     throw new Error('Cannot create a transform matrix from GL space to figure space for a perspective scene as transform is dependent on coordinates of point being transformed.');
+    //   }
+    //   return m3.inverse(figureToGLMatrix);
+    // }
 
-    const glToPixelMatrix = spaceToSpaceTransform(glSpace, pixelSpace).matrix();
-    glToPixelMatrix[10] = 0;
-    glToPixelMatrix[11] = 0;
-    if (from === 'gl' && to === 'pixel') {
-      return glToPixelMatrix;
-    }
+    // const glToPixelMatrix = spaceToSpaceTransform(glSpace, pixelSpace).matrix();
+    // glToPixelMatrix[10] = 0;
+    // glToPixelMatrix[11] = 0;
+    // if (from === 'gl' && to === 'pixel') {
+    //   return glToPixelMatrix;
+    // }
 
-    const figureToPixelMatrix = m3.mul(
-      glToPixelMatrix,
-      figureToGLMatrix,
-    );
-    if (from === 'figure' && to === 'pixel') {
-      return figureToPixelMatrix;
-    }
+    // const figureToPixelMatrix = m3.mul(
+    //   glToPixelMatrix,
+    //   figureToGLMatrix,
+    // );
+    // if (from === 'figure' && to === 'pixel') {
+    //   return figureToPixelMatrix;
+    // }
 
-    throw new Error(`Invalid space transform matrix inputs: from: '${from}', to: '${to}'`);
+    // throw new Error(`Invalid space transform matrix inputs: from: '${from}', to: '${to}'`);
   }
 
   /**
@@ -1402,64 +1349,65 @@ class Figure {
     toSpace: 'figure' | 'gl' | 'pixel',
     plane: TypeParsablePlane = [[0, 0, 0], [0, 0, 1]],
   ) {
-    const p = getPoint(point);
-    if (
-      this.scene.style === '2D'
-      || (fromSpace === 'gl' && toSpace === 'pixel')
-      || (
-        this.scene.style === 'orthographic'
-        && (
-          (fromSpace === 'gl' && toSpace === 'figure')
-          || (fromSpace === 'figure' && toSpace === 'gl')
-          || (fromSpace === 'figure' && toSpace === 'pixel')
-        )
-      )
-    ) {
-      const m = this.spaceTransformMatrix(fromSpace, toSpace);
-      return p.transformBy(m);
-    }
+    return this.elements.transformPoint(point, fromSpace, toSpace, plane);
+    // const p = getPoint(point);
+    // if (
+    //   this.scene.style === '2D'
+    //   || (fromSpace === 'gl' && toSpace === 'pixel')
+    //   || (
+    //     this.scene.style === 'orthographic'
+    //     && (
+    //       (fromSpace === 'gl' && toSpace === 'figure')
+    //       || (fromSpace === 'figure' && toSpace === 'gl')
+    //       || (fromSpace === 'figure' && toSpace === 'pixel')
+    //     )
+    //   )
+    // ) {
+    //   const m = this.spaceTransformMatrix(fromSpace, toSpace);
+    //   return p.transformBy(m);
+    // }
 
-    // Moving from pixel space to figure space in 3D requires a plane
-    // in figure space to cut through
-    if (fromSpace === 'pixel' && toSpace === 'figure') {
-      return this.pixelToPlane(p, plane);
-    }
+    // // Moving from pixel space to figure space in 3D requires a plane
+    // // in figure space to cut through
+    // if (fromSpace === 'pixel' && toSpace === 'figure') {
+    //   return this.pixelToPlane(p, plane);
+    // }
 
-    // Moving from pixel space to gl space in 3D requires a plane
-    // in gl space to cut through
-    if (fromSpace === 'pixel' && toSpace === 'gl') {
-      return this.pixelToGLPlane(p, plane);
-    }
+    // // Moving from pixel space to gl space in 3D requires a plane
+    // // in gl space to cut through
+    // if (fromSpace === 'pixel' && toSpace === 'gl') {
+    //   return this.pixelToGLPlane(p, plane);
+    // }
 
-    // If scene.style === 'perspective', then special functions are needed
-    // to convert between gl and figure space the transform matrix depends on
-    // the point's z coordinate relative to the camera
-    if (fromSpace === 'gl' && toSpace === 'figure') {
-      return this.scene.glToFigure(p);
-    }
+    // // If scene.style === 'perspective', then special functions are needed
+    // // to convert between gl and figure space the transform matrix depends on
+    // // the point's z coordinate relative to the camera
+    // if (fromSpace === 'gl' && toSpace === 'figure') {
+    //   return this.scene.glToFigure(p);
+    // }
 
-    if (fromSpace === 'figure' && toSpace === 'gl') {
-      return this.scene.figureToGl(p);
-    }
+    // if (fromSpace === 'figure' && toSpace === 'gl') {
+    //   return this.scene.figureToGl(p);
+    // }
 
-    if (fromSpace === 'figure' && toSpace === 'pixel') {
-      const gl = this.scene.figureToGl(p);
-      return this.transformPoint(gl, 'gl', 'pixel');
-    }
+    // if (fromSpace === 'figure' && toSpace === 'pixel') {
+    //   const gl = this.scene.figureToGl(p);
+    //   return this.transformPoint(gl, 'gl', 'pixel');
+    // }
 
-    // If we got here then all combinations of fromSpace and toSpace should
-    // have been covered, which means at least one string is incorrect
-    throw new Error(`Figure.transformPoint space definition error -'${fromSpace}', '${toSpace}'`);
+    // // If we got here then all combinations of fromSpace and toSpace should
+    // // have been covered, which means at least one string is incorrect
+    // throw new Error(`Figure.transformPoint space definition error -'${fromSpace}', '${toSpace}'`);
   }
 
-  pixelToPlane(
-    pixel: TypeParsablePoint,
-    figureSpacePlane: TypeParsablePlane,
-    // figureToLocalMatrix: Type3DMatrix = m3.identity(),
-  ) {
-    const glPoint = getPoint(pixel).transformBy(this.spaceTransformMatrix('pixel', 'gl'));
-    return this.glToPlane(glPoint, figureSpacePlane);
-  }
+  // pixelToPlane(
+  //   pixel: TypeParsablePoint,
+  //   figureSpacePlane: TypeParsablePlane,
+  //   // figureToLocalMatrix: Type3DMatrix = m3.identity(),
+  // ) {
+  //   const glPoint = getPoint(pixel).transformBy(this.spaceTransformMatrix('pixel', 'gl'));
+  //   return this.glToPlane(glPoint, figureSpacePlane);
+  // }
 
   /*
   A figure is projected into clip space (gl space) through a view matrix
@@ -1487,30 +1435,30 @@ class Figure {
   is transformed into figure space. The line in figure space is then
   intersected with a plane in figure space.
   */
-  glToPlane(
-    glPoint: TypeParsablePoint,
-    figureSpacePlane: TypeParsablePlane,
-  ) {
-    const gl = getPoint(glPoint);
-    const nearPoint = this.scene.nearCenter
-      .add(this.scene.rightVector.scale(this.scene.widthNear / 2 * gl.x))
-      .add(this.scene.upVector.scale(this.scene.heightNear / 2 * gl.y));
-    const farPoint = this.scene.farCenter
-      .add(this.scene.rightVector.scale(this.scene.widthFar / 2 * gl.x))
-      .add(this.scene.upVector.scale(this.scene.heightFar / 2 * gl.y));
-    return getPlane(figureSpacePlane).lineIntersect([nearPoint, farPoint]);
-  }
+  // glToPlane(
+  //   glPoint: TypeParsablePoint,
+  //   figureSpacePlane: TypeParsablePlane,
+  // ) {
+  //   const gl = getPoint(glPoint);
+  //   const nearPoint = this.scene.nearCenter
+  //     .add(this.scene.rightVector.scale(this.scene.widthNear / 2 * gl.x))
+  //     .add(this.scene.upVector.scale(this.scene.heightNear / 2 * gl.y));
+  //   const farPoint = this.scene.farCenter
+  //     .add(this.scene.rightVector.scale(this.scene.widthFar / 2 * gl.x))
+  //     .add(this.scene.upVector.scale(this.scene.heightFar / 2 * gl.y));
+  //   return getPlane(figureSpacePlane).lineIntersect([nearPoint, farPoint]);
+  // }
 
-  pixelToGLPlane(
-    pixelPoint: TypeParsablePoint,
-    glSpacePlane: TypeParsablePlane,
-  ) {
-    const pixel = getPoint(pixelPoint);
-    const gl = pixel.transformBy(this.spaceTransformMatrix('pixel', 'gl'));
-    const nearPoint = new Point(gl.x, gl.y, -1);
-    const farPoint = new Point(gl.x, gl.y, 1);
-    return getPlane(glSpacePlane).lineIntersect([nearPoint, farPoint]);
-  }
+  // pixelToGLPlane(
+  //   pixelPoint: TypeParsablePoint,
+  //   glSpacePlane: TypeParsablePlane,
+  // ) {
+  //   const pixel = getPoint(pixelPoint);
+  //   const gl = pixel.transformBy(this.spaceTransformMatrix('pixel', 'gl'));
+  //   const nearPoint = new Point(gl.x, gl.y, -1);
+  //   const farPoint = new Point(gl.x, gl.y, 1);
+  //   return getPlane(glSpacePlane).lineIntersect([nearPoint, farPoint]);
+  // }
 
 
   // deprecate
@@ -1807,7 +1755,7 @@ class Figure {
         } else {
           this.showCursor('up');
         }
-        this.setCursor(this.previousCursorPoint);
+        this.setCursorGLPoint(this.previousCursorPoint);
       } else {
         this.recorder.recordEvent('cursor', ['hide']);
         this.showCursor('hide');
@@ -1835,7 +1783,7 @@ class Figure {
       cursor.hide();
     }
     if (position != null) {
-      this.setCursor(position);
+      this.setCursorGLPoint(position);
     }
     this.animateNextFrame();
   }
@@ -1849,57 +1797,10 @@ class Figure {
   }
 
   touchDownHandlerClient(clientPoint: Point, eventFromPlayback: boolean = false) {
-    const pixelP = this.clientToPixel(clientPoint);
-    const glPoint = pixelP.transformBy(this.spaceTransformMatrix('pixel', 'gl'));
-    glPoint.z = -1;
-    // console.log(pixelP, glPoint, this.pixelToPlane(pixelP, [[0,0,0], [0, 0, 1]]))
-
-    // const zeroPoint = new Point(0, 0, 0).transformBy(this.scene.viewProjectionMatrix);
-    // const onePoint = new Point(1, 1, 0).transformBy(this.scene.viewProjectionMatrix);
-
-    // // near
-    // const aspect = this.scene.aspectRatio;
-    // const topNear = Math.tan(this.scene.fieldOfView * 0.5) * this.scene.near;
-    // // const bottomNear = -topNear;
-    // // const leftNear = aspect * bottomNear;
-    // const rightNear = aspect * topNear;
-    // // const width = Math.abs(right - left);
-    // // const height = Math.abs(top - bottom);
-    // const topFar = Math.tan(this.scene.fieldOfView * 0.5) * this.scene.far;
-    // const rightFar = aspect * topFar;
-
-    // const cameraPosition = getPoint(this.scene.camera.position);
-    // const cameraVector = getPoint(this.scene.camera.lookAt)
-    //   .sub(cameraPosition).normalize();
-    // const upVector = getPoint(this.scene.camera.up).normalize();
-    // const rightVector = cameraVector.crossProduct(upVector).normalize();
-    // const nearCenter = cameraPosition.add(cameraVector.scale(this.scene.near));
-    // const farCenter = cameraPosition.add(cameraVector.scale(this.scene.far));
-    // const nearPoint = rightVector
-    //   .scale(rightNear * glPoint.x)
-    //   .add(upVector.scale(topNear * glPoint.y))
-    //   .add(nearCenter);
-    // const farPoint = rightVector
-    //   .scale(rightFar * glPoint.x)
-    //   .add(upVector.scale(topFar * glPoint.y))
-    //   .add(farCenter);
-    // const plane = getPlane([[0, 0, 0], [0, 0, 1]]);
-    // console.log(cameraVector, upVector, rightVector, topNear, rightNear)
-    // console.log(plane.lineIntersect([nearPoint, farPoint]));
-
-    // const nearPoint = this.scene.rightVector
-    //   .scale(this.scene.rightNear * glPoint.x)
-    //   .add(this.scene.upVector.scale(this.scene.topNear * glPoint.y))
-    //   .add(this.scene.nearCenter);
-    // const farPoint = this.scene.rightVector
-    //   .scale(this.scene.rightFar * glPoint.x)
-    //   .add(this.scene.upVector.scale(this.scene.topFar * glPoint.y))
-    //   .add(this.scene.farCenter);
-    // const plane = getPlane([[0, 0, 0], [0, 0, 1]]);
-    // const intersect = plane.lineIntersect([nearPoint, farPoint]);
-    // console.log(intersect)
-    // console.log(this.glToPlane(glPoint, [[0, 0, 0], [0, 0, 1]]))
-    console.log(this.glToPlane(glPoint, [[0, 0, 0], [0, 0, 1]]));
+    const pixel = this.clientToPixel(clientPoint);
+    // const glPoint = pixelP.transformBy(this.spaceTransformMatrix('pixel', 'gl'));
+    const glPoint = this.transformPoint(pixel, 'pixel', 'gl');
+    // glPoint.z = -1;
     this.touchDownHandler(glPoint, eventFromPlayback);
     return true;
     // if (e != null) {
@@ -2088,16 +1989,28 @@ class Figure {
     }
   }
 
+  setCursorGLPoint(p: Point, animateNextFrame: boolean = true) {
+    const cursor = this.getElement(this.cursorElementName);
+    if (cursor == null) {
+      return;
+    }
+    cursor.setPosition(cursor.transformPoint(p, 'gl', 'figure'));
+    if (animateNextFrame) {
+      this.animateNextFrame();
+    }
+  }
+
   touchFreeHandler(clientPoint: Point) {
+    // const cursor = this.getCursor();
     if (this.recorder.state === 'recording') {
       const pixelP = this.clientToPixel(clientPoint);
-      const figure2DPoint = pixelP.transformBy(this.spaceTransformMatrix('pixel', 'figure2D'));
-      this.previousCursorPoint = figure2DPoint;
+      const cursorGLPoint = this.transformPoint(pixelP, 'pixel', 'gl');
+      this.previousCursorPoint = cursorGLPoint;
       if (this.cursorShown) {
-        this.recorder.recordEvent('cursorMove', [figure2DPoint.x, figure2DPoint.y]);
-        this.setCursor(figure2DPoint);
+        this.recorder.recordEvent('cursorMove', [cursorGLPoint.x, cursorGLPoint.y]);
+        this.setCursorGLPoint(cursorGLPoint);
       } else {
-        this.setCursor(figure2DPoint, false);
+        this.setCursorGLPoint(cursorGLPoint, false);
       }
     }
   }
@@ -2219,16 +2132,17 @@ class Figure {
     currentGLPoint: Point,
     fromAutoEvent: boolean = false,
   ): boolean {
-    const currentCusorPoint = currentGLPoint.transformBy(this.spaceTransformMatrix('gl', 'figure2D'));
+    // const currentCusorGLPoint = currentGLPoint.transformBy(this.spaceTransformMatrix('gl', 'figure2D'));
+    this.previousCursorPoint.x = currentGLPoint.x;
     this.previousCursorPoint.y = currentGLPoint.y;
     if (this.recorder.state === 'recording' && !fromAutoEvent) {
       this.recorder.recordEvent('cursorMove', [currentGLPoint.x, currentGLPoint.y]);
       if (this.cursorShown) {
-        this.setCursor(currentCusorPoint);
+        this.setCursorGLPoint(currentGLPoint);
       }
     }
 
-    this.previousCursorPoint = currentCusorPoint;
+    // this.previousCursorPoint = currentCusorPoint;
 
     if (this.beingMovedElement == null || this.beingMovedElement === this.elements) {
       return false;
