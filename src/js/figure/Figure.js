@@ -598,7 +598,8 @@ class Figure {
       // eslint-disable-next-line new-cap
       this.elements = new optionsToUse.elements(this);
       this.elements.figureLimits = this.limits;
-      this.elements.scene = this.scene;
+      // this.elements.scene = this.scene;
+      // this.elements.getCanvas = () => this.canvasLow;
       this.initElements();
     }
     // this.camera = { position: [0, 0, 2], lookAt: [0, 0, 0], up: [0, 1, 0] };
@@ -1518,6 +1519,10 @@ class Figure {
   }
 
   initElements() {
+    this.animations = this.elements.animations;
+    this.elements.scene = this.scene;
+    this.elements.getCanvas = () => this.canvasLow;
+    this.setupAnimations();
     this.elements.setFigure({
       limits: this.limits,
       spaceTransformMatrix: this.spaceTransformMatrix.bind(this),
@@ -1532,9 +1537,10 @@ class Figure {
 
   setElements(collection: FigureElementCollection) {
     this.elements = collection;
-    this.animations = this.elements.animations;
-    this.elements.scene = this.scene;
-    this.setupAnimations();
+    // this.animations = this.elements.animations;
+    // this.elements.scene = this.scene;
+    // this.elements.getCanvas = () => this.canvasLow;
+    // this.setupAnimations();
     this.initElements();
   }
 
@@ -2469,18 +2475,20 @@ class Figure {
   // or the `add` method can be used.
   createFigureElements() {
     this.elements = this.collections.collection({ name: 'rootCollection' });
-    this.elements.scene = this.scene;
-    this.animations = this.elements.animations;
-    this.setupAnimations();
+    // this.elements.scene = this.scene;
+    // this.animations = this.elements.animations;
+    // this.elements.getCanvas = () => this.canvasLow;
+    // this.setupAnimations();
     this.initElements();
   }
 
 
   setElementsToCollection(collection: FigureElementCollection) {
     this.elements = collection;
-    this.elements.scene = this.scene;
-    this.animations = this.elements.animations;
-    this.setupAnimations();
+    // this.elements.scene = this.scene;
+    // this.animations = this.elements.animations;
+    // this.elements.getCanvas = () => this.canvasLow;
+    // this.setupAnimations();
     this.initElements();
   }
 

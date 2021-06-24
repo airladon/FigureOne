@@ -2650,6 +2650,9 @@ class FigureElement {
     throw new Error(`Figure.transformPoint space definition error -'${fromSpace}', '${toSpace}'`);
   }
 
+  getCanvas() {
+    return this.drawingObject.getCanvas();
+  }
 
   spaceTransformMatrix(from: string, to: string): Type3DMatrix {
     // All Vertex related conversions
@@ -2664,7 +2667,7 @@ class FigureElement {
     const figureToGLMatrix = scene.viewProjectionMatrix;
 
     const pixelSpace = () => {
-      const canvasRect = this.drawingObject.getCanvas().getBoundingClientRect();
+      const canvasRect = this.getCanvas().getBoundingClientRect();
       return {
         x: { min: 0, span: canvasRect.width },
         y: { min: canvasRect.height, span: -canvasRect.height },
@@ -4281,6 +4284,12 @@ class FigureElementCollection extends FigureElement {
     return [
       ...super._getStatePropertiesMin(),
     ];
+  }
+
+  // Get a canvas from the top level parent
+  getCanvas() {
+    // return this.elements[this.drawOrder[0]].getCanvas();
+    return this.parent.getCanvas();
   }
 
   _dup(exceptions: Array<string> = []) {
