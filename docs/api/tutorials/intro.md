@@ -39,6 +39,194 @@ There are several different ways to create the same figure, but this way is used
 
 FigureOne renders shapes in WebGL, text in Context2D and can even manipulate html elements as figure elements. As WebGL is used most in FigureOne, it will be used as an example to introduce coorindate spaces and why they matter.
 
+A figure is rendered in a html [canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) element. The pixels in a canvas can be thought of as coorindates. In html convention, if a canvas element is 1000 pixels wide, and 500 pixels height, then the (0, 0) pixel is in the top left corner, and pixel (1000, 500) is in the bottom right corner. We call this *pixel space* (though in computer graphics generally it is also often referred to as *screen space* or *device space*).
+
+Defining a shape in pixel space is not very convenient as different clients may have different sized canvases. Therefore it is convenient to define all shapes in a normalized space (say from -1 to +1 in each dimension).
+
+This is an example of why you need to work with at least two spaces. The user interfaces with pixel space, and the drawings are defined in normalized space. For a shape to be rendered to the canvas, its vertices need to be transformed to pixel space. For a user to interact with a shape, their touch point in pixel space needs to be transformed to the normalized space.
+
+##### WebGL
+
+The above example is fine when defining a static figure, but becomes inefficient when animating.
+
+For instance, if a shape is a circle or sphere, it may require thousands (or tens of thousands) of vertices to model a smooth curve.
+
+A simple workflow to draw a shape might be:
+
+1) Javascript: Generate points of shape from some center point
+2) Transfer points from CPU to GPU
+3) GPU: Render points to screen
+4) On each animation frame (30-60 per second), repeat steps 1-3 for a new shape center
+
+
+WebGL provides a much more efficient way to do this:
+
+1) Javascript: Generate points of a shape centered at (0, 0)
+2) Transfer these points from CPU to GPU, and store in a GPU buffer
+3) Each animation frame:
+  - pass just the udpated shape center to the GPU
+  - GPU gets vertices from buffer and offsets each vertex with new center point
+
+This dramatically improves performance in two ways:
+* The GPU has many cores and can offset the vertices in parallel (JavaScript is single threaded)
+* The shape's thousands of points only need to be passed to the GPU once
+
+WebGL allows for smooth animation of hundreds of thousands (and sometimes millions) of verticies even on low end clients, but to use it conveniently, we need to introduce additional coordinate spaces:
+
+First we must define the vertices of a shape around a (0, 0) center point. In WebGL this would often be called *object space* or *model space*.
+
+The shape would then need to be positioned/oriented in the world with some transform. The example above was a translation, but the transform could be a scaling, rotation, translation or combination. The shape would then exist in *world space*. The transform that takes it from *model space* to *world space* is often called *model transform* or *world transform*.
+
+WebGL only draws vertices that are in a normalized space (-1 to +1 on each axis). Any vertices that are outside of this cube are clipped and not drawn, and so this space is often called *clip space*. The transform that converts the vertices from *world space* to *clip space* is often called a *projection* transform as the world is being projected into this normalized cube.
+
+The hardware will then transform *clip space* into *pixel space* for the final render.
+
+##### 3D - Camera
+
+The concept of a camera is used to define where a viewer is observing the world from. The camera can have a location in space, a point to where it is looking and an orientation.
+
+When the world is two dimensional, the camera is off the world plane looking perpendicular to the world.
+
+When the world is three dimensional however, the camera needs to have a location, an orientation and a position to which it is pointed.
+
+A view transform is used to move the world relative to the camera. This space is called *camera space* or *view space*.
+
+Thus, in a typical WebGL application there are 5 coordinate spaces:
+
+* Model Space
+* (world transform)
+* World Space
+* (View transform)
+* View Space
+* (Projection transform)
+* Clip Space
+* (System transform)
+* Pixel Space
+
+##### FigureOne
+
+FigureOne uses WebGL to render shapes to create figures, but for many applications a developer does not need to know the details of WebGL to use FigureOne. As such, the coordinate space nomencalture of FigureOne is more closely tied to other common terms in FigureOne.
+
+A figure consists of FigureElementPrimitives which handle drawing, and FigureElementCollections which can be used to create a hierarchical grouping of figure elements with shared transforms.
+
+The coordinate spaces in FigureOne are called:
+* Draw Space - where you draw vertices (equivalent to model space or object space)
+* Local Space - where a FigureElement is positioned/oriented within a FigureElementCollection - each FigureElementCollection's children live in the same local space
+* Figure Space - where FigureElements at the top of the hierarchy are positioned/oriented (equivalent to world space)
+* Pixel Space
+
+
+
+The coorindate space nomenclature of FigureOne is different to 
+
+##### 3D - Projection
+
+In three dimensions the world can either be viewed as orthographic (where parallel lines stay the same with apart), or with a vanishing perspective (parallel lines seem to merge at a point at infinite distance).
+
+####
+
+
+When a world has only two dimensions (say is in the xy plane) then the viewer will always be looking at the world from a normal of the plane (from somewhere on the z axis). The amount of the world shown will come from the *projection* transform.
+
+However, when the world has three dimensions, the concept of a camera is used to define where a viewer is viewing the world from. The camera can have a location in space, a point to where it is looking and an orientation.
+
+When objects in the world only have two dimensions, the projection transform can define how much of the world to view. It can project only a portion of the world into clip space, and therefore only that portion can be viewed.
+
+When objects in the world have three dimensions, you need to choose how to look at them. To do this, the concept of a camera is used
+When drawing in three dimensions, the concept of a camera is used. The camera defines how much of the world can be viewed and from what perspective.
+
+In addition, the projection transform can 
+
+
+
+
+
+We then use a transform to position/orient these vertices in the figure.
+
+
+* *Draw Space*: where we define the vertices of a shape
+* *World Space*: 
+
+
+First we define the vertices of the shape in 3D space. We call this *draw space* (it is often referred to as *model space* or *object space* outside of FigureOne).
+
+The 
+
+
+
+
+Each space i
+In other words, a shape can be represented in different spaces, each of which might have a particular function or advantage.
+
+
+
+WebGL uses lines or triangles to draw or model arbitrary shapes. Each line or triangle is defined by 3 dimensional points (vertices). WebGL will render any vertex with (x, y, z) values betweem -1 to +1. Any vertices outside of this cube will be clipped (not rendered). Therefore we call this clip space.
+
+We now have to examples of two different spaces we can define the vertices in. For example, a pixel in the middle of the canvas at (500, 250) in pixel space would map to a vertex at (0, 0, 0) in clip space.
+
+To see if a vertex is touched by a user, we need to be able to transform a point in pixel space to clip space. To render a vertex to the screen, we need to transform a point in clip space to pixel space. Therefore, we generally need to know how to convert points between spaces.
+
+We need at least two spaces as pixel space is where the user is, and it is more convenient to define shapes in clip space as it is normalized between -1 and 1 and therefore indepenant on the size of the canvas.
+
+##### 2D Space
+
+The example above is the simplest example of drawing in 2D.
+
+
+In FigureOne we call this *pixel space*, though it is also refered to as screen space or device space.
+
+The [canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) element is defined in screen pixels. The WebGL view re-maps the canvas pixels to -1 to +1 coordinates in both the vertical and horizontal directions, independent on the aspect ratio of the canvas.
+
+WebGL uses lines or triangles to draw or model arbitrary shapes. Each line or triangle is defined by (x, y, z) points (vertices).
+
+
+If you wish to draw a sphere, you may need hundreds or thousands of triangles to model a smooth surface. Each triangle needs three vertices, and a lot of vertices need to be defined and moved into memory to be drawn.
+
+There are two ways to animate a sphere's position:
+1) For each frame, calculate the new position of each vertex of the sphere in the CPU (JavaScript), and load the new vertices into the GPU
+2) For each frame, calculate the new center position of the sphere in the CPU (JavaScript) and transfer only that to the GPU. The GPU can then offset all the vertices with the new center.
+
+Method 2) is much faster. Compared to a single threaded JavaScript application running on the CPU, a GPU has many cores that work on the vertices in parallel. Also, transferring tens of thousands of vertices between the CPU and GPU can be relativly slow, so only doing this once before the animation starts makes for much smoother animations.
+
+
+
+
+*
+To animate the sphere's position then, you will need to recalculate 
+
+If you wish to
+
+WebGL uses lines or triangles to draw or model arbitrary shapes. Each line or triangle is defined by (x, y, z) points (vertices). In FigureOne terminology, we call the shape that is formed by the triangles or lines a FigureElementPrimitive as these are a collection of vertices that will typically stay fixed. We say these vertices are defined in *draw space*.
+
+These lines or triangles exist in 3D and get rendered to a 2D screen by going through a series of transformations. Each transformation moves the vertex into a new space, where it may have a different relative position to other vertices in it's shape and other shapes.
+
+First the shape must be positioned in the figure. For example, a sphere may be drawn with a center point of (0, 0, 0), but you may wish to animate moving it around the figure. Inst
+
+
+
+ A typical series of transformations include:
+* draw to figure transformation: move, rotate, scale, or otherwise transform the vertices to position and orient them in the figure. In OpenGL/WebGL nomenclature this would be a *model to world* or *object to world* transformation.
+* figure to camera transformation: transform all the vertices in the figure to be relative to a camera which defines from where the figure is viewed
+* camera to projection transformation: project all vertices relative to a -1 to 1 box in x, y and z. All vertices outside the box will be clipped and not shown.
+* projection to screen transformation
+
+Each FigureElementPrimitive will have a FigureElementCollection as a parent. The FigureElementCollection provides a *local space* to translate, scale, rotate or otherwise transform the FigureElementPrimitive relative to other children within the collection.
+
+So for example, if we have two shapes (two FigureElementPrimitives) that are a sphere and cube each centered at (0, 0, 0) within its own draw space, they can be placed next to each other by translating one of 
+
+Each shape has a parent FigureCollection and can be transformed relative to other shapes within the collection.
+
+A FigureCollection hierarchy may be formed where collections are parents of other collections, allowing for chained transformations relative to each level of the hierarchy.
+
+
+
+A shape is thus defined as a number of vertices drawn in *draw* space.
+
+
+WebGL typically uses many small triangles to model a more arbitrary shape. Each triangle is defined by three verticesThe vertices of each of these triangles effectively model the arbitrary shape, and are normally sayd
+
+A shape is a collections of vertices that typically create triangles that model an arbitrary shape. A shape's vertices are defined *model* space. That shape 
+
 WebGL is rendered in a html [canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) element.
 
 The [canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) element is defined in screen pixels. The WebGL view re-maps the canvas pixels to -1 to +1 coordinates in both the vertical and horizontal directions, independent on the aspect ratio of the canvas.

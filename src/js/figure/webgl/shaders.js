@@ -180,18 +180,6 @@ function composeFragShader(
 }
 
 const vertex = {
-  // simple: {
-  //   src:
-  //       'attribute vec2 a_position;'
-  //       + 'uniform mat4 u_worldMatrix;'
-  //       + 'uniform mat4 u_projectionMatrix;'
-  //       + 'uniform mat4 u_viewMatrix;'
-  //       + 'uniform float u_z;'
-  //       + 'void main() {'
-  //         + 'gl_Position = u_projectionMatrix * u_viewMatrix * u_worldMatrix * vec4(a_position.xy, u_z, 1);'
-  //       + '}',
-  //   vars: ['a_position', 'u_worldMatrix', 'u_projectionMatrix', 'u_viewMatrix'],
-  // },
   simple: {
     src: `
 attribute vec4 a_position; 
