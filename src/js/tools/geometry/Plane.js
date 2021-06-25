@@ -131,7 +131,7 @@ class Plane {
     };
   }
 
-  round(precision: number) {
+  round(precision: number = 8) {
     return new Plane(this.p.round(precision), this.n.round(precision));
   }
 

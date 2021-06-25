@@ -73,6 +73,233 @@ describe('Bounds', () => {
         expect(bounds.boundary.top).toEqual(new Line([0, 1, 1], [0, 1, -1]));
         expect(bounds.boundary.bottom).toEqual(new Line([0, -1, 1], [0, -1, -1]));
       });
+      test('XZ Plane right direction offset y', () => {
+        bounds = new RectBoundsNew({
+          position: [0, 1, 0],
+          rightDirection: [2, 0, 0],
+          normal: [0, 2, 0],
+          left: 1,
+          right: 1,
+          top: 1,
+          bottom: 1,
+        });
+        expect(bounds.plane.round()).toEqual(new Plane([[0, 1, 0], [0, 1, 0]]));
+        expect(bounds.position).toEqual(new Point(0, 1, 0));
+        expect(bounds.topDirection.round()).toEqual(new Point(0, 0, -1));
+        expect(bounds.rightDirection.round()).toEqual(new Point(1, 0, 0));
+        expect(bounds.left).toBe(1);
+        expect(bounds.right).toBe(1);
+        expect(bounds.top).toBe(1);
+        expect(bounds.bottom).toBe(1);
+        expect(bounds.boundary.left).toEqual(new Line([-1, 1, 1], [-1, 1, -1]));
+        expect(bounds.boundary.right).toEqual(new Line([1, 1, 1], [1, 1, -1]));
+        expect(bounds.boundary.top).toEqual(new Line([-1, 1, -1], [1, 1, -1]));
+        expect(bounds.boundary.bottom).toEqual(new Line([-1, 1, 1], [1, 1, 1]));
+      });
+    });
+    describe('Duplication', () => {
+      test('All Values', () => {
+        bounds = new RectBoundsNew({
+          position: [1, 1, 0],
+          rightDirection: [2, 0, 0],
+          topDirection: [0, 2, 0],
+          left: 2,
+          right: 3,
+          top: 4,
+          bottom: 5,
+        });
+        const dup = bounds._dup();
+        expect(dup.round()).toEqual(bounds.round());
+        expect(dup).not.toBe(bounds);
+      });
+    });
+    describe('Contains', () => {
+      describe('XY Plane', () => {
+        beforeEach(() => {
+          bounds = new RectBoundsNew({
+            position: [0, 0, 0],
+            rightDirection: [2, 0, 0],
+            topDirection: [0, 2, 0],
+            left: 1,
+            right: 1,
+            top: 1,
+            bottom: 1,
+          });
+        });
+        test('Inside', () => {
+          expect(bounds.contains([0, 0, 0])).toBe(true);
+          expect(bounds.contains([0.1, 0, 0])).toBe(true);
+          expect(bounds.contains([0.1, 0.1, 0])).toBe(true);
+          expect(bounds.contains([0.1, -0.1, 0])).toBe(true);
+          expect(bounds.contains([-0.1, -0.1, 0])).toBe(true);
+        });
+        test('On Border', () => {
+          expect(bounds.contains([1, 0, 0])).toBe(true);
+          expect(bounds.contains([-1, 0, 0])).toBe(true);
+          expect(bounds.contains([0, 1, 0])).toBe(true);
+          expect(bounds.contains([0, -1, 0])).toBe(true);
+          expect(bounds.contains([1, 1, 0])).toBe(true);
+          expect(bounds.contains([1, -1, 0])).toBe(true);
+          expect(bounds.contains([-1, -1, 0])).toBe(true);
+          expect(bounds.contains([-1, 1, 0])).toBe(true);
+        });
+        test('Outside', () => {
+          expect(bounds.contains([1.1, 0, 0])).toBe(false);
+          expect(bounds.contains([-1.1, 0, 0])).toBe(false);
+          expect(bounds.contains([0, 1.1, 0])).toBe(false);
+          expect(bounds.contains([0, -1.1, 0])).toBe(false);
+          expect(bounds.contains([1.1, 1.1, 0])).toBe(false);
+          expect(bounds.contains([1.1, -1.1, 0])).toBe(false);
+          expect(bounds.contains([-1.1, -1.1, 0])).toBe(false);
+          expect(bounds.contains([-1.1, 1.1, 0])).toBe(false);
+        });
+        test('Off Plane - will use projection', () => {
+          // Inside
+          expect(bounds.contains([0.5, 0.5, 10])).toBe(true);
+          expect(bounds.contains([-0.5, 0.5, 10])).toBe(true);
+          expect(bounds.contains([0.5, -0.5, 10])).toBe(true);
+          expect(bounds.contains([-0.5, -0.5, 10])).toBe(true);
+          expect(bounds.contains([0.5, 0.5, -10])).toBe(true);
+          expect(bounds.contains([0.5, -0.5, -10])).toBe(true);
+          expect(bounds.contains([-0.5, 0.5, -10])).toBe(true);
+          expect(bounds.contains([-0.5, -0.5, -10])).toBe(true);
+          // On
+          expect(bounds.contains([-1, 0, -10])).toBe(true);
+          // Outside
+          expect(bounds.contains([1.1, 0.5, 10])).toBe(false);
+        });
+      });
+      describe('XY Plane Reverse Normal', () => {
+        beforeEach(() => {
+          bounds = new RectBoundsNew({
+            position: [0, 0, 0],
+            rightDirection: [2, 0, 0],
+            topDirection: [0, -2, 0],
+            left: 1,
+            right: 1,
+            top: 1,
+            bottom: 1,
+          });
+        });
+        test('Inside', () => {
+          expect(bounds.contains([0, 0, 0])).toBe(true);
+          expect(bounds.contains([0.1, 0, 0])).toBe(true);
+          expect(bounds.contains([0.1, 0.1, 0])).toBe(true);
+          expect(bounds.contains([0.1, -0.1, 0])).toBe(true);
+          expect(bounds.contains([-0.1, -0.1, 0])).toBe(true);
+        });
+        test('On Border', () => {
+          expect(bounds.contains([1, 0, 0])).toBe(true);
+          expect(bounds.contains([-1, 0, 0])).toBe(true);
+          expect(bounds.contains([0, 1, 0])).toBe(true);
+          expect(bounds.contains([0, -1, 0])).toBe(true);
+          expect(bounds.contains([1, 1, 0])).toBe(true);
+          expect(bounds.contains([1, -1, 0])).toBe(true);
+          expect(bounds.contains([-1, -1, 0])).toBe(true);
+          expect(bounds.contains([-1, 1, 0])).toBe(true);
+        });
+        test('Outside', () => {
+          expect(bounds.contains([1.1, 0, 0])).toBe(false);
+          expect(bounds.contains([-1.1, 0, 0])).toBe(false);
+          expect(bounds.contains([0, 1.1, 0])).toBe(false);
+          expect(bounds.contains([0, -1.1, 0])).toBe(false);
+          expect(bounds.contains([1.1, 1.1, 0])).toBe(false);
+          expect(bounds.contains([1.1, -1.1, 0])).toBe(false);
+          expect(bounds.contains([-1.1, -1.1, 0])).toBe(false);
+          expect(bounds.contains([-1.1, 1.1, 0])).toBe(false);
+        });
+      });
+    });
+    describe('Intersect', () => {
+      let intersect;
+      describe('XY Plane', () => {
+        beforeEach(() => {
+          bounds = new RectBoundsNew({
+            position: [0, 0, 0],
+            rightDirection: [2, 0, 0],
+            topDirection: [0, 2, 0],
+            left: 1,
+            right: 1,
+            top: 1,
+            bottom: 1,
+          });
+          // intersect = (position, direction, i, d, r) => {
+          //   const result = bounds.intersect(position, direction);
+          //   if (result.intersect == null) {
+          //     expect(i).toBe(null);
+          //   } else {
+          //     expect(result.intersect.round()).toEqual(getPoint(i).round());
+          //   }
+          //   expect(round(result.distance)).toEqual(round(d));
+          //   expect(result.reflection.round()).toEqual(getPoint(r).round());
+          // };
+          intersect = (position, direction) => {
+            const result = bounds.intersect(position, direction);
+            const out = [];
+            if (result.intersect == null) {
+              out.push(null);
+            } else {
+              out.push(result.intersect.round(3).toArray());
+            }
+            out.push(round(result.distance, 3));
+            out.push(result.reflection.round(3).toArray());
+            return out;
+          }
+        });
+        // test.only('Right Bound Intersect', () => {
+        //   const i = bounds.getBoundIntersect(
+        //     getPoint([0, 0, 0]),
+        //     getPoint([1, 0, 0]),
+        //     bounds.boundary.right,
+        //     bounds.boundary.left,
+        //     bounds.rightDirection,
+        //   );
+        //   console.log(i)
+        //   expect(bounds.getBoundIntersect(getPoint([0, 0, 0]), [1, 0, 0])).toEqual({
+        //     intersect: new Point(1, 0, 0),
+        //     distance: 1,
+        //     reflection: [-1, 0, 0],
+        //   });
+        // });
+        describe('Right Bound', () => {
+          test('Inside normal direction on boundary', () => {
+            expect(intersect([0, 0, 0], [1, 0, 0])).toEqual([
+              [1, 0, 0], 1, [-1, 0, 0],
+            ]);
+          });
+          test('Inside normal', () => {
+            expect(intersect([0, 0, 0], [0.5, 0, 0])).toEqual([
+              [1, 0, 0], 1, [-1, 0, 0],
+            ]);
+          });
+          test('45º inside', () => {
+            expect(intersect([0.9, -0.1, 0], [1, 1, 0])).toEqual([
+              [1, 0, 0], round(0.1 * Math.sqrt(2), 3), [-0.707, 0.707, 0],
+            ]);
+          });
+          test('63º inside', () => {
+            expect(intersect([0.9, 0.2, 0], [1, -2, 0])).toEqual([
+              [1, 0, 0],
+              round(Math.sqrt(0.1 * 0.1 + 0.2 * 0.2), 3),
+              [-0.447, -0.894, 0],
+            ]);
+          });
+          test('84 inside', () => {
+            expect(intersect([0.99, 0.1, 0], [1, 10, 0])).toEqual([
+              [1, 0.2, 0],
+              round(Math.sqrt(0.01 ** 2 + 0.1 ** 2), 3),
+              [-0.1, 0.995, 0],
+            ]);
+          });
+          test('On Border', () => {
+            expect(intersect([1, 0, 0], [1, 1, 0])).toEqual([
+              [1, 0, 0],
+              0,
+              [-0.707, 0.707, 0],
+            ]);
+          });
+        });
+      });
     });
   });
   describe('Range Bounds', () => {

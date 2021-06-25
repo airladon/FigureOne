@@ -290,26 +290,25 @@ class RectBoundsNew extends Bounds {
   plane: Plane;
   rightDirection: Point;
   topDirection: Point;
-  left: null | number;
-  right: null | number;
-  bottom: null | number;
-  top: null | number;
+  left: number;
+  right: number;
+  bottom: number;
+  top: number;
   boundary: {
-    left: null | Line;
-    right: null | Line;
-    bottom: null | Line;
-    top: null | Line;
+    left: Line;
+    right: Line;
+    bottom: Line;
+    top: Line;
   };
 
   constructor(optionsOrRect: TypeRectBoundsDefinition) {
     const defaultOptions = {
       position: [0, 0, 0],
       normal: [0, 0, 1],
-      // rightDirection: [1, 0, 0],
-      left: null,
-      right: null,
-      top: null,
-      bottom: null,
+      left: 1,
+      right: 1,
+      top: 1,
+      bottom: 1,
       bounds: 'inside',
       precision: 8,
     };
@@ -349,76 +348,16 @@ class RectBoundsNew extends Bounds {
     let centerLeft = null;
     let centerRight = null;
 
-    if (left != null) {
-      centerLeft = position.add(rightDirection.scale(-1 * options.left));
-    }
-    if (right != null) {
-      centerRight = position.add(rightDirection.scale(options.right));
-    }
-    if (left != null && top != null) {
-      topLeft = centerLeft.add(topDirection.scale(options.top));
-    } else {
-      topLeft = centerLeft.add(topDirection);
-    }
-    if (left != null && bottom != null) {
-      bottomLeft = centerLeft.add(topDirection.scale(-1 * options.bottom));
-    } else {
-      bottomLeft = centerLeft.add(topDirection.scale(-1));
-    }
-    if (right != null && top != null) {
-      topRight = centerRight.add(topDirection.scale(options.top));
-    } else {
-      topRight = centerRight.add(topDirection);
-    }
-    if (right != null && bottom != null) {
-      bottomRight = centerRight.add(topDirection.scale(-1 * options.bottom));
-    } else {
-      bottomRight = centerRight.add(topDirection.scale(-1));
-    }
-    if (right != null) {
-      if (top != null && bottom != null) {
-        right = new Line(bottomRight, topRight);
-      } else if (top != null) {
-        right = new Line(topRight, bottomRight, 1);
-      } else if (bottom != null) {
-        right = new Line(bottomRight, topRight, 1);
-      } else {
-        right = new Line(bottomRight, topRight, 0);
-      }
-    }
-    if (left != null) {
-      if (top != null && bottom != null) {
-        left = new Line(bottomLeft, topLeft);
-      } else if (top != null) {
-        left = new Line(topLeft, bottomLeft, 1);
-      } else if (bottom != null) {
-        left = new Line(bottomLeft, topLeft, 1);
-      } else {
-        left = new Line(bottomLeft, topLeft, 0);
-      }
-    }
-    if (top != null) {
-      if (left != null && right != null) {
-        top = new Line(topLeft, topRight);
-      } else if (left != null) {
-        top = new Line(topLeft, topRight, 1);
-      } else if (right != null) {
-        top = new Line(topRight, topLeft, 1);
-      } else {
-        top = new Line(topLeft, topRight, 0);
-      }
-    }
-    if (bottom != null) {
-      if (left != null && right != null) {
-        bottom = new Line(bottomLeft, bottomRight);
-      } else if (left != null) {
-        bottom = new Line(bottomLeft, bottomRight, 1);
-      } else if (right != null) {
-        bottom = new Line(bottomRight, bottomLeft, 1);
-      } else {
-        bottom = new Line(bottomLeft, bottomRight, 0);
-      }
-    }
+    centerLeft = position.add(rightDirection.scale(-1 * options.left));
+    centerRight = position.add(rightDirection.scale(options.right));
+    topLeft = centerLeft.add(topDirection.scale(options.top));
+    bottomLeft = centerLeft.add(topDirection.scale(-1 * options.bottom));
+    topRight = centerRight.add(topDirection.scale(options.top));
+    bottomRight = centerRight.add(topDirection.scale(-1 * options.bottom));
+    right = new Line(bottomRight, topRight);
+    left = new Line(bottomLeft, topLeft);
+    top = new Line(topLeft, topRight);
+    bottom = new Line(bottomLeft, bottomRight);
 
     const boundary = {
       left,
@@ -458,9 +397,24 @@ class RectBoundsNew extends Bounds {
       bottom: this.bottom,
       top: this.top,
       position: this.position,
-      topDirection: this.topDireciton,
+      topDirection: this.topDirection,
       rightDirection: this.rightDirection,
     });
+  }
+
+  round(precision: number = 8) {
+    const d = this._dup();
+    d.left = round(d.left, precision);
+    d.right = round(d.left, precision);
+    d.bottom = round(d.left, precision);
+    d.top = round(d.left, precision);
+    d.boundary.left = d.boundary.left.round(precision);
+    d.boundary.right = d.boundary.right.round(precision);
+    d.boundary.top = d.boundary.top.round(precision);
+    d.boundary.bottom = d.boundary.bottom.round(precision);
+    d.plane = d.plane.round(precision);
+    d.rightDirection = d.rightDirection.round(precision);
+    d.topDirection = d.topDirection.round(precision);
   }
 
   _state(options: { precision: number }) {
@@ -471,10 +425,10 @@ class RectBoundsNew extends Bounds {
       state: [
         this.bounds,
         this.precision,
-        this.left != null ? roundNum(this.left, precision) : null,
-        this.right != null ? roundNum(this.right, precision) : null,
-        this.bottom != null ? roundNum(this.bottom, precision) : null,
-        this.top != null ? roundNum(this.top, precision) : null,
+        roundNum(this.left, precision),
+        roundNum(this.right, precision),
+        roundNum(this.bottom, precision),
+        roundNum(this.top, precision),
         this.position.toArray(),
         this.topDirection.toArray(),
         this.rightDirection.toArray(),
@@ -482,10 +436,7 @@ class RectBoundsNew extends Bounds {
     };
   }
 
-  contains(position: number | TypeParsablePoint) {
-    if (typeof position === 'number') {
-      return false;
-    }
+  contains(position: TypeParsablePoint) {
     const p = getPoint(position).round(this.precision);
     const pMag = p.distance();
     const rightTheta = Math.acos(
@@ -493,7 +444,7 @@ class RectBoundsNew extends Bounds {
     );
     const rightProjection = pMag * Math.cos(rightTheta);
     const topTheta = Math.acos(
-      p.dotProduct(this.topDireciton) / pMag / this.topDireciton.distance(),
+      p.dotProduct(this.topDirection) / pMag / this.topDirection.distance(),
     );
     const topProjection = pMag * Math.cos(topTheta);
     if (topProjection > this.top || -topProjection > this.bottom) {
@@ -509,42 +460,40 @@ class RectBoundsNew extends Bounds {
   getBoundIntersect(
     position: Point,
     direction: Point,
-    posBound: null | Line,
-    negBound: null | Line,
-    posDireciton: Point,
+    posBound: Line,
+    negBound: Line,
+    posDirection: Point,
   ) {
-    if (negBound == null && posBound == null) {
-      return null;
-    }
-    const dMag = direction.distance();
-    const topTheta = Math.acos(
-      direction.dotProduct(posDireciton) / dMag / posDireciton.distance(),
+    const dMag = direction.length();
+    const theta = Math.acos(
+      direction.dotProduct(posDirection) / dMag / posDirection.length(),
     );
-    const topProjection = dMag * Math.cos(topTheta);
+
+    const projection = dMag * Math.cos(theta);
     let bound;
-    if (topProjection < 0 && negBound != null) {
+    if (projection < 0) {
       bound = negBound;
     }
-    if (topProjection > 0 && posBound != null) {
+    if (projection > 0) {
       bound = posBound;
     }
     if (bound == null) {
       return null;
     }
 
-    const l = new Line({ p1: position, direction, ends: 1 });
-    const hIntersect = bound.intersectsWith(l);
+    const l = new Line({ p1: position, p2: position.add(direction), ends: 1 });
+    const i = bound.intersectsWith(l);
     if (
-      hIntersect.intersect == null
-      || hIntersect.collinear != null
-      || !bound.hasPointOn(hIntersect.intersect, this.precision)
+      i.intersect == null
+      || i.collinear
+      || !bound.hasPointOn(i.intersect, this.precision)
     ) {
       return null;
     }
 
     return {
-      intersect: hIntersect.intersect,
-      distance: hIntersect.intersect.distance(position),
+      intersect: i.intersect,
+      distance: i.intersect.distance(position),
       bound,
     };
   }
@@ -563,6 +512,9 @@ class RectBoundsNew extends Bounds {
     const h = this.getBoundIntersect(p, d, right, left, this.rightDirection);
     const v = this.getBoundIntersect(p, d, top, bottom, this.topDirection);
 
+    if (h == null && v == null) {
+      return { intersect: null, distance: 0, reflection: direction };
+    }
 
     let intersect;
     let bound;
@@ -583,9 +535,9 @@ class RectBoundsNew extends Bounds {
       };
     }
 
-    const angle = threePointAngleMin(p, intersect.intersect, bound.p1);
-    const v1 = p.sub(intersect.intersect);
-    const v2 = bound.p1.sub(intersect.intersect);
+    const angle = threePointAngleMin(p, intersect, bound.p1);
+    const v1 = p.sub(intersect);
+    const v2 = bound.p1.sub(intersect);
     let axis;
     let rotation;
     if (Math.abs(angle) > Math.PI / 2) {
@@ -597,11 +549,11 @@ class RectBoundsNew extends Bounds {
     }
 
     const rotationMatrix = m3.rotationMatrixAxis(axis.toArray(), rotation);
-    const reflection = v1.transformBy(rotationMatrix);
+    const reflection = v1.transformBy(rotationMatrix).normalize();
 
     return {
       distance,
-      intersect: intersect.intersect,
+      intersect,
       reflection,
     };
   }
