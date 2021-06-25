@@ -11,7 +11,7 @@ import { sphericalToCartesian, getPrecision } from './common';
 import { clipAngle } from './angle';
 import { roundNum } from '../math';
 
-export type OBJ_Line = {
+export type OBJ_LineDefinition = {
   p1?: TypeParsablePoint,
   p2?: TypeParsablePoint,
   length?: number,
@@ -65,7 +65,7 @@ export type OBJ_LineIntersect = {
  */
 export type TypeParsableLine = [TypeParsablePoint, TypeParsablePoint, 2 | 1 | 0]
                                 | [TypeParsablePoint, TypeParsablePoint]
-                                | OBJ_Line
+                                | OBJ_LineDefinition
                                 | TypeF1DefLine
                                 | Line;
 
@@ -122,12 +122,12 @@ function parseLine(lIn: TypeParsableLine): Line {
     }
     if (l.phi != null && l.theta != null && l.length != null) {
       return new Line({ // $FlowFixMe
-        p1: l.p1, phi: l.phi, theta: l.theta, ends: l.ends,
+        p1: l.p1, phi: l.phi, theta: l.theta, ends: l.ends, length: l.length,
       });
     }
     if (l.angle != null && l.length != null) {
       return new Line({ // $FlowFixMe
-        p1: l.p1, angle: l.angle, ends: l.ends,
+        p1: l.p1, angle: l.angle, ends: l.ends, length: l.length,
       });
     }
     throw new Error(`FigureOne could not parse line from object definition: ${JSON.stringify(lIn)}`);
@@ -156,7 +156,7 @@ class Line {
    * that goes through both first and second points to infinity.
    */
   constructor(
-    p1OrOptions: TypeParsablePoint | OBJ_Line,
+    p1OrOptions: TypeParsablePoint | OBJ_LineDefinition,
     p2: TypeParsablePoint,
     ends: 2 | 1 | 0 = 2,
   ) {

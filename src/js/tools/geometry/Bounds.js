@@ -9,24 +9,25 @@ import { clipAngle } from './angle';
 import { Line, getLine } from './Line';
 import { Transform } from './Transform';
 import { roundNum, round, clipValue } from '../math';
-import { polarToRect, rectToPolar } from './coordinates';
+import { polarToRect } from './coordinates';
 import type { TypeParsablePoint } from './Point';
-import type { TypeParsableLine } from './Line';
+import type { OBJ_LineDefinition } from './Line';
+
 
 export type TypeTransformBounds = Array<Bounds | null>;
 
 class Bounds {
   boundary: Object;
   precision: number;
-  bounds: 'inside' | 'outside';
+  // bounds: 'inside' | 'outside';
 
   constructor(
     boundary: Object,
-    bounds: 'inside' | 'outside' = 'inside',
+    // bounds: 'inside' | 'outside' = 'inside',
     precision: number = 8,
   ) {
     this.boundary = boundary;
-    this.bounds = bounds;
+    // this.bounds = bounds;
     this.precision = precision;
   }
 
@@ -94,12 +95,11 @@ export type TypeRangeBoundsDefinition = {
   min?: number | null,
   max?: number | null,
   precision?: number,
-  bounds?: 'inside' | 'outside',
 };
 
 type TypeF1DefRangeBounds = {
   f1Type: 'rangeBounds',
-  state: ['outside' | 'inside', number, number | null, number | null],
+  state: [number, number | null, number | null],
 };
 
 class RangeBounds extends Bounds {
@@ -107,7 +107,6 @@ class RangeBounds extends Bounds {
 
   constructor(optionsIn: TypeRangeBoundsDefinition) {
     const defaultOptions = {
-      bounds: 'inside',
       precision: 8,
       min: null,
       max: null,
@@ -117,7 +116,7 @@ class RangeBounds extends Bounds {
       min: options.min,
       max: options.max,
     };
-    super(boundary, options.bounds, options.precision);
+    super(boundary, options.precision);
   }
 
   isDefined() {
@@ -129,7 +128,6 @@ class RangeBounds extends Bounds {
 
   _dup() {
     return new RangeBounds({
-      bounds: this.bounds,
       precision: this.precision,
       min: this.boundary.min,
       max: this.boundary.max,
@@ -142,7 +140,6 @@ class RangeBounds extends Bounds {
     return {
       f1Type: 'rangeBounds',
       state: [
-        this.bounds,
         this.precision,
         this.boundary.min != null ? roundNum(this.boundary.min, precision) : null,
         this.boundary.max != null ? roundNum(this.boundary.max, precision) : null,
@@ -398,7 +395,7 @@ class RectBounds extends Bounds {
       top,
       bottom,
     };
-    super(boundary, options.bounds, options.precision);
+    super(boundary, options.precision);
     this.plane = plane;
     this.position = position;
     this.topDirection = topDirection;
@@ -456,7 +453,6 @@ class RectBounds extends Bounds {
     return {
       f1Type: 'rectBounds',
       state: [
-        this.bounds,
         this.precision,
         roundNum(this.left, precision),
         roundNum(this.right, precision),
@@ -1178,20 +1174,15 @@ export type TypeF1DefRectBoundsLegacy = {
 //   }
 // }
 
-export type TypeLineBoundsDefinition = {
-  p1?: TypeParsablePoint,
-  p2?: TypeParsablePoint,
-  line?: TypeParsableLine,
-  mag?: number,
-  angle?: number,
-  bounds?: 'inside' | 'outside',
-  ends?: 2 | 1 | 0,
-  precision?: number,
-};
+export type TypeLineBoundsDefinition = OBJ_LineDefinition
+  & {
+    precision?: number,
+    line?: TypeParsableLine,
+  };
 
 export type TypeF1DefLineBounds = {
   f1Type: 'lineBounds',
-  state: ['outside' | 'inside', number, number, number, number, number, 2 | 1 | 0],
+  state: [number, [number, number, number], [number, number, number], 2 | 1 | 0],
 };
 
 class LineBounds extends Bounds {
@@ -1200,25 +1191,16 @@ class LineBounds extends Bounds {
   constructor(optionsIn: TypeLineBoundsDefinition) {
     let boundary;
     const defaultOptions = {
-      angle: 0,
-      mag: 1,
-      bounds: 'inside',
       precision: 8,
-      ends: 2,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     if (options.line != null) {
       boundary = getLine(options.line);
-    } else if (options.p1 != null && options.p2 != null) {
-      boundary = new Line({
-        p1: options.p1, p2: options.p2, ends: options.ends,
-      });
-    } else if (options.p1 != null) {
-      boundary = new Line({
-        p1: options.p1, length: options.mag, angle: options.angle, ends: options.ends,
-      });
+    } else {
+      boundary = getLine(options);
     }
-    super(boundary, options.bounds, options.precision);
+
+    super(boundary, options.precision);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -1228,13 +1210,8 @@ class LineBounds extends Bounds {
 
   _dup() {
     return new LineBounds({
-      bounds: this.bounds,
       precision: this.precision,
-      p1: this.boundary.p1._dup(),
-      p2: this.boundary.p2._dup(),
-      mag: this.boundary.length(),
-      angle: this.boundary.angle(),
-      ends: this.boundary.ends,
+      line: this.boundary,
     });
   }
 
@@ -1244,20 +1221,25 @@ class LineBounds extends Bounds {
     return {
       f1Type: 'lineBounds',
       state: [
-        this.bounds,
         this.precision,
-        roundNum(this.boundary.p1.x, precision),
-        roundNum(this.boundary.p1.y, precision),
-        roundNum(this.boundary.p2.x, precision),
-        roundNum(this.boundary.p2.y, precision),
-        this.boundary.ends,
+        [
+          roundNum(this.boundary.p1.x, precision),
+          roundNum(this.boundary.p1.y, precision),
+          roundNum(this.boundary.p1.z, precision),
+        ],
+        [
+          roundNum(this.boundary.p2.x, precision),
+          roundNum(this.boundary.p2.y, precision),
+          roundNum(this.boundary.p2.z, precision),
+        ],
+        this.ends,
       ],
     };
   }
 
   contains(position: number | TypeParsablePoint) {
     if (typeof position === 'number') {
-      return false;
+      throw new Error(`LineBounds.contains only accepts a point: ${position}`);
     }
     const p = getPoint(position);
     return this.boundary.hasPointOn(p, this.precision);
@@ -1265,7 +1247,7 @@ class LineBounds extends Bounds {
 
   clip(position: number | TypeParsablePoint) {
     if (typeof position === 'number') {
-      return position;
+      throw new Error(`LineBounds.contains only accepts a point: ${position}`);
     }
     const p = getPoint(position);
     return this.boundary.clipPoint(p, this.precision);
@@ -1469,49 +1451,38 @@ function getBounds(
       && f1Type === 'rangeBounds'
       && state != null
       && Array.isArray([state])
-      && state.length === 4
+      && state.length === 3
     ) { // $FlowFixMe
-      const [b, precision, min, max] = state;
+      const [precision, min, max] = state;
       return new RangeBounds({
-        bounds: b, precision, min, max,
+        precision, min, max,
       });
     }
+
     if (f1Type != null
       && f1Type === 'rectBounds'
       && state != null
       && Array.isArray([state])
-      && state.length === 6
-    ) { // $FlowFixMe
-      const [b, precision, left, bottom, right, top] = state;
-      return new RectBounds({
-        bounds: b, precision, left, bottom, right, top,
-      });
-    }
-    if (f1Type != null
-      && f1Type === 'rectNewBounds'
-      && state != null
-      && Array.isArray([state])
-      && state.length === 6
+      && state.length === 8
     ) { // $FlowFixMe
       const [
-        b, precision, left, right, bottom, top, position, topDirection, rightDirection,
+        precision, left, right, bottom, top, position, topDirection, rightDirection,
       ] = state;
       return new RectBounds({
-        bounds: b, precision, left, bottom, right, top, position, topDirection, rightDirection,
+        precision, left, bottom, right, top, position, topDirection, rightDirection,
       });
     }
     if (f1Type != null
       && f1Type === 'lineBounds'
       && state != null
       && Array.isArray([state])
-      && state.length === 7
+      && state.length === 4
     ) { // $FlowFixMe
-      const [b, precision, x, y, x2, y2, ends] = state;
+      const [precision, p1, p2, ends] = state;
       return new LineBounds({
-        bounds: b,
         precision,
-        p1: new Point(x, y),
-        p2: new Point(x2, y2),
+        p1,
+        p2,
         ends,
       });
     }
