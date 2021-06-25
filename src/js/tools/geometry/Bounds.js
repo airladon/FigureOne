@@ -597,21 +597,21 @@ class RectBoundsNew extends Bounds {
     direction: TypeParsablePoint,
   ) {
     const p = this.clip(getPoint(position)).round(this.precision);
-    const d = getPoint(direction);
+    const d = getPoint(direction).normalize();
 
     const {
       left, right, top, bottom,
     } = this.boundary;
 
+    debugger;
     // Get the right direction intersect and top direction intersects.
     // If the intersects don't exist, a null will be returned.
     const rI = this.getBoundIntersect(p, d, right, left, this.rightDirection);
     const tI = this.getBoundIntersect(p, d, top, bottom, this.topDirection);
 
     if (rI == null && tI == null) {
-      return { intersect: null, distance: 0, reflection: direction };
+      return { intersect: null, distance: 0, reflection: d };
     }
-
     let intersect;
     let distance;
     let normal;
@@ -632,7 +632,7 @@ class RectBoundsNew extends Bounds {
       return {
         intersect: rI.intersect,
         distance: rI.distance,
-        reflection: direction.scale(-1),
+        reflection: d.scale(-1),
       };
     }
 

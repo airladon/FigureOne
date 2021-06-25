@@ -352,6 +352,20 @@ describe('Bounds', () => {
     });
     describe('Intersect', () => {
       let intersect;
+      beforeEach(() => {
+        intersect = (position, direction) => {
+          const result = bounds.intersect(position, direction);
+          const out = [];
+          if (result.intersect == null) {
+            out.push(null);
+          } else {
+            out.push(result.intersect.round(3).toArray());
+          }
+          out.push(round(result.distance, 3));
+          out.push(result.reflection.round(3).toArray());
+          return out;
+        };
+      });
       describe('XY Plane', () => {
         beforeEach(() => {
           bounds = new RectBoundsNew({
@@ -363,18 +377,6 @@ describe('Bounds', () => {
             top: 1,
             bottom: 1,
           });
-          intersect = (position, direction) => {
-            const result = bounds.intersect(position, direction);
-            const out = [];
-            if (result.intersect == null) {
-              out.push(null);
-            } else {
-              out.push(result.intersect.round(3).toArray());
-            }
-            out.push(round(result.distance, 3));
-            out.push(result.reflection.round(3).toArray());
-            return out;
-          };
         });
         describe('Right Bound', () => {
           test('Inside normal direction on boundary', () => {
@@ -426,6 +428,67 @@ describe('Bounds', () => {
           test('Outside Border going in', () => {
             expect(intersect([1.1, 0, 0], [-1, 0, 0])).toEqual([
               [-1, 0, 0], 2, [1, 0, 0],
+            ]);
+          });
+        });
+        describe('Top Bound', () => {
+          test('Inside normal direction on boundary', () => {
+            expect(intersect([0, 0, 0], [0, 1, 0])).toEqual([
+              [0, 1, 0], 1, [0, -1, 0],
+            ]);
+          });
+          test('Inside normal', () => {
+            expect(intersect([0, 0, 0], [0, 0.5, 0])).toEqual([
+              [0, 1, 0], 1, [0, -1, 0],
+            ]);
+          });
+          test('Inside normal offset', () => {
+            expect(intersect([0.5, 0, 0], [0, 0.5, 0])).toEqual([
+              [0.5, 1, 0], 1, [0, -1, 0],
+            ]);
+          });
+          test('26 inside', () => {
+            expect(intersect([0.05, 0.9, 0], [-1, 2, 0])).toEqual([
+              [0, 1, 0],
+              round(Math.sqrt(0.1 ** 2 + 0.05 ** 2), 3),
+              [-0.447, -0.894, 0],
+            ]);
+          });
+          test('45º inside', () => {
+            expect(intersect([-0.2, 0.9, 0], [1, 1, 0])).toEqual([
+              [-0.1, 1, 0], round(0.1 * Math.sqrt(2), 3), [0.707, -0.707, 0],
+            ]);
+          });
+          test('63º inside', () => {
+            expect(intersect([0.2, 0.95, 0], [-2, 1, 0])).toEqual([
+              [0.1, 1, 0],
+              round(Math.sqrt(0.1 ** 2 + 0.05 ** 2), 3),
+              [-0.894, -0.447, 0],
+            ]);
+          });
+          test('On Border', () => {
+            expect(intersect([0, 1, 0], [1, 1, 0])).toEqual([
+              [0, 1, 0], 0, [0.707, -0.707, 0],
+            ]);
+          });
+          test('Outside Border going out', () => {
+            expect(intersect([0, 1.1, 0], [1, 1, 0])).toEqual([
+              [0, 1, 0], 0, [0.707, -0.707, 0],
+            ]);
+          });
+          test('Outside Border corner going out', () => {
+            expect(intersect([1.1, 1.1, 0], [1, 1, 0])).toEqual([
+              [1, 1, 0], 0, [-0.707, -0.707, 0],
+            ]);
+          });
+          test('Outside Border corner going in', () => {
+            expect(intersect([1.1, 1.1, 0], [-1, -1, 0])).toEqual([
+              [-1, -1, 0], round(Math.sqrt(2) * 2, 3), [0.707, 0.707, 0],
+            ]);
+          });
+          test('Outside Border going in', () => {
+            expect(intersect([0, 1.1, 0], [0, -1, 0])).toEqual([
+              [0, -1, 0], 2, [0, 1, 0],
             ]);
           });
         });

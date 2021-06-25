@@ -674,7 +674,19 @@ class Line {
     const l1 = this;  // this.round(precision);
 
     const collinear = l1.isAlongLine(l2, precision);
+
+    // If the lines are parallel, they will never intersect
+    if (l1.isParallelTo(l2) && !collinear) {
+      return {
+        intersect: undefined, collinear, onLines: false,
+      };
+    }
     // If the distance between lines is 0, then they intersect
+    // Nomenclature:
+    // https://vicrucann.github.io/tutorials/3d-geometry-algorithms/
+    // With one exception: if fxg or fxe are 0, then it is possible
+    // the lines are parallel OR C or D is the actual intersect. As parallelism
+    // has already been tested, we know it is then the latter case.
     if (!collinear && l1.distanceToLine(l2, precision) === 0) {
       const C = this.p1;
       const D = l2.p1;
@@ -685,9 +697,17 @@ class Line {
       const fe = f.crossProduct(e);
       const h = fg.distance();
       const k = fe.distance();
-      if (h === 0 || k === 0) {
-        return { intersect: undefined, collinear, onLines: false };
+      // If h is 0, then C is the intersect point
+      // If k is 0, then D is the intersect point
+      if (h === 0) {
+        return { intersect: C, collinear, onLines: l2.hasPointOn(C) };
       }
+      if (k === 0) {
+        return { intersect: D, collinear, onLines: l1.hasPointOn(D) };
+      }
+      // if (h === 0 || k === 0) {
+      //   return { intersect: undefined, collinear, onLines: false };
+      // }
       const l = e.scale(h / k);
       let i;
       if (fg.normalize().isEqualTo(fe.normalize(), precision)) {

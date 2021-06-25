@@ -531,6 +531,38 @@ describe('Line', () => {
         expect(res.onLines).toBe(true);
         expect(res.collinear).toBe(false);
       });
+      test('On line intersect 3D where l1p1 is the intersect', () => {
+        const l1 = new Line(new Point(0, 0, 0), new Point(2, 0, 0));
+        const l2 = new Line(new Point(-1, -1, -1), new Point(1, 1, 1));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(0, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(false);
+      });
+      test('On line intersect 3D where l1p2 is the intersect', () => {
+        const l1 = new Line(new Point(0, 0, 0), new Point(2, 0, 0));
+        const l2 = new Line(new Point(1, -1, -1), new Point(3, 1, 1));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(2, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(false);
+      });
+      test('On line intersect 3D where l2p1 is the intersect', () => {
+        const l1 = new Line(new Point(-1, 0, 0), new Point(2, 0, 0));
+        const l2 = new Line(new Point(0, 0, 0), new Point(1, 1, 1));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(0, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(false);
+      });
+      test('On line intersect 3D where l2p2 is the intersect', () => {
+        const l1 = new Line(new Point(-1, 0, 0), new Point(2, 0, 0));
+        const l2 = new Line(new Point(-2, -2, -2), new Point(0, 0, 0));
+        const res = l1.intersectsWith(l2);
+        expect(res.intersect).toEqual(new Point(0, 0, 0));
+        expect(res.onLines).toBe(true);
+        expect(res.collinear).toBe(false);
+      });
       test('On line intersect negative', () => {
         const l1 = new Line(new Point(0, 0, 0), new Point(-2, -2, -2));
         const l2 = new Line(new Point(-1, -1, 0), new Point(-1, -1, -2));
