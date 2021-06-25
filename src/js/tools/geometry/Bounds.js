@@ -464,10 +464,14 @@ class RectBoundsNew extends Bounds {
     bound to be contained in that direction.
   - Repeat the same for the topDirection.
   */
-  contains(position: TypeParsablePoint) {
-    const p = getPoint(position).round(this.precision);
-    const rightProjection = p.projectOn(this.rightDirection);
-    const topProjection = p.projectOn(this.topDirection);
+  contains(position: TypeParsablePoint, projectToPlane: boolean = true) {
+    if (projectToPlane === false && !this.plane.hasPointOn(position)) {
+      return false;
+    }
+    const p = this.plane.pointProjection(position).round(this.precision);
+    const posP = p.sub(this.plane.p);
+    const rightProjection = posP.projectOn(this.rightDirection);
+    const topProjection = posP.projectOn(this.topDirection);
     if (topProjection > this.top || -topProjection > this.bottom) {
       return false;
     }
@@ -523,13 +527,15 @@ class RectBoundsNew extends Bounds {
       return p._dup();
     }
 
-    let rightProjection = p.projectOn(this.rightDirection);
+    const posP = p.sub(this.plane.p);
+
+    let rightProjection = posP.projectOn(this.rightDirection);
     if (rightProjection > this.right) {
       rightProjection = this.right;
     } else if (rightProjection < -this.left) {
       rightProjection = -this.left;
     }
-    let topProjection = p.projectOn(this.topDirection);
+    let topProjection = posP.projectOn(this.topDirection);
     if (topProjection > this.top) {
       topProjection = this.top;
     } else if (topProjection < -this.bottom) {
@@ -593,37 +599,47 @@ class RectBoundsNew extends Bounds {
     const p = this.clip(getPoint(position)).round(this.precision);
     const d = getPoint(direction);
 
-    // Get potential boundaries
     const {
       left, right, top, bottom,
     } = this.boundary;
-    const h = this.getBoundIntersect(p, d, right, left, this.rightDirection);
-    const v = this.getBoundIntersect(p, d, top, bottom, this.topDirection);
 
-    if (h == null && v == null) {
+    // Get the right direction intersect and top direction intersects.
+    // If the intersects don't exist, a null will be returned.
+    const rI = this.getBoundIntersect(p, d, right, left, this.rightDirection);
+    const tI = this.getBoundIntersect(p, d, top, bottom, this.topDirection);
+
+    if (rI == null && tI == null) {
       return { intersect: null, distance: 0, reflection: direction };
     }
 
     let intersect;
     let distance;
     let normal;
-    if (h != null && v == null) {
-      ({ intersect, distance, normal } = h);
-    } else if (v != null && h == null) {
-      ({ intersect, distance, normal } = v);
-    } else if (h.distance > v.distance) {
-      ({ intersect, distance, normal } = v);
-    } else if (v.distance > h.distance) {
-      ({ intersect, distance, normal } = h);
+    // If only the right intersect exists, then it is our intersect
+    if (rI != null && tI == null) {
+      ({ intersect, distance, normal } = rI);
+    // If only the top intersect exists, then it is our intersect
+    } else if (tI != null && rI == null) {
+      ({ intersect, distance, normal } = tI);
+    // If both intersects exist, then take the one with the smallest distance
+    } else if (rI.distance > tI.distance) {
+      ({ intersect, distance, normal } = tI);
+    } else if (tI.distance > rI.distance) {
+      ({ intersect, distance, normal } = rI);
+    // If the distances (and thus intersect points) are equal, then reflect
+    // the direction fully
     } else {
       return {
-        intersect: h.intersect,
-        distance: h.distance,
+        intersect: rI.intersect,
+        distance: rI.distance,
         reflection: direction.scale(-1),
       };
     }
 
-    // Perform a reflection off a plane
+    // Perform a reflection off the boundary.
+    // `this.getBoundIntersect` returns a normal vector that defines the
+    // boundary as a plane perpendicular to the plane of motion.
+    // This perpendicular boundary plane is used to calculate the reflection.
     // From: https://www.3dkingdoms.com/weekly/weekly.php?a=2
     const V = d;
     const N = normal;

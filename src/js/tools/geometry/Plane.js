@@ -254,7 +254,8 @@ class Plane {
     // https://stackoverflow.com/questions/9605556/how-to-project-a-point-onto-a-plane-in-3d - Mr H
     const o = this.p;
     const { n } = this;
-    return p.sub(n.scale(n.dotProduct(p.sub(o))));
+    const q = getPoint(p);
+    return q.sub(n.scale(n.dotProduct(q.sub(o))));
   }
 
   distanceToPoint(p: TypeParsablePoint) {
