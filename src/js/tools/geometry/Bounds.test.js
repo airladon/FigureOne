@@ -1,7 +1,7 @@
 import { Point, getPoint } from './Point';
 import { Transform } from './Transform';
 import { Line } from './Line';
-import { Plane, getPlane } from './Plane';
+import { Plane } from './Plane';
 import {
   RectBounds, LineBounds, RangeBounds, TransformBounds, getBounds,
   RectBoundsNew,
@@ -25,7 +25,7 @@ describe('Bounds', () => {
       expect(round(result.distance, 3)).toBe(round(d, 3));
     };
   });
-  describe.only('Rect New Bounds', () => {
+  describe('Rect New Bounds', () => {
     describe('Construction', () => {
       test('XY Plane direction vectors', () => {
         bounds = new RectBoundsNew({
@@ -605,6 +605,59 @@ describe('Bounds', () => {
           });
         });
       });
+      describe('Offset XZ Plane', () => {
+        beforeEach(() => {
+          bounds = new RectBoundsNew({
+            position: [1, 1, 1],
+            rightDirection: [2, 0, 0],
+            topDirection: [0, 0, -2],
+            left: 2,
+            right: 3,
+            top: 4,
+            bottom: 5,
+          });
+        });
+        test('Inside normal - right bound', () => {
+          expect(intersect([1, 1, 1], [0.5, 0, 0])).toEqual([
+            [4, 1, 1], 3, [-1, 0, 0],
+          ]);
+        });
+        test('Right bound 26º inside', () => {
+          expect(intersect([3.9, 1, 0.95], [1, 0, 0.5])).toEqual([
+            [4, 1, 1],
+            round(Math.sqrt(0.1 ** 2 + 0.05 ** 2), 3),
+            [-0.894, 0, 0.447],
+          ]);
+        });
+      });
+      describe('XY plane with 0 left and bottom', () => {
+        beforeEach(() => {
+          bounds = new RectBoundsNew({
+            position: [1, 1, 0],
+            rightDirection: [2, 0, 0],
+            topDirection: [0, 2, 0],
+            left: 0,
+            right: 2,
+            top: 2,
+            bottom: 0,
+          });
+        });
+        test('Inside normal - right bound', () => {
+          expect(intersect([1, 1, 0], [0.5, 0, 0])).toEqual([
+            [3, 1, 0], 2, [-1, 0, 0],
+          ]);
+        });
+        test('Inside normal - left bound', () => {
+          expect(intersect([2, 2, 0], [-0.5, 0, 0])).toEqual([
+            [1, 2, 0], 1, [1, 0, 0],
+          ]);
+        });
+        test('Inside normal - bottom bound', () => {
+          expect(intersect([2, 2, 0], [0, -1, 0])).toEqual([
+            [2, 1, 0], 1, [0, 1, 0],
+          ]);
+        });
+      });
     });
   });
   describe('Range Bounds', () => {
@@ -865,744 +918,744 @@ describe('Bounds', () => {
       });
     });
   });
-  describe('Rect Bounds', () => {
-    describe('Construction', () => {
-      describe('Finite', () => {
-        afterEach(() => {
-          expect(bounds.boundary.left).toBe(-10);
-          expect(bounds.boundary.bottom).toBe(-9);
-          expect(bounds.boundary.right).toBe(8);
-          expect(bounds.boundary.top).toBe(7);
-          expect(bounds.precision).toBe(5);
-          expect(bounds.bounds).toBe('outside');
-        });
-        test('Array', () => {
-          // bounds = new RectBounds([-10, -9, 8, 7], 5);
-          bounds = new RectBounds({
-            left: -10, bottom: -9, right: 8, top: 7, bounds: 'outside', precision: 5,
-          });
-        });
-      });
-      describe('Infinite Right', () => {
-        afterEach(() => {
-          expect(bounds.boundary.left).toBe(-10);
-          expect(bounds.boundary.bottom).toBe(-9);
-          expect(bounds.boundary.right).toBe(null);
-          expect(bounds.boundary.top).toBe(7);
-          expect(bounds.precision).toBe(5);
-        });
-        test('Array', () => {
-          // bounds = new RectBounds([-10, -9, null, 7], 5);
-          bounds = new RectBounds({
-            left: -10, bottom: -9, right: null, top: 7, precision: 5,
-          });
-        });
-      });
-      describe('Infinite Left and Right', () => {
-        afterEach(() => {
-          expect(bounds.boundary.left).toBe(null);
-          expect(bounds.boundary.bottom).toBe(-9);
-          expect(bounds.boundary.right).toBe(null);
-          expect(bounds.boundary.top).toBe(7);
-          expect(bounds.precision).toBe(5);
-        });
-        test('Array', () => {
-          // bounds = new RectBounds([null, -9, null, 7], 5);
-          bounds = new RectBounds({
-            left: null, bottom: -9, right: null, top: 7, precision: 5,
-          });
-        });
-      });
-    });
-    describe('Duplication', () => {
-      test('All Values', () => {
-        bounds = new RectBounds({
-          left: -10,
-          bottom: -11,
-          right: 8,
-          top: 9,
-          precision: 5,
-          bounds: 'outside',
-        });
-        const d = bounds._dup();
-        expect(d).toEqual(bounds);
-        expect(d).not.toBe(bounds);
-      });
-      test('min null', () => {
-        bounds = new RectBounds({
-          left: null,
-          bottom: -11,
-          right: 8,
-          top: null,
-          precision: 5,
-          bounds: 'outside',
-        });
-        const d = bounds._dup();
-        expect(d).toEqual(bounds);
-        expect(d).not.toBe(bounds);
-      });
-    });
-    describe('State', () => {
-      test('All Values', () => {
-        bounds = new RangeBounds({
-          left: -10,
-          bottom: -11,
-          right: 8,
-          top: 9,
-          precision: 5,
-          bounds: 'outside',
-        });
-        const state = bounds._state();
-        const d = getBounds(state);
-        expect(d).toEqual(bounds);
-        expect(d).not.toBe(bounds);
-      });
-    });
-    describe('Bounded Left, Right, Bottom, Top', () => {
-      beforeEach(() => {
-        bounds = new RectBounds({
-          left: -10, bottom: -10, right: 10, top: 10,
-        });
-      });
-      test('Contains value', () => {
-        expect(bounds.contains([0, 0])).toBe(true);
-        expect(bounds.contains([-10, -10])).toBe(true);
-        expect(bounds.contains([10, -10])).toBe(true);
-        expect(bounds.contains([11, -10])).toBe(false);
-        expect(bounds.contains([10, 11])).toBe(false);
-      });
-      test('Contains number - should be false', () => {
-        expect(bounds.contains(0)).toBe(false);
-      });
-      test('Clip Point', () => {
-        expect(bounds.clip([0, 0])).toEqual(new Point(0, 0));
-        expect(bounds.clip([-10, -10])).toEqual(new Point(-10, -10));
-        expect(bounds.clip([10, -10])).toEqual(new Point(10, -10));
-        expect(bounds.clip([11, -10])).toEqual(new Point(10, -10));
-        expect(bounds.clip([10, 11])).toEqual(new Point(10, 10));
-      });
-      test('Clip Value', () => {
-        expect(bounds.clip(100)).toBe(100);
-      });
-      describe('Intersect', () => {
-        test('Inside Bounds', () => {
-          // // From origin horiztonal and vertical
-          check([0, 0], 0, [10, 0], Math.PI, 10);
-          check([0, 0], Math.PI / 2, [0, 10], -Math.PI / 2, 10);
-          check([0, 0], Math.PI, [-10, 0], 0, 10);
-          check([0, 0], -Math.PI / 2, [0, -10], Math.PI / 2, 10);
+  // describe('Rect Bounds', () => {
+  //   describe('Construction', () => {
+  //     describe('Finite', () => {
+  //       afterEach(() => {
+  //         expect(bounds.boundary.left).toBe(-10);
+  //         expect(bounds.boundary.bottom).toBe(-9);
+  //         expect(bounds.boundary.right).toBe(8);
+  //         expect(bounds.boundary.top).toBe(7);
+  //         expect(bounds.precision).toBe(5);
+  //         expect(bounds.bounds).toBe('outside');
+  //       });
+  //       test('Array', () => {
+  //         // bounds = new RectBounds([-10, -9, 8, 7], 5);
+  //         bounds = new RectBounds({
+  //           left: -10, bottom: -9, right: 8, top: 7, bounds: 'outside', precision: 5,
+  //         });
+  //       });
+  //     });
+  //     describe('Infinite Right', () => {
+  //       afterEach(() => {
+  //         expect(bounds.boundary.left).toBe(-10);
+  //         expect(bounds.boundary.bottom).toBe(-9);
+  //         expect(bounds.boundary.right).toBe(null);
+  //         expect(bounds.boundary.top).toBe(7);
+  //         expect(bounds.precision).toBe(5);
+  //       });
+  //       test('Array', () => {
+  //         // bounds = new RectBounds([-10, -9, null, 7], 5);
+  //         bounds = new RectBounds({
+  //           left: -10, bottom: -9, right: null, top: 7, precision: 5,
+  //         });
+  //       });
+  //     });
+  //     describe('Infinite Left and Right', () => {
+  //       afterEach(() => {
+  //         expect(bounds.boundary.left).toBe(null);
+  //         expect(bounds.boundary.bottom).toBe(-9);
+  //         expect(bounds.boundary.right).toBe(null);
+  //         expect(bounds.boundary.top).toBe(7);
+  //         expect(bounds.precision).toBe(5);
+  //       });
+  //       test('Array', () => {
+  //         // bounds = new RectBounds([null, -9, null, 7], 5);
+  //         bounds = new RectBounds({
+  //           left: null, bottom: -9, right: null, top: 7, precision: 5,
+  //         });
+  //       });
+  //     });
+  //   });
+  //   describe('Duplication', () => {
+  //     test('All Values', () => {
+  //       bounds = new RectBounds({
+  //         left: -10,
+  //         bottom: -11,
+  //         right: 8,
+  //         top: 9,
+  //         precision: 5,
+  //         bounds: 'outside',
+  //       });
+  //       const d = bounds._dup();
+  //       expect(d).toEqual(bounds);
+  //       expect(d).not.toBe(bounds);
+  //     });
+  //     test('min null', () => {
+  //       bounds = new RectBounds({
+  //         left: null,
+  //         bottom: -11,
+  //         right: 8,
+  //         top: null,
+  //         precision: 5,
+  //         bounds: 'outside',
+  //       });
+  //       const d = bounds._dup();
+  //       expect(d).toEqual(bounds);
+  //       expect(d).not.toBe(bounds);
+  //     });
+  //   });
+  //   describe('State', () => {
+  //     test('All Values', () => {
+  //       bounds = new RangeBounds({
+  //         left: -10,
+  //         bottom: -11,
+  //         right: 8,
+  //         top: 9,
+  //         precision: 5,
+  //         bounds: 'outside',
+  //       });
+  //       const state = bounds._state();
+  //       const d = getBounds(state);
+  //       expect(d).toEqual(bounds);
+  //       expect(d).not.toBe(bounds);
+  //     });
+  //   });
+  //   describe('Bounded Left, Right, Bottom, Top', () => {
+  //     beforeEach(() => {
+  //       bounds = new RectBounds({
+  //         left: -10, bottom: -10, right: 10, top: 10,
+  //       });
+  //     });
+  //     test('Contains value', () => {
+  //       expect(bounds.contains([0, 0])).toBe(true);
+  //       expect(bounds.contains([-10, -10])).toBe(true);
+  //       expect(bounds.contains([10, -10])).toBe(true);
+  //       expect(bounds.contains([11, -10])).toBe(false);
+  //       expect(bounds.contains([10, 11])).toBe(false);
+  //     });
+  //     test('Contains number - should be false', () => {
+  //       expect(bounds.contains(0)).toBe(false);
+  //     });
+  //     test('Clip Point', () => {
+  //       expect(bounds.clip([0, 0])).toEqual(new Point(0, 0));
+  //       expect(bounds.clip([-10, -10])).toEqual(new Point(-10, -10));
+  //       expect(bounds.clip([10, -10])).toEqual(new Point(10, -10));
+  //       expect(bounds.clip([11, -10])).toEqual(new Point(10, -10));
+  //       expect(bounds.clip([10, 11])).toEqual(new Point(10, 10));
+  //     });
+  //     test('Clip Value', () => {
+  //       expect(bounds.clip(100)).toBe(100);
+  //     });
+  //     describe('Intersect', () => {
+  //       test('Inside Bounds', () => {
+  //         // // From origin horiztonal and vertical
+  //         check([0, 0], 0, [10, 0], Math.PI, 10);
+  //         check([0, 0], Math.PI / 2, [0, 10], -Math.PI / 2, 10);
+  //         check([0, 0], Math.PI, [-10, 0], 0, 10);
+  //         check([0, 0], -Math.PI / 2, [0, -10], Math.PI / 2, 10);
 
-          // From origin corner
-          check([0, 0], Math.PI / 4, [10, 10], Math.PI / 4 * 5, 10 * Math.sqrt(2));
-          check([0, 0], 3 * Math.PI / 4, [-10, 10], Math.PI / 4 * 7, 10 * Math.sqrt(2));
-          check([0, 0], 5 * Math.PI / 4, [-10, -10], Math.PI / 4 * 1, 10 * Math.sqrt(2));
-          check([0, 0], 7 * Math.PI / 4, [10, -10], Math.PI / 4 * 3, 10 * Math.sqrt(2));
+  //         // From origin corner
+  //         check([0, 0], Math.PI / 4, [10, 10], Math.PI / 4 * 5, 10 * Math.sqrt(2));
+  //         check([0, 0], 3 * Math.PI / 4, [-10, 10], Math.PI / 4 * 7, 10 * Math.sqrt(2));
+  //         check([0, 0], 5 * Math.PI / 4, [-10, -10], Math.PI / 4 * 1, 10 * Math.sqrt(2));
+  //         check([0, 0], 7 * Math.PI / 4, [10, -10], Math.PI / 4 * 3, 10 * Math.sqrt(2));
 
-          // From origin 30º
-          check(
-            [0, 0], Math.PI / 6, [10, Math.tan(Math.PI / 6) * 10],
-            Math.PI / 6 * 5, 10 / Math.cos(Math.PI / 6),
-          );
-          check(
-            [0, 0], 5 * Math.PI / 6, [-10, Math.tan(Math.PI / 6) * 10],
-            Math.PI / 6, 10 / Math.cos(Math.PI / 6),
-          );
-          check(
-            [0, 0], 7 * Math.PI / 6, [-10, -Math.tan(Math.PI / 6) * 10],
-            Math.PI / 6 * -1, 10 / Math.cos(Math.PI / 6),
-          );
-          check(
-            [0, 0], 11 * Math.PI / 6, [10, -Math.tan(Math.PI / 6) * 10],
-            Math.PI / 6 * 7, 10 / Math.cos(Math.PI / 6),
-          );
+  //         // From origin 30º
+  //         check(
+  //           [0, 0], Math.PI / 6, [10, Math.tan(Math.PI / 6) * 10],
+  //           Math.PI / 6 * 5, 10 / Math.cos(Math.PI / 6),
+  //         );
+  //         check(
+  //           [0, 0], 5 * Math.PI / 6, [-10, Math.tan(Math.PI / 6) * 10],
+  //           Math.PI / 6, 10 / Math.cos(Math.PI / 6),
+  //         );
+  //         check(
+  //           [0, 0], 7 * Math.PI / 6, [-10, -Math.tan(Math.PI / 6) * 10],
+  //           Math.PI / 6 * -1, 10 / Math.cos(Math.PI / 6),
+  //         );
+  //         check(
+  //           [0, 0], 11 * Math.PI / 6, [10, -Math.tan(Math.PI / 6) * 10],
+  //           Math.PI / 6 * 7, 10 / Math.cos(Math.PI / 6),
+  //         );
 
-          // From -1, -1
-          check([-1, -1], 0, [10, -1], Math.PI, 11);
-          check([-1, -1], Math.PI / 4, [10, 10], Math.PI / 4 * 5, 11 * Math.sqrt(2));
-          check(
-            [-1, -1], 7 * Math.PI / 6, [-10, -1 - Math.tan(Math.PI / 6) * 9],
-            Math.PI / 6 * -1, 9 / Math.cos(Math.PI / 6),
-          );
-        });
-        describe('Edges of bounds', () => {
-          test('Direction inside from border to opposite border', () => {
-            check([-10, 0], 0, [10, 0], Math.PI, 20);
-            check([10, 0], Math.PI, [-10, 0], 0, 20);
-            check([0, -10], Math.PI / 2, [0, 10], -Math.PI / 2, 20);
-            check([0, 10], -Math.PI / 2, [0, -10], Math.PI / 2, 20);
+  //         // From -1, -1
+  //         check([-1, -1], 0, [10, -1], Math.PI, 11);
+  //         check([-1, -1], Math.PI / 4, [10, 10], Math.PI / 4 * 5, 11 * Math.sqrt(2));
+  //         check(
+  //           [-1, -1], 7 * Math.PI / 6, [-10, -1 - Math.tan(Math.PI / 6) * 9],
+  //           Math.PI / 6 * -1, 9 / Math.cos(Math.PI / 6),
+  //         );
+  //       });
+  //       describe('Edges of bounds', () => {
+  //         test('Direction inside from border to opposite border', () => {
+  //           check([-10, 0], 0, [10, 0], Math.PI, 20);
+  //           check([10, 0], Math.PI, [-10, 0], 0, 20);
+  //           check([0, -10], Math.PI / 2, [0, 10], -Math.PI / 2, 20);
+  //           check([0, 10], -Math.PI / 2, [0, -10], Math.PI / 2, 20);
 
-            // Direction inside from border to adjacent side
-            check([-10, 0], Math.PI / 4, [0, 10], -Math.PI / 4, 10 * Math.sqrt(2));
-            check([10, 0], 5 * Math.PI / 4, [0, -10], 3 * Math.PI / 4, 10 * Math.sqrt(2));
-            check([0, -10], Math.PI / 4, [10, 0], 3 * Math.PI / 4, 10 * Math.sqrt(2));
-            check([0, 10], 5 * Math.PI / 4, [-10, 0], 7 * Math.PI / 4, 10 * Math.sqrt(2));
-          });
+  //           // Direction inside from border to adjacent side
+  //           check([-10, 0], Math.PI / 4, [0, 10], -Math.PI / 4, 10 * Math.sqrt(2));
+  //           check([10, 0], 5 * Math.PI / 4, [0, -10], 3 * Math.PI / 4, 10 * Math.sqrt(2));
+  //           check([0, -10], Math.PI / 4, [10, 0], 3 * Math.PI / 4, 10 * Math.sqrt(2));
+  //           check([0, 10], 5 * Math.PI / 4, [-10, 0], 7 * Math.PI / 4, 10 * Math.sqrt(2));
+  //         });
 
-          test('Direction inside from corner to side', () => {
-            const y = 20 * Math.tan(Math.PI / 6);
-            const d = 20 / Math.cos(Math.PI / 6);
-            check([-10, -10], Math.PI / 6, [10, y - 10], 5 * Math.PI / 6, d);
-            check([-10, 10], -Math.PI / 6, [10, 10 - y], 7 * Math.PI / 6, d);
-            check([10, 10], 7 * Math.PI / 6, [-10, 10 - y], 11 * Math.PI / 6, d);
-            check([10, -10], 5 * Math.PI / 6, [-10, -10 + y], 1 * Math.PI / 6, d);
-          });
+  //         test('Direction inside from corner to side', () => {
+  //           const y = 20 * Math.tan(Math.PI / 6);
+  //           const d = 20 / Math.cos(Math.PI / 6);
+  //           check([-10, -10], Math.PI / 6, [10, y - 10], 5 * Math.PI / 6, d);
+  //           check([-10, 10], -Math.PI / 6, [10, 10 - y], 7 * Math.PI / 6, d);
+  //           check([10, 10], 7 * Math.PI / 6, [-10, 10 - y], 11 * Math.PI / 6, d);
+  //           check([10, -10], 5 * Math.PI / 6, [-10, -10 + y], 1 * Math.PI / 6, d);
+  //         });
 
-          test('Direction along from corner', () => {
-            check([-10, -10], Math.PI / 2, [-10, 10], -Math.PI / 2, 20);
-            check([-10, -10], 0, [10, -10], Math.PI, 20);
-            check([-10, 10], -Math.PI / 2, [-10, -10], Math.PI / 2, 20);
-            check([-10, 10], 0, [10, 10], Math.PI, 20);
-            check([10, 10], -Math.PI / 2, [10, -10], Math.PI / 2, 20);
-            check([10, 10], Math.PI, [-10, 10], 0, 20);
-            check([10, -10], Math.PI / 2, [10, 10], -Math.PI / 2, 20);
-            check([10, -10], Math.PI, [-10, -10], 0, 20);
-          });
+  //         test('Direction along from corner', () => {
+  //           check([-10, -10], Math.PI / 2, [-10, 10], -Math.PI / 2, 20);
+  //           check([-10, -10], 0, [10, -10], Math.PI, 20);
+  //           check([-10, 10], -Math.PI / 2, [-10, -10], Math.PI / 2, 20);
+  //           check([-10, 10], 0, [10, 10], Math.PI, 20);
+  //           check([10, 10], -Math.PI / 2, [10, -10], Math.PI / 2, 20);
+  //           check([10, 10], Math.PI, [-10, 10], 0, 20);
+  //           check([10, -10], Math.PI / 2, [10, 10], -Math.PI / 2, 20);
+  //           check([10, -10], Math.PI, [-10, -10], 0, 20);
+  //         });
 
-          test('Direction inside from corner to corner', () => {
-            check([-10, -10], Math.PI / 4, [10, 10], 5 * Math.PI / 4, 20 * Math.sqrt(2));
-          });
+  //         test('Direction inside from corner to corner', () => {
+  //           check([-10, -10], Math.PI / 4, [10, 10], 5 * Math.PI / 4, 20 * Math.sqrt(2));
+  //         });
 
-          test('Direction outside from corner', () => {
-            check([-10, -10], 5 * Math.PI / 4, [-10, -10], Math.PI / 4, 0);
-          });
+  //         test('Direction outside from corner', () => {
+  //           check([-10, -10], 5 * Math.PI / 4, [-10, -10], Math.PI / 4, 0);
+  //         });
 
-          test('Direction outside', () => {
-            check([10, 0], 0, [10, 0], Math.PI, 0);
-            check([-10, 3], Math.PI / 4 * 3, [-10, 3], Math.PI / 4, 0);
-            check([-10, -10], Math.PI / 6 * 7, [-10, -10], Math.PI / 6, 0);
-          });
+  //         test('Direction outside', () => {
+  //           check([10, 0], 0, [10, 0], Math.PI, 0);
+  //           check([-10, 3], Math.PI / 4 * 3, [-10, 3], Math.PI / 4, 0);
+  //           check([-10, -10], Math.PI / 6 * 7, [-10, -10], Math.PI / 6, 0);
+  //         });
 
-          test('Direction along', () => {
-            check([10, 0], Math.PI / 2, [10, 10], -Math.PI / 2, 10);
-            check([-10, 0], -Math.PI / 2, [-10, -10], Math.PI / 2, 10);
-            check([0, 10], Math.PI, [-10, 10], 0, 10);
-            check([0, -10], 0, [10, -10], Math.PI, 10);
-          });
-        });
-        describe('Edges of outside bounds', () => {
-          beforeEach(() => {
-            bounds.bounds = 'outside';
-          });
-          test('Direction inside', () => {
-            check([-10, 0], 0, [-10, 0], Math.PI, 0);
-            check([10, 0], Math.PI, [10, 0], 0, 0);
-            check([0, -10], Math.PI / 2, [0, -10], -Math.PI / 2, 0);
-            check([0, 10], -Math.PI / 2, [0, 10], Math.PI / 2, 0);
-          });
+  //         test('Direction along', () => {
+  //           check([10, 0], Math.PI / 2, [10, 10], -Math.PI / 2, 10);
+  //           check([-10, 0], -Math.PI / 2, [-10, -10], Math.PI / 2, 10);
+  //           check([0, 10], Math.PI, [-10, 10], 0, 10);
+  //           check([0, -10], 0, [10, -10], Math.PI, 10);
+  //         });
+  //       });
+  //       describe('Edges of outside bounds', () => {
+  //         beforeEach(() => {
+  //           bounds.bounds = 'outside';
+  //         });
+  //         test('Direction inside', () => {
+  //           check([-10, 0], 0, [-10, 0], Math.PI, 0);
+  //           check([10, 0], Math.PI, [10, 0], 0, 0);
+  //           check([0, -10], Math.PI / 2, [0, -10], -Math.PI / 2, 0);
+  //           check([0, 10], -Math.PI / 2, [0, 10], Math.PI / 2, 0);
+  //         });
 
-          test('Direction inside from corner', () => {
-            check([-10, -10], Math.PI / 6, [-10, -10], 7 * Math.PI / 6, 0);
-            check([-10, 10], -Math.PI / 6, [-10, 10], 5 * Math.PI / 6, 0);
-            check([10, 10], 7 * Math.PI / 6, [10, 10], 1 * Math.PI / 6, 0);
-            check([10, -10], 5 * Math.PI / 6, [10, -10], 11 * Math.PI / 6, 0);
-          });
+  //         test('Direction inside from corner', () => {
+  //           check([-10, -10], Math.PI / 6, [-10, -10], 7 * Math.PI / 6, 0);
+  //           check([-10, 10], -Math.PI / 6, [-10, 10], 5 * Math.PI / 6, 0);
+  //           check([10, 10], 7 * Math.PI / 6, [10, 10], 1 * Math.PI / 6, 0);
+  //           check([10, -10], 5 * Math.PI / 6, [10, -10], 11 * Math.PI / 6, 0);
+  //         });
 
-          test('Direction along', () => {
-            check([10, 0], Math.PI / 2, null, Math.PI / 2, 0);
-            check([-10, 0], -Math.PI / 2, null, -Math.PI / 2, 0);
-            check([0, 10], Math.PI, null, Math.PI, 0);
-            check([0, -10], 0, null, 0, 0);
-          });
+  //         test('Direction along', () => {
+  //           check([10, 0], Math.PI / 2, null, Math.PI / 2, 0);
+  //           check([-10, 0], -Math.PI / 2, null, -Math.PI / 2, 0);
+  //           check([0, 10], Math.PI, null, Math.PI, 0);
+  //           check([0, -10], 0, null, 0, 0);
+  //         });
 
-          test('Direction along from corner', () => {
-            check([-10, -10], Math.PI / 2, null, Math.PI / 2, 0);
-            check([-10, -10], 0, null, 0, 0);
-            check([-10, 10], -Math.PI / 2, null, -Math.PI / 2, 0);
-            check([-10, 10], 0, null, 0, 0);
-            check([10, 10], -Math.PI / 2, null, -Math.PI / 2, 0);
-            check([10, 10], Math.PI, null, Math.PI, 0);
-            check([10, -10], Math.PI / 2, null, Math.PI / 2, 0);
-            check([10, -10], Math.PI, null, Math.PI, 0);
-          });
+  //         test('Direction along from corner', () => {
+  //           check([-10, -10], Math.PI / 2, null, Math.PI / 2, 0);
+  //           check([-10, -10], 0, null, 0, 0);
+  //           check([-10, 10], -Math.PI / 2, null, -Math.PI / 2, 0);
+  //           check([-10, 10], 0, null, 0, 0);
+  //           check([10, 10], -Math.PI / 2, null, -Math.PI / 2, 0);
+  //           check([10, 10], Math.PI, null, Math.PI, 0);
+  //           check([10, -10], Math.PI / 2, null, Math.PI / 2, 0);
+  //           check([10, -10], Math.PI, null, Math.PI, 0);
+  //         });
 
-          test('Direction outside', () => {
-            check([10, 0], 0, null, 0, 0);
-            check([-10, 0], Math.PI, null, Math.PI, 0);
-            check([0, 10], Math.PI / 2, null, Math.PI / 2, 0);
-            check([0, -10], -Math.PI / 2, null, -Math.PI / 2, 0);
-          });
+  //         test('Direction outside', () => {
+  //           check([10, 0], 0, null, 0, 0);
+  //           check([-10, 0], Math.PI, null, Math.PI, 0);
+  //           check([0, 10], Math.PI / 2, null, Math.PI / 2, 0);
+  //           check([0, -10], -Math.PI / 2, null, -Math.PI / 2, 0);
+  //         });
 
-          test('Direction outside from corner', () => {
-            check([-10, -10], 5 * Math.PI / 6, null, 5 * Math.PI / 6, 0);
-            check([-10, 10], Math.PI / 6, null, Math.PI / 6, 0);
-            check([10, 10], Math.PI / 6, null, Math.PI / 6, 0);
-            check([10, -10], -Math.PI / 6, null, -Math.PI / 6, 0);
-          });
-        });
-        test('Outside bounds no intersection', () => {
-          check([11, 0], 0, null, 0, 0);
-          check([11, 0], Math.PI / 2, null, Math.PI / 2, 0);
-          check([-10.1, -10.1], Math.PI * 1.1, null, Math.PI * 1.1, 0);
-        });
-        test('Outside bounds intersection', () => {
-          check([11, 0], Math.PI, [10, 0], 0, 1);
-          check([11, 0], Math.PI / 4 * 3, [10, 1], Math.PI / 4, Math.sqrt(2));
-          check([-11, -11], Math.PI / 4, [-10, -10], Math.PI / 4 * 5, Math.sqrt(2));
-        });
-      });
-    });
-    describe('Bounded Left, Right, Bottom, Unbounded Top', () => {
-      beforeEach(() => {
-        bounds = new RectBounds({
-          left: -10, bottom: -10, right: 10, top: null,
-        });
-      });
-      test('Contains value', () => {
-        expect(bounds.contains([0, 0])).toBe(true);
-        expect(bounds.contains([-10, -10])).toBe(true);
-        expect(bounds.contains([10, -10])).toBe(true);
-        expect(bounds.contains([11, -10])).toBe(false);
-        expect(bounds.contains([10, 11])).toBe(true);
-      });
-      test('Clip Point', () => {
-        expect(bounds.clip([0, 0])).toEqual(new Point(0, 0));
-        expect(bounds.clip([-10, -10])).toEqual(new Point(-10, -10));
-        expect(bounds.clip([10, -10])).toEqual(new Point(10, -10));
-        expect(bounds.clip([11, -10])).toEqual(new Point(10, -10));
-        expect(bounds.clip([10, 11])).toEqual(new Point(10, 11));
-      });
-      describe('Intersect', () => {
-        test('Inside Bounds', () => {
-          // // From origin horiztonal and vertical
-          check([0, 0], 0, [10, 0], Math.PI, 10);
-          check([0, 0], Math.PI / 2, null, Math.PI / 2, 0);
-          check([0, 0], Math.PI, [-10, 0], 0, 10);
-          check([0, 0], -Math.PI / 2, [0, -10], Math.PI / 2, 10);
+  //         test('Direction outside from corner', () => {
+  //           check([-10, -10], 5 * Math.PI / 6, null, 5 * Math.PI / 6, 0);
+  //           check([-10, 10], Math.PI / 6, null, Math.PI / 6, 0);
+  //           check([10, 10], Math.PI / 6, null, Math.PI / 6, 0);
+  //           check([10, -10], -Math.PI / 6, null, -Math.PI / 6, 0);
+  //         });
+  //       });
+  //       test('Outside bounds no intersection', () => {
+  //         check([11, 0], 0, null, 0, 0);
+  //         check([11, 0], Math.PI / 2, null, Math.PI / 2, 0);
+  //         check([-10.1, -10.1], Math.PI * 1.1, null, Math.PI * 1.1, 0);
+  //       });
+  //       test('Outside bounds intersection', () => {
+  //         check([11, 0], Math.PI, [10, 0], 0, 1);
+  //         check([11, 0], Math.PI / 4 * 3, [10, 1], Math.PI / 4, Math.sqrt(2));
+  //         check([-11, -11], Math.PI / 4, [-10, -10], Math.PI / 4 * 5, Math.sqrt(2));
+  //       });
+  //     });
+  //   });
+  //   describe('Bounded Left, Right, Bottom, Unbounded Top', () => {
+  //     beforeEach(() => {
+  //       bounds = new RectBounds({
+  //         left: -10, bottom: -10, right: 10, top: null,
+  //       });
+  //     });
+  //     test('Contains value', () => {
+  //       expect(bounds.contains([0, 0])).toBe(true);
+  //       expect(bounds.contains([-10, -10])).toBe(true);
+  //       expect(bounds.contains([10, -10])).toBe(true);
+  //       expect(bounds.contains([11, -10])).toBe(false);
+  //       expect(bounds.contains([10, 11])).toBe(true);
+  //     });
+  //     test('Clip Point', () => {
+  //       expect(bounds.clip([0, 0])).toEqual(new Point(0, 0));
+  //       expect(bounds.clip([-10, -10])).toEqual(new Point(-10, -10));
+  //       expect(bounds.clip([10, -10])).toEqual(new Point(10, -10));
+  //       expect(bounds.clip([11, -10])).toEqual(new Point(10, -10));
+  //       expect(bounds.clip([10, 11])).toEqual(new Point(10, 11));
+  //     });
+  //     describe('Intersect', () => {
+  //       test('Inside Bounds', () => {
+  //         // // From origin horiztonal and vertical
+  //         check([0, 0], 0, [10, 0], Math.PI, 10);
+  //         check([0, 0], Math.PI / 2, null, Math.PI / 2, 0);
+  //         check([0, 0], Math.PI, [-10, 0], 0, 10);
+  //         check([0, 0], -Math.PI / 2, [0, -10], Math.PI / 2, 10);
 
-          // From origin corner
-          check([0, 0], Math.PI / 4, [10, 10], Math.PI / 4 * 3, 10 * Math.sqrt(2));
-          check([0, 0], 3 * Math.PI / 4, [-10, 10], Math.PI / 4 * 1, 10 * Math.sqrt(2));
-          check([0, 0], 5 * Math.PI / 4, [-10, -10], Math.PI / 4 * 1, 10 * Math.sqrt(2));
-          check([0, 0], 7 * Math.PI / 4, [10, -10], Math.PI / 4 * 3, 10 * Math.sqrt(2));
+  //         // From origin corner
+  //         check([0, 0], Math.PI / 4, [10, 10], Math.PI / 4 * 3, 10 * Math.sqrt(2));
+  //         check([0, 0], 3 * Math.PI / 4, [-10, 10], Math.PI / 4 * 1, 10 * Math.sqrt(2));
+  //         check([0, 0], 5 * Math.PI / 4, [-10, -10], Math.PI / 4 * 1, 10 * Math.sqrt(2));
+  //         check([0, 0], 7 * Math.PI / 4, [10, -10], Math.PI / 4 * 3, 10 * Math.sqrt(2));
 
-          // From -1, -1
-          check([-1, -1], 0, [10, -1], Math.PI, 11);
-          check([-1, -1], Math.PI / 2, null, Math.PI / 2, 0);
-          check([-1, -1], Math.PI / 4, [10, 10], Math.PI / 4 * 3, 11 * Math.sqrt(2));
-          check(
-            [-1, -1], 7 * Math.PI / 6, [-10, -1 - Math.tan(Math.PI / 6) * 9],
-            Math.PI / 6 * -1, 9 / Math.cos(Math.PI / 6),
-          );
-        });
-        describe('Edges of bounds', () => {
-          test('Trajectory going out', () => {
-            check([10, 0], 0, [10, 0], Math.PI, 0);
-            check([-10, 100], Math.PI / 4 * 3, [-10, 100], Math.PI / 4, 0);
-            check([-10, -10], Math.PI / 6 * 7, [-10, -10], Math.PI / 6, 0);
-          });
+  //         // From -1, -1
+  //         check([-1, -1], 0, [10, -1], Math.PI, 11);
+  //         check([-1, -1], Math.PI / 2, null, Math.PI / 2, 0);
+  //         check([-1, -1], Math.PI / 4, [10, 10], Math.PI / 4 * 3, 11 * Math.sqrt(2));
+  //         check(
+  //           [-1, -1], 7 * Math.PI / 6, [-10, -1 - Math.tan(Math.PI / 6) * 9],
+  //           Math.PI / 6 * -1, 9 / Math.cos(Math.PI / 6),
+  //         );
+  //       });
+  //       describe('Edges of bounds', () => {
+  //         test('Trajectory going out', () => {
+  //           check([10, 0], 0, [10, 0], Math.PI, 0);
+  //           check([-10, 100], Math.PI / 4 * 3, [-10, 100], Math.PI / 4, 0);
+  //           check([-10, -10], Math.PI / 6 * 7, [-10, -10], Math.PI / 6, 0);
+  //         });
 
-          test('Trajectory along', () => {
-            check([10, 0], Math.PI / 2, null, Math.PI / 2, 0);
-            check([10, 0], -Math.PI / 2, [10, -10], Math.PI / 2, 10);
-            check([-10, 0], Math.PI / 2, null, Math.PI / 2, 0);
-            check([-10, 0], -Math.PI / 2, [-10, -10], Math.PI / 2, 10);
-            check([0, 10], Math.PI, [-10, 10], 0, 10);
-            check([0, -10], Math.PI, [-10, -10], 0, 10);
-          });
+  //         test('Trajectory along', () => {
+  //           check([10, 0], Math.PI / 2, null, Math.PI / 2, 0);
+  //           check([10, 0], -Math.PI / 2, [10, -10], Math.PI / 2, 10);
+  //           check([-10, 0], Math.PI / 2, null, Math.PI / 2, 0);
+  //           check([-10, 0], -Math.PI / 2, [-10, -10], Math.PI / 2, 10);
+  //           check([0, 10], Math.PI, [-10, 10], 0, 10);
+  //           check([0, -10], Math.PI, [-10, -10], 0, 10);
+  //         });
 
-          test('Trajectory along corners', () => {
-            check([-10, -10], Math.PI / 2, null, Math.PI / 2, 0);
-            check([-10, -10], 0, [10, -10], Math.PI, 20);
-            check([10, -10], Math.PI / 2, null, Math.PI / 2, 0);
-            check([10, -10], Math.PI, [-10, -10], 0, 20);
-          });
+  //         test('Trajectory along corners', () => {
+  //           check([-10, -10], Math.PI / 2, null, Math.PI / 2, 0);
+  //           check([-10, -10], 0, [10, -10], Math.PI, 20);
+  //           check([10, -10], Math.PI / 2, null, Math.PI / 2, 0);
+  //           check([10, -10], Math.PI, [-10, -10], 0, 20);
+  //         });
 
-          test('Trajectory going in', () => {
-            check([10, 0], Math.PI, [-10, 0], 0, 20);
-            check([-10, 100], Math.PI / 4, [10, 120], Math.PI / 4 * 3, 20 * Math.sqrt(2));
-            check([-10, -10], Math.PI / 4, [10, 10], Math.PI / 4 * 3, 20 * Math.sqrt(2));
-          });
-        });
-        describe('Edges outside', () => {
-          beforeEach(() => {
-            bounds.bounds = 'outside';
-          });
-          test('Trajectory along', () => {
-            check([10, 0], Math.PI / 2, null, Math.PI / 2, 0);
-            check([10, 0], -Math.PI / 2, null, -Math.PI / 2, 0);
-            check([-10, 0], Math.PI / 2, null, Math.PI / 2, 0);
-            check([-10, 0], -Math.PI / 2, null, -Math.PI / 2, 0);
-            check([0, -10], Math.PI, null, Math.PI, 0);
-            check([0, -10], 0, null, 0, 0);
-          });
+  //         test('Trajectory going in', () => {
+  //           check([10, 0], Math.PI, [-10, 0], 0, 20);
+  //           check([-10, 100], Math.PI / 4, [10, 120], Math.PI / 4 * 3, 20 * Math.sqrt(2));
+  //           check([-10, -10], Math.PI / 4, [10, 10], Math.PI / 4 * 3, 20 * Math.sqrt(2));
+  //         });
+  //       });
+  //       describe('Edges outside', () => {
+  //         beforeEach(() => {
+  //           bounds.bounds = 'outside';
+  //         });
+  //         test('Trajectory along', () => {
+  //           check([10, 0], Math.PI / 2, null, Math.PI / 2, 0);
+  //           check([10, 0], -Math.PI / 2, null, -Math.PI / 2, 0);
+  //           check([-10, 0], Math.PI / 2, null, Math.PI / 2, 0);
+  //           check([-10, 0], -Math.PI / 2, null, -Math.PI / 2, 0);
+  //           check([0, -10], Math.PI, null, Math.PI, 0);
+  //           check([0, -10], 0, null, 0, 0);
+  //         });
 
-          test('Trajectory along corners', () => {
-            check([-10, -10], Math.PI / 2, null, Math.PI / 2, 0);
-            check([-10, -10], 0, null, 0, 0);
-            check([10, -10], Math.PI / 2, null, Math.PI / 2, 0);
-            check([10, -10], Math.PI, null, Math.PI, 0);
-          });
+  //         test('Trajectory along corners', () => {
+  //           check([-10, -10], Math.PI / 2, null, Math.PI / 2, 0);
+  //           check([-10, -10], 0, null, 0, 0);
+  //           check([10, -10], Math.PI / 2, null, Math.PI / 2, 0);
+  //           check([10, -10], Math.PI, null, Math.PI, 0);
+  //         });
 
-          test('Trajectory inside', () => {
-            check([10, 0], Math.PI, [10, 0], 0, 0);
-            check([-10, 0], 0, [-10, 0], Math.PI, 0);
-            check([0, -10], Math.PI / 2, [0, -10], -Math.PI / 2, 0);
-          });
+  //         test('Trajectory inside', () => {
+  //           check([10, 0], Math.PI, [10, 0], 0, 0);
+  //           check([-10, 0], 0, [-10, 0], Math.PI, 0);
+  //           check([0, -10], Math.PI / 2, [0, -10], -Math.PI / 2, 0);
+  //         });
 
-          test('Trajectory outside', () => {
-            check([10, 0], 0, null, 0, 0);
-            check([-10, 0], Math.PI, null, Math.PI, 0);
-            check([0, -10], -Math.PI / 2, null, -Math.PI / 2, 0);
-          });
-        });
-        test('Outside bounds no intersection', () => {
-          check([11, 0], 0, null, 0, 0);
-          check([11, 0], Math.PI / 2, null, Math.PI / 2, 0);
-          check([-10.1, -10.1], Math.PI * 1.1, null, Math.PI * 1.1, 0);
-        });
-        test('Outside bounds intersection', () => {
-          check([11, 0], Math.PI, [10, 0], 0, 1);
-          check([11, 0], Math.PI / 4 * 3, [10, 1], Math.PI / 4, Math.sqrt(2));
-          check([-11, -11], Math.PI / 4, [-10, -10], Math.PI / 4 * 5, Math.sqrt(2));
-          check([11, 100], Math.PI, [10, 100], 0, 1);
-        });
-      });
-    });
-    describe('Bounded Left, Right, Top, Unbounded Bottom', () => {
-      beforeEach(() => {
-        bounds = new RectBounds({
-          left: -10, bottom: null, right: 10, top: 10,
-        });
-      });
-      test('Contains value', () => {
-        expect(bounds.contains([0, 0])).toBe(true);
-        expect(bounds.contains([-10, -11])).toBe(true);
-        expect(bounds.contains([10, -11])).toBe(true);
-        expect(bounds.contains([11, -11])).toBe(false);
-        expect(bounds.contains([10, 10])).toBe(true);
-      });
-      test('Clip Point', () => {
-        expect(bounds.clip([0, 0])).toEqual(new Point(0, 0));
-        expect(bounds.clip([-10, -10])).toEqual(new Point(-10, -10));
-        expect(bounds.clip([10, -11])).toEqual(new Point(10, -11));
-        expect(bounds.clip([11, -11])).toEqual(new Point(10, -11));
-        expect(bounds.clip([10, 11])).toEqual(new Point(10, 10));
-      });
-      describe('Intersect', () => {
-        test('Inside Bounds', () => {
-          // // From origin horiztonal and vertical
-          check([0, 0], 0, [10, 0], Math.PI, 10);
-          check([0, 0], Math.PI / 2, [0, 10], -Math.PI / 2, 10);
-          check([0, 0], Math.PI, [-10, 0], 0, 10);
-          check([0, 0], -Math.PI / 2, null, -Math.PI / 2, 0);
+  //         test('Trajectory outside', () => {
+  //           check([10, 0], 0, null, 0, 0);
+  //           check([-10, 0], Math.PI, null, Math.PI, 0);
+  //           check([0, -10], -Math.PI / 2, null, -Math.PI / 2, 0);
+  //         });
+  //       });
+  //       test('Outside bounds no intersection', () => {
+  //         check([11, 0], 0, null, 0, 0);
+  //         check([11, 0], Math.PI / 2, null, Math.PI / 2, 0);
+  //         check([-10.1, -10.1], Math.PI * 1.1, null, Math.PI * 1.1, 0);
+  //       });
+  //       test('Outside bounds intersection', () => {
+  //         check([11, 0], Math.PI, [10, 0], 0, 1);
+  //         check([11, 0], Math.PI / 4 * 3, [10, 1], Math.PI / 4, Math.sqrt(2));
+  //         check([-11, -11], Math.PI / 4, [-10, -10], Math.PI / 4 * 5, Math.sqrt(2));
+  //         check([11, 100], Math.PI, [10, 100], 0, 1);
+  //       });
+  //     });
+  //   });
+  //   describe('Bounded Left, Right, Top, Unbounded Bottom', () => {
+  //     beforeEach(() => {
+  //       bounds = new RectBounds({
+  //         left: -10, bottom: null, right: 10, top: 10,
+  //       });
+  //     });
+  //     test('Contains value', () => {
+  //       expect(bounds.contains([0, 0])).toBe(true);
+  //       expect(bounds.contains([-10, -11])).toBe(true);
+  //       expect(bounds.contains([10, -11])).toBe(true);
+  //       expect(bounds.contains([11, -11])).toBe(false);
+  //       expect(bounds.contains([10, 10])).toBe(true);
+  //     });
+  //     test('Clip Point', () => {
+  //       expect(bounds.clip([0, 0])).toEqual(new Point(0, 0));
+  //       expect(bounds.clip([-10, -10])).toEqual(new Point(-10, -10));
+  //       expect(bounds.clip([10, -11])).toEqual(new Point(10, -11));
+  //       expect(bounds.clip([11, -11])).toEqual(new Point(10, -11));
+  //       expect(bounds.clip([10, 11])).toEqual(new Point(10, 10));
+  //     });
+  //     describe('Intersect', () => {
+  //       test('Inside Bounds', () => {
+  //         // // From origin horiztonal and vertical
+  //         check([0, 0], 0, [10, 0], Math.PI, 10);
+  //         check([0, 0], Math.PI / 2, [0, 10], -Math.PI / 2, 10);
+  //         check([0, 0], Math.PI, [-10, 0], 0, 10);
+  //         check([0, 0], -Math.PI / 2, null, -Math.PI / 2, 0);
 
-          // From origin corner
-          check([0, 0], Math.PI / 4, [10, 10], Math.PI / 4 * 5, 10 * Math.sqrt(2));
-          check([0, 0], 3 * Math.PI / 4, [-10, 10], Math.PI / 4 * 7, 10 * Math.sqrt(2));
-          check([0, 0], 5 * Math.PI / 4, [-10, -10], Math.PI / 4 * 7, 10 * Math.sqrt(2));
-          check([0, 0], 7 * Math.PI / 4, [10, -10], Math.PI / 4 * 5, 10 * Math.sqrt(2));
+  //         // From origin corner
+  //         check([0, 0], Math.PI / 4, [10, 10], Math.PI / 4 * 5, 10 * Math.sqrt(2));
+  //         check([0, 0], 3 * Math.PI / 4, [-10, 10], Math.PI / 4 * 7, 10 * Math.sqrt(2));
+  //         check([0, 0], 5 * Math.PI / 4, [-10, -10], Math.PI / 4 * 7, 10 * Math.sqrt(2));
+  //         check([0, 0], 7 * Math.PI / 4, [10, -10], Math.PI / 4 * 5, 10 * Math.sqrt(2));
 
-          // From -1, -1
-          check([-1, -1], 0, [10, -1], Math.PI, 11);
-          check([-1, -1], -Math.PI / 2, null, -Math.PI / 2, 0);
-          check([-1, -1], Math.PI / 4, [10, 10], Math.PI / 4 * 5, 11 * Math.sqrt(2));
-          check(
-            [-1, -1], 7 * Math.PI / 6, [-10, -1 - Math.tan(Math.PI / 6) * 9],
-            Math.PI / 6 * -1, 9 / Math.cos(Math.PI / 6),
-          );
-        });
-        describe('Edges of bounds', () => {
-          test('Trajectory going out', () => {
-            check([10, 0], 0, [10, 0], Math.PI, 0);
-            check([-10, 10], Math.PI / 4 * 3, [-10, 10], Math.PI / 4 * 7, 0);
-            check([-10, -100], Math.PI / 6 * 7, [-10, -100], Math.PI / 6 * 11, 0);
-          });
+  //         // From -1, -1
+  //         check([-1, -1], 0, [10, -1], Math.PI, 11);
+  //         check([-1, -1], -Math.PI / 2, null, -Math.PI / 2, 0);
+  //         check([-1, -1], Math.PI / 4, [10, 10], Math.PI / 4 * 5, 11 * Math.sqrt(2));
+  //         check(
+  //           [-1, -1], 7 * Math.PI / 6, [-10, -1 - Math.tan(Math.PI / 6) * 9],
+  //           Math.PI / 6 * -1, 9 / Math.cos(Math.PI / 6),
+  //         );
+  //       });
+  //       describe('Edges of bounds', () => {
+  //         test('Trajectory going out', () => {
+  //           check([10, 0], 0, [10, 0], Math.PI, 0);
+  //           check([-10, 10], Math.PI / 4 * 3, [-10, 10], Math.PI / 4 * 7, 0);
+  //           check([-10, -100], Math.PI / 6 * 7, [-10, -100], Math.PI / 6 * 11, 0);
+  //         });
 
-          test('Trajectory along', () => {
-            check([10, 0], Math.PI / 2, [10, 10], -Math.PI / 2, 10);
-            check([10, 0], -Math.PI / 2, null, -Math.PI / 2, 0);
-            check([-10, 0], -Math.PI / 2, null, -Math.PI / 2, 0);
-            check([-10, 0], Math.PI / 2, [-10, 10], -Math.PI / 2, 10);
-            check([0, 10], 0, [10, 10], Math.PI, 10);
-            check([0, 10], Math.PI, [-10, 10], 0, 10);
-          });
+  //         test('Trajectory along', () => {
+  //           check([10, 0], Math.PI / 2, [10, 10], -Math.PI / 2, 10);
+  //           check([10, 0], -Math.PI / 2, null, -Math.PI / 2, 0);
+  //           check([-10, 0], -Math.PI / 2, null, -Math.PI / 2, 0);
+  //           check([-10, 0], Math.PI / 2, [-10, 10], -Math.PI / 2, 10);
+  //           check([0, 10], 0, [10, 10], Math.PI, 10);
+  //           check([0, 10], Math.PI, [-10, 10], 0, 10);
+  //         });
 
-          test('Trajectory along corners', () => {
-            check([-10, 10], -Math.PI / 2, null, -Math.PI / 2, 0);
-            check([-10, 10], 0, [10, 10], Math.PI, 20);
-            check([10, 10], -Math.PI / 2, null, -Math.PI / 2, 0);
-            check([10, 10], Math.PI, [-10, 10], 0, 20);
-          });
+  //         test('Trajectory along corners', () => {
+  //           check([-10, 10], -Math.PI / 2, null, -Math.PI / 2, 0);
+  //           check([-10, 10], 0, [10, 10], Math.PI, 20);
+  //           check([10, 10], -Math.PI / 2, null, -Math.PI / 2, 0);
+  //           check([10, 10], Math.PI, [-10, 10], 0, 20);
+  //         });
 
-          test('Trajectory going in', () => {
-            check([10, 0], Math.PI, [-10, 0], 0, 20);
-            check([-10, -100], Math.PI / 4, [10, -80], Math.PI / 4 * 3, 20 * Math.sqrt(2));
-            check([-10, 10], -Math.PI / 4, [10, -10], Math.PI / 4 * 5, 20 * Math.sqrt(2));
-          });
-        });
-        test('Outside bounds no intersection', () => {
-          check([11, 0], 0, null, 0, 0);
-          check([11, 0], Math.PI / 2, null, Math.PI / 2, 0);
-          check([10.1, 10.1], Math.PI * 0.9, null, Math.PI * 0.9, 0);
-        });
-        test('Outside bounds intersection', () => {
-          check([11, 0], Math.PI, [10, 0], 0, 1);
-          check([11, 0], Math.PI / 4 * 3, [10, 1], Math.PI / 4, Math.sqrt(2));
-          check([-11, 11], Math.PI / 4 * 7, [-10, 10], Math.PI / 4 * 3, Math.sqrt(2));
-          check([11, -100], Math.PI, [10, -100], 0, 1);
-        });
-      });
-    });
-    describe('Bounded Right, Top, Bottom, Unbounded Left', () => {
-      beforeEach(() => {
-        bounds = new RectBounds({
-          left: null, bottom: -10, right: 10, top: 10,
-        });
-      });
-      test('Contains value', () => {
-        expect(bounds.contains([0, 0])).toBe(true);
-        expect(bounds.contains([-11, -10])).toBe(true);
-        expect(bounds.contains([-11, -11])).toBe(false);
-        expect(bounds.contains([10, -10])).toBe(true);
-        expect(bounds.contains([11, -10])).toBe(false);
-        expect(bounds.contains([10, 10])).toBe(true);
-      });
-      test('Clip Point', () => {
-        expect(bounds.clip([0, 0])).toEqual(new Point(0, 0));
-        expect(bounds.clip([-11, -10])).toEqual(new Point(-11, -10));
-        expect(bounds.clip([10, -11])).toEqual(new Point(10, -10));
-        expect(bounds.clip([11, -11])).toEqual(new Point(10, -10));
-        expect(bounds.clip([10, 11])).toEqual(new Point(10, 10));
-      });
-      describe('Intersect', () => {
-        test('Inside Bounds', () => {
-          // From origin horiztonal and vertical
-          check([0, 0], 0, [10, 0], Math.PI, 10);
-          check([0, 0], Math.PI / 2, [0, 10], -Math.PI / 2, 10);
-          check([0, 0], Math.PI, null, Math.PI, 0);
-          check([0, 0], -Math.PI / 2, [0, -10], Math.PI / 2, 10);
+  //         test('Trajectory going in', () => {
+  //           check([10, 0], Math.PI, [-10, 0], 0, 20);
+  //           check([-10, -100], Math.PI / 4, [10, -80], Math.PI / 4 * 3, 20 * Math.sqrt(2));
+  //           check([-10, 10], -Math.PI / 4, [10, -10], Math.PI / 4 * 5, 20 * Math.sqrt(2));
+  //         });
+  //       });
+  //       test('Outside bounds no intersection', () => {
+  //         check([11, 0], 0, null, 0, 0);
+  //         check([11, 0], Math.PI / 2, null, Math.PI / 2, 0);
+  //         check([10.1, 10.1], Math.PI * 0.9, null, Math.PI * 0.9, 0);
+  //       });
+  //       test('Outside bounds intersection', () => {
+  //         check([11, 0], Math.PI, [10, 0], 0, 1);
+  //         check([11, 0], Math.PI / 4 * 3, [10, 1], Math.PI / 4, Math.sqrt(2));
+  //         check([-11, 11], Math.PI / 4 * 7, [-10, 10], Math.PI / 4 * 3, Math.sqrt(2));
+  //         check([11, -100], Math.PI, [10, -100], 0, 1);
+  //       });
+  //     });
+  //   });
+  //   describe('Bounded Right, Top, Bottom, Unbounded Left', () => {
+  //     beforeEach(() => {
+  //       bounds = new RectBounds({
+  //         left: null, bottom: -10, right: 10, top: 10,
+  //       });
+  //     });
+  //     test('Contains value', () => {
+  //       expect(bounds.contains([0, 0])).toBe(true);
+  //       expect(bounds.contains([-11, -10])).toBe(true);
+  //       expect(bounds.contains([-11, -11])).toBe(false);
+  //       expect(bounds.contains([10, -10])).toBe(true);
+  //       expect(bounds.contains([11, -10])).toBe(false);
+  //       expect(bounds.contains([10, 10])).toBe(true);
+  //     });
+  //     test('Clip Point', () => {
+  //       expect(bounds.clip([0, 0])).toEqual(new Point(0, 0));
+  //       expect(bounds.clip([-11, -10])).toEqual(new Point(-11, -10));
+  //       expect(bounds.clip([10, -11])).toEqual(new Point(10, -10));
+  //       expect(bounds.clip([11, -11])).toEqual(new Point(10, -10));
+  //       expect(bounds.clip([10, 11])).toEqual(new Point(10, 10));
+  //     });
+  //     describe('Intersect', () => {
+  //       test('Inside Bounds', () => {
+  //         // From origin horiztonal and vertical
+  //         check([0, 0], 0, [10, 0], Math.PI, 10);
+  //         check([0, 0], Math.PI / 2, [0, 10], -Math.PI / 2, 10);
+  //         check([0, 0], Math.PI, null, Math.PI, 0);
+  //         check([0, 0], -Math.PI / 2, [0, -10], Math.PI / 2, 10);
 
-          // From origin corner
-          check([0, 0], Math.PI / 4, [10, 10], Math.PI / 4 * 5, 10 * Math.sqrt(2));
-          check([0, 0], 3 * Math.PI / 4, [-10, 10], Math.PI / 4 * 5, 10 * Math.sqrt(2));
-          check([0, 0], 5 * Math.PI / 4, [-10, -10], Math.PI / 4 * 3, 10 * Math.sqrt(2));
-          check([0, 0], 7 * Math.PI / 4, [10, -10], Math.PI / 4 * 3, 10 * Math.sqrt(2));
+  //         // From origin corner
+  //         check([0, 0], Math.PI / 4, [10, 10], Math.PI / 4 * 5, 10 * Math.sqrt(2));
+  //         check([0, 0], 3 * Math.PI / 4, [-10, 10], Math.PI / 4 * 5, 10 * Math.sqrt(2));
+  //         check([0, 0], 5 * Math.PI / 4, [-10, -10], Math.PI / 4 * 3, 10 * Math.sqrt(2));
+  //         check([0, 0], 7 * Math.PI / 4, [10, -10], Math.PI / 4 * 3, 10 * Math.sqrt(2));
 
-          // From -1, -1
-          check([-1, -1], 0, [10, -1], Math.PI, 11);
-          check([-1, -1], -Math.PI / 2, [-1, -10], Math.PI / 2, 9);
-          check([-1, -1], Math.PI / 4, [10, 10], Math.PI / 4 * 5, 11 * Math.sqrt(2));
-          check(
-            [-1, -1], 7 * Math.PI / 6, [-1 - (9 / Math.tan(Math.PI / 6)), -10],
-            Math.PI / 6 * 5, 9 / Math.sin(Math.PI / 6),
-          );
-        });
-        describe('Edges of bounds', () => {
-          test('Trajectory going out', () => {
-            check([0, 10], Math.PI / 2, [0, 10], -Math.PI / 2, 0);
-            check([0, -10], -Math.PI / 2, [0, -10], Math.PI / 2, 0);
-            check([10, 0], 0, [10, 0], Math.PI, 0);
-          });
+  //         // From -1, -1
+  //         check([-1, -1], 0, [10, -1], Math.PI, 11);
+  //         check([-1, -1], -Math.PI / 2, [-1, -10], Math.PI / 2, 9);
+  //         check([-1, -1], Math.PI / 4, [10, 10], Math.PI / 4 * 5, 11 * Math.sqrt(2));
+  //         check(
+  //           [-1, -1], 7 * Math.PI / 6, [-1 - (9 / Math.tan(Math.PI / 6)), -10],
+  //           Math.PI / 6 * 5, 9 / Math.sin(Math.PI / 6),
+  //         );
+  //       });
+  //       describe('Edges of bounds', () => {
+  //         test('Trajectory going out', () => {
+  //           check([0, 10], Math.PI / 2, [0, 10], -Math.PI / 2, 0);
+  //           check([0, -10], -Math.PI / 2, [0, -10], Math.PI / 2, 0);
+  //           check([10, 0], 0, [10, 0], Math.PI, 0);
+  //         });
 
-          test('Trajectory along', () => {
-            check([10, 0], Math.PI / 2, [10, 10], -Math.PI / 2, 10);
-            check([10, 0], -Math.PI / 2, [10, -10], Math.PI / 2, 10);
-            check([0, 10], 0, [10, 10], Math.PI, 10);
-            check([0, 10], Math.PI, null, Math.PI, 0);
-            check([0, -10], Math.PI, null, Math.PI, 0);
-            check([0, -10], 0, [10, -10], Math.PI, 10);
-          });
+  //         test('Trajectory along', () => {
+  //           check([10, 0], Math.PI / 2, [10, 10], -Math.PI / 2, 10);
+  //           check([10, 0], -Math.PI / 2, [10, -10], Math.PI / 2, 10);
+  //           check([0, 10], 0, [10, 10], Math.PI, 10);
+  //           check([0, 10], Math.PI, null, Math.PI, 0);
+  //           check([0, -10], Math.PI, null, Math.PI, 0);
+  //           check([0, -10], 0, [10, -10], Math.PI, 10);
+  //         });
 
-          test('Trajectory along corners', () => {
-            check([10, 10], -Math.PI / 2, [10, -10], Math.PI / 2, 20);
-            check([10, 10], Math.PI, null, Math.PI, 0);
-            check([10, -10], Math.PI / 2, [10, 10], -Math.PI / 2, 20);
-            check([10, -10], Math.PI, null, Math.PI, 0);
-          });
+  //         test('Trajectory along corners', () => {
+  //           check([10, 10], -Math.PI / 2, [10, -10], Math.PI / 2, 20);
+  //           check([10, 10], Math.PI, null, Math.PI, 0);
+  //           check([10, -10], Math.PI / 2, [10, 10], -Math.PI / 2, 20);
+  //           check([10, -10], Math.PI, null, Math.PI, 0);
+  //         });
 
-          test('Trajectory going in', () => {
-            check([10, 0], Math.PI, null, Math.PI, 0);
-            check([0, 10], -Math.PI / 2, [0, -10], Math.PI / 2, 20);
-            check([0, -10], Math.PI / 2, [0, 10], -Math.PI / 2, 20);
-          });
-        });
-        test('Outside bounds no intersection', () => {
-          check([-100, -11], 0, null, 0, 0);
-          check([-100, 11], 1, null, 1, 0);
-          check([11, 0], Math.PI / 2, null, Math.PI / 2, 0);
-        });
-        test('Outside bounds intersection', () => {
-          check([-100, 11], -Math.PI / 2, [-100, 10], Math.PI / 2, 1);
-          check([-100, -11], Math.PI / 2, [-100, -10], -Math.PI / 2, 1);
-        });
-      });
-    });
-    describe('Bounded Left, Top, Bottom, Unbounded Right', () => {
-      beforeEach(() => {
-        bounds = new RectBounds({
-          left: -10, bottom: -10, right: null, top: 10,
-        });
-      });
-      test('Contains value', () => {
-        expect(bounds.contains([0, 0])).toBe(true);
-        expect(bounds.contains([11, -10])).toBe(true);
-        expect(bounds.contains([11, -11])).toBe(false);
-        expect(bounds.contains([10, -10])).toBe(true);
-        expect(bounds.contains([-11, -10])).toBe(false);
-        expect(bounds.contains([10, 10])).toBe(true);
-      });
-      test('Clip Point', () => {
-        expect(bounds.clip([0, 0])).toEqual(new Point(0, 0));
-        expect(bounds.clip([-11, -10])).toEqual(new Point(-10, -10));
-        expect(bounds.clip([10, -11])).toEqual(new Point(10, -10));
-        expect(bounds.clip([11, -11])).toEqual(new Point(11, -10));
-        expect(bounds.clip([10, 11])).toEqual(new Point(10, 10));
-      });
-      describe('Intersect', () => {
-        test('Inside Bounds', () => {
-          // // From origin horiztonal and vertical
-          check([0, 0], 0, null, 0, 0);
-          check([0, 0], Math.PI / 2, [0, 10], -Math.PI / 2, 10);
-          check([0, 0], Math.PI, [-10, 0], 0, 10);
-          check([0, 0], -Math.PI / 2, [0, -10], Math.PI / 2, 10);
-        });
-        test('Outside bounds intersection', () => {
-          check([100, 11], -Math.PI / 2, [100, 10], Math.PI / 2, 1);
-          check([100, -11], Math.PI / 2, [100, -10], -Math.PI / 2, 1);
-        });
-      });
-    });
-    describe('Bounded Left, Right, Unbounded Bottom Top', () => {
-      beforeEach(() => {
-        bounds = new RectBounds({
-          left: -10, bottom: null, right: 10, top: null,
-        });
-      });
-      test('Contains value', () => {
-        expect(bounds.contains([0, 0])).toBe(true);
-        expect(bounds.contains([11, -10])).toBe(false);
-        expect(bounds.contains([-11, -11])).toBe(false);
-        expect(bounds.contains([10, -11])).toBe(true);
-        expect(bounds.contains([-10, -11])).toBe(true);
-        expect(bounds.contains([10, 11])).toBe(true);
-      });
-      test('Clip Point', () => {
-        expect(bounds.clip([0, 0])).toEqual(new Point(0, 0));
-        expect(bounds.clip([-11, -10])).toEqual(new Point(-10, -10));
-        expect(bounds.clip([10, -11])).toEqual(new Point(10, -11));
-        expect(bounds.clip([11, -11])).toEqual(new Point(10, -11));
-        expect(bounds.clip([10, 11])).toEqual(new Point(10, 11));
-      });
-      describe('Intersect', () => {
-        test('Inside Bounds', () => {
-          // // From origin horiztonal and vertical
-          check([0, 0], 0, [10, 0], Math.PI, 10);
-          check([0, 0], Math.PI / 2, null, Math.PI / 2, 0);
-          check([0, 0], Math.PI, [-10, 0], 0, 10);
-          check([0, 0], -Math.PI / 2, null, -Math.PI / 2, 0);
-        });
-        test('Outside bounds intersection', () => {
-          check([100, 11], Math.PI, [10, 11], 0, 90);
-          check([-100, -11], 0, [-10, -11], Math.PI, 90);
-        });
-      });
-    });
-    describe('Bounded Top, Bottom, Unbounded Left Right', () => {
-      beforeEach(() => {
-        bounds = new RectBounds({
-          left: null, bottom: -10, right: null, top: 10,
-        });
-      });
-      test('Contains value', () => {
-        expect(bounds.contains([0, 0])).toBe(true);
-        expect(bounds.contains([11, -10])).toBe(true);
-        expect(bounds.contains([-11, -11])).toBe(false);
-        expect(bounds.contains([10, -11])).toBe(false);
-        expect(bounds.contains([-10, -11])).toBe(false);
-        expect(bounds.contains([10, 11])).toBe(false);
-      });
-      test('Clip Point', () => {
-        expect(bounds.clip([0, 0])).toEqual(new Point(0, 0));
-        expect(bounds.clip([-11, -10])).toEqual(new Point(-11, -10));
-        expect(bounds.clip([10, -11])).toEqual(new Point(10, -10));
-        expect(bounds.clip([11, -11])).toEqual(new Point(11, -10));
-        expect(bounds.clip([10, 11])).toEqual(new Point(10, 10));
-      });
-      describe('Intersect', () => {
-        test('Inside Bounds', () => {
-          // // From origin horiztonal and vertical
-          check([0, 0], 0, null, 0, 0);
-          check([0, 0], Math.PI / 2, [0, 10], -Math.PI / 2, 10);
-          check([0, 0], Math.PI, null, Math.PI, 0);
-          check([0, 0], -Math.PI / 2, [0, -10], Math.PI / 2, 10);
-        });
-        test('Outside bounds intersection', () => {
-          check([11, 100], -Math.PI / 2, [11, 10], Math.PI / 2, 90);
-          check([-11, -100], Math.PI / 2, [-11, -10], -Math.PI / 2, 90);
-        });
-      });
-    });
-    describe('Bounded Bottom, Left, Unbounded Top Right', () => {
-      beforeEach(() => {
-        bounds = new RectBounds({
-          left: -10, bottom: -10, right: null, top: null,
-        });
-      });
-      test('Contains value', () => {
-        expect(bounds.contains([0, 0])).toBe(true);
-        expect(bounds.contains([11, -10])).toBe(true);
-        expect(bounds.contains([-11, -11])).toBe(false);
-        expect(bounds.contains([10, -11])).toBe(false);
-        expect(bounds.contains([-10, -11])).toBe(false);
-        expect(bounds.contains([10, 11])).toBe(true);
-      });
-      test('Clip Point', () => {
-        expect(bounds.clip([0, 0])).toEqual(new Point(0, 0));
-        expect(bounds.clip([-11, -10])).toEqual(new Point(-10, -10));
-        expect(bounds.clip([10, -11])).toEqual(new Point(10, -10));
-        expect(bounds.clip([11, -11])).toEqual(new Point(11, -10));
-        expect(bounds.clip([10, 11])).toEqual(new Point(10, 11));
-      });
-      describe('Intersect', () => {
-        test('Inside Bounds', () => {
-          // // From origin horiztonal and vertical
-          check([0, 0], 0, null, 0, 0);
-          check([0, 0], Math.PI / 2, null, Math.PI / 2, 0);
-          check([0, 0], Math.PI, [-10, 0], 0, 10);
-          check([0, 0], -Math.PI / 2, [0, -10], Math.PI / 2, 10);
-        });
-        test('Outside bounds intersection', () => {
-          check([0, -100], Math.PI / 2, [0, -10], -Math.PI / 2, 90);
-          check([-100, 0], 0, [-10, 0], Math.PI, 90);
-        });
-      });
-    });
-    describe('Bounded Top, Right, Unbounded Bottom Left', () => {
-      beforeEach(() => {
-        bounds = new RectBounds({
-          left: null, bottom: null, right: 10, top: 10,
-        });
-      });
-      test('Contains value', () => {
-        expect(bounds.contains([0, 0])).toBe(true);
-        expect(bounds.contains([11, -10])).toBe(false);
-        expect(bounds.contains([-11, -11])).toBe(true);
-        expect(bounds.contains([10, -11])).toBe(true);
-        expect(bounds.contains([-10, -11])).toBe(true);
-        expect(bounds.contains([10, 11])).toBe(false);
-      });
-      test('Clip Point', () => {
-        expect(bounds.clip([0, 0])).toEqual(new Point(0, 0));
-        expect(bounds.clip([-11, -10])).toEqual(new Point(-11, -10));
-        expect(bounds.clip([10, -11])).toEqual(new Point(10, -11));
-        expect(bounds.clip([11, -11])).toEqual(new Point(10, -11));
-        expect(bounds.clip([10, 11])).toEqual(new Point(10, 10));
-      });
-      describe('Intersect', () => {
-        test('Inside Bounds', () => {
-          // // From origin horiztonal and vertical
-          check([0, 0], 0, [10, 0], Math.PI, 10);
-          check([0, 0], Math.PI / 2, [0, 10], -Math.PI / 2, 10);
-          check([0, 0], Math.PI, null, Math.PI, 0);
-          check([0, 0], -Math.PI / 2, null, -Math.PI / 2, 0);
-        });
-        test('Outside bounds intersection', () => {
-          check([0, 100], -Math.PI / 2, [0, 10], Math.PI / 2, 90);
-          check([100, 0], Math.PI, [10, 0], 0, 90);
-        });
-      });
-    });
-  });
+  //         test('Trajectory going in', () => {
+  //           check([10, 0], Math.PI, null, Math.PI, 0);
+  //           check([0, 10], -Math.PI / 2, [0, -10], Math.PI / 2, 20);
+  //           check([0, -10], Math.PI / 2, [0, 10], -Math.PI / 2, 20);
+  //         });
+  //       });
+  //       test('Outside bounds no intersection', () => {
+  //         check([-100, -11], 0, null, 0, 0);
+  //         check([-100, 11], 1, null, 1, 0);
+  //         check([11, 0], Math.PI / 2, null, Math.PI / 2, 0);
+  //       });
+  //       test('Outside bounds intersection', () => {
+  //         check([-100, 11], -Math.PI / 2, [-100, 10], Math.PI / 2, 1);
+  //         check([-100, -11], Math.PI / 2, [-100, -10], -Math.PI / 2, 1);
+  //       });
+  //     });
+  //   });
+  //   describe('Bounded Left, Top, Bottom, Unbounded Right', () => {
+  //     beforeEach(() => {
+  //       bounds = new RectBounds({
+  //         left: -10, bottom: -10, right: null, top: 10,
+  //       });
+  //     });
+  //     test('Contains value', () => {
+  //       expect(bounds.contains([0, 0])).toBe(true);
+  //       expect(bounds.contains([11, -10])).toBe(true);
+  //       expect(bounds.contains([11, -11])).toBe(false);
+  //       expect(bounds.contains([10, -10])).toBe(true);
+  //       expect(bounds.contains([-11, -10])).toBe(false);
+  //       expect(bounds.contains([10, 10])).toBe(true);
+  //     });
+  //     test('Clip Point', () => {
+  //       expect(bounds.clip([0, 0])).toEqual(new Point(0, 0));
+  //       expect(bounds.clip([-11, -10])).toEqual(new Point(-10, -10));
+  //       expect(bounds.clip([10, -11])).toEqual(new Point(10, -10));
+  //       expect(bounds.clip([11, -11])).toEqual(new Point(11, -10));
+  //       expect(bounds.clip([10, 11])).toEqual(new Point(10, 10));
+  //     });
+  //     describe('Intersect', () => {
+  //       test('Inside Bounds', () => {
+  //         // // From origin horiztonal and vertical
+  //         check([0, 0], 0, null, 0, 0);
+  //         check([0, 0], Math.PI / 2, [0, 10], -Math.PI / 2, 10);
+  //         check([0, 0], Math.PI, [-10, 0], 0, 10);
+  //         check([0, 0], -Math.PI / 2, [0, -10], Math.PI / 2, 10);
+  //       });
+  //       test('Outside bounds intersection', () => {
+  //         check([100, 11], -Math.PI / 2, [100, 10], Math.PI / 2, 1);
+  //         check([100, -11], Math.PI / 2, [100, -10], -Math.PI / 2, 1);
+  //       });
+  //     });
+  //   });
+  //   describe('Bounded Left, Right, Unbounded Bottom Top', () => {
+  //     beforeEach(() => {
+  //       bounds = new RectBounds({
+  //         left: -10, bottom: null, right: 10, top: null,
+  //       });
+  //     });
+  //     test('Contains value', () => {
+  //       expect(bounds.contains([0, 0])).toBe(true);
+  //       expect(bounds.contains([11, -10])).toBe(false);
+  //       expect(bounds.contains([-11, -11])).toBe(false);
+  //       expect(bounds.contains([10, -11])).toBe(true);
+  //       expect(bounds.contains([-10, -11])).toBe(true);
+  //       expect(bounds.contains([10, 11])).toBe(true);
+  //     });
+  //     test('Clip Point', () => {
+  //       expect(bounds.clip([0, 0])).toEqual(new Point(0, 0));
+  //       expect(bounds.clip([-11, -10])).toEqual(new Point(-10, -10));
+  //       expect(bounds.clip([10, -11])).toEqual(new Point(10, -11));
+  //       expect(bounds.clip([11, -11])).toEqual(new Point(10, -11));
+  //       expect(bounds.clip([10, 11])).toEqual(new Point(10, 11));
+  //     });
+  //     describe('Intersect', () => {
+  //       test('Inside Bounds', () => {
+  //         // // From origin horiztonal and vertical
+  //         check([0, 0], 0, [10, 0], Math.PI, 10);
+  //         check([0, 0], Math.PI / 2, null, Math.PI / 2, 0);
+  //         check([0, 0], Math.PI, [-10, 0], 0, 10);
+  //         check([0, 0], -Math.PI / 2, null, -Math.PI / 2, 0);
+  //       });
+  //       test('Outside bounds intersection', () => {
+  //         check([100, 11], Math.PI, [10, 11], 0, 90);
+  //         check([-100, -11], 0, [-10, -11], Math.PI, 90);
+  //       });
+  //     });
+  //   });
+  //   describe('Bounded Top, Bottom, Unbounded Left Right', () => {
+  //     beforeEach(() => {
+  //       bounds = new RectBounds({
+  //         left: null, bottom: -10, right: null, top: 10,
+  //       });
+  //     });
+  //     test('Contains value', () => {
+  //       expect(bounds.contains([0, 0])).toBe(true);
+  //       expect(bounds.contains([11, -10])).toBe(true);
+  //       expect(bounds.contains([-11, -11])).toBe(false);
+  //       expect(bounds.contains([10, -11])).toBe(false);
+  //       expect(bounds.contains([-10, -11])).toBe(false);
+  //       expect(bounds.contains([10, 11])).toBe(false);
+  //     });
+  //     test('Clip Point', () => {
+  //       expect(bounds.clip([0, 0])).toEqual(new Point(0, 0));
+  //       expect(bounds.clip([-11, -10])).toEqual(new Point(-11, -10));
+  //       expect(bounds.clip([10, -11])).toEqual(new Point(10, -10));
+  //       expect(bounds.clip([11, -11])).toEqual(new Point(11, -10));
+  //       expect(bounds.clip([10, 11])).toEqual(new Point(10, 10));
+  //     });
+  //     describe('Intersect', () => {
+  //       test('Inside Bounds', () => {
+  //         // // From origin horiztonal and vertical
+  //         check([0, 0], 0, null, 0, 0);
+  //         check([0, 0], Math.PI / 2, [0, 10], -Math.PI / 2, 10);
+  //         check([0, 0], Math.PI, null, Math.PI, 0);
+  //         check([0, 0], -Math.PI / 2, [0, -10], Math.PI / 2, 10);
+  //       });
+  //       test('Outside bounds intersection', () => {
+  //         check([11, 100], -Math.PI / 2, [11, 10], Math.PI / 2, 90);
+  //         check([-11, -100], Math.PI / 2, [-11, -10], -Math.PI / 2, 90);
+  //       });
+  //     });
+  //   });
+  //   describe('Bounded Bottom, Left, Unbounded Top Right', () => {
+  //     beforeEach(() => {
+  //       bounds = new RectBounds({
+  //         left: -10, bottom: -10, right: null, top: null,
+  //       });
+  //     });
+  //     test('Contains value', () => {
+  //       expect(bounds.contains([0, 0])).toBe(true);
+  //       expect(bounds.contains([11, -10])).toBe(true);
+  //       expect(bounds.contains([-11, -11])).toBe(false);
+  //       expect(bounds.contains([10, -11])).toBe(false);
+  //       expect(bounds.contains([-10, -11])).toBe(false);
+  //       expect(bounds.contains([10, 11])).toBe(true);
+  //     });
+  //     test('Clip Point', () => {
+  //       expect(bounds.clip([0, 0])).toEqual(new Point(0, 0));
+  //       expect(bounds.clip([-11, -10])).toEqual(new Point(-10, -10));
+  //       expect(bounds.clip([10, -11])).toEqual(new Point(10, -10));
+  //       expect(bounds.clip([11, -11])).toEqual(new Point(11, -10));
+  //       expect(bounds.clip([10, 11])).toEqual(new Point(10, 11));
+  //     });
+  //     describe('Intersect', () => {
+  //       test('Inside Bounds', () => {
+  //         // // From origin horiztonal and vertical
+  //         check([0, 0], 0, null, 0, 0);
+  //         check([0, 0], Math.PI / 2, null, Math.PI / 2, 0);
+  //         check([0, 0], Math.PI, [-10, 0], 0, 10);
+  //         check([0, 0], -Math.PI / 2, [0, -10], Math.PI / 2, 10);
+  //       });
+  //       test('Outside bounds intersection', () => {
+  //         check([0, -100], Math.PI / 2, [0, -10], -Math.PI / 2, 90);
+  //         check([-100, 0], 0, [-10, 0], Math.PI, 90);
+  //       });
+  //     });
+  //   });
+  //   describe('Bounded Top, Right, Unbounded Bottom Left', () => {
+  //     beforeEach(() => {
+  //       bounds = new RectBounds({
+  //         left: null, bottom: null, right: 10, top: 10,
+  //       });
+  //     });
+  //     test('Contains value', () => {
+  //       expect(bounds.contains([0, 0])).toBe(true);
+  //       expect(bounds.contains([11, -10])).toBe(false);
+  //       expect(bounds.contains([-11, -11])).toBe(true);
+  //       expect(bounds.contains([10, -11])).toBe(true);
+  //       expect(bounds.contains([-10, -11])).toBe(true);
+  //       expect(bounds.contains([10, 11])).toBe(false);
+  //     });
+  //     test('Clip Point', () => {
+  //       expect(bounds.clip([0, 0])).toEqual(new Point(0, 0));
+  //       expect(bounds.clip([-11, -10])).toEqual(new Point(-11, -10));
+  //       expect(bounds.clip([10, -11])).toEqual(new Point(10, -11));
+  //       expect(bounds.clip([11, -11])).toEqual(new Point(10, -11));
+  //       expect(bounds.clip([10, 11])).toEqual(new Point(10, 10));
+  //     });
+  //     describe('Intersect', () => {
+  //       test('Inside Bounds', () => {
+  //         // // From origin horiztonal and vertical
+  //         check([0, 0], 0, [10, 0], Math.PI, 10);
+  //         check([0, 0], Math.PI / 2, [0, 10], -Math.PI / 2, 10);
+  //         check([0, 0], Math.PI, null, Math.PI, 0);
+  //         check([0, 0], -Math.PI / 2, null, -Math.PI / 2, 0);
+  //       });
+  //       test('Outside bounds intersection', () => {
+  //         check([0, 100], -Math.PI / 2, [0, 10], Math.PI / 2, 90);
+  //         check([100, 0], Math.PI, [10, 0], 0, 90);
+  //       });
+  //     });
+  //   });
+  // });
   describe('Line Bounds', () => {
     describe('Construction', () => {
       describe('Finite', () => {

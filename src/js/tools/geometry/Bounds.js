@@ -5,14 +5,13 @@ import { Rect } from './Rect';
 import { Plane } from './Plane';
 import { joinObjects } from '../tools';
 import { getPrecision } from './common';
-import { clipAngle, threePointAngleMin } from './angle';
+import { clipAngle } from './angle';
 import { Line, getLine } from './Line';
 import { Transform } from './Transform';
 import { roundNum, round, clipValue } from '../math';
 import { polarToRect, rectToPolar } from './coordinates';
 import type { TypeParsablePoint } from './Point';
 import type { TypeParsableLine } from './Line';
-import * as m3 from '../m3';
 
 export type TypeTransformBounds = Array<Bounds | null>;
 
@@ -275,7 +274,41 @@ class RangeBounds extends Bounds {
 }
 
 
-export type TypeRectNewBoundsDefinition = {
+/*
+  A RectBounds is a rectangle around a point in a plane.
+
+  It is defined by:
+  - a position in plane around which rectangle is formed
+  - topDirection/rightDirection vectors that orient the rectangle
+  - left/right magnitudes that define the width of the rectangle
+  - bottom/top magnitudes that define the height of the rectangle
+
+  **********************************************     A
+  *                                            *     |
+  *        Top Vector                          *     |
+  *             A                              *     | top
+  *             |                              *     |
+  *             |                              *     |
+  *    position *----->                        *   ---
+  *                   Right Vector             *     |
+  *                                            *     | bottom
+  *                                            *     |
+  **********************************************     V
+                |
+                |
+  <-------------|----------------------------->
+      left                right
+
+  A rectangle can be defined in one of several ways:
+  - position, plane normal, one direction vecvtor (top or right)
+  - position, top and right direction vectors
+
+  The left, right, up, and down values must all be >= 0.
+
+  By default the rectangle will be in the XY plane (+z normal) with a
+  rightDirection vector along the +x axis.
+  */
+export type TypeRectBoundsDefinition = {
   position?: TypeParsablePoint,
   normal?: TypeParsablePoint,
   rightDirection?: TypeParsablePoint,
@@ -286,7 +319,7 @@ export type TypeRectNewBoundsDefinition = {
   down?: number,
 };
 
-class RectBoundsNew extends Bounds {
+class RectBounds extends Bounds {
   plane: Plane;
   rightDirection: Point;
   topDirection: Point;
@@ -389,7 +422,7 @@ class RectBoundsNew extends Bounds {
   }
 
   _dup() {
-    return new RectBoundsNew({
+    return new RectBounds({
       bounds: this.bounds,
       precision: this.precision,
       left: this.left,
@@ -603,7 +636,6 @@ class RectBoundsNew extends Bounds {
       left, right, top, bottom,
     } = this.boundary;
 
-    debugger;
     // Get the right direction intersect and top direction intersects.
     // If the intersects don't exist, a null will be returned.
     const rI = this.getBoundIntersect(p, d, right, left, this.rightDirection);
@@ -652,7 +684,7 @@ class RectBoundsNew extends Bounds {
   }
 }
 
-export type TypeRectBoundsDefinition = {
+export type TypeRectBoundsDefinitionLegacy = {
   left?: number | null,
   bottom?: number | null,
   right?: number | null,
@@ -662,489 +694,489 @@ export type TypeRectBoundsDefinition = {
 } | Rect;
 
 
-export type TypeF1DefRectBounds = {
+export type TypeF1DefRectBoundsLegacy = {
   f1Type: 'rectBounds',
   state: ['outside' | 'inside', number, number | null, number | null, number | null, number | null],
 };
 
-class RectBounds extends Bounds {
-  boundary: {
-    left: null | number,
-    right: null | number,
-    bottom: null | number,
-    top: null | number,
-  };
+// class RectBoundsLegacy extends Bounds {
+//   boundary: {
+//     left: null | number,
+//     right: null | number,
+//     bottom: null | number,
+//     top: null | number,
+//   };
 
-  constructor(optionsOrRect: TypeRectBoundsDefinition) {
-    const defaultOptions = {
-      left: null,
-      right: null,
-      top: null,
-      bottom: null,
-      bounds: 'inside',
-      precision: 8,
-    };
+//   constructor(optionsOrRect: TypeRectBoundsDefinitionLegacy) {
+//     const defaultOptions = {
+//       left: null,
+//       right: null,
+//       top: null,
+//       bottom: null,
+//       bounds: 'inside',
+//       precision: 8,
+//     };
 
-    const options = joinObjects({}, defaultOptions, optionsOrRect);
+//     const options = joinObjects({}, defaultOptions, optionsOrRect);
 
-    const boundary = {
-      left: options.left,
-      right: options.right,
-      top: options.top,
-      bottom: options.bottom,
-    };
-    super(boundary, options.bounds, options.precision);
-  }
+//     const boundary = {
+//       left: options.left,
+//       right: options.right,
+//       top: options.top,
+//       bottom: options.bottom,
+//     };
+//     super(boundary, options.bounds, options.precision);
+//   }
 
-  isDefined() {
-    if (
-      this.boundary.left == null
-      && this.boundary.right == null
-      && this.boundary.top == null
-      && this.boundary.bottom == null
-    ) {
-      return false;
-    }
-    return true;
-  }
+//   isDefined() {
+//     if (
+//       this.boundary.left == null
+//       && this.boundary.right == null
+//       && this.boundary.top == null
+//       && this.boundary.bottom == null
+//     ) {
+//       return false;
+//     }
+//     return true;
+//   }
 
-  _dup() {
-    return new RectBounds({
-      bounds: this.bounds,
-      precision: this.precision,
-      left: this.boundary.left,
-      right: this.boundary.right,
-      top: this.boundary.top,
-      bottom: this.boundary.bottom,
-    });
-  }
+//   _dup() {
+//     return new RectBounds({
+//       bounds: this.bounds,
+//       precision: this.precision,
+//       left: this.boundary.left,
+//       right: this.boundary.right,
+//       top: this.boundary.top,
+//       bottom: this.boundary.bottom,
+//     });
+//   }
 
-  _state(options: { precision: number }) {
-    // const { precision } = options;
-    const precision = getPrecision(options);
-    return {
-      f1Type: 'rectBounds',
-      state: [
-        this.bounds,
-        this.precision,
-        this.boundary.left != null ? roundNum(this.boundary.left, precision) : null,
-        this.boundary.bottom != null ? roundNum(this.boundary.bottom, precision) : null,
-        this.boundary.right != null ? roundNum(this.boundary.right, precision) : null,
-        this.boundary.top != null ? roundNum(this.boundary.top, precision) : null,
-      ],
-    };
-  }
+//   _state(options: { precision: number }) {
+//     // const { precision } = options;
+//     const precision = getPrecision(options);
+//     return {
+//       f1Type: 'rectBounds',
+//       state: [
+//         this.bounds,
+//         this.precision,
+//         this.boundary.left != null ? roundNum(this.boundary.left, precision) : null,
+//         this.boundary.bottom != null ? roundNum(this.boundary.bottom, precision) : null,
+//         this.boundary.right != null ? roundNum(this.boundary.right, precision) : null,
+//         this.boundary.top != null ? roundNum(this.boundary.top, precision) : null,
+//       ],
+//     };
+//   }
 
-  contains(position: number | TypeParsablePoint) {
-    if (typeof position === 'number') {
-      return false;
-    }
-    const p = getPoint(position).round(this.precision);
-    if (this.boundary.left != null && p.x < roundNum(this.boundary.left, this.precision)) {
-      return false;
-    }
-    if (this.boundary.right != null && p.x > roundNum(this.boundary.right, this.precision)) {
-      return false;
-    }
-    if (this.boundary.bottom != null && p.y < roundNum(this.boundary.bottom, this.precision)) {
-      return false;
-    }
-    if (this.boundary.top != null && p.y > roundNum(this.boundary.top, this.precision)) {
-      return false;
-    }
-    return true;
-  }
+//   contains(position: number | TypeParsablePoint) {
+//     if (typeof position === 'number') {
+//       return false;
+//     }
+//     const p = getPoint(position).round(this.precision);
+//     if (this.boundary.left != null && p.x < roundNum(this.boundary.left, this.precision)) {
+//       return false;
+//     }
+//     if (this.boundary.right != null && p.x > roundNum(this.boundary.right, this.precision)) {
+//       return false;
+//     }
+//     if (this.boundary.bottom != null && p.y < roundNum(this.boundary.bottom, this.precision)) {
+//       return false;
+//     }
+//     if (this.boundary.top != null && p.y > roundNum(this.boundary.top, this.precision)) {
+//       return false;
+//     }
+//     return true;
+//   }
 
-  clip(position: number | TypeParsablePoint) {
-    if (typeof position === 'number') {
-      return position;
-    }
-    const clipped = getPoint(position);
-    if (this.boundary.left != null && clipped.x < this.boundary.left) {
-      clipped.x = this.boundary.left;
-    }
-    if (this.boundary.right != null && clipped.x > this.boundary.right) {
-      clipped.x = this.boundary.right;
-    }
-    if (this.boundary.bottom != null && clipped.y < this.boundary.bottom) {
-      clipped.y = this.boundary.bottom;
-    }
-    if (this.boundary.top != null && clipped.y > this.boundary.top) {
-      clipped.y = this.boundary.top;
-    }
-    return clipped;
-  }
+//   clip(position: number | TypeParsablePoint) {
+//     if (typeof position === 'number') {
+//       return position;
+//     }
+//     const clipped = getPoint(position);
+//     if (this.boundary.left != null && clipped.x < this.boundary.left) {
+//       clipped.x = this.boundary.left;
+//     }
+//     if (this.boundary.right != null && clipped.x > this.boundary.right) {
+//       clipped.x = this.boundary.right;
+//     }
+//     if (this.boundary.bottom != null && clipped.y < this.boundary.bottom) {
+//       clipped.y = this.boundary.bottom;
+//     }
+//     if (this.boundary.top != null && clipped.y > this.boundary.top) {
+//       clipped.y = this.boundary.top;
+//     }
+//     return clipped;
+//   }
 
-  intersect(position: number | TypeParsablePoint, direction: number = 0) {
-    if (typeof position === 'number') {
-      return {
-        intersect: null,
-        distance: 0,
-        reflection: direction,
-      };
-    }
-    const a = roundNum(clipAngle(direction, '0to360'), this.precision);
-    const pi = roundNum(Math.PI, this.precision);
-    const threePiOnTwo = roundNum(3 * Math.PI / 2, this.precision);
-    const piOnTwo = roundNum(Math.PI / 2, this.precision);
-    const p = getPoint(position);
-    const {
-      top, bottom, left, right,
-    } = this.boundary;
+//   intersect(position: number | TypeParsablePoint, direction: number = 0) {
+//     if (typeof position === 'number') {
+//       return {
+//         intersect: null,
+//         distance: 0,
+//         reflection: direction,
+//       };
+//     }
+//     const a = roundNum(clipAngle(direction, '0to360'), this.precision);
+//     const pi = roundNum(Math.PI, this.precision);
+//     const threePiOnTwo = roundNum(3 * Math.PI / 2, this.precision);
+//     const piOnTwo = roundNum(Math.PI / 2, this.precision);
+//     const p = getPoint(position);
+//     const {
+//       top, bottom, left, right,
+//     } = this.boundary;
 
-    // let zeroHeight = false;
-    // if (
-    //   top != null && bottom != null
-    //   && roundNum(top, this.precision) === roundNum(bottom, this.precision)
-    // ) {
-    //   zeroHeight = true;
-    // }
-    // let zeroWdith = false;
-    // if (
-    //   left != null && right != null
-    //   && roundNum(left, this.precision) === roundNum(right, this.precision)
-    // ) {
-    //   zeroWdith = true;
-    // }
-    const calcHBound = (h) => {
-      if (h != null) {
-        if (bottom != null && top != null) {
-          return new Line([h, bottom], [h, top]);
-        }
-        if (bottom == null && top != null) {
-          return new Line({
-            p1: [h, top], length: 1, angle: -Math.PI / 2, ends: 1,
-          });
-        }
-        if (bottom != null && top == null) {
-          return new Line({
-            p1: [h, bottom], length: 1, angle: Math.PI / 2, ends: 1,
-          });
-        }
-        if (bottom == null && top == null) {
-          return new Line({
-            p1: [h, 0], length: 1, angle: Math.PI / 2, ends: 0,
-          });
-        }
-      }
-      return null;
-    };
-    const calcVBound = (v) => {
-      if (v != null) {
-        if (left != null && right != null) {
-          return new Line([left, v], [right, v]);
-        }
-        if (left == null && right != null) {
-          return new Line({
-            p1: [right, v], length: 1, angle: -Math.PI, ends: 1,
-          });
-        }
-        if (left != null && right == null) {
-          return new Line({
-            p1: [left, v], length: 1, angle: 0, ends: 1,
-          });
-        }
-        if (left == null && right == null) {
-          return new Line({
-            p1: [0, v], length: 1, angle: Math.PI, ends: 0,
-          });
-        }
-      }
-      return null;
-    };
+//     // let zeroHeight = false;
+//     // if (
+//     //   top != null && bottom != null
+//     //   && roundNum(top, this.precision) === roundNum(bottom, this.precision)
+//     // ) {
+//     //   zeroHeight = true;
+//     // }
+//     // let zeroWdith = false;
+//     // if (
+//     //   left != null && right != null
+//     //   && roundNum(left, this.precision) === roundNum(right, this.precision)
+//     // ) {
+//     //   zeroWdith = true;
+//     // }
+//     const calcHBound = (h) => {
+//       if (h != null) {
+//         if (bottom != null && top != null) {
+//           return new Line([h, bottom], [h, top]);
+//         }
+//         if (bottom == null && top != null) {
+//           return new Line({
+//             p1: [h, top], length: 1, angle: -Math.PI / 2, ends: 1,
+//           });
+//         }
+//         if (bottom != null && top == null) {
+//           return new Line({
+//             p1: [h, bottom], length: 1, angle: Math.PI / 2, ends: 1,
+//           });
+//         }
+//         if (bottom == null && top == null) {
+//           return new Line({
+//             p1: [h, 0], length: 1, angle: Math.PI / 2, ends: 0,
+//           });
+//         }
+//       }
+//       return null;
+//     };
+//     const calcVBound = (v) => {
+//       if (v != null) {
+//         if (left != null && right != null) {
+//           return new Line([left, v], [right, v]);
+//         }
+//         if (left == null && right != null) {
+//           return new Line({
+//             p1: [right, v], length: 1, angle: -Math.PI, ends: 1,
+//           });
+//         }
+//         if (left != null && right == null) {
+//           return new Line({
+//             p1: [left, v], length: 1, angle: 0, ends: 1,
+//           });
+//         }
+//         if (left == null && right == null) {
+//           return new Line({
+//             p1: [0, v], length: 1, angle: Math.PI, ends: 0,
+//           });
+//         }
+//       }
+//       return null;
+//     };
 
-    // Get the lines for each bound
-    const boundBottom = calcVBound(bottom);
-    const boundTop = calcVBound(top);
-    const boundLeft = calcHBound(left);
-    const boundRight = calcHBound(right);
+//     // Get the lines for each bound
+//     const boundBottom = calcVBound(bottom);
+//     const boundTop = calcVBound(top);
+//     const boundLeft = calcHBound(left);
+//     const boundRight = calcHBound(right);
 
-    // Get the closest boundary intersect
-    const trajectory = new Line({
-      p1: p, length: 1, angle: direction, ends: 1,
-    });
-    const getIntersect = (boundLine: Line | null, id) => {
-      if (boundLine == null) {
-        return null;
-      }
-      if (boundLine.hasPointOn(p, this.precision)) {
-        return {
-          intersect: p._dup(),
-          distance: 0,
-          id,
-        };
-      }
-      const result = trajectory.intersectsWith(boundLine, this.precision);
-      if (result.onLines && result.intersect != null) {
-        return {
-          intersect: result.intersect,
-          distance: round(p.distance(result.intersect), this.precision),
-          id,
-        };
-      }
-      return null;
-    };
+//     // Get the closest boundary intersect
+//     const trajectory = new Line({
+//       p1: p, length: 1, angle: direction, ends: 1,
+//     });
+//     const getIntersect = (boundLine: Line | null, id) => {
+//       if (boundLine == null) {
+//         return null;
+//       }
+//       if (boundLine.hasPointOn(p, this.precision)) {
+//         return {
+//           intersect: p._dup(),
+//           distance: 0,
+//           id,
+//         };
+//       }
+//       const result = trajectory.intersectsWith(boundLine, this.precision);
+//       if (result.onLines && result.intersect != null) {
+//         return {
+//           intersect: result.intersect,
+//           distance: round(p.distance(result.intersect), this.precision),
+//           id,
+//         };
+//       }
+//       return null;
+//     };
 
-    const bottomIntersect = getIntersect(boundBottom, 'bottom');
-    const topIntersect = getIntersect(boundTop, 'top');
-    const leftIntersect = getIntersect(boundLeft, 'left');
-    const rightIntersect = getIntersect(boundRight, 'right');
+//     const bottomIntersect = getIntersect(boundBottom, 'bottom');
+//     const topIntersect = getIntersect(boundTop, 'top');
+//     const leftIntersect = getIntersect(boundLeft, 'left');
+//     const rightIntersect = getIntersect(boundRight, 'right');
 
-    const getClosestIntersect = (intersect1, intersect2) => {
-      let closestIntersect = null;
-      if (intersect1 != null && intersect2 != null) {
-        if (intersect1.distance === 0 && this.bounds === 'inside') {
-          closestIntersect = intersect2;
-        } else if (intersect2.distance === 0 && this.bounds === 'inside') {
-          closestIntersect = intersect1;
-        } else if (intersect1.distance < intersect2.distance) {
-          closestIntersect = intersect1;
-        } else {
-          closestIntersect = intersect2;
-        }
-      } else if (intersect1 != null) {
-        closestIntersect = intersect1;
-      } else if (intersect2 != null) {
-        closestIntersect = intersect2;
-      }
-      return closestIntersect;
-    };
+//     const getClosestIntersect = (intersect1, intersect2) => {
+//       let closestIntersect = null;
+//       if (intersect1 != null && intersect2 != null) {
+//         if (intersect1.distance === 0 && this.bounds === 'inside') {
+//           closestIntersect = intersect2;
+//         } else if (intersect2.distance === 0 && this.bounds === 'inside') {
+//           closestIntersect = intersect1;
+//         } else if (intersect1.distance < intersect2.distance) {
+//           closestIntersect = intersect1;
+//         } else {
+//           closestIntersect = intersect2;
+//         }
+//       } else if (intersect1 != null) {
+//         closestIntersect = intersect1;
+//       } else if (intersect2 != null) {
+//         closestIntersect = intersect2;
+//       }
+//       return closestIntersect;
+//     };
 
-    const vIntersect = getClosestIntersect(bottomIntersect, topIntersect);
-    const hIntersect = getClosestIntersect(leftIntersect, rightIntersect);
+//     const vIntersect = getClosestIntersect(bottomIntersect, topIntersect);
+//     const hIntersect = getClosestIntersect(leftIntersect, rightIntersect);
 
-    let intersects = [];
-    if (
-      vIntersect != null
-      && hIntersect != null
-      && vIntersect.distance === hIntersect.distance
-    ) {
-      intersects = [vIntersect, hIntersect];
-    } else {
-      const result = getClosestIntersect(vIntersect, hIntersect);
-      if (result != null) {
-        intersects = [result];
-      }
-    }
+//     let intersects = [];
+//     if (
+//       vIntersect != null
+//       && hIntersect != null
+//       && vIntersect.distance === hIntersect.distance
+//     ) {
+//       intersects = [vIntersect, hIntersect];
+//     } else {
+//       const result = getClosestIntersect(vIntersect, hIntersect);
+//       if (result != null) {
+//         intersects = [result];
+//       }
+//     }
 
-    if (intersects.length === 0) {
-      return { intersect: null, distance: 0, reflection: direction };
-    }
+//     if (intersects.length === 0) {
+//       return { intersect: null, distance: 0, reflection: direction };
+//     }
 
-    let i;
-    let d = 0;
-    let xMirror = 1;
-    let yMirror = 1;
-    intersects.forEach((intersect) => {
-      if (intersect.id === 'left' || intersect.id === 'right') {
-        xMirror = -1;
-      } else {
-        yMirror = -1;
-      }
-      i = intersect.intersect;
-      d = intersect.distance;
-    });
-    const reflection = polarToRect(1, direction);
-    if (xMirror === -1) {
-      reflection.x *= -1;
-    }
-    if (yMirror === -1) {
-      reflection.y *= -1;
-    }
+//     let i;
+//     let d = 0;
+//     let xMirror = 1;
+//     let yMirror = 1;
+//     intersects.forEach((intersect) => {
+//       if (intersect.id === 'left' || intersect.id === 'right') {
+//         xMirror = -1;
+//       } else {
+//         yMirror = -1;
+//       }
+//       i = intersect.intersect;
+//       d = intersect.distance;
+//     });
+//     const reflection = polarToRect(1, direction);
+//     if (xMirror === -1) {
+//       reflection.x *= -1;
+//     }
+//     if (yMirror === -1) {
+//       reflection.y *= -1;
+//     }
 
-    if (d === 0) {
-      i = p;
-    }
+//     if (d === 0) {
+//       i = p;
+//     }
 
-    let r = rectToPolar(reflection).angle;
-    let noIntersect = false;
+//     let r = rectToPolar(reflection).angle;
+//     let noIntersect = false;
 
-    // Test for if the point is on the border, trajectory is along the border
-    // and the cross bound is null
-    if (d === 0 && this.bounds === 'inside' && intersects.length === 1) {
-      if (
-        (intersects[0].id === 'bottom' || intersects[0].id === 'top')
-        && (this.boundary.left == null || this.boundary.right == null)
-        && (a === 0 || a === pi)
-      ) {
-        noIntersect = true;
-      }
-      if (
-        (intersects[0].id === 'right' || intersects[0].id === 'left')
-        && (this.boundary.top == null || this.boundary.bottom == null)
-        && (a === piOnTwo || a === threePiOnTwo)
-      ) {
-        noIntersect = true;
-      }
-      if (
-        intersects[0].id === 'right'
-        && (this.boundary.left == null)
-        && (a === pi)
-      ) {
-        noIntersect = true;
-      }
-      if (
-        intersects[0].id === 'left'
-        && (this.boundary.right == null)
-        && (a === 0)
-      ) {
-        noIntersect = true;
-      }
-      if (
-        intersects[0].id === 'top'
-        && (this.boundary.bottom == null)
-        && (a === threePiOnTwo)
-      ) {
-        noIntersect = true;
-      }
-      if (
-        intersects[0].id === 'bottom'
-        && (this.boundary.top == null)
-        && (a === piOnTwo)
-      ) {
-        noIntersect = true;
-      }
-    }
+//     // Test for if the point is on the border, trajectory is along the border
+//     // and the cross bound is null
+//     if (d === 0 && this.bounds === 'inside' && intersects.length === 1) {
+//       if (
+//         (intersects[0].id === 'bottom' || intersects[0].id === 'top')
+//         && (this.boundary.left == null || this.boundary.right == null)
+//         && (a === 0 || a === pi)
+//       ) {
+//         noIntersect = true;
+//       }
+//       if (
+//         (intersects[0].id === 'right' || intersects[0].id === 'left')
+//         && (this.boundary.top == null || this.boundary.bottom == null)
+//         && (a === piOnTwo || a === threePiOnTwo)
+//       ) {
+//         noIntersect = true;
+//       }
+//       if (
+//         intersects[0].id === 'right'
+//         && (this.boundary.left == null)
+//         && (a === pi)
+//       ) {
+//         noIntersect = true;
+//       }
+//       if (
+//         intersects[0].id === 'left'
+//         && (this.boundary.right == null)
+//         && (a === 0)
+//       ) {
+//         noIntersect = true;
+//       }
+//       if (
+//         intersects[0].id === 'top'
+//         && (this.boundary.bottom == null)
+//         && (a === threePiOnTwo)
+//       ) {
+//         noIntersect = true;
+//       }
+//       if (
+//         intersects[0].id === 'bottom'
+//         && (this.boundary.top == null)
+//         && (a === piOnTwo)
+//       ) {
+//         noIntersect = true;
+//       }
+//     }
 
-    if (d === 0 && this.bounds === 'inside' && intersects.length === 2) {
-      if (
-        intersects[0].id === 'bottom'
-        && intersects[1].id === 'left'
-        && this.boundary.right == null
-        && a === 0
-      ) {
-        noIntersect = true;
-      }
-      if (
-        intersects[0].id === 'bottom'
-        && intersects[1].id === 'left'
-        && this.boundary.top == null
-        && a === piOnTwo
-      ) {
-        noIntersect = true;
-      }
-      if (
-        intersects[0].id === 'top'
-        && intersects[1].id === 'left'
-        && this.boundary.right == null
-        && a === 0
-      ) {
-        noIntersect = true;
-      }
-      if (
-        intersects[0].id === 'top'
-        && intersects[1].id === 'left'
-        && this.boundary.bottom == null
-        && a === threePiOnTwo
-      ) {
-        noIntersect = true;
-      }
-      if (
-        intersects[0].id === 'top'
-        && intersects[1].id === 'right'
-        && this.boundary.left == null
-        && a === pi
-      ) {
-        noIntersect = true;
-      }
-      if (
-        intersects[0].id === 'top'
-        && intersects[1].id === 'right'
-        && this.boundary.bottom == null
-        && a === threePiOnTwo
-      ) {
-        noIntersect = true;
-      }
-      if (
-        intersects[0].id === 'bottom'
-        && intersects[1].id === 'right'
-        && this.boundary.left == null
-        && a === pi
-      ) {
-        noIntersect = true;
-      }
-      if (
-        intersects[0].id === 'bottom'
-        && intersects[1].id === 'right'
-        && this.boundary.top == null
-        && a === piOnTwo
-      ) {
-        noIntersect = true;
-      }
-    }
+//     if (d === 0 && this.bounds === 'inside' && intersects.length === 2) {
+//       if (
+//         intersects[0].id === 'bottom'
+//         && intersects[1].id === 'left'
+//         && this.boundary.right == null
+//         && a === 0
+//       ) {
+//         noIntersect = true;
+//       }
+//       if (
+//         intersects[0].id === 'bottom'
+//         && intersects[1].id === 'left'
+//         && this.boundary.top == null
+//         && a === piOnTwo
+//       ) {
+//         noIntersect = true;
+//       }
+//       if (
+//         intersects[0].id === 'top'
+//         && intersects[1].id === 'left'
+//         && this.boundary.right == null
+//         && a === 0
+//       ) {
+//         noIntersect = true;
+//       }
+//       if (
+//         intersects[0].id === 'top'
+//         && intersects[1].id === 'left'
+//         && this.boundary.bottom == null
+//         && a === threePiOnTwo
+//       ) {
+//         noIntersect = true;
+//       }
+//       if (
+//         intersects[0].id === 'top'
+//         && intersects[1].id === 'right'
+//         && this.boundary.left == null
+//         && a === pi
+//       ) {
+//         noIntersect = true;
+//       }
+//       if (
+//         intersects[0].id === 'top'
+//         && intersects[1].id === 'right'
+//         && this.boundary.bottom == null
+//         && a === threePiOnTwo
+//       ) {
+//         noIntersect = true;
+//       }
+//       if (
+//         intersects[0].id === 'bottom'
+//         && intersects[1].id === 'right'
+//         && this.boundary.left == null
+//         && a === pi
+//       ) {
+//         noIntersect = true;
+//       }
+//       if (
+//         intersects[0].id === 'bottom'
+//         && intersects[1].id === 'right'
+//         && this.boundary.top == null
+//         && a === piOnTwo
+//       ) {
+//         noIntersect = true;
+//       }
+//     }
 
-    // Test for if the point is on the border, bounds is outside, and the
-    // trajectory is away from the border
-    if (d === 0 && this.bounds === 'outside' && intersects.length === 2) {
-      if (
-        intersects[0].id === 'bottom'
-        && intersects[1].id === 'left'
-        && (a >= piOnTwo || a === 0)
-      ) {
-        noIntersect = true;
-      }
-      if (
-        intersects[0].id === 'top'
-        && intersects[1].id === 'left'
-        && a >= 0 && a <= threePiOnTwo
-      ) {
-        noIntersect = true;
-      }
+//     // Test for if the point is on the border, bounds is outside, and the
+//     // trajectory is away from the border
+//     if (d === 0 && this.bounds === 'outside' && intersects.length === 2) {
+//       if (
+//         intersects[0].id === 'bottom'
+//         && intersects[1].id === 'left'
+//         && (a >= piOnTwo || a === 0)
+//       ) {
+//         noIntersect = true;
+//       }
+//       if (
+//         intersects[0].id === 'top'
+//         && intersects[1].id === 'left'
+//         && a >= 0 && a <= threePiOnTwo
+//       ) {
+//         noIntersect = true;
+//       }
 
-      if (
-        intersects[0].id === 'top'
-        && intersects[1].id === 'right'
-        && (a <= pi || a >= threePiOnTwo)
-      ) {
-        noIntersect = true;
-      }
-      if (
-        intersects[0].id === 'bottom'
-        && intersects[1].id === 'right'
-        && (a <= piOnTwo || a >= pi)
-      ) {
-        noIntersect = true;
-      }
-    }
-    if (d === 0 && this.bounds === 'outside' && intersects.length === 1) {
-      const [intersect] = intersects;
-      if (
-        intersect.id === 'left'
-        && a >= piOnTwo && a <= threePiOnTwo
-      ) {
-        noIntersect = true;
-      }
-      if (
-        intersect.id === 'right'
-        && (a <= piOnTwo || a >= threePiOnTwo)
-      ) {
-        noIntersect = true;
-      }
-      if (
-        intersect.id === 'bottom'
-        && (a >= pi || a === 0)
-      ) {
-        noIntersect = true;
-      }
-      if (
-        intersect.id === 'top'
-        && a <= pi
-      ) {
-        noIntersect = true;
-      }
-    }
-    if (noIntersect) {
-      i = null;
-      r = direction;
-    }
+//       if (
+//         intersects[0].id === 'top'
+//         && intersects[1].id === 'right'
+//         && (a <= pi || a >= threePiOnTwo)
+//       ) {
+//         noIntersect = true;
+//       }
+//       if (
+//         intersects[0].id === 'bottom'
+//         && intersects[1].id === 'right'
+//         && (a <= piOnTwo || a >= pi)
+//       ) {
+//         noIntersect = true;
+//       }
+//     }
+//     if (d === 0 && this.bounds === 'outside' && intersects.length === 1) {
+//       const [intersect] = intersects;
+//       if (
+//         intersect.id === 'left'
+//         && a >= piOnTwo && a <= threePiOnTwo
+//       ) {
+//         noIntersect = true;
+//       }
+//       if (
+//         intersect.id === 'right'
+//         && (a <= piOnTwo || a >= threePiOnTwo)
+//       ) {
+//         noIntersect = true;
+//       }
+//       if (
+//         intersect.id === 'bottom'
+//         && (a >= pi || a === 0)
+//       ) {
+//         noIntersect = true;
+//       }
+//       if (
+//         intersect.id === 'top'
+//         && a <= pi
+//       ) {
+//         noIntersect = true;
+//       }
+//     }
+//     if (noIntersect) {
+//       i = null;
+//       r = direction;
+//     }
 
-    return {
-      intersect: i,
-      distance: d,
-      reflection: r,
-    };
-  }
-}
+//     return {
+//       intersect: i,
+//       distance: d,
+//       reflection: r,
+//     };
+//   }
+// }
 
 export type TypeLineBoundsDefinition = {
   p1?: TypeParsablePoint,
@@ -1749,5 +1781,4 @@ export {
   LineBounds,
   RectBounds,
   getBounds,
-  RectBoundsNew,
 };
