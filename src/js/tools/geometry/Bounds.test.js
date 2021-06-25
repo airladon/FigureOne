@@ -369,9 +369,9 @@ describe('Bounds', () => {
           });
           test('Outside Border going in', () => {
             expect(intersect([1.1, 0, 0], [-1, 0, 0])).toEqual([
-              [1, 0, 0],
-              0,
               [-1, 0, 0],
+              2,
+              [1, 0, 0],
             ]);
           });
         });

@@ -330,21 +330,38 @@ class Point {
   /**
    * Dot product this point (vector) with another.
    */
-  dotProduct(p: TypeParsablePoint) {
-    const q = getPoint(p);
+  dotProduct(v: TypeParsablePoint) {
+    const q = getPoint(v);
     return dotProduct([this.x, this.y, this.z], [q.x, q.y, q.z]);
   }
 
   /**
    * Cross product of two points (vectors).
    */
-  crossProduct(p: TypeParsablePoint) {
-    const q = getPoint(p);
+  crossProduct(v: TypeParsablePoint) {
+    const q = getPoint(v);
     return new Point(
       this.y * q.z - this.z * q.y,
       -(this.x * q.z - this.z * q.x),
       this.x * q.y - this.y * q.x,
     );
+  }
+
+  /**
+   * Angle between this vector and vector v.
+   */
+  angle(v: TypeParsablePoint) {
+    const p = getPoint(v);
+    return Math.acos(
+      this.dotProduct(p) / p.length() / this.length(),
+    );
+  }
+
+  /**
+   * Scalar projection of this vector in direction of vector v.
+   */
+  projectOn(v: TypeParsablePoint) {
+    return this.length() * Math.cos(this.angle(v));
   }
 
   /**

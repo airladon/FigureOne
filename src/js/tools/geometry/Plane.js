@@ -261,6 +261,12 @@ class Plane {
     const projection = this.pointProjection(p);
     return projection.distance(p);
   }
+
+  // TODO - test this
+  reflect(vector: TypeParsablePoint) {
+    const V = getPoint(vector);
+    return this.n.scale(-2 * (this.n.dotProduct(V))).add(V).normalize();
+  }
 }
 
 function getNormal(

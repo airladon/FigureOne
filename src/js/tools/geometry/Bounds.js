@@ -456,35 +456,18 @@ class RectBoundsNew extends Bounds {
                 |
   <-------------|----------------------------->
       left                right
+
+  - Create a vector posP and project it onto RightVector
+  - If the scalar projection is positive, then it is in the same direciton as
+    right vector, and the bound to check will be the right bound
+  - The abs value of the scalar projection must be less than or equal to the
+    bound to be contained in that direction.
+  - Repeat the same for the topDirection.
   */
   contains(position: TypeParsablePoint) {
-    // const p = getPoint(position).round(this.precision);
-    // const pMag = p.distance();
-    // const theta = Math.acos(
-    //   p.dotProduct(this.rightDirection) / pMag / this.rightDirection.distance(),
-    // );
-    // const rightProjection = pMag * Math.cos(rightTheta);
-    // const topTheta = Math.acos(
-    //   p.dotProduct(this.topDirection) / pMag / this.topDirection.distance(),
-    // );
-    // const topProjection = pMag * Math.cos(topTheta);
-    // if (topProjection > this.top || -topProjection > this.bottom) {
-    //   return false;
-    // }
-    // if (rightProjection > this.right || -rightProjection > this.left) {
-    //   return false;
-    // }
-    // return true;
     const p = getPoint(position).round(this.precision);
-    const pMag = p.distance();
-    const rightTheta = Math.acos(
-      p.dotProduct(this.rightDirection) / pMag / this.rightDirection.distance(),
-    );
-    const rightProjection = pMag * Math.cos(rightTheta);
-    const topTheta = Math.acos(
-      p.dotProduct(this.topDirection) / pMag / this.topDirection.distance(),
-    );
-    const topProjection = pMag * Math.cos(topTheta);
+    const rightProjection = p.projectOn(this.rightDirection);
+    const topProjection = p.projectOn(this.topDirection);
     if (topProjection > this.top || -topProjection > this.bottom) {
       return false;
     }
@@ -515,6 +498,13 @@ class RectBoundsNew extends Bounds {
   <-------------|----------------------------->
       left                right
 
+  - Create a vector posP
+  - Project it onto rightDirection
+  - If the projection is > 0 and the projection > right, then clip to right
+  - If the projection is < 0 and the abs(projection) > left, then clip to left
+  - Find clipped topDirection projection
+  - Scale unitVector of posP by clipped projections and add to position
+
   To do so, first calculate the angle (theta) between right vector and p vector
   (both relative to position).
 
@@ -533,34 +523,22 @@ class RectBoundsNew extends Bounds {
       return p._dup();
     }
 
-    // Now clip per explanation above
-    const theta = threePointAngleMin(
-      this.rightDirection.add(this.position), this.position, p,
-    );
-    const pVector = p.sub(this.position);
-    const pMag = pVector.length();
-    const cosA = Math.cos(theta);
-    const sinA = Math.sin(theta);
-
-    let magRight = pMag * cosA;
-    let magTop = pMag * sinA;
-    if (cosA > 0) {
-      magRight = this.right < magRight ? this.right : magRight;
-    } else if (cosA < 0) {
-      magRight = -this.left > magRight ? -this.left : magRight;
+    let rightProjection = p.projectOn(this.rightDirection);
+    if (rightProjection > this.right) {
+      rightProjection = this.right;
+    } else if (rightProjection < -this.left) {
+      rightProjection = -this.left;
     }
-    // Note - the cosA === 0 case is not handled. If it is 0, then the point has
-    // no right/left component and therefore magRight doesn't need to change.
-    // Similarly, sinA === 0 is not handled below.
-
-    if (sinA > 0) {
-      magTop = this.top < magTop ? this.top : magTop;
-    } else if (sinA < 0) {
-      magTop = -this.bottom > magTop ? -this.bottom : magTop;
+    let topProjection = p.projectOn(this.topDirection);
+    if (topProjection > this.top) {
+      topProjection = this.top;
+    } else if (topProjection < -this.bottom) {
+      topProjection = -this.bottom;
     }
+
     return this.position
-      .add(this.rightDirection.scale(magRight))
-      .add(this.topDirection.scale(magTop));
+      .add(this.rightDirection.scale(rightProjection))
+      .add(this.topDirection.scale(topProjection));
   }
 
 
@@ -604,7 +582,6 @@ class RectBoundsNew extends Bounds {
     return {
       intersect: i.intersect,
       distance: i.intersect.distance(position),
-      bound,
       normal: boundNormal,
     };
   }
@@ -628,17 +605,16 @@ class RectBoundsNew extends Bounds {
     }
 
     let intersect;
-    let bound;
     let distance;
     let normal;
     if (h != null && v == null) {
-      ({ intersect, distance, bound, normal } = h);
+      ({ intersect, distance, normal } = h);
     } else if (v != null && h == null) {
-      ({ intersect, distance, bound, normal } = v);
+      ({ intersect, distance, normal } = v);
     } else if (h.distance > v.distance) {
-      ({ intersect, distance, bound, normal } = v);
+      ({ intersect, distance, normal } = v);
     } else if (v.distance > h.distance) {
-      ({ intersect, distance, bound, normal } = h);
+      ({ intersect, distance, normal } = h);
     } else {
       return {
         intersect: h.intersect,
@@ -649,27 +625,9 @@ class RectBoundsNew extends Bounds {
 
     // Perform a reflection off a plane
     // From: https://www.3dkingdoms.com/weekly/weekly.php?a=2
-    const V = intersect.sub(p);
+    const V = d;
     const N = normal;
     const R = N.scale(-2 * (N.dotProduct(V))).add(V).normalize();
-
-
-    // const angle = threePointAngleMin(p, intersect, bound.p1);
-    // const v1 = p.sub(intersect);
-    // const v2 = bound.p1.sub(intersect);
-    // let axis;
-    // let rotation;
-    // if (Math.abs(angle) > Math.PI / 2) {
-    //   rotation = (2 * Math.abs(angle) - Math.PI) * angle / Math.abs(angle);
-    //   axis = v1.crossProduct(v2);
-    // } else {
-    //   rotation = (Math.PI - 2 * Math.abs(angle)) * angle / Math.abs(angle);
-    //   axis = v2.crossProduct(v1);
-    // }
-
-    // const rotationMatrix = m3.rotationMatrixAxis(axis.toArray(), rotation);
-    // const reflection = v1.transformBy(rotationMatrix).normalize();
-
     return {
       distance,
       intersect,
