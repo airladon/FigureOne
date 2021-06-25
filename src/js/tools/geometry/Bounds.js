@@ -436,7 +436,45 @@ class RectBoundsNew extends Bounds {
     };
   }
 
+  /*
+  We wish to see if some point p is within (or on) a rectangle bounds defined
+  by a main position, a rightVector (scaled by left or right) and a topVector
+  (scaled by bottom or top).
+
+  **********************************************     A
+  *                                            *     |
+  *        Top Vector              p           *     |
+  *             A                 *            *     | top
+  *             |                              *     |
+  *             |                              *     |
+  *    position *----->                        *   ---
+  *                   Right Vector             *     |
+  *                                            *     | bottom
+  *                                            *     |
+  **********************************************     V
+                |
+                |
+  <-------------|----------------------------->
+      left                right
+  */
   contains(position: TypeParsablePoint) {
+    // const p = getPoint(position).round(this.precision);
+    // const pMag = p.distance();
+    // const theta = Math.acos(
+    //   p.dotProduct(this.rightDirection) / pMag / this.rightDirection.distance(),
+    // );
+    // const rightProjection = pMag * Math.cos(rightTheta);
+    // const topTheta = Math.acos(
+    //   p.dotProduct(this.topDirection) / pMag / this.topDirection.distance(),
+    // );
+    // const topProjection = pMag * Math.cos(topTheta);
+    // if (topProjection > this.top || -topProjection > this.bottom) {
+    //   return false;
+    // }
+    // if (rightProjection > this.right || -rightProjection > this.left) {
+    //   return false;
+    // }
+    // return true;
     const p = getPoint(position).round(this.precision);
     const pMag = p.distance();
     const rightTheta = Math.acos(
@@ -456,6 +494,75 @@ class RectBoundsNew extends Bounds {
     return true;
   }
 
+  /*
+  We wish to clip a point p, in bounds rectangle is defined by a main position,
+  a rightVector (scaled by left or right) and topVector (scaled by bottom or
+  top).
+
+  **********************************************     A
+  *                                            *     |
+  *        Top Vector              p           *     |
+  *             A                 *            *     | top
+  *             |                              *     |
+  *             |                              *     |
+  *    position *----->                        *   ---
+  *                   Right Vector             *     |
+  *                                            *     | bottom
+  *                                            *     |
+  **********************************************     V
+                |
+                |
+  <-------------|----------------------------->
+      left                right
+
+  To do so, first calculate the angle (theta) between right vector and p vector
+  (both relative to position).
+
+  |p|cos(theta) will give current right/left magnitude of p
+  |p|sin(theta) will give current bottom/top magnitude of p
+
+  To clip, take the minimum of these magnitudes vs right/left or bottom/top
+  */
+  clip(position: TypeParsablePoint) {
+    // First project point onto plane
+    const p = this.plane.pointProjection(getPoint(position)).round(this.precision);
+
+    // If the point is equal to the plane position, then it is inside (as left,
+    // right, top, and bottom cannot be negative)
+    if (p.isEqualTo(this.position)) {
+      return p._dup();
+    }
+
+    // Now clip per explanation above
+    const theta = threePointAngleMin(
+      this.rightDirection.add(this.position), this.position, p,
+    );
+    const pVector = p.sub(this.position);
+    const pMag = pVector.length();
+    const cosA = Math.cos(theta);
+    const sinA = Math.sin(theta);
+
+    let magRight = pMag * cosA;
+    let magTop = pMag * sinA;
+    if (cosA > 0) {
+      magRight = this.right < magRight ? this.right : magRight;
+    } else if (cosA < 0) {
+      magRight = -this.left > magRight ? -this.left : magRight;
+    }
+    // Note - the cosA === 0 case is not handled. If it is 0, then the point has
+    // no right/left component and therefore magRight doesn't need to change.
+    // Similarly, sinA === 0 is not handled below.
+
+    if (sinA > 0) {
+      magTop = this.top < magTop ? this.top : magTop;
+    } else if (sinA < 0) {
+      magTop = -this.bottom > magTop ? -this.bottom : magTop;
+    }
+    return this.position
+      .add(this.rightDirection.scale(magRight))
+      .add(this.topDirection.scale(magTop));
+  }
+
 
   getBoundIntersect(
     position: Point,
@@ -471,11 +578,14 @@ class RectBoundsNew extends Bounds {
 
     const projection = dMag * Math.cos(theta);
     let bound;
+    let boundNormal;
     if (projection < 0) {
       bound = negBound;
+      boundNormal = posDirection;
     }
     if (projection > 0) {
       bound = posBound;
+      boundNormal = posDirection.scale(-1);
     }
     if (bound == null) {
       return null;
@@ -495,6 +605,7 @@ class RectBoundsNew extends Bounds {
       intersect: i.intersect,
       distance: i.intersect.distance(position),
       bound,
+      normal: boundNormal,
     };
   }
 
@@ -502,7 +613,7 @@ class RectBoundsNew extends Bounds {
     position: TypeParsablePoint,
     direction: TypeParsablePoint,
   ) {
-    const p = getPoint(position).round(this.precision);
+    const p = this.clip(getPoint(position)).round(this.precision);
     const d = getPoint(direction);
 
     // Get potential boundaries
@@ -519,14 +630,15 @@ class RectBoundsNew extends Bounds {
     let intersect;
     let bound;
     let distance;
+    let normal;
     if (h != null && v == null) {
-      ({ intersect, distance, bound } = h);
+      ({ intersect, distance, bound, normal } = h);
     } else if (v != null && h == null) {
-      ({ intersect, distance, bound } = v);
+      ({ intersect, distance, bound, normal } = v);
     } else if (h.distance > v.distance) {
-      ({ intersect, distance, bound } = v);
+      ({ intersect, distance, bound, normal } = v);
     } else if (v.distance > h.distance) {
-      ({ intersect, distance, bound } = h);
+      ({ intersect, distance, bound, normal } = h);
     } else {
       return {
         intersect: h.intersect,
@@ -535,26 +647,33 @@ class RectBoundsNew extends Bounds {
       };
     }
 
-    const angle = threePointAngleMin(p, intersect, bound.p1);
-    const v1 = p.sub(intersect);
-    const v2 = bound.p1.sub(intersect);
-    let axis;
-    let rotation;
-    if (Math.abs(angle) > Math.PI / 2) {
-      rotation = (2 * Math.abs(angle) - Math.PI) * angle / Math.abs(angle);
-      axis = v1.crossProduct(v2);
-    } else {
-      rotation = (Math.PI - 2 * Math.abs(angle)) * angle / Math.abs(angle);
-      axis = v2.crossProduct(v1);
-    }
+    // Perform a reflection off a plane
+    // From: https://www.3dkingdoms.com/weekly/weekly.php?a=2
+    const V = intersect.sub(p);
+    const N = normal;
+    const R = N.scale(-2 * (N.dotProduct(V))).add(V).normalize();
 
-    const rotationMatrix = m3.rotationMatrixAxis(axis.toArray(), rotation);
-    const reflection = v1.transformBy(rotationMatrix).normalize();
+
+    // const angle = threePointAngleMin(p, intersect, bound.p1);
+    // const v1 = p.sub(intersect);
+    // const v2 = bound.p1.sub(intersect);
+    // let axis;
+    // let rotation;
+    // if (Math.abs(angle) > Math.PI / 2) {
+    //   rotation = (2 * Math.abs(angle) - Math.PI) * angle / Math.abs(angle);
+    //   axis = v1.crossProduct(v2);
+    // } else {
+    //   rotation = (Math.PI - 2 * Math.abs(angle)) * angle / Math.abs(angle);
+    //   axis = v2.crossProduct(v1);
+    // }
+
+    // const rotationMatrix = m3.rotationMatrixAxis(axis.toArray(), rotation);
+    // const reflection = v1.transformBy(rotationMatrix).normalize();
 
     return {
       distance,
       intersect,
-      reflection,
+      reflection: R,
     };
   }
 }

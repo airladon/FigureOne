@@ -210,6 +210,68 @@ describe('Bounds', () => {
         });
       });
     });
+    describe('Clip', () => {
+      let clip;
+      describe('XY Plane', () => {
+        beforeEach(() => {
+          bounds = new RectBoundsNew({
+            position: [0, 0, 0],
+            rightDirection: [2, 0, 0],
+            topDirection: [0, 2, 0],
+            left: 1,
+            right: 2,
+            top: 3,
+            bottom: 4,
+          });
+          clip = p => bounds.clip(p).round();
+        });
+        test('inside ', () => {
+          expect(clip([0, 0, 0])).toEqual(new Point(0, 0, 0));
+          expect(clip([0.1, 0.2, 0])).toEqual(new Point(0.1, 0.2, 0));
+        });
+        test('outside', () => {
+          expect(clip([2.1, 0, 0])).toEqual(new Point(2, 0, 0));
+          expect(clip([-1.1, 0, 0])).toEqual(new Point(-1, 0, 0));
+          expect(clip([0, 3.1, 0])).toEqual(new Point(0, 3, 0));
+          expect(clip([0, -4.1, 0])).toEqual(new Point(0, -4, 0));
+
+          expect(clip([2.1, 0.1, 0])).toEqual(new Point(2, 0.1, 0));
+          expect(clip([1.9, 3.1, 0])).toEqual(new Point(1.9, 3, 0));
+
+          expect(clip([2.1, 3.1, 0])).toEqual(new Point(2, 3, 0));
+          expect(clip([-1.1, 3.1, 0])).toEqual(new Point(-1, 3, 0));
+          expect(clip([-1.1, -4.1, 0])).toEqual(new Point(-1, -4, 0));
+          expect(clip([2.1, -4.1, 0])).toEqual(new Point(2, -4, 0));
+        });
+        test('off plane inside', () => {
+          expect(clip([0, 0, 1])).toEqual(new Point(0, 0, 0));
+          expect(clip([0.1, 0.2, -1])).toEqual(new Point(0.1, 0.2, 0));
+        });
+        test('off plane outside', () => {
+          expect(clip([2.1, 0, 0.1])).toEqual(new Point(2, 0, 0));
+          expect(clip([-1.1, 0, -10])).toEqual(new Point(-1, 0, 0));
+          expect(clip([-1.1, -4.1, 1])).toEqual(new Point(-1, -4, 0));
+          expect(clip([2.1, -4.1, -0.5])).toEqual(new Point(2, -4, 0));
+        });
+      });
+      describe('Offset XZ Plane', () => {
+        beforeEach(() => {
+          bounds = new RectBoundsNew({
+            position: [1, 1, 1],
+            rightDirection: [2, 0, 0],
+            topDirection: [0, 0, -2],
+            left: 1,
+            right: 1,
+            top: 1,
+            bottom: 1,
+          });
+        });
+        // test('inside ', () => {
+        //   expect(bounds.clip([0, 0, 0])).toEqual(new Point(0, 0, 0));
+        //   expect(bounds.clip([0.1, 0.2, 0]).round()).toEqual(new Point(0.1, 0.2, 0));
+        // });
+      });
+    });
     describe('Intersect', () => {
       let intersect;
       describe('XY Plane', () => {
@@ -296,6 +358,20 @@ describe('Bounds', () => {
               [1, 0, 0],
               0,
               [-0.707, 0.707, 0],
+            ]);
+          });
+          test('Outside Border going out', () => {
+            expect(intersect([1.1, 0, 0], [1, 0, 0])).toEqual([
+              [1, 0, 0],
+              0,
+              [-1, 0, 0],
+            ]);
+          });
+          test('Outside Border going in', () => {
+            expect(intersect([1.1, 0, 0], [-1, 0, 0])).toEqual([
+              [1, 0, 0],
+              0,
+              [-1, 0, 0],
             ]);
           });
         });
