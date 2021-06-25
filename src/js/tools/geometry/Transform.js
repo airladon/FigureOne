@@ -1006,11 +1006,7 @@ class Transform {
       def.push(makeTransformComponent(
         t, j => t[j] / deltaTime,
       ));
-      // if (t[0] === 't' || t[0] === 's' || t[0] === 'r') {  // $FlowFixMe
-      //   def.push([t[0], t[1] / deltaTime, t[2] / deltaTime, t[3] / deltaTime]);
-      // }
     }
-
     const v = new Transform(def);
     return v.clipMag(zeroThreshold, maxTransform);
   }

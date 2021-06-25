@@ -2,15 +2,17 @@
 /* eslint-disable no-use-before-define */
 import { Point, getPoint } from './Point';
 import { Rect } from './Rect';
+import { Plane } from './Plane';
 import { joinObjects } from '../tools';
 import { getPrecision } from './common';
-import { clipAngle } from './angle';
+import { clipAngle, threePointAngleMin } from './angle';
 import { Line, getLine } from './Line';
 import { Transform } from './Transform';
 import { roundNum, round, clipValue } from '../math';
 import { polarToRect, rectToPolar } from './coordinates';
 import type { TypeParsablePoint } from './Point';
 import type { TypeParsableLine } from './Line';
+import * as m3 from '../m3';
 
 export type TypeTransformBounds = Array<Bounds | null>;
 
@@ -179,13 +181,16 @@ class RangeBounds extends Bounds {
   ) {
     const reflection = direction * -1;
     const { min, max } = this.boundary;
-    if (!(typeof position === 'number')) {
-      return {
-        intersect: null,
-        distance: 0,
-        reflection: direction,
-      };
+    if (typeof position !== 'number') {
+      throw new Error(`FigureOne RangeBounds.intersect only accepts 'number' parameter for value. Provide: ${position}`);
     }
+    // if (!(typeof position === 'number')) {
+    //   return {
+    //     intersect: null,
+    //     distance: 0,
+    //     reflection: direction,
+    //   };
+    // }
 
     if (this.contains(position)) {
       if (
@@ -266,6 +271,339 @@ class RangeBounds extends Bounds {
     clipped.y = clipValue(p.y, this.boundary.min, this.boundary.max);
     clipped.z = clipValue(p.z, this.boundary.min, this.boundary.max);
     return clipped;
+  }
+}
+
+
+export type TypeRectNewBoundsDefinition = {
+  position?: TypeParsablePoint,
+  normal?: TypeParsablePoint,
+  rightDirection?: TypeParsablePoint,
+  topDirection?: TypeParsablePoint,
+  left?: number,
+  right?: number,
+  up?: number,
+  down?: number,
+};
+
+class RectBoundsNew extends Bounds {
+  plane: Plane;
+  rightDirection: Point;
+  topDirection: Point;
+  left: null | number;
+  right: null | number;
+  bottom: null | number;
+  top: null | number;
+  boundary: {
+    left: null | Line;
+    right: null | Line;
+    bottom: null | Line;
+    top: null | Line;
+  };
+
+  constructor(optionsOrRect: TypeRectBoundsDefinition) {
+    const defaultOptions = {
+      position: [0, 0, 0],
+      normal: [0, 0, 1],
+      // rightDirection: [1, 0, 0],
+      left: null,
+      right: null,
+      top: null,
+      bottom: null,
+      bounds: 'inside',
+      precision: 8,
+    };
+    const options = joinObjects({}, defaultOptions, optionsOrRect);
+    const position = getPoint(options.position);
+
+    // Calculate plane, topDirection and rightDirection of the rectangle
+    let plane;
+    let rightDirection;
+    let topDirection;
+    if (options.rightDirection != null && options.topDirection != null) {
+      rightDirection = getPoint(options.rightDirection).normalize();
+      topDirection = getPoint(options.topDirection).normalize();
+      plane = new Plane(position, rightDirection.crossProduct(topDirection));
+    } else if (options.rightDirection != null) {
+      rightDirection = getPoint(options.rightDirection).normalize();
+      plane = new Plane(position, options.normal);
+      topDirection = plane.n.crossProduct(rightDirection).normalize();
+    } else if (options.topDirection != null) {
+      topDirection = getPoint(options.topDirection).normalize();
+      plane = new Plane(position, options.normal);
+      rightDirection = topDirection.crossProduct(plane.n).normalize();
+    } else {
+      rightDirection = getPoint([1, 0, 0]);
+      plane = new Plane(position, options.normal);
+      topDirection = plane.n.crossProduct(rightDirection).normalize();
+    }
+
+    // Calculate the corner points of the rectangle
+    let {
+      left, right, top, bottom,
+    } = options;
+    let topLeft = null;
+    let bottomLeft = null;
+    let topRight = null;
+    let bottomRight = null;
+    let centerLeft = null;
+    let centerRight = null;
+
+    if (left != null) {
+      centerLeft = position.add(rightDirection.scale(-1 * options.left));
+    }
+    if (right != null) {
+      centerRight = position.add(rightDirection.scale(options.right));
+    }
+    if (left != null && top != null) {
+      topLeft = centerLeft.add(topDirection.scale(options.top));
+    } else {
+      topLeft = centerLeft.add(topDirection);
+    }
+    if (left != null && bottom != null) {
+      bottomLeft = centerLeft.add(topDirection.scale(-1 * options.bottom));
+    } else {
+      bottomLeft = centerLeft.add(topDirection.scale(-1));
+    }
+    if (right != null && top != null) {
+      topRight = centerRight.add(topDirection.scale(options.top));
+    } else {
+      topRight = centerRight.add(topDirection);
+    }
+    if (right != null && bottom != null) {
+      bottomRight = centerRight.add(topDirection.scale(-1 * options.bottom));
+    } else {
+      bottomRight = centerRight.add(topDirection.scale(-1));
+    }
+    if (right != null) {
+      if (top != null && bottom != null) {
+        right = new Line(bottomRight, topRight);
+      } else if (top != null) {
+        right = new Line(topRight, bottomRight, 1);
+      } else if (bottom != null) {
+        right = new Line(bottomRight, topRight, 1);
+      } else {
+        right = new Line(bottomRight, topRight, 0);
+      }
+    }
+    if (left != null) {
+      if (top != null && bottom != null) {
+        left = new Line(bottomLeft, topLeft);
+      } else if (top != null) {
+        left = new Line(topLeft, bottomLeft, 1);
+      } else if (bottom != null) {
+        left = new Line(bottomLeft, topLeft, 1);
+      } else {
+        left = new Line(bottomLeft, topLeft, 0);
+      }
+    }
+    if (top != null) {
+      if (left != null && right != null) {
+        top = new Line(topLeft, topRight);
+      } else if (left != null) {
+        top = new Line(topLeft, topRight, 1);
+      } else if (right != null) {
+        top = new Line(topRight, topLeft, 1);
+      } else {
+        top = new Line(topLeft, topRight, 0);
+      }
+    }
+    if (bottom != null) {
+      if (left != null && right != null) {
+        bottom = new Line(bottomLeft, bottomRight);
+      } else if (left != null) {
+        bottom = new Line(bottomLeft, bottomRight, 1);
+      } else if (right != null) {
+        bottom = new Line(bottomRight, bottomLeft, 1);
+      } else {
+        bottom = new Line(bottomLeft, bottomRight, 0);
+      }
+    }
+
+    const boundary = {
+      left,
+      right,
+      top,
+      bottom,
+    };
+    super(boundary, options.bounds, options.precision);
+    this.plane = plane;
+    this.position = position;
+    this.topDirection = topDirection;
+    this.rightDirection = rightDirection;
+    this.left = options.left;
+    this.right = options.right;
+    this.bottom = options.bottom;
+    this.top = options.top;
+  }
+
+  isDefined() {
+    if (
+      this.boundary.left == null
+      && this.boundary.right == null
+      && this.boundary.top == null
+      && this.boundary.bottom == null
+    ) {
+      return false;
+    }
+    return true;
+  }
+
+  _dup() {
+    return new RectBoundsNew({
+      bounds: this.bounds,
+      precision: this.precision,
+      left: this.left,
+      right: this.right,
+      bottom: this.bottom,
+      top: this.top,
+      position: this.position,
+      topDirection: this.topDireciton,
+      rightDirection: this.rightDirection,
+    });
+  }
+
+  _state(options: { precision: number }) {
+    // const { precision } = options;
+    const precision = getPrecision(options);
+    return {
+      f1Type: 'rectBounds',
+      state: [
+        this.bounds,
+        this.precision,
+        this.left != null ? roundNum(this.left, precision) : null,
+        this.right != null ? roundNum(this.right, precision) : null,
+        this.bottom != null ? roundNum(this.bottom, precision) : null,
+        this.top != null ? roundNum(this.top, precision) : null,
+        this.position.toArray(),
+        this.topDirection.toArray(),
+        this.rightDirection.toArray(),
+      ],
+    };
+  }
+
+  contains(position: number | TypeParsablePoint) {
+    if (typeof position === 'number') {
+      return false;
+    }
+    const p = getPoint(position).round(this.precision);
+    const pMag = p.distance();
+    const rightTheta = Math.acos(
+      p.dotProduct(this.rightDirection) / pMag / this.rightDirection.distance(),
+    );
+    const rightProjection = pMag * Math.cos(rightTheta);
+    const topTheta = Math.acos(
+      p.dotProduct(this.topDireciton) / pMag / this.topDireciton.distance(),
+    );
+    const topProjection = pMag * Math.cos(topTheta);
+    if (topProjection > this.top || -topProjection > this.bottom) {
+      return false;
+    }
+    if (rightProjection > this.right || -rightProjection > this.left) {
+      return false;
+    }
+    return true;
+  }
+
+
+  getBoundIntersect(
+    position: Point,
+    direction: Point,
+    posBound: null | Line,
+    negBound: null | Line,
+    posDireciton: Point,
+  ) {
+    if (negBound == null && posBound == null) {
+      return null;
+    }
+    const dMag = direction.distance();
+    const topTheta = Math.acos(
+      direction.dotProduct(posDireciton) / dMag / posDireciton.distance(),
+    );
+    const topProjection = dMag * Math.cos(topTheta);
+    let bound;
+    if (topProjection < 0 && negBound != null) {
+      bound = negBound;
+    }
+    if (topProjection > 0 && posBound != null) {
+      bound = posBound;
+    }
+    if (bound == null) {
+      return null;
+    }
+
+    const l = new Line({ p1: position, direction, ends: 1 });
+    const hIntersect = bound.intersectsWith(l);
+    if (
+      hIntersect.intersect == null
+      || hIntersect.collinear != null
+      || !bound.hasPointOn(hIntersect.intersect, this.precision)
+    ) {
+      return null;
+    }
+
+    return {
+      intersect: hIntersect.intersect,
+      distance: hIntersect.intersect.distance(position),
+      bound,
+    };
+  }
+
+  intersect(
+    position: TypeParsablePoint,
+    direction: TypeParsablePoint,
+  ) {
+    const p = getPoint(position).round(this.precision);
+    const d = getPoint(direction);
+
+    // Get potential boundaries
+    const {
+      left, right, top, bottom,
+    } = this.boundary;
+    const h = this.getBoundIntersect(p, d, right, left, this.rightDirection);
+    const v = this.getBoundIntersect(p, d, top, bottom, this.topDirection);
+
+
+    let intersect;
+    let bound;
+    let distance;
+    if (h != null && v == null) {
+      ({ intersect, distance, bound } = h);
+    } else if (v != null && h == null) {
+      ({ intersect, distance, bound } = v);
+    } else if (h.distance > v.distance) {
+      ({ intersect, distance, bound } = v);
+    } else if (v.distance > h.distance) {
+      ({ intersect, distance, bound } = h);
+    } else {
+      return {
+        intersect: h.intersect,
+        distance: h.distance,
+        reflection: direction.scale(-1),
+      };
+    }
+
+    const angle = threePointAngleMin(p, intersect.intersect, bound.p1);
+    const v1 = p.sub(intersect.intersect);
+    const v2 = bound.p1.sub(intersect.intersect);
+    let axis;
+    let rotation;
+    if (Math.abs(angle) > Math.PI / 2) {
+      rotation = (2 * Math.abs(angle) - Math.PI) * angle / Math.abs(angle);
+      axis = v1.crossProduct(v2);
+    } else {
+      rotation = (Math.PI - 2 * Math.abs(angle)) * angle / Math.abs(angle);
+      axis = v2.crossProduct(v1);
+    }
+
+    const rotationMatrix = m3.rotationMatrixAxis(axis.toArray(), rotation);
+    const reflection = v1.transformBy(rotationMatrix);
+
+    return {
+      distance,
+      intersect: intersect.intersect,
+      reflection,
+    };
   }
 }
 
@@ -1073,6 +1411,19 @@ function getBounds(
       });
     }
     if (f1Type != null
+      && f1Type === 'rectNewBounds'
+      && state != null
+      && Array.isArray([state])
+      && state.length === 6
+    ) { // $FlowFixMe
+      const [
+        b, precision, left, right, bottom, top, position, topDirection, rightDirection,
+      ] = state;
+      return new RectBounds({
+        bounds: b, precision, left, bottom, right, top, position, topDirection, rightDirection,
+      });
+    }
+    if (f1Type != null
       && f1Type === 'lineBounds'
       && state != null
       && Array.isArray([state])
@@ -1353,4 +1704,5 @@ export {
   LineBounds,
   RectBounds,
   getBounds,
+  RectBoundsNew,
 };

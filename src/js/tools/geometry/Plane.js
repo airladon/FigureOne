@@ -131,6 +131,10 @@ class Plane {
     };
   }
 
+  round(precision: number) {
+    return new Plane(this.p.round(precision), this.n.round(precision));
+  }
+
   hasPointOn(p: TypeParsablePoint, precision: number = 8) {
     const pnt = getPoint(p);
     const pDelta = pnt.sub(this.p);

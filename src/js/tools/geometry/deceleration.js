@@ -14,6 +14,21 @@ import type { TypeTransformValue, TransformDefinition } from './Transform';
 // type TypeTransformZeroThreshold = Array<number>;
 // type TypeTransformBounce = Array<number>;
 
+// function deceleratePointInPlane(
+//   positionIn: Point,
+//   velocityIn: Point,
+//   decelerationIn: number,
+//   deltaTimIn: number | null,
+//   boundsIn: ?Bounds = null,
+//   bounceLossIn: number = 0,
+//   zeroVelocityThreshold: number = 0,
+//   precision: number = 8,
+// ) {
+//   // bounds.center,
+//   // bounds.hVector,
+//   // bounds.vVector,
+
+// }
 
 function deceleratePoint(
   positionIn: Point,

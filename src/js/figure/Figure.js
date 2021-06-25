@@ -2051,9 +2051,8 @@ class Figure {
     previousGLPoint: Point,
     currentGLPoint: Point,
   ) {
-    console.log('translate')
-    const previousLocalPoint = element.glToPlane(previousGLPoint);
-    const currentLocalPoint = element.glToPlane(currentGLPoint);
+    const previousLocalPoint = element.glToPlane(previousGLPoint, 'local', element.move.plane);
+    const currentLocalPoint = element.glToPlane(currentGLPoint, 'local', element.move.plane);
     const delta = currentLocalPoint.sub(previousLocalPoint);
     const transform = element.transform._dup();
     const translation = transform.t();

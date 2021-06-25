@@ -169,7 +169,8 @@ const cube = figure.add({
 });
 cube.setMovable();
 cube.move.type = 'translation';
-// cube.move.plane = Fig.tools.g2.getPlane([[0.5, 0, 0], [1, 0, 0]]);
+// cube.move.plane = 
+cube.move.plane = Fig.tools.g2.getPlane([[0, 0, 0], [1, 0, 0]]);
 
 
 figure.add({

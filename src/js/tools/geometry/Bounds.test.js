@@ -1,8 +1,10 @@
 import { Point, getPoint } from './Point';
 import { Transform } from './Transform';
 import { Line } from './Line';
+import { Plane, getPlane } from './Plane';
 import {
   RectBounds, LineBounds, RangeBounds, TransformBounds, getBounds,
+  RectBoundsNew,
 } from './Bounds';
 import { clipAngle } from './angle';
 import { round } from '../math';
@@ -22,6 +24,56 @@ describe('Bounds', () => {
       expect(round(clipAngle(result.reflection, '-180to180'), 3)).toBe(round(clipAngle(r, '-180to180'), 3));
       expect(round(result.distance, 3)).toBe(round(d, 3));
     };
+  });
+  describe.only('Rect New Bounds', () => {
+    describe('Construction', () => {
+      test('XY Plane direction vectors', () => {
+        bounds = new RectBoundsNew({
+          position: [1, 1, 0],
+          rightDirection: [2, 0, 0],
+          topDirection: [0, 2, 0],
+          left: 2,
+          right: 3,
+          top: 4,
+          bottom: 5,
+        });
+        expect(bounds.plane.round()).toEqual(new Plane([[1, 1, 0], [0, 0, 1]]));
+        expect(bounds.position).toEqual(new Point(1, 1, 0));
+        expect(bounds.topDirection).toEqual(new Point(0, 1, 0));
+        expect(bounds.rightDirection).toEqual(new Point(1, 0, 0));
+        expect(bounds.left).toBe(2);
+        expect(bounds.right).toBe(3);
+        expect(bounds.top).toBe(4);
+        expect(bounds.bottom).toBe(5);
+        expect(bounds.boundary.left).toEqual(new Line([-1, -4, 0], [-1, 5, 0]));
+        expect(bounds.boundary.right).toEqual(new Line([4, -4, 0], [4, 5, 0]));
+        expect(bounds.boundary.top).toEqual(new Line([-1, 5, 0], [4, 5, 0]));
+        expect(bounds.boundary.bottom).toEqual(new Line([-1, -4, 0], [4, -4, 0]));
+      });
+      test('YZ Plane top direction', () => {
+        bounds = new RectBoundsNew({
+          position: [0, 0, 0],
+          topDirection: [0, 2, 0],
+          normal: [2, 0, 0],
+          left: 1,
+          right: 1,
+          top: 1,
+          bottom: 1,
+        });
+        expect(bounds.plane.round()).toEqual(new Plane([[0, 0, 0], [1, 0, 0]]));
+        expect(bounds.position).toEqual(new Point(0, 0, 0));
+        expect(bounds.topDirection.round()).toEqual(new Point(0, 1, 0));
+        expect(bounds.rightDirection.round()).toEqual(new Point(0, 0, -1));
+        expect(bounds.left).toBe(1);
+        expect(bounds.right).toBe(1);
+        expect(bounds.top).toBe(1);
+        expect(bounds.bottom).toBe(1);
+        expect(bounds.boundary.left).toEqual(new Line([0, -1, 1], [0, 1, 1]));
+        expect(bounds.boundary.right).toEqual(new Line([0, -1, -1], [0, 1, -1]));
+        expect(bounds.boundary.top).toEqual(new Line([0, 1, 1], [0, 1, -1]));
+        expect(bounds.boundary.bottom).toEqual(new Line([0, -1, 1], [0, -1, -1]));
+      });
+    });
   });
   describe('Range Bounds', () => {
     describe('Construction', () => {

@@ -323,15 +323,17 @@ type OBJ_ElementMoveFreely = {
 /*
 An element can be 'moved' (transformed) by touching on it and dragging.
 
-The element can either be translated or rotated.
+The element can be translated, rotated or scaled.
 
-A user can only move an element in a single plane:
-- Translation: within the plane
-- Rotation: around the normal of the plane
+An element can be translated in along a line, or within a plane.
+An element can be rotated in a plane.
+An element can be scaled by x, y, z or a combination.
 
 Movement range can be bounded:
-- Translation: By some rectangle in the plane, or along a line in the plane
+- Translation: Within a rectangle in the plane, or along a finite line
+  - The rectangle is defined as a center point with a width unit vector
 - Rotation: Between some min and max values of rotation
+- Scale: Between some min and max values of rotation
 
 When the object is released, it may continue to move freely with the velocity of
 its last movement. The velocity may deccelerate to zero over time.
@@ -339,10 +341,12 @@ its last movement. The velocity may deccelerate to zero over time.
 Velocity is defined as a number or point and relates to:
 - Translation: x, y, z component velocities
 - Rotation: angular velocity
+- Scale: x, y, z components
 
 Deceleration is defined with a number and relates to:
 - Translation: velocity vector magnitude reduction
 - Rotation: velocity value reduction
+- Scale: velocity vector magnitude reduction
 
 If bounded, then the object may bounce of the bounds where each bounce may
 incurr some decceleration. A bounce is a reversing of the velocity.
@@ -353,8 +357,6 @@ rotation.
 
 Only one element (the closest element under the touch pixel) can be touched at
 any time.
-
-To scale an object, use an invisible translation pad?
 */
 
 /**
@@ -2959,6 +2961,32 @@ class FigureElement {
     return this.glToPlane(glPoint, toSpace, plane);
   }
 
+  /*
+  A figure is projected into clip space (gl space) through a view matrix
+  and projection matrix.
+
+  The view matrix simulates a camera at some postion with some orientation
+  looking at the figure.
+
+  The projection matrix transforms all vertices that are to be seen to within
+  the GL coordinates (-1 to +1)
+
+  The near plane (gl space z = -1) represents a rectange in figure space where
+  the center of the rectangle is the point between the camera position and the
+  look at point a distance `near` from the camera. `scene.rightVector` and
+  `scene.upVector` define the figure space directions of gl space x+ and y+.
+
+  Therefore, a point on the near gl plane can be converted to figure space by
+  scaling the `scene.rightVector` and `scene.upVector`s and adding them to the
+  `scene.nearCenter`.
+
+  A similar process can be done with the far gl plane.
+
+  Therefore, this method takes the XY coordinate of a GL point and draws a line
+  from -1 to 1 in z in GL space. The near point (z = -1) and far point (z = 1)
+  is transformed into toSpace space. The line in toSpace space is then
+  intersected with a plane in toSpace space.
+  */
   glToPlane(
     glPoint: TypeParsablePoint,
     toSpace: 'figure' | 'local' | 'draw',
