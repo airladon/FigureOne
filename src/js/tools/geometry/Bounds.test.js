@@ -326,9 +326,27 @@ describe('Bounds', () => {
           });
         });
         test('inside ', () => {
-          expect(clip([0, 0, 0])).toEqual(new Point(0, 1, 0));
+          expect(clip([0, 1, 0])).toEqual(new Point(0, 1, 0));
           expect(clip([0, 1, 0])).toEqual(new Point(0, 1, 0));
           expect(clip([0.1, 1, 0.2]).round()).toEqual(new Point(0.1, 1, 0.2));
+        });
+        test('outside', () => {
+          expect(clip([-0.1, 0, 0])).toEqual(new Point(0, 1, 0));
+          expect(clip([-0.1, 0, -1])).toEqual(new Point(0, 1, 0));
+          expect(clip([0, 1, -1])).toEqual(new Point(0, 1, 0));
+          expect(clip([0, 1, 3])).toEqual(new Point(0, 1, 2));
+          expect(clip([2.1, 1, 3])).toEqual(new Point(2, 1, 2));
+          expect(clip([2.1, 1, -1])).toEqual(new Point(2, 1, 0));
+        });
+        test('off plane inside', () => {
+          expect(clip([0, 0, 0])).toEqual(new Point(0, 1, 0));
+          expect(clip([0.1, 0.2, 2])).toEqual(new Point(0.1, 1, 2));
+        });
+        test('off plane outside', () => {
+          expect(clip([2.1, 0, -0.1])).toEqual(new Point(2, 1, 0));
+          expect(clip([-1.1, 1.1, -10])).toEqual(new Point(0, 1, 0));
+          expect(clip([3, -4.1, 2.5])).toEqual(new Point(2, 1, 2));
+          expect(clip([2.1, -4.1, -0.5])).toEqual(new Point(2, 1, 0));
         });
       });
     });
