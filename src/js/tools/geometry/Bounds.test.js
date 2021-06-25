@@ -431,6 +431,52 @@ describe('Bounds', () => {
             ]);
           });
         });
+        describe('Left Bound', () => {
+          test('Inside normal direction on boundary', () => {
+            expect(intersect([0, 0, 0], [-1, 0, 0])).toEqual([
+              [-1, 0, 0], 1, [1, 0, 0],
+            ]);
+          });
+          test('Inside normal', () => {
+            expect(intersect([0, 0, 0], [-0.5, 0, 0])).toEqual([
+              [-1, 0, 0], 1, [1, 0, 0],
+            ]);
+          });
+          test('26 inside', () => {
+            expect(intersect([-0.9, -0.05, 0], [-1, 0.5, 0])).toEqual([
+              [-1, 0, 0],
+              round(Math.sqrt(0.1 ** 2 + 0.05 ** 2), 3),
+              [0.894, 0.447, 0],
+            ]);
+          });
+          test('45º inside', () => {
+            expect(intersect([-0.9, -0.1, 0], [-1, 1, 0])).toEqual([
+              [-1, 0, 0], round(0.1 * Math.sqrt(2), 3), [0.707, 0.707, 0],
+            ]);
+          });
+          test('63º inside', () => {
+            expect(intersect([-0.9, 0.2, 0], [-1, -2, 0])).toEqual([
+              [-1, 0, 0],
+              round(Math.sqrt(0.1 * 0.1 + 0.2 * 0.2), 3),
+              [0.447, -0.894, 0],
+            ]);
+          });
+          test('On Border', () => {
+            expect(intersect([-1, 0, 0], [-1, 1, 0])).toEqual([
+              [-1, 0, 0], 0, [0.707, 0.707, 0],
+            ]);
+          });
+          test('Outside Border going out', () => {
+            expect(intersect([-1.1, 0, 0], [-1, 0, 0])).toEqual([
+              [-1, 0, 0], 0, [1, 0, 0],
+            ]);
+          });
+          test('Outside Border going in', () => {
+            expect(intersect([-1.1, 0, 0], [1, 0, 0])).toEqual([
+              [1, 0, 0], 2, [-1, 0, 0],
+            ]);
+          });
+        });
         describe('Top Bound', () => {
           test('Inside normal direction on boundary', () => {
             expect(intersect([0, 0, 0], [0, 1, 0])).toEqual([
@@ -447,7 +493,7 @@ describe('Bounds', () => {
               [0.5, 1, 0], 1, [0, -1, 0],
             ]);
           });
-          test('26 inside', () => {
+          test('26º inside', () => {
             expect(intersect([0.05, 0.9, 0], [-1, 2, 0])).toEqual([
               [0, 1, 0],
               round(Math.sqrt(0.1 ** 2 + 0.05 ** 2), 3),
@@ -486,9 +532,75 @@ describe('Bounds', () => {
               [-1, -1, 0], round(Math.sqrt(2) * 2, 3), [0.707, 0.707, 0],
             ]);
           });
+          test('Outside Border corner going in x out y', () => {
+            expect(intersect([1.1, 1.1, 0], [-1, 1, 0])).toEqual([
+              [1, 1, 0], 0, [-0.707, -0.707, 0],
+            ]);
+          });
+          test('Outside Border corner going in y out x', () => {
+            expect(intersect([1.1, 1.1, 0], [1, -1, 0])).toEqual([
+              [1, 1, 0], 0, [-0.707, -0.707, 0],
+            ]);
+          });
           test('Outside Border going in', () => {
             expect(intersect([0, 1.1, 0], [0, -1, 0])).toEqual([
               [0, -1, 0], 2, [0, 1, 0],
+            ]);
+          });
+        });
+        describe('Bottom Bound', () => {
+          test('Inside normal direction on boundary', () => {
+            expect(intersect([0, 0, 0], [0, -1, 0])).toEqual([
+              [0, -1, 0], 1, [0, 1, 0],
+            ]);
+          });
+          test('Inside normal', () => {
+            expect(intersect([0, 0, 0], [0, -0.5, 0])).toEqual([
+              [0, -1, 0], 1, [0, 1, 0],
+            ]);
+          });
+          test('Inside normal offset', () => {
+            expect(intersect([0.5, 0, 0], [0, -0.5, 0])).toEqual([
+              [0.5, -1, 0], 1, [0, 1, 0],
+            ]);
+          });
+          test('26º inside', () => {
+            expect(intersect([0.05, -0.9, 0], [-1, -2, 0])).toEqual([
+              [0, -1, 0],
+              round(Math.sqrt(0.1 ** 2 + 0.05 ** 2), 3),
+              [-0.447, 0.894, 0],
+            ]);
+          });
+          test('45º inside', () => {
+            expect(intersect([-0.2, -0.9, 0], [1, -1, 0])).toEqual([
+              [-0.1, -1, 0], round(0.1 * Math.sqrt(2), 3), [0.707, 0.707, 0],
+            ]);
+          });
+          test('63º inside', () => {
+            expect(intersect([0.2, -0.95, 0], [-2, -1, 0])).toEqual([
+              [0.1, -1, 0],
+              round(Math.sqrt(0.1 ** 2 + 0.05 ** 2), 3),
+              [-0.894, 0.447, 0],
+            ]);
+          });
+          test('On Border', () => {
+            expect(intersect([0, 1, 0], [1, 1, 0])).toEqual([
+              [0, 1, 0], 0, [0.707, -0.707, 0],
+            ]);
+          });
+          test('Outside Border going out', () => {
+            expect(intersect([0, -1.1, 0], [1, -1, 0])).toEqual([
+              [0, -1, 0], 0, [0.707, 0.707, 0],
+            ]);
+          });
+          test('Outside Border corner going out', () => {
+            expect(intersect([1.1, -1.1, 0], [1, -1, 0])).toEqual([
+              [1, -1, 0], 0, [-0.707, 0.707, 0],
+            ]);
+          });
+          test('Outside Border corner going in', () => {
+            expect(intersect([1.1, -1.1, 0], [-1, 1, 0])).toEqual([
+              [-1, 1, 0], round(Math.sqrt(2) * 2, 3), [0.707, -0.707, 0],
             ]);
           });
         });
