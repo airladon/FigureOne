@@ -365,6 +365,15 @@ class Point {
   }
 
   /**
+   * Return a vector with magnitude of the scalar projection of this vector on
+   * v and direction +/- v (depending on the sign of the scalar projection).
+   */
+  componentAlong(v: TypeParsablePoint) {
+    const mag = this.projectOn(v);
+    return getPoint(v).normalize().scale(mag);
+  }
+
+  /**
    * Returns `true` if the x, y, z components of the point when rounded
    * with `precision` are zero.
    */

@@ -8,7 +8,7 @@ import {
 } from './deceleration';
 import { round } from '../math';
 
-describe('Decelerate Value', () => {
+describe.only('Decelerate Value', () => {
   describe('No Bounds', () => {
     test('From origin', () => {
       const p = 0;
@@ -21,6 +21,18 @@ describe('Decelerate Value', () => {
       // s = vt + 0.5 * at^2
       // s = 5 * 1 - 0.5 * 1 * 1^2 = 5 - 0.5 = 4.5
       expect(value).toEqual(4.5, 0);
+    });
+    test('From origin negative direction', () => {
+      const p = 0;
+      const v = -5;
+      const deceleration = 1;
+      const deltaTime = 1;
+      const { velocity, value } = decelerateValue(p, v, deceleration, deltaTime);
+      // v1 = v0 - a * t = 5 - 1 * 1 = 4
+      expect(round(velocity)).toBe(-4);
+      // s = vt + 0.5 * at^2
+      // s = 5 * 1 - 0.5 * 1 * 1^2 = 5 - 0.5 = 4.5
+      expect(value).toEqual(-4.5, 0);
     });
     test('Along x from point, 1s', () => {
       const p = 1;
@@ -59,7 +71,7 @@ describe('Decelerate Value', () => {
       // s = 5 * 5 - 0.5 * 1 * 5^2 = 25 - 12.5 = 12.5
       expect(round(value)).toEqual(12.5);
     });
-    describe('Rect Bounds', () => {
+    describe('Range Bounds', () => {
       test('Single bounce, no loss', () => {
         const p = 0;
         const v = 5;
@@ -73,7 +85,7 @@ describe('Decelerate Value', () => {
         // s = v0*t + 0.5*acc*t^2
         //   = 5 * 2 + 0.5 * 1 * 2 * 2 = 10 - 2 = 8
         // Total displacement = 8
-        // For v0 = 5, acc = -1, after 1s, the displaycement will be:
+        // For v0 = 5, acc = -1, after 1s, the displacement will be:
         // s = v0*t + 0.5*acc*t^2 = 5 - 0.5 = 4.5
         // Therefore end point will be 4.5 - (8 - 4.5) = 1
         expect(round(velocity)).toBe(-3);
@@ -98,6 +110,78 @@ describe('Decelerate Value', () => {
         // Therefore final position will be 4.5 - 1.5 = 3
         expect(round(velocity)).toBe(-1);
         expect(round(value)).toEqual(3);
+      });
+      test('Single bounce, negativeDirection, 0.5 loss', () => {
+        const p = 0;
+        const v = -5;
+        const deceleration = 1;
+        const deltaTime = 2;
+        const bounds = new RangeBounds({ min: -4.5, max: 4.5 });
+        const bounceLoss = 0.5;
+        const { velocity, value } = decelerateValue(
+          p, v, deceleration, deltaTime, bounds, bounceLoss,
+        );
+        // After 1s, s = 4.5 and v = 4.
+        // Boundary is at 4.5
+        // So at boundary, new v will be 4 * 0.5 = 2
+        // Over the next second, s will be:
+        //    = 2 * 1 - 0.5 * 1 * 1 * 1 = 1.5
+        //    and v will reduce from 2 to 1
+        // Therefore final position will be 4.5 - 1.5 = 3
+        expect(round(velocity)).toBe(1);
+        expect(round(value)).toEqual(-3);
+      });
+      test('Single bounce, from Bound toward bound', () => {
+        const p = 4.5;
+        const v = 5;
+        const deceleration = 1;
+        const deltaTime = 2;
+        const bounds = new RangeBounds({ min: -4.5, max: 4.5 });
+        const bounceLoss = 0;
+        const { velocity, value } = decelerateValue(
+          p, v, deceleration, deltaTime, bounds, bounceLoss,
+        );
+        // s = v0*t + 0.5*acc*t^2
+        //   = 5 * 2 + 0.5 * 1 * 2 * 2 = 10 - 2 = 8
+        // Total displacement = 8
+        // 4.5 - 8 = -3.5 finish position
+        expect(round(velocity)).toBe(-3);
+        expect(round(value)).toEqual(-3.5);
+      });
+      test('Single bounce, out of Bound toward bound', () => {
+        const p = 5.5;
+        const v = 5;
+        const deceleration = 1;
+        const deltaTime = 2;
+        const bounds = new RangeBounds({ min: -4.5, max: 4.5 });
+        const bounceLoss = 0;
+        const { velocity, value } = decelerateValue(
+          p, v, deceleration, deltaTime, bounds, bounceLoss,
+        );
+        // s = v0*t + 0.5*acc*t^2
+        //   = 5 * 2 + 0.5 * 1 * 2 * 2 = 10 - 2 = 8
+        // Total displacement = 8
+        // 4.5 - 8 = -3.5 finish position
+        expect(round(velocity)).toBe(-3);
+        expect(round(value)).toEqual(-3.5);
+      });
+      test('Two bounces, no loss', () => {
+        const p = 0;
+        const v = 5;
+        const deceleration = 1;
+        const deltaTime = 2;
+        const bounds = new RangeBounds({ min: -2.5, max: 2.5 });
+        const bounceLoss = 0;
+        const { velocity, value } = decelerateValue(
+          p, v, deceleration, deltaTime, bounds, bounceLoss,
+        );
+        // s = v0*t + 0.5*acc*t^2
+        //   = 5 * 2 + 0.5 * 1 * 2 * 2 = 10 - 2 = 8
+        // Total displacement = 8
+        // Will travel 2.5 to +boundary, 7.5 to -boundary then
+        // additional 0.5. So final position will be -2.
+        expect(round(velocity)).toBe(3);
+        expect(round(value)).toEqual(-2);
       });
     });
   });

@@ -10,25 +10,355 @@ import {
 import type { TypeTransformBounds, TypeTransformBoundsDefinition } from './Bounds';
 import type { TypeTransformValue, TransformDefinition } from './Transform';
 
-// type TypeTransformDeceleration = Array<number>;
-// type TypeTransformZeroThreshold = Array<number>;
-// type TypeTransformBounce = Array<number>;
+function getDistance(
+  value: number,
+  velocity: number,
+  deltaTimeIn: number,
+  deceleration: number,
+  zeroVelocityThreshold: number,
+) {
+  // Initial Velocity
+  const v0 = Math.abs(velocity);
+  // Total change in velocity to go to zero threshold
+  const deltaV = Math.abs(v0) - zeroVelocityThreshold;
 
-// function deceleratePointInPlane(
-//   positionIn: Point,
-//   velocityIn: Point,
-//   decelerationIn: number,
-//   deltaTimIn: number | null,
-//   boundsIn: ?Bounds = null,
-//   bounceLossIn: number = 0,
-//   zeroVelocityThreshold: number = 0,
-//   precision: number = 8,
-// ) {
-//   // bounds.center,
-//   // bounds.hVector,
-//   // bounds.vVector,
+  let deltaTime = deltaTimeIn;
 
-// }
+  if (deltaTime == null || deltaTime > Math.abs(deltaV / deceleration)) {
+    deltaTime = Math.abs(deltaV / deceleration);
+  }
+
+  // Calculate distance traveeled over time and so find the new Position
+  return [v0 * deltaTime - 0.5 * deceleration * (deltaTime ** 2), deltaTime];
+}
+
+function timeFromVS(velocity: number, distance: number, deceleration: number) {
+  // Calculate the time to the intersect point
+  const v0 = Math.abs(velocity);
+  const acc = -v0 / Math.abs(v0) * deceleration;
+  const s = distance;
+  const b = v0;
+  const a = 0.5 * acc;
+  const c = -s;
+  const t = (-b + Math.sqrt(b ** 2 - 4 * a * c)) / (2 * a);
+  const velocityAtDistance = v0 + acc * t; // (s - 0.5 * a * (t ** 2)) / t;
+  return [t, velocityAtDistance];
+}
+
+/*
+Decelerate value moving at velocity with some deceleration over time deltaTime.
+
+If bounds exist, then value will bounce off bounds.
+
+Return the new velocity and value after deltaTime. If the velocity goes to 0
+before deltaTime, then return the duration it took to go to 0.
+
+If deltaTime is null, then return the time it takes for the velocity to go to
+zero and the final value when it does.
+*/
+function decelerateValue(
+  valueIn: number,
+  velocityIn: number,
+  decelerationIn: number,
+  deltaTimeIn: number | null = null,
+  bounds: null | RangeBounds = null,
+  bounceLossIn: number = 0,
+  zeroVelocityThreshold: number = 0,
+  precision: number = 8,
+): {
+  velocity: number,
+  duration: null | number,
+  value: number,
+} {
+  // If deltaTimeIn === null, then the caller is requesting the time it takes
+  // for the velocity to go to zero, and the final value at that time.
+  // However, if the deceleration is 0, then the velocity will never go to
+  // zero so return duration = null (meaning infinite time).
+  if (
+    deltaTimeIn === 0
+    && round(decelerationIn, precision) === 0
+    // && bounceLossIn === 0 || bounds == null || !bounds.isDefined()
+  ) {
+    // if () {
+    //   if (deltaTimeIn == null) {
+    return {
+      velocity: velocityIn,
+      value: valueIn,
+      duration: null,
+    };
+    //   }
+    // }
+  }
+  debugger;
+  // If the velocity is already below the zero threshold, then we are finished
+  if (Math.abs(velocityIn) < zeroVelocityThreshold) {
+    return { velocity: 0, value: valueIn, duration: 0 };
+  }
+
+  // Clip the current value to within the bounds, and make the deceleration non
+  // zero to prevent divide by zeros
+  const value = bounds != null ? bounds.clip(valueIn) : valueIn;
+  const deceleration = Math.max(decelerationIn, 0.0000001);
+  // Direciton of velocity
+  const direction = velocityIn / Math.abs(velocityIn);
+
+  // Calculate the distance travelled in deltaTime - If deltaTime === null, then
+  // the distance travelled till the velocity becomes 0 will be calculated.
+  // Returned deltaTime will then be the time till the zero velocity.
+  const [distanceTravelled, deltaTime] = getDistance(
+    value, velocityIn, deltaTimeIn, deceleration, zeroVelocityThreshold,
+  );
+
+  // Calculate the new value from the old value, distanceTravelled and the
+  // velocity direction
+  const newValue = value + direction * distanceTravelled;
+
+  // If the new value is within the bounds, then can return the result.
+  if (bounds == null || bounds.contains(newValue)) {
+    // If originally deltaTimeIn was null, then the requested time and value
+    // were for when the velocity went to zero
+    if (deltaTimeIn == null) {
+      return {
+        duration: deltaTime,
+        value: newValue,
+        velocity: 0,
+      };
+    }
+    // If deltaTimeIn != null, then we need to find the new velocity after
+    // deltaTime
+    let v1 = Math.abs(velocityIn) - deceleration * deltaTime;
+    if (round(v1, precision) <= round(zeroVelocityThreshold, precision)) {
+      v1 = 0;
+    }
+    return {
+      value: newValue,
+      velocity: v1 * direction,
+      duration: deltaTime,
+    };
+  }
+
+  // if we got here, the new value is out of bounds
+  const bounceScaler = 1 - bounceLossIn;
+  const result = bounds.intersect(value, direction);
+
+  // if new value is not contained within bounds, but the intersect distance
+  // is larger than the distance travelled in deltaTime, then there is likely a
+  // rounding error that can't be resolved - this should be better handled in
+  // future...
+  if (result.distance != null && result.distance > distanceTravelled) {
+    throw new Error('Error in calculating intersect');
+  }
+
+  const { intersect, reflection } = result;
+  const distanceToBound = result.distance;
+
+  // Calculate the time to the intersect point
+  const [t, velocityAtIntersect] = timeFromVS(velocityIn, distanceToBound, deceleration);
+
+  // If there is no bounce (all energy is lost) then return the result
+  if (bounceLossIn === 1) {
+    return {
+      velocity: new Point(0, 0),
+      position: intersect,
+      duration: t,
+    };
+  }
+
+  const bounceVelocity = velocityAtIntersect * bounceScaler * reflection;
+
+  // Now we've had a bounce, we need to call decelerateValue again with the
+  // new bounce velocity and bounce position.
+
+  // If deltaTimeIn == null, looking for the zero velocity time/value
+  if (deltaTimeIn == null) {
+    const newStop = decelerateValue(
+      intersect, bounceVelocity, deceleration, deltaTimeIn,
+      bounds, bounceLossIn, zeroVelocityThreshold, precision,
+    );
+    // if (newStop.duration == null) {
+    //   return {
+    //     duration: null,
+    //     value: newStop.value,
+    //     velocity: new Point(0, 0),
+    //   };
+    // }
+    return {
+      duration: t + newStop.duration,
+      value: newStop.value,
+      velocity: 0,
+    };
+  }
+  return decelerateValue(
+    intersect, bounceVelocity, deceleration, deltaTime - t, bounds,
+    bounceLossIn, zeroVelocityThreshold, precision,
+  );
+}
+
+function decelerateVector(
+  positionIn: Point,
+  velocityIn: Point,
+  decelerationIn: number,
+  deltaTimeIn: number | null = null,
+  bounds: null | RectBounds | LineBounds = null,
+  bounceLossIn: number = 0,
+  zeroVelocityThreshold: number = 0,
+  precision: number = 8,
+) {
+  // If deltaTimeIn === null, then the caller is requesting the time it takes
+  // for the velocity to go to zero, and the final value at that time.
+  // However, if the deceleration is 0, then the velocity will never go to
+  // zero so return duration = null (meaning infinite time).
+  if (
+    deltaTimeIn == null
+    && round(decelerationIn, precision) === 0
+  ) {
+    // if (bounceLossIn === 0 || bounds == null || !bounds.isDefined()) {
+    //   if (deltaTimeIn == null) {
+    return {
+      velocity: velocityIn,
+      position: positionIn,
+      duration: null,
+    };
+  }
+
+  // clip velocity to the dimension of interest
+  let velocity = velocityIn;    // $FlowFixMe
+  if (bounds instanceof LineBounds) {
+    velocity = velocity.projectOn(bounds.line.unitVector());
+  } else if (bounds instanceof RectBounds) {
+    velocity = bounds.plane.pointProjection(velocity);
+  }
+
+  // Get the magnitude and direciton of the velocity
+  const mag = velocity.length();
+  const direction = velocity.unitVector();
+
+  if (mag <= zeroVelocityThreshold) {
+    return {
+      velocity: new Point(0, 0, 0),
+      position: positionIn,
+      duration: 0,
+    };
+  }
+
+  // Clip position in the bounds
+  let position = positionIn._dup();
+  if (bounds != null) {
+    position = bounds.clip(positionIn);
+  }
+
+  // // Initial Velocity
+  // const v0 = mag;
+  // // Total change in velocity to go to zero threshold
+  // const deltaV = Math.abs(v0) - zeroVelocityThreshold;
+
+  // let deltaTime = deltaTimeIn;
+
+  // // If the velocity will decelerate to 0 before deltaTimeIn, then change
+  // // deltaTime to be this shorter time.
+  // const deceleration = Math.max(decelerationIn, 0.0000001);
+  // if (deltaTime == null || deltaTime > Math.abs(deltaV / deceleration)) {
+  //   deltaTime = Math.abs(deltaV / deceleration);
+  // }
+
+  // // Calculate distance traveeled over time and so find the new Position
+  // const distanceTravelled = v0 * deltaTime - 0.5 * deceleration * (deltaTime ** 2);
+
+  // Calculate the distance travelled in deltaTime - If deltaTime === null, then
+  // the distance travelled till the velocity becomes 0 will be calculated.
+  // Returned deltaTime will then be the time till the zero velocity.
+  const [distanceTravelled, deltaTime] = getDistance(
+    value, velocityIn, deltaTimeIn, deceleration, zeroVelocityThreshold,
+  );
+  const newPosition = position.add(direction.scale(distanceTravelled));
+
+  // If the new position is within the bounds, then can return the result.
+  if (bounds == null || bounds.contains(newPosition)) {
+    if (deltaTimeIn == null) {
+      return {
+        duration: deltaTime,
+        position: newPosition,
+        velocity: new Point(0, 0, 0),
+      };
+    }
+    let v1 = velocityIn - deceleration * deltaTime;
+    if (round(v1, precision) <= round(zeroVelocityThreshold, precision)) {
+      v1 = 0;
+    }
+    return {
+      position: newPosition,
+      velocity: direction.scale(v1),
+      duration: deltaTime,
+    };
+  }
+
+  // if we got here, the new position is out of bounds
+  const bounceScaler = 1 - bounceLossIn;
+  const result = bounds.intersect(position, direction);
+
+  // if newPosition is not contained within bounds, but the intersect distance
+  // is larger than the distance travelled in deltaTime, then there is likely a
+  // rounding error... Or if the intersect is null there is an error (it really
+  // shouldn't be if the containment test is failed)
+  if (
+    (result.distance !== 0 && result.distance > distanceTravelled)
+    || result.intersect == null
+  ) {
+    throw new Error('Error in calculating intersect');
+  }
+
+  const intersectPoint = result.intersect;
+  const distanceToBound = result.distance;
+  const { reflection } = result;
+
+  // // Calculate the time to the intersect point
+  // const acc = -v0 / Math.abs(v0) * deceleration;
+  // const s = distanceToBound;
+  // const b = v0;
+  // const a = 0.5 * acc;
+  // const c = -s;
+  // const t = (-b + Math.sqrt(b ** 2 - 4 * a * c)) / (2 * a);
+
+  // Calculate the time to the intersect point
+  const [t, velocityAtIntersect] = timeFromVS(velocityIn, distanceToBound, deceleration)
+
+  // If there is no bounce (all energy is lost) then return the result
+  if (bounceLossIn === 1) {
+    return {
+      velocity: new Point(0, 0, 0),
+      position: intersectPoint,
+      duration: t,
+    };
+  }
+
+  // const velocityAtIntersect = v0 + acc * t;
+  const bounceVelocity = velocityAtIntersect * bounceScaler;
+  const reflectionVelocity = reflection.scale(bounceVelocity);
+
+
+  if (deltaTimeIn == null) {
+    const newStop = decelerateVector(
+      intersectPoint, reflectionVelocity, deceleration, deltaTimeIn,
+      bounds, bounceLossIn, zeroVelocityThreshold, precision,
+    );
+    // if (newStop.duration == null) {
+    //   return {
+    //     duration: null,
+    //     position: newStop.position,
+    //     velocity: new Point(0, 0),
+    //   };
+    // }
+    return {
+      duration: t + newStop.duration,
+      position: newStop.position,
+      velocity: new Point(0, 0),
+    };
+  }
+  return decelerateVector(
+    intersectPoint, reflectionVelocity, deceleration, deltaTime - t, bounds,
+    bounceLossIn, zeroVelocityThreshold, precision,
+  );
+}
 
 function deceleratePoint(
   positionIn: Point,
@@ -205,7 +535,7 @@ function deceleratePoint(
   );
 }
 
-function decelerateValue(
+function decelerateValueLegacy(
   value: number,
   velocity: number,
   deceleration: number,

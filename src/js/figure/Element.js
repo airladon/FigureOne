@@ -325,7 +325,7 @@ An element can be 'moved' (transformed) by touching on it and dragging.
 
 The element can be translated, rotated or scaled.
 
-An element can be translated in along a line, or within a plane.
+An element can be translated along a line, or within a plane.
 An element can be rotated in a plane.
 An element can be scaled by x, y, z or a combination.
 
@@ -357,6 +357,16 @@ rotation.
 
 Only one element (the closest element under the touch pixel) can be touched at
 any time.
+
+Translating an element in a plane requires VectorDeceleration.
+Everything else is ValueDeceleration
+
+Rotation can only happen with some rotation transform elements:
+- 2D - plane is defined as [[0, 0, 0], [0, 0, 1]
+- ra (axis) - plane is defined as [[x, y, z], axis]
+
+
+
 */
 
 /**
@@ -373,13 +383,13 @@ any time.
  * @property {FigureElement | null} element
  */
 type OBJ_ElementMove = {
-  type: 'rotation' | 'translation' | 'position' | 'scale',
+  type: 'rotation' | 'translation' | 'position' | 'scale' | 'scaleX' | 'scaleY' | 'scaleZ',
   bounds: RectBounds | LineBounds | RangeBounds | null,
   plane: Plane,
-  maxVelocity: TypeTransformValue;
+  maxVelocity: number | TypeParsablePoint;
   freely: OBJ_ElementMoveFreely,
   canBeMovedAfterLosingTouch: boolean;
-  type: 'rotation' | 'translation' | 'scaleX' | 'scaleY' | 'scale';
+  // type: 'rotation' | 'translation' | 'scaleX' | 'scaleY' | 'scale';
   element: FigureElement | null | string;
   // Deprecate
   sizeInBounds: boolean,
@@ -443,10 +453,12 @@ type Scenarios = {
  */
 type ElementMovementState = {
   previousTime: ?number,
-  previousTransform: Transform,
-  velocity: Transform,           // current velocity - will be clipped
+  // previousTransform: Transform,
+  // velocity: Transform,           // current velocity - will be clipped
                                     // at max if element is being moved
                                     // faster than max.
+  velocity: Point | value,
+  previous: Point | value,
 };
 
 /**
@@ -1696,9 +1708,12 @@ class FigureElement {
         return;
       }
       // console.log(this.state.movement.velocity)
-      if (Array.isArray(this.state.movement.velocity)) {
-        this.state.movement.velocity = getTransform(this.state.movement.velocity);
+      if (typeof this.state.movement.velocity !== 'number') {
+        this.state.movement.velocity = getPoint(this.state.movement.velocity);
       }
+      // if (Array.isArray(this.state.movement.velocity)) {
+      //   this.state.movement.velocity = getTransform(this.state.movement.velocity);
+      // }
       // If got here, then we are now after the first frame, so calculate
       // the delta time from this frame to the previous
       const deltaTime = now - this.state.movement.previousTime;
@@ -1709,8 +1724,18 @@ class FigureElement {
 
       // If the velocity is 0, then stop moving freely and return the current
       // transform
-      if (this.state.movement.velocity.isZero()) {
-        this.state.movement.velocity = this.state.movement.velocity.zero();
+      if (
+        (
+          typeof this.state.movement.velocity === 'number'
+          && round(this.state.movement.velocity) === 0
+        )
+        || this.state.movement.velocity.isZero()
+      ) {
+        if (typeof this.state.movement.velocity === 'number') {
+          this.state.movement.velocity = 0;
+        } else {
+          this.state.movement.velocity = new Point(0, 0, 0);
+        }
         this.stopMovingFreely('complete');
       }
       this.setTransform(next.transform);
@@ -1934,9 +1959,41 @@ class FigureElement {
   // transform and movement velocity
   decelerate(deltaTime: number | null = null): Object {
     const bounds = this.getMoveBounds();
+    let next;
+    const { type } = this.move;
+    if (type === 'position' || type === 'rotation') {
+      next = decelerateVector(
+        this.transform.t(),
+        this.state.movement.velocity,
+        this.move.freely.deceleration,
+        deltaTime,  // $FlowFixMe
+        bounds,
+        this.move.freely.bounceLoss,
+        this.move.freely.zeroVelocityThreshold,
+      );
+      return {
+        velocity: next.velocity, value: next.position, duration: next.duration,
+      };
+    }
+
+    let current;
+    if (type === 'scale' || type === 'scaleX') {
+      current = this.transform.s().x;
+    } else if (type === 'scaleY') {
+      current = this.transform.s().y;
+    } else if (type === 'scaleZ') {
+      current = this.transform.s().z;
+    } else if (type === 'rotation') {
+      const r = this.transform.r();
+      if (typeof r === 'number') {
+        current = r;
+      } else {
+        current = r[1];
+      }
+    }
     // console.log(deltaTime)
-    const next = decelerateTransform(
-      this.transform,
+    return decelerateValue(
+      current,
       this.state.movement.velocity,
       this.move.freely.deceleration,
       deltaTime,  // $FlowFixMe
@@ -1944,11 +2001,6 @@ class FigureElement {
       this.move.freely.bounceLoss,
       this.move.freely.zeroVelocityThreshold,
     );
-    return {
-      velocity: next.velocity,
-      transform: next.transform,
-      duration: next.duration,
-    };
   }
 
 
@@ -1979,14 +2031,47 @@ class FigureElement {
     return `${this.parent.getPath()}.${this.name}`;
   }
 
+  getMovement(transform: Transform) {
+    const { type } = this.move;
+    let movement;
+    if (type === 'scale' || type === 'scaleX') {
+      movement = transform.getScale().x;
+    } else if (type === 'scaleY') {
+      movement = transform.getScale().y;
+    } else if (type === 'scaleZ') {
+      movement = transform.getScale().z;
+    } else if (type === 'position' || type === 'translation') {
+      movement = transform.getTranslation();
+    } else if (type === 'rotation') {
+      const r = transform.getRotation();
+      if (typeof r === 'number') {
+        movement = r;
+      } else {
+        movement = r[1];
+      }
+    }
+    return movement;
+  }
+
+  setZeroVelocity() {
+    const { type } = this.move;
+    if (type === 'position' || type === 'translation') {
+      this.state.movement.velocity = new Point(0, 0, 0);
+    } else {
+      this.state.movement.velocity = 0;
+    }
+  }
 
   // Being Moved
   startBeingMoved(): void {
     // this.stopAnimating();
     this.animations.cancelAll('freeze');
     this.stopMovingFreely('freeze');
-    this.state.movement.velocity = this.transform.zero();
-    this.state.movement.previousTransform = this.transform._dup();
+    // this.state.movement.velocity = 0;
+    this.setZeroVelocity();
+    // 'rotation' | 'translation' | 'position' | 'scale' | 'scaleX' | 'scaleY' | 'scaleZ',
+    this.state.movement.previous = this.getMovement(this.transform);
+    // this.state.movement.previousTransform = this.transform._dup();
     this.state.movement.previousTime = this.timeKeeper.now() / 1000;
     this.state.isBeingMoved = true;
     this.unrender();
@@ -2026,7 +2111,7 @@ class FigureElement {
     // velocity 0 as the user has stopped moving before releasing touch/click
     if (this.state.movement.previousTime != null) {
       if ((currentTime - this.state.movement.previousTime) > 0.05) {
-        this.state.movement.velocity = this.transform.zero();
+        this.setZeroVelocity();
       }
     }
     this.notifications.publish('stopBeingMoved');
@@ -2036,7 +2121,7 @@ class FigureElement {
         [
           this.getPath(),
           this.transform._state(),
-          this.state.movement.velocity._state(),
+          typeof this.state.movement.velocity === 'number' ? this.state.movement.velocity : this.state.movement.velocity._state(),
         ],
         // this.state.movement.velocity.toString(),
       );
@@ -2057,20 +2142,33 @@ class FigureElement {
     if (deltaTime < 0.0001) {
       return;
     }
-    this.state.movement.velocity = nextTransform.velocity(
-      prevTransform,
-      deltaTime,
-      this.move.freely.zeroVelocityThreshold,
-      this.move.maxVelocity,
-    );
+    const next = this.getMovement(nextTransform);
+
+    let v;
+    if (typeof next === 'number' && typeof this.previous === 'number') {
+      v = (next - this.previous) / deltaTime;
+      if (v <= this.move.freely.zeroVelocityThreshold) {
+        v = 0;
+      }
+      v = Math.min(v, this.move.maxVelocity);
+    } else {
+      v = next.sub(this.previous).scale(1 / deltaTime);
+      const vMag = v.length;
+      if (vMag <= this.move.freely.zeroVelocityThreshold) {
+        v = new Point(0, 0, 0);
+      } else if (vMag > this.move.maxVelocity) {
+        v = v.normalize().scale(this.move.maxVelocity);
+      }
+    }
+    this.state.movement.velocity = v;
     this.state.movement.previousTime = currentTime;
   }
 
-  simulateStartMovingFreely(transform: Transform, velocity: Transform) {
-    this.transform = transform;
-    this.state.movement.velocity = velocity;
-    this.startMovingFreely();
-  }
+  // simulateStartMovingFreely(transform: Transform, velocity: Transform) {
+  //   this.transform = transform;
+  //   this.state.movement.velocity = velocity;
+  //   this.startMovingFreely();
+  // }
 
   // Moving Freely
   startMovingFreely(callback: ?(string | ((boolean) => void)) = null): void {
@@ -2081,13 +2179,13 @@ class FigureElement {
     }
     this.state.isMovingFreely = true;
     this.state.movement.previousTime = this.timeKeeper.now() / 1000;
-    if (Array.isArray(this.state.movement.velocity)) {
-      this.state.movement.velocity = getTransform(this.state.movement.velocity);
-    }
-    this.state.movement.velocity = this.state.movement.velocity.clipMag(
-      this.move.freely.zeroVelocityThreshold,
-      this.move.maxVelocity,
-    );
+    // if (Array.isArray(this.state.movement.velocity)) {
+    //   this.state.movement.velocity = getTransform(this.state.movement.velocity);
+    // }
+    // this.state.movement.velocity = this.state.movement.velocity.clipMag(
+    //   this.move.freely.zeroVelocityThreshold,
+    //   this.move.maxVelocity,
+    // );
     this.notifications.publish('startMovingFreely');
     if (this.recorder.state === 'recording') {
       this.recorder.recordEvent(

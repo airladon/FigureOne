@@ -11,19 +11,19 @@ import { round } from '../math';
 describe('Bounds', () => {
   let bounds;
   let check;
-  beforeEach(() => {
-    check = (p, dir, i, r, d) => {
-      const result = bounds.intersect(p, dir);
-      if (i == null) {
-        expect(result.intersect).toBe(null);
-        // return;
-      } else {
-        expect(result.intersect.round(3)).toEqual(getPoint(i).round(3));
-      }
-      expect(round(clipAngle(result.reflection, '-180to180'), 3)).toBe(round(clipAngle(r, '-180to180'), 3));
-      expect(round(result.distance, 3)).toBe(round(d, 3));
-    };
-  });
+  // beforeEach(() => {
+  //   check = (p, dir, i, r, d) => {
+  //     const result = bounds.intersect(p, dir);
+  //     if (i == null) {
+  //       expect(result.intersect).toBe(null);
+  //       // return;
+  //     } else {
+  //       expect(result.intersect.round(3)).toEqual(getPoint(i).round(3));
+  //     }
+  //     expect(round(clipAngle(result.reflection, '-180to180'), 3)).toBe(round(clipAngle(r, '-180to180'), 3));
+  //     expect(round(result.distance, 3)).toBe(round(d, 3));
+  //   };
+  // });
   describe('Rect Bounds', () => {
     describe('Construction', () => {
       test('XY Plane direction vectors', () => {
@@ -1780,7 +1780,7 @@ describe('Bounds', () => {
         expect(d).not.toBe(bounds);
       });
     });
-    describe('2 Ends horizontal - Inside Bounds', () => {
+    describe('2 Ends horizontal - 2D', () => {
       beforeEach(() => {
         bounds = new LineBounds({ p1: [0, 0], p2: [10, 0] });
       });
@@ -1808,22 +1808,75 @@ describe('Bounds', () => {
         expect(() => bounds.clip(100)).toThrow();
       });
       describe('Intersect', () => {
+        beforeEach(() => {
+          check = (pos, dir, i, r, d) => {
+            const result = bounds.intersect(pos, dir);
+            if (i == null) {
+              expect(result.intersect).toBe(null);
+            } else {
+              expect(result.intersect.round(3)).toEqual(getPoint(i).round(3));
+            }
+            expect(result.reflection.round(3)).toEqual(getPoint(r).round(3));
+            expect(round(result.distance, 3)).toBe(round(d, 3));
+          };
+        });
         test('Inside Bounds', () => {
           // check([0, 0], 0, [10, 0], Math.PI, 10);
-          check([1, 0], 0, [10, 0], Math.PI, 9);
-          check([1, 0], Math.PI, [0, 0], 0, 1);
+          check([1, 0], [1, 0], [10, 0], [-1, 0], 9);
+          check([1, 0], [-0.1, 0], [0, 0], [1, 0], 1);
         });
         test('Edges of bounds', () => {
-          check([0, 0], 0, [10, 0], Math.PI, 10);
-          check([0, 0], Math.PI, [0, 0], 0, 0);
-          check([10, 0], 0, [10, 0], Math.PI, 0);
-          check([10, 0], Math.PI, [0, 0], 0, 10);
+          check([0, 0], [1, 0], [10, 0], [-1, 0], 10);
+          check([0, 0], [-1, 0], [0, 0], [1, 0], 0);
+          check([10, 0], [1, 0], [10, 0], [-1, 0], 0);
+          check([10, 0], [-1, 0], [0, 0], [1, 0], 10);
         });
         test('Outside bounds', () => {
-          check([-1, 0], 0, [0, 0], Math.PI, 1);
-          check([-1, 0], Math.PI, null, Math.PI, 0);
-          check([11, 0], Math.PI, [10, 0], 0, 1);
-          check([11, 0], 0, null, 0, 0);
+          check([-1, 0], [1, 0], [10, 0], [-1, 0], 10);
+          check([-1, 0], [-1, 0], [0, 0], [1, 0], 0);
+          check([11, 0], [1, 0], [10, 0], [-1, 0], 0);
+          check([11, 0], [-1, 0], [0, 0], [1, 0], 10);
+        });
+      });
+    });
+    describe('2 Ends - 3D', () => {
+      beforeEach(() => {
+        bounds = new LineBounds({ p1: [0, 0, 0], p2: [10, 10, 10] });
+      });
+      test('Contains value', () => {
+        expect(bounds.contains([0, 0, 0])).toBe(true);
+        expect(bounds.contains([0.1, 0.1, 0.1])).toBe(true);
+        expect(bounds.contains([5, 5, 5])).toBe(true);
+        expect(bounds.contains([9.9, 9.9, 9.9])).toBe(true);
+        expect(bounds.contains([10, 10, 10])).toBe(true);
+        expect(bounds.contains([11, 11, 11])).toBe(false);
+        expect(bounds.contains([10, 11, 0])).toBe(false);
+        expect(bounds.contains([0, 0, 0.1])).toBe(false);
+        expect(bounds.contains([-1, -1, -1])).toBe(false);
+      });
+      test('Clip Point', () => {
+        expect(bounds.clip([0, 0, 0])).toEqual(new Point(0, 0, 0));
+        expect(bounds.clip([5, 5, 5])).toEqual(new Point(5, 5, 5));
+        expect(bounds.clip([10, 10, 10])).toEqual(new Point(10, 10, 10));
+        expect(bounds.clip([11, 12, 13])).toEqual(new Point(10, 10, 10));
+        expect(bounds.clip([-1, -1, -1])).toEqual(new Point(0, 0, 0));
+      });
+      describe('Intersect', () => {
+        beforeEach(() => {
+          check = (pos, dir, i, r, d) => {
+            const result = bounds.intersect(pos, dir);
+            if (i == null) {
+              expect(result.intersect).toBe(null);
+            } else {
+              expect(result.intersect.round(3)).toEqual(getPoint(i).round(3));
+            }
+            expect(result.reflection.round(3)).toEqual(getPoint(r).round(3));
+            expect(round(result.distance, 3)).toBe(round(d, 3));
+          };
+        });
+        test('Inside Bounds', () => {
+          check([1, 1, 1], [2, 2, 2], [10, 10, 10], [-0.577, -0.577, -0.577], 15.588);
+          check([1, 1, 1], [-0.1, -0.2, 0], [0, 0, 0], [0.577, 0.577, 0.577], Math.sqrt(3));
         });
       });
     });

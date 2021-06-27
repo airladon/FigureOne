@@ -763,12 +763,19 @@ class Line {
     return { intersect: l1.p1._dup(), collinear: true, onLines: true };
   }
 
+  /**
+   * Clip a point to be on a line.
+   *
+   * If point is not along line, then it will be projected onto it.
+   *
+   * If point is not on line, then the closest line end will be returned.
+   */
   clipPoint(point: TypeParsablePoint, precision: number = 8) {
-    // const p = getPoint(point);
-    if (this.hasPointOn(point, precision)) {
-      return point._dup();
+    const p = getPoint(point);
+    if (this.hasPointOn(p, precision)) {
+      return p._dup();
     }
-    const projection = this.pointProjection(point);
+    const projection = this.pointProjection(p);
     if (this.hasPointOn(projection, precision)) {
       return projection;
     }

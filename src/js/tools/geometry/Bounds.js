@@ -1247,7 +1247,7 @@ class LineBounds extends Bounds {
 
   clip(position: number | TypeParsablePoint) {
     if (typeof position === 'number') {
-      throw new Error(`LineBounds.contains only accepts a point: ${position}`);
+      throw new Error(`LineBounds.clip only accepts a point: ${position}`);
     }
     const p = getPoint(position);
     return this.boundary.clipPoint(p, this.precision);
@@ -1256,7 +1256,13 @@ class LineBounds extends Bounds {
   // The intersect of a Line Boundary can be its finite end points
   //  - p1 only if 1 ended
   //  - p1 or p2 if 2 ended
-  intersect(position: number | TypeParsablePoint, direction: number = 0) {
+  intersect(position: number | TypeParsablePoint, direction: TypeParsablePoint) {
+    // First project the point and velocity onto the boundary line
+    const p = this.boundary.clipPoint(position);
+    const boundaryDir = this.boundary.unitVector();
+    const dir = getPoint(direction).componentAlong(boundaryDir).normalize();
+
+    // If the line is unbounded, then there is no intersect
     if (
       typeof position === 'number'
       || this.boundary.ends === 0   // Unbounded line will have no intersect
@@ -1264,115 +1270,132 @@ class LineBounds extends Bounds {
       return {
         intersect: null,
         distance: 0,
-        reflection: direction,
+        reflection: dir,
       };
-    }
-
-    // If the point is not along the line, then it is invalid
-    const p = getPoint(position);
-
-    if (!this.boundary.hasPointAlong(p, this.precision)) {
-      return {
-        intersect: null,
-        distance: 0,
-        reflection: direction,
-      };
-    }
-
-    let onLine = false;
-    if (this.boundary.hasPointOn(p, this.precision)) {
-      onLine = true;
     }
 
     const b = this.boundary;
     const p1 = this.boundary.p1._dup();
     const p2 = this.boundary.p2._dup();
-    const angleDelta = round(Math.abs(clipAngle(direction, '0to360') - clipAngle(b.angle(), '0to360')), this.precision);
+    const dProjection = dir.projectOn(boundaryDir);
 
-    const d1 = p.distance(p1);
-    const d2 = p.distance(p2);
-
-    // If the point is on p1, unless it is inside and going towards p2 the
-    // result can be given immediately
-    if (p.isEqualTo(p1, this.precision)) {
-      if (this.bounds === 'inside' && angleDelta !== 0) {
-        return { intersect: p1, distance: 0, reflection: b.angle() };
+    // Positive dProjection means direction is along p1->p2
+    // A one ended line is only bounded at p1, therefore if dProjecttion
+    // is positive, there can only be an intersect if there are two lines.
+    if (dProjection > 0) {
+      if (b.ends === 2) {
+        return {
+          intersect: p2,
+          distance: p.distance(p2),
+          reflection: dir.scale(-1),
+        };
       }
-      if (this.bounds === 'outside' && angleDelta !== 0) {
-        return { intersect: null, distance: 0, reflection: direction };
-      }
-      if (this.bounds === 'outside' && angleDelta === 0) {
-        return { intersect: p1, distance: 0, reflection: b.angle() + Math.PI };
-      }
+      return {
+        intersect: null,
+        distance: 0,
+        reflection: dir,
+      };
     }
 
-    // If it is a one ended line, then only p1 is an intersect
-    if (b.ends === 1) {
-      if (
-        (onLine === true && angleDelta === 0)
-        || (onLine === false && angleDelta !== 0)
-      ) {
-        return { intersect: null, distance: 0, reflection: direction };
-      }
-      return { intersect: p1, distance: d1, reflection: direction + Math.PI };
+    // Negative dProjection means the dirction is p2->p1
+    if (dProjection < 0) {
+      return {
+        intersect: p1,
+        distance: p.distance(p1),
+        reflection: dir.scale(-1),
+      };
     }
 
-    // We are now left with a two ended line
-    // So if the point is on p2, then unless it is inside and going toward
-    // p1, the answer can be given now
-    if (p.isEqualTo(p2, this.precision)) {
-      if (this.bounds === 'inside' && angleDelta === 0) {
-        return { intersect: p2, distance: 0, reflection: b.angle() + Math.PI };
-      }
-      if (this.bounds === 'outside' && angleDelta === 0) {
-        return { intersect: null, distance: 0, reflection: direction };
-      }
-      if (this.bounds === 'outside' && angleDelta !== 0) {
-        return { intersect: p2, distance: 0, reflection: b.angle() };
-      }
-      // return { intersect: p2, distance: 0, reflection };
-    }
+    throw new Error('LineBounds.intersect error - could not find intersect');
 
-    if (onLine && angleDelta === 0) {
-      return { intersect: p2, distance: d2, reflection: direction + Math.PI };
-    }
+    // // if (bDir.dotProduct(dir))
 
-    if (onLine) {
-      return { intersect: p1, distance: d1, reflection: direction + Math.PI };
-    }
+    // // const angleDelta = round(Math.abs(clipAngle(direction, '0to360') - clipAngle(b.angle(), '0to360')), this.precision);
 
-    // We now know the point is off a 2 ended line
-    let i;
-    let d;
-    if (d1 < d2 && angleDelta === 0) {
-      i = p1;
-      d = d1;
-    } else if (d2 < d1 && angleDelta !== 0) {
-      i = p2;
-      d = d2;
-    } else {
-      return { intersect: null, distance: 0, reflection: direction };
-    }
-    return { intersect: i, distance: d, reflection: direction + Math.PI };
+    // const d1 = p.distance(p1);
+    // const d2 = p.distance(p2);
+
+    // // If the point is on p1, unless it is inside and going towards p2 the
+    // // result can be given immediately
+    // if (p.isEqualTo(p1, this.precision)) {
+    //   if (this.bounds === 'inside' && angleDelta !== 0) {
+    //     return { intersect: p1, distance: 0, reflection: b.angle() };
+    //   }
+    //   if (this.bounds === 'outside' && angleDelta !== 0) {
+    //     return { intersect: null, distance: 0, reflection: direction };
+    //   }
+    //   if (this.bounds === 'outside' && angleDelta === 0) {
+    //     return { intersect: p1, distance: 0, reflection: b.angle() + Math.PI };
+    //   }
+    // }
+
+    // // If it is a one ended line, then only p1 is an intersect
+    // if (b.ends === 1) {
+    //   if (
+    //     (onLine === true && angleDelta === 0)
+    //     || (onLine === false && angleDelta !== 0)
+    //   ) {
+    //     return { intersect: null, distance: 0, reflection: direction };
+    //   }
+    //   return { intersect: p1, distance: d1, reflection: direction + Math.PI };
+    // }
+
+    // // We are now left with a two ended line
+    // // So if the point is on p2, then unless it is inside and going toward
+    // // p1, the answer can be given now
+    // if (p.isEqualTo(p2, this.precision)) {
+    //   if (this.bounds === 'inside' && angleDelta === 0) {
+    //     return { intersect: p2, distance: 0, reflection: b.angle() + Math.PI };
+    //   }
+    //   if (this.bounds === 'outside' && angleDelta === 0) {
+    //     return { intersect: null, distance: 0, reflection: direction };
+    //   }
+    //   if (this.bounds === 'outside' && angleDelta !== 0) {
+    //     return { intersect: p2, distance: 0, reflection: b.angle() };
+    //   }
+    //   // return { intersect: p2, distance: 0, reflection };
+    // }
+
+    // if (onLine && angleDelta === 0) {
+    //   return { intersect: p2, distance: d2, reflection: direction + Math.PI };
+    // }
+
+    // if (onLine) {
+    //   return { intersect: p1, distance: d1, reflection: direction + Math.PI };
+    // }
+
+    // // We now know the point is off a 2 ended line
+    // let i;
+    // let d;
+    // if (d1 < d2 && angleDelta === 0) {
+    //   i = p1;
+    //   d = d1;
+    // } else if (d2 < d1 && angleDelta !== 0) {
+    //   i = p2;
+    //   d = d2;
+    // } else {
+    //   return { intersect: null, distance: 0, reflection: direction };
+    // }
+    // return { intersect: i, distance: d, reflection: direction + Math.PI };
   }
 
-  clipVelocity(velocity: number | TypeParsablePoint) {
-    if (typeof velocity === 'number') {
-      return velocity;
-    }
-    if (this.boundary == null) {
-      return velocity;
-    }
-    const v = getPoint(velocity); // $FlowFixMe
-    const unitVector = this.boundary.unitVector();
-    let projection = unitVector.dotProduct(v);
-    let ang = this.boundary.angle();
-    if (projection < -1) {
-      ang += Math.PI;
-      projection = -projection;
-    }
-    return polarToRect(projection, ang);
-  }
+  // clipVelocity(velocity: number | TypeParsablePoint) {
+  //   if (typeof velocity === 'number') {
+  //     return velocity;
+  //   }
+  //   if (this.boundary == null) {
+  //     return velocity;
+  //   }
+  //   const v = getPoint(velocity); // $FlowFixMe
+  //   const unitVector = this.boundary.unitVector();
+  //   let projection = unitVector.dotProduct(v);
+  //   let ang = this.boundary.angle();
+  //   if (projection < -1) {
+  //     ang += Math.PI;
+  //     projection = -projection;
+  //   }
+  //   return polarToRect(projection, ang);
+  // }
 }
 
 export type TypeBoundsDefinition = Bounds | null | TypeRectBoundsDefinition

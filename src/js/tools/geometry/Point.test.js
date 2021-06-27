@@ -347,4 +347,33 @@ describe('g2 Point', () => {
       expect(points[0]).toEqual(new Point(0, 0));
     });
   });
+  describe('Vector', () => {
+    describe('Component Along', () => {
+      test('xAxis', () => {
+        const p = new Point(1, 0, 0);
+        const q = new Point(1, 1, 0);
+        const c = q.componentAlong(p);
+        expect(c.round(3)).toEqual(new Point(1, 0, 0));
+      });
+      test('xAxis negative', () => {
+        const p = new Point(1, 0, 0);
+        const q = new Point(-1, 1, 0);
+        const c = q.componentAlong(p);
+        expect(c.round(3)).toEqual(new Point(-1, 0, 0));
+      });
+      test('45º', () => {
+        const mag = 0.4;
+        const a1 = 20 * Math.PI / 180;
+        const a2 = 65 * Math.PI / 180;
+        const p = new Point(mag * Math.cos(a1), mag * Math.sin(a1), 0);
+        const q = new Point(mag * Math.cos(a2), mag * Math.sin(a2), 0);
+        const c = q.componentAlong(p);
+        expect(c.round(3)).toEqual(new Point(
+          mag / Math.sqrt(2) * Math.cos(a1),
+          mag / Math.sqrt(2) * Math.sin(a1),
+          0,
+        ).round(3));
+      });
+    });
+  });
 });
