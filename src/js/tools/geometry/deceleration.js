@@ -11,7 +11,6 @@ import type { TypeTransformBounds, TypeTransformBoundsDefinition } from './Bound
 import type { TypeTransformValue, TransformDefinition } from './Transform';
 
 function getDistance(
-  value: number,
   velocity: number,
   deltaTimeIn: number,
   deceleration: number,
@@ -89,7 +88,7 @@ function decelerateValue(
     //   }
     // }
   }
-  debugger;
+
   // If the velocity is already below the zero threshold, then we are finished
   if (Math.abs(velocityIn) < zeroVelocityThreshold) {
     return { velocity: 0, value: valueIn, duration: 0 };
@@ -106,7 +105,7 @@ function decelerateValue(
   // the distance travelled till the velocity becomes 0 will be calculated.
   // Returned deltaTime will then be the time till the zero velocity.
   const [distanceTravelled, deltaTime] = getDistance(
-    value, velocityIn, deltaTimeIn, deceleration, zeroVelocityThreshold,
+    velocityIn, deltaTimeIn, deceleration, zeroVelocityThreshold,
   );
 
   // Calculate the new value from the old value, distanceTravelled and the
@@ -231,7 +230,7 @@ function decelerateVector(
 
   // Get the magnitude and direciton of the velocity
   const mag = velocity.length();
-  const direction = velocity.unitVector();
+  const direction = velocity.normalize();
 
   if (mag <= zeroVelocityThreshold) {
     return {
@@ -253,10 +252,9 @@ function decelerateVector(
   // const deltaV = Math.abs(v0) - zeroVelocityThreshold;
 
   // let deltaTime = deltaTimeIn;
-
   // // If the velocity will decelerate to 0 before deltaTimeIn, then change
   // // deltaTime to be this shorter time.
-  // const deceleration = Math.max(decelerationIn, 0.0000001);
+  const deceleration = Math.max(decelerationIn, 0.0000001);
   // if (deltaTime == null || deltaTime > Math.abs(deltaV / deceleration)) {
   //   deltaTime = Math.abs(deltaV / deceleration);
   // }
@@ -268,7 +266,7 @@ function decelerateVector(
   // the distance travelled till the velocity becomes 0 will be calculated.
   // Returned deltaTime will then be the time till the zero velocity.
   const [distanceTravelled, deltaTime] = getDistance(
-    value, velocityIn, deltaTimeIn, deceleration, zeroVelocityThreshold,
+    mag, deltaTimeIn, deceleration, zeroVelocityThreshold,
   );
   const newPosition = position.add(direction.scale(distanceTravelled));
 
@@ -281,7 +279,7 @@ function decelerateVector(
         velocity: new Point(0, 0, 0),
       };
     }
-    let v1 = velocityIn - deceleration * deltaTime;
+    let v1 = mag - deceleration * deltaTime;
     if (round(v1, precision) <= round(zeroVelocityThreshold, precision)) {
       v1 = 0;
     }
@@ -300,6 +298,7 @@ function decelerateVector(
   // is larger than the distance travelled in deltaTime, then there is likely a
   // rounding error... Or if the intersect is null there is an error (it really
   // shouldn't be if the containment test is failed)
+  debugger;
   if (
     (result.distance !== 0 && result.distance > distanceTravelled)
     || result.intersect == null
@@ -320,7 +319,7 @@ function decelerateVector(
   // const t = (-b + Math.sqrt(b ** 2 - 4 * a * c)) / (2 * a);
 
   // Calculate the time to the intersect point
-  const [t, velocityAtIntersect] = timeFromVS(velocityIn, distanceToBound, deceleration)
+  const [t, velocityAtIntersect] = timeFromVS(mag, distanceToBound, deceleration);
 
   // If there is no bounce (all energy is lost) then return the result
   if (bounceLossIn === 1) {
@@ -786,6 +785,7 @@ function decelerateTransform(
 
 export {
   deceleratePoint,
+  decelerateVector,
   decelerateIndependantPoint,
   decelerateValue,
   decelerateTransform,
