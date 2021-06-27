@@ -585,6 +585,7 @@ class Transform {
     if (type === 'rc' || type === 'rd') {
       return new Point(r[1], r[2], r[3]);
     }
+    // ra
     return [new Point(r[1], r[2], r[3]), r[4]];
   }
 

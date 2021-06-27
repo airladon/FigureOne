@@ -223,7 +223,7 @@ function decelerateVector(
   // clip velocity to the dimension of interest
   let velocity = velocityIn;    // $FlowFixMe
   if (bounds instanceof LineBounds) {
-    velocity = velocity.projectOn(bounds.line.unitVector());
+    velocity = bounds.boundary.pointProjection(velocity);
   } else if (bounds instanceof RectBounds) {
     velocity = bounds.plane.pointProjection(velocity);
   }
