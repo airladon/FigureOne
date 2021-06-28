@@ -16,7 +16,7 @@ import {
   Transform, getTransform, isParsableTransform,
 } from './geometry/Transform';
 import {
-  deceleratePoint, decelerateValue, decelerateTransform,
+  deceleratePoint, decelerateValue, decelerateTransform, decelerateVector,
 } from './geometry/deceleration';
 import type { TypeParsableLine } from './geometry/Line';
 import type { TypeParsableRect } from './geometry/Rect';
@@ -581,4 +581,5 @@ export {
   cube,
   surface,
   getLathePoints,
+  decelerateVector,
 };

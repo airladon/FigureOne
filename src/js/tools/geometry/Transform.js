@@ -981,7 +981,7 @@ class Transform {
     const t = new Transform();
     t.name = this.name; // $FlowFixMe
     t.mat = this.mat.slice();
-    t.index = this.index;  // $FlowFixMe
+    // t.index = this.index;  // $FlowFixMe
     t.def = this.def.map(d => d.slice());
     return t;
   }

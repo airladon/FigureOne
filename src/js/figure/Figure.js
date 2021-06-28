@@ -2025,24 +2025,37 @@ class Figure {
     const currentLocalPoint = element.glToPlane(currentGLPoint);
 
     const center = element.getPosition('local');
-    const currentAngle = Math.atan2(
-      currentLocalPoint.y - center.y,
-      currentLocalPoint.x - center.x,
-    );
-    const previousAngle = Math.atan2(
-      previousLocalPoint.y - center.y,
-      previousLocalPoint.x - center.x,
-    );
-    const diffAngle = minAngleDiff(currentAngle, previousAngle);
-    const transform = element.transform._dup();
-    let rot = transform.r();
-    if (rot == null) {
-      rot = 0;
+    const prev = previousLocalPoint.sub(center);
+    const curr = currentLocalPoint.sub(center);
+    let deltaAngle = curr.angleTo(prev);
+    const norm = prev.crossProduct(curr).normalize();
+    if (!norm.isEqualTo(element.move.plane.n)) {
+      deltaAngle *= -1;
     }
-    const newAngle = rot + diffAngle;
-    // console.log(rot, diffAngle, newAngle);
-    transform.updateRotation(newAngle);
-    element.moved(transform);
+    const r = element.transform.r();
+    if (typeof r === 'number') {
+      element.moved(r + deltaAngle);
+    }
+    element.moved(r[1] + deltaAngle);
+
+    // const currentAngle = Math.atan2(
+    //   currentLocalPoint.y - center.y,
+    //   currentLocalPoint.x - center.x,
+    // );
+    // const previousAngle = Math.atan2(
+    //   previousLocalPoint.y - center.y,
+    //   previousLocalPoint.x - center.x,
+    // );
+    // const diffAngle = minAngleDiff(currentAngle, previousAngle);
+    // const transform = element.transform._dup();
+    // let rot = transform.r();
+    // if (rot == null) {
+    //   rot = 0;
+    // }
+    // const newAngle = rot + diffAngle;
+    // // console.log(rot, diffAngle, newAngle);
+    // transform.updateRotation(newAngle);
+    // element.moved(transform);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -2057,8 +2070,9 @@ class Figure {
     const transform = element.transform._dup();
     const translation = transform.t();
     if (translation != null) {
-      transform.updateTranslation(translation.add(delta));
-      element.moved(transform);
+      // transform.updateTranslation(translation.add(delta));
+      // element.moved(transform);
+      element.moved(translation.add(delta));
     }
 
     // const m = element.spaceTransformMatrix('figure', 'local');
@@ -2091,21 +2105,29 @@ class Figure {
 
 
     const currentScale = element.transform.s();
+    // element.moved(currentMag / previousMag);
     if (currentScale != null) {
       const currentTransform = element.transform._dup();
-      const newScaleX = currentScale.x * currentMag / previousMag;
       const newScaleY = currentScale.y * currentMag / previousMag;
       const newScaleZ = currentScale.z * currentMag / previousMag;
       if (type === 'x') {
-        currentTransform.updateScale([newScaleX, 1, 1]);
+        // currentTransform.updateScale([newScaleX, 1, 1]);
+        const newScaleX = currentScale.x * currentMag / previousMag;
+        element.moved(newScaleX);
       } else if (type === 'y') {
-        currentTransform.updateScale([1, newScaleY, 1]);
+        // currentTransform.updateScale([1, newScaleY, 1]);
+        const newScaleY = currentScale.y * currentMag / previousMag;
+        element.moved(newScaleY);
       } else if (type === 'z') {
-        currentTransform.updateScale([1, 1, newScaleZ]);
+        // currentTransform.updateScale([1, 1, newScaleZ]);
+        const newScaleZ = currentScale.z * currentMag / previousMag;
+        element.moved(newScaleZ);
       } else {
-        currentTransform.updateScale([newScaleX, newScaleY, newScaleZ]);
+        // currentTransform.updateScale([newScaleX, newScaleY, newScaleZ]);
+        const newScaleX = currentScale.x * currentMag / previousMag;
+        element.moved(newScaleX);
       }
-      element.moved(currentTransform);
+      // element.moved(currentTransform);
     }
   }
 

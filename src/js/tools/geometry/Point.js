@@ -350,7 +350,7 @@ class Point {
   /**
    * Angle between this vector and vector v.
    */
-  angle(v: TypeParsablePoint) {
+  angleTo(v: TypeParsablePoint) {
     const p = getPoint(v);
     return Math.acos(
       this.dotProduct(p) / p.length() / this.length(),
@@ -361,7 +361,7 @@ class Point {
    * Scalar projection of this vector in direction of vector v.
    */
   projectOn(v: TypeParsablePoint) {
-    return this.length() * Math.cos(this.angle(v));
+    return this.length() * Math.cos(this.angleTo(v));
   }
 
   /**

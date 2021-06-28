@@ -5,7 +5,7 @@ import {
   spaceToSpaceTransform, getBoundingRect,
   clipAngle, getPoint, getTransform, getScale,
   TransformBounds, RectBounds, RangeBounds, getBounds,
-  getBoundingBorder, isBuffer, getBorder, decelerateTransform,
+  getBoundingBorder, isBuffer, getBorder, decelerateVector, decelerateValue,
   getPlane, Plane,
 } from '../tools/g2';
 import Scene from '../tools/scene';
@@ -990,45 +990,45 @@ class FigureElement {
 
   setProperties(properties: Object, exceptIn: Array<string> | string = []) {
     let except = exceptIn;
-    if (properties.move != null) {
-      const cleanBounds = (key) => {
-        if (typeof except === 'string') {
-          except = [except, `move.${key}`];
-        } else {
-          except.push(`move.${key}`);
-        }
-        const bounds = getBounds(properties.move[key], 'transform', this.transform);
-        if (bounds instanceof TransformBounds) {
-          for (let i = 0; i < bounds.boundary.length; i += 1) {
-            const bound = bounds.boundary[i];
-            const def = bounds.def[i];
-            if (
-              bounds.boundary[i] != null
-              && bound instanceof RangeBounds
-              && (def === 't' || def === 's')
-            ) {
-              bounds.boundary[i] = new RectBounds({
-                left: bound.boundary.min,
-                bottom: bound.boundary.min,
-                right: bound.boundary.max,
-                top: bound.boundary.max,
-              });
-            }
-          }
-          this.move[key] = bounds;
-        }
-      };
-      // if (properties.move.boundsToUse != null) {
-      //   cleanBounds('boundsToUse');
-      // }
-      if (
-        properties.move.bounds != null
-        && properties.move.bounds !== 'figure'
-        && properties.move.bounds !== 'none'
-      ) {
-        cleanBounds('bounds');
-      }
-    }
+    // if (properties.move != null) {
+    //   const cleanBounds = (key) => {
+    //     if (typeof except === 'string') {
+    //       except = [except, `move.${key}`];
+    //     } else {
+    //       except.push(`move.${key}`);
+    //     }
+    //     const bounds = getBounds(properties.move[key], 'transform', this.transform);
+    //     if (bounds instanceof TransformBounds) {
+    //       for (let i = 0; i < bounds.boundary.length; i += 1) {
+    //         const bound = bounds.boundary[i];
+    //         const def = bounds.def[i];
+    //         if (
+    //           bounds.boundary[i] != null
+    //           && bound instanceof RangeBounds
+    //           && (def === 't' || def === 's')
+    //         ) {
+    //           bounds.boundary[i] = new RectBounds({
+    //             left: bound.boundary.min,
+    //             bottom: bound.boundary.min,
+    //             right: bound.boundary.max,
+    //             top: bound.boundary.max,
+    //           });
+    //         }
+    //       }
+    //       this.move[key] = bounds;
+    //     }
+    //   };
+    //   // if (properties.move.boundsToUse != null) {
+    //   //   cleanBounds('boundsToUse');
+    //   // }
+    //   if (
+    //     properties.move.bounds != null
+    //     && properties.move.bounds !== 'figure'
+    //     && properties.move.bounds !== 'none'
+    //   ) {
+    //     cleanBounds('bounds');
+    //   }
+    // }
     joinObjectsWithOptions({
       except,
     }, this, properties);
@@ -1658,22 +1658,26 @@ class FigureElement {
    * @param {Transform} transform
    */
   setTransform(transform: Transform, publish: boolean = true): void {
-    if (this.move.bounds !== 'none' && this.move.bounds != null) {
-      const bounds = this.getMoveBounds(); // $FlowFixMe
-      const clip = bounds.clip(transform);
-      this.notifications.publish('beforeSetTransform', [clip]);
-      if (this.cancelSetTransform === false) {
-        this.transform = clip;
-      } else {
-        this.cancelSetTransform = false;
-      }
-    } else {
-      this.notifications.publish('beforeSetTransform', [transform]);
-      this.transform = transform;
-    }
+    // if (this.move.bounds != null && this.state.isBeingMoved) {
+    //   const clip = this.clipToMoveBounds();
+    //   if (this.cancelSetTransform === false) {
+    //     this.notifications.publish('beforeSetTransform', [clip]);
+    //     this.transform = clip;
+    //   } else {
+    //     this.cancelSetTransform = false;
+    //   }
+    // } else {
+    //   this.notifications.publish('beforeSetTransform', [transform]);
+    //   this.transform = transform;
+    // }
+    this.transform = transform;
     // if (this.simple === false) {
     //   this.updateDrawTransforms(this.parentTransform, this.lastScene, false);
     // }
+    this.transformSet(publish);
+  }
+
+  transformSet(publish: boolean = true) {
     if (this.internalSetTransformCallback) {
       this.fnMap.exec(this.internalSetTransformCallback, this.transform);
     }
@@ -1738,7 +1742,10 @@ class FigureElement {
         }
         this.stopMovingFreely('complete');
       }
-      this.setTransform(next.transform);
+
+      this.updateTransformWithMovement(next.value, this.transform);
+      // this.setTransform(t);
+      this.transformSet();
     }
   }
 
@@ -1958,10 +1965,10 @@ class FigureElement {
   // Decelerate over some time when moving freely to get a new element
   // transform and movement velocity
   decelerate(deltaTime: number | null = null): Object {
-    const bounds = this.getMoveBounds();
+    const { bounds } = this.move;
     let next;
     const { type } = this.move;
-    if (type === 'position' || type === 'rotation') {
+    if (type === 'position' || type === 'translation') {
       next = decelerateVector(
         this.transform.t(),
         this.state.movement.velocity,
@@ -2035,15 +2042,15 @@ class FigureElement {
     const { type } = this.move;
     let movement;
     if (type === 'scale' || type === 'scaleX') {
-      movement = transform.getScale().x;
+      movement = transform.s().x;
     } else if (type === 'scaleY') {
-      movement = transform.getScale().y;
+      movement = transform.s().y;
     } else if (type === 'scaleZ') {
-      movement = transform.getScale().z;
+      movement = transform.s().z;
     } else if (type === 'position' || type === 'translation') {
-      movement = transform.getTranslation();
+      movement = transform.t();
     } else if (type === 'rotation') {
-      const r = transform.getRotation();
+      const r = transform.r();
       if (typeof r === 'number') {
         movement = r;
       } else {
@@ -2051,6 +2058,35 @@ class FigureElement {
       }
     }
     return movement;
+  }
+
+  updateTransformWithMovement(valueIn: number | Point, transform: Transform) {
+    const { type } = this.move;
+    let value = valueIn;
+    if (this.move.bounds != null) {
+      value = this.move.bounds.clis(valueIn);
+    }
+    // console.log(type, transform)
+    // let movement;
+    if (type === 'scale' || type === 'scaleX') {
+      transform.updateScale(value, value, value);
+    } else if (type === 'scaleY') {
+      const s = transform.s();
+      transform.updateScale(s.x, value, s.z);
+    } else if (type === 'scaleZ') {
+      const s = transform.s();
+      transform.updateScale(s.x, s.y, value);
+    } else if (type === 'position' || type === 'translation') {
+      transform.updateTranslation(value);
+    } else if (type === 'rotation') {
+      const r = transform.r();
+      if (typeof r === 'number') {
+        transform.updateRotation(value)
+      } else {
+        transform.updateRotation(['ra', r[0], value]);
+      }
+    }
+    return transform;
   }
 
   setZeroVelocity() {
@@ -2081,25 +2117,27 @@ class FigureElement {
     }
   }
 
-  moved(newTransform: Transform): void {
-    const prevTransform = this.transform._dup();
-    this.setTransform(newTransform._dup());
-    let tBounds;
-    if (this.move.bounds != null && this.move.bounds !== 'none') {  // $FlowFixMe
-      tBounds = this.move.bounds.getTranslation();
-    }
-    // In a finite rect bounds, if we calculate the velocity from the clipped
-    // transform, the object will skip along the wall if the user lets the
-    // object go after intersecting with the wall
-    if (
-      tBounds instanceof RectBounds
-      && tBounds.boundary.right > tBounds.boundary.left
-      && tBounds.boundary.top > tBounds.boundary.bottom
-    ) {
-      this.calcVelocity(prevTransform, newTransform);
-    } else {
-      this.calcVelocity(prevTransform, this.transform);
-    }
+  moved(value: Point | number): void {
+    const previousValue = this.getMovement(this.transform);
+    this.calcVelocity(previousValue, value);
+    const t = this.updateTransformWithMovement(value, this.transform._dup())
+    this.setTransform(t);
+    // let tBounds;
+    // if (this.move.bounds != null && this.move.bounds !== 'none') {  // $FlowFixMe
+    //   tBounds = this.move.bounds.getTranslation();
+    // }
+    // // In a finite rect bounds, if we calculate the velocity from the clipped
+    // // transform, the object will skip along the wall if the user lets the
+    // // object go after intersecting with the wall
+    // if (
+    //   tBounds instanceof RectBounds
+    //   && tBounds.boundary.right > tBounds.boundary.left
+    //   && tBounds.boundary.top > tBounds.boundary.bottom
+    // ) {
+    //   this.calcVelocity(prevTransform, newTransform);
+    // } else {
+    //   this.calcVelocity(prevTransform, this.transform);
+    // }
   }
 
   stopBeingMoved(): void {
@@ -2130,7 +2168,7 @@ class FigureElement {
     this.state.movement.previousTime = null;
   }
 
-  calcVelocity(prevTransform: Transform, nextTransform: Transform): void {
+  calcVelocity(prevValue: number | Point, nextValue: number | Point): void {
     const currentTime = this.timeKeeper.now() / 1000;
     if (this.state.movement.previousTime == null) {
       this.state.movement.previousTime = currentTime;
@@ -2142,17 +2180,17 @@ class FigureElement {
     if (deltaTime < 0.0001) {
       return;
     }
-    const next = this.getMovement(nextTransform);
+    const next = nextValue;
 
     let v;
-    if (typeof next === 'number' && typeof this.previous === 'number') {
-      v = (next - this.previous) / deltaTime;
+    if (typeof next === 'number' && typeof prevValue === 'number') {
+      v = (next - prevValue) / deltaTime;
       if (v <= this.move.freely.zeroVelocityThreshold) {
         v = 0;
       }
       v = Math.min(v, this.move.maxVelocity);
     } else {
-      v = next.sub(this.previous).scale(1 / deltaTime);
+      v = next.sub(prevValue).scale(1 / deltaTime);
       const vMag = v.length;
       if (vMag <= this.move.freely.zeroVelocityThreshold) {
         v = new Point(0, 0, 0);
@@ -2210,7 +2248,9 @@ class FigureElement {
     }
     if (how === 'complete' && wasMovingFreely) {
       const result = this.getMovingFreelyEnd();
-      this.setTransform(result.transform);
+      // this.setTransform(result.transform);
+      this.updateTransformWithMovement(result.value, this.transform);
+      this.transformSet();
     }
 
     this.state.isMovingFreely = false;
@@ -3440,79 +3480,79 @@ class FigureElement {
     this.setPosition(local);
   }
 
-  checkMoveBounds() {
-    if (this.move.bounds === 'figure') {
-      this.setMoveBounds('figure');
-      return;
-    }
-    if (this.move.bounds === 'none' || this.move.bounds === null) {
-      this.setMoveBounds('none');
-      return;
-    }
-    if (!(this.move.bounds instanceof TransformBounds)) {
-      this.setMoveBounds(this.move.bounds);
-    }
-  }
+  // checkMoveBounds() {
+  //   if (this.move.bounds === 'figure') {
+  //     this.setMoveBounds('figure');
+  //     return;
+  //   }
+  //   if (this.move.bounds === 'none' || this.move.bounds === null) {
+  //     this.setMoveBounds('none');
+  //     return;
+  //   }
+  //   if (!(this.move.bounds instanceof TransformBounds)) {
+  //     this.setMoveBounds(this.move.bounds);
+  //   }
+  // }
 
-  setMoveBounds(
-    boundaryIn: TransformBounds | TypeTransformBoundsDefinition | 'figure' | 'none' = 'none',
-  ): void {
-    if (boundaryIn instanceof TransformBounds) {
-      this.move.bounds = boundaryIn;
-      return;
-    }
+  // setMoveBounds(
+  //   boundaryIn: TransformBounds | TypeTransformBoundsDefinition | 'figure' | 'none' = 'none',
+  // ): void {
+  //   if (boundaryIn instanceof TransformBounds) {
+  //     this.move.bounds = boundaryIn;
+  //     return;
+  //   }
 
-    if (boundaryIn === null || boundaryIn === 'none') {
-      this.move.bounds = new TransformBounds(this.transform);
-      return;
-    }
+  //   if (boundaryIn === null || boundaryIn === 'none') {
+  //     this.move.bounds = new TransformBounds(this.transform);
+  //     return;
+  //   }
 
-    if (boundaryIn === 'figure') {
-      if (!(this.move.bounds instanceof TransformBounds)) {
-        this.move.bounds = new TransformBounds(this.transform);
-      }
-      this.move.sizeInBounds = true;
-      const m = this.spaceTransformMatrix('figure', 'local');
-      const p0 = new Point(this.figureLimits.left, this.figureLimits.bottom).transformBy(m);
-      // const p1 = new Point(this.figureLimits.right, p0.y).transformBy(m);
-      const p1 = new Point(this.figureLimits.right, this.figureLimits.top).transformBy(m);
-      // $FlowFixMe
-      this.move.bounds.updateTranslation(new RectBounds({
-        left: p0.x,
-        bottom: p0.y,
-        right: p1.x,
-        top: p1.y,
-      }));
-      return;
-    }
-    const bounds = getBounds(boundaryIn, 'transform', this.transform);
-    if (bounds instanceof TransformBounds) {
-      this.move.bounds = bounds;
-    }
-  }
+  //   if (boundaryIn === 'figure') {
+  //     if (!(this.move.bounds instanceof TransformBounds)) {
+  //       this.move.bounds = new TransformBounds(this.transform);
+  //     }
+  //     this.move.sizeInBounds = true;
+  //     const m = this.spaceTransformMatrix('figure', 'local');
+  //     const p0 = new Point(this.figureLimits.left, this.figureLimits.bottom).transformBy(m);
+  //     // const p1 = new Point(this.figureLimits.right, p0.y).transformBy(m);
+  //     const p1 = new Point(this.figureLimits.right, this.figureLimits.top).transformBy(m);
+  //     // $FlowFixMe
+  //     this.move.bounds.updateTranslation(new RectBounds({
+  //       left: p0.x,
+  //       bottom: p0.y,
+  //       right: p1.x,
+  //       top: p1.y,
+  //     }));
+  //     return;
+  //   }
+  //   const bounds = getBounds(boundaryIn, 'transform', this.transform);
+  //   if (bounds instanceof TransformBounds) {
+  //     this.move.bounds = bounds;
+  //   }
+  // }
 
-  getMoveBounds(): Bounds {
-    this.checkMoveBounds();  // $FlowFixMe
-    if (this.move.bounds.isUnbounded()) { // $FlowFixMe
-      return this.move.bounds;
-    }
+  // getMoveBounds(): Bounds {
+  //   this.checkMoveBounds();  // $FlowFixMe
+  //   if (this.move.bounds.isUnbounded()) { // $FlowFixMe
+  //     return this.move.bounds;
+  //   }
 
-    if (this.move.sizeInBounds) {
-      const rect = this.getRelativeBoundingRect('local');
-      // $FlowFixMe
-      const dup = this.move.bounds._dup();
-      const b = dup.getTranslation();
-      if (b != null) {
-        b.boundary.left -= rect.left;
-        b.boundary.bottom -= rect.bottom;
-        b.boundary.right -= rect.right;
-        b.boundary.top -= rect.top;
-        dup.updateTranslation(b);
-        return dup;
-      }
-    } // $FlowFixMe
-    return this.move.bounds;
-  }
+  //   if (this.move.sizeInBounds) {
+  //     const rect = this.getRelativeBoundingRect('local');
+  //     // $FlowFixMe
+  //     const dup = this.move.bounds._dup();
+  //     const b = dup.getTranslation();
+  //     if (b != null) {
+  //       b.boundary.left -= rect.left;
+  //       b.boundary.bottom -= rect.bottom;
+  //       b.boundary.right -= rect.right;
+  //       b.boundary.top -= rect.top;
+  //       dup.updateTranslation(b);
+  //       return dup;
+  //     }
+  //   } // $FlowFixMe
+  //   return this.move.bounds;
+  // }
 
   getShown() {
     if (this.isShown) {
@@ -4247,7 +4287,7 @@ class FigureElementPrimitive extends FigureElement {
     // if (this.drawingObject instanceof HTMLObject) {
     //   this.drawingObject.transformHtml(firstTransform.matrix());
     // }
-    this.checkMoveBounds();
+    // this.checkMoveBounds();
   }
 
   increaseBorderSize(
@@ -5338,7 +5378,7 @@ class FigureElementCollection extends FigureElement {
     //   const element = this.elements[this.drawOrder[i]];
     //   element.setFirstTransform(firstTransform);
     // }
-    this.checkMoveBounds();
+    // this.checkMoveBounds();
   }
 
   // border is whatever border is
