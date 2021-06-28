@@ -298,7 +298,6 @@ function decelerateVector(
   // is larger than the distance travelled in deltaTime, then there is likely a
   // rounding error... Or if the intersect is null there is an error (it really
   // shouldn't be if the containment test is failed)
-  debugger;
   if (
     (result.distance !== 0 && result.distance > distanceTravelled)
     || result.intersect == null

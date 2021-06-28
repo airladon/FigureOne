@@ -2067,7 +2067,7 @@ class FigureElement {
     const { type } = this.move;
     let value = valueIn;
     if (this.move.bounds != null) {
-      value = this.move.bounds.clis(valueIn);
+      value = this.move.bounds.clip(valueIn);
     }
     // console.log(type, transform)
     // let movement;

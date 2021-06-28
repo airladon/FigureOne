@@ -129,6 +129,10 @@ xAxis.move.type = 'rotation';
 xAxis.transform.updateRotation(['axis', 0, 1, 0, 0])
 xAxis.move.plane = new Fig.tools.g2.Plane([[0, 0, 0], [0, 1, 0]]);
 xAxis.setMovable();
+xAxis.move.bounds = new Fig.RangeBounds({
+  min: -Math.PI / 2,
+  max: Math.PI / 2,
+});
 // const [lv, ln] = lathe({
 //   // profile: [[0, 0.02, 0], [0.399, 0.099, 0], [0.4, 0.1, 0], [0.499, 0.05, 0], [0.5, 0.05, 0], [0.5, 0.0499, 0], [0.5, 0, 0]],
 //   // profile: [[0, 0.001, 0], [0.399, 0.1, 0], [0.4, 0.1, 0], [0.4, 0.099, 0], [0.4, 0, 0]],
@@ -173,6 +177,14 @@ cube.setMovable();
 cube.move.type = 'translation';
 // cube.move.plane = 
 cube.move.plane = Fig.tools.g2.getPlane([[0, 0, 0], [1, 0, 0]]);
+cube.move.bounds = new Fig.RectBounds({
+  normal: [1, 0, 0],
+  rightDirection: [0, 0, -1],
+  left: 0.5,
+  right: 1,
+  top: 1,
+  bottom: 0.5,
+});
 
 
 figure.add({
@@ -203,12 +215,11 @@ figure.scene.light.ambient = 0;
 figure.scene.light.point = [0.3, 0.1, 1];
 
 
-// figure.scene.setCamera({ position: [2, 2, 2] });
-
-// figure.scene.setProjection({ style: 'orthographic', near: 1, far: 10, left: -2, right: 2, bottom: -1, top: 1 });
-
 figure.scene.setCamera({ position: [2, 2, 2] });
-figure.scene.setProjection({ style: 'perspective', near: 1, far: 7, aspectRatio: 2, fieldOfView: Math.PI * 0.2 });
+figure.scene.setProjection({ style: 'orthographic', near: 1, far: 10, left: -2, right: 2, bottom: -1, top: 1 });
+
+// figure.scene.setCamera({ position: [2, 2, 2] });
+// figure.scene.setProjection({ style: 'perspective', near: 1, far: 7, aspectRatio: 2, fieldOfView: Math.PI * 0.2 });
 
 // console.log(new Fig.Point(0, 0, 0).transformBy(figure.spaceTransformMatrix('figure', 'gl')));
 // console.log(new Fig.Point(-0.15, -1, 0).transformBy(figure.spaceTransformMatrix('figure', 'gl')));
