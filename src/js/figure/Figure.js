@@ -1,11 +1,9 @@
 // @flow
 import WebGLInstance from './webgl/webgl';
-// import getShaders from './webgl/shaders';
 
 import {
   Rect, Point, Transform, getRect,
-  spaceToSpaceTransform, minAngleDiff,
-  getPoint, Line, getPlane,
+  getPoint, getPlane,
 } from '../tools/g2';
 import Scene from '../tools/scene';
 import type { OBJ_Scene } from '../tools/scene';
@@ -46,13 +44,6 @@ import type { TypeColor, OBJ_Font } from '../tools/types';
 import type { COL_SlideNavigator } from './FigureCollections/SlideNavigator';
 
 const FIGURE1DEBUG = false;
-
-// export type OBJ_DrawGlobals = {
-//   projectionMatrix: Type3DMatrix,
-//   viewMatrix: Type3DMatrix,
-//   viewProjectionMatrix: Type3DMatrix,
-//   light: OBJ_Light
-// }
 
 /**
  * Space Transforms

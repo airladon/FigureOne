@@ -3601,18 +3601,28 @@ class FigureElement {
    *
    * `false` makes this element not touchable.
    */
-  setTouchable(makeThisElementTouchable: boolean = true, colorSeed: string = 'default') {
-    if (makeThisElementTouchable) {
-      this.isTouchable = true;
-      if (this.uniqueColor == null) {
-        this.setUniqueColor(generateUniqueColor(colorSeed));
-      }
-    } else {
-      this.hasTouchableElements = true;
+  setTouchable(
+    scale: number | TypeParsablePoint | null,
+    colorSeed: string = 'default',
+  ) {
+    this.isTouchable = true;
+    if (typeof scale === 'number') {
+      this.touchScale = new Point(scale, scale, scale);
+    } else if (scale != null) {
+      this.touchScale = getPoint(scale);
+    }
+    if (this.uniqueColor == null) {
+      this.setUniqueColor(generateUniqueColor(colorSeed));
     }
     if (this.parent != null) {
-      this.parent.setTouchable(false);
+      this.parent.setTouchable();
     }
+  }
+
+  setNotTouchable() {
+    this.hasTouchableElements = false;
+    this.isTouchable = false;
+    // this.parent.setNotTouchable();
   }
 
   /**
@@ -3623,7 +3633,7 @@ class FigureElement {
   setMovable(movable: boolean = true) {
     if (movable) {
       this.isMovable = true;
-      this.setTouchable(true);
+      this.setTouchable();
     } else {
       this.isMovable = false;
       this.isTouchable = false;
@@ -4223,7 +4233,11 @@ class FigureElementPrimitive extends FigureElement {
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawOpacity = colorToUse[3];
       // const transform = this.getTransform()._dup();
-      const transform = this.getTransform();
+      let transform = this.getTransform();
+      if (targetTexture && transform.s() != null && this.touchScale != null) {
+        transform = transform._dup();
+        transform.updateScale(transform.s().mul(this.touchScale));
+      }
       // const transform = this.transform._dup();
       const newTransforms = transformBy(parentTransform, [transform]);
       // eslint-disable-next-line prefer-destructuring

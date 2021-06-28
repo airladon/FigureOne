@@ -174,17 +174,22 @@ const cube = figure.add({
   // position: [0.5, 0, 0],
 });
 cube.setMovable();
+cube.setTouchable(2);
 cube.move.type = 'translation';
 // cube.move.plane = 
 cube.move.plane = Fig.tools.g2.getPlane([[0, 0, 0], [1, 0, 0]]);
-cube.move.bounds = new Fig.RectBounds({
-  normal: [1, 0, 0],
-  rightDirection: [0, 0, -1],
-  left: 0.5,
-  right: 1,
-  top: 1,
-  bottom: 0.5,
+cube.move.bounds = new Fig.LineBounds({
+  p1: [0, 0, 1],
+  p2: [0, 0, -1],
 });
+// cube.move.bounds = new Fig.RectBounds({
+//   normal: [1, 0, 0],
+//   rightDirection: [0, 0, -1],
+//   left: 0.5,
+//   right: 1,
+//   top: 1,
+//   bottom: 0.5,
+// });
 
 
 figure.add({

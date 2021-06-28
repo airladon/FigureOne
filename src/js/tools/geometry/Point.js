@@ -263,6 +263,11 @@ class Point {
     return new this.constructor(this.x * scalar, this.y * scalar, this.z * scalar);
   }
 
+  mul(p: TypeParsablePoint) {
+    const q = getPoint(p);
+    return new Point(this.x * q.x, this.y * q.y, this.z * q.z);
+  }
+
   /**
    * Subtract (x, y, z) values or a {@link Point} and return the difference as a new {@link Point}
    * @example
