@@ -1048,7 +1048,7 @@ export default class CollectionsLine extends FigureElementCollection {
       ) {
         this.move.type = type;
         super.setMovable(true);
-        this.hasTouchableElements = true;
+        // this.hasTouchableElements = true;
         if (this._line != null) {
           this._line.isTouchable = true;
           this._line.isMovable = false;
@@ -1106,7 +1106,7 @@ export default class CollectionsLine extends FigureElementCollection {
       movePad.move.element = this;
       movePad.drawingObject.border = [[]];
     }
-    this.hasTouchableElements = true;
+    // this.hasTouchableElements = true;
     this.isTouchable = false;
     this.isMovable = false;
     this.setLength(this.line.length());

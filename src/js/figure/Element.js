@@ -314,9 +314,9 @@ export type OBJ_Pulse = {
  * free movement
  */
 type OBJ_ElementMoveFreely = {
-  zeroVelocityThreshold: TypeTransformValue,  // Velocity considered 0
-  deceleration: TypeTransformValue,           // Deceleration
-  bounceLoss: TypeTransformValue,
+  zeroVelocityThreshold: number,  // Velocity considered 0
+  deceleration: number,           // Deceleration
+  bounceLoss: number,
   callback: ?(string | ((boolean) => void)),
 }
 
@@ -444,7 +444,7 @@ type OBJ_ElementMove = {
  * @property {OBJ_Scenario} scenarioName where scenarioName can be any
  * string that names the scenario
  */
-type Scenarios = {
+type TypeScenarios = {
   [scenarioName: string]: OBJ_Scenario,
 };
 
@@ -554,7 +554,7 @@ type ElementState = {
  * @property {number} opacity number between 0 and 1 that is multiplied with
  * `color` alpha channel to get final opacity
  * @property {OBJ_ElementMove} move movement parameters
- * @property {Scenarios} scenarios scenario presets
+ * @property {TypeScenarios} scenarios scenario presets
  * @property {ElementState} state current state of element
  * @property {AnimationManager} animations element animation manager
  * @property {NotificationManager} notifications notification manager for
@@ -593,10 +593,9 @@ class FigureElement {
 
   isMovable: boolean;             // Element is able to be moved
   isTouchable: boolean;           // Element can be touched
-  // isTrackable: boolean;
-  touchPriority: boolean;
+  touchScale: Point;
   isInteractive: ?boolean;         // Touch event is not processed by Figure
-  hasTouchableElements: boolean;
+  // hasTouchableElements: boolean;
   // touchInBoundingRect: boolean | number;
 
   drawPriority: number;
@@ -817,9 +816,9 @@ class FigureElement {
     this.notifications = new NotificationManager(this.fnMap);
     this.isMovable = false;
     this.isTouchable = false;
-    this.touchPriority = false;
+    this.touchScale = new Point(1, 1, 1);
     this.isInteractive = undefined;
-    this.hasTouchableElements = false;
+    // this.hasTouchableElements = false;
     this.color = [1, 1, 1, 1];
     this.lastDrawOpacity = 1;
     this.dimColor = [0.5, 0.5, 0.5, 1];
@@ -3614,15 +3613,47 @@ class FigureElement {
     if (this.uniqueColor == null) {
       this.setUniqueColor(generateUniqueColor(colorSeed));
     }
-    if (this.parent != null) {
-      this.parent.setTouchable();
-    }
+    // if (this.parent != null) {
+    //   this.parent.setTouchable();
+    // }
   }
 
   setNotTouchable() {
-    this.hasTouchableElements = false;
+    // this.hasTouchableElements = false;
     this.isTouchable = false;
     // this.parent.setNotTouchable();
+  }
+
+  setMove(options: boolean | OBJ_ElementMove) {
+    if (typeof options === 'boolean') {
+      this.setMovable(options);
+      return;
+    }
+    const {
+      type, bounds, plane, maxVelocity, freely, element,
+    } = options;
+    if (type != null) {
+      this.move.type = type;
+    }
+    if (bounds != null) {
+      this.move.bounds = getBounds(bounds);
+    }
+    if (plane != null) {
+      this.move.plane = getPlane(plane);
+    }
+    if (maxVelocity != null) {
+      if (typeof maxVelocity === 'number') {
+        this.move.maxVelocity = maxVelocity;
+      } else {
+        this.move.maxVelocity = getPoint(maxVelocity);
+      }
+    }
+    if (element != null) {
+      this.move.element = element;
+    }
+    if (freely != null) {
+      joinObjects(this.move.freely, freely);
+    }
   }
 
   /**
@@ -3806,15 +3837,15 @@ class FigureElement {
     return false;
   }
 
-  getTouched(glLocation: Point): Array<FigureElement> {
-    if (!this.isTouchable) {
-      return [];
-    }
-    if (this.isBeingTouched(glLocation)) {
-      return [this];
-    }
-    return [];
-  }
+  // getTouched(glLocation: Point): Array<FigureElement> {
+  //   if (!this.isTouchable) {
+  //     return [];
+  //   }
+  //   if (this.isBeingTouched(glLocation)) {
+  //     return [this];
+  //   }
+  //   return [];
+  // }
 
   // updateDrawTransforms(
   //   parentTransform: Array<Transform> = [new Transform()],
@@ -4461,7 +4492,7 @@ class FigureElementCollection extends FigureElement {
     }
     if (this.isShown || ignoreShown) {
       return [...super._getStateProperties(options),
-        'hasTouchableElements',
+        // 'hasTouchableElements',
       ];
     }
     return [
@@ -4935,9 +4966,9 @@ class FigureElementCollection extends FigureElement {
     targetTexture: boolean = false,
   ) {
     if (this.isShown) {
-      if (targetTexture && !this.isTouchable && !this.hasTouchableElements) {
-        return;
-      }
+      // if (targetTexture && !this.isTouchable && !this.hasTouchableElements) {
+      //   return;
+      // }
       // let timer;
       // if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
       // this.lastDrawElementTransformPosition = {
@@ -5594,32 +5625,32 @@ class FigureElementCollection extends FigureElement {
     }
   }
 
-  // Returns an array of touched elements.
-  // In a collection, elements defined later in the collection.order
-  // array are on top of earlier elements. The touched array
-  // is sorted to have elements on top first, where the collection containing
-  // the elements will be before it's elements. For example, the array
-  // would be ordered as:
-  //  0: top collection
-  //  1 to n: n top elements in collection
-  //  n+1: second top collection
-  //  n+2 to m: top elements in second top colleciton.
-  getTouched(glLocation: Point): Array<FigureElement> {
-    if (!this.isTouchable && !this.hasTouchableElements) {
-      return [];
-    }
-    let touched = [];
-    if (this.isTouchable) {
-      return super.getTouched(glLocation);
-    }
-    for (let i = this.drawOrder.length - 1; i >= 0; i -= 1) {
-      const element = this.elements[this.drawOrder[i]];
-      if (element.isShown === true) {
-        touched = touched.concat(element.getTouched(glLocation));
-      }
-    }
-    return touched;
-  }
+  // // Returns an array of touched elements.
+  // // In a collection, elements defined later in the collection.order
+  // // array are on top of earlier elements. The touched array
+  // // is sorted to have elements on top first, where the collection containing
+  // // the elements will be before it's elements. For example, the array
+  // // would be ordered as:
+  // //  0: top collection
+  // //  1 to n: n top elements in collection
+  // //  n+1: second top collection
+  // //  n+2 to m: top elements in second top colleciton.
+  // getTouched(glLocation: Point): Array<FigureElement> {
+  //   if (!this.isTouchable && !this.hasTouchableElements) {
+  //     return [];
+  //   }
+  //   let touched = [];
+  //   if (this.isTouchable) {
+  //     return super.getTouched(glLocation);
+  //   }
+  //   for (let i = this.drawOrder.length - 1; i >= 0; i -= 1) {
+  //     const element = this.elements[this.drawOrder[i]];
+  //     if (element.isShown === true) {
+  //       touched = touched.concat(element.getTouched(glLocation));
+  //     }
+  //   }
+  //   return touched;
+  // }
 
   stop(
     how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel',
@@ -5948,12 +5979,12 @@ class FigureElementCollection extends FigureElement {
     });
   }
 
-  setMovable(movable: boolean = true) {
-    super.setMovable(movable);
-    if (movable) {
-      this.hasTouchableElements = true;
-    }
-  }
+  // setMovable(movable: boolean = true) {
+  //   super.setMovable(movable);
+  //   if (movable) {
+  //     this.hasTouchableElements = true;
+  //   }
+  // }
 
 
   setupWebGLBuffers(newWebgl: WebGLInstance) {

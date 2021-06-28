@@ -125,14 +125,18 @@ const r1 = 0.01;
 const r2 = 0.02;
 
 const xAxis = figure.getElement('xPosAxis');
+// xAxis.setNotTouchable();
 xAxis.move.type = 'rotation';
 xAxis.transform.updateRotation(['axis', 0, 1, 0, 0])
 xAxis.move.plane = new Fig.tools.g2.Plane([[0, 0, 0], [0, 1, 0]]);
 xAxis.setMovable();
+xAxis.setTouchable([1, 2, 2]);
+// xAxis.onClick = () => console.log('asdfasdf')
 xAxis.move.bounds = new Fig.RangeBounds({
   min: -Math.PI / 2,
   max: Math.PI / 2,
 });
+
 // const [lv, ln] = lathe({
 //   // profile: [[0, 0.02, 0], [0.399, 0.099, 0], [0.4, 0.1, 0], [0.499, 0.05, 0], [0.5, 0.05, 0], [0.5, 0.0499, 0], [0.5, 0, 0]],
 //   // profile: [[0, 0.001, 0], [0.399, 0.1, 0], [0.4, 0.1, 0], [0.4, 0.099, 0], [0.4, 0, 0]],
@@ -172,16 +176,21 @@ const cube = figure.add({
   normals: { data: rn },
   color: [0, 1, 1, 1],
   // position: [0.5, 0, 0],
+  move: {
+    type: 'translation',
+    plane: [[0, 0, 0], [1, 0, 0]],
+    bounds: { p1: [0, 0, 1], p2: [0, 0, -1] },
+  },
 });
-cube.setMovable();
-cube.setTouchable();
-cube.move.type = 'translation';
-// cube.move.plane = 
-cube.move.plane = Fig.tools.g2.getPlane([[0, 0, 0], [1, 0, 0]]);
-cube.move.bounds = new Fig.LineBounds({
-  p1: [0, 0, 1],
-  p2: [0, 0, -1],
-});
+// cube.setMovable();
+// cube.setTouchable();
+// cube.move.type = 'translation';
+// // cube.move.plane = 
+// cube.move.plane = Fig.tools.g2.getPlane([[0, 0, 0], [1, 0, 0]]);
+// cube.move.bounds = new Fig.LineBounds({
+//   p1: [0, 0, 1],
+//   p2: [0, 0, -1],
+// });
 // cube.move.bounds = new Fig.RectBounds({
 //   normal: [1, 0, 0],
 //   rightDirection: [0, 0, -1],
@@ -226,69 +235,44 @@ figure.scene.setProjection({ style: 'orthographic', near: 1, far: 10, left: -2, 
 // figure.scene.setCamera({ position: [2, 2, 2] });
 // figure.scene.setProjection({ style: 'perspective', near: 1, far: 7, aspectRatio: 2, fieldOfView: Math.PI * 0.2 });
 
-// console.log(new Fig.Point(0, 0, 0).transformBy(figure.spaceTransformMatrix('figure', 'gl')));
-// console.log(new Fig.Point(-0.15, -1, 0).transformBy(figure.spaceTransformMatrix('figure', 'gl')));
-// console.log(new Fig.Point(1, 0.6, 0).transformBy(figure.spaceTransformMatrix('figure', 'gl')));
-// console.log(new Fig.Point(0, 0, 0).transformBy(figure.scene.viewProjectionMatrix));
 
-// console.log(new Fig.Point(0, 0, 0).transformBy(figure.scene.viewProjectionMatrix).transformBy(figure.spaceTransformMatrix('gl', 'figure')));
-// console.log(new Fig.Point(0, 0, 0).transformBy(figure.scene.viewProjectionMatrix).transformBy(Fig.tools.m3.inverse(figure.scene.viewProjectionMatrix)));
+// const c = new Fig.Point(-0.15, -1, 0).transformBy(figure.scene.viewMatrix);
+// const cameraZ = c.z;
+// const cameraX = c.x;
+// const cameraY = c.y;
+// const matrix0 = figure.scene.projectionMatrix[0];
+// const matrix5 = figure.scene.projectionMatrix[5];
+// const matrix10 = figure.scene.projectionMatrix[10];
+// const matrix11 = -1;
+// const matrix14 = figure.scene.projectionMatrix[11];
+// const clipY = cameraY * matrix5 / cameraZ * matrix11;
+// const clipX = cameraX * matrix0 / cameraZ * matrix11;
+// const clipZ = (matrix10 * cameraZ + matrix14) / (cameraZ * matrix11)
 
-// console.log(new Fig.Point(-0.15, -1, 0).transformBy(figure.scene.viewProjectionMatrix));
-// console.log(new Fig.Point(-0.15, -1, 0).transformBy(figure.spaceTransformMatrix('figure', 'gl')));
+// const q = m3.transformVector(figure.scene.viewProjectionMatrix, [-0.15, -1, 0, 1])
+// const qClip = q.map(n => n/ q[3]);
+// console.log(qClip);
+// const r = m3.transformVector(figure.scene.viewProjectionMatrix, [1, 0.6, 0, 1])
+// const rClip = r.map(n => n/ r[3])
+// // console.log(rClip);
+// // console.log(Fig.getPoint(rClip.slice(0, 3)).transformBy(m3.inverse(figure.scene.viewProjectionMatrix)))
+// // console.log(Fig.getPoint(qClip.slice(0, 3)).transformBy(m3.inverse(figure.scene.viewProjectionMatrix)))
 
-// console.log(Fig.tools.m3.transform(figure.scene.viewProjectionMatrix, 1, 0.6, 0))
-// console.log(Fig.tools.m3.transform(figure.scene.viewProjectionMatrix, -0.15, -1, 0))
-console.log(Fig.tools.m3.transformVector(figure.scene.viewProjectionMatrix, [-0.15, -1, 0, 1]))
-console.log(Fig.tools.m3.transformVector(figure.scene.viewProjectionMatrix, [1, 0.6, 0, 1]))
-console.log(Fig.tools.m3.transform(figure.scene.viewProjectionMatrix, -0.15, -1, 0))
-console.log(Fig.tools.m3.transform(figure.scene.viewProjectionMatrix, 1, 0.6, 0))
-// console.log(p)
+// const cz = matrix14 / (matrix11 * rClip[2] - matrix10);
+// const cx = rClip[0] * cz / matrix11 / matrix0;
+// const cy = rClip[1] * cz / matrix11 / matrix5;
+// console.log(m3.transform(figure.scene.cameraMatrix, cx, cy, cz))
 
-const c = new Fig.Point(-0.15, -1, 0).transformBy(figure.scene.viewMatrix);
-const cameraZ = c.z;
-const cameraX = c.x;
-const cameraY = c.y;
-const matrix0 = figure.scene.projectionMatrix[0];
-const matrix5 = figure.scene.projectionMatrix[5];
-const matrix10 = figure.scene.projectionMatrix[10];
-const matrix11 = -1;
-const matrix14 = figure.scene.projectionMatrix[11];
-const clipY = cameraY * matrix5 / cameraZ * matrix11;
-const clipX = cameraX * matrix0 / cameraZ * matrix11;
-const clipZ = (matrix10 * cameraZ + matrix14) / (cameraZ * matrix11)
-console.log(clipX, clipY, clipZ)
-console.log(c)
-console.log(c.transformBy([
-  matrix0, 0, 0, 0,
-  0, matrix5, 0, 0,
-  0, 0, matrix10, matrix14,
-  0, 0, matrix11, 0,
-]))
-const q = m3.transformVector(figure.scene.viewProjectionMatrix, [-0.15, -1, 0, 1])
-const qClip = q.map(n => n/ q[3]);
-console.log(qClip);
-const r = m3.transformVector(figure.scene.viewProjectionMatrix, [1, 0.6, 0, 1])
-const rClip = r.map(n => n/ r[3])
-// console.log(rClip);
-// console.log(Fig.getPoint(rClip.slice(0, 3)).transformBy(m3.inverse(figure.scene.viewProjectionMatrix)))
-// console.log(Fig.getPoint(qClip.slice(0, 3)).transformBy(m3.inverse(figure.scene.viewProjectionMatrix)))
+// const cz1 = matrix14 / (matrix11 * qClip[2] - matrix10);
+// const cx1 = qClip[0] * cz1 / matrix11 / matrix0;
+// const cy1 = qClip[1] * cz1 / matrix11 / matrix5;
+// console.log(m3.transform(figure.scene.cameraMatrix, cx1, cy1, cz1))
 
-const cz = matrix14 / (matrix11 * rClip[2] - matrix10);
-const cx = rClip[0] * cz / matrix11 / matrix0;
-const cy = rClip[1] * cz / matrix11 / matrix5;
-console.log(m3.transform(figure.scene.cameraMatrix, cx, cy, cz))
-
-const cz1 = matrix14 / (matrix11 * qClip[2] - matrix10);
-const cx1 = qClip[0] * cz1 / matrix11 / matrix0;
-const cy1 = qClip[1] * cz1 / matrix11 / matrix5;
-console.log(m3.transform(figure.scene.cameraMatrix, cx1, cy1, cz1))
-
-const a = figure.scene.figureToGL([1, 0.6, 0])
-const b = figure.scene.figureToGL([-0.15, -1, 0])
-const a1 = figure.scene.glToFigure(a);
-const b1 = figure.scene.glToFigure(b);
-console.log(a1)
-console.log(a)
-console.log(b1)
-console.log(b)
+// const a = figure.scene.figureToGL([1, 0.6, 0])
+// const b = figure.scene.figureToGL([-0.15, -1, 0])
+// const a1 = figure.scene.glToFigure(a);
+// const b1 = figure.scene.glToFigure(b);
+// console.log(a1)
+// console.log(a)
+// console.log(b1)
+// console.log(b)

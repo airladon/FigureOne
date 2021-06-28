@@ -370,6 +370,14 @@ export type OBJ_GLPrimitive = {
   buffers?: Array<OBJ_GLBuffer>,
   uniforms?: Array<OBJ_GLUniform>,
   glPrimitive?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
+  position?: TypeParsablePoint,
+  transform?: TypeParsableTransform,
+  color?: TypeColor,
+  touch?: boolean | number | TypeParsablePoint,
+  move?: boolean | OBJ_ElementMove,
+  dimColor?: TypeColor,
+  defaultColor?: TypeColor,
+  scenarios?: TypeScenarios,
 };
 
 /**
@@ -550,6 +558,12 @@ export type OBJ_Generic = {
   position?: TypeParsablePoint,
   transform?: TypeParsableTransform,
   pulse?: number,
+
+  touch?: boolean | number | TypeParsablePoint,
+  move?: boolean | OBJ_ElementMove,
+  dimColor?: TypeColor,
+  defaultColor?: TypeColor,
+  scenarios?: TypeScenarios,
 }
 
 /**
@@ -2440,6 +2454,24 @@ export default class FigurePrimitives {
     element.custom.getUniform = element.drawingObject.getUniform.bind(element.drawingObject);
     element.dimColor = this.defaultDimColor.slice();
 
+    if (options.move != null && options.move !== false) {
+      element.setTouchable();
+      element.setMovable();
+      element.setMove(options.move);
+    }
+    if (options.touch != null) {
+      element.setTouchable(options.touch);
+    }
+    if (options.dimColor != null) {
+      element.dimColor = options.dimColor;
+    }
+    if (options.defaultColor != null) {
+      element.defaultColor = options.dimColor;
+    }
+    if (options.scenarios != null) {
+      element.scenarios = options.scenarios;
+    }
+
     element.timeKeeper = this.timeKeeper;
     element.recorder = this.recorder;
     setupPulse(element, options);
@@ -2608,6 +2640,23 @@ export default class FigurePrimitives {
       options.name,
     );
     element.dimColor = this.defaultDimColor.slice();
+    if (options.move != null && options.move !== false) {
+      element.setTouchable();
+      element.setMovable();
+      element.setMove(options.move);
+    }
+    if (options.touch != null) {
+      element.setTouchable(options.touch);
+    }
+    if (options.dimColor != null) {
+      element.dimColor = options.dimColor;
+    }
+    if (options.defaultColor != null) {
+      element.defaultColor = options.dimColor;
+    }
+    if (options.scenarios != null) {
+      element.scenarios = options.scenarios;
+    }
 
     element.custom.updateGeneric = function update(updateOptions: {
       points?: Array<TypeParsablePoint>,

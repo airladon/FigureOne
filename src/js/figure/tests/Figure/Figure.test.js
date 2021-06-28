@@ -119,7 +119,7 @@ describe('Figure', () => {
         squareElement.move.bounds = 'figure';
         squares[sKey] = squareElement;
         collection.add(sKey, squareElement);
-        collection.hasTouchableElements = true;
+        // collection.hasTouchableElements = true;
       });
       figure.touchTopElementOnly = false;
       figure.elements = collection;

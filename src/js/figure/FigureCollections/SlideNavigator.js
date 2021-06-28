@@ -295,7 +295,7 @@ class CollectionsSlideNavigator extends FigureElementCollection {
     // if (o.collection == null) {
     //   this.nav.collection = null;
     // }
-    this.hasTouchableElements = true;
+    // this.hasTouchableElements = true;
     this.onAdd = () => {
       this.nav.load({ // $FlowFixMe
         collection: this.parent,

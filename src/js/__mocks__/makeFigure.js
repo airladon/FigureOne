@@ -151,16 +151,27 @@ export default function makeFigure(
       }
       figure.mock.duration += deltaTimeInSeconds;
     },
+    touchElement: (element, figurePosition) => {
+      // const p = getPoint(figurePosition);
+      let e = element;
+      if (typeof element === 'string') {
+        e = figure.get(element);
+      }
+      figure.getSelectionFromGLBackup = figure.getSelectionFromGL;
+      figure.getSelectionFromGL = () => e;
+      figure.touchDown(figurePosition);
+    },
     touchDown: (figurePosition) => {
-      const p = getPoint(figurePosition);
+      const p = figure.transformPoint('figure', 'gl', getPoint(figurePosition));
       figure.touchDownHandler(p);
       figure.mock.previousTouchPoint = p;
+      figure.getSelectionFromGL = figure.getSelectionFromGLBackup;
     },
     touchUp: () => {
       figure.touchUpHandler();
     },
     touchMove: (figurePosition) => {
-      const p = getPoint(figurePosition);
+      const p = figure.transformPoint('figure', 'gl', getPoint(figurePosition));
       figure.touchMoveHandler(figure.mock.previousTouchPoint, p);
       figure.mock.previousTouchPoint = p;
     },

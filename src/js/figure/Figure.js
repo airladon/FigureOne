@@ -1133,19 +1133,19 @@ class Figure {
     return this.getElements(children);
   }
 
-  /**
-   * Set the figure to be touchable.
-   *
-   * Using <a href="#figureelementsettouchable">element.setTouchable</a> will
-   * automatically set this.
-   */
-  setTouchable(touchable: boolean = true) {
-    if (touchable) {
-      this.elements.hasTouchableElements = true;
-    } else {
-      this.elements.hasTouchableElements = false;
-    }
-  }
+  // /**
+  //  * Set the figure to be touchable.
+  //  *
+  //  * Using <a href="#figureelementsettouchable">element.setTouchable</a> will
+  //  * automatically set this.
+  //  */
+  // setTouchable(touchable: boolean = true) {
+  //   if (touchable) {
+  //     this.elements.hasTouchableElements = true;
+  //   } else {
+  //     this.elements.hasTouchableElements = false;
+  //   }
+  // }
 
   getShapes() {
     const webgl = [this.webglLow];
@@ -1850,6 +1850,9 @@ class Figure {
     this.isTouchDown = true;
 
     const element = this.getSelectionFromGL(glPoint);
+    if (element != null) {
+      console.log(element.name)
+    }
     // console.log(element)
     if (element == null) {
       return false;
@@ -2142,6 +2145,7 @@ class Figure {
       return this.touchMoveHandler(previousGLPoint, currentGLPoint);
     }
     this.moveBuffer.push([previousGLPoint, currentGLPoint]);
+    return true;
   }
 
 
@@ -2474,7 +2478,6 @@ class Figure {
     gl.readPixels(
       x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, data,
     );
-    // Uncomment animateNextFrame to see touchable elements in their touch colors
     if (!debug) {
       this.animateNextFrame();
     }
