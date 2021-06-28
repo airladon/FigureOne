@@ -2458,7 +2458,7 @@ class Figure {
   // TODO in future - convert this to just one pixel as in
   // https://webglfundamentals.org/webgl/lessons/webgl-picking.html
   // but make sure it also works for orthographic projection
-  getSelectionFromPixel(xPixel: number, yPixel: number) {
+  getSelectionFromPixel(xPixel: number, yPixel: number, debug: false) {
     const { gl } = this.webglLow;
     this.setupForSelectionDraw();
     this.elements.draw(
@@ -2474,9 +2474,18 @@ class Figure {
     gl.readPixels(
       x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, data,
     );
-    // Uncomment this to see touchable elements in their touch colors
-    this.animateNextFrame();
+    // Uncomment animateNextFrame to see touchable elements in their touch colors
+    if (!debug) {
+      this.animateNextFrame();
+    }
     return this.elements.getUniqueColorElement(data);
+  }
+
+  /**
+   * Show touchable regions in figure.
+   */
+  showTouchable() {
+    this.getSelectionFromPixel(0, 0, true);
   }
 
   getSelectionFromGL(glPoint: Point) {
