@@ -2027,16 +2027,22 @@ class Figure {
     const center = element.getPosition('local');
     const prev = previousLocalPoint.sub(center);
     const curr = currentLocalPoint.sub(center);
-    let deltaAngle = curr.angleTo(prev);
-    const norm = prev.crossProduct(curr).normalize();
-    if (!norm.isEqualTo(element.move.plane.n)) {
-      deltaAngle *= -1;
+    let deltaAngle;
+    if (prev.isEqualTo(curr)) {
+      deltaAngle = 0;
+    } else { 
+      deltaAngle = curr.angleTo(prev);
+      const norm = prev.crossProduct(curr).normalize();
+      if (!norm.isEqualTo(element.move.plane.n)) {
+        deltaAngle *= -1;
+      }
     }
     const r = element.transform.r();
     if (typeof r === 'number') {
       element.moved(r + deltaAngle);
+    } else {
+      element.moved(r[1] + deltaAngle);
     }
-    element.moved(r[1] + deltaAngle);
 
     // const currentAngle = Math.atan2(
     //   currentLocalPoint.y - center.y,

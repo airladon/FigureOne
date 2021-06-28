@@ -352,8 +352,13 @@ class Point {
    */
   angleTo(v: TypeParsablePoint) {
     const p = getPoint(v);
+    const pLength = p.length();
+    const thisLength = this.length();
+    if (pLength === 0 || thisLength === 0) {
+      return 0;
+    }
     return Math.acos(
-      this.dotProduct(p) / p.length() / this.length(),
+      this.dotProduct(p) / pLength / thisLength,
     );
   }
 

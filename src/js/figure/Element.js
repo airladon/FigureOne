@@ -1733,7 +1733,10 @@ class FigureElement {
           typeof this.state.movement.velocity === 'number'
           && round(this.state.movement.velocity) === 0
         )
-        || this.state.movement.velocity.isZero()
+        || (
+          typeof this.state.movement.velocity !== 'number'
+          && this.state.movement.velocity.isZero()
+        )
       ) {
         if (typeof this.state.movement.velocity === 'number') {
           this.state.movement.velocity = 0;
@@ -2068,22 +2071,25 @@ class FigureElement {
     }
     // console.log(type, transform)
     // let movement;
-    if (type === 'scale' || type === 'scaleX') {
-      transform.updateScale(value, value, value);
+    if (type === 'scale') {
+      transform.updateScale([value, value, value]);
+    } else if (type === 'scaleX') {
+      const s = transform.s();
+      transform.updateScale([value, s.y, s.z]);
     } else if (type === 'scaleY') {
       const s = transform.s();
-      transform.updateScale(s.x, value, s.z);
+      transform.updateScale([s.x, value, s.z]);
     } else if (type === 'scaleZ') {
       const s = transform.s();
-      transform.updateScale(s.x, s.y, value);
+      transform.updateScale([s.x, s.y, value]);
     } else if (type === 'position' || type === 'translation') {
       transform.updateTranslation(value);
     } else if (type === 'rotation') {
       const r = transform.r();
       if (typeof r === 'number') {
-        transform.updateRotation(value)
+        transform.updateRotation(value);
       } else {
-        transform.updateRotation(['ra', r[0], value]);
+        transform.updateRotation(['axis', ...r[0].toArray(), value]);
       }
     }
     return transform;
@@ -2120,8 +2126,9 @@ class FigureElement {
   moved(value: Point | number): void {
     const previousValue = this.getMovement(this.transform);
     this.calcVelocity(previousValue, value);
-    const t = this.updateTransformWithMovement(value, this.transform._dup())
-    this.setTransform(t);
+    this.updateTransformWithMovement(value, this.transform);
+    this.transformSet();
+    // this.setTransform(t);
     // let tBounds;
     // if (this.move.bounds != null && this.move.bounds !== 'none') {  // $FlowFixMe
     //   tBounds = this.move.bounds.getTranslation();
@@ -2185,13 +2192,15 @@ class FigureElement {
     let v;
     if (typeof next === 'number' && typeof prevValue === 'number') {
       v = (next - prevValue) / deltaTime;
-      if (v <= this.move.freely.zeroVelocityThreshold) {
+      const d = v / Math.abs(v);
+      if (Math.abs(v) <= this.move.freely.zeroVelocityThreshold) {
         v = 0;
       }
-      v = Math.min(v, this.move.maxVelocity);
+      v = Math.min(Math.abs(v), this.move.maxVelocity);
+      v *= d;
     } else {
       v = next.sub(prevValue).scale(1 / deltaTime);
-      const vMag = v.length;
+      const vMag = v.length();
       if (vMag <= this.move.freely.zeroVelocityThreshold) {
         v = new Point(0, 0, 0);
       } else if (vMag > this.move.maxVelocity) {
