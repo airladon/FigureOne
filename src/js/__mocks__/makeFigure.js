@@ -162,7 +162,7 @@ export default function makeFigure(
       figure.touchDown(figurePosition);
     },
     touchDown: (figurePosition) => {
-      const p = figure.transformPoint('figure', 'gl', getPoint(figurePosition));
+      const p = figure.transformPoint(figurePosition, 'figure', 'gl');
       figure.touchDownHandler(p);
       figure.mock.previousTouchPoint = p;
       figure.getSelectionFromGL = figure.getSelectionFromGLBackup;
@@ -171,7 +171,7 @@ export default function makeFigure(
       figure.touchUpHandler();
     },
     touchMove: (figurePosition) => {
-      const p = figure.transformPoint('figure', 'gl', getPoint(figurePosition));
+      const p = figure.transformPoint(figurePosition, 'figure', 'gl');
       figure.touchMoveHandler(figure.mock.previousTouchPoint, p);
       figure.mock.previousTouchPoint = p;
     },

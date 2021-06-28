@@ -377,9 +377,6 @@ Rotation can only happen with some rotation transform elements:
  * defined method to clip velocity per frame
  * @property {TypeTransformValue} maxVelocity maximum velocity allowed (5)
  * @property {OBJ_ElementMoveFreely} freely free movement parameters
- * @property {boolean} canBeMovedAfterLosingTouch touch or mouse dragging will
- * continue to move element even after the touch/cursor position is outside
- * the element boundary
  * @property {FigureElement | null} element
  */
 type OBJ_ElementMove = {
@@ -388,11 +385,7 @@ type OBJ_ElementMove = {
   plane: Plane,
   maxVelocity: number | TypeParsablePoint;
   freely: OBJ_ElementMoveFreely,
-  canBeMovedAfterLosingTouch: boolean;
-  // type: 'rotation' | 'translation' | 'scaleX' | 'scaleY' | 'scale';
   element: FigureElement | null | string;
-  // Deprecate
-  sizeInBounds: boolean,
 };
 
 /* eslint-enable no-use-before-define */
@@ -874,7 +867,6 @@ class FigureElement {
       // bounds: 'none',
       bounds: null,
       plane: new Plane([0, 0, 0], [0, 0, 1]),
-      sizeInBounds: false,
       maxVelocity: 5,
       freely: {
         zeroVelocityThreshold: 0.0001,
@@ -882,7 +874,7 @@ class FigureElement {
         callback: null,
         bounceLoss: 0.5,
       },
-      canBeMovedAfterLosingTouch: true,
+      // canBeMovedAfterLosingTouch: true,
       type: 'translation',
       element: null,
       // transformClip: null,

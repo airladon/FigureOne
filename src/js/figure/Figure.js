@@ -1850,9 +1850,9 @@ class Figure {
     this.isTouchDown = true;
 
     const element = this.getSelectionFromGL(glPoint);
-    if (element != null) {
-      console.log(element.name)
-    }
+    // if (element != null) {
+    //   console.log(element.name)
+    // }
     // console.log(element)
     if (element == null) {
       return false;
