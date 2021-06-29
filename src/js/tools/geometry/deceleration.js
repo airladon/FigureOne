@@ -76,7 +76,7 @@ function decelerateValue(
   if (
     deltaTimeIn === 0
     && round(decelerationIn, precision) === 0
-    // && bounceLossIn === 0 || bounds == null || !bounds.isDefined()
+    && (bounceLossIn === 0 || bounds == null || !bounds.isDefined())
   ) {
     // if () {
     //   if (deltaTimeIn == null) {
@@ -210,6 +210,7 @@ function decelerateVector(
   if (
     deltaTimeIn == null
     && round(decelerationIn, precision) === 0
+    && (bounceLossIn === 0 || bounds == null || !bounds.isDefined())
   ) {
     // if (bounceLossIn === 0 || bounds == null || !bounds.isDefined()) {
     //   if (deltaTimeIn == null) {
@@ -246,21 +247,7 @@ function decelerateVector(
     position = bounds.clip(positionIn);
   }
 
-  // // Initial Velocity
-  // const v0 = mag;
-  // // Total change in velocity to go to zero threshold
-  // const deltaV = Math.abs(v0) - zeroVelocityThreshold;
-
-  // let deltaTime = deltaTimeIn;
-  // // If the velocity will decelerate to 0 before deltaTimeIn, then change
-  // // deltaTime to be this shorter time.
   const deceleration = Math.max(decelerationIn, 0.0000001);
-  // if (deltaTime == null || deltaTime > Math.abs(deltaV / deceleration)) {
-  //   deltaTime = Math.abs(deltaV / deceleration);
-  // }
-
-  // // Calculate distance traveeled over time and so find the new Position
-  // const distanceTravelled = v0 * deltaTime - 0.5 * deceleration * (deltaTime ** 2);
 
   // Calculate the distance travelled in deltaTime - If deltaTime === null, then
   // the distance travelled till the velocity becomes 0 will be calculated.
@@ -268,6 +255,7 @@ function decelerateVector(
   const [distanceTravelled, deltaTime] = getDistance(
     mag, deltaTimeIn, deceleration, zeroVelocityThreshold,
   );
+
   const newPosition = position.add(direction.scale(distanceTravelled));
 
   // If the new position is within the bounds, then can return the result.
@@ -332,7 +320,6 @@ function decelerateVector(
   // const velocityAtIntersect = v0 + acc * t;
   const bounceVelocity = velocityAtIntersect * bounceScaler;
   const reflectionVelocity = reflection.scale(bounceVelocity);
-
 
   if (deltaTimeIn == null) {
     const newStop = decelerateVector(
