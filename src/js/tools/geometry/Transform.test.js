@@ -677,7 +677,6 @@ describe('Transform', () => {
     });
     test('Copy', () => {
       const t = new Transform().scale(1, 1).rotate(1).translate(1, 1);
-      t.index = 0;
       const b = t._dup();
       expect(t).toEqual(b);
       expect(t).not.toBe(b);
@@ -759,49 +758,49 @@ describe('Transform', () => {
     //   y = sy + dist*sin(angle);
     //   return {vx, vy, x, y}
     // }
-    describe('Deceleration', () => {
-      let d;
-      let t;
-      let v;
-      let z;
-      beforeEach(() => {
-        // d = new TransformLimit(Math.sqrt(2), 1, Math.sqrt(2));
-        d = { scale: 1, translation: Math.sqrt(2), rotation: 1 };
-        // Transform().scale(1, 1).rotate(1).translate(1, 1);
-        v = new Transform().scale(10, 10).rotate(10).translate(10, 10);
-        t = new Transform().scale(0, 0).rotate(0).translate(0, 0);
-        // z = new TransformLimit(5, 5, 5);
-        z = { scale: 5, translation: 5, rotation: 5 };
-        // Transform().scale(5, 5).rotate(5).translate(5, 5);
-      });
-      test('Simple deceleration', () => {
-        const n = decelerateTransform(t, v, d, 1, {}, {}, z);     // next v and t
-        expect(n.velocity.round()).toEqual(new Transform()
-          .scale(9, 9, 0).rotate(9).translate(9, 9, 0));
-        expect(n.transform).toEqual(new Transform()
-          .scale(9.5, 9.5, 1).rotate(9.5).translate(9.5, 9.5));
-      });
-      test('Negatives in deceleration and velocity', () => {
-        // d = new TransformLimit(Math.sqrt(2), 1, Math.sqrt(2));
-        // d = { scale: Math.sqrt(2), translation: Math.sqrt(2), rotation: 1 };
-        v = new Transform().scale(10, -10).rotate(-10).translate(10, -10);
-        const n = decelerateTransform(t, v, d, 1, {}, {}, z);     // next v and t
-        expect(n.velocity.round()).toEqual(new Transform()
-          .scale(9, -9, 0).rotate(-9).translate(9, -9));
-        expect(n.transform.round()).toEqual(new Transform()
-          .scale(9.5, -9.5, 1).rotate(-9.5).translate(9.5, -9.5));
-      });
-      test('Zero thresholds', () => {
-        // d = new TransformLimit(Math.sqrt(2), 1, Math.sqrt(2));
-        v = new Transform().scale(10, -10).rotate(-10).translate(10, -10);
-        // z = new TransformLimit(5, 5, 5);
-        const n = decelerateTransform(t, v, d, 10, {}, {}, z);     // next v and t
-        expect(n.velocity.round()).toEqual(new Transform()
-          .scale(0, 0, 0).rotate(0).translate(0, 0));
-        expect(n.transform.round()).toEqual(new Transform()
-          .scale(37.5, -37.5, 1).rotate(-37.5).translate(43.75, -43.75));
-      });
-    });
+    // describe('Deceleration', () => {
+    //   let d;
+    //   let t;
+    //   let v;
+    //   let z;
+    //   beforeEach(() => {
+    //     // d = new TransformLimit(Math.sqrt(2), 1, Math.sqrt(2));
+    //     d = { scale: 1, translation: Math.sqrt(2), rotation: 1 };
+    //     // Transform().scale(1, 1).rotate(1).translate(1, 1);
+    //     v = new Transform().scale(10, 10).rotate(10).translate(10, 10);
+    //     t = new Transform().scale(0, 0).rotate(0).translate(0, 0);
+    //     // z = new TransformLimit(5, 5, 5);
+    //     z = { scale: 5, translation: 5, rotation: 5 };
+    //     // Transform().scale(5, 5).rotate(5).translate(5, 5);
+    //   });
+    //   test('Simple deceleration', () => {
+    //     const n = decelerateTransform(t, v, d, 1, {}, {}, z);     // next v and t
+    //     expect(n.velocity.round()).toEqual(new Transform()
+    //       .scale(9, 9, 0).rotate(9).translate(9, 9, 0));
+    //     expect(n.transform).toEqual(new Transform()
+    //       .scale(9.5, 9.5, 1).rotate(9.5).translate(9.5, 9.5));
+    //   });
+    //   test('Negatives in deceleration and velocity', () => {
+    //     // d = new TransformLimit(Math.sqrt(2), 1, Math.sqrt(2));
+    //     // d = { scale: Math.sqrt(2), translation: Math.sqrt(2), rotation: 1 };
+    //     v = new Transform().scale(10, -10).rotate(-10).translate(10, -10);
+    //     const n = decelerateTransform(t, v, d, 1, {}, {}, z);     // next v and t
+    //     expect(n.velocity.round()).toEqual(new Transform()
+    //       .scale(9, -9, 0).rotate(-9).translate(9, -9));
+    //     expect(n.transform.round()).toEqual(new Transform()
+    //       .scale(9.5, -9.5, 1).rotate(-9.5).translate(9.5, -9.5));
+    //   });
+    //   test('Zero thresholds', () => {
+    //     // d = new TransformLimit(Math.sqrt(2), 1, Math.sqrt(2));
+    //     v = new Transform().scale(10, -10).rotate(-10).translate(10, -10);
+    //     // z = new TransformLimit(5, 5, 5);
+    //     const n = decelerateTransform(t, v, d, 10, {}, {}, z);     // next v and t
+    //     expect(n.velocity.round()).toEqual(new Transform()
+    //       .scale(0, 0, 0).rotate(0).translate(0, 0));
+    //     expect(n.transform.round()).toEqual(new Transform()
+    //       .scale(37.5, -37.5, 1).rotate(-37.5).translate(43.75, -43.75));
+    //   });
+    // });
     // describe('Clipping', () => {
     //   test('Not clipped', () => {
     //     let min;
