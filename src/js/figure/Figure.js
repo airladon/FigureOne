@@ -2024,7 +2024,7 @@ class Figure {
     let deltaAngle;
     if (prev.isEqualTo(curr)) {
       deltaAngle = 0;
-    } else { 
+    } else {
       deltaAngle = curr.angleTo(prev);
       const norm = prev.crossProduct(curr).normalize();
       if (!norm.isEqualTo(element.move.plane.n)) {
@@ -2100,16 +2100,19 @@ class Figure {
     const currentLocalPoint = element.glToPlane(currentGLPoint);
 
     const center = element.getPosition('local');
-    const previousMag = previousLocalPoint.sub(center).distance();
+    let previousMag = previousLocalPoint.sub(center).distance();
+    if (previousMag === 0) {
+      previousMag = 0.000001;
+    }
     const currentMag = currentLocalPoint.sub(center).distance();
 
 
     const currentScale = element.transform.s();
     // element.moved(currentMag / previousMag);
     if (currentScale != null) {
-      const currentTransform = element.transform._dup();
-      const newScaleY = currentScale.y * currentMag / previousMag;
-      const newScaleZ = currentScale.z * currentMag / previousMag;
+      // const currentTransform = element.transform._dup();
+      // const newScaleY = currentScale.y * currentMag / previousMag;
+      // const newScaleZ = currentScale.z * currentMag / previousMag;
       if (type === 'x') {
         // currentTransform.updateScale([newScaleX, 1, 1]);
         const newScaleX = currentScale.x * currentMag / previousMag;

@@ -362,9 +362,13 @@ class Point {
     if (pLength === 0 || thisLength === 0) {
       return 0;
     }
-    return Math.acos(
-      this.dotProduct(p) / pLength / thisLength,
-    );
+    let dot = this.dotProduct(p) / pLength / thisLength;
+    if (dot < -1) {
+      dot = -1;
+    } else if (dot > 1) {
+      dot = 1;
+    }
+    return Math.acos(dot);
   }
 
   /**
