@@ -46,7 +46,7 @@ describe('Element Move', () => {
     jest.runAllTimers();
   });
   describe('2D', () => {
-    test('Simple', () => {
+    test('Translation', () => {
       move(true);
       figure.mock.timeStep(0);
       figure.mock.touchElement(a, [0, 0]);
@@ -62,7 +62,7 @@ describe('Element Move', () => {
       expect(a.state.movement.velocity.round().toArray()).toEqual([1, 0, 0]);
       expect(a.state.isMovingFreely).toBe(true);
     });
-    test('No deceleration', () => {
+    test('Translation, no deceleration', () => {
       move({
         type: 'translation',
         freely: {
@@ -81,7 +81,7 @@ describe('Element Move', () => {
       expect(a.state.movement.velocity.round(5).toArray()).toEqual([1, 0, 0]);
       expect(a.getRemainingMovingFreelyTime()).toBe(null);
     });
-    test('Defined Deceleration', () => {
+    test('Translation, deceleration', () => {
       move({
         type: 'translation',
         freely: {
@@ -104,7 +104,7 @@ describe('Element Move', () => {
       // Remaining time is not exactly 9 because of the zeroVelocityThreshold
       expect(round(a.getRemainingMovingFreelyTime())).toBe(8.999);
     });
-    test('Defined Mag Deceleration', () => {
+    test('Translation, mag deceleration', () => {
       move({
         type: 'translation',
         freely: {
@@ -254,6 +254,31 @@ describe('Element Move', () => {
       figure.mock.timeStep(5);
       expect(a.getPosition('figure').round(5).toArray()).toEqual([1, 0, 0]);
       expect(a.state.movement.velocity.round(5).toArray()).toEqual([0, 0, 0]);
+    });
+    test('Rotation, no deceleration', () => {
+      move3({
+        type: 'rotation',
+        freely: {
+          deceleration: 0,
+        },
+      });
+      figure.mock.timeStep(0);
+      figure.mock.touchElement(a, [0.4, 0]);
+      figure.mock.timeStep(1);
+      figure.mock.touchMove([0.4 * Math.cos(1), 0.4 * Math.sin(1)]);
+      expect(round(a.getRotation())).toEqual(1);
+      figure.mock.touchUp();
+      expect(round(a.getRotation())).toEqual(1);
+      expect(round(a.state.movement.velocity)).toEqual(1);
+      expect(a.state.isMovingFreely).toBe(true);
+
+      figure.mock.timeStep(1);
+      expect(round(a.getRotation())).toEqual(2);
+      expect(round(a.state.movement.velocity)).toEqual(1);
+
+      figure.mock.timeStep(7);
+      expect(round(a.getRotation())).toEqual(9);
+      expect(round(a.state.movement.velocity)).toEqual(1);
     });
   });
 });
