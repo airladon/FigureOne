@@ -6,6 +6,7 @@ import {
   round,
 } from '../../../tools/math';
 import makeFigure from '../../../__mocks__/makeFigure';
+import { cube } from '../../../tools/g2';
 
 jest.useFakeTimers();
 
@@ -13,14 +14,29 @@ describe('Element Move', () => {
   let figure;
   let a;
   let move;
+  let move3;
   beforeEach(() => {
     figure = makeFigure();
-    move = (options) => {
+    move = (moveOptions) => {
       a = figure.add({
         name: 'a',
         make: 'polygon',
         radius: 0.5,
-        move: options,
+        move: moveOptions,
+      });
+    };
+    move3 = (moveOptions, position = [0, 0, 0]) => {
+      const [cubeV] = cube({
+        side: 0.5,
+        position: [0, 0, 0],
+      });
+      a = figure.add({
+        name: 'a',
+        make: 'gl',
+        vertexShader: { dimension: 3 },
+        vertices3: { data: cubeV },
+        position,
+        move: moveOptions,
       });
     };
   });
@@ -184,6 +200,21 @@ describe('Element Move', () => {
       expect(a.getPosition('figure').round().toArray()).toEqual([-2, 1, -2]);
       figure.mock.touchMove([-2, 1, -2]);
       expect(a.getPosition('figure').round().toArray()).toEqual([-2, 1, -2]);
+    });
+    test('Rotation with bounds in XZ with Y offset', () => {
+      move3({
+        type: 'rotation',
+        plane: [[0, 1, 0], [0, 1, 0]],
+        bounds: { min: -1, max: 1 },
+      }, [0, 1, 0]);
+      a.transform.updateRotation(['axis', [0, 1, 0], 0]);
+      figure.scene.setCamera({ position: [2, 2, 2] });
+      figure.scene.setProjection({
+        near: 0.1, far: 10, left: -2, right: 2, bottom: -2, top: 2,
+      });
+      figure.mock.touchElement(a, [0.4, 1, 0]);
+      figure.mock.touchMove([0.4, 1, 0.4]);
+      expect(round(a.getRotation()[1])).toEqual(round(-Math.PI / 4));
     });
   });
 });

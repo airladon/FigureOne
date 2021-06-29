@@ -176,8 +176,9 @@ const cube = figure.add({
   normals: { data: rn },
   color: [0, 1, 1, 1],
   position: [0, 0.5, 0],
+  transform: [['s', 1, 1, 1], ['axis', [0, 1, 0], 1], ['t', 0, 0, 0]],
   move: {
-    type: 'scale',
+    type: 'rotation',
     plane: [[0, 0.5, 0], [0, 1, 0]],
     // bounds: { min: 0.5, max: 10}
     // bounds: { p1: [0, 0, 1], p2: [0, 0, -1] },

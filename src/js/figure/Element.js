@@ -14,7 +14,6 @@ import { round } from '../tools/math';
 import { getState } from './Recorder/state';
 import type {
   TypeParsablePoint, TypeParsableTransform,
-  TypeTransformValue,
   TypeBorder, TypeParsableBuffer,
 } from '../tools/g2';
 import { isPointInPolygon } from '../tools/geometry/polygon';

@@ -1,6 +1,5 @@
 import { Point } from './Point';
 import { Transform, getTransform } from './Transform';
-import { decelerateTransform } from './deceleration';
 import { round } from '../math';
 
 /* eslint-disable object-curly-newline */
@@ -746,101 +745,6 @@ describe('Transform', () => {
         expect(() => t1.velocity(t0, deltaTime, zero, max)).toThrow();
       });
     });
-    // Calculation for deceleration:
-    // s = function(sx, sy, vx, vy, d, t) {
-    //   vel = sqrt(vx*vx+vy*vy);
-    //   vNext = vel-d*t;
-    //   angle = atan2(vy, vx);
-    //   vx = vNext * cos(angle);
-    //   vy = vNext * sin(angle);
-    //   dist = vel*t - 0.5*d*t*t;
-    //   x = sx + dist*cos(angle);
-    //   y = sy + dist*sin(angle);
-    //   return {vx, vy, x, y}
-    // }
-    // describe('Deceleration', () => {
-    //   let d;
-    //   let t;
-    //   let v;
-    //   let z;
-    //   beforeEach(() => {
-    //     // d = new TransformLimit(Math.sqrt(2), 1, Math.sqrt(2));
-    //     d = { scale: 1, translation: Math.sqrt(2), rotation: 1 };
-    //     // Transform().scale(1, 1).rotate(1).translate(1, 1);
-    //     v = new Transform().scale(10, 10).rotate(10).translate(10, 10);
-    //     t = new Transform().scale(0, 0).rotate(0).translate(0, 0);
-    //     // z = new TransformLimit(5, 5, 5);
-    //     z = { scale: 5, translation: 5, rotation: 5 };
-    //     // Transform().scale(5, 5).rotate(5).translate(5, 5);
-    //   });
-    //   test('Simple deceleration', () => {
-    //     const n = decelerateTransform(t, v, d, 1, {}, {}, z);     // next v and t
-    //     expect(n.velocity.round()).toEqual(new Transform()
-    //       .scale(9, 9, 0).rotate(9).translate(9, 9, 0));
-    //     expect(n.transform).toEqual(new Transform()
-    //       .scale(9.5, 9.5, 1).rotate(9.5).translate(9.5, 9.5));
-    //   });
-    //   test('Negatives in deceleration and velocity', () => {
-    //     // d = new TransformLimit(Math.sqrt(2), 1, Math.sqrt(2));
-    //     // d = { scale: Math.sqrt(2), translation: Math.sqrt(2), rotation: 1 };
-    //     v = new Transform().scale(10, -10).rotate(-10).translate(10, -10);
-    //     const n = decelerateTransform(t, v, d, 1, {}, {}, z);     // next v and t
-    //     expect(n.velocity.round()).toEqual(new Transform()
-    //       .scale(9, -9, 0).rotate(-9).translate(9, -9));
-    //     expect(n.transform.round()).toEqual(new Transform()
-    //       .scale(9.5, -9.5, 1).rotate(-9.5).translate(9.5, -9.5));
-    //   });
-    //   test('Zero thresholds', () => {
-    //     // d = new TransformLimit(Math.sqrt(2), 1, Math.sqrt(2));
-    //     v = new Transform().scale(10, -10).rotate(-10).translate(10, -10);
-    //     // z = new TransformLimit(5, 5, 5);
-    //     const n = decelerateTransform(t, v, d, 10, {}, {}, z);     // next v and t
-    //     expect(n.velocity.round()).toEqual(new Transform()
-    //       .scale(0, 0, 0).rotate(0).translate(0, 0));
-    //     expect(n.transform.round()).toEqual(new Transform()
-    //       .scale(37.5, -37.5, 1).rotate(-37.5).translate(43.75, -43.75));
-    //   });
-    // });
-    // describe('Clipping', () => {
-    //   test('Not clipped', () => {
-    //     let min;
-    //     let max;
-    //     let t0;
-    //     t0 = new Transform().scale(1, 1).rotate(1).translate(1, 1);
-    //     min = new Transform().scale(0, 0).rotate(0).translate(-2, -2);
-    //     max = new Transform().scale(2, 2).rotate(2).translate(2, 2);
-    //     expect(t0.clip(min, max)).toEqual(t0);
-
-    //     t0 = new Transform().scale(-1, -1).rotate(-1).translate(-1, -1);
-    //     min = new Transform().scale(-2, -2).rotate(-2).translate(-2, -2);
-    //     max = new Transform().scale(0, 2).rotate(2).translate(0, 2);
-    //     expect(t0.clip(min, max)).toEqual(t0);
-
-    //     t0 = new Transform().scale(-1, 1).rotate(-1).translate(-1, 1);
-    //     min = new Transform().scale(-1, -2).rotate(-1).translate(-1, -2);
-    //     max = new Transform().scale(0, 1).rotate(2).translate(0, 1);
-    //     expect(t0.clip(min, max)).toEqual(t0);
-    //   });
-    //   test('Clipped', () => {
-    //     let min;
-    //     let max;
-    //     let t0;
-    //     let t1;
-    //     // Clip max
-    //     t0 = new Transform().scale(1, 1).rotate(1).translate(1, 1);
-    //     min = new Transform().scale(-1, 0).rotate(0).translate(-2, -2);
-    //     max = new Transform().scale(0, 0.5).rotate(0.5).translate(0, -1.5);
-    //     t1 = new Transform().scale(0, 0.5).rotate(0.5).translate(0, -1.5);
-    //     expect(t0.clip(min, max)).toEqual(t1);
-
-    //     // Clip min
-    //     t0 = new Transform().scale(1, -1).rotate(1).translate(1, -1);
-    //     min = new Transform().scale(1.5, 0).rotate(2).translate(1.5, 0);
-    //     max = new Transform().scale(2, 0.5).rotate(3).translate(2, 0.5);
-    //     t1 = new Transform().scale(1.5, 0).rotate(2).translate(1.5, 0);
-    //     expect(t0.clip(min, max)).toEqual(t1);
-    //   });
-    // });
   });
   describe('Get Transform', () => {
     test('Array', () => {
@@ -889,6 +793,62 @@ describe('Transform', () => {
     });
     test('Fail bad value', () => {
       expect(() => getTransform(1)).toThrow();
+    });
+    describe('Rotation', () => {
+      test('2D', () => {
+        const t = getTransform([['r', 1]]);
+        const t1 = getTransform([['2D', 1]]);
+        expect(t.def[0]).toEqual(['r', 1]);
+        expect(t1.def[0]).toEqual(t.def[0]);
+      });
+      test('axis', () => {
+        const t = getTransform([['axis', 0, 1, 0, 1]]);
+        const t1 = getTransform([['axis', [0, 1, 0], 1]]);
+        const t2 = getTransform([['ra', [0, 1, 0], 1]]);
+        const t3 = getTransform([['ra', 0, 1, 0, 1]]);
+        const t4 = getTransform([['ra', new Point(0, 1, 0), 1]]);
+        const t5 = getTransform([['axis', new Point(0, 1, 0), 1]]);
+        expect(t.def[0]).toEqual(['ra', 0, 1, 0, 1]);
+        expect(t1.def[0]).toEqual(t.def[0]);
+        expect(t2.def[0]).toEqual(t.def[0]);
+        expect(t3.def[0]).toEqual(t.def[0]);
+        expect(t4.def[0]).toEqual(t.def[0]);
+        expect(t5.def[0]).toEqual(t.def[0]);
+      });
+      test('cartesian', () => {
+        const t = getTransform([['xyz', 1, 2, 3]]);
+        const t1 = getTransform([['xyz', [1, 2, 3]]]);
+        const t2 = getTransform([['rc', [1, 2, 3]]]);
+        const t3 = getTransform([['rc', 1, 2, 3]]);
+        const t4 = getTransform([['rc', new Point(1, 2, 3)]]);
+        const t5 = getTransform([['xyz', new Point(1, 2, 3)]]);
+        expect(t.def[0]).toEqual(['rc', 1, 2, 3]);
+        expect(t1.def[0]).toEqual(t.def[0]);
+        expect(t2.def[0]).toEqual(t.def[0]);
+        expect(t3.def[0]).toEqual(t.def[0]);
+        expect(t4.def[0]).toEqual(t.def[0]);
+        expect(t5.def[0]).toEqual(t.def[0]);
+      });
+      test('direction', () => {
+        const t = getTransform([['dir', 1, 2, 3]]);
+        const t1 = getTransform([['dir', [1, 2, 3]]]);
+        const t2 = getTransform([['rd', [1, 2, 3]]]);
+        const t3 = getTransform([['rd', 1, 2, 3]]);
+        const t4 = getTransform([['rd', new Point(1, 2, 3)]]);
+        const t5 = getTransform([['dir', new Point(1, 2, 3)]]);
+        expect(t.def[0]).toEqual(['rd', 1, 2, 3]);
+        expect(t1.def[0]).toEqual(t.def[0]);
+        expect(t2.def[0]).toEqual(t.def[0]);
+        expect(t3.def[0]).toEqual(t.def[0]);
+        expect(t4.def[0]).toEqual(t.def[0]);
+        expect(t5.def[0]).toEqual(t.def[0]);
+      });
+      test('spherical', () => {
+        const t = getTransform([['sph', 1, 2]]);
+        const t1 = getTransform([['rs', 1, 2]]);
+        expect(t.def[0]).toEqual(['rs', 1, 2]);
+        expect(t1.def[0]).toEqual(t.def[0]);
+      });
     });
   });
 });

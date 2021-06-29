@@ -338,9 +338,11 @@ function zeroPad(num, places) {
 
 class UniqueIdGenerator {
   static instance: Object;
+
   seeds: {
     [seedString: string]: number,
   };
+
   colorSeeds: {
     [seedString: string]: number,
   };
@@ -398,6 +400,7 @@ class UniqueIdGenerator {
       this.colorSeeds[seed] += 1;
       return initialColors[id];
     }
+    /* eslint-disable no-bitwise */
     const color = [
       ((id >> 0) & 0xFF),
       ((id >> 8) & 0xFF),
@@ -405,6 +408,7 @@ class UniqueIdGenerator {
       255,
       // ((id >> 24) & 0xFF),
     ];
+    /* eslint-enable no-bitwise */
     if (
       (color[0] === 255 || color[0] === 0 || color[0] === 100)
       && (color[1] === 255 || color[1] === 0 || color[1] === 100)

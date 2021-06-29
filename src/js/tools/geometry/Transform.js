@@ -89,31 +89,31 @@ function parseRotation(
     return parseRotation(...typeOr2DOrDef);
   }
   const type = typeOr2DOrDef;
-  if (type === '2D' && typeof r1 === 'number') {
+  if ((type === '2D' || type === 'r') && typeof r1 === 'number') {
     return ['r', r1];
   }
   if (typeof r1 === 'number') {
     if (typeof r2 === 'number') {
-      if (type === 'sph') {
+      if (type === 'sph' || type === 'rs') {
         return ['rs', r1, r2];
       }
       if (typeof r3 === 'number') {
-        if (type === 'xyz') {
+        if (type === 'xyz' || type === 'rc') {
           return ['rc', r1, r2, r3];
         }
-        if (type === 'dir') {
+        if (type === 'dir' || type === 'rd') {
           return ['rd', r1, r2, r3];
         }
-        if (typeof r4 === 'number' && type === 'axis') {
+        if (typeof r4 === 'number' && (type === 'axis' || type === 'ra')) {
           return ['ra', r1, r2, r3, r4];
         }
       }
     }
-  } else if (type === 'xyz') {
+  } else if (type === 'xyz' || type === 'rc') {
     return ['rc', ...getPoint(r1).toArray()];
-  } else if (type === 'dir') {
+  } else if (type === 'dir' || type === 'rd') {
     return ['rd', ...getPoint(r1).toArray()];
-  } else if (type === 'axis' && typeof r2 === 'number') {
+  } else if ((type === 'axis' || type === 'ra') && typeof r2 === 'number') {
     return ['ra', ...getPoint(r1).toArray(), r2];
   }
   throw new Error(`Could not parse rotation '${typeOr2DOrDef}', '${r1}', '${r2}', '${r3}', '${r4}'`);
@@ -828,56 +828,6 @@ class Transform {
     // return new Transform(order, this.name);
   }
 
-  // // Deprecate
-  // /**
-  //  * Return a duplicate transform that is clipped to `minTransform` and
-  //  * `maxTransform`. Both `minTransform` and `maxTransform` must be similar
-  //  * to this transform meaning they must all share the same order of
-  //  * transform components.
-  //  *
-  //  * Use `limitLine` to clip the first {@link Translation} transform in the
-  //  * chain to within a {@link Line}.
-  //  */
-  // clip(
-  //   minTransform: Transform,
-  //   maxTransform: Transform,
-  //   limitLine: null | Line,
-  // ) {
-  //   if (!this.isEqualShapeTo(minTransform) || !this.isEqualShapeTo(maxTransform)) {
-  //     throw new Error(`Cannot clip transforms of different shape: t: '${this.def}', min: '${minTransform.def}', max: '${maxTransform.def}'`);
-  //   }
-
-  //   const def = [];
-  //   for (let i = 0; i < this.def.length; i += 1) {
-  //     def.push(makeTransformComponent(
-  //       this.def[i], // $FlowFixMe
-  //       j => clipValue(this.def[i][j], minTransform.def[i][j], maxTransform.def[i][j]),
-  //     ));
-  //   }
-  //   const clippedTransform = new Transform(def, this.name);
-  //   if (limitLine != null) {
-  //     const t = clippedTransform.t();
-  //     if (t != null) {
-  //       const perpLine = new Line({ p1: t, length: 1, angle: limitLine.angle() + Math.PI / 2 });
-  //       const { intersect } = perpLine.intersectsWith(limitLine);
-  //       if (intersect) {
-  //         if (limitLine.hasPointOn(intersect, 4)) {
-  //           clippedTransform.updateTranslation(intersect);
-  //         } else {
-  //           const p1Dist = distance(intersect, limitLine.p1);
-  //           const p2Dist = distance(intersect, limitLine.p2);
-  //           if (p1Dist < p2Dist) {
-  //             clippedTransform.updateTranslation(limitLine.p1);
-  //           } else {
-  //             clippedTransform.updateTranslation(limitLine.p2);
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  //   return clippedTransform;
-  // }
-
   clipMag(
     zeroThresholdTransform: TypeTransformValue,
     maxTransform: TypeTransformValue,
@@ -1083,6 +1033,11 @@ function isParsableTransform(value: any) {
       || value[0][0] === 'rc'
       || value[0][0] === 'rd'
       || value[0][0] === 'rs'
+      || value[0][0] === 'axis'
+      || value[0][0] === 'sph'
+      || value[0][0] === '2D'
+      || value[0][0] === 'xyz'
+      || value[0][0] === 'dir'
     )
   ) {
     return true;
@@ -1112,18 +1067,30 @@ function parseArrayTransformDefinition(defIn: TransformDefinition) {
     } // $FlowFixMe
     const [type, x, y] = defIn[i];
     const len = defIn[i].length;
-    if (len === 4 || len === 5 || len === 17) {
+    if (type === 'c') {
       def.push(defIn[i]);
-    } else if (len === 3 && type === 't') {
-      def.push(['t', x, y, 0]);
-    } else if (len === 3 && type === 's') {
-      def.push(['s', x, y, 1]);
-    } else if (len === 3 && type === 'rs') {
-      def.push(['rs', x, y]);
-    } else if (len === 2 && type === 's') {
-      def.push(['s', x, x, x]);
-    } else if (len === 2 && type === 'r') {
-      def.push(['r', x]);
+    } else if (type === 't') {
+      if (len === 4) {
+        def.push(defIn[i]);
+      } else if (len === 3) {
+        def.push(['t', x, y, 0]);
+      }
+    } else if (type === 's') {
+      if (len === 2) {
+        def.push(['s', x, x, x]);
+      } else if (len === 3) {
+        def.push(['s', x, y, 1]);
+      } else if (len === 4) {
+        def.push(defIn[i]);
+      }
+    } else if (type.startsWith('r') || type === 'axis' || type === 'sph' || type === 'xyz' || type === '2D' || type === 'dir') {
+      def.push(parseRotation(defIn[i]));
+    // } else if (len === 3 && (type === 'rs' || type === 'sph')) {
+    //   def.push(['rs', x, y]);
+    // } else if (len === 2 && type === 's') {
+    //   def.push(['s', x, x, x]);
+    // } else if (len === 2 && type === 'r') {
+    //   def.push(['r', x]);
     } else {
       throw new Error(`Cannot parse transform array definition: ${JSON.stringify(defIn)}`);
     }
