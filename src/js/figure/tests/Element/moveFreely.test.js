@@ -353,7 +353,7 @@ describe('Element Move', () => {
         freely: {
           bounceLoss: 0.5,
           deceleration: 0.1,
-        }
+        },
       }, [-1, 0, 0]);
       figure.scene.setCamera({ position: [2, 2, 2] });
       figure.scene.setProjection({
@@ -387,6 +387,52 @@ describe('Element Move', () => {
       expect(a.state.movement.velocity.round(5).toArray()).toEqual([0, 0.84685, -0.84685]);
       figure.mock.timeStep(0.0000002);
       expect(a.state.movement.velocity.round(5).toArray()).toEqual([0, -0.42343, -0.42343]);
+    });
+    test('Translation along line in YZ plane at X = -1', () => {
+      move3({
+        type: 'translation',
+        plane: [[-1, 0, 0], [1, 0, 0]],
+        bounds: {
+          p1: [-1, -1, 1],
+          p2: [-1, 1.5, -1.5],
+        },
+        freely: {
+          bounceLoss: 0.5,
+          deceleration: 0.1,
+        },
+      }, [-1, 0, 0]);
+      figure.scene.setCamera({ position: [2, 2, 2] });
+      figure.scene.setProjection({
+        near: 0.1, far: 10, left: -2, right: 2, bottom: -2, top: 2,
+      });
+
+      figure.mock.timeStep(0);
+      figure.mock.touchElement(a, [-1, 0, 0]);
+      figure.mock.timeStep(0.5);
+      figure.mock.touchMove([-1, 0.5, -0.5]);
+      expect(a.getPosition('figure').round().toArray()).toEqual([-1, 0.5, -0.5]);
+      figure.mock.touchUp();
+      expect(a.state.isMovingFreely).toBe(true);
+      // Intersect will be at (-1, 1, -1) with reflection: (-1, -1, 1)
+      // Distance s: (-1, 0.5, -0.5) -> (-1, 1.5, -1.5) = Math.sqrt(2)
+      // Velocity Mag: √2
+      // Find time for s = √2 (bounce) when decel = 0.1
+      // s = vt - 0.5at^2 => -0.5at^2 + vt - s = 0
+      // t = (-b + Math.sqrt(b ** 2 - 4 * a * c)) / (2 * a);
+      // a = -0.05, b = Math.sqrt(2), c = -Math.sqrt(2)
+      // t = 1.0381007965283717
+      //
+      // At 1.03810s:
+      // v1 = v0 - a * t = Math.sqrt(2) - 0.1 * 1.0381007965283717 = 1.310403482720258
+      //    = (x, y) = (0.9265951887219632, 0.9265951887219632)
+      // After bounce = v1 * 0.5 = 0.655201741360129 = (0.4632975943609816, 0.4632975943609816)
+      //
+      // Just before bounce
+      figure.mock.timeStep(1.0381007);
+      expect(a.getPosition('figure').round(5).toArray()).toEqual([-1, 1.5, -1.5]);
+      expect(a.state.movement.velocity.round(5).toArray()).toEqual([0, 0.92660, -0.92660]);
+      figure.mock.timeStep(0.0000002);
+      expect(a.state.movement.velocity.round(5).toArray()).toEqual([0, -0.46330, 0.46330]);
     });
   });
 });
