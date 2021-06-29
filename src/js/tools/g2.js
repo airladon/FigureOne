@@ -16,7 +16,7 @@ import {
   Transform, getTransform, isParsableTransform,
 } from './geometry/Transform';
 import {
-  deceleratePoint, decelerateValue, decelerateVector,
+   decelerateValue, decelerateVector,
 } from './geometry/deceleration';
 import type { TypeParsableLine } from './geometry/Line';
 import type { TypeParsableRect } from './geometry/Rect';
@@ -546,7 +546,6 @@ export {
   getRect,
   getTransform,
   getLine,
-  deceleratePoint,
   decelerateValue,
   RectBounds,
   LineBounds,

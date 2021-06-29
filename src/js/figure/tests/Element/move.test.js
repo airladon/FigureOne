@@ -1,7 +1,7 @@
 /* eslint-disable object-curly-newline, object-property-newline */
-import {
-  Point, Line, // Rect, RectBounds,
-} from '../../../tools/g2';
+// import {
+//   Point, Line, // Rect, RectBounds,
+// } from '../../../tools/g2';
 import {
   round,
 } from '../../../tools/math';

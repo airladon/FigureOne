@@ -5,7 +5,7 @@
 // } from '../Element';
 import Figure from '../figure/Figure';
 import {
-  Rect, getPoint, Point, getRect,
+  Rect, Point, getRect,
 } from '../tools/g2';
 import webgl from './WebGLInstanceMock';
 import DrawContext2D from './DrawContext2DMock';

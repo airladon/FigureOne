@@ -177,10 +177,11 @@ const cube = figure.add({
   color: [0, 1, 1, 1],
   position: [0, 0.5, 0],
   move: {
-    type: 'translation',
+    type: 'scale',
     plane: [[0, 0.5, 0], [0, 1, 0]],
+    // bounds: { min: 0.5, max: 10}
     // bounds: { p1: [0, 0, 1], p2: [0, 0, -1] },
-    bounds: { left: 0.5, bottom: 0.5, right: 0.5, rightDirection: [0, 0, -1] },
+    // bounds: { left: 0.5, bottom: 0.5, right: 0.5, rightDirection: [0, 0, -1] },
   },
 });
 // cube.setMovable();

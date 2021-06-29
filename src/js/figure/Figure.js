@@ -255,6 +255,7 @@ class Figure {
 
   // touchTopElementOnly: boolean;
   previousCursorPoint: Point;
+  originalScalePoint: Point | null;
 
   limits: Rect;
   stateTime: DOMHighResTimeStamp;
@@ -564,6 +565,7 @@ class Figure {
     this.oldScroll = window.pageYOffset;
     this.drawAnimationFrames = 0;
     this.cursorShown = false;
+    this.originalScalePoint = null;
   }
 
   /**
@@ -752,6 +754,7 @@ class Figure {
       'mockPreviousTouchPoint',
       'isTouchDown',
       'scene',
+      'originalScalePoint',
     ], o);
     state.beingTouchedElement = null;
     state.beingMovedElement = null;
@@ -1966,7 +1969,7 @@ class Figure {
       this.beingMovedElement.stopBeingMoved();
       this.beingMovedElement.startMovingFreely();
     }
-
+    this.originalScalePoint = null;
     this.isTouchDown = false;
     this.beingMovedElement = null;
     this.beingTouchedElement = null;
@@ -2089,6 +2092,11 @@ class Figure {
     // }
   }
 
+  // TODO There is some weird behavior here when a boundary limit min is
+  // set. When draggin toward the center, the min will be reached. Just beyond
+  // the center might have a previousMag << currentMag meaning a very large
+  // scale will result so the scale will jump from min to max instantly.
+
   // eslint-disable-next-line class-methods-use-this
   scaleElement(
     element: FigureElement,
@@ -2098,13 +2106,20 @@ class Figure {
   ) {
     const previousLocalPoint = element.glToPlane(previousGLPoint);
     const currentLocalPoint = element.glToPlane(currentGLPoint);
-
+    // if (this.originalScalePoint == null) {
+    //   this.originalScalePoint = previousLocalPoint;
+    // }
     const center = element.getPosition('local');
     let previousMag = previousLocalPoint.sub(center).distance();
     if (previousMag === 0) {
       previousMag = 0.000001;
     }
     const currentMag = currentLocalPoint.sub(center).distance();
+    // if (element.move.bounds !== null) {
+    //   currentMag = element.move.bounds.clip(currentMag);
+    //   previousMag = Math.max(element.move.bounds.clip(previousMag), 0.0000001);
+    //   console.log(currentMag, previousMag)
+    // }
 
 
     const currentScale = element.transform.s();

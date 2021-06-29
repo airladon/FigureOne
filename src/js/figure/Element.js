@@ -4,7 +4,7 @@ import {
   Transform, Point, Rect,
   spaceToSpaceTransform, getBoundingRect,
   clipAngle, getPoint, getTransform, getScale,
-  TransformBounds, RectBounds, RangeBounds, getBounds,
+  RectBounds, RangeBounds, getBounds,
   getBoundingBorder, isBuffer, getBorder, decelerateVector, decelerateValue,
   getPlane, Plane,
 } from '../tools/g2';
@@ -14,8 +14,8 @@ import { round } from '../tools/math';
 import { getState } from './Recorder/state';
 import type {
   TypeParsablePoint, TypeParsableTransform,
-  TypeTransformValue, TypeTransformBoundsDefinition,
-  TypeBorder, TypeParsableBuffer, Bounds,
+  TypeTransformValue,
+  TypeBorder, TypeParsableBuffer,
 } from '../tools/g2';
 import { isPointInPolygon } from '../tools/geometry/polygon';
 import { Recorder } from './Recorder/Recorder';
@@ -2183,6 +2183,10 @@ class FigureElement {
     let v;
     if (typeof next === 'number' && typeof prevValue === 'number') {
       v = (next - prevValue) / deltaTime;
+      if (v === 0) {
+        this.state.movement.velocity = 0;
+        return;
+      }
       const d = v / Math.abs(v);
       if (Math.abs(v) <= this.move.freely.zeroVelocityThreshold) {
         v = 0;
