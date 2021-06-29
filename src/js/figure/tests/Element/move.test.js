@@ -201,6 +201,29 @@ describe('Element Move', () => {
       figure.mock.touchMove([-2, 1, -2]);
       expect(a.getPosition('figure').round().toArray()).toEqual([-2, 1, -2]);
     });
+    test('Translation with line bounds', () => {
+      move3({
+        type: 'translation',
+        plane: [[0, 1, 0], [0, 1, 0]],
+        bounds: {
+          p1: [0, 1, -1],
+          p2: [0, 1, 1],
+        },
+      });
+      figure.scene.setCamera({ position: [2, 2, 2] });
+      figure.scene.setProjection({
+        near: 0.1, far: 10, left: -2, right: 2, bottom: -2, top: 2,
+      });
+      figure.mock.touchElement(a, [0, 1, 0]);
+      figure.mock.touchMove([1, 1, 0]);
+      expect(a.getPosition('figure').round().toArray()).toEqual([0, 1, 0]);
+      figure.mock.touchMove([1, 1, 0.5]);
+      expect(a.getPosition('figure').round().toArray()).toEqual([0, 1, 0.5]);
+      figure.mock.touchMove([1, 1, 2]);
+      expect(a.getPosition('figure').round().toArray()).toEqual([0, 1, 1]);
+      figure.mock.touchMove([-10, 1, -1]);
+      expect(a.getPosition('figure').round().toArray()).toEqual([0, 1, -1]);
+    });
     test('Rotation with bounds in XZ with Y offset', () => {
       move3({
         type: 'rotation',
