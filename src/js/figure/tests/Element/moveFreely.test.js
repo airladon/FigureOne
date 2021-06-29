@@ -434,5 +434,44 @@ describe('Element Move', () => {
       figure.mock.timeStep(0.0000002);
       expect(a.state.movement.velocity.round(5).toArray()).toEqual([0, -0.46330, 0.46330]);
     });
+    test('Rotation with bounds in XZ with Y offset', () => {
+      move3({
+        type: 'rotation',
+        plane: [[0, 1, 0], [0, 1, 0]],
+        bounds: { min: -1, max: 1 },
+        freely: {
+          deceleration: 0.1,
+          bounceLoss: 0.5,
+        },
+      }, [0, 1, 0]);
+      a.transform.updateRotation(['axis', [0, 1, 0], 0]);
+      figure.scene.setCamera({ position: [2, 2, 2] });
+      figure.scene.setProjection({
+        near: 0.1, far: 10, left: -2, right: 2, bottom: -2, top: 2,
+      });
+      figure.mock.timeStep(0);
+      figure.mock.touchElement(a, [0.4, 1, 0]);
+      figure.mock.timeStep(0.5);
+      figure.mock.touchMove([0.4 * Math.cos(0.5), 1, -0.4 * Math.sin(0.5)]);
+      figure.mock.touchUp();
+      expect(a.state.isMovingFreely).toBe(true);
+      expect(round(a.state.movement.velocity, 5)).toEqual(1);
+      // Velocity is 1 rad / s
+      // Distance to bound is 0.5
+      // Find time for s = 0.5 (bounce) when decel = 0.1
+      // s = vt - 0.5at^2 => -0.5at^2 + vt - s = 0
+      // t = (-b + Math.sqrt(b ** 2 - 4 * a * c)) / (2 * a);
+      // a = -0.05, b = 1, c = -0.5
+      // t = 0.5131670194948623
+      //
+      // At 0.5131670194948623:
+      // v1 = v0 - a * t = 1 - 0.1 * 0.5131670194948623 = 0.9486832980505138
+      // After bounce = v1 * 0.5 = 0.4743416490252569
+      figure.mock.timeStep(0.51316700);
+      expect(round(a.getRotation()[1], 5)).toBe(1);
+      expect(round(a.state.movement.velocity, 5)).toEqual(0.94868);
+      figure.mock.timeStep(0.0000002);
+      expect(round(a.state.movement.velocity, 5)).toEqual(-0.47434);
+    });
   });
 });
