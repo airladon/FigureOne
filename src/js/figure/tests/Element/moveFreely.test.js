@@ -271,14 +271,122 @@ describe('Element Move', () => {
       expect(round(a.getRotation())).toEqual(1);
       expect(round(a.state.movement.velocity)).toEqual(1);
       expect(a.state.isMovingFreely).toBe(true);
+      expect(a.getRemainingMovingFreelyTime()).toBe(null);
 
       figure.mock.timeStep(1);
       expect(round(a.getRotation())).toEqual(2);
       expect(round(a.state.movement.velocity)).toEqual(1);
-
       figure.mock.timeStep(7);
       expect(round(a.getRotation())).toEqual(9);
       expect(round(a.state.movement.velocity)).toEqual(1);
+    });
+    test('Rotation, deceleration', () => {
+      move3({
+        type: 'rotation',
+        freely: {
+          deceleration: 0.1,
+          zeroVelocityThreshold: 0.00001,
+        },
+      });
+      figure.mock.timeStep(0);
+      figure.mock.touchElement(a, [0.4, 0]);
+      figure.mock.timeStep(1);
+      figure.mock.touchMove([0.4 * Math.cos(-1), 0.4 * Math.sin(-1)]);
+      expect(round(a.getRotation())).toEqual(-1);
+      figure.mock.touchUp();
+      expect(round(a.getRotation())).toEqual(-1);
+      expect(round(a.state.movement.velocity)).toEqual(-1);
+      expect(a.state.isMovingFreely).toBe(true);
+      expect(a.getRemainingMovingFreelyTime()).toBe(9.9999);
+    });
+    test('Rotation, deceleration and bounce', () => {
+      move3({
+        type: 'rotation',
+        freely: {
+          deceleration: 0.1,
+          zeroVelocityThreshold: 0.00001,
+        },
+        bounds: {
+          min: -1, max: 2,
+        },
+      });
+      figure.mock.timeStep(0);
+      figure.mock.touchElement(a, [0.4, 0]);
+      figure.mock.timeStep(1);
+      figure.mock.touchMove([0.4 * Math.cos(1), 0.4 * Math.sin(1)]);
+      expect(round(a.getRotation())).toEqual(1);
+      figure.mock.touchUp();
+
+      // Find time for s = 1 (bounce) at angle = 2 when decel = 0.1
+      // 1 = vt - 0.5 * 0.1 * t^2
+      // t = (-b + √(b ** 2 - 4 * a * c)) / (2 * a);
+      // b = 1, a = -0.05, c = -1
+      // t = (-1 + √(1 - 4 * -1 * -0.05)) / -0.1
+      //   = (-1 + √0.8) / -0.1
+      //   = 1.0557281
+      //
+      // At 1.055:
+      // v1 = v0 - a * t = 1 - 0.1 * 1.055 = 0.89442719
+      // After bounce = v1 * 0.5 = 0.447213595
+      //
+      // Remaining Time = (0.4472 - 0.00001) / 0.1 = 4.472035954999579
+      // Remaining distance:
+      // s = vt + 0.5 * at^2 = 0.4472 * 4.47 - 0.5 * 0.1 * 4.47 * 4.47 = 0.99999999
+      figure.mock.timeStep(1.0557282);
+      expect(round(a.getRotation())).toEqual(2);
+      expect(round(a.state.movement.velocity, 5)).toEqual(-0.44721);
+      expect(round(a.getRemainingMovingFreelyTime(), 2)).toBe(4.47);
+    });
+  });
+  describe('3D', () => {
+    test('Translation YZ at X=-1', () => {
+      move3({
+        type: 'translation',
+        plane: [[-1, 0, 0], [1, 0, 0]],
+        bounds: {
+          rightDirection: [0, 0, -1],
+          left: 1,
+          bottom: 2,
+          top: 3,
+          right: 4,
+        },
+        freely: {
+          bounceLoss: 0.5,
+          deceleration: 0.1,
+        }
+      }, [-1, 0, 0]);
+      figure.scene.setCamera({ position: [2, 2, 2] });
+      figure.scene.setProjection({
+        near: 0.1, far: 10, left: -2, right: 2, bottom: -2, top: 2,
+      });
+
+      figure.mock.timeStep(0);
+      figure.mock.touchElement(a, [-1, 0, 0]);
+      figure.mock.timeStep(1);
+      figure.mock.touchMove([-1, 1, -1]);
+      expect(a.getPosition('figure').toArray()).toEqual([-1, 1, -1]);
+      figure.mock.touchUp();
+      expect(a.state.isMovingFreely).toBe(true);
+      // Intersect will be at (-1, 3, -3) with reflection in y: (-1, -3, -3)
+      // Distance s: (-1, 1, -1) -> (-1, 3, -3) = Math.sqrt(8)
+      // Velocity Mag: √2
+      // Find time for s = √8 (bounce) when decel = 0.1
+      // s = vt - 0.5at^2 => -0.5at^2 + vt - s = 0
+      // t = (-b + Math.sqrt(b ** 2 - 4 * a * c)) / (2 * a);
+      // a = -0.05, b = Math.sqrt(2), c = -Math.sqrt(8)
+      // t = 2.1658483231909287
+      //
+      // At 2.1658s:
+      // v1 = v0 - a * t = Math.sqrt(2) - 0.1 * 2.1658483231909287 = 1.1976287300540023
+      //    = (x, y) = (0.8468513963650182, 0.8468513963650182)
+      // After bounce = v1 * 0.5 = 0.5988143650270011 = (0.4234256981825091, 0.4234256981825091)
+      //
+      // Just before bounce
+      figure.mock.timeStep(2.1658482);
+      expect(a.getPosition('figure').round(5).toArray()).toEqual([-1, 3, -3]);
+      expect(a.state.movement.velocity.round(5).toArray()).toEqual([0, 0.84685, -0.84685]);
+      figure.mock.timeStep(0.0000002);
+      expect(a.state.movement.velocity.round(5).toArray()).toEqual([0, -0.42343, -0.42343]);
     });
   });
 });

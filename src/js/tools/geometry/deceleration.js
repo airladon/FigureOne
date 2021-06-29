@@ -74,7 +74,7 @@ function decelerateValue(
   // However, if the deceleration is 0, then the velocity will never go to
   // zero so return duration = null (meaning infinite time).
   if (
-    deltaTimeIn === 0
+    deltaTimeIn === null
     && round(decelerationIn, precision) === 0
     && (bounceLossIn === 0 || bounds == null || !bounds.isDefined())
   ) {
@@ -111,7 +111,6 @@ function decelerateValue(
   // Calculate the new value from the old value, distanceTravelled and the
   // velocity direction
   const newValue = value + direction * distanceTravelled;
-
   // If the new value is within the bounds, then can return the result.
   if (bounds == null || bounds.contains(newValue)) {
     // If originally deltaTimeIn was null, then the requested time and value
@@ -129,6 +128,7 @@ function decelerateValue(
     if (round(v1, precision) <= round(zeroVelocityThreshold, precision)) {
       v1 = 0;
     }
+
     return {
       value: newValue,
       velocity: v1 * direction,
@@ -167,7 +167,6 @@ function decelerateValue(
 
   // Now we've had a bounce, we need to call decelerateValue again with the
   // new bounce velocity and bounce position.
-
   // If deltaTimeIn == null, looking for the zero velocity time/value
   if (deltaTimeIn == null) {
     const newStop = decelerateValue(
@@ -224,9 +223,13 @@ function decelerateVector(
   // clip velocity to the dimension of interest
   let velocity = velocityIn;    // $FlowFixMe
   if (bounds instanceof LineBounds) {
-    velocity = bounds.boundary.pointProjection(velocity);
+    velocity = bounds.boundary
+      .pointProjection(bounds.boundary.p1.add(velocity))
+      .sub(bounds.boundary.p1);
   } else if (bounds instanceof RectBounds) {
-    velocity = bounds.plane.pointProjection(velocity);
+    velocity = bounds.plane
+      .pointProjection(bounds.plane.p.add(velocity))
+      .sub(bounds.plane.p);
   }
 
   // Get the magnitude and direciton of the velocity

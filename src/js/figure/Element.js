@@ -1715,7 +1715,6 @@ class FigureElement {
       const next = this.decelerate(deltaTime);
       this.state.movement.velocity = next.velocity;
       this.state.movement.previousTime = now;
-
       // If the velocity is 0, then stop moving freely and return the current
       // transform
       if (
