@@ -152,7 +152,7 @@ describe('Element Move', () => {
   });
   describe('3D', () => {
     test('Translation with no bounds in ZY plane', () => {
-      move({
+      move3({
         type: 'translation',
         plane: [[0, 0, 0], [1, 0, 0]],
       });
@@ -171,7 +171,7 @@ describe('Element Move', () => {
       expect(a.getPosition('figure').round().toArray()).toEqual([0, -10, -1]);
     });
     test('Translation with bounds in XZ with Y offset', () => {
-      move({
+      move3({
         type: 'translation',
         plane: [[0, 1, 0], [0, 1, 0]],
         bounds: {
@@ -213,8 +213,10 @@ describe('Element Move', () => {
         near: 0.1, far: 10, left: -2, right: 2, bottom: -2, top: 2,
       });
       figure.mock.touchElement(a, [0.4, 1, 0]);
-      figure.mock.touchMove([0.4, 1, 0.4]);
-      expect(round(a.getRotation()[1])).toEqual(round(-Math.PI / 4));
+      figure.mock.touchMove([0.4, 1, -0.4]);
+      expect(round(a.getRotation()[1])).toEqual(round(Math.PI / 4));
+      figure.mock.touchMove([0, 1, -0.4]);
+      expect(round(a.getRotation()[1])).toEqual(round(1));
     });
   });
 });
