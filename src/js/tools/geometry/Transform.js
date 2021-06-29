@@ -589,6 +589,18 @@ class Transform {
     return [new Point(r[1], r[2], r[3]), r[4]];
   }
 
+  rType(rotationIndex: number = 0) {
+    const i = this.getComponentIndex('r', rotationIndex);
+    const types = {
+      r: '2D',
+      ra: 'axis',
+      rc: 'xyz',
+      rd: 'dir',
+      rs: 'sph',
+    }
+    return types[this.def[i][0]];
+  }
+
   rArray(rotationIndex: number = 0) {
     const i = this.getComponentIndex('r', rotationIndex);
     const r = this.def[i];

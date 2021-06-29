@@ -3636,6 +3636,13 @@ class FigureElement {
     if (plane != null) {
       this.move.plane = getPlane(plane);
     }
+    if (type === 'rotation') {
+      // const r = this.transform.r();
+      const rType = this.transform.rType();
+      if (!this.move.plane.n.isEqualTo([0, 0, 1]) && rType !== 'axis') {
+        this.transform.updateRotation(['axis', this.move.plane.n, 0]);
+      }
+    }
     if (bounds != null) {
       if (bounds.contains != null) {
         this.move.bounds = bounds;
