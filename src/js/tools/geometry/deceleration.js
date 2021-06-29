@@ -1,14 +1,14 @@
 // @flow
 import { Point } from './Point';
 import { round } from '../math';
-import { Transform, transformValueToArray } from './Transform';
+// import { Transform, transformValueToArray } from './Transform';
 import { polarToRect } from './coordinates';
 import { clipAngle } from './angle';
 import {
-  RectBounds, RangeBounds, LineBounds, Bounds, TransformBounds,
+  RectBounds, RangeBounds, LineBounds, Bounds,
 } from './Bounds';
-import type { TypeTransformBounds, TypeTransformBoundsDefinition } from './Bounds';
-import type { TypeTransformValue, TransformDefinition } from './Transform';
+// import type { TypeTransformBounds, TypeTransformBoundsDefinition } from './Bounds';
+// import type { TypeTransformValue, TransformDefinition } from './Transform';
 
 function getDistance(
   velocity: number,
@@ -298,11 +298,12 @@ function decelerateVector(
   // is larger than the distance travelled in deltaTime, then there is likely a
   // rounding error... Or if the intersect is null there is an error (it really
   // shouldn't be if the containment test is failed)
+  console.log(result, distanceTravelled, position, direction, bounds)
   if (
     (result.distance !== 0 && result.distance > distanceTravelled)
     || result.intersect == null
   ) {
-    throw new Error('Error in calculating intersect');
+    throw new Error('Error in calculating intersect1');
   }
 
   const intersectPoint = result.intersect;
@@ -638,154 +639,154 @@ function decelerateIndependantPoint(
   };
 }
 
-function decelerateTransform(
-  transform: Transform,
-  velocity: Transform,
-  decelerationIn: TypeTransformValue,
-  deltaTime: number | null,
-  boundsIn: TypeTransformBounds | TypeTransformBoundsDefinition | 'none',
-  bounceLossIn: TypeTransformValue,
-  zeroVelocityThresholdIn: TypeTransformValue,
-  precision: number = 8,
-): { velocity: Transform, transform: Transform, duration: null | number } {
-  const deceleration = transformValueToArray(decelerationIn, transform);
-  const bounceLoss = transformValueToArray(bounceLossIn, transform);
-  const zeroVelocityThreshold = transformValueToArray(zeroVelocityThresholdIn, transform);
-  let bounds;
-  if (boundsIn instanceof TransformBounds) {
-    bounds = boundsIn;
-  } else if (boundsIn === 'none') {
-    bounds = new TransformBounds(transform);
-  } else {
-    bounds = new TransformBounds(transform, boundsIn);
-  }
-  let duration = 0;
-  const newDef: TransformDefinition = [];
-  const newVDef: TransformDefinition = [];
+// function decelerateTransform(
+//   transform: Transform,
+//   velocity: Transform,
+//   decelerationIn: TypeTransformValue,
+//   deltaTime: number | null,
+//   boundsIn: TypeTransformBounds | TypeTransformBoundsDefinition | 'none',
+//   bounceLossIn: TypeTransformValue,
+//   zeroVelocityThresholdIn: TypeTransformValue,
+//   precision: number = 8,
+// ): { velocity: Transform, transform: Transform, duration: null | number } {
+//   const deceleration = transformValueToArray(decelerationIn, transform);
+//   const bounceLoss = transformValueToArray(bounceLossIn, transform);
+//   const zeroVelocityThreshold = transformValueToArray(zeroVelocityThresholdIn, transform);
+//   let bounds;
+//   if (boundsIn instanceof TransformBounds) {
+//     bounds = boundsIn;
+//   } else if (boundsIn === 'none') {
+//     bounds = new TransformBounds(transform);
+//   } else {
+//     bounds = new TransformBounds(transform, boundsIn);
+//   }
+//   let duration = 0;
+//   const newDef: TransformDefinition = [];
+//   const newVDef: TransformDefinition = [];
 
-  for (let i = 0; i < transform.def.length; i += 1) {
-    const transformation = transform.def[i];
-    let result = { duration: 0 };
-    let newTransformation;
-    let newVTransformation;
-    if (transformation[0] === 't') {
-      result = deceleratePoint( // $FlowFixMe
-        new Point(transformation[1], transformation[2], transformation[3]),
-        new Point(velocity.def[i][1], velocity.def[i][2], velocity.def[i][3]),
-        deceleration[i], deltaTime,
-        bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
-        precision,
-      );
-      newTransformation = ['t', result.position.x, result.position.y, result.position.z];
-      newVTransformation = ['t', result.velocity.x, result.velocity.y, result.velocity.z];
-    } else if (
-      transformation[0] === 's'
-      || transformation[0] === 'rc'
-      || transformation[0] === 'rd'
-    ) {
-      result = decelerateIndependantPoint( // $FlowFixMe
-        new Point(transformation[1], transformation[2], transformation[3]),
-        new Point(velocity.def[i][1], velocity.def[i][2], velocity.def[i][3]),
-        deceleration[i], deltaTime, // $FlowFixMe
-        bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
-        precision,
-      );
-      newTransformation = [
-        transformation[0],
-        result.point.x, result.point.y, result.point.z,
-      ];
-      newVTransformation = [
-        transformation[0],
-        result.velocity.x, result.velocity.y, result.velocity.z,
-      ];
-    } else if (
-      transformation[0] === 'r'
-    ) {
-      result = decelerateValue( // $FlowFixMe
-        transformation[1],
-        velocity.def[i][1],
-        deceleration[i], deltaTime, // $FlowFixMe
-        bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
-        precision,
-      );
-      newTransformation = [
-        transformation[0],
-        result.value,
-      ];
-      newVTransformation = [
-        transformation[0],
-        result.velocity,
-      ];
-    } else if (
-      transformation[0] === 'rs'
-    ) {
-      result = decelerateIndependantPoint( // $FlowFixMe
-        new Point(transformation[1], transformation[2], 0),
-        new Point(velocity.def[i][1], velocity.def[i][2], 0),
-        deceleration[i], deltaTime, // $FlowFixMe
-        bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
-        precision,
-      );
-      newTransformation = [
-        transformation[0],
-        result.point.x, result.point.y,
-      ];
-      newVTransformation = [
-        transformation[0],
-        result.velocity.x, result.velocity.y,
-      ];
-    } else if (
-      transformation[0] === 'ra'
-    ) {
-      const result1 = decelerateIndependantPoint( // $FlowFixMe
-        new Point(transformation[1], transformation[2], transformation[3]),
-        new Point(velocity.def[i][1], velocity.def[i][2], velocity.def[i][3]),
-        deceleration[i], deltaTime, // $FlowFixMe
-        bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
-        precision,
-      );
-      const result2 = decelerateValue( // $FlowFixMe
-        transformation[4],
-        velocity.def[i][4],
-        deceleration[i], deltaTime, // $FlowFixMe
-        bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
-        precision,
-      );
-      newTransformation = [
-        transformation[0],
-        result1.point.x, result1.point.y, result1.point.z, result2.value,
-      ];
-      newVTransformation = [
-        transformation[0],
-        result1.velocity.x, result1.velocity.y, result1.velocity.z, result2.value,
-      ];
-      result = {
-        duration: Math.max(result1.duration, result2.duration),
-      };
-    }
-    if (deltaTime === null) { // $FlowFixMe
-      if (result.duration == null || result.duration > duration) {
-        ({ duration } = result);
-      }
-    } // $FlowFixMe
-    newVDef.push(newVTransformation); // $FlowFixMe
-    newDef.push(newTransformation);
-  }
+//   for (let i = 0; i < transform.def.length; i += 1) {
+//     const transformation = transform.def[i];
+//     let result = { duration: 0 };
+//     let newTransformation;
+//     let newVTransformation;
+//     if (transformation[0] === 't') {
+//       result = deceleratePoint( // $FlowFixMe
+//         new Point(transformation[1], transformation[2], transformation[3]),
+//         new Point(velocity.def[i][1], velocity.def[i][2], velocity.def[i][3]),
+//         deceleration[i], deltaTime,
+//         bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
+//         precision,
+//       );
+//       newTransformation = ['t', result.position.x, result.position.y, result.position.z];
+//       newVTransformation = ['t', result.velocity.x, result.velocity.y, result.velocity.z];
+//     } else if (
+//       transformation[0] === 's'
+//       || transformation[0] === 'rc'
+//       || transformation[0] === 'rd'
+//     ) {
+//       result = decelerateIndependantPoint( // $FlowFixMe
+//         new Point(transformation[1], transformation[2], transformation[3]),
+//         new Point(velocity.def[i][1], velocity.def[i][2], velocity.def[i][3]),
+//         deceleration[i], deltaTime, // $FlowFixMe
+//         bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
+//         precision,
+//       );
+//       newTransformation = [
+//         transformation[0],
+//         result.point.x, result.point.y, result.point.z,
+//       ];
+//       newVTransformation = [
+//         transformation[0],
+//         result.velocity.x, result.velocity.y, result.velocity.z,
+//       ];
+//     } else if (
+//       transformation[0] === 'r'
+//     ) {
+//       result = decelerateValue( // $FlowFixMe
+//         transformation[1],
+//         velocity.def[i][1],
+//         deceleration[i], deltaTime, // $FlowFixMe
+//         bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
+//         precision,
+//       );
+//       newTransformation = [
+//         transformation[0],
+//         result.value,
+//       ];
+//       newVTransformation = [
+//         transformation[0],
+//         result.velocity,
+//       ];
+//     } else if (
+//       transformation[0] === 'rs'
+//     ) {
+//       result = decelerateIndependantPoint( // $FlowFixMe
+//         new Point(transformation[1], transformation[2], 0),
+//         new Point(velocity.def[i][1], velocity.def[i][2], 0),
+//         deceleration[i], deltaTime, // $FlowFixMe
+//         bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
+//         precision,
+//       );
+//       newTransformation = [
+//         transformation[0],
+//         result.point.x, result.point.y,
+//       ];
+//       newVTransformation = [
+//         transformation[0],
+//         result.velocity.x, result.velocity.y,
+//       ];
+//     } else if (
+//       transformation[0] === 'ra'
+//     ) {
+//       const result1 = decelerateIndependantPoint( // $FlowFixMe
+//         new Point(transformation[1], transformation[2], transformation[3]),
+//         new Point(velocity.def[i][1], velocity.def[i][2], velocity.def[i][3]),
+//         deceleration[i], deltaTime, // $FlowFixMe
+//         bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
+//         precision,
+//       );
+//       const result2 = decelerateValue( // $FlowFixMe
+//         transformation[4],
+//         velocity.def[i][4],
+//         deceleration[i], deltaTime, // $FlowFixMe
+//         bounds.boundary[i], bounceLoss[i], zeroVelocityThreshold[i],
+//         precision,
+//       );
+//       newTransformation = [
+//         transformation[0],
+//         result1.point.x, result1.point.y, result1.point.z, result2.value,
+//       ];
+//       newVTransformation = [
+//         transformation[0],
+//         result1.velocity.x, result1.velocity.y, result1.velocity.z, result2.value,
+//       ];
+//       result = {
+//         duration: Math.max(result1.duration, result2.duration),
+//       };
+//     }
+//     if (deltaTime === null) { // $FlowFixMe
+//       if (result.duration == null || result.duration > duration) {
+//         ({ duration } = result);
+//       }
+//     } // $FlowFixMe
+//     newVDef.push(newVTransformation); // $FlowFixMe
+//     newDef.push(newTransformation);
+//   }
 
-  if (deltaTime != null) {
-    duration = deltaTime;
-  }
-  return {
-    transform: new Transform(newDef, transform.name),
-    velocity: new Transform(newVDef, transform.name),
-    duration,
-  };
-}
+//   if (deltaTime != null) {
+//     duration = deltaTime;
+//   }
+//   return {
+//     transform: new Transform(newDef, transform.name),
+//     velocity: new Transform(newVDef, transform.name),
+//     duration,
+//   };
+// }
 
 export {
   deceleratePoint,
   decelerateVector,
   decelerateIndependantPoint,
   decelerateValue,
-  decelerateTransform,
+  // decelerateTransform,
 };

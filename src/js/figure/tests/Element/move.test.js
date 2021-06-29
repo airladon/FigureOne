@@ -13,18 +13,18 @@ describe('Element Move', () => {
   let figure;
   let a;
   let move;
+  beforeEach(() => {
+    figure = makeFigure();
+    move = (options) => {
+      a = figure.add({
+        name: 'a',
+        make: 'polygon',
+        radius: 0.5,
+        move: options,
+      });
+    };
+  });
   describe('2D', () => {
-    beforeEach(() => {
-      figure = makeFigure();
-      move = (options) => {
-        a = figure.add({
-          name: 'a',
-          make: 'polygon',
-          radius: 0.5,
-          move: options,
-        });
-      };
-    });
     test('Simple', () => {
       move(true);
       figure.mock.touchElement(a, [0, 0]);
@@ -75,18 +75,38 @@ describe('Element Move', () => {
       figure.mock.touchMove([0, 2]);
       expect(a.getPosition('figure').round().toArray()).toEqual([0, 0, 0]);
     });
+  });
+  describe('3D', () => {
     test('Translation with bounds in XZ with Y offset', () => {
       move({
         type: 'translation',
         plane: [[0, 1, 0], [0, 1, 0]],
         bounds: {
           left: 1, bottom: 1, right: 2, top: 2,
-          position: [0, 1, 0], normal: [0, 1, 0], rightDirection: [0, 0, -1],
+          rightDirection: [0, 0, -1],
         },
+      });
+      figure.scene.setCamera({ position: [2, 2, 2] });
+      figure.scene.setProjection({
+        near: 0.1, far: 10, left: -2, right: 2, bottom: -2, top: 2,
       });
       figure.mock.touchElement(a, [0, 1, 0]);
       figure.mock.touchMove([1, 1, 0]);
       expect(a.getPosition('figure').round().toArray()).toEqual([1, 1, 0]);
+      figure.mock.touchMove([2, 1, 0]);
+      expect(a.getPosition('figure').round().toArray()).toEqual([1, 1, 0]);
+      figure.mock.touchMove([-1, 1, 0]);
+      expect(a.getPosition('figure').round().toArray()).toEqual([-2, 1, 0]);
+      figure.mock.touchMove([-2, 1, 0]);
+      expect(a.getPosition('figure').round().toArray()).toEqual([-2, 1, 0]);
+      figure.mock.touchMove([-2, 1, 1]);
+      expect(a.getPosition('figure').round().toArray()).toEqual([-2, 1, 1]);
+      figure.mock.touchMove([-2, 1, 2]);
+      expect(a.getPosition('figure').round().toArray()).toEqual([-2, 1, 1]);
+      figure.mock.touchMove([-2, 1, -1]);
+      expect(a.getPosition('figure').round().toArray()).toEqual([-2, 1, -2]);
+      figure.mock.touchMove([-2, 1, -2]);
+      expect(a.getPosition('figure').round().toArray()).toEqual([-2, 1, -2]);
     });
   });
 });

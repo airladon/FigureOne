@@ -175,11 +175,12 @@ const cube = figure.add({
   vertices3: { data: rv },
   normals: { data: rn },
   color: [0, 1, 1, 1],
-  // position: [0.5, 0, 0],
+  position: [0, 0.5, 0],
   move: {
     type: 'translation',
-    plane: [[0, 0, 0], [1, 0, 0]],
-    bounds: { p1: [0, 0, 1], p2: [0, 0, -1] },
+    plane: [[0, 0.5, 0], [0, 1, 0]],
+    // bounds: { p1: [0, 0, 1], p2: [0, 0, -1] },
+    bounds: { left: 0.5, bottom: 0.5, right: 0.5, rightDirection: [0, 0, -1] },
   },
 });
 // cube.setMovable();

@@ -159,7 +159,7 @@ export default function makeFigure(
       }
       figure.getSelectionFromGLBackup = figure.getSelectionFromGL;
       figure.getSelectionFromGL = () => e;
-      figure.touchDown(figurePosition);
+      figure.mock.touchDown(figurePosition);
     },
     touchDown: (figurePosition) => {
       const p = figure.transformPoint(figurePosition, 'figure', 'gl');

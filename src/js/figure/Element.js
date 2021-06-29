@@ -3616,6 +3616,9 @@ class FigureElement {
     // this.parent.setNotTouchable();
   }
 
+  /**
+   * Set move options
+   */
   setMove(options: boolean | OBJ_ElementMove) {
     if (typeof options === 'boolean') {
       this.setMovable(options);
@@ -3627,11 +3630,22 @@ class FigureElement {
     if (type != null) {
       this.move.type = type;
     }
-    if (bounds != null) {
-      this.move.bounds = getBounds(bounds);
-    }
     if (plane != null) {
       this.move.plane = getPlane(plane);
+    }
+    if (bounds != null) {
+      if (bounds.contains != null) {
+        this.move.bounds = bounds;
+      } else {
+        const b = joinObjects(
+          {},
+          {
+            position: this.move.plane.p, normal: this.move.plane.n,
+          },
+          bounds,
+        );
+        this.move.bounds = getBounds(b);
+      }
     }
     if (maxVelocity != null) {
       if (typeof maxVelocity === 'number') {

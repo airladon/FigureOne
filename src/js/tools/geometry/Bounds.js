@@ -626,7 +626,9 @@ class RectBounds extends Bounds {
     direction: TypeParsablePoint,
   ) {
     const p = this.clip(getPoint(position)).round(this.precision);
-    const d = getPoint(direction).normalize();
+    const d = this.plane
+      .pointProjection(this.plane.p.add(getPoint(direction).normalize()))
+      .sub(this.plane.p);
 
     const {
       left, right, top, bottom,
@@ -1410,7 +1412,7 @@ export type TypeBoundsDefinition = Bounds | null | TypeRectBoundsDefinition
 function getBounds(
   bounds: TypeBoundsDefinition,
   type: 'rect' | 'range' | 'line' | 'transform' | null = null,
-  transform: Transform = new Transform(),
+  // transform: Transform = new Transform(),
 ) {
   if (bounds == null) {
     return new Bounds();
@@ -1430,9 +1432,9 @@ function getBounds(
   if (type === 'line') {  // $FlowFixMe
     return new LineBounds(bounds);
   }
-  if (type === 'transform') {  // $FlowFixMe
-    return new TransformBounds(transform, bounds);
-  }
+  // if (type === 'transform') {  // $FlowFixMe
+  //   return new TransformBounds(transform, bounds);
+  // }
   if (bounds.min !== undefined || bounds.max !== undefined) {
     return getBounds(bounds, 'range');
   }
@@ -1510,266 +1512,266 @@ function getBounds(
       });
     }
 
-    if (f1Type != null
-      && f1Type === 'transformBounds'
-      && state != null
-      && Array.isArray([state])
-      && state.length === 3
-    ) { // $FlowFixMe
-      const [precision, def, boundsArray] = state;
-      const t = new TransformBounds(new Transform(), {}, precision);
-      t.def = def.slice();
-      const boundary = [];
-      boundsArray.forEach((b) => {
-        if (b == null) {
-          boundary.push(null);
-        } else {
-          boundary.push(getBounds(b));
-        }
-      });
-      t.boundary = boundary;
-      return t;
-    }
+    // if (f1Type != null
+    //   && f1Type === 'transformBounds'
+    //   && state != null
+    //   && Array.isArray([state])
+    //   && state.length === 3
+    // ) { // $FlowFixMe
+    //   const [precision, def, boundsArray] = state;
+    //   const t = new TransformBounds(new Transform(), {}, precision);
+    //   t.def = def.slice();
+    //   const boundary = [];
+    //   boundsArray.forEach((b) => {
+    //     if (b == null) {
+    //       boundary.push(null);
+    //     } else {
+    //       boundary.push(getBounds(b));
+    //     }
+    //   });
+    //   t.boundary = boundary;
+    //   return t;
+    // }
   }
   return null;
 }
 
 
-type TypeTranslationBoundsDefinition = Bounds
-                                       | TypeRectBoundsDefinition
-                                       | TypeLineBoundsDefinition
-                                       | TypeRangeBoundsDefinition;
-type TypeRotationBoundsDefinition = Bounds | TypeRangeBoundsDefinition;
-type TypeScaleBoundsDefinition = Bounds | TypeRangeBoundsDefinition | TypeRectBoundsDefinition;
+// type TypeTranslationBoundsDefinition = Bounds
+//                                        | TypeRectBoundsDefinition
+//                                        | TypeLineBoundsDefinition
+//                                        | TypeRangeBoundsDefinition;
+// type TypeRotationBoundsDefinition = Bounds | TypeRangeBoundsDefinition;
+// type TypeScaleBoundsDefinition = Bounds | TypeRangeBoundsDefinition | TypeRectBoundsDefinition;
 
-export type TypeTransformBoundsDefinition = Array<Bounds | null> | {
-  position?: TypeTranslationBoundsDefinition;
-  translation?: TypeTranslationBoundsDefinition;
-  rotation?: TypeRotationBoundsDefinition;
-  scale?: TypeScaleBoundsDefinition;
-};
+// export type TypeTransformBoundsDefinition = Array<Bounds | null> | {
+//   position?: TypeTranslationBoundsDefinition;
+//   translation?: TypeTranslationBoundsDefinition;
+//   rotation?: TypeRotationBoundsDefinition;
+//   scale?: TypeScaleBoundsDefinition;
+// };
 
-export type TypeF1DefTransformBounds = {
-  f1Type: 'transformBounds',
-  state: [number, Array<'s' | 'r' | 'r'>, Array<TypeF1DefLineBounds | TypeF1DefRectBounds | TypeF1DefRangeBounds>],
-};
+// export type TypeF1DefTransformBounds = {
+//   f1Type: 'transformBounds',
+//   state: [number, Array<'s' | 'r' | 'r'>, Array<TypeF1DefLineBounds | TypeF1DefRectBounds | TypeF1DefRangeBounds>],
+// };
 
-class TransformBounds extends Bounds {
-  boundary: Array<Bounds | null>;
-  def: Array<'t' | 'r' | 's'>;
+// class TransformBounds extends Bounds {
+//   boundary: Array<Bounds | null>;
+//   def: Array<'t' | 'r' | 's'>;
 
-  constructor(
-    transform: Transform,
-    bounds: TypeTransformBoundsDefinition = {},
-    precision: number = 8,
-  ) {
-    const def = transform.def.map(d => d[0]);
-    super([], 'inside', precision); // $FlowFixMe
-    this.def = def;
-    this.createBounds(bounds);
-  }
+//   constructor(
+//     transform: Transform,
+//     bounds: TypeTransformBoundsDefinition = {},
+//     precision: number = 8,
+//   ) {
+//     const def = transform.def.map(d => d[0]);
+//     super([], 'inside', precision); // $FlowFixMe
+//     this.def = def;
+//     this.createBounds(bounds);
+//   }
 
-  isUnbounded() {
-    for (let i = 0; i < this.boundary.length; i += 1) {
-      if (this.boundary[i] !== null) {
-        return false;
-      }
-    }
-    return true;
-  }
+//   isUnbounded() {
+//     for (let i = 0; i < this.boundary.length; i += 1) {
+//       if (this.boundary[i] !== null) {
+//         return false;
+//       }
+//     }
+//     return true;
+//   }
 
-  _dup() {
-    const t = new TransformBounds(new Transform(), {}, this.precision);
-    t.def = this.def.slice();
-    t.boundary = [];
-    this.boundary.forEach((b) => {
-      if (b == null) {
-        t.boundary.push(null);
-      } else {
-        t.boundary.push(b._dup());
-      }
-    });
-    return t;
-  }
+//   _dup() {
+//     const t = new TransformBounds(new Transform(), {}, this.precision);
+//     t.def = this.def.slice();
+//     t.boundary = [];
+//     this.boundary.forEach((b) => {
+//       if (b == null) {
+//         t.boundary.push(null);
+//       } else {
+//         t.boundary.push(b._dup());
+//       }
+//     });
+//     return t;
+//   }
 
-  _state(options: { precision: number }) {
-    // const { precision } = options;
-    const precision = getPrecision(options);
-    const bounds = [];
-    this.boundary.forEach((b) => {
-      if (b == null) {
-        bounds.push(null);
-      } else {
-        bounds.push(b._state({ precision }));
-      }
-    });
-    return {
-      f1Type: 'transformBounds',
-      state: [
-        this.precision, // $FlowFixMe
-        this.def.slice(),
-        bounds,
-      ],
-    };
-  }
+//   _state(options: { precision: number }) {
+//     // const { precision } = options;
+//     const precision = getPrecision(options);
+//     const bounds = [];
+//     this.boundary.forEach((b) => {
+//       if (b == null) {
+//         bounds.push(null);
+//       } else {
+//         bounds.push(b._state({ precision }));
+//       }
+//     });
+//     return {
+//       f1Type: 'transformBounds',
+//       state: [
+//         this.precision, // $FlowFixMe
+//         this.def.slice(),
+//         bounds,
+//       ],
+//     };
+//   }
 
-  createBounds(
-    bounds: TypeTransformBoundsDefinition | Bounds | null,
-    index: number = 0,
-  ) {
-    if (bounds == null || bounds instanceof Bounds) {
-      this.boundary[index] = bounds;
-      return;
-    }
-    if (Array.isArray(bounds)) {
-      this.boundary = bounds;
-      return;
-    }
-    const boundary = [];
-    this.def.forEach((o) => {
-      let bound = null;
-      if (o === 't' && bounds.position != null) {
-        bound = getBounds(bounds.position);
-      }
-      if (o === 't' && bounds.translation != null) {
-        bound = getBounds(bounds.translation);
-      }
-      if (o === 'r' && bounds.rotation != null) {
-        bound = getBounds(bounds.rotation);
-      }
-      if (o === 's' && bounds.scale != null) {
-        bound = getBounds(bounds.scale);
-      }
-      boundary.push(bound);
-    });
-    this.boundary = boundary;
-  }
+//   createBounds(
+//     bounds: TypeTransformBoundsDefinition | Bounds | null,
+//     index: number = 0,
+//   ) {
+//     if (bounds == null || bounds instanceof Bounds) {
+//       this.boundary[index] = bounds;
+//       return;
+//     }
+//     if (Array.isArray(bounds)) {
+//       this.boundary = bounds;
+//       return;
+//     }
+//     const boundary = [];
+//     this.def.forEach((o) => {
+//       let bound = null;
+//       if (o === 't' && bounds.position != null) {
+//         bound = getBounds(bounds.position);
+//       }
+//       if (o === 't' && bounds.translation != null) {
+//         bound = getBounds(bounds.translation);
+//       }
+//       if (o === 'r' && bounds.rotation != null) {
+//         bound = getBounds(bounds.rotation);
+//       }
+//       if (o === 's' && bounds.scale != null) {
+//         bound = getBounds(bounds.scale);
+//       }
+//       boundary.push(bound);
+//     });
+//     this.boundary = boundary;
+//   }
 
-  update(
-    type: 'r' | 's' | 't',
-    bound: TypeBoundsDefinition,
-    typeIndex: ?number = 0,
-  ) {
-    let index = 0;
-    for (let i = 0; i < this.def.length; i += 1) {
-      const o = this.def[i];
-      if (o === type) {
-        if (typeIndex == null || typeIndex === index) {
-          this.boundary[i] = getBounds(bound);
-        }
-        index += 1;
-      }
-      // if (o === type && (typeIndex == null || typeIndex === index)) {
-      //   this.boundary[i] = getBounds(bound);
-      //   index += 1;
-      // }
-    }
-  }
+//   update(
+//     type: 'r' | 's' | 't',
+//     bound: TypeBoundsDefinition,
+//     typeIndex: ?number = 0,
+//   ) {
+//     let index = 0;
+//     for (let i = 0; i < this.def.length; i += 1) {
+//       const o = this.def[i];
+//       if (o === type) {
+//         if (typeIndex == null || typeIndex === index) {
+//           this.boundary[i] = getBounds(bound);
+//         }
+//         index += 1;
+//       }
+//       // if (o === type && (typeIndex == null || typeIndex === index)) {
+//       //   this.boundary[i] = getBounds(bound);
+//       //   index += 1;
+//       // }
+//     }
+//   }
 
-  updateTranslation(
-    bound: Bounds | TypeTranslationBoundsDefinition,
-    translationIndex: ?number = 0,
-  ) {
-    let b = getBounds(bound);
-    if (b instanceof RangeBounds) {
-      b = new RectBounds({
-        left: b.boundary.min,
-        bottom: b.boundary.min,
-        top: b.boundary.max,
-        right: b.boundary.max,
-      });
-    }
-    this.update('t', b, translationIndex);
-  }
+//   updateTranslation(
+//     bound: Bounds | TypeTranslationBoundsDefinition,
+//     translationIndex: ?number = 0,
+//   ) {
+//     let b = getBounds(bound);
+//     if (b instanceof RangeBounds) {
+//       b = new RectBounds({
+//         left: b.boundary.min,
+//         bottom: b.boundary.min,
+//         top: b.boundary.max,
+//         right: b.boundary.max,
+//       });
+//     }
+//     this.update('t', b, translationIndex);
+//   }
 
-  updateRotation(
-    bound: Bounds | TypeRotationBoundsDefinition,
-    translationIndex: ?number = 0,
-  ) {
-    this.update('r', bound, translationIndex);
-  }
+//   updateRotation(
+//     bound: Bounds | TypeRotationBoundsDefinition,
+//     translationIndex: ?number = 0,
+//   ) {
+//     this.update('r', bound, translationIndex);
+//   }
 
-  updateScale(
-    bound: Bounds | TypeScaleBoundsDefinition,
-    translationIndex: ?number = 0,
-  ) {
-    this.update('s', bound, translationIndex);
-  }
+//   updateScale(
+//     bound: Bounds | TypeScaleBoundsDefinition,
+//     translationIndex: ?number = 0,
+//   ) {
+//     this.update('s', bound, translationIndex);
+//   }
 
-  getBound(type: 'r' | 's' | 't', index: number = 0) {
-    let typeIndex = 0;
-    for (let i = 0; i < this.def.length; i += 1) {
-      const o = this.def[i];
-      if (o === type) {
-        if (typeIndex === index) {
-          return this.boundary[i];
-        }
-        typeIndex += 1;
-      }
-    }
-    return null;
-  }
+//   getBound(type: 'r' | 's' | 't', index: number = 0) {
+//     let typeIndex = 0;
+//     for (let i = 0; i < this.def.length; i += 1) {
+//       const o = this.def[i];
+//       if (o === type) {
+//         if (typeIndex === index) {
+//           return this.boundary[i];
+//         }
+//         typeIndex += 1;
+//       }
+//     }
+//     return null;
+//   }
 
-  getTranslation(index: number = 0) {
-    return this.getBound('t', index);
-  }
+//   getTranslation(index: number = 0) {
+//     return this.getBound('t', index);
+//   }
 
-  getScale(index: number = 0) {
-    return this.getBound('s', index);
-  }
+//   getScale(index: number = 0) {
+//     return this.getBound('s', index);
+//   }
 
-  getRotation(index: number = 0) {
-    return this.getBound('r', index);
-  }
+//   getRotation(index: number = 0) {
+//     return this.getBound('r', index);
+//   }
 
-  // $FlowFixMe
-  contains(t: Transform) {
-    for (let i = 0; i < t.def.length; i += 1) {
-      const transformElement = t.def[i];
-      const [type] = transformElement;
-      const b = this.boundary[i];                       // $FlowFixMe
-      if (b != null) {
-        if (
-          (type === 'rc' || type === 't' || type === 's' || type === 'rd')
-          && !b.contains(new Point(
-            transformElement[1], transformElement[2], transformElement[3],
-          ))
-        ) {
-          return false;
-        }
-        if (
-          type === 'r'
-          && !b.contains(transformElement[1])
-        ) {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
+//   // $FlowFixMe
+//   contains(t: Transform) {
+//     for (let i = 0; i < t.def.length; i += 1) {
+//       const transformElement = t.def[i];
+//       const [type] = transformElement;
+//       const b = this.boundary[i];                       // $FlowFixMe
+//       if (b != null) {
+//         if (
+//           (type === 'rc' || type === 't' || type === 's' || type === 'rd')
+//           && !b.contains(new Point(
+//             transformElement[1], transformElement[2], transformElement[3],
+//           ))
+//         ) {
+//           return false;
+//         }
+//         if (
+//           type === 'r'
+//           && !b.contains(transformElement[1])
+//         ) {
+//           return false;
+//         }
+//       }
+//     }
+//     return true;
+//   }
 
-  // $FlowFixMe
-  clip(t: Transform) {
-    const def = [];
-    for (let i = 0; i < t.def.length; i += 1) {
-      const transformElement = t.def[i];
-      const b = this.boundary[i];
-      if (b != null) {
-        const clipped = b.clip(new Point(
-          transformElement[1], transformElement[2], transformElement[3],
-        ));
-        const newElement = [transformElement[0], clipped.x, clipped.y, clipped.z];  // $FlowFixMe
-        def.push(newElement);
-      } else {
-        def.push(transformElement.slice());
-      }
-    }  // $FlowFixMe
-    return new Transform(def, t.name);
-  }
-}
+//   // $FlowFixMe
+//   clip(t: Transform) {
+//     const def = [];
+//     for (let i = 0; i < t.def.length; i += 1) {
+//       const transformElement = t.def[i];
+//       const b = this.boundary[i];
+//       if (b != null) {
+//         const clipped = b.clip(new Point(
+//           transformElement[1], transformElement[2], transformElement[3],
+//         ));
+//         const newElement = [transformElement[0], clipped.x, clipped.y, clipped.z];  // $FlowFixMe
+//         def.push(newElement);
+//       } else {
+//         def.push(transformElement.slice());
+//       }
+//     }  // $FlowFixMe
+//     return new Transform(def, t.name);
+//   }
+// }
 
 export {
-  TransformBounds,
+  // TransformBounds,
   RangeBounds,
   Bounds,
   LineBounds,

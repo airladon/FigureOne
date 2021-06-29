@@ -138,7 +138,6 @@ const Fig = {
   Transform: g2.Transform,
   parsePoint: g2.getPoint,
   LineBounds: g2.LineBounds,
-  TransformBounds: g2.TransformBounds,
   RectBounds: g2.RectBounds,
   RangeBounds: g2.RangeBounds,
   minAngleDiff: g2.minAngleDiff,

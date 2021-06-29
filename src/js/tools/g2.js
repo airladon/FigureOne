@@ -16,7 +16,7 @@ import {
   Transform, getTransform, isParsableTransform,
 } from './geometry/Transform';
 import {
-  deceleratePoint, decelerateValue, decelerateTransform, decelerateVector,
+  deceleratePoint, decelerateValue, decelerateVector,
 } from './geometry/deceleration';
 import type { TypeParsableLine } from './geometry/Line';
 import type { TypeParsableRect } from './geometry/Rect';
@@ -24,9 +24,8 @@ import type { TypeTransformValue, TypeParsableTransform } from './geometry/Trans
 import { Rect, getRect } from './geometry/Rect';
 import { rectToPolar, polarToRect } from './geometry/coordinates';
 import {
-  RectBounds, LineBounds, Bounds, TransformBounds, RangeBounds, getBounds,
+  RectBounds, LineBounds, Bounds, RangeBounds, getBounds,
 } from './geometry/Bounds';
-import type { TypeTransformBoundsDefinition } from './geometry/Bounds';
 import {
   deg, minAngleDiff, getDeltaAngle3D, getDeltaAngle, normAngleTo90,
   threePointAngle, threePointAngleMin, normAngle, clipAngle,
@@ -55,7 +54,6 @@ export type {
   Type2Components,
   TypeParsablePlane,
   TypeRotationDirection,
-  TypeTransformBoundsDefinition,
   OBJ_TranslationPath,
 };
 
@@ -550,11 +548,9 @@ export {
   getLine,
   deceleratePoint,
   decelerateValue,
-  decelerateTransform,
   RectBounds,
   LineBounds,
   RangeBounds,
-  TransformBounds,
   getBounds,
   Bounds,
   getTriangleCenter,

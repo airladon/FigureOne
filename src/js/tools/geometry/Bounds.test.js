@@ -26,7 +26,7 @@ describe('Bounds', () => {
   // });
   describe('Rect Bounds', () => {
     describe('Construction', () => {
-      test('XY Plane direction vectors', () => {
+      test.only('XY Plane direction vectors', () => {
         bounds = new RectBounds({
           position: [1, 1, 0],
           rightDirection: [2, 0, 0],
@@ -37,7 +37,6 @@ describe('Bounds', () => {
           bottom: 5,
         });
         expect(bounds.plane.round()).toEqual(new Plane([[1, 1, 0], [0, 0, 1]]));
-        expect(bounds.position).toEqual(new Point(1, 1, 0));
         expect(bounds.topDirection).toEqual(new Point(0, 1, 0));
         expect(bounds.rightDirection).toEqual(new Point(1, 0, 0));
         expect(bounds.left).toBe(2);
@@ -50,7 +49,7 @@ describe('Bounds', () => {
         expect(bounds.boundary.bottom).toEqual(new Line([-1, -4, 0], [4, -4, 0]));
       });
       test('YZ Plane top direction', () => {
-        bounds = new RectBounds({
+        bounds = new RectBounds([[1, 1, 0], [0, 0, 1]], {
           position: [0, 0, 0],
           topDirection: [0, 2, 0],
           normal: [2, 0, 0],
