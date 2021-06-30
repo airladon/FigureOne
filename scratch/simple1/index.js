@@ -202,8 +202,14 @@ const cube = figure.add({
 //   top: 1,
 //   bottom: 0.5,
 // });
-
-
+figure.add({
+  make: 'polygon',
+  line: { width: 0.01 },
+  radius: 0.5,
+  position: [0, 0, 0.2],
+}).pulse({
+  duration: 3, scale: 1.2, min: 0.8, num: 5,
+});
 figure.add({
   make: 'text',
   text: 'a',

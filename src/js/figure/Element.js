@@ -568,7 +568,7 @@ class FigureElement {
   // lastDrawTransform: Transform; // Transform matrix used in last draw
   lastDrawPulseTransform: Transform; // Transform matrix used in last draw
   parentTransform: Array<Transform>;
-  lastScene: null | Scene;
+  // lastScene: null | Scene;
 
   // transformUpdated: boolean;
   // lastDrawParentTransform: Transform;
@@ -762,11 +762,11 @@ class FigureElement {
     scale: TypeParsablePoint;
   }
 
-  // TODO
-  move: {
-    line: Line,
-    plane: Plane, // arbitrary or normal plane
-  }
+  // // TODO
+  // move: {
+  //   line: Line,
+  //   plane: Plane, // arbitrary or normal plane
+  // }
 
   // scenarioSet: {
   //   quiz1: [
@@ -793,6 +793,7 @@ class FigureElement {
     figureLimitsOrFigure: Figure | Rect = new Rect(-1, -1, 2, 2),
     parent: FigureElement | null = null,
     name: string = generateUniqueId('element_'),
+    // scene: Scene = new Scene(),
     timeKeeper: TimeKeeper = new TimeKeeper(),
   ) {
     // This may be updated if element is added to a collection with a different
@@ -822,7 +823,7 @@ class FigureElement {
     this.internalSetTransformCallback = null;
     // this.lastDrawTransform = this.transform._dup();
     this.scene = null;
-    this.lastScene = null;
+    // this.lastScene = scene;
     this.parentTransform = [new Transform()];
     this.lastDrawPulseTransform = this.transform._dup();
     this.onClick = null;
@@ -2402,11 +2403,11 @@ class FigureElement {
     if (centerOn == null) {
       delta = new Point(0, 0);
     } else if (centerOn === 'this') {
-      delta = this.getPositionInBounds('figure', xAlign, yAlign)
-        .transformBy(this.spaceTransformMatrix('figure', 'draw'));
+      delta = this.getPositionInBounds('local', xAlign, yAlign)
+        .transformBy(this.spaceTransformMatrix('local', 'draw'));
     } else if (centerOn instanceof FigureElement) {
-      delta = centerOn.getPositionInBounds('figure', xAlign, yAlign)
-        .transformBy(this.spaceTransformMatrix('figure', 'draw'));
+      delta = centerOn.getPositionInBounds('local', xAlign, yAlign)
+        .transformBy(this.spaceTransformMatrix('local', 'draw'));
     } else {
       delta = getPoint(centerOn)
         .transformBy(this.spaceTransformMatrix(space, 'draw'));
@@ -2803,10 +2804,31 @@ class FigureElement {
     }
 
     const scene = this.getScene();
-    if (scene == null) {
+    if (
+      scene == null
+      && (
+        from === 'figure' || from === 'pixel' || from === 'gl'
+        || to === 'figure' || to === 'pixel' || to === 'gl'
+      )
+    ) {
       throw new Error(`Scene is null for element ${this.getPath()} and all it's parents `);
     }
-    const figureToGLMatrix = scene.viewProjectionMatrix;
+    let figureToGLMatrix;
+    let figure2DSpace;
+    if (scene != null) {
+      figureToGLMatrix = scene.viewProjectionMatrix;
+      figure2DSpace = {
+        x: {
+          min: scene.left,
+          span: scene.right - scene.left,
+        },
+        y: {
+          min: scene.bottom,
+          span: scene.top - scene.bottom,
+        },
+        z: { min: -1, span: 2 },
+      };
+    }
 
     const pixelSpace = () => {
       const canvasRect = this.getCanvas().getBoundingClientRect();
@@ -2820,18 +2842,6 @@ class FigureElement {
     const glSpace = {
       x: { min: -1, span: 2 },
       y: { min: -1, span: 2 },
-      z: { min: -1, span: 2 },
-    };
-
-    const figure2DSpace = {
-      x: {
-        min: scene.left,
-        span: scene.right - scene.left,
-      },
-      y: {
-        min: scene.bottom,
-        span: scene.top - scene.bottom,
-      },
       z: { min: -1, span: 2 },
     };
 
@@ -3970,6 +3980,7 @@ class FigureElementPrimitive extends FigureElement {
     figureLimits: Rect = new Rect(-1, -1, 2, 2),
     parent: FigureElement | null = null,
     name: string = generateUniqueId('element_'),
+    // scene: Scene = new Scene(),
     timeKeeper: TimeKeeper = new TimeKeeper(),
   ) {
     super(transform, figureLimits, parent, name, timeKeeper);
@@ -4305,7 +4316,7 @@ class FigureElementPrimitive extends FigureElement {
       // eslint-disable-next-line prefer-destructuring
       // this.lastDrawTransform = newTransforms[0];
       const sceneToUse = this.scene != null ? this.scene : scene;
-      this.lastScene = sceneToUse;
+      // this.lastScene = sceneToUse;
       // $FlowFixMe
       // if (FIGURE1DEBUG) { timer.stamp('m5'); }
       // eslint-disable-next-line prefer-destructuring
@@ -4997,7 +5008,7 @@ class FigureElementCollection extends FigureElement {
       // eslint-disable-next-line prefer-destructuring
       // this.lastDrawTransform = newTransforms[0];
       const sceneToUse = this.scene != null ? this.scene : scene;
-      this.lastScene = sceneToUse;
+      // this.lastScene = sceneToUse;
       this.parentTransform = parentTransform;
       // $FlowFixMe
 

@@ -1641,14 +1641,14 @@ export class Equation extends FigureElementCollection {
     this.eqn.descriptionPosition = descriptionPosition;
     if (this.eqn.descriptionElement) {
       this.eqn.descriptionElement
-        .setPosition(this.getPosition('figure')
+        .setPosition(this.getPosition('local')
           .add(descriptionPosition));
     }
   }
 
   setPosition(pointOrX: TypeParsablePoint | number, y: number = 0) {
     super.setPosition(pointOrX, y);
-    const position = this.getPosition('figure');
+    const position = this.getPosition('local');
     if (this.eqn.descriptionElement != null) {
       this.eqn.descriptionElement.setPosition(position.add(this.eqn.descriptionPosition));
     }

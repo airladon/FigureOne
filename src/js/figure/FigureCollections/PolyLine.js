@@ -553,7 +553,7 @@ export default class CollectionsPolyline extends FigureElementCollection {
     this.animateNextFrame = animateNextFrame;
     this.updatePointsCallback = null;
 
-    this.position = this.getPosition();
+    // this.position = this.getPosition();
     this.close = optionsToUse.close;
     this.options = optionsToUse;
     this.reverse = optionsToUse.reverse;

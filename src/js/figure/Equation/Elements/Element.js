@@ -113,7 +113,7 @@ class Element implements ElementInterface {
       // Update translation and scale
       content.transform.updateTranslation([location.x, location.y]);
       content.transform.updateScale([scale, scale]);
-      content.updateLastDrawTransform();
+      // content.updateLastDrawTransform();
       if (content.internalSetTransformCallback != null) {
         this.fnMap.exec(content.internalSetTransformCallback, content.transform);
       }
@@ -172,7 +172,7 @@ class Element implements ElementInterface {
         || content instanceof FigureElementPrimitive) {
       content.transform.updateTranslation([this.location.x, this.location.y]);
       content.transform.updateScale([this.scale, this.scale]);
-      content.updateLastDrawTransform();
+      // content.updateLastDrawTransform();
     }
   }
 

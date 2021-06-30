@@ -8,6 +8,7 @@ import {
 import WebGLInstance from '../webgl/webgl';
 // import type { CPY_Step } from '../geometries/copy/copy';
 import type { TypeColor } from '../../tools/types';
+import Scene from '../../tools/scene';
 
 export default function Generic(
   webgl: WebGLInstance,
@@ -26,6 +27,7 @@ export default function Generic(
   onLoad: ?() => void = null,
   // copy: Array<CPY_Step>,
   name: string = '',
+  scene: Scene = new Scene(),
 ) {
   const generic = new VertexGeneric(
     webgl,
@@ -50,5 +52,5 @@ export default function Generic(
     transform = transformOrLocation._dup();
   }
   // $FlowFixMe
-  return new FigureElementPrimitive(generic, transform, color, figureLimits, null, name);
+  return new FigureElementPrimitive(generic, transform, color, figureLimits, null, name, scene);
 }

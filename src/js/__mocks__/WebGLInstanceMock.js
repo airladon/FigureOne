@@ -46,6 +46,8 @@ const webgl = {
   useProgram: () => ({
     // eslint-disable-next-line camelcase
     a_position: '',
+    // eslint-disable-next-line camelcase
+    u_worldViewProjectionMatrix: '',
   }),
   programs: [],
   lastUsedProgram: null,

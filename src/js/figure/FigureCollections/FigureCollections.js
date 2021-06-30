@@ -99,6 +99,7 @@ export default class FigureCollections {
       color: this.primitives.defaultColor,
       parent: null,
       limits: this.limits,
+      scene: this.primitives.scene,
     };
     let optionsToUse;
     if (transformOrPointOrOptions instanceof Point) {

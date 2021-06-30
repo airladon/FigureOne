@@ -90,6 +90,7 @@ import type {
 import { getBufferBorder } from '../geometries/buffer';
 import type TimeKeeper from '../TimeKeeper';
 import type { Recorder } from '../Recorder/Recorder';
+import Scene from '../../tools/scene';
 
 /**
  * Line style definition object.
@@ -2313,6 +2314,7 @@ export default class FigurePrimitives {
   defaultLength: number;
   timeKeeper: TimeKeeper;
   recorder: Recorder;
+  scene: Scene;
 
   /**
     * @hideconstructor
@@ -2323,6 +2325,7 @@ export default class FigurePrimitives {
     // draw2DFigures: Object,
     htmlCanvas: HTMLElement,
     limits: Rect,
+    scene: Scene,
     // spaceTransforms: OBJ_SpaceTransforms,
     animateNextFrame: Function,
     defaultColor: Array<number>,
@@ -2349,6 +2352,7 @@ export default class FigurePrimitives {
      */
     this.htmlCanvas = htmlCanvas;
     this.limits = limits;
+    this.scene = scene;
     this.animateNextFrame = animateNextFrame;
     // this.spaceTransforms = spaceTransforms;
     this.defaultColor = defaultColor;
@@ -2638,6 +2642,7 @@ export default class FigurePrimitives {
       options.texture.repeat,
       options.texture.onLoad,
       options.name,
+      this.scene,
     );
     element.dimColor = this.defaultDimColor.slice();
     if (options.move != null && options.move !== false) {

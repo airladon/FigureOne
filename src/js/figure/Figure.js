@@ -1167,6 +1167,7 @@ class Figure {
       webgl, draw2D,
       this.htmlCanvas,
       this.limits,
+      this.scene,
       this.animateNextFrame.bind(this, true, 'getShapes'),
       this.defaultColor,
       this.defaultDimColor,

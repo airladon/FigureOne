@@ -2,24 +2,19 @@ import {
   Transform,
 } from '../../../tools/g2';
 import {
-  transpose,
+  transpose, mul,
 } from '../../../tools/m3';
-// import {
-//   round,
-// } from '../tools/math';
 import * as tools from '../../../tools/tools';
 import makeFigure from '../../../__mocks__/makeFigure';
 
 tools.isTouchDevice = jest.fn();
 
-// jest.mock('../../Recorder/recorder.worker');
 jest.useFakeTimers();
 
 describe('Element Drawing', () => {
   let figure;
   let a;
-  // let b;
-  // let c;
+
   beforeEach(() => {
     figure = makeFigure();
     figure.add([
@@ -28,16 +23,12 @@ describe('Element Drawing', () => {
         make: 'polygon',
       },
     ]);
-    //   c = figure.elements._c;
     a = figure.elements._a;
-    //   b = c._b;
-    figure.initialize();
     figure.webglLow.gl.uniformMatrix4fv.mockClear();
   });
   test('Simple', () => {
     a.setPosition(1, 1);
     expect(figure.webglLow.gl.uniformMatrix4fv.mock.calls).toHaveLength(0);
-    figure.setFirstTransform();
     figure.mock.timeStep(0);
     const expectedDrawTransform = new Transform()
       .scale(1, 1)
@@ -45,17 +36,17 @@ describe('Element Drawing', () => {
       .translate(1, 1)
       .scale(1, 1)
       .rotate(0)
-      .translate(0, 0)
-      // .scale(1, 1)
-      // .translate(0, 0);
+      .translate(0, 0);
+
     // LastDrawTransform
     expect(a.getDrawToFigureTransformDef()).toEqual(expectedDrawTransform.def);
+
     // Actual transform(s) drawn (in this case just one as no copies or pulse multipliers)
     expect(a.drawTransforms[0].def).toEqual(expectedDrawTransform.def);
     // Transform matrix sent to gl
     expect(figure.webglLow.gl.uniformMatrix4fv.mock.calls).toHaveLength(1);
     expect(figure.webglLow.gl.uniformMatrix4fv.mock.calls[0][2])
-      .toEqual(transpose(expectedDrawTransform.matrix()));
+      .toEqual(transpose(mul(figure.scene.viewProjectionMatrix, expectedDrawTransform.matrix())));
   });
   test('Pulse', () => {
     a.setPosition(1, 1);
@@ -70,9 +61,8 @@ describe('Element Drawing', () => {
       .translate(1, 1)
       .scale(1, 1)
       .rotate(0)
-      .translate(0, 0)
-      // .scale(1, 1)
-      // .translate(0, 0);
+      .translate(0, 0);
+
     const expectedDrawTransform = expectedLastDrawTransform.transform(
       new Transform()
         .translate(-0, -0)
@@ -87,7 +77,7 @@ describe('Element Drawing', () => {
     // Transform matrix sent to gl
     expect(figure.webglLow.gl.uniformMatrix4fv.mock.calls).toHaveLength(2);
     expect(figure.webglLow.gl.uniformMatrix4fv.mock.calls[1][2])
-      .toEqual(transpose(expectedDrawTransform.matrix()));
+      .toEqual(transpose(mul(figure.scene.viewProjectionMatrix, expectedDrawTransform.matrix())));
   });
   test('Copies', () => {
     const t1 = new Transform().translate(1, 1);
@@ -105,9 +95,8 @@ describe('Element Drawing', () => {
       .translate(0, 0)
       .scale(1, 1)
       .rotate(0)
-      .translate(0, 0)
-      // .scale(1, 1)
-      // .translate(0, 0);
+      .translate(0, 0);
+
     const expectedDrawTransforms = [
       expectedLastDrawTransform.transform(t1),
       expectedLastDrawTransform.transform(t2),
@@ -121,8 +110,14 @@ describe('Element Drawing', () => {
     // Transform matrix sent to gl
     expect(figure.webglLow.gl.uniformMatrix4fv.mock.calls).toHaveLength(2);
     expect(figure.webglLow.gl.uniformMatrix4fv.mock.calls[0][2])
-      .toEqual(transpose(expectedDrawTransforms[0].matrix()));
+      .toEqual(transpose(mul(
+        figure.scene.viewProjectionMatrix,
+        expectedDrawTransforms[0].matrix(),
+      )));
     expect(figure.webglLow.gl.uniformMatrix4fv.mock.calls[1][2])
-      .toEqual(transpose(expectedDrawTransforms[1].matrix()));
+      .toEqual(transpose(mul(
+        figure.scene.viewProjectionMatrix,
+        expectedDrawTransforms[1].matrix(),
+      )));
   });
 });
