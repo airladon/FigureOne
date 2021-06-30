@@ -291,10 +291,10 @@ describe('Equation Functions - SumPro', () => {
       functions.parameterSteps();
       eqn.showForm('base');
       figure.setFirstTransform();
-      baseA = eqn._a.getBoundingRect('figure');
-      baseB = eqn._b.getBoundingRect('figure');
-      baseC = eqn._c.getBoundingRect('figure');
-      baseS = eqn._s.getBoundingRect('figure');
+      baseA = eqn._a.getBoundingRect('local');
+      baseB = eqn._b.getBoundingRect('local');
+      baseC = eqn._c.getBoundingRect('local');
+      baseS = eqn._s.getBoundingRect('local');
       // space = 0.1;
       spaceDelta = 0.09;
       height = 1;
@@ -312,13 +312,13 @@ describe('Equation Functions - SumPro', () => {
     test('space', () => {
       eqn.showForm('space');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
       expect(round(newA.left)).toBe(round(baseA.left + spaceDelta));
     });
     test('topSpace', () => {
       eqn.showForm('topSpace');
       figure.setFirstTransform();
-      const newS = eqn._s.getBoundingRect('figure');
+      const newS = eqn._s.getBoundingRect('local');
       expect(round(newS.height)).toBe(round(baseS.height + spaceDelta));
       expect(round(newS.bottom)).toBe(round(baseS.bottom));
       expect(round(newS.top)).toBe(round(baseS.top + spaceDelta));
@@ -326,7 +326,7 @@ describe('Equation Functions - SumPro', () => {
     test('bottomSpace', () => {
       eqn.showForm('bottomSpace');
       figure.setFirstTransform();
-      const newS = eqn._s.getBoundingRect('figure');
+      const newS = eqn._s.getBoundingRect('local');
       expect(round(newS.height)).toBe(round(baseS.height + spaceDelta));
       expect(round(newS.bottom)).toBe(round(baseS.bottom - spaceDelta));
       expect(round(newS.top)).toBe(round(baseS.top));
@@ -334,7 +334,7 @@ describe('Equation Functions - SumPro', () => {
     test('topBottomSpace', () => {
       eqn.showForm('topBottomSpace');
       figure.setFirstTransform();
-      const newS = eqn._s.getBoundingRect('figure');
+      const newS = eqn._s.getBoundingRect('local');
       expect(round(newS.height)).toBe(round(baseS.height + spaceDelta * 2));
       expect(round(newS.bottom)).toBe(round(baseS.bottom - spaceDelta));
       expect(round(newS.top)).toBe(round(baseS.top + spaceDelta));
@@ -342,7 +342,7 @@ describe('Equation Functions - SumPro', () => {
     test('heightAndOverride', () => {
       eqn.showForm('heightAndOverride');
       figure.setFirstTransform();
-      const newS = eqn._s.getBoundingRect('figure');
+      const newS = eqn._s.getBoundingRect('local');
       expect(round(newS.height)).toBe(round(height));
       expect(round(newS.bottom)).toBe(round(baseA.bottom - 1));
       expect(round(newS.top)).toBe(round(newS.bottom + height));
@@ -350,7 +350,7 @@ describe('Equation Functions - SumPro', () => {
     test('heightCenterYOffset', () => {
       eqn.showForm('heightCenterYOffset');
       figure.setFirstTransform();
-      const newS = eqn._s.getBoundingRect('figure');
+      const newS = eqn._s.getBoundingRect('local');
       expect(round(newS.height)).toBe(round(height));
       expect(round(newS.bottom)).toBe(round(baseS.bottom - (height - baseS.height) / 2 + yOffset));
       expect(round(newS.top)).toBe(round(baseS.top + (height - baseS.height) / 2 + yOffset));
@@ -358,7 +358,7 @@ describe('Equation Functions - SumPro', () => {
     test('heightYOffset', () => {
       eqn.showForm('heightYOffset');
       figure.setFirstTransform();
-      const newS = eqn._s.getBoundingRect('figure');
+      const newS = eqn._s.getBoundingRect('local');
       expect(round(newS.height)).toBe(round(height));
       expect(round(newS.bottom)).toBe(round(baseS.bottom + yOffset));
       expect(round(newS.top)).toBe(round(newS.bottom + height));
@@ -366,7 +366,7 @@ describe('Equation Functions - SumPro', () => {
     test('yOffsetNegative', () => {
       eqn.showForm('yOffsetNegative');
       figure.setFirstTransform();
-      const newS = eqn._s.getBoundingRect('figure');
+      const newS = eqn._s.getBoundingRect('local');
       expect(round(newS.height)).toBe(round(baseS.height));
       expect(round(newS.bottom)).toBe(round(baseS.bottom - yOffset));
       expect(round(newS.top)).toBe(round(baseS.top - yOffset));
@@ -374,8 +374,8 @@ describe('Equation Functions - SumPro', () => {
     test('scale', () => {
       eqn.showForm('scale');
       figure.setFirstTransform();
-      const newS = eqn._s.getBoundingRect('figure');
-      const newA = eqn._a.getBoundingRect('figure');
+      const newS = eqn._s.getBoundingRect('local');
+      const newA = eqn._a.getBoundingRect('local');
       expect(round(newS.height)).toBe(round(baseA.height * scale + initialSpace * 2));
       expect(round(newA.height)).toBe(round(baseA.height * scale));
       expect(round(newS.bottom)).toBe(round(newA.bottom - initialSpace));
@@ -383,8 +383,8 @@ describe('Equation Functions - SumPro', () => {
     test('fromScale', () => {
       eqn.showForm('fromScale');
       figure.setFirstTransform();
-      const newS = eqn._s.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
+      const newS = eqn._s.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
       expect(round(newS.height)).toBe(round(baseS.height));
       expect(round(newS.bottom)).toBe(round(baseS.bottom));
       expect(round(newB.height)).toBe(round(baseB.height * scale));
@@ -394,8 +394,8 @@ describe('Equation Functions - SumPro', () => {
     test('toScale', () => {
       eqn.showForm('toScale');
       figure.setFirstTransform();
-      const newS = eqn._s.getBoundingRect('figure');
-      const newC = eqn._c.getBoundingRect('figure');
+      const newS = eqn._s.getBoundingRect('local');
+      const newC = eqn._c.getBoundingRect('local');
       expect(round(newS.height)).toBe(round(baseS.height));
       expect(round(newS.bottom)).toBe(round(baseS.bottom));
       expect(round(newC.height)).toBe(round(baseC.height * scale));
@@ -405,8 +405,8 @@ describe('Equation Functions - SumPro', () => {
     test('fromSpace', () => {
       eqn.showForm('fromSpace');
       figure.setFirstTransform();
-      const newS = eqn._s.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
+      const newS = eqn._s.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
       expect(round(newS.height)).toBe(round(baseS.height));
       expect(round(newS.bottom)).toBe(round(baseS.bottom));
       expect(round(newB.height)).toBe(round(baseB.height));
@@ -416,8 +416,8 @@ describe('Equation Functions - SumPro', () => {
     test('toSpace', () => {
       eqn.showForm('toSpace');
       figure.setFirstTransform();
-      const newS = eqn._s.getBoundingRect('figure');
-      const newC = eqn._c.getBoundingRect('figure');
+      const newS = eqn._s.getBoundingRect('local');
+      const newC = eqn._c.getBoundingRect('local');
       expect(round(newS.height)).toBe(round(baseS.height));
       expect(round(newS.bottom)).toBe(round(baseS.bottom));
       expect(round(newC.height)).toBe(round(baseC.height));
@@ -427,8 +427,8 @@ describe('Equation Functions - SumPro', () => {
     test('fromOffset', () => {
       eqn.showForm('fromOffset');
       figure.setFirstTransform();
-      const newS = eqn._s.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
+      const newS = eqn._s.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
       expect(round(newS.height)).toBe(round(baseS.height));
       expect(round(newS.bottom)).toBe(round(baseS.bottom));
       expect(round(newB.height)).toBe(round(baseB.height));
@@ -439,8 +439,8 @@ describe('Equation Functions - SumPro', () => {
     test('toOffset', () => {
       eqn.showForm('toOffset');
       figure.setFirstTransform();
-      const newS = eqn._s.getBoundingRect('figure');
-      const newC = eqn._c.getBoundingRect('figure');
+      const newS = eqn._s.getBoundingRect('local');
+      const newC = eqn._c.getBoundingRect('local');
       expect(round(newS.height)).toBe(round(baseS.height));
       expect(round(newS.bottom)).toBe(round(baseS.bottom));
       expect(round(newS.left)).toBe(round(baseS.left));
@@ -451,15 +451,15 @@ describe('Equation Functions - SumPro', () => {
     test('inSizeFalse', () => {
       eqn.showForm('inSizeFalse');
       figure.setFirstTransform();
-      const newS = eqn._s.getBoundingRect('figure');
-      const newA = eqn._a.getBoundingRect('figure');
+      const newS = eqn._s.getBoundingRect('local');
+      const newA = eqn._a.getBoundingRect('local');
       expect(round(newS.left)).toBe(round(newA.left - initialSpace - baseS.width));
     });
     test('noFrom', () => {
       eqn.showForm('noFrom');
       figure.setFirstTransform();
-      const newS = eqn._s.getBoundingRect('figure');
-      const newC = eqn._c.getBoundingRect('figure');
+      const newS = eqn._s.getBoundingRect('local');
+      const newC = eqn._c.getBoundingRect('local');
       expect(round(newS.left)).toBe(round(baseS.left));
       expect(round(newS.bottom)).toBe(round(baseS.bottom));
       expect(round(newS.height)).toBe(round(baseS.height));
@@ -470,8 +470,8 @@ describe('Equation Functions - SumPro', () => {
     test('noTo', () => {
       eqn.showForm('noTo');
       figure.setFirstTransform();
-      const newS = eqn._s.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
+      const newS = eqn._s.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
       expect(round(newS.left)).toBe(round(baseS.left));
       expect(round(newS.bottom)).toBe(round(baseS.bottom));
       expect(round(newS.height)).toBe(round(baseS.height));

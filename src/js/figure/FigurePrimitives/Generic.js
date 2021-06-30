@@ -27,7 +27,7 @@ export default function Generic(
   onLoad: ?() => void = null,
   // copy: Array<CPY_Step>,
   name: string = '',
-  scene: Scene = new Scene(),
+  // scene: Scene = new Scene(),
 ) {
   const generic = new VertexGeneric(
     webgl,
@@ -52,5 +52,5 @@ export default function Generic(
     transform = transformOrLocation._dup();
   }
   // $FlowFixMe
-  return new FigureElementPrimitive(generic, transform, color, figureLimits, null, name, scene);
+  return new FigureElementPrimitive(generic, transform, color, figureLimits, null, name);
 }

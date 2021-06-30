@@ -125,8 +125,8 @@ describe('Equation Symbols - Box', () => {
   test('Box Dynamic', () => {
     eqn.showForm('boxDynamic');
     figure.setFirstTransform();
-    const box = eqn._boxDynamic.getBoundingRect('figure');
-    const a = eqn._a.getBoundingRect('figure');
+    const box = eqn._boxDynamic.getBoundingRect('local');
+    const a = eqn._a.getBoundingRect('local');
     expect(round(box.left)).toBe(0);
     expect(round(box.width)).toBe(space * 2 + lineWidth * 2 + a.width);
     expect(round(box.height)).toBe(space * 2 + lineWidth * 2 + a.height);
@@ -137,8 +137,8 @@ describe('Equation Symbols - Box', () => {
   test('Box WidthHeight', () => {
     eqn.showForm('boxWidthHeight');
     figure.setFirstTransform();
-    const box = eqn._boxWidthHeight.getBoundingRect('figure');
-    const a = eqn._a.getBoundingRect('figure');
+    const box = eqn._boxWidthHeight.getBoundingRect('local');
+    const a = eqn._a.getBoundingRect('local');
     expect(round(box.left)).toBe(0);
     expect(round(box.width)).toBe(width);
     expect(round(box.height)).toBe(height);
@@ -149,8 +149,8 @@ describe('Equation Symbols - Box', () => {
   test('Box Static First', () => {
     eqn.showForm('boxStaticFirst');
     figure.setFirstTransform();
-    const box = eqn._boxStaticFirst.getBoundingRect('figure');
-    const a = eqn._a.getBoundingRect('figure');
+    const box = eqn._boxStaticFirst.getBoundingRect('local');
+    const a = eqn._a.getBoundingRect('local');
     expect(round(box.left)).toBe(0);
     expect(round(box.width)).toBe(space * 2 + lineWidth * 2 + a.width);
     expect(round(box.height)).toBe(space * 2 + lineWidth * 2 + a.height);
@@ -158,8 +158,8 @@ describe('Equation Symbols - Box', () => {
   test('Box Static 1', () => {
     eqn.showForm('boxStatic1');
     figure.setFirstTransform();
-    const box = eqn._boxStatic1.getBoundingRect('figure');
-    const a = eqn._a.getBoundingRect('figure');
+    const box = eqn._boxStatic1.getBoundingRect('local');
+    const a = eqn._a.getBoundingRect('local');
     expect(round(box.left)).toBe(0);
     const widthLineWidthRatio = lineWidth / 1;
     const heightLineWidthRatio = lineWidth / 1;
@@ -169,8 +169,8 @@ describe('Equation Symbols - Box', () => {
   test('Box Fill', () => {
     eqn.showForm('boxFill');
     figure.setFirstTransform();
-    const box = eqn._boxFill.getBoundingRect('figure');
-    const a = eqn._a.getBoundingRect('figure');
+    const box = eqn._boxFill.getBoundingRect('local');
+    const a = eqn._a.getBoundingRect('local');
     expect(round(box.left)).toBe(0);
     expect(round(box.width)).toBe(round(a.width + space * 2));
     expect(round(box.height)).toBe(round(a.height + space * 2));

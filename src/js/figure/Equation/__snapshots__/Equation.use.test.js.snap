@@ -116,8 +116,6 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
-            0,
-            0,
           ],
           Array [
             "t",
@@ -126,7 +124,6 @@ FigureElementPrimitive {
             0,
           ],
         ],
-        "index": 3,
         "mat": Array [
           1,
           0,
@@ -530,7 +527,6 @@ FigureElementPrimitive {
   "frozenPulseTransforms": Array [],
   "getBorderPoints": [Function],
   "getBorderPointsSuper": [Function],
-  "hasTouchableElements": false,
   "holeBorder": Array [
     Array [],
   ],
@@ -546,10 +542,6 @@ FigureElementPrimitive {
   "isRenderedAsImage": false,
   "isShown": true,
   "isTouchable": false,
-  "lastDrawElementTransformPosition": Object {
-    "elementCount": 3,
-    "parentCount": 6,
-  },
   "lastDrawOpacity": 1,
   "lastDrawPulseTransform": Transform {
     "_type": "transform",
@@ -563,8 +555,6 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
-        0,
-        0,
       ],
       Array [
         "t",
@@ -573,7 +563,6 @@ FigureElementPrimitive {
         0,
       ],
     ],
-    "index": 3,
     "mat": Array [
       1,
       0,
@@ -595,102 +584,9 @@ FigureElementPrimitive {
     "name": "text",
   },
   "lastDrawTime": 0,
-  "lastDrawTransform": Transform {
-    "_type": "transform",
-    "def": Array [
-      Array [
-        "s",
-        0.45,
-        0.45,
-        1,
-      ],
-      Array [
-        "r",
-        0,
-        0,
-        0,
-      ],
-      Array [
-        "t",
-        1.8875,
-        1.9572500000000002,
-        0,
-      ],
-      Array [
-        "s",
-        1,
-        1,
-        1,
-      ],
-      Array [
-        "r",
-        0,
-        0,
-        0,
-      ],
-      Array [
-        "t",
-        1,
-        1,
-        0,
-      ],
-      Array [
-        "s",
-        1,
-        1,
-        1,
-      ],
-      Array [
-        "r",
-        0,
-        0,
-        0,
-      ],
-      Array [
-        "t",
-        1,
-        1,
-        0,
-      ],
-    ],
-    "index": 0,
-    "mat": Array [
-      0.45,
-      0,
-      0,
-      3.8875,
-      0,
-      0.45,
-      0,
-      3.95725,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
-      1,
-    ],
-    "name": "Equation",
-  },
   "lengthToDraw": -1,
   "move": Object {
-    "bounds": TransformBounds {
-      "boundary": Array [
-        null,
-        null,
-        null,
-      ],
-      "bounds": "inside",
-      "def": Array [
-        "s",
-        "r",
-        "t",
-      ],
-      "precision": 8,
-    },
-    "canBeMovedAfterLosingTouch": true,
+    "bounds": null,
     "element": null,
     "freely": Object {
       "bounceLoss": 0.5,
@@ -699,8 +595,20 @@ FigureElementPrimitive {
       "zeroVelocityThreshold": 0.0001,
     },
     "maxVelocity": 5,
-    "sizeInBounds": false,
-    "transformClip": null,
+    "plane": Plane {
+      "n": Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0,
+        "z": 1,
+      },
+      "p": Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0,
+        "z": 0,
+      },
+    },
     "type": "translation",
   },
   "name": "a",
@@ -739,54 +647,16 @@ FigureElementPrimitive {
   "parentTransform": Array [
     Transform {
       "_type": "transform",
-      "def": Array [
-        Array [
-          "s",
-          1,
-          1,
-          1,
-        ],
-        Array [
-          "r",
-          0,
-          0,
-          0,
-        ],
-        Array [
-          "t",
-          1,
-          1,
-          0,
-        ],
-        Array [
-          "s",
-          1,
-          1,
-          1,
-        ],
-        Array [
-          "r",
-          0,
-          0,
-          0,
-        ],
-        Array [
-          "t",
-          1,
-          1,
-          0,
-        ],
-      ],
-      "index": 0,
+      "def": Array [],
       "mat": Array [
         1,
         0,
         0,
-        2,
+        0,
         0,
         1,
         0,
-        2,
+        0,
         0,
         0,
         1,
@@ -796,7 +666,7 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "Equation",
+      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -961,6 +831,7 @@ FigureElementPrimitive {
   },
   "renderedOnNextDraw": false,
   "scenarios": Object {},
+  "scene": null,
   "setPointsFromDefinition": null,
   "setTransformCallback": null,
   "simple": false,
@@ -983,8 +854,6 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
-            0,
-            0,
           ],
           Array [
             "t",
@@ -993,7 +862,6 @@ FigureElementPrimitive {
             0,
           ],
         ],
-        "index": 3,
         "mat": Array [
           1,
           0,
@@ -1014,49 +882,7 @@ FigureElementPrimitive {
         ],
         "name": "text",
       },
-      "velocity": Transform {
-        "_type": "transform",
-        "def": Array [
-          Array [
-            "s",
-            0,
-            0,
-            0,
-          ],
-          Array [
-            "r",
-            0,
-            0,
-            0,
-          ],
-          Array [
-            "t",
-            0,
-            0,
-            0,
-          ],
-        ],
-        "index": 3,
-        "mat": Array [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-        ],
-        "name": "text",
-      },
+      "velocity": 0,
     },
     "preparingToStop": false,
     "pulse": Object {
@@ -1095,7 +921,12 @@ FigureElementPrimitive {
     "updateSyncNow": true,
   },
   "touchBorder": "buffer",
-  "touchPriority": false,
+  "touchScale": Point {
+    "_type": "point",
+    "x": 1,
+    "y": 1,
+    "z": 1,
+  },
   "transform": Transform {
     "_type": "transform",
     "def": Array [
@@ -1108,8 +939,6 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
-        0,
-        0,
       ],
       Array [
         "t",
@@ -1118,7 +947,6 @@ FigureElementPrimitive {
         0,
       ],
     ],
-    "index": 3,
     "mat": Array [
       0.45,
       0,
@@ -1141,6 +969,7 @@ FigureElementPrimitive {
   },
   "type": "primitive",
   "uid": "0000000000",
+  "uniqueColor": null,
   "unrenderNextDraw": false,
 }
 `;

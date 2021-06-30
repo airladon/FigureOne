@@ -591,7 +591,7 @@ describe('Different ways to make an equation', () => {
       eqn.showForm('simpleElement');
       figure.setFirstTransform();
       const a = eqn._a;
-      const rect = a.getBoundingRect('figure');
+      const rect = a.getBoundingRect('local');
       expect(round(rect.left, 4)).toBe(round(-aWidth / 2, 4));
       expect(round(rect.right, 4)).toBe(round(aWidth / 2, 4));
       expect(round(rect.bottom, 4)).toBe(round(-aHeight / 2, 4));
@@ -600,8 +600,8 @@ describe('Different ways to make an equation', () => {
     test('simplePhrase', () => {
       eqn.showForm('simplePhrase');
       figure.setFirstTransform();
-      const _2 = eqn.__2.getBoundingRect('figure');
-      const _x = eqn._x.getBoundingRect('figure');
+      const _2 = eqn.__2.getBoundingRect('local');
+      const _x = eqn._x.getBoundingRect('local');
       const w = _2.width + _x.width;
       expect(round(_2.left, 4)).toBe(round(-w / 2, 4));
       expect(round(_x.right, 4)).toBe(round(w / 2, 4));
@@ -611,9 +611,9 @@ describe('Different ways to make an equation', () => {
     test('simpleSequence', () => {
       eqn.showForm('simpleSequence');
       figure.setFirstTransform();
-      const a = eqn._a.getBoundingRect('figure');
-      const b = eqn._b.getBoundingRect('figure');
-      const c = eqn._c.getBoundingRect('figure');
+      const a = eqn._a.getBoundingRect('local');
+      const b = eqn._b.getBoundingRect('local');
+      const c = eqn._c.getBoundingRect('local');
       const w = a.width + b.width + c.width;
       expect(round(a.left, 4)).toBe(round(-w / 2, 4));
       expect(round(c.right, 4)).toBe(round(w / 2, 4));
@@ -623,10 +623,10 @@ describe('Different ways to make an equation', () => {
     test('inlineFrac', () => {
       eqn.showForm('inlineFrac');
       figure.setFirstTransform();
-      const a = eqn._a.getBoundingRect('figure');
-      const v = eqn._v.getBoundingRect('figure');
-      const _2 = eqn.__2.getBoundingRect('figure');
-      const c = eqn._c.getBoundingRect('figure');
+      const a = eqn._a.getBoundingRect('local');
+      const v = eqn._v.getBoundingRect('local');
+      const _2 = eqn.__2.getBoundingRect('local');
+      const c = eqn._c.getBoundingRect('local');
       const w = v.width + c.width;
       const h = a.top - _2.bottom;
       expect(round(v.left, 4)).toBe(round(-w / 2, 4));
@@ -637,9 +637,9 @@ describe('Different ways to make an equation', () => {
     test('inlineElementDefinition', () => {
       eqn.showForm('inlineElementDefinition');
       figure.setFirstTransform();
-      const a = eqn._a.getBoundingRect('figure');
-      const equals = eqn._equals.getBoundingRect('figure');
-      const hello = eqn._hello.getBoundingRect('figure');
+      const a = eqn._a.getBoundingRect('local');
+      const equals = eqn._equals.getBoundingRect('local');
+      const hello = eqn._hello.getBoundingRect('local');
       expect(round(a.left, 4)).toBe(round(-equals.width / 2 - a.width, 4));
       expect(round(equals.left, 4)).toBe(round(a.right, 4));
       expect(round(hello.right, 4)).toBe(round(equals.width / 2 + hello.width, 4));
@@ -647,9 +647,9 @@ describe('Different ways to make an equation', () => {
     test('inlineMultiDefinition', () => {
       eqn.showForm('inlineMultiDefinition');
       figure.setFirstTransform();
-      const a = eqn._a.getBoundingRect('figure');
-      const _2_1 = eqn.__2_1.getBoundingRect('figure');
-      const _2_2 = eqn.__2_2.getBoundingRect('figure');
+      const a = eqn._a.getBoundingRect('local');
+      const _2_1 = eqn.__2_1.getBoundingRect('local');
+      const _2_2 = eqn.__2_2.getBoundingRect('local');
       const w = a.width + _2_1.width + _2_2.width;
       expect(round(_2_1.left, 4)).toBe(round(-w / 2, 4));
       expect(round(_2_2.right, 4)).toBe(round(w / 2, 4));
@@ -659,10 +659,10 @@ describe('Different ways to make an equation', () => {
     test('inlineEqualsElement', () => {
       eqn.showForm('inlineEqualsElement');
       figure.setFirstTransform();
-      const a = eqn._a.getBoundingRect('figure');
-      const b = eqn._b.getBoundingRect('figure');
-      const equals = eqn['_='].getBoundingRect('figure');
-      const c = eqn._c.getBoundingRect('figure');
+      const a = eqn._a.getBoundingRect('local');
+      const b = eqn._b.getBoundingRect('local');
+      const equals = eqn['_='].getBoundingRect('local');
+      const c = eqn._c.getBoundingRect('local');
       const w = a.width + b.width + equals.width + c.width;
       expect(round(a.left, 4)).toBe(round(-w / 2, 4));
       expect(round(a.right, 4)).toBe(round(b.left, 4));
@@ -674,8 +674,8 @@ describe('Different ways to make an equation', () => {
     test('inlineFullDefinition', () => {
       eqn.showForm('inlineFullDefinition');
       figure.setFirstTransform();
-      const a = eqn._a.getBoundingRect('figure');
-      const m = eqn._m.getBoundingRect('figure');
+      const a = eqn._a.getBoundingRect('local');
+      const m = eqn._m.getBoundingRect('local');
       const w = [a, m].reduce((sum, e) => sum + e.width, 0);
       expect(round(a.left, 4)).toBe(round(-w / 2, 4));
       expect(round(a.right, 4)).toBe(round(m.left, 4));
@@ -685,9 +685,9 @@ describe('Different ways to make an equation', () => {
     test('inlineSymbol', () => {
       eqn.showForm('inlineSymbol');
       figure.setFirstTransform();
-      const a = eqn._a.getBoundingRect('figure');
-      const v = eqn._vinculum.getBoundingRect('figure');
-      const b = eqn._b.getBoundingRect('figure');
+      const a = eqn._a.getBoundingRect('local');
+      const v = eqn._vinculum.getBoundingRect('local');
+      const b = eqn._b.getBoundingRect('local');
       const h = a.top - b.bottom;
       expect(round(v.left, 4)).toBe(round(-v.width / 2, 4));
       expect(round(v.right, 4)).toBe(round(v.width / 2, 4));
@@ -699,9 +699,9 @@ describe('Different ways to make an equation', () => {
     test('inlineSymbolWithId', () => {
       eqn.showForm('inlineSymbolWithId');
       figure.setFirstTransform();
-      const a = eqn._a.getBoundingRect('figure');
-      const v = eqn._v1.getBoundingRect('figure');
-      const b = eqn._b.getBoundingRect('figure');
+      const a = eqn._a.getBoundingRect('local');
+      const v = eqn._v1.getBoundingRect('local');
+      const b = eqn._b.getBoundingRect('local');
       const h = a.top - b.bottom;
       expect(round(v.left, 4)).toBe(round(-v.width / 2, 4));
       expect(round(v.right, 4)).toBe(round(v.width / 2, 4));
@@ -713,9 +713,9 @@ describe('Different ways to make an equation', () => {
     test('inlineSymbolObject', () => {
       eqn.showForm('inlineSymbolObject');
       figure.setFirstTransform();
-      const a = eqn._a.getBoundingRect('figure');
-      const v = eqn._v2.getBoundingRect('figure');
-      const b = eqn._b.getBoundingRect('figure');
+      const a = eqn._a.getBoundingRect('local');
+      const v = eqn._v2.getBoundingRect('local');
+      const b = eqn._b.getBoundingRect('local');
       const h = a.top - b.bottom;
       expect(round(v.left, 4)).toBe(round(-v.width / 2, 4));
       expect(round(v.right, 4)).toBe(round(v.width / 2, 4));
@@ -727,9 +727,9 @@ describe('Different ways to make an equation', () => {
     test('spaces', () => {
       eqn.showForm('spaces');
       figure.setFirstTransform();
-      const a = eqn._a.getBoundingRect('figure');
-      const b = eqn._b.getBoundingRect('figure');
-      const c = eqn._c.getBoundingRect('figure');
+      const a = eqn._a.getBoundingRect('local');
+      const b = eqn._b.getBoundingRect('local');
+      const c = eqn._c.getBoundingRect('local');
       const w = c.right - a.left;
       expect(round(a.left, 4)).toBe(round(-w / 2, 4));
       expect(round(c.right, 4)).toBe(round(w / 2, 4));
@@ -744,9 +744,9 @@ describe('Different ways to make an equation', () => {
       beforeEach(() => {
         eqn.showForm('fullObject');
         figure.setFirstTransform();
-        b = eqn._b.getBoundingRect('figure');
-        c = eqn._c.getBoundingRect('figure');
-        d = eqn._d.getBoundingRect('figure');
+        b = eqn._b.getBoundingRect('local');
+        c = eqn._c.getBoundingRect('local');
+        d = eqn._d.getBoundingRect('local');
         w = [b, c, d].reduce((sum, e) => sum + e.width, 0);
       });
       test('alignment', () => {
@@ -893,13 +893,13 @@ describe('Different ways to make an equation', () => {
   test('Equation Form Alignment', () => {
     ways.equationFormAlignment();
     eqn.showForm('originBasline');
-    const originBasline = eqn._a.getPosition('figure');
+    const originBasline = eqn._a.getPosition('local');
     eqn.showForm('aCenterTop');
-    const aCenterTop = eqn._a.getPosition('figure');
+    const aCenterTop = eqn._a.getPosition('local');
     eqn.showForm('aRightMiddle');
-    const aRightMiddle = eqn._a.getPosition('figure');
+    const aRightMiddle = eqn._a.getPosition('local');
     eqn.showForm('bRightBottom');
-    const bRightBottom = eqn._a.getPosition('figure');
+    const bRightBottom = eqn._a.getPosition('local');
 
     // Test x positions
     expect(originBasline.x > aCenterTop.x).toBe(true);

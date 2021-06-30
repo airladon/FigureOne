@@ -121,9 +121,9 @@ describe('Equation Functions - Container', () => {
       functions.parameterSteps();
       eqn.showForm('base');
       figure.setFirstTransform();
-      baseA = eqn._a.getBoundingRect('figure');
-      baseB = eqn._b.getBoundingRect('figure');
-      baseC = eqn._c.getBoundingRect('figure');
+      baseA = eqn._a.getBoundingRect('local');
+      baseB = eqn._b.getBoundingRect('local');
+      baseC = eqn._c.getBoundingRect('local');
       top = 1;
       left = 1;
       right = 1;
@@ -132,8 +132,8 @@ describe('Equation Functions - Container', () => {
     test('Bottom', () => {
       eqn.showForm('bottom');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
       expect(round(newA.left)).toEqual(round(baseA.left));
       expect(round(newA.bottom)).toEqual(round(baseA.bottom + bottom));
       expect(round(newB.left)).toEqual(round(baseB.left));
@@ -142,8 +142,8 @@ describe('Equation Functions - Container', () => {
     test('Top', () => {
       eqn.showForm('top');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
       expect(round(newA.left)).toEqual(round(baseA.left));
       expect(round(newA.bottom)).toEqual(round(baseA.bottom));
       expect(round(newB.left)).toEqual(round(baseB.left));
@@ -152,16 +152,16 @@ describe('Equation Functions - Container', () => {
     test('Left', () => {
       eqn.showForm('left');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newC = eqn._c.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newC = eqn._c.getBoundingRect('local');
       expect(round(newA.left)).toEqual(round(baseA.left + left));
       expect(round(newC.left)).toEqual(round(baseC.left + left));
     });
     test('Right', () => {
       eqn.showForm('right');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newC = eqn._c.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newC = eqn._c.getBoundingRect('local');
       expect(round(newA.left)).toEqual(round(baseA.left));
       expect(round(newC.left)).toEqual(round(baseC.left + right));
     });

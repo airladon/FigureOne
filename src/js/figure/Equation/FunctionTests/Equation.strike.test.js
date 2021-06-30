@@ -168,15 +168,15 @@ describe('Equation Functions - Strike', () => {
       functions.parameterSteps();
       eqn.showForm('base');
       figure.setFirstTransform();
-      baseA = eqn._a.getBoundingRect('figure');
+      baseA = eqn._a.getBoundingRect('local');
       space = 1;
     });
     test('inSize', () => {
       functions.parameterSteps();
       eqn.showForm('inSize');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newX = eqn._x.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newX = eqn._x.getBoundingRect('local');
       expect(round(newX.left)).toBe(round(-space));
       expect(round(newA.left)).toBe(round(0));
       expect(round(newX.width)).toBe(round(baseA.width + space * 2));
@@ -188,8 +188,8 @@ describe('Equation Functions - Strike', () => {
       functions.parameterSteps();
       eqn.showForm('space');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newX = eqn._x.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newX = eqn._x.getBoundingRect('local');
       expect(round(newX.left)).toBe(0);
       expect(round(newA.left)).toBe(round(space));
       expect(round(newX.width)).toBe(round(baseA.width + space * 2));
@@ -201,8 +201,8 @@ describe('Equation Functions - Strike', () => {
       functions.parameterSteps();
       eqn.showForm('topSpace');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newX = eqn._x.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newX = eqn._x.getBoundingRect('local');
       expect(round(newX.left)).toBe(0);
       expect(round(newA.left)).toBe(round(0));
       expect(round(newX.width)).toBe(round(baseA.width));
@@ -214,8 +214,8 @@ describe('Equation Functions - Strike', () => {
       functions.parameterSteps();
       eqn.showForm('bottomSpace');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newX = eqn._x.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newX = eqn._x.getBoundingRect('local');
       expect(round(newX.left)).toBe(0);
       expect(round(newA.left)).toBe(round(0));
       expect(round(newX.width)).toBe(round(baseA.width));
@@ -227,8 +227,8 @@ describe('Equation Functions - Strike', () => {
       functions.parameterSteps();
       eqn.showForm('leftSpace');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newX = eqn._x.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newX = eqn._x.getBoundingRect('local');
       expect(round(newX.left)).toBe(0);
       expect(round(newA.left)).toBe(round(space));
       expect(round(newX.width)).toBe(round(baseA.width + space));
@@ -240,8 +240,8 @@ describe('Equation Functions - Strike', () => {
       functions.parameterSteps();
       eqn.showForm('rightSpace');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newX = eqn._x.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newX = eqn._x.getBoundingRect('local');
       expect(round(newX.left)).toBe(0);
       expect(round(newA.left)).toBe(round(0));
       expect(round(newX.width)).toBe(round(baseA.width + space));

@@ -2642,7 +2642,7 @@ export default class FigurePrimitives {
       options.texture.repeat,
       options.texture.onLoad,
       options.name,
-      this.scene,
+      // this.scene,
     );
     element.dimColor = this.defaultDimColor.slice();
     if (options.move != null && options.move !== false) {

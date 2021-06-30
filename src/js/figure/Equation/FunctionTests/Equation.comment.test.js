@@ -243,11 +243,11 @@ describe('Equation Functions - Bar', () => {
     functions.nestedTopComment();
     eqn.showForm('base');
     figure.setFirstTransform();
-    const a = eqn._a.getBoundingRect('figure');
-    const b = eqn._b.getBoundingRect('figure');
-    const c = eqn._c.getBoundingRect('figure');
-    const bar = eqn._bar.getBoundingRect('figure');
-    const bar1 = eqn._bar1.getBoundingRect('figure');
+    const a = eqn._a.getBoundingRect('local');
+    const b = eqn._b.getBoundingRect('local');
+    const c = eqn._c.getBoundingRect('local');
+    const bar = eqn._bar.getBoundingRect('local');
+    const bar1 = eqn._bar1.getBoundingRect('local');
     const space = 0.1;
     expect(round(bar.bottom)).toBe(round(a.top + space));
     expect(round(b.bottom)).toBe(round(bar.top + space));
@@ -258,11 +258,11 @@ describe('Equation Functions - Bar', () => {
     functions.nestedBottomComment();
     eqn.showForm('base');
     figure.setFirstTransform();
-    const a = eqn._a.getBoundingRect('figure');
-    const b = eqn._b.getBoundingRect('figure');
-    const c = eqn._c.getBoundingRect('figure');
-    const bar = eqn._bar.getBoundingRect('figure');
-    const bar1 = eqn._bar1.getBoundingRect('figure');
+    const a = eqn._a.getBoundingRect('local');
+    const b = eqn._b.getBoundingRect('local');
+    const c = eqn._c.getBoundingRect('local');
+    const bar = eqn._bar.getBoundingRect('local');
+    const bar1 = eqn._bar1.getBoundingRect('local');
     const space = 0.1;
     expect(round(bar.top)).toBe(round(a.bottom - space));
     expect(round(b.top)).toBe(round(bar.bottom - space));
@@ -287,9 +287,9 @@ describe('Equation Functions - Bar', () => {
     // Snapshot test on most simple layout
     eqn.showForm('0');
     figure.setFirstTransform();
-    const a = eqn._a.getBoundingRect('figure');
-    const b = eqn._b.getBoundingRect('figure');
-    const bar = eqn._bar.getBoundingRect('figure');
+    const a = eqn._a.getBoundingRect('local');
+    const b = eqn._b.getBoundingRect('local');
+    const bar = eqn._bar.getBoundingRect('local');
     expect(round(eqn._a.transform.mat)).toMatchSnapshot();
     expect(round(eqn._b.transform.mat)).toMatchSnapshot();
     expect(round(eqn._bar.transform.mat)).toMatchSnapshot();

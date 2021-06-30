@@ -251,8 +251,8 @@ describe('Equation Functions - Superscript and Subscript', () => {
     // get without positions
     eqn.showForm('without');
     figure.setFirstTransform();
-    const baseB = eqn._b.getBoundingRect('figure');
-    const baseC = eqn._c.getBoundingRect('figure');
+    const baseB = eqn._b.getBoundingRect('local');
+    const baseC = eqn._c.getBoundingRect('local');
     const withoutPos = elems.map(elem => round(elem.transform.mat).slice());
 
     // with reference positions
@@ -268,8 +268,8 @@ describe('Equation Functions - Superscript and Subscript', () => {
       expect(withPos).toEqual(positions);
     });
     figure.setFirstTransform();
-    const newB = eqn._b.getBoundingRect('figure');
-    const newC = eqn._c.getBoundingRect('figure');
+    const newB = eqn._b.getBoundingRect('local');
+    const newC = eqn._c.getBoundingRect('local');
 
 
     // Check scaling was done correctly
