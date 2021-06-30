@@ -292,10 +292,10 @@ describe('Figure Stop', () => {
   describe('Moving Freely', () => {
     let state;
     beforeEach(() => {
-      a.move.freely.deceleration = { translation: 1 };
-      a.move.freely.zeroVelocityThreshold = { translation: 0.0000001 };
+      a.move.freely.deceleration = 1;
+      a.move.freely.zeroVelocityThreshold = 0.0000001;
       a.setMovable(true);
-      figure.mock.touchDown([0, 0]);
+      figure.mock.touchElement(a, [0, 0]);
       figure.mock.timeStep(1);
       figure.mock.touchMove([2, 0]);
       figure.mock.touchUp();
@@ -418,10 +418,10 @@ describe('Figure Stop', () => {
     let state;
     describe('Animate, move freely, same time', () => {
       beforeEach(() => {
-        b.move.freely.zeroVelocityThreshold = { translation: 0.0000001 };
-        b.move.freely.deceleration = { translation: 1 };
+        b.move.freely.zeroVelocityThreshold = 0.0000001;
+        b.move.freely.deceleration = 1;
         b.setMovable(true);
-        figure.mock.touchDown([0, 0]);
+        figure.mock.touchElement(b, [0, 0]);
         figure.mock.timeStep(1);
         figure.mock.touchMove([2, 0]);
         figure.mock.touchUp();
@@ -486,10 +486,10 @@ describe('Figure Stop', () => {
     });
     describe('Animate, move freely, different times', () => {
       beforeEach(() => {
-        b.move.freely.zeroVelocityThreshold = { translation: 0.0000001 };
-        b.move.freely.deceleration = { translation: 1 };
+        b.move.freely.zeroVelocityThreshold = 0.0000001;
+        b.move.freely.deceleration = 1;
         b.setMovable(true);
-        figure.mock.touchDown([0, 0]);
+        figure.mock.touchElement(b, [0, 0]);
         figure.mock.timeStep(1);
         figure.mock.touchMove([2, 0]);
         figure.mock.touchUp();

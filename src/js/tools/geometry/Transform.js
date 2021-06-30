@@ -597,7 +597,7 @@ class Transform {
       rc: 'xyz',
       rd: 'dir',
       rs: 'sph',
-    }
+    };
     return types[this.def[i][0]];
   }
 
