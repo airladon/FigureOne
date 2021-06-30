@@ -31,7 +31,7 @@ describe('Move Freely', () => {
         make: 'angle',
       },
     ]);
-    figure.initialize();
+    // figure.initialize();
   });
   test('Primitive', () => {
     const dup = figure.elements._primitive._dup();
