@@ -216,6 +216,14 @@ figure.add({
   position: [0.5, 0, 0],
   xAlign: 'center',
 });
+figure.add({
+  make: 'arc',
+  radius: 1,
+            angle: Math.PI,
+            sides: 4,
+            drawBorderBuffer: 0.1,
+            line: { width: 0.1, widthIs: 'inside' },
+})
 
 figure.add({
   make: 'polygon',

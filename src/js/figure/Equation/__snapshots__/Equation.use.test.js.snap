@@ -716,10 +716,12 @@ FigureElementPrimitive {
       "_autoCursorMove": -1,
       "_autoExec": -1,
       "_autoTouch": -1,
+      "_autoTouchElement": -1,
       "cursor": -1,
       "cursorMove": -1,
       "exec": -1,
       "touch": -1,
+      "touchElement": -1,
     },
     "events": Object {
       "_autoCursor": Object {
@@ -742,6 +744,11 @@ FigureElementPrimitive {
         "playbackAction": [Function],
         "setOnSeek": true,
       },
+      "_autoTouchElement": Object {
+        "list": Array [],
+        "playbackAction": [Function],
+        "setOnSeek": true,
+      },
       "cursor": Object {
         "list": Array [],
         "playbackAction": [Function],
@@ -758,6 +765,11 @@ FigureElementPrimitive {
         "setOnSeek": true,
       },
       "touch": Object {
+        "list": Array [],
+        "playbackAction": [Function],
+        "setOnSeek": true,
+      },
+      "touchElement": Object {
         "list": Array [],
         "playbackAction": [Function],
         "setOnSeek": true,

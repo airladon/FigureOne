@@ -78,12 +78,14 @@ class HTMLObject extends DrawingObject {
   getBoundaries(): Array<Array<Point>> {
     const parentRect = this.parentDiv.getBoundingClientRect();
     const glSpace = {
-      x: { bottomLeft: -1, width: 2 },
-      y: { bottomLeft: -1, height: 2 },
+      x: { min: -1, span: 2 },
+      y: { min: -1, span: 2 },
+      z: { min: -1, span: 2 },
     };
     const pixelSpace = {
-      x: { bottomLeft: 0, width: parentRect.width },
-      y: { bottomLeft: parentRect.height, height: -parentRect.height },
+      x: { min: 0, span: parentRect.width },
+      y: { min: parentRect.height, span: -parentRect.height },
+      z: { min: -1, span: 2 },
     };
     const pixelToGLTransform = spaceToSpaceTransform(pixelSpace, glSpace);
 

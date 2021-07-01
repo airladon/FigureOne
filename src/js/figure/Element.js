@@ -1254,9 +1254,9 @@ class FigureElement {
         tie.width, tie.height,
       ));
 
-      const { pixelToFigure } = this.figureTransforms;
-      const topLeft = topLeftPixels.transformBy(pixelToFigure.m());
-      const bottomRight = bottomRightPixels.transformBy(pixelToFigure.m());
+      const pixelToFigure = this.spaceTransformMatrix('pixel', 'figure');
+      const topLeft = topLeftPixels.transformBy(pixelToFigure);
+      const bottomRight = bottomRightPixels.transformBy(pixelToFigure);
       const width = bottomRight.x - topLeft.x;
       const height = topLeft.y - bottomRight.y;
       const center = topLeft.add(new Point(width / 2, -height / 2));
