@@ -601,7 +601,9 @@ class GLObject extends DrawingObject {
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     // gl.enable(gl.CULL_FACE);
-    gl.enable(gl.DEPTH_TEST);
+    if (scene.style !== '2D') {
+      gl.enable(gl.DEPTH_TEST);
+    }
 
     Object.keys(this.buffers).forEach((bufferName) => {
       if (targetTexture && bufferName !== 'a_position') {

@@ -2,7 +2,9 @@
 const { Figure, tools } = Fig;
 
 const figure = new Figure({
-  limits: [-4.5, -4.5, 9, 9],
+  scene: {
+    left: -4.5, bottom: -4.5, right: 4.5, top: 4.5,
+  },
   color: [1, 0, 0, 1],
   lineWidth: 0.01,
   font: { size: 0.1 },

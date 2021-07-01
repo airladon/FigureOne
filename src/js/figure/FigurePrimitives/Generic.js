@@ -8,7 +8,6 @@ import {
 import WebGLInstance from '../webgl/webgl';
 // import type { CPY_Step } from '../geometries/copy/copy';
 import type { TypeColor } from '../../tools/types';
-import Scene from '../../tools/scene';
 
 export default function Generic(
   webgl: WebGLInstance,
