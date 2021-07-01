@@ -208,7 +208,10 @@ function addToObject(
 //   });
 // }
 
-function duplicate(value: ?(number | boolean | string | Object)) {
+function duplicate(value: ?(number | boolean | string | Object), precision: number | null = null) {
+  if (typeof value === 'number' && precision != null) {
+    return roundNum(value, precision);
+  }
   if (typeof value === 'number'
       || typeof value === 'boolean'
       || typeof value === 'string'
@@ -222,13 +225,13 @@ function duplicate(value: ?(number | boolean | string | Object)) {
   }
   if (Array.isArray(value)) {
     const arrayDup = [];
-    value.forEach(arrayElement => arrayDup.push(duplicate(arrayElement)));
+    value.forEach(arrayElement => arrayDup.push(duplicate(arrayElement, precision)));
     return arrayDup;
   }
   // if (typeof value === 'object') {
   const objectDup = {};
   Object.keys(value).forEach((key) => {
-    const v = duplicate(value[key]);
+    const v = duplicate(value[key], precision);
     objectDup[key] = v;
   });
   return objectDup;

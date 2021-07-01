@@ -108,6 +108,7 @@ export default function makeFigure(
   figure.primitives.defaultLineWidth = 0.01;
   // needed as the first element needs to be set with the space Transforms
   figure.initElements();
+  figure.getSelectionFromGLBackup = figure.getSelectionFromGL;
   figure.mock = {
     initialTime: 0,
     duration: 0,
