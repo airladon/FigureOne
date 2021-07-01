@@ -210,13 +210,15 @@ describe('Seek', () => {
       figure.mock.timeStep(0.5, frameStep);
       expect(transforms()).toEqual(['playing', 1.5, [1.5], [], [1.5], 1.5]);
     });
-    test('Seek to end of animation, middle of pulse', () => {
+    test.only('Seek to end of animation, middle of pulse', () => {
       expect(transforms()).toEqual(['idle', 0, [], [], [1], 0]);
       recorder.seek(3);
-      expect(transforms()).toEqual(['idle', 2, [], [2], [2], 0]);
+      expect(transforms()).toEqual(['idle', 2, [], [2], [1], 0]);
       // figure.mock.timeStep(0, frameStep);
       // expect(transforms()).toEqual(['idle', 2, [], [2], [2], 0]);
       recorder.startPlayback();
+      expect(transforms()).toEqual(['playing', 2, [2], [], [1], 1]);
+      figure.mock.timeStep(0, frameStep);
       expect(transforms()).toEqual(['playing', 2, [2], [], [2], 1]);
       figure.mock.timeStep(0.5, frameStep);
       expect(transforms()).toEqual(['playing', 2, [1.5], [], [1.5], 0.5]);
@@ -1162,7 +1164,8 @@ describe('Seek', () => {
     figure.mock.timeStep(0);
     // figure.unpause();
     a.setMovable(true);
-    figure.mock.touchDown([0.5, 0.5]);
+    // figure.mock.touchDown([0.5, 0.5]);
+    figure.mock.touchElement(a, [0.5, 0.5]);
     figure.mock.touchMove([4, 4]);
     expect(a.getPosition().round().x).toBe(4);
   });
