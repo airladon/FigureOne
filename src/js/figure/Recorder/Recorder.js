@@ -1060,6 +1060,9 @@ ${this.showEvent('cursor', precision, 2)},
 ${figureName}.recorder.loadEventData('_autoTouch', [
 ${this.showEvent('touch', precision, 2)},
 ]);
+${figureName}.recorder.loadEventData('_autoTouchElement', [
+${this.showEvent('touchElement', precision, 2)},
+]);
 ${cursorData}
     `;
   }

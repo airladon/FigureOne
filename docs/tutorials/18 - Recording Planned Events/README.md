@@ -69,7 +69,7 @@ Recording mouse movements in a long video can be time consuming. Even though it 
 
 Another way to do this is to use the code generation function in `Recorder` to output the mouse movements directly into the JavaScript console of the browser. These can then be copy and pasted into a JavaScript file that is loaded in the project during recording.
 
-The method `genAutoMouseEvents()` will take any events in the `cursor`, `touch` or `cursorMove`, and output code that loads them into recorder as `_autoCursor`, `_autoTouch` and `_autoCursorMove` events. These events behave the same way, except they won't be over-written during recording.
+The method `genAutoMouseEvents()` will take any events in the `cursor`, `touch` or `cursorMove`, and output code that loads them into recorder as `_autoCursor`, `_autoTouch`, `_autoTouchElement` and `_autoCursorMove` events. These events behave the same way, except they won't be over-written during recording.
 
 In the tutorial above, if the `figure.recorder.genAutoMouseEvents()` is run, the following output will be generated:
 

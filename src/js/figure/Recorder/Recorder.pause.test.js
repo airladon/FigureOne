@@ -1520,8 +1520,8 @@ describe('Animate To State', () => {
     let states;
     let callbacks;
     beforeEach(() => {
-      a.move.freely.deceleration = { translation: 1 };
-      a.move.freely.zeroVelocityThreshold = { translation: 0.0000001 };
+      a.move.freely.deceleration = 1;
+      a.move.freely.zeroVelocityThreshold = 0.0000001;
       a.setMovable(true);
       // figure.mock.touchDown([0, 0]);
       // figure.mock.timeStep(1);
@@ -1543,7 +1543,7 @@ describe('Animate To State', () => {
       // startAnimation();
       // recorder.recordEvent('startAnimation');
       // recorder.recordEvent('touch', ['down', new Point(0, 0)]);
-      figure.mock.touchDown([0, 0]);
+      figure.mock.touchElement(a, [0, 0]);
       figure.mock.timeStep(1);
       // recorder.recordEvent('moved', ['a', new Point(2, 0)]);
       // recorder.recordEvent('touch', ['up']);

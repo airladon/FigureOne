@@ -1676,6 +1676,7 @@ class FigureElement {
       this.notifications.publish('setTransform', [this.transform]);
       this.fnMap.exec(this.setTransformCallback, this.transform);
     }
+    this.animateNextFrame();
   }
 
   // Set the next transform (and velocity if moving freely) for the next

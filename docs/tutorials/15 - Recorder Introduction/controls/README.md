@@ -251,7 +251,7 @@ Next we setup the logic to toggle recording. We only toggle if recorder state is
       recorder.stopRecording();
     } else {
       const currentTime = recorder.getCurrentTime();
-      recorder.startRecording(currentTime, ['_autoSlide', '_autoCursor', '_autoTouch', '_autoCursorMove', '_autoExec']);
+      recorder.startRecording(currentTime, ['_autoSlide', '_autoCursor', '_autoTouch', '_autoCursorMove', '_autoExec', '_autoTouchElement']);
       if (currentTime === 0) {
         recorder.recordEvent('slide', ['goto', 0], 0);
       }

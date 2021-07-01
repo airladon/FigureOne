@@ -752,7 +752,7 @@ class LineBounds extends Bounds {
           roundNum(this.boundary.p2.y, precision),
           roundNum(this.boundary.p2.z, precision),
         ],
-        this.ends,
+        this.boundary.ends,
       ],
     };
   }

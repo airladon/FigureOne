@@ -602,8 +602,8 @@ export default class CollectionsPolyline extends FigureElementCollection {
       sides: 20,
       radius: 0.1,
       color: this.color,
-      isMovable: false,
-      boundary: 'figure',
+      // isMovable: false,
+      // boundary: 'figure',
     };
     // const { pad } = optionsToUse;
     const pCount = this.points.length;
@@ -617,15 +617,15 @@ export default class CollectionsPolyline extends FigureElementCollection {
         }, padArray[i]);
         const padShape = this.collections.primitives.polygon(padOptions);
         // $FlowFixMe
-        const { isMovable, boundary } = padArray[i];
-        if (isMovable) {
-          padShape.onAdd = () => {
-            padShape.setMovable();
-          };
-          if (boundary != null) {
-            padShape.move.sizeInBounds = true;
-            padShape.setMoveBounds(boundary);
-          }
+        // const { isMovable, boundary } = padArray[i];
+        if (padShape.isMovable) {
+          // padShape.onAdd = () => {
+          //   padShape.setMovable();
+          // };
+          // if (boundary != null) {
+          //   padShape.move.sizeInBounds = true;
+          //   padShape.setMove({ bounds: boundary });
+          // }
           const fnName = `_polyline_pad${i}`;
           padShape.fnMap.add(
             fnName,

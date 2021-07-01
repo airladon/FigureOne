@@ -652,6 +652,10 @@ class Figure {
         this.showCursor('hide');
       }
     };
+    const onTouchElement = (payload) => {
+      const [element, x, y, z] = payload;
+      this.selectElement(element, new Point(x, y, z));
+    };
     const onTouch = (payload) => {
       const [action, x, y] = payload;
       if (action === 'down') {
@@ -692,6 +696,8 @@ class Figure {
       this.fnMap.exec(functionName, args);
     };
 
+    this.recorder.addEventType('touchElement', onTouchElement);
+    this.recorder.addEventType('_autoTouchElement', onTouchElement);
     this.recorder.addEventType('cursor', onCursor);
     this.recorder.addEventType('_autoCursor', onAutoCursor);
     this.recorder.addEventType('cursorMove', onCursorMove);
@@ -1861,17 +1867,53 @@ class Figure {
     if (element == null) {
       return false;
     }
+    this.selectElement(element, glPoint, autoEvent);
+    // element.click(glPoint);
+    // if (this.recorder.state === 'recording') {
+    //   if (!autoEvent) {
+    //     this.recorder.recordEvent('touchElement', [element.getPath(), glPoint.x, glPoint.y]);
+    //   }
+    // }
 
-    this.beingTouchedElement = element;
-    if (element.isMovable) {
-      this.beingMovedElement = element;
-      element.startBeingMoved();
+    // this.beingTouchedElement = element;
+    // if (element.isMovable) {
+    //   this.beingMovedElement = element;
+    //   element.startBeingMoved();
+    // }
+
+    // if (this.beingMovedElement != null) {
+    //   this.animateNextFrame(true, 'touch down handler');
+    // }
+    return true;
+  }
+
+  selectElement(
+    element: string | FigureElement,
+    glPoint: Point,
+    autoEvent: boolean = false,
+  ) {
+    let e;
+    if (typeof element === 'string') {
+      e = this.get(element);
+    } else {
+      e = element;
+    }
+    if (this.recorder.state === 'recording') {
+      if (!autoEvent) {
+        this.recorder.recordEvent('touchElement', [e.getPath(), glPoint.x, glPoint.y, glPoint.z]);
+      }
+    }
+    e.click(glPoint);
+
+    this.beingTouchedElement = e;
+    if (e.isMovable) {
+      this.beingMovedElement = e;
+      e.startBeingMoved();
     }
 
     if (this.beingMovedElement != null) {
       this.animateNextFrame(true, 'touch down handler');
     }
-    return true;
   }
 
   // // Handle touch down, or mouse click events within the canvas.

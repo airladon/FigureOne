@@ -549,7 +549,7 @@ describe('Text Borders', () => {
         make: 'text.lines',
         options: options[option],
       });
-      figure.initialize();
+      // figure.initialize();
       t = figure.elements._t;
       td = t.drawingObject;
       // tr = t.getBoundingRect('figure');
@@ -698,11 +698,11 @@ describe('Text Borders', () => {
     addElement('click');
     t.setTouchable();
     expect(callback.mock.calls.length).toBe(0);
-    figure.mock.touchDown([-2, -2]);
-    figure.mock.touchUp();
-    expect(callback.mock.calls.length).toBe(0);
+    // figure.mock.touchDown([-2, -2]);
+    // figure.mock.touchUp();
+    // expect(callback.mock.calls.length).toBe(0);
 
-    figure.mock.touchDown([-2 + 0.05, -2 - l]);
+    figure.mock.touchElement(t, [-2 + 0.05, -2 - l]);
     figure.mock.touchUp();
     expect(callback.mock.calls.length).toBe(1);
   });
