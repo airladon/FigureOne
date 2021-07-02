@@ -757,10 +757,10 @@ class TextObjectBase extends DrawingObject {
     //   tma[12] / p[3], tma[13] / p[3], tma[15] / p[3],
     // ];
 
-    // Use this to fully transform text, but always keep scale positive
+    // Use this to fully transform text
     const tm = [
-      Math.abs(tma[0] / p[3]), tma[1] / p[3], tma[3] / p[3],
-      tma[4] / p[3], Math.abs(tma[5] / p[3]), tma[7] / p[3],
+      tma[0] / p[3], tma[1] / p[3], tma[3] / p[3],
+      tma[4] / p[3], tma[5] / p[3], tma[7] / p[3],
       tma[12] / p[3], tma[13] / p[3], tma[15] / p[3],
     ];
 

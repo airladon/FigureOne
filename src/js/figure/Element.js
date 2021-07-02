@@ -1661,7 +1661,12 @@ class FigureElement {
     //   this.notifications.publish('beforeSetTransform', [transform]);
     //   this.transform = transform;
     // }
-    this.transform = transform;
+    this.notifications.publish('beforeSetTransform', [transform]);
+    if (!this.cancelSetTransform) {
+      this.transform = transform;
+    } else {
+      this.cancelSetTransform = false;
+    }
     // if (this.simple === false) {
     //   this.updateDrawTransforms(this.parentTransform, this.lastScene, false);
     // }
@@ -1737,9 +1742,10 @@ class FigureElement {
         this.stopMovingFreely('complete');
       }
 
-      this.updateTransformWithMovement(next.value, this.transform);
-      // this.setTransform(t);
-      this.transformSet();
+      const t = this.transform._dup();
+      this.updateTransformWithMovement(next.value, t);
+      this.setTransform(t);
+      // this.transformSet();
     }
   }
 
@@ -2032,7 +2038,9 @@ class FigureElement {
     return `${this.parent.getPath()}.${this.name}`;
   }
 
-  getMovement(transform: Transform) {
+  getMovement(
+    transform: Transform,
+  ) {
     const { type } = this.move;
     let movement;
     if (type === 'scale' || type === 'scaleX') {
@@ -2054,7 +2062,10 @@ class FigureElement {
     return movement;
   }
 
-  updateTransformWithMovement(valueIn: number | Point, transform: Transform) {
+  updateTransformWithMovement(
+    valueIn: number | Point,
+    transform: Transform,
+  ) {
     const { type } = this.move;
     let value = valueIn;
     if (this.move.bounds != null) {
@@ -2114,12 +2125,15 @@ class FigureElement {
     }
   }
 
-  moved(value: Point | number): void {
+  moved(
+    value: Point | number,
+  ): void {
     const previousValue = this.getMovement(this.transform);
     this.calcVelocity(previousValue, value);
-    this.updateTransformWithMovement(value, this.transform);
-    this.transformSet();
-    // this.setTransform(t);
+    const t = this.transform._dup();
+    this.updateTransformWithMovement(value, t);
+    // this.transformSet();
+    this.setTransform(t);
     // let tBounds;
     // if (this.move.bounds != null && this.move.bounds !== 'none') {  // $FlowFixMe
     //   tBounds = this.move.bounds.getTranslation();
@@ -2166,7 +2180,10 @@ class FigureElement {
     this.state.movement.previousTime = null;
   }
 
-  calcVelocity(prevValue: number | Point, nextValue: number | Point): void {
+  calcVelocity(
+    prevValue: number | Point,
+    nextValue: number | Point,
+  ): void {
     const currentTime = this.timeKeeper.now() / 1000;
     if (this.state.movement.previousTime == null) {
       this.state.movement.previousTime = currentTime;
@@ -2253,8 +2270,10 @@ class FigureElement {
     if (how === 'complete' && wasMovingFreely) {
       const result = this.getMovingFreelyEnd();
       // this.setTransform(result.transform);
-      this.updateTransformWithMovement(result.value, this.transform);
-      this.transformSet();
+      const t = this.transform._dup();
+      this.updateTransformWithMovement(result.value, t);
+      // this.transformSet();
+      this.setTransform(t);
     }
 
     this.state.isMovingFreely = false;
@@ -3140,7 +3159,7 @@ class FigureElement {
   */
   glToPlane(
     glPoint: TypeParsablePoint,
-    toSpace: 'figure' | 'local' | 'draw',
+    toSpace: 'figure' | 'local' | 'draw' = 'local',
     plane: TypeParsablePlane = this.move.plane,
   ) {
     const gl = getPoint(glPoint);
@@ -3904,9 +3923,9 @@ class FigureElement {
     this.uniqueColor = color == null ? null : color.slice();
   }
 
-  isUniqueColor(color: TypeColor) {
+  getUniqueColorElement(color: TypeColor) {
     if (this.isTouchable === false) {
-      return false;
+      return null;
     }
     if (
       this.uniqueColor == null
@@ -3915,9 +3934,9 @@ class FigureElement {
       || this.uniqueColor[2] !== color[2]
       || this.uniqueColor[3] !== color[3]
     ) {
-      return false;
+      return null;
     }
-    return true;
+    return this;
   }
 }
 
@@ -4292,7 +4311,11 @@ class FigureElementPrimitive extends FigureElement {
       this.lastDrawOpacity = colorToUse[3];
       // const transform = this.getTransform()._dup();
       let transform = this.getTransform();
-      if (targetTexture && transform.s() != null && this.touchScale != null) {
+      if (
+        targetTexture
+        && transform.hasComponent('s')
+        && this.touchScale != null
+      ) {
         transform = transform._dup();
         transform.updateScale(transform.s().mul(this.touchScale));
       }
@@ -5614,13 +5637,14 @@ class FigureElementCollection extends FigureElement {
   }
 
   getUniqueColorElement(color: null | TypeColor) {
-    if (super.isUniqueColor(color)) {
+    if (super.getUniqueColorElement(color)) {
       return this;
     }
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      if (element.isUniqueColor(color)) {
-        return element;
+      const e = element.getUniqueColorElement(color);
+      if (e != null) {
+        return e;
       }
     }
     return null;

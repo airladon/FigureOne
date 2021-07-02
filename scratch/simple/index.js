@@ -1,19 +1,44 @@
 const { sphere, cone, rod } = Fig.tools.g2;
 
 const figure = new Fig.Figure({
-  scene: { camera: { position: [0, 0, -2] } },
+  // scene: { camera: { position: [0, 0, 2] } },
 });
 
-figure.add({
-  make: 'polygon',
+const a = figure.add({
+  make: 'collections.angle',
   color: [1, 0, 0, 0.7],
+  position: [0.5, 0.5],
+  curve: {
+    radius: 0.3,
+    width: 0.05,
+  },
+  corner: {
+    width: 0.05,
+    length: 0.4,
+  },
+  angle: Math.PI / 4,
+  label: {
+    text: 'b',
+    location: 'top',
+    orientation: 'baseAway',
+    offset: 0.05,
+  },
 });
 
-figure.add({
-  make: 'polygon',
-  color: [0, 1, 0, 1],
-  radius: 0.5,
-});
+// a.setMovable({ startArm: 'rotation', width: 0.1 });
+a.setMovable({ endArm: 'rotation', width: 0.1 });
+// figure.elements.elements.primitive_000000000.elements.label.setPosition([0, 0, 0]);
+// figure.elements.elements.primitive_000000000.elements.label.setRotation(0);
+
+// const m = figure.add({
+//   make: 'text',
+//   text: 'M',
+// });
+// figure.add({
+//   make: 'polygon',
+//   color: [0, 1, 0, 1],
+//   radius: 0.5,
+// });
 
 // const figure = new Fig.Figure({
 //   scene: {

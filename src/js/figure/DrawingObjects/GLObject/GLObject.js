@@ -603,6 +603,8 @@ class GLObject extends DrawingObject {
     // gl.enable(gl.CULL_FACE);
     if (scene.style !== '2D') {
       gl.enable(gl.DEPTH_TEST);
+    } else {
+      gl.disable(gl.DEPTH_TEST);
     }
 
     Object.keys(this.buffers).forEach((bufferName) => {

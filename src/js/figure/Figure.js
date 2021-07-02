@@ -1860,13 +1860,10 @@ class Figure {
     this.isTouchDown = true;
 
     const element = this.getSelectionFromGL(glPoint);
-    // if (element != null) {
-    //   console.log(element.name)
-    // }
-    // console.log(element)
     if (element == null) {
       return false;
     }
+    // console.log(element)
     this.selectElement(element, glPoint, autoEvent);
     // element.click(glPoint);
     // if (this.recorder.state === 'recording') {
@@ -2005,13 +2002,27 @@ class Figure {
       }
     }
     this.flushMoveBuffer();
-    if (
-      this.beingMovedElement != null
-      && this.beingMovedElement.state.isBeingMoved
-    ) {
-      this.beingMovedElement.stopBeingMoved();
-      this.beingMovedElement.startMovingFreely();
+    if (this.beingMovedElement != null) {
+      let elementToMove;
+      if (this.beingMovedElement.move.element == null) {
+        elementToMove = this.beingMovedElement;
+      } else if (typeof this.beingMovedElement.move.element === 'string') {
+        elementToMove = this.getElement(this.beingMovedElement.move.element);
+      } else {
+        elementToMove = this.beingMovedElement.move.element;
+      }
+      if (elementToMove.state.isBeingMoved) {
+        elementToMove.stopBeingMoved();
+        elementToMove.startMovingFreely();
+      }
     }
+    // if (
+    //   this.beingMovedElement != null
+    //   && this.beingMovedElement.state.isBeingMoved
+    // ) {
+    //   this.beingMovedElement.stopBeingMoved();
+    //   this.beingMovedElement.startMovingFreely();
+    // }
     this.originalScalePoint = null;
     this.isTouchDown = false;
     this.beingMovedElement = null;
@@ -2061,8 +2072,8 @@ class Figure {
     previousGLPoint: Point,
     currentGLPoint: Point,
   ) {
-    const previousLocalPoint = element.glToPlane(previousGLPoint);
-    const currentLocalPoint = element.glToPlane(currentGLPoint);
+    const previousLocalPoint = element.glToPlane(previousGLPoint, 'local');
+    const currentLocalPoint = element.glToPlane(currentGLPoint, 'local');
 
     const center = element.getPosition('local');
     const prev = previousLocalPoint.sub(center);
@@ -2232,6 +2243,7 @@ class Figure {
     }
 
     const element = this.beingMovedElement;
+    const moveType = element.move.type;
 
     let elementToMove;
     if (element.move.element == null) {
@@ -2244,24 +2256,25 @@ class Figure {
     if (elementToMove.state.isBeingMoved === false) {
       elementToMove.startBeingMoved();
     }
+    elementToMove.move.type = moveType;
 
-    if (element.move.type === 'rotation') {
+    if (moveType === 'rotation') {
       this.rotateElement( // $FlowFixMe
         elementToMove, previousGLPoint, currentGLPoint,
       );
-    } else if (element.move.type === 'scale') {
+    } else if (moveType === 'scale') {
       this.scaleElement( // $FlowFixMe
         elementToMove, previousGLPoint, currentGLPoint,
       );
-    } else if (element.move.type === 'scaleX') {
+    } else if (moveType === 'scaleX') {
       this.scaleElement( // $FlowFixMe
         elementToMove, previousGLPoint, currentGLPoint, 'x',
       );
-    } else if (element.move.type === 'scaleY') {
+    } else if (moveType === 'scaleY') {
       this.scaleElement( // $FlowFixMe
         elementToMove, previousGLPoint, currentGLPoint, 'y',
       );
-    } else if (element.move.type === 'scaleZ') {
+    } else if (moveType === 'scaleZ') {
       this.scaleElement( // $FlowFixMe
         elementToMove, previousGLPoint, currentGLPoint, 'z',
       );
@@ -2610,7 +2623,7 @@ class Figure {
   }
 
   touchMove(figurePosition: TypeParsablePoint, autoEvent: boolean = false) {
-    const p = getPoint(figurePosition);
+    const p = getPoint(figurePosition).transformBy(this.spaceTransformMatrix('figure', 'gl'));
     this.touchMoveHandler(this.mockPreviousTouchPoint, p, autoEvent);
     this.mockPreviousTouchPoint = p;
   }

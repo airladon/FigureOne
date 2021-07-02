@@ -369,7 +369,8 @@ class Transform {
       } else if (type === 's' && (x !== 1 || y !== 1 || z !== 1)) {
         m = m3.mul(m, m3.scaleMatrix(x, y, z));
       } else if (type === 'r' && x !== 0) {
-        m = m3.mul(m, m3.rotationMatrixXYZ(0, 0, x));
+        // m = m3.mul(m, m3.rotationMatrixXYZ(0, 0, x));
+        m = m3.mul(m, m3.rotationMatrixZ(x));
       } else if (type === 'rc' && (x !== 0 || y !== 0 || z !== 0)) {
         m = m3.mul(m, m3.rotationMatrixXYZ(x, y, z));
       } else if (type === 'rd' && (x !== 1 || y !== 0 || z !== 0)) {
