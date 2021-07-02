@@ -1659,7 +1659,7 @@ export type OBJ_Grid = {
  * const s = [0.5, 0.8, 0.4, 0.6, 0.8, 0.6, 0.5, 0.8, 0.6];
  * const transforms = [];
  * for (let i = 0; i < 9; i += 1) {
- *   transforms.push(new Fig.Transform().scale(s[i], s[i]).rotate(r[i])x[i], y[i]));
+ *   transforms.push(new Fig.Transform().scale(s[i], s[i]).rotate(r[i]).translate(x[i], y[i]));
  * }
  *
  * // Create arrow and copy to transforms
@@ -3320,6 +3320,7 @@ export default class FigurePrimitives {
       element.custom.options = o;
       // Prioritize Num over Step. Only define Num from Step if Num is undefined.
       const bounds = getRect(o.bounds);
+
       let {
         xStep, xNum, yStep, yNum,
       } = o;

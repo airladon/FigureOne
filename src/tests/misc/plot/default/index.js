@@ -1,6 +1,15 @@
 /* eslint-disable no-unused-vars */
 /* global Fig __frames */
-const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1] });
+const figure = new Fig.Figure({
+  // limits: [-2, -1.5, 4, 3],
+  scene: {
+    left: -2,
+    bottom: -1.5,
+    right: 2,
+    top: 1.5,
+  },
+  color: [1, 0, 0, 1],
+});
 
 const pow = (power = 2, stop = 10, step = 0.05) => {
   const xValues = Fig.tools.math.range(0, stop, step);

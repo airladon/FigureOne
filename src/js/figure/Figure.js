@@ -714,7 +714,10 @@ class Figure {
       return;
     }
 
-    this.defaultLineWidth = this.limits.width / 40;
+    const figureWidth = this.scene.right - this.scene.left;
+    const pixelWidth = this.webglLow.gl.canvas.width;
+    this.defaultLineWidth = Math.max(figureWidth / pixelWidth, figureWidth / 800);
+    // this.defaultLineWidth = this.limits.width / 100;
     // const zero = this.transformPoint([0, 0], 'gl', 'figure');
     // const one = this.transformPoint([1, 0], 'gl', 'figure');
     // this.defaultLineWidth = Math.abs(one.distance(zero) / 10);
@@ -726,7 +729,7 @@ class Figure {
       return;
     }
 
-    this.defaultLength = this.limits.width / 4;
+    this.defaultLength = (this.scene.right - this.scene.left) / 4;
   }
 
   scrollEvent() {
