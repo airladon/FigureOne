@@ -609,7 +609,7 @@ export type OBJ_Generic = {
  *
  * By default, the border of the polyline is the line itself (`border` =
  * `'line'`). The border can also just be the points on the positive side of
- * the line, or the negative side of the line. This is useful for caturing
+ * the line, or the negative side of the line. This is useful for capturing
  * the hole shape of a closed polyline within a border. The border can also
  * be the encompassing rectangle of the polyline (`border` = `'rect'`) or
  * defined as a custom set of points.

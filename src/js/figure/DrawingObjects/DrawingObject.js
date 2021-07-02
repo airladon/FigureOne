@@ -72,7 +72,6 @@ class DrawingObject {
   textBorder: Array<Array<Point>>; // Border vertices
   textBorderBuffer: Array<Array<Point>>;
   // touchBorder: Array<Array<Point>>;
-  // hole: Array<Array<Point>>;  // Border of any holes inside of main border
   // +change: (any, any, any) => void;
   // onLoad: Function | null;   // Only used for drawing objects with asynchronous
   //                            loading (like textures)
@@ -202,7 +201,6 @@ class DrawingObject {
     drawingPrimitive: any,
     // border: Array<Array<Point>> | 'points' | 'rect',
     // touchBorder: Array<Array<Point>> | 'border' | 'rect' | 'none',
-    // holes: Array<Array<Point>> | 'none',
     copy: Array<CPY_Step> = [],
   ) {
   }
