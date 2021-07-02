@@ -715,7 +715,7 @@ class Figure {
     }
 
     const figureWidth = this.scene.right - this.scene.left;
-    const pixelWidth = this.webglLow.gl.canvas.width;
+    const pixelWidth = this.webglLow.gl != null ? this.webglLow.gl.canvas.width : 100;
     this.defaultLineWidth = Math.max(figureWidth / pixelWidth, figureWidth / 800);
     // this.defaultLineWidth = this.limits.width / 100;
     // const zero = this.transformPoint([0, 0], 'gl', 'figure');
