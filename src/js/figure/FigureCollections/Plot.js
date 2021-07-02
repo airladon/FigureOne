@@ -532,7 +532,7 @@ class CollectionsPlot extends FigureElementCollection {
     // }
 
     if (this.__frame != null && this.frameSpace != null) {
-      this.__frame.surround(this, this.frameSpace);
+      this.__frame.surround(this, this.frameSpace, true);
     }
   }
 

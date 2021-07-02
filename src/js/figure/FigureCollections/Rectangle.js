@@ -499,26 +499,34 @@ class CollectionsRectangle extends FigureElementCollection {
     this.add('label', label);
   }
 
-  getSurround(element: FigureElement | Array<FigureElement>, space: TypeParsableBuffer = 0) {
+  getSurround(
+    element: FigureElement | Array<FigureElement>, 
+    space: TypeParsableBuffer = 0,
+    isInLocalSpace: boolean = false,
+  ) {
     let bounds;
+    let coordSpace = 'figure';
+    if (isInLocalSpace) {
+      coordSpace = 'local';
+    }
     if (Array.isArray(element)) {
       const borders: Array<Array<Point>> = [];
       element.forEach((e) => {
-        const b = e.getBorder('figure');
+        const b = e.getBorder(coordSpace);
         borders.push(...b);
       });
       bounds = getBoundingRect(borders, space);
     } else {
-      bounds = getBoundingRect(element.getBorder('figure'), space);
+      bounds = getBoundingRect(element.getBorder(coordSpace), space);
     }
-    const matrix = this.spaceTransformMatrix('figure', 'draw');
+    const matrix = this.spaceTransformMatrix(coordSpace, 'draw');
     const scale = matrix[0];
     const newWidth = bounds.width * scale;
     const newHeight = bounds.height * scale;
     const center = new Point(
       bounds.left + bounds.width / 2,
       bounds.bottom + bounds.height / 2,
-    ).transformBy(this.spaceTransformMatrix('figure', 'local'));
+    ).transformBy(this.spaceTransformMatrix(coordSpace, 'local'));
     const position = center;
     if (this.xAlign === 'left') {
       position.x -= newWidth / 2;
@@ -540,8 +548,12 @@ class CollectionsRectangle extends FigureElementCollection {
   /**
    * Surround element of elements with the rectangle.
    */
-  surround(element: FigureElement | Array<FigureElement>, space: TypeParsableBuffer = 0) {
-    const [position, width, height] = this.getSurround(element, space);
+  surround(
+    element: FigureElement | Array<FigureElement>,
+    space: TypeParsableBuffer = 0,
+    isInLocalSpace: boolean = false,
+  ) {
+    const [position, width, height] = this.getSurround(element, space, isInLocalSpace);
     this.setSurround(position, width, height);
   }
 

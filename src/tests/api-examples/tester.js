@@ -28,7 +28,7 @@ async function frame(delta) {
 
 function tester(snapshots, path, initialization = '', threshold = 0, afterLoad = '') {
   const examples = getExamples(path);
-  console.log(examples['figure.FigureCollections.Plot.js.CollectionsPlot.97846bc1'])
+  // console.log(examples['figure.FigureCollections.Plot.js.CollectionsPlot.97846bc1'])
   const start = `
 // Replace Math.random with something deterministic
 // ********************************

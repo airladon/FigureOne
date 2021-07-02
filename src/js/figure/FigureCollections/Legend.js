@@ -477,7 +477,7 @@ class CollectionsPlotLegend extends FigureElementCollection {
       oFrame.line.color = this.defaultColor.slice();
     }
     const frame = this.collections.rectangle(oFrame);
-    frame.surround(this, oFrame.space);
+    frame.surround(this, oFrame.space, true);
     this.add('frame', frame);
   }
 
