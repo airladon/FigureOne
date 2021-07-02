@@ -158,7 +158,6 @@ describe('Polyline', () => {
       expect(round(p.getBorder('draw', 'border'), 2)).toEqual([border]);
       expect(round(p.getBorder('draw', 'touchBorder'), 2)).toEqual([border]);
       expect(round(p.drawBorderBuffer, 2)).toEqual([border]);
-      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Fill Center', () => {
       addElement('fillCenter');
@@ -166,7 +165,6 @@ describe('Polyline', () => {
       expect(round(p.getBorder('draw', 'border'), 2)).toEqual([fillCenterBorder]);
       expect(round(p.getBorder('draw', 'touchBorder'), 2)).toEqual([fillCenterBorder]);
       expect(round(p.drawBorderBuffer, 2)).toEqual([fillCenterBorder]);
-      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Buffer', () => {
       addElement('buffer');
@@ -174,7 +172,6 @@ describe('Polyline', () => {
       expect(round(p.getBorder('draw', 'border'), 2)).toEqual([rect]);
       expect(round(p.getBorder('draw', 'touchBorder'), 2)).toEqual([buffer]);
       expect(round(p.drawBorderBuffer, 2)).toEqual([buffer]);
-      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Update', () => {
       addElement('default');
@@ -204,7 +201,6 @@ describe('Polyline', () => {
       expect(round(p.getBorder('draw', 'border'), 2)).toEqual([lineBorder]);
       // expect(round(p.getBorder('draw', 'touchBorder'), 2)).toEqual([lineBuffer]);
       // expect(round(p.drawBorderBuffer, 2)).toEqual([lineBuffer]);
-      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Update', () => {
       addElement('buffer');

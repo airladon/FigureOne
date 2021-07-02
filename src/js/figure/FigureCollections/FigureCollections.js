@@ -95,7 +95,6 @@ export default class FigureCollections {
       transform: new Transform('collection').scale(1, 1).rotate(0).translate(0, 0),
       border: 'children',
       touchBorder: 'children',
-      holeBorder: 'children',
       color: this.primitives.defaultColor,
       parent: null,
       limits: this.limits,

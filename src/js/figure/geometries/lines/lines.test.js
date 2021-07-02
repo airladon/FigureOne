@@ -64,7 +64,7 @@ describe('Tools Lines', () => {
     });
     describe('Negative', () => {
       test('Unclosed', () => {
-        const [tris, border, , hole] = makePolyLine(points, 0.1, false, 'negative', 'none');
+        const [tris, border] = makePolyLine(points, 0.1, false, 'negative', 'none');
         const line1 = getBoundingRect(tris.slice(0, 6));
         const line2 = getBoundingRect(tris.slice(6, 12));
         const line3 = getBoundingRect(tris.slice(12));
@@ -94,7 +94,6 @@ describe('Tools Lines', () => {
           new Point(1, 0),
           new Point(0, 0),
         ]);
-        expect(hole).toEqual([[]]);
       });
       test('closed', () => {
         // const out = makePolyLine(points, 0.1, true, 'outside', 'none');

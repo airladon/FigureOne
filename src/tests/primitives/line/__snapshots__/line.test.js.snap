@@ -39,9 +39,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -424,9 +421,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -794,9 +788,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -1475,9 +1466,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -1845,9 +1833,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -2706,9 +2691,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -3076,9 +3058,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -5545,9 +5524,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -5915,9 +5891,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -6896,9 +6869,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -7266,9 +7236,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -9735,9 +9702,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -10105,9 +10069,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -10906,9 +10867,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -11276,9 +11234,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -11897,9 +11852,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -12267,9 +12219,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -12679,9 +12628,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -13116,9 +13062,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -13501,9 +13444,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -13953,9 +13893,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -14338,9 +14275,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -14708,9 +14642,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -15093,9 +15024,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -15463,9 +15391,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -15848,9 +15773,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -16218,9 +16140,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -16603,9 +16522,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -16976,9 +16892,6 @@ FigureElementPrimitive {
       ],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -17553,9 +17466,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -17926,9 +17836,6 @@ FigureElementPrimitive {
       ],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -18503,9 +18410,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -18877,9 +18781,6 @@ FigureElementPrimitive {
       ],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -19454,9 +19355,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -19827,9 +19725,6 @@ FigureElementPrimitive {
       ],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -20404,9 +20299,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -20777,9 +20669,6 @@ FigureElementPrimitive {
       ],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -21354,9 +21243,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -21724,9 +21610,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.3,
       "lineNum": 2,
       "linePrimitives": false,
@@ -22109,9 +21992,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -22479,9 +22359,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.3,
       "lineNum": 2,
       "linePrimitives": false,
@@ -22864,9 +22741,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -23234,9 +23108,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -23619,9 +23490,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -24006,9 +23874,6 @@ FigureElementPrimitive {
         ],
       ],
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -24391,9 +24256,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -24761,9 +24623,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -25146,9 +25005,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -25533,9 +25389,6 @@ FigureElementPrimitive {
           0.2,
         ],
       ],
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -25918,9 +25771,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -26288,9 +26138,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.2,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -26673,9 +26520,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -27043,9 +26887,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 5,
       "linePrimitives": true,
@@ -27676,9 +27517,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -28046,9 +27884,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 5,
       "linePrimitives": true,
@@ -28463,9 +28298,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -28833,9 +28665,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -29218,9 +29047,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -29588,9 +29414,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -29973,9 +29796,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -30343,9 +30163,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -30747,9 +30564,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -31138,9 +30952,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -31564,9 +31375,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -31975,9 +31783,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -32360,9 +32165,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -32730,9 +32532,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -33142,9 +32941,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -33539,9 +33335,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -33924,9 +33717,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -34294,9 +34084,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -34679,9 +34466,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -35049,9 +34833,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -35434,9 +35215,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -35804,9 +35582,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -36189,9 +35964,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -36559,9 +36331,6 @@ FigureElementPrimitive {
       "dash": Array [],
       "drawBorder": "line",
       "drawBorderBuffer": 0.05,
-      "holeBorder": Array [
-        Array [],
-      ],
       "length": 0.5,
       "lineNum": 2,
       "linePrimitives": false,
@@ -36944,9 +36713,6 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,

@@ -140,10 +140,6 @@ export type OBJ_LineStyleSimple_Defined = {
  * of the border. Use `number` for the bounding rectangle of the border plus
  * some buffer. Use `Array<Array<TypeParsablePoint>` for a custom touch
  * border (`'border'`).
- * @property {TypeParsableBorder | 'children'} [holeBorder] Hole
- * border of the collection. Use `'children'` to use the children element hole
- * borders, otherwise use `Array<Array<TypeParsablePoint>` for a customizable
- * border.
  *
  * @example
  * figure.add(
@@ -205,7 +201,6 @@ export type OBJ_Collection = {
   parent?: FigureElement | null,
   border?: TypeParsableBorder | 'children' | 'rect' | number,
   touchBorder?: TypeParsableBorder | 'border' | number | 'rect',
-  holeBorder?: TypeParsableBorder | 'children',
 };
 
 /**
@@ -471,8 +466,6 @@ export type OBJ_Morph = {
  * - `Array<Array<TypeParsablePoint>>`: a custom border of several contiguous
  *    portions
  *
- * A `holeBorder` can be used to override the `touchBorder` with areas where
- * touch is disabled.
  *
  * @property {Array<TypeParsablePoint>} points
  * @property {'triangles' | 'strip' | 'fan' | 'lines'} [drawType]
@@ -488,8 +481,6 @@ export type OBJ_Morph = {
  * keeping shape within limits
  * @property {TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw'} [touchBorder]
  * border used for determining shape was touched
- * @property {TypeParsableBorder} [holeBorder] areas where
- * touching is disabled
  * @property {TypeParsablePoint} [position] will overwrite first translation
  * transform of `transform` chain
  * @property {Transform} [transform]
@@ -555,7 +546,6 @@ export type OBJ_Generic = {
   drawBorderBuffer?: TypeParsableBorder,
   border?: TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number,
   touchBorder?: TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw',
-  holeBorder?: TypeParsableBorder,
   position?: TypeParsablePoint,
   transform?: TypeParsableTransform,
   pulse?: number,
@@ -2669,7 +2659,6 @@ export default class FigurePrimitives {
       drawBorderBuffer?: TypeParsableBorder,
       border?: TypeParsableBorder | 'draw' | 'buffer' | 'rect' | number,
       touchBorder?: TypeParsableBorder | 'draw' | 'border' | 'rect' | number | 'buffer',
-      holeBorder?: TypeParsableBorder,
       copy?: Array<CPY_Step>,
       drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
     }) {
@@ -2693,9 +2682,6 @@ export default class FigurePrimitives {
       }
       if (o.touchBorder != null) { // $FlowFixMe
         element.touchBorder = getBorder(o.touchBorder);
-      }
-      if (o.holeBorder != null) { // $FlowFixMe
-        element.holeBorder = getBorder(o.holeBorder);
       }
       element.drawingObject.change(o);
     };
@@ -2726,7 +2712,6 @@ export default class FigurePrimitives {
       linePrimitives: false,
       lineNum: 1,
       drawBorder: 'negative',
-      holeBorder: [[]],
       drawBorderBuffer: 0,
       simple: false,
     };
@@ -2734,27 +2719,26 @@ export default class FigurePrimitives {
     if (o.linePrimitives === false) {
       o.lineNum = 2;
     }
-    parsePoints(o, ['points', 'border', 'holeBorder', 'touchBorder']);
+    parsePoints(o, ['points', 'border', 'touchBorder']);
 
     let points;
     let drawBorder;
-    let holeBorder;
     let drawBorderBuffer;
     if (o.simple) {
-      [points, drawBorder, drawBorderBuffer, holeBorder] = makeFastPolyLine(
+      [points, drawBorder, drawBorderBuffer] = makeFastPolyLine(
         o.points, o.width, o.close,
       );
     } else if (o.cornersOnly) {
-      [points, drawBorder, drawBorderBuffer, holeBorder] = makePolyLineCorners(
+      [points, drawBorder, drawBorderBuffer] = makePolyLineCorners(
         o.points, o.width, o.close, o.cornerLength, o.widthIs, o.cornerStyle,
         o.cornerSize, o.cornerSides, o.minAutoCornerAngle, o.linePrimitives,
         o.lineNum, o.drawBorderBuffer,
       );
     } else {
-      [points, drawBorder, drawBorderBuffer, holeBorder] = makePolyLine(
+      [points, drawBorder, drawBorderBuffer] = makePolyLine(
         o.points, o.width, o.close, o.widthIs, o.cornerStyle, o.cornerSize,
         o.cornerSides, o.minAutoCornerAngle, o.dash, o.linePrimitives,
-        o.lineNum, o.drawBorder, o.drawBorderBuffer, o.hole, o.arrow,
+        o.lineNum, o.drawBorder, o.drawBorderBuffer, o.arrow,
       );
     }
     if (Array.isArray(o.drawBorderBuffer)) {
@@ -2765,9 +2749,6 @@ export default class FigurePrimitives {
     }
     if (drawBorderBuffer == null) {
       drawBorderBuffer = drawBorder;
-    }
-    if (o.holeBorder == null) {
-      o.holeBorder = holeBorder;
     }
     let drawType = 'triangles';
     if (o.linePrimitives) {
@@ -2789,7 +2770,6 @@ export default class FigurePrimitives {
       transform: new Transform('polyline').scale(1).rotate(0).translate(),
       border: 'draw',
       touchBorder: 'border',   // $FlowFixMe
-      holeBorder: [[]],
     }, ...optionsIn);
 
     element.custom.options = {
@@ -2808,7 +2788,6 @@ export default class FigurePrimitives {
       linePrimitives: false,
       lineNum: 1,
       drawBorder: 'line',
-      holeBorder: [[]],
       drawBorderBuffer: 0,
     };
     element.custom.updatePoints = (updateOptions: OBJ_Polyline) => {
@@ -2902,7 +2881,6 @@ export default class FigurePrimitives {
       transform: new Transform(name).scale(1).rotate(0).translate(),
       border: 'draw',
       touchBorder: 'border',   // $FlowFixMe
-      holeBorder: [[]],
     }, optionsIn);
 
     element.custom.options = defaultOptions;
@@ -3282,7 +3260,6 @@ export default class FigurePrimitives {
       transform: new Transform('grid').scale(1).rotate(0).translate(),
       border: 'draw',
       touchBorder: 'border', // $FlowFixMe
-      holeBorder: [[]],
     }, ...optionsIn);
 
     element.custom.options = {
@@ -3473,7 +3450,6 @@ export default class FigurePrimitives {
         points: updatedPoints,
         border: updatedBorder,
         touchBorder: updatedTouchBorder,
-        holeBorder: o.holeBorder,
       }));
     };
     // element.drawingObject.getPointCountForLength = (drawLength: number = this.maxLength) => {
@@ -3627,30 +3603,29 @@ export default class FigurePrimitives {
       }
     }; // $FlowFixMe
     element.getBorderPointsSuper = element.getBorderPoints; // $FlowFixMe
-    element.getBorderPoints = (border: 'border' | 'touchBorder' | 'holeBorder' = 'border') => {
+    element.getBorderPoints = (border: 'border' | 'touchBorder' = 'border') => {
       if (border === 'border') { // $FlowFixMe
         return element.getBorderPointsSuper(border);
       }
-      if (border === 'touchBorder') {
-        if (element.touchBorder === 'draw') {
-          return element.drawBorder;
-        }
-        if (element.touchBorder === 'buffer') {
-          return element.drawBorderBuffer;
-        }
-        if (element.touchBorder === 'border') {
-          return element.getBorderPoints('border');
-        }
-        if (element.touchBorder === 'rect') {
-          return [getBoundingBorder(element.drawBorderBuffer)];
-        }
-        if (isBuffer(element.touchBorder)) {
-          const b = element.drawBorderBuffer; // $FlowFixMe
-          return [getBoundingBorder(b, element.touchBorder)];
-        }
-        return element.touchBorder;
+      // if (border === 'touchBorder') {
+      if (element.touchBorder === 'draw') {
+        return element.drawBorder;
       }
-      return element.holeBorder;
+      if (element.touchBorder === 'buffer') {
+        return element.drawBorderBuffer;
+      }
+      if (element.touchBorder === 'border') {
+        return element.getBorderPoints('border');
+      }
+      if (element.touchBorder === 'rect') {
+        return [getBoundingBorder(element.drawBorderBuffer)];
+      }
+      if (isBuffer(element.touchBorder)) {
+        const b = element.drawBorderBuffer; // $FlowFixMe
+        return [getBoundingBorder(b, element.touchBorder)];
+      }
+      return element.touchBorder;
+      // }
     };
     element.custom.setText = (o: string | OBJ_TextDefinition, index: number = 0) => {
       element.drawingObject.setText(o, index);

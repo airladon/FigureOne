@@ -63,8 +63,6 @@ import type { OBJ_TextDefinition } from '../FigurePrimitives/FigurePrimitives';
  * closed boundary or border of the element. An element may have multiple
  * closed borders. A border defines where a shape can be touched, or how it
  * bounces of figure boundaries
- * @property {Array<Array<Point>>} holeBorder areas where a shape cannot be
- * touched
  * @see {@link FigureElementPrimitive}
  */
 class DrawingObject {

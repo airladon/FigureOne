@@ -226,7 +226,6 @@ describe('Polyline', () => {
       expect(round(td.points, 3)).toEqual(tri);
       expect(round(t.getBorder('draw', 'border'), 3)).toEqual(triBorder);
       expect(round(t.getBorder('draw', 'touchBorder'), 3)).toEqual(triBorder);
-      expect(t.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Border rect', () => {
       addElement('borderRect');
@@ -237,7 +236,6 @@ describe('Polyline', () => {
       expect(round(t.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [0, 0], [2, 0], [2, 1], [0, 1],
       ])]);
-      expect(t.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Touch border rect', () => {
       addElement('touchBorderRect');
@@ -246,7 +244,6 @@ describe('Polyline', () => {
       expect(round(t.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [0, 0], [2, 0], [2, 1], [0, 1],
       ])]);
-      expect(t.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Touch border buffer', () => {
       addElement('touchBorderBuffer');
@@ -260,14 +257,12 @@ describe('Polyline', () => {
         [2.1, -0.1],
         [2.134, 0.045],
       ])]);
-      expect(t.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Update', () => {
       addElement('default');
       expect(round(td.points, 3)).toEqual(tri);
       expect(round(t.getBorder('draw', 'border'), 3)).toEqual(triBorder);
       expect(round(t.getBorder('draw', 'touchBorder'), 3)).toEqual(triBorder);
-      expect(t.getBorder('draw', 'holeBorder')).toEqual([[]]);
 
       t.custom.updatePoints({
         width: 3,
@@ -387,21 +382,18 @@ describe('Polyline', () => {
       expect(round(td.points, 3)).toEqual(mid);
       expect(round(t.getBorder('draw', 'border'), 3)).toEqual(midBorder);
       expect(round(t.getBorder('draw', 'touchBorder'), 3)).toEqual(midBorder);
-      expect(t.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Inside', () => {
       addElement('inside');
       expect(round(td.points, 3)).toEqual(inside);
       expect(round(t.getBorder('draw', 'border'), 3)).toEqual(insideBorder);
       expect(round(t.getBorder('draw', 'touchBorder'), 3)).toEqual(insideBorder);
-      expect(t.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Outside', () => {
       addElement('outside');
       expect(round(td.points, 3)).toEqual(outside);
       expect(round(t.getBorder('draw', 'border'), 3)).toEqual(outsideBorder);
       expect(round(t.getBorder('draw', 'touchBorder'), 3)).toEqual(outsideBorder);
-      expect(t.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Outside border rect', () => {
       addElement('outsideBorderRect');
@@ -412,7 +404,6 @@ describe('Polyline', () => {
       expect(round(t.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [-0.1, -0.1], [2.424, -0.1], [2.424, 1.162], [-0.1, 1.162],
       ])]);
-      expect(t.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Outside touch border rect', () => {
       addElement('outsideTouchBorderRect');
@@ -421,7 +412,6 @@ describe('Polyline', () => {
       expect(round(t.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [-0.1, -0.1], [2.424, -0.1], [2.424, 1.162], [-0.1, 1.162],
       ])]);
-      expect(t.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Outside touch border buffer', () => {
       addElement('outsideTouchBorderBuffer');
@@ -435,14 +425,12 @@ describe('Polyline', () => {
         [2.523, -0.2],
         [2.557, -0.055],
       ])]);
-      expect(t.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Update', () => {
       addElement('inside');
       expect(round(td.points, 3)).toEqual(inside);
       expect(round(t.getBorder('draw', 'border'), 3)).toEqual(insideBorder);
       expect(round(t.getBorder('draw', 'touchBorder'), 3)).toEqual(insideBorder);
-      expect(t.getBorder('draw', 'holeBorder')).toEqual([[]]);
       t.custom.updatePoints({
         width: 4,
         height: 2,

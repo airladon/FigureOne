@@ -207,11 +207,6 @@ class VertexGeneric extends GLObject {
   //   // } else {
   //   //   this.touchBorder = touchBorder;
   //   // }
-  //   // if (holeBorder === 'none') {
-  //   //   this.hole = [];
-  //   // } else {
-  //   //   this.hole = holeBorder;
-  //   // }
   // }
 }
 

@@ -527,9 +527,6 @@ FigureElementPrimitive {
   "frozenPulseTransforms": Array [],
   "getBorderPoints": [Function],
   "getBorderPointsSuper": [Function],
-  "holeBorder": Array [
-    Array [],
-  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,

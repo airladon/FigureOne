@@ -250,7 +250,6 @@ class CollectionsRectangle extends FigureElementCollection {
       color: collections.primitives.defaultColor,
       border: 'children',
       touchBorder: 'border',
-      holeBorder: [[]],
       corner: {
         radius: 0,
         sides: 1,
@@ -275,7 +274,6 @@ class CollectionsRectangle extends FigureElementCollection {
     this.yAlign = options.yAlign;
     this.border = options.border;
     this.touchBorder = options.touchBorder;
-    this.holeBorder = options.holeBorder;
     this.corner = options.corner;
     this.labelOffset = new Point(0, 0);
 

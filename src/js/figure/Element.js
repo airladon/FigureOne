@@ -3262,13 +3262,13 @@ class FigureElement {
 
   /* eslint-disable class-methods-use-this, no-unused-vars */
   getBorderPoints(
-    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+    border: 'border' | 'touchBorder' = 'border',
   ): TypeBorder {
     return [[]];
   }
   /* eslint-enable class-methods-use-this, no-unused-vars */
 
-  // A DrawingObject has borders, touchBorders and and holeBorders
+  // A DrawingObject has borders, and touchBorders
   //
   // A FigureElement's border is then the DrawingObject's border transformed by
   // the element's transform
@@ -3281,7 +3281,7 @@ class FigureElement {
   /* eslint-disable class-methods-use-this, no-unused-vars */
   getBorder(
     space: TypeSpace = 'local',
-    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+    border: 'border' | 'touchBorder' = 'border',
   ) {
     // if (this.name === 'c' && border === 'touchBorder') {
     //   debugger;
@@ -3309,7 +3309,7 @@ class FigureElement {
 
   getBoundingRect(
     space: TypeSpace = 'local',
-    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+    border: 'border' | 'touchBorder' = 'border',
   ) {
     const transformedBorder = this.getBorder(space, border);  // $FlowFixMe
     return getBoundingRect(transformedBorder);
@@ -3320,7 +3320,7 @@ class FigureElement {
   // ***************************************************************
   getRelativeBoundingRect(
     space: TypeSpace = 'local',
-    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+    border: 'border' | 'touchBorder' = 'border',
   ) {
     const rect = this.getBoundingRect(space, border);
     const position = this.getPosition(space);
@@ -3399,7 +3399,7 @@ class FigureElement {
     space: TypeSpace = 'local',
     xAlign: 'center' | 'left' | 'right' | 'location' | number = 'location',
     yAlign: 'middle' | 'top' | 'bottom' | 'location' | number = 'location',
-    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+    border: 'border' | 'touchBorder' = 'border',
   ) {
     const bounds = this.getBoundingRect(space, border);
     const p = this.getPosition(space);
@@ -3850,32 +3850,14 @@ class FigureElement {
     }
     const vertexLocation = glLocation.transformBy(this.spaceTransformMatrix('gl', 'draw'));
     const borders = this.getBorder('draw', 'touchBorder');
-    const holeBorders = this.getBorder('draw', 'holeBorder');
-    if (borders == null || holeBorders == null) {
+    if (borders == null) {
       return false;
     }
     for (let i = 0; i < borders.length; i += 1) {
       const border = borders[i];
       if (border.length > 2) {
         if (isPointInPolygon(vertexLocation, border)) {
-          let isTouched = true;
-          // $FlowFixMe
-          if (this.cannotTouchHole) {
-            for (let j = 0; j < holeBorders.length; j += 1) {
-              const holeBorder = holeBorders[j];
-              if (holeBorder.length > 2) {
-                if (Array.isArray(holeBorder) && holeBorder.length > 2) {
-                  if (isPointInPolygon(vertexLocation, holeBorder)) {
-                    isTouched = false;
-                    j = holeBorders.length;
-                  }
-                }
-              }
-            }
-          }
-          if (isTouched) {
-            return true;
-          }
+          return true;
         }
       }
     }
@@ -3974,7 +3956,6 @@ class FigureElementPrimitive extends FigureElement {
   setPointsFromDefinition: ?(() => void);
   border: TypeBorder | 'draw' | 'buffer' | 'rect' | number;
   touchBorder: TypeBorder | 'border' | number | 'rect' | 'draw' | 'buffer';
-  holeBorder: TypeBorder;
   drawBorder: TypeBorder;
   drawBorderBuffer: TypeBorder;
   // +pulse: (?(mixed) => void) => void;
@@ -4017,7 +3998,6 @@ class FigureElementPrimitive extends FigureElement {
     this.setPointsFromDefinition = null;
     this.border = 'draw';
     this.touchBorder = 'draw';
-    this.holeBorder = [[]];
   }
 
   _getStateProperties(options: { ignoreShown?: boolean }) {
@@ -4178,7 +4158,7 @@ class FigureElementPrimitive extends FigureElement {
   }
 
   getBorderPoints(
-    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+    border: 'border' | 'touchBorder' = 'border',
   ): TypeBorder {
     if (border === 'border') {
       if (this.border === 'draw') {
@@ -4197,27 +4177,24 @@ class FigureElementPrimitive extends FigureElement {
       return this.border;
     }
 
-    if (border === 'touchBorder') {
-      if (this.touchBorder === 'draw') {
-        return this.drawBorder;
-      }
-      if (this.touchBorder === 'buffer') {
-        return this.drawBorderBuffer;
-      }
-      if (this.touchBorder === 'border') {
-        return this.getBorderPoints('border');
-      }
-      if (this.touchBorder === 'rect') {
-        const b = this.getBorderPoints('border');
-        return [getBoundingBorder(b)];
-      }
-      if (isBuffer(this.touchBorder)) {
-        const b = this.getBorderPoints('border'); // $FlowFixMe
-        return [getBoundingBorder(b, this.touchBorder)];
-      } // $FlowFixMe
-      return this.touchBorder;
+    if (this.touchBorder === 'draw') {
+      return this.drawBorder;
     }
-    return this.holeBorder;
+    if (this.touchBorder === 'buffer') {
+      return this.drawBorderBuffer;
+    }
+    if (this.touchBorder === 'border') {
+      return this.getBorderPoints('border');
+    }
+    if (this.touchBorder === 'rect') {
+      const b = this.getBorderPoints('border');
+      return [getBoundingBorder(b)];
+    }
+    if (isBuffer(this.touchBorder)) {
+      const b = this.getBorderPoints('border'); // $FlowFixMe
+      return [getBoundingBorder(b, this.touchBorder)];
+    } // $FlowFixMe
+    return this.touchBorder;
   }
 
   setupDraw(now: number = 0) {
@@ -4446,7 +4423,6 @@ class FigureElementPrimitive extends FigureElement {
  * @property {FigureElement | null} [parent] parent of collection
  * @property {TypeBorder | 'children' | 'rect' | number} [border]
  * @property {TypeBorder | 'border' | number | 'rect'} [touchBorder]
- * @property {TypeBorder} [holeBorder]
  */
 export type OBJ_FigureElementCollection = {
   transform?: TypeParsableTransform,
@@ -4456,7 +4432,6 @@ export type OBJ_FigureElementCollection = {
   parent?: FigureElement | null,
   border?: TypeBorder | 'children' | 'rect' | number,
   touchBorder?: TypeBorder | 'border' | number | 'rect',
-  holeBorder?: TypeBorder,
 };
 
 /**
@@ -4477,7 +4452,6 @@ class FigureElementCollection extends FigureElement {
   // $FlowFixMe
   touchBorder: TypeParsableBuffer | TypeBorder | 'border' | 'children' | 'rect' | number;
   // $FlowFixMe
-  holeBorder: TypeBorder | 'children';
   eqns: Object;
   collections: FigureCollections;
 
@@ -4499,7 +4473,6 @@ class FigureElementCollection extends FigureElement {
       parent: null,
       border: 'children',
       touchBorder: 'children',
-      holeBorder: [[]],
       color: [0, 0, 0, 1],
       name: generateUniqueId('collection_'),
       timeKeeper: new TimeKeeper(),
@@ -4529,9 +4502,6 @@ class FigureElementCollection extends FigureElement {
       } else {
         this.touchBorder = o.touchBorder;
       }
-    }
-    if (o.holeBorder != null) { // $FlowFixMe
-      this.holeBorder = getBorder(o.holeBorder);
     }
   }
 
@@ -5474,15 +5444,6 @@ class FigureElementCollection extends FigureElement {
   // }
 
   setFirstTransform(parentTransform: Transform = new Transform()) {
-    // const firstTransform = parentTransform.transform(this.getTransform());
-    // this.lastDrawTransform = firstTransform._dup();
-    // this.parentTransform = [parentTransform];
-
-    // for (let i = 0; i < this.drawOrder.length; i += 1) {
-    //   const element = this.elements[this.drawOrder[i]];
-    //   element.setFirstTransform(firstTransform);
-    // }
-    // this.checkMoveBounds();
   }
 
   // border is whatever border is
@@ -5490,7 +5451,7 @@ class FigureElementCollection extends FigureElement {
   // rect is rect of children touchBorder
   // number is buffer of rect of children touch border
   getBorderPoints(
-    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+    border: 'border' | 'touchBorder' = 'border',
     children: Array<string | FigureElement> | null = null,
     shownOnly: boolean = true,
   ): TypeBorder {
@@ -5529,30 +5490,26 @@ class FigureElementCollection extends FigureElement {
       } // $FlowFixMe
       return this.border;
     }
-    if (border === 'touchBorder') {
-      if (this.touchBorder === 'border') {
-        return this.getBorderPoints('border', children, shownOnly);
-      }
-      if (this.touchBorder === 'children') {
-        return getBorderFromChildren('touchBorder');
-      }
-      if (this.touchBorder === 'rect') { // $FlowFixMe
-        return [getBoundingBorder(getBorderFromChildren('touchBorder'))];
-      }
-      if (isBuffer(this.touchBorder)) { // $FlowFixMe
-        return [getBoundingBorder(getBorderFromChildren('touchBorder'), this.touchBorder)];
-      } // $FlowFixMe
-      return this.touchBorder;
+    // if (border === 'touchBorder') {
+    if (this.touchBorder === 'border') {
+      return this.getBorderPoints('border', children, shownOnly);
     }
-    if (this.holeBorder === 'children') {
-      return getBorderFromChildren('holeBorder');
+    if (this.touchBorder === 'children') {
+      return getBorderFromChildren('touchBorder');
     }
-    return this.holeBorder;
+    if (this.touchBorder === 'rect') { // $FlowFixMe
+      return [getBoundingBorder(getBorderFromChildren('touchBorder'))];
+    }
+    if (isBuffer(this.touchBorder)) { // $FlowFixMe
+      return [getBoundingBorder(getBorderFromChildren('touchBorder'), this.touchBorder)];
+    } // $FlowFixMe
+    return this.touchBorder;
+    // }
   }
 
   getBorder(
     space: TypeSpace | Array<number> = 'local',
-    border: 'touchBorder' | 'border' | 'holeBorder' = 'border',
+    border: 'touchBorder' | 'border' = 'border',
     children: ?Array<string | FigureElement> = null,
     shownOnly: boolean = true,
   ) {
@@ -5572,7 +5529,7 @@ class FigureElementCollection extends FigureElement {
 
   getBoundingRect(
     space: TypeSpace = 'local',
-    border: 'touchBorder' | 'border' | 'holeBorder' = 'border',
+    border: 'touchBorder' | 'border' = 'border',
     children: ?Array<string | FigureElement> = null,
     shownOnly: boolean = true,
   ) {
@@ -5583,7 +5540,7 @@ class FigureElementCollection extends FigureElement {
 
   getRelativeBoundingRect(
     space: TypeSpace = 'local',
-    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+    border: 'border' | 'touchBorder' = 'border',
     children: ?Array<string | FigureElement> = null,
     shownOnly: boolean = true,
   ) {
@@ -5602,7 +5559,7 @@ class FigureElementCollection extends FigureElement {
     xAlign: 'center' | 'left' | 'right' | 'location' | number = 'location',
     yAlign: 'middle' | 'top' | 'bottom' | 'location' | number = 'location', // $FlowFixMe
     children: ?Array<string | FigureElement> = null,
-    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+    border: 'border' | 'touchBorder' = 'border',
     shownOnly: boolean = true,
   ) {
     const bounds = this.getBoundingRect(space, border, children, shownOnly);
