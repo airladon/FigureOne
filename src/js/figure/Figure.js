@@ -84,13 +84,16 @@ export type OBJ_FigureForElement = {
 /**
   * Figure options object
   * @property {string} [htmlId] HTML `div` tag `id` to tie figure to (`"figureOneContainer"`)
-  * @property {TypeParsableRect} [limits] - simple override for 2D scene
-  * @property {OBJ_Scene} [scene]
-  * @property {TypeColor} [color] default color (`[0, 0, 0, 1]`)
-  * @property {OBJ_Font} [font] default font (`{ family: 'Helvetica,
+  * @property {OBJ_Scene} [scene] define 2D or 3D scene. 3D can be orthographic
+  * or perspective projection, and include camera position and lighting
+  * definition.
+  * @property {TypeParsableRect} [limits] Overrides scene with a simple 2D
+  * projection with shown limits
+  * @property {TypeColor} [color] default shape color (`[0, 0, 0, 1]`)
+  * @property {OBJ_Font} [font] default shape font (`{ family: 'Helvetica,
   * size: 0.2, style: 'normal', weight: 'normal' }`)
-  * @property {number} [lineWidth] default line width
-  * @property {number} [length] default length to use for shapes
+  * @property {number} [lineWidth] default shape line width
+  * @property {number} [length] default shape primary dimension
   * @property {TypeColor} [backgroundColor] background color for the figure.
   * Use [r, g, b, 1] for opaque and [0, 0, 0, 0] for transparent.
  */
