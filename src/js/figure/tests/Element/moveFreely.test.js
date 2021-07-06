@@ -49,7 +49,7 @@ describe('Element Move', () => {
     test('Translation', () => {
       move(true);
       figure.mock.timeStep(0);
-      figure.mock.touchElement(a, [0, 0]);
+      figure.mock.touchDown([0, 0]);
       figure.mock.timeStep(1);
       figure.mock.touchMove([1, 0]);
       expect(a.getPosition('figure').toArray()).toEqual([1, 0, 0]);
@@ -70,7 +70,7 @@ describe('Element Move', () => {
         },
       });
       figure.mock.timeStep(0);
-      figure.mock.touchElement(a, [0, 0]);
+      figure.mock.touchDown([0, 0]);
       figure.mock.timeStep(1);
       figure.mock.touchMove([1, 0]);
       figure.mock.touchUp();
@@ -90,7 +90,7 @@ describe('Element Move', () => {
         },
       });
       figure.mock.timeStep(0);
-      figure.mock.touchElement(a, [0, 0]);
+      figure.mock.touchDown([0, 0]);
       figure.mock.timeStep(1);
       figure.mock.touchMove([1, 0]);
       figure.mock.touchUp();
@@ -113,7 +113,7 @@ describe('Element Move', () => {
         },
       });
       figure.mock.timeStep(0);
-      figure.mock.touchElement(a, [0, 0]);
+      figure.mock.touchDown([0, 0]);
       figure.mock.timeStep(1);
       figure.mock.touchMove([1, 1]);
       figure.mock.touchUp();
@@ -139,7 +139,7 @@ describe('Element Move', () => {
         bounds: { left: 4, right: 4, bottom: 1, top: 1 },
       });
       figure.mock.timeStep(0);
-      figure.mock.touchElement(a, [0, 0]);
+      figure.mock.touchDown([0, 0]);
       figure.mock.timeStep(1);
       figure.mock.touchMove([1, 0]);
       figure.mock.touchUp();
@@ -164,7 +164,7 @@ describe('Element Move', () => {
         bounds: { left: 1, right: 2, bottom: 1, top: 1 },
       });
       figure.mock.timeStep(0);
-      figure.mock.touchElement(a, [0, 0]);
+      figure.mock.touchDown([0, 0]);
       figure.mock.timeStep(1);
       figure.mock.touchMove([1, 0]);
       figure.mock.touchUp();
@@ -199,7 +199,7 @@ describe('Element Move', () => {
         bounds: { left: 1, right: 2, bottom: 1, top: 1 },
       });
       figure.mock.timeStep(0);
-      figure.mock.touchElement(a, [0, 0]);
+      figure.mock.touchDown([0, 0]);
       figure.mock.timeStep(1);
       figure.mock.touchMove([1, 0]);
       figure.mock.touchUp();
@@ -225,7 +225,7 @@ describe('Element Move', () => {
         bounds: { left: 1, right: 2, bottom: 1, top: 1 },
       });
       figure.mock.timeStep(0);
-      figure.mock.touchElement(a, [0, 0]);
+      figure.mock.touchDown([0, 0]);
       figure.mock.timeStep(1);
       figure.mock.touchMove([1, 0]);
       figure.mock.touchUp();

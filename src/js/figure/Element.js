@@ -3376,20 +3376,6 @@ class FigureElement {
     return rotation;
   }
 
-  getRotation3(normalize: '0to360' | '-180to180' | '' = '') {
-    const r = this.transform.r3();
-    let rotation = [0, 0, 0];
-    if (r != null) {
-      rotation = r;
-    }
-    if (normalize !== '' && r != null) {
-      rotation[0] = clipAngle(r[0], normalize);
-      rotation[1] = clipAngle(r[1], normalize);
-      rotation[2] = clipAngle(r[2], normalize);
-    }
-    return new Point(rotation);
-  }
-
   // /**
   //  * Get position relative to bounding rect.
   //  *
@@ -3637,9 +3623,10 @@ class FigureElement {
     if (this.uniqueColor == null) {
       this.setUniqueColor(generateUniqueColor(colorSeed));
     }
-    // if (this.parent != null) {
-    //   this.parent.setTouchable();
-    // }
+    if (this.parent != null) {
+      // this.parent.setTouchable();
+      this.parent.setHasTouchableElements();
+    }
   }
 
   setNotTouchable() {
@@ -3864,15 +3851,25 @@ class FigureElement {
     return false;
   }
 
-  // getTouched(glLocation: Point): Array<FigureElement> {
-  //   if (!this.isTouchable) {
-  //     return [];
-  //   }
-  //   if (this.isBeingTouched(glLocation)) {
-  //     return [this];
-  //   }
-  //   return [];
-  // }
+  getTouched(glLocation: Point): Array<FigureElement> {
+    if (!this.isTouchable) {
+      return [];
+    }
+    if (this.isBeingTouched(glLocation)) {
+      return [this];
+    }
+    return [];
+  }
+
+  getSelectionFromBorders(glLocation: Point): Array<FigureElement> {
+    if (!this.isTouchable) {
+      return null;
+    }
+    if (this.isBeingTouched(glLocation)) {
+      return this;
+    }
+    return null;
+  }
 
   // updateDrawTransforms(
   //   parentTransform: Array<Transform> = [new Transform()],
@@ -4454,6 +4451,7 @@ class FigureElementCollection extends FigureElement {
   // $FlowFixMe
   eqns: Object;
   collections: FigureCollections;
+  hasTouchableElements: boolean;
 
   +getElement: (?(string | FigureElement)) => ?FigureElement;
   +getElements: (TypeElementPath) => Array<FigureElement>;
@@ -4488,6 +4486,7 @@ class FigureElementCollection extends FigureElement {
     this.eqns = {};
     this.type = 'collection';
     this.setColor(o.color);
+    this.hasTouchableElements = false;
 
     if (o.border != null) {
       if (!isBuffer(o.border)) { // $FlowFixMe
@@ -4512,7 +4511,7 @@ class FigureElementCollection extends FigureElement {
     }
     if (this.isShown || ignoreShown) {
       return [...super._getStateProperties(options),
-        // 'hasTouchableElements',
+        'hasTouchableElements',
       ];
     }
     return [
@@ -4986,9 +4985,9 @@ class FigureElementCollection extends FigureElement {
     targetTexture: boolean = false,
   ) {
     if (this.isShown) {
-      // if (targetTexture && !this.isTouchable && !this.hasTouchableElements) {
-      //   return;
-      // }
+      if (targetTexture && !this.isTouchable && !this.hasTouchableElements) {
+        return;
+      }
       // let timer;
       // if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
       // this.lastDrawElementTransformPosition = {
@@ -5633,32 +5632,56 @@ class FigureElementCollection extends FigureElement {
     }
   }
 
-  // // Returns an array of touched elements.
-  // // In a collection, elements defined later in the collection.order
-  // // array are on top of earlier elements. The touched array
-  // // is sorted to have elements on top first, where the collection containing
-  // // the elements will be before it's elements. For example, the array
-  // // would be ordered as:
-  // //  0: top collection
-  // //  1 to n: n top elements in collection
-  // //  n+1: second top collection
-  // //  n+2 to m: top elements in second top colleciton.
-  // getTouched(glLocation: Point): Array<FigureElement> {
-  //   if (!this.isTouchable && !this.hasTouchableElements) {
-  //     return [];
-  //   }
-  //   let touched = [];
-  //   if (this.isTouchable) {
-  //     return super.getTouched(glLocation);
-  //   }
-  //   for (let i = this.drawOrder.length - 1; i >= 0; i -= 1) {
-  //     const element = this.elements[this.drawOrder[i]];
-  //     if (element.isShown === true) {
-  //       touched = touched.concat(element.getTouched(glLocation));
-  //     }
-  //   }
-  //   return touched;
-  // }
+  // Returns an array of touched elements.
+  // In a collection, elements defined later in the collection.order
+  // array are on top of earlier elements. The touched array
+  // is sorted to have elements on top first, where the collection containing
+  // the elements will be before it's elements. For example, the array
+  // would be ordered as:
+  //  0: top collection
+  //  1 to n: n top elements in collection
+  //  n+1: second top collection
+  //  n+2 to m: top elements in second top colleciton.
+  getTouched(glLocation: Point): Array<FigureElement> {
+    if (!this.isTouchable && !this.hasTouchableElements) {
+      return [];
+    }
+    let touched = [];
+    if (this.isTouchable) {
+      return super.getTouched(glLocation);
+    }
+    for (let i = this.drawOrder.length - 1; i >= 0; i -= 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (element.isShown === true) {
+        touched = touched.concat(element.getTouched(glLocation));
+      }
+    }
+    return touched;
+  }
+
+  setHasTouchableElements() {
+    this.hasTouchableElements = true;
+    if (this.parent != null) {
+      this.parent.setHasTouchableElements();
+    }
+  }
+
+  getSelectionFromBorders(glLocation: Point) {
+    if (!this.isTouchable && !this.hasTouchableElements) {
+      return null;
+    }
+    if (this.isTouchable) {
+      return super.getSelectionFromBorders(glLocation);
+    }
+    for (let i = this.drawOrder.length - 1; i >= 0; i -= 1) {
+      const element = this.elements[this.drawOrder[i]];
+      const selection = element.getSelectionFromBorders(glLocation);
+      if (selection != null) {
+        return selection;
+      }
+    }
+    return null;
+  }
 
   stop(
     how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel',

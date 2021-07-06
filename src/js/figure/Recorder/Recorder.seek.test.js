@@ -1165,7 +1165,7 @@ describe('Seek', () => {
     // figure.unpause();
     a.setMovable(true);
     // figure.mock.touchDown([0.5, 0.5]);
-    figure.mock.touchElement(a, [0.5, 0.5]);
+    figure.mock.touchDown([0.5, 0.5]);
     figure.mock.touchMove([4, 4]);
     expect(a.getPosition().round().x).toBe(4);
   });

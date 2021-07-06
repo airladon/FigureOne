@@ -108,7 +108,7 @@ export default function makeFigure(
   figure.primitives.defaultLineWidth = 0.01;
   // needed as the first element needs to be set with the space Transforms
   figure.initElements();
-  figure.getSelectionFromGLBackup = figure.getSelectionFromGL;
+  figure.getSelectionFromDrawBackup = figure.getSelectionFromDraw;
   figure.mock = {
     initialTime: 0,
     duration: 0,
@@ -158,15 +158,15 @@ export default function makeFigure(
       if (typeof element === 'string') {
         e = figure.get(element);
       }
-      figure.getSelectionFromGLBackup = figure.getSelectionFromGL;
-      figure.getSelectionFromGL = () => e;
+      figure.getSelectionFromDrawBackup = figure.getSelectionFromDraw;
+      figure.getSelectionFromDraw = () => e;
       figure.mock.touchDown(figurePosition);
     },
     touchDown: (figurePosition) => {
       const p = figure.transformPoint(figurePosition, 'figure', 'gl');
       figure.touchDownHandler(p);
       figure.mock.previousTouchPoint = p;
-      figure.getSelectionFromGL = figure.getSelectionFromGLBackup;
+      figure.getSelectionFromDraw = figure.getSelectionFromDrawBackup;
     },
     touchUp: () => {
       figure.touchUpHandler();

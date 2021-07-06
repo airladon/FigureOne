@@ -702,7 +702,7 @@ describe('Text Borders', () => {
     // figure.mock.touchUp();
     // expect(callback.mock.calls.length).toBe(0);
 
-    figure.mock.touchElement(t, [-2 + 0.05, -2 - l]);
+    figure.mock.touchDown([-2 + 0.05, -2 - l]);
     figure.mock.touchUp();
     expect(callback.mock.calls.length).toBe(1);
   });

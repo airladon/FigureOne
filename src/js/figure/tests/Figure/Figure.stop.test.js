@@ -295,7 +295,7 @@ describe('Figure Stop', () => {
       a.move.freely.deceleration = 1;
       a.move.freely.zeroVelocityThreshold = 0.0000001;
       a.setMovable(true);
-      figure.mock.touchElement(a, [0, 0]);
+      figure.mock.touchDown([0, 0]);
       figure.mock.timeStep(1);
       figure.mock.touchMove([2, 0]);
       figure.mock.touchUp();

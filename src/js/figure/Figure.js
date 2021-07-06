@@ -1862,7 +1862,12 @@ class Figure {
     }
     this.isTouchDown = true;
 
-    const element = this.getSelectionFromGL(glPoint);
+
+    let element;
+    element = this.elements.getSelectionFromBorders(glPoint);
+    if (element == null) {
+      element = this.getSelectionFromDraw(glPoint);
+    }
     if (element == null) {
       return false;
     }
@@ -2568,7 +2573,7 @@ class Figure {
     this.getSelectionFromPixel(0, 0, true);
   }
 
-  getSelectionFromGL(glPoint: Point) {
+  getSelectionFromDraw(glPoint: Point) {
     const pixelPoint = glPoint.transformBy(this.spaceTransformMatrix('gl', 'pixel'));
     return this.getSelectionFromPixel(pixelPoint.x, pixelPoint.y);
   }

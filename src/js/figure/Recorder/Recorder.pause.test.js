@@ -1543,7 +1543,7 @@ describe('Animate To State', () => {
       // startAnimation();
       // recorder.recordEvent('startAnimation');
       // recorder.recordEvent('touch', ['down', new Point(0, 0)]);
-      figure.mock.touchElement(a, [0, 0]);
+      figure.mock.touchDown([0, 0]);
       figure.mock.timeStep(1);
       // recorder.recordEvent('moved', ['a', new Point(2, 0)]);
       // recorder.recordEvent('touch', ['up']);

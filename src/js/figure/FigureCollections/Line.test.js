@@ -285,13 +285,13 @@ describe('Collections line tests', () => {
     l.onClick = c;
     l.setTouchable();
     expect(c.mock.calls.length).toBe(0);
-    figure.mock.touchElement(l, [0.01, 0]);
+    figure.mock.touchDown([0.01, 0]);
     expect(c.mock.calls.length).toBe(1);
-    figure.mock.touchElement(l, [0.01, 0.049]);
+    figure.mock.touchDown([0.01, 0.049]);
     expect(c.mock.calls.length).toBe(2);
     // figure.mock.touchDown([0.01, 0.051]);
     // expect(c.mock.calls.length).toBe(2);
-    figure.mock.touchElement(l, [0.01, -0.049]);
+    figure.mock.touchDown([0.01, -0.049]);
     expect(c.mock.calls.length).toBe(3);
     // figure.mock.touchDown([0.01, -0.051]);
     // expect(c.mock.calls.length).toBe(3);

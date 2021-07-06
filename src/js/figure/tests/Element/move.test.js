@@ -43,7 +43,7 @@ describe('Element Move', () => {
   describe('2D', () => {
     test('Simple', () => {
       move(true);
-      figure.mock.touchElement(a, [0, 0]);
+      figure.mock.touchDown([0, 0]);
       figure.mock.touchMove([1, 0]);
       expect(a.getPosition('figure').toArray()).toEqual([1, 0, 0]);
       figure.mock.touchMove([1, 1]);
@@ -55,7 +55,7 @@ describe('Element Move', () => {
       move({
         type: 'translation',
       });
-      figure.mock.touchElement(a, [0, 0]);
+      figure.mock.touchDown([0, 0]);
       figure.mock.touchMove([1, 0]);
       expect(a.getPosition('figure').toArray()).toEqual([1, 0, 0]);
       figure.mock.touchMove([1, 1]);
@@ -67,7 +67,7 @@ describe('Element Move', () => {
       move({
         type: 'rotation',
       });
-      figure.mock.touchElement(a, [0.4, 0]);
+      figure.mock.touchDown([0.4, 0]);
       figure.mock.touchMove([0, 0.4]);
       expect(round(a.getRotation('figure'))).toEqual(round(Math.PI / 2));
       figure.mock.touchMove([0, -0.4]);
@@ -80,7 +80,7 @@ describe('Element Move', () => {
         type: 'rotation',
         bounds: { min: -1, max: Math.PI / 2 },
       });
-      figure.mock.touchElement(a, [0.4, 0]);
+      figure.mock.touchDown([0.4, 0]);
       figure.mock.touchMove([0, 0.4]);
       expect(round(a.getRotation('figure'))).toEqual(round(Math.PI / 2));
       figure.mock.touchMove([-0.1, 0.4]);
@@ -95,7 +95,7 @@ describe('Element Move', () => {
       move({
         type: 'scale',
       });
-      figure.mock.touchElement(a, [0.25, 0]);
+      figure.mock.touchDown([0.25, 0]);
       figure.mock.touchMove([0.5, 0]);
       expect(a.getScale('figure').toArray()).toEqual([2, 2, 2]);
       figure.mock.touchMove([-0.5, 0]);
@@ -105,7 +105,7 @@ describe('Element Move', () => {
       move({
         type: 'scaleX',
       });
-      figure.mock.touchElement(a, [0.25, 0]);
+      figure.mock.touchDown([0.25, 0]);
       figure.mock.touchMove([0.5, 0]);
       expect(a.getScale('figure').toArray()).toEqual([2, 1, 1]);
       figure.mock.touchMove([-0.5, 0]);
@@ -115,7 +115,7 @@ describe('Element Move', () => {
       move({
         type: 'scaleY',
       });
-      figure.mock.touchElement(a, [0, 0.25]);
+      figure.mock.touchDown([0, 0.25]);
       figure.mock.touchMove([0, 0.5]);
       expect(a.getScale('figure').toArray()).toEqual([1, 2, 1]);
       figure.mock.touchMove([0, -0.5]);
@@ -126,7 +126,7 @@ describe('Element Move', () => {
         type: 'translation',
         bounds: { left: 1, bottom: 1, right: 2, top: 2 },
       });
-      figure.mock.touchElement(a, [0, 0]);
+      figure.mock.touchDown([0, 0]);
       figure.mock.touchMove([1, 0]);
       expect(a.getPosition('figure').round().toArray()).toEqual([1, 0, 0]);
       figure.mock.touchMove([3, 0]);

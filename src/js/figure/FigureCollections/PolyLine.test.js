@@ -5,7 +5,7 @@
 // } from '../Element';
 // import Figure from '../Figure';
 import {
-  Point, rectToPolar,
+  Point,
 } from '../../tools/g2';
 import {
   round,
@@ -406,7 +406,7 @@ describe('Figure Objects PolyLine', () => {
       // p0.move.freely.bounceLoss = 0;
       // p0.move.freely.deceleration = 1;
       figure.mock.timeStep(0);
-      figure.mock.touchElement(p0, [0, 0]);
+      figure.mock.touchDown([0, 0]);
       figure.mock.timeStep(0.1);
       figure.mock.touchMove([0.5 / Math.sqrt(2), 0.5 / Math.sqrt(2)]);
       figure.mock.touchUp();
