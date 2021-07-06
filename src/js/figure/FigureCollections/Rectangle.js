@@ -255,7 +255,6 @@ class CollectionsRectangle extends FigureElementCollection {
         sides: 1,
       },
       transform: new Transform('Rectangle').scale(1, 1).rotate(0).translate(0, 0),
-      limits: collections.primitives.limits,
       // button: {},
     };
     const options = joinObjects({}, defaultOptions, optionsIn);

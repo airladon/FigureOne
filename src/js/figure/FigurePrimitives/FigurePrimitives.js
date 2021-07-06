@@ -2293,7 +2293,6 @@ export default class FigurePrimitives {
   webgl: Array<WebGLInstance>;
   draw2D: Array<DrawContext2D>;
   htmlCanvas: HTMLElement;
-  limits: Rect;
   // spaceTransforms: OBJ_SpaceTransforms;
   animateNextFrame: Function;
   draw2DFigures: Object;
@@ -2314,7 +2313,6 @@ export default class FigurePrimitives {
     draw2D: Array<DrawContext2D> | DrawContext2D,
     // draw2DFigures: Object,
     htmlCanvas: HTMLElement,
-    limits: Rect,
     scene: Scene,
     // spaceTransforms: OBJ_SpaceTransforms,
     animateNextFrame: Function,
@@ -2341,7 +2339,6 @@ export default class FigurePrimitives {
      * @private {htmlElement}
      */
     this.htmlCanvas = htmlCanvas;
-    this.limits = limits;
     this.scene = scene;
     this.animateNextFrame = animateNextFrame;
     // this.spaceTransforms = spaceTransforms;
@@ -2439,7 +2436,7 @@ export default class FigurePrimitives {
       }
     }
     const element = new FigureElementPrimitive(
-      glObject, options.transform, options.color, this.limits, null, options.name,
+      glObject, options.transform, options.color, null, options.name,
     );
     element.custom.updateBuffer = element.drawingObject.updateBuffer.bind(element.drawingObject);
     element.custom.updateVertices =
@@ -2564,7 +2561,7 @@ export default class FigurePrimitives {
     glObject.addUniform('u_percent', 1, 'FLOAT');
 
     const element = new FigureElementPrimitiveMorph(
-      glObject, options.transform, options.color, this.limits, null, options.name,
+      glObject, options.transform, options.color, null, options.name,
     );
     element.shapeNameMap = shapeNameMap;
 
@@ -2625,7 +2622,6 @@ export default class FigurePrimitives {
       this.webgl[0],
       options.color,
       options.transform,
-      this.limits,
       options.texture.src,
       options.texture.mapTo,
       options.texture.mapFrom,
@@ -3264,9 +3260,10 @@ export default class FigurePrimitives {
 
     element.custom.options = {
       bounds: new Rect(
-        this.limits.left + this.limits.width / 4,
-        this.limits.bottom + this.limits.height / 4,
-        this.limits.width / 2, this.limits.height / 2,
+        this.scene.left,
+        this.scene.bottom,
+        this.scene.right - this.scene.left,
+        this.scene.top - this.scene.bottom,
       ),
       line: {
         linePrimitives: false,
@@ -3476,7 +3473,6 @@ export default class FigurePrimitives {
   textGL(options: Object) {
     return Text(
       this.webgl[0],
-      this.limits,
       options,
     );
   }
@@ -3577,7 +3573,6 @@ export default class FigurePrimitives {
       drawingObject,
       options.transform,
       options.color,
-      this.limits,
     );
     element.timeKeeper = this.timeKeeper;
     element.recorder = this.recorder;
@@ -3773,7 +3768,6 @@ export default class FigurePrimitives {
       hT,
       new Transform().scale(1, 1).translate(p.x, p.y),
       [1, 1, 1, 1],
-      this.limits,
     );
     figureElement.timeKeeper = this.timeKeeper;
     figureElement.recorder = this.recorder;
@@ -3806,7 +3800,6 @@ export default class FigurePrimitives {
       hT,
       new Transform().scale(1, 1).translate(location.x, location.y),
       [1, 1, 1, 1],
-      this.limits,
     );
     figureElement.timeKeeper = this.timeKeeper;
     figureElement.recorder = this.recorder;

@@ -443,7 +443,6 @@ class CollectionsPlot extends FigureElementCollection {
       grid: [],
       xAlign: 'plotAreaLeft',
       yAlign: 'plotAreaBottom',
-      limits: collections.primitives.limits,
       transform: new Transform('Plot').scale(1, 1).rotate(0).translate(0, 0),
       touchBorder: 'rect',
     };
@@ -738,7 +737,6 @@ class CollectionsPlot extends FigureElementCollection {
     const gridLength = axis === 'x' ? this.height : this.width;
 
     // const minDimension = Math.min(
-    //   this.collections.primitives.limits.width, this.collections.primitives.limits.height);
 
     let theme = {};
     if (name === 'classic') {

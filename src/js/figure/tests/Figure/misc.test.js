@@ -145,7 +145,6 @@ describe('Figure', () => {
   test('Figure instantiation', () => {
     const d = figures.landscapeCenter;
     expect(d.elements.drawOrder).toHaveLength(3);
-    expect(d.limits).toEqual(new Rect(-1, -1, 2, 2));
   });
   test('Figure API', () => {
     const d = makeFigure();

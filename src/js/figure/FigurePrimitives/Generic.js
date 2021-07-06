@@ -17,7 +17,6 @@ export default function Generic(
   // drawType: 'triangles' | 'strip' | 'fan' | 'lines',
   color: TypeColor,
   transformOrLocation: Transform | Point,
-  figureLimits: Rect,
   textureLocation: string = '',
   textureVertexSpace: Rect = new Rect(-1, -1, 2, 2),
   textureCoords: Rect = new Rect(0, 0, 1, 1),
@@ -25,7 +24,6 @@ export default function Generic(
   onLoad: ?() => void = null,
   // copy: Array<CPY_Step>,
   name: string = '',
-  // scene: Scene = new Scene(),
 ) {
   const generic = new VertexGeneric(
     webgl,
@@ -49,5 +47,5 @@ export default function Generic(
     transform = transformOrLocation._dup();
   }
   // $FlowFixMe
-  return new FigureElementPrimitive(generic, transform, color, figureLimits, null, name);
+  return new FigureElementPrimitive(generic, transform, color, null, name);
 }

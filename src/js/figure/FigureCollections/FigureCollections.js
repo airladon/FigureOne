@@ -60,7 +60,6 @@ import type { TypeColor } from '../../tools/types';
 export default class FigureCollections {
   webgl: Array<WebGLInstance>;
   draw2D: DrawContext2D;
-  limits: Rect;
   primitives: Object;
   // equationFromFig: Object;
   isTouchDevice: boolean;
@@ -77,7 +76,6 @@ export default class FigureCollections {
   ) {
     this.webgl = primitives.webgl;
     this.draw2D = primitives.draw2D;
-    this.limits = primitives.limits;
     this.primitives = primitives;
     this.isTouchDevice = isTouchDevice;
     this.animateNextFrame = animateNextFrame;
@@ -97,7 +95,6 @@ export default class FigureCollections {
       touchBorder: 'children',
       color: this.primitives.defaultColor,
       parent: null,
-      limits: this.limits,
       scene: this.primitives.scene,
     };
     let optionsToUse;

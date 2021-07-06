@@ -1576,7 +1576,6 @@ export {
 
 // // Draw examples of arrows
 
-// const figure = new Fig.Figure({ limits: [-3, -3, 6, 6]});
 
 // let y = 3;
 // let yStep = -0.7;

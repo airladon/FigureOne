@@ -244,7 +244,6 @@ class CollectionsTrace extends FigureElementCollection {
       },
       name: '',
       transform: new Transform('Trace').scale(1, 1).rotate(0).translate(0, 0),
-      limits: collections.primitives.limits,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     if (options.markers == null && options.line === undefined) {

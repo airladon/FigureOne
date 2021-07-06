@@ -12,7 +12,12 @@ function __addGrid(__figure) {
         line: { width: 0.002 },
         xStep: 0.1,
         yStep: 0.1,
-        bounds: __figure.limits._dup(),
+        bounds: {
+          left: __figure.scene.left,
+          bottom: __figure.scene.bottom,
+          width: __figure.scene.right - __figure.scene.left,
+          height: __figure.scene.top - __figure.scene.bottom,
+        },
       },
     },
     {
@@ -24,7 +29,12 @@ function __addGrid(__figure) {
         line: { width: 0.005 },
         xStep: 0.5,
         yStep: 0.5,
-        bounds: __figure.limits._dup(),
+        bounds: {
+          left: __figure.scene.left,
+          bottom: __figure.scene.bottom,
+          width: __figure.scene.right - __figure.scene.left,
+          height: __figure.scene.top - __figure.scene.bottom,
+        },
       },
     },
     {

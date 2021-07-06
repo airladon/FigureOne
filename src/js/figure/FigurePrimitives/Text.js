@@ -23,7 +23,6 @@ type TypeTextInputOptions = {
 
 function Text(
   webgl: WebGLInstance,
-  figureLimits: Rect,
   optionsIn: TypeTextInputOptions,
 ) {
   const defaultOptions = {
@@ -50,7 +49,7 @@ function Text(
   // } else {
   //   transform = transformOrLocation._dup();
   // }
-  return new FigureElementPrimitive(vertexText, options.transform, options.color, figureLimits);
+  return new FigureElementPrimitive(vertexText, options.transform, options.color);
 }
 
 export default Text;

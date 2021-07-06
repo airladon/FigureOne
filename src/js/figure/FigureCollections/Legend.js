@@ -296,7 +296,6 @@ class CollectionsPlotLegend extends FigureElementCollection {
       space: 0.05,
       position: new Point(0, 0),
       transform: new Transform('PlotLegend').scale(1, 1).rotate(0).translate(0, 0),
-      limits: collections.primitives.limits,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
 

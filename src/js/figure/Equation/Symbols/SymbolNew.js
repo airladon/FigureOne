@@ -1,7 +1,7 @@
 // @flow
 import { FigureElementPrimitive } from '../../Element';
 import {
-  Point, Transform, Rect, getBoundingBorder, getBorder,
+  Point, Transform, getBoundingBorder, getBorder,
 } from '../../../tools/g2';
 import {
   duplicate,
@@ -20,7 +20,6 @@ export default class Symbol extends FigureElementPrimitive {
     webgl: WebGLInstance,
     color: TypeColor,
     transformOrLocation: Transform | Point,
-    figureLimits: Rect,
     symbolOptions: Object,
     // triangles: 'strip' | 'triangles' | 'fan',
   ) {
@@ -32,7 +31,7 @@ export default class Symbol extends FigureElementPrimitive {
     } else {
       initialT = new Transform('Symbol').scale(1, 1).translate(0, 0);
     }
-    super(vertexObject, initialT, color, figureLimits);
+    super(vertexObject, initialT, color);
     if (symbolOptions.touchBorder != null) {
       this.touchBorder = symbolOptions.touchBorder;
     }

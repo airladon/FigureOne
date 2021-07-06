@@ -45,7 +45,7 @@ export default function makeFigure(
   const definition = {
     width: inputCanvas.width,
     height: inputCanvas.height,
-    limits: new Rect(-1, -1, 2, 2),
+    // limits: new Rect(-1, -1, 2, 2),
   };
 
   const canvasMock = {
@@ -78,9 +78,9 @@ export default function makeFigure(
     offsetWidth: 100,
     appendChild: () => {},
   };
-  const { limits } = definition;
+  // const { limits } = definition;
   const figure = new Figure({
-    htmlId: 'c', limits, color: [1, 0, 0, 1], scene,
+    htmlId: 'c', color: [1, 0, 0, 1], scene,
   });
   figure.webglLow = webgl;
   figure.webglHigh = webgl;

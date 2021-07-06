@@ -10,7 +10,6 @@ import {
 } from '../tools/g2';
 import Scene from '../tools/scene';
 import { round } from '../tools/math';
-// import { areColorsSame } from '../tools/color';
 import { getState } from './Recorder/state';
 import type {
   TypeParsablePoint, TypeParsableTransform,
@@ -20,14 +19,12 @@ import { isPointInPolygon } from '../tools/geometry/polygon';
 import { Recorder } from './Recorder/Recorder';
 import * as m3 from '../tools/m3';
 import type { Type3DMatrix } from '../tools/m3';
-// import type { pathOptionsType, TypeRotationDirection } from '../tools/g2';
 import * as math from '../tools/math';
 import HTMLObject from './DrawingObjects/HTMLObject/HTMLObject';
 import DrawingObject from './DrawingObjects/DrawingObject';
 import VertexGeneric from './DrawingObjects/VertexObject/VertexGeneric';
 import GLObject from './DrawingObjects/GLObject/GLObject';
 import { TextObjectBase } from './DrawingObjects/TextObject/TextObject';
-// import type { OBJ_Font } from './DrawingObjects/TextObject/TextObject';
 import {
   duplicateFromTo, joinObjects, joinObjectsWithOptions, NotificationManager,
   generateUniqueId, PerformanceTimer, generateUniqueColor,
@@ -35,34 +32,19 @@ import {
 import { colorArrayToRGBA, areColorsWithinDelta } from '../tools/color';
 import TimeKeeper from './TimeKeeper';
 import type { TypeWhen } from './TimeKeeper';
-// import DrawContext2D from './DrawContext2D';
 
-import type Figure, { OBJ_SpaceTransforms, OBJ_FigureForElement } from './Figure';
+import type { OBJ_SpaceTransforms, OBJ_FigureForElement } from './Figure';
 // eslint-disable-next-line import/no-cycle
 import * as animations from './Animation/Animation';
 import WebGLInstance from './webgl/webgl';
-// import type Figure from './Figure';
 import { FunctionMap } from '../tools/FunctionMap';
 import type {
   OBJ_Font, TypeColor,
 } from '../tools/types';
-// import type FigurePrimitives from './FigurePrimitives/FigurePrimitives';
 import type FigureCollections from './FigureCollections/FigureCollections';
 
 const FIGURE1DEBUG = false;
 
-// eslint-disable-next-line import/no-cycle
-// import {
-//   AnimationPhase, ColorAnimationPhase, CustomAnimationPhase,
-// } from './AnimationPhase';
-
-// function checkCallback(callback: ?(boolean) => void): (boolean) => void {
-//   let callbackToUse = () => {};
-//   if (typeof callback === 'function') {
-//     callbackToUse = callback;
-//   }
-//   return callbackToUse; + width
-// }
 
 export type TypeSpace = 'draw' | 'local' | 'figure' | 'gl' | 'pixel';
 
@@ -363,9 +345,6 @@ Everything else is ValueDeceleration
 Rotation can only happen with some rotation transform elements:
 - 2D - plane is defined as [[0, 0, 0], [0, 0, 1]
 - ra (axis) - plane is defined as [[x, y, z], axis]
-
-
-
 */
 
 /**
@@ -436,7 +415,7 @@ type OBJ_ElementMove = {
  * @property {OBJ_Scenario} scenarioName where scenarioName can be any
  * string that names the scenario
  */
-type TypeScenarios = {
+export type TypeScenarios = {
   [scenarioName: string]: OBJ_Scenario,
 };
 
@@ -679,7 +658,6 @@ class FigureElement {
   };
 
 
-  figureLimits: Rect;
   figureTransforms: OBJ_SpaceTransforms;
 
   // Current animation/movement state of element
@@ -744,7 +722,6 @@ class FigureElement {
   lastDrawTime: number;
 
   // pauseSettings: TypePauseSettings;
-
   dependantTransform: boolean;
 
   recorder: Recorder;
@@ -790,10 +767,8 @@ class FigureElement {
    */
   constructor(
     transform: Transform = new Transform(),
-    figureLimitsOrFigure: Figure | Rect = new Rect(-1, -1, 2, 2),
     parent: FigureElement | null = null,
     name: string = generateUniqueId('element_'),
-    // scene: Scene = new Scene(),
     timeKeeper: TimeKeeper = new TimeKeeper(),
   ) {
     // This may be updated if element is added to a collection with a different
@@ -858,11 +833,6 @@ class FigureElement {
       when: 'syncNow',
     };
 
-    if (figureLimitsOrFigure instanceof Rect) {
-      this.figureLimits = figureLimitsOrFigure;
-    } else if (figureLimitsOrFigure != null) {
-      this.figureLimits = this.figure.limits._dup();
-    }
     this.move = {
       // bounds: 'none',
       bounds: null,
@@ -952,7 +922,6 @@ class FigureElement {
     this.tieToHTML = {
       element: null,
       scale: 'fit',
-      window: this.figureLimits,
       updateOnResize: true,
     };
     this.isRenderedAsImage = false;
@@ -979,47 +948,7 @@ class FigureElement {
     this.scene = new Scene(options);
   }
 
-  setProperties(properties: Object, exceptIn: Array<string> | string = []) {
-    let except = exceptIn;
-    // if (properties.move != null) {
-    //   const cleanBounds = (key) => {
-    //     if (typeof except === 'string') {
-    //       except = [except, `move.${key}`];
-    //     } else {
-    //       except.push(`move.${key}`);
-    //     }
-    //     const bounds = getBounds(properties.move[key], 'transform', this.transform);
-    //     if (bounds instanceof TransformBounds) {
-    //       for (let i = 0; i < bounds.boundary.length; i += 1) {
-    //         const bound = bounds.boundary[i];
-    //         const def = bounds.def[i];
-    //         if (
-    //           bounds.boundary[i] != null
-    //           && bound instanceof RangeBounds
-    //           && (def === 't' || def === 's')
-    //         ) {
-    //           bounds.boundary[i] = new RectBounds({
-    //             left: bound.boundary.min,
-    //             bottom: bound.boundary.min,
-    //             right: bound.boundary.max,
-    //             top: bound.boundary.max,
-    //           });
-    //         }
-    //       }
-    //       this.move[key] = bounds;
-    //     }
-    //   };
-    //   // if (properties.move.boundsToUse != null) {
-    //   //   cleanBounds('boundsToUse');
-    //   // }
-    //   if (
-    //     properties.move.bounds != null
-    //     && properties.move.bounds !== 'figure'
-    //     && properties.move.bounds !== 'none'
-    //   ) {
-    //     cleanBounds('bounds');
-    //   }
-    // }
+  setProperties(properties: Object, except: Array<string> | string = []) {
     joinObjectsWithOptions({
       except,
     }, this, properties);
@@ -1237,12 +1166,14 @@ class FigureElement {
       tieToElement = document.getElementById(this.tieToHTML.element);
     }
     if (tieToElement != null) {
+      const scene = this.getScene();
+      const figureWidth = scene.right - scene.left;
+      const figureHeight = scene.top - scene.bottom;
       const tie = tieToElement.getBoundingClientRect();
       const canvas = figureCanvas.getBoundingClientRect();
-      const figure = this.figureLimits;
       const dWindow = this.tieToHTML.window;
       const cAspectRatio = canvas.width / canvas.height;
-      const dAspectRatio = figure.width / figure.height;
+      const dAspectRatio = figureWidth / figureHeight;
       const tAspectRatio = tie.width / tie.height;
       const wAspectRatio = dWindow.width / dWindow.height;
 
@@ -1265,15 +1196,15 @@ class FigureElement {
 
       let scaleX = 1;
       let scaleY = 1;
-      const figureToWindowScaleX = figure.width / dWindow.width;
-      const figureToWindowScaleY = figure.height / dWindow.height;
+      const figureToWindowScaleX = figureWidth / dWindow.width;
+      const figureToWindowScaleY = figureHeight / dWindow.height;
 
       // Window has no scaling impact on em, it only has impact on translation
       if (scaleString.endsWith('em')) {
         const scale = parseFloat(scaleString);
         const em = parseFloat(getComputedStyle(tieToElement).fontSize);
         // 0.2 is default font size in figure units
-        const defaultFontScale = figure.width / 0.2;
+        const defaultFontScale = figureWidth / 0.2;
         scaleX = scale * em * defaultFontScale / canvas.width;
         scaleY = scale * em * defaultFontScale / dAspectRatio / canvas.height;
       }
@@ -2662,15 +2593,6 @@ class FigureElement {
   }
 
 
-  updateLimits(
-    limits: Rect,
-    // transforms: OBJ_SpaceTransforms = this.figureTransforms,
-  ) {
-    this.figureLimits = limits;
-    // this.figureTransforms = transforms;
-  }
-
-
   resize(figureHTMLElement: ?HTMLElement = null) {
     if (figureHTMLElement && this.tieToHTML.updateOnResize) {
       this.updateHTMLElementTie(figureHTMLElement);
@@ -3454,21 +3376,7 @@ class FigureElement {
   }
 
   setFigurePosition(figurePosition: Point) {
-    const glSpace = {
-      x: { bottomLeft: -1, width: 2 },
-      y: { bottomLeft: -1, height: 2 },
-    };
-    const figureSpace = {
-      x: {
-        bottomLeft: this.figureLimits.left,
-        width: this.figureLimits.width,
-      },
-      y: {
-        bottomLeft: this.figureLimits.bottom,
-        height: this.figureLimits.height,
-      },
-    };
-    const figureToGLSpace = spaceToSpaceTransform(figureSpace, glSpace);
+    const figureToGLSpace = this.spaceTransformMatrix('figure', 'gl');
     const glLocation = figurePosition.transformBy(figureToGLSpace.matrix());
     // const t = new Transform(this.lastDrawTransform.def.slice(this.transform.def.length));
     const t = this.getLocalToFigureTransform();
@@ -3497,80 +3405,6 @@ class FigureElement {
     );
     this.setPosition(local);
   }
-
-  // checkMoveBounds() {
-  //   if (this.move.bounds === 'figure') {
-  //     this.setMoveBounds('figure');
-  //     return;
-  //   }
-  //   if (this.move.bounds === 'none' || this.move.bounds === null) {
-  //     this.setMoveBounds('none');
-  //     return;
-  //   }
-  //   if (!(this.move.bounds instanceof TransformBounds)) {
-  //     this.setMoveBounds(this.move.bounds);
-  //   }
-  // }
-
-  // setMoveBounds(
-  //   boundaryIn: TransformBounds | TypeTransformBoundsDefinition | 'figure' | 'none' = 'none',
-  // ): void {
-  //   if (boundaryIn instanceof TransformBounds) {
-  //     this.move.bounds = boundaryIn;
-  //     return;
-  //   }
-
-  //   if (boundaryIn === null || boundaryIn === 'none') {
-  //     this.move.bounds = new TransformBounds(this.transform);
-  //     return;
-  //   }
-
-  //   if (boundaryIn === 'figure') {
-  //     if (!(this.move.bounds instanceof TransformBounds)) {
-  //       this.move.bounds = new TransformBounds(this.transform);
-  //     }
-  //     this.move.sizeInBounds = true;
-  //     const m = this.spaceTransformMatrix('figure', 'local');
-  //     const p0 = new Point(this.figureLimits.left, this.figureLimits.bottom).transformBy(m);
-  //     // const p1 = new Point(this.figureLimits.right, p0.y).transformBy(m);
-  //     const p1 = new Point(this.figureLimits.right, this.figureLimits.top).transformBy(m);
-  //     // $FlowFixMe
-  //     this.move.bounds.updateTranslation(new RectBounds({
-  //       left: p0.x,
-  //       bottom: p0.y,
-  //       right: p1.x,
-  //       top: p1.y,
-  //     }));
-  //     return;
-  //   }
-  //   const bounds = getBounds(boundaryIn, 'transform', this.transform);
-  //   if (bounds instanceof TransformBounds) {
-  //     this.move.bounds = bounds;
-  //   }
-  // }
-
-  // getMoveBounds(): Bounds {
-  //   this.checkMoveBounds();  // $FlowFixMe
-  //   if (this.move.bounds.isUnbounded()) { // $FlowFixMe
-  //     return this.move.bounds;
-  //   }
-
-  //   if (this.move.sizeInBounds) {
-  //     const rect = this.getRelativeBoundingRect('local');
-  //     // $FlowFixMe
-  //     const dup = this.move.bounds._dup();
-  //     const b = dup.getTranslation();
-  //     if (b != null) {
-  //       b.boundary.left -= rect.left;
-  //       b.boundary.bottom -= rect.bottom;
-  //       b.boundary.right -= rect.right;
-  //       b.boundary.top -= rect.top;
-  //       dup.updateTranslation(b);
-  //       return dup;
-  //     }
-  //   } // $FlowFixMe
-  //   return this.move.bounds;
-  // }
 
   getShown() {
     if (this.isShown) {
@@ -3967,7 +3801,6 @@ class FigureElementPrimitive extends FigureElement {
    * to the screen or manages a HTML element
    * @param {Transform} transform initial transform to set
    * @param {[number, number, number, number]} color color to set
-   * @param {Rect} figureLimits limits of figure
    * @param {FigureElement | null} parent parent element
    * @param
    */
@@ -3975,13 +3808,12 @@ class FigureElementPrimitive extends FigureElement {
     drawingObject: DrawingObject,
     transform: Transform = new Transform(),
     color: TypeColor = [0.5, 0.5, 0.5, 1],
-    figureLimits: Rect = new Rect(-1, -1, 2, 2),
     parent: FigureElement | null = null,
     name: string = generateUniqueId('element_'),
     // scene: Scene = new Scene(),
     timeKeeper: TimeKeeper = new TimeKeeper(),
   ) {
-    super(transform, figureLimits, parent, name, timeKeeper);
+    super(transform, parent, name, timeKeeper);
     this.drawingObject = drawingObject;
     this.color = color != null ? color.slice() : [0, 0, 0, 0];
     this.defaultColor = this.color.slice();
@@ -4415,7 +4247,6 @@ class FigureElementPrimitive extends FigureElement {
  * @property {TypeParsableTransform} [transform]
  * @property {TypeParsablePoint} [position] if defined, will overwrite first
  * translation of `transform`
- * @property {Rect} [limits] figure limits
  * @property {TypeColor} [color] default color
  * @property {FigureElement | null} [parent] parent of collection
  * @property {TypeBorder | 'children' | 'rect' | number} [border]
@@ -4424,7 +4255,6 @@ class FigureElementPrimitive extends FigureElement {
 export type OBJ_FigureElementCollection = {
   transform?: TypeParsableTransform,
   position?: TypeParsablePoint,
-  limits?: Rect,
   color?: TypeColor,
   parent?: FigureElement | null,
   border?: TypeBorder | 'children' | 'rect' | number,
@@ -4467,7 +4297,6 @@ class FigureElementCollection extends FigureElement {
     const defaultOptions = {
       transform: new Transform(),
       // position: [0, 0],
-      limits: new Rect(-1, 1, 2, 2),
       parent: null,
       border: 'children',
       touchBorder: 'children',
@@ -4476,7 +4305,7 @@ class FigureElementCollection extends FigureElement {
       timeKeeper: new TimeKeeper(),
     };
     const o = joinObjects({}, defaultOptions, options);
-    super(getTransform(o.transform), o.limits, o.parent, o.name, o.timeKeeper);
+    super(getTransform(o.transform), o.parent, o.name, o.timeKeeper);
     if (o.position != null) {
       this.transform.updateTranslation(getPoint(o.position));
     }
@@ -5606,17 +5435,6 @@ class FigureElementCollection extends FigureElement {
     return null;
   }
 
-  updateLimits(
-    limits: Rect,
-    // transforms: OBJ_SpaceTransforms = this.figureTransforms,
-  ) {
-    for (let i = 0; i < this.drawOrder.length; i += 1) {
-      const element = this.elements[this.drawOrder[i]];
-      element.updateLimits(limits);
-    }
-    this.figureLimits = limits;
-    // this.figureTransforms = transforms;
-  }
 
   updateHTMLElementTie(
     container: HTMLElement,

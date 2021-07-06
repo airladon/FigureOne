@@ -50,7 +50,12 @@ function makeFigure(backgroundColor, htmlId) {
         line: { width: 0.005 },
         xStep: 0.1,
         yStep: 0.1,
-        bounds: figure.limits._dup(),
+        bounds: {
+          left: figure.scene.left,
+          bottom: figure.scene.bottom,
+          width: figure.scene.right - figure.scene.left,
+          height: figure.scene.top - figure.scene.bottom,
+        },
       },
     },
     {
@@ -62,7 +67,12 @@ function makeFigure(backgroundColor, htmlId) {
         line: { width: 0.005 },
         xStep: 0.5,
         yStep: 0.5,
-        bounds: figure.limits._dup(),
+        bounds: {
+          left: figure.scene.left,
+          bottom: figure.scene.bottom,
+          width: figure.scene.right - figure.scene.left,
+          height: figure.scene.top - figure.scene.bottom,
+        },
       },
     },
 

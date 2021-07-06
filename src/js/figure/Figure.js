@@ -2,8 +2,8 @@
 import WebGLInstance from './webgl/webgl';
 
 import {
-  Rect, Point, Transform, getRect,
-  getPoint, getPlane,
+  Point, Transform, getRect,
+  getPoint,
 } from '../tools/g2';
 import Scene from '../tools/scene';
 import type { OBJ_Scene } from '../tools/scene';
@@ -74,8 +74,7 @@ export type OBJ_FigureLimits = {
 }
 
 export type OBJ_FigureForElement = {
-  limits: Rect,
-  spaceTransformMatrix: (string, string) => Type3DMatrix,
+  // spaceTransformMatrix: (string, string) => Type3DMatrix,
   animateNextFrame: (?boolean, ?string) => void,
   animationFinished: () => void,
   recorder: Recorder,
@@ -85,8 +84,8 @@ export type OBJ_FigureForElement = {
 /**
   * Figure options object
   * @property {string} [htmlId] HTML `div` tag `id` to tie figure to (`"figureOneContainer"`)
-  * @property {TypeParsableRect} [limits] - limits (bottom left
-  *  corner at (-1, -1), width 2, height 2)
+  * @property {TypeParsableRect} [limits] - simple override for 2D scene
+  * @property {OBJ_Scene} [scene]
   * @property {TypeColor} [color] default color (`[0, 0, 0, 1]`)
   * @property {OBJ_Font} [font] default font (`{ family: 'Helvetica,
   * size: 0.2, style: 'normal', weight: 'normal' }`)
@@ -97,7 +96,7 @@ export type OBJ_FigureForElement = {
  */
 export type OBJ_Figure = {
   htmlId?: string,
-  // limits?: TypeParsableRect,
+  limits?: TypeParsableRect,
   scene?: OBJ_Scene,
   color?: TypeColor,
   font?: OBJ_Font,
@@ -248,16 +247,15 @@ class Figure {
   timeKeeper: TimeKeeper;
   recorder: Recorder;
   gesture: Gesture;
-  // inTransition: boolean;
+
   beingMovedElement: null | FigureElement;
 
   beingTouchedElement: null | FigureElement;
 
-  // touchTopElementOnly: boolean;
+
   previousCursorPoint: Point;
   originalScalePoint: Point | null;
 
-  limits: Rect;
   stateTime: DOMHighResTimeStamp;
 
   // gestureElement: HTMLElement;
@@ -276,9 +274,9 @@ class Figure {
 
   backgroundColor: Array<number>;
   fontScale: number;
-  // layout: Object;
 
-  // oldScrollY: number;
+
+
   lastDrawTime: number;
   drawQueued: boolean;
   waitForFrames: number;
@@ -298,7 +296,7 @@ class Figure {
   defaultLength: number;
 
   animationFinishedCallback: ?(string | (() => void));
-  // updateFontSize: string;
+
 
   isTouchDevice: boolean;
   fnMap: FunctionMap;
@@ -323,17 +321,7 @@ class Figure {
     num: number,
   };
 
-  // camera: OBJ_Camera;
-  // viewMatrix: Type3DMatrix;
-  // projection: OBJ_Projection;
-  // projectionMatrix: Type3DMatrix;
-  // light: OBJ_Light;
-  // scene: OBJ_Scene;
   scene: Scene;
-
-  // frameRateInformation: string;
-  // frameRateHistory: Array<number>;
-  // frameRate
 
   animations: AnimationManager;
 
@@ -343,12 +331,10 @@ class Figure {
     preparingToSetState: boolean;
   };
 
-  // pauseAfterNextDrawFlag: boolean;
 
   constructor(options: OBJ_Figure = {}) {
     const defaultOptions = {
       htmlId: 'figureOneContainer',
-      limits: new Rect(-1, -1, 2, 2),
       fontScale: 1,
       color: [0, 0, 0, 1],
       dimColor: [0.5, 0.5, 0.5, 1],
@@ -360,13 +346,13 @@ class Figure {
         opacity: 1,
       },
       backgroundColor: [1, 1, 1, 1],
-      scene: {
-        style: '2D',
-        left: -1,
-        right: 1,
-        bottom: -1,
-        top: 1,
-      },
+      // scene: {
+      //   style: '2D',
+      //   left: -1,
+      //   right: 1,
+      //   bottom: -1,
+      //   top: 1,
+      // },
     };
     this.frameRate = {
       information: null,
@@ -386,7 +372,7 @@ class Figure {
     this.nextDrawTimerDuration = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
-      htmlId, limits,
+      htmlId,
     } = optionsToUse;
 
     this.defaultColor = optionsToUse.color;
@@ -508,11 +494,40 @@ class Figure {
       this.gesture = new Gesture(this);
     }
 
+    if (optionsToUse.limits != null) {
+      const limits = getRect(optionsToUse.limits);
+      optionsToUse.scene = {
+        style: '2D',
+        left: limits.left,
+        right: limits.right,
+        top: limits.top,
+        bottom: limits.bottom,
+      };
+    }
+    if (optionsToUse.scene == null) {
+      const width = this.canvasLow.clientWidth;
+      const height = this.canvasLow.clientHeight;
+      let w;
+      let h;
+      if (width > height) {
+        w = width / height * 2;
+        h = 2;
+      } else {
+        w = 2;
+        h = height / width * 2;
+      }
+      optionsToUse.scene = {
+        style: '2D',
+        left: -w / 2,
+        right: w / 2,
+        bottom: -h / 2,
+        top: h / 2,
+      };
+    }
     this.scene = new Scene(optionsToUse.scene);
     this.previousCursorPoint = new Point(0, 0);
     this.isTouchDown = false;
     this.fontScale = optionsToUse.fontScale;
-    this.updateLimits(limits);
     this.setDefaultLineWidth(options.lineWidth || null);
     this.setDefaultLength(options.length || null);
     this.drawQueued = false;
@@ -555,7 +570,6 @@ class Figure {
     if (optionsToUse.elements) {
       // eslint-disable-next-line new-cap
       this.elements = new optionsToUse.elements(this);
-      this.elements.figureLimits = this.limits;
       this.initElements();
     }
     this.waitForFrames = 0;
@@ -717,7 +731,6 @@ class Figure {
     const figureWidth = this.scene.right - this.scene.left;
     const pixelWidth = this.webglLow.gl != null ? this.webglLow.gl.canvas.width : 100;
     this.defaultLineWidth = Math.max(figureWidth / pixelWidth, figureWidth / 800);
-    // this.defaultLineWidth = this.limits.width / 100;
     // const zero = this.transformPoint([0, 0], 'gl', 'figure');
     // const one = this.transformPoint([1, 0], 'gl', 'figure');
     // this.defaultLineWidth = Math.abs(one.distance(zero) / 10);
@@ -1175,7 +1188,6 @@ class Figure {
     return new FigurePrimitives(
       webgl, draw2D,
       this.htmlCanvas,
-      this.limits,
       this.scene,
       this.animateNextFrame.bind(this, true, 'getShapes'),
       this.defaultColor,
@@ -1476,7 +1488,6 @@ class Figure {
     this.elements.getCanvas = () => this.canvasLow;
     this.setupAnimations();
     this.elements.setFigure({
-      limits: this.limits,
       spaceTransformMatrix: this.spaceTransformMatrix.bind(this),
       animateNextFrame: this.animateNextFrame.bind(this),
       animationFinished: this.animationFinished.bind(this),
@@ -1489,10 +1500,6 @@ class Figure {
 
   setElements(collection: FigureElementCollection) {
     this.elements = collection;
-    // this.animations = this.elements.animations;
-    // this.elements.scene = this.scene;
-    // this.elements.getCanvas = () => this.canvasLow;
-    // this.setupAnimations();
     this.initElements();
   }
 
@@ -1551,10 +1558,7 @@ class Figure {
     this.elements.setFirstTransform(new Transform());
   }
 
-  updateLimits(limits: TypeParsableRect) {
-    const l = getRect(limits);
-    this.limits = l._dup();
-  }
+
 
   // Renders all tied elements in the first level of figure elements
   renderAllElementsToTiedCanvases(force: boolean = false) {
@@ -1688,9 +1692,6 @@ class Figure {
   resize(skipHTMLTie: boolean = false) {
     this.webglLow.resize();
     this.draw2DLow.resize();
-    if (this.elements != null) {
-      this.elements.updateLimits(this.limits);
-    }
     this.sizeHtmlText();
     if (skipHTMLTie) {
       this.elements.resize();
@@ -3013,12 +3014,12 @@ class Figure {
         // mods: { isShown: true },
         text: ['Ave:', 'Max:'],
         position: [
-          this.limits.left,
-          this.limits.bottom,
+          this.scene.left,
+          this.scene.bottom,
         ],
         xAlign: 'left',
         yAlign: 'bottom',
-        font: { size: this.limits.width / 30 },
+        font: { size: (this.scene.right - this.scene.left) / 30 },
       },
       options,
     ));

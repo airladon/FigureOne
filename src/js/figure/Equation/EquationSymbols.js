@@ -1650,7 +1650,6 @@ export default class EquationSymbols {
       this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('VinculumSymbol').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
       optionsToUse,
       // 'strip',
     ));
@@ -1672,7 +1671,6 @@ export default class EquationSymbols {
       this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('Box').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
       optionsToUse,
       // 'strip',
     ));
@@ -1693,7 +1691,6 @@ export default class EquationSymbols {
       this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('Line').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
       optionsToUse,
     ));
   }
@@ -1716,7 +1713,6 @@ export default class EquationSymbols {
       this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('TouchBox').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
       optionsToUse,
       // 'strip',
     ));
@@ -1744,7 +1740,6 @@ export default class EquationSymbols {
       this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('ArrowSymbol').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
       optionsToUse,
       // 'strip',
     ));
@@ -1767,7 +1762,6 @@ export default class EquationSymbols {
       this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('sum').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
       optionsToUse,
       // 'strip',
     ));
@@ -1788,7 +1782,6 @@ export default class EquationSymbols {
       this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('Sum').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
       optionsToUse,
       // 'strip',
     ));
@@ -1819,7 +1812,6 @@ export default class EquationSymbols {
       this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('Integral').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
       // optionsToUse.staticSize,
       optionsToUse,
       // 'triangles',
@@ -1873,7 +1865,6 @@ export default class EquationSymbols {
       this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('bracket').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
       optionsToUse,
       // 'strip',
     );
@@ -1895,7 +1886,6 @@ export default class EquationSymbols {
       this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('bracket').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
       optionsToUse,
       // 'triangles',
     );
@@ -1948,7 +1938,6 @@ export default class EquationSymbols {
       this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('bracket').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
       optionsToUse,
       // 'strip',
     ));
@@ -1968,7 +1957,6 @@ export default class EquationSymbols {
       this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('bar').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
       optionsToUse,
       // 'strip',
     ));
@@ -1991,7 +1979,6 @@ export default class EquationSymbols {
       this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('brace').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
       optionsToUse,
       // 'strip',
     ));
@@ -2010,7 +1997,6 @@ export default class EquationSymbols {
       this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('bar').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
       optionsToUse,
       // 'strip',
     ));
@@ -2036,7 +2022,6 @@ export default class EquationSymbols {
       this.shapes.webgl[0],
       optionsToUse.color,
       new Transform('bar').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
       optionsToUse,
       // 'strip',
     ));

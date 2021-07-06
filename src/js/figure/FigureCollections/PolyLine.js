@@ -530,7 +530,6 @@ export default class CollectionsPolyline extends FigureElementCollection {
       reverse: false,
       transform: new Transform('PolyLine').scale(1, 1).rotate(0).translate(0, 0),
       makeValid: null,
-      limits: collections.primitives.limits,
     };
     if (options.makeValid != null && options.makeValid.shape != null && options.makeValid.shape === 'triangle') {
       defaultOptions.makeValid = {

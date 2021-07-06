@@ -387,14 +387,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -664,14 +656,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -1432,14 +1416,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -1709,14 +1685,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -2657,14 +2625,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -2934,14 +2894,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -5490,14 +5442,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -5767,14 +5711,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -6835,14 +6771,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -7112,14 +7040,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -9668,14 +9588,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -9945,14 +9857,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -10833,14 +10737,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -11110,14 +11006,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -11818,14 +11706,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -12095,14 +11975,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -12594,14 +12466,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -12871,14 +12735,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -13410,14 +13266,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -13687,14 +13535,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -14241,14 +14081,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -14518,14 +14350,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -14990,14 +14814,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -15267,14 +15083,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -15739,14 +15547,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -16016,14 +15816,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -16488,14 +16280,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -16765,14 +16549,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -17432,14 +17208,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -17709,14 +17477,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -18376,14 +18136,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -18653,14 +18405,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -19321,14 +19065,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -19598,14 +19334,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -20265,14 +19993,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -20542,14 +20262,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -21209,14 +20921,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -21486,14 +21190,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -21958,14 +21654,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -22235,14 +21923,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -22707,14 +22387,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -22984,14 +22656,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -23456,14 +23120,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -23733,14 +23389,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -24222,14 +23870,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -24499,14 +24139,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -24971,14 +24603,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -25248,14 +24872,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -25737,14 +25353,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -26014,14 +25622,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -26486,14 +26086,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -26763,14 +26355,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -27483,14 +27067,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -27760,14 +27336,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -28264,14 +27832,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -28541,14 +28101,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -29013,14 +28565,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -29290,14 +28834,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -29762,14 +29298,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -30039,14 +29567,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -30530,14 +30050,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -30807,14 +30319,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -31341,14 +30845,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -31618,14 +31114,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -32131,14 +31619,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -32408,14 +31888,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -32907,14 +32379,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -33184,14 +32648,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -33683,14 +33139,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -33960,14 +33408,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -34432,14 +33872,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -34709,14 +34141,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -35181,14 +34605,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -35458,14 +34874,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -35930,14 +35338,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -36207,14 +35607,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
@@ -36679,14 +36071,6 @@ FigureElementPrimitive {
     "z": 0,
   },
   "figure": null,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
       "map": Object {},
@@ -36956,14 +36340,6 @@ FigureElementPrimitive {
     "element": null,
     "scale": "fit",
     "updateOnResize": true,
-    "window": Rect {
-      "bottom": -1,
-      "height": 2,
-      "left": -1,
-      "right": 1,
-      "top": 1,
-      "width": 2,
-    },
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,

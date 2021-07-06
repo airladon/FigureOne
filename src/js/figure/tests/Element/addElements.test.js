@@ -211,9 +211,6 @@ describe('Figure Equations From Object', () => {
       },
     };
   });
-  test('Figure instantiation', () => {
-    expect(figure.limits).toEqual(new Rect(-1, -1, 2, 2));
-  });
   test('Simple', () => {
     ways.simple();
     const { elements } = figure;
