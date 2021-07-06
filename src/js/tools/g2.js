@@ -36,9 +36,11 @@ import sphere from './3d/sphere';
 import { lathe, getLathePoints } from './3d/lathe';
 import cone from './3d/cone';
 import rod from './3d/rod';
-import { polygon } from './geometry/polygon';
+// import { polygon } from './geometry/polygon';
 import cube from './3d/cube';
 import * as surface from './3d/surface';
+import { pointsToArray, pointsToArray2 } from './geometry/tools';
+import { polygon, polygonLine } from './2D/polygon';
 
 
 type Type3Components = [number, number, number];
@@ -570,11 +572,14 @@ export {
   getNormal,
   sphere,
   lathe,
-  polygon,
   rod,
   cone,
   cube,
   surface,
   getLathePoints,
   decelerateVector,
+  pointsToArray2,
+  pointsToArray,
+  polygon,
+  polygonLine,
 };

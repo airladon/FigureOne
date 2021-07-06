@@ -1145,6 +1145,13 @@ function parseTransform(inTransform: TypeParsableTransform): Transform {
   throw new Error(`FigureOne could not parse transform: '${JSON.stringify(inTransform)}'`);
 }
 
+function getMatrix(matrixOrTransform: TypeParsableTransfrom | Type3DMatrix) {
+  if (Array.isArray(matrixOrTransform) && matrixOrTransform.length === 16 && typeof matrixOrTransform[0] === 'number') {
+    return matrixOrTransform;
+  }
+  return parseTransform(matrixOrTransform);
+}
+
 /**
  * Convert a parsable transform definition to a {@link Transform}.
  * @param {TypeParsableTransform} t parsable transform definition
@@ -1216,5 +1223,6 @@ export {
   Transform,
   isParsableTransform,
   transformValueToArray,
+  getMatrix,
 };
 

@@ -2,6 +2,9 @@ import {
   Point,
   spaceToSpaceTransform,
   getBoundingRect,
+  pointsToArray,
+  pointsToArray2,
+  getPoints,
 } from './g2';
 
 describe('g2 tests', () => {
