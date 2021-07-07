@@ -2,11 +2,23 @@
 import { joinObjects } from '../../tools/tools';
 
 /**
- * Vertex shader composition
+ * Vertex shader composition options.
+ *
+ * Shader source code can be automatically composed for different vertex
+ * dimension (2D vs 3D), coloring and lighting options. Composed source code
+ * uses specific variable names that will need corresponding buffers and
+ * uniforms defined.
+ *
+ * `dimension` defines whether each vertex has two components (x, y) or three
+ * components (x, y, z). The variable `a_vertex` is used to define the vertex position and so a buffer with name `a_vertex` and size 
+ *
+ * @property {2 | 3} [dimension] (`2`)
+ * @property {'vertex' | 'uniform' | 'texture'} [color] (`uniform`)
+ * @property {'point' | 'directional' | null} [light] (`null`)
  */
 export type OBJ_VertexShader = {
   light?: 'point' | 'directional' | null,
-  normals?: boolean,
+  // normals?: boolean,
   color?: 'vertex' | 'uniform' | 'texture',
   dimension?: 2 | 3,
 };
@@ -31,14 +43,14 @@ export type TypeFragShader = string
 function composeVertexShader(
   options: {
     dimension: 2 | 3,
-    normals: boolean,
+    // normals: boolean,
     color: 'vertex' | 'uniform' | 'texture',
     light: null | 'point ' | 'directional',
   } = {},
 ) {
   const defaultOptions = {
     dimension: 2,
-    normals: false,
+    // normals: false,
     color: 'uniform',
     light: null,
   };
@@ -69,14 +81,14 @@ function composeVertexShader(
   }
 
   // Normals
-  if (normals) {
+  if (light != null) {
     src += 'attribute vec3 a_norm;\n';
     src += 'varying vec3 v_norm;\n';
     src += 'uniform mat4 u_worldInverseTranspose;\n';
     vars.push('u_worldInverseTranspose', 'a_norm');
   }
 
-  // Direcitonal Light
+  // Point Light requires light direction calculation per vertex
   if (light === 'point') {
     src += 'uniform vec3 u_lightWorldPosition;\n';
     src += 'uniform mat4 u_worldMatrix;\n';
@@ -100,7 +112,7 @@ function composeVertexShader(
     src += '  v_col = a_col;\n';
   }
 
-  if (normals) {
+  if (light != null) {
     src += '  v_norm = mat3(u_worldInverseTranspose) * a_norm;\n';
   }
 
