@@ -207,8 +207,9 @@ class GLObject extends DrawingObject {
    */
   addTexture(
     location: string,
-    mapTo: Rect = new Rect(-1, -1, 2, 2),
     mapFrom: Rect = new Rect(0, 0, 1, 1),
+    mapTo: Rect = new Rect(-1, -1, 2, 2),
+    mapToBuffer: string = 'a_vertex',
     points: Array<number>,
     repeat: boolean = false,
     onLoad: null | (() => void) = null,
@@ -225,6 +226,7 @@ class GLObject extends DrawingObject {
         buffer: this.gl.createBuffer(),
         type: 'image',
         data: null,
+        mapToBuffer,
       };
     }
     this.onLoad = onLoad;
@@ -258,7 +260,6 @@ class GLObject extends DrawingObject {
       const { src } = texture;
       if (src && texture.data == null) {
         // Fill the texture with a 1x1 blue pixel.
-        console.log(colorToInt(loadColor))
         gl.texImage2D(
           gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0,
           gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(colorToInt(loadColor)),
@@ -323,11 +324,15 @@ class GLObject extends DrawingObject {
     const texWidth = xMaxTex - xMinTex;
     const texHeight = yMaxTex - yMinTex;
     const { texture } = this;
+    const buffer = this.buffers[texture.mapToBuffer];
+    if (buffer == null) {
+      throw new Error(`FigureOne mapToBuffer buffer ('${texture.mapToBuffer}') does not exist. Available buffers: ${Object.keys(this.buffers)}.`);
+    }
     if (texture != null) {
       texture.points = [];
-      for (let i = 0; i < this.points.length; i += 2) {
-        const x = this.points[i];
-        const y = this.points[i + 1];
+      for (let i = 0; i < buffer.data.length; i += buffer.size) {
+        const x = buffer.data[i];
+        const y = buffer.data[i + 1];
         const texNormX = (x - xMinGL) / glWidth;
         const texNormY = (y - yMinGL) / glHeight;
         texture.points.push(texNormX * texWidth + xMinTex);
@@ -337,14 +342,14 @@ class GLObject extends DrawingObject {
   }
 
   addVertices(vertices: Array<number>, usage: TypeGLBufferUsage = 'STATIC') {
-    this.points = vertices;
-    this.addBuffer('a_position', 2, vertices, 'FLOAT', false, 0, 0, usage);
+    // this.points = vertices;
+    this.addBuffer('a_vertex', 2, vertices, 'FLOAT', false, 0, 0, usage);
     this.numVertices = vertices.length / 2;
   }
 
   addVertices3(vertices: Array<number>, usage: TypeGLBufferUsage = 'STATIC') {
-    this.points = vertices;
-    this.addBuffer('a_position', 3, vertices, 'FLOAT', false, 0, 0, usage);
+    // this.points = vertices;
+    this.addBuffer('a_vertex', 3, vertices, 'FLOAT', false, 0, 0, usage);
     this.numVertices = vertices.length / 3;
   }
 
@@ -399,6 +404,7 @@ class GLObject extends DrawingObject {
       offset,
       usage,
       len: data.length,
+      data,
     };
     this.fillBuffer(name, data);
   }
@@ -461,15 +467,15 @@ class GLObject extends DrawingObject {
   }
 
   updateVertices(vertices: Array<number>) {
-    this.points = vertices;
+    // this.points = vertices;
     this.numVertices = vertices.length / 2;
-    this.updateBuffer('a_position', vertices);
+    this.updateBuffer('a_vertex', vertices);
   }
 
   updateVertices3(vertices: Array<number>) {
-    this.points = vertices;
+    // this.points = vertices;
     this.numVertices = vertices.length / 3;
-    this.updateBuffer('a_position', vertices);
+    this.updateBuffer('a_vertex', vertices);
   }
 
   updateBuffer(name: string, data: Array<number>) {
@@ -620,7 +626,7 @@ class GLObject extends DrawingObject {
     }
 
     Object.keys(this.buffers).forEach((bufferName) => {
-      if (targetTexture && bufferName !== 'a_position') {
+      if (targetTexture && bufferName !== 'a_vertex') {
         return;
       }
       const {
@@ -704,7 +710,6 @@ class GLObject extends DrawingObject {
 
     gl.uniform1f(locations.u_z, this.z);
 
-    console.log(color)
     gl.uniform4f(
       locations.u_color,
       color[0], color[1], color[2], color[3],
@@ -731,7 +736,6 @@ class GLObject extends DrawingObject {
       gl.uniform1i(locations.u_use_texture, 1);
       const { index } = webglInstance.textures[texture.id];
       gl.uniform1i(locations.u_texture, index);
-      console.log(texture);
     } else {
       gl.uniform1i(locations.u_use_texture, 0);
     }
@@ -760,7 +764,7 @@ class GLObject extends DrawingObject {
   //   gl.enable(gl.DEPTH_TEST);
 
   //   Object.keys(this.buffers).forEach((bufferName) => {
-  //     if (bufferName !== 'a_position') {
+  //     if (bufferName !== 'a_vertex') {
   //       return;
   //     }
   //     const {

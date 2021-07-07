@@ -419,12 +419,12 @@ FigureOne's default shaders are below:
 Vertex Shader:
 
 ```c
-attribute vec2 a_position;
+attribute vec2 a_vertex;
 uniform mat3 u_worldMatrix;
 uniform float u_z;
 
 void main() {
-  gl_Position = vec4((u_worldMatrix * vec3(a_position, 1)).xy, u_z, 1);'
+  gl_Position = vec4((u_worldMatrix * vec3(a_vertex, 1)).xy, u_z, 1);'
 }
 ```
 
@@ -439,7 +439,7 @@ void main() {
 }
 ```
 
-The vertex shader takes in the vertex location (`a_position`) and transforms it by some transform matrix (`u_worldMatrix`). Here the `a_` and `u_` prefixes denote attributes and uniforms respectively.
+The vertex shader takes in the vertex location (`a_vertex`) and transforms it by some transform matrix (`u_worldMatrix`). Here the `a_` and `u_` prefixes denote attributes and uniforms respectively.
 
 These shaders are 2D shaders, but everything in WebGL is in 3D space, meaning a z coordinate (`u_z`) is also needed. In this case the z coordinate can be used to position shapes over other shapes.
 
@@ -458,7 +458,7 @@ FigureOne also has two more pairs of built in shaders:
 We will first write a shader that does just a part of our example above - it will move shapes in one direction, but not bounce them of boundaries. The shader logic is much simpler, and it will allow introduction of FigureOne's api to define the shader and corresponding attributes and uniforms.
 
 To start with, we will define two attribute arrays: 
-* Initial vertex positions (`a_position`)
+* Initial vertex positions (`a_vertex`)
 * Initial vertex velocities (`a_velocity`)
 
 We will also define a uniform that has the time from the start of the animation (`u_time`).
@@ -466,14 +466,14 @@ We will also define a uniform that has the time from the start of the animation 
 Thus our vertex shader will be:
 
 ```c
-attribute vec2 a_position;
+attribute vec2 a_vertex;
 attribute vec2 a_velocity;
 uniform mat3 u_worldMatrix;
 uniform float u_time;
 
 void main() {
-  float x = a_position.x + a_velocity.x * u_time;
-  float y = a_position.y + a_velocity.y * u_time;
+  float x = a_vertex.x + a_velocity.x * u_time;
+  float y = a_vertex.y + a_velocity.y * u_time;
   gl_Position = vec4((u_worldMatrix * vec3(x, y, 1)).xy, 0, 1);
 ```
 
@@ -490,18 +490,18 @@ const { rand } = Fig.tools.math;
 
 // Vertex shader
 // Input attributes:
-//    - 'a_position' (vertex position)
+//    - 'a_vertex' (vertex position)
 //    - 'a_velocity: (vertex velocity)
 // Input uniforms:
 //    - u_time: time from start of animation
 const vertexShader = `
-attribute vec2 a_position;
+attribute vec2 a_vertex;
 attribute vec2 a_velocity;
 uniform mat4 u_worldMatrix;
 uniform float u_time;
 void main() {
-  float x = a_position.x + a_velocity.x * u_time;
-  float y = a_position.y + a_velocity.y * u_time;
+  float x = a_vertex.x + a_velocity.x * u_time;
+  float y = a_vertex.y + a_velocity.y * u_time;
   gl_Position = u_worldMatrix * vec4(x, y, 0, 1);
 }`;
 
@@ -532,7 +532,7 @@ const element = figure.add({
   // matrix)
   vertexShader: {
     src: vertexShader,
-    vars: ['a_position', 'a_velocity', 'u_worldMatrix', 'u_time'],
+    vars: ['a_vertex', 'a_velocity', 'u_worldMatrix', 'u_time'],
   },
   // Build in shader with one color for all vertices
   fragShader: 'simple',
@@ -609,7 +609,7 @@ const figure = new Fig.Figure({
 const { rand } = Fig.tools.math;
 
 const vertexShader = `
-attribute vec2 a_position;
+attribute vec2 a_vertex;
 attribute vec4 a_color;
 attribute vec2 a_velocity;
 attribute vec2 a_center;
@@ -638,8 +638,8 @@ float calc(float limit, float pos, float center, float vel) {
   return x;
 }
 void main() {
-  float x = calc(3.0 - a_radius, a_position.x, a_center.x, a_velocity.x);
-  float y = calc(3.0 - a_radius, a_position.y, a_center.y, a_velocity.y);
+  float x = calc(3.0 - a_radius, a_vertex.x, a_center.x, a_velocity.x);
+  float y = calc(3.0 - a_radius, a_vertex.y, a_center.y, a_velocity.y);
   gl_Position = u_worldMatrix * vec4(x, y, 0, 1);
   v_col = a_color;
 }`;
@@ -680,7 +680,7 @@ const element = figure.add({
   // matrix)
   vertexShader: {
     src: vertexShader,
-    vars: ['a_position', 'a_color', 'a_velocity', 'a_center', 'a_radius', 'u_worldMatrix', 'u_time'],
+    vars: ['a_vertex', 'a_color', 'a_velocity', 'a_center', 'a_radius', 'u_worldMatrix', 'u_time'],
   },
   // Built in shader that allows for colored vertices
   fragShader: 'vertexColor',

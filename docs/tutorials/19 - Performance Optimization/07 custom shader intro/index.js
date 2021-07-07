@@ -8,18 +8,18 @@ const { rand } = Fig.tools.math;
 
 // Vertex shader
 // Input attributes:
-//    - 'a_position' (vertex position)
+//    - 'a_vertex' (vertex position)
 //    - 'a_velocity: (vertex velocity)
 // Input uniforms:
 //    - u_time: time from start of animation
 const vertexShader = `
-attribute vec2 a_position;
+attribute vec2 a_vertex;
 attribute vec2 a_velocity;
 uniform mat4 u_worldMatrix;
 uniform float u_time;
 void main() {
-  float x = a_position.x + a_velocity.x * u_time;
-  float y = a_position.y + a_velocity.y * u_time;
+  float x = a_vertex.x + a_velocity.x * u_time;
+  float y = a_vertex.y + a_velocity.y * u_time;
   gl_Position = u_worldMatrix * vec4(x, y, 0, 1);
 }`;
 
@@ -50,7 +50,7 @@ const element = figure.add({
   // matrix)
   vertexShader: {
     src: vertexShader,
-    vars: ['a_position', 'a_velocity', 'u_worldMatrix', 'u_time'],
+    vars: ['a_vertex', 'a_velocity', 'u_worldMatrix', 'u_time'],
   },
   // Built in shader with one color for all vertices
   fragShader: 'simple',

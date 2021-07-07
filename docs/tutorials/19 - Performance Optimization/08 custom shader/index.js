@@ -7,7 +7,7 @@ const figure = new Fig.Figure({
 const { rand } = Fig.tools.math;
 
 const vertexShader = `
-attribute vec2 a_position;
+attribute vec2 a_vertex;
 attribute vec4 a_color;
 attribute vec2 a_velocity;
 attribute vec2 a_center;
@@ -36,8 +36,8 @@ float calc(float limit, float pos, float center, float vel) {
   return x;
 }
 void main() {
-  float x = calc(3.0 - a_radius, a_position.x, a_center.x, a_velocity.x);
-  float y = calc(3.0 - a_radius, a_position.y, a_center.y, a_velocity.y);
+  float x = calc(3.0 - a_radius, a_vertex.x, a_center.x, a_velocity.x);
+  float y = calc(3.0 - a_radius, a_vertex.y, a_center.y, a_velocity.y);
   gl_Position = u_worldMatrix * vec4(x, y, 0, 1);
   v_col = a_color;
 }`;
@@ -78,7 +78,7 @@ const element = figure.add({
   // matrix)
   vertexShader: {
     src: vertexShader,
-    vars: ['a_position', 'a_color', 'a_velocity', 'a_center', 'a_radius', 'u_worldMatrix', 'u_time'],
+    vars: ['a_vertex', 'a_color', 'a_velocity', 'a_center', 'a_radius', 'u_worldMatrix', 'u_time'],
   },
   // Built in shader that allows for colored vertices
   fragShader: 'vertexColor',

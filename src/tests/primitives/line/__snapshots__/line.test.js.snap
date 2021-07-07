@@ -192,7 +192,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -374,7 +374,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -1029,7 +1029,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -1403,7 +1403,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -2094,7 +2094,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -2612,7 +2612,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -3615,7 +3615,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -5429,7 +5429,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -6144,7 +6144,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -6758,7 +6758,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -7761,7 +7761,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -9575,7 +9575,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -10254,7 +10254,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -10724,7 +10724,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -11367,7 +11367,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -11693,7 +11693,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -12271,7 +12271,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -12453,7 +12453,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -13071,7 +13071,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -13253,7 +13253,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -13886,7 +13886,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -14068,7 +14068,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -14619,7 +14619,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -14801,7 +14801,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -15352,7 +15352,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -15534,7 +15534,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -16085,7 +16085,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -16267,7 +16267,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -16821,7 +16821,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -17195,7 +17195,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -17749,7 +17749,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -18123,7 +18123,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -18678,7 +18678,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -19052,7 +19052,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -19606,7 +19606,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -19980,7 +19980,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -20534,7 +20534,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -20908,7 +20908,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -21459,7 +21459,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -21641,7 +21641,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -22192,7 +22192,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -22374,7 +22374,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -22925,7 +22925,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -23107,7 +23107,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -23675,7 +23675,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -23857,7 +23857,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -24408,7 +24408,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -24590,7 +24590,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -25158,7 +25158,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -25340,7 +25340,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -25891,7 +25891,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -26073,7 +26073,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -26696,7 +26696,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -27054,7 +27054,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -27605,7 +27605,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -27819,7 +27819,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -28370,7 +28370,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -28552,7 +28552,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -29103,7 +29103,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -29285,7 +29285,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -29855,7 +29855,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -30037,7 +30037,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -30650,7 +30650,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -30832,7 +30832,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -31424,7 +31424,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -31606,7 +31606,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -32184,7 +32184,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -32366,7 +32366,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -32944,7 +32944,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -33126,7 +33126,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -33677,7 +33677,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -33859,7 +33859,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -34410,7 +34410,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -34592,7 +34592,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -35143,7 +35143,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -35325,7 +35325,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],
@@ -35876,7 +35876,7 @@ FigureElementPrimitive {
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffers": Object {
-      "a_position": Object {
+      "a_vertex": Object {
         "buffer": undefined,
         "normalize": false,
         "offset": 0,
@@ -36058,7 +36058,7 @@ FigureElementPrimitive {
       },
       "lastUsedProgram": null,
       "locations": Object {
-        "a_position": "",
+        "a_vertex": "",
       },
       "programs": Array [],
       "resize": [Function],

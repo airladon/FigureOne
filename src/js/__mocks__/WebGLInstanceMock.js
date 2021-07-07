@@ -2,7 +2,7 @@
 const webgl = {
   locations: {
     // eslint-disable-next-line camelcase
-    a_position: '',
+    a_vertex: '',
   },
   gl: {
     TRIANGLES: 1,
@@ -46,7 +46,7 @@ const webgl = {
   getProgram: () => {},
   useProgram: () => ({
     // eslint-disable-next-line camelcase
-    a_position: '',
+    a_vertex: '',
     // eslint-disable-next-line camelcase
     u_worldViewProjectionMatrix: '',
   }),

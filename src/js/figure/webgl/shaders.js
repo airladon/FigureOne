@@ -50,17 +50,18 @@ function composeVertexShader(
 
   // Vertex position
   if (dimension === 2) {
-    src += 'attribute vec2 a_position;\n';
+    src += 'attribute vec2 a_vertex;\n';
     src += 'uniform float u_z;\n';
-    vars.push('a_position', 'u_z');
+    vars.push('a_vertex', 'u_z');
   } else if (dimension === 3) {
-    src += 'attribute vec4 a_position;\n';
-    vars.push('a_position');
+    src += 'attribute vec4 a_vertex;\n';
+    vars.push('a_vertex');
   }
 
   if (color === 'texture') {
     src += 'attribute vec2 a_texcoord;\n';
     src += 'varying vec2 v_texcoord;\n';
+    vars.push('a_texcoord');
   } else if (color === 'vertex') {
     src += 'attribute vec4 a_col;\n';
     src += 'varying vec4 v_col;\n';
@@ -88,9 +89,9 @@ function composeVertexShader(
 
   // Dimensional gl_Position
   if (dimension === 2) {
-    src += '  gl_Position = u_worldViewProjectionMatrix * vec4(a_position.xy, u_z, 1);\n';
+    src += '  gl_Position = u_worldViewProjectionMatrix * vec4(a_vertex.xy, u_z, 1);\n';
   } else {
-    src += '  gl_Position = u_worldViewProjectionMatrix * a_position;\n';
+    src += '  gl_Position = u_worldViewProjectionMatrix * a_vertex;\n';
   }
 
   if (color === 'texture') {
@@ -104,7 +105,7 @@ function composeVertexShader(
   }
 
   if (light === 'point') {
-    src += '  vec3 surfaceWorldPosition = (u_worldMatrix * a_position).xyz;\n';
+    src += '  vec3 surfaceWorldPosition = (u_worldMatrix * a_vertex).xyz;\n';
     src += '  v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;\n';
   }
 
@@ -184,36 +185,36 @@ function composeFragShader(
 const vertex = {
   simple: {
     src: `
-attribute vec4 a_position; 
+attribute vec4 a_vertex; 
 uniform mat4 u_worldViewProjectionMatrix;
 void main() {
-  gl_Position = u_worldViewProjectionMatrix * a_position;
+  gl_Position = u_worldViewProjectionMatrix * a_vertex;
 }`,
-    vars: ['a_position', 'u_worldViewProjectionMatrix'],
+    vars: ['a_vertex', 'u_worldViewProjectionMatrix'],
   },
   selector: {
     src: `
-attribute vec4 a_position; 
+attribute vec4 a_vertex; 
 uniform mat4 u_worldViewProjectionMatrix;
 void main() {
-  gl_Position = u_worldViewProjectionMatrix * a_position;
+  gl_Position = u_worldViewProjectionMatrix * a_vertex;
 }`,
-    vars: ['a_position', 'u_worldViewProjectionMatrix'],
+    vars: ['a_vertex', 'u_worldViewProjectionMatrix'],
   },
   noLight: {
     src:
-        'attribute vec3 a_position;'
+        'attribute vec3 a_vertex;'
         + 'uniform mat4 u_worldMatrix;'
         + 'uniform mat4 u_projectionMatrix;'
         + 'uniform mat4 u_viewMatrix;'
         + 'void main() {'
-          + 'gl_Position = u_projectionMatrix * u_viewMatrix * u_worldMatrix * vec4(a_position.xyz, 1);'
+          + 'gl_Position = u_projectionMatrix * u_viewMatrix * u_worldMatrix * vec4(a_vertex.xyz, 1);'
         + '}',
-    vars: ['a_position', 'u_worldMatrix', 'u_projectionMatrix', 'u_viewMatrix'],
+    vars: ['a_vertex', 'u_worldMatrix', 'u_projectionMatrix', 'u_viewMatrix'],
   },
   pointLight: {
     src: `
-attribute vec4 a_position;
+attribute vec4 a_vertex;
 attribute vec3 a_norm;
 varying vec3 v_norm;
 uniform vec3 u_lightWorldPosition;
@@ -222,30 +223,30 @@ uniform mat4 u_worldViewProjectionMatrix;
 uniform mat4 u_worldInverseTranspose;
 varying vec3 v_surfaceToLight;
 void main() {
-  gl_Position = u_worldViewProjectionMatrix * a_position;
+  gl_Position = u_worldViewProjectionMatrix * a_vertex;
   v_norm = mat3(u_worldInverseTranspose) * a_norm;
-  vec3 surfaceWorldPosition = (u_worldMatrix * a_position).xyz;
+  vec3 surfaceWorldPosition = (u_worldMatrix * a_vertex).xyz;
   v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
 }`,
-    vars: ['a_position', 'a_norm', 'u_worldViewProjectionMatrix', 'u_worldInverseTranspose', 'u_lightWorldPosition', 'u_worldMatrix'],
+    vars: ['a_vertex', 'a_norm', 'u_worldViewProjectionMatrix', 'u_worldInverseTranspose', 'u_lightWorldPosition', 'u_worldMatrix'],
   },
   directionalLight: {
     src: `
-attribute vec4 a_position;
+attribute vec4 a_vertex;
 attribute vec3 a_norm;
 varying vec3 v_norm;
 uniform mat4 u_worldViewProjectionMatrix;
 uniform mat4 u_worldInverseTranspose;
 void main() {
-  gl_Position = u_worldViewProjectionMatrix * a_position;
+  gl_Position = u_worldViewProjectionMatrix * a_vertex;
   v_norm = mat3(u_worldInverseTranspose) * a_norm;
 }`,
-    vars: ['a_position', 'a_norm', 'u_worldViewProjectionMatrix', 'u_worldInverseTranspose'],
+    vars: ['a_vertex', 'a_norm', 'u_worldViewProjectionMatrix', 'u_worldInverseTranspose'],
   },
   vertexColor: {
     src:
         `
-attribute vec2 a_position;
+attribute vec2 a_vertex;
 attribute vec4 a_col;
 varying vec4 v_col;
 uniform mat4 u_worldMatrix;
@@ -253,29 +254,29 @@ uniform mat4 u_projectionMatrix;
 uniform mat4 u_viewMatrix;
 uniform float u_z;
 void main() {
-  gl_Position = u_projectionMatrix * u_viewMatrix * u_worldMatrix * vec4(a_position.xy, u_z, 1);
+  gl_Position = u_projectionMatrix * u_viewMatrix * u_worldMatrix * vec4(a_vertex.xy, u_z, 1);
   v_col = a_col;
 }`,
-    vars: ['a_position', 'a_col', 'u_worldMatrix', 'u_z', 'u_projectionMatrix', 'u_viewMatrix'],
+    vars: ['a_vertex', 'a_col', 'u_worldMatrix', 'u_z', 'u_projectionMatrix', 'u_viewMatrix'],
   },
   vertexColor3D: {
     src:
         `
-attribute vec3 a_position;
+attribute vec3 a_vertex;
 attribute vec4 a_col;
 varying vec4 v_col;
 uniform mat4 u_worldMatrix;
 uniform mat4 u_projectionMatrix;
 uniform mat4 u_viewMatrix;
 void main() {
-  gl_Position = u_projectionMatrix * u_viewMatrix * u_worldMatrix * vec4(a_position.xyz, 1);
+  gl_Position = u_projectionMatrix * u_viewMatrix * u_worldMatrix * vec4(a_vertex.xyz, 1);
   v_col = a_col;
 }`,
-    vars: ['a_position', 'a_col', 'u_worldMatrix', 'u_projectionMatrix', 'u_viewMatrix'],
+    vars: ['a_vertex', 'a_col', 'u_worldMatrix', 'u_projectionMatrix', 'u_viewMatrix'],
   },
   withTexture: {
     src:
-        'attribute vec2 a_position;'
+        'attribute vec2 a_vertex;'
         + 'attribute vec2 a_texcoord;'
         + 'uniform mat4 u_worldMatrix;'
         + 'uniform mat4 u_projectionMatrix;'
@@ -283,10 +284,10 @@ void main() {
         + 'uniform float u_z;'
         + 'varying vec2 v_texcoord;'
         + 'void main() {'
-          + 'gl_Position = u_projectionMatrix * u_viewMatrix * u_worldMatrix * vec4(a_position.xy, u_z, 1);'
+          + 'gl_Position = u_projectionMatrix * u_viewMatrix * u_worldMatrix * vec4(a_vertex.xy, u_z, 1);'
           + 'v_texcoord = a_texcoord;'
         + '}',
-    vars: ['a_position', 'a_texcoord', 'u_worldMatrix', 'u_z', 'u_projectionMatrix', 'u_viewMatrix'],
+    vars: ['a_vertex', 'a_texcoord', 'u_worldMatrix', 'u_z', 'u_projectionMatrix', 'u_viewMatrix'],
   },
   morph4: {
     src: `

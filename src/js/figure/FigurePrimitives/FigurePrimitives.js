@@ -327,10 +327,10 @@ export type OBJ_GLBuffer = {
 };
 
 /**
- * GL vertex - associated with attribute 'a_position' in shader.
+ * GL vertex - associated with attribute 'a_vertex' in shader.
  *
  * Assumes buffer parameters of:
- * - name: 'a_position'
+ * - name: 'a_vertex'
  * - size: 2
  * - type: 'FLOAT'
  * - normalize: false
@@ -2385,6 +2385,7 @@ export default class FigurePrimitives {
         src: '',
         mapTo: new Rect(-1, -1, 2, 2),
         mapFrom: new Rect(0, 0, 1, 1),
+        mapToBuffer: 'a_vertex',
         repeat: false,
         onLoad: this.animateNextFrame,
         coords: [],
@@ -2453,8 +2454,12 @@ export default class FigurePrimitives {
     if (options.texture.src !== '') {
       const t = options.texture;
       glObject.addTexture(
-        t.src, getRect(t.mapTo), getRect(t.mapFrom), t.coords || [], t.repeat, t.onLoad, t.loadColor,
+        t.src, getRect(t.mapFrom), getRect(t.mapTo), t.mapToBuffer,
+        t.coords || [], t.repeat, t.onLoad, t.loadColor,
       );
+    }
+    if (options.numVertices !== 0) {
+      glObject.numVertices = options.numVertices;
     }
     if (glObject.numVertices === 0 && Object.keys(glObject.buffers).length > 0) {
       const bufferName = Object.keys(glObject.buffers)[0];
