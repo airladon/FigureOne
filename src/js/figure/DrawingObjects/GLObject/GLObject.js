@@ -52,8 +52,8 @@ class GLObject extends DrawingObject {
     data?: ?Image,
   };
 
-  buffers: {
-    [bufferName: string]: {
+  attributes: {
+    [attributeName: string]: {
       buffer: WebGLBuffer,
       size: number,
       type: number,
@@ -99,7 +99,7 @@ class GLObject extends DrawingObject {
     this.z = 0;
     this.programIndex = this.webgl.getProgram(vertexShader, fragmentShader);
     this.type = 'glPrimitive';
-    this.buffers = {};
+    this.attributes = {};
     this.numVertices = 0;
     this.uniforms = {};
     this.texture = null;
@@ -324,9 +324,9 @@ class GLObject extends DrawingObject {
     const texWidth = xMaxTex - xMinTex;
     const texHeight = yMaxTex - yMinTex;
     const { texture } = this;
-    const buffer = this.buffers[texture.mapToBuffer];
+    const buffer = this.attributes[texture.mapToBuffer];
     if (buffer == null) {
-      throw new Error(`FigureOne mapToBuffer buffer ('${texture.mapToBuffer}') does not exist. Available buffers: ${Object.keys(this.buffers)}.`);
+      throw new Error(`FigureOne mapToAttribute buffer ('${texture.mapToBuffer}') does not exist. Available attributes: ${Object.keys(this.attributes)}.`);
     }
     if (texture != null) {
       texture.points = [];
@@ -394,7 +394,7 @@ class GLObject extends DrawingObject {
     } else {
       throw new Error(`GLObject addBuffer usage needs to be FLOAT, BYTE, SHORT, UNSIGNED_BYTE or UNSIGNED_SHORT - received: "${typeIn}"`);
     }
-    this.buffers[name] = {
+    this.attributes[name] = {
       // buffer: gl.createBuffer(),
       buffer: null,
       size,
@@ -415,7 +415,7 @@ class GLObject extends DrawingObject {
   ) {
     const { gl } = this;
     let processedData;
-    const { type, usage } = this.buffers[name];
+    const { type, usage } = this.attributes[name];
     if (type === gl.FLOAT) {
       processedData = new Float32Array(data);
     } else if (type === gl.UNSIGNED_BYTE) {
@@ -427,8 +427,8 @@ class GLObject extends DrawingObject {
     } else if (type === gl.UNSIGNED_SHORT) {
       processedData = new Uint16Array(data);
     }
-    this.buffers[name].buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers[name].buffer);
+    this.attributes[name].buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.attributes[name].buffer);
     gl.bufferData(gl.ARRAY_BUFFER, processedData, usage);
   }
 
@@ -458,11 +458,11 @@ class GLObject extends DrawingObject {
 
   resetBuffers() {
     const { gl } = this;
-    Object.keys(this.buffers).forEach((bufferName) => {
-      gl.deleteBuffer(this.buffers[bufferName].buffer);
-      this.buffers[bufferName].buffer = null;
+    Object.keys(this.attributes).forEach((attributeName) => {
+      gl.deleteBuffer(this.attributes[attributeName].buffer);
+      this.attributes[attributeName].buffer = null;
     });
-    this.buffers = {};
+    this.attributes = {};
     this.resetTextureBuffer();
   }
 
@@ -479,8 +479,8 @@ class GLObject extends DrawingObject {
   }
 
   updateBuffer(name: string, data: Array<number>) {
-    this.gl.deleteBuffer(this.buffers[name].buffer);
-    this.buffers[name].buffer = null;
+    this.gl.deleteBuffer(this.attributes[name].buffer);
+    this.attributes[name].buffer = null;
     this.fillBuffer(name, data);
   }
 
@@ -625,19 +625,19 @@ class GLObject extends DrawingObject {
       gl.disable(gl.DEPTH_TEST);
     }
 
-    Object.keys(this.buffers).forEach((bufferName) => {
-      if (targetTexture && bufferName !== 'a_vertex') {
+    Object.keys(this.attributes).forEach((attributeName) => {
+      if (targetTexture && attributeName !== 'a_vertex') {
         return;
       }
       const {
         buffer, size, type, stride, offset, normalize,
-      } = this.buffers[bufferName];
-      gl.enableVertexAttribArray(locations[bufferName]);
+      } = this.attributes[attributeName];
+      gl.enableVertexAttribArray(locations[attributeName]);
       // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
       gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
       // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
       gl.vertexAttribPointer(
-        locations[bufferName],
+        locations[attributeName],
         size, type, normalize, stride, offset,
       );
     });
@@ -763,19 +763,19 @@ class GLObject extends DrawingObject {
   //   // gl.enable(gl.CULL_FACE);
   //   gl.enable(gl.DEPTH_TEST);
 
-  //   Object.keys(this.buffers).forEach((bufferName) => {
-  //     if (bufferName !== 'a_vertex') {
+  //   Object.keys(this.attributes).forEach((attributeName) => {
+  //     if (attributeName !== 'a_vertex') {
   //       return;
   //     }
   //     const {
   //       buffer, size, type, stride, offset, normalize,
-  //     } = this.buffers[bufferName];
-  //     gl.enableVertexAttribArray(locations[bufferName]);
+  //     } = this.attributes[attributeName];
+  //     gl.enableVertexAttribArray(locations[attributeName]);
   //     // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
   //     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
   //     // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
   //     gl.vertexAttribPointer(
-  //       locations[bufferName],
+  //       locations[attributeName],
   //       size, type, normalize, stride, offset,
   //     );
   //   });

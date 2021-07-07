@@ -269,8 +269,10 @@ export type OBJ_Collection = {
  * @property {Array<number>} [coords] texture coordinates to map to each vertex
  * in shape. If empty, then the texture coorindates will be automatically
  * generated using `mapTo` and `mapFrom`. (`[]`)
- * @property {TypeParsableRect} [mapTo] draw space window (`new TypeParsableRect(-1, -1, 2, 2)`)
  * @property {TypeParsableRect} [mapFrom] image space window (`new Rect(0, 0, 1, 1)`)
+ * @property {TypeParsableRect} [mapTo] draw space window (`new TypeParsableRect(-1, -1, 2, 2)`)
+ * @property {TypeParsableRect} [mapToAttribute] attribute name of the vertex
+ * definitions to map the texture to (`a_vertex`)
  * @property {boolean} [repeat] `true` will tile the image. Only works with
  * images that are square whose number of side pixels is a power of 2 (`false`)
  * @property {TypeColor} [loadColor] color to display while texture is loading.
@@ -282,8 +284,9 @@ export type OBJ_Collection = {
  */
 export type OBJ_Texture = {
   src?: string,
-  mapTo?: Rect,
   mapFrom?: Rect,
+  mapTo?: Rect,
+  mapToAttribute?: string,
   coords?: Array<number>,
   loadColor?: TypeColor,
   repeat?: boolean,
@@ -357,23 +360,73 @@ export type OBJ_GLUniform = {
   type: TypeGLUniform,
 };
 
+
+export type OBJ_Primitive = {
+  drawingObject: OBJ_DrawingObject,
+  // FigureElementPrimitiveOptions
+  name?: string,
+  position?: TypeParsablePoint,
+  transform?: TypeParsableTransform,
+  color?: TypeColor,
+  touch?: boolean | number | TypeParsablePoint,
+  move?: boolean | OBJ_ElementMove,
+  dimColor?: TypeColor,
+  defaultColor?: TypeColor,
+  scenarios?: TypeScenarios,
+  scene?: Scene,
+};
+
 /**
- * GLPrimitive allows shader customization.
+ * DiagramElementPrimitive with low level WegGL drawing object.
  *
- * @property {string} [name]
- * @property {string} [vertexShader]
- * @property {string} [fragShader]
+ * A number of WebGL specific and FigureElementPrimitive specific properties
+ * can be defined.
+ *
+ * WebGL specific properties are the WebGL primitive type, vertex shader,
+ * fragment shader, attributes, uniforms and an optional texture. The
+ * nomencalture for these properties is directly from WebGL.
+ *
+ * The Figure
+ *
+ * FigureElementPrimitive specific properties are `name`, `position`, `transform`, `color`, `dimColor`, `defaultColor`, `scenarios` and `scene`
+ *
+ * Shaders source code can be defined as a string, or composed automatically
+ * from options including `dimension`, `color` and `light`.
+ *
+ * To use the shader composers, options for dimension (2 or 3), light and
+ * color need to be used. The options 
+ *
+ * Use this to create any WebGL shape with full custom
+ *
+ * Allows customization of webGL
+ *
+ * @property {'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'} [glPrimitive]
+ * @property {string | OBJ_VertexShader} [vertexShader]
+ * @property {string | OBJ_FragShader} [fragShader]
+ * @property {Array<OBJ_GLBuffer>} [attributes]
+ * @property {Array<OBJ_GLUniform>} [uniforms]
  * @property {OBJ_Texture} [texture]
  * @property {OBJ_GLVertexBuffer} [vertices]
- * @property {Array<OBJ_GLBuffer>} [buffers]
- * @property {Array<OBJ_GLUniform>} [uniforms]
- * @property {'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'} [glPrimitive]
+ * @property {OBJ_GLVertexBuffer} [vertices3]
+ * @property {OBJ_GLVertexBuffer} [normals]
+ * @property {OBJ_GLVertexBuffer} [colors]
+ * @property {OBJ_GLVertexBuffer} [colorNormalized]
+ * @property {string} [name]
+ * @property {TypeParsablePoint} [position]
+ * @property {TypeParsableTransform} [transform]
+ * @property {TypeColor} [color]
+ * @property {boolean | number | TypeParsablePoint} [touch]
+ * @property {boolean | OBJ_ElementMove} [move]
+ * @property {TypeColor} [dimColor]
+ * @property {TypeColor} [defaultColor]
+ * @property {TypeScenarios} [scenarios]
+ * @property {Scene} [scene]
  */
 export type OBJ_GLPrimitive = {
   glPrimitive?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
-  vertexShader?: string,
-  fragShader?: string,
-  buffers?: Array<OBJ_GLBuffer>,
+  vertexShader?: string | OBJ_VertexShader,
+  fragShader?: string | OBJ_FragShader,
+  attributes?: Array<OBJ_GLBuffer>,
   uniforms?: Array<OBJ_GLUniform>,
   texture?: OBJ_Texture,
   // Helpers
@@ -2377,21 +2430,21 @@ export default class FigurePrimitives {
    */
   gl(...optionsIn: Array<OBJ_GLPrimitive>) {
     const defaultOptions = {
-      name: generateUniqueId('primitive_'),
-      color: this.defaultColor,
+      glPrimitive: 'TRIANGLES',
       vertexShader: { dimension: 2 },
       fragShader: { color: 'uniform' },
       texture: {
         src: '',
         mapTo: new Rect(-1, -1, 2, 2),
         mapFrom: new Rect(0, 0, 1, 1),
-        mapToBuffer: 'a_vertex',
+        mapToAttribute: 'a_vertex',
         repeat: false,
         onLoad: this.animateNextFrame,
         coords: [],
         loadColor: [0, 0, 1, 0.5],
       },
-      glPrimitive: 'TRIANGLES',
+      name: generateUniqueId('primitive_'),
+      color: this.defaultColor,
       transform: [['s', 1], ['r', 0, 0, 0], ['t', 0, 0, 0]],
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -2422,9 +2475,9 @@ export default class FigurePrimitives {
     if (options.colorsNorm != null) {
       glObject.addColorsNorm(options.colorsNorm.data, options.colcolorsNormors.usage);
     }
-    if (options.buffers != null) {
-      options.buffers.forEach((buffer) => {
-        const defaultBuffer = {
+    if (options.attributes != null) {
+      options.attributes.forEach((buffer) => {
+        const defaultAttribute = {
           type: 'FLOAT',
           normalize: false,
           stride: 0,
@@ -2432,7 +2485,7 @@ export default class FigurePrimitives {
           usage: 'STATIC',
           size: 2,
         };
-        const b = joinObjects({}, defaultBuffer, buffer);
+        const b = joinObjects({}, defaultAttribute, buffer);
         glObject.addBuffer(
           b.name, b.size, b.data, b.type,
           b.normalize, b.stride, b.offset, b.usageIn,
@@ -2454,17 +2507,17 @@ export default class FigurePrimitives {
     if (options.texture.src !== '') {
       const t = options.texture;
       glObject.addTexture(
-        t.src, getRect(t.mapFrom), getRect(t.mapTo), t.mapToBuffer,
+        t.src, getRect(t.mapFrom), getRect(t.mapTo), t.mapToAttribute,
         t.coords || [], t.repeat, t.onLoad, t.loadColor,
       );
     }
     if (options.numVertices !== 0) {
       glObject.numVertices = options.numVertices;
     }
-    if (glObject.numVertices === 0 && Object.keys(glObject.buffers).length > 0) {
-      const bufferName = Object.keys(glObject.buffers)[0];
-      const buffer = glObject.buffers[bufferName];
-      glObject.numVertices = buffer.len / buffer.size;
+    if (glObject.numVertices === 0 && Object.keys(glObject.attributes).length > 0) {
+      const attributeName = Object.keys(glObject.attributes)[0];
+      const attribute = glObject.attributes[attributeName];
+      glObject.numVertices = attribute.len / attribute.size;
     }
     const element = new FigureElementPrimitive(
       glObject, options.transform, options.color, null, options.name,

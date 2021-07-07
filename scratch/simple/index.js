@@ -14,7 +14,7 @@ figure.add({
   // vertices: {
   //   data: [0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1],
   // },
-  buffers: [
+  attributes: [
     {
       name: 'a_vertex',
       data: [0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1],
@@ -23,7 +23,7 @@ figure.add({
   numVertices: 6,
   texture: {
     src: './mic.png',
-    mapTo: [0.3, 0, 0.3333, 1],
+    // mapTo: [0.3, 0, 0.3333, 1],
     // mapToBuffer: 'a_vertex',
     coords: [-0.25, 0, 1.25, 0, -0.25, 1, 1.25, 0, 1.25, 1, -0.25, 1],
     loadColor: [1, 1, 0, 0],
