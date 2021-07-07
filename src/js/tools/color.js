@@ -77,6 +77,15 @@ function cssColorToArray(cssColorString: string): Array<number> | null {
   return null;
 }
 
+function colorToInt(color: TypeColor) {
+  return [
+    Math.floor(color[0] * 255),
+    Math.floor(color[1] * 255),
+    Math.floor(color[2] * 255),
+    Math.floor(color[3] * 255),
+  ];
+}
+
 function colorArrayToRGBA(color: TypeColor) {
   return `rgba(${
     Math.floor(color[0] * 255)},${
@@ -120,4 +129,5 @@ function areColorsWithinDelta(color1: TypeColor, color2: TypeColor, delta: numbe
 export {
   RGBToArray, HexToArray, cssColorToArray, colorArrayToRGB,
   colorArrayToRGBA, getCSSColors, areColorsSame, areColorsWithinDelta,
+  colorToInt,
 };

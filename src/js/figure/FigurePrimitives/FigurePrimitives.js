@@ -210,18 +210,23 @@ export type OBJ_Collection = {
  *
  * Textures can be used instead of colors to fill a shape in WebGL.
  *
- * Textures are effectively overlaid on a shape. Therefore, to overlay the
- * texture with the correct offset, magnification and aspect ratio of the
- * texture must be mapped to the space the shape's vertices are defined in
- * (draw space).
+ * Each vertex in a shape is mapped to a color in the texture. A texture
+ * coordinate is used to define where to sample the color in the texture.
+ * Texture coodinates (x, y) are between 0 and 1 where the bottom left corner of
+ * the texture is (0, 0) and the top right corner is (1, 1). Note, even if the
+ * texture is being mapped onto a 3D surface, the texture coordinates are
+ * always two dimensional as the texture is two dimensional.
  *
- * This is done by defining a window, or rectangle, for the texture file
- * (`mapFrom`) and a similar window in draw space (`mapTo`).
- * The texture is then offset and scaled such that its window aligns with the
- * draw space window.
+ * Texture colors can be mapped to vertices of the shape with either:
+ * - `coords` - directly define the texture coordinates for each vertex
+ * - `mapFrom`, `mapTo` - automatically map texture coordinates to the (x, y)
+ *    draw space components of the shape's vertices. This is only useful for 2D
+ *    shapes (3D shapes should use `coords`).
  *
- * The texture file has coordinates of (0, 0) in the bottom left corner and
- * (1, 1) in the top right corner.
+ * To automatically map the texture to a shapes vertices, a rectangular window
+ * in the texture (`mapFrom`) and a rectangular window in draw space (`mapTo`)
+ * is defined. The texture is then offset and scaled such that its window
+ * aligns with the draw space window.
  *
  * Therefore, to make a 1000 x 500 image fill a 2 x 1 rectangle in draw space
  * centered at (0, 0) you would define:
@@ -261,10 +266,15 @@ export type OBJ_Collection = {
  * and then the rectangle repeated throughout the figure.
  *
  * @property {string} src The url or location of the image
+ * @property {Array<number>} [coords] texture coordinates to map to each vertex
+ * in shape. If empty, then the texture coorindates will be automatically
+ * generated using `mapTo` and `mapFrom`. (`[]`)
  * @property {TypeParsableRect} [mapTo] draw space window (`new TypeParsableRect(-1, -1, 2, 2)`)
  * @property {TypeParsableRect} [mapFrom] image space window (`new Rect(0, 0, 1, 1)`)
  * @property {boolean} [repeat] `true` will tile the image. Only works with
  * images that are square whose number of side pixels is a power of 2 (`false`)
+ * @property {TypeColor} [loadColor] color to display while texture is loading.
+ * Use an alpha of 0 if no color is desired. (`[0, 0, 1, 0.5]`)
  * @property {() => void} [onLoad] textures are loaded asynchronously, so this
  * callback can be used to execute code after the texture is loaded. At a
  * minimum, any custom function here should include a call to animate the next
@@ -274,6 +284,8 @@ export type OBJ_Texture = {
   src?: string,
   mapTo?: Rect,
   mapFrom?: Rect,
+  coords?: Array<number>,
+  loadColor?: TypeColor,
   repeat?: boolean,
   onLoad?: () => void,
 }
@@ -2375,6 +2387,8 @@ export default class FigurePrimitives {
         mapFrom: new Rect(0, 0, 1, 1),
         repeat: false,
         onLoad: this.animateNextFrame,
+        coords: [],
+        loadColor: [0, 0, 1, 0.5],
       },
       glPrimitive: 'TRIANGLES',
       transform: [['s', 1], ['r', 0, 0, 0], ['t', 0, 0, 0]],
@@ -2439,7 +2453,7 @@ export default class FigurePrimitives {
     if (options.texture.src !== '') {
       const t = options.texture;
       glObject.addTexture(
-        t.src, getRect(t.mapTo), getRect(t.mapFrom), t.repeat,
+        t.src, getRect(t.mapTo), getRect(t.mapFrom), t.coords || [], t.repeat, t.onLoad, t.loadColor,
       );
     }
     if (glObject.numVertices === 0 && Object.keys(glObject.buffers).length > 0) {

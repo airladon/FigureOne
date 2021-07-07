@@ -23,6 +23,8 @@ figure.add({
   texture: {
     src: './mic.png',
     mapTo: [0.25, 0, 0.5, 1],
+    // coords: [0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1],
+    loadColor: [1, 1, 0, 0],
   },
-  // color: 'texture',
+  // color: [1, 0, 0, 0.5],
 });

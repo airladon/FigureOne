@@ -11,6 +11,7 @@ import { Rect, getPoint } from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
 // import type { CPY_Step } from '../../geometries/copy/copy';
 import type { TypeColor } from '../../../tools/types';
+import { colorToInt } from '../../../tools/color';
 
 /**
  * `'BYTE' | 'UNSIGNED_BYTE' | 'SHORT' | 'UNSIGNED_SHORT' | 'FLOAT'`
@@ -173,7 +174,7 @@ class GLObject extends DrawingObject {
     }
   }
 
-  updateTextureMap() {
+  updateTextureMap(points: Array<number>) {
     const { texture } = this;
     if (texture == null) {
       return;
@@ -182,12 +183,16 @@ class GLObject extends DrawingObject {
       this.gl.deleteBuffer(texture.buffer);
       texture.buffer = this.gl.createBuffer();
     }
-    this.createTextureMap(
-      texture.mapTo.left, texture.mapTo.right,
-      texture.mapTo.bottom, texture.mapTo.top,
-      texture.mapFrom.left, texture.mapFrom.right,
-      texture.mapFrom.bottom, texture.mapFrom.top,
-    );
+    if (points.length === 0) {
+      this.createTextureMap(
+        texture.mapTo.left, texture.mapTo.right,
+        texture.mapTo.bottom, texture.mapTo.top,
+        texture.mapFrom.left, texture.mapFrom.right,
+        texture.mapFrom.bottom, texture.mapFrom.top,
+      );
+    } else {
+      texture.points = points;
+    }
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, texture.buffer);
     this.gl.bufferData(
       this.gl.ARRAY_BUFFER,
@@ -204,7 +209,10 @@ class GLObject extends DrawingObject {
     location: string,
     mapTo: Rect = new Rect(-1, -1, 2, 2),
     mapFrom: Rect = new Rect(0, 0, 1, 1),
+    points: Array<number>,
     repeat: boolean = false,
+    onLoad: null | (() => void) = null,
+    loadColor: TypeColor = [0, 0, 1, 0.5],
   ) {
     if (this.texture == null) {
       this.texture = {
@@ -219,6 +227,7 @@ class GLObject extends DrawingObject {
         data: null,
       };
     }
+    this.onLoad = onLoad;
 
     const { texture, gl, webgl } = this;
     if (texture == null) {
@@ -226,7 +235,7 @@ class GLObject extends DrawingObject {
     }
 
     // $FlowFixMe
-    this.updateTextureMap();
+    this.updateTextureMap(points);
     // gl.bindBuffer(gl.ARRAY_BUFFER, texture.buffer);
     // gl.bufferData(
     //   gl.ARRAY_BUFFER,
@@ -249,9 +258,10 @@ class GLObject extends DrawingObject {
       const { src } = texture;
       if (src && texture.data == null) {
         // Fill the texture with a 1x1 blue pixel.
+        console.log(colorToInt(loadColor))
         gl.texImage2D(
           gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0,
-          gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 255, 100]),
+          gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(colorToInt(loadColor)),
         );
         const image = new Image();
         image.src = src;
