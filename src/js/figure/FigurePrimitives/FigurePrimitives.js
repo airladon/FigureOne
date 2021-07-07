@@ -377,6 +377,20 @@ export type OBJ_Primitive = {
 };
 
 /**
+ * Color definition for a gl primitive.
+ * @property {Array<number>} data color data
+ * @property {boolean} [normalize] if `true`, then color data values are between
+ * 0 and 255 (`false`)
+ * @property {3 | 4} [size] if `3`, then color data is RGB, if `4` then color
+ * data is RGBA
+ */
+export type OBJ_GLColorData = {
+  data: Array<number>,
+  normalize?: boolean,
+  size?: 3 | 4,
+};
+
+/**
  * DiagramElementPrimitive with low level WegGL drawing object.
  *
  * A number of WebGL specific and FigureElementPrimitive specific properties
@@ -385,6 +399,10 @@ export type OBJ_Primitive = {
  * WebGL specific properties are `glPrimitive`, `vertexShader`, `fragmentShader`
  * `attributes`, `uniforms` and an optional `texture`. The
  * nomencalture for these properties is directly from WebGL.
+ *
+ * Properties `vertices`, `colors`, `dimension`, `light` and `normals` provide
+ * shortcuts for defining the shaders, attributes and uniforms when shaders are
+ * not customized.
  *
  * FigureElementPrimitive specific properties are `name`, `position`,
  * `transform`, `color`, `dimColor`, `defaultColor`, `scenarios` and `scene`.
@@ -444,11 +462,15 @@ export type OBJ_Primitive = {
  * @property {Array<OBJ_GLBuffer>} [attributes]
  * @property {Array<OBJ_GLUniform>} [uniforms]
  * @property {OBJ_Texture} [texture]
+ * @property {2 | 3} [dimension] default value for `dimension in vertex shader
+ * if vertex shader is undefined (`2`)
+ * @property {'point' | 'directional' | null} [light] default value for `light`
+ * in vertex and fragment shader if shaders are not otherwise defined (`null`)
+ * @property {Array<number> | OBJ_GLColorData} [colors] default value for
+ * `light` in vertex and fragment shader if shaders are not otherwise defined
+ * (`uniform`)
  * @property {OBJ_GLVertexBuffer} [vertices]
- * @property {OBJ_GLVertexBuffer} [vertices3]
  * @property {OBJ_GLVertexBuffer} [normals]
- * @property {OBJ_GLVertexBuffer} [colors]
- * @property {OBJ_GLVertexBuffer} [colorNormalized]
  * @property {string} [name]
  * @property {TypeParsablePoint} [position]
  * @property {TypeParsableTransform} [transform]
@@ -509,6 +531,19 @@ export type OBJ_Primitive = {
  *       1, 0, 0,
  *     ],
  *     size: 3,
+ *   },
+ * });
+ *
+ * @example
+ * // Texture filled square
+ * figure.add({
+ *   make: 'gl',
+ *   vertices: [-0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5],
+ *   numVertices: 6,
+ *   texture: {
+ *     src: './flower.jpeg',
+ *     coords: [0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1],
+ *     loadColor: [0, 0, 0, 0],
  *   },
  * });
  *
@@ -581,15 +616,9 @@ export type OBJ_GLGeneric = {
   // Helpers
   dimension?: 2 | 3,
   light?: 'directional' | 'point' | null,
-  colors?: Array<number> | {
-    data: Array<number>,
-    normalize?: boolean,
-    size?: 3 | 4,
-  },
+  colors?: Array<number> | OBJ_GLColorData,
   vertices?: OBJ_GLVertexBuffer,
   normals?: OBJ_GLVertexBuffer,
-  // colors?: OBJ_GLVertexBuffer | TypeColor,
-  // colorNormalized?: boolean,
   // FigureElementPrimitiveOptions
   name?: string,
   position?: TypeParsablePoint,

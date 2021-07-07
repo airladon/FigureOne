@@ -4,22 +4,22 @@ const figure = new Fig.Figure();
 
 // figure.add({
 //   make: 'gl',
-//   vertexShader: {
-//     dimension: 2,
-//     color: 'texture',
-//   },
-//   fragmentShader: {
-//     color: 'texture',
-//   },
-//   // vertices: {
-//   //   data: [0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1],
+//   // vertexShader: {
+//   //   dimension: 2,
+//   //   color: 'texture',
 //   // },
-//   attributes: [
-//     {
-//       name: 'a_vertex',
-//       data: [0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1],
-//     },
-//   ],
+//   // fragmentShader: {
+//   //   color: 'texture',
+//   // },
+//   vertices: {
+//     data: [0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1],
+//   },
+//   // attributes: [
+//   //   {
+//   //     name: 'a_vertex',
+//   //     data: [0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1],
+//   //   },
+//   // ],
 //   numVertices: 6,
 //   texture: {
 //     src: './mic.png',
@@ -41,14 +41,14 @@ const figure = new Fig.Figure();
 //   color: [1, 0, 0, 1],
 // });
 
-// Simple moveable glGeneric element with a custom position
-figure.add({
-  make: 'gl',
-  vertices: [0, 0, 0.5, 0, 0, 0.5, 0.5, 0, 1, 0, 0.5, 0.5],
-  color: [1, 0, 0, 1],
-  position: [-0.4, -0.4, 0],
-  move: { type: 'rotation' },
-});
+// // Simple moveable glGeneric element with a custom position
+// figure.add({
+//   make: 'gl',
+//   vertices: [0, 0, 0.5, 0, 0, 0.5, 0.5, 0, 1, 0, 0.5, 0.5],
+//   color: [1, 0, 0, 1],
+//   position: [-0.4, -0.4, 0],
+//   move: { type: 'rotation' },
+// });
 
 // // Assign a color to each vertex
 // figure.add({
@@ -137,3 +137,15 @@ figure.add({
 //     },
 //   ],
 // });
+
+// Texture filled square
+figure.add({
+  make: 'gl',
+  vertices: [-0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5],
+  numVertices: 6,
+  texture: {
+    src: './flower.jpeg',
+    coords: [0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1],
+    loadColor: [0, 0, 0, 0],
+  },
+});
