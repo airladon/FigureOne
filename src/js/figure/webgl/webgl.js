@@ -3,6 +3,7 @@
 import getShaders from './shaders';
 import type { TypeFragShader, TypeVertexShader } from './shaders';
 import TargetTexture from './target';
+import { hash32 } from '../../tools/tools';
 
 const glMock = {
   TRIANGLES: 1,
@@ -199,8 +200,18 @@ class WebGLInstance {
     };
   };
   programs: Array<{
-    vertexShader: string | { src: string, vars: Array<string>} | Array<string | bool | number>,
-    fragmentShader: string| { src: string, vars: Array<string>} | Array<string | bool | number>,
+    vertexShader: {
+      src: string,
+      vars: Array<string>,
+      hash: string,
+    },
+    fragementShader: {
+      src: string,
+      vars: Array<string>,
+      hash: string,
+    },
+    // vertexShader: string | { src: string, vars: Array<string>} | Array<string | bool | number>,
+    // fragmentShader: string| { src: string, vars: Array<string>} | Array<string | bool | number>,
     locations: Object,
     program: WebGLProgram;
   }>;
@@ -240,15 +251,26 @@ class WebGLInstance {
     vertexShader: TypeVertexShader,
     fragmentShader: TypeFragShader,
   ) {
+    // for (let i = 0; i < this.programs.length; i += 1) {
+    //   const program = this.programs[i];
+    //   if (program.vertexShader.def === vertexShader
+    //     && program.fragmentShader.def === fragmentShader
+    //   ) {
+    //     return i;
+    //   }
+    // }
+    const shaders = getShaders(vertexShader, fragmentShader);
+    const hashVertexSrc = hash32(shaders.vertexSource);
+    const hashFragmentSrc = hash32(shaders.fragmentSource);
     for (let i = 0; i < this.programs.length; i += 1) {
       const program = this.programs[i];
-      if (program.vertexShader === vertexShader
-        && program.fragmentShader === fragmentShader
+      if (program.vertexShader.hash === hashVertexSrc
+        && program.fragmentShader.hash === hashFragmentSrc
       ) {
         return i;
       }
     }
-    const shaders = getShaders(vertexShader, fragmentShader);
+
     const newProgram = createProgramFromScripts(
       this.gl,
       shaders.vertexSource,
@@ -256,8 +278,18 @@ class WebGLInstance {
     );
 
     const programDetails = {
-      vertexShader,
-      fragmentShader,
+      vertexShader:{
+        src: shaders.vertexSource,
+        hash: hash32(shaders.vertexSource),
+        def: vertexShader,
+      },
+      fragmentShader:{
+        src: shaders.fragmentSource,
+        hash: hash32(shaders.fragmentSource),
+        def: fragmentShader,
+      },
+      vars: shaders.vars,
+      // fragmentShader,
       program: newProgram,
       locations: getGLLocations(this.gl, newProgram, shaders.vars),
     };

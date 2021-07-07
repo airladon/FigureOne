@@ -12,6 +12,7 @@ import DrawingObject from '../DrawingObject';
 // import type { CPY_Step } from '../../geometries/copy/copy';
 import type { TypeColor } from '../../../tools/types';
 import { colorToInt } from '../../../tools/color';
+import { Console } from '../../../tools/tools';
 
 /**
  * `'BYTE' | 'UNSIGNED_BYTE' | 'SHORT' | 'UNSIGNED_SHORT' | 'FLOAT'`
@@ -104,6 +105,11 @@ class GLObject extends DrawingObject {
     this.uniforms = {};
     this.texture = null;
     this.selectorProgramIndex = this.webgl.getProgram(selectorVertexShader, selectorFragShader);
+  }
+
+  showShaders() {
+    Console(this.webgl.programs[this.programIndex].vertexShader.src);
+    Console(this.webgl.programs[this.programIndex].fragmentShader.src);
   }
 
   getCanvas() {

@@ -698,8 +698,8 @@ const getShaders = (
   //   fragmentSource = fName.src;
   //   vars.push(...fName.vars);
   // }
-  console.log(vertexSource)
-  console.log(fragmentSource)
+  // console.log(vertexSource)
+  // console.log(fragmentSource)
   return {
     vertexSource,
     fragmentSource,
