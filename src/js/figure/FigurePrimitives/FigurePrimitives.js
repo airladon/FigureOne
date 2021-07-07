@@ -459,8 +459,119 @@ export type OBJ_Primitive = {
  * @property {TypeColor} [defaultColor]
  * @property {TypeScenarios} [scenarios]
  * @property {Scene} [scene]
+ *
+ * @example
+ * // Default options are 2D, uniform color, TRIANGLES.
+ * // Create two red triangles (6 vertices, 12 values)
+ * figure.add({
+ *   make: 'gl',
+ *   vertices: [0, 0, 0.5, 0, 0, 0.5, 0.5, 0, 1, 0, 0.5, 0.5],
+ *   color: [1, 0, 0, 1],
+ * });
+ *
+ * @example
+ * // Simple rotatable element with a custom position
+ * figure.add({
+ *   make: 'gl',
+ *   vertices: [0, 0, 0.5, 0, 0, 0.5, 0.5, 0, 1, 0, 0.5, 0.5],
+ *   color: [1, 0, 0, 1],
+ *   position: [-0.4, -0.4, 0],
+ *   move: { type: 'rotation' },
+ * });
+ *
+ * @example
+ * // Assign a color to each vertex
+ * figure.add({
+ *   make: 'gl',
+ *   vertices: [0, 0, 0.5, 0, 0, 0.5, 0.5, 0, 1, 0, 0.5, 0.5],
+ *   colors: [
+ *     0, 0, 1, 1,
+ *     1, 0, 0, 1,
+ *     0, 0, 1, 1,
+ *     1, 0, 0, 1,
+ *     0, 0, 1, 1,
+ *     1, 0, 0, 1,
+ *   ],
+ * });
+ *
+ * @example
+ * // Assign a color to each vertex, using just 3 numbers per color (no alpha)
+ * figure.add({
+ *   make: 'gl',
+ *   vertices: [0, 0, 0.5, 0, 0, 0.5, 0.5, 0, 1, 0, 0.5, 0.5],
+ *   colors: {
+ *     data: [
+ *       0, 0, 1,
+ *       1, 0, 0,
+ *       0, 0, 1,
+ *       1, 0, 0,
+ *       0, 0, 1,
+ *       1, 0, 0,
+ *     ],
+ *     size: 3,
+ *   },
+ * });
+ *
+ * @example
+ * // Make a 3D cube using composed shaders
+ * const [cubeVertices, cubeNormals] = Fig.tools.g2.cube({ side: 0.5 });
+ * figure.scene.setProjection({ style: 'orthographic' });
+ * figure.scene.setCamera({ position: [2, 1, 2] });
+ * figure.scene.setLight({ directional: [0.7, 0.5, 1] });
+ * figure.add({
+ *   make: 'gl',
+ *   light: 'directional',
+ *   dimension: 3,
+ *   vertices: cubeVertices,
+ *   normals: cubeNormals,
+ *   color: [1, 0, 0, 1],
+ * });
+ *
+ * @example
+ * // Custom shaders
+ * // Make a shader with a custom attribute aVertex and custom uniform uColor,
+ * // which are then defined in the options.
+ * // Note, the `u_worldViewProjectionMatrix` uniform does not need to be defined
+ * // as this will be passed by FigureOne using the Scene information of the
+ * // figure (or element if an element has a custom scene attached to it).
+ * figure.add({
+ *   make: 'gl',
+ *   vertexShader: {
+ *     src: `
+ *       uniform mat4 u_worldViewProjectionMatrix;
+ *       attribute vec4 aVertex;
+ *       void main() {
+ *         gl_Position = u_worldViewProjectionMatrix * aVertex;
+ *       }`,
+ *     vars: ['aVertex', 'u_worldViewProjectionMatrix'],
+ *   },
+ *   fragmentShader: {
+ *     src: `
+ *     precision mediump float;
+ *     uniform vec4 uColor;
+ *     void main() {
+ *       gl_FragColor = uColor;
+ *       gl_FragColor.rgb *= gl_FragColor.a;
+ *     }`,
+ *     vars: ['uColor'],
+ *   },
+ *   attributes: [
+ *     {
+ *       name: 'aVertex',
+ *       size: 3,
+ *       data: [0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.5, 0, 0, 1, 0, 0, 0.5, 0.5, 0],
+ *     },
+ *   ],
+ *   uniforms: [
+ *     {
+ *       name: 'uColor',
+ *       length: 4,
+ *       value: [1, 0, 0, 1],
+ *     },
+ *   ],
+ * });
  */
-export type OBJ_GLPrimitive = {
+export type OBJ_GLGeneric = {
   glPrimitive?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
   vertexShader?: TypeVertexShader,
   fragmentShader?: TypeFragmentShader,
@@ -470,9 +581,9 @@ export type OBJ_GLPrimitive = {
   // Helpers
   dimension?: 2 | 3,
   light?: 'directional' | 'point' | null,
-  colors?: 'texture' | 'vertex' | 'uniform' | Array<number> | {
+  colors?: Array<number> | {
     data: Array<number>,
-    normalized?: boolean,
+    normalize?: boolean,
     size?: 3 | 4,
   },
   vertices?: OBJ_GLVertexBuffer,
@@ -2468,15 +2579,28 @@ export default class FigurePrimitives {
     // this.draw2DFigures = draw2DFigures;
   }
 
+  // dimension?: 2 | 3,
+  // light?: 'directional' | 'point' | null,
+  // colors?: 'texture' | 'vertex' | 'uniform' | Array<number> | {
+  //   data: Array<number>,
+  //   normalized?: boolean,
+  //   size?: 3 | 4,
+  // },
+  // vertices?: OBJ_GLVertexBuffer,
+  // normals?: OBJ_GLVertexBuffer,
+
   /**
    * {@link FigureElementPrimitive} that draws a generic shape.
    * @see {@link OBJ_Generic} for options and examples.
    */
-  gl(...optionsIn: Array<OBJ_GLPrimitive>) {
+  gl(...optionsIn: Array<OBJ_GLGeneric>) {
+    // Setup the default options
+    const oIn = joinObjects({}, ...optionsIn)
     const defaultOptions = {
       glPrimitive: 'TRIANGLES',
       vertexShader: { dimension: 2 },
       fragmentShader: { color: 'uniform' },
+      attributes: [],
       texture: {
         src: '',
         mapTo: new Rect(-1, -1, 2, 2),
@@ -2490,8 +2614,28 @@ export default class FigurePrimitives {
       name: generateUniqueId('primitive_'),
       color: this.defaultColor,
       transform: [['s', 1], ['r', 0, 0, 0], ['t', 0, 0, 0]],
+      dimension: 2,
     };
-    const options = joinObjects({}, defaultOptions, ...optionsIn);
+    if (oIn.texture != null) {
+      defaultOptions.vertexShader.color = 'texture';
+      defaultOptions.fragmentShader.color = 'texture';
+    }
+    if (oIn.dimension != null) {
+      defaultOptions.vertexShader.dimension = oIn.dimension;
+    }
+    if (oIn.light != null) {
+      defaultOptions.vertexShader.light = oIn.light;
+      defaultOptions.fragmentShader.light = oIn.light;
+    }
+    if (oIn.colors != null) {
+      console.log('asdf')
+      defaultOptions.vertexShader.color = 'vertex';
+      defaultOptions.fragmentShader.color = 'vertex';
+    }
+    console.log(oIn)
+    console.log(defaultOptions)
+
+    const options = joinObjects({}, defaultOptions, oIn);
     options.transform = getTransform(options.transform);
     if (options.position != null) {
       options.position = getPoint(options.position);
@@ -2503,34 +2647,62 @@ export default class FigurePrimitives {
       options.vertexShader,
       options.fragmentShader,
     );
+
+    // Set the glPrimitive
     glObject.setPrimitive(options.glPrimitive);
+
+    // If vertices helper exists, then add the a_vertex attribute
     if (options.vertices != null) {
       if (Array.isArray(options.vertices)) {
-        glObject.addVertices(options.vertices);
+        options.attributes.push({
+          name: 'a_vertex', data: options.vertices, size: options.dimension,
+        });
       } else {
-        glObject.addVertices(
-          options.vertices,
-          options.vertices.size || 2,
-          options.vertices.usage,
-        );
+        options.attributes.push({
+          name: 'a_vertex',
+          data: options.vertices.data,
+          size: options.vertices.size || options.dimension,
+          usage: options.vertices.usage,
+        });
       }
     }
     if (options.normals != null) {
       if (Array.isArray(options.normals)) {
-        glObject.addNormals(options.colors);
+        // glObject.addNormals(options.colors);
+        options.attributes.push({
+          name: 'a_normal', data: options.normals, size: 3,
+        });
       } else {
-        glObject.addNormals(options.normals.data, options.normals.usage);
+        // glObject.addNormals(options.normals.data, options.normals.usage);
+        options.attributes.push({
+          name: 'a_normal', data: options.normals.data, size: 3, usage: options.normals.usage,
+        });
       }
     }
     if (options.colors != null) {
       if (Array.isArray(options.colors)) {
-        glObject.addColors(options.colors);
+        // glObject.addColors(options.colors);
+        options.attributes.push({
+          name: 'a_color', data: options.colors, size: 4,
+        });
+      } else if (options.colors.normalize) {
+        options.attributes.push({
+          name: 'a_color',
+          data: options.colors.data,
+          size: options.colors.size || 4,
+          usage: options.colors.usage,
+          type: 'UNSIGNED_BYTE',
+          normalize: true,
+        });
       } else {
-        glObject.addColors(
-          options.colors.data,
-          options.colors.normalized || false,
-          options.colors.usage,
-        );
+        options.attributes.push({
+          name: 'a_color',
+          data: options.colors.data,
+          size: options.colors.size || 4,
+          usage: options.colors.usage,
+          type: 'UNSIGNED_BYTE',
+          normalize: false,
+        });
       }
     }
     // if (options.colorsNorm != null) {
@@ -2547,7 +2719,7 @@ export default class FigurePrimitives {
           size: 2,
         };
         const b = joinObjects({}, defaultAttribute, buffer);
-        glObject.addBuffer(
+        glObject.addAttribute(
           b.name, b.size, b.data, b.type,
           b.normalize, b.stride, b.offset, b.usageIn,
         );
@@ -2560,7 +2732,7 @@ export default class FigurePrimitives {
           };
           const u = joinObjects({}, defaultUniform, uniform);
           glObject.addUniform(
-            u.name, u.length, u.type,
+            u.name, u.length, u.type, u.value,
           );
         });
       }
@@ -2666,7 +2838,7 @@ export default class FigurePrimitives {
         size: 2,
       };
       const b = joinObjects({}, defaultBuffer);
-      glObject.addBuffer(
+      glObject.addAttribute(
         attribute, b.size, points, b.type,
         b.normalize, b.stride, b.offset, b.usageIn,
       );
@@ -2694,7 +2866,7 @@ export default class FigurePrimitives {
           size: 4,
         };
         const b = joinObjects({}, defaultBuffer);
-        glObject.addBuffer(
+        glObject.addAttribute(
           attribute, b.size, colors, b.type,
           b.normalize, b.stride, b.offset, b.usageIn,
         );
