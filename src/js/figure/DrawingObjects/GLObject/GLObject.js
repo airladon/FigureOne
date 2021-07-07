@@ -347,29 +347,33 @@ class GLObject extends DrawingObject {
     }
   }
 
-  addVertices(vertices: Array<number>, usage: TypeGLBufferUsage = 'STATIC') {
+  addVertices(vertices: Array<number>, dimension: 2 | 3 = 2, usage: TypeGLBufferUsage = 'STATIC') {
     // this.points = vertices;
-    this.addBuffer('a_vertex', 2, vertices, 'FLOAT', false, 0, 0, usage);
-    this.numVertices = vertices.length / 2;
+    this.addBuffer('a_vertex', dimension, vertices, 'FLOAT', false, 0, 0, usage);
+    // this.numVertices = vertices.length / 2;
   }
 
   addVertices3(vertices: Array<number>, usage: TypeGLBufferUsage = 'STATIC') {
     // this.points = vertices;
     this.addBuffer('a_vertex', 3, vertices, 'FLOAT', false, 0, 0, usage);
-    this.numVertices = vertices.length / 3;
+    // this.numVertices = vertices.length / 3;
   }
 
   addNormals(normals: Array<number>, usage: TypeGLBufferUsage = 'STATIC') {
     this.addBuffer('a_normal', 3, normals, 'FLOAT', false, 0, 0, usage);
   }
 
-  addColors(colors: Array<number>, usage: TypeGLBufferUsage = 'STATIC') {
-    this.addBuffer('a_color', 4, colors, 'FLOAT', false, 0, 0, usage);
+  addColors(colors: Array<number>, normalized: boolean = false, usage: TypeGLBufferUsage = 'STATIC') {
+    if (normalized) {
+      this.addBuffer('a_color', 4, colors, 'UNSIGNED_BYTE', true, 0, 0, usage);
+    } else {
+      this.addBuffer('a_color', 4, colors, 'FLOAT', false, 0, 0, usage);
+    }
   }
 
-  addColorsNorm(colors: Array<number>, usage: TypeGLBufferUsage = 'STATIC') {
-    this.addBuffer('a_color', 4, colors, 'UNSIGNED_BYTE', true, 0, 0, usage);
-  }
+  // addColorsNorm(colors: Array<number>, usage: TypeGLBufferUsage = 'STATIC') {
+  //   this.addBuffer('a_color', 4, colors, 'UNSIGNED_BYTE', true, 0, 0, usage);
+  // }
 
   addBuffer(
     name: string,
@@ -412,6 +416,13 @@ class GLObject extends DrawingObject {
       len: data.length,
       data,
     };
+    const numVertices = data.length / size;
+    if (this.numVertices !== 0 && numVertices !== this.numVertices) {
+      throw new Error(`Figure One Error: Adding GL attribute ${name} with wrong length (${numVertices} vertices) when previously defined attributes used ${this.numVertices} vertices`);
+    }
+    if (this.numVertices === 0) {
+      this.numVertices = numVertices;
+    }
     this.fillBuffer(name, data);
   }
 

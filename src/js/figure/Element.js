@@ -4082,7 +4082,6 @@ class FigureElementPrimitive extends FigureElement {
       if (targetTexture && !this.isTouchable) {
         return;
       }
-      console.log(this.name)
       // let timer;
       // if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
       // if (FIGURE1DEBUG) { debugTimes.push([performance.now(), '']); }

@@ -439,8 +439,8 @@ export type OBJ_Primitive = {
  * shaders, and when they are used.
  *
  * @property {'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'} [glPrimitive]
- * @property {string | OBJ_VertexShader} [vertexShader]
- * @property {string | OBJ_FragmentShader} [fragmentShader]
+ * @property {TypeVertexShader} [vertexShader]
+ * @property {TypeFragmentShader} [fragmentShader]
  * @property {Array<OBJ_GLBuffer>} [attributes]
  * @property {Array<OBJ_GLUniform>} [uniforms]
  * @property {OBJ_Texture} [texture]
@@ -462,17 +462,23 @@ export type OBJ_Primitive = {
  */
 export type OBJ_GLPrimitive = {
   glPrimitive?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
-  vertexShader?: string | OBJ_VertexShader,
-  fragmentShader?: string | OBJ_FragShader,
+  vertexShader?: TypeVertexShader,
+  fragmentShader?: TypeFragmentShader,
   attributes?: Array<OBJ_GLBuffer>,
   uniforms?: Array<OBJ_GLUniform>,
   texture?: OBJ_Texture,
   // Helpers
+  dimension?: 2 | 3,
+  light?: 'directional' | 'point' | null,
+  colors?: 'texture' | 'vertex' | 'uniform' | Array<number> | {
+    data: Array<number>,
+    normalized?: boolean,
+    size?: 3 | 4,
+  },
   vertices?: OBJ_GLVertexBuffer,
-  verticies3?: OBJ_GLVertexBuffer,
   normals?: OBJ_GLVertexBuffer,
-  colors?: OBJ_GLVertexBuffer | TypeColor,
-  colorNormalized?: boolean,
+  // colors?: OBJ_GLVertexBuffer | TypeColor,
+  // colorNormalized?: boolean,
   // FigureElementPrimitiveOptions
   name?: string,
   position?: TypeParsablePoint,
@@ -2499,20 +2505,37 @@ export default class FigurePrimitives {
     );
     glObject.setPrimitive(options.glPrimitive);
     if (options.vertices != null) {
-      glObject.addVertices(options.vertices.data, options.vertices.usage);
-    }
-    if (options.vertices3 != null) {
-      glObject.addVertices3(options.vertices3.data, options.vertices3.usage);
+      if (Array.isArray(options.vertices)) {
+        glObject.addVertices(options.vertices);
+      } else {
+        glObject.addVertices(
+          options.vertices,
+          options.vertices.size || 2,
+          options.vertices.usage,
+        );
+      }
     }
     if (options.normals != null) {
-      glObject.addNormals(options.normals.data, options.normals.usage);
+      if (Array.isArray(options.normals)) {
+        glObject.addNormals(options.colors);
+      } else {
+        glObject.addNormals(options.normals.data, options.normals.usage);
+      }
     }
     if (options.colors != null) {
-      glObject.addColors(options.colors.data, options.colors.usage);
+      if (Array.isArray(options.colors)) {
+        glObject.addColors(options.colors);
+      } else {
+        glObject.addColors(
+          options.colors.data,
+          options.colors.normalized || false,
+          options.colors.usage,
+        );
+      }
     }
-    if (options.colorsNorm != null) {
-      glObject.addColorsNorm(options.colorsNorm.data, options.colcolorsNormors.usage);
-    }
+    // if (options.colorsNorm != null) {
+    //   glObject.addColorsNorm(options.colorsNorm.data, options.colcolorsNormors.usage);
+    // }
     if (options.attributes != null) {
       options.attributes.forEach((buffer) => {
         const defaultAttribute = {
@@ -2552,11 +2575,11 @@ export default class FigurePrimitives {
     // if (options.numVertices != null && options.numVertices !== 0) {
     //   glObject.numVertices = options.numVertices;
     // }
-    if (glObject.numVertices === 0 && Object.keys(glObject.attributes).length > 0) {
-      const attributeName = Object.keys(glObject.attributes)[0];
-      const attribute = glObject.attributes[attributeName];
-      glObject.numVertices = attribute.len / attribute.size;
-    }
+    // if (glObject.numVertices === 0 && Object.keys(glObject.attributes).length > 0) {
+    //   const attributeName = Object.keys(glObject.attributes)[0];
+    //   const attribute = glObject.attributes[attributeName];
+    //   glObject.numVertices = attribute.len / attribute.size;
+    // }
     const element = new FigureElementPrimitive(
       glObject, options.transform, options.color, null, options.name,
     );
