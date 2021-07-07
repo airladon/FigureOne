@@ -2549,9 +2549,9 @@ export default class FigurePrimitives {
         t.coords || [], t.repeat, t.onLoad, t.loadColor,
       );
     }
-    if (options.numVertices !== 0) {
-      glObject.numVertices = options.numVertices;
-    }
+    // if (options.numVertices != null && options.numVertices !== 0) {
+    //   glObject.numVertices = options.numVertices;
+    // }
     if (glObject.numVertices === 0 && Object.keys(glObject.attributes).length > 0) {
       const attributeName = Object.keys(glObject.attributes)[0];
       const attribute = glObject.attributes[attributeName];

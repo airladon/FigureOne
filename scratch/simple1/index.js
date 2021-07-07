@@ -67,6 +67,7 @@ const fragmentShader = {
   light: 'directional',
 };
 
+
 const addAxis = (name, direction, color, includeArrow = false) => {
   const [p, n] = rod({ radius: 0.03, sides: 10, line: [[0, 0, 0], direction] });
   let cn = [];

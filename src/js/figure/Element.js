@@ -4082,6 +4082,7 @@ class FigureElementPrimitive extends FigureElement {
       if (targetTexture && !this.isTouchable) {
         return;
       }
+      console.log(this.name)
       // let timer;
       // if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
       // if (FIGURE1DEBUG) { debugTimes.push([performance.now(), '']); }
@@ -4103,7 +4104,6 @@ class FigureElementPrimitive extends FigureElement {
         pointCount = 1;
       } // $FlowFixMe
       // if (FIGURE1DEBUG) { timer.stamp('m1'); }
-
       let colorToUse = [
         this.color[0], this.color[1], this.color[2], this.color[3] * this.opacity * parentOpacity,
       ];
