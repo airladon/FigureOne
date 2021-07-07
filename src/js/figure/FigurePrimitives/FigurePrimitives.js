@@ -358,14 +358,20 @@ export type OBJ_GLUniform = {
  * @property {'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'} [glPrimitive]
  */
 export type OBJ_GLPrimitive = {
-  name?: string,
+  glPrimitive?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
   vertexShader?: string,
   fragShader?: string,
-  texture?: OBJ_Texture,
-  vertices?: OBJ_GLVertexBuffer,
   buffers?: Array<OBJ_GLBuffer>,
   uniforms?: Array<OBJ_GLUniform>,
-  glPrimitive?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
+  texture?: OBJ_Texture,
+  // Helpers
+  vertices?: OBJ_GLVertexBuffer,
+  verticies3?: OBJ_GLVertexBuffer,
+  normals?: OBJ_GLVertexBuffer,
+  colors?: OBJ_GLVertexBuffer | TypeColor,
+  colorNormalized?: boolean,
+  // FigureElementPrimitiveOptions
+  name?: string,
   position?: TypeParsablePoint,
   transform?: TypeParsableTransform,
   color?: TypeColor,
@@ -374,6 +380,7 @@ export type OBJ_GLPrimitive = {
   dimColor?: TypeColor,
   defaultColor?: TypeColor,
   scenarios?: TypeScenarios,
+  scene?: Scene,
 };
 
 /**
@@ -2428,12 +2435,17 @@ export default class FigurePrimitives {
           );
         });
       }
-      if (options.texture.src !== '') {
-        const t = options.texture;
-        glObject.addTexture(
-          t.src, t.mapTo, t.mapFrom, t.repeat,
-        );
-      }
+    }
+    if (options.texture.src !== '') {
+      const t = options.texture;
+      glObject.addTexture(
+        t.src, getRect(t.mapTo), getRect(t.mapFrom), t.repeat,
+      );
+    }
+    if (glObject.numVertices === 0 && Object.keys(glObject.buffers).length > 0) {
+      const bufferName = Object.keys(glObject.buffers)[0];
+      const buffer = glObject.buffers[bufferName];
+      glObject.numVertices = buffer.len / buffer.size;
     }
     const element = new FigureElementPrimitive(
       glObject, options.transform, options.color, null, options.name,

@@ -1,85 +1,28 @@
-const { sphere, cone, rod } = Fig.tools.g2;
+const { polygon } = Fig.tools.g2;
 
-// const figure = new Fig.Figure({
-//   // scene: { camera: { position: [0, 0, 2] } },
-// });
-function xmur3(str) {
-  for(var i = 0, h = 1779033703 ^ str.length; i < str.length; i++)
-    h = Math.imul(h ^ str.charCodeAt(i), 3432918353),
-    h = h << 13 | h >>> 19;
-  return function() {
-    h = Math.imul(h ^ h >>> 16, 2246822507);
-    h = Math.imul(h ^ h >>> 13, 3266489909);
-    return (h ^= h >>> 16) >>> 0;
-  }
-}
-function mulberry32(a) {
-  return function() {
-    var t = a += 0x6D2B79F5;
-    t = Math.imul(t ^ t >>> 15, t | 1);
-    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
-    return ((t ^ t >>> 14) >>> 0) / 4294967296;
-  }
-}
+const figure = new Fig.Figure();
 
-var seed = xmur3("figureone");
-Math.random = mulberry32(seed());
-
-// ********************************
-let sleepTime = 0;
-const figure = new Fig.Figure({
-  scene: {
-    left: -3, bottom: -2.25, right: 3, top: 2.25,
-  },
-  color: [1, 0, 0, 1],
-  lineWidth: 0.01,
-  font: { size: 0.1 },
-});
-
-figure.add([
-  {
-    name: '__minorGrid',
-    make: 'primitives.grid',
-    options: {
-      position: [0, 0],
-      color: [0.9, 0.9, 0.9, 1],
-      line: { width: 0.002 },
-      xStep: 0.1,
-      yStep: 0.1,
-      bounds: new Fig.getRect([-3, -2.25, 6, 4.5]),
-    },
-  },
-  {
-    name: '__majorGrid',
-    make: 'primitives.grid',
-    options: {
-      position: [0, 0],
-      color: [0.9, 0.9, 0.9, 1],
-      line: { width: 0.005 },
-      xStep: 0.5,
-      yStep: 0.5,
-      bounds: new Fig.getRect([-3, -2.25, 6, 4.5]),
-    },
-  },
-  {
-    name: '__origin',
-    make: 'primitives.polygon',
-    options: {
-      color: [0.9, 0.9, 0.9, 1],
-      radius: 0.025,
-      sides: 10,
-    },
-  },
-]);
 figure.add({
-  make: 'primitives.polyline',
-  points: [[0, 0], [0.5, 0], [0, 0.5]],
-  width: 0.05,
-  drawBorderBuffer: 0.05,
-  color: [1, 0, 0, 0.6],
-  touchBorder: 'buffer',
-  position: [0, 0],
-  cornersOnly: 'true',
-  cornerLength: 0.15,
-  close: true,
+  make: 'gl',
+  vertexShader: {
+    dimension: 2,
+    color: 'texture',
+  },
+  fragShader: {
+    color: 'texture',
+  },
+  vertices: {
+    data: [0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1],
+  },
+  // buffers: [
+  //   {
+  //     name: 'a_texcoord',
+  //     data: [0, 0, 1, 0, 0, 1],
+  //   },
+  // ],
+  texture: {
+    src: './mic.png',
+    mapTo: [0.25, 0, 0.5, 1],
+  },
+  // color: 'texture',
 });

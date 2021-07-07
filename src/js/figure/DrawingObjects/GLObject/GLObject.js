@@ -60,6 +60,7 @@ class GLObject extends DrawingObject {
       stride: number,
       offset: number,
       usage: number,
+      len: number,
     };
   };
 
@@ -387,6 +388,7 @@ class GLObject extends DrawingObject {
       stride,
       offset,
       usage,
+      len: data.length,
     };
     this.fillBuffer(name, data);
   }
@@ -692,6 +694,7 @@ class GLObject extends DrawingObject {
 
     gl.uniform1f(locations.u_z, this.z);
 
+    console.log(color)
     gl.uniform4f(
       locations.u_color,
       color[0], color[1], color[2], color[3],
@@ -718,6 +721,7 @@ class GLObject extends DrawingObject {
       gl.uniform1i(locations.u_use_texture, 1);
       const { index } = webglInstance.textures[texture.id];
       gl.uniform1i(locations.u_texture, index);
+      console.log(texture);
     } else {
       gl.uniform1i(locations.u_use_texture, 0);
     }

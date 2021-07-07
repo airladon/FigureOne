@@ -51,7 +51,7 @@ function composeVertexShader(
   // Vertex position
   if (dimension === 2) {
     src += 'attribute vec2 a_position;\n';
-    src += 'uniform float u_z;';
+    src += 'uniform float u_z;\n';
     vars.push('a_position', 'u_z');
   } else if (dimension === 3) {
     src += 'attribute vec4 a_position;\n';
@@ -135,8 +135,8 @@ function composeFragShader(
     src += 'varying vec4 v_col;\n';
     vars.push('v_col');
   } else if (color === 'texture') {
-    src += 'uniform sampler2D u_texture;';
-    src += 'varying vec2 v_texcoord;';
+    src += 'uniform sampler2D u_texture;\n';
+    src += 'varying vec2 v_texcoord;\n';
   }
 
   if (light === 'directional') {
@@ -156,13 +156,15 @@ function composeFragShader(
   src += 'void main() {\n';
   if (color === 'vertex') {
     src += '  gl_FragColor = v_col;\n';
+    src += '  gl_FragColor.rgb *= gl_FragColor.a;\n';
   } else if (color === 'uniform') {
     src += '  gl_FragColor = u_color;\n';
+    src += '  gl_FragColor.rgb *= gl_FragColor.a;\n';
   } else if (color === 'texture') {
     src += '  gl_FragColor = texture2D(u_texture, v_texcoord) * u_color.a;\n';
   }
 
-  src += '  gl_FragColor.rgb *= gl_FragColor.a;\n';
+  // src += '  gl_FragColor.rgb *= gl_FragColor.a;\n';
   if (light === 'directional') {
     src += '  vec3 normal = normalize(v_norm);\n';
     src += '  float light = dot(normal, u_directionalLight);\n';
@@ -604,8 +606,8 @@ const getShaders = (
   //   fragmentSource = fName.src;
   //   vars.push(...fName.vars);
   // }
-  // console.log(vertexSource)
-  // console.log(fragmentSource)
+  console.log(vertexSource)
+  console.log(fragmentSource)
   return {
     vertexSource,
     fragmentSource,
