@@ -469,18 +469,30 @@ export type OBJ_GLColorData = {
  * @property {Array<number> | OBJ_GLColorData} [colors] default value for
  * `light` in vertex and fragment shader if shaders are not otherwise defined
  * (`uniform`)
- * @property {OBJ_GLVertexBuffer} [vertices]
- * @property {OBJ_GLVertexBuffer} [normals]
- * @property {string} [name]
- * @property {TypeParsablePoint} [position]
- * @property {TypeParsableTransform} [transform]
- * @property {TypeColor} [color]
- * @property {boolean | number | TypeParsablePoint} [touch]
- * @property {boolean | OBJ_ElementMove} [move]
- * @property {TypeColor} [dimColor]
+ * @property {OBJ_GLVertexBuffer} [vertices] create a `a_vertex` attribute for
+ * vertex coordinates
+ * @property {OBJ_GLVertexBuffer} [normals] create a `a_normal` attribute
+ * @property {string} [name]  name of figure element
+ * @property {TypeParsablePoint} [position] position overrides `transform` translation
+ * @property {TypeParsableTransform} [transform] transform to apply to element
+ * @property {TypeColor} [color] color to apply to element (is passed as the
+ * 'u_color' uniform to the fragment shader)
+ * @property {boolean | number | TypeParsablePoint} [touch] `true`, `number` or
+ * `TypeParsablePoint` will set the element as touchable. If `number`, then
+ * element touch volume is the scaled actual volume in x, y, and z. For
+ * example, if `2`, then the touchable volume is twice the actual volume. If
+ * `TypeParsablePoint` then the x, y, and z scales can be set independantly
+ * (`false`)
+ * @property {boolean | OBJ_ElementMove} [move] setting this to anything but
+ * `false` will set the element as movable. Use `OBJ_ElementMove` to customize
+ * the movement options
+ * @property {TypeColor} [dimColor] RGBA is used when vertex colors are from a
+ * uniform, otherwise just the alpha channel is used.
  * @property {TypeColor} [defaultColor]
  * @property {TypeScenarios} [scenarios]
- * @property {Scene} [scene]
+ * @property {Scene} [scene] Give the element a custom scene that is independant
+ * of the figure scene. For example, use this to create a 3D object in a 2D
+ * figure.
  *
  * @example
  * // Default options are 2D, uniform color, TRIANGLES.
