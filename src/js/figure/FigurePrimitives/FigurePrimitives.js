@@ -382,27 +382,65 @@ export type OBJ_Primitive = {
  * A number of WebGL specific and FigureElementPrimitive specific properties
  * can be defined.
  *
- * WebGL specific properties are the WebGL primitive type, vertex shader,
- * fragment shader, attributes, uniforms and an optional texture. The
+ * WebGL specific properties are `glPrimitive`, `vertexShader`, `fragmentShader`
+ * `attributes`, `uniforms` and an optional `texture`. The
  * nomencalture for these properties is directly from WebGL.
  *
- * The Figure
+ * FigureElementPrimitive specific properties are `name`, `position`,
+ * `transform`, `color`, `dimColor`, `defaultColor`, `scenarios` and `scene`.
  *
- * FigureElementPrimitive specific properties are `name`, `position`, `transform`, `color`, `dimColor`, `defaultColor`, `scenarios` and `scene`
+ * Shaders are programs that run in the GPU and are written in a C-like
+ * language. Shaders operate on each vertex of a shape in parallel. The vertex
+ * shader transforms each vertex to some specific position, and performs color
+ * and lighting related calculations for scenarios when color and/or lighting
+ * are vertex specific. The fragment shader computes the final color of each
+ * pixel (fragment) between the vertices that make up a `glPrimitive`.
+ *
+ * Data can be passed from the CPU (JavaScript) to the GPU with attributes and
+ * uniforms.
+ *
+ * Attributes are arrays of numbers that represent data specific for
+ * each vertex in a shape. At a minimum, an attribute that defines the (x, y)
+ * or (x, y, z) coordinates of each vertex is needed. Other attributes might be
+ * color if all verticies do not have the same color, texture coordinates to
+ * map vertex color to a 2D image texture, and normal vectors for defining how
+ * light reflects from and thus brightens a surface. Each attribute must define
+ * data for every vertex in a shape. Attributes are typically defined and loaded
+ * into GPU buffers once. On each animation frame, the GPU will pass the
+ * buffered attributes to the shaders. Attributes are only passed to the vertex
+ * shader.
+ *
+ * Uniforms are small amounts of data (vectors or square matrices with a maximum
+ * dimension/rank of 4) that are passed from the CPU to the GPU on each frame.
+ * A uniform value can be passed to both the vertex and fragment shader and is
+ * thus available to all vertices and fragments. A uniform is like a
+ * global variable whose value can change on each animation frame. Example
+ * uniforms are:
+ * - transform matrix that transforms all vertices in space the same way
+ * - color value that colors all vertices the same (instead of having to define
+ *   a color for each vertex)
+ * - light source properties like position, direction, and amplitude
+ *
+ * Data can be passed from the vertex shader to the fragment shader in variables
+ * called *varyings*. Example varyings include color attributes (color that is
+ * defined for each vertex) and lighting information if the lighting is vertex
+ * dependent.
  *
  * Shaders source code can be defined as a string, or composed automatically
- * from options including `dimension`, `color` and `light`.
+ * from options including `dimension`, `color` and `light`. Shader source code
+ * contains attribute and uniform variables, and these attributes and uniforms
+ * need to be defined with `attributes` and `uniforms`.
  *
- * To use the shader composers, options for dimension (2 or 3), light and
- * color need to be used. The options 
- *
- * Use this to create any WebGL shape with full custom
- *
- * Allows customization of webGL
+ * If using automated shader composition, then only attributes need to be
+ * defined. The uniforms will be passed to the shader from the information in
+ * the `color` property of the FigureElementPrimitive and the `scene` used to
+ * draw the primitive. See {@link OBJ_VertexShader} and
+ * {@link OBJ_FragmentShader} for names of attributes and uniforms used in the
+ * shaders, and when they are used.
  *
  * @property {'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'} [glPrimitive]
  * @property {string | OBJ_VertexShader} [vertexShader]
- * @property {string | OBJ_FragShader} [fragShader]
+ * @property {string | OBJ_FragmentShader} [fragmentShader]
  * @property {Array<OBJ_GLBuffer>} [attributes]
  * @property {Array<OBJ_GLUniform>} [uniforms]
  * @property {OBJ_Texture} [texture]
@@ -425,7 +463,7 @@ export type OBJ_Primitive = {
 export type OBJ_GLPrimitive = {
   glPrimitive?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
   vertexShader?: string | OBJ_VertexShader,
-  fragShader?: string | OBJ_FragShader,
+  fragmentShader?: string | OBJ_FragShader,
   attributes?: Array<OBJ_GLBuffer>,
   uniforms?: Array<OBJ_GLUniform>,
   texture?: OBJ_Texture,
@@ -2432,7 +2470,7 @@ export default class FigurePrimitives {
     const defaultOptions = {
       glPrimitive: 'TRIANGLES',
       vertexShader: { dimension: 2 },
-      fragShader: { color: 'uniform' },
+      fragmentShader: { color: 'uniform' },
       texture: {
         src: '',
         mapTo: new Rect(-1, -1, 2, 2),
@@ -2457,7 +2495,7 @@ export default class FigurePrimitives {
     const glObject = new GLObject(
       this.webgl[0],
       options.vertexShader,
-      options.fragShader,
+      options.fragmentShader,
     );
     glObject.setPrimitive(options.glPrimitive);
     if (options.vertices != null) {
@@ -2576,16 +2614,16 @@ export default class FigurePrimitives {
     }
 
     let colorVertex = false;
-    let fragShader = 'simple';
+    let fragmentShader = 'simple';
     if (Array.isArray(options.color[0])) {
       colorVertex = true;
-      fragShader = 'vertexColor';
+      fragmentShader = 'vertexColor';
     }
 
     const glObject = new GLObject(
       this.webgl[0],
       ['morpher', options.points.length, colorVertex],
-      fragShader,
+      fragmentShader,
     );
     glObject.setPrimitive(options.glPrimitive);
 

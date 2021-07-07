@@ -536,7 +536,7 @@ const vertexShader = {
   normals: true,
   light: 'directional',
 };
-const fragShader = {
+const fragmentShader = {
   light: 'directional',
 };
 
@@ -555,7 +555,7 @@ const addAxis = (name, direction, color, includeArrow = false) => {
     name,
     make: 'gl',
     vertexShader,
-    fragShader,
+    fragmentShader,
     vertices3: { data: [...p, ...cn] },
     normals: { data: [...n, ...cnNormals] },
     color,

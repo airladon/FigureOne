@@ -354,15 +354,15 @@ class GLObject extends DrawingObject {
   }
 
   addNormals(normals: Array<number>, usage: TypeGLBufferUsage = 'STATIC') {
-    this.addBuffer('a_norm', 3, normals, 'FLOAT', false, 0, 0, usage);
+    this.addBuffer('a_normal', 3, normals, 'FLOAT', false, 0, 0, usage);
   }
 
   addColors(colors: Array<number>, usage: TypeGLBufferUsage = 'STATIC') {
-    this.addBuffer('a_col', 4, colors, 'FLOAT', false, 0, 0, usage);
+    this.addBuffer('a_color', 4, colors, 'FLOAT', false, 0, 0, usage);
   }
 
   addColorsNorm(colors: Array<number>, usage: TypeGLBufferUsage = 'STATIC') {
-    this.addBuffer('a_col', 4, colors, 'UNSIGNED_BYTE', true, 0, 0, usage);
+    this.addBuffer('a_color', 4, colors, 'UNSIGNED_BYTE', true, 0, 0, usage);
   }
 
   addBuffer(
@@ -656,9 +656,9 @@ class GLObject extends DrawingObject {
       );
     }
 
-    if (locations.u_minLight != null) {
+    if (locations.u_ambientLight != null) {
       gl.uniform1f(
-        locations.u_minLight,
+        locations.u_ambientLight,
         scene.light.ambient,
       );
     }
@@ -794,9 +794,9 @@ class GLObject extends DrawingObject {
   //     );
   //   }
 
-  //   if (locations.u_minLight != null) {
+  //   if (locations.u_ambientLight != null) {
   //     gl.uniform1f(
-  //       locations.u_minLight,
+  //       locations.u_ambientLight,
   //       drawGlobals.light.min,
   //     );
   //   }

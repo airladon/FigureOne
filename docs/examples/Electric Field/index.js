@@ -42,7 +42,7 @@ uniform vec3 u_charge17;
 uniform vec3 u_charge18;
 uniform vec3 u_charge19;
 uniform vec3 u_charge20;
-varying vec4 v_col;
+varying vec4 v_color;
 
 vec2 polarToRect(float mag, float angle) {
   return vec2(mag * cos(angle), mag * sin(angle));
@@ -120,7 +120,7 @@ void main() {
 
   // Set the color based on the normalized charge between red (high charge
   // magnitude) and blue (low charge magnitude)
-  v_col = vec4(normCharge, 0.2, 1.0 - normCharge, 1);
+  v_color = vec4(normCharge, 0.2, 1.0 - normCharge, 1);
 }`;
 
 const points = [];
@@ -196,7 +196,7 @@ const field = figure.add({
       'u_charge20',
     ],
   },
-  fragShader: 'vertexColor',
+  fragmentShader: 'vertexColor',
   vertices: { data: points },
   buffers: [
     { name: 'a_center', data: centers },

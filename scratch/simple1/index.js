@@ -63,7 +63,7 @@ const vertexShader = {
   normals: true,
   light: 'directional',
 };
-const fragShader = {
+const fragmentShader = {
   light: 'directional',
 };
 
@@ -82,7 +82,7 @@ const addAxis = (name, direction, color, includeArrow = false) => {
     name,
     make: 'gl',
     vertexShader,
-    fragShader,
+    fragmentShader,
     vertices3: { data: [...p, ...cn] },
     normals: { data: [...n, ...cnNormals] },
     color,
@@ -105,7 +105,7 @@ const addSphere = (name, position, color) => {
     name,
     make: 'gl',
     vertexShader,
-    fragShader,
+    fragmentShader,
     vertices3: { data: sx },
     normals: { data: sn },
     color,
@@ -153,7 +153,7 @@ xAxis.move.bounds = new Fig.RangeBounds({
 // figure.add({
 //   make: 'gl',
 //   vertexShader,
-//   fragShader,
+//   fragmentShader,
 //   vertices3: { data: lv },
 //   normals: { data: ln },
 //   color: [1, 0, 0, 1],
@@ -171,7 +171,7 @@ const cube = figure.add({
   name: 'cube',
   make: 'gl',
   vertexShader,
-  fragShader,
+  fragmentShader,
   vertices3: { data: rv },
   normals: { data: rn },
   color: [0, 1, 1, 1],

@@ -2,15 +2,58 @@
 import { joinObjects } from '../../tools/tools';
 
 /**
- * Vertex shader composition options.
+ * Options used to compose vertex shader source code.
  *
  * Shader source code can be automatically composed for different vertex
- * dimension (2D vs 3D), coloring and lighting options. Composed source code
- * uses specific variable names that will need corresponding buffers and
- * uniforms defined.
+ * dimension (2D vs 3D), coloring and lighting options.
  *
- * `dimension` defines whether each vertex has two components (x, y) or three
- * components (x, y, z). The variable `a_vertex` is used to define the vertex position and so a buffer with name `a_vertex` and size 
+ * Composed source code uses specific attribute, uniform and varying names.
+ * Attributes will need to be defined by the user in the `attributes` property
+ * of {@link OBJ_GLPrimitive}.
+ *
+ * Attributes:
+ * - `vec2 a_vertex`: used to define vertex positions when `dimension = 2`.
+ * - `vec4 a_vertex`: used to define vertex positions when `dimension = 3` -
+ *   Note, for this case an attribute size of only 3 is needed as the fourth
+ *   coordinate (w in the homogenous coordinate system) is automatically filled
+ *   with a 1.
+ * - `vec4 a_color`: used to define the color of a vertex when `color = 'vertex'`
+ * - `vec2 a_texcoord`: used to define the texture coordinates to map the
+ *   vertex to when `color = 'texture'`
+ * - `vec3 a_normal`: used to define the normal vector for a vertex used when
+ *   `light = 'point'` or `light = 'directional'`
+ *
+ *
+ * Uniforms will be defined and updated by FigureOne based on the color and
+ * transform of the primitive, and the scene being used to draw the primitive.
+ * Thus, the uniform variables listed below for are for informational purposes
+ * only.
+ *
+ * Uniforms:
+ * - `mat4 u_worldViewProjectionMatrix`: transfomration matrix that cascades
+ *   projection, camera position, and any additional transformation of the shape
+ * - `float u_z`: define a specific z for all vertices when `dimension = 2`
+ * - `u_worldInverseTranspose`: transpose of inverse world matrix needed for
+ *   to correctly transform normal vectors. Used when `light = 'point'` or
+ *   `light = 'directional'`
+ * - `vec3 u_lightWorldPosition`: defines the position of a point source light
+ *    used when `light = 'point'`
+ * - `mat4 u_worldMatrix`: defines the world matrix transform that orients the
+ *   point source light relative to the shape used when `light = 'point'`.
+ *
+ * Varyings are passed from the vertex shader to the fragement shader. They are
+ * listed here in case the user wants to customize one shader, while relying on
+ * composition for the other. All varying expected by the composed shader will
+ * need to be defined in the custom shader.
+ *
+ * - `vec2 v_texcoord`: pass texture coordinates to fragment shader used when
+ *   `color = 'texture'`
+ * - `vec4 v_color`: pass vertex specific color to fragment shader used when
+ *   `color = 'vertex'`
+ * - `vec3 v_normal`: pass normals (transformed with `u_worldInverseTranspose`)
+ *    to fragment shader used when `light = 'directional'` or `light = 'point'`
+ * - `vec3 v_vertexToLight`: pass vector between point source light and vertex
+ *    to fragment shader used when `light = 'point'`
  *
  * @property {2 | 3} [dimension] (`2`)
  * @property {'vertex' | 'uniform' | 'texture'} [color] (`uniform`)
@@ -18,7 +61,6 @@ import { joinObjects } from '../../tools/tools';
  */
 export type OBJ_VertexShader = {
   light?: 'point' | 'directional' | null,
-  // normals?: boolean,
   color?: 'vertex' | 'uniform' | 'texture',
   dimension?: 2 | 3,
 };
@@ -27,35 +69,71 @@ export type TypeVertexShader = string
   | { src: string, vars?: Array<string> }
   | Array<string | number | boolean>
   | OBJ_VertexShader;
+
 /**
- * Fragment shader composition
+ * Options used to compose fragment shader source code.
+ *
+ * Shader source code can be automatically composed for different coloring and
+ * lighting options.
+ *
+ * Composed source code uses specific uniform and varying names.
+ *
+ * Uniforms will be defined and updated by FigureOne based on the color and
+ * transform of the primitive, and the scene being used to draw the primitive.
+ * Thus, the uniform variables listed below for are for informational purposes
+ * only.
+ *
+ * Uniforms:
+ * - `vec4 u_color`: global color for all vertices used all times. When
+ *   `color = 'texture'` or `color = 'vertex'`, only the alpha channel of
+ *   `u_color` is used.
+ * - `sampler2D u_texture`: texture used when `color = 'texture'`.
+ * - `vec3 u_directionalLight`: world space position of directional light
+ *   source used when `light = 'directional'`
+ * - `float u_ambientLight`: ambient light used when `light = 'directional'` or
+ *   `light = 'point'`.
+ *
+ * Varyings are passed from the vertex shader to the fragement shader. They are
+ * listed here in case the user wants to customize one shader, while relying on
+ * composition for the other.
+ *
+ * - `vec2 v_texcoord`: texture coordinates from vertex shader used when
+ *   `color = 'texture'`
+ * - `vec4 v_color`: vertex specific color from vertex shader used when
+ *   `color = 'vertex'`
+ * - `vec3 v_normal`: normals from vertex shader used when
+ *   `light = 'directional'` or `light = 'point'`
+ * - `vec3 v_vertexToLight`: vector between point source light and vertex
+ *    from vertex shader used when `light = 'point'`
+ *
+ * @property {2 | 3} [dimension] (`2`)
+ * @property {'vertex' | 'uniform' | 'texture'} [color] (`uniform`)
+ * @property {'point' | 'directional' | null} [light] (`null`)
  */
-export type OBJ_FragShader = {
+export type OBJ_FragmentShader = {
   light?: 'point' | 'directional' | null,
   color?: 'vertex' | 'uniform' | 'texture',
 };
 
-export type TypeFragShader = string
+export type TypeFragmentShader = string
   | { src: string, vars?: Array<string> }
   | Array<string | number | boolean>
-  | OBJ_FragShader;
+  | OBJ_FragmentShader;
 
 function composeVertexShader(
   options: {
     dimension: 2 | 3,
-    // normals: boolean,
     color: 'vertex' | 'uniform' | 'texture',
     light: null | 'point ' | 'directional',
   } = {},
 ) {
   const defaultOptions = {
     dimension: 2,
-    // normals: false,
     color: 'uniform',
     light: null,
   };
   const {
-    dimension, normals, light, color,
+    dimension, light, color,
   } = joinObjects(defaultOptions, options);
   let src = '\nuniform mat4 u_worldViewProjectionMatrix;\n';
   const vars = ['u_worldViewProjectionMatrix'];
@@ -75,24 +153,24 @@ function composeVertexShader(
     src += 'varying vec2 v_texcoord;\n';
     vars.push('a_texcoord');
   } else if (color === 'vertex') {
-    src += 'attribute vec4 a_col;\n';
-    src += 'varying vec4 v_col;\n';
-    vars.push('a_col');
+    src += 'attribute vec4 a_color;\n';
+    src += 'varying vec4 v_color;\n';
+    vars.push('a_color');
   }
 
   // Normals
   if (light != null) {
-    src += 'attribute vec3 a_norm;\n';
-    src += 'varying vec3 v_norm;\n';
+    src += 'attribute vec3 a_normal;\n';
+    src += 'varying vec3 v_normal;\n';
     src += 'uniform mat4 u_worldInverseTranspose;\n';
-    vars.push('u_worldInverseTranspose', 'a_norm');
+    vars.push('u_worldInverseTranspose', 'a_normal');
   }
 
   // Point Light requires light direction calculation per vertex
   if (light === 'point') {
     src += 'uniform vec3 u_lightWorldPosition;\n';
     src += 'uniform mat4 u_worldMatrix;\n';
-    src += 'varying vec3 v_surfaceToLight;\n';
+    src += 'varying vec3 v_vertexToLight;\n';
     vars.push('u_lightWorldPosition', 'u_worldMatrix');
   }
 
@@ -109,16 +187,16 @@ function composeVertexShader(
   if (color === 'texture') {
     src += '  v_texcoord = a_texcoord;\n';
   } else if (color === 'vertex') {
-    src += '  v_col = a_col;\n';
+    src += '  v_color = a_color;\n';
   }
 
   if (light != null) {
-    src += '  v_norm = mat3(u_worldInverseTranspose) * a_norm;\n';
+    src += '  v_normal = mat3(u_worldInverseTranspose) * a_normal;\n';
   }
 
   if (light === 'point') {
-    src += '  vec3 surfaceWorldPosition = (u_worldMatrix * a_vertex).xyz;\n';
-    src += '  v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;\n';
+    src += '  vec3 vertexWorldPosition = (u_worldMatrix * a_vertex).xyz;\n';
+    src += '  v_vertexToLight = u_lightWorldPosition - vertexWorldPosition;\n';
   }
 
   src += '}\n';
@@ -145,30 +223,31 @@ function composeFragShader(
   const vars = ['u_color'];
 
   if (color === 'vertex') {
-    src += 'varying vec4 v_col;\n';
-    vars.push('v_col');
+    src += 'varying vec4 v_color;\n';
+    vars.push('v_color');
   } else if (color === 'texture') {
     src += 'uniform sampler2D u_texture;\n';
     src += 'varying vec2 v_texcoord;\n';
   }
 
   if (light === 'directional') {
-    src += 'varying vec3 v_norm;\n';
+    src += 'varying vec3 v_normal;\n';
     src += 'uniform vec3 u_directionalLight;\n';
-    src += 'uniform float u_minLight;\n';
-    vars.push('u_minLight', 'u_directionalLight');
+    src += 'uniform float u_ambientLight;\n';
+    vars.push('u_ambientLight', 'u_directionalLight');
   } else if (light === 'point') {
-    src += 'varying vec3 v_norm;\n';
-    src += 'varying vec3 v_surfaceToLight;\n';
-    src += 'uniform float u_minLight;\n';
-    vars.push('u_minLight');
+    src += 'varying vec3 v_normal;\n';
+    src += 'varying vec3 v_vertexToLight;\n';
+    src += 'uniform float u_ambientLight;\n';
+    vars.push('u_ambientLight');
   }
 
 
   // Main Program
   src += 'void main() {\n';
   if (color === 'vertex') {
-    src += '  gl_FragColor = v_col;\n';
+    src += '  gl_FragColor = v_color;\n';
+    src += '  gl_FragColor.a *= u_color.a;\n';
     src += '  gl_FragColor.rgb *= gl_FragColor.a;\n';
   } else if (color === 'uniform') {
     src += '  gl_FragColor = u_color;\n';
@@ -179,14 +258,14 @@ function composeFragShader(
 
   // src += '  gl_FragColor.rgb *= gl_FragColor.a;\n';
   if (light === 'directional') {
-    src += '  vec3 normal = normalize(v_norm);\n';
+    src += '  vec3 normal = normalize(v_normal);\n';
     src += '  float light = dot(normal, u_directionalLight);\n';
-    src += '  gl_FragColor.rgb *= max((light + 1.0) / 2.0, u_minLight);\n';
+    src += '  gl_FragColor.rgb *= max((light + 1.0) / 2.0, u_ambientLight);\n';
   } else if (light === 'point') {
-    src += '  vec3 normal = normalize(v_norm);\n';
-    src += '  vec3 surfaceToLightDirection = normalize(v_surfaceToLight);\n';
+    src += '  vec3 normal = normalize(v_normal);\n';
+    src += '  vec3 surfaceToLightDirection = normalize(v_vertexToLight);\n';
     src += '  float light = dot(normal, surfaceToLightDirection);\n';
-    src += '  gl_FragColor.rgb *= max((light + 1.0) / 2.0, u_minLight);\n';
+    src += '  gl_FragColor.rgb *= max((light + 1.0) / 2.0, u_ambientLight);\n';
   }
 
   src += '}\n';
@@ -227,64 +306,64 @@ void main() {
   pointLight: {
     src: `
 attribute vec4 a_vertex;
-attribute vec3 a_norm;
-varying vec3 v_norm;
+attribute vec3 a_normal;
+varying vec3 v_normal;
 uniform vec3 u_lightWorldPosition;
 uniform mat4 u_worldMatrix;
 uniform mat4 u_worldViewProjectionMatrix;
 uniform mat4 u_worldInverseTranspose;
-varying vec3 v_surfaceToLight;
+varying vec3 v_vertexToLight;
 void main() {
   gl_Position = u_worldViewProjectionMatrix * a_vertex;
-  v_norm = mat3(u_worldInverseTranspose) * a_norm;
-  vec3 surfaceWorldPosition = (u_worldMatrix * a_vertex).xyz;
-  v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
+  v_normal = mat3(u_worldInverseTranspose) * a_normal;
+  vec3 vertexWorldPosition = (u_worldMatrix * a_vertex).xyz;
+  v_vertexToLight = u_lightWorldPosition - vertexWorldPosition;
 }`,
-    vars: ['a_vertex', 'a_norm', 'u_worldViewProjectionMatrix', 'u_worldInverseTranspose', 'u_lightWorldPosition', 'u_worldMatrix'],
+    vars: ['a_vertex', 'a_normal', 'u_worldViewProjectionMatrix', 'u_worldInverseTranspose', 'u_lightWorldPosition', 'u_worldMatrix'],
   },
   directionalLight: {
     src: `
 attribute vec4 a_vertex;
-attribute vec3 a_norm;
-varying vec3 v_norm;
+attribute vec3 a_normal;
+varying vec3 v_normal;
 uniform mat4 u_worldViewProjectionMatrix;
 uniform mat4 u_worldInverseTranspose;
 void main() {
   gl_Position = u_worldViewProjectionMatrix * a_vertex;
-  v_norm = mat3(u_worldInverseTranspose) * a_norm;
+  v_normal = mat3(u_worldInverseTranspose) * a_normal;
 }`,
-    vars: ['a_vertex', 'a_norm', 'u_worldViewProjectionMatrix', 'u_worldInverseTranspose'],
+    vars: ['a_vertex', 'a_normal', 'u_worldViewProjectionMatrix', 'u_worldInverseTranspose'],
   },
   vertexColor: {
     src:
         `
 attribute vec2 a_vertex;
-attribute vec4 a_col;
-varying vec4 v_col;
+attribute vec4 a_color;
+varying vec4 v_color;
 uniform mat4 u_worldMatrix;
 uniform mat4 u_projectionMatrix;
 uniform mat4 u_viewMatrix;
 uniform float u_z;
 void main() {
   gl_Position = u_projectionMatrix * u_viewMatrix * u_worldMatrix * vec4(a_vertex.xy, u_z, 1);
-  v_col = a_col;
+  v_color = a_color;
 }`,
-    vars: ['a_vertex', 'a_col', 'u_worldMatrix', 'u_z', 'u_projectionMatrix', 'u_viewMatrix'],
+    vars: ['a_vertex', 'a_color', 'u_worldMatrix', 'u_z', 'u_projectionMatrix', 'u_viewMatrix'],
   },
   vertexColor3D: {
     src:
         `
 attribute vec3 a_vertex;
-attribute vec4 a_col;
-varying vec4 v_col;
+attribute vec4 a_color;
+varying vec4 v_color;
 uniform mat4 u_worldMatrix;
 uniform mat4 u_projectionMatrix;
 uniform mat4 u_viewMatrix;
 void main() {
   gl_Position = u_projectionMatrix * u_viewMatrix * u_worldMatrix * vec4(a_vertex.xyz, 1);
-  v_col = a_col;
+  v_color = a_color;
 }`,
-    vars: ['a_vertex', 'a_col', 'u_worldMatrix', 'u_projectionMatrix', 'u_viewMatrix'],
+    vars: ['a_vertex', 'a_color', 'u_worldMatrix', 'u_projectionMatrix', 'u_viewMatrix'],
   },
   withTexture: {
     src:
@@ -369,10 +448,10 @@ void main() {
     let fromCol = '';
     let setVarying = '';
     if (vertexColor) {
-      aColDefs = `${aColDefs}varying vec4 v_col;\n`;
+      aColDefs = `${aColDefs}varying vec4 v_color;\n`;
       toCol = 'toCol = colors[i];\n';
       fromCol = 'fromCol = colors[i];\n';
-      setVarying = 'v_col = (toCol - fromCol) * u_percent + fromCol;\n';
+      setVarying = 'v_color = (toCol - fromCol) * u_percent + fromCol;\n';
     }
 
     const src = `
@@ -424,7 +503,7 @@ uniform mat3 u_worldMatrix;
 uniform float u_percent;
 uniform int u_from;
 uniform int u_to;
-varying vec4 v_col;
+varying vec4 v_color;
 
 void main() {
   vec2 fromPos = a_pos0;
@@ -460,7 +539,7 @@ void main() {
 
   vec2 newPosition = (toPos - fromPos) * u_percent + fromPos;
   gl_Position = u_worldMatrix * vec4(newPosition.xy, u_z, 1);
-  v_col = (toCol - fromCol) * u_percent + fromCol;
+  v_color = (toCol - fromCol) * u_percent + fromCol;
 }
 `,
     vars: ['a_pos0', 'a_pos1', 'a_pos2', 'a_pos3', 'a_col0', 'a_col1', 'a_col2', 'a_col3', 'u_worldMatrix', 'u_percent', 'u_from', 'u_to'],
@@ -482,35 +561,35 @@ const fragment = {
     src: `
 precision mediump float;
 uniform vec4 u_color;
-varying vec3 v_norm;
+varying vec3 v_normal;
 uniform vec3 u_directionalLight;
-uniform float u_minLight;
+uniform float u_ambientLight;
 void main() {
-  vec3 normal = normalize(v_norm);
+  vec3 normal = normalize(v_normal);
   float light = dot(normal, u_directionalLight);
   gl_FragColor = u_color;
   gl_FragColor.rgb *= gl_FragColor.a;
-  gl_FragColor.rgb *= max((light + 1.0) / 2.0, u_minLight);
+  gl_FragColor.rgb *= max((light + 1.0) / 2.0, u_ambientLight);
 }`,
-    vars: ['u_color', 'u_directionalLight', 'u_minLight'],
+    vars: ['u_color', 'u_directionalLight', 'u_ambientLight'],
   },
   pointLight: {
     src: `
 precision mediump float;
 uniform vec4 u_color;
-varying vec3 v_norm;
-varying vec3 v_surfaceToLight;
-uniform float u_minLight;
+varying vec3 v_normal;
+varying vec3 v_vertexToLight;
+uniform float u_ambientLight;
 void main() {
-  vec3 normal = normalize(v_norm);
-  vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
+  vec3 normal = normalize(v_normal);
+  vec3 surfaceToLightDirection = normalize(v_vertexToLight);
   float light = dot(normal, surfaceToLightDirection);
   gl_FragColor = u_color;
   gl_FragColor.rgb *= gl_FragColor.a;
-  // gl_FragColor.rgb *= max((light + 1.0) / 2.0, u_minLight);
-  gl_FragColor.rgb *= max((light + 1.0) / 2.0, u_minLight);
+  // gl_FragColor.rgb *= max((light + 1.0) / 2.0, u_ambientLight);
+  gl_FragColor.rgb *= max((light + 1.0) / 2.0, u_ambientLight);
 }`,
-    vars: ['u_color', 'u_minLight'],
+    vars: ['u_color', 'u_ambientLight'],
   },
   selector: {
     src: `
@@ -525,9 +604,9 @@ void main() {
     src:
       'precision mediump float;'
       + 'uniform vec4 u_color;'
-      + 'varying vec4 v_col;'
+      + 'varying vec4 v_color;'
       + 'void main() {'
-        + 'gl_FragColor = v_col;'
+        + 'gl_FragColor = v_color;'
         + 'gl_FragColor.rgb *= gl_FragColor.a;'
       + '}',
     vars: ['u_color'],

@@ -12,7 +12,7 @@ attribute vec4 a_color;
 attribute vec2 a_velocity;
 attribute vec2 a_center;
 attribute float a_radius;
-varying vec4 v_col;
+varying vec4 v_color;
 uniform mat4 u_worldMatrix;
 uniform float u_time;
 
@@ -39,7 +39,7 @@ void main() {
   float x = calc(3.0 - a_radius, a_vertex.x, a_center.x, a_velocity.x);
   float y = calc(3.0 - a_radius, a_vertex.y, a_center.y, a_velocity.y);
   gl_Position = u_worldMatrix * vec4(x, y, 0, 1);
-  v_col = a_color;
+  v_color = a_color;
 }`;
 
 const points = [];
@@ -81,7 +81,7 @@ const element = figure.add({
     vars: ['a_vertex', 'a_color', 'a_velocity', 'a_center', 'a_radius', 'u_worldMatrix', 'u_time'],
   },
   // Built in shader that allows for colored vertices
-  fragShader: 'vertexColor',
+  fragmentShader: 'vertexColor',
   // Define buffers and uniforms
   vertices: { data: points },
   buffers: [

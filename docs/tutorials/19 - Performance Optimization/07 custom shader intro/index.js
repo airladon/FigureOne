@@ -53,7 +53,7 @@ const element = figure.add({
     vars: ['a_vertex', 'a_velocity', 'u_worldMatrix', 'u_time'],
   },
   // Built in shader with one color for all vertices
-  fragShader: 'simple',
+  fragmentShader: 'simple',
   // Define buffers and uniforms
   vertices: { data: points },
   buffers: [{ name: 'a_velocity', data: velocities }],

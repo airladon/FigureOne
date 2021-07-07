@@ -8,7 +8,7 @@ figure.add({
     dimension: 2,
     color: 'texture',
   },
-  fragShader: {
+  fragmentShader: {
     color: 'texture',
   },
   // vertices: {

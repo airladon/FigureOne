@@ -42,7 +42,7 @@ const vertexShader = {
   normals: true,
   light: 'directional',
 };
-const fragShader = {
+const fragmentShader = {
   light: 'directional',
 };
 
@@ -62,7 +62,7 @@ const addAxis = (name, direction, color, includeArrow = false) => {
     name,
     make: 'gl',
     vertexShader,
-    fragShader,
+    fragmentShader,
     vertices3: { data: [...p, ...cn] },
     normals: { data: [...n, ...cnNormals] },
     color,
@@ -87,7 +87,7 @@ const [cv, cn] = cone({
 figure.add({
   make: 'gl',
   vertexShader,
-  fragShader,
+  fragmentShader,
   vertices3: { data: cv },
   normals: { data: cn },
   color: [0, 1, 1, 1],
@@ -102,7 +102,7 @@ figure.add({
   name: 'cube',
   make: 'gl',
   vertexShader: { dimension: 3, light: 'point', normals: true },
-  fragShader: { light: 'point' },
+  fragmentShader: { light: 'point' },
   vertices3: { data: cubeV },
   normals: { data: cubeN },
   color: [1, 0, 0, 1],
