@@ -485,7 +485,6 @@ class GLObject extends DrawingObject {
 
   updateVertices(vertices: Array<number>) {
     this.points = vertices;
-    // this.numVertices = vertices.length / 2;
     this.updateAttribute('a_vertex', vertices);
   }
 
@@ -499,6 +498,9 @@ class GLObject extends DrawingObject {
     this.gl.deleteBuffer(this.attributes[name].buffer);
     this.attributes[name].buffer = null;
     this.fillBuffer(name, data);
+    this.attributes[name].data = data;
+    this.attributes[name].len = data.length;
+    this.numVertices = this.attributes[name].data.length / this.attributes[name].size;
   }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this

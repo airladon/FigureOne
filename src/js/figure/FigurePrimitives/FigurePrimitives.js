@@ -2847,25 +2847,7 @@ export default class FigurePrimitives {
     return element;
   }
 
-/*
-points?: Array<TypeParsablePoint> | Array<Point>,
-  normals?: Array<TypeParsablePoint> | Array<Point>,
-  colors?: ARray<number>,
-  texture?: OBJ_Texture,
-  drawType?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
-  copy?: Array<CPY_Step | string> | CPY_Step,
-  color?: TypeColor,
-  name?: string,
-  position?: TypeParsablePoint,
-  transform?: TypeParsableTransform,
-  pulse?: number,
 
-  touch?: boolean | number | TypeParsablePoint,
-  move?: boolean | OBJ_ElementMove,
-  dimColor?: TypeColor,
-  defaultColor?: TypeColor,
-  scenarios?: TypeScenarios,
-  */
   /**
    * {@link FigureElementPrimitive} that draws a generic shape.
    * @see {@link OBJ_Generic} for options and examples.
@@ -2874,12 +2856,7 @@ points?: Array<TypeParsablePoint> | Array<Point>,
     const options = joinObjects({}, {
       dimension: 3, light: 'directional',
     }, ...optionsIn);
-    // options.transform = getTransform(options.transform);
 
-    // if (options.position != null) {
-    //   options.position = getPoint(options.position);
-    //   options.transform.updateTranslation(options.position);
-    // }
     const processOptions = (o) => {
       if (o.points != null) {
         o.vertices = o.points;
@@ -2911,7 +2888,6 @@ points?: Array<TypeParsablePoint> | Array<Point>,
       }
     };
     processOptions(options);
-    console.log(options)
     const element = this.gl(options);
 
     element.custom.updateGeneric = function update(updateOptions: {
@@ -2934,7 +2910,6 @@ points?: Array<TypeParsablePoint> | Array<Point>,
         element.custom.updateAttribute('a_colors', o.colors);
       }
     };
-    // element.custom.updateGeneric(options);
     element.custom.updatePoints = element.custom.updateGeneric;
     element.timeKeeper = this.timeKeeper;
     element.recorder = this.recorder;
@@ -2943,20 +2918,31 @@ points?: Array<TypeParsablePoint> | Array<Point>,
   }
 
   sphere(...optionsIn: Array<OBJ_Sphere>) {
-    const options = joinObjects(
-      {
-        radius: this.defaultLength,
-        sides: 10,
-        normals: 'flat',
-        center: [0, 0, 0],
-      },
-      ...optionsIn,
-    );
-    const [points, normals] = sphere(options);
-    return this.generic3D(options, {
-      points,
-      normals,
+    const oIn = joinObjects({}, ...optionsIn);
+    const getSphere = (options: OBJ_Sphere) => {
+      const o = joinObjects(
+        {
+          radius: this.defaultLength,
+          sides: 10,
+          normals: 'flat',
+          center: [0, 0, 0],
+        },
+        options,
+      );
+      return sphere(o);
+    }
+    const [points, normals] = getSphere(oIn);
+    const element = this.generic3D(oIn, {
+      points, normals,
     });
+    element.custom.updatePoints = (options: OBJ_Sphere) => {
+      const [p, n] = getSphere(options);
+      element.custom.updateGeneric(joinObjects(
+        options,
+        { points: p, normals: n },
+      ));
+    };
+    return element;
   }
 
   cube(...optionsIn: Array<OBJ_Cube>) {
@@ -2967,7 +2953,6 @@ points?: Array<TypeParsablePoint> | Array<Point>,
       ...optionsIn,
     );
     const [points, normals] = cube(options);
-    console.log(points, normals)
     return this.generic3D(options, {
       points,
       normals,

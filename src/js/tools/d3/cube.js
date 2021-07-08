@@ -130,20 +130,12 @@ export default function cube(options: OBJ_Cube) {
   const zNormal = matrix == null ? [0, 0, 1] : m3.transform(matrix, 0, 0, 1);
   const zNegNormal = matrix == null ? [0, 0, -1] : m3.transform(matrix, 0, 0, -1);
   for (let i = 0; i < 36; i += 1) {
-    // let p = [
-    //   pointsRaw[i * 3],
-    //   pointsRaw[i * 3 + 1],
-    //   pointsRaw[i * 3 + 2],
-    // ];
     let p = pointsRaw[i];
     if (matrix != null) {
       p = getPoint(m3.transform(matrix, p.x, p.y, p.z));
     }
     if (c != null) {
       p = p.add(c);
-      // p.x += c.x;
-      // p.y += c.y;
-      // p.x += c.z;
     }
     points.push(p);
   }
