@@ -82,7 +82,7 @@ import getLine from '../geometries/line';
 // import type {
 //   OBJ_Copy,
 // } from './FigurePrimitiveTypes';
-import { copyPoints } from '../geometries/copy/copy';
+import { copyPoints, getCopyCount } from '../geometries/copy/copy';
 import type { CPY_Step } from '../geometries/copy/copy';
 import type {
   TypeColor, TypeDash, OBJ_CurvedCorner, OBJ_Font,
@@ -2873,16 +2873,33 @@ points?: Array<TypeParsablePoint> | Array<Point>,
       dimension: 3, light: 'directional',
     }, ...optionsIn);
     options.transform = getTransform(options.transform);
+
     if (options.position != null) {
       options.position = getPoint(options.position);
       options.transform.updateTranslation(options.position);
     }
-    if (options.points != null) {
-      options.vertices = options.points;
-    }
-    if (options.copy != null) {
-      options.vertices = options.copy
-    }
+    const processOptions = (o) => {
+      if (o.points != null) {
+        o.vertices = o.points;
+      }
+      if (o.copy != null) {
+        if (o.vertices != null) {
+          o.vertices = copyPoints(o.vertices, o.copy, 'points');
+        }
+        if (o.normals != null) {
+          o.normals = copyPoints(o.normals, o.copy, 'normals');
+        }
+        if (o.colors != null) {
+          const count = getCopyCount(o.copy);
+          const out = [];
+          for (let i = 0; i < count; i += 1) {
+            out.push(...o.colors.map(c => c.slice()));
+          }
+          o.colors = out;
+        }
+      }
+    };
+    processOptions(options);
     const element = this.gl(options);
 
     element.custom.updateGeneric = function update(updateOptions: {
@@ -2893,13 +2910,11 @@ points?: Array<TypeParsablePoint> | Array<Point>,
       drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
     }) {
       const o = updateOptions;
-      if (o.copy != null && !Array.isArray(o.copy)) {
-        o.copy = [o.copy];
+      processOptions(o);
+      // element.drawingObject.change(o);
+      if (o.vertices) {
+        
       }
-      if (o.points != null) { // $FlowFixMe
-        o.points = getPoints(o.points);
-      }
-      element.drawingObject.change(o);
     };
     element.custom.updateGeneric(options);
     element.custom.updatePoints = element.custom.updateGeneric;

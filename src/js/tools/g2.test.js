@@ -2,8 +2,8 @@ import {
   Point,
   spaceToSpaceTransform,
   getBoundingRect,
-  pointsToArray,
-  pointsToArray2,
+  pointsToNumbers,
+  pointsToNumbers2,
   getPoints,
 } from './g2';
 

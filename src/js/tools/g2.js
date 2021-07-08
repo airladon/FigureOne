@@ -39,7 +39,7 @@ import rod from './3d/rod';
 // import { polygon } from './geometry/polygon';
 import cube from './3d/cube';
 import * as surface from './3d/surface';
-import { pointsToArray, pointsToArray2 } from './geometry/tools';
+import { pointsToNumbers, pointsToNumbers2 } from './geometry/tools';
 import { polygon, polygonLine } from './2D/polygon';
 
 
@@ -578,8 +578,8 @@ export {
   surface,
   getLathePoints,
   decelerateVector,
-  pointsToArray2,
-  pointsToArray,
+  pointsToNumbers2,
+  pointsToNumbers,
   polygon,
   polygonLine,
 };

@@ -2,7 +2,7 @@
 /* eslint-disable prefer-destructuring */
 import { Point, getPoint } from '../geometry/Point';
 import { getMatrix } from '../geometry/Transform';
-import { pointsToArray } from '../geometry/tools';
+import { pointsToNumbers } from '../geometry/tools';
 import { joinObjects } from '../tools';
 
 /**
@@ -118,7 +118,7 @@ function polygon(options: OBJ_GEOPolygon): Array<Point> | Array<number> {
   triangles[sides * 3 - 3] = position;
   triangles[sides * 3 - 2] = points[sides - 1];
   triangles[sides * 3 - 1] = points[0];
-  return pointsToArray(triangles, tris);
+  return pointsToNumbers(triangles, tris);
 }
 
 /**
@@ -162,7 +162,7 @@ function polygonLine(options: OBJ_GEOPolygon): Array<Point> | Array<number> {
   triangles[sides * 6 - 3] = inPoints[sides - 1];
   triangles[sides * 6 - 2] = points[0];
   triangles[sides * 6 - 1] = inPoints[0];
-  return pointsToArray(triangles, tris);
+  return pointsToNumbers(triangles, tris);
 }
 
 export {
