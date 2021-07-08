@@ -2,7 +2,7 @@
 // @flow
 /* eslint-disable camelcase */
 import {
-  Transform, Point, polarToRect, getBoundingRect, getPoints, getPoint, getScale,
+  Transform, Point, polarToRect, getBoundingRect, getPoints, getPoint,
 } from '../../../tools/g2';
 
 import type { TypeParsablePoint } from '../../../tools/g2';
@@ -73,6 +73,8 @@ import {
  * a location or locations or transform a copy of the points
  * @property {'x' | 'y' | number | 'rotation' | 'moveOnly'} [along] copy points
  * along a linear path where `number` is a path at an angle in radians
+ * @property {TypeParsablePoint} [axis] axis to rotate a 'rotation' copy around
+ * (default is the z axis so rotation is in xy plane `[0, 0, 1]`)
  * @property {number} [num] the number of copies to make when copying `along` a
  * path
  * @property {number} [step] distance between copies if `along` is `'x'` or
@@ -168,7 +170,8 @@ import {
 export type CPY_Step = {
   to?: Point | [number, number] | Transform
     | Array<Point | [number, number] | Transform> | Transform,
-  along?: 'x' | 'y' | number | 'rotation' | 'moveOnly',
+  along?: 'x' | 'y' | 'z' | number | 'rotation' | 'moveOnly',
+  axis?: TypeParsablePoint,
   num?: number,
   step?: number,
   center?: TypeParsablePoint,
@@ -265,16 +268,25 @@ function copyLinear(
     num: 1,
   };
   let angle = 0;
+  let direction = [1, 0, 0];
 
   const options = joinObjects({}, defaultOptions, optionsIn);
 
   if (options.along === 'y') {
-    angle = Math.PI / 2;
+    // angle = Math.PI / 2;
+    direction = [0, 1, 0];
   } else if (options.along === 'x') {
-    angle = 0;
+    // angle = 0;
+    direction = [1, 0, 0];
+  } else if (options.along === 'z') {
+    // axis = [1, 0, 0];
+    // angle = Math.PI;
+    direction = [0, 0, 1];
   } else if (typeof options.along === 'number') {
     angle = options.along;
+    direction = polarToRect(1, options.along).toArray();
   }
+  const d = getPoint(direction);
 
   if (options.step == null) {
     const bounds = getBoundingRect(pointsToCopy);
@@ -284,7 +296,9 @@ function copyLinear(
   let out = [];
   for (let i = 1; i < options.num + 1; i += 1) {
     const step = options.step * i;
-    out = [...out, ...pointsToCopy.map(p => p.add(polarToRect(step, angle)))];
+    // const t = new Transform.translate()
+    // out = [...out, ...pointsToCopy.map(p => p.add(polarToRect(step, angle)))];
+    out = [...out, ...pointsToCopy.map(p => p.add(d.scale(step)))];
   }
   return out;
 }
@@ -299,6 +313,7 @@ function copyAngle(
     num: 1,
     step: Math.PI / 4,
     center: [0, 0],
+    axis: [0, 0, 1],
   };
 
   const options = joinObjects({}, defaultOptions, optionsIn);
@@ -309,7 +324,7 @@ function copyAngle(
   for (let i = 1; i < options.num + 1; i += 1) {
     const matrix = new Transform()
       .translate(-center.x, -center.y)
-      .rotate(i * options.step)
+      .rotate(['axis', options.axis, i * options.step])
       .translate(center.x, center.y)
       .matrix();
     out = [...out, ...pointsToCopy.map(p => p.transformBy(matrix))];
@@ -357,7 +372,13 @@ function copyStep(
 ) {
   // const out = [];
 
-  if (copyStyle === 'linear' || copyStyle === 'x' || copyStyle === 'y' || typeof copyStyle === 'number') {
+  if (
+    copyStyle === 'linear'
+    || copyStyle === 'x'
+    || copyStyle === 'y'
+    || copyStyle === 'z'
+    || typeof copyStyle === 'number'
+  ) {
     return copyLinear(points, options);
   }
 

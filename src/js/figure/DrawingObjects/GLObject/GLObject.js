@@ -348,13 +348,13 @@ class GLObject extends DrawingObject {
   }
 
   addVertices(vertices: Array<number>, dimension: 2 | 3 = 2, usage: TypeGLBufferUsage = 'STATIC') {
-    // this.points = vertices;
+    this.points = vertices;
     this.addAttribute('a_vertex', dimension, vertices, 'FLOAT', false, 0, 0, usage);
     // this.numVertices = vertices.length / 2;
   }
 
   addVertices3(vertices: Array<number>, usage: TypeGLBufferUsage = 'STATIC') {
-    // this.points = vertices;
+    this.points = vertices;
     this.addAttribute('a_vertex', 3, vertices, 'FLOAT', false, 0, 0, usage);
     // this.numVertices = vertices.length / 3;
   }
@@ -484,13 +484,13 @@ class GLObject extends DrawingObject {
   }
 
   updateVertices(vertices: Array<number>) {
-    // this.points = vertices;
+    this.points = vertices;
     // this.numVertices = vertices.length / 2;
     this.updateBuffer('a_vertex', vertices);
   }
 
   updateVertices3(vertices: Array<number>) {
-    // this.points = vertices;
+    this.points = vertices;
     // this.numVertices = vertices.length / 3;
     this.updateBuffer('a_vertex', vertices);
   }

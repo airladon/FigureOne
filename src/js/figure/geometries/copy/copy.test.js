@@ -182,6 +182,18 @@ describe('Copy tests', () => {
       expect(round(points[0])).toEqual(new Point(0, 1));
       expect(round(points[1])).toEqual(new Point(-1, 0));
     });
+    test('ZY', () => {
+      const points = copyPoints([[0, 1, 0]], [
+        {
+          along: 'rotation',
+          num: 1,
+          step: Math.PI / 2,
+          axis: [1, 0, 0],
+        },
+      ]);
+      expect(round(points[0])).toEqual(new Point(0, 1, 0));
+      expect(round(points[1])).toEqual(new Point(0, 0, 1));
+    });
     test('Radial', () => {
       const points = copyPoints([[0, 0]], [
         { along: 'y', num: 2, step: 1 },
@@ -244,6 +256,17 @@ describe('Copy tests', () => {
       ]);
       expect(round(points[0])).toEqual(new Point(0, 0));
       expect(round(points[1])).toEqual(new Point(0, 1));
+    });
+    test('Z Axis', () => {
+      const points = copyPoints([[0, 0]], [
+        {
+          along: 'z',
+          num: 1,
+          step: 2,
+        },
+      ]);
+      expect(round(points[0])).toEqual(new Point(0, 0, 0));
+      expect(round(points[1])).toEqual(new Point(0, 0, 2));
     });
     test('Angle', () => {
       const points = copyPoints([[0, 0]], [
