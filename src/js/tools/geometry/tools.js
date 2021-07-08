@@ -46,9 +46,41 @@ function numbersToPoints(numbers: Array<number>, dimension: 2 | 3 = 3) {
   return points;
 }
 
+function toNumbers(
+  pointsOrNumbers: Array<Point> | Array<Array<number>> | Array<number>,
+  dimension: 2 | 3 = 3,
+) {
+  if (pointsOrNumbers.length === 0) {
+    return [];
+  }
+  if (typeof pointsOrNumbers[0] === 'number') {
+    return pointsOrNumbers;
+  }
+  if (Array.isArray(pointsOrNumbers[0])) {
+    const out = [];
+    for (let i = 0; i < pointsOrNumbers.length; i += 1) {
+      out.push(...pointsOrNumbers);
+    }
+    return out;
+  }
+  return pointsToNumbers(pointsOrNumbers, dimension);
+}
+
+function toPoints(pointsOrNumbers: Array<Point> | Array<number>, dimension: 2 | 3 = 3) {
+  if (pointsOrNumbers.length === 0) {
+    return [];
+  }
+  if (typeof pointsOrNumbers[0] !== 'number') {
+    return pointsOrNumbers;
+  }
+  return numbersToPoints(pointsOrNumbers, dimension);
+}
+
 export {
   pointsToNumbers2,
   pointsToNumbers,
   numbersToPoints,
   numbersToPoints2,
+  toNumbers,
+  toPoints,
 };

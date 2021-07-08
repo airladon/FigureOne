@@ -9,6 +9,7 @@ export type OBJ_Cube = {
   side?: number,
   position?: TypeParsablePoint,
   rotation?: TypeParsableRotation,
+  output?: 'points' | 'numbers',
 }
 
 export default function cube(options: OBJ_Cube) {

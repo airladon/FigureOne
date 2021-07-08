@@ -32,15 +32,15 @@ import {
 } from './geometry/angle';
 import type { TypeRotationDirection } from './geometry/angle';
 import { sphericalToCartesian, cartesianToSpherical } from './geometry/common';
-import sphere from './3d/sphere';
-import { lathe, getLathePoints } from './3d/lathe';
+import sphere from './d3/sphere';
+import { lathe, getLathePoints } from './d3/lathe';
 import cone from './3d/cone';
 import rod from './3d/rod';
 // import { polygon } from './geometry/polygon';
-import cube from './3d/cube';
-import * as surface from './3d/surface';
-import { pointsToNumbers, pointsToNumbers2 } from './geometry/tools';
-import { polygon, polygonLine } from './2D/polygon';
+import cube from './d3/cube';
+import * as surface from './d3/surface';
+import { pointsToNumbers, numbersToPoints, toNumbers, toPoints } from './geometry/tools';
+import { polygon, polygonLine } from './d2/polygon';
 
 
 type Type3Components = [number, number, number];
@@ -578,8 +578,10 @@ export {
   surface,
   getLathePoints,
   decelerateVector,
-  pointsToNumbers2,
+  numbersToPoints,
   pointsToNumbers,
+  toNumbers,
+  toPoints,
   polygon,
   polygonLine,
 };

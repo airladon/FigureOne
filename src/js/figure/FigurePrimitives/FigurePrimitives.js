@@ -3,7 +3,8 @@
 import {
   Rect, Point, Transform, getPoint, getRect, getTransform,
   getBorder, getPoints,
-  getBoundingBorder, isBuffer,
+  getBoundingBorder, isBuffer, toNumbers,
+  sphere,
 } from '../../tools/g2';
 // import {
 //   round
@@ -2814,7 +2815,8 @@ export default class FigurePrimitives {
     const element = new FigureElementPrimitive(
       glObject, options.transform, options.color, null, options.name,
     );
-    element.custom.updateBuffer = element.drawingObject.updateBuffer.bind(element.drawingObject);
+    element.custom.updateAttribute =
+      element.drawingObject.updateAttribute.bind(element.drawingObject);
     element.custom.updateVertices =
       element.drawingObject.updateVertices.bind(element.drawingObject);
     element.custom.updateUniform = element.drawingObject.updateUniform.bind(element.drawingObject);
@@ -2872,12 +2874,12 @@ points?: Array<TypeParsablePoint> | Array<Point>,
     const options = joinObjects({}, {
       dimension: 3, light: 'directional',
     }, ...optionsIn);
-    options.transform = getTransform(options.transform);
+    // options.transform = getTransform(options.transform);
 
-    if (options.position != null) {
-      options.position = getPoint(options.position);
-      options.transform.updateTranslation(options.position);
-    }
+    // if (options.position != null) {
+    //   options.position = getPoint(options.position);
+    //   options.transform.updateTranslation(options.position);
+    // }
     const processOptions = (o) => {
       if (o.points != null) {
         o.vertices = o.points;
@@ -2898,8 +2900,18 @@ points?: Array<TypeParsablePoint> | Array<Point>,
           o.colors = out;
         }
       }
+      if (o.vertices != null) {
+        o.vertices = toNumbers(o.vertices);
+      }
+      if (o.normals != null) {
+        o.normals = toNumbers(o.normals);
+      }
+      if (o.colors != null) {
+        o.colors = toNumbers(o.colors);
+      }
     };
     processOptions(options);
+    console.log(options)
     const element = this.gl(options);
 
     element.custom.updateGeneric = function update(updateOptions: {
@@ -2913,15 +2925,38 @@ points?: Array<TypeParsablePoint> | Array<Point>,
       processOptions(o);
       // element.drawingObject.change(o);
       if (o.vertices) {
-        
+        element.custom.updateVertices(o.vertices);
+      }
+      if (o.normals) {
+        element.custom.updateAttribute('a_normal', o.normals);
+      }
+      if (o.colors) {
+        element.custom.updateAttribute('a_colors', o.colors);
       }
     };
-    element.custom.updateGeneric(options);
+    // element.custom.updateGeneric(options);
     element.custom.updatePoints = element.custom.updateGeneric;
     element.timeKeeper = this.timeKeeper;
     element.recorder = this.recorder;
     setupPulse(element, options);
     return element;
+  }
+
+  sphere(...optionsIn: Array<OBJ_Sphere>) {
+    const options = joinObjects(
+      {
+        radius: this.defaultLength,
+        sides: 10,
+        normals: 'flat',
+        center: [0, 0, 0],
+      },
+      ...optionsIn,
+    );
+    const [points, normals] = sphere(options);
+    return this.generic3D(options, {
+      points,
+      normals,
+    });
   }
 
   /**

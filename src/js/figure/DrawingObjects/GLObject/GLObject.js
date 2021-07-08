@@ -486,16 +486,16 @@ class GLObject extends DrawingObject {
   updateVertices(vertices: Array<number>) {
     this.points = vertices;
     // this.numVertices = vertices.length / 2;
-    this.updateBuffer('a_vertex', vertices);
+    this.updateAttribute('a_vertex', vertices);
   }
 
   updateVertices3(vertices: Array<number>) {
     this.points = vertices;
     // this.numVertices = vertices.length / 3;
-    this.updateBuffer('a_vertex', vertices);
+    this.updateAttribute('a_vertex', vertices);
   }
 
-  updateBuffer(name: string, data: Array<number>) {
+  updateAttribute(name: string, data: Array<number>) {
     this.gl.deleteBuffer(this.attributes[name].buffer);
     this.attributes[name].buffer = null;
     this.fillBuffer(name, data);

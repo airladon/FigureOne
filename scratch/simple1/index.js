@@ -101,18 +101,27 @@ addAxis('zNegAxis', [0, 0, -0.7], [0, 0, 1, 1]);
 
 
 const addSphere = (name, position, color) => {
-  const [sx, sn] = sphere({ radius: 0.05, sides: 10, normals: 'curve' });
-  const s = figure.add({
-    name,
-    make: 'gl',
-    vertexShader,
-    fragmentShader,
-    vertices: { data: sx, size: 3 },
-    normals: { data: sn },
+  // const [sx, sn] = sphere({ radius: 0.05, sides: 5, normals: 'flat', output: 'numbers' });
+  // const s = figure.add({
+  //   name,
+  //   make: 'gl',
+  //   vertexShader,
+  //   fragmentShader,
+  //   vertices: { data: Fig.tools.g2.toNumbers(sx), size: 3 },
+  //   normals: { data: Fig.tools.g2.toNumbers(sn) },
+  //   color,
+  //   position,
+  // });
+  // s.setTouchable();
+  figure.add({
+    make: 'sphere',
+    radius: 0.05,
+    sides: 5,
+    normals: 'flat',
     color,
     position,
+    touch: {onClick: () => console.log('asdfasdf')},
   });
-  s.setTouchable();
 };
 
 addSphere('xPos', [1, 0, 0], [1, 0.5, 0.5, 1]);

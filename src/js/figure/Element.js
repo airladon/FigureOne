@@ -3444,18 +3444,35 @@ class FigureElement {
    *
    * `false` makes this element not touchable.
    */
-  setTouchable(
+  setTouchable(setOrOptions: {
     scale: number | TypeParsablePoint | null,
-    colorSeed: string = 'default',
-  ) {
+    colorSeed: string,
+    onClick: null | (() => void),
+  }) {
+    let options = setOrOptions;
+    if (typeof setOrOptions === 'boolean') {
+      if (setOrOptions === false) {
+        this.setNotTouchable();
+        return;
+      }
+      options = {};
+    }
+    const o = joinObjects({
+      scale: 1,
+      colorSeed: 'default',
+      onClick: null,
+    }, options);
     this.isTouchable = true;
-    if (typeof scale === 'number') {
-      this.touchScale = new Point(scale, scale, scale);
-    } else if (scale != null) {
-      this.touchScale = getPoint(scale);
+    if (typeof o.scale === 'number') {
+      this.touchScale = new Point(o.scale, o.scale, o.scale);
+    } else if (o.scale != null) {
+      this.touchScale = getPoint(o.scale);
     }
     if (this.uniqueColor == null) {
-      this.setUniqueColor(generateUniqueColor(colorSeed));
+      this.setUniqueColor(generateUniqueColor(o.colorSeed));
+    }
+    if (o.onClick != null) {
+      this.onClick = o.onClick;
     }
     if (this.parent != null) {
       // this.parent.setTouchable();
@@ -4690,6 +4707,7 @@ class FigureElementCollection extends FigureElement {
       triangle: shapes.triangle.bind(shapes),
       generic: shapes.generic.bind(shapes),
       grid: shapes.grid.bind(shapes),
+      sphere: shapes.sphere.bind(shapes),
       arrow: shapes.arrow.bind(shapes),
       line: shapes.line.bind(shapes),
       star: shapes.star.bind(shapes),
