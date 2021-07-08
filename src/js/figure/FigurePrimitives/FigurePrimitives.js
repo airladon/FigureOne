@@ -2917,47 +2917,67 @@ export default class FigurePrimitives {
     return element;
   }
 
-  sphere(...optionsIn: Array<OBJ_Sphere>) {
-    const oIn = joinObjects({}, ...optionsIn);
-    const getSphere = (options: OBJ_Sphere) => {
-      const o = joinObjects(
-        {
-          radius: this.defaultLength,
-          sides: 10,
-          normals: 'flat',
-          center: [0, 0, 0],
-        },
-        options,
-      );
-      return sphere(o);
-    }
-    const [points, normals] = getSphere(oIn);
-    const element = this.generic3D(oIn, {
-      points, normals,
+  generic3DBase(
+    defaultOptions: Object,
+    optionsIn: Object,
+    getPointsFn: (Object) => [Array<Point>, Array<Point>],
+  ) {
+    const element = this.generic3D(optionsIn, {
+      points: [],
+      normals: [],
     });
-    element.custom.updatePoints = (options: OBJ_Sphere) => {
-      const [p, n] = getSphere(options);
-      element.custom.updateGeneric(joinObjects(
-        options,
-        { points: p, normals: n },
-      ));
+    element.custom.options = joinObjects({}, defaultOptions, optionsIn);
+    element.custom.getPoints = getPointsFn;
+    element.custom.updatePoints = (updateOptions: Object) => {
+      const o = joinObjects({}, element.custom.options, updateOptions);
+      element.custom.options = o;
+      const [
+        points, normals,
+      ] = element.custom.getPoints(o);
+      element.custom.updateGeneric(joinObjects({}, o, {
+        points,
+        normals,
+      }));
     };
+    element.custom.updatePoints();
     return element;
   }
 
-  cube(...optionsIn: Array<OBJ_Cube>) {
-    const options = joinObjects(
+  sphere(...optionsIn: Array<OBJ_Sphere>) {
+    return this.generic3DBase(
+      {
+        radius: this.defaultLength,
+        sides: 10,
+        normals: 'flat',
+        center: [0, 0, 0],
+      },
+      joinObjects({}, ...optionsIn),
+      o => sphere(o),
+    );
+  }
+
+  cube(...optionsIn: Array<OBJ_Sphere>) {
+    return this.generic3DBase(
       {
         side: this.defaultLength,
       },
-      ...optionsIn,
+      joinObjects({}, ...optionsIn),
+      o => cube(o),
     );
-    const [points, normals] = cube(options);
-    return this.generic3D(options, {
-      points,
-      normals,
-    });
   }
+  // cube(...optionsIn: Array<OBJ_Cube>) {
+  //   const options = joinObjects(
+  //     {
+  //       side: this.defaultLength,
+  //     },
+  //     ...optionsIn,
+  //   );
+  //   const [points, normals] = cube(options);
+  //   return this.generic3D(options, {
+  //     points,
+  //     normals,
+  //   });
+  // }
 
   /**
    * {@link FigureElementPrimitive} that draws a generic shape.

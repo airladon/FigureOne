@@ -114,21 +114,22 @@ const addSphere = (name, position, color) => {
   // });
   // s.setTouchable();
   const s = figure.add({
-    // make: 'cube',
-    make: 'sphere',
-    // side: 0.1,
+    name,
+    make: 'cube',
+    side: 0.1,
     // rotation: ['axis', [1, 1, 1], Math.PI / 4],
-    radius: 0.05,
-    sides: 5,
-    normals: 'flat',
+    // make: 'sphere',
+    // radius: 0.05,
+    // sides: 5,
+    // normals: 'flat',
     color,
     position,
     touch: { onClick: () => console.log('asdfasdf') },
-    // copy: [
-    //   { along: 'x', num: 2, step: 0.12 },
-    //   { along: 'y', num: 2, step: 0.12 },
-    //   { along: 'z', num: 2, step: 0.12 },
-    // ],
+    copy: [
+      { along: 'x', num: 2, step: 0.11 },
+      { along: 'y', num: 2, step: 0.11 },
+      { along: 'z', num: 2, step: 0.11 },
+    ],
     move: true,
   });
   // s.custom.updatePoints({
