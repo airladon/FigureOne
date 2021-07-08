@@ -4,7 +4,7 @@ import {
   Rect, Point, Transform, getPoint, getRect, getTransform,
   getBorder, getPoints,
   getBoundingBorder, isBuffer, toNumbers,
-  sphere,
+  sphere, cube,
 } from '../../tools/g2';
 // import {
 //   round
@@ -2953,6 +2953,21 @@ points?: Array<TypeParsablePoint> | Array<Point>,
       ...optionsIn,
     );
     const [points, normals] = sphere(options);
+    return this.generic3D(options, {
+      points,
+      normals,
+    });
+  }
+
+  cube(...optionsIn: Array<OBJ_Cube>) {
+    const options = joinObjects(
+      {
+        side: this.defaultLength,
+      },
+      ...optionsIn,
+    );
+    const [points, normals] = cube(options);
+    console.log(points, normals)
     return this.generic3D(options, {
       points,
       normals,

@@ -4,12 +4,12 @@ import { Transform } from '../geometry/Transform';
 import type { TypeParsablePoint } from '../geometry/Point';
 import { joinObjects } from '../tools';
 import * as m3 from '../m3';
+import { toPoints } from '../geometry/tools';
 
 export type OBJ_Cube = {
   side?: number,
-  position?: TypeParsablePoint,
+  center?: TypeParsablePoint,
   rotation?: TypeParsableRotation,
-  output?: 'points' | 'numbers',
 }
 
 export default function cube(options: OBJ_Cube) {
@@ -19,10 +19,10 @@ export default function cube(options: OBJ_Cube) {
     },
     options,
   );
-  const { side, position, rotation } = o;
+  const { side, center, rotation } = o;
 
   const s = side / 2;
-  const pointsRaw = [
+  const pointsRaw = toPoints([
     // face +z
     -s, -s, s,
     s, -s, s,
@@ -65,8 +65,8 @@ export default function cube(options: OBJ_Cube) {
     s, -s, s,
     -s, -s, s,
     -s, -s, -s,
-  ];
-  const normalsRaw = [
+  ]);
+  const normalsRaw = toPoints([
     // +z
     0, 0, 1,
     0, 0, 1,
@@ -109,8 +109,8 @@ export default function cube(options: OBJ_Cube) {
     0, -1, 0,
     0, -1, 0,
     0, -1, 0,
-  ];
-  if (position == null && rotation == null) {
+  ]);
+  if (center == null && rotation == null) {
     return [pointsRaw, normalsRaw];
   }
   let matrix;
@@ -119,8 +119,8 @@ export default function cube(options: OBJ_Cube) {
   }
 
   let c;
-  if (position != null) {
-    c = getPoint(position);
+  if (center != null) {
+    c = getPoint(center);
   }
   const points = [];
   const xNormal = matrix == null ? [1, 0, 0] : m3.transform(matrix, 1, 0, 0);
@@ -130,64 +130,66 @@ export default function cube(options: OBJ_Cube) {
   const zNormal = matrix == null ? [0, 0, 1] : m3.transform(matrix, 0, 0, 1);
   const zNegNormal = matrix == null ? [0, 0, -1] : m3.transform(matrix, 0, 0, -1);
   for (let i = 0; i < 36; i += 1) {
-    let p = [
-      pointsRaw[i * 3],
-      pointsRaw[i * 3 + 1],
-      pointsRaw[i * 3 + 2],
-    ];
+    // let p = [
+    //   pointsRaw[i * 3],
+    //   pointsRaw[i * 3 + 1],
+    //   pointsRaw[i * 3 + 2],
+    // ];
+    let p = pointsRaw[i];
     if (matrix != null) {
-      p = m3.transform(matrix, p[0], p[1], p[2]);
+      p = getPoint(m3.transform(matrix, p.x, p.y, p.z));
     }
     if (c != null) {
-      p[0] += c.x;
-      p[1] += c.y;
-      p[2] += c.z;
+      p = p.add(c);
+      // p.x += c.x;
+      // p.y += c.y;
+      // p.x += c.z;
     }
-    points.push(...p);
+    points.push(p);
   }
   const normals = [
     // +z
-    ...zNormal.slice(),
-    ...zNormal.slice(),
-    ...zNormal.slice(),
-    ...zNormal.slice(),
-    ...zNormal.slice(),
-    ...zNormal.slice(),
+    getPoint(zNormal),
+    getPoint(zNormal),
+    getPoint(zNormal),
+    getPoint(zNormal),
+    getPoint(zNormal),
+    getPoint(zNormal),
     // +x
-    ...xNormal.slice(),
-    ...xNormal.slice(),
-    ...xNormal.slice(),
-    ...xNormal.slice(),
-    ...xNormal.slice(),
-    ...xNormal.slice(),
+    getPoint(xNormal),
+    getPoint(xNormal),
+    getPoint(xNormal),
+    getPoint(xNormal),
+    getPoint(xNormal),
+    getPoint(xNormal),
     // +y
-    ...yNormal.slice(),
-    ...yNormal.slice(),
-    ...yNormal.slice(),
-    ...yNormal.slice(),
-    ...yNormal.slice(),
-    ...yNormal.slice(),
+    getPoint(yNormal),
+    getPoint(yNormal),
+    getPoint(yNormal),
+    getPoint(yNormal),
+    getPoint(yNormal),
+    getPoint(yNormal),
     // -z
-    ...zNegNormal.slice(),
-    ...zNegNormal.slice(),
-    ...zNegNormal.slice(),
-    ...zNegNormal.slice(),
-    ...zNegNormal.slice(),
-    ...zNegNormal.slice(),
+    getPoint(zNegNormal),
+    getPoint(zNegNormal),
+    getPoint(zNegNormal),
+    getPoint(zNegNormal),
+    getPoint(zNegNormal),
+    getPoint(zNegNormal),
     // -x
-    ...xNegNormal.slice(),
-    ...xNegNormal.slice(),
-    ...xNegNormal.slice(),
-    ...xNegNormal.slice(),
-    ...xNegNormal.slice(),
-    ...xNegNormal.slice(),
+    getPoint(xNegNormal),
+    getPoint(xNegNormal),
+    getPoint(xNegNormal),
+    getPoint(xNegNormal),
+    getPoint(xNegNormal),
+    getPoint(xNegNormal),
     // -y
-    ...yNegNormal.slice(),
-    ...yNegNormal.slice(),
-    ...yNegNormal.slice(),
-    ...yNegNormal.slice(),
-    ...yNegNormal.slice(),
-    ...yNegNormal.slice(),
+    getPoint(yNegNormal),
+    getPoint(yNegNormal),
+    getPoint(yNegNormal),
+    getPoint(yNegNormal),
+    getPoint(yNegNormal),
+    getPoint(yNegNormal),
   ];
   return [points, normals];
 }

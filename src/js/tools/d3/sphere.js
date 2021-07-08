@@ -3,7 +3,6 @@ import { getPoint } from '../geometry/Point';
 import type { TypeParsablePoint } from '../geometry/Point';
 import { sphericalToCartesian } from '../geometry/common';
 import { joinObjects } from '../tools';
-import { toNumbers } from '../geometry/tools';
 
 export type OBJ_SphereMesh = {
   sides?: number,
