@@ -3,6 +3,7 @@
 /* eslint-disable camelcase */
 import {
   Transform, Point, polarToRect, getBoundingRect, getPoints, getPoint,
+  getTransform,
 } from '../../../tools/g2';
 
 import type { TypeParsablePoint } from '../../../tools/g2';
@@ -56,11 +57,13 @@ import {
  *
  * When using the `along` property, the points are copied a number (`num`) of
  * times along a path with some `step`. The paths can be horiztonal (`'x'`),
- * vertical (`'y'`), at an angle (`number`) or through a `'rotation'` around
- * a `center` point.
+ * vertical (`'y'`), along the z axis (`'z'`), at an angle in the xy plane,
+ * (`number`), along a direction vector (`TypeParsablePoint`) or through a
+ * `'rotation'` around a `center` point and `axis`.
  *
- * When copying along a line (`along` is `'x'`, `y'` or a `number`), then
- * `step` will be the distance offset along the line.
+ * When copying along a line (`along` is `'x'`, `y'`, `'z'`,
+ * `TypeParsablePoint` or a `number`), then `step` will be the distance offset
+ * along the line.
  *
  * When copying along a rotation (`along` is `'rotation'`), then `step` will be
  * the angular step in radians.
@@ -71,8 +74,9 @@ import {
  *
  * @property {TypeParsablePoint | TypeParsableTransform | Array<TypeParsablePoint | TypeParsableTransform>} [to] copy points to
  * a location or locations or transform a copy of the points
- * @property {'x' | 'y' | number | 'rotation' | 'moveOnly'} [along] copy points
- * along a linear path where `number` is a path at an angle in radians
+ * @property {'x' | 'y' | number | 'rotation' | 'moveOnly' | TypeParsablePoint} [along]
+ * copy points along a linear path where `number` is a path at an angle in
+ * radians in the xy plane, and `TypeParsablePoint` is a direction vector
  * @property {TypeParsablePoint} [axis] axis to rotate a 'rotation' copy around
  * (default is the z axis so rotation is in xy plane `[0, 0, 1]`)
  * @property {number} [num] the number of copies to make when copying `along` a
@@ -170,7 +174,7 @@ import {
 export type CPY_Step = {
   to?: Point | [number, number] | Transform
     | Array<Point | [number, number] | Transform> | Transform,
-  along?: 'x' | 'y' | 'z' | number | 'rotation' | 'moveOnly',
+  along?: 'x' | 'y' | 'z' | number | 'rotation' | 'moveOnly' | TypeParsablePoint,
   axis?: TypeParsablePoint,
   num?: number,
   step?: number,
@@ -213,6 +217,7 @@ function copyOffset(
   pointsToCopy: Array<Point>,
   // initialPoints: Array<Point>,
   optionsIn: CPY_Step,
+  type: 'points' | 'normals',
 ) {
   const defaultOptions = {
     to: [],
@@ -224,7 +229,14 @@ function copyOffset(
   const out = Array(options.to.length * pointsToCopy.length);
   for (let i = 0; i < options.to.length; i += 1) {
     for (let j = 0; j < pointsToCopy.length; j += 1) {
-      out[k] = new Point(pointsToCopy[j].x + options.to[i].x, pointsToCopy[j].y + options.to[i].y);
+      if (type === 'points') {
+        out[k] = new Point(
+          pointsToCopy[j].x + options.to[i].x,
+          pointsToCopy[j].y + options.to[i].y,
+        );
+      } else {
+        out[k] = pointsToCopy[j]._dup();
+      }
       k += 1;
     }
   }
@@ -236,6 +248,7 @@ function copyTransform(
   pointsToCopy: Array<Point>,
   // initialPoints: Array<Point>,
   optionsIn: CPY_Step,
+  type: 'points' | 'normals',
 ) {
   const defaultOptions = {
     to: [],
@@ -248,9 +261,23 @@ function copyTransform(
 
   let out = [];
   for (let i = 0; i < options.to.length; i += 1) {
-    // $FlowFixMe
-    const matrix = options.to[i].matrix();
-    out = [...out, ...pointsToCopy.map(p => p.transformBy((matrix)))];
+    const { def } = options.to[i];
+    let newDef = def;
+    if (type === 'normals') {
+      newDef = [];
+      for (let j = 0; j < def.length; j += 1) {
+        if (def[j][0] === 'r') {
+          newDef.push(def[j]);
+        }
+      }
+    }
+    if (newDef.length > 0) {
+      const matrix = getTransform(newDef).matrix();
+      // $FlowFixMe
+      out = [...out, ...pointsToCopy.map(p => p.transformBy((matrix)))];
+    } else {
+      out = [...out, ...pointsToCopy.map(p => p._dup())];
+    }
   }
   return out;
 }
@@ -260,6 +287,7 @@ function copyLinear(
   pointsToCopy: Array<Point>,
   // initialPoints: Array<Point>,
   optionsIn: CPY_Step,
+  type: 'points' | 'normals',
 ) {
   if (optionsIn.along == null) {
     return [];
@@ -285,8 +313,11 @@ function copyLinear(
   } else if (typeof options.along === 'number') {
     angle = options.along;
     direction = polarToRect(1, options.along).toArray();
+  } else if (Array.isArray(options.along) || options.along instanceof Point) {
+    direction = getPoint(options.along);
   }
-  const d = getPoint(direction);
+
+  const d = getPoint(direction).normalize();
 
   if (options.step == null) {
     const bounds = getBoundingRect(pointsToCopy);
@@ -298,7 +329,11 @@ function copyLinear(
     const step = options.step * i;
     // const t = new Transform.translate()
     // out = [...out, ...pointsToCopy.map(p => p.add(polarToRect(step, angle)))];
-    out = [...out, ...pointsToCopy.map(p => p.add(d.scale(step)))];
+    if (type === 'points') {
+      out = [...out, ...pointsToCopy.map(p => p.add(d.scale(step)))];
+    } else {
+      out = [...out, ...pointsToCopy.map(p => p._dup())];
+    }
   }
   return out;
 }
@@ -308,6 +343,7 @@ function copyAngle(
   pointsToCopy: Array<Point>,
   // initialPoints: Array<Point>,
   optionsIn: CPY_Step,
+  type: 'points' | 'normals',
 ) {
   const defaultOptions = {
     num: 1,
@@ -320,7 +356,10 @@ function copyAngle(
   options.center = getPoint(options.center);
 
   let out = [];
-  const { center } = options;
+  let { center } = options;
+  if (type === 'normals') {
+    center = getPoint([0, 0, 0]);
+  }
   for (let i = 1; i < options.num + 1; i += 1) {
     const matrix = new Transform()
       .translate(-center.x, -center.y)
@@ -366,8 +405,9 @@ function copyAngle(
 
 function copyStep(
   points: Array<Point>,
-  copyStyle: 'linear' | 'to' | 'rotation' | 'x' | 'y' | number,
+  copyStyle: 'linear' | 'to' | 'rotation' | 'x' | 'y' | 'z' | number | TypeParsablePoint,
   options: CPY_Step,
+  type: 'points' | 'normals',
   // marks: CPY_Marks,
 ) {
   // const out = [];
@@ -378,8 +418,10 @@ function copyStep(
     || copyStyle === 'y'
     || copyStyle === 'z'
     || typeof copyStyle === 'number'
+    || Array.isArray(copyStyle)
+    || copyStyle instanceof Point
   ) {
-    return copyLinear(points, options);
+    return copyLinear(points, options, type);
   }
 
   if (copyStyle === 'to') {
@@ -391,16 +433,16 @@ function copyStep(
     }
 
     if (options.to instanceof Transform) {
-      return copyTransform(points, options);
+      return copyTransform(points, options, type);
     }
     if (Array.isArray(options.to) && options.to[0] instanceof Transform) {
-      return copyTransform(points, options);
+      return copyTransform(points, options, type);
     }
-    return copyOffset(points, options);
+    return copyOffset(points, options, type);
   }
 
   if (copyStyle === 'rotation') {
-    return copyAngle(points, options);
+    return copyAngle(points, options, type);
   }
   return points;
 }
@@ -408,6 +450,7 @@ function copyStep(
 function copyPoints(
   points: Array<TypeParsablePoint> | Array<Point>,
   chain: ?CPY_Step | CPY_Steps,
+  type: 'points' | 'normals' = 'points',
 ) {
   const marks = {};
   // let out = [];
@@ -448,7 +491,7 @@ function copyPoints(
       if (options.original === false) {
         startIndex = out.length;
       }
-      out = [...out, ...copyStep(pointsToCopy, copyStyle, options)];
+      out = [...out, ...copyStep(pointsToCopy, copyStyle, options, type)];
     }
   });
 

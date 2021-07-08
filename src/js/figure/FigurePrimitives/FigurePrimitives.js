@@ -835,6 +835,26 @@ export type OBJ_Generic = {
   scenarios?: TypeScenarios,
 }
 
+export type OBJ_Generic3D = {
+  points?: Array<TypeParsablePoint> | Array<Point>,
+  normals?: Array<TypeParsablePoint> | Array<Point>,
+  colors?: ARray<number>,
+  texture?: OBJ_Texture,
+  drawType?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
+  copy?: Array<CPY_Step | string> | CPY_Step,
+  color?: TypeColor,
+  name?: string,
+  position?: TypeParsablePoint,
+  transform?: TypeParsableTransform,
+  pulse?: number,
+
+  touch?: boolean | number | TypeParsablePoint,
+  move?: boolean | OBJ_ElementMove,
+  dimColor?: TypeColor,
+  defaultColor?: TypeColor,
+  scenarios?: TypeScenarios,
+}
+
 /**
  * Polyline shape options object that extends {@link OBJ_Generic} (without
  * `drawType`)
@@ -2825,6 +2845,25 @@ export default class FigurePrimitives {
     return element;
   }
 
+/*
+points?: Array<TypeParsablePoint> | Array<Point>,
+  normals?: Array<TypeParsablePoint> | Array<Point>,
+  colors?: ARray<number>,
+  texture?: OBJ_Texture,
+  drawType?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
+  copy?: Array<CPY_Step | string> | CPY_Step,
+  color?: TypeColor,
+  name?: string,
+  position?: TypeParsablePoint,
+  transform?: TypeParsableTransform,
+  pulse?: number,
+
+  touch?: boolean | number | TypeParsablePoint,
+  move?: boolean | OBJ_ElementMove,
+  dimColor?: TypeColor,
+  defaultColor?: TypeColor,
+  scenarios?: TypeScenarios,
+  */
   /**
    * {@link FigureElementPrimitive} that draws a generic shape.
    * @see {@link OBJ_Generic} for options and examples.
@@ -2838,14 +2877,18 @@ export default class FigurePrimitives {
       options.position = getPoint(options.position);
       options.transform.updateTranslation(options.position);
     }
+    if (options.points != null) {
+      options.vertices = options.points;
+    }
+    if (options.copy != null) {
+      options.vertices = options.copy
+    }
     const element = this.gl(options);
 
     element.custom.updateGeneric = function update(updateOptions: {
       points?: Array<TypeParsablePoint>,
-      drawBorder?: TypeParsableBorder,
-      drawBorderBuffer?: TypeParsableBorder,
-      border?: TypeParsableBorder | 'draw' | 'buffer' | 'rect' | number,
-      touchBorder?: TypeParsableBorder | 'draw' | 'border' | 'rect' | number | 'buffer',
+      normals?: Array<TypeParsablePoint>,
+      colors?: Array<number>,
       copy?: Array<CPY_Step>,
       drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
     }) {
