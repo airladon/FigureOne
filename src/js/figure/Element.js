@@ -4725,6 +4725,7 @@ class FigureElementCollection extends FigureElement {
       generic3: shapes.generic3.bind(shapes),
       grid: shapes.grid.bind(shapes),
       sphere: shapes.sphere.bind(shapes),
+      rod: shapes.rod.bind(shapes),
       cube: shapes.cube.bind(shapes),
       arrow: shapes.arrow.bind(shapes),
       line: shapes.line.bind(shapes),

@@ -233,6 +233,7 @@ function copyOffset(
         out[k] = new Point(
           pointsToCopy[j].x + options.to[i].x,
           pointsToCopy[j].y + options.to[i].y,
+          pointsToCopy[j].z + options.to[i].z,
         );
       } else {
         out[k] = pointsToCopy[j]._dup();

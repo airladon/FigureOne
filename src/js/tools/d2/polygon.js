@@ -2,6 +2,7 @@
 /* eslint-disable prefer-destructuring */
 import { Point, getPoint } from '../geometry/Point';
 import { getMatrix } from '../geometry/Transform';
+import * as m3 from '../m3';
 import { pointsToNumbers } from '../geometry/tools';
 import { joinObjects } from '../tools';
 
@@ -29,6 +30,9 @@ export type OBJ_GEOPolygon = {
   tris?: 2 | 3,
   sidesToDraw?: number,
   angleToDraw?: number,
+  normal?: TypeParsablePoint,
+  rightVector?: TypeParsablePoint, 
+  center?: TypeParsablePoine,
   transform?: Type3DMatrix | TypeParsableTransform,
 };
 
@@ -49,6 +53,9 @@ function getPolygonCorners(
   direction: 1 | -1,
   position: Point,
   transformMatrix: Type3DMatrix | null,
+  rightVector: Point,
+  normal: Point,
+  center: Point,
 ) {
   const points = Array(sides);
   const deltaAngle = Math.PI * 2 / sides;
@@ -75,20 +82,56 @@ function processOptions(options: OBJ_GEOPolygon) {
       rotation: 0,
       direction: 1,
       position: [0, 0, 0],
+      normal: [0, 0, 1],
+      rightVector: [1, 0, 1],
+      center: [0, 0, 0],
     },
     options,
   );
   const p = getPoint(o.position);
-  let matrix = null;
+  let matrix;
+  // let matrix = new Transform().matrix();
   if (o.transform != null) {
     matrix = getMatrix(o.transform);
   }
+  // matrix = [
+  //   1, 0, 0, 0,
+  //   0, 0, -1, 0,
+  //   0, 1, 0, 0,
+  //   0, 0, 0, 1,
+  // ];
+  // matrix = m3.mul([
+  //   1, 0, 0, 0,
+  //   0, 0, -1, 0,
+  //   0, 1, 0, 0,
+  //   0, 0, 0, 1,
+  // ],
+  // [
+  //   1, 0, 0, 0,
+  //   0, 0, 1, 0,
+  //   0, -1, 0, 0,
+  //   0, 0, 0, 1,
+  // ]);
+  // matrix = m3.mul([
+  //   0, -1, 0, 0,
+  //   0, 0, 1, 0,
+  //   -1, 0, 0, 0,
+  //   0, 0, 0, 1,
+  // ],
+  // [
+  //   0, -1, 0, 0,
+  //   0, 0, 1, 0,
+  //   -1, 0, 0, 0,
+  //   0, 0, 0, 1,
+  // ]);
+
   let { innerRadius } = o;
   if (o.innerRadius == null) {
     innerRadius = o.radius * 0.5;
   }
   return [
-    o.radius, o.sides, o.rotation, o.direction, p, matrix, o.tris, innerRadius,
+    o.radius, o.sides, o.rotation, o.direction, p, matrix, o.tris,
+    getPoint(o.rightVector), getPoint(o.normal), getPoint(o.center), innerRadius,
   ];
 }
 
@@ -101,10 +144,10 @@ function processOptions(options: OBJ_GEOPolygon) {
  */
 function polygon(options: OBJ_GEOPolygon): Array<Point> | Array<number> {
   const [
-    radius, sides, rotation, direction, position, matrix, tris,
+    radius, sides, rotation, direction, position, matrix, tris, rightVector, normal, center,
   ] = processOptions(options);
 
-  const points = getPolygonCorners(radius, sides, rotation, direction, position, matrix);
+  const points = getPolygonCorners(radius, sides, rotation, direction, position, matrix, rightVector, normal, center);
   if (tris == null) {
     return points;
   }
@@ -131,12 +174,12 @@ function polygon(options: OBJ_GEOPolygon): Array<Point> | Array<number> {
  */
 function polygonLine(options: OBJ_GEOPolygon): Array<Point> | Array<number> {
   const [
-    radius, sides, rotation, direction, position, matrix, tris, innerRadius,
+    radius, sides, rotation, direction, position, matrix, tris, innerRadius, rightVector, normal, center,
   ] = processOptions(options);
 
-  const points = getPolygonCorners(radius, sides, rotation, direction, position, matrix);
+  const points = getPolygonCorners(radius, sides, rotation, direction, position, matrix, rightVector, normal, center);
 
-  const inPoints = getPolygonCorners(innerRadius, sides, rotation, direction, position, matrix);
+  const inPoints = getPolygonCorners(innerRadius, sides, rotation, direction, position, matrix, rightVector, normal, center);
 
   if (tris == null) {
     const out = Array(sides * 2);

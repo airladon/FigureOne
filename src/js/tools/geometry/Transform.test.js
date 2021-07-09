@@ -753,7 +753,7 @@ describe('Transform', () => {
       expect(t.def).toHaveLength(1);
     });
     test('Named Array', () => {
-      const t = getTransform([['t', 1, 1], 'Name1', ['s', 0.5]]);
+      const t = getTransform([['t', 1, 1], ['name', 'Name1'], ['s', 0.5]]);
       expect(t.t()).toEqual(new Point(1, 1, 0));
       expect(t.s()).toEqual(new Point(0.5, 0.5, 0.5));
       expect(t.def).toHaveLength(2);
@@ -777,7 +777,7 @@ describe('Transform', () => {
       expect(t.name).toBe('Name1');
     });
     test('Named String from String', () => {
-      const tIn = '["Name1", ["t", 1, 0.5], ["s", 1, 1], ["r", 0.5]]';
+      const tIn = '[["name", "Name1"], ["t", 1, 0.5], ["s", 1, 1], ["r", 0.5]]';
       const t = getTransform(tIn);
       expect(t.t()).toEqual(new Point(1, 0.5));
       expect(t.s()).toEqual(new Point(1, 1, 1));
@@ -848,6 +848,84 @@ describe('Transform', () => {
         const t1 = getTransform([['rs', 1, 2]]);
         expect(t.def[0]).toEqual(['rs', 1, 2]);
         expect(t1.def[0]).toEqual(t.def[0]);
+      });
+    });
+    describe('basis', () => {
+      describe('parse', () => {
+        test('x => z, z => -x', () => {
+          // Various combinations of i, j, k
+          const t1 = getTransform([['b', { i: [0, 0, 1], j: [0, 1, 0] }]]);
+          const t2 = getTransform([['b', { i: [0, 0, 1], k: [-1, 0, 0] }]]);
+          const t3 = getTransform([['b', { j: [0, 1, 0], k: [-1, 0, 0] }]]);
+
+          // Various combinations of right, top, normal
+          const t4 = getTransform([['b', { right: [0, 0, 1], top: [0, 1, 0] }]]);
+          const t5 = getTransform([['b', { right: [0, 0, 1], normal: [-1, 0, 0] }]]);
+          const t6 = getTransform([['b', { top: [0, 1, 0], normal: [-1, 0, 0] }]]);
+
+          // Mix i, j, k and right, top, normal
+          const t7 = getTransform([['b', { j: [0, 1, 0], normal: [-1, 0, 0] }]]);
+
+          // Array form
+          const t8 = getTransform([['b', [0, 0, 1], [0, 1, 0], [-1, 0, 0]]]);
+
+          expect(round(t1.def[0])).toEqual(
+            ['b', [0, 0, 1], [0, 1, 0], [-1, 0, 0]],
+          );
+          expect(round(t1.def[0])).toEqual(round(t2.def[0]));
+          expect(round(t1.def[0])).toEqual(round(t3.def[0]));
+          expect(round(t1.def[0])).toEqual(round(t4.def[0]));
+          expect(round(t1.def[0])).toEqual(round(t5.def[0]));
+          expect(round(t1.def[0])).toEqual(round(t6.def[0]));
+          expect(round(t1.def[0])).toEqual(round(t7.def[0]));
+          expect(round(t1.def[0])).toEqual(round(t8.def[0]));
+          expect(t1.matrix()).toEqual([
+            0, 0, -1, 0,
+            0, 1, 0, 0,
+            1, 0, 0, 0,
+            0, 0, 0, 1,
+          ]);
+        });
+        test('ik, y => z, z => -y', () => {
+          const t = getTransform([['b', { i: [1, 0, 0], k: [0, -1, 0] }]]);
+          expect(round(t.def[0])).toEqual(
+            ['b', [1, 0, 0], [0, 0, 1], [0, -1, 0]],
+          );
+          expect(t.matrix()).toEqual([
+            1, 0, 0, 0,
+            0, 0, -1, 0,
+            0, 1, 0, 0,
+            0, 0, 0, 1,
+          ]);
+        });
+        test('jk, x => y, y => -x', () => {
+          const t = getTransform([['b', { j: [-1, 0, 0], k: [0, 0, 1] }]]);
+          expect(round(t.def[0])).toEqual(
+            ['b', [0, 1, 0], [-1, 0, 0], [0, 0, 1]],
+          );
+          expect(t.matrix()).toEqual([
+            0, -1, 0, 0,
+            1, 0, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1,
+          ]);
+        });
+      });
+      describe('Basis to Basis', () => {
+        test('from i = y, j = -x, to i => -x, j => -y', () => {
+          // This test is the equivalent of Math.PI / 2 rotation
+          const t = getTransform([
+            'b',
+            { i: [0, 1, 0], j: [-1, 0, 0] },
+            { i: [-1, 0, 0], j: [0, -1, 0] },
+          ]);
+          expect(round(t.matrix())).toEqual([
+            0, -1, 0, 0,
+            1, 0, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1,
+          ]);
+        });
       });
     });
   });

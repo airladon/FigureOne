@@ -53,6 +53,8 @@ function round<T: number | TypeRoundObject | Array<number | TypeRoundObject>>(
     result = roundNum(arrayOrValue, precision);
   } else if (arrayOrValue != null && arrayOrValue.round != null) {
     result = arrayOrValue.round(precision);
+  } else {
+    result = arrayOrValue;
   }
   // $FlowFixMe
   return result;

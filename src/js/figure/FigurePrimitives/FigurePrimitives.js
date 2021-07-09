@@ -4,7 +4,7 @@ import {
   Rect, Point, Transform, getPoint, getRect, getTransform,
   getBorder, getPoints,
   getBoundingBorder, isBuffer, toNumbers,
-  sphere, cube,
+  sphere, cube, rod,
 } from '../../tools/g2';
 // import {
 //   round
@@ -667,6 +667,40 @@ export type OBJ_Generic3DAll = {
  * single color.
  * @property {OBJ_Texture} [texture] use to overlay a texture onto the shape's
  * surfaces
+ *
+ * @example
+
+ * @example
+ * // Cubes with texture on each face
+ * figure.scene.setProjection({ style: 'orthographic' });
+ * figure.scene.setCamera({ position: [1, 1, 2] });
+ * figure.scene.setLight({ directional: [0.7, 0.5, 1] });
+ *
+ * const [points, normals] = Fig.tools.g2.cube({ side: 0.8 });
+ *
+ * figure.add({
+ *   make: 'generic3',
+ *   points,
+ *   normals,
+ *   texture: {
+ *     src: './flowers.jpeg',
+ *     coords: [
+ *       0, 0, 0.333, 0, 0.333, 0.5,
+ *       0, 0, 0.333, 0.5, 0, 0.5,
+ *       0.333, 0, 0.666, 0, 0.666, 0.5,
+ *       0.333, 0, 0.666, 0.5, 0.333, 0.5,
+ *       0.666, 0, 1, 0, 1, 0.5,
+ *       0.666, 0, 1, 0.5, 0.666, 0.5,
+ *       0, 0.5, 0.333, 1, 0, 1,
+ *       0, 0.5, 0.333, 0.5, 0.333, 1,
+ *       0.333, 0.5, 0.666, 1, 0.333, 1,
+ *       0.333, 0.5, 0.666, 0.5, 0.666, 1,
+ *       0.666, 0.5, 1, 1, 0.666, 1,
+ *       0.666, 0.5, 1, 0.5, 1, 1,
+ *     ],
+ *     loadColor: [0, 0, 0, 0],
+ *   },
+ * });
  */
 export type OBJ_Generic3D = {
   glPrimitive?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
@@ -2996,6 +3030,17 @@ export default class FigurePrimitives {
       },
       joinObjects({}, ...optionsIn),
       o => cube(o),
+    );
+  }
+
+  rod(...optionsIn: Array<OBJ_Rod>) {
+    return this.generic3DBase(
+      {
+        radius: this.defaultLength / 20,
+        sides: 10,
+      },
+      joinObjects({}, ...optionsIn),
+      o => rod(o),
     );
   }
   // cube(...optionsIn: Array<OBJ_Cube>) {

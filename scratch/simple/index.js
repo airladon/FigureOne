@@ -138,46 +138,41 @@ const figure = new Fig.Figure();
 //   ],
 // });
 
-// Texture filled square
-const [points, normals] = Fig.tools.g2.cube({
-  side: 0.25,
-  center: [-0.15, -0.15, -0.15],
-});
+// 4 Cubes with texture on each face
+figure.scene.setProjection({ style: 'orthographic' });
+figure.scene.setCamera({ position: [1, 1, 2] });
+figure.scene.setLight({ directional: [0.7, 0.5, 1] });
+
+const [points, normals] = Fig.tools.g2.sphere({ side: 0.2, radius: 0.1, sides: 6, normals: 'flat' });
+
+console.log(Fig.tools.g2.polygon({ radius: 0.3, sides: 5, transform: [['dir', [0, 1, 0]]] }))
 figure.add({
   make: 'generic3',
   points,
   normals,
+  color: [1, 0, 0, 1],
   copy: [
-    { along: 'x', num: 1, step: 0.3 },
-    { along: 'y', num: 1, step: 0.3 },
-    { along: 'z', num: 1, step: 0.3 },
+    // { along: 'x', num: 2, step: 0.4 },
+    { to: Fig.tools.g2.polygon({ radius: 0.3, sides: 5, center: [0.5, 0, 0] }) },
+    // { to: [[0.5, 0, 0], [0, 0, -0.5], [-.5, 0, -0.5]]}
   ],
-  // move: { type: 'rotation', plane: [[0, 0, 0], [0, 1, 0]] },
-  move: true,
-  texture: {
-    src: './flower.jpeg',
-    coords: [
-      0, 0, 1, 0, 1, 1,
-      0, 0, 1, 1, 0, 1,
-      0, 0, 1, 0, 1, 1,
-      0, 0, 1, 1, 0, 1,
-      0, 0, 1, 0, 1, 1,
-      0, 0, 1, 1, 0, 1,
-      0, 0, 1, 1, 0, 1,
-      0, 0, 1, 0, 1, 1,
-      0, 0, 1, 1, 0, 1,
-      0, 0, 1, 0, 1, 1,
-      0, 0, 1, 0, 1, 1,
-      0, 0, 1, 1, 0, 1,
-    ],
-    loadColor: [0, 0, 0, 0],
-  },
 });
-// figure.add({
-//   make: 'sphere',
-//   radius: 0.05,
-//   color: [1, 0, 0, 1],
-// });
-figure.scene.setProjection({ style: 'orthographic' });
-figure.scene.setCamera({ position: [1, 1, 2] });
-figure.scene.setLight({ directional: [0.7, 0.5, 1] });
+
+figure.add({
+  make: 'rod',
+  radius: 0.01,
+  line: [[0, 0, 0], [1, 0, 0]],
+  color: [1, 0, 0, 1],
+});
+figure.add({
+  make: 'rod',
+  radius: 0.01,
+  line: [[0, 0, 0], [0, 1, 0]],
+  color: [0, 0, 1, 1],
+});
+figure.add({
+  make: 'rod',
+  radius: 0.01,
+  line: [[0, 0, 0], [0, 0, 1]],
+  color: [0, 1, 0, 1],
+});
