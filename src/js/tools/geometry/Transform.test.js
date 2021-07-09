@@ -912,6 +912,31 @@ describe('Transform', () => {
         });
       });
       describe('Basis to Basis', () => {
+        test('parse', () => {
+          const t1 = getTransform([
+            'b',
+            { i: [0, 1, 0], j: [-1, 0, 0] },
+            { i: [-1, 0, 0], j: [0, -1, 0] },
+          ]);
+          const t2 = getTransform([
+            'b',
+            { i: [0, 1, 0], j: [-1, 0, 0] },
+            { right: [-1, 0, 0], top: [0, -1, 0] },
+          ]);
+          const t3 = getTransform([
+            'b',
+            { i: [0, 1, 0], k: [0, 0, 1] },
+            { normal: [0, 0, 1], top: [0, -1, 0] },
+          ]);
+          const t4 = getTransform([
+            'b',
+            [0, 1, 0], [-1, 0, 0], [0, 0, 1],
+            [-1, 0, 0], [0, -1, 0], [0, 0, 1],
+          ]);
+          expect(round(t1.def)).toEqual(round(t2.def));
+          expect(round(t1.def)).toEqual(round(t3.def));
+          expect(round(t1.def)).toEqual(round(t4.def));
+        });
         test('from i = y, j = -x, to i => -x, j => -y', () => {
           // This test is the equivalent of Math.PI / 2 rotation
           const t = getTransform([
