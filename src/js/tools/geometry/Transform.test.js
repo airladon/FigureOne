@@ -867,10 +867,10 @@ describe('Transform', () => {
           const t7 = getTransform([['b', { j: [0, 1, 0], normal: [-1, 0, 0] }]]);
 
           // Array form
-          const t8 = getTransform([['b', [0, 0, 1], [0, 1, 0], [-1, 0, 0]]]);
+          const t8 = getTransform([['b', 0, 0, 1, 0, 1, 0, -1, 0, 0]]);
 
           expect(round(t1.def[0])).toEqual(
-            ['b', [0, 0, 1], [0, 1, 0], [-1, 0, 0]],
+            ['b', 0, 0, 1, 0, 1, 0, -1, 0, 0],
           );
           expect(round(t1.def[0])).toEqual(round(t2.def[0]));
           expect(round(t1.def[0])).toEqual(round(t3.def[0]));
@@ -889,7 +889,7 @@ describe('Transform', () => {
         test('ik, y => z, z => -y', () => {
           const t = getTransform([['b', { i: [1, 0, 0], k: [0, -1, 0] }]]);
           expect(round(t.def[0])).toEqual(
-            ['b', [1, 0, 0], [0, 0, 1], [0, -1, 0]],
+            ['b', 1, 0, 0, 0, 0, 1, 0, -1, 0],
           );
           expect(t.matrix()).toEqual([
             1, 0, 0, 0,
@@ -901,7 +901,7 @@ describe('Transform', () => {
         test('jk, x => y, y => -x', () => {
           const t = getTransform([['b', { j: [-1, 0, 0], k: [0, 0, 1] }]]);
           expect(round(t.def[0])).toEqual(
-            ['b', [0, 1, 0], [-1, 0, 0], [0, 0, 1]],
+            ['b', 0, 1, 0, -1, 0, 0, 0, 0, 1],
           );
           expect(t.matrix()).toEqual([
             0, -1, 0, 0,
@@ -930,8 +930,8 @@ describe('Transform', () => {
           ]);
           const t4 = getTransform([
             'b',
-            [0, 1, 0], [-1, 0, 0], [0, 0, 1],
-            [-1, 0, 0], [0, -1, 0], [0, 0, 1],
+            0, 1, 0, -1, 0, 0, 0, 0, 1,
+            -1, 0, 0, 0, -1, 0, 0, 0, 1,
           ]);
           expect(round(t1.def)).toEqual(round(t2.def));
           expect(round(t1.def)).toEqual(round(t3.def));

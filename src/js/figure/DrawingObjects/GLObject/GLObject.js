@@ -1,6 +1,7 @@
 // @flow
 
 // import * as g2 from '../g2';
+import { round } from '../../../tools/math';
 import * as m3 from '../../../tools/m3';
 import type Scene from '../../Figure';
 import type { Type3DMatrix } from '../../../tools/m3';
@@ -695,6 +696,7 @@ class GLObject extends DrawingObject {
         m3.inverse(worldMatrix),
       );
     }
+    console.log(worldMatrix)
 
     if (locations.u_worldViewProjectionMatrix != null) {  // $FlowFixMe
       gl.uniformMatrix4fv(

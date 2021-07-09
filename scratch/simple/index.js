@@ -146,11 +146,13 @@ figure.scene.setLight({ directional: [0.7, 0.5, 1] });
 const [points, normals] = Fig.tools.g2.sphere({ side: 0.2, radius: 0.1, sides: 6, normals: 'flat' });
 
 console.log(Fig.tools.g2.polygon({ radius: 0.3, sides: 5, transform: [['dir', [0, 1, 0]]] }))
-figure.add({
+const a = figure.add({
   make: 'generic3',
   points,
   normals,
   color: [1, 0, 0, 1],
+  transform: ['b', { i: [1, 0, 0], j: [0, 1, 0] }],
+  // transform: ['dir', [1, 0, 0]],
   copy: [
     // { along: 'x', num: 2, step: 0.4 },
     { to: Fig.tools.g2.polygon({ radius: 0.3, sides: 5, center: [0.5, 0, 0] }) },
@@ -158,21 +160,28 @@ figure.add({
   ],
 });
 
-figure.add({
-  make: 'rod',
-  radius: 0.01,
-  line: [[0, 0, 0], [1, 0, 0]],
-  color: [1, 0, 0, 1],
-});
-figure.add({
-  make: 'rod',
-  radius: 0.01,
-  line: [[0, 0, 0], [0, 1, 0]],
-  color: [0, 0, 1, 1],
-});
-figure.add({
-  make: 'rod',
-  radius: 0.01,
-  line: [[0, 0, 0], [0, 0, 1]],
-  color: [0, 1, 0, 1],
-});
+// figure.add({
+//   make: 'rod',
+//   radius: 0.01,
+//   line: [[0, 0, 0], [1, 0, 0]],
+//   color: [1, 0, 0, 1],
+// });
+// figure.add({
+//   make: 'rod',
+//   radius: 0.01,
+//   line: [[0, 0, 0], [0, 1, 0]],
+//   color: [0, 0, 1, 1],
+// });
+// figure.add({
+//   make: 'rod',
+//   radius: 0.01,
+//   line: [[0, 0, 0], [0, 0, 1]],
+//   color: [0, 1, 0, 1],
+// });
+
+a.animations.new()
+  .transform({ target: ['b', { i: [1, 0, 0], k: [0, 1, 0] }], duration: 2 })
+  .transform({ target: ['b', { i: [0, 0, -1], k: [0, 1, 0] }], duration: 2 })
+  // .transform({ duration: 5, target: ['dir', [0, 0, 1]] })
+  // .transform({ duration: 5, target: ['dir', [0, 1, 0]] })
+  .start();

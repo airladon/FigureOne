@@ -406,6 +406,17 @@ function inverseN(A: Array<number>) {
     return inverse3(A);
   }
   if (A.length === 16) {
+    if (
+      A[3] === 0 && A[7] === 0 && A[11] === 0
+      && A[12] === 0 && A[13] === 0 && A[14] === 0
+      && A[15] === 1
+    ) {
+      return toHomogonous(inverse3([
+        A[0], A[1], A[2],
+        A[4], A[5], A[6],
+        A[8], A[9], A[10],
+      ]));
+    }
     m = 4;
   } else {
     m = Math.sqrt(A.length);
@@ -506,6 +517,7 @@ function dup(A: Type3DMatrix): Type3DMatrix {
   // $FlowFixMe
   return A.slice();
 }
+
 
 export {
   mul,
