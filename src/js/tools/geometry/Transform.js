@@ -364,42 +364,9 @@ class Transform {
   }
 
 
-  // rotate(
-  //   rOrRxOrPoint: number | TypeParsablePoint,
-  //   ry: number | null = null,
-  //   rz: number = 0,
-  // ) {
-  //   let _rx;
-  //   let _ry;
-  //   let _rz;
-  //   if (typeof rOrRxOrPoint === 'number') {
-  //     if (ry == null) {
-  //       _rx = 0;
-  //       _ry = 0;
-  //       _rz = rOrRxOrPoint;
-  //     } else {
-  //       _rx = rOrRxOrPoint;
-  //       _ry = ry;
-  //       _rz = rz;
-  //     }
-  //   } else {
-  //     const p = getPoint(rOrRxOrPoint);
-  //     _rx = p.x;
-  //     _ry = p.y;
-  //     _rz = p.z;
-  //   }
-  //   const r = ['r', _rx, _ry, _rz];
-
-  //   if (this.index === this.def.length) { // $FlowFixMe
-  //     this.def.push(r);
-  //   } else { // $FlowFixMe
-  //     this.def[this.index] = r;
-  //   }
-  //   this.index += 1;
-  //   this.calcAndSetMatrix();
-  //   return this;
-  // }
-
+  /**
+   * Add a rotation transformation component to the transform.
+   */
   rotate(
     typeOr2DRotation: number | '2D' | 'xyz' | 'axis' | 'dir' | 'sph' | 'basis',
     r1: number | TypeParsablePoint | TypeBasisObjectDefinition | null = null,
@@ -432,6 +399,9 @@ class Transform {
     return this.addComponent(['b', ...basis, ...to]);
   }
 
+  /**
+   * Add a custom transformation component to the transform.
+   */
   custom(matrix: Type3DMatrix) {
     if (matrix.length !== 16) {
       throw new Error(`Transform custom matrices must be 16 elements (${matrix.length} input): ${JSON.stringify(matrix)}`);
