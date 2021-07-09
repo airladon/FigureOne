@@ -362,22 +362,9 @@ export type OBJ_GLUniform = {
 };
 
 
-export type OBJ_Primitive = {
-  drawingObject: OBJ_DrawingObject,
-  // FigureElementPrimitiveOptions
-  name?: string,
-  position?: TypeParsablePoint,
-  transform?: TypeParsableTransform,
-  color?: TypeColor,
-  touch?: boolean | number | TypeParsablePoint,
-  move?: boolean | OBJ_ElementMove,
-  dimColor?: TypeColor,
-  defaultColor?: TypeColor,
-  scenarios?: TypeScenarios,
-  scene?: Scene,
-};
-
 /**
+ * Options object for any {@link DiagramElementPrimitive}.
+ *
  * @property {string} [name]  name of figure element
  * @property {TypeParsablePoint} [position] position overrides `transform` translation
  * @property {TypeParsableTransform} [transform] transform to apply to element
@@ -630,7 +617,7 @@ export type OBJ_GLColorData = {
  *   ],
  * });
  */
-export type OBJ_GLGeneric = {
+export type OBJ_GenericGL = {
   glPrimitive?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
   vertexShader?: TypeVertexShader,
   fragmentShader?: TypeFragmentShader,
@@ -640,10 +627,54 @@ export type OBJ_GLGeneric = {
   // Helpers
   dimension?: 2 | 3,
   light?: 'directional' | 'point' | null,
-  colors?: Array<number> | OBJ_GLColorData,
   vertices?: OBJ_GLVertexBuffer,
+  colors?: Array<number> | OBJ_GLColorData,
   normals?: OBJ_GLVertexBuffer,
 } & OBJ_FigurePrimitive;
+
+/**
+ * @property {'directional' | 'point' | null} [light] the scene light that will
+ * be cast on the shape (`'directional'`)
+ * @property {Array<CPY_Step | string> | CPY_Step} [copy] Create copies the
+ * shapes vertices to replicate the shape in space. Copies of normals, colors
+ * (if defined) and texture coordinates (if defined) will also be made.
+ * @property {TypeGLBufferUsage} [usage] use `'DYNAMIC'` if the shape's vertices
+ * will be updated very frequently (`'STATIC'`)
+ */
+export type OBJ_Generic3DAll = {
+  light?: 'directional' | 'point' | null,
+  copy?: Array<CPY_Step | string> | CPY_Step,
+  usage?: TypeGLBufferUsage,
+}
+
+/**
+ * Options object for a {@link FigureElementPrimitive} of a generic 3D shape.
+ *
+ * {@link OBJ_GenericGL} can be used for shape creation with custom shaders.
+ *
+ * But for many custom shapes, only points and normals of the shape need to be
+ * defined, without needing to customize the shaders.
+ *
+ * This provides the ability to create many custom shapes that don't need shader
+ * customization.
+ *
+ * @property {'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'} [glPrimitive]
+ * (`'TRIANGLES'`)
+ * @property {Array<TypeParsablePoint>} [points] positions of vertices of shape
+ * @property {Array<TypeParsablePoint>} [normals] normals for each vertex
+ * @property {Array<TypeColor>} [colors] define a color for each vertex if the
+ * shape will be more than just a single color. Otherwise use `color` if a
+ * single color.
+ * @property {OBJ_Texture} [texture] use to overlay a texture onto the shape's
+ * surfaces
+ */
+export type OBJ_Generic3D = {
+  glPrimitive?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
+  points?: Array<TypeParsablePoint>,
+  normals?: Array<TypeParsablePoint>,
+  colors?: Array<TypeColor>,
+  texture?: OBJ_Texture,
+} & OBJ_Generic3DAll & OBJ_FigurePrimitive;
 
 /**
  * Sphere shape
@@ -652,8 +683,16 @@ export type OBJ_Sphere = {
   radius?: number,
   sides?: number,
   normals?: 'curve' | 'flat',
-} & OBJ_FigurePrimitive;
+} & OBJ_Generic3D;
 
+/**
+ * Cube shape
+ */
+export type OBJ_Cube = {
+  side?: number,
+  center?: TypeParsablePoint,
+  rotation?: TypeParsableRotation,
+} & OBJ_Generic3D;
 
 /**
  * {@link morph} options object.
@@ -825,26 +864,6 @@ export type OBJ_Generic = {
   drawBorderBuffer?: TypeParsableBorder,
   border?: TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number,
   touchBorder?: TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw',
-  position?: TypeParsablePoint,
-  transform?: TypeParsableTransform,
-  pulse?: number,
-
-  touch?: boolean | number | TypeParsablePoint,
-  move?: boolean | OBJ_ElementMove,
-  dimColor?: TypeColor,
-  defaultColor?: TypeColor,
-  scenarios?: TypeScenarios,
-}
-
-export type OBJ_Generic3D = {
-  points?: Array<TypeParsablePoint> | Array<Point>,
-  normals?: Array<TypeParsablePoint> | Array<Point>,
-  colors?: ARray<number>,
-  texture?: OBJ_Texture,
-  drawType?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
-  copy?: Array<CPY_Step | string> | CPY_Step,
-  color?: TypeColor,
-  name?: string,
   position?: TypeParsablePoint,
   transform?: TypeParsableTransform,
   pulse?: number,
@@ -2665,7 +2684,7 @@ export default class FigurePrimitives {
    * {@link FigureElementPrimitive} that draws a generic shape.
    * @see {@link OBJ_Generic} for options and examples.
    */
-  gl(...optionsIn: Array<OBJ_GLGeneric>) {
+  gl(...optionsIn: Array<OBJ_GenericGL>) {
     // Setup the default options
     const oIn = joinObjects({}, ...optionsIn)
     const defaultOptions = {
@@ -2852,9 +2871,9 @@ export default class FigurePrimitives {
    * {@link FigureElementPrimitive} that draws a generic shape.
    * @see {@link OBJ_Generic} for options and examples.
    */
-  generic3D(...optionsIn: Array<OBJ_Generic3D>) {
+  generic3(...optionsIn: Array<OBJ_Generic3D>) {
     const options = joinObjects({}, {
-      dimension: 3, light: 'directional',
+      dimension: 3, light: 'directional', usage: 'STATIC',
     }, ...optionsIn);
 
     const processOptions = (o) => {
@@ -2876,12 +2895,22 @@ export default class FigurePrimitives {
           }
           o.colors = out;
         }
+        if (o.texture != null && o.texture.coords != null) {
+          const count = getCopyCount(o.copy);
+          const out = [];
+          for (let i = 0; i < count; i += 1) {
+            out.push(...o.texture.coords.slice());
+          }
+          o.texture.coords = out;
+        }
       }
-      if (o.vertices != null) {
+      if (o.points != null) {
         o.vertices = toNumbers(o.vertices);
+        o.vertices = { data: o.vertices, usage: o.usage, size: 3 };
       }
       if (o.normals != null) {
         o.normals = toNumbers(o.normals);
+        o.normals = { data: o.normals, usage: o.usage, size: 3 };
       }
       if (o.colors != null) {
         o.colors = toNumbers(o.colors);

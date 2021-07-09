@@ -139,13 +139,37 @@ const figure = new Fig.Figure();
 // });
 
 // Texture filled square
+const [points, normals] = Fig.tools.g2.cube({ side: 0.3 });
 figure.add({
-  make: 'gl',
-  vertices: [-0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5],
-  numVertices: 6,
-  texture: {
-    src: './flower.jpeg',
-    coords: [0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1],
-    loadColor: [0, 0, 0, 0],
-  },
+  make: 'generic3',
+  points,
+  normals,
+  // copy: [
+  //   { along: 'x', num: 1, step: 0.35 },
+  //   { along: 'y', num: 1, step: 0.35 },
+  //   { along: 'z', num: 1, step: 0.35 },
+  // ],
+  color: [0.5, 0.5, 0.5, 1],
+  move: true,
+  // texture: {
+  //   src: './flower.jpeg',
+  //   coords: [
+  //     0, 0, 1, 0, 1, 1,
+  //     0, 0, 1, 1, 0, 1,
+  //     0, 0, 1, 0, 1, 1,
+  //     0, 0, 1, 1, 0, 1,
+  //     0, 0, 1, 0, 1, 1,
+  //     0, 0, 1, 1, 0, 1,
+  //     0, 0, 1, 0, 1, 1,
+  //     0, 0, 1, 1, 0, 1,
+  //     0, 0, 1, 0, 1, 1,
+  //     0, 0, 1, 1, 0, 1,
+  //     0, 0, 1, 0, 1, 1,
+  //     0, 0, 1, 1, 0, 1,
+  //   ],
+  //   loadColor: [0, 0, 0, 0],
+  // },
 });
+figure.scene.setProjection({ style: 'orthographic' });
+figure.scene.setCamera({ position: [2, 1, 2] });
+figure.scene.setLight({ directional: [0.7, 0.5, 1] });
