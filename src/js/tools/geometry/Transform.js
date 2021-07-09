@@ -13,21 +13,10 @@ import type { Type3DMatrix } from '../m3';
 import type { TypeParsablePoint } from './Point';
 import type { OBJ_TranslationPath } from './Path';
 
-
-// Transform components within transform.def
-export type TypeScaleTransformComponent = ['s', number, number, number];
-export type TypeTranslateTransformComponent = ['t', number, number, number];
-export type TypeRotateTransformComponent = ['r', number];
-export type TypeRotateCartesianTransformComponent = ['rc', number, number, number];
-export type TypeRotateAxisTransformComponent = ['ra', number, number, number, number];
-export type TypeRotateDirectionTransformComponent = ['rd', number, number, number];
-export type TypeRotationBasisTransformComponent = ['rb', number, number, number, number, number, number, number, number, number]
-export type TypeRotateSphericalTransformComponent = ['rs', number, number];
-export type TypeCustomTransformComponent = ['c', number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number];
-export type TypeTransformBasisComponent = ['b', [number, number, number], [number, number, number], [number, number, number]];
-export type TypeTransformBasisToBasisComponent = ['b', [number, number, number], [number, number, number], [number, number, number], [number, number, number], [number, number, number], [number, number, number]];
-
-
+/**
+ * Orthonormal basis definition. Use either (i, j, k), (x, y, z) or
+ * (right, top, normal).
+ */
 export type TypeBasisObjectDefinition = {
   i?: TypeParsablePoint,
   j?: TypeParsablePoint,
@@ -40,13 +29,65 @@ export type TypeBasisObjectDefinition = {
   normal?: TypeParsablePoint,
 }
 
-export type TypeBasisDefinition = ['b', TypeBasisObjectDefinition]
-  | ['b', TypeBasisObjectDefinition, TypeBasisObjectDefinition]
-  | TypeTransformBasisComponent
-  | TypeTransformBasisToBasisComponent;
+/**
+ * Type of rotations possible
+ */
+export type TypeRotationComponentName = '2D' | 'xyz' | 'axis' | 'dir' | 'sph' | 'rbasis';
 
-export type TypeTransformBasisDefinition = ['b', TypeBasisDefinition];
-export type TypeTransformBasisToBasisDefinition = ['b', TypeBasisDefinition, TypeBasisDefinition];
+/**
+ * Rotation definition options
+ */
+export type TypeUserRotationDefinition = ['2D', number]
+  | ['xyz', TypeParsablePoint]
+  | ['xyz', number, number, number]
+  | ['rc', TypeParsablePoint]
+  | ['rc', number, number, number]
+  | ['axis', TypeParsablePoint, number]
+  | ['axis', number, number, number, number]
+  | ['ra', TypeParsablePoint, number]
+  | ['ra', number, number, number, number]
+  | ['dir', TypeParsablePoint]
+  | ['dir', number, number, number]
+  | ['rd', TypeParsablePoint]
+  | ['rd', number, number, number]
+  | ['sph', number, number]
+  | ['rs', number, number]
+  | ['rbasis', TypeBasisObjectDefinition]
+  | ['rb', TypeBasisObjectDefinition];
+
+export type TypeUserTranslationDefinition = ['t', number, number]
+  | ['t', number, number, number];
+
+export type TypeUserScaleDefinition = ['s', number]
+  | ['s', number, number]
+  | ['s', number, number, number];
+
+export type TypeUserCustomDefinition = ['c', number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number];
+
+export type TypeUserBasisDefinition = ['basis', TypeBasisObjectDefinition]
+  | ['basis', TypeBasisObjectDefinition | TypeBasisObjectDefinition]
+  | ['b', number, number, number, number, number, number, number, number, number]
+  | ['b', number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number];
+
+/**
+ * Transform internal definition component identifiers
+ */
+export type TypeTransformComponentType = 't' | 'c' | 's' | 'r' | 'ra' | 'rd' | 'rc' | 'rs' | 'rb';
+
+/**
+ * Transform internal definition components
+ */
+export type TypeScaleTransformComponent = ['s', number, number, number];
+export type TypeTranslateTransformComponent = ['t', number, number, number];
+export type TypeRotateTransformComponent = ['r', number];
+export type TypeRotateCartesianTransformComponent = ['rc', number, number, number];
+export type TypeRotateAxisTransformComponent = ['ra', number, number, number, number];
+export type TypeRotateDirectionTransformComponent = ['rd', number, number, number];
+export type TypeRotationBasisTransformComponent = ['rb', number, number, number, number, number, number, number, number, number]
+export type TypeRotateSphericalTransformComponent = ['rs', number, number];
+export type TypeCustomTransformComponent = ['c', number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number];
+export type TypeTransformBasisComponent = ['b', number, number, number, number, number, number, number, number, number];
+export type TypeTransformBasisToBasisComponent = ['b', number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number];
 
 export type TypeTransformComponent = TypeScaleTransformComponent
   | TypeTranslateTransformComponent
@@ -55,12 +96,10 @@ export type TypeTransformComponent = TypeScaleTransformComponent
   | TypeRotateSphericalTransformComponent
   | TypeRotateCartesianTransformComponent
   | TypeRotateDirectionTransformComponent
-  | TypeCustomTransformComponent;
-
-// export type TransformComponent = ScaleTransformComponent
-//   | TranslateTransformComponent
-//   | RotateTransformComponent
-//   | CustomTransformComponent;
+  | TypeRotationBasisTransformComponent
+  | TypeCustomTransformComponent
+  | TypeTransformBasisComponent
+  | TypeTransformBasisToBasisComponent;
 
 export type TypeTransformDefinition = Array<TypeTransformComponent>;
 // export type TransformDefinition = Array<TransformComponent>;
@@ -72,36 +111,10 @@ export type TypeTransformValue = number | Array<number> | {
   rotation?: number,
 };
 
-// function distance(p1: Point, p2: Point) {
-//   return Math.sqrt(((p2.x - p1.x) ** 2) + ((p2.y - p1.y) ** 2));
-// }
 
-// export type TypeRotationDefinition = number // 2D
-//   | ['r', number] // 2D
-//   | ['xyz', TypeParsablePoint]
-//   | ['axis', TypeParsablePoint, number]
-//   | ['dir', TypeParsablePoint]
-//   | ['sph', number, number]
-type TypeRotationComponentName = '2D' | 'xyz' | 'axis' | 'dir' | 'sph';
-
-type TypeRotationDefinition = ['2D', number]
-  | ['xyz', TypeParsablePoint]
-  | ['xyz', number, number, number]
-  | ['axis', TypeParsablePoint, number]
-  | ['axis', number, number, number, number]
-  | ['dir', TypeParsablePoint]
-  | ['dir', number, number, number]
-  | ['sph', number, number]
-  | ['basis', TypeBasisObjectDefinition]
-
-type TypeTransformComponentType = 't' | 'c' | 's' | 'r' | 'ra' | 'rd' | 'rc' | 'rs';
-// function parseRotation(rDef: TypeRor)
-
-// new Transform().rotate('axis', [1, 2, 3], 4)
-// new Transform([['t', 4, 5, 6], ['r', 3, 4, 5])
-// transform.r() get first r
-
-function parseBasis(
+// Parse a basis definition object and return a full set of (x, y, z) basis
+// vectors.
+function parseBasisObject(
   basis: TypeBasisObjectDefinition,
   normalize: boolean = false,
 ) {
@@ -163,13 +176,15 @@ function parseBasis(
   ];
 }
 
+// Parse a basis definition - either a user definition or a internal transform
+// definition
 function parseBasisDefinition(def: TypeTransformBasisToBasisComponent) {
   const [type] = def;
   if (def.length === 2) {
-    return [type, ...parseBasis(def[1])];
+    return [type, ...parseBasisObject(def[1])];
   }
   if (def.length === 3) {
-    return [type, ...parseBasis(def[1]), ...parseBasis(def[2])];
+    return [type, ...parseBasisObject(def[1]), ...parseBasisObject(def[2])];
   }
   if (def.length === 10 || def.length === 19) {
     return def;
@@ -218,7 +233,7 @@ function parseRotation(
   } else if ((type === 'axis' || type === 'ra') && typeof r2 === 'number') {
     return ['ra', ...getPoint(r1).toArray(), r2];
   } else if (type === 'basis' || type === 'rb') {
-    return parseBasisDefinition(['rb', r1], true);
+    return ['rb', ...(parseBasisDefinition(['rb', r1], true).slice(1))];
   }
   throw new Error(`Could not parse rotation '${typeOr2DOrDef}', '${r1}', '${r2}', '${r3}', '${r4}'`);
 }
@@ -332,7 +347,7 @@ class Transform {
    * @return {Transform}
    */
   translate(
-    xOrTranslation: number | Point = 0,
+    xOrTranslation: number | TypeParsablePoint = 0,
     y: number = 0,
     z: number = 0,
     // name: string = this.name,
@@ -341,9 +356,7 @@ class Transform {
     let _y = y;
     let _z = z;
     if (typeof xOrTranslation !== 'number') {
-      _x = xOrTranslation.x;
-      _y = xOrTranslation.y;
-      _z = xOrTranslation.z;
+      [_x, _y, _z] = getPoint(xOrTranslation).toArray();
     } else {
       _x = xOrTranslation;
     }
@@ -399,15 +412,23 @@ class Transform {
     return this.addComponent(def);
   }
 
+  /**
+   * Add a change of basis transformation component to the transform.
+   *
+   * If `toBasis` is null, then the change of basis is from the standard
+   * basis to `fromOrToBasis`.
+   *
+   * Otherwise, the change of basis is from `fromOrToBasis` to `toBasis`.
+   */
   basis(
     fromOrToBasis: TypeBasisObjectDefinition,
     toBasis: null | TypeBasisObjectDefinition = null,
   ) {
-    const basis = parseBasis(fromOrToBasis);
+    const basis = parseBasisObject(fromOrToBasis);
     if (toBasis === null) {
       return this.addComonpont(['b', ...basis]);
     }
-    const to = parseBasis(toBasis);
+    const to = parseBasisObject(toBasis);
     return this.addComonpont(['b', ...basis, ...to]);
   }
 
@@ -424,7 +445,7 @@ class Transform {
    * @return {Transform}
    */
   scale(
-    sOrSxOrPoint: number | Point,
+    sOrSxOrPoint: number | TypeParsablePoint,
     sy: number | null = null,
     sz: number = 1,
   ) {
@@ -438,9 +459,7 @@ class Transform {
         _sz = sOrSxOrPoint;
       }
     } else {
-      _sx = sOrSxOrPoint.x;
-      _sy = sOrSxOrPoint.y;
-      _sz = sOrSxOrPoint.z;
+      [_sx, _sy, _sz] = getScale(sOrSxOrPoint).toArray();
     }
     return this.addComponent(['s', _sx, _sy, _sz]);
   }
@@ -1101,7 +1120,7 @@ class Transform {
         if (
           ix !== 1 || iy !== 0 || iz !== 0
           || jx !== 0 || jy !== 1 || jz !== 1
-          || kx !== 0 || ky !== 0 || jz !== 1
+          || kx !== 0 || ky !== 0 || kz !== 1
         ) {
           return false;
         }
@@ -1295,8 +1314,10 @@ function parseArrayTransformDefinition(definition: TransformDefinition) {
       } else if (len === 4) {
         def.push(defIn[i]);
       }
-    } else if (type === 'b' || type === 'basis' || type === 'rb') {
-      def.push(parseBasisDefinition(defIn[i]));
+    } else if (type === 'rb' || type === 'rbasis') {
+      def.push(['rb', ...(parseBasisDefinition(defIn[i]).slice(1))]);
+    } else if (type === 'b' || type === 'basis') {
+      def.push(['b', ...(parseBasisDefinition(defIn[i]).slice(1))]);
     } else if (type.startsWith('r') || type === 'axis' || type === 'sph' || type === 'xyz' || type === '2D' || type === 'dir') {
       def.push(parseRotation(defIn[i]));
     } else {

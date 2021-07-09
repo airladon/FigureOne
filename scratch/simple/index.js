@@ -182,6 +182,7 @@ figure.add({
 a.animations.new()
   .transform({ target: ['rb', { i: [1, 0, 0], k: [0, 1, 0] }], duration: 2 })
   .transform({ target: ['rb', { i: [0, 0, -1], k: [0, 1, 0] }], duration: 2 })
+  .transform({ target: ['rb', { i: [0, 0, -1], k: [1, 0, 0] }], duration: 2 })
   // .transform({ duration: 5, target: ['dir', [0, 0, 1]] })
   // .transform({ duration: 5, target: ['dir', [0, 1, 0]] })
   .start();
