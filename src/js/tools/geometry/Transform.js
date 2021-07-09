@@ -426,10 +426,10 @@ class Transform {
   ) {
     const basis = parseBasisObject(fromOrToBasis);
     if (toBasis === null) {
-      return this.addComonpont(['b', ...basis]);
+      return this.addComponent(['b', ...basis]);
     }
     const to = parseBasisObject(toBasis);
-    return this.addComonpont(['b', ...basis, ...to]);
+    return this.addComponent(['b', ...basis, ...to]);
   }
 
   custom(matrix: Type3DMatrix) {
