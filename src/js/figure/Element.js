@@ -3621,14 +3621,14 @@ class FigureElement {
 
   // eslint-disable-next-line no-unused-vars
   click(glPoint: Point = new Point(0, 0)) {
-    const drawPoint = glPoint.transformBy(this.spaceTransformMatrix('gl', 'draw'));
+    // const drawPoint = glPoint.transformBy(this.spaceTransformMatrix('gl', 'draw'));
     if (this.onClick != null) {
       if (this.recorder.state === 'recording') {
         this.recorder.recordEvent('elementClick', [this.getPath(), glPoint.x, glPoint.y]);
       }
-      this.fnMap.exec(this.onClick, drawPoint, this);
+      this.fnMap.exec(this.onClick, glPoint, this);
     }
-    this.notifications.publish('onClick', [drawPoint, this]);
+    this.notifications.publish('onClick', [glPoint, this]);
   }
 
 
@@ -3684,6 +3684,9 @@ class FigureElement {
 
   isBeingTouched(glLocation: Point): boolean {
     if (!this.isTouchable) {
+      return false;
+    }
+    if (this.drawBorderBuffer == null && this.drawBorder == null) {
       return false;
     }
     const vertexLocation = glLocation.transformBy(this.spaceTransformMatrix('gl', 'draw'));
@@ -3878,11 +3881,24 @@ class FigureElementPrimitive extends FigureElement {
   }
 
 
+  // click(glPoint: Point = new Point(0, 0)) {
+  //   super.click(glPoint);
+  //   if (this.drawingObject instanceof TextObjectBase) {
+  //     this.drawingObject.click(
+  //       glPoint.transformBy(this.spaceTransformMatrix('gl', 'draw')),
+  //       this.fnMap,
+  //     );
+  //     if (this.recorder.state === 'recording') {
+  //       this.recorder.recordEvent('elementTextClick', [this.getPath(), glPoint.x, glPoint.y]);
+  //     }
+  //   }
+  // }
+
   click(glPoint: Point = new Point(0, 0)) {
     super.click(glPoint);
     if (this.drawingObject instanceof TextObjectBase) {
       this.drawingObject.click(
-        glPoint.transformBy(this.spaceTransformMatrix('gl', 'draw')),
+        glPoint,
         this.fnMap,
       );
       if (this.recorder.state === 'recording') {

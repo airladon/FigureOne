@@ -62,7 +62,8 @@ class GLObject extends DrawingObject {
       stride: number,
       offset: number,
       usage: number,
-      len: number,
+      data: Array<number>
+      // len: number,
     };
   };
 
@@ -110,6 +111,11 @@ class GLObject extends DrawingObject {
   showShaders() {
     Console(this.webgl.programs[this.programIndex].vertexShader.src);
     Console(this.webgl.programs[this.programIndex].fragmentShader.src);
+  }
+
+  showSelectorShaders() {
+    Console(this.webgl.programs[this.selectorProgramIndex].vertexShader.src);
+    Console(this.webgl.programs[this.selectorProgramIndex].fragmentShader.src);
   }
 
   getCanvas() {
@@ -413,7 +419,7 @@ class GLObject extends DrawingObject {
       stride,
       offset,
       usage,
-      len: data.length,
+      // len: data.length,
       data,
     };
     const numVertices = data.length / size;
@@ -735,7 +741,7 @@ class GLObject extends DrawingObject {
     );
 
     const { texture } = this;
-    if (texture != null) {
+    if (texture != null && targetTexture === false) {
       // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
       const texSize = 2;          // 2 components per iteration
       const texType = gl.FLOAT;   // the data is 32bit floats

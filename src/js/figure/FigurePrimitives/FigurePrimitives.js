@@ -2876,7 +2876,10 @@ export default class FigurePrimitives {
       dimension: 3, light: 'directional', usage: 'STATIC',
     }, ...optionsIn);
 
-    const processOptions = (o) => {
+    const processOptions = (o, u) => {
+      if (o.usage == null) {
+        o.usage = u;
+      }
       if (o.points != null) {
         o.vertices = o.points;
       }
@@ -2916,7 +2919,8 @@ export default class FigurePrimitives {
         o.colors = toNumbers(o.colors);
       }
     };
-    processOptions(options);
+    processOptions(options, 'STATIC');
+    const u = options.usage;
     const element = this.gl(options);
 
     element.custom.updateGeneric = function update(updateOptions: {
@@ -2927,16 +2931,16 @@ export default class FigurePrimitives {
       drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
     }) {
       const o = updateOptions;
-      processOptions(o);
+      processOptions(o, u);
       // element.drawingObject.change(o);
       if (o.vertices) {
-        element.custom.updateVertices(o.vertices);
+        element.custom.updateVertices(o.vertices.data);
       }
       if (o.normals) {
-        element.custom.updateAttribute('a_normal', o.normals);
+        element.custom.updateAttribute('a_normal', o.normals.data);
       }
       if (o.colors) {
-        element.custom.updateAttribute('a_colors', o.colors);
+        element.custom.updateAttribute('a_color', o.colors);
       }
     };
     element.custom.updatePoints = element.custom.updateGeneric;
@@ -2951,7 +2955,7 @@ export default class FigurePrimitives {
     optionsIn: Object,
     getPointsFn: (Object) => [Array<Point>, Array<Point>],
   ) {
-    const element = this.generic3D(optionsIn, {
+    const element = this.generic3(optionsIn, {
       points: [],
       normals: [],
     });

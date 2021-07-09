@@ -139,37 +139,45 @@ const figure = new Fig.Figure();
 // });
 
 // Texture filled square
-const [points, normals] = Fig.tools.g2.cube({ side: 0.3 });
+const [points, normals] = Fig.tools.g2.cube({
+  side: 0.25,
+  center: [-0.15, -0.15, -0.15],
+});
 figure.add({
   make: 'generic3',
   points,
   normals,
-  // copy: [
-  //   { along: 'x', num: 1, step: 0.35 },
-  //   { along: 'y', num: 1, step: 0.35 },
-  //   { along: 'z', num: 1, step: 0.35 },
-  // ],
-  color: [0.5, 0.5, 0.5, 1],
+  copy: [
+    { along: 'x', num: 1, step: 0.3 },
+    { along: 'y', num: 1, step: 0.3 },
+    { along: 'z', num: 1, step: 0.3 },
+  ],
+  // move: { type: 'rotation', plane: [[0, 0, 0], [0, 1, 0]] },
   move: true,
-  // texture: {
-  //   src: './flower.jpeg',
-  //   coords: [
-  //     0, 0, 1, 0, 1, 1,
-  //     0, 0, 1, 1, 0, 1,
-  //     0, 0, 1, 0, 1, 1,
-  //     0, 0, 1, 1, 0, 1,
-  //     0, 0, 1, 0, 1, 1,
-  //     0, 0, 1, 1, 0, 1,
-  //     0, 0, 1, 0, 1, 1,
-  //     0, 0, 1, 1, 0, 1,
-  //     0, 0, 1, 0, 1, 1,
-  //     0, 0, 1, 1, 0, 1,
-  //     0, 0, 1, 0, 1, 1,
-  //     0, 0, 1, 1, 0, 1,
-  //   ],
-  //   loadColor: [0, 0, 0, 0],
-  // },
+  texture: {
+    src: './flower.jpeg',
+    coords: [
+      0, 0, 1, 0, 1, 1,
+      0, 0, 1, 1, 0, 1,
+      0, 0, 1, 0, 1, 1,
+      0, 0, 1, 1, 0, 1,
+      0, 0, 1, 0, 1, 1,
+      0, 0, 1, 1, 0, 1,
+      0, 0, 1, 1, 0, 1,
+      0, 0, 1, 0, 1, 1,
+      0, 0, 1, 1, 0, 1,
+      0, 0, 1, 0, 1, 1,
+      0, 0, 1, 0, 1, 1,
+      0, 0, 1, 1, 0, 1,
+    ],
+    loadColor: [0, 0, 0, 0],
+  },
 });
+// figure.add({
+//   make: 'sphere',
+//   radius: 0.05,
+//   color: [1, 0, 0, 1],
+// });
 figure.scene.setProjection({ style: 'orthographic' });
-figure.scene.setCamera({ position: [2, 1, 2] });
+figure.scene.setCamera({ position: [1, 1, 2] });
 figure.scene.setLight({ directional: [0.7, 0.5, 1] });
