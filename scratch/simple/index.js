@@ -151,7 +151,7 @@ const a = figure.add({
   points,
   normals,
   color: [1, 0, 0, 1],
-  transform: ['b', { i: [1, 0, 0], j: [0, 1, 0] }],
+  transform: ['rb', { i: [1, 0, 0], j: [0, 1, 0] }],
   // transform: ['dir', [1, 0, 0]],
   copy: [
     // { along: 'x', num: 2, step: 0.4 },
@@ -160,28 +160,28 @@ const a = figure.add({
   ],
 });
 
-// figure.add({
-//   make: 'rod',
-//   radius: 0.01,
-//   line: [[0, 0, 0], [1, 0, 0]],
-//   color: [1, 0, 0, 1],
-// });
-// figure.add({
-//   make: 'rod',
-//   radius: 0.01,
-//   line: [[0, 0, 0], [0, 1, 0]],
-//   color: [0, 0, 1, 1],
-// });
-// figure.add({
-//   make: 'rod',
-//   radius: 0.01,
-//   line: [[0, 0, 0], [0, 0, 1]],
-//   color: [0, 1, 0, 1],
-// });
+figure.add({
+  make: 'rod',
+  radius: 0.01,
+  line: [[0, 0, 0], [1, 0, 0]],
+  color: [1, 0, 0, 1],
+});
+figure.add({
+  make: 'rod',
+  radius: 0.01,
+  line: [[0, 0, 0], [0, 1, 0]],
+  color: [0, 0, 1, 1],
+});
+figure.add({
+  make: 'rod',
+  radius: 0.01,
+  line: [[0, 0, 0], [0, 0, 1]],
+  color: [0, 1, 0, 1],
+});
 
 a.animations.new()
-  .transform({ target: ['b', { i: [1, 0, 0], k: [0, 1, 0] }], duration: 2 })
-  .transform({ target: ['b', { i: [0, 0, -1], k: [0, 1, 0] }], duration: 2 })
+  .transform({ target: ['rb', { i: [1, 0, 0], k: [0, 1, 0] }], duration: 2 })
+  .transform({ target: ['rb', { i: [0, 0, -1], k: [0, 1, 0] }], duration: 2 })
   // .transform({ duration: 5, target: ['dir', [0, 0, 1]] })
   // .transform({ duration: 5, target: ['dir', [0, 1, 0]] })
   .start();

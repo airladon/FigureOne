@@ -696,7 +696,6 @@ class GLObject extends DrawingObject {
         m3.inverse(worldMatrix),
       );
     }
-    console.log(worldMatrix)
 
     if (locations.u_worldViewProjectionMatrix != null) {  // $FlowFixMe
       gl.uniformMatrix4fv(

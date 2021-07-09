@@ -92,6 +92,7 @@ type TypeRotationDefinition = ['2D', number]
   | ['dir', TypeParsablePoint]
   | ['dir', number, number, number]
   | ['sph', number, number]
+  | ['basis', TypeBasisObjectDefinition]
 
 type TypeTransformComponentType = 't' | 'c' | 's' | 'r' | 'ra' | 'rd' | 'rc' | 'rs';
 // function parseRotation(rDef: TypeRor)
@@ -102,7 +103,7 @@ type TypeTransformComponentType = 't' | 'c' | 's' | 'r' | 'ra' | 'rd' | 'rc' | '
 
 function parseBasis(
   basis: TypeBasisObjectDefinition,
-  normalize: boolean = false
+  normalize: boolean = false,
 ) {
   const {
     i, j, k, x, y, z,
@@ -139,11 +140,11 @@ function parseBasis(
   }
 
   if (top == null && right != null && normal != null) {
-    top = normal.crossProduct(right);
+    top = normal.crossProduct(right).normalize();
   } else if (top != null && right == null && normal != null) {
-    right = top.crossProduct(normal);
+    right = top.crossProduct(normal).normalize();
   } else if (top != null && right != null && normal == null) {
-    normal = right.crossProduct(top);
+    normal = right.crossProduct(top).normalize();
   }
 
   if (top == null || right == null || normal == null) {
@@ -160,73 +161,25 @@ function parseBasis(
     ...top.toArray(),
     ...normal.toArray(),
   ];
-
-  // // let right = basis.i != null ? basis.i : basis.right;
-  // // let top = basis.j != null ? basis.j : basis.top;
-  // // let normal = basis.k != null ? basis.k : basis.normal;
-  // // right = right != null ? getPoint(right).normalize() : null;
-  // // top = top != null ? getPoint(top).normalize() : null;
-  // // normal = normal != null ? getPoint(normal).normalize() : null;
-  // if (right != null && top != null && normal != null) {
-  //   return [right.toArray(), top.toArray(), normal.toArray()];
-  // }
-  // if (right != null && top != null) {
-  //   return [
-  //     ...right.toArray(), ...top.toArray(), ...right.crossProduct(top).normalize().toArray(),
-  //   ];
-  // }
-  // if (right != null && normal != null) {
-  //   return [
-  //     ...right.toArray(),
-  //     ...normal.crossProduct(right).normalize().toArray(),
-  //     ...normal.toArray(),
-  //   ];
-  // }
-  // if (top != null && normal != null) {
-  //   return [
-  //     ...top.crossProduct(normal).normalize().toArray(),
-  //     ...top.toArray(),
-  //     ...normal.toArray(),
-  //   ];
-  // }
-  // throw new Error(`Parsing basis fail - need at least two orthogonal basis vectors. Input: ${basis}`);
 }
 
 function parseBasisDefinition(def: TypeTransformBasisToBasisComponent) {
+  const [type] = def;
   if (def.length === 2) {
-    return ['b', ...parseBasis(def[1])];
+    return [type, ...parseBasis(def[1])];
   }
   if (def.length === 3) {
-    return ['b', ...parseBasis(def[1]), ...parseBasis(def[2])];
+    return [type, ...parseBasis(def[1]), ...parseBasis(def[2])];
   }
   if (def.length === 10 || def.length === 19) {
     return def;
   }
-  // if (def.length === 10) {
-  //   // return [
-  //   //   'b',
-  //   //   ...getPoint([def[1], def[2], def[3]]).normalize().toArray(),
-  //   //   ...getPoint([def[4], def[5], def[6]]).normalize().toArray(),
-  //   //   ...getPoint([def[7], def[8], def[9]]).normalize().toArray(),
-  //   // ];
-  // }
-  // if (def.length === 7) {
-  //   return [
-  //     'b',
-  //     ...getPoint(def[1]).normalize().toArray(),
-  //     ...getPoint(def[2]).normalize().toArray(),
-  //     ...getPoint(def[3]).normalize().toArray(),
-  //     ...getPoint(def[4]).normalize().toArray(),
-  //     ...getPoint(def[5]).normalize().toArray(),
-  //     ...getPoint(def[6]).normalize().toArray(),
-  //   ];
-  // }
-  throw new Error(`Could not parse transform basis definition: ${def}`);
+  throw new Error(`Could not parse transform basis definition: ${JSON.stringify(def)}`);
 }
 
 function parseRotation(
   typeOr2DOrDef: number | TypeRotationComponentName | TypeRotationDefinition,
-  r1: number | TypeParsablePoint | null = null,
+  r1: number | TypeParsablePoint | TypeBasisObjectDefinition | null = null,
   r2: number | null = null,
   r3: number | null = null,
   r4: number | null = null,
@@ -264,6 +217,8 @@ function parseRotation(
     return ['rd', ...getPoint(r1).toArray()];
   } else if ((type === 'axis' || type === 'ra') && typeof r2 === 'number') {
     return ['ra', ...getPoint(r1).toArray(), r2];
+  } else if (type === 'basis' || type === 'rb') {
+    return parseBasisDefinition(['rb', r1], true);
   }
   throw new Error(`Could not parse rotation '${typeOr2DOrDef}', '${r1}', '${r2}', '${r3}', '${r4}'`);
 }
@@ -433,8 +388,8 @@ class Transform {
   // }
 
   rotate(
-    typeOr2DRotation: number | '2D' | 'xyz' | 'axis' | 'dir' | 'sph',
-    r1: number | TypeParsablePoint | null = null,
+    typeOr2DRotation: number | '2D' | 'xyz' | 'axis' | 'dir' | 'sph' | 'basis',
+    r1: number | TypeParsablePoint | TypeBasisObjectDefinition | null = null,
     r2: number | null = null,
     r3: number | null = null,
     r4: number | null = null,
@@ -444,7 +399,10 @@ class Transform {
     return this.addComponent(def);
   }
 
-  basis(fromOrToBasis: TypeBasisDefinition, toBasis: null | TypeBasisDefinition = null) {
+  basis(
+    fromOrToBasis: TypeBasisObjectDefinition,
+    toBasis: null | TypeBasisObjectDefinition = null,
+  ) {
     const basis = parseBasis(fromOrToBasis);
     if (toBasis === null) {
       return this.addComonpont(['b', ...basis]);
@@ -537,6 +495,12 @@ class Transform {
         m = m3.mul(m, m3.rotationMatrixSpherical(x, y));
       } else if (type === 'ra' && this.def[i][4] !== 0) {
         m = m3.mul(m, m3.rotationMatrixAxis([x, y, z], this.def[i][4]));
+      } else if (type === 'rb') {
+        m = m3.mul(m, m3.basisMatrix(
+          this.def[i].slice(1, 4),
+          this.def[i].slice(4, 7),
+          this.def[i].slice(7),
+        ));
       } else if (type === 'c') {  // $FlowFixMe
         m = m3.mul(m, this.def[i].slice(1));
       } else if (type === 'b' && this.def[i].length === 10) {
@@ -708,6 +672,7 @@ class Transform {
       if (
         stepStart[0] === stepDelta[0]
         && stepStart[0] !== 't'
+        && stepStart[0] !== 'rb'
         && stepStart.length === stepDelta.length
       ) {
         // $FlowFixMe
@@ -715,6 +680,18 @@ class Transform {
           stepStart[0],
           ...stepDelta.slice(1).map((d, j) => d * percent + stepStart[j + 1]),
         ];
+      } else if (stepStart[0] === 'rb' && stepDelta[0] === 'rb') {
+        const iStart = getPoint(stepStart.slice(1, 4));
+        const jStart = getPoint(stepStart.slice(4, 7));
+        const kStart = getPoint(stepStart.slice(7, 10));
+        const iDelta = getPoint(stepDelta.slice(1, 4));
+        const jDelta = getPoint(stepDelta.slice(4, 7));
+        const kDelta = getPoint(stepDelta.slice(7, 10));
+
+        const iBasis = iStart.add(iDelta.scale(percent)).normalize().toArray();
+        const jBasis = jStart.add(jDelta.scale(percent)).normalize().toArray();
+        const kBasis = kStart.add(kDelta.scale(percent)).normalize().toArray();
+        out.def[i] = ['rb', ...iBasis, ...jBasis, ...kBasis];
       } else if (stepStart[0] === 't' && stepDelta[0] === 't') {
         const start = new Point(stepStart[1], stepStart[2], stepStart[3]);
         const sDelta = new Point(stepDelta[1], stepDelta[2], stepDelta[3]);
@@ -726,6 +703,7 @@ class Transform {
         out.def[i] = ['t', p.x, p.y, p.z];
       }
     }
+
     out.calcAndSetMatrix();
     return out;
   }
@@ -763,6 +741,13 @@ class Transform {
     if (type === 'rc' || type === 'rd') {
       return new Point(r[1], r[2], r[3]);
     }
+    if (type === 'rb') {
+      return [
+        new Point(r[1], r[2], r[3]),
+        new Point(r[4], r[5], r[6]),
+        new Point(r[7], r[8], r[9]),
+      ];
+    }
     // ra
     return [new Point(r[1], r[2], r[3]), r[4]];
   }
@@ -775,6 +760,7 @@ class Transform {
       rc: 'xyz',
       rd: 'dir',
       rs: 'sph',
+      rb: 'basis',
     };
     return types[this.def[i][0]];
   }
@@ -782,17 +768,18 @@ class Transform {
   rArray(rotationIndex: number = 0) {
     const i = this.getComponentIndex('r', rotationIndex);
     const r = this.def[i];
-    const [type] = r;
-    if (type === 'r') {
-      return [r[1]];
-    }
-    if (type === 'rs') {
-      return [r[1], r[2]];
-    }
-    if (type === 'rc' || type === 'rd') {
-      return [r[1], r[2], r[3]];
-    }
-    return [r[1], r[2], r[3], r[4]];
+    // const [type] = r;
+    return r.slice(1);
+    // if (type === 'r') {
+    //   return [r[1]];
+    // }
+    // if (type === 'rs') {
+    //   return [r[1], r[2]];
+    // }
+    // if (type === 'rc' || type === 'rd') {
+    //   return [r[1], r[2], r[3]];
+    // }
+    // return [r[1], r[2], r[3], r[4]];
   }
 
   /**
@@ -1109,6 +1096,15 @@ class Transform {
         ) {
           return false;
         }
+      } else if (type === 'rb') {
+        const [, ix, iy, iz, jx, jy, jz, kx, ky, kz] = this.def[i];
+        if (
+          ix !== 1 || iy !== 0 || iz !== 0
+          || jx !== 0 || jy !== 1 || jz !== 1
+          || kx !== 0 || ky !== 0 || jz !== 1
+        ) {
+          return false;
+        }
       }
     }
     return true;
@@ -1174,6 +1170,13 @@ class Transform {
         def.push([type, 1, 0, 0]);
       } else if (type === 'ra') { // $FlowFixMe
         def.push([type, 1, 0, 0, 0]);
+      } else if (type === 'rb') {
+        def.push([
+          'rb',
+          1, 0, 0,
+          0, 1, 0,
+          0, 0, 1,
+        ]);
       } else if (type === 'c') {
         def.push([
           'c',
@@ -1228,11 +1231,13 @@ function isParsableTransform(value: any) {
       || value[0][0] === 'rc'
       || value[0][0] === 'rd'
       || value[0][0] === 'rs'
+      || value[0][0] === 'rb'
       || value[0][0] === 'axis'
       || value[0][0] === 'sph'
       || value[0][0] === '2D'
       || value[0][0] === 'xyz'
       || value[0][0] === 'dir'
+      || value[0][0] === 'basis'
     )
   ) {
     return true;
@@ -1290,10 +1295,10 @@ function parseArrayTransformDefinition(definition: TransformDefinition) {
       } else if (len === 4) {
         def.push(defIn[i]);
       }
+    } else if (type === 'b' || type === 'basis' || type === 'rb') {
+      def.push(parseBasisDefinition(defIn[i]));
     } else if (type.startsWith('r') || type === 'axis' || type === 'sph' || type === 'xyz' || type === '2D' || type === 'dir') {
       def.push(parseRotation(defIn[i]));
-    } else if (type === 'b') {
-      def.push(parseBasisDefinition(defIn[i]));
     } else {
       throw new Error(`Cannot parse transform array definition: ${JSON.stringify(defIn)}`);
     }
