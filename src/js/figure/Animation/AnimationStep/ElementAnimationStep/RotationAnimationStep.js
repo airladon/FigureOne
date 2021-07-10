@@ -182,6 +182,12 @@ export default class RotationAnimationStep extends ElementAnimationStep {
         throw new Error(`RotationAnimationStep delta type and element rotation type are different: ${type}, start: ${typeDelta}`);
       }
     }
+    if (options.velocity != null) {
+      [typeDelta, ...options.velocity] = parseRotation(options.velocity);
+      if (typeDelta !== type) {
+        throw new Error(`RotationAnimationStep velocity type and element rotation type are different: ${type}, start: ${typeDelta}`);
+      }
+    }
 
     // $FlowFixMe
     this.rotation = {};
@@ -239,49 +245,27 @@ export default class RotationAnimationStep extends ElementAnimationStep {
         deltaVal[4] = getDeltaAngle(startVal[4], targetVal[4], direction);
       }
       this.rotation.delta = deltaVal;
-      // let delta = target.map((t, k) => getDeltaAngle(start[k], t, direction));
-      // if (this.element != null) {
-      //   const i = this.element.transform.getComponentIndex('r');
-      //   const type = this.element.transform.def[i][0];
-      //   if (type === 'rd') {
-      //     delta = target.map((t, k) => t - start[k]);
-      //   } else if (type === 'ra') {
-      //     delta[0] = target[0] - start[0];
-      //     delta[1] = target[1] - start[1];
-      //     delta[2] = target[2] - start[2];
-      //   }
-      // }
-      // this.rotation.delta = delta;
-      // this.rotation.delta = this.rotation.target - this.rotation.start;
     } else if (delta != null) {
       const deltaVal = delta;
       const startVal = start;
       this.rotation.target = startVal.map((s, i) => s + deltaVal[i]);
       // this.rotation.target = start.map((s, k) => s + this.rotation.delta[k]);
-    } else {
+    } else if (this.duration != null) {
       this.duration = 0;
     }
 
     ({ target, delta } = this.rotation);
 
     // If Velocity is defined, then use it to calculate duration
-    if (velocity != null && start != null && target != null) {
-      // const velocityToUse = getScale(velocity);
-      let v;
-      if (typeof velocity === 'number') {
-        v = start.map(() => velocity);
-      } else {
-        v = velocity;
-      }
+    if (
+      this.duration != null
+      && velocity != null
+      && start != null
+      && target != null
+    ) {
+      const v = velocity;
       const durations = start.map((s, k) => (target[k] - s) / v[k]);
-      this.duration = Math.max(durations);
-      // const velocityToUse = start.map(() => velocity);
-      // this.duration = getMaxTimeFromVelocity(
-      //   new Transform().rotate(start),
-      //   new Transform().rotate(target),
-      //   new Transform().rotate(velocityToUse),
-      //   this.rotation.direction,
-      // );
+      this.duration = Math.max(...durations);
     }
     if (this.rotation.maxDuration != null) {
       if (this.duration > this.rotation.maxDuration) {
@@ -291,28 +275,17 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     if (startTime === 'now' || startTime === 'prevFrame') {
       this.setFrame(0);
     }
-    // // If Velocity is defined, then use it to calculate duration
-    // const { velocity } = this.rotation;
-    // if (velocity != null) {
-    //   this.duration = getMaxTimeFromVelocity(
-    //     new Transform().rotate(this.rotation.start),
-    //     new Transform().rotate(this.rotation.target),
-    //     new Transform().rotate(velocity),
-    //     this.rotation.direction,
-    //   );
-    // }
-
-    // if (this.rotation.maxDuration != null) {
-    //   if (this.duration > this.rotation.maxDuration) {
-    //     this.duration = this.rotation.maxDuration;
-    //   }
-    // }
-    // if (startTime === 'now' || startTime === 'prevFrame') {
-    //   this.setFrame(0);
-    // }
   }
 
   setFrame(deltaTime: number) {
+    if (this.duration == null) {
+      const { start } = this.rotation;
+      const v = start.map((s, i) => s + deltaTime * this.rotation.velocity[i]);
+      if (this.element != null) {
+        this.element.setRotation([this.rotation.type, ...v]);
+      }
+      return;
+    }
     const percentTime = deltaTime / (this.duration + 0.000001);
     const percentComplete = this.getPercentComplete(percentTime);
     const p = percentComplete;

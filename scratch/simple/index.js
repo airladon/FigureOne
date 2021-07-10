@@ -154,7 +154,9 @@ const a = figure.add({
   // transform: ['rb', { i: [1, 0, 0], j: [0, 1, 0] }],
   // transform: ['rd', 1, 0, 0],
   // transform: ['dir', [1, 0, 0]],
-  transform: ['ra', 0, 1, 0, 0],
+  // transform: ['ra', 0, 1, 0, 0],
+  transform: ['xyz', 0, 0, 0],
+  // transform: ['r', 0],
   copy: [
     // { along: 'x', num: 2, step: 0.4 },
     { to: Fig.tools.g2.polygon({ radius: 0.3, sides: 5, center: [0.5, 0, 0] }) },
@@ -188,19 +190,22 @@ a.animations.new()
   // .rotation({ target: ['rd', -1, 0.1, 0], duration: 2 })
   // .rotation({ target: ['rb', { i: [0, 1, 0], j: [-1, 0, 0] }], duration: 5, progression: 'easein' })
   // .rotation({ target: ['rb', { i: [-1, 0, 0], j: [0, -1, 0] }], duration: 5, progression: 'easeout' })
-  .custom({
-    callback: (t) => {
-      const r = a.getRotation();
-      r[0].x += 0.02;
-      r[0].z += 0.01;
-      r[1] += 0.02;
-      a.setRotation(['ra', ...r]);
-      if (t > 1) {
-        return true;
-      }
-    },
-    duration: null,
-  })
+  // .rotation({ velocity: 0.1, duration: null })
+  // .rotation({ velocity: ['ra', 0.2, 0, 0.1, 0.2], duration: null })
+  .rotation({ velocity: ['xyz', 0.1, 0.2, 0.05], target: ['xyz', 1, 1, 1], duration: 2 })
+  // .custom({
+  //   callback: (t) => {
+  //     const r = a.getRotation();
+  //     r[0].x += 0.02;
+  //     r[0].z += 0.01;
+  //     r[1] += 0.02;
+  //     a.setRotation(['ra', ...r]);
+  //     if (t > 1) {
+  //       return true;
+  //     }
+  //   },
+  //   duration: null,
+  // })
   .start();
 
 
