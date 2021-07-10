@@ -3292,7 +3292,8 @@ class FigureElement {
     if (r != null) {
       rotation = r;
     }
-    if (normalize !== '' && r != null) {
+    // console.log(rotation)
+    if (normalize !== '' && r != null && typeof r === 'number') {
       rotation = clipAngle(r, normalize);
     }
     return rotation;

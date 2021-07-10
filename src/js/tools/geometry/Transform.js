@@ -243,7 +243,7 @@ function parseRotation(
     return ['rd', ...getPoint(r1).toArray()];
   } else if ((type === 'axis' || type === 'ra') && typeof r2 === 'number') {
     return ['ra', ...getPoint(r1).toArray(), r2];
-  } else if (type === 'basis' || type === 'rb') {
+  } else if (type === 'rbasis' || type === 'rb') {
     return ['rb', ...(parseBasisDefinition(['rb', r1], true).slice(1))];
   }
   throw new Error(`Could not parse rotation '${typeOr2DOrDef}', '${r1}', '${r2}', '${r3}', '${r4}'`);

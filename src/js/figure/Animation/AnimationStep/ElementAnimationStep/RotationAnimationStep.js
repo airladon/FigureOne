@@ -169,21 +169,18 @@ export default class RotationAnimationStep extends ElementAnimationStep {
       if (typeStart !== type) {
         throw new Error(`RotationAnimationStep start type and element rotation type are different: ${type}, start: ${typeStart}`);
       }
-      console.log(options.start.slice())
     }
     if (options.target != null) {
       [typeTarget, ...options.target] = parseRotation(options.target);
       if (typeTarget !== type) {
         throw new Error(`RotationAnimationStep target type and element rotation type are different: ${type}, start: ${typeTarget}`);
       }
-      console.log(options.target.slice())
     }
     if (options.delta != null) {
       [typeDelta, ...options.delta] = parseRotation(options.delta);
       if (typeDelta !== type) {
         throw new Error(`RotationAnimationStep delta type and element rotation type are different: ${type}, start: ${typeDelta}`);
       }
-      console.log(options.delta.slice())
     }
 
     // $FlowFixMe
@@ -233,10 +230,10 @@ export default class RotationAnimationStep extends ElementAnimationStep {
         deltaVal[0] = getDeltaAngle(startVal[0], targetVal[0], direction);
       } else if (type === 'rs') {
         deltaVal[0] = getDeltaAngle(startVal[0], targetVal[0], direction);
-        deltaVal[1] = getDeltaAngle(startVal[1], targetVal[2], direction);
+        deltaVal[1] = getDeltaAngle(startVal[1], targetVal[1], direction);
       } else if (type === 'rc') {
         deltaVal[0] = getDeltaAngle(startVal[0], targetVal[0], direction);
-        deltaVal[1] = getDeltaAngle(startVal[1], targetVal[2], direction);
+        deltaVal[1] = getDeltaAngle(startVal[1], targetVal[1], direction);
         deltaVal[2] = getDeltaAngle(startVal[2], targetVal[2], direction);
       } else if (type === 'ra') {
         deltaVal[4] = getDeltaAngle(startVal[4], targetVal[4], direction);
@@ -294,7 +291,6 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     if (startTime === 'now' || startTime === 'prevFrame') {
       this.setFrame(0);
     }
-    console.log(this.rotation)
     // // If Velocity is defined, then use it to calculate duration
     // const { velocity } = this.rotation;
     // if (velocity != null) {
