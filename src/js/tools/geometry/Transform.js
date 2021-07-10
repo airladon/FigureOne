@@ -198,6 +198,11 @@ function parseRotation(
   r2: number | null = null,
   r3: number | null = null,
   r4: number | null = null,
+  r5: number | null = null,
+  r6: number | null = null,
+  r7: number | null = null,
+  r8: number | null = null,
+  r9: number | null = null,
 ) {
   if (typeof typeOr2DOrDef === 'number') {
     return ['r', typeOr2DOrDef];
@@ -223,6 +228,12 @@ function parseRotation(
         }
         if (typeof r4 === 'number' && (type === 'axis' || type === 'ra')) {
           return ['ra', r1, r2, r3, r4];
+        }
+        if (
+          (type === 'rb' || type === 'rbasis' || type === 'basis' || type === 'b')
+          && typeof r9 === 'number'
+        ) {
+          return [type, r1, r2, r3, r4, r5, r6, r7, r8, r9];
         }
       }
     }
@@ -754,11 +765,11 @@ class Transform {
     return types[this.def[i][0]];
   }
 
-  rArray(rotationIndex: number = 0) {
+  rDef(rotationIndex: number = 0) {
     const i = this.getComponentIndex('r', rotationIndex);
     const r = this.def[i];
     // const [type] = r;
-    return r.slice(1);
+    return r;
     // if (type === 'r') {
     //   return [r[1]];
     // }
@@ -1410,5 +1421,6 @@ export {
   isParsableTransform,
   transformValueToArray,
   getMatrix,
+  parseRotation,
 };
 

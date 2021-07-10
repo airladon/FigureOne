@@ -1,7 +1,8 @@
 // @flow
 import {
-  getDeltaAngle, clipAngle, getPoint,
+  getDeltaAngle, clipAngle, getTransform,
 } from '../../../../tools/g2';
+import { parseRotation } from '../../../../tools/geometry/Transform';
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
 } from '../../../../tools/tools';
@@ -17,21 +18,21 @@ type TypeRotation = number
                   | [TypeParsablePoint, number]
                   | [number, number, number, number];
 
-function parseRotation(r: TypeRotation) {
-  if (typeof r === 'number') {
-    return [r];
-  }
-  if (r.length === 4) {
-    return r;
-  }
-  if (r.length === 2) {
-    if (typeof r[0] === 'number') {
-      return r;
-    }
-    return [...getPoint(r[0]).toArray(), r[1]];
-  }
-  return getPoint(r).toArray();
-}
+// function parseRotation(r: TypeRotation) {
+//   if (typeof r === 'number') {
+//     return [r];
+//   }
+//   if (r.length === 4) {
+//     return r;
+//   }
+//   if (r.length === 2) {
+//     if (typeof r[0] === 'number') {
+//       return r;
+//     }
+//     return [...getPoint(r[0]).toArray(), r[1]];
+//   }
+//   return getPoint(r).toArray();
+// }
 
 /**
  * {@link RotationAnimationStep} step options object
@@ -132,6 +133,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     velocity: Array<number> | number;
     maxDuration: ?number;
     clipTo: '0to360' | '-180to180' | null;
+    type: 'r' | 'ra' | 'rd' | 'rc' | 'rs' | 'rb';
   };
 
   /**
@@ -155,14 +157,33 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     };
     const options = joinObjects({}, defaultTransformOptions, ...optionsIn);
 
+    let type = 'r';
+    if (this.element != null) {
+      [type] = this.element.transform.rDef();
+    }
+    let typeStart;
+    let typeTarget;
+    let typeDelta;
     if (options.start != null) {
-      options.start = parseRotation(options.start);
+      [typeStart, ...options.start] = parseRotation(options.start);
+      if (typeStart !== type) {
+        throw new Error(`RotationAnimationStep start type and element rotation type are different: ${type}, start: ${typeStart}`);
+      }
+      console.log(options.start.slice())
     }
     if (options.target != null) {
-      options.target = parseRotation(options.target);
+      [typeTarget, ...options.target] = parseRotation(options.target);
+      if (typeTarget !== type) {
+        throw new Error(`RotationAnimationStep target type and element rotation type are different: ${type}, start: ${typeTarget}`);
+      }
+      console.log(options.target.slice())
     }
     if (options.delta != null) {
-      options.delta = parseRotation(options.delta);
+      [typeDelta, ...options.delta] = parseRotation(options.delta);
+      if (typeDelta !== type) {
+        throw new Error(`RotationAnimationStep delta type and element rotation type are different: ${type}, start: ${typeDelta}`);
+      }
+      console.log(options.delta.slice())
     }
 
     // $FlowFixMe
@@ -171,6 +192,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
       'start', 'delta', 'target', 'velocity', 'direction', 'clipTo',
       'maxDuration',
     ]);
+    this.rotation.type = type;
   }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
@@ -192,36 +214,58 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     super.start(startTime);
     if (this.rotation.start === null) {
       if (this.element != null) {
-        this.rotation.start = this.element.transform.rArray();
+        this.rotation.start = this.element.transform.rDef().slice(1);
       } else {
         this.duration = 0;
         return;
       }
     }
     const {
-      start, target, direction, velocity,
+      start, direction, velocity, type,
     } = this.rotation;
+    let { target, delta } = this.rotation;
     // if delta is null, then calculate it from start and target
-    if (this.rotation.delta == null && this.rotation.target != null) {
-      let delta = target.map((t, k) => getDeltaAngle(start[k], t, direction));
-      if (this.element != null) {
-        const i = this.element.transform.getComponentIndex('r');
-        const type = this.element.transform.def[i][0];
-        if (type === 'rd') {
-          delta = target.map((t, k) => t - start[k]);
-        } else if (type === 'ra') {
-          delta[0] = target[0] - start[0];
-          delta[1] = target[1] - start[1];
-          delta[2] = target[2] - start[2];
-        }
+    if (delta == null && target != null) {
+      const targetVal = target;
+      const startVal = start;
+      const deltaVal = targetVal.map((t, i) => t - startVal[i]);
+      if (type === 'r') {
+        deltaVal[0] = getDeltaAngle(startVal[0], targetVal[0], direction);
+      } else if (type === 'rs') {
+        deltaVal[0] = getDeltaAngle(startVal[0], targetVal[0], direction);
+        deltaVal[1] = getDeltaAngle(startVal[1], targetVal[2], direction);
+      } else if (type === 'rc') {
+        deltaVal[0] = getDeltaAngle(startVal[0], targetVal[0], direction);
+        deltaVal[1] = getDeltaAngle(startVal[1], targetVal[2], direction);
+        deltaVal[2] = getDeltaAngle(startVal[2], targetVal[2], direction);
+      } else if (type === 'ra') {
+        deltaVal[4] = getDeltaAngle(startVal[4], targetVal[4], direction);
       }
-      this.rotation.delta = delta;
+      this.rotation.delta = deltaVal;
+      // let delta = target.map((t, k) => getDeltaAngle(start[k], t, direction));
+      // if (this.element != null) {
+      //   const i = this.element.transform.getComponentIndex('r');
+      //   const type = this.element.transform.def[i][0];
+      //   if (type === 'rd') {
+      //     delta = target.map((t, k) => t - start[k]);
+      //   } else if (type === 'ra') {
+      //     delta[0] = target[0] - start[0];
+      //     delta[1] = target[1] - start[1];
+      //     delta[2] = target[2] - start[2];
+      //   }
+      // }
+      // this.rotation.delta = delta;
       // this.rotation.delta = this.rotation.target - this.rotation.start;
-    } else if (this.rotation.delta != null) {
-      this.rotation.target = start.map((s, k) => s + this.rotation.delta[k]);
+    } else if (delta != null) {
+      const deltaVal = delta;
+      const startVal = start;
+      this.rotation.target = startVal.map((s, i) => s + deltaVal[i]);
+      // this.rotation.target = start.map((s, k) => s + this.rotation.delta[k]);
     } else {
       this.duration = 0;
     }
+
+    ({ target, delta } = this.rotation);
 
     // If Velocity is defined, then use it to calculate duration
     if (velocity != null && start != null && target != null) {
@@ -250,7 +294,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     if (startTime === 'now' || startTime === 'prevFrame') {
       this.setFrame(0);
     }
-
+    console.log(this.rotation)
     // // If Velocity is defined, then use it to calculate duration
     // const { velocity } = this.rotation;
     // if (velocity != null) {
@@ -276,25 +320,33 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     const percentTime = deltaTime / (this.duration + 0.000001);
     const percentComplete = this.getPercentComplete(percentTime);
     const p = percentComplete;
-    const { start, delta } = this.rotation;
-    const nextR = start.map((s, k) => clipAngle(s + delta[k] * p, this.rotation.clipTo));
+    const { start, delta, type } = this.rotation;
+    const startT = getTransform([type, ...start]);
+    const deltaT = getTransform([type, ...delta]);
+    const nextR = startT.toDelta(deltaT, p, 'linear');
+    // const nextR = start.map((s, k) => clipAngle(s + delta[k] * p, this.rotation.clipTo));
     const { element } = this;
     if (element != null) {
-      const i = this.element.transform.getComponentIndex('r');
-      const type = this.element.transform.def[i][0];
-      if (type === 'rd' || type === 'ra') {
-        nextR[0] = start[0] + delta[0] * p;
-        nextR[1] = start[1] + delta[1] * p;
-        nextR[2] = start[2] + delta[2] * p;
-      }
-      element.setRotation(nextR);
+      element.setRotation(nextR.rDef());
     }
+    //   const i = this.element.transform.getComponentIndex('r');
+    //   const type = this.element.transform.def[i][0];
+    //   if (type === 'rd' || type === 'ra') {
+    //     nextR[0] = start[0] + delta[0] * p;
+    //     nextR[1] = start[1] + delta[1] * p;
+    //     nextR[2] = start[2] + delta[2] * p;
+    //   }
+    //   element.setRotation(nextR);
+    // }
+    // element.setRotation(nextR.rDef());
   }
 
+  // TODO DO THIS BELOW
   setToEnd() {
     const { element } = this;
     if (element != null) {
-      element.transform.updateRotationValues(0, this.rotation.target);
+      // element.transform.updateRotationValues(0, this.rotation.target);
+      element.transform.updateRotation([this.rotation.type, ...this.rotation.target]);
       element.transform.clipRotation(this.rotation.clipTo);
       this.fnExec(element.setTransformCallback, element.transform);
     }
