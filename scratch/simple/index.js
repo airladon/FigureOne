@@ -151,8 +151,10 @@ const a = figure.add({
   points,
   normals,
   color: [1, 0, 0, 1],
-  transform: ['rb', { i: [1, 0, 0], j: [0, 1, 0] }],
+  // transform: ['rb', { i: [1, 0, 0], j: [0, 1, 0] }],
+  // transform: ['rd', 1, 0, 0],
   // transform: ['dir', [1, 0, 0]],
+  transform: ['ra', 0, 1, 0, 0],
   copy: [
     // { along: 'x', num: 2, step: 0.4 },
     { to: Fig.tools.g2.polygon({ radius: 0.3, sides: 5, center: [0.5, 0, 0] }) },
@@ -183,6 +185,36 @@ a.animations.new()
   // .transform({ target: ['rb', { i: [1, 0, 0], k: [0, 1, 0] }], duration: 2 })
   // .transform({ target: ['rb', { i: [0, 0, -1], k: [0, 1, 0] }], duration: 2 })
   // .transform({ target: ['rb', { i: [0, 0, -1], k: [1, 0, 0] }], duration: 2 })
-  .rotation({ target: ['rb', { i: [1, 0, 0], k: [0, 1, 0] }], duration: 5 })
-  .rotation({ target: ['rb', { i: [0, -1, 0], k: [1, 0, 0] }], duration: 5 })
+  // .rotation({ target: ['rd', -1, 0.1, 0], duration: 2 })
+  // .rotation({ target: ['rb', { i: [0, 1, 0], j: [-1, 0, 0] }], duration: 5, progression: 'easein' })
+  // .rotation({ target: ['rb', { i: [-1, 0, 0], j: [0, -1, 0] }], duration: 5, progression: 'easeout' })
+  .custom({
+    callback: (t) => {
+      const r = a.getRotation();
+      r[0].x += 0.02;
+      r[0].z += 0.01;
+      r[1] += 0.02;
+      a.setRotation(['ra', ...r]);
+      if (t > 1) {
+        return true;
+      }
+    },
+    duration: null,
+  })
   .start();
+
+
+// const p = figure.add({
+//   make: 'polygon', radius: 0.2, sides: 100,
+// });
+
+// p.animations.new()
+//   .custom({
+//     callback: (t) => {
+//       const x = 0.5 * Math.cos(t * 2 * Math.PI * 0.1);
+//       const y = 0.5 * Math.sin(t * 2 * Math.PI * 0.1);
+//       p.setPosition(x, y);
+//     },
+//     duration: null,
+//   })
+//   .start();

@@ -1,6 +1,6 @@
 // @flow
 import {
-  getDeltaAngle, clipAngle, getTransform,
+  getDeltaAngle, getTransform,
 } from '../../../../tools/g2';
 import { parseRotation } from '../../../../tools/geometry/Transform';
 import {
@@ -45,7 +45,7 @@ type TypeRotation = number
  * @property {TypeRotation} [delta] delta rotation that can be used instead of `target`
  * @property {null | number} [velocity] velocity of rotation overrides
  * `duration` - `null` to use `duration` (`null`)
- * @property {0 | 1 | -1 | 2} [direction] where `0` is quickest direction, `1`
+ * @property {0 | 1 | -1 | 2} [direction] For 2D only - where `0` is quickest direction, `1`
  * is positive of CCW direction, `-1` is negative of CW direction and `2` is
  * whichever direction doesn't pass through angle 0 (`0`).
  * @property {'0to360' | '-180to180' | null} [clipTo] (`null`)

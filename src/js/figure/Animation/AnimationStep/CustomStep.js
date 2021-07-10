@@ -34,14 +34,21 @@ export type OBJ_CustomAnimationStep = {
  * Custom animation steps are useful for orchestrating complex animations, or
  * performing non-linear animations.
  *
- * This step will execute a custom callback function on each animation frame
- * for the duration of the animation. The callback function will be passed the
- * percentage progress of the animation.
+ * This step will execute a custom callback function on each animation frame.
+ * Custom animations can either have finite `duration` or infinite
+ * (`duration` = `null`). If finite, the callback function will be passed
+ * percentage progress through the duration. If infinite, the callback function
+ * will be passed the delta time from the start of the animation.
  *
- * The percentage progress can either be linear with time, or non-linear.
- * Built-in non-linear progressions are `'easeinout'`, `'easein`' and
- * `'easeout'` which will slow progress at the start or end of the animation.
- * A function to create a custom non-linear progressor can also be used.
+ * The animation can be stopped at any time by returning `true` from the
+ * callback funciton/
+ *
+ * For finite durations, the percentage progress can either be linear with
+ * time, or non-linear.
+ *  Built-in non-linear progressions are `'easeinout'`, `'easein`' and
+ * `'easeout'` which will slow progress at the start and/or end of the
+ * animation. A function to create a custom non-linear progressor can also be
+ * used.
  *
  * @extends AnimationStep
  *
@@ -61,6 +68,19 @@ export type OBJ_CustomAnimationStep = {
  *
  * p.animations.new()
  *   .custom({ callback: sine, duration: 5 })
+ *   .start();
+ *
+ * @example
+ * // Animate a object in a circle indefinitely at a frequency of 0.1Hz
+ * p.animations.new()
+ *   .custom({
+ *     callback: (t) => {
+ *       const x = 0.5 * Math.cos(2 * Math.PI * 0.1 * t);
+ *       const y = 0.5 * Math.sin(2 * Math.PI * 0.1 * t);
+ *       p.setPosition(x, y);
+ *     },
+ *     duration: null,
+ *   })
  *   .start();
  */
 export class CustomAnimationStep extends AnimationStep {
