@@ -89,6 +89,7 @@ export class CustomAnimationStep extends AnimationStep {
   startPercent: ?number;
   progression: string | ((number, ?boolean) => number);
   customProperties: Object;
+  isInfinite: boolean;
 
   /**
    * @hideconstructor
@@ -123,6 +124,7 @@ export class CustomAnimationStep extends AnimationStep {
     this.startTimeOffset = this.getPercentComplete(options.startPercent, true) * options.duration;
     this.duration = options.duration;
     this.customProperties = options.customProperties;
+    this.isInfinite = this.duration == null ? true : false;
   }
 
   // fnExec(idOrFn: string | Function | null, ...args: any) {
@@ -217,7 +219,9 @@ export class CustomAnimationStep extends AnimationStep {
   }
 
   setToEnd() {
-    this.fnExec(this.callback, 1, this.customProperties);
+    if (!this.isInfinite) {
+      this.fnExec(this.callback, 1, this.customProperties);
+    }
   }
 
   _dup() {
