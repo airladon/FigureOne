@@ -52,22 +52,22 @@ describe('Rotation Animation Step', () => {
     elem1.animations.nextFrame(1.1);
     expect(round(elem1.getRotation())).toBe(1);
   });
-  test('Rotate counter clock wise', () => {
-    elem1.animations.new()
-      .rotation({
-        start: 1, target: 0, direction: 1, duration: 1,
-      })
-      .start();
+  // test('Rotate counter clock wise', () => {
+  //   elem1.animations.new()
+  //     .rotation({
+  //       start: 1, target: 0, direction: 1, duration: 1,
+  //     })
+  //     .start();
 
-    elem1.animations.nextFrame(0);
-    expect(round(elem1.getRotation())).toBe(1);
+  //   elem1.animations.nextFrame(0);
+  //   expect(round(elem1.getRotation())).toBe(1);
 
-    elem1.animations.nextFrame(0.5);
-    expect(round(elem1.getRotation(), 2)).toBe(3.64);
+  //   elem1.animations.nextFrame(0.5);
+  //   expect(round(elem1.getRotation(), 2)).toBe(3.64);
 
-    elem1.animations.nextFrame(1.0);
-    expect(round(elem1.getRotation(), 2)).toBe(0);
-  });
+  //   elem1.animations.nextFrame(1.0);
+  //   expect(round(elem1.getRotation(), 2)).toBe(0);
+  // });
   describe('Rotation Types', () => {
     describe('2D', () => {
       test('r', () => {
@@ -101,32 +101,6 @@ describe('Rotation Animation Step', () => {
         expect(round(elem1.getRotation())).toBe(0);
         elem1.animations.nextFrame(0.5);
         expect(round(elem1.getRotation(), 2)).toBe(0.5);
-      });
-    });
-    describe('spherical', () => {
-      test('rs', () => {
-        elem1.transform.updateRotation(['rs', 0, 0]);
-        elem1.animations.new().rotation({ target: ['rs', 1, 2], duration: 1 }).start();
-        elem1.animations.nextFrame(0);
-        expect(round(elem1.getRotation())).toEqual([0, 0]);
-        elem1.animations.nextFrame(0.5);
-        expect(round(elem1.getRotation(), 2)).toEqual([0.5, 1]);
-      });
-      test('sph', () => {
-        elem1.transform.updateRotation(['sph', 0, 0]);
-        elem1.animations.new().rotation({ target: ['sph', 1, 2], duration: 1 }).start();
-        elem1.animations.nextFrame(0);
-        expect(round(elem1.getRotation())).toEqual([0, 0]);
-        elem1.animations.nextFrame(0.5);
-        expect(round(elem1.getRotation(), 2)).toEqual([0.5, 1]);
-      });
-      test('mix', () => {
-        elem1.transform.updateRotation(['rs', 0, 0]);
-        elem1.animations.new().rotation({ target: ['sph', 1, 2], duration: 1 }).start();
-        elem1.animations.nextFrame(0);
-        expect(round(elem1.getRotation())).toEqual([0, 0]);
-        elem1.animations.nextFrame(0.5);
-        expect(round(elem1.getRotation(), 2)).toEqual([0.5, 1]);
       });
     });
     describe('cartesian', () => {
@@ -289,60 +263,261 @@ describe('Rotation Animation Step', () => {
       });
     });
   });
-  // test('Rotate clip to 0to360', () => {
-  //   elem1.animations.new()
-  //     .rotation({
-  //       start: -1, target: 0, clipTo: '0to360', duration: 1,
-  //     })
-  //     .start();
-  //   elem1.animations.nextFrame(0);
-  //   expect(round(elem1.getRotation(), 2)).toBe(6.28 - 1);
-  //   elem1.animations.nextFrame(0.5);
-  //   expect(round(elem1.getRotation(), 2)).toBe(6.28 - 0.5);
-  //   elem1.animations.nextFrame(1.0);
-  //   expect(round(elem1.getRotation(), 2)).toBe(0);
-  //   elem1.animations.nextFrame(1.1);
-  //   expect(round(elem1.getRotation(), 2)).toBe(0);
-  // });
-  // test('Rotate clip to -180to180', () => {
-  //   elem1.animations.new()
-  //     .rotation({
-  //       start: 0, target: 6.28, clipTo: '-180to180', duration: 1, direction: 1, progression: 'linear',
-  //     })
-  //     .start();
-  //   elem1.animations.nextFrame(0);
-  //   expect(round(elem1.getRotation(), 2)).toBe(0);
-  //   elem1.animations.nextFrame(0.5);
-  //   expect(round(elem1.getRotation(), 2)).toBe(3.14);
-  //   elem1.animations.nextFrame(0.75);
-  //   expect(round(elem1.getRotation(), 2)).toBe(-3.14 / 2);
-  //   elem1.animations.nextFrame(1.1);
-  //   expect(round(elem1.getRotation(), 2)).toBe(0);
-  // });
-  test('Rotate with velocity', () => {
-    elem1.animations.new()
-      .rotation({
-        start: 0, target: 1, velocity: 1, direction: 1, progression: 'linear',
-      })
-      .start();
-    elem1.animations.nextFrame(0);
-    expect(round(elem1.getRotation(), 2)).toBe(0);
-    elem1.animations.nextFrame(0.5);
-    expect(round(elem1.getRotation(), 2)).toBe(0.5);
-    elem1.animations.nextFrame(1);
-    expect(round(elem1.getRotation(), 2)).toBe(1);
+  describe('Rotations', () => {
+    let testTarget;
+    beforeEach(() => {
+      testTarget = (start, target, startExpect, halfExpect, targetExpect) => {
+        elem1.transform.updateRotation(start);
+        elem1.animations.new().rotation({
+          target,
+          duration: 1,
+        }).start();
+        elem1.animations.nextFrame(0);
+        expect(round(elem1.transform.rDef(), 3)).toEqual(round(startExpect, 3));
+        elem1.animations.nextFrame(0.5);
+        expect(round(elem1.transform.rDef(), 3)).toEqual(round(halfExpect, 3));
+        elem1.animations.nextFrame(1);
+        expect(round(elem1.transform.rDef(), 3)).toEqual(round(targetExpect, 3));
+      };
+    });
+    describe('2D', () => {
+      test('positive', () => {
+        testTarget(
+          ['r', 0],   // start
+          ['r', 1],   // target
+          ['r', 0],   // test at start
+          ['r', 0.5], // test half way
+          ['r', 1],   // test at target
+        );
+      });
+      test('negative', () => {
+        testTarget(
+          ['r', 1],   // start
+          ['r', 0],   // target
+          ['r', 1],   // test at start
+          ['r', 0.5], // test half way
+          ['r', 0],   // test at target
+        );
+      });
+      test('>2π', () => {
+        testTarget(
+          ['r', 0],
+          ['r', 3 * Math.PI],
+          ['r', 0],
+          ['r', 1.5 * Math.PI],
+          ['r', 3 * Math.PI],
+        );
+      });
+      test('<-2π', () => {
+        testTarget(
+          ['r', 0],
+          ['r', -3 * Math.PI],
+          ['r', 0],
+          ['r', -1.5 * Math.PI],
+          ['r', -3 * Math.PI],
+        );
+      });
+    });
+    describe('axis angle', () => {
+      test('positive', () => {
+        testTarget(
+          ['ra', 1, 0, 0, 0],   // start
+          ['ra', 1, 0, 0, 1],   // target
+          ['ra', 1, 0, 0, 0],   // test at start
+          ['ra', 1, 0, 0, 0.5], // test half way
+          ['ra', 1, 0, 0, 1],   // test at target
+        );
+      });
+      test('negative', () => {
+        testTarget(
+          ['ra', 1, 0, 0, 1],
+          ['ra', 1, 0, 0, 0],
+          ['ra', 1, 0, 0, 1],
+          ['ra', 1, 0, 0, 0.5],
+          ['ra', 1, 0, 0, 0],
+        );
+      });
+      test('>2π', () => {
+        testTarget(
+          ['ra', 1, 0, 0, 0],
+          ['ra', 1, 0, 0, Math.PI * 3],
+          ['ra', 1, 0, 0, 0],
+          ['ra', 1, 0, 0, Math.PI * 1.5],
+          ['ra', 1, 0, 0, Math.PI * 3],
+        );
+      });
+      test('<-2π', () => {
+        testTarget(
+          ['ra', 1, 0, 0, 0],
+          ['ra', 1, 0, 0, -Math.PI * 3],
+          ['ra', 1, 0, 0, 0],
+          ['ra', 1, 0, 0, -Math.PI * 1.5],
+          ['ra', 1, 0, 0, -Math.PI * 3],
+        );
+      });
+      test('Axis Moves', () => {
+        testTarget(
+          ['ra', 1, 0, 0, 0],
+          ['ra', 0, 1, 0, 1],
+          ['ra', 1, 0, 0, 0],
+          ['ra', 0.5, 0.5, 0, 0.5],
+          ['ra', 0, 1, 0, 1],
+        );
+      });
+    });
+    describe('xyz', () => {
+      test('x', () => {
+        testTarget(
+          ['rc', 0, 0, 0],   // start
+          ['rc', 1, 0, 0],   // target
+          ['rc', 0, 0, 0],   // test at start
+          ['rc', 0.5, 0, 0], // test half way
+          ['rc', 1, 0, 0],   // test at target
+        );
+      });
+    });
   });
-  test('Rotate with velocity, but no movement', () => {
-    elem1.animations.new()
-      .rotation({
-        start: 1, target: 1, velocity: 1, direction: 1, progression: 'linear',
-      })
-      .start();
-    expect(elem1.animations.state).toBe('idle');
-    expect(elem1.animations.animations[0].state).toBe('finished');
-    expect(round(elem1.getRotation(), 2)).toBe(1);
-    figure.draw(0);
-    expect(elem1.animations.state).toBe('idle');
-    expect(elem1.animations.animations).toHaveLength(0);
+  describe('Velocity', () => {
+    describe('Use Velocity to Define Duration', () => {
+      let testV;
+      beforeEach(() => {
+        testV = (start, target, velocity, startExpect, halfExpect, targetExpect) => {
+          elem1.transform.updateRotation(start);
+          elem1.animations.new().rotation({
+            target,
+            velocity,
+          }).start();
+          elem1.animations.nextFrame(0);
+          expect(round(elem1.transform.rDef(), 3)).toEqual(round(startExpect, 3));
+          elem1.animations.nextFrame(0.5);
+          expect(round(elem1.transform.rDef(), 3)).toEqual(round(halfExpect, 3));
+          elem1.animations.nextFrame(1);
+          expect(round(elem1.transform.rDef(), 3)).toEqual(round(targetExpect, 3));
+        };
+      });
+      test('2D', () => {
+        testV(
+          ['r', 0],
+          ['r', 2],
+          ['r', 2],
+          ['r', 0],
+          ['r', 1],
+          ['r', 2],
+        );
+      });
+      test('Axis/Angle', () => {
+        testV(
+          ['ra', 0, 1, 0, 0],
+          ['ra', 0, 1, 0, 2],
+          ['ra', 0, 0, 0, 2],
+          ['ra', 0, 1, 0, 0],
+          ['ra', 0, 1, 0, 1],
+          ['ra', 0, 1, 0, 2],
+        );
+      });
+      test('xyz', () => {
+        testV(
+          ['rc', 0, 0, 0],
+          ['rc', 1, 2, 3],
+          ['rc', 1, 2, 3],
+          ['rc', 0, 0, 0],
+          ['rc', 0.5, 1, 1.5],
+          ['rc', 1, 2, 3],
+        );
+      });
+    });
+    describe('Use Velocity to Define Target', () => {
+      let testV;
+      beforeEach(() => {
+        testV = (start, duration, velocity, startExpect, halfExpect, targetExpect) => {
+          elem1.transform.updateRotation(start);
+          elem1.animations.new().rotation({
+            duration,
+            velocity,
+          }).start();
+          elem1.animations.nextFrame(0);
+          expect(round(elem1.transform.rDef(), 3)).toEqual(round(startExpect, 3));
+          elem1.animations.nextFrame(0.5);
+          expect(round(elem1.transform.rDef(), 3)).toEqual(round(halfExpect, 3));
+          elem1.animations.nextFrame(1);
+          expect(round(elem1.transform.rDef(), 3)).toEqual(round(targetExpect, 3));
+        };
+      });
+      test('2D', () => {
+        testV(
+          ['r', 0],
+          1,
+          ['r', 2],
+          ['r', 0],
+          ['r', 1],
+          ['r', 2],
+        );
+      });
+      test('Axis/Angle', () => {
+        testV(
+          ['ra', 0, 1, 0, 0],
+          1,
+          ['ra', 0, 0, 0, 2],
+          ['ra', 0, 1, 0, 0],
+          ['ra', 0, 1, 0, 1],
+          ['ra', 0, 1, 0, 2],
+        );
+      });
+      test('xyz', () => {
+        testV(
+          ['rc', 0, 0, 0],
+          1,
+          ['rc', 1, 2, 3],
+          ['rc', 0, 0, 0],
+          ['rc', 0.5, 1, 1.5],
+          ['rc', 1, 2, 3],
+        );
+      });
+    });
+    describe('Use Velocity in infinite rotation', () => {
+      let testV;
+      beforeEach(() => {
+        testV = (start, velocity, startExpect, oneSExpect, tenSExpect) => {
+          elem1.transform.updateRotation(start);
+          elem1.animations.new().rotation({
+            duration: null,
+            velocity,
+          }).start();
+          elem1.animations.nextFrame(0);
+          expect(round(elem1.transform.rDef(), 3)).toEqual(round(startExpect, 3));
+          elem1.animations.nextFrame(1);
+          expect(round(elem1.transform.rDef(), 3)).toEqual(round(oneSExpect, 3));
+          elem1.animations.nextFrame(10);
+          expect(round(elem1.transform.rDef(), 3)).toEqual(round(tenSExpect, 3));
+        };
+      });
+      test('2D', () => {
+        testV(
+          ['r', 0],
+          ['r', 1],
+          ['r', 0],
+          ['r', 1],
+          ['r', 10],
+        );
+      });
+      test('Axis/Angle', () => {
+        testV(
+          ['ra', 0, 1, 0, 0],
+          ['ra', 0, 0, 0, 2],
+          ['ra', 0, 1, 0, 0],
+          ['ra', 0, 1, 0, 2],
+          ['ra', 0, 1, 0, 20],
+        );
+      });
+      test('xyz', () => {
+        testV(
+          ['rc', 0, 0, 0],
+          ['rc', 1, 2, 3],
+          ['rc', 0, 0, 0],
+          ['rc', 1, 2, 3],
+          ['rc', 10, 20, 30],
+        );
+      });
+    });
   });
 });

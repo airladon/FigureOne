@@ -1,6 +1,6 @@
 // @flow
 import {
-  getDeltaAngle, getTransform,
+  getTransform,
 } from '../../../../tools/g2';
 import { parseRotation } from '../../../../tools/geometry/Transform';
 import {
@@ -35,20 +35,67 @@ type TypeRotation = number
 // }
 
 /**
- * {@link RotationAnimationStep} step options object
+ * {@link RotationAnimationStep} step options object.
+ *
+ * The {@link RotationAnimationStep} animates the first rotation component
+ * of a {@link Transform}.
+ *
+ * To rotate from a `start` rotation to a `target` rotation use the
+ * `start`, `delta` and/or `target` properties.
+ *
+ * If `start` is not defined, the current rotation angle (when the animation
+ * is started) will be used as `start`.
+ *
+ * Either `target` or `delta` (from start) can be used to define the target.
+ *
+ * `start`, `delta` and `target` must all be the same rotation type as the
+ * element's transform rotation component. For example, if the element's
+ * transform is `['axis', 1, 0, 0, 0]`, then `start`, `delta` and `target`
+ * must all be angle/axis rotations.
+ *
+ * The animation can either move to the target with a `duration`, or the
+ * `duration` can be determined by a `velocity`. The `velocity` must be
+ * the same rotation type as `start`, `delta` and `target`.
+ *
+ * Rotation animation targets can also be created with `velocity`, `start` and
+ * `duration`. In this case, the rotation angles will grow with `velocity`. If
+ * `duration` is null, then rotation duration will continue indefinitely until
+ * the animation is cancelled.
+ *
+ * Animations are simply interpolating each value within a rotation definition
+ * independently (either between a `start` and `target` or from a `start` with
+ * `velocity`). Therefore, animating any values that belong to vectors
+ * (direction ('dir' or 'rd'), change of basis ('rbasis' or 'rb'), or the axis
+ * of axis/angle) may result in unexpected animations. For example, if animating
+ * a rotation direction from [1, 0, 0] to [-1, 0, 0] it might be expected that
+ * a π radians rotation would occur. Instead, it will look like no rotation
+ * will have started, then a π rotation will happen in a single frame, and then
+ * it will look stationary again. This is because only the x component of the
+ * direction vector will change each animation frame. As a rotation direciton
+ * that is [0.5, 0, 0] is the same as [1, 0, 0], then for half the animation it
+ * will look like nothing is changing. When the x component cross from the 0
+ * point, the element's rotation will instantly flip. Then for the second have
+ * of the rotation as the x component gets more negative it will once again
+ * look stationary.
+ *
+ * If wanting to animate a direction vector, use {@link directionToAxisAngle}
+ * or {@link vectorToVectorToAxisAngle} and then use a axis/angle rotation
+ * keeping the axis constant. If wanting to animate a change of basis rotation,
+ * then use a {@link CustomAnimationStep} to manage how to change the basis
+ * vectors over time.
  *
  * @extends OBJ_ElementAnimationStep
  *
- * @property {TypeRotation} [start] start rotation - current rotation used if
- * undefined
- * @property {TypeRotation} [target] target rotation - will overwrite `delta` rotation
- * @property {TypeRotation} [delta] delta rotation that can be used instead of `target`
- * @property {null | number} [velocity] velocity of rotation overrides
- * `duration` - `null` to use `duration` (`null`)
- * @property {0 | 1 | -1 | 2} [direction] For 2D only - where `0` is quickest direction, `1`
- * is positive of CCW direction, `-1` is negative of CW direction and `2` is
- * whichever direction doesn't pass through angle 0 (`0`).
- * @property {'0to360' | '-180to180' | null} [clipTo] (`null`)
+ * @property {TypeUserRotationDefinition} [start] start rotation - current
+ * rotation used if undefined
+ * @property {TypeUserRotationDefinition} [target] target rotation
+ * @property {TypeUserRotationDefinition} [delta] a delta rotation that can be
+ * used to define `target` if `target` is undefined
+ * @property {null | TypeUserRotationDefinition} [velocity] velocity of
+ * rotation can either define the `duration` of a rotation if `target` or
+ * `delta` is defined, or can define the `target` of a rotation if `duration`
+ * is defined. If `duration` is null, then velocity determines the change in
+ * rotation over time (`null`)
  * @property {number | null} [maxDuration] maximum duration to clip animation
  * to where `null` is unlimited (`null`)
  *
@@ -59,11 +106,24 @@ export type OBJ_RotationAnimationStep = {
   target?: TypeRotation;     // Either target or delta must be defined
   delta?: TypeRotation;      // delta overrides target if both are defined
   // 1 is CCW, -1 is CW, 0 is fastest, 2 is not through 0
-  direction: 0 | 1 | -1 | 2;
-  clipTo: '0to360' | '-180to180' | null;
+  // direction: 0 | 1 | -1 | 2;
+  // clipTo: '0to360' | '-180to180' | null;
   velocity?: ?number,
   maxDuration?: ?number;
 } & OBJ_ElementAnimationStep;
+
+/*
+ * @property {'0to360' | '-180to180' | null} [clipTo] (`null`)
+ * @property {0 | 1 | -1 | 2} [direction] For 2D rotation, `1` is CCW,
+ * `-1` is CW and `2` is whichever direction doesn't pass through 0 and `0` is
+ * the direction of shortest rotation. For 'xyz' rotation, direction `1` follows
+ * the right hand rule around the (x, y, z), `-1` is the left hand rule, `2`
+ * doesn't pass through 0 and `0` is the direction of shortest rotation.
+ * For 'axis' rotation,
+ * axis vectors. For 'sph' rotation,
+ * is positive of CCW direction, `-1` is negative of CW direction and `2` is
+ * whichever direction doesn't pass through angle 0 (`0`).
+ */
 
 // A transform animation unit manages a transform animation on an element.
 //
@@ -88,7 +148,6 @@ export type OBJ_RotationAnimationStep = {
  *
  * Use either `delta` or `target` to define it's end point
  *
- * `clipTo` will clip the element's rotation during animation
  *
  * @extends ElementAnimationStep
  * @param {OBJ_RotationAnimationStep} options
@@ -133,7 +192,9 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     velocity: Array<number> | number;
     maxDuration: ?number;
     clipTo: '0to360' | '-180to180' | null;
-    type: 'r' | 'ra' | 'rd' | 'rc' | 'rs' | 'rb';
+    type: 'r' | 'ra' | 'rd' | 'rc' | 'rb';
+    tempAxis: Point;
+    tempAngle: number;
   };
 
   /**
@@ -223,33 +284,34 @@ export default class RotationAnimationStep extends ElementAnimationStep {
         return;
       }
     }
+    // const direction = 1;
     const {
-      start, direction, velocity, type,
+      start, velocity, // type,
     } = this.rotation;
     let { target, delta } = this.rotation;
     // if delta is null, then calculate it from start and target
-    if (delta == null && target != null) {
+    if (target != null) {
       const targetVal = target;
       const startVal = start;
       const deltaVal = targetVal.map((t, i) => t - startVal[i]);
-      if (type === 'r') {
-        deltaVal[0] = getDeltaAngle(startVal[0], targetVal[0], direction);
-      } else if (type === 'rs') {
-        deltaVal[0] = getDeltaAngle(startVal[0], targetVal[0], direction);
-        deltaVal[1] = getDeltaAngle(startVal[1], targetVal[1], direction);
-      } else if (type === 'rc') {
-        deltaVal[0] = getDeltaAngle(startVal[0], targetVal[0], direction);
-        deltaVal[1] = getDeltaAngle(startVal[1], targetVal[1], direction);
-        deltaVal[2] = getDeltaAngle(startVal[2], targetVal[2], direction);
-      } else if (type === 'ra') {
-        deltaVal[4] = getDeltaAngle(startVal[4], targetVal[4], direction);
-      }
+      // if (type === 'r') {
+      //   deltaVal[0] = getDeltaAngle(startVal[0], targetVal[0], direction);
+      // } else if (type === 'rc') {
+      //   deltaVal[0] = getDeltaAngle(startVal[0], targetVal[0], direction);
+      //   deltaVal[1] = getDeltaAngle(startVal[1], targetVal[1], direction);
+      //   deltaVal[2] = getDeltaAngle(startVal[2], targetVal[2], direction);
+      // } else if (type === 'ra') {
+      //   deltaVal[4] = getDeltaAngle(startVal[4], targetVal[4], direction);
+      // }
       this.rotation.delta = deltaVal;
     } else if (delta != null) {
       const deltaVal = delta;
       const startVal = start;
       this.rotation.target = startVal.map((s, i) => s + deltaVal[i]);
       // this.rotation.target = start.map((s, k) => s + this.rotation.delta[k]);
+    } else if (velocity != null && this.duration != null) {
+      this.rotation.target = start.map((s, i) => s + velocity[i] * this.duration);
+      this.rotation.delta = velocity.map(v => v * this.duration);
     } else if (this.duration != null) {
       this.duration = 0;
     }
@@ -258,7 +320,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
 
     // If Velocity is defined, then use it to calculate duration
     if (
-      this.duration != null
+      this.duration === undefined
       && velocity != null
       && start != null
       && target != null
@@ -278,7 +340,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
   }
 
   setFrame(deltaTime: number) {
-    if (this.duration == null) {
+    if (this.duration == null || this.rotation.delta == null) {
       const { start } = this.rotation;
       const v = start.map((s, i) => s + deltaTime * this.rotation.velocity[i]);
       if (this.element != null) {
@@ -296,6 +358,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     // const nextR = start.map((s, k) => clipAngle(s + delta[k] * p, this.rotation.clipTo));
     const { element } = this;
     if (element != null) {
+      // console.log(nextR)
       element.setRotation(nextR.rDef());
     }
     //   const i = this.element.transform.getComponentIndex('r');
@@ -315,8 +378,10 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     const { element } = this;
     if (element != null) {
       // element.transform.updateRotationValues(0, this.rotation.target);
-      element.transform.updateRotation([this.rotation.type, ...this.rotation.target]);
-      element.transform.clipRotation(this.rotation.clipTo);
+      if (this.rotation.target != null) {
+        element.transform.updateRotation([this.rotation.type, ...this.rotation.target]);
+      }
+      // element.transform.clipRotation(this.rotation.clipTo);
       this.fnExec(element.setTransformCallback, element.transform);
     }
   }

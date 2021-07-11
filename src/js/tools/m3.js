@@ -218,7 +218,7 @@ function rotationMatrixDirection(
   // [1, 0, 0]. Therefore, if the x term accounts for 99.9% of the magnitude,
   // then make the rotation axis the z+ axis, and set the rotation to 0 if
   // vector.x is positive and π if vector.x is negative.
-  if (Math.abs(vector[0]) / length(vector) > 0.999) {
+  if (Math.abs(vector[0]) / length(vector) > 0.999999) {
     return rotationMatrixAxis([0, 0, 1], vector[0] > 0 ? 0 : Math.PI);
   }
   const axis = crossProduct([1, 0, 0], vector);
@@ -227,17 +227,68 @@ function rotationMatrixDirection(
   return rotationMatrixAxis(axis, angle);
 }
 
-function rotationMatrixSpherical(
-  theta: number,
-  phi: number,
+function directionToAxisAngle(
+  vector: [number, number, number],
+  axisIfCollinear: [number, number, number] = [0, 0, 1],
 ) {
-  const direction = [
-    Math.cos(phi) * Math.sin(theta),
-    Math.sin(phi) * Math.sin(theta),
-    Math.cos(theta),
-  ];
-  return rotationMatrixDirection(direction);
+  if (Math.abs(vector[0]) / length(vector) > 0.999999) {
+    return [axisIfCollinear, vector[0] > 0 ? 0 : Math.PI];
+  }
+  const axis = crossProduct([1, 0, 0], vector);
+  const d = dotProduct([1, 0, 0], vector);
+  const angle = Math.acos(d / length(vector));
+  return [axis, angle];
 }
+
+function isEqual(data1: Array<number>, data2: Array<number>, within: number = 0.000001) {
+  for (let i = 0; i < data1.length; i += 1) {
+    if (Math.abs(data1[i] - data2[i]) > within) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function vectorToVectorToAxisAngle(
+  fromVector: [number, number, number],
+  toVector: [number, number, number],
+  axisIfCollinear: [number, number, number] | null = null,
+) {
+  let axis = crossProduct(fromVector, toVector);
+  // Check if vectors are collinear
+  if (isEqual(axis, [0, 0, 0], 0.000001)) {
+    const normFrom = normalize(fromVector);
+    const normTo = normalize(toVector);
+    // Get a normal axis
+    if (axisIfCollinear != null) {
+      axis = axisIfCollinear;
+    } else {
+      axis = crossProduct(fromVector, [1, 0, 0]);
+      if (isEqual(axis, [0, 0, 0], 0.000001)) {
+        axis = crossProduct(fromVector, [0, 1, 0]);
+      }
+    }
+    if (isEqual(normFrom, normTo, 0.000001)) {
+      return [axis, 0];
+    }
+    return [axis, Math.PI];
+  }
+  const d = dotProduct(fromVector, toVector);
+  const angle = Math.acos(d / (length(fromVector) * length(toVector)));
+  return [axis, angle];
+}
+
+// function rotationMatrixSpherical(
+//   theta: number,
+//   phi: number,
+// ) {
+//   const direction = [
+//     Math.cos(phi) * Math.sin(theta),
+//     Math.sin(phi) * Math.sin(theta),
+//     Math.cos(theta),
+//   ];
+//   return rotationMatrixDirection(direction);
+// }
 
 
 function rotate(m: Type3DMatrix, rx: number, ry: number, rz: number): Type3DMatrix {
@@ -538,7 +589,7 @@ export {
   rotationMatrixDirection,
   rotationMatrixXYZ,
   rotationMatrixAxis,
-  rotationMatrixSpherical,
+  // rotationMatrixSpherical,
   rotationMatrixVectorToVector,
   rotationMatrixUnitAxis,
   inverse,
@@ -548,4 +599,6 @@ export {
   transformVector,
   transformVectorT,
   dup,
+  directionToAxisAngle,
+  vectorToVectorToAxisAngle,
 };

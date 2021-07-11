@@ -1,4 +1,4 @@
-import { Point } from './Point';
+import { Point, getPoint } from './Point';
 import { Transform, getTransform } from './Transform';
 import { round } from '../math';
 
@@ -61,12 +61,6 @@ describe('Transform', () => {
       const p0 = new Point(1, 0, 0);
       const p1 = p0.transformBy(t1.matrix());
       expect(p1.round()).toEqual(new Point(0, 1, 0));
-    });
-    test('Create spherical rotation', () => {
-      const t1 = new Transform().rotate('sph', 0, Math.PI / 2);
-      const p0 = new Point(1, 0, 0);
-      const p1 = p0.transformBy(t1.matrix());
-      expect(p1.round()).toEqual(new Point(0, 0, 1));
     });
   });
   describe('Create 3D', () => {
@@ -745,6 +739,67 @@ describe('Transform', () => {
         expect(() => t1.velocity(t0, deltaTime, zero, max)).toThrow();
       });
     });
+    describe('Rotation transforms', () => {
+      let check;
+      beforeEach(() => {
+        check = (r, p, q) => {
+          const t = getTransform(r);
+          const p1 = getPoint(p).transformBy(t.matrix()).round().toArray();
+          expect(p1).toEqual(getPoint(q).round().toArray());
+        };
+      });
+      describe('Axis Angle', () => {
+        test('[0, 1, 0] +π/2 around x = [0, 0, 1]', () => {
+          check(['ra', 1, 0, 0, Math.PI / 2], [0, 1, 0], [0, 0, 1]);
+        });
+        test('[0, 1, 0] -π/2 around x = [0, 0, -1]', () => {
+          check(['ra', 1, 0, 0, -Math.PI / 2], [0, 1, 0], [0, 0, -1]);
+        });
+        test('[0, 1, 0] π/2 around -x = [0, 0, -1]', () => {
+          check(['ra', -1, 0, 0, Math.PI / 2], [0, 1, 0], [0, 0, -1]);
+        });
+        test('[1, 0, 0] +3π around z = [-1, 0, 0]', () => {
+          check(['ra', 0, 0, 1, 3 * Math.PI], [1, 0, 0], [-1, 0, 0]);
+        });
+      });
+      describe('xyz', () => {
+        test('x +ve', () => {
+          check(['xyz', Math.PI / 2, 0, 0], [0, 1, 0], [0, 0, 1]);
+        });
+        test('x -ve', () => {
+          check(['xyz', -Math.PI / 2, 0, 0], [0, 1, 0], [0, 0, -1]);
+        });
+        test('y +ve', () => {
+          check(['xyz', 0, Math.PI / 2, 0], [1, 0, 0], [0, 0, -1]);
+        });
+        test('y -ve', () => {
+          check(['xyz', 0, -Math.PI / 2, 0], [1, 0, 0], [0, 0, 1]);
+        });
+        test('z +ve', () => {
+          check(['xyz', 0, 0, Math.PI / 2], [1, 0, 0], [0, 1, 0]);
+        });
+        test('z -ve', () => {
+          check(['xyz', 0, 0, -Math.PI / 2], [1, 0, 0], [0, -1, 0]);
+        });
+        test('xyz', () => {
+          check(['xyz', Math.PI / 2, Math.PI / 2, Math.PI / 2], [0, 1, 0], [0, 1, 0]);
+        });
+        test('xyz 2', () => {
+          check(['xyz', -Math.PI / 2, Math.PI / 2, Math.PI / 2], [0, 1, 0], [0, -1, 0]);
+        });
+      });
+      describe('dir', () => {
+        test('y', () => {
+          check(['dir', 0, 1, 0], [0, 1, 0], [-1, 0, 0]);
+          check(['dir', 0, 1, 0], [0, 0, 1], [0, 0, 1]);
+          check(['dir', 0, 1, 0], [1, 0, 0], [0, 1, 0]);
+        });
+        test('-x', () => {
+          check(['dir', -1, 0, 0], [1, 0, 0], [-1, 0, 0]);
+          check(['dir', -1, 0, 0], [0, 1, 0], [0, -1, 0]);
+        });
+      });
+    });
   });
   describe('Get Transform', () => {
     test('Array', () => {
@@ -901,16 +956,16 @@ describe('Transform', () => {
         expect(t8.def[0]).toEqual(t.def[0]);
         expect(t9.def[0]).toEqual(t.def[0]);
       });
-      test('spherical', () => {
-        const t = getTransform([['sph', 1, 2]]);
-        const t1 = getTransform([['rs', 1, 2]]);
-        const t2 = new Transform().rotate('rs', 1, 2);
-        const t3 = new Transform().rotate('sph', 1, 2);
-        expect(t.def[0]).toEqual(['rs', 1, 2]);
-        expect(t1.def[0]).toEqual(t.def[0]);
-        expect(t2.def[0]).toEqual(t.def[0]);
-        expect(t3.def[0]).toEqual(t.def[0]);
-      });
+      // test('spherical', () => {
+      //   const t = getTransform([['sph', 1, 2]]);
+      //   const t1 = getTransform([['rs', 1, 2]]);
+      //   const t2 = new Transform().rotate('rs', 1, 2);
+      //   const t3 = new Transform().rotate('sph', 1, 2);
+      //   expect(t.def[0]).toEqual(['rs', 1, 2]);
+      //   expect(t1.def[0]).toEqual(t.def[0]);
+      //   expect(t2.def[0]).toEqual(t.def[0]);
+      //   expect(t3.def[0]).toEqual(t.def[0]);
+      // });
       test('basis', () => {
         const t1 = getTransform(['rbasis', { x: [0, 0, 1], y: [0, 1, 0] }]);
         const t2 = getTransform(['rbasis', 0, 0, 1, 0, 1, 0, -1, 0, 0]);
