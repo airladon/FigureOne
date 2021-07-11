@@ -261,9 +261,6 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
         if (t[0] === 'r') {
           transformVelocity.def[i] = ['r', velocity.rotation];
         }
-        if (t[0] === 'rs') {
-          transformVelocity.def[i] = ['rs', velocity.rotation, velocity.rotation];
-        }
         if (t[0] === 'rc') {
           transformVelocity.def[i] = ['rc', velocity.rotation, velocity.rotation, velocity.rotation];
         }
@@ -272,6 +269,9 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
         }
         if (t[0] === 'ra') {
           transformVelocity.def[i] = ['ra', velocity.rotation, velocity.rotation, velocity.rotation, velocity.rotation];
+        }
+        if (t[0] === 'rb') {
+          transformVelocity.def[i] = ['ra', velocity.rotation, velocity.rotation, velocity.rotation, velocity.rotation, velocity.rotation, velocity.rotation];
         }
         transformVelocity.calcAndSetMatrix();
       }

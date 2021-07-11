@@ -319,9 +319,6 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
         if (type === 'r') {
           transformVelocity.def[i] = ['r', velocity.rotation];
         }
-        if (type === 'rs') {
-          transformVelocity.def[i] = ['rs', velocity.rotation, velocity.rotation];
-        }
         if (type === 'rc') {
           transformVelocity.def[i] = ['rc', velocity.rotation, velocity.rotation, velocity.rotation];
         }
@@ -330,6 +327,9 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
         }
         if (type === 'ra') {
           transformVelocity.def[i] = ['ra', velocity.rotation, velocity.rotation, velocity.rotation, velocity.rotation];
+        }
+        if (type === 'rb') {
+          transformVelocity.def[i] = ['rb', velocity.rotation, velocity.rotation, velocity.rotation, velocity.rotation, velocity.rotation, velocity.rotation];
         }
       }
       transformVelocity.calcAndSetMatrix();

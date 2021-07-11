@@ -822,6 +822,9 @@ export default class AnimationManager {
         this.notifications.publish('finished');
       }
       this.state = 'idle';
+      if (remaining === null) {
+        remaining = 0;
+      }
     }
     // $FlowFixMe
     if (FIGURE1DEBUG) { timer.stamp('finished'); }

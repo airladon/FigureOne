@@ -52,22 +52,6 @@ describe('Rotation Animation Step', () => {
     elem1.animations.nextFrame(1.1);
     expect(round(elem1.getRotation())).toBe(1);
   });
-  // test('Rotate counter clock wise', () => {
-  //   elem1.animations.new()
-  //     .rotation({
-  //       start: 1, target: 0, direction: 1, duration: 1,
-  //     })
-  //     .start();
-
-  //   elem1.animations.nextFrame(0);
-  //   expect(round(elem1.getRotation())).toBe(1);
-
-  //   elem1.animations.nextFrame(0.5);
-  //   expect(round(elem1.getRotation(), 2)).toBe(3.64);
-
-  //   elem1.animations.nextFrame(1.0);
-  //   expect(round(elem1.getRotation(), 2)).toBe(0);
-  // });
   describe('Rotation Types', () => {
     describe('2D', () => {
       test('r', () => {

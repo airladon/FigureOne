@@ -188,7 +188,7 @@ export class SerialAnimationStep extends AnimationStep {
       if (this.afterFrame != null) { // $FlowFixMe - as this has been confirmed
         this.afterFrame(now - this.startTime);
       }
-      if (remaining >= 0) {
+      if (remaining != null && remaining >= 0) {
         if (this.index === this.steps.length - 1) {
           this.finish();
           return remaining;

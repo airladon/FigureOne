@@ -289,7 +289,8 @@ export default class RotationAnimationStep extends ElementAnimationStep {
       start, velocity, // type,
     } = this.rotation;
     let { target, delta } = this.rotation;
-    // if delta is null, then calculate it from start and target
+    // if a target is defined, then it takes priority over target definition
+    // from delta or velocity
     if (target != null) {
       const targetVal = target;
       const startVal = start;
@@ -304,21 +305,26 @@ export default class RotationAnimationStep extends ElementAnimationStep {
       //   deltaVal[4] = getDeltaAngle(startVal[4], targetVal[4], direction);
       // }
       this.rotation.delta = deltaVal;
+    // Delta takes priority to define target over velocity
     } else if (delta != null) {
       const deltaVal = delta;
       const startVal = start;
       this.rotation.target = startVal.map((s, i) => s + deltaVal[i]);
-      // this.rotation.target = start.map((s, k) => s + this.rotation.delta[k]);
+    // If duration is defined and velocity exists, (and target is yet to be
+    // defined), then velocity and duration can define the target
     } else if (velocity != null && this.duration != null) {
       this.rotation.target = start.map((s, i) => s + velocity[i] * this.duration);
       this.rotation.delta = velocity.map(v => v * this.duration);
+    // If we've got here then there is a finite duration and we have no target,
+    // so reset duration to 0.
     } else if (this.duration != null) {
       this.duration = 0;
     }
 
     ({ target, delta } = this.rotation);
 
-    // If Velocity is defined, then use it to calculate duration
+    // If target and velocity is defined, but duration hasn't been defined so
+    // far, then use velocity to find duration.
     if (
       this.duration === undefined
       && velocity != null
@@ -329,7 +335,9 @@ export default class RotationAnimationStep extends ElementAnimationStep {
       const durations = start.map((s, k) => (target[k] - s) / v[k]);
       this.duration = Math.max(...durations);
     }
-    if (this.rotation.maxDuration != null) {
+
+    // Check if the duration is longer than the maxDuration
+    if (this.rotation.maxDuration != null && this.duration != null) {
       if (this.duration > this.rotation.maxDuration) {
         this.duration = this.rotation.maxDuration;
       }
@@ -373,7 +381,6 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     // element.setRotation(nextR.rDef());
   }
 
-  // TODO DO THIS BELOW
   setToEnd() {
     const { element } = this;
     if (element != null) {

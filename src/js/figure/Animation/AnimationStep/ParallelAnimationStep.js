@@ -121,17 +121,18 @@ export class ParallelAnimationStep extends AnimationStep {
     if (this.startTime === null) {
       this.startTime = now - this.startTimeOffset;
     }
-    let remaining = null;
+    let remaining;
     if (this.beforeFrame != null) { // $FlowFixMe - as this has been confirmed
       this.beforeFrame(now - this.startTime);
     }
     this.steps.forEach((step) => {
       if (step.state === 'animating' || step.state === 'waitingToStart') {
         const stepRemaining = step.nextFrame(now, speed);
-        if (remaining === null) {
+        if (remaining === undefined) {
           remaining = stepRemaining;
-        }
-        if (stepRemaining < remaining) {
+        } else if (remaining === null || stepRemaining === null) {
+          remaining = null;
+        } else if (stepRemaining < remaining) {
           remaining = stepRemaining;
         }
       }
@@ -140,7 +141,7 @@ export class ParallelAnimationStep extends AnimationStep {
       this.afterFrame(now - this.startTime);
     }
     if (remaining === null) {
-      remaining = 0;
+      return null;
     }
     if (remaining >= 0) {
       this.finish();
