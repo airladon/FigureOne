@@ -82,7 +82,7 @@ describe('Transfrom Animation Unit', () => {
     expect(percentComplete).toBe(1);
     expect(callback.mock.calls.length).toBe(1);
   });
-  test.only('infinite duration with a cancel clause', () => {
+  test('infinite duration with a cancel clause', () => {
     elem1.animations.new()
       .custom({
         duration: null,

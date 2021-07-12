@@ -3,6 +3,7 @@ import { Line, getLine } from '../geometry/Line';
 import type { TypeParsableLine } from '../geometry/Line';
 import { joinObjects } from '../tools';
 import { lathe } from './lathe';
+import type { TypeParsableTransform } from '../geometry/Transform';
 
 export type OBJ_Rod = {
   sides?: number,
@@ -11,6 +12,7 @@ export type OBJ_Rod = {
   line?: TypeParsableLine | number,
   ends?: boolean | 1 | 2,
   length?: number,
+  transform?: TypeParsableTransform,
 }
 
 export default function rod(options: OBJ_Rod) {
@@ -26,7 +28,7 @@ export default function rod(options: OBJ_Rod) {
     options,
   );
   const {
-    ends, rotation, sides, radius, normals, length,
+    ends, rotation, sides, radius, normals, length, transform,
   } = o;
   let line;
   if (o.line == null) {
@@ -51,5 +53,6 @@ export default function rod(options: OBJ_Rod) {
     axis: ['dir', line.unitVector()],
     position: line.p1,
     profile,
+    transform,
   });
 }

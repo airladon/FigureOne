@@ -1,5 +1,7 @@
 // @flow
 import { getPoint } from '../geometry/Point';
+import { getTransform } from '../geometry/Transform';
+import * as m3 from '../m3';
 import type { TypeParsablePoint } from '../geometry/Point';
 import { sphericalToCartesian } from '../geometry/common';
 import { joinObjects } from '../tools';
@@ -9,6 +11,7 @@ export type OBJ_SphereMesh = {
   radius?: number,
   normals?: 'curve' | 'flat',
   center?: TypeParsablePoint,
+  transform?: TypeParsableTransform,
 }
 
 export default function sphere(options: OBJ_SphereMesh) {
@@ -22,7 +25,7 @@ export default function sphere(options: OBJ_SphereMesh) {
     options,
   );
   const {
-    sides, radius, normals,
+    sides, radius, normals, transform,
   } = o;
   let center;
   if (o.center == null) {
@@ -48,6 +51,19 @@ export default function sphere(options: OBJ_SphereMesh) {
     arcs.push(thetaArc);
     curvedNormals.push(curvedNormalsArc);
   }
+  let matrix;
+  let inverseTranspose;
+  if (transform != null) {
+    matrix = getTransform(transform).matrix();
+    inverseTranspose = m3.transpose(m3.inverse(matrix));
+    for (let i = 0; i < arcs.length; i += 1) {
+      const curvedNormalsArc = curvedNormals[i];
+      for (let j = 0; j < arcs[0].length; j += 1) {
+        arcs[i][j] = arcs[i][j].transformBy(matrix);
+        curvedNormalsArc[j] = curvedNormalsArc[j].transformBy(inverseTranspose);
+      }
+    }
+  }
 
   for (let p = 0; p < sides * 2; p += 1) {
     for (let t = 0; t < sides; t += 1) {
@@ -67,7 +83,10 @@ export default function sphere(options: OBJ_SphereMesh) {
       } else {
         const normalPhi = p * dPhi + dPhi / 2;
         const normalTheta = t * dTheta + dTheta / 2;
-        const normal = getPoint(sphericalToCartesian(1, normalTheta, normalPhi));
+        let normal = getPoint(sphericalToCartesian(1, normalTheta, normalPhi));
+        if (transform != null) {
+          normal = normal.transformBy(inverseTranspose);
+        }
         norms.push(normal);
         norms.push(normal);
         norms.push(normal);

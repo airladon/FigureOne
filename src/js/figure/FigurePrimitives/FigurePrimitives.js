@@ -701,7 +701,46 @@ export type OBJ_Generic3DAll = {
  *     loadColor: [0, 0, 0, 0],
  *   },
  * });
+ *
+ * @example
+ * // Create a primitive that is a ring around a sphere.
+ *
+ * figure.scene.setProjection({ style: 'orthographic' });
+ * figure.scene.setCamera({ position: [1, 1, 2] });
+ * figure.scene.setLight({ directional: [0.7, 0.5, 1] });
+ *
+ * const { sphere, polygon, lathe } = Fig.tools.g2;
+ * const [spherePoints, sphereNormals] = sphere({ radius: 0.15, sides: 40 });
+ *
+ * // The ring is a flattened doughnut
+ * const [ringPoints, ringNormals] = lathe({
+ *   profile: polygon({
+ *     close: true,
+ *     sides: 20,
+ *     radius: 0.05,
+ *     center: [0, 0.3],
+ *     direction: -1,
+ *     transform: ['s', 0.1, 1, 1],
+ *   }),
+ *   normals: 'curve',
+ *   sides: 50,
+ *   transform: ['dir', [0, 1, 0]],
+ * });
+ *
+ * const a = figure.add({
+ *   make: 'generic3',
+ *   points: [...spherePoints, ...ringPoints],
+ *   normals: [...sphereNormals, ...ringNormals],
+ *   color: [1, 0, 0, 1],
+ *   transform: ['xyz', 0, 0, 0],
+ * });
+ *
+ * // Animate the shape to slowly rotate around the x and y axes
+ * a.animations.new()
+ *   .rotation({ velocity: ['xyz', 0.05, 0.1, 0], duration: null })
+ *   .start();
  */
+
 export type OBJ_Generic3D = {
   glPrimitive?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
   points?: Array<TypeParsablePoint>,

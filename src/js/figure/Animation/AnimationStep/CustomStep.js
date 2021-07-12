@@ -124,7 +124,7 @@ export class CustomAnimationStep extends AnimationStep {
     this.startTimeOffset = this.getPercentComplete(options.startPercent, true) * options.duration;
     this.duration = options.duration;
     this.customProperties = options.customProperties;
-    this.isInfinite = this.duration == null ? true : false;
+    this.isInfinite = this.duration == null;
   }
 
   // fnExec(idOrFn: string | Function | null, ...args: any) {

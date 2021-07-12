@@ -7,33 +7,31 @@ import { pointsToNumbers } from '../geometry/tools';
 import { joinObjects } from '../tools';
 
 /**
+ * @property {TypeParsablePoint} [center] center position of the polygon
  * @property {number} [radius] distance from center to polygon corner (`1`)
  * @property {number} [sides] number of polygon sides (`4`)
  * @property {number} [rotation] rotation offset for first polygon corner (`0`)
  * @property {1 | -1} [direction] angular direction of corners - 1 is CCW in the
  * XY plane (`1`)
- * @property {TypeParsablePoint} [position] center position of the polygon
  * (`[0,, 0, 0]`)
  * @property {Type3DMatrix | TypeParsableTransform} [transform] transform
- * to apply to all polygon points
+ * to apply to polygon
  * @property {2 | 3} [tris] if defined, return an array of numbers representing
  * the interlaced x/y/z components of points that define triangles that can draw
  * the polygon. `2` returns just x/y components and `3` returns x/y/z
  * components.
  */
 export type OBJ_GEOPolygon = {
+  center?: TypeParsablePoint,
   radius?: number,
   sides?: number,
   rotation?: number,
   direction?: 1 | -1,
-  position?: TypeParsablePoint,
   tris?: 2 | 3,
-  sidesToDraw?: number,
-  angleToDraw?: number,
-  normal?: TypeParsablePoint,
-  rightVector?: TypeParsablePoint, 
-  center?: TypeParsablePoine,
   transform?: Type3DMatrix | TypeParsableTransform,
+  close?: boolean,
+  // sidesToDraw?: number,
+  // angleToDraw?: number,
 };
 
 /**
@@ -51,19 +49,17 @@ function getPolygonCorners(
   sides: number,
   rotation: number,
   direction: 1 | -1,
-  position: Point,
-  transformMatrix: Type3DMatrix | null,
-  rightVector: Point,
-  normal: Point,
   center: Point,
+  transformMatrix: Type3DMatrix | null,
+  close?: boolean,
 ) {
-  const points = Array(sides);
+  const points = Array(sides + close ? 1 : 0);
   const deltaAngle = Math.PI * 2 / sides;
   for (let i = 0; i < sides; i += 1) {
     const theta = rotation + i * deltaAngle * direction;
     points[i] = new Point(
-      radius * Math.cos(theta) + position.x,
-      radius * Math.sin(theta) + position.y,
+      radius * Math.cos(theta) + center.x,
+      radius * Math.sin(theta) + center.y,
     );
   }
   if (transformMatrix != null) {
@@ -71,6 +67,10 @@ function getPolygonCorners(
       points[i] = points[i].transformBy(transformMatrix);
     }
   }
+  if (close) {
+    points[sides] = points[0]._dup();
+  }
+  console.log(points);
   return points;
 }
 
@@ -81,57 +81,25 @@ function processOptions(options: OBJ_GEOPolygon) {
       radius: 1,
       rotation: 0,
       direction: 1,
-      position: [0, 0, 0],
-      normal: [0, 0, 1],
-      rightVector: [1, 0, 1],
       center: [0, 0, 0],
+      close: false,
     },
     options,
   );
-  const p = getPoint(o.position);
+  const p = getPoint(o.center);
   let matrix;
   // let matrix = new Transform().matrix();
   if (o.transform != null) {
     matrix = getMatrix(o.transform);
   }
-  // matrix = [
-  //   1, 0, 0, 0,
-  //   0, 0, -1, 0,
-  //   0, 1, 0, 0,
-  //   0, 0, 0, 1,
-  // ];
-  matrix = m3.mul([
-    1, 0, 0, 0,
-    0, 0, -1, 0,
-    0, 1, 0, 0,
-    0, 0, 0, 1,
-  ],
-  [
-    1, 0, 0, 0,
-    0, 0, 1, 0,
-    0, -1, 0, 0,
-    0, 0, 0, 1,
-  ]);
-  // matrix = m3.mul([
-  //   0, -1, 0, 0,
-  //   0, 0, 1, 0,
-  //   -1, 0, 0, 0,
-  //   0, 0, 0, 1,
-  // ],
-  // [
-  //   0, -1, 0, 0,
-  //   0, 0, 1, 0,
-  //   -1, 0, 0, 0,
-  //   0, 0, 0, 1,
-  // ]);
 
   let { innerRadius } = o;
   if (o.innerRadius == null) {
     innerRadius = o.radius * 0.5;
   }
   return [
-    o.radius, o.sides, o.rotation, o.direction, p, matrix, o.tris,
-    getPoint(o.rightVector), getPoint(o.normal), getPoint(o.center), innerRadius,
+    o.radius, o.sides, o.rotation, o.direction, p, matrix, o.tris, o.close,
+    innerRadius,
   ];
 }
 
@@ -144,21 +112,23 @@ function processOptions(options: OBJ_GEOPolygon) {
  */
 function polygon(options: OBJ_GEOPolygon): Array<Point> | Array<number> {
   const [
-    radius, sides, rotation, direction, position, matrix, tris, rightVector, normal, center,
+    radius, sides, rotation, direction, center, matrix, tris, close,
   ] = processOptions(options);
 
-  const points = getPolygonCorners(radius, sides, rotation, direction, position, matrix, rightVector, normal, center);
+  const points = getPolygonCorners(
+    radius, sides, rotation, direction, center, matrix, close,
+  );
   if (tris == null) {
     return points;
   }
 
   const triangles = Array(sides * 3);
   for (let i = 0; i < sides - 1; i += 1) {
-    triangles[i * 3] = position;
+    triangles[i * 3] = center;
     triangles[i * 3 + 1] = points[i];
     triangles[i * 3 + 2] = points[i + 1];
   }
-  triangles[sides * 3 - 3] = position;
+  triangles[sides * 3 - 3] = center;
   triangles[sides * 3 - 2] = points[sides - 1];
   triangles[sides * 3 - 1] = points[0];
   return pointsToNumbers(triangles, tris);
@@ -174,12 +144,13 @@ function polygon(options: OBJ_GEOPolygon): Array<Point> | Array<number> {
  */
 function polygonLine(options: OBJ_GEOPolygon): Array<Point> | Array<number> {
   const [
-    radius, sides, rotation, direction, position, matrix, tris, innerRadius, rightVector, normal, center,
+    radius, sides, rotation, direction, center, matrix,
+    tris, close, innerRadius,
   ] = processOptions(options);
 
-  const points = getPolygonCorners(radius, sides, rotation, direction, position, matrix, rightVector, normal, center);
+  const points = getPolygonCorners(radius, sides, rotation, direction, center, matrix, close);
 
-  const inPoints = getPolygonCorners(innerRadius, sides, rotation, direction, position, matrix, rightVector, normal, center);
+  const inPoints = getPolygonCorners(innerRadius, sides, rotation, direction, center, matrix);
 
   if (tris == null) {
     const out = Array(sides * 2);

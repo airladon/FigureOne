@@ -159,11 +159,13 @@ function getTriangles(
       const b2 = surfacePoints[r + 1][c + 1];
       // if ((c === cols - 2 && !endZero) || c < cols - 2) {
       if (!a1.isEqualTo(a2) && !b2.isEqualTo(a2)) {
-        triangles.push(...a1.toArray(), ...b2.toArray(), ...a2.toArray());
+        // triangles.push(...a1.toArray(), ...b2.toArray(), ...a2.toArray());
+        triangles.push(a1, b2, a2);
       }
       // if ((c === 0 && !endZero) || c > 0) {
       if (!b1.isEqualTo(b2) && !b1.isEqualTo(a1)) {
-        triangles.push(...a1.toArray(), ...b1.toArray(), ...b2.toArray());
+        // triangles.push(...a1.toArray(), ...b1.toArray(), ...b2.toArray());
+        triangles.push(a1, b1, b2);
       }
     }
   }
@@ -182,14 +184,22 @@ function getLines(
       const a2 = surfacePoints[r][c + 1];
       const b1 = surfacePoints[r + 1][c];
       const b2 = surfacePoints[r + 1][c + 1];
-      lines.push(...a1.toArray(), ...a2.toArray());
-      lines.push(...a1.toArray(), ...b1.toArray());
+      lines.push(a1, a2);
+      lines.push(a1, b1);
       if (c === cols - 2) {
-        lines.push(...a2.toArray(), ...b2.toArray());
+        lines.push(a2, b2);
       }
       if (r === rows - 2) {
-        lines.push(...b1.toArray(), ...b2.toArray());
+        lines.push(b1, b2);
       }
+      // lines.push(...a1.toArray(), ...a2.toArray());
+      // lines.push(...a1.toArray(), ...b1.toArray());
+      // if (c === cols - 2) {
+      //   lines.push(...a2.toArray(), ...b2.toArray());
+      // }
+      // if (r === rows - 2) {
+      //   lines.push(...b1.toArray(), ...b2.toArray());
+      // }
     }
   }
   return lines;
@@ -204,19 +214,24 @@ function getFlatNormals(
   const normals = [];
   for (let r = 0; r < rows - 1; r += 1) {
     for (let c = 0; c < cols - 1; c += 1) {
-      const n = surfaceNormals[r][c].toArray();
+      const n = surfaceNormals[r][c];
+      // const n = surfaceNormals[r][c].toArray();
       const a1 = surfacePoints[r][c];
       const a2 = surfacePoints[r][c + 1];
       const b1 = surfacePoints[r + 1][c];
       const b2 = surfacePoints[r + 1][c + 1];
-      // if ((c === profileSegments - 1 && !endZero) || c < profileSegments - 1) {
       if (!a1.isEqualTo(a2) && !b2.isEqualTo(a2)) {
-        normals.push(...n, ...n, ...n);
+        normals.push(n, n, n);
       }
-      // if ((c === 0 && !startZero) || c > 0) {
       if (!b1.isEqualTo(b2) && !b1.isEqualTo(a1)) {
-        normals.push(...n, ...n, ...n);
+        normals.push(n, n, n);
       }
+      // if (!a1.isEqualTo(a2) && !b2.isEqualTo(a2)) {
+      //   normals.push(...n, ...n, ...n);
+      // }
+      // if (!b1.isEqualTo(b2) && !b1.isEqualTo(a1)) {
+      //   normals.push(...n, ...n, ...n);
+      // }
     }
   }
   return normals;
@@ -331,20 +346,30 @@ function getCurveNormals(
         a2n = a2n.add(pn);
         b2n = b2n.add(nn);
       }
-      a1n = a1n.normalize().toArray();
-      a2n = a2n.normalize().toArray();
-      b1n = b1n.normalize().toArray();
-      b2n = b2n.normalize().toArray();
+      a1n = a1n.normalize();
+      a2n = a2n.normalize();
+      b1n = b1n.normalize();
+      b2n = b2n.normalize();
+      // a1n = a1n.normalize().toArray();
+      // a2n = a2n.normalize().toArray();
+      // b1n = b1n.normalize().toArray();
+      // b2n = b2n.normalize().toArray();
       const a1 = surfacePoints[r][c];
       const a2 = surfacePoints[r][c + 1];
       const b1 = surfacePoints[r + 1][c];
       const b2 = surfacePoints[r + 1][c + 1];
       if (!a1.isEqualTo(a2) && !b2.isEqualTo(a2)) {
-        normals.push(...a1n, ...b2n, ...a2n);
+        normals.push(a1n, b2n, a2n);
       }
       if (!b1.isEqualTo(b2) && !b1.isEqualTo(a1)) {
-        normals.push(...a1n, ...b1n, ...b2n);
+        normals.push(a1n, b1n, b2n);
       }
+      // if (!a1.isEqualTo(a2) && !b2.isEqualTo(a2)) {
+      //   normals.push(...a1n, ...b2n, ...a2n);
+      // }
+      // if (!b1.isEqualTo(b2) && !b1.isEqualTo(a1)) {
+      //   normals.push(...a1n, ...b1n, ...b2n);
+      // }
     }
   }
   return normals;

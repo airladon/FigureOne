@@ -1,6 +1,7 @@
 // @flow
 import { Line, getLine } from '../geometry/Line';
 import type { TypeParsableLine } from '../geometry/Line';
+import type { TypeParsableTransform } from '../geometry/Transform';
 import { joinObjects } from '../tools';
 import { lathe } from './lathe';
 
@@ -11,6 +12,7 @@ export type OBJ_Cone = {
   line?: TypeParsableLine | number,
   length?: number,
   rotation?: number,
+  transform?: TypeParsableTransform,
 }
 
 export default function cone(options: OBJ_Cone) {
@@ -25,7 +27,7 @@ export default function cone(options: OBJ_Cone) {
     options,
   );
   const {
-    rotation, sides, radius, normals, length,
+    rotation, sides, radius, normals, length, transform,
   } = o;
   let line;
   if (o.line == null) {
@@ -43,5 +45,6 @@ export default function cone(options: OBJ_Cone) {
     axis: ['dir', line.unitVector()],
     position: line.p1,
     profile,
+    transform,
   });
 }

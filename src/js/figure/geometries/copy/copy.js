@@ -5,6 +5,7 @@ import {
   Transform, Point, polarToRect, getBoundingRect, getPoints, getPoint,
   getTransform,
 } from '../../../tools/g2';
+import * as m3 from '../../../tools/m3';
 
 import type { TypeParsablePoint } from '../../../tools/g2';
 
@@ -262,23 +263,29 @@ function copyTransform(
 
   let out = [];
   for (let i = 0; i < options.to.length; i += 1) {
-    const { def } = options.to[i];
-    let newDef = def;
+    const t = options.to[i];
+    let matrix = getTransform(t).matrix();
     if (type === 'normals') {
-      newDef = [];
-      for (let j = 0; j < def.length; j += 1) {
-        if (def[j][0] === 'r') {
-          newDef.push(def[j]);
-        }
-      }
+      matrix = m3.transpose(m3.inverse(matrix));
     }
-    if (newDef.length > 0) {
-      const matrix = getTransform(newDef).matrix();
-      // $FlowFixMe
-      out = [...out, ...pointsToCopy.map(p => p.transformBy((matrix)))];
-    } else {
-      out = [...out, ...pointsToCopy.map(p => p._dup())];
-    }
+    out = [...out, ...pointsToCopy.map(p => p.transformBy((matrix)))];
+    // const { def } = options.to[i];
+    // let newDef = def;
+    // if (type === 'normals') {
+    //   newDef = [];
+    //   for (let j = 0; j < def.length; j += 1) {
+    //     if (def[j][0] === 'r') {
+    //       newDef.push(def[j]);
+    //     }
+    //   }
+    // }
+    // if (newDef.length > 0) {
+    //   const matrix = getTransform(newDef).matrix();
+    //   // $FlowFixMe
+    //   out = [...out, ...pointsToCopy.map(p => p.transformBy((matrix)))];
+    // } else {
+    //   out = [...out, ...pointsToCopy.map(p => p._dup())];
+    // }
   }
   return out;
 }

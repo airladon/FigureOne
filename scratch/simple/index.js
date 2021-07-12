@@ -1,4 +1,4 @@
-const { polygon } = Fig.tools.g2;
+// const { polygon } = Fig.tools.g2;
 
 const figure = new Fig.Figure();
 
@@ -143,25 +143,29 @@ figure.scene.setProjection({ style: 'orthographic' });
 figure.scene.setCamera({ position: [1, 1, 2] });
 figure.scene.setLight({ directional: [0.7, 0.5, 1] });
 
-const [points, normals] = Fig.tools.g2.sphere({ side: 0.2, radius: 0.1, sides: 6, normals: 'flat' });
+const { sphere, polygon, lathe } = Fig.tools.g2;
+const [spherePoints, sphereNormals] = sphere({ radius: 0.15, sides: 40 });
 
-console.log(Fig.tools.g2.polygon({ radius: 0.3, sides: 5, transform: [['dir', [0, 1, 0]]] }))
+const [ringPoints, ringNormals] = lathe({
+  profile: polygon({
+    close: true,
+    sides: 20,
+    radius: 0.05,
+    center: [0, 0.3],
+    direction: -1,
+    transform: ['s', 0.1, 1, 1],
+  }),
+  normals: 'curve',
+  sides: 50,
+  transform: ['dir', [0, 1, 0]],
+});
+
 const a = figure.add({
   make: 'generic3',
-  points,
-  normals,
+  points: [...spherePoints, ...ringPoints],
+  normals: [...sphereNormals, ...ringNormals],
   color: [1, 0, 0, 1],
-  // transform: ['rb', { i: [1, 0, 0], j: [0, 1, 0] }],
-  // transform: ['rd', 1, 0, 0],
-  // transform: ['dir', [1, 0, 0]],
-  // transform: ['ra', 0, 1, 0, 0],
-  // transform: ['axis', 0, 1, 0, 1],
-  transform: ['rd', 1, 0, 0],
-  copy: [
-    // { along: 'x', num: 2, step: 0.4 },
-    { to: Fig.tools.g2.polygon({ radius: 0.3, sides: 5, center: [0.5, 0, 0] }) },
-    // { to: [[0.5, 0, 0], [0, 0, -0.5], [-.5, 0, -0.5]]}
-  ],
+  transform: ['xyz', 0, 0, 0],
 });
 
 figure.add({
@@ -184,30 +188,7 @@ figure.add({
 });
 
 a.animations.new()
-  // .transform({ target: ['rb', { i: [1, 0, 0], k: [0, 1, 0] }], duration: 2 })
-  // .transform({ target: ['rb', { i: [0, 0, -1], k: [0, 1, 0] }], duration: 2 })
-  // .transform({ target: ['rb', { i: [0, 0, -1], k: [1, 0, 0] }], duration: 2 })
-  // .rotation({ target: ['rd', -1, 0.1, 0], duration: 5 })
-  .rotation({ velocity: ['rd', -0.1, 0.1, 0], duration: 40 })
-  // .rotation({ target: ['rb', { i: [0, 1, 0], j: [-1, 0, 0] }], duration: 5, progression: 'easein' })
-  // .rotation({ target: ['rb', { i: [-1, 0, 0], j: [0, -1, 0] }], duration: 5, progression: 'easeout' })
-  // .rotation({ velocity: 0.1, duration: null })
-  // .rotation({ velocity: ['ra', 0.2, 0, 0.1, 0.2], duration: null })
-  // .rotation({ target: ['axis', 0, 1, 0, -1], duration: 1, direction: 0 })
-  // .rotation({ target: ['rs', 1, 0], duration: 1 })
-  // .custom({
-  //   callback: (t) => {
-  //     const r = a.getRotation();
-  //     r[0].x += 0.02;
-  //     r[0].z += 0.01;
-  //     r[1] += 0.02;
-  //     a.setRotation(['ra', ...r]);
-  //     if (t > 1) {
-  //       return true;
-  //     }
-  //   },
-  //   duration: null,
-  // })
+  .rotation({ velocity: ['xyz', 0.05, 0.1, 0], duration: null })
   .start();
 
 

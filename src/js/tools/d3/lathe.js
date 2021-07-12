@@ -3,7 +3,7 @@ import { getPoint, getPoints, Point } from '../geometry/Point';
 import type { TypeParsablePoint } from '../geometry/Point';
 import { joinObjects } from '../tools';
 // import { getNormal } from '../geometry/Plane';
-import { Transform } from '../geometry/Transform';
+import { Transform, getTransform } from '../geometry/Transform';
 import type { TypeRotationDefinition } from '../geometry/Transform';
 import {
   getTriangles, getFlatNormals, getCurveNormals, getSurfaceNormals,
@@ -107,6 +107,8 @@ Which means the normals for vertex a1 will be:
  * @property {TypeParsablePoint} [position] offset the final vertices such that
  * the original (0, 0) point moves to position (this step happens after the
  * rotation)
+ * @property {TypeParsableTransform} [transform] apply a final transform to
+ * shape
  */
 export type OBJ_Lathe = {
   sides?: number,
@@ -115,6 +117,7 @@ export type OBJ_Lathe = {
   axis?: TypeRotationDefinition,
   rotation?: number,
   position?: TypeParsablePoint,
+  transform?: TypeParsableTransform,
 }
 
 export type OBJ_LatheDefined = {
@@ -124,6 +127,7 @@ export type OBJ_LatheDefined = {
   matrix: Type3DMatrix,
   rotation: number,
   position: Point,
+  transform?: TypeParsableTransform,
 }
 
 
@@ -132,8 +136,12 @@ export type OBJ_LatheDefined = {
 function getLathePoints(o: OBJ_LatheDefined) {
   const points = [];
   const {
-    profile, sides, rotation, matrix,
+    profile, sides, rotation, matrix, transform,
   } = o;
+  let transformMatrix;
+  if (transform != null) {
+    transformMatrix = getTransform(transform).matrix();
+  }
   const dAngle = Math.PI * 2 / sides;
   for (let i = 0; i < sides + 1; i += 1) {
     const profilePoints = [];
@@ -145,6 +153,9 @@ function getLathePoints(o: OBJ_LatheDefined) {
       );
       if (o.axis !== 0) {
         p = p.transformBy(matrix);
+      }
+      if (transformMatrix) {
+        p = p.transformBy(transformMatrix);
       }
       profilePoints.push(p.add(o.position));
     }
@@ -207,6 +218,7 @@ function lathe(options: OBJ_Lathe) {
     matrix,
     position: o.position,
     rotation,
+    transform: o.transform,
   };
 
   let norm = o.normals;
