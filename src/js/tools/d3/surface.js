@@ -1,5 +1,6 @@
 // @flow
 import { Point } from '../geometry/Point';
+import type { TypeParsablePoint } from '../geometry/Point';
 import { getNormal } from '../geometry/Plane';
 import { getTransform } from '../geometry/Transform';
 import type { TypeParsableTransform } from '../geometry/Transform';

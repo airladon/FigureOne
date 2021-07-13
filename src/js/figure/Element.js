@@ -357,7 +357,7 @@ Rotation can only happen with some rotation transform elements:
  * @property {OBJ_ElementMoveFreely} freely free movement parameters
  * @property {FigureElement | null} element
  */
-type OBJ_ElementMove = {
+export type OBJ_ElementMove = {
   type: 'rotation' | 'translation' | 'position' | 'scale' | 'scaleX' | 'scaleY' | 'scaleZ',
   bounds: RectBounds | LineBounds | RangeBounds | null,
   plane: Plane,
