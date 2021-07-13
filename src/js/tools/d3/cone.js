@@ -3,7 +3,7 @@ import { Line, getLine } from '../geometry/Line';
 import type { TypeParsableLine } from '../geometry/Line';
 import type { TypeParsableTransform } from '../geometry/Transform';
 import { joinObjects } from '../tools';
-import { lathe } from './lathe';
+import { revolve } from './revolve';
 
 export type OBJ_Cone = {
   sides?: number,
@@ -38,7 +38,7 @@ export default function cone(options: OBJ_Cone) {
   const profile = [];
   profile.push([0, 0], [0, radius], [line.length(), 0]);
 
-  return lathe({
+  return revolve({
     sides,
     rotation,
     normals: normals === 'curve' ? 'curveLathe' : 'flat',

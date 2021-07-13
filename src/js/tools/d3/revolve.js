@@ -10,7 +10,7 @@ import {
 } from './surface';
 
 /*
-This is a general lathe that takes a profile of points in the XY plane, lathe
+This is a general revolve that takes a profile of points in the XY plane, revolve
 rotates them around the X axis.
 
 The points can then be transformed such that the x axis points in some
@@ -21,7 +21,7 @@ All profile points must have a y value that is not 0, with the exceptions of
 the ends which can be 0.
 
 Normals for each vertex are returned which are either flat, averaged along the
-profile ('curveProfile'), averaged along the direction of lathe rotation
+profile ('curveProfile'), averaged along the direction of revolve rotation
 ('curveLathe'), or averaged by all surfaces touching the vertex ('curve').
 
 Curve normals are combinations of surface normals around a point.
@@ -32,27 +32,27 @@ profile goes to 0, or 6 vertices otherwise.
 The normals of each vertex of a surface can have 4 possibilities:
 - flat: normals are the surface normal
 - curveProfile: combination of normals for surfaces that touch the vertex, have
-  the same lathe rotation, and are along the profile
+  the same revolve rotation, and are along the profile
 - curveLathe: combination of normals for surfaces that touch the vertex, have
-  have the same profile location, and are along the lathe rotation
+  have the same profile location, and are along the revolve rotation
 - curve: combination of normals for surfaces that touch the vertex
 
 c = current surface
 n = next surface
 p = previous surface
-[lathe rotation][profile position]
+[revolve rotation][profile position]
 
 e.g:
 - cc = current surface
-- nc = next surface along the lathe rotation, with the same profile position
-- cn = next surface along the profile, that has the same lathe rotation
+- nc = next surface along the revolve rotation, with the same profile position
+- cn = next surface along the profile, that has the same revolve rotation
 
 
  profile
 --------->
 
 np  nc  nn       A
-cp  cc  cn       |  lathe rotation
+cp  cc  cn       |  revolve rotation
 pp  pc  pn       |
 
 
@@ -62,7 +62,7 @@ profile
 ------->
 
 b1    b2       A
-   cc          |  lathe rotation
+   cc          |  revolve rotation
 a1    a2       |
 
 If the profile start is a 0, then the start surface is a triangle:
@@ -94,14 +94,14 @@ Which means the normals for vertex a1 will be:
  */
 
 /**
- * Options object for {@link lathe}.
+ * Options object for {@link revolve}.
  *
  * @property {Array<TypeParsablePoint>} profile XY plane profile to be rotated
  * around the x axis
- * @property {number} [sides] number of sides in lathe rotation
+ * @property {number} [sides] number of sides in revolve rotation
  * @property {'flat' | 'curveProfile' | 'curveLathe' | 'curve'} [normals] how
  * the normals for each vertex should be combined
- * @property {number} [rotation] initial angle of the lathe rotation
+ * @property {number} [rotation] initial angle of the revolve rotation
  * @property {TypeRotationDefinition} [axis] orient the final vertices by
  * rotating their definition around the x axis to an arbitrary rotation
  * @property {TypeParsablePoint} [position] offset the final vertices such that
@@ -110,7 +110,7 @@ Which means the normals for vertex a1 will be:
  * @property {TypeParsableTransform} [transform] apply a final transform to
  * shape
  */
-export type OBJ_Lathe = {
+export type OBJ_Revolve = {
   sides?: number,
   profile?: Array<TypeParsablePoint>,
   normals?: 'flat' | 'curveProfile' | 'curveLathe' | 'curve',
@@ -120,7 +120,7 @@ export type OBJ_Lathe = {
   transform?: TypeParsableTransform,
 }
 
-export type OBJ_LatheDefined = {
+export type OBJ_RevolveDefined = {
   sides: number,
   profile: Array<Point>,
   normals: 'flat' | 'curveProfile' | 'curveLathe' | 'curve',
@@ -132,8 +132,8 @@ export type OBJ_LatheDefined = {
 
 
 // Return a 2D matrix where a column represents the same profile x position, and
-// a row represents the same lathe rotation position.
-function getLathePoints(o: OBJ_LatheDefined) {
+// a row represents the same revolve rotation position.
+function getLathePoints(o: OBJ_RevolveDefined) {
   const points = [];
   const {
     profile, sides, rotation, matrix, transform,
@@ -166,7 +166,7 @@ function getLathePoints(o: OBJ_LatheDefined) {
 
 /**
  * Create a 3D surface by rotating a 2D profile around an axis (analagous to a
- * lathe machine).
+ * revolve machine).
  *
  * A profile is defined in the XY plane, and then rotated around the x axis.
  *
@@ -180,14 +180,14 @@ function getLathePoints(o: OBJ_LatheDefined) {
  * the ends which can be 0.
  *
  * Normals for each vertex are returned which are either flat, averaged along
- * the profile ('curveProfile'), averaged along the direction of lathe rotation
+ * the profile ('curveProfile'), averaged along the direction of revolve rotation
  * ('curveLathe'), or averaged by all surfaces touching the vertex ('curve').
  *
- * @param {OBJ_Lathe} options
+ * @param {OBJ_Revolve} options
  * @return {[Array<number>, Array<number>]} array of vertices and array of
  * normals
  */
-function lathe(options: OBJ_Lathe) {
+function revolve(options: OBJ_Revolve) {
   const o = joinObjects(
     {
       sides: 10,
@@ -248,6 +248,6 @@ function lathe(options: OBJ_Lathe) {
 }
 
 export {
-  lathe,
+  revolve,
   getLathePoints,
 };

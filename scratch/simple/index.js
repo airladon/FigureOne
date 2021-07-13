@@ -140,13 +140,13 @@ const figure = new Fig.Figure();
 
 // 4 Cubes with texture on each face
 figure.scene.setProjection({ style: 'orthographic' });
-figure.scene.setCamera({ position: [1, 1, 2] });
+figure.scene.setCamera({ position: [2, 1, 1], up: [0, 0, 1] });
 figure.scene.setLight({ directional: [0.7, 0.5, 1] });
 
-const { sphere, polygon, lathe } = Fig.tools.g2;
+const { sphere, polygon, revolve } = Fig.tools.g2;
 const [spherePoints, sphereNormals] = sphere({ radius: 0.15, sides: 40 });
 
-const [ringPoints, ringNormals] = lathe({
+const [ringPoints, ringNormals] = revolve({
   profile: polygon({
     close: true,
     sides: 20,
@@ -179,6 +179,14 @@ figure.add({
   radius: 0.01,
   line: [[0, 0, 0], [0, 1, 0]],
   color: [0, 0, 1, 1],
+  transform: ['s', 1, 1, 0.1],
+});
+figure.add({
+  make: 'cone',
+  radius: 0.03,
+  line: [[0, 1, 0], [0, 1.1, 0]],
+  color: [0, 0, 1, 1],
+  transform: ['s', 1, 1, 0.3],
 });
 figure.add({
   make: 'rod',
@@ -186,11 +194,34 @@ figure.add({
   line: [[0, 0, 0], [0, 0, 1]],
   color: [0, 1, 0, 1],
 });
+figure.add({
+  make: 'revolve',
+  profile: [[0, 0], [0.1, 0.1], [0.2, 0.05], [0.2, 0]],
+  color: [0, 1, 1, 1],
+});
 
 a.animations.new()
   .rotation({ velocity: ['xyz', 0.05, 0.1, 0], duration: null })
   .start();
 
+const x = Fig.range(-0.5, 0.5, 0.01);
+const y = Fig.range(-0.5, 0.5, 0.01);
+const rows = [];
+for (let i = 0; i < x.length; i += 1) {
+  const cols = [];
+  for (let j = 0; j < y.length; j += 1) {
+    cols.push(new Fig.Point(x[i], y[j], 0.1 * Math.cos(y[j] * 2 * Math.PI * 2)));
+  }
+  rows.push(cols);
+}
+
+figure.add({
+  make: 'surface',
+  normals: 'flat',
+  color: [1, 0, 0, 1],
+  points: rows,
+  // transform: ['xyz', -Math.PI / 4, 0, 0]
+});
 
 // const p = figure.add({
 //   make: 'polygon', radius: 0.2, sides: 100,

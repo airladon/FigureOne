@@ -4,7 +4,7 @@ import {
   Rect, Point, Transform, getPoint, getRect, getTransform,
   getBorder, getPoints,
   getBoundingBorder, isBuffer, toNumbers,
-  sphere, cube, rod,
+  sphere, cube, rod, cone, revolve, surface,
 } from '../../tools/g2';
 // import {
 //   round
@@ -703,17 +703,17 @@ export type OBJ_Generic3DAll = {
  * });
  *
  * @example
- * // Create a primitive that is a ring around a sphere.
+ * // Create a a ring around a sphere.
  *
  * figure.scene.setProjection({ style: 'orthographic' });
  * figure.scene.setCamera({ position: [1, 1, 2] });
  * figure.scene.setLight({ directional: [0.7, 0.5, 1] });
  *
- * const { sphere, polygon, lathe } = Fig.tools.g2;
+ * const { sphere, polygon, revolve } = Fig.tools.g2;
  * const [spherePoints, sphereNormals] = sphere({ radius: 0.15, sides: 40 });
  *
  * // The ring is a flattened doughnut
- * const [ringPoints, ringNormals] = lathe({
+ * const [ringPoints, ringNormals] = revolve({
  *   profile: polygon({
  *     close: true,
  *     sides: 20,
@@ -3077,9 +3077,45 @@ export default class FigurePrimitives {
       {
         radius: this.defaultLength / 20,
         sides: 10,
+        normals: 'flat',
       },
       joinObjects({}, ...optionsIn),
       o => rod(o),
+    );
+  }
+
+  cone(...optionsIn: Array<OBJ_Cone>) {
+    return this.generic3DBase(
+      {
+        radius: this.defaultLength / 20,
+        sides: 10,
+        normals: 'flat',
+        length: 1,
+      },
+      joinObjects({}, ...optionsIn),
+      o => cone(o),
+    );
+  }
+
+  revolve(...optionsIn: Array<OBJ_Revolve>) {
+    return this.generic3DBase(
+      {
+        sides: 10,
+        normals: 'flat',
+      },
+      joinObjects({}, ...optionsIn),
+      o => revolve(o),
+    );
+  }
+
+  surface(...optionsIn: Array<OBJ_Surface>) {
+    return this.generic3DBase(
+      {
+        normals: 'flat',
+        lines: false,
+      },
+      joinObjects({}, ...optionsIn),
+      o => surface.surface(o),
     );
   }
   // cube(...optionsIn: Array<OBJ_Cube>) {

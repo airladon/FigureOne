@@ -1,6 +1,8 @@
 // @flow
 import { Point } from '../geometry/Point';
 import { getNormal } from '../geometry/Plane';
+import { getTransform } from '../geometry/Transform';
+import { joinObjects } from '../tools';
 
 /*
 A surface is defined by a grid of points.
@@ -69,8 +71,8 @@ p = previous surface
 
 e.g:
 - cc = current surface
-- nc = next surface along the lathe rotation, with the same profile position
-- cn = next surface along the profile, that has the same lathe rotation
+- nc = next surface along the revolve rotation, with the same profile position
+- cn = next surface along the profile, that has the same revolve rotation
 
 
  columns
@@ -375,10 +377,49 @@ function getCurveNormals(
   return normals;
 }
 
+export type OBJ_Surface = {
+  surfacePoints?: Array<Array<Point>>,
+  normals?: 'curveColumns' | 'curveRows' | 'curve' | 'flat',
+  closeRows?: boolean,
+  closeColumns?: boolean,
+  transform?: TypeParsableTransform,
+  lines?: boolean,
+};
+
+function surface(options: OBJ_Surface) {
+  const {
+    transform, lines, closeColumns, closeRows, normals, points,
+  } = joinObjects({
+    normals: 'flat',
+    lines: false,
+    closeRows: false,
+    closeColumns: false,
+  }, options);
+
+  let surfacePoints = points;
+  if (transform != null) {
+    const matrix = getTransform(transform).matrix();
+    surfacePoints = points.map(rows => rows.map(col => col.transformBy(matrix)));
+  }
+  if (lines) {
+    return getLines(surfacePoints);
+  }
+  const triangles = getTriangles(surfacePoints);
+  const surfaceNormals = getSurfaceNormals(surfacePoints);
+  let norms = surfaceNormals;
+  if (normals !== 'flat') {
+    norms = getCurveNormals(surfaceNormals, surfacePoints, normals, closeRows, closeColumns);
+  } else {
+    norms = getFlatNormals(surfaceNormals, surfacePoints);
+  }
+  return [triangles, norms];
+}
+
 export {
   getTriangles,
   getFlatNormals,
   getCurveNormals,
   getSurfaceNormals,
   getLines,
+  surface,
 };

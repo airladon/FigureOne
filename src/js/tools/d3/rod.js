@@ -2,7 +2,7 @@
 import { Line, getLine } from '../geometry/Line';
 import type { TypeParsableLine } from '../geometry/Line';
 import { joinObjects } from '../tools';
-import { lathe } from './lathe';
+import { revolve } from './revolve';
 import type { TypeParsableTransform } from '../geometry/Transform';
 
 export type OBJ_Rod = {
@@ -46,7 +46,7 @@ export default function rod(options: OBJ_Rod) {
     profile.push([line.length(), 0]);
   }
 
-  return lathe({
+  return revolve({
     sides,
     rotation,
     normals: normals === 'curve' ? 'curveLathe' : 'flat',

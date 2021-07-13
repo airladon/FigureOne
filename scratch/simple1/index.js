@@ -1,5 +1,5 @@
 /* globals Fig */
-const { sphere, lathe, polygon, cone, rod, getLathePoints, surface } = Fig.tools.g2;
+const { sphere, revolve, polygon, cone, rod, getLathePoints, surface } = Fig.tools.g2;
 const { getTransform } = Fig;
 const { m3 } = Fig.tools;
 const figure = new Fig.Figure({ limits: [-1, -1, 2, 2], backgroundColor: [1, 0.9, 0.9, 1] });
@@ -162,7 +162,7 @@ xAxis.move.bounds = new Fig.RangeBounds({
   max: Math.PI / 2,
 });
 
-// const [lv, ln] = lathe({
+// const [lv, ln] = revolve({
 //   // profile: [[0, 0.02, 0], [0.399, 0.099, 0], [0.4, 0.1, 0], [0.499, 0.05, 0], [0.5, 0.05, 0], [0.5, 0.0499, 0], [0.5, 0, 0]],
 //   // profile: [[0, 0.001, 0], [0.399, 0.1, 0], [0.4, 0.1, 0], [0.4, 0.099, 0], [0.4, 0, 0]],
 //   // profile: [[0, 0, 0], [0.4, r1, 0], [0.4, 0, 0]],

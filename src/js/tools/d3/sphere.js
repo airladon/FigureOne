@@ -6,7 +6,7 @@ import type { TypeParsablePoint } from '../geometry/Point';
 import { sphericalToCartesian } from '../geometry/common';
 import { joinObjects } from '../tools';
 
-export type OBJ_SphereMesh = {
+export type OBJ_SpherePoints = {
   sides?: number,
   radius?: number,
   normals?: 'curve' | 'flat',
@@ -14,7 +14,7 @@ export type OBJ_SphereMesh = {
   transform?: TypeParsableTransform,
 }
 
-export default function sphere(options: OBJ_SphereMesh) {
+export default function sphere(options: OBJ_SpherePoints) {
   const o = joinObjects(
     {
       sides: 10,
