@@ -2,6 +2,7 @@
 import { Point } from '../geometry/Point';
 import { getNormal } from '../geometry/Plane';
 import { getTransform } from '../geometry/Transform';
+import type { TypeParsableTransform } from '../geometry/Transform';
 import { joinObjects } from '../tools';
 
 /*
@@ -177,7 +178,6 @@ function getTriangles(
 function getLines(
   surfacePoints: Array<Array<Point>>,
 ) {
-  console.log(surfacePoints)
   if (surfacePoints.length === 0) {
     return [];
   }
@@ -381,8 +381,33 @@ function getCurveNormals(
   return normals;
 }
 
+/**
+ * Options object for defining a 3D surface.
+ *
+ * @property {Array<Array<TypeParsablePoint>>} [points] A grid of points that
+ * define a 3D surface
+ * @property {'curveColumns' | 'curveRows' | 'curve' | 'flat'} [normals]
+ * `flat` normals will make shading (from a light source) across a face of the
+ * object a constant color. `curveRows` will gradiate the shading along the
+ * rows of the grid. `curveColumns` will gradiate the shading along the columns
+ * of the grid. `curve` will gradiate the shading along both rows and columns.
+ * Use `curve`, `curveRows`, or `curveColumns` to make a surface
+ * look more round with fewer number of sides.
+ * @property {boolean} [closeRows] Set to `true` if first row and last row are
+ * the same, and normals is `'curveRows'` or `'curve'` to get correct normal
+ * calculations (`false`)
+ * @property {boolean} [closeColumns] Set to `true` if first row and last
+ * column are the same, and normals is `'curveColumns'` or `'curve'` to get
+ * correct normal calculations (`false`)
+ * @property {TypeParsableTransform} [transform] apply a final transform to
+ * shape
+ * @property {boolean} [lines] if `true` then points representing
+ * the edes of the faces will be returned. If `false`, then points
+ * representing two triangles per face and an
+ * associated normal for each point will be returned.
+ */
 export type OBJ_Surface = {
-  surfacePoints?: Array<Array<Point>>,
+  points?: Array<Array<TypeParsablePoint>>,
   normals?: 'curveColumns' | 'curveRows' | 'curve' | 'flat',
   closeRows?: boolean,
   closeColumns?: boolean,
@@ -390,6 +415,17 @@ export type OBJ_Surface = {
   lines?: boolean,
 };
 
+/**
+ * Return points of a 3D surface. A 3D surface is defined by a 2D matrix of
+ * points (a grid).
+ *
+ * The points can either represent the triangles that make up each face, or
+ * represent the start and end points lines that are the edges of each face of
+ * the cone.
+ *
+ * If the points represent triangles, then a second array of normal vectors
+ * for each point will be available.
+ */
 function surface(options: OBJ_Surface) {
   const {
     transform, lines, closeColumns, closeRows, normals, points,

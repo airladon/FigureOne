@@ -4729,7 +4729,7 @@ class FigureElementCollection extends FigureElement {
       cone: shapes.cone.bind(shapes),
       revolve: shapes.revolve.bind(shapes),
       surface: shapes.surface.bind(shapes),
-      rod: shapes.rod.bind(shapes),
+      cylinder: shapes.cylinder.bind(shapes),
       cube: shapes.cube.bind(shapes),
       arrow: shapes.arrow.bind(shapes),
       line: shapes.line.bind(shapes),

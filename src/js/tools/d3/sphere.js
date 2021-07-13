@@ -1,12 +1,33 @@
 // @flow
 import { getPoint } from '../geometry/Point';
 import { getTransform } from '../geometry/Transform';
+import type { TypeParsableTransform } from '../geometry/Transform';
 import * as m3 from '../m3';
-import type { TypeParsablePoint } from '../geometry/Point';
+import type { Point, TypeParsablePoint } from '../geometry/Point';
 import { sphericalToCartesian } from '../geometry/common';
 import { getLines } from './surface';
 import { joinObjects } from '../tools';
 
+/**
+ * Sphere options object.
+ *
+ * By default, a sphere with its base at the origin will be created.
+ *
+ * @property {number} [sides] number of sides around sphere's half great circle
+ * (`10`)
+ * @property {number} [radius] radius of sphere (`1`)
+ * @property {'curve' | 'flat'} [normals] `flat` normals will make light
+ * shading across a face cone constant. `curve` will gradiate the shading. Use
+ * `curve` to make a surface look more round with fewer number of sides.
+ * (`flat`)
+ * @property {TypeParsablePoint} [center] center position of sphere (`[0, 0]`)
+ * @property {TypeParsableTransform} [transform] transform to apply to all
+ * points of cube
+ * @property {boolean} [lines] if `true` then points representing
+ * the edes of the faces will be returned. If `false`, then points
+ * representing two triangles per face and an
+ * associated normal for each point will be returned.
+ */
 export type OBJ_SpherePoints = {
   sides?: number,
   radius?: number,
@@ -15,6 +36,20 @@ export type OBJ_SpherePoints = {
   transform?: TypeParsableTransform,
 }
 
+/**
+ * Return points of a sphere.
+ *
+ * The points can either represent the triangles that make up each face, or
+ * represent the start and end points lines that are the edges of each face of
+ * the sphere.
+ *
+ * If the points represent triangles, then a second array of normal vectors
+ * for each point will be available.
+ *
+ * @property {OBJ_CubePoints} options sphere options
+ * @return {[Array<Point>, Array<Point>]} an array of points and normals. If
+ * the points represent lines, then the array of normals will be empty.
+ */
 export default function sphere(options: OBJ_SpherePoints) {
   const o = joinObjects(
     {
@@ -22,31 +57,26 @@ export default function sphere(options: OBJ_SpherePoints) {
       radius: 1,
       normals: 'curve',
       output: 'points',
+      center: [0, 0, 0],
     },
     options,
   );
   const {
     sides, radius, normals, transform,
   } = o;
-  let center;
-  if (o.center == null) {
-    center = [0, 0, 0];
-  } else {
-    center = getPoint(o.center).toArray();
-  }
-  const dTheta = Math.PI / sides;
-  const dPhi = dTheta;
-  const arcs = [];
+  const center = getPoint(o.center);
+  const dAngle = Math.PI / sides;
+  const dTheta = dAngle;
+  const dPhi = dAngle;
+  const arcs: Array<Array<Point>> = [];
   const curvedNormals = [];
   const points = [];
   const norms = [];
   for (let phi = 0; phi < Math.PI * 2 + 0.0001; phi += dPhi) {
-    const thetaArc = [];
+    const thetaArc: Array<Point> = [];
     const curvedNormalsArc = [];
     for (let theta = 0; theta < Math.PI + 0.0001; theta += dTheta) {
-      thetaArc.push(getPoint(
-        sphericalToCartesian(radius, theta, phi).map((v, i) => v + center[i]),
-      ));
+      thetaArc.push(getPoint(sphericalToCartesian(radius, theta, phi)).add(center));
       curvedNormalsArc.push(getPoint(sphericalToCartesian(1, theta, phi)));
     }
     arcs.push(thetaArc);
@@ -88,7 +118,7 @@ export default function sphere(options: OBJ_SpherePoints) {
         const normalPhi = p * dPhi + dPhi / 2;
         const normalTheta = t * dTheta + dTheta / 2;
         let normal = getPoint(sphericalToCartesian(1, normalTheta, normalPhi));
-        if (transform != null) {
+        if (inverseTranspose != null) {
           normal = normal.transformBy(inverseTranspose);
         }
         norms.push(normal);

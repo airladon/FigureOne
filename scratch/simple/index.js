@@ -140,7 +140,8 @@ const figure = new Fig.Figure();
 
 // 4 Cubes with texture on each face
 figure.scene.setProjection({ style: 'orthographic' });
-figure.scene.setCamera({ position: [2, 1, 1], up: [0, 0, 1] });
+// figure.scene.setCamera({ position: [2, 1, 1], up: [0, 0, 1] });
+figure.scene.setCamera({ position: [3, 0, 0.001], up: [0, 0, 1] });
 figure.scene.setLight({ directional: [0.7, 0.5, 1] });
 
 const { sphere, polygon, revolve } = Fig.tools.g2;
@@ -174,25 +175,27 @@ figure.add({
   radius: 0.9999,
   // lines: true,
   color: [1, 1, 1, 1],
-  sides: 50
+  sides: 50,
 });
 figure.add({
-  make: 'cube',
-  side: 0.5,
-  lines: true,
+  make: 'cylinder',
+  sides: 10,
+  radius: 0.2,
+  // lines: true,
   // sides: 20,
   // ends: false,
+  // rotation: 0.2,
   color: [0, 0.6, 0, 1],
 });
 
 figure.add({
-  make: 'rod',
+  make: 'cylinder',
   radius: 0.01,
   line: [[0, 0, 0], [1, 0, 0]],
   color: [1, 0, 0, 1],
 });
 figure.add({
-  make: 'rod',
+  make: 'cylinder',
   radius: 0.01,
   line: [[0, 0, 0], [0, 1, 0]],
   color: [0, 0, 1, 1],
@@ -206,7 +209,7 @@ figure.add({
   transform: ['s', 1, 1, 0.5],
 });
 figure.add({
-  make: 'rod',
+  make: 'cylinder',
   radius: 0.01,
   line: [[0, 0, 0], [0, 0, 1]],
   color: [0, 1, 0, 1],

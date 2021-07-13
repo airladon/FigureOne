@@ -36,7 +36,7 @@ import { sphericalToCartesian, cartesianToSpherical } from './geometry/common';
 import sphere from './d3/sphere';
 import { revolve, getLathePoints } from './d3/revolve';
 import cone from './d3/cone';
-import rod from './d3/rod';
+import cylinder from './d3/cylinder';
 // import { polygon } from './geometry/polygon';
 import cube from './d3/cube';
 import * as surface from './d3/surface';
@@ -573,7 +573,7 @@ export {
   getNormal,
   sphere,
   revolve,
-  rod,
+  cylinder,
   cone,
   cube,
   surface,

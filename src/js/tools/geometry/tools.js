@@ -66,7 +66,10 @@ function toNumbers(
   return pointsToNumbers(pointsOrNumbers, dimension);
 }
 
-function toPoints(pointsOrNumbers: Array<Point> | Array<number>, dimension: 2 | 3 = 3) {
+function toPoints(
+  pointsOrNumbers: Array<Point> | Array<number>,
+  dimension: 2 | 3 = 3,
+): Array<Point> {
   if (pointsOrNumbers.length === 0) {
     return [];
   }

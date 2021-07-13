@@ -2,9 +2,10 @@
 import { getPoint, getPoints, Point } from '../geometry/Point';
 import type { TypeParsablePoint } from '../geometry/Point';
 import { joinObjects } from '../tools';
+import type { Type3DMatrix } from '../m3';
 // import { getNormal } from '../geometry/Plane';
 import { Transform, getTransform } from '../geometry/Transform';
-import type { TypeRotationDefinition } from '../geometry/Transform';
+import type { TypeParsableTransform, TypeUserRotationDefinition } from '../geometry/Transform';
 import {
   getTriangles, getFlatNormals, getCurveNormals, getSurfaceNormals, getLines,
 } from './surface';
@@ -22,7 +23,7 @@ the ends which can be 0.
 
 Normals for each vertex are returned which are either flat, averaged along the
 profile ('curveProfile'), averaged along the direction of revolve rotation
-('curveLathe'), or averaged by all surfaces touching the vertex ('curve').
+('curveRadial'), or averaged by all surfaces touching the vertex ('curve').
 
 Curve normals are combinations of surface normals around a point.
 
@@ -33,7 +34,7 @@ The normals of each vertex of a surface can have 4 possibilities:
 - flat: normals are the surface normal
 - curveProfile: combination of normals for surfaces that touch the vertex, have
   the same revolve rotation, and are along the profile
-- curveLathe: combination of normals for surfaces that touch the vertex, have
+- curveRadial: combination of normals for surfaces that touch the vertex, have
   have the same profile location, and are along the revolve rotation
 - curve: combination of normals for surfaces that touch the vertex
 
@@ -89,41 +90,57 @@ pp     pc     pn
 Which means the normals for vertex a1 will be:
 - flat: cc
 - curveProfile: cc + cp
-- curveLathe: cc + pc
+- curveRadial: cc + pc
 - curve: cc + pc + cp + pp
  */
 
 /**
  * Options object for {@link revolve}.
  *
- * @property {Array<TypeParsablePoint>} profile XY plane profile to be rotated
- * around the x axis
- * @property {number} [sides] number of sides in revolve rotation
- * @property {'flat' | 'curveProfile' | 'curveLathe' | 'curve'} [normals] how
- * the normals for each vertex should be combined
- * @property {number} [rotation] initial angle of the revolve rotation
- * @property {TypeRotationDefinition} [axis] orient the final vertices by
+ * Revolve (or radially sweep) a profile in the XY plane around the x axis to
+ * form a 3D surface.
+ *
+ * @property {Array<TypeParsablePoint>} profile XY plane profile to be radially
+ * swept around the x axis
+ * @property {number} [sides] number of sides in the radial sweep
+ * @property {'flat' | 'curveRows' | 'curveRadial' | 'curve'} [normals]
+ * `flat` normals will make shading (from a light source) across a face of the
+ * object a constant color. `curveProfile` will gradiate the shading along the
+ * profile. `curveRadial` will gradiate the shading around the radial sweep.
+ * `curve` will gradiate the shading both around the radial sweep and along the
+ * profile. Use `curve`, `curveProfile`, or `curveRadial` to make a surface
+ * look more round with fewer number of sides.
+ * @property {number} [rotation] by default the profile will start in the XY
+ * plane and sweep around the x axis following the right hand rule. Use
+ * `rotation` to start the sweep at some angle where 0º is in the XY for +y and
+ * 90º is in the XZ plane for +z. initial angle of the revolve rotation
+ * @property {TypeUserRotationDefinition} [axis] orient the final vertices by
  * rotating their definition around the x axis to an arbitrary rotation
  * @property {TypeParsablePoint} [position] offset the final vertices such that
- * the original (0, 0) point moves to position (this step happens after the
- * rotation)
+ * the original (0, 0) point in the profile moves to position (this step
+ * happens after the rotation)
  * @property {TypeParsableTransform} [transform] apply a final transform to
  * shape
+ * @property {boolean} [lines] if `true` then points representing
+ * the edes of the faces will be returned. If `false`, then points
+ * representing two triangles per face and an
+ * associated normal for each point will be returned.
  */
 export type OBJ_Revolve = {
   sides?: number,
   profile?: Array<TypeParsablePoint>,
-  normals?: 'flat' | 'curveProfile' | 'curveLathe' | 'curve',
-  axis?: TypeRotationDefinition,
+  normals?: 'flat' | 'curveProfile' | 'curveRadial' | 'curve',
+  axis?: TypeUserRotationDefinition,
   rotation?: number,
   position?: TypeParsablePoint,
   transform?: TypeParsableTransform,
+  lines?: boolean,
 }
 
 export type OBJ_RevolveDefined = {
   sides: number,
   profile: Array<Point>,
-  normals: 'flat' | 'curveProfile' | 'curveLathe' | 'curve',
+  normals: 'flat' | 'curveProfile' | 'curveRadial' | 'curve',
   matrix: Type3DMatrix,
   rotation: number,
   position: Point,
@@ -151,7 +168,7 @@ function getLathePoints(o: OBJ_RevolveDefined) {
         profile[j].y * Math.cos(dAngle * i + rotation),
         profile[j].y * Math.sin(dAngle * i + rotation),
       );
-      if (o.axis !== 0) {
+      if (matrix !== 0) {
         p = p.transformBy(matrix);
       }
       if (transformMatrix) {
@@ -165,10 +182,17 @@ function getLathePoints(o: OBJ_RevolveDefined) {
 }
 
 /**
- * Create a 3D surface by rotating a 2D profile around an axis (analagous to a
- * revolve machine).
+ * Return points of a 3D surface created by revolving (or radially sweeping) a
+ * 2D profile around an axis.
  *
- * A profile is defined in the XY plane, and then rotated around the x axis.
+ * The points can either represent the triangles that make up each face, or
+ * represent the start and end points lines that are the edges of each face of
+ * the cone.
+ *
+ * If the points represent triangles, then a second array of normal vectors
+ * for each point will be available.
+ *
+ * A profile is defined in the XY plane, and then revolved around the x axis.
  *
  * The resulting points can oriented and positioned by defining a rotation and
  * position. The rotation rotates the x axis (around which the profile was
@@ -179,13 +203,9 @@ function getLathePoints(o: OBJ_RevolveDefined) {
  * All profile points must have a y value that is not 0, with the exceptions of
  * the ends which can be 0.
  *
- * Normals for each vertex are returned which are either flat, averaged along
- * the profile ('curveProfile'), averaged along the direction of revolve rotation
- * ('curveLathe'), or averaged by all surfaces touching the vertex ('curve').
- *
  * @param {OBJ_Revolve} options
- * @return {[Array<number>, Array<number>]} array of vertices and array of
- * normals
+ * @return {[Array<Point>, Array<Point>]} an array of points and normals. If
+ * the points represent lines, then the array of normals will be empty.
  */
 function revolve(options: OBJ_Revolve) {
   const o = joinObjects(
@@ -200,8 +220,8 @@ function revolve(options: OBJ_Revolve) {
     options,
   );
   o.position = getPoint(o.position);
-  if (o.profile == null) {
-    o.profile = getPoints([0, 0.1, 0], [1, 0.2, 0]);
+  if (o.profile == null) {  // $FlowFixMe
+    o.profile = getPoints([[0, 0.1, 0], [1, 0.2, 0]]);
   } else {
     o.profile = getPoints(o.profile);
   }
@@ -222,7 +242,7 @@ function revolve(options: OBJ_Revolve) {
   };
 
   let norm = o.normals;
-  if (norm === 'curveLathe') {
+  if (norm === 'curveRadial') {
     norm = 'curveRows';
   }
   if (norm === 'curveProfile') {

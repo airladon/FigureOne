@@ -4,7 +4,7 @@ import {
   Rect, Point, Transform, getPoint, getRect, getTransform,
   getBorder, getPoints,
   getBoundingBorder, isBuffer, toNumbers,
-  sphere, cube, rod, cone, revolve, surface,
+  sphere, cube, cylinder, cone, revolve, surface,
 } from '../../tools/g2';
 // import {
 //   round
@@ -3089,7 +3089,7 @@ export default class FigurePrimitives {
     );
   }
 
-  cube(...optionsIn: Array<OBJ_Sphere>) {
+  cube(...optionsIn: Array<OBJ_Cube>) {
     return this.generic3DBase(
       {
         side: this.defaultLength,
@@ -3099,7 +3099,7 @@ export default class FigurePrimitives {
     );
   }
 
-  rod(...optionsIn: Array<OBJ_Rod>) {
+  cylinder(...optionsIn: Array<OBJ_Cylinder>) {
     return this.generic3DBase(
       {
         radius: this.defaultLength / 20,
@@ -3107,7 +3107,7 @@ export default class FigurePrimitives {
         normals: 'flat',
       },
       joinObjects({}, ...optionsIn),
-      o => rod(o),
+      o => cylinder(o),
     );
   }
 

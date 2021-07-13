@@ -1,27 +1,41 @@
 // @flow
 import { getPoint } from '../geometry/Point';
 import { Transform, getTransform } from '../geometry/Transform';
-import type { TypeParsablePoint } from '../geometry/Point';
+import type { TypeParsablePoint, Point } from '../geometry/Point';
 import { joinObjects } from '../tools';
 import * as m3 from '../m3';
 import { toPoints } from '../geometry/tools';
 import type { TypeParsableTransform } from '../geometry/Transform';
 
-export type OBJ_Cube = {
+/**
+ * Cube options object.
+ *
+ * By default, a cube will be constructed around the origin, with the xyz axes
+ * being normal to the cube faces.
+ *
+ * @property {number} [side] side length (`1`)
+ * @property {TypeParsablePoint} [center] center point (`[0, 0]`)
+ * @property {TypeParsableTransform} [transform] transform to apply to all
+ * points of cube
+ * @property {boolean} [lines] if `true` then points representing
+ * the 12 edges of the cube will be returned. If `false`, then points
+ * representing two triangles per face (12 triangles, 36 points) and an
+ * associated normal for each point will be returned. (`false`)
+ */
+export type OBJ_CubePoints = {
   side?: number,
   center?: TypeParsablePoint,
-  rotation?: TypeParsableRotation,
   transform?: TypeParsableTransform,
+  lines?: boolean,
 }
 
 function toLines(
   side: number,
   center: TypeParsablePoint,
-  rotation: TypeParsableRotation,
   transform: TypeParsableTransform,
-) {
+): Array<Point> {
   const s = side;
-  console.log([
+  const sidePoints: Array<number> = [
     -s, -s, s, s, -s, s,
     s, -s, s, s, s, s,
     s, s, s, -s, s, s,
@@ -34,39 +48,36 @@ function toLines(
     s, -s, -s, s, s, -s,
     s, s, -s, -s, s, -s,
     -s, s, -s, -s, -s, -s,
-  ])
-  const points = toPoints([
-    -s, -s, s, s, -s, s,
-    s, -s, s, s, s, s,
-    s, s, s, -s, s, s,
-    -s, s, s, -s, -s, s,
-    -s, -s, s, -s, -s, -s,
-    -s, s, s, -s, s, -s,
-    s, s, s, s, s, -s,
-    s, -s, s, s, -s, -s,
-    -s, -s, -s, s, -s, -s,
-    s, -s, -s, s, s, -s,
-    s, s, -s, -s, s, -s,
-    -s, s, -s, -s, -s, -s,
-  ]);
-  if (center == null && rotation == null && transform == null) {
+  ];
+  const points: Array<Point> = toPoints(sidePoints);
+  if (center == null && transform == null) {
     return points;
   }
   let t = new Transform();
   if (center != null) {
     t = t.translate(center);
   }
-  if (rotation != null) {
-    t = t.rotate(rotation);
-  }
   if (transform != null) {
     t = new Transform([...t.def, ...getTransform(transform).def]);
   }
   const matrix = t.matrix();
-  return points.map(p => p.transformBy(matrix));
+  return points.map((p: Point) => p.transformBy(matrix));
 }
 
-export default function cube(options: OBJ_Cube) {
+/**
+ * Return points of a cube.
+ *
+ * The points can either represent the triangles that make up each face, or
+ * represent the start and end points lines that are the edges of the cube.
+ *
+ * If the points represent triangles, then a second array of normal vectors
+ * for each point will be available.
+ *
+ * @property {OBJ_CubePoints} options cube options
+ * @return {[Array<Point>, Array<Point>]} an array of points and normals. If
+ * the points represent lines, then the array of normals will be empty.
+ */
+export default function cube(options: OBJ_CubePoints) {
   const o = joinObjects(
     {
       side: 1,
@@ -74,14 +85,14 @@ export default function cube(options: OBJ_Cube) {
     options,
   );
   const {
-    side, center, rotation, transform,
+    side, center, transform,
   } = o;
   if (o.lines) {
-    return [toLines(side, center, rotation, transform)];
+    return [toLines(side, center, transform)];
   }
 
   const s = side / 2;
-  const pointsRaw = toPoints([
+  const triPoints: Array<number> = [
     // face +z
     -s, -s, s,
     s, -s, s,
@@ -124,8 +135,9 @@ export default function cube(options: OBJ_Cube) {
     s, -s, s,
     -s, -s, s,
     -s, -s, -s,
-  ]);
-  const normalsRaw = toPoints([
+  ];
+  const pointsRaw = toPoints(triPoints);
+  const normalPoints: Array<number> = [
     // +z
     0, 0, 1,
     0, 0, 1,
@@ -168,14 +180,14 @@ export default function cube(options: OBJ_Cube) {
     0, -1, 0,
     0, -1, 0,
     0, -1, 0,
-  ]);
-  if (center == null && rotation == null && transform == null) {
+  ];
+
+  const normalsRaw = toPoints(normalPoints);
+
+  if (center == null && transform == null) {
     return [pointsRaw, normalsRaw];
   }
   let matrix;
-  if (rotation != null) {
-    matrix = new Transform().rotate(rotation).matrix();
-  }
 
   let transformMatrix;
   let normalTransformMatrix;
@@ -189,13 +201,13 @@ export default function cube(options: OBJ_Cube) {
     c = getPoint(center);
   }
   const points = [];
-  let xNormal = matrix == null ? [1, 0, 0] : m3.transform(matrix, 1, 0, 0);
-  let xNegNormal = matrix == null ? [-1, 0, 0] : m3.transform(matrix, -1, 0, 0);
-  let yNormal = matrix == null ? [0, 1, 0] : m3.transform(matrix, 0, 1, 0);
-  let yNegNormal = matrix == null ? [0, -1, 0] : m3.transform(matrix, 0, -1, 0);
-  let zNormal = matrix == null ? [0, 0, 1] : m3.transform(matrix, 0, 0, 1);
-  let zNegNormal = matrix == null ? [0, 0, -1] : m3.transform(matrix, 0, 0, -1);
-  if (transform != null) {
+  let xNormal = [1, 0, 0];
+  let xNegNormal = [-1, 0, 0];
+  let yNormal = [0, 1, 0];
+  let yNegNormal = [0, -1, 0];
+  let zNormal = [0, 0, 1];
+  let zNegNormal = [0, 0, -1];
+  if (normalTransformMatrix != null) {
     xNormal = m3.transform(normalTransformMatrix, ...xNormal);
     xNegNormal = m3.transform(normalTransformMatrix, ...xNegNormal);
     yNormal = m3.transform(normalTransformMatrix, ...yNormal);
@@ -211,7 +223,7 @@ export default function cube(options: OBJ_Cube) {
     if (c != null) {
       p = p.add(c);
     }
-    if (transform != null) {
+    if (transformMatrix != null) {
       p = p.transformBy(transformMatrix);
     }
     points.push(p);
