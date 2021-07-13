@@ -14,6 +14,58 @@ export type OBJ_Cube = {
   transform?: TypeParsableTransform,
 }
 
+function toLines(
+  side: number,
+  center: TypeParsablePoint,
+  rotation: TypeParsableRotation,
+  transform: TypeParsableTransform,
+) {
+  const s = side;
+  console.log([
+    -s, -s, s, s, -s, s,
+    s, -s, s, s, s, s,
+    s, s, s, -s, s, s,
+    -s, s, s, -s, -s, s,
+    -s, -s, s, -s, -s, -s,
+    -s, s, s, -s, s, -s,
+    s, s, s, s, s, -s,
+    s, -s, s, s, -s, -s,
+    -s, -s, -s, s, -s, -s,
+    s, -s, -s, s, s, -s,
+    s, s, -s, -s, s, -s,
+    -s, s, -s, -s, -s, -s,
+  ])
+  const points = toPoints([
+    -s, -s, s, s, -s, s,
+    s, -s, s, s, s, s,
+    s, s, s, -s, s, s,
+    -s, s, s, -s, -s, s,
+    -s, -s, s, -s, -s, -s,
+    -s, s, s, -s, s, -s,
+    s, s, s, s, s, -s,
+    s, -s, s, s, -s, -s,
+    -s, -s, -s, s, -s, -s,
+    s, -s, -s, s, s, -s,
+    s, s, -s, -s, s, -s,
+    -s, s, -s, -s, -s, -s,
+  ]);
+  if (center == null && rotation == null && transform == null) {
+    return points;
+  }
+  let t = new Transform();
+  if (center != null) {
+    t = t.translate(center);
+  }
+  if (rotation != null) {
+    t = t.rotate(rotation);
+  }
+  if (transform != null) {
+    t = new Transform([...t.def, ...getTransform(transform).def]);
+  }
+  const matrix = t.matrix();
+  return points.map(p => p.transformBy(matrix));
+}
+
 export default function cube(options: OBJ_Cube) {
   const o = joinObjects(
     {
@@ -24,6 +76,9 @@ export default function cube(options: OBJ_Cube) {
   const {
     side, center, rotation, transform,
   } = o;
+  if (o.lines) {
+    return [toLines(side, center, rotation, transform)];
+  }
 
   const s = side / 2;
   const pointsRaw = toPoints([

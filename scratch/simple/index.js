@@ -177,11 +177,12 @@ figure.add({
   sides: 50
 });
 figure.add({
-  make: 'cone',
-  radius: 0.3,
+  make: 'cube',
+  side: 0.5,
   lines: true,
-  sides: 20,
-  ends: false,
+  // sides: 20,
+  // ends: false,
+  color: [0, 0.6, 0, 1],
 });
 
 figure.add({
