@@ -6,7 +6,7 @@ import { joinObjects } from '../tools';
 import { Transform, getTransform } from '../geometry/Transform';
 import type { TypeRotationDefinition } from '../geometry/Transform';
 import {
-  getTriangles, getFlatNormals, getCurveNormals, getSurfaceNormals,
+  getTriangles, getFlatNormals, getCurveNormals, getSurfaceNormals, getLines,
 } from './surface';
 
 /*
@@ -230,6 +230,9 @@ function revolve(options: OBJ_Revolve) {
   }
 
   const points = getLathePoints(defined);
+  if (o.lines) {
+    return [getLines(points)];
+  }
   const surfaceNormals = getSurfaceNormals(points);
   const triangles = getTriangles(points);
   let normals;

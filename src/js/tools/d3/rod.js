@@ -24,11 +24,12 @@ export default function rod(options: OBJ_Rod) {
       ends: true,
       rotation: 0,
       length: 1,
+      lines: false,
     },
     options,
   );
   const {
-    ends, rotation, sides, radius, normals, length, transform,
+    ends, rotation, sides, radius, normals, length, transform, lines,
   } = o;
   let line;
   if (o.line == null) {
@@ -54,5 +55,6 @@ export default function rod(options: OBJ_Rod) {
     position: line.p1,
     profile,
     transform,
+    lines,
   });
 }

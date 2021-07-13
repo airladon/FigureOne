@@ -169,6 +169,22 @@ const a = figure.add({
 });
 
 figure.add({
+  make: 'sphere',
+  light: null,
+  radius: 0.9999,
+  // lines: true,
+  color: [1, 1, 1, 1],
+  sides: 50
+});
+figure.add({
+  make: 'cone',
+  radius: 0.3,
+  lines: true,
+  sides: 20,
+  ends: false,
+});
+
+figure.add({
   make: 'rod',
   radius: 0.01,
   line: [[0, 0, 0], [1, 0, 0]],
@@ -179,14 +195,14 @@ figure.add({
   radius: 0.01,
   line: [[0, 0, 0], [0, 1, 0]],
   color: [0, 0, 1, 1],
-  transform: ['s', 1, 1, 0.1],
+  transform: ['s', 1, 1, 0.5],
 });
 figure.add({
   make: 'cone',
   radius: 0.03,
   line: [[0, 1, 0], [0, 1.1, 0]],
   color: [0, 0, 1, 1],
-  transform: ['s', 1, 1, 0.3],
+  transform: ['s', 1, 1, 0.5],
 });
 figure.add({
   make: 'rod',
@@ -196,44 +212,30 @@ figure.add({
 });
 figure.add({
   make: 'revolve',
-  profile: [[0, 0], [0.1, 0.1], [0.2, 0.05], [0.2, 0]],
+  profile: [[0, 0], [0.5, 0.1], [0.7, 0.05], [0.7, 0]],
   color: [0, 1, 1, 1],
+  lines: true,
 });
 
 a.animations.new()
   .rotation({ velocity: ['xyz', 0.05, 0.1, 0], duration: null })
   .start();
 
-const x = Fig.range(-0.5, 0.5, 0.01);
-const y = Fig.range(-0.5, 0.5, 0.01);
+const x = Fig.range(-0.5, 0.5, 0.015);
+const y = Fig.range(-0.5, 0.5, 0.015);
 const rows = [];
 for (let i = 0; i < x.length; i += 1) {
   const cols = [];
   for (let j = 0; j < y.length; j += 1) {
-    cols.push(new Fig.Point(x[i], y[j], 0.1 * Math.cos(y[j] * 2 * Math.PI * 2)));
+    cols.push(new Fig.Point(x[i], y[j], 0.05 * Math.cos(y[j] * 2 * Math.PI * 2)));
   }
   rows.push(cols);
 }
 
 figure.add({
   make: 'surface',
-  normals: 'flat',
-  color: [1, 0, 0, 1],
+  name: 'surf',
+  color: [0, 0, 1, 0.9],
   points: rows,
-  // transform: ['xyz', -Math.PI / 4, 0, 0]
+  lines: true,
 });
-
-// const p = figure.add({
-//   make: 'polygon', radius: 0.2, sides: 100,
-// });
-
-// p.animations.new()
-//   .custom({
-//     callback: (t) => {
-//       const x = 0.5 * Math.cos(t * 2 * Math.PI * 0.1);
-//       const y = 0.5 * Math.sin(t * 2 * Math.PI * 0.1);
-//       p.setPosition(x, y);
-//     },
-//     duration: null,
-//   })
-//   .start();

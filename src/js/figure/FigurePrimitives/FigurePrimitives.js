@@ -2787,10 +2787,15 @@ export default class FigurePrimitives {
     if (oIn.dimension != null) {
       defaultOptions.vertexShader.dimension = oIn.dimension;
     }
+    if (oIn.glPrimitive === 'LINES') {
+      defaultOptions.vertexShader.light = null;
+      defaultOptions.fragmentShader.light = null;
+    }
     if (oIn.light != null) {
       defaultOptions.vertexShader.light = oIn.light;
       defaultOptions.fragmentShader.light = oIn.light;
     }
+    console.log(joinObjects({}, oIn))
     if (oIn.colors != null) {
       defaultOptions.vertexShader.color = 'vertex';
       defaultOptions.fragmentShader.color = 'vertex';
@@ -2945,9 +2950,14 @@ export default class FigurePrimitives {
    * @see {@link OBJ_Generic} for options and examples.
    */
   generic3(...optionsIn: Array<OBJ_Generic3D>) {
-    const options = joinObjects({}, {
-      dimension: 3, light: 'directional', usage: 'STATIC',
-    }, ...optionsIn);
+    const oIn = joinObjects({}, ...optionsIn);
+    const defaultOptions = {
+      dimension: 3,
+      light: oIn.lines ? null : 'directional',
+      usage: 'STATIC',
+    };
+    const options = joinObjects({}, defaultOptions, oIn);
+    console.log(joinObjects({}, options))
 
     const processOptions = (o, u) => {
       if (o.usage == null) {
@@ -2984,7 +2994,7 @@ export default class FigurePrimitives {
         o.vertices = toNumbers(o.vertices);
         o.vertices = { data: o.vertices, usage: o.usage, size: 3 };
       }
-      if (o.normals != null) {
+      if (o.normals != null && Array.isArray(o.normals)) {
         o.normals = toNumbers(o.normals);
         o.normals = { data: o.normals, usage: o.usage, size: 3 };
       }
@@ -3028,11 +3038,21 @@ export default class FigurePrimitives {
     optionsIn: Object,
     getPointsFn: (Object) => [Array<Point>, Array<Point>],
   ) {
-    const element = this.generic3(optionsIn, {
-      points: [],
-      normals: [],
-    });
-    element.custom.options = joinObjects({}, defaultOptions, optionsIn);
+    const options = joinObjects({}, defaultOptions, optionsIn)
+    const element = this.generic3(joinObjects(
+      {},
+      options,
+      {
+        points: [],
+        normals: options.lines ? null : [],
+        glPrimitive: options.lines ? 'LINES' : undefined,
+      },
+    ));
+    // const element = this.generic3(optionsIn, {
+    //   points: [],
+    //   normals: [],
+    // });
+    element.custom.options = options;
     element.custom.getPoints = getPointsFn;
     element.custom.updatePoints = (updateOptions: Object) => {
       const o = joinObjects({}, element.custom.options, updateOptions);
@@ -3040,10 +3060,17 @@ export default class FigurePrimitives {
       const [
         points, normals,
       ] = element.custom.getPoints(o);
-      element.custom.updateGeneric(joinObjects({}, o, {
-        points,
-        normals,
-      }));
+      if (o.lines == null || o.lines === false) {
+        element.custom.updateGeneric(joinObjects({}, o, {
+          points,
+          normals,
+        }));
+      } else {
+        element.custom.updateGeneric(joinObjects({}, o, {
+          points,
+          normals: null,
+        }));
+      }
     };
     element.custom.updatePoints();
     return element;

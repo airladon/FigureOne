@@ -13,6 +13,7 @@ export type OBJ_Cone = {
   length?: number,
   rotation?: number,
   transform?: TypeParsableTransform,
+  lines?: boolean,
 }
 
 export default function cone(options: OBJ_Cone) {
@@ -23,11 +24,12 @@ export default function cone(options: OBJ_Cone) {
       normals: 'flat',
       rotation: 0,
       length: 1,
+      lines: false,
     },
     options,
   );
   const {
-    rotation, sides, radius, normals, length, transform,
+    rotation, sides, radius, normals, length, transform, lines,
   } = o;
   let line;
   if (o.line == null) {
@@ -46,5 +48,6 @@ export default function cone(options: OBJ_Cone) {
     position: line.p1,
     profile,
     transform,
+    lines,
   });
 }

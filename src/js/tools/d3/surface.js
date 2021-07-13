@@ -177,6 +177,10 @@ function getTriangles(
 function getLines(
   surfacePoints: Array<Array<Point>>,
 ) {
+  console.log(surfacePoints)
+  if (surfacePoints.length === 0) {
+    return [];
+  }
   const rows = surfacePoints.length;
   const cols = surfacePoints[0].length;
   const lines = [];
@@ -402,7 +406,7 @@ function surface(options: OBJ_Surface) {
     surfacePoints = points.map(rows => rows.map(col => col.transformBy(matrix)));
   }
   if (lines) {
-    return getLines(surfacePoints);
+    return [getLines(surfacePoints), []];
   }
   const triangles = getTriangles(surfacePoints);
   const surfaceNormals = getSurfaceNormals(surfacePoints);

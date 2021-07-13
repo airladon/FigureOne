@@ -4,6 +4,7 @@ import { getTransform } from '../geometry/Transform';
 import * as m3 from '../m3';
 import type { TypeParsablePoint } from '../geometry/Point';
 import { sphericalToCartesian } from '../geometry/common';
+import { getLines } from './surface';
 import { joinObjects } from '../tools';
 
 export type OBJ_SpherePoints = {
@@ -63,6 +64,9 @@ export default function sphere(options: OBJ_SpherePoints) {
         curvedNormalsArc[j] = curvedNormalsArc[j].transformBy(inverseTranspose);
       }
     }
+  }
+  if (o.lines) {
+    return [getLines(arcs)];
   }
 
   for (let p = 0; p < sides * 2; p += 1) {
