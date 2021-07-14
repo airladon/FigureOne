@@ -412,11 +412,11 @@ export type OBJ_ElementMove = {
  * This is an object where the keys are scenario names and values are
  * {@link OBJ_Scenario} objects defining the scenario.
  *
- * @property {OBJ_Scenario} scenarioName where scenarioName can be any
+ * @property {OBJ_Scenario} _scenarioName where scenarioName can be any
  * string that names the scenario
  */
 export type TypeScenarios = {
-  [scenarioName: string]: OBJ_Scenario,
+  [_scenarioName: string]: OBJ_Scenario,
 };
 
 /**

@@ -45,7 +45,7 @@ export default class EquationLine extends Symbol {
     const [points] = makePolyLine(
       [new Point(0, 0), line.p2], options.width, false, 'mid', 'none', 0.1,
       1, 0, options.dash, false,
-      2, [[]], 0, [[]], options.arrow,
+      2, [[]], 0, options.arrow,
     );
 
     return [points, angle, length, 'triangles'];

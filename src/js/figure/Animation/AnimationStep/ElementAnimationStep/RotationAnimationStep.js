@@ -174,7 +174,6 @@ export type OBJ_RotationAnimationStep = {
  * const step2 = new Fig.Animation.RotationAnimationStep({
  *   element: p,
  *   target: 0,
- *   direction: -1,
  *   duration: 2,
  * });
  *

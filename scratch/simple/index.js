@@ -302,137 +302,34 @@ const figure = new Fig.Figure();
 //   lines: true,
 //   color: [1, 0, 0, 1],
 // });
+// Using duration
+const p = figure.add(
+  {
+    name: 'p',
+    make: 'polygon',
+    sides: 4,
+    radius: 0.5,
+    position: [0, 0],
+  },
+);
 
+p.animations.new()
+  .rotation({ target: Math.PI, duration: 2 })
+  .start();
 
-
-// const points = Fig.tools.g2.surfaceGrid({
-//   x: [-0.8, 0.8, 0.03],
-//   y: [-0.8, 0.8, 0.03],
-//   z: (x, y) => y * 0.2 * Math.cos(x * 2 * Math.PI),
-// });
-// figure.scene.setCamera({ position: [-1, -1, 0.7], up: [0, 0, 1] });
-// figure.add({
-//   make: 'surface',
-//   points,
-//   lines: true,
-//   color: [1, 0, 0, 1],
-// });
-// figure.add({
-//   make: 'gl',
-//   vertices: [0, 0, 0.5, 0, 0, 0.5, 0.5, 0, 1, 0, 0.5, 0.5],
-//   color: [1, 0, 0, 1],
-//   position: [-0.4, -0.4, 0],
-//   move: { type: 'rotation' },
-// });
-
-// @example
-// Simple rotatable element with a custom position
-figure.add({
-  make: 'gl',
-  vertices: [0, 0, 0.5, 0, 0, 0.5, 0.5, 0, 1, 0, 0.5, 0.5],
-  color: [1, 0, 0, 1],
-  position: [-0.4, -0.4, 0],
-  move: { type: 'rotation' },
+// // Using velocity
+// p.animations.new()
+//   .rotation({ target: Math.PI, velocity: Math.PI / 2 })
+//   .start();
+// Different ways to create a stand-alone step
+const step1 = p.animations.rotation({ target: Math.PI, duration: 2 });
+const step2 = new Fig.Animation.RotationAnimationStep({
+  element: p,
+  target: 0,
+  duration: 2,
 });
-// @example
-// Assign a color to each vertex
-// figure.add({
-//   make: 'gl',
-//   vertices: [0, 0, 0.5, 0, 0, 0.5, 0.5, 0, 1, 0, 0.5, 0.5],
-//   colors: [
-//     0, 0, 1, 1,
-//     1, 0, 0, 1,
-//     0, 0, 1, 1,
-//     1, 0, 0, 1,
-//     0, 0, 1, 1,
-//     1, 0, 0, 1,
-//   ],
-// });
-// // @example
-// // Assign a color to each vertex, using just 3 numbers per color (no alpha)
-// figure.add({
-//   make: 'gl',
-//   vertices: [0, 0, 0.5, 0, 0, 0.5, 0.5, 0, 1, 0, 0.5, 0.5],
-//   colors: {
-//     data: [
-//       0, 0, 1,
-//       1, 0, 0,
-//       0, 0, 1,
-//       1, 0, 0,
-//       0, 0, 1,
-//       1, 0, 0,
-//     ],
-//     size: 3,
-//   },
-// });
-// // @example
-// // Texture filled square
-// figure.add({
-//   make: 'gl',
-//   vertices: [-0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5],
-//   numVertices: 6,
-//   texture: {
-//     src: './flower.jpeg',
-//     coords: [0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1],
-//     loadColor: [0, 0, 0, 0],
-//   },
-// });
-// // @example
-// // Make a 3D cube using composed shaders
-// const { toNumbers } = Fig.tools.g2;
-// const [cubeVertices, cubeNormals] = Fig.tools.g2.cube({ side: 0.5 });
-// figure.scene.setProjection({ style: 'orthographic' });
-// figure.scene.setCamera({ position: [2, 1, 2] });
-// figure.scene.setLight({ directional: [0.7, 0.5, 1] });
 
-// figure.add({
-//   make: 'gl',
-//   light: 'directional',
-//   dimension: 3,
-//   vertices: toNumbers(cubeVertices),
-//   normals: toNumbers(cubeNormals),
-//   color: [1, 0, 0, 1],
-// });
-// @example
-// Custom shaders
-// Make a shader with a custom attribute aVertex and custom uniform uColor,
-// which are then defined in the options.
-// Note, the `u_worldViewProjectionMatrix` uniform does not need to be defined
-// as this will be passed by FigureOne using the Scene information of the
-// figure (or element if an element has a custom scene attached to it).
-// figure.add({
-//   make: 'gl',
-//   vertexShader: {
-//     src: `
-//       uniform mat4 u_worldViewProjectionMatrix;
-//       attribute vec4 aVertex;
-//       void main() {
-//         gl_Position = u_worldViewProjectionMatrix * aVertex;
-//       }`,
-//     vars: ['aVertex', 'u_worldViewProjectionMatrix'],
-//   },
-//   fragmentShader: {
-//     src: `
-//     precision mediump float;
-//     uniform vec4 uColor;
-//     void main() {
-//       gl_FragColor = uColor;
-//       gl_FragColor.rgb *= gl_FragColor.a;
-//     }`,
-//     vars: ['uColor'],
-//   },
-//   attributes: [
-//     {
-//       name: 'aVertex',
-//       size: 3,
-//       data: [0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.5, 0, 0, 1, 0, 0, 0.5, 0.5, 0],
-//     },
-//   ],
-//   uniforms: [
-//     {
-//       name: 'uColor',
-//       length: 4,
-//       value: [1, 0, 0, 1],
-//     },
-//   ],
-// });
+p.animations.new()
+  .then(step1)
+  .then(step2)
+  .start();

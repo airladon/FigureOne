@@ -1519,7 +1519,7 @@ export type EQN_SquareBracketSymbol = {
  *   make: 'equation',
  *   forms: {
  *     form1: { topComment: ['a', 'b', 'l1_line', 0.2, 0.2] },
- *     form2: { topComment: ['a', 'b', 'l1', 0.2, 0.2] },
+ *     form2: { topComment: ['c', 'd', 'l1', 0.2, 0.2] },
  *   },
  * });
  * eqn.animations.new()
