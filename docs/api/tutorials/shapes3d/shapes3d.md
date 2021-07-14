@@ -1,3 +1,4 @@
+3D shapes can be drawn, animated and interacted with in FigureOne.
 
 ### <a id="shapes3d-boilerplate"></a> Text Boilerplate
 ```js

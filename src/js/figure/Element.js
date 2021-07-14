@@ -3687,11 +3687,15 @@ class FigureElement {
     if (!this.isTouchable) {
       return false;
     }
-    if (this.drawBorderBuffer == null && this.drawBorder == null) {
+    const borders = this.getBorder('draw', 'touchBorder');
+    if (borders == null || borders.length === 0) {
       return false;
     }
+    // if (this.drawBorderBuffer == null && this.drawBorder == null) {
+    //   return false;
+    // }
     const vertexLocation = glLocation.transformBy(this.spaceTransformMatrix('gl', 'draw'));
-    const borders = this.getBorder('draw', 'touchBorder');
+    // const borders = this.getBorder('draw', 'touchBorder');
     if (borders == null) {
       return false;
     }
@@ -3898,8 +3902,12 @@ class FigureElementPrimitive extends FigureElement {
   click(glPoint: Point = new Point(0, 0)) {
     super.click(glPoint);
     if (this.drawingObject instanceof TextObjectBase) {
+      let p = glPoint;
+      if (this.getScene().style !== 'perspective') {
+        p = glPoint.transformBy(this.spaceTransformMatrix('gl', 'draw'));
+      }
       this.drawingObject.click(
-        glPoint,
+        p,
         this.fnMap,
       );
       if (this.recorder.state === 'recording') {
