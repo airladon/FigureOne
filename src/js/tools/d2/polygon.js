@@ -1,10 +1,12 @@
 // @flow
 /* eslint-disable prefer-destructuring */
 import { Point, getPoint } from '../geometry/Point';
+import type { TypeParsablePoint } from '../geometry/Point';
 import { getMatrix } from '../geometry/Transform';
-import * as m3 from '../m3';
 import { pointsToNumbers } from '../geometry/tools';
 import { joinObjects } from '../tools';
+import type { Type3DMatrix } from '../m3';
+import type { TypeParsableTransform } from '../geometry/Transform';
 
 /**
  * @property {TypeParsablePoint} [center] center position of the polygon
@@ -50,10 +52,10 @@ function getPolygonCorners(
   rotation: number,
   direction: 1 | -1,
   center: Point,
-  transformMatrix: Type3DMatrix | null,
-  close?: boolean,
+  transformMatrix: Type3DMatrix | null = null,
+  close?: boolean = false,
 ) {
-  const points = Array(sides + close ? 1 : 0);
+  const points = Array(sides + (close ? 1 : 0));
   const deltaAngle = Math.PI * 2 / sides;
   for (let i = 0; i < sides; i += 1) {
     const theta = rotation + i * deltaAngle * direction;
@@ -70,7 +72,6 @@ function getPolygonCorners(
   if (close) {
     points[sides] = points[0]._dup();
   }
-  console.log(points);
   return points;
 }
 

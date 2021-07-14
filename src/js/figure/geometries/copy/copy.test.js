@@ -1,5 +1,5 @@
 import {
-  Point, Transform,
+  Point, Transform, getTransform,
 } from '../../../tools/g2';
 import {
   copyPoints,
@@ -436,6 +436,71 @@ describe('Copy tests', () => {
         expect(round(points[1])).toEqual(new Point(0, 1, 0));
         expect(round(points[2])).toEqual(new Point(0, 1, 0));
       });
+    });
+  });
+  describe('Parsable Points and Transforms', () => {
+    test('Points', () => {
+      const points1 = copyPoints([[0, 0]], [{
+        to: [[1, 0], [2, 0], [3, 0]],
+      }]);
+      const points2 = copyPoints([[0, 0]], [{
+        to: [new Point(1, 0), new Point(2, 0), new Point(3, 0)],
+      }]);
+      const points3 = copyPoints([[0, 0]], [{
+        to: [new Point(1, 0), [2, 0], [3, 0]],
+      }]);
+      const points4 = copyPoints([[0, 0]], [{
+        to: [[1, 0], new Point(2, 0), new Point(3, 0)],
+      }]);
+      expect(round(points1[0])).toEqual(new Point(0, 0));
+      expect(round(points1[1])).toEqual(new Point(1, 0));
+      expect(round(points1[2])).toEqual(new Point(2, 0));
+      expect(round(points1[3])).toEqual(new Point(3, 0));
+      expect(round(points1)).toEqual(round(points2));
+      expect(round(points1)).toEqual(round(points3));
+      expect(round(points1)).toEqual(round(points4));
+    });
+    test('Transforms', () => {
+      const points1 = copyPoints([[0, 0]], [{
+        to: [['t', 1, 0], ['t', 2, 0], ['t', 3, 0]],
+      }]);
+      const points2 = copyPoints([[0, 0]], [{
+        to: [new Transform().translate(1, 0), new Transform(['t', 2, 0]), getTransform(['t', 3, 0])],
+      }]);
+      const points3 = copyPoints([[0, 0]], [{
+        to: [['t', 1, 0], new Transform(['t', 2, 0]), getTransform(['t', 3, 0])],
+      }]);
+      const points4 = copyPoints([[0, 0]], [{
+        to: [new Transform().translate(1, 0), ['t', 2, 0], ['t', 3, 0]],
+      }]);
+      expect(round(points1[0])).toEqual(new Point(0, 0));
+      expect(round(points1[1])).toEqual(new Point(1, 0));
+      expect(round(points1[2])).toEqual(new Point(2, 0));
+      expect(round(points1[3])).toEqual(new Point(3, 0));
+      expect(round(points1)).toEqual(round(points2));
+      expect(round(points1)).toEqual(round(points3));
+      expect(round(points1)).toEqual(round(points4));
+    });
+    test('Points and Transforms', () => {
+      const points1 = copyPoints([[0, 0]], [{
+        to: [['t', 1, 0], [2, 0], getTransform(['t', 3, 0])],
+      }]);
+      const points2 = copyPoints([[0, 0]], [{
+        to: [new Point(1, 0), new Transform(['t', 2, 0]), ['t', 3, 0]],
+      }]);
+      const points3 = copyPoints([[0, 0]], [{
+        to: [[1, 0], ['t', 2, 0], ['t', 3, 0]],
+      }]);
+      const points4 = copyPoints([[0, 0]], [{
+        to: [new Transform().translate(1, 0), [2, 0], ['t', 3, 0]],
+      }]);
+      expect(round(points1[0])).toEqual(new Point(0, 0));
+      expect(round(points1[1])).toEqual(new Point(1, 0));
+      expect(round(points1[2])).toEqual(new Point(2, 0));
+      expect(round(points1[3])).toEqual(new Point(3, 0));
+      expect(round(points1)).toEqual(round(points2));
+      expect(round(points1)).toEqual(round(points3));
+      expect(round(points1)).toEqual(round(points4));
     });
   });
 });

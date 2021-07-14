@@ -24,7 +24,7 @@ describe('polygon geometry tests', () => {
           sides: 4,
           radius: Math.sqrt(2),
           rotation: Math.PI / 4,
-          position: [1, 1],
+          center: [1, 1],
         });
         expect(round(points)).toEqual(getPoints([
           [2, 2, 0],
@@ -38,7 +38,7 @@ describe('polygon geometry tests', () => {
           sides: 4,
           radius: Math.sqrt(2),
           rotation: Math.PI / 4,
-          position: [1, 1],
+          center: [1, 1],
           direction: -1,
         });
         expect(round(points)).toEqual(getPoints([
@@ -104,7 +104,7 @@ describe('polygon geometry tests', () => {
           sides: 4,
           radius: Math.sqrt(2),
           rotation: Math.PI / 4,
-          position: [1, 1],
+          center: [1, 1],
           innerRadius: Math.sqrt(2) * 0.5,
         });
         expect(round(points)).toEqual(getPoints([
@@ -124,7 +124,7 @@ describe('polygon geometry tests', () => {
           radius: Math.sqrt(2),
           innerRadius: Math.sqrt(2) * 0.5,
           rotation: Math.PI / 4,
-          position: [1, 1],
+          center: [1, 1],
           direction: -1,
         });
         expect(round(points)).toEqual(getPoints([

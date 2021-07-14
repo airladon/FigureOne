@@ -52,7 +52,7 @@ toc:
   - OBJ_TextLines
   - name: 3D Shape Primitives
     file: ./docs/api/tutorials/shapes3D/shapes3d.md
-  - OBJ_Generic3D
+  - OBJ_Generic3
   - OBJ_Cube
   - OBJ_Sphere
   - OBJ_Cylinder

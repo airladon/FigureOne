@@ -18,7 +18,7 @@ import type {
  * @property {TypeGLBufferUsage} [usage] use `'DYNAMIC'` if the shape's vertices
  * will be updated very frequently (`'STATIC'`)
  */
-export type OBJ_Generic3DAll = {
+export type OBJ_Generic3All = {
   light?: 'directional' | 'point' | null,
   copy?: Array<CPY_Step | string> | CPY_Step,
   usage?: TypeGLBufferUsage,
@@ -37,7 +37,7 @@ export type OBJ_Generic3DAll = {
  * But for many custom shapes, only points and normals of the shape need to be
  * defined, without needing to customize the shaders.
  *
- * {@link OBJ_Generic3D} Provides the ability to create many custom shapes that
+ * {@link OBJ_Generic3} Provides the ability to create many custom shapes that
  * don't need shader customization.
  *
  * @property {'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'} [glPrimitive]
@@ -119,16 +119,16 @@ export type OBJ_Generic3DAll = {
  *   .start();
  */
 
-export type OBJ_Generic3D = {
+export type OBJ_Generic3 = {
   glPrimitive?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
   points?: Array<TypeParsablePoint>,
   normals?: Array<TypeParsablePoint>,
   colors?: Array<TypeColor>,
   texture?: OBJ_Texture,
-} & OBJ_Generic3DAll & OBJ_FigurePrimitive;
+} & OBJ_Generic3All & OBJ_FigurePrimitive;
 
 /**
- * Sphere shape options object that extends {@link OBJ_Generic3D}
+ * Sphere shape options object that extends {@link OBJ_Generic3}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/sphere.png)
@@ -203,7 +203,7 @@ export type OBJ_Sphere = {
 } & OBJ_FigurePrimitive;
 
 /**
- * Cube shape options object that extends {@link OBJ_Generic3D}
+ * Cube shape options object that extends {@link OBJ_Generic3}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/cube.png)
@@ -257,10 +257,10 @@ export type OBJ_Cube = {
   side?: number,
   center?: TypeParsablePoint,
   rotation?: TypeUserRotationDefinition,
-} & OBJ_Generic3D;
+} & OBJ_Generic3;
 
 /**
- * Cylinder shape options object that extends {@link OBJ_Generic3D}
+ * Cylinder shape options object that extends {@link OBJ_Generic3}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/cylinder.png)
@@ -360,7 +360,7 @@ export type OBJ_Cylinder = {
 };
 
 /**
- * Cone shape options object that extends {@link OBJ_Generic3D}
+ * Cone shape options object that extends {@link OBJ_Generic3}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/cone.png)
@@ -435,7 +435,7 @@ export type OBJ_Cone = {
 };
 
 /**
- * Revolve shape options object that extends {@link OBJ_Generic3D}
+ * Revolve shape options object that extends {@link OBJ_Generic3}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/revolve.png)
@@ -548,7 +548,7 @@ export type OBJ_Revolve = {
 };
 
 /**
- * Revolve shape options object that extends {@link OBJ_Generic3D}
+ * Revolve shape options object that extends {@link OBJ_Generic3}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/surface.png)

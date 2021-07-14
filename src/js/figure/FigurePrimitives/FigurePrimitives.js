@@ -85,7 +85,7 @@ import type {
   OBJ_TextLines,
 } from './FigurePrimitiveTypes2D';
 import type {
-  OBJ_Generic3D,
+  OBJ_Generic3,
   OBJ_Sphere,
   OBJ_Cube,
   OBJ_Cylinder,
@@ -531,7 +531,7 @@ export default class FigurePrimitives {
    * {@link FigureElementPrimitive} that draws a generic shape.
    * @see {@link OBJ_Generic} for options and examples.
    */
-  generic3(...optionsIn: Array<OBJ_Generic3D>) {
+  generic3(...optionsIn: Array<OBJ_Generic3>) {
     const oIn = joinObjects({}, ...optionsIn);
     const defaultOptions = {
       dimension: 3,

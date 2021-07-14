@@ -3,7 +3,7 @@
 /* eslint-disable camelcase */
 import {
   Transform, Point, polarToRect, getBoundingRect, getPoints, getPoint,
-  getTransform, isParsableTransform,
+  getTransform, isParsablePoint,
 } from '../../../tools/g2';
 import * as m3 from '../../../tools/m3';
 
@@ -214,7 +214,7 @@ function getPointsToCopy(
   return out;
 }
 
-function copyOffset(
+function copyOffsetLegacy(
   pointsToCopy: Array<Point>,
   // initialPoints: Array<Point>,
   optionsIn: CPY_Step,
@@ -244,9 +244,20 @@ function copyOffset(
   }
   return out;
 }
+function copyOffset(
+  pointsToCopy: Array<Point>,
+  // initialPoints: Array<Point>,
+  offset: Point,
+  type: 'points' | 'normals' = 'points',
+): Array<Point> {
+  if (type === 'normals') {
+    return pointsToCopy.map(p => p._dup());
+  }
+  return pointsToCopy.map(p => p.add(offset));
+}
 
 // TODO Speedup like copyOFfset
-function copyTransform(
+function copyTransformLegacy(
   pointsToCopy: Array<Point>,
   // initialPoints: Array<Point>,
   optionsIn: CPY_Step,
@@ -258,9 +269,25 @@ function copyTransform(
   const options = joinObjects({}, defaultOptions, optionsIn);
   if (
     options.to instanceof Transform
-    || (Array.isArray(options.to) && !Array.isArray(options.to[0]))
+    || (
+      Array.isArray(options.to)
+      && (
+        (
+          typeof options.to[0] === 'number'
+          || typeof options.to[0] === 'string'
+        )
+        || (
+          Array.isArray(options.to[0])
+          && (
+            typeof options.to[0] === 'string'
+            || typeof options.to[0] === 'number'
+          )
+        )
+      )
+      && !(options.to[0] instanceof Transform)
+    )
   ) {
-    options.to = [optionsIn.to];
+    options.to = [options.to];
   }
 
   let out = [];
@@ -271,25 +298,20 @@ function copyTransform(
       matrix = m3.transpose(m3.inverse(matrix));
     }
     out = [...out, ...pointsToCopy.map(p => p.transformBy((matrix)))];
-    // const { def } = options.to[i];
-    // let newDef = def;
-    // if (type === 'normals') {
-    //   newDef = [];
-    //   for (let j = 0; j < def.length; j += 1) {
-    //     if (def[j][0] === 'r') {
-    //       newDef.push(def[j]);
-    //     }
-    //   }
-    // }
-    // if (newDef.length > 0) {
-    //   const matrix = getTransform(newDef).matrix();
-    //   // $FlowFixMe
-    //   out = [...out, ...pointsToCopy.map(p => p.transformBy((matrix)))];
-    // } else {
-    //   out = [...out, ...pointsToCopy.map(p => p._dup())];
-    // }
   }
   return out;
+}
+
+function copyTransform(
+  pointsToCopy: Array<Point>,
+  transform: Transform,
+  type: 'points' | 'normals' = 'points',
+): Array<Point> {
+  let matrix = transform.matrix();
+  if (type === 'normals') {
+    matrix = m3.transpose(m3.inverse(matrix));
+  }
+  return pointsToCopy.map(p => p.transformBy((matrix)));
 }
 
 // TODO Speedup like copyOFfset
@@ -436,20 +458,58 @@ function copyStep(
   }
 
   if (copyStyle === 'to') {
-    if (options.to == null) {
+    const { to } = options;
+    debugger;
+    if (to == null) {
       return points;
     }
-    if (Array.isArray(options.to) && options.to.length === 0) {
+    if (to instanceof Point) {
+      return copyOffset(points, to, type);
+    }
+    if (to instanceof Transform) {
+      return copyTransform(points, to, type);
+    }
+    if (Array.isArray(to)) {
+      const processToCopyStep = (toStep) => {
+        if (
+          (Array.isArray(toStep) && typeof toStep[0] === 'number')
+          || (toStep instanceof Point)
+        ) {
+          return copyOffset(points, getPoint(toStep), type);
+        }
+        if (
+          (Array.isArray(toStep) && typeof toStep[0] === 'string')
+          || (toStep instanceof Transform)
+        ) {
+          return copyTransform(points, getTransform(toStep), type);
+        }
+      };
+      const result = processToCopyStep(to);
+      if (result != null) {
+        return result;
+      }
+      const out = [];
+      for (let i = 0; i < to.length; i += 1) {
+        const res = processToCopyStep(to[i]);
+        if (res != null) {
+          out.push(...res);
+        }
+      }
+      return out;
+    }
+    if (Array.isArray(to) && to.length === 0) {
       return points;
     }
 
-    if (isParsableTransform(options.to)) {
-      return copyTransform(points, options, type);
+    if (
+      isParsablePoint(options.to)
+    ) {
+      return copyOffset(points, options, type);
     }
     // if (Array.isArray(options.to) && options.to[0] instanceof Transform) {
     //   return copyTransform(points, options, type);
     // }
-    return copyOffset(points, options, type);
+    return copyTransform(points, options, type);
   }
 
   if (copyStyle === 'rotation') {
