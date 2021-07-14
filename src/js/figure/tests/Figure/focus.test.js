@@ -177,7 +177,7 @@ describe('Animate To State', () => {
       expect(figure.getRemainingAnimationTime()).toBe(0);
       expect(drawCallback.mock.calls).toHaveLength(1);
     });
-    /**
+    /*
      * This is a questionable test. Jest only updates timers when
      * figure.mock.timeStep() is called. Therefore, if it is called 4.5s after
      * the p1 animation is kicked off, it will update the timers such that the
