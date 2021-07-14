@@ -65,6 +65,34 @@ import Scene from '../../tools/scene';
 import type {
   OBJ_LineStyleSimple, OBJ_GenericGL,
 } from './FigurePrimitiveTypes';
+import type {
+  OBJ_Generic,
+  OBJ_Polyline,
+  OBJ_Polygon,
+  OBJ_Polygon_Defined,
+  OBJ_Star,
+  OBJ_Rectangle,
+  OBJ_Rectangle_Defined,
+  OBJ_Ellipse,
+  OBJ_Arc,
+  OBJ_Triangle,
+  OBJ_Line,
+  OBJ_Grid,
+  OBJ_Arrow,
+  OBJ_TextDefinition,
+  OBJ_Text,
+  OBJ_TextLine,
+  OBJ_TextLines,
+} from './FigurePrimitiveTypes2D';
+import type {
+  OBJ_Generic3D,
+  OBJ_Sphere,
+  OBJ_Cube,
+  OBJ_Cylinder,
+  OBJ_Cone,
+  OBJ_Revolve,
+  OBJ_Surface,
+} from './FigurePrimitiveTypes3D';
 
 
 /**
@@ -315,7 +343,7 @@ export default class FigurePrimitives {
   gl(...optionsIn: Array<OBJ_GenericGL>) {
     // Setup the default options
     const oIn = joinObjects({}, ...optionsIn)
-    const defaultOptions = {
+    const defaultOptions: OBJ_GenericGL = {
       glPrimitive: 'TRIANGLES',
       vertexShader: { dimension: 2 },
       fragmentShader: { color: 'uniform' },

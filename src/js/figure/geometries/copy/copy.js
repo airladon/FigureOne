@@ -265,7 +265,7 @@ function copyTransform(
 
   let out = [];
   for (let i = 0; i < options.to.length; i += 1) {
-    const t = options.to[i];
+    const t = options.to[i];  // $FlowFixMe
     let matrix = getTransform(t).matrix();
     if (type === 'normals') {
       matrix = m3.transpose(m3.inverse(matrix));

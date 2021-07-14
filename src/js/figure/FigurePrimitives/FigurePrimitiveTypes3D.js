@@ -26,6 +26,7 @@ export type OBJ_Generic3DAll = {
 
 /**
  * Options object for a {@link FigureElementPrimitive} of a generic 3D shape.
+ * Extends and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/generic3.png)
  *
@@ -36,8 +37,8 @@ export type OBJ_Generic3DAll = {
  * But for many custom shapes, only points and normals of the shape need to be
  * defined, without needing to customize the shaders.
  *
- * This provides the ability to create many custom shapes that don't need shader
- * customization.
+ * {@link OBJ_Generic3D} Provides the ability to create many custom shapes that
+ * don't need shader customization.
  *
  * @property {'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'} [glPrimitive]
  * (`'TRIANGLES'`)
@@ -49,8 +50,9 @@ export type OBJ_Generic3DAll = {
  * @property {OBJ_Texture} [texture] use to overlay a texture onto the shape's
  * surfaces
  *
- * @example
-
+ * @see To test examples, append them to the
+ * <a href="#shapes3d-boilerplate">boilerplate</a>
+ *
  * @example
  * // Cubes with texture on each face
  * figure.scene.setProjection({ style: 'orthographic' });
