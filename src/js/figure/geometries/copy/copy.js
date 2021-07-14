@@ -3,11 +3,11 @@
 /* eslint-disable camelcase */
 import {
   Transform, Point, polarToRect, getBoundingRect, getPoints, getPoint,
-  getTransform, isParsablePoint,
+  getTransform,
 } from '../../../tools/g2';
 import * as m3 from '../../../tools/m3';
 
-import type { TypeParsablePoint } from '../../../tools/g2';
+import type { TypeParsablePoint, TypeParsableTransform } from '../../../tools/g2';
 
 import {
   joinObjects,
@@ -173,8 +173,8 @@ import {
  * });
  */
 export type CPY_Step = {
-  to?: Point | [number, number] | Transform
-    | Array<Point | [number, number] | Transform> | Transform,
+  to?: TypeParsablePoint | TypeParsableTransform
+    | Array<TypeParsablePoint | TypeParsableTransform>,
   along?: 'x' | 'y' | 'z' | number | 'rotation' | 'moveOnly' | TypeParsablePoint,
   axis?: TypeParsablePoint,
   num?: number,
@@ -214,36 +214,6 @@ function getPointsToCopy(
   return out;
 }
 
-function copyOffsetLegacy(
-  pointsToCopy: Array<Point>,
-  // initialPoints: Array<Point>,
-  optionsIn: CPY_Step,
-  type: 'points' | 'normals' = 'points',
-) {
-  const defaultOptions = {
-    to: [],
-  };
-  const options = joinObjects({}, defaultOptions, optionsIn);
-  options.to = getPoints(options.to);
-
-  let k = 0;
-  const out = Array(options.to.length * pointsToCopy.length);
-  for (let i = 0; i < options.to.length; i += 1) {
-    for (let j = 0; j < pointsToCopy.length; j += 1) {
-      if (type === 'points') {
-        out[k] = new Point(
-          pointsToCopy[j].x + options.to[i].x,
-          pointsToCopy[j].y + options.to[i].y,
-          pointsToCopy[j].z + options.to[i].z,
-        );
-      } else {
-        out[k] = pointsToCopy[j]._dup();
-      }
-      k += 1;
-    }
-  }
-  return out;
-}
 function copyOffset(
   pointsToCopy: Array<Point>,
   // initialPoints: Array<Point>,
@@ -254,52 +224,6 @@ function copyOffset(
     return pointsToCopy.map(p => p._dup());
   }
   return pointsToCopy.map(p => p.add(offset));
-}
-
-// TODO Speedup like copyOFfset
-function copyTransformLegacy(
-  pointsToCopy: Array<Point>,
-  // initialPoints: Array<Point>,
-  optionsIn: CPY_Step,
-  type: 'points' | 'normals' = 'points',
-) {
-  const defaultOptions = {
-    to: [],
-  };
-  const options = joinObjects({}, defaultOptions, optionsIn);
-  if (
-    options.to instanceof Transform
-    || (
-      Array.isArray(options.to)
-      && (
-        (
-          typeof options.to[0] === 'number'
-          || typeof options.to[0] === 'string'
-        )
-        || (
-          Array.isArray(options.to[0])
-          && (
-            typeof options.to[0] === 'string'
-            || typeof options.to[0] === 'number'
-          )
-        )
-      )
-      && !(options.to[0] instanceof Transform)
-    )
-  ) {
-    options.to = [options.to];
-  }
-
-  let out = [];
-  for (let i = 0; i < options.to.length; i += 1) {
-    const t = options.to[i];  // $FlowFixMe
-    let matrix = getTransform(t).matrix();
-    if (type === 'normals') {
-      matrix = m3.transpose(m3.inverse(matrix));
-    }
-    out = [...out, ...pointsToCopy.map(p => p.transformBy((matrix)))];
-  }
-  return out;
 }
 
 function copyTransform(
@@ -314,7 +238,7 @@ function copyTransform(
   return pointsToCopy.map(p => p.transformBy((matrix)));
 }
 
-// TODO Speedup like copyOFfset
+// TODO Speedup by preallocating array
 function copyLinear(
   pointsToCopy: Array<Point>,
   // initialPoints: Array<Point>,
@@ -404,37 +328,6 @@ function copyAngle(
   return out;
 }
 
-// function copyArc(
-//   pointsToCopy: Array<Point>,
-//   initialPoints: Array<Point>,
-//   optionsIn: CPY_Arc,
-// ) {
-//   const defaultOptions = {
-//     num: 1,
-//     step: 0.1,
-//     angleStep: Math.PI / 4,
-//     // arcStep: 0.1,
-//     startAngle: 0,
-//     stopAngle: Math.PI * 2,
-//     center: [0, 0],
-//   };
-
-//   const options = joinObjects({}, defaultOptions, optionsIn);
-//   options.center = getPoint(options.center);
-
-//   let out = initialPoints;
-//   const { center } = options;
-//   for (let i = 1; i < options.num + 1; i += 1) {
-//     const matrix = new Transform()
-//       .translate(-center.x, -center.y)
-//       .rotate(i * options.step)
-//       .translate(center.x, center.y)
-//       .matrix();
-//     out = [...out, ...pointsToCopy.map(p => p.transformBy(matrix))];
-//   }
-//   return out;
-// }
-
 
 function copyStep(
   points: Array<Point>,
@@ -459,7 +352,6 @@ function copyStep(
 
   if (copyStyle === 'to') {
     const { to } = options;
-    debugger;
     if (to == null) {
       return points;
     }
@@ -474,15 +366,16 @@ function copyStep(
         if (
           (Array.isArray(toStep) && typeof toStep[0] === 'number')
           || (toStep instanceof Point)
-        ) {
+        ) { // $FlowFixMe
           return copyOffset(points, getPoint(toStep), type);
         }
         if (
           (Array.isArray(toStep) && typeof toStep[0] === 'string')
           || (toStep instanceof Transform)
-        ) {
+        ) { // $FlowFixMe
           return copyTransform(points, getTransform(toStep), type);
         }
+        return null;
       };
       const result = processToCopyStep(to);
       if (result != null) {
@@ -501,15 +394,15 @@ function copyStep(
       return points;
     }
 
-    if (
-      isParsablePoint(options.to)
-    ) {
-      return copyOffset(points, options, type);
-    }
+    // if (
+    //   isParsablePoint(options.to)
+    // ) {
+    //   return copyOffset(points, options, type);
+    // }
     // if (Array.isArray(options.to) && options.to[0] instanceof Transform) {
     //   return copyTransform(points, options, type);
     // }
-    return copyTransform(points, options, type);
+    // return copyTransform(points, options, type);
   }
 
   if (copyStyle === 'rotation') {
@@ -570,6 +463,7 @@ function copyPoints(
 }
 
 function getCopyCount(chain: ?CPY_Step | CPY_Steps) {
+  // $FlowFixMe
   const copy = copyPoints([0, 0, 0], chain);
   return copy.length;
 }

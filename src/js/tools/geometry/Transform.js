@@ -346,7 +346,7 @@ function parseBasisDefinition(def: TypeTransformBasisToBasisComponent) {
 }
 
 function parseRotation(
-  typeOr2DOrDef: number | TypeRotationComponentName | TypeRotationDefinition,
+  typeOr2DOrDef: number | TypeRotationComponentName | TypeUserRotationDefinition,
   r1: number | TypeParsablePoint | TypeBasisObjectDefinition | null = null,
   r2: number | null = null,
   r3: number | null = null,
@@ -399,7 +399,7 @@ function parseRotation(
   } else if (type === 'rbasis' || type === 'rb') {
     return ['rb', ...(parseBasisDefinition(['rb', r1], true).slice(1))];
   }
-  throw new Error(`Could not parse rotation '${typeOr2DOrDef}', '${r1}', '${r2}', '${r3}', '${r4}'`);
+  throw new Error(`Could not parse rotation '${typeOr2DOrDef}', '${JSON.stringify(r1)}', '${JSON.stringify(r2)}', '${JSON.stringify(r3)}', '${JSON.stringify(r4)}'`);
 }
 
 function makeTransformComponent(
@@ -527,12 +527,11 @@ class Transform {
     return this.addComponent(['t', _x, _y, _z]);
   }
 
-
   /**
    * Add a rotation transformation component to the transform.
    */
   rotate(
-    typeOr2DRotation: number | '2D' | 'xyz' | 'axis' | 'dir' | 'basis',
+    typeOr2DRotation: number | TypeRotationComponentName | TypeUserRotationDefinition,
     r1: number | TypeParsablePoint | TypeBasisObjectDefinition | null = null,
     r2: number | null = null,
     r3: number | null = null,
