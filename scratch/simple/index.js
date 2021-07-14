@@ -138,11 +138,11 @@ const figure = new Fig.Figure();
 //   ],
 // });
 
-// 4 Cubes with texture on each face
-figure.scene.setProjection({ style: 'orthographic' });
-figure.scene.setCamera({ position: [2, 1, 1], up: [0, 1, 0] });
-// figure.scene.setCamera({ position: [3, 0, 0.001], up: [0, 0, 1] });
-figure.scene.setLight({ directional: [0.7, 0.5, 1] });
+// // 4 Cubes with texture on each face
+// figure.scene.setProjection({ style: 'orthographic' });
+// figure.scene.setCamera({ position: [2, 1, 1], up: [0, 1, 0] });
+// // figure.scene.setCamera({ position: [3, 0, 0.001], up: [0, 0, 1] });
+// figure.scene.setLight({ directional: [0.7, 0.5, 1] });
 
 // const { sphere, polygon, revolve } = Fig.tools.g2;
 // const [spherePoints, sphereNormals] = sphere({ radius: 0.15, sides: 40 });
@@ -317,25 +317,122 @@ figure.scene.setLight({ directional: [0.7, 0.5, 1] });
 //   lines: true,
 //   color: [1, 0, 0, 1],
 // });
+// figure.add({
+//   make: 'gl',
+//   vertices: [0, 0, 0.5, 0, 0, 0.5, 0.5, 0, 1, 0, 0.5, 0.5],
+//   color: [1, 0, 0, 1],
+//   position: [-0.4, -0.4, 0],
+//   move: { type: 'rotation' },
+// });
 
-const points = Fig.tools.g2.surfaceGrid({
-  x: [-0.8, 0.8, 0.03],
-  y: [-0.8, 0.8, 0.03],
-  z: (x, y) => {
-    const r = Math.sqrt(x * x + y * y) * Math.PI * 2 * 2;
-    return Math.sin(r) / r;
-  },
-});
-// Orient the camera so z is up
-figure.scene.setCamera({ up: [0, 0, 1] });
+// @example
+// Simple rotatable element with a custom position
 figure.add({
-  make: 'surface',
-  points,
+  make: 'gl',
+  vertices: [0, 0, 0.5, 0, 0, 0.5, 0.5, 0, 1, 0, 0.5, 0.5],
   color: [1, 0, 0, 1],
+  position: [-0.4, -0.4, 0],
+  move: { type: 'rotation' },
 });
-figure.add({
-  make: 'surface',
-  points,
-  lines: true,
-  color: [0, 0, 0, 1],
-});
+// @example
+// Assign a color to each vertex
+// figure.add({
+//   make: 'gl',
+//   vertices: [0, 0, 0.5, 0, 0, 0.5, 0.5, 0, 1, 0, 0.5, 0.5],
+//   colors: [
+//     0, 0, 1, 1,
+//     1, 0, 0, 1,
+//     0, 0, 1, 1,
+//     1, 0, 0, 1,
+//     0, 0, 1, 1,
+//     1, 0, 0, 1,
+//   ],
+// });
+// // @example
+// // Assign a color to each vertex, using just 3 numbers per color (no alpha)
+// figure.add({
+//   make: 'gl',
+//   vertices: [0, 0, 0.5, 0, 0, 0.5, 0.5, 0, 1, 0, 0.5, 0.5],
+//   colors: {
+//     data: [
+//       0, 0, 1,
+//       1, 0, 0,
+//       0, 0, 1,
+//       1, 0, 0,
+//       0, 0, 1,
+//       1, 0, 0,
+//     ],
+//     size: 3,
+//   },
+// });
+// // @example
+// // Texture filled square
+// figure.add({
+//   make: 'gl',
+//   vertices: [-0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5],
+//   numVertices: 6,
+//   texture: {
+//     src: './flower.jpeg',
+//     coords: [0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1],
+//     loadColor: [0, 0, 0, 0],
+//   },
+// });
+// // @example
+// // Make a 3D cube using composed shaders
+// const { toNumbers } = Fig.tools.g2;
+// const [cubeVertices, cubeNormals] = Fig.tools.g2.cube({ side: 0.5 });
+// figure.scene.setProjection({ style: 'orthographic' });
+// figure.scene.setCamera({ position: [2, 1, 2] });
+// figure.scene.setLight({ directional: [0.7, 0.5, 1] });
+
+// figure.add({
+//   make: 'gl',
+//   light: 'directional',
+//   dimension: 3,
+//   vertices: toNumbers(cubeVertices),
+//   normals: toNumbers(cubeNormals),
+//   color: [1, 0, 0, 1],
+// });
+// @example
+// Custom shaders
+// Make a shader with a custom attribute aVertex and custom uniform uColor,
+// which are then defined in the options.
+// Note, the `u_worldViewProjectionMatrix` uniform does not need to be defined
+// as this will be passed by FigureOne using the Scene information of the
+// figure (or element if an element has a custom scene attached to it).
+// figure.add({
+//   make: 'gl',
+//   vertexShader: {
+//     src: `
+//       uniform mat4 u_worldViewProjectionMatrix;
+//       attribute vec4 aVertex;
+//       void main() {
+//         gl_Position = u_worldViewProjectionMatrix * aVertex;
+//       }`,
+//     vars: ['aVertex', 'u_worldViewProjectionMatrix'],
+//   },
+//   fragmentShader: {
+//     src: `
+//     precision mediump float;
+//     uniform vec4 uColor;
+//     void main() {
+//       gl_FragColor = uColor;
+//       gl_FragColor.rgb *= gl_FragColor.a;
+//     }`,
+//     vars: ['uColor'],
+//   },
+//   attributes: [
+//     {
+//       name: 'aVertex',
+//       size: 3,
+//       data: [0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.5, 0, 0, 1, 0, 0, 0.5, 0.5, 0],
+//     },
+//   ],
+//   uniforms: [
+//     {
+//       name: 'uColor',
+//       length: 4,
+//       value: [1, 0, 0, 1],
+//     },
+//   ],
+// });

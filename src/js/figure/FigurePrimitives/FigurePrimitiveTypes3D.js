@@ -410,7 +410,7 @@ export type OBJ_Cylinder = {
  *   color: [1, 0, 0, 1],
  *   line: [[0, 0, 0], [0, 0.5, 0]],
  * });
- * 
+ *
  * @example
  * // Wire mesh cone
  * figure.add({

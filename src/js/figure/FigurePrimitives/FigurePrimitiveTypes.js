@@ -1,7 +1,4 @@
 // @flow
-import {
-  Transform,
-} from '../../tools/g2';
 import type {
   TypeParsablePoint, TypeParsableTransform,
   TypeParsableBorder, Rect,
@@ -13,34 +10,6 @@ import type {
 } from '../../tools/types';
 import type Scene from '../../tools/scene';
 import type { TypeVertexShader, TypeFragmentShader } from '../webgl/shaders';
-
-export type TypeCopyPoint = {
-  point: TypeParsablePoint,
-  points: Array<TypeParsablePoint>,
-  cum: 'first' | ''
-}
-
-export type TypeCopyLinear = {
-  num: number,
-  step?: number,
-  angle?: number,
-  axis?: 'x' | 'y',
-}
-
-export type TypeCopyAngle = {
-  numAngle: number,
-  step?: number,
-  center?: TypeParsablePoint,
-  skipFirst?: boolean,
-}
-
-export type TypeCopyOffset = {
-  offset: TypeParsablePoint | Transform,
-};
-
-export type OBJ_Copy = Array<Transform> | Array<TypeParsablePoint>
-                       | TypeCopyAngle | TypeCopyLinear | TypeParsablePoint
-                       | Transform | TypeCopyOffset;
 
 
 /**
@@ -510,16 +479,18 @@ export type OBJ_GLColorData = {
  *
  * @example
  * // Make a 3D cube using composed shaders
+ * const { toNumbers } = Fig.tools.g2;
  * const [cubeVertices, cubeNormals] = Fig.tools.g2.cube({ side: 0.5 });
  * figure.scene.setProjection({ style: 'orthographic' });
  * figure.scene.setCamera({ position: [2, 1, 2] });
  * figure.scene.setLight({ directional: [0.7, 0.5, 1] });
+ *
  * figure.add({
  *   make: 'gl',
  *   light: 'directional',
  *   dimension: 3,
- *   vertices: cubeVertices,
- *   normals: cubeNormals,
+ *   vertices: toNumbers(cubeVertices),
+ *   normals: toNumbers(cubeNormals),
  *   color: [1, 0, 0, 1],
  * });
  *
@@ -581,3 +552,26 @@ export type OBJ_GenericGL = {
   colors?: Array<number> | OBJ_GLColorData,
   normals?: OBJ_GLVertexBuffer,
 } & OBJ_FigurePrimitive;
+
+/**
+ * {@link morph} options object.
+ *
+ * @property {string} name primitive name
+ * @property {Array<Array<number>>} pointArrays point arrays to morph between.
+ * Each point array is an array of consecutive x, y values of points. For
+ * example: [x1, y1, x2, y2, x3, y3, ...].
+ * @property {TypeColor | Array<TypeColor | Array<TypeColor>>} color colors to
+ * be assigned to the points
+ * @property {Array<String>} names optional names for each point array. Names
+ * can be used when using the morph animation step instead of point array
+ * indeces.
+ * @property {'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'} [glPrimitive]
+ * glPrimitive is the same for all point arrays (`'TRIANGLES'`)
+ */
+export type OBJ_Morph = {
+  name?: string,
+  pointArrays: Array<Array<number>>,
+  color: TypeColor | Array<TypeColor | Array<TypeColor>>,
+  names: Array<string>,
+  glPrimitive: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
+};

@@ -63,7 +63,7 @@ import type TimeKeeper from '../TimeKeeper';
 import type { Recorder } from '../Recorder/Recorder';
 import Scene from '../../tools/scene';
 import type {
-  OBJ_LineStyleSimple, OBJ_GenericGL,
+  OBJ_LineStyleSimple, OBJ_GenericGL, OBJ_Morph,
 } from './FigurePrimitiveTypes';
 import type {
   OBJ_Generic,
@@ -94,94 +94,6 @@ import type {
   OBJ_Surface,
 } from './FigurePrimitiveTypes3D';
 
-
-/**
- * {@link morph} options object.
- *
- * @property {string} name primitive name
- * @property {Array<Array<number>>} pointArrays point arrays to morph between.
- * Each point array is an array of consecutive x, y values of points. For
- * example: [x1, y1, x2, y2, x3, y3, ...].
- * @property {TypeColor | Array<TypeColor | Array<TypeColor>>} color colors to
- * be assigned to the points
- * @property {Array<String>} names optional names for each point array. Names
- * can be used when using the morph animation step instead of point array
- * indeces.
- * @property {'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'} [glPrimitive]
- * glPrimitive is the same for all point arrays (`'TRIANGLES'`)
- */
-export type OBJ_Morph = {
-  name?: string,
-  pointArrays: Array<Array<number>>,
-  color: TypeColor | Array<TypeColor | Array<TypeColor>>,
-  names: Array<string>,
-  glPrimitive: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
-};
-
-
-// export type TypePointTransforms = {
-//   offset?: TypeParsablePoint,
-//   transform?: Transform,
-//   repeatRect?: {
-//     xNum?: number,
-//     xStep?: number,
-//     yNum?: number,
-//     yStep?: number,
-//   },
-//   repeatPolar?: {
-//     magNum?: number,
-//     magStep?: number,
-//     angleNum?: number,
-//     angleStep?: number,
-//     angleStart?: number,
-//   },
-//   repeatTransforms?: Array<Transform>,
-// };
-
-// export type TypeCopyLinear = {
-//   num?: number,
-//   step?: number,
-//   angle?: number,
-//   axis?: 'x' | 'y',
-// }
-
-// export type TypeCopyRadial = {
-//   numMag?: number,
-//   numAngle?: number,
-//   stepMag?: number,
-//   stepAngle?: number,
-//   startAngle?: number,
-// }
-
-// export type TypeCopyOffset = {
-//   offset: TypeParsablePoint,
-// };
-
-// export type TypeCopyTransform = {
-//   transform: Transform;
-// }
-
-// export type TypeCopy = Array<Transform> | Array<Point> | TypeCopyRadial
-//                        | TypeCopyLinear | Point | Transform | TypeCopyOffset
-//                        | TypeCopyTransform;
-
-// export type TypePointTransforms1 = {
-//   offset?: TypeParsablePoint,
-//   transform?: Transform,
-//   copy: {
-//     xNum?: number,
-//     xStep?: number,
-//     yNum?: number,
-//     yStep?: number,
-//     magNum?: number,
-//     magStep?: number,
-//     angleNum?: number,
-//     angleStep?: number,
-//     angleStart?: number,
-//     transforms?: Array<Transform>,
-//   },
-//   copy: TypeCopy | Array<TypeCopy>,
-// };
 
 type OBJ_PolyLineTris = OBJ_LineStyleSimple & { drawBorderBuffer: number | Array<Array<Point>> };
 
