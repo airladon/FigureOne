@@ -1779,9 +1779,19 @@
               
                 
                 <li><a
-                  href='#obj_revolve'
+                  href='#obj_surface'
                   class="">
-                  OBJ_Revolve
+                  OBJ_Surface
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_surface'
+                  class="">
+                  OBJ_Surface
                   
                 </a>
                 
@@ -6025,6 +6035,16 @@
               
                 
                 <li><a
+                  href='#obj_revolvepoints'
+                  class="">
+                  OBJ_RevolvePoints
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#revolve'
                   class="">
                   revolve
@@ -6048,16 +6068,6 @@
                   href='#sphere'
                   class="">
                   sphere
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_surface'
-                  class="">
-                  OBJ_Surface
                   
                 </a>
                 
@@ -26450,17 +26460,17 @@ figure.add({
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_revolve'>
-      OBJ_Revolve
+    <h3 class='fl m0' id='obj_surface'>
+      OBJ_Surface
     </h3>
     
     
   </div>
   
 
-  <p>Options object for <a href="#revolve">revolve</a>.</p>
-<p>Revolve (or radially sweep) a profile in the XY plane around the x axis to
-form a 3D surface.</p>
+  <p>Revolve shape options object that extends <a href="#obj_generic3d">OBJ_Generic3D</a>
+and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
+<p><img src="./apiassets/surface.png" alt=""></p>
 
   
   
@@ -26479,39 +26489,32 @@ form a 3D surface.</p>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>profile</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)</code>
-          : XY plane profile to be radially
-swept around the x axis
+          <span class='code bold'>points</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>?)</code>
+          : A grid of points that
+define a 3D surface
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : number of sides in the radial sweep
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>normals</span> <code class='quiet'>((<code>"flat"</code> | <code>"curveRows"</code> | <code>"curveRadial"</code> | <code>"curve"</code>)?)</code>
+          <span class='code bold'>normals</span> <code class='quiet'>((<code>"curveColumns"</code> | <code>"curveRows"</code> | <code>"curve"</code> | <code>"flat"</code>)?)</code>
           : <code>flat</code>
  normals will make shading (from a light source) across a face of the
 object a constant color. 
-<code>curveProfile</code>
+<code>curveRows</code>
  will gradiate the shading along the
-profile. 
-<code>curveRadial</code>
- will gradiate the shading around the radial sweep.
-
+rows of the grid. 
+<code>curveColumns</code>
+ will gradiate the shading along the columns
+of the grid. 
 <code>curve</code>
- will gradiate the shading both around the radial sweep and along the
-profile. Use 
+ will gradiate the shading along both rows and columns.
+Use 
 <code>curve</code>
 , 
-<code>curveProfile</code>
+<code>curveRows</code>
 , or 
-<code>curveRadial</code>
+<code>curveColumns</code>
  to make a surface
 look more round with fewer number of sides.
 
@@ -26519,30 +26522,245 @@ look more round with fewer number of sides.
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : by default the profile will start in the XY
-plane and sweep around the x axis following the right hand rule. Use
-
-<code>rotation</code>
- to start the sweep at some angle where 0º is in the XY for +y and
-90º is in the XZ plane for +z. initial angle of the revolve rotation
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>axis</span> <code class='quiet'>(<a href="#typeuserrotationdefinition">TypeUserRotationDefinition</a>?)</code>
-          : orient the final vertices by
-rotating their definition around the x axis to an arbitrary rotation
+          <span class='code bold'>closeRows</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : Set to 
+<code>true</code>
+ if first row and last row are
+the same, and normals is 
+<code>'curveRows'</code>
+ or 
+<code>'curve'</code>
+ to get correct normal
+calculations (
+<code>false</code>
+)
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : offset the final vertices such that
-the original (0, 0) point in the profile moves to position (this step
-happens after the rotation)
+          <span class='code bold'>closeColumns</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : Set to 
+<code>true</code>
+ if first row and last
+column are the same, and normals is 
+<code>'curveColumns'</code>
+ or 
+<code>'curve'</code>
+ to get
+correct normal calculations (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
+          : apply a final transform to
+shape
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lines</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : if 
+<code>true</code>
+ then points representing
+the edes of the faces will be returned. If 
+<code>false</code>
+, then points
+representing two triangles per face and an
+associated normal for each point will be returned.
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#shapes3d-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> points = Fig.tools.g2.surfaceGrid({
+  <span class="hljs-attr">x</span>: [-<span class="hljs-number">0.8</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">0.03</span>],
+  <span class="hljs-attr">y</span>: [-<span class="hljs-number">0.8</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">0.03</span>],
+  <span class="hljs-attr">z</span>: <span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> <span class="hljs-number">0.2</span> * <span class="hljs-built_in">Math</span>.cos(x * <span class="hljs-number">2</span> * <span class="hljs-built_in">Math</span>.PI),
+});
+figure.scene.setCamera({ <span class="hljs-attr">up</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] });
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;surface&#x27;</span>,
+  points,
+  <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Surface wire mesh</span>
+<span class="hljs-keyword">const</span> points = Fig.tools.g2.surfaceGrid({
+  <span class="hljs-attr">x</span>: [-<span class="hljs-number">0.8</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0.03</span>],
+  <span class="hljs-attr">y</span>: [-<span class="hljs-number">0.8</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0.03</span>],
+  <span class="hljs-attr">z</span>: <span class="hljs-function">(<span class="hljs-params">x, y</span>) =&gt;</span> y * <span class="hljs-number">0.2</span> * <span class="hljs-built_in">Math</span>.cos(x * <span class="hljs-number">2</span> * <span class="hljs-built_in">Math</span>.PI),
+});
+figure.scene.setCamera({ <span class="hljs-attr">position</span>: [-<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, <span class="hljs-number">0.7</span>], <span class="hljs-attr">up</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] });
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;surface&#x27;</span>,
+  points,
+  <span class="hljs-attr">lines</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Surface with wire mesh and fill</span>
+<span class="hljs-keyword">const</span> points = Fig.tools.g2.surfaceGrid({
+  <span class="hljs-attr">x</span>: [-<span class="hljs-number">0.8</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0.03</span>],
+  <span class="hljs-attr">y</span>: [-<span class="hljs-number">0.8</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0.03</span>],
+  <span class="hljs-attr">z</span>: <span class="hljs-function">(<span class="hljs-params">x, y</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> r = <span class="hljs-built_in">Math</span>.sqrt(x * x + y * y) * <span class="hljs-built_in">Math</span>.PI * <span class="hljs-number">2</span> * <span class="hljs-number">2</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Math</span>.sin(r) / r;
+  },
+});
+<span class="hljs-comment">// Orient the camera so z is up</span>
+figure.scene.setCamera({ <span class="hljs-attr">up</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] });
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;surface&#x27;</span>,
+  points,
+  <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+});
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;surface&#x27;</span>,
+  points,
+  <span class="hljs-attr">lines</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_surface'>
+      OBJ_Surface
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Options object for defining a 3D surface.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>points</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>?)</code>
+          : A grid of points that
+define a 3D surface
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>normals</span> <code class='quiet'>((<code>"curveColumns"</code> | <code>"curveRows"</code> | <code>"curve"</code> | <code>"flat"</code>)?)</code>
+          : <code>flat</code>
+ normals will make shading (from a light source) across a face of the
+object a constant color. 
+<code>curveRows</code>
+ will gradiate the shading along the
+rows of the grid. 
+<code>curveColumns</code>
+ will gradiate the shading along the columns
+of the grid. 
+<code>curve</code>
+ will gradiate the shading along both rows and columns.
+Use 
+<code>curve</code>
+, 
+<code>curveRows</code>
+, or 
+<code>curveColumns</code>
+ to make a surface
+look more round with fewer number of sides.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>closeRows</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : Set to 
+<code>true</code>
+ if first row and last row are
+the same, and normals is 
+<code>'curveRows'</code>
+ or 
+<code>'curve'</code>
+ to get correct normal
+calculations (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>closeColumns</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : Set to 
+<code>true</code>
+ if first row and last
+column are the same, and normals is 
+<code>'curveColumns'</code>
+ or 
+<code>'curve'</code>
+ to get
+correct normal calculations (
+<code>false</code>
+)
 
           
         </div>
@@ -74055,6 +74273,153 @@ associated normal for each point will be returned.
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='obj_revolvepoints'>
+      OBJ_RevolvePoints
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Options object for <a href="#revolve">revolve</a>.</p>
+<p>Revolve (or radially sweep) a profile in the XY plane around the x axis to
+form a 3D surface.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>profile</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)</code>
+          : XY plane profile to be radially
+swept around the x axis
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides in the radial sweep
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>normals</span> <code class='quiet'>((<code>"flat"</code> | <code>"curveRows"</code> | <code>"curveRadial"</code> | <code>"curve"</code>)?)</code>
+          : <code>flat</code>
+ normals will make shading (from a light source) across a face of the
+object a constant color. 
+<code>curveProfile</code>
+ will gradiate the shading along the
+profile. 
+<code>curveRadial</code>
+ will gradiate the shading around the radial sweep.
+
+<code>curve</code>
+ will gradiate the shading both around the radial sweep and along the
+profile. Use 
+<code>curve</code>
+, 
+<code>curveProfile</code>
+, or 
+<code>curveRadial</code>
+ to make a surface
+look more round with fewer number of sides.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : by default the profile will start in the XY
+plane and sweep around the x axis following the right hand rule. Use
+
+<code>rotation</code>
+ to start the sweep at some angle where 0º is in the XY for +y and
+90º is in the XZ plane for +z. initial angle of the revolve rotation
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>axis</span> <code class='quiet'>(<a href="#typeuserrotationdefinition">TypeUserRotationDefinition</a>?)</code>
+          : orient the final vertices by
+rotating their definition around the x axis to an arbitrary rotation
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : offset the final vertices such that
+the original (0, 0) point in the profile moves to position (this step
+happens after the rotation)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
+          : apply a final transform to
+shape
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lines</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : if 
+<code>true</code>
+ then points representing
+the edes of the faces will be returned. If 
+<code>false</code>
+, then points
+representing two triangles per face and an
+associated normal for each point will be returned.
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='revolve'>
       revolve
     </h3>
@@ -74325,149 +74690,6 @@ the points represent lines, then the array of normals will be empty.
 
       
     
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_surface'>
-      OBJ_Surface
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Options object for defining a 3D surface.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>points</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>?)</code>
-          : A grid of points that
-define a 3D surface
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>normals</span> <code class='quiet'>((<code>"curveColumns"</code> | <code>"curveRows"</code> | <code>"curve"</code> | <code>"flat"</code>)?)</code>
-          : <code>flat</code>
- normals will make shading (from a light source) across a face of the
-object a constant color. 
-<code>curveRows</code>
- will gradiate the shading along the
-rows of the grid. 
-<code>curveColumns</code>
- will gradiate the shading along the columns
-of the grid. 
-<code>curve</code>
- will gradiate the shading along both rows and columns.
-Use 
-<code>curve</code>
-, 
-<code>curveRows</code>
-, or 
-<code>curveColumns</code>
- to make a surface
-look more round with fewer number of sides.
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>closeRows</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : Set to 
-<code>true</code>
- if first row and last row are
-the same, and normals is 
-<code>'curveRows'</code>
- or 
-<code>'curve'</code>
- to get correct normal
-calculations (
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>closeColumns</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : Set to 
-<code>true</code>
- if first row and last
-column are the same, and normals is 
-<code>'curveColumns'</code>
- or 
-<code>'curve'</code>
- to get
-correct normal calculations (
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
-          : apply a final transform to
-shape
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>lines</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : if 
-<code>true</code>
- then points representing
-the edes of the faces will be returned. If 
-<code>false</code>
-, then points
-representing two triangles per face and an
-associated normal for each point will be returned.
-
-          
-        </div>
-      
-    </div>
-  
-
   
 
   

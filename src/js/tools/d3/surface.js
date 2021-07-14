@@ -1,5 +1,5 @@
 // @flow
-import { Point } from '../geometry/Point';
+import { Point, getPoints, getPoint } from '../geometry/Point';
 import type { TypeParsablePoint } from '../geometry/Point';
 import { getNormal } from '../geometry/Plane';
 import { getTransform } from '../geometry/Transform';
@@ -408,7 +408,7 @@ function getCurveNormals(
  * representing two triangles per face and an
  * associated normal for each point will be returned.
  */
-export type OBJ_Surface = {
+export type OBJ_SurfacePoints = {
   points?: Array<Array<TypeParsablePoint>>,
   normals?: 'curveColumns' | 'curveRows' | 'curve' | 'flat',
   closeRows?: boolean,
@@ -428,7 +428,7 @@ export type OBJ_Surface = {
  * If the points represent triangles, then a second array of normal vectors
  * for each point will be available.
  */
-function surface(options: OBJ_Surface) {
+function surface(options: OBJ_SurfacePoints) {
   const {
     transform, lines, closeColumns, closeRows, normals, points,
   } = joinObjects({
@@ -438,10 +438,10 @@ function surface(options: OBJ_Surface) {
     closeColumns: false,
   }, options);
 
-  let surfacePoints = points;
+  let surfacePoints = points.map(p => getPoints(p));
   if (transform != null) {
     const matrix = getTransform(transform).matrix();
-    surfacePoints = points.map(rows => rows.map(col => col.transformBy(matrix)));
+    surfacePoints = points.map(rows => rows.map(col => getPoint(col).transformBy(matrix)));
   }
   if (lines) {
     return [getLines(surfacePoints), []];

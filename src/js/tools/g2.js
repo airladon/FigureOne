@@ -1,6 +1,6 @@
 // @flow
 /* eslint-disable no-use-before-define */
-import { rand2D } from './math';
+import { rand2D, range } from './math';
 import { joinObjects } from './tools';
 import type { TypeParsablePoint } from './geometry/Point';
 import {
@@ -518,6 +518,25 @@ function getPositionInRect(
   return position;
 }
 
+export type OBJ_SurfaceGrid = {
+  x: [number, number, number],
+  y: [number, number, number],
+  z: (number, number) => number,
+};
+
+function surfaceGrid(options: OBJ_SurfaceGrid) {
+  const surfacePoints = [];
+  for (let x = options.x[0]; x <= options.x[1]; x += options.x[2]) {
+    const row = [];
+    for (let y = options.y[0]; y <= options.y[1]; y += options.y[2]) {
+      row.push(new Point(x, y, options.z(x, y)));
+    }
+    surfacePoints.push(row);
+  }
+  return surfacePoints;
+}
+
+
 export {
   Point,
   Line,
@@ -587,4 +606,5 @@ export {
   polygonLine,
   vectorToVectorToAxisAngle,
   directionToAxisAngle,
+  surfaceGrid,
 };

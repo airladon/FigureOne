@@ -267,12 +267,75 @@ figure.scene.setLight({ directional: [0.7, 0.5, 1] });
 // Use curve normals around radial sweep
 
 // Wire mesh arrow
+// const x = Fig.range(-0.5, 0.5, 0.05);
+// const y = Fig.range(-0.5, 0.5, 0.05);
 
+// const points = Fig.tools.g2.surfaceGrid({
+//   x: [-0.8, 0.8, 0.03],
+//   y: [-0.8, 0.8, 0.03],
+//   z: (x, y) => {
+//     // const r = Math.sqrt(x * x + y * y) * Math.PI * 2 * 2;
+//     // return Math.sin(r) / r;
+//     return  x * Math.exp((-(x ** 2) - y ** 2 ) * 3)
+//   },
+// });
+// // // Surface with mesh and fill
+// // const points = [];
+// // for (let x = -0.8; x <= 0.8; x += 0.03) {
+// //   const row = [];
+// //   for (let y = -0.8; y <= 0.8; y += 0.03) {
+// //     const r = Math.sqrt(x * x + y * y) * Math.PI * 2 * 2;
+// //     row.push([x, y, Math.sin(r) / r]);
+// //   }
+// //   points.push(row);
+// // }
+// // Orient the camera so z is up
+// figure.scene.setCamera({ position: [-1, -1, 0.7], up: [0, 0, 1] });
+// // figure.add({
+// //   make: 'surface',
+// //   points,
+// //   color: [1, 0, 0, 1],
+// // });
+// figure.add({
+//   make: 'surface',
+//   points,
+//   lines: true,
+//   color: [1, 0, 0, 1],
+// });
+
+
+
+// const points = Fig.tools.g2.surfaceGrid({
+//   x: [-0.8, 0.8, 0.03],
+//   y: [-0.8, 0.8, 0.03],
+//   z: (x, y) => y * 0.2 * Math.cos(x * 2 * Math.PI),
+// });
+// figure.scene.setCamera({ position: [-1, -1, 0.7], up: [0, 0, 1] });
+// figure.add({
+//   make: 'surface',
+//   points,
+//   lines: true,
+//   color: [1, 0, 0, 1],
+// });
+
+const points = Fig.tools.g2.surfaceGrid({
+  x: [-0.8, 0.8, 0.03],
+  y: [-0.8, 0.8, 0.03],
+  z: (x, y) => {
+    const r = Math.sqrt(x * x + y * y) * Math.PI * 2 * 2;
+    return Math.sin(r) / r;
+  },
+});
+// Orient the camera so z is up
+figure.scene.setCamera({ up: [0, 0, 1] });
 figure.add({
   make: 'surface',
-  profile: [[0, 0.03], [0.4, 0.03], [0.4, 0.09], [0.7, 0]],
-  axis: ['dir', 0, 1, 0],
+  points,
   color: [1, 0, 0, 1],
-  sides: 20,
+});
+figure.add({
+  make: 'surface',
+  points,
   lines: true,
+  color: [0, 0, 0, 1],
 });

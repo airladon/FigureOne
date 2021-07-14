@@ -58,6 +58,7 @@ toc:
   - OBJ_Cylinder
   - OBJ_Cone
   - OBJ_Revolve
+  - OBJ_Surface
   - name: Animation
     file: ./docs/api/tutorials/animation/animation.md
   - AnimationManager

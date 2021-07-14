@@ -543,4 +543,96 @@ export type OBJ_Revolve = {
   position?: TypeParsablePoint,
   transform?: TypeParsableTransform,
   lines?: boolean,
-}
+};
+
+/**
+ * Revolve shape options object that extends {@link OBJ_Generic3D}
+ * and {@link OBJ_FigurePrimitive}
+ *
+ * ![](./apiassets/surface.png)
+ *
+ * @property {Array<Array<TypeParsablePoint>>} [points] A grid of points that
+ * define a 3D surface
+ * @property {'curveColumns' | 'curveRows' | 'curve' | 'flat'} [normals]
+ * `flat` normals will make shading (from a light source) across a face of the
+ * object a constant color. `curveRows` will gradiate the shading along the
+ * rows of the grid. `curveColumns` will gradiate the shading along the columns
+ * of the grid. `curve` will gradiate the shading along both rows and columns.
+ * Use `curve`, `curveRows`, or `curveColumns` to make a surface
+ * look more round with fewer number of sides.
+ * @property {boolean} [closeRows] Set to `true` if first row and last row are
+ * the same, and normals is `'curveRows'` or `'curve'` to get correct normal
+ * calculations (`false`)
+ * @property {boolean} [closeColumns] Set to `true` if first row and last
+ * column are the same, and normals is `'curveColumns'` or `'curve'` to get
+ * correct normal calculations (`false`)
+ * @property {TypeParsableTransform} [transform] apply a final transform to
+ * shape
+ * @property {boolean} [lines] if `true` then points representing
+ * the edes of the faces will be returned. If `false`, then points
+ * representing two triangles per face and an
+ * associated normal for each point will be returned.
+ *
+ * @see To test examples, append them to the
+ * <a href="#shapes3d-boilerplate">boilerplate</a>
+ *
+ * @example
+ * const points = Fig.tools.g2.surfaceGrid({
+ *   x: [-0.8, 0.7, 0.03],
+ *   y: [-0.8, 0.7, 0.03],
+ *   z: x => 0.2 * Math.cos(x * 2 * Math.PI),
+ * });
+ * figure.scene.setCamera({ up: [0, 0, 1] });
+ * figure.add({
+ *   make: 'surface',
+ *   points,
+ *   color: [1, 0, 0, 1],
+ * });
+ *
+ * @example
+ * // Surface wire mesh
+ * const points = Fig.tools.g2.surfaceGrid({
+ *   x: [-0.8, 0.8, 0.03],
+ *   y: [-0.8, 0.8, 0.03],
+ *   z: (x, y) => y * 0.2 * Math.cos(x * 2 * Math.PI),
+ * });
+ * figure.scene.setCamera({ position: [-1, -1, 0.7], up: [0, 0, 1] });
+ * figure.add({
+ *   make: 'surface',
+ *   points,
+ *   lines: true,
+ *   color: [1, 0, 0, 1],
+ * });
+ *
+ * @example
+ * // Surface with wire mesh and fill
+ * const points = Fig.tools.g2.surfaceGrid({
+ *   x: [-0.8, 0.8, 0.03],
+ *   y: [-0.8, 0.8, 0.03],
+ *   z: (x, y) => {
+ *     const r = Math.sqrt(x * x + y * y) * Math.PI * 2 * 2;
+ *     return Math.sin(r) / r;
+ *   },
+ * });
+ * // Orient the camera so z is up
+ * figure.scene.setCamera({ up: [0, 0, 1] });
+ * figure.add({
+ *   make: 'surface',
+ *   points,
+ *   color: [1, 0, 0, 1],
+ * });
+ * figure.add({
+ *   make: 'surface',
+ *   points,
+ *   lines: true,
+ *   color: [0, 0, 0, 1],
+ * });
+ */
+export type OBJ_Surface = {
+  points?: Array<Array<TypeParsablePoint>>,
+  normals?: 'curveColumns' | 'curveRows' | 'curve' | 'flat',
+  closeRows?: boolean,
+  closeColumns?: boolean,
+  transform?: TypeParsableTransform,
+  lines?: boolean,
+};
