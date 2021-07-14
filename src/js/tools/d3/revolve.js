@@ -126,7 +126,7 @@ Which means the normals for vertex a1 will be:
  * representing two triangles per face and an
  * associated normal for each point will be returned.
  */
-export type OBJ_Revolve = {
+export type OBJ_RevolvePoints = {
   sides?: number,
   profile?: Array<TypeParsablePoint>,
   normals?: 'flat' | 'curveProfile' | 'curveRadial' | 'curve',
@@ -207,7 +207,7 @@ function getLathePoints(o: OBJ_RevolveDefined) {
  * @return {[Array<Point>, Array<Point>]} an array of points and normals. If
  * the points represent lines, then the array of normals will be empty.
  */
-function revolve(options: OBJ_Revolve) {
+function revolve(options: OBJ_RevolvePoints) {
   const o = joinObjects(
     {
       sides: 10,
@@ -243,10 +243,10 @@ function revolve(options: OBJ_Revolve) {
 
   let norm = o.normals;
   if (norm === 'curveRadial') {
-    norm = 'curveRows';
+    norm = 'curveColumns';
   }
   if (norm === 'curveProfile') {
-    norm = 'curveColumns';
+    norm = 'curveRows';
   }
 
   const points = getLathePoints(defined);
@@ -263,8 +263,8 @@ function revolve(options: OBJ_Revolve) {
       surfaceNormals,
       points,
       norm,
-      true,
       profile[0].isEqualTo(profile[profile.length - 1]),
+      true,
     );
   }
   return [triangles, normals];

@@ -3,7 +3,7 @@
 /* eslint-disable camelcase */
 import {
   Transform, Point, polarToRect, getBoundingRect, getPoints, getPoint,
-  getTransform,
+  getTransform, isParsableTransform,
 } from '../../../tools/g2';
 import * as m3 from '../../../tools/m3';
 
@@ -256,7 +256,9 @@ function copyTransform(
     to: [],
   };
   const options = joinObjects({}, defaultOptions, optionsIn);
-  if (options.to instanceof Transform
+  if (
+    options.to instanceof Transform
+    || (Array.isArray(options.to) && !Array.isArray(options.to[0]))
   ) {
     options.to = [optionsIn.to];
   }
@@ -441,12 +443,12 @@ function copyStep(
       return points;
     }
 
-    if (options.to instanceof Transform) {
+    if (isParsableTransform(options.to)) {
       return copyTransform(points, options, type);
     }
-    if (Array.isArray(options.to) && options.to[0] instanceof Transform) {
-      return copyTransform(points, options, type);
-    }
+    // if (Array.isArray(options.to) && options.to[0] instanceof Transform) {
+    //   return copyTransform(points, options, type);
+    // }
     return copyOffset(points, options, type);
   }
 

@@ -55,7 +55,7 @@ export default function sphere(options: OBJ_SpherePoints) {
     {
       sides: 10,
       radius: 1,
-      normals: 'curve',
+      normals: 'flat',
       output: 'points',
       center: [0, 0, 0],
     },

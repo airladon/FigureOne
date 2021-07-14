@@ -1395,6 +1395,29 @@ function isParsableTransform(value: any) {
   ) {
     return true;
   }
+  if (
+    Array.isArray(value)
+    && (
+      value[0] === 'r'
+      || value[0] === 's'
+      || value[0] === 't'
+      || value[0] === 'c'
+      || value[0] === 'b'
+      || value[0] === 'ra'
+      || value[0] === 'rc'
+      || value[0] === 'rd'
+      // || value[0] === 'rs'
+      || value[0] === 'rb'
+      || value[0] === 'axis'
+      // || value[0] === 'sph'
+      || value[0] === '2D'
+      || value[0] === 'xyz'
+      || value[0] === 'dir'
+      || value[0] === 'basis'
+    )
+  ) {
+    return true;
+  }
   if (value.f1Type != null && value.f1Type === 'tf') {
     return true;
   }

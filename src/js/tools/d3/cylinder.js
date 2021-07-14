@@ -33,7 +33,7 @@ import type { TypeParsableTransform } from '../geometry/Transform';
  * representing two triangles per face and an
  * associated normal for each point will be returned.
  */
-export type OBJ_Cylinder = {
+export type OBJ_CylinderPoints = {
   sides?: number,
   radius?: number,
   normals?: 'curve' | 'flat',
@@ -43,7 +43,7 @@ export type OBJ_Cylinder = {
   transform?: TypeParsableTransform,
 }
 
-export default function cylinder(options: OBJ_Cylinder) {
+export default function cylinder(options: OBJ_CylinderPoints) {
   const o = joinObjects(
     {
       sides: 10,

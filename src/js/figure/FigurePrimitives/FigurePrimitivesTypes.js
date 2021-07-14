@@ -21,14 +21,14 @@ import type { TypeVertexShader, TypeFragmentShader } from '../webgl/shaders';
  * @property {TypeDash} [dash] select solid or dashed line
  * @property {TypeColor} [color] line color
  */
-export type OBJ_LineStyleSimple = {
+type OBJ_LineStyleSimple = {
   widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative' | number,
   width?: number,
   dash?: TypeDash,
   color?: TypeColor,
 };
 
-export type OBJ_LineStyleSimple_Defined = {
+type OBJ_LineStyleSimple_Defined = {
   widthIs: 'mid' | 'outside' | 'inside' | 'positive' | 'negative' | number,
   width: number,
   dash?: TypeDash,
@@ -113,7 +113,7 @@ export type OBJ_LineStyleSimple_Defined = {
  *   .rotation({ target: Math.PI * 1.999, direction: 1, duration: 5 })
  *   .start();
  */
-export type OBJ_Collection = {
+type OBJ_Collection = {
   transform?: TypeParsableTransform,
   position?: TypeParsablePoint,
   color?: TypeColor,
@@ -201,7 +201,7 @@ export type OBJ_Collection = {
  * minimum, any custom function here should include a call to animate the next
  * frame (`figure.animateNextFrame`)
  */
-export type OBJ_Texture = {
+type OBJ_Texture = {
   src?: string,
   mapFrom?: Rect,
   mapTo?: Rect,
@@ -219,7 +219,7 @@ export type OBJ_Texture = {
  * @property {number} [duration] duration to pulse
  * @property {number} [frequency] frequency to pulse where 0
  */
-export type OBJ_PulseScale = {
+type OBJ_PulseScale = {
   duration?: number,
   scale?: number,
   frequency?: number,
@@ -237,7 +237,7 @@ export type OBJ_PulseScale = {
  * @property {number} [offset] (`0`)
  * @property {TypeGLBufferUsage} [usage] (`'STATIC'`)
  */
-export type OBJ_GLBuffer = {
+type OBJ_GLBuffer = {
   name: string,
   data: Array<number>,
   size?: number,
@@ -262,7 +262,7 @@ export type OBJ_GLBuffer = {
  * @property {Array<number>} data array of values
  * @property {TypeGLBufferUsage} [usage] (`'STATIC'`)
  */
-export type OBJ_GLVertexBuffer = {
+type OBJ_GLVertexBuffer = {
   data: Array<number>,
   usage: TypeGLBufferUsage,
 };
@@ -273,7 +273,7 @@ export type OBJ_GLVertexBuffer = {
  * @property {1 | 2 | 3 | 4} length
  * @property {TypeGLUniform} type
  */
-export type OBJ_GLUniform = {
+type OBJ_GLUniform = {
   name: string,
   length: 1 | 2 | 3 | 4,
   type: TypeGLUniform,
@@ -305,7 +305,7 @@ export type OBJ_GLUniform = {
  * of the figure scene. For example, use this to create a 3D object in a 2D
  * figure.
  */
-export type OBJ_FigurePrimitive = {
+type OBJ_FigurePrimitive = {
   name?: string,
   position?: TypeParsablePoint,
   transform?: TypeParsableTransform,
@@ -326,7 +326,7 @@ export type OBJ_FigurePrimitive = {
  * @property {3 | 4} [size] if `3`, then color data is RGB, if `4` then color
  * data is RGBA
  */
-export type OBJ_GLColorData = {
+type OBJ_GLColorData = {
   data: Array<number>,
   normalize?: boolean,
   size?: 3 | 4,
@@ -535,7 +535,7 @@ export type OBJ_GLColorData = {
  *   ],
  * });
  */
-export type OBJ_GenericGL = {
+type OBJ_GenericGL = {
   glPrimitive?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
   vertexShader?: TypeVertexShader,
   fragmentShader?: TypeFragmentShader,
@@ -549,3 +549,24 @@ export type OBJ_GenericGL = {
   colors?: Array<number> | OBJ_GLColorData,
   normals?: OBJ_GLVertexBuffer,
 } & OBJ_FigurePrimitive;
+
+export type {
+  OBJ_LineStyleSimple,
+  OBJ_LineStyleSimple_Defined,
+  OBJ_Collection,
+  OBJ_Texture,
+  OBJ_PulseScale,
+  OBJ_GLBuffer,
+  OBJ_GLVertexBuffer,
+  OBJ_GLUniform,
+  OBJ_FigurePrimitive,
+  OBJ_GLColorData,
+  OBJ_GenericGL,
+};
+
+function a() {
+
+}
+export {
+  a,
+};

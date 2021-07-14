@@ -31,7 +31,7 @@ import { revolve } from './revolve';
  * representing two triangles per face and an
  * associated normal for each point will be returned.
  */
-export type OBJ_Cone = {
+export type OBJ_ConePoints = {
   sides?: number,
   radius?: number,
   normals?: 'curve' | 'flat',
@@ -56,7 +56,7 @@ export type OBJ_Cone = {
  * @return {[Array<Point>, Array<Point>]} an array of points and normals. If
  * the points represent lines, then the array of normals will be empty.
  */
-export default function cone(options: OBJ_Cone) {
+export default function cone(options: OBJ_ConePoints) {
   const o = joinObjects(
     {
       sides: 10,

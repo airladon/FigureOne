@@ -62,7 +62,6 @@ import { getBufferBorder } from '../geometries/buffer';
 import type TimeKeeper from '../TimeKeeper';
 import type { Recorder } from '../Recorder/Recorder';
 import Scene from '../../tools/scene';
-
 import type {
   OBJ_LineStyleSimple, OBJ_GenericGL,
 } from './FigurePrimitiveTypes';
@@ -512,7 +511,6 @@ export default class FigurePrimitives {
       usage: 'STATIC',
     };
     const options = joinObjects({}, defaultOptions, oIn);
-    console.log(joinObjects({}, options))
 
     const processOptions = (o, u) => {
       if (o.usage == null) {
@@ -612,6 +610,9 @@ export default class FigurePrimitives {
     element.custom.updatePoints = (updateOptions: Object) => {
       const o = joinObjects({}, element.custom.options, updateOptions);
       element.custom.options = o;
+      if (o.transformPoints != null) {
+        o.transform = o.transformPoints;
+      }
       const [
         points, normals,
       ] = element.custom.getPoints(o);

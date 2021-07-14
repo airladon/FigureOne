@@ -251,6 +251,7 @@ function getCurveNormals(
   closeRows: boolean,
   closeColumns: boolean,
 ) {
+  console.log(curve, closeRows, closeColumns)
   const rows = surfacePoints.length;
   const cols = surfacePoints[0].length;
   const normals = [];
@@ -335,13 +336,13 @@ function getCurveNormals(
       let a2n = cc;
       let b1n = cc;
       let b2n = cc;
-      if (curve === 'curveRows' || curve === 'curve') {
+      if (curve === 'curveColumns' || curve === 'curve') {
         a1n = a1n.add(pc);
         a2n = a2n.add(pc);
         b1n = b1n.add(nc);
         b2n = b2n.add(nc);
       }
-      if (curve === 'curveColumns' || curve === 'curve') {
+      if (curve === 'curveRows' || curve === 'curve') {
         a1n = a1n.add(cp);
         b1n = b1n.add(cp);
         a2n = a2n.add(cn);

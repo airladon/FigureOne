@@ -1739,3 +1739,5 @@ export type OBJ_TextLines = {
   transform: TypeParsableTransform,
 };
 
+function b() {};
+export {b};

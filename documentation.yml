@@ -17,7 +17,7 @@ toc:
   - Rotation
   - Scale
   - Transform
-  - name: Shape Primitives
+  - name: 2D Shape Primitives
     file: ./docs/api/tutorials/draw/draw.md
   - OBJ_Generic
   - OBJ_Line
@@ -30,7 +30,7 @@ toc:
   - OBJ_Polygon
   - OBJ_Star
   - OBJ_Grid
-  - name: Shape Collections
+  - name: 2D Shape Collections
     file: ./docs/api/tutorials/collections/collections.md
   - OBJ_Collection
   - CollectionsLine
@@ -50,6 +50,14 @@ toc:
   - OBJ_Text
   - OBJ_TextLine
   - OBJ_TextLines
+  - name: 3D Shape Primitives
+    file: ./docs/api/tutorials/shapes3D/shapes3d.md
+  - OBJ_Generic3D
+  - OBJ_Cube
+  - OBJ_Sphere
+  - OBJ_Cylinder
+  - OBJ_Cone
+  - OBJ_Revolve
   - name: Animation
     file: ./docs/api/tutorials/animation/animation.md
   - AnimationManager
@@ -162,7 +170,6 @@ toc:
   - TypeRecorderTime
   - name: Shaders
     file: ./docs/api/tutorials/shaders/shaders.md
-  - OBJ_GLPrimitive
   - OBJ_GLBuffer
   - OBJ_GLVertexBuffer
   - OBJ_GLUniform
