@@ -123,14 +123,14 @@ class GLObject extends DrawingObject {
     return this.gl.canvas;
   }
 
-  setPrimitive(primitiveType: 'TRIANGLES' | 'POINTS' | 'TRIANGLE_FAN' | 'TRIANGLE_STRIP' | 'LINES' | 'LINE_LOOP' | 'LINE_STRIP') {
+  setPrimitive(primitiveType: 'TRIANGLES' | 'POINTS' | 'TRIANGLE_FAN' | 'TRIANGLE_STRIP' | 'LINES' | 'LINE_LOOP' | 'LINE_STRIP' | 'FAN' | 'STRIP') {
     if (primitiveType === 'TRIANGLES') {
       this.glPrimitive = this.gl.TRIANGLES;
     } else if (primitiveType === 'LINES') {
       this.glPrimitive = this.gl.LINES;
-    } else if (primitiveType === 'TRIANGLE_FAN') {
+    } else if (primitiveType === 'TRIANGLE_FAN' || primitiveType === 'FAN') {
       this.glPrimitive = this.gl.TRIANGLE_FAN;
-    } else if (primitiveType === 'TRIANGLE_STRIP') {
+    } else if (primitiveType === 'TRIANGLE_STRIP' || primitiveType === 'STRIP') {
       this.glPrimitive = this.gl.TRIANGLE_STRIP;
     } else if (primitiveType === 'POINTS') {
       this.glPrimitive = this.gl.POINTS;
@@ -139,7 +139,7 @@ class GLObject extends DrawingObject {
     } else if (primitiveType === 'LINE_STRIP') {
       this.glPrimitive = this.gl.LINE_STRIP;
     } else {
-      throw new Error(`Primitive type can only be ['TRIANGLES' | 'POINTS' | 'TRIANGLE_FAN' | 'TRIANGLE_STRIP' | 'LINES' | 'LINE_LOOP' | 'LINE_STRIP']. Input primitive type was: '${primitiveType}'`);
+      throw new Error(`Primitive type can only be ['TRIANGLES' | 'POINTS' | 'TRIANGLE_FAN' | 'TRIANGLE_STRIP' | 'LINES' | 'LINE_LOOP' | 'LINE_STRIP']. Input primitive type was: ${primitiveType}`);
     }
   }
 

@@ -343,10 +343,19 @@ const figure = new Fig.Figure();
 //     mapTo: [-0.5, -0.5, 1, 1],
 //   },
 // });
-figure.add({
-  name: 'e',
-  make: 'ellipse',
-  height: 1,
-  width: 0.5,
-  sides: 100,
+// figure.add({
+//   name: 'e',
+//   make: 'ellipse',
+//   height: 1,
+//   width: 0.5,
+//   sides: 100,
+// });
+
+a = figure.add({
+  make: 'polygon',
+  radius: 0.5,
+  color: [1, 0, 0, 1],
+  sides: 10,
+  // angleToDraw: Math.PI,
 });
+

@@ -4129,7 +4129,7 @@ class FigureElementPrimitive extends FigureElement {
       // if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
       // if (FIGURE1DEBUG) { debugTimes.push([performance.now(), '']); }
       let pointCount = -1;
-      if (this.drawingObject instanceof VertexGeneric) {
+      if (this.drawingObject instanceof GLObject) {
         pointCount = this.drawingObject.numVertices;
         if (this.angleToDraw !== -1) {
           pointCount = this.drawingObject.getPointCountForAngle(this.angleToDraw);

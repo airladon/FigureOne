@@ -22962,7 +22962,7 @@ FigureElementPrimitive {
       "vertexAttribPointer": [Function],
       "viewport": [Function],
     },
-    "glPrimitive": 1,
+    "glPrimitive": undefined,
     "location": Point {
       "_type": "point",
       "x": 0,
@@ -23707,7 +23707,7 @@ FigureElementPrimitive {
       "vertexAttribPointer": [Function],
       "viewport": [Function],
     },
-    "glPrimitive": 1,
+    "glPrimitive": undefined,
     "location": Point {
       "_type": "point",
       "x": 0,

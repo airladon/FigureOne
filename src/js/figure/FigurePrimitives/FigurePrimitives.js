@@ -312,7 +312,7 @@ export default class FigurePrimitives {
     );
 
     // Set the glPrimitive
-    glObject.setPrimitive(options.glPrimitive);
+    glObject.setPrimitive(options.glPrimitive.toUpperCase());
 
     // If vertices helper exists, then add the a_vertex attribute
     if (options.vertices != null) {
@@ -515,6 +515,9 @@ export default class FigurePrimitives {
       if (o.colors != null) {
         o.colors = toNumbers(o.colors, dim);
       }
+      if (o.drawType != null) {
+        o.glPrimitive = o.drawType.toUpperCase();
+      }
     };
     processOptions(options, 'STATIC');
     const u = options.usage;
@@ -546,6 +549,9 @@ export default class FigurePrimitives {
       }
       if (o.colors) {
         element.custom.updateAttribute('a_color', o.colors);
+      }
+      if (o.drawType != null) {
+        element.drawingObject.setPrimitive(o.drawType.toUpperCase());
       }
     };
     element.custom.updatePoints = element.custom.updateGeneric3;
@@ -586,12 +592,12 @@ export default class FigurePrimitives {
         points, normals,
       ] = element.custom.getPoints(o);
       if (o.lines == null || o.lines === false) {
-        element.custom.updateGeneric(joinObjects({}, o, {
+        element.custom.updateGeneric3(joinObjects({}, o, {
           points,
           normals,
         }));
       } else {
-        element.custom.updateGeneric(joinObjects({}, o, {
+        element.custom.updateGeneric3(joinObjects({}, o, {
           points,
           normals: null,
         }));
@@ -718,7 +724,7 @@ export default class FigurePrimitives {
       ['morpher', options.points.length, colorVertex],
       fragmentShader,
     );
-    glObject.setPrimitive(options.glPrimitive);
+    glObject.setPrimitive(options.glPrimitive.toUpperCase());
 
     const shapeNameMap = {};
     if (options.names != null) {
@@ -1672,7 +1678,7 @@ export default class FigurePrimitives {
         points: [...xTris, ...yTris],
         drawBorder,
         drawBorderBuffer,
-        drawType: o.line.linePrimitives ? 'lines' : 'triangles',
+        drawType: o.line.linePrimitives ? 'LINES' : 'TRIANGLES',
       }));
     };
     element.custom.updatePoints(joinObjects({}, ...optionsIn));
