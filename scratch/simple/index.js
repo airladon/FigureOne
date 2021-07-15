@@ -334,21 +334,43 @@ const figure = new Fig.Figure();
 //   .then(step2)
 //   .start();
 
-figure.add({
+const a = figure.add({
   make: 'rectangle',
   width: 1,
   height: 1,
   position: [0.5, 0.5],
+//   fragmentShader: {
+//     src: `
+//     precision mediump float;
+// uniform vec4 u_color;
+// uniform sampler2D u_texture;
+// varying vec2 v_texcoord;
+// void main() {
+//   gl_FragColor = texture2D(u_texture, v_texcoord) * u_color.a;
+// }`,
+//     vars: ['u_color', 'u_texture'],
+//   },
   texture: {
     src: './mic.png',
     mapTo: [-0.5, -0.5, 1, 1],
     loadColor: [0, 0, 0, 0],
   },
 });
-figure.add({
+const b = figure.add({
   make: 'rectangle',
   width: 1,
   height: 1,
+//   fragmentShader: {
+//     src: `
+//     precision mediump float;
+// uniform vec4 u_color;
+// uniform sampler2D u_texture;
+// varying vec2 v_texcoord;
+// void main() {
+//   gl_FragColor = texture2D(u_texture, v_texcoord) * u_color.a;
+// }`,
+//     vars: ['u_color', 'u_texture'],
+//   },
   position: [-0.5, -0.5],
   texture: {
     src: './headphones.png',

@@ -161,6 +161,7 @@ class GLObject extends DrawingObject {
     if (texture != null) {
       const { index } = webgl.textures[texture.id];
       gl.activeTexture(gl.TEXTURE0 + index);
+      // console.log(glTexture)
       gl.bindTexture(gl.TEXTURE_2D, glTexture);
       gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
       gl.texImage2D(

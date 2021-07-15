@@ -228,6 +228,7 @@ function composeFragShader(
   } else if (color === 'texture') {
     src += 'uniform sampler2D u_texture;\n';
     src += 'varying vec2 v_texcoord;\n';
+    vars.push('u_texture');
   }
 
   if (light === 'directional') {
