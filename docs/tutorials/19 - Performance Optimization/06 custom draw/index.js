@@ -63,13 +63,13 @@ for (let i = 0; i < 400; i += 1) {
   };
 
   // Override element draw method
-  e.draw = (now, parentTransform) => {
+  e.draw = (now, scene, parentTransform) => {
     // Cacluate the draw matrix as efficiently as possible
     const mat = Fig.tools.m3.mul(parentTransform[0].mat, e.transform.mat);
 
     // Draw
     e.drawingObject.drawWithTransformMatrix(
-      mat, e.color,
+      scene, mat, e.color,
     );
   };
 }

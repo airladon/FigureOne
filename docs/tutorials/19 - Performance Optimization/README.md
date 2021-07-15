@@ -79,13 +79,15 @@ for (let i = 0; i < n; i += 1) {
     radius: r,
     color: [rand(0, 1), rand(0, 1), rand(0, 1), 0.7],
     transform: [['t', rand(-2.9 + r, 2.9 - r), rand(-2.7 + r, 2.9 - r)]],
-    mods: {
-      move: {
-        freely: { deceleration: 0, bounceLoss: 0 },
-        bounds: 'figure',
+    move: {
+      freely: { deceleration: 0, bounceLoss: 0 },
+      bounds: {
+        left: 3 - r, bottom: 3 - r, right: 3 - r, top: 3 - r,
       },
+    },
+    mods: {
       state: {
-        movement: { velocity: [['t', rand(-0.3, 0.3), rand(-0.3, 0.3)]] },
+        movement: { velocity: [rand(-0.3, 0.3), rand(-0.3, 0.3)] },
       },
     },
   });
@@ -146,13 +148,15 @@ for (let i = 0; i < n; i += 1) {
     radius: r,
     color: [rand(0, 1), rand(0, 1), rand(0, 1), 0.7],
     transform: [['t', rand(-2.9 + r, 2.9 - r), rand(-2.7 + r, 2.9 - r)]],
-    mods: {
-      move: {
-        freely: { deceleration: 0, bounceLoss: 0 },
-        bounds: 'figure',
+    move: {
+      freely: { deceleration: 0, bounceLoss: 0 },
+      bounds: {
+        left: 3 - r, bottom: 3 - r, right: 3 - r, top: 3 - r,
       },
+    },
+    mods: {
       state: {
-        movement: { velocity: [['t', rand(-0.3, 0.3), rand(-0.3, 0.3)]] },
+        movement: { velocity: [rand(-0.3, 0.3), rand(-0.3, 0.3)] },
       },
     },
   });
@@ -191,13 +195,15 @@ for (let i = 0; i < n; i += 1) {
     sides: 200,
     color: [rand(0, 1), rand(0, 1), rand(0, 1), 0.7],
     transform: [['t', rand(-2.9 + r, 2.9 - r), rand(-2.7 + r, 2.9 - r)]],
-    mods: {
-      move: {
-        freely: { deceleration: 0, bounceLoss: 0 },
-        bounds: 'figure',
+    move: {
+      freely: { deceleration: 0, bounceLoss: 0 },
+      bounds: {
+        left: 3 - r, bottom: 3 - r, right: 3 - r, top: 3 - r,
       },
+    },
+    mods: {
       state: {
-        movement: { velocity: [['t', rand(-0.3, 0.3), rand(-0.3, 0.3)]] },
+        movement: { velocity: [rand(-0.3, 0.3), rand(-0.3, 0.3)] },
       },
     },
   });
@@ -343,13 +349,13 @@ The `draw` method takes a parent transform, and chains that with the element's t
 for (let i = 0; i < 400; i += 1) {
   ...
   // Override element draw method
-  e.draw = (now, parentTransform) => {
+  e.draw = (now, scene, parentTransform) => {
     // Cacluate the draw matrix as efficiently as possible
     const mat = Fig.tools.m3.mul(parentTransform[0].mat, e.transform.mat);
 
     // Draw
     e.drawingObject.drawWithTransformMatrix(
-      mat, e.color,
+      scene, mat, e.color,
     );
   };
 }
@@ -358,7 +364,7 @@ for (let i = 0; i < 400; i += 1) {
 The files for this are [here](./06%20custom%20draw).
 
 
-This draw method is super simple, and will stop an element from being able to pulse, or use the `getPosition` or `getBorder` methods.
+The draw method usually handles element pulsing (as a pulsing does not change an element's transform and is purely a draw time process). Therefore, overwriting the draw method will disable element pulsing.
 
 It almost halves the draw time however, so we can then increase `n` to `400` and still achieve 20 fps on the Chromebook.
 
@@ -420,11 +426,11 @@ Vertex Shader:
 
 ```c
 attribute vec2 a_vertex;
-uniform mat3 u_worldMatrix;
+uniform mat3 u_worldViewProjectionMatrix;
 uniform float u_z;
 
 void main() {
-  gl_Position = vec4((u_worldMatrix * vec3(a_vertex, 1)).xy, u_z, 1);'
+  gl_Position = vec4((u_worldViewProjectionMatrix * vec3(a_vertex, 1)).xy, u_z, 1);'
 }
 ```
 
@@ -439,7 +445,7 @@ void main() {
 }
 ```
 
-The vertex shader takes in the vertex location (`a_vertex`) and transforms it by some transform matrix (`u_worldMatrix`). Here the `a_` and `u_` prefixes denote attributes and uniforms respectively.
+The vertex shader takes in the vertex location (`a_vertex`) and transforms it by some transform matrix (`u_worldViewProjectionMatrix`). Here the `a_` and `u_` prefixes denote attributes and uniforms respectively.
 
 These shaders are 2D shaders, but everything in WebGL is in 3D space, meaning a z coordinate (`u_z`) is also needed. In this case the z coordinate can be used to position shapes over other shapes.
 
@@ -468,13 +474,13 @@ Thus our vertex shader will be:
 ```c
 attribute vec2 a_vertex;
 attribute vec2 a_velocity;
-uniform mat3 u_worldMatrix;
+uniform mat3 u_worldViewProjectionMatrix;
 uniform float u_time;
 
 void main() {
   float x = a_vertex.x + a_velocity.x * u_time;
   float y = a_vertex.y + a_velocity.y * u_time;
-  gl_Position = vec4((u_worldMatrix * vec3(x, y, 1)).xy, 0, 1);
+  gl_Position = vec4((u_worldViewProjectionMatrix * vec3(x, y, 1)).xy, 0, 1);
 ```
 
 We will not use a customized fragment shader for this example, and so all shapes will be the same color.
@@ -497,12 +503,12 @@ const { rand } = Fig.tools.math;
 const vertexShader = `
 attribute vec2 a_vertex;
 attribute vec2 a_velocity;
-uniform mat4 u_worldMatrix;
+uniform mat4 u_worldViewProjectionMatrix;
 uniform float u_time;
 void main() {
   float x = a_vertex.x + a_velocity.x * u_time;
   float y = a_vertex.y + a_velocity.y * u_time;
-  gl_Position = u_worldMatrix * vec4(x, y, 0, 1);
+  gl_Position = u_worldViewProjectionMatrix * vec4(x, y, 0, 1);
 }`;
 
 // Create vertices for 10,000 polygons. Each polygon is 20 triangles.
@@ -528,17 +534,18 @@ for (let i = 0; i < 10000; i += 1) {
 
 const element = figure.add({
   make: 'gl',
-  // Define the custom shader and variables (u_worldMatrix is the element transform
-  // matrix)
+  // Define the custom shader and variables. u_worldViewProjectionMatrix is the
+  // element transform combined with the scene (projection and camera)
+  // matrix.
   vertexShader: {
     src: vertexShader,
-    vars: ['a_vertex', 'a_velocity', 'u_worldMatrix', 'u_time'],
+    vars: ['a_vertex', 'a_velocity', 'u_worldViewProjectionMatrix', 'u_time'],
   },
   // Build in shader with one color for all vertices
   fragmentShader: 'simple',
   // Define buffers and uniforms
   vertices: { data: points },
-  buffers: [{ name: 'a_velocity', data: velocities }],
+  attributes: [{ name: 'a_velocity', data: velocities }],
   uniforms: [{ name: 'u_time' }],
   // Element color and mods
   color: [1, 0, 1, 0.5],
@@ -615,7 +622,7 @@ attribute vec2 a_velocity;
 attribute vec2 a_center;
 attribute float a_radius;
 varying vec4 v_color;
-uniform mat4 u_worldMatrix;
+uniform mat4 u_worldViewProjectionMatrix;
 uniform float u_time;
 
 float calc(float limit, float pos, float center, float vel) {
@@ -640,7 +647,7 @@ float calc(float limit, float pos, float center, float vel) {
 void main() {
   float x = calc(3.0 - a_radius, a_vertex.x, a_center.x, a_velocity.x);
   float y = calc(3.0 - a_radius, a_vertex.y, a_center.y, a_velocity.y);
-  gl_Position = u_worldMatrix * vec4(x, y, 0, 1);
+  gl_Position = u_worldViewProjectionMatrix * vec4(x, y, 0, 1);
   v_color = a_color;
 }`;
 
@@ -676,17 +683,18 @@ for (let i = 0; i < 10000; i += 1) {
 
 const element = figure.add({
   make: 'gl',
-  // Define the custom shader and variables (u_worldMatrix is the element transform
-  // matrix)
+  // Define the custom shader and variables. u_worldViewProjectionMatrix is the
+  // element transform combined with the scene (projection and camera)
+  // matrix.
   vertexShader: {
     src: vertexShader,
-    vars: ['a_vertex', 'a_color', 'a_velocity', 'a_center', 'a_radius', 'u_worldMatrix', 'u_time'],
+    vars: ['a_vertex', 'a_color', 'a_velocity', 'a_center', 'a_radius', 'u_worldViewProjectionMatrix', 'u_time'],
   },
   // Built in shader that allows for colored vertices
   fragmentShader: 'vertexColor',
   // Define buffers and uniforms
   vertices: { data: points },
-  buffers: [
+  attributes: [
     {
       name: 'a_color', size: 4, data: colors, type: 'UNSIGNED_BYTE', normalize: true,
     },

@@ -14,13 +14,15 @@ for (let i = 0; i < n; i += 1) {
     radius: r,
     color: [rand(0, 1), rand(0, 1), rand(0, 1), 0.7],
     transform: [['t', rand(-2.9 + r, 2.9 - r), rand(-2.7 + r, 2.9 - r)]],
-    mods: {
-      move: {
-        freely: { deceleration: 0, bounceLoss: 0 },
-        bounds: 'figure',
+    move: {
+      freely: { deceleration: 0, bounceLoss: 0 },
+      bounds: {
+        left: 3 - r, bottom: 3 - r, right: 3 - r, top: 3 - r,
       },
+    },
+    mods: {
       state: {
-        movement: { velocity: [['t', rand(-0.3, 0.3), rand(-0.3, 0.3)]] },
+        movement: { velocity: [rand(-0.3, 0.3), rand(-0.3, 0.3)] },
       },
     },
   });

@@ -13,7 +13,7 @@ attribute vec2 a_velocity;
 attribute vec2 a_center;
 attribute float a_radius;
 varying vec4 v_color;
-uniform mat4 u_worldMatrix;
+uniform mat4 u_worldViewProjectionMatrix;
 uniform float u_time;
 
 float calc(float limit, float pos, float center, float vel) {
@@ -38,7 +38,7 @@ float calc(float limit, float pos, float center, float vel) {
 void main() {
   float x = calc(3.0 - a_radius, a_vertex.x, a_center.x, a_velocity.x);
   float y = calc(3.0 - a_radius, a_vertex.y, a_center.y, a_velocity.y);
-  gl_Position = u_worldMatrix * vec4(x, y, 0, 1);
+  gl_Position = u_worldViewProjectionMatrix * vec4(x, y, 0, 1);
   v_color = a_color;
 }`;
 
@@ -74,17 +74,18 @@ for (let i = 0; i < 10000; i += 1) {
 
 const element = figure.add({
   make: 'gl',
-  // Define the custom shader and variables (u_worldMatrix is the element transform
-  // matrix)
+  // Define the custom shader and variables. u_worldViewProjectionMatrix is the
+  // element transform combined with the scene (projection and camera)
+  // matrix.
   vertexShader: {
     src: vertexShader,
-    vars: ['a_vertex', 'a_color', 'a_velocity', 'a_center', 'a_radius', 'u_worldMatrix', 'u_time'],
+    vars: ['a_vertex', 'a_color', 'a_velocity', 'a_center', 'a_radius', 'u_worldViewProjectionMatrix', 'u_time'],
   },
-  // Built in shader that allows for colored vertices
-  fragmentShader: 'vertexColor',
+  // Compose a built in shader with vertex defined colors
+  fragmentShader: { color: 'vertex' },
   // Define buffers and uniforms
   vertices: { data: points },
-  buffers: [
+  attributes: [
     {
       name: 'a_color', size: 4, data: colors, type: 'UNSIGNED_BYTE', normalize: true,
     },
