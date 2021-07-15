@@ -4353,6 +4353,23 @@ class FigureElementCollection extends FigureElement {
     }
     this.elements = {};
     this.drawOrder = [];
+    if (options.move != null && options.move !== false) {
+      this.setTouchable();
+      this.setMovable();
+      this.setMove(options.move);
+    }
+    if (options.touch != null) {
+      this.setTouchable(options.touch);
+    }
+    if (options.dimColor != null) {
+      this.dimColor = options.dimColor;
+    }
+    if (options.defaultColor != null) {
+      this.defaultColor = options.dimColor;
+    }
+    if (options.scenarios != null) {
+      this.scenarios = options.scenarios;
+    }
     this.childrenCanAnimate = true;
     this.eqns = {};
     this.type = 'collection';
