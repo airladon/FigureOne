@@ -1113,9 +1113,29 @@
               
                 
                 <li><a
+                  href='#obj_genericgl'
+                  class="">
+                  OBJ_GenericGL
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_generic'
                   class="">
                   OBJ_Generic
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_figureprimitive'
+                  class="">
+                  OBJ_FigurePrimitive
                   
                 </a>
                 
@@ -1719,9 +1739,9 @@
               
                 
                 <li><a
-                  href='#obj_generic3d'
+                  href='#obj_generic3'
                   class="">
-                  OBJ_Generic3D
+                  OBJ_Generic3
                   
                 </a>
                 
@@ -1772,16 +1792,6 @@
                   href='#obj_revolve'
                   class="">
                   OBJ_Revolve
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_surface'
-                  class="">
-                  OBJ_Surface
                   
                 </a>
                 
@@ -3852,6 +3862,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#figureprimitivesgenericlegacy'
+                        class='regular pre-open'>
+                        #genericLegacy
+                      </a></li>
+                      
+                      <li><a
                         href='#figureprimitivesgeneric'
                         class='regular pre-open'>
                         #generic
@@ -4176,6 +4192,16 @@
                   href='#obj_elementmods'
                   class="">
                   OBJ_ElementMods
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typescenarios'
+                  class="">
+                  TypeScenarios
                   
                 </a>
                 
@@ -5119,6 +5145,36 @@
               
                 
                 <li><a
+                  href='#obj_glcolordata'
+                  class="">
+                  OBJ_GLColorData
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_vertexshader'
+                  class="">
+                  OBJ_VertexShader
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_fragmentshader'
+                  class="">
+                  OBJ_FragmentShader
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#misc-animation'
                   class="h5 bold black caps">
                   Misc Animation
@@ -5865,79 +5921,9 @@
               
                 
                 <li><a
-                  href='#typescenarios'
+                  href='#obj_generic3all'
                   class="">
-                  TypeScenarios
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_figureprimitive'
-                  class="">
-                  OBJ_FigurePrimitive
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_glcolordata'
-                  class="">
-                  OBJ_GLColorData
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_genericgl'
-                  class="">
-                  OBJ_GenericGL
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_generic3dall'
-                  class="">
-                  OBJ_Generic3DAll
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#test'
-                  class="">
-                  test
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_vertexshader'
-                  class="">
-                  OBJ_VertexShader
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_fragmentshader'
-                  class="">
-                  OBJ_FragmentShader
+                  OBJ_Generic3All
                   
                 </a>
                 
@@ -6075,6 +6061,16 @@
               
                 
                 <li><a
+                  href='#obj_surfacepoints'
+                  class="">
+                  OBJ_SurfacePoints
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#surface'
                   class="">
                   surface
@@ -6118,6 +6114,36 @@
                   href='#getdeltaangle3d'
                   class="">
                   getDeltaAngle3D
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typerangeboundsdefinition'
+                  class="">
+                  TypeRangeBoundsDefinition
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typerectboundsdefinition'
+                  class="">
+                  TypeRectBoundsDefinition
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typelineboundsdefinition'
+                  class="">
+                  TypeLineBoundsDefinition
                   
                 </a>
                 
@@ -6587,16 +6613,6 @@
                 
                 </li>
               
-                
-                <li><a
-                  href='#tester'
-                  class="">
-                  tester
-                  
-                </a>
-                
-                </li>
-              
             </ul>
           </div>
           <div class='mt1 h6 quiet'>
@@ -6616,13 +6632,13 @@
   
     <h4>Figures, Primitives and Collections</h4>
 <p><a href="https://github.com/airladon/FigureOne">FigureOne</a> allows you to create a <em>figure</em> that can be both interactive and animated.</p>
-<p>A figure has one or more <em>figure elements</em>. A figure element is a simple shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.</p>
+<p>A figure is composed of one or more <em>figure elements</em>. A figure element is a simple shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.</p>
 <p>In the language of <strong>FigureOne</strong>, there are two types of <a href="FigureElements">FigureElements</a>:</p>
 <ul>
 <li><a href="#figureelementprimitive">FigureElementPrimitive</a> - an element that will draw something to the screen, such as a line, shape or text</li>
 <li><a href="#figureelementcollection">FigureElementCollection</a> - collections of elements that will move or be operated on together</li>
 </ul>
-<p>Each <a href="#figureelement">FigureElement</a> has a <a href="#transform">Transform</a> that may contain one or more translations, rotations and scaling factors. When the element is rendered to the screen, the transform will be applied. In the case of a <a href="#figureelementprimitive">FigureElementPrimitive</a>, the shape or text will be transformed. In the case of a <a href="#figureelementcollection">FigureElementCollection</a>, all the figure elements it contains will have their transforms further transformed by the collection transform.</p>
+<p>Each <a href="#figureelement">FigureElement</a> has a <a href="#transform">Transform</a> that may for example translate, rotate or scale an element. When the element is rendered to the screen, the transform will be applied. In the case of a <a href="#figureelementprimitive">FigureElementPrimitive</a>, the shape or text will be transformed. In the case of a <a href="#figureelementcollection">FigureElementCollection</a>, all the figure elements it contains will have their transforms cascaded with the collection transform.</p>
 <p>This means there is a heierachy of <a href="#figureelement">FigureElement</a> objects, where the parent transform is applied to (cascaded with) the child transform. Therefore collections can be thought of as modular building blocks of a more complex figure.</p>
 <p>Changing an element's transform moves the element through space. Changing the element's transform over time animates the element.</p>
 <h4>An Example</h4>
@@ -14510,7 +14526,7 @@ not initializing with transforms.
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>typeOr2DRotation</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"2D"</code> | <code>"xyz"</code> | <code>"axis"</code> | <code>"dir"</code> | <code>"basis"</code>))</code>
+            <span class='code bold'>typeOr2DRotation</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#typerotationcomponentname">TypeRotationComponentName</a> | <a href="#typeuserrotationdefinition">TypeUserRotationDefinition</a>))</code>
 	    
           </div>
           
@@ -16622,6 +16638,333 @@ figure.add(p);</pre>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='obj_genericgl'>
+      OBJ_GenericGL
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>DiagramElementPrimitive with low level WegGL drawing object.</p>
+<p>A number of WebGL specific properties can be defined.</p>
+<p>WebGL specific properties are <code>glPrimitive</code>, <code>vertexShader</code>, <code>fragmentShader</code>
+<code>attributes</code>, <code>uniforms</code> and an optional <code>texture</code>. The
+nomencalture for these properties is directly from WebGL.</p>
+<p>Properties <code>vertices</code>, <code>colors</code>, <code>dimension</code>, <code>light</code> and <code>normals</code> provide
+shortcuts for defining the shaders, attributes and uniforms when shaders are
+not customized.</p>
+<p>Shaders are programs that run in the GPU and are written in a C-like
+language. Shaders operate on each vertex of a shape in parallel. The vertex
+shader transforms each vertex to some specific position, and performs color
+and lighting related calculations for scenarios when color and/or lighting
+are vertex specific. The fragment shader computes the final color of each
+pixel (fragment) between the vertices that make up a <code>glPrimitive</code>.</p>
+<p>Data can be passed from the CPU (JavaScript) to the GPU with attributes and
+uniforms.</p>
+<p>Attributes are arrays of numbers that represent data specific for
+each vertex in a shape. At a minimum, an attribute that defines the (x, y)
+or (x, y, z) coordinates of each vertex is needed. Other attributes might be
+color if all verticies do not have the same color, texture coordinates to
+map vertex color to a 2D image texture, and normal vectors for defining how
+light reflects from and thus brightens a surface. Each attribute must define
+data for every vertex in a shape. Attributes are typically defined and loaded
+into GPU buffers once. On each animation frame, the GPU will pass the
+buffered attributes to the shaders. Attributes are only passed to the vertex
+shader.</p>
+<p>Uniforms are small amounts of data (vectors or square matrices with a maximum
+dimension/rank of 4) that are passed from the CPU to the GPU on each frame.
+A uniform value can be passed to both the vertex and fragment shader and is
+thus available to all vertices and fragments. A uniform is like a
+global variable whose value can change on each animation frame. Example
+uniforms are:</p>
+<ul>
+<li>transform matrix that transforms all vertices in space the same way</li>
+<li>color value that colors all vertices the same (instead of having to define
+a color for each vertex)</li>
+<li>light source properties like position, direction, and amplitude</li>
+</ul>
+<p>Data can be passed from the vertex shader to the fragment shader in variables
+called <em>varyings</em>. Example varyings include color attributes (color that is
+defined for each vertex) and lighting information if the lighting is vertex
+dependent.</p>
+<p>Shaders source code can be defined as a string, or composed automatically
+from options including <code>dimension</code>, <code>color</code> and <code>light</code>. Shader source code
+contains attribute and uniform variables, and these attributes and uniforms
+need to be defined with <code>attributes</code> and <code>uniforms</code>.</p>
+<p>If using automated shader composition, then only attributes need to be
+defined. The uniforms will be passed to the shader from the information in
+the <code>color</code> property of the FigureElementPrimitive and the <code>scene</code> used to
+draw the primitive. See <a href="#obj_vertexshader">OBJ_VertexShader</a> and
+<a href="#obj_fragmentshader">OBJ_FragmentShader</a> for names of attributes and uniforms used in the
+shaders, and when they are used.</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>glPrimitive</span> <code class='quiet'>((<code>"TRIANGLES"</code> | <code>"POINTS"</code> | <code>"FAN"</code> | <code>"STRIP"</code> | <code>"LINES"</code>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>vertexShader</span> <code class='quiet'>(TypeVertexShader?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fragmentShader</span> <code class='quiet'>(TypeFragmentShader?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>attributes</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_glbuffer">OBJ_GLBuffer</a>>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>uniforms</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_gluniform">OBJ_GLUniform</a>>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>dimension</span> <code class='quiet'>((<code>2</code> | <code>3</code>)?)</code>
+          : default value for 
+<code>dimension in vertex shader if vertex shader is undefined (</code>
+2`)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>light</span> <code class='quiet'>((<code>"point"</code> | <code>"directional"</code> | null)?)</code>
+          : default value for 
+<code>light</code>
+
+in vertex and fragment shader if shaders are not otherwise defined (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>colors</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>> | <a href="#obj_glcolordata">OBJ_GLColorData</a>)?)</code>
+          : default value for
+
+<code>light</code>
+ in vertex and fragment shader if shaders are not otherwise defined
+(
+<code>uniform</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>vertices</span> <code class='quiet'>(<a href="#obj_glvertexbuffer">OBJ_GLVertexBuffer</a>?)</code>
+          : create a 
+<code>a_vertex</code>
+ attribute for
+vertex coordinates
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>normals</span> <code class='quiet'>(<a href="#obj_glvertexbuffer">OBJ_GLVertexBuffer</a>?)</code>
+          : create a 
+<code>a_normal</code>
+ attribute
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Default options are 2D, uniform color, TRIANGLES.</span>
+<span class="hljs-comment">// Create two red triangles (6 vertices, 12 values)</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;gl&#x27;</span>,
+  <span class="hljs-attr">vertices</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>],
+  <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple rotatable element with a custom position</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;gl&#x27;</span>,
+  <span class="hljs-attr">vertices</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>],
+  <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+  <span class="hljs-attr">position</span>: [-<span class="hljs-number">0.4</span>, -<span class="hljs-number">0.4</span>, <span class="hljs-number">0</span>],
+  <span class="hljs-attr">move</span>: { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;rotation&#x27;</span> },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Assign a color to each vertex</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;gl&#x27;</span>,
+  <span class="hljs-attr">vertices</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>],
+  <span class="hljs-attr">colors</span>: [
+    <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>,
+    <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>,
+    <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>,
+    <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>,
+    <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>,
+    <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>,
+  ],
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Assign a color to each vertex, using just 3 numbers per color (no alpha)</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;gl&#x27;</span>,
+  <span class="hljs-attr">vertices</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>],
+  <span class="hljs-attr">colors</span>: {
+    <span class="hljs-attr">data</span>: [
+      <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>,
+      <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>,
+      <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>,
+      <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>,
+      <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>,
+      <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>,
+    ],
+    <span class="hljs-attr">size</span>: <span class="hljs-number">3</span>,
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Texture filled square</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;gl&#x27;</span>,
+  <span class="hljs-attr">vertices</span>: [-<span class="hljs-number">0.5</span>, -<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, -<span class="hljs-number">0.5</span>, -<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, -<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, -<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>],
+  <span class="hljs-attr">numVertices</span>: <span class="hljs-number">6</span>,
+  <span class="hljs-attr">texture</span>: {
+    <span class="hljs-attr">src</span>: <span class="hljs-string">&#x27;./flower.jpeg&#x27;</span>,
+    <span class="hljs-attr">coords</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">loadColor</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Make a 3D cube using composed shaders</span>
+<span class="hljs-keyword">const</span> { toNumbers } = Fig.tools.g2;
+<span class="hljs-keyword">const</span> [cubeVertices, cubeNormals] = Fig.tools.g2.cube({ <span class="hljs-attr">side</span>: <span class="hljs-number">0.5</span> });
+figure.scene.setProjection({ <span class="hljs-attr">style</span>: <span class="hljs-string">&#x27;orthographic&#x27;</span> });
+figure.scene.setCamera({ <span class="hljs-attr">position</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>] });
+figure.scene.setLight({ <span class="hljs-attr">directional</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">1</span>] });
+
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;gl&#x27;</span>,
+  <span class="hljs-attr">light</span>: <span class="hljs-string">&#x27;directional&#x27;</span>,
+  <span class="hljs-attr">dimension</span>: <span class="hljs-number">3</span>,
+  <span class="hljs-attr">vertices</span>: toNumbers(cubeVertices),
+  <span class="hljs-attr">normals</span>: toNumbers(cubeNormals),
+  <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Custom shaders</span>
+<span class="hljs-comment">// Make a shader with a custom attribute aVertex and custom uniform uColor,</span>
+<span class="hljs-comment">// which are then defined in the options.</span>
+<span class="hljs-comment">// Note, the `u_worldViewProjectionMatrix` uniform does not need to be defined</span>
+<span class="hljs-comment">// as this will be passed by FigureOne using the Scene information of the</span>
+<span class="hljs-comment">// figure (or element if an element has a custom scene attached to it).</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;gl&#x27;</span>,
+  <span class="hljs-attr">vertexShader</span>: {
+    <span class="hljs-attr">src</span>: <span class="hljs-string">`
+      uniform mat4 u_worldViewProjectionMatrix;
+      attribute vec4 aVertex;
+      void main() {
+        gl_Position = u_worldViewProjectionMatrix * aVertex;
+      }`</span>,
+    <span class="hljs-attr">vars</span>: [<span class="hljs-string">&#x27;aVertex&#x27;</span>, <span class="hljs-string">&#x27;u_worldViewProjectionMatrix&#x27;</span>],
+  },
+  <span class="hljs-attr">fragmentShader</span>: {
+    <span class="hljs-attr">src</span>: <span class="hljs-string">`
+    precision mediump float;
+    uniform vec4 uColor;
+    void main() {
+      gl_FragColor = uColor;
+      gl_FragColor.rgb *= gl_FragColor.a;
+    }`</span>,
+    <span class="hljs-attr">vars</span>: [<span class="hljs-string">&#x27;uColor&#x27;</span>],
+  },
+  <span class="hljs-attr">attributes</span>: [
+    {
+      <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;aVertex&#x27;</span>,
+      <span class="hljs-attr">size</span>: <span class="hljs-number">3</span>,
+      <span class="hljs-attr">data</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>],
+    },
+  ],
+  <span class="hljs-attr">uniforms</span>: [
+    {
+      <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;uColor&#x27;</span>,
+      <span class="hljs-attr">length</span>: <span class="hljs-number">4</span>,
+      <span class="hljs-attr">value</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+    },
+  ],
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='obj_generic'>
       OBJ_Generic
     </h3>
@@ -16908,6 +17251,158 @@ figure.add({
   ],
 });</pre>
     
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_figureprimitive'>
+      OBJ_FigurePrimitive
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Options object for any <a href="DiagramElementPrimitive">DiagramElementPrimitive</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : name of figure element
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : position overrides 
+<code>transform</code>
+ translation
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
+          : transform to apply to element
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
+          : color to apply to element (is passed as the
+'u_color' uniform to the fragment shader)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>touch</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#typeparsablepoint">TypeParsablePoint</a>)?)</code>
+          : <code>true</code>
+, 
+<code>number</code>
+ or
+
+<code>TypeParsablePoint</code>
+ will set the element as touchable. If 
+<code>number</code>
+, then
+element touch volume is the scaled actual volume in x, y, and z. For
+example, if 
+<code>2</code>
+, then the touchable volume is twice the actual volume. If
+
+<code>TypeParsablePoint</code>
+ then the x, y, and z scales can be set independantly
+(
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>move</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | <a href="#obj_elementmove">OBJ_ElementMove</a>)?)</code>
+          : setting this to anything but
+
+<code>false</code>
+ will set the element as movable. Use 
+<code>OBJ_ElementMove</code>
+ to customize
+the movement options
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>dimColor</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
+          : RGBA is used when vertex colors are from a
+uniform, otherwise just the alpha channel is used.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>defaultColor</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scenarios</span> <code class='quiet'>(<a href="#typescenarios">TypeScenarios</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scene</span> <code class='quiet'>(Scene?)</code>
+          : Give the element a custom scene that is independant
+of the figure scene. For example, use this to create a 3D object in a 2D
+figure.
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
   
 
   
@@ -25286,7 +25781,8 @@ figure.add(
   </h2>
 
   
-    <h3><a id="shapes3d-boilerplate"></a> Text Boilerplate</h3>
+    <p>3D shapes can be drawn, animated and interacted with in FigureOne.</p>
+<h3><a id="shapes3d-boilerplate"></a> Text Boilerplate</h3>
 <pre class='hljs'><span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure();
 figure.scene.setProjection({ <span class="hljs-attr">style</span>: <span class="hljs-string">&#x27;orthographic&#x27;</span> });
 figure.scene.setCamera({ <span class="hljs-attr">position</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">up</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>] });
@@ -25302,22 +25798,23 @@ figure.scene.setLight({ <span class="hljs-attr">directional</span>: [<span class
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_generic3d'>
-      OBJ_Generic3D
+    <h3 class='fl m0' id='obj_generic3'>
+      OBJ_Generic3
     </h3>
     
     
   </div>
   
 
-  <p>Options object for a <a href="#figureelementprimitive">FigureElementPrimitive</a> of a generic 3D shape.</p>
+  <p>Options object for a <a href="#figureelementprimitive">FigureElementPrimitive</a> of a generic 3D shape.
+Extends and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
 <p><img src="./apiassets/generic3.png" alt=""></p>
 <p><img src="./apiassets/generic3.gif" alt=""></p>
 <p><a href="#obj_genericgl">OBJ_GenericGL</a> can be used for shape creation with custom shaders.</p>
 <p>But for many custom shapes, only points and normals of the shape need to be
 defined, without needing to customize the shaders.</p>
-<p>This provides the ability to create many custom shapes that don't need shader
-customization.</p>
+<p><a href="#obj_generic3">OBJ_Generic3</a> Provides the ability to create many custom shapes that
+don't need shader customization.</p>
 
   
     <p style="display: none;">      Type:
@@ -25386,6 +25883,18 @@ surfaces
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#shapes3d-boilerplate">
+boilerplate
+</a>
+
+      
+    
   
 
   
@@ -25485,7 +25994,7 @@ a.animations.new()
   </div>
   
 
-  <p>Cube shape options object that extends <a href="#obj_generic3d">OBJ_Generic3D</a>
+  <p>Cube shape options object that extends <a href="#obj_generic3">OBJ_Generic3</a>
 and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
 <p><img src="./apiassets/cube.png" alt=""></p>
 <p>By default, a cube will be constructed around the origin, with the xyz axes
@@ -25633,7 +26142,7 @@ figure.add({
   </div>
   
 
-  <p>Sphere shape options object that extends <a href="#obj_generic3d">OBJ_Generic3D</a>
+  <p>Sphere shape options object that extends <a href="#obj_generic3">OBJ_Generic3</a>
 and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
 <p><img src="./apiassets/sphere.png" alt=""></p>
 <p>By default, a sphere with its center at the origin will be created.</p>
@@ -25817,7 +26326,7 @@ figure.add({
   </div>
   
 
-  <p>Cylinder shape options object that extends <a href="#obj_generic3d">OBJ_Generic3D</a>
+  <p>Cylinder shape options object that extends <a href="#obj_generic3">OBJ_Generic3</a>
 and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
 <p><img src="./apiassets/cylinder.png" alt=""></p>
 <p>By default, a cylinder along the x axis will be created.</p>
@@ -26050,7 +26559,7 @@ figure.add([
   </div>
   
 
-  <p>Cone shape options object that extends <a href="#obj_generic3d">OBJ_Generic3D</a>
+  <p>Cone shape options object that extends <a href="#obj_generic3">OBJ_Generic3</a>
 and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
 <p><img src="./apiassets/cone.png" alt=""></p>
 <p>By default, a cone with its base at the origin and its tip along the x axis
@@ -26241,7 +26750,7 @@ figure.add({
   </div>
   
 
-  <p>Revolve shape options object that extends <a href="#obj_generic3d">OBJ_Generic3D</a>
+  <p>Revolve shape options object that extends <a href="#obj_generic3">OBJ_Generic3</a>
 and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
 <p><img src="./apiassets/revolve.png" alt=""></p>
 <p>Revolve (or radially sweep) a profile in the XY plane around the x axis to
@@ -26468,7 +26977,7 @@ figure.add({
   </div>
   
 
-  <p>Revolve shape options object that extends <a href="#obj_generic3d">OBJ_Generic3D</a>
+  <p>Revolve shape options object that extends <a href="#obj_generic3">OBJ_Generic3</a>
 and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
 <p><img src="./apiassets/surface.png" alt=""></p>
 
@@ -26653,149 +27162,6 @@ figure.add({
   <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
 });</pre>
     
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_surface'>
-      OBJ_Surface
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Options object for defining a 3D surface.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>points</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>?)</code>
-          : A grid of points that
-define a 3D surface
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>normals</span> <code class='quiet'>((<code>"curveColumns"</code> | <code>"curveRows"</code> | <code>"curve"</code> | <code>"flat"</code>)?)</code>
-          : <code>flat</code>
- normals will make shading (from a light source) across a face of the
-object a constant color. 
-<code>curveRows</code>
- will gradiate the shading along the
-rows of the grid. 
-<code>curveColumns</code>
- will gradiate the shading along the columns
-of the grid. 
-<code>curve</code>
- will gradiate the shading along both rows and columns.
-Use 
-<code>curve</code>
-, 
-<code>curveRows</code>
-, or 
-<code>curveColumns</code>
- to make a surface
-look more round with fewer number of sides.
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>closeRows</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : Set to 
-<code>true</code>
- if first row and last row are
-the same, and normals is 
-<code>'curveRows'</code>
- or 
-<code>'curve'</code>
- to get correct normal
-calculations (
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>closeColumns</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : Set to 
-<code>true</code>
- if first row and last
-column are the same, and normals is 
-<code>'curveColumns'</code>
- or 
-<code>'curve'</code>
- to get
-correct normal calculations (
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
-          : apply a final transform to
-shape
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>lines</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : if 
-<code>true</code>
- then points representing
-the edes of the faces will be returned. If 
-<code>false</code>
-, then points
-representing two triangles per face and an
-associated normal for each point will be returned.
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
   
 
   
@@ -30646,7 +31012,6 @@ p.animations.new()
 <span class="hljs-keyword">const</span> step2 = <span class="hljs-keyword">new</span> Fig.Animation.RotationAnimationStep({
   <span class="hljs-attr">element</span>: p,
   <span class="hljs-attr">target</span>: <span class="hljs-number">0</span>,
-  <span class="hljs-attr">direction</span>: -<span class="hljs-number">1</span>,
   <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
 });
 
@@ -43907,7 +44272,7 @@ figure.add({
   <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;equation&#x27;</span>,
   <span class="hljs-attr">forms</span>: {
     <span class="hljs-attr">form1</span>: { <span class="hljs-attr">topComment</span>: [<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-string">&#x27;l1_line&#x27;</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">0.2</span>] },
-    <span class="hljs-attr">form2</span>: { <span class="hljs-attr">topComment</span>: [<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-string">&#x27;l1&#x27;</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">0.2</span>] },
+    <span class="hljs-attr">form2</span>: { <span class="hljs-attr">topComment</span>: [<span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-string">&#x27;d&#x27;</span>, <span class="hljs-string">&#x27;l1&#x27;</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">0.2</span>] },
   },
 });
 eqn.animations.new()
@@ -51420,8 +51785,16 @@ if bouncing of boundary
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>bounds</span> <code class='quiet'>(TransformBounds)</code>
-          : rectangle to limit movement within
+          <span class='code bold'>bounds</span> <code class='quiet'>((RectBounds | LineBounds | RangeBounds | null))</code>
+          : rectangle to
+limit movement within
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>plane</span> <code class='quiet'>(<a href="#plane">Plane</a>)</code>
+          : movement plane
 
           
         </div>
@@ -51441,19 +51814,13 @@ if bouncing of boundary
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>element</span> <code class='quiet'>((<a href="#figureelement">FigureElement</a> | null))</code>
+          <span class='code bold'>element</span> <code class='quiet'>((<a href="#figureelement">FigureElement</a> | null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>))</code>
           
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>type</span> <code class='quiet'>((<code>"rotation"</code> | <code>"translation"</code> | <code>"position"</code> | <code>"scale"</code> | <code>"scaleX"</code> | <code>"scaleY"</code> | <code>"scaleZ"</code>))</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>plane</span> <code class='quiet'>(<a href="#plane">Plane</a>)</code>
           
           
         </div>
@@ -51838,7 +52205,7 @@ bounces of figure boundaries
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>fragmentShader</span> <code class='quiet'>(TypeFragShader
+            <span class='code bold'>fragmentShader</span> <code class='quiet'>(TypeFragmentShader
             = <code>{color:&#39;uniform&#39;,light:null}</code>)</code>
 	    
           </div>
@@ -51856,7 +52223,7 @@ bounces of figure boundaries
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>selectorFragShader</span> <code class='quiet'>(TypeFragShader
+            <span class='code bold'>selectorFragShader</span> <code class='quiet'>(TypeFragmentShader
             = <code>&#39;selector&#39;</code>)</code>
 	    
           </div>
@@ -51947,7 +52314,8 @@ bounces of figure boundaries
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>points</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>)</code>
+            <span class='code bold'>points</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>
+            = <code>[]</code>)</code>
 	    
           </div>
           
@@ -52323,7 +52691,7 @@ for uniform - if null then uniform will be all 0 (
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>optionsIn</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_generic3d">OBJ_Generic3D</a>>)</code>
+            <span class='code bold'>optionsIn</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_generic3">OBJ_Generic3</a>>)</code>
 	    
           </div>
           
@@ -52415,6 +52783,76 @@ for uniform - if null then uniform will be all 0 (
 <a href="#obj_morph">OBJ_Morph</a>
  for
 examples and options.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='figureprimitivesgenericlegacy'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>genericLegacy(optionsIn)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p><a href="#figureelementprimitive">FigureElementPrimitive</a> that draws a generic shape.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>optionsIn</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_generic">OBJ_Generic</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#obj_generic">OBJ_Generic</a>
+ for options and examples.
 
       
     
@@ -55329,6 +55767,72 @@ describing which element properties to modify after creation.</p>
         <div class='space-bottom0'>
           <span class='code bold'>_elementName</span> <code class='quiet'>(<a href="#obj_elementpropertymod">OBJ_ElementPropertyMod</a>?)</code>
           
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typescenarios'>
+      TypeScenarios
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>All scenarios set to element.</p>
+<p>Scenarios are preset transforms, color and visibility settings that can be
+easily animated to.</p>
+<p>This is an object where the keys are scenario names and values are
+<a href="#obj_scenario">OBJ_Scenario</a> objects defining the scenario.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>_scenarioName</span> <code class='quiet'>(<a href="#obj_scenario">OBJ_Scenario</a>)</code>
+          : where scenarioName can be any
+string that names the scenario
+
           
         </div>
       
@@ -61047,7 +61551,7 @@ associated polyline point (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>boundary</span> <code class='quiet'>((TypeRangeBoundsDefinition | TypeRectBoundsDefinition | RangeBounds | RectBounds | <code>"figure"</code>)?)</code>
+          <span class='code bold'>boundary</span> <code class='quiet'>((<a href="#typerangeboundsdefinition">TypeRangeBoundsDefinition</a> | <a href="#typerectboundsdefinition">TypeRectBoundsDefinition</a> | RangeBounds | RectBounds | <code>"figure"</code>)?)</code>
           : boundary the pad can move within
 
           
@@ -64376,6 +64880,333 @@ line's label in the touch boundary for
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_glcolordata'>
+      OBJ_GLColorData
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Color definition for a gl primitive.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>data</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>)</code>
+          : color data
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>normalize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : if 
+<code>true</code>
+, then color data values are between
+0 and 255 (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>size</span> <code class='quiet'>((<code>3</code> | <code>4</code>)?)</code>
+          : if 
+<code>3</code>
+, then color data is RGB, if 
+<code>4</code>
+ then color
+data is RGBA
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_vertexshader'>
+      OBJ_VertexShader
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Options used to compose vertex shader source code.</p>
+<p>Shader source code can be automatically composed for different vertex
+dimension (2D vs 3D), coloring and lighting options.</p>
+<p>Composed source code uses specific attribute, uniform and varying names.
+Attributes will need to be defined by the user in the <code>attributes</code> property
+of <a href="OBJ_GLPrimitive">OBJ_GLPrimitive</a>.</p>
+<p>Attributes:</p>
+<ul>
+<li><code>vec2 a_vertex</code>: used to define vertex positions when <code>dimension = 2</code>.</li>
+<li><code>vec4 a_vertex</code>: used to define vertex positions when <code>dimension = 3</code> -
+Note, for this case an attribute size of only 3 is needed as the fourth
+coordinate (w in the homogenous coordinate system) is automatically filled
+with a 1.</li>
+<li><code>vec4 a_color</code>: used to define the color of a vertex when <code>color = 'vertex'</code></li>
+<li><code>vec2 a_texcoord</code>: used to define the texture coordinates to map the
+vertex to when <code>color = 'texture'</code></li>
+<li><code>vec3 a_normal</code>: used to define the normal vector for a vertex used when
+<code>light = 'point'</code> or <code>light = 'directional'</code></li>
+</ul>
+<p>Uniforms will be defined and updated by FigureOne based on the color and
+transform of the primitive, and the scene being used to draw the primitive.
+Thus, the uniform variables listed below for are for informational purposes
+only.</p>
+<p>Uniforms:</p>
+<ul>
+<li><code>mat4 u_worldViewProjectionMatrix</code>: transfomration matrix that cascades
+projection, camera position, and any additional transformation of the shape</li>
+<li><code>float u_z</code>: define a specific z for all vertices when <code>dimension = 2</code></li>
+<li><code>u_worldInverseTranspose</code>: transpose of inverse world matrix needed for
+to correctly transform normal vectors. Used when <code>light = 'point'</code> or
+<code>light = 'directional'</code></li>
+<li><code>vec3 u_lightWorldPosition</code>: defines the position of a point source light
+used when <code>light = 'point'</code></li>
+<li><code>mat4 u_worldMatrix</code>: defines the world matrix transform that orients the
+point source light relative to the shape used when <code>light = 'point'</code>.</li>
+</ul>
+<p>Varyings are passed from the vertex shader to the fragement shader. They are
+listed here in case the user wants to customize one shader, while relying on
+composition for the other. All varying expected by the composed shader will
+need to be defined in the custom shader.</p>
+<ul>
+<li><code>vec2 v_texcoord</code>: pass texture coordinates to fragment shader used when
+<code>color = 'texture'</code></li>
+<li><code>vec4 v_color</code>: pass vertex specific color to fragment shader used when
+<code>color = 'vertex'</code></li>
+<li><code>vec3 v_normal</code>: pass normals (transformed with <code>u_worldInverseTranspose</code>)
+to fragment shader used when <code>light = 'directional'</code> or <code>light = 'point'</code></li>
+<li><code>vec3 v_vertexToLight</code>: pass vector between point source light and vertex
+to fragment shader used when <code>light = 'point'</code></li>
+</ul>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>dimension</span> <code class='quiet'>((<code>2</code> | <code>3</code>)?)</code>
+          : (
+<code>2</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>((<code>"vertex"</code> | <code>"uniform"</code> | <code>"texture"</code>)?)</code>
+          : (
+<code>uniform</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>light</span> <code class='quiet'>((<code>"point"</code> | <code>"directional"</code> | null)?)</code>
+          : (
+<code>null</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_fragmentshader'>
+      OBJ_FragmentShader
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Options used to compose fragment shader source code.</p>
+<p>Shader source code can be automatically composed for different coloring and
+lighting options.</p>
+<p>Composed source code uses specific uniform and varying names.</p>
+<p>Uniforms will be defined and updated by FigureOne based on the color and
+transform of the primitive, and the scene being used to draw the primitive.
+Thus, the uniform variables listed below for are for informational purposes
+only.</p>
+<p>Uniforms:</p>
+<ul>
+<li><code>vec4 u_color</code>: global color for all vertices used all times. When
+<code>color = 'texture'</code> or <code>color = 'vertex'</code>, only the alpha channel of
+<code>u_color</code> is used.</li>
+<li><code>sampler2D u_texture</code>: texture used when <code>color = 'texture'</code>.</li>
+<li><code>vec3 u_directionalLight</code>: world space position of directional light
+source used when <code>light = 'directional'</code></li>
+<li><code>float u_ambientLight</code>: ambient light used when <code>light = 'directional'</code> or
+<code>light = 'point'</code>.</li>
+</ul>
+<p>Varyings are passed from the vertex shader to the fragement shader. They are
+listed here in case the user wants to customize one shader, while relying on
+composition for the other.</p>
+<ul>
+<li><code>vec2 v_texcoord</code>: texture coordinates from vertex shader used when
+<code>color = 'texture'</code></li>
+<li><code>vec4 v_color</code>: vertex specific color from vertex shader used when
+<code>color = 'vertex'</code></li>
+<li><code>vec3 v_normal</code>: normals from vertex shader used when
+<code>light = 'directional'</code> or <code>light = 'point'</code></li>
+<li><code>vec3 v_vertexToLight</code>: vector between point source light and vertex
+from vertex shader used when <code>light = 'point'</code></li>
+</ul>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>dimension</span> <code class='quiet'>((<code>2</code> | <code>3</code>)?)</code>
+          : (
+<code>2</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>((<code>"vertex"</code> | <code>"uniform"</code> | <code>"texture"</code>)?)</code>
+          : (
+<code>uniform</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>light</span> <code class='quiet'>((<code>"point"</code> | <code>"directional"</code> | null)?)</code>
+          : (
+<code>null</code>
+)
+
+          
+        </div>
+      
+    </div>
   
 
   
@@ -72322,636 +73153,8 @@ where duration is undim duration</li>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='typescenarios'>
-      TypeScenarios
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>All scenarios set to element.</p>
-<p>Scenarios are preset transforms, color and visibility settings that can be
-easily animated to.</p>
-<p>This is an object where the keys are scenario names and values are
-<a href="#obj_scenario">OBJ_Scenario</a> objects defining the scenario.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scenarioName</span> <code class='quiet'>(<a href="#obj_scenario">OBJ_Scenario</a>)</code>
-          : where scenarioName can be any
-string that names the scenario
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_figureprimitive'>
-      OBJ_FigurePrimitive
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Options object for any <a href="DiagramElementPrimitive">DiagramElementPrimitive</a>.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
-          : name of figure element
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : position overrides 
-<code>transform</code>
- translation
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
-          : transform to apply to element
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : color to apply to element (is passed as the
-'u_color' uniform to the fragment shader)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>touch</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#typeparsablepoint">TypeParsablePoint</a>)?)</code>
-          : <code>true</code>
-, 
-<code>number</code>
- or
-
-<code>TypeParsablePoint</code>
- will set the element as touchable. If 
-<code>number</code>
-, then
-element touch volume is the scaled actual volume in x, y, and z. For
-example, if 
-<code>2</code>
-, then the touchable volume is twice the actual volume. If
-
-<code>TypeParsablePoint</code>
- then the x, y, and z scales can be set independantly
-(
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>move</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | <a href="#obj_elementmove">OBJ_ElementMove</a>)?)</code>
-          : setting this to anything but
-
-<code>false</code>
- will set the element as movable. Use 
-<code>OBJ_ElementMove</code>
- to customize
-the movement options
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>dimColor</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : RGBA is used when vertex colors are from a
-uniform, otherwise just the alpha channel is used.
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>defaultColor</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scenarios</span> <code class='quiet'>(<a href="#typescenarios">TypeScenarios</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scene</span> <code class='quiet'>(Scene?)</code>
-          : Give the element a custom scene that is independant
-of the figure scene. For example, use this to create a 3D object in a 2D
-figure.
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_glcolordata'>
-      OBJ_GLColorData
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Color definition for a gl primitive.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>data</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>)</code>
-          : color data
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>normalize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : if 
-<code>true</code>
-, then color data values are between
-0 and 255 (
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>size</span> <code class='quiet'>((<code>3</code> | <code>4</code>)?)</code>
-          : if 
-<code>3</code>
-, then color data is RGB, if 
-<code>4</code>
- then color
-data is RGBA
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_genericgl'>
-      OBJ_GenericGL
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>DiagramElementPrimitive with low level WegGL drawing object.</p>
-<p>A number of WebGL specific properties can be defined.</p>
-<p>WebGL specific properties are <code>glPrimitive</code>, <code>vertexShader</code>, <code>fragmentShader</code>
-<code>attributes</code>, <code>uniforms</code> and an optional <code>texture</code>. The
-nomencalture for these properties is directly from WebGL.</p>
-<p>Properties <code>vertices</code>, <code>colors</code>, <code>dimension</code>, <code>light</code> and <code>normals</code> provide
-shortcuts for defining the shaders, attributes and uniforms when shaders are
-not customized.</p>
-<p>Shaders are programs that run in the GPU and are written in a C-like
-language. Shaders operate on each vertex of a shape in parallel. The vertex
-shader transforms each vertex to some specific position, and performs color
-and lighting related calculations for scenarios when color and/or lighting
-are vertex specific. The fragment shader computes the final color of each
-pixel (fragment) between the vertices that make up a <code>glPrimitive</code>.</p>
-<p>Data can be passed from the CPU (JavaScript) to the GPU with attributes and
-uniforms.</p>
-<p>Attributes are arrays of numbers that represent data specific for
-each vertex in a shape. At a minimum, an attribute that defines the (x, y)
-or (x, y, z) coordinates of each vertex is needed. Other attributes might be
-color if all verticies do not have the same color, texture coordinates to
-map vertex color to a 2D image texture, and normal vectors for defining how
-light reflects from and thus brightens a surface. Each attribute must define
-data for every vertex in a shape. Attributes are typically defined and loaded
-into GPU buffers once. On each animation frame, the GPU will pass the
-buffered attributes to the shaders. Attributes are only passed to the vertex
-shader.</p>
-<p>Uniforms are small amounts of data (vectors or square matrices with a maximum
-dimension/rank of 4) that are passed from the CPU to the GPU on each frame.
-A uniform value can be passed to both the vertex and fragment shader and is
-thus available to all vertices and fragments. A uniform is like a
-global variable whose value can change on each animation frame. Example
-uniforms are:</p>
-<ul>
-<li>transform matrix that transforms all vertices in space the same way</li>
-<li>color value that colors all vertices the same (instead of having to define
-a color for each vertex)</li>
-<li>light source properties like position, direction, and amplitude</li>
-</ul>
-<p>Data can be passed from the vertex shader to the fragment shader in variables
-called <em>varyings</em>. Example varyings include color attributes (color that is
-defined for each vertex) and lighting information if the lighting is vertex
-dependent.</p>
-<p>Shaders source code can be defined as a string, or composed automatically
-from options including <code>dimension</code>, <code>color</code> and <code>light</code>. Shader source code
-contains attribute and uniform variables, and these attributes and uniforms
-need to be defined with <code>attributes</code> and <code>uniforms</code>.</p>
-<p>If using automated shader composition, then only attributes need to be
-defined. The uniforms will be passed to the shader from the information in
-the <code>color</code> property of the FigureElementPrimitive and the <code>scene</code> used to
-draw the primitive. See <a href="#obj_vertexshader">OBJ_VertexShader</a> and
-<a href="#obj_fragmentshader">OBJ_FragmentShader</a> for names of attributes and uniforms used in the
-shaders, and when they are used.</p>
-
-  
-    <p style="display: none;">      Type:
-      any
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>glPrimitive</span> <code class='quiet'>((<code>"TRIANGLES"</code> | <code>"POINTS"</code> | <code>"FAN"</code> | <code>"STRIP"</code> | <code>"LINES"</code>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>vertexShader</span> <code class='quiet'>(TypeVertexShader?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fragmentShader</span> <code class='quiet'>(TypeFragmentShader?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>attributes</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_glbuffer">OBJ_GLBuffer</a>>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>uniforms</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_gluniform">OBJ_GLUniform</a>>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>dimension</span> <code class='quiet'>((<code>2</code> | <code>3</code>)?)</code>
-          : default value for 
-<code>dimension in vertex shader if vertex shader is undefined (</code>
-2`)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>light</span> <code class='quiet'>((<code>"point"</code> | <code>"directional"</code> | null)?)</code>
-          : default value for 
-<code>light</code>
-
-in vertex and fragment shader if shaders are not otherwise defined (
-<code>null</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>colors</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>> | <a href="#obj_glcolordata">OBJ_GLColorData</a>)?)</code>
-          : default value for
-
-<code>light</code>
- in vertex and fragment shader if shaders are not otherwise defined
-(
-<code>uniform</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>vertices</span> <code class='quiet'>(<a href="#obj_glvertexbuffer">OBJ_GLVertexBuffer</a>?)</code>
-          : create a 
-<code>a_vertex</code>
- attribute for
-vertex coordinates
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>normals</span> <code class='quiet'>(<a href="#obj_glvertexbuffer">OBJ_GLVertexBuffer</a>?)</code>
-          : create a 
-<code>a_normal</code>
- attribute
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Default options are 2D, uniform color, TRIANGLES.</span>
-<span class="hljs-comment">// Create two red triangles (6 vertices, 12 values)</span>
-figure.add({
-  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;gl&#x27;</span>,
-  <span class="hljs-attr">vertices</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>],
-  <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple rotatable element with a custom position</span>
-figure.add({
-  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;gl&#x27;</span>,
-  <span class="hljs-attr">vertices</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>],
-  <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-  <span class="hljs-attr">position</span>: [-<span class="hljs-number">0.4</span>, -<span class="hljs-number">0.4</span>, <span class="hljs-number">0</span>],
-  <span class="hljs-attr">move</span>: { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;rotation&#x27;</span> },
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Assign a color to each vertex</span>
-figure.add({
-  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;gl&#x27;</span>,
-  <span class="hljs-attr">vertices</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>],
-  <span class="hljs-attr">colors</span>: [
-    <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>,
-    <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>,
-    <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>,
-    <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>,
-    <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>,
-    <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>,
-  ],
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Assign a color to each vertex, using just 3 numbers per color (no alpha)</span>
-figure.add({
-  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;gl&#x27;</span>,
-  <span class="hljs-attr">vertices</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>],
-  <span class="hljs-attr">colors</span>: {
-    <span class="hljs-attr">data</span>: [
-      <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>,
-      <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>,
-      <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>,
-      <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>,
-      <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>,
-      <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>,
-    ],
-    <span class="hljs-attr">size</span>: <span class="hljs-number">3</span>,
-  },
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Texture filled square</span>
-figure.add({
-  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;gl&#x27;</span>,
-  <span class="hljs-attr">vertices</span>: [-<span class="hljs-number">0.5</span>, -<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, -<span class="hljs-number">0.5</span>, -<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, -<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, -<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>],
-  <span class="hljs-attr">numVertices</span>: <span class="hljs-number">6</span>,
-  <span class="hljs-attr">texture</span>: {
-    <span class="hljs-attr">src</span>: <span class="hljs-string">&#x27;./flower.jpeg&#x27;</span>,
-    <span class="hljs-attr">coords</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-    <span class="hljs-attr">loadColor</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
-  },
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Make a 3D cube using composed shaders</span>
-<span class="hljs-keyword">const</span> [cubeVertices, cubeNormals] = Fig.tools.g2.cube({ <span class="hljs-attr">side</span>: <span class="hljs-number">0.5</span> });
-figure.scene.setProjection({ <span class="hljs-attr">style</span>: <span class="hljs-string">&#x27;orthographic&#x27;</span> });
-figure.scene.setCamera({ <span class="hljs-attr">position</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>] });
-figure.scene.setLight({ <span class="hljs-attr">directional</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">1</span>] });
-figure.add({
-  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;gl&#x27;</span>,
-  <span class="hljs-attr">light</span>: <span class="hljs-string">&#x27;directional&#x27;</span>,
-  <span class="hljs-attr">dimension</span>: <span class="hljs-number">3</span>,
-  <span class="hljs-attr">vertices</span>: cubeVertices,
-  <span class="hljs-attr">normals</span>: cubeNormals,
-  <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Custom shaders</span>
-<span class="hljs-comment">// Make a shader with a custom attribute aVertex and custom uniform uColor,</span>
-<span class="hljs-comment">// which are then defined in the options.</span>
-<span class="hljs-comment">// Note, the `u_worldViewProjectionMatrix` uniform does not need to be defined</span>
-<span class="hljs-comment">// as this will be passed by FigureOne using the Scene information of the</span>
-<span class="hljs-comment">// figure (or element if an element has a custom scene attached to it).</span>
-figure.add({
-  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;gl&#x27;</span>,
-  <span class="hljs-attr">vertexShader</span>: {
-    <span class="hljs-attr">src</span>: <span class="hljs-string">`
-      uniform mat4 u_worldViewProjectionMatrix;
-      attribute vec4 aVertex;
-      void main() {
-        gl_Position = u_worldViewProjectionMatrix * aVertex;
-      }`</span>,
-    <span class="hljs-attr">vars</span>: [<span class="hljs-string">&#x27;aVertex&#x27;</span>, <span class="hljs-string">&#x27;u_worldViewProjectionMatrix&#x27;</span>],
-  },
-  <span class="hljs-attr">fragmentShader</span>: {
-    <span class="hljs-attr">src</span>: <span class="hljs-string">`
-    precision mediump float;
-    uniform vec4 uColor;
-    void main() {
-      gl_FragColor = uColor;
-      gl_FragColor.rgb *= gl_FragColor.a;
-    }`</span>,
-    <span class="hljs-attr">vars</span>: [<span class="hljs-string">&#x27;uColor&#x27;</span>],
-  },
-  <span class="hljs-attr">attributes</span>: [
-    {
-      <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;aVertex&#x27;</span>,
-      <span class="hljs-attr">size</span>: <span class="hljs-number">3</span>,
-      <span class="hljs-attr">data</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>],
-    },
-  ],
-  <span class="hljs-attr">uniforms</span>: [
-    {
-      <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;uColor&#x27;</span>,
-      <span class="hljs-attr">length</span>: <span class="hljs-number">4</span>,
-      <span class="hljs-attr">value</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-    },
-  ],
-});</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_generic3dall'>
-      OBJ_Generic3DAll
+    <h3 class='fl m0' id='obj_generic3all'>
+      OBJ_Generic3All
     </h3>
     
     
@@ -73001,324 +73204,6 @@ shapes vertices to replicate the shape in space. Copies of normals, colors
  if the shape's vertices
 will be updated very frequently (
 <code>'STATIC'</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='test'>
-      test
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>This is a questionable test. Jest only updates timers when
-figure.mock.timeStep() is called. Therefore, if it is called 4.5s after
-the p1 animation is kicked off, it will update the timers such that the
-p1 animation finishes, which then starts the p2 animation at the current
-now() time, which is 4.5s (not 2s) after p1 is started.</p>
-<p>It is desired that the p2 animation is actually kicked of at 2s after p1
-starts, but this test can't catch that. In real life, the timers aren't
-held back, and so they would fire when now() is 2s (or close to
-it) meaning that p2 is kicked off at the right time.</p>
-<p>What happens:</p>
-<ul>
-<li>mockFigure sets performance.now to 4500</li>
-<li>jest.advanceTimersByTime(4500)</li>
-<li>timers go to 2000 which finishes p1 animation and kicks of p2</li>
-<li>p2 starts at 4500, and sets a timer for 2000</li>
-<li>timers now have a new timer for 2000 with 2500 left, so it goes
-to that time (which should be then end of p2), but p2 doesn't end
-as its start time is 4500 and timeKeeper.now() is still 4500,
-so another 2000ms timer is set</li>
-<li>timers now have a new timer for 2000 with 500ms left, so 500 ms comes
-out of next timer.</li>
-<li>frame draw 1500ms - which is exactly when the 2000-500ms timer
-completes, so we get a setupDraw 1500ms into the 2000ms animation
-and thus the position of p2 is now 1.5. A new timer is setup for 500
-left.</li>
-<li>frame draw 1000 goes past the 500ms remaining p2 end timer, and so
-p2 comes to an end.</li>
-</ul>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_vertexshader'>
-      OBJ_VertexShader
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Options used to compose vertex shader source code.</p>
-<p>Shader source code can be automatically composed for different vertex
-dimension (2D vs 3D), coloring and lighting options.</p>
-<p>Composed source code uses specific attribute, uniform and varying names.
-Attributes will need to be defined by the user in the <code>attributes</code> property
-of <a href="OBJ_GLPrimitive">OBJ_GLPrimitive</a>.</p>
-<p>Attributes:</p>
-<ul>
-<li><code>vec2 a_vertex</code>: used to define vertex positions when <code>dimension = 2</code>.</li>
-<li><code>vec4 a_vertex</code>: used to define vertex positions when <code>dimension = 3</code> -
-Note, for this case an attribute size of only 3 is needed as the fourth
-coordinate (w in the homogenous coordinate system) is automatically filled
-with a 1.</li>
-<li><code>vec4 a_color</code>: used to define the color of a vertex when <code>color = 'vertex'</code></li>
-<li><code>vec2 a_texcoord</code>: used to define the texture coordinates to map the
-vertex to when <code>color = 'texture'</code></li>
-<li><code>vec3 a_normal</code>: used to define the normal vector for a vertex used when
-<code>light = 'point'</code> or <code>light = 'directional'</code></li>
-</ul>
-<p>Uniforms will be defined and updated by FigureOne based on the color and
-transform of the primitive, and the scene being used to draw the primitive.
-Thus, the uniform variables listed below for are for informational purposes
-only.</p>
-<p>Uniforms:</p>
-<ul>
-<li><code>mat4 u_worldViewProjectionMatrix</code>: transfomration matrix that cascades
-projection, camera position, and any additional transformation of the shape</li>
-<li><code>float u_z</code>: define a specific z for all vertices when <code>dimension = 2</code></li>
-<li><code>u_worldInverseTranspose</code>: transpose of inverse world matrix needed for
-to correctly transform normal vectors. Used when <code>light = 'point'</code> or
-<code>light = 'directional'</code></li>
-<li><code>vec3 u_lightWorldPosition</code>: defines the position of a point source light
-used when <code>light = 'point'</code></li>
-<li><code>mat4 u_worldMatrix</code>: defines the world matrix transform that orients the
-point source light relative to the shape used when <code>light = 'point'</code>.</li>
-</ul>
-<p>Varyings are passed from the vertex shader to the fragement shader. They are
-listed here in case the user wants to customize one shader, while relying on
-composition for the other. All varying expected by the composed shader will
-need to be defined in the custom shader.</p>
-<ul>
-<li><code>vec2 v_texcoord</code>: pass texture coordinates to fragment shader used when
-<code>color = 'texture'</code></li>
-<li><code>vec4 v_color</code>: pass vertex specific color to fragment shader used when
-<code>color = 'vertex'</code></li>
-<li><code>vec3 v_normal</code>: pass normals (transformed with <code>u_worldInverseTranspose</code>)
-to fragment shader used when <code>light = 'directional'</code> or <code>light = 'point'</code></li>
-<li><code>vec3 v_vertexToLight</code>: pass vector between point source light and vertex
-to fragment shader used when <code>light = 'point'</code></li>
-</ul>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>dimension</span> <code class='quiet'>((<code>2</code> | <code>3</code>)?)</code>
-          : (
-<code>2</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>((<code>"vertex"</code> | <code>"uniform"</code> | <code>"texture"</code>)?)</code>
-          : (
-<code>uniform</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>light</span> <code class='quiet'>((<code>"point"</code> | <code>"directional"</code> | null)?)</code>
-          : (
-<code>null</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_fragmentshader'>
-      OBJ_FragmentShader
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Options used to compose fragment shader source code.</p>
-<p>Shader source code can be automatically composed for different coloring and
-lighting options.</p>
-<p>Composed source code uses specific uniform and varying names.</p>
-<p>Uniforms will be defined and updated by FigureOne based on the color and
-transform of the primitive, and the scene being used to draw the primitive.
-Thus, the uniform variables listed below for are for informational purposes
-only.</p>
-<p>Uniforms:</p>
-<ul>
-<li><code>vec4 u_color</code>: global color for all vertices used all times. When
-<code>color = 'texture'</code> or <code>color = 'vertex'</code>, only the alpha channel of
-<code>u_color</code> is used.</li>
-<li><code>sampler2D u_texture</code>: texture used when <code>color = 'texture'</code>.</li>
-<li><code>vec3 u_directionalLight</code>: world space position of directional light
-source used when <code>light = 'directional'</code></li>
-<li><code>float u_ambientLight</code>: ambient light used when <code>light = 'directional'</code> or
-<code>light = 'point'</code>.</li>
-</ul>
-<p>Varyings are passed from the vertex shader to the fragement shader. They are
-listed here in case the user wants to customize one shader, while relying on
-composition for the other.</p>
-<ul>
-<li><code>vec2 v_texcoord</code>: texture coordinates from vertex shader used when
-<code>color = 'texture'</code></li>
-<li><code>vec4 v_color</code>: vertex specific color from vertex shader used when
-<code>color = 'vertex'</code></li>
-<li><code>vec3 v_normal</code>: normals from vertex shader used when
-<code>light = 'directional'</code> or <code>light = 'point'</code></li>
-<li><code>vec3 v_vertexToLight</code>: vector between point source light and vertex
-from vertex shader used when <code>light = 'point'</code></li>
-</ul>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>dimension</span> <code class='quiet'>((<code>2</code> | <code>3</code>)?)</code>
-          : (
-<code>2</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>((<code>"vertex"</code> | <code>"uniform"</code> | <code>"texture"</code>)?)</code>
-          : (
-<code>uniform</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>light</span> <code class='quiet'>((<code>"point"</code> | <code>"directional"</code> | null)?)</code>
-          : (
-<code>null</code>
 )
 
           
@@ -74715,6 +74600,149 @@ the points represent lines, then the array of normals will be empty.
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='obj_surfacepoints'>
+      OBJ_SurfacePoints
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Options object for defining a 3D surface.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>points</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>?)</code>
+          : A grid of points that
+define a 3D surface
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>normals</span> <code class='quiet'>((<code>"curveColumns"</code> | <code>"curveRows"</code> | <code>"curve"</code> | <code>"flat"</code>)?)</code>
+          : <code>flat</code>
+ normals will make shading (from a light source) across a face of the
+object a constant color. 
+<code>curveRows</code>
+ will gradiate the shading along the
+rows of the grid. 
+<code>curveColumns</code>
+ will gradiate the shading along the columns
+of the grid. 
+<code>curve</code>
+ will gradiate the shading along both rows and columns.
+Use 
+<code>curve</code>
+, 
+<code>curveRows</code>
+, or 
+<code>curveColumns</code>
+ to make a surface
+look more round with fewer number of sides.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>closeRows</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : Set to 
+<code>true</code>
+ if first row and last row are
+the same, and normals is 
+<code>'curveRows'</code>
+ or 
+<code>'curve'</code>
+ to get correct normal
+calculations (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>closeColumns</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : Set to 
+<code>true</code>
+ if first row and last
+column are the same, and normals is 
+<code>'curveColumns'</code>
+ or 
+<code>'curve'</code>
+ to get
+correct normal calculations (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
+          : apply a final transform to
+shape
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lines</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : if 
+<code>true</code>
+ then points representing
+the edes of the faces will be returned. If 
+<code>false</code>
+, then points
+representing two triangles per face and an
+associated normal for each point will be returned.
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='surface'>
       surface
     </h3>
@@ -74747,7 +74775,7 @@ for each point will be available.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_surface">OBJ_Surface</a>)</code>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_surfacepoints">OBJ_SurfacePoints</a>)</code>
 	    
           </div>
           
@@ -75037,6 +75065,326 @@ around the x, y, and z axes.</p>
     </div>
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typerangeboundsdefinition'>
+      TypeRangeBoundsDefinition
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Range bounds object definition.</p>
+<p>A range bounds defines a minimum and maximum value.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>min</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null)?)</code>
+          : minimum value boundary, null for unbounded
+(
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>max</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null)?)</code>
+          : maximum value boundary, null for unbounded
+(
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>precision</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : precision with which to calculate boundary
+
+<code>intersect</code>
+ and 
+<code>contains</code>
+ (
+<code>8</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typerectboundsdefinition'>
+      TypeRectBoundsDefinition
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>A RectBounds is a rectangle around a point in a plane.</p>
+<p>It is defined by:</p>
+<ul>
+<li>a position in plane around which rectangle is formed</li>
+<li>topDirection/rightDirection vectors that orient the rectangle</li>
+<li>left/right magnitudes that define the width of the rectangle</li>
+<li>bottom/top magnitudes that define the height of the rectangle</li>
+</ul>
+<pre><code>----------------------------------------------     A
+|                                            |     |
+|        Top Vector                          |     |
+|             A                              |     | top
+|             |                              |     |
+|             |                              |     |
+|    position *----->                        |   ---
+|                   Right Vector             |     |
+|                                            |     | bottom
+|                                            |     |
+----------------------------------------------     V
+|
+|
+&#x3C;-------------|----------------------------->
+left                right
+</code></pre>
+<p>A rectangle can be defined in one of several ways:</p>
+<ul>
+<li>position, plane normal, one direction vecvtor (top or right)</li>
+<li>position, top and right direction vectors</li>
+</ul>
+<p>The left, right, up, and down values must all be >= 0.</p>
+<p>By default the rectangle will be in the XY plane (+z normal) with a
+rightDirection vector along the +x axis.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>normal</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rightDirection</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>topDirection</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>left</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>right</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>up</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>down</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>precision</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : precision with which to calculate boundary
+
+<code>intersect</code>
+ and 
+<code>contains</code>
+ (
+<code>8</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pecision</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typelineboundsdefinition'>
+      TypeLineBoundsDefinition
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>A line bounds defines a line boundary.</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>line</span> <code class='quiet'>(<a href="#typeparsableline">TypeParsableLine</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>precision</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : precision with which to calculate boundary
+
+<code>intersect</code>
+ and 
+<code>contains</code>
+ (
+<code>8</code>
+)
+
+          
+        </div>
+      
+    </div>
   
 
   
@@ -78186,92 +78534,6 @@ Bk Bk Re Re Bk Bk Re Re Bl Bl Tr Tr Bl Bl Tr Tr</p>
   
   
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='tester'>
-      tester
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Tests</p>
-<ol>
-<li>Playback tests: snapshot at each state time during playback</li>
-<li>Seek tests: snapshot of seek to each state time</li>
-<li>FromTo tests: snapshots of:
-<ul>
-<li>seekFrom time</li>
-<li>seekTo time</li>
-<li>one state time after resumePlayback at seekTo time</li>
-</ul>
-</li>
-</ol>
-<p>During playback tests, use <code>intermitentTime</code> to force a frame draw
-at a specific interval.</p>
-<p>Input options object to tester is:
-title                 // test title
-width                 // viewport width
-height                // viewport height
-htmlFile,             // website to load
-testPath,             // path to test file - defaults to calling file
-stateSampling = 1,    // Use n for testing every n state times
-fromTimesIn = [],     // Defaults to slide times, then empty
-toTimesIn = [],       // Defaults to slide times, from times, empty
-threshold = 0,        // In pixels
-intermitentTime = 0,  // Force a frame draw every intermitentTime seconds</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>optionsIn</span> <code class='quiet'>(any)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
   
 
   

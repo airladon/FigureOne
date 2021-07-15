@@ -88,6 +88,19 @@ class Bounds {
 // class ValueBounds extends Bounds {
 //   boundary: ?number;
 // }
+
+/**
+ * Range bounds object definition.
+ *
+ * A range bounds defines a minimum and maximum value.
+ *
+ * @property {number | null} [min] minimum value boundary, null for unbounded
+ * (`null`)
+ * @property {number | null} [max] maximum value boundary, null for unbounded
+ * (`null`)
+ * @property {number} [precision] precision with which to calculate boundary
+ * `intersect` and `contains` (`8`)
+ */
 export type TypeRangeBoundsDefinition = {
   min?: number | null,
   max?: number | null,
@@ -268,40 +281,52 @@ class RangeBounds extends Bounds {
 }
 
 
-/*
-  A RectBounds is a rectangle around a point in a plane.
+/**
+ * A RectBounds is a rectangle around a point in a plane.
 
-  It is defined by:
-  - a position in plane around which rectangle is formed
-  - topDirection/rightDirection vectors that orient the rectangle
-  - left/right magnitudes that define the width of the rectangle
-  - bottom/top magnitudes that define the height of the rectangle
-
-  **********************************************     A
-  *                                            *     |
-  *        Top Vector                          *     |
-  *             A                              *     | top
-  *             |                              *     |
-  *             |                              *     |
-  *    position *----->                        *   ---
-  *                   Right Vector             *     |
-  *                                            *     | bottom
-  *                                            *     |
-  **********************************************     V
-                |
-                |
-  <-------------|----------------------------->
-      left                right
-
-  A rectangle can be defined in one of several ways:
-  - position, plane normal, one direction vecvtor (top or right)
-  - position, top and right direction vectors
-
-  The left, right, up, and down values must all be >= 0.
-
-  By default the rectangle will be in the XY plane (+z normal) with a
-  rightDirection vector along the +x axis.
-  */
+ * It is defined by:
+ * - a position in plane around which rectangle is formed
+ * - topDirection/rightDirection vectors that orient the rectangle
+ * - left/right magnitudes that define the width of the rectangle
+ * - bottom/top magnitudes that define the height of the rectangle
+ *
+ * ```
+----------------------------------------------     A
+|                                            |     |
+|        Top Vector                          |     |
+|             A                              |     | top
+|             |                              |     |
+|             |                              |     |
+|    position *----->                        |   ---
+|                   Right Vector             |     |
+|                                            |     | bottom
+|                                            |     |
+----------------------------------------------     V
+              |
+              |
+<-------------|----------------------------->
+    left                right
+```
+ * A rectangle can be defined in one of several ways:
+ * - position, plane normal, one direction vecvtor (top or right)
+ * - position, top and right direction vectors
+ *
+ * The left, right, up, and down values must all be >= 0.
+ *
+ * By default the rectangle will be in the XY plane (+z normal) with a
+ * rightDirection vector along the +x axis.
+ *
+ * @property {TypeParsablePoint} [position]
+ * @property {TypeParsablePoint} [normal]
+ * @property {TypeParsablePoint} [rightDirection]
+ * @property {TypeParsablePoint} [topDirection]
+ * @property {number} [left]
+ * @property {number} [right]
+ * @property {number} [up]
+ * @property {number} [down]
+ * @property {number} [precision] precision with which to calculate boundary
+ * `intersect` and `contains` (`8`)
+ */
 export type TypeRectBoundsDefinition = {
   position?: TypeParsablePoint,
   normal?: TypeParsablePoint,
@@ -311,8 +336,10 @@ export type TypeRectBoundsDefinition = {
   right?: number,
   up?: number,
   down?: number,
+  pecision?: number,
 };
 
+// $FlowFixMe
 class RectBounds extends Bounds {
   plane: Plane;
   rightDirection: Point;
@@ -694,6 +721,13 @@ export type TypeF1DefRectBoundsLegacy = {
   state: ['outside' | 'inside', number, number | null, number | null, number | null, number | null],
 };
 
+/**
+ * A line bounds defines a line boundary.
+ *
+ * @property {TypeParsableLine} [line]
+ * @property {number} [precision] precision with which to calculate boundary
+ * `intersect` and `contains` (`8`)
+ */
 export type TypeLineBoundsDefinition = OBJ_LineDefinition
   & {
     precision?: number,

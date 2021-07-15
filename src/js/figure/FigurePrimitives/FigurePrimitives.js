@@ -851,7 +851,7 @@ export default class FigurePrimitives {
       options.name,
       // this.scene,
     );
-    console.log(element.touchBorder)
+
     element.dimColor = this.defaultDimColor.slice();
     if (options.move != null && options.move !== false) {
       element.setTouchable();
@@ -870,7 +870,7 @@ export default class FigurePrimitives {
     if (options.scenarios != null) {
       element.scenarios = options.scenarios;
     }
-    console.log(element.touchBorder)
+
     element.custom.updateGeneric = function update(updateOptions: {
       points?: Array<TypeParsablePoint>,
       drawBorder?: TypeParsableBorder,
@@ -898,14 +898,12 @@ export default class FigurePrimitives {
       if (o.border != null) { // $FlowFixMe
         element.border = getBorder(o.border);
       }
-      console.log(element.name, o.touchBorder)
       if (o.touchBorder != null) { // $FlowFixMe
         element.touchBorder = getBorder(o.touchBorder);
       }
       element.drawingObject.change(o);
     };
     element.custom.updateGeneric(options);
-    console.log(element.touchBorder)
     element.custom.updatePoints = element.custom.updateGeneric;
     element.timeKeeper = this.timeKeeper;
     element.recorder = this.recorder;

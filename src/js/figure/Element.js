@@ -349,13 +349,13 @@ Rotation can only happen with some rotation transform elements:
 
 /**
  * Figure element move parameters
- *
- * @property {TransformBounds} bounds rectangle to limit movement within
- * @property {string | (?(Transform) => Transform)} transformClip user
- * defined method to clip velocity per frame
+ * @property {type: 'rotation' | 'translation' | 'position' | 'scale' | 'scaleX' | 'scaleY' | 'scaleZ'} type
+ * @property {RectBounds | LineBounds | RangeBounds | null} bounds rectangle to
+ * limit movement within
+ * @property {Plane} plane movement plane
  * @property {TypeTransformValue} maxVelocity maximum velocity allowed (5)
  * @property {OBJ_ElementMoveFreely} freely free movement parameters
- * @property {FigureElement | null} element
+ * @property {FigureElement | null | string} element
  */
 export type OBJ_ElementMove = {
   type: 'rotation' | 'translation' | 'position' | 'scale' | 'scaleX' | 'scaleY' | 'scaleZ',

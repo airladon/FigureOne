@@ -378,66 +378,66 @@ toc:
   #         - TypeF1DefRect
 
 
-OBJ_GEOPolygon
-OBJ_GEOPolygonLine
-polygon
-polygonLine
-OBJ_ConePoints
-cone
-OBJ_CubePoints
-cube
-OBJ_CylinderPoints
-OBJ_RevolvePoints
-revolve
-OBJ_SpherePoints
-sphere
-surface
-normAngle
-TypeRotationDirection
-getDeltaAngle
-getDeltaAngle3D
-OBJ_LineIntersect
-constructor
-theta
-phi
-setP1
-setP2
-unitVector
-vector
-getPoint
-reverse
-angle
-round
-length
-midPoint
-pointAtPercent
-pointAtLength
-hasPointAlong
-hasPointOn
-distanceToPoint
-isEqualTo
-hasLineWithin
-isAlongLine
-isWithinLine
-offset
-offset2D
-distanceToLine
-pointProjection
-intersectsWith
-clipPoint
-Path
-getPlane
-Plane ▸
-isParsablePoint
-TypeBasisObjectDefinition
-TypeRotationComponentName
-TypeUserRotationDefinition
-TypeUserTranslationDefinition
-TypeUserScaleDefinition
-TypeUserCustomDefinition
-TypeUserBasisDefinition
-TypeTransformComponentType
-TypeScaleTransformComponent
-TypeParsableArrayTransform
-fourByFour
-tester
+# OBJ_GEOPolygon
+# OBJ_GEOPolygonLine
+# polygon
+# polygonLine
+# OBJ_ConePoints
+# cone
+# OBJ_CubePoints
+# cube
+# OBJ_CylinderPoints
+# OBJ_RevolvePoints
+# revolve
+# OBJ_SpherePoints
+# sphere
+# surface
+# normAngle
+# TypeRotationDirection
+# getDeltaAngle
+# getDeltaAngle3D
+# OBJ_LineIntersect
+# constructor
+# theta
+# phi
+# setP1
+# setP2
+# unitVector
+# vector
+# getPoint
+# reverse
+# angle
+# round
+# length
+# midPoint
+# pointAtPercent
+# pointAtLength
+# hasPointAlong
+# hasPointOn
+# distanceToPoint
+# isEqualTo
+# hasLineWithin
+# isAlongLine
+# isWithinLine
+# offset
+# offset2D
+# distanceToLine
+# pointProjection
+# intersectsWith
+# clipPoint
+# Path
+# getPlane
+# Plane ▸
+# isParsablePoint
+# TypeBasisObjectDefinition
+# TypeRotationComponentName
+# TypeUserRotationDefinition
+# TypeUserTranslationDefinition
+# TypeUserScaleDefinition
+# TypeUserCustomDefinition
+# TypeUserBasisDefinition
+# TypeTransformComponentType
+# TypeScaleTransformComponent
+# TypeParsableArrayTransform
+# fourByFour
+# tester
