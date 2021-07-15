@@ -37,12 +37,9 @@ figure.add([
         offset: 0.05,
         update: true,
       },
-      mods: {
-        isMovable: true,
-        move: {
-          type: 'rotation',
-          bounds: { rotation: { min: 0.07, max: 1.1 } },
-        },
+      move: {
+        type: 'rotation',
+        bounds: { min: 0.07, max: 1.1 },
       },
     },
   },
