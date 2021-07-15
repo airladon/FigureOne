@@ -303,33 +303,50 @@ const figure = new Fig.Figure();
 //   color: [1, 0, 0, 1],
 // });
 // Using duration
-const p = figure.add(
-  {
-    name: 'p',
-    make: 'polygon',
-    sides: 4,
-    radius: 0.5,
-    position: [0, 0],
-  },
-);
+// const p = figure.add(
+//   {
+//     name: 'p',
+//     make: 'polygon',
+//     sides: 4,
+//     radius: 0.5,
+//     position: [0, 0],
+//   },
+// );
 
-p.animations.new()
-  .rotation({ target: Math.PI, duration: 2 })
-  .start();
+// // p.animations.new()
+// //   .rotation({ target: Math.PI, duration: 2 })
+// //   .start();
 
-// // Using velocity
+// // // Using velocity
+// // p.animations.new()
+// //   .rotation({ target: Math.PI, velocity: Math.PI / 2 })
+// //   .start();
+// // Different ways to create a stand-alone step
+// const step1 = p.animations.rotation({ target: Math.PI, duration: 2 });
+// const step2 = new Fig.Animation.RotationAnimationStep({
+//   element: p,
+//   target: 0,
+//   duration: 2,
+// });
+
 // p.animations.new()
-//   .rotation({ target: Math.PI, velocity: Math.PI / 2 })
+//   .then(step1)
+//   .then(step2)
 //   .start();
-// Different ways to create a stand-alone step
-const step1 = p.animations.rotation({ target: Math.PI, duration: 2 });
-const step2 = new Fig.Animation.RotationAnimationStep({
-  element: p,
-  target: 0,
-  duration: 2,
-});
 
-p.animations.new()
-  .then(step1)
-  .then(step2)
-  .start();
+// figure.add({
+//   make: 'rectangle',
+//   width: 1,
+//   height: 1,
+//   texture: {
+//     src: './flower.jpeg',
+//     mapTo: [-0.5, -0.5, 1, 1],
+//   },
+// });
+figure.add({
+  name: 'e',
+  make: 'ellipse',
+  height: 1,
+  width: 0.5,
+  sides: 100,
+});

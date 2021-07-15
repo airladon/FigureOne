@@ -50,7 +50,7 @@ class VertexGeneric extends GLObject {
     // this.setupTexture(textureLocation, textureVertexSpace, textureCoords, textureRepeat);
     this.addVertices([]);
     if (textureLocation !== '') {
-      this.addTexture(textureLocation, textureVertexSpace, textureCoords, textureRepeat);
+      this.addTexture(textureLocation, textureVertexSpace, textureCoords, 'a_vertex', [], textureRepeat);
       // this.texOptions = {
       //   location: textureLocation,
       //   mapTo: textureVertexSpace,

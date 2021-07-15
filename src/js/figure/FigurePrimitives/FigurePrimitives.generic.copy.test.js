@@ -40,7 +40,7 @@ describe('Figure Primitive Generic Copy', () => {
           // copyChain: copyChainOption,
         },
       });
-      figure.initialize();
+      // figure.initialize();
       points = processPoints(figure.getElement('a').drawingObject.points);
     };
 

@@ -6,8 +6,8 @@ import * as m3 from '../../../tools/m3';
 import type Scene from '../../Figure';
 import type { Type3DMatrix } from '../../../tools/m3';
 import WebGLInstance from '../../webgl/webgl';
-import type { TypeFragShader, TypeVertexShader } from '../../webgl/shaders';
-import { Rect, getPoint } from '../../../tools/g2';
+import type { TypeFragmentShader, TypeVertexShader } from '../../webgl/shaders';
+import { Rect, getPoint, getRect } from '../../../tools/g2';
 // import type { TypeParsablePoint } from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
 // import type { CPY_Step } from '../../geometries/copy/copy';
@@ -91,9 +91,9 @@ class GLObject extends DrawingObject {
     vertexShader: TypeVertexShader = {
       color: 'uniform', dimension: 2, normals: false, light: null,
     },
-    fragmentShader: TypeFragShader = { color: 'uniform', light: null },
+    fragmentShader: TypeFragmentShader = { color: 'uniform', light: null },
     selectorVertexShader: TypeVertexShader = 'selector',
-    selectorFragShader: TypeFragShader = 'selector',
+    selectorFragShader: TypeFragmentShader = 'selector',
   ) {
     super();
     this.gl = webgl.gl;
@@ -187,7 +187,7 @@ class GLObject extends DrawingObject {
     }
   }
 
-  updateTextureMap(points: Array<number>) {
+  updateTextureMap(points: Array<number> = []) {
     const { texture } = this;
     if (texture == null) {
       return;
@@ -223,7 +223,7 @@ class GLObject extends DrawingObject {
     mapFrom: Rect = new Rect(0, 0, 1, 1),
     mapTo: Rect = new Rect(-1, -1, 2, 2),
     mapToBuffer: string = 'a_vertex',
-    points: Array<number>,
+    points: Array<number> = [],
     repeat: boolean = false,
     onLoad: null | (() => void) = null,
     loadColor: TypeColor = [0, 0, 1, 0.5],
@@ -231,8 +231,8 @@ class GLObject extends DrawingObject {
     if (this.texture == null) {
       this.texture = {
         id: location,
-        mapTo,
-        mapFrom,
+        mapTo: getRect(mapTo),
+        mapFrom: getRect(mapFrom),
         repeat,
         src: location,
         points: [],
@@ -430,6 +430,9 @@ class GLObject extends DrawingObject {
     if (this.numVertices === 0) {
       this.numVertices = numVertices;
     }
+    if (name === 'a_vertex') {
+      this.points = data;
+    }
     this.fillBuffer(name, data);
   }
 
@@ -508,6 +511,9 @@ class GLObject extends DrawingObject {
     this.attributes[name].data = data;
     this.attributes[name].len = data.length;
     this.numVertices = this.attributes[name].data.length / this.attributes[name].size;
+    if (name === 'a_vertex') {
+      this.points = data;
+    }
   }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
@@ -771,6 +777,16 @@ class GLObject extends DrawingObject {
     if (texture) {
       gl.disableVertexAttribArray(locations.a_texcoord);
     }
+  }
+
+  getPointCountForAngle(drawAngle: number = Math.PI * 2) {
+    return this.numVertices;
+  }
+
+  // Abstract method - should be reimplemented for any vertexObjects that
+  // eslint-disable-next-line no-unused-vars
+  getPointCountForLength(drawLength: number) {
+    return this.numVertices;
   }
 
   // drawToSelectorTexture(

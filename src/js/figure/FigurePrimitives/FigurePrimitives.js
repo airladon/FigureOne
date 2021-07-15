@@ -254,7 +254,7 @@ export default class FigurePrimitives {
    */
   gl(...optionsIn: Array<OBJ_GenericGL>) {
     // Setup the default options
-    const oIn = joinObjects({}, ...optionsIn)
+    const oIn = joinObjects({}, ...optionsIn);
     const defaultOptions: OBJ_GenericGL = {
       glPrimitive: 'TRIANGLES',
       vertexShader: { dimension: 2 },
@@ -275,6 +275,7 @@ export default class FigurePrimitives {
       transform: [['s', 1], ['r', 0, 0, 0], ['t', 0, 0, 0]],
       dimension: 2,
     };
+    // Setup shaders based on input options
     if (oIn.texture != null) {
       defaultOptions.vertexShader.color = 'texture';
       defaultOptions.fragmentShader.color = 'texture';
@@ -295,6 +296,7 @@ export default class FigurePrimitives {
       defaultOptions.fragmentShader.color = 'vertex';
     }
 
+    // Combine default and input options
     const options = joinObjects({}, defaultOptions, oIn);
     options.transform = getTransform(options.transform);
     if (options.position != null) {
@@ -302,6 +304,7 @@ export default class FigurePrimitives {
       options.transform.updateTranslation(options.position);
     }
 
+    // User shaders to create a gl drawing object
     const glObject = new GLObject(
       this.webgl[0],
       options.vertexShader,
@@ -326,19 +329,21 @@ export default class FigurePrimitives {
         });
       }
     }
+
+    // If a normals helper exists, then add the a_normal attribute
     if (options.normals != null) {
       if (Array.isArray(options.normals)) {
-        // glObject.addNormals(options.colors);
         options.attributes.push({
           name: 'a_normal', data: options.normals, size: 3,
         });
       } else {
-        // glObject.addNormals(options.normals.data, options.normals.usage);
         options.attributes.push({
           name: 'a_normal', data: options.normals.data, size: 3, usage: options.normals.usage,
         });
       }
     }
+
+    // If a colors helper exits, then add the a_color attribute
     if (options.colors != null) {
       if (Array.isArray(options.colors)) {
         // glObject.addColors(options.colors);
@@ -366,6 +371,7 @@ export default class FigurePrimitives {
       }
     }
 
+    // Add all custom attributes
     if (options.attributes != null) {
       options.attributes.forEach((buffer) => {
         const defaultAttribute = {
@@ -382,19 +388,23 @@ export default class FigurePrimitives {
           b.normalize, b.stride, b.offset, b.usageIn,
         );
       });
-      if (options.uniforms != null) {
-        options.uniforms.forEach((uniform) => {
-          const defaultUniform = {
-            type: 'FLOAT',
-            length: 1,
-          };
-          const u = joinObjects({}, defaultUniform, uniform);
-          glObject.addUniform(
-            u.name, u.length, u.type, u.value,
-          );
-        });
-      }
     }
+
+    // Add all custom uniforms
+    if (options.uniforms != null) {
+      options.uniforms.forEach((uniform) => {
+        const defaultUniform = {
+          type: 'FLOAT',
+          length: 1,
+        };
+        const u = joinObjects({}, defaultUniform, uniform);
+        glObject.addUniform(
+          u.name, u.length, u.type, u.value,
+        );
+      });
+    }
+
+    // Add a texture - use mapFrom and mapTo if texture coords is not defined
     if (options.texture.src !== '') {
       const t = options.texture;
       glObject.addTexture(
@@ -403,9 +413,13 @@ export default class FigurePrimitives {
       );
     }
 
+    // Create th figure element primitive with the gl drawing object
     const element = new FigureElementPrimitive(
       glObject, options.transform, options.color, null, options.name,
     );
+
+    // Add some custom methods to the FigureElementPrimitive to update
+    // attributes, vertices, uniforms
     element.custom.updateAttribute =
       element.drawingObject.updateAttribute.bind(element.drawingObject);
     element.custom.updateVertices =
@@ -414,6 +428,8 @@ export default class FigurePrimitives {
     element.custom.getUniform = element.drawingObject.getUniform.bind(element.drawingObject);
     element.dimColor = this.defaultDimColor.slice();
 
+    // Setup move, touch, scenarios, dim and default colors if defined in
+    // options
     if (options.move != null && options.move !== false) {
       element.setTouchable();
       element.setMovable();
@@ -438,7 +454,9 @@ export default class FigurePrimitives {
     return element;
   }
 
-
+  // Generic3 is an easy way to create generic 3D objects where just points,
+  // normals, colors and texture helpers are used to create attributes in a
+  // gl FigureElementPrimitive
   /**
    * {@link FigureElementPrimitive} that draws a generic shape.
    * @see {@link OBJ_Generic} for options and examples.
@@ -451,6 +469,7 @@ export default class FigurePrimitives {
       usage: 'STATIC',
     };
     const options = joinObjects({}, defaultOptions, oIn);
+    const dim = options.dimension;
 
     const processOptions = (o, u) => {
       if (o.usage == null) {
@@ -459,6 +478,8 @@ export default class FigurePrimitives {
       if (o.points != null) {
         o.vertices = o.points;
       }
+      // If copy steps exist, then make copies of vertices, normals
+      // and colors
       if (o.copy != null) {
         if (o.vertices != null) {
           o.vertices = copyPoints(o.vertices, o.copy, 'points');
@@ -484,22 +505,22 @@ export default class FigurePrimitives {
         }
       }
       if (o.points != null) {
-        o.vertices = toNumbers(o.vertices);
-        o.vertices = { data: o.vertices, usage: o.usage, size: 3 };
+        o.vertices = toNumbers(getPoints(o.vertices), dim);
+        o.vertices = { data: o.vertices, usage: o.usage, size: dim };
       }
       if (o.normals != null && Array.isArray(o.normals)) {
-        o.normals = toNumbers(o.normals);
-        o.normals = { data: o.normals, usage: o.usage, size: 3 };
+        o.normals = toNumbers(getPoints(o.normals), dim);
+        o.normals = { data: o.normals, usage: o.usage, size: dim };
       }
       if (o.colors != null) {
-        o.colors = toNumbers(o.colors);
+        o.colors = toNumbers(o.colors, dim);
       }
     };
     processOptions(options, 'STATIC');
     const u = options.usage;
     const element = this.gl(options);
 
-    element.custom.updateGeneric = function update(updateOptions: {
+    element.custom.updateGeneric3 = function update(updateOptions: {
       points?: Array<TypeParsablePoint>,
       normals?: Array<TypeParsablePoint>,
       colors?: Array<number>,
@@ -508,9 +529,17 @@ export default class FigurePrimitives {
     }) {
       const o = updateOptions;
       processOptions(o, u);
-      // element.drawingObject.change(o);
       if (o.vertices) {
         element.custom.updateVertices(o.vertices.data);
+        if (o.texture != null && o.texture.coords != null) {
+          element.drawingObject.updateTextureMap(o.texture.coords);
+        } else if (o.texture != null && element.drawingObject.texture != null) {
+          if (element.drawingObject.texture.points != null) {
+            element.drawingObject.updateTextureMap(element.drawingObject.texture.points);
+          } else {
+            element.drawingObject.updateTextureMap([]);
+          }
+        }
       }
       if (o.normals) {
         element.custom.updateAttribute('a_normal', o.normals.data);
@@ -519,7 +548,7 @@ export default class FigurePrimitives {
         element.custom.updateAttribute('a_color', o.colors);
       }
     };
-    element.custom.updatePoints = element.custom.updateGeneric;
+    element.custom.updatePoints = element.custom.updateGeneric3;
     element.timeKeeper = this.timeKeeper;
     element.recorder = this.recorder;
     setupPulse(element, options);
@@ -784,7 +813,7 @@ export default class FigurePrimitives {
    * {@link FigureElementPrimitive} that draws a generic shape.
    * @see {@link OBJ_Generic} for options and examples.
    */
-  generic(...optionsIn: Array<OBJ_Generic>) {
+  genericLegacy(...optionsIn: Array<OBJ_Generic>) {
     const defaultOptions = {
       name: generateUniqueId('primitive_'),
       color: this.defaultColor,
@@ -809,13 +838,14 @@ export default class FigurePrimitives {
       options.color,
       options.transform,
       options.texture.src,
-      options.texture.mapTo,
-      options.texture.mapFrom,
+      getRect(options.texture.mapTo),
+      getRect(options.texture.mapFrom),
       options.texture.repeat,
       options.texture.onLoad,
       options.name,
       // this.scene,
     );
+    console.log(element.touchBorder)
     element.dimColor = this.defaultDimColor.slice();
     if (options.move != null && options.move !== false) {
       element.setTouchable();
@@ -834,7 +864,7 @@ export default class FigurePrimitives {
     if (options.scenarios != null) {
       element.scenarios = options.scenarios;
     }
-
+    console.log(element.touchBorder)
     element.custom.updateGeneric = function update(updateOptions: {
       points?: Array<TypeParsablePoint>,
       drawBorder?: TypeParsableBorder,
@@ -862,16 +892,99 @@ export default class FigurePrimitives {
       if (o.border != null) { // $FlowFixMe
         element.border = getBorder(o.border);
       }
+      console.log(element.name, o.touchBorder)
       if (o.touchBorder != null) { // $FlowFixMe
         element.touchBorder = getBorder(o.touchBorder);
       }
       element.drawingObject.change(o);
     };
     element.custom.updateGeneric(options);
+    console.log(element.touchBorder)
     element.custom.updatePoints = element.custom.updateGeneric;
     element.timeKeeper = this.timeKeeper;
     element.recorder = this.recorder;
     setupPulse(element, options);
+    return element;
+  }
+
+  /**
+   * {@link FigureElementPrimitive} that draws a generic shape.
+   * @see {@link OBJ_Generic} for options and examples.
+   */
+  generic(...optionsIn: Array<OBJ_Generic>) {
+    const oIn = joinObjects({}, ...optionsIn);
+    const element = this.generic3({
+      dimension: 2,
+      light: null,
+      points: [],
+    }, ...optionsIn);
+    const processBorders = (o) => {
+      if (o.drawBorder != null) { // $FlowFixMe
+        element.drawBorder = getBorder(o.drawBorder);
+      } else if (o.points != null) {
+        element.drawBorder = [getPoints(o.points)];
+      }
+      if (o.drawBorderBuffer != null) { // $FlowFixMe
+        element.drawBorderBuffer = getBorder(o.drawBorderBuffer);
+      } else element.drawBorderBuffer = element.drawBorder;
+      if (o.border != null) { // $FlowFixMe
+        element.border = getBorder(o.border);
+      }
+      if (o.touchBorder != null) { // $FlowFixMe
+        element.touchBorder = getBorder(o.touchBorder);
+      }
+    };
+
+    element.custom.updateGeneric = function update(updateOptions: {
+      points?: Array<TypeParsablePoint>,
+      drawBorder?: TypeParsableBorder,
+      drawBorderBuffer?: TypeParsableBorder,
+      border?: TypeParsableBorder | 'draw' | 'buffer' | 'rect' | number,
+      touchBorder?: TypeParsableBorder | 'draw' | 'border' | 'rect' | number | 'buffer',
+      colors?: Array<number>,
+      copy?: Array<CPY_Step>,
+      drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
+    }) {
+      const o = updateOptions;
+      element.custom.updateGeneric3(o);
+      processBorders(o);
+      // processOptions(o, u);
+      // if (o.drawBorder != null) { // $FlowFixMe
+      //   element.drawBorder = getBorder(o.drawBorder);
+      // } else if (o.points != null) {
+      //   element.drawBorder = [getPoints(o.points)];
+      // }
+      // if (o.drawBorderBuffer != null) { // $FlowFixMe
+      //   element.drawBorderBuffer = getBorder(o.drawBorderBuffer);
+      // } else element.drawBorderBuffer = element.drawBorder;
+      // if (o.border != null) { // $FlowFixMe
+      //   element.border = getBorder(o.border);
+      // }
+      // if (o.touchBorder != null) { // $FlowFixMe
+      //   element.touchBorder = getBorder(o.touchBorder);
+      // }
+    };
+    processBorders(oIn);
+    // if (oIn.drawBorder != null) { // $FlowFixMe
+    //   element.drawBorder = getBorder(oIn.drawBorder);
+    // } else if (oIn.points != null) {
+    //   element.drawBorder = [getPoints(oIn.points)];
+    // }
+    // if (oIn.drawBorderBuffer != null) { // $FlowFixMe
+    //   element.drawBorderBuffer = getBorder(oIn.drawBorderBuffer);
+    // } else element.drawBorderBuffer = element.drawBorder;
+    // if (oIn.border != null) { // $FlowFixMe
+    //   element.border = getBorder(oIn.border);
+    // }
+    // if (oIn.touchBorder != null) { // $FlowFixMe
+    //   element.touchBorder = getBorder(oIn.touchBorder);
+    // }
+    // element.custom.updateGeneric({
+    //   drawBorder: o.drawBorder,
+    //   drawBorderBuffer: o.drawBorderBuffer,
+    //   border: o.border,
+    //   touchBorder: o.touchBorder,
+    // });
     return element;
   }
 

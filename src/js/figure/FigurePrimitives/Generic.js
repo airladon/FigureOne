@@ -33,7 +33,7 @@ export default function Generic(
     // drawType,
     textureLocation,
     getRect(textureVertexSpace),
-    getRect(textureCoords),
+    textureCoords,
     textureRepeat,
     // copy,
   );
