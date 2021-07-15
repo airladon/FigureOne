@@ -334,15 +334,28 @@ const figure = new Fig.Figure();
 //   .then(step2)
 //   .start();
 
-// figure.add({
-//   make: 'rectangle',
-//   width: 1,
-//   height: 1,
-//   texture: {
-//     src: './flower.jpeg',
-//     mapTo: [-0.5, -0.5, 1, 1],
-//   },
-// });
+figure.add({
+  make: 'rectangle',
+  width: 1,
+  height: 1,
+  position: [0.5, 0.5],
+  texture: {
+    src: './mic.png',
+    mapTo: [-0.5, -0.5, 1, 1],
+    loadColor: [0, 0, 0, 0],
+  },
+});
+figure.add({
+  make: 'rectangle',
+  width: 1,
+  height: 1,
+  position: [-0.5, -0.5],
+  texture: {
+    src: './headphones.png',
+    mapTo: [-0.5, -0.5, 1, 1],
+    loadColor: [0, 0, 0, 0],
+  },
+});
 // figure.add({
 //   name: 'e',
 //   make: 'ellipse',
@@ -351,11 +364,11 @@ const figure = new Fig.Figure();
 //   sides: 100,
 // });
 
-a = figure.add({
-  make: 'polygon',
-  radius: 0.5,
-  color: [1, 0, 0, 1],
-  sides: 10,
-  // angleToDraw: Math.PI,
-});
+// a = figure.add({
+//   make: 'polygon',
+//   radius: 0.5,
+//   color: [1, 0, 0, 1],
+//   sides: 10,
+//   // angleToDraw: Math.PI,
+// });
 

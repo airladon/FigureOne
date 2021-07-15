@@ -1364,7 +1364,6 @@ export type TypeF1DefTransform = {
 //  * t2 = [['s', 1, 1], ['r', 0], ['t', 2, 2]];
 //  * t3 = '[['s', 1, 1], ['r', 0], ['t', 2, 2]]';
 //  */
-// export type TypeParsableTransform = Array<string | ['s', number, number] | ['r', number] | ['t', number, number]> | string | Transform | TypeF1DefTransform;
 
 function isParsableTransform(value: any) {
   if (value instanceof Transform) {
