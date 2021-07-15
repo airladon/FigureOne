@@ -8,11 +8,12 @@ figure.add(
     sides: 100,
     radius: 0.2,
     touchBorder: 0.5,
-    mods: {
-      isMovable: true,
-      move: {
-        bounds: 'figure',
-        freely: { deceleration: 0.5 },
+    move: {
+      bounds: {
+        left: 0.8, bottom: 0.8, right: 0.8, top: 0.8,
+      },
+      freely: {
+        deceleration: 0.5,
       },
     },
   },

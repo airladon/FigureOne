@@ -652,7 +652,7 @@ void main() {
 
 const getShaders = (
   vName: TypeVertexShader = 'simple',
-  fName: TypeFragShader = 'simple',
+  fName: TypeFragmentShader = 'simple',
 ) => {
   let vertexSource = '';
   let fragmentSource = '';
