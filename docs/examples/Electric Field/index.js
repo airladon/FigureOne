@@ -19,7 +19,7 @@ const figure = new Fig.Figure({
 const vertexShader = `
 attribute vec2 a_vertex;
 attribute vec2 a_center;
-uniform mat4 u_worldMatrix;
+uniform mat4 u_worldViewProjectionMatrix;
 uniform float u_norm;
 uniform float u_scaleArrow;
 uniform vec3 u_charge1;
@@ -116,7 +116,7 @@ void main() {
   vec3 final = originToCenter * scaleRotation * centerToOrigin * vec3(a_vertex.x, a_vertex.y, 1);
 
   // Final position
-  gl_Position = u_worldMatrix * vec4(final.xy, 0, 1);
+  gl_Position = u_worldViewProjectionMatrix * vec4(final.xy, 0, 1);
 
   // Set the color based on the normalized charge between red (high charge
   // magnitude) and blue (low charge magnitude)
@@ -171,7 +171,7 @@ const field = figure.add({
   vertexShader: {
     src: vertexShader,
     vars: [
-      'a_vertex', 'a_center', 'u_worldMatrix',
+      'a_vertex', 'a_center', 'u_worldViewProjectionMatrix',
       'u_norm',
       'u_scaleArrow',
       'u_charge1',
@@ -198,7 +198,7 @@ const field = figure.add({
   },
   fragmentShader: 'vertexColor',
   vertices: { data: points },
-  buffers: [
+  attributes: [
     { name: 'a_center', data: centers },
   ],
   uniforms: [
