@@ -565,7 +565,6 @@ class TextObjectBase extends DrawingObject {
   }
 
   click(p: Point, fnMap: FunctionMap) {
-    debugger;
     this.text.forEach((text) => {
       if (text.onClick != null) {
         if (isPointInPolygon(p, text.textBorderBuffer)) {
