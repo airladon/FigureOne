@@ -76,14 +76,13 @@ const figure = new Fig.Figure();
 figure.add({
   name: 'ball',
   make: 'primitives.polygon',
-  options: {
-    radius: 0.3,
-    sides: 100,
-    color: [1, 0, 0, 1],
-  },
-  mods: {
-    isMovable: true,
-    move: { bounds: 'figure' },
+  radius: 0.3,
+  sides: 100,
+  color: [1, 0, 0, 1],
+  move: {
+    bounds: {
+      left: 1, bottom: 1, top: 1, right: 1,
+    },
   },
 });
 ```
