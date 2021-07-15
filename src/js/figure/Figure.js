@@ -1913,7 +1913,6 @@ class Figure {
       }
     }
     e.click(glPoint);
-
     this.beingTouchedElement = e;
     if (e.isMovable) {
       this.beingMovedElement = e;

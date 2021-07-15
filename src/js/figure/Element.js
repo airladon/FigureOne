@@ -5519,7 +5519,7 @@ class FigureElementCollection extends FigureElement {
     }
     for (let i = this.drawOrder.length - 1; i >= 0; i -= 1) {
       const element = this.elements[this.drawOrder[i]];
-      if (element.isShown === true) {
+      if (element.isShown) {
         touched = touched.concat(element.getTouched(glLocation));
       }
     }
@@ -5542,9 +5542,11 @@ class FigureElementCollection extends FigureElement {
     }
     for (let i = this.drawOrder.length - 1; i >= 0; i -= 1) {
       const element = this.elements[this.drawOrder[i]];
-      const selection = element.getSelectionFromBorders(glLocation);
-      if (selection != null) {
-        return selection;
+      if (element.isShown) {
+        const selection = element.getSelectionFromBorders(glLocation);
+        if (selection != null) {
+          return selection;
+        }
       }
     }
     return null;
