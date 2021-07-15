@@ -2123,7 +2123,7 @@ class FigureElement {
     const deltaTime = currentTime - this.state.movement.previousTime;
 
     // If the time is too small, weird calculations may happen
-    if (deltaTime < 0.0001) {
+    if (deltaTime < 0.0000001) {
       return;
     }
     const next = nextValue;
@@ -2150,6 +2150,7 @@ class FigureElement {
         v = v.normalize().scale(this.move.maxVelocity);
       }
     }
+    // console.log(v)
     this.state.movement.velocity = v;
     this.state.movement.previousTime = currentTime;
   }
