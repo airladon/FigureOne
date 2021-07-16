@@ -52,6 +52,7 @@ describe('Pulse', () => {
   describe('Primitive', () => {
     test('Simple', () => {
       const element = makeSquare();
+      figure.elements.add('e', element);
       expect(element.state.isPulsing).toBe(false);
       element.pulse();
       expect(element.state.isPulsing).toBe(true);

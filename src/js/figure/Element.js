@@ -2361,11 +2361,11 @@ class FigureElement {
     if (centerOn == null) {
       delta = new Point(0, 0);
     } else if (centerOn === 'this') {
-      delta = this.getPositionInBounds('local', xAlign, yAlign)
-        .transformBy(this.spaceTransformMatrix('local', 'draw'));
+      delta = this.getPositionInBounds('figure', xAlign, yAlign)
+        .transformBy(this.spaceTransformMatrix('figure', 'draw'));
     } else if (centerOn instanceof FigureElement) {
-      delta = centerOn.getPositionInBounds('local', xAlign, yAlign)
-        .transformBy(this.spaceTransformMatrix('local', 'draw'));
+      delta = centerOn.getPositionInBounds('figure', xAlign, yAlign)
+        .transformBy(this.spaceTransformMatrix('figure', 'draw'));
     } else {
       delta = getPoint(centerOn)
         .transformBy(this.spaceTransformMatrix(space, 'draw'));
@@ -4867,6 +4867,9 @@ class FigureElementCollection extends FigureElement {
         this.fnMap.exec(this.beforeDrawCallback, now);
       } // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('beforePub'); }
+      // if (this.name === 'rootCollection') {
+      //   console.log('asdf', now, this.animations.animations.length);
+      // }
       this.animations.nextFrame(now); // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('animations'); }
       this.nextMovingFreelyFrame(now); // $FlowFixMe

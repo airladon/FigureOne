@@ -601,6 +601,8 @@ export default class CollectionsLine extends FigureElementCollection {
     //     optionsToUse.touchBorder = optionsToUse.width * 8;
     //   }
     // }
+    const { move } = optionsToUse;
+    delete optionsToUse.move;
     super(optionsToUse);
     this.setColor(optionsToUse.color);
 
@@ -736,7 +738,7 @@ export default class CollectionsLine extends FigureElementCollection {
       middleLength: 0.22,
       includeLabelInTouchBoundary: false,
     };
-    if (optionsToUse.move) {
+    if (move) {
       const moveOptions = joinObjects({}, defaultMoveOptions, optionsToUse.move);
       this.setMovable({
         movable: true,
