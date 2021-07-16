@@ -1113,6 +1113,17 @@ export default class CollectionsLine extends FigureElementCollection {
     this.setLength(this.line.length());
   }
 
+  moved(
+    value: Point | number,
+  ): void {
+    if (typeof value === 'number') {
+      this.move.type = 'rotation';
+    } else {
+      this.move.type = 'translation';
+    }
+    super.moved(value);
+  }
+
 
   /**
    * Use this to manually update the rotation of the line collection.
