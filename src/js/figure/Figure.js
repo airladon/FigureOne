@@ -2576,6 +2576,41 @@ class Figure {
     this.getSelectionFromPixel(0, 0, true);
   }
 
+  showTouchBorders() {
+    const elements = this.elements.getAllElements();
+    const colors = [
+      [0, 0, 1, 1],
+      [0, 1, 1, 1],
+      [1, 0, 1, 1],
+      [1, 0, 0, 1],
+      [1, 0.5, 0, 1],
+      [0, 0, 0, 1],
+    ];
+    let colorIndex = 0;
+    for (let i = 0; i < elements.length; i += 1) {
+      const element = elements[i];
+      if (element.isTouchable) {
+        const touchBorder = element.getBorder('figure', 'touchBorder');
+        if (touchBorder[0].length > 0) {
+          for (let j = 0; j < touchBorder.length; j += 1) {
+            this.add({
+              name: `buffer${i}${j}`,
+              make: 'polyline',
+              options: {
+                points: touchBorder[j],
+                width: 0.01,
+                color: colors[colorIndex % colors.length],
+                dash: [0.02, 0.02],
+                close: true,
+              },
+            });
+          }
+          colorIndex += 1;
+        }
+      }
+    }
+  }
+
   getSelectionFromDraw(glPoint: Point) {
     const pixelPoint = glPoint.transformBy(this.spaceTransformMatrix('gl', 'pixel'));
     return this.getSelectionFromPixel(pixelPoint.x, pixelPoint.y);
