@@ -153,20 +153,14 @@ function layoutRight() {
       {
         name: 'movePad',
         make: 'primitives.polygon',
-        radius: 0.1,
-        color: [0, 0, 1, 0.5],
+        radius: 0.3,
+        color: [0, 0, 1, 0],
         sides: 20,
         position: [1, 1],
         move: {
           bounds: {
-            // translation: {
-            //   left: 0.001, right: 3, bottom: 0.001, top: 2,
-            // },
             left: 0.999, right: 2, bottom: 0.999, top: 1, position: [1, 1],
           },
-        },
-        mods: {
-          touchBorder: 0.2,
         },
       },
     ],

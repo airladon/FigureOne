@@ -691,12 +691,14 @@ class Figure {
     };
     const onCursorMove = (payload) => {
       const [x, y] = payload;
-      this.setCursorGLPoint(new Point(x, y));
+      // this.setCursorGLPoint(new Point(x, y));
+      this.setCursor(new Point(x, y));
       this.touchMove(new Point(x, y));
     };
     const onAutoCursorMove = (payload) => {
       const [x, y] = payload;
-      this.setCursorGLPoint(new Point(x, y));
+      // this.setCursorGLPoint(new Point(x, y));
+      this.setCursor(new Point(x, y));
       this.touchMove(new Point(x, y), true);
     };
 
@@ -1791,7 +1793,7 @@ class Figure {
       cursor.hide();
     }
     if (position != null) {
-      this.setCursorGLPoint(position);
+      this.setCursor(position);
     }
     this.animateNextFrame();
   }
