@@ -1091,7 +1091,7 @@ class FigureElement {
 
   getDrawToFigureTransformDef() {
     if (this.parent != null) {
-      return [...this.transform.def, ...this.parent.getDrawToFigureTransformDef()];
+      return [...this.getTransform().def, ...this.parent.getDrawToFigureTransformDef()];
     }
     return this.transform.def;
   }
@@ -3696,6 +3696,7 @@ class FigureElement {
     //   return false;
     // }
     const vertexLocation = glLocation.transformBy(this.spaceTransformMatrix('gl', 'draw'));
+
     // const borders = this.getBorder('draw', 'touchBorder');
     if (borders == null) {
       return false;

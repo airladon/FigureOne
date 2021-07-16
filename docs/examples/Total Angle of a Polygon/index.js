@@ -6,6 +6,7 @@ const figure = new Fig.Figure({
   color: [1, 0, 0, 1],
 });
 
+
 /*
 .##.....##.########.##.......########..########.########...######.
 .##.....##.##.......##.......##.....##.##.......##.....##.##....##
@@ -23,15 +24,13 @@ const get = name => figure.getElement(name);
 const angle = (p1, p2, p3, name, label, alpha = 1, fill = false, direction = 1) => ({
   name,
   make: 'collections.angle',
-  options: {
-    p1,
-    p2,
-    p3,
-    label: { offset: 0.01, text: label },
-    curve: { width: 0.01, radius: 0.3, fill, sides: 200 },
-    direction,
-    color: [1, 0, 0, alpha],
-  },
+  p1,
+  p2,
+  p3,
+  label: { offset: 0.01, text: label },
+  curve: { width: 0.01, radius: 0.3, fill, sides: 200 },
+  direction,
+  color: [1, 0, 0, alpha],
 });
 
 // Helper function that sets equation elements as touchable or not
@@ -140,23 +139,19 @@ figure.add([
   {
     name: 'button',
     make: 'collections.rectangle',
-    options: {
-      width: 0.6,
-      height: 0.3,
-      color: [0.3, 0.3, 0.3, 1],
-      dimColor: [0.7, 0.7, 0.7, 1],
-      line: { width: 0.005 },
-      button: true,
-      label: {
-        text: 'Simplify',
-        font: { size: 0.12, color: [0.3, 0.3, 0.3, 1] },
-      },
-      corner: { radius: 0.05, sides: 10 },
-      position: [1, -1.5],
+    width: 0.6,
+    height: 0.3,
+    color: [0.3, 0.3, 0.3, 1],
+    dimColor: [0.7, 0.7, 0.7, 1],
+    line: { width: 0.005 },
+    button: true,
+    label: {
+      text: 'Simplify',
+      font: { size: 0.12, color: [0.3, 0.3, 0.3, 1] },
     },
-    mods: {
-      isTouchable: true,
-    },
+    corner: { radius: 0.05, sides: 10 },
+    position: [1, -1.5],
+    touch: true,
   },
 
   // Equation Definition
