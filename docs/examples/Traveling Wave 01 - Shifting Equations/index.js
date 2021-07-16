@@ -154,22 +154,16 @@ figure.add([
       {
         name: 'movePad',
         make: 'primitives.rectangle',
-        options: {
-          width: 2,
-          height: plotHeight + 0.2,
-          position: [plotWidth / 2, plotHeight / 2],
-          color: [1, 0, 0, 0],
-        },
-        mods: {
-          move: {
-            style: 'translation',
-            bounds: {
-              translation: {
-                p1: [plotWidth / 5, plotHeight / 2],
-                mag: plotWidth / 5 * 3,
-                angle: 0,
-              },
-            },
+        width: 2,
+        height: plotHeight + 0.2,
+        position: [plotWidth / 2, plotHeight / 2],
+        color: [1, 0, 0, 0],
+        move: {
+          style: 'translation',
+          bounds: {
+            p1: [plotWidth / 5, plotHeight / 2],
+            p2: [plotWidth / 5 * 4, plotHeight / 2],
+            ends: 2,
           },
         },
       },
@@ -880,7 +874,7 @@ slides.push({
     eqnF.showForm('0');
     eqnG.showForm('0');
     movePad.setMovable();
-    movePad.setPosition(plotWidth / 2, 0);
+    movePad.setPosition(plotWidth / 2, plotHeight / 2);
     figure.setScenarios('example');
   },
   leaveState: () => {
