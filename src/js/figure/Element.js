@@ -4707,6 +4707,23 @@ class FigureElementCollection extends FigureElement {
       if (firstScenario != null && firstScenario in newElement.scenarios) {
         newElement.setScenario(firstScenario);
       }
+      if (optionsToUse.move != null && optionsToUse.move !== false) {
+        newElement.setTouchable();
+        newElement.setMovable();
+        newElement.setMove(optionsToUse.move);
+      }
+      if (optionsToUse.touch != null) {
+        newElement.setTouchable(optionsToUse.touch);
+      }
+      if (optionsToUse.dimColor != null) {
+        newElement.dimColor = optionsToUse.dimColor;
+      }
+      if (optionsToUse.defaultColor != null) {
+        newElement.defaultColor = optionsToUse.dimColor;
+      }
+      if (optionsToUse.scenarios != null) {
+        newElement.scenarios = optionsToUse.scenarios;
+      }
 
       if (
         `_${nameToUse}` in rootCollection

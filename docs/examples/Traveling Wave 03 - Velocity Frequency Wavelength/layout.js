@@ -325,18 +325,14 @@ function setupFigure() {
         {
           name: 'movePad',
           make: 'primitives.polygon',
-          options: {
-            radius: 0.4,
-            sides: 8,
-            color: [0, 0, 0, 0],
-          },
-          mods: {
-            move: {
-              bounds: {
-                translation: {
-                  left: 0, right: 0, bottom: -A, top: A,
-                },
-              },
+          radius: 0.4,
+          sides: 8,
+          color: [1, 0, 0, 0],
+          move: {
+            bounds: {
+              p1: [0, -A],
+              p2: [0, A],
+              ends: 2,
             },
           },
         },
