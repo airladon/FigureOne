@@ -2179,12 +2179,18 @@ class FigureElement {
     // );
     this.notifications.publish('startMovingFreely');
     if (this.recorder.state === 'recording') {
+      let v;
+      if (this.state.movement.velocity._state) {
+        v = this.state.movement.velocity._state();
+      } else {
+        v = this.state.movement.velocity;
+      }
       this.recorder.recordEvent(
         'startMovingFreely',
         [
           this.getPath(),
           this.transform._state(),
-          this.state.movement.velocity._state(),
+          v,
         ],
       );
     }
