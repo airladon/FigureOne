@@ -125,7 +125,7 @@ describe('Seek', () => {
       expect(round(figure.elements.opacity)).toBe(0.001);
       expect(a.isShown).toBe(false);
       expect(a.opacity).toBe(1);
-      expect(round(a.lastDrawOpacity)).toBe(0.12587);
+      expect(round(a.lastDrawOpacity)).toBe(0.12588);
 
       figure.mock.timeStep(0.2, frameStep);
       expect(transforms()).toEqual(['preparingToPlay', ...inState, 0.8]);
