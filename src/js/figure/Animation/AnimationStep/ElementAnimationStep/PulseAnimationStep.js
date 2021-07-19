@@ -196,11 +196,12 @@ export default class PulseAnimationStep extends ElementAnimationStep {
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(),
-      'scale',
-      'numLines',
-      'frequency',
-      'stopAfterDuration',
+      // 'scale',
+      // 'numLines',
+      // 'frequency',
+      // 'stopAfterDuration',
       'toStart',
+      'pulse',
     ];
   }
 
