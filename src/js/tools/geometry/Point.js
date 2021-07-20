@@ -210,7 +210,10 @@ class Point {
    * Return x, y, z components as a length 3 tuple.
    * @return {[number, number, number]}
    */
-  toArray() {
+  toArray(dim: number = 3) {
+    if (dim === 2) {
+      return [this.x, this.y];
+    }
     return [this.x, this.y, this.z];
   }
 

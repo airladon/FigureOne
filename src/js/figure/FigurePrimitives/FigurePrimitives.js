@@ -968,6 +968,7 @@ export default class FigurePrimitives {
       //   element.touchBorder = getBorder(o.touchBorder);
       // }
     };
+    element.custom.updatePoints = element.custom.updateGeneric;
     processBorders(oIn);
     // if (oIn.drawBorder != null) { // $FlowFixMe
     //   element.drawBorder = getBorder(oIn.drawBorder);

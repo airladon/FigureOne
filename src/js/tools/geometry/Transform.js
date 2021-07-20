@@ -1,7 +1,7 @@
 // @flow
 /* eslint-disable no-use-before-define */
 import {
-  roundNum, clipMag,
+  roundNum, clipMag, round,
 } from '../math';
 import * as m3 from '../m3';
 import { clipAngle } from './angle';
@@ -971,7 +971,10 @@ class Transform {
    * Return the matrix that respresents the cascaded transform chain
    * @return {Type3DMatrix}
    */
-  matrix(): Type3DMatrix {
+  matrix(precision: number | null = null): Type3DMatrix {
+    if (precision) {
+      return round(this.mat, precision);
+    }
     return this.mat;
   }
 
