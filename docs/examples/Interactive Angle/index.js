@@ -21,11 +21,6 @@ figure.add({
     length: 1,
     color: [0, 0.5, 1, 1],
   },
-  move: {
-    bounds: {
-      left: 2, bottom: 1.5, right: 2, top: 1.5,
-    },
-  },
 });
 
 // Angle collection has a specific setMovable function that allows for
