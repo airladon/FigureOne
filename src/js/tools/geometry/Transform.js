@@ -754,6 +754,7 @@ class Transform {
         // }
       }
     }
+    this.calcAndSetMatrix();
   }
 
   /**
