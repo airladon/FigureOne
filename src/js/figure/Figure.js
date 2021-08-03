@@ -723,6 +723,7 @@ class Figure {
   }
 
   getState(options: { precision?: number, ignoreShown?: boolean, min?: boolean }) {
+    this.notifications.publish('getState');
     this.stateTime = this.timeKeeper.now() / 1000;
     const o = joinObjects({}, options, { returnF1Type: false });
     const state = getState(this, [
@@ -775,7 +776,7 @@ class Figure {
       setState(this, state);
       this.beingMovedElements = this.beingMovedElements.filter(e => Object.keys(e).length > 0);
       this.beingTouchedElements = this.beingTouchedElements.filter(e => Object.keys(e).length > 0);
-      this.notifications.publish('stateSetInit');
+      this.notifications.publish('setStateInit');
       this.elements.setTimeDelta(this.timeKeeper.now() / 1000 - this.stateTime);
       this.elements.updateDrawTransforms([this.spaceTransforms.figureToGL]);
       this.elements.stateSet();
@@ -785,7 +786,7 @@ class Figure {
         this.fnMap.exec(this.setStateCallback);
       }
       this.animateNextFrame();
-      this.notifications.publish('stateSet');
+      this.notifications.publish('setState');
     };
 
     let options = {
