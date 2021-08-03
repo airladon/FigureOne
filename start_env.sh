@@ -33,7 +33,6 @@ docker run -it --rm \
   -v $PROJECT_PATH/containers/figureone/favicon.ico:/opt/app/favicon.ico \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -e LOCAL_PROJECT_PATH=$PROJECT_PATH \
-  -p 8080:8080 \
   -p 9229:9229 \
   --name figureone_dev \
   figureone_dev $CMD
