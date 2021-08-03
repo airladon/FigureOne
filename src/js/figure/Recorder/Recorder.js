@@ -1547,7 +1547,7 @@ ${cursorData}
     if (this.figure.state.preparingToSetState) {
       this.state = 'preparingToPlay';
       this.notifications.publish('preparingToPlay');
-      this.figure.notifications.add('stateSet', finished, 1);
+      this.figure.notifications.add('setState', finished, 1);
     } else {
       finished();
     }
