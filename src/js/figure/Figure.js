@@ -1919,7 +1919,7 @@ class Figure {
     this.elements.stop('freeze');
     this.setState(completeState, 'dissolve');
     if (this.state.preparingToSetState) {
-      this.notifications.add('stateSet', stopped, 1);
+      this.notifications.add('setState', stopped, 1);
       this.notifications.publish('preparingToStop');
       this.state.preparingToStop = true;
     } else {
