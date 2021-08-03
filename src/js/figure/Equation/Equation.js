@@ -1679,13 +1679,27 @@ export class Equation extends FigureElementCollection {
     // eslint-disable-next-line max-len
     const isFormElements = form => (form instanceof Elements || form instanceof BaseAnnotationFunction);
     const addFormNormal = (name: string, form: TypeEquationForm) => {
-      // $FlowFixMe
-      const formContent = [this.eqn.functions.contentToElement(form)];
-      this.addForm(name, formContent);
+      let formContent;
+      try {
+        // $FlowFixMe
+        formContent = [this.eqn.functions.contentToElement(form)];
+      } catch (e) {
+        throw new Error(`FigureOne addForm error: '${e.message}' raised when creating form: ${JSON.stringify(form)}`);
+      }
+      try {
+        this.addForm(name, formContent);
+      } catch (e) {
+        throw new Error(`FigureOne addForm error: '${e.message}' raised when creating form: ${JSON.stringify(form)}`);
+      }
     };
     const addFormFullObject = (name: string, form: TypeEquationForm) => {
-      // $FlowFixMe
-      const formContent = [this.eqn.functions.contentToElement(form.content)];
+      let formContent;
+      try {
+        // $FlowFixMe
+        formContent = [this.eqn.functions.contentToElement(form.content)];
+      } catch (e) {
+        throw new Error(`FigureOne addForm error: '${e.message}' raised when creating form: ${JSON.stringify(form)}`);
+      }
       const {   // $FlowFixMe
         elementMods, duration, alignment, scale, // $FlowFixMe
         description, modifiers, translation,  // $FlowFixMe
@@ -1703,8 +1717,12 @@ export class Equation extends FigureElementCollection {
         onShow,
         onTransition,
       };
+      try {
       // $FlowFixMe
-      this.addForm(name, formContent, options);
+        this.addForm(name, formContent, options);
+      } catch (e) {
+        throw new Error(`FigureOne addForm error: '${e.message}' raised when creating form: ${JSON.stringify(form)}`);
+      }
     };
 
     Object.keys(forms).forEach((name) => {
