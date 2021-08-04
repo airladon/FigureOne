@@ -1823,6 +1823,38 @@ export class Equation extends FigureElementCollection {
     // return content.getAllElements();
   }
 
+  getUnusedElements() {
+    const elements = this.getChildren().map(e => e.name);
+    const usedElements = [];
+    const phrases = Object.keys(this.eqn.functions.phraseElements);
+    const forms = Object.keys(this.eqn.forms);
+    forms.forEach((form) => {
+      const elems = this.getFormElements(form).map(e => e.name);
+      elems.forEach((name) => {
+        const index = elements.indexOf(name);
+        if (index > -1) {
+          elements.splice(index, 1);
+        }
+        if (elements.length === 0) {
+          return [];
+        }
+      });
+    });
+    return elements;
+    // phrases.forEach((phrase) => {
+    //   const elems = this.getPhraseElements(phrase).map(e => e.name);
+    //   elems.forEach((name) => {
+    //     const index = elements.indexOf(name);
+    //     if (index > -1) {
+    //       elements.splice(index, 1);
+    //     }
+    //     if (elements.length === 0) {
+    //       return [];
+    //     }
+    //   });
+    // });
+  }
+
   stopEquationAnimating(how: 'complete' | 'cancel' = 'cancel') {
     this.stopAnimating(how, '_Equation', true);
     this.stopAnimating(how, '_EquationColor', true);
