@@ -537,6 +537,7 @@ export default class SlideNavigator {
     duration: number,
     animate: "move" | "dissolve" | "moveFrom" | "pulse" | "dissolveInThenMove",
   };
+  disableButtonOpacity: number;
 
   fromAutoSlide: boolean;
 
@@ -550,6 +551,7 @@ export default class SlideNavigator {
     this.notifications = new NotificationManager();
     this.inTransition = false;
     this.fromAutoSlide = false;
+    this.disableButtonOpacity = 0.7;
     if (options != null) {
       this.load(options);
     }
@@ -858,7 +860,7 @@ export default class SlideNavigator {
     const { prevButton, nextButton } = this;
     if (prevButton != null) {
       if (this.currentSlideIndex === 0) {
-        prevButton.setOpacity(0.7);
+        prevButton.setOpacity(this.disableButtonOpacity);
         prevButton.isTouchable = false;
       } else if (prevButton.isTouchable === false) {
         prevButton.setOpacity(1);

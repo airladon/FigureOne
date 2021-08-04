@@ -63,6 +63,7 @@ export type COL_SlideNavigatorEqnDefaults = {
  * to tie to SlideNavigator
  * @property {COL_SlideNavigatorEqnDefaults} [equationDefaults] default
  * equation animation options
+ * @property {number} [disableOpacity] opacity for previous button when disabled (`0.7`)
  */
 export type COL_SlideNavigator = {
   collection?: Figure | FigureElementCollection | string,
@@ -72,6 +73,7 @@ export type COL_SlideNavigator = {
   text?: OBJ_TextLines | null,
   equation?: Equation | string | Array<string | Equation>,
   equationDefaults?: COL_SlideNavigatorEqnDefaults,
+  disableOpacity?: number,
 } & OBJ_Collection;
 
 
@@ -262,6 +264,7 @@ class CollectionsSlideNavigator extends FigureElementCollection {
       limits: collections.primitives.limits,
       // slides: [],
       color: collections.primitives.defaultColor,
+      disableOpacity: 0.7,
     };
     const o = joinObjects({}, defaultOptions, optionsIn);
     super(o);
@@ -281,6 +284,7 @@ class CollectionsSlideNavigator extends FigureElementCollection {
     }
 
     this.nav = new SlideNavigator();
+    this.nav.disableButtonOpacity = o.disableOpacity;
     this.custom.options = o;
     // this.nav = new SlideNavigator(joinObjects({}, {
     //   collection: o.collection || this,
