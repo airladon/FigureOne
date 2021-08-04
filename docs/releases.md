@@ -90,3 +90,6 @@ API cleanup
 ## 0.10.2
 * Add 'getState' notification to Figure before the recording state is captured for the figure
 * Add 'getState' notification to FigureElement before the recording state is captured for the element
+
+## 0.10.3
+* Add verbose error reporting for equation functions and forms

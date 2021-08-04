@@ -1679,13 +1679,27 @@ export class Equation extends FigureElementCollection {
     // eslint-disable-next-line max-len
     const isFormElements = form => (form instanceof Elements || form instanceof BaseAnnotationFunction);
     const addFormNormal = (name: string, form: TypeEquationForm) => {
-      // $FlowFixMe
-      const formContent = [this.eqn.functions.contentToElement(form)];
-      this.addForm(name, formContent);
+      let formContent;
+      try {
+        // $FlowFixMe
+        formContent = [this.eqn.functions.contentToElement(form)];
+      } catch (e) {
+        throw new Error(`\n\nFigureOne error adding form '${name}' in equation '${this.getPath()}'\n\nError: '${e.message}'\n\nForm definition: ${JSON.stringify(form, null, 2)}\n\n`);
+      }
+      try {
+        this.addForm(name, formContent);
+      } catch (e) {
+        throw new Error(`\n\nFigureOne error adding form '${name}' in equation '${this.getPath()}'\n\nError: '${e.message}'\n\nForm definition: ${JSON.stringify(form, null, 2)}\n\n`);
+      }
     };
     const addFormFullObject = (name: string, form: TypeEquationForm) => {
-      // $FlowFixMe
-      const formContent = [this.eqn.functions.contentToElement(form.content)];
+      let formContent;
+      try {
+        // $FlowFixMe
+        formContent = [this.eqn.functions.contentToElement(form.content)];
+      } catch (e) {
+        throw new Error(`\n\nFigureOne error adding form '${name}' in equation '${this.getPath()}'\n\nError: '${e.message}'\n\nForm definition: ${JSON.stringify(form, null, 2)}\n\n`);
+      }
       const {   // $FlowFixMe
         elementMods, duration, alignment, scale, // $FlowFixMe
         description, modifiers, translation,  // $FlowFixMe
@@ -1703,8 +1717,12 @@ export class Equation extends FigureElementCollection {
         onShow,
         onTransition,
       };
+      try {
       // $FlowFixMe
-      this.addForm(name, formContent, options);
+        this.addForm(name, formContent, options);
+      } catch (e) {
+        throw new Error(`\n\nFigureOne error adding form '${name}' in equation '${this.getPath()}'\n\nError: '${e.message}'\n\nForm definition: ${JSON.stringify(form, null, 2)}\n\n`);
+      }
     };
 
     Object.keys(forms).forEach((name) => {
@@ -1803,6 +1821,38 @@ export class Equation extends FigureElementCollection {
     });
     return elements;
     // return content.getAllElements();
+  }
+
+  getUnusedElements() {
+    const elements = this.getChildren().map(e => e.name);
+    const usedElements = [];
+    const phrases = Object.keys(this.eqn.functions.phraseElements);
+    const forms = Object.keys(this.eqn.forms);
+    forms.forEach((form) => {
+      const elems = this.getFormElements(form).map(e => e.name);
+      elems.forEach((name) => {
+        const index = elements.indexOf(name);
+        if (index > -1) {
+          elements.splice(index, 1);
+        }
+        if (elements.length === 0) {
+          return [];
+        }
+      });
+    });
+    return elements;
+    // phrases.forEach((phrase) => {
+    //   const elems = this.getPhraseElements(phrase).map(e => e.name);
+    //   elems.forEach((name) => {
+    //     const index = elements.indexOf(name);
+    //     if (index > -1) {
+    //       elements.splice(index, 1);
+    //     }
+    //     if (elements.length === 0) {
+    //       return [];
+    //     }
+    //   });
+    // });
   }
 
   stopEquationAnimating(how: 'complete' | 'cancel' = 'cancel') {

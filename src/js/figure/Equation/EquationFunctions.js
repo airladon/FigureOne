@@ -3302,56 +3302,60 @@ export class EquationFunctions {
   container(
     options: EQN_Container,
   ) {
-    let content;
-    let scale;
-    let fit; // fits content to container - width, height, contain, null
-    let width;
-    let ascent;
-    let descent;
-    let xAlign; // left, center, right, multiplier (to left)
-    let yAlign; // bottom, baseline, middle, top, multiplier (to bottom)
-    let inSize;
-    let fullContentBounds;
+    try {
+      let content;
+      let scale;
+      let fit; // fits content to container - width, height, contain, null
+      let width;
+      let ascent;
+      let descent;
+      let xAlign; // left, center, right, multiplier (to left)
+      let yAlign; // bottom, baseline, middle, top, multiplier (to bottom)
+      let inSize;
+      let fullContentBounds;
 
-    const defaultOptions = {
-      scaleModifier: 1,
-      fit: null,
-      width: null,
-      ascent: null,
-      descent: null,
-      xAlign: 'center',
-      yAlign: 'baseline',
-      inSize: true,
-      fullContentBounds: false,
-    };
-    if (Array.isArray(options)) {
-      [
-        content, width, inSize, descent, ascent, xAlign, yAlign, fit, scale,
+      const defaultOptions = {
+        scaleModifier: 1,
+        fit: null,
+        width: null,
+        ascent: null,
+        descent: null,
+        xAlign: 'center',
+        yAlign: 'baseline',
+        inSize: true,
+        fullContentBounds: false,
+      };
+      if (Array.isArray(options)) {
+        [
+          content, width, inSize, descent, ascent, xAlign, yAlign, fit, scale,
+          fullContentBounds,
+        ] = options;
+      } else {
+        ({
+          content, width, inSize, descent, ascent, xAlign, yAlign, fit, scale,
+          fullContentBounds,
+        } = options);
+      }
+      const optionsIn = {
+        scaleModifier: scale,
+        fit,
+        width,
+        ascent,
+        descent,
+        xAlign,
+        yAlign,
+        inSize,
         fullContentBounds,
-      ] = options;
-    } else {
-      ({
-        content, width, inSize, descent, ascent, xAlign, yAlign, fit, scale,
-        fullContentBounds,
-      } = options);
+      };
+      const o = joinObjects(defaultOptions, optionsIn);
+      return new Container(
+        [this.contentToElement(content)],
+        [],
+        o,
+      );
+    } catch (e) {
+      throw new Error(`FigureOne Equation Container Error: ${e.message}`);
     }
-    const optionsIn = {
-      scaleModifier: scale,
-      fit,
-      width,
-      ascent,
-      descent,
-      xAlign,
-      yAlign,
-      inSize,
-      fullContentBounds,
-    };
-    const o = joinObjects(defaultOptions, optionsIn);
-    return new Container(
-      [this.contentToElement(content)],
-      [],
-      o,
-    );
   }
 
   /**
@@ -3361,36 +3365,40 @@ export class EquationFunctions {
   offset(
     options: EQN_Offset,
   ) {
-    let content;
-    let offset;
-    // let inSize;
-    let fullContentBounds;
+    try {
+      let content;
+      let offset;
+      // let inSize;
+      let fullContentBounds;
 
-    const defaultOptions = {
-      offset: [0, 0],
-      // inSize: false,
-      fullContentBounds: false,
-    };
-    if (Array.isArray(options)) {
-      [
-        content, offset, fullContentBounds,
-      ] = options;
-    } else {
-      ({
-        content, offset, fullContentBounds,
-      } = options);
+      const defaultOptions = {
+        offset: [0, 0],
+        // inSize: false,
+        fullContentBounds: false,
+      };
+      if (Array.isArray(options)) {
+        [
+          content, offset, fullContentBounds,
+        ] = options;
+      } else {
+        ({
+          content, offset, fullContentBounds,
+        } = options);
+      }
+      const optionsIn = {
+        offset: getPoint(offset || [0, 0]),
+        // inSize,
+        fullContentBounds,
+      };
+      const o = joinObjects(defaultOptions, optionsIn);
+      return new Offset(
+        [this.contentToElement(content)],
+        [],
+        o,
+      );
+    } catch (e) {
+      throw new Error(`FigureOne Equation Offset Error: ${e.message}`);
     }
-    const optionsIn = {
-      offset: getPoint(offset || [0, 0]),
-      // inSize,
-      fullContentBounds,
-    };
-    const o = joinObjects(defaultOptions, optionsIn);
-    return new Offset(
-      [this.contentToElement(content)],
-      [],
-      o,
-    );
   }
 
   /**
@@ -3400,96 +3408,100 @@ export class EquationFunctions {
   brac(
     options: EQN_Bracket,
   ) {
-    let content;
-    let left;
-    let right;
-    let insideSpace;
-    let outsideSpace;
-    let topSpace;
-    let bottomSpace;
-    let minContentHeight;
-    let minContentDescent;
-    let descent;
-    let height;
-    let inSize;
-    let useFullBounds;
-    let fullContentBounds;
+    try {
+      let content;
+      let left;
+      let right;
+      let insideSpace;
+      let outsideSpace;
+      let topSpace;
+      let bottomSpace;
+      let minContentHeight;
+      let minContentDescent;
+      let descent;
+      let height;
+      let inSize;
+      let useFullBounds;
+      let fullContentBounds;
 
-    if (Array.isArray(options)) {
-      [
-        left, content, right, inSize, insideSpace, outsideSpace,   // $FlowFixMe
-        topSpace, bottomSpace, minContentHeight,                   // $FlowFixMe
-        minContentDescent, height, descent, fullContentBounds,     // $FlowFixMe
+      if (Array.isArray(options)) {
+        [
+          left, content, right, inSize, insideSpace, outsideSpace,   // $FlowFixMe
+          topSpace, bottomSpace, minContentHeight,                   // $FlowFixMe
+          minContentDescent, height, descent, fullContentBounds,     // $FlowFixMe
+          useFullBounds,
+        ] = options;
+      } else {
+        ({
+          left, content, right, inSize, insideSpace, outsideSpace,
+          topSpace, bottomSpace, minContentHeight,
+          minContentDescent, height, descent, fullContentBounds, useFullBounds,
+        } = options);
+      }
+      const defaultOptions = {
+        insideSpace: 0.03,
+        outsideSpace: 0.03,
+        topSpace: 0.05,
+        bottomSpace: 0.05,
+        minContentHeight: null,
+        minContentDescent: null,
+        descent: null,
+        height: null,
+        inSize: true,
+        useFullBounds: false,
+        fullContentBounds: false,
+      };
+      const optionsIn = {
+        insideSpace,
+        outsideSpace,
+        topSpace,
+        bottomSpace,
+        minContentHeight,
+        minContentDescent,
+        descent,
+        height,
+        inSize,
         useFullBounds,
-      ] = options;
-    } else {
-      ({
-        left, content, right, inSize, insideSpace, outsideSpace,
-        topSpace, bottomSpace, minContentHeight,
-        minContentDescent, height, descent, fullContentBounds, useFullBounds,
-      } = options);
-    }
-    const defaultOptions = {
-      insideSpace: 0.03,
-      outsideSpace: 0.03,
-      topSpace: 0.05,
-      bottomSpace: 0.05,
-      minContentHeight: null,
-      minContentDescent: null,
-      descent: null,
-      height: null,
-      inSize: true,
-      useFullBounds: false,
-      fullContentBounds: false,
-    };
-    const optionsIn = {
-      insideSpace,
-      outsideSpace,
-      topSpace,
-      bottomSpace,
-      minContentHeight,
-      minContentDescent,
-      descent,
-      height,
-      inSize,
-      useFullBounds,
-      fullContentBounds,
-    };
-    const o = joinObjects({}, defaultOptions, optionsIn);
-    const glyphs = {};
-    if (left) {
-      glyphs.left = {
-        symbol: left,
-        space: o.insideSpace,
-        topSpace: o.topSpace,
-        bottomSpace: o.bottomSpace,
-        minContentHeight: o.minContentHeight,
-        minContentDescent: o.minContentDescent,
-        descent: o.descent,
-        height: o.height,
+        fullContentBounds,
       };
+      const o = joinObjects({}, defaultOptions, optionsIn);
+      const glyphs = {};
+      if (left) {
+        glyphs.left = {
+          symbol: left,
+          space: o.insideSpace,
+          topSpace: o.topSpace,
+          bottomSpace: o.bottomSpace,
+          minContentHeight: o.minContentHeight,
+          minContentDescent: o.minContentDescent,
+          descent: o.descent,
+          height: o.height,
+        };
+      }
+      if (right) {
+        glyphs.right = {
+          symbol: right,
+          space: o.insideSpace,
+          topSpace: o.topSpace,
+          bottomSpace: o.bottomSpace,
+          minContentHeight: o.minContentHeight,
+          minContentDescent: o.minContentDescent,
+          descent: o.descent,
+          height: o.height,
+        };
+      }
+      return this.annotate({
+        content,
+        glyphs,
+        inSize: o.inSize,
+        leftSpace: o.outsideSpace,
+        rightSpace: o.outsideSpace,
+        useFullBounds: o.useFullBounds,
+        fullContentBounds: o.fullContentBounds,
+      });
+    } catch (e) {
+      throw new Error(`FigureOne Equation Brackert Error: ${e.message}`);
     }
-    if (right) {
-      glyphs.right = {
-        symbol: right,
-        space: o.insideSpace,
-        topSpace: o.topSpace,
-        bottomSpace: o.bottomSpace,
-        minContentHeight: o.minContentHeight,
-        minContentDescent: o.minContentDescent,
-        descent: o.descent,
-        height: o.height,
-      };
-    }
-    return this.annotate({
-      content,
-      glyphs,
-      inSize: o.inSize,
-      leftSpace: o.outsideSpace,
-      rightSpace: o.outsideSpace,
-      useFullBounds: o.useFullBounds,
-      fullContentBounds: o.fullContentBounds,
-    });
   }
 
   /**
@@ -3500,130 +3512,135 @@ export class EquationFunctions {
     options: EQN_Bar,
     forceOptions: Object = {},
   ) {
-    let content;
-    let symbol;
-    let side;
-    let space;
-    let overhang;
-    let length;
-    let left;
-    let right;
-    let top;
-    let bottom;
-    let inSize;
-    let minContentHeight;
-    let minContentDescent;
-    let minContentAscent;
-    let descent;
-    let fullContentBounds;
-    let useFullBounds;
-    const defaultOptions = {
-      inSize: true,
-      space: 0.03,
-      overhang: 0,
-      length: null,
-      left: null,
-      right: null,
-      top: null,
-      bottom: null,
-      side: 'top',
-      minContentHeight: null,
-      minContentDescent: null,
-      minContentAscent: null,
-      descent: null,
-      fullContentBounds: false,
-      useFullBounds: false,
-    };
-    if (Array.isArray(options)) {
-      [
-        content, symbol, inSize, space, overhang,
-        length, left, right, top, bottom,
-        side, minContentHeight, minContentDescent,
-        minContentAscent, descent, fullContentBounds, useFullBounds,
-      ] = options;
-    } else {
-      ({
-        content, symbol, inSize, space, overhang,
-        length, left, right, top, bottom,
-        side, minContentHeight, minContentDescent,
-        minContentAscent, descent, fullContentBounds, useFullBounds,
-      } = options);
-    }
-    const optionsIn = {
-      side,
-      space,
-      overhang,
-      length,
-      left,
-      right,
-      top,
-      bottom,
-      inSize,
-      minContentHeight,
-      minContentDescent,
-      minContentAscent,
-      descent,
-      fullContentBounds,
-      useFullBounds,
-    };
-    const o = joinObjects({}, defaultOptions, optionsIn, forceOptions);
+    try {
+      let content;
+      let symbol;
+      let side;
+      let space;
+      let overhang;
+      let length;
+      let left;
+      let right;
+      let top;
+      let bottom;
+      let inSize;
+      let minContentHeight;
+      let minContentDescent;
+      let minContentAscent;
+      let descent;
+      let fullContentBounds;
+      let useFullBounds;
+      const defaultOptions = {
+        inSize: true,
+        space: 0.03,
+        overhang: 0,
+        length: null,
+        left: null,
+        right: null,
+        top: null,
+        bottom: null,
+        side: 'top',
+        minContentHeight: null,
+        minContentDescent: null,
+        minContentAscent: null,
+        descent: null,
+        fullContentBounds: false,
+        useFullBounds: false,
+      };
+      if (Array.isArray(options)) {
+        [
+          content, symbol, inSize, space, overhang,
+          length, left, right, top, bottom,
+          side, minContentHeight, minContentDescent,
+          minContentAscent, descent, fullContentBounds, useFullBounds,
+        ] = options;
+      } else {
+        ({
+          content, symbol, inSize, space, overhang,
+          length, left, right, top, bottom,
+          side, minContentHeight, minContentDescent,
+          minContentAscent, descent, fullContentBounds, useFullBounds,
+        } = options);
+      }
+      const optionsIn = {
+        side,
+        space,
+        overhang,
+        length,
+        left,
+        right,
+        top,
+        bottom,
+        inSize,
+        minContentHeight,
+        minContentDescent,
+        minContentAscent,
+        descent,
+        fullContentBounds,
+        useFullBounds,
+      };
+      const o = joinObjects({}, defaultOptions, optionsIn, forceOptions);
 
-    const glyphs = {};
-    if (o.side === 'top') {
-      glyphs.top = {
-        symbol,
-        space: o.space,
-        overhang: o.overhang,
-        leftSpace: o.left,
-        rightSpace: o.right,
-        width: o.length,
-      };
+      const glyphs = {};
+      if (o.side === 'top') {
+        glyphs.top = {
+          symbol,
+          space: o.space,
+          overhang: o.overhang,
+          leftSpace: o.left,
+          rightSpace: o.right,
+          width: o.length,
+        };
+      }
+      if (o.side === 'bottom') {
+        glyphs.bottom = {
+          symbol,
+          space: o.space,
+          overhang: o.overhang,
+          leftSpace: o.left,
+          rightSpace: o.right,
+          width: o.length,
+        };
+      }
+      if (o.side === 'left') {
+        glyphs.left = {
+          symbol,
+          space: o.space,
+          overhang: o.overhang,
+          topSpace: o.top,
+          bottomSpace: o.bottom,
+          height: o.length,
+          minContentHeight: o.minContentHeight,
+          minContentDescent: o.minContentDescent,
+          minContentAscent: o.minContentAscent,
+          descent: o.descent,
+        };
+      }
+      if (o.side === 'right') {
+        glyphs.right = {
+          symbol,
+          space: o.space,
+          overhang: o.overhang,
+          topSpace: o.top,
+          bottomSpace: o.bottom,
+          height: o.length,
+          minContentHeight: o.minContentHeight,
+          minContentDescent: o.minContentDescent,
+          minContentAscent: o.minContentAscent,
+          descent: o.descent,
+        };
+      }
+
+      return this.annotate({
+        content,                            // $FlowFixMe
+        glyphs,
+        inSize: o.inSize,
+        fullContentBounds: o.fullContentBounds,
+        useFullBounds: o.useFullBounds,
+      });
+    } catch (e) {
+      throw new Error(`FigureOne Equation Bar Error: ${e.message}`);
     }
-    if (o.side === 'bottom') {
-      glyphs.bottom = {
-        symbol,
-        space: o.space,
-        overhang: o.overhang,
-        leftSpace: o.left,
-        rightSpace: o.right,
-        width: o.length,
-      };
-    }
-    if (o.side === 'left') {
-      glyphs.left = {
-        symbol,
-        space: o.space,
-        overhang: o.overhang,
-        topSpace: o.top,
-        bottomSpace: o.bottom,
-        height: o.length,
-        minContentHeight: o.minContentHeight,
-        minContentDescent: o.minContentDescent,
-        minContentAscent: o.minContentAscent,
-        descent: o.descent,
-      };
-    }
-    if (o.side === 'right') {
-      glyphs.right = {
-        symbol,
-        space: o.space,
-        overhang: o.overhang,
-        topSpace: o.top,
-        bottomSpace: o.bottom,
-        height: o.length,
-        minContentHeight: o.minContentHeight,
-        minContentDescent: o.minContentDescent,
-        minContentAscent: o.minContentAscent,
-        descent: o.descent,
-      };
-    }
-    return this.annotate({
-      content,                            // $FlowFixMe
-      glyphs,
-      inSize: o.inSize,
-      fullContentBounds: o.fullContentBounds,
-      useFullBounds: o.useFullBounds,
-    });
   }
 
   // /**
@@ -3767,6 +3784,9 @@ export class EquationFunctions {
       glyphsToUse[side] = joinObjects({}, defaultOptions[side], glyphSide);
       glyphsToUse[side].annotations = glyphAnnotationsToUse;     // $FlowFixMe
       glyphsToUse[side].glyph = this.getExistingOrAddSymbol(glyphSide.symbol || '');
+      if (glyphsToUse[side].glyph == null) {
+        throw new Error(`Equation glyph identifier '${JSON.stringify(glyphSide.symbol || '')}' is not a glyph, or does not exist`);
+      }
     };
 
     fillGlyphAnnotation('encompass');
@@ -3793,32 +3813,36 @@ export class EquationFunctions {
   scale(
     options: EQN_Scale,
   ) {
-    let content;
-    let scale;
-    let fullContentBounds;
-    const defaultOptions = {
-      scaleModifier: 1,
-      fullContentBounds: false,
-    };
-    if (Array.isArray(options)) {
-      [
-        content, scale, fullContentBounds,
-      ] = options;
-    } else {
-      ({
-        content, scale, fullContentBounds,
-      } = options);
+    try {
+      let content;
+      let scale;
+      let fullContentBounds;
+      const defaultOptions = {
+        scaleModifier: 1,
+        fullContentBounds: false,
+      };
+      if (Array.isArray(options)) {
+        [
+          content, scale, fullContentBounds,
+        ] = options;
+      } else {
+        ({
+          content, scale, fullContentBounds,
+        } = options);
+      }
+      const optionsIn = {
+        scaleModifier: scale,
+        fullContentBounds,
+      };
+      const o = joinObjects(defaultOptions, optionsIn);
+      return new Scale(
+        [this.contentToElement(content)],
+        [],
+        o,
+      );
+    } catch (e) {
+      throw new Error(`FigureOne Equation Scale Error: ${e.message}`);
     }
-    const optionsIn = {
-      scaleModifier: scale,
-      fullContentBounds,
-    };
-    const o = joinObjects(defaultOptions, optionsIn);
-    return new Scale(
-      [this.contentToElement(content)],
-      [],
-      o,
-    );
   }
 
   /**
@@ -3828,138 +3852,146 @@ export class EquationFunctions {
   frac(
     options: EQN_Fraction,
   ) {
-    let numerator;
-    let denominator;
-    let symbol;
-    let scale;
-    let overhang;
-    let numeratorSpace;
-    let denominatorSpace;
-    let offsetY;
-    let fullContentBounds;
-    let baseline;
+    try {
+      let numerator;
+      let denominator;
+      let symbol;
+      let scale;
+      let overhang;
+      let numeratorSpace;
+      let denominatorSpace;
+      let offsetY;
+      let fullContentBounds;
+      let baseline;
 
-    // This is imperfect type checking, as the assumption is if den, sym
-    // and fractionScale is null, then they weren't defined by the caller
-    // and therefore the caller is passing in a TypeFracObject or TypeFracArray
-    // All the flow errors go away if TypeEquationPhrase is removed from
-    // optionsOrNum (and then also remove the first if statement below)
-    const defaultOptions = {
-      scaleModifier: 1,
-      numeratorSpace: 0.05,
-      denominatorSpace: 0.05,
-      offsetY: 0.07,
-      overhang: 0.05,
-      fullContentBounds: false,
-      baseline: 'vinculum',
-    };
-    if (Array.isArray(options)) {
-      [
-        numerator, symbol, denominator, scale,
-        numeratorSpace, denominatorSpace, overhang,
-        offsetY, baseline, fullContentBounds,
-      ] = options;
-    } else {
-      ({
-        numerator, symbol, denominator, scale,
-        numeratorSpace, denominatorSpace, overhang,
-        offsetY, baseline, fullContentBounds,
-      } = options);
+      // This is imperfect type checking, as the assumption is if den, sym
+      // and fractionScale is null, then they weren't defined by the caller
+      // and therefore the caller is passing in a TypeFracObject or TypeFracArray
+      // All the flow errors go away if TypeEquationPhrase is removed from
+      // optionsOrNum (and then also remove the first if statement below)
+      const defaultOptions = {
+        scaleModifier: 1,
+        numeratorSpace: 0.05,
+        denominatorSpace: 0.05,
+        offsetY: 0.07,
+        overhang: 0.05,
+        fullContentBounds: false,
+        baseline: 'vinculum',
+      };
+      if (Array.isArray(options)) {
+        [
+          numerator, symbol, denominator, scale,
+          numeratorSpace, denominatorSpace, overhang,
+          offsetY, baseline, fullContentBounds,
+        ] = options;
+      } else {
+        ({
+          numerator, symbol, denominator, scale,
+          numeratorSpace, denominatorSpace, overhang,
+          offsetY, baseline, fullContentBounds,
+        } = options);
+      }
+      const optionsIn = {
+        scaleModifier: scale,
+        overhang,
+        numeratorSpace,
+        denominatorSpace,
+        offsetY,
+        fullContentBounds,
+        baseline,
+      };
+      const o = joinObjects(defaultOptions, optionsIn);
+
+      return new Fraction(
+        [this.contentToElement(numerator), this.contentToElement(denominator)],       // $FlowFixMe
+        this.getExistingOrAddSymbol(symbol),
+        o,
+      );
+    } catch (e) {
+      throw new Error(`FigureOne Equation Fraction Error: ${e.message}`);
     }
-    const optionsIn = {
-      scaleModifier: scale,
-      overhang,
-      numeratorSpace,
-      denominatorSpace,
-      offsetY,
-      fullContentBounds,
-      baseline,
-    };
-    const o = joinObjects(defaultOptions, optionsIn);
-
-    return new Fraction(
-      [this.contentToElement(numerator), this.contentToElement(denominator)],       // $FlowFixMe
-      this.getExistingOrAddSymbol(symbol),
-      o,
-    );
   }
 
   root(optionsOrArray: EQN_Root) {
-    let content;
-    let root;
-    let symbol;
-    let space;
-    let leftSpace;
-    let topSpace;
-    let bottomSpace;
-    let rightSpace;
-    let rootScale;
-    let rootOffset;
-    let inSize = true;
-    let fullContentBounds;
-    let useFullBounds;
-    if (Array.isArray(optionsOrArray)) {
-      [                                                            // $FlowFixMe
-        symbol, content, inSize,                                   // $FlowFixMe
-        space, topSpace, rightSpace, bottomSpace, leftSpace,       // $FlowFixMe
-        root, rootOffset, rootScale, fullContentBounds, useFullBounds,
-      ] = optionsOrArray;
-    } else {
-      ({                                                    // $FlowFixMe
-        symbol, content, inSize,                                   // $FlowFixMe
-        space, topSpace, rightSpace, bottomSpace, leftSpace,       // $FlowFixMe
-        root, rootOffset, rootScale, fullContentBounds, useFullBounds,
-      } = optionsOrArray);
-    }
+    try {
+      let content;
+      let root;
+      let symbol;
+      let space;
+      let leftSpace;
+      let topSpace;
+      let bottomSpace;
+      let rightSpace;
+      let rootScale;
+      let rootOffset;
+      let inSize = true;
+      let fullContentBounds;
+      let useFullBounds;
+      if (Array.isArray(optionsOrArray)) {
+        [                                                            // $FlowFixMe
+          symbol, content, inSize,                                   // $FlowFixMe
+          space, topSpace, rightSpace, bottomSpace, leftSpace,       // $FlowFixMe
+          root, rootOffset, rootScale, fullContentBounds, useFullBounds,
+        ] = optionsOrArray;
+      } else {
+        ({                                                    // $FlowFixMe
+          symbol, content, inSize,                                   // $FlowFixMe
+          space, topSpace, rightSpace, bottomSpace, leftSpace,       // $FlowFixMe
+          root, rootOffset, rootScale, fullContentBounds, useFullBounds,
+        } = optionsOrArray);
+      }
 
-    const defaultOptions = {
-      space: 0.02,
-      rootScale: 0.6,
-      rootOffset: [0, 0.06],
-      inSize: true,
-      fullContentBounds: false,
-      useFullBounds: false,
-    };
-    const optionsIn = {
-      leftSpace,
-      topSpace,
-      bottomSpace,
-      rightSpace,
-      space,
-      rootScale,
-      rootOffset,
-      inSize,
-      fullContentBounds,
-      useFullBounds,
-    };
-    const options = joinObjects(defaultOptions, optionsIn);
-    options.rootOffset = getPoint(options.rootOffset);
-    const annotations = [];
-    if (root != null) {
-      annotations.push({
-        content: root,
-        offset: options.rootOffset,
-        scale: options.rootScale,
-        reference: 'root',
-      });
-    }
-    return this.annotate({
-      content,
-      inSize: options.inSize,
-      useFullBounds: options.useFullBounds,
-      fullContentBounds: options.fullContentBounds,
-      glyphs: {
-        encompass: {
-          symbol,       // $FlowFixMe
-          annotations,
-          space: options.space,
-          leftSpace: options.leftSpace,
-          rightSpace: options.rightSpace,
-          topSpace: options.topSpace,
-          bottomSpace: options.bottomSpace,
+      const defaultOptions = {
+        space: 0.02,
+        rootScale: 0.6,
+        rootOffset: [0, 0.06],
+        inSize: true,
+        fullContentBounds: false,
+        useFullBounds: false,
+      };
+      const optionsIn = {
+        leftSpace,
+        topSpace,
+        bottomSpace,
+        rightSpace,
+        space,
+        rootScale,
+        rootOffset,
+        inSize,
+        fullContentBounds,
+        useFullBounds,
+      };
+      const options = joinObjects(defaultOptions, optionsIn);
+      options.rootOffset = getPoint(options.rootOffset);
+      const annotations = [];
+      if (root != null) {
+        annotations.push({
+          content: root,
+          offset: options.rootOffset,
+          scale: options.rootScale,
+          reference: 'root',
+        });
+      }
+      return this.annotate({
+        content,
+        inSize: options.inSize,
+        useFullBounds: options.useFullBounds,
+        fullContentBounds: options.fullContentBounds,
+        glyphs: {
+          encompass: {
+            symbol,       // $FlowFixMe
+            annotations,
+            space: options.space,
+            leftSpace: options.leftSpace,
+            rightSpace: options.rightSpace,
+            topSpace: options.topSpace,
+            bottomSpace: options.bottomSpace,
+          },
         },
-      },
-    });
+      });
+    } catch (e) {
+      throw new Error(`FigureOne Equation Root Error: ${e.message}`);
+    }
   }
 
   /**
@@ -4024,6 +4056,7 @@ export class EquationFunctions {
         scale: o.scale,
       });
     }
+
     return this.annotate({
       content,      // $FlowFixMe
       annotations,
@@ -4036,29 +4069,33 @@ export class EquationFunctions {
    * @see {@link EQN_Superscript} for description and examples
    */
   sup(options: EQN_Superscript) {
-    let content;
-    let superscript;
-    let scale;
-    let offset;
-    // let superscriptOffset = null;
-    let inSize;
-    if (Array.isArray(options)) {
-      [           // $FlowFixMe
-        content, superscript, scale, offset, inSize,           // $FlowFixMe
-      ] = options;
-    } else {
-      ({                                                    // $FlowFixMe
-        content, superscript, scale, offset, inSize,
-      } = options);
+    try {
+      let content;
+      let superscript;
+      let scale;
+      let offset;
+      // let superscriptOffset = null;
+      let inSize;
+      if (Array.isArray(options)) {
+        [           // $FlowFixMe
+          content, superscript, scale, offset, inSize,           // $FlowFixMe
+        ] = options;
+      } else {
+        ({                                                    // $FlowFixMe
+          content, superscript, scale, offset, inSize,
+        } = options);
+      }
+      // $FlowFixMe
+      return this.supSub({          // $FlowFixMe
+        content,                    // $FlowFixMe
+        superscript,                // $FlowFixMe
+        superscriptOffset: offset,  // $FlowFixMe
+        inSize,                     // $FlowFixMe
+        scale,
+      });
+    } catch (e) {
+      throw new Error(`FigureOne Equation Superscript Error: ${e.message}`);
     }
-    // $FlowFixMe
-    return this.supSub({          // $FlowFixMe
-      content,                    // $FlowFixMe
-      superscript,                // $FlowFixMe
-      superscriptOffset: offset,  // $FlowFixMe
-      inSize,                     // $FlowFixMe
-      scale,
-    });
   }
 
   /**
@@ -4066,28 +4103,32 @@ export class EquationFunctions {
    * @see {@link EQN_Subscript} for description and examples
    */
   sub(options: EQN_Subscript) {
-    let content;
-    let subscript;
-    let scale;
-    let offset;
-    let inSize;
-    if (Array.isArray(options)) {
-      [           // $FlowFixMe
-        content, subscript, scale, offset, inSize,           // $FlowFixMe
-      ] = options;
-    } else {
-      ({                                                    // $FlowFixMe
-        content, subscript, scale, offset, inSize,
-      } = options);
+    try {
+      let content;
+      let subscript;
+      let scale;
+      let offset;
+      let inSize;
+      if (Array.isArray(options)) {
+        [           // $FlowFixMe
+          content, subscript, scale, offset, inSize,           // $FlowFixMe
+        ] = options;
+      } else {
+        ({                                                    // $FlowFixMe
+          content, subscript, scale, offset, inSize,
+        } = options);
+      }
+      // $FlowFixMe
+      return this.supSub({          // $FlowFixMe
+        content,                    // $FlowFixMe
+        subscript,                  // $FlowFixMe
+        subscriptOffset: offset,    // $FlowFixMe
+        inSize,                     // $FlowFixMe
+        scale,
+      });
+    } catch (e) {
+      throw new Error(`FigureOne Equation Subscript Error: ${e.message}`);
     }
-    // $FlowFixMe
-    return this.supSub({          // $FlowFixMe
-      content,                    // $FlowFixMe
-      subscript,                  // $FlowFixMe
-      subscriptOffset: offset,    // $FlowFixMe
-      inSize,                     // $FlowFixMe
-      scale,
-    });
   }
 
   /**
@@ -4097,58 +4138,63 @@ export class EquationFunctions {
   touchBox(
     options: EQN_TouchBox,
   ) {
-    let content;
-    let symbol;
-    let space;
-    let topSpace;
-    let bottomSpace;
-    let leftSpace;
-    let rightSpace;
-    const defaultOptions = {
-      inSize: false,
-      space: 0,
-      topSpace: null,
-      bottomSpace: null,
-      leftSpace: null,
-      rightSpace: null,
-    };
-    if (Array.isArray(options)) {
-      [
-        content, symbol, space, topSpace,
-        rightSpace, bottomSpace, leftSpace,
-      ] = options;
-    } else {
-      ({
-        content, symbol, space, topSpace,
-        rightSpace, bottomSpace, leftSpace,
-      } = options);
-    }
-    const optionsIn = {
-      content,
-      symbol,
-      space,
-      topSpace,
-      rightSpace,
-      bottomSpace,
-      leftSpace,
-    };
-    const o = joinObjects(defaultOptions, optionsIn);
-    return this.annotate({
-      content,
-      inSize: false,
-      fullContentBounds: false,
-      useFullBounds: false,
-      glyphs: {
-        encompass: {
-          symbol,
-          space: o.space,
-          leftSpace: o.leftSpace,
-          rightSpace: o.rightSpace,
-          topSpace: o.topSpace,
-          bottomSpace: o.bottomSpace,
+    try {
+      let content;
+      let symbol;
+      let space;
+      let topSpace;
+      let bottomSpace;
+      let leftSpace;
+      let rightSpace;
+      const defaultOptions = {
+        inSize: false,
+        space: 0,
+        topSpace: null,
+        bottomSpace: null,
+        leftSpace: null,
+        rightSpace: null,
+      };
+      if (Array.isArray(options)) {
+        [
+          content, symbol, space, topSpace,
+          rightSpace, bottomSpace, leftSpace,
+        ] = options;
+      } else {
+        ({
+          content, symbol, space, topSpace,
+          rightSpace, bottomSpace, leftSpace,
+        } = options);
+      }
+      const optionsIn = {
+        content,
+        symbol,
+        space,
+        topSpace,
+        rightSpace,
+        bottomSpace,
+        leftSpace,
+      };
+      const o = joinObjects(defaultOptions, optionsIn);
+
+      return this.annotate({
+        content,
+        inSize: false,
+        fullContentBounds: false,
+        useFullBounds: false,
+        glyphs: {
+          encompass: {
+            symbol,
+            space: o.space,
+            leftSpace: o.leftSpace,
+            rightSpace: o.rightSpace,
+            topSpace: o.topSpace,
+            bottomSpace: o.bottomSpace,
+          },
         },
-      },
-    });
+      });
+    } catch (e) {
+      throw new Error(`FigureOne Equation TouchBox Error: ${e.message}`);
+    }
   }
 
   /**
@@ -4158,66 +4204,70 @@ export class EquationFunctions {
   box(
     options: EQN_Box,
   ) {
-    let content;
-    let symbol;
-    let inSize;
-    let space;
-    let topSpace;
-    let bottomSpace;
-    let leftSpace;
-    let rightSpace;
-    let fullContentBounds;
-    let useFullBounds;
-    const defaultOptions = {
-      inSize: false,
-      space: 0,
-      topSpace: null,
-      bottomSpace: null,
-      leftSpace: null,
-      rightSpace: null,
-      fullContentBounds: false,
-      useFullBounds: false,
-    };
-    if (Array.isArray(options)) {
-      [
-        content, symbol, inSize, space, topSpace,
-        rightSpace, bottomSpace, leftSpace, fullContentBounds, useFullBounds,
-      ] = options;
-    } else {
-      ({
-        content, symbol, inSize, space, topSpace,
-        rightSpace, bottomSpace, leftSpace, fullContentBounds, useFullBounds,
-      } = options);
-    }
-    const optionsIn = {
-      content,
-      symbol,
-      inSize,
-      space,
-      topSpace,
-      rightSpace,
-      bottomSpace,
-      leftSpace,
-      fullContentBounds,
-      useFullBounds,
-    };
-    const o = joinObjects(defaultOptions, optionsIn);
-    return this.annotate({
-      content,
-      inSize: o.inSize,
-      fullContentBounds: o.fullContentBounds,
-      useFullBounds: o.useFullBounds,
-      glyphs: {
-        encompass: {
-          symbol,
-          space: o.space,
-          leftSpace: o.leftSpace,
-          rightSpace: o.rightSpace,
-          topSpace: o.topSpace,
-          bottomSpace: o.bottomSpace,
+    try {
+      let content;
+      let symbol;
+      let inSize;
+      let space;
+      let topSpace;
+      let bottomSpace;
+      let leftSpace;
+      let rightSpace;
+      let fullContentBounds;
+      let useFullBounds;
+      const defaultOptions = {
+        inSize: false,
+        space: 0,
+        topSpace: null,
+        bottomSpace: null,
+        leftSpace: null,
+        rightSpace: null,
+        fullContentBounds: false,
+        useFullBounds: false,
+      };
+      if (Array.isArray(options)) {
+        [
+          content, symbol, inSize, space, topSpace,
+          rightSpace, bottomSpace, leftSpace, fullContentBounds, useFullBounds,
+        ] = options;
+      } else {
+        ({
+          content, symbol, inSize, space, topSpace,
+          rightSpace, bottomSpace, leftSpace, fullContentBounds, useFullBounds,
+        } = options);
+      }
+      const optionsIn = {
+        content,
+        symbol,
+        inSize,
+        space,
+        topSpace,
+        rightSpace,
+        bottomSpace,
+        leftSpace,
+        fullContentBounds,
+        useFullBounds,
+      };
+      const o = joinObjects(defaultOptions, optionsIn);
+      return this.annotate({
+        content,
+        inSize: o.inSize,
+        fullContentBounds: o.fullContentBounds,
+        useFullBounds: o.useFullBounds,
+        glyphs: {
+          encompass: {
+            symbol,
+            space: o.space,
+            leftSpace: o.leftSpace,
+            rightSpace: o.rightSpace,
+            topSpace: o.topSpace,
+            bottomSpace: o.bottomSpace,
+          },
         },
-      },
-    });
+      });
+    } catch (e) {
+      throw new Error(`FigureOne Equation Box Error: ${e.message}`);
+    }
   }
 
   /**
@@ -4227,40 +4277,44 @@ export class EquationFunctions {
   pad(
     options: EQN_Pad,
   ) {
-    let content;
-    let top;
-    let right;
-    let bottom;
-    let left;
-    const defaultOptions = {
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-    };
-    if (Array.isArray(options)) {
-      [
-        content, top, right, bottom, left,
-      ] = options;
-    } else {
-      ({
-        content, top, right, bottom, left,
-      } = options);
+    try {
+      let content;
+      let top;
+      let right;
+      let bottom;
+      let left;
+      const defaultOptions = {
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+      };
+      if (Array.isArray(options)) {
+        [
+          content, top, right, bottom, left,
+        ] = options;
+      } else {
+        ({
+          content, top, right, bottom, left,
+        } = options);
+      }
+      const optionsIn = {
+        top,
+        right,
+        bottom,
+        left,
+      };
+      const o = joinObjects(defaultOptions, optionsIn);
+      return this.annotate({
+        content,
+        topSpace: o.top,
+        bottomSpace: o.bottom,
+        rightSpace: o.right,
+        leftSpace: o.left,
+      });
+    } catch (e) {
+      throw new Error(`FigureOne Equation Pad Error: ${e.message}`);
     }
-    const optionsIn = {
-      top,
-      right,
-      bottom,
-      left,
-    };
-    const o = joinObjects(defaultOptions, optionsIn);
-    return this.annotate({
-      content,
-      topSpace: o.top,
-      bottomSpace: o.bottom,
-      rightSpace: o.right,
-      leftSpace: o.left,
-    });
   }
 
   /**
@@ -4268,7 +4322,11 @@ export class EquationFunctions {
    * @see {@link EQN_Bar} for description and examples
    */
   topBar(options: EQN_Bar) {
-    return this.bar(options, { side: 'top' });
+    try {
+      return this.bar(options, { side: 'top' });
+    } catch (e) {
+      throw new Error(`FigureOne Equation TopBar Error: ${e.message}`);
+    }
   }
 
   /**
@@ -4276,7 +4334,11 @@ export class EquationFunctions {
    * @see {@link EQN_Bar} for description and examples
    */
   bottomBar(options: EQN_Bar) {
-    return this.bar(options, { side: 'bottom' });
+    try {
+      return this.bar(options, { side: 'bottom' });
+    } catch (e) {
+      throw new Error(`FigureOne Equation BottomBar Error: ${e.message}`);
+    }
   }
 
   /**
@@ -4284,73 +4346,77 @@ export class EquationFunctions {
    * @see {@link EQN_Matrix} for description and examples
    */
   matrix(options: EQN_Matrix) {
-    let content;
-    let left;
-    let right;
-    let order;
-    let fit;
-    let space;
-    let scale;
-    let yAlign;
-    let brac;
-    let fullContentBounds;
-    const defaultOptions = {
-      contentScale: 0.7,
-      fit: 'min',
-      space: [0.05, 0.05],
-      yAlign: 'baseline',
-      brac: {},
-      fullContentBounds: false,
-    };
-    if (Array.isArray(options)) {
-      [
-        order, left, content, right,
-        scale, fit, space, yAlign, brac, fullContentBounds,
-      ] = options;
-    } else {
-      ({
-        order, left, content, right,
-        scale, fit, space, yAlign, brac, fullContentBounds,
-      } = options);
-    }
-    const optionsIn = {
-      space,
-      fit,
-      order,
-      contentScale: scale,
-      brac,
-      yAlign,
-      fullContentBounds,
-    };
-    const o = joinObjects({}, defaultOptions, optionsIn);
+    try {
+      let content;
+      let left;
+      let right;
+      let order;
+      let fit;
+      let space;
+      let scale;
+      let yAlign;
+      let brac;
+      let fullContentBounds;
+      const defaultOptions = {
+        contentScale: 0.7,
+        fit: 'min',
+        space: [0.05, 0.05],
+        yAlign: 'baseline',
+        brac: {},
+        fullContentBounds: false,
+      };
+      if (Array.isArray(options)) {
+        [
+          order, left, content, right,
+          scale, fit, space, yAlign, brac, fullContentBounds,
+        ] = options;
+      } else {
+        ({
+          order, left, content, right,
+          scale, fit, space, yAlign, brac, fullContentBounds,
+        } = options);
+      }
+      const optionsIn = {
+        space,
+        fit,
+        order,
+        contentScale: scale,
+        brac,
+        yAlign,
+        fullContentBounds,
+      };
+      const o = joinObjects({}, defaultOptions, optionsIn);
 
-    let contentArray = [];
-    if (content != null) {      // $FlowFixMe
-      contentArray = content.map(c => this.contentToElement(c));
-    }
+      let contentArray = [];
+      if (content != null) {      // $FlowFixMe
+        contentArray = content.map(c => this.contentToElement(c));
+      }
 
-    if (o.order == null
-      || o.order[0] * o.order[1] !== contentArray.length) {
-      o.order = [1, contentArray.length];
-    }
+      if (o.order == null
+        || o.order[0] * o.order[1] !== contentArray.length) {
+        o.order = [1, contentArray.length];
+      }
 
-    if (o.space != null) {
-      o.space = getPoint(o.space);
-    }
+      if (o.space != null) {
+        o.space = getPoint(o.space);
+      }
 
-    const matrixContent = new Matrix(
-      contentArray,
-      [],
-      o,
-    );
-    if (left != null && right != null) {
-      return this.brac(joinObjects({}, o.brac, {
-        content: matrixContent,
-        left,
-        right,
-      }));
+      const matrixContent = new Matrix(
+        contentArray,
+        [],
+        o,
+      );
+      if (left != null && right != null) {
+        return this.brac(joinObjects({}, o.brac, {
+          content: matrixContent,
+          left,
+          right,
+        }));
+      }
+      return matrixContent;
+    } catch (e) {
+      throw new Error(`FigureOne Equation Bar Error: ${e.message}`);
     }
-    return matrixContent;
   }
 
   /**
@@ -4358,71 +4424,74 @@ export class EquationFunctions {
    * @see {@link EQN_Matrix} for description and examples
    */
   lines(options: EQN_Lines) {
-    let content;
-    let justify;
-    let yAlign;
-    let baselineSpace;
-    let space;
-    let fullContentBounds;
-    const defaultOptions = {
-      justify: 'center',
-      yAlign: 0,
-      baselineSpace: null,
-      space: 0,
-      // offset: 0,
-      fullContentBounds: false,
-    };
-    if (Array.isArray(options)) {
-      [
-        content, justify, baselineSpace, space, yAlign, fullContentBounds,
-      ] = options;
-    } else {
-      ({
-        content, justify, baselineSpace, space, yAlign, fullContentBounds,
-      } = options);
-    }
-    const optionsIn = {
-      justify,
-      baselineSpace,
-      space,
-      yAlign,
-      fullContentBounds,
-    };
-    const o = joinObjects({}, defaultOptions, optionsIn);
-    const contentArray = [];
-    const lineArray = [];
-    if (content != null) {      // $FlowFixMe
-      content.forEach((c) => {
-        let baselineSpaceLine = o.baselineSpace;
-        let spaceLine = o.space;
-        let justifyLine = null;
-        if (Array.isArray(c) || c.content == null) { // $FlowFixMe
-          contentArray.push(this.contentToElement(c));
-        } else {      // $FlowFixMe
-          contentArray.push(this.contentToElement(c.content));
-          if (c.baselineSpace != null) { baselineSpaceLine = c.baselineSpace; }
-          if (c.space != null) { spaceLine = c.space; }
-          if (c.justify != null) { // $FlowFixMe
-            justifyLine = this.elements[c.justify];
+    try {
+      let content;
+      let justify;
+      let yAlign;
+      let baselineSpace;
+      let space;
+      let fullContentBounds;
+      const defaultOptions = {
+        justify: 'center',
+        yAlign: 0,
+        baselineSpace: null,
+        space: 0,
+        // offset: 0,
+        fullContentBounds: false,
+      };
+      if (Array.isArray(options)) {
+        [
+          content, justify, baselineSpace, space, yAlign, fullContentBounds,
+        ] = options;
+      } else {
+        ({
+          content, justify, baselineSpace, space, yAlign, fullContentBounds,
+        } = options);
+      }
+      const optionsIn = {
+        justify,
+        baselineSpace,
+        space,
+        yAlign,
+        fullContentBounds,
+      };
+      const o = joinObjects({}, defaultOptions, optionsIn);
+      const contentArray = [];
+      const lineArray = [];
+      if (content != null) {      // $FlowFixMe
+        content.forEach((c) => {
+          let baselineSpaceLine = o.baselineSpace;
+          let spaceLine = o.space;
+          let justifyLine = null;
+          if (Array.isArray(c) || c.content == null) { // $FlowFixMe
+            contentArray.push(this.contentToElement(c));
+          } else {      // $FlowFixMe
+            contentArray.push(this.contentToElement(c.content));
+            if (c.baselineSpace != null) { baselineSpaceLine = c.baselineSpace; }
+            if (c.space != null) { spaceLine = c.space; }
+            if (c.justify != null) { // $FlowFixMe
+              justifyLine = this.elements[c.justify];
+            }
           }
-        }
-        lineArray.push({
-          baselineSpace: baselineSpaceLine,
-          space: spaceLine,
-          justify: justifyLine,
-          offset: c.offset || 0,
+          lineArray.push({
+            baselineSpace: baselineSpaceLine,
+            space: spaceLine,
+            justify: justifyLine,
+            offset: c.offset || 0,
+          });
         });
-      });
-      // contentArray = content.map(c => this.contentToElement(c));
-      o.lineOptions = lineArray;
+        // contentArray = content.map(c => this.contentToElement(c));
+        o.lineOptions = lineArray;
+      }
+      const lines = new Lines(
+        contentArray,
+        [],
+        o,
+      );
+      return lines;
+    } catch (e) {
+      throw new Error(`FigureOne Equation Lines Error: ${e.message}`);
     }
-
-    const lines = new Lines(
-      contentArray,
-      [],
-      o,
-    );
-    return lines;
   }
 
   /**
@@ -4432,180 +4501,184 @@ export class EquationFunctions {
   int(
     options: EQN_Integral,
   ) {
-    let content;
-    let symbol;
-    let space;
-    let topSpace;
-    let bottomSpace;
-    let height;
-    let yOffset;
-    let inSize;
-    let from;
-    let to;
-    let scale;
-    let fromScale;
-    let toScale;
-    // let fromSpace;
-    // let toSpace;
-    let fromOffset;
-    let toOffset;
-    let limitsPosition;
-    let limitsAroundContent;
-    let fromXPosition;
-    let fromYPosition;
-    let fromXAlign;
-    let fromYAlign;
-    let toXPosition;
-    let toYPosition;
-    let toXAlign;
-    let toYAlign;
-    let fullBoundsContent;
-    let useFullBounds;
-    const defaultOptions = {
-      inSize: true,
-      space: 0.01,
-      topSpace: 0.1,
-      bottomSpace: 0.1,
-      height: null,
-      yOffset: 0,
-      contentScale: 1,
-      fromScale: 0.5,
-      toScale: 0.5,
-      fromOffset: [0, 0],
-      toOffset: [0.04, 0],
-      limitsPosition: 'side',
-      limitsAroundContent: true,
-      fromXPosition: 0.5,
-      fromYPosition: 'bottom',
-      fromXAlign: 'left',
-      fromYAlign: 'middle',
-      toXPosition: 'right',
-      toYPosition: 'top',
-      toXAlign: 'left',
-      toYAlign: 'middle',
-      fullBoundsContent: false,
-      useFullBounds: false,
-    };
-    if (Array.isArray(options)) {
-      [                                                    // $FlowFixMe
-        symbol, content, from, to, inSize, space,          // $FlowFixMe
-        topSpace, bottomSpace,                             // $FlowFixMe
-        height, yOffset, scale,                            // $FlowFixMe
-        fromScale, toScale,                                // $FlowFixMe
-        fromOffset, toOffset, limitsPosition,              // $FlowFixMe
-        limitsAroundContent,                               // $FlowFixMe
-        fromXPosition, fromYPosition, fromXAlign, fromYAlign, // $FlowFixMe
-        toXPosition, toYPosition, toXAlign, toYAlign, // $FlowFixMe
-        fullBoundsContent, useFullBounds,
-      ] = options;
-    } else {
-      ({                                                   // $FlowFixMe
-        content, symbol, from, to, inSize, space,          // $FlowFixMe
-        topSpace, bottomSpace,                             // $FlowFixMe
-        height, yOffset,                                   // $FlowFixMe
-        scale, fromScale, toScale,                         // $FlowFixMe
-        fromOffset, toOffset, limitsPosition,              // $FlowFixMe
-        limitsAroundContent,                               // $FlowFixMe
-        fromXPosition, fromYPosition, fromXAlign, fromYAlign, // $FlowFixMe
-        toXPosition, toYPosition, toXAlign, toYAlign, // $FlowFixMe
-        fullBoundsContent, useFullBounds,
-      } = options);
-    }
-    if (limitsPosition === 'topBottom') {
-      defaultOptions.fromXPosition = 0.1;
-      defaultOptions.fromYPosition = 'bottom';
-      defaultOptions.fromXAlign = 'center';
-      defaultOptions.fromYAlign = 'top';        // $FlowFixMe
-      defaultOptions.toXPosition = 0.9;
-      defaultOptions.toYPosition = 'top';
-      defaultOptions.toXAlign = 'center';
-      defaultOptions.toYAlign = 'bottom';
-      defaultOptions.fromOffset = [0, -0.04];
-      defaultOptions.toOffset = [0, 0.04];
-    }
-    if (limitsPosition === 'topBottomCenter') {        // $FlowFixMe
-      defaultOptions.fromXPosition = 'center';
-      defaultOptions.fromYPosition = 'bottom';
-      defaultOptions.fromXAlign = 'center';
-      defaultOptions.fromYAlign = 'top';
-      defaultOptions.toXPosition = 'center';
-      defaultOptions.toYPosition = 'top';
-      defaultOptions.toXAlign = 'center';
-      defaultOptions.toYAlign = 'bottom';
-      defaultOptions.fromOffset = [0, -0.04];
-      defaultOptions.toOffset = [0, 0.04];
-    }
-    const optionsIn = {
-      space,
-      topSpace,
-      bottomSpace,
-      height,
-      yOffset,
-      inSize,
-      contentScale: scale,
-      fromScale,
-      toScale,
-      // fromSpace,
-      // toSpace,
-      fromOffset,
-      toOffset,
-      limitsPosition,
-      limitsAroundContent,
-      fromXPosition,
-      fromYPosition,
-      fromXAlign,
-      fromYAlign,
-      toXPosition,
-      toYPosition,
-      toXAlign,
-      toYAlign,
-      fullBoundsContent,
-      useFullBounds,
-    };
-    const o = joinObjects({}, defaultOptions, optionsIn);
-    o.fromOffset = getPoint(o.fromOffset);
-    o.toOffset = getPoint(o.toOffset);
+    try {
+      let content;
+      let symbol;
+      let space;
+      let topSpace;
+      let bottomSpace;
+      let height;
+      let yOffset;
+      let inSize;
+      let from;
+      let to;
+      let scale;
+      let fromScale;
+      let toScale;
+      // let fromSpace;
+      // let toSpace;
+      let fromOffset;
+      let toOffset;
+      let limitsPosition;
+      let limitsAroundContent;
+      let fromXPosition;
+      let fromYPosition;
+      let fromXAlign;
+      let fromYAlign;
+      let toXPosition;
+      let toYPosition;
+      let toXAlign;
+      let toYAlign;
+      let fullBoundsContent;
+      let useFullBounds;
+      const defaultOptions = {
+        inSize: true,
+        space: 0.01,
+        topSpace: 0.1,
+        bottomSpace: 0.1,
+        height: null,
+        yOffset: 0,
+        contentScale: 1,
+        fromScale: 0.5,
+        toScale: 0.5,
+        fromOffset: [0, 0],
+        toOffset: [0.04, 0],
+        limitsPosition: 'side',
+        limitsAroundContent: true,
+        fromXPosition: 0.5,
+        fromYPosition: 'bottom',
+        fromXAlign: 'left',
+        fromYAlign: 'middle',
+        toXPosition: 'right',
+        toYPosition: 'top',
+        toXAlign: 'left',
+        toYAlign: 'middle',
+        fullBoundsContent: false,
+        useFullBounds: false,
+      };
+      if (Array.isArray(options)) {
+        [                                                    // $FlowFixMe
+          symbol, content, from, to, inSize, space,          // $FlowFixMe
+          topSpace, bottomSpace,                             // $FlowFixMe
+          height, yOffset, scale,                            // $FlowFixMe
+          fromScale, toScale,                                // $FlowFixMe
+          fromOffset, toOffset, limitsPosition,              // $FlowFixMe
+          limitsAroundContent,                               // $FlowFixMe
+          fromXPosition, fromYPosition, fromXAlign, fromYAlign, // $FlowFixMe
+          toXPosition, toYPosition, toXAlign, toYAlign, // $FlowFixMe
+          fullBoundsContent, useFullBounds,
+        ] = options;
+      } else {
+        ({                                                   // $FlowFixMe
+          content, symbol, from, to, inSize, space,          // $FlowFixMe
+          topSpace, bottomSpace,                             // $FlowFixMe
+          height, yOffset,                                   // $FlowFixMe
+          scale, fromScale, toScale,                         // $FlowFixMe
+          fromOffset, toOffset, limitsPosition,              // $FlowFixMe
+          limitsAroundContent,                               // $FlowFixMe
+          fromXPosition, fromYPosition, fromXAlign, fromYAlign, // $FlowFixMe
+          toXPosition, toYPosition, toXAlign, toYAlign, // $FlowFixMe
+          fullBoundsContent, useFullBounds,
+        } = options);
+      }
+      if (limitsPosition === 'topBottom') {
+        defaultOptions.fromXPosition = 0.1;
+        defaultOptions.fromYPosition = 'bottom';
+        defaultOptions.fromXAlign = 'center';
+        defaultOptions.fromYAlign = 'top';        // $FlowFixMe
+        defaultOptions.toXPosition = 0.9;
+        defaultOptions.toYPosition = 'top';
+        defaultOptions.toXAlign = 'center';
+        defaultOptions.toYAlign = 'bottom';
+        defaultOptions.fromOffset = [0, -0.04];
+        defaultOptions.toOffset = [0, 0.04];
+      }
+      if (limitsPosition === 'topBottomCenter') {        // $FlowFixMe
+        defaultOptions.fromXPosition = 'center';
+        defaultOptions.fromYPosition = 'bottom';
+        defaultOptions.fromXAlign = 'center';
+        defaultOptions.fromYAlign = 'top';
+        defaultOptions.toXPosition = 'center';
+        defaultOptions.toYPosition = 'top';
+        defaultOptions.toXAlign = 'center';
+        defaultOptions.toYAlign = 'bottom';
+        defaultOptions.fromOffset = [0, -0.04];
+        defaultOptions.toOffset = [0, 0.04];
+      }
+      const optionsIn = {
+        space,
+        topSpace,
+        bottomSpace,
+        height,
+        yOffset,
+        inSize,
+        contentScale: scale,
+        fromScale,
+        toScale,
+        // fromSpace,
+        // toSpace,
+        fromOffset,
+        toOffset,
+        limitsPosition,
+        limitsAroundContent,
+        fromXPosition,
+        fromYPosition,
+        fromXAlign,
+        fromYAlign,
+        toXPosition,
+        toYPosition,
+        toXAlign,
+        toYAlign,
+        fullBoundsContent,
+        useFullBounds,
+      };
+      const o = joinObjects({}, defaultOptions, optionsIn);
+      o.fromOffset = getPoint(o.fromOffset);
+      o.toOffset = getPoint(o.toOffset);
 
-    const annotations = [
-      {
-        content: to,
-        xPosition: o.toXPosition,
-        yPosition: o.toYPosition,
-        xAlign: o.toXAlign,
-        yAlign: o.toYAlign,
-        offset: o.toOffset,
-        scale: o.toScale,
-      },
-      {
-        content: from,
-        xPosition: o.fromXPosition,
-        yPosition: o.fromYPosition,
-        xAlign: o.fromXAlign,
-        yAlign: o.fromYAlign,
-        offset: o.fromOffset,
-        scale: o.fromScale,
-      },
-    ];
-    return this.annotate({  // $FlowFixMe
-      content,
-      inSize: o.inSize,
-      contentScale: o.contentScale,
-      fullBoundsContent: o.fullBoundsContent,
-      useFullBounds: o.useFullBounds,
-      glyphs: {
-        left: {   // $FlowFixMe
-          symbol,
-          space: o.space,
-          topSpace: o.topSpace,
-          bottomSpace: o.bottomSpace,
-          height: o.height,
-          yOffset: o.yOffset,
-          annotationsOverContent: o.limitsAroundContent,
-          // $FlowFixMe
-          annotations,
+      const annotations = [
+        {
+          content: to,
+          xPosition: o.toXPosition,
+          yPosition: o.toYPosition,
+          xAlign: o.toXAlign,
+          yAlign: o.toYAlign,
+          offset: o.toOffset,
+          scale: o.toScale,
         },
-      },
-    });
+        {
+          content: from,
+          xPosition: o.fromXPosition,
+          yPosition: o.fromYPosition,
+          xAlign: o.fromXAlign,
+          yAlign: o.fromYAlign,
+          offset: o.fromOffset,
+          scale: o.fromScale,
+        },
+      ];
+      return this.annotate({  // $FlowFixMe
+        content,
+        inSize: o.inSize,
+        contentScale: o.contentScale,
+        fullBoundsContent: o.fullBoundsContent,
+        useFullBounds: o.useFullBounds,
+        glyphs: {
+          left: {   // $FlowFixMe
+            symbol,
+            space: o.space,
+            topSpace: o.topSpace,
+            bottomSpace: o.bottomSpace,
+            height: o.height,
+            yOffset: o.yOffset,
+            annotationsOverContent: o.limitsAroundContent,
+            // $FlowFixMe
+            annotations,
+          },
+        },
+      });
+    } catch (e) {
+      throw new Error(`FigureOne Equation Integral Error: ${e.message}`);
+    }
   }
 
   /**
@@ -4613,7 +4686,11 @@ export class EquationFunctions {
    * @see {@link EQN_SumOf} for description and examples
    */
   sumOf(options: EQN_SumOf) {
-    return this.sumProd(options);
+    try {
+      return this.sumProd(options);
+    } catch (e) {
+      throw new Error(`FigureOne Equation SumOf Error: ${e.message}`);
+    }
   }
 
   /**
@@ -4621,7 +4698,11 @@ export class EquationFunctions {
    * @see {@link EQN_ProdOf} for description and examples
    */
   prodOf(options: EQN_ProdOf) {
-    return this.sumProd(options);
+    try {
+      return this.sumProd(options);
+    } catch (e) {
+      throw new Error(`FigureOne Equation ProductOf Error: ${e.message}`);
+    }
   }
 
   sumProd(
@@ -4805,60 +4886,65 @@ export class EquationFunctions {
    */
   // $FlowFixMe
   topComment(...args) {
-    const [
-      content, comment, symbol,
-      contentSpaceToUse, commentSpaceToUse, scaleToUse,
-      inSize, contentLineSpace, commentLineSpace, fullContentBounds,
-      useFullBounds,
-    ] = this.processComment(...args);
-    const annotations = [{
-      content: comment,
-      xPosition: 'center',
-      yPosition: 'top',
-      xAlign: 'center',
-      yAlign: 'bottom',
-      scale: scaleToUse,
-      offset: [0, commentSpaceToUse],
-    }];
-    if (symbol === '' || symbol == null) {
-      return this.annotate({
-        content,           // $FlowFixMe
-        annotations,
-        inSize,
-      });
-    }
-    const glyph = this.getExistingOrAddSymbol(symbol);
-    if (glyph instanceof EquationLine) {
-      annotations[0].offset = [0, commentSpaceToUse + contentSpaceToUse];
+    try {
+      const [
+        content, comment, symbol,
+        contentSpaceToUse, commentSpaceToUse, scaleToUse,
+        inSize, contentLineSpace, commentLineSpace, fullContentBounds,
+        useFullBounds,
+      ] = this.processComment(...args);
+      const annotations = [{
+        content: comment,
+        xPosition: 'center',
+        yPosition: 'top',
+        xAlign: 'center',
+        yAlign: 'bottom',
+        scale: scaleToUse,
+        offset: [0, commentSpaceToUse],
+      }];
+      if (symbol === '' || symbol == null) {
+        return this.annotate({
+          content,           // $FlowFixMe
+          annotations,
+          inSize,
+        });
+      }
+      const glyph = this.getExistingOrAddSymbol(symbol);
+
+      if (glyph instanceof EquationLine) {
+        annotations[0].offset = [0, commentSpaceToUse + contentSpaceToUse];
+        return this.annotate({
+          content,
+          fullContentBounds,
+          useFullBounds,   // $FlowFixMe
+          annotations,
+          glyphs: {
+            line: {
+              symbol,              // $FlowFixMe
+              content: { xAlign: 'center', yAlign: 'top', space: contentLineSpace },
+              annotation: { xAlign: 'center', yAlign: 'bottom', space: commentLineSpace },
+              annotationIndex: 0,
+            },
+          },
+          inSize,
+        });
+      }
       return this.annotate({
         content,
         fullContentBounds,
-        useFullBounds,   // $FlowFixMe
-        annotations,
+        useFullBounds,
         glyphs: {
-          line: {
+          top: {
             symbol,              // $FlowFixMe
-            content: { xAlign: 'center', yAlign: 'top', space: contentLineSpace },
-            annotation: { xAlign: 'center', yAlign: 'bottom', space: commentLineSpace },
-            annotationIndex: 0,
+            annotations,
+            space: contentSpaceToUse,
           },
         },
         inSize,
       });
+    } catch (e) {
+      throw new Error(`FigureOne Equation TopComment Error: ${e.message}`);
     }
-    return this.annotate({
-      content,
-      fullContentBounds,
-      useFullBounds,
-      glyphs: {
-        top: {
-          symbol,              // $FlowFixMe
-          annotations,
-          space: contentSpaceToUse,
-        },
-      },
-      inSize,
-    });
   }
 
   /**
@@ -4868,61 +4954,65 @@ export class EquationFunctions {
    */
   // $FlowFixMe
   bottomComment(...args) {
-    const [
-      content, comment, symbol,
-      contentSpaceToUse, commentSpaceToUse, scaleToUse,
-      inSize, contentLineSpace, commentLineSpace, fullContentBounds,
-      useFullBounds,
-    ] = this.processComment(...args);
+    try {
+      const [
+        content, comment, symbol,
+        contentSpaceToUse, commentSpaceToUse, scaleToUse,
+        inSize, contentLineSpace, commentLineSpace, fullContentBounds,
+        useFullBounds,
+      ] = this.processComment(...args);
 
-    const annotations = [{
-      content: comment,
-      xPosition: 'center',
-      yPosition: 'bottom',
-      xAlign: 'center',
-      yAlign: 'top',
-      scale: scaleToUse,
-      offset: [0, -commentSpaceToUse],
-    }];
-    if (symbol === '' || symbol == null) {
-      return this.annotate({
-        content,           // $FlowFixMe
-        annotations,
-        inSize,
-      });
-    }
-    const glyph = this.getExistingOrAddSymbol(symbol);
-    if (glyph instanceof EquationLine) {
-      annotations[0].offset = [0, -commentSpaceToUse - contentSpaceToUse];
+      const annotations = [{
+        content: comment,
+        xPosition: 'center',
+        yPosition: 'bottom',
+        xAlign: 'center',
+        yAlign: 'top',
+        scale: scaleToUse,
+        offset: [0, -commentSpaceToUse],
+      }];
+      if (symbol === '' || symbol == null) {
+        return this.annotate({
+          content,           // $FlowFixMe
+          annotations,
+          inSize,
+        });
+      }
+      const glyph = this.getExistingOrAddSymbol(symbol);
+      if (glyph instanceof EquationLine) {
+        annotations[0].offset = [0, -commentSpaceToUse - contentSpaceToUse];
+        return this.annotate({
+          content,
+          fullContentBounds,
+          useFullBounds,    // $FlowFixMe
+          annotations,
+          glyphs: {
+            line: {
+              symbol,              // $FlowFixMe
+              content: { xAlign: 'center', yAlign: 'bottom', space: contentLineSpace },
+              annotation: { xAlign: 'center', yAlign: 'top', space: commentLineSpace },
+              annotationIndex: 0,
+            },
+          },
+          inSize,
+        });
+      }
       return this.annotate({
         content,
         fullContentBounds,
-        useFullBounds,    // $FlowFixMe
-        annotations,
+        useFullBounds,
         glyphs: {
-          line: {
-            symbol,              // $FlowFixMe
-            content: { xAlign: 'center', yAlign: 'bottom', space: contentLineSpace },
-            annotation: { xAlign: 'center', yAlign: 'top', space: commentLineSpace },
-            annotationIndex: 0,
+          bottom: {
+            symbol,            // $FlowFixMe
+            annotations,
+            space: contentSpaceToUse,
           },
         },
         inSize,
       });
+    } catch (e) {
+      throw new Error(`FigureOne Equation BottomComment Error: ${e.message}`);
     }
-    return this.annotate({
-      content,
-      fullContentBounds,
-      useFullBounds,
-      glyphs: {
-        bottom: {
-          symbol,            // $FlowFixMe
-          annotations,
-          space: contentSpaceToUse,
-        },
-      },
-      inSize,
-    });
   }
 
   /**
@@ -4932,73 +5022,77 @@ export class EquationFunctions {
   strike(
     options: EQN_Strike,
   ) {
-    let content;
-    let symbol;
-    let inSize;
-    let space;
-    let topSpace;
-    let bottomSpace;
-    let leftSpace;
-    let rightSpace;
-    let fullContentBounds;
-    let useFullBounds;
+    try {
+      let content;
+      let symbol;
+      let inSize;
+      let space;
+      let topSpace;
+      let bottomSpace;
+      let leftSpace;
+      let rightSpace;
+      let fullContentBounds;
+      let useFullBounds;
 
-    const defaultOptions = {
-      inSize: false,
-      space: 0.02,
-      topSpace: null,
-      bottomSpace: null,
-      leftSpace: null,
-      rightSpace: null,
-      fullContentBounds: false,
-      useFullBounds: false,
-    };
-    if (Array.isArray(options)) {
-      [
-        content, symbol, inSize, space, topSpace,
-        rightSpace, bottomSpace, leftSpace, fullContentBounds, useFullBounds,
-      ] = options;
-    } else {
-      ({
-        content, symbol, inSize, space, topSpace,
-        rightSpace, bottomSpace, leftSpace, fullContentBounds, useFullBounds,
-      } = options);
-    }
-    const glyph = this.getExistingOrAddSymbol(symbol);
-    if (glyph != null && glyph._custom.options.style === 'horizontal') {
-      defaultOptions.space = 0;           // $FlowFixMe
-      defaultOptions.leftSpace = 0.02;    // $FlowFixMe
-      defaultOptions.rightSpace = 0.02;   // $FlowFixMe
-    }
-    const optionsIn = {
-      content,
-      symbol,
-      inSize,
-      space,
-      topSpace,
-      rightSpace,
-      bottomSpace,
-      leftSpace,
-      fullContentBounds,
-      useFullBounds,
-    };
-    const o = joinObjects(defaultOptions, optionsIn);
-    return this.annotate({
-      content,
-      inSize: o.inSize,
-      fullContentBounds: o.fullContentBounds,
-      useFullBounds: o.useFullBounds,
-      glyphs: {
-        encompass: {
-          symbol,
-          topSpace: o.topSpace,
-          bottomSpace: o.bottomSpace,
-          leftSpace: o.leftSpace,
-          rightSpace: o.rightSpace,
-          space: o.space,
+      const defaultOptions = {
+        inSize: false,
+        space: 0.02,
+        topSpace: null,
+        bottomSpace: null,
+        leftSpace: null,
+        rightSpace: null,
+        fullContentBounds: false,
+        useFullBounds: false,
+      };
+      if (Array.isArray(options)) {
+        [
+          content, symbol, inSize, space, topSpace,
+          rightSpace, bottomSpace, leftSpace, fullContentBounds, useFullBounds,
+        ] = options;
+      } else {
+        ({
+          content, symbol, inSize, space, topSpace,
+          rightSpace, bottomSpace, leftSpace, fullContentBounds, useFullBounds,
+        } = options);
+      }
+      const glyph = this.getExistingOrAddSymbol(symbol);
+      if (glyph != null && glyph._custom.options.style === 'horizontal') {
+        defaultOptions.space = 0;           // $FlowFixMe
+        defaultOptions.leftSpace = 0.02;    // $FlowFixMe
+        defaultOptions.rightSpace = 0.02;   // $FlowFixMe
+      }
+      const optionsIn = {
+        content,
+        symbol,
+        inSize,
+        space,
+        topSpace,
+        rightSpace,
+        bottomSpace,
+        leftSpace,
+        fullContentBounds,
+        useFullBounds,
+      };
+      const o = joinObjects(defaultOptions, optionsIn);
+      return this.annotate({
+        content,
+        inSize: o.inSize,
+        fullContentBounds: o.fullContentBounds,
+        useFullBounds: o.useFullBounds,
+        glyphs: {
+          encompass: {
+            symbol,
+            topSpace: o.topSpace,
+            bottomSpace: o.bottomSpace,
+            leftSpace: o.leftSpace,
+            rightSpace: o.rightSpace,
+            space: o.space,
+          },
         },
-      },
-    });
+      });
+    } catch (e) {
+      throw new Error(`FigureOne Equation Strike Error: ${e.message}`);
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -5045,32 +5139,36 @@ export class EquationFunctions {
    */
   // $FlowFixMe
   topStrike(...args) {
-    const [
-      content, symbol, comment, inSize,
-      commentSpace, scale, space,
-    ] = this.processStrike(...args);
-    const annotations = [
-      {
-        content: comment,
-        xPosition: 'center',
-        yPosition: 'top',
-        xAlign: 'center',
-        yAlign: 'bottom',
-        offset: [0, commentSpace],
-        scale,
-      },
-    ];
-    return this.annotate({    // $FlowFixMe
-      content,
-      inSize,
-      glyphs: {
-        encompass: {    // $FlowFixMe
-          symbol,
-          space,    // $FlowFixMe
-          annotations,
+    try {
+      const [
+        content, symbol, comment, inSize,
+        commentSpace, scale, space,
+      ] = this.processStrike(...args);
+      const annotations = [
+        {
+          content: comment,
+          xPosition: 'center',
+          yPosition: 'top',
+          xAlign: 'center',
+          yAlign: 'bottom',
+          offset: [0, commentSpace],
+          scale,
         },
-      },
-    });
+      ];
+      return this.annotate({    // $FlowFixMe
+        content,
+        inSize,
+        glyphs: {
+          encompass: {    // $FlowFixMe
+            symbol,
+            space,    // $FlowFixMe
+            annotations,
+          },
+        },
+      });
+    } catch (e) {
+      throw new Error(`FigureOne Equation TopStrike Error: ${e.message}`);
+    }
   }
 
   /**
@@ -5080,31 +5178,35 @@ export class EquationFunctions {
    */
   // $FlowFixMe
   bottomStrike(...args) {
-    const [
-      content, symbol, comment, inSize,
-      commentSpace, scale, space,
-    ] = this.processStrike(...args);
-    const annotations = [
-      {
-        content: comment,
-        xPosition: 'center',
-        yPosition: 'bottom',
-        xAlign: 'center',
-        yAlign: 'top',
-        offset: [0, -commentSpace],
-        scale,
-      },
-    ];
-    return this.annotate({    // $FlowFixMe
-      content,
-      inSize,
-      glyphs: {
-        encompass: {    // $FlowFixMe
-          symbol,
-          space,    // $FlowFixMe
-          annotations,
+    try {
+      const [
+        content, symbol, comment, inSize,
+        commentSpace, scale, space,
+      ] = this.processStrike(...args);
+      const annotations = [
+        {
+          content: comment,
+          xPosition: 'center',
+          yPosition: 'bottom',
+          xAlign: 'center',
+          yAlign: 'top',
+          offset: [0, -commentSpace],
+          scale,
         },
-      },
-    });
+      ];
+      return this.annotate({    // $FlowFixMe
+        content,
+        inSize,
+        glyphs: {
+          encompass: {    // $FlowFixMe
+            symbol,
+            space,    // $FlowFixMe
+            annotations,
+          },
+        },
+      });
+    } catch (e) {
+      throw new Error(`FigureOne Equation BottomStrike Error: ${e.message}`);
+    }
   }
 }
