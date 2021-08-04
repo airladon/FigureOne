@@ -1684,12 +1684,12 @@ export class Equation extends FigureElementCollection {
         // $FlowFixMe
         formContent = [this.eqn.functions.contentToElement(form)];
       } catch (e) {
-        throw new Error(`\n\nFigureOne error adding form '${name}' in equation '${this.getPath()}'\n\nError: '${e.message}'\n\nForm definition: ${JSON.stringify(form)}\n\n`);
+        throw new Error(`\n\nFigureOne error adding form '${name}' in equation '${this.getPath()}'\n\nError: '${e.message}'\n\nForm definition: ${JSON.stringify(form, null, 2)}\n\n`);
       }
       try {
         this.addForm(name, formContent);
       } catch (e) {
-        throw new Error(`\n\nFigureOne error adding form '${name}' in equation '${this.getPath()}'\n\nError: '${e.message}'\n\nForm definition: ${JSON.stringify(form)}\n\n`);
+        throw new Error(`\n\nFigureOne error adding form '${name}' in equation '${this.getPath()}'\n\nError: '${e.message}'\n\nForm definition: ${JSON.stringify(form, null, 2)}\n\n`);
       }
     };
     const addFormFullObject = (name: string, form: TypeEquationForm) => {
@@ -1698,7 +1698,7 @@ export class Equation extends FigureElementCollection {
         // $FlowFixMe
         formContent = [this.eqn.functions.contentToElement(form.content)];
       } catch (e) {
-        throw new Error(`\n\nFigureOne error adding form '${name}' in equation '${this.getPath()}'\n\nError: '${e.message}'\n\nForm definition: ${JSON.stringify(form)}\n\n`);
+        throw new Error(`\n\nFigureOne error adding form '${name}' in equation '${this.getPath()}'\n\nError: '${e.message}'\n\nForm definition: ${JSON.stringify(form, null, 2)}\n\n`);
       }
       const {   // $FlowFixMe
         elementMods, duration, alignment, scale, // $FlowFixMe
@@ -1721,7 +1721,7 @@ export class Equation extends FigureElementCollection {
       // $FlowFixMe
         this.addForm(name, formContent, options);
       } catch (e) {
-        throw new Error(`\n\nFigureOne error adding form '${name}' in equation '${this.getPath()}'\n\nError: '${e.message}'\n\nForm definition: ${JSON.stringify(form)}\n\n`);
+        throw new Error(`\n\nFigureOne error adding form '${name}' in equation '${this.getPath()}'\n\nError: '${e.message}'\n\nForm definition: ${JSON.stringify(form, null, 2)}\n\n`);
       }
     };
 
