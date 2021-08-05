@@ -1827,10 +1827,12 @@ export class Equation extends FigureElementCollection {
     const elements = this.getChildren().map(e => e.name);
     // const phrases = Object.keys(this.eqn.functions.phraseElements);
     const forms = Object.keys(this.eqn.forms);
-    forms.forEach((form) => { // $FlowFixMe
+    // forms.forEach((form) => { // $FlowFixMe
+    for (let j = 0; j < forms.length; j += 1) {
+      const form = forms[j]; // $FlowFixMe
       const elems = this.getFormElements(form).map(e => e.name);
       for (let i = 0; i < elems.length; i += 1) {
-        name = elems[i];
+        const name = elems[i];
         const index = elements.indexOf(name);
         if (index > -1) {
           elements.splice(index, 1);
@@ -1839,7 +1841,7 @@ export class Equation extends FigureElementCollection {
           return [];
         }
       }
-    });
+    }
     return elements;
     // phrases.forEach((phrase) => {
     //   const elems = this.getPhraseElements(phrase).map(e => e.name);

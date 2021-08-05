@@ -537,8 +537,8 @@ export default class SlideNavigator {
     duration: number,
     animate: "move" | "dissolve" | "moveFrom" | "pulse" | "dissolveInThenMove",
   };
-  disableButtonOpacity: number;
 
+  disableButtonOpacity: number;
   fromAutoSlide: boolean;
 
   /**
