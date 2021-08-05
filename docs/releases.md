@@ -93,3 +93,7 @@ API cleanup
 
 ## 0.10.3
 * Add verbose error reporting for equation functions and forms
+
+## 0.10.4
+* Add `disableOpacity` setting to SlideNavigator to control opacity of previous button when disabled
+* Texture placeholder while loading is now clear
