@@ -192,7 +192,7 @@ export type OBJ_Figure = {
  * <body>
  *     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
  *     </div>
- *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.10.4/figureone.min.js'></script>
+ *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.10.5/figureone.min.js'></script>
  *     <script type="text/javascript" src='./index.js'></script>
  * </body>
  * </html>
@@ -786,7 +786,7 @@ class Figure {
         this.fnMap.exec(this.setStateCallback);
       }
       this.animateNextFrame();
-      this.notifications.publish('setState');
+      this.notifications.publish('setState', this.timeKeeper.now() / 1000 - this.stateTime);
     };
 
     let options = {
@@ -2037,6 +2037,10 @@ class Figure {
     if (nowIn === -1) {
       now = this.lastDrawTime;
     }
+
+    // const t = performance.now();
+    // console.log(t - this.lastTime)
+    // this.lastTime = t;
 
     this.lastDrawTime = now;
 
