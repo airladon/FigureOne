@@ -786,7 +786,7 @@ class Figure {
         this.fnMap.exec(this.setStateCallback);
       }
       this.animateNextFrame();
-      this.notifications.publish('setState');
+      this.notifications.publish('setState', this.timeKeeper.now() / 1000 - this.stateTime);
     };
 
     let options = {
@@ -2037,6 +2037,10 @@ class Figure {
     if (nowIn === -1) {
       now = this.lastDrawTime;
     }
+
+    // const t = performance.now();
+    // console.log(t - this.lastTime)
+    // this.lastTime = t;
 
     this.lastDrawTime = now;
 
