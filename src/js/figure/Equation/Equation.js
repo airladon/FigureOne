@@ -1985,7 +1985,7 @@ export class Equation extends FigureElementCollection {
 
     optionsToUse.alignment.fixTo = this.checkFixTo(optionsToUse.alignment.fixTo);
     form.content = content;
-    form.arrange(
+    form.lazyArrange(
       optionsToUse.scale,
       optionsToUse.alignment.xAlign,
       optionsToUse.alignment.yAlign,
