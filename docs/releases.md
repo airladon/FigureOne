@@ -102,3 +102,7 @@ API cleanup
 * Include collections.rectangle width and height in state capture during recording
 * Include state time in figure setState notification
 * Add custom font measurement scaling for Open Sans font
+
+## 0.10.6
+* Equation forms to be arranged at use instead of initially (lazy arrangement) - speeding up initial load time
+* Bug fix: when using multiple `in` and `out` animation steps in slide transitions, the automatic showing/hiding of elements was sometimes not working in the correct order.
