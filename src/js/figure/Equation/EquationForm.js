@@ -291,7 +291,7 @@ export default class EquationForm extends Elements {
     this.collectionMethods.hideAll();
     this.collectionMethods.show();
 
-     this.positionsSet = true;
+    this.positionsSet = true;
     super.calcSize(new Point(0, 0), scale);
     this.setPositions();
 
