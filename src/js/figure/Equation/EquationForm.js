@@ -174,7 +174,9 @@ export default class EquationForm extends Elements {
 
   setPositions() {
     if (!this.positionsSet) {
-      this.arrange(this.arranged.scale, this.arranged.xAlign, this.arranged.yAlign, this.arranged.fixTo);
+      this.arrange(
+        this.arranged.scale, this.arranged.xAlign, this.arranged.yAlign, this.arranged.fixTo,
+      );
     }
     super.setPositions();
   }
@@ -289,7 +291,7 @@ export default class EquationForm extends Elements {
     this.collectionMethods.hideAll();
     this.collectionMethods.show();
 
-    this.positionsSet = true;
+     this.positionsSet = true;
     super.calcSize(new Point(0, 0), scale);
     this.setPositions();
 
@@ -368,7 +370,7 @@ export default class EquationForm extends Elements {
       xAlign,
       yAlign,
       fixTo,
-    }
+    };
     this.positionsSet = false;
   }
 
