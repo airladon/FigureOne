@@ -655,7 +655,7 @@ export type EQN_FormDefaults = {
   translation?: EQN_TranslationStyle,
   onShow?: null | string | (() => void),
   onTransition?: null | string | (() => void),
-  lazyLayout?: boolean, 
+  lazyLayout?: boolean,
 }
 
 /**

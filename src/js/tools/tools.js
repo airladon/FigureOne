@@ -723,6 +723,10 @@ function objectToPaths(
     return pathObj;
   }
   if (Array.isArray(obj)) {
+    // if (obj.length === 0) {
+    //   pathObj[`${path}`] = [];
+    //   return pathObj;
+    // }
     obj.forEach((o, index) => {
       objectToPaths(o, `${path}[${index}]`, pathObj, precision);
     });
