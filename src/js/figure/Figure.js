@@ -1637,6 +1637,9 @@ class Figure {
   // happens, the default behavior is to let any elements being moved to move
   // freely until they decelerate to 0.
   touchUpHandler(autoEvent: boolean = false) {
+    if (this.isTouchDown === false) {
+      return;
+    }
     if (this.recorder.state === 'recording' && !autoEvent) {
       this.recorder.recordEvent('touch', ['up']);
       if (this.cursorShown) {
