@@ -707,9 +707,10 @@ export default class SlideNavigator {
     }
     let lastTime = 0;
     this.slides.forEach((slide, index) => {
+      console.log(index)
       const { time, delta, execDelta } = slide;
-      if (time != null) {
-        const t = this.convertTime(time);
+      if (time != null || index === 0) {
+        const t = this.convertTime(time || 0);
         this.collection.recorder.events._autoSlide.list.push([t, [index], 0]);
         lastTime = t;
       } else if (delta != null) {
