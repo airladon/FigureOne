@@ -124,6 +124,7 @@ export default class EquationForm extends Elements {
   // animation: {
   duration: ?number;
   translation: TypeElementTranslationOptions;
+  positionsSet: boolean;
   // };
 
   fromForm: {
@@ -159,6 +160,7 @@ export default class EquationForm extends Elements {
     // this.translation = {};
     // this.animation = {};
     this.fromForm = {};
+    this.positionsSet = false;
     // this.subForm = '';
   }
 
@@ -168,6 +170,15 @@ export default class EquationForm extends Elements {
       namedElements[element.name] = element;
     });
     return namedElements;
+  }
+
+  setPositions() {
+    if (!this.positionsSet) {
+      this.arrange(
+        this.arranged.scale, this.arranged.xAlign, this.arranged.yAlign, this.arranged.fixTo,
+      );
+    }
+    super.setPositions();
   }
 
   _dup(
@@ -280,6 +291,7 @@ export default class EquationForm extends Elements {
     this.collectionMethods.hideAll();
     this.collectionMethods.show();
 
+    this.positionsSet = true;
     super.calcSize(new Point(0, 0), scale);
     this.setPositions();
 
@@ -345,6 +357,21 @@ export default class EquationForm extends Elements {
     }
 
     this.collectionMethods.showOnly(elementsCurrentlyShowing);
+  }
+
+  lazyArrange(
+    scale: number = 1,
+    xAlign: TypeHAlign | null = 'left',
+    yAlign: TypeVAlign | null = 'baseline',
+    fixTo: FigureElementPrimitive | FigureElementCollection | Point = new Point(0, 0),
+  ) {
+    this.arranged = {
+      scale,
+      xAlign,
+      yAlign,
+      fixTo,
+    };
+    this.positionsSet = false;
   }
 
   // eslint-disable-next-line class-methods-use-this

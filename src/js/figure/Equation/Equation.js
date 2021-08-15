@@ -655,6 +655,7 @@ export type EQN_FormDefaults = {
   translation?: EQN_TranslationStyle,
   onShow?: null | string | (() => void),
   onTransition?: null | string | (() => void),
+  lazyLayout?: boolean,
 }
 
 /**
@@ -980,6 +981,7 @@ export class Equation extends FigureElementCollection {
       translation?: EQN_TranslationStyle,
       onShow?: null | string | (() => void),
       onTransition?: null | string | (() => void),
+      lazyLayout?: boolean,
     };
 
     isAnimating: boolean;
@@ -1053,6 +1055,7 @@ export class Equation extends FigureElementCollection {
           yAlign: 'baseline',
         },
         elementMods: {},
+        lazyLayout: false,
       },
       elements: {},
       forms: {},
@@ -1134,6 +1137,7 @@ export class Equation extends FigureElementCollection {
         // animation: optionsToUse.formDefaults.animation,
         duration: optionsToUse.formDefaults.duration,
         translation: optionsToUse.formDefaults.translation,
+        lazyLayout: optionsToUse.formDefaults.lazyLayout,
       },
       functions: new EquationFunctions(
         this.elements,
@@ -1910,6 +1914,7 @@ export class Equation extends FigureElementCollection {
       fromForm: {},
       onShow: null,
       onTransition: null,
+      lazyArrange: false,
     }, this.eqn.formDefaults);
     let optionsToUse = defaultOptions;
     if (options) {
@@ -1985,12 +1990,21 @@ export class Equation extends FigureElementCollection {
 
     optionsToUse.alignment.fixTo = this.checkFixTo(optionsToUse.alignment.fixTo);
     form.content = content;
-    form.arrange(
-      optionsToUse.scale,
-      optionsToUse.alignment.xAlign,
-      optionsToUse.alignment.yAlign,
-      optionsToUse.alignment.fixTo,
-    );
+    if (optionsToUse.lazyLayout) {
+      form.lazyArrange(
+        optionsToUse.scale,
+        optionsToUse.alignment.xAlign,
+        optionsToUse.alignment.yAlign,
+        optionsToUse.alignment.fixTo,
+      );
+    } else {
+      form.arrange(
+        optionsToUse.scale,
+        optionsToUse.alignment.xAlign,
+        optionsToUse.alignment.yAlign,
+        optionsToUse.alignment.fixTo,
+      );
+    }
 
     // // make the first form added also equal to the base form as always
     // // need a base form for some functions

@@ -192,7 +192,7 @@ export type OBJ_Figure = {
  * <body>
  *     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
  *     </div>
- *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.10.5/figureone.min.js'></script>
+ *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.10.6/figureone.min.js'></script>
  *     <script type="text/javascript" src='./index.js'></script>
  * </body>
  * </html>
@@ -1637,6 +1637,9 @@ class Figure {
   // happens, the default behavior is to let any elements being moved to move
   // freely until they decelerate to 0.
   touchUpHandler(autoEvent: boolean = false) {
+    if (this.isTouchDown === false) {
+      return;
+    }
     if (this.recorder.state === 'recording' && !autoEvent) {
       this.recorder.recordEvent('touch', ['up']);
       if (this.cursorShown) {

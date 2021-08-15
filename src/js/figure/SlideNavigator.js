@@ -96,6 +96,32 @@ export type TypeSlideTransitionCallback = string | ((() => void, number, TypeSli
  * - `trigger`: {@link OBJ_TriggerAnimationStep}
  * - `goToForm`: {@link OBJ_TriggerAnimationStep}
  *
+ *
+ * Several animation steps will automatically set their final targets just
+ * before `steadyStateCommon` is set. This means, if the slide is navigated to
+ * from a slide that doesn't trigger the transition, then these targets will
+ * still be set. In many cases, this reduces doubling up desired steady state
+ * targets when defining a slide. However, if the target should not be
+ * automatically set, then use `final: false` in the animation steps's options
+ * to disable this behavor. The animations that automatically set targets are:
+ *
+ * - `in`
+ * - `out`
+ * - `scenario`
+ * - `dim`
+ * - `undim`
+ * - `rotation`
+ * - `position`
+ * - `scale`
+ *
+ *
+ * If a transition definition contains `in` or `out` animation steps, then
+ * before the transition starts, the elements that will dissolve in are
+ * automatically hidden, and the elements that will dissolve out are
+ * automatically shown. If this behavior is not wanted, then for `out` steps
+ * use `show: false` in the animation step definition, and for `in` steps use
+ * `show: true`.
+ *
  */
 export type OBJ_AnimationDefinition = Object;
 
@@ -958,7 +984,9 @@ export default class SlideNavigator {
     if (!Array.isArray(stepsIn)) {
       stepsIn = [stepsIn];
     }
-    stepsIn.forEach((serialStep) => {
+    for (let i = stepsIn.length - 1; i >= 0; i -= 1) {
+      // stepsIn.forEach((serialStep) => {
+      const serialStep = stepsIn[i];
       let steps;
       if (!Array.isArray(serialStep)) {
         steps = [serialStep];
@@ -983,7 +1011,7 @@ export default class SlideNavigator {
           }
         }
       });
-    });
+    }
   }
 
   autoTransition(stepsIn: Array<Array<Object>> | Array<Object>) {

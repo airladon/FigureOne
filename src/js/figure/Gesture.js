@@ -42,16 +42,24 @@ class Gesture {
     };
 
     this.addEvent('mousedown', this.binds.mouseDownHandler, false);
-    this.addEvent('mouseup', this.binds.mouseUpHandler, false);
+    this.addWindowEvent('mouseup', this.binds.mouseUpHandler, false);
     this.addEvent('mousemove', this.binds.mouseMoveHandler, false);
     this.addEvent('touchstart', this.binds.touchStartHandler, false);
-    this.addEvent('touchend', this.binds.touchEndHandler, false);
+    this.addWindowEvent('touchend', this.binds.touchEndHandler, false);
     this.addEvent('touchmove', this.binds.touchMoveHandler, false);
     this.enable = true;
   }
 
   addEvent(event: string, method: Object, flag: boolean) {
     this.figure.gestureCanvas.addEventListener(
+      event,
+      method.bind(this),
+      flag,
+    );
+  }
+
+  addWindowEvent(event: string, method: Object, flag: boolean) {
+    window.addEventListener(
       event,
       method.bind(this),
       flag,

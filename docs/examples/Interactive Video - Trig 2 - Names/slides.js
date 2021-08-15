@@ -511,9 +511,10 @@ function makeSlides() {
     time: '3:39',
     scenario: ['eqnCenterLeft'],
     show: { circ: ['thetaCompCot', 'cotTheta'] },
-    fromForm: { eqn2: 'tanComp' },
+    fromForm: { eqn2: 'cot' },
     transition: [
-      { out: 'eqn2' },
+      // { out: 'eqn2' },
+      { delay: 0.5 },
       [
         { in: 'circ.cscTheta.line' },
         { pulseWidth: 'circ.cscTheta', line: 6, delay: 0.2 },
@@ -583,7 +584,7 @@ function makeSlides() {
     transition: [
       [
         { out: { circ: ['x', 'y', 'arc', 'cscTheta', 'cotTheta', 'unitOpp', 'theta', 'rightUnit', 'point', 'tri'] } },
-        { out: 'eqn' },
+        // { out: 'eqn' },
       ],
       { in: 'trig' },
       { delay: 2 },
