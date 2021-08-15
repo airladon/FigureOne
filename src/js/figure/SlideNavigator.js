@@ -707,7 +707,6 @@ export default class SlideNavigator {
     }
     let lastTime = 0;
     this.slides.forEach((slide, index) => {
-      console.log(index)
       const { time, delta, execDelta } = slide;
       if (time != null || index === 0) {
         const t = this.convertTime(time || 0);
