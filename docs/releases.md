@@ -107,3 +107,6 @@ API cleanup
 * Added lazylayout to equation forms which delays their layout till they are first shown. Using lazyLayout will shorten initial load time when many equation forms are being used, but will increase the size of video-track files when recording (the increase can be reduced by using `addReference` properties in slides where significant equation change happens).
 * Bug fix: when using multiple `in` and `out` animation steps in slide transitions, the automatic showing/hiding of elements was sometimes not working in the correct order.
 * Bug fix: mouse and touch up events are now tied to the window instead of the canvas preventing sticky touch down when a touch up happens outside of canvas.
+
+## 0.10.7
+* Bug fix: When seeking backwards through a recording, the slide navigator doesn't go to the first slide unless the time is 0.
