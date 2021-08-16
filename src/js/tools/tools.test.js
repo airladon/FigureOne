@@ -1414,9 +1414,17 @@ describe('ObjectTracker', () => {
       const s = 'This is |a|| test| for this';
       const [split, firstToken] = tools.splitString(s, '|');
       expect(split).toEqual([
-        'This is ', 'a', ' test', ' for this',
+        'This is ', 'a', '', ' test', ' for this',
       ]);
       expect(firstToken).toEqual(1);
+    });
+    test('Side by side Start', () => {
+      const s = '|This ||is ||a|| test| for this';
+      const [split, firstToken] = tools.splitString(s, '|');
+      expect(split).toEqual([
+        'This ', '', 'is ', '', 'a', '', ' test', ' for this',
+      ]);
+      expect(firstToken).toEqual(0);
     });
     test('Escape escape', () => {
       const s = 'This is //|a test| for this';

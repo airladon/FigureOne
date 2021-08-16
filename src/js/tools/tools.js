@@ -1363,7 +1363,7 @@ function splitString(str: string, token: string = '|', escape: string = '') {
     if (tokenStringIndex === token.length) {
       if (!escaped) {
         const newSplitString = currentSplit.slice(0, -token.length).join('');
-        if (newSplitString.length > 0) {
+        if (newSplitString.length > 0 || split.length > 0) {
           split.push(newSplitString);
         }
         if (newSplitString.length === 0 && firstToken === -1) {
