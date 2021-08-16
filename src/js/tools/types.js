@@ -80,6 +80,12 @@ export type OBJ_Font = {
   weight?: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
   color?: TypeColor | null,
   opacity?: number,
+  width?: number,
+  descent?: number,
+  maxDescent?: number,
+  midDescent?: number,
+  maxAscent?: number,
+  midAscent?: number,
 };
 
 export type OBJ_Font_Fixed = {
@@ -89,6 +95,12 @@ export type OBJ_Font_Fixed = {
   weight: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
   color: TypeColor | null,
   opacity: number,
+  width: number,
+  descent: number,
+  maxDescent: number,
+  midDescent: number,
+  maxAscent: number,
+  midAscent: number,
 };
 
 const doNothing = 1;
