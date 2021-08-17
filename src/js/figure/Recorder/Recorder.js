@@ -447,6 +447,17 @@ class Recorder {
     this.audio.oncanplaythrough = () => {
       this.notifications.publish('audioLoaded');
     };
+    this.audio.addEventListener('pause', () => {
+      console.log('pause')
+      if (this.state === 'playing') {
+        this.pausePlayback();
+      }
+    });
+    this.audio.addEventListener('play', () => {
+      if (this.state === 'idle') {
+        this.resumePlayback();
+      }
+    });
   }
 
   loadEvents(
@@ -1344,7 +1355,7 @@ ${cursorData}
       for (let i = firstIndex; i <= lastIndex; i += 1) {
         const [eventTime, , timeCount] = event.list[i];
         if (
-          (this.stateIndex === -1 || eventTime < stateTime)
+          (this.stateIndex === -1 || eventTime <= stateTime)
           && (eventName === 'slide' || eventName === '_autoSlide')
           // || (eventTime === stateTime && timeCount <= stateTimeCount)
         ) {
@@ -1833,10 +1844,10 @@ ${cursorData}
     };
     this.stopTimeouts();
     if (this.audio) {
+      this.state = 'preparingToPause';
       this.audio.pause();
       this.isAudioPlaying = false;
     }
-
     this.figure.notifications.add('stopped', pause, 1);
     this.figure.stop(how);
     if (this.figure.state.preparingToStop) {
