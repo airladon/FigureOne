@@ -448,7 +448,6 @@ class Recorder {
       this.notifications.publish('audioLoaded');
     };
     this.audio.addEventListener('pause', () => {
-      console.log('pause')
       if (this.state === 'playing') {
         this.pausePlayback();
       }
