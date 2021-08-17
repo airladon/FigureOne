@@ -168,6 +168,8 @@ export type TypeEquationPhrase =
  * ascent and descent to either match width, height or fully contain the content (`null`)
  * @property {number} [scale] - (`1`)
  * @property {boolean} [fullContentBounds] - (`false`)
+ * @property {boolean} [showContent] - if `false`, a container will be created
+ * around the content, but the content will not be shown (`true`)
  *
  * @see To test examples, append them to the
  * <a href="#equation-boilerplate">boilerplate</a>
@@ -231,6 +233,7 @@ export type EQN_Container = {
   fit?: 'width' | 'height' | 'contain',
   scale?: number,
   fullContentBounds?: boolean,
+  showContent?: boolean,
 } | [
   TypeEquationPhrase,
   ?number,
@@ -241,6 +244,7 @@ export type EQN_Container = {
   ?'bottom' | 'middle' | 'top' | 'baseline' | number,
   ?'width' | 'height' | 'contain',
   ?number,
+  ?boolean,
   ?boolean,
 ];
 
@@ -3313,6 +3317,7 @@ export class EquationFunctions {
       let yAlign; // bottom, baseline, middle, top, multiplier (to bottom)
       let inSize;
       let fullContentBounds;
+      let showContent;
 
       const defaultOptions = {
         scaleModifier: 1,
@@ -3324,16 +3329,17 @@ export class EquationFunctions {
         yAlign: 'baseline',
         inSize: true,
         fullContentBounds: false,
+        showContent: true,
       };
       if (Array.isArray(options)) {
         [
           content, width, inSize, descent, ascent, xAlign, yAlign, fit, scale,
-          fullContentBounds,
+          fullContentBounds, showContent,
         ] = options;
       } else {
         ({
           content, width, inSize, descent, ascent, xAlign, yAlign, fit, scale,
-          fullContentBounds,
+          fullContentBounds, showContent,
         } = options);
       }
       const optionsIn = {
@@ -3352,6 +3358,7 @@ export class EquationFunctions {
         [this.contentToElement(content)],
         [],
         o,
+        showContent == null ? true : showContent,
       );
     } catch (e) {
       throw new Error(`FigureOne Equation Container Error: ${e.message}`);
