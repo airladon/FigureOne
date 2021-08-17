@@ -49,6 +49,36 @@ export type OBJ_CurvedCorner = {
  *
  * `size` is the draw space size of the font.
  *
+ * Width, descent and ascent of text is estimated, and there are times, 
+ * especially with non-standard fonts, that these estimates need ajustment.
+ *
+ * Most browsers only support a width measurement of text, and while this is
+ * often good enough, there are times when it is not accurate (some fonts are
+ * not accurate, sometimes the width of italics is inaccurate, width of
+ * narrower letters is reported as thicker letters). Therefore, use the `width`
+ * property to include a scaling factor that can reduce these errors in cases
+ * where they arise.
+ *
+ * Many browsers don't yet support measurement of heights of text, and so
+ * ascents and descents are calculated from measuring the width of an 'a'
+ * character and then using scaling factors.
+ *
+ * `maxAscent` is the scaling factor for letters that rise above an 'a', like
+ * capital letters, lower case letters like 'd' and 'l', and punctuation like
+ * '|', brackets and apostrophes. Note, some fonts have slightly different
+ * heights for these different letters, but it is generally pretty close.
+ *
+ * `midAscent` is for lower case letters like 'a', 'g', 'p'.
+ *
+ * `descent` is for letters that generally do not go much below the baseline
+ * like 'a', 'A', 't'.
+ *
+ * `midDescent` is for punctuation that drops below the baseline a bit like
+ * commas.
+ *
+ * `maxDescent` is for letters and punctuation that drops the furthest below
+ * the baseline like 'g', '|', and brackets.
+ *
  * @property {string} [family] The font family (`Times New Roman`)
  * @property {`normal` | `italic`} [style] (`normal`)
  * @property {number} [size] size of font in draw space (`0.2`)
@@ -58,6 +88,13 @@ export type OBJ_CurvedCorner = {
  * [red, green, blue, alpha] between 0 and 1 - (`[1, 0, 0, 1]`)
  * @property {number} [opacity] opacity multiplier (final opacity will be
  * `opacity` * `color` alpha) [`1`]
+ * @property {number} [width] width multiplier for text when measured with
+ * canvas2D.context.measureText (`1`)
+ * @property {number} [descent] (`0.8`)
+ * @property {number} [maxDescent] (`0.2`)
+ * @property {number} [midDescent] (`0.5`)
+ * @property {number} [maxAscent] (`0.95`)
+ * @property {number} [midAscent] (`1.4`)
  * @example
  * // Full font definition
  * const font = new FigureFont({
