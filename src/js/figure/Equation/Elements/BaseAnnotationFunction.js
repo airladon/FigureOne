@@ -236,6 +236,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
   location: Point;
   height: number;
   scale: number;
+  showContent: boolean;
   fullSize: {
     leftOffset: number,
     width: number,
@@ -256,12 +257,14 @@ export default class BaseAnnotationFunction implements ElementInterface {
     annotations: Array<EQN_Annotation>,
     glyphs: EQN_Glyphs,
     options: Object,
+    showContent: boolean = true,
   ) {
     this.glyphs = glyphs;
     this.content = content;
     this.annotations = annotations;
     this.options = options;
     this.fnMap = new FunctionMap();
+    this.showContent = showContent;
   }
 
   _dup(namedCollection?: Object) {
@@ -278,9 +281,12 @@ export default class BaseAnnotationFunction implements ElementInterface {
     return copy;
   }
 
-  getAllElements() {
+  getAllElements(includeHidden: boolean = true) {
+    if (!includeHidden && !this.showContent) {
+      return [];
+    }
     return [
-      ...this.content.getAllElements(),
+      ...this.content.getAllElements(includeHidden),
       ...getAllElementsFromAnnotations(this.annotations),
       ...getAllElementsFromGlyphs(this.glyphs),
     ];

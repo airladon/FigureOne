@@ -333,7 +333,7 @@ function addSlides() {
     },
     text: [
       'To help compare, we can plot the disturbance of the |first particle|',
-      'over time to see both mediums are being |disturbed| in the same way.',
+      'over time to see both mediums are being disturbed in the same way.',
     ],
     steadyStateCommon: () => {
       layout.startDisturbances([medium1, medium2], 5.5, false);

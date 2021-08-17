@@ -1395,6 +1395,7 @@ export class Equation extends FigureElementCollection {
       weight?: 'normal' | 'bold' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
       size?: number,
       family?: string,
+      width?: number,
       color?: TypeColor,
       touchBorder?: TypeParsableBuffer | Array<Point>,
       onClick?: () => void | 'string' | null,
@@ -1421,6 +1422,7 @@ export class Equation extends FigureElementCollection {
           family: options.family,
           size: options.size,
           color: options.color,
+          width: options.width,
         },
         options.font,
       );
@@ -1791,11 +1793,11 @@ export class Equation extends FigureElementCollection {
    * @param {string} form
    * @return {Array<FigureElement>}
    */
-  getFormElements(form: string) {
+  getFormElements(form: string, includeHidden: boolean = false) {
     if (this.eqn.forms[form] == null) {
       return [];
     }
-    return this.eqn.forms[form].content[0].getAllElements();
+    return this.eqn.forms[form].content[0].getAllElements(includeHidden);
   }
 
   /**

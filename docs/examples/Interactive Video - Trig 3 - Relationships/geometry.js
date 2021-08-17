@@ -306,19 +306,19 @@ function layoutCirc() {
               theta: {
                 text: '\u03b8',
                 font: {
-                  style: 'italic', family: 'Time New Roman', size: size * 1.2,
+                  style: 'italic', family: 'Times New Roman', size: size * 1.2,
                 },
               },
               _90: {
                 text: '90\u00b0',
                 font: {
-                  family: 'Time New Roman', size: size * 1.2,
+                  family: 'Times New Roman', size: size * 1.2,
                 },
               },
               min: {
                 text: '\u2212',
                 font: {
-                  family: 'Time New Roman', size: size * 1.2,
+                  family: 'Times New Roman', size: size * 1.2,
                 },
               },
             },

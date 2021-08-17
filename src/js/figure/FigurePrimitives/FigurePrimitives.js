@@ -2033,6 +2033,8 @@ export type OBJ_TextModifiersDefinition = {
  * in transform
  * @property {TypeParsableTransform} [transform]
  * (`Transform('text').standard()`)
+ * @property {OBJ_Font} [defaultAccent] default font for text modifiers that
+ * are not defined.
  *
  * @see To test examples, append them to the
  * <a href="#text-boilerplate">boilerplate</a>
@@ -2108,13 +2110,14 @@ export type OBJ_TextLines = {
   defaultTextTouchBorder?: TypeParsableBuffer,
   justify?: 'left' | 'center' | 'right',
   lineSpace?: number,
-  xAlign: 'left' | 'right' | 'center',
-  yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
-  color: TypeColor,
+  xAlign?: 'left' | 'right' | 'center',
+  yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
+  color?: TypeColor,
   border?: TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number,
   touchBorder?: TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw',
-  position: TypeParsablePoint,
-  transform: TypeParsableTransform,
+  position?: TypeParsablePoint,
+  transform?: TypeParsableTransform,
+  defaultAccent?: OBJ_Font,
 };
 
 // export type TypeGridOptions = {
