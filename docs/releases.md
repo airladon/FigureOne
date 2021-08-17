@@ -110,3 +110,8 @@ API cleanup
 
 ## 0.10.7
 * Bug fix: When seeking backwards through a recording, the slide navigator doesn't go to the first slide unless the time is 0.
+
+## 0.10.8
+* Add defaultAccent to lines
+* Add customizable font metrics (need to check docs)
+* Add showContent flag to equation container to create containers around elements without showing the elements
