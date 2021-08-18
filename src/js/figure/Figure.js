@@ -1643,7 +1643,10 @@ class Figure {
     // If the recorder is playing and there is a touchup even outside of the
     // figure, then unless this check is here, then if the cursor is down, it
     // will be lifted.
-    if (this.recorder.state === 'playing' || this.recorder.state === 'preparingToPlay' && !autoEvent) {
+    if (
+      (this.recorder.state === 'playing' || this.recorder.state === 'preparingToPlay')
+      && !autoEvent
+    ) {
       return;
     }
     if (this.recorder.state === 'recording' && !autoEvent) {
@@ -1652,6 +1655,7 @@ class Figure {
         this.showCursor('up');
       }
     }
+    console.log('touchUp')
     for (let i = 0; i < this.beingMovedElements.length; i += 1) {
       const element = this.beingMovedElements[i];
       if (element.state.isBeingMoved) {
