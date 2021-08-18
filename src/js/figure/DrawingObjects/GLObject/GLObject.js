@@ -616,6 +616,9 @@ class GLObject extends DrawingObject {
     if (texture) {
       gl.disableVertexAttribArray(locations.a_texcoord);
     }
+    Object.keys(this.buffers).forEach((bufferName) => {
+      gl.disableVertexAttribArray(locations[bufferName]);
+    });
   }
 }
 
