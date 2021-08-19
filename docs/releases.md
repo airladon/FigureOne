@@ -124,3 +124,4 @@ API cleanup
 
 ## 0.10.10
 * Bug Fix: Remove console statement
+* Bug Fix: Recorder playback of non-auto events not working with touchUp
