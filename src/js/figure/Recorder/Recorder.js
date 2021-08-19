@@ -1631,7 +1631,7 @@ ${cursorData}
     this.startPlayback(this.currentTime, true);
   }
 
-  startAudioPlayback(fromTime: number) { //, startCallback: () => void = () => {}) {
+  startAudioPlayback(fromTime: number) {
     const { audio } = this;
     if (audio != null) {
       this.isAudioPlaying = true;
