@@ -1290,7 +1290,7 @@ ${cursorData}
     this.figure.timeKeeper.clearTimeout(this.queueSeekId);
     this.queueSeekId = this.figure.timeKeeper.setTimeout(() => {
       this.seek(this.queueSeekTime);
-      this.queueSeekId = null;
+      // this.queueSeekId = null;
     }, 100);
   }
 
@@ -1300,6 +1300,7 @@ ${cursorData}
    */
   seek(timeIn: number) {
     this.figure.timeKeeper.clearTimeout(this.queueSeekId);
+    this.queueSeekId = null;
     let time = this.convertTime(timeIn);
     if (time < 0) {
       time = 0;
