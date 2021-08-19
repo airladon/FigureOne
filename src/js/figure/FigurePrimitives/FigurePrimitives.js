@@ -2417,7 +2417,7 @@ export default class FigurePrimitives {
       if (options.texture.src !== '') {
         const t = options.texture;
         glObject.addTexture(
-          t.src, t.mapTo, t.mapFrom, t.repeat,
+          t.src, t.mapTo, t.mapFrom, t.repeat, t.onLoad,
         );
       }
     }
