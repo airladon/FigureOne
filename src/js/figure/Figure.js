@@ -1636,7 +1636,7 @@ class Figure {
   // Handle touch up, or mouse click up events in the canvas. When an UP even
   // happens, the default behavior is to let any elements being moved to move
   // freely until they decelerate to 0.
-  touchUpHandler(autoEvent: boolean = false) {
+  touchUpHandler(autoEvent: boolean = false, fromGesture: boolean = false) {
     if (this.isTouchDown === false) {
       return;
     }
@@ -1645,7 +1645,7 @@ class Figure {
     // will be lifted.
     if (
       (this.recorder.state === 'playing' || this.recorder.state === 'preparingToPlay')
-      && !autoEvent
+      && fromGesture
     ) {
       return;
     }
