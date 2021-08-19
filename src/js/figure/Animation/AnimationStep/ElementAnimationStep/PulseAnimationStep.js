@@ -201,6 +201,7 @@ export default class PulseAnimationStep extends ElementAnimationStep {
       'frequency',
       'stopAfterDuration',
       'toStart',
+      'pulse',
     ];
   }
 

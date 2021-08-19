@@ -125,3 +125,8 @@ API cleanup
 ## 0.10.10
 * Bug Fix: Remove console statement
 * Bug Fix: Recorder playback of non-auto events not working with touchUp
+
+## 0.10.11
+* Start playing video after audio starts instead of before
+* Add two notifications `startingPlayback` and `startingPause` for players to switch state before recorder processing completes
+* Bug Fix: Pulse settings was missing from recorder seek state in PulseAnimationStep

@@ -191,6 +191,7 @@ class GLObject extends DrawingObject {
     mapTo: Rect = new Rect(-1, -1, 2, 2),
     mapFrom: Rect = new Rect(0, 0, 1, 1),
     repeat: boolean = false,
+    onLoad?: null | () => void = null,
   ) {
     if (this.texture == null) {
       this.texture = {
@@ -204,6 +205,9 @@ class GLObject extends DrawingObject {
         type: 'image',
         data: null,
       };
+    }
+    if (onLoad != null) {
+      this.onLoad = onLoad;
     }
 
     const { texture, gl, webgl } = this;
