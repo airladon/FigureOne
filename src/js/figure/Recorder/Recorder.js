@@ -1523,6 +1523,7 @@ ${cursorData}
     allowPauseResume: boolean = false,
     events: ?Array<string> = [],
   ) {
+    this.notifications.publish('startingPlayback');
     this.lastSeekTime = null;
     let fromTime = this.convertTime(fromTimeIn);
     if (fromTimeIn == null || fromTimeIn >= this.duration) {
@@ -1874,6 +1875,7 @@ ${cursorData}
    * how any animations currently playing should be stopped
    */
   pausePlayback(how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = this.settings.pause) {
+    this.notifications.publish('startingPause');
     // this.currentTime = this.getCurrentTime();
     this.setCurrentTime(this.getCurrentTime());
     this.pauseState = this.figure.getState({
