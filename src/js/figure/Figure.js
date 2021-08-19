@@ -1655,7 +1655,7 @@ class Figure {
         this.showCursor('up');
       }
     }
-    console.log('touchUp')
+
     for (let i = 0; i < this.beingMovedElements.length; i += 1) {
       const element = this.beingMovedElements[i];
       if (element.state.isBeingMoved) {
