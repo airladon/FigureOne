@@ -1557,8 +1557,8 @@ ${cursorData}
           this.finishPlaying();
         }
         this.notifications.publish('playbackStarted');
-      }
-      
+      };
+
       if (this.audio != null) {
         this.startAudioPlayback(fromTime, start);
       } else {
@@ -1660,7 +1660,8 @@ ${cursorData}
       this.finishPlaying();
     }
   }
-  startAudioPlayback(fromTime: number, callback: () => void = null) {
+
+  startAudioPlayback(fromTime: number, callback: null | (() => void) = null) {
     const { audio } = this;
     if (audio != null) {
       this.isAudioPlaying = true;
@@ -1685,7 +1686,7 @@ ${cursorData}
       //   console.log('start audio 1', performance.now() / 1000, this.audio.currentTime)
       //   audio.removeEventListener('playing', audioStarted.bind(this), false);
       // }
-      
+
       // audio.removeEventListener('play', audioStarted.bind(this), false);
       // audio.addEventListener('play', audioStarted.bind(this), false);
       // audio.removeEventListener('playing', audioStarted.bind(this), false);
