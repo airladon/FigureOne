@@ -9,7 +9,7 @@ class Gesture {
   mouseDown: boolean;
   enable: boolean;
   start: (Point) => boolean;
-  end: void => void;
+  end: (boolean, boolean) => void;
   move: (Point, Point) => boolean;
   free: (Point) => void;
   toggleCursor: () => void;
@@ -85,7 +85,7 @@ class Gesture {
 
   endHandler() {
     this.mouseDown = false;
-    this.end();
+    this.end(false, true);
   }
 
   moveHandler(event: MouseEvent | TouchEvent, point: Point) {
