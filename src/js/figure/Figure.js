@@ -192,7 +192,7 @@ export type OBJ_Figure = {
  * <body>
  *     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
  *     </div>
- *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.10.12/figureone.min.js'></script>
+ *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.10.13/figureone.min.js'></script>
  *     <script type="text/javascript" src='./index.js'></script>
  * </body>
  * </html>
@@ -2264,6 +2264,7 @@ class Figure {
   }
 
   setupDraw(time: number = this.timeKeeper.now() / 1000) {
+    this.notifications.publish('beforeDraw');
     this.elements.setupDraw(time);
     if (!this.focused) {
       this.setDrawTimeout(0.1);
