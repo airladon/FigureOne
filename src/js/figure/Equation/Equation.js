@@ -1287,6 +1287,29 @@ export class Equation extends FigureElementCollection {
     });
   }
 
+  _state(
+    options: {
+      precision?: number,
+      ignoreShown?: boolean,
+      min?: boolean,
+      returnF1Type?: boolean,
+    } = {},
+  ) {
+    let state = super._state(options);
+    state._stateForms = {};
+    Object.keys(this.eqn.forms).forEach((form) => {
+      state._stateForms[form] = this.eqn.forms[form].positionsSet;
+    });
+    return state;
+  }
+
+  stateSet() {
+    super.stateSet();
+    Object.keys(this.eqn.forms).forEach((form) => {
+      this.eqn.forms[form].positionsSet = this._stateForms[form];
+    });
+  }
+
   setFigure(figure: OBJ_FigureForElement) {
     super.setFigure(figure);
     if (this.initialForm != null) {
