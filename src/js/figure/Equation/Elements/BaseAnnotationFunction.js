@@ -211,8 +211,11 @@ function setPositionsForGlyphs(glyphs: EQN_Glyphs) {
     }
     const glyph = glyphs[key];
     const t = glyph.glyph.transform._dup();
-    t.updateScale(glyph.width, glyph.height);
-    t.updateTranslation(glyph.location.x, glyph.location.y);
+    t.updateScale(glyph.width == null ? 1 : glyph.width, glyph.height == null ? 1 : glyph.height);
+    t.updateTranslation(
+      glyph.location == null ? 0 : glyph.location.x,
+      glyph.location == null ? 0 : glyph.location.y,
+    );
     glyph.glyph.setTransform(t);
     setPositionsForAnnotations(glyph.annotations);
   });
@@ -265,6 +268,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     this.options = options;
     this.fnMap = new FunctionMap();
     this.showContent = showContent;
+    this.scale = 1;
   }
 
   _dup(namedCollection?: Object) {
