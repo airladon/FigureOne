@@ -2264,6 +2264,7 @@ class Figure {
   }
 
   setupDraw(time: number = this.timeKeeper.now() / 1000) {
+    this.notifications.publish('beforeDraw');
     this.elements.setupDraw(time);
     if (!this.focused) {
       this.setDrawTimeout(0.1);
