@@ -1295,7 +1295,7 @@ export class Equation extends FigureElementCollection {
       returnF1Type?: boolean,
     } = {},
   ) {
-    let state = super._state(options);
+    const state = super._state(options);
     state._stateForms = {};
     Object.keys(this.eqn.forms).forEach((form) => {
       state._stateForms[form] = this.eqn.forms[form].positionsSet;
@@ -1306,7 +1306,10 @@ export class Equation extends FigureElementCollection {
   stateSet() {
     super.stateSet();
     Object.keys(this.eqn.forms).forEach((form) => {
-      this.eqn.forms[form].positionsSet = this._stateForms[form];
+      // $FlowFixMe
+      if (this._stateForms != null) {  // $FlowFixMe
+        this.eqn.forms[form].positionsSet = this._stateForms[form];
+      }
     });
   }
 

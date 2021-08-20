@@ -79,6 +79,7 @@ class Element implements ElementInterface {
     this.descent = 0;
     this.width = 0;
     this.location = new Point(0, 0);
+    this.scale = 1;
     this.height = 0;
     this.fullSize = {
       leftOffset: 0,
