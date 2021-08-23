@@ -778,6 +778,9 @@ class GLObject extends DrawingObject {
     if (texture) {
       gl.disableVertexAttribArray(locations.a_texcoord);
     }
+    Object.keys(this.attributes).forEach((attributeName) => {
+      gl.disableVertexAttribArray(locations[attributeName]);
+    });
   }
 
   getPointCountForAngle(drawAngle: number = Math.PI * 2) {
