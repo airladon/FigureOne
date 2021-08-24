@@ -99,10 +99,14 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
     test.each(tests)('%s %s',
       async (time, description, deltaTime, action, location, snap) => {
         let d = deltaTime;
-        if (intermitentTime > 0 && deltaTime > intermitentTime) {
-          for (let i = intermitentTime; i <= deltaTime - intermitentTime; i += intermitentTime) {
+        if (intermitentTime > 0 && deltaTime >= intermitentTime) {
+          for (
+            let i = intermitentTime;
+            i <= Math.round((deltaTime - intermitentTime) * 100) / 100;
+            i = Math.round((i + intermitentTime) * 100) / 100
+          ) {
             await frame(intermitentTime);
-            d = Math.round((d - intermitentTime) * 10) / 10;
+            d = Math.round((d - intermitentTime) * 100) / 100;
           }
         }
         if (action !== 'delay') {

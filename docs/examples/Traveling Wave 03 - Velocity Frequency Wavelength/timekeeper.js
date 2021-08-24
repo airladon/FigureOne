@@ -46,7 +46,7 @@ function TimeKeeper() {
     } else if (targetSpeed < timeSpeed) {
       timeSpeed += Math.max(targetSpeed - timeSpeed, -0.05);
     }
-    const timeDelta = delta == null ? (n - lastTime) * timeSpeed : delta;
+    const timeDelta = delta == null ? Math.round((n - lastTime) * timeSpeed * 1000) / 1000 : delta;
     time += timeDelta;
     lastTime = n;
     return timeDelta;
