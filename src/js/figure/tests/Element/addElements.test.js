@@ -5,7 +5,7 @@
 // } from '../Element';
 // import Figure from '../Figure';
 import {
-  Point, Rect, Transform,
+  Point, Transform,
 } from '../../../tools/g2';
 // import {
 //   round,
