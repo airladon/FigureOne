@@ -182,7 +182,11 @@ class Point {
   z: number;
   _type: 'point';
 
-  constructor(xOrArray: Type3Components | Type2Components | number, y: number, z: number = 0) {
+  constructor(
+    xOrArray: Type3Components | Type2Components | number,
+    y: number = 0,
+    z: number = 0,
+  ) {
     this._type = 'point';
     if (Array.isArray(xOrArray)) {
       try {
@@ -318,7 +322,7 @@ class Point {
    * // d = 1.7320508075688772
    *
    */
-  distance(toPointIn: TypeParsablePoint): number {
+  distance(toPointIn: TypeParsablePoint | null = null): number {
     if (toPointIn == null) {
       return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
@@ -593,7 +597,7 @@ class Point {
    * p.isNotEqualTo(q, 2)
    * // false
    */
-  isNotEqualTo(p: Point, precision: number, delta: boolean = false) {
+  isNotEqualTo(p: Point, precision: number = 8, delta: boolean = false) {
     return !this.isEqualTo(p, precision, delta);
   }
 

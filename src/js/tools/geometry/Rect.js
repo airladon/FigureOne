@@ -127,7 +127,7 @@ class Rect {
   intersectsWith(point: TypeParsablePoint) {
     const p = getPoint(point);
     const center = this.center();
-    const centerToP = new Line(center, p);
+    const centerToP = new Line(center, p); // $FlowFixMe
     const centerOut = new Line(
       { p1: center, length: this.width + this.height, angle: centerToP.angle() },
     );

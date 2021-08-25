@@ -43,10 +43,10 @@ function parsePlane(pIn: TypeParsablePlane): Plane {
     ) {
       const [p0, n] = p.state;
       return new Plane(p0, n);
-    } // $FlowFixMe
-    throw new Error(`FigureOne could not parse point from state: ${pIn}`);
-  } // $FlowFixMe
-  throw new Error(`FigureOne could not parse point: ${pIn}`);
+    }
+    throw new Error(`FigureOne could not parse point from state: ${JSON.stringify(pIn)}`);
+  }
+  throw new Error(`FigureOne could not parse point: ${JSON.stringify(pIn)}`);
 }
 
 function isParsablePlane(pIn: any) {
@@ -72,6 +72,13 @@ function getPlane(p: TypeParsablePlane): Plane {
  * Contains methods that makes it convenient to operate on planes,
  * points and lines.
  *
+ * A plane can either be created with:
+ * - a point on the plane and a normal
+ * - 3 points on the plane
+ *
+ * If defined with 3 points P1, P2, and P3, then the normal will be in the
+ * direction of the cross product of vectors P1P2 and P1P3.
+ *
  * @example TODO
  */
 class Plane {
@@ -95,14 +102,14 @@ class Plane {
     normalOrP2: null | TypeParsablePoint = null,
     p3: null | TypeParsablePoint = null,
   ) {
-    if (normalOrP2 == null && p3 == null) {
+    if (normalOrP2 == null && p3 == null) { // $FlowFixMe
       return parsePlane(p1OrDef);
     }
-    if (p3 == null) {
-      this.p = getPoint(p1OrDef);
+    if (p3 == null) { // $FlowFixMe
+      this.p = getPoint(p1OrDef); // $FlowFixMe
       this.n = getPoint(normalOrP2).normalize();
-    } else {
-      this.p = getPoint(p1OrDef);
+    } else { // $FlowFixMe
+      this.p = getPoint(p1OrDef); // $FlowFixMe
       const p2 = getPoint(normalOrP2);
       this.n = p2.sub(this.p).crossProduct(getPoint(p3).sub(this.p)).normalize();
     }
@@ -206,7 +213,7 @@ class Plane {
       yi = (d1 * n2.x - d2 * n1.x) / u.z;
       zi = 0;
     }
-    const p0 = new Point(xi, yi, zi);
+    const p0 = new Point(xi, yi, zi); // $FlowFixMe
     return new Line({
       p1: p0, direction: u, length: 1, ends: 0,
     });
@@ -274,7 +281,7 @@ function getNormal(
   p1OrPoints: TypeParsablePoint | [TypeParsablePoint, TypeParsablePoint, TypeParsablePoint],
   p2: TypeParsablePoint,
   p3: TypeParsablePoint,
-) {
+) { // $FlowFixMe
   let p = getPoints(p1OrPoints);
   if (p.length === 1) {
     p = [p[0], getPoint(p2), getPoint(p3)];
