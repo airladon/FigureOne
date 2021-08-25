@@ -58,6 +58,17 @@ export type OBJ_LightDefined = {
   point: TypeParsablePoint,
 }
 
+/**
+ * The Scene options object defines how the elements within the figure are
+ * viewed.
+ *
+ * For 2D figures (`style: '2D'`), `left`, `right`, `bottom`, and `top` are
+ * required to define the x-y expanse to view. Any elements or portions of
+ * elements outside of this expanse will not be shown (be clipped).
+ *
+ * For 3D figures, a camera, lighting and the near/far clipping planes also
+ * need definition.
+ */
 export type OBJ_Scene = {
   style?: '2D' | 'orthographic' | 'perspective',
   left?: number,
