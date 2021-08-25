@@ -1,6 +1,6 @@
 // @flow
 /* eslint-disable no-use-before-define */
-import { rand2D, range } from './math';
+import { rand2D } from './math';
 import { joinObjects } from './tools';
 import type { TypeParsablePoint } from './geometry/Point';
 import {
@@ -17,7 +17,7 @@ import {
   vectorToVectorToAxisAngle, directionToAxisAngle,
 } from './geometry/Transform';
 import {
-   decelerateValue, decelerateVector,
+  decelerateValue, decelerateVector,
 } from './geometry/deceleration';
 import type { TypeParsableLine } from './geometry/Line';
 import type { TypeParsableRect } from './geometry/Rect';
@@ -40,7 +40,9 @@ import cylinder from './d3/cylinder';
 // import { polygon } from './geometry/polygon';
 import cube from './d3/cube';
 import * as surface from './d3/surface';
-import { pointsToNumbers, numbersToPoints, toNumbers, toPoints } from './geometry/tools';
+import {
+  pointsToNumbers, numbersToPoints, toNumbers, toPoints,
+} from './geometry/tools';
 import { polygon, polygonLine } from './d2/polygon';
 
 

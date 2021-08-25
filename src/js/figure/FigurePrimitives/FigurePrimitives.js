@@ -566,7 +566,7 @@ export default class FigurePrimitives {
     optionsIn: Object,
     getPointsFn: (Object) => [Array<Point>, Array<Point>],
   ) {
-    const options = joinObjects({}, defaultOptions, optionsIn)
+    const options = joinObjects({}, defaultOptions, optionsIn);
     const element = this.generic3(joinObjects(
       {},
       options,

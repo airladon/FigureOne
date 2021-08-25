@@ -1293,54 +1293,6 @@ class Figure {
     plane: TypeParsablePlane = [[0, 0, 0], [0, 0, 1]],
   ) {
     return this.elements.transformPoint(point, fromSpace, toSpace, plane);
-    // const p = getPoint(point);
-    // if (
-    //   this.scene.style === '2D'
-    //   || (fromSpace === 'gl' && toSpace === 'pixel')
-    //   || (
-    //     this.scene.style === 'orthographic'
-    //     && (
-    //       (fromSpace === 'gl' && toSpace === 'figure')
-    //       || (fromSpace === 'figure' && toSpace === 'gl')
-    //       || (fromSpace === 'figure' && toSpace === 'pixel')
-    //     )
-    //   )
-    // ) {
-    //   const m = this.spaceTransformMatrix(fromSpace, toSpace);
-    //   return p.transformBy(m);
-    // }
-
-    // // Moving from pixel space to figure space in 3D requires a plane
-    // // in figure space to cut through
-    // if (fromSpace === 'pixel' && toSpace === 'figure') {
-    //   return this.pixelToPlane(p, plane);
-    // }
-
-    // // Moving from pixel space to gl space in 3D requires a plane
-    // // in gl space to cut through
-    // if (fromSpace === 'pixel' && toSpace === 'gl') {
-    //   return this.pixelToGLPlane(p, plane);
-    // }
-
-    // // If scene.style === 'perspective', then special functions are needed
-    // // to convert between gl and figure space the transform matrix depends on
-    // // the point's z coordinate relative to the camera
-    // if (fromSpace === 'gl' && toSpace === 'figure') {
-    //   return this.scene.glToFigure(p);
-    // }
-
-    // if (fromSpace === 'figure' && toSpace === 'gl') {
-    //   return this.scene.figureToGl(p);
-    // }
-
-    // if (fromSpace === 'figure' && toSpace === 'pixel') {
-    //   const gl = this.scene.figureToGl(p);
-    //   return this.transformPoint(gl, 'gl', 'pixel');
-    // }
-
-    // // If we got here then all combinations of fromSpace and toSpace should
-    // // have been covered, which means at least one string is incorrect
-    // throw new Error(`Figure.transformPoint space definition error -'${fromSpace}', '${toSpace}'`);
   }
 
   // pixelToPlane(

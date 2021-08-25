@@ -3,7 +3,7 @@ const { Figure, tools } = Fig;
 
 const figure = new Figure({
   scene: {
-    left: -4.5, bottom: -4.5, right: 4.5, top: 4.5
+    left: -4.5, bottom: -4.5, right: 4.5, top: 4.5,
   },
   color: [1, 0, 0, 1],
   lineWidth: 0.01,
