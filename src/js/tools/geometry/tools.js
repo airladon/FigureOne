@@ -62,7 +62,7 @@ function toNumbers(
       out.push(...pointsOrNumbers);
     }
     return out;
-  }
+  } // $FlowFixMe
   return pointsToNumbers(pointsOrNumbers, dimension);
 }
 
@@ -73,9 +73,9 @@ function toPoints(
   if (pointsOrNumbers.length === 0) {
     return [];
   }
-  if (typeof pointsOrNumbers[0] !== 'number') {
+  if (typeof pointsOrNumbers[0] !== 'number') { // $FlowFixMe
     return pointsOrNumbers;
-  }
+  } // $FlowFixMe
   return numbersToPoints(pointsOrNumbers, dimension);
 }
 

@@ -1,5 +1,5 @@
 /* globals Fig */
-const { sphere, revolve, polygon, cone, rod, getLathePoints, surface } = Fig.tools.g2;
+const { sphere, revolve, polygon, cone, cylinder, getLathePoints, surface } = Fig.tools.g2;
 const { getTransform } = Fig;
 const { m3 } = Fig.tools;
 const figure = new Fig.Figure({ limits: [-1, -1, 2, 2], backgroundColor: [1, 0.9, 0.9, 1] });
@@ -69,7 +69,7 @@ const fragmentShader = {
 
 
 const addAxis = (name, direction, color, includeArrow = false) => {
-  const [p, n] = rod({ radius: 0.03, sides: 10, line: [[0, 0, 0], direction] });
+  const [p, n] = cylinder({ radius: 0.03, sides: 10, line: [[0, 0, 0], direction] });
   let cn = [];
   let cnNormals = [];
   if (includeArrow) {

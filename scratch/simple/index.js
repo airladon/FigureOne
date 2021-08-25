@@ -166,7 +166,7 @@ const figure = new Fig.Figure();
 //   points: [...spherePoints, ...ringPoints],
 //   normals: [...sphereNormals, ...ringNormals],
 //   color: [1, 0, 0, 1],
-//   transform: ['xyz', 0, 0, 0],
+//   transform: [OBJ_Basis, 0, 0, 0],
 // });
 
 // figure.add({
@@ -222,7 +222,7 @@ const figure = new Fig.Figure();
 // });
 
 // a.animations.new()
-//   .rotation({ velocity: ['xyz', 0.05, 0.1, 0], duration: null })
+//   .rotation({ velocity: [OBJ_Basis, 0.05, 0.1, 0], duration: null })
 //   .start();
 
 // const x = Fig.range(-0.5, 0.5, 0.015);
@@ -251,7 +251,7 @@ const figure = new Fig.Figure();
 //   color: [1, 0, 0, 1],
 //   length: 0.5,
 //   copy: [
-//     { to: [['xyz', 0, Math.PI, 0], ['t', 0.5, 0, 0]], original: false },
+//     { to: [[OBJ_Basis, 0, Math.PI, 0], ['t', 0.5, 0, 0]], original: false },
 //   ],
 // });
 
