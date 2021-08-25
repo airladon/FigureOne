@@ -604,11 +604,11 @@ export default class CollectionsLine extends FigureElementCollection {
     const { move } = optionsToUse;
     delete optionsToUse.move;
     super(optionsToUse);
+    this.collections = collections;
     this.setColor(optionsToUse.color);
 
     // this.shapes = shapes;
     // this.equation = equation;
-    this.collections = collections;
     // this.touchBorder = optionsToUse.touchBorder;
     this.isTouchDevice = isTouchDevice;
     this.dash = optionsToUse.dash;
@@ -618,7 +618,10 @@ export default class CollectionsLine extends FigureElementCollection {
     this.localXPosition = 0;
     this.autoUpdateSubscriptionId = -1;
     this.lastParentRotationOffset = 0;
-
+    this.multiMove = {
+      midLength: 0.333,
+      includeLabelInTouchBoundary: false,
+    };
 
     // this.animateLengthToOptions = {
     //   initialLength: 0,
@@ -653,14 +656,7 @@ export default class CollectionsLine extends FigureElementCollection {
     // MultiMove means the line has a middle section that when touched
     // translates the line collection, and when the rest of the line is
     // touched then the line collection is rotated.
-    this.multiMove = {
-      midLength: 0,
-      includeLabelInTouchBoundary: false,
-      // bounds: new RectBounds({
-      //   left: -1, bottom: -1, top: 1, right: 1
-      // }),
-      // bounds: new Rect(-1, -1, 2, 2),
-    };
+    
 
     this.scaleTransformMethodName = '_transformMethod';
     // If the line is to be shown (and not just a label) then make it
@@ -739,7 +735,7 @@ export default class CollectionsLine extends FigureElementCollection {
       includeLabelInTouchBoundary: false,
     };
     if (move) {
-      const moveOptions = joinObjects({}, defaultMoveOptions, optionsToUse.move);
+      const moveOptions = joinObjects({}, defaultMoveOptions, move);
       this.setMovable({
         movable: true,
         type: moveOptions.type,
@@ -1023,12 +1019,12 @@ export default class CollectionsLine extends FigureElementCollection {
    * set different kinds of movability.
    */
   // $FlowFixMe
-  setMovable(movableOrOptions: OBJ_MovableLine | boolean) {
+  setMove(movableOrOptions: OBJ_MovableLine | boolean = {}) {
     const defaultOptions = {
       movable: true,
       type: this.move.type,
-      middleLength: 0.333,
-      includeLabelInTouchBoundary: false,
+      middleLength: this.multiMove.midLength,
+      includeLabelInTouchBoundary: this.multiMove.includeLabelInTouchBoundary,
     };
     let options;
     if (movableOrOptions === false) {
