@@ -37,15 +37,68 @@ Thus we need to define how we project 3D shapes onto a 2D screen:
 * *perspective projection* - shapes get smaller the further they are away from the observer
 * *orthographic projection* - shapes size is the same at all distances to the observer
 
-![](./projection.png)
+<!-- const figure = new Fig.Figure({ color: [1, 0, 0, 1]});
 
-Our second question is then one of light. A red 3D sphere looks just like a flat circle, unless there is a light that makes some portions of it more bright than other portions.
+const c1 = figure.add({
+  make: 'cube',
+  lines: true,
+  side: 0.12,
+  position: [-0.25, -0.025, 0],
+});
+c1.scene = new Fig.Scene({
+  style: 'orthographic',
+  camera: { position: [1, 0.5, 2] },
+  left: -1,
+  right: 1,
+  bottom: -0.5,
+  top: 0.5,
+});
+
+const c2 = figure.add({
+  make: 'cube',
+  lines: true,
+  side: 0.2,
+  position: [0, 0, 0],
+});
+c2.scene = new Fig.Scene({
+  style: 'perspective',
+  camera: { position: [0.35, 0.25, 0.7] },
+  aspectRatio: 2,
+  fieldOfView: 1.7,
+}); -->
+
+![](./tutorials/shapes3d/projection.png)
+
+The second question is then one of light. A red 3D sphere looks just like a flat circle, unless there is a light that makes some portions of it more bright than other portions.
+
+<!-- const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
+
+const c1 = figure.add({
+  make: 'sphere',
+  position: [-0.5, 0, 0],
+  radius: 0.2,
+  sides: 100,
+});
+c1.scene = new Fig.Scene({
+  light: { ambient: 1 }, left: -1, bottom: -0.5, right: 1, top: 0.5,
+});
+
+const c2 = figure.add({
+  make: 'sphere',
+  radius: 0.2,
+  sides: 100,
+  position: [0, 0, 0],
+});
+c2.scene = new Fig.Scene({
+  left: -1, bottom: -0.5, right: 1, top: 0.5, light: { directional: [1, 1, -1] },
+}); -->
+
+![](./tutorials/shapes3d/light.png)
 
 
-
-In 3D then:
+Therefore, to define a 3D scene:
 * The shapes are in x-y-z space
-* The projection is defined with the `type` property (can be either `orthographic` of `perspective`)
+* The projection is defined with the `style` property (can be either `orthographic` of `perspective`)
 * The camera position, where it is pointing and its orientation can be defined with the `camera` property
 * The expanse of space captured is defined with `left`, `right`, `bottom`, `top`, `near` and `far` properties if we are using an *orthographic projection*, and `fieldOfView`, `aspectRatio`, `near` and `far` if we are using a *perspective projection*.
 * The lighting is defined with the `light` property
