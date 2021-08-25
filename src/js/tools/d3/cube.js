@@ -34,7 +34,7 @@ function toLines(
   center: TypeParsablePoint,
   transform: TypeParsableTransform,
 ): Array<Point> {
-  const s = side;
+  const s = side / 2;
   const sidePoints: Array<number> = [
     -s, -s, s, s, -s, s,
     s, -s, s, s, s, s,
