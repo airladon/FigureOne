@@ -1,6 +1,6 @@
 /* globals Fig */
 const figure = new Fig.Figure();
-const { rod, cone } = Fig.tools.g2;
+const { cylinder, cone } = Fig.tools.g2;
 
 
 const screenGrid = figure.add({
@@ -48,7 +48,7 @@ const fragmentShader = {
 
 
 const addAxis = (name, direction, color, includeArrow = false) => {
-  const [p, n] = rod({ radius: 0.03, sides: 10, line: [[0, 0, 0], [0.7, 0, 0]] });
+  const [p, n] = cylinder({ radius: 0.03, sides: 10, line: [[0, 0, 0], [0.7, 0, 0]] });
   let cn = [];
   let cnNormals = [];
   if (includeArrow) {
@@ -63,8 +63,9 @@ const addAxis = (name, direction, color, includeArrow = false) => {
     make: 'gl',
     vertexShader,
     fragmentShader,
-    vertices3: { data: [...p, ...cn] },
-    normals: { data: [...n, ...cnNormals] },
+    vertices: { data: Fig.tools.g2.pointsToNumbers([...p, ...cn]) },
+    normals: { data: Fig.tools.g2.pointsToNumbers([...n, ...cnNormals]) },
+    dimension: 3,
     color,
     transform: [['rd', ...direction]],
   });
@@ -88,8 +89,9 @@ figure.add({
   make: 'gl',
   vertexShader,
   fragmentShader,
-  vertices3: { data: cv },
-  normals: { data: cn },
+  dimension: 3,
+  vertices: { data: Fig.tools.g2.pointsToNumbers(cv) },
+  normals: { data: Fig.tools.g2.pointsToNumbers(cn) },
   color: [0, 1, 1, 1],
   position: [0, 0, 0.5],
 });
@@ -103,8 +105,9 @@ figure.add({
   make: 'gl',
   vertexShader: { dimension: 3, light: 'point', normals: true },
   fragmentShader: { light: 'point' },
-  vertices3: { data: cubeV },
-  normals: { data: cubeN },
+  dimension: 3,
+  vertices: { data: Fig.tools.g2.pointsToNumbers(cubeV) },
+  normals: { data: Fig.tools.g2.pointsToNumbers(cubeN) },
   color: [1, 0, 0, 1],
   position: [0, 0, 0.5],
 });

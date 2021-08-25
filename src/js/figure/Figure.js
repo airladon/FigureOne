@@ -641,6 +641,9 @@ class Figure {
   }
 
   // setScene(options: OBJ_SceneOptions) {
+  //   this.scene = new Scene(options);
+  //   this.elements.scene = this.
+  // }
   //   const o = joinobjects({}, this.scene, options);
 
 
@@ -1489,7 +1492,7 @@ class Figure {
 
   initElements() {
     this.animations = this.elements.animations;
-    this.elements.scene = this.scene;
+    // this.elements.scene = this.scene;
     this.elements.getCanvas = () => this.canvasLow;
     this.setupAnimations();
     this.elements.setFigure({

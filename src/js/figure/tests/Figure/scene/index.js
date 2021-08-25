@@ -4,7 +4,7 @@
 
 testCases = {
   beforeEach: () => {
-    figure.scene = new Fig.Scene();
+    figure.scene = new Fig.Scene({ style: 'orthographic' });
     figure.get('cube').hide();
   },
   '2D': {
@@ -120,8 +120,6 @@ if (typeof process === 'object') {
     testCases,
   };
 } else {
-  // Uncomment and change this to test in browser
-  // Make sure to comment it again when testing with jest
   function runTestCase(tc, tcs) {
     if (tcs.beforeEach != null) {
       tcs.beforeEach();
@@ -131,11 +129,12 @@ if (typeof process === 'object') {
     }
     const next = tc[0];
     if (tc.length === 1) {
-      // console.log(next)
       return tcs[next]();
     }
     return runTestCase(tc.slice(1), tcs[next]);
   }
 
+  // Uncomment and change this to test in browser
+  // Make sure to comment it again when testing with jest
   runTestCase(['ortho', 'pointLight', 'point light further'], testCases);
 }
