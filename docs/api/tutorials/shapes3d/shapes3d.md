@@ -104,47 +104,12 @@ Therefore, to define a 3D scene:
 * The lighting is defined with the `light` property
 
 
-
-Thus, after you create 
-
-In 2D, the shapes are positioned in x-y space. The scene is defined by looking at the XY plane (from the positive z axis), and limiting the expanse of visible x-y space with the `left` (minimum x), `right` (maximum x), `top` (maximum y), and `bottom` (minimum y) properties. Any shape (or portion of a shape) outside these limits will be clipped and not shown. Using these limits you can view any portion of x-y space, and you can set the aspect ratio of the space to align with the aspect ratio of canvas the figure is drawn to.
-
-In 3D, the shapes are created within a x-y-z space. The scene is then defined by:
-  * Where the viewer is veiwing from, where they are looking and how they are oriented (in 2D it was from the positive z axis, at the center of the limits)
-  * What portion of the space is shown
-  * How the 3D space is projected onto a 2D window
-
-In the case of 2D, the shapes are defined in an x-y space. The 
-
-In 2D in FigureOne, when you create a figure you define what expanse of x-y space will be shown by using the `limits` property. You then create a number of shapes in x-y space and any shapes (or portions of shapes) that are outside these limits will be clipped and not shown.
-
-In 3D, you similarly define a number of shapes within a 3D (x-y-z) space, but defining which shapes are shown, and how they are shown requires more information. We need to define from where and how we are looking at the shapes (`camera`), how shapes are projected into two dimensions (`projection`), what part of the x-y-z expanse should be viewable (`left`,`right`, `top`, `bottom`, `near`, `far`, `fieldOfView`, `aspectRatio`), and how the shapes are illuminated (`light`).
-
-The `Scene` object is used to define these properties.
-
 ##### Camera
 
-To view 3D shapes on a 2D screen, we need to project our three dimensional shapes onto a two dimensional screen. This is what a camera does.
-
-To take a picture, we position the camera in space, point it at the object we want to capture and then adjust its zoom so the features in the object we want to capture can be seen by the camera.
-
-If we position the camera at a different location, point it in a different direction, or use a different zoom setting then the picture we capture of the same object will look different.
-
-`Scene.camera` has these definitions:
-
-* `position` the position of the camera in space
-* `lookAt` the position the camera is pointed toward
-* `up` the vector
-3D computer visualization has a similar
-As a computer screen can be thought of as the view finder on a camera, we can similarly define
-When we view a constructed 3D scene on a computer screen, we need to similarly define 
-
-
-If we think of the screen as the screen of a camera looking at the scene of shapes it can be useful.
-
-Depending on where we 
-
-The simplest way to do this is with an *orthographic projection*.
+The camera is the observer in a 3D scene and has the properties:
+* `position` - position in space the camera is located at
+* `lookAt` - point in space the camera is looking at
+* `up` - vector that defines how the camera is oriented
 
 
 ##### Projection
