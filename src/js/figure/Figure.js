@@ -1492,7 +1492,7 @@ class Figure {
 
   initElements() {
     this.animations = this.elements.animations;
-    // this.elements.scene = this.scene;
+    this.elements.scene = this.scene;
     this.elements.getCanvas = () => this.canvasLow;
     this.setupAnimations();
     this.elements.setFigure({

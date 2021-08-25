@@ -5,6 +5,7 @@
 testCases = {
   beforeEach: () => {
     figure.scene = new Fig.Scene({ style: 'orthographic' });
+    figure.elements.scene = figure.scene;
     figure.get('cube').hide();
   },
   '2D': {
