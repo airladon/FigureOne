@@ -1034,6 +1034,8 @@ export default class CollectionsLine extends FigureElementCollection {
     } else {
       options = joinObjects({}, defaultOptions, movableOrOptions);
     }
+    // $FlowFixMe
+    super.setMove(options);
     const { movable } = options;
     if (movable) {
       const {
