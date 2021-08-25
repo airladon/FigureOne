@@ -3456,7 +3456,7 @@ class FigureElement {
     scale: number | TypeParsablePoint | null,
     colorSeed: string,
     onClick: null | (() => void),
-  }) {
+  } | boolean = true) {
     let options = setOrOptions;
     if (typeof setOrOptions === 'boolean') {
       if (setOrOptions === false) {

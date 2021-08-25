@@ -2273,7 +2273,6 @@ class Figure {
       elementToMove.startBeingMoved();
     }
     elementToMove.move.type = moveType;
-
     if (moveType === 'rotation') {
       this.rotateElement( // $FlowFixMe
         elementToMove, previousGLPoint, currentGLPoint,
