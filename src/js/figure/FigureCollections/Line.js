@@ -656,7 +656,6 @@ export default class CollectionsLine extends FigureElementCollection {
     // MultiMove means the line has a middle section that when touched
     // translates the line collection, and when the rest of the line is
     // touched then the line collection is rotated.
-    
 
     this.scaleTransformMethodName = '_transformMethod';
     // If the line is to be shown (and not just a label) then make it

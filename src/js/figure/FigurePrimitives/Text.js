@@ -3,7 +3,7 @@
 import VertexText from '../DrawingObjects/VertexObject/VertexText';
 import { FigureElementPrimitive } from '../Element';
 import {
-  Point, Transform, Rect,
+  Point, Transform,
 } from '../../tools/g2';
 import WebGLInstance from '../webgl/webgl';
 import { joinObjects } from '../../tools/tools';

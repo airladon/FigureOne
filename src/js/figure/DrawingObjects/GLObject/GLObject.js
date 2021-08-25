@@ -1,7 +1,7 @@
 // @flow
 
 // import * as g2 from '../g2';
-import { round } from '../../../tools/math';
+// import { round } from '../../../tools/math';
 import * as m3 from '../../../tools/m3';
 import type Scene from '../../Figure';
 import type { Type3DMatrix } from '../../../tools/m3';
@@ -783,6 +783,7 @@ class GLObject extends DrawingObject {
     });
   }
 
+  // eslint-disable-next-line no-unused-vars
   getPointCountForAngle(drawAngle: number = Math.PI * 2) {
     return this.numVertices;
   }

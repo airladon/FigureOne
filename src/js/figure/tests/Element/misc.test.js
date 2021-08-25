@@ -6,7 +6,7 @@ import {
 import {
   Point, Transform,
 } from '../../../tools/g2';
-import webgl from '../../../__mocks__/WebGLInstanceMock';
+// import webgl from '../../../__mocks__/WebGLInstanceMock';
 import {
   linear, round,
 } from '../../../tools/math';
@@ -283,47 +283,47 @@ describe('Animationa and Movement', () => {
         expect(round(draw.mock.calls[10][1], 3)).toEqual(round(minM, 3));
       });
     });
-    // describe('Get and Is being touched', () => {
-    //   let square;
-    //   let glPoint;
-    //   beforeEach(() => {
-    //     // const figure = makeFigure();
-    //     square = figure.shapes.polygon({
-    //       sides: 4,
-    //       radius: Math.sqrt(2),
-    //       line: { width: 0.1 },
-    //       rotation: Math.PI / 4,
-    //     });
-    //     square.isTouchable = true;
-    //     figure.elements.add('square', square);
-    //     figure.initialize();
-    //     glPoint = (x, y) => new Point(x, y)
-    //       .transformBy(figure.spaceTransformMatrix('figure', 'gl'));
-    //   });
-    //   test('Inside square and border', () => {
-    //     expect(square.isBeingTouched(glPoint(0, 0))).toBe(true);
-    //     expect(square.isBeingTouched(glPoint(1.0499, 0))).toBe(true);
-    //     expect(square.isBeingTouched(glPoint(0, 1.0499))).toBe(true);
-    //     expect(square.isBeingTouched(glPoint(1.0499, 1.0499))).toBe(true);
-    //     expect(square.isBeingTouched(glPoint(-1.0499, -1.0499))).toBe(true);
-    //     expect(square.isBeingTouched(glPoint(0, -1.0499))).toBe(true);
-    //     expect(square.isBeingTouched(glPoint(-1.0499, 0))).toBe(true);
-    //   });
-    //   test('Outside of border', () => {
-    //     expect(square.isBeingTouched(glPoint(1.05001, 0))).toBe(false);
-    //     expect(square.isBeingTouched(glPoint(0, 1.05001))).toBe(false);
-    //     expect(square.isBeingTouched(glPoint(1.05001, 1.05001))).toBe(false);
-    //     expect(square.isBeingTouched(glPoint(-1.05001, -1.05001))).toBe(false);
-    //     expect(square.isBeingTouched(glPoint(0, -1.05001))).toBe(false);
-    //     expect(square.isBeingTouched(glPoint(-1.05001, 0))).toBe(false);
-    //     expect(square.isBeingTouched(glPoint(100, 100))).toBe(false);
-    //   });
-    //   test('Get being touched', () => {
-    //     expect(square.getTouched(new Point(0, 0))).toEqual([square]);
-    //     expect(square.getTouched(new Point(1, 1))).toEqual([square]);
-    //     expect(square.getTouched(new Point(2, 2))).toEqual([]);
-    //   });
-    // });
+    describe('Get and Is being touched', () => {
+      let square;
+      let glPoint;
+      beforeEach(() => {
+        // const figure = makeFigure();
+        square = figure.shapes.polygon({
+          sides: 4,
+          radius: Math.sqrt(2),
+          line: { width: 0.1 },
+          rotation: Math.PI / 4,
+        });
+        square.isTouchable = true;
+        figure.elements.add('square', square);
+        figure.initialize();
+        glPoint = (x, y) => new Point(x, y)
+          .transformBy(figure.spaceTransformMatrix('figure', 'gl'));
+      });
+      test('Inside square and border', () => {
+        expect(square.isBeingTouched(glPoint(0, 0))).toBe(true);
+        expect(square.isBeingTouched(glPoint(1.0499, 0))).toBe(true);
+        expect(square.isBeingTouched(glPoint(0, 1.0499))).toBe(true);
+        expect(square.isBeingTouched(glPoint(1.0499, 1.0499))).toBe(true);
+        expect(square.isBeingTouched(glPoint(-1.0499, -1.0499))).toBe(true);
+        expect(square.isBeingTouched(glPoint(0, -1.0499))).toBe(true);
+        expect(square.isBeingTouched(glPoint(-1.0499, 0))).toBe(true);
+      });
+      test('Outside of border', () => {
+        expect(square.isBeingTouched(glPoint(1.05001, 0))).toBe(false);
+        expect(square.isBeingTouched(glPoint(0, 1.05001))).toBe(false);
+        expect(square.isBeingTouched(glPoint(1.05001, 1.05001))).toBe(false);
+        expect(square.isBeingTouched(glPoint(-1.05001, -1.05001))).toBe(false);
+        expect(square.isBeingTouched(glPoint(0, -1.05001))).toBe(false);
+        expect(square.isBeingTouched(glPoint(-1.05001, 0))).toBe(false);
+        expect(square.isBeingTouched(glPoint(100, 100))).toBe(false);
+      });
+      test('Get being touched', () => {
+        expect(square.getTouched(new Point(0, 0))).toEqual([square]);
+        expect(square.getTouched(new Point(1, 1))).toEqual([square]);
+        expect(square.getTouched(new Point(2, 2))).toEqual([]);
+      });
+    });
     describe('Get bounding box', () => {
       let square;
       // let figure;
@@ -695,82 +695,82 @@ describe('Animationa and Movement', () => {
         expect(collection.isShown).toBe(true);
       });
     });
-    // describe('Get and Is being touched', () => {
-    //   // let square;
-    //   // let squareElement2;
-    //   // let squareElement3;
-    //   // let collection2;
-    //   beforeEach(() => {
-    //     // identity = new Transform();
-    //     squareElement = figure.shapes.polygon({
-    //       sides: 4,
-    //       radius: Math.sqrt(2) * (1.05),
-    //       // line: { width: Math.sqrt(2) * 0.1 },
-    //       rotation: Math.PI / 4,
-    //     });
-    //     // squareElement = new FigureElementPrimitive(square);
-    //     collection = new FigureElementCollection();
-    //     collection.add('square', squareElement);
-    //     collection.isTouchable = true;
-    //     squareElement.isTouchable = true;
-    //     figure.elements.add('f', collection);
-    //     figure.initialize();
-    //   });
-    //   test('Simple', () => {
-    //     expect(squareElement.isBeingTouched(new Point(0, 0))).toBe(true);
-    //     expect(squareElement.isBeingTouched(new Point(1.049, 1.049))).toBe(true);
-    //     expect(collection.isBeingTouched(new Point(0, 0))).toBe(true);
-    //     expect(collection.isBeingTouched(new Point(1.049, 1.049))).toBe(true);
-    //   });
-    //   test('Collection Transform', () => {
-    //     // figure.initialize();
-    //     collection.setTransform(new Transform()
-    //       .translate(new Point(10, 0))
-    //       .rotate(Math.PI / 2));
-    //     figure.mock.timeStep(0);
-    //     collection.setTouchable();
-    //     expect(collection.isBeingTouched(new Point(0, 10))).toBe(true);
-    //     expect(collection.isBeingTouched(new Point(1.049, 11.049))).toBe(true);
-    //     expect(collection.isBeingTouched(new Point(1.051, 11.049))).toBe(false);
-    //     expect(collection.isBeingTouched(new Point(1.049, 11.051))).toBe(false);
-    //   });
-    //   test('Collection not touchable', () => {
-    //     collection.isTouchable = false;
-    //     squareElement.isTouchable = true;
-    //     expect(squareElement.isBeingTouched(new Point(0, 0))).toBe(true);
-    //     expect(collection.isBeingTouched(new Point(0, 0))).toBe(false);
-    //   });
-    //   test('Get being touched', () => {
-    //     const squareElement2 = figure.shapes.polygon({
-    //       sides: 4,
-    //       radius: Math.sqrt(2) * (1.05),
-    //       rotation: Math.PI / 4,
-    //       transform: new Transform().translate(0.5, 0),
-    //     });
+    describe('Get and Is being touched', () => {
+      // let square;
+      // let squareElement2;
+      // let squareElement3;
+      // let collection2;
+      beforeEach(() => {
+        // identity = new Transform();
+        squareElement = figure.shapes.polygon({
+          sides: 4,
+          radius: Math.sqrt(2) * (1.05),
+          // line: { width: Math.sqrt(2) * 0.1 },
+          rotation: Math.PI / 4,
+        });
+        // squareElement = new FigureElementPrimitive(square);
+        collection = new FigureElementCollection();
+        collection.add('square', squareElement);
+        collection.isTouchable = true;
+        squareElement.isTouchable = true;
+        figure.elements.add('f', collection);
+        figure.initialize();
+      });
+      test('Simple', () => {
+        expect(squareElement.isBeingTouched(new Point(0, 0))).toBe(true);
+        expect(squareElement.isBeingTouched(new Point(1.049, 1.049))).toBe(true);
+        expect(collection.isBeingTouched(new Point(0, 0))).toBe(true);
+        expect(collection.isBeingTouched(new Point(1.049, 1.049))).toBe(true);
+      });
+      test('Collection Transform', () => {
+        // figure.initialize();
+        collection.setTransform(new Transform()
+          .translate(new Point(10, 0))
+          .rotate(Math.PI / 2));
+        figure.mock.timeStep(0);
+        collection.setTouchable();
+        expect(collection.isBeingTouched(new Point(0, 10))).toBe(true);
+        expect(collection.isBeingTouched(new Point(1.049, 11.049))).toBe(true);
+        expect(collection.isBeingTouched(new Point(1.051, 11.049))).toBe(false);
+        expect(collection.isBeingTouched(new Point(1.049, 11.051))).toBe(false);
+      });
+      test('Collection not touchable', () => {
+        collection.isTouchable = false;
+        squareElement.isTouchable = true;
+        expect(squareElement.isBeingTouched(new Point(0, 0))).toBe(true);
+        expect(collection.isBeingTouched(new Point(0, 0))).toBe(false);
+      });
+      test('Get being touched', () => {
+        const squareElement2 = figure.shapes.polygon({
+          sides: 4,
+          radius: Math.sqrt(2) * (1.05),
+          rotation: Math.PI / 4,
+          transform: new Transform().translate(0.5, 0),
+        });
 
-    //     collection.add('square2', squareElement2);
-    //     squareElement2.isTouchable = true;
-    //     let touched = collection.getTouched(new Point(0, 0));
+        collection.add('square2', squareElement2);
+        squareElement2.isTouchable = true;
+        let touched = collection.getTouched(new Point(0, 0));
 
-    //     expect(touched).toHaveLength(1);
-    //     expect(touched.includes(collection)).toBe(true);
-    //     expect(touched.includes(squareElement)).toBe(false);
-    //     expect(touched.includes(squareElement2)).toBe(false);
+        expect(touched).toHaveLength(1);
+        expect(touched.includes(collection)).toBe(true);
+        expect(touched.includes(squareElement)).toBe(false);
+        expect(touched.includes(squareElement2)).toBe(false);
 
-    //     squareElement.hide();
-    //     touched = collection.getTouched(new Point(0, 0));
-    //     expect(touched).toHaveLength(1);
+        squareElement.hide();
+        touched = collection.getTouched(new Point(0, 0));
+        expect(touched).toHaveLength(1);
 
-    //     squareElement2.hide();
-    //     touched = collection.getTouched(new Point(0, 0));
-    //     expect(touched).toHaveLength(0);
+        squareElement2.hide();
+        touched = collection.getTouched(new Point(0, 0));
+        expect(touched).toHaveLength(0);
 
-    //     squareElement.show();
-    //     squareElement.isTouchable = false;
-    //     touched = collection.getTouched(new Point(0, 0));
-    //     expect(touched).toHaveLength(1);
-    //   });
-    // });
+        squareElement.show();
+        squareElement.isTouchable = false;
+        touched = collection.getTouched(new Point(0, 0));
+        expect(touched).toHaveLength(1);
+      });
+    });
     describe('Copy', () => {
       test('Vertex Objects', () => {
         collection.parent = null;

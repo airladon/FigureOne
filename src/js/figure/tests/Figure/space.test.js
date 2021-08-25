@@ -93,7 +93,9 @@ describe('Figure', () => {
     });
     const mat = figure.spaceTransformMatrix('figure', 'pixel');
     expect(point(0, 0, 0).transformBy(mat)).toEqual(point(50, 50, 0));
-    expect(point(1, 0, 0).transformBy(mat)).toEqual(point(50 + 50 * Math.cos(Math.PI / 4), 50, 0).round());
-    expect(point(1, 1, 0).transformBy(mat)).toEqual(point(50 + 50 * Math.cos(Math.PI / 4), 0, 0).round());
+    expect(point(1, 0, 0).transformBy(mat))
+      .toEqual(point(50 + 50 * Math.cos(Math.PI / 4), 50, 0).round());
+    expect(point(1, 1, 0).transformBy(mat))
+      .toEqual(point(50 + 50 * Math.cos(Math.PI / 4), 0, 0).round());
   });
 });

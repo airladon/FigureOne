@@ -7,7 +7,7 @@ import {
 } from '../tools/g2';
 import Scene from '../tools/scene';
 import type { OBJ_Scene } from '../tools/scene';
-import * as m3 from '../tools/m3';
+// import * as m3 from '../tools/m3';
 import type { TypeParsableRect, TypeParsablePoint, Type3DMatrix } from '../tools/g2';
 // import * as math from '../tools/math';
 import { round } from '../tools/math';
@@ -277,9 +277,6 @@ class Figure {
 
   backgroundColor: Array<number>;
   fontScale: number;
-
-
-
   lastDrawTime: number;
   drawQueued: boolean;
   waitForFrames: number;
@@ -827,8 +824,6 @@ class Figure {
       finishedFlag = true;
       this.state.preparingToSetState = false;
       setState(this, state);
-      // this.beingMovedElements = this.beingMovedElements.filter(e => Object.keys(e).length > 0);
-      // this.beingTouchedElements = this.beingTouchedElements.filter(e => Object.keys(e).length > 0);
       this.notifications.publish('stateSetInit');
       this.elements.setTimeDelta(this.timeKeeper.now() / 1000 - this.stateTime);
       // this.elements.updateDrawTransforms([new Transform()], this.scene);
@@ -1276,82 +1271,6 @@ class Figure {
     to: 'figure' | 'gl' | 'pixel',
   ) {
     return this.elements.spaceTransformMatrix(from, to);
-    // if (from === to) {
-    //   return m3.identity();
-    // }
-    // const canvasRect = this.canvasLow.getBoundingClientRect();
-    // const pixelSpace = {
-    //   x: { min: 0, span: canvasRect.width },
-    //   y: { min: canvasRect.height, span: -canvasRect.height },
-    //   z: { min: -1, span: 2 },
-    // };
-
-    // const glSpace = {
-    //   x: { min: -1, span: 2 },
-    //   y: { min: -1, span: 2 },
-    //   z: { min: -1, span: 2 },
-    // };
-
-    // const figure2DSpace = {
-    //   x: {
-    //     min: this.scene.left,
-    //     span: this.scene.right - this.scene.left,
-    //   },
-    //   y: {
-    //     min: this.scene.bottom,
-    //     span: this.scene.top - this.scene.bottom,
-    //   },
-    //   z: { min: -1, span: 2 },
-    // };
-
-    // // Always returns gl XY plane at z = 0
-    // if (from === 'pixel' && to === 'gl') {
-    //   return spaceToSpaceTransform(pixelSpace, glSpace).matrix();
-    // }
-    // // Only works for 2D projection
-    // if (from === 'pixel' && to === 'figure') {
-    //   if (this.scene.style === '2D') {
-    //     return spaceToSpaceTransform(pixelSpace, figure2DSpace).matrix();
-    //   }
-    //   throw new Error('Cannot create a transform matrix from pixel to figure spaces as converting from 2D to 3D');
-    // }
-
-    // // Only works for 2D and orthographic projection
-    // const figureToGLMatrix = this.scene.viewProjectionMatrix;
-    // if (from === 'figure' && to === 'gl') {
-    //   if (this.scene.style === 'perspective') {
-    //     throw new Error('Cannot create a transform matrix from figure space to GL space for a perspective scene as transform is dependent on coordinates of point being transformed.');
-    //   }
-    //   return figureToGLMatrix;
-    // }
-
-    // // Only works for orthographic projection
-    // if (from === 'gl' && to === 'figure') {
-    //   if (this.scene.style === '2D') {
-    //     return spaceToSpaceTransform(glSpace, figure2DSpace).matrix();
-    //   }
-    //   if (this.scene.style === 'perspective') {
-    //     throw new Error('Cannot create a transform matrix from GL space to figure space for a perspective scene as transform is dependent on coordinates of point being transformed.');
-    //   }
-    //   return m3.inverse(figureToGLMatrix);
-    // }
-
-    // const glToPixelMatrix = spaceToSpaceTransform(glSpace, pixelSpace).matrix();
-    // glToPixelMatrix[10] = 0;
-    // glToPixelMatrix[11] = 0;
-    // if (from === 'gl' && to === 'pixel') {
-    //   return glToPixelMatrix;
-    // }
-
-    // const figureToPixelMatrix = m3.mul(
-    //   glToPixelMatrix,
-    //   figureToGLMatrix,
-    // );
-    // if (from === 'figure' && to === 'pixel') {
-    //   return figureToPixelMatrix;
-    // }
-
-    // throw new Error(`Invalid space transform matrix inputs: from: '${from}', to: '${to}'`);
   }
 
   /**
@@ -1565,7 +1484,6 @@ class Figure {
   setFirstTransform() {
     this.elements.setFirstTransform(new Transform());
   }
-
 
 
   // Renders all tied elements in the first level of figure elements
@@ -2242,7 +2160,6 @@ class Figure {
     currentGLPoint: Point,
     fromAutoEvent: boolean = false,
   ): boolean {
-    // const currentCusorGLPoint = currentGLPoint.transformBy(this.spaceTransformMatrix('gl', 'figure2D'));
     this.previousCursorPoint.x = currentGLPoint.x;
     this.previousCursorPoint.y = currentGLPoint.y;
     if (this.recorder.state === 'recording' && !fromAutoEvent) {
@@ -2528,6 +2445,7 @@ class Figure {
         this.backgroundColor[2],
         this.backgroundColor[3],
       );
+      // eslint-disable-next-line no-bitwise
       this.webglLow.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT | this.webglLow.gl.DEPTH_BUFFER_BIT);
     } else {
       this.webglOffscreen.gl.clearColor(0, 0, 0, 0);
@@ -2544,6 +2462,7 @@ class Figure {
       // gl.enable(gl.CULL_FACE);
       gl.enable(gl.DEPTH_TEST);
       // Clear the canvas AND the depth buffer.
+      // eslint-disable-next-line no-bitwise
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     }
   }

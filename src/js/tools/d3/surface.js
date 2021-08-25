@@ -251,7 +251,6 @@ function getCurveNormals(
   closeRows: boolean,
   closeColumns: boolean,
 ) {
-  console.log(curve, closeRows, closeColumns)
   const rows = surfacePoints.length;
   const cols = surfacePoints[0].length;
   const normals = [];

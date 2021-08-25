@@ -202,7 +202,6 @@ describe('Polyline', () => {
         [0.759, 0.1],
         [0.1, 0.1],
       ])]);
-
     });
     test('outside Border', () => {
       addElement('outsideBorder');
@@ -225,7 +224,6 @@ describe('Polyline', () => {
         [1.241, -0.1],
         [-0.1, 1.241],
       ]));
-
     });
     test('inside Border', () => {
       addElement('insideBorder');
@@ -249,7 +247,6 @@ describe('Polyline', () => {
         [0.759, 0.1],
         [0.1, 0.759],
       ]));
-
     });
     test('Rect Border', () => {
       addElement('rectBorder');
@@ -275,7 +272,6 @@ describe('Polyline', () => {
         [1.241, 1.241],
         [-0.1, 1.241],
       ]));
-
     });
     test('Touch Rect Border', () => {
       addElement('touchRectBorder');
@@ -305,7 +301,6 @@ describe('Polyline', () => {
         [1.241, 1.241],
         [-0.1, 1.241],
       ])]);
-
     });
     test('Buffer Border', () => {
       addElement('bufferBorder');
@@ -339,7 +334,6 @@ describe('Polyline', () => {
         [0.517, 0.2],
         [0.2, 0.2],
       ])]);
-
     });
     test('Dashed Border', () => {
       addElement('dashedBorder');
@@ -416,7 +410,6 @@ describe('Polyline', () => {
       //   [0.1, 0.1],
       //   [0.1, 0.759],
       // ]));
-
     });
   });
 });

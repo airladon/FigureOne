@@ -1,5 +1,5 @@
 const { browserScreenShot } = require('../../../../../tests/browserScreenShot');
-const { testCases } = require('./index.js');
+const { testCases } = require('./index');
 
 const title = 'Scene';
 

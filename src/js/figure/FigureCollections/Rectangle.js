@@ -497,7 +497,7 @@ class CollectionsRectangle extends FigureElementCollection {
   }
 
   getSurround(
-    element: FigureElement | Array<FigureElement>, 
+    element: FigureElement | Array<FigureElement>,
     space: TypeParsableBuffer = 0,
     isInLocalSpace: boolean = false,
   ) {

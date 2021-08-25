@@ -1477,6 +1477,7 @@ class PerformanceTimer {
   }
 }
 
+/* eslint-disable no-bitwise, no-plusplus */
 function hash32(s: string) {
   let hash = 0;
   if (s.length === 0) return hash;
@@ -1486,7 +1487,8 @@ function hash32(s: string) {
     hash |= 0; // Convert to 32bit integer
   }
   return hash;
-};
+}
+/* eslint-enable no-bitwise, no-plusplus */
 
 export {
   diffPathsToObj, diffObjToPaths,

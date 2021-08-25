@@ -301,6 +301,7 @@ type OBJ_ElementMoveFreely = {
   callback: ?(string | ((boolean) => void)),
 }
 
+/* eslint-disable max-len */
 /*
 An element can be 'moved' (transformed) by touching on it and dragging.
 
@@ -365,6 +366,7 @@ export type OBJ_ElementMove = {
   freely: OBJ_ElementMoveFreely,
   element: FigureElement | null | string;
 };
+/* eslint-enable max-len */
 
 /* eslint-enable no-use-before-define */
 
@@ -1926,6 +1928,7 @@ class FigureElement {
       if (typeof r === 'number') {
         current = r;
       } else {
+        // eslint-disable-next-line prefer-destructuring
         current = r[1];
       }
     }
@@ -1987,6 +1990,7 @@ class FigureElement {
       if (typeof r === 'number') {
         movement = r;
       } else {
+        // eslint-disable-next-line prefer-destructuring
         movement = r[1];
       }
     }
@@ -2962,7 +2966,7 @@ class FigureElement {
       const figureToDrawMatrix = m3.inverse(
         this.getFigureTransform().matrix(precision),
       );
-      return round(m3.mul(figureToDrawMatrix, glToFigureMatrix), precision);;
+      return round(m3.mul(figureToDrawMatrix, glToFigureMatrix), precision);
     }
 
     // Figure Down
@@ -4235,6 +4239,7 @@ class FigureElementPrimitive extends FigureElement {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
   setFirstTransform(parentTransform: Transform = new Transform()) {
     // this.lastDrawElementTransformPosition = {
     //   parentCount: parentTransform.def.length,
@@ -5364,6 +5369,7 @@ class FigureElementCollection extends FigureElement {
   //   }
   // }
 
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
   setFirstTransform(parentTransform: Transform = new Transform()) {
   }
 

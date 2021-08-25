@@ -11,7 +11,6 @@ jest.useFakeTimers();
 
 describe('Element Touch 2D', () => {
   let figure;
-  let a;
   let b;
   let result;
   beforeEach(() => {

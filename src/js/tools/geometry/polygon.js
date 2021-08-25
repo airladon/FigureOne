@@ -1,8 +1,8 @@
 // @flow
-import { Point, getPoint } from './Point';
-import { Transform } from './Transform';
+import { Point } from './Point';
+// import { Transform } from './Transform';
 import { Line } from './Line';
-import { joinObjects } from '../tools';
+// import { joinObjects } from '../tools';
 
 function isLeft(p0: Point, p1: Point, p2: Point) {
   return (

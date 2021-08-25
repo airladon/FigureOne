@@ -21,7 +21,6 @@ describe('Polyline', () => {
   let rect;
   let update;
   let lineBorder;
-  let lineBuffer;
   let lineUpdate;
   beforeEach(() => {
     figure = makeFigure();

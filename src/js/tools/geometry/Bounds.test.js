@@ -285,7 +285,7 @@ describe('Bounds', () => {
             bottom: 4,
           });
         });
-        test('inside ', () => {
+        test('inside', () => {
           expect(clip([0, 0, 0])).toEqual(new Point(0, 0, 0));
           expect(clip([0.1, 0.2, 0])).toEqual(new Point(0.1, 0.2, 0));
         });
@@ -326,7 +326,7 @@ describe('Bounds', () => {
             bottom: 1,
           });
         });
-        test('inside ', () => {
+        test('inside', () => {
           expect(clip([0, 1, 0])).toEqual(new Point(0, 1, 0));
           expect(clip([0, 1, 0])).toEqual(new Point(0, 1, 0));
           expect(clip([0.1, 1, 0.2]).round()).toEqual(new Point(0.1, 1, 0.2));

@@ -91,11 +91,6 @@ describe('Figure Primitive Generic Copy', () => {
       expect(points[2]).toEqual(new Point(1, 0));
       expect(points[3]).toEqual(new Point(1.1, 0.1));
     });
-    // test('Number Point', () => {
-    //   addElement(copy.numberPoint);
-    //   expect(points[2]).toEqual(new Point(1, 1));
-    //   expect(points[3]).toEqual(new Point(1.1, 1.1));
-    // });
     test('Transform', () => {
       addElement(copy.transform);
       expect(points[2]).toEqual(new Point(1, 0));
