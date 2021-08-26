@@ -10,7 +10,8 @@ import { toDelta } from './geometry/Path';
 import {
   Plane, getPlane, isParsablePlane, getNormal,
 } from './geometry/Plane';
-import type { TypeParsablePlane, OBJ_TranslationPath } from './geometry/Plane';
+import type { TypeParsablePlane } from './geometry/Plane';
+import type { OBJ_TranslationPath } from './geometry/Path';
 import { Line, getLine } from './geometry/Line';
 import {
   Transform, getTransform, isParsableTransform,
@@ -392,16 +393,16 @@ function getMoveTime(
     for (let i = 0; i < velocity.def.length; i += 1) {
       const v = velocity.def[i];
       if (v[0] === 't') {
-        v[1] = translationVelocity.x;
-        v[2] = translationVelocity.y;
+        v[1] = translationVelocity.x; // $FlowFixMe
+        v[2] = translationVelocity.y; // $FlowFixMe
         v[3] = translationVelocity.z;
       } else if (v[0] === 'r') {
-        v[1] = rotationVelocity.x;
-        v[2] = rotationVelocity.y;
+        v[1] = rotationVelocity.x; // $FlowFixMe
+        v[2] = rotationVelocity.y; // $FlowFixMe
         v[3] = rotationVelocity.z;
       } else {
-        v[1] = scaleVelocity.x;
-        v[2] = scaleVelocity.y;
+        v[1] = scaleVelocity.x; // $FlowFixMe
+        v[2] = scaleVelocity.y; // $FlowFixMe
         v[3] = scaleVelocity.z;
       }
     }

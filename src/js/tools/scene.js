@@ -163,6 +163,20 @@ export default class Scene {
   viewProjectionMatrix: Type3DMatrix;
   onUpdate: null | (() => void);
 
+  cameraPosition: Point;
+  cameraVector: Point;
+  inverseViewProjectionMatrix: Type3DMatrix;
+  rightVector: Point;
+  upVector: Point;
+  nearCenter: Point;
+  farCenter: Point;
+  nearPlane: Plane;
+  farPlane: Plane;
+  heightNear: number;
+  heightFar: number;
+  widthNear: number;
+  widthFar: number;
+
   // eslint-disable-next-line class-methods-use-this
   defaultOptions() {
     return {
