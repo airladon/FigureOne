@@ -328,7 +328,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
         if (type === 'ra') {
           transformVelocity.def[i] = ['ra', velocity.rotation, velocity.rotation, velocity.rotation, velocity.rotation];
         }
-        if (type === 'rb') {
+        if (type === 'rb') { // $FlowFixMe
           transformVelocity.def[i] = ['rb', velocity.rotation, velocity.rotation, velocity.rotation, velocity.rotation, velocity.rotation, velocity.rotation];
         }
       }
