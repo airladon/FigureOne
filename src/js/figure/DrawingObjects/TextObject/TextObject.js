@@ -21,7 +21,7 @@ import type {
 } from '../../../tools/FunctionMap';
 import type {
   OBJ_TextDefinition,
-} from '../../FigurePrimitives/FigurePrimitives';
+} from '../../FigurePrimitives/FigurePrimitiveTypes2D';
 
 
 /* eslint-enable max-len */
@@ -347,7 +347,7 @@ class FigureTextBase {
   }
 
   getBoundary(
-    transformMatrix: Array<number> | null,
+    transformMatrix: Type3DMatrix | null,
   ): Array<Point> {
     if (transformMatrix == null) {
       return this.textBorder;
@@ -555,8 +555,8 @@ class TextObjectBase extends DrawingObject {
     this.layoutText();
   }
 
-  getCanvas() {
-    return this.drawContext2D.canvas;
+  getCanvas(index: number = 0) {
+    return this.drawContext2D[index].canvas;
   }
 
 
