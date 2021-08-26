@@ -113,10 +113,10 @@ export default class Sum extends Symbol {
     const tipWidth = lineWidth * 0.6;
 
     const lineA = new Line(new Point(0, 0), new Point(a, e));
-    const CxOffset = thick2 / Math.sin(lineA.angle()); // $FlowFixMe
+    const CxOffset = thick2 / Math.sin(lineA.angle());
     const lineC = new Line({ p1: new Point(CxOffset, 0), length: height, angle: lineA.angle() });
     const lineB = new Line(new Point(0, height), new Point(a, e));
-    const DxOffset = -thick1 / Math.sin(lineB.angle()); // $FlowFixMe
+    const DxOffset = -thick1 / Math.sin(lineB.angle());
     const lineD = new Line({
       p1: new Point(DxOffset, height), length: height, angle: lineB.angle(),
     });

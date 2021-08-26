@@ -6,7 +6,7 @@ import {
   joinObjects, joinObjectsWithOptions,
 } from '../../tools/tools';
 import { getPolygonPoints } from './polygon/polygon';
-import type { OBJ_Arrow } from '../FigurePrimitives/FigurePrimitives';
+import type { OBJ_Arrow } from '../FigurePrimitives/FigurePrimitiveTypes2D';
 // import { makePolyLine } from './lines/lines';
 
 /**

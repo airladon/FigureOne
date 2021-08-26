@@ -639,7 +639,6 @@ class RectBounds extends Bounds {
       return null;
     }
 
-    // $FlowFixMe
     const l = new Line({ p1: position, p2: position.add(direction), ends: 1 });
     const i = bound.intersectsWith(l);
     if (

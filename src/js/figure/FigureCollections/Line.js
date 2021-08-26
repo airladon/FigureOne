@@ -327,7 +327,7 @@ function getLineFromOptions(options: {
   const o = joinObjects({}, defaultOptions, options);
   if (o.p1 != null && o.p2 != null) {
     line = new Line(o.p1, o.p2);
-  } else {  // $FlowFixMe
+  } else {
     line = new Line({ p1: o.p1, length: o.length, angle: o.angle });
   }
   if (o.offset !== 0) {

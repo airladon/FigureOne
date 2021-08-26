@@ -213,7 +213,7 @@ class Plane {
       yi = (d1 * n2.x - d2 * n1.x) / u.z;
       zi = 0;
     }
-    const p0 = new Point(xi, yi, zi); // $FlowFixMe
+    const p0 = new Point(xi, yi, zi);
     return new Line({
       p1: p0, direction: u, length: 1, ends: 0,
     });

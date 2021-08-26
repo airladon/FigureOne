@@ -4,7 +4,7 @@ import {
 } from '../../tools/g2';
 import type {
   OBJ_Generic,
-} from '../FigurePrimitives/FigurePrimitives';
+} from '../FigurePrimitives/FigurePrimitiveTypes2D';
 
 export type OBJ_Arc_Defined = {
   radius: number,
