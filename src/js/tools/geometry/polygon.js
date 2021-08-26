@@ -2,6 +2,7 @@
 import { Point } from './Point';
 // import { Transform } from './Transform';
 import { Line } from './Line';
+import type { TypeRotationComponent } from './Transform';
 // import { joinObjects } from '../tools';
 
 function isLeft(p0: Point, p1: Point, p2: Point) {
@@ -14,7 +15,7 @@ export type OBJ_Polygon = {
   sides?: number,
   radius?: number,
   center?: number,
-  axis?: TypeRotationDefinition,
+  axis?: TypeRotationComponent,
   close?: boolean,
   rotation?: number,
   direction?: 1 | -1,

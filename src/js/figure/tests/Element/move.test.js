@@ -237,9 +237,9 @@ describe('Element Move', () => {
       });
       figure.mock.touchElement(a, [0.4, 1, 0]);
       figure.mock.touchMove([0.4, 1, -0.4]);
-      expect(round(a.getRotation()[1])).toEqual(round(Math.PI / 4));
+      expect(round(a.getRotation())).toEqual(round(Math.PI / 4));
       figure.mock.touchMove([0, 1, -0.4]);
-      expect(round(a.getRotation()[1])).toEqual(round(1));
+      expect(round(a.getRotation())).toEqual(round(1));
     });
   });
 });

@@ -33,7 +33,7 @@ export type TypeBasisObjectDefinition = {
 /**
  * Type of rotations possible
  */
-export type TypeRotationComponentName = '2D' | 'xyz' | 'axis' | 'dir' | 'rbasis';
+export type TypeRotationComponentName = '2D' | 'xyz' | 'axis' | 'dir' | 'rbasis' | 'rb' | 'r' | 'rc' | 'ra' | 'rd';
 
 /**
  * Rotation definition.
@@ -215,6 +215,11 @@ export type TypeTransformComponent = TypeScaleTransformComponent
   | TypeTransformBasisComponent
   | TypeTransformBasisToBasisComponent;
 
+export type TypeRotationComponent = TypeRotateTransformComponent
+  | TypeRotateCartesianTransformComponent
+  | TypeRotateAxisTransformComponent
+  | TypeRotateDirectionTransformComponent
+  | TypeRotationBasisTransformComponent
 /**
  * A parsable array transform definition is an array of any number of
  * transform components.
@@ -252,7 +257,8 @@ export type TypeParsableTransform = TypeParsableArrayTransform
   | TypeUserTranslationDefinition
   | TypeUserScaleDefinition
   | TypeUserBasisDefinition
-  | TypeUserCustomDefinition;
+  | TypeUserCustomDefinition
+  | Transform;
 
 export type TypeTransformDefinition = Array<TypeTransformComponent>;
 // export type TransformDefinition = Array<TransformComponent>;
@@ -356,7 +362,7 @@ function parseRotation(
   r7: number | null = null,
   r8: number | null = null,
   r9: number | null = null,
-) {
+): TypeRotationComponent {
   if (typeof typeOr2DOrDef === 'number') {
     return ['r', typeOr2DOrDef];
   }
@@ -385,18 +391,18 @@ function parseRotation(
         if (
           (type === 'rb' || type === 'rbasis' || type === 'basis' || type === 'b')
           && typeof r9 === 'number'
-        ) {
+        ) { // $FlowFixMe
           return [type, r1, r2, r3, r4, r5, r6, r7, r8, r9];
         }
       }
     }
-  } else if (type === 'xyz' || type === 'rc') {
+  } else if (type === 'xyz' || type === 'rc') { // $FlowFixMe
     return ['rc', ...getPoint(r1).toArray()];
-  } else if (type === 'dir' || type === 'rd') {
+  } else if (type === 'dir' || type === 'rd') { // $FlowFixMe
     return ['rd', ...getPoint(r1).toArray()];
-  } else if ((type === 'axis' || type === 'ra') && typeof r2 === 'number') {
+  } else if ((type === 'axis' || type === 'ra') && typeof r2 === 'number') { // $FlowFixMe
     return ['ra', ...getPoint(r1).toArray(), r2];
-  } else if (type === 'rbasis' || type === 'rb') {
+  } else if (type === 'rbasis' || type === 'rb') { // $FlowFixMe
     return ['rb', ...(parseBasisDefinition(['rb', r1], true).slice(1))];
   }
   throw new Error(`Could not parse rotation '${typeOr2DOrDef}', '${JSON.stringify(r1)}', '${JSON.stringify(r2)}', '${JSON.stringify(r3)}', '${JSON.stringify(r4)}'`);
@@ -447,10 +453,13 @@ class Transform {
     if (typeof defOrName === 'string') {
       this.def = [];
       this.name = defOrName;
-    } else {
+    } else if (defOrName instanceof Transform) {
+      this.name = defOrName.name;
+      this.def = defOrName.def.slice();
+    } else { // $FlowFixMe
       const result = parseArrayTransformDefinition(defOrName);
-      this.def = result.def;
-      if (name === '' && result.name != null && result.name.length > 0) {
+      this.def = result.def; // $FlowFixMe
+      if (name === '' && result.name != null && result.name.length > 0) { // $FlowFixMe
         this.name = result.name;
       } else {
         this.name = name;
@@ -582,12 +591,12 @@ class Transform {
     sy: number | null = null,
     sz: number = 1,
   ) {
-    let _sx = sOrSxOrPoint;
+    let _sx;
     let _sy = sy;
     let _sz = sz;
     if (typeof sOrSxOrPoint === 'number') {
-      if (sy == null) {
-        _sx = sOrSxOrPoint;
+      _sx = sOrSxOrPoint;
+      if (_sy == null) {
         _sy = sOrSxOrPoint;
         _sz = sOrSxOrPoint;
       }
@@ -630,7 +639,7 @@ class Transform {
       defEndToUse = this.def.length + defEnd;
     }
     let m = m3.identity();
-    for (let i = defEndToUse; i >= defStart; i -= 1) {
+    for (let i = defEndToUse; i >= defStart; i -= 1) { // $FlowFixMe
       const [type, x, y, z] = this.def[i];
       if (type === 't' && (x !== 0 || y !== 0 || z !== 0)) {
         m = m3.mul(m, m3.translationMatrix(x, y, z));
@@ -645,32 +654,33 @@ class Transform {
         m = m3.mul(m, m3.rotationMatrixDirection([x, y, z]));
       // } else if (type === 'rs' && (x !== 0 || y !== 0)) {
       //   m = m3.mul(m, m3.rotationMatrixSpherical(x, y));
+      // $FlowFixMe
       } else if (type === 'ra' && this.def[i][4] !== 0) {
         m = m3.mul(m, m3.rotationMatrixAxis([x, y, z], this.def[i][4]));
       } else if (type === 'rb') {
-        m = m3.mul(m, m3.basisMatrix(
-          this.def[i].slice(1, 4),
-          this.def[i].slice(4, 7),
+        m = m3.mul(m, m3.basisMatrix( // $FlowFixMe
+          this.def[i].slice(1, 4),  // $FlowFixMe
+          this.def[i].slice(4, 7),  // $FlowFixMe
           this.def[i].slice(7),
         ));
       } else if (type === 'c') {  // $FlowFixMe
         m = m3.mul(m, this.def[i].slice(1));
       } else if (type === 'b' && this.def[i].length === 10) {
-        m = m3.mul(m, m3.basisMatrix(
-          this.def[i].slice(1, 4),
-          this.def[i].slice(4, 7),
+        m = m3.mul(m, m3.basisMatrix(  // $FlowFixMe
+          this.def[i].slice(1, 4),  // $FlowFixMe
+          this.def[i].slice(4, 7),  // $FlowFixMe
           this.def[i].slice(7),
         ));
       } else if (type === 'b' && this.def[i].length === 19) {
         m = m3.mul(m, m3.basisToBasisMatrix(
-          [
-            this.def[i].slice(1, 4),
-            this.def[i].slice(4, 7),
+          [  // $FlowFixMe
+            this.def[i].slice(1, 4),  // $FlowFixMe
+            this.def[i].slice(4, 7),  // $FlowFixMe
             this.def[i].slice(7, 10),
           ],
-          [
-            this.def[i].slice(10, 13),
-            this.def[i].slice(13, 16),
+          [  // $FlowFixMe
+            this.def[i].slice(10, 13),  // $FlowFixMe
+            this.def[i].slice(13, 16),  // $FlowFixMe
             this.def[i].slice(16),
           ],
         ));
@@ -715,6 +725,7 @@ class Transform {
    */
   t(translationIndex: number = 0): ?Point {
     const i = this.getComponentIndex('t', translationIndex);
+    // $FlowFixMe
     const [, x, y, z] = this.def[i];
     return new Point(x, y, z);
   }
@@ -736,14 +747,14 @@ class Transform {
           this.def[i] = ['r', clipAngle(component[1], clipTo)];
         } else if (type === 'rc') {
           this.def[i] = [
-            'r',
-            clipAngle(component[1], clipTo),
-            clipAngle(component[2], clipTo),
+            'rc',
+            clipAngle(component[1], clipTo),  // $FlowFixMe
+            clipAngle(component[2], clipTo),  // $FlowFixMe
             clipAngle(component[3], clipTo),
           ];
         } else if (type === 'ra') {
-          this.def[i] = [
-            'r', component[1], component[2], component[3], clipAngle(component[4], clipTo),
+          this.def[i] = [  // $FlowFixMe
+            'ra', component[1], component[2], component[3], clipAngle(component[4], clipTo),
           ];
         } // else if (type === 'rs') {
         //   this.def[i] = [
@@ -787,7 +798,7 @@ class Transform {
         count += 1;
       }
     }
-    throw new Error(`Cannot update '${def}-${n}' in transform: ${JSON.stringify(this.def)}`);
+    throw new Error(`Cannot update '${JSON.stringify(def)}-${n}' in transform: ${JSON.stringify(this.def)}`);
   }
 
 
@@ -799,7 +810,7 @@ class Transform {
    * @return {Point | null}
    */
   s(scaleIndex: number = 0): ?Point {
-    const i = this.getComponentIndex('s', scaleIndex);
+    const i = this.getComponentIndex('s', scaleIndex); // $FlowFixMe
     const [, x, y, z] = this.def[i];
     return new Point(x, y, z);
   }
@@ -830,23 +841,23 @@ class Transform {
       ) {
         // $FlowFixMe
         out.def[i] = [
-          stepStart[0],
+          stepStart[0], // $FlowFixMe
           ...stepDelta.slice(1).map((d, j) => d * percent + stepStart[j + 1]),
         ];
-      } else if (stepStart[0] === 'rb' && stepDelta[0] === 'rb') {
-        const iStart = getPoint(stepStart.slice(1, 4));
-        const jStart = getPoint(stepStart.slice(4, 7));
-        const kStart = getPoint(stepStart.slice(7, 10));
-        const iDelta = getPoint(stepDelta.slice(1, 4));
-        const jDelta = getPoint(stepDelta.slice(4, 7));
+      } else if (stepStart[0] === 'rb' && stepDelta[0] === 'rb') { // $FlowFixMe
+        const iStart = getPoint(stepStart.slice(1, 4)); // $FlowFixMe
+        const jStart = getPoint(stepStart.slice(4, 7)); // $FlowFixMe
+        const kStart = getPoint(stepStart.slice(7, 10)); // $FlowFixMe
+        const iDelta = getPoint(stepDelta.slice(1, 4)); // $FlowFixMe
+        const jDelta = getPoint(stepDelta.slice(4, 7)); // $FlowFixMe
         const kDelta = getPoint(stepDelta.slice(7, 10));
 
         const iBasis = iStart.add(iDelta.scale(percent)).normalize().toArray();
         const jBasis = jStart.add(jDelta.scale(percent)).normalize().toArray();
         const kBasis = kStart.add(kDelta.scale(percent)).normalize().toArray();
         out.def[i] = ['rb', ...iBasis, ...jBasis, ...kBasis];
-      } else if (stepStart[0] === 't' && stepDelta[0] === 't') {
-        const start = new Point(stepStart[1], stepStart[2], stepStart[3]);
+      } else if (stepStart[0] === 't' && stepDelta[0] === 't') { // $FlowFixMe
+        const start = new Point(stepStart[1], stepStart[2], stepStart[3]); // $FlowFixMe
         const sDelta = new Point(stepDelta[1], stepDelta[2], stepDelta[3]);
         const p = translationPath(
           translationStyle,
@@ -891,17 +902,20 @@ class Transform {
     // if (type === 'rs') {
     //   return [r[1], r[2]];
     // }
-    if (type === 'rc' || type === 'rd') {
+    if (type === 'rc' || type === 'rd') { // $FlowFixMe
       return new Point(r[1], r[2], r[3]);
     }
+    if (type === 'ra') { // $FlowFixMe
+      return r[4];
+    }
     if (type === 'rb') {
-      return [
-        new Point(r[1], r[2], r[3]),
-        new Point(r[4], r[5], r[6]),
+      return [ // $FlowFixMe
+        new Point(r[1], r[2], r[3]), // $FlowFixMe
+        new Point(r[4], r[5], r[6]), // $FlowFixMe
         new Point(r[7], r[8], r[9]),
       ];
     }
-    // ra
+    // $FlowFixMe
     return [new Point(r[1], r[2], r[3]), r[4]];
   }
 
@@ -914,7 +928,7 @@ class Transform {
       rd: 'dir',
       rs: 'sph',
       rb: 'basis',
-    };
+    }; // $FlowFixMe
     return types[this.def[i][0]];
   }
 
@@ -941,7 +955,7 @@ class Transform {
    * @return {Transform}
    */
   updateRotation(
-    r: number | TypeRotationDefinition,
+    r: number | TypeUserRotationDefinition,
     n: number = 0,
   ) {
     if (typeof r === 'number') {
@@ -956,7 +970,7 @@ class Transform {
     values: Array<number>,
   ) {
     const i = this.getComponentIndex('r', n);
-    const type = this.def[i][0];
+    const type = this.def[i][0]; // $FlowFixMe
     return this.updateComponent([type, ...values], n);
   }
 
@@ -973,7 +987,7 @@ class Transform {
    * @return {Type3DMatrix}
    */
   matrix(precision: number | null = null): Type3DMatrix {
-    if (precision) {
+    if (precision) { // $FlowFixMe
       return round(this.mat, precision);
     }
     return this.mat;
@@ -1057,14 +1071,14 @@ class Transform {
    */
   sub(transformToSubtract: Transform = new Transform()): Transform {
     if (!this.isEqualShapeTo(transformToSubtract)) {
-      throw new Error(`Cannot subtract transforms of different shape: '${this.def}', '${transformToSubtract.def}'`);
+      throw new Error(`Cannot subtract transforms of different shape: '${JSON.stringify(this.def)}', '${JSON.stringify(transformToSubtract.def)}'`);
     }
     const def = [];
     for (let i = 0; i < this.def.length; i += 1) {
       const a = this.def[i];
-      const b = transformToSubtract.def[i];
+      const b = transformToSubtract.def[i]; // $FlowFixMe
       def.push([a[0], ...a.slice(1).map((v, j) => v - b[j + 1])]);
-    }
+    } // $FlowFixMe
     return new Transform(def, this.name);
   }
 
@@ -1080,14 +1094,14 @@ class Transform {
    */
   add(transformToAdd: Transform = new Transform()): Transform {
     if (!this.isEqualShapeTo(transformToAdd)) {
-      throw new Error(`Cannot add transforms of different shape: '${this.def}', '${transformToAdd.def}'`);
+      throw new Error(`Cannot add transforms of different shape: '${JSON.stringify(this.def)}', '${JSON.stringify(transformToAdd.def)}'`);
     }
     const def = [];
     for (let i = 0; i < this.def.length; i += 1) {
       const a = this.def[i];
-      const b = transformToAdd.def[i];
+      const b = transformToAdd.def[i]; // $FlowFixMe
       def.push([a[0], ...a.slice(1).map((v, j) => v + b[j + 1])]);
-    }
+    } // $FlowFixMe
     return new Transform(def, this.name);
   }
 
@@ -1101,14 +1115,14 @@ class Transform {
    */
   mul(transformToMultiply: Transform = new Transform()): Transform {
     if (!this.isEqualShapeTo(transformToMultiply)) {
-      throw new Error(`Cannot multiply transforms of different shape: '${this.def}', '${transformToMultiply.def}'`);
+      throw new Error(`Cannot multiply transforms of different shape: '${JSON.stringify(this.def)}', '${JSON.stringify(transformToMultiply.def)}'`);
     }
     const def = [];
     for (let i = 0; i < this.def.length; i += 1) {
       const a = this.def[i];
-      const b = transformToMultiply.def[i];
+      const b = transformToMultiply.def[i]; // $FlowFixMe
       def.push([a[0], ...a.slice(1).map((v, j) => v * b[j + 1])]);
-    }
+    } // $FlowFixMe
     return new Transform(def, this.name);
   }
 
@@ -1172,7 +1186,7 @@ class Transform {
     const def = [];
 
     for (let i = 0; i < this.def.length; i += 1) {
-      const t = this.def[i];
+      const t = this.def[i]; // $FlowFixMe
       const [type, x, y, z] = t;
       if (type === 't' && vector) {
         // if (vector) {
@@ -1217,7 +1231,7 @@ class Transform {
    * `zeroThreshold`
    */
   isZero(zeroThreshold: number = 0): boolean {
-    for (let i = 0; i < this.def.length; i += 1) {
+    for (let i = 0; i < this.def.length; i += 1) { // $FlowFixMe
       const [type, x, y, z, a] = this.def[i];
       if (type === 't' || type === 's' || type === 'rd') {
         if (
@@ -1252,7 +1266,7 @@ class Transform {
         ) {
           return false;
         }
-      } else if (type === 'rb') {
+      } else if (type === 'rb') { // $FlowFixMe
         const [, ix, iy, iz, jx, jy, jz, kx, ky, kz] = this.def[i];
         if (
           ix !== 1 || iy !== 0 || iz !== 0
@@ -1273,7 +1287,7 @@ class Transform {
     const t = new Transform();
     t.name = this.name; // $FlowFixMe
     t.mat = this.mat.slice();
-    // t.index = this.index;  // $FlowFixMe
+    // $FlowFixMe
     t.def = this.def.map(d => d.slice());
     return t;
   }
@@ -1296,7 +1310,7 @@ class Transform {
     const deltaTransform = this.sub(previousTransform);
     for (let i = 0; i < deltaTransform.def.length; i += 1) {
       const t = deltaTransform.def[i]; // $FlowFixMe
-      def.push(makeTransformComponent(
+      def.push(makeTransformComponent( // $FlowFixMe
         t, j => t[j] / deltaTime,
       ));
     }
@@ -1353,7 +1367,7 @@ class Transform {
 
 export type TypeF1DefTransform = {
   f1Type: 'tf',
-  state: TransformDefinition,
+  state: TypeTransformDefinition,
 };
 
 // /**
@@ -1435,8 +1449,8 @@ function isParsableTransform(value: any) {
   return false;
 }
 
-function parseArrayTransformDefinition(definition: TransformDefinition) {
-  const def = [];
+function parseArrayTransformDefinition(definition: TypeTransformDefinition) {
+  const def: TypeTransformDefinition = [];
   if (definition.length === 0) {
     return { name: '', def };
   }
@@ -1453,31 +1467,32 @@ function parseArrayTransformDefinition(definition: TransformDefinition) {
     //   name = defIn[i];  // eslint-disable-next-line no-continue
     //   continue;
     // } // $FlowFixMe
+    // $FlowFixMe
     const [type, x, y] = defIn[i];
     const len = defIn[i].length;
-    if (type === 'c') {
+    if (type === 'c') { // $FlowFixMe
       def.push(defIn[i]);
     } else if (type === 'name') {
       [, name] = defIn[i];
     } else if (type === 't') {
-      if (len === 4) {
+      if (len === 4) { // $FlowFixMe
         def.push(defIn[i]);
-      } else if (len === 3) {
+      } else if (len === 3) { // $FlowFixMe
         def.push(['t', x, y, 0]);
       }
     } else if (type === 's') {
-      if (len === 2) {
+      if (len === 2) { // $FlowFixMe
         def.push(['s', x, x, x]);
-      } else if (len === 3) {
+      } else if (len === 3) { // $FlowFixMe
         def.push(['s', x, y, 1]);
-      } else if (len === 4) {
+      } else if (len === 4) { // $FlowFixMe
         def.push(defIn[i]);
       }
-    } else if (type === 'rb' || type === 'rbasis') {
+    } else if (type === 'rb' || type === 'rbasis') { // $FlowFixMe
       def.push(['rb', ...(parseBasisDefinition(defIn[i]).slice(1))]);
-    } else if (type === 'b' || type === 'basis') {
-      def.push(['b', ...(parseBasisDefinition(defIn[i]).slice(1))]);
-    } else if (type.startsWith('r') || type === 'axis' || type === 'xyz' || type === '2D' || type === 'dir') {
+    } else if (type === 'b' || type === 'basis') { // $FlowFixMe
+      def.push(['b', ...(parseBasisDefinition(defIn[i]).slice(1))]); // $FlowFixMe
+    } else if (type.startsWith('r') || type === 'axis' || type === 'xyz' || type === '2D' || type === 'dir') { // $FlowFixMe
       def.push(parseRotation(defIn[i]));
     } else {
       throw new Error(`Cannot parse transform array definition: ${JSON.stringify(defIn)}`);
@@ -1506,7 +1521,7 @@ function parseTransform(inTransform: TypeParsableTransform): Transform {
   if (Array.isArray(tToUse)) { // $FlowFixMe
     const t = new Transform(tToUse);
     return t;
-  }
+  } // $FlowFixMe
   const { f1Type, state } = tToUse;
   if (
     f1Type != null
@@ -1520,10 +1535,10 @@ function parseTransform(inTransform: TypeParsableTransform): Transform {
   throw new Error(`FigureOne could not parse transform: '${JSON.stringify(inTransform)}'`);
 }
 
-function getMatrix(matrixOrTransform: TypeParsableTransfrom | Type3DMatrix) {
+function getMatrix(matrixOrTransform: TypeParsableTransform | Type3DMatrix) {
   if (Array.isArray(matrixOrTransform) && matrixOrTransform.length === 16 && typeof matrixOrTransform[0] === 'number') {
     return matrixOrTransform;
-  }
+  } // $FlowFixMe
   return parseTransform(matrixOrTransform).matrix();
 }
 
@@ -1580,11 +1595,11 @@ function transformValueToArray(
         value = transformValue.rotation;
       }
       def.push(value);
-    } else if (type[0] === 'x') {
-      let value = 0;
+    } else if (type[0] === 'c') {
+      let value = 0; // $FlowFixMe
       if (transformValue.custom != null) {
         value = transformValue.custom;
-      }
+      } // $FlowFixMe
       def.push(value);
     }
   }
@@ -1601,9 +1616,9 @@ function parseDirectionVector(
   let v;
   if (!Array.isArray(vector)) {
     v = getPoint(vector);
-  } else if (typeof vector[0] === 'string') {
+  } else if (typeof vector[0] === 'string') { // $FlowFixMe
     v = getPoint(parseRotation(vector).slice(1));
-  } else {
+  } else { // $FlowFixMe
     v = getPoint(vector);
   }
   return v;

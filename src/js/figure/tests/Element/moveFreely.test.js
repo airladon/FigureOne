@@ -468,7 +468,7 @@ describe('Element Move', () => {
       // v1 = v0 - a * t = 1 - 0.1 * 0.5131670194948623 = 0.9486832980505138
       // After bounce = v1 * 0.5 = 0.4743416490252569
       figure.mock.timeStep(0.51316700);
-      expect(round(a.getRotation()[1], 5)).toBe(1);
+      expect(round(a.getRotation(), 5)).toBe(1);
       expect(round(a.state.movement.velocity, 5)).toEqual(0.94868);
       figure.mock.timeStep(0.0000002);
       expect(round(a.state.movement.velocity, 5)).toEqual(-0.47434);
