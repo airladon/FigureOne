@@ -412,7 +412,7 @@ export default class EquationForm extends Elements {
   getElementsToShowAndHide() {
     const allElements = this.collectionMethods.getAllElements();
     const elementsShown = allElements.filter(e => e.isShown);
-    const elementsShownTarget = this.getAllElements();
+    const elementsShownTarget = this.getAllElements(false);
     const elementsToHide: Array<FigureElementPrimitive
                                 | FigureElementCollection> =
        elementsShown.filter(e => elementsShownTarget.indexOf(e) === -1);
@@ -493,7 +493,7 @@ export default class EquationForm extends Elements {
     this.collectionMethods.stop();
     const allElements = this.collectionMethods.getAllElements();
     const elementsShown = allElements.filter(e => e.isShown);
-    const elementsToShow = this.getAllElements();
+    const elementsToShow = this.getAllElements(false);
     const elementsToDelayShowing = elementsToShow.filter(e => !e.isShown);
     const elementsToShowAfterDissolve = elementsToShow.filter(e => e.isShown);
     let cumTime = delay;
@@ -592,7 +592,7 @@ export default class EquationForm extends Elements {
   ) {
     const allElements = this.collectionMethods.getAllElements();
     this.collectionMethods.stop();
-    const elementsShownTarget = this.getAllElements();
+    const elementsShownTarget = this.getAllElements(false);
     elementsShownTarget.forEach((e) => {
       if (e.opacity === 0.001) {
         e.hide();

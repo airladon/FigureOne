@@ -34,6 +34,13 @@ class FigureFont {
   family: string;
   color: TypeColor | null;
   opacity: number;
+  width: number;
+  descent: number;
+  midDescent: number;
+  maxDescent: number;
+  midAscent: number;
+  maxAscent: number;
+
 
   constructor(optionsIn: OBJ_Font | FigureFont = {}) {
     if (optionsIn instanceof FigureFont) {
@@ -43,6 +50,12 @@ class FigureFont {
       this.weight = optionsIn.weight;
       this.opacity = optionsIn.opacity;
       this.setColor(optionsIn.color);
+      this.width = optionsIn.width;
+      this.descent = optionsIn.descent;
+      this.midDescent = optionsIn.midDescent;
+      this.maxDescent = optionsIn.maxDescent;
+      this.midAscent = optionsIn.midAscent;
+      this.maxAscent = optionsIn.maxAscent;
       return;
     }
     const defaultOptions = {
@@ -52,6 +65,12 @@ class FigureFont {
       weight: '200',
       color: null,
       opacity: 1,
+      width: 1,
+      descent: 0.08,
+      midDescent: 0.2,
+      maxDescent: 0.5,
+      midAscent: 0.95,
+      maxAscent: 1.4,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     this.family = options.family;
@@ -60,6 +79,12 @@ class FigureFont {
     this.weight = options.weight;
     this.opacity = options.opacity;
     this.setColor(options.color);
+    this.width = options.width;
+    this.descent = options.descent;
+    this.midDescent = options.midDescent;
+    this.maxDescent = options.maxDescent;
+    this.midAscent = options.midAscent;
+    this.maxAscent = options.maxAscent;
   }
 
   setColor(color: TypeColor | null = null) {
@@ -85,6 +110,12 @@ class FigureFont {
       weight: this.weight,
       color: colorToUse,
       opacity: this.opacity,
+      width: this.width,
+      descent: this.descent,
+      midDescent: this.midDescent,
+      maxDescent: this.maxDescent,
+      midAscent: this.midAscent,
+      maxAscent: this.maxAscent,
     };
   }
 
@@ -272,15 +303,15 @@ class FigureTextBase {
       aWidth = ctx.measureText('a').width;
     }
     // Estimations of FONT ascent and descent for a baseline of "alphabetic"
-    let ascent = aWidth * 1.4;
-    let descent = aWidth * 0.08;
+    let ascent = aWidth * this.font.maxAscent;
+    let descent = aWidth * this.font.descent;
 
     // Uncomment below and change above consts to lets if more resolution on
     // actual text boundaries is needed
 
     // const maxAscentRe =
     //   /[ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890!#%^&()@$Qbdtfhiklj]/g;
-    const midAscentRe = /[acemnorsuvwxz*gyqp]/g;
+    const midAscentRe = /[acemnorsuvwxz*gyqp: ]/g;
     const midDecentRe = /[;,$]/g;
     let maxDescentRe = /[gjyqp@Q(){}[\]|]/g;
     if (this.font.family === 'Times New Roman') {
@@ -292,29 +323,30 @@ class FigureTextBase {
     const midAscentMatches = this.text.match(midAscentRe);
     if (Array.isArray(midAscentMatches)) {
       if (midAscentMatches.length === this.text.length) {
-        ascent = aWidth * 0.95;
+        ascent = aWidth * this.font.midAscent;
       }
     }
 
     const midDescentMatches = this.text.match(midDecentRe);
     if (Array.isArray(midDescentMatches)) {
       if (midDescentMatches.length > 0) {
-        descent = aWidth * 0.2;
+        descent = aWidth * this.font.midDescent;
       }
     }
 
     const maxDescentMatches = this.text.match(maxDescentRe);
     if (Array.isArray(maxDescentMatches)) {
       if (maxDescentMatches.length > 0) {
-        descent = aWidth * 0.5;
+        descent = aWidth * this.font.maxDescent;
       }
     }
     // const height = ascent + descent;
 
     let { width } = ctx.measureText(this.text);
-    if (this.font.family.toLowerCase() === 'open sans') {
-      width *= 1.152;
-    }
+    width *= this.font.width;
+    // if (this.font.family.toLowerCase() === 'open sans') {
+    //   width *= 1.152;
+    // }
     this.measure = {
       ascent: ascent / scalingFactor,
       descent: descent / scalingFactor,
@@ -1194,6 +1226,7 @@ class TextLinesObject extends TextObjectBase {
         rSpace?: number,
       },
     },
+    defaultAccent: OBJ_Font,
     defaultTextTouchBorder?: number,
     font: OBJ_Font,
     justify: 'left' | 'center' | 'right',
@@ -1217,6 +1250,10 @@ class TextLinesObject extends TextObjectBase {
     this.modifiers = options.modifiers || {};
     this.lines = [];
     const figureTextArray = [];
+    let defaultAccent = { style: 'italic' };
+    if (options.defaultAccent != null) {
+      defaultAccent = joinObjects({}, defaultAccent, options.defaultAccent);
+    }
 
     textLines.forEach((lineDefinition, lineIndex) => {
       let lineJustification = options.justify;
@@ -1242,8 +1279,9 @@ class TextLinesObject extends TextObjectBase {
       }
       const line = [];
 
-      const split = splitString(lineToUse, '|', '/');
-      split.forEach((s) => {
+      const [split, firstToken] = splitString(lineToUse, '|', '/');
+      // console.log(split)
+      split.forEach((s, i) => {
         let text = s;
         let textFont = lineFont;
         let offset = new Point(0, 0);
@@ -1254,8 +1292,19 @@ class TextLinesObject extends TextObjectBase {
         let followOffsetY = false;
         let rSpace = 0;
         let lSpace = 0;
-        if (this.modifiers[s] != null) {
-          const mod = this.modifiers[s];
+        // console.log(s, firstToken, i % 2)
+        // if (this.modifiers[s] != null) {
+        if (i % 2 === firstToken) {
+          let mod;
+          if (this.modifiers[s] != null) {
+            mod = this.modifiers[s];
+          } else {
+            mod = {
+              text: s,
+              font: defaultAccent,
+            };
+          }
+          // const mod = this.modifiers[s];
           if (mod.text != null) {
             ({ text } = mod);
           }

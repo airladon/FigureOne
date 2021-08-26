@@ -78,6 +78,12 @@ describe('Figure Text Object', () => {
         style: 'normal',
         weight: '100',
         opacity: 1,
+        descent: 0.08,
+        maxAscent: 1.4,
+        maxDescent: 0.5,
+        midAscent: 0.95,
+        midDescent: 0.2,
+        width: 1,
       });
       expect(t0.location).toEqual(new Point(0, 0));
       expect(t0.xAlign).toBe('left');

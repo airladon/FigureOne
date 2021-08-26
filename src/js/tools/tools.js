@@ -1399,6 +1399,7 @@ function splitString(str: string, token: string = '|', escape: string = '') {
   let escaped = false;
   let escapedEscape = false;
   let tokenStringIndex = 0;
+  let firstToken = -1;
   letters.forEach((letter) => {
     currentSplit.push(letter);
     if (tokenStringIndex === 0 && letter === escape && escaped === false) {
@@ -1414,8 +1415,13 @@ function splitString(str: string, token: string = '|', escape: string = '') {
     if (tokenStringIndex === token.length) {
       if (!escaped) {
         const newSplitString = currentSplit.slice(0, -token.length).join('');
-        if (newSplitString.length > 0) {
+        if (newSplitString.length > 0 || split.length > 0) {
           split.push(newSplitString);
+        }
+        if (newSplitString.length === 0 && firstToken === -1) {
+          firstToken = 0;
+        } else if (firstToken === -1) {
+          firstToken = 1;
         }
         currentSplit = [];
       } else {
@@ -1435,7 +1441,7 @@ function splitString(str: string, token: string = '|', escape: string = '') {
   if (currentSplit.length > 0) {
     split.push(currentSplit.join(''));
   }
-  return split;
+  return [split, firstToken];
 }
 
 class PerformanceTimer {

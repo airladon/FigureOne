@@ -19,6 +19,7 @@ export default class BaseEquationFunction extends Elements {
   glyphWidths: Array<number>;
   glyphHeights: Array<number>;
   // inSize: boolean;
+  showContent: boolean;
   options: Object;
 
   constructor(
@@ -27,6 +28,7 @@ export default class BaseEquationFunction extends Elements {
       | Array<?Symbol>),
     // inSize: boolean = true,
     options: Object,
+    showContent: boolean = true,
   ) {
     const glyphElements = [];
     if (Array.isArray(glyph)) {
@@ -56,6 +58,7 @@ export default class BaseEquationFunction extends Elements {
     this.glyphWidths = glyphElements.map(() => 1);
     this.glyphHeights = glyphElements.map(() => 1);
     this.options = options;
+    this.showContent = showContent;
     // this.fullSize = null;
   }
 
@@ -105,11 +108,14 @@ export default class BaseEquationFunction extends Elements {
     return copy;
   }
 
-  getAllElements() {
+  getAllElements(includeHidden: boolean = true) {
+    if (!includeHidden && !this.showContent) {
+      return [];
+    }
     let elements = [];
     this.contents.forEach((c) => {
       if (c != null) {
-        elements = [...elements, ...c.getAllElements()];
+        elements = [...elements, ...c.getAllElements(includeHidden)];
       }
     });
     this.glyphs.forEach((g) => {

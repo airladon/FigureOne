@@ -1356,67 +1356,84 @@ describe('ObjectTracker', () => {
   describe('Split String', () => {
     test('single letter without escape', () => {
       const s = 'This is |a| test';
-      const split = tools.splitString(s, '|');
+      const [split, firstToken] = tools.splitString(s, '|');
       expect(split).toEqual([
         'This is ', 'a', ' test',
       ]);
+      expect(firstToken).toEqual(1);
     });
     test('Multi word without escape, start', () => {
       const s = '|This| is |a| test';
-      const split = tools.splitString(s, '|');
+      const [split, firstToken] = tools.splitString(s, '|');
       expect(split).toEqual([
         'This', ' is ', 'a', ' test',
       ]);
+      expect(firstToken).toEqual(0);
     });
     test('Multi letter without escape, end', () => {
       const s = 'This is a |test|';
-      const split = tools.splitString(s, '|');
+      const [split, firstToken] = tools.splitString(s, '|');
       expect(split).toEqual([
         'This is a ', 'test',
       ]);
+      expect(firstToken).toEqual(1);
     });
     test('Single letter with escape', () => {
       const s = 'This /|is |a| test';
-      const split = tools.splitString(s, '|', '/');
+      const [split, firstToken] = tools.splitString(s, '|', '/');
       expect(split).toEqual([
         'This |is ', 'a', ' test',
       ]);
+      expect(firstToken).toEqual(1);
     });
     test('Single letter with 2x escapes', () => {
       const s = 'This /|/|is |a| test';
-      const split = tools.splitString(s, '|', '/');
+      const [split, firstToken] = tools.splitString(s, '|', '/');
       expect(split).toEqual([
         'This ||is ', 'a', ' test',
       ]);
+      expect(firstToken).toEqual(1);
     });
     test('Print escape sequence', () => {
       const s = 'This ///|is |a| test';
-      const split = tools.splitString(s, '|', '/');
+      const [split, firstToken] = tools.splitString(s, '|', '/');
       expect(split).toEqual([
         'This /|is ', 'a', ' test',
       ]);
+      expect(firstToken).toEqual(1);
     });
     test('Double', () => {
       const s = 'This is ||a|| test';
-      const split = tools.splitString(s, '||');
+      const [split, firstToken] = tools.splitString(s, '||');
       expect(split).toEqual([
         'This is ', 'a', ' test',
       ]);
+      expect(firstToken).toEqual(1);
     });
     test('Side by side', () => {
       const s = 'This is |a|| test| for this';
-      const split = tools.splitString(s, '|');
+      const [split, firstToken] = tools.splitString(s, '|');
       expect(split).toEqual([
-        'This is ', 'a', ' test', ' for this',
+        'This is ', 'a', '', ' test', ' for this',
       ]);
+      expect(firstToken).toEqual(1);
+    });
+    test('Side by side Start', () => {
+      const s = '|This ||is ||a|| test| for this';
+      const [split, firstToken] = tools.splitString(s, '|');
+      expect(split).toEqual([
+        'This ', '', 'is ', '', 'a', '', ' test', ' for this',
+      ]);
+      expect(firstToken).toEqual(0);
     });
     test('Escape escape', () => {
       const s = 'This is //|a test| for this';
       // debugger;
-      const split = tools.splitString(s, '|', '/');
+      const [split, firstToken] = tools.splitString(s, '|', '/');
       expect(split).toEqual([
         'This is /', 'a test', ' for this',
       ]);
+      expect(firstToken).toEqual(1);
     });
     // 'This is |a| test'
     // 'This \|is |a| test'

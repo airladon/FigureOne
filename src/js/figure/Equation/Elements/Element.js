@@ -15,6 +15,7 @@ export interface ElementInterface {
   width: number;
   location: Point;
   height: number;
+  showContent: boolean;
   fullSize: {
     leftOffset: number,
     width: number,
@@ -26,7 +27,8 @@ export interface ElementInterface {
 
   calcSize(location: Point, scale: number): void;
   _dup(namedCollection?: Object): ElementInterface;
-  getAllElements(): Array<ElementInterface | FigureElementPrimitive | FigureElementCollection>;
+  getAllElements(includeHidden?: boolean): Array<ElementInterface
+    | FigureElementPrimitive | FigureElementCollection>;
   setPositions(): void;
   offsetLocation(offset: Point): void;
   getBounds(useFullSize?: boolean): Bounds;
@@ -62,6 +64,7 @@ class Element implements ElementInterface {
   height: number;
   scale: number;
   fnMap: FunctionMap;
+  showContent: boolean;
   fullSize: {
     leftOffset: number,
     width: number,
@@ -85,6 +88,7 @@ class Element implements ElementInterface {
       descent: this.descent,
     };
     this.fnMap = new FunctionMap();
+    this.showContent = true;
   }
 
   // execFn(fn: string | Function | null, ...args: Array<any>) {
@@ -159,7 +163,11 @@ class Element implements ElementInterface {
   //   return this.fullSize;
   // }
 
-  getAllElements() {
+  // esline-diable-next-line
+  getAllElements(includeHidden: boolean = true) {
+    if (!includeHidden && !this.showContent) {
+      return [];
+    }
     if (this.content instanceof BlankElement) {
       return [];
     }
@@ -227,6 +235,7 @@ class Elements implements ElementInterface {
   location: Point;
   height: number;
   fnMap: FunctionMap;
+  showContent: boolean;
   fullSize: {
     leftOffset: number,
     width: number,
@@ -249,6 +258,7 @@ class Elements implements ElementInterface {
     this.location = new Point(0, 0);
     this.height = 0;
     this.fnMap = new FunctionMap();
+    this.showContent = true;
   }
 
   // execFn(fn: string | Function | null, ...args: Array<any>) {
@@ -341,10 +351,13 @@ class Elements implements ElementInterface {
   //   return bounds;
   // }
 
-  getAllElements() {
+  getAllElements(includeHidden: boolean = true) {
     let elements = [];
+    if (!includeHidden && !this.showContent) {
+      return [];
+    }
     this.content.forEach((e) => {
-      elements = [...elements, ...e.getAllElements()];
+      elements = [...elements, ...e.getAllElements(includeHidden)];
     });
     return elements;
   }
