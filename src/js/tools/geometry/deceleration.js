@@ -12,7 +12,7 @@ import {
 
 function getDistance(
   velocity: number,
-  deltaTimeIn: number,
+  deltaTimeIn: number | null,
   deceleration: number,
   zeroVelocityThreshold: number,
 ) {
@@ -96,7 +96,8 @@ function decelerateValue(
 
   // Clip the current value to within the bounds, and make the deceleration non
   // zero to prevent divide by zeros
-  const value = bounds != null ? bounds.clip(valueIn) : valueIn;
+  // $FlowFixMe
+  const value: number = bounds != null ? bounds.clip(valueIn) : valueIn;
   const deceleration = Math.max(decelerationIn, 0.0000001);
   // Direciton of velocity
   const direction = velocityIn / Math.abs(velocityIn);
@@ -157,8 +158,8 @@ function decelerateValue(
   // If there is no bounce (all energy is lost) then return the result
   if (bounceLossIn === 1) {
     return {
-      velocity: new Point(0, 0),
-      position: intersect,
+      velocity: new Point(0, 0),  // $FlowFixMe
+      value: intersect,
       duration: t,
     };
   }
@@ -169,7 +170,7 @@ function decelerateValue(
   // new bounce velocity and bounce position.
   // If deltaTimeIn == null, looking for the zero velocity time/value
   if (deltaTimeIn == null) {
-    const newStop = decelerateValue(
+    const newStop = decelerateValue(  // $FlowFixMe
       intersect, bounceVelocity, deceleration, deltaTimeIn,
       bounds, bounceLossIn, zeroVelocityThreshold, precision,
     );
@@ -180,13 +181,13 @@ function decelerateValue(
     //     velocity: new Point(0, 0),
     //   };
     // }
-    return {
+    return {  // $FlowFixMe
       duration: t + newStop.duration,
       value: newStop.value,
       velocity: 0,
     };
   }
-  return decelerateValue(
+  return decelerateValue(  // $FlowFixMe
     intersect, bounceVelocity, deceleration, deltaTime - t, bounds,
     bounceLossIn, zeroVelocityThreshold, precision,
   );
@@ -336,7 +337,7 @@ function decelerateVector(
     //     velocity: new Point(0, 0),
     //   };
     // }
-    return {
+    return {  // $FlowFixMe
       duration: t + newStop.duration,
       position: newStop.position,
       velocity: new Point(0, 0),
