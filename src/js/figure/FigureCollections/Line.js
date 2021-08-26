@@ -736,6 +736,7 @@ export default class CollectionsLine extends FigureElementCollection {
     };
     if (move) {
       const moveOptions = joinObjects({}, defaultMoveOptions, move);
+      // $FlowFixMe
       this.setMovable({
         movable: true,
         type: moveOptions.type,
