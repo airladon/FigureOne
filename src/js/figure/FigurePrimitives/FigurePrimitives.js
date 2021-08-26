@@ -271,28 +271,28 @@ export default class FigurePrimitives {
         loadColor: [0, 0, 1, 0.5],
       },
       name: generateUniqueId('primitive_'),
-      color: this.defaultColor,
+      color: this.defaultColor, // $FlowFixMe
       transform: [['s', 1], ['r', 0, 0, 0], ['t', 0, 0, 0]],
       dimension: 2,
     };
     // Setup shaders based on input options
-    if (oIn.texture != null) {
-      defaultOptions.vertexShader.color = 'texture';
+    if (oIn.texture != null) { // $FlowFixMe
+      defaultOptions.vertexShader.color = 'texture'; // $FlowFixMe
       defaultOptions.fragmentShader.color = 'texture';
     }
-    if (oIn.dimension != null) {
+    if (oIn.dimension != null) { // $FlowFixMe
       defaultOptions.vertexShader.dimension = oIn.dimension;
     }
-    if (oIn.glPrimitive === 'LINES') {
-      defaultOptions.vertexShader.light = null;
+    if (oIn.glPrimitive === 'LINES') { // $FlowFixMe
+      defaultOptions.vertexShader.light = null; // $FlowFixMe
       defaultOptions.fragmentShader.light = null;
     }
-    if (oIn.light != null) {
-      defaultOptions.vertexShader.light = oIn.light;
+    if (oIn.light != null) { // $FlowFixMe
+      defaultOptions.vertexShader.light = oIn.light; // $FlowFixMe
       defaultOptions.fragmentShader.light = oIn.light;
     }
-    if (oIn.colors != null) {
-      defaultOptions.vertexShader.color = 'vertex';
+    if (oIn.colors != null) { // $FlowFixMe
+      defaultOptions.vertexShader.color = 'vertex'; // $FlowFixMe
       defaultOptions.fragmentShader.color = 'vertex';
     }
 
@@ -420,7 +420,7 @@ export default class FigurePrimitives {
 
     // Add some custom methods to the FigureElementPrimitive to update
     // attributes, vertices, uniforms
-    element.custom.updateAttribute =
+    element.custom.updateAttribute =  // $FlowFixMe
       element.drawingObject.updateAttribute.bind(element.drawingObject);
     element.custom.updateVertices =
       element.drawingObject.updateVertices.bind(element.drawingObject);
@@ -471,7 +471,7 @@ export default class FigurePrimitives {
     const options = joinObjects({}, defaultOptions, oIn);
     const dim = options.dimension;
 
-    const processOptions = (o, u) => {
+    const processOptions = (o: OBJ_Generic3, u) => {
       if (o.usage == null) {
         o.usage = u;
       }
@@ -550,7 +550,7 @@ export default class FigurePrimitives {
       if (o.colors) {
         element.custom.updateAttribute('a_color', o.colors);
       }
-      if (o.drawType != null) {
+      if (o.drawType != null) { // $FlowFixMe
         element.drawingObject.setPrimitive(o.drawType.toUpperCase());
       }
     };
@@ -564,7 +564,7 @@ export default class FigurePrimitives {
   generic3DBase(
     defaultOptions: Object,
     optionsIn: Object,
-    getPointsFn: (Object) => [Array<Point>, Array<Point>],
+    getPointsFn: (Object) => ([Array<Point>, Array<Point>] | [Array<Point>]),
   ) {
     const options = joinObjects({}, defaultOptions, optionsIn);
     const element = this.generic3(joinObjects(
@@ -815,101 +815,101 @@ export default class FigurePrimitives {
     return element;
   }
 
-  /**
-   * {@link FigureElementPrimitive} that draws a generic shape.
-   * @see {@link OBJ_Generic} for options and examples.
-   */
-  genericLegacy(...optionsIn: Array<OBJ_Generic>) {
-    const defaultOptions = {
-      name: generateUniqueId('primitive_'),
-      color: this.defaultColor,
-      transform: new Transform('generic').scale(1).rotate(0).translate(),
-      texture: {
-        src: '',
-        mapTo: new Rect(-1, -1, 2, 2),
-        mapFrom: new Rect(0, 0, 1, 1),
-        repeat: false,
-        onLoad: this.animateNextFrame,
-      },
-    };
-    const options = joinObjects({}, defaultOptions, ...optionsIn);
-    options.transform = getTransform(options.transform);
-    if (options.position != null) {
-      options.position = getPoint(options.position);
-      options.transform.updateTranslation(options.position);
-    }
+  // /**
+  //  * {@link FigureElementPrimitive} that draws a generic shape.
+  //  * @see {@link OBJ_Generic} for options and examples.
+  //  */
+  // genericLegacy(...optionsIn: Array<OBJ_Generic>) {
+  //   const defaultOptions = {
+  //     name: generateUniqueId('primitive_'),
+  //     color: this.defaultColor,
+  //     transform: new Transform('generic').scale(1).rotate(0).translate(),
+  //     texture: {
+  //       src: '',
+  //       mapTo: new Rect(-1, -1, 2, 2),
+  //       mapFrom: new Rect(0, 0, 1, 1),
+  //       repeat: false,
+  //       onLoad: this.animateNextFrame,
+  //     },
+  //   };
+  //   const options = joinObjects({}, defaultOptions, ...optionsIn);
+  //   options.transform = getTransform(options.transform);
+  //   if (options.position != null) {
+  //     options.position = getPoint(options.position);
+  //     options.transform.updateTranslation(options.position);
+  //   }
 
-    const element = Generic(
-      this.webgl[0],
-      options.color,
-      options.transform,
-      options.texture.src,
-      getRect(options.texture.mapTo),
-      getRect(options.texture.mapFrom),
-      options.texture.repeat,
-      options.texture.onLoad,
-      options.name,
-      // this.scene,
-    );
+  //   const element = Generic(
+  //     this.webgl[0],
+  //     options.color,
+  //     options.transform,
+  //     options.texture.src,
+  //     getRect(options.texture.mapTo),
+  //     getRect(options.texture.mapFrom),
+  //     options.texture.repeat,
+  //     options.texture.onLoad,
+  //     options.name,
+  //     // this.scene,
+  //   );
 
-    element.dimColor = this.defaultDimColor.slice();
-    if (options.move != null && options.move !== false) {
-      element.setTouchable();
-      element.setMovable();
-      element.setMove(options.move);
-    }
-    if (options.touch != null) {
-      element.setTouchable(options.touch);
-    }
-    if (options.dimColor != null) {
-      element.dimColor = options.dimColor;
-    }
-    if (options.defaultColor != null) {
-      element.defaultColor = options.dimColor;
-    }
-    if (options.scenarios != null) {
-      element.scenarios = options.scenarios;
-    }
+  //   element.dimColor = this.defaultDimColor.slice();
+  //   if (options.move != null && options.move !== false) {
+  //     element.setTouchable();
+  //     element.setMovable();
+  //     element.setMove(options.move);
+  //   }
+  //   if (options.touch != null) {
+  //     element.setTouchable(options.touch);
+  //   }
+  //   if (options.dimColor != null) {
+  //     element.dimColor = options.dimColor;
+  //   }
+  //   if (options.defaultColor != null) {
+  //     element.defaultColor = options.dimColor;
+  //   }
+  //   if (options.scenarios != null) {
+  //     element.scenarios = options.scenarios;
+  //   }
 
-    element.custom.updateGeneric = function update(updateOptions: {
-      points?: Array<TypeParsablePoint>,
-      drawBorder?: TypeParsableBorder,
-      drawBorderBuffer?: TypeParsableBorder,
-      border?: TypeParsableBorder | 'draw' | 'buffer' | 'rect' | number,
-      touchBorder?: TypeParsableBorder | 'draw' | 'border' | 'rect' | number | 'buffer',
-      copy?: Array<CPY_Step>,
-      drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
-    }) {
-      const o = updateOptions;
-      if (o.copy != null && !Array.isArray(o.copy)) {
-        o.copy = [o.copy];
-      }
-      if (o.points != null) { // $FlowFixMe
-        o.points = getPoints(o.points);
-      }
-      if (o.drawBorder != null) { // $FlowFixMe
-        element.drawBorder = getBorder(o.drawBorder);
-      } else if (o.points != null) {
-        element.drawBorder = [o.points];
-      }
-      if (o.drawBorderBuffer != null) { // $FlowFixMe
-        element.drawBorderBuffer = getBorder(o.drawBorderBuffer);
-      } else element.drawBorderBuffer = element.drawBorder;
-      if (o.border != null) { // $FlowFixMe
-        element.border = getBorder(o.border);
-      }
-      if (o.touchBorder != null) { // $FlowFixMe
-        element.touchBorder = getBorder(o.touchBorder);
-      }
-      element.drawingObject.change(o);
-    };
-    element.custom.updateGeneric(options);
-    element.custom.updatePoints = element.custom.updateGeneric;
-    element.timeKeeper = this.timeKeeper;
-    element.recorder = this.recorder;
-    setupPulse(element, options);
-    return element;
-  }
+  //   element.custom.updateGeneric = function update(updateOptions: {
+  //     points?: Array<TypeParsablePoint>,
+  //     drawBorder?: TypeParsableBorder,
+  //     drawBorderBuffer?: TypeParsableBorder,
+  //     border?: TypeParsableBorder | 'draw' | 'buffer' | 'rect' | number,
+  //     touchBorder?: TypeParsableBorder | 'draw' | 'border' | 'rect' | number | 'buffer',
+  //     copy?: Array<CPY_Step>,
+  //     drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
+  //   }) {
+  //     const o = updateOptions;
+  //     if (o.copy != null && !Array.isArray(o.copy)) {
+  //       o.copy = [o.copy];
+  //     }
+  //     if (o.points != null) { // $FlowFixMe
+  //       o.points = getPoints(o.points);
+  //     }
+  //     if (o.drawBorder != null) { // $FlowFixMe
+  //       element.drawBorder = getBorder(o.drawBorder);
+  //     } else if (o.points != null) {
+  //       element.drawBorder = [o.points];
+  //     }
+  //     if (o.drawBorderBuffer != null) { // $FlowFixMe
+  //       element.drawBorderBuffer = getBorder(o.drawBorderBuffer);
+  //     } else element.drawBorderBuffer = element.drawBorder;
+  //     if (o.border != null) { // $FlowFixMe
+  //       element.border = getBorder(o.border);
+  //     }
+  //     if (o.touchBorder != null) { // $FlowFixMe
+  //       element.touchBorder = getBorder(o.touchBorder);
+  //     }
+  //     element.drawingObject.change(o);
+  //   };
+  //   element.custom.updateGeneric(options);
+  //   element.custom.updatePoints = element.custom.updateGeneric;
+  //   element.timeKeeper = this.timeKeeper;
+  //   element.recorder = this.recorder;
+  //   setupPulse(element, options);
+  //   return element;
+  // }
 
   /**
    * {@link FigureElementPrimitive} that draws a generic shape.
