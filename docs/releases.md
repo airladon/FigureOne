@@ -121,3 +121,12 @@ API cleanup
 * Bug Fix: Global TouchUp events no longer interrupt cursor movements when a video is playing (bug introduced in 0.10.6)
 * Bug Fix: Video is now automatically paused/played when headphones are removed/mounted
 * Bug Fix: Video seek now correctly replays the current slide if seek time is equal to the slide time
+
+## 0.10.10
+* Bug Fix: Remove console statement
+* Bug Fix: Recorder playback of non-auto events not working with touchUp
+
+## 0.10.11
+* Start playing video after audio starts instead of before
+* Add two notifications `startingPlayback` and `startingPause` for players to switch state before recorder processing completes
+* Bug Fix: Pulse settings was missing from recorder seek state in PulseAnimationStep

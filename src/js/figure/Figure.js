@@ -204,7 +204,7 @@ export type OBJ_Figure = {
  * <body>
  *     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
  *     </div>
- *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.10.9/figureone.min.js'></script>
+ *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.10.10/figureone.min.js'></script>
  *     <script type="text/javascript" src='./index.js'></script>
  * </body>
  * </html>
@@ -1891,14 +1891,17 @@ class Figure {
   // Handle touch up, or mouse click up events in the canvas. When an UP even
   // happens, the default behavior is to let any elements being moved to move
   // freely until they decelerate to 0.
-  touchUpHandler(autoEvent: boolean = false) {
+  touchUpHandler(autoEvent: boolean = false, fromGesture: boolean = false) {
     if (this.isTouchDown === false) {
       return;
     }
     // If the recorder is playing and there is a touchup even outside of the
     // figure, then unless this check is here, then if the cursor is down, it
     // will be lifted.
-    if (this.recorder.state === 'playing' || this.recorder.state === 'preparingToPlay' && !autoEvent) {
+    if (
+      (this.recorder.state === 'playing' || this.recorder.state === 'preparingToPlay')
+      && fromGesture
+    ) {
       return;
     }
     if (this.recorder.state === 'recording' && !autoEvent) {

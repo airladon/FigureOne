@@ -300,6 +300,7 @@ class Recorder {
   // static instance: Object;
 
   timeKeeper: TimeKeeper;
+  audioStartedCallback: null | () => void;
 
   // All slides, events and states are relative to 0, where 0 is the start of a recording.
   // Slides, events and states do not have to have a 0 time,
@@ -454,10 +455,14 @@ class Recorder {
     });
     // $FlowFixMe
     this.audio.addEventListener('play', () => {
-      if (this.state === 'idle') {
+      // This is here to handle audio triggered start/stop (like headphones
+      // being removed or inserted)
+      if (this.state === 'idle' && this.audioStartedCallback == null) {
         this.resumePlayback();
       }
     });
+    audio.addEventListener('playing', () => this.audioStarted(), false);
+    audio.addEventListener('ended', () => this.audioEnded(), false);
   }
 
   loadEvents(
@@ -1288,7 +1293,7 @@ ${cursorData}
     this.figure.timeKeeper.clearTimeout(this.queueSeekId);
     this.queueSeekId = this.figure.timeKeeper.setTimeout(() => {
       this.seek(this.queueSeekTime);
-      this.queueSeekId = null;
+      // this.queueSeekId = null;
     }, 100);
   }
 
@@ -1298,6 +1303,7 @@ ${cursorData}
    */
   seek(timeIn: number) {
     this.figure.timeKeeper.clearTimeout(this.queueSeekId);
+    this.queueSeekId = null;
     let time = this.convertTime(timeIn);
     if (time < 0) {
       time = 0;
@@ -1521,6 +1527,7 @@ ${cursorData}
     allowPauseResume: boolean = false,
     events: ?Array<string> = [],
   ) {
+    this.notifications.publish('startingPlayback');
     this.lastSeekTime = null;
     let fromTime = this.convertTime(fromTimeIn);
     if (fromTimeIn == null || fromTimeIn >= this.duration) {
@@ -1545,17 +1552,28 @@ ${cursorData}
       }
       this.setVideoToNowDeltaTime(fromTime);
       fromTime = this.getCurrentTime();
-      this.state = 'playing';
-      this.setCurrentTime(fromTime);
-      this.startTimeUpdates();
-      this.startEventsPlayback(fromTime);
-      // console.log('start playback', performance.now() / 1000)
-      this.startAudioPlayback(fromTime);
-      this.figure.animateNextFrame();
-      if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
-        this.finishPlaying();
+      const start = () => {
+        this.state = 'playing';
+        this.setCurrentTime(fromTime);
+        this.startTimeUpdates();
+        this.startEventsPlayback(fromTime);
+        this.figure.animateNextFrame();
+        if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
+          this.finishPlaying();
+        }
+        this.notifications.publish('playbackStarted');
+      };
+
+      if (this.audio != null) {
+        this.startAudioPlayback(fromTime, start);
+      } else {
+        start();
       }
-      this.notifications.publish('playbackStarted');
+      // this.figure.animateNextFrame();
+      // if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
+      //   this.finishPlaying();
+      // }
+      // this.notifications.publish('playbackStarted');
     };
 
     this.figure.setState(stateToStartFrom, this.settings.play);
@@ -1634,7 +1652,21 @@ ${cursorData}
     this.startPlayback(this.currentTime, true);
   }
 
-  startAudioPlayback(fromTime: number) { //, startCallback: () => void = () => {}) {
+  audioStarted() {
+    if (this.audioStartedCallback != null) {
+      this.audioStartedCallback();
+      this.audioStartedCallback = null;
+    }
+  }
+
+  audioEnded() {
+    this.isAudioPlaying = false;
+    if (this.state === 'playing') {
+      this.finishPlaying();
+    }
+  }
+
+  startAudioPlayback(fromTime: number, callback: null | (() => void) = null) {
     const { audio } = this;
     if (audio != null) {
       this.isAudioPlaying = true;
@@ -1643,21 +1675,27 @@ ${cursorData}
         return false;
       }
       audio.currentTime = this.convertTime(fromTime);
-      const audioEnded = () => {
-        this.isAudioPlaying = false;
-        if (this.state === 'playing') {
-          this.finishPlaying();
-        }
-        // console.log('end audio')
-      };
+      // const audioEnded = () => {
+      //   this.isAudioPlaying = false;
+      //   if (this.state === 'playing') {
+      //     this.finishPlaying();
+      //   }
+      //   // console.log('end audio')
+      // };
+      this.audioStartedCallback = callback;
       // const audioStarted = () => {
-      //   startCallback();
-      //   console.log('start audio', performance.now() / 1000)
+      //   if (callback != null) {
+      //     callback();
+      //   }
+      //   // startCallback();
+      //   console.log('start audio 1', performance.now() / 1000, this.audio.currentTime)
+      //   audio.removeEventListener('playing', audioStarted.bind(this), false);
       // }
-      audio.removeEventListener('ended', audioEnded.bind(this), false);
-      audio.addEventListener('ended', audioEnded.bind(this), false);
+
       // audio.removeEventListener('play', audioStarted.bind(this), false);
       // audio.addEventListener('play', audioStarted.bind(this), false);
+      // audio.removeEventListener('playing', audioStarted.bind(this), false);
+      // audio.addEventListener('playing', audioStarted.bind(this), false);
     }
     return true;
   }
@@ -1841,6 +1879,7 @@ ${cursorData}
    * how any animations currently playing should be stopped
    */
   pausePlayback(how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = this.settings.pause) {
+    this.notifications.publish('startingPause');
     // this.currentTime = this.getCurrentTime();
     this.setCurrentTime(this.getCurrentTime());
     this.pauseState = this.figure.getState({
