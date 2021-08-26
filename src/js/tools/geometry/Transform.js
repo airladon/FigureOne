@@ -826,8 +826,8 @@ class Transform {
   toDelta(
     delta: Transform,
     percent: number,
-    translationStyle: 'linear' | 'curved' | 'curve',
-    translationOptions: OBJ_TranslationPath,
+    translationStyle: 'linear' | 'curved' | 'curve' = 'linear',
+    translationOptions: OBJ_TranslationPath = {},
   ) {
     const out = this._dup();
     for (let i = 0; i < this.def.length; i += 1) {
