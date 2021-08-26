@@ -14,8 +14,11 @@ import {
 } from '../Element';
 import type { FigureElement } from '../Element';
 import type {
-  OBJ_Collection, OBJ_TextLines, OBJ_Arrow,
-} from '../FigurePrimitives/FigurePrimitives';
+  OBJ_TextLines, OBJ_Arrow,
+} from '../FigurePrimitives/FigurePrimitiveTypes2D';
+import type {
+  OBJ_Collection,
+} from '../FigurePrimitives/FigurePrimitiveTypes';
 import type FigureCollections from './FigureCollections';
 import SlideNavigator from '../SlideNavigator';
 import type { OBJ_SlideNavigatorSlide } from '../SlideNavigator';

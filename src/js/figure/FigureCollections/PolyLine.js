@@ -6,7 +6,7 @@ import {
 } from '../../tools/g2';
 import type {
   TypeRangeBoundsDefinition, TypeRectBoundsDefinition,
-} from '../../tools/g2';
+} from '../../tools/geometry/Bounds';
 import { joinObjects, joinObjectsWithOptions } from '../../tools/tools';
 import { round, range } from '../../tools/math';
 import {
@@ -22,7 +22,8 @@ import type {
 // eslint-disable-next-line import/no-cycle
 import FigureCollections from './FigureCollections';
 // import FigureEquation from '../Equation/FigureEquation';
-import type { OBJ_Polyline, OBJ_Polygon, OBJ_Collection } from '../FigurePrimitives/FigurePrimitives';
+import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
+import type { OBJ_Polyline, OBJ_Polygon } from '../FigurePrimitives/FigurePrimitiveTypes2D';
 
 /* eslint-disable max-len */
 /**

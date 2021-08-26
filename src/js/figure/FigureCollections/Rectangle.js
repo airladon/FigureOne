@@ -16,8 +16,11 @@ import {
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep } from '../Animation/Animation';
 import type {
-  OBJ_LineStyleSimple, OBJ_Texture, OBJ_Collection, OBJ_TextLines,
-} from '../FigurePrimitives/FigurePrimitives';
+  OBJ_TextLines,
+} from '../FigurePrimitives/FigurePrimitiveTypes2D';
+import type {
+  OBJ_LineStyleSimple, OBJ_Texture, OBJ_Collection,
+} from '../FigurePrimitives/FigurePrimitiveTypes';
 import type {
   TypeColor, OBJ_CurvedCorner,
 } from '../../tools/types';

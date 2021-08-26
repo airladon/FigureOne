@@ -15,8 +15,11 @@ import {
 } from '../Element';
 import type CollectionsAxis, { COL_Axis } from './Axis';
 import type {
-  OBJ_Line, OBJ_Polygon, OBJ_Star, OBJ_LineStyleSimple, OBJ_Collection,
-} from '../FigurePrimitives/FigurePrimitives';
+  OBJ_Line, OBJ_Polygon, OBJ_Star,
+} from '../FigurePrimitives/FigurePrimitiveTypes2D';
+import type {
+  OBJ_LineStyleSimple, OBJ_Collection,
+} from '../FigurePrimitives/FigurePrimitiveTypes';
 import type { TypeColor, OBJ_Font_Fixed } from '../../tools/types';
 import type { CPY_Steps } from '../geometries/copy/copy';
 import type FigureCollections from './FigureCollections';

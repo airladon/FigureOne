@@ -17,8 +17,9 @@ import type {
   OBJ_Font, OBJ_Font_Fixed, TypeDash,
 } from '../../tools/types';
 import type {
-  OBJ_Line, OBJ_TextLines, OBJ_Collection,
-} from '../FigurePrimitives/FigurePrimitives';
+  OBJ_Line, OBJ_TextLines,
+} from '../FigurePrimitives/FigurePrimitiveTypes2D';
+import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type FigureCollections from './FigureCollections';
 
 /**

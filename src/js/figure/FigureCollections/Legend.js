@@ -15,9 +15,8 @@ import {
 } from '../Element';
 import type CollectionsTrace, { COL_Trace } from './Trace';
 import type { OBJ_Font, OBJ_Font_Fixed } from '../../tools/types';
-import type {
-  OBJ_TextLines, OBJ_Collection,
-} from '../FigurePrimitives/FigurePrimitives';
+import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
+import type { OBJ_TextLines } from '../FigurePrimitives/FigurePrimitiveTypes2D';
 import type { TypePlotFrame } from './Plot';
 import type FigureCollections from './FigureCollections';
 

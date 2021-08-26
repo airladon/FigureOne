@@ -39,7 +39,7 @@ import CollectionsRectangle from './Rectangle';
 import type { EQN_Equation } from '../Equation/Equation';
 // eslint-disable-next-line import/no-cycle
 import { Equation } from '../Equation/Equation';
-import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitives';
+import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
 // import EqnNavigator from './EqnNavigator';
 // import type { TypeNavigatorOptions } from './EqnNavigator';
 // eslint-disable-next-line import/no-cycle

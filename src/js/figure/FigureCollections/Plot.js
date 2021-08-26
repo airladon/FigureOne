@@ -18,7 +18,8 @@ import type CollectionsAxis, { COL_Axis } from './Axis';
 import type CollectionsTrace, { COL_Trace } from './Trace';
 import type { COL_PlotLegend } from './Legend';
 import type CollectionsRectangle, { COL_Rectangle } from './Rectangle';
-import type { OBJ_TextLines, OBJ_Collection } from '../FigurePrimitives/FigurePrimitives';
+import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
+import type { OBJ_TextLines } from '../FigurePrimitives/FigurePrimitiveTypes2D';
 import type { OBJ_Font, TypeColor, OBJ_Font_Fixed } from '../../tools/types';
 import type FigureCollections from './FigureCollections';
 
