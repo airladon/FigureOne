@@ -3,7 +3,8 @@
 // import * as g2 from '../g2';
 // import { round } from '../../../tools/math';
 import * as m3 from '../../../tools/m3';
-import type Scene from '../../Figure';
+// import type Scene from '../../Figure';
+import Scene from '../../../tools/scene';
 import type { Type3DMatrix } from '../../../tools/m3';
 import WebGLInstance from '../../webgl/webgl';
 import type { TypeFragmentShader, TypeVertexShader } from '../../webgl/shaders';
@@ -338,9 +339,12 @@ class GLObject extends DrawingObject {
     const texWidth = xMaxTex - xMinTex;
     const texHeight = yMaxTex - yMinTex;
     const { texture } = this;
+    if (texture == null) {
+      return;
+    } // $FlowFixMe
     const buffer = this.attributes[texture.mapToBuffer];
-    if (buffer == null) {
-      throw new Error(`FigureOne mapToAttribute buffer ('${texture.mapToBuffer}') does not exist. Available attributes: ${Object.keys(this.attributes)}.`);
+    if (buffer == null) { // $FlowFixMe
+      throw new Error(`FigureOne mapToAttribute buffer ('${texture.mapToBuffer}') does not exist. Available attributes: ${JSON.stringify(Object.keys(this.attributes))}.`);
     }
     if (texture != null) {
       texture.points = [];
@@ -510,7 +514,7 @@ class GLObject extends DrawingObject {
     this.attributes[name].buffer = null;
     this.fillBuffer(name, data);
     this.attributes[name].data = data;
-    this.attributes[name].len = data.length;
+    // this.attributes[name].len = data.length;
     this.numVertices = this.attributes[name].data.length / this.attributes[name].size;
     if (name === 'a_vertex') {
       this.points = data;

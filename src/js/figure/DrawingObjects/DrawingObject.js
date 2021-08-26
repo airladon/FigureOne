@@ -11,7 +11,7 @@ import type Scene from '../../tools/scene';
 import { getState } from '../Recorder/state';
 import type { TypeColor } from '../../tools/types';
 import type { CPY_Step } from '../geometries/copy/copy';
-import type { OBJ_TextDefinition } from '../FigurePrimitives/FigurePrimitives';
+import type { OBJ_TextDefinition } from '../FigurePrimitives/FigurePrimitiveTypes2D';
 
 // A Drawing object can be:
 //  - GL primitive vertices
@@ -110,8 +110,10 @@ class DrawingObject {
   update(options: Object) {
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getCanvas() {}
+  /* eslint-disable class-methods-use-this */
+  // $FlowFixMe
+  getCanvas(): HTMLCanvasElement {}
+  /* eslint-enable class-methods-use-this */
 
 
   // getBoundaries(transformMatrix: null | Array<number> = null): Array<Array<Point>> {
@@ -143,7 +145,7 @@ class DrawingObject {
   //   return getBoundingRect(boundaries);
   // }
 
-  getLocation(transformMatrix: Array<number> | null = null): Point {
+  getLocation(transformMatrix: Type3DMatrix | null = null): Point {
     if (transformMatrix == null) {
       return this.location;
     }
