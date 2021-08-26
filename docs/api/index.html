@@ -1288,9 +1288,9 @@
                       </a></li>
                       
                       <li><a
-                        href='#collectionslinesetmovable'
+                        href='#collectionslinesetmove'
                         class='regular pre-open'>
-                        #setMovable
+                        #setMove
                       </a></li>
                       
                       <li><a
@@ -6613,6 +6613,16 @@
                 
                 </li>
               
+                
+                <li><a
+                  href='#obj_scene'
+                  class="">
+                  OBJ_Scene
+                  
+                </a>
+                
+                </li>
+              
             </ul>
           </div>
           <div class='mt1 h6 quiet'>
@@ -8702,7 +8712,7 @@ then the frame rate will be 0.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>scene</span> <code class='quiet'>(OBJ_Scene?)</code>
+          <span class='code bold'>scene</span> <code class='quiet'>(<a href="#obj_scene">OBJ_Scene</a>?)</code>
           : define 2D or 3D scene. 3D can be orthographic
 or perspective projection, and include camera position and lighting
 definition.
@@ -10297,7 +10307,8 @@ to accept touches for their children</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>setOrOptions</span> <code class='quiet'>({scale: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#typeparsablepoint">TypeParsablePoint</a> | null), colorSeed: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, onClick: (null | function (): void)})</code>
+            <span class='code bold'>setOrOptions</span> <code class='quiet'>(({scale: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#typeparsablepoint">TypeParsablePoint</a> | null), colorSeed: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, onClick: (null | function (): void)} | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)
+            = <code>true</code>)</code>
 	    
           </div>
           
@@ -12002,7 +12013,8 @@ transform points.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>y</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+            <span class='code bold'>y</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>0</code>)</code>
 	    
           </div>
           
@@ -12056,7 +12068,7 @@ transform points.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>toArray()</span>
+            <span class='code strong strong truncate'>toArray(dim)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -12076,6 +12088,20 @@ transform points.</p>
   
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>dim</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>3</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
   
 
   
@@ -12556,7 +12582,8 @@ supplied)</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>toPointIn</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>)</code>
+            <span class='code bold'>toPointIn</span> <code class='quiet'>((<a href="#typeparsablepoint">TypeParsablePoint</a> | null)
+            = <code>null</code>)</code>
 	    
           </div>
           
@@ -13538,7 +13565,8 @@ p.isEqualTo(q, <span class="hljs-number">2</span>)
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>precision</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+            <span class='code bold'>precision</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>8</code>)</code>
 	    
           </div>
           
@@ -15464,7 +15492,7 @@ then <code>null</code> will be returned.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>r</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | TypeRotationDefinition))</code>
+            <span class='code bold'>r</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#typeuserrotationdefinition">TypeUserRotationDefinition</a>))</code>
 	    
           </div>
           
@@ -15570,7 +15598,7 @@ then <code>null</code> will be returned.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>matrix()</span>
+            <span class='code strong strong truncate'>matrix(precision)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -15590,6 +15618,20 @@ then <code>null</code> will be returned.</p>
   
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>precision</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null)
+            = <code>null</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
   
 
   
@@ -20248,11 +20290,11 @@ separately.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='collectionslinesetmovable'>
+    <div class='border-bottom' id='collectionslinesetmove'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>setMovable(movableOrOptions?)</span>
+            <span class='code strong strong truncate'>setMove(movableOrOptions = {})</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -20278,7 +20320,8 @@ separately.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>movableOrOptions</span> <code class='quiet'>((<a href="#obj_movableline">OBJ_MovableLine</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)?)</code>
+            <span class='code bold'>movableOrOptions</span> <code class='quiet'>((<a href="#obj_movableline">OBJ_MovableLine</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)?
+            = <code>{}</code>)</code>
 	    <code>true</code>
  to
 make movable, 
@@ -25782,7 +25825,146 @@ figure.add(
 
   
     <p>3D shapes can be drawn, animated and interacted with in FigureOne.</p>
-<h3><a id="shapes3d-boilerplate"></a> Text Boilerplate</h3>
+<p>FigureOne tries to simplify the process for using 3D as much as possible. In fact, a number of simple shapes like cubes, spheres and surfaces can be created similarly to shapes in 2D.</p>
+<p>However, there are a number of concepts that are useful to know when dealing with 3D that are not needed for 2D. These concepts are especially useful if customizing shapes, or if creating your own.</p>
+<h4>Scene</h4>
+<p>In FigureOne we create some shapes in space. The <code>Scene</code> then defines how we present those shapes to the user.</p>
+<p>A good analogy is a camera:</p>
+<ul>
+<li>A camera captures a picture of some space</li>
+<li>The camera's position in space, where it is pointing, its orientation (e.g. portrait, landscape), and its zoom settings define the expanse of space that is captured in the picture</li>
+<li>The scene would then be these various camera properties</li>
+</ul>
+<p>In fact, in 3D we will use camera as a property to define some of these properties</p>
+<h5>Two Dimensions</h5>
+<p>In 2D, the Scene options are relatively limited:</p>
+<ul>
+<li>The shapes are in the x-y plane</li>
+<li>The camera will always be above the x-y plane (in the +z direction) looking down at the x-y plane</li>
+<li>The camera has only one orientation: <code>left</code>/<code>right</code> is along the x axis and <code>bottom</code>/<code>top</code> is along the y axis where <code>left</code> and <code>bottom</code> are always more negative on their respective axes</li>
+<li>The expanse of space captured is defined with the <code>left</code>, <code>right</code>, <code>bottom</code>, and <code>top</code> properties</li>
+</ul>
+<p>In other words, the <code>left</code>, <code>right</code>, <code>bottom</code>, and <code>top</code> properties completely define what space the figure shows. They also effectively define the aspect ratio of the space. So if the figure is drawn in a <div> element that is a square, then (<code>right</code> - <code>left</code>) should equal (<code>top</code> - <code>bottom</code>) for 1 unit in either x or y to be the same number of pixels on the screen. Similarly, if the <div> element is 2000 pixels wide by 1000 pixels high then (<code>right</code> - <code>left</code>) should be double (<code>top</code> - <code>bottom</code>).</p>
+<h5>Three Dimensions</h5>
+<p>The depth of 3D raises two questions:</p>
+<ul>
+<li>How should we deal with distances further from the observer?</li>
+<li>How do we convey to a user than an object has depth?</li>
+</ul>
+<p>In real life, we see things get smaller as they get further away. But in technical drawings, it is often useful to keep things the same size (independent of proximity to the observer) as this can accurately convey a shape's dimensions and proportions.</p>
+<p>Thus we need to define how we project 3D shapes onto a 2D screen:</p>
+<ul>
+<li><em>perspective projection</em> - shapes get smaller the further they are away from the observer</li>
+<li><em>orthographic projection</em> - shapes size is the same at all distances to the observer</li>
+</ul>
+<!-- const figure = new Fig.Figure({ color: [1, 0, 0, 1]});
+
+const c1 = figure.add({
+  make: 'cube',
+  lines: true,
+  side: 0.12,
+  position: [-0.25, -0.025, 0],
+});
+c1.scene = new Fig.Scene({
+  style: 'orthographic',
+  camera: { position: [1, 0.5, 2] },
+  left: -1,
+  right: 1,
+  bottom: -0.5,
+  top: 0.5,
+});
+
+const c2 = figure.add({
+  make: 'cube',
+  lines: true,
+  side: 0.2,
+  position: [0, 0, 0],
+});
+c2.scene = new Fig.Scene({
+  style: 'perspective',
+  camera: { position: [0.35, 0.25, 0.7] },
+  aspectRatio: 2,
+  fieldOfView: 1.7,
+}); -->
+<p><img src="./tutorials/shapes3d/projection.png" alt=""></p>
+<p>The second question is then one of light. A red 3D sphere looks just like a flat circle, unless there is a light that makes some portions of it more bright than other portions.</p>
+<!-- const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
+
+const c1 = figure.add({
+  make: 'sphere',
+  position: [-0.5, 0, 0],
+  radius: 0.2,
+  sides: 100,
+});
+c1.scene = new Fig.Scene({
+  light: { ambient: 1 }, left: -1, bottom: -0.5, right: 1, top: 0.5,
+});
+
+const c2 = figure.add({
+  make: 'sphere',
+  radius: 0.2,
+  sides: 100,
+  position: [0, 0, 0],
+});
+c2.scene = new Fig.Scene({
+  left: -1, bottom: -0.5, right: 1, top: 0.5, light: { directional: [1, 1, -1] },
+}); -->
+<p><img src="./tutorials/shapes3d/light.png" alt=""></p>
+<p>Therefore, to define a 3D scene:</p>
+<ul>
+<li>The shapes are in x-y-z space</li>
+<li>The projection is defined with the <code>style</code> property (can be either <code>orthographic</code> of <code>perspective</code>)</li>
+<li>The camera position, where it is pointing and its orientation can be defined with the <code>camera</code> property</li>
+<li>The expanse of space captured is defined with <code>left</code>, <code>right</code>, <code>bottom</code>, <code>top</code>, <code>near</code> and <code>far</code> properties if we are using an <em>orthographic projection</em>, and <code>fieldOfView</code>, <code>aspectRatio</code>, <code>near</code> and <code>far</code> if we are using a <em>perspective projection</em>.</li>
+<li>The lighting is defined with the <code>light</code> property</li>
+</ul>
+<h5>Camera</h5>
+<p>The camera is the observer in a 3D scene and has the properties:</p>
+<ul>
+<li><code>position</code> - position in space the camera is located at</li>
+<li><code>lookAt</code> - point in space the camera is looking at</li>
+<li><code>up</code> - vector that defines how the camera is oriented</li>
+</ul>
+<h5>Projection</h5>
+<p>To view a 3D scene on a 2D screen, we need to project our three dimensional shapes onto a two dimensional screen.</p>
+<p>There are two ways to do this:</p>
+<ul>
+<li>
+<p>Orthographic projection - shapes are the same size no matter how close they are to the observer</p>
+</li>
+<li>
+<p>Perspective projection - shapes get smaller when they are further from the observer</p>
+</li>
+<li>
+<p>Scene</p>
+<ul>
+<li>Projection</li>
+<li>Camera</li>
+<li>Lighting</li>
+</ul>
+</li>
+<li>
+<p>Shapes</p>
+<ul>
+<li>Cone</li>
+<li>Cube</li>
+<li>Sphere</li>
+<li>Revolve</li>
+<li>Surface</li>
+</ul>
+</li>
+<li>
+<p>Geometetry</p>
+<ul>
+<li>Plane</li>
+<li>Rotation</li>
+</ul>
+</li>
+<li>
+<p>Touching/Moving</p>
+</li>
+</ul>
+<h3><a id="shapes3d-boilerplate"></a> 3D Shapes Boilerplate</h3>
 <pre class='hljs'><span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure();
 figure.scene.setProjection({ <span class="hljs-attr">style</span>: <span class="hljs-string">&#x27;orthographic&#x27;</span> });
 figure.scene.setCamera({ <span class="hljs-attr">position</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">up</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>] });
@@ -27751,7 +27933,7 @@ p.animations.new()
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>targetOrOptions</span> <code class='quiet'>((<a href="#obj_rotationanimationstep">OBJ_RotationAnimationStep</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | TypeRotationDefinition))</code>
+            <span class='code bold'>targetOrOptions</span> <code class='quiet'>((<a href="#obj_rotationanimationstep">OBJ_RotationAnimationStep</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | TypeRotationComponent))</code>
 	    
           </div>
           
@@ -56116,7 +56298,7 @@ components, or just a single component.</p>
 
   
     <p style="display: none;">      Type:
-      (<a href="#typeparsablearraytransform">TypeParsableArrayTransform</a> | <a href="#typeuserrotationdefinition">TypeUserRotationDefinition</a> | <a href="#typeusertranslationdefinition">TypeUserTranslationDefinition</a> | <a href="#typeuserscaledefinition">TypeUserScaleDefinition</a> | <a href="#typeuserbasisdefinition">TypeUserBasisDefinition</a> | <a href="#typeusercustomdefinition">TypeUserCustomDefinition</a>)
+      (<a href="#typeparsablearraytransform">TypeParsableArrayTransform</a> | <a href="#typeuserrotationdefinition">TypeUserRotationDefinition</a> | <a href="#typeusertranslationdefinition">TypeUserTranslationDefinition</a> | <a href="#typeuserscaledefinition">TypeUserScaleDefinition</a> | <a href="#typeuserbasisdefinition">TypeUserBasisDefinition</a> | <a href="#typeusercustomdefinition">TypeUserCustomDefinition</a> | <a href="#transform">Transform</a>)
     </p>
   
   
@@ -75197,17 +75379,17 @@ around the x, y, and z axes.</p>
 <li>left/right magnitudes that define the width of the rectangle</li>
 <li>bottom/top magnitudes that define the height of the rectangle</li>
 </ul>
-<pre><code>*********************************************     A
-                                           *     |
-       Top Vector                          *     |
-            A                              *     | top
-            |                              *     |
-            |                              *     |
-   position *----->                        *   ---
-                  Right Vector             *     |
-                                           *     | bottom
-                                           *     |
-*********************************************     V
+<pre><code>----------------------------------------------     A
+|                                            |     |
+|        Top Vector                          |     |
+|             A                              |     | top
+|             |                              |     |
+|             |                              |     |
+|    position *----->                        |   ---
+|                   Right Vector             |     |
+|                                            |     | bottom
+|                                            |     |
+----------------------------------------------     V
 |
 |
 &#x3C;-------------|----------------------------->
@@ -77556,6 +77738,13 @@ intersect will be p1 of the calling line, <code>offLine</code> will be <code>fal
   <p>Object representing a plane.</p>
 <p>Contains methods that makes it convenient to operate on planes,
 points and lines.</p>
+<p>A plane can either be created with:</p>
+<ul>
+<li>a point on the plane and a normal</li>
+<li>3 points on the plane</li>
+</ul>
+<p>If defined with 3 points P1, P2, and P3, then the normal will be in the
+direction of the cross product of vectors P1P2 and P1P3.</p>
 
   
   
@@ -77965,7 +78154,7 @@ be useful for different contexts.</p>
 
   
     <p style="display: none;">      Type:
-      (<code>"2D"</code> | <code>"xyz"</code> | <code>"axis"</code> | <code>"dir"</code> | <code>"rbasis"</code>)
+      (<code>"2D"</code> | <code>"xyz"</code> | <code>"axis"</code> | <code>"dir"</code> | <code>"rbasis"</code> | <code>"rb"</code> | <code>"r"</code> | <code>"rc"</code> | <code>"ra"</code> | <code>"rd"</code>)
     </p>
   
   
@@ -78536,6 +78725,132 @@ Bk Bk Re Re Bk Bk Re Re Bl Bl Tr Tr Bl Bl Tr Tr</p>
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_scene'>
+      OBJ_Scene
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>The Scene options object defines how the elements within the figure are
+viewed.</p>
+<p>For 2D figures (<code>style: '2D'</code>), <code>left</code>, <code>right</code>, <code>bottom</code>, and <code>top</code> are
+required to define the x-y expanse to view. Any elements or portions of
+elements outside of this expanse will not be shown (be clipped).</p>
+<p>For 3D figures, a camera, lighting and the near/far clipping planes also
+need definition.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>style</span> <code class='quiet'>((<code>"2D"</code> | <code>"orthographic"</code> | <code>"perspective"</code>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>left</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>right</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>bottom</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>top</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>near</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>far</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>aspectRatio</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fieldOfView</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>light</span> <code class='quiet'>(OBJ_Light?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>camera</span> <code class='quiet'>(OBJ_Camera?)</code>
+          
+          
+        </div>
+      
+    </div>
   
 
   
