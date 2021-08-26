@@ -45,7 +45,6 @@ describe('Bounds', () => {
           bottom: 1,
         });
         expect(bounds.plane.round()).toEqual(new Plane([[0, 0, 0], [1, 0, 0]]));
-        expect(bounds.position).toEqual(new Point(0, 0, 0));
         expect(bounds.topDirection.round()).toEqual(new Point(0, 1, 0));
         expect(bounds.rightDirection.round()).toEqual(new Point(0, 0, -1));
         expect(bounds.left).toBe(1);
@@ -68,7 +67,6 @@ describe('Bounds', () => {
           bottom: 1,
         });
         expect(bounds.plane.round()).toEqual(new Plane([[0, 1, 0], [0, 1, 0]]));
-        expect(bounds.position).toEqual(new Point(0, 1, 0));
         expect(bounds.topDirection.round()).toEqual(new Point(0, 0, -1));
         expect(bounds.rightDirection.round()).toEqual(new Point(1, 0, 0));
         expect(bounds.left).toBe(1);

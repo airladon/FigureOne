@@ -199,26 +199,27 @@ class RangeBounds extends Bounds {
     // }
 
     if (this.contains(position)) {
-      if (
-        max != null
-        && round(position, this.precision) === round(max, this.precision)
-        // && this.bounds === 'outside'
-      ) {
-        if (direction === -1) {
-          return { intersect: max, distance: 0, reflection: 1 };
-        }
-        return { intersect: null, distance: 0, reflection: 1 };
-      }
-      if (
-        min != null
-        && round(position, this.precision) === round(min, this.precision)
-        // && this.bounds === 'outside'
-      ) {
-        if (direction === 1) {
-          return { intersect: min, distance: 0, reflection: -1 };
-        }
-        return { intersect: null, distance: 0, reflection: -1 };
-      }
+      // console.log(position)
+      // if (
+      //   max != null
+      //   && round(position, this.precision) === round(max, this.precision)
+      //   // && this.bounds === 'outside'
+      // ) {
+      //   if (direction === -1) {
+      //     return { intersect: max, distance: 0, reflection: 1 };
+      //   }
+      //   return { intersect: null, distance: 0, reflection: 1 };
+      // }
+      // if (
+      //   min != null
+      //   && round(position, this.precision) === round(min, this.precision)
+      //   // && this.bounds === 'outside'
+      // ) {
+      //   if (direction === 1) {
+      //     return { intersect: min, distance: 0, reflection: -1 };
+      //   }
+      //   return { intersect: null, distance: 0, reflection: -1 };
+      // }
       if (direction === 1) {
         if (max == null) {
           return { intersect: null, distance: 0, reflection: direction };
