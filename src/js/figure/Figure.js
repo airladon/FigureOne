@@ -797,12 +797,12 @@ class Figure {
         state: this.beingTouchedElement.getPath(),
       };
     }
-    if (this.beingMovedElements != null) {
-      state.beingMovedElement = {
-        f1Type: 'de',
-        state: this.beingMovedElements.getPath(),
-      };
-    }
+    // if (this.beingMovedElements != null) {
+    //   state.beingMovedElement = {
+    //     f1Type: 'de',
+    //     state: this.beingMovedElements.getPath(),
+    //   };
+    // }
     return state;
   }
 

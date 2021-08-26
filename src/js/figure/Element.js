@@ -431,7 +431,7 @@ type ElementMovementState = {
                                     // at max if element is being moved
                                     // faster than max.
   velocity: Point | number,
-  previous: Point | number,
+  // previous: Point | number,
 };
 
 /**
@@ -904,7 +904,7 @@ class FigureElement {
       isChanging: false,
       movement: {
         previousTime: null,
-        previousTransform: this.transform._dup(),
+        // previousTransform: this.transform._dup(),
         velocity: 0,
       },
 
@@ -2050,7 +2050,7 @@ class FigureElement {
     // this.state.movement.velocity = 0;
     this.setZeroVelocity();
     // 'rotation' | 'translation' | 'position' | 'scale' | 'scaleX' | 'scaleY' | 'scaleZ',
-    this.state.movement.previous = this.getMovement(this.transform);
+    // this.state.movement.previous = this.getMovement(this.transform);
     // this.state.movement.previousTransform = this.transform._dup();
     this.state.movement.previousTime = this.timeKeeper.now() / 1000;
     this.state.isBeingMoved = true;
