@@ -49,7 +49,7 @@ export type OBJ_CurvedCorner = {
  *
  * `size` is the draw space size of the font.
  *
- * Width, descent and ascent of text is estimated, and there are times, 
+ * Width, descent and ascent of text is estimated, and there are times,
  * especially with non-standard fonts, that these estimates need ajustment.
  *
  * Most browsers only support a width measurement of text, and while this is

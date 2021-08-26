@@ -1655,6 +1655,8 @@ export type OBJ_TextModifiersDefinition = {
  * in transform
  * @property {TypeParsableTransform} [transform]
  * (`Transform('text'))`)
+ * @property {OBJ_Font} [defaultAccent] default font for text modifiers that
+ * are not defined.
  *
  * @see To test examples, append them to the
  * <a href="#text-boilerplate">boilerplate</a>
@@ -1737,5 +1739,6 @@ export type OBJ_TextLines = {
   touchBorder?: TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw',
   position: TypeParsablePoint,
   transform: TypeParsableTransform,
+  defaultAccent?: OBJ_Font,
 };
 

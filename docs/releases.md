@@ -115,3 +115,9 @@ API cleanup
 * Add defaultAccent to lines
 * Add customizable font metrics (need to check docs)
 * Add showContent flag to equation container to create containers around elements without showing the elements
+
+## 0.10.9
+* Bug Fix: Rare GL related bug that happens when using textures and drawn elements together on non-chrome browsers fixed
+* Bug Fix: Global TouchUp events no longer interrupt cursor movements when a video is playing (bug introduced in 0.10.6)
+* Bug Fix: Video is now automatically paused/played when headphones are removed/mounted
+* Bug Fix: Video seek now correctly replays the current slide if seek time is equal to the slide time

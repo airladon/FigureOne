@@ -447,6 +447,17 @@ class Recorder {
     this.audio.oncanplaythrough = () => {
       this.notifications.publish('audioLoaded');
     };
+    this.audio.addEventListener('pause', () => {
+      if (this.state === 'playing') {
+        this.pausePlayback();
+      }
+    });
+    // $FlowFixMe
+    this.audio.addEventListener('play', () => {
+      if (this.state === 'idle') {
+        this.resumePlayback();
+      }
+    });
   }
 
   loadEvents(
@@ -1347,7 +1358,7 @@ ${cursorData}
       for (let i = firstIndex; i <= lastIndex; i += 1) {
         const [eventTime, , timeCount] = event.list[i];
         if (
-          (this.stateIndex === -1 || eventTime < stateTime)
+          (this.stateIndex === -1 || eventTime <= stateTime)
           && (eventName === 'slide' || eventName === '_autoSlide')
           // || (eventTime === stateTime && timeCount <= stateTimeCount)
         ) {
@@ -1538,6 +1549,7 @@ ${cursorData}
       this.setCurrentTime(fromTime);
       this.startTimeUpdates();
       this.startEventsPlayback(fromTime);
+      // console.log('start playback', performance.now() / 1000)
       this.startAudioPlayback(fromTime);
       this.figure.animateNextFrame();
       if (this.areEventsPlaying() === false && this.isAudioPlaying === false) {
@@ -1622,7 +1634,7 @@ ${cursorData}
     this.startPlayback(this.currentTime, true);
   }
 
-  startAudioPlayback(fromTime: number) {
+  startAudioPlayback(fromTime: number) { //, startCallback: () => void = () => {}) {
     const { audio } = this;
     if (audio != null) {
       this.isAudioPlaying = true;
@@ -1636,9 +1648,16 @@ ${cursorData}
         if (this.state === 'playing') {
           this.finishPlaying();
         }
+        // console.log('end audio')
       };
+      // const audioStarted = () => {
+      //   startCallback();
+      //   console.log('start audio', performance.now() / 1000)
+      // }
       audio.removeEventListener('ended', audioEnded.bind(this), false);
       audio.addEventListener('ended', audioEnded.bind(this), false);
+      // audio.removeEventListener('play', audioStarted.bind(this), false);
+      // audio.addEventListener('play', audioStarted.bind(this), false);
     }
     return true;
   }
@@ -1836,10 +1855,10 @@ ${cursorData}
     };
     this.stopTimeouts();
     if (this.audio) {
+      this.state = 'preparingToPause';
       this.audio.pause();
       this.isAudioPlaying = false;
     }
-
     this.figure.notifications.add('stopped', pause, 1);
     this.figure.stop(how);
     if (this.figure.state.preparingToStop) {

@@ -14,6 +14,7 @@ const webgl = {
     enableVertexAttribArray: () => {},
     enable: () => {},
     disable: () => {},
+    disableVertexAttribArray: () => {},
     vertexAttribPointer: () => {},
     disableVertexAttribArray: () => {},
     uniformMatrix3fv: jest.fn(),
