@@ -3,8 +3,11 @@ import { joinObjects, NotificationManager, joinObjectsWithOptions } from '../too
 import { FigureElementCollection } from './Element';
 import type { FigureElement, TypeElementPath } from './Element';
 import type {
-  OBJ_Collection, OBJ_TextModifiersDefinition, OBJ_TextLines,
-} from './FigurePrimitives/FigurePrimitives';
+  OBJ_Collection,
+} from './FigurePrimitives/FigurePrimitiveTypes';
+import type {
+  OBJ_TextModifiersDefinition, OBJ_TextLines,
+} from './FigurePrimitives/FigurePrimitiveTypes2D';
 import type Figure from './Figure';
 import { Equation } from './Equation/Equation';
 import type AnimationStep from './Animation/AnimationStep';

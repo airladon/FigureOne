@@ -1535,8 +1535,8 @@ function parseTransform(inTransform: TypeParsableTransform): Transform {
   throw new Error(`FigureOne could not parse transform: '${JSON.stringify(inTransform)}'`);
 }
 
-function getMatrix(matrixOrTransform: TypeParsableTransform | Type3DMatrix) {
-  if (Array.isArray(matrixOrTransform) && matrixOrTransform.length === 16 && typeof matrixOrTransform[0] === 'number') {
+function getMatrix(matrixOrTransform: TypeParsableTransform | Type3DMatrix): Type3DMatrix {
+  if (Array.isArray(matrixOrTransform) && matrixOrTransform.length === 16 && typeof matrixOrTransform[0] === 'number') {  // $FlowFixMe
     return matrixOrTransform;
   } // $FlowFixMe
   return parseTransform(matrixOrTransform).matrix();

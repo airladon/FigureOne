@@ -956,16 +956,6 @@ describe('Transform', () => {
         expect(t8.def[0]).toEqual(t.def[0]);
         expect(t9.def[0]).toEqual(t.def[0]);
       });
-      // test('spherical', () => {
-      //   const t = getTransform([['sph', 1, 2]]);
-      //   const t1 = getTransform([['rs', 1, 2]]);
-      //   const t2 = new Transform().rotate('rs', 1, 2);
-      //   const t3 = new Transform().rotate('sph', 1, 2);
-      //   expect(t.def[0]).toEqual(['rs', 1, 2]);
-      //   expect(t1.def[0]).toEqual(t.def[0]);
-      //   expect(t2.def[0]).toEqual(t.def[0]);
-      //   expect(t3.def[0]).toEqual(t.def[0]);
-      // });
       test('basis', () => {
         const t1 = getTransform(['rbasis', { x: [0, 0, 1], y: [0, 1, 0] }]);
         const t2 = getTransform(['rbasis', 0, 0, 1, 0, 1, 0, -1, 0, 0]);
