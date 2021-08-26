@@ -143,6 +143,9 @@ export class ParallelAnimationStep extends AnimationStep {
     if (remaining === null) {
       return null;
     }
+    if (remaining === undefined) {
+      return 0;
+    }
     if (remaining >= 0) {
       this.finish();
     }
