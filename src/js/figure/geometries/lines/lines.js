@@ -12,7 +12,7 @@ import {
 } from '../arrow';
 import type { TypeDash } from '../../../tools/types';
 import type { TypeArrowHead } from '../arrow';
-import type { OBJ_Arrow } from '../../FigurePrimitives/FigurePrimitives';
+import type { OBJ_Arrow } from '../../FigurePrimitives/FigurePrimitiveTypes2D';
 // import { getBufferBorder } from '../buffer';
 
 /* eslint-disable yoda */
@@ -42,7 +42,7 @@ function lineSegmentsToPoints(
   borderIs: 'negative' | 'positive' | 'line' | Array<Array<Point>> = 'line',
   corner: 'auto' | 'fill' | 'none',
   close: boolean,
-): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
+): [Array<Point>, Array<Array<Point>>] {
   const tris = [];
   const positiveBorder = [];
   const negativeBorder = [];
@@ -468,7 +468,7 @@ function makeThickLine(
   linePrimitives: boolean = false,
   lineNum: number = 2,
   borderIs: 'negative' | 'positive' | 'line' | Array<Array<Point>> = 'line',
-): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
+): [Array<Point>, Array<Array<Point>>] {
   const widthToUse = width;
   // if (widthIsIn === 'mid') {
   //   widthToUse = width / 2;
@@ -483,7 +483,7 @@ function makeThickLine(
   }
 
   if (idealLines.length === 0) {
-    return [[], [], []];
+    return [[], []];
   }
 
   // Join line segments based on the angle between them
@@ -739,7 +739,7 @@ function makePolyLine(
     end: OBJ_Arrow | TypeArrowHead,
   } & OBJ_Arrow = null,
   precision: number = 8,
-): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>, Array<Array<Point>>] {
+): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
   let points = [];
   let cornerStyleToUse;
   let orderedPoints = pointsIn;
