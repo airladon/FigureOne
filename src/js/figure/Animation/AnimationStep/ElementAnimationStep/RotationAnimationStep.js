@@ -1,7 +1,8 @@
 // @flow
 import {
-  getTransform,
+  getTransform, Point,
 } from '../../../../tools/g2';
+import type { TypeParsablePoint } from '../../../../tools/geometry/Point';
 import { parseRotation } from '../../../../tools/geometry/Transform';
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
@@ -188,7 +189,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     delta: Array<number>;
     target: Array<number>;
     direction: 0 | 1 | -1 | 2;
-    velocity: Array<number> | number;
+    velocity: Array<number>;
     maxDuration: ?number;
     clipTo: '0to360' | '-180to180' | null;
     type: 'r' | 'ra' | 'rd' | 'rc' | 'rb';
@@ -224,25 +225,25 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     let typeStart;
     let typeTarget;
     let typeDelta;
-    if (options.start != null) {
+    if (options.start != null) { // $FlowFixMe
       [typeStart, ...options.start] = parseRotation(options.start);
       if (typeStart !== type) {
         throw new Error(`RotationAnimationStep start type and element rotation type are different: ${type}, start: ${typeStart}`);
       }
     }
-    if (options.target != null) {
+    if (options.target != null) { // $FlowFixMe
       [typeTarget, ...options.target] = parseRotation(options.target);
       if (typeTarget !== type) {
         throw new Error(`RotationAnimationStep target type and element rotation type are different: ${type}, start: ${typeTarget}`);
       }
     }
-    if (options.delta != null) {
+    if (options.delta != null) { // $FlowFixMe
       [typeDelta, ...options.delta] = parseRotation(options.delta);
       if (typeDelta !== type) {
         throw new Error(`RotationAnimationStep delta type and element rotation type are different: ${type}, start: ${typeDelta}`);
       }
     }
-    if (options.velocity != null) {
+    if (options.velocity != null) { // $FlowFixMe
       [typeDelta, ...options.velocity] = parseRotation(options.velocity);
       if (typeDelta !== type) {
         throw new Error(`RotationAnimationStep velocity type and element rotation type are different: ${type}, start: ${typeDelta}`);
@@ -350,7 +351,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     if (this.duration == null || this.rotation.delta == null) {
       const { start } = this.rotation;
       const v = start.map((s, i) => s + deltaTime * this.rotation.velocity[i]);
-      if (this.element != null) {
+      if (this.element != null) {  // $FlowFixMe
         this.element.setRotation([this.rotation.type, ...v]);
       }
       return;
@@ -358,8 +359,8 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     const percentTime = deltaTime / (this.duration + 0.000001);
     const percentComplete = this.getPercentComplete(percentTime);
     const p = percentComplete;
-    const { start, delta, type } = this.rotation;
-    const startT = getTransform([type, ...start]);
+    const { start, delta, type } = this.rotation; // $FlowFixMe
+    const startT = getTransform([type, ...start]); // $FlowFixMe
     const deltaT = getTransform([type, ...delta]);
     const nextR = startT.toDelta(deltaT, p, 'linear');
     // const nextR = start.map((s, k) => clipAngle(s + delta[k] * p, this.rotation.clipTo));
@@ -384,7 +385,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     const { element } = this;
     if (element != null) {
       // element.transform.updateRotationValues(0, this.rotation.target);
-      if (this.rotation.target != null) {
+      if (this.rotation.target != null) { // $FlowFixMe
         element.transform.updateRotation([this.rotation.type, ...this.rotation.target]);
       }
       // element.transform.clipRotation(this.rotation.clipTo);
