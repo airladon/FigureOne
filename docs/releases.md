@@ -130,3 +130,9 @@ API cleanup
 * Start playing video after audio starts instead of before
 * Add two notifications `startingPlayback` and `startingPause` for players to switch state before recorder processing completes
 * Bug Fix: Pulse settings was missing from recorder seek state in PulseAnimationStep
+
+## 0.10.12
+* Bug Fix: Recording state wasn't recording form property positionsSet, and default values of equation elements were left undefined
+
+## 0.10.13
+* Bug Fix: When figure is not on top of window stack, 'beforeDraw' notifications were not being sent
