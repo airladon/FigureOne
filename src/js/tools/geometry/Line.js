@@ -116,7 +116,7 @@ function parseLine(lIn: TypeParsableLine): Line {
     if (p2 != null) {
       return new Line(p1, p2, ends);
     }
-    if (length != null && direction != null) { // $FlowFixMe
+    if (length != null && direction != null) {
       return new Line({
         p1,
         direction,
@@ -124,12 +124,12 @@ function parseLine(lIn: TypeParsableLine): Line {
         ends,
       });
     }
-    if (l.phi != null && l.theta != null && l.length != null) { // $FlowFixMe
+    if (l.phi != null && l.theta != null && l.length != null) {
       return new Line({ // $FlowFixMe
         p1, phi: l.phi, theta: l.theta, ends, length,
       });
     }
-    if (l.angle != null && l.length != null) { // $FlowFixMe
+    if (l.angle != null && l.length != null) {
       return new Line({ // $FlowFixMe
         p1, angle: l.angle, ends, length,
       });
@@ -161,38 +161,9 @@ class Line {
    */
   constructor(
     p1OrOptions: TypeParsablePoint | OBJ_LineDefinition,
-    p2: TypeParsablePoint,
+    p2: TypeParsablePoint = [0, 0],
     ends: 2 | 1 | 0 = 2,
   ) {
-    // if (!(p1OrOptions instanceof Point) && typeof p1OrOptions === 'object') {
-    //   const defaultOptions = {
-    //     p1: new Point(0, 0, 0),
-    //     mag: 1,
-    //     theta: 0,
-    //     phi: 0,
-    //     ends: 2,
-    //   };
-    //   const o = joinObjects({}, defaultOptions, p1OrOptions);
-    //   this.p1 = getPoint(o.p1);
-    //   this.ends = o.ends;
-    //   if (o.p2 != null) {
-    //     this.p2 = getPoint(o.p2);
-    //   } else if (o.direction != null) {
-    //     this.p2 = getPoint(o.direction).normalize().scale(o.length).add(this.p1);
-    //   } else if (o.angle != null) {
-    //     this.p2 = this.p1.add(
-    //       o.length * Math.cos(o.angle),
-    //       o.length * Math.sin(o.angle),
-    //       0,
-    //     );
-    //   } else {
-    //     this.p2 = this.p1.add(new Point(sphericalToCartesian(o.length, o.theta, o.phi)));
-    //   }
-    // } else {
-    //   this.p1 = getPoint(p1OrOptions);
-    //   this.p2 = getPoint(p2);
-    //   this.ends = ends;
-    // }
     if (p1OrOptions instanceof Point || Array.isArray(p1OrOptions) || typeof p1OrOptions === 'string') {
       this.p1 = getPoint(p1OrOptions);
       this.p2 = getPoint(p2);
