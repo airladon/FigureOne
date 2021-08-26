@@ -415,7 +415,7 @@ function copyPoints(
   points: Array<TypeParsablePoint> | Array<Point>,
   chain: ?CPY_Step | CPY_Steps,
   type: 'points' | 'normals' = 'points',
-) {
+): Array<Point> {
   const marks = {};
   // let out = [];
   let startIndex = 0;

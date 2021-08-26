@@ -964,7 +964,7 @@ function getLineTail(o: {
     .intersectsWith(new Line({ p1: [-o.length, 0], length: 1, angle: 0 }));
   if (!insideIntersectWithZero) {
     zeroPoint = -o.length;
-  } else {
+  } else {  // $FlowFixMe
     zeroPoint = insideIntersectWithZero.intersect.x;
   }
   if (!insideIntersectWithZero.onLines || o.tail === false) {
