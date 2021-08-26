@@ -86,3 +86,7 @@ API cleanup
 
 ## 0.10.1
 * Bug Fix - SlideShowNavigators now have unique global function map names for the transition so multiple slideshows can be in a figure.
+
+## 0.10.2
+* Add 'getState' notification to Figure before the recording state is captured for the figure
+* Add 'getState' notification to FigureElement before the recording state is captured for the element

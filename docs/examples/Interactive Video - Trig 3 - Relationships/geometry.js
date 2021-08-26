@@ -857,7 +857,7 @@ function layoutCirc() {
   // updated the appropriate triangle needs to be selected. This needs to happen
   // before other figure elements update, as when the button elements get
   // updated they will need to know which triangle is selected (if any)
-  figure.notifications.add('stateSetInit', () => {
+  figure.notifications.add('setStateInit', () => {
     if (typeof geom.customState.selected === 'string' && geom.customState.selected.length > 1) {
       selectTriangle(geom.get(geom.customState.selected));
     }

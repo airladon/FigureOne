@@ -1018,6 +1018,7 @@ class FigureElement {
       returnF1Type?: boolean,
     } = {},
   ) {
+    this.notifications.publish('getState');
     let state;
     let { returnF1Type } = options;
     if (returnF1Type == null) {
@@ -6198,6 +6199,7 @@ class FigureElementCollection extends FigureElement {
       returnF1Type?: boolean,
     } = {},
   ) {
+    this.notifications.publish('getState');
     let state;
     let { returnF1Type } = options;
     if (returnF1Type == null) {
