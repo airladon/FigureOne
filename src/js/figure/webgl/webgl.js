@@ -1,7 +1,7 @@
 // @flow
 
 import getShaders from './shaders';
-import type { TypeFragShader, TypeVertexShader } from './shaders';
+import type { TypeFragmentShader, TypeVertexShader } from './shaders';
 import TargetTexture from './target';
 import { hash32 } from '../../tools/tools';
 
@@ -200,15 +200,15 @@ class WebGLInstance {
     };
   };
   programs: Array<{
+    vars: Array<string>,
     vertexShader: {
       src: string,
-      vars: Array<string>,
-      hash: string,
+      hash: number,
     },
-    fragementShader: {
+    fragmentShader: {
       src: string,
-      vars: Array<string>,
-      hash: string,
+      // vars: Array<string>,
+      hash: number,
     },
     // vertexShader: string | { src: string, vars: Array<string>} | Array<string | bool | number>,
     // fragmentShader: string| { src: string, vars: Array<string>} | Array<string | bool | number>,
@@ -249,7 +249,7 @@ class WebGLInstance {
 
   getProgram(
     vertexShader: TypeVertexShader,
-    fragmentShader: TypeFragShader,
+    fragmentShader: TypeFragmentShader,
   ) {
     // for (let i = 0; i < this.programs.length; i += 1) {
     //   const program = this.programs[i];
@@ -259,8 +259,8 @@ class WebGLInstance {
     //     return i;
     //   }
     // }
-    const shaders = getShaders(vertexShader, fragmentShader);
-    const hashVertexSrc = hash32(shaders.vertexSource);
+    const shaders = getShaders(vertexShader, fragmentShader); // $FlowFixMe
+    const hashVertexSrc = hash32(shaders.vertexSource); // $FlowFixMe
     const hashFragmentSrc = hash32(shaders.fragmentSource);
     for (let i = 0; i < this.programs.length; i += 1) {
       const program = this.programs[i];
@@ -272,14 +272,14 @@ class WebGLInstance {
     }
 
     const newProgram = createProgramFromScripts(
-      this.gl,
-      shaders.vertexSource,
+      this.gl, // $FlowFixMe
+      shaders.vertexSource, // $FlowFixMe
       shaders.fragmentSource,
     );
 
     const programDetails = {
       vertexShader:{
-        src: shaders.vertexSource,
+        src: shaders.vertexSource, // $FlowFixMe
         hash: hash32(shaders.vertexSource),
         def: vertexShader,
       },
@@ -292,7 +292,7 @@ class WebGLInstance {
       // fragmentShader,
       program: newProgram,
       locations: getGLLocations(this.gl, newProgram, shaders.vars),
-    };
+    };  // $FlowFixMe
     this.programs.push(programDetails);
     return this.programs.length - 1;
   }

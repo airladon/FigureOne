@@ -685,7 +685,7 @@ const getShaders = (
     const shader = vertex[fName[0]](...fName.slice(1));
     fragmentSource = shader.src;
     vars.push(...shader.vars);
-  } else if (!Array.isArray(fName) && fName.src != null) {
+  } else if (!Array.isArray(fName) && fName.src != null && typeof fName.src === 'string') {
     fragmentSource = fName.src; // $FlowFixMe
     vars.push(...(fName.vars || []));
   } else if (typeof fName === 'object') {
