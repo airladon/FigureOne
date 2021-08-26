@@ -535,6 +535,7 @@ export default class SlideNavigator {
   collection: FigureElementCollection;
   notifications: NotificationManager;
   from: 'prev' | 'next' | number;
+  slideTransitionDoneName: string;
   equationDefaults: {
     duration: number,
     animate: "move" | "dissolve" | "moveFrom" | "pulse" | "dissolveInThenMove",
@@ -599,7 +600,16 @@ export default class SlideNavigator {
       }
     };
     this.collection.recorder.addEventType('_autoSlide', processAutoSlide, true);
-    this.collection.fnMap.global.add('slideNavigatorTransitionDone', this.transitionDone.bind(this));
+    if (this.collection.fnMap.global.map.slideNavigatorTransitionDone == null) {
+      this.slideTransitionDoneName = 'slideNavigatorTransitionDone';
+    } else {
+      let index = 0;
+      while (this.collection.fnMap.global.map[`slideNavigatorTransitionDone${index}`] != null) {
+        index += 1;
+      }
+      this.slideTransitionDoneName = `slideNavigatorTransitionDone${index}`;
+    }
+    this.collection.fnMap.global.add(this.slideTransitionDoneName, this.transitionDone.bind(this));
     this.from = 'prev';
 
     if (o.slides != null) {
@@ -1013,7 +1023,7 @@ export default class SlideNavigator {
         anim.inParallel(animSteps);
       }
     });
-    anim.whenFinished('slideNavigatorTransitionDone').start();
+    anim.whenFinished(this.slideTransitionDoneName).start();
   }
 
   transition(from: 'next' | 'prev' | number) {
@@ -1025,7 +1035,7 @@ export default class SlideNavigator {
     this.inTransition = true;
     const slide = this.slides[this.currentSlideIndex];
     if (typeof slide.transition === 'function') { // $FlowFixMe
-      return slide.transition('slideNavigatorTransitionDone', this.currentSlideIndex, from);
+      return slide.transition(this.slideTransitionDoneName, this.currentSlideIndex, from);
     }
     if (slide.transition != null && Array.isArray(slide.transition)) {
       return this.autoTransition(slide.transition);
@@ -1037,8 +1047,7 @@ export default class SlideNavigator {
 
     const forms = this.getForm(this.currentSlideIndex);
     const fromForms = this.getFromForm(this.currentSlideIndex);
-
-    let done = 'slideNavigatorTransitionDone';
+    let done = this.slideTransitionDoneName;
 
     Object.keys(fromForms).forEach((eqnName) => {
       const e = this.collection.getElement(this.equations[eqnName]);

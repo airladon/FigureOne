@@ -83,3 +83,6 @@ API cleanup
    - circleCloudShapes
    - rectangleCloudShapes
    - getPolygonCorners
+
+## 0.10.1
+* Bug Fix - SlideShowNavigators now have unique global function map names for the transition so multiple slideshows can be in a figure.
