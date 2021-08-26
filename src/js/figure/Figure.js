@@ -8,7 +8,8 @@ import {
 import Scene from '../tools/scene';
 import type { OBJ_Scene } from '../tools/scene';
 // import * as m3 from '../tools/m3';
-import type { TypeParsableRect, TypeParsablePoint, Type3DMatrix } from '../tools/g2';
+import type { TypeParsableRect, TypeParsablePoint } from '../tools/g2';
+import type { Type3DMatrix } from '../tools/m3';
 // import * as math from '../tools/math';
 import { round } from '../tools/math';
 import { FunctionMap } from '../tools/FunctionMap';
@@ -31,10 +32,11 @@ import TimeKeeper from './TimeKeeper';
 import { Recorder } from './Recorder/Recorder';
 // eslint-disable-next-line import/no-cycle
 import Gesture from './Gesture';
+import type { TypeParsablePlane } from '../tools/geometry/Plane';
 import DrawContext2D from './DrawContext2D';
 // eslint-disable-next-line import/no-cycle
 import FigurePrimitives from './FigurePrimitives/FigurePrimitives';
-import type { OBJ_Polyline, OBJ_TextLinesDefinition, OBJ_TextLines } from './FigurePrimitives/FigurePrimitives';
+import type { OBJ_Polyline, OBJ_TextLinesDefinition, OBJ_TextLines } from './FigurePrimitives/FigurePrimitiveTypes2D';
 // eslint-disable-next-line import/no-cycle
 import FigureCollections from './FigureCollections/FigureCollections';
 // eslint-disable-next-line import/no-cycle
@@ -300,6 +302,7 @@ class Figure {
 
   isTouchDevice: boolean;
   fnMap: FunctionMap;
+  moveBuffer: Array<[Point, Point]>;
 
   isPaused: boolean;
   pauseTime: number;
@@ -538,6 +541,7 @@ class Figure {
     this.timeKeeper = new TimeKeeper();
     this.notifications = new NotificationManager(this.fnMap);
     this.recorder = new Recorder(this.timeKeeper);
+    // $FlowFixMe
     this.recorder.figure = this;
     this.bindRecorder();
     this.pauseTime = this.timeKeeper.now() / 1000;
@@ -1364,6 +1368,7 @@ class Figure {
   initElements() {
     this.animations = this.elements.animations;
     this.elements.scene = this.scene;
+    // $FlowFixMe
     this.elements.getCanvas = () => this.canvasLow;
     this.setupAnimations();
     this.elements.setFigure({
@@ -1776,21 +1781,26 @@ class Figure {
     glPoint: Point,
     autoEvent: boolean = false,
   ) {
-    let e;
+    let e: FigureElement;
     if (typeof element === 'string') {
+      // $FlowFixMe
       e = this.get(element);
     } else {
       e = element;
     }
+    if (e == null) {
+      return;
+    }
     if (this.recorder.state === 'recording') {
-      if (!autoEvent) {
+      if (!autoEvent) { // $FlowFixMe
         this.recorder.recordEvent('touchElement', [e.getPath(), glPoint.x, glPoint.y, glPoint.z]);
       }
     }
-    e.click(glPoint);
+    // $FlowFixMe
+    e.click(glPoint); // $FlowFixMe
     this.beingTouchedElement = e;
-    if (e.isMovable) {
-      this.beingMovedElement = e;
+    if (e.isMovable) { // $FlowFixMe
+      this.beingMovedElement = e;// $FlowFixMe
       e.startBeingMoved();
     }
 
@@ -1897,7 +1907,7 @@ class Figure {
       } else {
         elementToMove = this.beingMovedElement.move.element;
       }
-      if (elementToMove.state.isBeingMoved) {
+      if (elementToMove != null && elementToMove.state.isBeingMoved) {
         elementToMove.stopBeingMoved();
         elementToMove.startMovingFreely();
       }
@@ -2130,17 +2140,17 @@ class Figure {
     const element = this.beingMovedElement;
     const moveType = element.move.type;
 
-    let elementToMove;
+    let elementToMove: FigureElement;
     if (element.move.element == null) {
       elementToMove = element;
-    } else if (typeof element.move.element === 'string') {
+    } else if (typeof element.move.element === 'string') {  // $FlowFixMe
       elementToMove = this.getElement(element.move.element);
     } else {
       elementToMove = element.move.element;
-    }
-    if (elementToMove.state.isBeingMoved === false) {
+    } // $FlowFixMe
+    if (elementToMove.state.isBeingMoved === false) {  // $FlowFixMe
       elementToMove.startBeingMoved();
-    }
+    } // $FlowFixMe
     elementToMove.move.type = moveType;
     if (moveType === 'rotation') {
       this.rotateElement( // $FlowFixMe
@@ -2340,7 +2350,7 @@ class Figure {
         up: start.up.add(target.up.sub(start.up).scale(p)),
       };
       this.scene.setCamera(camera);
-    });
+    }); // $FlowFixMe
     this.animations.camera = (...opt) => {
       const o = joinObjects({}, {
         progression: 'easeinout',
@@ -2422,7 +2432,7 @@ class Figure {
   // TODO in future - convert this to just one pixel as in
   // https://webglfundamentals.org/webgl/lessons/webgl-picking.html
   // but make sure it also works for orthographic projection
-  getSelectionFromPixel(xPixel: number, yPixel: number, debug: false) {
+  getSelectionFromPixel(xPixel: number, yPixel: number, debug: boolean = false) {
     const { gl } = this.webglLow;
     this.setupForSelectionDraw();
     this.elements.draw(
@@ -2440,7 +2450,7 @@ class Figure {
     );
     if (!debug) {
       this.animateNextFrame();
-    }
+    } // $FlowFixMe
     return this.elements.getUniqueColorElement(data);
   }
 
