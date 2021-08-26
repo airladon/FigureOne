@@ -43,6 +43,12 @@ export type Type3Matrix = [
   number, number, number,
 ];
 
+export type Type2DMatrix = [
+  number, number, number,
+  number, number, number,
+  number, number, number,
+];
+
 export type Type3Vector = [number, number, number];
 
 

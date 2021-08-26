@@ -31,7 +31,8 @@ import type { EQN_Equation } from '../Equation/Equation';
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep, OBJ_TriggerAnimationStep } from '../Animation/Animation';
 import type { TypeColor, TypeDash } from '../../tools/types';
-import type FigurePrimitives, { OBJ_Collection } from '../FigurePrimitives/FigurePrimitives';
+import type FigurePrimitives from '../FigurePrimitives/FigurePrimitives';
+import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type FigureCollections from './FigureCollections';
 
 
@@ -326,7 +327,7 @@ function getLineFromOptions(options: {
   const o = joinObjects({}, defaultOptions, options);
   if (o.p1 != null && o.p2 != null) {
     line = new Line(o.p1, o.p2);
-  } else {
+  } else {  // $FlowFixMe
     line = new Line({ p1: o.p1, length: o.length, angle: o.angle });
   }
   if (o.offset !== 0) {
