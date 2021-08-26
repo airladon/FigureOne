@@ -278,6 +278,7 @@ class CollectionsRectangle extends FigureElementCollection {
     this.touchBorder = options.touchBorder;
     this.corner = options.corner;
     this.labelOffset = new Point(0, 0);
+    this.stateProperties = ['width', 'height', 'xAlign', 'yAlign'];
 
     // if (options.position != null) {
     //   this.transform.updateTranslation(getPoint(options.position));
@@ -571,6 +572,18 @@ class CollectionsRectangle extends FigureElementCollection {
     // }
     this.setPositions();
     this.setPosition(position);
+  }
+
+  stateSet() {
+    super.stateSet();
+    const { width, height } = this;
+    if (this._line) {
+      this._line.custom.updatePoints({ width, height });
+    }
+    if (this._fill) {
+      this._fill.custom.updatePoints({ width, height });
+    }
+    this.setPositions();
   }
 
   /**

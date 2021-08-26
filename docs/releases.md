@@ -93,3 +93,17 @@ API cleanup
 
 ## 0.10.3
 * Add verbose error reporting for equation functions and forms
+
+## 0.10.4
+* Add `disableOpacity` setting to SlideNavigator to control opacity of previous button when disabled
+* Texture placeholder while loading is now clear
+
+## 0.10.5
+* Include collections.rectangle width and height in state capture during recording
+* Include state time in figure setState notification
+* Add custom font measurement scaling for Open Sans font
+
+## 0.10.6
+* Added lazylayout to equation forms which delays their layout till they are first shown. Using lazyLayout will shorten initial load time when many equation forms are being used, but will increase the size of video-track files when recording (the increase can be reduced by using `addReference` properties in slides where significant equation change happens).
+* Bug fix: when using multiple `in` and `out` animation steps in slide transitions, the automatic showing/hiding of elements was sometimes not working in the correct order.
+* Bug fix: mouse and touch up events are now tied to the window instead of the canvas preventing sticky touch down when a touch up happens outside of canvas.

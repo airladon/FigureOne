@@ -311,7 +311,10 @@ class FigureTextBase {
     }
     // const height = ascent + descent;
 
-    const { width } = ctx.measureText(this.text);
+    let { width } = ctx.measureText(this.text);
+    if (this.font.family.toLowerCase() === 'open sans') {
+      width *= 1.152;
+    }
     this.measure = {
       ascent: ascent / scalingFactor,
       descent: descent / scalingFactor,
