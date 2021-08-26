@@ -59,7 +59,7 @@ describe('Animate To State', () => {
       figure.mock.timeStep(1);
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(2, 0));
       expect(figure.getRemainingAnimationTime()).toBe(0);
-      expect(drawCallback.mock.calls).toHaveLength(3);
+      expect(drawCallback.mock.calls).toHaveLength(4);
     });
     test('Focus lost', () => {
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(0, 0));
@@ -70,7 +70,7 @@ describe('Animate To State', () => {
       figure.mock.timeStep(3, null, false);
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(2, 0));
       expect(figure.getRemainingAnimationTime()).toBe(0);
-      expect(drawCallback.mock.calls).toHaveLength(1);
+      expect(drawCallback.mock.calls).toHaveLength(31);
     });
     test('Focus lost multi animations going frames aligned with animation end times', () => {
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(0, 0));
@@ -94,7 +94,7 @@ describe('Animate To State', () => {
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(2, 0));
       expect(p2.getPosition('figure').round(3)).toEqual(new Point(3, 0));
       expect(figure.getRemainingAnimationTime()).toBe(0);
-      expect(drawCallback.mock.calls).toHaveLength(1);
+      expect(drawCallback.mock.calls).toHaveLength(31);
     });
     test('Focus lost multi animations going frames unaligned with animation end times', () => {
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(0, 0));
@@ -115,7 +115,7 @@ describe('Animate To State', () => {
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(2, 0));
       expect(p2.getPosition('figure').round(3)).toEqual(new Point(3, 0));
       expect(figure.getRemainingAnimationTime()).toBe(0);
-      expect(drawCallback.mock.calls).toHaveLength(1);
+      expect(drawCallback.mock.calls).toHaveLength(36);
     });
     test('Chained animation frames aligned with animation end', () => {
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(0, 0));
@@ -145,7 +145,7 @@ describe('Animate To State', () => {
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(2, 0));
       expect(p2.getPosition('figure').round(3)).toEqual(new Point(2, 0));
       expect(figure.getRemainingAnimationTime()).toBe(0);
-      expect(drawCallback.mock.calls).toHaveLength(1);
+      expect(drawCallback.mock.calls).toHaveLength(41);
     });
     test('Chained animation frames not aligned with animation end', () => {
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(0, 0));
@@ -175,7 +175,7 @@ describe('Animate To State', () => {
       expect(p1.getPosition('figure').round(3)).toEqual(new Point(2, 0));
       expect(p2.getPosition('figure').round(3)).toEqual(new Point(2, 0));
       expect(figure.getRemainingAnimationTime()).toBe(0);
-      expect(drawCallback.mock.calls).toHaveLength(1);
+      expect(drawCallback.mock.calls).toHaveLength(46);
     });
     /*
      * This is a questionable test. Jest only updates timers when
@@ -230,7 +230,7 @@ describe('Animate To State', () => {
       figure.mock.timeStep(1, null, false);
       expect(p2.getPosition('figure').round(3)).toEqual(new Point(2, 0));
       expect(figure.getRemainingAnimationTime()).toBe(0);
-      expect(drawCallback.mock.calls).toHaveLength(1);
+      expect(drawCallback.mock.calls).toHaveLength(71);
     });
   });
 });
