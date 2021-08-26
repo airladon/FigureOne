@@ -13,7 +13,7 @@ import { round } from '../tools/math';
 import { getState } from './Recorder/state';
 import type {
   TypeParsablePoint, TypeParsableTransform,
-  TypeBorder, TypeParsableBuffer,
+  TypeBorder, TypeParsableBuffer, LineBounds, TypeParsablePlane,
 } from '../tools/g2';
 import { isPointInPolygon } from '../tools/geometry/polygon';
 import { Recorder } from './Recorder/Recorder';
@@ -116,8 +116,8 @@ export type TypeElementPath = string
 /* eslint-enable no-use-before-define */
 
 function transformByMatrix(
-  inputTransforms: Array<Array<number>>,
-  copyTransforms: Array<Array<number>>,
+  inputTransforms: Array<Type3DMatrix>,
+  copyTransforms: Array<Type3DMatrix>,
 ) {
   if (copyTransforms.length === 0) {
     return inputTransforms;
@@ -430,8 +430,8 @@ type ElementMovementState = {
   // velocity: Transform,           // current velocity - will be clipped
                                     // at max if element is being moved
                                     // faster than max.
-  velocity: Point | value,
-  previous: Point | value,
+  velocity: Point | number,
+  previous: Point | number,
 };
 
 /**
@@ -616,7 +616,7 @@ class FigureElement {
   // scenarios: {
   //   [scenarioName: string]: OBJ_Scenario;
   // };
-  scenarios: Scenarios;
+  scenarios: TypeScenarios;
 
   type: 'collection' | 'primitive';
 
@@ -1902,8 +1902,8 @@ class FigureElement {
     let next;
     const { type } = this.move;
     if (type === 'position' || type === 'translation') {
-      next = decelerateVector(
-        this.transform.t(),
+      next = decelerateVector( // $FlowFixMe
+        this.transform.t(), // $FlowFixMe
         this.state.movement.velocity,
         this.move.freely.deceleration,
         deltaTime,  // $FlowFixMe
@@ -1917,11 +1917,11 @@ class FigureElement {
     }
 
     let current;
-    if (type === 'scale' || type === 'scaleX') {
+    if (type === 'scale' || type === 'scaleX') { // $FlowFixMe
       current = this.transform.s().x;
-    } else if (type === 'scaleY') {
+    } else if (type === 'scaleY') { // $FlowFixMe
       current = this.transform.s().y;
-    } else if (type === 'scaleZ') {
+    } else if (type === 'scaleZ') { // $FlowFixMe
       current = this.transform.s().z;
     } else if (type === 'rotation') {
       const r = this.transform.r();
@@ -1933,8 +1933,8 @@ class FigureElement {
       }
     }
     // console.log(deltaTime)
-    return decelerateValue(
-      current,
+    return decelerateValue( // $FlowFixMe
+      current, // $FlowFixMe
       this.state.movement.velocity,
       this.move.freely.deceleration,
       deltaTime,  // $FlowFixMe
@@ -1977,11 +1977,11 @@ class FigureElement {
   ) {
     const { type } = this.move;
     let movement;
-    if (type === 'scale' || type === 'scaleX') {
+    if (type === 'scale' || type === 'scaleX') { // $FlowFixMe
       movement = transform.s().x;
-    } else if (type === 'scaleY') {
+    } else if (type === 'scaleY') { // $FlowFixMe
       movement = transform.s().y;
-    } else if (type === 'scaleZ') {
+    } else if (type === 'scaleZ') { // $FlowFixMe
       movement = transform.s().z;
     } else if (type === 'position' || type === 'translation') {
       movement = transform.t();
@@ -2001,9 +2001,9 @@ class FigureElement {
     valueIn: number | Point,
     transform: Transform,
   ) {
-    const { type } = this.move;
-    let value = valueIn;
-    if (this.move.bounds != null) {
+    const { type } = this.move; // $FlowFixMe
+    let value: number = valueIn;
+    if (this.move.bounds != null) { // $FlowFixMe
       value = this.move.bounds.clip(valueIn);
     }
     // console.log(type, transform)
@@ -2011,15 +2011,15 @@ class FigureElement {
     if (type === 'scale') {
       transform.updateScale([value, value, value]);
     } else if (type === 'scaleX') {
-      const s = transform.s();
+      const s = transform.s(); // $FlowFixMe
       transform.updateScale([value, s.y, s.z]);
     } else if (type === 'scaleY') {
-      const s = transform.s();
+      const s = transform.s(); // $FlowFixMe
       transform.updateScale([s.x, value, s.z]);
     } else if (type === 'scaleZ') {
-      const s = transform.s();
+      const s = transform.s(); // $FlowFixMe
       transform.updateScale([s.x, s.y, value]);
-    } else if (type === 'position' || type === 'translation') {
+    } else if (type === 'position' || type === 'translation') { // $FlowFixMe
       transform.updateTranslation(value);
     } else if (type === 'rotation') {
       const r = transform.r();
@@ -2142,14 +2142,14 @@ class FigureElement {
       const d = v / Math.abs(v);
       if (Math.abs(v) <= this.move.freely.zeroVelocityThreshold) {
         v = 0;
-      }
+      } // $FlowFixMe
       v = Math.min(Math.abs(v), this.move.maxVelocity);
       v *= d;
-    } else {
+    } else { // $FlowFixMe
       v = next.sub(prevValue).scale(1 / deltaTime);
       const vMag = v.length();
       if (vMag <= this.move.freely.zeroVelocityThreshold) {
-        v = new Point(0, 0, 0);
+        v = new Point(0, 0, 0); // $FlowFixMe
       } else if (vMag > this.move.maxVelocity) {
         v = v.normalize().scale(this.move.maxVelocity);
       }
@@ -2798,7 +2798,7 @@ class FigureElement {
       z: { min: -1, span: 2 },
     };
 
-    const glToPixelMatrix = () => {
+    const glToPixelMatrix = (): Type3DMatrix => {
       const glToPixel = spaceToSpaceTransform(glSpace, pixelSpace()).matrix(precision);
       glToPixel[10] = 0;
       glToPixel[11] = 0;

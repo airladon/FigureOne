@@ -239,7 +239,7 @@ class Point {
     return cartesianToSpherical(this.x, this.y, this.z);
   }
 
-  _state(options: { precision: number }) {
+  _state(options: { precision: number } = { precision: 8 }) {
     const precision = getPrecision(options);
     return {
       f1Type: 'p',

@@ -41,7 +41,15 @@ type TypeRoundObject = {
  * @param {number} precision - Number of decimal places to round to
  * @returns {number | Array<number>} Rounded value or array of values
  */
-function round<T: number | TypeRoundObject | Array<number | TypeRoundObject>>(
+function round<T: number
+| TypeRoundObject
+| Array<number | TypeRoundObject>
+| [
+  number, number, number, number,
+  number, number, number, number,
+  number, number, number, number,
+  number, number, number, number,
+]>(
   arrayOrValue: T,
   precision: number = 5,
 ): T {
