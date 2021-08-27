@@ -282,9 +282,11 @@ export type OBJ_GLUniform = {
 
 
 /**
- * Options object for any {@link DiagramElementPrimitive}.
+ * Options object for any {@link FigureElementPrimitive}.
  *
- * @property {string} [name]  name of figure element
+ * These properties are available when defining any FigureElementPrimitive.
+ *
+ * @property {string} [name] name of figure element
  * @property {TypeParsablePoint} [position] position overrides `transform` translation
  * @property {TypeParsableTransform} [transform] transform to apply to element
  * @property {TypeColor} [color] color to apply to element (is passed as the
@@ -300,8 +302,9 @@ export type OBJ_GLUniform = {
  * the movement options
  * @property {TypeColor} [dimColor] RGBA is used when vertex colors are from a
  * uniform, otherwise just the alpha channel is used.
- * @property {TypeColor} [defaultColor]
- * @property {TypeScenarios} [scenarios]
+ * @property {TypeColor} [defaultColor] 
+ * @property {TypeScenarios} [scenarios] Define
+ * position/transform/rotation/scale/color scenarios tied to the element
  * @property {Scene} [scene] Give the element a custom scene that is independant
  * of the figure scene. For example, use this to create a 3D object in a 2D
  * figure.
