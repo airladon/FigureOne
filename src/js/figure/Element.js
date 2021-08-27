@@ -2759,7 +2759,7 @@ class FigureElement {
     if (this.drawingObject != null) { // $FlowFixMe
       return this.drawingObject.getCanvas();
     }
-    throw new Error(`getCanvas error: Element ${this.getPath()} has no drawing object.`)
+    throw new Error(`getCanvas error: Element ${this.getPath()} has no drawing object.`);
   }
 
   spaceTransformMatrix(from: string, to: string, precision: number = 8): Type3DMatrix {
@@ -3970,14 +3970,14 @@ class FigureElementPrimitive extends FigureElement {
   resize(figureHTMLElement: ?HTMLElement = null) {
     this.resizeHtmlObject();
     super.resize(figureHTMLElement);
-    // If gl canvas is resized, webgl text will need to be updated.
-    if (this.drawingObject.type === 'vertexText') {
-      const pixelToVertexScale = this.getPixelToVertexSpaceScale();
-      // $FlowFixMe
-      this.drawingObject.drawTextIntoBuffer(
-        new Point(pixelToVertexScale.x, Math.abs(pixelToVertexScale.y)),
-      );
-    }
+    // // If gl canvas is resized, webgl text will need to be updated.
+    // if (this.drawingObject.type === 'vertexText') {
+    //   const pixelToVertexScale = this.getPixelToVertexSpaceScale();
+    //   // $FlowFixMe
+    //   this.drawingObject.drawTextIntoBuffer(
+    //     new Point(pixelToVertexScale.x, Math.abs(pixelToVertexScale.y)),
+    //   );
+    // }
   }
 
   setColor(color: TypeColor, setDefault: boolean = true) {
@@ -4175,7 +4175,7 @@ class FigureElementPrimitive extends FigureElement {
       if (targetTexture) {
         if (this.uniqueColor == null) {
           this.setUniqueColor(generateUniqueColor());
-        }
+        } // $FlowFixMe
         colorToUse = this.uniqueColor.map(c => c / 255);
       }
       // eslint-disable-next-line prefer-destructuring

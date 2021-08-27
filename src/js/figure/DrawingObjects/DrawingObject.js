@@ -136,6 +136,7 @@ class DrawingObject {
     color: TypeColor,
     // canvasIndex: number,
     numPoints: number,
+    targetTexture: boolean = false,
   ) {
   }
   /* eslint-enable */
