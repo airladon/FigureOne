@@ -40,6 +40,7 @@ import cone from './d3/cone';
 import cylinder from './d3/cylinder';
 // import { polygon } from './geometry/polygon';
 import cube from './d3/cube';
+import prism from './d3/prism';
 import * as surface from './d3/surface';
 import {
   pointsToNumbers, numbersToPoints, toNumbers, toPoints,
@@ -598,6 +599,7 @@ export {
   cylinder,
   cone,
   cube,
+  prism,
   surface,
   getLathePoints,
   decelerateVector,
