@@ -30,7 +30,7 @@ import { CustomAnimationStep } from '../Animation/Animation';
 // eslint-disable-next-line import/no-cycle
 import FigureElementPrimitiveMorph from './FigureElementPrimitiveMorph';
 // eslint-disable-next-line import/no-cycle
-import Generic from './Generic';
+// import Generic from './Generic';
 import Text from './Text';
 // eslint-disable-next-line import/no-cycle
 import {
