@@ -31,7 +31,7 @@ These choices are bundled into three categories:
 * Projection
 * Light
 
-###### Camera
+##### Camera
 
 The camera is the observer of the scene. `Scene.camera` defines how we are looking at the space we which to draw. It has the properties
 
@@ -39,7 +39,7 @@ The camera is the observer of the scene. `Scene.camera` defines how we are looki
 * `lookAt` - where the camera is looking at
 * `up` - which direction is up for the camera
 
-###### Projection
+##### Projection
 
 Setting up the camera defines how we are looking at the 3D space. We then need to project what we are looking at into two dimensions for the screen.
 
@@ -86,12 +86,15 @@ c2.scene = new Fig.Scene({
 
 Depending on the style of projection, the expanse of space to be captured in the projection can be defined. 
 
-For orthographic projection, adding `near` and `far` to `left`, `right`, `bottom`, and `top` creates a rectangular prism in front of the camera. Any shapes (or portions of shapes) withing this prism will be shown.
+For orthographic projection, adding `near` and `far` to `left`, `right`, `bottom`, and `top` creates a rectangular prism in front of the camera. Any shapes (or portions of shapes) withing this prism will be shown. The property names are relative to the camera. `camera.lookAt` will be a normal to the plane with `left`, `right`, `bottom` and `top`. `camera.up` will orient the plane to align with `top`. `camera.position` and `near` will then position the prism while `far` will give it depth.
 
-The property names are relative to the camera. `camera.lookAt` will be a normal to the plane with `left`, `right`, `bottom` and `top`. `camera.up` will orient the plane to align with `top`.
+![](./tutorials/shapes3d/orthographic.jpg)
 
+These same properties cannot be used for perspective projection because size changes with distance from camera. For example the width `left` and `right` will be different closer to the camera compared with further away. Therefore, a fustrum is used to define visible space.
 
-The reson the properties are named such (and not xMin, yMin etc) is because depending on where the camera is and where it is looking, these properties may not align with any axis. The prism surface will be normal to the direction the camera is looking. The `left`, `right`, `bottom` and `top` properties will be relative to the `up` direction of the camera.
+![](./tutorials/shapes3d/perspective.jpg)
+
+The reason the properties are named such (and not xMin, yMin etc) is because depending on where the camera is and where it is looking, these properties may not align with any axis. The prism surface will be normal to the direction the camera is looking. The `left`, `right`, `bottom` and `top` properties will be relative to the `up` direction of the camera.
 
 
 In 3D however
