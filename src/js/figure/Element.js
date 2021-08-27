@@ -4325,6 +4325,11 @@ export type OBJ_FigureElementCollection = {
   parent?: FigureElement | null,
   border?: TypeBorder | 'children' | 'rect' | number,
   touchBorder?: TypeBorder | 'border' | number | 'rect',
+  touch?: boolean | number | TypeParsablePoint,
+  move?: boolean | OBJ_ElementMove,
+  dimColor?: TypeColor,
+  scenarios?: TypeScenarios,
+  scene?: Scene,
 };
 
 /**
@@ -4388,9 +4393,9 @@ class FigureElementCollection extends FigureElement {
     if (options.dimColor != null) {
       this.dimColor = options.dimColor;
     }
-    if (options.defaultColor != null) {
-      this.defaultColor = options.dimColor;
-    }
+    // if (options.defaultColor != null) {
+    //   this.defaultColor = options.dimColor;
+    // }
     if (options.scenarios != null) {
       this.scenarios = options.scenarios;
     }
@@ -4440,7 +4445,10 @@ class FigureElementCollection extends FigureElement {
   // Get a canvas from the top level parent
   getCanvas() {
     // return this.elements[this.drawOrder[0]].getCanvas();
-    return this.parent.getCanvas();
+    if (this.parent != null) {
+      return this.parent.getCanvas();
+    }
+    throw new Error(`Element ${this.getPath()} is not attached to a parent with a canvas`);
   }
 
   _dup(exceptions: Array<string> = []) {
@@ -4741,9 +4749,9 @@ class FigureElementCollection extends FigureElement {
       if (optionsToUse.dimColor != null) {
         newElement.dimColor = optionsToUse.dimColor;
       }
-      if (optionsToUse.defaultColor != null) {
-        newElement.defaultColor = optionsToUse.dimColor;
-      }
+      // if (optionsToUse.defaultColor != null) {
+      //   newElement.defaultColor = optionsToUse.dimColor;
+      // }
       if (optionsToUse.scenarios != null) {
         newElement.scenarios = optionsToUse.scenarios;
       }
@@ -4798,6 +4806,7 @@ class FigureElementCollection extends FigureElement {
       surface: shapes.surface.bind(shapes),
       cylinder: shapes.cylinder.bind(shapes),
       cube: shapes.cube.bind(shapes),
+      prism: shapes.prism.bind(shapes),
       arrow: shapes.arrow.bind(shapes),
       line: shapes.line.bind(shapes),
       star: shapes.star.bind(shapes),
@@ -5532,7 +5541,7 @@ class FigureElementCollection extends FigureElement {
     }
   }
 
-  getUniqueColorElement(color: null | TypeColor) {
+  getUniqueColorElement(color: TypeColor) {
     if (super.getUniqueColorElement(color)) {
       return this;
     }
