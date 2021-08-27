@@ -4,7 +4,7 @@ import {
   Rect, Point, Transform, getPoint, getRect, getTransform,
   getBorder, getPoints,
   getBoundingBorder, isBuffer, toNumbers,
-  sphere, cube, cylinder, cone, revolve, surface,
+  sphere, cube, cylinder, cone, revolve, surface, prism,
 } from '../../tools/g2';
 // import {
 //   round
@@ -627,6 +627,16 @@ export default class FigurePrimitives {
       },
       joinObjects({}, ...optionsIn),
       o => cube(o),
+    );
+  }
+
+  prism(...optionsIn: Array<OBJ_Prism>) {
+    return this.generic3DBase(
+      {
+        side: this.defaultLength,
+      },
+      joinObjects({}, ...optionsIn),
+      o => prism(o),
     );
   }
 
