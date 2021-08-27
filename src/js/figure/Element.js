@@ -9,6 +9,7 @@ import {
   getPlane, Plane,
 } from '../tools/g2';
 import Scene from '../tools/scene';
+import type { OBJ_Scene } from '../tools/scene';
 import { round } from '../tools/math';
 import { getState } from './Recorder/state';
 import type {
@@ -916,11 +917,13 @@ class FigureElement {
     };
     this.interactiveLocation = new Point(0, 0);
     this.animationFinishedCallback = null;
+    // $FlowFixMe
     this.animations = new animations.AnimationManager({
       element: this,
       finishedCallback: this.animationFinished.bind(this),
       timeKeeper: this.timeKeeper,
     });
+    // $FlowFixMe
     this.tieToHTML = {
       element: null,
       scale: 'fit',
@@ -1093,7 +1096,7 @@ class FigureElement {
   }
 
   getDrawToFigureTransformDef() {
-    if (this.parent != null) {
+    if (this.parent != null) { // $FlowFixMe
       return [...this.getTransform().def, ...this.parent.getDrawToFigureTransformDef()];
     }
     return this.transform.def;
@@ -1107,13 +1110,13 @@ class FigureElement {
   }
 
   getLocalToFigureTransform() {
-    if (this.parent != null) {
+    if (this.parent != null) { // $FlowFixMe
       return new Transform(this.getLocalToFigureTransformDef());
     }
     return new Transform();
   }
 
-  getFigureTransform() {
+  getFigureTransform() { // $FlowFixMe
     return new Transform(this.getDrawToFigureTransformDef());
   }
 
@@ -1170,6 +1173,9 @@ class FigureElement {
     }
     if (tieToElement != null) {
       const scene = this.getScene();
+      if (scene == null) {
+        return;
+      }
       const figureWidth = scene.right - scene.left;
       const figureHeight = scene.top - scene.bottom;
       const tie = tieToElement.getBoundingClientRect();
@@ -1459,7 +1465,7 @@ class FigureElement {
     return drawTransforms;
   }
 
-  getDrawTransformsMatrix(initialTransforms: Array<Array<number>>) {
+  getDrawTransformsMatrix(initialTransforms: Array<Type3DMatrix>) {
     let drawTransforms = initialTransforms;
     if (this.copyTransforms.length > 0) {
       drawTransforms = transformByMatrix(drawTransforms, this.copyTransforms.map(t => t.matrix()));
@@ -1546,7 +1552,7 @@ class FigureElement {
       }
     } else {
       rotation = rOrRx;
-    }
+    } // $FlowFixMe
     currentTransform.updateRotation(rotation);
     this.setTransform(currentTransform);
   }
@@ -2065,6 +2071,7 @@ class FigureElement {
     value: Point | number,
   ): void {
     const previousValue = this.getMovement(this.transform);
+    // $FlowFixMe
     this.calcVelocity(previousValue, value);
     const t = this.transform._dup();
     this.updateTransformWithMovement(value, t);
@@ -2185,7 +2192,7 @@ class FigureElement {
     this.notifications.publish('startMovingFreely');
     if (this.recorder.state === 'recording') {
       let v;
-      if (this.state.movement.velocity._state) {
+      if (this.state.movement.velocity._state) { // $FlowFixMe
         v = this.state.movement.velocity._state();
       } else {
         v = this.state.movement.velocity;
@@ -2747,8 +2754,12 @@ class FigureElement {
     throw new Error(`Figure.transformPoint space definition error -'${fromSpace}', '${toSpace}'`);
   }
 
-  getCanvas() {
-    return this.drawingObject.getCanvas();
+  // $FlowFixMe
+  getCanvas() { // $FlowFixMe
+    if (this.drawingObject != null) { // $FlowFixMe
+      return this.drawingObject.getCanvas();
+    }
+    throw new Error(`getCanvas error: Element ${this.getPath()} has no drawing object.`)
   }
 
   spaceTransformMatrix(from: string, to: string, precision: number = 8): Type3DMatrix {
@@ -2784,7 +2795,7 @@ class FigureElement {
       };
     }
 
-    const pixelSpace = () => {
+    const pixelSpace = () => { // $FlowFixMe
       const canvasRect = this.getCanvas().getBoundingClientRect();
       return {
         x: { min: 0, span: canvasRect.width },
@@ -2820,23 +2831,23 @@ class FigureElement {
       return this.getFigureTransform().matrix(precision);
     }
     // Only works for '2D' and 'orthographic' projections
-    if (from === 'draw' && to === 'gl') {
+    if (from === 'draw' && to === 'gl') { // $FlowFixMe
       if (scene.style === 'perspective') {
         throw new Error('Cannot create a transform matrix from draw space to GL space for a perspective scene.');
       }
-      return round(m3.mul(
+      return round(m3.mul( // $FlowFixMe
         scene.viewProjectionMatrix,
         this.getFigureTransform().matrix(precision),
       ), precision);
     }
     // Only works for '2D' and 'orthographic' projections
-    if (from === 'draw' && to === 'pixel') {
+    if (from === 'draw' && to === 'pixel') { // $FlowFixMe
       if (scene.style === 'perspective') {
         throw new Error('Cannot create a transform matrix from draw space to pixel space for a perspective scene.');
       }
       return round(m3.mul(
         glToPixelMatrix(),
-        m3.mul(
+        m3.mul( // $FlowFixMe
           scene.viewProjectionMatrix,
           // this.lastDrawTransform.matrix(),
           this.getFigureTransform().matrix(precision),
@@ -2849,24 +2860,24 @@ class FigureElement {
       return this.getLocalToFigureTransform().matrix(precision);
     }
     // Only works for '2D' and 'orthographic' projections
-    if (from === 'local' && to === 'gl') {
+    if (from === 'local' && to === 'gl') { // $FlowFixMe
       if (scene.style === 'perspective') {
         throw new Error('Cannot create a transform matrix from local space to GL space for a perspective scene.');
       }
-      return round(m3.mul(
+      return round(m3.mul( // $FlowFixMe
         figureToGLMatrix,
         this.getLocalToFigureTransform().matrix(precision),
       ), precision);
     }
     // Only works for '2D' and 'orthographic' projections
-    if (from === 'local' && to === 'pixel') {
+    if (from === 'local' && to === 'pixel') { // $FlowFixMe
       if (scene.style === 'perspective') {
         throw new Error('Cannot create a transform matrix from local space to pixel space for a perspective scene.');
       }
       return round(m3.mul(
         // this.figure.spaceTransformMatrix('gl', 'pixel'),
         glToPixelMatrix(),
-        m3.mul(
+        m3.mul( // $FlowFixMe
           figureToGLMatrix,
           this.getLocalToFigureTransform().matrix(precision),
         ),
@@ -2875,14 +2886,14 @@ class FigureElement {
 
     // From figure Up
     // Only works for '2D' and 'orthographic' projections
-    if (from === 'figure' && to === 'gl') {
+    if (from === 'figure' && to === 'gl') { // $FlowFixMe
       if (scene.style === 'perspective') {
         throw new Error('Cannot create a transform matrix from figure space to GL space for a perspective scene.');
-      }
+      } // $FlowFixMe
       return figureToGLMatrix;
     }
     // Only works for '2D' and 'orthographic' projections
-    if (from === 'figure' && to === 'pixel') {
+    if (from === 'figure' && to === 'pixel') { // $FlowFixMe
       if (scene.style === 'perspective') {
         throw new Error('Cannot create a transform matrix from figure space to pixel space for a perspective scene.');
       }
@@ -2905,52 +2916,52 @@ class FigureElement {
     }
 
     // Only works for 2D projection
-    if (from === 'pixel' && to === 'figure') {
+    if (from === 'pixel' && to === 'figure') { // $FlowFixMe
       if (scene.style !== '2D') {
         throw new Error('Cannot create a transform matrix from pixel space to figure space (needs a plane intersect).');
       }
-      // return this.figure.spaceTransformMatrix('pixel', 'figure');
+      // $FlowFixMe
       return spaceToSpaceTransform(pixelSpace(), figure2DSpace).matrix(precision);
     }
 
     // Only works for 2D projection
-    if (from === 'pixel' && to === 'local') {
+    if (from === 'pixel' && to === 'local') { // $FlowFixMe
       if (scene.style !== '2D') {
         throw new Error('Cannot create a transform matrix from pixel space to local space (needs a plane intersect).');
       }
       return round(m3.mul(
         m3.inverse(this.getLocalToFigureTransform().matrix(precision)),
-        // this.figure.spaceTransformMatrix('pixel', 'figure'),
+        // $FlowFixMe
         spaceToSpaceTransform(pixelSpace(), figure2DSpace).matrix(precision),
       ), precision);
     }
 
     // Only works for 2D projection
-    if (from === 'pixel' && to === 'draw') {
+    if (from === 'pixel' && to === 'draw') { // $FlowFixMe
       if (scene.style !== '2D') {
         throw new Error('Cannot create a transform matrix from pixel space to draw space (needs a plane intersect).');
       }
       return round(m3.mul(
         m3.inverse(this.getFigureTransform().matrix(precision)),
-        // this.figure.spaceTransformMatrix('pixel', 'figure'),
+        // $FlowFixMe
         spaceToSpaceTransform(pixelSpace(), figure2DSpace).matrix(precision),
       ), precision);
     }
 
     // GL Down
     // Works only for 2D and orthographic projections
-    if (from === 'gl' && to === 'figure') {
+    if (from === 'gl' && to === 'figure') { // $FlowFixMe
       if (scene.style === 'perspective') {
         throw new Error('Cannot create a transform matrix from GL space to figure space for a perspective scene.');
-      }
+      } // $FlowFixMe
       return round(m3.inverse(figureToGLMatrix), precision);
     }
 
     // Works only for 2D and orthographic projections
-    if (from === 'gl' && to === 'local') {
+    if (from === 'gl' && to === 'local') { // $FlowFixMe
       if (scene.style === 'perspective') {
         throw new Error('Cannot create a transform matrix from GL space to local space for a perspective scene.');
-      }
+      } // $FlowFixMe
       const glToFigureMatrix = m3.inverse(figureToGLMatrix);
       const figureToLocalMatrix = m3.inverse(
         this.getLocalToFigureTransform().matrix(precision),
@@ -2959,10 +2970,10 @@ class FigureElement {
     }
 
     // Works only for 2D and orthographic projections
-    if (from === 'gl' && to === 'draw') {
+    if (from === 'gl' && to === 'draw') { // $FlowFixMe
       if (scene.style === 'perspective') {
         throw new Error('Cannot create a transform matrix from GL space to draw space for a perspective scene.');
-      }
+      } // $FlowFixMe
       const glToFigureMatrix = m3.inverse(figureToGLMatrix);
       const figureToDrawMatrix = m3.inverse(
         this.getFigureTransform().matrix(precision),
@@ -3390,6 +3401,7 @@ class FigureElement {
 
   setFigurePosition(figurePosition: Point) {
     const figureToGLSpace = this.spaceTransformMatrix('figure', 'gl');
+    // $FlowFixMe
     const glLocation = figurePosition.transformBy(figureToGLSpace.matrix());
     // const t = new Transform(this.lastDrawTransform.def.slice(this.transform.def.length));
     const t = this.getLocalToFigureTransform();
@@ -3487,8 +3499,7 @@ class FigureElement {
     if (o.onClick != null) {
       this.onClick = o.onClick;
     }
-    if (this.parent != null) {
-      // this.parent.setTouchable();
+    if (this.parent != null) { // $FlowFixMe
       this.parent.setHasTouchableElements();
     }
   }
@@ -3533,7 +3544,7 @@ class FigureElement {
             position: this.move.plane.p, normal: this.move.plane.n,
           },
           bounds,
-        );
+        ); // $FlowFixMe
         this.move.bounds = getBounds(b);
       }
     }
@@ -3733,7 +3744,7 @@ class FigureElement {
     return [];
   }
 
-  getSelectionFromBorders(glLocation: Point): Array<FigureElement> {
+  getSelectionFromBorders(glLocation: Point): null | FigureElement {
     if (!this.isTouchable) {
       return null;
     }
@@ -3918,7 +3929,7 @@ class FigureElementPrimitive extends FigureElement {
       let p = glPoint;
       if (this.getScene().style !== 'perspective') {
         p = glPoint.transformBy(this.spaceTransformMatrix('gl', 'draw'));
-      }
+      } // $FlowFixMe
       this.drawingObject.click(
         p,
         this.fnMap,
@@ -5436,7 +5447,7 @@ class FigureElementCollection extends FigureElement {
   }
 
   getBorder(
-    space: TypeSpace | Array<number> = 'local',
+    space: TypeSpace | Type3DMatrix = 'local',
     border: 'touchBorder' | 'border' = 'border',
     children: ?Array<string | FigureElement> = null,
     shownOnly: boolean = true,
@@ -5579,7 +5590,7 @@ class FigureElementCollection extends FigureElement {
 
   setHasTouchableElements() {
     this.hasTouchableElements = true;
-    if (this.parent != null) {
+    if (this.parent != null) { // $FlowFixMe
       this.parent.setHasTouchableElements();
     }
   }
