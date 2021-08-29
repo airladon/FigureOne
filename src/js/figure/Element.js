@@ -1541,19 +1541,26 @@ class FigureElement {
    * Conveniently set the first `rotation` of the element's `transform`.
    * @param {number} rotation
    */
-  setRotation(rOrRx: number | TypeParsablePoint, ry: number | null = null, rz: number = 0) {
+  setRotation(r: number, axis: TypeParsablePoint | null = null) {
+    // const index = this.transform.getComponentIndex(['r', 'rx', 'rz', 'ry', 'ra']);
     const currentTransform = this.transform._dup();
-    let rotation;
-    if (typeof rOrRx === 'number') {
-      if (ry == null) {
-        rotation = rOrRx;
-      } else {
-        rotation = new Point(rOrRx, ry, rz);
-      }
-    } else {
-      rotation = rOrRx;
-    } // $FlowFixMe
-    currentTransform.updateRotation(rotation);
+    currentTransform.updateRotation(r, axis);
+    // currentTransform.def[index][1] = r;
+    // if (axis != null && currentTransform.def[index][0] === 'ra') {
+    //   currentTransform.def[index] = ['r', r, ...getPoint(axis)];
+    //   currentTransform.calcAndSetMatrix();
+    // }
+    // let rotation;
+    // if (typeof rOrRx === 'number') {
+    //   if (ry == null) {
+    //     rotation = rOrRx;
+    //   } else {
+    //     rotation = new Point(rOrRx, ry, rz);
+    //   }
+    // } else {
+    //   rotation = rOrRx;
+    // } // $FlowFixMe
+    // currentTransform.updateRotation(rotation);
     this.setTransform(currentTransform);
   }
 
@@ -3310,13 +3317,16 @@ class FigureElement {
    * @return {Point} scale
    */
   getRotation(normalize: '0to360' | '-180to180' | '' = '') {
-    const r = this.transform.r();
-    let rotation = 0;
-    if (r != null) {
-      rotation = r;
-    }
+    const index = this.transform.getComponentIndex(['r', 'rx', 'rz', 'ry', 'ra']);
+    const r = this.transform.def[index][1];
+
+    // const r = this.transform.r();
+    let rotation = r;
+    // if (r != null) {
+    //   rotation = r;
+    // }
     // console.log(rotation)
-    if (normalize !== '' && r != null && typeof r === 'number') {
+    if (normalize !== '' && r != null) {
       rotation = clipAngle(r, normalize);
     }
     return rotation;
