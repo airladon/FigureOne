@@ -63,7 +63,7 @@ describe('Rotation Animation Step', () => {
       expect(round(elem1.getRotation(), 2)).toBe(0.5);
     });
     test('rx', () => {
-      elem1.transform.setComponent(1, ['rx', 0]);
+      elem1.transform.setComponent(1, ['r', 0, 1, 0, 0]);
       elem1.animations.new().rotation({ target: 1, duration: 1 }).start();
       elem1.animations.nextFrame(0);
       expect(round(elem1.getRotation())).toBe(0);
@@ -71,7 +71,7 @@ describe('Rotation Animation Step', () => {
       expect(round(elem1.getRotation(), 2)).toBe(0.5);
     });
     test('ry', () => {
-      elem1.transform.setComponent(1, ['ry', 0]);
+      elem1.transform.setComponent(1, ['r', 0, 0, 1, 0]);
       elem1.animations.new().rotation({ target: 1, duration: 1 }).start();
       elem1.animations.nextFrame(0);
       expect(round(elem1.getRotation())).toBe(0);
@@ -79,7 +79,7 @@ describe('Rotation Animation Step', () => {
       expect(round(elem1.getRotation(), 2)).toBe(0.5);
     });
     test('rz', () => {
-      elem1.transform.setComponent(1, ['rz', 0]);
+      elem1.transform.setComponent(1, ['r', 0, 0, 0, 1]);
       elem1.animations.new().rotation({ target: 1, duration: 1 }).start();
       elem1.animations.nextFrame(0);
       expect(round(elem1.getRotation())).toBe(0);
@@ -87,7 +87,7 @@ describe('Rotation Animation Step', () => {
       expect(round(elem1.getRotation(), 2)).toBe(0.5);
     });
     test('ra', () => {
-      elem1.transform.setComponent(1, ['ra', 0]);
+      elem1.transform.setComponent(1, ['r', 0, 1, 1, 0]);
       elem1.animations.new().rotation({ target: 1, duration: 1 }).start();
       elem1.animations.nextFrame(0);
       expect(round(elem1.getRotation())).toBe(0);
@@ -158,7 +158,7 @@ describe('Rotation Animation Step', () => {
     describe('rx', () => {
       test('positive', () => {
         testTarget(
-          ['rx', 0],
+          ['r', 0, 1, 0, 0],
           0,   // start
           1,   // target
           0,   // test at start
@@ -168,7 +168,7 @@ describe('Rotation Animation Step', () => {
       });
       test('negative', () => {
         testTarget(
-          ['rx', 0],
+          ['r', 0, 1, 0, 0],
           1,   // start
           0,   // target
           1,   // test at start
@@ -178,7 +178,7 @@ describe('Rotation Animation Step', () => {
       });
       test('>2π', () => {
         testTarget(
-          ['rx', 0],
+          ['r', 0, 1, 0, 0],
           0,
           3 * Math.PI,
           0,
@@ -188,7 +188,7 @@ describe('Rotation Animation Step', () => {
       });
       test('<-2π', () => {
         testTarget(
-          ['rx', 0],
+          ['r', 0, 1, 0, 0],
           0,
           -3 * Math.PI,
           0,
@@ -200,7 +200,7 @@ describe('Rotation Animation Step', () => {
     describe('ry', () => {
       test('positive', () => {
         testTarget(
-          ['ry', 0],
+          ['r', 0, 0, 1, 0],
           0,   // start
           1,   // target
           0,   // test at start
@@ -210,7 +210,7 @@ describe('Rotation Animation Step', () => {
       });
       test('negative', () => {
         testTarget(
-          ['ry', 0],
+          ['r', 0, 0, 1, 0],
           1,   // start
           0,   // target
           1,   // test at start
@@ -220,7 +220,7 @@ describe('Rotation Animation Step', () => {
       });
       test('>2π', () => {
         testTarget(
-          ['ry', 0],
+          ['r', 0, 0, 1, 0],
           0,
           3 * Math.PI,
           0,
@@ -230,7 +230,7 @@ describe('Rotation Animation Step', () => {
       });
       test('<-2π', () => {
         testTarget(
-          ['ry', 0],
+          ['r', 0, 0, 1, 0],
           0,
           -3 * Math.PI,
           0,
@@ -242,7 +242,7 @@ describe('Rotation Animation Step', () => {
     describe('rz', () => {
       test('positive', () => {
         testTarget(
-          ['rz', 0],
+          ['r', 0, 0, 0, 1],
           0,   // start
           1,   // target
           0,   // test at start
@@ -252,7 +252,7 @@ describe('Rotation Animation Step', () => {
       });
       test('negative', () => {
         testTarget(
-          ['rz', 0],
+          ['r', 0, 0, 0, 1],
           1,   // start
           0,   // target
           1,   // test at start
@@ -262,7 +262,7 @@ describe('Rotation Animation Step', () => {
       });
       test('>2π', () => {
         testTarget(
-          ['rz', 0],
+          ['r', 0, 0, 0, 1],
           0,
           3 * Math.PI,
           0,
@@ -272,7 +272,7 @@ describe('Rotation Animation Step', () => {
       });
       test('<-2π', () => {
         testTarget(
-          ['rz', 0],
+          ['r', 0, 0, 0, 1],
           0,
           -3 * Math.PI,
           0,
@@ -284,7 +284,7 @@ describe('Rotation Animation Step', () => {
     describe('axis angle', () => {
       test('positive', () => {
         testTarget(
-          ['ra', 1, [1, 0, 0]],
+          ['r', 1, 1, 0, 0],
           0,   // start
           1,   // target
           0,   // test at start
@@ -294,7 +294,7 @@ describe('Rotation Animation Step', () => {
       });
       test('negative', () => {
         testTarget(
-          ['ra', 1, [1, 0, 0]],
+          ['r', 1, 1, 0, 0],
           1,
           0,
           1,
@@ -304,7 +304,7 @@ describe('Rotation Animation Step', () => {
       });
       test('>2π', () => {
         testTarget(
-          ['ra', 1, [1, 0, 0]],
+          ['r', 1, 1, 0, 0],
           0,
           Math.PI * 3,
           0,
@@ -314,7 +314,7 @@ describe('Rotation Animation Step', () => {
       });
       test('<-2π', () => {
         testTarget(
-          ['ra', 1, [1, 0, 0]],
+          ['r', 1, 1, 0, 0],
           0,
           -Math.PI * 3,
           0,
@@ -356,7 +356,7 @@ describe('Rotation Animation Step', () => {
       });
       test('rx', () => {
         testV(
-          ['rx', 0],
+          ['r', 0, 1, 0, 0],
           0,
           2,
           2,
@@ -367,7 +367,7 @@ describe('Rotation Animation Step', () => {
       });
       test('ry', () => {
         testV(
-          ['ry', 0],
+          ['r', 0, 0, 1, 0],
           0,
           2,
           2,
@@ -378,7 +378,7 @@ describe('Rotation Animation Step', () => {
       });
       test('rz', () => {
         testV(
-          ['rz', 0],
+          ['r', 0, 0, 0, 1],
           0,
           2,
           2,
@@ -389,7 +389,7 @@ describe('Rotation Animation Step', () => {
       });
       test('Axis/Angle', () => {
         testV(
-          ['ra', 0, [1, 0, 0]],
+          ['r', 0, 1, 0, 0],
           0,
           2,
           2,
@@ -430,7 +430,7 @@ describe('Rotation Animation Step', () => {
       });
       test('rx', () => {
         testV(
-          ['rx', 0],
+          ['r', 0, 1, 0, 0],
           0,
           1,
           2,
@@ -441,7 +441,7 @@ describe('Rotation Animation Step', () => {
       });
       test('ry', () => {
         testV(
-          ['ry', 0],
+          ['r', 0, 0, 1, 0],
           0,
           1,
           2,
@@ -452,7 +452,7 @@ describe('Rotation Animation Step', () => {
       });
       test('rz', () => {
         testV(
-          ['rz', 0],
+          ['r', 0, 0, 0, 1],
           0,
           1,
           2,
@@ -463,7 +463,7 @@ describe('Rotation Animation Step', () => {
       });
       test('Axis/Angle', () => {
         testV(
-          ['ra', 0, [1, 0, 0]],
+          ['r', 0, 1, 0, 0],
           0,
           1,
           2,
@@ -503,7 +503,7 @@ describe('Rotation Animation Step', () => {
       });
       test('rx', () => {
         testV(
-          ['rx', 0],
+          ['r', 0, 1, 0, 0],
           0,
           1,
           0,
@@ -513,7 +513,7 @@ describe('Rotation Animation Step', () => {
       });
       test('ry', () => {
         testV(
-          ['ry', 0],
+          ['r', 0, 0, 1, 0],
           0,
           1,
           0,
@@ -523,7 +523,7 @@ describe('Rotation Animation Step', () => {
       });
       test('rz', () => {
         testV(
-          ['rz', 0],
+          ['r', 0, 0, 0, 1],
           0,
           1,
           0,
@@ -533,7 +533,7 @@ describe('Rotation Animation Step', () => {
       });
       test('Axis/Angle', () => {
         testV(
-          ['ra', 0, [1, 0, 0]],
+          ['r', 0, 1, 0, 0],
           0,
           2,
           0,

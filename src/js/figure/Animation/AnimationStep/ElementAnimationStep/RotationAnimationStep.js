@@ -11,9 +11,8 @@ import type { AnimationStartTime } from '../../AnimationManager';
 /**
  * {@link RotationAnimationStep} step options object.
  *
- * The {@link RotationAnimationStep} animates the first rotation component
- * of a {@link Transform} (either a 2D rotation, x axis rotation, y axis rotation
- * z axis rotation or arbitrary axis rotation)
+ * The {@link RotationAnimationStep} animates the rotation value of a the first
+ * rotation component in a {@link Transform}.
  *
  * To rotate from a `start` rotation to a `target` rotation use the
  * `start`, `delta` and/or `target` properties.
@@ -258,7 +257,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     const { element } = this;
     if (element != null) {
       if (this.rotation.target != null) { // $FlowFixMe
-        element.transform.updateR(this.rotation.target);
+        element.transform.updateRotation(this.rotation.target);
       }
       this.fnExec(element.setTransformCallback, element.transform);
     }
