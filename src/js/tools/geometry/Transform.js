@@ -31,42 +31,43 @@ export type TypeBasisObjectDefinition = {
 }
 
 /**
- * 2D rotation transform component definition. Equivalent to a rotation around
- * the z axis.
+ * Rotation transform component definition. First number is the rotation value
+ * an the next three numbers define the x, y, and z components of the axis
+ * vector.
  *
- * `['r', number]`
+ * `['r', number, number, number, number]`
  */
-export type TypeTransformRotation = ['r', number];
+export type TypeTransformRotation = ['r', number, number, number, number];
 
-/**
- * X axis rotation transform component definition.
- *
- * `['rx', number]`
- */
-export type TypeTransformRotationX = ['rx', number];
+// /**
+//  * X axis rotation transform component definition.
+//  *
+//  * `['rx', number]`
+//  */
+// export type TypeTransformRotationX = ['rx', number];
 
-/**
- * Y axis rotation transform component definition.
- *
- * `['ry', number]`
- */
-export type TypeTransformRotationY = ['ry', number];
+// /**
+//  * Y axis rotation transform component definition.
+//  *
+//  * `['ry', number]`
+//  */
+// export type TypeTransformRotationY = ['ry', number];
 
-/**
- * Z axis rotation transform component definition.
- *
- * `['rz', number]`
- */
-export type TypeTransformRotationZ = ['rz', number];
+// /**
+//  * Z axis rotation transform component definition.
+//  *
+//  * `['rz', number]`
+//  */
+// export type TypeTransformRotationZ = ['rz', number];
 
-/**
- * Axis rotation transform component definition. The first number is the
- * rotation value, and the next three are the xyz components of the axis vector
- * to rotate around.
- *
- * `['ra', number, number, number, number]`
- */
-export type TypeTransformRotationA = ['ra', number, number, number, number];
+// /**
+//  * Axis rotation transform component definition. The first number is the
+//  * rotation value, and the next three are the xyz components of the axis vector
+//  * to rotate around.
+//  *
+//  * `['ra', number, number, number, number]`
+//  */
+// export type TypeTransformRotationA = ['ra', number, number, number, number];
 
 /**
  * Direction transform component. The numbers are the xyz components of the
@@ -155,11 +156,10 @@ export type TypeTransformBasisToBasisUserDefinition = ['bb', TypeBasisObjectDefi
 /**
  * Transform Component.
  *
- * {@link TypeTransformRotation} | {@link TypeTransformRotationX} | {@link TypeTransformRotationY} | {@link TypeTransformRotationZ} | {@link TypeTransformRotationA} | {@link TypeTransformDirection} | {@link TypeTransformTranslation} | {@link TypeTransformScale} | {@link TypeTransformCustom} | {@link TypeTransformBasis} | {@link TypeTransformBasisToBasis}
+ * {@link TypeTransformRotation} | {@link TypeTransformDirection} | {@link TypeTransformTranslation} | {@link TypeTransformScale} | {@link TypeTransformCustom} | {@link TypeTransformBasis} | {@link TypeTransformBasisToBasis}
 */
 export type TypeTransformComponent = TypeTransformRotation
-   | TypeTransformRotationX | TypeTransformRotationY | TypeTransformRotationZ
-   | TypeTransformRotationA | TypeTransformDirection | TypeTransformTranslation
+   | TypeTransformDirection | TypeTransformTranslation
    | TypeTransformScale | TypeTransformCustom | TypeTransformBasis
    | TypeTransformBasisToBasis;
 
@@ -167,13 +167,12 @@ export type TypeTransformComponent = TypeTransformRotation
 /**
  * Transform component defined by a user.
  *
- * {@link TypeTransformRotation} | {@link TypeTransformRotationX} | {@link TypeTransformRotationY} | {@link TypeTransformRotationZ} | {@link TypeTransformRotationA} | {@link TypeTransformDirection} | {@link TypeTransformTranslation} | {@link TypeTransformScale} | {@link TypeTransformCustom} | {@link TypeTransformBasisUserDefinition} | {@link TypeTransformBasisToBasisUserDefinition}
+ * {@link TypeTransformRotation} | {@link TypeTransformDirection} | {@link TypeTransformTranslation} | {@link TypeTransformScale} | {@link TypeTransformCustom} | {@link TypeTransformBasisUserDefinition} | {@link TypeTransformBasisToBasisUserDefinition}
 */
 export type TypeTransformComponentUserDefinition = TypeTransformRotation
-  | TypeTransformRotationX | TypeTransformRotationY | TypeTransformRotationZ
-  | TypeTransformRotationA | TypeTransformDirection | TypeTransformTranslation
+  | TypeTransformDirection | TypeTransformTranslation
   | TypeTransformScale | TypeTransformCustom | TypeTransformBasisUserDefinition
-  | TypeTransformBasisToBasisUserDefinition;
+  | TypeTransformBasisToBasisUserDefinition | ['r', number];
 
 /**
  * Transform array definition.
@@ -195,7 +194,7 @@ export type TypeF1DefTransform = {
 };
 
 
-export type TypeTransformComponentName = 't' | 's' | 'b' | 'bb' | 'c' | 'd' | 'r' | 'rx' | 'ry' | 'rz' | 'ra';
+export type TypeTransformComponentName = 't' | 's' | 'b' | 'bb' | 'c' | 'd' | 'r';
 
 
 /**
@@ -445,73 +444,102 @@ class Transform {
     return this.addComponent(['t', _x, _y, _z]);
   }
 
-  /**
-   * Return a duplicate transform with an added 2D rotation component.
-   *
-   * A 2D rotation is equivalent to a 3D rotation around the z axis.
-   *
-   * @param {number} rotation
-   * @return {Transform}
-   */
-  rotate(rotation: number) {
-    return this.addComponent(['r', rotation]);
-  }
+  // /**
+  //  * Return a duplicate transform with an added 2D rotation component.
+  //  *
+  //  * A 2D rotation is equivalent to a 3D rotation around the z axis.
+  //  *
+  //  * @param {number} rotation
+  //  * @return {Transform}
+  //  */
+  // rotate(rotation: number) {
+  //   return this.addComponent(['r', rotation]);
+  // }
 
   /**
-   * Return a duplicate transform with an added 3D axis rotation component.
-   *
+   * Return a duplicate transform with an added rotation component.
    * @param {number} rotation
-   * @param {number | TypeParsablePoint} xOrAxis
-   * @param {number} y
-   * @param {number} z
+   * @param {number | TypeParsablePoint | 'x' | 'y' | 'z'} axisOrX (`z`)
+   * @param {number} y (`0`)
+   * @param {number} z (`0`)
    * @return {Transform}
    */
-  rotateA(rotation: number, xOrAxis: number | TypeParsablePoint, y: number = 0, z: number = 0) {
-    let _x;
-    let _y;
-    let _z;
-    if (typeof xOrAxis === 'number') {
-      _x = xOrAxis;
-      _y = y;
-      _z = z;
+  rotate(
+    rotation: number,
+    axisOrX: number | TypeParsablePoint | 'x' | 'y' | 'z' = 'z',
+    y: number = 0,
+    z: number = 0,
+  ) {
+    let axis;
+    if (typeof axisOrX === 'number') {
+      axis = [axisOrX, y, z];
+    } else if (axisOrX === 'x') {
+      axis = [1, 0, 0];
+    } else if (axisOrX === 'y') {
+      axis = [0, 1, 0];
+    } else if (axisOrX === 'z') {
+      axis = [0, 0, 1];
     } else {
-      const axis = getPoint(xOrAxis);
-      _x = axis.x;
-      _y = axis.y;
-      _z = axis.z;
+      axis = getPoint(axisOrX).toArray();
     }
-    return this.addComponent(['ra', rotation, _x, _y, _z]);
+    return this.addComponent(['r', rotation, ...axis]);
   }
 
-  /**
-   * Return a duplicate transform with an added x axis rotation component.
-   *
-   * @param {number} rotation
-   * @return {Transform}
-   */
-  rotateX(rotation: number) {
-    return this.addComponent(['rx', rotation]);
-  }
+  // /**
+  //  * Return a duplicate transform with an added 3D axis rotation component.
+  //  *
+  //  * @param {number} rotation
+  //  * @param {number | TypeParsablePoint} xOrAxis
+  //  * @param {number} y
+  //  * @param {number} z
+  //  * @return {Transform}
+  //  */
+  // rotateA(rotation: number, xOrAxis: number | TypeParsablePoint, y: number = 0, z: number = 0) {
+  //   let _x;
+  //   let _y;
+  //   let _z;
+  //   if (typeof xOrAxis === 'number') {
+  //     _x = xOrAxis;
+  //     _y = y;
+  //     _z = z;
+  //   } else {
+  //     const axis = getPoint(xOrAxis);
+  //     _x = axis.x;
+  //     _y = axis.y;
+  //     _z = axis.z;
+  //   }
+  //   return this.addComponent(['ra', rotation, _x, _y, _z]);
+  // }
 
-  /**
-   * Return a duplicate transform with an added y axis rotation component.
-   *
-   * @param {number} rotation
-   * @return {Transform}
-   */
-  rotateY(rotation: number) {
-    return this.addComponent(['ry', rotation]);
-  }
+  // /**
+  //  * Return a duplicate transform with an added x axis rotation component.
+  //  *
+  //  * @param {number} rotation
+  //  * @return {Transform}
+  //  */
+  // rotateX(rotation: number) {
+  //   return this.addComponent(['rx', rotation]);
+  // }
 
-  /**
-   * Return a duplicate transform with an added z axis rotation component.
-   *
-   * @param {number} rotation
-   * @return {Transform}
-   */
-  rotateZ(rotation: number) {
-    return this.addComponent(['rz', rotation]);
-  }
+  // /**
+  //  * Return a duplicate transform with an added y axis rotation component.
+  //  *
+  //  * @param {number} rotation
+  //  * @return {Transform}
+  //  */
+  // rotateY(rotation: number) {
+  //   return this.addComponent(['ry', rotation]);
+  // }
+
+  // /**
+  //  * Return a duplicate transform with an added z axis rotation component.
+  //  *
+  //  * @param {number} rotation
+  //  * @return {Transform}
+  //  */
+  // rotateZ(rotation: number) {
+  //   return this.addComponent(['rz', rotation]);
+  // }
 
   /**
    * Return a duplicate transform with an added direction transform component.
@@ -672,22 +700,20 @@ class Transform {
         } else if (v3 != null && (v1 !== 1 || v2 !== 1 || v3 !== 1)) {
           m = m3.mul(m, m3.scaleMatrix(v1, v2, v3));
         }
-      } else if (type === 'r' && v1 !== 0) {
-        m = m3.mul(m, m3.rotationMatrixZ(v1));
-      } else if (type === 'rx' && v1 !== 0) {
-        m = m3.mul(m, m3.rotationMatrixX(v1));
-      } else if (type === 'ry' && v1 !== 0) {
-        m = m3.mul(m, m3.rotationMatrixY(v1));
-      } else if (type === 'rz' && v1 !== 0) {
-        m = m3.mul(m, m3.rotationMatrixZ(v1));
-      // } else if (type === 'rc' && (x !== 0 || y !== 0 || z !== 0)) {
-      //   m = m3.mul(m, m3.rotationMatrixXYZ(x, y, z));
+      // } else if (type === 'r' && v1 !== 0) {
+      //   m = m3.mul(m, m3.rotationMatrixZ(v1));
+      // } else if (type === 'rx' && v1 !== 0) {
+      //   m = m3.mul(m, m3.rotationMatrixX(v1));
+      // } else if (type === 'ry' && v1 !== 0) {
+      //   m = m3.mul(m, m3.rotationMatrixY(v1));
+      // } else if (type === 'rz' && v1 !== 0) {
+      //   m = m3.mul(m, m3.rotationMatrixZ(v1));
       } else if (type === 'd' && (v1 !== 1 || v2 !== 0 || v3 !== 0)) {
         m = m3.mul(m, m3.rotationMatrixDirection([v1, v2, v3]));
       // } else if (type === 'rs' && (x !== 0 || y !== 0)) {
       //   m = m3.mul(m, m3.rotationMatrixSpherical(x, y));
       // $FlowFixMe
-      } else if (type === 'ra' && v1 !== 0) {
+      } else if (type === 'r' && v1 !== 0) {
         m = m3.mul(m, m3.rotationMatrixAxis([v2, v3, v4], v1));
       } else if (type === 'b') {
         m = m3.mul(m, m3.basisMatrix( // $FlowFixMe
@@ -931,61 +957,84 @@ class Transform {
     return new Point(x, y, z);
   }
 
+  // /**
+  //  * Retrieve the nth rotation transform component rotation value
+  //  * (transform component is any rotation 'r', 'rx', 'ry', 'rz', or 'ra').
+  //  * @param {number} n (`0`)
+  //  * @return {Point}
+  //  */
+  // r(n: number = 0) {
+  //   const index = this.getComponentIndex(['r', 'rx', 'rz', 'ry', 'ra'], n);
+  //   return this.def[index][1];
+  // }
+
   /**
-   * Retrieve the nth rotation transform component rotation value
-   * (transform component is any rotation 'r', 'rx', 'ry', 'rz', or 'ra').
+   * Retrieve the nth rotation transform component rotation value.
+   *
    * @param {number} n (`0`)
    * @return {Point}
    */
   r(n: number = 0) {
-    const index = this.getComponentIndex(['r', 'rx', 'rz', 'ry', 'ra'], n);
+    const index = this.getComponentIndex('r', n);
     return this.def[index][1];
   }
 
   /**
-   * Retrieve the nth 2D rotation transform component.
-   * @param {number} n (`0`)
-   * @return {Point}
-   */
-  r2(n: number = 0) {
-    return this.def[this.getComponentIndex('r', n)][1];
-  }
-
-  /**
-   * Retrieve the nth x axis rotation transform component.
-   * @param {number} n (`0`)
-   * @return {Point}
-   */
-  rx(n: number = 0) {
-    return this.def[this.getComponentIndex('rx', n)][1];
-  }
-
-  /**
-   * Retrieve the nth y axis rotation transform component.
-   * @param {number} n (`0`)
-   * @return {Point}
-   */
-  ry(n: number = 0) {
-    return this.def[this.getComponentIndex('ry', n)][1];
-  }
-
-  /**
-   * Retrieve the nth z axis rotation transform component.
-   * @param {number} n (`0`)
-   * @return {Point}
-   */
-  rz(n: number = 0) {
-    return this.def[this.getComponentIndex('rz', n)][1];
-  }
-
-  /**
-   * Retrieve the nth axis rotation transform component.
+   * Retrieve the nth rotation transform component axis.
+   *
    * @param {number} n (`0`)
    * @return {Point}
    */
   ra(n: number = 0) {
-    return this.def[this.getComponentIndex('ra', n)].slice(1);
+    const index = this.getComponentIndex('r', n);
+    return getPoint(this.def[index].slice(2));
   }
+
+
+  // /**
+  //  * Retrieve the nth 2D rotation transform component.
+  //  * @param {number} n (`0`)
+  //  * @return {Point}
+  //  */
+  // r2(n: number = 0) {
+  //   return this.def[this.getComponentIndex('r', n)][1];
+  // }
+
+  // /**
+  //  * Retrieve the nth x axis rotation transform component.
+  //  * @param {number} n (`0`)
+  //  * @return {Point}
+  //  */
+  // rx(n: number = 0) {
+  //   return this.def[this.getComponentIndex('rx', n)][1];
+  // }
+
+  // /**
+  //  * Retrieve the nth y axis rotation transform component.
+  //  * @param {number} n (`0`)
+  //  * @return {Point}
+  //  */
+  // ry(n: number = 0) {
+  //   return this.def[this.getComponentIndex('ry', n)][1];
+  // }
+
+  // /**
+  //  * Retrieve the nth z axis rotation transform component.
+  //  * @param {number} n (`0`)
+  //  * @return {Point}
+  //  */
+  // rz(n: number = 0) {
+  //   return this.def[this.getComponentIndex('rz', n)][1];
+  // }
+
+  // /**
+  //  * Retrieve the nth axis rotation transform component.
+  //  * @param {number} n (`0`)
+  //  * @return {Point}
+  //  */
+  // ra(n: number = 0) {
+  //   return this.def[this.getComponentIndex('ra', n)].slice(1);
+  // }
 
   /**
    * Retrieve the nth direction transform component.
@@ -1036,82 +1085,103 @@ class Transform {
     return this.updateComponent(['s', ...getScale(scale).toArray()], n);
   }
 
-  /**
-   * Update the nth 2D rotation transform component.
-   * @param {number} r
-   * @param {number} n
-   * @return {Transform}
-   */
-  updateRotation(
-    r: number,
-    n: number = 0,
-  ) {
-    return this.updateComponent(['r', r], n);
-  }
-
-  updateR(
-    r: number,
-    n: number = 0,
-  ) {
-    const index = this.getComponentIndex(['r', 'rx', 'rz', 'ry', 'ra'], n);
-    this.def[index][1] = r;
-    this.calcAndSetMatrix();
-    return this;
-  }
+  // /**
+  //  * Update the nth 2D rotation transform component.
+  //  * @param {number} r
+  //  * @param {number} n
+  //  * @return {Transform}
+  //  */
+  // updateRotation(
+  //   r: number,
+  //   n: number = 0,
+  // ) {
+  //   return this.updateComponent(['r', r], n);
+  // }
 
   /**
-   * Update the nth x axis rotation transform component.
-   * @param {number} r
-   * @param {number} n
-   * @return {Transform}
-   */
-  updateRotationX(
-    r: number,
-    n: number = 0,
-  ) {
-    return this.updateComponent(['rx', r], n);
-  }
-
-  /**
-   * Update the nth y axis rotation transform component.
-   * @param {number} r
-   * @param {number} n
-   * @return {Transform}
-   */
-  updateRotationY(
-    r: number,
-    n: number = 0,
-  ) {
-    return this.updateComponent(['ry', r], n);
-  }
-
-  /**
-   * Update the nth z axis rotation transform component.
-   * @param {number} r
-   * @param {number} n
-   * @return {Transform}
-   */
-  updateRotationZ(
-    r: number,
-    n: number = 0,
-  ) {
-    return this.updateComponent(['rz', r], n);
-  }
-
-  /**
-   * Update the nth axis rotation transform component.
+   * Update the nth rotation transform component.
    * @param {number} r
    * @param {TypeParsablePoint} axis
    * @param {number} n
    * @return {Transform}
    */
-  updateRotationA(
+  updateRotation(
     r: number,
-    axis: TypeParsablePoint,
+    axis: TypeParsablePoint | null = null,
     n: number = 0,
   ) {
-    return this.updateComponent(['ra', r, ...getPoint(axis).toArray()], n);
+    let axisToUse;
+    if (axis == null) {
+      axisToUse = this.def[this.getComponentIndex('r', n)].slice(2);
+    } else {
+      axisToUse = getPoint(axis).toArray();
+    }
+    return this.updateComponent(['r', r, ...axisToUse], n);
   }
+
+  // updateR(
+  //   r: number,
+  //   n: number = 0,
+  // ) {
+  //   const index = this.getComponentIndex(['r', 'rx', 'rz', 'ry', 'ra'], n);
+  //   this.def[index][1] = r;
+  //   this.calcAndSetMatrix();
+  //   return this;
+  // }
+
+  // /**
+  //  * Update the nth x axis rotation transform component.
+  //  * @param {number} r
+  //  * @param {number} n
+  //  * @return {Transform}
+  //  */
+  // updateRotationX(
+  //   r: number,
+  //   n: number = 0,
+  // ) {
+  //   return this.updateComponent(['rx', r], n);
+  // }
+
+  // /**
+  //  * Update the nth y axis rotation transform component.
+  //  * @param {number} r
+  //  * @param {number} n
+  //  * @return {Transform}
+  //  */
+  // updateRotationY(
+  //   r: number,
+  //   n: number = 0,
+  // ) {
+  //   return this.updateComponent(['ry', r], n);
+  // }
+
+  // /**
+  //  * Update the nth z axis rotation transform component.
+  //  * @param {number} r
+  //  * @param {number} n
+  //  * @return {Transform}
+  //  */
+  // updateRotationZ(
+  //   r: number,
+  //   n: number = 0,
+  // ) {
+  //   return this.updateComponent(['rz', r], n);
+  // }
+
+  // /**
+  //  * Update the nth axis rotation transform component.
+  //  * @param {number} r
+  //  * @param {TypeParsablePoint} axis
+  //  * @param {number} n
+  //  * @return {Transform}
+  //  */
+  // updateRotationA(
+  //   r: number,
+  //   axis: TypeParsablePoint,
+  //   n: number = 0,
+  // ) {
+  //   return this.updateComponent(['ra', r, ...getPoint(axis).toArray()], n);
+  // }
 
   /**
    * Update the nth direction transform component.
@@ -1445,31 +1515,32 @@ class Transform {
         }
       } else if (type === 'r' && clipAngle(v1, '0to360') > zeroThreshold) {
         return false;
-      } else if (type === 'rx' && clipAngle(v1, '0to360') > zeroThreshold) {
-        return false;
-      } else if (type === 'ry' && clipAngle(v1, '0to360') > zeroThreshold) {
-        return false;
-      } else if (type === 'rz' && clipAngle(v1, '0to360') > zeroThreshold) {
-        return false;
-      } else if (type === 'ra') {
-        if (
-          Math.abs(v2) > zeroThreshold
-          || Math.abs(v3) > zeroThreshold
-          || Math.abs(v4) > zeroThreshold
-          || clipAngle(v1, '0to360') > zeroThreshold
-        ) {
-          return false;
-        }
-      } else if (type === 'rb') { // $FlowFixMe
-        const [, ix, iy, iz, jx, jy, jz, kx, ky, kz] = this.def[i];
-        if (
-          ix !== 1 || iy !== 0 || iz !== 0
-          || jx !== 0 || jy !== 1 || jz !== 1
-          || kx !== 0 || ky !== 0 || kz !== 1
-        ) {
-          return false;
-        }
       }
+      //  else if (type === 'rx' && clipAngle(v1, '0to360') > zeroThreshold) {
+      //   return false;
+      // } else if (type === 'ry' && clipAngle(v1, '0to360') > zeroThreshold) {
+      //   return false;
+      // } else if (type === 'rz' && clipAngle(v1, '0to360') > zeroThreshold) {
+      //   return false;
+      // } else if (type === 'ra') {
+      //   if (
+      //     Math.abs(v2) > zeroThreshold
+      //     || Math.abs(v3) > zeroThreshold
+      //     || Math.abs(v4) > zeroThreshold
+      //     || clipAngle(v1, '0to360') > zeroThreshold
+      //   ) {
+      //     return false;
+      //   }
+      // } else if (type === 'rb') { // $FlowFixMe
+      //   const [, ix, iy, iz, jx, jy, jz, kx, ky, kz] = this.def[i];
+      //   if (
+      //     ix !== 1 || iy !== 0 || iz !== 0
+      //     || jx !== 0 || jy !== 1 || jz !== 1
+      //     || kx !== 0 || ky !== 0 || kz !== 1
+      //   ) {
+      //     return false;
+      //   }
+      // }
     }
     return true;
   }
@@ -1525,17 +1596,17 @@ class Transform {
       } else if (type === 's') { // $FlowFixMe
         def.push([type, 1, 1, 1]);
       } else if (type === 'r') { // $FlowFixMe
-        def.push([type, 0]);
-      } else if (type === 'rx') { // $FlowFixMe
-        def.push([type, 0]);
-      } else if (type === 'ry') { // $FlowFixMe
-        def.push([type, 0]);
-      } else if (type === 'rz') { // $FlowFixMe
-        def.push([type, 0]);
+        def.push([type, 0, 0, 0, 1]);
+      // } else if (type === 'rx') { // $FlowFixMe
+      //   def.push([type, 0]);
+      // } else if (type === 'ry') { // $FlowFixMe
+      //   def.push([type, 0]);
+      // } else if (type === 'rz') { // $FlowFixMe
+      //   def.push([type, 0]);
       } else if (type === 'd') { // $FlowFixMe
         def.push([type, 0, 0, 0]);
-      } else if (type === 'ra') { // $FlowFixMe
-        def.push([type, 0, 1, 0, 0]);
+      // } else if (type === 'ra') { // $FlowFixMe
+      //   def.push([type, 0, 1, 0, 0]);
       } else if (type === 'b') {
         def.push([
           'b',
@@ -1601,10 +1672,10 @@ function isParsableTransform(value: any) {
       || value[0][0] === 't'
       || value[0][0] === 'c'
       || value[0][0] === 'b'
-      || value[0][0] === 'ra'
-      || value[0][0] === 'rx'
-      || value[0][0] === 'ry'
-      || value[0][0] === 'rz'
+      // || value[0][0] === 'ra'
+      // || value[0][0] === 'rx'
+      // || value[0][0] === 'ry'
+      // || value[0][0] === 'rz'
       || value[0][0] === 'd'
       || value[0][0] === 'bb'
     )
@@ -1619,11 +1690,11 @@ function isParsableTransform(value: any) {
       || value[0] === 't'
       || value[0] === 'c'
       || value[0] === 'b'
-      || value[0] === 'b'
-      || value[0] === 'ra'
-      || value[0] === 'rx'
-      || value[0] === 'ry'
-      || value[0] === 'rz'
+      || value[0] === 'bb'
+      // || value[0] === 'ra'
+      // || value[0] === 'rx'
+      // || value[0] === 'ry'
+      // || value[0] === 'rz'
       || value[0] === 'd'
     )
   ) {
@@ -1672,7 +1743,9 @@ function parseTransformDef(
       if (tToUse[i][0] === 'b' && typeof tToUse[i][1] !== 'number') { // $FlowFixMe
         def.push(['b', ...parseBasisObject(tToUse[i][1])]); // $FlowFixMe
       } else if (tToUse[i][0] === 'bb' && typeof tToUse[i][1] !== 'number') { // $FlowFixMe
-        def.push(['bb', ...parseBasisObject(tToUse[i][1]), ...parseBasisObject(tToUse[i][2])]);
+        def.push(['bb', ...parseBasisObject(tToUse[i][1]), ...parseBasisObject(tToUse[i][2])]); // $FlowFixMe
+      } else if (tToUse[i][0] === 'r' && tToUse[i].length === 2) {
+        def.push(['r', tToUse[i][1], 0, 0, 1]);
       } else { // $FlowFixMe
         def.push(tToUse[i].slice());
       }
