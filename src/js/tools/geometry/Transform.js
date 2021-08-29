@@ -731,17 +731,28 @@ class Transform {
    * @param {number} n (`0`)
    * @return {number} index of component
    */
-  getComponentIndex(type: TypeTransformComponentName, n: number = 0) {
+  getComponentIndex(
+    type: TypeTransformComponentName | Array<TypeTransformComponentName>,
+    n: number = 0,
+  ) {
     let count = 0;
+    let types;
+    if (Array.isArray(type)) {
+      types = type;
+    } else {
+      types = [type];
+    }
     for (let i = 0; i < this.def.length; i += 1) {
-      if (this.def[i][0] === type) {
-        if (count === n) {
-          return i;
+      for (let j = 0; j < types.length; j += 1) {
+        if (this.def[i][0] === types[j]) {
+          if (count === n) {
+            return i;
+          }
+          count += 1;
         }
-        count += 1;
       }
     }
-    throw new Error(`Cannot get type '${type}-${n}' from transform '${JSON.stringify(this.def)}'`);
+    throw new Error(`Cannot get type '${JSON.stringify(type)}-${n}' from transform '${JSON.stringify(this.def)}'`);
   }
 
 
@@ -921,11 +932,22 @@ class Transform {
   }
 
   /**
-   * Retrieve the nth 2D rotation transform component.
+   * Retrieve the nth rotation transform component rotation value
+   * (transform component is any rotation 'r', 'rx', 'ry', 'rz', or 'ra').
    * @param {number} n (`0`)
    * @return {Point}
    */
   r(n: number = 0) {
+    const index = this.getComponentIndex(['r', 'rx', 'rz', 'ry', 'ra'], n);
+    return this.def[index][1];
+  }
+
+  /**
+   * Retrieve the nth 2D rotation transform component.
+   * @param {number} n (`0`)
+   * @return {Point}
+   */
+  r2(n: number = 0) {
     return this.def[this.getComponentIndex('r', n)][1];
   }
 
@@ -1025,6 +1047,16 @@ class Transform {
     n: number = 0,
   ) {
     return this.updateComponent(['r', r], n);
+  }
+
+  updateR(
+    r: number,
+    n: number = 0,
+  ) {
+    const index = this.getComponentIndex(['r', 'rx', 'rz', 'ry', 'ra'], n);
+    this.def[index][1] = r;
+    this.calcAndSetMatrix();
+    return this;
   }
 
   /**
