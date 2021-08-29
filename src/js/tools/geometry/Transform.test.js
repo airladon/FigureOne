@@ -305,13 +305,13 @@ describe('Transform', () => {
     });
     test('Get rotation A', () => {
       const t = new Transform().scale(2, 2).rotateA(1, 2, 3, 4).translate(1, 1)
-        .rotateZ(2, 4, 5, 6);
+        .rotateA(2, 4, 5, 6);
       expect(t.ra()).toEqual([1, 2, 3, 4]);
       expect(t.ra(0)).toEqual([1, 2, 3, 4]);
       expect(t.ra(1)).toEqual([2, 4, 5, 6]);
       expect(() => t.ra(2)).toThrow();
     });
-    test('Update rotation', () => {
+    test('Update rotationX', () => {
       const t = new Transform()
         .scale(2, 2)
         .rotateX(1)
@@ -319,28 +319,67 @@ describe('Transform', () => {
         .rotateX(2);
       t.updateRotationX(4);
       expect(t.rx()).toEqual(4);
-
       t.updateRotationX(5, 0);
       expect(t.rx(0)).toEqual(5);
-
       t.updateRotationX(6, 1);
       expect(t.rx(1)).toEqual(6);
-
       expect(() => t.updateRotationX(7, 2)).toThrow();
+    });
+    test('Update rotationY', () => {
+      const t = new Transform()
+        .scale(2, 2)
+        .rotateY(1)
+        .translate(1, 1)
+        .rotateY(2);
+      t.updateRotationY(4);
+      expect(t.ry()).toEqual(4);
+      t.updateRotationY(5, 0);
+      expect(t.ry(0)).toEqual(5);
+      t.updateRotationY(6, 1);
+      expect(t.ry(1)).toEqual(6);
+      expect(() => t.updateRotationY(7, 2)).toThrow();
+    });
+    test('Update rotationZ', () => {
+      const t = new Transform()
+        .scale(2, 2)
+        .rotateZ(1)
+        .translate(1, 1)
+        .rotateZ(2);
+      t.updateRotationZ(4);
+      expect(t.rz()).toEqual(4);
+      t.updateRotationZ(5, 0);
+      expect(t.rz(0)).toEqual(5);
+      t.updateRotationZ(6, 1);
+      expect(t.rz(1)).toEqual(6);
+      expect(() => t.updateRotationZ(7, 2)).toThrow();
+    });
+    test('Update rotationA', () => {
+      const t = new Transform()
+        .scale(2, 2)
+        .rotateA(1, 2, 3, 4)
+        .translate(1, 1)
+        .rotateA(5, 6, 7, 8);
+      t.updateRotationA(9, [10, 11, 12]);
+      expect(t.ra()).toEqual([9, 10, 11, 12]);
+      t.updateRotationA(-1, [1, 2, 3], 0);
+      expect(t.ra(0)).toEqual([-1, 1, 2, 3]);
+      t.updateRotationA(-2, [2, 2, 2], 1);
+      expect(t.ra(1)).toEqual([-2, 2, 2, 2]);
+      expect(() => t.updateRotationA(7, [4, 2, 6], 2)).toThrow();
     });
     test('Update rotation checking matrix', () => {
       const t = new Transform().rotate(0);
       const matrix = t.m();
-      t.updateRotation([1, 2, 3]);
+      t.updateRotation(1);
       expect(t.m()).not.toEqual(matrix);
-      expect(t.m()).toEqual(new Transform().rotate(1, 2, 3).m());
+      expect(t.m()).toEqual(new Transform().rotate(1).m());
     });
     test('Update rotation at index matrix', () => {
-      const t = new Transform().rotate(0).rotate(1, 2, 3);
+      const t = new Transform().rotate(0).rotate(1);
       const matrix = t.m();
-      t.updateRotation([2, 1, 0]);
+      t.updateRotation(2);
       expect(t.m()).not.toEqual(matrix);
-      expect(t.m()).toEqual(new Transform().rotate(2, 1, 0).rotate(1, 2, 3).m());
+      expect(t.m()).toEqual(new Transform().rotate(2).rotate(1).m());
     });
     test('Update translation checking matrix', () => {
       const t = new Transform().translate(0, 0, 0);
@@ -450,19 +489,30 @@ describe('Transform', () => {
       expect(t1.isEqualTo(ne7)).toBe(false);
     });
     test('isEqualTo 3D', () => {
-      const t1 = new Transform().scale(1, 2, 3).rotate('xyz', 4, 5, 6).translate(7, 8, 9);
-      const e1 = new Transform().scale(1, 2, 3).rotate('xyz', 4, 5, 6).translate(7, 8, 9);
-      const ne1 = new Transform().scale(2, 2, 3).rotate('xyz', 4, 5, 6).translate(7, 8, 9);
-      const ne2 = new Transform().scale(1, 1, 3).rotate('xyz', 4, 5, 6).translate(7, 8, 9);
-      const ne3 = new Transform().scale(1, 2, 1).rotate('xyz', 4, 5, 6).translate(7, 8, 9);
-      const ne4 = new Transform().scale(1, 2, 3).rotate('xyz', 1, 5, 6).translate(7, 8, 9);
-      const ne5 = new Transform().scale(1, 2, 3).rotate('xyz', 4, 1, 6).translate(7, 8, 9);
-      const ne6 = new Transform().scale(1, 2, 3).rotate('xyz', 4, 5, 1).translate(7, 8, 9);
-      const ne7 = new Transform().scale(1, 2, 3).rotate('xyz', 4, 5, 6).translate(1, 8, 9);
-      const ne8 = new Transform().scale(1, 2, 3).rotate('xyz', 4, 5, 6).translate(7, 1, 9);
-      const ne9 = new Transform().scale(1, 2, 3).rotate('xyz', 4, 5, 6).translate(7, 8, 1);
-      const ne10 = new Transform().rotate('xyz', 4, 5, 6).translate(7, 8, 9).scale(1, 2, 3);
-      const ne11 = new Transform().rotate('xyz', 4, 5, 6).translate(7, 8, 9);
+      const tf = (s, r, ra, rx, ry, rz, t) => new Transform()
+        .scale(s)
+        .rotate(r)
+        .rotateA(...ra)
+        .rotateX(rx)
+        .rotateY(ry)
+        .rotateZ(rz)
+        .translate(t);
+      const t1 = tf([1, 2, 3], 4, [5, [6, 7, 8]], 9, 10, 11, [12, 13, 14]);
+      const e1 = tf([1, 2, 3], 4, [5, [6, 7, 8]], 9, 10, 11, [12, 13, 14]);
+      const ne1 = tf([2, 2, 3], 4, [5, [6, 7, 8]], 9, 10, 11, [12, 13, 14]);
+      const ne2 = tf([1, 1, 3], 4, [5, [6, 7, 8]], 9, 10, 11, [12, 13, 14]);
+      const ne3 = tf([1, 2, 1], 4, [5, [6, 7, 8]], 9, 10, 11, [12, 13, 14]);
+      const ne4 = tf([1, 2, 3], 1, [5, [6, 7, 8]], 9, 10, 11, [12, 13, 14]);
+      const ne5 = tf([1, 2, 3], 4, [1, [6, 7, 8]], 9, 10, 11, [12, 13, 14]);
+      const ne6 = tf([1, 2, 3], 4, [5, [1, 7, 8]], 9, 10, 11, [12, 13, 14]);
+      const ne7 = tf([1, 2, 3], 4, [5, [6, 1, 8]], 9, 10, 11, [12, 13, 14]);
+      const ne8 = tf([1, 2, 3], 4, [5, [6, 7, 1]], 9, 10, 11, [12, 13, 14]);
+      const ne9 = tf([1, 2, 3], 4, [5, [6, 7, 8]], 1, 10, 11, [12, 13, 14]);
+      const ne10 = tf([1, 2, 3], 4, [5, [6, 7, 8]], 9, 1, 11, [12, 13, 14]);
+      const ne11 = tf([1, 2, 3], 4, [5, [6, 7, 8]], 9, 10, 1, [12, 13, 14]);
+      const ne12 = tf([1, 2, 3], 4, [5, [6, 7, 8]], 9, 10, 11, [1, 13, 14]);
+      const ne13 = tf([1, 2, 3], 4, [5, [6, 7, 8]], 9, 10, 11, [12, 1, 14]);
+      const ne14 = tf([1, 2, 3], 4, [5, [6, 7, 8]], 9, 10, 11, [12, 13, 1]);
       expect(t1.isEqualTo(e1)).toBe(true);
       expect(t1.isEqualTo(ne1)).toBe(false);
       expect(t1.isEqualTo(ne2)).toBe(false);
@@ -475,6 +525,9 @@ describe('Transform', () => {
       expect(t1.isEqualTo(ne9)).toBe(false);
       expect(t1.isEqualTo(ne10)).toBe(false);
       expect(t1.isEqualTo(ne11)).toBe(false);
+      expect(t1.isEqualTo(ne12)).toBe(false);
+      expect(t1.isEqualTo(ne13)).toBe(false);
+      expect(t1.isEqualTo(ne14)).toBe(false);
     });
     test('is Similar to - single transform in order', () => {
       const t1 = new Transform().scale(1, 1);
@@ -520,17 +573,17 @@ describe('Transform', () => {
       expect(ts.t()).toEqual(new Point(1, 1));
     });
     test('Subtraction happy case 3D', () => {
-      const t1 = new Transform().scale(1, 2, 3).rotate('xyz', 4, 5, 6).translate(7, 8, 9, 5);
-      const t2 = new Transform().scale(0, 1, 2).rotate('xyz', 3, 4, 5).translate(6, 7, 8);
+      const t1 = new Transform().scale(1, 2, 3).rotateA(1, 4, 5, 6).translate(7, 8, 9, 5);
+      const t2 = new Transform().scale(0, 1, 2).rotateA(0, 3, 4, 5).translate(6, 7, 8);
       const ts = t1.sub(t2);
       expect(ts.s()).toEqual(new Point(1, 1, 1));
-      expect(ts.r()).toEqual(new Point(1, 1, 1));
+      expect(ts.ra()).toEqual([1, 1, 1, 1]);
       expect(ts.t()).toEqual(new Point(1, 1, 1));
     });
     test('Subtraction sad case', () => {
       // Sad cases should throw an error
       const t1 = new Transform().scale(1, 2).rotate(3).translate(4, 5);
-      const t2 = new Transform().rotate(0, 1).rotate(2).translate(3, 4);
+      const t2 = new Transform().rotate(1).rotate(2).translate(3, 4);
       const t3 = new Transform().scale(0, 1).rotate(2);
       expect(() => t1.sub(t2)).toThrow();
       expect(() => t1.sub(t3)).toThrow();
@@ -544,11 +597,11 @@ describe('Transform', () => {
       expect(ts.t()).toEqual(new Point(7, 9));
     });
     test('Addition happy case - 3D', () => {
-      const t1 = new Transform().scale(1, 2, 3).rotate('xyz', 4, 5, 6).translate(7, 8, 9);
-      const t2 = new Transform().scale(0, 1, 2).rotate('xyz', 3, 4, 5).translate(6, 7, 8);
+      const t1 = new Transform().scale(1, 2, 3).rotateA(3, 4, 5, 6).translate(7, 8, 9);
+      const t2 = new Transform().scale(0, 1, 2).rotateA(2, 3, 4, 5).translate(6, 7, 8);
       const ts = t1.add(t2);
       expect(ts.s()).toEqual(new Point(1, 3, 5));
-      expect(ts.r()).toEqual(new Point(7, 9, 11));
+      expect(ts.ra()).toEqual([5, 7, 9, 11]);
       expect(ts.t()).toEqual(new Point(13, 15, 17));
     });
     test('Addition sad case', () => {
@@ -568,11 +621,11 @@ describe('Transform', () => {
       expect(ts.t()).toEqual(new Point(12, 20));
     });
     test('Multiply happy case - 3D', () => {
-      const t1 = new Transform().scale(1, 2, 3).rotate('xyz', 3, 4, 5).translate(4, 5, 6);
-      const t2 = new Transform().scale(0, 1, 2).rotate('xyz', 2, 3, 4).translate(3, 4, 5);
+      const t1 = new Transform().scale(1, 2, 3).rotateA(2, 3, 4, 5).translate(4, 5, 6);
+      const t2 = new Transform().scale(0, 1, 2).rotateA(1, 2, 3, 4).translate(3, 4, 5);
       const ts = t1.mul(t2);
       expect(ts.s()).toEqual(new Point(0, 2, 6));
-      expect(ts.r()).toEqual(new Point(6, 12, 20));
+      expect(ts.ra()).toEqual([2, 6, 12, 20]);
       expect(ts.t()).toEqual(new Point(12, 20, 30));
     });
     test('Multiply sad case', () => {
@@ -774,53 +827,53 @@ describe('Transform', () => {
       });
       describe('Axis Angle', () => {
         test('[0, 1, 0] +π/2 around x = [0, 0, 1]', () => {
-          check(['ra', 1, 0, 0, Math.PI / 2], [0, 1, 0], [0, 0, 1]);
+          check(['ra', Math.PI / 2, 1, 0, 0], [0, 1, 0], [0, 0, 1]);
         });
         test('[0, 1, 0] -π/2 around x = [0, 0, -1]', () => {
-          check(['ra', 1, 0, 0, -Math.PI / 2], [0, 1, 0], [0, 0, -1]);
+          check(['ra', -Math.PI / 2, 1, 0, 0], [0, 1, 0], [0, 0, -1]);
         });
         test('[0, 1, 0] π/2 around -x = [0, 0, -1]', () => {
-          check(['ra', -1, 0, 0, Math.PI / 2], [0, 1, 0], [0, 0, -1]);
+          check(['ra', Math.PI / 2, -1, 0, 0], [0, 1, 0], [0, 0, -1]);
         });
         test('[1, 0, 0] +3π around z = [-1, 0, 0]', () => {
-          check(['ra', 0, 0, 1, 3 * Math.PI], [1, 0, 0], [-1, 0, 0]);
+          check(['ra', 3 * Math.PI, 0, 0, 1], [1, 0, 0], [-1, 0, 0]);
         });
       });
       describe('xyz', () => {
         test('x +ve', () => {
-          check(['xyz', Math.PI / 2, 0, 0], [0, 1, 0], [0, 0, 1]);
+          check(['rx', Math.PI / 2], [0, 1, 0], [0, 0, 1]);
         });
         test('x -ve', () => {
-          check(['xyz', -Math.PI / 2, 0, 0], [0, 1, 0], [0, 0, -1]);
+          check(['rx', -Math.PI / 2], [0, 1, 0], [0, 0, -1]);
         });
         test('y +ve', () => {
-          check(['xyz', 0, Math.PI / 2, 0], [1, 0, 0], [0, 0, -1]);
+          check(['ry', Math.PI / 2], [1, 0, 0], [0, 0, -1]);
         });
         test('y -ve', () => {
-          check(['xyz', 0, -Math.PI / 2, 0], [1, 0, 0], [0, 0, 1]);
+          check(['ry', -Math.PI / 2], [1, 0, 0], [0, 0, 1]);
         });
         test('z +ve', () => {
-          check(['xyz', 0, 0, Math.PI / 2], [1, 0, 0], [0, 1, 0]);
+          check(['rz', Math.PI / 2], [1, 0, 0], [0, 1, 0]);
         });
         test('z -ve', () => {
-          check(['xyz', 0, 0, -Math.PI / 2], [1, 0, 0], [0, -1, 0]);
+          check(['rz', -Math.PI / 2], [1, 0, 0], [0, -1, 0]);
         });
         test('xyz', () => {
-          check(['xyz', Math.PI / 2, Math.PI / 2, Math.PI / 2], [0, 1, 0], [0, 1, 0]);
+          check([['rx', Math.PI / 2], ['ry', Math.PI / 2], ['rz', Math.PI / 2]], [0, 1, 0], [0, 1, 0]);
         });
         test('xyz 2', () => {
-          check(['xyz', -Math.PI / 2, Math.PI / 2, Math.PI / 2], [0, 1, 0], [0, -1, 0]);
+          check([['rx', -Math.PI / 2], ['ry', Math.PI / 2], ['rz', Math.PI / 2]], [0, 1, 0], [0, -1, 0]);
         });
       });
       describe('dir', () => {
         test('y', () => {
-          check(['dir', 0, 1, 0], [0, 1, 0], [-1, 0, 0]);
-          check(['dir', 0, 1, 0], [0, 0, 1], [0, 0, 1]);
-          check(['dir', 0, 1, 0], [1, 0, 0], [0, 1, 0]);
+          check(['d', 0, 1, 0], [0, 1, 0], [-1, 0, 0]);
+          check(['d', 0, 1, 0], [0, 0, 1], [0, 0, 1]);
+          check(['d', 0, 1, 0], [1, 0, 0], [0, 1, 0]);
         });
         test('-x', () => {
-          check(['dir', -1, 0, 0], [1, 0, 0], [-1, 0, 0]);
-          check(['dir', -1, 0, 0], [0, 1, 0], [0, -1, 0]);
+          check(['d', -1, 0, 0], [1, 0, 0], [-1, 0, 0]);
+          check(['d', -1, 0, 0], [0, 1, 0], [0, -1, 0]);
         });
       });
     });
@@ -831,13 +884,6 @@ describe('Transform', () => {
       expect(t.t()).toEqual(new Point(1, 2));
       expect(t.def).toHaveLength(1);
     });
-    test('Named Array', () => {
-      const t = getTransform([['t', 1, 1], ['name', 'Name1'], ['s', 0.5]]);
-      expect(t.t()).toEqual(new Point(1, 1, 0));
-      expect(t.s()).toEqual(new Point(0.5, 0.5, 0.5));
-      expect(t.def).toHaveLength(2);
-      expect(t.name).toBe('Name1');
-    });
     test('Translation', () => {
       const t1 = getTransform(['t', 2, 2]);
       const t2 = getTransform(['t', 2, 2, 2]);
@@ -845,7 +891,7 @@ describe('Transform', () => {
       const t4 = new Transform().translate(2, 2, 2);
       const t5 = new Transform().translate([2, 2]);
       const t6 = new Transform().translate([2, 2, 2]);
-      expect(t1.def[0]).toEqual(['t', 2, 2, 0]);
+      expect(t1.def[0]).toEqual(['t', 2, 2]);
       expect(t2.def[0]).toEqual(['t', 2, 2, 2]);
       expect(t3.def[0]).toEqual(['t', 2, 2, 0]);
       expect(t4.def[0]).toEqual(['t', 2, 2, 2]);
@@ -861,14 +907,26 @@ describe('Transform', () => {
       const t6 = new Transform().scale(2, 2, 2);
       const t7 = new Transform().scale([2, 2]);
       const t8 = new Transform().scale([2, 2, 2]);
-      expect(t1.def[0]).toEqual(['s', 2, 2, 2]);
-      expect(t2.def[0]).toEqual(['s', 2, 2, 1]);
+      expect(t1.def[0]).toEqual(['s', 2]);
+      expect(t2.def[0]).toEqual(['s', 2, 2]);
       expect(t3.def[0]).toEqual(['s', 2, 2, 2]);
       expect(t4.def[0]).toEqual(['s', 2, 2, 2]);
       expect(t5.def[0]).toEqual(['s', 2, 2, 1]);
       expect(t6.def[0]).toEqual(['s', 2, 2, 2]);
       expect(t7.def[0]).toEqual(['s', 2, 2, 1]);
       expect(t8.def[0]).toEqual(['s', 2, 2, 2]);
+    });
+    test('Direction', () => {
+      const t = getTransform([['d', 1, 2, 3]]);
+      const t1 = getTransform(['d', 1, 2, 3]);
+      const t2 = new Transform().direction(1, 2, 3);
+      const t3 = new Transform().direction([1, 2, 3]);
+      const t4 = new Transform().direction(new Point(1, 2, 3));
+      expect(t.def[0]).toEqual(['d', 1, 2, 3]);
+      expect(t1.def[0]).toEqual(t.def[0]);
+      expect(t2.def[0]).toEqual(t.def[0]);
+      expect(t3.def[0]).toEqual(t.def[0]);
+      expect(t4.def[0]).toEqual(t.def[0]);
     });
     test('Def', () => {
       const tIn = new Transform().translate(1, 0.5).scale(1, 1).rotate(0.5);
@@ -877,24 +935,6 @@ describe('Transform', () => {
       expect(t.s()).toEqual(new Point(1, 1, 1));
       expect(t.r()).toEqual(0.5);
       expect(t.def).toHaveLength(3);
-    });
-    test('Named String Def', () => {
-      const tIn = new Transform('Name1').translate(1, 0.5).scale(1, 1).rotate(0.5);
-      const t = getTransform(tIn._state());
-      expect(t.t()).toEqual(new Point(1, 0.5));
-      expect(t.s()).toEqual(new Point(1, 1, 1));
-      expect(t.r()).toEqual(0.5);
-      expect(t.def).toHaveLength(3);
-      expect(t.name).toBe('Name1');
-    });
-    test('Named String from String', () => {
-      const tIn = '[["name", "Name1"], ["t", 1, 0.5], ["s", 1, 1], ["r", 0.5]]';
-      const t = getTransform(tIn);
-      expect(t.t()).toEqual(new Point(1, 0.5));
-      expect(t.s()).toEqual(new Point(1, 1, 1));
-      expect(t.r()).toEqual(0.5);
-      expect(t.def).toHaveLength(3);
-      expect(t.name).toBe('Name1');
     });
     test('Fail undefined', () => {
       expect(() => getTransform()).toThrow();
@@ -908,88 +948,58 @@ describe('Transform', () => {
     describe('Rotation', () => {
       test('2D', () => {
         const t = getTransform([['r', 1]]);
-        const t1 = getTransform([['2D', 1]]);
+        const t1 = getTransform(['r', 1]);
         const t2 = new Transform().rotate(1);
         expect(t.def[0]).toEqual(['r', 1]);
         expect(t1.def[0]).toEqual(t.def[0]);
         expect(t2.def[0]).toEqual(t.def[0]);
       });
       test('axis', () => {
-        const t = getTransform([['axis', 0, 1, 0, 1]]);
-        const t1 = getTransform([['axis', [0, 1, 0], 1]]);
-        const t2 = getTransform([['ra', [0, 1, 0], 1]]);
-        const t3 = getTransform([['ra', 0, 1, 0, 1]]);
-        const t4 = getTransform([['ra', new Point(0, 1, 0), 1]]);
-        const t5 = getTransform([['axis', new Point(0, 1, 0), 1]]);
-        const t6 = new Transform().rotate('axis', 0, 1, 0, 1);
-        const t7 = new Transform().rotate('ra', 0, 1, 0, 1);
-        const t8 = new Transform().rotate('axis', [0, 1, 0], 1);
-        const t9 = new Transform().rotate('ra', [0, 1, 0], 1);
-        expect(t.def[0]).toEqual(['ra', 0, 1, 0, 1]);
+        const t = getTransform([['ra', 1, 0, 1, 0]]);
+        const t1 = getTransform(['ra', 1, 0, 1, 0]);
+        const t2 = new Transform().rotateA(1, 0, 1, 0);
+        const t3 = new Transform().rotateA(1, [0, 1, 0]);
+        const t4 = new Transform().rotateA(1, new Point(0, 1, 0));
+        expect(t.def[0]).toEqual(['ra', 1, 0, 1, 0]);
         expect(t1.def[0]).toEqual(t.def[0]);
         expect(t2.def[0]).toEqual(t.def[0]);
         expect(t3.def[0]).toEqual(t.def[0]);
         expect(t4.def[0]).toEqual(t.def[0]);
-        expect(t5.def[0]).toEqual(t.def[0]);
-        expect(t6.def[0]).toEqual(t.def[0]);
-        expect(t7.def[0]).toEqual(t.def[0]);
-        expect(t8.def[0]).toEqual(t.def[0]);
-        expect(t9.def[0]).toEqual(t.def[0]);
       });
-      test('cartesian', () => {
-        const t = getTransform([['xyz', 1, 2, 3]]);
-        const t1 = getTransform([['xyz', [1, 2, 3]]]);
-        const t2 = getTransform([['rc', [1, 2, 3]]]);
-        const t3 = getTransform([['rc', 1, 2, 3]]);
-        const t4 = getTransform([['rc', new Point(1, 2, 3)]]);
-        const t5 = getTransform([['xyz', new Point(1, 2, 3)]]);
-        const t6 = new Transform().rotate('xyz', 1, 2, 3);
-        const t7 = new Transform().rotate('rc', 1, 2, 3);
-        const t8 = new Transform().rotate('xyz', [1, 2, 3]);
-        const t9 = new Transform().rotate('rc', [1, 2, 3]);
-        expect(t.def[0]).toEqual(['rc', 1, 2, 3]);
+      test('x', () => {
+        const t = getTransform([['rx', 1]]);
+        const t1 = getTransform(['rx', 1]);
+        const t2 = new Transform().rotateX(1);
+        expect(t.def[0]).toEqual(['rx', 1]);
         expect(t1.def[0]).toEqual(t.def[0]);
         expect(t2.def[0]).toEqual(t.def[0]);
-        expect(t3.def[0]).toEqual(t.def[0]);
-        expect(t4.def[0]).toEqual(t.def[0]);
-        expect(t5.def[0]).toEqual(t.def[0]);
-        expect(t6.def[0]).toEqual(t.def[0]);
-        expect(t7.def[0]).toEqual(t.def[0]);
-        expect(t8.def[0]).toEqual(t.def[0]);
-        expect(t9.def[0]).toEqual(t.def[0]);
       });
-      test('direction', () => {
-        const t = getTransform([['dir', 1, 2, 3]]);
-        const t1 = getTransform([['dir', [1, 2, 3]]]);
-        const t2 = getTransform([['rd', [1, 2, 3]]]);
-        const t3 = getTransform([['rd', 1, 2, 3]]);
-        const t4 = getTransform([['rd', new Point(1, 2, 3)]]);
-        const t5 = getTransform([['dir', new Point(1, 2, 3)]]);
-        const t6 = new Transform().rotate('dir', 1, 2, 3);
-        const t7 = new Transform().rotate('rd', 1, 2, 3);
-        const t8 = new Transform().rotate('dir', [1, 2, 3]);
-        const t9 = new Transform().rotate('rd', [1, 2, 3]);
-        expect(t.def[0]).toEqual(['rd', 1, 2, 3]);
+      test('y', () => {
+        const t = getTransform([['ry', 1]]);
+        const t1 = getTransform(['ry', 1]);
+        const t2 = new Transform().rotateY(1);
+        expect(t.def[0]).toEqual(['ry', 1]);
         expect(t1.def[0]).toEqual(t.def[0]);
         expect(t2.def[0]).toEqual(t.def[0]);
-        expect(t3.def[0]).toEqual(t.def[0]);
-        expect(t4.def[0]).toEqual(t.def[0]);
-        expect(t5.def[0]).toEqual(t.def[0]);
-        expect(t6.def[0]).toEqual(t.def[0]);
-        expect(t7.def[0]).toEqual(t.def[0]);
-        expect(t8.def[0]).toEqual(t.def[0]);
-        expect(t9.def[0]).toEqual(t.def[0]);
       });
-      test('basis', () => {
-        const t1 = getTransform(['rbasis', { x: [0, 0, 1], y: [0, 1, 0] }]);
-        const t2 = getTransform(['rbasis', 0, 0, 1, 0, 1, 0, -1, 0, 0]);
-        const t3 = getTransform(['rb', { x: [0, 0, 1], y: [0, 1, 0] }]);
-        const t4 = getTransform(['rb', 0, 0, 1, 0, 1, 0, -1, 0, 0]);
-        expect(round(t1.def[0])).toEqual(['rb', 0, 0, 1, 0, 1, 0, -1, 0, 0]);
-        expect(round(t1.def[0])).toEqual(round(t2.def[0]));
-        expect(round(t1.def[0])).toEqual(round(t3.def[0]));
-        expect(round(t1.def[0])).toEqual(round(t4.def[0]));
+      test('z', () => {
+        const t = getTransform([['rz', 1]]);
+        const t1 = getTransform(['rz', 1]);
+        const t2 = new Transform().rotateZ(1);
+        expect(t.def[0]).toEqual(['rz', 1]);
+        expect(t1.def[0]).toEqual(t.def[0]);
+        expect(t2.def[0]).toEqual(t.def[0]);
       });
+      // test('basis', () => {
+      //   const t1 = getTransform(['rbasis', { x: [0, 0, 1], y: [0, 1, 0] }]);
+      //   const t2 = getTransform(['rbasis', 0, 0, 1, 0, 1, 0, -1, 0, 0]);
+      //   const t3 = getTransform(['rb', { x: [0, 0, 1], y: [0, 1, 0] }]);
+      //   const t4 = getTransform(['rb', 0, 0, 1, 0, 1, 0, -1, 0, 0]);
+      //   expect(round(t1.def[0])).toEqual(['rb', 0, 0, 1, 0, 1, 0, -1, 0, 0]);
+      //   expect(round(t1.def[0])).toEqual(round(t2.def[0]));
+      //   expect(round(t1.def[0])).toEqual(round(t3.def[0]));
+      //   expect(round(t1.def[0])).toEqual(round(t4.def[0]));
+      // });
     });
     describe('basis', () => {
       describe('parse', () => {
@@ -1059,26 +1069,26 @@ describe('Transform', () => {
       describe('Basis to Basis', () => {
         test('parse', () => {
           const t1 = getTransform([
-            'b',
+            'bb',
             { i: [0, 1, 0], j: [-1, 0, 0] },
             { i: [-1, 0, 0], j: [0, -1, 0] },
           ]);
           const t2 = getTransform([
-            'b',
+            'bb',
             { i: [0, 1, 0], j: [-1, 0, 0] },
             { right: [-1, 0, 0], top: [0, -1, 0] },
           ]);
           const t3 = getTransform([
-            'b',
+            'bb',
             { i: [0, 1, 0], k: [0, 0, 1] },
             { normal: [0, 0, 1], top: [0, -1, 0] },
           ]);
           const t4 = getTransform([
-            'b',
+            'bb',
             0, 1, 0, -1, 0, 0, 0, 0, 1,
             -1, 0, 0, 0, -1, 0, 0, 0, 1,
           ]);
-          const t5 = new Transform().basis(
+          const t5 = new Transform().basisToBasis(
             { i: [0, 1, 0], j: [-1, 0, 0] },
             { right: [-1, 0, 0], top: [0, -1, 0] },
           );
@@ -1090,7 +1100,7 @@ describe('Transform', () => {
         test('from i = y, j = -x, to i => -x, j => -y', () => {
           // This test is the equivalent of Math.PI / 2 rotation
           const t = getTransform([
-            'b',
+            'bb',
             { i: [0, 1, 0], j: [-1, 0, 0] },
             { i: [-1, 0, 0], j: [0, -1, 0] },
           ]);
