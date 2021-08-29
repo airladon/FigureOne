@@ -1,4 +1,28 @@
 // @flow
+/**
+* Animations are simply interpolating each value within a rotation definition
+ * independently (either between a `start` and `target` or from a `start` with
+ * `velocity`). Therefore, animating any values that belong to vectors
+ * (direction ('dir' or 'rd'), change of basis ('rbasis' or 'rb'), or the axis
+ * of axis/angle) may result in unexpected animations. For example, if animating
+ * a rotation direction from [1, 0, 0] to [-1, 0, 0] it might be expected that
+ * a π radians rotation would occur. Instead, it will look like no rotation
+ * will have started, then a π rotation will happen in a single frame, and then
+ * it will look stationary again. This is because only the x component of the
+ * direction vector will change each animation frame. As a rotation direciton
+ * that is [0.5, 0, 0] is the same as [1, 0, 0], then for half the animation it
+ * will look like nothing is changing. When the x component cross from the 0
+ * point, the element's rotation will instantly flip. Then for the second have
+ * of the rotation as the x component gets more negative it will once again
+ * look stationary.
+ *
+ * If wanting to animate a direction vector, use {@link directionToAxisAngle}
+ * or {@link vectorToVectorToAxisAngle} and then use a axis/angle rotation
+ * keeping the axis constant. If wanting to animate a change of basis rotation,
+ * then use a {@link CustomAnimationStep} to manage how to change the basis
+ * vectors over time.
+ */
+
 import {
   Transform,
   getMaxTimeFromVelocity,
