@@ -258,27 +258,10 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
         t[1] = s.x; // $FlowFixMe
         t[2] = s.y;
       }
-      if (velocity.rotation != null) {
-        if (t[0] === 'r') {
-          transformVelocity.def[i] = ['r', velocity.rotation];
-        }
-        if (t[0] === 'rc') {
-          transformVelocity.def[i] = ['rc', velocity.rotation, velocity.rotation, velocity.rotation];
-        }
-        if (t[0] === 'rd') {
-          transformVelocity.def[i] = ['rc', velocity.rotation, velocity.rotation, velocity.rotation];
-        }
-        if (t[0] === 'ra') {
-          transformVelocity.def[i] = ['ra', velocity.rotation, velocity.rotation, velocity.rotation, velocity.rotation];
-        }
-        if (t[0] === 'rb') { // $FlowFixMe
-          transformVelocity.def[i] = ['rb', velocity.rotation, velocity.rotation, velocity.rotation, velocity.rotation, velocity.rotation, velocity.rotation];
-        }
-        transformVelocity.calcAndSetMatrix();
+      if (t[0] === 'r' && velocity.rotation != null) {
+        t[1] = velocity.rotation;
       }
-      // if (t[0] === 'r' && velocity.rotation != null) {
-      //   t[3] = velocity.rotation;
-      // }
+      transformVelocity.calcAndSetMatrix();
     }
     return transformVelocity;
   }
