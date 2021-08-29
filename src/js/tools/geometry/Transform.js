@@ -297,8 +297,24 @@ function makeTransformComponent(
 
 /**
  * A Transform is a chain or cascade of transform components, such as rotations
- * and translations. Each transform component creates a 4x4 matrix (3D
- * homogenous coordinates) representing the transform.
+ * and translations.
+ *
+ * There are several built in transforms that can be used for components, but
+ * no matter how a component is defined it will represent a three dimensional
+ * transform matrix in homogenous coordinates (so it is 4x4). The available
+ * built in transforms are:
+ *
+ * - Translation
+ * - Scale
+ * - 2D rotation
+ * - Rotation around the x axis
+ * - Rotation around the y axis
+ * - Rotation around the z axis
+ * - Rotation around an arbitrary axis
+ * - Direction transform
+ * - Custom (where a specific matrix can be defined)
+ * - Change of basis from standard basis
+ * - Change of basis from an initial basis
  *
  * Matrix multiplication is not commutative, and so chaining transforms is not
  * commutative. This means the order of components is important.
@@ -312,10 +328,6 @@ function makeTransformComponent(
  *
  * In this Transform object, the order that components are defined, is the order
  * the resulting transform will represent.
- *
- * @example
- * // Create a tranform that first scales, then rotates then translates
- * const t1 = new Transform().scale(2, 2).rotate(Math.PI).translate(1, 1)
  */
 class Transform {
   def: TypeTransformDefinition;
