@@ -900,7 +900,7 @@ describe('Transform', () => {
       const t4 = new Transform().translate(2, 2, 2);
       const t5 = new Transform().translate([2, 2]);
       const t6 = new Transform().translate([2, 2, 2]);
-      expect(t1.def[0]).toEqual(['t', 2, 2]);
+      expect(t1.def[0]).toEqual(['t', 2, 2, 0]);
       expect(t2.def[0]).toEqual(['t', 2, 2, 2]);
       expect(t3.def[0]).toEqual(['t', 2, 2, 0]);
       expect(t4.def[0]).toEqual(['t', 2, 2, 2]);
@@ -916,8 +916,8 @@ describe('Transform', () => {
       const t6 = new Transform().scale(2, 2, 2);
       const t7 = new Transform().scale([2, 2]);
       const t8 = new Transform().scale([2, 2, 2]);
-      expect(t1.def[0]).toEqual(['s', 2]);
-      expect(t2.def[0]).toEqual(['s', 2, 2]);
+      expect(t1.def[0]).toEqual(['s', 2, 2, 2]);
+      expect(t2.def[0]).toEqual(['s', 2, 2, 1]);
       expect(t3.def[0]).toEqual(['s', 2, 2, 2]);
       expect(t4.def[0]).toEqual(['s', 2, 2, 2]);
       expect(t5.def[0]).toEqual(['s', 2, 2, 1]);

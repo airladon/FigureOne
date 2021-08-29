@@ -52,11 +52,11 @@ export type TypeTransformDirection = ['d', number, number, number];
 
 /**
  * Translation transform component. The numbers are the xy(z) components of the
- * translation. Two numbers can be used for 2D figures, and 3 numbers for 3D.
+ * translation.
  *
- * `['t', number, number, number] | ['t', number, number]`
+ * `['t', number, number, number]`
  */
-export type TypeTransformTranslation = ['t', number, number, number] | ['t', number, number];
+export type TypeTransformTranslation = ['t', number, number, number];
 
 /**
  * Scale transform component. Using just a single number scales xyz components
@@ -65,7 +65,7 @@ export type TypeTransformTranslation = ['t', number, number, number] | ['t', num
  *
  * `['s', number, number, number] | ['s', number, number] | ['s', number]`
  */
-export type TypeTransformScale = ['s', number] | ['s', number, number] | ['s', number, number, number];
+export type TypeTransformScale = ['s', number, number, number];
 
 /* eslint-disable max-len */
 /**
@@ -142,7 +142,7 @@ export type TypeTransformComponent = TypeTransformRotation
 export type TypeTransformComponentUserDefinition = TypeTransformRotation
   | TypeTransformDirection | TypeTransformTranslation
   | TypeTransformScale | TypeTransformCustom | TypeTransformBasisUserDefinition
-  | TypeTransformBasisToBasisUserDefinition | ['r', number];
+  | TypeTransformBasisToBasisUserDefinition | ['r', number] | ['t', number, number] | ['s', number] | ['s', number, number];
 
 /**
  * Transform array definition.
@@ -569,20 +569,23 @@ class Transform {
     for (let i = defEndToUse; i >= defStart; i -= 1) { // $FlowFixMe
       const [type, v1, v2, v3, v4] = this.def[i];
       if (type === 't' && v1 != null && v2 != null) {
-        if (v3 == null && (v1 !== 0 || v2 !== 0)) {
-          m = m3.mul(m, m3.translationMatrix(v1, v2, 0));
-        }
+        // if (v3 == null && (v1 !== 0 || v2 !== 0)) {
+        //   m = m3.mul(m, m3.translationMatrix(v1, v2, 0));
+        // }
         if (v3 != null && (v1 !== 0 || v2 !== 0 || v3 !== 0)) {
           m = m3.mul(m, m3.translationMatrix(v1, v2, v3));
         }
-      } else if (type === 's' && v1 != null) {
-        if (v3 == null && v2 == null && (v1 !== 1)) {
-          m = m3.mul(m, m3.scaleMatrix(v1, v1, v1));
-        } else if (v3 == null && v2 != null && (v1 !== 1 || v2 !== 1)) {
-          m = m3.mul(m, m3.scaleMatrix(v1, v2, 1));
-        } else if (v3 != null && (v1 !== 1 || v2 !== 1 || v3 !== 1)) {
-          m = m3.mul(m, m3.scaleMatrix(v1, v2, v3));
-        }
+      } else if (type === 's' && (v1 !== 1 || v2 !== 1 || v3 !== 1)) {
+        // } else if (v3 != null && (v1 !== 1 || v2 !== 1 || v3 !== 1)) {
+        m = m3.mul(m, m3.scaleMatrix(v1, v2, v3));
+        // }
+        // if (v3 == null && v2 == null && (v1 !== 1)) {
+        //   m = m3.mul(m, m3.scaleMatrix(v1, v1, v1));
+        // } else if (v3 == null && v2 != null && (v1 !== 1 || v2 !== 1)) {
+        //   m = m3.mul(m, m3.scaleMatrix(v1, v2, 1));
+        // } else if (v3 != null && (v1 !== 1 || v2 !== 1 || v3 !== 1)) {
+        //   m = m3.mul(m, m3.scaleMatrix(v1, v2, v3));
+        // }
       } else if (type === 'd' && (v1 !== 1 || v2 !== 0 || v3 !== 0)) {
         m = m3.mul(m, m3.rotationMatrixDirection([v1, v2, v3]));
       } else if (type === 'r' && v1 !== 0) {
@@ -1378,6 +1381,12 @@ function parseTransformDef(
         def.push(['bb', ...parseBasisObject(tToUse[i][1]), ...parseBasisObject(tToUse[i][2])]); // $FlowFixMe
       } else if (tToUse[i][0] === 'r' && tToUse[i].length === 2) {  // $FlowFixMe
         def.push(['r', tToUse[i][1], 0, 0, 1]);
+      } else if (tToUse[i][0] === 's' && tToUse[i].length === 2) {  // $FlowFixMe
+        def.push(['s', tToUse[i][1], tToUse[i][1], tToUse[i][1]]);
+      } else if (tToUse[i][0] === 's' && tToUse[i].length === 3) {  // $FlowFixMe
+        def.push(['s', tToUse[i][1], tToUse[i][2], 1]);
+      } else if (tToUse[i][0] === 't' && tToUse[i].length === 3) {  // $FlowFixMe
+        def.push(['t', tToUse[i][1], tToUse[i][2], 0]);
       } else { // $FlowFixMe
         def.push(tToUse[i].slice());
       }
