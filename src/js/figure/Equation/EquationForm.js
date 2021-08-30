@@ -125,6 +125,7 @@ export default class EquationForm extends Elements {
   duration: ?number;
   translation: TypeElementTranslationOptions;
   positionsSet: boolean;
+  lazyLayout: boolean;
   // };
 
   fromForm: {
@@ -161,6 +162,7 @@ export default class EquationForm extends Elements {
     // this.animation = {};
     this.fromForm = {};
     this.positionsSet = false;
+    this.lazyLayout = false;
     // this.subForm = '';
   }
 
