@@ -136,3 +136,7 @@ API cleanup
 
 ## 0.10.13
 * Bug Fix: When figure is not on top of window stack, 'beforeDraw' notifications were not being sent
+
+## 0.10.14
+* Bug Fix: When ivid was watched to end, playing ivid would restart audio but not slides
+* Bug Fix: When using lazylayout for equation forms, seeking to within a goToForm animation caused form to be impropertly arranged
