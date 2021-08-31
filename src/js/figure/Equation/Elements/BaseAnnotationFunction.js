@@ -689,10 +689,9 @@ export default class BaseAnnotationFunction implements ElementInterface {
       glyphLength += 2 * overhang * scale;
       contentX = contentBounds.left - overhang * scale;
     }
-    if (width != null) {
-      glyphLength = width * scale;
-    }
-
+    // if (width != null) {
+    //   glyphLength = width * scale;
+    // }
     if (leftSpace != null || rightSpace != null) {
       glyphLength = (leftSpace || 0) * scale + contentBounds.width + (rightSpace || 0) * scale;
       if (leftSpace != null) {

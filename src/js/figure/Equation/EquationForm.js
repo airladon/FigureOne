@@ -357,7 +357,7 @@ export default class EquationForm extends Elements {
       this.offsetLocation(delta);
       this.setPositions();
     }
-
+    this.positionsSet = false;
     this.collectionMethods.showOnly(elementsCurrentlyShowing);
   }
 
