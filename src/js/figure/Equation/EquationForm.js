@@ -125,7 +125,7 @@ export default class EquationForm extends Elements {
   duration: ?number;
   translation: TypeElementTranslationOptions;
   positionsSet: boolean;
-  layout:'always' | 'lazy' | 'init';
+  layout: 'always' | 'lazy' | 'init';
   // };
 
   fromForm: {
