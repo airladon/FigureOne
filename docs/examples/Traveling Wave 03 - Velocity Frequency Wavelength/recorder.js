@@ -36,17 +36,17 @@ function Recorder(duration) {
   // since the last record. If the ellapsed time is longer than `timeStep`, then
   // interpolated values will be added at each `timeStep`.
   function record(value, deltaTimeIn) {
-    const deltaTime = deltaTimeIn + lastDelta;
+    const deltaTime = Fig.tools.math.round(deltaTimeIn + lastDelta, 6);
     if (deltaTime < timeStep) {
       lastDelta = deltaTime;
       return;
     }
     // Count the number of samples that need to be added to the signal
-    const count = Math.floor(deltaTime / timeStep);
-    lastDelta = deltaTime - count * timeStep;
+    const count = Math.floor(Fig.tools.math.round(deltaTime / timeStep, 6));
+    lastDelta = Fig.tools.math.round(deltaTime - count * timeStep, 6);
 
     const lastValue = data[index - 1];
-    const deltaValue = (value - lastValue) / count;
+    const deltaValue = Fig.tools.math.round((value - lastValue) / count, 6);
     for (let i = 0; i < count; i += 1) {
       data[index] = lastValue + deltaValue * (i + 1);
       incrementIndex();
