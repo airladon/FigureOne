@@ -320,6 +320,7 @@ function layoutRight() {
       element.label.eqn.showForm(form);
     } else {
       element.label.eqn.setCurrentForm(form);
+      element.label.eqn.layoutForms('current');
     }
   };
 
