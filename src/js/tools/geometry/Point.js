@@ -9,10 +9,10 @@ import {
 import type {
   Type2Components, Type3Components,
 } from './types';
-import * as m2 from '../m2';
+// import * as m2 from '../m2';
 import * as m3 from '../m3';
 import type { Type3DMatrix } from '../m3';
-import type { Type2DMatrix } from '../m2';
+// import type { Type2DMatrix } from '../m2';
 
 // Point definition in a state capture
 type TypeF1DefPoint = {
@@ -484,11 +484,11 @@ class Point {
    * q = p.transformBy(m)
    * // q = Point{x: -3, y: 3, 0}
   */
-  transformBy(matrix: Type3DMatrix | Type2DMatrix): Point {
-    if (matrix.length === 9) {
-      const transformedPoint = m2.transform(matrix, this.x, this.y);
-      return new Point(transformedPoint[0], transformedPoint[1]);
-    }
+  transformBy(matrix: Type3DMatrix): Point {
+    // if (matrix.length === 9) {
+    //   const transformedPoint = m2.transform(matrix, this.x, this.y);
+    //   return new Point(transformedPoint[0], transformedPoint[1]);
+    // }
     // const transformedPoint = m3.transform(matrix, this.x, this.y, this.z);
     const transformedPoint = m3.transform(matrix, this.x, this.y, this.z);
     return new this.constructor(transformedPoint[0], transformedPoint[1], transformedPoint[2]);
