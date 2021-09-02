@@ -19,4 +19,5 @@ tester({
     242,
     265,
   ],
+  threshold: 2,
 });

@@ -690,9 +690,9 @@ export default class BaseAnnotationFunction implements ElementInterface {
       contentX = contentBounds.left - overhang * scale;
     }
     if (width != null) {
-      glyphLength = width * scale;
+      // glyphLength = width * scale;
+      glyphLength = width;
     }
-
     if (leftSpace != null || rightSpace != null) {
       glyphLength = (leftSpace || 0) * scale + contentBounds.width + (rightSpace || 0) * scale;
       if (leftSpace != null) {
@@ -730,6 +730,9 @@ export default class BaseAnnotationFunction implements ElementInterface {
     const glyphAndAnnotationBounds = new Bounds();
     glyphAndAnnotationBounds.copyFrom(glyphBounds);
     glyph.width = glyphBounds.width;
+    // if (width != null) {
+    //   glyph.width = glyphBounds.width / scale;
+    // }
 
     glyph.height = glyphBounds.height;
     glyph.location = new Point(glyphBounds.left, glyphBounds.bottom);

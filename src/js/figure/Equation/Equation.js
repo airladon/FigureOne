@@ -655,7 +655,7 @@ export type EQN_FormDefaults = {
   translation?: EQN_TranslationStyle,
   onShow?: null | string | (() => void),
   onTransition?: null | string | (() => void),
-  lazyLayout?: boolean,
+  layout?: 'lazy' | 'init' | 'always'
 }
 
 /**
@@ -981,7 +981,7 @@ export class Equation extends FigureElementCollection {
       translation?: EQN_TranslationStyle,
       onShow?: null | string | (() => void),
       onTransition?: null | string | (() => void),
-      lazyLayout?: boolean,
+      layout?: 'always' | 'lazy' | 'init',
     };
 
     isAnimating: boolean;
@@ -1055,7 +1055,9 @@ export class Equation extends FigureElementCollection {
           yAlign: 'baseline',
         },
         elementMods: {},
-        lazyLayout: false,
+        layout: 'always',
+        // lazyLayout: true,
+        // layoutonce: false,
       },
       elements: {},
       forms: {},
@@ -1137,7 +1139,7 @@ export class Equation extends FigureElementCollection {
         // animation: optionsToUse.formDefaults.animation,
         duration: optionsToUse.formDefaults.duration,
         translation: optionsToUse.formDefaults.translation,
-        lazyLayout: optionsToUse.formDefaults.lazyLayout,
+        layout: optionsToUse.formDefaults.layout,
       },
       functions: new EquationFunctions(
         this.elements,
@@ -1287,28 +1289,31 @@ export class Equation extends FigureElementCollection {
     });
   }
 
-  _state(
-    options: {
-      precision?: number,
-      ignoreShown?: boolean,
-      min?: boolean,
-      returnF1Type?: boolean,
-    } = {},
-  ) {
-    const state = super._state(options);
-    state._stateForms = {};
-    Object.keys(this.eqn.forms).forEach((form) => {
-      state._stateForms[form] = this.eqn.forms[form].positionsSet;
-    });
-    return state;
-  }
+  // _state(
+  //   options: {
+  //     precision?: number,
+  //     ignoreShown?: boolean,
+  //     min?: boolean,
+  //     returnF1Type?: boolean,
+  //   } = {},
+  // ) {
+  //   const state = super._state(options);
+  //   state._stateForms = {};
+  //   Object.keys(this.eqn.forms).forEach((form) => {
+  //     state._stateForms[form] = this.eqn.forms[form].positionsSet;
+  //   });
+  //   return state;
+  // }
 
   stateSet() {
     super.stateSet();
     Object.keys(this.eqn.forms).forEach((form) => {
       // $FlowFixMe
-      if (this._stateForms != null) {  // $FlowFixMe
-        this.eqn.forms[form].positionsSet = this._stateForms[form];
+      // if (this._stateForms != null) {  // $FlowFixMe
+      //   this.eqn.forms[form].positionsSet = this._stateForms[form];
+      // }
+      if (this.eqn.forms[form].layout !== 'init') {
+        this.eqn.forms[form].positionsSet = false;
       }
     });
   }
@@ -1369,6 +1374,17 @@ export class Equation extends FigureElementCollection {
     return this.eqn.currentFormSeriesName;
   }
 
+
+  /**
+   * For equation layout. If an equation layout happens before a desired font
+   * is fully loaded, then use this method to re-layout the equation when the
+   * font is available.
+   *
+   * Either the current form only, or all forms of the equation can be
+   * re-laid-out.
+   *
+   * @param {'none' | 'current' | 'all'} forms
+   */
   layoutForms(forms: 'none' | 'current' | 'all') {
     if (forms === 'none') {
       return;
@@ -1396,6 +1412,7 @@ export class Equation extends FigureElementCollection {
    * @param {EQN_UpdateElementText} elements elements to update
    * @param {'all' | 'current' | 'none'} [layoutForms] which forms to re-layout
    * with the updated text
+   *
    */
   updateElementText(
     elements: EQN_UpdateElementText,
@@ -1942,7 +1959,7 @@ export class Equation extends FigureElementCollection {
       fromForm: {},
       onShow: null,
       onTransition: null,
-      lazyArrange: false,
+      layout: this.eqn.formDefaults.layout,
     }, this.eqn.formDefaults);
     let optionsToUse = defaultOptions;
     if (options) {
@@ -2018,7 +2035,8 @@ export class Equation extends FigureElementCollection {
 
     optionsToUse.alignment.fixTo = this.checkFixTo(optionsToUse.alignment.fixTo);
     form.content = content;
-    if (optionsToUse.lazyLayout) {
+    form.layout = optionsToUse.layout;
+    if (optionsToUse.layout !== 'init') {
       form.lazyArrange(
         optionsToUse.scale,
         optionsToUse.alignment.xAlign,

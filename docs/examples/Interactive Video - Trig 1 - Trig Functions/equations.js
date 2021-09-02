@@ -146,6 +146,7 @@ function makeEquation() {
           ['hypOpp', '  ', 'eq6', '  ', 'cscTheta'],
         ], 0.6),
       },
+      layout: 'init',
       forms: {
         ratios: ['c1'],
         values: ['c1', 'c2', 'values'],

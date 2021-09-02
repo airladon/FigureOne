@@ -43,7 +43,7 @@ class DynamicSignal {
   // was recorder, then use interpolation to fill in the missing samples.
   update(value) {
     const currentTime = figure.timeKeeper.now();
-    const deltaTime = (currentTime - this.lastTime) / 1000;
+    const deltaTime = Fig.tools.math.round((currentTime - this.lastTime) / 1000, 6);
 
     // If the value has come in faster than the time resolution, then
     // do nothing
@@ -61,11 +61,11 @@ class DynamicSignal {
     }
 
     // Count the number of samples that need to be added to the signal
-    const count = Math.floor(deltaTime / this.timeStep);
+    const count = Math.floor(Fig.tools.math.round(deltaTime / this.timeStep, 6));
 
     // Interpolate between the last recorded value and the new value
     const newValues = [];
-    const deltaValue = (this.data[0] - value) / (count);
+    const deltaValue = Fig.tools.math.round((this.data[0] - value) / (count), 6);
     for (let i = 0; i < count; i += 1) {
       newValues.push(value + deltaValue * i);
     }

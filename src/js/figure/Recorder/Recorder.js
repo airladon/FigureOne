@@ -1528,6 +1528,7 @@ ${cursorData}
     this.lastSeekTime = null;
     let fromTime = this.convertTime(fromTimeIn);
     if (fromTimeIn == null || fromTimeIn >= this.duration) {
+      this.seek(0);
       fromTime = 0;
     }
     this.eventsToPlay = this.getEvents(events);

@@ -338,11 +338,8 @@ class FigureTextBase {
     }
     // const height = ascent + descent;
 
-    let { width } = ctx.measureText(this.text);
-    width *= this.font.width;
-    // if (this.font.family.toLowerCase() === 'open sans') {
-    //   width *= 1.152;
-    // }
+    const { width } = ctx.measureText(this.text);
+    // width *= this.font.width;
     this.measure = {
       ascent: ascent / scalingFactor,
       descent: descent / scalingFactor,
