@@ -2000,13 +2000,7 @@ class FigureElement {
     } else if (type === 'position' || type === 'translation') {
       movement = transform.t();
     } else if (type === 'rotation') {
-      const r = transform.r();
-      if (typeof r === 'number') {
-        movement = r;
-      } else {
-        // eslint-disable-next-line prefer-destructuring
-        movement = r[1];
-      }
+      movement = transform.r();
     }
     return movement;
   }
@@ -2036,12 +2030,7 @@ class FigureElement {
     } else if (type === 'position' || type === 'translation') { // $FlowFixMe
       transform.updateTranslation(value);
     } else if (type === 'rotation') {
-      const r = transform.r();
-      if (typeof r === 'number') {
-        transform.updateRotation(value);
-      } else {
-        transform.updateRotation(['axis', ...r[0].toArray(), value]);
-      }
+      transform.updateRotation(value);
     }
     return transform;
   }
@@ -3309,25 +3298,16 @@ class FigureElement {
   }
 
   /**
-   * Return the first rotation in the element's transform. Will return
-   * `0` if the element's transform doesn't have a rotation.
+   * Return the first rotation in the element's transform.
    *
    * @param {'0to360' | '-180to180' | ''} normalize how to normalize the
    * returned angle where `''` returns the raw angle
    * @return {Point} scale
    */
-  getRotation(normalize: '0to360' | '-180to180' | '' = '') {
-    const index = this.transform.getComponentIndex(['r', 'rx', 'rz', 'ry', 'ra']);
-    const r = this.transform.def[index][1];
-
-    // const r = this.transform.r();
-    let rotation = r;
-    // if (r != null) {
-    //   rotation = r;
-    // }
-    // console.log(rotation)
-    if (normalize !== '' && r != null) {
-      rotation = clipAngle(r, normalize);
+  getRotation(normalize: '0to360' | '-180to180' | '' = '') { 
+    let rotation = this.transform.r();
+    if (normalize !== '' && rotation != null) {
+      rotation = clipAngle(rotation, normalize);
     }
     return rotation;
   }
@@ -3539,9 +3519,9 @@ class FigureElement {
     }
     if (type === 'rotation') {
       // const r = this.transform.r();
-      const rType = this.transform.rType();
-      if (!this.move.plane.n.isEqualTo([0, 0, 1]) && rType !== 'axis') {
-        this.transform.updateRotation(['axis', this.move.plane.n, 0]);
+      // const rType = this.transform.rType();
+      if (!this.move.plane.n.isEqualTo([0, 0, 1])) {
+        this.transform.updateRotation(0, this.move.plane.n);
       }
     }
     if (bounds != null) {
