@@ -18,7 +18,7 @@ import type {
  * @property {TypeGLBufferUsage} [usage] use `'DYNAMIC'` if the shape's vertices
  * will be updated very frequently (`'STATIC'`)
  */
-export type OBJ_Generic3All = {
+export type OBJ_Generic3D = {
   light?: 'directional' | 'point' | null,
   copy?: Array<CPY_Step | string> | CPY_Step,
   usage?: TypeGLBufferUsage,
@@ -131,10 +131,10 @@ export type OBJ_Generic3 = {
   normals?: Array<TypeParsablePoint>,
   colors?: Array<TypeColor>,
   texture?: OBJ_Texture,
-} & OBJ_Generic3All & OBJ_FigurePrimitive;
+} & OBJ_Generic3D & OBJ_FigurePrimitive;
 
 /**
- * Sphere shape options object that extends {@link OBJ_Generic3All}
+ * Sphere shape options object that extends {@link OBJ_Generic3D}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/sphere.png)
@@ -205,10 +205,10 @@ export type OBJ_Sphere = {
   radius?: number,
   normals?: 'curve' | 'flat',
   center?: TypeParsablePoint,
-} & OBJ_Generic3All & OBJ_FigurePrimitive;
+} & OBJ_Generic3D & OBJ_FigurePrimitive;
 
 /**
- * Cube shape options object that extends {@link OBJ_Generic3All}
+ * Cube shape options object that extends {@link OBJ_Generic3D}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/cube.png)
@@ -261,10 +261,10 @@ export type OBJ_Cube = {
   side?: number,
   center?: TypeParsablePoint,
   lines?: boolean,
-} & OBJ_FigurePrimitive & OBJ_Generic3All;
+} & OBJ_FigurePrimitive & OBJ_Generic3D;
 
 /**
- * Cylinder shape options object that extends {@link OBJ_Generic3All}
+ * Cylinder shape options object that extends {@link OBJ_Generic3D}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/cylinder.png)
@@ -359,10 +359,10 @@ export type OBJ_Cylinder = {
   line?: TypeParsableLine,
   length?: number,
   ends?: boolean | 1 | 2,
-} & OBJ_FigurePrimitive & OBJ_Generic3All;
+} & OBJ_FigurePrimitive & OBJ_Generic3D;
 
 /**
- * Cone shape options object that extends {@link OBJ_Generic3All}
+ * Cone shape options object that extends {@link OBJ_Generic3D}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/cone.png)
@@ -432,10 +432,10 @@ export type OBJ_Cone = {
   length?: number,
   rotation?: number,
   lines?: boolean,
-} & OBJ_FigurePrimitive & OBJ_Generic3All;
+} & OBJ_FigurePrimitive & OBJ_Generic3D;
 
 /**
- * Revolve shape options object that extends {@link OBJ_Generic3All}
+ * Revolve shape options object that extends {@link OBJ_Generic3D}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/revolve.png)
@@ -543,10 +543,10 @@ export type OBJ_Revolve = {
   rotation?: number,
   position?: TypeParsablePoint,
   lines?: boolean,
-} & OBJ_FigurePrimitive & OBJ_Generic3All;
+} & OBJ_FigurePrimitive & OBJ_Generic3D;
 
 /**
- * Revolve shape options object that extends {@link OBJ_Generic3All}
+ * Revolve shape options object that extends {@link OBJ_Generic3D}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/surface.png)
@@ -633,4 +633,4 @@ export type OBJ_Surface = {
   closeRows?: boolean,
   closeColumns?: boolean,
   lines?: boolean,
-} & OBJ_FigurePrimitive & OBJ_Generic3All;
+} & OBJ_FigurePrimitive & OBJ_Generic3D;
