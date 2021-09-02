@@ -11,15 +11,15 @@ function isLeft(p0: Point, p1: Point, p2: Point) {
   );
 }
 
-export type OBJ_Polygon = {
-  sides?: number,
-  radius?: number,
-  center?: number,
-  axis?: TypeRotationComponent,
-  close?: boolean,
-  rotation?: number,
-  direction?: 1 | -1,
-};
+// export type OBJ_Polygon = {
+//   sides?: number,
+//   radius?: number,
+//   center?: number,
+//   axis?: TypeRotationComponent,
+//   close?: boolean,
+//   rotation?: number,
+//   direction?: 1 | -1,
+// };
 
 // function polygon(options: OBJ_Polygon) {
 //   const o = joinObjects({
