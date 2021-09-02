@@ -317,19 +317,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       for (let i = 0; i < transformVelocity.def.length; i += 1) {
         const [type] = transformVelocity.def[i];
         if (type === 'r') {
-          transformVelocity.def[i] = ['r', velocity.rotation];
-        }
-        if (type === 'rc') {
-          transformVelocity.def[i] = ['rc', velocity.rotation, velocity.rotation, velocity.rotation];
-        }
-        if (type === 'rd') {
-          transformVelocity.def[i] = ['rc', velocity.rotation, velocity.rotation, velocity.rotation];
-        }
-        if (type === 'ra') {
-          transformVelocity.def[i] = ['ra', velocity.rotation, velocity.rotation, velocity.rotation, velocity.rotation];
-        }
-        if (type === 'rb') { // $FlowFixMe
-          transformVelocity.def[i] = ['rb', velocity.rotation, velocity.rotation, velocity.rotation, velocity.rotation, velocity.rotation, velocity.rotation];
+          transformVelocity.def[i] = ['r', velocity.rotation, 0, 0, 0];
         }
       }
       transformVelocity.calcAndSetMatrix();
