@@ -444,7 +444,7 @@ describe('Element Move', () => {
           bounceLoss: 0.5,
         },
       }, [0, 1, 0]);
-      a.transform.updateRotation(['axis', [0, 1, 0], 0]);
+      a.transform.updateRotation(0, [0, 1, 0]);
       figure.scene.setCamera({ position: [2, 2, 2] });
       figure.scene.setProjection({
         near: 0.1, far: 10, left: -2, right: 2, bottom: -2, top: 2,
