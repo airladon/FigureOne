@@ -448,6 +448,14 @@ export default class FigurePrimitives {
       element.scenarios = options.scenarios;
     }
 
+    if (options.scene != null) {
+      if (options.scene instanceof Scene) {
+        element.scene = options.scene;
+      } else {
+        element.setScene(options.scene);
+      }
+    }
+
     element.timeKeeper = this.timeKeeper;
     element.recorder = this.recorder;
     setupPulse(element, options);

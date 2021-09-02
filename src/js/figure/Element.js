@@ -4389,6 +4389,13 @@ class FigureElementCollection extends FigureElement {
     if (options.scenarios != null) {
       this.scenarios = options.scenarios;
     }
+    if (options.scene != null) {
+      if (options.scene instanceof Scene) {
+        this.scene = options.scene;
+      } else {
+        this.setScene(options.scene);
+      }
+    }
     this.childrenCanAnimate = true;
     this.eqns = {};
     this.type = 'collection';
@@ -4744,6 +4751,14 @@ class FigureElementCollection extends FigureElement {
       // }
       if (optionsToUse.scenarios != null) {
         newElement.scenarios = optionsToUse.scenarios;
+      }
+
+      if (optionsToUse.scene != null) {
+        if (optionsToUse.scene instanceof Scene) {
+          newElement.scene = optionsToUse.scene;
+        } else {
+          newElement.setScene(optionsToUse.scene);
+        }
       }
 
       if (

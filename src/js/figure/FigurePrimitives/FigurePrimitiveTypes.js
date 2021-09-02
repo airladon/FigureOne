@@ -8,7 +8,7 @@ import type { TypeGLUniform, TypeGLBufferType, TypeGLBufferUsage } from '../Draw
 import type {
   TypeColor, TypeDash,
 } from '../../tools/types';
-import type Scene from '../../tools/scene';
+import type Scene, { OBJ_Scene } from '../../tools/scene';
 import type { TypeVertexShader, TypeFragmentShader } from '../webgl/shaders';
 
 
@@ -319,7 +319,7 @@ export type OBJ_FigurePrimitive = {
   dimColor?: TypeColor,
   defaultColor?: TypeColor,
   scenarios?: TypeScenarios,
-  scene?: Scene,
+  scene?: Scene | OBJ_Scene,
 };
 
 /**

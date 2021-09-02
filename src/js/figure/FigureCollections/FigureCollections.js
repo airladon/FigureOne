@@ -95,7 +95,7 @@ export default class FigureCollections {
       touchBorder: 'children',
       color: this.primitives.defaultColor,
       parent: null,
-      scene: this.primitives.scene,
+      // scene: this.primitives.scene,
     };
     let optionsToUse;
     if (transformOrPointOrOptions instanceof Point) {
