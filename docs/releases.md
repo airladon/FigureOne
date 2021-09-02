@@ -139,4 +139,4 @@ API cleanup
 
 ## 0.10.14
 * Bug Fix: When ivid was watched to end, playing ivid would restart audio but not slides
-* Bug Fix: When using lazylayout for equation forms, seeking to within a goToForm animation caused form to be impropertly arranged
+* Add `layout` property to equation form and default it to 'all' making equations rearrange themselves on every show
