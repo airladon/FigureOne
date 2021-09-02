@@ -84,6 +84,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -110,7 +113,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -399,6 +401,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -425,7 +430,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -510,7 +514,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -614,6 +617,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -640,7 +646,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -738,6 +743,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -764,7 +772,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.025,
       "widthIs": "mid",
@@ -1253,6 +1260,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -1279,7 +1289,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -1364,7 +1373,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -1468,6 +1476,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -1494,7 +1505,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -1592,6 +1602,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -1618,7 +1631,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.025,
       "widthIs": "mid",
@@ -2215,6 +2227,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -2241,7 +2256,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -2326,7 +2340,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -2430,6 +2443,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -2456,7 +2472,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -2554,6 +2569,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -2580,7 +2598,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.025,
       "widthIs": "mid",
@@ -4137,6 +4154,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -4163,7 +4183,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -4248,7 +4267,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -4352,6 +4370,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -4378,7 +4399,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -4476,6 +4496,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -4502,7 +4525,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.025,
       "widthIs": "mid",
@@ -5171,6 +5193,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -5197,7 +5222,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -5282,7 +5306,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -5386,6 +5409,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -5412,7 +5438,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -5510,6 +5535,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -5536,7 +5564,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.025,
       "widthIs": "mid",
@@ -7093,6 +7120,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -7119,7 +7149,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -7204,7 +7233,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -7308,6 +7336,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -7334,7 +7365,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -7432,6 +7462,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -7458,7 +7491,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.025,
       "widthIs": "mid",
@@ -8019,6 +8051,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -8045,7 +8080,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -8130,7 +8164,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -8234,6 +8267,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -8260,7 +8296,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -8358,6 +8393,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -8384,7 +8422,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.025,
       "widthIs": "mid",
@@ -8837,6 +8874,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -8863,7 +8903,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -8948,7 +8987,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -9052,6 +9090,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -9078,7 +9119,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -9203,6 +9243,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -9229,7 +9272,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -9518,6 +9560,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -9544,7 +9589,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -9629,7 +9673,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -9760,6 +9803,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -9786,7 +9832,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -9924,6 +9969,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -9950,7 +9998,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -10239,6 +10286,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -10265,7 +10315,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -10350,7 +10399,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -10454,6 +10502,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -10480,7 +10531,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -10660,6 +10710,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -10686,7 +10739,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -10975,6 +11027,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -11001,7 +11056,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -11086,7 +11140,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -11190,6 +11243,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -11216,7 +11272,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -11314,6 +11369,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -11340,7 +11398,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -11629,6 +11686,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -11655,7 +11715,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -11740,7 +11799,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -11844,6 +11902,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -11870,7 +11931,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -11968,6 +12028,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -11994,7 +12057,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -12283,6 +12345,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -12309,7 +12374,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -12394,7 +12458,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -12498,6 +12561,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -12524,7 +12590,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -12622,6 +12687,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -12648,7 +12716,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -12937,6 +13004,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -12963,7 +13033,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -13048,7 +13117,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -13152,6 +13220,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -13178,7 +13249,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -13279,6 +13349,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -13305,7 +13378,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -13690,6 +13762,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -13716,7 +13791,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -13801,7 +13875,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -13905,6 +13978,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -13931,7 +14007,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -14032,6 +14107,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -14058,7 +14136,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "negative",
@@ -14443,6 +14520,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -14469,7 +14549,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -14554,7 +14633,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -14658,6 +14736,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -14684,7 +14765,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -14786,6 +14866,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -14812,7 +14895,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -15197,6 +15279,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -15223,7 +15308,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -15308,7 +15392,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -15412,6 +15495,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -15438,7 +15524,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -15539,6 +15624,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -15565,7 +15653,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "positive",
@@ -15950,6 +16037,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -15976,7 +16066,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -16061,7 +16150,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -16165,6 +16253,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -16191,7 +16282,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -16292,6 +16382,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -16318,7 +16411,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": 0.3,
@@ -16703,6 +16795,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -16729,7 +16824,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -16814,7 +16908,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -16918,6 +17011,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -16944,7 +17040,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -17042,6 +17137,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -17068,7 +17166,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -17357,6 +17454,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -17383,7 +17483,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -17468,7 +17567,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -17572,6 +17670,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -17598,7 +17699,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -17696,6 +17796,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -17722,7 +17825,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -18011,6 +18113,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -18037,7 +18142,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -18122,7 +18226,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -18226,6 +18329,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -18252,7 +18358,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -18350,6 +18455,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -18376,7 +18484,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -18665,6 +18772,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -18691,7 +18801,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -18776,7 +18885,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -18880,6 +18988,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -18906,7 +19017,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -19021,6 +19131,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -19047,7 +19160,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -19336,6 +19448,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -19362,7 +19477,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -19447,7 +19561,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -19551,6 +19664,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -19577,7 +19693,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -19675,6 +19790,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -19701,7 +19819,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -19990,6 +20107,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -20016,7 +20136,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -20101,7 +20220,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -20205,6 +20323,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -20231,7 +20352,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -20346,6 +20466,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -20372,7 +20495,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -20661,6 +20783,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -20687,7 +20812,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -20772,7 +20896,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -20876,6 +20999,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -20902,7 +21028,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -21000,6 +21125,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -21026,7 +21154,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -21315,6 +21442,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -21341,7 +21471,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -21426,7 +21555,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -21530,6 +21658,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -21556,7 +21687,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -21654,6 +21784,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -21680,7 +21813,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -22129,6 +22261,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -22155,7 +22290,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -22240,7 +22374,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -22344,6 +22477,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -22370,7 +22506,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -22468,6 +22603,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -22494,7 +22632,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -22799,6 +22936,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -22825,7 +22965,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -22910,7 +23049,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -23014,6 +23152,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -23040,7 +23181,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -23138,6 +23278,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -23164,7 +23307,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -23453,6 +23595,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -23479,7 +23624,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -23564,7 +23708,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -23668,6 +23811,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -23694,7 +23840,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -23792,6 +23937,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -23818,7 +23966,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -24107,6 +24254,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -24133,7 +24283,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -24218,7 +24367,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -24322,6 +24470,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -24348,7 +24499,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -24465,6 +24615,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -24491,7 +24644,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -24780,6 +24932,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -24806,7 +24961,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -24891,7 +25045,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -25016,6 +25169,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -25042,7 +25198,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -25181,6 +25336,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -25207,7 +25365,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -25496,6 +25653,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -25522,7 +25682,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -25607,7 +25766,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -25752,6 +25910,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -25778,7 +25939,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -25876,6 +26036,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -25902,7 +26065,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -26191,6 +26353,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -26217,7 +26382,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -26302,7 +26466,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -26406,6 +26569,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -26432,7 +26598,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -26557,6 +26722,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -26583,7 +26751,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -26872,6 +27039,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -26898,7 +27068,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -26983,7 +27152,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -27114,6 +27282,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -27140,7 +27311,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -27238,6 +27408,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -27264,7 +27437,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -27553,6 +27725,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -27579,7 +27754,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -27664,7 +27838,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -27768,6 +27941,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -27794,7 +27970,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -27892,6 +28067,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -27918,7 +28096,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "mid",
@@ -28207,6 +28384,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -28233,7 +28413,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -28318,7 +28497,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -28422,6 +28600,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -28448,7 +28629,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -28546,6 +28726,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -28572,7 +28755,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "negative",
@@ -28861,6 +29043,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -28887,7 +29072,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -28972,7 +29156,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -29076,6 +29259,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -29102,7 +29288,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -29200,6 +29385,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -29226,7 +29414,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": 0.3,
@@ -29515,6 +29702,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -29541,7 +29731,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -29626,7 +29815,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -29730,6 +29918,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -29756,7 +29947,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
@@ -29854,6 +30044,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -29880,7 +30073,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "line",
       },
       "width": 0.05,
       "widthIs": "positive",
@@ -30169,6 +30361,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -30195,7 +30390,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -30280,7 +30474,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -30384,6 +30577,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -30410,7 +30606,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "line",
   },
   "type": "primitive",
   "uid": "",
