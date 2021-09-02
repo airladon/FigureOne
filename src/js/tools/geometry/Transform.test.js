@@ -674,7 +674,7 @@ describe('Transform', () => {
       expect(t).toEqual(round(expected.matrix(), 5));
     });
     test('Zero', () => {
-      const t1 = new Transform().scale(1, 1, 1).rotate('xyz', 1, 1, 1).translate(1, 1, 1);
+      const t1 = new Transform().scale(1, 1, 1).rotate(1, 1, 1, 1).translate(1, 1, 1);
       const t2 = t1.zero();
       expect(t2.isZero()).toBe(true);
     });
