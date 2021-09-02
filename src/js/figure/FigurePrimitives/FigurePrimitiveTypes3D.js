@@ -2,7 +2,7 @@
 import type { TypeGLBufferUsage } from '../DrawingObjects/GLObject/GLObject';
 import type { CPY_Step } from '../geometries/copy/copy';
 import type { TypeParsablePoint } from '../../tools/geometry/Point';
-import type { TypeUserRotationDefinition, TypeParsableTransform } from '../../tools/geometry/Transform';
+import type { TypeParsableTransform } from '../../tools/geometry/Transform';
 import type { TypeColor } from '../../tools/types';
 import type { TypeParsableLine } from '../../tools/geometry/Line';
 import type {
@@ -104,18 +104,24 @@ export type OBJ_Generic3All = {
  *   }),
  *   normals: 'curve',
  *   sides: 50,
- *   transform: ['dir', [0, 1, 0]],
+ *   transform: ['d', 0, 1, 0],
  * });
  * const a = figure.add({
  *   make: 'generic3',
  *   points: [...spherePoints, ...ringPoints],
  *   normals: [...sphereNormals, ...ringNormals],
  *   color: [1, 0, 0, 1],
- *   transform: ['xyz', 0, 0, 0],
+ *   transform: [['r', 0.15, 1, 0, 0], ['r', 0.3, 0, 1, 0]],
  * });
  * // Animate the shape to slowly rotate around the x and y axes
  * a.animations.new()
- *   .rotation({ velocity: ['xyz', 0.15, 0.3, 0], duration: null })
+ *   .custom({
+ *     callback: (t) => {
+ *       a.transform.updateRotation(t * 0.15);
+ *       a.transform.updateRotation(t * 0.3, null, 1);
+ *     },
+ *     duration: null,
+ *   })
  *   .start();
  */
 
@@ -128,7 +134,7 @@ export type OBJ_Generic3 = {
 } & OBJ_Generic3All & OBJ_FigurePrimitive;
 
 /**
- * Sphere shape options object that extends {@link OBJ_Generic3}
+ * Sphere shape options object that extends {@link OBJ_Generic3All}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/sphere.png)
@@ -191,7 +197,7 @@ export type OBJ_Generic3 = {
  *   copy: [
  *     { along: 'rotation', num: 10, step: Math.PI * 2 / 10 },
  *   ],
- *   transform: ['xyz', Math.PI / 2, 0, 0],
+ *   transform: ['r', Math.PI / 2, 1, 0, 0],
  * });
  */
 export type OBJ_Sphere = {
@@ -199,11 +205,10 @@ export type OBJ_Sphere = {
   radius?: number,
   normals?: 'curve' | 'flat',
   center?: TypeParsablePoint,
-  transform?: TypeParsableTransform,
-} & OBJ_FigurePrimitive;
+} & OBJ_Generic3All & OBJ_FigurePrimitive;
 
 /**
- * Cube shape options object that extends {@link OBJ_Generic3}
+ * Cube shape options object that extends {@link OBJ_Generic3All}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/cube.png)
@@ -213,7 +218,6 @@ export type OBJ_Sphere = {
  *
  * @property {number} [side] side length (`1`)
  * @property {TypeParsablePoint} [center] center point (`[0, 0]`)
- * @property {TypeParsableTransform} [transform] transform to apply to all
  * points of cube
  * @property {boolean} [lines] if `true` then points representing
  * the 12 edges of the cube will be returned. If `false`, then points
@@ -256,11 +260,11 @@ export type OBJ_Sphere = {
 export type OBJ_Cube = {
   side?: number,
   center?: TypeParsablePoint,
-  rotation?: TypeUserRotationDefinition,
-} & OBJ_Generic3;
+  lines?: boolean,
+} & OBJ_FigurePrimitive & OBJ_Generic3All;
 
 /**
- * Cylinder shape options object that extends {@link OBJ_Generic3}
+ * Cylinder shape options object that extends {@link OBJ_Generic3All}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/cylinder.png)
@@ -273,7 +277,7 @@ export type OBJ_Cube = {
  * shading (from light source) across a face cone constant.
  * `curve` will gradiate the shading. Use `curve` to make a surface look more
  * round with fewer number of sides. (`flat`)
-* @property {TypeParsableLine | number} [line] line that can position and
+* @property {TypeParsableLine} [line] line that can position and
  * orient the cylinder. First point of line is cylinder base center, and second
  * point is the top center.
  * @property {number} [length] length of the cylinder if `line` isn't
@@ -283,7 +287,6 @@ export type OBJ_Cube = {
  * the second end. (`true`)
  * @property {number} [rotation] rotation of base - this is only noticable for
  * small numbers of sides (`0`)
- * @property {TypeParsableTransform} [transform] transform to apply to all
  * points of cube
  * @property {boolean} [lines] if `true` then points representing
  * the edes of the faces will be returned. If `false`, then points
@@ -353,14 +356,13 @@ export type OBJ_Cylinder = {
   sides?: number,
   radius?: number,
   normals?: 'curve' | 'flat',
-  line?: TypeParsableLine | number,
+  line?: TypeParsableLine,
   length?: number,
   ends?: boolean | 1 | 2,
-  transform?: TypeParsableTransform,
-};
+} & OBJ_FigurePrimitive & OBJ_Generic3All;
 
 /**
- * Cone shape options object that extends {@link OBJ_Generic3}
+ * Cone shape options object that extends {@link OBJ_Generic3All}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/cone.png)
@@ -374,14 +376,13 @@ export type OBJ_Cylinder = {
  * shading across a face cone constant. `curve` will gradiate the shading. Use
  * `curve` to make a surface look more round with fewer number of sides.
  * (`flat`)
- * @property {TypeParsableLine | number} [line] line that can position and
+ * @property {TypeParsableLine} [line] line that can position and
  * orient the cone. First point of line is cone base center, and second point
  * is cone tip.
  * @property {number} [length] length of the cone along the x axis if
  * `line` isn't defined (`1`)
  * @property {number} [rotation] rotation of base - this is only noticable for
  * small numbers of sides (`0`)
- * @property {TypeParsableTransform} [transform] transform to apply to all
  * points of cube
  * @property {boolean} [lines] if `true` then points representing
  * the edes of the faces will be returned. If `false`, then points
@@ -427,15 +428,14 @@ export type OBJ_Cone = {
   sides?: number,
   radius?: number,
   normals?: 'curve' | 'flat',
-  line?: TypeParsableLine | number,
+  line?: TypeParsableLine,
   length?: number,
   rotation?: number,
-  transform?: TypeParsableTransform,
   lines?: boolean,
-};
+} & OBJ_FigurePrimitive & OBJ_Generic3All;
 
 /**
- * Revolve shape options object that extends {@link OBJ_Generic3}
+ * Revolve shape options object that extends {@link OBJ_Generic3All}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/revolve.png)
@@ -463,12 +463,11 @@ export type OBJ_Cone = {
  * plane and sweep around the x axis following the right hand rule. Use
  * `rotation` to start the sweep at some angle where 0º is in the XY for +y and
  * 90º is in the XZ plane for +z. initial angle of the revolve rotation
- * @property {TypeUserRotationDefinition} [axis] orient the final vertices by
- * rotating their definition around the x axis to an arbitrary rotation
+ * @property {TypeParsablePoint} [axis] orient the shape so its axis is along
+ * this vector
  * @property {TypeParsablePoint} [position] offset the final vertices such that
  * the original (0, 0) point in the profile moves to position (this step
  * happens after the rotation)
- * @property {TypeParsableTransform} [transform] apply a final transform to
  * shape
  * @property {boolean} [lines] if `true` then points representing
  * the edes of the faces will be returned. If `false`, then points
@@ -482,7 +481,7 @@ export type OBJ_Cone = {
  * figure.add({
  *   make: 'revolve',
  *   profile: [[0, 0], [0, 0.05], [0.5, 0.05], [0.6, 0.1], [0.7, 0]],
- *   axis: ['dir', 0, 1, 0],
+ *   axis: [0, 1, 0],
  *   color: [1, 0, 0, 1],
  *   sides: 20,
  * });
@@ -505,7 +504,7 @@ export type OBJ_Cone = {
  * figure.add({
  *   make: 'revolve',
  *   profile: [...profile, [0.4, 0]],
- *   axis: ['dir', 0, 1, 0],
+ *   axis: [0, 1, 0],
  *   color: [1, 0, 0, 1],
  *   sides: 30,
  * });
@@ -530,7 +529,7 @@ export type OBJ_Cone = {
  * figure.add({
  *   make: 'revolve',
  *   profile: [[0, 0.03], [0.4, 0.03], [0.4, 0.09], [0.7, 0]],
- *   axis: ['dir', 0, 1, 0],
+ *   axis: [0, 1, 0],
  *   color: [1, 0, 0, 1],
  *   sides: 20,
  *   lines: true,
@@ -540,15 +539,14 @@ export type OBJ_Revolve = {
   sides?: number,
   profile?: Array<TypeParsablePoint>,
   normals?: 'flat' | 'curveProfile' | 'curveRadial' | 'curve',
-  axis?: TypeUserRotationDefinition,
+  axis?: TypeParsablePoint,
   rotation?: number,
   position?: TypeParsablePoint,
-  transform?: TypeParsableTransform,
   lines?: boolean,
-};
+} & OBJ_FigurePrimitive & OBJ_Generic3All;
 
 /**
- * Revolve shape options object that extends {@link OBJ_Generic3}
+ * Revolve shape options object that extends {@link OBJ_Generic3All}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/surface.png)
@@ -568,7 +566,6 @@ export type OBJ_Revolve = {
  * @property {boolean} [closeColumns] Set to `true` if first row and last
  * column are the same, and normals is `'curveColumns'` or `'curve'` to get
  * correct normal calculations (`false`)
- * @property {TypeParsableTransform} [transform] apply a final transform to
  * shape
  * @property {boolean} [lines] if `true` then points representing
  * the edes of the faces will be returned. If `false`, then points
@@ -635,6 +632,5 @@ export type OBJ_Surface = {
   normals?: 'curveColumns' | 'curveRows' | 'curve' | 'flat',
   closeRows?: boolean,
   closeColumns?: boolean,
-  transform?: TypeParsableTransform,
   lines?: boolean,
-};
+} & OBJ_FigurePrimitive & OBJ_Generic3All;

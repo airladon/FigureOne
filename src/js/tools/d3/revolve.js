@@ -5,7 +5,7 @@ import { joinObjects } from '../tools';
 import type { Type3DMatrix } from '../m3';
 // import { getNormal } from '../geometry/Plane';
 import { Transform, getTransform } from '../geometry/Transform';
-import type { TypeParsableTransform, TypeUserRotationDefinition } from '../geometry/Transform';
+import type { TypeParsableTransform } from '../geometry/Transform';
 import {
   getTriangles, getFlatNormals, getCurveNormals, getSurfaceNormals, getLines,
 } from './surface';
@@ -114,8 +114,8 @@ Which means the normals for vertex a1 will be:
  * plane and sweep around the x axis following the right hand rule. Use
  * `rotation` to start the sweep at some angle where 0º is in the XY for +y and
  * 90º is in the XZ plane for +z. initial angle of the revolve rotation
- * @property {TypeUserRotationDefinition} [axis] orient the final vertices by
- * rotating their definition around the x axis to an arbitrary rotation
+ * @property {TypeParsablePoint} [axis] orient the shape so its axis is along
+ * this vector
  * @property {TypeParsablePoint} [position] offset the final vertices such that
  * the original (0, 0) point in the profile moves to position (this step
  * happens after the rotation)
@@ -130,7 +130,7 @@ export type OBJ_RevolvePoints = {
   sides?: number,
   profile?: Array<TypeParsablePoint>,
   normals?: 'flat' | 'curveProfile' | 'curveRadial' | 'curve',
-  axis?: TypeUserRotationDefinition,
+  axis?: TypeParsablePoint,
   rotation?: number,
   position?: TypeParsablePoint,
   transform?: TypeParsableTransform,
@@ -194,8 +194,8 @@ function getLathePoints(o: OBJ_RevolveDefined) {
  *
  * A profile is defined in the XY plane, and then revolved around the x axis.
  *
- * The resulting points can oriented and positioned by defining a rotation and
- * position. The rotation rotates the x axis (around which the profile was
+ * The resulting points can oriented and positioned by defining a axis and
+ * position. The axis directs the x axis (around which the profile was
  * rotated) to any direction. The position then offsets the transformed points
  * in 3D space, there the original (0, 0, [0]) point is translated to
  * (position.x, position.y, position.z)
@@ -214,7 +214,7 @@ function revolve(options: OBJ_RevolvePoints) {
       normals: 'curved',
       ends: true,
       position: [0, 0, 0],
-      axis: 0,
+      axis: [1, 0, 0],
       rotation: 0,
     },
     options,
@@ -229,7 +229,7 @@ function revolve(options: OBJ_RevolvePoints) {
   const {
     sides, profile, rotation,
   } = o;
-  const matrix = new Transform().rotate(o.axis).matrix();
+  const matrix = new Transform().direction(o.axis).matrix();
 
   const defined = {
     sides,

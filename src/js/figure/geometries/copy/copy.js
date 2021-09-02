@@ -320,7 +320,7 @@ function copyAngle(
   for (let i = 1; i < options.num + 1; i += 1) {
     const matrix = new Transform()
       .translate(-center.x, -center.y)
-      .rotate(['axis', options.axis, i * options.step])
+      .rotate(i * options.step, getPoint(options.axis))
       .translate(center.x, center.y)
       .matrix();
     out = [...out, ...pointsToCopy.map(p => p.transformBy(matrix))];

@@ -46,7 +46,7 @@ export type TypeTransformRotation = ['r', number, number, number, number];
  * This is equivalent to an axis rotation where the axis is the normal
  * to the plane formed by [1, 0, 0] and `d`
  *
- * `['ra', number, number, number]`
+ * `['d', number, number, number]`
  */
 export type TypeTransformDirection = ['d', number, number, number];
 
@@ -1380,11 +1380,11 @@ function parseTransformDef(
       } else if (tToUse[i][0] === 'bb' && typeof tToUse[i][1] !== 'number') { // $FlowFixMe
         def.push(['bb', ...parseBasisObject(tToUse[i][1]), ...parseBasisObject(tToUse[i][2])]); // $FlowFixMe
       } else if (tToUse[i][0] === 'r' && tToUse[i].length === 2) {  // $FlowFixMe
-        def.push(['r', tToUse[i][1], 0, 0, 1]);
+        def.push(['r', tToUse[i][1], 0, 0, 1]);  // $FlowFixMe
       } else if (tToUse[i][0] === 's' && tToUse[i].length === 2) {  // $FlowFixMe
-        def.push(['s', tToUse[i][1], tToUse[i][1], tToUse[i][1]]);
+        def.push(['s', tToUse[i][1], tToUse[i][1], tToUse[i][1]]);  // $FlowFixMe
       } else if (tToUse[i][0] === 's' && tToUse[i].length === 3) {  // $FlowFixMe
-        def.push(['s', tToUse[i][1], tToUse[i][2], 1]);
+        def.push(['s', tToUse[i][1], tToUse[i][2], 1]);  // $FlowFixMe
       } else if (tToUse[i][0] === 't' && tToUse[i].length === 3) {  // $FlowFixMe
         def.push(['t', tToUse[i][1], tToUse[i][2], 0]);
       } else { // $FlowFixMe

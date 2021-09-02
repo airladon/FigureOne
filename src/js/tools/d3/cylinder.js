@@ -16,7 +16,7 @@ import type { TypeParsableTransform } from '../geometry/Transform';
  * shading (from light source) across a face cone constant.
  * `curve` will gradiate the shading. Use `curve` to make a surface look more
  * round with fewer number of sides. (`flat`)
-* @property {TypeParsableLine | number} [line] line that can position and
+ * @property {TypeParsableLine} [line] line that can position and
  * orient the cylinder. First point of line is cylinder base center, and second
  * point is the top center.
  * @property {number} [length] length of the cylinder if `line` isn't
@@ -37,7 +37,7 @@ export type OBJ_CylinderPoints = {
   sides?: number,
   radius?: number,
   normals?: 'curve' | 'flat',
-  line?: TypeParsableLine | number,
+  line?: TypeParsableLine,
   length?: number,
   ends?: boolean | 1 | 2,
   transform?: TypeParsableTransform,
@@ -79,7 +79,7 @@ export default function cylinder(options: OBJ_CylinderPoints) {
     sides,
     rotation,
     normals: normals === 'curve' ? 'curveRadial' : 'flat',
-    axis: ['dir', line.unitVector()],
+    axis: line.unitVector().toArray(),
     position: line.p1,
     profile,
     transform,

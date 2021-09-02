@@ -12,12 +12,12 @@ import { revolve } from './revolve';
  * will be created.
  *
  * @property {number} [sides] number of sides (`10`)
- * @property {number} [radius] radius of cube base
+ * @property {number} [radius] radius of cone base
  * @property {'curve' | 'flat'} [normals] `flat` normals will make light
  * shading across a face cone constant. `curve` will gradiate the shading. Use
  * `curve` to make a surface look more round with fewer number of sides.
  * (`flat`)
- * @property {TypeParsableLine | number} [line] line that can position and
+ * @property {TypeParsableLine} [line] line that can position and
  * orient the cone. First point of line is cone base center, and second point
  * is cone tip.
  * @property {number} [length] length of the cone along the x axis if
@@ -35,7 +35,7 @@ export type OBJ_ConePoints = {
   sides?: number,
   radius?: number,
   normals?: 'curve' | 'flat',
-  line?: TypeParsableLine | number,
+  line?: TypeParsableLine,
   length?: number,
   rotation?: number,
   transform?: TypeParsableTransform,
@@ -84,7 +84,7 @@ export default function cone(options: OBJ_ConePoints) {
     sides,
     rotation,
     normals: normals === 'curve' ? 'curveRadial' : 'flat',
-    axis: ['dir', line.unitVector()],
+    axis: line.unitVector().toArray(),
     position: line.p1,
     profile,
     transform,
