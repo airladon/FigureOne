@@ -122,6 +122,9 @@ FigureElementPrimitive {
           Array [
             "r",
             0,
+            0,
+            0,
+            1,
           ],
           Array [
             "t",
@@ -148,7 +151,6 @@ FigureElementPrimitive {
           0,
           1,
         ],
-        "name": "text",
       },
       "xAlign": "left",
       "yAlign": "baseline",
@@ -556,6 +558,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -582,7 +587,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "text",
   },
   "lastDrawTime": 0,
   "lengthToDraw": -1,
@@ -667,7 +671,6 @@ FigureElementPrimitive {
         0,
         1,
       ],
-      "name": "",
     },
   ],
   "pointsDefinition": Object {},
@@ -904,6 +907,9 @@ FigureElementPrimitive {
       Array [
         "r",
         0,
+        0,
+        0,
+        1,
       ],
       Array [
         "t",
@@ -930,7 +936,6 @@ FigureElementPrimitive {
       0,
       1,
     ],
-    "name": "text",
   },
   "type": "primitive",
   "uid": "0000000000",
