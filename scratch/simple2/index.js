@@ -252,15 +252,47 @@ pan.notifications.add('setTransform', () => {
   //   deltaY = 0;
   // }
   // console.log(angleToLock);
-  // if (deltaY < 0) {
-  //   const angleToLock = Math.abs(Fig.tools.g2.threePointAngleMin(verticalAxis, lookAt, position));
-  //   console.log(angleToLock)
-  //   deltaY = Math.max(-angleToLock + 0.1, deltaY);
+  let deltaAngle = 0.001;
+  let angleToLock = Math.abs(Math.acos(
+    position.sub(lookAt).normalize()
+      .dotProduct(lookAt.add(verticalAxis).normalize()),
+  ));
+  // if (angleToLock > Math.PI / 2) {
+  //   angleToLock = Math.PI - angleToLock;
   // }
-  // if (angleToLock < -0.99 && deltaY < 0) {
-  //   deltaY = 0;
-  // }
-  const matrix = new Fig.Transform().rotate(deltaX, panAxis).rotate(deltaY, tiltAxis).matrix();
+  
+  // console.log(angleToLock)
+  if (deltaY < 0 && angleToLock < Math.PI / 2) {
+    // let angleToLock = Math.abs(Math.acos(
+    //   position.sub(lookAt).normalize()
+    //     .dotProduct(lookAt.add(verticalAxis).normalize()),
+    // ));
+    // if (angleToLock > Math.PI / 2) {
+    //   angleToLock = Math.PI - angleToLock;
+    // }
+    if (deltaY < -angleToLock + deltaAngle) {
+      deltaY = -angleToLock + deltaAngle + 0.001;
+    }
+    // deltaY = Fig.tools.math.round(Math.max(-angleToLock + deltaAngle, deltaY), 4);
+    // console.log(angleToLock, deltaY)
+  }
+  if (deltaY > 0 && angleToLock > Math.PI / 2) {
+    // let angleToLock = Math.abs(Math.acos(
+    //   position.sub(lookAt).normalize()
+    //     .dotProduct(lookAt.add(verticalAxis).normalize()),
+    // ));
+    // if (angleToLock > Math.PI / 2) {
+      angleToLock = Math.PI - angleToLock;
+    // }
+    deltaY = Fig.tools.math.round(Math.min(angleToLock - deltaAngle, deltaY), 4);
+  }
+  const t = [['r', deltaX, ...panAxis.toArray()]];
+  if (deltaY > 0.0001 || deltaY < -0.0001) {
+    t.push(['r', deltaY, ...tiltAxis.toArray()]);
+  }
+  // console.log(deltaX, deltaY)
+  // const matrix = new Fig.Transform().rotate(deltaX, panAxis).rotate(deltaY, tiltAxis).matrix();
+  const matrix = Fig.getTransform(t).matrix();
   const newPosition = position.transformBy(matrix);
 
   figure.scene.setCamera({
