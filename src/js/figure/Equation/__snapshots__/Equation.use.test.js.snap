@@ -566,10 +566,10 @@ FigureElementPrimitive {
     "mat": Array [
       0.45,
       0,
-      3.8875,
+      3.865,
       0,
       0.45,
-      3.95725,
+      3.9370000000000003,
       0,
       0,
       1,
@@ -589,8 +589,8 @@ FigureElementPrimitive {
       Translation {
         "_type": "point",
         "name": "text",
-        "x": 1.8875,
-        "y": 1.9572500000000002,
+        "x": 1.865,
+        "y": 1.937,
       },
       Scale {
         "_type": "point",
@@ -1024,10 +1024,10 @@ FigureElementPrimitive {
     "mat": Array [
       0.45,
       0,
-      1.8875,
+      1.865,
       0,
       0.45,
-      1.9572500000000002,
+      1.937,
       0,
       0,
       1,
@@ -1047,8 +1047,8 @@ FigureElementPrimitive {
       Translation {
         "_type": "point",
         "name": "text",
-        "x": 1.8875,
-        "y": 1.9572500000000002,
+        "x": 1.865,
+        "y": 1.937,
       },
     ],
   },
