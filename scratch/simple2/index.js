@@ -291,8 +291,8 @@ pan.notifications.add('setTransform', () => {
   // Method 2
   const verticalAxis = Fig.getPoint([0, 1, 0]);
   const panAxis = verticalAxis;
-  const tiltAxis = lookAt.sub(position).crossProduct(up).normalize();
-  // const tiltAxis = verticalAxis.crossProduct(position.sub(lookAt));
+  // const tiltAxis = lookAt.sub(position).crossProduct(up).normalize();
+  const tiltAxis = verticalAxis.crossProduct(position.sub(lookAt)).normalize();
   // const tiltAxis = verticalAxis.crossProduct([position.x, 0, position.z]);
   // const angleToLock = position.sub(lookAt).normalize().dotProduct(lookAt.add(verticalAxis).normalize());
   // console.log(angleToLock)
@@ -300,11 +300,12 @@ pan.notifications.add('setTransform', () => {
   //   deltaY = 0;
   // }
   // console.log(angleToLock);
-  let deltaAngle = 0.05;
+  let deltaAngle = 0.001;
   let angleToLock = Math.abs(Math.acos(
     position.sub(lookAt).normalize()
       .dotProduct(lookAt.add(verticalAxis).normalize()),
   ));
+  // console.log(angleToLock)
   // if (angleToLock > Math.PI / 2) {
   //   angleToLock = Math.PI - angleToLock;
   // }
@@ -343,15 +344,19 @@ pan.notifications.add('setTransform', () => {
   // const matrix = new Fig.Transform().rotate(deltaX, panAxis).rotate(deltaY, tiltAxis).matrix();
   const matrix = Fig.getTransform(t).matrix();
   // const newPosition = position.transformBy(matrix);
-  const newPosition = dt(position, deltaEl, tiltAxis, deltaAz, panAxis);
+  // const newPosition = dt(position, deltaEl, tiltAxis, deltaAz, panAxis);
+  // const newUp = dt(up, deltaEl, tiltAxis, deltaAz, panAxis);
+  const newPosition = dt(position, deltaAz, panAxis, deltaEl, tiltAxis);
+  const newUp = dt(up, deltaAz, panAxis, deltaEl, tiltAxis);
 
 
-  // console.log('before', tiltAxis.round(2).toArray(), position.round(5).toArray())
+  // console.log('before', tiltAxis.round(2).toArray(), position.round(5).toArray(), lookAt.sub(position).round(4).toArray())
 
   figure.scene.setCamera({
     position: newPosition,
+    // up: newUp,
   });
   pan.transform.updateTranslation([0, 0, 0]);
 
-  // console.log('after', lookAt.sub(Fig.getPoint(figure.scene.camera.position)).crossProduct(up).normalize().round(2).toArray(), newPosition.round(5).toArray())
+  // console.log('after', lookAt.sub(Fig.getPoint(figure.scene.camera.position)).crossProduct(up).normalize().round(2).toArray(), newPosition.round(5).toArray(), lookAt.sub(newPosition).round(4).toArray())
 });
