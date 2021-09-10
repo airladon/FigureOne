@@ -356,7 +356,8 @@ Rotation can only happen with some rotation transform elements:
  * limit movement within
  * @property {Plane} plane movement plane
  * @property {TypeTransformValue} maxVelocity maximum velocity allowed (5)
- * @property {OBJ_ElementMoveFreely} freely free movement parameters
+ * @property {OBJ_ElementMoveFreely} freely free movement parameters - use
+ * false for disabling free movement after touch up
  * @property {FigureElement | null | string} element
  */
 export type OBJ_ElementMove = {
@@ -364,7 +365,7 @@ export type OBJ_ElementMove = {
   bounds: RectBounds | LineBounds | RangeBounds | null,
   plane: Plane,
   maxVelocity: number | TypeParsablePoint;
-  freely: OBJ_ElementMoveFreely,
+  freely: OBJ_ElementMoveFreely | false,
   element: FigureElement | null | string;
 };
 /* eslint-enable max-len */
@@ -1071,6 +1072,7 @@ class FigureElement {
     if (this.isMovable) {
       this.setMovable();
     }
+    this.notifications.publish('setFigure');
   }
 
   setTimeDelta(delta: number) {
@@ -1083,6 +1085,13 @@ class FigureElement {
     if (this.state.movement.previousTime != null) {
       this.state.movement.previousTime += delta;
     }
+  }
+
+  getRootElement() {
+    if (this.parent != null) {
+      return this.parent.getRootElement();
+    }
+    return null;
   }
 
   getScene() {
@@ -1645,6 +1654,7 @@ class FigureElement {
   // Once the velocity goes to zero, this metho will stop the element moving
   // freely.
   nextMovingFreelyFrame(now: number): void {
+    this.notifications.publish('beforeMoveFreely');
     // If the element is moving freely, then calc it's next velocity and
     // transform. Save the new velocity into state.movement and return the
     // transform.
@@ -1914,16 +1924,19 @@ class FigureElement {
   decelerate(deltaTime: number | null = null): Object {
     const { bounds } = this.move;
     let next;
-    const { type } = this.move;
+    const { type, freely } = this.move;
+    if (typeof freely === 'boolean') {
+      return;
+    }
     if (type === 'position' || type === 'translation') {
       next = decelerateVector( // $FlowFixMe
         this.transform.t(), // $FlowFixMe
         this.state.movement.velocity,
-        this.move.freely.deceleration,
+        freely.deceleration,
         deltaTime,  // $FlowFixMe
         bounds,
-        this.move.freely.bounceLoss,
-        this.move.freely.zeroVelocityThreshold,
+        freely.bounceLoss,
+        freely.zeroVelocityThreshold,
       );
       return {
         velocity: next.velocity, value: next.position, duration: next.duration,
@@ -1950,11 +1963,11 @@ class FigureElement {
     return decelerateValue( // $FlowFixMe
       current, // $FlowFixMe
       this.state.movement.velocity,
-      this.move.freely.deceleration,
+      freely.deceleration,
       deltaTime,  // $FlowFixMe
       bounds,
-      this.move.freely.bounceLoss,
-      this.move.freely.zeroVelocityThreshold,
+      freely.bounceLoss,
+      freely.zeroVelocityThreshold,
     );
   }
 
@@ -2066,6 +2079,7 @@ class FigureElement {
   moved(
     value: Point | number,
   ): void {
+    this.notifications.publish('beforeMove');
     const previousValue = this.getMovement(this.transform);
     // $FlowFixMe
     this.calcVelocity(previousValue, value);
@@ -2135,7 +2149,10 @@ class FigureElement {
       return;
     }
     const next = nextValue;
-
+    const { freely } = this.move;
+    if (typeof freely === 'boolean') {
+      return;
+    }
     let v;
     if (typeof next === 'number' && typeof prevValue === 'number') {
       v = (next - prevValue) / deltaTime;
@@ -2144,7 +2161,7 @@ class FigureElement {
         return;
       }
       const d = v / Math.abs(v);
-      if (Math.abs(v) <= this.move.freely.zeroVelocityThreshold) {
+      if (Math.abs(v) <= freely.zeroVelocityThreshold) {
         v = 0;
       } // $FlowFixMe
       v = Math.min(Math.abs(v), this.move.maxVelocity);
@@ -2152,7 +2169,7 @@ class FigureElement {
     } else { // $FlowFixMe
       v = next.sub(prevValue).scale(1 / deltaTime);
       const vMag = v.length();
-      if (vMag <= this.move.freely.zeroVelocityThreshold) {
+      if (vMag <= freely.zeroVelocityThreshold) {
         v = new Point(0, 0, 0); // $FlowFixMe
       } else if (vMag > this.move.maxVelocity) {
         v = v.normalize().scale(this.move.maxVelocity);
@@ -2173,6 +2190,9 @@ class FigureElement {
   startMovingFreely(callback: ?(string | ((boolean) => void)) = null): void {
     this.animations.cancelAll('freeze');
     this.stopBeingMoved();
+    if (this.move.freely === false) {
+      return;
+    }
     if (callback) {
       this.move.freely.callback = callback;
     }
@@ -2207,6 +2227,9 @@ class FigureElement {
 
   stopMovingFreely(how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel'): void {
     if (how === 'animateToComplete') {
+      return;
+    }
+    if (typeof this.move.freely === 'boolean') {
       return;
     }
     let wasMovingFreely = false;
@@ -3549,7 +3572,11 @@ class FigureElement {
       this.move.element = element;
     }
     if (freely != null) {
-      joinObjects(this.move.freely, freely);
+      if (freely === false) {
+        this.move.freely = false;
+      } else {
+        joinObjects(this.move.freely, freely);
+      }
     }
   }
 
@@ -4448,6 +4475,14 @@ class FigureElementCollection extends FigureElement {
     throw new Error(`Element ${this.getPath()} is not attached to a parent with a canvas`);
   }
 
+  getRootElement() {
+    const e = super.getRootElement();
+    if (e == null) {
+      return this;
+    }
+    return e;
+  }
+
   _dup(exceptions: Array<string> = []) {
     const collection = new FigureElementCollection({
     });
@@ -4812,6 +4847,7 @@ class FigureElementCollection extends FigureElement {
       cylinder: shapes.cylinder.bind(shapes),
       cube: shapes.cube.bind(shapes),
       prism: shapes.prism.bind(shapes),
+      cameraControl: shapes.cameraControl.bind(shapes),
       arrow: shapes.arrow.bind(shapes),
       line: shapes.line.bind(shapes),
       star: shapes.star.bind(shapes),
