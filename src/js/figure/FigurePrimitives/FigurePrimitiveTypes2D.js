@@ -669,7 +669,7 @@ export type OBJ_Rectangle = {
   corner?: OBJ_CurvedCorner,
   line?: OBJ_LineStyleSimple,
   drawBorderBuffer?: TypeParsableBorder | number,
-  offset: TypeParsablePoint,
+  offset?: TypeParsablePoint,
 } & OBJ_Generic;
 
 export type OBJ_Rectangle_Defined = {
