@@ -119,15 +119,15 @@ FigureOne provides two simple lighting options:
 
 In two dimensions, polygon borders are used to define the borders within which figure elements can be touched. Polygon borders are useful as arbitrary touch borders can be selected that are unrelated to the shape drawn to the screen.
 
-In three dimensions, defining volumes in which to select becomes challening, both to define the volumes and to decide which volume was selected in a quick time on slower client devices.
+In three dimensions, defining volumes in which to select becomes challenging, both to define the volumes and to decide which volume was selected in a quick time on slower client devices.
 
-Therefore, selection of 3D objects is performed by FigureOne by:
+Therefore, selection of 3D objects is performed in FigureOne by:
  * Rendering each touchable element into a temporary texture
  * Each element is rendered with a unique color
  * The temporary texture pixels are mapped to the screen pixels and the corresponding touched pixel found
  * The color of the pixel touched is mapped to the figure element with that color
 
-This method is performant, simple (as complex touch volumes don't need to be defined), and will automatically handle depth - elements in front of other elements relative to the camera will be selected.
+This method is common, performant, simple (as complex touch volumes don't need to be defined), and will automatically handle depth - elements in front of other elements relative to the camera will be selected.
 
 When a larger touch border is required for a 3D element, use the `touch` property to scale the element in the temporary texture.
 
@@ -135,17 +135,77 @@ When debugging, the `figure.showTouchable()` method can be used to render the te
 
 #### Move Interactivity
 
-Once an object is selected, it can be moved. In two dimensions this simply means moving the objects in the  XY plane.
+Once an object is selected, it can be moved. In two dimensions this simply means moving the objects in the XY plane.
 
 But in three dimensions a choice needs to be made about how a mouse of finger movement on a 2D screen translates to a movement in 3D space.
 
 The default way to do this in FigureOne is to use a movement plane (`element.move.plane`). FigureOne will automatically project a movement on the screen onto this plane and move the element accordingly.
 
+For example, to create a cube that can be translated in the YZ plane:
+
+```js
+const figure = new Fig.Figure();
+figure.scene.setProjection({ style: 'orthographic' });
+figure.scene.setCamera({ position: [2, 1, 1], up: [0, 1, 0] });
+figure.scene.setLight({ directional: [0.7, 0.5, 0.2] });
+
+// Add x, y, z axis and a grid in the XZ plane which will help show how
+// the cube is moving
+figure.add([
+  {
+    make: 'cylinder',
+    radius: 0.01,
+    color: [1, 0, 0, 1],
+    line: [[-1, 0, 0], [1, 0, 0]],
+  },
+  {
+    make: 'cylinder',
+    radius: 0.01,
+    color: [0, 1, 0, 1],
+    line: [[0, -1, 0], [0, 1, 0]],
+  },
+  {
+    make: 'cylinder',
+    radius: 0.01,
+    color: [0, 0, 1, 1],
+    line: [[0, 0, -1], [0, 0, 1]],
+  },
+  {
+    make: 'grid',
+    bounds: [-0.8, -0.8, 1.6, 1.6],
+    xStep: 0.05,
+    yStep: 0.05,
+    line: { width: 0.002 },
+    color: [0.7, 0.7, 0.7, 1],
+    transform: ['r', Math.PI / 2, 0, 1, 0],
+  },
+]);
+
+figure.add({
+  make: 'cube',
+  side: 0.3,
+  color: [1, 0, 0, 1],
+  move: {
+    plane: [[0, 0, 0], [1, 0, 0]],
+  },
+});
+```
+![](./tutorials/shapes3d/xztranslate.gif)
+
+In comparison, a cube that can be rotated around the y axis would be:
+
+>> Note: FigureOne rotates 3D objects with fingers in 
+
+
 #### Rotation
 
-The only information needed for a 2D rotation is the magnitude of rotation and direction. The axis is always the same, out of the page (z axis).
+The only information needed for a 2D rotation is the magnitude of rotation and direction. The rotation axis is always along the z axis.
 
-In three dimensions however, a rotation can be around any arbitrary axis. Rotations can also be thought of in different ways that may be more or less convenient for a given
+In three dimensions however, a rotation can be around any arbitrary axis.
+
+
+
+
 In 3D, a two dimensional rotation is a rotation around the z axis, where using the right hand rule a positive rotation is anti-clockwise and a negative rotation is clockwise.
 
 
