@@ -4,7 +4,7 @@ import {
   Point, // Rect, getBoundingRect,
 } from '../../tools/g2';
 import type { Type3DMatrix } from '../../tools/m3';
-import type Scene from '../../tools/scene';
+import type Scene from '../../tools/geometry/scene';
 // import type {
 //   TypeParsablePoint
 // } from '../../tools/g2';
