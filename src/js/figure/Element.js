@@ -8,8 +8,8 @@ import {
   getBoundingBorder, isBuffer, getBorder, decelerateVector, decelerateValue,
   getPlane, Plane,
 } from '../tools/g2';
-import Scene from '../tools/scene';
-import type { OBJ_Scene } from '../tools/scene';
+import Scene from '../tools/geometry/scene';
+import type { OBJ_Scene } from '../tools/geometry/scene';
 import { round } from '../tools/math';
 import { getState } from './Recorder/state';
 import type {

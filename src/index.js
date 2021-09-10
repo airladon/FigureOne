@@ -17,7 +17,7 @@ import * as lines from './js/figure/geometries/lines/lines';
 import {
   FigureElement, FigureElementPrimitive, FigureElementCollection,
 } from './js/figure/Element';
-import Scene from './js/tools/scene';
+import Scene from './js/tools/geometry/scene';
 import DrawContext2D from './js/figure/DrawContext2D';
 import WebGLInstance from './js/figure/webgl/webgl';
 import DrawingObject from './js/figure/DrawingObjects/DrawingObject';

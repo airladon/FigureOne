@@ -61,7 +61,7 @@ import type {
 import { getBufferBorder } from '../geometries/buffer';
 import type TimeKeeper from '../TimeKeeper';
 import type { Recorder } from '../Recorder/Recorder';
-import Scene from '../../tools/scene';
+import Scene from '../../tools/geometry/scene';
 import type {
   OBJ_LineStyleSimple, OBJ_GenericGL, OBJ_Morph,
 } from './FigurePrimitiveTypes';

@@ -5,8 +5,8 @@ import {
   Point, Transform, getRect,
   getPoint,
 } from '../tools/g2';
-import Scene from '../tools/scene';
-import type { OBJ_Scene } from '../tools/scene';
+import Scene from '../tools/geometry/scene';
+import type { OBJ_Scene } from '../tools/geometry/scene';
 // import * as m3 from '../tools/m3';
 import type { TypeParsableRect, TypeParsablePoint } from '../tools/g2';
 import type { Type3DMatrix } from '../tools/m3';

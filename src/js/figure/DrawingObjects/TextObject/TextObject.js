@@ -7,7 +7,7 @@ import {
   Point, getPoint, Rect, getBoundingBorder, getBorder, isBuffer,
 } from '../../../tools/g2';
 import type { TypeParsablePoint, TypeParsableBuffer } from '../../../tools/g2';
-import type Scene from '../../../tools/scene';
+import type Scene from '../../../tools/geometry/scene';
 import type { Type3DMatrix } from '../../../tools/m3';
 import DrawingObject from '../DrawingObject';
 import DrawContext2D from '../../DrawContext2D';

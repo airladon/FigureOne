@@ -8,7 +8,7 @@ import type { TypeGLUniform, TypeGLBufferType, TypeGLBufferUsage } from '../Draw
 import type {
   TypeColor, TypeDash,
 } from '../../tools/types';
-import type Scene, { OBJ_Scene } from '../../tools/scene';
+import type Scene, { OBJ_Scene } from '../../tools/geometry/scene';
 import type { TypeVertexShader, TypeFragmentShader } from '../webgl/shaders';
 
 

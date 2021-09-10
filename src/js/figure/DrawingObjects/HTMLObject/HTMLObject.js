@@ -9,7 +9,7 @@ import DrawingObject from '../DrawingObject';
 import type { TypeColor } from '../../../tools/types';
 import * as m3 from '../../../tools/m3';
 import type { Type3DMatrix } from '../../../tools/m3';
-import type Scene from '../../../tools/scene';
+import type Scene from '../../../tools/geometry/scene';
 
 
 class HTMLObject extends DrawingObject {

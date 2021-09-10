@@ -4,7 +4,7 @@
 // import { round } from '../../../tools/math';
 import * as m3 from '../../../tools/m3';
 // import type Scene from '../../Figure';
-import Scene from '../../../tools/scene';
+import Scene from '../../../tools/geometry/scene';
 import type { Type3DMatrix } from '../../../tools/m3';
 import WebGLInstance from '../../webgl/webgl';
 import type { TypeFragmentShader, TypeVertexShader } from '../../webgl/shaders';
