@@ -1404,6 +1404,116 @@ export default class FigurePrimitives {
   }
 
   /**
+   * {@link FigureElementPrimitive} that can control camera position.
+   * @see {@link OBJ_CameraControl} for options and examples.
+   */
+  cameraControl(...options: Array<OBJ_CameraControl>) {
+    const o = joinObjects({
+      left: 0,
+      bottom: 0,
+      width: 1,
+      height: 1,
+      scene: null,
+      color: [0, 0, 0, 0],
+      axis: [0, 1, 0],
+      sensitivity: 5,
+      xSensitivity: 1,
+      ySensitivity: 1,
+    }, ...options);
+    const element = this.rectangle({
+      width: o.width,
+      height: o.height,
+      position: [o.left, o.bottom],
+      xAlign: 'left',
+      yAlign: 'bottom',
+      move: true,
+      color: o.color,
+    });
+    element.custom.sceneToChange = o.scene;
+    element.scene = new Scene({
+      style: '2D',
+      left: 0,
+      right: 1,
+      bottom: 0,
+      top: 1,
+    })
+    element.notifications.add('beforeMove', () => {
+      element.custom.position = element.getPosition();
+      element.custom.moving = true;
+    })
+    element.notifications.add('beforeMoveFreely', () => {
+      element.custom.position = element.getPosition();
+      element.custom.moving = true;
+    })
+    element.notifications.add('setTransform', () => {
+      if (element.custom.moving === false) {
+        return;
+      }
+      if (
+        element.custom.sceneToChange == null
+        || typeof element.custom.sceneToChange === 'string'
+      ) {
+        if (element.figure != null) {
+          if (element.custom.sceneToChange == null && element.parent != null) {
+            element.custom.sceneToChange = element.parent.getScene();
+          }
+          if (typeof element.custom.sceneToChange === 'string') {
+            const rootElement = element.getRootElement();
+            if (rootElement != null) {
+              const e = rootElement.getElement(element.custom.sceneToChange);
+              if (e != null) {
+                element.custom.sceneToChange = e.getScene();
+              }
+            }
+          }
+        }
+      }
+      // const screenWidth = element.drawingObject.gl.canvas.width;
+      // const screenHeight = element.drawingObject.gl.canvas.height;
+      // const aspectRatio = screenWidth / screenHeight;
+      const scene = element.custom.sceneToChange;
+      const delta = element.getPosition().sub(element.custom.position);
+      const deltaX = -delta.x * o.sensitivity * o.xSensitivity;
+      let deltaY = delta.y * o.sensitivity * o.ySensitivity; // * aspectRatio;
+      const lookAt = getPoint(scene.camera.lookAt);
+      const up = getPoint(scene.camera.up);
+      const position = getPoint(scene.camera.position);
+
+      let deltaAz = deltaX;
+      let deltaEl = deltaY;
+
+      const verticalAxis = getPoint(o.axis);
+      const panAxis = verticalAxis;
+      const tiltAxis = verticalAxis.crossProduct(position.sub(lookAt)).normalize();
+      const deltaAngle = 0.001;
+      let angleToLock = Math.abs(Math.acos(
+        position.sub(lookAt).normalize()
+          .dotProduct(lookAt.add(verticalAxis).normalize()),
+      ));
+      if (deltaEl < 0 && angleToLock < Math.PI / 2) {
+        if (deltaEl < -angleToLock + deltaAngle) {
+          deltaEl = -angleToLock + deltaAngle;
+        }
+      }
+      if (deltaEl > 0 && angleToLock > Math.PI / 2) {
+        angleToLock = Math.PI - angleToLock;
+        deltaEl = tools.round(Math.min(angleToLock - deltaAngle, deltaEl), 4);
+      }
+      const t = [['r', deltaEl, ...tiltAxis.toArray()], ['r', deltaAz, ...panAxis.toArray()]];
+      const matrix = getTransform(t).matrix();
+      const newPosition = position.transformBy(matrix);
+
+
+      scene.setCamera({
+        position: newPosition,
+      });
+      element.transform.updateTranslation(element.custom.position);
+      element.custom.moving = false;
+    });
+    return element;
+  }
+
+  /**
    * {@link FigureElementPrimitive} that draws an ellipse.
    * @see {@link OBJ_Ellipse} for options and examples.
    */

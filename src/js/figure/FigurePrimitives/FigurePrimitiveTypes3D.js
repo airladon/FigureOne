@@ -2,7 +2,7 @@
 import type { TypeGLBufferUsage } from '../DrawingObjects/GLObject/GLObject';
 import type { CPY_Step } from '../geometries/copy/copy';
 import type { TypeParsablePoint } from '../../tools/geometry/Point';
-import type { TypeParsableTransform } from '../../tools/geometry/Transform';
+import type Scene from '../../tools/geometry/scene';
 import type { TypeColor } from '../../tools/types';
 import type { TypeParsableLine } from '../../tools/geometry/Line';
 import type {
@@ -546,8 +546,7 @@ export type OBJ_Revolve = {
 } & OBJ_FigurePrimitive & OBJ_Generic3D;
 
 /**
- * Revolve shape options object that extends {@link OBJ_Generic3D}
- * and {@link OBJ_FigurePrimitive}
+ * Revolve shape options object ≈
  *
  * ![](./apiassets/surface.png)
  *
@@ -634,3 +633,174 @@ export type OBJ_Surface = {
   closeColumns?: boolean,
   lines?: boolean,
 } & OBJ_FigurePrimitive & OBJ_Generic3D;
+
+/**
+ * Camera control definition object that extends
+ * and {@link OBJ_FigurePrimitive}
+ *
+ * A camera control is a transparent rectangle that uses touch and drag
+ * gestures to rotate the position of the camera in a 3D scene around a vertical
+ * axis.
+ *
+ * The vertical axis will always remain vertical. Left/right movements will
+ * rotate the scene around the vertical axis (in the azimuth of the vertical
+ * axis), while up/down movements will change the elevation relative to the
+ * vertical axis.
+ *
+ * The transparent rectangle will be positioned relative to the 2D HTML canvas
+ * the figure is drawn in on the screen. The `left`, `bottom`, `width` and
+ * `height` properties are numbers from 0 to 1 which represent percentage of
+ * the screen width and height.
+ *
+ * Thus for the rectangle to cover the entire screen, values of `left: 0`,
+ * `bottom: 0`, `width: 1` and `height: 1` would be used (these are the default
+ * values as well).
+ *
+ * By default, the figure's {@link Scene} camera position is modified. If an
+ * element's custom scene is to be controlled, use the `scene` property to link
+ * to it.
+ *
+ * How fast the camera is rotated in the aziumuth and elevation is controlled by
+ * the `sensitivity`, `xSensitivity` and `ySensitivity` properties.
+ * A higher sensitivity value will result in more rotation for the same user
+ * movement. If only azimuthal or elevation rotation is desired set
+ * `ySensitivity` or `xSensitivity` to 0 respectively.
+ *
+ * @property {number} [left] screen left position to place the control
+ * rectangle. 0 is the left edge, while 1 is the right edge (`0`).
+ * @property {number} [bottom] screen bottom position to place the control
+ * rectangle. 0 is the bottom edge, while 1 is the top edge (`0`).
+ * @property {number} [width] width of control rectangle. 1 is the full
+ * width of the drawing canvas (`1`).
+ * @property {number} [height] height of control rectangle. 1 is the full
+ * height of the drawing canvas (`1`).
+ * @property {TypeParsablePoint} [axis] Axis to keep vertical as camera is
+ * rotated. The axis vector and scene.camera.up vector should be in the same
+ * plane (`[0, 1, 0]`)
+ * @property {Scene | string} [scene] Use this to constrol a scene that is not
+ * the default Figure scene.
+ * @property {number} sensitivity sensitivity of camera position relative to
+ * user movement where larger numbers result in more rotation for the same
+ * movement (`5`)
+ * @property {number} xSensitivity sensitivity to a horizontal user movement.
+ * Setting this to 0 will mean the scene doesn't not rotate aziumthally (`1`)
+ * @property {number} ySensitivity sensitivity to a vertical user movement.
+ * Setting this to 0 will mean the elevation does not change (`1`)
+ *
+ * @example
+ * // Add a camera control that will cover the whole screen
+ *
+ * // Create a figure and add some shapes to view.
+ * const figure = new Fig.Figure();
+ * figure.scene.setProjection({ style: 'orthographic' });
+ * figure.scene.setCamera({ position: [2, 1, 1], up: [0, 1, 0] });
+ * figure.scene.setLight({ directional: [0.7, 0.5, 0.2] });
+ *
+ * figure.add([
+ *   {
+ *     make: 'cylinder',
+ *     radius: 0.01,
+ *     color: [1, 0, 0, 1],
+ *     line: [[-1, 0, 0], [1, 0, 0]],
+ *   },
+ *   {
+ *     make: 'cylinder',
+ *     radius: 0.01,
+ *     color: [0, 1, 0, 1],
+ *     line: [[0, -1, 0], [0, 1, 0]],
+ *   },
+ *   {
+ *     make: 'cylinder',
+ *     radius: 0.01,
+ *     color: [0, 0, 1, 1],
+ *     line: [[0, 0, -1], [0, 0, 1]],
+ *   },
+ *   {
+ *     make: 'grid',
+ *     bounds: [-0.8, -0.8, 1.6, 1.6],
+ *     xStep: 0.05,
+ *     yStep: 0.05,
+ *     line: { width: 0.002 },
+ *     color: [0.7, 0.7, 0.7, 1],
+ *     transform: ['r', Math.PI / 2, 1, 0, 0],
+ *   },
+ * ]);
+ *
+ * // Add camera control
+ * figure.add({
+ *   make: 'cameraControl',
+ * });
+ *
+ * @example
+ * // Add a thin bar at the bottom of the figure that rotates the scene in the
+ * // azimuth only
+ *
+ * // Create a figure and add some shapes to view.
+ * const figure = new Fig.Figure();
+ * figure.scene.setProjection({ style: 'orthographic' });
+ * figure.scene.setCamera({ position: [2, 1, 1], up: [0, 1, 0] });
+ * figure.scene.setLight({ directional: [0.7, 0.5, 0.2] });
+ *
+ * figure.add([
+ *   {
+ *     make: 'cylinder',
+ *     radius: 0.01,
+ *     color: [1, 0, 0, 1],
+ *     line: [[-1, 0, 0], [1, 0, 0]],
+ *   },
+ *   {
+ *     make: 'cylinder',
+ *     radius: 0.01,
+ *     color: [0, 1, 0, 1],
+ *     line: [[0, -1, 0], [0, 1, 0]],
+ *   },
+ *   {
+ *     make: 'cylinder',
+ *     radius: 0.01,
+ *     color: [0, 0, 1, 1],
+ *     line: [[0, 0, -1], [0, 0, 1]],
+ *   },
+ *   {
+ *     make: 'grid',
+ *     bounds: [-0.8, -0.8, 1.6, 1.6],
+ *     xStep: 0.05,
+ *     yStep: 0.05,
+ *     line: { width: 0.002 },
+ *     color: [0.7, 0.7, 0.7, 1],
+ *     transform: ['r', Math.PI / 2, 1, 0, 0],
+ *   },
+ * ]);
+ *
+ * // Add a moveable cube
+ * figure.add({
+ *   make: 'cube',
+ *   side: 0.3,
+ *   color: [1, 0, 0, 1],
+ *   center: [0.3, 0, 0],
+ *   move: {
+ *     plane: [[0, 0, 0], [0, 1, 0]],
+ *   },
+ * });
+ *
+ * // Add camera control bar at the bottom of the screen that only allows
+ * // rotation in the azimuth. As the camera control bar does not overlap the
+ * // cube, then both the cube can moved, and the scene rotated with the bar.
+ * figure.add({
+ *   make: 'cameraControl',
+ *   color: [0, 0, 0, 0.2],
+ *   ySensitivity: 0,
+ *   height: 0.1,
+ * });
+
+ */
+export type OBJ_CameraControl = {
+  left?: number,
+  bottom?: number,
+  width?: number,
+  height?: number,
+  axis?: TypeParsablePoint,
+  scene?: Scene | string,
+  sensitivity?: number,
+  xSensitivity?: number,
+  ySensitivity?: number,
+} & OBJ_FigurePrimitive;
