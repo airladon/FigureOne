@@ -1,10 +1,6 @@
 // @flow
-import { Line, getLine } from '../geometry/Line';
+import { Line } from '../geometry/Line';
 import type { TypeParsablePoint } from '../geometry/Point';
-import { getPoint } from '../geometry/Point';
-import type { TypeParsableLine } from '../geometry/Line';
-import { makePolyLine } from '../../figure/geometries/lines/lines';
-import { simplifyArrowOptions, getArrow } from '../../figure/geometries/arrow';
 import type { TypeParsableTransform } from '../geometry/Transform';
 import { joinObjects } from '../tools';
 import { revolve } from './revolve';
