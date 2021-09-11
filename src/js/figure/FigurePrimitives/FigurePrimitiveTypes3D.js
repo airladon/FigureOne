@@ -11,7 +11,8 @@ import type {
 
 /**
  * @property {'directional' | 'point' | null} [light] the scene light that will
- * be cast on the shape (`'directional'`)
+ * be cast on the shape. Use `null` for no lighting - all surfaces will have
+ * the defined color. (`'directional'`)
  * @property {Array<CPY_Step | string> | CPY_Step} [copy] Create copies the
  * shapes vertices to replicate the shape in space. Copies of normals, colors
  * (if defined) and texture coordinates (if defined) will also be made.
@@ -19,7 +20,7 @@ import type {
  * will be updated very frequently (`'STATIC'`)
  */
 export type OBJ_Generic3D = {
-  light?: 'directional' | 'point' | null,
+  light?: 'directional' | 'point' | 'ambient' | null,
   copy?: Array<CPY_Step | string> | CPY_Step,
   usage?: TypeGLBufferUsage,
 };
@@ -360,6 +361,97 @@ export type OBJ_Cylinder = {
   length?: number,
   ends?: boolean | 1 | 2,
 } & OBJ_FigurePrimitive & OBJ_Generic3D;
+
+
+/**
+ * 3D Line options object that extends {@link OBJ_Generic3D}
+ * and {@link OBJ_FigurePrimitive}
+ *
+ * ![](./apiassets/line3.png)
+ *
+ * A 3D line is a cylinder with optional arrows on the end. Unlike a 2D line,
+ * the arrow profiles can only be simple triangles.
+ *
+ * @property {TypeParsablePoint} [p1] (`[0, 0, 0]`)
+ * @property {TypeParsablePoint} [p2] (default: `p1 + [1, 0, 0]`)
+ * @property {number} [width] width of line
+ * @property {OBJ_Line3Arrow} [arrow] define to use arrows at one or both ends
+ * of the line
+ * @property {number} [sides] number of sides (`10`)
+ * @property {'curve' | 'flat'} [normals] `flat` normals will make light
+ * shading across a line face constant. `curve` will gradiate the shading. Use
+ * `curve` to make a surface look more round with fewer number of sides.
+ * (`curve`)
+ * @property {number} [rotation] rotation of line around its axis - this is
+ * only noticable for small numbers of sides (`0`)
+ * @property {TypeParsableTransform} [transform] transform to apply to line
+ * @property {boolean} [lines] if `true` then points representing
+ * the edes of the faces will be returned. If `false`, then points
+ * representing two triangles per face and an
+ * associated normal for each point will be returned.
+ *
+ * @see To test examples, append them to the
+ * <a href="#shapes3d-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Simple line
+ * figure.add({
+ *   make: 'line3',
+ *   p1: [0, 0, 0],
+ *   p2: [0, 1, 0],
+ *   color: [1, 0, 0, 1],
+ * });
+ *
+ *
+ * @example
+ * // Thick line with arrows on both ends
+ * figure.add({
+ *   make: 'line3',
+ *   p1: [0, 0, 0],
+ *   p2: [0, 1, 0],
+ *   arrow: { ends: 'all', width: 0.1, length: 0.1 },
+ *   sides: 30,
+ *   width: 0.05,
+ *   color: [1, 0, 0, 1],
+ * });
+ *
+ * @example
+ * // Wire mesh line with arrow
+ * figure.add({
+ *   make: 'line3',
+ *   p1: [0, 0, 0],
+ *   p2: [0, 1, 0],
+ *   arrow: { ends: 'end' },
+ *   color: [1, 0, 0, 1],
+ *   lines: true,
+ * });
+ *
+ * @example
+ * // Ball of arrows
+ * figure.add(
+ *   {
+ *     make: 'line3',
+ *     p1: [0, 0, 0],
+ *     p2: [0, 0.4, 0],
+ *     color: [1, 0, 0, 1],
+ *     width: 0.01,
+ *     arrow: { end: 'end', width: 0.02 },
+ *     copy: [
+ *       { along: 'rotation', num: 20, step: Math.PI * 2 / 20 },
+ *       { along: 'rotation', axis: [0, 1, 0], num: 20, step: Math.PI * 2 / 20 },
+ *     ],
+ *   },
+ * );
+ */
+export type OBJ_Line3 = {
+  sides?: number,
+  radius?: number,
+  normals?: 'curve' | 'flat',
+  line?: TypeParsableLine,
+  length?: number,
+  ends?: boolean | 1 | 2,
+} & OBJ_FigurePrimitive & OBJ_Generic3D;
+
 
 /**
  * Cone shape options object that extends {@link OBJ_Generic3D}

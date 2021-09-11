@@ -4,7 +4,7 @@ import {
   Rect, Point, Transform, getPoint, getRect, getTransform,
   getBorder, getPoints,
   getBoundingBorder, isBuffer, toNumbers,
-  sphere, cube, cylinder, cone, revolve, surface, prism,
+  sphere, cube, cylinder, cone, revolve, surface, prism, line3,
 } from '../../tools/g2';
 // import {
 //   round
@@ -92,6 +92,7 @@ import type {
   OBJ_Cone,
   OBJ_Revolve,
   OBJ_Surface,
+  OBJ_Line3,
 } from './FigurePrimitiveTypes3D';
 
 
@@ -329,9 +330,8 @@ export default class FigurePrimitives {
         });
       }
     }
-
     // If a normals helper exists, then add the a_normal attribute
-    if (options.normals != null) {
+    if (options.normals != null && options.light != null && options.light !== 'ambient') {
       if (Array.isArray(options.normals)) {
         options.attributes.push({
           name: 'a_normal', data: options.normals, size: 3,
@@ -552,7 +552,7 @@ export default class FigurePrimitives {
           }
         }
       }
-      if (o.normals) {
+      if (o.normals && element.drawingObject.attributes.a_normal != null) {
         element.custom.updateAttribute('a_normal', o.normals.data);
       }
       if (o.colors) {
@@ -670,6 +670,18 @@ export default class FigurePrimitives {
       },
       joinObjects({}, ...optionsIn),
       o => cone(o),
+    );
+  }
+
+  line3(...optionsIn: Array<OBJ_Line3>) {
+    return this.generic3DBase(
+      {
+        width: this.defaultLength / 40,
+        sides: 10,
+        normals: 'curve',
+      },
+      joinObjects({}, ...optionsIn),
+      o => line3(o),
     );
   }
 
