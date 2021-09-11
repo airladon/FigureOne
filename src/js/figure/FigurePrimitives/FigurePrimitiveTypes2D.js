@@ -10,7 +10,7 @@ import type {
   TypeParsableBorder, Point, TypeParsableRect,
   TypeParsableBuffer,
 } from '../../tools/g2';
-import type { TypeScenarios, OBJ_ElementMove } from '../Element';
+// import type { TypeScenarios, OBJ_ElementMove } from '../Element';
 import type {
   TypeColor, TypeDash, OBJ_CurvedCorner, OBJ_Font,
 } from '../../tools/types';
@@ -89,7 +89,6 @@ import type { OBJ_LineArrows, TypeArrowHead } from '../geometries/arrow';
  * (`'triangles'`)
  * @property {Array<CPY_Step | string> | CPY_Step} [copy] use `drawType` as
  * `'triangles'` when using copy (`[]`)
- * @property {TypeColor} [color] (`[1, 0, 0, 1])
  * @property {OBJ_Texture} [texture] override `color` with a texture if defined
  * @property {TypeParsableBorder} [drawBorder],
  * @property {TypeParsableBorder} [drawBorderBuffer],
@@ -98,9 +97,6 @@ import type { OBJ_LineArrows, TypeArrowHead } from '../geometries/arrow';
  * keeping shape within limits
  * @property {TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw'} [touchBorder]
  * border used for determining shape was touched
- * @property {TypeParsablePoint} [position] will overwrite first translation
- * transform of `transform` chain
- * @property {Transform} [transform]
  * @property {OBJ_PulseScale | number} [pulse] set default scale pulse options
  * (`OBJ_PulseScale`) or pulse scale directly (`number`)
  *
@@ -157,26 +153,17 @@ export type OBJ_Generic = {
   points?: Array<TypeParsablePoint> | Array<Point>,
   drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
   copy?: Array<CPY_Step | string> | CPY_Step,
-  color?: TypeColor,
   texture?: OBJ_Texture,
   drawBorder?: TypeParsableBorder,
   drawBorderBuffer?: TypeParsableBorder,
   border?: TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number,
   touchBorder?: TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw',
-  position?: TypeParsablePoint,
-  transform?: TypeParsableTransform,
   pulse?: number,
-
-  touch?: boolean | number | TypeParsablePoint,
-  move?: boolean | OBJ_ElementMove,
-  dimColor?: TypeColor,
-  defaultColor?: TypeColor,
-  scenarios?: TypeScenarios,
 }
 
 /**
  * Polyline shape options object that extends {@link OBJ_Generic} (without
- * `drawType`)
+ * `drawType`) and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/polyline.png)
  *
@@ -502,7 +489,7 @@ export type OBJ_Polygon_Defined = {
 
 /**
  * Star options object that extends {@link OBJ_Generic} (without
- * `drawType`)
+ * `drawType`) and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/star.png)
  *
@@ -597,7 +584,7 @@ export type OBJ_Star_Defined = {
 
 /**
  * Rectangle shape options object that extends {@link OBJ_Generic} (without
- * `drawType)
+ * `drawType) and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/rectangle.png)
  *
@@ -693,7 +680,7 @@ export type OBJ_Rectangle_Defined = {
 
 /**
  * Ellipse shape options object that extends {@link OBJ_Generic} (without
- * `drawType`)
+ * `drawType`) and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/ellipse.png)
  *
@@ -762,7 +749,7 @@ export type OBJ_Ellipse = {
 
 /**
  * Arc shape options object that extends {@link OBJ_Generic} (without
- * `drawType`)
+ * `drawType`) and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/arc.png)
  *
@@ -840,7 +827,7 @@ export type OBJ_TriangleSideRotationAlignment = {
 /* eslint-disable max-len */
 /**
  * Triangle shape options object that extends {@link OBJ_Generic} (without
- * `drawType`)
+ * `drawType`) and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/triangle.png)
  *
@@ -982,7 +969,7 @@ export type OBJ_Triangle = {
 
 /**
  * Line definition options object that extends {@link OBJ_Generic} (without
- * `drawType`)
+ * `drawType`) and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/line.png)
  *
@@ -1083,7 +1070,7 @@ export type OBJ_Line = {
 
 /**
  * Grid shape options object that extends {@link OBJ_Generic} (without
- * `drawType`)
+ * `drawType`) and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/grid.png)
  *
@@ -1175,7 +1162,7 @@ export type OBJ_Grid = {
 
 /**
  * Arrow options object that extends {@link OBJ_Generic} (without
- * `drawType`)
+ * `drawType`) and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/arrow_heads.png)
  *
