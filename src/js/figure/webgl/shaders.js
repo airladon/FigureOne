@@ -159,7 +159,7 @@ function composeVertexShader(
   }
 
   // Normals
-  if (light != null) {
+  if (light != null && light !== 'ambient') {
     src += 'attribute vec3 a_normal;\n';
     src += 'varying vec3 v_normal;\n';
     src += 'uniform mat4 u_worldInverseTranspose;\n';
@@ -190,7 +190,7 @@ function composeVertexShader(
     src += '  v_color = a_color;\n';
   }
 
-  if (light != null) {
+  if (light != null && light !== 'ambient') {
     src += '  v_normal = mat3(u_worldInverseTranspose) * a_normal;\n';
   }
 
@@ -241,6 +241,9 @@ function composeFragShader(
     src += 'varying vec3 v_vertexToLight;\n';
     src += 'uniform float u_ambientLight;\n';
     vars.push('u_ambientLight');
+  } else if (light === 'ambient') {
+    src += 'uniform float u_ambientLight;\n';
+    vars.push('u_ambientLight');
   }
 
 
@@ -267,6 +270,8 @@ function composeFragShader(
     src += '  vec3 surfaceToLightDirection = normalize(v_vertexToLight);\n';
     src += '  float light = dot(normal, surfaceToLightDirection);\n';
     src += '  gl_FragColor.rgb *= max((light + 1.0) / 2.0, u_ambientLight);\n';
+  } else if (light === 'ambient') {
+    src += '  gl_FragColor.rgb *= u_ambientLight;\n';
   }
 
   src += '}\n';
