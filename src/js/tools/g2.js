@@ -15,7 +15,7 @@ import type { OBJ_TranslationPath } from './geometry/Path';
 import { Line, getLine } from './geometry/Line';
 import {
   Transform, getTransform, isParsableTransform,
-  vectorToVectorToAxisAngle, directionToAxisAngle,
+  angleFromVectors, directionToAxisAngle,
 } from './geometry/Transform';
 import {
   decelerateValue, decelerateVector,
@@ -609,7 +609,7 @@ export {
   toPoints,
   polygon,
   polygonLine,
-  vectorToVectorToAxisAngle,
+  angleFromVectors,
   directionToAxisAngle,
   surfaceGrid,
 };

@@ -1519,7 +1519,16 @@ function directionToAxisAngle(
   };
 }
 
-function vectorToVectorToAxisAngle(
+/**
+ * Calculate the rotation axis and angle required to move from one
+ * vector to another.
+ *
+ * @param {TypeParsablePoint} fromVector
+ * @param {TypeParsablePoint} toVector
+ * @param {TypeParsablePoint | null} axisIfCollinear
+ * @return {{axis: Point, angle: number}}
+ */
+function angleFromVectors(
   fromVector: TypeParsablePoint | TypeTransformDirection,
   toVector: TypeParsablePoint | TypeTransformDirection,
   axisIfCollinear: TypeParsablePoint | null = null,
@@ -1545,7 +1554,7 @@ export {
   transformValueToArray,
   getMatrix,
   // parseRotation,
-  vectorToVectorToAxisAngle,
+  angleFromVectors,
   directionToAxisAngle,
 };
 

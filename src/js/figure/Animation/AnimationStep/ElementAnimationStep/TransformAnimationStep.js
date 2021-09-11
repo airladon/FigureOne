@@ -17,7 +17,7 @@
  * look stationary.
  *
  * If wanting to animate a direction vector, use {@link directionToAxisAngle}
- * or {@link vectorToVectorToAxisAngle} and then use a axis/angle rotation
+ * or {@link angleFromVectors} and then use a axis/angle rotation
  * keeping the axis constant. If wanting to animate a change of basis rotation,
  * then use a {@link CustomAnimationStep} to manage how to change the basis
  * vectors over time.
