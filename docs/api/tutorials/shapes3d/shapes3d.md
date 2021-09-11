@@ -36,6 +36,8 @@ While {@link Point}s, {@link Line}s and {@link Rect}angles are used to define mo
 
 A plane is defined as a position and a normal vector to the plane.
 
+![](./tutorials/shapes3d/plane.png)
+
 ```js
 // Create an XZ plane at [0, 0, 0] (the normal is thus along the y axis)
 const p = new Fig.Plane([0, 0, 0], [0, 1, 0]);
@@ -157,14 +159,61 @@ These same properties cannot be used for perspective projection because size cha
 
 ##### Light
 
-Light is an important factor in vizualizing 3D. If all surfaces of an object are illuminated equally (ambient light), then different faces or curvature of the surface will be indistinguishable. The image will look flat.
+Light is an important factor in vizualizing 3D. If all surfaces of an object are illuminated equally (no lighting modifier, or ambient light), then different faces or curvature of the surface will be indistinguishable. The image will look flat.
 
-FigureOne provides two simple lighting options:
-* *directional light*: light that comes from infinitely far away and illuminates all objects equally (defined with a vector that describes the angle from which the light comes from)
-* *point light*: light that comes from a point in space and illuminates surfaces closer to that point more brightly.
+![](./tutorials/shapes3d/lightvsnolight.png)
+
+FigureOne lighting is a color modifier based on the amount of light reflected from a surface. If all light is reflected from a surface, then the surface color will be the original color. If only a portion of light is reflected from the surface, then the surface color will be a darker form of the original color.
+
+The amount of light reflected from a surface is a function of the direction of the light relative to the surface, and whether the surface faces the light source or not. The direction the surface faces is the direction of its normal.
+
+![](./tutorials/shapes3d/lightincidence.png)
+
+If **L** is the normalized light incidence vector and **n** is the normalized surface normal, then the color modifier *m* is given by:
+
+![](./tutorials/shapes3d/lighteqn.png)
+
+Where *m* will be a value between 0 (no light) and 1 (full light), and *a* is the ambient light (also between 0 and 1) and is the minimum amount of light that each surface will reflect.
+
+The goal of FigureOne lighting is to provide simple lighting options that can easily show the curvature of a 3D object. It is not realistic:
+
+* It does not cast shaddows
+* It lights surfaces from behind
+* A surface color is the same on top and below the surface
+
+If more realistic lighting, shaddows or multiple light sources are required, then custom shaders should be used.
+
+FigureOne provides four simple lighting options:
+* *no light*: All surfaces are the shape color with no lighting modification (looks flat)
+* *ambient light*: All surfaces of a shape reflect the same amount of light. If ambient light is less than 1, then the color of each surface will be a darker shade of the shape color (also looks flat).
+* *directional light*: All surfaces of a shape use the same light incidence vector **L**. This is similar to a plane  of light coming from a single direction. The direciton light vector definition points toward the light source.
+* *point light*: All surfaces of a shape use a **L** equal to the vector between the point source and the surface position.
 
 ![](./tutorials/shapes3d/light.png)
 
+As an example, let's create a cube with directional lighting. The light source will be predominantly from the x direction, and so the +x face of the cube will be brightest.
+
+```js
+const figure = new Fig.Figure();
+figure.scene.setProjection({ style: 'orthographic' });
+figure.scene.setCamera({ position: [2, 1, 1], up: [0, 1, 0] });
+// Setup the direction of directional light. Note, this vector describes where
+// the light is coming from.
+figure.scene.setLight({ directional: [1, 0.5, -0.1] });
+
+figure.add(
+  {
+    make: 'cube',
+    color: [1, 0, 0, 1],
+    side: 0.5,
+    // Note: 'directional' is the default value, and so when using direcitonal
+    // light this line is not required. It is here for example only.
+    light: 'directional',
+  },
+);
+```
+
+![](./tutorials/shapes3d/cube.png)
 
 #### Explanation Boiler-Plate Code
 All code examples in the following 3D shape topics uses the same code to create a figure, set the scene and add a red x axis, green y axis and blue z axis.

@@ -1879,6 +1879,16 @@
               
                 
                 <li><a
+                  href='#obj_line3'
+                  class="">
+                  OBJ_Line3
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_revolve'
                   class="">
                   OBJ_Revolve
@@ -6124,6 +6134,36 @@
                   href='#obj_cylinderpoints'
                   class="">
                   OBJ_CylinderPoints
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_line3arrow'
+                  class="">
+                  OBJ_Line3Arrow
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_line3points'
+                  class="">
+                  OBJ_Line3Points
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#line3'
+                  class="">
+                  line3
                   
                 </a>
                 
@@ -18454,13 +18494,6 @@ portions</li>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : (`[1, 0, 0, 1])
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
           <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
           : override 
 <code>color</code>
@@ -18499,22 +18532,6 @@ keeping shape within limits
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : will overwrite first translation
-transform of 
-<code>transform</code>
- chain
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
           <span class='code bold'>pulse</span> <code class='quiet'>((<a href="#obj_pulsescale">OBJ_PulseScale</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
           : set default scale pulse options
 (
@@ -18523,36 +18540,6 @@ transform of
 <code>number</code>
 )
 
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>touch</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#typeparsablepoint">TypeParsablePoint</a>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>move</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | <a href="#obj_elementmove">OBJ_ElementMove</a>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>dimColor</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>defaultColor</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scenarios</span> <code class='quiet'>(<a href="#typescenarios">TypeScenarios</a>?)</code>
-          
           
         </div>
       
@@ -18809,7 +18796,7 @@ figure.
   
 
   <p>Line definition options object that extends <a href="#obj_generic">OBJ_Generic</a> (without
-<code>drawType</code>)</p>
+<code>drawType</code>) and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
 <p><img src="./apiassets/line.png" alt=""></p>
 <p>A line can either be defined as two points <code>p1</code> and <code>p2</code>, or
 a single point <code>p1</code>, a <code>length</code> and an <code>angle</code>.</p>
@@ -19055,7 +19042,7 @@ figure.add({
   
 
   <p>Polyline shape options object that extends <a href="#obj_generic">OBJ_Generic</a> (without
-<code>drawType</code>)</p>
+<code>drawType</code>) and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
 <p><img src="./apiassets/polyline.png" alt=""></p>
 <p>A polyline is a series of lines that are connected end to end. It is defined
 by a series of points which are the ends and corners of the polyline.</p>
@@ -19473,7 +19460,7 @@ figure.add({
   
 
   <p>Arrow options object that extends <a href="#obj_generic">OBJ_Generic</a> (without
-<code>drawType</code>)</p>
+<code>drawType</code>) and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
 <p><img src="./apiassets/arrow_heads.png" alt=""></p>
 <p>An arrow has a head, tail, length and width. The <code>head</code> defines the head
 style of the arrow. The <code>length</code>, <code>width</code> (or <code>radius</code> for polygon and circle
@@ -19722,7 +19709,7 @@ figure.add({
   
 
   <p>Triangle shape options object that extends <a href="#obj_generic">OBJ_Generic</a> (without
-<code>drawType</code>)</p>
+<code>drawType</code>) and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
 <p><img src="./apiassets/triangle.png" alt=""></p>
 <p>The most generic way to define a triangle is with three points (<code>points</code>
 property). When using <code>points</code>, all the other properties that can also
@@ -19981,7 +19968,7 @@ figure.add({
   
 
   <p>Rectangle shape options object that extends <a href="#obj_generic">OBJ_Generic</a> (without
-`drawType)</p>
+`drawType) and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
 <p><img src="./apiassets/rectangle.png" alt=""></p>
 
   
@@ -20179,7 +20166,7 @@ figure.add({
   
 
   <p>Ellipse shape options object that extends <a href="#obj_generic">OBJ_Generic</a> (without
-<code>drawType</code>)</p>
+<code>drawType</code>) and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
 <p><img src="./apiassets/ellipse.png" alt=""></p>
 
   
@@ -20367,7 +20354,7 @@ figure.add({
   
 
   <p>Arc shape options object that extends <a href="#obj_generic">OBJ_Generic</a> (without
-<code>drawType</code>)</p>
+<code>drawType</code>) and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
 <p><img src="./apiassets/arc.png" alt=""></p>
 
   
@@ -20755,7 +20742,7 @@ figure.add({
   
 
   <p>Star options object that extends <a href="#obj_generic">OBJ_Generic</a> (without
-<code>drawType</code>)</p>
+<code>drawType</code>) and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
 <p><img src="./apiassets/star.png" alt=""></p>
 
   
@@ -20959,7 +20946,7 @@ figure.add({
   
 
   <p>Grid shape options object that extends <a href="#obj_generic">OBJ_Generic</a> (without
-<code>drawType</code>)</p>
+<code>drawType</code>) and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
 <p><img src="./apiassets/grid.png" alt=""></p>
 <p>A grid is a rectangle divided into a series of vertical and horizontal lines.</p>
 <p>The rectangle is defined by <code>bounds</code>.</p>
@@ -27190,6 +27177,7 @@ figure.add([
 <h5>Plane</h5>
 <p>While <a href="#point">Point</a>s, <a href="Line">Line</a>s and <a href="#rect">Rect</a>angles are used to define most geometries in two dimensions, a <a href="#plane">Plane</a> is required for some three dimensional definitions.</p>
 <p>A plane is defined as a position and a normal vector to the plane.</p>
+<p><img src="./tutorials/shapes3d/plane.png" alt=""></p>
 <pre class='hljs'><span class="hljs-comment">// Create an XZ plane at [0, 0, 0] (the normal is thus along the y axis)</span>
 <span class="hljs-keyword">const</span> p = <span class="hljs-keyword">new</span> Fig.Plane([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>]);</pre>
 <p>The <a href="#plane">Plane</a> object has a number of useful methods for working with planes and can determine things like:</p>
@@ -27289,13 +27277,48 @@ fieldOfView: 1.7,
 </ul>
 <p><img src="./tutorials/shapes3d/perspective.jpg" alt=""></p>
 <h5>Light</h5>
-<p>Light is an important factor in vizualizing 3D. If all surfaces of an object are illuminated equally (ambient light), then different faces or curvature of the surface will be indistinguishable. The image will look flat.</p>
-<p>FigureOne provides two simple lighting options:</p>
+<p>Light is an important factor in vizualizing 3D. If all surfaces of an object are illuminated equally (no lighting modifier, or ambient light), then different faces or curvature of the surface will be indistinguishable. The image will look flat.</p>
+<p><img src="./tutorials/shapes3d/lightvsnolight.png" alt=""></p>
+<p>FigureOne lighting is a color modifier based on the amount of light reflected from a surface. If all light is reflected from a surface, then the surface color will be the original color. If only a portion of light is reflected from the surface, then the surface color will be a darker form of the original color.</p>
+<p>The amount of light reflected from a surface is a function of the direction of the light relative to the surface, and whether the surface faces the light source or not. The direction the surface faces is the direction of its normal.</p>
+<p><img src="./tutorials/shapes3d/lightincidence.png" alt=""></p>
+<p>If <strong>L</strong> is the normalized light incidence vector and <strong>n</strong> is the normalized surface normal, then the color modifier <em>m</em> is given by:</p>
+<p><img src="./tutorials/shapes3d/lighteqn.png" alt=""></p>
+<p>Where <em>m</em> will be a value between 0 (no light) and 1 (full light), and <em>a</em> is the ambient light (also between 0 and 1) and is the minimum amount of light that each surface will reflect.</p>
+<p>The goal of FigureOne lighting is to provide simple lighting options that can easily show the curvature of a 3D object. It is not realistic:</p>
 <ul>
-<li><em>directional light</em>: light that comes from infinitely far away and illuminates all objects equally (defined with a vector that describes the angle from which the light comes from)</li>
-<li><em>point light</em>: light that comes from a point in space and illuminates surfaces closer to that point more brightly.</li>
+<li>It does not cast shaddows</li>
+<li>It lights surfaces from behind</li>
+<li>A surface color is the same on top and below the surface</li>
+</ul>
+<p>If more realistic lighting, shaddows or multiple light sources are required, then custom shaders should be used.</p>
+<p>FigureOne provides four simple lighting options:</p>
+<ul>
+<li><em>no light</em>: All surfaces are the shape color with no lighting modification (looks flat)</li>
+<li><em>ambient light</em>: All surfaces of a shape reflect the same amount of light. If ambient light is less than 1, then the color of each surface will be a darker shade of the shape color (also looks flat).</li>
+<li><em>directional light</em>: All surfaces of a shape use the same light incidence vector <strong>L</strong>. This is similar to a plane  of light coming from a single direction. The direciton light vector definition points toward the light source.</li>
+<li><em>point light</em>: All surfaces of a shape use a <strong>L</strong> equal to the vector between the point source and the surface position.</li>
 </ul>
 <p><img src="./tutorials/shapes3d/light.png" alt=""></p>
+<p>As an example, let's create a cube with directional lighting. The light source will be predominantly from the x direction, and so the +x face of the cube will be brightest.</p>
+<pre class='hljs'><span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure();
+figure.scene.setProjection({ <span class="hljs-attr">style</span>: <span class="hljs-string">&#x27;orthographic&#x27;</span> });
+figure.scene.setCamera({ <span class="hljs-attr">position</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">up</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>] });
+<span class="hljs-comment">// Setup the direction of directional light. Note, this vector describes where</span>
+<span class="hljs-comment">// the light is coming from.</span>
+figure.scene.setLight({ <span class="hljs-attr">directional</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0.5</span>, -<span class="hljs-number">0.1</span>] });
+
+figure.add(
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cube&#x27;</span>,
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">side</span>: <span class="hljs-number">0.5</span>,
+    <span class="hljs-comment">// Note: &#x27;directional&#x27; is the default value, and so when using direcitonal</span>
+    <span class="hljs-comment">// light this line is not required. It is here for example only.</span>
+    <span class="hljs-attr">light</span>: <span class="hljs-string">&#x27;directional&#x27;</span>,
+  },
+);</pre>
+<p><img src="./tutorials/shapes3d/cube.png" alt=""></p>
 <h4>Explanation Boiler-Plate Code</h4>
 <p>All code examples in the following 3D shape topics uses the same code to create a figure, set the scene and add a red x axis, green y axis and blue z axis.</p>
 <p>All example code in the topics below would be appended to this boilerplate code:</p>
@@ -28374,6 +28397,222 @@ figure.add({
   <span class="hljs-attr">line</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>]],
   <span class="hljs-attr">lines</span>: <span class="hljs-literal">true</span>,
 });</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_line3'>
+      OBJ_Line3
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>3D Line options object that extends <a href="#obj_generic3d">OBJ_Generic3D</a>
+and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
+<p><img src="./apiassets/line3.png" alt=""></p>
+<p>A 3D line is a cylinder with optional arrows on the end. Unlike a 2D line,
+the arrow profiles can only be simple triangles.</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>p1</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : (
+<code>[0, 0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>p2</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : (default: 
+<code>p1 + [1, 0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : width of line
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>arrow</span> <code class='quiet'>(<a href="#obj_line3arrow">OBJ_Line3Arrow</a>?)</code>
+          : define to use arrows at one or both ends
+of the line
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides (
+<code>10</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>normals</span> <code class='quiet'>((<code>"curve"</code> | <code>"flat"</code>)?)</code>
+          : <code>flat</code>
+ normals will make light
+shading across a line face constant. 
+<code>curve</code>
+ will gradiate the shading. Use
+
+<code>curve</code>
+ to make a surface look more round with fewer number of sides.
+(
+<code>curve</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : rotation of line around its axis - this is
+only noticable for small numbers of sides (
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
+          : transform to apply to line
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lines</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : if 
+<code>true</code>
+ then points representing
+the edes of the faces will be returned. If 
+<code>false</code>
+, then points
+representing two triangles per face and an
+associated normal for each point will be returned.
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#shapes3d-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple line</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;line3&#x27;</span>,
+  <span class="hljs-attr">p1</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+  <span class="hljs-attr">p2</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
+  <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Thick line with arrows on both ends</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;line3&#x27;</span>,
+  <span class="hljs-attr">p1</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+  <span class="hljs-attr">p2</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
+  <span class="hljs-attr">arrow</span>: { <span class="hljs-attr">ends</span>: <span class="hljs-string">&#x27;all&#x27;</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">0.1</span>, <span class="hljs-attr">length</span>: <span class="hljs-number">0.1</span> },
+  <span class="hljs-attr">sides</span>: <span class="hljs-number">30</span>,
+  <span class="hljs-attr">width</span>: <span class="hljs-number">0.05</span>,
+  <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Wire mesh line with arrow</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;line3&#x27;</span>,
+  <span class="hljs-attr">p1</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+  <span class="hljs-attr">p2</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
+  <span class="hljs-attr">arrow</span>: { <span class="hljs-attr">ends</span>: <span class="hljs-string">&#x27;end&#x27;</span> },
+  <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+  <span class="hljs-attr">lines</span>: <span class="hljs-literal">true</span>,
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Ball of arrows</span>
+figure.add(
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;line3&#x27;</span>,
+    <span class="hljs-attr">p1</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+    <span class="hljs-attr">p2</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.4</span>, <span class="hljs-number">0</span>],
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span>,
+    <span class="hljs-attr">arrow</span>: { <span class="hljs-attr">end</span>: <span class="hljs-string">&#x27;end&#x27;</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">0.02</span> },
+    <span class="hljs-attr">copy</span>: [
+      { <span class="hljs-attr">along</span>: <span class="hljs-string">&#x27;rotation&#x27;</span>, <span class="hljs-attr">num</span>: <span class="hljs-number">20</span>, <span class="hljs-attr">step</span>: <span class="hljs-built_in">Math</span>.PI * <span class="hljs-number">2</span> / <span class="hljs-number">20</span> },
+      { <span class="hljs-attr">along</span>: <span class="hljs-string">&#x27;rotation&#x27;</span>, <span class="hljs-attr">axis</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">num</span>: <span class="hljs-number">20</span>, <span class="hljs-attr">step</span>: <span class="hljs-built_in">Math</span>.PI * <span class="hljs-number">2</span> / <span class="hljs-number">20</span> },
+    ],
+  },
+);</pre>
     
   
 
@@ -75024,7 +75263,10 @@ use <code>show: false</code> in the animation step definition, and for <code>in<
         <div class='space-bottom0'>
           <span class='code bold'>light</span> <code class='quiet'>((<code>"directional"</code> | <code>"point"</code> | null)?)</code>
           : the scene light that will
-be cast on the shape (
+be cast on the shape. Use 
+<code>null</code>
+ for no lighting - all surfaces will have
+the defined color. (
 <code>'directional'</code>
 )
 
@@ -76255,6 +76497,326 @@ associated normal for each point will be returned.
     </div>
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_line3arrow'>
+      OBJ_Line3Arrow
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Arrow definition object for a 3D line.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>ends</span> <code class='quiet'>((<code>"start"</code> | <code>"end"</code> | <code>"all"</code>)?)</code>
+          : which end to put an arrow where
+
+<code>'start'</code>
+ is 
+<code>p1</code>
+ and 
+<code>'end'</code>
+ is 
+<code>p2</code>
+ (
+<code>'end'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : width of arrow (line width * 2.5)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : length of arrow (arrow width * 3)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_line3points'>
+      OBJ_Line3Points
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>3D line options object.</p>
+<p>A 3D line is a cylinder with optional arrows on the end. Unlike a 2D line,
+the arrow profiles can only be simple triangles.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>p1</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : (
+<code>[0, 0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>p2</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : (default: 
+<code>p1 + [1, 0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : width of line
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>arrow</span> <code class='quiet'>(<a href="#obj_line3arrow">OBJ_Line3Arrow</a>?)</code>
+          : define to use arrows at one or both ends
+of the line
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides (
+<code>10</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>normals</span> <code class='quiet'>((<code>"curve"</code> | <code>"flat"</code>)?)</code>
+          : <code>flat</code>
+ normals will make light
+shading across a line face constant. 
+<code>curve</code>
+ will gradiate the shading. Use
+
+<code>curve</code>
+ to make a surface look more round with fewer number of sides.
+(
+<code>curve</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : rotation of line around its axis - this is
+only noticable for small numbers of sides (
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
+          : transform to apply to line
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lines</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : if 
+<code>true</code>
+ then points representing
+the edes of the faces will be returned. If 
+<code>false</code>
+, then points
+representing two triangles per face and an
+associated normal for each point will be returned.
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='line3'>
+      line3
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Return points of a 3D line with optional arrows.</p>
+<p>The points can either represent the triangles that make up each face, or
+represent the start and end points of lines that are the edges of each face
+of the shape.</p>
+<p>If the points represent triangles, then a second array of normal vectors
+for each point will be available.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_line3points">OBJ_Line3Points</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_line3points">OBJ_Line3Points</a>)</code>
+          : line options
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>]</code>:
+        an array of points and normals. If
+the points represent lines, then the array of normals will be empty.
+
+      
+    
   
 
   
