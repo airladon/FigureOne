@@ -4,9 +4,60 @@ FigureOne tries to simplify the process for using 3D as much as possible. In fac
 
 However, there are a number of concepts that are useful to know when dealing with 3D that are not needed for 2D. These concepts are especially useful if customizing shapes, or if creating your own.
 
+#### Geometry
+
+##### Point
+
+In FigureOne, the {@link Point} class is used extensively to define shapes and their properties. Points can be defined with {@link Point} object or by using array notation. For example, creating two rectangles with different positions in two dimensions could look like:
+
+```js
+// Create two rectangles. One centered at [0.5, 0.5], and the other at
+// [-0.5, -0.5]
+figure.add([
+  { make: 'rectangle', position: new Fig.Point(0.5, 0.5) },
+  { make: 'rectangle', position: [-0.5, -0.5] },
+]);
+```
+
+All points in FigureOne have an x, y, and z component. If working in two dimensions, then the z coordinate never has to be defined (as above), and will be 0 by default. When working in three dimensions, the z coordinate can be added.
+
+```js
+// Create two rectangles. One centered at [0.5, 0.5, 1], and the other at
+// [-0.5, -0.5, -1]
+figure.add([
+  { make: 'rectangle', position: new Fig.Point(0.5, 0.5, 1) },
+  { make: 'rectangle', position: [-0.5, -0.5, -1] },
+]);
+```
+
+##### Plane
+
+While {@link Point}s, {@link Line}s and {@link Rect}angles are used to define most geometries in two dimensions, a {@link Plane} is required for some three dimensional definitions.
+
+A plane is defined as a position and a normal vector to the plane.
+
+```js
+// Create an XZ plane at [0, 0, 0] (the normal is thus along the y axis)
+const p = new Fig.Plane([0, 0, 0], [0, 1, 0]);
+```
+
+The {@link Plane} object has a number of useful methods for working with planes and can determine things like:
+
+* if a point is on the plane
+* if two planes are equal
+* if two planes are parallel
+* the line at the intersection of two planes
+* if a line is parallel to the plane
+* the intersect point of a line and plane
+* if a line lies on the plane
+* a point's projection onto the plane
+* the distance between the plane and a point
+
+
+
 #### Scene
 
-In FigureOne we create some shapes in space. The `Scene` then defines how we present those shapes to the user. In other words, the Scene defines what portion of space gets shown to the user.
+In FigureOne shapes are created in a space. The `Scene` then defines how we present those shapes to the user, or what portion of space gets shown to the user.
 
 ##### Two Dimensions
 In two dimensions the Scene simply defines the range of x and y values that will be shown. Four properties are used for this:
@@ -115,6 +166,44 @@ FigureOne provides two simple lighting options:
 ![](./tutorials/shapes3d/light.png)
 
 
+#### Explanation Boiler-Plate Code
+All code examples in the following 3D shape topics uses the same code to create a figure, set the scene and add a red x axis, green y axis and blue z axis.
+
+All example code in the topics below would be appended to this boilerplate code:
+
+```js
+// Create the figure
+const figure = new Fig.Figure();
+
+// Set the scene
+figure.scene.setProjection({ style: 'orthographic' });
+figure.scene.setCamera({ position: [2, 1, 1], up: [0, 1, 0] });
+figure.scene.setLight({ directional: [0.7, 0.5, 0.2] });
+
+// Add x, y, z axis
+figure.add([
+  {
+    make: 'cylinder',
+    radius: 0.01,
+    color: [1, 0, 0, 1],
+    line: [[-1, 0, 0], [1, 0, 0]],
+  },
+  {
+    make: 'cylinder',
+    radius: 0.01,
+    color: [0, 1, 0, 1],
+    line: [[0, -1, 0], [0, 1, 0]],
+  },
+  {
+    make: 'cylinder',
+    radius: 0.01,
+    color: [0, 0, 1, 1],
+    line: [[0, 0, -1], [0, 0, 1]],
+  },
+]);
+
+```
+
 #### Touch Interactivity
 
 In two dimensions, polygon borders are used to define the borders within which figure elements can be touched. Polygon borders are useful as arbitrary touch borders can be selected that are unrelated to the shape drawn to the screen.
@@ -144,32 +233,8 @@ The default way to do this in FigureOne is to use a movement plane (`element.mov
 For example, to create a cube that can be translated in the YZ plane:
 
 ```js
-const figure = new Fig.Figure();
-figure.scene.setProjection({ style: 'orthographic' });
-figure.scene.setCamera({ position: [2, 1, 1], up: [0, 1, 0] });
-figure.scene.setLight({ directional: [0.7, 0.5, 0.2] });
-
-// Add x, y, z axis and a grid in the XZ plane which will help show how
-// the cube is moving
+// Add a grid in the YZ plane
 figure.add([
-  {
-    make: 'cylinder',
-    radius: 0.01,
-    color: [1, 0, 0, 1],
-    line: [[-1, 0, 0], [1, 0, 0]],
-  },
-  {
-    make: 'cylinder',
-    radius: 0.01,
-    color: [0, 1, 0, 1],
-    line: [[0, -1, 0], [0, 1, 0]],
-  },
-  {
-    make: 'cylinder',
-    radius: 0.01,
-    color: [0, 0, 1, 1],
-    line: [[0, 0, -1], [0, 0, 1]],
-  },
   {
     make: 'grid',
     bounds: [-0.8, -0.8, 1.6, 1.6],
@@ -177,10 +242,13 @@ figure.add([
     yStep: 0.05,
     line: { width: 0.002 },
     color: [0.7, 0.7, 0.7, 1],
+    // By default, the grid is created in the XY plane
+    // To rotate it to the XZ plane rotate π/2 around the y axis
     transform: ['r', Math.PI / 2, 0, 1, 0],
   },
 ]);
 
+// Add a red cube movable in the XZ plane
 figure.add({
   make: 'cube',
   side: 0.3,
@@ -196,17 +264,63 @@ In comparison, a cube that can be rotated around the y axis would be:
 
 >> Note: FigureOne rotates 3D objects with fingers in 
 
+#### Camera Interactivity
+
+It is often useful to allow a user to change the scene manually using gestures. This can be achieved by changing the scene with `setCamera` to change the camera location and `setProjection` to change the expanse of visible space.
+
+FigureOne also provides a built-in FigureElementPrimitive `cameraControl` (see {@link OBJ_CameraControl}) which defines a transparent rectangle in which the user can swipe horizontally to rotate a scene around a vertical axis, and swipe vertically to change the elevation of the camera relative to the vertical axis.
+
+```js
+figure.add([
+  {
+    make: 'cube',
+    side: 0.5,
+    color: [0, 1, 1, 1],
+    transform: ['r', 0, 1, 0, 0],
+  },
+  {
+    make: 'cameraControl',
+  },
+]);
+```
+
+![](./tutorials/shapes3d/cameracontrol.gif)
 
 #### Rotation
 
 The only information needed for a 2D rotation is the magnitude of rotation and direction. The rotation axis is always along the z axis.
 
-In three dimensions however, a rotation can be around any arbitrary axis.
+In three dimensions, a rotation can be around any arbitrary axis, and therefore 4 numbers are required. The rotation, and the x, y, and z components of the axis vector.
+
+Both a transform object, or short-hand transform notation can be used to define a 3D rotation. In both cases, first the rotation value is defined, then the axis of rotation.
+
+```js
+// Create a rotation component in a transform object
+const t1 = new Fig.Transform().rotate(Math.PI / 2, [1, 0, 0]);
+// Create a transform from short hand transform notation
+const t2 = Fig.getTransform(['r', Math.PI / 2, 1, 0, 0]);
+```
+
+For example, to rotate a cube around the x-Axis
+
+```js
+const cube = figure.add({
+  make: 'cube',
+  side: 0.5,
+  color: [0, 1, 1, 1],
+  // Set the transform so the rotation is arount the x axis
+  transform: ['r', 0, 1, 0, 0],
+});
+
+// Animate rotation around the x axis
+cube.animations.new()
+  .rotation({ velocity: 0.5, duration: null })
+  .start();
+```
+
+![](./tutorials/shapes3d/rotation.gif)
 
 
-
-
-In 3D, a two dimensional rotation is a rotation around the z axis, where using the right hand rule a positive rotation is anti-clockwise and a negative rotation is clockwise.
 
 
 
@@ -227,6 +341,7 @@ In 3D, a two dimensional rotation is a rotation around the z axis, where using t
 * Geometetry
   * Plane
   * Rotation
+  * Transform (direction, basis)
 * Touching/Moving
 
 ### <a id="shapes3d-boilerplate"></a> 3D Shapes Boilerplate

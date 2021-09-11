@@ -6795,6 +6795,16 @@
               
                 
                 <li><a
+                  href='#anglefromvectors'
+                  class="">
+                  angleFromVectors
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#fourbyfour'
                   class="">
                   fourByFour
@@ -27161,8 +27171,41 @@ figure.add(
     <p>3D shapes can be drawn, animated and interacted with in FigureOne.</p>
 <p>FigureOne tries to simplify the process for using 3D as much as possible. In fact, a number of simple shapes like cubes, spheres and surfaces can be created similarly to shapes in 2D.</p>
 <p>However, there are a number of concepts that are useful to know when dealing with 3D that are not needed for 2D. These concepts are especially useful if customizing shapes, or if creating your own.</p>
+<h4>Geometry</h4>
+<h5>Point</h5>
+<p>In FigureOne, the <a href="#point">Point</a> class is used extensively to define shapes and their properties. Points can be defined with <a href="#point">Point</a> object or by using array notation. For example, creating two rectangles with different positions in two dimensions could look like:</p>
+<pre class='hljs'><span class="hljs-comment">// Create two rectangles. One centered at [0.5, 0.5], and the other at</span>
+<span class="hljs-comment">// [-0.5, -0.5]</span>
+figure.add([
+  { <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;rectangle&#x27;</span>, <span class="hljs-attr">position</span>: <span class="hljs-keyword">new</span> Fig.Point(<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>) },
+  { <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;rectangle&#x27;</span>, <span class="hljs-attr">position</span>: [-<span class="hljs-number">0.5</span>, -<span class="hljs-number">0.5</span>] },
+]);</pre>
+<p>All points in FigureOne have an x, y, and z component. If working in two dimensions, then the z coordinate never has to be defined (as above), and will be 0 by default. When working in three dimensions, the z coordinate can be added.</p>
+<pre class='hljs'><span class="hljs-comment">// Create two rectangles. One centered at [0.5, 0.5, 1], and the other at</span>
+<span class="hljs-comment">// [-0.5, -0.5, -1]</span>
+figure.add([
+  { <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;rectangle&#x27;</span>, <span class="hljs-attr">position</span>: <span class="hljs-keyword">new</span> Fig.Point(<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">1</span>) },
+  { <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;rectangle&#x27;</span>, <span class="hljs-attr">position</span>: [-<span class="hljs-number">0.5</span>, -<span class="hljs-number">0.5</span>, -<span class="hljs-number">1</span>] },
+]);</pre>
+<h5>Plane</h5>
+<p>While <a href="#point">Point</a>s, <a href="Line">Line</a>s and <a href="#rect">Rect</a>angles are used to define most geometries in two dimensions, a <a href="#plane">Plane</a> is required for some three dimensional definitions.</p>
+<p>A plane is defined as a position and a normal vector to the plane.</p>
+<pre class='hljs'><span class="hljs-comment">// Create an XZ plane at [0, 0, 0] (the normal is thus along the y axis)</span>
+<span class="hljs-keyword">const</span> p = <span class="hljs-keyword">new</span> Fig.Plane([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>]);</pre>
+<p>The <a href="#plane">Plane</a> object has a number of useful methods for working with planes and can determine things like:</p>
+<ul>
+<li>if a point is on the plane</li>
+<li>if two planes are equal</li>
+<li>if two planes are parallel</li>
+<li>the line at the intersection of two planes</li>
+<li>if a line is parallel to the plane</li>
+<li>the intersect point of a line and plane</li>
+<li>if a line lies on the plane</li>
+<li>a point's projection onto the plane</li>
+<li>the distance between the plane and a point</li>
+</ul>
 <h4>Scene</h4>
-<p>In FigureOne we create some shapes in space. The <code>Scene</code> then defines how we present those shapes to the user. In other words, the Scene defines what portion of space gets shown to the user.</p>
+<p>In FigureOne shapes are created in a space. The <code>Scene</code> then defines how we present those shapes to the user, or what portion of space gets shown to the user.</p>
 <h5>Two Dimensions</h5>
 <p>In two dimensions the Scene simply defines the range of x and y values that will be shown. Four properties are used for this:</p>
 <ul>
@@ -27253,31 +27296,18 @@ fieldOfView: 1.7,
 <li><em>point light</em>: light that comes from a point in space and illuminates surfaces closer to that point more brightly.</li>
 </ul>
 <p><img src="./tutorials/shapes3d/light.png" alt=""></p>
-<h4>Touch Interactivity</h4>
-<p>In two dimensions, polygon borders are used to define the borders within which figure elements can be touched. Polygon borders are useful as arbitrary touch borders can be selected that are unrelated to the shape drawn to the screen.</p>
-<p>In three dimensions, defining volumes in which to select becomes challenging, both to define the volumes and to decide which volume was selected in a quick time on slower client devices.</p>
-<p>Therefore, selection of 3D objects is performed in FigureOne by:</p>
-<ul>
-<li>Rendering each touchable element into a temporary texture</li>
-<li>Each element is rendered with a unique color</li>
-<li>The temporary texture pixels are mapped to the screen pixels and the corresponding touched pixel found</li>
-<li>The color of the pixel touched is mapped to the figure element with that color</li>
-</ul>
-<p>This method is common, performant, simple (as complex touch volumes don't need to be defined), and will automatically handle depth - elements in front of other elements relative to the camera will be selected.</p>
-<p>When a larger touch border is required for a 3D element, use the <code>touch</code> property to scale the element in the temporary texture.</p>
-<p>When debugging, the <code>figure.showTouchable()</code> method can be used to render the temporary texture being used to determine what is touched to the screen.</p>
-<h4>Move Interactivity</h4>
-<p>Once an object is selected, it can be moved. In two dimensions this simply means moving the objects in the XY plane.</p>
-<p>But in three dimensions a choice needs to be made about how a mouse of finger movement on a 2D screen translates to a movement in 3D space.</p>
-<p>The default way to do this in FigureOne is to use a movement plane (<code>element.move.plane</code>). FigureOne will automatically project a movement on the screen onto this plane and move the element accordingly.</p>
-<p>For example, to create a cube that can be translated in the YZ plane:</p>
-<pre class='hljs'><span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure();
+<h4>Explanation Boiler-Plate Code</h4>
+<p>All code examples in the following 3D shape topics uses the same code to create a figure, set the scene and add a red x axis, green y axis and blue z axis.</p>
+<p>All example code in the topics below would be appended to this boilerplate code:</p>
+<pre class='hljs'><span class="hljs-comment">// Create the figure</span>
+<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure();
+
+<span class="hljs-comment">// Set the scene</span>
 figure.scene.setProjection({ <span class="hljs-attr">style</span>: <span class="hljs-string">&#x27;orthographic&#x27;</span> });
 figure.scene.setCamera({ <span class="hljs-attr">position</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">up</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>] });
 figure.scene.setLight({ <span class="hljs-attr">directional</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.2</span>] });
 
-<span class="hljs-comment">// Add x, y, z axis and a grid in the XZ plane which will help show how</span>
-<span class="hljs-comment">// the cube is moving</span>
+<span class="hljs-comment">// Add x, y, z axis</span>
 figure.add([
   {
     <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cylinder&#x27;</span>,
@@ -27297,6 +27327,28 @@ figure.add([
     <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
     <span class="hljs-attr">line</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, -<span class="hljs-number">1</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>]],
   },
+]);
+</pre>
+<h4>Touch Interactivity</h4>
+<p>In two dimensions, polygon borders are used to define the borders within which figure elements can be touched. Polygon borders are useful as arbitrary touch borders can be selected that are unrelated to the shape drawn to the screen.</p>
+<p>In three dimensions, defining volumes in which to select becomes challenging, both to define the volumes and to decide which volume was selected in a quick time on slower client devices.</p>
+<p>Therefore, selection of 3D objects is performed in FigureOne by:</p>
+<ul>
+<li>Rendering each touchable element into a temporary texture</li>
+<li>Each element is rendered with a unique color</li>
+<li>The temporary texture pixels are mapped to the screen pixels and the corresponding touched pixel found</li>
+<li>The color of the pixel touched is mapped to the figure element with that color</li>
+</ul>
+<p>This method is common, performant, simple (as complex touch volumes don't need to be defined), and will automatically handle depth - elements in front of other elements relative to the camera will be selected.</p>
+<p>When a larger touch border is required for a 3D element, use the <code>touch</code> property to scale the element in the temporary texture.</p>
+<p>When debugging, the <code>figure.showTouchable()</code> method can be used to render the temporary texture being used to determine what is touched to the screen.</p>
+<h4>Move Interactivity</h4>
+<p>Once an object is selected, it can be moved. In two dimensions this simply means moving the objects in the XY plane.</p>
+<p>But in three dimensions a choice needs to be made about how a mouse of finger movement on a 2D screen translates to a movement in 3D space.</p>
+<p>The default way to do this in FigureOne is to use a movement plane (<code>element.move.plane</code>). FigureOne will automatically project a movement on the screen onto this plane and move the element accordingly.</p>
+<p>For example, to create a cube that can be translated in the YZ plane:</p>
+<pre class='hljs'><span class="hljs-comment">// Add a grid in the YZ plane</span>
+figure.add([
   {
     <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;grid&#x27;</span>,
     <span class="hljs-attr">bounds</span>: [-<span class="hljs-number">0.8</span>, -<span class="hljs-number">0.8</span>, <span class="hljs-number">1.6</span>, <span class="hljs-number">1.6</span>],
@@ -27304,10 +27356,13 @@ figure.add([
     <span class="hljs-attr">yStep</span>: <span class="hljs-number">0.05</span>,
     <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.002</span> },
     <span class="hljs-attr">color</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-comment">// By default, the grid is created in the XY plane</span>
+    <span class="hljs-comment">// To rotate it to the XZ plane rotate π/2 around the y axis</span>
     <span class="hljs-attr">transform</span>: [<span class="hljs-string">&#x27;r&#x27;</span>, <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
   },
 ]);
 
+<span class="hljs-comment">// Add a red cube movable in the XZ plane</span>
 figure.add({
   <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cube&#x27;</span>,
   <span class="hljs-attr">side</span>: <span class="hljs-number">0.3</span>,
@@ -27323,10 +27378,43 @@ figure.add({
 <p>Note: FigureOne rotates 3D objects with fingers in</p>
 </blockquote>
 </blockquote>
+<h4>Camera Interactivity</h4>
+<p>It is often useful to allow a user to change the scene manually using gestures. This can be achieved by changing the scene with <code>setCamera</code> to change the camera location and <code>setProjection</code> to change the expanse of visible space.</p>
+<p>FigureOne also provides a built-in FigureElementPrimitive <code>cameraControl</code> (see <a href="#obj_cameracontrol">OBJ_CameraControl</a>) which defines a transparent rectangle in which the user can swipe horizontally to rotate a scene around a vertical axis, and swipe vertically to change the elevation of the camera relative to the vertical axis.</p>
+<pre class='hljs'>figure.add([
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cube&#x27;</span>,
+    <span class="hljs-attr">side</span>: <span class="hljs-number">0.5</span>,
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">transform</span>: [<span class="hljs-string">&#x27;r&#x27;</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+  },
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cameraControl&#x27;</span>,
+  },
+]);</pre>
+<p><img src="./tutorials/shapes3d/cameracontrol.gif" alt=""></p>
 <h4>Rotation</h4>
 <p>The only information needed for a 2D rotation is the magnitude of rotation and direction. The rotation axis is always along the z axis.</p>
-<p>In three dimensions however, a rotation can be around any arbitrary axis.</p>
-<p>In 3D, a two dimensional rotation is a rotation around the z axis, where using the right hand rule a positive rotation is anti-clockwise and a negative rotation is clockwise.</p>
+<p>In three dimensions, a rotation can be around any arbitrary axis, and therefore 4 numbers are required. The rotation, and the x, y, and z components of the axis vector.</p>
+<p>Both a transform object, or short-hand transform notation can be used to define a 3D rotation. In both cases, first the rotation value is defined, then the axis of rotation.</p>
+<pre class='hljs'><span class="hljs-comment">// Create a rotation component in a transform object</span>
+<span class="hljs-keyword">const</span> t1 = <span class="hljs-keyword">new</span> Fig.Transform().rotate(<span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]);
+<span class="hljs-comment">// Create a transform from short hand transform notation</span>
+<span class="hljs-keyword">const</span> t2 = Fig.getTransform([<span class="hljs-string">&#x27;r&#x27;</span>, <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]);</pre>
+<p>For example, to rotate a cube around the x-Axis</p>
+<pre class='hljs'><span class="hljs-keyword">const</span> cube = figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cube&#x27;</span>,
+  <span class="hljs-attr">side</span>: <span class="hljs-number">0.5</span>,
+  <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+  <span class="hljs-comment">// Set the transform so the rotation is arount the x axis</span>
+  <span class="hljs-attr">transform</span>: [<span class="hljs-string">&#x27;r&#x27;</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+});
+
+<span class="hljs-comment">// Animate rotation around the x axis</span>
+cube.animations.new()
+  .rotation({ <span class="hljs-attr">velocity</span>: <span class="hljs-number">0.5</span>, <span class="hljs-attr">duration</span>: <span class="hljs-literal">null</span> })
+  .start();</pre>
+<p><img src="./tutorials/shapes3d/rotation.gif" alt=""></p>
 <ul>
 <li>Scene
 <ul>
@@ -27348,6 +27436,7 @@ figure.add({
 <ul>
 <li>Plane</li>
 <li>Rotation</li>
+<li>Transform (direction, basis)</li>
 </ul>
 </li>
 <li>Touching/Moving</li>
@@ -58188,7 +58277,7 @@ point, the element's rotation will instantly flip. Then for the second have
 of the rotation as the x component gets more negative it will once again
 look stationary.</p>
 <p>If wanting to animate a direction vector, use <a href="directionToAxisAngle">directionToAxisAngle</a>
-or <a href="vectorToVectorToAxisAngle">vectorToVectorToAxisAngle</a> and then use a axis/angle rotation
+or <a href="#anglefromvectors">angleFromVectors</a> and then use a axis/angle rotation
 keeping the axis constant. If wanting to animate a change of basis rotation,
 then use a <a href="#customanimationstep">CustomAnimationStep</a> to manage how to change the basis
 vectors over time.</p>
@@ -81098,6 +81187,93 @@ and the second object or nin numbers define the basis to move to.</p>
 
       
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='anglefromvectors'>
+      angleFromVectors
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Calculate the rotation axis and angle required to move from one
+vector to another.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>fromVector</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>toVector</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>axisIfCollinear</span> <code class='quiet'>((<a href="#typeparsablepoint">TypeParsablePoint</a> | null)
+            = <code>null</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>{axis: <a href="#point">Point</a>, angle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>}</code>:
+        
+      
+    
+  
+
   
 
   
