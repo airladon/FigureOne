@@ -272,7 +272,7 @@ export default class FigurePrimitives {
       },
       name: generateUniqueId('primitive_'),
       color: this.defaultColor, // $FlowFixMe
-      transform: [['s', 1], ['r', 0, 0, 0], ['t', 0, 0, 0]],
+      transform: [['s', 1], ['r', 0, 0, 0, 1], ['t', 0, 0, 0]],
       dimension: 2,
     };
     // Setup shaders based on input options
