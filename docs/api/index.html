@@ -27160,14 +27160,14 @@ figure.add(
 <p>However, there are a number of concepts that are useful to know when dealing with 3D that are not needed for 2D. These concepts are especially useful if customizing shapes, or if creating your own.</p>
 <h4>Geometry</h4>
 <h5>Point</h5>
-<p>In FigureOne, the <a href="#point">Point</a> class is used extensively to define shapes and their properties. Points can be defined with <a href="#point">Point</a> object or by using array notation. For example, creating two rectangles with different positions in two dimensions could look like:</p>
+<p>In FigureOne, the <a href="#point">Point</a> class is used extensively to define shapes and their properties. Points can be defined by instantiating a <a href="#point">Point</a> or by using array notation. For example, creating two rectangles with different positions in two dimensions could look like:</p>
 <pre class='hljs'><span class="hljs-comment">// Create two rectangles. One centered at [0.5, 0.5], and the other at</span>
 <span class="hljs-comment">// [-0.5, -0.5]</span>
 figure.add([
   { <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;rectangle&#x27;</span>, <span class="hljs-attr">position</span>: <span class="hljs-keyword">new</span> Fig.Point(<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>) },
   { <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;rectangle&#x27;</span>, <span class="hljs-attr">position</span>: [-<span class="hljs-number">0.5</span>, -<span class="hljs-number">0.5</span>] },
 ]);</pre>
-<p>All points in FigureOne have an x, y, and z component. If working in two dimensions, then the z coordinate never has to be defined (as above), and will be 0 by default. When working in three dimensions, the z coordinate can be added.</p>
+<p>All points in FigureOne have an x, y, and z component. If working in two dimensions, then the z component never has to be defined (as above), and will be 0 by default. When working in three dimensions, the z component can be added.</p>
 <pre class='hljs'><span class="hljs-comment">// Create two rectangles. One centered at [0.5, 0.5, 1], and the other at</span>
 <span class="hljs-comment">// [-0.5, -0.5, -1]</span>
 figure.add([
@@ -27175,7 +27175,7 @@ figure.add([
   { <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;rectangle&#x27;</span>, <span class="hljs-attr">position</span>: [-<span class="hljs-number">0.5</span>, -<span class="hljs-number">0.5</span>, -<span class="hljs-number">1</span>] },
 ]);</pre>
 <h5>Plane</h5>
-<p>While <a href="#point">Point</a>s, <a href="Line">Line</a>s and <a href="#rect">Rect</a>angles are used to define most geometries in two dimensions, a <a href="#plane">Plane</a> is required for some three dimensional definitions.</p>
+<p>While <a href="#point">Point</a>, <a href="Line">Line</a> and <a href="#rect">Rect</a> are used to define most geometries in two dimensions, a <a href="#plane">Plane</a> is required for some three dimensional definitions.</p>
 <p>A plane is defined as a position and a normal vector to the plane.</p>
 <p><img src="./tutorials/shapes3d/plane.png" alt=""></p>
 <pre class='hljs'><span class="hljs-comment">// Create an XZ plane at [0, 0, 0] (the normal is thus along the y axis)</span>
@@ -27193,7 +27193,7 @@ figure.add([
 <li>the distance between the plane and a point</li>
 </ul>
 <h4>Scene</h4>
-<p>In FigureOne shapes are created in a space. The <code>Scene</code> then defines how we present those shapes to the user, or what portion of space gets shown to the user.</p>
+<p>In FigureOne shapes are created in a space. The <code>Scene</code> then defines how the shapes are presented to the user (what portion of space gets shown to the user).</p>
 <h5>Two Dimensions</h5>
 <p>In two dimensions the Scene simply defines the range of x and y values that will be shown. Four properties are used for this:</p>
 <ul>
@@ -27203,7 +27203,7 @@ figure.add([
 <li><code>top</code> - the maximum y value</li>
 </ul>
 <h5>Three Dimensions</h5>
-<p>In three dimensions, we want capture a three dimensional space and draw it to a two dimensional screen. To do this we:</p>
+<p>In three dimensions, we want capture a three dimensional space or volume and draw it to a two dimensional screen. To do this we:</p>
 <ul>
 <li>Choose a position from which to observe the space from</li>
 <li>Choose a direction to look at</li>
@@ -27235,33 +27235,35 @@ figure.add([
 <li><em>perspective projection</em> - shapes get smaller the further they are away from the camera</li>
 <li><em>orthographic projection</em> - shape size is the same at all distances to the camera</li>
 </ul>
-<p>const figure = new Fig.Figure({ color: [1, 0, 0, 1]});</p>
-<p>const c1 = figure.add({
-make: 'cube',
-lines: true,
-side: 0.12,
-position: [-0.25, -0.025, 0],
+<!-- const figure = new Fig.Figure({ color: [1, 0, 0, 1]});
+
+const c1 = figure.add({
+  make: 'cube',
+  lines: true,
+  side: 0.12,
+  position: [-0.25, -0.025, 0],
 });
 c1.scene = new Fig.Scene({
-style: 'orthographic',
-camera: { position: [1, 0.5, 2] },
-left: -1,
-right: 1,
-bottom: -0.5,
-top: 0.5,
-});</p>
-<p>const c2 = figure.add({
-make: 'cube',
-lines: true,
-side: 0.2,
-position: [0, 0, 0],
+  style: 'orthographic',
+  camera: { position: [1, 0.5, 2] },
+  left: -1,
+  right: 1,
+  bottom: -0.5,
+  top: 0.5,
+});
+
+const c2 = figure.add({
+  make: 'cube',
+  lines: true,
+  side: 0.2,
+  position: [0, 0, 0],
 });
 c2.scene = new Fig.Scene({
-style: 'perspective',
-camera: { position: [0.35, 0.25, 0.7] },
-aspectRatio: 2,
-fieldOfView: 1.7,
-});</p>
+  style: 'perspective',
+  camera: { position: [0.35, 0.25, 0.7] },
+  aspectRatio: 2,
+  fieldOfView: 1.7,
+}); -->
 <p><img src="./tutorials/shapes3d/projection.png" alt=""></p>
 <h5>Orthographic Projection</h5>
 <p>Depending on the style of projection, the expanse of space to be captured in the projection can be defined.</p>

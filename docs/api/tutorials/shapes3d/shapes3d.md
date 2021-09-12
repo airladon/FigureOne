@@ -8,7 +8,7 @@ However, there are a number of concepts that are useful to know when dealing wit
 
 ##### Point
 
-In FigureOne, the {@link Point} class is used extensively to define shapes and their properties. Points can be defined with {@link Point} object or by using array notation. For example, creating two rectangles with different positions in two dimensions could look like:
+In FigureOne, the {@link Point} class is used extensively to define shapes and their properties. Points can be defined by instantiating a {@link Point} or by using array notation. For example, creating two rectangles with different positions in two dimensions could look like:
 
 ```js
 // Create two rectangles. One centered at [0.5, 0.5], and the other at
@@ -19,7 +19,7 @@ figure.add([
 ]);
 ```
 
-All points in FigureOne have an x, y, and z component. If working in two dimensions, then the z coordinate never has to be defined (as above), and will be 0 by default. When working in three dimensions, the z coordinate can be added.
+All points in FigureOne have an x, y, and z component. If working in two dimensions, then the z component never has to be defined (as above), and will be 0 by default. When working in three dimensions, the z component can be added.
 
 ```js
 // Create two rectangles. One centered at [0.5, 0.5, 1], and the other at
@@ -32,7 +32,7 @@ figure.add([
 
 ##### Plane
 
-While {@link Point}s, {@link Line}s and {@link Rect}angles are used to define most geometries in two dimensions, a {@link Plane} is required for some three dimensional definitions.
+While {@link Point}, {@link Line} and {@link Rect} are used to define most geometries in two dimensions, a {@link Plane} is required for some three dimensional definitions.
 
 A plane is defined as a position and a normal vector to the plane.
 
@@ -59,7 +59,7 @@ The {@link Plane} object has a number of useful methods for working with planes 
 
 #### Scene
 
-In FigureOne shapes are created in a space. The `Scene` then defines how we present those shapes to the user, or what portion of space gets shown to the user.
+In FigureOne shapes are created in a space. The `Scene` then defines how the shapes are presented to the user (what portion of space gets shown to the user).
 
 ##### Two Dimensions
 In two dimensions the Scene simply defines the range of x and y values that will be shown. Four properties are used for this:
@@ -71,7 +71,7 @@ In two dimensions the Scene simply defines the range of x and y values that will
 
 ##### Three Dimensions
 
-In three dimensions, we want capture a three dimensional space and draw it to a two dimensional screen. To do this we:
+In three dimensions, we want capture a three dimensional space or volume and draw it to a two dimensional screen. To do this we:
 * Choose a position from which to observe the space from
 * Choose a direction to look at
 * Choose which direction is up
@@ -106,7 +106,7 @@ Therefore the projection can have two styles:
 * *perspective projection* - shapes get smaller the further they are away from the camera
 * *orthographic projection* - shape size is the same at all distances to the camera
 
-const figure = new Fig.Figure({ color: [1, 0, 0, 1]});
+<!-- const figure = new Fig.Figure({ color: [1, 0, 0, 1]});
 
 const c1 = figure.add({
   make: 'cube',
@@ -134,7 +134,7 @@ c2.scene = new Fig.Scene({
   camera: { position: [0.35, 0.25, 0.7] },
   aspectRatio: 2,
   fieldOfView: 1.7,
-});
+}); -->
 
 ![](./tutorials/shapes3d/projection.png)
 
@@ -142,7 +142,7 @@ c2.scene = new Fig.Scene({
 ##### Orthographic Projection
 Depending on the style of projection, the expanse of space to be captured in the projection can be defined. 
 
-For orthographic projection, adding `near` and `far` to `left`, `right`, `bottom`, and `top` creates a rectangular prism in front of the camera. Any shapes (or portions of shapes) withing this prism will be shown. The property names are relative to the camera. `camera.lookAt` will be a normal to the plane with `left`, `right`, `bottom` and `top`. `camera.up` will orient the plane to align with `top`. `camera.position` and `near` will then position the prism while `far` will give it depth.
+For orthographic projection, adding `near` and `far` to `left`, `right`, `bottom`, and `top` creates a rectangular prism in front of the camera. Any shapes (or portions of shapes) within this prism will be shown. The property names are relative to the camera. `camera.lookAt` will be a normal to the near and far sides of the prism. `camera.up` will orient the the `top` of the prism. `camera.position` and `near` will then position the prism while `far` will give it depth.
 
 ![](./tutorials/shapes3d/orthographic.jpg)
 
@@ -181,7 +181,7 @@ The goal of FigureOne lighting is to provide simple lighting options that can ea
 * It lights surfaces from behind
 * A surface color is the same on top and below the surface
 
-If more realistic lighting, shaddows or multiple light sources are required, then custom shaders should be used.
+If more realistic lighting, shaddows or multiple light sources are required, then custom shaders can be used.
 
 FigureOne provides four simple lighting options:
 * *no light*: All surfaces are the shape color with no lighting modification (looks flat)
@@ -370,33 +370,36 @@ cube.animations.new()
 ![](./tutorials/shapes3d/rotation.gif)
 
 
+#### <a id="shapes3d-boilerplate"></a> Equation Boilerplate
+To test examples within the '3D Shape Primitives' section of the API reference create an `index.html` file and `index.js` file.
 
+All examples are snippets which can be appended to the end of the `index.js` file.
 
+```html
+<!-- index.html -->
+<!doctype html>
+<html>
+<body>
+    <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
+    </div>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.10.13/figureone.min.js'></script>
+    <script type="text/javascript" src='./index.js'></script>
+</body>
+</html>
+```
 
-
-
-
-
-* Scene
-  * Projection
-  * Camera
-  * Lighting
-* Shapes
-  * Cone
-  * Cube
-  * Sphere
-  * Revolve
-  * Surface
-* Geometetry
-  * Plane
-  * Rotation
-  * Transform (direction, basis)
-* Touching/Moving
-
-### <a id="shapes3d-boilerplate"></a> 3D Shapes Boilerplate
-```js
-const figure = new Fig.Figure();
-figure.scene.setProjection({ style: 'orthographic' });
-figure.scene.setCamera({ position: [2, 1, 1], up: [0, 1, 0] });
-figure.scene.setLight({ directional: [0.7, 0.5, 1] });
+```javascript
+// index.js
+const figure = new Fig.Figure({
+  scene: {
+    style: 'orthographic',
+    camera: {
+      position: [2, 1, 1],
+      up: [0, 1, 0],
+    },
+    light: {
+      directional: [0.7, 0.5, 1],
+    },
+  },
+});
 ```
