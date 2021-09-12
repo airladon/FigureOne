@@ -30,7 +30,6 @@ import { FunctionMap } from '../../tools/FunctionMap';
 import type { TypeWhen } from '../TimeKeeper';
 // import type { OBJ_AnimationStep } from './AnimationStep';
 import type { TypeParsablePoint, TypeParsableTransform } from '../../tools/g2';
-import type { TypeRotationComponent } from '../../tools/geometry/Transform';
 import {
   isParsablePoint, getPoint, isParsableTransform, getTransform,
 } from '../../tools/g2';
@@ -338,7 +337,7 @@ export default class AnimationManager {
    *   .start();
    */
   rotation(
-    targetOrOptions: OBJ_RotationAnimationStep | number | TypeRotationComponent,
+    targetOrOptions: OBJ_RotationAnimationStep | number,
   ) {
     let optionsIn;
     if (typeof targetOrOptions === 'number' || Array.isArray(targetOrOptions)) {
