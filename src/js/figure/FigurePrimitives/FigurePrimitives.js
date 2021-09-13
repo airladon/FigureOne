@@ -591,7 +591,9 @@ export default class FigurePrimitives {
     element.custom.options = options;
     element.custom.getPoints = getPointsFn;
     element.custom.updatePoints = (updateOptions: Object) => {
-      const o = joinObjects({}, element.custom.options, { transform: [] }, updateOptions);
+      const o = joinObjects(
+        {}, element.custom.options, { transform: [], position: [0, 0] }, updateOptions,
+      );
       element.custom.options = o;
       if (o.transformPoints != null) {
         o.transform = o.transformPoints;

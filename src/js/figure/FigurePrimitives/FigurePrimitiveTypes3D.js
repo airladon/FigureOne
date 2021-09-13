@@ -534,13 +534,29 @@ export type OBJ_Cone = {
  * ![](./apiassets/revolve.png)
  *
  * Revolve (or radially sweep) a profile in the XY plane around the x axis to
- * form a 3D surface.
+ * form a 3D surface. The profile y values must be greater than or equal to 0.
  *
- * Note, if creating a shape with a hole (like the pipe or torus example below)
- *, then ensure the points are defined in the clockwise direction in the XY
- * plane otherwise the lighting normals will be opposite to that expected.
- * One way to think of it is, starting at x = 0, create the outside surface
- * first, then turn back to create the inside surface.
+ * Profiles can be open (start and end point are different) or closed (start
+ * and end point are equal).
+ *
+ * For predictable lighting results, profiles should be created with the
+ * following rules:
+ *
+ * - An open profile's start points should have an x value less than its end
+ *   point
+ * - Closed profiles where all points have y > 0 should be defined in the
+ *   clockwise direction when looking at the XY plane from the +z axis.
+ *
+ * If an open profile's start and ends points are at y = 0, then the final shape
+ * will look solid.
+ *
+ * If an open profile's start and/or ends points have y > 0, then the final
+ * shape will look like a surface open at the ends with y > 0. As a surface can
+ * have only one color, then looking inside the shape the surface lighting will
+ * be opposite to that expected. To create open ended solids with lighting that
+ * is as expected, create the outside and inside surface with a closed profile.
+ *
+ * ![](./apiassets/revolveexplanation.png)
  *
  * @property {Array<TypeParsablePoint>} profile XY plane profile to be radially
  * swept around the x axis
@@ -556,12 +572,8 @@ export type OBJ_Cone = {
  * plane and sweep around the x axis following the right hand rule. Use
  * `rotation` to start the sweep at some angle where 0º is in the XY for +y and
  * 90º is in the XZ plane for +z. initial angle of the revolve rotation
- * @property {TypeParsablePoint} [axis] orient the shape so its axis is along
- * this vector
- * @property {TypeParsablePoint} [position] offset the final vertices such that
- * the original (0, 0) point in the profile moves to position (this step
- * happens after the rotation)
- * shape
+ * @property {TypeParsablePoint} [axis] orient the draw space vertices of the
+ * shape so its axis is along this vector
  * @property {boolean} [lines] if `true` then points representing
  * the edes of the faces will be returned. If `false`, then points
  * representing two triangles per face and an
@@ -582,9 +594,11 @@ export type OBJ_Cone = {
  * @example
  * // If creating a shell, then also create the inside surface as this will make
  * // lighting more correct (note there is not shaddows).
+ * // Ensure to close the shell by adding the first point to the end of the
+ * // profile
  * figure.add({
  *   make: 'revolve',
- *   profile: [[0, 0.15], [0.5, 0.3], [0.5, 0.29], [0, 0.14]],
+ *   profile: [[0, 0.15], [0.5, 0.3], [0.5, 0.29], [0, 0.14], [0, 0.15]],
  *   color: [1, 0, 0, 1],
  *   sides: 30,
  *   normals: 'curveRadial',
@@ -596,7 +610,7 @@ export type OBJ_Cone = {
  * const profile = x.map(_x => [_x, 0.1 + 0.05 * Math.sin(_x * 2 * Math.PI * 2)]);
  * figure.add({
  *   make: 'revolve',
- *   profile: [...profile, [0.4, 0]],
+ *   profile: [...profile, [0.4, 0], [0, 0], [0, 0.1]],
  *   axis: [0, 1, 0],
  *   color: [1, 0, 0, 1],
  *   sides: 30,
@@ -627,6 +641,33 @@ export type OBJ_Cone = {
  *   sides: 20,
  *   lines: true,
  * });
+ *
+@example
+// Open profile y = 0 at ends
+figure.add({
+  make: 'revolve',
+  profile: [[0, 0], [0, 0.3], [0.5, 0.2], [1, 0.3], [1, 0]],
+  color: [1, 0, 0, 1],
+  sides: 30,
+});
+
+@example
+// Open profile y > 0 at ends
+figure.add({
+  make: 'revolve',
+  profile: [[0, 0.3], [0.5, 0.2], [1, 0.3]],
+  color: [1, 0, 0, 1],
+  sides: 30,
+});
+
+@example
+// Closed Profile
+figure.add({
+  make: 'revolve',
+  profile: [[0, 0.3], [0.5, 0.2], [1, 0.3], [1, 0.29], [0.5, 0.19], [0, 0.29], [0, 0.3]],
+  color: [1, 0, 0, 1],
+  sides: 30,
+});
  */
 export type OBJ_Revolve = {
   sides?: number,
@@ -634,7 +675,6 @@ export type OBJ_Revolve = {
   normals?: 'flat' | 'curveProfile' | 'curveRadial' | 'curve',
   axis?: TypeParsablePoint,
   rotation?: number,
-  position?: TypeParsablePoint,
   lines?: boolean,
 } & OBJ_FigurePrimitive & OBJ_Generic3D;
 
