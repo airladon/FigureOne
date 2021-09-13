@@ -24,7 +24,7 @@ col0  col1...
    *   *   *   *   *   *       |        row 0
 
 Edges may be connected to their opposite edge:
-- `closeRows`: connects the first column to the last column
+- `closeColumns`: connects the first column to the last column
 - `closeColums`: connects the first row to the last row
 
 A cyclinder is an example where just one pair of edges is connected.
@@ -248,8 +248,8 @@ function getCurveNormals(
   surfaceNormals: Array<Array<Point>>,
   surfacePoints: Array<Array<Point>>,
   curve: 'curveColumns' | 'curveRows' | 'curve',
-  closeRows: boolean,
   closeColumns: boolean,
+  closeRows: boolean,
 ) {
   const rows = surfacePoints.length;
   const cols = surfacePoints[0].length;
@@ -280,28 +280,28 @@ function getCurveNormals(
       pp = new Point(0, 0, 0);
       if (r > 0) {
         prevSideIndex = r - 1;
-      } else if (closeColumns) {
+      } else if (closeRows) {
         prevSideIndex = surfaceNormals.length - 1;
       } else {
         prevSideIndex = null;
       }
       if (r < rows - 2) {
         nextSideIndex = r + 1;
-      } else if (closeColumns) {
+      } else if (closeRows) {
         nextSideIndex = 0;
       } else {
         nextSideIndex = null;
       }
       if (c > 0) {
         prevProfileIndex = c - 1;
-      } else if (closeRows) {
+      } else if (closeColumns) {
         prevProfileIndex = surfaceNormals[0].length - 1;
       } else {
         prevProfileIndex = null;
       }
       if (c < cols - 2) {
         nextProfileIndex = c + 1;
-      } else if (closeRows) {
+      } else if (closeColumns) {
         nextProfileIndex = 0;
       } else {
         nextProfileIndex = null;
@@ -394,10 +394,10 @@ function getCurveNormals(
  * of the grid. `curve` will gradiate the shading along both rows and columns.
  * Use `curve`, `curveRows`, or `curveColumns` to make a surface
  * look more round with fewer number of sides.
- * @property {boolean} [closeRows] Set to `true` if first row and last row are
+ * @property {boolean} [closeColumns] Set to `true` if first row and last row are
  * the same, and normals is `'curveRows'` or `'curve'` to get correct normal
  * calculations (`false`)
- * @property {boolean} [closeColumns] Set to `true` if first row and last
+ * @property {boolean} [closeRows] Set to `true` if first row and last
  * column are the same, and normals is `'curveColumns'` or `'curve'` to get
  * correct normal calculations (`false`)
  * @property {TypeParsableTransform} [transform] apply a final transform to
@@ -411,8 +411,8 @@ function getCurveNormals(
 export type OBJ_SurfacePoints = {
   points?: Array<Array<TypeParsablePoint>>,
   normals?: 'curveColumns' | 'curveRows' | 'curve' | 'flat',
-  closeRows?: boolean,
   closeColumns?: boolean,
+  closeRows?: boolean,
   transform?: TypeParsableTransform,
   lines?: boolean,
   invertNormals?: boolean,
@@ -431,12 +431,12 @@ export type OBJ_SurfacePoints = {
  */
 function surface(options: OBJ_SurfacePoints) {
   const {
-    transform, lines, closeColumns, closeRows, normals, points, invertNormals,
+    transform, lines, closeRows, closeColumns, normals, points, invertNormals,
   } = joinObjects({
     normals: 'flat',
     lines: false,
-    closeRows: false,
     closeColumns: false,
+    closeRows: false,
     invertNormals: false,
   }, options);
 
@@ -452,7 +452,7 @@ function surface(options: OBJ_SurfacePoints) {
   const surfaceNormals = getSurfaceNormals(surfacePoints);
   let norms = surfaceNormals;
   if (normals !== 'flat') {
-    norms = getCurveNormals(surfaceNormals, surfacePoints, normals, closeRows, closeColumns);
+    norms = getCurveNormals(surfaceNormals, surfacePoints, normals, closeColumns, closeRows);
   } else {
     norms = getFlatNormals(surfaceNormals, surfacePoints);
   }

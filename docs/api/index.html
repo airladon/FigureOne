@@ -20991,10 +20991,19 @@ lines from the bottom left corner.</p>
         </div>
       
         <div class='space-bottom0'>
+          <span class='code bold'>step</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : distance between grid lines
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
           <span class='code bold'>xStep</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : distance between vertical lines in grid from
 left - use this instead of 
 <code>xNum</code>
+. This will override 
+<code>step</code>
 .
 
           
@@ -21005,6 +21014,18 @@ left - use this instead of
           : distance between horizontal lines in grid from
 bottom - use this instead of 
 <code>yNum</code>
+. This will override 
+<code>step</code>
+.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>num</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of grid lines. This will override 
+<code>step</code>
+.
 
           
         </div>
@@ -21012,7 +21033,11 @@ bottom - use this instead of
         <div class='space-bottom0'>
           <span class='code bold'>xNum</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : number of vertical lines in grid including top and
-bottom lines - overrides xStep
+bottom lines - overrides 
+<code>num</code>
+ and 
+<code>xStep</code>
+.
 
           
         </div>
@@ -21020,7 +21045,11 @@ bottom lines - overrides xStep
         <div class='space-bottom0'>
           <span class='code bold'>yNum</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : number of horizontal lines in grid including left
-and right lines - overrides yStep
+and right lines - overrides 
+<code>num</code>
+ and 
+<code>yStep</code>
+.
 
           
         </div>
@@ -27267,7 +27296,7 @@ c2.scene = new Fig.Scene({
 <p><img src="./tutorials/shapes3d/projection.png" alt=""></p>
 <h5>Orthographic Projection</h5>
 <p>Depending on the style of projection, the expanse of space to be captured in the projection can be defined.</p>
-<p>For orthographic projection, adding <code>near</code> and <code>far</code> to <code>left</code>, <code>right</code>, <code>bottom</code>, and <code>top</code> creates a rectangular prism in front of the camera. Any shapes (or portions of shapes) withing this prism will be shown. The property names are relative to the camera. <code>camera.lookAt</code> will be a normal to the plane with <code>left</code>, <code>right</code>, <code>bottom</code> and <code>top</code>. <code>camera.up</code> will orient the plane to align with <code>top</code>. <code>camera.position</code> and <code>near</code> will then position the prism while <code>far</code> will give it depth.</p>
+<p>For orthographic projection, adding <code>near</code> and <code>far</code> to <code>left</code>, <code>right</code>, <code>bottom</code>, and <code>top</code> creates a rectangular prism in front of the camera. Any shapes (or portions of shapes) within this prism will be shown. The property names are relative to the camera. <code>camera.lookAt</code> will be a normal to the near and far sides of the prism. <code>camera.up</code> will orient the the <code>top</code> of the prism. <code>camera.position</code> and <code>near</code> will then position the prism while <code>far</code> will give it depth.</p>
 <p><img src="./tutorials/shapes3d/orthographic.jpg" alt=""></p>
 <h5>Perspective Projection</h5>
 <p>These same properties cannot be used for perspective projection because size changes with distance from camera. For example the width <code>left</code> and <code>right</code> will be different closer to the camera compared with further away. Therefore, a frustum is used to define visible space with the properties:</p>
@@ -27293,7 +27322,7 @@ c2.scene = new Fig.Scene({
 <li>It lights surfaces from behind</li>
 <li>A surface color is the same on top and below the surface</li>
 </ul>
-<p>If more realistic lighting, shaddows or multiple light sources are required, then custom shaders should be used.</p>
+<p>If more realistic lighting, shaddows or multiple light sources are required, then custom shaders can be used.</p>
 <p>FigureOne provides four simple lighting options:</p>
 <ul>
 <li><em>no light</em>: All surfaces are the shape color with no lighting modification (looks flat)</li>
@@ -27440,37 +27469,32 @@ cube.animations.new()
   .rotation({ <span class="hljs-attr">velocity</span>: <span class="hljs-number">0.5</span>, <span class="hljs-attr">duration</span>: <span class="hljs-literal">null</span> })
   .start();</pre>
 <p><img src="./tutorials/shapes3d/rotation.gif" alt=""></p>
-<ul>
-<li>Scene
-<ul>
-<li>Projection</li>
-<li>Camera</li>
-<li>Lighting</li>
-</ul>
-</li>
-<li>Shapes
-<ul>
-<li>Cone</li>
-<li>Cube</li>
-<li>Sphere</li>
-<li>Revolve</li>
-<li>Surface</li>
-</ul>
-</li>
-<li>Geometetry
-<ul>
-<li>Plane</li>
-<li>Rotation</li>
-<li>Transform (direction, basis)</li>
-</ul>
-</li>
-<li>Touching/Moving</li>
-</ul>
-<h3><a id="shapes3d-boilerplate"></a> 3D Shapes Boilerplate</h3>
-<pre class='hljs'><span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure();
-figure.scene.setProjection({ <span class="hljs-attr">style</span>: <span class="hljs-string">&#x27;orthographic&#x27;</span> });
-figure.scene.setCamera({ <span class="hljs-attr">position</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">up</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>] });
-figure.scene.setLight({ <span class="hljs-attr">directional</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">1</span>] });</pre>
+<h4><a id="shapes3d-boilerplate"></a> Equation Boilerplate</h4>
+<p>To test examples within the '3D Shape Primitives' section of the API reference create an <code>index.html</code> file and <code>index.js</code> file.</p>
+<p>All examples are snippets which can be appended to the end of the <code>index.js</code> file.</p>
+<pre class='hljs'><span class="hljs-comment">&lt;!-- index.html --&gt;</span>
+<span class="hljs-meta">&lt;!doctype <span class="hljs-meta-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;figureOneContainer&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;width: 800px; height: 800px; background-color: white;&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&#x27;https://cdn.jsdelivr.net/npm/figureone@0.10.13/figureone.min.js&#x27;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&#x27;./index.js&#x27;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
+<pre class='hljs'><span class="hljs-comment">// index.js</span>
+<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({
+  <span class="hljs-attr">scene</span>: {
+    <span class="hljs-attr">style</span>: <span class="hljs-string">&#x27;orthographic&#x27;</span>,
+    <span class="hljs-attr">camera</span>: {
+      <span class="hljs-attr">position</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+      <span class="hljs-attr">up</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
+    },
+    <span class="hljs-attr">light</span>: {
+      <span class="hljs-attr">directional</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">1</span>],
+    },
+  },
+});</pre>
 
   
 </section></div>
@@ -27891,14 +27915,6 @@ shading across a face cone constant.
           : center position of sphere (
 <code>[0, 0]</code>
 )
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
-          : transform to apply to all
-points of cube
 
           
         </div>
@@ -28523,13 +28539,6 @@ only noticable for small numbers of sides (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
-          : transform to apply to line
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
           <span class='code bold'>lines</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
           : if 
 <code>true</code>
@@ -28647,12 +28656,25 @@ figure.add(
 and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
 <p><img src="./apiassets/revolve.png" alt=""></p>
 <p>Revolve (or radially sweep) a profile in the XY plane around the x axis to
-form a 3D surface.</p>
-<p>Note, if creating a shape with a hole (like the pipe or torus example below)
-, then ensure the points are defined in the clockwise direction in the XY
-plane otherwise the lighting normals will be opposite to that expected.
-One way to think of it is, starting at x = 0, create the outside surface
-first, then turn back to create the inside surface.</p>
+form a 3D surface. The profile y values must be greater than or equal to 0.</p>
+<p>Profiles can be open (start and end point are different) or closed (start
+and end point are equal).</p>
+<p>For predictable lighting results, profiles should be created with the
+following rules:</p>
+<ul>
+<li>An open profile's start points should have an x value less than its end
+point</li>
+<li>Closed profiles where all points have y > 0 should be defined in the
+clockwise direction when looking at the XY plane from the +z axis.</li>
+</ul>
+<p>If an open profile's start and ends points are at y = 0, then the final shape
+will look solid.</p>
+<p>If an open profile's start and/or ends points have y > 0, then the final
+shape will look like a surface open at the ends with y > 0. As a surface can
+have only one color, then looking inside the shape the surface lighting will
+be opposite to that expected. To create open ended solids with lighting that
+is as expected, create the outside and inside surface with a closed profile.</p>
+<p><img src="./apiassets/revolveexplanation.png" alt=""></p>
 
   
     <p style="display: none;">      Type:
@@ -28728,18 +28750,8 @@ plane and sweep around the x axis following the right hand rule. Use
       
         <div class='space-bottom0'>
           <span class='code bold'>axis</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : orient the shape so its axis is along
-this vector
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : offset the final vertices such that
-the original (0, 0) point in the profile moves to position (this step
-happens after the rotation)
-shape
+          : orient the draw space vertices of the
+shape so its axis is along this vector
 
           
         </div>
@@ -28794,9 +28806,11 @@ boilerplate
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// If creating a shell, then also create the inside surface as this will make</span>
 <span class="hljs-comment">// lighting more correct (note there is not shaddows).</span>
+<span class="hljs-comment">// Ensure to close the shell by adding the first point to the end of the</span>
+<span class="hljs-comment">// profile</span>
 figure.add({
   <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;revolve&#x27;</span>,
-  <span class="hljs-attr">profile</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0.15</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.3</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.29</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0.14</span>]],
+  <span class="hljs-attr">profile</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0.15</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.3</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.29</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0.14</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0.15</span>]],
   <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
   <span class="hljs-attr">sides</span>: <span class="hljs-number">30</span>,
   <span class="hljs-attr">normals</span>: <span class="hljs-string">&#x27;curveRadial&#x27;</span>,
@@ -28808,7 +28822,7 @@ figure.add({
 <span class="hljs-keyword">const</span> profile = x.map(<span class="hljs-function"><span class="hljs-params">_x</span> =&gt;</span> [_x, <span class="hljs-number">0.1</span> + <span class="hljs-number">0.05</span> * <span class="hljs-built_in">Math</span>.sin(_x * <span class="hljs-number">2</span> * <span class="hljs-built_in">Math</span>.PI * <span class="hljs-number">2</span>)]);
 figure.add({
   <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;revolve&#x27;</span>,
-  <span class="hljs-attr">profile</span>: [...profile, [<span class="hljs-number">0.4</span>, <span class="hljs-number">0</span>]],
+  <span class="hljs-attr">profile</span>: [...profile, [<span class="hljs-number">0.4</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0.1</span>]],
   <span class="hljs-attr">axis</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
   <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
   <span class="hljs-attr">sides</span>: <span class="hljs-number">30</span>,
@@ -28840,6 +28854,33 @@ figure.add({
   <span class="hljs-attr">lines</span>: <span class="hljs-literal">true</span>,
 });</pre>
     
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Open profile y = 0 at ends</span>
+figure.add({
+<span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;revolve&#x27;</span>,
+<span class="hljs-attr">profile</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0.3</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.2</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0.3</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
+<span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+<span class="hljs-attr">sides</span>: <span class="hljs-number">30</span>,
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Open profile y &gt; 0 at ends</span>
+figure.add({
+<span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;revolve&#x27;</span>,
+<span class="hljs-attr">profile</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0.3</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.2</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0.3</span>]],
+<span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+<span class="hljs-attr">sides</span>: <span class="hljs-number">30</span>,
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Closed Profile</span>
+figure.add({
+<span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;revolve&#x27;</span>,
+<span class="hljs-attr">profile</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0.3</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.2</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0.3</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0.29</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.19</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0.29</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0.3</span>]],
+<span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+<span class="hljs-attr">sides</span>: <span class="hljs-number">30</span>,
+});</pre>
+    
   
 
   
@@ -28867,8 +28908,30 @@ figure.add({
   </div>
   
 
-  <p>Revolve shape options object ≈</p>
+  <p>Surface shape options object</p>
 <p><img src="./apiassets/surface.png" alt=""></p>
+<p><img src="./apiassets/surfaceclosed.png" alt=""></p>
+<p>A surface is defined with a 2D matrix of points. Triangles that fill the
+surface are created between neighboring points in the matrix.</p>
+<p>If a surface is defined with 9 points:</p>
+<p><img src="./apiassets/surfacematrix.png" alt=""></p>
+<p>Then triangles will be created between <code>adb</code>, <code>deb</code>, <code>bec</code>, <code>efc</code>, <code>dge</code>,
+<code>ghe</code>, <code>ehf</code>, and <code>hif</code>.</p>
+<p>The normal for triangle 'adb' is in the direction of the cross product
+of vector 'ad' with vector 'ab' (use the right hand rule where the fingers
+of the right hand curl from vector 'ad' to 'ab', and the thumb will then be
+the direction of the normal). Similarly, the normal of <code>hif</code> will be the
+direction of the cross product of <code>hi</code> with <code>hf</code>.</p>
+<p>Use the property <code>invertNormals</code> to make all the normals go in the reverse
+direction.</p>
+<p>A surface can be open or closed at the end rows or columns of the matrix.
+For example, a surface has closed columns if the first and last column
+of the matrix have identical points. A surface is has open rows if the first
+and last row of the matrix have different points.</p>
+<p>If using curved normals (<code>'curve'</code>, <code>'curveRows'</code> or <code>'curveColumns'</code>) with
+closed surfaces, use <code>closeRows</code> or <code>closeColumns</code> to ensure normal
+curvature is maintained at the end rows
+and columns.</p>
 
   
     <p style="display: none;">      Type:
@@ -28972,6 +29035,16 @@ associated normal for each point will be returned.
           
         </div>
       
+        <div class='space-bottom0'>
+          <span class='code bold'>invertNormals</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : if 
+<code>true</code>
+ then all normals will be
+inverted
+
+          
+        </div>
+      
     </div>
   
 
@@ -29046,6 +29119,67 @@ figure.add({
   points,
   <span class="hljs-attr">lines</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple Closed surface around the x axis</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;surface&#x27;</span>,
+  <span class="hljs-attr">normals</span>: <span class="hljs-string">&#x27;curveColumns&#x27;</span>,
+  <span class="hljs-attr">closeRows</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">points</span>: [
+    [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>]],
+    [[<span class="hljs-number">0</span>, -<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, -<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>]],
+    [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, -<span class="hljs-number">0.5</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, -<span class="hljs-number">0.5</span>]],
+    [[<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>]],
+    [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>]],
+  ],
+  <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple Closed surface around the x axis with curved normals</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;surface&#x27;</span>,
+  <span class="hljs-attr">normals</span>: <span class="hljs-string">&#x27;curveColumns&#x27;</span>,
+  <span class="hljs-attr">closeRows</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">points</span>: [
+    [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>]],
+    [[<span class="hljs-number">0</span>, -<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, -<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>]],
+    [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, -<span class="hljs-number">0.5</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, -<span class="hljs-number">0.5</span>]],
+    [[<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>]],
+    [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>]],
+  ],
+  <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> { Point, Transform } = Fig;
+<span class="hljs-keyword">const</span> points = [];
+<span class="hljs-comment">// Create a matrix of points by taking a profile in XY and rotating</span>
+<span class="hljs-comment">// it around the x axis</span>
+
+<span class="hljs-comment">// Rotation step</span>
+<span class="hljs-keyword">const</span> dr = <span class="hljs-built_in">Math</span>.PI * <span class="hljs-number">2</span> / <span class="hljs-number">50</span>;
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> r = <span class="hljs-number">0</span>; r &lt; <span class="hljs-built_in">Math</span>.PI * <span class="hljs-number">2</span> + dr / <span class="hljs-number">2</span>; r += dr) {
+  <span class="hljs-comment">// Rotation matrix of rotation step around x axis</span>
+  <span class="hljs-keyword">const</span> m = <span class="hljs-keyword">new</span> Transform().rotate(r, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>).matrix();
+
+  <span class="hljs-comment">// A row of points is a profile rotated by some amount r</span>
+  points.push([]);
+  <span class="hljs-comment">// Make a profile for x values from 0 to 1</span>
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> x = <span class="hljs-number">0</span>; x &lt; <span class="hljs-number">1</span>; x += <span class="hljs-number">0.05</span>) {
+    <span class="hljs-comment">// The y coordinate of the profile changes with both x value, and</span>
+    <span class="hljs-comment">// rotation value</span>
+    <span class="hljs-keyword">const</span> y = <span class="hljs-number">0.1</span> * <span class="hljs-built_in">Math</span>.sin(<span class="hljs-number">6</span> * x) + <span class="hljs-number">0.25</span> + <span class="hljs-number">0.1</span> * <span class="hljs-built_in">Math</span>.cos(<span class="hljs-number">3</span> * r);
+    <span class="hljs-keyword">const</span> p = <span class="hljs-keyword">new</span> Point(x, y).transformBy(m);
+    points[points.length - <span class="hljs-number">1</span>].push(p);
+  }
+}
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;surface&#x27;</span>,
+  points,
+  <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
 });</pre>
     
   
@@ -29637,7 +29771,7 @@ p.animations.new()
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>targetOrOptions</span> <code class='quiet'>((<a href="#obj_rotationanimationstep">OBJ_RotationAnimationStep</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | TypeRotationComponent))</code>
+            <span class='code bold'>targetOrOptions</span> <code class='quiet'>((<a href="#obj_rotationanimationstep">OBJ_RotationAnimationStep</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>))</code>
 	    
           </div>
           
@@ -77544,7 +77678,7 @@ look more round with fewer number of sides.
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>closeRows</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          <span class='code bold'>closeColumns</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
           : Set to 
 <code>true</code>
  if first row and last row are
@@ -77561,7 +77695,7 @@ calculations (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>closeColumns</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          <span class='code bold'>closeRows</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
           : Set to 
 <code>true</code>
  if first row and last
@@ -77595,6 +77729,15 @@ the edes of the faces will be returned. If
 , then points
 representing two triangles per face and an
 associated normal for each point will be returned.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>invertNormals</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : if 
+<code>true</code>
+, all normals will be inverted
 
           
         </div>
