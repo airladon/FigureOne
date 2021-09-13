@@ -104,6 +104,7 @@ const makeShape = (options, reverseLight) => {
 const shapes = [
   // Definitions
   makeShape({}),
+  makeShape({ rotation: Math.PI / 10 }),
   makeShape({ sides: 20 }),
   makeShape({ radius: 0.1 }),
   makeShape({ line: [[0, -0.1, 0], [0.4, -0.1, 0]] }),
