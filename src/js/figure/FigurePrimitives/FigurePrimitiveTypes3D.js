@@ -529,7 +529,7 @@ export type OBJ_Cone = {
 
 /**
  * Revolve shape options object that extends {@link OBJ_Generic3D}
- * and {@link OBJ_FigurePrimitive}
+ * and {@link OBJ_FigurePrimitive}.
  *
  * ![](./apiassets/revolve.png)
  *
@@ -679,9 +679,41 @@ export type OBJ_Revolve = {
 } & OBJ_FigurePrimitive & OBJ_Generic3D;
 
 /**
- * Revolve shape options object ≈
+ * Surface shape options object that extends {@link OBJ_Generic3D}
+ * and {@link OBJ_FigurePrimitive}.
  *
  * ![](./apiassets/surface.png)
+ *
+ * ![](./apiassets/surfaceclosed.png)
+ *
+ * A surface is defined with a 2D matrix of points. Triangles that fill the
+ * surface are created between neighboring points in the matrix.
+ *
+ * If a surface is defined with 9 points (an array or arrays in JavaScript):
+ *
+ * ![](./apiassets/surfacematrix.png)
+ *
+ * Then triangles will be created between `adb`, `deb`, `bec`, `efc`, `dge`,
+ * `ghe`, `ehf`, and `hif`.
+ *
+ * The normal for triangle 'adb' is in the direction of the cross product
+ * of vector 'ad' with vector 'ab' (use the right hand rule where the fingers
+ * of the right hand curl from vector 'ad' to 'ab', and the thumb will then be
+ * the direction of the normal). Similarly, the normal of `hif` will be the
+ * direction of the cross product of `hi` with `hf`.
+ *
+ * Use the property `invertNormals` to make all the normals go in the reverse
+ * direction.
+ *
+ * A surface can be open or closed at the end rows or columns of the matrix.
+ * For example, a surface has closed columns if the first and last column
+ * of the matrix have identical points. A surface is has open rows if the first
+ * and last row of the matrix have different points.
+ *
+ * If using curved normals (`'curve'`, `'curveRows'` or `'curveColumns'`) with
+ * closed surfaces, use `closeRows` or `closeColumns` to ensure normal
+ * curvature is maintained at the end rows
+ * and columns.
  *
  * @property {Array<Array<TypeParsablePoint>>} [points] A grid of points that
  * define a 3D surface
@@ -703,6 +735,8 @@ export type OBJ_Revolve = {
  * the edes of the faces will be returned. If `false`, then points
  * representing two triangles per face and an
  * associated normal for each point will be returned.
+ * @property {boolean} [invertNormals] if `true` then all normals will be
+ * inverted
  *
  * @see To test examples, append them to the
  * <a href="#shapes3d-boilerplate">boilerplate</a>
@@ -757,6 +791,67 @@ export type OBJ_Revolve = {
  *   points,
  *   lines: true,
  *   color: [0, 0, 0, 1],
+ * });
+ *
+ * @example
+ * // Simple Closed surface around the x axis
+ * figure.add({
+ *   make: 'surface',
+ *   normals: 'curveColumns',
+ *   closeRows: true,
+ *   points: [
+ *     [[0, 0, 0.5], [1, 0, 0.5]],
+ *     [[0, -0.5, 0], [1, -0.5, 0]],
+ *     [[0, 0, -0.5], [1, 0, -0.5]],
+ *     [[0, 0.5, 0], [1, 0.5, 0]],
+ *     [[0, 0, 0.5], [1, 0, 0.5]],
+ *   ],
+ *   color: [1, 0, 0, 1],
+ * });
+ *
+ * @example
+ * // Simple Closed surface around the x axis with curved normals
+ * figure.add({
+ *   make: 'surface',
+ *   normals: 'curveColumns',
+ *   closeRows: true,
+ *   points: [
+ *     [[0, 0, 0.5], [1, 0, 0.5]],
+ *     [[0, -0.5, 0], [1, -0.5, 0]],
+ *     [[0, 0, -0.5], [1, 0, -0.5]],
+ *     [[0, 0.5, 0], [1, 0.5, 0]],
+ *     [[0, 0, 0.5], [1, 0, 0.5]],
+ *   ],
+ *   color: [1, 0, 0, 1],
+ * });
+ * 
+ * @example
+ * const { Point, Transform } = Fig;
+ * const points = [];
+ * // Create a matrix of points by taking a profile in XY and rotating
+ * // it around the x axis
+ *
+ * // Rotation step
+ * const dr = Math.PI * 2 / 50;
+ * for (let r = 0; r < Math.PI * 2 + dr / 2; r += dr) {
+ *   // Rotation matrix of rotation step around x axis
+ *   const m = new Transform().rotate(r, 1, 0, 0).matrix();
+ *
+ *   // A row of points is a profile rotated by some amount r
+ *   points.push([]);
+ *   // Make a profile for x values from 0 to 1
+ *   for (let x = 0; x < 1; x += 0.05) {
+ *     // The y coordinate of the profile changes with both x value, and
+ *     // rotation value
+ *     const y = 0.1 * Math.sin(6 * x) + 0.25 + 0.1 * Math.cos(3 * r);
+ *     const p = new Point(x, y).transformBy(m);
+ *     points[points.length - 1].push(p);
+ *   }
+ * }
+ * figure.add({
+ *   make: 'surface',
+ *   points,
+ *   color: [1, 0, 0, 1],
  * });
  */
 export type OBJ_Surface = {
