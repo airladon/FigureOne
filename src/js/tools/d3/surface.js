@@ -406,6 +406,7 @@ function getCurveNormals(
  * the edes of the faces will be returned. If `false`, then points
  * representing two triangles per face and an
  * associated normal for each point will be returned.
+ * @property {boolean} [invertNormals] if `true`, all normals will be inverted
  */
 export type OBJ_SurfacePoints = {
   points?: Array<Array<TypeParsablePoint>>,
@@ -414,6 +415,7 @@ export type OBJ_SurfacePoints = {
   closeColumns?: boolean,
   transform?: TypeParsableTransform,
   lines?: boolean,
+  invertNormals?: boolean,
 };
 
 /**
@@ -429,12 +431,13 @@ export type OBJ_SurfacePoints = {
  */
 function surface(options: OBJ_SurfacePoints) {
   const {
-    transform, lines, closeColumns, closeRows, normals, points,
+    transform, lines, closeColumns, closeRows, normals, points, invertNormals,
   } = joinObjects({
     normals: 'flat',
     lines: false,
     closeRows: false,
     closeColumns: false,
+    invertNormals: false,
   }, options);
 
   let surfacePoints = points.map(p => getPoints(p));
@@ -453,6 +456,12 @@ function surface(options: OBJ_SurfacePoints) {
   } else {
     norms = getFlatNormals(surfaceNormals, surfacePoints);
   }
+  if (invertNormals) {
+    for (let i = 0; i < norms.length; i += 1) {
+      norms[i] = norms[i].scale(-1);
+    }
+  }
+
   return [triangles, norms];
 }
 
