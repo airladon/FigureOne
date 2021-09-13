@@ -67,11 +67,11 @@ export default function cylinder(options: OBJ_CylinderPoints) {
   }
 
   const profile = [];
-  if (ends || ends === 1) {
+  if (ends === true || ends === 1) {
     profile.push([0, 0]);
   }
   profile.push([0, radius], [line.length(), radius]);
-  if (ends || ends === 2) {
+  if (ends === true || ends === 2) {
     profile.push([line.length(), 0]);
   }
 
