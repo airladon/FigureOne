@@ -87,6 +87,7 @@ const makeShape = (options, reverseLight) => {
       isTouchable: true,
       onClick: () => tools.misc.Console(`${index}: ${name} - ${x}, ${y}`),
     }),
+    scene,
     sides: 10,
     radius: 0.2,
     normals: 'flat',
@@ -116,5 +117,6 @@ const shapes = [
   makeShape({ line: [[0, 0, 0], [0, 0, 0.1]], ends: 2 }),
   makeShape({ normals: 'curve' }),
   makeShape({ lines: true }),
+  makeShape({}, true),
 ];
 figure.add(shapes);
