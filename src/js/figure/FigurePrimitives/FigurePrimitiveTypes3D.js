@@ -150,8 +150,6 @@ export type OBJ_Generic3 = {
  * `curve` to make a surface look more round with fewer number of sides.
  * (`flat`)
  * @property {TypeParsablePoint} [center] center position of sphere (`[0, 0]`)
- * @property {TypeParsableTransform} [transform] transform to apply to all
- * points of cube
  * @property {boolean} [lines] if `true` then points representing
  * the edes of the faces will be returned. If `false`, then points
  * representing two triangles per face and an
@@ -206,6 +204,7 @@ export type OBJ_Sphere = {
   radius?: number,
   normals?: 'curve' | 'flat',
   center?: TypeParsablePoint,
+  lines?: boolean,
 } & OBJ_Generic3D & OBJ_FigurePrimitive;
 
 /**
