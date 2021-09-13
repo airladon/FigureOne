@@ -591,7 +591,7 @@ export default class FigurePrimitives {
     element.custom.options = options;
     element.custom.getPoints = getPointsFn;
     element.custom.updatePoints = (updateOptions: Object) => {
-      const o = joinObjects({}, element.custom.options, updateOptions);
+      const o = joinObjects({}, element.custom.options, { transform: [] }, updateOptions);
       element.custom.options = o;
       if (o.transformPoints != null) {
         o.transform = o.transformPoints;
@@ -1739,9 +1739,22 @@ export default class FigurePrimitives {
       // Prioritize Num over Step. Only define Num from Step if Num is undefined.
       const bounds = getRect(o.bounds);
 
+      const { step, num } = o;
       let {
         xStep, xNum, yStep, yNum,
       } = o;
+      if (xStep == null) {
+        xStep = step;
+      }
+      if (yStep == null) {
+        yStep = step;
+      }
+      if (xNum == null) {
+        xNum = num;
+      }
+      if (yNum == null) {
+        yNum = num;
+      }
       let { width } = o.line;
       if (o.line.linePrimitives && o.line.lineNum === 1) {
         width = 0;

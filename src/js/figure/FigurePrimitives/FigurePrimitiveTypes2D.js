@@ -1087,14 +1087,16 @@ export type OBJ_Line = {
  * The line width and style is defined with `line`.
  *
  * @property {TypeParsableRect} [bounds] rectangle definition
+ * @property {number} [step] distance between grid lines
  * @property {number} [xStep] distance between vertical lines in grid from
- * left - use this instead of `xNum`.
+ * left - use this instead of `xNum`. This will override `step`.
  * @property {number} [yStep] distance between horizontal lines in grid from
- * bottom - use this instead of `yNum`
+ * bottom - use this instead of `yNum`. This will override `step`.
+ * @property {number} [num] number of grid lines. This will override `step`.
  * @property {number} [xNum] number of vertical lines in grid including top and
- * bottom lines - overrides xStep
+ * bottom lines - overrides `num` and `xStep`.
  * @property {number} [yNum] number of horizontal lines in grid including left
- * and right lines - overrides yStep
+ * and right lines - overrides `num` and `yStep`.
  * @property {OBJ_LineStyle} [line] line style options - do not use any corner
  * options
  * @property {number | TypeParsableBorder} [drawBorderBuffer]
