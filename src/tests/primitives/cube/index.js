@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-undef
-const { Figure, tools } = Fig;
+const { Figure, tools, Scene } = Fig;
 
-const figure = new Fig.Figure({
+const figure = new Figure({
   scene: {
     style: 'orthographic',
     left: -4.5,
@@ -23,14 +23,6 @@ const figure = new Fig.Figure({
   color: [1, 0, 0, 1],
 });
 
-// const figure = new Figure({
-//   scene: {
-//     left: -4.5, bottom: -4.5, right: 4.5, top: 4.5,
-//   },
-//   color: [1, 0, 0, 1],
-//   lineWidth: 0.01,
-//   font: { size: 0.1 },
-// });
 
 figure.add([
   {
@@ -79,7 +71,7 @@ const makeShape = (make, options, reverseLight) => {
   index += 1;
   let scene;
   if (reverseLight) {
-    scene = new Fig.Scene({
+    scene = new Scene({
       style: 'orthographic',
       left: -4.5,
       bottom: -4.5,
