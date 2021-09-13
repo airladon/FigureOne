@@ -5,6 +5,7 @@ import type { TypeParsablePoint } from '../../tools/geometry/Point';
 import type Scene from '../../tools/geometry/scene';
 import type { TypeColor } from '../../tools/types';
 import type { TypeParsableLine } from '../../tools/geometry/Line';
+import type { OBJ_Line3Arrow } from '../../tools/d3/line3';
 import type {
   OBJ_Texture, OBJ_FigurePrimitive,
 } from './FigurePrimitiveTypes';
@@ -359,6 +360,7 @@ export type OBJ_Cylinder = {
   line?: TypeParsableLine,
   length?: number,
   ends?: boolean | 1 | 2,
+  rotation?: number,
 } & OBJ_FigurePrimitive & OBJ_Generic3D;
 
 
@@ -383,7 +385,6 @@ export type OBJ_Cylinder = {
  * (`curve`)
  * @property {number} [rotation] rotation of line around its axis - this is
  * only noticable for small numbers of sides (`0`)
- * @property {TypeParsableTransform} [transform] transform to apply to line
  * @property {boolean} [lines] if `true` then points representing
  * the edes of the faces will be returned. If `false`, then points
  * representing two triangles per face and an
@@ -444,11 +445,12 @@ export type OBJ_Cylinder = {
  */
 export type OBJ_Line3 = {
   sides?: number,
-  radius?: number,
+  p1?: TypeParsablePoint,
+  p2?: TypeParsablePoint,
+  width?: number,
+  arrow?: OBJ_Line3Arrow,
+  rotation?: number,
   normals?: 'curve' | 'flat',
-  line?: TypeParsableLine,
-  length?: number,
-  ends?: boolean | 1 | 2,
 } & OBJ_FigurePrimitive & OBJ_Generic3D;
 
 

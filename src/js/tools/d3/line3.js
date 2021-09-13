@@ -1,6 +1,7 @@
 // @flow
 import { Line } from '../geometry/Line';
 import type { TypeParsablePoint } from '../geometry/Point';
+import { getPoint } from '../geometry/Point';
 import type { TypeParsableTransform } from '../geometry/Transform';
 import { joinObjects } from '../tools';
 import { revolve } from './revolve';
@@ -97,7 +98,7 @@ export default function line3(options: OBJ_Line3Points) {
     }
   }
   if (p2 == null) {
-    p2 = p1.add([1, 0, 0]);
+    p2 = getPoint(p1).add(1, 0, 0);
   }
 
   const l = new Line(p1, p2);
