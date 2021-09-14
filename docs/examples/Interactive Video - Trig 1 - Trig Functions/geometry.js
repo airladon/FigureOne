@@ -195,8 +195,8 @@ function layoutRight() {
     tri.updatePoints([
       [0, 0], [x, y], [x, 0],
     ]);
-    const a = Fig.tools.math.round(r * 180 / Math.PI, 0) * Math.PI / 180;
-    const rad = Fig.tools.math.round(radius / 1.8508, 4);
+    const a = Fig.round(r * 180 / Math.PI, 0) * Math.PI / 180;
+    const rad = Fig.round(radius / 1.8508, 4);
     const sin = Math.sin(a);
     const cos = Math.cos(a);
     const rSin = rad * Math.sin(a);
@@ -213,7 +213,7 @@ function layoutRight() {
       tri._side20.label.eqn.updateElementText({ v: rCos.toFixed(4) }, 'none');
     }
     if (tri._angle2.label.eqn.getCurrentForm().name === 'value') {
-      tri._angle2.label.eqn.updateElementText({ v: `${Fig.tools.math.round(r * 180 / Math.PI, 0)}\u00b0` });
+      tri._angle2.label.eqn.updateElementText({ v: `${Fig.round(r * 180 / Math.PI, 0)}\u00b0` });
     }
 
     // If theta is too close to 0 or 90 degrees, then rearrange or hide some

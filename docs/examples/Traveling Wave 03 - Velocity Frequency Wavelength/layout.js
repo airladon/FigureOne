@@ -17,7 +17,7 @@ const color3 = [1, 0, 1, 1];
 
 function setupFigure() {
   const { Transform, Point } = Fig;
-  const { range, rand, randSign } = Fig.tools.math;
+  const { range, rand, randSign } = Fig;
   const minVelocity = 0.5;
   const time = new TimeKeeper();
   let maxTime = 0;

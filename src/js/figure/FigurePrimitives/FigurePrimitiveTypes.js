@@ -482,8 +482,8 @@ export type OBJ_GLColorData = {
  *
  * @example
  * // Make a 3D cube using composed shaders
- * const { toNumbers } = Fig.tools.g2;
- * const [cubeVertices, cubeNormals] = Fig.tools.g2.cube({ side: 0.5 });
+ * const { toNumbers } = Fig;
+ * const [cubeVertices, cubeNormals] = Fig.cube({ side: 0.5 });
  * figure.scene.setProjection({ style: 'orthographic' });
  * figure.scene.setCamera({ position: [2, 1, 2] });
  * figure.scene.setLight({ directional: [0.7, 0.5, 1] });

@@ -2,7 +2,7 @@
 /* eslint-disable camelcase, object-curly-newline */
 
 const { Point } = Fig;
-const { round, range } = Fig.tools.math;
+const { round, range } = Fig;
 
 const greyColor = [0.6, 0.6, 0.6, 1];
 const dGreyColor = [0.4, 0.4, 0.4, 1];

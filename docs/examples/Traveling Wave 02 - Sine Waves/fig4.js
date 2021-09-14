@@ -39,8 +39,7 @@ figures. Several methods are returned from the function (exposed globally) so
 links within the text can pulse or select parts of the figure.
 */
 function fig4() {
-  const { Point } = Fig;
-  const { range } = Fig.tools.math;
+  const { Point, range } = Fig;
 
   const fig = new Fig.Figure({
     limits: [-1.9, -0.8, 4 * 0.95, 2],

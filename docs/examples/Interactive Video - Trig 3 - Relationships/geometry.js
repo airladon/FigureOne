@@ -13,9 +13,9 @@ function layoutCirc() {
   const dSin = radius * Math.sin(defaultAngle);
   const dTan = radius * Math.tan(defaultAngle);
   const dCot = radius / Math.tan(defaultAngle);
-  const dC1 = Fig.tools.g2.getTriangleCenter([0, 0], [dCos, 0], [dCos, dSin]);
-  const dC2 = Fig.tools.g2.getTriangleCenter([0, 0], [radius, 0], [radius, dTan]);
-  const dC3 = Fig.tools.g2.getTriangleCenter([0, 0], [dCot, 0], [dCot, radius]);
+  const dC1 = Fig.getTriangleCenter([0, 0], [dCos, 0], [dCos, dSin]);
+  const dC2 = Fig.getTriangleCenter([0, 0], [radius, 0], [radius, dTan]);
+  const dC3 = Fig.getTriangleCenter([0, 0], [dCot, 0], [dCot, radius]);
   const origin = [-0.8, -0.5];
   const point = (pointX, pointY) => new Fig.Point(pointX, pointY);
 
@@ -550,7 +550,7 @@ function layoutCirc() {
   // Update the points of the rotator for some specificed angle at
   // a vertex of a triangle
   const setRotPad = (rotPadEl, vertex, startAngle, ang, rotPadRad = 0.3) => {
-    const v = Fig.tools.g2.getPoint(vertex);
+    const v = Fig.getPoint(vertex);
     const cosV = rotPadRad * Math.cos(startAngle);
     const sinV = rotPadRad * Math.sin(startAngle);
     const cosVStop = rotPadRad * Math.cos(startAngle + ang);
@@ -582,9 +582,9 @@ function layoutCirc() {
     };
 
     // The triangle centers change when theta changes
-    const c1 = Fig.tools.g2.getTriangleCenter([0, 0], [cosVal, 0], [cosVal, sinVal]);
-    const c2 = Fig.tools.g2.getTriangleCenter([0, 0], [radius, 0], [radius, tanVal]);
-    const c3 = Fig.tools.g2.getTriangleCenter([0, 0], [cotVal, 0], [cotVal, radius]);
+    const c1 = Fig.getTriangleCenter([0, 0], [cosVal, 0], [cosVal, sinVal]);
+    const c2 = Fig.getTriangleCenter([0, 0], [radius, 0], [radius, tanVal]);
+    const c3 = Fig.getTriangleCenter([0, 0], [cotVal, 0], [cotVal, radius]);
 
     // Update the theta widget UI with the new angle
     if (theta.isShown) {
@@ -683,7 +683,7 @@ function layoutCirc() {
 
   // Whenever the theta widget rotator changes, the geometry needs to be updated
   const rotatorUpdateCircle = () => {
-    updateGeometry(Fig.tools.g2.clipAngle(rotator.transform.r(), '0to360'));
+    updateGeometry(Fig.clipAngle(rotator.transform.r(), '0to360'));
   };
   rotator.fnMap.add('updateGeometry', () => rotatorUpdateCircle());
   rotator.notifications.add('setState', 'updateGeometry');
@@ -934,12 +934,12 @@ function layoutCirc() {
     const rightVertex = (thetaVertex.add(x, 0));
     const compVertex = thetaVertex.add(x, y);
     if (angleLock === 'theta') {
-      return Fig.tools.g2.getPoint(p).sub(thetaVertex.transformBy(matrix));
+      return Fig.getPoint(p).sub(thetaVertex.transformBy(matrix));
     }
     if (angleLock === 'comp') {
-      return Fig.tools.g2.getPoint(p).sub(compVertex.transformBy(matrix));
+      return Fig.getPoint(p).sub(compVertex.transformBy(matrix));
     }
-    return Fig.tools.g2.getPoint(p).sub(rightVertex.transformBy(matrix));
+    return Fig.getPoint(p).sub(rightVertex.transformBy(matrix));
   };
 
   // Create a scenario for a triangle based on a desired position (p), rotation
@@ -1004,18 +1004,18 @@ function layoutCirc() {
     showAll();
     geom.hide(dissolveOut);
     const velocity = new Fig.Transform().scale(0.5, 0.5).rotate(0.5).translate(0.5, 0.5);
-    const duration1 = Fig.tools.g2.getMaxTimeFromVelocity(
+    const duration1 = Fig.getMaxTimeFromVelocity(
       triSinCos.transform._dup(), triSinCos.getScenarioTarget(scenario).transform, velocity, 0,
     );
-    const duration2 = Fig.tools.g2.getMaxTimeFromVelocity(
+    const duration2 = Fig.getMaxTimeFromVelocity(
       triTanSec.transform._dup(), triTanSec.getScenarioTarget(scenario).transform, velocity, 0,
     );
-    const duration3 = Fig.tools.g2.getMaxTimeFromVelocity(
+    const duration3 = Fig.getMaxTimeFromVelocity(
       triCotCsc.transform._dup(), triCotCsc.getScenarioTarget(scenario).transform, velocity, 0,
     );
     let duration4 = 0;
     if (showCircle) {
-      duration4 = Fig.tools.g2.getMaxTimeFromVelocity(
+      duration4 = Fig.getMaxTimeFromVelocity(
         circle.transform._dup(), circle.getScenarioTarget(scenario).transform, velocity, 0,
       );
     }

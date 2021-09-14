@@ -3,7 +3,7 @@ const figure = new Fig.Figure({
   limits: [-3, -3, 6, 6],
   backgroundColor: [1, 1, 0.9, 1],
 });
-const { rand } = Fig.tools.math;
+const { rand } = Fig;
 
 for (let i = 0; i < 400; i += 1) {
   const r = rand(0.1, 0.2);
@@ -65,7 +65,7 @@ for (let i = 0; i < 400; i += 1) {
   // Override element draw method
   e.draw = (now, scene, parentTransform) => {
     // Cacluate the draw matrix as efficiently as possible
-    const mat = Fig.tools.m3.mul(parentTransform[0].mat, e.transform.mat);
+    const mat = Fig.m3.mul(parentTransform[0].mat, e.transform.mat);
 
     // Draw
     e.drawingObject.drawWithTransformMatrix(

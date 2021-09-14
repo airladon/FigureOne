@@ -38,19 +38,19 @@ function Recorder(duration) {
   // since the last record. If the ellapsed time is longer than `timeStep`, then
   // interpolated values will be added at each `timeStep`.
   function record(value, deltaTimeIn) {
-    const deltaTime = Fig.tools.math.roundNum(deltaTimeIn + lastDelta, 3);
+    const deltaTime = Fig.roundNum(deltaTimeIn + lastDelta, 3);
     if (deltaTime < timeStep) {
       lastDelta = deltaTime;
       return;
     }
     // Count the number of samples that need to be added to the signal
     const count = Math.floor(deltaTime / timeStep);
-    lastDelta = Fig.tools.math.roundNum(deltaTime - count * timeStep, 3);
+    lastDelta = Fig.roundNum(deltaTime - count * timeStep, 3);
 
     const lastValue = data[index - 1];
     const deltaValue = (value - lastValue) / count;
     for (let i = 0; i < count; i += 1) {
-      data[index] = Fig.tools.math.roundNum(lastValue + deltaValue * (i + 1), 3);
+      data[index] = Fig.roundNum(lastValue + deltaValue * (i + 1), 3);
       incrementIndex();
     }
   }

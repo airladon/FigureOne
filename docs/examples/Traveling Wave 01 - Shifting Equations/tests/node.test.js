@@ -5,6 +5,8 @@ global.Fig = {
   Figure: () => makeFigure(),
   tools: { g2, math },
   Point: g2.Point,
+  range: math.range,
+  round: math.round,
 };
 
 global.figure = {};

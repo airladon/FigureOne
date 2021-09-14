@@ -1,6 +1,6 @@
 /* globals Fig */
 const figure = new Fig.Figure();
-const { cylinder, cone } = Fig.tools.g2;
+const { cylinder, cone } = Fig;
 
 
 const screenGrid = figure.add({
@@ -63,8 +63,8 @@ const addAxis = (name, direction, color, includeArrow = false) => {
     make: 'gl',
     vertexShader,
     fragmentShader,
-    vertices: { data: Fig.tools.g2.pointsToNumbers([...p, ...cn]) },
-    normals: { data: Fig.tools.g2.pointsToNumbers([...n, ...cnNormals]) },
+    vertices: { data: Fig.pointsToNumbers([...p, ...cn]) },
+    normals: { data: Fig.pointsToNumbers([...n, ...cnNormals]) },
     dimension: 3,
     color,
     transform: [['rd', ...direction]],
@@ -90,13 +90,13 @@ figure.add({
   vertexShader,
   fragmentShader,
   dimension: 3,
-  vertices: { data: Fig.tools.g2.pointsToNumbers(cv) },
-  normals: { data: Fig.tools.g2.pointsToNumbers(cn) },
+  vertices: { data: Fig.pointsToNumbers(cv) },
+  normals: { data: Fig.pointsToNumbers(cn) },
   color: [0, 1, 1, 1],
   position: [0, 0, 0.5],
 });
 
-const [cubeV, cubeN] = Fig.tools.g2.cube({
+const [cubeV, cubeN] = Fig.cube({
   side: 1,
 });
 
@@ -106,8 +106,8 @@ figure.add({
   vertexShader: { dimension: 3, light: 'point', normals: true },
   fragmentShader: { light: 'point' },
   dimension: 3,
-  vertices: { data: Fig.tools.g2.pointsToNumbers(cubeV) },
-  normals: { data: Fig.tools.g2.pointsToNumbers(cubeN) },
+  vertices: { data: Fig.pointsToNumbers(cubeV) },
+  normals: { data: Fig.pointsToNumbers(cubeN) },
   color: [1, 0, 0, 1],
   position: [0, 0, 0.5],
 });

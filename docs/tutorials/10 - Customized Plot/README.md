@@ -12,7 +12,7 @@ Open `index.html` in a browser to view example.
 const figure = new Fig.Figure();
 
 const pow = (power, stop = 10, step = 0.05) => {
-  const xValues = Fig.tools.math.range(0, stop, step);
+  const xValues = Fig.range(0, stop, step);
   return xValues.map(x => new Fig.Point(x, x ** power));
 };
 

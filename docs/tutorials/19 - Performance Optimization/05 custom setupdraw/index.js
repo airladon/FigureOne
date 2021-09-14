@@ -3,7 +3,7 @@ const figure = new Fig.Figure({
   limits: [-3, -3, 6, 6],
   backgroundColor: [1, 1, 0.9, 1],
 });
-const { rand } = Fig.tools.math;
+const { rand } = Fig;
 
 for (let i = 0; i < 250; i += 1) {
   const r = rand(0.1, 0.2);

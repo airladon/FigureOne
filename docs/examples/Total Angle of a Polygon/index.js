@@ -62,7 +62,7 @@ const hideAngles = () => {
 .......########.##.....##....##.....#######...#######.....##...
 */
 // Define the polyline points
-const { getPoints, threePointAngle } = Fig.tools.g2;
+const { getPoints, threePointAngle } = Fig;
 const points = [
   [1, 0.5], [0.4, 1.3], [-1.7, 1.5], [-0.5, 0.7], [-1.4, -0.5], [0.5, -0.5],
 ];

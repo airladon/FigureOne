@@ -163,9 +163,17 @@ const Fig = {
   cone: g2.cone,
   cylinder: g2.cylinder,
   line3: g2.line3,
+  getMaxTimeFromVelocity: g2.getMaxTimeFromVelocity,
+  toNumbers: g2.toNumbers,
+  pointsToNumbers: g2.pointsToNumbers,
+
+  // misc
+  joinObjects: misc.joinObjects,
+
 
   // math
   round: math.round,
+  roundNum: math.roundNum,
   range: math.range,
   randSign: math.randSign,
   randInt: math.randInt,

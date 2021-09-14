@@ -4,7 +4,7 @@ const figure = new Fig.Figure({
   limits: [-3, -3, 6, 6],
   backgroundColor: [1, 1, 0.9, 1],
 });
-const { rand } = Fig.tools.math;
+const { rand } = Fig;
 
 // Add n polygons, each of which has a random size, start position and
 // velocity. They move freely and bounce off the figure boundaries without
