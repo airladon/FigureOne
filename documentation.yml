@@ -7,15 +7,15 @@ toc:
   - name: Geometry
     file: ./docs/api/tutorials/geometric/geometric.md
   - Point
-  - Rect
   - Line
   - Plane
+  - Rect
   - Transform
   - name: Figure Elements
   - FigureElement
   - FigureElementPrimitive
   - FigureElementCollection
-  - name: FigureElementPrimitve Base
+  - name: Base Shape Primitives
   - OBJ_FigurePrimitive
   - OBJ_GenericGL
   - OBJ_Generic3D
@@ -188,6 +188,9 @@ toc:
   - threePointAngle
   - threePointAngleMin
   - clipAngle
+  - normAngle
+  - getDeltaAngle
+  - getDeltaAngle3D
   - name: 2D Geometry Creation
   - polygon
   - polygonLine

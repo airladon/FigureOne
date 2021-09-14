@@ -3,11 +3,9 @@ To define many shapes, geometric concepts such as points and lines need to be us
 FigureOne includes classes that define a:
 * {@link Point}
 * {@link Line}
-* <a href="#rect">Rectangle</a>
+* {@link Plane}
+* {@link Rect}
 * {@link Translation} transform
-* {@link Rotation} transform
-* {@link Scale} transform
-* <a href="transform">Transform Chain</a>
 
 Each of these classes have convenience methods that make it easy to to work with them such as
 * Checking if two points are equal or within some delta
@@ -19,9 +17,10 @@ Each of these classes have convenience methods that make it easy to to work with
 
 There are many more methods in each class and it is recommended you quickly review them so you know what is available and don't need to reimplement existing logic.
 
-Many of these classes are used by each other. For instance, {@link Line} makes a lot of use of {@link Point}. Therefore instead of defining a point by creating a class each time, short hand, parsable equivalents for Points, Lines, Rectangles and Transforms are available. For more information refer to:
+Many of these classes are used by each other. For instance, {@link Line} makes a lot of use of {@link Point}. Therefore instead of defining a point by instantiating a class each time, short hand, parsable equivalents for Points, Lines, Rectangles and Transforms are available. For more information refer to:
 
 * {@link TypeParsablePoint}
 * {@link TypeParsableLine}
 * {@link TypeParsableRect}
+* {@link TypeParsablePlane}
 * {@link TypeParsableTransform}
