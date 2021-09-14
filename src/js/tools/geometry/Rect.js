@@ -84,6 +84,7 @@ class Rect {
    * Returns `true` if `point` is within or on the border of the rectangle
    * @param {TypeParsablePoint} point point to test
    * @param {number} precision precision to test
+   * @return {boolean}
    * @example
    * const r = new Rect(-2, -1, 4, 2);
    *
@@ -105,6 +106,7 @@ class Rect {
   /**
    * Returns a rectangle with coordinates rounded to `precision`
    * @param {number} precision precision to test
+   * @return {Rect}
    */
   round(precision: number = 8) {
     const newRect = new Rect(
@@ -151,10 +153,12 @@ class Rect {
 
 
   /**
-   * Find the intersect between a line and the rectangle
+   * Find the intersect(s) between a line and rectangle
+   * @param {TypeParsableLine} line
+   * @return {Array<Point>}
    */
-  intersectsWithLine(lineIn: TypeParsableLine) {
-    const l = getLine(lineIn);
+  intersectsWithLine(line: TypeParsableLine) {
+    const l = getLine(line);
     const left = new Line([this.left, this.bottom], [this.left, this.top]);
     const top = new Line([this.left, this.top], [this.right, this.top]);
     const right = new Line([this.right, this.top], [this.right, this.bottom]);
@@ -171,7 +175,10 @@ class Rect {
     return intersects;
   }
 
-  // Return the center point of the rectangle
+  /**
+   * The center point of the rectangle
+   * @return {Point}
+   */
   center() {
     return new Point(this.left + this.width / 2, this.bottom + this.height / 2);
   }
