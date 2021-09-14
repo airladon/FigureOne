@@ -17,6 +17,15 @@ import type { OBJ_TranslationPath } from './Path';
  * Orthonormal basis definition. Use either (i, j, k), (x, y, z) or
  * (right, top, normal). They are identical, but different terminology may
  * be useful for different contexts.
+ * @property {TypeParsablePoint} [i]
+ * @property {TypeParsablePoint} [j]
+ * @property {TypeParsablePoint} [k]
+ * @property {TypeParsablePoint} [x]
+ * @property {TypeParsablePoint} [y]
+ * @property {TypeParsablePoint} [z]
+ * @property {TypeParsablePoint} [right]
+ * @property {TypeParsablePoint} [top]
+ * @property {TypeParsablePoint} [normal]
  */
 export type TypeBasisObjectDefinition = {
   i?: TypeParsablePoint,
@@ -118,7 +127,7 @@ export type TypeTransformBasisUserDefinition = ['b', TypeBasisObjectDefinition] 
  * In either case, the first object or nine numbers define the initial basis
  * and the second object or nin numbers define the basis to move to.
  *
- * ` ['b', `{@link TypeBasisObjectDefinition}`] | ` {@link TypeTransformBasis}
+ * ` ['bb', `{@link TypeBasisObjectDefinition}`, `{@link TypeBasisObjectDefinition}`] | ` {@link TypeTransformBasisToBasis}
  */
 export type TypeTransformBasisToBasisUserDefinition = ['bb', TypeBasisObjectDefinition, TypeBasisObjectDefinition] | TypeTransformBasisToBasis;
 
@@ -147,6 +156,8 @@ export type TypeTransformComponentUserDefinition = TypeTransformRotation
 /**
  * Transform array definition.
  *
+ *
+ *
  * `Array<`{@link TypeTransformComponent}`>`
  */
 export type TypeTransformDefinition = Array<TypeTransformComponent>
@@ -158,6 +169,18 @@ export type TypeTransformDefinition = Array<TypeTransformComponent>
  */
 export type TypeTransformUserDefinition = Array<TypeTransformComponentUserDefinition>;
 
+/**
+ * Transform state definition of a {@link Transform} that represents an array
+ * of transform components.
+ *
+ * ```
+ * {
+ *   f1Type: 'pl',
+ *   state: TypeTransformDefinition
+ * }
+ * ```
+ * @see {@link TypeTransformDefinition}
+ */
 export type TypeF1DefTransform = {
   f1Type: 'tf',
   state: TypeTransformDefinition,
@@ -168,11 +191,20 @@ export type TypeTransformComponentName = 't' | 's' | 'b' | 'bb' | 'c' | 'd' | 'r
 
 
 /**
- * A parsable transform definition can be either an array of transform
- * components, a single component, or a Transform object.
+ * A transform is defined with either:
+ * - an instantiated {@link Transform}
+ * - an array of transform components {@link TypeTransformUserDefinition}
+ * - a single transform component {@link TypeTransformComponentUserDefinition}
+ * - a recorder state definition {@link TypeF1DefTransform}
+ * - A string representation of all options except the first
  *
- * {@link TypeTransformUserDefinition} | {@link Transform}
- * | {@link TypeTransformComponentUserDefinition}
+ * @example
+ * // t1, t2 and t3 are all equal transforms
+ * const t1 = new Fig.Transform().scale(2).rotate(Math.PI / 2).translate(1, 1);
+ * const t2 = new Fig.Transform([['s', 2], ['r', Math.PI / 2], ['t', 1, 1]]);
+ * const t3 = Fig.getTransform([['s', 2], ['r', Math.PI / 2], ['t', 1, 1]]);
+ *
+ * @see Transform for a summary of transfom components available.
  */
 export type TypeParsableTransform = TypeTransformUserDefinition | TypeTransformComponentUserDefinition | Transform | TypeF1DefTransform;
 
@@ -465,25 +497,6 @@ class Transform {
     return this.addComponent(['d', _x, _y, _z]);
   }
 
-  /**
-   * Add a change of basis transformation component to the transform.
-   *
-   * If `toBasis` is null, then the change of basis is from the standard
-   * basis to `fromOrToBasis`.
-   *
-   * Otherwise, the change of basis is from `fromOrToBasis` to `toBasis`.
-   */
-  basisLegacy(
-    fromOrToBasis: TypeBasisObjectDefinition,
-    toBasis: null | TypeBasisObjectDefinition = null,
-  ) {
-    const basis = parseBasisObject(fromOrToBasis);
-    if (toBasis === null) {
-      return this.addComponent(['b', ...basis]);
-    }
-    const to = parseBasisObject(toBasis);
-    return this.addComponent(['b', ...basis, ...to]);
-  }
 
   /**
    * Return a duplicate transform with an added change of basis from the

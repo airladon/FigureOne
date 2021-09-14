@@ -11,10 +11,12 @@ import type { TypeParsableLine } from './Line';
  * Recorder state definition of a {@link Plane} that represents a position
  * and normal vector
  *
- * ```{
+ * ```
+ * {
  *   f1Type: 'pl',
  *   state: [[number, number, number], [number, number, number]],
- * }```
+ * }
+ * ```
  */
 export type TypeF1DefPlane = {
   f1Type: 'pl',

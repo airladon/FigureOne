@@ -21,6 +21,6 @@ Many of these classes are used by each other. For instance, {@link Line} makes a
 
 * {@link TypeParsablePoint}
 * {@link TypeParsableLine}
-* {@link TypeParsableRect}
 * {@link TypeParsablePlane}
+* {@link TypeParsableRect}
 * {@link TypeParsableTransform}

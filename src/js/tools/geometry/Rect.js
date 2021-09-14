@@ -184,34 +184,34 @@ class Rect {
   }
 }
 
-// /**
-//  JSON definition of a rect.
-//  @property {'rect'} f1Type rect identifier
-//  @property {[number, number, number, number]} state left, bottom, width
-//  * and height definition
-//  */
+/**
+ * Recorder state definition of a {@link Rect} that represents the left,
+ * bottom, width and height of the rectangle.
+ *
+ * ```{
+ *   f1Type: 'rect',
+ *   state: [number, number, number, number],
+ * }```
+ */
 type TypeF1DefRect = {
   f1Type: 'rect',
   state: [number, number, number, number],
 };
 
 /**
- * A [Rectangle]{@link Rect} can be defined as either as an
- * - Array (left, bottom, width, height)
- * - a {@link Rect} class
- * - a string representing the json definition of the
- *   array form, or a {@link TypeF1DefRect}.
+ * A {@link Rect} can be defined with either
+ * - an instantiated {@link Rect}
+ * - an array of left, bottom, width, height values
+ *  `[number, number, number, number]`
+ * - a recorder state definition {@link TypeF1DefRect}
+ * - a string representation of all options except the first
  *
  * @example
  * // All rectangles are the same when parsed by `getRect` and have a lower
  * left corner of `(-2, -1)`, a width of `4`, and a height of `2`
- * const r1 = [-2, -1, 4, 2];
+ * const r1 = Fig.getRect([-2, -1, 4, 2]);
  * const r2 = new Fig.Rect(-2, -1, 4, 2);
- * const r3 = '[-2, -1, 4, 2]';
- * const r4 = {
- *   f1Type: 'rect',
- *   state: [-2, -1, 4, 2],
- * };
+ * const r3 = Fig.getRect('[-2, -1, 4, 2]');
  */
 export type TypeParsableRect = [number, number, number, number]
                                | Rect
