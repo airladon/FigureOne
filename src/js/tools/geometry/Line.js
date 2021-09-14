@@ -148,6 +148,27 @@ function getLine(l: TypeParsableLine): Line {
   return parseLine(l);
 }
 
+/**
+ * Object representing a Line.
+ *
+ * Contains methods that makes it conventient to use lines in calculations.
+ *
+ * @example
+ * // get Line from Fig
+ * const { Line } = Fig;
+ *
+ * // define a line from [0, 0] to [1, 0]
+ * const l = new Line([0, 0], [1, 0]);
+ *
+ * // find the length of the line
+ * const len = l.length();
+ *
+ * // get the point at length 0.2 along the line
+ * const p = l.pointAtLength(0.2);
+ *
+ * // find the intersect with another line
+ * const i = l.intersectsWith([[0.5, 0.5], [0.5, -0.5]]);
+ */
 class Line {
   p1: Point;
   p2: Point;
@@ -294,7 +315,7 @@ class Line {
   // }
 
   /**
-   * Get the angle of the line from p1 to p2
+   * Get the 2D angle of the line from p1 to p2
    * @return {number}
    */
   angle() {
