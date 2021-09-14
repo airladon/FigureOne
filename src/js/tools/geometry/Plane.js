@@ -7,6 +7,40 @@ import { getPrecision, dotProduct } from './common';
 import type { TypeParsablePoint } from './Point';
 import type { TypeParsableLine } from './Line';
 
+/**
+ * Recorder state definition of a {@link Plane} that represents a position
+ * and normal vector
+ *
+ * ```{
+ *   f1Type: 'pl',
+ *   state: [[number, number, number], [number, number, number]],
+ * }```
+ */
+export type TypeF1DefPlane = {
+  f1Type: 'pl',
+  state: [[number, number, number], [number, number, number]],
+}
+
+/**
+ * A {@link Plane} is defined with either:
+ * - an instantiated {@link Plane}
+ * - a position and normal vector
+ *   [{@link TypeParsablePoint}, {@link TypeParsablePoint}]
+ * - three points [{@link TypeParsablePoint}, {@link TypeParsablePoint},
+ *   {@link TypeParsablePoint}]
+ * - A recorder state definition {@link TypeF1DefPlane}
+ * - A string representation of all options except the first
+ *
+ * When defining 3 points p1, p2 and p3, the normal will be in the direction of
+ * the cross product of p12 with p13.
+ *
+ *
+ * @example
+ * // p1, p2, and p3 are all equal planes
+ * p1 = new Fig.Plane([0, 0, 0], [0, 1, 0]);
+ * p2 = Fig.getPlane([[0, 0, 0], [0, 1, 0]]);
+ * p3 = Fig.getPlane([[0, 0, 0], [1, 0, 0], [0, 0, 1]]);
+ */
 export type TypeParsablePlane = [TypeParsablePoint, TypeParsablePoint]
                 | [TypeParsablePoint, TypeParsablePoint, TypeParsablePoint] |
                 Plane | string;
@@ -49,6 +83,10 @@ function parsePlane(pIn: TypeParsablePlane): Plane {
   throw new Error(`FigureOne could not parse point: ${JSON.stringify(pIn)}`);
 }
 
+/**
+ * Chech if input parameter can be parsed as a {@link Plane}.
+ * @return {boolean}
+ */
 function isParsablePlane(pIn: any) {
   try {
     parsePlane(pIn);
@@ -79,24 +117,51 @@ function getPlane(p: TypeParsablePlane): Plane {
  * If defined with 3 points P1, P2, and P3, then the normal will be in the
  * direction of the cross product of vectors P1P2 and P1P3.
  *
- * @example TODO
+ * @example
+ * // define a plane at the origin in the XZ plane
+ * const p = new Plane([0, 0, 0], [0, 1, 0]);
+ *
+ * // see if a point is on the plane
+ * const result = p.hasPointOn([1, 0, 1]);
+ *
+ * // find the intersect with a line
+ * const i = lineIntersect([[0, -0.5, 0], [0, 0.5, 0]])
  */
 class Plane {
   p: Point;  // Point on plane
   n: Point;  // Plane normal
 
+  /**
+   * @return {Plane} a XY plane through the origin
+   */
   static xy() {
     return new Plane([0, 0, 0], [0, 0, 1]);
   }
 
+  /**
+   * @return {Plane} a XZ plane through the origin
+   */
   static xz() {
     return new Plane([0, 0, 0], [0, 1, 0]);
   }
 
+  /**
+   * @return {Plane} a YZ plane through the origin
+   */
   static yz() {
     return new Plane([0, 0, 0], [1, 0, 0]);
   }
 
+  /**
+   * @param {TypeParsablePlane | TypeParsablePoint} p1OrDef position of plane
+   * or parsable plane definition
+   * @param {TypeParsablePoint | null} normalOrP2 if `p1OrDef` is a point and
+   * `p3` is `null`, then
+   * this parameter will define the plane normal (`null`)
+   * @param {TypeParsablePoint | null} p3 if defined, then `p1OrDef` and
+   * `normalOrP2` will define the first two points of a three point plane
+   * definition
+   */
   constructor(  // $FlowFixMe
     p1OrDef: TypeParsablePlane | TypeParsablePoint = [[0, 0, 0], [0, 0, 1]],
     normalOrP2: null | TypeParsablePoint = null,
@@ -138,10 +203,21 @@ class Plane {
     };
   }
 
+  /**
+   * Return a plane with all values rounded to a precision.
+   * @param {number} precision
+   * @return {Plane}
+   */
   round(precision: number = 8) {
     return new Plane(this.p.round(precision), this.n.round(precision));
   }
 
+  /**
+   * `true` if point p lies on plane
+   * @param {TypeParsablePoint} p
+   * @param {number} precision
+   * @return {boolean}
+   */
   hasPointOn(p: TypeParsablePoint, precision: number = 8) {
     const pnt = getPoint(p);
     const pDelta = pnt.sub(this.p);
@@ -155,15 +231,33 @@ class Plane {
   /**
    * Two planes are considered equal if they are parallel, and the same
    * point exists on both planes.
+   *
+   * If the plane normal direction also needs to be compared, then use `includeNormal = true`.
+   *
+   * @param {TypeParsablePlane} plane
+   * @param {boolean} includeNormal
+   * @param {number} precision
+   * @return {boolean}
    */
-  isEqualTo(plane: TypeParsablePlane, precision: number = 8) {
+  isEqualTo(plane: TypeParsablePlane, includeNormal: boolean = false, precision: number = 8) {
     const p = getPlane(plane);
     if (this.hasPointOn(p.p, precision) && this.isParallelTo(p, precision)) {
+      if (includeNormal) {
+        if (this.n.isNotEqualTo(p.n, precision)) {
+          return false;
+        }
+      }
       return true;
     }
     return false;
   }
 
+  /**
+   * `true` if two planes are parallel to each other.
+   * @param {TypeParsablePlane} plane
+   * @param {number} precision
+   * @return {boolean}
+   */
   isParallelTo(plane: TypeParsablePlane, precision: number = 8) {
     const p = getPlane(plane);
     const d = round(this.n.dotProduct(p.n), precision);
@@ -173,6 +267,14 @@ class Plane {
     return false;
   }
 
+  /**
+   * Returns intersect line of two planes. Returns `null` if planes are parallel
+   * and have no intersect.
+   *
+   * @param {TypeParsablePlane} plane
+   * @param {number} precision
+   * @return {null | Line} intersect line
+   */
   intersectsWith(plane: Plane, precision: number = 8) {
     // https://vicrucann.github.io/tutorials/3d-geometry-algorithms/
     const p = getPlane(plane);
@@ -219,6 +321,13 @@ class Plane {
     });
   }
 
+  /**
+   * `true` if line is parallel to plane.
+   *
+   * @param {TypeParsableLine} line
+   * @param {number} precision
+   * @return {boolean}
+   */
   isParallelToLine(line: TypeParsableLine, precision: number = 8) {
     const l = getLine(line);
     const d = round(this.n.dotProduct(l.vector()), precision);
@@ -230,6 +339,10 @@ class Plane {
 
   /**
    * Returns the intersect point for a line (extended to infinity) with a plane.
+   * @param {TypeParsableLine} line
+   * @param {number} precision
+   * @return {Point | null} intersect point. `null` if the line does not
+   * intersect
    */
   lineIntersect(line: TypeParsableLine, precision: number = 8) {
     // https://vicrucann.github.io/tutorials/3d-geometry-algorithms/
@@ -246,6 +359,13 @@ class Plane {
     return FN.scale(x).add(N);
   }
 
+  /**
+   * `true` if a line lies within the plane
+   * @param {TypeParsableLine} line
+   * @param {number} precision
+   * @return {Point | null} intersect point. `null` if the line does not
+   * intersect
+   */
   hasLineOn(line: TypeParsableLine, precision: number = 8) {
     const l = getLine(line);
     if (!this.isParallelToLine(l, precision)) {
@@ -257,6 +377,11 @@ class Plane {
     return true;
   }
 
+  /**
+   * Project a point onto the plane
+   * @param {TypeParsablePoint} p
+   * @return {Point}
+   */
   pointProjection(p: TypeParsablePoint) {
     // https://stackoverflow.com/questions/9605556/how-to-project-a-point-onto-a-plane-in-3d - Mr H
     const o = this.p;
@@ -265,6 +390,11 @@ class Plane {
     return q.sub(n.scale(n.dotProduct(q.sub(o))));
   }
 
+  /**
+   * Distance between plane and point
+   * @param {TypeParsablePoint} p
+   * @return {number}
+   */
   distanceToPoint(p: TypeParsablePoint) {
     const projection = this.pointProjection(p);
     return projection.distance(p);
@@ -277,13 +407,21 @@ class Plane {
   }
 }
 
+/**
+ * Get plane created with three points.
+ *
+ * Normal is in the direction of the cross product of p12 and p13
+ * @param {TypeParsablePoint | [TypeParsablePoint, TypeParsablePoint, TypeParsablePoint]} p1OrPoints
+ * @param {TypeParsablePoint} p2
+ * @param {TypeParsablePoint} p3
+ */
 function getNormal(
   p1OrPoints: TypeParsablePoint | [TypeParsablePoint, TypeParsablePoint, TypeParsablePoint],
-  p2: TypeParsablePoint,
-  p3: TypeParsablePoint,
+  p2: null | TypeParsablePoint = null,
+  p3: null | TypeParsablePoint = null,
 ) { // $FlowFixMe
   let p = getPoints(p1OrPoints);
-  if (p.length === 1) {
+  if (p.length === 1 && p2 != null && p3 != null) {
     p = [p[0], getPoint(p2), getPoint(p3)];
   }
   const m = p[1].sub(p[0]);

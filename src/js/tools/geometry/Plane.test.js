@@ -158,6 +158,11 @@ describe('Plane', () => {
       const q = new Plane([0, 0, 0], [1, 0, 0]);
       expect(p.isEqualTo(q)).toBe(true);
     });
+    test('Same planes, opposite directions with normal check', () => {
+      const p = new Plane([0, 0, 0], [-1, 0, 0]);
+      const q = new Plane([0, 0, 0], [1, 0, 0]);
+      expect(p.isEqualTo(q, true)).toBe(false);
+    });
     test('Same planes, opposite directions, different reference points', () => {
       const p = new Plane([0, 1, 1], [-1, 0, 0]);
       const q = new Plane([0, 0, 0], [1, 0, 0]);
