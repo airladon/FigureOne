@@ -7,7 +7,7 @@ import 'regenerator-runtime/runtime';
 // import { round } from './math';
 jest.mock('./getImageData');
 
-/**
+/*
   Image:
     Bk Bk Re Re
     Bk Bk Re Re
