@@ -61,7 +61,7 @@ export type OBJ_Generic3D = {
  * figure.scene.setCamera({ position: [1, 1, 2] });
  * figure.scene.setLight({ directional: [0.7, 0.5, 1] });
  *
- * const [points, normals] = Fig.tools.g2.cube({ side: 0.8 });
+ * const [points, normals] = Fig.cube({ side: 0.8 });
  *
  * figure.add({
  *   make: 'generic3',
@@ -92,7 +92,7 @@ export type OBJ_Generic3D = {
  * figure.scene.setProjection({ style: 'orthographic' });
  * figure.scene.setCamera({ position: [1, 1, 2] });
  * figure.scene.setLight({ directional: [0.7, 0.5, 1] });
- * const { sphere, polygon, revolve } = Fig.tools.g2;
+ * const { sphere, polygon, revolve } = Fig;
  * const [spherePoints, sphereNormals] = sphere({ radius: 0.15 });
  * // The ring is a flattened doughnut
  * const [ringPoints, ringNormals] = revolve({
@@ -621,7 +621,7 @@ export type OBJ_Cone = {
  * // the x axis, a hole will be created
  * // Try using `normals: 'curve'`, `normals: 'curveProfile'`, and
  * // `normals: 'curveRadial'` to see different curve options.
- * const { polygon } = Fig.tools.g2;
+ * const { polygon } = Fig;
  * figure.add({
  *   make: 'revolve',
  *   profile: polygon({
@@ -742,7 +742,7 @@ export type OBJ_Revolve = {
  * <a href="#shapes3d-boilerplate">boilerplate</a>
  *
  * @example
- * const points = Fig.tools.g2.surfaceGrid({
+ * const points = Fig.surfaceGrid({
  *   x: [-0.8, 0.7, 0.03],
  *   y: [-0.8, 0.7, 0.03],
  *   z: x => 0.2 * Math.cos(x * 2 * Math.PI),
@@ -756,7 +756,7 @@ export type OBJ_Revolve = {
  *
  * @example
  * // Surface wire mesh
- * const points = Fig.tools.g2.surfaceGrid({
+ * const points = Fig.surfaceGrid({
  *   x: [-0.8, 0.8, 0.03],
  *   y: [-0.8, 0.8, 0.03],
  *   z: (x, y) => y * 0.2 * Math.cos(x * 2 * Math.PI),
@@ -771,7 +771,7 @@ export type OBJ_Revolve = {
  *
  * @example
  * // Surface with wire mesh and fill
- * const points = Fig.tools.g2.surfaceGrid({
+ * const points = Fig.surfaceGrid({
  *   x: [-0.8, 0.8, 0.03],
  *   y: [-0.8, 0.8, 0.03],
  *   z: (x, y) => {
