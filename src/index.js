@@ -133,6 +133,7 @@ const Fig = {
   //
   Scene,
   Point: g2.Point,
+  Plane: g2.Plane,
   Line: g2.Line,
   Rect: g2.Rect,
   Transform: g2.Transform,
@@ -153,6 +154,15 @@ const Fig = {
   getLine: g2.getLine,
   getRect: g2.getRect,
   getTransform: g2.getTransform,
+  surfaceGrid: g2.surfaceGrid,
+  cube: g2.cube,
+  sphere: g2.sphere,
+  polygon: g2.polygon,
+  revolve: g2.revolve,
+  surface: g2.surface,
+  cone: g2.cone,
+  cylinder: g2.cylinder,
+  line3: g2.line3,
 
   // math
   round: math.round,
