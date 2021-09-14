@@ -11,6 +11,26 @@ import { sphericalToCartesian, getPrecision } from './common';
 import { clipAngle } from './angle';
 import { roundNum } from '../math';
 
+/**
+ * Line definition object.
+ *
+ * Combinations that can be used are:
+ * - p1, p2, ends
+ * - p1, length, angle, ends (for 2D lines)
+ * - p1, length, phi, theta, ends (for 3D lines)
+ * - p1, length, direction, ends
+ *
+ * @property {TypeParsablePoint} [p1] first point of line
+ * @property {TypeParsablePoint} [p2] second point of line
+ * @property {number} [length] length of line
+ * @property {number} [theta] theta (elevation) angle of line in spherical
+ * coordinates
+ * @property {number} [phi] phi (azimuth) angle of line in spherical coordinates
+ * @property {number} [angle] angle of line in 2D definition
+ * @property {TypeParsablePoint | number} [direction] direction vector of line
+ * from p1
+ * @property {0 | 1 | 2} [ends]
+ */
 export type OBJ_LineDefinition = {
   p1?: TypeParsablePoint,
   p2?: TypeParsablePoint,
@@ -22,6 +42,12 @@ export type OBJ_LineDefinition = {
   ends?: 0 | 1 | 2,
 };
 
+/**
+ * Recorder state definition of a {@link Line} that represents the two end
+ * points of the line and the number of finite ends.
+ *
+ * `{ f1Type: 'l', state: [[number, number, number], [number, number, number], 2 | 1 | 0] }`
+ */
 type TypeF1DefLine = {
   f1Type: 'l',
   state: [[number, number, number], [number, number, number], 2 | 1 | 0],
@@ -44,12 +70,13 @@ export type OBJ_LineIntersect = {
 
 /**
  * A {@link Line} is defined with either:
- * - two points
- * - a point, direction and length
- * - a point and cartesian delta (equivalent to point and vector)
- * - a point and spherical delta (a length, theta rotation, and phi rotation
- *   from the point)
- * - a length and angle (for a 2D XY plane point)
+ * - an instantiated {@link Line}
+ * - two points [{@link TypeParsablePoint}, {@link TypeParsablePoint}]
+ * - two points and the number of ends
+ *   [{@link TypeParsablePoint}, {@link TypeParsablePoint}, `1 | 2 | 0`]
+ * - a line definition object {@link OBJ_LineDefinition}
+ * - A recorder state definition {@link TypeF1DefLine}
+ * - A string representation of all options except the first
  *
  * The `ends` defines whether a line is finite (a line segment between two
  * points - `ends = 2`), a ray (a line extending to infinity in one direction
@@ -57,11 +84,13 @@ export type OBJ_LineIntersect = {
  * in both directions - `ends = 0`).
  *
  * @example
- * // l1, l2, l3, l4, l5 and l6 are all the same if parsed by `getLine`
- * l1 = parseLine([0, 0], [2, 2]);
- * l2 = parseLine{ p1: [0, 0], length: 2, direction: [1, 0] })
- * l3 = parseLine{ p1: [0, 0], length: 2, angle: 0 })
- * l4 = parseLine{ p1: [0, 0], length: 2, theta: Math.PI / 2, phi: 0 })
+ * // l1, l2, l3, l4, l5, and l6 are all the same
+ * l1 = new Fig.Line([0, 0], [2, 0]);
+ * l2 = Fig.getLine([[0, 0], [2, 0]]);
+ * l3 = Fig.getLine({ p1: [0, 0], length: 2, direction: [1, 0] });
+ * l4 = Fig.getLine({ p1: [0, 0], length: 2, angle: 0 });
+ * l5 = Fig.getLine({ p1: [0, 0], length: 2, theta: Math.PI / 2, phi: 0 });
+ * l6 = Fig.getLine({ p1: [0, 0], p2: [2, 0] });
  */
 export type TypeParsableLine = [TypeParsablePoint, TypeParsablePoint, 2 | 1 | 0]
                                 | [TypeParsablePoint, TypeParsablePoint]
@@ -430,6 +459,10 @@ class Line {
     return p.sub(a).sub(n.scale(p.sub(a).dotProduct(n))).distance();
   }
 
+  /**
+   * `true` if `line` is parrallel to this line.
+   * @return {boolean}
+   */
   isParallelTo(line: TypeParsableLine, precision: number = 8) {
     const l = getLine(line);
     const n = this.unitVector();
@@ -794,6 +827,10 @@ class Line {
    * If point is not along line, then it will be projected onto it.
    *
    * If point is not on line, then the closest line end will be returned.
+   *
+   * @param {TypeParsablePoint} point point to clip
+   * @param {number} precision precision to clip to (`8`)
+   * @return {Point} clipped point
    */
   clipPoint(point: TypeParsablePoint, precision: number = 8) {
     const p = getPoint(point);
