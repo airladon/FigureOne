@@ -1,9 +1,9 @@
 // @flow
 import { cornerLine, lineToCorners } from './corners';
 import { lineToDash } from './dashes';
-import {
-  Line, Point, threePointAngleMin, threePointAngle,
-} from '../../../tools/g2';
+import { Line } from '../../../tools/geometry/Line';
+import { Point } from '../../../tools/geometry/Point';
+import { threePointAngleMin, threePointAngle } from '../../../tools/geometry/angle';
 import {
   joinObjects,
 } from '../../../tools/tools';
