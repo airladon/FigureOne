@@ -4,24 +4,24 @@ toc:
   - name: Figure
   - Figure
   - OBJ_Figure
-  - name: Figure Elements
-  - FigureElement
-  - FigureElementPrimitive
-  - FigureElementCollection
-  - name: Geometric Classes
+  - name: Geometry
     file: ./docs/api/tutorials/geometric/geometric.md
   - Point
   - Rect
   - Line
-  - Translation
-  - Rotation
-  - Scale
+  - Plane
   - Transform
+  - name: Figure Elements
+  - FigureElement
+  - FigureElementPrimitive
+  - FigureElementCollection
+  - name: FigureElementPrimitve Base
+  - OBJ_FigurePrimitive
+  - OBJ_GenericGL
+  - OBJ_Generic3D
   - name: 2D Shape Primitives
     file: ./docs/api/tutorials/draw/draw.md
-  - OBJ_GenericGL
   - OBJ_Generic
-  - OBJ_FigurePrimitive
   - OBJ_Line
   - OBJ_Polyline
   - OBJ_Arrow
@@ -32,21 +32,6 @@ toc:
   - OBJ_Polygon
   - OBJ_Star
   - OBJ_Grid
-  - name: 2D Shape Collections
-    file: ./docs/api/tutorials/collections/collections.md
-  - OBJ_Collection
-  - CollectionsLine
-  - COL_Line
-  - CollectionsAngle
-  - COL_Angle
-  - CollectionsPolyline
-  - COL_Polyline
-  - CollectionsRectangle
-  - COL_Rectangle
-  - CollectionsAxis
-  - COL_Axis
-  - CollectionsPlot
-  - COL_Plot
   - name: Text
     file: ./docs/api/tutorials/text/text.md
   - OBJ_Text
@@ -62,6 +47,21 @@ toc:
   - OBJ_Line3
   - OBJ_Revolve
   - OBJ_Surface
+  - name: 2D Shape Collections
+    file: ./docs/api/tutorials/collections/collections.md
+  - OBJ_Collection
+  - CollectionsLine
+  - COL_Line
+  - CollectionsAngle
+  - COL_Angle
+  - CollectionsPolyline
+  - COL_Polyline
+  - CollectionsRectangle
+  - COL_Rectangle
+  - CollectionsAxis
+  - COL_Axis
+  - CollectionsPlot
+  - COL_Plot
   - name: Animation
     file: ./docs/api/tutorials/animation/animation.md
   - AnimationManager
@@ -188,6 +188,15 @@ toc:
   - threePointAngle
   - threePointAngleMin
   - clipAngle
+  - name: 2D Geometry Creation
+  - polygon
+  - polygonLine
+  - cone
+  - cube
+  - sphere
+  - prism
+  - revolve
+  - surface
   - name: Math tools
   - round
   - range
@@ -307,6 +316,16 @@ toc:
   - OBJ_Generic3DAll
   - OBJ_VertexShader
   - OBJ_FragmentShader
+  - name: Misc Geometry Creation
+  - OBJ_ConePoints
+  - OBJ_CubePoints
+  - OBJ_CylinderPoints
+  - OBJ_Line3Arrow
+  - OBJ_Line3Points
+  - OBJ_PrismPoints
+  - OBJ_RevolvePoints
+  - OBJ_SpherePoints
+  - OBJ_SurfacePoints
   - name: Misc Animation
   - AnimationStep
   - ElementAnimationStep
