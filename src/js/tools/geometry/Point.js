@@ -22,19 +22,25 @@ type TypeF1DefPoint = {
 
 /**
  * A {@link Point} can be defined in several ways
- * - As a Point: new Point()
+ * - As an instantiated {@link Point}
  * - As an x, y tuple: [number, number]
  * - As an x, y, z tuple: [number, number, number]
  * - As an x, y string: '[number, number]'
  * - As an x, y, z string: '[number, number, number]'
- * - As a definition object: { f1Type: 'p', state: [number, number] }
+ * - As a recorder state definition: { f1Type: 'p', state: [number, number, number] }
  }
+ * - A string representation of all options except the first
+ *
+ * If points are defined with only a `x` and `y` component, then `z` will be
+ * set to 0 automatically.
+ *
  * @example
  * // p1, p2, p3 and p4 are all the same when parsed by `getPoint`
- * p1 = new Point(2, 3);
+ * p1 = new Fig.Point(2, 3);
  * p2 = [2, 3];
  * p3 = '[2, 3]';
  * p4 = { f1Type: 'p', state: [2, 3] };
+ * p5 = [2, 3, 0];
  */
 export type TypeParsablePoint = Type2Components
                                 | Type3Components
