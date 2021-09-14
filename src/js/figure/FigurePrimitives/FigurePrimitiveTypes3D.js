@@ -642,32 +642,32 @@ export type OBJ_Cone = {
  *   lines: true,
  * });
  *
-@example
-// Open profile y = 0 at ends
-figure.add({
-  make: 'revolve',
-  profile: [[0, 0], [0, 0.3], [0.5, 0.2], [1, 0.3], [1, 0]],
-  color: [1, 0, 0, 1],
-  sides: 30,
-});
-
-@example
-// Open profile y > 0 at ends
-figure.add({
-  make: 'revolve',
-  profile: [[0, 0.3], [0.5, 0.2], [1, 0.3]],
-  color: [1, 0, 0, 1],
-  sides: 30,
-});
-
-@example
-// Closed Profile
-figure.add({
-  make: 'revolve',
-  profile: [[0, 0.3], [0.5, 0.2], [1, 0.3], [1, 0.29], [0.5, 0.19], [0, 0.29], [0, 0.3]],
-  color: [1, 0, 0, 1],
-  sides: 30,
-});
+ * @example
+ * // Open profile y = 0 at ends
+ * figure.add({
+ *   make: 'revolve',
+ *   profile: [[0, 0], [0, 0.3], [0.5, 0.2], [1, 0.3], [1, 0]],
+ *   color: [1, 0, 0, 1],
+ *   sides: 30,
+ * });
+ *
+ * @example
+ * // Open profile y > 0 at ends
+ * figure.add({
+ *   make: 'revolve',
+ *   profile: [[0, 0.3], [0.5, 0.2], [1, 0.3]],
+ *   color: [1, 0, 0, 1],
+ *   sides: 30,
+ * });
+ *
+ * @example
+ * // Closed Profile
+ * figure.add({
+ *   make: 'revolve',
+ *   profile: [[0, 0.3], [0.5, 0.2], [1, 0.3], [1, 0.29], [0.5, 0.19], [0, 0.29], [0, 0.3]],
+ *   color: [1, 0, 0, 1],
+ *   sides: 30,
+ * });
  */
 export type OBJ_Revolve = {
   sides?: number,
@@ -824,12 +824,12 @@ export type OBJ_Revolve = {
  *   ],
  *   color: [1, 0, 0, 1],
  * });
- * 
+ *
  * @example
- * const { Point, Transform } = Fig;
- * const points = [];
  * // Create a matrix of points by taking a profile in XY and rotating
  * // it around the x axis
+ * const { Point, Transform } = Fig;
+ * const points = [];
  *
  * // Rotation step
  * const dr = Math.PI * 2 / 50;
@@ -918,12 +918,6 @@ export type OBJ_Surface = {
  * @example
  * // Add a camera control that will cover the whole screen
  *
- * // Create a figure and add some shapes to view.
- * const figure = new Fig.Figure();
- * figure.scene.setProjection({ style: 'orthographic' });
- * figure.scene.setCamera({ position: [2, 1, 1], up: [0, 1, 0] });
- * figure.scene.setLight({ directional: [0.7, 0.5, 0.2] });
- *
  * figure.add([
  *   {
  *     make: 'cylinder',
@@ -962,12 +956,6 @@ export type OBJ_Surface = {
  * @example
  * // Add a thin bar at the bottom of the figure that rotates the scene in the
  * // azimuth only
- *
- * // Create a figure and add some shapes to view.
- * const figure = new Fig.Figure();
- * figure.scene.setProjection({ style: 'orthographic' });
- * figure.scene.setCamera({ position: [2, 1, 1], up: [0, 1, 0] });
- * figure.scene.setLight({ directional: [0.7, 0.5, 0.2] });
  *
  * figure.add([
  *   {
