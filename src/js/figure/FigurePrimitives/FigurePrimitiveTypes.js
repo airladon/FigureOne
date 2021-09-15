@@ -238,7 +238,7 @@ export type OBJ_PulseScale = {
  * @property {number} [offset] (`0`)
  * @property {TypeGLBufferUsage} [usage] (`'STATIC'`)
  */
-export type OBJ_GLBuffer = {
+export type OBJ_GLAttribute = {
   name: string,
   data: Array<number>,
   size?: number,
@@ -401,7 +401,7 @@ export type OBJ_GLColorData = {
  * @property {'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'} [glPrimitive]
  * @property {TypeVertexShader} [vertexShader]
  * @property {TypeFragmentShader} [fragmentShader]
- * @property {Array<OBJ_GLBuffer>} [attributes]
+ * @property {Array<OBJ_GLAttribute>} [attributes]
  * @property {Array<OBJ_GLUniform>} [uniforms]
  * @property {OBJ_Texture} [texture]
  * @property {2 | 3} [dimension] default value for `dimension in vertex shader
@@ -545,7 +545,7 @@ export type OBJ_GenericGL = {
   glPrimitive?: 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES',
   vertexShader?: TypeVertexShader,
   fragmentShader?: TypeFragmentShader,
-  attributes?: Array<OBJ_GLBuffer>,
+  attributes?: Array<OBJ_GLAttribute>,
   uniforms?: Array<OBJ_GLUniform>,
   texture?: OBJ_Texture,
   // Helpers

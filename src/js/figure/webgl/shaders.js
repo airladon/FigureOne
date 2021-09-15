@@ -9,7 +9,7 @@ import { joinObjects } from '../../tools/tools';
  *
  * Composed source code uses specific attribute, uniform and varying names.
  * Attributes will need to be defined by the user in the `attributes` property
- * of {@link OBJ_GLPrimitive}.
+ * of {@link OBJ_GenericGL}.
  *
  * Attributes:
  * - `vec2 a_vertex`: used to define vertex positions when `dimension = 2`.
