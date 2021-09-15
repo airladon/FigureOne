@@ -243,3 +243,38 @@ describe('Element Move', () => {
     });
   });
 });
+describe('Element Move with custom Scene', () => {
+  let figure;
+  let a;
+  let move;
+  beforeEach(() => {
+    figure = makeFigure({
+      scene: {
+        left: 1, bottom: 1, right: 3, top: 3,
+      },
+    });
+    move = (moveOptions) => {
+      a = figure.add({
+        name: 'a',
+        make: 'polygon',
+        radius: 0.5,
+        move: moveOptions,
+        position: [2, 2],
+      });
+    };
+  });
+  describe('2D', () => {
+    test('Rotation with no bounds', () => {
+      move({
+        type: 'rotation',
+      });
+      figure.mock.touchDown([2.4, 2]);
+      figure.mock.touchMove([2, 2.4]);
+      expect(round(a.getRotation('figure'))).toEqual(round(Math.PI / 2));
+      figure.mock.touchMove([2, 1.6]);
+      expect(round(a.getRotation('figure'))).toEqual(round(-Math.PI / 2));
+      figure.mock.touchMove([1.6, 1.6]);
+      expect(round(a.getRotation('figure'))).toEqual(round(-Math.PI / 4 * 3));
+    });
+  });
+});
