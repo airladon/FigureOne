@@ -262,23 +262,39 @@ export default class Scene {
     this.rightVector = this.cameraVector
       .crossProduct(getPoint(this.camera.up)).normalize();
     this.upVector = this.rightVector.crossProduct(this.cameraVector).normalize();
-    this.nearCenter = this.cameraPosition
-      .add(this.cameraVector.scale(this.near));
-    this.farCenter = this.cameraPosition
-      .add(this.cameraVector.scale(this.far));
-    this.nearPlane = new Plane(this.nearCenter, this.cameraVector);
-    this.farPlane = new Plane(this.farCenter, this.cameraVector);
+    // this.nearCenter = this.cameraPosition
+    //   .add(this.cameraVector.scale(this.near));
+    // this.farCenter = this.cameraPosition
+    //   .add(this.cameraVector.scale(this.far));
+    // this.nearPlane = new Plane(this.nearCenter, this.cameraVector);
+    // this.farPlane = new Plane(this.farCenter, this.cameraVector);
 
     if (this.style === 'perspective') {
       this.heightNear = Math.tan(this.fieldOfView * 0.5) * this.near * 2;
       this.heightFar = Math.tan(this.fieldOfView * 0.5) * this.far * 2;
       this.widthNear = this.aspectRatio * this.heightNear;
       this.widthFar = this.aspectRatio * this.heightFar;
+      this.nearCenter = this.cameraPosition
+        .add(this.cameraVector.scale(this.near));
+      this.farCenter = this.cameraPosition
+        .add(this.cameraVector.scale(this.far));
+      this.nearPlane = new Plane(this.nearCenter, this.cameraVector);
+      this.farPlane = new Plane(this.farCenter, this.cameraVector);
     } else {
       this.heightNear = this.top - this.bottom;
       this.widthNear = this.right - this.left;
       this.heightFar = this.heightNear;
       this.widthFar = this.widthNear;
+      this.nearCenter = this.cameraPosition
+        .add(this.cameraVector.scale(this.near))
+        .add(this.rightVector.scale(this.left + this.widthNear / 2))
+        .add(this.upVector.scale(this.bottom + this.heightNear / 2));
+      this.farCenter = this.cameraPosition
+        .add(this.cameraVector.scale(this.far))
+        .add(this.rightVector.scale(this.left + this.widthFar / 2))
+        .add(this.upVector.scale(this.bottom + this.heightFar / 2));
+      this.nearPlane = new Plane(this.nearCenter, this.cameraVector);
+      this.farPlane = new Plane(this.farCenter, this.cameraVector);
     }
   }
 
