@@ -1,41 +1,172 @@
-
 #### Figures, Primitives and Collections
 
 [FigureOne](https://github.com/airladon/FigureOne) allows you to create a *figure* that can be both interactive and animated.
 
-A figure is composed of one or more *figure elements*. A figure element is a simple shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.
+A figure is composed of one or more *figure elements*. A figure element is a shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.
 
 In the language of **FigureOne**, there are two types of {@link FigureElements}:
 
 * {@link FigureElementPrimitive} - an element that will draw something to the screen, such as a line, shape or text
 * {@link FigureElementCollection} - collections of elements that will move or be operated on together
 
-Each {@link FigureElement} has a {@link Transform} that may for example translate, rotate or scale an element. When the element is rendered to the screen, the transform will be applied. In the case of a {@link FigureElementPrimitive}, the shape or text will be transformed. In the case of a {@link FigureElementCollection}, all the figure elements it contains will have their transforms cascaded with the collection transform.
+Each {@link FigureElement} has a {@link Transform} that transforms an element in space (e.g. rotates, translates, scales etc) when it is time to draw the element. In the case of a {@link FigureElementPrimitive}, the shape or text will be transformed. In the case of a {@link FigureElementCollection}, all the figure elements it contains will have their transforms cascaded with the collection's transform.
 
-This means there is a heierachy of {@link FigureElement} objects, where the parent transform is applied to (cascaded with) the child transform. Therefore collections can be thought of as modular building blocks of a more complex figure.
+This means there is a heierachy of {@link FigureElement} objects, where the parent transform is combined with  (cascaded with) the child transform. Therefore collections can be thought of as modular building blocks of a more complex figure.
 
-Changing an element's transform moves the element through space. Changing the element's transform over time animates the element.
+<p style="text-align: center"><img src="./tutorials/transformcascades.png"></p>
 
-#### An Example
-Let's say we want to create a rotating labeled line. As the line is rotated, the label follows the line.
+<!-- Changing an element's transform moves the element through space. Changing the element's transform over time animates the element. -->
+##### Example
+
+As an example, let's say we want to create a labeled line where the line and label both rotate together.
 
 <p style="text-align: center"><img src="./tutorials/ex1.png"></p>
 
-To create this figure, we might use a figure element hierarchy like:
+To create this, we could use a line and text primitive within a collection:
 
 <p style="text-align: center"><img src="./tutorials/ex1-hierarchy.png"></p>
 
-The drawn elements, the line and label, are primitives. They are created in the simple no rotation case. If the line is 0.8 long, and it starts at (0, 0), then the text might be at (0.4, 0.1)
+To rotate both label and line in tandem, we simply need to rotate the collection.
+
+##### Code
+
+Let's see the code for the example above. Two files, `index.html` and `index.js` should be in the same folder.
+
+```html
+<!-- index.html -->
+<!doctype html>
+<html>
+<body>
+    <div id="figureOneContainer" style="width: 1200px; height: 800px; background-color: white;">
+    </div>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.10.13/figureone.min.js'></script>
+    <script type="text/javascript" src='./index.js'></script>
+</body>
+</html>
+```
+
+```javascript
+// Note, the `position` property is a short hand way of defining a transform with a
+// translation component.
+
+// Set the figure limits to be 0 ≤ x ≤ 6 and 0 ≤ y ≤ 4
+const figure = new Fig.Figure({ limits: [0, 0, 6, 4] });
+figure.add(
+  {
+    name: 'labeledLine',
+    make: 'collection',
+    elements: [
+      {
+        make: 'line',
+        p1: [0, 0],
+        p2: [2, 0],
+        width: 0.01,
+        color: [1, 0, 0, 1],
+      },
+      {
+        make: 'text',
+        text: 'Line 1',
+        // Set the label position to be at the middle point of the line
+        // And slightly above it
+        position: [1, 0.1],
+        font: { color: [1, 0, 0, 1] },
+        xAlign: 'center',
+      },
+    ],
+    // Set the position of the collection such that the end of the line is
+    // in the middle of the figure
+    position: [3, 2],
+    touchBorder: 0.3,
+    move: {
+      type: 'rotation',
+    },
+  },
+);
+```
+
+This code positions text relative to the middle of a line of length 2.
 
 <p style="text-align: center"><img src="./tutorials/ex1-collection.png"></p>
 
-The figure itself has limits that define the coordinate window that can be shown, in this case its bottom left is the origin, and it is 6 wide and 4 high. We want the collection to be rotated, with the center of rotation at the center of the figure. Therefore we apply a rotation and translation transform to the collection.
+It then positions the collection so the line end is in the middle of the figure.
 
 <p style="text-align: center"><img src="./tutorials/ex1-figure.png"></p>
 
-There are several different ways to create the same figure, but this way is used as it highlights how a collection can be used to transform a group of primitive elements.
+
+#### Figure Setup
+
+To attach a figure to a HTML document:
+
+* A HTML `div` element is required which FigureOne will attach the drawing canvas to. By default FigureOne will look for a `div` with `id=figureOneContainer`. A custom ID can also be specificed.
+* The FigureOne library needs to be loaded either from a public CDN (like below), or from a local source
+* A JavaScript file that creates the figure, adds elements to it needs to be loaded and executed.
+
+```html
+<!-- index.html -->
+<!doctype html>
+<html>
+<body>
+    <div id="figureOneContainer" style="width: 1200px; height: 800px; background-color: white;">
+    </div>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.10.13/figureone.min.js'></script>
+    <script type="text/javascript" src='./index.js'></script>
+</body>
+</html>
+```
+
+To create the figure then in `index.js`:
+
+```js
+const figure = new Fig.Figure({
+  scene: [0, 0, 6, 4],
+});
+```
+
+#### Draw
+
+There are several options to drawing a shape in a figure:
+
 
 #### Coordinate spaces
+
+FigureOne renders shapes in WebGL, text in Context2D and can even manipulate html elements as figure elements. As WebGL is used most in FigureOne, it will be used as an example to introduce coorindate spaces and why they matter.
+
+WebGL is rendered in a html [canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) element.
+
+The canvas element is defined in screen pixels. The WebGL view re-maps the canvas pixels to -1 to +1 coordinates in both the vertical and horizontal directions, independent on the aspect ratio of the canvas.
+
+When the canvas aspect ratio is not a square, or it is more convenient to create a figure in a coordinate space not mapped between -1 to +1, then it is useful to have a separate figure space. In the example above, the figure space re-maps the GL space to 0 to 6 in the horizontal and 0 to 4 in the vertical.
+
+These are three examples of different coordinate spaces - *pixel space*, *GL space* (also called clip space in WebGL nomenclature) and *figure space*.
+
+If you want to move or modify an element, you need to think about what you want to modify it relative to. Do you want to move it relative to other elements in the figure? In other words, do you want to move it in figure space? Or do you want to move it relative to other elements within the parent, or local collection - *local space*. Alternately, you might want to modify the vertices of the shape, in *draw space*.
+
+In simple figures, where no collections are used, or collections don't transform their child elements you don't really need to think about what space you are working in. *Figure space* will be the same as *local space*, if you aren't changing vertices of primitives then draw space won't be used, and GL and pixel spaces are rarely needed for most figures.
+
+But if you are using collections, or if you are tying an element to a location on the screen you will need to convert points between the different spaces. In addition, it is useful to know about these different spaces as sometimes they are referred to in the documentation.
+
+One way to think about what space you are modifying is:
+
+* Elements that are direct children of the figure: element transforms move the element in *figure space*
+* Elements that are direct children of a collection: element transforms move the element in *local space* (the space of the parent colleciton)
+* Vertex or text definitions in element primitives: *draw space*
+* A collection's children are in the collection's *draw space*
+
+For example, a square's vertices are defined in draw space.
+
+The transform of the figure element primitive that draws the square will move the square in local space - the space relative to all other elements that are the children of the same parent collection.
+
+If the parent collection's parent is the figure itself, then its transform will move the colleciton in figure space.
+
+Converting between spaces is relatively straight forward. All figure elements have methods to find their position or bounds in figure, local or draw space. The figure has transforms that allow conversion between figure, GL and pixel spaces.
+
+Where this is useful is if two primitives have different parents, and you want to move one to be in the same position as the other. To do this you would convert the target element position to figure space, and then to the local space of the element to move.
+
+
+
+
+
+
 
 FigureOne renders shapes in WebGL, text in Context2D and can even manipulate html elements as figure elements. As WebGL is used most in FigureOne, it will be used as an example to introduce coorindate spaces and why they matter.
 
@@ -288,36 +419,31 @@ Finally, let's see the code for the example above. Two files, `index.html` and `
 
 ```javascript
 // index.js
-const figure = new Fig.Figure({ limits: [0, 0, 6, 4 ]});
+const figure = new Fig.Figure({ limits: [0, 0, 6, 3] });
 figure.add(
   {
     name: 'labeledLine',
-    make: 'collections.collection',
+    make: 'collection',
     elements: [
       {
-        name: 'line',
-        make: 'primitives.line',
+        make: 'line',
         p1: [0, 0],
         p2: [2, 0],
         width: 0.01,
-        color: [0, 0, 1, 1],
+        color: [1, 0, 0, 1],
       },
       {
-        name: 'label',
-        make: 'primitives.text',
+        make: 'text',
         text: 'Line 1',
         position: [1, 0.1],
-        font: { color: [0, 0, 1, 1] },
+        font: { color: [1, 0, 0, 1] },
         xAlign: 'center',
       },
     ],
     position: [3, 2],
     touchBorder: 0.3,
-    mods: {
-      isMovable: true,
-      move: {
-        type: 'rotation',
-      },
+    move: {
+      type: 'rotation',
     },
   },
 );
