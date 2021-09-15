@@ -1040,7 +1040,7 @@ describe('Figure Recorder', () => {
           width: 0.01,
           p1: [0, 0],
           p2: [0, 1],
-          transform: new Transform('lineT')
+          transform: new Transform()
             .scale(1, 1).rotate(0).translate(0, 0),
         },
       });

@@ -832,7 +832,7 @@ class CollectionsAngle extends FigureElementCollection {
         thick: 1,
       },
       mods: {},
-      transform: new Transform('Angle').scale(1, 1).rotate(0).translate(0, 0),
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
 
@@ -1252,7 +1252,7 @@ class CollectionsAngle extends FigureElementCollection {
         radius: optionsToUse.radius + i * optionsToUse.step,
         color: this.color,
         direction,
-        transform: new Transform('AngleCurve').rotate(0),
+        transform: new Transform().rotate(0),
         // dash: optionsToUse.dash,
       };
       if (optionsToUse.fill === false) {  // $FlowFixMe

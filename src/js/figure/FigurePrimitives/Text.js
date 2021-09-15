@@ -32,7 +32,7 @@ function Text(
   const options = joinObjects({}, defaultOptions, optionsIn);
 
   if (options.transform == null) {
-    options.transform = new Transform('Text').translate(0, 0);
+    options.transform = new Transform().translate(0, 0);
   }
 
   if (options.position != null) {

@@ -166,8 +166,9 @@ function getScale(s: TypeParsablePoint | number) {
 /**
  * Object representing a point or vector.
  *
- * Contains methods that makes it conventient to add, subtract and
- * transform points.
+ * Contains methods that makes it convenient to work with points and vectors.
+ *
+ * @see {@link TypeParsablePoint}, {@link isParsablePoint}
  *
  * @example
  * // get Point from Fig
@@ -220,8 +221,8 @@ class Point {
    * Return x, y, z components as a length 3 tuple.
    * @return {[number, number, number]}
    */
-  toArray(dim: number = 3) {
-    if (dim === 2) {
+  toArray(dimension: 2 | 3 = 3) {
+    if (dimension === 2) {
       return [this.x, this.y];
     }
     return [this.x, this.y, this.z];
@@ -230,6 +231,7 @@ class Point {
   /**
    * Convert a cartesian point to polar coordiantes (will use x and y
    * components of point only).
+   * @return {{ mag: number, angle: number }}
    */
   toPolar() {
     return {
@@ -240,9 +242,13 @@ class Point {
 
   /**
    * Convert the cartesian point to spherical coordinates.
+   * @return {{ mag: number, theta: number, phi: number }}
    */
   toSpherical() {
-    return cartesianToSpherical(this.x, this.y, this.z);
+    const [mag, theta, phi] = cartesianToSpherical(this.x, this.y, this.z);
+    return {
+      mag, theta, phi,
+    };
   }
 
   _state(options: { precision: number } = { precision: 8 }) {
@@ -259,6 +265,7 @@ class Point {
 
   /**
    * Return a duplicate of the {@link Point} object
+   * @return {Point}
    */
   _dup(): Point {
     return new this.constructor(this.x, this.y, this.z);
@@ -266,6 +273,7 @@ class Point {
 
   /**
    * Multiply values of point by scalar
+   * @return {Point}
    * @example
    * p = new Point(1, 1, 1);
    * s = p.scale(3);
@@ -282,6 +290,7 @@ class Point {
 
   /**
    * Subtract (x, y, z) values or a {@link Point} and return the difference as a new {@link Point}
+   * @return {Point}
    * @example
    * p = new Point(3, 3, 3);
    * d = p.sub(1, 1, 1)
@@ -301,6 +310,7 @@ class Point {
 
   /**
    * Add (x, y, z) values or a {@link Point} and return the sum as a new {@link Point}
+   * @return {Point}
    * @example
    * p = new Point(3, 3, 3);
    * d = p.add(1, 1, 1)
@@ -321,6 +331,7 @@ class Point {
   /**
    * Return the distance between two points (or point and origin if no input
    * supplied)
+   * @return {number}
    * @example
    * p = new Point(1, 1, 1);
    * q = new Point(0, 0, 0);
@@ -339,6 +350,7 @@ class Point {
   /**
    * Return the distance between (0, 0, 0) and the point. If the point
    * represents a vector, then it is the length of the vector.
+   * @return {number}
    */
   length(): number {
     return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
@@ -346,6 +358,7 @@ class Point {
 
   /**
    * Dot product this point (vector) with another.
+   * @return {number}
    */
   dotProduct(v: TypeParsablePoint) {
     const q = getPoint(v);
@@ -354,6 +367,7 @@ class Point {
 
   /**
    * Cross product of two points (vectors).
+   * @return {Point}
    */
   crossProduct(v: TypeParsablePoint) {
     const q = getPoint(v);
@@ -366,6 +380,7 @@ class Point {
 
   /**
    * Angle between this vector and vector v.
+   * @return {number}
    */
   angleTo(v: TypeParsablePoint) {
     const p = getPoint(v);
@@ -385,6 +400,7 @@ class Point {
 
   /**
    * Scalar projection of this vector in direction of vector v.
+   * @return {number}
    */
   projectOn(v: TypeParsablePoint) {
     return this.length() * Math.cos(this.angleTo(v));
@@ -393,6 +409,7 @@ class Point {
   /**
    * Return a vector with magnitude of the scalar projection of this vector on
    * v and direction +/- v (depending on the sign of the scalar projection).
+   * @return {Point}
    */
   componentAlong(v: TypeParsablePoint) {
     const mag = this.projectOn(v);
@@ -402,6 +419,7 @@ class Point {
   /**
    * Returns `true` if the x, y, z components of the point when rounded
    * with `precision` are zero.
+   * @return {boolean}
    */
   isZero(precision: number = 8) {
     if (
@@ -416,6 +434,7 @@ class Point {
 
   /**
    * Return a new point with (x, y, z) values rounded to some precision
+   * @return {Point}
    * @example
    * p = new Point(1.234, 1.234, 1.234);
    * q = p.round(2);
@@ -435,6 +454,7 @@ class Point {
    * Use a point as a parameter to define different (x, y) min/max values,
    * a number to define the same (x, y) min/max values, or null to have no
    * min/max values.
+   * @return {Point}
    * @example
    * p = new Point(2, 2);
    * q = p.clip(1, 1);
@@ -481,7 +501,9 @@ class Point {
   }
 
   /**
-   * Transform the point with a 4x4 matrix (3 dimensional transform)
+   * Transform the point with a 4x4 matrix (3 dimensional transform in
+   * homogenous coordinates)
+   * @return {Point}
    * @example
    * // Transform a point with a (2, 2, 0) translation then 90º z rotation
    * p = new Point(1, 1);
@@ -509,7 +531,9 @@ class Point {
 
   /**
    * Rotate a point some angle around a point
-   * @param angle - in radians
+   * @param {number} angle - in radians
+   * @param center - in radians
+   * @return {Point}
    * @example
    * // Rotate a point around the origin
    * p = new Point(1, 0);
@@ -522,18 +546,14 @@ class Point {
    * // q = Point{x: 0, y: 1}
    */
   rotate(
-    angle: number | Type3Components,
+    angle: number,
     center?: TypeParsablePoint = new Point(0, 0, 0),
+    axis?: TypeParsablePoint = new Point(0, 0, 1),
   ): Point {
-    let a = [0, 0, 0];
-    if (typeof angle === 'number') {
-      a[2] = angle;
-    } else {
-      a = angle;
-    }
+    const a = getPoint(axis);
     const c = getPoint(center);
     const centered = this.sub(c);
-    const rotated = centered.transformBy(m3.rotationMatrixXYZ(a[0], a[1], a[2]));
+    const rotated = centered.transformBy(m3.rotationMatrixAxis(a.toArray(), angle));
 
     return rotated.add(c);
   }
@@ -541,6 +561,7 @@ class Point {
   /**
    * Return the unit vector of the point (the direction vector of length 1
    * from the origin to the point).
+   * @return {Point}
    */
   normalize() {
     const len = this.length();
@@ -550,7 +571,12 @@ class Point {
   /* eslint-enable comma-dangle */
 
   /**
-   * Compare two points for equality to some precision
+   * Compare two points for equality to some precision or delta
+   * @param {TypeParsablePoint} p point to compare
+   * @param {number} precision precision to compare (`8`)
+   * @param {boolean} delta if `true` then precision is the delta value the two
+   * points must be within to be equal
+   * @return {boolean}
    * @example
    * p = new Point(1.123, 1.123);
    * q = new Point(1.124, 1.124);

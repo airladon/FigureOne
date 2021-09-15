@@ -90,7 +90,7 @@ export default class FigureCollections {
     ...moreOptions: Array<OBJ_Collection>
   ) {
     const defaultOptions = {
-      transform: new Transform('collection').scale(1, 1).rotate(0).translate(0, 0),
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       border: 'children',
       touchBorder: 'children',
       color: this.primitives.defaultColor,

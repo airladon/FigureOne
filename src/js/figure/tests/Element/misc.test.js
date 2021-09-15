@@ -50,7 +50,7 @@ describe('Animationa and Movement', () => {
             })
             .start();
           const t = element.transform;
-          expect(t).toEqual(new Transform('polygon').scale(1, 1).rotate(0).translate(0, 0));
+          expect(t).toEqual(new Transform().scale(1, 1).rotate(0).translate(0, 0));
 
           expect(element.animations.state).toBe('idle');
           expect(element.isAnimating()).toBe(true);
@@ -80,7 +80,7 @@ describe('Animationa and Movement', () => {
             .position({ target: new Point(1, 0), duration: 1, progression: 'linear' })
             .start();
           const t = element.transform;
-          expect(t).toEqual(new Transform('polygon').scale(1, 1).rotate(0).translate(0, 0));
+          expect(t).toEqual(new Transform().scale(1, 1).rotate(0).translate(0, 0));
 
           expect(element.animations.state).toBe('idle');
           expect(element.isAnimating()).toBe(true);

@@ -43,7 +43,7 @@ describe('Figure Equations From Object', () => {
             name: 'group1',
             make: 'collections.collection',
             options: {
-              transform: new Transform('group'),
+              transform: new Transform(),
             },
             mods: {
               isTouchable: true,
@@ -55,7 +55,7 @@ describe('Figure Equations From Object', () => {
             name: 'group2',
             make: 'collection',
             options: {
-              transform: new Transform('group'),
+              transform: new Transform(),
             },
             mods: {
               isTouchable: true,
@@ -70,7 +70,7 @@ describe('Figure Equations From Object', () => {
             name: 'group',
             make: 'collections.collection',
             options: {
-              transform: new Transform('group'),
+              transform: new Transform(),
             },
             // The collection can be added to by nesting
             elements: [
@@ -185,7 +185,7 @@ describe('Figure Equations From Object', () => {
             name: 'tri',
             make: 'collections.collection',
             options: {
-              transform: new Transform('iso').translate(0, 0),
+              transform: new Transform().translate(0, 0),
             },
             elements: [
               {

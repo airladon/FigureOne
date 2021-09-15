@@ -263,7 +263,7 @@ class CollectionsSlideNavigator extends FigureElementCollection {
     optionsIn: COL_SlideNavigator,
   ) {
     const defaultOptions = {
-      transform: new Transform('SlideNavigator').scale(1, 1).rotate(0).translate(0, 0),
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       // slides: [],
       color: collections.primitives.defaultColor,
       disableOpacity: 0.7,

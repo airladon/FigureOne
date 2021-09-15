@@ -186,12 +186,12 @@ describe('g2 Point', () => {
   describe('Points can be rotated around 0, 0, 0 in 3D', () => {
     test('Rotate (1, 0) by 90 deg = (0, 1)', () => {
       const p = new Point(1, 0, 0);
-      const s = p.rotate([0, Math.PI / 2, 0]);
+      const s = p.rotate(Math.PI / 2, [0, 0, 0], [0, 1, 0]);
       expect(s.round()).toEqual(new Point(0, 0, -1).round());
     });
     test('Rotate (1, 0, 1) by -45 deg = (0, sqrt(2))', () => {
       const p = new Point(1, 0, 1);
-      const s = p.rotate([0, -Math.PI / 4, 0]);
+      const s = p.rotate(-Math.PI / 4, [0, 0, 0], [0, 1, 0]);
       expect(s.round()).toEqual(new Point(0, 0, Math.sqrt(2)).round());
     });
   });
@@ -212,7 +212,7 @@ describe('g2 Point', () => {
     test('Rotate (2, 0, 2) by -45 deg around (1, 0, 1)', () => {
       const p = new Point(2, 0, 2);
       const q = new Point(1, 0, 1);
-      const s = p.rotate([0, -Math.PI / 4, 0], q);
+      const s = p.rotate(-Math.PI / 4, q, [0, 1, 0]);
       expect(s.round()).toEqual(new Point(1, 0, 1 + Math.sqrt(2)).round());
     });
   });

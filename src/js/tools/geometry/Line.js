@@ -271,14 +271,14 @@ class Line {
    * Return the spherical theta angle of p2 relative to p1.
    */
   theta() {
-    return this.p2.sub(this.p1).toSpherical()[1];
+    return this.p2.sub(this.p1).toSpherical().theta;
   }
 
   /**
    * Return the spherical phi angle of p2 relative to p1.
    */
   phi() {
-    return this.p2.sub(this.p1).toSpherical()[2];
+    return this.p2.sub(this.p1).toSpherical().phi;
   }
 
   _dup() {

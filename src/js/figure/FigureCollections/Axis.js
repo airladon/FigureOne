@@ -560,7 +560,7 @@ class CollectionsAxis extends FigureElementCollection {
       // ticks: null,
       show: true,
       axis: 'x',
-      transform: new Transform('Axis').scale(1, 1).rotate(0).translate(0, 0),
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
     };
     let options = joinObjects({}, defaultOptions, optionsIn);
     super(options);

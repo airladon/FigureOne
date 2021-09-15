@@ -419,7 +419,7 @@ export type OBJ_ElementMove = {
  * @property {OBJ_Scenario} _scenarioName where scenarioName can be any
  * string that names the scenario
  */
-export type TypeScenarios = {
+export type OBJ_Scenarios = {
   [_scenarioName: string]: OBJ_Scenario,
 };
 
@@ -529,7 +529,7 @@ type ElementState = {
  * @property {number} opacity number between 0 and 1 that is multiplied with
  * `color` alpha channel to get final opacity
  * @property {OBJ_ElementMove} move movement parameters
- * @property {TypeScenarios} scenarios scenario presets
+ * @property {OBJ_Scenarios} scenarios scenario presets
  * @property {ElementState} state current state of element
  * @property {AnimationManager} animations element animation manager
  * @property {NotificationManager} notifications notification manager for
@@ -618,7 +618,7 @@ class FigureElement {
   // scenarios: {
   //   [scenarioName: string]: OBJ_Scenario;
   // };
-  scenarios: TypeScenarios;
+  scenarios: OBJ_Scenarios;
 
   type: 'collection' | 'primitive';
 
@@ -4345,7 +4345,7 @@ export type OBJ_FigureElementCollection = {
   touch?: boolean | number | TypeParsablePoint,
   move?: boolean | OBJ_ElementMove,
   dimColor?: TypeColor,
-  scenarios?: TypeScenarios,
+  scenarios?: OBJ_Scenarios,
   scene?: Scene,
 };
 

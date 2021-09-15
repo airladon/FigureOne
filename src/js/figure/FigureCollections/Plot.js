@@ -444,7 +444,7 @@ class CollectionsPlot extends FigureElementCollection {
       grid: [],
       xAlign: 'plotAreaLeft',
       yAlign: 'plotAreaBottom',
-      transform: new Transform('Plot').scale(1, 1).rotate(0).translate(0, 0),
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       touchBorder: 'rect',
     };
     if (

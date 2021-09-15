@@ -3,7 +3,7 @@ import type {
   TypeParsablePoint, TypeParsableTransform,
   TypeParsableBorder, Rect,
 } from '../../tools/g2';
-import type { FigureElement, TypeScenarios, OBJ_ElementMove } from '../Element';
+import type { FigureElement, OBJ_Scenarios, OBJ_ElementMove } from '../Element';
 import type { TypeGLUniform, TypeGLBufferType, TypeGLBufferUsage } from '../DrawingObjects/GLObject/GLObject';
 import type {
   TypeColor, TypeDash,
@@ -303,7 +303,7 @@ export type OBJ_GLUniform = {
  * @property {TypeColor} [dimColor] RGBA is used when vertex colors are from a
  * uniform, otherwise just the alpha channel is used.
  * @property {TypeColor} [defaultColor] 
- * @property {TypeScenarios} [scenarios] Define
+ * @property {OBJ_Scenarios} [scenarios] Define
  * position/transform/rotation/scale/color scenarios tied to the element
  * @property {Scene} [scene] Give the element a custom scene that is independant
  * of the figure scene. For example, use this to create a 3D object in a 2D
@@ -318,7 +318,7 @@ export type OBJ_FigurePrimitive = {
   move?: boolean | OBJ_ElementMove,
   dimColor?: TypeColor,
   defaultColor?: TypeColor,
-  scenarios?: TypeScenarios,
+  scenarios?: OBJ_Scenarios,
   scene?: Scene | OBJ_Scene,
 };
 

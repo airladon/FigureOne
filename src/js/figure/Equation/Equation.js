@@ -1062,7 +1062,7 @@ export class Equation extends FigureElementCollection {
       // formSeries: {},
       formRestart: null,
       touchBorder: 'rect',
-      transform: new Transform('Equation').scale(1, 1).rotate(0).translate(0, 0),
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       timeKeeper: shapes.timeKeeper,
     };
 

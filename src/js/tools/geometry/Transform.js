@@ -204,7 +204,7 @@ export type TypeTransformComponentName = 't' | 's' | 'b' | 'bb' | 'c' | 'd' | 'r
  * const t2 = new Fig.Transform([['s', 2], ['r', Math.PI / 2], ['t', 1, 1]]);
  * const t3 = Fig.getTransform([['s', 2], ['r', Math.PI / 2], ['t', 1, 1]]);
  *
- * @see Transform for a summary of transfom components available.
+ * @see See {@link Transform} for a summary of transfom components available.
  */
 export type TypeParsableTransform = TypeTransformUserDefinition | TypeTransformComponentUserDefinition | Transform | TypeF1DefTransform;
 
@@ -300,10 +300,11 @@ function makeTransformComponent(
  * A Transform is a chain or cascade of transform components, such as rotations
  * and translations.
  *
- * There are several built in transforms that can be used for components, but
- * no matter how a component is defined it will represent a three dimensional
- * transform matrix in homogenous coordinates (so it is 4x4). The available
- * built in transforms are:
+ * The transform components cascade to form a single 3D transform matrix in
+ * homogenous coordinates - meaning the result is a 4x4 matrix. This matrix can
+ * be used to transform a point in space.
+ *
+ * There are several built in transform components:
  *
  * - Translation
  * - Scale
@@ -325,6 +326,16 @@ function makeTransformComponent(
  *
  * In this Transform object, the order that components are defined, is the order
  * the resulting transform will represent.
+ *
+ * A transform can be created by either chaining transform component methods on
+ * an instantiated Transform object, or using an array definition of
+ * components. For example the following two transforms are the same:
+ * ```
+ * const t1 = new Transform().scale(1).translate(1, 0);
+ * const t2 = new Transform([['s', 1], ['t', 1, 0]]);
+ * ```
+ *
+ * @see See {@link TypeParsableTransform} for the different ways to define a transform.
  */
 class Transform {
   def: TypeTransformDefinition;
@@ -337,11 +348,9 @@ class Transform {
   /**
    * @param {TypeParsableTransform} chain chain of transform components.
    */
-  constructor(chain: TypeParsableTransform | string = '') {
+  constructor(chain: TypeParsableTransform = []) {
     this.def = [];
-    if (typeof chain === 'string') {
-      this.def = [];
-    } else if (chain instanceof Transform) {
+    if (chain instanceof Transform) {
       this.def = chain.def.slice();
     } else {
       this.def = parseTransformDef(chain);
@@ -1375,6 +1384,9 @@ function parseTransformDef(
 
   let tToUse = inTransform;
   if (typeof tToUse === 'string') {
+    if (tToUse === '') {
+      return [];
+    }
     try {
       tToUse = JSON.parse(tToUse);
     } catch {
@@ -1383,6 +1395,9 @@ function parseTransformDef(
   }
 
   if (Array.isArray(tToUse)) { // $FlowFixMe
+    if (tToUse.length === 0) {
+      return [];
+    }
     if (!Array.isArray(tToUse[0])) {
       tToUse = [tToUse];
     }

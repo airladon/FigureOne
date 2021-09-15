@@ -131,14 +131,14 @@ describe('Figure Recorder', () => {
     });
     test('Save Scenario default', () => {
       a.saveScenario('s1');
-      expect(a.scenarios.s1.transform).toEqual(new Transform('polygon').scale(2, 2).rotate(3).translate(1, 5));
+      expect(a.scenarios.s1.transform).toEqual(new Transform().scale(2, 2).rotate(3).translate(1, 5));
       expect(a.scenarios.s1.color).toEqual([0, 1, 0, 1]);
       expect(a.scenarios.s1.isShown).toEqual(true);
       expect(Object.keys(a.scenarios.s1)).toHaveLength(3);
     });
     test('Save Scenario everything', () => {
       a.saveScenario('s1', ['position', 'scale', 'rotation', 'color', 'isShown', 'transform']);
-      expect(a.scenarios.s1.transform).toEqual(new Transform('polygon').scale(2, 2).rotate(3).translate(1, 5));
+      expect(a.scenarios.s1.transform).toEqual(new Transform().scale(2, 2).rotate(3).translate(1, 5));
       expect(a.scenarios.s1.color).toEqual([0, 1, 0, 1]);
       expect(a.scenarios.s1.isShown).toEqual(true);
       expect(a.scenarios.s1.position).toEqual(new Point(1, 5));

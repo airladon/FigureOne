@@ -10,7 +10,7 @@ import type {
   TypeParsableBorder, Point, TypeParsableRect,
   TypeParsableBuffer,
 } from '../../tools/g2';
-// import type { TypeScenarios, OBJ_ElementMove } from '../Element';
+// import type { OBJ_Scenarios, OBJ_ElementMove } from '../Element';
 import type {
   TypeColor, TypeDash, OBJ_CurvedCorner, OBJ_Font,
 } from '../../tools/types';
@@ -1361,7 +1361,7 @@ export type OBJ_TextDefinition = {
  * @property {TypeParsableTransform} [transform]
  * @property {boolean} [fixColor] If `true`, {@link FigureElement}`.setColor`
  * method will not change the color of text
- * (default: `Transform('text'))`)
+ * (default: `Transform())`)
  *
  * @see To test examples, append them to the
  * <a href="#text-boilerplate">boilerplate</a>
@@ -1480,7 +1480,7 @@ export type OBJ_TextLineDefinition = {
  * @property {TypeParsablePoint} [position] if defined, overrides translation
  * in transform
  * @property {TypeParsableTransform} [transform]
- * (`Transform('text'))`)
+ * (`Transform())`)
  *
  * @see To test examples, append them to the
  * <a href="#text-boilerplate">boilerplate</a>
@@ -1643,7 +1643,7 @@ export type OBJ_TextModifiersDefinition = {
  * @property {TypeParsablePoint} [position] if defined, overrides translation
  * in transform
  * @property {TypeParsableTransform} [transform]
- * (`Transform('text'))`)
+ * (`Transform())`)
  * @property {OBJ_Font} [defaultAccent] default font for text modifiers that
  * are not defined.
  *

@@ -240,7 +240,7 @@ class CollectionsRectangle extends FigureElementCollection {
     collections: FigureCollections,
     optionsIn: COL_Rectangle,
   ) {
-    // super(new Transform('Plot')
+    // super(new Transform()
     //   .scale(1, 1)
     //   .rotate(0)
     //   .translate(0, 0), shapes.limits);
@@ -257,7 +257,7 @@ class CollectionsRectangle extends FigureElementCollection {
         radius: 0,
         sides: 1,
       },
-      transform: new Transform('Rectangle').scale(1, 1).rotate(0).translate(0, 0),
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       // button: {},
     };
     const options = joinObjects({}, defaultOptions, optionsIn);

@@ -246,7 +246,7 @@ class CollectionsTrace extends FigureElementCollection {
         opacity: 1,
       },
       name: '',
-      transform: new Transform('Trace').scale(1, 1).rotate(0).translate(0, 0),
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     if (options.markers == null && options.line === undefined) {

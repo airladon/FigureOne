@@ -153,6 +153,7 @@ const Fig = {
   getScale: g2.getScale,
   getLine: g2.getLine,
   getRect: g2.getRect,
+  getPlane: g2.getPlane,
   getTransform: g2.getTransform,
   surfaceGrid: g2.surfaceGrid,
   cube: g2.cube,
@@ -170,6 +171,7 @@ const Fig = {
   // misc
   joinObjects: misc.joinObjects,
   m3,
+  morph,
 
 
   // math

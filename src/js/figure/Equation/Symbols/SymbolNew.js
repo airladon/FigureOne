@@ -29,7 +29,7 @@ export default class Symbol extends FigureElementPrimitive {
     if (transformOrLocation instanceof Transform) {
       initialT = transformOrLocation;
     } else {
-      initialT = new Transform('Symbol').scale(1, 1).translate(0, 0);
+      initialT = new Transform().scale(1, 1).translate(0, 0);
     }
     super(vertexObject, initialT, color);
     if (symbolOptions.touchBorder != null) {

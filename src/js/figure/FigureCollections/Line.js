@@ -591,7 +591,7 @@ export default class CollectionsLine extends FigureElementCollection {
         duration: 1,
         frequency: 0,
       },
-      transform: new Transform('Line').scale(1, 1).rotate(0).translate(0, 0),
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       // touchBorder: 'children',
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);

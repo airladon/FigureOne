@@ -147,7 +147,7 @@ function parsePoints(
 //   if (options.position != null) {
 //     const p = getPoint(options.position);
 //     if (options.transform == null) {
-//       options.transform = new Transform('processOptions')0, 0);
+//       options.transform = new Transform()0, 0);
 //     }
 //     options.transform.updateTranslation(p);
 //   }
@@ -733,7 +733,7 @@ export default class FigurePrimitives {
       color: this.defaultColor,
       points: [],
       glPrimitive: 'TRIANGLES',
-      transform: new Transform('morph').scale(1, 1).rotate(0).translate(0, 0),
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       position: [0, 0],
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -855,7 +855,7 @@ export default class FigurePrimitives {
   //   const defaultOptions = {
   //     name: generateUniqueId('primitive_'),
   //     color: this.defaultColor,
-  //     transform: new Transform('generic').scale(1).rotate(0).translate(),
+  //     transform: new Transform().scale(1).rotate(0).translate(),
   //     texture: {
   //       src: '',
   //       mapTo: new Rect(-1, -1, 2, 2),
@@ -1099,7 +1099,7 @@ export default class FigurePrimitives {
   polyline(...optionsIn: Array<OBJ_Polyline>) {
     const options = joinObjects({}, ...optionsIn);
     const element = this.generic({
-      transform: new Transform('polyline').scale(1).rotate(0).translate(),
+      transform: new Transform().scale(1).rotate(0).translate(),
       border: 'draw',
       touchBorder: 'border',   // $FlowFixMe
     }, ...optionsIn);
@@ -1210,7 +1210,7 @@ export default class FigurePrimitives {
     optionsIn: Object,
   ) {
     const element = this.generic({
-      transform: new Transform(name).scale(1).rotate(0).translate(),
+      transform: new Transform().scale(1).rotate(0).translate(),
       border: 'draw',
       touchBorder: 'border',   // $FlowFixMe
     }, optionsIn);
@@ -1699,7 +1699,7 @@ export default class FigurePrimitives {
    */
   grid(...optionsIn: Array<OBJ_Grid>) {
     const element = this.generic({
-      transform: new Transform('grid').scale(1).rotate(0).translate(),
+      transform: new Transform().scale(1).rotate(0).translate(),
       border: 'draw',
       touchBorder: 'border', // $FlowFixMe
     }, ...optionsIn);
@@ -1847,7 +1847,7 @@ export default class FigurePrimitives {
     const element = this.polyline(joinObjects(
       {},
       {
-        transform: new Transform('line').scale(1).rotate(0).translate(),
+        transform: new Transform().scale(1).rotate(0).translate(),
       },
       ...options,
       {
@@ -1977,7 +1977,7 @@ export default class FigurePrimitives {
 
     // // Define standard transform if no transform was input
     // if (options.transform == null) {
-    //   options.transform = new Transform('text').translate();
+    //   options.transform = new Transform().translate();
     // } else {
     //   options.transform = getTransform(options.transform);
     // }
@@ -2017,7 +2017,7 @@ export default class FigurePrimitives {
     const options = optionsIn;
     // Define standard transform if no transform was input
     if (options.transform == null) {
-      options.transform = new Transform('text').scale(1).rotate(0).translate();
+      options.transform = new Transform().scale(1).rotate(0).translate();
     } else {
       options.transform = getTransform(options.transform);
     }
