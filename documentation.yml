@@ -212,7 +212,6 @@ toc:
   - name: Misc Figure Element
   - OBJ_ElementMoveFreely
   - OBJ_ElementMove
-  - Scenarios
   - ElementMovementState
   - ElementPulseState
   - ElementState
@@ -229,8 +228,12 @@ toc:
   - FigureElement#setTransform
   - OBJ_ElementPropertyMod
   - OBJ_ElementMods
-  - TypeScenarios
+  - OBJ_Scenarios
   - name: Misc Geometry
+  - isParsableTransform
+  - isParsablePoint
+  - isParsablePlane
+  - isParsableTransform
   - TypeParsablePoint
   - TypeParsableLine
   - TypeParsableRect
@@ -242,12 +245,29 @@ toc:
   - getRect
   - getTransform
   - OBJ_QuadraticBezier
-  - Intersect
+  - OBJ_LineIntersect
   - OBJ_Buffer
   - TypeParsableBuffer
   - getBuffer
   - TypeParsableBorder
+  - TypeParsablePlane
+  - TypeF1DefPlane
+  - TypeF1DefLine
   - TypeBorder
+  - TypeBasisObjectDefinition
+  - TypeTransformRotation
+  - TypeTransformDirection
+  - TypeTransformTranslation
+  - TypeTransformScale
+  - TypeTransformCustom
+  - TypeTransformBasis
+  - TypeTransformBasisToBasis
+  - TypeTransformBasisUserDefinition
+  - TypeTransformBasisToBasisUserDefinition
+  - TypeTransformComponent
+  - TypeTransformComponentUserDefinition
+  - TypeTransformDefinition
+  - TypeTransformUserDefinition
   - name: Misc Shapes
   - OBJ_Texture
   - OBJ_TextDefinition
