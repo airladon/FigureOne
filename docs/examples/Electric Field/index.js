@@ -1,7 +1,7 @@
 /* globals Fig */
 
 const figure = new Fig.Figure({
-  limits: [-3, -3, 6, 6],
+  scene: [-3, -3, 3, 3],
   backgroundColor: [0, 0, 0, 1],
 });
 

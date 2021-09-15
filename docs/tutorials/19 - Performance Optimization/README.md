@@ -63,7 +63,7 @@ We can do this easily with FigureOne by creating 100 squares, each of which:
 
 ```js
 const figure = new Fig.Figure({
-  limits: [-3, -3, 6, 6],
+  scene: [-3, -3, 3, 3],
   backgroundColor: [1, 1, 0.9, 1],
 });
 const { rand } = Fig;
@@ -260,7 +260,7 @@ We start by replacing just the setupDraw method. In the new `setupDraw` we will 
 
 ```js
 const figure = new Fig.Figure({
-  limits: [-3, -3, 6, 6],
+  scene: [-3, -3, 3, 3],
   backgroundColor: [1, 1, 0.9, 1],
 });
 const { rand } = Fig;
@@ -489,7 +489,7 @@ Our final code is then:
 
 ```js
 const figure = new Fig.Figure({
-  limits: [-3, -3, 6, 6],
+  scene: [-3, -3, 3, 3],
   backgroundColor: [1, 1, 0.9, 1],
 });
 const { rand } = Fig;
@@ -610,7 +610,7 @@ The final program is then:
 ```js
 
 const figure = new Fig.Figure({
-  limits: [-3, -3, 6, 6],
+  scene: [-3, -3, 3, 3],
   backgroundColor: [1, 1, 0.9, 1],
 });
 const { rand } = Fig;

@@ -42,38 +42,38 @@ describe('Figure', () => {
       landscapeCenter: {
         width: 1000,
         height: 500,
-        // limits: new Rect(-1, -1, 2, 2),
-        limits: { left: -1, bottom: -1, right: 1, top: 1 },
+        // scene: new Rect(-1, -1, 2, 2),
+        scene: { left: -1, bottom: -1, right: 1, top: 1 },
       },
       landscapeOffset: {
         width: 1000,
         height: 500,
-        // limits: new Rect(0, 0, 4, 2),
-        limits: { left: 0, bottom: 0, right: 4, top: 2 },
+        // scene: new Rect(0, 0, 4, 2),
+        scene: { left: 0, bottom: 0, right: 4, top: 2 },
       },
       portraitCenter: {
         width: 500,
         height: 1000,
-        // limits: new Rect(-1, -1, 2, 2),
-        limits: { left: -1, bottom: -1, right: 1, top: 1 },
+        // scene: new Rect(-1, -1, 2, 2),
+        scene: { left: -1, bottom: -1, right: 1, top: 1 },
       },
       portraitOffset: {
         width: 500,
         height: 1000,
-        // limits: new Rect(0, 0, 2, 4),
-        limits: { left: 0, bottom: 0, right: 4, top: 2 },
+        // scene: new Rect(0, 0, 2, 4),
+        scene: { left: 0, bottom: 0, right: 4, top: 2 },
       },
       squareCenter: {
         width: 1000,
         height: 1000,
-        // limits: new Rect(-1, -1, 2, 2),
-        limits: { left: -1, bottom: -1, right: 1, top: 1 },
+        // scene: new Rect(-1, -1, 2, 2),
+        scene: { left: -1, bottom: -1, right: 1, top: 1 },
       },
       squareOffset: {
         width: 1000,
         height: 1000,
-        // limits: new Rect(0, 0, 4, 4),
-        limits: { left: 0, bottom: 0, right: 4, top: 4 },
+        // scene: new Rect(0, 0, 4, 4),
+        scene: { left: 0, bottom: 0, right: 4, top: 4 },
       },
     };
     const squareDefinitions = {
@@ -100,16 +100,15 @@ describe('Figure', () => {
 
     Object.keys(figureDefinitions).forEach((key) => {
       const definition = figureDefinitions[key];
-      const { limits } = definition;
+      const { scene } = definition;
       const figure = makeFigure(
         new Rect(100, -(definition.height - 200), definition.width, definition.height),
-        limits,
+        scene,
       );
       const squares = {};
       const collection = new FigureElementCollection({
         trasform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
         // 'c',
-        limits: figure.limits,
       });
       Object.keys(squareDefinitions).forEach((sKey) => {
         const def = squareDefinitions[sKey];

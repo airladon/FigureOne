@@ -706,7 +706,7 @@ class TextObjectBase extends DrawingObject {
   // canvas and we want to think about the size and location of text in
   // Figure Space or Element Space (if the element has a specific transform).
   //
-  // For example, if we have a figure with limits: min: (0, 0), max(2, 1)
+  // For example, if we have a figure with scene: min: (0, 0), max(2, 1)
   // with a canvas of 1000 x 500 then:
   //    1) Transform pixel space (1000 x 500) to be GL Space (2 x 2). i.e.
   //         - Magnify pixel space by 500 so one unit in the 2D drawing

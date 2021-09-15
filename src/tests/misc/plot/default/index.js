@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* global Fig __frames */
 const figure = new Fig.Figure({
-  // limits: [-2, -1.5, 4, 3],
   scene: {
     left: -2,
     bottom: -1.5,

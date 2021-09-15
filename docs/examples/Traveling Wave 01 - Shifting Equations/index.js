@@ -10,7 +10,7 @@ const actionColor = [0, 0.6, 1, 1];
 const primaryCol = [1, 0, 0, 1];
 const secondaryCol = [0, 0.6, 1, 1];
 
-const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: dGreyColor });
+const figure = new Fig.Figure({ scene: [-2, -1.5, 2, 1.5], color: dGreyColor });
 
 /*
 .......##..........###....##....##..#######..##.....##.########

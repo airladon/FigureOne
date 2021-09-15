@@ -1,5 +1,5 @@
 /* globals Fig */
-const figure = new Fig.Figure({ limits: [-2, -1.7, 4, 3], color: [1, 0, 0, 1] });
+const figure = new Fig.Figure({ scene: [-2, -1.7, 2, 1.3], color: [1, 0, 0, 1] });
 
 // ////////////////////////////////////////////////////////////////////////
 // Radius and Space between radius and recorded signal

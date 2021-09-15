@@ -11,7 +11,7 @@ Open `index.html` in a browser to view example, or the example is hosted [here](
 ```js
 // `index.js`
 
-const figure = new Fig.Figure({ limits: [-2, -2, 4, 4], color: [1, 0, 0, 1] });
+const figure = new Fig.Figure({ scene: [-2, -2, 2, 2], color: [1, 0, 0, 1] });
 
 // Movable angle
 figure.add({

@@ -2,7 +2,7 @@
 import WebGLInstance from './webgl/webgl';
 
 import {
-  Point, Transform, getRect,
+  Point, Transform,
   getPoint,
 } from '../tools/g2';
 import Scene from '../tools/geometry/scene';
@@ -86,11 +86,10 @@ export type OBJ_FigureForElement = {
 /**
   * Figure options object
   * @property {string} [htmlId] HTML `div` tag `id` to tie figure to (`"figureOneContainer"`)
-  * @property {OBJ_Scene} [scene] define 2D or 3D scene. 3D can be orthographic
-  * or perspective projection, and include camera position and lighting
-  * definition.
-  * @property {TypeParsableRect} [limits] Overrides scene with a simple 2D
-  * projection with shown limits
+  * @property {OBJ_Scene | TypeParsableRect} [scene] define 2D or 3D scene. 3D
+  * can be orthographic or perspective projection, and include camera position
+  * and lighting definition. A 2D scene can be defined using `left`, `right`,
+  * `bottom` and `top`, or the short hand rectangle definition.
   * @property {TypeColor} [color] default shape color (`[0, 0, 0, 1]`)
   * @property {OBJ_Font} [font] default shape font (`{ family: 'Helvetica,
   * size: 0.2, style: 'normal', weight: 'normal' }`)
@@ -101,8 +100,7 @@ export type OBJ_FigureForElement = {
  */
 export type OBJ_Figure = {
   htmlId?: string,
-  limits?: TypeParsableRect,
-  scene?: OBJ_Scene,
+  scene?: OBJ_Scene | TypeParsableRect,
   color?: TypeColor,
   font?: OBJ_Font,
   lineWidth?: number,
@@ -210,7 +208,7 @@ export type OBJ_Figure = {
  * </html>
  *
  * // index.js
- * const figure = new Fig.Figure({ limits: [-1, -1, 2, 2 ]});
+ * const figure = new Fig.Figure({ scene: [-1, -1, 1, 1 ]});
  * figure.add(
  *   {
  *     name: 'p',
@@ -223,7 +221,7 @@ export type OBJ_Figure = {
  * @example
  * // Alternately, an element can be added programatically
  * // index.js
- * const figure = new Fig.Figure({ limits: [-1, -1, 2, 2 ]});
+ * const figure = new Fig.Figure({ scene: [-1, -1, 1, 1 ]});
  * const hex = figure.shapes.polygon({
  *   radius: 0.5,
  *   sides: 6,
@@ -497,14 +495,26 @@ class Figure {
       this.gesture = new Gesture(this);
     }
 
-    if (optionsToUse.limits != null) {
-      const limits = getRect(optionsToUse.limits);
+    // if (optionsToUse.limits != null) {
+    //   const limits = getRect(optionsToUse.limits);
+    //   optionsToUse.scene = {
+    //     style: '2D',
+    //     left: limits.left,
+    //     right: limits.right,
+    //     top: limits.top,
+    //     bottom: limits.bottom,
+    //   };
+    // }
+    if (Array.isArray(optionsToUse.scene)) {
+      const [
+        left, bottom, right, top,
+      ] = optionsToUse.scene;
       optionsToUse.scene = {
         style: '2D',
-        left: limits.left,
-        right: limits.right,
-        top: limits.top,
-        bottom: limits.bottom,
+        left,
+        right,
+        top,
+        bottom,
       };
     }
     if (optionsToUse.scene == null) {

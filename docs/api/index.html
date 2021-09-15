@@ -3906,9 +3906,9 @@
               
                 
                 <li><a
-                  href='#obj_glbuffer'
+                  href='#obj_glattribute'
                   class="">
-                  OBJ_GLBuffer
+                  OBJ_GLAttribute
                   
                 </a>
                 
@@ -4159,6 +4159,16 @@
                   href='#surface'
                   class="">
                   surface
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#line3'
+                  class="">
+                  line3
                   
                 </a>
                 
@@ -4894,6 +4904,36 @@
               
                 
                 <li><a
+                  href='#getplane'
+                  class="">
+                  getPlane
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getnormal'
+                  class="">
+                  getNormal
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#anglefromvectors'
+                  class="">
+                  angleFromVectors
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_quadraticbezier'
                   class="">
                   OBJ_QuadraticBezier
@@ -4977,6 +5017,16 @@
                   href='#typef1defline'
                   class="">
                   TypeF1DefLine
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typef1deftransform'
+                  class="">
+                  TypeF1DefTransform
                   
                 </a>
                 
@@ -5930,6 +5980,16 @@
               
                 
                 <li><a
+                  href='#obj_scene'
+                  class="">
+                  OBJ_Scene
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#misc-geometry-creation'
                   class="h5 bold black caps">
                   Misc Geometry Creation
@@ -6806,16 +6866,6 @@
               
                 
                 <li><a
-                  href='#line3'
-                  class="">
-                  line3
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#typerotationdirection'
                   class="">
                   TypeRotationDirection
@@ -6876,59 +6926,9 @@
               
                 
                 <li><a
-                  href='#getplane'
-                  class="">
-                  getPlane
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#getnormal'
-                  class="">
-                  getNormal
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#typef1defrect'
                   class="">
                   TypeF1DefRect
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_scene'
-                  class="">
-                  OBJ_Scene
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#typef1deftransform'
-                  class="">
-                  TypeF1DefTransform
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#anglefromvectors'
-                  class="">
-                  angleFromVectors
                   
                 </a>
                 
@@ -6953,25 +6953,74 @@
   
     <h4>Figures, Primitives and Collections</h4>
 <p><a href="https://github.com/airladon/FigureOne">FigureOne</a> allows you to create a <em>figure</em> that can be both interactive and animated.</p>
-<p>A figure is composed of one or more <em>figure elements</em>. A figure element is a simple shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.</p>
+<p>A figure is composed of one or more <em>figure elements</em>. A figure element is a shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.</p>
 <p>In the language of <strong>FigureOne</strong>, there are two types of <a href="FigureElements">FigureElements</a>:</p>
 <ul>
 <li><a href="#figureelementprimitive">FigureElementPrimitive</a> - an element that will draw something to the screen, such as a line, shape or text</li>
 <li><a href="#figureelementcollection">FigureElementCollection</a> - collections of elements that will move or be operated on together</li>
 </ul>
-<p>Each <a href="#figureelement">FigureElement</a> has a <a href="#transform">Transform</a> that may for example translate, rotate or scale an element. When the element is rendered to the screen, the transform will be applied. In the case of a <a href="#figureelementprimitive">FigureElementPrimitive</a>, the shape or text will be transformed. In the case of a <a href="#figureelementcollection">FigureElementCollection</a>, all the figure elements it contains will have their transforms cascaded with the collection transform.</p>
-<p>This means there is a heierachy of <a href="#figureelement">FigureElement</a> objects, where the parent transform is applied to (cascaded with) the child transform. Therefore collections can be thought of as modular building blocks of a more complex figure.</p>
-<p>Changing an element's transform moves the element through space. Changing the element's transform over time animates the element.</p>
-<h4>An Example</h4>
-<p>Let's say we want to create a rotating labeled line. As the line is rotated, the label follows the line.</p>
+<p>Each <a href="#figureelement">FigureElement</a> has a <a href="#transform">Transform</a> that transforms an element in space (e.g. rotates, translates, scales etc) when it is time to draw the element. In the case of a <a href="#figureelementprimitive">FigureElementPrimitive</a>, the shape or text will be transformed. In the case of a <a href="#figureelementcollection">FigureElementCollection</a>, all the figure elements it contains will have their transforms cascaded with the collection's transform.</p>
+<p>This means there is a heierachy of <a href="#figureelement">FigureElement</a> objects, where the parent transform is combined with  (cascaded with) the child transform. Therefore collections can be thought of as modular building blocks of a more complex figure.</p>
+<p style="text-align: center"><img src="./tutorials/transformcascades.png"></p>
+<!-- Changing an element's transform moves the element through space. Changing the element's transform over time animates the element. -->
+<h5>Example</h5>
+<p>As an example, let's say we want to create a labeled line where the line and label both rotate together.</p>
 <p style="text-align: center"><img src="./tutorials/ex1.png"></p>
-<p>To create this figure, we might use a figure element hierarchy like:</p>
+<p>To create this, we could use a line and text primitive within a collection:</p>
 <p style="text-align: center"><img src="./tutorials/ex1-hierarchy.png"></p>
-<p>The drawn elements, the line and label, are primitives. They are created in the simple no rotation case. If the line is 0.8 long, and it starts at (0, 0), then the text might be at (0.4, 0.1)</p>
+<p>To rotate both label and line in tandem, we simply need to rotate the collection.</p>
+<h5>Code</h5>
+<p>Let's see the code for the example above. Two files, <code>index.html</code> and <code>index.js</code> should be in the same folder.</p>
+<pre class='hljs'><span class="hljs-comment">&lt;!-- index.html --&gt;</span>
+<span class="hljs-meta">&lt;!doctype <span class="hljs-meta-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;figureOneContainer&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;width: 1200px; height: 800px; background-color: white;&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&#x27;https://cdn.jsdelivr.net/npm/figureone@0.10.13/figureone.min.js&#x27;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&#x27;./index.js&#x27;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
+<pre class='hljs'><span class="hljs-comment">// Note, the `position` property is a short hand way of defining a transform with a</span>
+<span class="hljs-comment">// translation component.</span>
+
+<span class="hljs-comment">// Set the figure limits to be 0 ≤ x ≤ 6 and 0 ≤ y ≤ 4</span>
+<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">6</span>, <span class="hljs-number">4</span>] });
+figure.add(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;labeledLine&#x27;</span>,
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;collection&#x27;</span>,
+    <span class="hljs-attr">elements</span>: [
+      {
+        <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;line&#x27;</span>,
+        <span class="hljs-attr">p1</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+        <span class="hljs-attr">p2</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">0</span>],
+        <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span>,
+        <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+      },
+      {
+        <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;text&#x27;</span>,
+        <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;Line 1&#x27;</span>,
+        <span class="hljs-comment">// Set the label position to be at the middle point of the line</span>
+        <span class="hljs-comment">// And slightly above it</span>
+        <span class="hljs-attr">position</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0.1</span>],
+        <span class="hljs-attr">font</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] },
+        <span class="hljs-attr">xAlign</span>: <span class="hljs-string">&#x27;center&#x27;</span>,
+      },
+    ],
+    <span class="hljs-comment">// Set the position of the collection such that the end of the line is</span>
+    <span class="hljs-comment">// in the middle of the figure</span>
+    <span class="hljs-attr">position</span>: [<span class="hljs-number">3</span>, <span class="hljs-number">2</span>],
+    <span class="hljs-attr">touchBorder</span>: <span class="hljs-number">0.3</span>,
+    <span class="hljs-attr">move</span>: {
+      <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;rotation&#x27;</span>,
+    },
+  },
+);</pre>
+<p>This code positions text relative to the middle of a line of length 2.</p>
 <p style="text-align: center"><img src="./tutorials/ex1-collection.png"></p>
-<p>The figure itself has limits that define the coordinate window that can be shown, in this case its bottom left is the origin, and it is 6 wide and 4 high. We want the collection to be rotated, with the center of rotation at the center of the figure. Therefore we apply a rotation and translation transform to the collection.</p>
+<p>It then positions the collection so the line end is in the middle of the figure.</p>
 <p style="text-align: center"><img src="./tutorials/ex1-figure.png"></p>
-<p>There are several different ways to create the same figure, but this way is used as it highlights how a collection can be used to transform a group of primitive elements.</p>
 <h4>Coordinate spaces</h4>
 <p>FigureOne renders shapes in WebGL, text in Context2D and can even manipulate html elements as figure elements. As WebGL is used most in FigureOne, it will be used as an example to introduce coorindate spaces and why they matter.</p>
 <p>A figure is rendered in a html <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API">canvas</a> element. The pixels in a canvas can be thought of as coorindates. In html convention, if a canvas element is 1000 pixels wide, and 500 pixels height, then the (0, 0) pixel is in the top left corner, and pixel (1000, 500) is in the bottom right corner. We call this <em>pixel space</em> (though in computer graphics generally it is also often referred to as <em>screen space</em> or <em>device space</em>).</p>
@@ -7128,36 +7177,31 @@ In other words, a shape can be represented in different spaces, each of which mi
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
-<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">6</span>, <span class="hljs-number">4</span> ]});
+<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">6</span>, <span class="hljs-number">3</span>] });
 figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;labeledLine&#x27;</span>,
-    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;collections.collection&#x27;</span>,
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;collection&#x27;</span>,
     <span class="hljs-attr">elements</span>: [
       {
-        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;line&#x27;</span>,
-        <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;primitives.line&#x27;</span>,
+        <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;line&#x27;</span>,
         <span class="hljs-attr">p1</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
         <span class="hljs-attr">p2</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">0</span>],
         <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span>,
-        <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+        <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
       },
       {
-        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;label&#x27;</span>,
-        <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;primitives.text&#x27;</span>,
+        <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;text&#x27;</span>,
         <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;Line 1&#x27;</span>,
         <span class="hljs-attr">position</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0.1</span>],
-        <span class="hljs-attr">font</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] },
+        <span class="hljs-attr">font</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] },
         <span class="hljs-attr">xAlign</span>: <span class="hljs-string">&#x27;center&#x27;</span>,
       },
     ],
     <span class="hljs-attr">position</span>: [<span class="hljs-number">3</span>, <span class="hljs-number">2</span>],
     <span class="hljs-attr">touchBorder</span>: <span class="hljs-number">0.3</span>,
-    <span class="hljs-attr">mods</span>: {
-      <span class="hljs-attr">isMovable</span>: <span class="hljs-literal">true</span>,
-      <span class="hljs-attr">move</span>: {
-        <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;rotation&#x27;</span>,
-      },
+    <span class="hljs-attr">move</span>: {
+      <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;rotation&#x27;</span>,
     },
   },
 );</pre>
@@ -9156,8 +9200,7 @@ Use [r, g, b, 1] for opaque and [0, 0, 0, 0] for transparent.
   
 
   <p>Object representing a point or vector.</p>
-<p>Contains methods that makes it conventient to add, subtract and
-transform points.</p>
+<p>Contains methods that makes it convenient to work with points and vectors.</p>
 
   
   
@@ -9398,6 +9441,13 @@ components of point only).</p>
   
 
   
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>{mag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, theta: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, phi: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>}</code>:
+        
+      
+    
+  
 
   
 
@@ -9448,7 +9498,9 @@ components of point only).</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#point">Point</a></code>
+      <code><a href="#point">Point</a></code>:
+        
+      
     
   
 
@@ -9514,7 +9566,9 @@ components of point only).</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#point">Point</a></code>
+      <code><a href="#point">Point</a></code>:
+        
+      
     
   
 
@@ -9606,7 +9660,9 @@ s = p.scale(<span class="hljs-number">3</span>);
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#point">Point</a></code>
+      <code><a href="#point">Point</a></code>:
+        
+      
     
   
 
@@ -9703,7 +9759,9 @@ d = p.sub(q)
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#point">Point</a></code>
+      <code><a href="#point">Point</a></code>:
+        
+      
     
   
 
@@ -9784,7 +9842,9 @@ supplied)</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        
+      
     
   
 
@@ -9847,7 +9907,9 @@ represents a vector, then it is the length of the vector.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        
+      
     
   
 
@@ -9911,6 +9973,13 @@ represents a vector, then it is the length of the vector.</p>
   
 
   
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        
+      
+    
+  
 
   
 
@@ -9971,6 +10040,13 @@ represents a vector, then it is the length of the vector.</p>
 
   
 
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#point">Point</a></code>:
+        
+      
+    
   
 
   
@@ -10033,6 +10109,13 @@ represents a vector, then it is the length of the vector.</p>
   
 
   
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        
+      
+    
+  
 
   
 
@@ -10093,6 +10176,13 @@ represents a vector, then it is the length of the vector.</p>
 
   
 
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        
+      
+    
   
 
   
@@ -10156,6 +10246,13 @@ v and direction +/- v (depending on the sign of the scalar projection).</p>
   
 
   
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#point">Point</a></code>:
+        
+      
+    
+  
 
   
 
@@ -10218,6 +10315,13 @@ with <code>precision</code> are zero.</p>
 
   
 
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>:
+        
+      
+    
   
 
   
@@ -10283,7 +10387,9 @@ with <code>precision</code> are zero.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#point">Point</a></code>
+      <code><a href="#point">Point</a></code>:
+        
+      
     
   
 
@@ -10368,7 +10474,9 @@ min/max values.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#point">Point</a></code>
+      <code><a href="#point">Point</a></code>:
+        
+      
     
   
 
@@ -10419,7 +10527,8 @@ q = p.clip(minClip, <span class="hljs-literal">null</span>);
 
   
 
-  <p>Transform the point with a 4x4 matrix (3 dimensional transform)</p>
+  <p>Transform the point with a 4x4 matrix (3 dimensional transform in
+homogenous coordinates)</p>
 
   
   
@@ -10451,7 +10560,9 @@ q = p.clip(minClip, <span class="hljs-literal">null</span>);
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#point">Point</a></code>
+      <code><a href="#point">Point</a></code>:
+        
+      
     
   
 
@@ -10488,7 +10599,7 @@ q = p.transformBy(m)
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>rotate(angle, center)</span>
+            <span class='code strong strong truncate'>rotate(angle, center, axis)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -10514,7 +10625,7 @@ q = p.transformBy(m)
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>angle</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | Type3Components))</code>
+            <span class='code bold'>angle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
 	    in radians
 
           </div>
@@ -10525,6 +10636,16 @@ q = p.transformBy(m)
           <div>
             <span class='code bold'>center</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>
             = <code>new Point(0,0,0)</code>)</code>
+	    in radians
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>axis</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>
+            = <code>new Point(0,0,1)</code>)</code>
 	    
           </div>
           
@@ -10538,7 +10659,9 @@ q = p.transformBy(m)
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#point">Point</a></code>
+      <code><a href="#point">Point</a></code>:
+        
+      
     
   
 
@@ -10604,6 +10727,13 @@ from the origin to the point).</p>
   
 
   
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#point">Point</a></code>:
+        
+      
+    
+  
 
   
 
@@ -10635,7 +10765,7 @@ from the origin to the point).</p>
 
   
 
-  <p>Compare two points for equality to some precision</p>
+  <p>Compare two points for equality to some precision or delta</p>
 
   
   
@@ -10654,7 +10784,8 @@ from the origin to the point).</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>p</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>)</code>
-	    
+	    point to compare
+
           </div>
           
         </div>
@@ -10663,7 +10794,10 @@ from the origin to the point).</p>
           <div>
             <span class='code bold'>precision</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
             = <code>8</code>)</code>
-	    
+	    precision to compare (
+<code>8</code>
+)
+
           </div>
           
         </div>
@@ -10672,7 +10806,11 @@ from the origin to the point).</p>
           <div>
             <span class='code bold'>delta</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
             = <code>false</code>)</code>
-	    
+	    if 
+<code>true</code>
+ then precision is the delta value the two
+points must be within to be equal
+
           </div>
           
         </div>
@@ -10682,6 +10820,13 @@ from the origin to the point).</p>
 
   
 
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>:
+        
+      
+    
   
 
   
@@ -21385,7 +21530,7 @@ shaders, and when they are used.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>attributes</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_glbuffer">OBJ_GLBuffer</a>>?)</code>
+          <span class='code bold'>attributes</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_glattribute">OBJ_GLAttribute</a>>?)</code>
           
           
         </div>
@@ -24806,7 +24951,7 @@ in transform
 
 method will not change the color of text
 (default: 
-<code>Transform('text'))</code>
+<code>Transform())</code>
 )
 
           
@@ -25020,7 +25165,7 @@ in transform
         <div class='space-bottom0'>
           <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
           : (
-<code>Transform('text'))</code>
+<code>Transform())</code>
 )
 
           
@@ -25254,7 +25399,7 @@ in transform
         <div class='space-bottom0'>
           <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
           : (
-<code>Transform('text'))</code>
+<code>Transform())</code>
 )
 
           
@@ -55285,11 +55430,11 @@ example, '1:23.5' would define 1 minute, 23.5 seconds)</p>
 
   
     <p>WebGL utilizes hardware acceleration to draw very complex shapes - even on low end devices. Most FigureOne FigureElementPrimitives interface directly with WebGL to render the shapes, and as such a user doesn't need to know anything about WebGL to use FigureOne.</p>
-<p>FigureOne also provides a FigureElementPrimitive (<code>GLPrimitive</code>) with direct access to WebGL shaders and buffers. This means a user with some WebGL experience can write custom shaders which may dramatically increase the performance of a particularly complicated figure, or a figure with special graphical effects.</p>
+<p>FigureOne also provides a FigureElementPrimitive <a href="#obj_genericgl">OBJ_GenericGL</a> with direct access to WebGL shaders and buffers. This means a user with some WebGL experience can write custom shaders which may dramatically increase the performance of a particularly complicated figure, or a figure with special graphical effects.</p>
 <p>It is not in the scope of this API reference to explain what WebGL is, and how to use it. There are many good resources on the web that already do this - for example <a href="https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html">WebGLFundamentals</a> gives an excellent introduction to WebGL and this <a href="https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf">quick reference guid</a> is useful to refer to especially when writing shaders. A WebGL API reference is <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext">here</a>.</p>
-<p>For more detailed information on how to create a FigureOne <code>GLPrimitive</code>, and customize shaders and buffers see <a href="https://github.com/airladon/FigureOne/tree/master/docs/tutorials/19%20-%20Performance%20Optimization">this tutorial</a>.</p>
+<p>For more detailed information on how to create a FigureOne <a href="#obj_genericgl">OBJ_GenericGL</a>, and customize shaders and buffers see <a href="https://github.com/airladon/FigureOne/tree/master/docs/tutorials/19%20-%20Performance%20Optimization">this tutorial</a>.</p>
 <p><img src="../tutorials/19%20-%20Performance%20Optimization/08%20custom%20shader/example.gif" alt=""></p>
-<p>Another example of a <code>GLPrimitive</code> in action is from the FigureOne examples <a href="https://github.com/airladon/FigureOne/tree/master/docs/examples/Electric%20Field/">here</a>.</p>
+<p>Another example of a <a href="#obj_genericgl">OBJ_GenericGL</a> in action is from the FigureOne examples <a href="https://github.com/airladon/FigureOne/tree/master/docs/examples/Electric%20Field/">here</a>.</p>
 <p><img src="../examples/Electric%20Field/example.gif" alt=""></p>
 
   
@@ -55302,8 +55447,8 @@ example, '1:23.5' would define 1 minute, 23.5 seconds)</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_glbuffer'>
-      OBJ_GLBuffer
+    <h3 class='fl m0' id='obj_glattribute'>
+      OBJ_GLAttribute
     </h3>
     
     
@@ -57233,6 +57378,94 @@ for each point will be available.</p>
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='line3'>
+      line3
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Return points of a 3D line with optional arrows.</p>
+<p>The points can either represent the triangles that make up each face, or
+represent the start and end points of lines that are the edges of each face
+of the shape.</p>
+<p>If the points represent triangles, then a second array of normal vectors
+for each point will be available.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_line3points">OBJ_Line3Points</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_line3points">OBJ_Line3Points</a>)</code>
+          : line options
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>]</code>:
+        an array of points and normals. If
+the points represent lines, then the array of normals will be empty.
+
+      
+    
   
 
   
@@ -63121,6 +63354,243 @@ vectors over time.</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='getplane'>
+      getPlane
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Parse a <a href="#typeparsablepoint">TypeParsablePoint</a> and return a <a href="#point">Point</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>p</span> <code class='quiet'>(<a href="#typeparsableplane">TypeParsablePlane</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#point">Point</a></code>:
+        
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getnormal'>
+      getNormal
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Get plane created with three points.</p>
+<p>Normal is in the direction of the cross product of p12 and p13</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>p1OrPoints</span> <code class='quiet'>((<a href="#typeparsablepoint">TypeParsablePoint</a> | [<a href="#typeparsablepoint">TypeParsablePoint</a>, <a href="#typeparsablepoint">TypeParsablePoint</a>, <a href="#typeparsablepoint">TypeParsablePoint</a>]))</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>p2</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>
+            = <code>null</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>p3</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>
+            = <code>null</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='anglefromvectors'>
+      angleFromVectors
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Calculate the rotation axis and angle required to move from one
+vector to another.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>fromVector</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>toVector</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>axisIfCollinear</span> <code class='quiet'>((<a href="#typeparsablepoint">TypeParsablePoint</a> | null)
+            = <code>null</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>{axis: <a href="#point">Point</a>, angle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>}</code>:
+        
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='obj_quadraticbezier'>
       OBJ_QuadraticBezier
     </h3>
@@ -63773,6 +64243,86 @@ points of the line and the number of finite ends.</p>
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typef1deftransform'>
+      TypeF1DefTransform
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Transform state definition of a <a href="#transform">Transform</a> that represents an array
+of transform components.</p>
+<pre><code>{
+  f1Type: 'pl',
+  state: TypeTransformDefinition
+}
+</code></pre>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>f1Type</span> <code class='quiet'>(<code>"tf"</code>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>state</span> <code class='quiet'>(<a href="#typetransformdefinition">TypeTransformDefinition</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#typetransformdefinition">TypeTransformDefinition</a>
+
+      
+    
   
 
   
@@ -72777,7 +73327,7 @@ data is RGBA
 dimension (2D vs 3D), coloring and lighting options.</p>
 <p>Composed source code uses specific attribute, uniform and varying names.
 Attributes will need to be defined by the user in the <code>attributes</code> property
-of <a href="OBJ_GLPrimitive">OBJ_GLPrimitive</a>.</p>
+of <a href="#obj_genericgl">OBJ_GenericGL</a>.</p>
 <p>Attributes:</p>
 <ul>
 <li><code>vec2 a_vertex</code>: used to define vertex positions when <code>dimension = 2</code>.</li>
@@ -72975,6 +73525,132 @@ from vertex shader used when <code>light = 'point'</code></li>
 <code>null</code>
 )
 
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_scene'>
+      OBJ_Scene
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>The Scene options object defines how the elements within the figure are
+viewed.</p>
+<p>For 2D figures (<code>style: '2D'</code>), <code>left</code>, <code>right</code>, <code>bottom</code>, and <code>top</code> are
+required to define the x-y expanse to view. Any elements or portions of
+elements outside of this expanse will not be shown (be clipped).</p>
+<p>For 3D figures, a camera, lighting and the near/far clipping planes also
+need definition.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>style</span> <code class='quiet'>((<code>"2D"</code> | <code>"orthographic"</code> | <code>"perspective"</code>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>left</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>right</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>bottom</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>top</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>near</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>far</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>aspectRatio</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fieldOfView</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>light</span> <code class='quiet'>(OBJ_Light?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>camera</span> <code class='quiet'>(OBJ_Camera?)</code>
+          
           
         </div>
       
@@ -82568,94 +83244,6 @@ corner
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='line3'>
-      line3
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Return points of a 3D line with optional arrows.</p>
-<p>The points can either represent the triangles that make up each face, or
-represent the start and end points of lines that are the edges of each face
-of the shape.</p>
-<p>If the points represent triangles, then a second array of normal vectors
-for each point will be available.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_line3points">OBJ_Line3Points</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_line3points">OBJ_Line3Points</a>)</code>
-          : line options
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>[<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>]</code>:
-        an array of points and normals. If
-the points represent lines, then the array of normals will be empty.
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='typerotationdirection'>
       TypeRotationDirection
     </h3>
@@ -83208,156 +83796,6 @@ from p1
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='getplane'>
-      getPlane
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Parse a <a href="#typeparsablepoint">TypeParsablePoint</a> and return a <a href="#point">Point</a>.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>p</span> <code class='quiet'>(<a href="#typeparsableplane">TypeParsablePlane</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#point">Point</a></code>:
-        
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='getnormal'>
-      getNormal
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Get plane created with three points.</p>
-<p>Normal is in the direction of the cross product of p12 and p13</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>p1OrPoints</span> <code class='quiet'>((<a href="#typeparsablepoint">TypeParsablePoint</a> | [<a href="#typeparsablepoint">TypeParsablePoint</a>, <a href="#typeparsablepoint">TypeParsablePoint</a>, <a href="#typeparsablepoint">TypeParsablePoint</a>]))</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>p2</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>
-            = <code>null</code>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>p3</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>
-            = <code>null</code>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='typef1defrect'>
       TypeF1DefRect
     </h3>
@@ -83403,299 +83841,6 @@ bottom, width and height of the rectangle.</p>
     </div>
   
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_scene'>
-      OBJ_Scene
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>The Scene options object defines how the elements within the figure are
-viewed.</p>
-<p>For 2D figures (<code>style: '2D'</code>), <code>left</code>, <code>right</code>, <code>bottom</code>, and <code>top</code> are
-required to define the x-y expanse to view. Any elements or portions of
-elements outside of this expanse will not be shown (be clipped).</p>
-<p>For 3D figures, a camera, lighting and the near/far clipping planes also
-need definition.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>style</span> <code class='quiet'>((<code>"2D"</code> | <code>"orthographic"</code> | <code>"perspective"</code>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>left</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>right</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>bottom</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>top</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>near</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>far</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>aspectRatio</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fieldOfView</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>light</span> <code class='quiet'>(OBJ_Light?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>camera</span> <code class='quiet'>(OBJ_Camera?)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='typef1deftransform'>
-      TypeF1DefTransform
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Transform state definition of a <a href="#transform">Transform</a> that represents an array
-of transform components.</p>
-<pre><code>{
-  f1Type: 'pl',
-  state: TypeTransformDefinition
-}
-</code></pre>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>f1Type</span> <code class='quiet'>(<code>"tf"</code>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>state</span> <code class='quiet'>(<a href="#typetransformdefinition">TypeTransformDefinition</a>)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Related</div>
-    
-      
-        <a href="#typetransformdefinition">TypeTransformDefinition</a>
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='anglefromvectors'>
-      angleFromVectors
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Calculate the rotation axis and angle required to move from one
-vector to another.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>fromVector</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>toVector</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>axisIfCollinear</span> <code class='quiet'>((<a href="#typeparsablepoint">TypeParsablePoint</a> | null)
-            = <code>null</code>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>{axis: <a href="#point">Point</a>, angle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>}</code>:
-        
-      
-    
   
 
   

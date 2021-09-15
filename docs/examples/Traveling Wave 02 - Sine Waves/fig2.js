@@ -24,7 +24,7 @@ function fig2() {
   const { Point, range } = Fig;
 
   const fig = new Fig.Figure({
-    limits: [-2, -0.8, 4, 2],
+    scene: [-2, -0.8, 2, -0.8 + 2],
     htmlId: 'figureOneContainer2',
     color: [0.4, 0.4, 0.4, 1],
   });

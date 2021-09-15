@@ -174,7 +174,7 @@ toc:
   - TypeRecorderTime
   - name: Shaders
     file: ./docs/api/tutorials/shaders/shaders.md
-  - OBJ_GLBuffer
+  - OBJ_GLAttribute
   - OBJ_GLVertexBuffer
   - OBJ_GLUniform
   - TypeGLBufferType
@@ -200,6 +200,7 @@ toc:
   - prism
   - revolve
   - surface
+  - line3
   - name: Math tools
   - round
   - range
@@ -230,7 +231,6 @@ toc:
   - OBJ_ElementMods
   - OBJ_Scenarios
   - name: Misc Geometry
-  - isParsableTransform
   - isParsablePoint
   - isParsablePlane
   - isParsableTransform
@@ -244,6 +244,9 @@ toc:
   - getLine
   - getRect
   - getTransform
+  - getPlane
+  - getNormal
+  - angleFromVectors
   - OBJ_QuadraticBezier
   - OBJ_LineIntersect
   - OBJ_Buffer
@@ -253,6 +256,7 @@ toc:
   - TypeParsablePlane
   - TypeF1DefPlane
   - TypeF1DefLine
+  - TypeF1DefTransform
   - TypeBorder
   - TypeBasisObjectDefinition
   - TypeTransformRotation
@@ -336,9 +340,9 @@ toc:
   - TypeHAlign
   - TypeVAlign
   - OBJ_GLColorData
-  - OBJ_Generic3DAll
   - OBJ_VertexShader
   - OBJ_FragmentShader
+  - OBJ_Scene
   - name: Misc Geometry Creation
   - OBJ_ConePoints
   - OBJ_CubePoints

@@ -45,7 +45,7 @@ export default function makeFigure(
   const definition = {
     width: inputCanvas.width,
     height: inputCanvas.height,
-    // limits: new Rect(-1, -1, 2, 2),
+    // scene: [-1, -1, 1, 1],
   };
 
   const canvasMock = {

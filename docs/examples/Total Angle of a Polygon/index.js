@@ -2,7 +2,7 @@
 /* eslint-disable object-curly-newline */
 
 const figure = new Fig.Figure({
-  limits: [-2.5, -1.7, 6.667 * 0.65, 5 * 0.65],
+  scene: [-2.5, -1.7, -2.5 + 6.667 * 0.65, -1.7 + 5 * 0.65],
   color: [1, 0, 0, 1],
 });
 

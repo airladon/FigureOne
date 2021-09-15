@@ -30,7 +30,7 @@ To rotate both label and line in tandem, we simply need to rotate the collection
 
 ##### Code
 
-Let's see the code for the example above. Two files, `index.html` and `index.js` should be in the same folder.
+Let's see the code for the example above. Two files, `index.html` and `index.js` should be in the same folder (the following sections will describe the code).
 
 ```html
 <!-- index.html -->
@@ -50,7 +50,7 @@ Let's see the code for the example above. Two files, `index.html` and `index.js`
 // translation component.
 
 // Set the figure limits to be 0 ≤ x ≤ 6 and 0 ≤ y ≤ 4
-const figure = new Fig.Figure({ limits: [0, 0, 6, 4] });
+const figure = new Fig.Figure({ scene: [0, 0, 6, 4] });
 figure.add(
   {
     name: 'labeledLine',
@@ -97,9 +97,9 @@ It then positions the collection so the line end is in the middle of the figure.
 
 To attach a figure to a HTML document:
 
-* A HTML `div` element is required which FigureOne will attach the drawing canvas to. By default FigureOne will look for a `div` with `id=figureOneContainer`. A custom ID can also be specificed.
-* The FigureOne library needs to be loaded either from a public CDN (like below), or from a local source
-* A JavaScript file that creates the figure, adds elements to it needs to be loaded and executed.
+* The HTML document needs a `div` element to which FigureOne will attach the drawing canvas to. By default FigureOne will look for a `div` with ID `'figureOneContainer'`. A custom ID can be specificed if desired or more than one figure in the document will be created.
+* The FigureOne library `figureone.min.js` needs to be loaded either from a public CDN (like below), or from a local source
+* A JavaScript file (in this case `index.js`) that creates the figure, and adds elements to it needs to be loaded and executed.
 
 ```html
 <!-- index.html -->
@@ -114,7 +114,7 @@ To attach a figure to a HTML document:
 </html>
 ```
 
-To create the figure then in `index.js`:
+In `index.js`, the figure can be created using the {@link OBJ_Figure} options object as a parameter to `Figure`. One of the most commonly used properties sets the figure's scene (the expanse of space to show).
 
 ```js
 const figure = new Fig.Figure({
@@ -122,9 +122,57 @@ const figure = new Fig.Figure({
 });
 ```
 
-#### Draw
+For 2D figures, a simple array containing the left, bottom, right and top limits can be used. In three dimensions, the scene also defines from where the visible space is viewed (camera) and lighting (see <a href="##3d-shape-primitives">3D Shape Primitives</a> for a detailed explanation).
 
-There are several options to drawing a shape in a figure:
+
+Now the figure is setup, shapes can be added to it.
+
+#### Shapes
+
+There are several ways to define a shape that a FigureElementPrimitive will draw. FigureOne comes with:
+
+* Built-in shapes
+* Generic shapes (see {@link OBJ_Generic} and {@link OBJ_Generic3D}) that can draw fully custom shapes
+* Generic GL primitive (see {@link OBJ_GenericGL}) through which shaders, attributes, uniforms and textures can be defined allowing for more customization and performance optimization of complex shapes
+
+##### Built-In Shapes
+
+FigureOne comes with a number of customizable shapes. For example, to add a polygon to a figure (see {@link OBJ_Polygon} for all possible polygon options):
+
+```js
+figure.add({
+  make: 'polygon',
+  sides: 6,
+  radius: 0.5,
+});
+```
+
+When adding an alement to the figure, the most important property (and only one that is required to be defined) is `make` which tells FigureOne which built-in shape to use. The remaining properties are optional.
+
+For a complete list of built in shapes see:
+* <a href="#2d-shape-primitives">2D Shape Primitives</a>
+* <a href="#text">Text</a>
+* <a href="##3d-shape-primitives">3D Shape Primitives</a>
+* <a href="#2d-shape-collections">2D Shape Collections</a>
+* <a href="#equations">Equations</a>)
+
+##### Generic Shapes
+
+If you need to create a shape that is very different from the build-in shapes then the generic primitive can be used. Most commonly, the `points` used to define the shape actually define a series of triangles that create a fill. The example below creates two triangles.
+
+```js
+figure.add({
+  make: 'generic',
+  points: [
+    [-1, -1], [0, -1], [0, 1],
+    [0, -1], [1, -1], [1, 1],
+  ],
+});
+```
+
+See {}
+
+
 
 
 #### Coordinate spaces
@@ -419,7 +467,7 @@ Finally, let's see the code for the example above. Two files, `index.html` and `
 
 ```javascript
 // index.js
-const figure = new Fig.Figure({ limits: [0, 0, 6, 3] });
+const figure = new Fig.Figure({ scene: [0, 0, 6, 3] });
 figure.add(
   {
     name: 'labeledLine',
@@ -459,7 +507,7 @@ Figures can also be defined more dynamically, such as in the example below which
 
 ```javascript
 // index.js
-const figure = new Fig.Figure({ limits: [0, 0, 6, 4 ]});
+const figure = new Fig.Figure({ scene: [0, 0, 6, 4 ]});
 
 const label = figure.primitives.text({
   text: 'Line 1',

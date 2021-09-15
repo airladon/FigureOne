@@ -3,7 +3,7 @@
 
 const { Point, Figure } = Fig;
 const figure = new Figure({
-  limits: [-2, -1.5, 4, 3],
+  scene: [-2, -1.5, 2, 1.5],
   color: [0.5, 0.5, 0.5, 1],
   font: { size: 0.1 },
 });

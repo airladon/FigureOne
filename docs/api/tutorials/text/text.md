@@ -22,7 +22,7 @@ All examples are snippets which can be appended to the end of the `index.js` fil
 A grid is included in this javascript file to make it obvious how text is aligned and justified
 ```javascript
 // index.js
-const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+const figure = new Fig.Figure({ scene: [-3, -3, 3, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 figure.add([
   {
     name: 'origin',

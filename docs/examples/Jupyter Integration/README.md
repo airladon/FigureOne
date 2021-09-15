@@ -111,7 +111,7 @@ Now we create a `Figure`, and define the equation to be shown.
 require(['Fig'], function(Fig) {  
     // Create a figure with limits that are proportional to the html div style size 
     const figure = new Fig.Figure({
-      limits: new Fig.Rect(-2, -1, 4, 2),
+      scene: new Fig.Rect(-2, -1, 2, 1),
       htmlId: 'dynamic_equation_1',
     });
 

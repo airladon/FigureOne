@@ -1,7 +1,7 @@
 /* globals Fig */
 /* eslint-disable camelcase, no-param-reassign, object-curly-newline */
 
-const figure = new Fig.Figure({ limits: [-4, -3, 8, 6], color: [1, 0, 0, 1] });
+const figure = new Fig.Figure({ scene: [-4, -3, 4, 3], color: [1, 0, 0, 1] });
 
 
 // ////////////////////////////////////////////////////////////////////////

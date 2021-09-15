@@ -3,7 +3,7 @@
 
 
 const figure = new Fig.Figure({
-  limits: [-3, 0, 6, 3],
+  scene: [-3, 0, 3, 3],
   color: [0.3, 0.3, 0.3, 1],
   font: { size: 0.1 },
 });

@@ -9,7 +9,7 @@ Open `index.html` in a browser to view example.
 ## Code
 `index.js`
 ```js
-const figure = new Fig.Figure({ limits: [-2, -2, 4, 4] });
+const figure = new Fig.Figure({ scene: [-2, -2, 2, 2] });
 
 // Create a movable ball and text that shows the ball's coordinates
 const [ball, text] = figure.add([
