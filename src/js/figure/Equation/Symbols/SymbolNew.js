@@ -21,7 +21,6 @@ export default class Symbol extends FigureElementPrimitive {
     color: TypeColor,
     transformOrLocation: Transform | Point,
     symbolOptions: Object,
-    // triangles: 'strip' | 'triangles' | 'fan',
   ) {
     const vertexObject = new VertexGeneric(webgl);
 
@@ -88,7 +87,7 @@ export default class Symbol extends FigureElementPrimitive {
         let points = [];
         let width = 0;
         let height = 0;
-        let drawType = 'strip';
+        let drawType = 'STRIP';
         if (
           this._custom.options.staticHeight === 'first'
           || this._custom.options.staticWidth === 'first'
@@ -154,7 +153,7 @@ export default class Symbol extends FigureElementPrimitive {
     pointsIn: Array<Point>,
     width: number,
     height: number,
-    drawType: 'strip' | 'triangles' | 'fan',
+    drawType: 'STRIP' | 'TRIANGLES' | 'FAN',
   ) {
     this.drawingObject.change({ points: pointsIn, drawType });
     this.drawBorder = [[
@@ -293,7 +292,7 @@ export default class Symbol extends FigureElementPrimitive {
       new Point(0, height),
     ];
 
-    return [points, width, height, 'strip'];
+    return [points, width, height, 'STRIP'];
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars

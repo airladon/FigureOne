@@ -9,7 +9,7 @@ import Symbol from './SymbolNew';
 export default class Sum extends Symbol {
   // eslint-disable-next-line class-methods-use-this
   // getTriangles() {
-  //   return 'strip';
+  //   return 'STRIP';
   // }
 
   // // eslint-disable-next-line class-methods-use-this
@@ -182,7 +182,7 @@ export default class Sum extends Symbol {
       p12,
       p13,
     ];
-    return [points, width, height, 'strip'];
+    return [points, width, height, 'STRIP'];
   }
 
   /* eslint-disable class-methods-use-this */

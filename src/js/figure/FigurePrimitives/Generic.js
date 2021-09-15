@@ -14,7 +14,6 @@ export default function Generic(
   // vertices: Array<Point>,
   // border: Array<Array<Point>> | 'points' | 'rect',
   // touchBorder: Array<Array<Point>> | 'rect' | 'border' | 'none',
-  // drawType: 'triangles' | 'strip' | 'fan' | 'lines',
   color: TypeColor,
   transformOrLocation: Transform | Point,
   textureLocation: string = '',

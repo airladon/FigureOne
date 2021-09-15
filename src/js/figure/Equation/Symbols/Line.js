@@ -17,7 +17,6 @@ export default class EquationLine extends Symbol {
   //   transformOrLocation: Transform | Point,
   //   figureLimits: Rect,
   //   symbolOptions: Object,
-  //   // triangles: 'strip' | 'triangles' | 'fan',
   // ) {
   //   super(webgl, color, transformOrLocation, figureLimits, symbolOptions);
   //   // this.custom.setSize = (location: Point) => {
@@ -26,7 +25,7 @@ export default class EquationLine extends Symbol {
   // }
   // eslint-disable-next-line class-methods-use-this
   // getTriangles() {
-  //   return 'strip';
+  //   return 'STRIP';
   // }
 
   //                             width
@@ -48,6 +47,6 @@ export default class EquationLine extends Symbol {
       2, [[]], 0, options.arrow,
     );
 
-    return [points, angle, length, 'triangles'];
+    return [points, angle, length, 'TRIANGLES'];
   }
 }

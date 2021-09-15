@@ -11,6 +11,19 @@ import type {
 import type Scene, { OBJ_Scene } from '../../tools/geometry/scene';
 import type { TypeVertexShader, TypeFragmentShader } from '../webgl/shaders';
 
+/**
+ * GL primitive type that describes the shapes the vertices are creating.
+ * Analagous to WebGL [drawing primitives](https://webglfundamentals.org/webgl/lessons/webgl-points-lines-triangles.html)
+ * where the mapping between the two are:
+ * - `'TRIANGLES'`: TRIANGLES
+ * - `'STRIP'`: TRIANGLE_STRIP
+ * - `'FAN'`: TRIANGLE_FAN
+ * - `'LINES'`: LINES
+ * - `'POINTS'`: LINES
+ *
+ * `'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'`
+ */
+export type TypeGLPrimitive = 'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES';
 
 /**
  * Line style definition object.
@@ -302,7 +315,7 @@ export type OBJ_GLUniform = {
  * the movement options
  * @property {TypeColor} [dimColor] RGBA is used when vertex colors are from a
  * uniform, otherwise just the alpha channel is used.
- * @property {TypeColor} [defaultColor] 
+ * @property {TypeColor} [defaultColor]
  * @property {OBJ_Scenarios} [scenarios] Define
  * position/transform/rotation/scale/color scenarios tied to the element
  * @property {Scene} [scene] Give the element a custom scene that is independant
@@ -398,7 +411,7 @@ export type OBJ_GLColorData = {
  * {@link OBJ_FragmentShader} for names of attributes and uniforms used in the
  * shaders, and when they are used.
  *
- * @property {'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'} [glPrimitive]
+ * @property {TypeGLPrimitive} [glPrimitive]
  * @property {TypeVertexShader} [vertexShader]
  * @property {TypeFragmentShader} [fragmentShader]
  * @property {Array<OBJ_GLAttribute>} [attributes]

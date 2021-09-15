@@ -6836,6 +6836,16 @@
               
                 
                 <li><a
+                  href='#typeglprimitive'
+                  class="">
+                  TypeGLPrimitive
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_cameracontrol'
                   class="">
                   OBJ_CameraControl
@@ -6970,7 +6980,7 @@
 <p style="text-align: center"><img src="./tutorials/ex1-hierarchy.png"></p>
 <p>To rotate both label and line in tandem, we simply need to rotate the collection.</p>
 <h5>Code</h5>
-<p>Let's see the code for the example above. Two files, <code>index.html</code> and <code>index.js</code> should be in the same folder.</p>
+<p>Let's see the code for the example above. Two files, <code>index.html</code> and <code>index.js</code> should be in the same folder (the following sections will describe the code).</p>
 <pre class='hljs'><span class="hljs-comment">&lt;!-- index.html --&gt;</span>
 <span class="hljs-meta">&lt;!doctype <span class="hljs-meta-keyword">html</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
@@ -6985,7 +6995,7 @@
 <span class="hljs-comment">// translation component.</span>
 
 <span class="hljs-comment">// Set the figure limits to be 0 ≤ x ≤ 6 and 0 ≤ y ≤ 4</span>
-<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">6</span>, <span class="hljs-number">4</span>] });
+<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">scene</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">6</span>, <span class="hljs-number">4</span>] });
 figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;labeledLine&#x27;</span>,
@@ -7021,7 +7031,90 @@ figure.add(
 <p style="text-align: center"><img src="./tutorials/ex1-collection.png"></p>
 <p>It then positions the collection so the line end is in the middle of the figure.</p>
 <p style="text-align: center"><img src="./tutorials/ex1-figure.png"></p>
+<h4>Figure Setup</h4>
+<p>To attach a figure to a HTML document:</p>
+<ul>
+<li>The HTML document needs a <code>div</code> element to which FigureOne will attach the drawing canvas to. By default FigureOne will look for a <code>div</code> with ID <code>'figureOneContainer'</code>. A custom ID can be specificed if desired or more than one figure in the document will be created.</li>
+<li>The FigureOne library <code>figureone.min.js</code> needs to be loaded either from a public CDN (like below), or from a local source</li>
+<li>A JavaScript file (in this case <code>index.js</code>) that creates the figure, and adds elements to it needs to be loaded and executed.</li>
+</ul>
+<pre class='hljs'><span class="hljs-comment">&lt;!-- index.html --&gt;</span>
+<span class="hljs-meta">&lt;!doctype <span class="hljs-meta-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;figureOneContainer&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;width: 1200px; height: 800px; background-color: white;&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&#x27;https://cdn.jsdelivr.net/npm/figureone@0.10.13/figureone.min.js&#x27;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&#x27;./index.js&#x27;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
+<p>In <code>index.js</code>, the figure can be created using the <a href="#obj_figure">OBJ_Figure</a> options object as a parameter to <code>Figure</code>. One of the most commonly used properties sets the figure's scene (the expanse of space to show).</p>
+<pre class='hljs'><span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({
+  <span class="hljs-attr">scene</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">6</span>, <span class="hljs-number">4</span>],
+});</pre>
+<p>For 2D figures, a simple array containing the left, bottom, right and top limits can be used. In three dimensions, the scene also defines from where the visible space is viewed (camera) and lighting (see <a href="##3d-shape-primitives">3D Shape Primitives</a> for a detailed explanation).</p>
+<p>Now the figure is setup, shapes can be added to it.</p>
+<h4>Shapes</h4>
+<p>There are several ways to define a shape that a FigureElementPrimitive will draw. FigureOne comes with:</p>
+<ul>
+<li>Built-in shapes</li>
+<li>Generic shapes (see <a href="#obj_generic">OBJ_Generic</a> and <a href="#obj_generic3d">OBJ_Generic3D</a>) that can draw fully custom shapes</li>
+<li>Low level GL shapes (see <a href="#obj_genericgl">OBJ_GenericGL</a>) through which shaders, attributes, uniforms and textures can be defined allowing for more customization and performance optimization of complex shapes</li>
+</ul>
+<h5>Built-In Shapes</h5>
+<p>FigureOne comes with a number of customizable shapes. For example, to add a polygon to a figure (see <a href="#obj_polygon">OBJ_Polygon</a> for all possible polygon options):</p>
+<pre class='hljs'>figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;polygon&#x27;</span>,
+  <span class="hljs-attr">sides</span>: <span class="hljs-number">6</span>,
+  <span class="hljs-attr">radius</span>: <span class="hljs-number">0.5</span>,
+});</pre>
+<p>When adding an alement to the figure, the most important property (and only one that is required to be defined) is <code>make</code> which tells FigureOne which built-in shape to use. The remaining properties are optional.</p>
+<p>For a complete list of built in shapes see:</p>
+<ul>
+<li><a href="#2d-shape-primitives">2D Shape Primitives</a></li>
+<li><a href="#text">Text</a></li>
+<li><a href="##3d-shape-primitives">3D Shape Primitives</a></li>
+<li><a href="#2d-shape-collections">2D Shape Collections</a></li>
+<li><a href="#equations">Equations</a>)</li>
+</ul>
+<h5>Generic Shapes</h5>
+<p>If you need to create a shape that is very different from the build-in shapes then the generic primitive can be used. Most commonly, the <code>points</code> used to define the shape actually define a series of triangles that create a fill. The example below creates two triangles.</p>
+<pre class='hljs'>figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;generic&#x27;</span>,
+  <span class="hljs-attr">points</span>: [
+    [-<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>], [<span class="hljs-number">0</span>, -<span class="hljs-number">1</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+    [<span class="hljs-number">0</span>, -<span class="hljs-number">1</span>], [<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+  ],
+});</pre>
+<p>For more information on drawing generic shapes see:</p>
+<ul>
+<li><a href="#2d-shape-primitives">2D Shape Primitives</a></li>
+<li><a href="#obj_generic">OBJ_Generic</a></li>
+<li><a href="#obj_generic3">OBJ_Generic3</a></li>
+</ul>
+<h5>Low Level GL Shapes</h5>
+<p>There are some times where</p>
 <h4>Coordinate spaces</h4>
+<p>FigureOne renders shapes in WebGL, text in Context2D and can even manipulate html elements as figure elements. As WebGL is used most in FigureOne, it will be used as an example to introduce coorindate spaces and why they matter.</p>
+<p>WebGL is rendered in a html <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API">canvas</a> element.</p>
+<p>The canvas element is defined in screen pixels. The WebGL view re-maps the canvas pixels to -1 to +1 coordinates in both the vertical and horizontal directions, independent on the aspect ratio of the canvas.</p>
+<p>When the canvas aspect ratio is not a square, or it is more convenient to create a figure in a coordinate space not mapped between -1 to +1, then it is useful to have a separate figure space. In the example above, the figure space re-maps the GL space to 0 to 6 in the horizontal and 0 to 4 in the vertical.</p>
+<p>These are three examples of different coordinate spaces - <em>pixel space</em>, <em>GL space</em> (also called clip space in WebGL nomenclature) and <em>figure space</em>.</p>
+<p>If you want to move or modify an element, you need to think about what you want to modify it relative to. Do you want to move it relative to other elements in the figure? In other words, do you want to move it in figure space? Or do you want to move it relative to other elements within the parent, or local collection - <em>local space</em>. Alternately, you might want to modify the vertices of the shape, in <em>draw space</em>.</p>
+<p>In simple figures, where no collections are used, or collections don't transform their child elements you don't really need to think about what space you are working in. <em>Figure space</em> will be the same as <em>local space</em>, if you aren't changing vertices of primitives then draw space won't be used, and GL and pixel spaces are rarely needed for most figures.</p>
+<p>But if you are using collections, or if you are tying an element to a location on the screen you will need to convert points between the different spaces. In addition, it is useful to know about these different spaces as sometimes they are referred to in the documentation.</p>
+<p>One way to think about what space you are modifying is:</p>
+<ul>
+<li>Elements that are direct children of the figure: element transforms move the element in <em>figure space</em></li>
+<li>Elements that are direct children of a collection: element transforms move the element in <em>local space</em> (the space of the parent colleciton)</li>
+<li>Vertex or text definitions in element primitives: <em>draw space</em></li>
+<li>A collection's children are in the collection's <em>draw space</em></li>
+</ul>
+<p>For example, a square's vertices are defined in draw space.</p>
+<p>The transform of the figure element primitive that draws the square will move the square in local space - the space relative to all other elements that are the children of the same parent collection.</p>
+<p>If the parent collection's parent is the figure itself, then its transform will move the colleciton in figure space.</p>
+<p>Converting between spaces is relatively straight forward. All figure elements have methods to find their position or bounds in figure, local or draw space. The figure has transforms that allow conversion between figure, GL and pixel spaces.</p>
+<p>Where this is useful is if two primitives have different parents, and you want to move one to be in the same position as the other. To do this you would convert the target element position to figure space, and then to the local space of the element to move.</p>
 <p>FigureOne renders shapes in WebGL, text in Context2D and can even manipulate html elements as figure elements. As WebGL is used most in FigureOne, it will be used as an example to introduce coorindate spaces and why they matter.</p>
 <p>A figure is rendered in a html <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API">canvas</a> element. The pixels in a canvas can be thought of as coorindates. In html convention, if a canvas element is 1000 pixels wide, and 500 pixels height, then the (0, 0) pixel is in the top left corner, and pixel (1000, 500) is in the bottom right corner. We call this <em>pixel space</em> (though in computer graphics generally it is also often referred to as <em>screen space</em> or <em>device space</em>).</p>
 <p>Defining a shape in pixel space is not very convenient as different clients may have different sized canvases. Therefore it is convenient to define all shapes in a normalized space (say from -1 to +1 in each dimension).</p>
@@ -7177,7 +7270,7 @@ In other words, a shape can be represented in different spaces, each of which mi
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
-<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">6</span>, <span class="hljs-number">3</span>] });
+<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">scene</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">6</span>, <span class="hljs-number">3</span>] });
 figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;labeledLine&#x27;</span>,
@@ -7210,7 +7303,7 @@ figure.add(
 <p>For many uses, it is fine to fully define a figure and all its elements before a user interacts with it.</p>
 <p>Figures can also be defined more dynamically, such as in the example below which has exactly the same function as the example above.</p>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
-<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">6</span>, <span class="hljs-number">4</span> ]});
+<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">scene</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">6</span>, <span class="hljs-number">4</span> ]});
 
 <span class="hljs-keyword">const</span> label = figure.primitives.text({
   <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;Line 1&#x27;</span>,
@@ -7374,7 +7467,7 @@ element
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></span>
 
 <span class="hljs-comment">// index.js</span>
-<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">limits</span>: [-<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span> ]});
+<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">scene</span>: [-<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span> ]});
 figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;p&#x27;</span>,
@@ -7387,7 +7480,7 @@ figure.add(
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Alternately, an element can be added programatically</span>
 <span class="hljs-comment">// index.js</span>
-<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">limits</span>: [-<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span> ]});
+<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">scene</span>: [-<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span> ]});
 <span class="hljs-keyword">const</span> hex = figure.shapes.polygon({
   <span class="hljs-attr">radius</span>: <span class="hljs-number">0.5</span>,
   <span class="hljs-attr">sides</span>: <span class="hljs-number">6</span>,
@@ -9067,18 +9160,19 @@ then the frame rate will be 0.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>scene</span> <code class='quiet'>(<a href="#obj_scene">OBJ_Scene</a>?)</code>
-          : define 2D or 3D scene. 3D can be orthographic
-or perspective projection, and include camera position and lighting
-definition.
+          <span class='code bold'>scene</span> <code class='quiet'>((<a href="#obj_scene">OBJ_Scene</a> | <a href="#typeparsablerect">TypeParsableRect</a>)?)</code>
+          : define 2D or 3D scene. 3D
+can be orthographic or perspective projection, and include camera position
+and lighting definition. A 2D scene can be defined using 
+<code>left</code>
+, 
+<code>right</code>
+,
 
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>limits</span> <code class='quiet'>(<a href="#typeparsablerect">TypeParsableRect</a>?)</code>
-          : Overrides scene with a simple 2D
-projection with shown limits
+<code>bottom</code>
+ and 
+<code>top</code>
+, or the short hand rectangle definition.
 
           
         </div>
@@ -21512,7 +21606,7 @@ shaders, and when they are used.</p>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>glPrimitive</span> <code class='quiet'>((<code>"TRIANGLES"</code> | <code>"POINTS"</code> | <code>"FAN"</code> | <code>"STRIP"</code> | <code>"LINES"</code>)?)</code>
+          <span class='code bold'>glPrimitive</span> <code class='quiet'>(<a href="#typeglprimitive">TypeGLPrimitive</a>?)</code>
           
           
         </div>
@@ -21862,7 +21956,7 @@ will be updated very frequently (
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
-<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">limits</span>: [-<span class="hljs-number">3</span>, -<span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> } });</pre>
+<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">scene</span>: [-<span class="hljs-number">3</span>, -<span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> } });</pre>
 <h4>Quick Start</h4>
 <p>Let's start by creating a <a href="#figureelementprimitive">FigureElementPrimitive</a> element that draws a polygon and adding it to the figure.</p>
 <pre class='hljs'><span class="hljs-comment">// create the `FigureElementPrimitive`</span>
@@ -21921,11 +22015,11 @@ figure.add(p);</pre>
     [-<span class="hljs-number">2</span>, -<span class="hljs-number">1</span>], [-<span class="hljs-number">2</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>],
     [-<span class="hljs-number">2</span>, -<span class="hljs-number">1</span>], [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">2</span>, -<span class="hljs-number">1</span>],
   ],
-  <span class="hljs-attr">drawType</span>: <span class="hljs-string">&#x27;triangles&#x27;</span>,
+  <span class="hljs-attr">drawType</span>: <span class="hljs-string">&#x27;TRIANGLES&#x27;</span>,
 });</pre>
 <p>This method will be able to draw almost anything.</p>
 <p>However, for some shapes there are simpler ways to draw the same thing with fewer repeated vertices.</p>
-<h5>drawType: 'strip'</h5>
+<h5>drawType: 'STRIP'</h5>
 <p>A strip starts with one triangle, and then every subsequent vertex will create a triangle with the last two vertices.</p>
 <p>Therefore, to draw the same rectangle we would draw the first triangle with the vertices 2, 1 and then 3. Then 1 and 3 could be used with 4 to create the second triangle.</p>
 <pre class='hljs'>figure.add({
@@ -21935,12 +22029,12 @@ figure.add(p);</pre>
     [-<span class="hljs-number">2</span>, <span class="hljs-number">1</span>], [-<span class="hljs-number">2</span>, -<span class="hljs-number">1</span>], [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>],  <span class="hljs-comment">// first triangle</span>
     [<span class="hljs-number">2</span>, -<span class="hljs-number">1</span>],                    <span class="hljs-comment">// second triangle formed with vertices 1 and 3</span>
   ],
-  <span class="hljs-attr">drawType</span>: <span class="hljs-string">&#x27;strip&#x27;</span>,
+  <span class="hljs-attr">drawType</span>: <span class="hljs-string">&#x27;STRIP&#x27;</span>,
 });</pre>
 <p>This method works well for continuous shapes, but will not work for shapes that have gaps.</p>
-<p>A good example of a shape that works with <code>'strip'</code> is below. The vertices are labeled in the order they would be defined.</p>
+<p>A good example of a shape that works with <code>'STRIP'</code> is below. The vertices are labeled in the order they would be defined.</p>
 <p style="text-align: center"><img src="./tutorials/draw/strip.png"></p>
-<h5>drawType: 'fan'</h5>
+<h5>drawType: 'FAN'</h5>
 <p>A fan starts with one point. The next two points create the first triangle, and then every subsequent point uses the first and last point to create the next triangle.</p>
 <p>Therefore, to draw the same rectangle we would draw the first point 1, then complete the first triangle with 2 and 3. Then we would draw point 4 to make the second triangle with points 1 and 3.</p>
 <pre class='hljs'>figure.add({
@@ -21951,14 +22045,14 @@ figure.add(p);</pre>
     [-<span class="hljs-number">2</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>],  <span class="hljs-comment">// complete first triangle (vertices 2, 3)</span>
     [<span class="hljs-number">2</span>, -<span class="hljs-number">1</span>],          <span class="hljs-comment">// second triangle formed with first and last vertex (1, 3)</span>
   ],
-  <span class="hljs-attr">drawType</span>: <span class="hljs-string">&#x27;fan&#x27;</span>,
+  <span class="hljs-attr">drawType</span>: <span class="hljs-string">&#x27;FAN&#x27;</span>,
 });</pre>
 <p>This method works for any shape that can be broken into triangles that all share a common point. For example:</p>
 <p style="text-align: center"><img src="./tutorials/draw/fan.png"></p>
-<p>Note, <code>'strip'</code> can create any shape <code>'fan'</code> can, but it can be a little more involved. For instance, the shape above would need to duplicate one of the vertices to fully fill it:</p>
+<p>Note, <code>'STRIP'</code> can create any shape <code>'FAN'</code> can, but it can be a little more involved. For instance, the shape above would need to duplicate one of the vertices to fully fill it:</p>
 <p style="text-align: center"><img src="./tutorials/draw/strip-fan.png"></p>
-<h5>drawType: 'lines'</h5>
-<p><code>'lines'</code> is the final style that WebGL accepts for drawing primitives. In this case vertex pairs are used to create lines.</p>
+<h5>drawType: 'LINES'</h5>
+<p><code>'LINES'</code> is the final style that WebGL accepts for drawing primitives. In this case vertex pairs are used to create lines.</p>
 <p>This is not useful for drawing filled shapes, but is useful for drawing thin outlines.</p>
 <p>For instance, to draw a rectangle outline:</p>
 <pre class='hljs'>figure.add({
@@ -21970,7 +22064,7 @@ figure.add(p);</pre>
     [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">2</span>, -<span class="hljs-number">1</span>],    <span class="hljs-comment">// right edge</span>
     [<span class="hljs-number">2</span>, -<span class="hljs-number">1</span>], [-<span class="hljs-number">2</span>, -<span class="hljs-number">1</span>],  <span class="hljs-comment">// bottom edge</span>
   ],
-  <span class="hljs-attr">drawType</span>: <span class="hljs-string">&#x27;lines&#x27;</span>,
+  <span class="hljs-attr">drawType</span>: <span class="hljs-string">&#x27;LINES&#x27;</span>,
 });</pre>
 
   
@@ -21995,16 +22089,8 @@ figure.add(p);</pre>
 <p>Options object for a <a href="#figureelementprimitive">FigureElementPrimitive</a> of a generic shape</p>
 <p><code>points</code> will define either triangles or lines which combine
 to make the shape.</p>
-<p><code>drawType</code> defines what sort of triangles or lines the <code>points</code> make
-and is analagous to WebGL <a href="https://webglfundamentals.org/webgl/lessons/webgl-points-lines-triangles.html">drawing primitives</a>
-where the mapping between the two are:</p>
-<ul>
-<li><code>'triangles'</code>: TRIANGLES</li>
-<li><code>'strip'</code>: TRIANGLE_STRIP</li>
-<li><code>'fan'</code>: TRIANGLE_FAN</li>
-<li><code>'lines'</code>: LINES</li>
-</ul>
-<p>The most useful, common and generic <code>drawType</code> is <code>'triangles'</code>
+<p><code>drawType</code> defines what sort of triangles or lines the <code>points</code> make.
+The most useful, common and generic <code>drawType</code> is <code>'TRIANGLES'</code>
 which can be used to create any shape.</p>
 <p>The shape's points can be duplicated using the <code>copy</code> property
 to conveniently create multiple copies (like grids) of shapes.</p>
@@ -22074,9 +22160,9 @@ portions</li>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>drawType</span> <code class='quiet'>((<code>"triangles"</code> | <code>"strip"</code> | <code>"fan"</code> | <code>"lines"</code>)?)</code>
+          <span class='code bold'>drawType</span> <code class='quiet'>(<a href="#typeglprimitive">TypeGLPrimitive</a>?)</code>
           : (
-<code>'triangles'</code>
+<code>'TRIANGLES'</code>
 )
 
           
@@ -22088,7 +22174,7 @@ portions</li>
 <code>drawType</code>
  as
 
-<code>'triangles'</code>
+<code>'TRIANGLES'</code>
  when using copy (
 <code>[]</code>
 )
@@ -24631,7 +24717,7 @@ figure.add({
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
 <p>A grid is included in this javascript file to make it obvious how text is aligned and justified</p>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
-<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">limits</span>: [-<span class="hljs-number">3</span>, -<span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> } });
+<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">scene</span>: [-<span class="hljs-number">3</span>, -<span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> } });
 figure.add([
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;origin&#x27;</span>,
@@ -32670,7 +32756,7 @@ COL_Rectangle
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
 <p>A grid is included in this javascript file to make it obvious how shapes are animated</p>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
-<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">limits</span>: [-<span class="hljs-number">3</span>, -<span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> } });
+<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">scene</span>: [-<span class="hljs-number">3</span>, -<span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> } });
 
 <span class="hljs-comment">// grid</span>
 figure.add([
@@ -38357,7 +38443,7 @@ more readable.</p>
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
-<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">limits</span>: [-<span class="hljs-number">3</span>, -<span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> } });</pre>
+<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">scene</span>: [-<span class="hljs-number">3</span>, -<span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> } });</pre>
 <h4>Quick Start</h4>
 <p>First let's create an equation, with red as the default color:</p>
 <pre class='hljs'><span class="hljs-keyword">const</span> equation = figure.collections.equation({ <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] });</pre>
@@ -82737,6 +82823,69 @@ use <code>show: false</code> in the animation step definition, and for <code>in<
   
     <p style="display: none;">      Type:
       <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeglprimitive'>
+      TypeGLPrimitive
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>GL primitive type that describes the shapes the vertices are creating.
+Analagous to WebGL <a href="https://webglfundamentals.org/webgl/lessons/webgl-points-lines-triangles.html">drawing primitives</a>
+where the mapping between the two are:</p>
+<ul>
+<li><code>'TRIANGLES'</code>: TRIANGLES</li>
+<li><code>'STRIP'</code>: TRIANGLE_STRIP</li>
+<li><code>'FAN'</code>: TRIANGLE_FAN</li>
+<li><code>'LINES'</code>: LINES</li>
+<li><code>'POINTS'</code>: LINES</li>
+</ul>
+<p><code>'TRIANGLES' | 'POINTS' | 'FAN' | 'STRIP' | 'LINES'</code></p>
+
+  
+    <p style="display: none;">      Type:
+      (<code>"TRIANGLES"</code> | <code>"POINTS"</code> | <code>"FAN"</code> | <code>"STRIP"</code> | <code>"LINES"</code>)
     </p>
   
   

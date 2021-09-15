@@ -15,7 +15,7 @@ import Symbol from './SymbolNew';
 export default class Integral extends Symbol {
   // eslint-disable-next-line class-methods-use-this
   // getTriangles() {
-  //   return 'triangles';
+  //   return 'TRIANGLES';
   // }
 
   // eslint-disable-next-line class-methods-use-this
@@ -227,7 +227,7 @@ export default class Integral extends Symbol {
       );
       points = [...points, ...lineIntegralEllipsePoints];
     }
-    return [points, width, height, 'triangles'];
+    return [points, width, height, 'TRIANGLES'];
   }
 
   // eslint-disable-next-line class-methods-use-this

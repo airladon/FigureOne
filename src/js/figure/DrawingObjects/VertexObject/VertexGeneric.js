@@ -8,6 +8,7 @@ import WebGLInstance from '../../webgl/webgl';
 import GLObject from '../GLObject/GLObject';
 import { copyPoints } from '../../geometries/copy/copy';
 import type { CPY_Step } from '../../geometries/copy/copy';
+import type { TypeGLPrimitive } from '../../FigurePrimitives/FigurePrimitiveTypes';
 
 
 class VertexGeneric extends GLObject {
@@ -27,7 +28,6 @@ class VertexGeneric extends GLObject {
   constructor(
     webgl: WebGLInstance,
     // vertices: Array<Point>,
-    // drawType: 'triangles' | 'strip' | 'fan' | 'lines',
     textureLocation: string = '',
     textureVertexSpace: Rect = new Rect(-1, -1, 2, 2),
     textureCoords: Rect = new Rect(0, 0, 1, 1),
@@ -88,7 +88,7 @@ class VertexGeneric extends GLObject {
   change(options: {
     points?: Array<Point>,
     copy?: Array<CPY_Step>,
-    drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
+    drawType?: TypeGLPrimitive,
     texture?: {
       location?: string,
       mapFrom?: Rect,
@@ -105,11 +105,11 @@ class VertexGeneric extends GLObject {
       this.vertices = points;
     }
     if (drawType != null) {
-      if (drawType === 'lines') {
+      if (drawType === 'LINES') {
         this.glPrimitive = this.gl.LINES;
-      } else if (drawType === 'strip') {
+      } else if (drawType === 'STRIP') {
         this.glPrimitive = this.gl.TRIANGLE_STRIP;
-      } else if (drawType === 'fan') {
+      } else if (drawType === 'FAN') {
         this.glPrimitive = this.gl.TRIANGLE_FAN;
       } else {
         this.glPrimitive = this.gl.TRIANGLES;

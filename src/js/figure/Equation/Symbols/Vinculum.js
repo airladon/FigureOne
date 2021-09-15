@@ -12,7 +12,7 @@ export default class Vinculum extends Symbol {
 
   // eslint-disable-next-line class-methods-use-this
   // getTriangles() {
-  //   return 'strip';
+  //   return 'STRIP';
   // }
 
   //                             width
@@ -37,7 +37,7 @@ export default class Vinculum extends Symbol {
       new Point(width, 0),
       new Point(width, lineWidth),
     ];
-    return [points, width, height, 'strip'];
+    return [points, width, height, 'STRIP'];
   }
 
   /* eslint-disable class-methods-use-this */

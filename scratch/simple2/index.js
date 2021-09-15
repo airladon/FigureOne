@@ -87,9 +87,8 @@
 // const figure = new Fig.Figure({ scene: [0, 0, 6, 3]});
 const figure = new Fig.Figure();
 figure.add({
-  make: 'generic',
-  points: [
-    [-1, -1], [0, -1], [0, 1],
-    [0, -1], [1, -1], [1, 1],
-  ],
+  make: 'equation',
+  forms: {
+    0: { frac: ['a', 'vinculum', 'b']}
+  }
 });

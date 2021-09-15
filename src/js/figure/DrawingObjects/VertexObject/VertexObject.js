@@ -240,7 +240,7 @@
 //   change(options: {
 //     points?: Array<Point>,
 //     copy?: Array<CPY_Step>,
-//     drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
+//     drawType?: TypeGLPrimitive,
 //   }) {
 //     this.resetBuffer();
 //   }

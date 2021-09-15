@@ -1651,7 +1651,6 @@ export default class EquationSymbols {
       optionsToUse.color,
       new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     ));
   }
 
@@ -1672,7 +1671,6 @@ export default class EquationSymbols {
       optionsToUse.color,
       new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     ));
   }
 
@@ -1714,7 +1712,6 @@ export default class EquationSymbols {
       optionsToUse.color,
       new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     ));
   }
 
@@ -1741,7 +1738,6 @@ export default class EquationSymbols {
       optionsToUse.color,
       new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     ));
   }
 
@@ -1763,7 +1759,6 @@ export default class EquationSymbols {
       optionsToUse.color,
       new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     ));
   }
 
@@ -1783,7 +1778,6 @@ export default class EquationSymbols {
       optionsToUse.color,
       new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     ));
   }
 
@@ -1814,7 +1808,6 @@ export default class EquationSymbols {
       new Transform().scale(1, 1).translate(0, 0),
       // optionsToUse.staticSize,
       optionsToUse,
-      // 'triangles',
       // {
       //   lineWidth: optionsToUse.lineWidth,
       //   minLineWidth: optionsToUse.minLineWidth,
@@ -1866,7 +1859,6 @@ export default class EquationSymbols {
       optionsToUse.color,
       new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     );
   }
 
@@ -1887,7 +1879,6 @@ export default class EquationSymbols {
       optionsToUse.color,
       new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'triangles',
     );
     // let { color } = options;
     // if (color == null) {
@@ -1939,7 +1930,6 @@ export default class EquationSymbols {
       optionsToUse.color,
       new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     ));
   }
 
@@ -1958,7 +1948,6 @@ export default class EquationSymbols {
       optionsToUse.color,
       new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     ));
   }
 
@@ -1980,7 +1969,6 @@ export default class EquationSymbols {
       optionsToUse.color,
       new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     ));
   }
 
@@ -1998,7 +1986,6 @@ export default class EquationSymbols {
       optionsToUse.color,
       new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     ));
   }
 
@@ -2023,7 +2010,6 @@ export default class EquationSymbols {
       optionsToUse.color,
       new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     ));
   }
 }

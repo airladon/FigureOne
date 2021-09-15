@@ -16,7 +16,7 @@ export default class Box extends Symbol {
 
   // eslint-disable-next-line class-methods-use-this
   // getTriangles() {
-  //   return 'strip';
+  //   return 'STRIP';
   // }
 
   //                                          width
@@ -66,7 +66,7 @@ export default class Box extends Symbol {
         new Point(lineWidth, lineWidth),
       ];
     }
-    return [points, width, height, 'strip'];
+    return [points, width, height, 'STRIP'];
   }
 
   /* eslint-disable class-methods-use-this */

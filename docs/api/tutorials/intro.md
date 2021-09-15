@@ -1,8 +1,47 @@
+#### Introduction
+
+[FigureOne](https://github.com/airladon/FigureOne) is a JavaScript library that makes it easy to create, animate and interact with shapes, text and equations in a browser. FigureOne can be used to create animated and interactive diagrams, slide shows and video like experiences.
+
+
+##### WebGL
+
+FigureOne uses WebGL for drawing shapes. As of September 2021, WebGL is supported by <a href="https://caniuse.com/?search=webgl">97.72% of browsers</a> (with Opera Mini at 1.15%, Android Browser before 2014 at 0.35% and Internet Explorer before 2013 at 0.19% being the main browsers without support).
+
+WebGL leverages GPU hardware to accelerate rendering. As such very complex shapes (with millions of vertices) can be rendered efficiently on low end clients. WebGL does this by limiting the amount of data transferred between the CPU and GPU on each draw frame, and moving as much of the the per vertex calculations into the GPU (where there are many parallel cores) as possible. A standard WebGL work flow is:
+
+* Define the vertices of a shape once, and load them into a GPU memory buffer
+* On each draw frame, pass a transform matrix from the CPU to GPU that will transform all the points in the shape
+* The GPU then transforms each vertex in its memory buffer with the transform for final screen rendering
+
+WebGL is very powerful, but can be hard to get started with due to its low-level nature relative to JavaScript. While FigureOne hides the complexity of WebGL from the user, it is still useful to understand the above workflow as FigureOne is organized with this work flow in mind, and the more such a work flow can be followed, then the more performant the end result will be.
+
+>> FigureOne also supports the cases where this work flow is not adequate (for example when vertices of a shape are morphing into a different shape - see <a href="#morphing">morphing</a>), though in such cases care needs to be taken to ensure a good end user experience. 
+
+##### Shape
+
+In FigureOne, shapes are typically formed by combining triangles.
+
+<p style="text-align: center"><img src="./tutorials/triangles.png"></p>
+
+Thus, in FigureOne a shape is a collection points that describe the vertices each triangle in a shape.
+
+##### Transform
+
+A *transform* describes a spatial change, for example a translation or rotation.
+
+Mathematically, a transform is a 4x4 matrix that when mulitiplied with a point creates a new point that undergoes the transform. For example:
+
+<p style="text-align: center"><img src="./tutorials/transform.png"></p>
+
+As such, all transforms in FigureOne create such matrix, and are used to transform a point or shape vertex.
+
+Transforms can be chained together, so a rotation transform can be chained with a translation transform to both rotate and translate. Transform chains can be arbitrarily long, and include multiple transforms of the same type.
+
+In the language of FigureOne, a {@link Transform} is made up of a series of *transform components* where each component is a single transform step (like a rotation or translation).
+
 #### Figures, Primitives and Collections
 
-[FigureOne](https://github.com/airladon/FigureOne) allows you to create a *figure* that can be both interactive and animated.
-
-A figure is composed of one or more *figure elements*. A figure element is a shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.
+A *figure* is composed of one or more *figure elements*. A figure element is a shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.
 
 In the language of **FigureOne**, there are two types of {@link FigureElements}:
 
@@ -15,7 +54,7 @@ This means there is a heierachy of {@link FigureElement} objects, where the pare
 
 <p style="text-align: center"><img src="./tutorials/transformcascades.png"></p>
 
-<!-- Changing an element's transform moves the element through space. Changing the element's transform over time animates the element. -->
+
 ##### Example
 
 As an example, let's say we want to create a labeled line where the line and label both rotate together.
@@ -30,7 +69,7 @@ To rotate both label and line in tandem, we simply need to rotate the collection
 
 ##### Code
 
-Let's see the code for the example above. Two files, `index.html` and `index.js` should be in the same folder (the following sections will describe the code).
+Let's see the code for the example above. Two files, `index.html` and `index.js` should be in the same folder.
 
 ```html
 <!-- index.html -->
@@ -46,7 +85,7 @@ Let's see the code for the example above. Two files, `index.html` and `index.js`
 ```
 
 ```javascript
-// Note, the `position` property is a short hand way of defining a transform with a
+// Note: the `position` property is a short hand way of defining a transform with a
 // translation component.
 
 // Set the figure limits to be 0 ≤ x ≤ 6 and 0 ≤ y ≤ 4
@@ -93,6 +132,55 @@ It then positions the collection so the line end is in the middle of the figure.
 <p style="text-align: center"><img src="./tutorials/ex1-figure.png"></p>
 
 
+#### Coordinate spaces
+FigureOne renders shapes in WebGL, text in Context2D and can even manipulate html elements as figure elements. As WebGL is used most in FigureOne, it will be used as an example to introduce coorindate spaces and why they matter.
+
+WebGL is rendered in a html [canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) element.
+
+The canvas element is defined in screen pixels. The WebGL view re-maps the canvas pixels to -1 to +1 coordinates in both the vertical and horizontal directions, independent on the aspect ratio of the canvas.
+
+When the canvas aspect ratio is not a square, or it is more convenient to create a figure in a coordinate space not mapped between -1 to +1, then it is useful to have a separate figure space. In the example above, the figure space re-maps the GL space to 0 to 6 in the horizontal and 0 to 4 in the vertical.
+
+These are three examples of different coordinate spaces - *pixel space*, *GL space* (also called clip space in WebGL nomenclature) and *figure space*.
+
+If you want to move or modify an element, you need to think about what you want to modify it relative to. Do you want to move it relative to other elements in the figure? In other words, do you want to move it in figure space? Or do you want to move it relative to other elements within the parent, or local collection - *local space*. Alternately, you might want to modify the vertices of the shape, in *draw space*.
+
+In simple figures, where no collections are used, or collections don't transform their child elements you don't really need to think about what space you are working in. *Figure space* will be the same as *local space*, if you aren't changing vertices of primitives then draw space won't be used, and GL and pixel spaces are rarely needed for most figures.
+
+But if you are using collections, or if you are tying an element to a location on the screen you will need to convert points between the different spaces. In addition, it is useful to know about these different spaces as sometimes they are referred to in the documentation.
+
+One way to think about what space you are modifying is:
+
+* Elements that are direct children of the figure: element transforms move the element in *figure space*
+* Elements that are direct children of a collection: element transforms move the element in *local space* (the space of the parent colleciton)
+* Vertex or text definitions in element primitives: *draw space*
+* A collection's children are in the collection's *draw space*
+
+For example, a square's vertices are defined in draw space.
+
+The transform of the figure element primitive that draws the square will move the square in local space - the space relative to all other elements that are the children of the same parent collection.
+
+If the parent collection's parent is the figure itself, then its transform will move the colleciton in figure space.
+
+Converting between spaces is relatively straight forward. All figure elements have methods to find their position or bounds in figure, local or draw space. The figure has transforms that allow conversion between figure, GL and pixel spaces.
+
+Where this is useful is if two primitives have different parents, and you want to move one to be in the same position as the other. To do this you would convert the target element position to figure space, and then to the local space of the element to move.
+
+
+#### Drawing
+
+When it is time to draw the scene, the figure will pass an initial transform to the first element in the hierarchy. In the example above, the "Labeled Line" collection. This transform will include any translations and scaling needed to convert from figure space to GL space for actual rendering.
+
+The "Labeled Line" collection will then cascade this transform with it's own rotation and translation transform, and pass this to its children, the "Label" and "Line" primitives.
+
+The "Label" primitive has it's own transform that translates it to the middle of the horizontal line in local space. The transform will be combined with the one from its parent, creating a final transform to draw the label with.
+
+The primitive's shape or text definition never needs to change. At draw time, it is simply transformed by it's own transform and all the ancestors directly above it in the hierarchy. This is the same method used by WebGL as it reduces the amount of data that needs to be loaded into the graphics memory each draw frame. All the vertices of a shape are loaded into the graphics memory just once, and for each frame just a transform is passed to inform the graphics processor how to orient the vertices.
+
+If you have a dynamic shape whose vertices do change every frame (like a morphing animation), you can choose to load the vertices every frame. However, depending on the performance of the browser's host machine, and the number of vertices being adjusted, you might see a performance impact compared to a shape with a similar amount of vertices that do not change. That said, for shapes of reasonable size, this will not be a problem.
+
+
+
 #### Figure Setup
 
 To attach a figure to a HTML document:
@@ -132,12 +220,12 @@ Now the figure is setup, shapes can be added to it.
 There are several ways to define a shape that a FigureElementPrimitive will draw. FigureOne comes with:
 
 * Built-in shapes
-* Generic shapes (see {@link OBJ_Generic} and {@link OBJ_Generic3D}) that can draw fully custom shapes
-* Generic GL primitive (see {@link OBJ_GenericGL}) through which shaders, attributes, uniforms and textures can be defined allowing for more customization and performance optimization of complex shapes
+* Generic (custom) shapes
+* Low level GL shapes through which WebGL concepts such as shaders, attributes, uniforms and textures can be defined allowing for complete customization and performance optimization
 
 ##### Built-In Shapes
 
-FigureOne comes with a number of customizable shapes. For example, to add a polygon to a figure (see {@link OBJ_Polygon} for all possible polygon options):
+FigureOne comes with a number of common, customizable shapes. For example, to add a polygon to a figure (see {@link OBJ_Polygon} for all possible polygon options):
 
 ```js
 figure.add({
@@ -147,7 +235,7 @@ figure.add({
 });
 ```
 
-When adding an alement to the figure, the most important property (and only one that is required to be defined) is `make` which tells FigureOne which built-in shape to use. The remaining properties are optional.
+When adding an element to the figure, the most important property (and only one that is required to be defined) is `make` which tells FigureOne which built-in shape to use. The remaining properties are optional.
 
 For a complete list of built in shapes see:
 * <a href="#2d-shape-primitives">2D Shape Primitives</a>
@@ -158,7 +246,7 @@ For a complete list of built in shapes see:
 
 ##### Generic Shapes
 
-If you need to create a shape that is very different from the build-in shapes then the generic primitive can be used. Most commonly, the `points` used to define the shape actually define a series of triangles that create a fill. The example below creates two triangles.
+If you need to create a shape that is very different from the built-in shapes then the `generic` or `generic3` primitive can be used. Most commonly, the `points` used to define the shape actually define a series of triangles that create a fill. The example below creates two triangles.
 
 ```js
 figure.add({
@@ -170,7 +258,14 @@ figure.add({
 });
 ```
 
-See {}
+For more information on drawing generic shapes see:
+* <a href="#2d-shape-primitives">2D Shape Primitives</a>
+* {@link OBJ_Generic}
+* {@link OBJ_Generic3}
+
+##### Low Level GL Shapes
+
+There are some times where
 
 
 

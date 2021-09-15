@@ -83,6 +83,7 @@ import type {
   OBJ_Text,
   OBJ_TextLine,
   OBJ_TextLines,
+  TypeGLPrimitive,
 } from './FigurePrimitiveTypes2D';
 import type {
   OBJ_Generic3,
@@ -536,7 +537,7 @@ export default class FigurePrimitives {
       normals?: Array<TypeParsablePoint>,
       colors?: Array<number>,
       copy?: Array<CPY_Step>,
-      drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
+      drawType?: TypeGLPrimitive,
     }) {
       const o = updateOptions;
       processOptions(o, u);
@@ -910,7 +911,7 @@ export default class FigurePrimitives {
   //     border?: TypeParsableBorder | 'draw' | 'buffer' | 'rect' | number,
   //     touchBorder?: TypeParsableBorder | 'draw' | 'border' | 'rect' | number | 'buffer',
   //     copy?: Array<CPY_Step>,
-  //     drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
+  //     drawType?: TypeGLPrimitive,
   //   }) {
   //     const o = updateOptions;
   //     if (o.copy != null && !Array.isArray(o.copy)) {
@@ -979,7 +980,7 @@ export default class FigurePrimitives {
       touchBorder?: TypeParsableBorder | 'draw' | 'border' | 'rect' | number | 'buffer',
       colors?: Array<number>,
       copy?: Array<CPY_Step>,
-      drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
+      drawType?: TypeGLPrimitive,
     }) {
       const o = updateOptions;
       element.custom.updateGeneric3(o);
@@ -1082,12 +1083,12 @@ export default class FigurePrimitives {
     if (drawBorderBuffer == null) {
       drawBorderBuffer = drawBorder;
     }
-    let drawType = 'triangles';
+    let drawType = 'TRIANGLES';
     if (o.linePrimitives) {
-      drawType = 'lines';
+      drawType = 'LINES';
     }
     if (o.simple) {
-      drawType = 'strip';
+      drawType = 'STRIP';
     }
     return [o, points, drawBorder, drawBorderBuffer, drawType];
   }
@@ -1200,7 +1201,7 @@ export default class FigurePrimitives {
         {}, o, { radius: o.radius + drawBorderOffset },
       ))];
     }
-    return [o, points, drawBorder, 'triangles'];
+    return [o, points, drawBorder, 'TRIANGLES'];
   }
 
 
@@ -1323,7 +1324,7 @@ export default class FigurePrimitives {
         border,
         fillOptions.sides, fillOptions.sidesToDraw,
       ),
-      'triangles',
+      'TRIANGLES',
     ];
     // element.custom.getLine = (o: OBJ_PolyLineTris) => this.getPolylineTris(o);
 
@@ -1372,7 +1373,7 @@ export default class FigurePrimitives {
         fillOptions.offset, border,
         fillOptions.sides, fillOptions.sidesToDraw,
       ),
-      'triangles',
+      'TRIANGLES',
     ];
 
     element.custom.updatePoints(joinObjects({}, ...options));
@@ -1410,7 +1411,7 @@ export default class FigurePrimitives {
     };
     element.custom.getFill = (border: Array<Point>) => [
       rectangleBorderToTris(border),
-      'triangles',
+      'TRIANGLES',
     ];
     // element.custom.getLine = (o: OBJ_PolyLineTris) => this.getPolylineTris(o);
     element.custom.updatePoints(joinObjects({}, ...options));
@@ -1551,7 +1552,7 @@ export default class FigurePrimitives {
     };
     element.custom.getFill = (border: Array<Point>) => [
       ellipseBorderToTris(border),
-      'triangles',
+      'TRIANGLES',
     ];
     // element.custom.getLine = (o: OBJ_PolyLineTris) => this.getPolylineTris(o);
     element.custom.updatePoints(joinObjects({}, ...options));
@@ -1587,7 +1588,7 @@ export default class FigurePrimitives {
     };
     element.custom.getFill = (border: Array<Point>) => [
       arcBorderToTris(border),
-      'triangles',
+      'TRIANGLES',
     ];
     // element.custom.getLine = (o: OBJ_PolyLineTris) => this.getPolylineTris(o);
     element.custom.updatePoints(joinObjects({}, ...options));
@@ -1648,7 +1649,7 @@ export default class FigurePrimitives {
     // ];
     element.custom.getFill = (border: Array<Point>) => [
       border,
-      'triangles',
+      'TRIANGLES',
     ];
     element.custom.updatePoints(joinObjects({}, ...options));
     return element;
@@ -1687,7 +1688,7 @@ export default class FigurePrimitives {
     };
     element.custom.getFill = (border: Array<Point>, o: Object) => [
       getArrowTris(border, o),
-      'triangles',
+      'TRIANGLES',
     ];
     element.custom.updatePoints(joinObjects({}, ...options));
     return element;

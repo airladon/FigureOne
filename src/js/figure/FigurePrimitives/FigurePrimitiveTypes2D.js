@@ -2,7 +2,7 @@
 
 import type { CPY_Step } from '../geometries/copy/copy';
 import type {
-  OBJ_Texture, OBJ_LineStyleSimple,
+  OBJ_Texture, OBJ_LineStyleSimple, TypeGLPrimitive,
 } from './FigurePrimitiveTypes';
 // @flow
 import type {
@@ -25,15 +25,8 @@ import type { OBJ_LineArrows, TypeArrowHead } from '../geometries/arrow';
  * `points` will define either triangles or lines which combine
  * to make the shape.
  *
- * `drawType` defines what sort of triangles or lines the `points` make
- * and is analagous to WebGL [drawing primitives](https://webglfundamentals.org/webgl/lessons/webgl-points-lines-triangles.html)
- * where the mapping between the two are:
- * - `'triangles'`: TRIANGLES
- * - `'strip'`: TRIANGLE_STRIP
- * - `'fan'`: TRIANGLE_FAN
- * - `'lines'`: LINES
- *
- * The most useful, common and generic `drawType` is `'triangles'`
+ * `drawType` defines what sort of triangles or lines the `points` make.
+ * The most useful, common and generic `drawType` is `'TRIANGLES'`
  * which can be used to create any shape.
  *
  * The shape's points can be duplicated using the `copy` property
@@ -85,10 +78,10 @@ import type { OBJ_LineArrows, TypeArrowHead } from '../geometries/arrow';
  *
  *
  * @property {Array<TypeParsablePoint>} points
- * @property {'triangles' | 'strip' | 'fan' | 'lines'} [drawType]
- * (`'triangles'`)
+ * @property {TypeGLPrimitive} [drawType]
+ * (`'TRIANGLES'`)
  * @property {Array<CPY_Step | string> | CPY_Step} [copy] use `drawType` as
- * `'triangles'` when using copy (`[]`)
+ * `'TRIANGLES'` when using copy (`[]`)
  * @property {OBJ_Texture} [texture] override `color` with a texture if defined
  * @property {TypeParsableBorder} [drawBorder],
  * @property {TypeParsableBorder} [drawBorderBuffer],
@@ -151,7 +144,7 @@ import type { OBJ_LineArrows, TypeArrowHead } from '../geometries/arrow';
 /* eslint-enable max-len */
 export type OBJ_Generic = {
   points?: Array<TypeParsablePoint> | Array<Point>,
-  drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
+  drawType?: TypeGLPrimitive,
   copy?: Array<CPY_Step | string> | CPY_Step,
   texture?: OBJ_Texture,
   drawBorder?: TypeParsableBorder,

@@ -312,7 +312,7 @@ describe('Tools Lines', () => {
 //     make: 'shapes.generic',
 //     options: {
 //       points: out,
-//       drawType: 'triangles',
+//       drawType: 'TRIANGLES',
 //       position: [-0.7, -0.5],
 //     },
 //   },
