@@ -3,23 +3,9 @@
 [FigureOne](https://github.com/airladon/FigureOne) is a JavaScript library that makes it easy to create, animate and interact with shapes, text and equations in a browser. FigureOne can be used to create animated and interactive diagrams, slide shows and video like experiences.
 
 
-##### WebGL
-
-FigureOne uses WebGL for drawing shapes. As of September 2021, WebGL is supported by <a href="https://caniuse.com/?search=webgl">97.72% of browsers</a> (with Opera Mini at 1.15%, Android Browser before 2014 at 0.35% and Internet Explorer before 2013 at 0.19% being the main browsers without support).
-
-WebGL leverages GPU hardware to accelerate rendering. As such very complex shapes (with millions of vertices) can be rendered efficiently on low end clients. WebGL does this by limiting the amount of data transferred between the CPU and GPU on each draw frame, and moving as much of the the per vertex calculations into the GPU (where there are many parallel cores) as possible. A standard WebGL work flow is:
-
-* Define the vertices of a shape once, and load them into a GPU memory buffer
-* On each draw frame, pass a transform matrix from the CPU to GPU that will transform all the points in the shape
-* The GPU then transforms each vertex in its memory buffer with the transform for final screen rendering
-
-WebGL is very powerful, but can be hard to get started with due to its low-level nature relative to JavaScript. While FigureOne hides the complexity of WebGL from the user, it is still useful to understand the above workflow as FigureOne is organized with this work flow in mind, and the more such a work flow can be followed, then the more performant the end result will be.
-
->> FigureOne also supports the cases where this work flow is not adequate (for example when vertices of a shape are morphing into a different shape - see <a href="#morphing">morphing</a>), though in such cases care needs to be taken to ensure a good end user experience. 
-
 ##### Shape
 
-In FigureOne, shapes are typically formed by combining triangles.
+In FigureOne, shapes are typically formed from multiple triangles.
 
 <p style="text-align: center"><img src="./tutorials/triangles.png"></p>
 
@@ -33,11 +19,38 @@ Mathematically, a transform is a 4x4 matrix that when mulitiplied with a point c
 
 <p style="text-align: center"><img src="./tutorials/transform.png"></p>
 
-As such, all transforms in FigureOne create such matrix, and are used to transform a point or shape vertex.
+All transforms in FigureOne create such a matrix, and can be used to transform points.
 
-Transforms can be chained together, so a rotation transform can be chained with a translation transform to both rotate and translate. Transform chains can be arbitrarily long, and include multiple transforms of the same type.
+Transforms can be chained together, so a *rotation transform* can be chained with a *translation transform* to both rotate and translate. Transform chains can be arbitrarily long, and include multiple transforms of the same type.
 
 In the language of FigureOne, a {@link Transform} is made up of a series of *transform components* where each component is a single transform step (like a rotation or translation).
+
+The {@link Transform} class makes creating transforms easy.
+
+```js
+// Create a transform
+const transform = new Fig.Transform().scale(2).rotate(Math.PI / 2).translate(0, 1);
+// Get the transform matrix
+const matrix = transform.matrix();
+// Define a point
+const p = new Fig.Point(2, 3);
+// Transform the point
+const transformedPoint = p.transformBy(matrix);
+```
+
+##### WebGL
+
+FigureOne uses WebGL for drawing shapes. As of September 2021, WebGL is supported by <a href="https://caniuse.com/?search=webgl">97.72% of browsers</a> (with Opera Mini at 1.15%, Android Browser before 2014 at 0.35% and Internet Explorer before 2013 at 0.19% being the main browsers without support).
+
+WebGL leverages GPU hardware to accelerate rendering. As such very complex shapes (with millions of vertices) can be rendered efficiently on low end clients. WebGL does this by limiting the amount of data transferred between the CPU and GPU on each draw frame, and moving as much of the the per vertex calculations into the GPU (where there are many parallel cores) as possible. A standard WebGL work flow is:
+
+* Define the vertices of a shape once, and load them into a GPU memory buffer
+* On each draw frame, pass a transform matrix from the CPU to GPU that will transform all the points in the shape
+* The GPU then transforms each vertex in its memory buffer with the transform for final screen rendering
+
+WebGL is very powerful, but can be hard to get started with due to its low-level nature relative to JavaScript. While FigureOne hides the complexity of WebGL from the user, it is still useful to understand the above workflow as FigureOne is organized with this work flow in mind, and the more such a work flow can be followed, then the more performant the end result will be.
+
+>> FigureOne also supports the cases where this work flow is not adequate, for example when vertices of a shape are morphing into a different shape. In such cases care needs to be taken to ensure a good end user experience. See <a href="#morphing">morphing</a> for more information.
 
 #### Figures, Primitives and Collections
 
@@ -133,11 +146,12 @@ It then positions the collection so the line end is in the middle of the figure.
 
 
 #### Coordinate spaces
-FigureOne renders shapes in WebGL, text in Context2D and can even manipulate html elements as figure elements. As WebGL is used most in FigureOne, it will be used as an example to introduce coorindate spaces and why they matter.
 
-WebGL is rendered in a html [canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) element.
+FigureOne renders shapes in [WebGL](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API), text with the [HTML Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) and can even manipulate html elements as figure elements. As WebGL is used most in FigureOne, it will be used as an example to introduce coorindate spaces and why they matter.
 
-The canvas element is defined in screen pixels. The WebGL view re-maps the canvas pixels to -1 to +1 coordinates in both the vertical and horizontal directions, independent on the aspect ratio of the canvas.
+WebGL is rendered in a html [canvas](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas) element.
+
+The canvas element is defined in screen pixels. WebGL re-maps the canvas pixels to -1 to +1 coordinates in both the vertical and horizontal directions, independent on the aspect ratio of the canvas.
 
 When the canvas aspect ratio is not a square, or it is more convenient to create a figure in a coordinate space not mapped between -1 to +1, then it is useful to have a separate figure space. In the example above, the figure space re-maps the GL space to 0 to 6 in the horizontal and 0 to 4 in the vertical.
 
@@ -160,7 +174,7 @@ For example, a square's vertices are defined in draw space.
 
 The transform of the figure element primitive that draws the square will move the square in local space - the space relative to all other elements that are the children of the same parent collection.
 
-If the parent collection's parent is the figure itself, then its transform will move the colleciton in figure space.
+If the parent collection's parent is the figure itself, then its transform will move the collection in figure space.
 
 Converting between spaces is relatively straight forward. All figure elements have methods to find their position or bounds in figure, local or draw space. The figure has transforms that allow conversion between figure, GL and pixel spaces.
 
@@ -178,8 +192,6 @@ The "Label" primitive has it's own transform that translates it to the middle of
 The primitive's shape or text definition never needs to change. At draw time, it is simply transformed by it's own transform and all the ancestors directly above it in the hierarchy. This is the same method used by WebGL as it reduces the amount of data that needs to be loaded into the graphics memory each draw frame. All the vertices of a shape are loaded into the graphics memory just once, and for each frame just a transform is passed to inform the graphics processor how to orient the vertices.
 
 If you have a dynamic shape whose vertices do change every frame (like a morphing animation), you can choose to load the vertices every frame. However, depending on the performance of the browser's host machine, and the number of vertices being adjusted, you might see a performance impact compared to a shape with a similar amount of vertices that do not change. That said, for shapes of reasonable size, this will not be a problem.
-
-
 
 #### Figure Setup
 
@@ -270,55 +282,6 @@ There are some times where
 
 
 
-#### Coordinate spaces
-
-FigureOne renders shapes in WebGL, text in Context2D and can even manipulate html elements as figure elements. As WebGL is used most in FigureOne, it will be used as an example to introduce coorindate spaces and why they matter.
-
-WebGL is rendered in a html [canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) element.
-
-The canvas element is defined in screen pixels. The WebGL view re-maps the canvas pixels to -1 to +1 coordinates in both the vertical and horizontal directions, independent on the aspect ratio of the canvas.
-
-When the canvas aspect ratio is not a square, or it is more convenient to create a figure in a coordinate space not mapped between -1 to +1, then it is useful to have a separate figure space. In the example above, the figure space re-maps the GL space to 0 to 6 in the horizontal and 0 to 4 in the vertical.
-
-These are three examples of different coordinate spaces - *pixel space*, *GL space* (also called clip space in WebGL nomenclature) and *figure space*.
-
-If you want to move or modify an element, you need to think about what you want to modify it relative to. Do you want to move it relative to other elements in the figure? In other words, do you want to move it in figure space? Or do you want to move it relative to other elements within the parent, or local collection - *local space*. Alternately, you might want to modify the vertices of the shape, in *draw space*.
-
-In simple figures, where no collections are used, or collections don't transform their child elements you don't really need to think about what space you are working in. *Figure space* will be the same as *local space*, if you aren't changing vertices of primitives then draw space won't be used, and GL and pixel spaces are rarely needed for most figures.
-
-But if you are using collections, or if you are tying an element to a location on the screen you will need to convert points between the different spaces. In addition, it is useful to know about these different spaces as sometimes they are referred to in the documentation.
-
-One way to think about what space you are modifying is:
-
-* Elements that are direct children of the figure: element transforms move the element in *figure space*
-* Elements that are direct children of a collection: element transforms move the element in *local space* (the space of the parent colleciton)
-* Vertex or text definitions in element primitives: *draw space*
-* A collection's children are in the collection's *draw space*
-
-For example, a square's vertices are defined in draw space.
-
-The transform of the figure element primitive that draws the square will move the square in local space - the space relative to all other elements that are the children of the same parent collection.
-
-If the parent collection's parent is the figure itself, then its transform will move the colleciton in figure space.
-
-Converting between spaces is relatively straight forward. All figure elements have methods to find their position or bounds in figure, local or draw space. The figure has transforms that allow conversion between figure, GL and pixel spaces.
-
-Where this is useful is if two primitives have different parents, and you want to move one to be in the same position as the other. To do this you would convert the target element position to figure space, and then to the local space of the element to move.
-
-
-
-
-
-
-
-FigureOne renders shapes in WebGL, text in Context2D and can even manipulate html elements as figure elements. As WebGL is used most in FigureOne, it will be used as an example to introduce coorindate spaces and why they matter.
-
-A figure is rendered in a html [canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) element. The pixels in a canvas can be thought of as coorindates. In html convention, if a canvas element is 1000 pixels wide, and 500 pixels height, then the (0, 0) pixel is in the top left corner, and pixel (1000, 500) is in the bottom right corner. We call this *pixel space* (though in computer graphics generally it is also often referred to as *screen space* or *device space*).
-
-Defining a shape in pixel space is not very convenient as different clients may have different sized canvases. Therefore it is convenient to define all shapes in a normalized space (say from -1 to +1 in each dimension).
-
-This is an example of why you need to work with at least two spaces. The user interfaces with pixel space, and the drawings are defined in normalized space. For a shape to be rendered to the canvas, its vertices need to be transformed to pixel space. For a user to interact with a shape, their touch point in pixel space needs to be transformed to the normalized space.
-
 ##### WebGL
 
 The above example is fine when defining a static figure, but becomes inefficient when animating.
@@ -389,58 +352,6 @@ The coordinate spaces in FigureOne are called:
 * Figure Space - where FigureElements at the top of the hierarchy are positioned/oriented (equivalent to world space)
 * Pixel Space
 
-
-
-The coorindate space nomenclature of FigureOne is different to 
-
-##### 3D - Projection
-
-In three dimensions the world can either be viewed as orthographic (where parallel lines stay the same with apart), or with a vanishing perspective (parallel lines seem to merge at a point at infinite distance).
-
-####
-
-
-When a world has only two dimensions (say is in the xy plane) then the viewer will always be looking at the world from a normal of the plane (from somewhere on the z axis). The amount of the world shown will come from the *projection* transform.
-
-However, when the world has three dimensions, the concept of a camera is used to define where a viewer is viewing the world from. The camera can have a location in space, a point to where it is looking and an orientation.
-
-When objects in the world only have two dimensions, the projection transform can define how much of the world to view. It can project only a portion of the world into clip space, and therefore only that portion can be viewed.
-
-When objects in the world have three dimensions, you need to choose how to look at them. To do this, the concept of a camera is used
-When drawing in three dimensions, the concept of a camera is used. The camera defines how much of the world can be viewed and from what perspective.
-
-In addition, the projection transform can 
-
-
-
-
-
-We then use a transform to position/orient these vertices in the figure.
-
-
-* *Draw Space*: where we define the vertices of a shape
-* *World Space*: 
-
-
-First we define the vertices of the shape in 3D space. We call this *draw space* (it is often referred to as *model space* or *object space* outside of FigureOne).
-
-The 
-
-
-
-
-Each space i
-In other words, a shape can be represented in different spaces, each of which might have a particular function or advantage.
-
-
-
-WebGL uses lines or triangles to draw or model arbitrary shapes. Each line or triangle is defined by 3 dimensional points (vertices). WebGL will render any vertex with (x, y, z) values betweem -1 to +1. Any vertices outside of this cube will be clipped (not rendered). Therefore we call this clip space.
-
-We now have to examples of two different spaces we can define the vertices in. For example, a pixel in the middle of the canvas at (500, 250) in pixel space would map to a vertex at (0, 0, 0) in clip space.
-
-To see if a vertex is touched by a user, we need to be able to transform a point in pixel space to clip space. To render a vertex to the screen, we need to transform a point in clip space to pixel space. Therefore, we generally need to know how to convert points between spaces.
-
-We need at least two spaces as pixel space is where the user is, and it is more convenient to define shapes in clip space as it is normalized between -1 and 1 and therefore indepenant on the size of the canvas.
 
 ##### 2D Space
 

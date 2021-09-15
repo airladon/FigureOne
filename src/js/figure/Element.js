@@ -3412,10 +3412,16 @@ class FigureElement {
     return new Point(0, 0).transformBy(this.spaceTransformMatrix('draw', space));
   }
 
-  setFigurePosition(figurePosition: Point) {
+  /**
+   * Set the element's position in local space such that it lines up with a
+   * figure space target.
+   *
+   * @param {TypeParsablePoint} figurePosition
+   */
+  setFigurePosition(figurePosition: TypeParsablePoint) {
     const figureToGLSpace = this.spaceTransformMatrix('figure', 'gl');
     // $FlowFixMe
-    const glLocation = figurePosition.transformBy(figureToGLSpace.matrix());
+    const glLocation = getPoint(figurePosition).transformBy(figureToGLSpace.matrix());
     // const t = new Transform(this.lastDrawTransform.def.slice(this.transform.def.length));
     const t = this.getLocalToFigureTransform();
     const newLocation = glLocation.transformBy(m3.inverse(t.matrix()));
@@ -3427,6 +3433,12 @@ class FigureElement {
     this.setFigurePosition(p._dup());
   }
 
+  /**
+   * Align element position in local space such that it is in the same position
+   * as the target element (even if that element is in a different local space)
+   *
+   * @param {FigureElement} element
+   */
   setPositionToElement(
     element: FigureElement,
   ) {
@@ -3459,7 +3471,7 @@ class FigureElement {
   }
 
   /**
-   * Show element
+   * Show element.
    */
   show() {
     this.isShown = true;
