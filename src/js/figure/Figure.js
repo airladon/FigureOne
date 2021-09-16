@@ -518,25 +518,85 @@ class Figure {
       };
     }
     if (optionsToUse.scene == null) {
-      const width = this.canvasLow.clientWidth;
-      const height = this.canvasLow.clientHeight;
-      let w;
-      let h;
-      if (width > height) {
-        w = width / height * 2;
-        h = 2;
-      } else {
-        w = 2;
-        h = height / width * 2;
-      }
+      // const width = this.canvasLow.clientWidth;
+      // const height = this.canvasLow.clientHeight;
+      // let w;
+      // let h;
+      // if (width > height) {
+      //   w = width / height * 2;
+      //   h = 2;
+      // } else {
+      //   w = 2;
+      //   h = height / width * 2;
+      // }
       optionsToUse.scene = {
         style: '2D',
-        left: -w / 2,
-        right: w / 2,
-        bottom: -h / 2,
-        top: h / 2,
+        // left: -w / 2,
+        // right: w / 2,
+        // bottom: -h / 2,
+        // top: h / 2,
       };
     }
+    if (
+      optionsToUse.scene.style === '2D'
+      || optionsToUse.scene.style === 'orthographic'
+    ) {
+      const {
+        left, right, top, bottom,
+      } = optionsToUse.scene;
+
+      if (left == null && right == null && top == null && bottom == null) {
+        const width = this.canvasLow.clientWidth;
+        const height = this.canvasLow.clientHeight;
+        let w;
+        let h;
+        if (width > height) {
+          w = width / height * 2;
+          h = 2;
+        } else {
+          w = 2;
+          h = height / width * 2;
+        }
+        optionsToUse.scene.left = -w / 2;
+        optionsToUse.scene.right = w / 2;
+        optionsToUse.scene.bottom = -h / 2;
+        optionsToUse.scene.top = h / 2;
+      }
+    } else {
+      const {
+        fieldOfView, aspectRatio,
+      } = optionsToUse.scene;
+      if (fieldOfView == null && aspectRatio == null) {
+        const width = this.canvasLow.clientWidth;
+        const height = this.canvasLow.clientHeight || 1;
+        optionsToUse.scene.fieldOfView = 27 * Math.PI / 180;
+        optionsToUse.scene.aspectRatio = width / height;
+      }
+    }
+
+    if (
+      optionsToUse.scene.style === 'perspective'
+      || optionsToUse.scene.style === 'orthographic'
+    ) {
+      const {
+        camera, near, far, light,
+      } = optionsToUse.scene;
+      if (camera == null || camera.position == null) {
+        optionsToUse.scene.camera = {
+          position: [1, 0.5, 2],
+        };
+      }
+      if (near == null && far == null) {
+        optionsToUse.scene.near = 0.1;
+        optionsToUse.scene.far = 20;
+      }
+      if (light == null) {
+        optionsToUse.scene.light = {
+          directional: [1, 0.5, 0.2],
+        };
+      }
+    }
+
     this.scene = new Scene(optionsToUse.scene);
     this.previousCursorPoint = new Point(0, 0);
     this.isTouchDown = false;
@@ -2478,34 +2538,106 @@ class Figure {
   }
 
   /**
-   * Show touchable regions in figure.
+   * Debug - 3D Shapes
+   *
+   * Show touchable 3D shapes in figure. This will only last for one animation
+   * frame, so it will not work if an animation is ongoing.
+   *
+   * Note, the shown borders will be for the instant this method is called
+   * only. If animation is ongoing, the shown borders will not move with the
+   * animation. To update the borders, call this method again.
    */
   showTouchable() {
     this.getSelectionFromPixel(0, 0, true);
   }
 
-  showTouchBorders() {
-    const elements = this.elements.getAllElements();
-    const colors = [
+  /**
+   * Debug - 2D Shapes
+   *
+   * Show the touchBorders of selected elements in the figure or all
+   * elements in the figure.
+   *
+   * Note, the shown borders will be for the instant this method is called
+   * only. If animation is ongoing, the shown borders will not move with the
+   * animation. To update the borders, call this method again.
+   *
+   * @param {TypeElementPath | null | 'touchable'} element use `null` for all
+   * elements, `touchable` for all touchable elements or define specific
+   * elements to show (`'touchable'`)
+   * @param {Array<TypeColor>} colors array of colors to cycle through for each
+   * shape ([blue, cyan, purple, green, red, yellow, black])
+   */
+  showTouchBorders(
+    element: TypeElementPath | null | 'touchable' = 'touchable',
+    colors: Array<TypeColor> = [
       [0, 0, 1, 1],
       [0, 1, 1, 1],
       [1, 0, 1, 1],
+      [0, 1, 0, 1],
       [1, 0, 0, 1],
       [1, 0.5, 0, 1],
       [0, 0, 0, 1],
-    ];
+    ],
+  ) {
+    this.showBorders('touchBorder', element, colors);
+  }
+
+  /**
+   * Debug - 2D Shapes
+   *
+   * Show the borders or touchBorders of selected elements in the figure or all
+   * elements in the figure.
+   *
+   * @param {'border' | 'touchBorder'} border (`'border'`)
+   * @param {TypeElementPath | null | 'touchable'} element use `null` for all
+   * elements, `touchable` for all touchable elements or define specific
+   * elements to show (`null`)
+   * @param {Array<TypeColor>} colors array of colors to cycle through for each
+   * shape ([blue, cyan, purple, green, red, yellow, black])
+   */
+  showBorders(
+    border: 'border' | 'touchBorder' = 'border',
+    element: TypeElementPath | null | 'touchable' = null,
+    colors: Array<TypeColor> = [
+      [0, 0, 1, 1],
+      [0, 1, 1, 1],
+      [1, 0, 1, 1],
+      [0, 1, 0, 1],
+      [1, 0, 0, 1],
+      [1, 0.5, 0, 1],
+      [0, 0, 0, 1],
+    ],
+  ) {
+    let elements = [];
+    if (element == null || element === 'touchable') {
+      elements = this.elements.getAllElements().slice(1);
+      if (element === 'touchable') {
+        elements = elements.filter(e => e.isTouchable);
+      }
+    } else if (typeof element === 'string') {
+      elements = this.getElements(element);
+    } else {
+      elements = [element];
+    }
     let colorIndex = 0;
     for (let i = 0; i < elements.length; i += 1) {
-      const element = elements[i];
-      if (element.isTouchable) {
-        const touchBorder = element.getBorder('figure', 'touchBorder');
-        if (touchBorder[0].length > 0) {
-          for (let j = 0; j < touchBorder.length; j += 1) {
+      const e = elements[i];
+      if (e.drawingObject != null && e.drawBorderBuffer == null) { // eslint-disable-next-line no-continue
+        continue;
+      }
+      const borderPoints = e.getBorder('figure', border);
+      if (borderPoints[0].length > 0) {
+        for (let j = 0; j < borderPoints.length; j += 1) {
+          const name = `__${border}${i}${j}`;
+          const e = this.get(name);
+          if (e != null) {
+            e.custom.updatePoints({ points: borderPoints[j] });
+          } else {
             this.add({
-              name: `buffer${i}${j}`,
+              name: `__${border}${i}${j}`,
               make: 'polyline',
               options: {
-                points: touchBorder[j],
+                points: borderPoints[j],
                 width: 0.01,
                 color: colors[colorIndex % colors.length],
                 dash: [0.02, 0.02],
@@ -2513,10 +2645,11 @@ class Figure {
               },
             });
           }
-          colorIndex += 1;
         }
+        colorIndex += 1;
       }
     }
+    this.animateNextFrame();
   }
 
   getSelectionFromDraw(glPoint: Point) {
