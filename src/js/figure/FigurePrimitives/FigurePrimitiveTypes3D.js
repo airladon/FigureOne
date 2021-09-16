@@ -24,6 +24,7 @@ export type OBJ_Generic3D = {
   light?: 'directional' | 'point' | 'ambient' | null,
   copy?: Array<CPY_Step | string> | CPY_Step,
   usage?: TypeGLBufferUsage,
+  touchScale?: number | TypeParsablePoint,
 };
 
 /**

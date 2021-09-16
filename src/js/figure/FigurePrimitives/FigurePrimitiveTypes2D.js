@@ -85,11 +85,19 @@ import type { OBJ_LineArrows, TypeArrowHead } from '../geometries/arrow';
  * @property {OBJ_Texture} [texture] override `color` with a texture if defined
  * @property {TypeParsableBorder} [drawBorder],
  * @property {TypeParsableBorder} [drawBorderBuffer],
- * @property {TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number} [border]
- * border used for
- * keeping shape within limits
- * @property {TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw'} [touchBorder]
- * border used for determining shape was touched
+ * @property {TypeParsableBuffer | TypeParsableBorder | 'buffer' | 'draw' | 'rect'} [border]
+ * defines border of primitive. Use `draw` to use the `drawBorder` of the
+ * element. Use 'buffer' to use the `drawBorderBuffer` property of the element.
+ * Use `'rect'` for the bounding rectangle of `drawBorder`. Use
+ * `TypeParsableBuffer` for the bounding rectangle of `drawBorder`. Use
+ * `TypeParsableBorder` for a custom border. (`'draw'`)
+ * @property {TypeParsableBorder | 'rect' | 'border' | 'buffer' | 'draw'} [touchBorder]
+ * defines touch border of the primitive. Use `border` to use the same border
+ * as `border`. Use `draw` to use the `drawBorder` of the element.
+ * Use 'buffer' to use the `drawBorderBuffer` property of the element.
+ * Use `'rect'` for the bounding rectangle of `drawBorderBuffer`. Use
+ * `TypeParsableBuffer` for the bounding rectangle of `drawBorderBuffer`. Use
+ * `TypeParsableBorder` for a custom border. (`'border'`)
  * @property {OBJ_PulseScale | number} [pulse] set default scale pulse options
  * (`OBJ_PulseScale`) or pulse scale directly (`number`)
  *
@@ -149,8 +157,8 @@ export type OBJ_Generic = {
   texture?: OBJ_Texture,
   drawBorder?: TypeParsableBorder,
   drawBorderBuffer?: TypeParsableBorder,
-  border?: TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number,
-  touchBorder?: TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw',
+  border?: TypeParsableBuffer | TypeParsableBorder | 'buffer' | 'draw' | 'rect',
+  touchBorder?: TypeParsableBuffer | TypeParsableBorder | 'rect' | 'border' | 'buffer' | 'draw',
   pulse?: number,
 }
 

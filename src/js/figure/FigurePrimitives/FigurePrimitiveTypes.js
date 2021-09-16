@@ -62,17 +62,19 @@ export type OBJ_LineStyleSimple_Defined = {
  * translation of `transform`
  * @property {TypeColor} [color] default color
  * @property {FigureElement | null} [parent] parent of collection
- * @property {TypeParsableBorder | 'children' | 'rect' | number} [border]
- * defines border of collection. Use `'children'` for the borders of the
- * children. Use 'rect' for bounding rectangle of children. Use `number`
- * for the bounding rectangle with some buffer. Use
- * `Array<Array<TypeParsablePoint>` for a custom border. (`'children'`)
- * @property {TypeParsableBorder | 'border' | number | 'rect'} [touchBorder]
+ * @property {TypeParsableBuffer | TypeParsableBorder | 'children' | 'rect'} [border]
+ * defines border of collection. Use `children` to use the borders of
+ * the children. Use `'rect'` for the bounding rectangle of the borders
+ * of the children. Use `TypeParsableBuffer` for the bounding rectangle of the
+ * borders of the children with some buffer. Use `TypeParsableBorder` for
+ * a custom border. (`'children'`)
+ * @property {TypeParsableBuffer | TypeParsableBorder | 'border' | 'rect'} [touchBorder]
  * defines the touch border of the collection. Use `'border'` to use the same
- * as the border of the collection. Use `'rect'` for the bounding rectangle
- * of the border. Use `number` for the bounding rectangle of the border plus
- * some buffer. Use `Array<Array<TypeParsablePoint>` for a custom touch
- * border (`'border'`).
+ * as the border of the collection. Use `children` to use the touch borders of
+ * the children. Use `'rect'` for the bounding rectangle of the touch borders
+ * of the children. Use `TypeParsableBuffer` for the bounding rectangle of the
+ * touch borders of the children with some buffer. Use `TypeParsableBorder` for
+ * a custom touch border. (`'children'`)
  *
  * @example
  * figure.add(
@@ -132,8 +134,8 @@ export type OBJ_Collection = {
   position?: TypeParsablePoint,
   color?: TypeColor,
   parent?: FigureElement | null,
-  border?: TypeParsableBorder | 'children' | 'rect' | number,
-  touchBorder?: TypeParsableBorder | 'border' | number | 'rect',
+  border?: TypeParsableBuffer | TypeParsableBorder | 'children' | 'rect' | number,
+  touchBorder?: TypeParsableBuffer | TypeParsableBorder | 'border' | 'children' | number | 'rect',
 };
 
 /**
@@ -293,6 +295,21 @@ export type OBJ_GLUniform = {
   type: TypeGLUniform,
 };
 
+/**
+ * Touch options for a FigureElement.
+ *
+ * @property {boolean} [enable] `true` to enable touch (`true`)
+ * @property {string | ((Point, FigureElement) => void)} [onClick] function to
+ * execute when element is touched. If string, then a function from the
+ * FunctionMap is used.
+ * @property {string} [colorSeed] use a unique string to reset color generation
+ * of unique colors used for touch determination (debug only) (`'default'`)
+ */
+export type OBJ_Touch = {
+  onClick?: string | ((Point, FigureElement) => void),
+  colorSeed?: string,
+  enable?: boolean,
+}
 
 /**
  * Options object for any {@link FigureElementPrimitive}.
@@ -304,7 +321,7 @@ export type OBJ_GLUniform = {
  * @property {TypeParsableTransform} [transform] transform to apply to element
  * @property {TypeColor} [color] color to apply to element (is passed as the
  * 'u_color' uniform to the fragment shader)
- * @property {boolean | number | TypeParsablePoint} [touch] `true`, `number` or
+ * @property {boolean | OBJ_Touch} [touch] `true`, `number` or
  * `TypeParsablePoint` will set the element as touchable. If `number`, then
  * element touch volume is the scaled actual volume in x, y, and z. For
  * example, if `2`, then the touchable volume is twice the actual volume. If
@@ -327,7 +344,7 @@ export type OBJ_FigurePrimitive = {
   position?: TypeParsablePoint,
   transform?: TypeParsableTransform,
   color?: TypeColor,
-  touch?: boolean | number | TypeParsablePoint,
+  touch?: boolean | OBJ_Touch,
   move?: boolean | OBJ_ElementMove,
   dimColor?: TypeColor,
   defaultColor?: TypeColor,
