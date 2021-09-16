@@ -241,7 +241,6 @@ function isBuffer(input: any) {
     ) {
       return true;
     }
-  } else {
     return false;
   }
   if (typeof input === 'object') {
@@ -479,9 +478,13 @@ export type TypeBorder = Array<Array<Point>>;
 
 function getBorder(
   border: Array<TypeParsablePoint> | Array<Array<TypeParsablePoint>>
-          | string | number,
+          | string | number | TypeParsableBuffer,
 ): Array<Array<Point>> | string | number {
-  if (typeof border === 'string' || typeof border === 'number') {
+  if (
+    typeof border === 'string'
+    || typeof border === 'number'
+    || isBuffer(border)
+  ) {
     return border;
   } // $FlowFixMe
   if (isParsablePoint(border[0])) {  // $FlowFixMe
