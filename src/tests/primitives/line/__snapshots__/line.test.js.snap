@@ -233,6 +233,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -304,6 +306,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -1044,6 +1048,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -1163,6 +1169,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -1975,6 +1983,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -2130,6 +2140,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -3578,6 +3590,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -4057,6 +4071,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -4917,6 +4933,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -5096,6 +5114,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -6544,6 +6564,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -7023,6 +7045,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -7811,6 +7835,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -7954,6 +7980,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -8670,6 +8698,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -8777,6 +8807,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -9392,6 +9424,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -9463,6 +9497,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -10118,6 +10154,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -10189,6 +10227,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -10859,6 +10899,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -10930,6 +10972,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -11518,6 +11562,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -11589,6 +11635,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -12177,6 +12225,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -12248,6 +12298,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -12836,6 +12888,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -12907,6 +12961,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -13546,6 +13602,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -13665,6 +13723,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -14304,6 +14364,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -14423,6 +14485,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -15063,6 +15127,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -15182,6 +15248,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -15821,6 +15889,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -15940,6 +16010,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -16579,6 +16651,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -16698,6 +16772,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -17286,6 +17362,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -17357,6 +17435,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -17945,6 +18025,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -18016,6 +18098,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -18604,6 +18688,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -18675,6 +18761,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -19280,6 +19368,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -19351,6 +19441,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -19939,6 +20031,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -20010,6 +20104,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -20615,6 +20711,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -20686,6 +20784,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -21274,6 +21374,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -21345,6 +21447,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -22049,6 +22153,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -22164,6 +22270,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -22760,6 +22868,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -22839,6 +22949,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -23427,6 +23539,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -23498,6 +23612,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -24086,6 +24202,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -24157,6 +24275,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -24764,6 +24884,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -24835,6 +24957,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -25485,6 +25609,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -25556,6 +25682,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -26185,6 +26313,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -26256,6 +26386,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -26871,6 +27003,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -26942,6 +27076,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -27557,6 +27693,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -27628,6 +27766,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -28216,6 +28356,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -28287,6 +28429,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -28875,6 +29019,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -28946,6 +29092,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -29534,6 +29682,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -29605,6 +29755,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
@@ -30193,6 +30345,8 @@ FigureElementPrimitive {
       "blendFunc": [Function],
       "bufferData": [Function],
       "canvas": Object {
+        "clientHeight": 500,
+        "clientWidth": 1000,
         "getBoundingClientRect": [Function],
         "height": 500,
         "left": 100,
@@ -30264,6 +30418,8 @@ FigureElementPrimitive {
         "blendFunc": [Function],
         "bufferData": [Function],
         "canvas": Object {
+          "clientHeight": 500,
+          "clientWidth": 1000,
           "getBoundingClientRect": [Function],
           "height": 500,
           "left": 100,
