@@ -4470,7 +4470,6 @@ class FigureElementCollection extends FigureElement {
     this.type = 'collection';
     this.setColor(o.color);
     this.hasTouchableElements = false;
-
     if (o.border != null) {
       if (!isBuffer(o.border)) { // $FlowFixMe
         this.border = getBorder(o.border);
@@ -4739,7 +4738,9 @@ class FigureElementCollection extends FigureElement {
         throw Error(`Add elements index ${index} does not exist in layout`);
       }
       const addElementsKey = 'elements';
-      const nameToUse = elementDefinition.name || generateUniqueId('primitive_');
+      const nameToUse = elementDefinition.name || generateUniqueId(
+        elementDefinition.make.startsWith('collection') ? 'collection_' : 'primitive_',
+      );
       const pathToUse = elementDefinition.path;
       let optionsToUse;
       if (elementDefinition.options != null) {
