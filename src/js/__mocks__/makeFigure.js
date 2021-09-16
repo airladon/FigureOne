@@ -50,7 +50,9 @@ export default function makeFigure(
 
   const canvasMock = {
     width: definition.width,
+    clientWidth: definition.width,
     height: definition.height,
+    clientHeight: definition.height,
     // offsetLeft: 100,
     left: inputCanvas.left,
     // offsetTop: 200,

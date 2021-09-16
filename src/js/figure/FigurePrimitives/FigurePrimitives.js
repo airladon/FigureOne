@@ -5,6 +5,7 @@ import {
   getBorder, getPoints,
   getBoundingBorder, isBuffer, toNumbers,
   sphere, cube, cylinder, cone, revolve, surface, prism, line3,
+  getScale,
 } from '../../tools/g2';
 // import {
 //   round
@@ -561,6 +562,9 @@ export default class FigurePrimitives {
       }
       if (o.drawType != null) { // $FlowFixMe
         element.drawingObject.setPrimitive(o.drawType.toUpperCase());
+      }
+      if (o.touchScale != null) {
+        element.touchScale = getScale(o.touchScale);
       }
     };
     element.custom.updatePoints = element.custom.updateGeneric3;

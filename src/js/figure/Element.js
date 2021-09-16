@@ -42,6 +42,7 @@ import { FunctionMap } from '../tools/FunctionMap';
 import type {
   OBJ_Font, TypeColor, TypeCoordinateSpace,
 } from '../tools/types';
+import type { OBJ_Touch } from './FigurePrimitives/FigurePrimitiveTypes';
 import type FigureCollections from './FigureCollections/FigureCollections';
 
 const FIGURE1DEBUG = false;
@@ -3250,6 +3251,15 @@ class FigureElement {
   // * BoundingRect: The rectangle enclosing all the border points
   // * BoundingRectBorder: The perimeter of the boundingRect
   /* eslint-disable class-methods-use-this, no-unused-vars */
+
+  /**
+   * Get the border or touchBorder of a FigureElementPrimitive in a defined
+   * coordinate space.
+   *
+   * @param {TypeCoordinateSpace} space (`'local`)
+   * @param {'border' | 'touchBorder'} border (`'border'`)
+   * @return {Array<Array<Point>>}
+   */
   getBorder(
     space: TypeCoordinateSpace = 'local',
     border: 'border' | 'touchBorder' = 'border',
@@ -3501,11 +3511,7 @@ class FigureElement {
    *
    * `false` makes this element not touchable.
    */
-  setTouchable(setOrOptions: {
-    scale: number | TypeParsablePoint | null,
-    colorSeed: string,
-    onClick: null | (() => void),
-  } | boolean = true) {
+  setTouchable(setOrOptions: OBJ_Touch | boolean = true) {
     let options = setOrOptions;
     if (typeof setOrOptions === 'boolean') {
       if (setOrOptions === false) {
@@ -3517,20 +3523,25 @@ class FigureElement {
     const o = joinObjects({
       scale: 1,
       colorSeed: 'default',
-      onClick: null,
+      enable: true,
     }, options);
-    this.isTouchable = true;
-    if (typeof o.scale === 'number') {
-      this.touchScale = new Point(o.scale, o.scale, o.scale);
-    } else if (o.scale != null) {
-      this.touchScale = getPoint(o.scale);
+    if (o.enable) {
+      this.isTouchable = true;
     }
+    // if (typeof o.scale === 'number') {
+    //   this.touchScale = new Point(o.scale, o.scale, o.scale);
+    // } else if (o.scale != null) {
+    //   this.touchScale = getPoint(o.scale);
+    // }
     if (this.uniqueColor == null) {
       this.setUniqueColor(generateUniqueColor(o.colorSeed));
     }
     if (o.onClick != null) {
       this.onClick = o.onClick;
     }
+    // if (o.touchBorder != null) {
+    //   this.touchBorder = o.touchBorder;
+    // }
     if (this.parent != null) { // $FlowFixMe
       this.parent.setHasTouchableElements();
     }
@@ -3870,8 +3881,8 @@ class FigureElementPrimitive extends FigureElement {
   cannotTouchHole: boolean;
   pointsDefinition: Object;
   setPointsFromDefinition: ?(() => void);
-  border: TypeBorder | 'draw' | 'buffer' | 'rect' | number;
-  touchBorder: TypeBorder | 'border' | number | 'rect' | 'draw' | 'buffer';
+  border: TypeParsableBuffer | TypeBorder | 'draw' | 'buffer' | 'rect' | number;
+  touchBorder: TypeParsableBuffer | TypeBorder | 'border' | number | 'rect' | 'draw' | 'buffer';
   drawBorder: TypeBorder;
   drawBorderBuffer: TypeBorder;
   // +pulse: (?(mixed) => void) => void;
@@ -4178,10 +4189,13 @@ class FigureElementPrimitive extends FigureElement {
     parentTransform: Array<Transform> = [new Transform()],
     parentOpacity: number = 1,
     targetTexture: boolean = false,
+    parentIsTouchable: boolean = false,
+    parentTouchScale: Point | null = null,
+    parentUniqueColor: TypeColor | null = null,
     // canvasIndex: number = 0,
   ) {
     if (this.isShown) {
-      if (targetTexture && !this.isTouchable) {
+      if (targetTexture && !this.isTouchable && !parentIsTouchable) {
         return;
       }
       // let timer;
@@ -4209,10 +4223,12 @@ class FigureElementPrimitive extends FigureElement {
         this.color[0], this.color[1], this.color[2], this.color[3] * this.opacity * parentOpacity,
       ];
       if (targetTexture) {
-        if (this.uniqueColor == null) {
+        if (parentUniqueColor != null) {
+          colorToUse = parentUniqueColor;
+        } else if (this.uniqueColor == null) {
           this.setUniqueColor(generateUniqueColor());
+          colorToUse = this.uniqueColor.map(c => c / 255);
         } // $FlowFixMe
-        colorToUse = this.uniqueColor.map(c => c / 255);
       }
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawOpacity = colorToUse[3];
@@ -4225,6 +4241,13 @@ class FigureElementPrimitive extends FigureElement {
       ) {
         transform = transform._dup();
         transform.updateScale(transform.s().mul(this.touchScale));
+      }
+      if (
+        targetTexture
+        && transform.hasComponent('s')
+        && parentTouchScale != null
+      ) {
+        transform.updateScale(transform.s().mul(parentTouchScale));
       }
       // const transform = this.transform._dup();
       const newTransforms = transformBy(parentTransform, [transform]);
@@ -4382,7 +4405,7 @@ export type OBJ_FigureElementCollection = {
 class FigureElementCollection extends FigureElement {
   elements: Object;
   drawOrder: Array<string>;
-  border: TypeBorder | 'children' | 'rect' | number;
+  border: TypeParsableBuffer | TypeBorder | 'children' | 'rect' | number;
   // $FlowFixMe
   touchBorder: TypeParsableBuffer | TypeBorder | 'border' | 'children' | 'rect' | number;
   // $FlowFixMe
@@ -4461,6 +4484,9 @@ class FigureElementCollection extends FigureElement {
       } else {
         this.touchBorder = o.touchBorder;
       }
+    }
+    if (o.touchScale != null) {
+      this.touchScale = getScale(o.touchScale);
     }
   }
 
@@ -4797,6 +4823,9 @@ class FigureElementCollection extends FigureElement {
       if (optionsToUse.touch != null) {
         newElement.setTouchable(optionsToUse.touch);
       }
+      if (optionsToUse.touchScale != null) {
+        newElement.touchScale = getScale(optionsToUse.touchScale);
+      }
       if (optionsToUse.dimColor != null) {
         newElement.dimColor = optionsToUse.dimColor;
       }
@@ -4992,10 +5021,38 @@ class FigureElementCollection extends FigureElement {
     parentOpacity: number = 1,
     // canvasIndex: number = 0,
     targetTexture: boolean = false,
+    parentIsTouchable: boolean = false,
+    parentTouchScale: Point | null = null,
+    parentUniqueColor: TypeColor | null = null,
   ) {
     if (this.isShown) {
-      if (targetTexture && !this.isTouchable && !this.hasTouchableElements) {
+      if (targetTexture && !this.isTouchable && !this.hasTouchableElements && !parentIsTouchable) {
         return;
+      }
+      let parentTouchScaleToUse = null;
+      if (targetTexture) {
+        if (parentTouchScale != null || this.touchScale != null) {
+          parentTouchScaleToUse = new Point(1, 1, 1);
+        }
+        if (parentTouchScale != null) {
+          parentTouchScaleToUse = parentTouchScaleToUse.mul(parentTouchScale);
+        }
+        if (this.touchScale != null) {
+          parentTouchScaleToUse = parentTouchScaleToUse.mul(getScale(this.touchScale));
+        }
+      }
+      let parentIsTouchableToUse = parentIsTouchable;
+      if (this.isTouchable) {
+        parentIsTouchableToUse = true;
+      }
+      let uniqueColorToUse = null;
+      if (parentUniqueColor == null && this.isTouchable) {
+        if (this.uniqueColor == null) {
+          this.setUniqueColor(generateUniqueColor());
+        }
+        uniqueColorToUse = this.uniqueColor.map(c => c / 255);
+      } else if (parentUniqueColor != null) {
+        uniqueColorToUse = parentUniqueColor;
       }
       // let timer;
       // if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
@@ -5032,6 +5089,7 @@ class FigureElementCollection extends FigureElement {
       for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
         this.elements[this.drawOrder[i]].draw(
           now, sceneToUse, this.drawTransforms, opacityToUse, targetTexture,
+          parentIsTouchableToUse, parentTouchScaleToUse, uniqueColorToUse,
         ); // $FlowFixMe
         // if (FIGURE1DEBUG) { drawTimer.stamp(this.elements[this.drawOrder[i]].name); }
       } // $FlowFixMe
@@ -5482,7 +5540,9 @@ class FigureElementCollection extends FigureElement {
           return;
         }
         // $FlowFixMe
-        childrenBorder.push(...e.getBorder('local', b, null, shownOnly));
+        if (e instanceof FigureElementCollection || e.drawBorder != null) {
+          childrenBorder.push(...e.getBorder('local', b, null, shownOnly));
+        }
       });
       return childrenBorder;
     };
@@ -5516,6 +5576,18 @@ class FigureElementCollection extends FigureElement {
     // }
   }
 
+  /**
+   * Get the border or touchBorder of a FigureElementCollection in a defined
+   * coordinate space.
+   *
+   * @param {TypeCoordinateSpace} space (`'local`)
+   * @param {'border' | 'touchBorder'} border (`'border'`)
+   * @param {Array<string | FigureElement> | null} children choose specific
+   * children only - use `null` for all children (`null`)
+   * @param {boolean} shownOnly if `true` then only children that are shown
+   * will be used (`true`)
+   * @return {Array<Array<Point>>}
+   */
   getBorder(
     space: TypeCoordinateSpace | Type3DMatrix = 'local',
     border: 'touchBorder' | 'border' = 'border',
