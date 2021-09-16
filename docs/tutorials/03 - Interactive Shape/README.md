@@ -22,7 +22,7 @@ figure.add(
     radius: 0.2,
     move: {
       bounds: {
-        left: 0.8, bottom: 0.8, right: 0.8, top: 0.8,
+        left: -0.8, bottom: -0.8, right: 0.8, top: 0.8,
       },
       freely: { deceleration: 0.5 },
     },
@@ -51,7 +51,7 @@ The properties that make the element moveable can be set on any figure element:
 ```js
     move: {
       bounds: {
-        left: 0.8, bottom: 0.8, right: 0.8, top: 0.8,
+        left: -0.8, bottom: -0.8, right: 0.8, top: 0.8,
       },
       freely: { deceleration: 0.5 },
     },

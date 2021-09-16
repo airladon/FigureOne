@@ -124,7 +124,7 @@ describe('Element Move', () => {
     test('Translation with bounds', () => {
       move({
         type: 'translation',
-        bounds: { left: 1, bottom: 1, right: 2, top: 2 },
+        bounds: { left: -1, bottom: -1, right: 2, top: 2 },
       });
       figure.mock.touchDown([0, 0]);
       figure.mock.touchMove([1, 0]);
@@ -175,7 +175,7 @@ describe('Element Move', () => {
         type: 'translation',
         plane: [[0, 1, 0], [0, 1, 0]],
         bounds: {
-          left: 1, bottom: 1, right: 2, top: 2,
+          left: -1, bottom: -1, right: 2, top: 2,
           rightDirection: [0, 0, -1],
         },
       });

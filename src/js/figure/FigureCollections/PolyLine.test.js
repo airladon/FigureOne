@@ -140,7 +140,7 @@ describe('Figure Objects PolyLine', () => {
           radius: 0.2,
           move: {
             bounds: {
-              left: 3, bottom: 2, right: 3, top: 2,
+              left: -3, bottom: -2, right: 3, top: 2,
             },
           },
           // boundary: {
@@ -222,9 +222,9 @@ describe('Figure Objects PolyLine', () => {
       const poly = ways.PadBoundary();
       expect(poly).toHaveProperty('_pad0');
       const boundary = poly._pad0.move.bounds;
-      expect(round(boundary.left, 3)).toBe(3);
+      expect(round(boundary.left, 3)).toBe(-3);
       expect(round(boundary.right, 3)).toBe(3);
-      expect(round(boundary.bottom, 3)).toBe(2);
+      expect(round(boundary.bottom, 3)).toBe(-2);
       expect(round(boundary.top, 3)).toBe(2);
     });
   });
@@ -344,7 +344,7 @@ describe('Figure Objects PolyLine', () => {
             radius: 0.2,
             move: {
               bounds: {
-                left: 3, bottom: 2, right: 3, top: 2,
+                left: -3, bottom: -2, right: 3, top: 2,
               },
             },
             // isMovable: true,

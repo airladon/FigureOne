@@ -136,7 +136,7 @@ describe('Element Move', () => {
           deceleration: 0,
           bounceLoss: 0,
         },
-        bounds: { left: 4, right: 4, bottom: 1, top: 1 },
+        bounds: { left: -4, right: 4, bottom: -1, top: 1 },
       });
       figure.mock.timeStep(0);
       figure.mock.touchDown([0, 0]);
@@ -161,7 +161,7 @@ describe('Element Move', () => {
           bounceLoss: 0.9,
           zeroVelocityThreshold: 0.01,
         },
-        bounds: { left: 1, right: 2, bottom: 1, top: 1 },
+        bounds: { left: -1, right: 2, bottom: -1, top: 1 },
       });
       figure.mock.timeStep(0);
       figure.mock.touchDown([0, 0]);
@@ -196,7 +196,7 @@ describe('Element Move', () => {
           bounceLoss: 0,
           zeroVelocityThreshold: 0.00001,
         },
-        bounds: { left: 1, right: 2, bottom: 1, top: 1 },
+        bounds: { left: -1, right: 2, bottom: -1, top: 1 },
       });
       figure.mock.timeStep(0);
       figure.mock.touchDown([0, 0]);
@@ -222,7 +222,7 @@ describe('Element Move', () => {
           bounceLoss: 0.5,
           zeroVelocityThreshold: 0.00001,
         },
-        bounds: { left: 1, right: 2, bottom: 1, top: 1 },
+        bounds: { left: -1, right: 2, bottom: -1, top: 1 },
       });
       figure.mock.timeStep(0);
       figure.mock.touchDown([0, 0]);
@@ -345,8 +345,8 @@ describe('Element Move', () => {
         plane: [[-1, 0, 0], [1, 0, 0]],
         bounds: {
           rightDirection: [0, 0, -1],
-          left: 1,
-          bottom: 2,
+          left: -1,
+          bottom: -2,
           top: 3,
           right: 4,
         },

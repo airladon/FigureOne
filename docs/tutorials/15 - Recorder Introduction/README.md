@@ -81,7 +81,7 @@ figure.add({
   color: [1, 0, 0, 1],
   move: {
     bounds: {
-      left: 1, bottom: 1, top: 1, right: 1,
+      left: -1, bottom: -1, top: 1, right: 1,
     },
   },
 });

@@ -17,7 +17,7 @@ for (let i = 0; i < n; i += 1) {
     move: {
       freely: { deceleration: 0, bounceLoss: 0 },
       bounds: {
-        left: 3 - r, bottom: 3 - r, right: 3 - r, top: 3 - r,
+        left: -(3 - r), bottom: -(3 - r), right: 3 - r, top: 3 - r,
       },
     },
     mods: {

@@ -11,7 +11,7 @@ figure.add([
     color: [1, 0, 0, 1],
     move: {
       bounds: {
-        left: 1, bottom: 1, top: 1, right: 1,
+        left: -0.7, bottom: -0.7, top: 0.7, right: 0.7,
       },
     },
   },
@@ -23,7 +23,7 @@ figure.add([
     color: [0.5, 0.5, 1, 1],
     move: {
       bounds: {
-        left: 1, bottom: 1, top: 1, right: 1,
+        left: -0.75, bottom: -0.835, top: 0.668, right: 0.75,
       },
     },
   },

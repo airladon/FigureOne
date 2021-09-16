@@ -17,18 +17,18 @@ describe('Bounds', () => {
           position: [1, 1, 0],
           rightDirection: [2, 0, 0],
           topDirection: [0, 2, 0],
-          left: 2,
+          left: -2,
           right: 3,
           top: 4,
-          bottom: 5,
+          bottom: -5,
         });
         expect(bounds.plane.round()).toEqual(new Plane([[1, 1, 0], [0, 0, 1]]));
         expect(bounds.topDirection).toEqual(new Point(0, 1, 0));
         expect(bounds.rightDirection).toEqual(new Point(1, 0, 0));
-        expect(bounds.left).toBe(2);
+        expect(bounds.left).toBe(-2);
         expect(bounds.right).toBe(3);
         expect(bounds.top).toBe(4);
-        expect(bounds.bottom).toBe(5);
+        expect(bounds.bottom).toBe(-5);
         expect(bounds.boundary.left).toEqual(new Line([-1, -4, 0], [-1, 5, 0]));
         expect(bounds.boundary.right).toEqual(new Line([4, -4, 0], [4, 5, 0]));
         expect(bounds.boundary.top).toEqual(new Line([-1, 5, 0], [4, 5, 0]));
@@ -39,18 +39,18 @@ describe('Bounds', () => {
           position: [0, 0, 0],
           topDirection: [0, 2, 0],
           normal: [2, 0, 0],
-          left: 1,
+          left: -1,
           right: 1,
           top: 1,
-          bottom: 1,
+          bottom: -1,
         });
         expect(bounds.plane.round()).toEqual(new Plane([[0, 0, 0], [1, 0, 0]]));
         expect(bounds.topDirection.round()).toEqual(new Point(0, 1, 0));
         expect(bounds.rightDirection.round()).toEqual(new Point(0, 0, -1));
-        expect(bounds.left).toBe(1);
+        expect(bounds.left).toBe(-1);
         expect(bounds.right).toBe(1);
         expect(bounds.top).toBe(1);
-        expect(bounds.bottom).toBe(1);
+        expect(bounds.bottom).toBe(-1);
         expect(bounds.boundary.left).toEqual(new Line([0, -1, 1], [0, 1, 1]));
         expect(bounds.boundary.right).toEqual(new Line([0, -1, -1], [0, 1, -1]));
         expect(bounds.boundary.top).toEqual(new Line([0, 1, 1], [0, 1, -1]));
@@ -61,18 +61,18 @@ describe('Bounds', () => {
           position: [0, 1, 0],
           rightDirection: [2, 0, 0],
           normal: [0, 2, 0],
-          left: 1,
+          left: -1,
           right: 1,
           top: 1,
-          bottom: 1,
+          bottom: -1,
         });
         expect(bounds.plane.round()).toEqual(new Plane([[0, 1, 0], [0, 1, 0]]));
         expect(bounds.topDirection.round()).toEqual(new Point(0, 0, -1));
         expect(bounds.rightDirection.round()).toEqual(new Point(1, 0, 0));
-        expect(bounds.left).toBe(1);
+        expect(bounds.left).toBe(-1);
         expect(bounds.right).toBe(1);
         expect(bounds.top).toBe(1);
-        expect(bounds.bottom).toBe(1);
+        expect(bounds.bottom).toBe(-1);
         expect(bounds.boundary.left).toEqual(new Line([-1, 1, 1], [-1, 1, -1]));
         expect(bounds.boundary.right).toEqual(new Line([1, 1, 1], [1, 1, -1]));
         expect(bounds.boundary.top).toEqual(new Line([-1, 1, -1], [1, 1, -1]));
@@ -85,10 +85,10 @@ describe('Bounds', () => {
           position: [1, 1, 0],
           rightDirection: [2, 0, 0],
           topDirection: [0, 2, 0],
-          left: 2,
+          left: -2,
           right: 3,
           top: 4,
-          bottom: 5,
+          bottom: -5,
         });
         const dup = bounds._dup();
         expect(dup.round()).toEqual(bounds.round());
@@ -101,10 +101,10 @@ describe('Bounds', () => {
           position: [1, 1, 0],
           rightDirection: [2, 0, 0],
           topDirection: [0, 2, 0],
-          left: 2,
+          left: -2,
           right: 3,
           top: 4,
-          bottom: 5,
+          bottom: -5,
         });
         const state = bounds._state();
         const d = getBounds(state);
@@ -119,10 +119,10 @@ describe('Bounds', () => {
             position: [0, 0, 0],
             rightDirection: [2, 0, 0],
             topDirection: [0, 2, 0],
-            left: 1,
+            left: -1,
             right: 1,
             top: 1,
-            bottom: 1,
+            bottom: -1,
           });
         });
         test('Inside', () => {
@@ -174,10 +174,10 @@ describe('Bounds', () => {
             position: [0, 0, 0],
             rightDirection: [2, 0, 0],
             topDirection: [0, -2, 0],
-            left: 1,
+            left: -1,
             right: 1,
             top: 1,
-            bottom: 1,
+            bottom: -1,
           });
         });
         test('Inside', () => {
@@ -214,10 +214,10 @@ describe('Bounds', () => {
             position: [1, 1, 1],
             rightDirection: [2, 0, 0],
             topDirection: [0, 0, -2],
-            left: 1,
+            left: -1,
             right: 1,
             top: 1,
-            bottom: 1,
+            bottom: -1,
           });
         });
         test('Inside', () => {
@@ -277,10 +277,10 @@ describe('Bounds', () => {
             position: [0, 0, 0],
             rightDirection: [2, 0, 0],
             topDirection: [0, 2, 0],
-            left: 1,
+            left: -1,
             right: 2,
             top: 3,
-            bottom: 4,
+            bottom: -4,
           });
         });
         test('inside', () => {
@@ -318,10 +318,10 @@ describe('Bounds', () => {
             position: [1, 1, 1],
             rightDirection: [2, 0, 0],
             topDirection: [0, 0, -2],
-            left: 1,
+            left: -1,
             right: 1,
             top: 1,
-            bottom: 1,
+            bottom: -1,
           });
         });
         test('inside', () => {
@@ -371,10 +371,10 @@ describe('Bounds', () => {
             position: [0, 0, 0],
             rightDirection: [2, 0, 0],
             topDirection: [0, 2, 0],
-            left: 1,
+            left: -1,
             right: 1,
             top: 1,
-            bottom: 1,
+            bottom: -1,
           });
         });
         describe('Right Bound', () => {
@@ -610,10 +610,10 @@ describe('Bounds', () => {
             position: [1, 1, 1],
             rightDirection: [2, 0, 0],
             topDirection: [0, 0, -2],
-            left: 2,
+            left: -2,
             right: 3,
             top: 4,
-            bottom: 5,
+            bottom: -5,
           });
         });
         test('Inside normal - right bound', () => {

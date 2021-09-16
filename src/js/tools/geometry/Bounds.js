@@ -320,8 +320,6 @@ export type TypeF1DefRectBounds = {
  * - position, plane normal, one direction vecvtor (top or right)
  * - position, top and right direction vectors
  *
- * The left, right, up, and down values must all be >= 0.
- *
  * By default the rectangle will be in the XY plane (+z normal) with a
  * rightDirection vector along the +x axis.
  *
@@ -368,8 +366,8 @@ class RectBounds extends Bounds {
     const defaultOptions = {
       position: [0, 0, 0],
       normal: [0, 0, 1],
-      left: 1,
-      right: 1,
+      left: -1,
+      right: -1,
       top: 1,
       bottom: 1,
       // bounds: 'inside',
@@ -411,12 +409,12 @@ class RectBounds extends Bounds {
     let centerLeft = null;
     let centerRight = null;
 
-    centerLeft = position.add(rightDirection.scale(-1 * options.left));
+    centerLeft = position.add(rightDirection.scale(options.left));
     centerRight = position.add(rightDirection.scale(options.right));
     topLeft = centerLeft.add(topDirection.scale(options.top));
-    bottomLeft = centerLeft.add(topDirection.scale(-1 * options.bottom));
+    bottomLeft = centerLeft.add(topDirection.scale(options.bottom));
     topRight = centerRight.add(topDirection.scale(options.top));
-    bottomRight = centerRight.add(topDirection.scale(-1 * options.bottom));
+    bottomRight = centerRight.add(topDirection.scale(options.bottom));
     right = new Line(bottomRight, topRight);
     left = new Line(bottomLeft, topLeft);
     top = new Line(topLeft, topRight);
@@ -535,10 +533,10 @@ class RectBounds extends Bounds {
     const posP = p.sub(this.plane.p);
     const rightProjection = posP.projectOn(this.rightDirection);
     const topProjection = posP.projectOn(this.topDirection);
-    if (topProjection > this.top || -topProjection > this.bottom) {
+    if (topProjection > this.top || topProjection < this.bottom) {
       return false;
     }
-    if (rightProjection > this.right || -rightProjection > this.left) {
+    if (rightProjection > this.right || rightProjection < this.left) {
       return false;
     }
     return true;
@@ -596,14 +594,14 @@ class RectBounds extends Bounds {
     let rightProjection = posP.projectOn(this.rightDirection);
     if (rightProjection > this.right) {
       rightProjection = this.right;
-    } else if (rightProjection < -this.left) {
-      rightProjection = -this.left;
+    } else if (rightProjection < this.left) {
+      rightProjection = this.left;
     }
     let topProjection = posP.projectOn(this.topDirection);
     if (topProjection > this.top) {
       topProjection = this.top;
-    } else if (topProjection < -this.bottom) {
-      topProjection = -this.bottom;
+    } else if (topProjection < this.bottom) {
+      topProjection = this.bottom;
     }
 
     return this.plane.p

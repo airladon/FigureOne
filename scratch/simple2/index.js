@@ -85,7 +85,7 @@
 // // console.log(t1.isEqualTo(t3))
 
 // const figure = new Fig.Figure({ scene: [0, 0, 6, 3]});
-const figure = new Fig.Figure();
+const figure = new Fig.Figure({ backgroundColor: [1, 0, 0, 0.2] });
 figure.add(
   {
     make: 'polygon',
@@ -93,7 +93,7 @@ figure.add(
     radius: 0.2,
     touchBorder: 0.5,
     move: {
-      bounds: { left: 0.8, right: 0.8, bottom: 0.8, top: 0.8 },
+      bounds: { left: -1.8, right: 1.8, bottom: -0.8, top: 0.8 },
     },
   },
 );
