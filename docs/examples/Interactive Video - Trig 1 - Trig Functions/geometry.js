@@ -159,7 +159,7 @@ function layoutRight() {
         position: [1, 1],
         move: {
           bounds: {
-            left: 0.999, right: 2, bottom: 0.999, top: 1, position: [1, 1],
+            left: -0.999, right: 2, bottom: -0.999, top: 1, position: [1, 1],
           },
         },
       },
