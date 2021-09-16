@@ -34,6 +34,11 @@ export type TypeDash = Array<number>;
 export type TypeColor = Array<number>;
 
 /**
+ * `'pixel' | 'gl' | 'figure' | 'local' | 'draw'`
+ */
+export type TypeCoordinateSpace = 'pixel' | 'gl' | 'figure' | 'local' | 'draw';
+
+/**
   Curved Corner Definition
  */
 export type OBJ_CurvedCorner = {

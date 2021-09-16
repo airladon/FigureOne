@@ -176,9 +176,15 @@ The transform of the figure element primitive that draws the square will move th
 
 If the parent collection's parent is the figure itself, then its transform will move the collection in figure space.
 
-Converting between spaces is relatively straight forward. All figure elements have methods to find their position or bounds in figure, local or draw space. The figure has transforms that allow conversion between figure, GL and pixel spaces.
+Converting between spaces is relatively straight forward. Figure elements have methods to find their position or bounds in figure, local or draw space. The figure has transforms that allow conversion between figure, GL and pixel spaces. For example see:
 
-Where this is useful is if two primitives have different parents, and you want to move one to be in the same position as the other. To do this you would convert the target element position to figure space, and then to the local space of the element to move.
+* <a href="figureelementspacetransformmatrix">FigureElement.spaceTransformMatrix()</a>
+* <a href="figureelementgetPosition">FigureElement.getPosition()</a>
+* <a href="figureelementsetpositiontoelement">FigureElement.setPositionToElement()</a>
+* <a href="spacetransformmatrix">Figure.spaceTransformMatrix()</a>
+
+
+An example of where this is useful is if two FigureElements have different parents, and you want to move one to be in the same position as the other. To do this you would convert the target FigureElement position to figure space, and then to the local space of the FigureElement to move.
 
 
 #### Drawing
@@ -277,7 +283,36 @@ For more information on drawing generic shapes see:
 
 ##### Low Level GL Shapes
 
-There are some times where
+FigureElements are optimized for both performance and convenience. To fully optimize for performance, a lower level GL primitive can be used (see {@link OBJ_GenericGL}).
+
+Using this primitive requires some familiarity with the concepts of WebGL. It provides an easy way to create custom <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLShader">shaders</a> with custom <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Data#attributes">attributes</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Data#uniforms">uniforms</a>.
+
+This primitive still handles all calls to the WebGL API, and so it is a relatively easy way to get started with WebGL shaders.
+
+The {@link OBJ_GenericGL} has example code on how to use this primitive.
+
+It is not in the scope of this documentation to explain what WebGL is, and how to use it. There are many good resources on the web that already do this - for example [WebGLFundamentals](https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html) gives an excellent introduction to WebGL and this [quick reference guid](https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf) is useful to refer to especially when writing shaders.
+
+
+
+#### Animation
+
+Animations change figure elements over time.
+
+Each figure element has its own {@link AnimationManager} (`animations` property) that can coordinate animations for any element.
+
+An animation is a number of {@link AnimationStep}s in either series or parallel. The animation manager provides a way to create these steps, build them into a complete animation, and then manage their execution.
+
+For a detailed explanation on animations see:
+
+* the <a href="#animation">Animation</a> section of the API reference
+* the animation <a href="https://github.com/airladon/FigureOne/tree/master/docs/tutorials/04%20-%20Animation">tutorial</a>
+
+
+#### Interactivity
+
+FigureOne provides some simple interactivity options that allows users to touch and move FigureElements.
+
 
 
 

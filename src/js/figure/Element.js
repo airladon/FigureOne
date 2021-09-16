@@ -40,14 +40,14 @@ import * as animations from './Animation/Animation';
 import WebGLInstance from './webgl/webgl';
 import { FunctionMap } from '../tools/FunctionMap';
 import type {
-  OBJ_Font, TypeColor,
+  OBJ_Font, TypeColor, TypeCoordinateSpace,
 } from '../tools/types';
 import type FigureCollections from './FigureCollections/FigureCollections';
 
 const FIGURE1DEBUG = false;
 
 
-export type TypeSpace = 'draw' | 'local' | 'figure' | 'gl' | 'pixel';
+// export type TypeCoordinateSpace = 'draw' | 'local' | 'figure' | 'gl' | 'pixel';
 
 /**
  * Add element Object
@@ -655,7 +655,7 @@ class FigureElement {
     xAlign: 'center' | 'left' | 'right' | number,
     yAlign: 'middle' | 'bottom' | 'top' | number,
     centerOn: null | FigureElement | string,
-    space: TypeSpace,
+    space: TypeCoordinateSpace,
     done: null | () => void,
     progression: string | (number) => number,
     when: TypeWhen,
@@ -2781,7 +2781,14 @@ class FigureElement {
     throw new Error(`getCanvas error: Element ${this.getPath()} has no drawing object.`);
   }
 
-  spaceTransformMatrix(from: string, to: string, precision: number = 8): Type3DMatrix {
+  /**
+   * Return a matrix that can transform from one coordinate space to another.
+   */
+  spaceTransformMatrix(
+    from: TypeCoordinateSpace,
+    to: TypeCoordinateSpace,
+    precision: number = 8,
+  ): Type3DMatrix {
     // All Vertex related conversions
     if (from === to) {
       return m3.identity();
@@ -3218,8 +3225,8 @@ class FigureElement {
 
   pointFromSpaceToSpace(
     point: TypeParsablePoint,
-    fromSpace: TypeSpace,
-    toSpace: TypeSpace,
+    fromSpace: TypeCoordinateSpace,
+    toSpace: TypeCoordinateSpace,
   ) {
     return getPoint(point).transformBy(this.spaceTransformMatrix(fromSpace, toSpace));
   }
@@ -3244,7 +3251,7 @@ class FigureElement {
   // * BoundingRectBorder: The perimeter of the boundingRect
   /* eslint-disable class-methods-use-this, no-unused-vars */
   getBorder(
-    space: TypeSpace = 'local',
+    space: TypeCoordinateSpace = 'local',
     border: 'border' | 'touchBorder' = 'border',
   ) {
     // if (this.name === 'c' && border === 'touchBorder') {
@@ -3272,7 +3279,7 @@ class FigureElement {
   /* eslint-enable class-methods-use-this, no-unused-vars */
 
   getBoundingRect(
-    space: TypeSpace = 'local',
+    space: TypeCoordinateSpace = 'local',
     border: 'border' | 'touchBorder' = 'border',
   ) {
     const transformedBorder = this.getBorder(space, border);  // $FlowFixMe
@@ -3283,7 +3290,7 @@ class FigureElement {
   // Size
   // ***************************************************************
   getRelativeBoundingRect(
-    space: TypeSpace = 'local',
+    space: TypeCoordinateSpace = 'local',
     border: 'border' | 'touchBorder' = 'border',
   ) {
     const rect = this.getBoundingRect(space, border);
@@ -3341,7 +3348,7 @@ class FigureElement {
   //  * @return {Point} position
   //  */
   getPositionInBounds(
-    space: TypeSpace = 'local',
+    space: TypeCoordinateSpace = 'local',
     xAlign: 'center' | 'left' | 'right' | 'location' | number = 'location',
     yAlign: 'middle' | 'top' | 'bottom' | 'location' | number = 'location',
     border: 'border' | 'touchBorder' = 'border',
@@ -3398,7 +3405,7 @@ class FigureElement {
    * position in percentage height from the bottom.
    */
   getPosition(
-    space: TypeSpace = 'local',
+    space: TypeCoordinateSpace = 'local',
     xAlign: 'center' | 'left' | 'right' | 'location' | number = 'location',
     yAlign: 'middle' | 'top' | 'bottom' | 'location' | number = 'location',
   ) {
@@ -5510,7 +5517,7 @@ class FigureElementCollection extends FigureElement {
   }
 
   getBorder(
-    space: TypeSpace | Type3DMatrix = 'local',
+    space: TypeCoordinateSpace | Type3DMatrix = 'local',
     border: 'touchBorder' | 'border' = 'border',
     children: ?Array<string | FigureElement> = null,
     shownOnly: boolean = true,
@@ -5530,7 +5537,7 @@ class FigureElementCollection extends FigureElement {
   }
 
   getBoundingRect(
-    space: TypeSpace = 'local',
+    space: TypeCoordinateSpace = 'local',
     border: 'touchBorder' | 'border' = 'border',
     children: ?Array<string | FigureElement> = null,
     shownOnly: boolean = true,
@@ -5541,7 +5548,7 @@ class FigureElementCollection extends FigureElement {
   }
 
   getRelativeBoundingRect(
-    space: TypeSpace = 'local',
+    space: TypeCoordinateSpace = 'local',
     border: 'border' | 'touchBorder' = 'border',
     children: ?Array<string | FigureElement> = null,
     shownOnly: boolean = true,
@@ -5557,7 +5564,7 @@ class FigureElementCollection extends FigureElement {
   }
 
   getPositionInBounds(
-    space: TypeSpace = 'local',
+    space: TypeCoordinateSpace = 'local',
     xAlign: 'center' | 'left' | 'right' | 'location' | number = 'location',
     yAlign: 'middle' | 'top' | 'bottom' | 'location' | number = 'location', // $FlowFixMe
     children: ?Array<string | FigureElement> = null,
