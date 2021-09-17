@@ -2622,16 +2622,17 @@ class Figure {
     let colorIndex = 0;
     for (let i = 0; i < elements.length; i += 1) {
       const e = elements[i];
-      if (e.drawingObject != null && e.drawBorderBuffer == null) { // eslint-disable-next-line no-continue
+      if (e.drawingObject != null && e.drawBorderBuffer == null) {
+        // eslint-disable-next-line no-continue
         continue;
       }
       const borderPoints = e.getBorder('figure', border);
       if (borderPoints[0].length > 0) {
         for (let j = 0; j < borderPoints.length; j += 1) {
           const name = `__${border}${i}${j}`;
-          const e = this.get(name);
-          if (e != null) {
-            e.custom.updatePoints({ points: borderPoints[j] });
+          const el = this.get(name);
+          if (el != null) {
+            el.custom.updatePoints({ points: borderPoints[j] });
           } else {
             this.add({
               name: `__${border}${i}${j}`,
@@ -2978,7 +2979,10 @@ class Figure {
     }
   }
 
-
+  /**
+   * Check if any element in the figure is animating.
+   * @return {boolean}
+   */
   isAnimating(): boolean {
     return this.elements.isAnimating();
   }

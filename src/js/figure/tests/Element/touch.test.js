@@ -11,7 +11,6 @@ jest.useFakeTimers();
 
 describe('Element Touch', () => {
   let figure;
-  let a;
   let b;
   let result;
   let add;

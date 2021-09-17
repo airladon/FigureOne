@@ -59,7 +59,7 @@ figure.add([
 const xValues = tools.math.range(-4, 4, 1);
 const yValues = tools.math.range(4, -4, -1);
 let index = 0;
-const makeShape = (transform, reverseLight) => {
+const makeShape = (transform) => {
   const x = xValues[index % xValues.length];
   const y = yValues[Math.floor(index / xValues.length)];
   const name = `_${index}`;

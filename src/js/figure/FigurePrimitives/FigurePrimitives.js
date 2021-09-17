@@ -1454,15 +1454,15 @@ export default class FigurePrimitives {
       right: 1,
       bottom: 0,
       top: 1,
-    })
+    });
     element.notifications.add('beforeMove', () => {
       element.custom.position = element.getPosition();
       element.custom.moving = true;
-    })
+    });
     element.notifications.add('beforeMoveFreely', () => {
       element.custom.position = element.getPosition();
       element.custom.moving = true;
-    })
+    });
     element.notifications.add('setTransform', () => {
       if (element.custom.moving === false) {
         return;
@@ -1492,12 +1492,12 @@ export default class FigurePrimitives {
       const scene = element.custom.sceneToChange;
       const delta = element.getPosition().sub(element.custom.position);
       const deltaX = -delta.x * o.sensitivity * o.xSensitivity;
-      let deltaY = delta.y * o.sensitivity * o.ySensitivity; // * aspectRatio;
+      const deltaY = delta.y * o.sensitivity * o.ySensitivity; // * aspectRatio;
       const lookAt = getPoint(scene.camera.lookAt);
-      const up = getPoint(scene.camera.up);
+      // const up = getPoint(scene.camera.up);
       const position = getPoint(scene.camera.position);
 
-      let deltaAz = deltaX;
+      const deltaAz = deltaX;
       let deltaEl = deltaY;
 
       const verticalAxis = getPoint(o.axis);

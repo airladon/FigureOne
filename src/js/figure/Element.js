@@ -1666,7 +1666,6 @@ class FigureElement {
         this.state.movement.previousTime = now;
         return;
       }
-      // console.log(this.state.movement.velocity)
       if (typeof this.state.movement.velocity !== 'number') {
         this.state.movement.velocity = getPoint(this.state.movement.velocity);
       }
@@ -1927,7 +1926,7 @@ class FigureElement {
     let next;
     const { type, freely } = this.move;
     if (typeof freely === 'boolean') {
-      return;
+      return { velocity: 0, value: 0, duration: 0 };
     }
     if (type === 'position' || type === 'translation') {
       next = decelerateVector( // $FlowFixMe
@@ -3344,7 +3343,7 @@ class FigureElement {
    * returned angle where `''` returns the raw angle
    * @return {Point} scale
    */
-  getRotation(normalize: '0to360' | '-180to180' | '' = '') { 
+  getRotation(normalize: '0to360' | '-180to180' | '' = '') {
     let rotation = this.transform.r();
     if (normalize !== '' && rotation != null) {
       rotation = clipAngle(rotation, normalize);
@@ -3561,6 +3560,7 @@ class FigureElement {
       this.setMovable(options);
       return;
     }
+    this.setMovable();
     const {
       type, bounds, plane, maxVelocity, freely, element,
     } = options;
