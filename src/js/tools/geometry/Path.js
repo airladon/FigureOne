@@ -6,13 +6,13 @@ import { Line } from './Line';
 import { quadraticBezier } from './common';
 import { clipAngle } from './angle';
 
-/**
- * A path can be:
- * - linear
- * - quadratic bezier
- * - cubic bezier
- */
-class Path {}
+// /**
+//  * A path can be:
+//  * - linear
+//  * - quadratic bezier
+//  * - cubic bezier
+//  */
+// class Path {}
 
 
 function linearPath(
@@ -217,7 +217,6 @@ function toDelta(
 }
 
 export {
-  Path,
   curvedPath,
   linearPath,
   translationPath,

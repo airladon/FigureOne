@@ -5,7 +5,7 @@ import {
   RangeBounds, RectBounds,
 } from '../../tools/g2';
 import type {
-  TypeRangeBoundsDefinition, TypeRectBoundsDefinition,
+  OBJ_RangeBounds, OBJ_RectBounds,
 } from '../../tools/geometry/Bounds';
 import { joinObjects, joinObjectsWithOptions } from '../../tools/tools';
 import { round, range } from '../../tools/math';
@@ -35,13 +35,13 @@ import type { OBJ_Polyline, OBJ_Polygon } from '../FigurePrimitives/FigurePrimit
  *
  * @property {boolean} [isMovable] `true` allows moving the pad and the
  * associated polyline point (`false`)
- * @property {TypeRangeBoundsDefinition | TypeRectBoundsDefinition | RangeBounds | RectBounds | 'figure'} [boundary]
+ * @property {OBJ_RangeBounds | OBJ_RectBounds | RangeBounds | RectBounds | 'figure'} [boundary]
  * boundary the pad can move within
  */
 /* eslint-enable max-len */
 export type OBJ_PolylinePadSingle = {
   isMovable?: boolean,
-  boundary?: TypeRangeBoundsDefinition | TypeRectBoundsDefinition | RangeBounds | RectBounds | 'figure',
+  boundary?: OBJ_RangeBounds | OBJ_RectBounds | RangeBounds | RectBounds | 'figure',
 }
 
 /**

@@ -188,10 +188,12 @@ class Rect {
  * Recorder state definition of a {@link Rect} that represents the left,
  * bottom, width and height of the rectangle.
  *
- * ```{
+ * ```
+ * {
  *   f1Type: 'rect',
  *   state: [number, number, number, number],
- * }```
+ * }
+ * ```
  */
 type TypeF1DefRect = {
   f1Type: 'rect',

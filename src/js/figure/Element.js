@@ -4,7 +4,7 @@ import {
   Transform, Point, Rect,
   spaceToSpaceTransform, getBoundingRect,
   clipAngle, getPoint, getTransform, getScale,
-  RectBounds, RangeBounds, getBounds,
+  getBounds,
   getBoundingBorder, isBuffer, getBorder, decelerateVector, decelerateValue,
   getPlane, Plane,
 } from '../tools/g2';
@@ -14,7 +14,7 @@ import { round } from '../tools/math';
 import { getState } from './Recorder/state';
 import type {
   TypeParsablePoint, TypeParsableTransform,
-  TypeBorder, TypeParsableBuffer, LineBounds, TypeParsablePlane,
+  TypeBorder, TypeParsableBuffer, TypeParsableBounds, TypeParsablePlane,
 } from '../tools/g2';
 import { isPointInPolygon } from '../tools/geometry/polygon';
 import { Recorder } from './Recorder/Recorder';
@@ -353,7 +353,7 @@ Rotation can only happen with some rotation transform elements:
 /**
  * Figure element move parameters
  * @property {type: 'rotation' | 'translation' | 'position' | 'scale' | 'scaleX' | 'scaleY' | 'scaleZ'} type
- * @property {RectBounds | LineBounds | RangeBounds | null} bounds rectangle to
+ * @property {TypeParsableBounds} bounds rectangle to
  * limit movement within
  * @property {Plane} plane movement plane
  * @property {TypeTransformValue} maxVelocity maximum velocity allowed (5)
@@ -363,7 +363,7 @@ Rotation can only happen with some rotation transform elements:
  */
 export type OBJ_ElementMove = {
   type: 'rotation' | 'translation' | 'position' | 'scale' | 'scaleX' | 'scaleY' | 'scaleZ',
-  bounds: RectBounds | LineBounds | RangeBounds | null,
+  bounds: TypeParsableBounds,
   plane: Plane,
   maxVelocity: number | TypeParsablePoint;
   freely: OBJ_ElementMoveFreely | false,
@@ -3580,7 +3580,16 @@ class FigureElement {
     if (bounds != null) {
       if (bounds.contains != null) {
         this.move.bounds = bounds;
-      } else {
+      } else if (
+        bounds.left !== undefined
+        || bounds.right !== undefined
+        || bounds.bottom !== undefined
+        || bounds.top !== undefined
+        || bounds.topDirection !== undefined
+        || bounds.rightDirection !== undefined
+        || bounds.position !== undefined
+        || bounds.normal !== undefined
+      ) {
         const b = joinObjects(
           {},
           {
@@ -3589,6 +3598,8 @@ class FigureElement {
           bounds,
         ); // $FlowFixMe
         this.move.bounds = getBounds(b);
+      } else {
+        this.move.bounds = getBounds(bounds);
       }
     }
     if (maxVelocity != null) {

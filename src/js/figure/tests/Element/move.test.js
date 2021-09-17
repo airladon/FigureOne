@@ -30,6 +30,7 @@ describe('Element Move', () => {
         side: 0.5,
         position: [0, 0, 0],
       });
+
       a = figure.add({
         name: 'a',
         make: 'gl',

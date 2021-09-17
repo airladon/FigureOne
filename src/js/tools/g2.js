@@ -28,6 +28,7 @@ import { rectToPolar, polarToRect } from './geometry/coordinates';
 import {
   RectBounds, LineBounds, Bounds, RangeBounds, getBounds,
 } from './geometry/Bounds';
+import type { TypeParsableBounds } from './geometry/Bounds';
 import {
   deg, minAngleDiff, getDeltaAngle3D, getDeltaAngle, normAngleTo90,
   threePointAngle, threePointAngleMin, normAngle, clipAngle,
@@ -63,6 +64,7 @@ export type {
   TypeParsablePlane,
   TypeRotationDirection,
   OBJ_TranslationPath,
+  TypeParsableBounds,
 };
 
 function isTransformArrayZero(
@@ -102,12 +104,11 @@ function spaceToSpaceTransform(
     y: { min: number, span: number },
     z: { min: number, span: number },
   },
-  name: string = '',
 ) {
   const xScale = s2.x.span / s1.x.span;
   const yScale = s2.y.span / s1.y.span;
   const zScale = s2.z.span / s1.z.span;
-  const t = new Transform(name)
+  const t = new Transform()
     .scale(xScale, yScale, zScale)
     .translate(
       s2.x.min - s1.x.min * xScale,

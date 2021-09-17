@@ -753,14 +753,14 @@ describe('Bounds', () => {
           .toEqual({ intersect: -10, reflection: 1, distance: 0 });
         // Outside Bounds, no intersection
         expect(bounds.intersect(-11, -1))
-          .toEqual({ intersect: null, reflection: -1, distance: 0 });
+          .toEqual({ intersect: -10, reflection: 1, distance: 0 });
         expect(bounds.intersect(11, 1))
-          .toEqual({ intersect: null, reflection: 1, distance: 0 });
+          .toEqual({ intersect: 10, reflection: -1, distance: 0 });
         // Outside Bounds intersection
         expect(bounds.intersect(-11, 1))
-          .toEqual({ intersect: -10, reflection: -1, distance: 1 });
+          .toEqual({ intersect: 10, reflection: -1, distance: 20 });
         expect(bounds.intersect(11, -1))
-          .toEqual({ intersect: 10, reflection: 1, distance: 1 });
+          .toEqual({ intersect: -10, reflection: 1, distance: 20 });
       });
     });
     describe('Bounded max, unbounded min', () => {
@@ -805,10 +805,10 @@ describe('Bounds', () => {
           .toEqual({ intersect: null, reflection: -1, distance: 0 });
         // Outside bounds intersect
         expect(bounds.intersect(11, -1))
-          .toEqual({ intersect: 10, reflection: 1, distance: 1 });
+          .toEqual({ intersect: null, reflection: -1, distance: 0 });
         // Outside bounds no intersect
         expect(bounds.intersect(11, 1))
-          .toEqual({ intersect: null, reflection: 1, distance: 0 });
+          .toEqual({ intersect: 10, reflection: -1, distance: 0 });
       });
     });
     describe('Unbounded max, bounded min', () => {
@@ -853,10 +853,10 @@ describe('Bounds', () => {
           .toEqual({ intersect: null, reflection: 1, distance: 0 });
         // Outside bounds intersect
         expect(bounds.intersect(-11, 1))
-          .toEqual({ intersect: -10, reflection: -1, distance: 1 });
+          .toEqual({ intersect: null, reflection: 1, distance: 0 });
         // Outside bounds no intersect
         expect(bounds.intersect(-11, -1))
-          .toEqual({ intersect: null, reflection: -1, distance: 0 });
+          .toEqual({ intersect: -10, reflection: 1, distance: 0 });
       });
     });
     describe('Unbounded max, unbounded min', () => {

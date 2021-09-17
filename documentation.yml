@@ -72,6 +72,10 @@ toc:
   - OBJ_ElementMoveFreely
   - OBJ_CameraControl
   - OBJ_Touch
+  - OBJ_RangeBounds
+  - OBJ_LineBounds
+  - OBJ_RectBounds
+  - TypeParsableBounds
   - name: Animation
     file: ./docs/api/tutorials/animation/animation.md
   - AnimationManager
@@ -192,6 +196,11 @@ toc:
   - TypeGLBufferUsage
   - TypeGLUniform
   - TypeGLPrimitive
+  - TypeFragmentShader
+  - TypeVertexShader
+  - OBJ_VertexShader
+  - OBJ_FragmentShader
+  - OBJ_GLColorData
   - name: 2D Geometry Tools
   - minAngleDiff
   - getTriangleCenter
@@ -240,6 +249,7 @@ toc:
   - OBJ_ElementPropertyMod
   - OBJ_ElementMods
   - OBJ_Scenarios
+  - TypeCoordinateSpace
   - name: Misc Geometry
   - isParsablePoint
   - isParsablePlane
@@ -262,6 +272,7 @@ toc:
   - TypeF1DefPlane
   - TypeF1DefLine
   - TypeF1DefTransform
+  - TypeF1DefRect
   - TypeBorder
   - TypeBasisObjectDefinition
   - TypeTransformRotation
@@ -344,11 +355,20 @@ toc:
   - OBJ_LineMove
   - TypeHAlign
   - TypeVAlign
-  - OBJ_GLColorData
-  - OBJ_VertexShader
-  - OBJ_FragmentShader
   - OBJ_Scene
   - TypeRotationDirection
+  - OBJ_LineDefinition
+  - BoundsIntersect
+  - BoundsPointIntersect
+  - BoundsValueIntersect
+  - Bounds
+  - TypeF1DefRangeBounds
+  - RangeBounds
+  - TypeF1DefRectBounds
+  - RectBounds
+  - TypeF1DefLineBounds
+  - LineBounds
+  - getBounds
   - name: Misc Geometry Creation
   - OBJ_PolygonPoints
   - OBJ_PolygonLinePoints
@@ -434,10 +454,4 @@ toc:
 
 
 
-# TypeRangeBoundsDefinition
-# TypeRectBoundsDefinition
-# TypeLineBoundsDefinition
-# OBJ_LineDefinition
-# Path
-# TypeF1DefRect
-# TypeCoordinateSpace
+
