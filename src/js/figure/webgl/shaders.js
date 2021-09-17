@@ -65,6 +65,14 @@ export type OBJ_VertexShader = {
   dimension?: 2 | 3,
 };
 
+/**
+ * A vertex shader can be defined with either:
+ * - `{ src: string, vars: Array<string> }`: a shader source code string and a
+ *   list of attributes and uniforms
+ * - `string`: an identifier to a built-in shader
+ * - {@link OBJ_VertexShader} `| Array<string | number | boolean>`: composing
+ *   options for a composable shader
+ */
 export type TypeVertexShader = string
   | { src: string, vars?: Array<string> }
   | Array<string | number | boolean>
@@ -115,6 +123,14 @@ export type OBJ_FragmentShader = {
   color?: 'vertex' | 'uniform' | 'texture',
 };
 
+/**
+ * A fragment shader can be defined with either:
+ * - `{ src: string, vars: Array<string> }`: a shader source code string and a
+ *   list of attributes and uniforms
+ * - `string`: an identifier to a built-in shader
+ * - {@link OBJ_VertexShader} `| Array<string | number | boolean>`: composing
+ *   options for a composable shader
+ */
 export type TypeFragmentShader = string
   | { src: string, vars?: Array<string> }
   | Array<string | number | boolean>
