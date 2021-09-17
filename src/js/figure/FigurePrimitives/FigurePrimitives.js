@@ -64,7 +64,7 @@ import type TimeKeeper from '../TimeKeeper';
 import type { Recorder } from '../Recorder/Recorder';
 import Scene from '../../tools/geometry/scene';
 import type {
-  OBJ_LineStyleSimple, OBJ_GenericGL, OBJ_Morph,
+  OBJ_LineStyleSimple, OBJ_GenericGL, OBJ_Morph, TypeGLPrimitive,
 } from './FigurePrimitiveTypes';
 import type {
   OBJ_Generic,
@@ -84,7 +84,6 @@ import type {
   OBJ_Text,
   OBJ_TextLine,
   OBJ_TextLines,
-  TypeGLPrimitive,
 } from './FigurePrimitiveTypes2D';
 import type {
   OBJ_Generic3,

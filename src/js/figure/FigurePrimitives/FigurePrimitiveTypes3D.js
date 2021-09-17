@@ -20,7 +20,7 @@ import type {
  * @property {TypeGLBufferUsage} [usage] use `'DYNAMIC'` if the shape's vertices
  * will be updated very frequently (`'STATIC'`)
  */
-export type OBJ_Generic3D = {
+export type OBJ_Generic3All = {
   light?: 'directional' | 'point' | 'ambient' | null,
   copy?: Array<CPY_Step | string> | CPY_Step,
   usage?: TypeGLBufferUsage,
@@ -29,7 +29,7 @@ export type OBJ_Generic3D = {
 
 /**
  * Options object for a {@link FigureElementPrimitive} of a generic 3D shape.
- * Extends and {@link OBJ_FigurePrimitive}
+ * Extends {@link OBJ_Generic3All} and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/generic3.png)
  *
@@ -134,10 +134,10 @@ export type OBJ_Generic3 = {
   normals?: Array<TypeParsablePoint>,
   colors?: Array<TypeColor>,
   texture?: OBJ_Texture,
-} & OBJ_Generic3D & OBJ_FigurePrimitive;
+} & OBJ_Generic3All & OBJ_FigurePrimitive;
 
 /**
- * Sphere shape options object that extends {@link OBJ_Generic3D}
+ * Sphere shape options object that extends {@link OBJ_Generic3All}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/sphere.png)
@@ -207,10 +207,10 @@ export type OBJ_Sphere = {
   normals?: 'curve' | 'flat',
   center?: TypeParsablePoint,
   lines?: boolean,
-} & OBJ_Generic3D & OBJ_FigurePrimitive;
+} & OBJ_Generic3All & OBJ_FigurePrimitive;
 
 /**
- * Cube shape options object that extends {@link OBJ_Generic3D}
+ * Cube shape options object that extends {@link OBJ_Generic3All}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/cube.png)
@@ -263,10 +263,10 @@ export type OBJ_Cube = {
   side?: number,
   center?: TypeParsablePoint,
   lines?: boolean,
-} & OBJ_FigurePrimitive & OBJ_Generic3D;
+} & OBJ_FigurePrimitive & OBJ_Generic3All;
 
 /**
- * Cylinder shape options object that extends {@link OBJ_Generic3D}
+ * Cylinder shape options object that extends {@link OBJ_Generic3All}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/cylinder.png)
@@ -362,11 +362,11 @@ export type OBJ_Cylinder = {
   length?: number,
   ends?: boolean | 1 | 2,
   rotation?: number,
-} & OBJ_FigurePrimitive & OBJ_Generic3D;
+} & OBJ_FigurePrimitive & OBJ_Generic3All;
 
 
 /**
- * 3D Line options object that extends {@link OBJ_Generic3D}
+ * 3D Line options object that extends {@link OBJ_Generic3All}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/line3.png)
@@ -452,11 +452,11 @@ export type OBJ_Line3 = {
   arrow?: OBJ_Line3Arrow,
   rotation?: number,
   normals?: 'curve' | 'flat',
-} & OBJ_FigurePrimitive & OBJ_Generic3D;
+} & OBJ_FigurePrimitive & OBJ_Generic3All;
 
 
 /**
- * Cone shape options object that extends {@link OBJ_Generic3D}
+ * Cone shape options object that extends {@link OBJ_Generic3All}
  * and {@link OBJ_FigurePrimitive}
  *
  * ![](./apiassets/cone.png)
@@ -526,10 +526,10 @@ export type OBJ_Cone = {
   length?: number,
   rotation?: number,
   lines?: boolean,
-} & OBJ_FigurePrimitive & OBJ_Generic3D;
+} & OBJ_FigurePrimitive & OBJ_Generic3All;
 
 /**
- * Revolve shape options object that extends {@link OBJ_Generic3D}
+ * Revolve shape options object that extends {@link OBJ_Generic3All}
  * and {@link OBJ_FigurePrimitive}.
  *
  * ![](./apiassets/revolve.png)
@@ -677,10 +677,10 @@ export type OBJ_Revolve = {
   axis?: TypeParsablePoint,
   rotation?: number,
   lines?: boolean,
-} & OBJ_FigurePrimitive & OBJ_Generic3D;
+} & OBJ_FigurePrimitive & OBJ_Generic3All;
 
 /**
- * Surface shape options object that extends {@link OBJ_Generic3D}
+ * Surface shape options object that extends {@link OBJ_Generic3All}
  * and {@link OBJ_FigurePrimitive}.
  *
  * ![](./apiassets/surface.png)
@@ -861,7 +861,7 @@ export type OBJ_Surface = {
   closeRows?: boolean,
   closeColumns?: boolean,
   lines?: boolean,
-} & OBJ_FigurePrimitive & OBJ_Generic3D;
+} & OBJ_FigurePrimitive & OBJ_Generic3All;
 
 /**
  * Camera control definition object that extends
