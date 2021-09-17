@@ -2288,6 +2288,36 @@
               
                 
                 <li><a
+                  href='#obj_elementmove'
+                  class="">
+                  OBJ_ElementMove
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_elementmovefreely'
+                  class="">
+                  OBJ_ElementMoveFreely
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_cameracontrol'
+                  class="">
+                  OBJ_CameraControl
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#animation'
                   class="h5 bold black caps">
                   Animation
@@ -4333,26 +4363,6 @@
                   href='#misc-figure-element'
                   class="h5 bold black caps">
                   Misc Figure Element
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_elementmovefreely'
-                  class="">
-                  OBJ_ElementMoveFreely
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_elementmove'
-                  class="">
-                  OBJ_ElementMove
                   
                 </a>
                 
@@ -6920,16 +6930,6 @@
               
                 
                 <li><a
-                  href='#obj_cameracontrol'
-                  class="">
-                  OBJ_CameraControl
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#obj_geopolygon'
                   class="">
                   OBJ_GEOPolygon
@@ -7083,7 +7083,7 @@
 </blockquote>
 <h4>Figures, Primitives and Collections</h4>
 <p>A <em>figure</em> is composed of one or more <em>figure elements</em>. A figure element is a shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.</p>
-<p>In the language of <strong>FigureOne</strong>, there are two types of <a href="FigureElements">FigureElements</a>:</p>
+<p>In the language of <strong>FigureOne</strong>, there are two types of <a href="#figureelement">FigureElement</a>:</p>
 <ul>
 <li><a href="#figureelementprimitive">FigureElementPrimitive</a> - an element that will draw something to the screen, such as a line, shape or text</li>
 <li><a href="#figureelementcollection">FigureElementCollection</a> - collections of elements that will move or be operated on together</li>
@@ -7155,9 +7155,9 @@ figure.add(
 <p>The canvas element is defined in screen pixels. WebGL re-maps the canvas pixels to -1 to +1 coordinates in both the vertical and horizontal directions, independent on the aspect ratio of the canvas.</p>
 <p>When the canvas aspect ratio is not a square, or it is more convenient to create a figure in a coordinate space not mapped between -1 to +1, then it is useful to have a separate figure space. In the example above, the figure space re-maps the GL space to 0 to 6 in the horizontal and 0 to 4 in the vertical.</p>
 <p>These are three examples of different coordinate spaces - <em>pixel space</em>, <em>GL space</em> (also called clip space in WebGL nomenclature) and <em>figure space</em>.</p>
-<p>If you want to move or modify an element, you need to think about what you want to modify it relative to. Do you want to move it relative to other elements in the figure? In other words, do you want to move it in figure space? Or do you want to move it relative to other elements within the parent, or local collection - <em>local space</em>. Alternately, you might want to modify the vertices of the shape, in <em>draw space</em>.</p>
-<p>In simple figures, where no collections are used, or collections don't transform their child elements you don't really need to think about what space you are working in. <em>Figure space</em> will be the same as <em>local space</em>, if you aren't changing vertices of primitives then draw space won't be used, and GL and pixel spaces are rarely needed for most figures.</p>
-<p>But if you are using collections, or if you are tying an element to a location on the screen you will need to convert points between the different spaces. In addition, it is useful to know about these different spaces as sometimes they are referred to in the documentation.</p>
+<p>If you want to move or modify an element, you need to think about what you want to modify it relative to. Do you want to move it relative to other elements in the figure? In other words, do you want to move it in figure space? Or do you want to move it relative to other elements within the parent collection - <em>local space</em>. Alternately, you might want to modify the vertices of the shape, in <em>draw space</em>.</p>
+<p>In simple figures, where no collections are used, or collections don't transform their child elements you don't really need to think about what space you are working in. <em>Figure space</em> will be the same as <em>local space</em>, if you aren't changing vertices of primitives then draw space won't be used, and GL and pixel spaces are rarely needed for most figures as FigureOne handles touch events.</p>
+<p>But if you are using collections you may need to convert points between the different spaces. In addition, it is useful to know about these different spaces as sometimes they are referred to in the documentation.</p>
 <p>One way to think about what space you are modifying is:</p>
 <ul>
 <li>Elements that are direct children of the figure: element transforms move the element in <em>figure space</em></li>
@@ -7170,10 +7170,10 @@ figure.add(
 <p>If the parent collection's parent is the figure itself, then its transform will move the collection in figure space.</p>
 <p>Converting between spaces is relatively straight forward. Figure elements have methods to find their position or bounds in figure, local or draw space. The figure has transforms that allow conversion between figure, GL and pixel spaces. For example see:</p>
 <ul>
-<li><a href="figureelementspacetransformmatrix">FigureElement.spaceTransformMatrix()</a></li>
-<li><a href="figureelementgetPosition">FigureElement.getPosition()</a></li>
-<li><a href="figureelementsetpositiontoelement">FigureElement.setPositionToElement()</a></li>
-<li><a href="spacetransformmatrix">Figure.spaceTransformMatrix()</a></li>
+<li><a href="#figureelementspacetransformmatrix">FigureElement.spaceTransformMatrix()</a></li>
+<li><a href="#figureelementgetposition">FigureElement.getPosition()</a></li>
+<li><a href="#figureelementsetpositiontoelement">FigureElement.setPositionToElement()</a></li>
+<li><a href="#spacetransformmatrix">Figure.spaceTransformMatrix()</a></li>
 </ul>
 <p>An example of where this is useful is if two FigureElements have different parents, and you want to move one to be in the same position as the other. To do this you would convert the target FigureElement position to figure space, and then to the local space of the FigureElement to move.</p>
 <h4>Drawing</h4>
@@ -7182,7 +7182,7 @@ figure.add(
 <p>The "Label" primitive has it's own transform that translates it to the middle of the horizontal line in local space. The transform will be combined with the one from its parent, creating a final transform to draw the label with.</p>
 <p>The primitive's shape or text definition never needs to change. At draw time, it is simply transformed by it's own transform and all the ancestors directly above it in the hierarchy. This is the same method used by WebGL as it reduces the amount of data that needs to be loaded into the graphics memory each draw frame. All the vertices of a shape are loaded into the graphics memory just once, and for each frame just a transform is passed to inform the graphics processor how to orient the vertices.</p>
 <p>If you have a dynamic shape whose vertices do change every frame (like a morphing animation), you can choose to load the vertices every frame. However, depending on the performance of the browser's host machine, and the number of vertices being adjusted, you might see a performance impact compared to a shape with a similar amount of vertices that do not change. That said, for shapes of reasonable size, this will not be a problem.</p>
-<h4>Shapes</h4>
+<h4>Creating Shapes</h4>
 <p>There are several ways to define a shape that a FigureElementPrimitive will draw. FigureOne comes with:</p>
 <ul>
 <li>Built-in shapes</li>
@@ -7203,7 +7203,7 @@ figure.add(
 <li><a href="#text">Text</a></li>
 <li><a href="##3d-shape-primitives">3D Shape Primitives</a></li>
 <li><a href="#2d-shape-collections">2D Shape Collections</a></li>
-<li><a href="#equations">Equations</a>)</li>
+<li><a href="#equations">Equations</a></li>
 </ul>
 <h5>Generic Shapes</h5>
 <p>If you need to create a shape that is very different from the built-in shapes then the <code>generic</code> or <code>generic3</code> primitive can be used. Most commonly, the <code>points</code> used to define the shape actually define a series of triangles that create a fill. The example below creates two triangles.</p>
@@ -7444,7 +7444,7 @@ labeledLine.setMovable();</pre>
 <h5><a id="drawing-boilerplate"></a> 2D Boilerplate</h5>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
 <span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">scene</span>: [-<span class="hljs-number">3</span>, -<span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> } });</pre>
-<h5><a id="3D-boilerplate"></a> 3D Boilerplate</h5>
+<h5><a id="shapes3d-boilerplate"></a> 3D Boilerplate</h5>
 <pre class='hljs'><span class="hljs-comment">// Create the figure</span>
 <span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure();
 
@@ -7491,8 +7491,7 @@ figure.add([
     <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;gridMinor&#x27;</span>,
     <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;grid&#x27;</span>,
     <span class="hljs-attr">bounds</span>: [-<span class="hljs-number">3</span>, -<span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>],
-    <span class="hljs-attr">yStep</span>: <span class="hljs-number">0.1</span>,
-    <span class="hljs-attr">xStep</span>: <span class="hljs-number">0.1</span>,
+    <span class="hljs-attr">step</span>: <span class="hljs-number">0.1</span>,
     <span class="hljs-attr">color</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>],
     <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.001</span> },
   },
@@ -7500,13 +7499,12 @@ figure.add([
     <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;gridMajor&#x27;</span>,
     <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;grid&#x27;</span>,
     <span class="hljs-attr">bounds</span>: [-<span class="hljs-number">3</span>, -<span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>],
-    <span class="hljs-attr">yStep</span>: <span class="hljs-number">0.5</span>,
-    <span class="hljs-attr">xStep</span>: <span class="hljs-number">0.5</span>,
+    <span class="hljs-attr">step</span>: <span class="hljs-number">0.5</span>,
     <span class="hljs-attr">color</span>: [<span class="hljs-number">0.8</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">1</span>],
     <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.004</span> },
   },
 ]);</pre>
-<h4><a id="animation-boilerplate"></a> Animation Boilerplate</h4>
+<h5><a id="animation-boilerplate"></a> Animation Boilerplate</h5>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
 <span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">scene</span>: [-<span class="hljs-number">3</span>, -<span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> } });
 
@@ -7524,8 +7522,7 @@ figure.add([
     <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;grid&#x27;</span>,
     <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;grid&#x27;</span>,
     <span class="hljs-attr">bounds</span>: [-<span class="hljs-number">3</span>, -<span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>],
-    <span class="hljs-attr">yStep</span>: <span class="hljs-number">0.1</span>,
-    <span class="hljs-attr">xStep</span>: <span class="hljs-number">0.1</span>,
+    <span class="hljs-attr">step</span>: <span class="hljs-number">0.1</span>,
     <span class="hljs-attr">color</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>],
     <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.001</span> },
   },
@@ -7533,8 +7530,7 @@ figure.add([
     <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;gridMajor&#x27;</span>,
     <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;grid&#x27;</span>,
     <span class="hljs-attr">bounds</span>: [-<span class="hljs-number">3</span>, -<span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>],
-    <span class="hljs-attr">yStep</span>: <span class="hljs-number">0.5</span>,
-    <span class="hljs-attr">xStep</span>: <span class="hljs-number">0.5</span>,
+    <span class="hljs-attr">step</span>: <span class="hljs-number">0.5</span>,
     <span class="hljs-attr">color</span>: [<span class="hljs-number">0.8</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">1</span>],
     <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.004</span> }
   },
@@ -7570,7 +7566,7 @@ figure.add([
 <li><a href="#line">Line</a></li>
 <li><a href="#plane">Plane</a></li>
 <li><a href="#rect">Rect</a></li>
-<li><a href="Translation">Translation</a> transform</li>
+<li><a href="#transform">Transform</a></li>
 </ul>
 <p>Each of these classes have convenience methods that make it easy to to work with them such as</p>
 <ul>
@@ -20909,7 +20905,7 @@ make this element touchable and movable</p>
   <p>Primitive figure element</p>
 <p>A primitive figure element is one that handles an object (<code>drawingObject</code>)
 that draws to the screen. This object may be a <a href="#globject">GLObject</a>, a
-<a href="TextObject">TextObject</a> or a <a href="HTMLObject">HTMLObject</a>}.</p>
+<a href="TextObject">TextObject</a> or a <a href="HTMLObject">HTMLObject</a>.</p>
 
   
   
@@ -33527,54 +33523,15 @@ figure.add({
   <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
 });
 hex.setTouchable({ <span class="hljs-attr">onClick</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Touched!&#x27;</span>)});</pre>
+<p style="text-align: center"><img src="./tutorials/interactive/touched.gif"></p>
 <p>Sometimes touching small elements can be challenging with a finger. Therefore it is useful to set how much of the area around an element can also trigger a touch event. To do so, borders and touch borders of elements can be defined.</p>
 <h4>Borders</h4>
 <h5>Two Dimensions</h5>
 <p>Two dimensional shapes can have borders and touch borders to determine when shapes overlap, or when a touch event is on a shape.</p>
-<p>Each FigureElementPrimitive has <code>drawBorder</code> and <code>drawBorderBuffer</code> properties. The <code>drawBorder</code> is typically a border around all the vertices that make up the shape. The <code>drawBorderBuffer</code> is usually equal to or larger than the <code>drawBorder</code> and often follows the contours of the border but with some additional buffer. Both types of borders can also be fully customized with an array of <code>Point</code>s.</p>
-<p>These properties are used to calculate the <code>border</code> and <code>touchBorder</code> of a shape. The <code>border</code> can be used for determining the shape's edge, and therefore any collision it has with other shapes or the figure's edge. The <code>touchBorder</code> is used to determine when a touch event is on the shape.</p>
-<p>While it may look like there are a lot of options to define borders below, there are really just three:</p>
-<ul>
-<li>Use the <code>drawBorder</code></li>
-<li>Use the <code>drawBorderBuffer</code></li>
-<li>Use a rectangle that encompasses <code>drawBorder</code> or <code>drawBorderBuffer</code> (or in the case of a FigureElementCollection, its children's borders and touchBorders) with some optional additional buffer</li>
-</ul>
-<p>There are several ways to define a <code>border</code> and <code>touchBorder</code> for a FigureElementPrimitive:</p>
-<ul>
-<li><code>'draw'</code> - use the <code>drawBorder</code> points</li>
-<li><code>'buffer'</code> - use the <code>drawBorderBuffer</code> points</li>
-<li><code>'rect'</code> - use the rectangle that encompasses the <code>drawBorder</code> points</li>
-<li><code>number</code> - same as rect but rect is larger by <code>number</code> on all its sides</li>
-<li><code>[number, number]</code> - same as rect but with left/right buffer and bottom/top buffer</li>
-<li><code>[number, number, number, number]</code> - same as rect but left, bottom, right, top buffer</li>
-<li><code>{ left?: number, bottom?: number, right?: number, top?: number }</code> - same as rect but left, bottom, right, top buffer</li>
-<li><code>Array&#x3C;TypeParsablePoint></code> - use a custom border</li>
-<li><code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code> - use more than one closed border that may be separate from each other</li>
-<li><code>'border'</code>: for <code>touchBorder</code> only - use whatever <code>border</code> uses</li>
-</ul>
-<p>A <code>FigureElementCollection</code>s <code>border</code> comes from its child elements:</p>
-<ul>
-<li><code>'children'</code> - use the <code>border</code>s of the children</li>
-<li><code>'rect'</code> - use the rectangle that encompasses the <code>border</code>s of all children</li>
-<li><code>number</code> - same as rect but rect is larger by <code>number</code> on all its sides</li>
-<li><code>[number, number]</code> - same as rect but with left/right buffer and bottom/top buffer</li>
-<li><code>[number, number, number, number]</code> - same as rect but left, bottom, right, top buffer</li>
-<li><code>{ left?: number, bottom?: number, right?: number, top?: number }</code> - same as rect but left, bottom, right, top buffer</li>
-<li><code>Array&#x3C;TypeParsablePoint></code> - use a custom border</li>
-<li><code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code> - use more than one closed border that may be separate from each other</li>
-</ul>
-<p>A <code>FigureElementCollection</code>s <code>touchBorder</code> also comes from its child elements:</p>
-<ul>
-<li><code>'border'</code>: use whatever <code>border</code> uses</li>
-<li><code>'children'</code> - use the <code>touchBorder</code>s of the children</li>
-<li><code>'rect'</code> - use the rectangle that encompasses the <code>touchBorder</code>s of all children</li>
-<li><code>number</code> - same as rect but rect is larger by <code>number</code> on all its sides</li>
-<li><code>[number, number]</code> - same as rect but with left/right buffer and bottom/top buffer</li>
-<li><code>[number, number, number, number]</code> - same as rect but left, bottom, right, top buffer</li>
-<li><code>{ left?: number, bottom?: number, right?: number, top?: number }</code> - same as rect but left, bottom, right, top buffer</li>
-<li><code>Array&#x3C;TypeParsablePoint></code> - use a custom border</li>
-<li><code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code> - use more than one closed border that may be separate from each other</li>
-</ul>
+<p>Each FigureElementPrimitive has <code>drawBorder</code> and <code>drawBorderBuffer</code> properties. The <code>drawBorder</code> is typically a border (convex hull) around all the vertices that make up the shape. The <code>drawBorderBuffer</code> is usually equal to or larger than the <code>drawBorder</code> and often follows the contours of the border but with some additional buffer. Built-in shapes will generate these automatically, but they can also be be fully customized with a <a href="#typeparsableborder">TypeParsableBorder</a> by the user.</p>
+<p><code>drawBorder</code> and <code>drawBorderBuffer</code> are then used to calculate the <code>border</code> and <code>touchBorder</code> of a shape. The <code>border</code> can be used for determining the shape's visual edge, and therefore any collision it has with other shapes or the figure's edge. The <code>touchBorder</code> is used to determine when a touch event is on the shape.</p>
+<p>The border and touch borders can be defined with either the <code>drawBorder</code> or <code>drawBorderBuffer</code> directly, as a rectangle with or without some buffer around these properties, or as a fully customized <a href="#typeparsableborder">TypeParsableBorder</a>.</p>
+<p>The documentation in <a href="#obj_generic">OBJ_Generic</a> has the specifics on how to define borders and touch borders for FigureElementPrimitives. Similarly the documentation for @{OBJ_Collection} details the same for FigureElementCollections.</p>
 <p>The border for a FigureElement can be retrieved with <a href="#figureelementgetborder">FigureElementPrimitive.getBorder()</a> and <a href="#figureelementcollectiongetborder">FigureElementCollection.getBorder()</a></p>
 <p>When debugging, the borders and touchBorders of all shapes can be shown with <a href="#showborders">Figure.showBorders()</a> and <a href="#showtouchborders">Figure.showTouchBorders()</a>.</p>
 <p>Borders and touch borders can be created during an object's creation:</p>
@@ -33588,13 +33545,15 @@ figure.add(
     <span class="hljs-comment">// with a buffer of 0.1 on the left and right, and 0.3 on bottom</span>
     <span class="hljs-comment">// and top</span>
     <span class="hljs-attr">touchBorder</span>: [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.3</span>],
+    <span class="hljs-attr">touch</span>: <span class="hljs-literal">true</span>,
     <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
   },
 );
 figure.showTouchBorders();</pre>
+<p style="text-align: center"><img src="./tutorials/interactive/touchborder.png"></p>
 <h5>Three Dimensions</h5>
-<p>In two dimensions, polygon borders are used to define the borders within which figure elements can be touched. Polygon borders are useful as arbitrary touch borders can be selected that are unrelated to the shape drawn to the screen.</p>
-<p>In three dimensions, defining volumes in which to select becomes challenging, both to define the volumes and to decide which volume was selected in a quick time on slower client devices.</p>
+<p>In two dimensions, polygon borders are used to define where a figure element can be touched. This is useful in examples such as equations, where equation elements are touchable, but spaced different to each other, so maximizing touch locations between elements means having touch borders that have different buffers on each side of the element.</p>
+<p>In three dimensions, defining volumes in which to select becomes challenging, both to define the volumes and to decide which volume was selected in a quick time on lower end client devices.</p>
 <p>Therefore, selection of 3D objects is performed in FigureOne by:</p>
 <ul>
 <li>Rendering each touchable element into a temporary texture</li>
@@ -33602,9 +33561,9 @@ figure.showTouchBorders();</pre>
 <li>The temporary texture pixels are mapped to the screen pixels and the corresponding touched pixel found</li>
 <li>The color of the pixel touched is mapped to the figure element with that color</li>
 </ul>
-<p>This method is common, performant, simple (as complex touch volumes don't need to be defined), and will automatically handle depth - elements in front of other elements relative to the camera will be selected.</p>
+<p>This method is commonly used, performant, simple (as complex touch volumes don't need to be defined), and will automatically handle depth - elements in front of other elements relative to the camera will be selected.</p>
 <p>When a larger touch border is required for a 3D element, use the <code>touchScale</code> property to scale the element in the temporary texture.</p>
-<p>When debugging, the <code>figure.showTouchable()</code> method can be used to render the temporary texture being used to determine what is touched to the screen.</p>
+<p>When debugging, the <a href="#showTouchable">Figure.showTouchable()</a> method can be used to render the temporary texture being used to determine what is touched to the screen.</p>
 <pre class='hljs'><span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">scene</span>: { <span class="hljs-attr">style</span>: <span class="hljs-string">&#x27;orthographic&#x27;</span> } });
 
 figure.add({
@@ -33614,16 +33573,56 @@ figure.add({
   <span class="hljs-attr">touchScale</span>: <span class="hljs-number">1.5</span>,
 });
 figure.showTouchable();</pre>
+<p style="text-align: center"><img src="./tutorials/interactive/touchable.png"></p>
 <h4>Move Interactivity</h4>
-<p>Once an element is touched, it can be moved. How movement is defined depends on whether the movement is happening in two or three dimensions.</p>
-<h5>Two Dimensions</h5>
+<p>Once an element is touched, it can be moved.</p>
+<p>To make an element movable, use the <code>move</code> property during its definition or use the <a href="#figureelementsetmove">FigureElement.setMove()</a> on an instantiated element.</p>
+<pre class='hljs'><span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure();
+figure.add(
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;polygon&#x27;</span>,
+    <span class="hljs-attr">sides</span>: <span class="hljs-number">8</span>,
+    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.2</span>,
+    <span class="hljs-attr">move</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+  },
+);</pre>
+<p style="text-align: center"><img src="./tutorials/interactive/move.gif"></p>
+<p>By default, element movement will be translation. <a href="#obj_elementmove">OBJ_ElementMove</a> options can be used to make movement a rotation or scaling and add bounds to movement.</p>
+<h5>Moving Freely</h5>
+<p>When an element is being moved and is released it can either immediately stop, or continue on with its current velocity and some deceleration (move freely).</p>
+<p>By default, elements will move freely after they are released (if they were released during movement). The options for if and how they move freely are set within the <a href="#obj_elementmove">OBJ_ElementMove</a> options object.</p>
+<p>This example makes the free movement deceleration small (so free movement is pronounced), and only allows movement within rectangular bounds.</p>
+<pre class='hljs'><span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure()
+figure.add(
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;polygon&#x27;</span>,
+    <span class="hljs-attr">sides</span>: <span class="hljs-number">8</span>,
+    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.2</span>,
+    <span class="hljs-attr">move</span>: {
+      <span class="hljs-attr">freely</span>: {
+        <span class="hljs-attr">deceleration</span>: <span class="hljs-number">0.01</span>,
+      },
+      <span class="hljs-attr">bounds</span>: { <span class="hljs-attr">left</span>: -<span class="hljs-number">0.8</span>, <span class="hljs-attr">bottom</span>: -<span class="hljs-number">0.8</span>, <span class="hljs-attr">right</span>: <span class="hljs-number">0.8</span>, <span class="hljs-attr">top</span>: <span class="hljs-number">0.8</span> },
+    },
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+  },
+);</pre>
+<p style="text-align: center"><img src="./tutorials/interactive/freemovement.gif"></p>
+<h5>Notifications</h5>
+<p>Often it is desirable to change the state of other elements when an element is moved. Use the FigureElement's <a href="#notificationmanager">NotificationManager</a> to get notifications when an element has moved. Useful notifications are:</p>
+<ul>
+<li><code>beforeMove</code> - sent before the element transform has been updated with a move event</li>
+<li><code>beforeMovingFreely</code> - sent before the element transform has been updated with a move freely frame</li>
+<li><code>setTransform</code> - sent after the element transform has been updated</li>
+</ul>
 <h5>Three Dimensions</h5>
 <p>In three dimensions a choice needs to be made about how a mouse of finger movement on a 2D screen translates to a movement in 3D space.</p>
 <p>The default way to do this in FigureOne is to use a movement plane (<code>element.move.plane</code>). FigureOne will automatically project a movement on the screen onto this plane and move the element accordingly.</p>
 <p>For example, to create a cube that can be translated in the YZ plane:</p>
 <blockquote>
 <blockquote>
-<p>For the following examples, use the explanation <a href="#shapes3d-explanation-boilerplate">boiler plate</a> from the 3D shape primitives section.</p>
+<p>For the following examples, use <a href="#shapes3d-boilerplate">3D boiler plate</a>.</p>
 </blockquote>
 </blockquote>
 <pre class='hljs'><span class="hljs-comment">// Add a grid in the YZ plane</span>
@@ -33651,15 +33650,9 @@ figure.add({
   },
 });</pre>
 <p><img src="./tutorials/shapes3d/xztranslate.gif" alt=""></p>
-<p>TODO note on rotation challenges</p>
 <h4>Camera Interactivity</h4>
 <p>In 3D figures, it is often useful to allow a user to change the scene manually using gestures. This can be achieved by changing the scene with <code>setCamera</code> to change the camera location and <code>setProjection</code> to change the expanse of visible space.</p>
 <p>FigureOne also provides a built-in FigureElementPrimitive <code>cameraControl</code> (see <a href="#obj_cameracontrol">OBJ_CameraControl</a>) which defines a transparent rectangle in which the user can swipe horizontally to rotate a scene around a vertical axis, and swipe vertically to change the elevation of the camera relative to the vertical axis.</p>
-<blockquote>
-<blockquote>
-<p>Use the explanation <a href="#shapes3d-explanation-boilerplate">boiler plate</a> from the 3D shape primitives section for this example.</p>
-</blockquote>
-</blockquote>
 <pre class='hljs'>figure.add([
   {
     <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cube&#x27;</span>,
@@ -33675,6 +33668,455 @@ figure.add({
 
   
 </section></div>
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_elementmove'>
+      OBJ_ElementMove
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Figure element move parameters</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>bounds</span> <code class='quiet'>((RectBounds | LineBounds | RangeBounds | null))</code>
+          : rectangle to
+limit movement within
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>plane</span> <code class='quiet'>(<a href="#plane">Plane</a>)</code>
+          : movement plane
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>maxVelocity</span> <code class='quiet'>(TypeTransformValue)</code>
+          : maximum velocity allowed (5)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>freely</span> <code class='quiet'>(<a href="#obj_elementmovefreely">OBJ_ElementMoveFreely</a>)</code>
+          : free movement parameters - use
+false for disabling free movement after touch up
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>element</span> <code class='quiet'>((<a href="#figureelement">FigureElement</a> | null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>))</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>type</span> <code class='quiet'>((<code>"rotation"</code> | <code>"translation"</code> | <code>"position"</code> | <code>"scale"</code> | <code>"scaleX"</code> | <code>"scaleY"</code> | <code>"scaleZ"</code>))</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_elementmovefreely'>
+      OBJ_ElementMoveFreely
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Figure element move freely parameters</p>
+<p>If a figure element is released from moving with some velocity
+then these parameters will define how it continues to move freely</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>zeroVelocityThreshold</span> <code class='quiet'>(TypeTransformValue)</code>
+          : used to overcome
+limitations of floating point numbers not reaching 0
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>deceleration</span> <code class='quiet'>(TypeTransformValue)</code>
+          : amount to decelerate in local
+space units per second squared
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>bounceLoss</span> <code class='quiet'>(TypeTransformValue)</code>
+          : 0.5 results in 50% velocity loss
+if bouncing of boundary
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>callback</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>): void)?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_cameracontrol'>
+      OBJ_CameraControl
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Camera control definition object that extends
+and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
+<p>A camera control is a transparent rectangle that uses touch and drag
+gestures to rotate the position of the camera in a 3D scene around a vertical
+axis.</p>
+<p>The vertical axis will always remain vertical. Left/right movements will
+rotate the scene around the vertical axis (in the azimuth of the vertical
+axis), while up/down movements will change the elevation relative to the
+vertical axis.</p>
+<p>The transparent rectangle will be positioned relative to the 2D HTML canvas
+the figure is drawn in on the screen. The <code>left</code>, <code>bottom</code>, <code>width</code> and
+<code>height</code> properties are numbers from 0 to 1 which represent percentage of
+the screen width and height.</p>
+<p>Thus for the rectangle to cover the entire screen, values of <code>left: 0</code>,
+<code>bottom: 0</code>, <code>width: 1</code> and <code>height: 1</code> would be used (these are the default
+values as well).</p>
+<p>By default, the figure's <a href="Scene">Scene</a> camera position is modified. If an
+element's custom scene is to be controlled, use the <code>scene</code> property to link
+to it.</p>
+<p>How fast the camera is rotated in the aziumuth and elevation is controlled by
+the <code>sensitivity</code>, <code>xSensitivity</code> and <code>ySensitivity</code> properties.
+A higher sensitivity value will result in more rotation for the same user
+movement. If only azimuthal or elevation rotation is desired set
+<code>ySensitivity</code> or <code>xSensitivity</code> to 0 respectively.</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>left</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : screen left position to place the control
+rectangle. 0 is the left edge, while 1 is the right edge (
+<code>0</code>
+).
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>bottom</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : screen bottom position to place the control
+rectangle. 0 is the bottom edge, while 1 is the top edge (
+<code>0</code>
+).
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : width of control rectangle. 1 is the full
+width of the drawing canvas (
+<code>1</code>
+).
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : height of control rectangle. 1 is the full
+height of the drawing canvas (
+<code>1</code>
+).
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>axis</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : Axis to keep vertical as camera is
+rotated. The axis vector and scene.camera.up vector should be in the same
+plane (
+<code>[0, 1, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scene</span> <code class='quiet'>((Scene | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
+          : Use this to constrol a scene that is not
+the default Figure scene.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sensitivity</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : sensitivity of camera position relative to
+user movement where larger numbers result in more rotation for the same
+movement (
+<code>5</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xSensitivity</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : sensitivity to a horizontal user movement.
+Setting this to 0 will mean the scene doesn't not rotate aziumthally (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>ySensitivity</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : sensitivity to a vertical user movement.
+Setting this to 0 will mean the elevation does not change (
+<code>1</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Add a camera control that will cover the whole screen</span>
+
+figure.add([
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cylinder&#x27;</span>,
+    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.01</span>,
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">line</span>: [[-<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]],
+  },
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cylinder&#x27;</span>,
+    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.01</span>,
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">line</span>: [[<span class="hljs-number">0</span>, -<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
+  },
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cylinder&#x27;</span>,
+    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.01</span>,
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">line</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, -<span class="hljs-number">1</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>]],
+  },
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;grid&#x27;</span>,
+    <span class="hljs-attr">bounds</span>: [-<span class="hljs-number">0.8</span>, -<span class="hljs-number">0.8</span>, <span class="hljs-number">1.6</span>, <span class="hljs-number">1.6</span>],
+    <span class="hljs-attr">xStep</span>: <span class="hljs-number">0.05</span>,
+    <span class="hljs-attr">yStep</span>: <span class="hljs-number">0.05</span>,
+    <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.002</span> },
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">transform</span>: [<span class="hljs-string">&#x27;r&#x27;</span>, <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+  },
+]);
+
+<span class="hljs-comment">// Add camera control</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cameraControl&#x27;</span>,
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Add a thin bar at the bottom of the figure that rotates the scene in the</span>
+<span class="hljs-comment">// azimuth only</span>
+
+figure.add([
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cylinder&#x27;</span>,
+    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.01</span>,
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">line</span>: [[-<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]],
+  },
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cylinder&#x27;</span>,
+    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.01</span>,
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">line</span>: [[<span class="hljs-number">0</span>, -<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
+  },
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cylinder&#x27;</span>,
+    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.01</span>,
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">line</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, -<span class="hljs-number">1</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>]],
+  },
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;grid&#x27;</span>,
+    <span class="hljs-attr">bounds</span>: [-<span class="hljs-number">0.8</span>, -<span class="hljs-number">0.8</span>, <span class="hljs-number">1.6</span>, <span class="hljs-number">1.6</span>],
+    <span class="hljs-attr">xStep</span>: <span class="hljs-number">0.05</span>,
+    <span class="hljs-attr">yStep</span>: <span class="hljs-number">0.05</span>,
+    <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.002</span> },
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">transform</span>: [<span class="hljs-string">&#x27;r&#x27;</span>, <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+  },
+]);
+
+<span class="hljs-comment">// Add a moveable cube</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cube&#x27;</span>,
+  <span class="hljs-attr">side</span>: <span class="hljs-number">0.3</span>,
+  <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+  <span class="hljs-attr">center</span>: [<span class="hljs-number">0.3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+  <span class="hljs-attr">move</span>: {
+    <span class="hljs-attr">plane</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
+  },
+});
+
+<span class="hljs-comment">// Add camera control bar at the bottom of the screen that only allows</span>
+<span class="hljs-comment">// rotation in the azimuth. As the camera control bar does not overlap the</span>
+<span class="hljs-comment">// cube, then both the cube can moved, and the scene rotated with the bar.</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cameraControl&#x27;</span>,
+  <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.2</span>],
+  <span class="hljs-attr">ySensitivity</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">height</span>: <span class="hljs-number">0.1</span>,
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
           
         
           
@@ -59108,188 +59550,6 @@ the points represent lines, then the array of normals will be empty.
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_elementmovefreely'>
-      OBJ_ElementMoveFreely
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Figure element move freely parameters</p>
-<p>If a figure element is released from moving with some velocity
-then these parameters will define how it continues to move freely</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>zeroVelocityThreshold</span> <code class='quiet'>(TypeTransformValue)</code>
-          : used to overcome
-limitations of floating point numbers not reaching 0
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>deceleration</span> <code class='quiet'>(TypeTransformValue)</code>
-          : amount to decelerate in local
-space units per second squared
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>bounceLoss</span> <code class='quiet'>(TypeTransformValue)</code>
-          : 0.5 results in 50% velocity loss
-if bouncing of boundary
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>callback</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>): void)?)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_elementmove'>
-      OBJ_ElementMove
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Figure element move parameters</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>bounds</span> <code class='quiet'>((RectBounds | LineBounds | RangeBounds | null))</code>
-          : rectangle to
-limit movement within
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>plane</span> <code class='quiet'>(<a href="#plane">Plane</a>)</code>
-          : movement plane
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>maxVelocity</span> <code class='quiet'>(TypeTransformValue)</code>
-          : maximum velocity allowed (5)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>freely</span> <code class='quiet'>(<a href="#obj_elementmovefreely">OBJ_ElementMoveFreely</a>)</code>
-          : free movement parameters - use
-false for disabling free movement after touch up
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>element</span> <code class='quiet'>((<a href="#figureelement">FigureElement</a> | null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>))</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>type</span> <code class='quiet'>((<code>"rotation"</code> | <code>"translation"</code> | <code>"position"</code> | <code>"scale"</code> | <code>"scaleX"</code> | <code>"scaleY"</code> | <code>"scaleZ"</code>))</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='elementmovementstate'>
       ElementMovementState
     </h3>
@@ -83862,273 +84122,6 @@ of unique colors used for touch determination (debug only) (
 
   
 
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_cameracontrol'>
-      OBJ_CameraControl
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Camera control definition object that extends
-and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
-<p>A camera control is a transparent rectangle that uses touch and drag
-gestures to rotate the position of the camera in a 3D scene around a vertical
-axis.</p>
-<p>The vertical axis will always remain vertical. Left/right movements will
-rotate the scene around the vertical axis (in the azimuth of the vertical
-axis), while up/down movements will change the elevation relative to the
-vertical axis.</p>
-<p>The transparent rectangle will be positioned relative to the 2D HTML canvas
-the figure is drawn in on the screen. The <code>left</code>, <code>bottom</code>, <code>width</code> and
-<code>height</code> properties are numbers from 0 to 1 which represent percentage of
-the screen width and height.</p>
-<p>Thus for the rectangle to cover the entire screen, values of <code>left: 0</code>,
-<code>bottom: 0</code>, <code>width: 1</code> and <code>height: 1</code> would be used (these are the default
-values as well).</p>
-<p>By default, the figure's <a href="Scene">Scene</a> camera position is modified. If an
-element's custom scene is to be controlled, use the <code>scene</code> property to link
-to it.</p>
-<p>How fast the camera is rotated in the aziumuth and elevation is controlled by
-the <code>sensitivity</code>, <code>xSensitivity</code> and <code>ySensitivity</code> properties.
-A higher sensitivity value will result in more rotation for the same user
-movement. If only azimuthal or elevation rotation is desired set
-<code>ySensitivity</code> or <code>xSensitivity</code> to 0 respectively.</p>
-
-  
-    <p style="display: none;">      Type:
-      any
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>left</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : screen left position to place the control
-rectangle. 0 is the left edge, while 1 is the right edge (
-<code>0</code>
-).
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>bottom</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : screen bottom position to place the control
-rectangle. 0 is the bottom edge, while 1 is the top edge (
-<code>0</code>
-).
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : width of control rectangle. 1 is the full
-width of the drawing canvas (
-<code>1</code>
-).
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : height of control rectangle. 1 is the full
-height of the drawing canvas (
-<code>1</code>
-).
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>axis</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : Axis to keep vertical as camera is
-rotated. The axis vector and scene.camera.up vector should be in the same
-plane (
-<code>[0, 1, 0]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scene</span> <code class='quiet'>((Scene | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
-          : Use this to constrol a scene that is not
-the default Figure scene.
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>sensitivity</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
-          : sensitivity of camera position relative to
-user movement where larger numbers result in more rotation for the same
-movement (
-<code>5</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>xSensitivity</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
-          : sensitivity to a horizontal user movement.
-Setting this to 0 will mean the scene doesn't not rotate aziumthally (
-<code>1</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>ySensitivity</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
-          : sensitivity to a vertical user movement.
-Setting this to 0 will mean the elevation does not change (
-<code>1</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Add a camera control that will cover the whole screen</span>
-
-figure.add([
-  {
-    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cylinder&#x27;</span>,
-    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.01</span>,
-    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-    <span class="hljs-attr">line</span>: [[-<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]],
-  },
-  {
-    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cylinder&#x27;</span>,
-    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.01</span>,
-    <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-    <span class="hljs-attr">line</span>: [[<span class="hljs-number">0</span>, -<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
-  },
-  {
-    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cylinder&#x27;</span>,
-    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.01</span>,
-    <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
-    <span class="hljs-attr">line</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, -<span class="hljs-number">1</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>]],
-  },
-  {
-    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;grid&#x27;</span>,
-    <span class="hljs-attr">bounds</span>: [-<span class="hljs-number">0.8</span>, -<span class="hljs-number">0.8</span>, <span class="hljs-number">1.6</span>, <span class="hljs-number">1.6</span>],
-    <span class="hljs-attr">xStep</span>: <span class="hljs-number">0.05</span>,
-    <span class="hljs-attr">yStep</span>: <span class="hljs-number">0.05</span>,
-    <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.002</span> },
-    <span class="hljs-attr">color</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>],
-    <span class="hljs-attr">transform</span>: [<span class="hljs-string">&#x27;r&#x27;</span>, <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
-  },
-]);
-
-<span class="hljs-comment">// Add camera control</span>
-figure.add({
-  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cameraControl&#x27;</span>,
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Add a thin bar at the bottom of the figure that rotates the scene in the</span>
-<span class="hljs-comment">// azimuth only</span>
-
-figure.add([
-  {
-    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cylinder&#x27;</span>,
-    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.01</span>,
-    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-    <span class="hljs-attr">line</span>: [[-<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]],
-  },
-  {
-    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cylinder&#x27;</span>,
-    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.01</span>,
-    <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-    <span class="hljs-attr">line</span>: [[<span class="hljs-number">0</span>, -<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
-  },
-  {
-    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cylinder&#x27;</span>,
-    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.01</span>,
-    <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
-    <span class="hljs-attr">line</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, -<span class="hljs-number">1</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>]],
-  },
-  {
-    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;grid&#x27;</span>,
-    <span class="hljs-attr">bounds</span>: [-<span class="hljs-number">0.8</span>, -<span class="hljs-number">0.8</span>, <span class="hljs-number">1.6</span>, <span class="hljs-number">1.6</span>],
-    <span class="hljs-attr">xStep</span>: <span class="hljs-number">0.05</span>,
-    <span class="hljs-attr">yStep</span>: <span class="hljs-number">0.05</span>,
-    <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.002</span> },
-    <span class="hljs-attr">color</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>],
-    <span class="hljs-attr">transform</span>: [<span class="hljs-string">&#x27;r&#x27;</span>, <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
-  },
-]);
-
-<span class="hljs-comment">// Add a moveable cube</span>
-figure.add({
-  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cube&#x27;</span>,
-  <span class="hljs-attr">side</span>: <span class="hljs-number">0.3</span>,
-  <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-  <span class="hljs-attr">center</span>: [<span class="hljs-number">0.3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
-  <span class="hljs-attr">move</span>: {
-    <span class="hljs-attr">plane</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
-  },
-});
-
-<span class="hljs-comment">// Add camera control bar at the bottom of the screen that only allows</span>
-<span class="hljs-comment">// rotation in the azimuth. As the camera control bar does not overlap the</span>
-<span class="hljs-comment">// cube, then both the cube can moved, and the scene rotated with the bar.</span>
-figure.add({
-  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cameraControl&#x27;</span>,
-  <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.2</span>],
-  <span class="hljs-attr">ySensitivity</span>: <span class="hljs-number">0</span>,
-  <span class="hljs-attr">height</span>: <span class="hljs-number">0.1</span>,
-});</pre>
-    
   
 
   

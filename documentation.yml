@@ -8,6 +8,11 @@ toc:
   - Plane
   - Rect
   - Transform
+  - TypeParsablePoint
+  - TypeParsableLine
+  - TypeParsablePlane
+  - TypeParsableRect
+  - TypeParsableTransform
   - name: Figure
     file: ./docs/api/tutorials/figure/figure.md
   - Figure
@@ -16,12 +21,9 @@ toc:
   - FigureElement
   - FigureElementPrimitive
   - FigureElementCollection
-  - name: Base Shape Primitives
-  - OBJ_FigurePrimitive
-  - OBJ_GenericGL
-  - OBJ_Generic3D
   - name: 2D Shape Primitives
     file: ./docs/api/tutorials/draw/draw.md
+  - OBJ_FigurePrimitive
   - OBJ_Generic
   - OBJ_Line
   - OBJ_Polyline
@@ -40,6 +42,7 @@ toc:
   - OBJ_TextLines
   - name: 3D Shape Primitives
     file: ./docs/api/tutorials/shapes3D/shapes3d.md
+  - OBJ_Generic3D
   - OBJ_Generic3
   - OBJ_Cube
   - OBJ_Sphere
@@ -65,6 +68,10 @@ toc:
   - COL_Plot
   - name: Interactivity
     file: ./docs/api/tutorials/interactive/interactive.md
+  - OBJ_ElementMove
+  - OBJ_ElementMoveFreely
+  - OBJ_CameraControl
+  - OBJ_Touch
   - name: Animation
     file: ./docs/api/tutorials/animation/animation.md
   - AnimationManager
@@ -177,12 +184,14 @@ toc:
   - TypeRecorderTime
   - name: Shaders
     file: ./docs/api/tutorials/shaders/shaders.md
+  - OBJ_GenericGL
   - OBJ_GLAttribute
   - OBJ_GLVertexBuffer
   - OBJ_GLUniform
   - TypeGLBufferType
   - TypeGLBufferUsage
   - TypeGLUniform
+  - TypeGLPrimitive
   - name: 2D Geometry Tools
   - minAngleDiff
   - getTriangleCenter
@@ -194,7 +203,7 @@ toc:
   - normAngle
   - getDeltaAngle
   - getDeltaAngle3D
-  - name: 2D Geometry Creation
+  - name: Geometry Creation
   - polygon
   - polygonLine
   - cone
@@ -214,8 +223,6 @@ toc:
   - randElements
   - removeRandElement
   - name: Misc Figure Element
-  - OBJ_ElementMoveFreely
-  - OBJ_ElementMove
   - ElementMovementState
   - ElementPulseState
   - ElementState
@@ -237,10 +244,6 @@ toc:
   - isParsablePoint
   - isParsablePlane
   - isParsableTransform
-  - TypeParsablePoint
-  - TypeParsableLine
-  - TypeParsableRect
-  - TypeParsableTransform
   - getPoint
   - getPoints
   - getScale
@@ -256,7 +259,6 @@ toc:
   - TypeParsableBuffer
   - getBuffer
   - TypeParsableBorder
-  - TypeParsablePlane
   - TypeF1DefPlane
   - TypeF1DefLine
   - TypeF1DefTransform
@@ -346,7 +348,10 @@ toc:
   - OBJ_VertexShader
   - OBJ_FragmentShader
   - OBJ_Scene
+  - TypeRotationDirection
   - name: Misc Geometry Creation
+  - OBJ_PolygonPoints
+  - OBJ_PolygonLinePoints
   - OBJ_ConePoints
   - OBJ_CubePoints
   - OBJ_CylinderPoints
@@ -428,66 +433,11 @@ toc:
   #         - TypeF1DefRect
 
 
-# OBJ_GEOPolygon
-# OBJ_GEOPolygonLine
-# polygon
-# polygonLine
-# OBJ_ConePoints
-# cone
-# OBJ_CubePoints
-# cube
-# OBJ_CylinderPoints
-# OBJ_RevolvePoints
-# revolve
-# OBJ_SpherePoints
-# sphere
-# surface
-# normAngle
-# TypeRotationDirection
-# getDeltaAngle
-# getDeltaAngle3D
-# OBJ_LineIntersect
-# constructor
-# theta
-# phi
-# setP1
-# setP2
-# unitVector
-# vector
-# getPoint
-# reverse
-# angle
-# round
-# length
-# midPoint
-# pointAtPercent
-# pointAtLength
-# hasPointAlong
-# hasPointOn
-# distanceToPoint
-# isEqualTo
-# hasLineWithin
-# isAlongLine
-# isWithinLine
-# offset
-# offset2D
-# distanceToLine
-# pointProjection
-# intersectsWith
-# clipPoint
+
+# TypeRangeBoundsDefinition
+# TypeRectBoundsDefinition
+# TypeLineBoundsDefinition
+# OBJ_LineDefinition
 # Path
-# getPlane
-# Plane ▸
-# isParsablePoint
-# TypeBasisObjectDefinition
-# TypeRotationComponentName
-# TypeUserRotationDefinition
-# TypeUserTranslationDefinition
-# TypeUserScaleDefinition
-# TypeUserCustomDefinition
-# TypeUserBasisDefinition
-# TypeTransformComponentType
-# TypeScaleTransformComponent
-# TypeParsableArrayTransform
-# fourByFour
-# tester
+# TypeF1DefRect
+# TypeCoordinateSpace

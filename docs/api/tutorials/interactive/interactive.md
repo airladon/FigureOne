@@ -41,6 +41,8 @@ const hex = figure.add({
 hex.setTouchable({ onClick: () => console.log('Touched!')});
 ```
 
+<p style="text-align: center"><img src="./tutorials/interactive/touched.gif"></p>
+
 Sometimes touching small elements can be challenging with a finger. Therefore it is useful to set how much of the area around an element can also trigger a touch event. To do so, borders and touch borders of elements can be defined.
 
 #### Borders
@@ -49,47 +51,13 @@ Sometimes touching small elements can be challenging with a finger. Therefore it
 
 Two dimensional shapes can have borders and touch borders to determine when shapes overlap, or when a touch event is on a shape.
 
-Each FigureElementPrimitive has `drawBorder` and `drawBorderBuffer` properties. The `drawBorder` is typically a border around all the vertices that make up the shape. The `drawBorderBuffer` is usually equal to or larger than the `drawBorder` and often follows the contours of the border but with some additional buffer. Both types of borders can also be fully customized with an array of `Point`s.
+Each FigureElementPrimitive has `drawBorder` and `drawBorderBuffer` properties. The `drawBorder` is typically a border (convex hull) around all the vertices that make up the shape. The `drawBorderBuffer` is usually equal to or larger than the `drawBorder` and often follows the contours of the border but with some additional buffer. Built-in shapes will generate these automatically, but they can also be be fully customized with a {@link TypeParsableBorder} by the user.
 
-These properties are used to calculate the `border` and `touchBorder` of a shape. The `border` can be used for determining the shape's edge, and therefore any collision it has with other shapes or the figure's edge. The `touchBorder` is used to determine when a touch event is on the shape.
+`drawBorder` and `drawBorderBuffer` are then used to calculate the `border` and `touchBorder` of a shape. The `border` can be used for determining the shape's visual edge, and therefore any collision it has with other shapes or the figure's edge. The `touchBorder` is used to determine when a touch event is on the shape.
 
-While it may look like there are a lot of options to define borders below, there are really just three:
-* Use the `drawBorder`
-* Use the `drawBorderBuffer`
-* Use a rectangle that encompasses `drawBorder` or `drawBorderBuffer` (or in the case of a FigureElementCollection, its children's borders and touchBorders) with some optional additional buffer
+The border and touch borders can be defined with either the `drawBorder` or `drawBorderBuffer` directly, as a rectangle with or without some buffer around these properties, or as a fully customized {@link TypeParsableBorder}.
 
-There are several ways to define a `border` and `touchBorder` for a FigureElementPrimitive:
-* `'draw'` - use the `drawBorder` points
-* `'buffer'` - use the `drawBorderBuffer` points
-* `'rect'` - use the rectangle that encompasses the `drawBorder` points
-* `number` - same as rect but rect is larger by `number` on all its sides
-* `[number, number]` - same as rect but with left/right buffer and bottom/top buffer
-* `[number, number, number, number]` - same as rect but left, bottom, right, top buffer
-* `{ left?: number, bottom?: number, right?: number, top?: number }` - same as rect but left, bottom, right, top buffer
-* `Array<TypeParsablePoint>` - use a custom border
-* `Array<Array<TypeParsablePoint>>` - use more than one closed border that may be separate from each other
-* `'border'`: for `touchBorder` only - use whatever `border` uses
-
-A `FigureElementCollection`s `border` comes from its child elements:
-* `'children'` - use the `border`s of the children
-* `'rect'` - use the rectangle that encompasses the `border`s of all children
-* `number` - same as rect but rect is larger by `number` on all its sides
-* `[number, number]` - same as rect but with left/right buffer and bottom/top buffer
-* `[number, number, number, number]` - same as rect but left, bottom, right, top buffer
-* `{ left?: number, bottom?: number, right?: number, top?: number }` - same as rect but left, bottom, right, top buffer
-* `Array<TypeParsablePoint>` - use a custom border
-* `Array<Array<TypeParsablePoint>>` - use more than one closed border that may be separate from each other
-
-A `FigureElementCollection`s `touchBorder` also comes from its child elements:
-* `'border'`: use whatever `border` uses
-* `'children'` - use the `touchBorder`s of the children
-* `'rect'` - use the rectangle that encompasses the `touchBorder`s of all children
-* `number` - same as rect but rect is larger by `number` on all its sides
-* `[number, number]` - same as rect but with left/right buffer and bottom/top buffer
-* `[number, number, number, number]` - same as rect but left, bottom, right, top buffer
-* `{ left?: number, bottom?: number, right?: number, top?: number }` - same as rect but left, bottom, right, top buffer
-* `Array<TypeParsablePoint>` - use a custom border
-* `Array<Array<TypeParsablePoint>>` - use more than one closed border that may be separate from each other
+The documentation in {@link OBJ_Generic} has the specifics on how to define borders and touch borders for FigureElementPrimitives. Similarly the documentation for @{OBJ_Collection} details the same for FigureElementCollections.
 
 The border for a FigureElement can be retrieved with <a href="#figureelementgetborder">FigureElementPrimitive.getBorder()</a> and <a href="#figureelementcollectiongetborder">FigureElementCollection.getBorder()</a>
 
@@ -108,17 +76,20 @@ figure.add(
     // with a buffer of 0.1 on the left and right, and 0.3 on bottom
     // and top
     touchBorder: [0.1, 0.3],
+    touch: true,
     color: [1, 0, 0, 1],
   },
 );
 figure.showTouchBorders();
 ```
 
+<p style="text-align: center"><img src="./tutorials/interactive/touchborder.png"></p>
+
 ##### Three Dimensions
 
-In two dimensions, polygon borders are used to define the borders within which figure elements can be touched. Polygon borders are useful as arbitrary touch borders can be selected that are unrelated to the shape drawn to the screen.
+In two dimensions, polygon borders are used to define where a figure element can be touched. This is useful in examples such as equations, where equation elements are touchable, but spaced different to each other, so maximizing touch locations between elements means having touch borders that have different buffers on each side of the element.
 
-In three dimensions, defining volumes in which to select becomes challenging, both to define the volumes and to decide which volume was selected in a quick time on slower client devices.
+In three dimensions, defining volumes in which to select becomes challenging, both to define the volumes and to decide which volume was selected in a quick time on lower end client devices.
 
 Therefore, selection of 3D objects is performed in FigureOne by:
  * Rendering each touchable element into a temporary texture
@@ -126,11 +97,11 @@ Therefore, selection of 3D objects is performed in FigureOne by:
  * The temporary texture pixels are mapped to the screen pixels and the corresponding touched pixel found
  * The color of the pixel touched is mapped to the figure element with that color
 
-This method is common, performant, simple (as complex touch volumes don't need to be defined), and will automatically handle depth - elements in front of other elements relative to the camera will be selected.
+This method is commonly used, performant, simple (as complex touch volumes don't need to be defined), and will automatically handle depth - elements in front of other elements relative to the camera will be selected.
 
 When a larger touch border is required for a 3D element, use the `touchScale` property to scale the element in the temporary texture.
 
-When debugging, the `figure.showTouchable()` method can be used to render the temporary texture being used to determine what is touched to the screen.
+When debugging, the <a href="#showTouchable">Figure.showTouchable()</a> method can be used to render the temporary texture being used to determine what is touched to the screen.
 
 ```js
 const figure = new Fig.Figure({ scene: { style: 'orthographic' } });
@@ -144,11 +115,69 @@ figure.add({
 figure.showTouchable();
 ```
 
+<p style="text-align: center"><img src="./tutorials/interactive/touchable.png"></p>
+
 #### Move Interactivity
 
-Once an element is touched, it can be moved. How movement is defined depends on whether the movement is happening in two or three dimensions.
+Once an element is touched, it can be moved.
 
-##### Two Dimensions
+To make an element movable, use the `move` property during its definition or use the <a href="#figureelementsetmove">FigureElement.setMove()</a> on an instantiated element.
+
+```js
+const figure = new Fig.Figure();
+figure.add(
+  {
+    make: 'polygon',
+    sides: 8,
+    radius: 0.2,
+    move: true,
+    color: [1, 0, 0, 1],
+  },
+);
+```
+
+<p style="text-align: center"><img src="./tutorials/interactive/move.gif"></p>
+
+By default, element movement will be translation. {@link OBJ_ElementMove} options can be used to make movement a rotation or scaling and add bounds to movement.
+
+##### Moving Freely
+
+When an element is being moved and is released it can either immediately stop, or continue on with its current velocity and some deceleration (move freely).
+
+By default, elements will move freely after they are released (if they were released during movement). The options for if and how they move freely are set within the {@link OBJ_ElementMove} options object.
+
+This example makes the free movement deceleration small (so free movement is pronounced), and only allows movement within rectangular bounds.
+
+```js
+const figure = new Fig.Figure()
+figure.add(
+  {
+    make: 'polygon',
+    sides: 8,
+    radius: 0.2,
+    move: {
+      freely: {
+        deceleration: 0.01,
+      },
+      bounds: { left: -0.8, bottom: -0.8, right: 0.8, top: 0.8 },
+    },
+    color: [1, 0, 0, 1],
+  },
+);
+```
+
+<p style="text-align: center"><img src="./tutorials/interactive/freemovement.gif"></p>
+
+
+
+##### Notifications
+
+Often it is desirable to change the state of other elements when an element is moved. Use the FigureElement's {@link NotificationManager} to get notifications when an element has moved. Useful notifications are:
+
+* `beforeMove` - sent before the element transform has been updated with a move event
+* `beforeMovingFreely` - sent before the element transform has been updated with a move freely frame
+* `setTransform` - sent after the element transform has been updated
+
 
 ##### Three Dimensions
 
@@ -158,7 +187,7 @@ The default way to do this in FigureOne is to use a movement plane (`element.mov
 
 For example, to create a cube that can be translated in the YZ plane:
 
->> For the following examples, use the explanation <a href="#shapes3d-explanation-boilerplate">boiler plate</a> from the 3D shape primitives section.
+>> For the following examples, use <a href="#shapes3d-boilerplate">3D boiler plate</a>.
 
 
 ```js
@@ -189,7 +218,6 @@ figure.add({
 ```
 ![](./tutorials/shapes3d/xztranslate.gif)
 
-TODO note on rotation challenges
 
 #### Camera Interactivity
 
@@ -197,7 +225,6 @@ In 3D figures, it is often useful to allow a user to change the scene manually u
 
 FigureOne also provides a built-in FigureElementPrimitive `cameraControl` (see {@link OBJ_CameraControl}) which defines a transparent rectangle in which the user can swipe horizontally to rotate a scene around a vertical axis, and swipe vertically to change the elevation of the camera relative to the vertical axis.
 
->> Use the explanation <a href="#shapes3d-explanation-boilerplate">boiler plate</a> from the 3D shape primitives section for this example.
 
 ```js
 figure.add([

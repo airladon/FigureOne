@@ -127,11 +127,14 @@
 // );
 // figure.showTouchable();
 
-const figure = new Fig.Figure()
-const hex = figure.add({
-  make: 'polygon',
-  sides: 6,
-  color: [1, 0, 0, 1],
-  touch: true,
-});
-hex.notifications.add('onClick', () => console.log('Touched!'));
+
+const figure = new Fig.Figure();
+figure.add(
+  {
+    make: 'polygon',
+    sides: 8,
+    radius: 0.2,
+    move: true,
+    color: [1, 0, 0, 1],
+  },
+);

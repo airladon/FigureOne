@@ -3868,7 +3868,7 @@ class FigureElement {
  *
  * A primitive figure element is one that handles an object (`drawingObject`)
  * that draws to the screen. This object may be a {@link GLObject}, a
- * {@link TextObject} or a {@link HTMLObject}}.
+ * {@link TextObject} or a {@link HTMLObject}.
  *
  * @class
  * @extends FigureElement

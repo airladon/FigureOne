@@ -58,7 +58,7 @@ WebGL is very powerful, but can be hard to get started with due to its low-level
 
 A *figure* is composed of one or more *figure elements*. A figure element is a shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.
 
-In the language of **FigureOne**, there are two types of {@link FigureElements}:
+In the language of **FigureOne**, there are two types of {@link FigureElement}:
 
 * {@link FigureElementPrimitive} - an element that will draw something to the screen, such as a line, shape or text
 * {@link FigureElementCollection} - collections of elements that will move or be operated on together
@@ -160,11 +160,11 @@ When the canvas aspect ratio is not a square, or it is more convenient to create
 
 These are three examples of different coordinate spaces - *pixel space*, *GL space* (also called clip space in WebGL nomenclature) and *figure space*.
 
-If you want to move or modify an element, you need to think about what you want to modify it relative to. Do you want to move it relative to other elements in the figure? In other words, do you want to move it in figure space? Or do you want to move it relative to other elements within the parent, or local collection - *local space*. Alternately, you might want to modify the vertices of the shape, in *draw space*.
+If you want to move or modify an element, you need to think about what you want to modify it relative to. Do you want to move it relative to other elements in the figure? In other words, do you want to move it in figure space? Or do you want to move it relative to other elements within the parent collection - *local space*. Alternately, you might want to modify the vertices of the shape, in *draw space*.
 
-In simple figures, where no collections are used, or collections don't transform their child elements you don't really need to think about what space you are working in. *Figure space* will be the same as *local space*, if you aren't changing vertices of primitives then draw space won't be used, and GL and pixel spaces are rarely needed for most figures.
+In simple figures, where no collections are used, or collections don't transform their child elements you don't really need to think about what space you are working in. *Figure space* will be the same as *local space*, if you aren't changing vertices of primitives then draw space won't be used, and GL and pixel spaces are rarely needed for most figures as FigureOne handles touch events.
 
-But if you are using collections, or if you are tying an element to a location on the screen you will need to convert points between the different spaces. In addition, it is useful to know about these different spaces as sometimes they are referred to in the documentation.
+But if you are using collections you may need to convert points between the different spaces. In addition, it is useful to know about these different spaces as sometimes they are referred to in the documentation.
 
 One way to think about what space you are modifying is:
 
@@ -181,10 +181,10 @@ If the parent collection's parent is the figure itself, then its transform will 
 
 Converting between spaces is relatively straight forward. Figure elements have methods to find their position or bounds in figure, local or draw space. The figure has transforms that allow conversion between figure, GL and pixel spaces. For example see:
 
-* <a href="figureelementspacetransformmatrix">FigureElement.spaceTransformMatrix()</a>
-* <a href="figureelementgetPosition">FigureElement.getPosition()</a>
-* <a href="figureelementsetpositiontoelement">FigureElement.setPositionToElement()</a>
-* <a href="spacetransformmatrix">Figure.spaceTransformMatrix()</a>
+* <a href="#figureelementspacetransformmatrix">FigureElement.spaceTransformMatrix()</a>
+* <a href="#figureelementgetposition">FigureElement.getPosition()</a>
+* <a href="#figureelementsetpositiontoelement">FigureElement.setPositionToElement()</a>
+* <a href="#spacetransformmatrix">Figure.spaceTransformMatrix()</a>
 
 
 An example of where this is useful is if two FigureElements have different parents, and you want to move one to be in the same position as the other. To do this you would convert the target FigureElement position to figure space, and then to the local space of the FigureElement to move.
@@ -203,7 +203,7 @@ The primitive's shape or text definition never needs to change. At draw time, it
 
 If you have a dynamic shape whose vertices do change every frame (like a morphing animation), you can choose to load the vertices every frame. However, depending on the performance of the browser's host machine, and the number of vertices being adjusted, you might see a performance impact compared to a shape with a similar amount of vertices that do not change. That said, for shapes of reasonable size, this will not be a problem.
 
-#### Shapes
+#### Creating Shapes
 
 There are several ways to define a shape that a FigureElementPrimitive will draw. FigureOne comes with:
 
@@ -230,7 +230,7 @@ For a complete list of built in shapes see:
 * <a href="#text">Text</a>
 * <a href="##3d-shape-primitives">3D Shape Primitives</a>
 * <a href="#2d-shape-collections">2D Shape Collections</a>
-* <a href="#equations">Equations</a>)
+* <a href="#equations">Equations</a>
 
 ##### Generic Shapes
 
@@ -505,7 +505,7 @@ The `index.js` file is different depending on the example.
 const figure = new Fig.Figure({ scene: [-3, -3, 3, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 ```
 
-##### <a id="3D-boilerplate"></a> 3D Boilerplate
+##### <a id="shapes3d-boilerplate"></a> 3D Boilerplate
 
 ```js
 // Create the figure
@@ -557,8 +557,7 @@ figure.add([
     name: 'gridMinor',
     make: 'grid',
     bounds: [-3, -3, 6, 6],
-    yStep: 0.1,
-    xStep: 0.1,
+    step: 0.1,
     color: [0.7, 0.7, 0.7, 1],
     line: { width: 0.001 },
   },
@@ -566,15 +565,14 @@ figure.add([
     name: 'gridMajor',
     make: 'grid',
     bounds: [-3, -3, 6, 6],
-    yStep: 0.5,
-    xStep: 0.5,
+    step: 0.5,
     color: [0.8, 0.8, 0.8, 1],
     line: { width: 0.004 },
   },
 ]);
 ```
 
-#### <a id="animation-boilerplate"></a> Animation Boilerplate
+##### <a id="animation-boilerplate"></a> Animation Boilerplate
 ```js
 // index.js
 const figure = new Fig.Figure({ scene: [-3, -3, 3, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
@@ -593,8 +591,7 @@ figure.add([
     name: 'grid',
     make: 'grid',
     bounds: [-3, -3, 6, 6],
-    yStep: 0.1,
-    xStep: 0.1,
+    step: 0.1,
     color: [0.7, 0.7, 0.7, 1],
     line: { width: 0.001 },
   },
@@ -602,8 +599,7 @@ figure.add([
     name: 'gridMajor',
     make: 'grid',
     bounds: [-3, -3, 6, 6],
-    yStep: 0.5,
-    xStep: 0.5,
+    step: 0.5,
     color: [0.8, 0.8, 0.8, 1],
     line: { width: 0.004 }
   },

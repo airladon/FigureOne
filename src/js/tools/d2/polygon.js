@@ -23,7 +23,7 @@ import type { TypeParsableTransform } from '../geometry/Transform';
  * the polygon. `2` returns just x/y components and `3` returns x/y/z
  * components.
  */
-export type OBJ_GEOPolygon = {
+export type OBJ_PolygonPoints = {
   center?: TypeParsablePoint,
   radius?: number,
   sides?: number,
@@ -40,11 +40,11 @@ export type OBJ_GEOPolygon = {
  * @property {number} [innerRadius] distance from center to inside polygon
  * corner
  *
- * @extends OBJ_GEOPolygon
+ * @extends OBJ_PolygonPoints
  */
-export type OBJ_GEOPolygonLine = {
+export type OBJ_PolygonLinePoints = {
   innerRadius?: number,
-} & OBJ_GEOPolygon;
+} & OBJ_PolygonPoints;
 
 function getPolygonCorners(
   radius: number,
@@ -75,7 +75,7 @@ function getPolygonCorners(
   return points;
 }
 
-function processOptions(options: OBJ_GEOPolygon) {
+function processOptions(options: OBJ_PolygonPoints) {
   const o = joinObjects(
     {
       sides: 4,
@@ -111,7 +111,7 @@ function processOptions(options: OBJ_GEOPolygon) {
  * - Array<{@link Point}> - corners of a polygon
  * - Array<`number`> - interlaced points of triangles used to a polygon fill
  */
-function polygon(options: OBJ_GEOPolygon): Array<Point> | Array<number> {
+function polygon(options: OBJ_PolygonPoints): Array<Point> | Array<number> {
   const [
     radius, sides, rotation, direction, center, matrix, tris, close,
   ] = processOptions(options);
@@ -141,9 +141,9 @@ function polygon(options: OBJ_GEOPolygon): Array<Point> | Array<number> {
  * Can return either:
  * - Array<{@link Point}> - [inner corner 0, outer corner 0, inner corner 1,
  *   outer corner 1, inner corner 2...]
- * - Array<`number`> - interlaced points of triangles used to a polygon line
+ * - Array<`number`> - interlaced points of triangles used to draw a polygon line
  */
-function polygonLine(options: OBJ_GEOPolygon): Array<Point> | Array<number> {
+function polygonLine(options: OBJ_PolygonLinePoints): Array<Point> | Array<number> {
   const [
     radius, sides, rotation, direction, center, matrix,
     tris, close, innerRadius,

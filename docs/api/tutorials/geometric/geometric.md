@@ -5,7 +5,7 @@ FigureOne includes classes that define a:
 * {@link Line}
 * {@link Plane}
 * {@link Rect}
-* {@link Translation} transform
+* {@link Transform}
 
 Each of these classes have convenience methods that make it easy to to work with them such as
 * Checking if two points are equal or within some delta
