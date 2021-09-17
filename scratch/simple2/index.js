@@ -85,15 +85,53 @@
 // // console.log(t1.isEqualTo(t3))
 
 // const figure = new Fig.Figure({ scene: [0, 0, 6, 3]});
-const figure = new Fig.Figure({ backgroundColor: [1, 0, 0, 0.2] });
-figure.add(
-  {
-    make: 'polygon',
-    sides: 100,
-    radius: 0.2,
-    touchBorder: 0.5,
-    move: {
-      bounds: { left: -1.8, right: 1.8, bottom: -0.8, top: 0.8 },
-    },
-  },
-);
+// const figure = new Fig.Figure({ scene: { style: 'orthographic' } });
+// // figure.add(
+// //   {
+// //     make: 'polygon',
+// //     sides: 8,
+// //     radius: 0.2,
+// //     // create a touch border that is a rectangle around the border
+// //     // with a buffer of 0.1 on the left and right, and 0.3 on bottom
+// //     // and top
+// //     touchBorder: [0.1, 0.3],
+// //     color: [1, 0, 0, 1],
+// //   },
+// // );
+// // figure.showTouchBorders();
+
+// figure.add(
+//   {
+//     name: 'c',
+//     make: 'collection',
+//     elements: [
+//       {
+//         name: 'cube',
+//         make: 'cube',
+//         color: [1, 1, 0, 1],
+//         side: 0.4,
+//       },
+//       {
+//         name: 'sphere',
+//         make: 'sphere',
+//         position: [0.8, 0, 0],
+//         color: [1, 1, 0, 1],
+//         radius: 0.2,
+//       },
+//     ],
+//     touch: {
+//       onClick: () => console.log('a'),
+//     },
+//     touchScale: 2,
+//   },
+// );
+// figure.showTouchable();
+
+const figure = new Fig.Figure()
+const hex = figure.add({
+  make: 'polygon',
+  sides: 6,
+  color: [1, 0, 0, 1],
+  touch: true,
+});
+hex.notifications.add('onClick', () => console.log('Touched!'));

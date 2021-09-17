@@ -1,58 +1,5 @@
 FigureOne provides text layout for both simple text, and lines of text with rich formatting.
 
-
-### <a id="text-boilerplate"></a> Text Boilerplate
-To test examples within the 'Drawing Text' sections of the API reference create an `index.html` file and `index.js` file.
-
-All examples are snippets which can be appended to the end of the `index.js` file.
-
-```html
-<!-- index.html -->
-<!doctype html>
-<html>
-<body>
-    <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
-    </div>
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.10.13/figureone.min.js'></script>
-    <script type="text/javascript" src='./index.js'></script>
-</body>
-</html>
-```
-
-A grid is included in this javascript file to make it obvious how text is aligned and justified
-```javascript
-// index.js
-const figure = new Fig.Figure({ scene: [-3, -3, 3, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
-figure.add([
-  {
-    name: 'origin',
-    make: 'polygon',
-    radius: 0.01,
-    line: { width: 0.01 },
-    sides: 10,
-    color: [0.7, 0.7, 0.7, 1]
-  },
-  {
-    name: 'gridMinor',
-    make: 'grid',
-    bounds: [-3, -3, 6, 6],
-    yStep: 0.1,
-    xStep: 0.1,
-    color: [0.7, 0.7, 0.7, 1],
-    line: { width: 0.001 },
-  },
-  {
-    name: 'gridMajor',
-    make: 'grid',
-    bounds: [-3, -3, 6, 6],
-    yStep: 0.5,
-    xStep: 0.5,
-    color: [0.8, 0.8, 0.8, 1],
-    line: { width: 0.004 },
-  },
-]);
-```
-
 ### Quick Start - `text`
 
 Let's start by creating a {@link FigureElementPrimitive} element that writes 'hello world' to the figure.

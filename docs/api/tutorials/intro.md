@@ -38,6 +38,7 @@ const p = new Fig.Point(2, 3);
 const transformedPoint = p.transformBy(matrix);
 ```
 
+
 ##### WebGL
 
 FigureOne uses WebGL for drawing shapes. As of September 2021, WebGL is supported by <a href="https://caniuse.com/?search=webgl">97.72% of browsers</a> (with Opera Mini at 1.15%, Android Browser before 2014 at 0.35% and Internet Explorer before 2013 at 0.19% being the main browsers without support).
@@ -51,6 +52,7 @@ WebGL leverages GPU hardware to accelerate rendering. As such very complex shape
 WebGL is very powerful, but can be hard to get started with due to its low-level nature relative to JavaScript. While FigureOne hides the complexity of WebGL from the user, it is still useful to understand the above workflow as FigureOne is organized with this work flow in mind, and the more such a work flow can be followed, then the more performant the end result will be.
 
 >> FigureOne also supports the cases where this work flow is not adequate, for example when vertices of a shape are morphing into a different shape. In such cases care needs to be taken to ensure a good end user experience. See <a href="#morphing">morphing</a> for more information.
+
 
 #### Figures, Primitives and Collections
 
@@ -145,6 +147,7 @@ It then positions the collection so the line end is in the middle of the figure.
 <p style="text-align: center"><img src="./tutorials/ex1-figure.png"></p>
 
 
+
 #### Coordinate spaces
 
 FigureOne renders shapes in [WebGL](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API), text with the [HTML Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) and can even manipulate html elements as figure elements. As WebGL is used most in FigureOne, it will be used as an example to introduce coorindate spaces and why they matter.
@@ -187,6 +190,7 @@ Converting between spaces is relatively straight forward. Figure elements have m
 An example of where this is useful is if two FigureElements have different parents, and you want to move one to be in the same position as the other. To do this you would convert the target FigureElement position to figure space, and then to the local space of the FigureElement to move.
 
 
+
 #### Drawing
 
 When it is time to draw the scene, the figure will pass an initial transform to the first element in the hierarchy. In the example above, the "Labeled Line" collection. This transform will include any translations and scaling needed to convert from figure space to GL space for actual rendering.
@@ -198,40 +202,6 @@ The "Label" primitive has it's own transform that translates it to the middle of
 The primitive's shape or text definition never needs to change. At draw time, it is simply transformed by it's own transform and all the ancestors directly above it in the hierarchy. This is the same method used by WebGL as it reduces the amount of data that needs to be loaded into the graphics memory each draw frame. All the vertices of a shape are loaded into the graphics memory just once, and for each frame just a transform is passed to inform the graphics processor how to orient the vertices.
 
 If you have a dynamic shape whose vertices do change every frame (like a morphing animation), you can choose to load the vertices every frame. However, depending on the performance of the browser's host machine, and the number of vertices being adjusted, you might see a performance impact compared to a shape with a similar amount of vertices that do not change. That said, for shapes of reasonable size, this will not be a problem.
-
-#### Figure Setup
-
-To attach a figure to a HTML document:
-
-* The HTML document needs a `div` element to which FigureOne will attach the drawing canvas to. By default FigureOne will look for a `div` with ID `'figureOneContainer'`. A custom ID can be specificed if desired or more than one figure in the document will be created.
-* The FigureOne library `figureone.min.js` needs to be loaded either from a public CDN (like below), or from a local source
-* A JavaScript file (in this case `index.js`) that creates the figure, and adds elements to it needs to be loaded and executed.
-
-```html
-<!-- index.html -->
-<!doctype html>
-<html>
-<body>
-    <div id="figureOneContainer" style="width: 1200px; height: 800px; background-color: white;">
-    </div>
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.10.13/figureone.min.js'></script>
-    <script type="text/javascript" src='./index.js'></script>
-</body>
-</html>
-```
-
-In `index.js`, the figure can be created using the {@link OBJ_Figure} options object as a parameter to `Figure`. One of the most commonly used properties sets the figure's scene (the expanse of space to show).
-
-```js
-const figure = new Fig.Figure({
-  scene: [0, 0, 6, 4],
-});
-```
-
-For 2D figures, a simple array containing the left, bottom, right and top limits can be used. In three dimensions, the scene also defines from where the visible space is viewed (camera) and lighting (see <a href="##3d-shape-primitives">3D Shape Primitives</a> for a detailed explanation).
-
-
-Now the figure is setup, shapes can be added to it.
 
 #### Shapes
 
@@ -295,28 +265,10 @@ It is not in the scope of this documentation to explain what WebGL is, and how t
 
 
 
-#### Animation
-
-Animations change figure elements over time.
-
-Each figure element has its own {@link AnimationManager} (`animations` property) that can coordinate animations for any element.
-
-An animation is a number of {@link AnimationStep}s in either series or parallel. The animation manager provides a way to create these steps, build them into a complete animation, and then manage their execution.
-
-For a detailed explanation on animations see:
-
-* the <a href="#animation">Animation</a> section of the API reference
-* the animation <a href="https://github.com/airladon/FigureOne/tree/master/docs/tutorials/04%20-%20Animation">tutorial</a>
-
-
-#### Interactivity
-
-FigureOne provides some simple interactivity options that allows users to touch and move FigureElements.
 
 
 
-
-
+<!-- 
 ##### WebGL
 
 The above example is fine when defining a static figure, but becomes inefficient when animating.
@@ -487,56 +439,8 @@ The "Label" primitive has it's own transform that translates it to the middle of
 
 The primitive's shape or text definition never needs to change. At draw time, it is simply transformed by it's own transform and all the ancestors directly above it in the hierarchy. This is the same method used by WebGL as it reduces the amount of data that needs to be loaded into the graphics memory each draw frame. All the vertices of a shape are loaded into the graphics memory just once, and for each frame just a transform is passed to inform the graphics processor how to orient the vertices.
 
-If you have a dynamic shape whose vertices do change every frame (like a morphing animation), you can choose to load the vertices every frame. However, depending on the performance of the browser's host machine, and the number of vertices being adjusted, you might see a performance impact compared to a shape with a similar amount of vertices that do not change. That said, for shapes of **reasonable** size, this will not be a problem.
+If you have a dynamic shape whose vertices do change every frame (like a morphing animation), you can choose to load the vertices every frame. However, depending on the performance of the browser's host machine, and the number of vertices being adjusted, you might see a performance impact compared to a shape with a similar amount of vertices that do not change. That said, for shapes of **reasonable** size, this will not be a problem. -->
 
-#### Code
-
-Finally, let's see the code for the example above. Two files, `index.html` and `index.js` should be in the same folder.
-
-```html
-<!-- index.html -->
-<!doctype html>
-<html>
-<body>
-    <div id="figureOneContainer" style="width: 1200px; height: 800px; background-color: white;">
-    </div>
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.10.13/figureone.min.js'></script>
-    <script type="text/javascript" src='./index.js'></script>
-</body>
-</html>
-```
-
-```javascript
-// index.js
-const figure = new Fig.Figure({ scene: [0, 0, 6, 3] });
-figure.add(
-  {
-    name: 'labeledLine',
-    make: 'collection',
-    elements: [
-      {
-        make: 'line',
-        p1: [0, 0],
-        p2: [2, 0],
-        width: 0.01,
-        color: [1, 0, 0, 1],
-      },
-      {
-        make: 'text',
-        text: 'Line 1',
-        position: [1, 0.1],
-        font: { color: [1, 0, 0, 1] },
-        xAlign: 'center',
-      },
-    ],
-    position: [3, 2],
-    touchBorder: 0.3,
-    move: {
-      type: 'rotation',
-    },
-  },
-);
-```
 
 #### Using FigureOne
 
@@ -572,4 +476,147 @@ labeledLine.add('line', line);
 labeledLine.add('label', label);
 labeledLine.move.type = 'rotation';
 labeledLine.setMovable();
+```
+
+#### Boiler Plate
+
+To test examples within the API reference create an `index.html` file and `index.js` file. All examples are snippets which can be appended to the end of the `index.js` file.
+
+The `index.html` file is the same for all examples:
+
+```html
+<!-- index.html -->
+<!doctype html>
+<html>
+<body>
+    <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
+    </div>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.10.13/figureone.min.js'></script>
+    <script type="text/javascript" src='./index.js'></script>
+</body>
+</html>
+```
+
+The `index.js` file is different depending on the example.
+
+##### <a id="2D-shapes-boilerplate"></a> 2D Boilerplate
+```js
+// index.js
+const figure = new Fig.Figure({ scene: [-3, -3, 3, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+```
+
+##### <a id="3D-boilerplate"></a> 3D Boilerplate
+
+```js
+// Create the figure
+const figure = new Fig.Figure();
+
+// Set the scene
+figure.scene.setProjection({ style: 'orthographic' });
+figure.scene.setCamera({ position: [2, 1, 1], up: [0, 1, 0] });
+figure.scene.setLight({ directional: [0.7, 0.5, 0.2] });
+
+// Add x, y, z axis
+figure.add([
+  {
+    make: 'cylinder',
+    radius: 0.01,
+    color: [1, 0, 0, 1],
+    line: [[-1, 0, 0], [1, 0, 0]],
+  },
+  {
+    make: 'cylinder',
+    radius: 0.01,
+    color: [0, 1, 0, 1],
+    line: [[0, -1, 0], [0, 1, 0]],
+  },
+  {
+    make: 'cylinder',
+    radius: 0.01,
+    color: [0, 0, 1, 1],
+    line: [[0, 0, -1], [0, 0, 1]],
+  },
+]);
+
+```
+
+##### <a id="text-boilerplate"></a> Text Boilerplate
+```js
+// index.js
+const figure = new Fig.Figure({ scene: [-3, -3, 3, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+figure.add([
+  {
+    name: 'origin',
+    make: 'polygon',
+    radius: 0.01,
+    line: { width: 0.01 },
+    sides: 10,
+    color: [0.7, 0.7, 0.7, 1]
+  },
+  {
+    name: 'gridMinor',
+    make: 'grid',
+    bounds: [-3, -3, 6, 6],
+    yStep: 0.1,
+    xStep: 0.1,
+    color: [0.7, 0.7, 0.7, 1],
+    line: { width: 0.001 },
+  },
+  {
+    name: 'gridMajor',
+    make: 'grid',
+    bounds: [-3, -3, 6, 6],
+    yStep: 0.5,
+    xStep: 0.5,
+    color: [0.8, 0.8, 0.8, 1],
+    line: { width: 0.004 },
+  },
+]);
+```
+
+#### <a id="animation-boilerplate"></a> Animation Boilerplate
+```js
+// index.js
+const figure = new Fig.Figure({ scene: [-3, -3, 3, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+
+// grid
+figure.add([
+  {
+    name: 'origin',
+    make: 'polygon',
+    radius: 0.01,
+    line: { width: 0.01 },
+    sides: 10,
+    color: [0.7, 0.7, 0.7, 1]
+  },
+  {
+    name: 'grid',
+    make: 'grid',
+    bounds: [-3, -3, 6, 6],
+    yStep: 0.1,
+    xStep: 0.1,
+    color: [0.7, 0.7, 0.7, 1],
+    line: { width: 0.001 },
+  },
+  {
+    name: 'gridMajor',
+    make: 'grid',
+    bounds: [-3, -3, 6, 6],
+    yStep: 0.5,
+    xStep: 0.5,
+    color: [0.8, 0.8, 0.8, 1],
+    line: { width: 0.004 }
+  },
+]);
+
+// shape to animate
+const p = figure.add(
+  {
+    name: 'p',
+    make: 'polygon',
+    sides: 4,
+    radius: 0.5,
+    position: [0, 0],
+  },
+);
 ```

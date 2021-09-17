@@ -215,125 +215,6 @@ figure.add(
 
 ![](./tutorials/shapes3d/cube.png)
 
-#### Explanation Boiler-Plate Code
-All code examples in the following 3D shape topics uses the same code to create a figure, set the scene and add a red x axis, green y axis and blue z axis.
-
-All example code in the topics below would be appended to this boilerplate code:
-
-```js
-// Create the figure
-const figure = new Fig.Figure();
-
-// Set the scene
-figure.scene.setProjection({ style: 'orthographic' });
-figure.scene.setCamera({ position: [2, 1, 1], up: [0, 1, 0] });
-figure.scene.setLight({ directional: [0.7, 0.5, 0.2] });
-
-// Add x, y, z axis
-figure.add([
-  {
-    make: 'cylinder',
-    radius: 0.01,
-    color: [1, 0, 0, 1],
-    line: [[-1, 0, 0], [1, 0, 0]],
-  },
-  {
-    make: 'cylinder',
-    radius: 0.01,
-    color: [0, 1, 0, 1],
-    line: [[0, -1, 0], [0, 1, 0]],
-  },
-  {
-    make: 'cylinder',
-    radius: 0.01,
-    color: [0, 0, 1, 1],
-    line: [[0, 0, -1], [0, 0, 1]],
-  },
-]);
-
-```
-
-#### Touch Interactivity
-
-In two dimensions, polygon borders are used to define the borders within which figure elements can be touched. Polygon borders are useful as arbitrary touch borders can be selected that are unrelated to the shape drawn to the screen.
-
-In three dimensions, defining volumes in which to select becomes challenging, both to define the volumes and to decide which volume was selected in a quick time on slower client devices.
-
-Therefore, selection of 3D objects is performed in FigureOne by:
- * Rendering each touchable element into a temporary texture
- * Each element is rendered with a unique color
- * The temporary texture pixels are mapped to the screen pixels and the corresponding touched pixel found
- * The color of the pixel touched is mapped to the figure element with that color
-
-This method is common, performant, simple (as complex touch volumes don't need to be defined), and will automatically handle depth - elements in front of other elements relative to the camera will be selected.
-
-When a larger touch border is required for a 3D element, use the `touch` property to scale the element in the temporary texture.
-
-When debugging, the `figure.showTouchable()` method can be used to render the temporary texture being used to determine what is touched to the screen.
-
-#### Move Interactivity
-
-Once an object is selected, it can be moved. In two dimensions this simply means moving the objects in the XY plane.
-
-But in three dimensions a choice needs to be made about how a mouse of finger movement on a 2D screen translates to a movement in 3D space.
-
-The default way to do this in FigureOne is to use a movement plane (`element.move.plane`). FigureOne will automatically project a movement on the screen onto this plane and move the element accordingly.
-
-For example, to create a cube that can be translated in the YZ plane:
-
-```js
-// Add a grid in the YZ plane
-figure.add([
-  {
-    make: 'grid',
-    bounds: [-0.8, -0.8, 1.6, 1.6],
-    xStep: 0.05,
-    yStep: 0.05,
-    line: { width: 0.002 },
-    color: [0.7, 0.7, 0.7, 1],
-    // By default, the grid is created in the XY plane
-    // To rotate it to the XZ plane rotate π/2 around the y axis
-    transform: ['r', Math.PI / 2, 0, 1, 0],
-  },
-]);
-
-// Add a red cube movable in the XZ plane
-figure.add({
-  make: 'cube',
-  side: 0.3,
-  color: [1, 0, 0, 1],
-  move: {
-    plane: [[0, 0, 0], [1, 0, 0]],
-  },
-});
-```
-![](./tutorials/shapes3d/xztranslate.gif)
-
-In comparison, a cube that can be rotated around the y axis would be:
-
->> Note: FigureOne rotates 3D objects with fingers in 
-
-#### Camera Interactivity
-
-It is often useful to allow a user to change the scene manually using gestures. This can be achieved by changing the scene with `setCamera` to change the camera location and `setProjection` to change the expanse of visible space.
-
-FigureOne also provides a built-in FigureElementPrimitive `cameraControl` (see {@link OBJ_CameraControl}) which defines a transparent rectangle in which the user can swipe horizontally to rotate a scene around a vertical axis, and swipe vertically to change the elevation of the camera relative to the vertical axis.
-
-```js
-figure.add([
-  {
-    make: 'cube',
-    side: 0.5,
-    color: [0, 1, 1, 1],
-    transform: ['r', 0, 1, 0, 0],
-  },
-  {
-    make: 'cameraControl',
-  },
-]);
-```
-
-![](./tutorials/shapes3d/cameracontrol.gif)
 
 #### Rotation
 
@@ -370,7 +251,7 @@ cube.animations.new()
 ![](./tutorials/shapes3d/rotation.gif)
 
 
-#### <a id="shapes3d-boilerplate"></a> Equation Boilerplate
+#### <a id="shapes3d-boilerplate"></a> 3D Shape Primitives Boilerplate
 To test examples within the '3D Shape Primitives' section of the API reference create an `index.html` file and `index.js` file.
 
 All examples are snippets which can be appended to the end of the `index.js` file.

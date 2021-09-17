@@ -1,9 +1,6 @@
 toc:
-  - name: FigureOne API Reference
+  - name: Introduction
     file: ./docs/api/tutorials/intro.md
-  - name: Figure
-  - Figure
-  - OBJ_Figure
   - name: Geometry
     file: ./docs/api/tutorials/geometric/geometric.md
   - Point
@@ -11,6 +8,10 @@ toc:
   - Plane
   - Rect
   - Transform
+  - name: Figure
+    file: ./docs/api/tutorials/figure/figure.md
+  - Figure
+  - OBJ_Figure
   - name: Figure Elements
   - FigureElement
   - FigureElementPrimitive
@@ -62,6 +63,8 @@ toc:
   - COL_Axis
   - CollectionsPlot
   - COL_Plot
+  - name: Interactivity
+    file: ./docs/api/tutorials/interactive/interactive.md
   - name: Animation
     file: ./docs/api/tutorials/animation/animation.md
   - AnimationManager
