@@ -111,7 +111,7 @@ export type COL_SlideNavigator = {
  * See {@link SlideNavigator} for information about what a slide navigator is.
  *
  * To test examples below, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>.
+ * <a href="#drawing-boilerplate">boilerplate</a>.
  *
  *
  * @example

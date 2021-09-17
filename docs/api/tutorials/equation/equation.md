@@ -17,29 +17,6 @@ In FigureOne, an equation is a collection ({@link FigureElementCollection}) of *
 As the equation, terms and operators are all {@link FigureElement}s, then they have all the same interactivety and animation abilities as shapes and text.
 
 
-#### <a id="equation-boilerplate"></a> Equation Boilerplate
-To test examples within the 'Equation' section of the API reference create an `index.html` file and `index.js` file.
-
-All examples are snippets which can be appended to the end of the `index.js` file.
-
-```html
-<!-- index.html -->
-<!doctype html>
-<html>
-<body>
-    <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
-    </div>
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.10.13/figureone.min.js'></script>
-    <script type="text/javascript" src='./index.js'></script>
-</body>
-</html>
-```
-
-```javascript
-// index.js
-const figure = new Fig.Figure({ scene: [-3, -3, 3, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
-```
-
 #### Quick Start
 
 First let's create an equation, with red as the default color:

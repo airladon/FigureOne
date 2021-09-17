@@ -218,7 +218,7 @@ export type EQN_EquationElements = {
  * @property {TypeVAlign} [yAlign] (`'baseline'`)
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Note - the points are drawn in the figure's draw space, but as the
@@ -797,7 +797,7 @@ type EQN_EquationGoToForm = {
  * @param {OBJ_NextFormAnimationStep} options
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Example showing both ways to access GoToForm animation step
@@ -843,7 +843,7 @@ class NextFormAnimationStep extends TriggerAnimationStep {
  * @param {OBJ_GoToFormAnimationStep} options
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Example showing both ways to access GoToForm animation step
@@ -894,7 +894,7 @@ class GoToFormAnimationStep extends TriggerAnimationStep {
  * @extends FigureElementCollection
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @param {EQN_Equation} options
  * @example

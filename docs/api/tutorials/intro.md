@@ -478,7 +478,7 @@ labeledLine.move.type = 'rotation';
 labeledLine.setMovable();
 ```
 
-#### Boiler Plate
+#### Boilerplate Code
 
 To test examples within the API reference create an `index.html` file and `index.js` file. All examples are snippets which can be appended to the end of the `index.js` file.
 
@@ -499,7 +499,7 @@ The `index.html` file is the same for all examples:
 
 The `index.js` file is different depending on the example.
 
-##### <a id="2D-shapes-boilerplate"></a> 2D Boilerplate
+##### <a id="drawing-boilerplate"></a> 2D Boilerplate
 ```js
 // index.js
 const figure = new Fig.Figure({ scene: [-3, -3, 3, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
