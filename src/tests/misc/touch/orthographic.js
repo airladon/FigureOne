@@ -2,16 +2,16 @@
   "varsIgnorePattern": "[(timeoutId)|(step)|(duration)]",
   "vars": "local",
   }] */
-/* global figure getShapes getPosition */
+/* global figure getShapes getPosition Fig */
 /* eslint-disable block-scoped-var, object-property-newline */
 
 if (typeof process === 'object') {
   /* eslint-disable global-require, no-unused-vars, vars-on-top, no-var */
   var { tools } = require('../../../index').default;
-  var { makePrimitive } = require('./three');
+  var { makePrimitive, makeCollection, createFigure } = require('./layout');
 }
 
-
+createFigure('orthographic');
 function getShapes(getPos) {
   // const angle = (name, options, mods) => makeAngle(name, options, mods, getPos);
 
@@ -19,6 +19,9 @@ function getShapes(getPos) {
   return [
     makePrimitive('standard'),
     makePrimitive('larger', { touchScale: 2 }),
+    makePrimitive('smaller', { touchScale: 0.5 }),
+    makeCollection('collection-no-scale'),
+    makeCollection('collection-with-scale', { touchScale: 2 }),
   ];
 }
 
@@ -41,7 +44,22 @@ const getValues = {
   },
   larger: {
     element: 'larger',
+    expect: 3,
+    when: e => e.custom.count,
+  },
+  smaller: {
+    element: 'smaller',
     expect: 2,
+    when: e => e.custom.count,
+  },
+  'collection-no-scale': {
+    element: 'collection-no-scale',
+    expect: 2,
+    when: e => e.custom.count,
+  },
+  'collection-with-scale': {
+    element: 'collection-with-scale',
+    expect: 4,
     when: e => e.custom.count,
   },
 };
@@ -67,6 +85,45 @@ const move = {
       ['touchDown', [0.4, 0]],
       ['touchUp'],
       ['touchDown', [0.42, 0]],
+      ['touchUp'],
+    ],
+  },
+  smaller: {
+    element: 'smaller',
+    events: [
+      ['touchDown', [0, 0]],
+      ['touchUp'],
+      ['touchDown', [0.1, 0]],
+      ['touchUp'],
+      ['touchDown', [0.11, 0]],
+      ['touchUp'],
+    ],
+  },
+  'collection-no-scale': {
+    element: 'collection-no-scale',
+    events: [
+      ['touchDown', [0, 0]],
+      ['touchUp'],
+      ['touchDown', [0.1, 0]],
+      ['touchUp'],
+      ['touchDown', [0.1, -0.2]],
+      ['touchUp'],
+      ['touchDown', [-0.1, -0.2]],
+      ['touchUp'],
+    ],
+  },
+  'collection-with-scale': {
+    element: 'collection-with-scale',
+    events: [
+      ['touchDown', [0, 0.1]],
+      ['touchUp'],
+      ['touchDown', [0, 0]],
+      ['touchUp'],
+      ['touchDown', [0.1, 0]],
+      ['touchUp'],
+      ['touchDown', [0.1, -0.2]],
+      ['touchUp'],
+      ['touchDown', [-0.1, -0.2]],
       ['touchUp'],
     ],
   },

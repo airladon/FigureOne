@@ -4228,7 +4228,9 @@ class FigureElementPrimitive extends FigureElement {
         } else if (this.uniqueColor == null) {
           this.setUniqueColor(generateUniqueColor());
           colorToUse = this.uniqueColor.map(c => c / 255);
-        } // $FlowFixMe
+        } else {
+          colorToUse = this.uniqueColor.map(c => c / 255);
+        }
       }
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawOpacity = colorToUse[3];

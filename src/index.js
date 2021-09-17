@@ -172,6 +172,7 @@ const Fig = {
   joinObjects: misc.joinObjects,
   m3,
   morph,
+  misc,
 
 
   // math
