@@ -528,6 +528,46 @@ export type OBJ_Cone = {
   lines?: boolean,
 } & OBJ_FigurePrimitive & OBJ_Generic3All;
 
+
+/**
+ * Prism shape options object that extends {@link OBJ_Generic3All}
+ * and {@link OBJ_FigurePrimitive}
+ *
+ * ![](./apiassets/prism.png)
+ *
+ * A prism face is defined in the XY plane, and it's length extends
+ * into +z. Use `transform` to orient it in any other way.
+ *
+ * Triangles will be created for the ends if the face is convex. If the face
+ * is not convex, use `faceTriangles` to define the triangles.
+ *
+ * @property {number} [face] face border points defined in the XY plane
+ * @property {Array<TypeParsablePoint>} faceTriangles triangles that create the
+ * face fill - triangles should be defined counter-clock-wise in the XY plane.
+ * If the face is convex, then the triangles can be auto-generated and this
+ * property left undefined.
+ * @property {number} [length] length of the prism
+ * @property {TypeParsableTransform} [transform] transform to apply to all
+ * points of prism
+ * @property {boolean} [lines] if `true` then points representing
+ * the edges of the prism will be returned. If `false`, then points
+ * representing triangle faces and associated normals will be returned.
+ * (`false`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#shapes3d-boilerplate">boilerplate</a>
+ *
+ * @example
+
+ */
+export type OBJ_Prism = {
+  ace?: Array<TypeParsablePoint>,
+  faceTriangles?: Array<TypeParsablePoint>,
+  length?: number,
+  lines?: boolean,
+} & OBJ_FigurePrimitive & OBJ_Generic3All;
+
+
 /**
  * Revolve shape options object that extends {@link OBJ_Generic3All}
  * and {@link OBJ_FigurePrimitive}.

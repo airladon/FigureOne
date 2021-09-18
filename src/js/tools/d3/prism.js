@@ -22,8 +22,7 @@ import type { TypeParsableTransform } from '../geometry/Transform';
  * face fill - triangles should be defined counter-clock-wise in the XY plane.
  * If the face is convex, then the triangles can be auto-generated and this
  * property left undefined.
- * @property {number} [length] length of the prism if `line` isn't
- * defined (`1`)
+ * @property {number} [length] length of the prism
  * @property {TypeParsableTransform} [transform] transform to apply to all
  * points of prism
  * @property {boolean} [lines] if `true` then points representing
