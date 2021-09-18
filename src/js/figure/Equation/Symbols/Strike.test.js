@@ -97,7 +97,7 @@ describe('Equation Symbols - Bracket', () => {
     expect(round(eqn._sf.drawingObject.points)).toMatchSnapshot();
   });
   test('Snapshot Backward', () => {
-    eqn.showForm('backward');
+    eqn.showForm('back');
     expect(round(eqn._sb.drawingObject.points)).toMatchSnapshot();
   });
   test('Snapshot Horizontal', () => {

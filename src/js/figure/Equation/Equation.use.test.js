@@ -178,6 +178,10 @@ describe('Different ways to make an equation', () => {
                 color: [0, 0, 1, 1],
               },
             },
+            // When to relayout equation forms. 'all' is everytime showForm
+            // is called. Can also be 'init' (when equation is initialized)
+            // and 'lazy' (when equation is first used).
+            layout: 'init',
           },
           // Phrases are combinations of elements that can be used in forms to
           // make the forms simpler. This is especially useful for frequently
@@ -309,6 +313,8 @@ describe('Different ways to make an equation', () => {
                   },
                 },
               },
+              // When to re-layout form
+              layout: 'init',
             },
           },
           // Form Series are used by equation navigators to know the order of
@@ -356,6 +362,7 @@ describe('Different ways to make an equation', () => {
               xAlign: 'right',
               yAlign: 'top',
             },
+            layout: 'init',
           },
           scale: 0.45,
           forms: {
@@ -542,6 +549,27 @@ describe('Different ways to make an equation', () => {
         eqn = new Equation(figure.shapes, { color: color1, scale: 0.95 });
         eqn.addForms({  // eslint-disable-next-line camelcase
           0: { frac: ['a', { v_vinculum: { color: color2 } }, 'b'] },
+        });
+      },
+      initialLayout: () => {
+        eqn = new Equation(figure.shapes, {
+          formDefaults: { layout: 'init' },
+          forms: { 0: ['a', 'b'] },
+          scale: 1,
+        });
+      },
+      lazyLayout: () => {
+        eqn = new Equation(figure.shapes, {
+          formDefaults: { layout: 'lazy' },
+          forms: { 0: ['a', 'b'] },
+          scale: 1,
+        });
+      },
+      alwaysLayout: () => {
+        eqn = new Equation(figure.shapes, {
+          formDefaults: { layout: 'always' },
+          forms: { 0: ['a', 'b'] },
+          scale: 1,
         });
       },
     };
@@ -841,6 +869,7 @@ describe('Different ways to make an equation', () => {
   });
   test('All Text in constructor with all options', () => {
     ways.allTextInConstructorAllOptions();
+    eqn.layoutForms('all');
 
     expect(eqn).toHaveProperty('_a');
     expect(eqn).toHaveProperty('_b');
@@ -885,6 +914,7 @@ describe('Different ways to make an equation', () => {
   });
   test('Equation Scale', () => {
     ways.equationScale();
+    eqn.layoutForms('all');
     expect(eqn.eqn.scale).toBe(0.95);
     const h1 = eqn.eqn.forms['0'].content[0].height;
     const h2 = eqn.eqn.forms['1'].content[0].height;
@@ -955,6 +985,7 @@ describe('Different ways to make an equation', () => {
   });
   test('Auto Symbols Name', () => {
     ways.autoSymbolsName();
+    eqn.layoutForms('all');
     expect(eqn._a).not.toBe(undefined);
     expect(eqn._b).not.toBe(undefined);
     expect(eqn._a.drawingObject.text[0].text).toBe('a');
@@ -966,6 +997,7 @@ describe('Different ways to make an equation', () => {
   });
   test('Auto Symbols ID', () => {
     ways.autoSymbolsID();
+    eqn.layoutForms('all');
     expect(round(eqn._v.drawingObject.points, 3)).toEqual([
       0, 0, 0, 0.01, 0.19, 0, 0.19, 0.01,
     ]);
@@ -973,6 +1005,7 @@ describe('Different ways to make an equation', () => {
   });
   test('Auto Symbols Object Name', () => {
     ways.autoSymbolsObjectName();
+    eqn.layoutForms('all');
     expect(round(eqn._vinculum.drawingObject.points, 3)).toEqual([
       0, 0, 0, 0.01, 0.19, 0, 0.19, 0.01,
     ]);
@@ -980,9 +1013,55 @@ describe('Different ways to make an equation', () => {
   });
   test('Auto Symbols Object ID', () => {
     ways.autoSymbolsObjectID();
+    eqn.layoutForms('all');
     expect(round(eqn._v.drawingObject.points, 3)).toEqual([
       0, 0, 0, 0.01, 0.19, 0, 0.19, 0.01,
     ]);
     expect(eqn._v.color).toEqual(color2);
+  });
+  test('Initial Layout', () => {
+    ways.initialLayout();
+    expect(eqn._a.getPosition().round(2).x).toEqual(0);
+    expect(eqn._b.getPosition().round(2).x).toEqual(0.1);
+    expect(eqn.eqn.forms['0'].content[0].width).toEqual(0.2);
+  });
+  test('Lazy Layout', () => {
+    ways.lazyLayout();
+    expect(eqn._a.getPosition().round(2).x).toEqual(0);
+    expect(eqn._b.getPosition().round(2).x).toEqual(0);
+    expect(eqn.eqn.forms['0'].content[0].width).toEqual(0);
+    eqn.showForm('0');
+    expect(eqn._a.getPosition().round(2).x).toEqual(0);
+    expect(eqn._b.getPosition().round(2).x).toEqual(0.1);
+    expect(eqn.eqn.forms['0'].content[0].width).toEqual(0.2);
+    // Changing the text in a does nothing as one layout has already been done
+    eqn._a.drawingObject.setText('xx');
+    expect(eqn._a.getPosition().round(2).x).toEqual(0);
+    expect(eqn._b.getPosition().round(2).x).toEqual(0.1);
+    expect(eqn.eqn.forms['0'].content[0].width).toEqual(0.2);
+    eqn.showForm('0');
+    expect(eqn._a.getPosition().round(2).x).toEqual(0);
+    expect(eqn._b.getPosition().round(2).x).toEqual(0.1);
+    expect(eqn.eqn.forms['0'].content[0].width).toEqual(0.2);
+  });
+  test('Always Layout', () => {
+    ways.alwaysLayout();
+    expect(eqn._a.getPosition().round(2).x).toEqual(0);
+    expect(eqn._b.getPosition().round(2).x).toEqual(0);
+    expect(eqn.eqn.forms['0'].content[0].width).toEqual(0);
+    eqn.showForm('0');
+    expect(eqn._a.getPosition().round(2).x).toEqual(0);
+    expect(eqn._b.getPosition().round(2).x).toEqual(0.1);
+    expect(eqn.eqn.forms['0'].content[0].width).toEqual(0.2);
+    // Changin a to 'xx' will double it's width, but only after the form
+    // is shown.
+    eqn._a.drawingObject.setText('xx');
+    expect(eqn._a.getPosition().round(2).x).toEqual(0);
+    expect(eqn._b.getPosition().round(2).x).toEqual(0.1);
+    expect(eqn.eqn.forms['0'].content[0].width).toEqual(0.2);
+    eqn.showForm('0');
+    expect(eqn._a.getPosition().round(2).x).toEqual(0);
+    expect(eqn._b.getPosition().round(2).x).toEqual(0.2);
+    expect(round(eqn.eqn.forms['0'].content[0].width, 2)).toEqual(0.3);
   });
 });

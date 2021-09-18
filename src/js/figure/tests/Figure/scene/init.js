@@ -67,7 +67,7 @@ const addAxis = (name, direction, color, includeArrow = false) => {
     normals: { data: Fig.pointsToNumbers([...n, ...cnNormals]) },
     dimension: 3,
     color,
-    transform: [['rd', ...direction]],
+    transform: [['d', ...direction]],
   });
   r.setTouchable();
 };
@@ -112,3 +112,4 @@ figure.add({
   position: [0, 0, 0.5],
 });
 
+figure.add({ make: 'cameraControl' });

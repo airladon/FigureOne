@@ -4,6 +4,9 @@ const { Figure, tools, Scene } = Fig;
 const figure = new Figure({
   scene: {
     style: 'orthographic',
+    camera: {
+      position: [0, 0, 1],
+    },
     left: -4.5,
     bottom: -4.5,
     right: 4.5,
@@ -73,6 +76,9 @@ const makeShape = (make, options, reverseLight) => {
   if (reverseLight) {
     scene = new Scene({
       style: 'orthographic',
+      camera: {
+        position: [0, 0, 1],
+      },
       left: -4.5,
       bottom: -4.5,
       right: 4.5,

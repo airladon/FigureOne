@@ -332,7 +332,7 @@ export default class FigurePrimitives {
       }
     }
     // If a normals helper exists, then add the a_normal attribute
-    if (options.normals != null && options.light != null && options.light !== 'ambient') {
+    if (options.normals != null) {
       if (Array.isArray(options.normals)) {
         options.attributes.push({
           name: 'a_normal', data: options.normals, size: 3,

@@ -116,6 +116,13 @@ class Element implements ElementInterface {
     if (content instanceof FigureElementCollection
         || content instanceof FigureElementPrimitive) {
       // Update translation and scale
+      if (content.drawingObject != null && content.drawingObject.text != null) { // $FlowFixMe
+        content.drawingObject.text[0].measureAndAlignText(); // $FlowFixMe
+        content.drawingObject.text[0].calcBorderAndBounds(); // $FlowFixMe
+        content.drawingObject.setBorder(); // $FlowFixMe
+        content.drawingObject.setTouchBorder(); // $FlowFixMe
+        content.custom.updateBorders({});
+      }
       content.transform.updateTranslation([location.x, location.y]);
       content.transform.updateScale([scale, scale]);
       // content.updateLastDrawTransform();

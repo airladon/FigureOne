@@ -125,6 +125,7 @@ export default class EquationForm extends Elements {
   duration: ?number;
   translation: TypeElementTranslationOptions;
   positionsSet: boolean;
+  layout: 'always' | 'lazy' | 'init';
   // };
 
   fromForm: {
@@ -161,6 +162,7 @@ export default class EquationForm extends Elements {
     // this.animation = {};
     this.fromForm = {};
     this.positionsSet = false;
+    this.layout = 'always';
     // this.subForm = '';
   }
 
@@ -172,8 +174,9 @@ export default class EquationForm extends Elements {
     return namedElements;
   }
 
-  setPositions() {
-    if (!this.positionsSet) {
+
+  setPositions(noArrange: boolean = false) {
+    if (!noArrange && (this.layout === 'always' || this.positionsSet === false)) {
       this.arrange(
         this.arranged.scale, this.arranged.xAlign, this.arranged.yAlign, this.arranged.fixTo,
       );
@@ -293,7 +296,7 @@ export default class EquationForm extends Elements {
 
     this.positionsSet = true;
     super.calcSize(new Point(0, 0), scale);
-    this.setPositions();
+    this.setPositions(true);
 
     let fixPoint = new Point(0, 0);
     if (fixTo instanceof FigureElementPrimitive
@@ -303,6 +306,7 @@ export default class EquationForm extends Elements {
         fixPoint = t._dup();
       }
     } else {
+      // fixPoint = getPoint(fixTo).scale(-1);
       fixPoint = new Point(-fixTo.x, -fixTo.y);
     }
 
@@ -353,9 +357,9 @@ export default class EquationForm extends Elements {
     const delta = new Point(0, 0).sub(fixPoint);
     if (delta.x !== 0 || delta.y !== 0) {
       this.offsetLocation(delta);
-      this.setPositions();
+      this.setPositions(true);
     }
-
+    // this.positionsSet = false;
     this.collectionMethods.showOnly(elementsCurrentlyShowing);
   }
 

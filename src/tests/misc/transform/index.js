@@ -10,6 +10,9 @@ const figure = new Figure({
     top: 4.5,
     near: 0.1,
     far: 20,
+    camera: {
+      position: [0, 0, 2],
+    },
     light: {
       directional: [1, 0.5, -0.1],
       ambient: 0.1,

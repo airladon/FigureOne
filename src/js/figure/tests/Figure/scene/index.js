@@ -4,7 +4,24 @@
 
 testCases = {
   beforeEach: () => {
-    figure.scene = new Fig.Scene({ style: 'orthographic' });
+    figure.scene = new Fig.Scene({
+      style: 'orthographic',
+      near: 0.1,
+      far: 10,
+      camera: {
+        position: [0, 0, 2],
+        lookAt: [0, 0, 0],
+        up: [0, 1, 0],
+      },
+      // left: -1, right: 1, bottom: -1, top: 1,
+      // aspectRatio: 1,
+      // fieldOfView: 1,
+      // light: {
+      //   directional: [1, 1, 1],
+      //   ambient: 0.4,
+      //   point: [10, 10, 10],
+      // },
+    });
     figure.elements.scene = figure.scene;
     figure.get('cube').hide();
   },
@@ -137,5 +154,5 @@ if (typeof process === 'object') {
 
   // Uncomment and change this to test in browser
   // Make sure to comment it again when testing with jest
-  runTestCase(['ortho', 'pointLight', 'point light further'], testCases);
+  runTestCase(['ortho', 'clipping', 'fully capture'], testCases);
 }
