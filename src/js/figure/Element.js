@@ -4787,7 +4787,7 @@ class FigureElementCollection extends FigureElement {
         // $FlowFixMe
         throw new Error(`Figure addElement ERROR  at index ${index} in collection ${rootCollection.name}: missing method property in ${elementDefinition}`);
       }
-      const nameToUse = methodPathToUse || generateUniqueId(
+      const nameToUse = elementDefinition.name || generateUniqueId(
         methodPathToUse.startsWith('collection') ? 'collection_' : 'primitive_',
       );
       // Check for critical errors

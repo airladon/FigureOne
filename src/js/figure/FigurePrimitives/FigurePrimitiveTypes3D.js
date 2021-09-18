@@ -535,20 +535,18 @@ export type OBJ_Cone = {
  *
  * ![](./apiassets/prism.png)
  *
- * A prism face is defined in the XY plane, and it's length extends
+ * A prism base is defined in the XY plane, and it's length extends
  * into +z. Use `transform` to orient it in any other way.
  *
- * Triangles will be created for the ends if the face is convex. If the face
- * is not convex, use `faceTriangles` to define the triangles.
+ * Triangles will be created for the ends if the base is convex. If the base
+ * is not convex, use `baseTriangles` to define the triangles.
  *
- * @property {number} [face] face border points defined in the XY plane
- * @property {Array<TypeParsablePoint>} faceTriangles triangles that create the
- * face fill - triangles should be defined counter-clock-wise in the XY plane.
- * If the face is convex, then the triangles can be auto-generated and this
- * property left undefined.
+ * @property {number} [base] base border points defined in the XY plane - the
+ * points should be defined in the counter-clock-wise direction.
+ * @property {Array<TypeParsablePoint>} baseTriangles triangles in the XY plane
+ * that create the base fill. If the base is convex, then the triangles can be
+ * auto-generated and this property left undefined.
  * @property {number} [length] length of the prism
- * @property {TypeParsableTransform} [transform] transform to apply to all
- * points of prism
  * @property {boolean} [lines] if `true` then points representing
  * the edges of the prism will be returned. If `false`, then points
  * representing triangle faces and associated normals will be returned.
@@ -558,11 +556,47 @@ export type OBJ_Cone = {
  * <a href="#shapes3d-boilerplate">boilerplate</a>
  *
  * @example
-
+ * // Create a rectangular prism
+ * figure.add(
+ *   {
+ *     make: 'prism',
+ *     base: [[0, 0], [0.5, 0], [0.5, 0.2], [0, 0.2]],
+ *     color: [1, 0, 0, 1],
+ *   },
+ * );
+ *
+ * @example
+ * // Create a hexagonal prism along the x axis with lines
+ * figure.add(
+ *   {
+ *     make: 'prism',
+ *     base: Fig.polygon({ radius: 0.1, sides: 6 }),
+ *     color: [1, 0, 0, 1],
+ *     transform: ['r', Math.PI / 2, 0, 1, 0],
+ *     lines: true,
+ *   },
+ * );
+ *
+ * @example
+ * // Create a bow tie prism defining the base triangles
+ * figure.add(
+ *   {
+ *     make: 'prism',
+ *     base: [[0, 0], [0.25, 0.1], [0.5, 0], [0.5, 0.3], [0.25, 0.2], [0, 0.3]],
+ *     baseTriangles: [
+ *       [0, 0], [0.25, 0.1], [0.25, 0.2],
+ *       [0, 0], [0.25, 0.2], [0, 0.3],
+ *       [0.25, 0.1], [0.5, 0], [0.5, 0.3],
+ *       [0.25, 0.1], [0.5, 0.3], [0.25, 0.2],
+ *     ],
+ *     color: [1, 0, 0, 1],
+ *     transform: ['r', Math.PI / 2, 0, 1, 0],
+ *   },
+ * );
  */
 export type OBJ_Prism = {
-  ace?: Array<TypeParsablePoint>,
-  faceTriangles?: Array<TypeParsablePoint>,
+  base?: Array<TypeParsablePoint>,
+  baseTriangles?: Array<TypeParsablePoint>,
   length?: number,
   lines?: boolean,
 } & OBJ_FigurePrimitive & OBJ_Generic3All;

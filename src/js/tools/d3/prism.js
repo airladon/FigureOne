@@ -1,7 +1,7 @@
 // @flow
-import { getPoints } from '../geometry/Point';
+import { getPoints, Point } from '../geometry/Point';
 import { getTransform } from '../geometry/Transform';
-import type { TypeParsablePoint, Point } from '../geometry/Point';
+import type { TypeParsablePoint } from '../geometry/Point';
 import { joinObjects } from '../tools';
 import { getNormal } from '../geometry/Plane';
 // import * as m3 from '../m3';
@@ -11,28 +11,28 @@ import type { TypeParsableTransform } from '../geometry/Transform';
 /**
  * Prism options object.
  *
- * A prism face is defined in the XY plane, and it's length extends
+ * A prism base is defined in the XY plane, and it's length extends
  * into +z. Use `transform` to orient it in any other way.
  *
- * Triangles will be created for the ends if the face is convex. If the face
- * is not convex, use `faceTriangles` to define the triangles.
+ * Triangles will be created for the ends if the base is convex. If the base
+ * is not convex, use `baseTriangles` to define the triangles.
  *
- * @property {number} [face] face border points defined in the XY plane
- * @property {Array<TypeParsablePoint>} faceTriangles triangles that create the
- * face fill - triangles should be defined counter-clock-wise in the XY plane.
- * If the face is convex, then the triangles can be auto-generated and this
- * property left undefined.
+ * @property {number} [base] base border points defined in the XY plane - the
+ * points should be defined in the counter-clock-wise direction.
+ * @property {Array<TypeParsablePoint>} baseTriangles triangles in the XY plane
+ * that create the base fill. If the base is convex, then the triangles can be
+ * auto-generated and this property left undefined.
  * @property {number} [length] length of the prism
  * @property {TypeParsableTransform} [transform] transform to apply to all
  * points of prism
  * @property {boolean} [lines] if `true` then points representing
  * the edges of the prism will be returned. If `false`, then points
- * representing triangle faces and associated normals will be returned.
+ * representing triangle bases and associated normals will be returned.
  * (`false`)
  */
 export type OBJ_PrismPoints = {
-  face?: Array<TypeParsablePoint>,
-  faceTriangles?: Array<TypeParsablePoint>,
+  base?: Array<TypeParsablePoint>,
+  baseTriangles?: Array<TypeParsablePoint>,
   length?: number,
   transform?: TypeParsableTransform,
   lines?: boolean,
@@ -40,17 +40,17 @@ export type OBJ_PrismPoints = {
 
 
 function toLines(
-  face: Array<TypeParsablePoint>,
+  base: Array<TypeParsablePoint>,
   length: number,
   transform: TypeParsableTransform,
 ): Array<Point> {
   const frontFace = [];
-  const facePoints = getPoints(face);
+  const basePoints = getPoints(base);
 
-  for (let i = 0; i < facePoints.length - 1; i += 1) {
-    frontFace.push(facePoints[i], facePoints[i + 1]);
+  for (let i = 0; i < basePoints.length - 1; i += 1) {
+    frontFace.push(basePoints[i], basePoints[i + 1]);
   }
-  frontFace.push(facePoints[facePoints.length - 1], facePoints[0]);
+  frontFace.push(basePoints[basePoints.length - 1], basePoints[0]);
   const backFace = frontFace.map(p => p.add(0, 0, length));
   const sides = [];
   for (let i = 0; i < frontFace.length; i += 2) {
@@ -66,7 +66,7 @@ function toLines(
 /**
  * Return points of a prism.
  *
- * The points can either represent the triangles that make up each face, or
+ * The points can either represent the triangles that make up each base, or
  * represent the start and end points lines that are the edges of the prism.
  *
  * If the points represent triangles, then a second array of normal vectors
@@ -82,47 +82,54 @@ export default function prism(options: OBJ_PrismPoints) {
     options,
   }, options);
   const {
-    face, length, transform, lines, faceTriangles,
+    base, length, transform, lines, baseTriangles,
   } = o;
   // let axisToUse = getPoint(axis);
   // if (depth != null) {
   //   axisToUse = axisToUse.normalize().scale(depth);
   // }
   if (lines) {
-    return [toLines(face, length, transform)];
+    return [toLines(base, length, transform)];
   }
 
-  const faceBorder = getPoints(face);
-  const backFaceBorder = faceBorder.map(p => p.add(0, 0, length));
-  let frontFace = [];
-  if (faceTriangles != null) {
-    frontFace = getPoints(faceTriangles);
+  const baseBorder = getPoints(base);
+  const zBaseBorder = baseBorder.map(p => p.add(0, 0, length));
+  let baseFace = [];
+  if (baseTriangles != null) {
+    baseFace = getPoints(baseTriangles);
   } else {
-    for (let i = 2; i < faceBorder.length; i += 1) {
-      frontFace.push(faceBorder[0], faceBorder[i - 1], faceBorder[i]);
+    for (let i = 2; i < baseBorder.length; i += 1) {
+      baseFace.push(baseBorder[0], baseBorder[i], baseBorder[i - 1]);
     }
   }
-  const backFace = frontFace.map(p => p.add(0, 0, length));
+  const zBaseFace = baseFace.map(p => p.add(0, 0, length));
   const sides = [];
-  for (let i = 0; i < faceBorder.length - 1; i += 1) {
-    sides.push(faceBorder[i], backFaceBorder[i], backFaceBorder[i + 1]);
-    sides.push(faceBorder[i], backFaceBorder[i + 1], faceBorder[i + 1]);
+  for (let i = 0; i < baseBorder.length - 1; i += 1) {
+    sides.push(zBaseBorder[i], baseBorder[i], baseBorder[i + 1]);
+    sides.push(zBaseBorder[i], baseBorder[i + 1], zBaseBorder[i + 1]);
   }
-  const j = faceBorder.length - 1;
-  sides.push(faceBorder[j], backFaceBorder[j], backFaceBorder[0]);
-  sides.push(faceBorder[j], backFaceBorder[0], faceBorder[0]);
+  const j = baseBorder.length - 1;
+  sides.push(zBaseBorder[j], baseBorder[j], baseBorder[0]);
+  sides.push(zBaseBorder[j], baseBorder[0], zBaseBorder[0]);
 
-  let triangles: Array<Point> = [...frontFace, ...sides, ...backFace];
-  if (transform != null) {
-    const matrix = transform != null ? getTransform(transform).matrix() : [1, 0, 0, 0];
-    // $FlowFixMe
-    triangles = triangles.map((p: Point) => p.transformBy(matrix));
+  let triangles: Array<Point> = [...baseFace, ...sides, ...zBaseFace];
+  let normals: Array<Point> = [];
+  for (let i = 0; i < baseFace.length; i += 1) {
+    normals.push(new Point(0, 0, -1));
   }
-
-  const normals = [];
-  for (let i = 0; i < triangles.length - 2; i += 3) {
-    const normal = getNormal(triangles[i], triangles[i + 1], triangles[i + 2]);
+  for (let i = 0; i < sides.length - 2; i += 3) {
+    const normal = getNormal(sides[i], sides[i + 1], sides[i + 2]);
     normals.push(normal._dup(), normal._dup(), normal._dup());
   }
+  for (let i = 0; i < baseFace.length; i += 1) {
+    normals.push(new Point(0, 0, 1));
+  }
+  if (transform != null) {
+    const matrix = getTransform(transform).matrix();
+    // $FlowFixMe
+    triangles = triangles.map((p: Point) => p.transformBy(matrix));
+    normals = normals.map((p: Point) => p.transformBy(matrix));
+  }
+
   return [triangles, normals];
 }

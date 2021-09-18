@@ -649,7 +649,7 @@ export default class FigurePrimitives {
   prism(...optionsIn: Array<OBJ_Prism>) {
     return this.generic3DBase(
       {
-        side: this.defaultLength,
+        length: this.defaultLength / 3,
       },
       joinObjects({}, ...optionsIn),
       o => prism(o),
