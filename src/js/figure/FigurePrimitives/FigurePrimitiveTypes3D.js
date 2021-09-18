@@ -377,7 +377,7 @@ export type OBJ_Cylinder = {
  * @property {TypeParsablePoint} [p1] (`[0, 0, 0]`)
  * @property {TypeParsablePoint} [p2] (default: `p1 + [1, 0, 0]`)
  * @property {number} [width] width of line
- * @property {OBJ_Line3Arrow} [arrow] define to use arrows at one or both ends
+ * @property {OBJ_Line3Arrow | boolean} [arrow] define to use arrows at one or both ends
  * of the line
  * @property {number} [sides] number of sides (`10`)
  * @property {'curve' | 'flat'} [normals] `flat` normals will make light

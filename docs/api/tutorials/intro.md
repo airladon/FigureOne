@@ -508,36 +508,24 @@ const figure = new Fig.Figure({ scene: [-3, -3, 3, 3], color: [1, 0, 0, 1], line
 ##### <a id="shapes3d-boilerplate"></a> 3D Boilerplate
 
 ```js
-// Create the figure
-const figure = new Fig.Figure();
-
-// Set the scene
-figure.scene.setProjection({ style: 'orthographic' });
-figure.scene.setCamera({ position: [2, 1, 1], up: [0, 1, 0] });
-figure.scene.setLight({ directional: [0.7, 0.5, 0.2] });
+// Create the figure and set the scene
+const figure = new Fig.Figure({
+  scene: {
+    style: 'orthographic',
+    camera: { position: [2, 1, 1], up: [0, 1, 0] },
+    light: { directional: [0.7, 0.5, 0.2] } },
+  },
+});
 
 // Add x, y, z axis
-figure.add([
+figure.add(
   {
-    make: 'cylinder',
-    radius: 0.01,
-    color: [1, 0, 0, 1],
-    line: [[-1, 0, 0], [1, 0, 0]],
+    make: 'collections.axis3',
+    start: -1,
+    width: 0.01,
+    length: 2,
   },
-  {
-    make: 'cylinder',
-    radius: 0.01,
-    color: [0, 1, 0, 1],
-    line: [[0, -1, 0], [0, 1, 0]],
-  },
-  {
-    make: 'cylinder',
-    radius: 0.01,
-    color: [0, 0, 1, 1],
-    line: [[0, 0, -1], [0, 0, 1]],
-  },
-]);
-
+);
 ```
 
 ##### <a id="text-boilerplate"></a> Text Boilerplate

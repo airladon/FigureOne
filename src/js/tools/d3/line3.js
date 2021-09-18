@@ -29,8 +29,8 @@ export type OBJ_Line3Arrow = {
  * @property {TypeParsablePoint} [p1] (`[0, 0, 0]`)
  * @property {TypeParsablePoint} [p2] (default: `p1 + [1, 0, 0]`)
  * @property {number} [width] width of line
- * @property {OBJ_Line3Arrow} [arrow] define to use arrows at one or both ends
- * of the line
+ * @property {OBJ_Line3Arrow | boolean} [arrow] define to use arrows at one or
+ * both ends of the line
  * @property {number} [sides] number of sides (`10`)
  * @property {'curve' | 'flat'} [normals] `flat` normals will make light
  * shading across a line face constant. `curve` will gradiate the shading. Use
@@ -48,7 +48,7 @@ export type OBJ_Line3Points = {
   p1?: TypeParsablePoint,
   p2?: TypeParsablePoint,
   width?: number,
-  arrow?: OBJ_Line3Arrow,
+  arrow?: OBJ_Line3Arrow | boolean,
   sides?: number,
   normals?: 'curve' | 'flat',
   transform?: TypeParsableTransform,
@@ -86,15 +86,28 @@ export default function line3(options: OBJ_Line3Points) {
     rotation, sides, normals, p1, width, transform, lines, arrow,
   } = o;
   let { p2 } = o;
-  if (arrow != null) {
-    if (arrow.ends == null) {
-      arrow.ends = 'end';
-    }
-    if (arrow.width == null) {
-      arrow.width = width * 2.5;
-    }
-    if (arrow.length == null) {
-      arrow.length = arrow.width * 3;
+  let arrowToUse = arrow;
+  if (arrowToUse != null) {
+    if (typeof arrowToUse === 'boolean') {
+      if (arrowToUse) {
+        arrowToUse = {
+          ends: 'end',
+          width: width * 2.5,
+          length: width * 2.5 * 3,
+        };
+      } else {
+        arrowToUse = null;
+      }
+    } else {
+      if (arrowToUse.ends == null) {
+        arrowToUse.ends = 'end';
+      }
+      if (arrowToUse.width == null) {
+        arrowToUse.width = width * 2.5;
+      }
+      if (arrowToUse.length == null) {
+        arrowToUse.length = arrowToUse.width * 3;
+      }
     }
   }
   if (p2 == null) {
@@ -105,23 +118,23 @@ export default function line3(options: OBJ_Line3Points) {
 
   let startLine = 0;
   let endLine = l.length();
-  if (arrow != null) {
-    if (arrow.ends === 'start' || arrow.ends === 'all') {
-      startLine = arrow.length;
+  if (arrowToUse != null) {
+    if (arrowToUse.ends === 'start' || arrowToUse.ends === 'all') {
+      startLine = arrowToUse.length;
     }
-    if (arrow.ends === 'end' || arrow.ends === 'all') {
-      endLine = l.length() - arrow.length;
+    if (arrowToUse.ends === 'end' || arrowToUse.ends === 'all') {
+      endLine = l.length() - arrowToUse.length;
     }
   }
   const profile = [];
   profile.push([0, 0]);
-  if (arrow != null && (arrow.ends === 'start' || arrow.ends === 'all')) {
-    profile.push([startLine, arrow.width]);
+  if (arrowToUse != null && (arrowToUse.ends === 'start' || arrowToUse.ends === 'all')) {
+    profile.push([startLine, arrowToUse.width]);
   }
   profile.push([startLine, width]);
   profile.push([endLine, width]);
-  if (arrow != null && (arrow.ends === 'end' || arrow.ends === 'all')) {
-    profile.push([endLine, arrow.width]);
+  if (arrowToUse != null && (arrowToUse.ends === 'end' || arrowToUse.ends === 'all')) {
+    profile.push([endLine, arrowToUse.width]);
   }
   profile.push([l.length(), 0]);
 

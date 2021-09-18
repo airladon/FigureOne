@@ -19,12 +19,15 @@ import CollectionsPolyline from './PolyLine';
 // eslint-disable-next-line import/no-cycle
 import CollectionsAxis from './Axis';
 // eslint-disable-next-line import/no-cycle
+import CollectionsAxis3 from './Axis3';
+// eslint-disable-next-line import/no-cycle
 import CollectionsTrace from './Trace';
 import type { COL_Line } from './Line';
 import type { COL_Angle } from './Angle';
 import type { TypeLabelOptions } from './EquationLabel';
 import type { COL_Polyline } from './PolyLine';
 import type { COL_Axis } from './Axis';
+import type { COL_Axis3 } from './Axis3';
 import type { COL_Trace } from './Trace';
 import type { COL_Plot } from './Plot';
 import type { COL_Rectangle } from './Rectangle';
@@ -187,6 +190,15 @@ export default class FigureCollections {
    */
   axis(...options: Array<COL_Axis>) {
     return new CollectionsAxis(
+      this, joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options),
+    );
+  }
+
+  /**
+   * Create a {@link CollectionsAixs3}.
+   */
+  axis3(...options: Array<COL_Axis3>) {
+    return new CollectionsAxis3(
       this, joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options),
     );
   }

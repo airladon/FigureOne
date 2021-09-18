@@ -2330,6 +2330,36 @@
               
                 
                 <li><a
+                  href='#3d-shape-collections'
+                  class="h5 bold black caps">
+                  3D Shape Collections
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#collectionsaxis3'
+                  class="">
+                  CollectionsAxis3
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#col_axis3'
+                  class="">
+                  COL_Axis3
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#interactivity'
                   class="h5 bold black caps">
                   Interactivity
@@ -6096,6 +6126,12 @@
                         href='#figurecollectionsaxis'
                         class='regular pre-open'>
                         #axis
+                      </a></li>
+                      
+                      <li><a
+                        href='#figurecollectionsaxis3'
+                        class='regular pre-open'>
+                        #axis3
                       </a></li>
                       
                       <li><a
@@ -28208,7 +28244,7 @@ the arrow profiles can only be simple triangles.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>arrow</span> <code class='quiet'>(<a href="#obj_line3arrow">OBJ_Line3Arrow</a>?)</code>
+          <span class='code bold'>arrow</span> <code class='quiet'>((<a href="#obj_line3arrow">OBJ_Line3Arrow</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)?)</code>
           : define to use arrows at one or both ends
 of the line
 
@@ -33993,6 +34029,239 @@ COL_Rectangle
         <div class='space-bottom0'>
           <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
           : Position of the plot
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+
+  <h2 id='3d-shape-collections' class='mt0'>
+    3D Shape Collections
+  </h2>
+
+  
+    
+  
+</section></div>
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='collectionsaxis3'>
+      CollectionsAxis3
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="#figureelementcollection">FigureElementCollection</a> representing x, y, z axes.</p>
+<p><img src="./apiassets/axis3.png" alt=""></p>
+<p>This object creates an x, y, and z axes.</p>
+<p>The axes can be created uniformly, or customized individually.</p>
+<p>See <a href="#col_axis3">COL_Axis3</a> for setup options.</p>
+<p>To test examples below, append them to the
+<a href="#shapes3d-boilerplate">boilerplate</a></p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#figureelementcollection">FigureElementCollection</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create positive x, y, and z axes</span>
+figure.add(
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;collections.axis3&#x27;</span>,
+    <span class="hljs-attr">arrow</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">length</span>: <span class="hljs-number">0.5</span>,
+  },
+);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create full x, y, and z axes with arrows</span>
+figure.add(
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;collections.axis3&#x27;</span>,
+    <span class="hljs-attr">arrow</span>: { <span class="hljs-attr">ends</span>: <span class="hljs-string">&#x27;all&#x27;</span> },
+    <span class="hljs-attr">start</span>: -<span class="hljs-number">0.5</span>,
+    <span class="hljs-attr">length</span>: <span class="hljs-number">1</span>,
+  },
+);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Customize each axis</span>
+figure.add(
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;collections.axis3&#x27;</span>,
+    <span class="hljs-attr">arrow</span>: [{ <span class="hljs-attr">ends</span>: <span class="hljs-string">&#x27;end&#x27;</span> }, <span class="hljs-literal">false</span>, { <span class="hljs-attr">ends</span>: <span class="hljs-string">&#x27;all&#x27;</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">0.02</span> }],
+    <span class="hljs-attr">width</span>: <span class="hljs-number">0.02</span>,
+    <span class="hljs-attr">start</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, -<span class="hljs-number">0.5</span>],
+    <span class="hljs-attr">length</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">1</span>],
+  },
+);</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='col_axis3'>
+      COL_Axis3
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="#collectionsaxis3">CollectionsAxis3</a> options object that extends <a href="#obj_collection">OBJ_Collection</a>
+options object (without <code>parent</code>).</p>
+<p>Each option can either be singular and applied to all axes, or in a 3 element
+tuple where the first, second and third elements apply to the x, y, and z
+axes respectively.</p>
+<p>To not create an axis, use a width of exactly 0.</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_collection">OBJ_Collection</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>])?)</code>
+          : width of axis
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>start</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>])?)</code>
+          : start value of axis
+(
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>length</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>])?)</code>
+          : length of axis
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>])?)</code>
+          : number of sides in
+cross section of axis (
+<code>10</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lines</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>])?)</code>
+          : <code>true</code>
+ if to draw as
+lines instead of a solid (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>((<a href="#typecolor">TypeColor</a> | [<a href="#typecolor">TypeColor</a>, <a href="#typecolor">TypeColor</a>, <a href="#typecolor">TypeColor</a>])?)</code>
+          : axes color - default is x: red, y: green, z: blue.
 
           
         </div>
@@ -75604,6 +75873,67 @@ translation of
       </div>
     </div>
   
+    <div class='border-bottom' id='figurecollectionsaxis3'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>axis3(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Create a <a href="CollectionsAixs3">CollectionsAixs3</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#col_axis3">COL_Axis3</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='figurecollectionstrace'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -79036,9 +79366,9 @@ the arrow profiles can only be simple triangles.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>arrow</span> <code class='quiet'>(<a href="#obj_line3arrow">OBJ_Line3Arrow</a>?)</code>
-          : define to use arrows at one or both ends
-of the line
+          <span class='code bold'>arrow</span> <code class='quiet'>((<a href="#obj_line3arrow">OBJ_Line3Arrow</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)?)</code>
+          : define to use arrows at one or
+both ends of the line
 
           
         </div>

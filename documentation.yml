@@ -67,6 +67,9 @@ toc:
   - COL_Axis
   - CollectionsPlot
   - COL_Plot
+  - name: 3D Shape Collections
+  - CollectionsAxis3
+  - COL_Axis3
   - name: Interactivity
     file: ./docs/api/tutorials/interactive/interactive.md
   - OBJ_ElementMove
