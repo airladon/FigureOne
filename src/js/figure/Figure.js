@@ -541,7 +541,7 @@ class Figure {
       optionsToUse.scene.style === '2D'
       || optionsToUse.scene.style === 'orthographic'
     ) {
-      const {
+      const { // $FlowFixMe
         left, right, top, bottom,
       } = optionsToUse.scene;
 
@@ -556,10 +556,10 @@ class Figure {
         } else {
           w = 2;
           h = height / width * 2;
-        }
-        optionsToUse.scene.left = -w / 2;
-        optionsToUse.scene.right = w / 2;
-        optionsToUse.scene.bottom = -h / 2;
+        } // $FlowFixMe
+        optionsToUse.scene.left = -w / 2; // $FlowFixMe
+        optionsToUse.scene.right = w / 2; // $FlowFixMe
+        optionsToUse.scene.bottom = -h / 2; // $FlowFixMe
         optionsToUse.scene.top = h / 2;
       }
     } else {
@@ -2625,13 +2625,13 @@ class Figure {
       if (e.drawingObject != null && e.drawBorderBuffer == null) {
         // eslint-disable-next-line no-continue
         continue;
-      }
+      } // $FlowFixMe
       const borderPoints = e.getBorder('figure', border);
       if (borderPoints[0].length > 0) {
         for (let j = 0; j < borderPoints.length; j += 1) {
           const name = `__${border}${i}${j}`;
           const el = this.get(name);
-          if (el != null) {
+          if (el != null) { // $FlowFixMe
             el.custom.updatePoints({ points: borderPoints[j] });
           } else {
             this.add({

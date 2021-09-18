@@ -480,12 +480,12 @@ export type TypeBorder = Array<Array<Point>>;
 function getBorder(
   border: Array<TypeParsablePoint> | Array<Array<TypeParsablePoint>>
           | string | number | TypeParsableBuffer,
-): Array<Array<Point>> | string | number {
+): Array<Array<Point>> | string | TypeParsableBuffer {
   if (
     typeof border === 'string'
     || typeof border === 'number'
     || isBuffer(border)
-  ) {
+  ) { // $FlowFixMe
     return border;
   } // $FlowFixMe
   if (isParsablePoint(border[0])) {  // $FlowFixMe

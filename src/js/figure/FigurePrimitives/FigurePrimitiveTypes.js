@@ -1,7 +1,7 @@
 // @flow
 import type {
   TypeParsablePoint, TypeParsableTransform,
-  TypeParsableBorder, Rect,
+  TypeParsableBorder, Rect, Point, TypeParsableBuffer,
 } from '../../tools/g2';
 import type { FigureElement, OBJ_Scenarios, OBJ_ElementMove } from '../Element';
 import type { TypeGLUniform, TypeGLBufferType, TypeGLBufferUsage } from '../DrawingObjects/GLObject/GLObject';

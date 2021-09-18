@@ -100,7 +100,7 @@ function decelerateValue(
   const value: number = bounds != null ? bounds.clip(valueIn) : valueIn;
   const deceleration = Math.max(decelerationIn, 0.0000001);
   // Direciton of velocity
-  const direction = velocityIn / Math.abs(velocityIn);
+  const direction = round(velocityIn / Math.abs(velocityIn), 1);
 
   // Calculate the distance travelled in deltaTime - If deltaTime === null, then
   // the distance travelled till the velocity becomes 0 will be calculated.
@@ -138,7 +138,7 @@ function decelerateValue(
   }
 
   // if we got here, the new value is out of bounds
-  const bounceScaler = 1 - bounceLossIn;
+  const bounceScaler = 1 - bounceLossIn; // $FlowFixMe
   const result = bounds.intersect(value, direction);
 
   // if new value is not contained within bounds, but the intersect distance

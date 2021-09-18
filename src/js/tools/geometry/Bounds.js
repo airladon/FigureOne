@@ -296,8 +296,9 @@ class RangeBounds extends Bounds {
    * @param {number} value
    * @return {BoundsIntersect}
    */
-  intersect(
-    value: number | TypeParsablePoint,
+  // $FlowFixMe
+  intersect( // $FlowFixMe
+    value: number,
     direction: 1 | -1 = 1,
   ) {
     // const reflection = direction * -1;
@@ -320,7 +321,7 @@ class RangeBounds extends Bounds {
         return { intersect: null, distance: 0, reflection: direction };
       }
       return {
-        intersect: max,
+        intersect: max, // $FlowFixMe
         distance: Math.abs(v - max),
         reflection: -1,
       };
@@ -329,7 +330,7 @@ class RangeBounds extends Bounds {
       return { intersect: null, distance: 0, reflection: direction };
     }
     return {
-      intersect: min,
+      intersect: min, // $FlowFixMe
       distance: Math.abs(v - min),
       reflection: 1,
     };
@@ -594,6 +595,7 @@ class RectBounds extends Bounds {
    * @param {number} precision
    * @return {RectBounds}
    */
+  // $FlowFixMe
   round(precision: number = 8): RectBounds {
     const d = this._dup();
     d.left = round(d.left, precision);
@@ -1107,29 +1109,30 @@ function getBounds(
     return bounds;
   }
 
-  if (bounds.min !== undefined || bounds.max !== undefined) {
+  // $FlowFixMe
+  if (bounds.min !== undefined || bounds.max !== undefined) { // $FlowFixMe
     return new RangeBounds(bounds);
   }
   if (
     bounds.left !== undefined
-    || bounds.right !== undefined
-    || bounds.top !== undefined
+    || bounds.right !== undefined // $FlowFixMe
+    || bounds.top !== undefined // $FlowFixMe
     || bounds.bottom !== undefined
     || bounds.position !== undefined
     || bounds.normal !== undefined
     || bounds.rightDirection !== undefined
     || bounds.topDirection !== undefined
-  ) {
+  ) { // $FlowFixMe
     return new RectBounds(bounds);
   }
-  if (
-    bounds.line !== undefined
-    || bounds.p1 !== undefined
-    || bounds.p2 !== undefined
-    || bounds.angle !== undefined
-    || bounds.mag !== undefined
+  if ( // $FlowFixMe
+    bounds.line !== undefined // $FlowFixMe
+    || bounds.p1 !== undefined // $FlowFixMe
+    || bounds.p2 !== undefined // $FlowFixMe
+    || bounds.angle !== undefined // $FlowFixMe
+    || bounds.mag !== undefined // $FlowFixMe
     || bounds.ends !== undefined
-  ) {
+  ) { // $FlowFixMe
     return new LineBounds(bounds);
   }
 
@@ -1175,7 +1178,7 @@ function getBounds(
       });
     }
   }
-  throw new Error(`Cannot parse bounds ${bounds}`);
+  throw new Error(`Cannot parse bounds ${JSON.stringify(bounds)}`);
 }
 
 export {

@@ -94,6 +94,8 @@ import type {
   OBJ_Revolve,
   OBJ_Surface,
   OBJ_Line3,
+  OBJ_CameraControl,
+  OBJ_Prism,
 } from './FigurePrimitiveTypes3D';
 
 
@@ -480,11 +482,11 @@ export default class FigurePrimitives {
     const options = joinObjects({}, defaultOptions, oIn);
     const dim = options.dimension;
 
-    const processOptions = (o: OBJ_Generic3, u) => {
+    const processOptions = (o: Object, u) => {
       if (o.usage == null) {
         o.usage = u;
       }
-      if (o.points != null) {
+      if (o.points != null) { // $FlowFixMe
         o.vertices = o.points;
       }
       // If copy steps exist, then make copies of vertices, normals
@@ -540,20 +542,20 @@ export default class FigurePrimitives {
       drawType?: TypeGLPrimitive,
     }) {
       const o = updateOptions;
-      processOptions(o, u);
-      if (o.vertices) {
-        element.custom.updateVertices(o.vertices.data);
-        if (o.texture != null && o.texture.coords != null) {
-          element.drawingObject.updateTextureMap(o.texture.coords);
+      processOptions(o, u); // $FlowFixMe
+      if (o.vertices) { // $FlowFixMe
+        element.custom.updateVertices(o.vertices.data); // $FlowFixMe
+        if (o.texture != null && o.texture.coords != null) { // $FlowFixMe
+          element.drawingObject.updateTextureMap(o.texture.coords); // $FlowFixMe
         } else if (o.texture != null && element.drawingObject.texture != null) {
-          if (element.drawingObject.texture.points != null) {
+          if (element.drawingObject.texture.points != null) { // $FlowFixMe
             element.drawingObject.updateTextureMap(element.drawingObject.texture.points);
-          } else {
+          } else { // $FlowFixMe
             element.drawingObject.updateTextureMap([]);
           }
         }
-      }
-      if (o.normals && element.drawingObject.attributes.a_normal != null) {
+      } // $FlowFixMe
+      if (o.normals && element.drawingObject.attributes.a_normal != null) { // $FlowFixMe
         element.custom.updateAttribute('a_normal', o.normals.data);
       }
       if (o.colors) {
@@ -561,8 +563,8 @@ export default class FigurePrimitives {
       }
       if (o.drawType != null) { // $FlowFixMe
         element.drawingObject.setPrimitive(o.drawType.toUpperCase());
-      }
-      if (o.touchScale != null) {
+      } // $FlowFixMe
+      if (o.touchScale != null) { // $FlowFixMe
         element.touchScale = getScale(o.touchScale);
       }
     };
@@ -952,7 +954,7 @@ export default class FigurePrimitives {
    * @see {@link OBJ_Generic} for options and examples.
    */
   generic(...optionsIn: Array<OBJ_Generic>) {
-    const oIn = joinObjects({}, ...optionsIn);
+    const oIn = joinObjects({}, ...optionsIn); // $FlowFixMe
     const element = this.generic3({
       dimension: 2,
       light: null,
@@ -1438,6 +1440,7 @@ export default class FigurePrimitives {
       xSensitivity: 1,
       ySensitivity: 1,
     }, ...options);
+    // $FlowFixMe
     const element = this.rectangle({
       width: o.width,
       height: o.height,

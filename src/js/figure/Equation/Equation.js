@@ -1813,6 +1813,9 @@ export class Equation extends FigureElementCollection {
     ) {
       return fixTo;
     }
+    if (fixTo == null) {
+      return new Point(0, 0);
+    }
     return getPoint(fixTo);
   }
 

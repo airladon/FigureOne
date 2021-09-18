@@ -57,10 +57,22 @@ export type OBJ_AddElement = {
   path?: string,
   name?: string,
   make?: string,
-  options?: {},   // eslint-disable-next-line no-use-before-define
+  options?: Object,   // eslint-disable-next-line no-use-before-define
   elements?: Array<OBJ_AddElement | FigureElement>,
   mods?: {},
   scenario?: string,
+  position?: TypeParsablePoint,
+  transform?: TypeParsableTransform,
+  color?: TypeColor,
+  touch?: boolean | OBJ_Touch,
+  // eslint-disable-next-line no-use-before-define
+  move?: boolean | OBJ_ElementMove,
+  dimColor?: TypeColor,
+  defaultColor?: TypeColor,
+  // eslint-disable-next-line no-use-before-define
+  scenarios?: OBJ_Scenarios,
+  scene?: Scene | OBJ_Scene,
+  touchScale?: number,
 };
 
 /**
@@ -2248,7 +2260,7 @@ class FigureElement {
     this.state.isMovingFreely = false;
     this.state.movement.previousTime = null;
     if (this.move.freely.callback) {
-      this.fnMap.exec(this.move.freely.callback, how);
+      this.fnMap.exec(this.move.freely.callback, how);  // $FlowFixMe
       this.move.freely.callback = null;
     }
     if (wasMovingFreely) {
@@ -3577,17 +3589,17 @@ class FigureElement {
         this.transform.updateRotation(0, this.move.plane.n);
       }
     }
-    if (bounds != null) {
+    if (bounds != null) { // $FlowFixMex
       if (bounds.contains != null) {
         this.move.bounds = bounds;
-      } else if (
-        bounds.left !== undefined
-        || bounds.right !== undefined
-        || bounds.bottom !== undefined
-        || bounds.top !== undefined
-        || bounds.topDirection !== undefined
-        || bounds.rightDirection !== undefined
-        || bounds.position !== undefined
+      } else if ( // $FlowFixMex
+        bounds.left !== undefined // $FlowFixMex
+        || bounds.right !== undefined // $FlowFixMex
+        || bounds.bottom !== undefined // $FlowFixMex
+        || bounds.top !== undefined // $FlowFixMex
+        || bounds.topDirection !== undefined // $FlowFixMex
+        || bounds.rightDirection !== undefined // $FlowFixMex
+        || bounds.position !== undefined // $FlowFixMex
         || bounds.normal !== undefined
       ) {
         const b = joinObjects(
@@ -4237,7 +4249,7 @@ class FigureElementPrimitive extends FigureElement {
         if (parentUniqueColor != null) {
           colorToUse = parentUniqueColor;
         } else if (this.uniqueColor == null) {
-          this.setUniqueColor(generateUniqueColor());
+          this.setUniqueColor(generateUniqueColor()); // $FlowFixMex
           colorToUse = this.uniqueColor.map(c => c / 255);
         } else {
           colorToUse = this.uniqueColor.map(c => c / 255);
@@ -4456,10 +4468,10 @@ class FigureElementCollection extends FigureElement {
     this.drawOrder = [];
     if (options.move != null && options.move !== false) {
       this.setTouchable();
-      this.setMovable();
+      this.setMovable(); // $FlowFixMex
       this.setMove(options.move);
     }
-    if (options.touch != null) {
+    if (options.touch != null) { // $FlowFixMex
       this.setTouchable(options.touch);
     }
     if (options.dimColor != null) {
@@ -4751,9 +4763,6 @@ class FigureElementCollection extends FigureElement {
         throw Error(`Add elements index ${index} does not exist in layout`);
       }
       const addElementsKey = 'elements';
-      const nameToUse = elementDefinition.name || generateUniqueId(
-        elementDefinition.make.startsWith('collection') ? 'collection_' : 'primitive_',
-      );
       const pathToUse = elementDefinition.path;
       let optionsToUse;
       if (elementDefinition.options != null) {
@@ -4773,14 +4782,18 @@ class FigureElementCollection extends FigureElement {
       } else {
         collectionPath = rootCollection.getElement(pathToUse);
       }
+
+      if (methodPathToUse == null || methodPathToUse === '') {
+        // $FlowFixMe
+        throw new Error(`Figure addElement ERROR  at index ${index} in collection ${rootCollection.name}: missing method property in ${elementDefinition}`);
+      }
+      const nameToUse = methodPathToUse || generateUniqueId(
+        methodPathToUse.startsWith('collection') ? 'collection_' : 'primitive_',
+      );
       // Check for critical errors
       if (nameToUse == null || nameToUse === '') {
         // $FlowFixMe
         throw new Error(`Figure addElement ERROR  at index ${index} in collection ${rootCollection.name}: missing name property in ${elementDefinition}`);
-      }
-      if (methodPathToUse == null || methodPathToUse === '') {
-        // $FlowFixMe
-        throw new Error(`Figure addElement ERROR  at index ${index} in collection ${rootCollection.name}: missing method property in ${elementDefinition}`);
       }
       if (!(collectionPath instanceof FigureElementCollection)) {
         // $FlowFixMe
@@ -5048,10 +5061,10 @@ class FigureElementCollection extends FigureElement {
         if (parentTouchScale != null || this.touchScale != null) {
           parentTouchScaleToUse = new Point(1, 1, 1);
         }
-        if (parentTouchScale != null) {
+        if (parentTouchScale != null) { // $FlowFixMe
           parentTouchScaleToUse = parentTouchScaleToUse.mul(parentTouchScale);
         }
-        if (this.touchScale != null) {
+        if (this.touchScale != null) {  // $FlowFixMe
           parentTouchScaleToUse = parentTouchScaleToUse.mul(getScale(this.touchScale));
         }
       }
@@ -5063,7 +5076,7 @@ class FigureElementCollection extends FigureElement {
       if (parentUniqueColor == null && this.isTouchable) {
         if (this.uniqueColor == null) {
           this.setUniqueColor(generateUniqueColor());
-        }
+        } // $FlowFixMe
         uniqueColorToUse = this.uniqueColor.map(c => c / 255);
       } else if (parentUniqueColor != null) {
         uniqueColorToUse = parentUniqueColor;
@@ -5554,7 +5567,7 @@ class FigureElementCollection extends FigureElement {
           return;
         }
         // $FlowFixMe
-        if (e instanceof FigureElementCollection || e.drawBorder != null) {
+        if (e instanceof FigureElementCollection || e.drawBorder != null) { // $FlowFixMe
           childrenBorder.push(...e.getBorder('local', b, null, shownOnly));
         }
       });

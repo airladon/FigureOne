@@ -119,7 +119,9 @@ class VertexGeneric extends GLObject {
       this.copy = copy;
     }
 
-    const newVerts = this.vertices != null ? copyPoints(this.vertices, this.copy) : [0, 0];
+    const newVerts = this.vertices != null
+      ? copyPoints(this.vertices, this.copy)
+      : [new Point(0, 0)];
     const vertices = Array(newVerts.length * 2);
     for (let i = 0; i < newVerts.length; i += 1) {
       vertices[i * 2] = newVerts[i].x;
