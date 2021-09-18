@@ -48,6 +48,7 @@ toc:
   - OBJ_Sphere
   - OBJ_Cylinder
   - OBJ_Cone
+  - OBJ_Prism
   - OBJ_Line3
   - OBJ_Revolve
   - OBJ_Surface

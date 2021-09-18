@@ -1844,6 +1844,16 @@
               
                 
                 <li><a
+                  href='#obj_prism'
+                  class="">
+                  OBJ_Prism
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_line3'
                   class="">
                   OBJ_Line3
@@ -7293,16 +7303,6 @@
                   href='#obj_animationdefinition'
                   class="">
                   OBJ_AnimationDefinition
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_prism'
-                  class="">
-                  OBJ_Prism
                   
                 </a>
                 
@@ -27970,6 +27970,164 @@ figure.add({
   <span class="hljs-attr">line</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>]],
   <span class="hljs-attr">lines</span>: <span class="hljs-literal">true</span>,
 });</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_prism'>
+      OBJ_Prism
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Prism shape options object that extends <a href="#obj_generic3all">OBJ_Generic3All</a>
+and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
+<p><img src="./apiassets/prism.png" alt=""></p>
+<p>A prism base is defined in the XY plane, and it's length extends
+into +z. Use <code>transform</code> to orient it in any other way.</p>
+<p>Triangles will be created for the ends if the base is convex. If the base
+is not convex, use <code>baseTriangles</code> to define the triangles.</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>base</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : base border points defined in the XY plane - the
+points should be defined in the counter-clock-wise direction.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>baseTriangles</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)</code>
+          : triangles in the XY plane
+that create the base fill. If the base is convex, then the triangles can be
+auto-generated and this property left undefined.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : length of the prism
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lines</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : if 
+<code>true</code>
+ then points representing
+the edges of the prism will be returned. If 
+<code>false</code>
+, then points
+representing triangle faces and associated normals will be returned.
+(
+<code>false</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#shapes3d-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create a rectangular prism</span>
+figure.add(
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;prism&#x27;</span>,
+    <span class="hljs-attr">base</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.2</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0.2</span>]],
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+  },
+);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create a hexagonal prism along the x axis with lines</span>
+figure.add(
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;prism&#x27;</span>,
+    <span class="hljs-attr">base</span>: Fig.polygon({ <span class="hljs-attr">radius</span>: <span class="hljs-number">0.1</span>, <span class="hljs-attr">sides</span>: <span class="hljs-number">6</span> }),
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">transform</span>: [<span class="hljs-string">&#x27;r&#x27;</span>, <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
+    <span class="hljs-attr">lines</span>: <span class="hljs-literal">true</span>,
+  },
+);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create a bow tie prism defining the base triangles</span>
+figure.add(
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;prism&#x27;</span>,
+    <span class="hljs-attr">base</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.25</span>, <span class="hljs-number">0.1</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.3</span>], [<span class="hljs-number">0.25</span>, <span class="hljs-number">0.2</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0.3</span>]],
+    <span class="hljs-attr">baseTriangles</span>: [
+      [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.25</span>, <span class="hljs-number">0.1</span>], [<span class="hljs-number">0.25</span>, <span class="hljs-number">0.2</span>],
+      [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.25</span>, <span class="hljs-number">0.2</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0.3</span>],
+      [<span class="hljs-number">0.25</span>, <span class="hljs-number">0.1</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.3</span>],
+      [<span class="hljs-number">0.25</span>, <span class="hljs-number">0.1</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.3</span>], [<span class="hljs-number">0.25</span>, <span class="hljs-number">0.2</span>],
+    ],
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">transform</span>: [<span class="hljs-string">&#x27;r&#x27;</span>, <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
+  },
+);</pre>
     
   
 
@@ -87395,164 +87553,6 @@ use <code>show: false</code> in the animation step definition, and for <code>in<
 
   
 
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_prism'>
-      OBJ_Prism
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Prism shape options object that extends <a href="#obj_generic3all">OBJ_Generic3All</a>
-and <a href="#obj_figureprimitive">OBJ_FigurePrimitive</a></p>
-<p><img src="./apiassets/prism.png" alt=""></p>
-<p>A prism base is defined in the XY plane, and it's length extends
-into +z. Use <code>transform</code> to orient it in any other way.</p>
-<p>Triangles will be created for the ends if the base is convex. If the base
-is not convex, use <code>baseTriangles</code> to define the triangles.</p>
-
-  
-    <p style="display: none;">      Type:
-      any
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>base</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : base border points defined in the XY plane - the
-points should be defined in the counter-clock-wise direction.
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>baseTriangles</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)</code>
-          : triangles in the XY plane
-that create the base fill. If the base is convex, then the triangles can be
-auto-generated and this property left undefined.
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : length of the prism
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>lines</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : if 
-<code>true</code>
- then points representing
-the edges of the prism will be returned. If 
-<code>false</code>
-, then points
-representing triangle faces and associated normals will be returned.
-(
-<code>false</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Related</div>
-    
-      
-        To test examples, append them to the
-
-<a href="#shapes3d-boilerplate">
-boilerplate
-</a>
-
-      
-    
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create a rectangular prism</span>
-figure.add(
-  {
-    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;prism&#x27;</span>,
-    <span class="hljs-attr">base</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.2</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0.2</span>]],
-    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-  },
-);</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create a hexagonal prism along the x axis with lines</span>
-figure.add(
-  {
-    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;prism&#x27;</span>,
-    <span class="hljs-attr">base</span>: Fig.polygon({ <span class="hljs-attr">radius</span>: <span class="hljs-number">0.1</span>, <span class="hljs-attr">sides</span>: <span class="hljs-number">6</span> }),
-    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-    <span class="hljs-attr">transform</span>: [<span class="hljs-string">&#x27;r&#x27;</span>, <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
-    <span class="hljs-attr">lines</span>: <span class="hljs-literal">true</span>,
-  },
-);</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create a bow tie prism defining the base triangles</span>
-figure.add(
-  {
-    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;prism&#x27;</span>,
-    <span class="hljs-attr">base</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.25</span>, <span class="hljs-number">0.1</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.3</span>], [<span class="hljs-number">0.25</span>, <span class="hljs-number">0.2</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0.3</span>]],
-    <span class="hljs-attr">baseTriangles</span>: [
-      [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.25</span>, <span class="hljs-number">0.1</span>], [<span class="hljs-number">0.25</span>, <span class="hljs-number">0.2</span>],
-      [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.25</span>, <span class="hljs-number">0.2</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0.3</span>],
-      [<span class="hljs-number">0.25</span>, <span class="hljs-number">0.1</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.3</span>],
-      [<span class="hljs-number">0.25</span>, <span class="hljs-number">0.1</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.3</span>], [<span class="hljs-number">0.25</span>, <span class="hljs-number">0.2</span>],
-    ],
-    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-    <span class="hljs-attr">transform</span>: [<span class="hljs-string">&#x27;r&#x27;</span>, <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
-  },
-);</pre>
-    
   
 
   
