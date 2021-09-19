@@ -581,10 +581,11 @@ class Figure {
       const {
         camera, near, far, light,
       } = optionsToUse.scene;
-      if (camera == null || camera.position == null) {
-        optionsToUse.scene.camera = {
-          position: [1, 0.5, 2],
-        };
+      if (camera == null) {
+        optionsToUse.scene.camera = {};
+      }
+      if (camera.position == null) {
+        optionsToUse.scene.camera.position = [1, 0.5, 2];
       }
       if (near == null && far == null) {
         optionsToUse.scene.near = 0.1;
@@ -2215,6 +2216,14 @@ class Figure {
     }
 
     // this.previousCursorPoint = currentCusorPoint;
+    // let e;
+    // e = this.elements.getSelectionFromBorders(currentGLPoint);
+    // if (e == null) {
+    //   e = this.getSelectionFromDraw(currentGLPoint);
+    // }
+    // if (e == null) {
+    //   return false;
+    // }
 
     if (this.beingMovedElement == null || this.beingMovedElement === this.elements) {
       return false;
