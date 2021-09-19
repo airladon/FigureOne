@@ -373,6 +373,8 @@ toc:
   - TypeF1DefLineBounds
   - LineBounds
   - getBounds
+  - OBJ_Surface
+  - surfaceGrid
   - name: Misc Geometry Creation
   - OBJ_PolygonPoints
   - OBJ_PolygonLinePoints

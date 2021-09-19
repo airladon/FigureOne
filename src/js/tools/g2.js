@@ -527,22 +527,112 @@ function getPositionInRect(
   return position;
 }
 
+/**
+ * Surface grid options object.
+ *
+ * Two components must be a fixed [min, max, step].
+ *
+ * One component must be a function that takes in two components
+ * (x, y), (x, z), or (y, z) and outputs the third (z, y or x repsectively).
+ */
 export type OBJ_SurfaceGrid = {
-  x: [number, number, number],
-  y: [number, number, number],
-  z: (number, number) => number,
+  x: ((number, number) => number) | [number, number, number],
+  y: ((number, number) => number) | [number, number, number],
+  z: ((number, number) => number) | [number, number, number],
 };
 
-function surfaceGrid(options: OBJ_SurfaceGrid) {
+/**
+ * Create a matrix of points that define a surface.
+ *
+ * ![](./apiassets/sufacegrid.png)
+ *
+ * Start with a grid of points in two components (x, y), (x, z), or (y, z), and
+ * define the third component (z, y or x repsectively) based on the first two.
+ *
+ * Resulting matrix can be used to create a 3D surface.
+ *
+ * @see {OBJ_Surface}
+ *
+ * @param {OBJ_SurfaceGrid} [components]
+ * @return {<Array<Array<Point>>}
+ *
+ * @example
+ * const { Figure, surfaceGrid } = Fig;
+ *
+ * // Orthographic scene with camera oriented so z is up
+ * const figure = new Figure({
+ *   scene: {
+ *     style: 'orthographic',
+ *     camera: { up: [0, 0, 1], position: [1, 0.5, 0.5] },
+ *   },
+ * });
+ *
+ * // Use surfaceGrid to generate a 3D surface from an xy grid
+ * const points = surfaceGrid({
+ *   x: [-0.8, 0.8, 0.02],
+ *   y: [-0.8, 0.8, 0.02],
+ *   z: (x, y) => 1 / ((x * 5) ** 2 + (y * 5) ** 2 + 1),
+ * });
+ *
+ * figure.add([
+ *   {
+ *     make: 'surface',
+ *     points,
+ *     color: [1, 0, 0, 1],
+ *     normals: 'curve',
+ *   },
+ *   {
+ *     make: 'surface',
+ *     points,
+ *     lines: true,
+ *     color: [0, 0, 0, 1],
+ *     position: [0, 0, 0.0001],
+ *   },
+ *   { make: 'cameraControl', axis: [0, 0, 1] },
+ * ]);
+ */
+function surfaceGrid(components: OBJ_SurfaceGrid) {
   const surfacePoints = [];
-  for (let x = options.x[0]; x <= options.x[1]; x += options.x[2]) {
-    const row = [];
-    for (let y = options.y[0]; y <= options.y[1]; y += options.y[2]) {
-      row.push(new Point(x, y, options.z(x, y)));
+  if (Array.isArray(components.x) && Array.isArray(components.y)) {
+    if (typeof components.z !== 'function') {
+      throw new Error('surfaceGrid must have two components as ranges, and the third as a function');
     }
-    surfacePoints.push(row);
+    for (let x = components.x[0]; x <= components.x[1]; x += components.x[2]) {
+      const row = [];
+      for (let y = components.y[0]; y <= components.y[1]; y += components.y[2]) {
+        row.push(new Point(x, y, components.z(x, y)));
+      }
+      surfacePoints.push(row);
+    }
+    return surfacePoints;
   }
-  return surfacePoints;
+  if (Array.isArray(components.x) && Array.isArray(components.z)) {
+    if (typeof components.y !== 'function') {
+      throw new Error('surfaceGrid must have two components as ranges, and the third as a function');
+    }
+    for (let x = components.x[0]; x <= components.x[1]; x += components.x[2]) {
+      const row = [];
+      for (let z = components.z[0]; z <= components.z[1]; z += components.z[2]) {
+        row.push(new Point(x, components.y(x, z), z));
+      }
+      surfacePoints.push(row);
+    }
+    return surfacePoints;
+  }
+  if (Array.isArray(components.y) && Array.isArray(components.z)) {
+    if (typeof components.x !== 'function') {
+      throw new Error('surfaceGrid must have two components as ranges, and the third as a function');
+    }
+    for (let y = components.y[0]; y <= components.y[1]; y += components.y[2]) {
+      const row = [];
+      for (let z = components.z[0]; z <= components.z[1]; z += components.z[2]) {
+        row.push(new Point(components.x(y, z), y, z));
+      }
+      surfacePoints.push(row);
+    }
+    return surfacePoints;
+  }
+  throw new Error('surfaceGrid must have two components as ranges, and the third as a function');
 }
 
 

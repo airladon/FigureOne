@@ -584,7 +584,7 @@ class Figure {
       if (camera == null) {
         optionsToUse.scene.camera = {};
       }
-      if (camera.position == null) {
+      if (camera == null || camera.position == null) {
         optionsToUse.scene.camera.position = [1, 0.5, 2];
       }
       if (near == null && far == null) {
