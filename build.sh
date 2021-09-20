@@ -18,6 +18,10 @@ then
   then
     TESTING=0
   fi
+  if [ $1 = "skip-tests" ];
+  then
+    TESTING=0
+  fi
 fi
 
 # First cleanup package folder
