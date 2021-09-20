@@ -1675,9 +1675,9 @@ class CollectionsAngle extends FigureElementCollection {
         (label.autoHide != null && label.autoHide > Math.abs(this.angle)) // $FlowFixMe
         || (label.autoHideMax != null && Math.abs(this.angle) > label.autoHideMax)
       ) {
-        _label.hide();
+        _label.setOpacity(0);
       } else {
-        _label.show();
+        _label.setOpacity(1);
         if (label.showRealAngle) {
           let { angle } = this;
           if (angle >= 0 && this.direction === -1) {
