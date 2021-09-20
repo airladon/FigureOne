@@ -65,7 +65,7 @@ function Recorder(duration) {
       };
     }
     return {
-      time: time.slice(0, i + 1),
+      time: time.slice(0, i),
       data: data.slice(num, num + i),
     };
   }

@@ -535,11 +535,13 @@ function setupFigure() {
     const trace = timePlot.getElement('trace');
     timePlot.custom.update = () => {
       const recorded = recording.getRecording();
-      const points = Array(recorded.time.length);
+      const points = Array(recorded.data.length);
       for (let i = 0; i < points.length; i += 1) {
         points[i] = new Point(axis.valueToDraw(recorded.time[i]), recorded.data[i]);
       }
-      trace.custom.updatePoints({ points });
+      if (points.length > 0) {
+        trace.custom.updatePoints({ points });
+      }
     };
     return timePlot;
   };

@@ -722,9 +722,9 @@ function addSlides() {
         .goToForm({ target: 'yxtxAndSineBotCom', animate: 'move' })
         .trigger({
           callback: () => {
-            setArrows();
             arrow1.showAll();
             arrow2.showAll();
+            setArrows();
           },
         })
         .inParallel([
