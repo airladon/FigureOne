@@ -1105,7 +1105,13 @@ class CollectionsAngle extends FigureElementCollection {
     if (wasHidden) {
       this.hide();
     }
-    if (labelWasHidden && this._label != null) {
+    if (
+      labelWasHidden
+      && this._label != null
+      && this.label != null
+      && this.label.autoHide == null
+      && this.label.autoHideMax == null
+    ) {
       this._label.hide();
     }
   }
@@ -1675,9 +1681,9 @@ class CollectionsAngle extends FigureElementCollection {
         (label.autoHide != null && label.autoHide > Math.abs(this.angle)) // $FlowFixMe
         || (label.autoHideMax != null && Math.abs(this.angle) > label.autoHideMax)
       ) {
-        _label.setOpacity(0);
+        _label.hide();
       } else {
-        _label.setOpacity(1);
+        _label.show();
         if (label.showRealAngle) {
           let { angle } = this;
           if (angle >= 0 && this.direction === -1) {

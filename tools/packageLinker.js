@@ -13,7 +13,7 @@ const to = process.argv.slice(2)[0] || 'dev';
 
 const files = [
   ...getFiles('./docs/tutorials', /html$/, /test.html$/),
-  ...getFiles('./docs/examples', /html$/, /example.html$/),
+  ...getFiles('./docs/examples', /html$/, /tests/),
 ];
 
 const remote = `https://cdn.jsdelivr.net/npm/figureone@${pjson.version}/figureone.min.js`;
