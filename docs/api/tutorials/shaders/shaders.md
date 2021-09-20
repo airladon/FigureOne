@@ -4,11 +4,11 @@ FigureOne also provides a FigureElementPrimitive {@link OBJ_GenericGL} with dire
 
 It is not in the scope of this API reference to explain what WebGL is, and how to use it. There are many good resources on the web that already do this - for example [WebGLFundamentals](https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html) gives an excellent introduction to WebGL and this [quick reference guid](https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf) is useful to refer to especially when writing shaders. A WebGL API reference is [here](https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext).
 
-For more detailed information on how to create a FigureOne {@link OBJ_GenericGL}, and customize shaders and buffers see [this tutorial](https://github.com/airladon/FigureOne/tree/master/docs/tutorials/19%20-%20Performance%20Optimization).
+For more detailed information on how to create a FigureOne {@link OBJ_GenericGL}, and customize shaders and buffers see [this tutorial](https://github.com/airladon/FigureOne/tree/main/docs/tutorials/19%20-%20Performance%20Optimization).
 
 ![](../tutorials/19%20-%20Performance%20Optimization/08%20custom%20shader/example.gif)
 
-Another example of a {@link OBJ_GenericGL} in action is from the FigureOne examples [here](https://github.com/airladon/FigureOne/tree/master/docs/examples/Electric%20Field/).
+Another example of a {@link OBJ_GenericGL} in action is from the FigureOne examples [here](https://github.com/airladon/FigureOne/tree/main/docs/examples/Electric%20Field/).
 
 ![](../examples/Electric%20Field/example.gif)
 

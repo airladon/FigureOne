@@ -5,9 +5,9 @@ from requests_html import HTMLSession
 session = HTMLSession()
 
 paths = [
-#   'https://github.com/airladon/FigureOne/tree/master',
-  'https://github.com/airladon/FigureOne/tree/master/docs/examples',
-  'https://github.com/airladon/FigureOne/tree/master/docs/tutorials',
+#   'https://github.com/airladon/FigureOne/tree/main',
+  'https://github.com/airladon/FigureOne/tree/main/docs/examples',
+  'https://github.com/airladon/FigureOne/tree/main/docs/tutorials',
 ]
 
 api_reference = session.get('https://airladon.github.io/FigureOne/api/')
@@ -47,6 +47,6 @@ for path in paths:
 test_r = requests.get("https://airladon.github.io/FigureOne/api/#obj_rectangle")
 
 
-r = session.get('https://github.com/airladon/FigureOne/tree/master/docs/tutorials')
+r = session.get('https://github.com/airladon/FigureOne/tree/main/docs/tutorials')
 
 folders = r.html.find('.js-details-container')

@@ -2,7 +2,7 @@
 
 # MODE=prod
 HOST_PATH=`pwd`
-DEPLOY_PROD_BRANCH=master           # Branch to test and deploy to prod
+DEPLOY_PROD_BRANCH=main           # Branch to test and deploy to prod
 DEPLOY_DEV_BRANCH=release-candidate # Branch to test and deploy to dev
 TRAVIS_DEBUG_BRANCH=travis          # Branch for fast travis debug
 TESTING=1

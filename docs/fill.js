@@ -10,7 +10,7 @@ function fillHeader(title, path) {
         <a href="https://github.com/airladon/figureone/">GitHub</a>
       </div>
       <div class="title-link link">
-        <a href="https://github.com/airladon/FigureOne/tree/master/docs/tutorials">Tutorials</a>
+        <a href="https://github.com/airladon/FigureOne/tree/main/docs/tutorials">Tutorials</a>
       </div>
       <div class="title-link link">
         <a href="https://airladon.github.io/FigureOne/api/">API Reference</a>
@@ -19,7 +19,7 @@ function fillHeader(title, path) {
   </div>
   <h1 class="example-title">${title}</h1>
   <div class="see-the-code">
-    See the code on <a href="https://github.com/airladon/FigureOne/tree/master/docs/examples/${path.replace(' ', '%20')}">Github</a>
+    See the code on <a href="https://github.com/airladon/FigureOne/tree/main/docs/examples/${path.replace(' ', '%20')}">Github</a>
   </div>
   `;
 }
