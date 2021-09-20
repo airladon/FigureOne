@@ -105,9 +105,9 @@ Creating 3D Shapes
 ## **[21 - 3D Surface](./21%20-%203D%20Surface)**
 Creating 3D Surfaces
 
-![](./20%20-%203D%20Surface/example.gif)
+![](./21%20-%203D%20Surface/example.gif)
 
 ## **[22 - 3D Interactivity](./22%20-%203D%20Interactivity)**
 Creating Interactive 3D Shapes
 
-![](./20%20-%203D%20Interactivity/example.gif)
+![](./22%20-%203D%20Interactivity/example.gif)
