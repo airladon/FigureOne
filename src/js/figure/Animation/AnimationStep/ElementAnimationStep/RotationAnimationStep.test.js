@@ -1,6 +1,6 @@
 import * as tools from '../../../../tools/tools';
 import makeFigure from '../../../../__mocks__/makeFigure';
-import * as math from '../../../../tools/math';
+import { round } from '../../../../tools/math';
 
 tools.isTouchDevice = jest.fn();
 
@@ -24,16 +24,16 @@ describe('Rotation Animation Step', () => {
       .start();
 
     elem1.animations.nextFrame(0);
-    expect(math.round(elem1.getRotation())).toBe(0);
+    expect(round(elem1.getRotation())).toBe(0);
 
     elem1.animations.nextFrame(0.5);
-    expect(math.round(elem1.getRotation())).toBe(0.5);
+    expect(round(elem1.getRotation())).toBe(0.5);
 
     elem1.animations.nextFrame(1.0);
-    expect(math.round(elem1.getRotation())).toBe(1);
+    expect(round(elem1.getRotation())).toBe(1);
 
     elem1.animations.nextFrame(1.1);
-    expect(math.round(elem1.getRotation())).toBe(1);
+    expect(round(elem1.getRotation())).toBe(1);
   });
   test('Simple rotate to delta', () => {
     elem1.animations.new()
@@ -41,90 +41,506 @@ describe('Rotation Animation Step', () => {
       .start();
 
     elem1.animations.nextFrame(0);
-    expect(math.round(elem1.getRotation())).toBe(0);
+    expect(round(elem1.getRotation())).toBe(0);
 
     elem1.animations.nextFrame(0.5);
-    expect(math.round(elem1.getRotation())).toBe(0.5);
+    expect(round(elem1.getRotation())).toBe(0.5);
 
     elem1.animations.nextFrame(1.0);
-    expect(math.round(elem1.getRotation())).toBe(1);
+    expect(round(elem1.getRotation())).toBe(1);
 
     elem1.animations.nextFrame(1.1);
-    expect(math.round(elem1.getRotation())).toBe(1);
+    expect(round(elem1.getRotation())).toBe(1);
   });
-  test('Rotate counter clock wise', () => {
-    elem1.animations.new()
-      .rotation({
-        start: 1, target: 0, direction: 1, duration: 1,
-      })
-      .start();
-
-    elem1.animations.nextFrame(0);
-    expect(math.round(elem1.getRotation())).toBe(1);
-
-    elem1.animations.nextFrame(0.5);
-    expect(math.round(elem1.getRotation(), 2)).toBe(3.64);
-
-    elem1.animations.nextFrame(1.0);
-    expect(math.round(elem1.getRotation(), 2)).toBe(0);
-
-    // elem1.animations.nextFrame(1.1);
-    // expect(math.round(elem1.getRotation(), 2)).toBe(0);
+  describe('Rotation Types', () => {
+    test('r', () => {
+      elem1.transform.setComponent(1, ['r', 0]);
+      elem1.transform.updateRotation(0);
+      elem1.animations.new().rotation({ target: 1, duration: 1 }).start();
+      elem1.animations.nextFrame(0);
+      expect(round(elem1.getRotation())).toBe(0);
+      elem1.animations.nextFrame(0.5);
+      expect(round(elem1.getRotation(), 2)).toBe(0.5);
+    });
+    test('rx', () => {
+      elem1.transform.setComponent(1, ['r', 0, 1, 0, 0]);
+      elem1.animations.new().rotation({ target: 1, duration: 1 }).start();
+      elem1.animations.nextFrame(0);
+      expect(round(elem1.getRotation())).toBe(0);
+      elem1.animations.nextFrame(0.5);
+      expect(round(elem1.getRotation(), 2)).toBe(0.5);
+    });
+    test('ry', () => {
+      elem1.transform.setComponent(1, ['r', 0, 0, 1, 0]);
+      elem1.animations.new().rotation({ target: 1, duration: 1 }).start();
+      elem1.animations.nextFrame(0);
+      expect(round(elem1.getRotation())).toBe(0);
+      elem1.animations.nextFrame(0.5);
+      expect(round(elem1.getRotation(), 2)).toBe(0.5);
+    });
+    test('rz', () => {
+      elem1.transform.setComponent(1, ['r', 0, 0, 0, 1]);
+      elem1.animations.new().rotation({ target: 1, duration: 1 }).start();
+      elem1.animations.nextFrame(0);
+      expect(round(elem1.getRotation())).toBe(0);
+      elem1.animations.nextFrame(0.5);
+      expect(round(elem1.getRotation(), 2)).toBe(0.5);
+    });
+    test('ra', () => {
+      elem1.transform.setComponent(1, ['r', 0, 1, 1, 0]);
+      elem1.animations.new().rotation({ target: 1, duration: 1 }).start();
+      elem1.animations.nextFrame(0);
+      expect(round(elem1.getRotation())).toBe(0);
+      elem1.animations.nextFrame(0.5);
+      expect(round(elem1.getRotation(), 2)).toBe(0.5);
+    });
   });
-  test('Rotate clip to 0to360', () => {
-    elem1.animations.new()
-      .rotation({
-        start: -1, target: 0, clipTo: '0to360', duration: 1,
-      })
-      .start();
-    elem1.animations.nextFrame(0);
-    expect(math.round(elem1.getRotation(), 2)).toBe(6.28 - 1);
-    elem1.animations.nextFrame(0.5);
-    expect(math.round(elem1.getRotation(), 2)).toBe(6.28 - 0.5);
-    elem1.animations.nextFrame(1.0);
-    expect(math.round(elem1.getRotation(), 2)).toBe(0);
-    elem1.animations.nextFrame(1.1);
-    expect(math.round(elem1.getRotation(), 2)).toBe(0);
+  describe('Rotations', () => {
+    let testTarget;
+    beforeEach(() => {
+      testTarget = (initial, start, target, startExpect, halfExpect, targetExpect) => {
+        elem1.transform.setComponent(1, initial);
+        elem1.transform.updateRotation(start);
+        elem1.animations.new().rotation({
+          target,
+          duration: 1,
+        }).start();
+        elem1.animations.nextFrame(0);
+        expect(round(elem1.getRotation(), 3)).toEqual(round(startExpect, 3));
+        elem1.animations.nextFrame(0.5);
+        expect(round(elem1.getRotation(), 3)).toEqual(round(halfExpect, 3));
+        elem1.animations.nextFrame(1);
+        expect(round(elem1.getRotation(), 3)).toEqual(round(targetExpect, 3));
+      };
+    });
+    describe('2D', () => {
+      test('positive', () => {
+        testTarget(
+          ['r', 0],
+          0,   // start
+          1,   // target
+          0,   // test at start
+          0.5, // test half way
+          1,   // test at target
+        );
+      });
+      test('negative', () => {
+        testTarget(
+          ['r', 0],
+          1,   // start
+          0,   // target
+          1,   // test at start
+          0.5, // test half way
+          0,   // test at target
+        );
+      });
+      test('>2π', () => {
+        testTarget(
+          ['r', 0],
+          0,
+          3 * Math.PI,
+          0,
+          1.5 * Math.PI,
+          3 * Math.PI,
+        );
+      });
+      test('<-2π', () => {
+        testTarget(
+          ['r', 0],
+          0,
+          -3 * Math.PI,
+          0,
+          -1.5 * Math.PI,
+          -3 * Math.PI,
+        );
+      });
+    });
+    describe('rx', () => {
+      test('positive', () => {
+        testTarget(
+          ['r', 0, 1, 0, 0],
+          0,   // start
+          1,   // target
+          0,   // test at start
+          0.5, // test half way
+          1,   // test at target
+        );
+      });
+      test('negative', () => {
+        testTarget(
+          ['r', 0, 1, 0, 0],
+          1,   // start
+          0,   // target
+          1,   // test at start
+          0.5, // test half way
+          0,   // test at target
+        );
+      });
+      test('>2π', () => {
+        testTarget(
+          ['r', 0, 1, 0, 0],
+          0,
+          3 * Math.PI,
+          0,
+          1.5 * Math.PI,
+          3 * Math.PI,
+        );
+      });
+      test('<-2π', () => {
+        testTarget(
+          ['r', 0, 1, 0, 0],
+          0,
+          -3 * Math.PI,
+          0,
+          -1.5 * Math.PI,
+          -3 * Math.PI,
+        );
+      });
+    });
+    describe('ry', () => {
+      test('positive', () => {
+        testTarget(
+          ['r', 0, 0, 1, 0],
+          0,   // start
+          1,   // target
+          0,   // test at start
+          0.5, // test half way
+          1,   // test at target
+        );
+      });
+      test('negative', () => {
+        testTarget(
+          ['r', 0, 0, 1, 0],
+          1,   // start
+          0,   // target
+          1,   // test at start
+          0.5, // test half way
+          0,   // test at target
+        );
+      });
+      test('>2π', () => {
+        testTarget(
+          ['r', 0, 0, 1, 0],
+          0,
+          3 * Math.PI,
+          0,
+          1.5 * Math.PI,
+          3 * Math.PI,
+        );
+      });
+      test('<-2π', () => {
+        testTarget(
+          ['r', 0, 0, 1, 0],
+          0,
+          -3 * Math.PI,
+          0,
+          -1.5 * Math.PI,
+          -3 * Math.PI,
+        );
+      });
+    });
+    describe('rz', () => {
+      test('positive', () => {
+        testTarget(
+          ['r', 0, 0, 0, 1],
+          0,   // start
+          1,   // target
+          0,   // test at start
+          0.5, // test half way
+          1,   // test at target
+        );
+      });
+      test('negative', () => {
+        testTarget(
+          ['r', 0, 0, 0, 1],
+          1,   // start
+          0,   // target
+          1,   // test at start
+          0.5, // test half way
+          0,   // test at target
+        );
+      });
+      test('>2π', () => {
+        testTarget(
+          ['r', 0, 0, 0, 1],
+          0,
+          3 * Math.PI,
+          0,
+          1.5 * Math.PI,
+          3 * Math.PI,
+        );
+      });
+      test('<-2π', () => {
+        testTarget(
+          ['r', 0, 0, 0, 1],
+          0,
+          -3 * Math.PI,
+          0,
+          -1.5 * Math.PI,
+          -3 * Math.PI,
+        );
+      });
+    });
+    describe('axis angle', () => {
+      test('positive', () => {
+        testTarget(
+          ['r', 1, 1, 0, 0],
+          0,   // start
+          1,   // target
+          0,   // test at start
+          0.5, // test half way
+          1,   // test at target
+        );
+      });
+      test('negative', () => {
+        testTarget(
+          ['r', 1, 1, 0, 0],
+          1,
+          0,
+          1,
+          0.5,
+          0,
+        );
+      });
+      test('>2π', () => {
+        testTarget(
+          ['r', 1, 1, 0, 0],
+          0,
+          Math.PI * 3,
+          0,
+          Math.PI * 1.5,
+          Math.PI * 3,
+        );
+      });
+      test('<-2π', () => {
+        testTarget(
+          ['r', 1, 1, 0, 0],
+          0,
+          -Math.PI * 3,
+          0,
+          -Math.PI * 1.5,
+          -Math.PI * 3,
+        );
+      });
+    });
   });
-  test('Rotate clip to -180to180', () => {
-    elem1.animations.new()
-      .rotation({
-        start: 0, target: 6.28, clipTo: '-180to180', duration: 1, direction: 1, progression: 'linear',
-      })
-      .start();
-    elem1.animations.nextFrame(0);
-    expect(math.round(elem1.getRotation(), 2)).toBe(0);
-    elem1.animations.nextFrame(0.5);
-    expect(math.round(elem1.getRotation(), 2)).toBe(3.14);
-    elem1.animations.nextFrame(0.75);
-    expect(math.round(elem1.getRotation(), 2)).toBe(-3.14 / 2);
-    elem1.animations.nextFrame(1.1);
-    expect(math.round(elem1.getRotation(), 2)).toBe(0);
-  });
-  test('Rotate with velocity', () => {
-    elem1.animations.new()
-      .rotation({
-        start: 0, target: 1, velocity: 1, direction: 1, progression: 'linear',
-      })
-      .start();
-    elem1.animations.nextFrame(0);
-    expect(math.round(elem1.getRotation(), 2)).toBe(0);
-    elem1.animations.nextFrame(0.5);
-    expect(math.round(elem1.getRotation(), 2)).toBe(0.5);
-    elem1.animations.nextFrame(1);
-    expect(math.round(elem1.getRotation(), 2)).toBe(1);
-  });
-  test('Rotate with velocity, but no movement', () => {
-    elem1.animations.new()
-      .rotation({
-        start: 1, target: 1, velocity: 1, direction: 1, progression: 'linear',
-      })
-      .start();
-    expect(elem1.animations.state).toBe('idle');
-    expect(elem1.animations.animations[0].state).toBe('finished');
-    expect(math.round(elem1.getRotation(), 2)).toBe(1);
-    figure.draw(0);
-    expect(elem1.animations.state).toBe('idle');
-    expect(elem1.animations.animations).toHaveLength(0);
+  describe('Velocity', () => {
+    describe('Use Velocity to Define Duration', () => {
+      let testV;
+      beforeEach(() => {
+        testV = (initial, start, target, velocity, startExpect, halfExpect, targetExpect) => {
+          elem1.transform.setComponent(1, initial);
+          elem1.transform.updateRotation(start);
+          elem1.animations.new().rotation({
+            target,
+            velocity,
+          }).start();
+          elem1.animations.nextFrame(0);
+          expect(round(elem1.getRotation(), 3)).toEqual(round(startExpect, 3));
+          elem1.animations.nextFrame(0.5);
+          expect(round(elem1.getRotation(), 3)).toEqual(round(halfExpect, 3));
+          elem1.animations.nextFrame(1);
+          expect(round(elem1.getRotation(), 3)).toEqual(round(targetExpect, 3));
+        };
+      });
+      test('2D', () => {
+        testV(
+          ['r', 0],
+          0,
+          2,
+          2,
+          0,
+          1,
+          2,
+        );
+      });
+      test('rx', () => {
+        testV(
+          ['r', 0, 1, 0, 0],
+          0,
+          2,
+          2,
+          0,
+          1,
+          2,
+        );
+      });
+      test('ry', () => {
+        testV(
+          ['r', 0, 0, 1, 0],
+          0,
+          2,
+          2,
+          0,
+          1,
+          2,
+        );
+      });
+      test('rz', () => {
+        testV(
+          ['r', 0, 0, 0, 1],
+          0,
+          2,
+          2,
+          0,
+          1,
+          2,
+        );
+      });
+      test('Axis/Angle', () => {
+        testV(
+          ['r', 0, 1, 0, 0],
+          0,
+          2,
+          2,
+          0,
+          1,
+          2,
+        );
+      });
+    });
+    describe('Use Velocity to Define Target', () => {
+      let testV;
+      beforeEach(() => {
+        testV = (initial, start, duration, velocity, startExpect, halfExpect, targetExpect) => {
+          elem1.transform.setComponent(1, initial);
+          elem1.transform.updateRotation(start);
+          elem1.animations.new().rotation({
+            duration,
+            velocity,
+          }).start();
+          elem1.animations.nextFrame(0);
+          expect(round(elem1.getRotation(), 3)).toEqual(round(startExpect, 3));
+          elem1.animations.nextFrame(0.5);
+          expect(round(elem1.getRotation(), 3)).toEqual(round(halfExpect, 3));
+          elem1.animations.nextFrame(1);
+          expect(round(elem1.getRotation(), 3)).toEqual(round(targetExpect, 3));
+        };
+      });
+      test('2D', () => {
+        testV(
+          ['r', 0],
+          0,
+          1,
+          2,
+          0,
+          1,
+          2,
+        );
+      });
+      test('rx', () => {
+        testV(
+          ['r', 0, 1, 0, 0],
+          0,
+          1,
+          2,
+          0,
+          1,
+          2,
+        );
+      });
+      test('ry', () => {
+        testV(
+          ['r', 0, 0, 1, 0],
+          0,
+          1,
+          2,
+          0,
+          1,
+          2,
+        );
+      });
+      test('rz', () => {
+        testV(
+          ['r', 0, 0, 0, 1],
+          0,
+          1,
+          2,
+          0,
+          1,
+          2,
+        );
+      });
+      test('Axis/Angle', () => {
+        testV(
+          ['r', 0, 1, 0, 0],
+          0,
+          1,
+          2,
+          0,
+          1,
+          2,
+        );
+      });
+    });
+    describe('Use Velocity in infinite rotation', () => {
+      let testV;
+      beforeEach(() => {
+        testV = (initial, start, velocity, startExpect, oneSExpect, tenSExpect) => {
+          elem1.transform.setComponent(1, initial);
+          elem1.transform.updateRotation(start);
+          elem1.animations.new().rotation({
+            duration: null,
+            velocity,
+          }).start();
+          elem1.animations.nextFrame(0);
+          expect(round(elem1.getRotation(), 3)).toEqual(round(startExpect, 3));
+          elem1.animations.nextFrame(1);
+          expect(round(elem1.getRotation(), 3)).toEqual(round(oneSExpect, 3));
+          elem1.animations.nextFrame(10);
+          expect(round(elem1.getRotation(), 3)).toEqual(round(tenSExpect, 3));
+        };
+      });
+      test('2D', () => {
+        testV(
+          ['r', 0],
+          0,
+          1,
+          0,
+          1,
+          10,
+        );
+      });
+      test('rx', () => {
+        testV(
+          ['r', 0, 1, 0, 0],
+          0,
+          1,
+          0,
+          1,
+          10,
+        );
+      });
+      test('ry', () => {
+        testV(
+          ['r', 0, 0, 1, 0],
+          0,
+          1,
+          0,
+          1,
+          10,
+        );
+      });
+      test('rz', () => {
+        testV(
+          ['r', 0, 0, 0, 1],
+          0,
+          1,
+          0,
+          1,
+          10,
+        );
+      });
+      test('Axis/Angle', () => {
+        testV(
+          ['r', 0, 1, 0, 0],
+          0,
+          2,
+          0,
+          2,
+          20,
+        );
+      });
+    });
   });
 });

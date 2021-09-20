@@ -172,7 +172,7 @@ export type TypeEquationPhrase =
  * around the content, but the content will not be shown (`true`)
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Example showing the difference between with and without container
@@ -264,7 +264,7 @@ export type EQN_Container = {
  * @property {boolean} [fullContentBounds] - (`false`)
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * figure.add([
@@ -312,7 +312,7 @@ export type EQN_Offset = {
  * @property {boolean} [fullContentBounds] Use full bounds with content (`false`)
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Simple
@@ -432,7 +432,7 @@ export type EQN_Fraction = {
  * @property {boolean} [fullContentBounds] Use full bounds with content (`false`)
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Simple
@@ -529,7 +529,7 @@ export type EQN_Scale = {
  * brackets only surround a portion of the content (`false`)
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Simple
@@ -642,7 +642,7 @@ export type EQN_Bracket = {
  * brackets only surround a portion of the content (`false`)
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Simple
@@ -775,7 +775,7 @@ export type EQN_Root = {
  * brackets only surround a portion of the content (`false`)
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Simple
@@ -887,7 +887,7 @@ export type EQN_Strike = {
  *
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Simple
@@ -994,7 +994,7 @@ export type EQN_Box = {
  *
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  */
 export type EQN_TouchBox = {
@@ -1064,7 +1064,7 @@ export type EQN_TouchBox = {
  * brackets only surround a portion of the content (`false`)
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Simple
@@ -1230,7 +1230,7 @@ export type EQN_Bar = {
  * brackets only surround a portion of the content (`false`)
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Simple
@@ -1381,7 +1381,7 @@ export type EQN_Integral = {
  * brackets only surround a portion of the content (`false`)
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Simple
@@ -1512,7 +1512,7 @@ export type EQN_SumOf = {
  * brackets only surround a portion of the content (`false`)
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Simple
@@ -1622,7 +1622,7 @@ export type EQN_ProdOf = {
  * resulting phrase (`true`)
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * //Simple
@@ -1696,7 +1696,7 @@ export type EQN_Subscript = {
  * resulting phrase (`true`)
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Simple
@@ -1764,7 +1764,7 @@ export type EQN_Superscript = {
  * resulting phrase (`true`)
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Simple
@@ -1846,7 +1846,7 @@ export type EQN_SuperscriptSubscript = {
  * brackets only surround a portion of the content (`false`)
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Simple
@@ -1951,7 +1951,7 @@ export type EQN_Comment = {
  * @property {number} [commentSpace] space from symbol to comment (`0.03`)
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Simple
@@ -2040,7 +2040,7 @@ export type EQN_StrikeComment = {
  * @property {number} [left] (`0`)
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Simple
@@ -2127,7 +2127,7 @@ export type EQN_Pad = {
  * overriding any `inSize=false` properties in the content (`false`)
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Simple
@@ -2298,7 +2298,7 @@ export type EQN_Line = {
  * overriding any `inSize=false` properties in the content (`false`)
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Two lines, array definition
@@ -3018,7 +3018,7 @@ export type EQN_Glyphs = {
  * brackets only surround a portion of the content (`false`)
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Some different annotation examples

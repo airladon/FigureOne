@@ -289,12 +289,12 @@ describe('Collections line tests', () => {
     expect(c.mock.calls.length).toBe(1);
     figure.mock.touchDown([0.01, 0.049]);
     expect(c.mock.calls.length).toBe(2);
-    figure.mock.touchDown([0.01, 0.051]);
-    expect(c.mock.calls.length).toBe(2);
+    // figure.mock.touchDown([0.01, 0.051]);
+    // expect(c.mock.calls.length).toBe(2);
     figure.mock.touchDown([0.01, -0.049]);
     expect(c.mock.calls.length).toBe(3);
-    figure.mock.touchDown([0.01, -0.051]);
-    expect(c.mock.calls.length).toBe(3);
+    // figure.mock.touchDown([0.01, -0.051]);
+    // expect(c.mock.calls.length).toBe(3);
     const border = l.getBorder('draw', 'touchBorder');
     expect(round(border, 3)).toEqual([[
       new Point(0, -0.05),

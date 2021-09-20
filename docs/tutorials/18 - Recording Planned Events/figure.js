@@ -5,28 +5,26 @@ const figure = new Fig.Figure();
 const [ball] = figure.add([
   {
     name: 'ball',
-    make: 'primitives.polygon',
-    options: {
-      radius: 0.3,
-      sides: 100,
-      color: [1, 0, 0, 1],
-    },
-    mods: {
-      isMovable: true,
-      move: { bounds: 'figure' },
+    make: 'polygon',
+    radius: 0.3,
+    sides: 100,
+    color: [1, 0, 0, 1],
+    move: {
+      bounds: {
+        left: -0.7, bottom: -0.7, top: 0.7, right: 0.7,
+      },
     },
   },
   {
     name: 'triangle',
-    make: 'primitives.triangle',
-    options: {
-      width: 0.5,
-      height: 0.5,
-      color: [0.5, 0.5, 1, 1],
-    },
-    mods: {
-      isMovable: true,
-      move: { bounds: 'figure' },
+    make: 'triangle',
+    width: 0.5,
+    height: 0.5,
+    color: [0.5, 0.5, 1, 1],
+    move: {
+      bounds: {
+        left: -0.75, bottom: -0.835, top: 0.668, right: 0.75,
+      },
     },
   },
 ]);

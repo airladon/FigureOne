@@ -96,3 +96,18 @@ Create an interactive video from with minimal manual recording
 Optimizing performance for complex figures.
 
 ![](./19%20-%20Performance%20Optimization/example.gif)
+
+## **[20 - 3D Shapes](./20%20-%203D%20Shapes)**
+Creating 3D Shapes
+
+![](./20%20-%203D%20Shapes/example.gif)
+
+## **[21 - 3D Surface](./21%20-%203D%20Surface)**
+Creating 3D Surfaces
+
+![](./21%20-%203D%20Surface/example.gif)
+
+## **[22 - 3D Interactivity](./22%20-%203D%20Interactivity)**
+Creating Interactive 3D Shapes
+
+![](./22%20-%203D%20Interactivity/example.gif)

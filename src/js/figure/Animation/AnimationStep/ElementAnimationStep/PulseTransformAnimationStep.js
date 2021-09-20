@@ -1,11 +1,10 @@
 // @flow
 import {
   Transform, getScale, getTransform,
-  Rotation, getDeltaAngle, getMaxTimeFromVelocity,
-  Scale, Translation,
+  getMaxTimeFromVelocity,
 } from '../../../../tools/g2';
 import type {
-  TypeParsablePoint, TypeParsableTransform, OBJ_TranslationPath,
+  TypeParsablePoint, TypeParsableTransform,
 } from '../../../../tools/g2';
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
@@ -18,6 +17,7 @@ import type {
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
 import type { AnimationStartTime } from '../../AnimationManager';
+import type { OBJ_TranslationPath } from '../../../../tools/geometry/Path';
 
 export type OBJ_PulseTransformAnimationStep = {
   start?: Array<Transform>;      // default is element transform
@@ -173,21 +173,36 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
       const start = this.transform.start[i];
       const target = this.transform.target[i];
       const delta = target.sub(start);
-      delta.order.forEach((deltaStep, index) => {
-        const startStep = start.order[index];
-        const targetStep = target.order[index];
-        if (deltaStep instanceof Rotation
-          && startStep instanceof Rotation
-          && targetStep instanceof Rotation) {
-          const rotDiff = getDeltaAngle(
-            startStep.r,
-            targetStep.r,
-            this.transform.rotDirection,
-          );
-          // eslint-disable-next-line no-param-reassign
-          deltaStep.r = rotDiff;
-        }
-      });
+      // const { direction } = this.transform;
+      // delta.def.forEach((deltaStep, index) => {
+      //   const s = start.def[index];
+      //   const t = target.def[index];
+      //   /* eslint-disable no-param-reassign */
+      //   if (deltaStep[0] === 'r') {
+      //     deltaStep[1] = getDeltaAngle(s[1], t[1], direction);
+      //   } else if (deltaStep[0] === 'rs') {
+      //     deltaStep[1] = getDeltaAngle(s[1], t[1], direction);
+      //     deltaStep[2] = getDeltaAngle(s[2], t[2], direction);
+      //   } else if (deltaStep[0] === 'rc') {
+      //     deltaStep[1] = getDeltaAngle(s[1], t[1], direction);
+      //     deltaStep[2] = getDeltaAngle(s[2], t[2], direction);
+      //     deltaStep[3] = getDeltaAngle(s[3], t[3], direction);
+      //   } else if (deltaStep[0] === 'ra') {
+      //     deltaStep[4] = getDeltaAngle(s[4], t[4], direction);
+      //   }
+      //   /* eslint-enable no-param-reassign */
+      //   // if (deltaStep[0] === 'r'
+      //   //   && startStep[0] === 'r'
+      //   //   && targetStep[0] === 'r') {
+      //   //   const rotDiff = getDeltaAngle(
+      //   //     startStep[3],
+      //   //     targetStep[3],
+      //   //     this.transform.rotDirection,
+      //   //   );
+      //   //   // eslint-disable-next-line no-param-reassign
+      //   //   deltaStep[3] = rotDiff;
+      //   // }
+      // });
       this.transform.delta.push(delta);
     }
   }
@@ -226,26 +241,27 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
       transformVelocity = getTransform(velocity.transform)._dup();
     }
 
-    for (let i = 0; i < transformVelocity.order.length; i += 1) {
-      const t = transformVelocity.order[i];
-      if (t instanceof Scale && velocity.scale != null) {
+    for (let i = 0; i < transformVelocity.def.length; i += 1) {
+      const t = transformVelocity.def[i];
+      if (t[0] === 's' && velocity.scale != null) {
         const s = getScale(velocity.scale);
-        t.x = s.x;
-        t.y = s.y;
+        t[1] = s.x; // $FlowFixMe
+        t[2] = s.y;
       }
-      if (t instanceof Translation && velocity.translation != null) {
+      if (t[0] === 't' && velocity.translation != null) {
         const s = getScale(velocity.translation);
-        t.x = s.x;
-        t.y = s.y;
+        t[1] = s.x; // $FlowFixMe
+        t[2] = s.y;
       }
-      if (t instanceof Translation && velocity.position != null) {
+      if (t[0] === 't' && velocity.position != null) {
         const s = getScale(velocity.position);
-        t.x = s.x;
-        t.y = s.y;
+        t[1] = s.x; // $FlowFixMe
+        t[2] = s.y;
       }
-      if (t instanceof Rotation && velocity.rotation != null) {
-        t.r = velocity.rotation;
+      if (t[0] === 'r' && velocity.rotation != null) {
+        t[1] = velocity.rotation;
       }
+      transformVelocity.calcAndSetMatrix();
     }
     return transformVelocity;
   }

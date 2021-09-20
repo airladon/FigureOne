@@ -15,8 +15,11 @@ import {
 } from '../Element';
 import type CollectionsAxis, { COL_Axis } from './Axis';
 import type {
-  OBJ_Line, OBJ_Polygon, OBJ_Star, OBJ_LineStyleSimple, OBJ_Collection,
-} from '../FigurePrimitives/FigurePrimitives';
+  OBJ_Line, OBJ_Polygon, OBJ_Star,
+} from '../FigurePrimitives/FigurePrimitiveTypes2D';
+import type {
+  OBJ_LineStyleSimple, OBJ_Collection,
+} from '../FigurePrimitives/FigurePrimitiveTypes';
 import type { TypeColor, OBJ_Font_Fixed } from '../../tools/types';
 import type { CPY_Steps } from '../geometries/copy/copy';
 import type FigureCollections from './FigureCollections';
@@ -118,7 +121,7 @@ export type COL_Trace = {
  * All examples below also use this power function to generate the traces:
  * ```javascript
  * const pow = (pow = 2, stop = 10, step = 0.05) => {
- *   const xValues = Fig.tools.math.range(0, stop, step);
+ *   const xValues = Fig.range(0, stop, step);
  *   return xValues.map(x => new Fig.Point(x, x ** pow));
  * }
  * ```
@@ -243,8 +246,7 @@ class CollectionsTrace extends FigureElementCollection {
         opacity: 1,
       },
       name: '',
-      transform: new Transform('Trace').scale(1, 1).rotate(0).translate(0, 0),
-      limits: collections.primitives.limits,
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     if (options.markers == null && options.line === undefined) {
@@ -372,7 +374,7 @@ class CollectionsTrace extends FigureElementCollection {
     ];
     bounds.forEach((bound) => {
       const i = line.intersectsWith(bound);
-      if (i.withinLine) {
+      if (i.onLines) {
         result = true;
         intersect.push(i.intersect);
       }

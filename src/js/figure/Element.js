@@ -4,64 +4,51 @@ import {
   Transform, Point, Rect,
   spaceToSpaceTransform, getBoundingRect,
   clipAngle, getPoint, getTransform, getScale,
-  TransformBounds, RectBounds, RangeBounds, getBounds,
-  getBoundingBorder, isBuffer, getBorder,
+  getBounds,
+  getBoundingBorder, isBuffer, getBorder, decelerateVector, decelerateValue,
+  getPlane, Plane,
 } from '../tools/g2';
+import Scene from '../tools/geometry/scene';
+import type { OBJ_Scene } from '../tools/geometry/scene';
 import { round } from '../tools/math';
-// import { areColorsSame } from '../tools/color';
 import { getState } from './Recorder/state';
 import type {
   TypeParsablePoint, TypeParsableTransform,
-  TypeTransformValue, TypeTransformBoundsDefinition,
-  TypeBorder, TypeParsableBuffer, Bounds,
+  TypeBorder, TypeParsableBuffer, TypeParsableBounds, TypeParsablePlane,
 } from '../tools/g2';
+import { isPointInPolygon } from '../tools/geometry/polygon';
 import { Recorder } from './Recorder/Recorder';
-import * as m2 from '../tools/m2';
-// import type { pathOptionsType, TypeRotationDirection } from '../tools/g2';
+import * as m3 from '../tools/m3';
+import type { Type3DMatrix } from '../tools/m3';
 import * as math from '../tools/math';
 import HTMLObject from './DrawingObjects/HTMLObject/HTMLObject';
 import DrawingObject from './DrawingObjects/DrawingObject';
 import VertexGeneric from './DrawingObjects/VertexObject/VertexGeneric';
 import GLObject from './DrawingObjects/GLObject/GLObject';
 import { TextObjectBase } from './DrawingObjects/TextObject/TextObject';
-// import type { OBJ_Font } from './DrawingObjects/TextObject/TextObject';
 import {
   duplicateFromTo, joinObjects, joinObjectsWithOptions, NotificationManager,
-  generateUniqueId, PerformanceTimer,
+  generateUniqueId, PerformanceTimer, generateUniqueColor,
 } from '../tools/tools';
 import { colorArrayToRGBA, areColorsWithinDelta } from '../tools/color';
 import TimeKeeper from './TimeKeeper';
 import type { TypeWhen } from './TimeKeeper';
-// import DrawContext2D from './DrawContext2D';
 
-import type Figure, { OBJ_SpaceTransforms, OBJ_FigureForElement } from './Figure';
+import type { OBJ_SpaceTransforms, OBJ_FigureForElement } from './Figure';
 // eslint-disable-next-line import/no-cycle
 import * as animations from './Animation/Animation';
 import WebGLInstance from './webgl/webgl';
-// import type Figure from './Figure';
 import { FunctionMap } from '../tools/FunctionMap';
 import type {
-  OBJ_Font, TypeColor,
+  OBJ_Font, TypeColor, TypeCoordinateSpace,
 } from '../tools/types';
-// import type FigurePrimitives from './FigurePrimitives/FigurePrimitives';
+import type { OBJ_Touch } from './FigurePrimitives/FigurePrimitiveTypes';
 import type FigureCollections from './FigureCollections/FigureCollections';
 
 const FIGURE1DEBUG = false;
 
-// eslint-disable-next-line import/no-cycle
-// import {
-//   AnimationPhase, ColorAnimationPhase, CustomAnimationPhase,
-// } from './AnimationPhase';
 
-// function checkCallback(callback: ?(boolean) => void): (boolean) => void {
-//   let callbackToUse = () => {};
-//   if (typeof callback === 'function') {
-//     callbackToUse = callback;
-//   }
-//   return callbackToUse; + width
-// }
-
-export type TypeSpace = 'draw' | 'local' | 'figure' | 'gl' | 'pixel';
+// export type TypeCoordinateSpace = 'draw' | 'local' | 'figure' | 'gl' | 'pixel';
 
 /**
  * Add element Object
@@ -70,10 +57,22 @@ export type OBJ_AddElement = {
   path?: string,
   name?: string,
   make?: string,
-  options?: {},   // eslint-disable-next-line no-use-before-define
+  options?: Object,   // eslint-disable-next-line no-use-before-define
   elements?: Array<OBJ_AddElement | FigureElement>,
   mods?: {},
   scenario?: string,
+  position?: TypeParsablePoint,
+  transform?: TypeParsableTransform,
+  color?: TypeColor,
+  touch?: boolean | OBJ_Touch,
+  // eslint-disable-next-line no-use-before-define
+  move?: boolean | OBJ_ElementMove,
+  dimColor?: TypeColor,
+  defaultColor?: TypeColor,
+  // eslint-disable-next-line no-use-before-define
+  scenarios?: OBJ_Scenarios,
+  scene?: Scene | OBJ_Scene,
+  touchScale?: number,
 };
 
 /**
@@ -131,8 +130,8 @@ export type TypeElementPath = string
 /* eslint-enable no-use-before-define */
 
 function transformByMatrix(
-  inputTransforms: Array<Array<number>>,
-  copyTransforms: Array<Array<number>>,
+  inputTransforms: Array<Type3DMatrix>,
+  copyTransforms: Array<Type3DMatrix>,
 ) {
   if (copyTransforms.length === 0) {
     return inputTransforms;
@@ -140,7 +139,7 @@ function transformByMatrix(
   const newTransforms = [];
   for (let i = 0; i < inputTransforms.length; i += 1) {
     for (let j = 0; j < copyTransforms.length; j += 1) {
-      newTransforms.push(m2.mul(inputTransforms[i], copyTransforms[j]));
+      newTransforms.push(m3.mul(inputTransforms[i], copyTransforms[j]));
     }
   }
   return newTransforms;
@@ -310,38 +309,79 @@ export type OBJ_Pulse = {
  * free movement
  */
 type OBJ_ElementMoveFreely = {
-  zeroVelocityThreshold: TypeTransformValue,  // Velocity considered 0
-  deceleration: TypeTransformValue,           // Deceleration
-  bounceLoss: TypeTransformValue,
+  zeroVelocityThreshold: number,  // Velocity considered 0
+  deceleration: number,           // Deceleration
+  bounceLoss: number,
   callback: ?(string | ((boolean) => void)),
 }
 
+/* eslint-disable max-len */
+/*
+An element can be 'moved' (transformed) by touching on it and dragging.
+
+The element can be translated, rotated or scaled.
+
+An element can be translated along a line, or within a plane.
+An element can be rotated in a plane.
+An element can be scaled by x, y, z or a combination.
+
+Movement range can be bounded:
+- Translation: Within a rectangle in the plane, or along a finite line
+  - The rectangle is defined as a center point with a width unit vector
+- Rotation: Between some min and max values of rotation
+- Scale: Between some min and max values of rotation
+
+When the object is released, it may continue to move freely with the velocity of
+its last movement. The velocity may deccelerate to zero over time.
+
+Velocity is defined as a number or point and relates to:
+- Translation: x, y, z component velocities
+- Rotation: angular velocity
+- Scale: x, y, z components
+
+Deceleration is defined with a number and relates to:
+- Translation: velocity vector magnitude reduction
+- Rotation: velocity value reduction
+- Scale: velocity vector magnitude reduction
+
+If bounded, then the object may bounce of the bounds where each bounce may
+incurr some decceleration. A bounce is a reversing of the velocity.
+
+Movement happens with deltas. The in plane delta between the last movement
+position and the current movement position is used to delta the translation or
+rotation.
+
+Only one element (the closest element under the touch pixel) can be touched at
+any time.
+
+Translating an element in a plane requires VectorDeceleration.
+Everything else is ValueDeceleration
+
+Rotation can only happen with some rotation transform elements:
+- 2D - plane is defined as [[0, 0, 0], [0, 0, 1]
+- ra (axis) - plane is defined as [[x, y, z], axis]
+*/
+
 /**
  * Figure element move parameters
- *
- * @property {TransformBounds} bounds rectangle to limit movement within
- * @property {string | (?(Transform) => Transform)} transformClip user
- * defined method to clip velocity per frame
+ * @property {type: 'rotation' | 'translation' | 'position' | 'scale' | 'scaleX' | 'scaleY' | 'scaleZ'} type
+ * @property {TypeParsableBounds} bounds rectangle to
+ * limit movement within
+ * @property {Plane} plane movement plane
  * @property {TypeTransformValue} maxVelocity maximum velocity allowed (5)
- * @property {OBJ_ElementMoveFreely} freely free movement parameters
- * @property {boolean} canBeMovedAfterLosingTouch touch or mouse dragging will
- * continue to move element even after the touch/cursor position is outside
- * the element boundary
- * @property {FigureElement | null} element
+ * @property {OBJ_ElementMoveFreely} freely free movement parameters - use
+ * false for disabling free movement after touch up
+ * @property {FigureElement | null | string} element
  */
-type OBJ_ElementMove = {
-  bounds: TransformBounds | 'none' | 'figure',
-  // boundsToUse: TransformBounds,
-  sizeInBounds: boolean,
-  // limits: TransformBounds,
-  // includeSize: boolean,
-  transformClip: string | (?(Transform) => Transform);
-  maxVelocity: TypeTransformValue;
-  freely: OBJ_ElementMoveFreely,
-  canBeMovedAfterLosingTouch: boolean;
-  type: 'rotation' | 'translation' | 'scaleX' | 'scaleY' | 'scale';
+export type OBJ_ElementMove = {
+  type: 'rotation' | 'translation' | 'position' | 'scale' | 'scaleX' | 'scaleY' | 'scaleZ',
+  bounds: TypeParsableBounds,
+  plane: Plane,
+  maxVelocity: number | TypeParsablePoint;
+  freely: OBJ_ElementMoveFreely | false,
   element: FigureElement | null | string;
 };
+/* eslint-enable max-len */
 
 /* eslint-enable no-use-before-define */
 
@@ -389,11 +429,11 @@ type OBJ_ElementMove = {
  * This is an object where the keys are scenario names and values are
  * {@link OBJ_Scenario} objects defining the scenario.
  *
- * @property {OBJ_Scenario} scenarioName where scenarioName can be any
+ * @property {OBJ_Scenario} _scenarioName where scenarioName can be any
  * string that names the scenario
  */
-type Scenarios = {
-  [scenarioName: string]: OBJ_Scenario,
+export type OBJ_Scenarios = {
+  [_scenarioName: string]: OBJ_Scenario,
 };
 
 /**
@@ -401,10 +441,12 @@ type Scenarios = {
  */
 type ElementMovementState = {
   previousTime: ?number,
-  previousTransform: Transform,
-  velocity: Transform,           // current velocity - will be clipped
+  // previousTransform: Transform,
+  // velocity: Transform,           // current velocity - will be clipped
                                     // at max if element is being moved
                                     // faster than max.
+  velocity: Point | number,
+  // previous: Point | number,
 };
 
 /**
@@ -500,7 +542,7 @@ type ElementState = {
  * @property {number} opacity number between 0 and 1 that is multiplied with
  * `color` alpha channel to get final opacity
  * @property {OBJ_ElementMove} move movement parameters
- * @property {Scenarios} scenarios scenario presets
+ * @property {OBJ_Scenarios} scenarios scenario presets
  * @property {ElementState} state current state of element
  * @property {AnimationManager} animations element animation manager
  * @property {NotificationManager} notifications notification manager for
@@ -519,14 +561,16 @@ class FigureElement {
   copyTransforms: Array<Transform>;
   drawTransforms: Array<Transform>;
 
-  lastDrawTransform: Transform; // Transform matrix used in last draw
+  // lastDrawTransform: Transform; // Transform matrix used in last draw
   lastDrawPulseTransform: Transform; // Transform matrix used in last draw
   parentTransform: Array<Transform>;
+  // lastScene: null | Scene;
+
   // transformUpdated: boolean;
   // lastDrawParentTransform: Transform;
   // lastDrawElementTransform: Transform;
   // lastDrawPulseTransform: Transform;
-  lastDrawElementTransformPosition: {parentCount: number, elementCount: number};
+  // lastDrawElementTransformPosition: {parentCount: number, elementCount: number};
 
   lastDrawOpacity: number;
 
@@ -537,10 +581,9 @@ class FigureElement {
 
   isMovable: boolean;             // Element is able to be moved
   isTouchable: boolean;           // Element can be touched
-  // isTrackable: boolean;
-  touchPriority: boolean;
+  touchScale: Point;
   isInteractive: ?boolean;         // Touch event is not processed by Figure
-  hasTouchableElements: boolean;
+  // hasTouchableElements: boolean;
   // touchInBoundingRect: boolean | number;
 
   drawPriority: number;
@@ -563,6 +606,7 @@ class FigureElement {
   interactiveLocation: Point;   // this is in vertex space
   // recorder: Recorder;
   figure: OBJ_FigureForElement;
+  scene: null | Scene;
   // move: {
   //   bounds: TransformBounds,
   //   transformClip: string | (?(Transform) => Transform);
@@ -587,7 +631,7 @@ class FigureElement {
   // scenarios: {
   //   [scenarioName: string]: OBJ_Scenario;
   // };
-  scenarios: Scenarios;
+  scenarios: OBJ_Scenarios;
 
   type: 'collection' | 'primitive';
 
@@ -624,14 +668,13 @@ class FigureElement {
     xAlign: 'center' | 'left' | 'right' | number,
     yAlign: 'middle' | 'bottom' | 'top' | number,
     centerOn: null | FigureElement | string,
-    space: TypeSpace,
+    space: TypeCoordinateSpace,
     done: null | () => void,
     progression: string | (number) => number,
     when: TypeWhen,
   };
 
 
-  figureLimits: Rect;
   figureTransforms: OBJ_SpaceTransforms;
 
   // Current animation/movement state of element
@@ -696,13 +739,29 @@ class FigureElement {
   lastDrawTime: number;
 
   // pauseSettings: TypePauseSettings;
-
   dependantTransform: boolean;
 
   recorder: Recorder;
   timeKeeper: TimeKeeper;
 
   simple: boolean;
+
+  // TODO - Remove
+  uniqueColor: null | TypeColor;
+
+  // TODO
+  touch: {
+    color: null | TypeColor;  // integer color ([255, 255, 255, 255])
+    enabled: boolean;
+    scale: TypeParsablePoint;
+  }
+
+  // // TODO
+  // move: {
+  //   line: Line,
+  //   plane: Plane, // arbitrary or normal plane
+  // }
+
   // scenarioSet: {
   //   quiz1: [
   //     { element: xyz, position: (), scale: (), rotation: (), length: () }
@@ -725,7 +784,6 @@ class FigureElement {
    */
   constructor(
     transform: Transform = new Transform(),
-    figureLimitsOrFigure: Figure | Rect = new Rect(-1, -1, 2, 2),
     parent: FigureElement | null = null,
     name: string = generateUniqueId('element_'),
     timeKeeper: TimeKeeper = new TimeKeeper(),
@@ -734,6 +792,7 @@ class FigureElement {
     // name
     this.name = name;
     this.uid = (Math.random() * 1e18).toString(36);
+    this.uniqueColor = null;
     this.isShown = true;
     this.simple = false;
     this.transform = transform._dup();
@@ -742,9 +801,9 @@ class FigureElement {
     this.notifications = new NotificationManager(this.fnMap);
     this.isMovable = false;
     this.isTouchable = false;
-    this.touchPriority = false;
+    this.touchScale = new Point(1, 1, 1);
     this.isInteractive = undefined;
-    this.hasTouchableElements = false;
+    // this.hasTouchableElements = false;
     this.color = [1, 1, 1, 1];
     this.lastDrawOpacity = 1;
     this.dimColor = [0.5, 0.5, 0.5, 1];
@@ -754,14 +813,16 @@ class FigureElement {
     this.beforeDrawCallback = null;
     this.afterDrawCallback = null;
     this.internalSetTransformCallback = null;
-    this.lastDrawTransform = this.transform._dup();
+    // this.lastDrawTransform = this.transform._dup();
+    this.scene = null;
+    // this.lastScene = scene;
     this.parentTransform = [new Transform()];
     this.lastDrawPulseTransform = this.transform._dup();
     this.onClick = null;
-    this.lastDrawElementTransformPosition = {
-      parentCount: 0,
-      elementCount: 0,
-    };
+    // this.lastDrawElementTransformPosition = {
+    //   parentCount: 0,
+    //   elementCount: 0,
+    // };
     this.custom = {};
     this._custom = {};
     this.customState = {};
@@ -789,14 +850,10 @@ class FigureElement {
       when: 'syncNow',
     };
 
-    if (figureLimitsOrFigure instanceof Rect) {
-      this.figureLimits = figureLimitsOrFigure;
-    } else if (figureLimitsOrFigure != null) {
-      this.figureLimits = this.figure.limits._dup();
-    }
     this.move = {
-      bounds: 'none',
-      sizeInBounds: false,
+      // bounds: 'none',
+      bounds: null,
+      plane: new Plane([0, 0, 0], [0, 0, 1]),
       maxVelocity: 5,
       freely: {
         zeroVelocityThreshold: 0.0001,
@@ -804,10 +861,10 @@ class FigureElement {
         callback: null,
         bounceLoss: 0.5,
       },
-      canBeMovedAfterLosingTouch: true,
+      // canBeMovedAfterLosingTouch: true,
       type: 'translation',
       element: null,
-      transformClip: null,
+      // transformClip: null,
     };
 
     this.scenarios = {};
@@ -862,8 +919,8 @@ class FigureElement {
       isChanging: false,
       movement: {
         previousTime: null,
-        previousTransform: this.transform._dup(),
-        velocity: this.transform.zero(),
+        // previousTransform: this.transform._dup(),
+        velocity: 0,
       },
 
       isPulsing: false,
@@ -874,15 +931,16 @@ class FigureElement {
     };
     this.interactiveLocation = new Point(0, 0);
     this.animationFinishedCallback = null;
+    // $FlowFixMe
     this.animations = new animations.AnimationManager({
       element: this,
       finishedCallback: this.animationFinished.bind(this),
       timeKeeper: this.timeKeeper,
     });
+    // $FlowFixMe
     this.tieToHTML = {
       element: null,
       scale: 'fit',
-      window: this.figureLimits,
       updateOnResize: true,
     };
     this.isRenderedAsImage = false;
@@ -905,47 +963,11 @@ class FigureElement {
     }
   }
 
-  setProperties(properties: Object, exceptIn: Array<string> | string = []) {
-    let except = exceptIn;
-    if (properties.move != null) {
-      const cleanBounds = (key) => {
-        if (typeof except === 'string') {
-          except = [except, `move.${key}`];
-        } else {
-          except.push(`move.${key}`);
-        }
-        const bounds = getBounds(properties.move[key], 'transform', this.transform);
-        if (bounds instanceof TransformBounds) {
-          for (let i = 0; i < bounds.boundary.length; i += 1) {
-            const bound = bounds.boundary[i];
-            const order = bounds.order[i];
-            if (
-              bounds.boundary[i] != null
-              && bound instanceof RangeBounds
-              && (order === 't' || order === 's')
-            ) {
-              bounds.boundary[i] = new RectBounds({
-                left: bound.boundary.min,
-                bottom: bound.boundary.min,
-                right: bound.boundary.max,
-                top: bound.boundary.max,
-              });
-            }
-          }
-          this.move[key] = bounds;
-        }
-      };
-      // if (properties.move.boundsToUse != null) {
-      //   cleanBounds('boundsToUse');
-      // }
-      if (
-        properties.move.bounds != null
-        && properties.move.bounds !== 'figure'
-        && properties.move.bounds !== 'none'
-      ) {
-        cleanBounds('bounds');
-      }
-    }
+  setScene(options: OBJ_Scene) {
+    this.scene = new Scene(options);
+  }
+
+  setProperties(properties: Object, except: Array<string> | string = []) {
     joinObjectsWithOptions({
       except,
     }, this, properties);
@@ -966,6 +988,7 @@ class FigureElement {
         'defaultColor',
         'transform',
         '_custom',
+        'scene',
         // 'lastDrawTransform',
         // 'parentTransform',
         'isShown',
@@ -1062,6 +1085,7 @@ class FigureElement {
     if (this.isMovable) {
       this.setMovable();
     }
+    this.notifications.publish('setFigure');
   }
 
   setTimeDelta(delta: number) {
@@ -1074,6 +1098,48 @@ class FigureElement {
     if (this.state.movement.previousTime != null) {
       this.state.movement.previousTime += delta;
     }
+  }
+
+  getRootElement() {
+    if (this.parent != null) {
+      return this.parent.getRootElement();
+    }
+    return null;
+  }
+
+  getScene() {
+    if (this.scene != null) {
+      return this.scene;
+    }
+    if (this.parent != null) {
+      return this.parent.getScene();
+    }
+    return null;
+  }
+
+  getDrawToFigureTransformDef() {
+    if (this.parent != null) { // $FlowFixMe
+      return [...this.getTransform().def, ...this.parent.getDrawToFigureTransformDef()];
+    }
+    return this.transform.def;
+  }
+
+  getLocalToFigureTransformDef() {
+    if (this.parent != null) {
+      return this.parent.getDrawToFigureTransformDef();
+    }
+    return [];
+  }
+
+  getLocalToFigureTransform() {
+    if (this.parent != null) { // $FlowFixMe
+      return new Transform(this.getLocalToFigureTransformDef());
+    }
+    return new Transform();
+  }
+
+  getFigureTransform() { // $FlowFixMe
+    return new Transform(this.getDrawToFigureTransformDef());
   }
 
 
@@ -1128,12 +1194,17 @@ class FigureElement {
       tieToElement = document.getElementById(this.tieToHTML.element);
     }
     if (tieToElement != null) {
+      const scene = this.getScene();
+      if (scene == null) {
+        return;
+      }
+      const figureWidth = scene.right - scene.left;
+      const figureHeight = scene.top - scene.bottom;
       const tie = tieToElement.getBoundingClientRect();
       const canvas = figureCanvas.getBoundingClientRect();
-      const figure = this.figureLimits;
       const dWindow = this.tieToHTML.window;
       const cAspectRatio = canvas.width / canvas.height;
-      const dAspectRatio = figure.width / figure.height;
+      const dAspectRatio = figureWidth / figureHeight;
       const tAspectRatio = tie.width / tie.height;
       const wAspectRatio = dWindow.width / dWindow.height;
 
@@ -1145,9 +1216,9 @@ class FigureElement {
         tie.width, tie.height,
       ));
 
-      const { pixelToFigure } = this.figureTransforms;
-      const topLeft = topLeftPixels.transformBy(pixelToFigure.m());
-      const bottomRight = bottomRightPixels.transformBy(pixelToFigure.m());
+      const pixelToFigure = this.spaceTransformMatrix('pixel', 'figure');
+      const topLeft = topLeftPixels.transformBy(pixelToFigure);
+      const bottomRight = bottomRightPixels.transformBy(pixelToFigure);
       const width = bottomRight.x - topLeft.x;
       const height = topLeft.y - bottomRight.y;
       const center = topLeft.add(new Point(width / 2, -height / 2));
@@ -1156,15 +1227,15 @@ class FigureElement {
 
       let scaleX = 1;
       let scaleY = 1;
-      const figureToWindowScaleX = figure.width / dWindow.width;
-      const figureToWindowScaleY = figure.height / dWindow.height;
+      const figureToWindowScaleX = figureWidth / dWindow.width;
+      const figureToWindowScaleY = figureHeight / dWindow.height;
 
       // Window has no scaling impact on em, it only has impact on translation
       if (scaleString.endsWith('em')) {
         const scale = parseFloat(scaleString);
         const em = parseFloat(getComputedStyle(tieToElement).fontSize);
         // 0.2 is default font size in figure units
-        const defaultFontScale = figure.width / 0.2;
+        const defaultFontScale = figureWidth / 0.2;
         scaleX = scale * em * defaultFontScale / canvas.width;
         scaleY = scale * em * defaultFontScale / dAspectRatio / canvas.height;
       }
@@ -1221,10 +1292,11 @@ class FigureElement {
         center.x - scaleX * (this.tieToHTML.window.left + this.tieToHTML.window.width / 2),
         center.y - scaleY * (this.tieToHTML.window.bottom + this.tieToHTML.window.height / 2),
       );
-      this.setFirstTransform(this.getParentLastDrawTransform());
+      // this.setFirstTransform(this.getParentLastDrawTransform());
     }
   }
 
+  // Deprecate
   // eslint-disable-next-line no-unused-vars, class-methods-use-this
   setFirstTransform(parentTransform: Transform) {
   }
@@ -1415,17 +1487,17 @@ class FigureElement {
     return drawTransforms;
   }
 
-  getDrawTransformsMatrix(initialTransforms: Array<Array<number>>) {
+  getDrawTransformsMatrix(initialTransforms: Array<Type3DMatrix>) {
     let drawTransforms = initialTransforms;
     if (this.copyTransforms.length > 0) {
-      drawTransforms = transformByMatrix(drawTransforms, this.copyTransforms.map(t => t.mat));
+      drawTransforms = transformByMatrix(drawTransforms, this.copyTransforms.map(t => t.matrix()));
     }
     if (this.pulseTransforms.length > 0) {
-      drawTransforms = transformByMatrix(drawTransforms, this.pulseTransforms.map(t => t.mat));
+      drawTransforms = transformByMatrix(drawTransforms, this.pulseTransforms.map(t => t.matrix()));
     }
     if (this.frozenPulseTransforms.length > 0) {
       drawTransforms = transformByMatrix(
-        drawTransforms, this.frozenPulseTransforms.map(t => t.mat),
+        drawTransforms, this.frozenPulseTransforms.map(t => t.matrix()),
       );
     }
     return drawTransforms;
@@ -1475,10 +1547,10 @@ class FigureElement {
    * definition
    * @param {number} y y coordinate if `pointOrX` is just the x coordinate (`0`)
    */
-  setPosition(pointOrX: TypeParsablePoint | number, y: number = 0) {
+  setPosition(pointOrX: TypeParsablePoint | number, y: number = 0, z: number = 0) {
     let position;
     if (typeof pointOrX === 'number') {
-      position = new Point(pointOrX, y);
+      position = new Point(pointOrX, y, z);
     } else {
       position = getPoint(pointOrX);
     }
@@ -1491,9 +1563,26 @@ class FigureElement {
    * Conveniently set the first `rotation` of the element's `transform`.
    * @param {number} rotation
    */
-  setRotation(rotation: number) {
+  setRotation(r: number, axis: TypeParsablePoint | null = null) {
+    // const index = this.transform.getComponentIndex(['r', 'rx', 'rz', 'ry', 'ra']);
     const currentTransform = this.transform._dup();
-    currentTransform.updateRotation(rotation);
+    currentTransform.updateRotation(r, axis);
+    // currentTransform.def[index][1] = r;
+    // if (axis != null && currentTransform.def[index][0] === 'ra') {
+    //   currentTransform.def[index] = ['r', r, ...getPoint(axis)];
+    //   currentTransform.calcAndSetMatrix();
+    // }
+    // let rotation;
+    // if (typeof rOrRx === 'number') {
+    //   if (ry == null) {
+    //     rotation = rOrRx;
+    //   } else {
+    //     rotation = new Point(rOrRx, ry, rz);
+    //   }
+    // } else {
+    //   rotation = rOrRx;
+    // } // $FlowFixMe
+    // currentTransform.updateRotation(rotation);
     this.setTransform(currentTransform);
   }
 
@@ -1504,13 +1593,13 @@ class FigureElement {
    * `y` is null, then both `x` and `y` will be equally scaled
    * @param {number | null} y y coordinate if `scaleOrX` is a `number` (`null`)
    */
-  setScale(scaleOrX: TypeParsablePoint | number, y: ?number = null) {
+  setScale(scaleOrX: TypeParsablePoint | number, y: ?number = null, z: number = 1) {
     let scale;
     if (typeof scaleOrX === 'number') {
       if (typeof y === 'number') {
-        scale = new Point(scaleOrX, y);
+        scale = new Point(scaleOrX, y, z);
       } else {
-        scale = new Point(scaleOrX, scaleOrX);
+        scale = new Point(scaleOrX, scaleOrX, scaleOrX);
       }
     } else {
       scale = getPoint(scaleOrX);
@@ -1529,32 +1618,31 @@ class FigureElement {
    * @param {Transform} transform
    */
   setTransform(transform: Transform, publish: boolean = true): void {
-    if (this.move.transformClip != null) {
-      const clip = this.fnMap.exec(this.move.transformClip, transform);
-      if (clip instanceof Transform) {
-        this.notifications.publish('beforeSetTransform', [clip]);
-        if (this.cancelSetTransform === false) {
-          this.transform = clip;
-        } else {
-          this.cancelSetTransform = false;
-        }
-      }
-    } else if (this.move.bounds !== 'none' && this.move.bounds != null) {
-      const bounds = this.getMoveBounds(); // $FlowFixMe
-      const clip = bounds.clip(transform);
-      this.notifications.publish('beforeSetTransform', [clip]);
-      if (this.cancelSetTransform === false) {
-        this.transform = clip;
-      } else {
-        this.cancelSetTransform = false;
-      }
-    } else {
-      this.notifications.publish('beforeSetTransform', [transform]);
+    // if (this.move.bounds != null && this.state.isBeingMoved) {
+    //   const clip = this.clipToMoveBounds();
+    //   if (this.cancelSetTransform === false) {
+    //     this.notifications.publish('beforeSetTransform', [clip]);
+    //     this.transform = clip;
+    //   } else {
+    //     this.cancelSetTransform = false;
+    //   }
+    // } else {
+    //   this.notifications.publish('beforeSetTransform', [transform]);
+    //   this.transform = transform;
+    // }
+    this.notifications.publish('beforeSetTransform', [transform]);
+    if (!this.cancelSetTransform) {
       this.transform = transform;
+    } else {
+      this.cancelSetTransform = false;
     }
-    if (this.simple === false) {
-      this.updateDrawTransforms(this.parentTransform, false);
-    }
+    // if (this.simple === false) {
+    //   this.updateDrawTransforms(this.parentTransform, this.lastScene, false);
+    // }
+    this.transformSet(publish);
+  }
+
+  transformSet(publish: boolean = true) {
     if (this.internalSetTransformCallback) {
       this.fnMap.exec(this.internalSetTransformCallback, this.transform);
     }
@@ -1562,6 +1650,7 @@ class FigureElement {
       this.notifications.publish('setTransform', [this.transform]);
       this.fnMap.exec(this.setTransformCallback, this.transform);
     }
+    this.animateNextFrame();
   }
 
   // Set the next transform (and velocity if moving freely) for the next
@@ -1578,6 +1667,7 @@ class FigureElement {
   // Once the velocity goes to zero, this metho will stop the element moving
   // freely.
   nextMovingFreelyFrame(now: number): void {
+    this.notifications.publish('beforeMoveFreely');
     // If the element is moving freely, then calc it's next velocity and
     // transform. Save the new velocity into state.movement and return the
     // transform.
@@ -1588,10 +1678,12 @@ class FigureElement {
         this.state.movement.previousTime = now;
         return;
       }
-      // console.log(this.state.movement.velocity)
-      if (Array.isArray(this.state.movement.velocity)) {
-        this.state.movement.velocity = getTransform(this.state.movement.velocity);
+      if (typeof this.state.movement.velocity !== 'number') {
+        this.state.movement.velocity = getPoint(this.state.movement.velocity);
       }
+      // if (Array.isArray(this.state.movement.velocity)) {
+      //   this.state.movement.velocity = getTransform(this.state.movement.velocity);
+      // }
       // If got here, then we are now after the first frame, so calculate
       // the delta time from this frame to the previous
       const deltaTime = now - this.state.movement.previousTime;
@@ -1599,14 +1691,30 @@ class FigureElement {
       const next = this.decelerate(deltaTime);
       this.state.movement.velocity = next.velocity;
       this.state.movement.previousTime = now;
-
       // If the velocity is 0, then stop moving freely and return the current
       // transform
-      if (this.state.movement.velocity.isZero()) {
-        this.state.movement.velocity = this.state.movement.velocity.zero();
+      if (
+        (
+          typeof this.state.movement.velocity === 'number'
+          && round(this.state.movement.velocity) === 0
+        )
+        || (
+          typeof this.state.movement.velocity !== 'number'
+          && this.state.movement.velocity.isZero()
+        )
+      ) {
+        if (typeof this.state.movement.velocity === 'number') {
+          this.state.movement.velocity = 0;
+        } else {
+          this.state.movement.velocity = new Point(0, 0, 0);
+        }
         this.stopMovingFreely('complete');
       }
-      this.setTransform(next.transform);
+
+      const t = this.transform._dup();
+      this.updateTransformWithMovement(next.value, t);
+      this.setTransform(t);
+      // this.transformSet();
     }
   }
 
@@ -1826,36 +1934,68 @@ class FigureElement {
   // Decelerate over some time when moving freely to get a new element
   // transform and movement velocity
   decelerate(deltaTime: number | null = null): Object {
-    const bounds = this.getMoveBounds();
+    const { bounds } = this.move;
+    let next;
+    const { type, freely } = this.move;
+    if (typeof freely === 'boolean') {
+      return { velocity: 0, value: 0, duration: 0 };
+    }
+    if (type === 'position' || type === 'translation') {
+      next = decelerateVector( // $FlowFixMe
+        this.transform.t(), // $FlowFixMe
+        this.state.movement.velocity,
+        freely.deceleration,
+        deltaTime,  // $FlowFixMe
+        bounds,
+        freely.bounceLoss,
+        freely.zeroVelocityThreshold,
+      );
+      return {
+        velocity: next.velocity, value: next.position, duration: next.duration,
+      };
+    }
+
+    let current;
+    if (type === 'scale' || type === 'scaleX') { // $FlowFixMe
+      current = this.transform.s().x;
+    } else if (type === 'scaleY') { // $FlowFixMe
+      current = this.transform.s().y;
+    } else if (type === 'scaleZ') { // $FlowFixMe
+      current = this.transform.s().z;
+    } else if (type === 'rotation') {
+      const r = this.transform.r();
+      if (typeof r === 'number') {
+        current = r;
+      } else {
+        // eslint-disable-next-line prefer-destructuring
+        current = r[1];
+      }
+    }
     // console.log(deltaTime)
-    const next = this.transform.decelerate(
+    return decelerateValue( // $FlowFixMe
+      current, // $FlowFixMe
       this.state.movement.velocity,
-      this.move.freely.deceleration,
+      freely.deceleration,
       deltaTime,  // $FlowFixMe
       bounds,
-      this.move.freely.bounceLoss,
-      this.move.freely.zeroVelocityThreshold,
+      freely.bounceLoss,
+      freely.zeroVelocityThreshold,
     );
-    return {
-      velocity: next.velocity,
-      transform: next.transform,
-      duration: next.duration,
-    };
   }
 
 
-  updateLastDrawTransform() {
-    const transform = this.getTransform();
-    transform.order.forEach((t, index) => {
-      this.lastDrawTransform.order[index] = t._dup();
-    });
-    this.lastDrawTransform.calcAndSetMatrix();
-  }
+  // updateLastDrawTransform() {
+  //   const transform = this.getTransform();
+  //   transform.def.forEach((t, index) => {
+  //     this.lastDrawTransform.def[index] = t.slice();
+  //   });
+  //   this.lastDrawTransform.calcAndSetMatrix();
+  // }
 
-  getParentLastDrawTransform() {
-    const { parentCount } = this.lastDrawElementTransformPosition;
-    return new Transform(this.lastDrawTransform.order.slice(-parentCount));
-  }
+  // getParentLastDrawTransform() {
+  //   const { parentCount } = this.lastDrawElementTransformPosition;
+  //   return new Transform(this.lastDrawTransform.def.slice(-parentCount));
+  // }
 
   /**
    * Return figure path of element
@@ -1871,14 +2011,74 @@ class FigureElement {
     return `${this.parent.getPath()}.${this.name}`;
   }
 
+  getMovement(
+    transform: Transform,
+  ) {
+    const { type } = this.move;
+    let movement;
+    if (type === 'scale' || type === 'scaleX') { // $FlowFixMe
+      movement = transform.s().x;
+    } else if (type === 'scaleY') { // $FlowFixMe
+      movement = transform.s().y;
+    } else if (type === 'scaleZ') { // $FlowFixMe
+      movement = transform.s().z;
+    } else if (type === 'position' || type === 'translation') {
+      movement = transform.t();
+    } else if (type === 'rotation') {
+      movement = transform.r();
+    }
+    return movement;
+  }
+
+  updateTransformWithMovement(
+    valueIn: number | Point,
+    transform: Transform,
+  ) {
+    const { type } = this.move; // $FlowFixMe
+    let value: number = valueIn;
+    if (this.move.bounds != null) { // $FlowFixMe
+      value = this.move.bounds.clip(valueIn);
+    }
+    // console.log(type, transform)
+    // let movement;
+    if (type === 'scale') {
+      transform.updateScale([value, value, value]);
+    } else if (type === 'scaleX') {
+      const s = transform.s(); // $FlowFixMe
+      transform.updateScale([value, s.y, s.z]);
+    } else if (type === 'scaleY') {
+      const s = transform.s(); // $FlowFixMe
+      transform.updateScale([s.x, value, s.z]);
+    } else if (type === 'scaleZ') {
+      const s = transform.s(); // $FlowFixMe
+      transform.updateScale([s.x, s.y, value]);
+    } else if (type === 'position' || type === 'translation') { // $FlowFixMe
+      transform.updateTranslation(value);
+    } else if (type === 'rotation') {
+      transform.updateRotation(value);
+    }
+    return transform;
+  }
+
+  setZeroVelocity() {
+    const { type } = this.move;
+    if (type === 'position' || type === 'translation') {
+      this.state.movement.velocity = new Point(0, 0, 0);
+    } else {
+      this.state.movement.velocity = 0;
+    }
+  }
 
   // Being Moved
   startBeingMoved(): void {
     // this.stopAnimating();
     this.animations.cancelAll('freeze');
     this.stopMovingFreely('freeze');
-    this.state.movement.velocity = this.transform.zero();
-    this.state.movement.previousTransform = this.transform._dup();
+    // this.state.movement.velocity = 0;
+    this.setZeroVelocity();
+    // 'rotation' | 'translation' | 'position' | 'scale' | 'scaleX' | 'scaleY' | 'scaleZ',
+    // this.state.movement.previous = this.getMovement(this.transform);
+    // this.state.movement.previousTransform = this.transform._dup();
     this.state.movement.previousTime = this.timeKeeper.now() / 1000;
     this.state.isBeingMoved = true;
     this.unrender();
@@ -1888,25 +2088,33 @@ class FigureElement {
     }
   }
 
-  moved(newTransform: Transform): void {
-    const prevTransform = this.transform._dup();
-    this.setTransform(newTransform._dup());
-    let tBounds;
-    if (this.move.bounds != null && this.move.bounds !== 'none') {  // $FlowFixMe
-      tBounds = this.move.bounds.getTranslation();
-    }
-    // In a finite rect bounds, if we calculate the velocity from the clipped
-    // transform, the object will skip along the wall if the user lets the
-    // object go after intersecting with the wall
-    if (
-      tBounds instanceof RectBounds
-      && tBounds.boundary.right > tBounds.boundary.left
-      && tBounds.boundary.top > tBounds.boundary.bottom
-    ) {
-      this.calcVelocity(prevTransform, newTransform);
-    } else {
-      this.calcVelocity(prevTransform, this.transform);
-    }
+  moved(
+    value: Point | number,
+  ): void {
+    this.notifications.publish('beforeMove');
+    const previousValue = this.getMovement(this.transform);
+    // $FlowFixMe
+    this.calcVelocity(previousValue, value);
+    const t = this.transform._dup();
+    this.updateTransformWithMovement(value, t);
+    // this.transformSet();
+    this.setTransform(t);
+    // let tBounds;
+    // if (this.move.bounds != null && this.move.bounds !== 'none') {  // $FlowFixMe
+    //   tBounds = this.move.bounds.getTranslation();
+    // }
+    // // In a finite rect bounds, if we calculate the velocity from the clipped
+    // // transform, the object will skip along the wall if the user lets the
+    // // object go after intersecting with the wall
+    // if (
+    //   tBounds instanceof RectBounds
+    //   && tBounds.boundary.right > tBounds.boundary.left
+    //   && tBounds.boundary.top > tBounds.boundary.bottom
+    // ) {
+    //   this.calcVelocity(prevTransform, newTransform);
+    // } else {
+    //   this.calcVelocity(prevTransform, this.transform);
+    // }
   }
 
   stopBeingMoved(): void {
@@ -1918,7 +2126,7 @@ class FigureElement {
     // velocity 0 as the user has stopped moving before releasing touch/click
     if (this.state.movement.previousTime != null) {
       if ((currentTime - this.state.movement.previousTime) > 0.05) {
-        this.state.movement.velocity = this.transform.zero();
+        this.setZeroVelocity();
       }
     }
     this.notifications.publish('stopBeingMoved');
@@ -1928,7 +2136,7 @@ class FigureElement {
         [
           this.getPath(),
           this.transform._state(),
-          this.state.movement.velocity._state(),
+          typeof this.state.movement.velocity === 'number' ? this.state.movement.velocity : this.state.movement.velocity._state(),
         ],
         // this.state.movement.velocity.toString(),
       );
@@ -1937,7 +2145,10 @@ class FigureElement {
     this.state.movement.previousTime = null;
   }
 
-  calcVelocity(prevTransform: Transform, nextTransform: Transform): void {
+  calcVelocity(
+    prevValue: number | Point,
+    nextValue: number | Point,
+  ): void {
     const currentTime = this.timeKeeper.now() / 1000;
     if (this.state.movement.previousTime == null) {
       this.state.movement.previousTime = currentTime;
@@ -1946,48 +2157,80 @@ class FigureElement {
     const deltaTime = currentTime - this.state.movement.previousTime;
 
     // If the time is too small, weird calculations may happen
-    if (deltaTime < 0.0001) {
+    if (deltaTime < 0.0000001) {
       return;
     }
-    this.state.movement.velocity = nextTransform.velocity(
-      prevTransform,
-      deltaTime,
-      this.move.freely.zeroVelocityThreshold,
-      this.move.maxVelocity,
-    );
+    const next = nextValue;
+    const { freely } = this.move;
+    if (typeof freely === 'boolean') {
+      return;
+    }
+    let v;
+    if (typeof next === 'number' && typeof prevValue === 'number') {
+      v = (next - prevValue) / deltaTime;
+      if (v === 0) {
+        this.state.movement.velocity = 0;
+        return;
+      }
+      const d = v / Math.abs(v);
+      if (Math.abs(v) <= freely.zeroVelocityThreshold) {
+        v = 0;
+      } // $FlowFixMe
+      v = Math.min(Math.abs(v), this.move.maxVelocity);
+      v *= d;
+    } else { // $FlowFixMe
+      v = next.sub(prevValue).scale(1 / deltaTime);
+      const vMag = v.length();
+      if (vMag <= freely.zeroVelocityThreshold) {
+        v = new Point(0, 0, 0); // $FlowFixMe
+      } else if (vMag > this.move.maxVelocity) {
+        v = v.normalize().scale(this.move.maxVelocity);
+      }
+    }
+    // console.log(v)
+    this.state.movement.velocity = v;
     this.state.movement.previousTime = currentTime;
   }
 
-  simulateStartMovingFreely(transform: Transform, velocity: Transform) {
-    this.transform = transform;
-    this.state.movement.velocity = velocity;
-    this.startMovingFreely();
-  }
+  // simulateStartMovingFreely(transform: Transform, velocity: Transform) {
+  //   this.transform = transform;
+  //   this.state.movement.velocity = velocity;
+  //   this.startMovingFreely();
+  // }
 
   // Moving Freely
   startMovingFreely(callback: ?(string | ((boolean) => void)) = null): void {
     this.animations.cancelAll('freeze');
     this.stopBeingMoved();
+    if (this.move.freely === false) {
+      return;
+    }
     if (callback) {
       this.move.freely.callback = callback;
     }
     this.state.isMovingFreely = true;
     this.state.movement.previousTime = this.timeKeeper.now() / 1000;
-    if (Array.isArray(this.state.movement.velocity)) {
-      this.state.movement.velocity = getTransform(this.state.movement.velocity);
-    }
-    this.state.movement.velocity = this.state.movement.velocity.clipMag(
-      this.move.freely.zeroVelocityThreshold,
-      this.move.maxVelocity,
-    );
+    // if (Array.isArray(this.state.movement.velocity)) {
+    //   this.state.movement.velocity = getTransform(this.state.movement.velocity);
+    // }
+    // this.state.movement.velocity = this.state.movement.velocity.clipMag(
+    //   this.move.freely.zeroVelocityThreshold,
+    //   this.move.maxVelocity,
+    // );
     this.notifications.publish('startMovingFreely');
     if (this.recorder.state === 'recording') {
+      let v;
+      if (this.state.movement.velocity._state) { // $FlowFixMe
+        v = this.state.movement.velocity._state();
+      } else {
+        v = this.state.movement.velocity;
+      }
       this.recorder.recordEvent(
         'startMovingFreely',
         [
           this.getPath(),
           this.transform._state(),
-          this.state.movement.velocity._state(),
+          v,
         ],
       );
     }
@@ -1998,19 +2241,26 @@ class FigureElement {
     if (how === 'animateToComplete') {
       return;
     }
+    if (typeof this.move.freely === 'boolean') {
+      return;
+    }
     let wasMovingFreely = false;
     if (this.state.isMovingFreely === true) {
       wasMovingFreely = true;
     }
     if (how === 'complete' && wasMovingFreely) {
       const result = this.getMovingFreelyEnd();
-      this.setTransform(result.transform);
+      // this.setTransform(result.transform);
+      const t = this.transform._dup();
+      this.updateTransformWithMovement(result.value, t);
+      // this.transformSet();
+      this.setTransform(t);
     }
 
     this.state.isMovingFreely = false;
     this.state.movement.previousTime = null;
     if (this.move.freely.callback) {
-      this.fnMap.exec(this.move.freely.callback, how);
+      this.fnMap.exec(this.move.freely.callback, how);  // $FlowFixMe
       this.move.freely.callback = null;
     }
     if (wasMovingFreely) {
@@ -2393,15 +2643,6 @@ class FigureElement {
   }
 
 
-  updateLimits(
-    limits: Rect,
-    transforms: OBJ_SpaceTransforms = this.figureTransforms,
-  ) {
-    this.figureLimits = limits;
-    this.figureTransforms = transforms;
-  }
-
-
   resize(figureHTMLElement: ?HTMLElement = null) {
     if (figureHTMLElement && this.tieToHTML.updateOnResize) {
       this.updateHTMLElementTie(figureHTMLElement);
@@ -2409,125 +2650,608 @@ class FigureElement {
   }
 
 
-  getPixelToVertexSpaceScale() {
-    const pixelToFigure = this.figureTransforms.pixelToFigure.matrix();
-    const figureToVertex = this.spaceTransformMatrix('figure', 'draw');
-    const scaleX = pixelToFigure[0] * figureToVertex[0];
-    const scaleY = pixelToFigure[4] * figureToVertex[4];
-    return new Point(scaleX, scaleY);
+  // getPixelToVertexSpaceScale() {
+  //   const pixelToFigure = this.figureTransforms.pixelToFigure.matrix();
+  //   const figureToVertex = this.spaceTransformMatrix('figure', 'draw');
+  //   const scaleX = pixelToFigure[0] * figureToVertex[0];
+  //   const scaleY = pixelToFigure[4] * figureToVertex[4];
+  //   return new Point(scaleX, scaleY);
+  // }
+
+  // getVertexToPixelSpaceScale() {
+  //   const pixelToVertexSpaceScale = this.getPixelToVertexSpaceScale();
+  //   return new Point(
+  //     1 / pixelToVertexSpaceScale.x,
+  //     1 / pixelToVertexSpaceScale.y,
+  //   );
+  // }
+
+  /**
+   * Transform a point between 'draw', 'local', 'figure', 'gl' and 'pixel'
+   * spaces.
+   *
+   * `plane` is only needed when converting from pixel space (a 2D space) to
+   * 'figure', 'local' or 'draw' spaces (a 3D space). A ray from the pixel is
+   * drawn into the screen
+   * and the intersection with the defined `plane` is returned.
+   *
+   * 'pixel' to 'gl' is also a 2D to 3D transformation, but in this case the
+   * XY plane at z = 0 is used in gl space.
+   *
+   * @param {TypeParsablePoint} point
+   * @param {'figure' | 'gl' | 'pixel'} fromSpace space to convert point from
+   * @param {'figure' | 'gl' | 'pixel'} toSpace space to convert point to
+   * @param {TypeParsablePlane} plane figure space intersection plane for
+   * 'pixel' to 'figure' conversion
+   */
+  transformPoint(
+    point: TypeParsablePoint,
+    fromSpace: 'draw' | 'local' | 'figure' | 'gl' | 'pixel',
+    toSpace: 'draw' | 'local' | 'figure' | 'gl' | 'pixel',
+    toSpacePlane: TypeParsablePlane = [[0, 0, 0], [0, 0, 1]],
+  ) {
+    const scene = this.getScene();
+    if (scene == null) {
+      throw new Error(`Scene is null for element ${this.getPath()} and all it's parents `);
+    }
+    const p = getPoint(point);
+    if (
+      scene.style === '2D'
+      || (fromSpace === 'gl' && toSpace === 'pixel')
+      || (fromSpace === 'local' && toSpace === 'figure')
+      || (fromSpace === 'draw' && toSpace === 'figure')
+      || (fromSpace === 'draw' && toSpace === 'local')
+      || (fromSpace === 'figure' && toSpace === 'local')
+      || (fromSpace === 'figure' && toSpace === 'draw')
+      || (fromSpace === 'local' && toSpace === 'draw')
+      || (
+        scene.style === 'orthographic'
+        && (
+          (fromSpace === 'gl' && toSpace === 'figure')
+          || (fromSpace === 'gl' && toSpace === 'local')
+          || (fromSpace === 'gl' && toSpace === 'draw')
+          || (fromSpace === 'figure' && toSpace === 'pixel')
+          || (fromSpace === 'local' && toSpace === 'pixel')
+          || (fromSpace === 'draw' && toSpace === 'pixel')
+          || (fromSpace === 'figure' && toSpace === 'gl')
+          || (fromSpace === 'local' && toSpace === 'gl')
+          || (fromSpace === 'draw' && toSpace === 'gl')
+        )
+      )
+    ) {
+      const m = this.spaceTransformMatrix(fromSpace, toSpace);
+      return p.transformBy(m);
+    }
+
+    // Moving from pixel space to figure/local/draw space in 3D requires a plane
+    // in figure space to cut through
+    if (
+      (fromSpace === 'pixel' && toSpace === 'figure')
+      || (fromSpace === 'pixel' && toSpace === 'local')
+      || (fromSpace === 'pixel' && toSpace === 'draw')
+    ) {
+      return this.pixelToPlane(p, toSpace, toSpacePlane);
+    }
+
+    // Moving from pixel space to gl space in 3D requires a plane
+    // in figure space to cut through
+    if (fromSpace === 'pixel' && toSpace === 'gl') {
+      return this.pixelToGLPlane(p, toSpacePlane);
+    }
+
+    // If scene.style === 'perspective', then special functions are needed
+    // to convert between gl and figure space as the transform matrix depends on
+    // the point's z coordinate relative to the camera. Therefore we need to
+    // handle this for all conversions that include this boundary
+    if (
+      (fromSpace === 'gl' && toSpace === 'local')
+      || (fromSpace === 'gl' && toSpace === 'draw')
+      || (fromSpace === 'gl' && toSpace === 'figure')
+    ) {
+      const f = scene.glToFigure(p);
+      if (toSpace === 'figure') {
+        return f;
+      }
+      return this.transformPoint(f, 'figure', toSpace);
+    }
+
+    if (
+      (fromSpace === 'draw' && toSpace === 'gl')
+      || (fromSpace === 'local' && toSpace === 'gl')
+      || (fromSpace === 'figure' && toSpace === 'gl')
+    ) {
+      let f = p;
+      if (fromSpace !== 'figure') {
+        f = this.transformPoint(p, fromSpace, 'figure');
+      }
+      return scene.figureToGL(f);
+    }
+
+    if (
+      (fromSpace === 'draw' && toSpace === 'pixel')
+      || (fromSpace === 'local' && toSpace === 'pixel')
+      || (fromSpace === 'figure' && toSpace === 'pixel')
+    ) {
+      let f = p;
+      if (fromSpace !== 'figure') {
+        f = this.transformPoint(p, fromSpace, 'figure');
+      }
+      const gl = scene.figureToGL(f);
+      return this.transformPoint(gl, 'gl', 'pixel');
+    }
+
+    // If we got here then all combinations of fromSpace and toSpace should
+    // have been covered, which means at least one string is incorrect
+    throw new Error(`Figure.transformPoint space definition error -'${fromSpace}', '${toSpace}'`);
   }
 
-  getVertexToPixelSpaceScale() {
-    const pixelToVertexSpaceScale = this.getPixelToVertexSpaceScale();
-    return new Point(
-      1 / pixelToVertexSpaceScale.x,
-      1 / pixelToVertexSpaceScale.y,
-    );
+  // $FlowFixMe
+  getCanvas() { // $FlowFixMe
+    if (this.drawingObject != null) { // $FlowFixMe
+      return this.drawingObject.getCanvas();
+    }
+    throw new Error(`getCanvas error: Element ${this.getPath()} has no drawing object.`);
   }
 
-  spaceTransformMatrix(from: string, to: string) {
+  /**
+   * Return a matrix that can transform from one coordinate space to another.
+   */
+  spaceTransformMatrix(
+    from: TypeCoordinateSpace,
+    to: TypeCoordinateSpace,
+    precision: number = 8,
+  ): Type3DMatrix {
     // All Vertex related conversions
     if (from === to) {
-      return new Transform().identity().matrix();
+      return m3.identity();
     }
-    if (from === 'draw' && to === 'pixel') {
-      return m2.mul(
-        this.figure.spaceTransforms.glToPixel.matrix(),
-        this.lastDrawTransform.matrix(),
-      );
+
+    const scene = this.getScene();
+    if (
+      scene == null
+      && (
+        from === 'figure' || from === 'pixel' || from === 'gl'
+        || to === 'figure' || to === 'pixel' || to === 'gl'
+      )
+    ) {
+      throw new Error(`Scene is null for element ${this.getPath()} and all it's parents `);
     }
-    if (from === 'draw' && to === 'gl') {
-      return this.lastDrawTransform.matrix();
+    let figureToGLMatrix;
+    let figure2DSpace;
+    if (scene != null) {
+      figureToGLMatrix = scene.viewProjectionMatrix;
+      figure2DSpace = {
+        x: {
+          min: scene.left,
+          span: scene.right - scene.left,
+        },
+        y: {
+          min: scene.bottom,
+          span: scene.top - scene.bottom,
+        },
+        z: { min: -1, span: 2 },
+      };
+    }
+
+    const pixelSpace = () => { // $FlowFixMe
+      const canvasRect = this.getCanvas().getBoundingClientRect();
+      return {
+        x: { min: 0, span: canvasRect.width },
+        y: { min: canvasRect.height, span: -canvasRect.height },
+        z: { min: -1, span: 2 },
+      };
+    };
+
+    const glSpace = {
+      x: { min: -1, span: 2 },
+      y: { min: -1, span: 2 },
+      z: { min: -1, span: 2 },
+    };
+
+    const glToPixelMatrix = (): Type3DMatrix => {
+      const glToPixel = spaceToSpaceTransform(glSpace, pixelSpace()).matrix(precision);
+      glToPixel[10] = 0;
+      glToPixel[11] = 0;
+      return glToPixel;
+    };
+
+    const figureToPixelMatrix = () => round(m3.mul(
+      glToPixelMatrix(),
+      figureToGLMatrix,
+    ), precision);
+
+    // Up Space Conversions
+    // From Draw Up
+    if (from === 'draw' && to === 'local') {
+      return this.getTransform().matrix(precision);
     }
     if (from === 'draw' && to === 'figure') {
-      return this.lastDrawTransform.calcMatrix(0, -3);
+      return this.getFigureTransform().matrix(precision);
     }
-    if (from === 'draw' && to === 'local') {
-      return this.getTransform().matrix();
+    // Only works for '2D' and 'orthographic' projections
+    if (from === 'draw' && to === 'gl') { // $FlowFixMe
+      if (scene.style === 'perspective') {
+        throw new Error('Cannot create a transform matrix from draw space to GL space for a perspective scene.');
+      }
+      return round(m3.mul( // $FlowFixMe
+        scene.viewProjectionMatrix,
+        this.getFigureTransform().matrix(precision),
+      ), precision);
     }
-    if (from === 'pixel' && to === 'draw') {
-      return m2.mul(
-        m2.inverse(this.lastDrawTransform.matrix()),
-        this.figure.spaceTransforms.pixelToGL.matrix(),
-      );
-    }
-    if (from === 'gl' && to === 'draw') {
-      return m2.inverse(this.lastDrawTransform.matrix());
-    }
-    if (from === 'figure' && to === 'draw') {
-      return m2.inverse(this.lastDrawTransform.calcMatrix(0, -3));
-    }
-    if (from === 'local' && to === 'draw') {
-      return m2.inverse(this.getTransform().matrix());
+    // Only works for '2D' and 'orthographic' projections
+    if (from === 'draw' && to === 'pixel') { // $FlowFixMe
+      if (scene.style === 'perspective') {
+        throw new Error('Cannot create a transform matrix from draw space to pixel space for a perspective scene.');
+      }
+      return round(m3.mul(
+        glToPixelMatrix(),
+        m3.mul( // $FlowFixMe
+          scene.viewProjectionMatrix,
+          // this.lastDrawTransform.matrix(),
+          this.getFigureTransform().matrix(precision),
+        ),
+      ), precision);
     }
 
-    // Remaining Local related conversions
-    if (from === 'local' && to === 'pixel') {
-      return m2.mul(
-        this.figure.spaceTransforms.glToPixel.matrix(),
-        this.lastDrawTransform.calcMatrix(this.transform.order.length),
-      );
-    }
-    if (from === 'local' && to === 'gl') {
-      return this.lastDrawTransform.calcMatrix(this.transform.order.length);
-    }
+    // From Local Up
     if (from === 'local' && to === 'figure') {
-      return this.lastDrawTransform.calcMatrix(this.transform.order.length, -3);
+      return this.getLocalToFigureTransform().matrix(precision);
     }
-    if (from === 'pixel' && to === 'local') {
-      return m2.mul(
-        m2.inverse(this.lastDrawTransform.calcMatrix(this.transform.order.length)),
-        this.figure.spaceTransforms.pixelToGL.matrix(),
-      );
+    // Only works for '2D' and 'orthographic' projections
+    if (from === 'local' && to === 'gl') { // $FlowFixMe
+      if (scene.style === 'perspective') {
+        throw new Error('Cannot create a transform matrix from local space to GL space for a perspective scene.');
+      }
+      return round(m3.mul( // $FlowFixMe
+        figureToGLMatrix,
+        this.getLocalToFigureTransform().matrix(precision),
+      ), precision);
     }
-    if (from === 'gl' && to === 'local') {
-      return m2.inverse(this.lastDrawTransform.calcMatrix(this.transform.order.length));
-    }
-    if (from === 'figure' && to === 'local') {
-      return m2.inverse(this.lastDrawTransform.calcMatrix(this.transform.order.length, -3));
-    }
-
-    // Remaining Figure related conversions
-    if (from === 'figure' && to === 'gl') {
-      return this.figure.spaceTransforms.figureToGL.matrix();
-    }
-    if (from === 'figure' && to === 'pixel') {
-      return this.figure.spaceTransforms.figureToPixel.matrix();
-    }
-    if (from === 'gl' && to === 'figure') {
-      return this.figure.spaceTransforms.glToFigure.matrix();
-    }
-    if (from === 'pixel' && to === 'figure') {
-      return this.figure.spaceTransforms.pixelToFigure.matrix();
+    // Only works for '2D' and 'orthographic' projections
+    if (from === 'local' && to === 'pixel') { // $FlowFixMe
+      if (scene.style === 'perspective') {
+        throw new Error('Cannot create a transform matrix from local space to pixel space for a perspective scene.');
+      }
+      return round(m3.mul(
+        // this.figure.spaceTransformMatrix('gl', 'pixel'),
+        glToPixelMatrix(),
+        m3.mul( // $FlowFixMe
+          figureToGLMatrix,
+          this.getLocalToFigureTransform().matrix(precision),
+        ),
+      ), precision);
     }
 
-    // Remaining GL related conversions
+    // From figure Up
+    // Only works for '2D' and 'orthographic' projections
+    if (from === 'figure' && to === 'gl') { // $FlowFixMe
+      if (scene.style === 'perspective') {
+        throw new Error('Cannot create a transform matrix from figure space to GL space for a perspective scene.');
+      } // $FlowFixMe
+      return figureToGLMatrix;
+    }
+    // Only works for '2D' and 'orthographic' projections
+    if (from === 'figure' && to === 'pixel') { // $FlowFixMe
+      if (scene.style === 'perspective') {
+        throw new Error('Cannot create a transform matrix from figure space to pixel space for a perspective scene.');
+      }
+      return figureToPixelMatrix();
+      // return this.figure.spaceTransformMatrix('figure', 'pixel');
+    }
+
+    // From GL Up
     if (from === 'gl' && to === 'pixel') {
-      return this.figure.spaceTransforms.glToPixel.matrix();
+      // return this.figure.spaceTransformMatrix('gl', 'pixel');
+      return glToPixelMatrix();
     }
+
+    // Down Space Conversions
+    // Pixel and down
+    // Always returns gl XY plane at z = 0
     if (from === 'pixel' && to === 'gl') {
-      return this.figure.spaceTransforms.pixelToGL.matrix();
+      // return this.figure.spaceTransformMatrix('pixel', 'gl');
+      return spaceToSpaceTransform(pixelSpace(), glSpace).matrix(precision);
     }
-    return new Transform().identity().matrix();
+
+    // Only works for 2D projection
+    if (from === 'pixel' && to === 'figure') { // $FlowFixMe
+      if (scene.style !== '2D') {
+        throw new Error('Cannot create a transform matrix from pixel space to figure space (needs a plane intersect).');
+      }
+      // $FlowFixMe
+      return spaceToSpaceTransform(pixelSpace(), figure2DSpace).matrix(precision);
+    }
+
+    // Only works for 2D projection
+    if (from === 'pixel' && to === 'local') { // $FlowFixMe
+      if (scene.style !== '2D') {
+        throw new Error('Cannot create a transform matrix from pixel space to local space (needs a plane intersect).');
+      }
+      return round(m3.mul(
+        m3.inverse(this.getLocalToFigureTransform().matrix(precision)),
+        // $FlowFixMe
+        spaceToSpaceTransform(pixelSpace(), figure2DSpace).matrix(precision),
+      ), precision);
+    }
+
+    // Only works for 2D projection
+    if (from === 'pixel' && to === 'draw') { // $FlowFixMe
+      if (scene.style !== '2D') {
+        throw new Error('Cannot create a transform matrix from pixel space to draw space (needs a plane intersect).');
+      }
+      return round(m3.mul(
+        m3.inverse(this.getFigureTransform().matrix(precision)),
+        // $FlowFixMe
+        spaceToSpaceTransform(pixelSpace(), figure2DSpace).matrix(precision),
+      ), precision);
+    }
+
+    // GL Down
+    // Works only for 2D and orthographic projections
+    if (from === 'gl' && to === 'figure') { // $FlowFixMe
+      if (scene.style === 'perspective') {
+        throw new Error('Cannot create a transform matrix from GL space to figure space for a perspective scene.');
+      } // $FlowFixMe
+      return round(m3.inverse(figureToGLMatrix), precision);
+    }
+
+    // Works only for 2D and orthographic projections
+    if (from === 'gl' && to === 'local') { // $FlowFixMe
+      if (scene.style === 'perspective') {
+        throw new Error('Cannot create a transform matrix from GL space to local space for a perspective scene.');
+      } // $FlowFixMe
+      const glToFigureMatrix = m3.inverse(figureToGLMatrix);
+      const figureToLocalMatrix = m3.inverse(
+        this.getLocalToFigureTransform().matrix(precision),
+      );
+      return round(m3.mul(figureToLocalMatrix, glToFigureMatrix), precision);
+    }
+
+    // Works only for 2D and orthographic projections
+    if (from === 'gl' && to === 'draw') { // $FlowFixMe
+      if (scene.style === 'perspective') {
+        throw new Error('Cannot create a transform matrix from GL space to draw space for a perspective scene.');
+      } // $FlowFixMe
+      const glToFigureMatrix = m3.inverse(figureToGLMatrix);
+      const figureToDrawMatrix = m3.inverse(
+        this.getFigureTransform().matrix(precision),
+      );
+      return round(m3.mul(figureToDrawMatrix, glToFigureMatrix), precision);
+    }
+
+    // Figure Down
+    if (from === 'figure' && to === 'local') {
+      return round(m3.inverse(this.getLocalToFigureTransform().matrix(precision)), precision);
+    }
+
+    if (from === 'figure' && to === 'draw') {
+      return round(m3.inverse(this.getFigureTransform().matrix(precision)), precision);
+    }
+
+    // Local Down
+    if (from === 'local' && to === 'draw') {
+      return round(m3.inverse(this.getTransform().matrix(precision)), precision);
+    }
+
+    // // if (from === 'pixel' && to === 'draw') {
+    // //   return m3.mul(
+    // //     m3.inverse(this.lastDrawTransform.matrix()),
+    // //     // this.lastDrawTransform.calcInverseMatrix(),
+    // //     this.figure.spaceTransforms.pixelToGL.matrix(),
+    // //   );
+    // // }
+    // if (from === 'gl' && to === 'draw') {
+    //   // return m3.inverse(this.lastDrawTransform.matrix());
+    //   return m3.inverse(m3.mul(
+    //     scene.viewProjectionMatrix,
+    //     // this.lastDrawTransform.matrix(),
+    //     this.getFigureTransform().matrix(),
+    //   ));
+    // }
+    // if (from === 'figure' && to === 'draw') {
+    //   // return m3.inverse(this.lastDrawTransform.calcMatrix(0, -3));
+    //   return m3.inverse(
+    //     this.getFigureTransform().matrix(),
+    //   );
+    // }
+    // if (from === 'local' && to === 'draw') {
+    //   return m3.inverse(this.getTransform().matrix());
+    // }
+
+    // // Remaining Local related conversions
+    // // if (from === 'pixel' && to === 'local') {
+    // //   return m3.mul(
+    // //     m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.def.length)),
+    // //     this.figure.spaceTransforms.pixelToGL.matrix(),
+    // //   );
+    // // }
+    // if (from === 'gl' && to === 'local') {
+    //   const glToFigureMatrix = m3.inverse(figureToGLMatrix);
+    //   // const glToFigureMatrix = m3.mul(
+    //   //   scene.cameraMatrix,
+    //   //   m3.inverse(scene.projectionMatrix),
+    //   // );
+    //   const figureToLocalMatrix = m3.inverse(
+    //     // this.lastDrawTransform.calcMatrix(this.transform.def.length),
+    //     this.getLocalToFigureTransform().matrix(),
+    //   );
+    //   return m3.mul(figureToLocalMatrix, glToFigureMatrix);
+    // }
+    // if (from === 'figure' && to === 'local') {
+    //   return m3.inverse(
+    //     this.getLocalToFigureTransform().matrix(),
+    //   );
+    //   // return m3.inverse(this.lastDrawTransform.calcMatrix(this.transform.def.length, -3));
+    // }
+
+    // if (from === 'gl' && to === 'figure') {
+    //   return m3.inverse(figureToGLMatrix);
+    //   // return this.figure.spaceTransformMatrix('gl', 'figure');
+    // }
+    // // if (from === 'gl' && to === 'figure') {
+    // //   return this.figure.spaceTransforms.glToFigure.matrix();
+    // // }
+    // if (from === 'pixel' && to === 'figure') {
+    //   return this.figure.spaceTransforms.pixelToFigure.matrix();
+    // }
+
+    // // Remaining GL related conversions
+
+    // // if (from === 'pixel' && to === 'gl') {
+    // //   return this.figure.spaceTransforms.pixelToGL.matrix();
+    // // }
+    // return new Transform().identity().matrix();
+    throw new Error(`Invalid space transform matrix inputs: from: '${from}', to: '${to}'`);
   }
+
+  pixelToPlane(
+    pixel: TypeParsablePoint,
+    toSpace: 'figure' | 'local' | 'draw',
+    plane: TypeParsablePlane,
+    // figureToLocalMatrix: Type3DMatrix = m3.identity(),
+  ) {
+    const glPoint = getPoint(pixel).transformBy(this.spaceTransformMatrix('pixel', 'gl'));
+    return this.glToPlane(glPoint, toSpace, plane);
+  }
+
+  /*
+  A figure is projected into clip space (gl space) through a view matrix
+  and projection matrix.
+
+  The view matrix simulates a camera at some postion with some orientation
+  looking at the figure.
+
+  The projection matrix transforms all vertices that are to be seen to within
+  the GL coordinates (-1 to +1)
+
+  The near plane (gl space z = -1) represents a rectange in figure space where
+  the center of the rectangle is the point between the camera position and the
+  look at point a distance `near` from the camera. `scene.rightVector` and
+  `scene.upVector` define the figure space directions of gl space x+ and y+.
+
+  Therefore, a point on the near gl plane can be converted to figure space by
+  scaling the `scene.rightVector` and `scene.upVector`s and adding them to the
+  `scene.nearCenter`.
+
+  A similar process can be done with the far gl plane.
+
+  Therefore, this method takes the XY coordinate of a GL point and draws a line
+  from -1 to 1 in z in GL space. The near point (z = -1) and far point (z = 1)
+  is transformed into toSpace space. The line in toSpace space is then
+  intersected with a plane in toSpace space.
+  */
+  glToPlane(
+    glPoint: TypeParsablePoint,
+    toSpace: 'figure' | 'local' | 'draw' = 'local',
+    plane: TypeParsablePlane = this.move.plane,
+  ) {
+    const gl = getPoint(glPoint);
+    const scene = this.getScene();
+    if (scene == null) {
+      throw new Error(`Scene is null for element ${this.getPath()} and all it's parents `);
+    }
+    let nearPoint = scene.nearCenter
+      .add(scene.rightVector.scale(scene.widthNear / 2 * gl.x))
+      .add(scene.upVector.scale(scene.heightNear / 2 * gl.y));
+    let farPoint = scene.farCenter
+      .add(scene.rightVector.scale(scene.widthFar / 2 * gl.x))
+      .add(scene.upVector.scale(scene.heightFar / 2 * gl.y));
+
+    if (toSpace === 'local' || toSpace === 'draw') {
+      const matrix = this.spaceTransformMatrix('figure', toSpace);
+      nearPoint = nearPoint.transformBy(matrix);
+      farPoint = farPoint.transformBy(matrix);
+    }
+    const p = getPlane(plane);
+    return p.lineIntersect([nearPoint, farPoint]);
+  }
+
+  pixelToGLPlane(
+    pixelPoint: TypeParsablePoint,
+    glSpacePlane: TypeParsablePlane,
+  ) {
+    const pixel = getPoint(pixelPoint);
+    const gl = pixel.transformBy(this.spaceTransformMatrix('pixel', 'gl'));
+    const nearPoint = new Point(gl.x, gl.y, -1);
+    const farPoint = new Point(gl.x, gl.y, 1);
+    return getPlane(glSpacePlane).lineIntersect([nearPoint, farPoint]);
+  }
+
+  glToPlaneLegacy(
+    glPoint: TypeParsablePoint,
+    plane: TypeParsablePlane = this.move.plane,
+  ) {
+    const gl = getPoint(glPoint);
+    const scene = this.getScene();
+    if (scene == null) {
+      throw new Error(`Scene is null for element ${this.getPath()} and all it's parents `);
+    }
+    const nearPoint = scene.nearCenter
+      .add(scene.rightVector.scale(scene.widthNear / 2 * gl.x))
+      .add(scene.upVector.scale(scene.heightNear / 2 * gl.y));
+    const farPoint = scene.farCenter
+      .add(scene.rightVector.scale(scene.widthFar / 2 * gl.x))
+      .add(scene.upVector.scale(scene.heightFar / 2 * gl.y));
+    const p = getPlane(plane);
+    const localToFigureMatrix = this.spaceTransformMatrix('local', 'figure');
+    const figurePlane = new Plane(
+      p.p.transformBy(localToFigureMatrix),
+      p.n.transformBy(localToFigureMatrix),
+    );
+    return figurePlane.lineIntersect([nearPoint, farPoint]);
+
+    // const gl = getPoint(glPoint);
+    // const nearPoint = this.lastScene.rightVector
+    //   .scale(this.lastScene.widthNear / 2 * gl.x)
+    //   .add(this.lastScene.upVector.scale(this.lastScene.heightNear / 2 * gl.y))
+    //   .add(this.lastScene.nearCenter);
+    // const farPoint = this.lastScene.rightVector
+    //   .scale(this.lastScene.widthFar / 2 * gl.x)
+    //   .add(this.lastScene.upVector.scale(this.lastScene.heightFar / 2 * gl.y))
+    //   .add(this.lastScene.farCenter);
+    // // const plane = getPlane([[0, 0, 0], [0, 0, 1]]);
+    // return getPlane(plane).lineIntersect([nearPoint, farPoint]);
+
+    // if (this.scene.style === 'orthographic' || this.scene.style === '2D') {
+    //   const glPoint1 = getPoint(glPoint);
+    //   const glPoint2 = glPoint1.add(0, 0, 0.1);
+    //   const glToLocalMatrix = this.spaceTransformMatrix('gl', 'local');
+    //   const fPoint1 = glPoint1.transformBy(glToLocalMatrix);
+    //   const fPoint2 = glPoint2.transformBy(glToLocalMatrix);
+    //   const p = getPlane(plane);
+    //   return p.lineIntersect([fPoint1, fPoint2]);
+    // }
+    // const gl = getPoint(glPoint);
+    // const nearPoint = this.lastScene.rightVector
+    //   .scale(this.lastScene.rightNear * gl.x)
+    //   .add(this.lastScene.upVector.scale(this.lastScene.topNear * gl.y))
+    //   .add(this.lastScene.nearCenter);
+    // const farPoint = this.lastScene.rightVector
+    //   .scale(this.lastScene.rightFar * gl.x)
+    //   .add(this.lastScene.upVector.scale(this.lastScene.topFar * gl.y))
+    //   .add(this.lastScene.farCenter);
+    // // const plane = getPlane([[0, 0, 0], [0, 0, 1]]);
+    // return getPlane(plane).lineIntersect([nearPoint, farPoint]);
+  }
+
 
   pointFromSpaceToSpace(
     point: TypeParsablePoint,
-    fromSpace: TypeSpace,
-    toSpace: TypeSpace,
+    fromSpace: TypeCoordinateSpace,
+    toSpace: TypeCoordinateSpace,
   ) {
     return getPoint(point).transformBy(this.spaceTransformMatrix(fromSpace, toSpace));
   }
 
   /* eslint-disable class-methods-use-this, no-unused-vars */
   getBorderPoints(
-    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+    border: 'border' | 'touchBorder' = 'border',
   ): TypeBorder {
     return [[]];
   }
   /* eslint-enable class-methods-use-this, no-unused-vars */
 
-  // A DrawingObject has borders, touchBorders and and holeBorders
+  // A DrawingObject has borders, and touchBorders
   //
   // A FigureElement's border is then the DrawingObject's border transformed by
   // the element's transform
@@ -2538,9 +3262,18 @@ class FigureElement {
   // * BoundingRect: The rectangle enclosing all the border points
   // * BoundingRectBorder: The perimeter of the boundingRect
   /* eslint-disable class-methods-use-this, no-unused-vars */
+
+  /**
+   * Get the border or touchBorder of a FigureElementPrimitive in a defined
+   * coordinate space.
+   *
+   * @param {TypeCoordinateSpace} space (`'local`)
+   * @param {'border' | 'touchBorder'} border (`'border'`)
+   * @return {Array<Array<Point>>}
+   */
   getBorder(
-    space: TypeSpace = 'local',
-    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+    space: TypeCoordinateSpace = 'local',
+    border: 'border' | 'touchBorder' = 'border',
   ) {
     // if (this.name === 'c' && border === 'touchBorder') {
     //   debugger;
@@ -2552,7 +3285,7 @@ class FigureElement {
     const transformedBorders = [];
     let matrix;
     if (Array.isArray(space)) {
-      matrix = m2.mul(space, this.getTransform().matrix());
+      matrix = m3.mul(space, this.getTransform().matrix());
     } else {
       matrix = this.spaceTransformMatrix('draw', space);
     }
@@ -2567,8 +3300,8 @@ class FigureElement {
   /* eslint-enable class-methods-use-this, no-unused-vars */
 
   getBoundingRect(
-    space: TypeSpace = 'local',
-    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+    space: TypeCoordinateSpace = 'local',
+    border: 'border' | 'touchBorder' = 'border',
   ) {
     const transformedBorder = this.getBorder(space, border);  // $FlowFixMe
     return getBoundingRect(transformedBorder);
@@ -2578,8 +3311,8 @@ class FigureElement {
   // Size
   // ***************************************************************
   getRelativeBoundingRect(
-    space: TypeSpace = 'local',
-    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+    space: TypeCoordinateSpace = 'local',
+    border: 'border' | 'touchBorder' = 'border',
   ) {
     const rect = this.getBoundingRect(space, border);
     const position = this.getPosition(space);
@@ -2616,21 +3349,16 @@ class FigureElement {
   }
 
   /**
-   * Return the first rotation in the element's transform. Will return
-   * `0` if the element's transform doesn't have a rotation.
+   * Return the first rotation in the element's transform.
    *
    * @param {'0to360' | '-180to180' | ''} normalize how to normalize the
    * returned angle where `''` returns the raw angle
    * @return {Point} scale
    */
   getRotation(normalize: '0to360' | '-180to180' | '' = '') {
-    const r = this.transform.r();
-    let rotation = 0;
-    if (r != null) {
-      rotation = r;
-    }
-    if (normalize !== '' && r != null) {
-      rotation = clipAngle(r, normalize);
+    let rotation = this.transform.r();
+    if (normalize !== '' && rotation != null) {
+      rotation = clipAngle(rotation, normalize);
     }
     return rotation;
   }
@@ -2641,10 +3369,10 @@ class FigureElement {
   //  * @return {Point} position
   //  */
   getPositionInBounds(
-    space: TypeSpace = 'local',
+    space: TypeCoordinateSpace = 'local',
     xAlign: 'center' | 'left' | 'right' | 'location' | number = 'location',
     yAlign: 'middle' | 'top' | 'bottom' | 'location' | number = 'location',
-    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+    border: 'border' | 'touchBorder' = 'border',
   ) {
     const bounds = this.getBoundingRect(space, border);
     const p = this.getPosition(space);
@@ -2698,7 +3426,7 @@ class FigureElement {
    * position in percentage height from the bottom.
    */
   getPosition(
-    space: TypeSpace = 'local',
+    space: TypeCoordinateSpace = 'local',
     xAlign: 'center' | 'left' | 'right' | 'location' | number = 'location',
     yAlign: 'middle' | 'top' | 'bottom' | 'location' | number = 'location',
   ) {
@@ -2712,25 +3440,19 @@ class FigureElement {
     return new Point(0, 0).transformBy(this.spaceTransformMatrix('draw', space));
   }
 
-  setFigurePosition(figurePosition: Point) {
-    const glSpace = {
-      x: { bottomLeft: -1, width: 2 },
-      y: { bottomLeft: -1, height: 2 },
-    };
-    const figureSpace = {
-      x: {
-        bottomLeft: this.figureLimits.left,
-        width: this.figureLimits.width,
-      },
-      y: {
-        bottomLeft: this.figureLimits.bottom,
-        height: this.figureLimits.height,
-      },
-    };
-    const figureToGLSpace = spaceToSpaceTransform(figureSpace, glSpace);
-    const glLocation = figurePosition.transformBy(figureToGLSpace.matrix());
-    const t = new Transform(this.lastDrawTransform.order.slice(this.transform.order.length));
-    const newLocation = glLocation.transformBy(m2.inverse(t.matrix()));
+  /**
+   * Set the element's position in local space such that it lines up with a
+   * figure space target.
+   *
+   * @param {TypeParsablePoint} figurePosition
+   */
+  setFigurePosition(figurePosition: TypeParsablePoint) {
+    const figureToGLSpace = this.spaceTransformMatrix('figure', 'gl');
+    // $FlowFixMe
+    const glLocation = getPoint(figurePosition).transformBy(figureToGLSpace.matrix());
+    // const t = new Transform(this.lastDrawTransform.def.slice(this.transform.def.length));
+    const t = this.getLocalToFigureTransform();
+    const newLocation = glLocation.transformBy(m3.inverse(t.matrix()));
     this.setPosition(newLocation._dup());
   }
 
@@ -2739,6 +3461,12 @@ class FigureElement {
     this.setFigurePosition(p._dup());
   }
 
+  /**
+   * Align element position in local space such that it is in the same position
+   * as the target element (even if that element is in a different local space)
+   *
+   * @param {FigureElement} element
+   */
   setPositionToElement(
     element: FigureElement,
   ) {
@@ -2756,80 +3484,6 @@ class FigureElement {
     this.setPosition(local);
   }
 
-  checkMoveBounds() {
-    if (this.move.bounds === 'figure') {
-      this.setMoveBounds('figure');
-      return;
-    }
-    if (this.move.bounds === 'none' || this.move.bounds === null) {
-      this.setMoveBounds('none');
-      return;
-    }
-    if (!(this.move.bounds instanceof TransformBounds)) {
-      this.setMoveBounds(this.move.bounds);
-    }
-  }
-
-  setMoveBounds(
-    boundaryIn: TransformBounds | TypeTransformBoundsDefinition | 'figure' | 'none' = 'none',
-  ): void {
-    if (boundaryIn instanceof TransformBounds) {
-      this.move.bounds = boundaryIn;
-      return;
-    }
-
-    if (boundaryIn === null || boundaryIn === 'none') {
-      this.move.bounds = new TransformBounds(this.transform);
-      return;
-    }
-
-    if (boundaryIn === 'figure') {
-      if (!(this.move.bounds instanceof TransformBounds)) {
-        this.move.bounds = new TransformBounds(this.transform);
-      }
-      this.move.sizeInBounds = true;
-      const m = this.spaceTransformMatrix('figure', 'local');
-      const p0 = new Point(this.figureLimits.left, this.figureLimits.bottom).transformBy(m);
-      // const p1 = new Point(this.figureLimits.right, p0.y).transformBy(m);
-      const p1 = new Point(this.figureLimits.right, this.figureLimits.top).transformBy(m);
-      // $FlowFixMe
-      this.move.bounds.updateTranslation(new RectBounds({
-        left: p0.x,
-        bottom: p0.y,
-        right: p1.x,
-        top: p1.y,
-      }));
-      return;
-    }
-    const bounds = getBounds(boundaryIn, 'transform', this.transform);
-    if (bounds instanceof TransformBounds) {
-      this.move.bounds = bounds;
-    }
-  }
-
-  getMoveBounds(): Bounds {
-    this.checkMoveBounds();  // $FlowFixMe
-    if (this.move.bounds.isUnbounded()) { // $FlowFixMe
-      return this.move.bounds;
-    }
-
-    if (this.move.sizeInBounds) {
-      const rect = this.getRelativeBoundingRect('local');
-      // $FlowFixMe
-      const dup = this.move.bounds._dup();
-      const b = dup.getTranslation();
-      if (b != null) {
-        b.boundary.left -= rect.left;
-        b.boundary.bottom -= rect.bottom;
-        b.boundary.right -= rect.right;
-        b.boundary.top -= rect.top;
-        dup.updateTranslation(b);
-        return dup;
-      }
-    } // $FlowFixMe
-    return this.move.bounds;
-  }
-
   getShown() {
     if (this.isShown) {
       return [[this.getPath(), this.uid, this]];
@@ -2845,7 +3499,7 @@ class FigureElement {
   }
 
   /**
-   * Show element
+   * Show element.
    */
   show() {
     this.isShown = true;
@@ -2868,14 +3522,114 @@ class FigureElement {
    *
    * `false` makes this element not touchable.
    */
-  setTouchable(makeThisElementTouchable: boolean = true) {
-    if (makeThisElementTouchable) {
-      this.isTouchable = true;
-    } else {
-      this.hasTouchableElements = true;
+  setTouchable(setOrOptions: OBJ_Touch | boolean = true) {
+    let options = setOrOptions;
+    if (typeof setOrOptions === 'boolean') {
+      if (setOrOptions === false) {
+        this.setNotTouchable();
+        return;
+      }
+      options = {};
     }
-    if (this.parent != null) {
-      this.parent.setTouchable(false);
+    const o = joinObjects({
+      scale: 1,
+      colorSeed: 'default',
+      enable: true,
+    }, options);
+    if (o.enable) {
+      this.isTouchable = true;
+    }
+    // if (typeof o.scale === 'number') {
+    //   this.touchScale = new Point(o.scale, o.scale, o.scale);
+    // } else if (o.scale != null) {
+    //   this.touchScale = getPoint(o.scale);
+    // }
+    if (this.uniqueColor == null) {
+      this.setUniqueColor(generateUniqueColor(o.colorSeed));
+    }
+    if (o.onClick != null) {
+      this.onClick = o.onClick;
+    }
+    // if (o.touchBorder != null) {
+    //   this.touchBorder = o.touchBorder;
+    // }
+    if (this.parent != null) { // $FlowFixMe
+      this.parent.setHasTouchableElements();
+    }
+  }
+
+  setNotTouchable() {
+    // this.hasTouchableElements = false;
+    this.isTouchable = false;
+    // this.parent.setNotTouchable();
+  }
+
+  /**
+   * Set move options
+   */
+  setMove(options: boolean | OBJ_ElementMove) {
+    if (typeof options === 'boolean') {
+      this.setMovable(options);
+      return;
+    }
+    this.setMovable();
+    const {
+      type, bounds, plane, maxVelocity, freely, element,
+    } = options;
+    if (type != null) {
+      this.move.type = type;
+    }
+    if (plane != null) {
+      this.move.plane = getPlane(plane);
+    }
+    if (type === 'rotation') {
+      // const r = this.transform.r();
+      // const rType = this.transform.rType();
+      if (!this.move.plane.n.isEqualTo([0, 0, 1])) {
+        this.transform.updateRotation(0, this.move.plane.n);
+      }
+    }
+    if (bounds != null) { // $FlowFixMex
+      if (bounds.contains != null) {
+        this.move.bounds = bounds;
+      } else if ( // $FlowFixMex
+        bounds.left !== undefined // $FlowFixMex
+        || bounds.right !== undefined // $FlowFixMex
+        || bounds.bottom !== undefined // $FlowFixMex
+        || bounds.top !== undefined // $FlowFixMex
+        || bounds.topDirection !== undefined // $FlowFixMex
+        || bounds.rightDirection !== undefined // $FlowFixMex
+        || bounds.position !== undefined // $FlowFixMex
+        || bounds.normal !== undefined
+      ) {
+        const b = joinObjects(
+          {},
+          {
+            position: this.move.plane.p, normal: this.move.plane.n,
+          },
+          bounds,
+        ); // $FlowFixMe
+        this.move.bounds = getBounds(b);
+      } else {
+        this.move.bounds = getBounds(bounds);
+      }
+    }
+    if (maxVelocity != null) {
+      if (typeof maxVelocity === 'number') {
+        this.move.maxVelocity = maxVelocity;
+      } else {
+        this.move.maxVelocity = getPoint(maxVelocity);
+      }
+    }
+    if (element != null) {
+      this.move.element = element;
+    }
+    if (freely != null) {
+      if (freely === false) {
+        this.move.freely = false;
+      } else {
+        joinObjects(this.move.freely, freely);
+      }
     }
   }
 
@@ -2887,7 +3641,7 @@ class FigureElement {
   setMovable(movable: boolean = true) {
     if (movable) {
       this.isMovable = true;
-      this.setTouchable(true);
+      this.setTouchable();
     } else {
       this.isMovable = false;
       this.isTouchable = false;
@@ -2961,14 +3715,14 @@ class FigureElement {
 
   // eslint-disable-next-line no-unused-vars
   click(glPoint: Point = new Point(0, 0)) {
-    const drawPoint = glPoint.transformBy(this.spaceTransformMatrix('gl', 'draw'));
+    // const drawPoint = glPoint.transformBy(this.spaceTransformMatrix('gl', 'draw'));
     if (this.onClick != null) {
       if (this.recorder.state === 'recording') {
         this.recorder.recordEvent('elementClick', [this.getPath(), glPoint.x, glPoint.y]);
       }
-      this.fnMap.exec(this.onClick, drawPoint, this);
+      this.fnMap.exec(this.onClick, glPoint, this);
     }
-    this.notifications.publish('onClick', [drawPoint, this]);
+    this.notifications.publish('onClick', [glPoint, this]);
   }
 
 
@@ -3026,31 +3780,24 @@ class FigureElement {
     if (!this.isTouchable) {
       return false;
     }
-    const vertexLocation = glLocation.transformBy(this.spaceTransformMatrix('gl', 'draw'));
     const borders = this.getBorder('draw', 'touchBorder');
-    const holeBorders = this.getBorder('draw', 'holeBorder');
+    if (borders == null || borders.length === 0) {
+      return false;
+    }
+    // if (this.drawBorderBuffer == null && this.drawBorder == null) {
+    //   return false;
+    // }
+    const vertexLocation = glLocation.transformBy(this.spaceTransformMatrix('gl', 'draw'));
+
+    // const borders = this.getBorder('draw', 'touchBorder');
+    if (borders == null) {
+      return false;
+    }
     for (let i = 0; i < borders.length; i += 1) {
       const border = borders[i];
       if (border.length > 2) {
-        if (vertexLocation.isInPolygon(border)) {
-          let isTouched = true;
-          // $FlowFixMe
-          if (this.cannotTouchHole) {
-            for (let j = 0; j < holeBorders.length; j += 1) {
-              const holeBorder = holeBorders[j];
-              if (holeBorder.length > 2) {
-                if (Array.isArray(holeBorder) && holeBorder.length > 2) {
-                  if (vertexLocation.isInPolygon(holeBorder)) {
-                    isTouched = false;
-                    j = holeBorders.length;
-                  }
-                }
-              }
-            }
-          }
-          if (isTouched) {
-            return true;
-          }
+        if (isPointInPolygon(vertexLocation, border)) {
+          return true;
         }
       }
     }
@@ -3067,29 +3814,61 @@ class FigureElement {
     return [];
   }
 
-  updateDrawTransforms(
-    parentTransform: Array<Transform> = [new Transform()],
-    isSame: boolean = false,
-  ) {
-    if (isSame) {
-      return isSame;
+  getSelectionFromBorders(glLocation: Point): null | FigureElement {
+    if (!this.isTouchable) {
+      return null;
     }
-    const transform = this.getTransform()._dup();
-    const newTransforms = transformBy(parentTransform, [transform]);
-    this.parentTransform = parentTransform;
-    this.lastDrawElementTransformPosition = {
-      parentCount: parentTransform[0].order.length,
-      elementCount: this.transform.order.length,
-    };
-    this.pulseTransforms = this.getPulseTransforms(
-      this.timeKeeper.now() / 1000,
-    ); // $FlowFixMe
-    this.drawTransforms = this.getDrawTransforms(newTransforms);
-    // eslint-disable-next-line prefer-destructuring
-    this.lastDrawTransform = newTransforms[0];
-    // eslint-disable-next-line prefer-destructuring
-    this.lastDrawPulseTransform = this.drawTransforms[0];
-    return isSame;
+    if (this.isBeingTouched(glLocation)) {
+      return this;
+    }
+    return null;
+  }
+
+  // updateDrawTransforms(
+  //   parentTransform: Array<Transform> = [new Transform()],
+  //   scene: Scene,
+  //   isSame: boolean = false,
+  // ) {
+  //   if (isSame) {
+  //     return isSame;
+  //   }
+  //   const transform = this.getTransform()._dup();
+  //   const newTransforms = transformBy(parentTransform, [transform]);
+  //   this.parentTransform = parentTransform;
+  //   this.lastDrawElementTransformPosition = {
+  //     parentCount: parentTransform[0].def.length,
+  //     elementCount: this.transform.def.length,
+  //   };
+  //   this.lastScene = this.scene != null ? this.scene : scene;
+  //   this.pulseTransforms = this.getPulseTransforms(
+  //     this.timeKeeper.now() / 1000,
+  //   ); // $FlowFixMe
+  //   this.drawTransforms = this.getDrawTransforms(newTransforms);
+  //   // eslint-disable-next-line prefer-destructuring
+  //   this.lastDrawTransform = newTransforms[0];
+  //   // eslint-disable-next-line prefer-destructuring
+  //   this.lastDrawPulseTransform = this.drawTransforms[0];
+  //   return isSame;
+  // }
+
+  setUniqueColor(color: null | TypeColor) {
+    this.uniqueColor = color == null ? null : color.slice();
+  }
+
+  getUniqueColorElement(color: TypeColor) {
+    if (this.isTouchable === false) {
+      return null;
+    }
+    if (
+      this.uniqueColor == null
+      || this.uniqueColor[0] !== color[0]
+      || this.uniqueColor[1] !== color[1]
+      || this.uniqueColor[2] !== color[2]
+      || this.uniqueColor[3] !== color[3]
+    ) {
+      return null;
+    }
+    return this;
   }
 }
 
@@ -3112,7 +3891,7 @@ class FigureElement {
  *
  * A primitive figure element is one that handles an object (`drawingObject`)
  * that draws to the screen. This object may be a {@link GLObject}, a
- * {@link TextObject} or a {@link HTMLObject}}.
+ * {@link TextObject} or a {@link HTMLObject}.
  *
  * @class
  * @extends FigureElement
@@ -3125,9 +3904,8 @@ class FigureElementPrimitive extends FigureElement {
   cannotTouchHole: boolean;
   pointsDefinition: Object;
   setPointsFromDefinition: ?(() => void);
-  border: TypeBorder | 'draw' | 'buffer' | 'rect' | number;
-  touchBorder: TypeBorder | 'border' | number | 'rect' | 'draw' | 'buffer';
-  holeBorder: TypeBorder;
+  border: TypeParsableBuffer | TypeBorder | 'draw' | 'buffer' | 'rect' | number;
+  touchBorder: TypeParsableBuffer | TypeBorder | 'border' | number | 'rect' | 'draw' | 'buffer';
   drawBorder: TypeBorder;
   drawBorderBuffer: TypeBorder;
   // +pulse: (?(mixed) => void) => void;
@@ -3142,7 +3920,6 @@ class FigureElementPrimitive extends FigureElement {
    * to the screen or manages a HTML element
    * @param {Transform} transform initial transform to set
    * @param {[number, number, number, number]} color color to set
-   * @param {Rect} figureLimits limits of figure
    * @param {FigureElement | null} parent parent element
    * @param
    */
@@ -3150,12 +3927,12 @@ class FigureElementPrimitive extends FigureElement {
     drawingObject: DrawingObject,
     transform: Transform = new Transform(),
     color: TypeColor = [0.5, 0.5, 0.5, 1],
-    figureLimits: Rect = new Rect(-1, -1, 2, 2),
     parent: FigureElement | null = null,
     name: string = generateUniqueId('element_'),
+    // scene: Scene = new Scene(),
     timeKeeper: TimeKeeper = new TimeKeeper(),
   ) {
-    super(transform, figureLimits, parent, name, timeKeeper);
+    super(transform, parent, name, timeKeeper);
     this.drawingObject = drawingObject;
     this.color = color != null ? color.slice() : [0, 0, 0, 0];
     this.defaultColor = this.color.slice();
@@ -3169,7 +3946,6 @@ class FigureElementPrimitive extends FigureElement {
     this.setPointsFromDefinition = null;
     this.border = 'draw';
     this.touchBorder = 'draw';
-    this.holeBorder = [[]];
   }
 
   _getStateProperties(options: { ignoreShown?: boolean }) {
@@ -3204,11 +3980,28 @@ class FigureElementPrimitive extends FigureElement {
   }
 
 
+  // click(glPoint: Point = new Point(0, 0)) {
+  //   super.click(glPoint);
+  //   if (this.drawingObject instanceof TextObjectBase) {
+  //     this.drawingObject.click(
+  //       glPoint.transformBy(this.spaceTransformMatrix('gl', 'draw')),
+  //       this.fnMap,
+  //     );
+  //     if (this.recorder.state === 'recording') {
+  //       this.recorder.recordEvent('elementTextClick', [this.getPath(), glPoint.x, glPoint.y]);
+  //     }
+  //   }
+  // }
+
   click(glPoint: Point = new Point(0, 0)) {
     super.click(glPoint);
     if (this.drawingObject instanceof TextObjectBase) {
+      let p = glPoint;
+      if (this.getScene().style !== 'perspective') {
+        p = glPoint.transformBy(this.spaceTransformMatrix('gl', 'draw'));
+      } // $FlowFixMe
       this.drawingObject.click(
-        glPoint.transformBy(this.spaceTransformMatrix('gl', 'draw')),
+        p,
         this.fnMap,
       );
       if (this.recorder.state === 'recording') {
@@ -3247,14 +4040,14 @@ class FigureElementPrimitive extends FigureElement {
   resize(figureHTMLElement: ?HTMLElement = null) {
     this.resizeHtmlObject();
     super.resize(figureHTMLElement);
-    // If gl canvas is resized, webgl text will need to be updated.
-    if (this.drawingObject.type === 'vertexText') {
-      const pixelToVertexScale = this.getPixelToVertexSpaceScale();
-      // $FlowFixMe
-      this.drawingObject.drawTextIntoBuffer(
-        new Point(pixelToVertexScale.x, Math.abs(pixelToVertexScale.y)),
-      );
-    }
+    // // If gl canvas is resized, webgl text will need to be updated.
+    // if (this.drawingObject.type === 'vertexText') {
+    //   const pixelToVertexScale = this.getPixelToVertexSpaceScale();
+    //   // $FlowFixMe
+    //   this.drawingObject.drawTextIntoBuffer(
+    //     new Point(pixelToVertexScale.x, Math.abs(pixelToVertexScale.y)),
+    //   );
+    // }
   }
 
   setColor(color: TypeColor, setDefault: boolean = true) {
@@ -3301,7 +4094,8 @@ class FigureElementPrimitive extends FigureElement {
       // Therefore, should use figure.setFirstTransform before using this,
       // or in the future remove this line, and the line in hide(), and
       // somehow do the hide in the draw call
-      this.drawingObject.transformHtml(this.lastDrawTransform.matrix());
+      // this.drawingObject.transformHtml(this.lastDrawTransform.matrix());
+      this.drawingObject.transformHtml(this.getFigureTransform().matrix());
     }
   }
 
@@ -3309,7 +4103,8 @@ class FigureElementPrimitive extends FigureElement {
     super.hide();
     if (this.drawingObject instanceof HTMLObject) {
       this.drawingObject.show = false;
-      this.drawingObject.transformHtml(this.lastDrawTransform.matrix());
+      // this.drawingObject.transformHtml(this.lastDrawTransform.matrix());
+      this.drawingObject.transformHtml(this.getFigureTransform().matrix());
     }
   }
 
@@ -3322,12 +4117,13 @@ class FigureElementPrimitive extends FigureElement {
 
   resizeHtmlObject() {
     if (this.drawingObject instanceof HTMLObject) {
-      this.drawingObject.transformHtml(this.lastDrawTransform.matrix());
+      // this.drawingObject.transformHtml(this.lastDrawTransform.matrix());
+      this.drawingObject.transformHtml(this.getFigureTransform().matrix());
     }
   }
 
   getBorderPoints(
-    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+    border: 'border' | 'touchBorder' = 'border',
   ): TypeBorder {
     if (border === 'border') {
       if (this.border === 'draw') {
@@ -3346,27 +4142,24 @@ class FigureElementPrimitive extends FigureElement {
       return this.border;
     }
 
-    if (border === 'touchBorder') {
-      if (this.touchBorder === 'draw') {
-        return this.drawBorder;
-      }
-      if (this.touchBorder === 'buffer') {
-        return this.drawBorderBuffer;
-      }
-      if (this.touchBorder === 'border') {
-        return this.getBorderPoints('border');
-      }
-      if (this.touchBorder === 'rect') {
-        const b = this.getBorderPoints('border');
-        return [getBoundingBorder(b)];
-      }
-      if (isBuffer(this.touchBorder)) {
-        const b = this.getBorderPoints('border'); // $FlowFixMe
-        return [getBoundingBorder(b, this.touchBorder)];
-      } // $FlowFixMe
-      return this.touchBorder;
+    if (this.touchBorder === 'draw') {
+      return this.drawBorder;
     }
-    return this.holeBorder;
+    if (this.touchBorder === 'buffer') {
+      return this.drawBorderBuffer;
+    }
+    if (this.touchBorder === 'border') {
+      return this.getBorderPoints('border');
+    }
+    if (this.touchBorder === 'rect') {
+      const b = this.getBorderPoints('border');
+      return [getBoundingBorder(b)];
+    }
+    if (isBuffer(this.touchBorder)) {
+      const b = this.getBorderPoints('border'); // $FlowFixMe
+      return [getBoundingBorder(b, this.touchBorder)];
+    } // $FlowFixMe
+    return this.touchBorder;
   }
 
   setupDraw(now: number = 0) {
@@ -3413,16 +4206,26 @@ class FigureElementPrimitive extends FigureElement {
 
   draw(
     now: number,
+    scene: Scene,
+    // projection: Type3DMatrix,
+    // view: Type3DMatrix,
     parentTransform: Array<Transform> = [new Transform()],
     parentOpacity: number = 1,
+    targetTexture: boolean = false,
+    parentIsTouchable: boolean = false,
+    parentTouchScale: Point | null = null,
+    parentUniqueColor: TypeColor | null = null,
     // canvasIndex: number = 0,
   ) {
     if (this.isShown) {
+      if (targetTexture && !this.isTouchable && !parentIsTouchable) {
+        return;
+      }
       // let timer;
       // if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
       // if (FIGURE1DEBUG) { debugTimes.push([performance.now(), '']); }
       let pointCount = -1;
-      if (this.drawingObject instanceof VertexGeneric) {
+      if (this.drawingObject instanceof GLObject) {
         pointCount = this.drawingObject.numVertices;
         if (this.angleToDraw !== -1) {
           pointCount = this.drawingObject.getPointCountForAngle(this.angleToDraw);
@@ -3439,14 +4242,38 @@ class FigureElementPrimitive extends FigureElement {
         pointCount = 1;
       } // $FlowFixMe
       // if (FIGURE1DEBUG) { timer.stamp('m1'); }
-
-      const colorToUse = [
+      let colorToUse = [
         this.color[0], this.color[1], this.color[2], this.color[3] * this.opacity * parentOpacity,
       ];
+      if (targetTexture) {
+        if (parentUniqueColor != null) {
+          colorToUse = parentUniqueColor;
+        } else if (this.uniqueColor == null) {
+          this.setUniqueColor(generateUniqueColor()); // $FlowFixMex
+          colorToUse = this.uniqueColor.map(c => c / 255);
+        } else {
+          colorToUse = this.uniqueColor.map(c => c / 255);
+        }
+      }
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawOpacity = colorToUse[3];
       // const transform = this.getTransform()._dup();
-      const transform = this.getTransform();
+      let transform = this.getTransform();
+      if (
+        targetTexture
+        && transform.hasComponent('s')
+        && this.touchScale != null
+      ) {
+        transform = transform._dup();
+        transform.updateScale(transform.s().mul(this.touchScale));
+      }
+      if (
+        targetTexture
+        && transform.hasComponent('s')
+        && parentTouchScale != null
+      ) {
+        transform.updateScale(transform.s().mul(parentTouchScale));
+      }
       // const transform = this.transform._dup();
       const newTransforms = transformBy(parentTransform, [transform]);
       // eslint-disable-next-line prefer-destructuring
@@ -3454,10 +4281,10 @@ class FigureElementPrimitive extends FigureElement {
       // $FlowFixMe
       // if (FIGURE1DEBUG) { timer.stamp('m2'); }
 
-      this.lastDrawElementTransformPosition = {
-        parentCount: parentTransform[0].order.length,
-        elementCount: this.transform.order.length,
-      };
+      // this.lastDrawElementTransformPosition = {
+      //   parentCount: parentTransform[0].def.length,
+      //   elementCount: this.transform.def.length,
+      // };
 
       this.pulseTransforms = this.getPulseTransforms(now); // $FlowFixMe
       // if (FIGURE1DEBUG) { timer.stamp('m3'); }
@@ -3466,15 +4293,18 @@ class FigureElementPrimitive extends FigureElement {
       // this.drawTransforms = newTransforms;
 
       // eslint-disable-next-line prefer-destructuring
-      this.lastDrawTransform = newTransforms[0];
+      // this.lastDrawTransform = newTransforms[0];
+      const sceneToUse = this.scene != null ? this.scene : scene;
+      // this.lastScene = sceneToUse;
       // $FlowFixMe
       // if (FIGURE1DEBUG) { timer.stamp('m5'); }
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawPulseTransform = this.drawTransforms[0];
+      // console.log(this.scene)
       if (pointCount > 0) {
         this.drawTransforms.forEach((t) => {
           this.drawingObject.drawWithTransformMatrix(
-            t.matrix(), colorToUse, pointCount,
+            sceneToUse, t.matrix(), colorToUse, pointCount, targetTexture,
           );
         });
       }  // $FlowFixMe
@@ -3505,18 +4335,19 @@ class FigureElementPrimitive extends FigureElement {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
   setFirstTransform(parentTransform: Transform = new Transform()) {
-    this.lastDrawElementTransformPosition = {
-      parentCount: parentTransform.order.length,
-      elementCount: this.transform.order.length,
-    };
-    this.parentTransform = [parentTransform];
-    const firstTransform = parentTransform.transform(this.getTransform());
-    this.lastDrawTransform = firstTransform._dup();
-    if (this.drawingObject instanceof HTMLObject) {
-      this.drawingObject.transformHtml(firstTransform.matrix());
-    }
-    this.checkMoveBounds();
+    // this.lastDrawElementTransformPosition = {
+    //   parentCount: parentTransform.def.length,
+    //   elementCount: this.transform.def.length,
+    // };
+    // this.parentTransform = [parentTransform];
+    // const firstTransform = parentTransform.transform(this.getTransform());
+    // this.lastDrawTransform = firstTransform._dup();
+    // if (this.drawingObject instanceof HTMLObject) {
+    //   this.drawingObject.transformHtml(firstTransform.matrix());
+    // }
+    // this.checkMoveBounds();
   }
 
   increaseBorderSize(
@@ -3566,22 +4397,23 @@ class FigureElementPrimitive extends FigureElement {
  * @property {TypeParsableTransform} [transform]
  * @property {TypeParsablePoint} [position] if defined, will overwrite first
  * translation of `transform`
- * @property {Rect} [limits] figure limits
  * @property {TypeColor} [color] default color
  * @property {FigureElement | null} [parent] parent of collection
  * @property {TypeBorder | 'children' | 'rect' | number} [border]
  * @property {TypeBorder | 'border' | number | 'rect'} [touchBorder]
- * @property {TypeBorder} [holeBorder]
  */
 export type OBJ_FigureElementCollection = {
   transform?: TypeParsableTransform,
   position?: TypeParsablePoint,
-  limits?: Rect,
   color?: TypeColor,
   parent?: FigureElement | null,
   border?: TypeBorder | 'children' | 'rect' | number,
   touchBorder?: TypeBorder | 'border' | number | 'rect',
-  holeBorder?: TypeBorder,
+  touch?: boolean | number | TypeParsablePoint,
+  move?: boolean | OBJ_ElementMove,
+  dimColor?: TypeColor,
+  scenarios?: OBJ_Scenarios,
+  scene?: Scene,
 };
 
 /**
@@ -3598,13 +4430,13 @@ export type OBJ_FigureElementCollection = {
 class FigureElementCollection extends FigureElement {
   elements: Object;
   drawOrder: Array<string>;
-  border: TypeBorder | 'children' | 'rect' | number;
+  border: TypeParsableBuffer | TypeBorder | 'children' | 'rect' | number;
   // $FlowFixMe
   touchBorder: TypeParsableBuffer | TypeBorder | 'border' | 'children' | 'rect' | number;
   // $FlowFixMe
-  holeBorder: TypeBorder | 'children';
   eqns: Object;
   collections: FigureCollections;
+  hasTouchableElements: boolean;
 
   +getElement: (?(string | FigureElement)) => ?FigureElement;
   +getElements: (TypeElementPath) => Array<FigureElement>;
@@ -3620,27 +4452,49 @@ class FigureElementCollection extends FigureElement {
     const defaultOptions = {
       transform: new Transform(),
       // position: [0, 0],
-      limits: new Rect(-1, 1, 2, 2),
       parent: null,
       border: 'children',
       touchBorder: 'children',
-      holeBorder: [[]],
       color: [0, 0, 0, 1],
       name: generateUniqueId('collection_'),
       timeKeeper: new TimeKeeper(),
     };
     const o = joinObjects({}, defaultOptions, options);
-    super(getTransform(o.transform), o.limits, o.parent, o.name, o.timeKeeper);
+    super(getTransform(o.transform), o.parent, o.name, o.timeKeeper);
     if (o.position != null) {
       this.transform.updateTranslation(getPoint(o.position));
     }
     this.elements = {};
     this.drawOrder = [];
+    if (options.move != null && options.move !== false) {
+      this.setTouchable();
+      this.setMovable(); // $FlowFixMex
+      this.setMove(options.move);
+    }
+    if (options.touch != null) { // $FlowFixMex
+      this.setTouchable(options.touch);
+    }
+    if (options.dimColor != null) {
+      this.dimColor = options.dimColor;
+    }
+    // if (options.defaultColor != null) {
+    //   this.defaultColor = options.dimColor;
+    // }
+    if (options.scenarios != null) {
+      this.scenarios = options.scenarios;
+    }
+    if (options.scene != null) {
+      if (options.scene instanceof Scene) {
+        this.scene = options.scene;
+      } else {
+        this.setScene(options.scene);
+      }
+    }
     this.childrenCanAnimate = true;
     this.eqns = {};
     this.type = 'collection';
     this.setColor(o.color);
-
+    this.hasTouchableElements = false;
     if (o.border != null) {
       if (!isBuffer(o.border)) { // $FlowFixMe
         this.border = getBorder(o.border);
@@ -3655,8 +4509,8 @@ class FigureElementCollection extends FigureElement {
         this.touchBorder = o.touchBorder;
       }
     }
-    if (o.holeBorder != null) { // $FlowFixMe
-      this.holeBorder = getBorder(o.holeBorder);
+    if (o.touchScale != null) {
+      this.touchScale = getScale(o.touchScale);
     }
   }
 
@@ -3679,6 +4533,23 @@ class FigureElementCollection extends FigureElement {
     return [
       ...super._getStatePropertiesMin(),
     ];
+  }
+
+  // Get a canvas from the top level parent
+  getCanvas() {
+    // return this.elements[this.drawOrder[0]].getCanvas();
+    if (this.parent != null) {
+      return this.parent.getCanvas();
+    }
+    throw new Error(`Element ${this.getPath()} is not attached to a parent with a canvas`);
+  }
+
+  getRootElement() {
+    const e = super.getRootElement();
+    if (e == null) {
+      return this;
+    }
+    return e;
   }
 
   _dup(exceptions: Array<string> = []) {
@@ -3803,7 +4674,7 @@ class FigureElementCollection extends FigureElement {
     if (this.figure != null) {
       element.setFigure(this.figure);
     }
-    element.setFirstTransform(this.lastDrawTransform);
+    // element.setFirstTransform(this.lastDrawTransform);
     this.animateNextFrame();
     return element;
   }
@@ -3892,7 +4763,6 @@ class FigureElementCollection extends FigureElement {
         throw Error(`Add elements index ${index} does not exist in layout`);
       }
       const addElementsKey = 'elements';
-      const nameToUse = elementDefinition.name || generateUniqueId('primitive_');
       const pathToUse = elementDefinition.path;
       let optionsToUse;
       if (elementDefinition.options != null) {
@@ -3912,14 +4782,18 @@ class FigureElementCollection extends FigureElement {
       } else {
         collectionPath = rootCollection.getElement(pathToUse);
       }
+
+      if (methodPathToUse == null || methodPathToUse === '') {
+        // $FlowFixMe
+        throw new Error(`Figure addElement ERROR  at index ${index} in collection ${rootCollection.name}: missing method property in ${elementDefinition}`);
+      }
+      const nameToUse = elementDefinition.name || generateUniqueId(
+        methodPathToUse.startsWith('collection') ? 'collection_' : 'primitive_',
+      );
       // Check for critical errors
       if (nameToUse == null || nameToUse === '') {
         // $FlowFixMe
         throw new Error(`Figure addElement ERROR  at index ${index} in collection ${rootCollection.name}: missing name property in ${elementDefinition}`);
-      }
-      if (methodPathToUse == null || methodPathToUse === '') {
-        // $FlowFixMe
-        throw new Error(`Figure addElement ERROR  at index ${index} in collection ${rootCollection.name}: missing method property in ${elementDefinition}`);
       }
       if (!(collectionPath instanceof FigureElementCollection)) {
         // $FlowFixMe
@@ -3968,6 +4842,34 @@ class FigureElementCollection extends FigureElement {
       if (firstScenario != null && firstScenario in newElement.scenarios) {
         newElement.setScenario(firstScenario);
       }
+      if (optionsToUse.move != null && optionsToUse.move !== false) {
+        newElement.setTouchable();
+        newElement.setMovable();
+        newElement.setMove(optionsToUse.move);
+      }
+      if (optionsToUse.touch != null) {
+        newElement.setTouchable(optionsToUse.touch);
+      }
+      if (optionsToUse.touchScale != null) {
+        newElement.touchScale = getScale(optionsToUse.touchScale);
+      }
+      if (optionsToUse.dimColor != null) {
+        newElement.dimColor = optionsToUse.dimColor;
+      }
+      // if (optionsToUse.defaultColor != null) {
+      //   newElement.defaultColor = optionsToUse.dimColor;
+      // }
+      if (optionsToUse.scenarios != null) {
+        newElement.scenarios = optionsToUse.scenarios;
+      }
+
+      if (optionsToUse.scene != null) {
+        if (optionsToUse.scene instanceof Scene) {
+          newElement.scene = optionsToUse.scene;
+        } else {
+          newElement.setScene(optionsToUse.scene);
+        }
+      }
 
       if (
         `_${nameToUse}` in rootCollection
@@ -4011,7 +4913,17 @@ class FigureElementCollection extends FigureElement {
       arc: shapes.arc.bind(shapes),
       triangle: shapes.triangle.bind(shapes),
       generic: shapes.generic.bind(shapes),
+      generic3: shapes.generic3.bind(shapes),
       grid: shapes.grid.bind(shapes),
+      sphere: shapes.sphere.bind(shapes),
+      cone: shapes.cone.bind(shapes),
+      line3: shapes.line3.bind(shapes),
+      revolve: shapes.revolve.bind(shapes),
+      surface: shapes.surface.bind(shapes),
+      cylinder: shapes.cylinder.bind(shapes),
+      cube: shapes.cube.bind(shapes),
+      prism: shapes.prism.bind(shapes),
+      cameraControl: shapes.cameraControl.bind(shapes),
       arrow: shapes.arrow.bind(shapes),
       line: shapes.line.bind(shapes),
       star: shapes.star.bind(shapes),
@@ -4098,6 +5010,9 @@ class FigureElementCollection extends FigureElement {
         this.fnMap.exec(this.beforeDrawCallback, now);
       } // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('beforePub'); }
+      // if (this.name === 'rootCollection') {
+      //   console.log('asdf', now, this.animations.animations.length);
+      // }
       this.animations.nextFrame(now); // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('animations'); }
       this.nextMovingFreelyFrame(now); // $FlowFixMe
@@ -4128,24 +5043,58 @@ class FigureElementCollection extends FigureElement {
 
   draw(
     now: number,
+    scene: Scene,
     parentTransform: Array<Transform> = [new Transform()],
     parentOpacity: number = 1,
-    canvasIndex: number = 0,
+    // canvasIndex: number = 0,
+    targetTexture: boolean = false,
+    parentIsTouchable: boolean = false,
+    parentTouchScale: Point | null = null,
+    parentUniqueColor: TypeColor | null = null,
   ) {
     if (this.isShown) {
+      if (targetTexture && !this.isTouchable && !this.hasTouchableElements && !parentIsTouchable) {
+        return;
+      }
+      let parentTouchScaleToUse = null;
+      if (targetTexture) {
+        if (parentTouchScale != null || this.touchScale != null) {
+          parentTouchScaleToUse = new Point(1, 1, 1);
+        }
+        if (parentTouchScale != null) { // $FlowFixMe
+          parentTouchScaleToUse = parentTouchScaleToUse.mul(parentTouchScale);
+        }
+        if (this.touchScale != null) {  // $FlowFixMe
+          parentTouchScaleToUse = parentTouchScaleToUse.mul(getScale(this.touchScale));
+        }
+      }
+      let parentIsTouchableToUse = parentIsTouchable;
+      if (this.isTouchable) {
+        parentIsTouchableToUse = true;
+      }
+      let uniqueColorToUse = null;
+      if (parentUniqueColor == null && this.isTouchable) {
+        if (this.uniqueColor == null) {
+          this.setUniqueColor(generateUniqueColor());
+        } // $FlowFixMe
+        uniqueColorToUse = this.uniqueColor.map(c => c / 255);
+      } else if (parentUniqueColor != null) {
+        uniqueColorToUse = parentUniqueColor;
+      }
       // let timer;
       // if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
-
-      this.lastDrawElementTransformPosition = {
-        parentCount: parentTransform[0].order.length,
-        elementCount: this.transform.order.length,
-      };
+      // this.lastDrawElementTransformPosition = {
+      //   parentCount: parentTransform[0].def.length,
+      //   elementCount: this.transform.def.length,
+      // };
       const transform = this.getTransform();
       const newTransforms = transformBy(parentTransform, [transform]);
       // $FlowFixMe
       // if (FIGURE1DEBUG) { timer.stamp('m1'); }
       // eslint-disable-next-line prefer-destructuring
-      this.lastDrawTransform = newTransforms[0];
+      // this.lastDrawTransform = newTransforms[0];
+      const sceneToUse = this.scene != null ? this.scene : scene;
+      // this.lastScene = sceneToUse;
       this.parentTransform = parentTransform;
       // $FlowFixMe
 
@@ -4166,7 +5115,8 @@ class FigureElementCollection extends FigureElement {
       // if (FIGURE1DEBUG) { drawTimer = new PerformanceTimer(); }
       for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
         this.elements[this.drawOrder[i]].draw(
-          now, this.drawTransforms, opacityToUse, canvasIndex,
+          now, sceneToUse, this.drawTransforms, opacityToUse, targetTexture,
+          parentIsTouchableToUse, parentTouchScaleToUse, uniqueColorToUse,
         ); // $FlowFixMe
         // if (FIGURE1DEBUG) { drawTimer.stamp(this.elements[this.drawOrder[i]].name); }
       } // $FlowFixMe
@@ -4572,28 +5522,22 @@ class FigureElementCollection extends FigureElement {
     }
   }
 
-  updateDrawTransforms(
-    parentTransform: Array<Transform> = [new Transform()],
-    isSame: boolean = false,
-  ) {
-    super.updateDrawTransforms(parentTransform, isSame);
-    for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
-      this.elements[this.drawOrder[i]].updateDrawTransforms(
-        this.drawTransforms, isSame,
-      );
-    }
-  }
+  // updateDrawTransforms(
+  //   parentTransform: Array<Transform> = [new Transform()],
+  //   scene: Scene,
+  //   isSame: boolean = false,
+  // ) {
+  //   super.updateDrawTransforms(parentTransform, scene, isSame);
+  //   for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
+  //     const s = this.scene != null ? this.scene : scene;
+  //     this.elements[this.drawOrder[i]].updateDrawTransforms(
+  //       this.drawTransforms, s, isSame,
+  //     );
+  //   }
+  // }
 
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
   setFirstTransform(parentTransform: Transform = new Transform()) {
-    const firstTransform = parentTransform.transform(this.getTransform());
-    this.lastDrawTransform = firstTransform._dup();
-    this.parentTransform = [parentTransform];
-
-    for (let i = 0; i < this.drawOrder.length; i += 1) {
-      const element = this.elements[this.drawOrder[i]];
-      element.setFirstTransform(firstTransform);
-    }
-    this.checkMoveBounds();
   }
 
   // border is whatever border is
@@ -4601,7 +5545,7 @@ class FigureElementCollection extends FigureElement {
   // rect is rect of children touchBorder
   // number is buffer of rect of children touch border
   getBorderPoints(
-    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+    border: 'border' | 'touchBorder' = 'border',
     children: Array<string | FigureElement> | null = null,
     shownOnly: boolean = true,
   ): TypeBorder {
@@ -4623,7 +5567,9 @@ class FigureElementCollection extends FigureElement {
           return;
         }
         // $FlowFixMe
-        childrenBorder.push(...e.getBorder('local', b, null, shownOnly));
+        if (e instanceof FigureElementCollection || e.drawBorder != null) { // $FlowFixMe
+          childrenBorder.push(...e.getBorder('local', b, null, shownOnly));
+        }
       });
       return childrenBorder;
     };
@@ -4640,30 +5586,38 @@ class FigureElementCollection extends FigureElement {
       } // $FlowFixMe
       return this.border;
     }
-    if (border === 'touchBorder') {
-      if (this.touchBorder === 'border') {
-        return this.getBorderPoints('border', children, shownOnly);
-      }
-      if (this.touchBorder === 'children') {
-        return getBorderFromChildren('touchBorder');
-      }
-      if (this.touchBorder === 'rect') { // $FlowFixMe
-        return [getBoundingBorder(getBorderFromChildren('touchBorder'))];
-      }
-      if (isBuffer(this.touchBorder)) { // $FlowFixMe
-        return [getBoundingBorder(getBorderFromChildren('touchBorder'), this.touchBorder)];
-      } // $FlowFixMe
-      return this.touchBorder;
+    // if (border === 'touchBorder') {
+    if (this.touchBorder === 'border') {
+      return this.getBorderPoints('border', children, shownOnly);
     }
-    if (this.holeBorder === 'children') {
-      return getBorderFromChildren('holeBorder');
+    if (this.touchBorder === 'children') {
+      return getBorderFromChildren('touchBorder');
     }
-    return this.holeBorder;
+    if (this.touchBorder === 'rect') { // $FlowFixMe
+      return [getBoundingBorder(getBorderFromChildren('touchBorder'))];
+    }
+    if (isBuffer(this.touchBorder)) { // $FlowFixMe
+      return [getBoundingBorder(getBorderFromChildren('touchBorder'), this.touchBorder)];
+    } // $FlowFixMe
+    return this.touchBorder;
+    // }
   }
 
+  /**
+   * Get the border or touchBorder of a FigureElementCollection in a defined
+   * coordinate space.
+   *
+   * @param {TypeCoordinateSpace} space (`'local`)
+   * @param {'border' | 'touchBorder'} border (`'border'`)
+   * @param {Array<string | FigureElement> | null} children choose specific
+   * children only - use `null` for all children (`null`)
+   * @param {boolean} shownOnly if `true` then only children that are shown
+   * will be used (`true`)
+   * @return {Array<Array<Point>>}
+   */
   getBorder(
-    space: TypeSpace | Array<number> = 'local',
-    border: 'touchBorder' | 'border' | 'holeBorder' = 'border',
+    space: TypeCoordinateSpace | Type3DMatrix = 'local',
+    border: 'touchBorder' | 'border' = 'border',
     children: ?Array<string | FigureElement> = null,
     shownOnly: boolean = true,
   ) {
@@ -4672,7 +5626,7 @@ class FigureElementCollection extends FigureElement {
     }
     let matrix;
     if (Array.isArray(space)) {
-      matrix = m2.mul(space, this.getTransform().matrix());
+      matrix = m3.mul(space, this.getTransform().matrix());
     } else {
       matrix = this.spaceTransformMatrix('draw', space);
     }
@@ -4682,8 +5636,8 @@ class FigureElementCollection extends FigureElement {
   }
 
   getBoundingRect(
-    space: TypeSpace = 'local',
-    border: 'touchBorder' | 'border' | 'holeBorder' = 'border',
+    space: TypeCoordinateSpace = 'local',
+    border: 'touchBorder' | 'border' = 'border',
     children: ?Array<string | FigureElement> = null,
     shownOnly: boolean = true,
   ) {
@@ -4693,8 +5647,8 @@ class FigureElementCollection extends FigureElement {
   }
 
   getRelativeBoundingRect(
-    space: TypeSpace = 'local',
-    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+    space: TypeCoordinateSpace = 'local',
+    border: 'border' | 'touchBorder' = 'border',
     children: ?Array<string | FigureElement> = null,
     shownOnly: boolean = true,
   ) {
@@ -4709,11 +5663,11 @@ class FigureElementCollection extends FigureElement {
   }
 
   getPositionInBounds(
-    space: TypeSpace = 'local',
+    space: TypeCoordinateSpace = 'local',
     xAlign: 'center' | 'left' | 'right' | 'location' | number = 'location',
     yAlign: 'middle' | 'top' | 'bottom' | 'location' | number = 'location', // $FlowFixMe
     children: ?Array<string | FigureElement> = null,
-    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+    border: 'border' | 'touchBorder' = 'border',
     shownOnly: boolean = true,
   ) {
     const bounds = this.getBoundingRect(space, border, children, shownOnly);
@@ -4739,17 +5693,28 @@ class FigureElementCollection extends FigureElement {
     return p;
   }
 
-  updateLimits(
-    limits: Rect,
-    transforms: OBJ_SpaceTransforms = this.figureTransforms,
-  ) {
+  setUniqueColor(color: null | TypeColor) {
+    super.setUniqueColor(color);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      element.updateLimits(limits, transforms);
+      element.setUniqueColor(color);
     }
-    this.figureLimits = limits;
-    this.figureTransforms = transforms;
   }
+
+  getUniqueColorElement(color: TypeColor) {
+    if (super.getUniqueColorElement(color)) {
+      return this;
+    }
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      const e = element.getUniqueColorElement(color);
+      if (e != null) {
+        return e;
+      }
+    }
+    return null;
+  }
+
 
   updateHTMLElementTie(
     container: HTMLElement,
@@ -4785,11 +5750,37 @@ class FigureElementCollection extends FigureElement {
     }
     for (let i = this.drawOrder.length - 1; i >= 0; i -= 1) {
       const element = this.elements[this.drawOrder[i]];
-      if (element.isShown === true) {
+      if (element.isShown) {
         touched = touched.concat(element.getTouched(glLocation));
       }
     }
     return touched;
+  }
+
+  setHasTouchableElements() {
+    this.hasTouchableElements = true;
+    if (this.parent != null) { // $FlowFixMe
+      this.parent.setHasTouchableElements();
+    }
+  }
+
+  getSelectionFromBorders(glLocation: Point) {
+    if (!this.isTouchable && !this.hasTouchableElements) {
+      return null;
+    }
+    if (this.isTouchable) {
+      return super.getSelectionFromBorders(glLocation);
+    }
+    for (let i = this.drawOrder.length - 1; i >= 0; i -= 1) {
+      const element = this.elements[this.drawOrder[i]];
+      if (element.isShown) {
+        const selection = element.getSelectionFromBorders(glLocation);
+        if (selection != null) {
+          return selection;
+        }
+      }
+    }
+    return null;
   }
 
   stop(
@@ -5119,12 +6110,12 @@ class FigureElementCollection extends FigureElement {
     });
   }
 
-  setMovable(movable: boolean = true) {
-    super.setMovable(movable);
-    if (movable) {
-      this.hasTouchableElements = true;
-    }
-  }
+  // setMovable(movable: boolean = true) {
+  //   super.setMovable(movable);
+  //   if (movable) {
+  //     this.hasTouchableElements = true;
+  //   }
+  // }
 
 
   setupWebGLBuffers(newWebgl: WebGLInstance) {

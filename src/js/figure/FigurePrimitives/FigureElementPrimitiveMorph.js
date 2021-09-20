@@ -57,8 +57,8 @@ import type { OBJ_AnimationStep } from '../Animation/AnimationStep';
    * that loading is ongoing).
    *
    * @example
-   * const { polylineToShapes, getPolygonCorners } = Fig.tools.morph;
-   * const { range } = Fig.tools.math;
+   * const { polylineToShapes, getPolygonCorners } = Fig.morph;
+   * const { range } = Fig;
    *
    * // Number of shapes that make up the lines
    * const n = 300;
@@ -112,8 +112,8 @@ import type { OBJ_AnimationStep } from '../Animation/AnimationStep';
    *   .start();
    *
    * @example
-   * const { imageToShapes, circleCloudShapes, polylineToShapes } = Fig.tools.morph;
-   * const { range } = Fig.tools.math;
+   * const { imageToShapes, circleCloudShapes, polylineToShapes } = Fig.morph;
+   * const { range } = Fig;
    *
    * const image = new Image();
    * image.src = './logocolored.png';

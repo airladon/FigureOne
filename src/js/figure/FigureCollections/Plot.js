@@ -3,7 +3,7 @@
 // import Figure from '../Figure';
 import {
   Transform, Point,
-  getPoint, parsePoint,
+  getPoint, isParsablePoint,
   comparePoints, Rect,
 } from '../../tools/g2';
 import type { TypeParsablePoint } from '../../tools/g2';
@@ -18,7 +18,8 @@ import type CollectionsAxis, { COL_Axis } from './Axis';
 import type CollectionsTrace, { COL_Trace } from './Trace';
 import type { COL_PlotLegend } from './Legend';
 import type CollectionsRectangle, { COL_Rectangle } from './Rectangle';
-import type { OBJ_TextLines, OBJ_Collection } from '../FigurePrimitives/FigurePrimitives';
+import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
+import type { OBJ_TextLines } from '../FigurePrimitives/FigurePrimitiveTypes2D';
 import type { OBJ_Font, TypeColor, OBJ_Font_Fixed } from '../../tools/types';
 import type FigureCollections from './FigureCollections';
 
@@ -104,7 +105,7 @@ function cleanTraces(
     traces = [tracesIn];
   } else if (tracesIn.length === 0) {
     traces = []; // $FlowFixMe
-  } else if (parsePoint(tracesIn[0]) instanceof Point) {
+  } else if (isParsablePoint(tracesIn[0])) {
     traces = [{ points: tracesIn }];
   } else {
     tracesIn.forEach((trace) => {
@@ -180,7 +181,7 @@ function cleanTraces(
  * All examples below also use this power function to generate the traces:
  * ```javascript
  * const pow = (pow = 2, stop = 10, step = 0.05) => {
- *   const xValues = Fig.tools.math.range(0, stop, step);
+ *   const xValues = Fig.range(0, stop, step);
  *   return xValues.map(x => new Fig.Point(x, x ** pow));
  * }
  * ```
@@ -438,13 +439,12 @@ class CollectionsPlot extends FigureElementCollection {
       font: collections.primitives.defaultFont,
       color: collections.primitives.defaultColor,
       theme: 'classic',
-      width: collections.primitives.limits.width / 3,
-      height: collections.primitives.limits.width / 3,
+      width: (collections.primitives.scene.right - collections.primitives.scene.left) / 3,
+      height: (collections.primitives.scene.right - collections.primitives.scene.left) / 3,
       grid: [],
       xAlign: 'plotAreaLeft',
       yAlign: 'plotAreaBottom',
-      limits: collections.primitives.limits,
-      transform: new Transform('Plot').scale(1, 1).rotate(0).translate(0, 0),
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       touchBorder: 'rect',
     };
     if (
@@ -493,6 +493,7 @@ class CollectionsPlot extends FigureElementCollection {
     this.axes = [];
     this.traces = [];
 
+    // console.log(options.trace)
     const [traces, bounds] = cleanTraces(options.trace);
 
     if (options.frame != null && options.frame !== false) {
@@ -531,7 +532,7 @@ class CollectionsPlot extends FigureElementCollection {
     // }
 
     if (this.__frame != null && this.frameSpace != null) {
-      this.__frame.surround(this, this.frameSpace);
+      this.__frame.surround(this, this.frameSpace, true);
     }
   }
 
@@ -737,7 +738,6 @@ class CollectionsPlot extends FigureElementCollection {
     const gridLength = axis === 'x' ? this.height : this.width;
 
     // const minDimension = Math.min(
-    //   this.collections.primitives.limits.width, this.collections.primitives.limits.height);
 
     let theme = {};
     if (name === 'classic') {

@@ -15,9 +15,8 @@ import {
 } from '../Element';
 import type CollectionsTrace, { COL_Trace } from './Trace';
 import type { OBJ_Font, OBJ_Font_Fixed } from '../../tools/types';
-import type {
-  OBJ_TextLines, OBJ_Collection,
-} from '../FigurePrimitives/FigurePrimitives';
+import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
+import type { OBJ_TextLines } from '../FigurePrimitives/FigurePrimitiveTypes2D';
 import type { TypePlotFrame } from './Plot';
 import type FigureCollections from './FigureCollections';
 
@@ -134,7 +133,7 @@ export type COL_PlotLegend = {
  * All examples below also use this power function to generate the traces:
  * ```javascript
  * const pow = (pow = 2, stop = 10, step = 0.05) => {
- *   const xValues = Fig.tools.math.range(0, stop, step);
+ *   const xValues = Fig.range(0, stop, step);
  *   return xValues.map(x => new Fig.Point(x, x ** pow));
  * }
  * ```
@@ -295,8 +294,7 @@ class CollectionsPlotLegend extends FigureElementCollection {
       length: collections.primitives.defaultLength / 10,
       space: 0.05,
       position: new Point(0, 0),
-      transform: new Transform('PlotLegend').scale(1, 1).rotate(0).translate(0, 0),
-      limits: collections.primitives.limits,
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
 
@@ -477,7 +475,7 @@ class CollectionsPlotLegend extends FigureElementCollection {
       oFrame.line.color = this.defaultColor.slice();
     }
     const frame = this.collections.rectangle(oFrame);
-    frame.surround(this, oFrame.space);
+    frame.surround(this, oFrame.space, true);
     this.add('frame', frame);
   }
 

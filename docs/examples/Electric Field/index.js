@@ -1,7 +1,7 @@
 /* globals Fig */
 
 const figure = new Fig.Figure({
-  limits: [-3, -3, 6, 6],
+  scene: [-3, -3, 3, 3],
   backgroundColor: [0, 0, 0, 1],
 });
 
@@ -17,9 +17,9 @@ const figure = new Fig.Figure({
 // Each charge position and value is a uniform. There are 20 charges, and so
 // there are 20 uniforms
 const vertexShader = `
-attribute vec2 a_position;
+attribute vec2 a_vertex;
 attribute vec2 a_center;
-uniform mat3 u_matrix;
+uniform mat4 u_worldViewProjectionMatrix;
 uniform float u_norm;
 uniform float u_scaleArrow;
 uniform vec3 u_charge1;
@@ -42,7 +42,7 @@ uniform vec3 u_charge17;
 uniform vec3 u_charge18;
 uniform vec3 u_charge19;
 uniform vec3 u_charge20;
-varying vec4 v_col;
+varying vec4 v_color;
 
 vec2 polarToRect(float mag, float angle) {
   return vec2(mag * cos(angle), mag * sin(angle));
@@ -65,7 +65,7 @@ vec2 fromCharge(vec3 charge) {
 void main() {
   mat3 centerToOrigin = mat3(1, 0, 0, 0, 1, 0, -a_center.x, -a_center.y, 1);
   mat3 originToCenter = mat3(1, 0, 0, 0, 1, 0, a_center.x, a_center.y, 1);
-  vec2 centerOffset = vec2(a_center.x - a_position.x, a_center.y - a_position.y);
+  vec2 centerOffset = vec2(a_center.x - a_vertex.x, a_center.y - a_vertex.y);
 
   // Calculate the x and y charge magnitude from each charge at this vertex
   vec2 c1 = fromCharge(u_charge1);
@@ -113,14 +113,14 @@ void main() {
 
   // Offset the vertex relative to the center, scale and rotate, then reverse
   // the offset
-  vec3 final = originToCenter * scaleRotation * centerToOrigin * vec3(a_position.x, a_position.y, 1);
+  vec3 final = originToCenter * scaleRotation * centerToOrigin * vec3(a_vertex.x, a_vertex.y, 1);
 
   // Final position
-  gl_Position = vec4((u_matrix * final).xy, 0, 1);
+  gl_Position = u_worldViewProjectionMatrix * vec4(final.xy, 0, 1);
 
   // Set the color based on the normalized charge between red (high charge
   // magnitude) and blue (low charge magnitude)
-  v_col = vec4(normCharge, 0.2, 1.0 - normCharge, 1);
+  v_color = vec4(normCharge, 0.2, 1.0 - normCharge, 1);
 }`;
 
 const points = [];
@@ -171,7 +171,7 @@ const field = figure.add({
   vertexShader: {
     src: vertexShader,
     vars: [
-      'a_position', 'a_center', 'u_matrix',
+      'a_vertex', 'a_center', 'u_worldViewProjectionMatrix',
       'u_norm',
       'u_scaleArrow',
       'u_charge1',
@@ -196,9 +196,9 @@ const field = figure.add({
       'u_charge20',
     ],
   },
-  fragShader: 'vertexColor',
+  fragmentShader: 'vertexColor',
   vertices: { data: points },
-  buffers: [
+  attributes: [
     { name: 'a_center', data: centers },
   ],
   uniforms: [

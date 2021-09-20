@@ -240,8 +240,8 @@ describe('Equation Functions - Brackets', () => {
     test('noLeftBracket', () => {
       eqn.showForm('noLeftBracket');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newR = eqn._rb.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newR = eqn._rb.getBoundingRect('local');
       expect(round(newA.left)).toBe(0.1);
       expect(round(newR.left)).toBe(round(newA.right + 0.1));
     });
@@ -254,7 +254,7 @@ describe('Equation Functions - Brackets', () => {
       expect(round(newLScale.y)).toBe(0.303);
       expect(round(newL.y)).toBe(-0.108);
       // 0 - 0.1 - 0.04 = -0.14
-      expect(round(newL.x)).toBe(round(-0.1 - eqn._lb.getBoundingRect('figure').width));
+      expect(round(newL.x)).toBe(round(-0.1 - eqn._lb.getBoundingRect('local').width));
       expect(round(newB.x)).toBe(0.1);
     });
     test('forceHeightGreaterThanActualHeight', () => {

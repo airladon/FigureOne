@@ -50,7 +50,12 @@ function makeFigure(backgroundColor, htmlId) {
         line: { width: 0.005 },
         xStep: 0.1,
         yStep: 0.1,
-        bounds: figure.limits._dup(),
+        bounds: {
+          left: figure.scene.left,
+          bottom: figure.scene.bottom,
+          width: figure.scene.right - figure.scene.left,
+          height: figure.scene.top - figure.scene.bottom,
+        },
       },
     },
     {
@@ -62,7 +67,12 @@ function makeFigure(backgroundColor, htmlId) {
         line: { width: 0.005 },
         xStep: 0.5,
         yStep: 0.5,
-        bounds: figure.limits._dup(),
+        bounds: {
+          left: figure.scene.left,
+          bottom: figure.scene.bottom,
+          width: figure.scene.right - figure.scene.left,
+          height: figure.scene.top - figure.scene.bottom,
+        },
       },
     },
 
@@ -148,6 +158,7 @@ function makeFigure(backgroundColor, htmlId) {
     square('ov2s', [0.65, -0.35], 0.5, 0.3, 0.3),
     square('ov3s', [0.8, -0.4], 0.5, 0.2),
   ]);
+  return figure;
 }
 
 /* eslint-disable no-unused-vars */

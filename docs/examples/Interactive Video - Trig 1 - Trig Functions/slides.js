@@ -188,7 +188,6 @@ function makeSlides() {
         },
         { out: 'eqn', final: false },
       ],
-      { scenario: 'eqn', target: 'oneTri', duration: 0 },
       {
         in: { 'rightTri.tri': ['side01', 'side12', 'side20', 'angle2.label'], delay: 0.5 },
       },

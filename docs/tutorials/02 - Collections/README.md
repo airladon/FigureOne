@@ -46,7 +46,7 @@ There are two types of figure elements (subclasses of [FigureElement](https://ai
 * [FigureElementPrimitive](https://airladon.github.io/FigureOne/api/#figureelementprimitive) - An object that draws something to the screen
 * [FigureElementCollection](https://airladon.github.io/FigureOne/api/#figureelementcollection) - An object that manages a group of figure elements (either primitives or collections)
 
-All figure elements have their own `transform` that *translates*, *rotates* and/or *scales* the element.
+All figure elements have their own `transform` that might *translate*, *rotate* and/or *scale* the element.
 
 A figure element in a collection will be transformed by both its own transform, and its parent collection's transform.
 

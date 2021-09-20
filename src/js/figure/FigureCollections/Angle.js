@@ -26,7 +26,7 @@ import type {
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep, OBJ_TriggerAnimationStep } from '../Animation/Animation';
 import type { TypeColor } from '../../tools/types';
-import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitives';
+import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type FigureCollections from './FigureCollections';
 
 // export type TypeAngleLabelOrientation = 'horizontal' | 'tangent';
@@ -832,8 +832,7 @@ class CollectionsAngle extends FigureElementCollection {
         thick: 1,
       },
       mods: {},
-      transform: new Transform('Angle').scale(1, 1).rotate(0).translate(0, 0),
-      limits: collections.primitives.limits,
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
 
@@ -1106,7 +1105,13 @@ class CollectionsAngle extends FigureElementCollection {
     if (wasHidden) {
       this.hide();
     }
-    if (labelWasHidden && this._label != null) {
+    if (
+      labelWasHidden
+      && this._label != null
+      && this.label != null
+      && this.label.autoHide == null
+      && this.label.autoHideMax == null
+    ) {
       this._label.hide();
     }
   }
@@ -1253,7 +1258,7 @@ class CollectionsAngle extends FigureElementCollection {
         radius: optionsToUse.radius + i * optionsToUse.step,
         color: this.color,
         direction,
-        transform: new Transform('AngleCurve').rotate(0),
+        transform: new Transform().rotate(0),
         // dash: optionsToUse.dash,
       };
       if (optionsToUse.fill === false) {  // $FlowFixMe
@@ -1460,7 +1465,7 @@ class CollectionsAngle extends FigureElementCollection {
       } else {
         _arrow1.show();
         // $FlowFixMe
-        _arrow1.transform.updateTranslation(this.arrow.start.radius, 0);
+        _arrow1.transform.updateTranslation([this.arrow.start.radius, 0]);
         // $FlowFixMe
         const arrowLengthAngle = this.arrow.start.height / this.arrow.start.radius;
         let curveToLine;    // $FlowFixMe
@@ -1572,13 +1577,13 @@ class CollectionsAngle extends FigureElementCollection {
     const { _side1, side1 } = this;
     if (_side1 && side1) {
       // _side1.transform.updateRotation(this.rotation);
-      _side1.transform.updateScale(side1.length, 1);
+      _side1.transform.updateScale([side1.length, 1]);
     }
 
     const { _side2, side2 } = this;
     if (_side2 && side2) {
       _side2.transform.updateRotation(this.angle);
-      _side2.transform.updateScale(side2.length, 1);
+      _side2.transform.updateScale([side2.length, 1]);
     }
 
     this.updateMovePads();

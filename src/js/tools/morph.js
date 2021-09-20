@@ -263,7 +263,7 @@ export type OBJ_ImageToShapes = {
  * @return {[Array<number>, Array<number>]} [vertices, colors]
  *
  * @example
- * const { imageToShapes, rectangleCloudShapes } = Fig.tools.morph;
+ * const { imageToShapes, rectangleCloudShapes } = Fig.morph;
  *
  * const image = new Image();
  * image.src = './logo.png';
@@ -294,7 +294,7 @@ export type OBJ_ImageToShapes = {
  * };
  *
  * @example
- * const { imageToShapes } = Fig.tools.morph;
+ * const { imageToShapes } = Fig.morph;
  *
  * const micImage = new Image();
  * micImage.src = './mic.png';
@@ -652,7 +652,7 @@ export type OBJ_PolylineToShapes = {
  * @return {[Array<number>, Array<number>]} [vertices, colors]
  *
  * @example
- * const { polylineToShapes, getPolygonCorners } = Fig.tools.morph;
+ * const { polylineToShapes, getPolygonCorners } = Fig.morph;
  *
  * const [square] = polylineToShapes({
  *   points: [[0.5, 0], [0, 0.5], [-0.5, 0], [0, -0.5]],
@@ -680,7 +680,7 @@ export type OBJ_PolylineToShapes = {
  *   .start();
  *
  * @example
- * const { polylineToShapes, getPolygonCorners } = Fig.tools.morph;
+ * const { polylineToShapes, getPolygonCorners } = Fig.morph;
  *
  * const [square] = polylineToShapes({
  *   points: [[-0.5, 0], [0.5, 0]],
@@ -708,7 +708,7 @@ export type OBJ_PolylineToShapes = {
  *   .start();
  *
  * @example
- * const { polylineToShapes, getPolygonCorners } = Fig.tools.morph;
+ * const { polylineToShapes, getPolygonCorners } = Fig.morph;
  *
  * const [square] = polylineToShapes({
  *   points: getPolygonCorners({ radius: 0.5, sides: 4, rotation: Math.PI / 4 }),
@@ -803,9 +803,9 @@ export type OBJ_PointsToShapes = {
  * @return {[Array<number>, Array<number>]} [vertices, colors]
  *
  * @example
- * const { pointsToShapes } = Fig.tools.morph;
+ * const { pointsToShapes } = Fig.morph;
  *
- * const xValues = Fig.tools.math.range(-0.8, 0.8, 0.001);
+ * const xValues = Fig.range(-0.8, 0.8, 0.001);
  * const sinc = (xIn, a, b, c) => {
  *   const x = (xIn + c) === 0 ? 0.00001 : xIn + c;
  *   return a * Math.sin(b * x) / (b * x);
@@ -982,11 +982,11 @@ function polyline(options: OBJ_MorphPolyline) {
  * @property {1 | -1} [direction] 1 is CCW, -1 is CW (`1`)
  */
 export type OBJ_GetPolygonCorners = {
-  radius: number,
-  sides: number,
-  position: TypeParsablePoint,
-  rotation: number,
-  direction: 1 | -1,
+  radius?: number,
+  sides?: number,
+  position?: TypeParsablePoint,
+  rotation?: number,
+  direction?: 1 | -1,
 };
 
 /**
@@ -1054,7 +1054,7 @@ export type OBJ_PolygonCloudShapes = {
  * @return {Array<number>} array of interlaced x and y coordinates of vertices
  *
  * @example
- * const { polygonCloudShapes } = Fig.tools.morph;
+ * const { polygonCloudShapes } = Fig.morph;
  *
  * const cloud1 = polygonCloudShapes({
  *   num: 2000,
@@ -1144,7 +1144,7 @@ export type OBJ_CircleCloudShapes = {
  * @return {Array<number>} array of interlaced x and y coordinates of vertices
  *
  * @example
- * const { circleCloudShapes } = Fig.tools.morph;
+ * const { circleCloudShapes } = Fig.morph;
  *
  * const cloud1 = circleCloudShapes({
  *   num: 2000,
@@ -1228,7 +1228,7 @@ export type OBJ_RectangleCloudShapes = {
  * @return {Array<number>} array of interlaced x and y coordinates of vertices
  *
  * @example
- * const { rectangleCloudShapes } = Fig.tools.morph;
+ * const { rectangleCloudShapes } = Fig.morph;
  *
  * const cloud1 = rectangleCloudShapes({
  *   num: 1000,

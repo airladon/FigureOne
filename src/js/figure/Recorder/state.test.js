@@ -1,6 +1,6 @@
 import {
   Point, Rect, Transform, Line, RangeBounds, RectBounds, LineBounds,
-  TransformBounds,
+  // TransformBounds,
 } from '../../tools/g2';
 import {
   getState, setState,
@@ -72,15 +72,16 @@ describe('state', () => {
     });
     test('RectBounds', () => {
       const bounds = new RectBounds({
-        left: -10,
-        bottom: -11,
-        right: 8,
-        top: 9,
-        precision: 5,
-        bounds: 'outside',
+        left: 10,
+        bottom: 11,
+        right: 5,
+        top: 7,
+        precision: 3,
+        normal: [0, 0, 1],
+        rightDirection: [1, 0, 0],
       });
       const b = parseState(bounds._state());
-      expect(b).toEqual(bounds);
+      expect(b.round()).toEqual(bounds.round());
       expect(b).not.toBe(bounds);
     });
     test('RangeBounds', () => {
@@ -97,20 +98,7 @@ describe('state', () => {
         p2: [3, 3],
         ends: 1,
         precision: 5,
-        bounds: 'outside',
       });
-      const b = parseState(bounds._state());
-      expect(b).toEqual(bounds);
-      expect(b).not.toBe(bounds);
-    });
-    test('TransformBounds', () => {
-      const t = new Transform().scale(1, 1).rotate(0).translate(0, 0);
-      const bounds = new TransformBounds(t);
-      bounds.updateScale(new RangeBounds({ min: 0.5, max: 1.5 }));
-      bounds.updateRotation(new RangeBounds({ min: -2, max: 2 }));
-      bounds.updateTranslation(new RectBounds({
-        left: -1, right: 1, bottom: -1, top: 1,
-      }));
       const b = parseState(bounds._state());
       expect(b).toEqual(bounds);
       expect(b).not.toBe(bounds);

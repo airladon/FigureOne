@@ -237,8 +237,8 @@ describe('Equation Functions - Bar', () => {
       functions.topStrikeParameterSteps();
       eqn.showForm('base');
       figure.setFirstTransform();
-      // baseA = eqn._a.getBoundingRect('figure');
-      baseB = eqn._b.getBoundingRect('figure');
+      // baseA = eqn._a.getBoundingRect('local');
+      baseB = eqn._b.getBoundingRect('local');
       space = 1;
       scale = 0.5;
       overhang = 1;
@@ -246,9 +246,9 @@ describe('Equation Functions - Bar', () => {
     test('inSize', () => {
       eqn.showForm('inSize');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newX = eqn._x.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newX = eqn._x.getBoundingRect('local');
       expect(round(newX.width)).toBe(round(newA.width + overhang * 2));
       expect(round(newX.height)).toBe(round(newA.height + overhang * 2));
       expect(round(newX.left)).toBe(round(newA.left - overhang));
@@ -260,9 +260,9 @@ describe('Equation Functions - Bar', () => {
     test('Space', () => {
       eqn.showForm('space');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newX = eqn._x.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newX = eqn._x.getBoundingRect('local');
       expect(round(newX.width)).toBe(round(newA.width));
       expect(round(newX.height)).toBe(round(newA.height));
       expect(round(newX.left)).toBe(round(newA.left));
@@ -273,9 +273,9 @@ describe('Equation Functions - Bar', () => {
     test('Scale', () => {
       eqn.showForm('scale');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newX = eqn._x.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newX = eqn._x.getBoundingRect('local');
       expect(round(newX.width)).toBe(round(newA.width));
       expect(round(newX.height)).toBe(round(newA.height));
       expect(round(newX.left)).toBe(round(newA.left));
@@ -288,9 +288,9 @@ describe('Equation Functions - Bar', () => {
     test('Overhang', () => {
       eqn.showForm('overhang');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newX = eqn._x.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newX = eqn._x.getBoundingRect('local');
       expect(round(newX.width)).toBe(round(newA.width + overhang * 2));
       expect(round(newX.height)).toBe(round(newA.height + overhang * 2));
       expect(round(newX.left)).toBe(round(newA.left - overhang));
@@ -308,8 +308,8 @@ describe('Equation Functions - Bar', () => {
       functions.bottomStrikeParameterSteps();
       eqn.showForm('base');
       figure.setFirstTransform();
-      // baseA = eqn._a.getBoundingRect('figure');
-      baseB = eqn._b.getBoundingRect('figure');
+      // baseA = eqn._a.getBoundingRect('local');
+      baseB = eqn._b.getBoundingRect('local');
       space = 1;
       scale = 0.5;
       overhang = 1;
@@ -317,9 +317,9 @@ describe('Equation Functions - Bar', () => {
     test('inSize', () => {
       eqn.showForm('inSize');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newX = eqn._x.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newX = eqn._x.getBoundingRect('local');
       expect(round(newX.width)).toBe(round(newA.width + overhang * 2));
       expect(round(newX.height)).toBe(round(newA.height + overhang * 2));
       expect(round(newX.left)).toBe(round(newA.left - overhang));
@@ -331,9 +331,9 @@ describe('Equation Functions - Bar', () => {
     test('Space', () => {
       eqn.showForm('space');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newX = eqn._x.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newX = eqn._x.getBoundingRect('local');
       expect(round(newX.width)).toBe(round(newA.width));
       expect(round(newX.height)).toBe(round(newA.height));
       expect(round(newX.left)).toBe(round(newA.left));
@@ -344,9 +344,9 @@ describe('Equation Functions - Bar', () => {
     test('Scale', () => {
       eqn.showForm('scale');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newX = eqn._x.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newX = eqn._x.getBoundingRect('local');
       expect(round(newX.width)).toBe(round(newA.width));
       expect(round(newX.height)).toBe(round(newA.height));
       expect(round(newX.left)).toBe(round(newA.left));
@@ -359,9 +359,9 @@ describe('Equation Functions - Bar', () => {
     test('Overhang', () => {
       eqn.showForm('overhang');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newX = eqn._x.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newX = eqn._x.getBoundingRect('local');
       expect(round(newX.width)).toBe(round(newA.width + overhang * 2));
       expect(round(newX.height)).toBe(round(newA.height + overhang * 2));
       expect(round(newX.left)).toBe(round(newA.left - overhang));

@@ -3,6 +3,8 @@ import * as g2 from  '../../../../src/js/tools/g2';
 global.Fig = {
   Figure: () => makeFigure(),
   tools: { g2 },
+  getPoints: g2.getPoints,
+  threePointAngle: g2.threePointAngle,
 };
 
 global.figure = {};

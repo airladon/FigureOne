@@ -5,8 +5,8 @@ import {
   RangeBounds, RectBounds,
 } from '../../tools/g2';
 import type {
-  TypeRangeBoundsDefinition, TypeRectBoundsDefinition,
-} from '../../tools/g2';
+  OBJ_RangeBounds, OBJ_RectBounds,
+} from '../../tools/geometry/Bounds';
 import { joinObjects, joinObjectsWithOptions } from '../../tools/tools';
 import { round, range } from '../../tools/math';
 import {
@@ -22,7 +22,8 @@ import type {
 // eslint-disable-next-line import/no-cycle
 import FigureCollections from './FigureCollections';
 // import FigureEquation from '../Equation/FigureEquation';
-import type { OBJ_Polyline, OBJ_Polygon, OBJ_Collection } from '../FigurePrimitives/FigurePrimitives';
+import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
+import type { OBJ_Polyline, OBJ_Polygon } from '../FigurePrimitives/FigurePrimitiveTypes2D';
 
 /* eslint-disable max-len */
 /**
@@ -34,13 +35,13 @@ import type { OBJ_Polyline, OBJ_Polygon, OBJ_Collection } from '../FigurePrimiti
  *
  * @property {boolean} [isMovable] `true` allows moving the pad and the
  * associated polyline point (`false`)
- * @property {TypeRangeBoundsDefinition | TypeRectBoundsDefinition | RangeBounds | RectBounds | 'figure'} [boundary]
+ * @property {OBJ_RangeBounds | OBJ_RectBounds | RangeBounds | RectBounds | 'figure'} [boundary]
  * boundary the pad can move within
  */
 /* eslint-enable max-len */
 export type OBJ_PolylinePadSingle = {
   isMovable?: boolean,
-  boundary?: TypeRangeBoundsDefinition | TypeRectBoundsDefinition | RangeBounds | RectBounds | 'figure',
+  boundary?: OBJ_RangeBounds | OBJ_RectBounds | RangeBounds | RectBounds | 'figure',
 }
 
 /**
@@ -528,9 +529,8 @@ export default class CollectionsPolyline extends FigureElementCollection {
       showLine: true,
       width: collections.primitives.defaultLineWidth,
       reverse: false,
-      transform: new Transform('PolyLine').scale(1, 1).rotate(0).translate(0, 0),
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       makeValid: null,
-      limits: collections.primitives.limits,
     };
     if (options.makeValid != null && options.makeValid.shape != null && options.makeValid.shape === 'triangle') {
       defaultOptions.makeValid = {
@@ -553,7 +553,7 @@ export default class CollectionsPolyline extends FigureElementCollection {
     this.animateNextFrame = animateNextFrame;
     this.updatePointsCallback = null;
 
-    this.position = this.getPosition();
+    // this.position = this.getPosition();
     this.close = optionsToUse.close;
     this.options = optionsToUse;
     this.reverse = optionsToUse.reverse;
@@ -602,8 +602,8 @@ export default class CollectionsPolyline extends FigureElementCollection {
       sides: 20,
       radius: 0.1,
       color: this.color,
-      isMovable: false,
-      boundary: 'figure',
+      // isMovable: false,
+      // boundary: 'figure',
     };
     // const { pad } = optionsToUse;
     const pCount = this.points.length;
@@ -617,15 +617,15 @@ export default class CollectionsPolyline extends FigureElementCollection {
         }, padArray[i]);
         const padShape = this.collections.primitives.polygon(padOptions);
         // $FlowFixMe
-        const { isMovable, boundary } = padArray[i];
-        if (isMovable) {
-          padShape.onAdd = () => {
-            padShape.setMovable();
-          };
-          if (boundary != null) {
-            padShape.move.sizeInBounds = true;
-            padShape.setMoveBounds(boundary);
-          }
+        // const { isMovable, boundary } = padArray[i];
+        if (padShape.isMovable) {
+          // padShape.onAdd = () => {
+          //   padShape.setMovable();
+          // };
+          // if (boundary != null) {
+          //   padShape.move.sizeInBounds = true;
+          //   padShape.setMove({ bounds: boundary });
+          // }
           const fnName = `_polyline_pad${i}`;
           padShape.fnMap.add(
             fnName,

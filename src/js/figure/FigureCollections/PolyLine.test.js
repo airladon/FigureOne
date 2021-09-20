@@ -5,7 +5,7 @@
 // } from '../Element';
 // import Figure from '../Figure';
 import {
-  Point, rectToPolar,
+  Point,
 } from '../../tools/g2';
 import {
   round,
@@ -138,12 +138,17 @@ describe('Figure Objects PolyLine', () => {
         close: true,
         pad: {
           radius: 0.2,
-          boundary: {
-            translation: {
+          move: {
+            bounds: {
               left: -3, bottom: -2, right: 3, top: 2,
             },
           },
-          isMovable: true,
+          // boundary: {
+          //   translation: {
+          //     left: -3, bottom: -2, right: 3, top: 2,
+          //   },
+          // },
+          // isMovable: true,
         },
       }),
       Misc: () => figure.collections.polyline({
@@ -216,11 +221,11 @@ describe('Figure Objects PolyLine', () => {
     test('Boundary', () => {
       const poly = ways.PadBoundary();
       expect(poly).toHaveProperty('_pad0');
-      const { boundary } = poly._pad0.getMoveBounds().boundary[0];
-      expect(round(boundary.left, 3)).toBe(-2.8);
-      expect(round(boundary.right, 3)).toBe(2.8);
-      expect(round(boundary.bottom, 3)).toBe(-1.8);
-      expect(round(boundary.top, 3)).toBe(1.8);
+      const boundary = poly._pad0.move.bounds;
+      expect(round(boundary.left, 3)).toBe(-3);
+      expect(round(boundary.right, 3)).toBe(3);
+      expect(round(boundary.bottom, 3)).toBe(-2);
+      expect(round(boundary.top, 3)).toBe(2);
     });
   });
   describe('Side Labels', () => {
@@ -337,12 +342,12 @@ describe('Figure Objects PolyLine', () => {
           close: true,
           pad: {
             radius: 0.2,
-            boundary: {
-              translation: {
+            move: {
+              bounds: {
                 left: -3, bottom: -2, right: 3, top: 2,
               },
             },
-            isMovable: true,
+            // isMovable: true,
           },
         },
       });
@@ -370,12 +375,16 @@ describe('Figure Objects PolyLine', () => {
           close: true,
           pad: {
             radius: 0.2,
-            boundary: {
-              translation: {
-                left: -3, bottom: -2, right: 3, top: 2,
+            move: {
+              bounds: {
+                p1: [0, 0], p2: [9, 9],
+              },
+              freely: {
+                bounceLoss: 0,
+                deceleration: 1,
               },
             },
-            isMovable: true,
+            // isMovable: true,
             // move: {
             //   bounds: {
             //     translation: { line: [[0, 0], [9, 9]] },
@@ -384,7 +393,7 @@ describe('Figure Objects PolyLine', () => {
           },
         },
       });
-      figure.initialize();
+      // figure.initialize();
       const a = figure.elements._a;
       // a.move.freely.bounceLoss = 0;
       // a.move.freely.deceleration = 1;
@@ -392,21 +401,23 @@ describe('Figure Objects PolyLine', () => {
       expect(a.points[1]).toEqual(new Point(10, 0));
       expect(a.points[2]).toEqual(new Point(10, 10));
       const p0 = a._pad0;
-      p0.move.bounds.updateTranslation({ line: [[0, 0], [9, 9]] });
-      p0.setTouchable();
-      p0.move.freely.bounceLoss = 0;
-      p0.move.freely.deceleration = 1;
+      // p0.move.bounds.updateTranslation({ line: [[0, 0], [9, 9]] });
+      // p0.setTouchable();
+      // p0.move.freely.bounceLoss = 0;
+      // p0.move.freely.deceleration = 1;
       figure.mock.timeStep(0);
       figure.mock.touchDown([0, 0]);
       figure.mock.timeStep(0.1);
-      figure.mock.touchMove([0.5 * Math.sqrt(2), 0]);
+      figure.mock.touchMove([0.5 / Math.sqrt(2), 0.5 / Math.sqrt(2)]);
       figure.mock.touchUp();
 
+      let vC = round(0.5 / Math.sqrt(2) / 0.1, 3);
       // Moving at 5 units/s
       // Total time = 5s
       // Distance: s = v0t - 0.5*1*t^2 = 25 - 12.5 = 12.5;
       const x = 0.5 / Math.sqrt(2);
-      expect(round(rectToPolar(p0.state.movement.velocity.t()).mag, 3)).toBe(5);
+      // Note - this is 5 as the line p0 moves along is diagonal
+      expect(round(p0.state.movement.velocity, 3).toArray()).toEqual([vC, vC, 0]);
       expect(p0.getPosition().round(3).x).toEqual(round(x, 3));
       expect(round(p0.getRemainingMovingFreelyTime(), 2)).toBe(5);
       expect(p0.state.isMovingFreely).toBe(true);
@@ -418,7 +429,8 @@ describe('Figure Objects PolyLine', () => {
       //  v1 = v0 - at = 5 - 1 = 4
       //  s  = 5 - 0.5 = 4.5
       figure.mock.timeStep(1);
-      expect(round(rectToPolar(p0.state.movement.velocity.t()).mag, 3)).toBe(4);
+      vC = round(4 * Math.cos(Math.PI / 4), 3);
+      expect(round(p0.state.movement.velocity, 3).toArray()).toEqual([vC, vC, 0]);
       expect(p0.getPosition().round(3).x).toEqual(round(x + 4.5 / Math.sqrt(2), 3));
       expect(round(p0.getRemainingMovingFreelyTime(), 2)).toBe(4);
       expect(p0.state.isMovingFreely).toBe(true);
@@ -433,7 +445,8 @@ describe('Figure Objects PolyLine', () => {
       //  v2 = v1 - at = 4 - 1 = 3
       //  s  = 4 - 0.5 = 3.5 (+4.5)
       figure.mock.timeStep(1);
-      expect(round(rectToPolar(p0.state.movement.velocity.t()).mag, 3)).toBe(3);
+      vC = round(3 * Math.cos(Math.PI / 4), 3);
+      expect(round(p0.state.movement.velocity, 3).toArray()).toEqual([vC, vC, 0]);
       expect(p0.getPosition().round(3).x).toEqual(round(x + (4.5 + 3.5) / Math.sqrt(2), 3));
       expect(round(p0.getRemainingMovingFreelyTime(), 2)).toBe(3);
       expect(p0.state.isMovingFreely).toBe(true);

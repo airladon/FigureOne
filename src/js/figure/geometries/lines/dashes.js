@@ -1,6 +1,6 @@
 // @flow
 import {
-  Point, Line, distance,
+  Point, Line,
 } from '../../../tools/g2';
 import {
   roundNum,
@@ -131,7 +131,7 @@ function lineToDash(
       out = [...out, ...dashLines];
     }
     lastContinue = dashContinues;
-    cumLength = roundNum(cumLength + distance(p1, p2), precision);
+    cumLength = roundNum(cumLength + p1.distance(p2), precision);
   };
 
   for (let i = 0; i < points.length - 1; i += 1) {

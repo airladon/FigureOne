@@ -80,7 +80,7 @@ This cell will load `FigureOne`, and then hide this setup code as well.
 %%javascript
 require.config({ 
   paths: { 
-    Fig: 'https://cdn.jsdelivr.net/npm/figureone@0.10.14/figureone.min'
+    Fig: 'https://cdn.jsdelivr.net/npm/figureone@0.11.0/figureone.min'
   },
   scriptType: 'text/javascript'
 });
@@ -111,7 +111,7 @@ Now we create a `Figure`, and define the equation to be shown.
 require(['Fig'], function(Fig) {  
     // Create a figure with limits that are proportional to the html div style size 
     const figure = new Fig.Figure({
-      limits: new Fig.Rect(-2, -1, 4, 2),
+      scene: new Fig.Rect(-2, -1, 2, 1),
       htmlId: 'dynamic_equation_1',
     });
 

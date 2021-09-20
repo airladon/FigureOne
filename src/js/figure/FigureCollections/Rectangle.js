@@ -16,8 +16,11 @@ import {
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep } from '../Animation/Animation';
 import type {
-  OBJ_LineStyleSimple, OBJ_Texture, OBJ_Collection, OBJ_TextLines,
-} from '../FigurePrimitives/FigurePrimitives';
+  OBJ_TextLines,
+} from '../FigurePrimitives/FigurePrimitiveTypes2D';
+import type {
+  OBJ_LineStyleSimple, OBJ_Texture, OBJ_Collection,
+} from '../FigurePrimitives/FigurePrimitiveTypes';
 import type {
   TypeColor, OBJ_CurvedCorner,
 } from '../../tools/types';
@@ -237,7 +240,7 @@ class CollectionsRectangle extends FigureElementCollection {
     collections: FigureCollections,
     optionsIn: COL_Rectangle,
   ) {
-    // super(new Transform('Plot')
+    // super(new Transform()
     //   .scale(1, 1)
     //   .rotate(0)
     //   .translate(0, 0), shapes.limits);
@@ -250,13 +253,11 @@ class CollectionsRectangle extends FigureElementCollection {
       color: collections.primitives.defaultColor,
       border: 'children',
       touchBorder: 'border',
-      holeBorder: [[]],
       corner: {
         radius: 0,
         sides: 1,
       },
-      transform: new Transform('Rectangle').scale(1, 1).rotate(0).translate(0, 0),
-      limits: collections.primitives.limits,
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       // button: {},
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
@@ -275,7 +276,6 @@ class CollectionsRectangle extends FigureElementCollection {
     this.yAlign = options.yAlign;
     this.border = options.border;
     this.touchBorder = options.touchBorder;
-    this.holeBorder = options.holeBorder;
     this.corner = options.corner;
     this.labelOffset = new Point(0, 0);
     this.stateProperties = ['width', 'height', 'xAlign', 'yAlign'];
@@ -500,26 +500,34 @@ class CollectionsRectangle extends FigureElementCollection {
     this.add('label', label);
   }
 
-  getSurround(element: FigureElement | Array<FigureElement>, space: TypeParsableBuffer = 0) {
+  getSurround(
+    element: FigureElement | Array<FigureElement>,
+    space: TypeParsableBuffer = 0,
+    isInLocalSpace: boolean = false,
+  ) {
     let bounds;
+    let coordSpace = 'figure';
+    if (isInLocalSpace) {
+      coordSpace = 'local';
+    }
     if (Array.isArray(element)) {
       const borders: Array<Array<Point>> = [];
       element.forEach((e) => {
-        const b = e.getBorder('figure');
+        const b = e.getBorder(coordSpace);
         borders.push(...b);
       });
       bounds = getBoundingRect(borders, space);
     } else {
-      bounds = getBoundingRect(element.getBorder('figure'), space);
+      bounds = getBoundingRect(element.getBorder(coordSpace), space);
     }
-    const matrix = this.spaceTransformMatrix('figure', 'draw');
+    const matrix = this.spaceTransformMatrix(coordSpace, 'draw');
     const scale = matrix[0];
     const newWidth = bounds.width * scale;
     const newHeight = bounds.height * scale;
     const center = new Point(
       bounds.left + bounds.width / 2,
       bounds.bottom + bounds.height / 2,
-    ).transformBy(this.spaceTransformMatrix('figure', 'local'));
+    ).transformBy(this.spaceTransformMatrix(coordSpace, 'local'));
     const position = center;
     if (this.xAlign === 'left') {
       position.x -= newWidth / 2;
@@ -541,8 +549,12 @@ class CollectionsRectangle extends FigureElementCollection {
   /**
    * Surround element of elements with the rectangle.
    */
-  surround(element: FigureElement | Array<FigureElement>, space: TypeParsableBuffer = 0) {
-    const [position, width, height] = this.getSurround(element, space);
+  surround(
+    element: FigureElement | Array<FigureElement>,
+    space: TypeParsableBuffer = 0,
+    isInLocalSpace: boolean = false,
+  ) {
+    const [position, width, height] = this.getSurround(element, space, isInLocalSpace);
     this.setSurround(position, width, height);
   }
 

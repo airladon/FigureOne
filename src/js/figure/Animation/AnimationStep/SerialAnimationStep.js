@@ -145,17 +145,18 @@ export class SerialAnimationStep extends AnimationStep {
       this.startWaiting();
       super.start(startTime);
       this.index = 0;
-      if (this.steps.length > 0) {
-        this.steps[0].start(startTime);
-        this.steps[0].finishIfZeroDuration();
-      }
+      this.startStep(startTime);
+      // if (this.steps.length > 0) {
+      //   this.steps[0].start(startTime);
+      //   this.steps[0].finishIfZeroDuration();
+      // }
     }
-    this.finishIfZeroDuration();
+    // this.finishIfZeroDuration();
   }
 
-  finishIfZeroDuration() {
-    let i = 0;
-    let step = this.steps[0];
+  finishIfZeroDuration(startIndex: number = 0) {
+    let i = startIndex;
+    let step = this.steps[startIndex];
     while (i < this.steps.length && step.state === 'finished') {
       i += 1;
       if (i < this.steps.length) {
@@ -170,12 +171,31 @@ export class SerialAnimationStep extends AnimationStep {
     }
   }
 
+  startStep(startTime: ?AnimationStartTime = null) {
+    if (this.index >= this.steps.length) {
+      this.finish();
+      return;
+    }
+    const step = this.steps[this.index];
+    step.start(startTime);
+    step.finishIfZeroDuration();
+    if (step.state === 'finished') {
+      this.index += 1;
+      if (this.index === this.steps.length) {
+        this.finish();
+      } else {
+        this.startStep(startTime);
+      }
+    }
+  }
+
   setTimeSpeed(oldSpeed: number, newSpeed: number, now: number) {
     super.setTimeSpeed(oldSpeed, newSpeed, now);
     this.steps.forEach(step => step.setTimeSpeed(oldSpeed, newSpeed, now));
   }
 
   nextFrame(now: number, speed: number = 1) {
+    // console.log(now);
     if (this.startTime === null) {
       this.startTime = now - this.startTimeOffset;
     }
@@ -188,14 +208,16 @@ export class SerialAnimationStep extends AnimationStep {
       if (this.afterFrame != null) { // $FlowFixMe - as this has been confirmed
         this.afterFrame(now - this.startTime);
       }
-      if (remaining >= 0) {
+      if (remaining != null && remaining >= 0) {
         if (this.index === this.steps.length - 1) {
           this.finish();
           return remaining;
         }
         this.index += 1;
-        this.steps[this.index].start(now - remaining);
-        return this.nextFrame(now, speed);
+        this.startStep(now - remaining);
+        if (this.index < this.steps.length) {
+          return this.nextFrame(now, speed);
+        }
       }
     }
     return remaining;

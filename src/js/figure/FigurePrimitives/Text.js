@@ -3,7 +3,7 @@
 import VertexText from '../DrawingObjects/VertexObject/VertexText';
 import { FigureElementPrimitive } from '../Element';
 import {
-  Point, Transform, Rect,
+  Point, Transform,
 } from '../../tools/g2';
 import WebGLInstance from '../webgl/webgl';
 import { joinObjects } from '../../tools/tools';
@@ -23,7 +23,6 @@ type TypeTextInputOptions = {
 
 function Text(
   webgl: WebGLInstance,
-  figureLimits: Rect,
   optionsIn: TypeTextInputOptions,
 ) {
   const defaultOptions = {
@@ -33,7 +32,7 @@ function Text(
   const options = joinObjects({}, defaultOptions, optionsIn);
 
   if (options.transform == null) {
-    options.transform = new Transform('Text').translate(0, 0);
+    options.transform = new Transform().translate(0, 0);
   }
 
   if (options.position != null) {
@@ -50,7 +49,7 @@ function Text(
   // } else {
   //   transform = transformOrLocation._dup();
   // }
-  return new FigureElementPrimitive(vertexText, options.transform, options.color, figureLimits);
+  return new FigureElementPrimitive(vertexText, options.transform, options.color);
 }
 
 export default Text;

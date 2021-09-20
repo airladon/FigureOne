@@ -208,7 +208,10 @@ function addToObject(
 //   });
 // }
 
-function duplicate(value: ?(number | boolean | string | Object)) {
+function duplicate(value: ?(number | boolean | string | Object), precision: number | null = null) {
+  if (typeof value === 'number' && precision != null) {
+    return roundNum(value, precision);
+  }
   if (typeof value === 'number'
       || typeof value === 'boolean'
       || typeof value === 'string'
@@ -222,13 +225,13 @@ function duplicate(value: ?(number | boolean | string | Object)) {
   }
   if (Array.isArray(value)) {
     const arrayDup = [];
-    value.forEach(arrayElement => arrayDup.push(duplicate(arrayElement)));
+    value.forEach(arrayElement => arrayDup.push(duplicate(arrayElement, precision)));
     return arrayDup;
   }
   // if (typeof value === 'object') {
   const objectDup = {};
   Object.keys(value).forEach((key) => {
-    const v = duplicate(value[key]);
+    const v = duplicate(value[key], precision);
     objectDup[key] = v;
   });
   return objectDup;
@@ -338,7 +341,12 @@ function zeroPad(num, places) {
 
 class UniqueIdGenerator {
   static instance: Object;
+
   seeds: {
+    [seedString: string]: number,
+  };
+
+  colorSeeds: {
     [seedString: string]: number,
   };
 
@@ -360,6 +368,7 @@ class UniqueIdGenerator {
 
   initialize() {
     this.seeds = {};
+    this.colorSeeds = {};
   }
 
   getId(seed: string) {
@@ -370,25 +379,68 @@ class UniqueIdGenerator {
     this.seeds[seed] += 1;
     return id;
   }
+
+  getColor(seed: string) {
+    const initialColors = [
+      [255, 0, 0, 255],
+      [0, 255, 0, 255],
+      [0, 0, 255, 255],
+      [255, 0, 255, 255],
+      [0, 255, 255, 255],
+      [255, 255, 0, 255],
+      [100, 0, 0, 255],
+      [0, 100, 0, 255],
+      [0, 0, 100, 255],
+      [100, 0, 100, 255],
+      [0, 100, 100, 255],
+      [100, 100, 0, 255],
+    ];
+    if (this.colorSeeds[seed] == null) {
+      this.colorSeeds[seed] = 0;
+    }
+    const id = this.colorSeeds[seed];
+    if (id < initialColors.length) {
+      this.colorSeeds[seed] += 1;
+      return initialColors[id];
+    }
+    /* eslint-disable no-bitwise */
+    const color = [
+      ((id >> 0) & 0xFF),
+      ((id >> 8) & 0xFF),
+      ((id >> 16) & 0xFF),
+      255,
+      // ((id >> 24) & 0xFF),
+    ];
+    /* eslint-enable no-bitwise */
+    if (
+      (color[0] === 255 || color[0] === 0 || color[0] === 100)
+      && (color[1] === 255 || color[1] === 0 || color[1] === 100)
+      && (color[2] === 255 || color[2] === 0 || color[2] === 100)
+      && (color[3] === 255 || color[3] === 0 || color[3] === 100)
+    ) {
+      for (let i = 0; i < initialColors.length; i += 1) {
+        if (
+          initialColors[i][0] === color[0]
+          && initialColors[i][1] === color[1]
+          && initialColors[i][2] === color[2]
+          && initialColors[i][3] === color[3]
+        ) {
+          this.colorSeeds[seed] += 1;
+          return this.getColor(seed);
+        }
+      }
+    }
+    this.colorSeeds[seed] += 1;
+    return color;
+  }
 }
 
 function generateUniqueId(seed: string = '') {
   return new UniqueIdGenerator().getId(seed);
-  // const randomString = s => `${s}${Math.floor(Math.random() * 1000000)}`;
-  // let seedToUse = seed;
-  // if (seedToUse.length === 0) {
-  //   seedToUse = 'id_random_';
-  // }
-  // let idExists = true;
-  // let newId = randomString(seedToUse);
-  // while (idExists) {
-  //   newId = randomString(seedToUse);
-  //   const element = document.getElementById(newId);
-  //   if (element == null) {
-  //     idExists = false;
-  //   }
-  // }
-  // return newId;
+}
+
+function generateUniqueColor(seed: string = '') {
+  return new UniqueIdGenerator().getColor(seed);
 }
 
 function isTouchDevice() {
@@ -1435,6 +1487,19 @@ class PerformanceTimer {
   }
 }
 
+/* eslint-disable no-bitwise, no-plusplus */
+function hash32(s: string) {
+  let hash = 0;
+  if (s.length === 0) return hash;
+  for (let i = 0; i < s.length; i++) {
+    const chr = s.charCodeAt(i);
+    hash = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+}
+/* eslint-enable no-bitwise, no-plusplus */
+
 export {
   diffPathsToObj, diffObjToPaths,
   Console,
@@ -1451,5 +1516,6 @@ export {
   NotificationManager,
   getFromObject,
   splitString, PerformanceTimer,
+  generateUniqueColor, hash32,
 };
 

@@ -1519,7 +1519,7 @@ export type EQN_SquareBracketSymbol = {
  *   make: 'equation',
  *   forms: {
  *     form1: { topComment: ['a', 'b', 'l1_line', 0.2, 0.2] },
- *     form2: { topComment: ['a', 'b', 'l1', 0.2, 0.2] },
+ *     form2: { topComment: ['c', 'd', 'l1', 0.2, 0.2] },
  *   },
  * });
  * eqn.animations.new()
@@ -1631,7 +1631,7 @@ export default class EquationSymbols {
   //     new Point(0, 0),
   //     1, 1, 0,
   //     color,
-  //     new Transform('vinculum').scale(1, 1).translate(0, 0),
+  //     new Transform().scale(1, 1).translate(0, 0),
   //   );
   // }
 
@@ -1649,10 +1649,8 @@ export default class EquationSymbols {
     return (new VinculumNew(
       this.shapes.webgl[0],
       optionsToUse.color,
-      new Transform('VinculumSymbol').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
+      new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     ));
   }
 
@@ -1671,10 +1669,8 @@ export default class EquationSymbols {
     return (new Box(
       this.shapes.webgl[0],
       optionsToUse.color,
-      new Transform('Box').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
+      new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     ));
   }
 
@@ -1692,8 +1688,7 @@ export default class EquationSymbols {
     return (new Line(
       this.shapes.webgl[0],
       optionsToUse.color,
-      new Transform('Line').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
+      new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
     ));
   }
@@ -1715,10 +1710,8 @@ export default class EquationSymbols {
     return (new Box(
       this.shapes.webgl[0],
       optionsToUse.color,
-      new Transform('TouchBox').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
+      new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     ));
   }
 
@@ -1743,10 +1736,8 @@ export default class EquationSymbols {
     return (new Arrow(
       this.shapes.webgl[0],
       optionsToUse.color,
-      new Transform('ArrowSymbol').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
+      new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     ));
   }
 
@@ -1766,10 +1757,8 @@ export default class EquationSymbols {
     return (new Sum(
       this.shapes.webgl[0],
       optionsToUse.color,
-      new Transform('sum').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
+      new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     ));
   }
 
@@ -1787,10 +1776,8 @@ export default class EquationSymbols {
     return (new Product(
       this.shapes.webgl[0],
       optionsToUse.color,
-      new Transform('Sum').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
+      new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     ));
   }
 
@@ -1818,11 +1805,9 @@ export default class EquationSymbols {
     return new Integral(
       this.shapes.webgl[0],
       optionsToUse.color,
-      new Transform('Integral').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
+      new Transform().scale(1, 1).translate(0, 0),
       // optionsToUse.staticSize,
       optionsToUse,
-      // 'triangles',
       // {
       //   lineWidth: optionsToUse.lineWidth,
       //   minLineWidth: optionsToUse.minLineWidth,
@@ -1872,10 +1857,8 @@ export default class EquationSymbols {
     return new Radical(
       this.shapes.webgl[0],
       optionsToUse.color,
-      new Transform('bracket').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
+      new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     );
   }
 
@@ -1894,10 +1877,8 @@ export default class EquationSymbols {
     return new Strike(
       this.shapes.webgl[0],
       optionsToUse.color,
-      new Transform('bracket').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
+      new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'triangles',
     );
     // let { color } = options;
     // if (color == null) {
@@ -1907,7 +1888,7 @@ export default class EquationSymbols {
     //   new Point(0, 0),
     //   1, 1, 0,
     //   color,
-    //   new Transform('strike').scale(1, 1).rotate(0).translate(0, 0),
+    //   new Transform().scale(1, 1).rotate(0).translate(0, 0),
     // );
   }
 
@@ -1916,14 +1897,14 @@ export default class EquationSymbols {
   //   if (color == null) {
   //     color = this.defaultColor;
   //   }
-  //   const cross = this.collections.collection(new Transform('xStrike')
+  //   const cross = this.collections.collection(new Transform()
   //     .scale(1, 1).rotate(0).translate(0, 0));
   //   cross.color = color;
   //   const strike1 = this.shapes.horizontalLine(
   //     new Point(0, 0),
   //     1, 1, 0,
   //     color,
-  //     new Transform('strikeLine').scale(1, 1).rotate(0).translate(0, 0),
+  //     new Transform().scale(1, 1).rotate(0).translate(0, 0),
   //   );
   //   const strike2 = strike1._dup();
   //   cross.add('s1', strike1);
@@ -1947,10 +1928,8 @@ export default class EquationSymbols {
     return (new Bracket(
       this.shapes.webgl[0],
       optionsToUse.color,
-      new Transform('bracket').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
+      new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     ));
   }
 
@@ -1967,10 +1946,8 @@ export default class EquationSymbols {
     return (new AngleBracket(
       this.shapes.webgl[0],
       optionsToUse.color,
-      new Transform('bar').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
+      new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     ));
   }
 
@@ -1990,10 +1967,8 @@ export default class EquationSymbols {
     return (new Brace(
       this.shapes.webgl[0],
       optionsToUse.color,
-      new Transform('brace').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
+      new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     ));
   }
 
@@ -2009,10 +1984,8 @@ export default class EquationSymbols {
     return (new Bar(
       this.shapes.webgl[0],
       optionsToUse.color,
-      new Transform('bar').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
+      new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     ));
   }
 
@@ -2035,10 +2008,8 @@ export default class EquationSymbols {
     return (new SquareBracket(
       this.shapes.webgl[0],
       optionsToUse.color,
-      new Transform('bar').scale(1, 1).translate(0, 0),
-      this.shapes.limits,
+      new Transform().scale(1, 1).translate(0, 0),
       optionsToUse,
-      // 'strip',
     ));
   }
 }

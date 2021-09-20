@@ -1,26 +1,26 @@
 /* globals Fig */
 
 const figure = new Fig.Figure({
-  limits: [-3, -3, 6, 6],
+  scene: [-3, -3, 3, 3],
   backgroundColor: [1, 1, 0.9, 1],
 });
-const { rand } = Fig.tools.math;
+const { rand } = Fig;
 
 // Vertex shader
 // Input attributes:
-//    - 'a_position' (vertex position)
+//    - 'a_vertex' (vertex position)
 //    - 'a_velocity: (vertex velocity)
 // Input uniforms:
 //    - u_time: time from start of animation
 const vertexShader = `
-attribute vec2 a_position;
+attribute vec2 a_vertex;
 attribute vec2 a_velocity;
-uniform mat3 u_matrix;
+uniform mat4 u_worldViewProjectionMatrix;
 uniform float u_time;
 void main() {
-  float x = a_position.x + a_velocity.x * u_time;
-  float y = a_position.y + a_velocity.y * u_time;
-  gl_Position = vec4((u_matrix * vec3(x, y, 1)).xy, 0, 1);
+  float x = a_vertex.x + a_velocity.x * u_time;
+  float y = a_vertex.y + a_velocity.y * u_time;
+  gl_Position = u_worldViewProjectionMatrix * vec4(x, y, 0, 1);
 }`;
 
 // Create vertices for 10,000 polygons. Each polygon is 20 triangles.
@@ -46,17 +46,18 @@ for (let i = 0; i < 10000; i += 1) {
 
 const element = figure.add({
   make: 'gl',
-  // Define the custom shader and variables (u_matrix is the element transform
-  // matrix)
+  // Define the custom shader and variables. u_worldViewProjectionMatrix is the
+  // element transform combined with the scene (projection and camera)
+  // matrix.
   vertexShader: {
     src: vertexShader,
-    vars: ['a_position', 'a_velocity', 'u_matrix', 'u_time'],
+    vars: ['a_vertex', 'a_velocity', 'u_worldViewProjectionMatrix', 'u_time'],
   },
   // Built in shader with one color for all vertices
-  fragShader: 'simple',
+  fragmentShader: 'simple',
   // Define buffers and uniforms
   vertices: { data: points },
-  buffers: [{ name: 'a_velocity', data: velocities }],
+  attributes: [{ name: 'a_velocity', data: velocities }],
   uniforms: [{ name: 'u_time' }],
   // Element color and mods
   color: [1, 0, 1, 0.5],

@@ -17,8 +17,9 @@ import type {
   OBJ_Font, OBJ_Font_Fixed, TypeDash,
 } from '../../tools/types';
 import type {
-  OBJ_Line, OBJ_TextLines, OBJ_Collection,
-} from '../FigurePrimitives/FigurePrimitives';
+  OBJ_Line, OBJ_TextLines,
+} from '../FigurePrimitives/FigurePrimitiveTypes2D';
+import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type FigureCollections from './FigureCollections';
 
 /**
@@ -559,8 +560,7 @@ class CollectionsAxis extends FigureElementCollection {
       // ticks: null,
       show: true,
       axis: 'x',
-      transform: new Transform('Axis').scale(1, 1).rotate(0).translate(0, 0),
-      limits: collections.primitives.limits,
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
     };
     let options = joinObjects({}, defaultOptions, optionsIn);
     super(options);
@@ -834,6 +834,7 @@ class CollectionsAxis extends FigureElementCollection {
       xAlign: this.axis === 'x' ? 'center' : 'right',
       yAlign: this.axis === 'x' ? 'baseline' : 'middle',
       rotation: 0,
+      offset: [0, 0],
     };
     let optionsToUse;
     if (Array.isArray(optionsIn)) {

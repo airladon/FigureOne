@@ -15,7 +15,7 @@ All examples are snippets which can be appended to the end of the `index.js` fil
 <body>
     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
     </div>
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.10.14/figureone.min.js'></script>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.11.0/figureone.min.js'></script>
     <script type="text/javascript" src='./index.js'></script>
 </body>
 </html>
@@ -23,7 +23,7 @@ All examples are snippets which can be appended to the end of the `index.js` fil
 
 ```javascript
 // index.js
-const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+const figure = new Fig.Figure({ scene: [-3, -3, 3, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 ```
 
 #### Quick Start
@@ -101,7 +101,7 @@ figure.add({
     [-2, -1], [-2, 1], [2, 1],
     [-2, -1], [2, 1], [2, -1],
   ],
-  drawType: 'triangles',
+  drawType: 'TRIANGLES',
 });
 ```
 
@@ -109,7 +109,7 @@ This method will be able to draw almost anything.
 
 However, for some shapes there are simpler ways to draw the same thing with fewer repeated vertices.
 
-##### drawType: 'strip'
+##### drawType: 'STRIP'
 
 A strip starts with one triangle, and then every subsequent vertex will create a triangle with the last two vertices.
 
@@ -123,17 +123,17 @@ figure.add({
     [-2, 1], [-2, -1], [2, 1],  // first triangle
     [2, -1],                    // second triangle formed with vertices 1 and 3
   ],
-  drawType: 'strip',
+  drawType: 'STRIP',
 });
 ```
 
 This method works well for continuous shapes, but will not work for shapes that have gaps.
 
-A good example of a shape that works with `'strip'` is below. The vertices are labeled in the order they would be defined.
+A good example of a shape that works with `'STRIP'` is below. The vertices are labeled in the order they would be defined.
 
 <p style="text-align: center"><img src="./tutorials/draw/strip.png"></p>
 
-##### drawType: 'fan'
+##### drawType: 'FAN'
 
 A fan starts with one point. The next two points create the first triangle, and then every subsequent point uses the first and last point to create the next triangle.
 
@@ -148,7 +148,7 @@ figure.add({
     [-2, 1], [2, 1],  // complete first triangle (vertices 2, 3)
     [2, -1],          // second triangle formed with first and last vertex (1, 3)
   ],
-  drawType: 'fan',
+  drawType: 'FAN',
 });
 ```
 
@@ -156,13 +156,13 @@ This method works for any shape that can be broken into triangles that all share
 
 <p style="text-align: center"><img src="./tutorials/draw/fan.png"></p>
 
-Note, `'strip'` can create any shape `'fan'` can, but it can be a little more involved. For instance, the shape above would need to duplicate one of the vertices to fully fill it:
+Note, `'STRIP'` can create any shape `'FAN'` can, but it can be a little more involved. For instance, the shape above would need to duplicate one of the vertices to fully fill it:
 
 <p style="text-align: center"><img src="./tutorials/draw/strip-fan.png"></p>
 
-##### drawType: 'lines'
+##### drawType: 'LINES'
 
-`'lines'` is the final style that WebGL accepts for drawing primitives. In this case vertex pairs are used to create lines.
+`'LINES'` is the final style that WebGL accepts for drawing primitives. In this case vertex pairs are used to create lines.
 
 This is not useful for drawing filled shapes, but is useful for drawing thin outlines.
 
@@ -177,6 +177,6 @@ figure.add({
     [2, 1], [2, -1],    // right edge
     [2, -1], [-2, -1],  // bottom edge
   ],
-  drawType: 'lines',
+  drawType: 'LINES',
 });
 ```

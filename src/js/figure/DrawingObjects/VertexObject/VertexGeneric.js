@@ -8,6 +8,7 @@ import WebGLInstance from '../../webgl/webgl';
 import GLObject from '../GLObject/GLObject';
 import { copyPoints } from '../../geometries/copy/copy';
 import type { CPY_Step } from '../../geometries/copy/copy';
+import type { TypeGLPrimitive } from '../../FigurePrimitives/FigurePrimitiveTypes';
 
 
 class VertexGeneric extends GLObject {
@@ -27,7 +28,6 @@ class VertexGeneric extends GLObject {
   constructor(
     webgl: WebGLInstance,
     // vertices: Array<Point>,
-    // drawType: 'triangles' | 'strip' | 'fan' | 'lines',
     textureLocation: string = '',
     textureVertexSpace: Rect = new Rect(-1, -1, 2, 2),
     textureCoords: Rect = new Rect(0, 0, 1, 1),
@@ -50,7 +50,7 @@ class VertexGeneric extends GLObject {
     // this.setupTexture(textureLocation, textureVertexSpace, textureCoords, textureRepeat);
     this.addVertices([]);
     if (textureLocation !== '') {
-      this.addTexture(textureLocation, textureVertexSpace, textureCoords, textureRepeat);
+      this.addTexture(textureLocation, textureVertexSpace, textureCoords, 'a_vertex', [], textureRepeat);
       // this.texOptions = {
       //   location: textureLocation,
       //   mapTo: textureVertexSpace,
@@ -88,7 +88,7 @@ class VertexGeneric extends GLObject {
   change(options: {
     points?: Array<Point>,
     copy?: Array<CPY_Step>,
-    drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
+    drawType?: TypeGLPrimitive,
     texture?: {
       location?: string,
       mapFrom?: Rect,
@@ -105,11 +105,11 @@ class VertexGeneric extends GLObject {
       this.vertices = points;
     }
     if (drawType != null) {
-      if (drawType === 'lines') {
+      if (drawType === 'LINES') {
         this.glPrimitive = this.gl.LINES;
-      } else if (drawType === 'strip') {
+      } else if (drawType === 'STRIP') {
         this.glPrimitive = this.gl.TRIANGLE_STRIP;
-      } else if (drawType === 'fan') {
+      } else if (drawType === 'FAN') {
         this.glPrimitive = this.gl.TRIANGLE_FAN;
       } else {
         this.glPrimitive = this.gl.TRIANGLES;
@@ -118,7 +118,10 @@ class VertexGeneric extends GLObject {
     if (copy != null) {
       this.copy = copy;
     }
-    const newVerts = copyPoints(this.vertices, this.copy);
+
+    const newVerts = this.vertices != null
+      ? copyPoints(this.vertices, this.copy)
+      : [new Point(0, 0)];
     const vertices = Array(newVerts.length * 2);
     for (let i = 0; i < newVerts.length; i += 1) {
       vertices[i * 2] = newVerts[i].x;
@@ -205,11 +208,6 @@ class VertexGeneric extends GLObject {
   //   //   this.touchBorder = this.border;
   //   // } else {
   //   //   this.touchBorder = touchBorder;
-  //   // }
-  //   // if (holeBorder === 'none') {
-  //   //   this.hole = [];
-  //   // } else {
-  //   //   this.hole = holeBorder;
   //   // }
   // }
 }

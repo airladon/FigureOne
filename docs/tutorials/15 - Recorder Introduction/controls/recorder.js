@@ -29,7 +29,7 @@ function addRecorder() {
       recorder.stopRecording();
     } else {
       const currentTime = recorder.getCurrentTime();
-      recorder.startRecording(currentTime, ['_autoSlide', '_autoCursor', '_autoTouch', '_autoCursorMove', '_autoExec']);
+      recorder.startRecording(currentTime, ['_autoSlide', '_autoCursor', '_autoTouch', '_autoCursorMove', '_autoExec', '_autoTouchDown']);
       if (currentTime === 0) {
         recorder.recordEvent('slide', ['goto', 0], 0);
       }

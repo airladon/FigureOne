@@ -233,11 +233,11 @@ describe('Equation Functions - Matrix', () => {
       functions.parameterSteps();
       eqn.showForm('base');
       figure.setFirstTransform();
-      baseA = eqn._a.getBoundingRect('figure');
-      baseB = eqn._b.getBoundingRect('figure');
-      baseC = eqn._c.getBoundingRect('figure');
-      baseD = eqn._d.getBoundingRect('figure');
-      baseLeft = eqn._left.getBoundingRect('figure');
+      baseA = eqn._a.getBoundingRect('local');
+      baseB = eqn._b.getBoundingRect('local');
+      baseC = eqn._c.getBoundingRect('local');
+      baseD = eqn._d.getBoundingRect('local');
+      baseLeft = eqn._left.getBoundingRect('local');
       initialSpace = 0.1;
       insideSpace = 0.1;
       scale = 0.5;
@@ -246,10 +246,10 @@ describe('Equation Functions - Matrix', () => {
     test('Row Vector', () => {
       eqn.showForm('rowVector');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newC = eqn._c.getBoundingRect('figure');
-      const newD = eqn._d.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newC = eqn._c.getBoundingRect('local');
+      const newD = eqn._d.getBoundingRect('local');
       expect(round(newA.left)).toBe(round(baseLeft.right + insideSpace));
       expect(round(newB.left)).toBe(round(newA.right + initialSpace));
       expect(round(newC.left)).toBe(round(newB.right + initialSpace));
@@ -261,10 +261,10 @@ describe('Equation Functions - Matrix', () => {
     test('Column Vector', () => {
       eqn.showForm('columnVector');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newC = eqn._c.getBoundingRect('figure');
-      const newD = eqn._d.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newC = eqn._c.getBoundingRect('local');
+      const newD = eqn._d.getBoundingRect('local');
       expect(round(newA.left)).toBe(round(baseLeft.right + insideSpace));
       expect(round(newB.left)).toBe(round(newA.left));
       expect(round(newC.left)).toBe(round(newB.left));
@@ -276,10 +276,10 @@ describe('Equation Functions - Matrix', () => {
     test('Scale', () => {
       eqn.showForm('scale');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newC = eqn._c.getBoundingRect('figure');
-      const newD = eqn._d.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newC = eqn._c.getBoundingRect('local');
+      const newD = eqn._d.getBoundingRect('local');
       expect(round(newA.height)).toBe(round(baseA.height * scale));
       expect(round(newB.height)).toBe(round(baseB.height * scale));
       expect(round(newC.height)).toBe(round(baseC.height * scale));
@@ -290,25 +290,25 @@ describe('Equation Functions - Matrix', () => {
       figure.setFirstTransform();
       // in this case the height of the b or d is the max dimension so the width
       // of all columns becomes it.
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
       expect(round(newA.left))
         .toBe(round(baseLeft.right + initialSpace + (newB.height - newA.width) / 2));
     });
     test('Space', () => {
       eqn.showForm('space');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newD = eqn._d.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newD = eqn._d.getBoundingRect('local');
       expect(round(newB.left)).toBe(round(newA.right + space.x));
       expect(round(newB.bottom)).toBe(round(newD.top + space.y));
     });
     test('yAlign', () => {
       eqn.showForm('yAlign');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
       expect(round(newA.bottom))
         .toBe(round(newB.bottom + (newB.height - newA.height) / 2));
     });

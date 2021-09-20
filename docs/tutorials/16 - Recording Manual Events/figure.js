@@ -5,14 +5,13 @@ const figure = new Fig.Figure();
 figure.add({
   name: 'ball',
   make: 'primitives.polygon',
-  options: {
-    radius: 0.3,
-    sides: 100,
-    color: [1, 0, 0, 1],
-  },
-  mods: {
-    isMovable: true,
-    move: { bounds: 'figure' },
+  radius: 0.3,
+  sides: 100,
+  color: [1, 0, 0, 1],
+  move: {
+    bounds: {
+      left: -0.7, bottom: -0.7, top: 0.7, right: 0.7,
+    },
   },
 });
 

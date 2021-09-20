@@ -60,6 +60,7 @@ describe('Equation Symbols - Radical', () => {
         draw: 'dynamic',
       },
     };
+    // eqn = figure.add({ make: 'equation', color: color1 });
     eqn = new Equation(figure.shapes, { color: color1 });
     eqn.addElements(elements);
     eqn.addForms({ default: { content: { root: ['rad', 'a', true, space] }, scale: 1 } });
@@ -69,8 +70,8 @@ describe('Equation Symbols - Radical', () => {
   test('Default', () => {
     eqn.showForm('default');
     figure.setFirstTransform();
-    const a = eqn._a.getBoundingRect('figure');
-    const rad = eqn._rad.getBoundingRect('figure');
+    const a = eqn._a.getBoundingRect('local');
+    const rad = eqn._rad.getBoundingRect('local');
     expect(round(rad.height)).toBe(round(a.height + space * 2 + lineWidth));
     const h = rad.height;
 
@@ -98,8 +99,8 @@ describe('Equation Symbols - Radical', () => {
   test('Not Proportaional', () => {
     eqn.showForm('notProportional');
     figure.setFirstTransform();
-    const a = eqn._a.getBoundingRect('figure');
-    const rad = eqn._rad1.getBoundingRect('figure');
+    const a = eqn._a.getBoundingRect('local');
+    const rad = eqn._rad1.getBoundingRect('local');
     expect(round(rad.height)).toBe(round(a.height + space * 2 + lineWidth));
     const startHeight = eqn._rad1.drawingObject.points[5];
     expect(round(startHeight)).toBe(round(0.03));

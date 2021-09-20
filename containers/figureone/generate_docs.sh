@@ -1,4 +1,4 @@
-documentation build src/index.js -f html -o ./docs/api --config documentation.yml
+documentation build src/** -f html -o ./docs/api --config documentation.yml
 
 cat docs/api/assets/style.css docs/api/custom.css > docs/api/assets/style1.css
 mv docs/api/assets/style1.css docs/api/assets/style.css

@@ -7,6 +7,9 @@ import {
 import { round } from '../../../tools/math';
 import DrawingObject from '../DrawingObject';
 import type { TypeColor } from '../../../tools/types';
+import * as m3 from '../../../tools/m3';
+import type { Type3DMatrix } from '../../../tools/m3';
+import type Scene from '../../../tools/geometry/scene';
 
 
 class HTMLObject extends DrawingObject {
@@ -78,12 +81,14 @@ class HTMLObject extends DrawingObject {
   getBoundaries(): Array<Array<Point>> {
     const parentRect = this.parentDiv.getBoundingClientRect();
     const glSpace = {
-      x: { bottomLeft: -1, width: 2 },
-      y: { bottomLeft: -1, height: 2 },
+      x: { min: -1, span: 2 },
+      y: { min: -1, span: 2 },
+      z: { min: -1, span: 2 },
     };
     const pixelSpace = {
-      x: { bottomLeft: 0, width: parentRect.width },
-      y: { bottomLeft: parentRect.height, height: -parentRect.height },
+      x: { min: 0, span: parentRect.width },
+      y: { min: parentRect.height, span: -parentRect.height },
+      z: { min: -1, span: 2 },
     };
     const pixelToGLTransform = spaceToSpaceTransform(pixelSpace, glSpace);
 
@@ -109,7 +114,7 @@ class HTMLObject extends DrawingObject {
   }
 
   // $FlowFixMe
-  change(newHtml: string | HTMLElement, lastDrawTransformMatrix: Array<number>) {
+  change(newHtml: string | HTMLElement, lastDrawTransformMatrix: Type3DMatrix) {
     let element = newHtml;
     if (typeof newHtml === 'string') {
       element = document.createElement('div');
@@ -122,7 +127,7 @@ class HTMLObject extends DrawingObject {
     }
   }
 
-  transformHtml(transformMatrix: Array<number>, opacity: number = 1) {
+  transformHtml(transformMatrix: Type3DMatrix, opacity: number = 1) {
     if (this.show) {
       const glLocation = this.location.transformBy(transformMatrix);
       const pixelLocation = this.glToPixelSpace(glLocation);
@@ -156,15 +161,16 @@ class HTMLObject extends DrawingObject {
     }
   }
 
-  drawWithTransformMatrix(transformMatrix: Array<number>, color: TypeColor) {
+  drawWithTransformMatrix(scene: Scene, worldMatrix: Type3DMatrix, color: TypeColor) {
     let isDifferent = false;
+    const transformMatrix = m3.transpose(m3.mul(scene.viewProjectionMatrix, worldMatrix));
     for (let i = 0; i < transformMatrix.length; i += 1) {
       if (round(transformMatrix[i], 8) !== this.lastMatrix[i]) {
         isDifferent = true;
       }
     }
     if (isDifferent || this.lastColor[3] !== round(color[3], 8)) {
-      this.transformHtml(transformMatrix, color[3]);
+      this.transformHtml(transformMatrix, color[3]); // $FlowFixMe
       this.lastMatrix = round(transformMatrix, 8);
       this.lastColor = round(color, 8);
     }

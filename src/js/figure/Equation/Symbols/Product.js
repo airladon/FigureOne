@@ -9,7 +9,7 @@ import Symbol from './SymbolNew';
 export default class Product extends Symbol {
   // eslint-disable-next-line class-methods-use-this
   // getTriangles() {
-  //   return 'strip';
+  //   return 'STRIP';
   // }
 
   // eslint-disable-next-line class-methods-use-this
@@ -196,7 +196,7 @@ export default class Product extends Symbol {
       ...transition,
       ...leg2,
     ];
-    return [points, width, height, 'strip'];
+    return [points, width, height, 'STRIP'];
   }
 
   // Linewidths that look good:

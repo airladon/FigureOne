@@ -5,7 +5,7 @@ describe('Shaders', () => {
     const shaders = getShaders('simple', 'simple');
     expect(typeof shaders.vertexSource).toBe('string');
     expect(typeof shaders.fragmentSource).toBe('string');
-    const vNames = ['a_position', 'u_matrix', 'u_z', 'u_color'];
+    const vNames = ['a_vertex', 'u_worldViewProjectionMatrix', 'u_color'];
     expect(shaders.vars).toEqual(vNames);
   });
 });

@@ -50,7 +50,6 @@ describe('Generic', () => {
           points: [[0, 0], [1, 0], [0, 1]],
           border: 'points',
           touchBorder: 'border',
-          hole: 'none',
         },
       },
     };
@@ -81,7 +80,6 @@ describe('Generic', () => {
       new Point(1, 0),
       new Point(0, 1),
     ]]);
-    expect(g.getBorder('draw', 'holeBorder')).toEqual([[]]);
   });
   describe('Different Borders', () => {
     let tri;
@@ -159,13 +157,6 @@ describe('Generic', () => {
       g.border = [[new Point(0, 0)]];
       g.touchBorder = 'border';
       expect(round(g.getBorder('draw', 'touchBorder')[0])).toEqual([new Point(0, 0)]);
-    });
-    test('hole: default', () => {
-      expect(round(g.getBorder('draw', 'holeBorder')[0])).toEqual([]);
-    });
-    test('hole: custom', () => {
-      g.holeBorder = [[new Point(0, 0)]];
-      expect(round(g.getBorder('draw', 'holeBorder')[0])).toEqual([new Point(0, 0)]);
     });
   });
   test('Color', () => {

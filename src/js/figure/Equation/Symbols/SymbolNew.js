@@ -1,7 +1,7 @@
 // @flow
 import { FigureElementPrimitive } from '../../Element';
 import {
-  Point, Transform, Rect, getBoundingBorder, getBorder,
+  Point, Transform, getBoundingBorder, getBorder,
 } from '../../../tools/g2';
 import {
   duplicate,
@@ -20,9 +20,7 @@ export default class Symbol extends FigureElementPrimitive {
     webgl: WebGLInstance,
     color: TypeColor,
     transformOrLocation: Transform | Point,
-    figureLimits: Rect,
     symbolOptions: Object,
-    // triangles: 'strip' | 'triangles' | 'fan',
   ) {
     const vertexObject = new VertexGeneric(webgl);
 
@@ -30,9 +28,9 @@ export default class Symbol extends FigureElementPrimitive {
     if (transformOrLocation instanceof Transform) {
       initialT = transformOrLocation;
     } else {
-      initialT = new Transform('Symbol').scale(1, 1).translate(0, 0);
+      initialT = new Transform().scale(1, 1).translate(0, 0);
     }
-    super(vertexObject, initialT, color, figureLimits);
+    super(vertexObject, initialT, color);
     if (symbolOptions.touchBorder != null) {
       this.touchBorder = symbolOptions.touchBorder;
     }
@@ -89,7 +87,7 @@ export default class Symbol extends FigureElementPrimitive {
         let points = [];
         let width = 0;
         let height = 0;
-        let drawType = 'strip';
+        let drawType = 'STRIP';
         if (
           this._custom.options.staticHeight === 'first'
           || this._custom.options.staticWidth === 'first'
@@ -114,7 +112,7 @@ export default class Symbol extends FigureElementPrimitive {
         this.updateSymbol(points, width, height, drawType);
         this._custom.options.staticHeight = height;
         this._custom.options.staticWidth = width;
-        t.updateScale(width, height);
+        t.updateScale([width, height]);
       } else {
         const [
           pointsNew, widthNew, heightNew, drawType,
@@ -128,9 +126,9 @@ export default class Symbol extends FigureElementPrimitive {
         // $FlowFixMe
         this.updateSymbol(pointsNew, widthNew, heightNew, drawType);
         this._custom.scale = new Point(widthIn, heightIn);
-        t.updateScale(widthIn, heightIn);
+        t.updateScale([widthIn, heightIn]);
       }
-      t.updateTranslation(location.x, location.y);
+      t.updateTranslation([location.x, location.y]);
       this.setTransform(t);
     };
 
@@ -155,7 +153,7 @@ export default class Symbol extends FigureElementPrimitive {
     pointsIn: Array<Point>,
     width: number,
     height: number,
-    drawType: 'strip' | 'triangles' | 'fan',
+    drawType: 'STRIP' | 'TRIANGLES' | 'FAN',
   ) {
     this.drawingObject.change({ points: pointsIn, drawType });
     this.drawBorder = [[
@@ -191,15 +189,15 @@ export default class Symbol extends FigureElementPrimitive {
       const t = this.transform._dup();
       const s = t.s();
       if (s != null) {
-        t.updateScale(
+        t.updateScale([
           s.x / this._custom.options.staticWidth,
           s.y / this._custom.options.staticHeight,
-        );
+        ]);
       }
       return t;
     }
     const t = this.transform._dup();
-    t.updateScale(1, 1);
+    t.updateScale([1, 1]);
     return t;
   }
 
@@ -294,7 +292,7 @@ export default class Symbol extends FigureElementPrimitive {
       new Point(0, height),
     ];
 
-    return [points, width, height, 'strip'];
+    return [points, width, height, 'STRIP'];
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars

@@ -39,11 +39,10 @@ figures. Several methods are returned from the function (exposed globally) so
 links within the text can pulse or select parts of the figure.
 */
 function fig4() {
-  const { Point } = Fig;
-  const { range } = Fig.tools.math;
+  const { Point, range } = Fig;
 
   const fig = new Fig.Figure({
-    limits: [-1.9, -0.8, 4 * 0.95, 2],
+    scene: [-1.9, -0.8, -1.9 + 4 * 0.95, -0.8 + 2],
     htmlId: 'figureOneContainer4',
     color: [0.4, 0.4, 0.4, 1],
   });
@@ -210,7 +209,7 @@ function fig4() {
   // in their direction will not result in meaningful change to the variable.
   mover.notifications.add('setTransform', () => {
     const p = mover.getPosition();
-    mover.transform.updateTranslation(0, 0);
+    mover.transform.updateTranslation([0, 0]);
     if (selected == null) {
       return;
     }

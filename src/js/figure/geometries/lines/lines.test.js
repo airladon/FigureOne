@@ -31,7 +31,9 @@ describe('Tools Lines', () => {
     });
     test('simple negative 45º', () => {
       const line1 = new Line(new Point(0, 0), new Point(0, 1));
-      const line2 = new Line(line1.p2._dup(), 1, Math.PI / 2 - Math.PI / 4 * 3);
+      const line2 = new Line({
+        p1: line1.p2._dup(), length: 1, angle: Math.PI / 2 - Math.PI / 4 * 3,
+      });
       const offsetLine1 = line1.offset('negative', 0.1);
       const offsetLine2 = line2.offset('negative', 0.1);
       const [tris] = makePolyLine(
@@ -62,7 +64,7 @@ describe('Tools Lines', () => {
     });
     describe('Negative', () => {
       test('Unclosed', () => {
-        const [tris, border, , hole] = makePolyLine(points, 0.1, false, 'negative', 'none');
+        const [tris, border] = makePolyLine(points, 0.1, false, 'negative', 'none');
         const line1 = getBoundingRect(tris.slice(0, 6));
         const line2 = getBoundingRect(tris.slice(6, 12));
         const line3 = getBoundingRect(tris.slice(12));
@@ -92,7 +94,6 @@ describe('Tools Lines', () => {
           new Point(1, 0),
           new Point(0, 0),
         ]);
-        expect(hole).toEqual([[]]);
       });
       test('closed', () => {
         // const out = makePolyLine(points, 0.1, true, 'outside', 'none');
@@ -311,7 +312,7 @@ describe('Tools Lines', () => {
 //     make: 'shapes.generic',
 //     options: {
 //       points: out,
-//       drawType: 'triangles',
+//       drawType: 'TRIANGLES',
 //       position: [-0.7, -0.5],
 //     },
 //   },

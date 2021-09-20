@@ -97,17 +97,17 @@ describe('Equation Functions - Scale', () => {
       functions.parameterSteps();
       eqn.showForm('base');
       figure.setFirstTransform();
-      baseA = eqn._a.getBoundingRect('figure');
-      baseB = eqn._b.getBoundingRect('figure');
-      baseC = eqn._c.getBoundingRect('figure');
+      baseA = eqn._a.getBoundingRect('local');
+      baseB = eqn._b.getBoundingRect('local');
+      baseC = eqn._c.getBoundingRect('local');
       scale = 0.5;
     });
     test('Scale', () => {
       eqn.showForm('scale');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newC = eqn._c.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newC = eqn._c.getBoundingRect('local');
       expect(round(newA.left)).toEqual(round(baseA.left));
       expect(round(newA.width)).toEqual(round(baseA.width));
       expect(round(newB.left)).toEqual(round(baseB.left));

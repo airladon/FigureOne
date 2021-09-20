@@ -1,13 +1,20 @@
 // @flow
 
 // import * as g2 from '../g2';
-import * as m2 from '../../../tools/m2';
+// import { round } from '../../../tools/math';
+import * as m3 from '../../../tools/m3';
+// import type Scene from '../../Figure';
+import Scene from '../../../tools/geometry/scene';
+import type { Type3DMatrix } from '../../../tools/m3';
 import WebGLInstance from '../../webgl/webgl';
-import { Rect } from '../../../tools/g2';
+import type { TypeFragmentShader, TypeVertexShader } from '../../webgl/shaders';
+import { Rect, getPoint, getRect } from '../../../tools/g2';
 // import type { TypeParsablePoint } from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
 // import type { CPY_Step } from '../../geometries/copy/copy';
 import type { TypeColor } from '../../../tools/types';
+import { colorToInt } from '../../../tools/color';
+import { Console } from '../../../tools/tools';
 
 /**
  * `'BYTE' | 'UNSIGNED_BYTE' | 'SHORT' | 'UNSIGNED_SHORT' | 'FLOAT'`
@@ -20,9 +27,9 @@ export type TypeGLBufferType = 'BYTE' | 'UNSIGNED_BYTE' | 'SHORT' | 'UNSIGNED_SH
 export type TypeGLBufferUsage = 'STATIC' | 'DYNAMIC';
 
 /**
- * `'FLOAT' | 'FLOAT_ARRAY' | 'INT' | 'INT_ARRAY'`
+ * `'FLOAT' | 'FLOAT_VECTOR' | 'INT' | 'INT_VECTOR'`
  */
-export type TypeGLUniform = 'FLOAT' | 'FLOAT_ARRAY' | 'INT' | 'INT_ARRAY';
+export type TypeGLUniform = 'FLOAT' | 'FLOAT_VECTOR' | 'INT' | 'INT_VECTOR';
 
 /**
  * FigureElementPrimitive that can be used to utilize custom shaders for WebGL.
@@ -48,8 +55,8 @@ class GLObject extends DrawingObject {
     data?: ?Image,
   };
 
-  buffers: {
-    [bufferName: string]: {
+  attributes: {
+    [attributeName: string]: {
       buffer: WebGLBuffer,
       size: number,
       type: number,
@@ -57,6 +64,8 @@ class GLObject extends DrawingObject {
       stride: number,
       offset: number,
       usage: number,
+      data: Array<number>
+      // len: number,
     };
   };
 
@@ -74,13 +83,18 @@ class GLObject extends DrawingObject {
   state: 'loading' | 'loaded';
 
   programIndex: number;
+  selectorProgramIndex: number;
   onLoad: ?(() => void);
 
 
   constructor(
     webgl: WebGLInstance,
-    vertexShader: string | { src: string, vars: Array<string> } | Array<string | number | boolean> = 'withTexture',
-    fragmentShader: string | { src: string, vars: Array<string> } | Array<string | number | boolean> = 'withTexture',
+    vertexShader: TypeVertexShader = {
+      color: 'uniform', dimension: 2, normals: false, light: null,
+    },
+    fragmentShader: TypeFragmentShader = { color: 'uniform', light: null },
+    selectorVertexShader: TypeVertexShader = 'selector',
+    selectorFragShader: TypeFragmentShader = 'selector',
   ) {
     super();
     this.gl = webgl.gl;
@@ -89,20 +103,35 @@ class GLObject extends DrawingObject {
     this.z = 0;
     this.programIndex = this.webgl.getProgram(vertexShader, fragmentShader);
     this.type = 'glPrimitive';
-    this.buffers = {};
+    this.attributes = {};
     this.numVertices = 0;
     this.uniforms = {};
     this.texture = null;
+    this.selectorProgramIndex = this.webgl.getProgram(selectorVertexShader, selectorFragShader);
   }
 
-  setPrimitive(primitiveType: 'TRIANGLES' | 'POINTS' | 'TRIANGLE_FAN' | 'TRIANGLE_STRIP' | 'LINES' | 'LINE_LOOP' | 'LINE_STRIP') {
+  showShaders() {
+    Console(this.webgl.programs[this.programIndex].vertexShader.src);
+    Console(this.webgl.programs[this.programIndex].fragmentShader.src);
+  }
+
+  showSelectorShaders() {
+    Console(this.webgl.programs[this.selectorProgramIndex].vertexShader.src);
+    Console(this.webgl.programs[this.selectorProgramIndex].fragmentShader.src);
+  }
+
+  getCanvas() {
+    return this.gl.canvas;
+  }
+
+  setPrimitive(primitiveType: 'TRIANGLES' | 'POINTS' | 'TRIANGLE_FAN' | 'TRIANGLE_STRIP' | 'LINES' | 'LINE_LOOP' | 'LINE_STRIP' | 'FAN' | 'STRIP') {
     if (primitiveType === 'TRIANGLES') {
       this.glPrimitive = this.gl.TRIANGLES;
     } else if (primitiveType === 'LINES') {
       this.glPrimitive = this.gl.LINES;
-    } else if (primitiveType === 'TRIANGLE_FAN') {
+    } else if (primitiveType === 'TRIANGLE_FAN' || primitiveType === 'FAN') {
       this.glPrimitive = this.gl.TRIANGLE_FAN;
-    } else if (primitiveType === 'TRIANGLE_STRIP') {
+    } else if (primitiveType === 'TRIANGLE_STRIP' || primitiveType === 'STRIP') {
       this.glPrimitive = this.gl.TRIANGLE_STRIP;
     } else if (primitiveType === 'POINTS') {
       this.glPrimitive = this.gl.POINTS;
@@ -111,7 +140,7 @@ class GLObject extends DrawingObject {
     } else if (primitiveType === 'LINE_STRIP') {
       this.glPrimitive = this.gl.LINE_STRIP;
     } else {
-      throw new Error(`Primitive type can only be ['TRIANGLES' | 'POINTS' | 'TRIANGLE_FAN' | 'TRIANGLE_STRIP' | 'LINES' | 'LINE_LOOP' | 'LINE_STRIP']. Input primitive type was: '${primitiveType}'`);
+      throw new Error(`Primitive type can only be ['TRIANGLES' | 'POINTS' | 'TRIANGLE_FAN' | 'TRIANGLE_STRIP' | 'LINES' | 'LINE_LOOP' | 'LINE_STRIP']. Input primitive type was: ${primitiveType}`);
     }
   }
 
@@ -133,6 +162,7 @@ class GLObject extends DrawingObject {
     if (texture != null) {
       const { index } = webgl.textures[texture.id];
       gl.activeTexture(gl.TEXTURE0 + index);
+      // console.log(glTexture)
       gl.bindTexture(gl.TEXTURE_2D, glTexture);
       gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
       gl.texImage2D(
@@ -159,7 +189,7 @@ class GLObject extends DrawingObject {
     }
   }
 
-  updateTextureMap() {
+  updateTextureMap(points: Array<number> = []) {
     const { texture } = this;
     if (texture == null) {
       return;
@@ -168,12 +198,16 @@ class GLObject extends DrawingObject {
       this.gl.deleteBuffer(texture.buffer);
       texture.buffer = this.gl.createBuffer();
     }
-    this.createTextureMap(
-      texture.mapTo.left, texture.mapTo.right,
-      texture.mapTo.bottom, texture.mapTo.top,
-      texture.mapFrom.left, texture.mapFrom.right,
-      texture.mapFrom.bottom, texture.mapFrom.top,
-    );
+    if (points.length === 0) {
+      this.createTextureMap(
+        texture.mapTo.left, texture.mapTo.right,
+        texture.mapTo.bottom, texture.mapTo.top,
+        texture.mapFrom.left, texture.mapFrom.right,
+        texture.mapFrom.bottom, texture.mapFrom.top,
+      );
+    } else {
+      texture.points = points;
+    }
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, texture.buffer);
     this.gl.bufferData(
       this.gl.ARRAY_BUFFER,
@@ -188,27 +222,29 @@ class GLObject extends DrawingObject {
    */
   addTexture(
     location: string,
-    mapTo: Rect = new Rect(-1, -1, 2, 2),
     mapFrom: Rect = new Rect(0, 0, 1, 1),
+    mapTo: Rect = new Rect(-1, -1, 2, 2),
+    mapToBuffer: string = 'a_vertex',
+    points: Array<number> = [],
     repeat: boolean = false,
-    onLoad?: null | () => void = null,
+    onLoad: null | (() => void) = null,
+    loadColor: TypeColor = [0, 0, 1, 0.5],
   ) {
     if (this.texture == null) {
       this.texture = {
         id: location,
-        mapTo,
-        mapFrom,
+        mapTo: getRect(mapTo),
+        mapFrom: getRect(mapFrom),
         repeat,
         src: location,
         points: [],
         buffer: this.gl.createBuffer(),
         type: 'image',
         data: null,
+        mapToBuffer,
       };
     }
-    if (onLoad != null) {
-      this.onLoad = onLoad;
-    }
+    this.onLoad = onLoad;
 
     const { texture, gl, webgl } = this;
     if (texture == null) {
@@ -216,7 +252,7 @@ class GLObject extends DrawingObject {
     }
 
     // $FlowFixMe
-    this.updateTextureMap();
+    this.updateTextureMap(points);
     // gl.bindBuffer(gl.ARRAY_BUFFER, texture.buffer);
     // gl.bufferData(
     //   gl.ARRAY_BUFFER,
@@ -241,7 +277,7 @@ class GLObject extends DrawingObject {
         // Fill the texture with a 1x1 blue pixel.
         gl.texImage2D(
           gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0,
-          gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 0]),
+          gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(colorToInt(loadColor)),
         );
         const image = new Image();
         image.src = src;
@@ -303,11 +339,18 @@ class GLObject extends DrawingObject {
     const texWidth = xMaxTex - xMinTex;
     const texHeight = yMaxTex - yMinTex;
     const { texture } = this;
+    if (texture == null) {
+      return;
+    } // $FlowFixMe
+    const buffer = this.attributes[texture.mapToBuffer];
+    if (buffer == null) { // $FlowFixMe
+      throw new Error(`FigureOne mapToAttribute buffer ('${texture.mapToBuffer}') does not exist. Available attributes: ${JSON.stringify(Object.keys(this.attributes))}.`);
+    }
     if (texture != null) {
       texture.points = [];
-      for (let i = 0; i < this.points.length; i += 2) {
-        const x = this.points[i];
-        const y = this.points[i + 1];
+      for (let i = 0; i < buffer.data.length; i += buffer.size) {
+        const x = buffer.data[i];
+        const y = buffer.data[i + 1];
         const texNormX = (x - xMinGL) / glWidth;
         const texNormY = (y - yMinGL) / glHeight;
         texture.points.push(texNormX * texWidth + xMinTex);
@@ -316,13 +359,35 @@ class GLObject extends DrawingObject {
     }
   }
 
-  addVertices(vertices: Array<number>, usage: TypeGLBufferUsage = 'STATIC') {
+  addVertices(vertices: Array<number>, dimension: 2 | 3 = 2, usage: TypeGLBufferUsage = 'STATIC') {
     this.points = vertices;
-    this.addBuffer('a_position', 2, vertices, 'FLOAT', false, 0, 0, usage);
-    this.numVertices = vertices.length / 2;
+    this.addAttribute('a_vertex', dimension, vertices, 'FLOAT', false, 0, 0, usage);
+    // this.numVertices = vertices.length / 2;
   }
 
-  addBuffer(
+  addVertices3(vertices: Array<number>, usage: TypeGLBufferUsage = 'STATIC') {
+    this.points = vertices;
+    this.addAttribute('a_vertex', 3, vertices, 'FLOAT', false, 0, 0, usage);
+    // this.numVertices = vertices.length / 3;
+  }
+
+  addNormals(normals: Array<number>, usage: TypeGLBufferUsage = 'STATIC') {
+    this.addAttribute('a_normal', 3, normals, 'FLOAT', false, 0, 0, usage);
+  }
+
+  addColors(colors: Array<number>, normalized: boolean = false, usage: TypeGLBufferUsage = 'STATIC') {
+    if (normalized) {
+      this.addAttribute('a_color', 4, colors, 'UNSIGNED_BYTE', true, 0, 0, usage);
+    } else {
+      this.addAttribute('a_color', 4, colors, 'FLOAT', false, 0, 0, usage);
+    }
+  }
+
+  // addColorsNorm(colors: Array<number>, usage: TypeGLBufferUsage = 'STATIC') {
+  //   this.addAttribute('a_color', 4, colors, 'UNSIGNED_BYTE', true, 0, 0, usage);
+  // }
+
+  addAttribute(
     name: string,
     size: number,
     data: Array<number>,
@@ -349,9 +414,9 @@ class GLObject extends DrawingObject {
     } else if (typeIn === 'UNSIGNED_SHORT') {
       type = gl.UNSIGNED_SHORT;
     } else {
-      throw new Error(`GLObject addBuffer usage needs to be FLOAT, BYTE, SHORT, UNSIGNED_BYTE or UNSIGNED_SHORT - received: "${typeIn}"`);
+      throw new Error(`GLObject addAttribute usage needs to be FLOAT, BYTE, SHORT, UNSIGNED_BYTE or UNSIGNED_SHORT - received: "${typeIn}"`);
     }
-    this.buffers[name] = {
+    this.attributes[name] = {
       // buffer: gl.createBuffer(),
       buffer: null,
       size,
@@ -360,7 +425,19 @@ class GLObject extends DrawingObject {
       stride,
       offset,
       usage,
+      // len: data.length,
+      data,
     };
+    const numVertices = data.length / size;
+    if (this.numVertices !== 0 && numVertices !== this.numVertices) {
+      throw new Error(`Figure One Error: Adding GL attribute ${name} with wrong length (${numVertices} vertices) when previously defined attributes used ${this.numVertices} vertices`);
+    }
+    if (this.numVertices === 0) {
+      this.numVertices = numVertices;
+    }
+    if (name === 'a_vertex') {
+      this.points = data;
+    }
     this.fillBuffer(name, data);
   }
 
@@ -370,7 +447,7 @@ class GLObject extends DrawingObject {
   ) {
     const { gl } = this;
     let processedData;
-    const { type, usage } = this.buffers[name];
+    const { type, usage } = this.attributes[name];
     if (type === gl.FLOAT) {
       processedData = new Float32Array(data);
     } else if (type === gl.UNSIGNED_BYTE) {
@@ -382,8 +459,8 @@ class GLObject extends DrawingObject {
     } else if (type === gl.UNSIGNED_SHORT) {
       processedData = new Uint16Array(data);
     }
-    this.buffers[name].buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers[name].buffer);
+    this.attributes[name].buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.attributes[name].buffer);
     gl.bufferData(gl.ARRAY_BUFFER, processedData, usage);
   }
 
@@ -413,24 +490,35 @@ class GLObject extends DrawingObject {
 
   resetBuffers() {
     const { gl } = this;
-    Object.keys(this.buffers).forEach((bufferName) => {
-      gl.deleteBuffer(this.buffers[bufferName].buffer);
-      this.buffers[bufferName].buffer = null;
+    Object.keys(this.attributes).forEach((attributeName) => {
+      gl.deleteBuffer(this.attributes[attributeName].buffer);
+      this.attributes[attributeName].buffer = null;
     });
-    this.buffers = {};
+    this.attributes = {};
     this.resetTextureBuffer();
   }
 
   updateVertices(vertices: Array<number>) {
     this.points = vertices;
-    this.numVertices = vertices.length / 2;
-    this.updateBuffer('a_position', vertices);
+    this.updateAttribute('a_vertex', vertices);
   }
 
-  updateBuffer(name: string, data: Array<number>) {
-    this.gl.deleteBuffer(this.buffers[name].buffer);
-    this.buffers[name].buffer = null;
+  updateVertices3(vertices: Array<number>) {
+    this.points = vertices;
+    // this.numVertices = vertices.length / 3;
+    this.updateAttribute('a_vertex', vertices);
+  }
+
+  updateAttribute(name: string, data: Array<number>) {
+    this.gl.deleteBuffer(this.attributes[name].buffer);
+    this.attributes[name].buffer = null;
     this.fillBuffer(name, data);
+    this.attributes[name].data = data;
+    // this.attributes[name].len = data.length;
+    this.numVertices = this.attributes[name].data.length / this.attributes[name].size;
+    if (name === 'a_vertex') {
+      this.points = data;
+    }
   }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
@@ -546,37 +634,111 @@ class GLObject extends DrawingObject {
   }
 
   drawWithTransformMatrix(
-    transformMatrix: Array<number>,
+    scene: Scene,
+    worldMatrix: Type3DMatrix,
     color: TypeColor,
     numDrawVertices: number = this.numVertices,
+    targetTexture: boolean = false,
   ) {
+    // if (targetTexture) {
+    //   this.drawToSelectorTexture(drawGlobals, worldMatrix, color, numDrawVertices);
+    //   return;
+    // }
     const { gl } = this;
     const webglInstance = this.webgl;
 
-    const locations = webglInstance.useProgram(this.programIndex);
-
+    let locations;
+    if (targetTexture) {
+      locations = webglInstance.useProgram(this.selectorProgramIndex);
+    } else {
+      locations = webglInstance.useProgram(this.programIndex);
+    }
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+    // gl.enable(gl.CULL_FACE);
+    if (scene.style !== '2D') {
+      gl.enable(gl.DEPTH_TEST);
+    } else {
+      gl.disable(gl.DEPTH_TEST);
+    }
 
-    Object.keys(this.buffers).forEach((bufferName) => {
+    Object.keys(this.attributes).forEach((attributeName) => {
+      if (targetTexture && attributeName !== 'a_vertex') {
+        return;
+      }
       const {
         buffer, size, type, stride, offset, normalize,
-      } = this.buffers[bufferName];
-      gl.enableVertexAttribArray(locations[bufferName]);
+      } = this.attributes[attributeName];
+      gl.enableVertexAttribArray(locations[attributeName]);
       // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
       gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
       // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
       gl.vertexAttribPointer(
-        locations[bufferName],
+        locations[attributeName],
         size, type, normalize, stride, offset,
       );
     });
 
-    gl.uniformMatrix3fv(
-      locations.u_matrix,
-      false,
-      m2.t(transformMatrix),
-    );
+    if (locations.u_directionalLight != null) {
+      gl.uniform3fv(
+        locations.u_directionalLight,
+        getPoint(scene.light.directional).normalize().toArray(),
+      );
+    }
+
+    if (locations.u_lightWorldPosition != null) {
+      gl.uniform3fv(
+        locations.u_lightWorldPosition,
+        getPoint(scene.light.point).toArray(),
+      );
+    }
+
+    if (locations.u_ambientLight != null) {
+      gl.uniform1f(
+        locations.u_ambientLight,
+        scene.light.ambient,
+      );
+    }
+
+    if (locations.u_worldInverseTranspose != null) {  // $FlowFixMe
+      gl.uniformMatrix4fv(
+        locations.u_worldInverseTranspose,
+        false,
+        m3.inverse(worldMatrix),
+      );
+    }
+
+    if (locations.u_worldViewProjectionMatrix != null) {  // $FlowFixMe
+      gl.uniformMatrix4fv(
+        locations.u_worldViewProjectionMatrix,
+        false,
+        m3.transpose(m3.mul(scene.viewProjectionMatrix, worldMatrix)),
+      );
+    }
+
+    if (locations.u_worldMatrix != null) {  // $FlowFixMe
+      gl.uniformMatrix4fv(
+        locations.u_worldMatrix,
+        false,
+        m3.transpose(worldMatrix),
+      );
+    }
+
+    if (locations.u_projectionMatrix != null) {  // $FlowFixMe
+      gl.uniformMatrix4fv(
+        locations.u_projectionMatrix,
+        false,
+        m3.transpose(scene.projectionMatrix),
+      );
+    }
+
+    if (locations.u_viewMatrix != null) {  // $FlowFixMe
+      gl.uniformMatrix4fv(
+        locations.u_viewMatrix,
+        false,
+        m3.transpose(scene.viewMatrix),
+      );
+    }
 
     Object.keys(this.uniforms).forEach((uniformName) => {
       const { method } = this.uniforms[uniformName];
@@ -591,7 +753,7 @@ class GLObject extends DrawingObject {
     );
 
     const { texture } = this;
-    if (texture != null) {
+    if (texture != null && targetTexture === false) {
       // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
       const texSize = 2;          // 2 components per iteration
       const texType = gl.FLOAT;   // the data is 32bit floats
@@ -620,10 +782,133 @@ class GLObject extends DrawingObject {
     if (texture) {
       gl.disableVertexAttribArray(locations.a_texcoord);
     }
-    Object.keys(this.buffers).forEach((bufferName) => {
-      gl.disableVertexAttribArray(locations[bufferName]);
+    Object.keys(this.attributes).forEach((attributeName) => {
+      gl.disableVertexAttribArray(locations[attributeName]);
     });
   }
+
+  // eslint-disable-next-line no-unused-vars
+  getPointCountForAngle(drawAngle: number = Math.PI * 2) {
+    return this.numVertices;
+  }
+
+  // Abstract method - should be reimplemented for any vertexObjects that
+  // eslint-disable-next-line no-unused-vars
+  getPointCountForLength(drawLength: number) {
+    return this.numVertices;
+  }
+
+  // drawToSelectorTexture(
+  //   drawGlobals: OBJ_DrawGlobals,
+  //   worldMatrix: Type3DMatrix,
+  //   color: TypeColor,
+  //   numDrawVertices: number = this.numVertices,
+  // ) {
+  //   const { gl } = this;
+  //   const webglInstance = this.webgl;
+
+  //   const locations = webglInstance.useProgram(this.selectorProgramIndex);
+
+  //   gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
+  //   gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+  //   // gl.enable(gl.CULL_FACE);
+  //   gl.enable(gl.DEPTH_TEST);
+
+  //   Object.keys(this.attributes).forEach((attributeName) => {
+  //     if (attributeName !== 'a_vertex') {
+  //       return;
+  //     }
+  //     const {
+  //       buffer, size, type, stride, offset, normalize,
+  //     } = this.attributes[attributeName];
+  //     gl.enableVertexAttribArray(locations[attributeName]);
+  //     // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
+  //     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  //     // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+  //     gl.vertexAttribPointer(
+  //       locations[attributeName],
+  //       size, type, normalize, stride, offset,
+  //     );
+  //   });
+
+  //   if (locations.u_directionalLight != null) {
+  //     gl.uniform3fv(
+  //       locations.u_directionalLight,
+  //       getPoint(drawGlobals.light.directional).normalize().toArray(),
+  //     );
+  //   }
+
+  //   if (locations.u_lightWorldPosition != null) {
+  //     gl.uniform3fv(
+  //       locations.u_lightWorldPosition,
+  //       getPoint(drawGlobals.light.point).toArray(),
+  //     );
+  //   }
+
+  //   if (locations.u_ambientLight != null) {
+  //     gl.uniform1f(
+  //       locations.u_ambientLight,
+  //       drawGlobals.light.min,
+  //     );
+  //   }
+
+  //   if (locations.u_worldInverseTranspose != null) {  // $FlowFixMe
+  //     gl.uniformMatrix4fv(
+  //       locations.u_worldInverseTranspose,
+  //       false,
+  //       m3.inverse(worldMatrix),
+  //     );
+  //   }
+
+  //   if (locations.u_worldViewProjectionMatrix != null) {  // $FlowFixMe
+  //     gl.uniformMatrix4fv(
+  //       locations.u_worldViewProjectionMatrix,
+  //       false,
+  //       m3.transpose(m3.mul(drawGlobals.viewProjectionMatrix, worldMatrix)),
+  //     );
+  //   }
+
+  //   if (locations.u_worldMatrix != null) {  // $FlowFixMe
+  //     gl.uniformMatrix4fv(
+  //       locations.u_worldMatrix,
+  //       false,
+  //       m3.transpose(worldMatrix),
+  //     );
+  //   }
+
+  //   if (locations.u_projectionMatrix != null) {  // $FlowFixMe
+  //     gl.uniformMatrix4fv(
+  //       locations.u_projectionMatrix,
+  //       false,
+  //       m3.transpose(drawGlobals.projectionMatrix),
+  //     );
+  //   }
+
+  //   if (locations.u_viewMatrix != null) {  // $FlowFixMe
+  //     gl.uniformMatrix4fv(
+  //       locations.u_viewMatrix,
+  //       false,
+  //       m3.transpose(drawGlobals.viewMatrix),
+  //     );
+  //   }
+
+  //   Object.keys(this.uniforms).forEach((uniformName) => {
+  //     const { method } = this.uniforms[uniformName];
+  //     method(locations[uniformName], uniformName);
+  //   });
+
+  //   gl.uniform1f(locations.u_z, this.z);
+
+  //   console.log(color)
+  //   gl.uniform4f(
+  //     locations.u_color,
+  //     color[0], color[1], color[2], color[3],
+  //     // 1, 0, 0, 1,
+  //   );
+
+  //   gl.drawArrays(this.glPrimitive, 0, numDrawVertices);
+  // }
 }
+
 
 export default GLObject;

@@ -226,9 +226,9 @@ describe('Equation Functions - Fraction', () => {
       functions.parameterSteps();
       eqn.showForm('base');
       figure.setFirstTransform();
-      baseA = eqn._a.getBoundingRect('figure');
-      baseB = eqn._b.getBoundingRect('figure');
-      baseV = eqn._v.getBoundingRect('figure');
+      baseA = eqn._a.getBoundingRect('local');
+      baseB = eqn._b.getBoundingRect('local');
+      baseV = eqn._v.getBoundingRect('local');
       space = 0.01;
       overhang = 0.02;
       offsetY = 0.02;
@@ -236,9 +236,9 @@ describe('Equation Functions - Fraction', () => {
     test('Numerator Space', () => {
       eqn.showForm('numeratorSpace');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newV = eqn._v.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newV = eqn._v.getBoundingRect('local');
       expect(round(newA.top)).toBe(round(baseA.top + space));
       expect(round(newV.top)).toBe(round(baseV.top));
       expect(round(newB.top)).toBe(round(baseB.top));
@@ -246,9 +246,9 @@ describe('Equation Functions - Fraction', () => {
     test('Denominator Space', () => {
       eqn.showForm('denominatorSpace');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newV = eqn._v.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newV = eqn._v.getBoundingRect('local');
       expect(round(newA.top)).toBe(round(baseA.top));
       expect(round(newV.top)).toBe(round(baseV.top));
       expect(round(newB.top)).toBe(round(baseB.top - space));
@@ -256,9 +256,9 @@ describe('Equation Functions - Fraction', () => {
     test('Overhang', () => {
       eqn.showForm('overhang');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newV = eqn._v.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newV = eqn._v.getBoundingRect('local');
       expect(round(newA.left)).toBe(round(newV.left + overhang));
       expect(round(newV.left)).toBe(round(baseV.left));
       expect(round(newV.width)).toBe(round(baseV.width + overhang));
@@ -267,15 +267,15 @@ describe('Equation Functions - Fraction', () => {
     test('OffsetY', () => {
       eqn.showForm('offsetY');
       figure.setFirstTransform();
-      const newV = eqn._v.getBoundingRect('figure');
+      const newV = eqn._v.getBoundingRect('local');
       expect(round(newV.bottom)).toBe(round(offsetY));
     });
     test('Numerator baseline', () => {
       eqn.showForm('numeratorBaseline');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newV = eqn._v.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newV = eqn._v.getBoundingRect('local');
       expect(round(newA.bottom)).toBe(-0.008);
       expect(round(newV.top)).toBe(round(newA.bottom - space));
       expect(round(newB.top)).toBe(round(newV.bottom - space));
@@ -283,9 +283,9 @@ describe('Equation Functions - Fraction', () => {
     test('Denominator baseline', () => {
       eqn.showForm('denominatorBaseline');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newV = eqn._v.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newV = eqn._v.getBoundingRect('local');
       expect(round(newB.bottom)).toBe(-0.008);
       expect(round(newV.bottom)).toBe(round(newB.top + space));
       expect(round(newA.bottom)).toBe(round(newV.top + space));

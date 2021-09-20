@@ -1,10 +1,14 @@
 // @flow
 
 import * as m2 from '../../../tools/m2';
+import * as m3 from '../../../tools/m3';
+import { isPointInPolygon } from '../../../tools/geometry/polygon';
 import {
   Point, getPoint, Rect, getBoundingBorder, getBorder, isBuffer,
 } from '../../../tools/g2';
 import type { TypeParsablePoint, TypeParsableBuffer } from '../../../tools/g2';
+import type Scene from '../../../tools/geometry/scene';
+import type { Type3DMatrix } from '../../../tools/m3';
 import DrawingObject from '../DrawingObject';
 import DrawContext2D from '../../DrawContext2D';
 import { joinObjects, splitString } from '../../../tools/tools';
@@ -17,7 +21,7 @@ import type {
 } from '../../../tools/FunctionMap';
 import type {
   OBJ_TextDefinition,
-} from '../../FigurePrimitives/FigurePrimitives';
+} from '../../FigurePrimitives/FigurePrimitiveTypes2D';
 
 
 /* eslint-enable max-len */
@@ -375,7 +379,7 @@ class FigureTextBase {
   }
 
   getBoundary(
-    transformMatrix: Array<number> | null,
+    transformMatrix: Type3DMatrix | null,
   ): Array<Point> {
     if (transformMatrix == null) {
       return this.textBorder;
@@ -583,6 +587,10 @@ class TextObjectBase extends DrawingObject {
     this.layoutText();
   }
 
+  getCanvas(index: number = 0) {
+    return this.drawContext2D[index].canvas;
+  }
+
 
   // eslint-disable-next-line class-methods-use-this
   setTextLocations() {
@@ -591,7 +599,7 @@ class TextObjectBase extends DrawingObject {
   click(p: Point, fnMap: FunctionMap) {
     this.text.forEach((text) => {
       if (text.onClick != null) {
-        if (p.isInPolygon(text.textBorderBuffer)) {
+        if (isPointInPolygon(p, text.textBorderBuffer)) {
           fnMap.exec(text.onClick, fnMap);
         }
       }
@@ -695,7 +703,7 @@ class TextObjectBase extends DrawingObject {
   // canvas and we want to think about the size and location of text in
   // Figure Space or Element Space (if the element has a specific transform).
   //
-  // For example, if we have a figure with limits: min: (0, 0), max(2, 1)
+  // For example, if we have a figure with scene: min: (0, 0), max(2, 1)
   // with a canvas of 1000 x 500 then:
   //    1) Transform pixel space (1000 x 500) to be GL Space (2 x 2). i.e.
   //         - Magnify pixel space by 500 so one unit in the 2D drawing
@@ -727,7 +735,8 @@ class TextObjectBase extends DrawingObject {
   //   - scaledPixelSpace
   //
   drawWithTransformMatrix(
-    transformMatrix: Array<number>,
+    scene: Scene,
+    worldMatrix: Type3DMatrix,
     color: TypeColor = [1, 1, 1, 1],
     // contextIndex: number = 0,
   ) {
@@ -758,12 +767,42 @@ class TextObjectBase extends DrawingObject {
       0, 0, 1,
     ];
 
+    const worldViewProjectionMatrix = m3.mul(scene.viewProjectionMatrix, worldMatrix);
+
+    const p = m3.transformVectorT(worldViewProjectionMatrix, [0, 0, 0, 1]);
     // The incoming transform matrix transforms elementSpace to glSpace.
-    // Modify the incoming transformMatrix to be compatible with
+    // Modify the incoming worldMatrix to be compatible with
     // pixel space
     //   - Flip the y translation
     //   - Reverse rotation
-    const tm = transformMatrix;
+    // const tm = worldMatrix;
+    const tma = m3.mul([
+      1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 1, 0,
+      0, 0, 0, 1,
+    ], worldViewProjectionMatrix);
+    // // Use this to fully transform text
+    // const tm = [
+    //   tma[0] / p[3], tma[1] / p[3], tma[3] / p[3],
+    //   tma[4] / p[3], tma[5] / p[3], tma[7] / p[3],
+    //   tma[12] / p[3], tma[13] / p[3], tma[15] / p[3],
+    // ];
+
+    // Use this to fully transform text
+    const tm = [
+      tma[0] / p[3], tma[1] / p[3], tma[3] / p[3],
+      tma[4] / p[3], tma[5] / p[3], tma[7] / p[3],
+      tma[12] / p[3], tma[13] / p[3], tma[15] / p[3],
+    ];
+
+    // // Use this to position text and give it perspective scale only
+    // const tm = [
+    //   1 / p[3], 0, tma[3] / p[3],
+    //   0, 1 / p[3], tma[7] / p[3],
+    //   0, 0, tma[15] / p[3],
+    // ];
+
     const elementToGLMatrix = [
       tm[0], -tm[1], tm[2],
       -tm[3], tm[4], tm[5] * -1,

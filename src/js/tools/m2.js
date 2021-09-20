@@ -1,8 +1,13 @@
 // @flow
 
 // 2D Matrix functions
+export type Type2DMatrix = [
+  number, number, number,
+  number, number, number,
+  number, number, number,
+];
 
-function mul(a: Array<number>, b: Array<number>) {
+function mul(a: Type2DMatrix, b: Type2DMatrix) {
   return [
     (a[0] * b[0]) + (a[1] * b[3]) + (a[2] * b[6]),
     (a[0] * b[1]) + (a[1] * b[4]) + (a[2] * b[7]),
@@ -15,7 +20,7 @@ function mul(a: Array<number>, b: Array<number>) {
     (a[6] * b[2]) + (a[7] * b[5]) + (a[8] * b[8]),
   ];
 }
-function t(a: Array<number>) {
+function t(a: Type2DMatrix) {
   return [
     a[0], a[3], a[6],
     a[1], a[4], a[7],
@@ -29,7 +34,7 @@ function identity() {
     0, 0, 1,
   ];
 }
-function copy(a: Array<number>) {
+function copy(a: Type2DMatrix) {
   return [
     a[0], a[1], a[2],
     a[3], a[4], a[5],
@@ -43,7 +48,7 @@ function translationMatrix(tx: number, ty: number) {
     0, 0, 1,
   ];
 }
-function translate(m: Array<number>, tx: number, ty: number) {
+function translate(m: Type2DMatrix, tx: number, ty: number) {
   // return mul(m, translationMatrix(tx, ty));
   return [
     m[0], m[1], m[2] + m[0] * tx + m[1] * ty,
@@ -60,7 +65,7 @@ function rotationMatrix(angle: number) {
     0, 0, 1,
   ];
 }
-function rotate(m: Array<number>, angle: number) {
+function rotate(m: Type2DMatrix, angle: number) {
   // return mul(m, rotationMatrix(angle));
   const c = Math.cos(angle);
   const s = Math.sin(angle);
@@ -79,7 +84,7 @@ function scaleMatrix(sx: number, sy: number) {
   ];
 }
 
-function scale(m: Array<number>, sx: number, sy: number) {
+function scale(m: Type2DMatrix, sx: number, sy: number) {
   // return mul(m, scaleMatrix(sx, sy));
   return [
     m[0] * sx, m[1] * sy, m[2],
@@ -88,14 +93,14 @@ function scale(m: Array<number>, sx: number, sy: number) {
   ];
 }
 
-function transform(m: Array<number>, px: number, py: number) {
+function transform(m: Type2DMatrix, px: number, py: number) {
   return [
     (m[0] * px) + (m[1] * py) + m[2],
     (m[3] * px) + (m[4] * py) + m[5],
   ];
 }
 
-function inverse(m: Array<number>) {
+function inverse(m: Type2DMatrix) {
   const det = (m[0] * ((m[4] * m[8]) - (m[7] * m[5]))) - // eslint-disable-line
               (m[1] * ((m[3] * m[8]) - (m[5] * m[6]))) + // eslint-disable-line
               (m[2] * ((m[3] * m[7]) - (m[4] * m[6])));

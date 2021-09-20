@@ -40,14 +40,14 @@ describe('Figure Primitive Generic Copy', () => {
           // copyChain: copyChainOption,
         },
       });
-      figure.initialize();
+      // figure.initialize();
       points = processPoints(figure.getElement('a').drawingObject.points);
     };
 
     copy = {
       point: { to: new Point(1, 0) },
       arrayPoint: { to: [1, 0] },
-      numberPoint: { to: 1 },
+      // numberPoint: { to: 1 },
       transform: { to: new Transform().translate(1, 0) },
       transformArray: {
         to: [
@@ -90,11 +90,6 @@ describe('Figure Primitive Generic Copy', () => {
       addElement(copy.arrayPoint);
       expect(points[2]).toEqual(new Point(1, 0));
       expect(points[3]).toEqual(new Point(1.1, 0.1));
-    });
-    test('Number Point', () => {
-      addElement(copy.numberPoint);
-      expect(points[2]).toEqual(new Point(1, 1));
-      expect(points[3]).toEqual(new Point(1.1, 1.1));
     });
     test('Transform', () => {
       addElement(copy.transform);

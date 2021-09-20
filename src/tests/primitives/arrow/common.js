@@ -33,7 +33,7 @@ function makeShape(name, options, lineOptions, mods, getPos) {
       widthIs: 'mid',
     }, o.options.line, lineOptions);
   }
-  o.options.position = tools.g2.getPoint(o.options.position).add(x, y);
+  o.options.position = tools.g2.getPoint(o.options.position || [0, 0]).add(x, y);
   return o;
 }
 

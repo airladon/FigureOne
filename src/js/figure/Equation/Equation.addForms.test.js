@@ -447,7 +447,7 @@ describe('Figure Equations From Object', () => {
   //   ascent: top: 0.14,
   test('All form options', () => {
     expect(eqn._a.getPosition().round(3)).toEqual(new Point(0, 0));
-    expect(eqn._a.getScale().round(3)).toEqual(new Point(1, 1));
+    expect(eqn._a.getScale().round(3)).toEqual(new Point(1, 1, 1));
     // debugger;
     eqn.addForms(addForms.allFormOptions);
     expect(forms['0'].description).toBe('|Form| 1 |description|');
@@ -467,6 +467,6 @@ describe('Figure Equations From Object', () => {
     // FixTo is b, 'center'. As 'a' and 'b' are both 0.1 width, and the scale
     // is 1.2, then the left position of a must be: 0.15 * 1.2 = -0.18
     expect(eqn._a.getPosition().round(3)).toEqual(new Point(-0.18, 0.01));
-    expect(eqn._a.getScale().round(3)).toEqual(new Point(1.2, 1.2));
+    expect(eqn._a.getScale().round(3)).toEqual(new Point(1.2, 1.2, 1));
   });
 });

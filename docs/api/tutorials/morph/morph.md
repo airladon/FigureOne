@@ -12,7 +12,7 @@ For instance, if we want to morph a straight line into a wave we could:
 const figure = new Fig.Figure();
 
 const sin = (mag) => {
-  const xValues = Fig.tools.math.range(-0.8, 0.8, 0.001);
+  const xValues = Fig.range(-0.8, 0.8, 0.001);
   return xValues.map(x => [x, mag * Math.sin(2 * Math.PI * x / 0.5)]);
 };
 
@@ -88,11 +88,11 @@ Let's now recreate the line to wave example above using morph.
 const figure = new Fig.Figure();
 
 const sin = (mag) => {
-  const xValues = Fig.tools.math.range(-0.8, 0.8, 0.001);
+  const xValues = Fig.range(-0.8, 0.8, 0.001);
   return xValues.map(x => [x, mag * Math.sin(2 * Math.PI * x / 0.5)]);
 };
 
-const { pointsToShapes } = Fig.tools.morph;
+const { pointsToShapes } = Fig.morph;
 
 const [line] = pointsToShapes({
   points: sin(0),
@@ -127,7 +127,7 @@ The power of the morph primitive can be seen when using large numbers of vertice
 
 ```js
 const sin = (mag) => {
-  const xValues = Fig.tools.math.range(-0.8, 0.8, 0.00001);
+  const xValues = Fig.range(-0.8, 0.8, 0.00001);
   return xValues.map(x => [x, mag * Math.sin(2 * Math.PI * x / 0.5)]);
 };
 ```
@@ -146,7 +146,7 @@ An extreme example is when we change angle by 180º:
 
 ```js
 const figure = new Fig.Figure();
-const { polyline } = Fig.tools.morph;
+const { polyline } = Fig.morph;
 
 const line = figure.add({
   make: 'morph',
@@ -168,7 +168,7 @@ Compare this to a string of points that has no width change:
 
 ```js
 const figure = new Fig.Figure();
-const { polylineToShapes } = Fig.tools.morph;
+const { polylineToShapes } = Fig.morph;
 
 const line = figure.add({
   make: 'morph',
@@ -217,7 +217,7 @@ It can be challenging to construct vertices that represent a relatively arbitrar
 
 ```js
 const figure = new Fig.Figure();
-const { imageToShapes } = Fig.tools.morph;
+const { imageToShapes } = Fig.morph;
 
 const micImage = new Image();
 micImage.src = './mic.png';
@@ -273,7 +273,7 @@ This time, we will limit the number of shapes to just 2000 per image. We will pl
 
 ```js
 const figure = new Fig.Figure();
-const { imageToShapes } = Fig.tools.morph;
+const { imageToShapes } = Fig.morph;
 
 const micImage = new Image();
 micImage.src = './mic.png';

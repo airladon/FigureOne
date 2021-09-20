@@ -42,6 +42,8 @@ describe('Animation Step State', () => {
     // now = 11;
     figure.mock.timeStep(10);
     figure.setState(state);
+    // console.log(state.elements.elements.elem1.transform)
+    // console.log(state.elements.elements.elem1)
     figure.mock.timeStep(0);
     expect(math.round(elem1.getRotation())).toBe(0.5);
 

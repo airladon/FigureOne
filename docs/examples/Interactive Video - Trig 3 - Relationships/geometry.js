@@ -13,9 +13,9 @@ function layoutCirc() {
   const dSin = radius * Math.sin(defaultAngle);
   const dTan = radius * Math.tan(defaultAngle);
   const dCot = radius / Math.tan(defaultAngle);
-  const dC1 = Fig.tools.g2.getTriangleCenter([0, 0], [dCos, 0], [dCos, dSin]);
-  const dC2 = Fig.tools.g2.getTriangleCenter([0, 0], [radius, 0], [radius, dTan]);
-  const dC3 = Fig.tools.g2.getTriangleCenter([0, 0], [dCot, 0], [dCot, radius]);
+  const dC1 = Fig.getTriangleCenter([0, 0], [dCos, 0], [dCos, dSin]);
+  const dC2 = Fig.getTriangleCenter([0, 0], [radius, 0], [radius, dTan]);
+  const dC3 = Fig.getTriangleCenter([0, 0], [dCot, 0], [dCot, radius]);
   const origin = [-0.8, -0.5];
   const point = (pointX, pointY) => new Fig.Point(pointX, pointY);
 
@@ -32,18 +32,16 @@ function layoutCirc() {
   const lineWithLabel = (name, color, text, width = thick, p1, length, ang, location = 'negative') => ({
     name,
     make: 'collections.line',
-    options: {
-      width,
-      color,
-      p1,
-      length,
-      angle: ang,
-      label: {
-        text: { textFont: { style: 'normal' }, forms: { 0: text } },
-        location,
-        orientation: 'horizontal',
-        update: true,
-      },
+    width,
+    color,
+    p1,
+    length,
+    angle: ang,
+    label: {
+      text: { textFont: { style: 'normal' }, forms: { 0: text } },
+      location,
+      orientation: 'horizontal',
+      update: true,
     },
   });
 
@@ -68,33 +66,27 @@ function layoutCirc() {
       {
         name: 'eye1',
         make: 'polygon',
-        options: {
-          line: { width: medium },
-          radius: 0.075,
-          angleToDraw: 2,
-          rotation: Math.PI / 2 - 1,
-          sides: 100,
-          position: [0, -0.043],
-        },
+        line: { width: medium },
+        radius: 0.075,
+        angleToDraw: 2,
+        rotation: Math.PI / 2 - 1,
+        sides: 100,
+        position: [0, -0.043],
       },
       {
         name: 'eye2',
         make: 'polygon',
-        options: {
-          line: { width: medium },
-          radius: 0.075,
-          angleToDraw: 2,
-          rotation: Math.PI / 2 - 1 + Math.PI,
-          sides: 100,
-          position: [0, 0.043],
-        },
+        line: { width: medium },
+        radius: 0.075,
+        angleToDraw: 2,
+        rotation: Math.PI / 2 - 1 + Math.PI,
+        sides: 100,
+        position: [0, 0.043],
       },
-      { name: 'center', make: 'polygon', options: { radius: 0.012, sides: 6 } },
-      { name: 'strike', make: 'line', options: { p1: [-0.05, -0.05], p2: [0.05, 0.05], width: medium } },
+      { name: 'center', make: 'polygon', radius: 0.012, sides: 6 },
+      { name: 'strike', make: 'line', p1: [-0.05, -0.05], p2: [0.05, 0.05], width: medium },
     ],
-    options: {
-      position,
-    },
+    position,
     mods: {
       custom: {
         visible: () => figure.elements._geom.getElement(name)._strike.hide(),
@@ -111,29 +103,23 @@ function layoutCirc() {
       {
         name: 'lock',
         make: 'polygon',
-        options: {
-          position: [0, 0.035],
-          line: { width: medium },
-          radius: 0.025,
-          sides: 20,
-          angleToDraw: Math.PI,
-        },
+        position: [0, 0.035],
+        line: { width: medium },
+        radius: 0.025,
+        sides: 20,
+        angleToDraw: Math.PI,
       },
       {
         name: 'r',
         make: 'collections.rectangle',
-        options: {
-          width: 0.08,
-          height: 0.07,
-          corner: { radius: 0.005 },
-          line: { width: medium },
-          fill: [1, 1, 1, 1],
-        },
+        width: 0.08,
+        height: 0.07,
+        corner: { radius: 0.005 },
+        line: { width: medium },
+        fill: [1, 1, 1, 1],
       },
     ],
-    options: {
-      position,
-    },
+    position,
     mods: {
       custom: {
         lock: () => figure.elements._geom.getElement(name)._lock.setRotation(0),
@@ -146,13 +132,11 @@ function layoutCirc() {
   const rightAngle = (name, position, startAngle, r = 0.15, color = colGrey) => ({
     name,
     make: 'collections.angle',
-    options: {
-      position,
-      startAngle,
-      angle: Math.PI / 2,
-      curve: { autoRightAngle: true, width: thin, radius: r },
-      color,
-    },
+    position,
+    startAngle,
+    angle: Math.PI / 2,
+    curve: { autoRightAngle: true, width: thin, radius: r },
+    color,
   });
 
   // Helper function to make a angle
@@ -163,15 +147,13 @@ function layoutCirc() {
     return {
       name,
       make: 'collections.angle',
-      options: {
-        color: colTheta,
-        curve: { width: 0.01, radius: rad, sides: 400 },
-        startAngle,
-        angle: angleSize,
-        label: { text, offset: 0.01, curvePosition },
-        sides,
-        position,
-      },
+      color: colTheta,
+      curve: { width: 0.01, radius: rad, sides: 400 },
+      startAngle,
+      angle: angleSize,
+      label: { text, offset: 0.01, curvePosition },
+      sides,
+      position,
     };
   }
 
@@ -179,26 +161,18 @@ function layoutCirc() {
   const rot = name => ({
     name,
     make: 'primitives.generic',
-    options: { color: [0, 1, 1, 0] },
-    mods: {
-      isMovable: true,
-      move: { type: 'rotation' },
-    },
+    color: [0, 1, 1, 0],
+    mods: { isMovable: true, move: { type: 'rotation' } },
   });
 
   // Helper function to make a background triangle rotator pad
   const rotPad = name => ({
     name,
     make: 'primitives.polygon',
-    options: {
-      color: [0, 1, 0, 0],
-      radius: 0.3,
-      sides: 8,
-    },
-    mods: {
-      isMovable: true,
-      move: { type: 'rotation' },
-    },
+    color: [0, 1, 0, 0],
+    radius: 0.3,
+    sides: 8,
+    move: { type: 'rotation' },
   });
 
   /**
@@ -230,14 +204,10 @@ function layoutCirc() {
       {
         name: 'movePad',
         make: 'primitives.generic',
-        options: {
-          points: [[0, 0], [0, 1], [1, 1]],
-          color: [0, 0, 1, 0.3],
-          close: true,
-        },
-        mods: {
-          isMovable: true,
-        },
+        points: [[0, 0], [0, 1], [1, 1]],
+        color: [0, 0, 1, 0.3],
+        close: true,
+        move: true,
       },
       rot('rotTheta'),
       rot('rotComp'),
@@ -282,51 +252,48 @@ function layoutCirc() {
         {
           name: 'rect',
           make: 'collections.rectangle',
-          options: {
-            width,
-            height,
-            line: { width: thin },
-            corner: { radius: 0.02, sides: 3 },
-            fill: [1, 1, 1, 1],
-            color: colGrey,
-          },
+          width,
+          height,
+          line: { width: thin },
+          corner: { radius: 0.02, sides: 3 },
+          fill: [1, 1, 1, 1],
+          color: colGrey,
         },
         {
           name: 'label',
           make: 'textLines',
-          options: {
-            position:
-            textPosition,
-            text,
-            font: { size, color: colText },
-            xAlign: 'center',
-            yAlign: 'middle',
-            fixColor: true,
-            modifiers: {
-              theta: {
-                text: '\u03b8',
-                font: {
-                  style: 'italic', family: 'Times New Roman', size: size * 1.2,
-                },
+          position:
+          textPosition,
+          text,
+          font: { size, color: colText },
+          xAlign: 'center',
+          yAlign: 'middle',
+          fixColor: true,
+          modifiers: {
+            theta: {
+              text: '\u03b8',
+              font: {
+                style: 'italic', family: 'Times New Roman', size: size * 1.2,
               },
-              _90: {
-                text: '90\u00b0',
-                font: {
-                  family: 'Times New Roman', size: size * 1.2,
-                },
+            },
+            _90: {
+              text: '90\u00b0',
+              font: {
+                family: 'Times New Roman', size: size * 1.2,
               },
-              min: {
-                text: '\u2212',
-                font: {
-                  family: 'Times New Roman', size: size * 1.2,
-                },
+            },
+            min: {
+              text: '\u2212',
+              font: {
+                family: 'Times New Roman', size: size * 1.2,
               },
             },
           },
         },
       ],
-      options: { position },
-      mods: { isTouchable: true, touchBorder: 0 },
+      position,
+      // touch: true,
+      mods: { touchBorder: 0, isTouchable: true },
     };
   }
 
@@ -340,14 +307,10 @@ function layoutCirc() {
       {
         name: 'background',
         make: 'rectangle',
-        options: {
-          width: 6,
-          height: 3,
-          color: [0, 0, 0, 0],
-        },
-        mods: {
-          isTouchable: true,
-        },
+        width: 6,
+        height: 3,
+        color: [0, 0, 0, 0],
+        touch: true,
       },
       // A quarter circle with axes
       {
@@ -360,25 +323,19 @@ function layoutCirc() {
           {
             name: 'movePad',
             make: 'primitives.polygon',
-            options: {
-              sides: 16,
-              radius: radius + 0.03,
-              color: [0, 0, 0, 0],
-              sidesToDraw: 4,
-            },
-            mods: {
-              isMovable: true,
-            },
+            sides: 16,
+            radius: radius + 0.03,
+            color: [0, 0, 0, 0],
+            sidesToDraw: 4,
+            move: true,
           },
         ],
-        mods: {
-          scenarios: {
-            reset: { position: origin },
-            preset1: { position: origin },
-            preset2: { position: origin },
-            preset3: { position: origin },
-            preset4: { position: origin },
-          },
+        scenarios: {
+          reset: { position: origin },
+          preset1: { position: origin },
+          preset2: { position: origin },
+          preset3: { position: origin },
+          preset4: { position: origin },
         },
       },
       // Three background triangles that have corner rotation pads that extend
@@ -421,12 +378,10 @@ function layoutCirc() {
       {
         name: 'angleBackground',
         make: 'primitives.polygon',
-        options: {
-          sides: 400,
-          color: [1, 1, 1, 1],
-          radius: 0.3,
-          position: [-2.8, -1.3],
-        },
+        sides: 400,
+        color: [1, 1, 1, 1],
+        radius: 0.3,
+        position: [-2.8, -1.3],
       },
       angle('theta', '0', 0.3, 0.5, [-2.8, -1.3], 0, defaultAngle, { length: 0.33, width: thick }),
 
@@ -447,22 +402,18 @@ function layoutCirc() {
           {
             name: 'fill',
             make: 'primitives.polygon',
-            options: {
-              color: [1, 1, 1, 1],
-              radius: 0.22,
-              sides: 400,
-              angleToDraw: Math.PI / 2,
-            },
+            color: [1, 1, 1, 1],
+            radius: 0.22,
+            sides: 400,
+            angleToDraw: Math.PI / 2,
           },
           arc('arc', colText, thin, 100, Math.PI / 2, 0, 0.22),
           line('x', colText, thin, [0, 0], 0.22, 0),
           line('y', colText, thin, [0, 0], 0.22, Math.PI / 2),
         ],
-        options: {
-          position: [-0.9, -1.31],
-        },
+        position: [-0.9, -1.31],
+        touch: true,
         mods: {
-          isTouchable: true,
           touchBorder: 0.1,
         },
       },
@@ -476,19 +427,17 @@ function layoutCirc() {
       {
         name: 'rotator',
         make: 'collections.line',
-        options: {
-          length: radius * 0.5,
-          width: 0.5,
-          color: [0, 0, 0, 0],
-          p1: [-2.8, -1.3],
+        length: radius * 0.5,
+        width: 0.5,
+        color: [0, 0, 0, 0],
+        p1: [-2.8, -1.3],
+        dimColor: [0, 0, 0, 0],
+        move: {
+          type: 'rotation',
+          bounds: { min: 0.0001, max: Math.PI / 2 * 0.999 },
         },
-        mods: {
-          dimColor: [0, 0, 0, 0],
-          isMovable: true,
-          move: { type: 'rotation', bounds: { rotation: { min: 0.0001, max: Math.PI / 2 * 0.999 } } },
-          scenarios: {
-            default: { rotation: defaultAngle },
-          },
+        scenarios: {
+          default: { rotation: defaultAngle },
         },
       },
     ],
@@ -601,7 +550,7 @@ function layoutCirc() {
   // Update the points of the rotator for some specificed angle at
   // a vertex of a triangle
   const setRotPad = (rotPadEl, vertex, startAngle, ang, rotPadRad = 0.3) => {
-    const v = Fig.tools.g2.getPoint(vertex);
+    const v = Fig.getPoint(vertex);
     const cosV = rotPadRad * Math.cos(startAngle);
     const sinV = rotPadRad * Math.sin(startAngle);
     const cosVStop = rotPadRad * Math.cos(startAngle + ang);
@@ -633,9 +582,9 @@ function layoutCirc() {
     };
 
     // The triangle centers change when theta changes
-    const c1 = Fig.tools.g2.getTriangleCenter([0, 0], [cosVal, 0], [cosVal, sinVal]);
-    const c2 = Fig.tools.g2.getTriangleCenter([0, 0], [radius, 0], [radius, tanVal]);
-    const c3 = Fig.tools.g2.getTriangleCenter([0, 0], [cotVal, 0], [cotVal, radius]);
+    const c1 = Fig.getTriangleCenter([0, 0], [cosVal, 0], [cosVal, sinVal]);
+    const c2 = Fig.getTriangleCenter([0, 0], [radius, 0], [radius, tanVal]);
+    const c3 = Fig.getTriangleCenter([0, 0], [cotVal, 0], [cotVal, radius]);
 
     // Update the theta widget UI with the new angle
     if (theta.isShown) {
@@ -725,11 +674,16 @@ function layoutCirc() {
     offsetForLock(triSinCos, r, cos.getP2(), unitSinCos.getP2(), cos.getP1());
     offsetForLock(triTanSec, r, unitTanSec.getP2(), sec.getP2(), sec.getP1());
     offsetForLock(triCotCsc, r, cot.getP2(), csc.getP2(), cot.getP1());
+
+    // Clip rotations to between 0 and 360
+    triSinCos.transform.clipRotation('0to360');
+    triTanSec.transform.clipRotation('0to360');
+    triCotCsc.transform.clipRotation('0to360');
   }
 
   // Whenever the theta widget rotator changes, the geometry needs to be updated
   const rotatorUpdateCircle = () => {
-    updateGeometry(Fig.tools.g2.clipAngle(rotator.transform.r(), '0to360'));
+    updateGeometry(Fig.clipAngle(rotator.transform.r(), '0to360'));
   };
   rotator.fnMap.add('updateGeometry', () => rotatorUpdateCircle());
   rotator.notifications.add('setState', 'updateGeometry');
@@ -980,12 +934,12 @@ function layoutCirc() {
     const rightVertex = (thetaVertex.add(x, 0));
     const compVertex = thetaVertex.add(x, y);
     if (angleLock === 'theta') {
-      return Fig.tools.g2.getPoint(p).sub(thetaVertex.transformBy(matrix));
+      return Fig.getPoint(p).sub(thetaVertex.transformBy(matrix));
     }
     if (angleLock === 'comp') {
-      return Fig.tools.g2.getPoint(p).sub(compVertex.transformBy(matrix));
+      return Fig.getPoint(p).sub(compVertex.transformBy(matrix));
     }
-    return Fig.tools.g2.getPoint(p).sub(rightVertex.transformBy(matrix));
+    return Fig.getPoint(p).sub(rightVertex.transformBy(matrix));
   };
 
   // Create a scenario for a triangle based on a desired position (p), rotation
@@ -1005,7 +959,7 @@ function layoutCirc() {
   createScenario('preset1', triTanSec, origin, 'theta', 0, false);
   createScenario('preset1', triCotCsc, [origin[0] - thick / 2, origin[1] + thick / 2], 'theta', 0, false);
   createScenario('preset3', triSinCos, origin, 'theta', 0, false);
-  createScenario('preset3', triTanSec, origin, 'theta', defaultAngle - Math.PI, true);
+  createScenario('preset3', triTanSec, origin, 'theta', defaultAngle + Math.PI, true);
   createScenario('preset3', triCotCsc, origin, 'comp', Math.PI / 2 + defaultAngle, true);
   createScenario('preset2', triSinCos, origin, 'theta', 0, false);
   createScenario('preset2', triTanSec, origin, 'theta', 0, false);
@@ -1050,18 +1004,18 @@ function layoutCirc() {
     showAll();
     geom.hide(dissolveOut);
     const velocity = new Fig.Transform().scale(0.5, 0.5).rotate(0.5).translate(0.5, 0.5);
-    const duration1 = Fig.tools.g2.getMaxTimeFromVelocity(
+    const duration1 = Fig.getMaxTimeFromVelocity(
       triSinCos.transform._dup(), triSinCos.getScenarioTarget(scenario).transform, velocity, 0,
     );
-    const duration2 = Fig.tools.g2.getMaxTimeFromVelocity(
+    const duration2 = Fig.getMaxTimeFromVelocity(
       triTanSec.transform._dup(), triTanSec.getScenarioTarget(scenario).transform, velocity, 0,
     );
-    const duration3 = Fig.tools.g2.getMaxTimeFromVelocity(
+    const duration3 = Fig.getMaxTimeFromVelocity(
       triCotCsc.transform._dup(), triCotCsc.getScenarioTarget(scenario).transform, velocity, 0,
     );
     let duration4 = 0;
     if (showCircle) {
-      duration4 = Fig.tools.g2.getMaxTimeFromVelocity(
+      duration4 = Fig.getMaxTimeFromVelocity(
         circle.transform._dup(), circle.getScenarioTarget(scenario).transform, velocity, 0,
       );
     }

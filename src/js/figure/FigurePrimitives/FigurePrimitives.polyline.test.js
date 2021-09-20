@@ -70,7 +70,6 @@ describe('Polyline', () => {
       expect(round(p.getBorder('draw', 'touchBorder'))).toEqual([getPoints([
         [0, -0.1], [1, -0.1], [1, 0.1], [0, 0.1],
       ])]);
-      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Buffer Border', () => {
       addElement('lineBorderWithBuffer');
@@ -88,7 +87,6 @@ describe('Polyline', () => {
       expect(round(p.getBorder('draw', 'touchBorder'))).toEqual([getPoints([
         [-0.1, -0.2], [1.1, -0.2], [1.1, 0.2], [-0.1, 0.2],
       ])]);
-      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Custom Border', () => {
       addElement('customBorder');
@@ -106,7 +104,6 @@ describe('Polyline', () => {
       expect(round(p.getBorder('draw', 'touchBorder'))).toEqual([getPoints([
         [-0.2, -0.6], [1.2, -0.6], [1.2, 0.6], [-0.2, 0.6],
       ])]);
-      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
   });
   describe('Closed Triangle', () => {
@@ -205,8 +202,6 @@ describe('Polyline', () => {
         [0.759, 0.1],
         [0.1, 0.1],
       ])]);
-
-      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('outside Border', () => {
       addElement('outsideBorder');
@@ -229,8 +224,6 @@ describe('Polyline', () => {
         [1.241, -0.1],
         [-0.1, 1.241],
       ]));
-
-      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('inside Border', () => {
       addElement('insideBorder');
@@ -254,8 +247,6 @@ describe('Polyline', () => {
         [0.759, 0.1],
         [0.1, 0.759],
       ]));
-
-      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Rect Border', () => {
       addElement('rectBorder');
@@ -281,8 +272,6 @@ describe('Polyline', () => {
         [1.241, 1.241],
         [-0.1, 1.241],
       ]));
-
-      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Touch Rect Border', () => {
       addElement('touchRectBorder');
@@ -312,8 +301,6 @@ describe('Polyline', () => {
         [1.241, 1.241],
         [-0.1, 1.241],
       ])]);
-
-      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Buffer Border', () => {
       addElement('bufferBorder');
@@ -347,8 +334,6 @@ describe('Polyline', () => {
         [0.517, 0.2],
         [0.2, 0.2],
       ])]);
-
-      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Dashed Border', () => {
       addElement('dashedBorder');
@@ -425,8 +410,6 @@ describe('Polyline', () => {
       //   [0.1, 0.1],
       //   [0.1, 0.759],
       // ]));
-
-      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
   });
 });

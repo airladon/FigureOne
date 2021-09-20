@@ -49,5 +49,5 @@ __frames = [
   [0.5, 'touchDown', [1.5, -0.7], 'form 12'],
   [0, 'touchUp'],
   [1.5, 'touchDown', [1.5, -0.7], 'form 12'],
-  [0, 'touchUp', 'happy'],
+  [0, 'touchUp'],
 ];

@@ -532,46 +532,6 @@ const move = {
       ['touchUp'],
     ],
   },
-  // rotateStart: {
-  //   element: 'start-rotator',
-  //   events: [
-  //     ['touchDown', [0.3, 0]],
-  //     ['touchMove', [0.3, 0.1]],
-  //     ['touchMove', [0.3, 0.1]],
-  //     ['touchUp'],
-  //   ],
-  // },
-  // rotateCenter: {
-  //   element: 'center-rotator',
-  //   events: [
-  //     ['touchDown', [0.1, 0]],
-  //     ['touchMove', [0.1, 0.1]],
-  //     ['touchMove', [0.1, 0.1]],
-  //     ['touchUp'],
-  //   ],
-  // },
-  // rotateEnd: {
-  //   element: 'end-rotator',
-  //   events: [
-  //     ['touchDown', [-0.3, 0]],
-  //     ['touchMove', [-0.3, 0.1]],
-  //     ['touchMove', [-0.3, 0.1]],
-  //     ['touchUp'],
-  //   ],
-  // },
-  // translateRotate: {
-  //   element: 'translate-rotate',
-  //   events: [
-  //     ['touchDown', [0, 0]],
-  //     ['touchMove', [0.2, 0]],
-  //     ['touchMove', [0.2, 0]],
-  //     ['touchUp'],
-  //     ['touchDown', [0.1, 0]],
-  //     ['touchMove', [0.1, 0.1]],
-  //     ['touchMove', [0.1, 0.1]],
-  //     ['touchUp'],
-  //   ],
-  // },
 };
 
 if (typeof process === 'object') {

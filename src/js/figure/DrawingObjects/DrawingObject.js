@@ -3,13 +3,15 @@
 import {
   Point, // Rect, getBoundingRect,
 } from '../../tools/g2';
+import type { Type3DMatrix } from '../../tools/m3';
+import type Scene from '../../tools/geometry/scene';
 // import type {
 //   TypeParsablePoint
 // } from '../../tools/g2';
 import { getState } from '../Recorder/state';
 import type { TypeColor } from '../../tools/types';
 import type { CPY_Step } from '../geometries/copy/copy';
-import type { OBJ_TextDefinition } from '../FigurePrimitives/FigurePrimitives';
+import type { OBJ_TextDefinition } from '../FigurePrimitives/FigurePrimitiveTypes2D';
 
 // A Drawing object can be:
 //  - GL primitive vertices
@@ -61,8 +63,6 @@ import type { OBJ_TextDefinition } from '../FigurePrimitives/FigurePrimitives';
  * closed boundary or border of the element. An element may have multiple
  * closed borders. A border defines where a shape can be touched, or how it
  * bounces of figure boundaries
- * @property {Array<Array<Point>>} holeBorder areas where a shape cannot be
- * touched
  * @see {@link FigureElementPrimitive}
  */
 class DrawingObject {
@@ -72,7 +72,6 @@ class DrawingObject {
   textBorder: Array<Array<Point>>; // Border vertices
   textBorderBuffer: Array<Array<Point>>;
   // touchBorder: Array<Array<Point>>;
-  // hole: Array<Array<Point>>;  // Border of any holes inside of main border
   // +change: (any, any, any) => void;
   // onLoad: Function | null;   // Only used for drawing objects with asynchronous
   //                            loading (like textures)
@@ -111,6 +110,11 @@ class DrawingObject {
   update(options: Object) {
   }
 
+  /* eslint-disable class-methods-use-this */
+  // $FlowFixMe
+  getCanvas(): HTMLCanvasElement {}
+  /* eslint-enable class-methods-use-this */
+
 
   // getBoundaries(transformMatrix: null | Array<number> = null): Array<Array<Point>> {
   //   return getBounds(this.border, transformMatrix);
@@ -127,10 +131,12 @@ class DrawingObject {
 
   /* eslint-disable class-methods-use-this, no-unused-vars */
   drawWithTransformMatrix(
-    transformMatrix: Array<number>,
+    scene: Scene,
+    transformMatrix: Type3DMatrix,
     color: TypeColor,
     // canvasIndex: number,
     numPoints: number,
+    targetTexture: boolean = false,
   ) {
   }
   /* eslint-enable */
@@ -140,7 +146,7 @@ class DrawingObject {
   //   return getBoundingRect(boundaries);
   // }
 
-  getLocation(transformMatrix: Array<number> | null = null): Point {
+  getLocation(transformMatrix: Type3DMatrix | null = null): Point {
     if (transformMatrix == null) {
       return this.location;
     }
@@ -198,7 +204,6 @@ class DrawingObject {
     drawingPrimitive: any,
     // border: Array<Array<Point>> | 'points' | 'rect',
     // touchBorder: Array<Array<Point>> | 'border' | 'rect' | 'none',
-    // holes: Array<Array<Point>> | 'none',
     copy: Array<CPY_Step> = [],
   ) {
   }

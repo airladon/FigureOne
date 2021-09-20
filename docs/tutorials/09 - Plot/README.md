@@ -12,7 +12,7 @@ Open `index.html` in a browser to view example.
 const figure = new Fig.Figure();
 
 const pow = () => {
-  const xValues = Fig.tools.math.range(0, 10, 0.05);
+  const xValues = Fig.range(0, 10, 0.05);
   return xValues.map(x => [x, x ** 2]);
 };
 
@@ -33,7 +33,7 @@ The trace is defined by:
 
 ```js
 const pow = () => {
-  const xValues = Fig.tools.math.range(0, 10, 0.05);
+  const xValues = Fig.range(0, 10, 0.05);
   return xValues.map(x => [x, x ** 2]);
 };
 ```

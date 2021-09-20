@@ -3,7 +3,7 @@
 
 
 const figure = new Fig.Figure({
-  limits: [-3, 0, 6, 3],
+  scene: [-3, 0, 3, 3],
   color: [0.3, 0.3, 0.3, 1],
   font: { size: 0.1 },
 });
@@ -17,7 +17,7 @@ const color3 = [1, 0, 1, 1];
 
 function setupFigure() {
   const { Transform, Point } = Fig;
-  const { range, rand, randSign } = Fig.tools.math;
+  const { range, rand, randSign } = Fig;
   const minVelocity = 0.5;
   const time = new TimeKeeper();
   let maxTime = 0;
@@ -325,18 +325,14 @@ function setupFigure() {
         {
           name: 'movePad',
           make: 'primitives.polygon',
-          options: {
-            radius: 0.4,
-            sides: 8,
-            color: [0, 0, 0, 0],
-          },
-          mods: {
-            move: {
-              bounds: {
-                translation: {
-                  left: 0, right: 0, bottom: -A, top: A,
-                },
-              },
+          radius: 0.4,
+          sides: 8,
+          color: [1, 0, 0, 0],
+          move: {
+            bounds: {
+              p1: [0, -A],
+              p2: [0, A],
+              ends: 2,
             },
           },
         },
@@ -398,7 +394,7 @@ function setupFigure() {
       // updates all the particles with their current displacement.
       update: (deltaTime) => {
         // Get movePad displacement
-        const { y } = movePad.transform.order[2];
+        const y = movePad.transform.def[2][2];
         // Record the displacement
         medium.custom.recording.record(y, deltaTime);
 
@@ -539,11 +535,13 @@ function setupFigure() {
     const trace = timePlot.getElement('trace');
     timePlot.custom.update = () => {
       const recorded = recording.getRecording();
-      const points = Array(recorded.time.length);
+      const points = Array(recorded.data.length);
       for (let i = 0; i < points.length; i += 1) {
         points[i] = new Point(axis.valueToDraw(recorded.time[i]), recorded.data[i]);
       }
-      trace.custom.updatePoints({ points });
+      if (points.length > 0) {
+        trace.custom.updatePoints({ points });
+      }
     };
     return timePlot;
   };

@@ -1,6 +1,6 @@
 // @flow
 import {
-  Transform, Point, getMaxTimeFromVelocity, getPoint,
+  Transform, Point, getMaxTimeFromVelocity, getPoint, getScale, toDelta,
 } from '../../../../tools/g2';
 import type { OBJ_TranslationPath } from '../../../../tools/g2';
 import {
@@ -26,7 +26,7 @@ import type { AnimationStartTime } from '../../AnimationManager';
  * `delta` is used
  * @property {TypeParsablePoint} [delta] target delta - only used if `target`
  * is undefined
- * @property {null | TypeParsablePoint} [velocity] velocity of
+ * @property {null | TypeParsablePoint | number} [velocity] velocity of
  * position overrides `duration` - `null` to use `duration` (`null`)
  * @property {number} [null | maxDuration] maximum duration to cap to -
  * `null` for no cap (`null`)
@@ -220,7 +220,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     // If Velocity is defined, then use it to calculate duration
     const { target, start, velocity } = this.position;
     if (velocity != null && start != null && target != null) {
-      const velocityToUse = getPoint(velocity);
+      const velocityToUse = getScale(velocity);
       this.duration = getMaxTimeFromVelocity(
         new Transform().translate(start),
         new Transform().translate(target),
@@ -243,7 +243,8 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     const p = percentComplete;
 
     if (this.position.delta != null && this.position.start != null) {
-      const next = this.position.start.toDelta(
+      const next = toDelta(
+        this.position.start,
         this.position.delta, p,
         this.position.path.style,
         this.position.path,

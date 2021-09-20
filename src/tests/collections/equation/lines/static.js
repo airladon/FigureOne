@@ -29,7 +29,7 @@ function makeShape(name, options, mods, getPos) {
       onClick: () => tools.misc.Console(`${indexName}: ${name}`),
     }, mods),
   };
-  o.options.position = tools.g2.getPoint(options.position).add(x, y);
+  o.options.position = tools.g2.getPoint(options.position || [0, 0]).add(x, y);
   return o;
 }
 

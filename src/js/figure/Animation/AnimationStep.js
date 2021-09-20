@@ -209,8 +209,25 @@ export default class AnimationStep {
     if (this.startTime == null) {
       this.startTime = now - this.startTimeOffset;
     }
-    const deltaTime = (now - this.startTime) * speed;
+    const deltaTime = math.round((now - this.startTime) * speed, this.precision);
+    if (this.duration == null) {
+      if (this.beforeFrame) {
+        this.beforeFrame(deltaTime);
+      }
+      this.setFrame(deltaTime);
+      if (this.afterFrame) {
+        this.afterFrame(deltaTime);
+      }
+      if (this.duration == null) {
+        return null;
+      }
+      // If an infinite animation (this.duration == null) has now got a finite
+      // duration, then it has been cancelled.
+      this.finish();
+      return 0;
+    }
     let remainingTime = math.round(-(this.duration + this.startDelay - deltaTime), this.precision);
+
     if (deltaTime >= this.startDelay) {
       let deltaTimeAfterDelay = deltaTime - this.startDelay;
       if (deltaTimeAfterDelay >= this.duration) {

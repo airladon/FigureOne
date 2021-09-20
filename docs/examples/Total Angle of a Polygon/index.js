@@ -2,9 +2,10 @@
 /* eslint-disable object-curly-newline */
 
 const figure = new Fig.Figure({
-  limits: [-2.5, -1.7, 6.667 * 0.65, 5 * 0.65],
+  scene: [-2.5, -1.7, -2.5 + 6.667 * 0.65, -1.7 + 5 * 0.65],
   color: [1, 0, 0, 1],
 });
+
 
 /*
 .##.....##.########.##.......########..########.########...######.
@@ -23,15 +24,13 @@ const get = name => figure.getElement(name);
 const angle = (p1, p2, p3, name, label, alpha = 1, fill = false, direction = 1) => ({
   name,
   make: 'collections.angle',
-  options: {
-    p1,
-    p2,
-    p3,
-    label: { offset: 0.01, text: label },
-    curve: { width: 0.01, radius: 0.3, fill, sides: 200 },
-    direction,
-    color: [1, 0, 0, alpha],
-  },
+  p1,
+  p2,
+  p3,
+  label: { offset: 0.01, text: label },
+  curve: { width: 0.01, radius: 0.3, fill, sides: 200 },
+  direction,
+  color: [1, 0, 0, alpha],
 });
 
 // Helper function that sets equation elements as touchable or not
@@ -63,7 +62,7 @@ const hideAngles = () => {
 .......########.##.....##....##.....#######...#######.....##...
 */
 // Define the polyline points
-const { getPoints, threePointAngle } = Fig.tools.g2;
+const { getPoints, threePointAngle } = Fig;
 const points = [
   [1, 0.5], [0.4, 1.3], [-1.7, 1.5], [-0.5, 0.7], [-1.4, -0.5], [0.5, -0.5],
 ];
@@ -140,23 +139,19 @@ figure.add([
   {
     name: 'button',
     make: 'collections.rectangle',
-    options: {
-      width: 0.6,
-      height: 0.3,
-      color: [0.3, 0.3, 0.3, 1],
-      dimColor: [0.7, 0.7, 0.7, 1],
-      line: { width: 0.005 },
-      button: true,
-      label: {
-        text: 'Simplify',
-        font: { size: 0.12, color: [0.3, 0.3, 0.3, 1] },
-      },
-      corner: { radius: 0.05, sides: 10 },
-      position: [1, -1.5],
+    width: 0.6,
+    height: 0.3,
+    color: [0.3, 0.3, 0.3, 1],
+    dimColor: [0.7, 0.7, 0.7, 1],
+    line: { width: 0.005 },
+    button: true,
+    label: {
+      text: 'Simplify',
+      font: { size: 0.12, color: [0.3, 0.3, 0.3, 1] },
     },
-    mods: {
-      isTouchable: true,
-    },
+    corner: { radius: 0.05, sides: 10 },
+    position: [1, -1.5],
+    touch: true,
   },
 
   // Equation Definition

@@ -57,7 +57,7 @@ async function snap(time, threshold) {
   });
 }
 
-/**
+/*
  * Tests
  * 1) Playback tests: snapshot at each state time during playback
  * 2) Seek tests: snapshot of seek to each state time

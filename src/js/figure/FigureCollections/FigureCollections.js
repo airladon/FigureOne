@@ -1,7 +1,7 @@
 // @flow
 import WebGLInstance from '../webgl/webgl';
 import {
-  Rect, Transform, Point,
+  Transform, Point,
 } from '../../tools/g2';
 
 import { joinObjects } from '../../tools/tools';
@@ -19,12 +19,15 @@ import CollectionsPolyline from './PolyLine';
 // eslint-disable-next-line import/no-cycle
 import CollectionsAxis from './Axis';
 // eslint-disable-next-line import/no-cycle
+import CollectionsAxis3 from './Axis3';
+// eslint-disable-next-line import/no-cycle
 import CollectionsTrace from './Trace';
 import type { COL_Line } from './Line';
 import type { COL_Angle } from './Angle';
 import type { TypeLabelOptions } from './EquationLabel';
 import type { COL_Polyline } from './PolyLine';
 import type { COL_Axis } from './Axis';
+import type { COL_Axis3 } from './Axis3';
 import type { COL_Trace } from './Trace';
 import type { COL_Plot } from './Plot';
 import type { COL_Rectangle } from './Rectangle';
@@ -39,7 +42,7 @@ import CollectionsRectangle from './Rectangle';
 import type { EQN_Equation } from '../Equation/Equation';
 // eslint-disable-next-line import/no-cycle
 import { Equation } from '../Equation/Equation';
-import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitives';
+import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
 // import EqnNavigator from './EqnNavigator';
 // import type { TypeNavigatorOptions } from './EqnNavigator';
 // eslint-disable-next-line import/no-cycle
@@ -60,7 +63,6 @@ import type { TypeColor } from '../../tools/types';
 export default class FigureCollections {
   webgl: Array<WebGLInstance>;
   draw2D: DrawContext2D;
-  limits: Rect;
   primitives: Object;
   // equationFromFig: Object;
   isTouchDevice: boolean;
@@ -77,7 +79,6 @@ export default class FigureCollections {
   ) {
     this.webgl = primitives.webgl;
     this.draw2D = primitives.draw2D;
-    this.limits = primitives.limits;
     this.primitives = primitives;
     this.isTouchDevice = isTouchDevice;
     this.animateNextFrame = animateNextFrame;
@@ -92,13 +93,12 @@ export default class FigureCollections {
     ...moreOptions: Array<OBJ_Collection>
   ) {
     const defaultOptions = {
-      transform: new Transform('collection').scale(1, 1).rotate(0).translate(0, 0),
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       border: 'children',
       touchBorder: 'children',
-      holeBorder: 'children',
       color: this.primitives.defaultColor,
       parent: null,
-      limits: this.limits,
+      // scene: this.primitives.scene,
     };
     let optionsToUse;
     if (transformOrPointOrOptions instanceof Point) {
@@ -190,6 +190,15 @@ export default class FigureCollections {
    */
   axis(...options: Array<COL_Axis>) {
     return new CollectionsAxis(
+      this, joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options),
+    );
+  }
+
+  /**
+   * Create a {@link CollectionsAixs3}.
+   */
+  axis3(...options: Array<COL_Axis3>) {
+    return new CollectionsAxis3(
       this, joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options),
     );
   }

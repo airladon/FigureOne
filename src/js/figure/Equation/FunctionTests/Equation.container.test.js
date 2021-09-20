@@ -181,9 +181,9 @@ describe('Equation Functions - Container', () => {
       functions.parameterSteps();
       eqn.showForm('base');
       figure.setFirstTransform();
-      baseA = eqn._a.getBoundingRect('figure');
-      baseB = eqn._b.getBoundingRect('figure');
-      baseC = eqn._c.getBoundingRect('figure');
+      baseA = eqn._a.getBoundingRect('local');
+      baseB = eqn._b.getBoundingRect('local');
+      baseC = eqn._c.getBoundingRect('local');
       width = 1;
       multiplier = 0.2;
       smallWidth = 0.01;
@@ -194,9 +194,9 @@ describe('Equation Functions - Container', () => {
     test('Width Left', () => {
       eqn.showForm('widthLeft');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newC = eqn._c.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newC = eqn._c.getBoundingRect('local');
       expect(round(newA.left)).toEqual(round(baseA.left));
       expect(round(newB.left)).toEqual(round(baseA.right));
       expect(round(newC.left)).toEqual(round(baseA.right + width));
@@ -204,9 +204,9 @@ describe('Equation Functions - Container', () => {
     test('Width Center', () => {
       eqn.showForm('widthCenter');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newC = eqn._c.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newC = eqn._c.getBoundingRect('local');
       expect(round(newA.left)).toEqual(round(baseA.left));
       expect(round(newB.left)).toEqual(round(baseA.right + width / 2 - baseB.width / 2));
       expect(round(newC.left)).toEqual(round(baseA.right + width));
@@ -214,9 +214,9 @@ describe('Equation Functions - Container', () => {
     test('Width Right', () => {
       eqn.showForm('widthRight');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newC = eqn._c.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newC = eqn._c.getBoundingRect('local');
       expect(round(newA.left)).toEqual(round(baseA.left));
       expect(round(newB.left)).toEqual(round(baseA.right + width - baseB.width));
       expect(round(newC.left)).toEqual(round(baseA.right + width));
@@ -224,9 +224,9 @@ describe('Equation Functions - Container', () => {
     test('Width Multiplier', () => {
       eqn.showForm('widthMultiplier');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newC = eqn._c.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newC = eqn._c.getBoundingRect('local');
       expect(round(newA.left)).toEqual(round(baseA.left));
       expect(round(newB.left)).toEqual(round(baseA.right + width * multiplier));
       expect(round(newC.left)).toEqual(round(baseA.right + width));
@@ -234,9 +234,9 @@ describe('Equation Functions - Container', () => {
     test('Small Width Center', () => {
       eqn.showForm('smallWidthCenter');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newC = eqn._c.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newC = eqn._c.getBoundingRect('local');
       expect(round(newA.left)).toEqual(round(baseA.left));
       expect(round(newB.left)).toEqual(round(baseA.right + smallWidth / 2 - baseB.width / 2));
       expect(round(newC.left)).toEqual(round(baseA.right + smallWidth));
@@ -244,9 +244,9 @@ describe('Equation Functions - Container', () => {
     test('Descent Ascent Baseline', () => {
       eqn.showForm('descentAscentBaseline');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
-      const newC = eqn._c.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
+      const newC = eqn._c.getBoundingRect('local');
       expect(round(newA.left)).toEqual(round(baseA.left));
       expect(round(newB.left)).toEqual(round(baseB.left));
       expect(round(newC.left)).toEqual(round(baseC.left));
@@ -255,61 +255,61 @@ describe('Equation Functions - Container', () => {
     test('Descent Ascent Bottom', () => {
       eqn.showForm('descentAscentBottom');
       figure.setFirstTransform();
-      const newB = eqn._b.getBoundingRect('figure');
+      const newB = eqn._b.getBoundingRect('local');
       expect(round(newB.bottom)).toEqual(round(-descent));
     });
     test('Descent Ascent Middle', () => {
       eqn.showForm('descentAscentMiddle');
       figure.setFirstTransform();
-      const newB = eqn._b.getBoundingRect('figure');
+      const newB = eqn._b.getBoundingRect('local');
       expect(round(newB.bottom))
         .toEqual(round(-descent + (descent + ascent) / 2 - baseB.height / 2));
     });
     test('Descent Ascent Top', () => {
       eqn.showForm('descentAscentTop');
       figure.setFirstTransform();
-      const newB = eqn._b.getBoundingRect('figure');
+      const newB = eqn._b.getBoundingRect('local');
       expect(round(newB.top)).toEqual(round(ascent));
     });
     test('Descent Ascent Multiplier', () => {
       eqn.showForm('descentAscentMultiplier');
       figure.setFirstTransform();
-      const newB = eqn._b.getBoundingRect('figure');
+      const newB = eqn._b.getBoundingRect('local');
       expect(round(newB.bottom)).toEqual(round(-descent + (descent + ascent) * multiplier));
     });
     test('Fit Width', () => {
       eqn.showForm('fitWidth');
       figure.setFirstTransform();
-      const newB = eqn._b.getBoundingRect('figure');
+      const newB = eqn._b.getBoundingRect('local');
       expect(round(newB.width)).toEqual(round(width));
       expect(round(newB.height)).toEqual(round(width / baseB.width * baseB.height));
     });
     test('Fit Height', () => {
       eqn.showForm('fitHeight');
       figure.setFirstTransform();
-      const newB = eqn._b.getBoundingRect('figure');
+      const newB = eqn._b.getBoundingRect('local');
       expect(round(newB.height)).toEqual(round(ascent + descent));
       expect(round(newB.width)).toEqual(round((ascent + descent) / baseB.height * baseB.width));
     });
     test('Fit Contain Width', () => {
       eqn.showForm('fitContainWidth');
       figure.setFirstTransform();
-      const newB = eqn._b.getBoundingRect('figure');
+      const newB = eqn._b.getBoundingRect('local');
       expect(round(newB.width)).toEqual(round(width));
       expect(round(newB.height)).toEqual(round(width / baseB.width * baseB.height));
     });
     test('Fit Contain Height', () => {
       eqn.showForm('fitContainHeight');
       figure.setFirstTransform();
-      const newB = eqn._b.getBoundingRect('figure');
+      const newB = eqn._b.getBoundingRect('local');
       expect(round(newB.height)).toEqual(round(ascent + descent));
       expect(round(newB.width)).toEqual(round((ascent + descent) / baseB.height * baseB.width));
     });
     test('Scale Default', () => {
       eqn.showForm('scaleDefault');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
       expect(round(newA.left)).toEqual(round(baseA.left));
       expect(round(newA.width)).toEqual(round(baseA.width));
       expect(round(newB.left)).toEqual(round(baseA.right));
@@ -318,8 +318,8 @@ describe('Equation Functions - Container', () => {
     test('Scale Fixed Container', () => {
       eqn.showForm('scaleFixedContainer');
       figure.setFirstTransform();
-      const newA = eqn._a.getBoundingRect('figure');
-      const newB = eqn._b.getBoundingRect('figure');
+      const newA = eqn._a.getBoundingRect('local');
+      const newB = eqn._b.getBoundingRect('local');
       expect(round(newA.left)).toEqual(round(baseA.left));
       expect(round(newA.width)).toEqual(round(baseA.width));
       expect(round(newB.left)).toEqual(round(baseA.right));

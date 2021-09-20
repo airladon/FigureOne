@@ -27,7 +27,9 @@ Math.random = mulberry32(seed());
 // ********************************
 let sleepTime = 0;
 const figure = new Fig.Figure({
-  limits: [-3, -2.25, 6, 4.5],
+  scene: {
+    left: -3, bottom: -2.25, right: 3, top: 2.25,
+  },
   color: [1, 0, 0, 1],
   lineWidth: 0.01,
   font: { size: 0.1 },
@@ -43,7 +45,7 @@ figure.add([
       line: { width: 0.002 },
       xStep: 0.1,
       yStep: 0.1,
-      bounds: figure.limits._dup(),
+      bounds: new Fig.getRect([-3, -2.25, 6, 4.5]),
     },
   },
   {
@@ -55,7 +57,7 @@ figure.add([
       line: { width: 0.005 },
       xStep: 0.5,
       yStep: 0.5,
-      bounds: figure.limits._dup(),
+      bounds: new Fig.getRect([-3, -2.25, 6, 4.5]),
     },
   },
   {

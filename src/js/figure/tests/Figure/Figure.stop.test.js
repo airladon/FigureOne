@@ -226,11 +226,11 @@ describe('Figure Stop', () => {
       });
       test('Dissolve To Complete', () => {
         figure.stop('dissolveToComplete');
-        expect(state()).toEqual([true, 1, [], [1], [1], 1, 0, true]);
-        figure.mock.timeStep(0.8);
-        figure.mock.timeStep(0.2);
-        figure.mock.timeStep(0.8);
-        expect(state()).toEqual([false, 0, [], [], [1], 1, 1, false]);
+        // expect(state()).toEqual([true, 1, [], [1], [1], 1, 0, true]);
+        // figure.mock.timeStep(0.8);
+        // figure.mock.timeStep(0.2);
+        // figure.mock.timeStep(0.8);
+        expect(state()).toEqual([false, 0, [], [], [1], 0, 1, false]);
       });
     });
     describe('Middle', () => {
@@ -292,8 +292,8 @@ describe('Figure Stop', () => {
   describe('Moving Freely', () => {
     let state;
     beforeEach(() => {
-      a.move.freely.deceleration = { translation: 1 };
-      a.move.freely.zeroVelocityThreshold = { translation: 0.0000001 };
+      a.move.freely.deceleration = 1;
+      a.move.freely.zeroVelocityThreshold = 0.0000001;
       a.setMovable(true);
       figure.mock.touchDown([0, 0]);
       figure.mock.timeStep(1);
@@ -418,10 +418,10 @@ describe('Figure Stop', () => {
     let state;
     describe('Animate, move freely, same time', () => {
       beforeEach(() => {
-        b.move.freely.zeroVelocityThreshold = { translation: 0.0000001 };
-        b.move.freely.deceleration = { translation: 1 };
+        b.move.freely.zeroVelocityThreshold = 0.0000001;
+        b.move.freely.deceleration = 1;
         b.setMovable(true);
-        figure.mock.touchDown([0, 0]);
+        figure.mock.touchElement(b, [0, 0]);
         figure.mock.timeStep(1);
         figure.mock.touchMove([2, 0]);
         figure.mock.touchUp();
@@ -486,10 +486,10 @@ describe('Figure Stop', () => {
     });
     describe('Animate, move freely, different times', () => {
       beforeEach(() => {
-        b.move.freely.zeroVelocityThreshold = { translation: 0.0000001 };
-        b.move.freely.deceleration = { translation: 1 };
+        b.move.freely.zeroVelocityThreshold = 0.0000001;
+        b.move.freely.deceleration = 1;
         b.setMovable(true);
-        figure.mock.touchDown([0, 0]);
+        figure.mock.touchElement(b, [0, 0]);
         figure.mock.timeStep(1);
         figure.mock.touchMove([2, 0]);
         figure.mock.touchUp();

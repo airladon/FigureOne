@@ -1,19 +1,19 @@
 /* globals Fig */
 
 const figure = new Fig.Figure({
-  limits: [-3, -3, 6, 6],
+  scene: [-3, -3, 3, 3],
   backgroundColor: [1, 1, 0.9, 1],
 });
-const { rand } = Fig.tools.math;
+const { rand } = Fig;
 
 const vertexShader = `
-attribute vec2 a_position;
+attribute vec2 a_vertex;
 attribute vec4 a_color;
 attribute vec2 a_velocity;
 attribute vec2 a_center;
 attribute float a_radius;
-varying vec4 v_col;
-uniform mat3 u_matrix;
+varying vec4 v_color;
+uniform mat4 u_worldViewProjectionMatrix;
 uniform float u_time;
 
 float calc(float limit, float pos, float center, float vel) {
@@ -36,10 +36,10 @@ float calc(float limit, float pos, float center, float vel) {
   return x;
 }
 void main() {
-  float x = calc(3.0 - a_radius, a_position.x, a_center.x, a_velocity.x);
-  float y = calc(3.0 - a_radius, a_position.y, a_center.y, a_velocity.y);
-  gl_Position = vec4((u_matrix * vec3(x, y, 1)).xy, 0, 1);
-  v_col = a_color;
+  float x = calc(3.0 - a_radius, a_vertex.x, a_center.x, a_velocity.x);
+  float y = calc(3.0 - a_radius, a_vertex.y, a_center.y, a_velocity.y);
+  gl_Position = u_worldViewProjectionMatrix * vec4(x, y, 0, 1);
+  v_color = a_color;
 }`;
 
 const points = [];
@@ -74,17 +74,18 @@ for (let i = 0; i < 10000; i += 1) {
 
 const element = figure.add({
   make: 'gl',
-  // Define the custom shader and variables (u_matrix is the element transform
-  // matrix)
+  // Define the custom shader and variables. u_worldViewProjectionMatrix is the
+  // element transform combined with the scene (projection and camera)
+  // matrix.
   vertexShader: {
     src: vertexShader,
-    vars: ['a_position', 'a_color', 'a_velocity', 'a_center', 'a_radius', 'u_matrix', 'u_time'],
+    vars: ['a_vertex', 'a_color', 'a_velocity', 'a_center', 'a_radius', 'u_worldViewProjectionMatrix', 'u_time'],
   },
-  // Built in shader that allows for colored vertices
-  fragShader: 'vertexColor',
+  // Compose a built in shader with vertex defined colors
+  fragmentShader: { color: 'vertex' },
   // Define buffers and uniforms
   vertices: { data: points },
-  buffers: [
+  attributes: [
     {
       name: 'a_color', size: 4, data: colors, type: 'UNSIGNED_BYTE', normalize: true,
     },

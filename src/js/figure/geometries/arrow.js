@@ -6,7 +6,7 @@ import {
   joinObjects, joinObjectsWithOptions,
 } from '../../tools/tools';
 import { getPolygonPoints } from './polygon/polygon';
-import type { OBJ_Arrow } from '../FigurePrimitives/FigurePrimitives';
+import type { OBJ_Arrow } from '../FigurePrimitives/FigurePrimitiveTypes2D';
 // import { makePolyLine } from './lines/lines';
 
 /**
@@ -396,7 +396,7 @@ function getReverseTriTail(o: {
   tailWidth: number,
   tail: boolean | number,
 }) {
-  const hLine = new Line([-o.length, o.tailWidth / 2], 1, 0);
+  const hLine = new Line({ p1: [-o.length, o.tailWidth / 2], length: 1, angle: 0 });
   let headTop = new Line([-o.length, 0], [0, o.width / 2]);
   let i = hLine.intersectsWith(headTop).intersect || new Point(-o.length, o.tailWidth / 2);
   let t = 0;
@@ -590,11 +590,11 @@ function getBarbTail(o: {
   if (o.tail === false) {
     tailX = headX + o.barb;
   }
-  const line1 = new Line([tailX, o.tailWidth / 2], 1, 0);
+  const line1 = new Line({ p1: [tailX, o.tailWidth / 2], length: 1, angle: 0 });
   const back = new Line([headX + o.barb, 0], [headX, o.width / 2]);
   const backIntersect = line1.intersectsWith(back);
   let i = backIntersect.intersect || new Point(tailX, o.tailWidth / 2);
-  if (backIntersect.withinLine === false) {
+  if (backIntersect.onLines === false) {
     i = new Point(headX + o.barb, o.tailWidth / 2);
   }
   return [i, headX, tailX];
@@ -951,7 +951,7 @@ function getLineTail(o: {
   }
   const topOutsideLine = new Line([headX + a, o.width / 2], [0, 0]);
   const topInsideLine = topOutsideLine.offset('bottom', o.tailWidth);
-  const line = new Line([headX, o.tailWidth / 2], 1, 0);
+  const line = new Line({ p1: [headX, o.tailWidth / 2], length: 1, angle: 0 });
   const outsideIntersect = topOutsideLine.intersectsWith(line).intersect
     || new Point(headX, o.tailWidth / 2);
   let insideIntersect = topInsideLine.intersectsWith(line).intersect
@@ -961,13 +961,13 @@ function getLineTail(o: {
   }
   let zeroPoint;
   const insideIntersectWithZero = topInsideLine
-    .intersectsWith(new Line([-o.length, 0], 1, 0));
+    .intersectsWith(new Line({ p1: [-o.length, 0], length: 1, angle: 0 }));
   if (!insideIntersectWithZero) {
     zeroPoint = -o.length;
-  } else {
+  } else {  // $FlowFixMe
     zeroPoint = insideIntersectWithZero.intersect.x;
   }
-  if (!insideIntersectWithZero.isWithinLine || o.tail === false) {
+  if (!insideIntersectWithZero.onLines || o.tail === false) {
     tailX = -o.length;
   }
   let stubTail = false;
@@ -1196,8 +1196,8 @@ function getPolygonTail(o: {
   const bottomSide = new Line(
     points[bottomSideNum], points[bottomSideNum + 1],
   );
-  const hLineTop = new Line([-o.radius, o.tailWidth / 2], 1, 0);
-  const hLineBottom = new Line([-o.radius, -o.tailWidth / 2], 1, 0);
+  const hLineTop = new Line({ p1: [-o.radius, o.tailWidth / 2], length: 1, angle: 0 });
+  const hLineBottom = new Line({ p1: [-o.radius, -o.tailWidth / 2], length: 1, angle: 0 });
 
   const topIntersect = hLineTop.intersectsWith(topSide).intersect
     || new Point(-o.radius, o.tailWidth / 2);
@@ -1576,7 +1576,6 @@ export {
 
 // // Draw examples of arrows
 
-// const figure = new Fig.Figure({ limits: [-3, -3, 6, 6]});
 
 // let y = 3;
 // let yStep = -0.7;

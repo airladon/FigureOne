@@ -14,11 +14,8 @@ export default function Generic(
   // vertices: Array<Point>,
   // border: Array<Array<Point>> | 'points' | 'rect',
   // touchBorder: Array<Array<Point>> | 'rect' | 'border' | 'none',
-  // holeBorder: Array<Array<Point>> | 'none',
-  // drawType: 'triangles' | 'strip' | 'fan' | 'lines',
   color: TypeColor,
   transformOrLocation: Transform | Point,
-  figureLimits: Rect,
   textureLocation: string = '',
   textureVertexSpace: Rect = new Rect(-1, -1, 2, 2),
   textureCoords: Rect = new Rect(0, 0, 1, 1),
@@ -32,11 +29,10 @@ export default function Generic(
     // vertices,
     // border,
     // touchBorder,
-    // holeBorder,
     // drawType,
     textureLocation,
     getRect(textureVertexSpace),
-    getRect(textureCoords),
+    textureCoords,
     textureRepeat,
     // copy,
   );
@@ -50,5 +46,5 @@ export default function Generic(
     transform = transformOrLocation._dup();
   }
   // $FlowFixMe
-  return new FigureElementPrimitive(generic, transform, color, figureLimits, null, name);
+  return new FigureElementPrimitive(generic, transform, color, null, name);
 }

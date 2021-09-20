@@ -1,3 +1,5 @@
+/* globals Fig */
+
 /**
 This function records values over time. The recorder samples at a specific rate
 (`timeStep`), and if values are input with larger time steps, then additional
@@ -48,7 +50,7 @@ function Recorder(duration) {
     const lastValue = data[index - 1];
     const deltaValue = Fig.tools.math.round((value - lastValue) / count, 6);
     for (let i = 0; i < count; i += 1) {
-      data[index] = lastValue + deltaValue * (i + 1);
+      data[index] = Fig.roundNum(lastValue + deltaValue * (i + 1), 3);
       incrementIndex();
     }
   }
@@ -63,7 +65,7 @@ function Recorder(duration) {
       };
     }
     return {
-      time: time.slice(0, i + 1),
+      time: time.slice(0, i),
       data: data.slice(num, num + i),
     };
   }

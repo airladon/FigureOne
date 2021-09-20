@@ -1,24 +1,29 @@
 toc:
-  - name: FigureOne API Reference
+  - name: Introduction
     file: ./docs/api/tutorials/intro.md
+  - name: Geometry
+    file: ./docs/api/tutorials/geometric/geometric.md
+  - Point
+  - Line
+  - Plane
+  - Rect
+  - Transform
+  - TypeParsablePoint
+  - TypeParsableLine
+  - TypeParsablePlane
+  - TypeParsableRect
+  - TypeParsableTransform
   - name: Figure
+    file: ./docs/api/tutorials/figure/figure.md
   - Figure
   - OBJ_Figure
   - name: Figure Elements
   - FigureElement
   - FigureElementPrimitive
   - FigureElementCollection
-  - name: Geometric Classes
-    file: ./docs/api/tutorials/geometric/geometric.md
-  - Point
-  - Rect
-  - Line
-  - Translation
-  - Rotation
-  - Scale
-  - Transform
-  - name: Shape Primitives
+  - name: 2D Shape Primitives
     file: ./docs/api/tutorials/draw/draw.md
+  - OBJ_FigurePrimitive
   - OBJ_Generic
   - OBJ_Line
   - OBJ_Polyline
@@ -30,7 +35,24 @@ toc:
   - OBJ_Polygon
   - OBJ_Star
   - OBJ_Grid
-  - name: Shape Collections
+  - name: Text
+    file: ./docs/api/tutorials/text/text.md
+  - OBJ_Text
+  - OBJ_TextLine
+  - OBJ_TextLines
+  - name: 3D Shape Primitives
+    file: ./docs/api/tutorials/shapes3D/shapes3d.md
+  - OBJ_Generic3All
+  - OBJ_Generic3
+  - OBJ_Cube
+  - OBJ_Sphere
+  - OBJ_Cylinder
+  - OBJ_Cone
+  - OBJ_Prism
+  - OBJ_Line3
+  - OBJ_Revolve
+  - OBJ_Surface
+  - name: 2D Shape Collections
     file: ./docs/api/tutorials/collections/collections.md
   - OBJ_Collection
   - CollectionsLine
@@ -45,11 +67,19 @@ toc:
   - COL_Axis
   - CollectionsPlot
   - COL_Plot
-  - name: Text
-    file: ./docs/api/tutorials/text/text.md
-  - OBJ_Text
-  - OBJ_TextLine
-  - OBJ_TextLines
+  - name: 3D Shape Collections
+  - CollectionsAxis3
+  - COL_Axis3
+  - name: Interactivity
+    file: ./docs/api/tutorials/interactive/interactive.md
+  - OBJ_ElementMove
+  - OBJ_ElementMoveFreely
+  - OBJ_CameraControl
+  - OBJ_Touch
+  - OBJ_RangeBounds
+  - OBJ_LineBounds
+  - OBJ_RectBounds
+  - TypeParsableBounds
   - name: Animation
     file: ./docs/api/tutorials/animation/animation.md
   - AnimationManager
@@ -162,13 +192,19 @@ toc:
   - TypeRecorderTime
   - name: Shaders
     file: ./docs/api/tutorials/shaders/shaders.md
-  - OBJ_GLPrimitive
-  - OBJ_GLBuffer
+  - OBJ_GenericGL
+  - OBJ_GLAttribute
   - OBJ_GLVertexBuffer
   - OBJ_GLUniform
   - TypeGLBufferType
   - TypeGLBufferUsage
   - TypeGLUniform
+  - TypeGLPrimitive
+  - TypeFragmentShader
+  - TypeVertexShader
+  - OBJ_VertexShader
+  - OBJ_FragmentShader
+  - OBJ_GLColorData
   - name: 2D Geometry Tools
   - minAngleDiff
   - getTriangleCenter
@@ -177,6 +213,19 @@ toc:
   - threePointAngle
   - threePointAngleMin
   - clipAngle
+  - normAngle
+  - getDeltaAngle
+  - getDeltaAngle3D
+  - name: Geometry Creation
+  - polygon
+  - polygonLine
+  - cone
+  - cube
+  - sphere
+  - prism
+  - revolve
+  - surface
+  - line3
   - name: Math tools
   - round
   - range
@@ -187,9 +236,6 @@ toc:
   - randElements
   - removeRandElement
   - name: Misc Figure Element
-  - OBJ_ElementMoveFreely
-  - OBJ_ElementMove
-  - Scenarios
   - ElementMovementState
   - ElementPulseState
   - ElementState
@@ -206,24 +252,46 @@ toc:
   - FigureElement#setTransform
   - OBJ_ElementPropertyMod
   - OBJ_ElementMods
+  - OBJ_Scenarios
+  - TypeCoordinateSpace
   - name: Misc Geometry
-  - TypeParsablePoint
-  - TypeParsableLine
-  - TypeParsableRect
-  - TypeParsableTransform
+  - isParsablePoint
+  - isParsablePlane
+  - isParsableTransform
   - getPoint
   - getPoints
   - getScale
   - getLine
   - getRect
   - getTransform
+  - getPlane
+  - getNormal
+  - angleFromVectors
   - OBJ_QuadraticBezier
-  - Intersect
+  - OBJ_LineIntersect
   - OBJ_Buffer
   - TypeParsableBuffer
   - getBuffer
   - TypeParsableBorder
+  - TypeF1DefPlane
+  - TypeF1DefLine
+  - TypeF1DefTransform
+  - TypeF1DefRect
   - TypeBorder
+  - TypeBasisObjectDefinition
+  - TypeTransformRotation
+  - TypeTransformDirection
+  - TypeTransformTranslation
+  - TypeTransformScale
+  - TypeTransformCustom
+  - TypeTransformBasis
+  - TypeTransformBasisToBasis
+  - TypeTransformBasisUserDefinition
+  - TypeTransformBasisToBasisUserDefinition
+  - TypeTransformComponent
+  - TypeTransformComponentUserDefinition
+  - TypeTransformDefinition
+  - TypeTransformUserDefinition
   - name: Misc Shapes
   - OBJ_Texture
   - OBJ_TextDefinition
@@ -291,6 +359,34 @@ toc:
   - OBJ_LineMove
   - TypeHAlign
   - TypeVAlign
+  - OBJ_Scene
+  - TypeRotationDirection
+  - OBJ_LineDefinition
+  - BoundsIntersect
+  - BoundsPointIntersect
+  - BoundsValueIntersect
+  - Bounds
+  - TypeF1DefRangeBounds
+  - RangeBounds
+  - TypeF1DefRectBounds
+  - RectBounds
+  - TypeF1DefLineBounds
+  - LineBounds
+  - getBounds
+  - OBJ_SurfaceGrid
+  - surfaceGrid
+  - name: Misc Geometry Creation
+  - OBJ_PolygonPoints
+  - OBJ_PolygonLinePoints
+  - OBJ_ConePoints
+  - OBJ_CubePoints
+  - OBJ_CylinderPoints
+  - OBJ_Line3Arrow
+  - OBJ_Line3Points
+  - OBJ_PrismPoints
+  - OBJ_RevolvePoints
+  - OBJ_SpherePoints
+  - OBJ_SurfacePoints
   - name: Misc Animation
   - AnimationStep
   - ElementAnimationStep
@@ -361,3 +457,7 @@ toc:
   #         # - TypeParsableRect
   #         # - getRect
   #         - TypeF1DefRect
+
+
+
+

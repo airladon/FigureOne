@@ -21,11 +21,10 @@ figures. Several methods are returned from the function (exposed globally) so
 links within the text can pulse parts of the figure.
 */
 function fig3() {
-  const { Point } = Fig;
-  const { range } = Fig.tools.math;
+  const { Point, range } = Fig;
 
   const fig = new Fig.Figure({
-    limits: [-2, -0.6, 4, 2],
+    scene: [-2, -0.6, 2, 1.4],
     htmlId: 'figureOneContainer3',
     color: [0.4, 0.4, 0.4, 1],
   });
@@ -132,7 +131,7 @@ function fig3() {
   // needs to be updated.
   mover.notifications.add('setTransform', () => {
     offset += mover.getPosition().x;
-    mover.transform.updateTranslation(0, 0.15);
+    mover.transform.updateTranslation([0, 0.15]);
     if (offset > 1) { offset = 1; }
     if (offset < -1) { offset = -1; }
     const newR = offset * 3 + 5;

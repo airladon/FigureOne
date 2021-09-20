@@ -138,21 +138,14 @@ function layoutRight() {
       {
         name: 'rotLine',
         make: 'primitives.line',
-        options: {
-          length: 1,
-          width: 0.1,
-          color: [1, 0, 0, 0],
+        length: 1,
+        width: 0.1,
+        color: [1, 0, 0, 0],
+        move: {
+          type: 'rotation',
+          bounds: { min: 0.0001, max: Math.PI / 2 },
         },
         mods: {
-          move: {
-            type: 'rotation',
-            bounds: {
-              rotation: {
-                min: 0.0001, max: Math.PI / 2,
-              },
-            },
-          },
-          isMovable: true,
           touchBorder: 0.1,
         },
       },
@@ -160,22 +153,14 @@ function layoutRight() {
       {
         name: 'movePad',
         make: 'primitives.polygon',
-        options: {
-          radius: 0.1,
-          color: [0, 0, 1, 0],
-          sides: 20,
-          position: [1, 1],
-        },
-        mods: {
-          move: {
-            bounds: {
-              translation: {
-                left: 0.001, right: 3, bottom: 0.001, top: 2,
-              },
-            },
+        radius: 0.3,
+        color: [0, 0, 1, 0],
+        sides: 20,
+        position: [1, 1],
+        move: {
+          bounds: {
+            left: -0.999, right: 2, bottom: -0.999, top: 1, position: [1, 1],
           },
-          isMovable: true,
-          touchBorder: 0.2,
         },
       },
     ],
@@ -210,8 +195,8 @@ function layoutRight() {
     tri.updatePoints([
       [0, 0], [x, y], [x, 0],
     ]);
-    const a = Fig.tools.math.round(r * 180 / Math.PI, 0) * Math.PI / 180;
-    const rad = Fig.tools.math.round(radius / 1.8508, 4);
+    const a = Fig.round(r * 180 / Math.PI, 0) * Math.PI / 180;
+    const rad = Fig.round(radius / 1.8508, 4);
     const sin = Math.sin(a);
     const cos = Math.cos(a);
     const rSin = rad * Math.sin(a);
@@ -228,7 +213,7 @@ function layoutRight() {
       tri._side20.label.eqn.updateElementText({ v: rCos.toFixed(4) }, 'none');
     }
     if (tri._angle2.label.eqn.getCurrentForm().name === 'value') {
-      tri._angle2.label.eqn.updateElementText({ v: `${Fig.tools.math.round(r * 180 / Math.PI, 0)}\u00b0` });
+      tri._angle2.label.eqn.updateElementText({ v: `${Fig.round(r * 180 / Math.PI, 0)}\u00b0` });
     }
 
     // If theta is too close to 0 or 90 degrees, then rearrange or hide some
@@ -280,10 +265,10 @@ function layoutRight() {
     const hyp = Math.sqrt(x ** 2 + y ** 2);
     const minHypotenuse = 1.3;
     if (hyp < minHypotenuse) {
-      movePad.transform.updateTranslation(
+      movePad.transform.updateTranslation([
         minHypotenuse * Math.cos(angle),
         minHypotenuse * Math.sin(angle),
-      );
+      ]);
     }
     rotLine.transform.updateRotation(angle);
     rotLine.custom.updatePoints({ length: Math.max(hyp, minHypotenuse) });

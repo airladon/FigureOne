@@ -54,3 +54,9 @@ h5 {
 img {
   max-width: 100%;
 }
+
+blockquote {
+  font-style: italic;
+  margin-block-start: 0.5em;
+  margin-inline-start: 20px;
+}

@@ -182,6 +182,7 @@ function makeEquation() {
 
   // Add function to function map that dissolves equation in to its values form
   figure.fnMap.global.add('eqnInToValues', () => {
+    figure.elements._eqn.setScenario('oneTri');
     figure.elements._eqn.showForm('values');
     figure.elements._eqn.animations.new().dissolveIn().start();
     figure.fnMap.exec('triSetup', [2, 1.453], 'values', true);

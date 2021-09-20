@@ -240,7 +240,7 @@
 //   change(options: {
 //     points?: Array<Point>,
 //     copy?: Array<CPY_Step>,
-//     drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
+//     drawType?: TypeGLPrimitive,
 //   }) {
 //     this.resetBuffer();
 //   }
@@ -356,18 +356,18 @@
 //       gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 //     }
 //     // Turn on the attribute
-//     gl.enableVertexAttribArray(locations.a_position);
+//     gl.enableVertexAttribArray(locations.a_vertex);
 
 //     // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
 //     gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer[glIndex]);
 //     // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
 //     gl.vertexAttribPointer(
-//       locations.a_position,
+//       locations.a_vertex,
 //       size, type, normalize, stride, offset,
 //     );
 
 //     gl.uniformMatrix3fv(
-//       locations.u_matrix,
+//       locations.u_worldMatrix,
 //       false,
 //       m2.t(transformMatrix),
 //     );  // Translate

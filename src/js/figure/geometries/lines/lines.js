@@ -1,9 +1,9 @@
 // @flow
 import { cornerLine, lineToCorners } from './corners';
 import { lineToDash } from './dashes';
-import {
-  Line, Point, threePointAngleMin, threePointAngle,
-} from '../../../tools/g2';
+import { Line } from '../../../tools/geometry/Line';
+import { Point } from '../../../tools/geometry/Point';
+import { threePointAngleMin, threePointAngle } from '../../../tools/geometry/angle';
 import {
   joinObjects,
 } from '../../../tools/tools';
@@ -12,7 +12,7 @@ import {
 } from '../arrow';
 import type { TypeDash } from '../../../tools/types';
 import type { TypeArrowHead } from '../arrow';
-import type { OBJ_Arrow } from '../../FigurePrimitives/FigurePrimitives';
+import type { OBJ_Arrow } from '../../FigurePrimitives/FigurePrimitiveTypes2D';
 // import { getBufferBorder } from '../buffer';
 
 /* eslint-disable yoda */
@@ -40,12 +40,10 @@ function lineSegmentsToPoints(
   lineSegments: Array<Array<Line>>,
   linePrimitives: boolean,
   borderIs: 'negative' | 'positive' | 'line' | Array<Array<Point>> = 'line',
-  holeIs: 'negative' | 'positive' | Array<Array<Point>> = [[]],
   corner: 'auto' | 'fill' | 'none',
   close: boolean,
-): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
+): [Array<Point>, Array<Array<Point>>] {
   const tris = [];
-  let hole = [[]];
   const positiveBorder = [];
   const negativeBorder = [];
   lineSegments.forEach((lineSegment, index) => {
@@ -150,11 +148,6 @@ function lineSegmentsToPoints(
     //     positive.p2._dup(),
     //   );
     // }
-    if (holeIs === 'positive') {
-      hole[0].push(positive.p1._dup(), positive.p2._dup());
-    } else if (holeIs === 'negative') {
-      hole[0].push(negative.p1._dup(), negative.p2._dup());
-    }
   });
   let border = [[]];
   if (borderIs === 'positive') {
@@ -173,10 +166,7 @@ function lineSegmentsToPoints(
   } else if (Array.isArray(borderIs)) {
     border = borderIs;
   }
-  if (Array.isArray(holeIs)) {
-    hole = holeIs;
-  }
-  return [tris, border, hole];
+  return [tris, border];
 }
 
 // Extend two lines to their intersection point
@@ -186,7 +176,7 @@ function joinLinesInPoint(
   corner: 'fill' | 'auto' | 'none',
 ) {
   const intersect = line1.intersectsWith(lineNext);
-  if (!intersect.withinLine && corner === 'fill') {
+  if (!intersect.onLines && corner === 'fill') {
     return;
   }
   if (intersect.intersect != null) {
@@ -225,10 +215,10 @@ function joinLinesInTangent(
   corner: 'fill' | 'auto' | 'none',
 ) {
   const angle = threePointAngleMin(mid.p1, mid.p2, midNext.p2);
-  const tangent = new Line(mid.p2, 1, mid.angle() + angle / 2 + Math.PI / 2);
+  const tangent = new Line({ p1: mid.p2, length: 1, angle: mid.angle() + angle / 2 + Math.PI / 2 });
   const intercept = outside.intersectsWith(tangent);
   const interceptNext = outsideNext.intersectsWith(tangent);
-  // if (intercept.withinLine === false && interceptNext.withinLine === false) {
+  // if (intercept.onLines === false && interceptNext.onLines === false) {
   //   const i = outside.intersectsWith(outsideNext);
   //   if (i.intersect != null) {
   //     outside.setP2(i.intersect);
@@ -258,19 +248,19 @@ function joinLinesAcuteInside(
   linePrimitives: boolean,
 ) {
   const insideIntercept = inside.intersectsWith(insideNext);
-  const { withinLine, intersect } = insideIntercept;
-  if (withinLine && intersect != null) {
+  const { onLines, intersect } = insideIntercept;
+  if (onLines && intersect != null) {
     inside.setP2(intersect);
     insideNext.setP1(intersect);
     return;
   }
   if (!linePrimitives) {
     let intercept = inside.intersectsWith(midNext);
-    if (intercept.intersect != null && intercept.withinLine) {
+    if (intercept.intersect != null && intercept.onLines) {
       inside.setP2(intercept.intersect);
     }
     intercept = insideNext.intersectsWith(mid);
-    if (intercept.intersect != null && intercept.withinLine) {
+    if (intercept.intersect != null && intercept.onLines) {
       insideNext.setP1(intercept.intersect);
     }
   }
@@ -283,18 +273,18 @@ function joinLinesObtuseInside(
   insideNext: Line,
 ) {
   const insideIntercept = inside.intersectsWith(insideNext);
-  const { withinLine, intersect } = insideIntercept;
-  if (withinLine && intersect != null) {
+  const { onLines, intersect } = insideIntercept;
+  if (onLines && intersect != null) {
     inside.setP2(intersect);
     insideNext.setP1(intersect);
     return;
   }
   let intercept = inside.intersectsWith(midNext);
-  if (intercept.intersect != null && intercept.intersect.isWithinLine(midNext, 8)) {
+  if (intercept.intersect != null && midNext.hasPointOn(intercept.intersect, 8)) {
     inside.setP2(intercept.intersect);
   }
   intercept = insideNext.intersectsWith(mid);
-  if (intercept.intersect != null && intercept.intersect.isWithinLine(mid, 8)) {
+  if (intercept.intersect != null && mid.hasPointOn(intercept.intersect, 8)) {
     insideNext.setP1(intercept.intersect);
   }
 }
@@ -313,7 +303,7 @@ function makeLineSegments(
   for (let i = 0; i < points.length - 1; i += 1) {
     idealLines.push(makeLine(points[i], points[i + 1]));
   }
-  if (close) {
+  if (close && points.length > 1) {
     idealLines.push(makeLine(points[points.length - 1], points[0]));
   }
   const segmentSides = [];
@@ -478,8 +468,7 @@ function makeThickLine(
   linePrimitives: boolean = false,
   lineNum: number = 2,
   borderIs: 'negative' | 'positive' | 'line' | Array<Array<Point>> = 'line',
-  holeIs: 'negative' | 'positive' | Array<Array<Point>> = [[]],
-): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
+): [Array<Point>, Array<Array<Point>>] {
   const widthToUse = width;
   // if (widthIsIn === 'mid') {
   //   widthToUse = width / 2;
@@ -491,6 +480,10 @@ function makeThickLine(
   let widthIs = widthIsIn;
   if (typeof widthIs === 'number') {
     widthIs = 'mid';
+  }
+
+  if (idealLines.length === 0) {
+    return [[], []];
   }
 
   // Join line segments based on the angle between them
@@ -591,10 +584,10 @@ function makeThickLine(
       }
     }
   }
-  const [tris, border, hole] = lineSegmentsToPoints(
-    lineSegments, linePrimitives, borderIs, holeIs, corner, close,
+  const [tris, border] = lineSegmentsToPoints(
+    lineSegments, linePrimitives, borderIs, corner, close,
   );
-  return [[...tris, ...cornerFills], border, hole];
+  return [[...tris, ...cornerFills], border];
 }
 
 
@@ -741,13 +734,12 @@ function makePolyLine(
   lineNum: number = 2,
   borderIs: 'positive' | 'negative' | 'line' | Array<Array<Point>> = 'line',
   touchBorderBuffer: number = 0,
-  holeIs: 'positive' | 'negative' | Array<Array<Point>> = [[]],
   arrowIn: null | TypeArrowHead | {
     start: OBJ_Arrow | TypeArrowHead,
     end: OBJ_Arrow | TypeArrowHead,
   } & OBJ_Arrow = null,
   precision: number = 8,
-): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>, Array<Array<Point>>] {
+): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
   let points = [];
   let cornerStyleToUse;
   let orderedPoints = pointsIn;
@@ -783,16 +775,16 @@ function makePolyLine(
     dashes.forEach((d) => {
       const [tris] = makeThickLine(
         d, width, widthIs, widthIsIn === 'inside', closeDashes, cornerStyleToUse, minAutoCornerAngle,
-        linePrimitives, lineNum, borderIs, holeIs,
+        linePrimitives, lineNum, borderIs,
       );
       dashedTris = [...dashedTris, ...tris];
     });
   }
 
   // Get tris and border of solid line
-  const [tris, border, hole] = makeThickLine(
+  const [tris, border] = makeThickLine(
     points, width, widthIs, widthIsIn === 'inside', close, cornerStyleToUse, minAutoCornerAngle,
-    linePrimitives, lineNum, borderIs, holeIs,
+    linePrimitives, lineNum, borderIs,
   );
 
   // Get touch border if there is a buffer
@@ -824,7 +816,7 @@ function makePolyLine(
     }
     [, touchBorder] = makeThickLine(
       pointsToUse, widthBuffer, widthIsBuffer, widthIsIn === 'inside', close, cornerStyleToUse, minAutoCornerAngle,
-      linePrimitives, lineNum, borderIsToUse, holeIs,
+      linePrimitives, lineNum, borderIsToUse,
     );
   }
 
@@ -835,11 +827,11 @@ function makePolyLine(
       arrow,
       [orderedPoints[0], pointsIn[0]],
       [orderedPoints[orderedPoints.length - 1], pointsIn[pointsIn.length - 1]],
-      trisToUse, border, touchBorder, hole, touchBorderBuffer, width,
+      trisToUse, border, touchBorder, touchBorderBuffer, width,
       onLine,
     );
   }
-  return [trisToUse, border, touchBorder, hole];
+  return [trisToUse, border, touchBorder];
 }
 
 function makePolyLineCorners(
@@ -863,7 +855,6 @@ function makePolyLineCorners(
 
   let tris = [];
   let borders = [];
-  let holes = [];
   let borderBuffers = [];
   let drawBorderBufferToUse = 0;
   if (typeof drawBorderBuffer === 'number') {
@@ -871,16 +862,15 @@ function makePolyLineCorners(
   }
 
   corners.forEach((corner) => {
-    const [t, b, dbb, h] = makePolyLine(
+    const [t, b, dbb] = makePolyLine(
       corner, width, false, widthIs, cornerStyle, cornerSize,
-      cornerSides, minAutoCornerAngle, [], linePrimitives, lineNum, 'line', drawBorderBufferToUse, [[]],
+      cornerSides, minAutoCornerAngle, [], linePrimitives, lineNum, 'line', drawBorderBufferToUse,
     );
     tris = [...tris, ...t];
     borders = [...borders, ...b];
     borderBuffers = [...borderBuffers, ...dbb];
-    holes = [...holes, ...h];
   });
-  return [tris, borders, borderBuffers, holes];
+  return [tris, borders, borderBuffers];
 }
 
 function addArrows(
@@ -905,7 +895,6 @@ function addArrows(
   existingTriangles: Array<Point>,
   existingBorder: Array<Array<Point>>,
   existingTouchBorder: Array<Array<Point>>,
-  holeBorder: Array<Array<Point>>,
   drawBorderBuffer: number,
   lineWidth: number,
   onLine: boolean,
@@ -922,7 +911,9 @@ function addArrows(
   if (start != null) {
     let startArrowLine = new Line(startArrowIn[0], startArrowIn[1]);
     const startLineMid = new Line(updatedTriangles[0], updatedTriangles[2]).midPoint();
-    startArrowLine = new Line(startLineMid, startArrowLine.length(), startArrowLine.angle());
+    startArrowLine = new Line({
+      p1: startLineMid, length: startArrowLine.length(), angle: startArrowLine.angle(),
+    });
     const startArrow = [startArrowLine.p1, startArrowLine.p2];
     const [border, touchBorder, tail] = getArrow(joinObjects(
       {},
@@ -951,7 +942,9 @@ function addArrows(
     const l = count;
     let endArrowLine = new Line(endArrowIn[0], endArrowIn[1]);
     const endLineMid = new Line(updatedTriangles[l - 2], updatedTriangles[l - 1]).midPoint();
-    endArrowLine = new Line(endLineMid, endArrowLine.length(), endArrowLine.angle());
+    endArrowLine = new Line({
+      p1: endLineMid, length: endArrowLine.length(), angle: endArrowLine.angle(),
+    });
     const endArrow = [endArrowLine.p1, endArrowLine.p2];
     const [border, touchBorder, tail] = getArrow(joinObjects(
       {},
@@ -984,7 +977,6 @@ function addArrows(
     updatedTriangles,
     updatedBorder,
     updatedTouchBorder,
-    holeBorder,
   ];
 }
 

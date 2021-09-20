@@ -1,6 +1,9 @@
 // @flow
 
 import getShaders from './shaders';
+import type { TypeFragmentShader, TypeVertexShader } from './shaders';
+import TargetTexture from './target';
+import { hash32 } from '../../tools/tools';
 
 const glMock = {
   TRIANGLES: 1,
@@ -197,11 +200,23 @@ class WebGLInstance {
     };
   };
   programs: Array<{
-    vertexShader: string | { src: string, vars: Array<string>} | Array<string | bool | number>,
-    fragmentShader: string| { src: string, vars: Array<string>} | Array<string | bool | number>,
+    vars: Array<string>,
+    vertexShader: {
+      src: string,
+      hash: number,
+    },
+    fragmentShader: {
+      src: string,
+      // vars: Array<string>,
+      hash: number,
+    },
+    // vertexShader: string | { src: string, vars: Array<string>} | Array<string | bool | number>,
+    // fragmentShader: string| { src: string, vars: Array<string>} | Array<string | bool | number>,
     locations: Object,
     program: WebGLProgram;
   }>;
+
+  targetTexture: TargetTexture;
 
   addTexture(
     id: string,
@@ -233,30 +248,51 @@ class WebGLInstance {
   }
 
   getProgram(
-    vertexShader: string | { src: string, vars: Array<string> } | Array<string | number | boolean>,
-    fragmentShader: string | { src: string, vars: Array<string> } | Array<string | number | boolean>,
+    vertexShader: TypeVertexShader,
+    fragmentShader: TypeFragmentShader,
   ) {
+    // for (let i = 0; i < this.programs.length; i += 1) {
+    //   const program = this.programs[i];
+    //   if (program.vertexShader.def === vertexShader
+    //     && program.fragmentShader.def === fragmentShader
+    //   ) {
+    //     return i;
+    //   }
+    // }
+    const shaders = getShaders(vertexShader, fragmentShader); // $FlowFixMe
+    const hashVertexSrc = hash32(shaders.vertexSource); // $FlowFixMe
+    const hashFragmentSrc = hash32(shaders.fragmentSource);
     for (let i = 0; i < this.programs.length; i += 1) {
       const program = this.programs[i];
-      if (program.vertexShader === vertexShader
-        && program.fragmentShader === fragmentShader
+      if (program.vertexShader.hash === hashVertexSrc
+        && program.fragmentShader.hash === hashFragmentSrc
       ) {
         return i;
       }
     }
-    const shaders = getShaders(vertexShader, fragmentShader);
+
     const newProgram = createProgramFromScripts(
-      this.gl,
-      shaders.vertexSource,
+      this.gl, // $FlowFixMe
+      shaders.vertexSource, // $FlowFixMe
       shaders.fragmentSource,
     );
 
     const programDetails = {
-      vertexShader,
-      fragmentShader,
+      vertexShader:{
+        src: shaders.vertexSource, // $FlowFixMe
+        hash: hash32(shaders.vertexSource),
+        def: vertexShader,
+      },
+      fragmentShader:{
+        src: shaders.fragmentSource,
+        hash: hash32(shaders.fragmentSource),
+        def: fragmentShader,
+      },
+      vars: shaders.vars,
+      // fragmentShader,
       program: newProgram,
       locations: getGLLocations(this.gl, newProgram, shaders.vars),
-    };
+    };  // $FlowFixMe
     this.programs.push(programDetails);
     return this.programs.length - 1;
   }
@@ -306,7 +342,7 @@ class WebGLInstance {
       // $FlowFixMe
       this.gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA)
       this.gl.enable(gl.BLEND);
-
+      this.targetTexture = new TargetTexture(this);
     }
   }
 
@@ -329,6 +365,8 @@ class WebGLInstance {
     }
 
     this.gl.viewport(0, 0, this.gl.drawingBufferWidth, this.gl.drawingBufferHeight);
+    if (this.targetTexture != null)
+    this.targetTexture.setFramebufferAttachmentSizes(this.gl.canvas.width, this.gl.canvas.height);
   }
   // resize() {
   //   var width = this.gl.canvas.clientWidth;

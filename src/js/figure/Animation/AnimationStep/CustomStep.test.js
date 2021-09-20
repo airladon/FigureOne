@@ -82,4 +82,29 @@ describe('Transfrom Animation Unit', () => {
     expect(percentComplete).toBe(1);
     expect(callback.mock.calls.length).toBe(1);
   });
+  test('infinite duration with a cancel clause', () => {
+    elem1.animations.new()
+      .custom({
+        duration: null,
+        callback: (deltaTime) => {
+          if (deltaTime > 20) {
+            elem1.setPosition(20, 0);
+            return true;
+          }
+          elem1.setPosition(deltaTime, 0);
+          return false;
+        },
+      })
+      .start();
+    elem1.animations.nextFrame(0);
+    expect(elem1.getPosition().round().x).toBe(0);
+    elem1.animations.nextFrame(1.5);
+    expect(elem1.getPosition().round().x).toBe(1.5);
+    elem1.animations.nextFrame(10.5);
+    expect(elem1.getPosition().round().x).toBe(10.5);
+    expect(elem1.animations.state).toBe('animating');
+    elem1.animations.nextFrame(30.5);
+    expect(elem1.getPosition().round().x).toBe(20);
+    expect(elem1.animations.state).toBe('idle');
+  });
 });

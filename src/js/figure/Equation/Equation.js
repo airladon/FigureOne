@@ -1,6 +1,6 @@
 // @flow
 import {
-  Point, Transform, parsePoint, getPoint, getTransform,
+  Point, Transform, isParsablePoint, getPoint, getTransform,
 } from '../../tools/g2';
 import { joinObjects, joinObjectsWithOptions } from '../../tools/tools';
 // import { RGBToArray } from '../../tools/color';
@@ -218,7 +218,7 @@ export type EQN_EquationElements = {
  * @property {TypeVAlign} [yAlign] (`'baseline'`)
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Note - the points are drawn in the figure's draw space, but as the
@@ -797,7 +797,7 @@ type EQN_EquationGoToForm = {
  * @param {OBJ_NextFormAnimationStep} options
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Example showing both ways to access GoToForm animation step
@@ -843,7 +843,7 @@ class NextFormAnimationStep extends TriggerAnimationStep {
  * @param {OBJ_GoToFormAnimationStep} options
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Example showing both ways to access GoToForm animation step
@@ -894,7 +894,7 @@ class GoToFormAnimationStep extends TriggerAnimationStep {
  * @extends FigureElementCollection
  *
  * @see To test examples, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @param {EQN_Equation} options
  * @example
@@ -1063,9 +1063,8 @@ export class Equation extends FigureElementCollection {
       forms: {},
       // formSeries: {},
       formRestart: null,
-      limits: shapes.limits,
       touchBorder: 'rect',
-      transform: new Transform('Equation').scale(1, 1).rotate(0).translate(0, 0),
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       timeKeeper: shapes.timeKeeper,
     };
 
@@ -1094,10 +1093,14 @@ export class Equation extends FigureElementCollection {
       optionsToUse.transform = getTransform(optionsToUse.transform);
     }
 
-    optionsToUse.formDefaults.alignment.fixTo = parsePoint(
-      optionsToUse.formDefaults.alignment.fixTo,
-      optionsToUse.formDefaults.alignment.fixTo,
-    );
+    if (isParsablePoint(optionsToUse.formDefaults.alignment.fixTo)) {
+      optionsToUse.formDefaults.alignment.fixTo
+        = getPoint(optionsToUse.formDefaults.alignment.fixTo);
+    }
+    // optionsToUse.formDefaults.alignment.fixTo = parsePoint(
+    //   optionsToUse.formDefaults.alignment.fixTo,
+    //   optionsToUse.formDefaults.alignment.fixTo,
+    // );
     // optionsToUse.defaultFormAlignment.fixTo = parsePoint(
     //   optionsToUse.defaultFormAlignment.fixTo,
     //   optionsToUse.defaultFormAlignment.fixTo,
@@ -1515,6 +1518,7 @@ export class Equation extends FigureElementCollection {
     if (options.mods != null) {
       p.setProperties(options.mods);
     }
+
     return p;
   }
 
@@ -1685,14 +1689,14 @@ export class Equation extends FigureElementCollection {
     this.eqn.descriptionPosition = descriptionPosition;
     if (this.eqn.descriptionElement) {
       this.eqn.descriptionElement
-        .setPosition(this.getPosition('figure')
+        .setPosition(this.getPosition('local')
           .add(descriptionPosition));
     }
   }
 
   setPosition(pointOrX: TypeParsablePoint | number, y: number = 0) {
     super.setPosition(pointOrX, y);
-    const position = this.getPosition('figure');
+    const position = this.getPosition('local');
     if (this.eqn.descriptionElement != null) {
       this.eqn.descriptionElement.setPosition(position.add(this.eqn.descriptionPosition));
     }
@@ -1794,10 +1798,11 @@ export class Equation extends FigureElementCollection {
     fixTo: FigureElementCollection
           | FigureElementPrimitive
           | string | Point | null,
+    formElements: Array<FigureElementPrimitive | FigureElementCollection>,
   ): FigureElementPrimitive | FigureElementCollection | Point {
     if (typeof fixTo === 'string') {
       const element = getFigureElement(this, fixTo);
-      if (element != null) {
+      if (element != null && formElements.indexOf(element) >= 0) {
         return element;
       }
       return new Point(0, 0);
@@ -1808,7 +1813,10 @@ export class Equation extends FigureElementCollection {
     ) {
       return fixTo;
     }
-    return new Point(0, 0);
+    if (fixTo == null) {
+      return new Point(0, 0);
+    }
+    return getPoint(fixTo);
   }
 
   createForm(
@@ -2033,8 +2041,9 @@ export class Equation extends FigureElementCollection {
       });
     }
 
-    optionsToUse.alignment.fixTo = this.checkFixTo(optionsToUse.alignment.fixTo);
     form.content = content;
+    const elements = form.getAllElements();
+    optionsToUse.alignment.fixTo = this.checkFixTo(optionsToUse.alignment.fixTo, elements);
     form.layout = optionsToUse.layout;
     if (optionsToUse.layout !== 'init') {
       form.lazyArrange(

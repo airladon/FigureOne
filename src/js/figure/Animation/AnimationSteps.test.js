@@ -7,6 +7,8 @@ import { round } from '../../tools/math';
 import makeFigure from '../../__mocks__/makeFigure';
 
 const point = value => new Point(value, value);
+const scale = value => new Point(value, value, value);
+const scale2D = value => new Point(value, value, 1);
 
 describe('Animation Examples', () => {
   let figure;
@@ -88,17 +90,17 @@ describe('Animation Examples', () => {
         builder: {
           numbers: () => {
             a.animations.new()
-              .scale(2, 2)
+              .scale(2)
               .start();
           },
           arrayPoint: () => {
             a.animations.new()
-              .scale([2, 2])
+              .scale([2, 2, 2])
               .start();
           },
           point: () => {
             a.animations.new()
-              .scale(new Point(2, 2))
+              .scale(new Point(2, 2, 2))
               .start();
           },
           value: () => {
@@ -108,24 +110,24 @@ describe('Animation Examples', () => {
           },
           options: () => {
             a.animations.new()
-              .scale({ target: [2, 2] })
+              .scale({ target: [2, 2, 2] })
               .start();
           },
         },
         step: {
           numbers: () => {
             a.animations.new()
-              .then(a.animations.scale(2, 2))
+              .then(a.animations.scale(2))
               .start();
           },
           arrayPoint: () => {
             a.animations.new()
-              .then(a.animations.scale([2, 2]))
+              .then(a.animations.scale([2, 2, 2]))
               .start();
           },
           point: () => {
             a.animations.new()
-              .then(a.animations.scale(new Point(2, 2)))
+              .then(a.animations.scale(new Point(2, 2, 2)))
               .start();
           },
           value: () => {
@@ -135,7 +137,7 @@ describe('Animation Examples', () => {
           },
           options: () => {
             a.animations.new()
-              .then(a.animations.scale({ target: [2, 2] }))
+              .then(a.animations.scale({ target: [2, 2, 2] }))
               .start();
           },
         },
@@ -600,7 +602,7 @@ describe('Animation Examples', () => {
       figure.mock.timeStep(0);
       figure.mock.timeStep(0.5);
       expect(a.getPosition().round(4)).toEqual(point(0.5));
-      expect(a.getScale().round(4)).toEqual(point(1.5));
+      expect(a.getScale().round(4)).toEqual(scale2D(1.5));
       expect(round(a.getRotation(), 4)).toEqual(0.5);
     });
     test('builder transform arrayTransform', () => {
@@ -783,7 +785,7 @@ describe('Animation Examples', () => {
     afterEach(() => {
       figure.mock.timeStep(0);
       figure.mock.timeStep(0.5);
-      expect(a.getScale().round(4)).toEqual(point(1.5));
+      expect(a.getScale().round(4)).toEqual(scale(1.5));
     });
     test('builder scale numbers', () => {
       animations.scale.builder.numbers();

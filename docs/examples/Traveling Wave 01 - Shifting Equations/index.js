@@ -2,7 +2,7 @@
 /* eslint-disable camelcase, object-curly-newline */
 
 const { Point } = Fig;
-const { round, range } = Fig.tools.math;
+const { round, range } = Fig;
 
 const greyColor = [0.6, 0.6, 0.6, 1];
 const dGreyColor = [0.4, 0.4, 0.4, 1];
@@ -10,7 +10,7 @@ const actionColor = [0, 0.6, 1, 1];
 const primaryCol = [1, 0, 0, 1];
 const secondaryCol = [0, 0.6, 1, 1];
 
-const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: dGreyColor });
+const figure = new Fig.Figure({ scene: [-2, -1.5, 2, 1.5], color: dGreyColor });
 
 /*
 .......##..........###....##....##..#######..##.....##.########
@@ -154,22 +154,16 @@ figure.add([
       {
         name: 'movePad',
         make: 'primitives.rectangle',
-        options: {
-          width: 2,
-          height: plotHeight + 0.2,
-          position: [plotWidth / 2, plotHeight / 2],
-          color: [1, 0, 0, 0],
-        },
-        mods: {
-          move: {
-            style: 'translation',
-            bounds: {
-              translation: {
-                p1: [plotWidth / 5, plotHeight / 2],
-                mag: plotWidth / 5 * 3,
-                angle: 0,
-              },
-            },
+        width: 2,
+        height: plotHeight + 0.2,
+        position: [plotWidth / 2, plotHeight / 2],
+        color: [1, 0, 0, 0],
+        move: {
+          style: 'translation',
+          bounds: {
+            p1: [plotWidth / 5, plotHeight / 2],
+            p2: [plotWidth / 5 * 4, plotHeight / 2],
+            ends: 2,
           },
         },
       },
@@ -880,7 +874,7 @@ slides.push({
     eqnF.showForm('0');
     eqnG.showForm('0');
     movePad.setMovable();
-    movePad.setPosition(plotWidth / 2, 0);
+    movePad.setPosition(plotWidth / 2, plotHeight / 2);
     figure.setScenarios('example');
   },
   leaveState: () => {

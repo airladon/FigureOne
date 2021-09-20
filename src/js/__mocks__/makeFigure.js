@@ -5,7 +5,7 @@
 // } from '../Element';
 import Figure from '../figure/Figure';
 import {
-  Rect, getPoint, Point,
+  Rect, Point, getRect,
 } from '../tools/g2';
 import webgl from './WebGLInstanceMock';
 import DrawContext2D from './DrawContext2DMock';
@@ -23,8 +23,8 @@ const generateRandomStringMock = jest.spyOn(tools, 'generateRandomString');
 generateRandomStringMock.mockImplementation(() => '000000');
 
 export default function makeFigure(
-  inputCanvas = new Rect(100, -300, 1000, 500),
-  inputLimits = new Rect(-1, -1, 2, 2),
+  inputCanvasIn = new Rect(100, -300, 1000, 500),
+  scene = {},
 ) {
   document.body.innerHTML =
     '<div id="c">'
@@ -40,15 +40,19 @@ export default function makeFigure(
     + '  </canvas>'
     + '</div>';
   // canvas = document.getElementById('c');
+  const inputCanvas = getRect(inputCanvasIn);
+  // const inputLimits = getRect(inputLimitsIn);
   const definition = {
     width: inputCanvas.width,
     height: inputCanvas.height,
-    limits: inputLimits,
+    // scene: [-1, -1, 1, 1],
   };
 
   const canvasMock = {
     width: definition.width,
+    clientWidth: definition.width,
     height: definition.height,
+    clientHeight: definition.height,
     // offsetLeft: 100,
     left: inputCanvas.left,
     // offsetTop: 200,
@@ -76,12 +80,15 @@ export default function makeFigure(
     offsetWidth: 100,
     appendChild: () => {},
   };
-  const { limits } = definition;
-  const figure = new Figure({ htmlId: 'c', limits, color: [1, 0, 0, 1] });
+  // const { limits } = definition;
+  const figure = new Figure({
+    htmlId: 'c', color: [1, 0, 0, 1], scene,
+  });
   figure.webglLow = webgl;
   figure.webglHigh = webgl;
   figure.webgl = webgl;
   figure.canvasLow = canvasMock;
+  figure.webglLow.gl.canvas = canvasMock;
   figure.canvasHigh = canvasMock;
   figure.htmlCanvas = htmlCanvasMock;
   figure.isTouchDevice = false;
@@ -98,12 +105,12 @@ export default function makeFigure(
   figure.collectionsLow = figure.getObjects(false);
   figure.collectionsHigh = figure.getObjects(true);
   figure.collections = figure.collectionsLow;
-  figure.setSpaceTransforms();
   figure.createFigureElements();
   figure.defaultLineWidth = 0.01;
   figure.primitives.defaultLineWidth = 0.01;
   // needed as the first element needs to be set with the space Transforms
   figure.initElements();
+  figure.getSelectionFromDrawBackup = figure.getSelectionFromDraw;
   figure.mock = {
     initialTime: 0,
     duration: 0,
@@ -147,22 +154,27 @@ export default function makeFigure(
       }
       figure.mock.duration += deltaTimeInSeconds;
     },
+    touchElement: (element, figurePosition) => {
+      // const p = getPoint(figurePosition);
+      let e = element;
+      if (typeof element === 'string') {
+        e = figure.get(element);
+      }
+      figure.getSelectionFromDrawBackup = figure.getSelectionFromDraw;
+      figure.getSelectionFromDraw = () => e;
+      figure.mock.touchDown(figurePosition);
+    },
     touchDown: (figurePosition) => {
-      const p = getPoint(figurePosition);
+      const p = figure.transformPoint(figurePosition, 'figure', 'gl');
       figure.touchDownHandler(p);
       figure.mock.previousTouchPoint = p;
-      // const pixelPoint = p.transformBy(figure.spaceTransforms.figureToPixel.m());
-      // const clientPoint = figure.pixelToClient(pixelPoint);
-      // figure.touchDownHandlerClient(clientPoint);
-      // figure.mock.previousTouchPoint = clientPoint;
+      figure.getSelectionFromDraw = figure.getSelectionFromDrawBackup;
     },
     touchUp: () => {
       figure.touchUpHandler();
     },
     touchMove: (figurePosition) => {
-      const p = getPoint(figurePosition);
-      // const pixelPoint = p.transformBy(figure.spaceTransforms.figureToPixel.m());
-      // const clientPoint = figure.pixelToClient(pixelPoint);
+      const p = figure.transformPoint(figurePosition, 'figure', 'gl');
       figure.touchMoveHandler(figure.mock.previousTouchPoint, p);
       figure.mock.previousTouchPoint = p;
     },

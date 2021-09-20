@@ -13,7 +13,7 @@ export default class Strike extends Symbol {
 
   // eslint-disable-next-line class-methods-use-this
   // getTriangles() {
-  //   return 'strip';
+  //   return 'STRIP';
   // }
 
   //                             X Strike
@@ -148,7 +148,7 @@ export default class Strike extends Symbol {
         h0, h3, h1,
       ];
     }
-    return [points, width, height, 'triangles'];
+    return [points, width, height, 'TRIANGLES'];
   }
 
   /* eslint-disable class-methods-use-this */

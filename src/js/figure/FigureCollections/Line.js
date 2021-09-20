@@ -31,7 +31,8 @@ import type { EQN_Equation } from '../Equation/Equation';
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep, OBJ_TriggerAnimationStep } from '../Animation/Animation';
 import type { TypeColor, TypeDash } from '../../tools/types';
-import type FigurePrimitives, { OBJ_Collection } from '../FigurePrimitives/FigurePrimitives';
+import type FigurePrimitives from '../FigurePrimitives/FigurePrimitives';
+import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type FigureCollections from './FigureCollections';
 
 
@@ -327,7 +328,7 @@ function getLineFromOptions(options: {
   if (o.p1 != null && o.p2 != null) {
     line = new Line(o.p1, o.p2);
   } else {
-    line = new Line(o.p1, o.length, o.angle);
+    line = new Line({ p1: o.p1, length: o.length, angle: o.angle });
   }
   if (o.offset !== 0) {
     line = line.offset('positive', o.offset);
@@ -590,8 +591,7 @@ export default class CollectionsLine extends FigureElementCollection {
         duration: 1,
         frequency: 0,
       },
-      transform: new Transform('Line').scale(1, 1).rotate(0).translate(0, 0),
-      limits: collections.primitives.limits,
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       // touchBorder: 'children',
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
@@ -602,12 +602,14 @@ export default class CollectionsLine extends FigureElementCollection {
     //     optionsToUse.touchBorder = optionsToUse.width * 8;
     //   }
     // }
+    const { move } = optionsToUse;
+    delete optionsToUse.move;
     super(optionsToUse);
+    this.collections = collections;
     this.setColor(optionsToUse.color);
 
     // this.shapes = shapes;
     // this.equation = equation;
-    this.collections = collections;
     // this.touchBorder = optionsToUse.touchBorder;
     this.isTouchDevice = isTouchDevice;
     this.dash = optionsToUse.dash;
@@ -617,7 +619,10 @@ export default class CollectionsLine extends FigureElementCollection {
     this.localXPosition = 0;
     this.autoUpdateSubscriptionId = -1;
     this.lastParentRotationOffset = 0;
-
+    this.multiMove = {
+      midLength: 0.333,
+      includeLabelInTouchBoundary: false,
+    };
 
     // this.animateLengthToOptions = {
     //   initialLength: 0,
@@ -652,14 +657,6 @@ export default class CollectionsLine extends FigureElementCollection {
     // MultiMove means the line has a middle section that when touched
     // translates the line collection, and when the rest of the line is
     // touched then the line collection is rotated.
-    this.multiMove = {
-      midLength: 0,
-      includeLabelInTouchBoundary: false,
-      // bounds: new RectBounds({
-      //   left: -1, bottom: -1, top: 1, right: 1
-      // }),
-      // bounds: new Rect(-1, -1, 2, 2),
-    };
 
     this.scaleTransformMethodName = '_transformMethod';
     // If the line is to be shown (and not just a label) then make it
@@ -737,8 +734,9 @@ export default class CollectionsLine extends FigureElementCollection {
       middleLength: 0.22,
       includeLabelInTouchBoundary: false,
     };
-    if (optionsToUse.move) {
-      const moveOptions = joinObjects({}, defaultMoveOptions, optionsToUse.move);
+    if (move) {
+      const moveOptions = joinObjects({}, defaultMoveOptions, move);
+      // $FlowFixMe
       this.setMovable({
         movable: true,
         type: moveOptions.type,
@@ -758,8 +756,19 @@ export default class CollectionsLine extends FigureElementCollection {
       this.setProperties(optionsToUse.mods);
     }
 
-    this.fnMap.add('_lengthCallback', (percentage: number, customProperties: Object) => {
-      const { start, target } = customProperties;
+    let toSetup = true;
+    let start;
+    let target;
+    this.fnMap.add('_lengthCallback', (percentage: number) => {
+      if (toSetup) {
+        if (start == null) {
+          start = this.line.length();
+        }
+        if (target == null) {
+          target = this.line.length();
+        }
+      }
+      toSetup = false;
       const l = (target - start) * percentage + start;
       this.setLength(l);
     });
@@ -767,10 +776,8 @@ export default class CollectionsLine extends FigureElementCollection {
       const o = joinObjects({}, {
         element: this,
       }, ...opt);
-      o.customProperties = {
-        start: o.start == null ? this.line.length() : o.start,
-        target: o.target == null ? this.line.length() : o.target,
-      };
+      start = o.start;
+      target = o.target;
       o.callback = '_lengthCallback';
       o.timeKeeper = this.timeKeeper;
       return new animation.CustomAnimationStep(o);
@@ -851,7 +858,7 @@ export default class CollectionsLine extends FigureElementCollection {
     const r = this.transform.r() || 0;
     const t = this.transform.t() || new Point(0, 0);
     const length = this.line.length();
-    const l = new Line(t, length, r);
+    const l = new Line({ p1: t, length, angle: r });
     let p1 = [0, 0];
     if (this.alignDraw === 'start') {
       p1 = t._dup();
@@ -863,7 +870,7 @@ export default class CollectionsLine extends FigureElementCollection {
       p1 = l.pointAtPercent(-this.alignDraw);
     }
 
-    this.line = new Line(p1, length, r);
+    this.line = new Line({ p1, length, angle: r });
   }
 
   _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
@@ -1022,12 +1029,12 @@ export default class CollectionsLine extends FigureElementCollection {
    * set different kinds of movability.
    */
   // $FlowFixMe
-  setMovable(movableOrOptions: OBJ_MovableLine | boolean) {
+  setMove(movableOrOptions: OBJ_MovableLine | boolean = {}) {
     const defaultOptions = {
       movable: true,
       type: this.move.type,
-      middleLength: 0.333,
-      includeLabelInTouchBoundary: false,
+      middleLength: this.multiMove.midLength,
+      includeLabelInTouchBoundary: this.multiMove.includeLabelInTouchBoundary,
     };
     let options;
     if (movableOrOptions === false) {
@@ -1037,6 +1044,8 @@ export default class CollectionsLine extends FigureElementCollection {
     } else {
       options = joinObjects({}, defaultOptions, movableOrOptions);
     }
+    // $FlowFixMe
+    super.setMove(options);
     const { movable } = options;
     if (movable) {
       const {
@@ -1048,7 +1057,7 @@ export default class CollectionsLine extends FigureElementCollection {
       ) {
         this.move.type = type;
         super.setMovable(true);
-        this.hasTouchableElements = true;
+        // this.hasTouchableElements = true;
         if (this._line != null) {
           this._line.isTouchable = true;
           this._line.isMovable = false;
@@ -1106,10 +1115,21 @@ export default class CollectionsLine extends FigureElementCollection {
       movePad.move.element = this;
       movePad.drawingObject.border = [[]];
     }
-    this.hasTouchableElements = true;
+    // this.hasTouchableElements = true;
     this.isTouchable = false;
     this.isMovable = false;
     this.setLength(this.line.length());
+  }
+
+  moved(
+    value: Point | number,
+  ): void {
+    if (typeof value === 'number') {
+      this.move.type = 'rotation';
+    } else {
+      this.move.type = 'translation';
+    }
+    super.moved(value);
   }
 
 
@@ -1409,22 +1429,27 @@ export default class CollectionsLine extends FigureElementCollection {
       newLen = 0.0000001;
     }
     if (align === 'start') {
-      this.line = new Line(this.line.p1, newLen, this.line.angle());
+      this.line = new Line({
+        p1: this.line.p1, length: newLen, angle: this.line.angle(),
+      });
     } else if (align === 'end') {
-      this.line = new Line(
-        this.line.pointAtLength(this.line.length() - newLen),
-        newLen, this.line.angle(),
-      );
+      this.line = new Line({
+        p1: this.line.pointAtLength(this.line.length() - newLen),
+        length: newLen,
+        angle: this.line.angle(),
+      });
     } else if (align === 'center') {
-      this.line = new Line(
-        this.line.pointAtLength((this.line.length() - newLen) / 2),
-        newLen, this.line.angle(),
-      );
+      this.line = new Line({
+        p1: this.line.pointAtLength((this.line.length() - newLen) / 2),
+        length: newLen,
+        angle: this.line.angle(),
+      });
     } else if (typeof align === 'number') {
-      this.line = new Line(
-        this.line.pointAtLength((this.line.length() - newLen) * align),
-        newLen, this.line.angle(),
-      );
+      this.line = new Line({
+        p1: this.line.pointAtLength((this.line.length() - newLen) * align),
+        length: newLen,
+        angle: this.line.angle(),
+      });
     }
     this.alignDraw = align;
     this.setupLine();
@@ -1439,7 +1464,7 @@ export default class CollectionsLine extends FigureElementCollection {
     const set = (key, x) => {
       // $FlowFixMe
       if (this[`_${key}`] != null) {  // $FlowFixMe
-        this[`_${key}`].transform.updateTranslation(x);
+        this[`_${key}`].transform.updateTranslation([x, 0]);
       }
     };
     let xPosition = 0;
@@ -1473,7 +1498,7 @@ export default class CollectionsLine extends FigureElementCollection {
     straightLineLength = Math.max(straightLineLength, 0);
     const line = this._line;
     if (line) {
-      line.transform.updateTranslation(xPosition + startOffset);
+      line.transform.updateTranslation([xPosition + startOffset, 0]);
       line.custom.updatePoints({ p1: [0, 0], p2: [straightLineLength, 0], dash: this.dash });
       // if (Array.isArray(this.dash) && this.dash.length > 0) {
       //   line.lengthToDraw = straightLineLength;
@@ -1515,7 +1540,7 @@ export default class CollectionsLine extends FigureElementCollection {
     const movePad = this._movePad;
     if (movePad) {
       const midWidth = this.multiMove.midLength * this.line.length();
-      movePad.transform.updateScale(midWidth, height);
+      movePad.transform.updateScale([midWidth, height]);
       // const p = movePad.getPosition();
       movePad.setPosition(
         this.localXPosition + this.line.length() / 2 - midWidth / 2,
@@ -1524,13 +1549,13 @@ export default class CollectionsLine extends FigureElementCollection {
     }
     const rotPad = this._rotPad;
     if (rotPad) {
-      rotPad.transform.updateScale(width, height);
+      rotPad.transform.updateScale([width, height]);
       // const p = rotPad.getPosition();
       rotPad.setPosition(touchBorder[0].x, touchBorder[0].y);
     }
     const startPad = this._startPad;
     if (startPad) {
-      startPad.transform.updateTranslation(this.localXPosition, 0);
+      startPad.transform.updateTranslation([this.localXPosition, 0]);
     }
   }
 

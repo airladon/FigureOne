@@ -3,6 +3,7 @@
 import * as g2 from './js/tools/g2';
 import * as math from './js/tools/math';
 import * as m2 from './js/tools/m2';
+import * as m3 from './js/tools/m3';
 import * as morph from './js/tools/morph';
 import Figure from './js/figure/Figure';
 import TimeKeeper from './js/figure/TimeKeeper';
@@ -16,6 +17,7 @@ import * as lines from './js/figure/geometries/lines/lines';
 import {
   FigureElement, FigureElementPrimitive, FigureElementCollection,
 } from './js/figure/Element';
+import Scene from './js/tools/geometry/scene';
 import DrawContext2D from './js/figure/DrawContext2D';
 import WebGLInstance from './js/figure/webgl/webgl';
 import DrawingObject from './js/figure/DrawingObjects/DrawingObject';
@@ -79,6 +81,7 @@ export type {
 const tools = {
   math,
   g2,
+  m3,
   color,
   css,
   html,
@@ -128,16 +131,14 @@ const Fig = {
   //
   Animation: anim,
   //
+  Scene,
   Point: g2.Point,
+  Plane: g2.Plane,
   Line: g2.Line,
   Rect: g2.Rect,
   Transform: g2.Transform,
-  Translation: g2.Translation,
-  Scale: g2.Scale,
-  Rotation: g2.Rotation,
   parsePoint: g2.getPoint,
   LineBounds: g2.LineBounds,
-  TransformBounds: g2.TransformBounds,
   RectBounds: g2.RectBounds,
   RangeBounds: g2.RangeBounds,
   minAngleDiff: g2.minAngleDiff,
@@ -152,10 +153,31 @@ const Fig = {
   getScale: g2.getScale,
   getLine: g2.getLine,
   getRect: g2.getRect,
+  getPlane: g2.getPlane,
   getTransform: g2.getTransform,
+  surfaceGrid: g2.surfaceGrid,
+  cube: g2.cube,
+  sphere: g2.sphere,
+  polygon: g2.polygon,
+  revolve: g2.revolve,
+  surface: g2.surface,
+  cone: g2.cone,
+  cylinder: g2.cylinder,
+  line3: g2.line3,
+  getMaxTimeFromVelocity: g2.getMaxTimeFromVelocity,
+  toNumbers: g2.toNumbers,
+  pointsToNumbers: g2.pointsToNumbers,
+
+  // misc
+  joinObjects: misc.joinObjects,
+  m3,
+  morph,
+  misc,
+
 
   // math
   round: math.round,
+  roundNum: math.roundNum,
   range: math.range,
   randSign: math.randSign,
   randInt: math.randInt,

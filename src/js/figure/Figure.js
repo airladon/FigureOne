@@ -1,13 +1,15 @@
 // @flow
 import WebGLInstance from './webgl/webgl';
-// import getShaders from './webgl/shaders';
 
 import {
-  Rect, Point, Transform, getRect,
-  spaceToSpaceTransform, minAngleDiff,
+  Point, Transform,
   getPoint,
 } from '../tools/g2';
+import Scene from '../tools/geometry/scene';
+import type { OBJ_Scene } from '../tools/geometry/scene';
+// import * as m3 from '../tools/m3';
 import type { TypeParsableRect, TypeParsablePoint } from '../tools/g2';
+import type { Type3DMatrix } from '../tools/m3';
 // import * as math from '../tools/math';
 import { round } from '../tools/math';
 import { FunctionMap } from '../tools/FunctionMap';
@@ -17,6 +19,7 @@ import parseState from './Recorder/parseState';
 import {
   isTouchDevice, joinObjects, NotificationManager, Console, PerformanceTimer,
 } from '../tools/tools';
+import { CustomAnimationStep } from './Animation/Animation';
 // eslint-disable-next-line import/no-cycle
 import {
   FigureElementCollection, FigureElement,
@@ -29,10 +32,11 @@ import TimeKeeper from './TimeKeeper';
 import { Recorder } from './Recorder/Recorder';
 // eslint-disable-next-line import/no-cycle
 import Gesture from './Gesture';
+import type { TypeParsablePlane } from '../tools/geometry/Plane';
 import DrawContext2D from './DrawContext2D';
 // eslint-disable-next-line import/no-cycle
 import FigurePrimitives from './FigurePrimitives/FigurePrimitives';
-import type { OBJ_Polyline, OBJ_TextLinesDefinition, OBJ_TextLines } from './FigurePrimitives/FigurePrimitives';
+import type { OBJ_Polyline, OBJ_TextLinesDefinition, OBJ_TextLines } from './FigurePrimitives/FigurePrimitiveTypes2D';
 // eslint-disable-next-line import/no-cycle
 import FigureCollections from './FigureCollections/FigureCollections';
 // eslint-disable-next-line import/no-cycle
@@ -43,7 +47,6 @@ import type { COL_SlideNavigator } from './FigureCollections/SlideNavigator';
 
 const FIGURE1DEBUG = false;
 
-
 /**
  * Space Transforms
  *
@@ -53,7 +56,6 @@ const FIGURE1DEBUG = false;
  * @property {Transform} figureToPixel
  * @property {Transform} pixelToGL
  * @property {Transform} glToPixel
- * @property {Transform} figureToCSSPercent
  */
 export type OBJ_SpaceTransforms = {
   glToFigure: Transform;
@@ -62,13 +64,19 @@ export type OBJ_SpaceTransforms = {
   figureToPixel: Transform;
   pixelToGL: Transform;
   glToPixel: Transform;
-  figureToCSSPercent: Transform;
+  glToPixelMatrix: Type3DMatrix;
+  figureToGLMatrix: Type3DMatrix;
+  figureToPixelMatrix: Type3DMatrix;
 }
 
+export type OBJ_FigureLimits = {
+  x: { min: number, max: number },
+  y: { min: number, max: number },
+  z: { min: number, max: number },
+}
 
 export type OBJ_FigureForElement = {
-  limits: Rect,
-  spaceTransforms: OBJ_SpaceTransforms,
+  // spaceTransformMatrix: (string, string) => Type3DMatrix,
   animateNextFrame: (?boolean, ?string) => void,
   animationFinished: () => void,
   recorder: Recorder,
@@ -78,19 +86,21 @@ export type OBJ_FigureForElement = {
 /**
   * Figure options object
   * @property {string} [htmlId] HTML `div` tag `id` to tie figure to (`"figureOneContainer"`)
-  * @property {TypeParsableRect} [limits] - limits (bottom left
-  *  corner at (-1, -1), width 2, height 2)
-  * @property {TypeColor} [color] default color (`[0, 0, 0, 1]`)
-  * @property {OBJ_Font} [font] default font (`{ family: 'Helvetica,
+  * @property {OBJ_Scene | TypeParsableRect} [scene] define 2D or 3D scene. 3D
+  * can be orthographic or perspective projection, and include camera position
+  * and lighting definition. A 2D scene can be defined using `left`, `right`,
+  * `bottom` and `top`, or the short hand rectangle definition.
+  * @property {TypeColor} [color] default shape color (`[0, 0, 0, 1]`)
+  * @property {OBJ_Font} [font] default shape font (`{ family: 'Helvetica,
   * size: 0.2, style: 'normal', weight: 'normal' }`)
-  * @property {number} [lineWidth] default line width
-  * @property {number} [length] default length to use for shapes
+  * @property {number} [lineWidth] default shape line width
+  * @property {number} [length] default shape primary dimension
   * @property {TypeColor} [backgroundColor] background color for the figure.
   * Use [r, g, b, 1] for opaque and [0, 0, 0, 0] for transparent.
  */
 export type OBJ_Figure = {
   htmlId?: string,
-  limits?: TypeParsableRect,
+  scene?: OBJ_Scene | TypeParsableRect,
   color?: TypeColor,
   font?: OBJ_Font,
   lineWidth?: number,
@@ -192,13 +202,13 @@ export type OBJ_Figure = {
  * <body>
  *     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
  *     </div>
- *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.10.14/figureone.min.js'></script>
+ *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.11.0/figureone.min.js'></script>
  *     <script type="text/javascript" src='./index.js'></script>
  * </body>
  * </html>
  *
  * // index.js
- * const figure = new Fig.Figure({ limits: [-1, -1, 2, 2 ]});
+ * const figure = new Fig.Figure({ scene: [-1, -1, 1, 1 ]});
  * figure.add(
  *   {
  *     name: 'p',
@@ -211,7 +221,7 @@ export type OBJ_Figure = {
  * @example
  * // Alternately, an element can be added programatically
  * // index.js
- * const figure = new Fig.Figure({ limits: [-1, -1, 2, 2 ]});
+ * const figure = new Fig.Figure({ scene: [-1, -1, 1, 1 ]});
  * const hex = figure.shapes.polygon({
  *   radius: 0.5,
  *   sides: 6,
@@ -240,15 +250,15 @@ class Figure {
   timeKeeper: TimeKeeper;
   recorder: Recorder;
   gesture: Gesture;
-  // inTransition: boolean;
-  beingMovedElements: Array<FigureElement>;
 
-  beingTouchedElements: Array<FigureElement>;
+  beingMovedElement: null | FigureElement;
 
-  touchTopElementOnly: boolean;
+  beingTouchedElement: null | FigureElement;
+
+
   previousCursorPoint: Point;
+  originalScalePoint: Point | null;
 
-  limits: Rect;
   stateTime: DOMHighResTimeStamp;
 
   // gestureElement: HTMLElement;
@@ -267,15 +277,6 @@ class Figure {
 
   backgroundColor: Array<number>;
   fontScale: number;
-  // layout: Object;
-
-  /**
-   * Useful transforms between spaces at the figure level and above.
-   * @property {OBJ_SpaceTransforms} spaceTransforms
-   */
-  spaceTransforms: OBJ_SpaceTransforms;
-
-  // oldScrollY: number;
   lastDrawTime: number;
   drawQueued: boolean;
   waitForFrames: number;
@@ -295,10 +296,11 @@ class Figure {
   defaultLength: number;
 
   animationFinishedCallback: ?(string | (() => void));
-  // updateFontSize: string;
+
 
   isTouchDevice: boolean;
   fnMap: FunctionMap;
+  moveBuffer: Array<[Point, Point]>;
 
   isPaused: boolean;
   pauseTime: number;
@@ -319,9 +321,8 @@ class Figure {
     history: Array<Array<number>>,
     num: number,
   };
-  // frameRateInformation: string;
-  // frameRateHistory: Array<number>;
-  // frameRate
+
+  scene: Scene;
 
   animations: AnimationManager;
 
@@ -331,12 +332,10 @@ class Figure {
     preparingToSetState: boolean;
   };
 
-  // pauseAfterNextDrawFlag: boolean;
 
   constructor(options: OBJ_Figure = {}) {
     const defaultOptions = {
       htmlId: 'figureOneContainer',
-      limits: new Rect(-1, -1, 2, 2),
       fontScale: 1,
       color: [0, 0, 0, 1],
       dimColor: [0.5, 0.5, 0.5, 1],
@@ -348,6 +347,13 @@ class Figure {
         opacity: 1,
       },
       backgroundColor: [1, 1, 1, 1],
+      // scene: {
+      //   style: '2D',
+      //   left: -1,
+      //   right: 1,
+      //   bottom: -1,
+      //   top: 1,
+      // },
     };
     this.frameRate = {
       information: null,
@@ -365,11 +371,11 @@ class Figure {
     this.nextDrawTimer = null;
     this.nextDrawTimerStart = 0;
     this.nextDrawTimerDuration = 0;
-    // this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
-      htmlId, limits,
+      htmlId,
     } = optionsToUse;
+
     this.defaultColor = optionsToUse.color;
     // this.defaultLineWidth = optionsToUse.lineWidth;
     if (optionsToUse.font.color == null) {
@@ -489,34 +495,131 @@ class Figure {
       this.gesture = new Gesture(this);
     }
 
+    // if (optionsToUse.limits != null) {
+    //   const limits = getRect(optionsToUse.limits);
+    //   optionsToUse.scene = {
+    //     style: '2D',
+    //     left: limits.left,
+    //     right: limits.right,
+    //     top: limits.top,
+    //     bottom: limits.bottom,
+    //   };
+    // }
+    if (Array.isArray(optionsToUse.scene)) {
+      const [
+        left, bottom, right, top,
+      ] = optionsToUse.scene;
+      optionsToUse.scene = {
+        style: '2D',
+        left,
+        right,
+        top,
+        bottom,
+      };
+    }
+    if (optionsToUse.scene == null) {
+      // const width = this.canvasLow.clientWidth;
+      // const height = this.canvasLow.clientHeight;
+      // let w;
+      // let h;
+      // if (width > height) {
+      //   w = width / height * 2;
+      //   h = 2;
+      // } else {
+      //   w = 2;
+      //   h = height / width * 2;
+      // }
+      optionsToUse.scene = {
+        style: '2D',
+        // left: -w / 2,
+        // right: w / 2,
+        // bottom: -h / 2,
+        // top: h / 2,
+      };
+    }
+    if (
+      optionsToUse.scene.style === '2D'
+      || optionsToUse.scene.style === 'orthographic'
+    ) {
+      const { // $FlowFixMe
+        left, right, top, bottom,
+      } = optionsToUse.scene;
+
+      if (left == null && right == null && top == null && bottom == null) {
+        const width = this.canvasLow.clientWidth;
+        const height = this.canvasLow.clientHeight;
+        let w;
+        let h;
+        if (width > height) {
+          w = width / height * 2;
+          h = 2;
+        } else {
+          w = 2;
+          h = height / width * 2;
+        } // $FlowFixMe
+        optionsToUse.scene.left = -w / 2; // $FlowFixMe
+        optionsToUse.scene.right = w / 2; // $FlowFixMe
+        optionsToUse.scene.bottom = -h / 2; // $FlowFixMe
+        optionsToUse.scene.top = h / 2;
+      }
+    } else {
+      const {
+        fieldOfView, aspectRatio,
+      } = optionsToUse.scene;
+      if (fieldOfView == null && aspectRatio == null) {
+        const width = this.canvasLow.clientWidth;
+        const height = this.canvasLow.clientHeight || 1;
+        optionsToUse.scene.fieldOfView = 27 * Math.PI / 180;
+        optionsToUse.scene.aspectRatio = width / height;
+      }
+    }
+
+    if (
+      optionsToUse.scene.style === 'perspective'
+      || optionsToUse.scene.style === 'orthographic'
+    ) {
+      const {
+        camera, near, far, light,
+      } = optionsToUse.scene;
+      if (camera == null) {
+        optionsToUse.scene.camera = {};
+      }
+      if (camera == null || camera.position == null) {
+        optionsToUse.scene.camera.position = [1, 0.5, 2];
+      }
+      if (near == null && far == null) {
+        optionsToUse.scene.near = 0.1;
+        optionsToUse.scene.far = 20;
+      }
+      if (light == null) {
+        optionsToUse.scene.light = {
+          directional: [1, 0.5, 0.2],
+        };
+      }
+    }
+
+    this.scene = new Scene(optionsToUse.scene);
     this.previousCursorPoint = new Point(0, 0);
     this.isTouchDown = false;
-    // this.pauseAfterNextDrawFlag = false;
     this.fontScale = optionsToUse.fontScale;
-    this.updateLimits(limits);
     this.setDefaultLineWidth(options.lineWidth || null);
     this.setDefaultLength(options.length || null);
     this.drawQueued = false;
     this.lastDrawTime = 0;
-    // this.inTransition = false;
-    this.beingMovedElements = [];
-    this.beingTouchedElements = [];
-    this.touchTopElementOnly = true;
+    this.beingMovedElement = null;
+    this.beingTouchedElement = null;
+    this.moveBuffer = [];
     this.timeKeeper = new TimeKeeper();
     this.notifications = new NotificationManager(this.fnMap);
     this.recorder = new Recorder(this.timeKeeper);
+    // $FlowFixMe
     this.recorder.figure = this;
     this.bindRecorder();
     this.pauseTime = this.timeKeeper.now() / 1000;
     this.shapesLow = this.getShapes();
-    // this.shapesHigh = this.getShapes(true);
     this.shapes = this.shapesLow;
     this.primitives = this.shapes;
-    // this.equationLow = this.getEquations();
-    // this.equationHigh = this.getEquations(true);
-    // this.equation = this.equationLow;
     this.collectionsLow = this.getObjects();
-    // this.collectionsHigh = this.getObjects(true);
     this.collections = this.collectionsLow;
     this.createFigureElements();
     if (this.elements.name === '') {
@@ -542,7 +645,6 @@ class Figure {
     if (optionsToUse.elements) {
       // eslint-disable-next-line new-cap
       this.elements = new optionsToUse.elements(this);
-      this.elements.figureLimits = this.limits;
       this.initElements();
     }
     this.waitForFrames = 0;
@@ -552,6 +654,7 @@ class Figure {
     this.oldScroll = window.pageYOffset;
     this.drawAnimationFrames = 0;
     this.cursorShown = false;
+    this.originalScalePoint = null;
   }
 
   /**
@@ -609,6 +712,15 @@ class Figure {
     return this.getElement(this.cursorElementName);
   }
 
+  // setScene(options: OBJ_SceneOptions) {
+  //   this.scene = new Scene(options);
+  //   this.elements.scene = this.
+  // }
+  //   const o = joinobjects({}, this.scene, options);
+
+
+  // }
+
   bindRecorder() {
     const onCursor = (payload) => {
       const [action, x, y] = payload;
@@ -632,6 +744,10 @@ class Figure {
         this.showCursor('hide');
       }
     };
+    const onTouchElement = (payload) => {
+      const [element, x, y, z] = payload;
+      this.selectElement(element, new Point(x, y, z));
+    };
     const onTouch = (payload) => {
       const [action, x, y] = payload;
       if (action === 'down') {
@@ -650,11 +766,13 @@ class Figure {
     };
     const onCursorMove = (payload) => {
       const [x, y] = payload;
+      // this.setCursorGLPoint(new Point(x, y));
       this.setCursor(new Point(x, y));
       this.touchMove(new Point(x, y));
     };
     const onAutoCursorMove = (payload) => {
       const [x, y] = payload;
+      // this.setCursorGLPoint(new Point(x, y));
       this.setCursor(new Point(x, y));
       this.touchMove(new Point(x, y), true);
     };
@@ -672,6 +790,8 @@ class Figure {
       this.fnMap.exec(functionName, args);
     };
 
+    this.recorder.addEventType('touchElement', onTouchElement);
+    this.recorder.addEventType('_autoTouchElement', onTouchElement);
     this.recorder.addEventType('cursor', onCursor);
     this.recorder.addEventType('_autoCursor', onAutoCursor);
     this.recorder.addEventType('cursorMove', onCursorMove);
@@ -688,8 +808,12 @@ class Figure {
       return;
     }
 
-    const matrix = this.spaceTransforms.pixelToFigure.matrix();
-    this.defaultLineWidth = Math.abs(matrix[0]);
+    const figureWidth = this.scene.right - this.scene.left;
+    const pixelWidth = this.webglLow.gl != null ? this.webglLow.gl.canvas.width : 100;
+    this.defaultLineWidth = Math.max(figureWidth / pixelWidth, figureWidth / 800);
+    // const zero = this.transformPoint([0, 0], 'gl', 'figure');
+    // const one = this.transformPoint([1, 0], 'gl', 'figure');
+    // this.defaultLineWidth = Math.abs(one.distance(zero) / 10);
   }
 
   setDefaultLength(userInputLength: number | null) {
@@ -698,7 +822,7 @@ class Figure {
       return;
     }
 
-    this.defaultLength = this.limits.width / 4;
+    this.defaultLength = (this.scene.right - this.scene.left) / 4;
   }
 
   scrollEvent() {
@@ -732,22 +856,24 @@ class Figure {
       'stateTime',
       'mockPreviousTouchPoint',
       'isTouchDown',
+      'scene',
+      'originalScalePoint',
     ], o);
-    state.beingTouchedElements = [];
-    state.beingMovedElements = [];
+    state.beingTouchedElement = null;
+    state.beingMovedElement = null;
 
-    this.beingTouchedElements.forEach((e) => {
-      state.beingTouchedElements.push({
+    if (this.beingTouchedElement != null) {
+      state.beingTouchedElement = {
         f1Type: 'de',
-        state: e.getPath(),
-      });
-    });
-    this.beingMovedElements.forEach((e) => {
-      state.beingMovedElements.push({
-        f1Type: 'de',
-        state: e.getPath(),
-      });
-    });
+        state: this.beingTouchedElement.getPath(),
+      };
+    }
+    // if (this.beingMovedElements != null) {
+    //   state.beingMovedElement = {
+    //     f1Type: 'de',
+    //     state: this.beingMovedElements.getPath(),
+    //   };
+    // }
     return state;
   }
 
@@ -774,11 +900,9 @@ class Figure {
       finishedFlag = true;
       this.state.preparingToSetState = false;
       setState(this, state);
-      this.beingMovedElements = this.beingMovedElements.filter(e => Object.keys(e).length > 0);
-      this.beingTouchedElements = this.beingTouchedElements.filter(e => Object.keys(e).length > 0);
       this.notifications.publish('setStateInit');
       this.elements.setTimeDelta(this.timeKeeper.now() / 1000 - this.stateTime);
-      this.elements.updateDrawTransforms([this.spaceTransforms.figureToGL]);
+      // this.elements.updateDrawTransforms([new Transform()], this.scene);
       this.elements.stateSet();
       this.elements.setPointsFromDefinition();
       this.elements.setPrimitiveColors();
@@ -1113,19 +1237,19 @@ class Figure {
     return this.getElements(children);
   }
 
-  /**
-   * Set the figure to be touchable.
-   *
-   * Using <a href="#figureelementsettouchable">element.setTouchable</a> will
-   * automatically set this.
-   */
-  setTouchable(touchable: boolean = true) {
-    if (touchable) {
-      this.elements.hasTouchableElements = true;
-    } else {
-      this.elements.hasTouchableElements = false;
-    }
-  }
+  // /**
+  //  * Set the figure to be touchable.
+  //  *
+  //  * Using <a href="#figureelementsettouchable">element.setTouchable</a> will
+  //  * automatically set this.
+  //  */
+  // setTouchable(touchable: boolean = true) {
+  //   if (touchable) {
+  //     this.elements.hasTouchableElements = true;
+  //   } else {
+  //     this.elements.hasTouchableElements = false;
+  //   }
+  // }
 
   getShapes() {
     const webgl = [this.webglLow];
@@ -1143,8 +1267,7 @@ class Figure {
     return new FigurePrimitives(
       webgl, draw2D,
       this.htmlCanvas,
-      this.limits,
-      this.spaceTransforms,
+      this.scene,
       this.animateNextFrame.bind(this, true, 'getShapes'),
       this.defaultColor,
       this.defaultDimColor,
@@ -1196,37 +1319,117 @@ class Figure {
     // this.webglHigh.gl.getExtension('WEBGL_lose_context').loseContext();
   }
 
-  setSpaceTransforms() {
-    const glSpace = {
-      x: { bottomLeft: -1, width: 2 },
-      y: { bottomLeft: -1, height: 2 },
-    };
-    const figureSpace = {
-      x: { bottomLeft: this.limits.left, width: this.limits.width },
-      y: { bottomLeft: this.limits.bottom, height: this.limits.height },
-    };
-
-    const canvasRect = this.canvasLow.getBoundingClientRect();
-    const pixelSpace = {
-      x: { bottomLeft: 0, width: canvasRect.width },
-      y: { bottomLeft: canvasRect.height, height: -canvasRect.height },
-    };
-
-    const percentSpace = {
-      x: { bottomLeft: 0, width: 1 },
-      y: { bottomLeft: 1, height: -1 },
-    };
-
-    this.spaceTransforms = {
-      figureToGL: spaceToSpaceTransform(figureSpace, glSpace, 'Figure'),
-      glToFigure: spaceToSpaceTransform(glSpace, figureSpace),
-      pixelToFigure: spaceToSpaceTransform(pixelSpace, figureSpace),
-      figureToPixel: spaceToSpaceTransform(figureSpace, pixelSpace),
-      pixelToGL: spaceToSpaceTransform(pixelSpace, glSpace),
-      glToPixel: spaceToSpaceTransform(glSpace, pixelSpace),
-      figureToCSSPercent: spaceToSpaceTransform(figureSpace, percentSpace),
-    };
+  /**
+   * Return matrix that can convert between 'pixel', 'figure' and 'gl' spaces.
+   *
+   * These matrices would be generally used to transform points between spaces.
+   * `transformPoint` can be used to do this for individual points, but if
+   * converting many points, then generating the transform matrix once and
+   * applying it to each point can be more efficient.
+   *
+   * Depending on the type of figure scene, not all space combinations are
+   * possible.
+   *
+   * For 2D scenes, all combinations are possible.
+   *
+   * For 3D scenes:
+   * - 'pixel' to 'gl' will transform a point in pixel space to a point on the
+   *    XY plane at Z = 0 in GL space.
+   * - 'pixel' to 'figure' is not valid. Use `transformPoint` instead where a
+   *   plane can be defined to intersect with.
+   * - Conversions between 'gl' and 'figure' are only valid for 'orthographic'
+   *   projections. For perspective projections, the transform matrix is not
+   *   general and depends coordinates of the point to be transformed. Use
+   *   `transformPoint` for each point to be transformed.
+   */
+  spaceTransformMatrix(
+    from: 'figure' | 'gl' | 'pixel',
+    to: 'figure' | 'gl' | 'pixel',
+  ) {
+    return this.elements.spaceTransformMatrix(from, to);
   }
+
+  /**
+   * Transform a point between 'figure', 'gl' and 'pixel' spaces.
+   *
+   * `plane` is only needed when converting from pixel space (a 2D space) to
+   * 'figure' space or 'gl' space (a 3D space). A ray from the pixel is drawn
+   * into the screen and the intersection with the defined `plane` is returned.
+   *
+   * @param {TypeParsablePoint} point
+   * @param {'figure' | 'gl' | 'pixel'} fromSpace space to convert point from
+   * @param {'figure' | 'gl' | 'pixel'} toSpace space to convert point to
+   * @param {TypeParsablePlane} plane figure space intersection plane for
+   * 'pixel' to 'figure' conversion (default: xy plane at z = 0)
+   */
+  transformPoint(
+    point: TypeParsablePoint,
+    fromSpace: 'figure' | 'gl' | 'pixel',
+    toSpace: 'figure' | 'gl' | 'pixel',
+    plane: TypeParsablePlane = [[0, 0, 0], [0, 0, 1]],
+  ) {
+    return this.elements.transformPoint(point, fromSpace, toSpace, plane);
+  }
+
+  // pixelToPlane(
+  //   pixel: TypeParsablePoint,
+  //   figureSpacePlane: TypeParsablePlane,
+  //   // figureToLocalMatrix: Type3DMatrix = m3.identity(),
+  // ) {
+  //   const glPoint = getPoint(pixel).transformBy(this.spaceTransformMatrix('pixel', 'gl'));
+  //   return this.glToPlane(glPoint, figureSpacePlane);
+  // }
+
+  /*
+  A figure is projected into clip space (gl space) through a view matrix
+  and projection matrix.
+
+  The view matrix simulates a camera at some postion with some orientation
+  looking at the figure.
+
+  The projection matrix transforms all vertices that are to be seen to within
+  the GL coordinates (-1 to +1)
+
+  The near plane (gl space z = -1) represents a rectange in figure space where
+  the center of the rectangle is the point between the camera position and the
+  look at point a distance `near` from the camera. `scene.rightVector` and
+  `scene.upVector` define the figure space directions of gl space x+ and y+.
+
+  Therefore, a point on the near gl plane can be converted to figure space by
+  scaling the `scene.rightVector` and `scene.upVector`s and adding them to the
+  `scene.nearCenter`.
+
+  A similar process can be done with the far gl plane.
+
+  Therefore, this method takes the XY coordinate of a GL point and draws a line
+  from -1 to 1 in z in GL space. The near point (z = -1) and far point (z = 1)
+  is transformed into figure space. The line in figure space is then
+  intersected with a plane in figure space.
+  */
+  // glToPlane(
+  //   glPoint: TypeParsablePoint,
+  //   figureSpacePlane: TypeParsablePlane,
+  // ) {
+  //   const gl = getPoint(glPoint);
+  //   const nearPoint = this.scene.nearCenter
+  //     .add(this.scene.rightVector.scale(this.scene.widthNear / 2 * gl.x))
+  //     .add(this.scene.upVector.scale(this.scene.heightNear / 2 * gl.y));
+  //   const farPoint = this.scene.farCenter
+  //     .add(this.scene.rightVector.scale(this.scene.widthFar / 2 * gl.x))
+  //     .add(this.scene.upVector.scale(this.scene.heightFar / 2 * gl.y));
+  //   return getPlane(figureSpacePlane).lineIntersect([nearPoint, farPoint]);
+  // }
+
+  // pixelToGLPlane(
+  //   pixelPoint: TypeParsablePoint,
+  //   glSpacePlane: TypeParsablePlane,
+  // ) {
+  //   const pixel = getPoint(pixelPoint);
+  //   const gl = pixel.transformBy(this.spaceTransformMatrix('pixel', 'gl'));
+  //   const nearPoint = new Point(gl.x, gl.y, -1);
+  //   const farPoint = new Point(gl.x, gl.y, 1);
+  //   return getPlane(glSpacePlane).lineIntersect([nearPoint, farPoint]);
+  // }
 
 
   // deprecate
@@ -1235,9 +1438,13 @@ class Figure {
   }
 
   initElements() {
+    this.animations = this.elements.animations;
+    this.elements.scene = this.scene;
+    // $FlowFixMe
+    this.elements.getCanvas = () => this.canvasLow;
+    this.setupAnimations();
     this.elements.setFigure({
-      limits: this.limits,
-      spaceTransforms: this.spaceTransforms,
+      spaceTransformMatrix: this.spaceTransformMatrix.bind(this),
       animateNextFrame: this.animateNextFrame.bind(this),
       animationFinished: this.animationFinished.bind(this),
       recorder: this.recorder,
@@ -1249,7 +1456,6 @@ class Figure {
 
   setElements(collection: FigureElementCollection) {
     this.elements = collection;
-    this.animations = this.elements.animations;
     this.initElements();
   }
 
@@ -1305,14 +1511,9 @@ class Figure {
   }
 
   setFirstTransform() {
-    this.elements.setFirstTransform(this.spaceTransforms.figureToGL);
+    this.elements.setFirstTransform(new Transform());
   }
 
-  updateLimits(limits: TypeParsableRect) {
-    const l = getRect(limits);
-    this.limits = l._dup();
-    this.setSpaceTransforms();
-  }
 
   // Renders all tied elements in the first level of figure elements
   renderAllElementsToTiedCanvases(force: boolean = false) {
@@ -1446,10 +1647,6 @@ class Figure {
   resize(skipHTMLTie: boolean = false) {
     this.webglLow.resize();
     this.draw2DLow.resize();
-    this.setSpaceTransforms();
-    if (this.elements != null) {
-      this.elements.updateLimits(this.limits, this.spaceTransforms);
-    }
     this.sizeHtmlText();
     if (skipHTMLTie) {
       this.elements.resize();
@@ -1518,7 +1715,7 @@ class Figure {
         } else {
           this.showCursor('up');
         }
-        this.setCursor(this.previousCursorPoint);
+        this.setCursorGLPoint(this.previousCursorPoint);
       } else {
         this.recorder.recordEvent('cursor', ['hide']);
         this.showCursor('hide');
@@ -1560,23 +1757,46 @@ class Figure {
   }
 
   touchDownHandlerClient(clientPoint: Point, eventFromPlayback: boolean = false) {
-    const pixelP = this.clientToPixel(clientPoint);
-    const figurePoint = pixelP.transformBy(this.spaceTransforms.pixelToFigure.matrix());
-    return this.touchDownHandler(figurePoint, eventFromPlayback);
+    const pixel = this.clientToPixel(clientPoint);
+    // const glPoint = pixelP.transformBy(this.spaceTransformMatrix('pixel', 'gl'));
+    const glPoint = this.transformPoint(pixel, 'pixel', 'gl');
+    // glPoint.z = -1;
+    this.touchDownHandler(glPoint, eventFromPlayback);
+    return true;
+    // if (e != null) {
+    //   // console.log(e.getPosition('figure'))
+    //   const drawPosition = e.getPosition('draw');
+    //   const worldViewProjectionMatrix = m3.mul(
+    //     m3.mul(
+    //       this.scene.projectionMatrix,
+    //       this.scene.viewMatrix,
+    //     ),
+    //     e.lastDrawTransform.matrix(),
+    //   );
+    //   const n = m3.transformVector(worldViewProjectionMatrix, [0, 0, 0, 1]);
+    //   const perspectiveWVPMatrix = worldViewProjectionMatrix.map(a => a / n[3]);
+    //   const drawToPixel = m3.mul(this.spaceTransformMatrix('gl', 'pixel'), perspectiveWVPMatrix);
+
+    //   const p = drawPosition.transformBy(drawToPixel);
+
+    //   const q = pixelP.round(0);
+    //   console.log(e.name, [p.x, p.y], [q.x, q.y]);
+    //   console.log(e.getPosition('pixel'))
+    // }
+    // console.log('xz', this.pixelToPlane(pixelP, [[0, 0, 0], [1, 0, 0]]));
+
+    // const figurePoint = pixelP.transformBy(this.spaceTransformMatrix('pixel', 'figure'));
+    // return this.touchDownHandler(figurePoint, eventFromPlayback);
   }
 
-  // Handle touch down, or mouse click events within the canvas.
-  // The default behavior is to be able to move objects that are touched
-  // and dragged, then when they are released, for them to move freely before
-  // coming to a stop.
   touchDownHandler(
-    figurePoint: Point,
+    glPoint: Point,
     eventFromPlayback: boolean = false,
     autoEvent: boolean = false,
   ) {
     if (this.recorder.state === 'recording') {
       if (!autoEvent) {
-        this.recorder.recordEvent('touch', ['down', figurePoint.x, figurePoint.y]);
+        this.recorder.recordEvent('touch', ['down', glPoint.x, glPoint.y]);
       }
       if (this.cursorShown) {
         this.showCursor('down');
@@ -1584,7 +1804,7 @@ class Figure {
     }
 
     // this.currentCursorPoint = figurePoint._dup();
-    this.previousCursorPoint = figurePoint._dup();
+    this.previousCursorPoint = this.transformPoint(glPoint, 'gl', 'figure');
 
     if (this.isPaused) {
       this.unpause();
@@ -1598,40 +1818,146 @@ class Figure {
     }
     this.isTouchDown = true;
 
-    // Get the touched point in clip space
-    const glPoint = figurePoint.transformBy(this.spaceTransforms.figureToGL.matrix());
 
-    // Get all the figure elements that were touched at this point (element
-    // must have isTouchable = true to be considered)
-    // debugger;
-    this.beingTouchedElements = this.elements.getTouched(glPoint);
-
-    if (this.touchTopElementOnly && this.beingTouchedElements.length > 1) {
-      this.beingTouchedElements = [this.beingTouchedElements[0]];
+    let element;
+    element = this.elements.getSelectionFromBorders(glPoint);
+    if (element == null) {
+      element = this.getSelectionFromDraw(glPoint);
     }
-
-    this.beingTouchedElements.forEach(e => e.click(glPoint));
-
-    // Make a list of, and start moving elements that are being moved
-    // (element must be touched and have isMovable = true to be in list)
-    this.beingMovedElements = [];
-    for (let i = 0; i < this.beingTouchedElements.length; i += 1) {
-      const element = this.beingTouchedElements[i];
-      if (element.isMovable) {
-        this.beingMovedElements.push(element);
-        element.startBeingMoved();
-      }
+    if (element == null) {
+      return false;
     }
+    // console.log(element)
+    this.selectElement(element, glPoint, autoEvent);
+    // element.click(glPoint);
+    // if (this.recorder.state === 'recording') {
+    //   if (!autoEvent) {
+    //     this.recorder.recordEvent('touchElement', [element.getPath(), glPoint.x, glPoint.y]);
+    //   }
+    // }
 
-    if (this.beingMovedElements.length > 0) {
-      this.animateNextFrame(true, 'touch down handler');
-    }
-    if (this.beingTouchedElements.length > 0) {
-      return true;
-    }
-    return false;
+    // this.beingTouchedElement = element;
+    // if (element.isMovable) {
+    //   this.beingMovedElement = element;
+    //   element.startBeingMoved();
+    // }
+
+    // if (this.beingMovedElement != null) {
+    //   this.animateNextFrame(true, 'touch down handler');
+    // }
+    return true;
   }
 
+  selectElement(
+    element: string | FigureElement,
+    glPoint: Point,
+    autoEvent: boolean = false,
+  ) {
+    let e: FigureElement;
+    if (typeof element === 'string') {
+      // $FlowFixMe
+      e = this.get(element);
+    } else {
+      e = element;
+    }
+    if (e == null) {
+      return;
+    }
+    if (this.recorder.state === 'recording') {
+      if (!autoEvent) { // $FlowFixMe
+        this.recorder.recordEvent('touchElement', [e.getPath(), glPoint.x, glPoint.y, glPoint.z]);
+      }
+    }
+    // $FlowFixMe
+    e.click(glPoint); // $FlowFixMe
+    this.beingTouchedElement = e;
+    if (e.isMovable) { // $FlowFixMe
+      this.beingMovedElement = e;// $FlowFixMe
+      e.startBeingMoved();
+    }
+
+    if (this.beingMovedElement != null) {
+      this.animateNextFrame(true, 'touch down handler');
+    }
+  }
+
+  // // Handle touch down, or mouse click events within the canvas.
+  // // The default behavior is to be able to move objects that are touched
+  // // and dragged, then when they are released, for them to move freely before
+  // // coming to a stop.
+  // touchDownHandlerLegacy(
+  //   figurePoint: Point,
+  //   eventFromPlayback: boolean = false,
+  //   autoEvent: boolean = false,
+  // ) {
+  //   if (this.recorder.state === 'recording') {
+  //     if (!autoEvent) {
+  //       this.recorder.recordEvent('touch', ['down', figurePoint.x, figurePoint.y]);
+  //     }
+  //     if (this.cursorShown) {
+  //       this.showCursor('down');
+  //     }
+  //   }
+
+  //   // this.currentCursorPoint = figurePoint._dup();
+  //   this.previousCursorPoint = figurePoint._dup();
+
+  //   if (this.isPaused) {
+  //     this.unpause();
+  //   }
+  //   if (this.recorder.state === 'idle') {
+  //     this.recorder.lastSeekTime = null;
+  //   }
+  //   if (this.recorder.state === 'playing' && !eventFromPlayback) {
+  //     this.recorder.pausePlayback();
+  //     this.showCursor('hide');
+  //   }
+  //   this.isTouchDown = true;
+
+  //   // Get the touched point in clip space
+  //   const glPoint = figurePoint.transformBy(this.spaceTransformMatrix('figure', 'gl'));
+
+  //   // Get all the figure elements that were touched at this point (element
+  //   // must have isTouchable = true to be considered)
+  //   // debugger;
+  //   this.beingTouchedElements = this.elements.getTouched(glPoint);
+
+  //   if (this.touchTopElementOnly && this.beingTouchedElements.length > 1) {
+  //     this.beingTouchedElements = [this.beingTouchedElements[0]];
+  //   }
+
+  //   this.beingTouchedElements.forEach(e => e.click(glPoint));
+
+  //   // Make a list of, and start moving elements that are being moved
+  //   // (element must be touched and have isMovable = true to be in list)
+  //   this.beingMovedElements = [];
+  //   for (let i = 0; i < this.beingTouchedElements.length; i += 1) {
+  //     const element = this.beingTouchedElements[i];
+  //     if (element.isMovable) {
+  //       this.beingMovedElements.push(element);
+  //       element.startBeingMoved();
+  //     }
+  //   }
+
+  //   if (this.beingMovedElements.length > 0) {
+  //     this.animateNextFrame(true, 'touch down handler');
+  //   }
+  //   if (this.beingTouchedElements.length > 0) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
+
+  flushMoveBuffer() {
+    if (this.moveBuffer.length > 0) {
+      this.touchMoveHandler(
+        this.moveBuffer[0][0],
+        this.moveBuffer[this.moveBuffer.length - 1][1],
+        false,
+      );
+      this.moveBuffer = [];
+    }
+  }
 
   // Handle touch up, or mouse click up events in the canvas. When an UP even
   // happens, the default behavior is to let any elements being moved to move
@@ -1655,19 +1981,33 @@ class Figure {
         this.showCursor('up');
       }
     }
-
-    for (let i = 0; i < this.beingMovedElements.length; i += 1) {
-      const element = this.beingMovedElements[i];
-      if (element.state.isBeingMoved) {
-        element.stopBeingMoved();
-        element.startMovingFreely();
+    this.flushMoveBuffer();
+    if (this.beingMovedElement != null) {
+      let elementToMove;
+      if (this.beingMovedElement.move.element == null) {
+        elementToMove = this.beingMovedElement;
+      } else if (typeof this.beingMovedElement.move.element === 'string') {
+        elementToMove = this.getElement(this.beingMovedElement.move.element);
+      } else {
+        elementToMove = this.beingMovedElement.move.element;
+      }
+      if (elementToMove != null && elementToMove.state.isBeingMoved) {
+        elementToMove.stopBeingMoved();
+        elementToMove.startMovingFreely();
       }
     }
+    // if (
+    //   this.beingMovedElement != null
+    //   && this.beingMovedElement.state.isBeingMoved
+    // ) {
+    //   this.beingMovedElement.stopBeingMoved();
+    //   this.beingMovedElement.startMovingFreely();
+    // }
+    this.originalScalePoint = null;
     this.isTouchDown = false;
-    this.beingMovedElements = [];
-    this.beingTouchedElements = [];
+    this.beingMovedElement = null;
+    this.beingTouchedElement = null;
   }
-
 
   setCursor(p: Point, animateNextFrame: boolean = true) {
     const cursor = this.getElement(this.cursorElementName);
@@ -1680,16 +2020,28 @@ class Figure {
     }
   }
 
+  setCursorGLPoint(p: Point, animateNextFrame: boolean = true) {
+    const cursor = this.getElement(this.cursorElementName);
+    if (cursor == null) {
+      return;
+    }
+    cursor.setPosition(cursor.transformPoint(p, 'gl', 'figure'));
+    if (animateNextFrame) {
+      this.animateNextFrame();
+    }
+  }
+
   touchFreeHandler(clientPoint: Point) {
+    // const cursor = this.getCursor();
     if (this.recorder.state === 'recording') {
       const pixelP = this.clientToPixel(clientPoint);
-      const figurePoint = pixelP.transformBy(this.spaceTransforms.pixelToFigure.matrix());
-      this.previousCursorPoint = figurePoint;
+      const cursorGLPoint = this.transformPoint(pixelP, 'pixel', 'gl');
+      this.previousCursorPoint = cursorGLPoint;
       if (this.cursorShown) {
-        this.recorder.recordEvent('cursorMove', [figurePoint.x, figurePoint.y]);
-        this.setCursor(figurePoint);
+        this.recorder.recordEvent('cursorMove', [cursorGLPoint.x, cursorGLPoint.y]);
+        this.setCursorGLPoint(cursorGLPoint);
       } else {
-        this.setCursor(figurePoint, false);
+        this.setCursorGLPoint(cursorGLPoint, false);
       }
     }
   }
@@ -1697,185 +2049,326 @@ class Figure {
   // eslint-disable-next-line class-methods-use-this
   rotateElement(
     element: FigureElement,
-    previousFigurePoint: Point,
-    currentFigurePoint: Point,
+    previousGLPoint: Point,
+    currentGLPoint: Point,
   ) {
-    let center = element.getPosition('figure');
-    if (center == null) {
-      center = new Point(0, 0);
+    const previousLocalPoint = element.glToPlane(previousGLPoint, 'local');
+    const currentLocalPoint = element.glToPlane(currentGLPoint, 'local');
+
+    const center = element.getPosition('local');
+    const prev = previousLocalPoint.sub(center);
+    const curr = currentLocalPoint.sub(center);
+    let deltaAngle;
+    if (prev.isEqualTo(curr)) {
+      deltaAngle = 0;
+    } else {
+      deltaAngle = curr.angleTo(prev);
+      const norm = prev.crossProduct(curr).normalize();
+      if (!norm.isEqualTo(element.move.plane.n)) {
+        deltaAngle *= -1;
+      }
     }
-    const currentAngle = Math.atan2(
-      currentFigurePoint.y - center.y,
-      currentFigurePoint.x - center.x,
-    );
-    const previousAngle = Math.atan2(
-      previousFigurePoint.y - center.y,
-      previousFigurePoint.x - center.x,
-    );
-    const diffAngle = minAngleDiff(currentAngle, previousAngle);
-    const transform = element.transform._dup();
-    let rot = transform.r();
-    if (rot == null) {
-      rot = 0;
+    const r = element.transform.r();
+    if (typeof r === 'number') {
+      element.moved(r + deltaAngle);
+    } else {
+      element.moved(r[1] + deltaAngle);
     }
-    const newAngle = rot + diffAngle;
-    transform.updateRotation(newAngle);
-    element.moved(transform._dup());
+
+    // const currentAngle = Math.atan2(
+    //   currentLocalPoint.y - center.y,
+    //   currentLocalPoint.x - center.x,
+    // );
+    // const previousAngle = Math.atan2(
+    //   previousLocalPoint.y - center.y,
+    //   previousLocalPoint.x - center.x,
+    // );
+    // const diffAngle = minAngleDiff(currentAngle, previousAngle);
+    // const transform = element.transform._dup();
+    // let rot = transform.r();
+    // if (rot == null) {
+    //   rot = 0;
+    // }
+    // const newAngle = rot + diffAngle;
+    // // console.log(rot, diffAngle, newAngle);
+    // transform.updateRotation(newAngle);
+    // element.moved(transform);
   }
 
   // eslint-disable-next-line class-methods-use-this
   translateElement(
     element: FigureElement,
-    previousFigurePoint: Point,
-    currentFigurePoint: Point,
+    previousGLPoint: Point,
+    currentGLPoint: Point,
   ) {
-    const m = element.spaceTransformMatrix('figure', 'local');
-
-    const currentVertexSpacePoint = currentFigurePoint.transformBy(m);
-    const previousVertexSpacePoint = previousFigurePoint.transformBy(m);
-    const elementSpaceDelta = currentVertexSpacePoint.sub(previousVertexSpacePoint);
-    const currentTransform = element.transform._dup();
-    const currentTranslation = currentTransform.t();
-    if (currentTranslation != null) {
-      const newTranslation = currentTranslation.add(elementSpaceDelta);
-      currentTransform.updateTranslation(newTranslation);
-      element.moved(currentTransform);
+    const previousLocalPoint = element.glToPlane(previousGLPoint, 'local', element.move.plane);
+    const currentLocalPoint = element.glToPlane(currentGLPoint, 'local', element.move.plane);
+    const delta = currentLocalPoint.sub(previousLocalPoint);
+    const transform = element.transform._dup();
+    const translation = transform.t();
+    if (translation != null) {
+      // transform.updateTranslation(translation.add(delta));
+      // element.moved(transform);
+      element.moved(translation.add(delta));
     }
+
+    // const m = element.spaceTransformMatrix('figure', 'local');
+
+    // const currentVertexSpacePoint = currentFigurePoint.transformBy(m);
+    // const previousVertexSpacePoint = previousFigurePoint.transformBy(m);
+    // const elementSpaceDelta = currentVertexSpacePoint.sub(previousVertexSpacePoint);
+    // const currentTransform = element.transform._dup();
+    // const currentTranslation = currentTransform.t();
+    // if (currentTranslation != null) {
+    //   const newTranslation = currentTranslation.add(elementSpaceDelta);
+    //   currentTransform.updateTranslation(newTranslation);
+    //   element.moved(currentTransform);
+    // }
   }
+
+  // TODO There is some weird behavior here when a boundary limit min is
+  // set. When draggin toward the center, the min will be reached. Just beyond
+  // the center might have a previousMag << currentMag meaning a very large
+  // scale will result so the scale will jump from min to max instantly.
 
   // eslint-disable-next-line class-methods-use-this
   scaleElement(
     element: FigureElement,
-    previousFigurePoint: Point,
-    currentFigurePoint: Point,
-    type: 'x' | 'y' | '' = '',
+    previousGLPoint: Point,
+    currentGLPoint: Point,
+    type: 'x' | 'y' | 'z' | '' = '',
   ) {
-    const center = element.getPosition('figure');
-    const previousMag = previousFigurePoint.sub(center).distance();
-    const currentMag = currentFigurePoint.sub(center).distance();
+    const previousLocalPoint = element.glToPlane(previousGLPoint);
+    const currentLocalPoint = element.glToPlane(currentGLPoint);
+    // if (this.originalScalePoint == null) {
+    //   this.originalScalePoint = previousLocalPoint;
+    // }
+    const center = element.getPosition('local');
+    let previousMag = previousLocalPoint.sub(center).distance();
+    if (previousMag === 0) {
+      previousMag = 0.000001;
+    }
+    const currentMag = currentLocalPoint.sub(center).distance();
+    // if (element.move.bounds !== null) {
+    //   currentMag = element.move.bounds.clip(currentMag);
+    //   previousMag = Math.max(element.move.bounds.clip(previousMag), 0.0000001);
+    //   console.log(currentMag, previousMag)
+    // }
 
 
     const currentScale = element.transform.s();
+    // element.moved(currentMag / previousMag);
     if (currentScale != null) {
-      const currentTransform = element.transform._dup();
-      const newScaleX = currentScale.x * currentMag / previousMag;
-      const newScaleY = currentScale.y * currentMag / previousMag;
+      // const currentTransform = element.transform._dup();
+      // const newScaleY = currentScale.y * currentMag / previousMag;
+      // const newScaleZ = currentScale.z * currentMag / previousMag;
       if (type === 'x') {
-        currentTransform.updateScale(newScaleX, 1);
+        // currentTransform.updateScale([newScaleX, 1, 1]);
+        const newScaleX = currentScale.x * currentMag / previousMag;
+        element.moved(newScaleX);
       } else if (type === 'y') {
-        currentTransform.updateScale(1, newScaleY);
+        // currentTransform.updateScale([1, newScaleY, 1]);
+        const newScaleY = currentScale.y * currentMag / previousMag;
+        element.moved(newScaleY);
+      } else if (type === 'z') {
+        // currentTransform.updateScale([1, 1, newScaleZ]);
+        const newScaleZ = currentScale.z * currentMag / previousMag;
+        element.moved(newScaleZ);
       } else {
-        currentTransform.updateScale(newScaleX, newScaleY);
+        // currentTransform.updateScale([newScaleX, newScaleY, newScaleZ]);
+        const newScaleX = currentScale.x * currentMag / previousMag;
+        element.moved(newScaleX);
       }
-      element.moved(currentTransform);
+      // element.moved(currentTransform);
     }
   }
 
 
   touchMoveHandlerClient(previousClientPoint: Point, currentClientPoint: Point) {
     const currentPixelPoint = this.clientToPixel(currentClientPoint);
-    const currentFigurePoint = currentPixelPoint
-      .transformBy(this.spaceTransforms.pixelToFigure.matrix());
+    const currentGLPoint = currentPixelPoint
+      .transformBy(this.spaceTransformMatrix('pixel', 'gl'));
     const previousPixelPoint = this.clientToPixel(previousClientPoint);
-    const previousFigurePoint = previousPixelPoint
-      .transformBy(this.spaceTransforms.pixelToFigure.matrix());
-    return this.touchMoveHandler(previousFigurePoint, currentFigurePoint);
+    const previousGLPoint = previousPixelPoint
+      .transformBy(this.spaceTransformMatrix('pixel', 'gl'));
+    currentGLPoint.z = -1;
+    previousGLPoint.z = -1;
+    if (this.beingMovedElement == null || this.beingMovedElement === this.elements) {
+      return this.touchMoveHandler(previousGLPoint, currentGLPoint);
+    }
+    this.moveBuffer.push([previousGLPoint, currentGLPoint]);
+    return true;
   }
 
 
-  // Handle touch/mouse move events in the canvas. These events will only be
-  // sent if the initial touch down happened in the canvas.
-  // The default behavior is to drag (move) any objects that were touched in
-  // the down event to the new location.
-  // This function should return true if the move event should NOT be processed
-  // by the system. For example, on a touch device, a touch and drag would
-  // normally scroll the screen. Typically, you would want to move the figure
-  // element and not the screen, so a true would be returned.
   touchMoveHandler(
-    previousFigurePoint: Point,
-    currentFigurePoint: Point,
+    previousGLPoint: Point,
+    currentGLPoint: Point,
     fromAutoEvent: boolean = false,
   ): boolean {
+    this.previousCursorPoint.x = currentGLPoint.x;
+    this.previousCursorPoint.y = currentGLPoint.y;
     if (this.recorder.state === 'recording' && !fromAutoEvent) {
-      this.recorder.recordEvent('cursorMove', [currentFigurePoint.x, currentFigurePoint.y]);
+      this.recorder.recordEvent('cursorMove', [currentGLPoint.x, currentGLPoint.y]);
       if (this.cursorShown) {
-        this.setCursor(currentFigurePoint);
+        this.setCursorGLPoint(currentGLPoint);
       }
     }
 
-    this.previousCursorPoint.x = currentFigurePoint.x;
-    this.previousCursorPoint.y = currentFigurePoint.y;
+    // this.previousCursorPoint = currentCusorPoint;
+    // let e;
+    // e = this.elements.getSelectionFromBorders(currentGLPoint);
+    // if (e == null) {
+    //   e = this.getSelectionFromDraw(currentGLPoint);
+    // }
+    // if (e == null) {
+    //   return false;
+    // }
 
-    if (this.beingMovedElements.length === 0) {
+    if (this.beingMovedElement == null || this.beingMovedElement === this.elements) {
       return false;
     }
-    const previousGLPoint = previousFigurePoint
-      .transformBy(this.spaceTransforms.figureToGL.matrix());
-    // Go through each element being moved, get the current translation
-    for (let i = 0; i < this.beingMovedElements.length; i += 1) {
-      const element = this.beingMovedElements[i];
-      if (element !== this.elements) {
-        if (element.isBeingTouched(previousGLPoint)
-              || element.move.canBeMovedAfterLosingTouch) {
-          let elementToMove;
-          if (element.move.element == null) {
-            elementToMove = element;
-          } else if (typeof element.move.element === 'string') {
-            elementToMove = this.getElement(element.move.element);
-          } else {
-            elementToMove = element.move.element;
-          }
-          // $FlowFixMe
-          if (elementToMove.state.isBeingMoved === false) {
-            // $FlowFixMe
-            elementToMove.startBeingMoved();
-          }
-          if (this.beingMovedElements.indexOf(elementToMove) === -1) {
-            // $FlowFixMe
-            this.beingMovedElements.push(elementToMove);
-          }
-          if (element.move.type === 'rotation') {
-            this.rotateElement( // $FlowFixMe
-              elementToMove,
-              previousFigurePoint,
-              currentFigurePoint,
-            );
-          } else if (element.move.type === 'scale') {
-            this.scaleElement( // $FlowFixMe
-              elementToMove,
-              previousFigurePoint,
-              currentFigurePoint,
-            );
-          } else if (element.move.type === 'scaleX') {
-            this.scaleElement( // $FlowFixMe
-              elementToMove,
-              previousFigurePoint,
-              currentFigurePoint,
-              'x',
-            );
-          } else if (element.move.type === 'scaleY') {
-            this.scaleElement( // $FlowFixMe
-              elementToMove,
-              previousFigurePoint,
-              currentFigurePoint,
-              'y',
-            );
-          } else {
-            this.translateElement( // $FlowFixMe
-              elementToMove,
-              previousFigurePoint,
-              currentFigurePoint,
-            );
-          }
-        }
-      }
-      if (this.touchTopElementOnly) {
-        i = this.beingMovedElements.length;
-      }
+
+    const element = this.beingMovedElement;
+    const moveType = element.move.type;
+
+    let elementToMove: FigureElement;
+    if (element.move.element == null) {
+      elementToMove = element;
+    } else if (typeof element.move.element === 'string') {  // $FlowFixMe
+      elementToMove = this.getElement(element.move.element);
+    } else {
+      elementToMove = element.move.element;
+    } // $FlowFixMe
+    if (elementToMove.state.isBeingMoved === false) {  // $FlowFixMe
+      elementToMove.startBeingMoved();
+    } // $FlowFixMe
+    elementToMove.move.type = moveType;
+    if (moveType === 'rotation') {
+      this.rotateElement( // $FlowFixMe
+        elementToMove, previousGLPoint, currentGLPoint,
+      );
+    } else if (moveType === 'scale') {
+      this.scaleElement( // $FlowFixMe
+        elementToMove, previousGLPoint, currentGLPoint,
+      );
+    } else if (moveType === 'scaleX') {
+      this.scaleElement( // $FlowFixMe
+        elementToMove, previousGLPoint, currentGLPoint, 'x',
+      );
+    } else if (moveType === 'scaleY') {
+      this.scaleElement( // $FlowFixMe
+        elementToMove, previousGLPoint, currentGLPoint, 'y',
+      );
+    } else if (moveType === 'scaleZ') {
+      this.scaleElement( // $FlowFixMe
+        elementToMove, previousGLPoint, currentGLPoint, 'z',
+      );
+    } else {
+      this.translateElement( // $FlowFixMe
+        elementToMove,
+        previousGLPoint,
+        currentGLPoint,
+      );
     }
+
     this.animateNextFrame(true, 'touch move handler');
     return true;
   }
+
+  // // Handle touch/mouse move events in the canvas. These events will only be
+  // // sent if the initial touch down happened in the canvas.
+  // // The default behavior is to drag (move) any objects that were touched in
+  // // the down event to the new location.
+  // // This function should return true if the move event should NOT be processed
+  // // by the system. For example, on a touch device, a touch and drag would
+  // // normally scroll the screen. Typically, you would want to move the figure
+  // // element and not the screen, so a true would be returned.
+  // touchMoveHandlerLegacy(
+  //   previousFigurePoint: Point,
+  //   currentFigurePoint: Point,
+  //   fromAutoEvent: boolean = false,
+  // ): boolean {
+  //   if (this.recorder.state === 'recording' && !fromAutoEvent) {
+  //     this.recorder.recordEvent('cursorMove', [currentFigurePoint.x, currentFigurePoint.y]);
+  //     if (this.cursorShown) {
+  //       this.setCursor(currentFigurePoint);
+  //     }
+  //   }
+
+  //   this.previousCursorPoint.x = currentFigurePoint.x;
+  //   this.previousCursorPoint.y = currentFigurePoint.y;
+
+  //   if (this.beingMovedElements.length === 0) {
+  //     return false;
+  //   }
+  //   const previousGLPoint = previousFigurePoint
+  //     .transformBy(this.spaceTransformMatrix('figure', 'gl'));
+  //   // Go through each element being moved, get the current translation
+  //   for (let i = 0; i < this.beingMovedElements.length; i += 1) {
+  //     const element = this.beingMovedElements[i];
+  //     if (element !== this.elements) {
+  //       if (element.isBeingTouched(previousGLPoint)
+  //             || element.move.canBeMovedAfterLosingTouch) {
+  //         let elementToMove;
+  //         if (element.move.element == null) {
+  //           elementToMove = element;
+  //         } else if (typeof element.move.element === 'string') {
+  //           elementToMove = this.getElement(element.move.element);
+  //         } else {
+  //           elementToMove = element.move.element;
+  //         }
+  //         // $FlowFixMe
+  //         if (elementToMove.state.isBeingMoved === false) {
+  //           // $FlowFixMe
+  //           elementToMove.startBeingMoved();
+  //         }
+  //         if (this.beingMovedElements.indexOf(elementToMove) === -1) {
+  //           // $FlowFixMe
+  //           this.beingMovedElements.push(elementToMove);
+  //         }
+  //         if (element.move.type === 'rotation') {
+  //           this.rotateElement( // $FlowFixMe
+  //             elementToMove,
+  //             previousFigurePoint,
+  //             currentFigurePoint,
+  //           );
+  //         } else if (element.move.type === 'scale') {
+  //           this.scaleElement( // $FlowFixMe
+  //             elementToMove,
+  //             previousFigurePoint,
+  //             currentFigurePoint,
+  //           );
+  //         } else if (element.move.type === 'scaleX') {
+  //           this.scaleElement( // $FlowFixMe
+  //             elementToMove,
+  //             previousFigurePoint,
+  //             currentFigurePoint,
+  //             'x',
+  //           );
+  //         } else if (element.move.type === 'scaleY') {
+  //           this.scaleElement( // $FlowFixMe
+  //             elementToMove,
+  //             previousFigurePoint,
+  //             currentFigurePoint,
+  //             'y',
+  //           );
+  //         } else {
+  //           this.translateElement( // $FlowFixMe
+  //             elementToMove,
+  //             previousFigurePoint,
+  //             currentFigurePoint,
+  //           );
+  //         }
+  //       }
+  //     }
+  //     if (this.touchTopElementOnly) {
+  //       i = this.beingMovedElements.length;
+  //     }
+  //   }
+  //   this.animateNextFrame(true, 'touch move handler');
+  //   return true;
+  // }
 
   /**
    * Stop all animations, movement and pulses in figure.
@@ -1940,35 +2433,238 @@ class Figure {
     }
   }
 
+  setupAnimations() {
+    this.elements.fnMap.add('_cameraCallback', (p: number, customProperties: Object) => {
+      const { start, target } = customProperties;
+      const camera = {
+        position: start.position.add(target.position.sub(start.position).scale(p)),
+        lookAt: start.lookAt.add(target.lookAt.sub(start.lookAt).scale(p)),
+        up: start.up.add(target.up.sub(start.up).scale(p)),
+      };
+      this.scene.setCamera(camera);
+    }); // $FlowFixMe
+    this.animations.camera = (...opt) => {
+      const o = joinObjects({}, {
+        progression: 'easeinout',
+      }, ...opt);
+      o.customProperties = {
+        start: joinObjects({}, this.scene.camera, o.start || {}),
+        target: joinObjects({}, this.scene.camera, o.target || {}),
+      };
+      o.customProperties.start.position = getPoint(o.customProperties.start.position);
+      o.customProperties.start.lookAt = getPoint(o.customProperties.start.lookAt);
+      o.customProperties.start.up = getPoint(o.customProperties.start.up);
+      o.customProperties.target.position = getPoint(o.customProperties.target.position);
+      o.customProperties.target.lookAt = getPoint(o.customProperties.target.lookAt);
+      o.customProperties.target.up = getPoint(o.customProperties.target.up);
+      o.callback = '_cameraCallback';
+      o.timeKeeper = this.timeKeeper;
+      return new CustomAnimationStep(o);
+    };
+    this.animations.customSteps.push({
+      step: this.animations.camera.bind(this),
+      name: 'camera',
+    });
+  }
+
   // To add elements to a figure, either this method can be overridden,
   // or the `add` method can be used.
   createFigureElements() {
     this.elements = this.collections.collection({ name: 'rootCollection' });
-    this.animations = this.elements.animations;
+    // this.elements.scene = this.scene;
+    // this.animations = this.elements.animations;
+    // this.elements.getCanvas = () => this.canvasLow;
+    // this.setupAnimations();
     this.initElements();
   }
 
 
   setElementsToCollection(collection: FigureElementCollection) {
     this.elements = collection;
-    this.animations = this.elements.animations;
+    // this.elements.scene = this.scene;
+    // this.animations = this.elements.animations;
+    // this.elements.getCanvas = () => this.canvasLow;
+    // this.setupAnimations();
     this.initElements();
   }
 
   clearContext(canvasIndex: number = 0) {
     if (canvasIndex === 0) {
+      const { gl } = this.webglLow;
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
       this.webglLow.gl.clearColor(
         this.backgroundColor[0],
         this.backgroundColor[1],
         this.backgroundColor[2],
         this.backgroundColor[3],
       );
-      this.webglLow.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
+      // eslint-disable-next-line no-bitwise
+      this.webglLow.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT | this.webglLow.gl.DEPTH_BUFFER_BIT);
     } else {
       this.webglOffscreen.gl.clearColor(0, 0, 0, 0);
       this.webglOffscreen.gl.clear(this.webglLow.gl.COLOR_BUFFER_BIT);
     }
     this.elements.clear(canvasIndex);
+  }
+
+  setupForSelectionDraw(canvasIndex: number = 0) {
+    if (canvasIndex === 0) {
+      const { gl } = this.webglLow;
+      gl.bindFramebuffer(gl.FRAMEBUFFER, this.webglLow.targetTexture.fb);
+      gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+      // gl.enable(gl.CULL_FACE);
+      gl.enable(gl.DEPTH_TEST);
+      // Clear the canvas AND the depth buffer.
+      // eslint-disable-next-line no-bitwise
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    }
+  }
+
+  // TODO in future - convert this to just one pixel as in
+  // https://webglfundamentals.org/webgl/lessons/webgl-picking.html
+  // but make sure it also works for orthographic projection
+  getSelectionFromPixel(xPixel: number, yPixel: number, debug: boolean = false) {
+    const { gl } = this.webglLow;
+    this.setupForSelectionDraw();
+    this.elements.draw(
+      0,
+      this.scene,
+      [new Transform()],
+      1,
+      true,
+    );
+    const x = xPixel / gl.canvas.clientWidth * gl.canvas.width;
+    const y = gl.canvas.height - yPixel * gl.canvas.height / gl.canvas.clientHeight - 1;
+    const data = new Uint8Array(4);
+    gl.readPixels(
+      x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, data,
+    );
+    if (!debug) {
+      this.animateNextFrame();
+    } // $FlowFixMe
+    return this.elements.getUniqueColorElement(data);
+  }
+
+  /**
+   * Debug - 3D Shapes
+   *
+   * Show touchable 3D shapes in figure. This will only last for one animation
+   * frame, so it will not work if an animation is ongoing.
+   *
+   * Note, the shown borders will be for the instant this method is called
+   * only. If animation is ongoing, the shown borders will not move with the
+   * animation. To update the borders, call this method again.
+   */
+  showTouchable() {
+    this.getSelectionFromPixel(0, 0, true);
+  }
+
+  /**
+   * Debug - 2D Shapes
+   *
+   * Show the touchBorders of selected elements in the figure or all
+   * elements in the figure.
+   *
+   * Note, the shown borders will be for the instant this method is called
+   * only. If animation is ongoing, the shown borders will not move with the
+   * animation. To update the borders, call this method again.
+   *
+   * @param {TypeElementPath | null | 'touchable'} element use `null` for all
+   * elements, `touchable` for all touchable elements or define specific
+   * elements to show (`'touchable'`)
+   * @param {Array<TypeColor>} colors array of colors to cycle through for each
+   * shape ([blue, cyan, purple, green, red, yellow, black])
+   */
+  showTouchBorders(
+    element: TypeElementPath | null | 'touchable' = 'touchable',
+    colors: Array<TypeColor> = [
+      [0, 0, 1, 1],
+      [0, 1, 1, 1],
+      [1, 0, 1, 1],
+      [0, 1, 0, 1],
+      [1, 0, 0, 1],
+      [1, 0.5, 0, 1],
+      [0, 0, 0, 1],
+    ],
+  ) {
+    this.showBorders('touchBorder', element, colors);
+  }
+
+  /**
+   * Debug - 2D Shapes
+   *
+   * Show the borders or touchBorders of selected elements in the figure or all
+   * elements in the figure.
+   *
+   * @param {'border' | 'touchBorder'} border (`'border'`)
+   * @param {TypeElementPath | null | 'touchable'} element use `null` for all
+   * elements, `touchable` for all touchable elements or define specific
+   * elements to show (`null`)
+   * @param {Array<TypeColor>} colors array of colors to cycle through for each
+   * shape ([blue, cyan, purple, green, red, yellow, black])
+   */
+  showBorders(
+    border: 'border' | 'touchBorder' = 'border',
+    element: TypeElementPath | null | 'touchable' = null,
+    colors: Array<TypeColor> = [
+      [0, 0, 1, 1],
+      [0, 1, 1, 1],
+      [1, 0, 1, 1],
+      [0, 1, 0, 1],
+      [1, 0, 0, 1],
+      [1, 0.5, 0, 1],
+      [0, 0, 0, 1],
+    ],
+  ) {
+    let elements = [];
+    if (element == null || element === 'touchable') {
+      elements = this.elements.getAllElements().slice(1);
+      if (element === 'touchable') {
+        elements = elements.filter(e => e.isTouchable);
+      }
+    } else if (typeof element === 'string') {
+      elements = this.getElements(element);
+    } else {
+      elements = [element];
+    }
+    let colorIndex = 0;
+    for (let i = 0; i < elements.length; i += 1) {
+      const e = elements[i];
+      if (e.drawingObject != null && e.drawBorderBuffer == null) {
+        // eslint-disable-next-line no-continue
+        continue;
+      } // $FlowFixMe
+      const borderPoints = e.getBorder('figure', border);
+      if (borderPoints[0].length > 0) {
+        for (let j = 0; j < borderPoints.length; j += 1) {
+          const name = `__${border}${i}${j}`;
+          const el = this.get(name);
+          if (el != null) { // $FlowFixMe
+            el.custom.updatePoints({ points: borderPoints[j] });
+          } else {
+            this.add({
+              name: `__${border}${i}${j}`,
+              make: 'polyline',
+              options: {
+                points: borderPoints[j],
+                width: 0.01,
+                color: colors[colorIndex % colors.length],
+                dash: [0.02, 0.02],
+                close: true,
+              },
+            });
+          }
+        }
+        colorIndex += 1;
+      }
+    }
+    this.animateNextFrame();
+  }
+
+  getSelectionFromDraw(glPoint: Point) {
+    const pixelPoint = glPoint.transformBy(this.spaceTransformMatrix('gl', 'pixel'));
+    return this.getSelectionFromPixel(pixelPoint.x, pixelPoint.y);
   }
 
 
@@ -2005,8 +2701,9 @@ class Figure {
     autoEvent: boolean = false,
   ) {
     const p = getPoint(figurePosition);
-    this.touchDownHandler(p, eventFromPlayback, autoEvent);
-    this.mockPreviousTouchPoint = p;
+    const gl = p.transformBy(this.spaceTransformMatrix('figure', 'gl'));
+    this.touchDownHandler(gl, eventFromPlayback, autoEvent);
+    this.mockPreviousTouchPoint = gl;
     // $FlowFixMe
     if (this.elements.elements[this.cursorElementName] != null) {
       this.showCursor('down', p);
@@ -2023,7 +2720,7 @@ class Figure {
   }
 
   touchMove(figurePosition: TypeParsablePoint, autoEvent: boolean = false) {
-    const p = getPoint(figurePosition);
+    const p = getPoint(figurePosition).transformBy(this.spaceTransformMatrix('figure', 'gl'));
     this.touchMoveHandler(this.mockPreviousTouchPoint, p, autoEvent);
     this.mockPreviousTouchPoint = p;
   }
@@ -2051,10 +2748,6 @@ class Figure {
       now = this.lastDrawTime;
     }
 
-    // const t = performance.now();
-    // console.log(t - this.lastTime)
-    // this.lastTime = t;
-
     this.lastDrawTime = now;
 
     if (this.scrolled === true) {
@@ -2078,11 +2771,10 @@ class Figure {
       return;
     }
     this.drawQueued = false;
+    this.flushMoveBuffer();
     // $FlowFixMe
     if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('m1'); }
-    this.clearContext(canvasIndex);
-    // $FlowFixMe
-    if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('clearContext'); }
+
     this.notifications.publish('beforeDraw');
     // $FlowFixMe
     if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('beforeDraw'); }
@@ -2098,7 +2790,17 @@ class Figure {
     // $FlowFixMe
     if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('setupDraw'); }
 
-    this.elements.draw(now, [this.spaceTransforms.figureToGL], 1, canvasIndex);
+    this.clearContext(canvasIndex);
+    // $FlowFixMe
+    if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('clearContext'); }
+    this.elements.draw(
+      now,
+      this.scene,
+      [new Transform()],
+      1,
+      false,
+    );
+
     // $FlowFixMe
     if (this.elements.__frameRate_ != null || FIGURE1DEBUG) { timer.stamp('draw'); }
 
@@ -2286,7 +2988,10 @@ class Figure {
     }
   }
 
-
+  /**
+   * Check if any element in the figure is animating.
+   * @return {boolean}
+   */
   isAnimating(): boolean {
     return this.elements.isAnimating();
   }
@@ -2402,12 +3107,12 @@ class Figure {
         // mods: { isShown: true },
         text: ['Ave:', 'Max:'],
         position: [
-          this.limits.left,
-          this.limits.bottom,
+          this.scene.left,
+          this.scene.bottom,
         ],
         xAlign: 'left',
         yAlign: 'bottom',
-        font: { size: this.limits.width / 30 },
+        font: { size: (this.scene.right - this.scene.left) / 30 },
       },
       options,
     ));

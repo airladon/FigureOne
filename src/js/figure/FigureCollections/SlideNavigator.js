@@ -14,8 +14,11 @@ import {
 } from '../Element';
 import type { FigureElement } from '../Element';
 import type {
-  OBJ_Collection, OBJ_TextLines, OBJ_Arrow,
-} from '../FigurePrimitives/FigurePrimitives';
+  OBJ_TextLines, OBJ_Arrow,
+} from '../FigurePrimitives/FigurePrimitiveTypes2D';
+import type {
+  OBJ_Collection,
+} from '../FigurePrimitives/FigurePrimitiveTypes';
 import type FigureCollections from './FigureCollections';
 import SlideNavigator from '../SlideNavigator';
 import type { OBJ_SlideNavigatorSlide } from '../SlideNavigator';
@@ -108,7 +111,7 @@ export type COL_SlideNavigator = {
  * See {@link SlideNavigator} for information about what a slide navigator is.
  *
  * To test examples below, append them to the
- * <a href="#equation-boilerplate">boilerplate</a>.
+ * <a href="#drawing-boilerplate">boilerplate</a>.
  *
  *
  * @example
@@ -260,8 +263,7 @@ class CollectionsSlideNavigator extends FigureElementCollection {
     optionsIn: COL_SlideNavigator,
   ) {
     const defaultOptions = {
-      transform: new Transform('SlideNavigator').scale(1, 1).rotate(0).translate(0, 0),
-      limits: collections.primitives.limits,
+      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       // slides: [],
       color: collections.primitives.defaultColor,
       disableOpacity: 0.7,
@@ -299,7 +301,7 @@ class CollectionsSlideNavigator extends FigureElementCollection {
     // if (o.collection == null) {
     //   this.nav.collection = null;
     // }
-    this.hasTouchableElements = true;
+    // this.hasTouchableElements = true;
     this.onAdd = () => {
       this.nav.load({ // $FlowFixMe
         collection: this.parent,

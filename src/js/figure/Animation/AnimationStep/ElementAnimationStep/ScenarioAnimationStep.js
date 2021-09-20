@@ -297,25 +297,34 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       return [this.duration, this.duration, this.duration];
     }
 
-    let transformVelocity = element.transform._dup().constant(1);
+    let transformVelocity = element.transform.identity();
     const colorVelocity = velocity.color == null ? 1 : velocity.color;
     const opacityVelocity = velocity.opacity == null ? 1 : velocity.opacity;
 
     if (velocity.transform != null) {
       transformVelocity = getTransform(velocity.transform)._dup();
     }
-    if (velocity.position != null) {
+    if (velocity.position != null && transformVelocity.hasComponent('t')) {
       transformVelocity.updateTranslation(getScale(velocity.position));
     }
-    if (velocity.translation != null) {
+    if (velocity.translation != null && transformVelocity.hasComponent('t')) {
       transformVelocity.updateTranslation(getScale(velocity.translation));
     }
-    if (velocity.scale != null) {
+    if (velocity.scale != null && transformVelocity.hasComponent('s')) {
       transformVelocity.updateScale(getScale(velocity.scale));
     }
     if (velocity.rotation != null) {
-      transformVelocity.updateRotation(velocity.rotation);
+      for (let i = 0; i < transformVelocity.def.length; i += 1) {
+        const [type] = transformVelocity.def[i];
+        if (type === 'r') {
+          transformVelocity.def[i] = ['r', velocity.rotation, 0, 0, 0];
+        }
+      }
+      transformVelocity.calcAndSetMatrix();
     }
+    // if (velocity.rotation != null && transformVelocity.hasComponent('r')) {
+    //   transformVelocity.updateRotation(velocity.rotation);
+    // }
 
     let transformDuration = 0;
     const startTransform = start.transform;
@@ -420,7 +429,6 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       }
     }
 
-    // let animateOpacity = false;
     let dissolve = null;
     let dissolveFromCurrent = false;
     if (start.isShown === false && target.isShown === true && start.opacity == null) {

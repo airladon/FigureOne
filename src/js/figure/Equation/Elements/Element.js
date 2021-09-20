@@ -123,9 +123,9 @@ class Element implements ElementInterface {
         content.drawingObject.setTouchBorder(); // $FlowFixMe
         content.custom.updateBorders({});
       }
-      content.transform.updateTranslation(location.x, location.y);
-      content.transform.updateScale(scale, scale);
-      content.updateLastDrawTransform();
+      content.transform.updateTranslation([location.x, location.y]);
+      content.transform.updateScale([scale, scale]);
+      // content.updateLastDrawTransform();
       if (content.internalSetTransformCallback != null) {
         this.fnMap.exec(content.internalSetTransformCallback, content.transform);
       }
@@ -186,9 +186,9 @@ class Element implements ElementInterface {
     const { content } = this;
     if (content instanceof FigureElementCollection
         || content instanceof FigureElementPrimitive) {
-      content.transform.updateTranslation(this.location.x, this.location.y);
-      content.transform.updateScale(this.scale, this.scale);
-      content.updateLastDrawTransform();
+      content.transform.updateTranslation([this.location.x, this.location.y]);
+      content.transform.updateScale([this.scale, this.scale]);
+      // content.updateLastDrawTransform();
     }
   }
 

@@ -96,9 +96,9 @@ export default class Bracket extends Symbol {
       points.push(r2p);
     });
     if (side === 'top' || side === 'bottom') {
-      return [points, height, width, 'strip'];
+      return [points, height, width, 'STRIP'];
     }
-    return [points, width, height, 'strip'];
+    return [points, width, height, 'STRIP'];
   }
 
   getLeftPoints(options: Object, widthIn: number, heightIn: number) {

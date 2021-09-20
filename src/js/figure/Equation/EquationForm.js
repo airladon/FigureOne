@@ -306,6 +306,7 @@ export default class EquationForm extends Elements {
         fixPoint = t._dup();
       }
     } else {
+      // fixPoint = getPoint(fixTo).scale(-1);
       fixPoint = new Point(-fixTo.x, -fixTo.y);
     }
 
@@ -639,7 +640,7 @@ export default class EquationForm extends Elements {
       moveTimeToUse = getMoveTime(
         toMoveStartTransforms, toMoveStopTransforms, 0,
         new Point(0.35, 0.35),      // 0.25 figure space per s
-        2 * Math.PI / 6,            // 60º per second
+        new Point(0, 0, 2 * Math.PI / 6),            // 60º per second
         new Point(0.4, 0.4),            // 100% per second
       );
     } else {

@@ -3,7 +3,7 @@
 
 const { Point, Figure } = Fig;
 const figure = new Figure({
-  limits: [-2, -1.5, 4, 3],
+  scene: [-2, -1.5, 2, 1.5],
   color: [0.5, 0.5, 0.5, 1],
   font: { size: 0.1 },
 });
@@ -37,12 +37,9 @@ figure.add([
         offset: 0.05,
         update: true,
       },
-      mods: {
-        isMovable: true,
-        move: {
-          type: 'rotation',
-          bounds: { rotation: { min: 0.07, max: 1.1 } },
-        },
+      move: {
+        type: 'rotation',
+        bounds: { min: 0.07, max: 1.1 },
       },
     },
   },

@@ -286,8 +286,9 @@ function getShapes(getPos) {
     shape('move-pad', {
       pad: {
         radius: 0.15,
-        line: { width: 0.01 },
-        isMovable: true,
+        // line: { width: 0.01 },
+        // isMovable: true,
+        move: true,
       },
     }, { isTouchable: false }),
   ];

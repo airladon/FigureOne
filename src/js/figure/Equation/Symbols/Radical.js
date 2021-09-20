@@ -15,7 +15,7 @@ export default class Radical extends Symbol {
 
   // eslint-disable-next-line class-methods-use-this
   // getTriangles() {
-  //   return 'strip';
+  //   return 'STRIP';
   // }
 
   //   height                      left space                right space
@@ -115,7 +115,7 @@ export default class Radical extends Symbol {
 
     const points = [p0, p1, p2, p3, p4, p5, p6, p7, p8, p9];
 
-    return [points, widthIn, heightIn, 'strip'];
+    return [points, widthIn, heightIn, 'STRIP'];
   }
 
   // Get Glyph bounds based on content

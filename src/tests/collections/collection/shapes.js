@@ -18,7 +18,12 @@ if (typeof process === 'object') {
   const figureHeight = height / pixelsPerUnit;
 
   figure = new Figure({
-    limits: [-figureWidth / 2, -figureHeight / 2, figureWidth, figureHeight],
+    scene: {
+      left: -figureWidth / 2,
+      bottom: -figureHeight / 2,
+      right: -figureWidth / 2 + figureWidth,
+      top: -figureHeight / 2 + figureHeight,
+    },
     color: [1, 0, 0, 1],
     lineWidth: 0.01,
     font: { size: 0.1 },

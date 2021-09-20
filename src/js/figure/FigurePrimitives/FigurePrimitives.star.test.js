@@ -101,7 +101,6 @@ describe('Polyline', () => {
       expect(round(p.getBorder('draw', 'border'), 3)).toEqual([border]);
       expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([border]);
       expect(round(p.drawBorderBuffer)).toEqual([border]);
-      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Buffer', () => {
       addElement('buffer');
@@ -109,7 +108,6 @@ describe('Polyline', () => {
       expect(round(p.getBorder('draw', 'border'), 3)).toEqual([rect]);
       expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([buffer]);
       expect(round(p.drawBorderBuffer, 3)).toEqual([buffer]);
-      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Update', () => {
       addElement('default');

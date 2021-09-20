@@ -6,7 +6,7 @@
 
 
 figure = new Fig.Figure({
-  limits: [-3, -1.5, 6, 3],
+  scene: [-3, -1.5, 3, 1.5],
   color: [0.3, 0.3, 0.3, 1],
   font: { size: 0.1 },
   dimColor: [0.5, 0.5, 0.5, 1],

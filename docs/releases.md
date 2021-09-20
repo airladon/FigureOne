@@ -140,3 +140,24 @@ API cleanup
 ## 0.10.14
 * Bug Fix: When ivid was watched to end, playing ivid would restart audio but not slides
 * Add `layout` property to equation form and default it to 'all' making equations rearrange themselves on every show
+
+## 0.11.0
+* Add the third dimension
+* Remove `element.lastDrawTransform` making `getPosition` stateless and dependent on parents, not the last draw
+* Update `Point` and `Line` with third dimension and various vector methods
+* Transform
+   - Simplify definitions
+   - Add axis to `rotation` component
+   - Add `direction`, `basis` and `basisToBasis` components
+* Add `plane` geometry component
+* Add element selection using a texture for 3D shapes
+* Refactor bounds for cleaner API and 3D support
+* Add `cameraControl` for user movement in 3D scene
+* Rename limits to Scene and add 3D properties
+* Add 3D Shapes: `cube`, `cone`, `prism`, `line3`, `sphere` `revolve`, `surface`, `axix3`
+* Mid-level shape custom primitives are now `generic` and `generic3`
+* Low level gl primitive is now `gl` and supports 2D, 3D and composable shaders
+* API docs reorganization
+* Add tutorials 20, 21 and 22 for 3D
+
+
