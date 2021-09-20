@@ -756,8 +756,19 @@ export default class CollectionsLine extends FigureElementCollection {
       this.setProperties(optionsToUse.mods);
     }
 
-    this.fnMap.add('_lengthCallback', (percentage: number, customProperties: Object) => {
-      const { start, target } = customProperties;
+    let toSetup = true;
+    let start;
+    let target;
+    this.fnMap.add('_lengthCallback', (percentage: number) => {
+      if (toSetup) {
+        if (start == null) {
+          start = this.line.length();
+        }
+        if (target == null) {
+          target = this.line.length();
+        }
+      }
+      toSetup = false;
       const l = (target - start) * percentage + start;
       this.setLength(l);
     });
@@ -765,10 +776,8 @@ export default class CollectionsLine extends FigureElementCollection {
       const o = joinObjects({}, {
         element: this,
       }, ...opt);
-      o.customProperties = {
-        start: o.start == null ? this.line.length() : o.start,
-        target: o.target == null ? this.line.length() : o.target,
-      };
+      start = o.start;
+      target = o.target;
       o.callback = '_lengthCallback';
       o.timeKeeper = this.timeKeeper;
       return new animation.CustomAnimationStep(o);
