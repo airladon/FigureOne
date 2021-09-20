@@ -6480,6 +6480,26 @@
               
                 
                 <li><a
+                  href='#obj_surfacegrid'
+                  class="">
+                  OBJ_SurfaceGrid
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#surfacegrid'
+                  class="">
+                  surfaceGrid
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#misc-geometry-creation'
                   class="h5 bold black caps">
                   Misc Geometry Creation
@@ -7761,36 +7781,24 @@ labeledLine.setMovable();</pre>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
 <span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">scene</span>: [-<span class="hljs-number">3</span>, -<span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> } });</pre>
 <h5><a id="shapes3d-boilerplate"></a> 3D Boilerplate</h5>
-<pre class='hljs'><span class="hljs-comment">// Create the figure</span>
-<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure();
-
-<span class="hljs-comment">// Set the scene</span>
-figure.scene.setProjection({ <span class="hljs-attr">style</span>: <span class="hljs-string">&#x27;orthographic&#x27;</span> });
-figure.scene.setCamera({ <span class="hljs-attr">position</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">up</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>] });
-figure.scene.setLight({ <span class="hljs-attr">directional</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.2</span>] });
+<pre class='hljs'><span class="hljs-comment">// Create the figure and set the scene</span>
+<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({
+  <span class="hljs-attr">scene</span>: {
+    <span class="hljs-attr">style</span>: <span class="hljs-string">&#x27;orthographic&#x27;</span>,
+    <span class="hljs-attr">camera</span>: { <span class="hljs-attr">position</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">up</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>] },
+    <span class="hljs-attr">light</span>: { <span class="hljs-attr">directional</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.2</span>] } },
+  },
+});
 
 <span class="hljs-comment">// Add x, y, z axis</span>
-figure.add([
+figure.add(
   {
-    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cylinder&#x27;</span>,
-    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.01</span>,
-    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-    <span class="hljs-attr">line</span>: [[-<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]],
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;collections.axis3&#x27;</span>,
+    <span class="hljs-attr">start</span>: -<span class="hljs-number">1</span>,
+    <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span>,
+    <span class="hljs-attr">length</span>: <span class="hljs-number">2</span>,
   },
-  {
-    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cylinder&#x27;</span>,
-    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.01</span>,
-    <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-    <span class="hljs-attr">line</span>: [[<span class="hljs-number">0</span>, -<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
-  },
-  {
-    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cylinder&#x27;</span>,
-    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.01</span>,
-    <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
-    <span class="hljs-attr">line</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, -<span class="hljs-number">1</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>]],
-  },
-]);
-</pre>
+);</pre>
 <h5><a id="text-boilerplate"></a> Text Boilerplate</h5>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
 <span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">scene</span>: [-<span class="hljs-number">3</span>, -<span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> } });
@@ -34150,6 +34158,19 @@ figure.add(
     <span class="hljs-attr">width</span>: <span class="hljs-number">0.02</span>,
     <span class="hljs-attr">start</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, -<span class="hljs-number">0.5</span>],
     <span class="hljs-attr">length</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">1</span>],
+  },
+);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Lines axes all the same color</span>
+figure.add(
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;collections.axis3&#x27;</span>,
+    <span class="hljs-attr">arrow</span>: { <span class="hljs-attr">ends</span>: <span class="hljs-string">&#x27;all&#x27;</span> },
+    <span class="hljs-attr">start</span>: -<span class="hljs-number">0.5</span>,
+    <span class="hljs-attr">length</span>: <span class="hljs-number">1</span>,
+    <span class="hljs-attr">lines</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
   },
 );</pre>
     
@@ -78593,6 +78614,193 @@ before finding the intersect.</p>
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_surfacegrid'>
+      OBJ_SurfaceGrid
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Surface grid options object.</p>
+<p>Two components must be a fixed [min, max, step].</p>
+<p>One component must be a function that takes in two components
+(x, y), (x, z), or (y, z) and outputs the third (z, y or x repsectively).</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>x</span> <code class='quiet'>((function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]))</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>y</span> <code class='quiet'>((function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]))</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>z</span> <code class='quiet'>((function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]))</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='surfacegrid'>
+      surfaceGrid
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Create a matrix of points that define a surface.</p>
+<p><img src="./apiassets/sufacegrid.png" alt=""></p>
+<p>Start with a grid of points in two components (x, y), (x, z), or (y, z), and
+define the third component (z, y or x repsectively) based on the first two.</p>
+<p>Resulting matrix can be used to create a 3D surface.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>components</span> <code class='quiet'>(<a href="#obj_surfacegrid">OBJ_SurfaceGrid</a>?)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        {OBJ_Surface}
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> { Figure, surfaceGrid } = Fig;
+
+<span class="hljs-comment">// Orthographic scene with camera oriented so z is up</span>
+<span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Figure({
+  <span class="hljs-attr">scene</span>: {
+    <span class="hljs-attr">style</span>: <span class="hljs-string">&#x27;orthographic&#x27;</span>,
+    <span class="hljs-attr">camera</span>: { <span class="hljs-attr">up</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">position</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>] },
+  },
+});
+
+<span class="hljs-comment">// Use surfaceGrid to generate a 3D surface from an xy grid</span>
+<span class="hljs-keyword">const</span> points = surfaceGrid({
+  <span class="hljs-attr">x</span>: [-<span class="hljs-number">0.8</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0.02</span>],
+  <span class="hljs-attr">y</span>: [-<span class="hljs-number">0.8</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0.02</span>],
+  <span class="hljs-attr">z</span>: <span class="hljs-function">(<span class="hljs-params">x, y</span>) =&gt;</span> <span class="hljs-number">1</span> / ((x * <span class="hljs-number">5</span>) ** <span class="hljs-number">2</span> + (y * <span class="hljs-number">5</span>) ** <span class="hljs-number">2</span> + <span class="hljs-number">1</span>),
+});
+
+figure.add([
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;surface&#x27;</span>,
+    points,
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">normals</span>: <span class="hljs-string">&#x27;curve&#x27;</span>,
+  },
+  {
+    <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;surface&#x27;</span>,
+    points,
+    <span class="hljs-attr">lines</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">position</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0.0001</span>],
+  },
+  { <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;cameraControl&#x27;</span>, <span class="hljs-attr">axis</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] },
+]);</pre>
+    
   
 
   
