@@ -159,5 +159,3 @@ API cleanup
 * Low level gl primitive is now `gl` and supports 2D, 3D and composable shaders
 * API docs reorganization
 * Add tutorials 20, 21 and 22 for 3D
-
-
