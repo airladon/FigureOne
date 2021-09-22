@@ -131,7 +131,7 @@ vec3 fromCharge(vec4 charge, vec4 center) {
 
 void main() {
   vec4 center = u_vertexTransform * vec4(a_center.xyz, 1.0);
-  mat4 centerToOrigin = mat4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -center.x, -center.y, -center.z, 1);
+  // mat4 centerToOrigin = mat4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -center.x, -center.y, -center.z, 1);
   mat4 originToCenter = mat4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, center.x, center.y, center.z, 1);
 
   // Calculate the x and y charge magnitude from each charge at this vertex
@@ -184,7 +184,7 @@ void main() {
 
   // Offset the vertex relative to the center, scale and rotate, then reverse
   // the offset
-  vec4 final = originToCenter * scaleRotation * centerToOrigin * u_vertexTransform * vec4(a_vertex.x, a_vertex.y, a_vertex.z, 1);
+  vec4 final = originToCenter * scaleRotation * vec4(a_vertex.x, a_vertex.y, a_vertex.z, 1);
 
   // Final position
   gl_Position = u_worldViewProjectionMatrix * final;
@@ -205,12 +205,7 @@ const hWidth = 0.03;  // head width
 const hLength = 0.06; // head length
 const step = 0.2;
 const halfLength = (tLength + hLength) / 2;
-console.log(Fig.cone({
-  length: tLength + hLength,
-  radius: tWidth,
-  sides: 4,
-  transform: ['t', -(tLength + hLength) / 2, 0, 0],
-}))
+
 const [conePoints, coneNormals] = Fig.cone({
   length: tLength + hLength,
   radius: tWidth * 2,
@@ -222,7 +217,7 @@ const normals = [];
 for (let x = -3; x < 3 + step / 2; x += step) {
   for (let y = -3; y < 3 + step / 2; y += step) {
     // Each arrow is made of 3 triangles
-    points.push(...Fig.toNumbers(conePoints.map(p => p.add(x, y))));
+    points.push(...Fig.toNumbers(conePoints.map(p => p._dup())));
     normals.push(...Fig.toNumbers(coneNormals.map(p => p._dup())));
     // points.push(
     //   // Head triangle
@@ -384,7 +379,7 @@ for (let i = 1; i <= 20; i += 1) {
     field.custom.updateUniform(`u_charge${i}`, [p.x, p.y, 0, charge.custom.q]);
   });
 
-  field.custom.updateUniform('u_vertexTransform', new Fig.Transform().translate(0, 0, -0.5).matrix())
+  field.custom.updateUniform('u_vertexTransform', new Fig.Transform().rotate(Math.PI / 2, 1, 0, 0).matrix());
 
   // A function that will animate a charge's position, color, label and charge
   // value. If the charge sign changes, then the charge color and label will is
