@@ -24,8 +24,10 @@ import CollectionsAxis3 from './Axis3';
 import CollectionsTrace from './Trace';
 import CollectionsToggle from './Toggle';
 import CollectionsSlider from './Slider';
+import CollectionsButton from './Button';
 import type { COL_Toggle } from './Toggle';
 import type { COL_Slider } from './Slider';
+import type { COL_Button } from './Button';
 import type { COL_Line } from './Line';
 import type { COL_Angle } from './Angle';
 import type { TypeLabelOptions } from './EquationLabel';
@@ -221,6 +223,15 @@ export default class FigureCollections {
    */
   slider(...options: Array<COL_Slider>) {
     return new CollectionsSlider(
+      this, joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options),
+    );
+  }
+
+  /**
+   * Create a {@link CollectionSlider}.
+   */
+  button(...options: Array<COL_Button>) {
+    return new CollectionsButton(
       this, joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options),
     );
   }
