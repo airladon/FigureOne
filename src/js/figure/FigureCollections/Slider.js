@@ -370,7 +370,7 @@ class CollectionsSlider extends FigureElementCollection {
     }
 
     this._custom.lastSeek = 0;
-    this.set(0);
+    this.setValue(0);
     this.setMove({
       // bounds: {
       //   p1: [-this.width / 2 + this.height / 2, 0],
@@ -379,7 +379,7 @@ class CollectionsSlider extends FigureElementCollection {
       freely: false,
     });
     this.notifications.add('setState', () => {
-      this.set(this._custom.lastSeek, false);
+      this.setValue(this._custom.lastSeek, false);
     });
     this._custom.lastPosition = this.getPosition();
     this.notifications.add('beforeMove', () => {
@@ -412,7 +412,7 @@ class CollectionsSlider extends FigureElementCollection {
    * @param {boolean} notify `true` to send notifications on change, `false` to
    * supress (`true`)
    */
-  set(percentage: number, notify: boolean = true) {
+  setValue(percentage: number, notify: boolean = true) {
     this._custom.seek = clipValue(percentage, 0, 1);
     this.setElementsToCircle();
     if (notify) {

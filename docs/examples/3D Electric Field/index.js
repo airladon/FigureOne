@@ -22,7 +22,7 @@ const figure = new Fig.Figure({
     right: 3,
     near: 0.1,
     far: 10,
-    camera: { up: [0, 0, 1], position: [3, 2, 1] },
+    camera: { up: [0, 0, 1], position: [3, 3, 1] },
   },
 });
 
@@ -80,13 +80,6 @@ uniform vec4 u_charge19;
 uniform vec4 u_charge20;
 varying vec4 v_color;
 
-vec2 polarToRect(float mag, float angle) {
-  return vec2(mag * cos(angle), mag * sin(angle));
-}
-
-vec2 rectToPolar(float x, float y) {
-  return vec2(sqrt(x * x + y * y), atan(y, x));
-}
 
 vec4 directionToAxisAngle(vec3 vector) {
   if (abs(vector.x) / length(vector) > 0.999999) {
@@ -108,19 +101,8 @@ mat4 rotationMatrixAngleAxis(float angle, vec3 axis) {
   float y = axis.y;
   float z = axis.z;
   float C = 1.0 - c;
-  // return mat4(x * x * C + c, x * y * C - z * s, x * z * C + y * s, 0, y * x * C + z * s, y * y * C + c, y * z * C - x * s, 0, z * x * C - y * s, z * y * C + x * s, z * z * C + c, 0, 0, 0, 0, 1);
   return mat4(x * x * C + c, y * x * C + z * s, z * x * C - y * s, 0, x * y * C - z * s, y * y * C + c, z * y * C + x * s, 0, x * z * C + y * s, y * z * C - x * s, z * z * C + c, 0, 0, 0, 0, 1);
 }
-
-// Calculate the x/y charge magnitude at this vertex for a single charge
-// The absolute value of the charge doesn't matter for this visualization so the
-// dielectric constant is left out of the charge calculation
-// vec2 fromCharge(vec4 charge) {
-//   float angle = atan(charge.y - a_center.y, charge.x - a_center.x);
-//   float dist = distance(charge.xy, a_center.xy);
-//   float q = -charge.w / pow(dist, 2.0);
-//   return polarToRect(q, angle);
-// }
 
 vec3 fromCharge(vec4 charge, vec4 center) {
   vec3 direction = normalize(vec3(charge.x - center.x, charge.y - center.y, charge.z - center.z));
@@ -131,7 +113,6 @@ vec3 fromCharge(vec4 charge, vec4 center) {
 
 void main() {
   vec4 center = u_vertexTransform * vec4(a_center.xyz, 1.0);
-  // mat4 centerToOrigin = mat4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -center.x, -center.y, -center.z, 1);
   mat4 originToCenter = mat4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, center.x, center.y, center.z, 1);
 
   // Calculate the x and y charge magnitude from each charge at this vertex
@@ -160,9 +141,7 @@ void main() {
   vec3 sum = c1 + c2 + c3 + c4 + c5 + c6 + c7 + c8 + c9 + c10 + c11 + c12 + c13 + c14 + c15 + c16 + c17 + c18 + c19 + c20;
 
   // Total charge magnitude and direction
-  vec2 charge = rectToPolar(sum.x, sum.y);
   float mag = length(sum);
-  float angle = charge.y;
 
   // Normalize the charge magnitude for visualization
   float normCharge = min(sqrt(mag), u_norm)/ u_norm;
@@ -174,12 +153,9 @@ void main() {
   }
 
   // Calculate the scale and rotation matrix for the arrow
-  float s = sin(angle);
-  float c = cos(angle);
   mat4 scaleMatrix = mat4(min(scale, 1.0), 0, 0, 0, 0, min(scale, 1.0), 0, 0, 0, 0,min(scale, 1.0), 0, 0, 0, 0, 1.0);
   vec4 axisAngle = directionToAxisAngle(normalize(sum));
   mat4 rotationMatrix = rotationMatrixAngleAxis(axisAngle.w, axisAngle.xyz);
-  // mat4 scaleRotation = mat4(c * min(scale, 1.0), s * min(scale, 1.0), 0, 0, -s * scale, c * scale, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
   mat4 scaleRotation = rotationMatrix * scaleMatrix;
 
   // Offset the vertex relative to the center, scale and rotate, then reverse
@@ -219,20 +195,6 @@ for (let x = -3; x < 3 + step / 2; x += step) {
     // Each arrow is made of 3 triangles
     points.push(...Fig.toNumbers(conePoints.map(p => p._dup())));
     normals.push(...Fig.toNumbers(coneNormals.map(p => p._dup())));
-    // points.push(
-    //   // Head triangle
-    //   halfLength + x, y, 0,
-    //   halfLength + x - hLength, y + hWidth, 0,
-    //   halfLength + x - hLength, y - hWidth, 0,
-    //   // Tail triangle 1
-    //   halfLength + x - hLength, y + tWidth, 0,
-    //   halfLength + x - hLength - tLength, y + tWidth, 0,
-    //   halfLength + x - hLength - tLength, y - tWidth, 0,
-    //   // Tail triangle 2
-    //   halfLength + x - hLength, y + tWidth, 0,
-    //   halfLength + x - hLength - tLength, y - tWidth, 0,
-    //   halfLength + x - hLength, y - tWidth, 0,
-    // );
     // Each vertex is paired with the center coordinate of the arrow so
     // each vertex can be scaled and rotated relative to the center
     centers.push(
@@ -251,7 +213,7 @@ for (let x = -3; x < 3 + step / 2; x += step) {
 figure.add({
   make: 'cameraControl', axis: [0, 0, 1], // controlScene: scene2D,
 });
-figure.add({ make: 'axis3' });
+figure.add({ make: 'collections.axis3', arrow: true, width: 0.01, length: 1 });
 // The `field` FigureElement has the arrow grid within it.
 // The vertex shader will orient and scale the arrows based on the
 // superposition of charge contributions from each charge at the vertex the
@@ -378,8 +340,6 @@ for (let i = 1; i <= 20; i += 1) {
     const p = charge.getPosition();
     field.custom.updateUniform(`u_charge${i}`, [p.x, p.y, 0, charge.custom.q]);
   });
-
-  field.custom.updateUniform('u_vertexTransform', new Fig.Transform().rotate(Math.PI / 2, 1, 0, 0).matrix());
 
   // A function that will animate a charge's position, color, label and charge
   // value. If the charge sign changes, then the charge color and label will is
@@ -634,6 +594,32 @@ scaleButton.onClick = () => {
     field.custom.updateUniform('u_scaleArrow', 1);
   }
 };
+
+let plane = 'xy';
+const slider = figure.add({
+  make: 'collections.slider',
+  scene: scene2D,
+  position: [0, -2.5],
+  width: 2.5,
+  colorOn: [0.6, 0.6, 0.6, 1],
+  colorOff: [0.6, 0.6, 0.6, 1],
+});
+slider.notifications.add('changed', (value) => {
+  const transform = [];
+  const offset = value * 5 - 2.5;
+  if (plane === 'xz') {
+    transform.push(['r', Math.PI / 2, 1, 0, 0]);
+    transform.push(['t', 0, offset, 0]);
+  } else if (plane === 'yz') {
+    transform.push(['r', Math.PI / 2, 0, 1, 0]);
+    transform.push(['t', offset, 0, 0]);
+  } else {
+    transform.push(['t', 0, 0, offset]);
+  }
+  field.custom.updateUniform('u_vertexTransform', Fig.getTransform(transform).matrix());
+  figure.animateNextFrame();
+});
+slider.setValue(0.5);
 
 nextButton.onClick = () => {
   figure.stop();
