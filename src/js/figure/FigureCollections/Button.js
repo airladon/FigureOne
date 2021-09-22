@@ -99,7 +99,8 @@ export type OBJ_ButtonState = {
  * @property {number} [width] button width
  * @property {number} [height] button height
  * @property {OBJ_CurvedCorner} [corner] button corner
- * @property {OBJ_LineStyleSimple} [line] button outline
+ * @property {null | OBJ_LineStyleSimple} [line] button outline - use `null` to
+ * remove the default line
  * @property {OBJ_ButtonLabel} [label]
  * @property {TypeColor} [lineColor]
  * @property {TypeColor} [fillColor]
@@ -113,7 +114,7 @@ export type COL_Button = {
   width?: number,
   height?: number,
   corner?: OBJ_CurvedCorner,
-  line?: OBJ_LineStyleSimple,
+  line?: null | OBJ_LineStyleSimple,
   label?: OBJ_ButtonLabel,
   lineColor?: TypeColor,
   fillColor?: TypeColor,
@@ -243,6 +244,23 @@ class CollectionsButton extends FigureElementCollection {
 
     this.touchDown = touchDown;
     this.states = states;
+    if (this.states.length > 0) {
+      if (typeof this.states[0] === 'string') {
+        this.states[0] = { label: this.states[0] };
+      }
+      if (this.states[0].fillColor == null) {
+        this.states[0].fillColor = fillColor;
+      }
+      if (this.states[0].labelColor == null) {
+        this.states[0].labelColor = labelColor;
+      }
+      if (this.states[0].lineColor == null) {
+        this.states[0].lineColor = lineColor;
+      }
+      if (this.states[0].label == null) {
+        this.states[0].label = label;
+      }
+    }
     if (label == null && states != null) {
       if (typeof states[0] === 'string') {
         [label] = states;
@@ -279,7 +297,7 @@ class CollectionsButton extends FigureElementCollection {
 
     if (width == null && this._label != null) {
       const r = this._label.getBoundingRect();
-      this.width = r.width + collections.primitives.defaultLength / 10;
+      this.width = r.width + r.height;
     } else if (width == null && height != null) {
       this.width = this.height * 2;
     } else if (width == null) {
@@ -290,7 +308,7 @@ class CollectionsButton extends FigureElementCollection {
 
     if (height == null && this._label != null) {
       const r = this._label.getBoundingRect();
-      this.height = r.height + collections.primitives.defaultLength / 10;
+      this.height = r.height + r.height;
     } else if (height == null && width != null) {
       this.height = this.width / 2;
     } else if (height == null) {
@@ -356,14 +374,22 @@ class CollectionsButton extends FigureElementCollection {
     return this._custom.stateIndex;
   }
 
+  getStateProperty(propertyName: string) {
+    let property = this.states[0][propertyName];
+    for (let i = 0; i < this._custom.stateIndex; i += 1) {
+      if (this.states[0][propertyName] != null) {
+        property = this.states[0][propertyName];
+      }
+    }
+    return property;
+  }
+
   updateState() {
     if (this.states.length > 0) {
       const s = this.states[this._custom.stateIndex];
-      if (s.fillColor != null) {
-        this._fill.setColor(s.fillColor);
-      }
-      if (this._line != null && s.lineColor != null) {
-        this._line.setColor(s.lineColor);
+      this._fill.setColor(this.getStateProperty('fillColor'));
+      if (this._line != null) {
+        this._line.setColor(this.getStateProperty('lineColor'));
       }
       if (this._label != null) {
         let labelText;
@@ -380,8 +406,8 @@ class CollectionsButton extends FigureElementCollection {
           }
         }
       }
-      if (this._label != null && s.labelColor != null) {
-        this._label.setColor(s.labelColor);
+      if (this._label != null) {
+        this._label.setColor(this.getStateProperty('labelColor'));
       }
     }
   }
