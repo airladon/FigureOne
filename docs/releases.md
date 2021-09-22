@@ -160,4 +160,8 @@ API cleanup
 * API docs reorganization
 * Add tutorials 20, 21 and 22 for 3D
 
-
+## 0.11.1
+* Add Slider collection
+* Add toggle switch collection
+* Add matrix uniform to gl primitive
+* Change OBJ_CameraControl.scene to OBJ_CameraControl.sceneControl
