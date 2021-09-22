@@ -1433,7 +1433,7 @@ export default class FigurePrimitives {
       bottom: 0,
       width: 1,
       height: 1,
-      scene: null,
+      controlScene: null,
       color: [0, 0, 0, 0],
       axis: [0, 1, 0],
       sensitivity: 5,
@@ -1450,7 +1450,7 @@ export default class FigurePrimitives {
       move: true,
       color: o.color,
     });
-    element.custom.sceneToChange = o.scene;
+    element.custom.sceneToChange = o.controlScene;
     element.scene = new Scene({
       style: '2D',
       left: 0,

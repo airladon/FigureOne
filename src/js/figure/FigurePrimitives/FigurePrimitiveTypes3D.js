@@ -980,7 +980,7 @@ export type OBJ_Surface = {
  * @property {TypeParsablePoint} [axis] Axis to keep vertical as camera is
  * rotated. The axis vector and scene.camera.up vector should be in the same
  * plane (`[0, 1, 0]`)
- * @property {Scene | string} [scene] Use this to constrol a scene that is not
+ * @property {Scene | string} [controlScene] Use this to control a scene that is not
  * the default Figure scene.
  * @property {number} sensitivity sensitivity of camera position relative to
  * user movement where larger numbers result in more rotation for the same
@@ -1090,7 +1090,7 @@ export type OBJ_CameraControl = {
   width?: number,
   height?: number,
   axis?: TypeParsablePoint,
-  scene?: Scene | string,
+  controlScene?: Scene | string,
   sensitivity?: number,
   xSensitivity?: number,
   ySensitivity?: number,

@@ -12,8 +12,29 @@
 /* globals Fig */
 
 const figure = new Fig.Figure({
-  scene: [-3, -3, 3, 3],
+  // scene: [-3, -3, 3, 3],
   backgroundColor: [0, 0, 0, 1],
+  scene: {
+    style: 'orthographic',
+    left: -3,
+    bottom: -3,
+    top: 3,
+    right: 3,
+    near: 0.1,
+    far: 10,
+    camera: { up: [0, 0, 1], position: [3, 2, 1] },
+  },
+});
+
+const scene2D = new Fig.Scene({
+  style: '2D',
+  left: -3,
+  bottom: -3,
+  top: 3,
+  right: 3,
+  // near: 0.1,
+  // far: 10,
+  // camera: { up: [0, 0, 1], position: [3, 2, 1] },
 });
 
 /*
@@ -30,6 +51,9 @@ const figure = new Fig.Figure({
 const vertexShader = `
 attribute vec3 a_vertex;
 attribute vec3 a_center;
+attribute vec3 a_normal;
+varying vec3 v_normal;
+uniform mat4 u_worldInverseTranspose;
 uniform mat4 u_worldViewProjectionMatrix;
 uniform float u_norm;
 uniform float u_scaleArrow;
@@ -166,6 +190,7 @@ void main() {
   // Set the color based on the normalized charge between red (high charge
   // magnitude) and blue (low charge magnitude)
   v_color = vec4(normCharge, 0.2, 1.0 - normCharge, 1);
+  v_normal = mat3(u_worldInverseTranspose) * a_normal;
 }`;
 
 const points = [];
@@ -178,28 +203,47 @@ const hWidth = 0.03;  // head width
 const hLength = 0.06; // head length
 const step = 0.2;
 const halfLength = (tLength + hLength) / 2;
-
+console.log(Fig.cone({
+  length: tLength + hLength,
+  radius: tWidth,
+  sides: 4,
+  transform: ['t', -(tLength + hLength) / 2, 0, 0],
+}))
+const [conePoints, coneNormals] = Fig.cone({
+  length: tLength + hLength,
+  radius: tWidth * 2,
+  sides: 4,
+  transform: ['t', -(tLength + hLength) / 2, 0, 0],
+});
+const normals = [];
 // Make a grid of arrows
 for (let x = -3; x < 3 + step / 2; x += step) {
   for (let y = -3; y < 3 + step / 2; y += step) {
     // Each arrow is made of 3 triangles
-    points.push(
-      // Head triangle
-      halfLength + x, y, 0,
-      halfLength + x - hLength, y + hWidth, 0,
-      halfLength + x - hLength, y - hWidth, 0,
-      // Tail triangle 1
-      halfLength + x - hLength, y + tWidth, 0,
-      halfLength + x - hLength - tLength, y + tWidth, 0,
-      halfLength + x - hLength - tLength, y - tWidth, 0,
-      // Tail triangle 2
-      halfLength + x - hLength, y + tWidth, 0,
-      halfLength + x - hLength - tLength, y - tWidth, 0,
-      halfLength + x - hLength, y - tWidth, 0,
-    );
+    points.push(...Fig.toNumbers(conePoints.map(p => p.add(x, y))));
+    normals.push(...Fig.toNumbers(coneNormals.map(p => p._dup())));
+    // points.push(
+    //   // Head triangle
+    //   halfLength + x, y, 0,
+    //   halfLength + x - hLength, y + hWidth, 0,
+    //   halfLength + x - hLength, y - hWidth, 0,
+    //   // Tail triangle 1
+    //   halfLength + x - hLength, y + tWidth, 0,
+    //   halfLength + x - hLength - tLength, y + tWidth, 0,
+    //   halfLength + x - hLength - tLength, y - tWidth, 0,
+    //   // Tail triangle 2
+    //   halfLength + x - hLength, y + tWidth, 0,
+    //   halfLength + x - hLength - tLength, y - tWidth, 0,
+    //   halfLength + x - hLength, y - tWidth, 0,
+    // );
     // Each vertex is paired with the center coordinate of the arrow so
     // each vertex can be scaled and rotated relative to the center
     centers.push(
+      x, y, 0, x, y, 0, x, y, 0,
+      x, y, 0, x, y, 0, x, y, 0,
+      x, y, 0, x, y, 0, x, y, 0,
+      x, y, 0, x, y, 0, x, y, 0,
+      x, y, 0, x, y, 0, x, y, 0,
       x, y, 0, x, y, 0, x, y, 0,
       x, y, 0, x, y, 0, x, y, 0,
       x, y, 0, x, y, 0, x, y, 0,
@@ -207,9 +251,10 @@ for (let x = -3; x < 3 + step / 2; x += step) {
   }
 }
 
-figure.add({
-  make: 'cameraControl',
-});
+// figure.add({
+//   make: 'cameraControl', axis: [0, 0, 1], // controlScene: scene2D,
+// });
+figure.add({ make: 'axis3' });
 // The `field` FigureElement has the arrow grid within it.
 // The vertex shader will orient and scale the arrows based on the
 // superposition of charge contributions from each charge at the vertex the
@@ -220,6 +265,7 @@ const field = figure.add({
     src: vertexShader,
     vars: [
       'a_vertex', 'a_center', 'u_worldViewProjectionMatrix',
+      'u_worldInverseTranspose', 'a_normal',
       'u_norm',
       'u_scaleArrow',
       'u_charge1',
@@ -244,8 +290,9 @@ const field = figure.add({
       'u_charge20',
     ],
   },
-  fragmentShader: 'vertexColor',
+  fragmentShader: { color: 'vertex', dimension: 3, light: null },
   vertices: { data: points, size: 3 },
+  normals: { data: normals, size: 3 },
   attributes: [
     { name: 'a_center', data: centers, size: 3 },
   ],
@@ -572,6 +619,7 @@ const makeButton = (text, width, position) => figure.add({
   mods: {
     isTouchable: true,
   },
+  scene: scene2D,
 });
 const nextButton = makeButton('Next', 1, [2.3, -2.5]);
 const prevButton = makeButton('Prev', 1, [-2.3, -2.5]);
