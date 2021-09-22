@@ -2260,6 +2260,106 @@
               
                 
                 <li><a
+                  href='#col_toggle'
+                  class="">
+                  COL_Toggle
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#collectionstoggle'
+                  class=" toggle-sibling">
+                  CollectionsToggle
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#collectionstoggleon'
+                        class='regular pre-open'>
+                        #on
+                      </a></li>
+                      
+                      <li><a
+                        href='#collectionstoggleoff'
+                        class='regular pre-open'>
+                        #off
+                      </a></li>
+                      
+                      <li><a
+                        href='#collectionstoggletoggle'
+                        class='regular pre-open'>
+                        #toggle
+                      </a></li>
+                      
+                      <li><a
+                        href='#collectionstogglesetlabel'
+                        class='regular pre-open'>
+                        #setLabel
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#col_slider'
+                  class="">
+                  COL_Slider
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#collectionsslider'
+                  class=" toggle-sibling">
+                  CollectionsSlider
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#collectionssliderset'
+                        class='regular pre-open'>
+                        #set
+                      </a></li>
+                      
+                      <li><a
+                        href='#collectionsslidergetvalue'
+                        class='regular pre-open'>
+                        #getValue
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
                   href='#collectionsaxis'
                   class=" toggle-sibling">
                   CollectionsAxis
@@ -6135,6 +6235,18 @@
                       </a></li>
                       
                       <li><a
+                        href='#figurecollectionstoggle'
+                        class='regular pre-open'>
+                        #toggle
+                      </a></li>
+                      
+                      <li><a
+                        href='#figurecollectionsslider'
+                        class='regular pre-open'>
+                        #slider
+                      </a></li>
+                      
+                      <li><a
                         href='#figurecollectionstrace'
                         class='regular pre-open'>
                         #trace
@@ -7359,6 +7471,36 @@
                   href='#obj_animationdefinition'
                   class="">
                   OBJ_AnimationDefinition
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#sliderborder'
+                  class="">
+                  SliderBorder
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_togglelabel'
+                  class="">
+                  OBJ_ToggleLabel
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#toggleborder'
+                  class="">
+                  ToggleBorder
                   
                 </a>
                 
@@ -32206,6 +32348,870 @@ to specify click colors for each (
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='col_toggle'>
+      COL_Toggle
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="#collectionstoggle">CollectionsToggle</a> options object that extends <a href="#obj_collection">OBJ_Collection</a>
+options object (without <code>parent</code>).</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_collection">OBJ_Collection</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : toggle width
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : toggle height
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>backgroundHeight</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : height of toggle background showing on
+or off
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides in curves (
+<code>20</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>theme</span> <code class='quiet'>((<code>"dark"</code> | <code>"light"</code>)?)</code>
+          : selects default colors for a light or
+dark switch (
+<code>dark</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>colorOff</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
+          : toggle off color
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>colorOn</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
+          : toggle on color (
+<code>[0, 1, 0, 1]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>circleBorder</span> <code class='quiet'>(<a href="#toggleborder">ToggleBorder</a>?)</code>
+          : border around circle (defaults to on
+where width is half the figure's default line width)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>backgroundBorder</span> <code class='quiet'>(<a href="#toggleborder">ToggleBorder</a>?)</code>
+          : border around background
+(defaults to off - width = 0)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>label</span> <code class='quiet'>(<a href="#obj_togglelabel">OBJ_ToggleLabel</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='collectionstoggle'>
+      CollectionsToggle
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="#figureelementcollection">FigureElementCollection</a> representing a toggle switch.</p>
+<p><img src="./apiassets/toggle.gif" alt=""></p>
+<p>The toggle switch can be turned on or off.</p>
+<p>Notifications - The notification manager property <code>notifications</code> will
+publish the following events:</p>
+<ul>
+<li><code>toggle</code>: switch is changed - <code>true</code> will be passed if the switch is
+changed to on, and <code>false</code> will be passed if the switch is changed to off</li>
+<li><code>on</code>: switch is changed to on</li>
+<li><code>off</code>: switch is changed to off</li>
+</ul>
+<p>See <a href="#col_toggle">COL_Toggle</a> for setup options.</p>
+<p>To test examples below, append them to the
+boilerplate</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#figureelementcollection">FigureElementCollection</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple toggle switch with notification causing a console statement</span>
+<span class="hljs-keyword">const</span> toggle = figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;collections.toggle&#x27;</span>,
+  <span class="hljs-attr">label</span>: {
+    <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;Control&#x27;</span>,
+    <span class="hljs-attr">location</span>: <span class="hljs-string">&#x27;bottom&#x27;</span>,
+    <span class="hljs-attr">scale</span>: <span class="hljs-number">0.6</span>,
+  },
+});
+
+toggle.notifications.add(<span class="hljs-string">&#x27;toggle&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> {
+  state ? <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;on&#x27;</span>) : <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;off&#x27;</span>);
+});</pre>
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='collectionstoggleon'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>on(notify, null)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Turn switch on.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>notify</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
+            = <code>true</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>null</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+	    <code>true</code>
+ to send 
+<code>'toggle'</code>
+ and 
+<code>'on'</code>
+ notifications
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='collectionstoggleoff'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>off(notify, null)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Turn switch off.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>notify</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
+            = <code>true</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>null</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+	    <code>true</code>
+ to send 
+<code>'toggle'</code>
+ and 
+<code>'off'</code>
+ notifications
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='collectionstoggletoggle'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>toggle()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Toggle switch.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='collectionstogglesetlabel'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setLabel(text)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Change label text.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    text to change to
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='col_slider'>
+      COL_Slider
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="#collectionsslider">CollectionsSlider</a> options object that extends <a href="#obj_collection">OBJ_Collection</a>
+options object (without <code>parent</code>).</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_collection">OBJ_Collection</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : slider width
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : slider height
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>barHeight</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : height of slider bar bar
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides in curves (
+<code>20</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>theme</span> <code class='quiet'>((<code>"dark"</code> | <code>"light"</code>)?)</code>
+          : selects default colors for a light or
+dark switch (
+<code>dark</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>colorOff</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
+          : slider off color (bar color from slider
+value to 1)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>colorOn</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
+          : slider on color (bar color from 0 to slider
+value (
+<code>[0, 1, 0, 1]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>circleBorder</span> <code class='quiet'>(<a href="#sliderborder">SliderBorder</a>?)</code>
+          : border around circle (defaults to on
+where width is half the figure's default line width)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>barBorder</span> <code class='quiet'>(<a href="#sliderborder">SliderBorder</a>?)</code>
+          : border around bar
+(defaults to off - width = 0)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='collectionsslider'>
+      CollectionsSlider
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="#figureelementcollection">FigureElementCollection</a> representing a slider control.</p>
+<p><img src="./apiassets/slider.gif" alt=""></p>
+<p>Notifications - The notification manager property <code>notifications</code> will
+publish the following events:</p>
+<ul>
+<li><code>changed</code>: slider value is changed - slider position in percent is passed
+as parameter to callback.</li>
+</ul>
+<p>See <a href="#col_slider">COL_Slider</a> for setup options.</p>
+<p>To test examples below, append them to the
+boilerplate</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#figureelementcollection">FigureElementCollection</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple slider with notification causing a console statement</span>
+<span class="hljs-keyword">const</span> slider = figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;collections.slider&#x27;</span>,
+  <span class="hljs-attr">barHeight</span>: <span class="hljs-number">0.02</span>,
+  <span class="hljs-attr">height</span>: <span class="hljs-number">0.1</span>,
+  <span class="hljs-attr">width</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">color</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">1</span>],
+  <span class="hljs-attr">touchBorder</span>: <span class="hljs-number">0.2</span>,
+});
+
+slider.notifications.add(<span class="hljs-string">&#x27;changed&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">position</span>) =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(position)
+});</pre>
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='collectionssliderset'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>set(percentage, notify)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Set slider to value between 0 and 1.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>percentage</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    between 0 and 1
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>notify</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
+            = <code>true</code>)</code>
+	    <code>true</code>
+ to send notifications on change, 
+<code>false</code>
+ to
+supress (
+<code>true</code>
+)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='collectionsslidergetvalue'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getValue()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Get slider value.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        between 0 and 1
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='collectionsaxis'>
       CollectionsAxis
     </h3>
@@ -33642,7 +34648,7 @@ false for disabling free movement after touch up
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>type</span> <code class='quiet'>((<code>"rotation"</code> | <code>"translation"</code> | <code>"position"</code> | <code>"scale"</code> | <code>"scaleX"</code> | <code>"scaleY"</code> | <code>"scaleZ"</code>))</code>
+          <span class='code bold'>type</span> <code class='quiet'>((<code>"rotation"</code> | <code>"translation"</code> | <code>"position"</code> | <code>"scale"</code> | <code>"scaleX"</code> | <code>"scaleY"</code> | <code>"scaleZ"</code>)?)</code>
           
           
         </div>
@@ -74033,6 +75039,128 @@ translation of
       </div>
     </div>
   
+    <div class='border-bottom' id='figurecollectionstoggle'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>toggle(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Create a <a href="CollectionToggle">CollectionToggle</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#col_toggle">COL_Toggle</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='figurecollectionsslider'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>slider(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Create a <a href="CollectionSlider">CollectionSlider</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#col_slider">COL_Slider</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='figurecollectionstrace'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -86102,6 +87230,294 @@ use <code>show: false</code> in the animation step definition, and for <code>in<
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='sliderborder'>
+      SliderBorder
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Border of circle or bar of slider.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>number</span> <code class='quiet'>(width?)</code>
+          : border width
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>TypeColor</span> <code class='quiet'>(color?)</code>
+          : border color
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="OBJ_Slider">OBJ_Slider</a>
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_togglelabel'>
+      OBJ_ToggleLabel
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Collections toggle label options object.</p>
+<p>A toggle switch can be annotated with a label using the <code>text</code> property and can be:</p>
+<ul>
+<li>text (<code>string</code>, <code>Array&#x3C;string></code>)</li>
+<li>an equation (<code>Equation</code>, <code>EQN_Equation</code>)</li>
+</ul>
+<p>In all cases, an actual <a href="#equation">Equation</a> is created as the label. The
+equation can have multiple forms, which can be set using the <code>showForm</code>
+method.</p>
+<p>If <code>text</code>: <code>string</code>, then an equation with a single form named <code>base</code> will
+be created with a single element being the string text.</p>
+<p>If <code>text</code>: <code>Array&#x3C;string></code>, then an equation with a form for each element
+of the array is created. Each form is named '0', '1', '2'... corresponding
+with the index of the array. Each form is has a single element, being the
+text at that index.</p>
+<p>Use <code>text</code>: <code>Equation</code> or <code>EQN_Equation</code> to create completely custom
+equations with any forms desirable.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>text</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>> | <a href="#equation">Equation</a> | <a href="#eqn_equation">EQN_Equation</a>))</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>offset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : offset to default loation
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>location</span> <code class='quiet'>(<a href="#typelabelsublocation">TypeLabelSubLocation</a>?)</code>
+          : location of label relative to
+toggle
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : size of the label
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#col_toggle">COL_Toggle</a>
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='toggleborder'>
+      ToggleBorder
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Border of circle or background of toggle.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>number</span> <code class='quiet'>(width?)</code>
+          : border width
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>TypeColor</span> <code class='quiet'>(color?)</code>
+          : border color
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="OBJ_Toggle">OBJ_Toggle</a>
+
+      
+    
   
 
   

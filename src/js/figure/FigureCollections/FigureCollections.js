@@ -22,6 +22,10 @@ import CollectionsAxis from './Axis';
 import CollectionsAxis3 from './Axis3';
 // eslint-disable-next-line import/no-cycle
 import CollectionsTrace from './Trace';
+import CollectionsToggle from './Toggle';
+import CollectionsSlider from './Slider';
+import type { COL_Toggle } from './Toggle';
+import type { COL_Slider } from './Slider';
 import type { COL_Line } from './Line';
 import type { COL_Angle } from './Angle';
 import type { TypeLabelOptions } from './EquationLabel';
@@ -199,6 +203,24 @@ export default class FigureCollections {
    */
   axis3(...options: Array<COL_Axis3>) {
     return new CollectionsAxis3(
+      this, joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options),
+    );
+  }
+
+  /**
+   * Create a {@link CollectionToggle}.
+   */
+  toggle(...options: Array<COL_Toggle>) {
+    return new CollectionsToggle(
+      this, joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options),
+    );
+  }
+
+  /**
+   * Create a {@link CollectionSlider}.
+   */
+  slider(...options: Array<COL_Slider>) {
+    return new CollectionsSlider(
       this, joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options),
     );
   }

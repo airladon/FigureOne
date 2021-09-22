@@ -374,6 +374,15 @@ Rotation can only happen with some rotation transform elements:
  * @property {FigureElement | null | string} element
  */
 export type OBJ_ElementMove = {
+  type?: 'rotation' | 'translation' | 'position' | 'scale' | 'scaleX' | 'scaleY' | 'scaleZ',
+  bounds?: TypeParsableBounds,
+  plane?: Plane,
+  maxVelocity?: number | TypeParsablePoint;
+  freely?: OBJ_ElementMoveFreely | false,
+  element?: FigureElement | null | string;
+};
+
+type OBJ_ElementMoveFixed = {
   type: 'rotation' | 'translation' | 'position' | 'scale' | 'scaleX' | 'scaleY' | 'scaleZ',
   bounds: TypeParsableBounds,
   plane: Plane,
@@ -381,6 +390,7 @@ export type OBJ_ElementMove = {
   freely: OBJ_ElementMoveFreely | false,
   element: FigureElement | null | string;
 };
+
 /* eslint-enable max-len */
 
 /* eslint-enable no-use-before-define */
@@ -625,7 +635,7 @@ class FigureElement {
   //   // eslint-disable-next-line no-use-before-define
   //   element: FigureElementCollection | FigureElementPrimitive | null;
   // };
-  move: OBJ_ElementMove;
+  move: OBJ_ElementMoveFixed;
 
   onAdd: null | 'string' | () => void;
   // scenarios: {
