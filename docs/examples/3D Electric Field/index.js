@@ -63,6 +63,30 @@ vec2 rectToPolar(float x, float y) {
   return vec2(sqrt(x * x + y * y), atan(y, x));
 }
 
+vec4 directionToAxisAngle(vec3 vector) {
+  if (abs(vector.x) / length(vector) > 0.999999) {
+    if (vector.x > 0.0) {
+      return vec4(0, 0, 1, 0);
+    }
+    return vec4(0, 0, 1, 3.141592);
+  }
+  vec3 axis = normalize(cross(vec3(1.0, 0.0, 0.0), vector));
+  float d = dot(vec3(1.0, 0.0, 0.0), vector);
+  float angle = acos(d / length(vector));
+  return vec4(axis.xyz, angle);
+}
+
+mat4 rotationMatrixAngleAxis(float angle, vec3 axis) {
+  float c = cos(angle);
+  float s = sin(angle);
+  float x = axis.x;
+  float y = axis.y;
+  float z = axis.z;
+  float C = 1.0 - c;
+  // return mat4(x * x * C + c, x * y * C - z * s, x * z * C + y * s, 0, y * x * C + z * s, y * y * C + c, y * z * C - x * s, 0, z * x * C - y * s, z * y * C + x * s, z * z * C + c, 0, 0, 0, 0, 1);
+  return mat4(x * x * C + c, y * x * C + z * s, z * x * C - y * s, 0, x * y * C - z * s, y * y * C + c, z * y * C + x * s, 0, x * z * C + y * s, y * z * C - x * s, z * z * C + c, 0, 0, 0, 0, 1);
+}
+
 // Calculate the x/y charge magnitude at this vertex for a single charge
 // The absolute value of the charge doesn't matter for this visualization so the
 // dielectric constant is left out of the charge calculation
@@ -111,7 +135,7 @@ void main() {
 
   // Total charge magnitude and direction
   vec2 charge = rectToPolar(sum.x, sum.y);
-  float mag = charge.x;
+  float mag = length(sum);
   float angle = charge.y;
 
   // Normalize the charge magnitude for visualization
@@ -126,7 +150,11 @@ void main() {
   // Calculate the scale and rotation matrix for the arrow
   float s = sin(angle);
   float c = cos(angle);
-  mat4 scaleRotation = mat4(c * min(scale, 1.0), s * min(scale, 1.0), 0, 0, -s * scale, c * scale, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+  mat4 scaleMatrix = mat4(min(scale, 1.0), 0, 0, 0, 0, min(scale, 1.0), 0, 0, 0, 0,min(scale, 1.0), 0, 0, 0, 0, 1.0);
+  vec4 axisAngle = directionToAxisAngle(normalize(sum));
+  mat4 rotationMatrix = rotationMatrixAngleAxis(axisAngle.w, axisAngle.xyz);
+  // mat4 scaleRotation = mat4(c * min(scale, 1.0), s * min(scale, 1.0), 0, 0, -s * scale, c * scale, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+  mat4 scaleRotation = rotationMatrix * scaleMatrix;
 
   // Offset the vertex relative to the center, scale and rotate, then reverse
   // the offset
@@ -179,6 +207,9 @@ for (let x = -3; x < 3 + step / 2; x += step) {
   }
 }
 
+figure.add({
+  make: 'cameraControl',
+});
 // The `field` FigureElement has the arrow grid within it.
 // The vertex shader will orient and scale the arrows based on the
 // superposition of charge contributions from each charge at the vertex the
@@ -256,19 +287,19 @@ for (let i = 1; i <= 20; i += 1) {
     elements: [
       {
         name: 'fill',
-        make: 'polygon',
+        make: 'sphere',
         sides: 20,
         radius: chargeRadius,
         color: [1, 0, 0, 1],
       },
-      {
-        name: 'border',
-        make: 'polygon',
-        sides: 20,
-        radius: chargeRadius,
-        color: [0, 0, 0, 0.5],
-        line: { width: 0.005 },
-      },
+      // {
+      //   name: 'border',
+      //   make: 'polygon',
+      //   sides: 20,
+      //   radius: chargeRadius,
+      //   color: [0, 0, 0, 0.5],
+      //   line: { width: 0.005 },
+      // },
       {
         name: 'negativeLine',
         make: 'primitives.line',
