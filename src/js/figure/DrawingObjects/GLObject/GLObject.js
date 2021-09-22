@@ -547,7 +547,7 @@ class GLObject extends DrawingObject {
    */
   addUniform(
     uniformName: string,
-    length: 1 | 2 | 3 | 4 = 1,
+    length: 1 | 2 | 3 | 4 | 16 = 1,
     type: TypeGLUniform = 'FLOAT',
     initialValue: number | Array<number> | null = null,
   ) {
@@ -608,6 +608,16 @@ class GLObject extends DrawingObject {
 
   uploadUniform4iv(location: WebGLUniformLocation, name: string) {
     this.gl.uniform4iv(location, new Int32Array(this.uniforms[name].value));
+  }
+
+  uploadUniform16fv(location: WebGLUniformLocation, name: string) {
+    // this.gl.uniformMatrix4fv(location, this.uniforms[name].value);
+    // $FlowFixMe
+    this.gl.uniformMatrix4fv(
+      location,
+      false,
+      m3.transpose(this.uniforms[name].value),
+    );
   }
 
   uploadUniform1i(location: WebGLUniformLocation, name: string) {

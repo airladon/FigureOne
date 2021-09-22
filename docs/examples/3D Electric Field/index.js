@@ -54,6 +54,7 @@ attribute vec3 a_center;
 attribute vec3 a_normal;
 varying vec3 v_normal;
 uniform mat4 u_worldInverseTranspose;
+uniform mat4 u_vertexTransform;
 uniform mat4 u_worldViewProjectionMatrix;
 uniform float u_norm;
 uniform float u_scaleArrow;
@@ -121,38 +122,39 @@ mat4 rotationMatrixAngleAxis(float angle, vec3 axis) {
 //   return polarToRect(q, angle);
 // }
 
-vec3 fromCharge(vec4 charge) {
-  vec3 direction = normalize(vec3(charge.x - a_center.x, charge.y - a_center.y, charge.z - a_center.z));
-  float dist = distance(charge.xyz, a_center.xyz);
+vec3 fromCharge(vec4 charge, vec4 center) {
+  vec3 direction = normalize(vec3(charge.x - center.x, charge.y - center.y, charge.z - center.z));
+  float dist = distance(charge.xyz, center.xyz);
   float q1 = -charge.w / pow(dist, 2.0);
   return q1 * direction;
 }
 
 void main() {
-  mat4 centerToOrigin = mat4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -a_center.x, -a_center.y, -a_center.z, 1);
-  mat4 originToCenter = mat4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, a_center.x, a_center.y, a_center.z, 1);
+  vec4 center = u_vertexTransform * vec4(a_center.xyz, 1.0);
+  mat4 centerToOrigin = mat4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -center.x, -center.y, -center.z, 1);
+  mat4 originToCenter = mat4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, center.x, center.y, center.z, 1);
 
   // Calculate the x and y charge magnitude from each charge at this vertex
-  vec3 c1 = fromCharge(u_charge1);
-  vec3 c2 = fromCharge(u_charge2);
-  vec3 c3 = fromCharge(u_charge3);
-  vec3 c4 = fromCharge(u_charge4);
-  vec3 c5 = fromCharge(u_charge5);
-  vec3 c6 = fromCharge(u_charge6);
-  vec3 c7 = fromCharge(u_charge7);
-  vec3 c8 = fromCharge(u_charge8);
-  vec3 c9 = fromCharge(u_charge9);
-  vec3 c10 = fromCharge(u_charge10);
-  vec3 c11 = fromCharge(u_charge11);
-  vec3 c12 = fromCharge(u_charge12);
-  vec3 c13 = fromCharge(u_charge13);
-  vec3 c14 = fromCharge(u_charge14);
-  vec3 c15 = fromCharge(u_charge15);
-  vec3 c16 = fromCharge(u_charge16);
-  vec3 c17 = fromCharge(u_charge17);
-  vec3 c18 = fromCharge(u_charge18);
-  vec3 c19 = fromCharge(u_charge19);
-  vec3 c20 = fromCharge(u_charge20);
+  vec3 c1 = fromCharge(u_charge1, center);
+  vec3 c2 = fromCharge(u_charge2, center);
+  vec3 c3 = fromCharge(u_charge3, center);
+  vec3 c4 = fromCharge(u_charge4, center);
+  vec3 c5 = fromCharge(u_charge5, center);
+  vec3 c6 = fromCharge(u_charge6, center);
+  vec3 c7 = fromCharge(u_charge7, center);
+  vec3 c8 = fromCharge(u_charge8, center);
+  vec3 c9 = fromCharge(u_charge9, center);
+  vec3 c10 = fromCharge(u_charge10, center);
+  vec3 c11 = fromCharge(u_charge11, center);
+  vec3 c12 = fromCharge(u_charge12, center);
+  vec3 c13 = fromCharge(u_charge13, center);
+  vec3 c14 = fromCharge(u_charge14, center);
+  vec3 c15 = fromCharge(u_charge15, center);
+  vec3 c16 = fromCharge(u_charge16, center);
+  vec3 c17 = fromCharge(u_charge17, center);
+  vec3 c18 = fromCharge(u_charge18, center);
+  vec3 c19 = fromCharge(u_charge19, center);
+  vec3 c20 = fromCharge(u_charge20, center);
 
   // Total x and y charge magnitude
   vec3 sum = c1 + c2 + c3 + c4 + c5 + c6 + c7 + c8 + c9 + c10 + c11 + c12 + c13 + c14 + c15 + c16 + c17 + c18 + c19 + c20;
@@ -182,7 +184,7 @@ void main() {
 
   // Offset the vertex relative to the center, scale and rotate, then reverse
   // the offset
-  vec4 final = originToCenter * scaleRotation * centerToOrigin * vec4(a_vertex.x, a_vertex.y, a_vertex.z, 1);
+  vec4 final = originToCenter * scaleRotation * centerToOrigin * u_vertexTransform * vec4(a_vertex.x, a_vertex.y, a_vertex.z, 1);
 
   // Final position
   gl_Position = u_worldViewProjectionMatrix * final;
@@ -251,9 +253,9 @@ for (let x = -3; x < 3 + step / 2; x += step) {
   }
 }
 
-// figure.add({
-//   make: 'cameraControl', axis: [0, 0, 1], // controlScene: scene2D,
-// });
+figure.add({
+  make: 'cameraControl', axis: [0, 0, 1], // controlScene: scene2D,
+});
 figure.add({ make: 'axis3' });
 // The `field` FigureElement has the arrow grid within it.
 // The vertex shader will orient and scale the arrows based on the
@@ -266,6 +268,7 @@ const field = figure.add({
     vars: [
       'a_vertex', 'a_center', 'u_worldViewProjectionMatrix',
       'u_worldInverseTranspose', 'a_normal',
+      'u_vertexTransform',
       'u_norm',
       'u_scaleArrow',
       'u_charge1',
@@ -297,6 +300,7 @@ const field = figure.add({
     { name: 'a_center', data: centers, size: 3 },
   ],
   uniforms: [
+    { name: 'u_vertexTransform', length: 16, type: 'FLOAT_VECTOR' },
     { name: 'u_norm', length: 1 },
     { name: 'u_scaleArrow', length: 1 },
     { name: 'u_charge1', length: 4 },
@@ -379,6 +383,8 @@ for (let i = 1; i <= 20; i += 1) {
     const p = charge.getPosition();
     field.custom.updateUniform(`u_charge${i}`, [p.x, p.y, 0, charge.custom.q]);
   });
+
+  field.custom.updateUniform('u_vertexTransform', new Fig.Transform().translate(0, 0, -0.5).matrix())
 
   // A function that will animate a charge's position, color, label and charge
   // value. If the charge sign changes, then the charge color and label will is
