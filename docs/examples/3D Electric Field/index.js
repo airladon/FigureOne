@@ -66,11 +66,18 @@ vec2 rectToPolar(float x, float y) {
 // Calculate the x/y charge magnitude at this vertex for a single charge
 // The absolute value of the charge doesn't matter for this visualization so the
 // dielectric constant is left out of the charge calculation
-vec2 fromCharge(vec4 charge) {
-  float angle = atan(charge.y - a_center.y, charge.x - a_center.x);
-  float dist = distance(charge.xy, a_center.xy);
-  float q = -charge.w / pow(dist, 2.0);
-  return polarToRect(q, angle);
+// vec2 fromCharge(vec4 charge) {
+//   float angle = atan(charge.y - a_center.y, charge.x - a_center.x);
+//   float dist = distance(charge.xy, a_center.xy);
+//   float q = -charge.w / pow(dist, 2.0);
+//   return polarToRect(q, angle);
+// }
+
+vec3 fromCharge(vec4 charge) {
+  vec3 direction = normalize(vec3(charge.x - a_center.x, charge.y - a_center.y, charge.z - a_center.z));
+  float dist = distance(charge.xyz, a_center.xyz);
+  float q1 = -charge.w / pow(dist, 2.0);
+  return q1 * direction;
 }
 
 void main() {
@@ -78,29 +85,29 @@ void main() {
   mat4 originToCenter = mat4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, a_center.x, a_center.y, a_center.z, 1);
 
   // Calculate the x and y charge magnitude from each charge at this vertex
-  vec2 c1 = fromCharge(u_charge1);
-  vec2 c2 = fromCharge(u_charge2);
-  vec2 c3 = fromCharge(u_charge3);
-  vec2 c4 = fromCharge(u_charge4);
-  vec2 c5 = fromCharge(u_charge5);
-  vec2 c6 = fromCharge(u_charge6);
-  vec2 c7 = fromCharge(u_charge7);
-  vec2 c8 = fromCharge(u_charge8);
-  vec2 c9 = fromCharge(u_charge9);
-  vec2 c10 = fromCharge(u_charge10);
-  vec2 c11 = fromCharge(u_charge11);
-  vec2 c12 = fromCharge(u_charge12);
-  vec2 c13 = fromCharge(u_charge13);
-  vec2 c14 = fromCharge(u_charge14);
-  vec2 c15 = fromCharge(u_charge15);
-  vec2 c16 = fromCharge(u_charge16);
-  vec2 c17 = fromCharge(u_charge17);
-  vec2 c18 = fromCharge(u_charge18);
-  vec2 c19 = fromCharge(u_charge19);
-  vec2 c20 = fromCharge(u_charge20);
+  vec3 c1 = fromCharge(u_charge1);
+  vec3 c2 = fromCharge(u_charge2);
+  vec3 c3 = fromCharge(u_charge3);
+  vec3 c4 = fromCharge(u_charge4);
+  vec3 c5 = fromCharge(u_charge5);
+  vec3 c6 = fromCharge(u_charge6);
+  vec3 c7 = fromCharge(u_charge7);
+  vec3 c8 = fromCharge(u_charge8);
+  vec3 c9 = fromCharge(u_charge9);
+  vec3 c10 = fromCharge(u_charge10);
+  vec3 c11 = fromCharge(u_charge11);
+  vec3 c12 = fromCharge(u_charge12);
+  vec3 c13 = fromCharge(u_charge13);
+  vec3 c14 = fromCharge(u_charge14);
+  vec3 c15 = fromCharge(u_charge15);
+  vec3 c16 = fromCharge(u_charge16);
+  vec3 c17 = fromCharge(u_charge17);
+  vec3 c18 = fromCharge(u_charge18);
+  vec3 c19 = fromCharge(u_charge19);
+  vec3 c20 = fromCharge(u_charge20);
 
   // Total x and y charge magnitude
-  vec2 sum = c1 + c2 + c3 + c4 + c5 + c6 + c7 + c8 + c9 + c10 + c11 + c12 + c13 + c14 + c15 + c16 + c17 + c18 + c19 + c20;
+  vec3 sum = c1 + c2 + c3 + c4 + c5 + c6 + c7 + c8 + c9 + c10 + c11 + c12 + c13 + c14 + c15 + c16 + c17 + c18 + c19 + c20;
 
   // Total charge magnitude and direction
   vec2 charge = rectToPolar(sum.x, sum.y);
