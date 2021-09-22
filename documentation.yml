@@ -63,10 +63,10 @@ toc:
   - COL_Polyline
   - CollectionsRectangle
   - COL_Rectangle
-  - COL_Toggle
   - CollectionsToggle
-  - COL_Slider
+  - COL_Toggle
   - CollectionsSlider
+  - COL_Slider
   - CollectionsAxis
   - COL_Axis
   - CollectionsPlot
