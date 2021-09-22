@@ -2651,7 +2651,8 @@ class Figure {
                 width: 0.01,
                 color: colors[colorIndex % colors.length],
                 dash: [0.02, 0.02],
-                close: true,
+                close: true, // $FlowFixMe
+                scene: e.scene,
               },
             });
           }
