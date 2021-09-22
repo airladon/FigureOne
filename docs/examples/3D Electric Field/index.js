@@ -74,8 +74,8 @@ vec2 fromCharge(vec4 charge) {
 }
 
 void main() {
-  mat3 centerToOrigin = mat3(1, 0, 0, 0, 1, 0, -a_center.x, -a_center.y, 1);
-  mat3 originToCenter = mat3(1, 0, 0, 0, 1, 0, a_center.x, a_center.y, 1);
+  mat4 centerToOrigin = mat4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -a_center.x, -a_center.y, -a_center.z, 1);
+  mat4 originToCenter = mat4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, a_center.x, a_center.y, a_center.z, 1);
 
   // Calculate the x and y charge magnitude from each charge at this vertex
   vec2 c1 = fromCharge(u_charge1);
@@ -119,14 +119,14 @@ void main() {
   // Calculate the scale and rotation matrix for the arrow
   float s = sin(angle);
   float c = cos(angle);
-  mat3 scaleRotation = mat3(c * min(scale, 1.0), s * min(scale, 1.0), 0, -s * scale, c * scale, 0, 0, 0, 1);
+  mat4 scaleRotation = mat4(c * min(scale, 1.0), s * min(scale, 1.0), 0, 0, -s * scale, c * scale, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 
   // Offset the vertex relative to the center, scale and rotate, then reverse
   // the offset
-  vec3 final = originToCenter * scaleRotation * centerToOrigin * vec3(a_vertex.x, a_vertex.y, 1);
+  vec4 final = originToCenter * scaleRotation * centerToOrigin * vec4(a_vertex.x, a_vertex.y, a_vertex.z, 1);
 
   // Final position
-  gl_Position = u_worldViewProjectionMatrix * vec4(final.xy, 0, 1);
+  gl_Position = u_worldViewProjectionMatrix * final;
 
   // Set the color based on the normalized charge between red (high charge
   // magnitude) and blue (low charge magnitude)
