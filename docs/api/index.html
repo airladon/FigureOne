@@ -2260,16 +2260,6 @@
               
                 
                 <li><a
-                  href='#col_toggle'
-                  class="">
-                  COL_Toggle
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#collectionstoggle'
                   class=" toggle-sibling">
                   CollectionsToggle
@@ -2316,9 +2306,9 @@
               
                 
                 <li><a
-                  href='#col_slider'
+                  href='#col_toggle'
                   class="">
-                  COL_Slider
+                  COL_Toggle
                   
                 </a>
                 
@@ -2355,6 +2345,16 @@
                   
                   
                 </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#col_slider'
+                  class="">
+                  COL_Slider
+                  
+                </a>
                 
                 </li>
               
@@ -7478,9 +7478,19 @@
               
                 
                 <li><a
-                  href='#sliderborder'
+                  href='#obj_sliderborder'
                   class="">
-                  SliderBorder
+                  OBJ_SliderBorder
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_slidermarker'
+                  class="">
+                  OBJ_SliderMarker
                   
                 </a>
                 
@@ -7498,9 +7508,9 @@
               
                 
                 <li><a
-                  href='#toggleborder'
+                  href='#obj_toggleborder'
                   class="">
-                  ToggleBorder
+                  OBJ_ToggleBorder
                   
                 </a>
                 
@@ -32348,151 +32358,6 @@ to specify click colors for each (
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='col_toggle'>
-      COL_Toggle
-    </h3>
-    
-    
-  </div>
-  
-
-  <p><a href="#collectionstoggle">CollectionsToggle</a> options object that extends <a href="#obj_collection">OBJ_Collection</a>
-options object (without <code>parent</code>).</p>
-
-  
-    <p style="display: none;">      Type:
-      any
-    </p>
-  
-  
-    <p>
-      Extends
-      
-        <a href="#obj_collection">OBJ_Collection</a>
-      
-    </p>
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : toggle width
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : toggle height
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>backgroundHeight</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : height of toggle background showing on
-or off
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : number of sides in curves (
-<code>20</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>theme</span> <code class='quiet'>((<code>"dark"</code> | <code>"light"</code>)?)</code>
-          : selects default colors for a light or
-dark switch (
-<code>dark</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>colorOff</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : toggle off color
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>colorOn</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : toggle on color (
-<code>[0, 1, 0, 1]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>circleBorder</span> <code class='quiet'>(<a href="#toggleborder">ToggleBorder</a>?)</code>
-          : border around circle (defaults to on
-where width is half the figure's default line width)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>backgroundBorder</span> <code class='quiet'>(<a href="#toggleborder">ToggleBorder</a>?)</code>
-          : border around background
-(defaults to off - width = 0)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>label</span> <code class='quiet'>(<a href="#obj_togglelabel">OBJ_ToggleLabel</a>?)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='collectionstoggle'>
       CollectionsToggle
     </h3>
@@ -32848,15 +32713,15 @@ toggle.notifications.add(<span class="hljs-string">&#x27;toggle&#x27;</span>, <s
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='col_slider'>
-      COL_Slider
+    <h3 class='fl m0' id='col_toggle'>
+      COL_Toggle
     </h3>
     
     
   </div>
   
 
-  <p><a href="#collectionsslider">CollectionsSlider</a> options object that extends <a href="#obj_collection">OBJ_Collection</a>
+  <p><a href="#collectionstoggle">CollectionsToggle</a> options object that extends <a href="#obj_collection">OBJ_Collection</a>
 options object (without <code>parent</code>).</p>
 
   
@@ -32888,21 +32753,22 @@ options object (without <code>parent</code>).</p>
       
         <div class='space-bottom0'>
           <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : slider width
+          : toggle width
 
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : slider height
+          : toggle height
 
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>barHeight</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : height of slider bar bar
+          : height of toggle bar showing on
+or off
 
           
         </div>
@@ -32928,16 +32794,14 @@ dark switch (
       
         <div class='space-bottom0'>
           <span class='code bold'>colorOff</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : slider off color (bar color from slider
-value to 1)
+          : toggle off color
 
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>colorOn</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : slider on color (bar color from 0 to slider
-value (
+          : toggle on color (
 <code>[0, 1, 0, 1]</code>
 )
 
@@ -32945,7 +32809,7 @@ value (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>circleBorder</span> <code class='quiet'>(<a href="#sliderborder">SliderBorder</a>?)</code>
+          <span class='code bold'>circleBorder</span> <code class='quiet'>(<a href="#obj_toggleborder">OBJ_ToggleBorder</a>?)</code>
           : border around circle (defaults to on
 where width is half the figure's default line width)
 
@@ -32953,10 +32817,16 @@ where width is half the figure's default line width)
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>barBorder</span> <code class='quiet'>(<a href="#sliderborder">SliderBorder</a>?)</code>
+          <span class='code bold'>barBorder</span> <code class='quiet'>(<a href="#obj_toggleborder">OBJ_ToggleBorder</a>?)</code>
           : border around bar
 (defaults to off - width = 0)
 
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>label</span> <code class='quiet'>(<a href="#obj_togglelabel">OBJ_ToggleLabel</a>?)</code>
+          
           
         </div>
       
@@ -32997,6 +32867,7 @@ where width is half the figure's default line width)
   
 
   <p><a href="#figureelementcollection">FigureElementCollection</a> representing a slider control.</p>
+<p><img src="./apiassets/slider.png" alt=""></p>
 <p><img src="./apiassets/slider.gif" alt=""></p>
 <p>Notifications - The notification manager property <code>notifications</code> will
 publish the following events:</p>
@@ -33051,6 +32922,30 @@ boilerplate</p>
 
 slider.notifications.add(<span class="hljs-string">&#x27;changed&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">position</span>) =&gt;</span> {
   <span class="hljs-built_in">console</span>.log(position)
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Slider without a marker and red fill for on</span>
+figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;collections.slider&#x27;</span>,
+  <span class="hljs-attr">barHeight</span>: <span class="hljs-number">0.1</span>,
+  <span class="hljs-attr">colorOn</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+  <span class="hljs-attr">width</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">touchBorder</span>: <span class="hljs-number">0.2</span>,
+  <span class="hljs-attr">marker</span>: <span class="hljs-string">&#x27;none&#x27;</span>,
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Slider with rectangle marker and multi-colors</span>
+<span class="hljs-keyword">const</span> slider = figure.add({
+  <span class="hljs-attr">make</span>: <span class="hljs-string">&#x27;collections.slider&#x27;</span>,
+  <span class="hljs-attr">barHeight</span>: <span class="hljs-number">0.02</span>,
+  <span class="hljs-attr">height</span>: <span class="hljs-number">0.1</span>,
+  <span class="hljs-attr">width</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">marker</span>: <span class="hljs-string">&#x27;rectangle&#x27;</span>,
+  <span class="hljs-attr">colorOff</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+  <span class="hljs-attr">colorOn</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+  <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
 });</pre>
     
   
@@ -33196,6 +33091,156 @@ supress (
     </div>
   
 </div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='col_slider'>
+      COL_Slider
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="#collectionsslider">CollectionsSlider</a> options object that extends <a href="#obj_collection">OBJ_Collection</a>
+options object (without <code>parent</code>).</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_collection">OBJ_Collection</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : slider width
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : slider height
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>barHeight</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : height of slider bar bar
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides in curves (
+<code>20</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>marker</span> <code class='quiet'>((<a href="#obj_slidermarker">OBJ_SliderMarker</a> | <code>"polygon"</code> | <code>"rectangle"</code> | <code>"none"</code>)?)</code>
+          : marker style
+(
+<code>'polygon'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>theme</span> <code class='quiet'>((<code>"dark"</code> | <code>"light"</code>)?)</code>
+          : selects default colors for a light or
+dark switch (
+<code>dark</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>colorOff</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
+          : slider off color (bar color from slider
+value to 1)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>colorOn</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
+          : slider on color (bar color from 0 to slider
+value (
+<code>[0, 1, 0, 1]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>markerBorder</span> <code class='quiet'>(<a href="#obj_sliderborder">OBJ_SliderBorder</a>?)</code>
+          : border around circle (defaults to on
+where width is half the figure's default line width)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>barBorder</span> <code class='quiet'>(<a href="#obj_sliderborder">OBJ_SliderBorder</a>?)</code>
+          : border around bar
+(defaults to off - width = 0)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 
@@ -87253,8 +87298,8 @@ use <code>show: false</code> in the animation step definition, and for <code>in<
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='sliderborder'>
-      SliderBorder
+    <h3 class='fl m0' id='obj_sliderborder'>
+      OBJ_SliderBorder
     </h3>
     
     
@@ -87302,6 +87347,81 @@ use <code>show: false</code> in the animation step definition, and for <code>in<
         <div class='space-bottom0'>
           <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="OBJ_Slider">OBJ_Slider</a>
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_slidermarker'>
+      OBJ_SliderMarker
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Slider marker options.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>style</span> <code class='quiet'>((<code>"polygon"</code> | <code>"rectangle"</code>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : width of 'rectangle'
+
           
         </div>
       
@@ -87453,15 +87573,15 @@ toggle
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='toggleborder'>
-      ToggleBorder
+    <h3 class='fl m0' id='obj_toggleborder'>
+      OBJ_ToggleBorder
     </h3>
     
     
   </div>
   
 
-  <p>Border of circle or background of toggle.</p>
+  <p>Border of circle or bar of toggle.</p>
 
   
   

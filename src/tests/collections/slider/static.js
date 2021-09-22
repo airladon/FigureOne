@@ -19,27 +19,27 @@ function getShapes(getPos) {
   return [
     shape('default'),
     shape('defaultTouch'),
-    shape('width', { width: 0.2 }),
-    shape('height', { height: 0.2 }),
-    shape('barHeight', { barHeight: 0.2 }),
-    shape('height-and-bar', { height: 0.2, barHeight: 0.1 }),
-    shape('height-width-bar', { height: 0.2, barHeight: 0.1, width: 0.5 }),
-    shape('color', { color: [1, 0, 0, 1] }),
-    shape('off-color', { colorOff: [1, 0, 0, 1] }),
-    shape('on-color', { colorOn: [1, 0, 0, 1] }),
+    shape('defaultMove'),
+    shape('moveBeyond1'),
+    shape('moveBeyond0'),
+    shape('width', { width: 0.7 }),
+    shape('height', { height: 0.3 }),
+    shape('barHeight', { barHeight: 0.1 }),
+    shape('height-and-bar', { height: 0.3, barHeight: 0.2 }),
+    shape('height-width-background', { height: 0.3, barHeight: 0.2, width: 0.7 }),
+    shape('color', { color: [1, 1, 0, 1] }),
+    shape('off-color', { colorOff: [1, 1, 0, 1] }),
+    shape('on-color', { colorOn: [1, 1, 0, 1] }),
     shape('colors', { color: [1, 0, 0, 1], colorOn: [0, 0, 1, 1], colorOff: [1, 1, 0, 1] }),
-    shape('colors-switch', { color: [1, 0, 0, 1], colorOn: [0, 0, 1, 1], colorOff: [1, 1, 0, 1] }),
-    shape('border-width', { circleBorder: { width: 0.05 } }),
-    shape('border-width-color', { circleBorder: { width: 0.05, color: [1, 0, 0, 1] } }),
-    shape('back-border-width', { barBorder: { width: 0.05 } }),
-    shape('back-border-width-color', { barBorder: { width: 0.05, color: [1, 0, 0, 1] } }),
-    shape('label-text', { label: 'label' }),
-    shape('label-bottom', { label: { text: 'label', location: 'bottom' } }),
-    shape('label-top', { label: { text: 'label', location: 'top' } }),
-    shape('label-right', { label: { text: 'label', location: 'right' } }),
-    shape('label-scale', { label: { text: 'label', scale: 1.5, location: 'bottom' } }),
-    shape('label-font', { label: { text: 'label', font: { family: 'Times', size: 0.2 } } }),
-    shape('label-eqn', { label: { text: { scale: 1, forms: { 0: { frac: ['a', 'vinculum', 'b'] } } } } }),
+    shape('border-width', { circleBorder: { width: 0.03 }, barHeight: 0.1 }),
+    shape('border-width-color', { circleBorder: { width: 0.03, color: [1, 0, 0, 1] } }),
+    shape('back-border-width', { barBorder: { width: 0.03 }, barHeight: 0.1 }),
+    shape('back-border-width-color', { barBorder: { width: 0.03, color: [1, 0, 0, 1] }, barHeight: 0.1 }),
+    shape('rectMarker', { marker: 'rectangle' }),
+    shape('rectMarkerWide', { marker: { style: 'rectangle', width: 0.3 } }),
+    shape('rectMarkerNarrow', { marker: { style: 'rectangle', width: 0.01 } }),
+    shape('noMarker', { marker: 'none' }),
+    shape('themeLight', { theme: 'light' }),
   ];
 }
 
@@ -68,6 +68,31 @@ const move = {
     element: 'defaultTouch',
     events: [
       ['touchDown', [0, 0]],
+      ['touchUp'],
+    ],
+  },
+  defaultMove: {
+    element: 'defaultMove',
+    events: [
+      ['touchDown', [0, 0]],
+      ['touchMove', [0.1, 0]],
+      ['touchUp'],
+    ],
+  },
+  moveBeyond1: {
+    element: 'moveBeyond1',
+    events: [
+      ['touchDown', [0, 0]],
+      ['touchMove', [1, 0]],
+      ['touchUp'],
+    ],
+  },
+  moveBeyond0: {
+    element: 'moveBeyond0',
+    events: [
+      ['touchDown', [0, 0]],
+      ['touchMove', [-1, 0]],
+      ['touchUp'],
     ],
   },
   'on-color': {
@@ -76,29 +101,18 @@ const move = {
       ['touchDown', [0, 0]],
     ],
   },
-  'colors-switch': {
-    element: 'colors-switch',
+  colors: {
+    element: 'colors',
     events: [
       ['touchDown', [0, 0]],
     ],
   },
-  // movePad: {
-  //   element: 'move-pad',
-  //   events: [
-  //     ['touchDown', [0, 0]],
-  //     ['touchMove', [-0.1, -0.1]],
-  //     ['touchMove', [-0.1, -0.1]],
-  //     ['touchUp'],
-  //     ['touchDown', [0.3, 0]],
-  //     ['touchMove', [0.4, 0.1]],
-  //     ['touchMove', [0.4, 0.1]],
-  //     ['touchUp'],
-  //     ['touchDown', [0, 0.3]],
-  //     ['touchMove', [-0.1, 0.4]],
-  //     ['touchMove', [-0.1, 0.4]],
-  //     ['touchUp'],
-  //   ],
-  // },
+  noMarker: {
+    element: 'noMarker',
+    events: [
+      ['touchDown', [0, 0]],
+    ],
+  },
 };
 
 if (typeof process === 'object') {

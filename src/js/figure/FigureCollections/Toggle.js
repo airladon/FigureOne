@@ -65,13 +65,13 @@ export type OBJ_ToggleLabel = {
 };
 
 /**
- * Border of circle or background of toggle.
+ * Border of circle or bar of toggle.
  *
  * @property {width} [number] border width
  * @property {color} [TypeColor] border color
  * @see {@link OBJ_Toggle}
  */
-export type ToggleBorder = {
+export type OBJ_ToggleBorder = {
   width?: number;
   color?: TypeColor;
 };
@@ -83,16 +83,16 @@ export type ToggleBorder = {
  *
  * @property {number} [width] toggle width
  * @property {number} [height] toggle height
- * @property {number} [backgroundHeight] height of toggle background showing on
+ * @property {number} [barHeight] height of toggle bar showing on
  * or off
  * @property {number} [sides] number of sides in curves (`20`)
  * @property {'dark' | 'light'} [theme] selects default colors for a light or
  * dark switch (`dark`)
  * @property {TypeColor} [colorOff] toggle off color
  * @property {TypeColor} [colorOn] toggle on color (`[0, 1, 0, 1]`)
- * @property {ToggleBorder} [circleBorder] border around circle (defaults to on
+ * @property {OBJ_ToggleBorder} [circleBorder] border around circle (defaults to on
  * where width is half the figure's default line width)
- * @property {ToggleBorder} [backgroundBorder] border around background
+ * @property {OBJ_ToggleBorder} [barBorder] border around bar
  * (defaults to off - width = 0)
  * @property {OBJ_ToggleLabel} [label]
 
@@ -101,13 +101,13 @@ export type ToggleBorder = {
 export type COL_Toggle = {
   width?: number;
   height?: number;
-  backgroundHeight?: number;
+  barHeight?: number;
   sides?: number;
   theme?: 'dark' | 'light';
   colorOff?: TypeColor;
   colorOn?: TypeColor;
-  circleBorder?: ToggleBorder,
-  backgroundBorder?: ToggleBorder,
+  circleBorder?: OBJ_ToggleBorder,
+  barBorder?: OBJ_ToggleBorder,
   label?: OBJ_ToggleLabel,
 } & OBJ_Collection;
 /* eslint-enable max-len */
@@ -193,9 +193,9 @@ class ToggleLabel extends EquationLabel {
 // $FlowFixMe
 class CollectionsToggle extends FigureElementCollection {
   _circ: FigureElementPrimitive;
-  _background: FigureElementPrimitive;
+  _bar: FigureElementPrimitive;
   _circBorder: FigureElementPrimitive | null;
-  _backgroundBorder: FigureElementPrimitive | null;
+  _barBorder: FigureElementPrimitive | null;
   label: ToggleLabel | null;
   _label: FigureElementPrimitive | null;
 
@@ -221,7 +221,7 @@ class CollectionsToggle extends FigureElementCollection {
       circleBorder: {
         width: collections.primitives.defaultLineWidth / 2,
       },
-      backgroundBorder: {
+      barBorder: {
         width: 0,
       },
       theme: 'dark',
@@ -235,32 +235,32 @@ class CollectionsToggle extends FigureElementCollection {
         on: colorOn,
         off: colorLight,
         circleBorder: colorLight,
-        backgroundBorder: colorLight,
+        barBorder: colorLight,
       },
       light: {
         color: colorLight,
         on: colorOn,
         off: colorDark,
         circleBorder: colorDark,
-        backgroundBorder: colorDark,
+        barBorder: colorDark,
       },
     };
 
     const options = joinObjects({}, defaultOptions, optionsIn);
-    let { width, height, backgroundHeight } = options;
+    let { width, height, barHeight } = options;
     // If no dimensions are defined then use defaultLength
-    if (width == null && height == null && backgroundHeight == null) {
+    if (width == null && height == null && barHeight == null) {
       height = collections.primitives.defaultLength / 10;
     }
 
-    // If only backgroundHeight dimension is defined, then use it to define
+    // If only barHeight dimension is defined, then use it to define
     // height
-    if (width == null && height == null && backgroundHeight != null) {
-      height = backgroundHeight * 1.7;
+    if (width == null && height == null && barHeight != null) {
+      height = barHeight * 1.7;
     }
 
     // If only width dimension is defined, then use it to define height
-    if (height == null && backgroundHeight == null && width != null
+    if (height == null && barHeight == null && width != null
     ) {
       height = width / 1.7;
     }
@@ -270,8 +270,8 @@ class CollectionsToggle extends FigureElementCollection {
       width = height * 1.7;
     }
 
-    if (backgroundHeight == null) {
-      backgroundHeight = height / 1.7;
+    if (barHeight == null) {
+      barHeight = height / 1.7;
     }
 
     super(joinObjects({}, options));
@@ -284,27 +284,27 @@ class CollectionsToggle extends FigureElementCollection {
     this.colorOff = options.colorOff == null ? theme.off : options.colorOff;
 
     this.add({
-      name: 'background',
+      name: 'bar',
       make: 'rectangle',
-      width: width - options.backgroundBorder.width * 2,
-      height: backgroundHeight - options.backgroundBorder.width * 2,
-      corner: { radius: backgroundHeight / 2, sides: 10 },
+      width: width - options.barBorder.width * 2,
+      height: barHeight - options.barBorder.width * 2,
+      corner: { radius: barHeight / 2, sides: 10 },
       color: this.colorOff,
     });
-    if (options.backgroundBorder.width > 0) {
+    if (options.barBorder.width > 0) {
       this.add({
-        name: 'backgroundBorder',
+        name: 'barBorder',
         make: 'rectangle',
-        width: width - options.backgroundBorder.width,
-        height: backgroundHeight - options.backgroundBorder.width,
-        corner: { radius: backgroundHeight / 2, sides: 10 },
-        line: { width: options.backgroundBorder.width },
-        color: options.backgroundBorder.color == null
-          ? theme.backgroundBorder
-          : options.backgroundBorder.color,
+        width: width - options.barBorder.width,
+        height: barHeight - options.barBorder.width,
+        corner: { radius: barHeight / 2, sides: 10 },
+        line: { width: options.barBorder.width },
+        color: options.barBorder.color == null
+          ? theme.barBorder
+          : options.barBorder.color,
       });
     } else {
-      this._backgroundBorder = null;
+      this._barBorder = null;
     }
 
     this.add({
@@ -380,7 +380,7 @@ class CollectionsToggle extends FigureElementCollection {
     if (this._circBorder != null) {
       this._circBorder.setPosition(this.width / 2 - this.height / 2, 0);
     }
-    this._background.setColor(this.colorOn);
+    this._bar.setColor(this.colorOn);
     this._custom.state = true;
     if (notify) {
       this.notifications.publish('on');
@@ -397,7 +397,7 @@ class CollectionsToggle extends FigureElementCollection {
     if (this._circBorder != null) {
       this._circBorder.setPosition(-this.width / 2 + this.height / 2, 0);
     }
-    this._background.setColor(this.colorOff);
+    this._bar.setColor(this.colorOff);
     this._custom.state = false;
     if (notify) {
       this.notifications.publish('off');
