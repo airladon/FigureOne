@@ -2006,6 +2006,9 @@ class Figure {
     this.originalScalePoint = null;
     this.isTouchDown = false;
     this.beingMovedElement = null;
+    if (this.beingTouchedElement != null) {
+      this.beingTouchedElement.notifications.publish('touchUp');
+    }
     this.beingTouchedElement = null;
   }
 
