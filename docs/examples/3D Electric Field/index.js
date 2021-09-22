@@ -582,18 +582,26 @@ const makeButton = (text, width, position) => figure.add({
   },
   scene: scene2D,
 });
-const nextButton = makeButton('Next', 1, [2.3, -2.5]);
-const prevButton = makeButton('Prev', 1, [-2.3, -2.5]);
-const scaleButton = makeButton('Scale', 1, [2.3, 2.5]);
+const nextButton = makeButton('Next', 1, [2.3, 2.5]);
+// const prevButton = makeButton('Prev', 1, [-2.3, -2.5]);
+// const scaleButton = makeButton('Scale', 1, [2.3, 2.5]);
+const scaleButton = figure.add({
+  make: 'collections.toggle',
+  label: { text: 'Scale', location: 'bottom' },
+  scene: scene2D,
+  position: [2.3, -2.5],
+  theme: 'light',
+  touchBorder: 0.2,
+});
 
-scaleButton.onClick = () => {
+scaleButton.notifications.add('onClick', () => {
   const [scaleArrow] = field.custom.getUniform('u_scaleArrow');
   if (scaleArrow === 1) {
     field.custom.updateUniform('u_scaleArrow', 0);
   } else {
     field.custom.updateUniform('u_scaleArrow', 1);
   }
-};
+});
 
 let plane = 'xy';
 const slider = figure.add({
@@ -603,10 +611,11 @@ const slider = figure.add({
   width: 2.5,
   colorOn: [0.6, 0.6, 0.6, 1],
   colorOff: [0.6, 0.6, 0.6, 1],
+  theme: 'light',
 });
 slider.notifications.add('changed', (value) => {
   const transform = [];
-  const offset = value * 5 - 2.5;
+  const offset = value * 4 - 2;
   if (plane === 'xz') {
     transform.push(['r', Math.PI / 2, 1, 0, 0]);
     transform.push(['t', 0, offset, 0]);
@@ -627,16 +636,29 @@ nextButton.onClick = () => {
   cycle[cycleIndex]();
 };
 
-prevButton.onClick = () => {
-  figure.stop();
-  let prevIndex = cycleIndex - 1;
-  if (prevIndex < 0) {
-    prevIndex = cycle.length - 1;
-  }
-  cycleIndex = cycleIndex - 1 < 0 ? cycle.length - 1 : cycleIndex - 1;
-  cycle[cycleIndex]();
-};
+// prevButton.onClick = () => {
+//   figure.stop();
+//   let prevIndex = cycleIndex - 1;
+//   if (prevIndex < 0) {
+//     prevIndex = cycle.length - 1;
+//   }
+//   cycleIndex = cycleIndex - 1 < 0 ? cycle.length - 1 : cycleIndex - 1;
+//   cycle[cycleIndex]();
+// };
 
+const makeAxisButton = (p, text) => figure.add({
+  make: 'collections.toggle',
+  label: { text, location: 'bottom' },
+  scene: scene2D,
+  position: p,
+  theme: 'light',
+  touchBorder: 0.2,
+});
+
+const xButton = makeAxisButton([-2.7, -2.5], 'x');
+const yButton = makeAxisButton([-2.3, -2.5], 'y');
+const zButton = makeAxisButton([-1.9, -2.5], 'z');
+xButton.notifications.add('on', () => {})
 /*
 ..######..########.########.##.....##.########.
 .##....##.##..........##....##.....##.##.....##
