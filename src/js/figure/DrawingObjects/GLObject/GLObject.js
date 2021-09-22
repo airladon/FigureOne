@@ -622,7 +622,7 @@ class GLObject extends DrawingObject {
     // $FlowFixMe
     this.gl.uniformMatrix4fv(
       location,
-      false,
+      false,  // $FlowFixMe
       m3.transpose(this.uniforms[name].value),
     );
   }
