@@ -204,7 +204,7 @@ for (let i = 1; i <= 20; i += 1) {
     grid.hide();
   });
 
-  // A function that will animate a charge's position, color, label and charge
+  // A function that will animate a charge's position, color, and charge
   // value. If the charge sign changes, then the charge color and label will is
   // animated. If the charge goes to 0 value, then the charge will become
   // transparent.
@@ -334,6 +334,20 @@ const circle = (radius, duration = 4) => {
   }
 };
 
+const threeD = (radius, duration = 4) => {
+  figure.stop();
+  const center = [0, 0];
+  const angleStep = Math.PI * 2 / charges.length;
+  animateNorm(4, duration);
+  for (let i = 0; i < charges.length; i += 1) {
+    const x = radius * Math.cos(angleStep * i * 2) + center[0];
+    const y = radius * Math.sin(angleStep * i * 2) + center[1];
+    const z = Math.round(i / charges.length) * 1.5 - 0.75;
+    const p = getPoint([x, y, z]).transformBy(Fig.getTransform(['r', Math.PI / 2, 0, 1, 0]).matrix());
+    charges[i].custom.animateTo(p, z < 0 ? -1 : 1, duration);
+  }
+};
+
 /*
 .########..##.....##.########.########..#######..##....##..######.
 .##.....##.##.....##....##.......##....##.....##.###...##.##....##
@@ -360,12 +374,13 @@ const makeButton = (label, position, small = false, onClick = null) => {
   }
   return button;
 };
-makeButton('1', [0.4, 2.5], true, () => singleCharge(1));
-makeButton('2', [0.8, 2.5], true, () => twoCharges(-1, 1));
-makeButton('3', [1.2, 2.5], true, () => twoCharges(1, 1, 2));
-makeButton('4', [1.6, 2.5], true, () => capacitor(-1, 1));
-makeButton('5', [2, 2.5], true, () => capacitor(1, 1));
-makeButton('6', [2.4, 2.5], true, () => circle(1.5));
+makeButton('1', [0.3, 2.5], true, () => singleCharge(1));
+makeButton('2', [0.7, 2.5], true, () => twoCharges(-1, 1));
+makeButton('3', [1.1, 2.5], true, () => twoCharges(1, 1, 2));
+makeButton('4', [1.5, 2.5], true, () => capacitor(-1, 1));
+makeButton('5', [1.9, 2.5], true, () => capacitor(1, 1));
+makeButton('6', [2.3, 2.5], true, () => circle(1.5));
+makeButton('7', [2.7, 2.5], true, () => threeD(0.6));
 // const nextButton = makeButton('Next', [2.3, 2.5]);
 const resetButton = makeButton('Reset', [-2.3, 2.5]);
 
@@ -538,4 +553,3 @@ reset();
 field.custom.updateUniform('u_scaleArrow', 1);
 twoCharges(-1, 1, 0);
 figure.animateNextFrame();
-

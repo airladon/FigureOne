@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 const vertexShader = `
 attribute vec3 a_vertex;
 attribute vec3 a_center;
