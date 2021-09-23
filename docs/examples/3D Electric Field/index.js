@@ -1,6 +1,8 @@
 /* globals Fig */
 
-const figure = new Fig.Figure({
+const { getPoint, Figure, getPlane } = Fig;
+
+const figure = new Figure({
   // scene: [-3, -3, 3, 3],
   backgroundColor: [0, 0, 0, 1],
   scene: {
@@ -202,23 +204,6 @@ const cameraControl = figure.add({
   make: 'cameraControl', axis: [0, 0, 1], // controlScene: scene2D,
 });
 
-// const grid = figure.add({
-//   make: 'grid',
-//   step: 0.5,
-//   line: { width: 0.01 },
-//   color: [0.8, 0.8, 0.8, 1],
-// });
-// const grid = figure.add({
-//   make: 'rectangle',
-//   // sides: 4,
-//   // length: 0.01,
-//   // radius: 3,
-//   width: 4,
-//   height: 4,
-//   // line: { width: 0.01 },
-//   color: [0.3, 0.3, 0.3, 0],
-// });
-
 // Add axes
 const axes = figure.add({
   make: 'collections.axis3',
@@ -243,26 +228,11 @@ const field = figure.add({
       'u_vertexTransform',
       'u_norm',
       'u_scaleArrow',
-      'u_charge1',
-      'u_charge2',
-      'u_charge3',
-      'u_charge4',
-      'u_charge5',
-      'u_charge6',
-      'u_charge7',
-      'u_charge8',
-      'u_charge9',
-      'u_charge10',
-      'u_charge11',
-      'u_charge12',
-      'u_charge13',
-      'u_charge14',
-      'u_charge15',
-      'u_charge16',
-      'u_charge17',
-      'u_charge18',
-      'u_charge19',
-      'u_charge20',
+      'u_charge1', 'u_charge2', 'u_charge3', 'u_charge4',
+      'u_charge5', 'u_charge6', 'u_charge7', 'u_charge8',
+      'u_charge9', 'u_charge10', 'u_charge11', 'u_charge12',
+      'u_charge13', 'u_charge14', 'u_charge15', 'u_charge16',
+      'u_charge17', 'u_charge18', 'u_charge19', 'u_charge20',
     ],
   },
   fragmentShader: { color: 'vertex', dimension: 3, light: null },
@@ -297,6 +267,14 @@ const field = figure.add({
     { name: 'u_charge20', length: 4 },
   ],
 });
+
+const grid = figure.add({
+  make: 'grid',
+  step: 0.2,
+  line: { width: 0.008 },
+  color: [0.6, 0.6, 0.6, 0.8],
+});
+grid.hide();
 
 // Create 20 charge FigureElements
 // Each charge has a fill, border, sign label (plus or minus), and a custom `q`
@@ -333,9 +311,12 @@ for (let i = 1; i <= 20; i += 1) {
         color: [0, 0, 0, 1],
       },
     ],
+    move: {
+      plane: getPlane([[0, 0, 0], [0, 0, 1]]),
+    },
     mods: {
       simple: true,
-      isMovable: true,
+      // isMovable: true,
       custom: { q: 1 },
     },
   });
@@ -347,6 +328,23 @@ for (let i = 1; i <= 20; i += 1) {
   charge.notifications.add('setTransform', () => {
     const p = charge.getPosition();
     field.custom.updateUniform(`u_charge${i}`, [p.x, p.y, 0, charge.custom.q]);
+  });
+
+  charge.notifications.add('onClick', () => {
+    const p = charge.getPosition();
+    // const g = grid.getPosition();
+    charge.move.plane.p = p;
+    if (Math.abs(charge.move.plane.n.x) > 0.5) {
+      grid.setPosition(p.x, 0, 0);
+    } else if (Math.abs(charge.move.plane.n.y) > 0.5) {
+      grid.setPosition(0, p.y, 0);
+    } else if (Math.abs(charge.move.plane.n.z) > 0.5) {
+      grid.setPosition(0, 0, p.z);
+    }
+    grid.show();
+  });
+  charge.notifications.add('touchUp', () => {
+    grid.hide();
   });
 
   // A function that will animate a charge's position, color, label and charge
@@ -443,12 +441,7 @@ const measurementPlane = figure.add({
   color: [0, 0, 0, 0.8],
 });
 
-const grid = figure.add({
-  make: 'grid',
-  step: 0.2,
-  line: { width: 0.008 },
-  color: [0.6, 0.6, 0.6, 0.8],
-});
+
 
 /*
 .########..########..########..######..########.########..######.
@@ -662,17 +655,33 @@ const slider = figure.add({
 });
 
 let plane = 'xy';
+const updateMovementPlanes = (position = null, normal = null) => {
+  for (let i = 0; i < charges.length; i += 1) {
+    if (position != null) {
+      charges[i].move.plane.p = getPoint(position);
+    }
+    if (normal != null) {
+      charges[i].move.plane.n = getPoint(normal);
+    }
+  }
+};
 const update = () => {
   const transform = [];
   const offset = slider.getValue() * 4 - 2;
   if (plane === 'xz') {
     transform.push(['r', -Math.PI / 2, 1, 0, 0]);
     transform.push(['t', 0, offset, 0]);
+    updateMovementPlanes(null, [0, 1, 0]);
+    grid.transform.updateRotation(-Math.PI / 2, [1, 0, 0]);
   } else if (plane === 'yz') {
     transform.push(['r', Math.PI / 2, 0, 1, 0]);
     transform.push(['t', offset, 0, 0]);
+    updateMovementPlanes(null, [1, 0, 0]);
+    grid.transform.updateRotation(Math.PI / 2, [0, 1, 0]);
   } else {
     transform.push(['t', 0, 0, offset]);
+    updateMovementPlanes(null, [0, 0, 1]);
+    grid.transform.updateRotation(0, [0, 0, 1]);
   }
   field.custom.updateUniform('u_vertexTransform', Fig.getTransform(transform).matrix());
   measurementPlane.transform = transform;
@@ -738,10 +747,10 @@ const cameraControlButton = figure.add({
 cameraControlButton.notifications.add('toggle', (on) => {
   if (on) {
     cameraControl.show();
-    grid.hide();
+    // grid.hide();
   } else {
     cameraControl.hide();
-    grid.show();
+    // grid.show();
   }
 });
 cameraControlButton.on();
