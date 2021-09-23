@@ -19,7 +19,7 @@ function makeShape(name, options, mods, getPos) {
       label: 'button',
       position: [x, y],
       line: { width: 0.03 },
-      touch: {
+      touch: {  // eslint-disable-next-line
         onClick: () => console.log(indexName, name),
       },
     }, options),
