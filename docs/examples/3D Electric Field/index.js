@@ -201,7 +201,10 @@ for (let x = -3; x < 3 + step / 2; x += step) {
 
 // Add camera control
 const cameraControl = figure.add({
-  make: 'cameraControl', axis: [0, 0, 1], // controlScene: scene2D,
+  make: 'cameraControl',
+  axis: [0, 0, 1],
+  // controlScene: scene2D,
+  back: true,
 });
 
 // Add axes
@@ -327,12 +330,11 @@ for (let i = 1; i <= 20; i += 1) {
   // x and y coordinates, and the third element is the charge value
   charge.notifications.add('setTransform', () => {
     const p = charge.getPosition();
-    field.custom.updateUniform(`u_charge${i}`, [p.x, p.y, 0, charge.custom.q]);
+    field.custom.updateUniform(`u_charge${i}`, [p.x, p.y, p.z, charge.custom.q]);
   });
 
   charge.notifications.add('onClick', () => {
     const p = charge.getPosition();
-    // const g = grid.getPosition();
     charge.move.plane.p = p;
     if (Math.abs(charge.move.plane.n.x) > 0.5) {
       grid.setPosition(p.x, 0, 0);
@@ -735,25 +737,25 @@ scaleButton.notifications.add('onClick', () => {
   }
 });
 
-const cameraControlButton = figure.add({
-  make: 'collections.toggle',
-  label: { text: 'Camera', location: 'bottom' },
-  scene: scene2D,
-  position: [-2.5, 2.5],
-  theme: 'light',
-  touchBorder: 0.2,
-});
+// const cameraControlButton = figure.add({
+//   make: 'collections.toggle',
+//   label: { text: 'Camera', location: 'bottom' },
+//   scene: scene2D,
+//   position: [-2.5, 2.5],
+//   theme: 'light',
+//   touchBorder: 0.2,
+// });
 
-cameraControlButton.notifications.add('toggle', (on) => {
-  if (on) {
-    cameraControl.show();
-    // grid.hide();
-  } else {
-    cameraControl.hide();
-    // grid.show();
-  }
-});
-cameraControlButton.on();
+// cameraControlButton.notifications.add('toggle', (on) => {
+//   if (on) {
+//     cameraControl.show();
+//     // grid.hide();
+//   } else {
+//     cameraControl.hide();
+//     // grid.show();
+//   }
+// });
+// cameraControlButton.on();
 
 const axisButton = figure.add({
   make: 'collections.toggle',
