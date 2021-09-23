@@ -1822,7 +1822,11 @@ class Figure {
     let element;
     let backCameraControl;
     element = this.elements.getSelectionFromBorders(glPoint);
-    if (element._custom.cameraControlBack) {
+    if (
+      element != null
+      && element._custom != null
+      && element._custom.cameraControlBack
+    ) {
       backCameraControl = element;
     }
     if (element == null || backCameraControl) {
