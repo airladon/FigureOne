@@ -108,7 +108,7 @@ export type COL_Slider = {
  * See {@link COL_Slider} for setup options.
  *
  * To test examples below, append them to the
- * <a href="#shapes3d-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Simple slider with notification causing a console statement

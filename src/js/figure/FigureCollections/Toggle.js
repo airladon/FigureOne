@@ -172,7 +172,7 @@ class ToggleLabel extends EquationLabel {
  * See {@link COL_Toggle} for setup options.
  *
  * To test examples below, append them to the
- * <a href="#shapes3d-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Simple toggle switch with notification causing a console statement
