@@ -1820,10 +1820,18 @@ class Figure {
 
 
     let element;
+    let backCameraControl;
     element = this.elements.getSelectionFromBorders(glPoint);
-    if (element == null) {
+    if (element._custom.cameraControlBack) {
+      backCameraControl = element;
+    }
+    if (element == null || backCameraControl) {
       element = this.getSelectionFromDraw(glPoint);
     }
+    if (element == null && backCameraControl) {
+      element = backCameraControl;
+    }
+
     if (element == null) {
       return false;
     }

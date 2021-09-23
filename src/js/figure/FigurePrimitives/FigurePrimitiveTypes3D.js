@@ -982,13 +982,17 @@ export type OBJ_Surface = {
  * plane (`[0, 1, 0]`)
  * @property {Scene | string} [controlScene] Use this to control a scene that is not
  * the default Figure scene.
- * @property {number} sensitivity sensitivity of camera position relative to
+ * @property {number} [sensitivity] sensitivity of camera position relative to
  * user movement where larger numbers result in more rotation for the same
  * movement (`5`)
- * @property {number} xSensitivity sensitivity to a horizontal user movement.
+ * @property {number} [xSensitivity] sensitivity to a horizontal user movement.
  * Setting this to 0 will mean the scene doesn't not rotate aziumthally (`1`)
- * @property {number} ySensitivity sensitivity to a vertical user movement.
+ * @property {number} [ySensitivity] sensitivity to a vertical user movement.
  * Setting this to 0 will mean the elevation does not change (`1`)
+ * @property {boolean} [back] if `true` then all 2D and 3D objects that can be
+ * touched will be touched before the camera control, regardless of where it is
+ * on the drawing stack. This should be used everytime 3D objects need priority
+ * over the camera control (`true`)
  *
  * @example
  * // Add a camera control that will cover the whole screen
@@ -1094,4 +1098,5 @@ export type OBJ_CameraControl = {
   sensitivity?: number,
   xSensitivity?: number,
   ySensitivity?: number,
+  back?: boolen,
 } & OBJ_FigurePrimitive;

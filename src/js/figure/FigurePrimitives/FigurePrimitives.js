@@ -1439,6 +1439,7 @@ export default class FigurePrimitives {
       sensitivity: 5,
       xSensitivity: 1,
       ySensitivity: 1,
+      back: true,
     }, ...options);
     // $FlowFixMe
     const element = this.rectangle({
@@ -1450,6 +1451,10 @@ export default class FigurePrimitives {
       move: true,
       color: o.color,
     });
+    element._custom.cameraControlBack = false;
+    if (o.back) {
+      element._custom.cameraControlBack = true;
+    }
     element.custom.sceneToChange = o.controlScene;
     element.scene = new Scene({
       style: '2D',
