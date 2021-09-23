@@ -2596,7 +2596,7 @@ class Figure {
       [0, 1, 0, 1],
       [1, 0, 0, 1],
       [1, 0.5, 0, 1],
-      [0, 0, 0, 1],
+      // [0, 0, 0, 1],
     ],
   ) {
     this.showBorders('touchBorder', element, colors);
@@ -2625,7 +2625,7 @@ class Figure {
       [0, 1, 0, 1],
       [1, 0, 0, 1],
       [1, 0.5, 0, 1],
-      [0, 0, 0, 1],
+      // [0, 0, 0, 1],
     ],
   ) {
     let elements = [];
@@ -2642,12 +2642,12 @@ class Figure {
     let colorIndex = 0;
     for (let i = 0; i < elements.length; i += 1) {
       const e = elements[i];
-      if (e.drawingObject != null && e.drawBorderBuffer == null) {
-        // eslint-disable-next-line no-continue
-        continue;
-      } // $FlowFixMe
+      // if (e.drawingObject != null && e.drawBorderBuffer == null) {
+      //   // eslint-disable-next-line no-continue
+      //   continue;
+      // } // $FlowFixMe
       const borderPoints = e.getBorder('figure', border);
-      if (borderPoints[0].length > 0) {
+      if (borderPoints.length > 0 && borderPoints[0].length > 0) {
         for (let j = 0; j < borderPoints.length; j += 1) {
           const name = `__${border}${i}${j}`;
           const el = this.get(name);
