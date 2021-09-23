@@ -200,7 +200,7 @@ for (let x = -3; x < 3 + step / 2; x += step) {
 }
 
 // Add camera control
-const cameraControl = figure.add({
+figure.add({
   make: 'cameraControl',
   axis: [0, 0, 1],
   // controlScene: scene2D,
@@ -271,6 +271,7 @@ const field = figure.add({
   ],
 });
 
+// The grid will show in which plane a charge can move
 const grid = figure.add({
   make: 'grid',
   step: 0.2,
@@ -297,29 +298,12 @@ for (let i = 1; i <= 20; i += 1) {
         radius: chargeRadius,
         color: [1, 0, 0, 1],
       },
-      {
-        name: 'negativeLine',
-        make: 'primitives.line',
-        p1: [-chargeRadius / 3, 0],
-        p2: [chargeRadius / 3, 0],
-        width: 0.01,
-        color: [0, 0, 0, 1],
-      },
-      {
-        name: 'positiveLine',
-        make: 'primitives.line',
-        p1: [0, -chargeRadius / 3],
-        p2: [0, chargeRadius / 3],
-        width: 0.01,
-        color: [0, 0, 0, 1],
-      },
     ],
     move: {
       plane: getPlane([[0, 0, 0], [0, 0, 1]]),
     },
     mods: {
       simple: true,
-      // isMovable: true,
       custom: { q: 1 },
     },
   });
@@ -366,31 +350,12 @@ for (let i = 1; i <= 20; i += 1) {
       charge.custom.q = q;
       charge.setPosition(position);
       charge._fill.setColor(targetColor);
-      if (charge < 0) {
-        charge._positiveLine.setOpacity(0);
-      } else {
-        charge._positiveLine.setOpacity(1);
-      }
       return;
     }
 
     const startCharge = charge.custom.q;
     const deltaCharge = q - startCharge;
     const chargeDuration = Math.min(duration, 1);
-    let signAnimationStep = null;
-    if (startCharge < 0 && q > 0) {
-      signAnimationStep = charge._positiveLine.animations.opacity({
-        target: 1, duration: chargeDuration / 2,
-      });
-    } else if (startCharge > 0 && q < 0) {
-      signAnimationStep = charge._positiveLine.animations.opacity({
-        target: 0, duration: chargeDuration / 2,
-      });
-    } else if (q < 0) {
-      charge._positiveLine.setOpacity(0);
-    } else {
-      charge._positiveLine.setOpacity(1);
-    }
     let fillColorAnimationStep = null;
     fillColorAnimationStep = charge._fill.animations.color({
       target: targetColor, duration: chargeDuration,
@@ -401,7 +366,6 @@ for (let i = 1; i <= 20; i += 1) {
     });
     charge.animations.new()
       .inParallel([
-        signAnimationStep,
         fillColorAnimationStep,
         opacityAnimationStep,
         charge.animations.position({ target: position, duration }),
@@ -433,16 +397,11 @@ const animateNorm = (target, duration = 4) => {
 };
 
 const measurementPlane = figure.add({
-  // make: 'rectangle',
-  // width: 6,
-  // height: 6,
-  // color: [0.1, 0.1, 0.1, 0.5],
   make: 'cylinder',
   line: [[0, 0, -12], [0, 0, 0]],
   radius: 0.015,
   color: [0, 0, 0, 0.8],
 });
-
 
 
 /*
@@ -585,56 +544,21 @@ let cycleIndex = 0;
 .##.....##.##.....##....##.......##....##.....##.##...###.##....##
 .########...#######.....##.......##.....#######..##....##..######.
 */
-// Helper function to make a button
-// const makeButton = (text, width, position) => figure.add({
-//   make: 'collections.rectangle',
-//   button: true,
-//   fill: [0.4, 0.4, 0.4, 0.7],
-//   label: {
-//     text,
-//     font: { color: [1, 1, 1, 1] },
-//   },
-//   corner: { radius: 0.1, sides: 5 },
-//   width,
-//   height: 0.5,
-//   position,
-//   mods: {
-//     isTouchable: true,
-//   },
-//   scene: scene2D,
-// });
-// const nextButton = makeButton('Next', 1, [2.3, 2.5]);
-const nextButton = figure.add({
+const makeButton = (label, position) => figure.add({
   make: 'collections.button',
-  label: 'Next',
-  width: 0.8,
-  height: 0.4,
+  label,
+  width: 0.7,
+  height: 0.3,
   scene: scene2D,
   touchDown: { colorFill: [0.2, 0.2, 0.2, 1] },
   color: [0.8, 0.8, 0.8, 1],
-  position: [2.3, 2.5],
-});
-
-const makeButton = (text, position, color) => figure.add({
-  make: 'collections.button',
   position,
-  label: {
-    text,
-    font: {
-      family: 'Times New Roman',
-      style: 'italic',
-      color,
-    },
-  },
-  color: [0.8, 0.8, 0.8, 1],
-  width: 0.3,
-  height: 0.3,
-  line: { width: 0.015 },
-  corner: { radius: 0.15, sides: 20 },
-  states: [{ colorLine: [0, 0, 0, 0] }, { colorLine: [0.8, 0.8, 0.8, 1] }],
-  scene: scene2D,
+  touchBorder: 0.1,
 });
+const nextButton = makeButton('Next', [2.3, 2.5]);
+const resetButton = makeButton('Reset', [-2.3, 2.5]);
 
+// XYZ selector
 figure.add({
   make: 'collections.rectangle',
   width: 0.915,
@@ -645,6 +569,25 @@ figure.add({
   scene: scene2D,
   position: [-2.3, -2.5],
 });
+const makeXYZButton = (text, position, color) => figure.add({
+  make: 'collections.button',
+  position,
+  label: {
+    text,
+    font: { family: 'Times New Roman', style: 'italic', color },
+  },
+  color: [0.8, 0.8, 0.8, 1],
+  width: 0.3,
+  height: 0.3,
+  line: { width: 0.015 },
+  corner: { radius: 0.15, sides: 20 },
+  states: [{ colorLine: [0, 0, 0, 0] }, { colorLine: [0.8, 0.8, 0.8, 1] }],
+  scene: scene2D,
+  touchBorder: [0, 0.1, 0, 0.1],
+});
+const xButton = makeXYZButton('x', [-2.6, -2.5], [1, 0, 0, 1]);
+const yButton = makeXYZButton('y', [-2.3, -2.5], [0, 1, 0, 1]);
+const zButton = makeXYZButton('z', [-2.0, -2.5], [0, 1, 1, 1]);
 
 const slider = figure.add({
   make: 'collections.slider',
@@ -654,8 +597,30 @@ const slider = figure.add({
   colorOn: [0.6, 0.6, 0.6, 1],
   colorOff: [0.6, 0.6, 0.6, 1],
   theme: 'light',
+  touchBorder: 0.1,
 });
 
+const makeToggle = (label, position) => figure.add({
+  make: 'collections.toggle',
+  label: { text: label, location: 'bottom' },
+  scene: scene2D,
+  position,
+  theme: 'light',
+  touchBorder: 0.2,
+});
+
+const scaleButton = makeToggle('Scale', [2.3, -2.5]);
+const axisButton = makeToggle('Axes', [-1.4, 2.6]);
+
+/*
+.##........#######...######...####..######.
+.##.......##.....##.##....##...##..##....##
+.##.......##.....##.##.........##..##......
+.##.......##.....##.##...####..##..##......
+.##.......##.....##.##....##...##..##......
+.##.......##.....##.##....##...##..##....##
+.########..#######...######...####..######.
+*/
 let plane = 'xy';
 const updateMovementPlanes = (position = null, normal = null) => {
   for (let i = 0; i < charges.length; i += 1) {
@@ -690,9 +655,6 @@ const update = () => {
   figure.animateNextFrame();
 };
 
-const xButton = makeButton('x', [-2.6, -2.5], [1, 0, 0, 1]);
-const yButton = makeButton('y', [-2.3, -2.5], [0, 1, 0, 1]);
-const zButton = makeButton('z', [-2.0, -2.5], [0, 1, 1, 1]);
 xButton.notifications.add('touch', () => {
   xButton.setStateIndex(1);
   yButton.setStateIndex(0);
@@ -719,15 +681,6 @@ zButton.notifications.add('touch', () => {
 });
 zButton.click();
 
-const scaleButton = figure.add({
-  make: 'collections.toggle',
-  label: { text: 'Scale', location: 'bottom' },
-  scene: scene2D,
-  position: [2.3, -2.5],
-  theme: 'light',
-  touchBorder: 0.2,
-});
-
 scaleButton.notifications.add('onClick', () => {
   const [scaleArrow] = field.custom.getUniform('u_scaleArrow');
   if (scaleArrow === 1) {
@@ -735,35 +688,6 @@ scaleButton.notifications.add('onClick', () => {
   } else {
     field.custom.updateUniform('u_scaleArrow', 1);
   }
-});
-
-// const cameraControlButton = figure.add({
-//   make: 'collections.toggle',
-//   label: { text: 'Camera', location: 'bottom' },
-//   scene: scene2D,
-//   position: [-2.5, 2.5],
-//   theme: 'light',
-//   touchBorder: 0.2,
-// });
-
-// cameraControlButton.notifications.add('toggle', (on) => {
-//   if (on) {
-//     cameraControl.show();
-//     // grid.hide();
-//   } else {
-//     cameraControl.hide();
-//     // grid.show();
-//   }
-// });
-// cameraControlButton.on();
-
-const axisButton = figure.add({
-  make: 'collections.toggle',
-  label: { text: 'Axes', location: 'bottom' },
-  scene: scene2D,
-  position: [-1.6, 2.5],
-  theme: 'light',
-  touchBorder: 0.2,
 });
 
 axisButton.notifications.add('toggle', (on) => {
@@ -777,10 +701,10 @@ axisButton.notifications.add('toggle', (on) => {
 });
 axisButton.on();
 
+const reset = () => figure.scene.setCamera({ position: [3, 3, 2] });
+resetButton.notifications.add('onClick', () => reset());
 
-slider.notifications.add('changed', (value) => {
-  update();
-});
+slider.notifications.add('changed', () => update());
 slider.setValue(0.5);
 
 nextButton.onClick = () => {
@@ -798,7 +722,7 @@ nextButton.onClick = () => {
 .##....##.##..........##....##.....##.##.......
 ..######..########....##.....#######..##.......
 */
-
+reset();
 field.custom.updateUniform('u_scaleArrow', 1);
 singleCharge(1, 0);
 // figure.addFrameRate(10, { font: { color: [1, 1, 1, 0]}});
