@@ -152,20 +152,18 @@ class ButtonLabel extends EquationLabel {
 */
 /* eslint-disable max-len */
 /**
- * {@link FigureElementCollection} representing a toggle switch.
+ * {@link FigureElementCollection} representing a button.
  *
  * ![](./apiassets/button.png)
  *
  * ![](./apiassets/button1.gif)
  *
- * The toggle switch can be turned on or off.
+ * A button can be simple, or it can change state with each press.
  *
   * Notifications - The notification manager property `notifications` will
  * publish the following events:
- * - `toggle`: switch is changed - `true` will be passed if the switch is
- *    changed to on, and `false` will be passed if the switch is changed to off
- * - `on`: switch is changed to on
- * - `off`: switch is changed to off
+ * - `touch`: button is pressed - the current state index is passed to the
+ *   subscriber
  *
  * See {@link COL_Button} for setup options.
  *
@@ -189,16 +187,17 @@ class ButtonLabel extends EquationLabel {
  * });
  *
  * @example
- * // Button that changes state
+ * // Button that changes state and has a touch buffer of 0.1 around it
  * const button = figure.add({
  *   make: 'collections.button',
  *   states: ['Slow', 'Medium', 'Fast'],
  *   width: 0.7,
  *   height: 0.3,
+ *   touchBorder: 0.1,
  * });
  *
- * button.notifications.add('onClick', () => {
- *   console.log(button.getStateIndex());
+ * button.notifications.add('touch', (index) => {
+ *   console.log(index);
  * });
  */
 /* eslint-enable max-len */
@@ -372,6 +371,7 @@ class CollectionsButton extends FigureElementCollection {
       this.incrementState();
       this.updateState();
       this.updateStateForTouch(true);
+      this.notifications.publish('touch', this._custom.stateIndex);
     });
     this.notifications.add('touchUp', () => {
       this.updateStateForTouch(false);
