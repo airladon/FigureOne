@@ -95,7 +95,7 @@ mat4 rotationMatrixAngleAxis(float angle, vec3 axis) {
 
 vec3 fromCharge(vec4 charge, vec4 center) {
   vec3 direction = normalize(charge.xyz - center.xyz);
-  float dist = distance(charge, center);
+  float dist = distance(charge.xyz, center.xyz);
   float q1 = -charge.w / pow(dist, 2.0);
   return q1 * direction;
 }
