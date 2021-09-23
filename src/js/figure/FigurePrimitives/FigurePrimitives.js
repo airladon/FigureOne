@@ -1448,7 +1448,7 @@ export default class FigurePrimitives {
       position: [o.left, o.bottom],
       xAlign: 'left',
       yAlign: 'bottom',
-      move: true,
+      move: { freely: false },
       color: o.color,
     });
     element._custom.cameraControlBack = false;
