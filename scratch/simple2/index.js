@@ -79,6 +79,6 @@ const button = figure.add({
   height: 0.3,
 });
 
-button.notifications.add('onClick', () => {
-  console.log(button.getStateIndex());
+button.notifications.add('touch', (index) => {
+  console.log(index);
 });
