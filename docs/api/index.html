@@ -19064,7 +19064,8 @@ elements to show (
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>colors</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typecolor">TypeColor</a>>
-            = <code>[[0,0,1,1],[0,1,1,1],[1,0,1,1],[0,1,0,1],[1,0,0,1],[1,0.5,0,1],[0,0,0,1]]</code>)</code>
+            = <code>[[0,0,1,1],[0,1,1,1],[1,0,1,1],[0,1,0,1],[1,0,0,1],[1,0.5,0,1]// [0, 0, 0, 1],
+]</code>)</code>
 	    array of colors to cycle through for each
 shape (
 [blue, cyan, purple, green, red, yellow, black]
@@ -19162,7 +19163,8 @@ elements to show (
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>colors</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typecolor">TypeColor</a>>
-            = <code>[[0,0,1,1],[0,1,1,1],[1,0,1,1],[0,1,0,1],[1,0,0,1],[1,0.5,0,1],[0,0,0,1]]</code>)</code>
+            = <code>[[0,0,1,1],[0,1,1,1],[1,0,1,1],[0,1,0,1],[1,0,0,1],[1,0.5,0,1]// [0, 0, 0, 1],
+]</code>)</code>
 	    array of colors to cycle through for each
 shape (
 [blue, cyan, purple, green, red, yellow, black]
@@ -36422,7 +36424,7 @@ the default Figure scene.
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>sensitivity</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          <span class='code bold'>sensitivity</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : sensitivity of camera position relative to
 user movement where larger numbers result in more rotation for the same
 movement (
@@ -36433,7 +36435,7 @@ movement (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>xSensitivity</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          <span class='code bold'>xSensitivity</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : sensitivity to a horizontal user movement.
 Setting this to 0 will mean the scene doesn't not rotate aziumthally (
 <code>1</code>
@@ -36443,10 +36445,24 @@ Setting this to 0 will mean the scene doesn't not rotate aziumthally (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>ySensitivity</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          <span class='code bold'>ySensitivity</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : sensitivity to a vertical user movement.
 Setting this to 0 will mean the elevation does not change (
 <code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>back</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : if 
+<code>true</code>
+ then all 2D and 3D objects that can be
+touched will be touched before the camera control, regardless of where it is
+on the drawing stack. This should be used everytime 3D objects need priority
+over the camera control (
+<code>true</code>
 )
 
           
