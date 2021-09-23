@@ -167,7 +167,7 @@ void main() {
 
   // Set the color based on the normalized charge between red (high charge
   // magnitude) and blue (low charge magnitude)
-  v_color = vec4(normCharge, 0.2, 1.0 - normCharge, 1);
+  v_color = vec4(normCharge, normCharge, 1.0 - normCharge, 1);
   v_normal = mat3(u_worldInverseTranspose) * a_normal;
 }`;
 
@@ -213,7 +213,7 @@ for (let x = -3; x < 3 + step / 2; x += step) {
 figure.add({
   make: 'cameraControl', axis: [0, 0, 1], // controlScene: scene2D,
 });
-figure.add({ make: 'collections.axis3', arrow: true, width: 0.01, length: 1 });
+figure.add({ make: 'collections.axis3', arrow: true, width: 0.01, length: 1, color: [[1, 0, 0, 1], [0, 1, 0, 1], [0, 1, 1, 1]] });
 // The `field` FigureElement has the arrow grid within it.
 // The vertex shader will orient and scale the arrows based on the
 // superposition of charge contributions from each charge at the vertex the
@@ -565,24 +565,122 @@ let cycleIndex = 0;
 .########...#######.....##.......##.....#######..##....##..######.
 */
 // Helper function to make a button
-const makeButton = (text, width, position) => figure.add({
-  make: 'collections.rectangle',
-  button: true,
-  fill: [0.4, 0.4, 0.4, 0.7],
+// const makeButton = (text, width, position) => figure.add({
+//   make: 'collections.rectangle',
+//   button: true,
+//   fill: [0.4, 0.4, 0.4, 0.7],
+//   label: {
+//     text,
+//     font: { color: [1, 1, 1, 1] },
+//   },
+//   corner: { radius: 0.1, sides: 5 },
+//   width,
+//   height: 0.5,
+//   position,
+//   mods: {
+//     isTouchable: true,
+//   },
+//   scene: scene2D,
+// });
+// const nextButton = makeButton('Next', 1, [2.3, 2.5]);
+const nextButton = figure.add({
+  make: 'collections.button',
+  label: 'Next',
+  width: 0.8,
+  height: 0.4,
+  scene: scene2D,
+  touchDown: { colorFill: [0.2, 0.2, 0.2, 1] },
+  color: [0.8, 0.8, 0.8, 1],
+  position: [2.3, 2.5],
+});
+
+const makeButton = (text, position, color) => figure.add({
+  make: 'collections.button',
+  position,
   label: {
     text,
-    font: { color: [1, 1, 1, 1] },
+    font: {
+      family: 'Times New Roman',
+      style: 'italic',
+      color,
+    },
   },
-  corner: { radius: 0.1, sides: 5 },
-  width,
-  height: 0.5,
-  position,
-  mods: {
-    isTouchable: true,
-  },
+  color: [0.8, 0.8, 0.8, 1],
+  width: 0.3,
+  height: 0.3,
+  line: { width: 0.015 },
+  corner: { radius: 0.15, sides: 20 },
+  states: [{ colorLine: [0, 0, 0, 0] }, { colorLine: [0.8, 0.8, 0.8, 1] }],
   scene: scene2D,
 });
-const nextButton = makeButton('Next', 1, [2.3, 2.5]);
+
+figure.add({
+  make: 'collections.rectangle',
+  width: 0.915,
+  height: 0.315,
+  corner: { radius: 0.15, sides: 20 },
+  line: { width: 0.015 },
+  color: [0.8, 0.8, 0.8, 1],
+  scene: scene2D,
+  position: [-2.3, -2.5],
+});
+
+const slider = figure.add({
+  make: 'collections.slider',
+  scene: scene2D,
+  position: [0, -2.5],
+  width: 2.5,
+  colorOn: [0.6, 0.6, 0.6, 1],
+  colorOff: [0.6, 0.6, 0.6, 1],
+  theme: 'light',
+});
+
+let plane = 'xy';
+const update = () => {
+  const transform = [];
+  const offset = slider.getValue() * 4 - 2;
+  if (plane === 'xz') {
+    transform.push(['r', Math.PI / 2, 1, 0, 0]);
+    transform.push(['t', 0, offset, 0]);
+  } else if (plane === 'yz') {
+    transform.push(['r', Math.PI / 2, 0, 1, 0]);
+    transform.push(['t', offset, 0, 0]);
+  } else {
+    transform.push(['t', 0, 0, offset]);
+  }
+  field.custom.updateUniform('u_vertexTransform', Fig.getTransform(transform).matrix());
+  figure.animateNextFrame();
+};
+
+const xButton = makeButton('x', [-2.6, -2.5], [1, 0, 0, 1]);
+const yButton = makeButton('y', [-2.3, -2.5], [0, 1, 0, 1]);
+const zButton = makeButton('z', [-2.0, -2.5], [0, 1, 1, 1]);
+xButton.notifications.add('touch', () => {
+  xButton.setStateIndex(1);
+  yButton.setStateIndex(0);
+  zButton.setStateIndex(0);
+  plane = 'yz';
+  slider.setValue(0.5);
+  update();
+});
+yButton.notifications.add('touch', () => {
+  yButton.setStateIndex(1);
+  xButton.setStateIndex(0);
+  zButton.setStateIndex(0);
+  plane = 'xz';
+  slider.setValue(0.5);
+  update();
+});
+zButton.notifications.add('touch', () => {
+  zButton.setStateIndex(1);
+  xButton.setStateIndex(0);
+  yButton.setStateIndex(0);
+  plane = 'xy';
+  slider.setValue(0.5);
+  update();
+});
+zButton.click();
+
 // const prevButton = makeButton('Prev', 1, [-2.3, -2.5]);
 // const scaleButton = makeButton('Scale', 1, [2.3, 2.5]);
 const scaleButton = figure.add({
@@ -603,30 +701,21 @@ scaleButton.notifications.add('onClick', () => {
   }
 });
 
-let plane = 'xy';
-const slider = figure.add({
-  make: 'collections.slider',
-  scene: scene2D,
-  position: [0, -2.5],
-  width: 2.5,
-  colorOn: [0.6, 0.6, 0.6, 1],
-  colorOff: [0.6, 0.6, 0.6, 1],
-  theme: 'light',
-});
 slider.notifications.add('changed', (value) => {
-  const transform = [];
-  const offset = value * 4 - 2;
-  if (plane === 'xz') {
-    transform.push(['r', Math.PI / 2, 1, 0, 0]);
-    transform.push(['t', 0, offset, 0]);
-  } else if (plane === 'yz') {
-    transform.push(['r', Math.PI / 2, 0, 1, 0]);
-    transform.push(['t', offset, 0, 0]);
-  } else {
-    transform.push(['t', 0, 0, offset]);
-  }
-  field.custom.updateUniform('u_vertexTransform', Fig.getTransform(transform).matrix());
-  figure.animateNextFrame();
+  // const transform = [];
+  // const offset = value * 4 - 2;
+  // if (plane === 'xz') {
+  //   transform.push(['r', Math.PI / 2, 1, 0, 0]);
+  //   transform.push(['t', 0, offset, 0]);
+  // } else if (plane === 'yz') {
+  //   transform.push(['r', Math.PI / 2, 0, 1, 0]);
+  //   transform.push(['t', offset, 0, 0]);
+  // } else {
+  //   transform.push(['t', 0, 0, offset]);
+  // }
+  // field.custom.updateUniform('u_vertexTransform', Fig.getTransform(transform).matrix());
+  // figure.animateNextFrame();
+  update();
 });
 slider.setValue(0.5);
 
@@ -646,19 +735,19 @@ nextButton.onClick = () => {
 //   cycle[cycleIndex]();
 // };
 
-const makeAxisButton = (p, text) => figure.add({
-  make: 'collections.toggle',
-  label: { text, location: 'bottom' },
-  scene: scene2D,
-  position: p,
-  theme: 'light',
-  touchBorder: 0.2,
-});
+// const makeAxisButton = (p, text) => figure.add({
+//   make: 'collections.toggle',
+//   label: { text, location: 'bottom' },
+//   scene: scene2D,
+//   position: p,
+//   theme: 'light',
+//   touchBorder: 0.2,
+// });
 
-const xButton = makeAxisButton([-2.7, -2.5], 'x');
-const yButton = makeAxisButton([-2.3, -2.5], 'y');
-const zButton = makeAxisButton([-1.9, -2.5], 'z');
-xButton.notifications.add('on', () => {})
+// const xButton = makeAxisButton([-2.7, -2.5], 'x');
+// const yButton = makeAxisButton([-2.3, -2.5], 'y');
+// const zButton = makeAxisButton([-1.9, -2.5], 'z');
+// xButton.notifications.add('on', () => {})
 /*
 ..######..########.########.##.....##.########.
 .##....##.##..........##....##.....##.##.....##
