@@ -67,21 +67,18 @@
 // Tutorial 21 - 3D - Interactive cube
 const { Figure, round } = Fig;
 const figure = new Figure({
+  // color: [1, 0, 0, 1],
   // backgroundColor: [0, 0, 0, 1]
 });
 
-// Simple slider with notification causing a console statement
-const slider = figure.add({
-  make: 'collections.slider',
-  barHeight: 0.02,
-  height: 0.1,
-  width: 1,
-  marker: 'rectangle',
-  colorOff: [1, 0, 0, 1],
-  colorOn: [0, 0.8, 0, 1],
-  color: [0, 0, 0, 1],
+// Simple button
+const button = figure.add({
+  make: 'collections.button',
+  states: ['Slow', 'Medium', 'Fast'],
+  width: 0.7,
+  height: 0.3,
 });
 
-slider.notifications.add('changed', (position) => {
-  console.log(position)
+button.notifications.add('onClick', () => {
+  console.log(button.getStateIndex());
 });
