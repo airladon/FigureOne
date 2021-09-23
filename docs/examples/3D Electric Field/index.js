@@ -3,29 +3,20 @@
 const { getPoint, Figure, getPlane } = Fig;
 
 const figure = new Figure({
-  // scene: [-3, -3, 3, 3],
+  scene: [-3, -3, 3, 3],
   backgroundColor: [0, 0, 0, 1],
-  scene: {
-    style: 'orthographic',
-    left: -3,
-    bottom: -3,
-    top: 3,
-    right: 3,
-    near: 0.1,
-    far: 10,
-    camera: { up: [0, 0, 1], position: [3, 3, 1] },
-  },
 });
 
-const scene2D = new Fig.Scene({
-  style: '2D',
+// Create a scene for all 3D objects
+const scene3D = new Fig.Scene({
+  style: 'orthographic',
   left: -3,
   bottom: -3,
   top: 3,
   right: 3,
-  // near: 0.1,
-  // far: 10,
-  // camera: { up: [0, 0, 1], position: [3, 2, 1] },
+  near: 0.1,
+  far: 10,
+  camera: { up: [0, 0, 1], position: [3, 3, 1] },
 });
 
 /*
@@ -41,16 +32,14 @@ const points = [];
 const centers = [];
 
 // Arrow properties
-const tWidth = 0.01;  // tail width
-const tLength = 0.12; // tail length
-const hLength = 0.06; // head length
+const arrowLength = 0.2; // head length
 const step = 0.2;
 
 const [conePoints, coneNormals] = Fig.cone({
-  length: tLength + hLength,
-  radius: tWidth * 2,
+  length: arrowLength,
+  radius: 0.015,
   sides: 4,
-  transform: ['t', -(tLength + hLength) / 2, 0, 0],
+  transform: ['t', 0, 0, 0],
 });
 const normals = [];
 // Make a grid of arrows
@@ -78,8 +67,8 @@ for (let x = -3; x < 3 + step / 2; x += step) {
 figure.add({
   make: 'cameraControl',
   axis: [0, 0, 1],
-  // controlScene: scene2D,
   back: true,
+  controlScene: scene3D,
 });
 
 // Add axes
@@ -90,6 +79,7 @@ const axes = figure.add({
   length: 6,
   start: -3,
   color: [[1, 0, 0, 1], [0, 1, 0, 1], [0, 1, 1, 1]],
+  scene: scene3D,
 });
 
 // The `field` FigureElement has the arrow grid within it.
@@ -105,7 +95,7 @@ const field = figure.add({
       'u_worldInverseTranspose', 'a_normal',
       'u_vertexTransform',
       'u_norm',
-      'u_scaleArrow',
+      'u_scaleArrow', 'u_arrowLength',
       'u_charge1', 'u_charge2', 'u_charge3', 'u_charge4',
       'u_charge5', 'u_charge6', 'u_charge7', 'u_charge8',
       'u_charge9', 'u_charge10', 'u_charge11', 'u_charge12',
@@ -123,6 +113,7 @@ const field = figure.add({
     { name: 'u_vertexTransform', length: 16, type: 'FLOAT_VECTOR' },
     { name: 'u_norm', length: 1 },
     { name: 'u_scaleArrow', length: 1 },
+    { name: 'u_arrowLength', length: 1 },
     { name: 'u_charge1', length: 4 },
     { name: 'u_charge2', length: 4 },
     { name: 'u_charge3', length: 4 },
@@ -144,7 +135,9 @@ const field = figure.add({
     { name: 'u_charge19', length: 4 },
     { name: 'u_charge20', length: 4 },
   ],
+  scene: scene3D,
 });
+field.custom.updateUniform('u_arrowLength', arrowLength);
 
 // The grid will show in which plane a charge can move
 const grid = figure.add({
@@ -152,6 +145,7 @@ const grid = figure.add({
   step: 0.2,
   line: { width: 0.008 },
   color: [0.6, 0.6, 0.6, 0.8],
+  scene: scene3D,
 });
 grid.hide();
 
@@ -163,6 +157,7 @@ const charges = [];
 const chargeRadius = 0.18;
 for (let i = 1; i <= 20; i += 1) {
   const charge = figure.add({
+    name: `charge${i}`,
     make: 'collection',
     elements: [
       {
@@ -181,6 +176,7 @@ for (let i = 1; i <= 20; i += 1) {
       simple: true,
       custom: { q: 1 },
     },
+    scene: scene3D,
   });
 
   // Whenever a charge is moved, it needs to update its associated uniform with
@@ -276,6 +272,7 @@ const measurementPlane = figure.add({
   line: [[0, 0, -12], [0, 0, 0]],
   radius: 0.015,
   color: [0, 0, 0, 0.8],
+  scene: scene3D,
 });
 
 
@@ -320,7 +317,7 @@ const capacitor = (q, separation, duration = 4) => {
     if (i >= charges.length / 2) {
       charge.custom.animateTo([start + (i - charges.length / 2) * lenStep, y], 1, duration);
     } else {
-      charge.custom.animateTo([-start - i * lenStep, -y], q, duration);
+      charge.custom.animateTo([-start - (i + 1) * lenStep, -y], q, duration);
     }
   }
 };
@@ -352,7 +349,7 @@ const makeButton = (label, position, small = false, onClick = null) => {
     label,
     width: small ? 0.3 : 0.7,
     height: 0.3,
-    scene: scene2D,
+    // scene: scene2D,
     touchDown: { colorFill: [0.2, 0.2, 0.2, 1] },
     color: [0.8, 0.8, 0.8, 1],
     position,
@@ -363,11 +360,12 @@ const makeButton = (label, position, small = false, onClick = null) => {
   }
   return button;
 };
-makeButton('1', [0.8, 2.5], true, () => singleCharge(1));
-makeButton('2', [1.2, 2.5], true, () => twoCharges(-1, 1));
-makeButton('3', [1.6, 2.5], true, () => twoCharges(1, 1, 2));
-makeButton('4', [2, 2.5], true, () => capacitor(-1, 1));
-makeButton('5', [2.4, 2.5], true, () => circle(1.5));
+makeButton('1', [0.4, 2.5], true, () => singleCharge(1));
+makeButton('2', [0.8, 2.5], true, () => twoCharges(-1, 1));
+makeButton('3', [1.2, 2.5], true, () => twoCharges(1, 1, 2));
+makeButton('4', [1.6, 2.5], true, () => capacitor(-1, 1));
+makeButton('5', [2, 2.5], true, () => capacitor(1, 1));
+makeButton('6', [2.4, 2.5], true, () => circle(1.5));
 // const nextButton = makeButton('Next', [2.3, 2.5]);
 const resetButton = makeButton('Reset', [-2.3, 2.5]);
 
@@ -379,7 +377,7 @@ figure.add({
   corner: { radius: 0.15, sides: 20 },
   line: { width: 0.01 },
   color: [0.8, 0.8, 0.8, 1],
-  scene: scene2D,
+  // scene: scene2D,
   position: [-2.3, -2.5],
 });
 const makeXYZButton = (text, position, color) => figure.add({
@@ -398,7 +396,7 @@ const makeXYZButton = (text, position, color) => figure.add({
     { colorLine: [0, 0, 0, 0], colorFill: [0.2, 0.2, 0.2, 0] },
     { colorLine: [0.8, 0.8, 0.8, 1], colorFill: [0.2, 0.2, 0.2, 1] },
   ],
-  scene: scene2D,
+  // scene: scene2D,
   touchBorder: [0, 0.1, 0, 0.1],
 });
 const xButton = makeXYZButton('x', [-2.6, -2.5], [1, 0, 0, 1]);
@@ -407,7 +405,7 @@ const zButton = makeXYZButton('z', [-2.0, -2.5], [0, 1, 1, 1]);
 
 const slider = figure.add({
   make: 'collections.slider',
-  scene: scene2D,
+  // scene: scene2D,
   position: [0, -2.5],
   width: 2.5,
   colorOn: [0.6, 0.6, 0.6, 1],
@@ -419,7 +417,7 @@ const slider = figure.add({
 const makeToggle = (label, position) => figure.add({
   make: 'collections.toggle',
   label: { text: label, location: 'bottom' },
-  scene: scene2D,
+  // scene: scene2D,
   position,
   theme: 'light',
   touchBorder: 0.2,
@@ -517,7 +515,7 @@ axisButton.notifications.add('toggle', (on) => {
 });
 
 const reset = () => {
-  figure.scene.setCamera({ position: [3, 3, 2] });
+  scene3D.setCamera({ position: [3, 3, 2] });
   zButton.click();
 };
 resetButton.notifications.add('onClick', () => reset());
@@ -538,7 +536,6 @@ reset();
 ..######..########....##.....#######..##.......
 */
 field.custom.updateUniform('u_scaleArrow', 1);
-singleCharge(1, 0);
-// figure.addFrameRate(10, { font: { color: [1, 1, 1, 0]}});
+twoCharges(-1, 1, 0);
 figure.animateNextFrame();
 

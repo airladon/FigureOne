@@ -21,7 +21,7 @@ import {
 import WebGLInstance from '../webgl/webgl';
 import DrawContext2D from '../DrawContext2D';
 import * as tools from '../../tools/math';
-import { generateUniqueId, joinObjects } from '../../tools/tools';
+import { generateUniqueId, joinObjects, joinObjectsWithOptions } from '../../tools/tools';
 // eslint-disable-next-line import/no-cycle
 import DrawingObject from '../DrawingObjects/DrawingObject';
 // eslint-disable-next-line import/no-cycle
@@ -1428,7 +1428,7 @@ export default class FigurePrimitives {
    * @see {@link OBJ_CameraControl} for options and examples.
    */
   cameraControl(...options: Array<OBJ_CameraControl>) {
-    const o = joinObjects({
+    const o = joinObjectsWithOptions({ except: 'controlScene' }, {}, {
       left: 0,
       bottom: 0,
       width: 1,
@@ -1455,7 +1455,17 @@ export default class FigurePrimitives {
     if (o.back) {
       element._custom.cameraControlBack = true;
     }
-    element.custom.sceneToChange = o.controlScene;
+    for (let i = options.length - 1; i >= 0; i -= 1) {
+      if (options[i].controlScene != null) {
+        if (options[i].controlScene instanceof Scene) {
+          element.custom.sceneToChange = options[i].controlScene;
+          i = -1;
+        } else if (typeof options[i].controlScene === 'string') {
+          element.custom.sceneToChange = options[i].control.Scene;
+          i = -1;
+        }
+      }
+    }
     element.scene = new Scene({
       style: '2D',
       left: 0,
@@ -1530,7 +1540,7 @@ export default class FigurePrimitives {
       const newPosition = position.transformBy(matrix);
 
 
-      scene.setCamera({
+      element.custom.sceneToChange.setCamera({
         position: newPosition,
       });
       element.transform.updateTranslation(element.custom.position);

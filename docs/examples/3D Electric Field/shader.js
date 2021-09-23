@@ -8,6 +8,7 @@ uniform mat4 u_vertexTransform;
 uniform mat4 u_worldViewProjectionMatrix;
 uniform float u_norm;
 uniform float u_scaleArrow;
+uniform float u_arrowLength;
 uniform vec4 u_charge1;
 uniform vec4 u_charge2;
 uniform vec4 u_charge3;
@@ -110,7 +111,11 @@ void main() {
 
   // Offset the vertex relative to the center, scale and rotate, then reverse
   // the offset
-  vec4 final = originToCenter * scaleRotation * vec4(a_vertex.xyz, 1);
+  vec3 offsetVertex = a_vertex;
+  if (u_scaleArrow == 0.0) {
+    offsetVertex = vec3(a_vertex.x - u_arrowLength / 2.0, a_vertex.yz);
+  }
+  vec4 final = originToCenter * scaleRotation * vec4(offsetVertex.xyz, 1);
 
   // Final position
   gl_Position = u_worldViewProjectionMatrix * final;
