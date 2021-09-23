@@ -197,10 +197,20 @@ for (let x = -3; x < 3 + step / 2; x += step) {
   }
 }
 
+// Add camera control
 figure.add({
   make: 'cameraControl', axis: [0, 0, 1], // controlScene: scene2D,
 });
-figure.add({ make: 'collections.axis3', arrow: true, width: 0.01, length: 1, color: [[1, 0, 0, 1], [0, 1, 0, 1], [0, 1, 1, 1]] });
+
+// Add axes
+figure.add({
+  make: 'collections.axis3',
+  arrow: true,
+  width: 0.01,
+  length: 1,
+  color: [[1, 0, 0, 1], [0, 1, 0, 1], [0, 1, 1, 1]],
+});
+
 // The `field` FigureElement has the arrow grid within it.
 // The vertex shader will orient and scale the arrows based on the
 // superposition of charge contributions from each charge at the vertex the
@@ -284,17 +294,10 @@ for (let i = 1; i <= 20; i += 1) {
         name: 'fill',
         make: 'sphere',
         sides: 20,
+        normals: 'curve',
         radius: chargeRadius,
         color: [1, 0, 0, 1],
       },
-      // {
-      //   name: 'border',
-      //   make: 'polygon',
-      //   sides: 20,
-      //   radius: chargeRadius,
-      //   color: [0, 0, 0, 0.5],
-      //   line: { width: 0.005 },
-      // },
       {
         name: 'negativeLine',
         make: 'primitives.line',
