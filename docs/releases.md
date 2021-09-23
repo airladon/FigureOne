@@ -164,4 +164,5 @@ API cleanup
 * Add Slider collection
 * Add toggle switch collection
 * Add matrix uniform to gl primitive
-* Change OBJ_CameraControl.scene to OBJ_CameraControl.sceneControl
+* Change OBJ_CameraControl.scene to OBJ_CameraControl.controlScene
+* Add 3D Electric Field example
