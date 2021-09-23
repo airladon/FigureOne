@@ -1,16 +1,5 @@
 /* globals Fig */
 
-// Calculate the x/y charge magnitude at this vertex for a single charge
-// The absolute value of the charge doesn't matter for this visualization so the
-// dielectric constant is left out of the charge calculation
-// vec3 fromCharge(vec3 charge) {
-//   vec3 direction = normalize(vec3(charge.x - a_center.x, charge.y - a_center.y, charge.z - a_center.z));
-//   float dist = distance(charge.xyz, a_center.xyz);
-//   float q = -charge.w / pow(dist, 2.0);
-//   return distance * direction;
-// }
-/* globals Fig */
-
 const figure = new Fig.Figure({
   // scene: [-3, -3, 3, 3],
   backgroundColor: [0, 0, 0, 1],
@@ -105,8 +94,8 @@ mat4 rotationMatrixAngleAxis(float angle, vec3 axis) {
 }
 
 vec3 fromCharge(vec4 charge, vec4 center) {
-  vec3 direction = normalize(vec3(charge.x - center.x, charge.y - center.y, charge.z - center.z));
-  float dist = distance(charge.xyz, center.xyz);
+  vec3 direction = normalize(charge.xyz - center.xyz);
+  float dist = distance(charge, center);
   float q1 = -charge.w / pow(dist, 2.0);
   return q1 * direction;
 }
@@ -160,7 +149,7 @@ void main() {
 
   // Offset the vertex relative to the center, scale and rotate, then reverse
   // the offset
-  vec4 final = originToCenter * scaleRotation * vec4(a_vertex.x, a_vertex.y, a_vertex.z, 1);
+  vec4 final = originToCenter * scaleRotation * vec4(a_vertex.xyz, 1);
 
   // Final position
   gl_Position = u_worldViewProjectionMatrix * final;
@@ -177,10 +166,8 @@ const centers = [];
 // Arrow properties
 const tWidth = 0.01;  // tail width
 const tLength = 0.12; // tail length
-const hWidth = 0.03;  // head width
 const hLength = 0.06; // head length
 const step = 0.2;
-const halfLength = (tLength + hLength) / 2;
 
 const [conePoints, coneNormals] = Fig.cone({
   length: tLength + hLength,
