@@ -34,12 +34,12 @@ function getShapes(getPos) {
     shape('label-font-color', { label: { text: 'ab', font: { color: [0, 1, 0, 1] } } }),
     shape('label-font-color-override', { label: { text: 'ab', color: [0, 0, 1, 1], font: { color: [0, 1, 0, 1] } } }),
     shape('label-color', { label: { text: 'ab', color: [0, 0, 1, 1] } }),
-    shape('labelColor', { labelColor: [1, 1, 0, 1], label: { text: 'ab', color: [0, 0, 1, 1] } }),
+    shape('labelColor', { colorLabel: [1, 1, 0, 1], label: { text: 'ab', color: [0, 0, 1, 1] } }),
 
     // Width/Height/Corner
     shape('width', { width: 0.7 }),
     shape('height', { height: 0.7 }),
-    shape('width-heigth', { width: 0.7, height: 0.5 }),
+    shape('width-heigth', { width: 0.7, height: 1 }),
     shape('corner-radius', { corner: { radius: 0.1 } }),
     shape('corner-sides', { corner: { radius: 0.1, sides: 1 } }),
 
@@ -47,14 +47,28 @@ function getShapes(getPos) {
     shape('line-none', { line: null }),
     shape('line-width', { line: { width: 0.1 } }),
     shape('line-color', { line: { width: 0.1, color: [0, 1, 1, 1] } }),
-    shape('line-color-override', { lineColor: [1, 1, 0, 1], line: { width: 0.1, color: [0, 1, 1, 1] } }),
+    shape('line-color-override', { colorLine: [1, 1, 0, 1], line: { width: 0.1, color: [0, 1, 1, 1] } }),
 
     // Colors
     shape('color', { color: [0, 1, 1, 1], line: { width: 0.1 } }),
     shape('color-line-color-override', { color: [0, 1, 1, 1], line: { width: 0.1, color: [1, 1, 0, 1] } }),
-    shape('color-lineColor-override', { color: [0, 1, 1, 1], lineColor: [1, 1, 0, 1] }),
-    shape('fill', { fillColor: [1, 0, 0, 0.4] }),
+    shape('color-lineColor-override', { color: [0, 1, 1, 1], colorLine: [1, 1, 0, 1] }),
+    shape('fill', { colorFill: [1, 0, 0, 0.4] }),
 
+    // States
+    shape('states', { states: ['abc', 'def'], label: null }),
+    shape('states-labels', { states: ['abc', 'def'], label: null }),
+    shape('states-labels2', { states: ['abc', 'def'], label: null }),
+    shape('states-colorFill0', { states: [{ colorFill: [1, 0, 0, 0.5] }, { colorFill: [0, 0, 1, 0.5] }] }),
+    shape('states-colorFill1', { states: [{ colorFill: [1, 0, 0, 0.5] }, { colorFill: [0, 0, 1, 0.5] }] }),
+    shape('states-colorFill2', { states: [{ colorFill: [1, 0, 0, 0.5] }, { colorFill: [0, 0, 1, 0.5] }] }),
+    shape('states-colorLine0', { states: [{ colorLine: [1, 1, 0, 1] }, { colorLine: [0, 0, 1, 1] }] }),
+    shape('states-colorLine1', { states: [{ colorLine: [1, 1, 0, 1] }, { colorLine: [0, 0, 1, 1] }] }),
+    shape('states-colorLine2', { states: [{ colorLine: [1, 1, 0, 1] }, { colorLine: [0, 0, 1, 1] }] }),
+    shape('states-colorLabel0', { states: [{ colorLabel: [1, 1, 0, 1] }, { colorLabel: [0, 0, 1, 1] }] }),
+    shape('states-colorLabel1', { states: [{ colorLabel: [1, 1, 0, 1] }, { colorLabel: [0, 0, 1, 1] }] }),
+    shape('states-colorLabel2', { states: [{ colorLabel: [1, 1, 0, 1] }, { colorLabel: [0, 0, 1, 1] }] }),
+    shape('touchDown', { touchDown: { colorFill: [1, 0, 0, 1], colorLabel: [1, 1, 1, 1], colorLine: [0, 1, 0, 1] } }),
     // shape('defaultTouch'),
     // shape('defaultMove'),
     // shape('moveBeyond1'),
@@ -106,6 +120,76 @@ const move = {
     events: [
       ['touchDown', [0, 0]],
       ['touchUp'],
+    ],
+  },
+  'states-labels': {
+    element: 'states-labels',
+    events: [
+      ['touchDown', [0, 0]],
+      ['touchUp'],
+    ],
+  },
+  'states-labels2': {
+    element: 'states-labels2',
+    events: [
+      ['touchDown', [0, 0]],
+      ['touchUp'],
+      ['touchDown', [0, 0]],
+      ['touchUp'],
+    ],
+  },
+  'states-colorFill1': {
+    element: 'states-colorFill1',
+    events: [
+      ['touchDown', [0, 0]],
+      ['touchUp'],
+    ],
+  },
+  'states-colorFill2': {
+    element: 'states-colorFill2',
+    events: [
+      ['touchDown', [0, 0]],
+      ['touchUp'],
+      ['touchDown', [0, 0]],
+      ['touchUp'],
+    ],
+  },
+  'states-colorLine1': {
+    element: 'states-colorLine1',
+    events: [
+      ['touchDown', [0, 0]],
+      ['touchUp'],
+    ],
+  },
+  'states-colorLine2': {
+    element: 'states-colorLine2',
+    events: [
+      ['touchDown', [0, 0]],
+      ['touchUp'],
+      ['touchDown', [0, 0]],
+      ['touchUp'],
+    ],
+  },
+  'states-colorLabel1': {
+    element: 'states-colorLabel1',
+    events: [
+      ['touchDown', [0, 0]],
+      ['touchUp'],
+    ],
+  },
+  'states-colorLabel2': {
+    element: 'states-colorLabel2',
+    events: [
+      ['touchDown', [0, 0]],
+      ['touchUp'],
+      ['touchDown', [0, 0]],
+      ['touchUp'],
+    ],
+  },
+  touchDown: {
+    element: 'touchDown',
+    events: [
+      ['touchDown', [0, 0]],
     ],
   },
 };

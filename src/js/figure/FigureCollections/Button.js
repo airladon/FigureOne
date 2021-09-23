@@ -60,16 +60,16 @@ export type OBJ_ButtonLabel = {
 /**
  * Button state options object.
  *
- * @property {TypeColor} [lineColor]
- * @property {TypeColor} [fillColor]
- * @property {TypeColor} [labelColor]
+ * @property {TypeColor} [colorLine]
+ * @property {TypeColor} [colorFill]
+ * @property {TypeColor} [colorLabel]
  * @property {string} [label]
  * @see {@link COL_Button}
  */
 export type OBJ_ButtonColorState = {
-  lineColor?: TypeColor,
-  fillColor?: TypeColor,
-  labelColor?: TypeColor,
+  colorLine?: TypeColor,
+  colorFill?: TypeColor,
+  colorLabel?: TypeColor,
 }
 
 /**
@@ -78,16 +78,16 @@ export type OBJ_ButtonColorState = {
  * The `label` can either be the label text, or it can be the name of the form
  * of the equation label.
  *
- * @property {TypeColor} [lineColor]
- * @property {TypeColor} [fillColor]
- * @property {TypeColor} [labelColor]
+ * @property {TypeColor} [colorLine]
+ * @property {TypeColor} [colorFill]
+ * @property {TypeColor} [colorLabel]
  * @property {string} [label]
  * @see {@link COL_Button}
  */
 export type OBJ_ButtonState = {
-  lineColor?: TypeColor,
-  fillColor?: TypeColor,
-  labelColor?: TypeColor,
+  colorLine?: TypeColor,
+  colorFill?: TypeColor,
+  colorLabel?: TypeColor,
   label?: string,
 }
 
@@ -102,11 +102,12 @@ export type OBJ_ButtonState = {
  * @property {null | OBJ_LineStyleSimple} [line] button outline - use `null` to
  * remove the default line
  * @property {OBJ_ButtonLabel} [label]
- * @property {TypeColor} [lineColor]
- * @property {TypeColor} [fillColor]
- * @property {TypeColor} [labelColor]
+ * @property {TypeColor} [colorLine]
+ * @property {TypeColor} [colorFill]
+ * @property {TypeColor} [colorLabel]
  * @property {Array<OBJ_ButtonState | string>} [states]
- * @property {OBJ_ButtonColorState>} [states]
+ * @property {OBJ_ButtonColorState>} [touchDown] set colors between a touch
+ * down and touch up
  *
  * @extends OBJ_Collection
  */
@@ -116,9 +117,9 @@ export type COL_Button = {
   corner?: OBJ_CurvedCorner,
   line?: null | OBJ_LineStyleSimple,
   label?: OBJ_ButtonLabel,
-  lineColor?: TypeColor,
-  fillColor?: TypeColor,
-  labelColor?: TypeColor,
+  colorLine?: TypeColor,
+  colorFill?: TypeColor,
+  colorLabel?: TypeColor,
   states?: Array<OBJ_ButtonState | string>,
   touchDown?: OBJ_ButtonColorState,
 } & OBJ_Collection;
@@ -153,7 +154,9 @@ class ButtonLabel extends EquationLabel {
 /**
  * {@link FigureElementCollection} representing a toggle switch.
  *
- * ![](./apiassets/button.gif)
+ * ![](./apiassets/button.png)
+ *
+ * ![](./apiassets/button1.gif)
  *
  * The toggle switch can be turned on or off.
  *
@@ -167,21 +170,35 @@ class ButtonLabel extends EquationLabel {
  * See {@link COL_Button} for setup options.
  *
  * To test examples below, append them to the
- * <a href="#shapes3d-boilerplate">boilerplate</a>
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
- * // Simple toggle switch with notification causing a console statement
- * const toggle = figure.add({
- *   make: 'collections.toggle',
- *   label: {
- *     text: 'Control',
- *     location: 'bottom',
- *     scale: 0.6,
- *   },
+ * // Simple button
+ * figure.add({
+ *   make: 'collections.button',
+ *   label: 'Start',
  * });
  *
- * toggle.notifications.add('toggle', (state) => {
- *   state ? console.log('on') : console.log('off');
+ * @example
+ * // Borderless button
+ * figure.add({
+ *   make: 'collections.button',
+ *   label: 'Start',
+ *   colorFill: [0.8, 0.8, 0.8, 1],
+ *   line: null,
+ * });
+ *
+ * @example
+ * // Button that changes state
+ * const button = figure.add({
+ *   make: 'collections.button',
+ *   states: ['Slow', 'Medium', 'Fast'],
+ *   width: 0.7,
+ *   height: 0.3,
+ * });
+ *
+ * button.notifications.add('onClick', () => {
+ *   console.log(button.getStateIndex());
  * });
  */
 /* eslint-enable max-len */
@@ -208,7 +225,7 @@ class CollectionsButton extends FigureElementCollection {
       states: [],
       touchBorder: 'rect',
       color: collections.primitives.defaultColor,
-      fillColor: [0, 0, 0, 0],
+      colorFill: [0, 0, 0, 0],
       line: { width: collections.primitives.defaultLineWidth },
       corner: { radius: collections.primitives.defaultLineWidth * 4, sides: 5 },
       transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
@@ -219,45 +236,53 @@ class CollectionsButton extends FigureElementCollection {
     super(joinObjects({}, options));
     this.collections = collections;
     let {
-      labelColor, lineColor, label,
+      colorLabel, colorLine, label,
     } = options;
     const {
-      line, fillColor, color, width, height, corner, states, touchDown,
+      line, colorFill, color, width, height, corner, states, touchDown,
     } = options;
 
-    if (lineColor == null) {
+    if (colorLine == null) {
       if (line != null && line.color != null) {
-        lineColor = line.color;
+        colorLine = line.color;
       } else {
-        lineColor = color;
+        colorLine = color;
       }
     }
-    if (labelColor == null) {
+    if (colorLabel == null) {
       if (label != null && typeof label === 'object' && label.font != null && label.font.color != null) {
-        labelColor = label.font.color;
+        colorLabel = label.font.color;
       } else if (label != null && typeof label === 'object' && label.color != null) {
-        labelColor = label.color;
+        colorLabel = label.color;
       } else {
-        labelColor = color;
+        colorLabel = color;
       }
     }
 
     this.touchDown = touchDown;
     this.states = states;
+    if (this.states.length === 0) {
+      this.states = [{ colorFill, colorLabel, colorLine }];
+    }
     if (this.states.length > 0) {
       if (typeof this.states[0] === 'string') {
-        this.states[0] = { label: this.states[0] };
+        this.states[0] = {
+          label: this.states[0],
+          colorFill,
+          colorLabel,
+          colorLine,
+        };
       }
-      if (this.states[0].fillColor == null) {
-        this.states[0].fillColor = fillColor;
+      if (this.states[0].colorFill == null) {
+        this.states[0].colorFill = colorFill;
       }
-      if (this.states[0].labelColor == null) {
-        this.states[0].labelColor = labelColor;
+      if (this.states[0].colorLabel == null) {
+        this.states[0].colorLabel = colorLabel;
       }
-      if (this.states[0].lineColor == null) {
-        this.states[0].lineColor = lineColor;
+      if (this.states[0].colorLine == null) {
+        this.states[0].colorLine = colorLine;
       }
-      if (this.states[0].label == null) {
+      if (this.states[0].label == null) { // $FlowFixMe
         this.states[0].label = label;
       }
     }
@@ -277,11 +302,11 @@ class CollectionsButton extends FigureElementCollection {
         {},
         {
           scale: 0.8,
-          color: labelColor,
+          color: colorLabel,
           font: collections.primitives.defaultFont,
         },
         {
-          font: { color: labelColor },
+          font: { color: colorLabel },
         },
         loIn,
       );
@@ -323,7 +348,7 @@ class CollectionsButton extends FigureElementCollection {
       width: this.width,
       height: this.height,
       corner,
-      color: fillColor,
+      color: colorFill,
     });
     this.toBack('fill');
     if (line != null) {
@@ -334,7 +359,7 @@ class CollectionsButton extends FigureElementCollection {
         width: this.width,
         height: this.height,
         corner,
-        color: lineColor,
+        color: colorLine,
       });
     }
     this._custom.stateIndex = 0;
@@ -351,6 +376,7 @@ class CollectionsButton extends FigureElementCollection {
     this.notifications.add('touchUp', () => {
       this.updateStateForTouch(false);
     });
+    this.setStateIndex(0);
   }
 
   incrementState() {
@@ -376,9 +402,9 @@ class CollectionsButton extends FigureElementCollection {
 
   getStateProperty(propertyName: string) {
     let property = this.states[0][propertyName];
-    for (let i = 0; i < this._custom.stateIndex; i += 1) {
-      if (this.states[0][propertyName] != null) {
-        property = this.states[0][propertyName];
+    for (let i = 0; i <= this._custom.stateIndex; i += 1) {
+      if (this.states[i][propertyName] != null) {
+        property = this.states[i][propertyName];
       }
     }
     return property;
@@ -387,9 +413,9 @@ class CollectionsButton extends FigureElementCollection {
   updateState() {
     if (this.states.length > 0) {
       const s = this.states[this._custom.stateIndex];
-      this._fill.setColor(this.getStateProperty('fillColor'));
+      this._fill.setColor(this.getStateProperty('colorFill'));
       if (this._line != null) {
-        this._line.setColor(this.getStateProperty('lineColor'));
+        this._line.setColor(this.getStateProperty('colorLine'));
       }
       if (this._label != null) {
         let labelText;
@@ -398,7 +424,7 @@ class CollectionsButton extends FigureElementCollection {
         } else if (s.label != null) {
           labelText = s.label;
         }
-        if (labelText != null) {
+        if (labelText != null && typeof labelText !== 'object') {
           if (this._label.eqn.forms[labelText] != null) {
             this._label.showForm(labelText);
           } else {
@@ -407,9 +433,10 @@ class CollectionsButton extends FigureElementCollection {
         }
       }
       if (this._label != null) {
-        this._label.setColor(this.getStateProperty('labelColor'));
+        this._label.setColor(this.getStateProperty('colorLabel'));
       }
     }
+    this.animateNextFrame();
   }
 
   updateStateForTouch(down: boolean) {
@@ -418,14 +445,14 @@ class CollectionsButton extends FigureElementCollection {
     }
     if (down) {
       const s = this.touchDown;
-      if (s.fillColor != null) {
-        this._fill.setColor(s.fillColor);
+      if (s.colorFill != null) {
+        this._fill.setColor(s.colorFill);
       }
-      if (this._line != null && s.lineColor != null) {
-        this._line.setColor(s.lineColor);
+      if (this._line != null && s.colorLine != null) {
+        this._line.setColor(s.colorLine);
       }
-      if (this._label != null && s.labelColor != null) {
-        this._label.setColor(s.labelColor);
+      if (this._label != null && s.colorLabel != null) {
+        this._label.setColor(s.colorLabel);
       }
     } else {
       this.updateState();
