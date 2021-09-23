@@ -198,16 +198,34 @@ for (let x = -3; x < 3 + step / 2; x += step) {
 }
 
 // Add camera control
-figure.add({
+const cameraControl = figure.add({
   make: 'cameraControl', axis: [0, 0, 1], // controlScene: scene2D,
 });
 
+// const grid = figure.add({
+//   make: 'grid',
+//   step: 0.5,
+//   line: { width: 0.01 },
+//   color: [0.8, 0.8, 0.8, 1],
+// });
+// const grid = figure.add({
+//   make: 'rectangle',
+//   // sides: 4,
+//   // length: 0.01,
+//   // radius: 3,
+//   width: 4,
+//   height: 4,
+//   // line: { width: 0.01 },
+//   color: [0.3, 0.3, 0.3, 0],
+// });
+
 // Add axes
-figure.add({
+const axes = figure.add({
   make: 'collections.axis3',
-  arrow: true,
+  // arrow: true,
   width: 0.01,
-  length: 1,
+  length: 6,
+  start: -3,
   color: [[1, 0, 0, 1], [0, 1, 0, 1], [0, 1, 1, 1]],
 });
 
@@ -413,6 +431,24 @@ const animateNorm = (target, duration = 4) => {
     })
     .start();
 };
+
+const measurementPlane = figure.add({
+  // make: 'rectangle',
+  // width: 6,
+  // height: 6,
+  // color: [0.1, 0.1, 0.1, 0.5],
+  make: 'cylinder',
+  line: [[0, 0, -12], [0, 0, 0]],
+  radius: 0.015,
+  color: [0, 0, 0, 0.8],
+});
+
+const grid = figure.add({
+  make: 'grid',
+  step: 0.2,
+  line: { width: 0.008 },
+  color: [0.6, 0.6, 0.6, 0.8],
+});
 
 /*
 .########..########..########..######..########.########..######.
@@ -630,7 +666,7 @@ const update = () => {
   const transform = [];
   const offset = slider.getValue() * 4 - 2;
   if (plane === 'xz') {
-    transform.push(['r', Math.PI / 2, 1, 0, 0]);
+    transform.push(['r', -Math.PI / 2, 1, 0, 0]);
     transform.push(['t', 0, offset, 0]);
   } else if (plane === 'yz') {
     transform.push(['r', Math.PI / 2, 0, 1, 0]);
@@ -639,6 +675,7 @@ const update = () => {
     transform.push(['t', 0, 0, offset]);
   }
   field.custom.updateUniform('u_vertexTransform', Fig.getTransform(transform).matrix());
+  measurementPlane.transform = transform;
   figure.animateNextFrame();
 };
 
@@ -671,8 +708,6 @@ zButton.notifications.add('touch', () => {
 });
 zButton.click();
 
-// const prevButton = makeButton('Prev', 1, [-2.3, -2.5]);
-// const scaleButton = makeButton('Scale', 1, [2.3, 2.5]);
 const scaleButton = figure.add({
   make: 'collections.toggle',
   label: { text: 'Scale', location: 'bottom' },
@@ -691,20 +726,48 @@ scaleButton.notifications.add('onClick', () => {
   }
 });
 
+const cameraControlButton = figure.add({
+  make: 'collections.toggle',
+  label: { text: 'Camera', location: 'bottom' },
+  scene: scene2D,
+  position: [-2.5, 2.5],
+  theme: 'light',
+  touchBorder: 0.2,
+});
+
+cameraControlButton.notifications.add('toggle', (on) => {
+  if (on) {
+    cameraControl.show();
+    grid.hide();
+  } else {
+    cameraControl.hide();
+    grid.show();
+  }
+});
+cameraControlButton.on();
+
+const axisButton = figure.add({
+  make: 'collections.toggle',
+  label: { text: 'Axes', location: 'bottom' },
+  scene: scene2D,
+  position: [-1.6, 2.5],
+  theme: 'light',
+  touchBorder: 0.2,
+});
+
+axisButton.notifications.add('toggle', (on) => {
+  if (on) {
+    axes.show();
+    measurementPlane.show();
+  } else {
+    axes.hide();
+    measurementPlane.hide();
+  }
+});
+axisButton.on();
+
+
 slider.notifications.add('changed', (value) => {
-  // const transform = [];
-  // const offset = value * 4 - 2;
-  // if (plane === 'xz') {
-  //   transform.push(['r', Math.PI / 2, 1, 0, 0]);
-  //   transform.push(['t', 0, offset, 0]);
-  // } else if (plane === 'yz') {
-  //   transform.push(['r', Math.PI / 2, 0, 1, 0]);
-  //   transform.push(['t', offset, 0, 0]);
-  // } else {
-  //   transform.push(['t', 0, 0, offset]);
-  // }
-  // field.custom.updateUniform('u_vertexTransform', Fig.getTransform(transform).matrix());
-  // figure.animateNextFrame();
   update();
 });
 slider.setValue(0.5);
@@ -715,29 +778,6 @@ nextButton.onClick = () => {
   cycle[cycleIndex]();
 };
 
-// prevButton.onClick = () => {
-//   figure.stop();
-//   let prevIndex = cycleIndex - 1;
-//   if (prevIndex < 0) {
-//     prevIndex = cycle.length - 1;
-//   }
-//   cycleIndex = cycleIndex - 1 < 0 ? cycle.length - 1 : cycleIndex - 1;
-//   cycle[cycleIndex]();
-// };
-
-// const makeAxisButton = (p, text) => figure.add({
-//   make: 'collections.toggle',
-//   label: { text, location: 'bottom' },
-//   scene: scene2D,
-//   position: p,
-//   theme: 'light',
-//   touchBorder: 0.2,
-// });
-
-// const xButton = makeAxisButton([-2.7, -2.5], 'x');
-// const yButton = makeAxisButton([-2.3, -2.5], 'y');
-// const zButton = makeAxisButton([-1.9, -2.5], 'z');
-// xButton.notifications.add('on', () => {})
 /*
 ..######..########.########.##.....##.########.
 .##....##.##..........##....##.....##.##.....##
@@ -747,6 +787,7 @@ nextButton.onClick = () => {
 .##....##.##..........##....##.....##.##.......
 ..######..########....##.....#######..##.......
 */
+
 field.custom.updateUniform('u_scaleArrow', 1);
 singleCharge(1, 0);
 // figure.addFrameRate(10, { font: { color: [1, 1, 1, 0]}});
