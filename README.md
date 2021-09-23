@@ -162,6 +162,14 @@ Demonstrator of how shaders can be used to animate over 1000 elements simultaneo
 
 ![](docs/examples/Electric%20Field/example.gif)
 
+## **[3D Electric Field](3D%20Electric%20Field)**
+
+See this example hosted [here](https://airladon.github.io/FigureOne/examples/3D%20Electric%20Field/index.html).
+
+Visualize and interact with 3D figures.
+
+![](docs/examples/2D%20Electric%20Field/example.gif)
+
 ## NPM Package
 
 On projects that are bundled with tools such as Webpack, it can be useful to use the FigureOne NPM package:
