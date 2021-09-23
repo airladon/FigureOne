@@ -168,7 +168,7 @@ See this example hosted [here](https://airladon.github.io/FigureOne/examples/3D%
 
 Visualize and interact with 3D figures.
 
-![](docs/examples/2D%20Electric%20Field/example.gif)
+![](docs/examples/3D%20Electric%20Field/example.gif)
 
 ## NPM Package
 
