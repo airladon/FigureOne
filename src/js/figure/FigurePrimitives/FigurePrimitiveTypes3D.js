@@ -1098,5 +1098,5 @@ export type OBJ_CameraControl = {
   sensitivity?: number,
   xSensitivity?: number,
   ySensitivity?: number,
-  back?: boolen,
+  back?: boolean,
 } & OBJ_FigurePrimitive;

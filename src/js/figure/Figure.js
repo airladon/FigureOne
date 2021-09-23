@@ -2646,10 +2646,8 @@ class Figure {
     let colorIndex = 0;
     for (let i = 0; i < elements.length; i += 1) {
       const e = elements[i];
-      // if (e.drawingObject != null && e.drawBorderBuffer == null) {
-      //   // eslint-disable-next-line no-continue
-      //   continue;
-      // } // $FlowFixMe
+
+      // $FlowFixMe
       const borderPoints = e.getBorder('figure', border);
       if (borderPoints.length > 0 && borderPoints[0].length > 0) {
         for (let j = 0; j < borderPoints.length; j += 1) {

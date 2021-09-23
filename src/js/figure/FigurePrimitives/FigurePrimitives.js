@@ -1461,7 +1461,7 @@ export default class FigurePrimitives {
           element.custom.sceneToChange = options[i].controlScene;
           i = -1;
         } else if (typeof options[i].controlScene === 'string') {
-          element.custom.sceneToChange = options[i].control.Scene;
+          element.custom.sceneToChange = options[i].controlScene;
           i = -1;
         }
       }
