@@ -159,3 +159,11 @@ API cleanup
 * Low level gl primitive is now `gl` and supports 2D, 3D and composable shaders
 * API docs reorganization
 * Add tutorials 20, 21 and 22 for 3D
+
+## 0.11.1
+* Add Slider collection
+* Add toggle switch collection
+* Add matrix uniform to gl primitive
+* Change OBJ_CameraControl.scene to OBJ_CameraControl.controlScene
+* Add 3D Electric Field example
+

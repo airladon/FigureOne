@@ -202,7 +202,7 @@ export type OBJ_Figure = {
  * <body>
  *     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
  *     </div>
- *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.11.0/figureone.min.js'></script>
+ *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.11.1/figureone.min.js'></script>
  *     <script type="text/javascript" src='./index.js'></script>
  * </body>
  * </html>
@@ -1820,10 +1820,22 @@ class Figure {
 
 
     let element;
+    let backCameraControl;
     element = this.elements.getSelectionFromBorders(glPoint);
-    if (element == null) {
+    if (
+      element != null
+      && element._custom != null
+      && element._custom.cameraControlBack
+    ) {
+      backCameraControl = element;
+    }
+    if (element == null || backCameraControl) {
       element = this.getSelectionFromDraw(glPoint);
     }
+    if (element == null && backCameraControl) {
+      element = backCameraControl;
+    }
+
     if (element == null) {
       return false;
     }
@@ -2006,6 +2018,9 @@ class Figure {
     this.originalScalePoint = null;
     this.isTouchDown = false;
     this.beingMovedElement = null;
+    if (this.beingTouchedElement != null) {
+      this.beingTouchedElement.notifications.publish('touchUp');
+    }
     this.beingTouchedElement = null;
   }
 
@@ -2585,7 +2600,7 @@ class Figure {
       [0, 1, 0, 1],
       [1, 0, 0, 1],
       [1, 0.5, 0, 1],
-      [0, 0, 0, 1],
+      // [0, 0, 0, 1],
     ],
   ) {
     this.showBorders('touchBorder', element, colors);
@@ -2614,7 +2629,7 @@ class Figure {
       [0, 1, 0, 1],
       [1, 0, 0, 1],
       [1, 0.5, 0, 1],
-      [0, 0, 0, 1],
+      // [0, 0, 0, 1],
     ],
   ) {
     let elements = [];
@@ -2631,12 +2646,10 @@ class Figure {
     let colorIndex = 0;
     for (let i = 0; i < elements.length; i += 1) {
       const e = elements[i];
-      if (e.drawingObject != null && e.drawBorderBuffer == null) {
-        // eslint-disable-next-line no-continue
-        continue;
-      } // $FlowFixMe
+
+      // $FlowFixMe
       const borderPoints = e.getBorder('figure', border);
-      if (borderPoints[0].length > 0) {
+      if (borderPoints.length > 0 && borderPoints[0].length > 0) {
         for (let j = 0; j < borderPoints.length; j += 1) {
           const name = `__${border}${i}${j}`;
           const el = this.get(name);
@@ -2651,7 +2664,8 @@ class Figure {
                 width: 0.01,
                 color: colors[colorIndex % colors.length],
                 dash: [0.02, 0.02],
-                close: true,
+                close: true, // $FlowFixMe
+                scene: e.scene,
               },
             });
           }

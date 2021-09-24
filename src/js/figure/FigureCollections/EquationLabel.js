@@ -101,7 +101,9 @@ export default class EquationLabel {
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const labelTextOrEquation = optionsToUse.label;
-    const { color, scale, position } = optionsToUse;
+    const {
+      color, scale, position, font,
+    } = optionsToUse;
     // const { form } = optionsToUse;
     const { yAlign, xAlign } = optionsToUse;
     let eqn;
@@ -116,6 +118,8 @@ export default class EquationLabel {
             yAlign,
           },
         },
+        font,
+        textFont: font,
         scale,
         forms: {
           base: ['base'],

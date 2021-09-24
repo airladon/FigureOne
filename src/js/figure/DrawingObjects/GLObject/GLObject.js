@@ -537,8 +537,11 @@ class GLObject extends DrawingObject {
   /**
    * Add a uniform.
    *
+   * Length 16 corresponds to a 4x4 matrix and can only be
+   * `'FLOAT_VECTOR'` type.
+   *
    * @param {string} uniformName The variable name used in the shader
-   * @param {1 | 2 | 3 | 4} length (`1`) number of values in uniform
+   * @param {1 | 2 | 3 | 4 | 16} length (`1`) number of values in uniform
    * @param {'FLOAT' | 'FLOAT_VECTOR' | 'INT' | 'INT_VECTOR'} type type of
    * value. Use '_VECTOR' suffix if using vector methods on the uniform in the
    * shader (`'FLOAT'`).
@@ -547,13 +550,17 @@ class GLObject extends DrawingObject {
    */
   addUniform(
     uniformName: string,
-    length: 1 | 2 | 3 | 4 = 1,
+    length: 1 | 2 | 3 | 4 | 16 = 1,
     type: TypeGLUniform = 'FLOAT',
     initialValue: number | Array<number> | null = null,
   ) {
+    let typeToUse = type;
+    if (length === 16) {
+      typeToUse = 'FLOAT_VECTOR';
+    }
     this.uniforms[uniformName] = {
       value: Array(length).fill(0), // $FlowFixMe
-      method: this[`uploadUniform${length.toString()}${type[0].toLowerCase()}${type.endsWith('VECTOR') ? 'v' : ''}`].bind(this),
+      method: this[`uploadUniform${length.toString()}${typeToUse[0].toLowerCase()}${typeToUse.endsWith('VECTOR') ? 'v' : ''}`].bind(this),
     };
     if (initialValue != null) {
       this.updateUniform(uniformName, initialValue);
@@ -609,6 +616,17 @@ class GLObject extends DrawingObject {
   uploadUniform4iv(location: WebGLUniformLocation, name: string) {
     this.gl.uniform4iv(location, new Int32Array(this.uniforms[name].value));
   }
+
+  uploadUniform16fv(location: WebGLUniformLocation, name: string) {
+    // this.gl.uniformMatrix4fv(location, this.uniforms[name].value);
+    // $FlowFixMe
+    this.gl.uniformMatrix4fv(
+      location,
+      false,  // $FlowFixMe
+      m3.transpose(this.uniforms[name].value),
+    );
+  }
+
 
   uploadUniform1i(location: WebGLUniformLocation, name: string) {
     this.gl.uniform1i(location, this.uniforms[name].value[0]);

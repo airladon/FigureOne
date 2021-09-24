@@ -28,7 +28,7 @@ The library used to draw interactive slides at <a href="https://www.thisiget.com
 Load the FigureOne library into your HTML file:
 
 ```html
-<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.11.0/figureone.min.js'></script>
+<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.11.1/figureone.min.js'></script>
 ```
 
 Create a `div` element to attach the figure to:
@@ -161,6 +161,14 @@ See this example hosted [here](https://airladon.github.io/FigureOne/examples/Ele
 Demonstrator of how shaders can be used to animate over 1000 elements simultaneously and still get excellent performance on low end clients.
 
 ![](docs/examples/Electric%20Field/example.gif)
+
+## **[3D Electric Field](3D%20Electric%20Field)**
+
+See this example hosted [here](https://airladon.github.io/FigureOne/examples/3D%20Electric%20Field/index.html).
+
+Visualize and interact with 3D figures.
+
+![](docs/examples/3D%20Electric%20Field/example.gif)
 
 ## NPM Package
 
