@@ -256,17 +256,19 @@ describe('Animationa and Movement', () => {
       test('pulse thick', () => {
         const draw = jest.fn();
         element.drawingObject.drawWithTransformMatrix = draw;
+        figure.setManualFrames();
         figure.mock.timeStep(0);
         expect(draw.mock.calls).toHaveLength(1);
         element.pulse({
           duration: 1, scale: 1.2, min: 0.8, num: 5,
         });
-        // element.setupDraw(identity, 0.0);
-        figure.mock.timeStep(0);
-        // element.draw(0.0);
-        // element.setupDraw(identity, 0.5);
-        figure.mock.timeStep(0.5);
-        // element.draw(0.5);
+
+        figure.frame(0);
+        figure.timeKeeper.draw();
+
+        figure.frame(0.5);
+        figure.timeKeeper.draw();
+
         // 5 lines x 2 draws + 1 draw before pulse
         expect(draw.mock.calls).toHaveLength(11);
 

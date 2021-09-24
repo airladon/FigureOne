@@ -15,7 +15,12 @@ describe('Animate To State', () => {
   // let p3;
   let c;
   let drawCallback;
+  afterEach(() => {
+    window.requestAnimationFrame.mockRestore();
+  });
   beforeEach(() => {
+    jest.useFakeTimers();
+    jest.spyOn(window, 'requestAnimationFrame').mockImplementation(() => {});
     figure = makeFigure();
     figure.add([
       {

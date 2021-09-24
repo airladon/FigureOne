@@ -11,9 +11,14 @@ describe('Figure Element State', () => {
   let figure;
   // let now;
   beforeEach(() => {
+    jest.useFakeTimers();
+    jest.spyOn(window, 'requestAnimationFrame').mockImplementation(() => {});
     figure = makeFigure();
     elem1 = figure.primitives.polygon();
     figure.elements.add('elem1', elem1);
+  });
+  afterEach(() => {
+    window.requestAnimationFrame.mockRestore();
   });
   test('Transform Callback', () => {
     const setTransformCallback = jest.fn(() => {});

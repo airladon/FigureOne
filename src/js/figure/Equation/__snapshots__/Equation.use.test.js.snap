@@ -41,7 +41,19 @@ FigureElementPrimitive {
       "manual": false,
       "nextDrawQueue": Array [],
       "nowTime": 3000,
-      "requestNextAnimationFrame": [Function],
+      "requestNextAnimationFrame": [MockFunction] {
+        "calls": Array [
+          Array [
+            [Function],
+          ],
+        ],
+        "results": Array [
+          Object {
+            "type": "return",
+            "value": undefined,
+          },
+        ],
+      },
       "speed": 1,
       "syncNowTimeout": 100,
       "timeoutId": null,
@@ -824,7 +836,7 @@ FigureElementPrimitive {
     },
     "timeKeeper": TimeKeeper {
       "animateOnFrame": false,
-      "animationId": 20,
+      "animationId": undefined,
       "drawQueue": Array [],
       "idCounter": 0,
       "lastDrawTime": null,
@@ -832,7 +844,19 @@ FigureElementPrimitive {
       "manual": false,
       "nextDrawQueue": Array [],
       "nowTime": 3000,
-      "requestNextAnimationFrame": [Function],
+      "requestNextAnimationFrame": [MockFunction] {
+        "calls": Array [
+          Array [
+            [Function],
+          ],
+        ],
+        "results": Array [
+          Object {
+            "type": "return",
+            "value": undefined,
+          },
+        ],
+      },
       "speed": 1,
       "syncNowTimeout": 100,
       "timeoutId": null,
@@ -873,7 +897,7 @@ FigureElementPrimitive {
   },
   "timeKeeper": TimeKeeper {
     "animateOnFrame": false,
-    "animationId": 20,
+    "animationId": undefined,
     "drawQueue": Array [],
     "idCounter": 0,
     "lastDrawTime": null,
@@ -881,7 +905,19 @@ FigureElementPrimitive {
     "manual": false,
     "nextDrawQueue": Array [],
     "nowTime": 3000,
-    "requestNextAnimationFrame": [Function],
+    "requestNextAnimationFrame": [MockFunction] {
+      "calls": Array [
+        Array [
+          [Function],
+        ],
+      ],
+      "results": Array [
+        Object {
+          "type": "return",
+          "value": undefined,
+        },
+      ],
+    },
     "speed": 1,
     "syncNowTimeout": 100,
     "timeoutId": null,

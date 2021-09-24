@@ -60,7 +60,12 @@ describe('Different ways to make an equation', () => {
   let color2;
   let ways;
   let clean;
+  afterEach(() => {
+    window.requestAnimationFrame.mockRestore();
+  });
   beforeEach(() => {
+    jest.useFakeTimers();
+    jest.spyOn(window, 'requestAnimationFrame').mockImplementation(() => {});
     clean = (formName) => {
       cleanForm(eqn.eqn.forms[formName]);
       return eqn.eqn.forms[formName];
