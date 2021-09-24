@@ -5,7 +5,8 @@ const path = require('path');
 // const TerserPlugin = require("terser-webpack-plugin");
 // eslint-disable-next-line import/no-unresolved
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const TerserPlugin = require("terser-webpack-plugin");
+// eslint-disable-next-line import/no-extraneous-dependencies
+const TerserPlugin = require('terser-webpack-plugin');
 
 const buildPath = path.resolve(__dirname, 'package');
 
@@ -60,7 +61,7 @@ module.exports = (env) => {
 
   console.log(`Building for ${e.name}`); // eslint-disable-line no-console
 
-  let uglify = '';
+  // let uglify = '';
 
   // if (e.uglify) {
   //   uglify = new UglifyJsPlugin({
