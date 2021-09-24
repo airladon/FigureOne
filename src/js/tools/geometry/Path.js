@@ -19,7 +19,7 @@ function linearPath(
   start: Point,
   delta: Point,
   percent: number,
-) {
+): Point {
   return start.add(delta.x * percent, delta.y * percent, delta.z * percent);
 }
 

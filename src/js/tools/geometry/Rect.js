@@ -62,11 +62,12 @@ class Rect {
   /**
    * Return a duplicate rectangle object
    */
-  _dup() {
+  _dup(): Rect {
     return new Rect(this.left, this.bottom, this.width, this.height);
   }
 
-  _state(options: { precision: number}) {
+  // eslint-disable-next-line no-use-before-define
+  _state(options: { precision: number}): TypeF1DefRect {
     // const { precision } = options;
     const precision = getPrecision(options);
     return {
@@ -91,7 +92,7 @@ class Rect {
    * // check if point is within the rectangle (will return `true`)
    * const result = r.isPointInside([0, 1]);
    */
-  isPointInside(point: TypeParsablePoint, precision: number = 8) {
+  isPointInside(point: TypeParsablePoint, precision: number = 8): boolean {
     const p = getPoint(point).round(precision);
     const top = roundNum(this.top, precision);
     const bottom = roundNum(this.bottom, precision);
@@ -108,7 +109,7 @@ class Rect {
    * @param {number} precision precision to test
    * @return {Rect}
    */
-  round(precision: number = 8) {
+  round(precision: number = 8): Rect {
     const newRect = new Rect(
       roundNum(this.left, precision), roundNum(this.bottom, precision),
       roundNum(this.width, precision), roundNum(this.height, precision),
@@ -126,7 +127,7 @@ class Rect {
    * @param {TypeParsablePoint} point
    * @return {Point | null} intersect
    */
-  intersectsWith(point: TypeParsablePoint) {
+  intersectsWith(point: TypeParsablePoint): ?Point {
     const p = getPoint(point);
     const center = this.center();
     const centerToP = new Line(center, p); // $FlowFixMe
@@ -157,7 +158,7 @@ class Rect {
    * @param {TypeParsableLine} line
    * @return {Array<Point>}
    */
-  intersectsWithLine(line: TypeParsableLine) {
+  intersectsWithLine(line: TypeParsableLine): Array<any | void | Point> {
     const l = getLine(line);
     const left = new Line([this.left, this.bottom], [this.left, this.top]);
     const top = new Line([this.left, this.top], [this.right, this.top]);

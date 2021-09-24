@@ -1324,7 +1324,7 @@ class Transform {
  * @param {any} value
  * @return {boolean}
  */
-function isParsableTransform(value: any) {
+function isParsableTransform(value: any): boolean {
   if (value instanceof Transform) {
     return true;
   }
@@ -1535,7 +1535,7 @@ function parseDirectionVector(
 function directionToAxisAngle(
   direction: TypeParsablePoint | TypeTransformDirection,
   axisIfCollinear: TypeParsablePoint = [0, 0, 1],
-) {
+): {|angle: number, axis: Point|} {
   const d = parseDirectionVector(direction);
   const [axis, angle] = m3.directionToAxisAngle(
     d.toArray(),
@@ -1560,7 +1560,7 @@ function angleFromVectors(
   fromVector: TypeParsablePoint | TypeTransformDirection,
   toVector: TypeParsablePoint | TypeTransformDirection,
   axisIfCollinear: TypeParsablePoint | null = null,
-) {
+): {|angle: number, axis: Point|} {
   const from = parseDirectionVector(fromVector);
   const to = parseDirectionVector(toVector);
 

@@ -1,7 +1,7 @@
 // @flow
 import { Point } from './Point';
 
-function deg(angle: number) {
+function deg(angle: number): number {
   return angle * 180 / Math.PI;
 }
 
@@ -22,7 +22,7 @@ function deg(angle: number) {
  * console.log(d3);
  * // 0.2
  */
-function minAngleDiff(angle1: number, angle2: number) {
+function minAngleDiff(angle1: number, angle2: number): number {
   if (angle1 === angle2) {
     return 0;
   }
@@ -50,7 +50,7 @@ function minAngleDiff(angle1: number, angle2: number) {
 function clipAngle(
   angleToClip: number,
   clipTo: '0to360' | '-180to180' | null | '-360to360' | '-360to0',
-) {
+): number {
   if (clipTo === null) {
     return angleToClip;
   }
@@ -86,11 +86,11 @@ function clipAngle(
 /**
  * Normalize angle to between 0 and 2π.
  */
-function normAngle(angle: number) {
+function normAngle(angle: number): number {
   return clipAngle(angle, '0to360');
 }
 
-function normAngleTo90(angle: number) {
+function normAngleTo90(angle: number): number {
   let newAngle = normAngle(angle);
   if (newAngle > Math.PI / 2 && newAngle < Math.PI) {
     newAngle += Math.PI;
@@ -127,7 +127,7 @@ function getDeltaAngle(
   startAngle: number,
   targetAngle: number,
   rotDirection: TypeRotationDirection = 0,
-) {
+): number {
   const start = normAngle(startAngle);
   const target = normAngle(targetAngle);
   let dir = rotDirection;
@@ -203,7 +203,7 @@ function getDeltaAngle3D(
  * console.log(p2);
  * // 4.71238898038469
  */
-function threePointAngle(p2: Point, p1: Point, p3: Point) {
+function threePointAngle(p2: Point, p1: Point, p3: Point): number {
   const r12 = p2.sub(p1);
   const r13 = p3.sub(p1);
   // const p12 = distance(p1, p2);
@@ -232,7 +232,7 @@ function threePointAngle(p2: Point, p1: Point, p3: Point) {
  * console.log(p2);
  * // -1.5707963267948966
  */
-function threePointAngleMin(p2: Point, p1: Point, p3: Point) {
+function threePointAngleMin(p2: Point, p1: Point, p3: Point): number {
   const a12 = clipAngle(Math.atan2(p2.y - p1.y, p2.x - p1.x), '0to360');
   const a13 = clipAngle(Math.atan2(p3.y - p1.y, p3.x - p1.x), '0to360');
   let delta = a13 - a12;

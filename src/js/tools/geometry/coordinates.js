@@ -33,7 +33,9 @@ function polarToRect(mag: number, angle: number, theta: number | null = null) {
 * console.log(p);
 * // {mag: 1, angle: 1.5707963267948966}
  */
-function rectToPolar(x: number | Point, y: number = 0, z: number = 0) {
+function rectToPolar(x: number | Point, y: number = 0, z: number = 0): {
+  angle: number, mag: number, phi: number, r: number, theta: number,
+} {
   let rect;
   if (typeof x === 'number') {
     rect = new Point(x, y, z);

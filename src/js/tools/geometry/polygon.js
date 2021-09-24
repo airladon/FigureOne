@@ -9,7 +9,7 @@ function isLeft(p0: Point, p1: Point, p2: Point) {
   );
 }
 
-function isPointInPolygon(point: Point, polygonCorners: Array<Point>) {
+function isPointInPolygon(point: Point, polygonCorners: Array<Point>): boolean {
   let windingNumber = 0;
   let n = polygonCorners.length - 1;
   const v = polygonCorners.slice();
@@ -44,7 +44,7 @@ function isPointInPolygon(point: Point, polygonCorners: Array<Point>) {
   return true;
 }
 
-function isPointOnPolygon(point: Point, polygonCorners: Array<Point>) {
+function isPointOnPolygon(point: Point, polygonCorners: Array<Point>): boolean {
   let popLastPoint = false;
   const p = point;
   let n = polygonCorners.length - 1;   // Number of sides

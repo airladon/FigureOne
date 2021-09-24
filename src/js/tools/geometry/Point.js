@@ -103,7 +103,7 @@ function parsePoint(pIn: TypeParsablePoint): Point {
 /**
  * Test is a point is parsable
  */
-function isParsablePoint(pIn: any) {
+function isParsablePoint(pIn: any): boolean {
   try {
     parsePoint(pIn);
   } catch {
