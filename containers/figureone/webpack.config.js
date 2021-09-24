@@ -1,8 +1,12 @@
 const path = require('path');
 // eslint-disable-next-line import/no-unresolved
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+// eslint-disable-next-line import/no-unresolved
+// const TerserPlugin = require("terser-webpack-plugin");
 // eslint-disable-next-line import/no-unresolved
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const TerserPlugin = require('terser-webpack-plugin');
 
 const buildPath = path.resolve(__dirname, 'package');
 
@@ -57,39 +61,39 @@ module.exports = (env) => {
 
   console.log(`Building for ${e.name}`); // eslint-disable-line no-console
 
-  let uglify = '';
+  // let uglify = '';
 
-  if (e.uglify) {
-    uglify = new UglifyJsPlugin({
-      uglifyOptions: {
-        ecma: 8,
-        warnings: false,
-        // parse: { ...options },
-        // compress: { ...options },
-        // mangle: {
-        //   ...options,
-        //   properties: {
-        //     // mangle property options
-        //   },
-        // },
-        output: {
-          comments: false,
-          beautify: false,
-          // ...options
-        },
-        compress: {
-          passes: 3,
-        },
-        toplevel: false,
-        nameCache: null,
-        ie8: false,
-        keep_classnames: undefined,
-        keep_fnames: false,
-        safari10: false,
-      },
-      sourceMap: e.uglifySourceMap,
-    });
-  }
+  // if (e.uglify) {
+  //   uglify = new UglifyJsPlugin({
+  //     uglifyOptions: {
+  //       ecma: 8,
+  //       warnings: false,
+  //       // parse: { ...options },
+  //       // compress: { ...options },
+  //       // mangle: {
+  //       //   ...options,
+  //       //   properties: {
+  //       //     // mangle property options
+  //       //   },
+  //       // },
+  //       output: {
+  //         comments: false,
+  //         beautify: false,
+  //         // ...options
+  //       },
+  //       compress: {
+  //         passes: 3,
+  //       },
+  //       toplevel: false,
+  //       nameCache: null,
+  //       ie8: false,
+  //       keep_classnames: undefined,
+  //       keep_fnames: false,
+  //       safari10: false,
+  //     },
+  //     sourceMap: e.uglifySourceMap,
+  //   });
+  // }
 
   let toClean = true;
   let clean = '';
@@ -102,7 +106,7 @@ module.exports = (env) => {
 
   // Make the plugin array filtering out those plugins that are null
   const pluginArray = [
-    uglify,
+    // uglify,
     clean].filter(elem => elem !== '');
 
   let externals = {};
@@ -124,6 +128,21 @@ module.exports = (env) => {
       umdNamedDefine: true,
     },
     externals,
+    optimization: {
+      minimize: true,
+      minimizer: [
+        new TerserPlugin({
+          // minify: TerserPlugin.uglifyJsMinify,
+          terserOptions: {
+            compress: true,
+            format: {
+              comments: false,
+            },
+          },
+          extractComments: false,
+        }),
+      ],
+    },
     module: {
       rules: [
         {

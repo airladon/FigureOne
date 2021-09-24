@@ -1,5 +1,5 @@
 # Development environment for FigureOne:
-FROM airladon/pynode:python3.9.5-node16.1.0-npm7.12.0
+FROM airladon/pynode:python3.9.5-node16.10.0-npm7.24.1
 
 # ## General ##
 WORKDIR /opt/app
