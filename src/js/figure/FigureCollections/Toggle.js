@@ -406,6 +406,22 @@ class CollectionsToggle extends FigureElementCollection {
   }
 
   /**
+   * `true` if switch is on.
+   * @return {boolean}
+   */
+  isOn() {
+    return this._custom.state;
+  }
+
+  /**
+   * `true` if switch is off.
+   * @return {boolean}
+   */
+  isOff() {
+    return !this._custom.state;
+  }
+
+  /**
    * Toggle switch.
    */
   toggle() {

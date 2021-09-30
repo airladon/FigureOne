@@ -101,13 +101,13 @@ export type OBJ_ButtonState = {
  * @property {OBJ_CurvedCorner} [corner] button corner
  * @property {null | OBJ_LineStyleSimple} [line] button outline - use `null` to
  * remove the default line
- * @property {OBJ_ButtonLabel} [label]
+ * @property {OBJ_ButtonLabel} [label] button label
  * @property {TypeColor} [colorLine]
  * @property {TypeColor} [colorFill]
  * @property {TypeColor} [colorLabel]
- * @property {Array<OBJ_ButtonState | string>} [states]
  * @property {OBJ_ButtonColorState>} [touchDown] set colors between a touch
  * down and touch up
+ * @property {Array<OBJ_ButtonState | string>} [states]
  *
  * @extends OBJ_Collection
  */
@@ -120,8 +120,8 @@ export type COL_Button = {
   colorLine?: TypeColor,
   colorFill?: TypeColor,
   colorLabel?: TypeColor,
-  states?: Array<OBJ_ButtonState | string>,
   touchDown?: OBJ_ButtonColorState,
+  states?: Array<OBJ_ButtonState | string>,
 } & OBJ_Collection;
 /* eslint-enable max-len */
 
