@@ -104,3 +104,9 @@ Demonstrator of how shaders can be used to animate over 1000 elements simultaneo
 
 ![](Electric%20Field/example.gif)
 
+## **[3D Electric Field](3D%20Electric%20Field)**
+
+Demonstration of 3D drawing and interactivity.
+
+![](3D%20Electric%20Field/example.gif)
+
