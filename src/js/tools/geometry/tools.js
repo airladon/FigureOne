@@ -1,7 +1,7 @@
 // @flow
 import { Point } from './Point';
 
-function pointsToNumbers2(points: Array<Point>) {
+function pointsToNumbers2(points: Array<Point>): Array<number> {
   const list = Array(points.length * 2);
   for (let i = 0; i < points.length; i += 1) {
     list[i * 2] = points[i].x;
@@ -10,7 +10,7 @@ function pointsToNumbers2(points: Array<Point>) {
   return list;
 }
 
-function pointsToNumbers(points: Array<Point>, dimension: 2 | 3 = 3) {
+function pointsToNumbers(points: Array<Point>, dimension: 2 | 3 = 3): Array<number> {
   if (dimension === 2) {
     return pointsToNumbers2(points);
   }
@@ -23,7 +23,7 @@ function pointsToNumbers(points: Array<Point>, dimension: 2 | 3 = 3) {
   return list;
 }
 
-function numbersToPoints2(numbers: Array<number>) {
+function numbersToPoints2(numbers: Array<number>): Array<Point> {
   const points = Array(numbers.length / 2);
   for (let i = 0; i < points.length; i += 1) {
     points[i] = new Point(numbers[i * 2], numbers[i * 2 + 1]);
@@ -31,7 +31,7 @@ function numbersToPoints2(numbers: Array<number>) {
   return points;
 }
 
-function numbersToPoints(numbers: Array<number>, dimension: 2 | 3 = 3) {
+function numbersToPoints(numbers: Array<number>, dimension: 2 | 3 = 3): Array<Point> {
   if (dimension === 2) {
     return numbersToPoints2(numbers);
   }
@@ -49,18 +49,18 @@ function numbersToPoints(numbers: Array<number>, dimension: 2 | 3 = 3) {
 function toNumbers(
   pointsOrNumbers: Array<Point> | Array<Array<number>> | Array<number>,
   dimension: 2 | 3 = 3,
-) {
+): Array<number> {
   if (pointsOrNumbers.length === 0) {
     return [];
   }
-  if (typeof pointsOrNumbers[0] === 'number') {
+  if (typeof pointsOrNumbers[0] === 'number') { // $FlowFixMe
     return pointsOrNumbers;
   }
   if (Array.isArray(pointsOrNumbers[0])) {
     const out = [];
     for (let i = 0; i < pointsOrNumbers.length; i += 1) {
       out.push(...pointsOrNumbers);
-    }
+    } // $FlowFixMe
     return out;
   } // $FlowFixMe
   return pointsToNumbers(pointsOrNumbers, dimension);

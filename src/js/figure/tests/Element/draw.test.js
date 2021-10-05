@@ -16,6 +16,8 @@ describe('Element Drawing', () => {
   let a;
 
   beforeEach(() => {
+    jest.useFakeTimers();
+    jest.spyOn(window, 'requestAnimationFrame').mockImplementation(() => {});
     figure = makeFigure();
     figure.add([
       {
@@ -25,6 +27,9 @@ describe('Element Drawing', () => {
     ]);
     a = figure.elements._a;
     figure.webglLow.gl.uniformMatrix4fv.mockClear();
+  });
+  afterEach(() => {
+    window.requestAnimationFrame.mockRestore();
   });
   test('Simple', () => {
     a.setPosition(1, 1);

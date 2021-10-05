@@ -178,7 +178,19 @@ export default class Scene {
   widthFar: number;
 
   // eslint-disable-next-line class-methods-use-this
-  defaultOptions() {
+  defaultOptions(): {|
+  aspectRatio: number,
+  bottom: number,
+  camera: {|lookAt: Array<number>, position: Array<number>, up: Array<number>|},
+  far: number,
+  fieldOfView: number,
+  left: number,
+  light: {|ambient: number, directional: Array<number>, point: Array<number>|},
+  near: number,
+  right: number,
+  style: '2D' | 'orthographic' | 'perspective',
+  top: number,
+  |} {
     return {
       style: '2D',
       left: -1,
@@ -444,7 +456,7 @@ export default class Scene {
   More detailed information breaking down the perspective matrix
   https://stackoverflow.com/questions/28286057/trying-to-understand-the-math-behind-the-perspective-matrix-in-webgl/28301213#28301213
   */
-  glToFigure(glPoint: TypeParsablePoint) {
+  glToFigure(glPoint: TypeParsablePoint): Point {
     const clip = getPoint(glPoint);
     if (this.style === '2D' || this.style === 'orthographic') {
       return getPoint(clip).transformBy(this.inverseViewProjectionMatrix);

@@ -246,7 +246,7 @@ class Line {
     // this.setupLine();
   }
 
-  _state(options: { precision: number }) {
+  _state(options: { precision: number }): TypeF1DefLine {
     // const { precision } = options;
     const precision = getPrecision(options);
     return {
@@ -270,18 +270,18 @@ class Line {
   /**
    * Return the spherical theta angle of p2 relative to p1.
    */
-  theta() {
+  theta(): number {
     return this.p2.sub(this.p1).toSpherical().theta;
   }
 
   /**
    * Return the spherical phi angle of p2 relative to p1.
    */
-  phi() {
+  phi(): number {
     return this.p2.sub(this.p1).toSpherical().phi;
   }
 
-  _dup() {
+  _dup(): Line {
     return new Line(this.p1, this.p2, this.ends);
   }
 
@@ -309,7 +309,7 @@ class Line {
   /**
    * Get the vector of the line (p2 - p1).
    */
-  vector() {
+  vector(): Point {
     return this.p2.sub(this.p1);
   }
 
@@ -317,7 +317,7 @@ class Line {
    * Get p1 or p2
    * @return {Point}
    */
-  getPoint(index: 1 | 2 = 1) {
+  getPoint(index: 1 | 2 = 1): Point {
     if (index === 2) {
       return this.p2;
     }
@@ -327,7 +327,7 @@ class Line {
   /**
    * Return a line with swapped p1 and p2.
    */
-  reverse() {
+  reverse(): Line {
     return new Line(this.p2, this.p1, this.ends);
   }
 
@@ -347,7 +347,7 @@ class Line {
    * Get the 2D angle of the line from p1 to p2
    * @return {number}
    */
-  angle() {
+  angle(): number {
     return Math.atan2(this.p2.y - this.p1.y, this.p2.x - this.p1.x);
   }
 
@@ -355,7 +355,7 @@ class Line {
    * Return a duplicate line with values rounded to `precision`
    * @return {Line}
    */
-  round(precision?: number = 8) {
+  round(precision?: number = 8): Line {
     return new Line(this.p1.round(precision), this.p2.round(precision), this.ends);
   }
 
@@ -365,7 +365,7 @@ class Line {
    * the line.
    * @return {number}
    */
-  length() {
+  length(): number {
     const p = this.p2.sub(this.p1);
     return Math.sqrt(p.x * p.x + p.y * p.y + p.z * p.z);
   }
@@ -375,7 +375,7 @@ class Line {
    * Return the midpoint between p1 and p2.
    * @return {Point}
    */
-  midPoint() {
+  midPoint(): Point {
     return this.pointAtPercent(0.5);
   }
 
@@ -383,7 +383,7 @@ class Line {
    * Return the point along some percent of the distance between p1 and p2.
    * @return {Point}
    */
-  pointAtPercent(percent: number) {
+  pointAtPercent(percent: number): Point {
     const length = this.length();
     const n = this.p2.sub(this.p1).normalize();
     return this.p1.add(n.scale(length * percent));
@@ -393,7 +393,7 @@ class Line {
    * Return the point along the line at some length from p1
    * @return {Point}
    */
-  pointAtLength(length: number) {
+  pointAtLength(length: number): Point {
     return this.pointAtPercent(length / this.length());
   }
   /* eslint-enable comma-dangle */
@@ -402,7 +402,7 @@ class Line {
    * `true` if `point` is along the line extended to infinity on both ends
    * @return {boolean}
    */
-  hasPointAlong(point: TypeParsablePoint, precision?: number = 8) {
+  hasPointAlong(point: TypeParsablePoint, precision?: number = 8): boolean {
     if (this.p1.isEqualTo(point, precision)) {
       return true;
     }
@@ -422,7 +422,7 @@ class Line {
    * defined ends.
    * @return {boolean}
    */
-  hasPointOn(point: TypeParsablePoint, precision?: number = 8) {
+  hasPointOn(point: TypeParsablePoint, precision?: number = 8): boolean {
     const p = getPoint(point);
     if (this.ends === 0) {
       return this.hasPointAlong(p, precision);
@@ -451,7 +451,7 @@ class Line {
    * Perpendicular distance from `point` to line
    * @return {number}
    */
-  distanceToPoint(point: TypeParsablePoint) {
+  distanceToPoint(point: TypeParsablePoint): number {
     // Equation from https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
     const n = this.unitVector();
     const p = getPoint(point);
@@ -463,7 +463,7 @@ class Line {
    * `true` if `line` is parrallel to this line.
    * @return {boolean}
    */
-  isParallelTo(line: TypeParsableLine, precision: number = 8) {
+  isParallelTo(line: TypeParsableLine, precision: number = 8): boolean {
     const l = getLine(line);
     const n = this.unitVector();
     const m = l.unitVector();
@@ -478,7 +478,7 @@ class Line {
    * `true` if two lines are equal to within some rounding `precision`.
    * @return {boolean}
    */
-  isEqualTo(line2: TypeParsableLine, precision: number = 8, delta: boolean = false) {
+  isEqualTo(line2: TypeParsableLine, precision: number = 8, delta: boolean = false): boolean {
     const l1 = this;
     const l2 = getLine(line2);
     if (l1.ends !== l2.ends) {
@@ -525,7 +525,7 @@ class Line {
    * `true` if this line is within `line2`
    * @return {boolean}
    */
-  hasLineWithin(line: TypeParsableLine, precision: number = 8) {
+  hasLineWithin(line: TypeParsableLine, precision: number = 8): boolean {
     return getLine(line).isWithinLine(this, precision);
   }
 
@@ -533,11 +533,11 @@ class Line {
    * `true` if this line is along the infinite length of `line2`
    * @return {boolean}
    */
-  isAlongLine(line: TypeParsableLine, precision: number = 8) {
+  isAlongLine(line: TypeParsableLine, precision: number = 8): boolean {
     return this.isCollinearTo(line, precision);
   }
 
-  isCollinearTo(line: TypeParsableLine, precision: number = 8) {
+  isCollinearTo(line: TypeParsableLine, precision: number = 8): boolean {
     const l = getLine(line);
     const n = this.unitVector();
     const m = l.unitVector();
@@ -552,7 +552,7 @@ class Line {
    * `true` if this line is contained within `line2`
    * @return {boolean}
    */
-  isWithinLine(line: TypeParsableLine, precision: number = 8) {
+  isWithinLine(line: TypeParsableLine, precision: number = 8): boolean {
     const l1 = this.round(precision);
     const l2 = getLine(line).round(precision);
     if (!l1.isAlongLine(l2, precision)) {
@@ -593,7 +593,7 @@ class Line {
     direction: TypeParsablePoint | 'left' | 'right' | 'top' | 'bottom' | 'positive' | 'negative',
     dist: number | null = null,
     perpendicular: boolean = true,
-  ) {
+  ): Line {
     if (typeof direction === 'string') {  // $FlowFixMe
       return this.offset2D(direction, dist);
     }
@@ -638,7 +638,7 @@ class Line {
   offset2D(
     direction: 'left' | 'right' | 'top' | 'bottom' | 'positive' | 'negative',
     dist: number,
-  ) {
+  ): Line {
     let normalizedAngle = this.angle();
     if (normalizedAngle >= Math.PI) {
       normalizedAngle -= Math.PI;
@@ -674,7 +674,7 @@ class Line {
   /**
    * Perpendicular distance between two lines extended to infinity
    */
-  distanceToLine(line: TypeParsableLine, precision: number = 8) {
+  distanceToLine(line: TypeParsableLine, precision: number = 8): number {
     const l = getLine(line);
     const u1 = this.unitVector();
     const u2 = l.unitVector();
@@ -694,7 +694,7 @@ class Line {
    * The line from the projected point to the offline point will be
    * perpendicular to the line.
    */
-  pointProjection(p: TypeParsablePoint) {
+  pointProjection(p: TypeParsablePoint): Point {
     // https://en.wikipedia.org/wiki/Vector_projection#Vector_projection_2
     const a = getPoint(p).sub(this.p1);
     const b = this.vector();
@@ -832,7 +832,7 @@ class Line {
    * @param {number} precision precision to clip to (`8`)
    * @return {Point} clipped point
    */
-  clipPoint(point: TypeParsablePoint, precision: number = 8) {
+  clipPoint(point: TypeParsablePoint, precision: number = 8): Point {
     const p = getPoint(point);
     if (this.hasPointOn(p, precision)) {
       return p._dup();

@@ -22,6 +22,11 @@ describe('Seek', () => {
   let frameStep;
   let dissolveTester;
   beforeEach(() => {
+    // Disable requestAnimationFrame calling draw as it does so at a time
+    // interval and figure.mock.timeStep does it precisely
+    jest.useFakeTimers();
+    jest.spyOn(window, 'requestAnimationFrame').mockImplementation(() => {});
+
     figure = makeFigure();
     figure.timeKeeper.reset();
     jest.useFakeTimers();
@@ -154,6 +159,7 @@ describe('Seek', () => {
   });
   afterEach(() => {
     figure.timeKeeper.reset();
+    window.requestAnimationFrame.mockRestore();
   });
   test('Just playback', () => {
     // Note, the animation and pulse are starting on the frame after the desired

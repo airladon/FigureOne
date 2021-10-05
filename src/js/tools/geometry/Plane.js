@@ -89,7 +89,7 @@ function parsePlane(pIn: TypeParsablePlane): Plane {
  * Chech if input parameter can be parsed as a {@link Plane}.
  * @return {boolean}
  */
-function isParsablePlane(pIn: any) {
+function isParsablePlane(pIn: any): boolean {
   try {
     parsePlane(pIn);
   } catch {
@@ -421,7 +421,7 @@ function getNormal(
   p1OrPoints: TypeParsablePoint | [TypeParsablePoint, TypeParsablePoint, TypeParsablePoint],
   p2: null | TypeParsablePoint = null,
   p3: null | TypeParsablePoint = null,
-) { // $FlowFixMe
+): any { // $FlowFixMe
   let p = getPoints(p1OrPoints);
   if (p.length === 1 && p2 != null && p3 != null) {
     p = [p[0], getPoint(p2), getPoint(p3)];

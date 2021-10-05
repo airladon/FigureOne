@@ -1,4 +1,5 @@
 const path = require('path');
+/* eslint-disable camelcase */
 // eslint-disable-next-line import/no-unresolved
 // const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 // eslint-disable-next-line import/no-unresolved
@@ -135,8 +136,12 @@ module.exports = (env) => {
           // minify: TerserPlugin.uglifyJsMinify,
           terserOptions: {
             compress: true,
+            // output: {
+            //   ascii_only: true,
+            // },
             format: {
-              comments: false,
+              // comments: false,
+              ascii_only: true,
             },
           },
           extractComments: false,

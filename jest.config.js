@@ -12,4 +12,5 @@ module.exports = {
   testPathIgnorePatterns: ['/node_modules/', '\\.snap$', '<rootDir>/package/', 'package.json'],
   coverageDirectory: './reports',
   testEnvironment: 'jsdom',
+  timers: 'real',
 };

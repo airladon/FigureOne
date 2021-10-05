@@ -167,3 +167,5 @@ API cleanup
 * Change OBJ_CameraControl.scene to OBJ_CameraControl.controlScene
 * Add 3D Electric Field example
 
+## 0.11.2
+* Add `isOn` and `isOff` to toggle

@@ -15,6 +15,7 @@ describe('Figure Stop', () => {
   let preparingToStopCallback;
   beforeEach(() => {
     jest.useFakeTimers();
+    jest.spyOn(window, 'requestAnimationFrame').mockImplementation(() => {});
     figure = makeFigure();
     figure.timeKeeper.reset();
     figure.add([
@@ -35,6 +36,9 @@ describe('Figure Stop', () => {
     figure.notifications.add('preparingToStop', preparingToStopCallback);
     figure.initialize();
     figure.mock.timeStep(0);
+  });
+  afterEach(() => {
+    window.requestAnimationFrame.mockRestore();
   });
   describe('Animation', () => {
     let state;
