@@ -3,7 +3,7 @@ import WebGLInstance from './webgl/webgl';
 
 import {
   Point, Transform, Line, Rect,
-  getPoint,
+  getPoint, getRect,
 } from '../tools/g2';
 import Scene from '../tools/geometry/scene';
 import type { OBJ_Scene } from '../tools/geometry/scene';
@@ -1876,6 +1876,56 @@ class Figure {
     // const newCenter = mousePosition.scale(zoom / oldZoom);
     // this.zoom.cumOffset = this.zoom.cumOffset.add(this.zoom.position.sub(newCenter).scale(1 / zoom));
     this.notifications.publish('zoom', [this.zoom.mag]);
+  }
+
+  /**
+   * Change the position and scale of an element to simulate it zooming.
+   *
+   * Note, the element will stay in the same space it was previous, and
+   * therefore moving it will be moving it in the same space. 
+   *
+   * Often a better way to zoom an element (especially if more than one and
+   * interactivity is being used) is to zoom the scene the element(s) belong
+   * to.
+   *
+   * @param {FigureElement} element element to zoom
+   */
+  zoomElement(
+    element: FigureElement | string,
+    originalPosition: TypeParsablePoint,
+    scale: boolean = true,
+  ) {
+    let e = element;
+    if (typeof e === 'string') {
+      e = this.get(e);
+    }
+    if (e == null) {
+      throw new Error(`Cannot zoom a non FigureElement. ${element}`);
+    }
+    const o = getPoint(originalPosition);
+    element.setPosition(o.add(this.zoom.cumOffset).scale(this.zoom.mag));
+    if (scale) {
+      element.setScale(this.zoom.mag);
+    }
+  }
+
+  /**
+   * Changes a 2D scene to simulate zooming in and out
+   */
+  zoom2DScene(scene: Scene, original: TypeParsableRect) {
+    // Get original scene
+    const r = getRect(original);
+    const left = r.left / this.zoom.mag;
+    const bottom = r.bottom / this.zoom.mag;
+    const right = r.right / this.zoom.mag;
+    const top = r.top / this.zoom.mag;
+    scene.set2D({
+      left: left - this.zoom.cumOffset.x,
+      right: right - this.zoom.cumOffset.x,
+      bottom: bottom - this.zoom.cumOffset.y,
+      top: top - this.zoom.cumOffset.y,
+    });
+    this.animateNextFrame();
   }
 
   updateZoom(mag: number, zoomPosition: Point, distance: number = 0, angle: number = 0) {

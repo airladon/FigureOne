@@ -52,20 +52,25 @@ const plane = figure.add({
   ],
 });
 
+const s = new Fig.Scene({
+  left: -1, right: 1, bottom: -1, top: 1,
+});
 const polygon = figure.add({
   make: 'polygon',
   sides: 10,
   color: [1, 0, 0, 0.5],
   radius: 0.3,
   position: [0, -0.2],
+  scene: s,
+  move: true,
 });
 
 
 figure.notifications.add('zoom', (zoom) => {
   const z = figure.getZoom();
-  console.log(z.mag, z.offset.round(4).toArray(2), z.current.position.round(2).toArray(2));
-  polygon.setPosition(new Fig.Point(0, -0.2).add(z.offset).scale(z.mag));
-  polygon.setScale(z.mag);
+  // console.log(z.mag, z.offset.round(4).toArray(2), z.current.position.round(2).toArray(2));
+  figure.zoom2DScene(s, [-1, -1, 2, 2]);
+  // figure.zoomElement(polygon, [0, -0.2], false);
   plane.drawingObject.uniforms.u_zoom.value = [z.mag];
   plane.drawingObject.uniforms.u_offset.value = [-z.offset.x, -z.offset.y];
 })
