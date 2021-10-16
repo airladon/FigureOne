@@ -112,7 +112,14 @@ class Gesture {
 
   touchStartHandler(event: TouchEvent) {
     const touch = event.touches[0];
-    const disableEvent = this.startHandler(new Point(touch.clientX, touch.clientY));
+    let disableEvent = this.startHandler(new Point(touch.clientX, touch.clientY));
+    if (event.targetTouches.length === 2) {
+      disableEvent = true;
+      this.figure.startPinchZoom(
+        new Point(event.targetTouches[0].clientX, event.targetTouches[0].clientY),
+        new Point(event.targetTouches[1].clientX, event.targetTouches[1].clientY),
+      );
+    }
     if (disableEvent) {
       event.preventDefault();
     }
@@ -128,6 +135,12 @@ class Gesture {
   touchMoveHandler(event: TouchEvent) {
     const touch = event.touches[0];
     this.moveHandler(event, new Point(touch.clientX, touch.clientY));
+    if (event.targetTouches.length > 1) {
+      this.figure.pinchZoom(
+        new Point(event.targetTouches[0].clientX, event.targetTouches[0].clientY),
+        new Point(event.targetTouches[1].clientX, event.targetTouches[1].clientY),
+      );
+    }
   }
 
   mouseMoveHandler(event: MouseEvent) {
@@ -139,7 +152,10 @@ class Gesture {
     this.endHandler();
   }
 
-  touchEndHandler() {
+  touchEndHandler(event: TouchEvent) {
+    if (event.targetTouches.length < 2) {
+      this.figure.endPinchZoom();
+    }
     this.endHandler();
   }
 

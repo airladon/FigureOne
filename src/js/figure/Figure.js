@@ -2,7 +2,7 @@
 import WebGLInstance from './webgl/webgl';
 
 import {
-  Point, Transform,
+  Point, Transform, Line, Rect,
   getPoint,
 } from '../tools/g2';
 import Scene from '../tools/geometry/scene';
@@ -46,6 +46,39 @@ import type { TypeColor, OBJ_Font } from '../tools/types';
 import type { COL_SlideNavigator } from './FigureCollections/SlideNavigator';
 
 const FIGURE1DEBUG = false;
+
+/**
+ * Zoom options.
+ *
+ * @property {null | number} [max] maximum zoom if value defined, no
+ * maximum if `null` (`null`)
+ * @property {null | number} [min] minimum zoom if value defined, no
+ * minimum if `null` (`null`)
+ * @property {number} [scale] scale zoom value to make it most faster
+ * (scale > 1) or slower (scale < 1) (`q`)
+ */
+export type OBJ_ZoomOptions = {
+  max: null | number,
+  min: null | number,
+  scale: number,
+}
+
+/**
+ * Current zoom.
+ *
+ @property {number} zoom current zoom
+ @property {Point} position figure space point where the last zoom gesture was
+ * centered
+ @property {number} angle when zooming with pinch touch gestures, the angle
+ * difference between the latest gesture and the current gesture.
+ @property {number} zooming `true` if two touches are currently zooming
+ */
+export type OBJ_Zoom = {
+  zoom: number,
+  position: Point,
+  angle: number,
+  zooming: boolean,
+}
 
 /**
  * Space Transforms
@@ -329,6 +362,10 @@ class Figure {
     min: null | number,
     position: Point,
     scale: number,
+    lastDistance: number,
+    lastAngle: number,
+    angle: number,
+    zooming: boolean,
   }
 
   scene: Scene;
@@ -381,13 +418,7 @@ class Figure {
     this.nextDrawTimerStart = 0;
     this.nextDrawTimerDuration = 0;
     this.mousePixelPosition = new Point(0, 0);
-    this.zoom = {
-      min: null,
-      max: null,
-      current: 1,
-      position: new Point(0, 0),
-      scale: 1,
-    };
+    
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
       htmlId,
@@ -616,6 +647,23 @@ class Figure {
     }
 
     this.scene = new Scene(optionsToUse.scene);
+    this.zoom = {
+      min: null,
+      max: null,
+      current: 1,
+      position: new Point(0, 0),
+      scale: 1,
+      zooming: false,
+      angle: 0,
+      lastAngle: 0,
+      lastDistance: 0,
+      space: new Rect(
+        this.scene.left,
+        this.scene.bottom,
+        this.scene.right - this.scene.left,
+        this.scene.top - this.scene.bottom,
+      ),
+    };
     this.previousCursorPoint = new Point(0, 0);
     this.isTouchDown = false;
     this.fontScale = optionsToUse.fontScale;
@@ -1787,10 +1835,110 @@ class Figure {
       zoom = Math.min(zoom, this.zoom.max);
     }
     const mousePosition = this.transformPoint(this.mousePixelPosition, 'pixel', 'figure');
-    const zoomPosition = mousePosition.scale(zoom / oldZoom);
     this.zoom.current = zoom;
-    this.zoom.position = zoomPosition;
+    this.zoom.position = mousePosition;
+    const newCenter = mousePosition.scale(zoom / oldZoom);
+    this.zoom.offset = this.zoom.offset.add(this.zoom.position.sub(newCenter).scale(1 / zoom));
     this.notifications.publish('zoom', [this.zoom.current, this.zoom.position]);
+  }
+
+  startPinchZoom(touch1ClientPos: Point, touch2ClientPos: Point) {
+    const pixelPoints = this.clientsToPixel([touch1ClientPos, touch2ClientPos]);
+    const line = new Line(pixelPoints[0], pixelPoints[1]);
+    this.zoom.lastAngle = line.angle();
+    this.zoom.lastDistance = line.length();
+    this.zoom.position = this.transformPoint(line.pointAtPercent(0.5), 'pixel', 'figure');
+    this.zoom.zooming = true;
+  }
+
+  pinchZoom(touch1ClientPos: Point, touch2ClientPos: Point) {
+    const pixelPoints = this.clientsToPixel([touch1ClientPos, touch2ClientPos]);
+    const line = new Line(pixelPoints[0], pixelPoints[1]);
+
+    const d = line.length();
+    const { current, lastDistance, scale } = this.zoom;
+    let zoom = current + (d - lastDistance) / 10 * scale * current / 100;
+    if (this.zoom.min != null) {
+      zoom = Math.max(zoom, this.zoom.min);
+    }
+    if (this.zoom.max != null) {
+      zoom = Math.min(zoom, this.zoom.max);
+    }
+    this.zoom.lastDistance = d;
+    this.zoom.current = zoom;
+    this.zoom.angle += line.angle() - this.zoom.lastAngle;
+
+    this.zoom.position = this.transformPoint(line.pointAtPercent(0.5), 'pixel', 'figure');
+    const newCenter = this.zoom.position.scale(zoom / oldZoom);
+    this.zoom.offset = this.zoom.offset.add(this.zoom.position.sub(newCenter).scale(1 / zoom));
+    this.notifications.publish('zoom', [this.zoom.current, this.zoom.position]);
+  }
+
+  // zoomSpace() {
+  //   if (this.zoom.space == null) {
+  //     return;
+  //   }
+    
+  //   s.set2D({
+  //     left: -w / 2 - offset.x,
+  //     right: w / 2 - offset.x,
+  //     bottom: -h / 2 - offset.y,
+  //     top: h / 2 - offset.y,
+  //   });
+  // }
+
+  /**
+  Zooming has three main instantaneous parameters:
+  * Zoom magnification
+  * Zoom position
+  * Zoom angle
+
+  And one cumulative parameters:
+  * Zoom offset (cumulative offsets from each zoom change where zoom position is not 0)
+   */
+
+  endPinchZoom() {
+    this.zoom.zooming = false;
+  }
+
+  /**
+   * Set zoom gesture options for figure.
+   *
+   * @param {OBJ_ZoomOptions} options
+   */
+  setZoomOptions(options: OBJ_ZoomOptions) {
+    if (options.min !== undefined) { this.zoom.min = options.min; }
+    if (options.max !== undefined) { this.zoom.max = options.max; }
+    if (options.scale !== undefined) { this.zoom.scale = options.scale; }
+    if (options.scene !== undefined) { this.zoom.scene = options.scene; }
+  }
+
+  /**
+   * Set zoom
+   *
+   * @param {OBJ_Zoom} zoom
+   * @param {boolean} notify `true` to send `'zoom'` notification after set
+   */
+  setZoom(zoom: OBJ_Zoom, notify: boolean = false) {
+    if (zoom.zoom !== undefined) { this.zoom.current = zoom.zoom; }
+    if (zoom.angle !== undefined) { this.zoom.angle = zoom.angle; }
+    if (zoom.position !== undefined) { this.zoom.position = zoom.position; }
+    if (zoom.zooming !== undefined) { this.zoom.zooming = zoom.zooming; }
+    if (notify) {
+      this.notifications.publish('zoom', [this.zoom.current, this.zoom.position]);
+    }
+  }
+
+  /**
+   * @return {OBJ_Zoom}
+   */
+  getZoom() {
+    return {
+      zoom: this.zoom.current,
+      angle: this.zoom.angle,
+      position: this.zoom.position,
+      zooming: this.zoom.zooming,
+    };
   }
 
   touchDownHandlerClient(clientPoint: Point, eventFromPlayback: boolean = false) {
@@ -3053,6 +3201,12 @@ class Figure {
       clientLocation.x - canvas.left,
       clientLocation.y - canvas.top,
     );
+  }
+
+
+  clientsToPixel(clientLocations: Array<Point>): Array<Point> {
+    const canvas = this.canvasLow.getBoundingClientRect();
+    return clientLocations.map(p => new Point(p.x - canvas.left, p.y - canvas.top));
   }
 
   pixelToClient(pixelLocation: Point): Point {
