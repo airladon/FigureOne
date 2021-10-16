@@ -322,6 +322,15 @@ class Figure {
     num: number,
   };
 
+  mousePixelPosition: Point;
+  zoom: {
+    current: number,
+    max: null | number,
+    min: null | number,
+    position: Point,
+    scale: number,
+  }
+
   scene: Scene;
 
   animations: AnimationManager;
@@ -371,6 +380,14 @@ class Figure {
     this.nextDrawTimer = null;
     this.nextDrawTimerStart = 0;
     this.nextDrawTimerDuration = 0;
+    this.mousePixelPosition = new Point(0, 0);
+    this.zoom = {
+      min: null,
+      max: null,
+      current: 1,
+      position: new Point(0, 0),
+      scale: 1,
+    };
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
       htmlId,
@@ -1754,6 +1771,26 @@ class Figure {
       return false;
     }
     return cursor.isShown;
+  }
+
+  mousePosition(pixelPoint: Point) {
+    this.mousePixelPosition = pixelPoint;
+  }
+
+  wheelHandler(deltaY: number) {
+    const oldZoom = this.zoom.current;
+    let zoom = this.zoom.current + deltaY / 10 * this.zoom.scale * this.zoom.current / 100;
+    if (this.zoom.min != null) {
+      zoom = Math.max(zoom, this.zoom.min);
+    }
+    if (this.zoom.max != null) {
+      zoom = Math.min(zoom, this.zoom.max);
+    }
+    const mousePosition = this.transformPoint(this.mousePixelPosition, 'pixel', 'figure');
+    const zoomPosition = mousePosition.scale(zoom / oldZoom);
+    this.zoom.current = zoom;
+    this.zoom.position = zoomPosition;
+    this.notifications.publish('zoom', [this.zoom.current, this.zoom.position]);
   }
 
   touchDownHandlerClient(clientPoint: Point, eventFromPlayback: boolean = false) {

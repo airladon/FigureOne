@@ -13,6 +13,7 @@ class Gesture {
   move: (Point, Point) => boolean;
   free: (Point) => void;
   toggleCursor: () => void;
+  wheel: (number) => void;
   binds: {
     mouseDownHandler: (MouseEvent) => void,
     mouseUpHandler: (MouseEvent) => void,
@@ -20,6 +21,7 @@ class Gesture {
     touchStartHandler: (TouchEvent) => void,
     touchEndHandler: (TouchEvent) => void,
     touchMoveHandler: (TouchEvent) => void,
+    wheelHandler: (WheelEvent) => void,
   };
 
   constructor(figure: Figure) {
@@ -31,6 +33,7 @@ class Gesture {
     this.move = this.figure.touchMoveHandlerClient.bind(this.figure);
     this.free = this.figure.touchFreeHandler.bind(this.figure);
     this.toggleCursor = this.figure.toggleCursor.bind(this.figure);
+    this.wheel = this.figure.wheelHandler.bind(this.figure);
 
     this.binds = {
       mouseDownHandler: this.mouseDownHandler.bind(this),
@@ -39,6 +42,7 @@ class Gesture {
       touchStartHandler: this.touchStartHandler.bind(this),
       touchEndHandler: this.touchEndHandler.bind(this),
       touchMoveHandler: this.touchMoveHandler.bind(this),
+      wheelHandler: this.wheelHandler.bind(this),
     };
 
     this.addEvent('mousedown', this.binds.mouseDownHandler, false);
@@ -47,6 +51,7 @@ class Gesture {
     this.addEvent('touchstart', this.binds.touchStartHandler, false);
     this.addWindowEvent('touchend', this.binds.touchEndHandler, false);
     this.addEvent('touchmove', this.binds.touchMoveHandler, false);
+    this.addEvent('wheel', this.binds.wheelHandler, false);
     this.enable = true;
   }
 
@@ -100,6 +105,11 @@ class Gesture {
     }
   }
 
+  wheelHandler(event: WheelEvent) {
+    this.wheel(event.deltaY);
+    event.preventDefault();
+  }
+
   touchStartHandler(event: TouchEvent) {
     const touch = event.touches[0];
     const disableEvent = this.startHandler(new Point(touch.clientX, touch.clientY));
@@ -121,6 +131,7 @@ class Gesture {
   }
 
   mouseMoveHandler(event: MouseEvent) {
+    this.figure.mousePosition(new Point(event.offsetX, event.offsetY));
     this.moveHandler(event, new Point(event.clientX, event.clientY));
   }
 
@@ -139,6 +150,7 @@ class Gesture {
     this.removeEvent('touchstart', this.binds.touchStartHandler, false);
     this.removeEvent('touchend', this.binds.touchEndHandler, false);
     this.removeEvent('touchmove', this.binds.touchMoveHandler, false);
+    this.removeEvent('wheel', this.binds.wheelHandler, false);
   }
 }
 
