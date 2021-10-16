@@ -169,3 +169,6 @@ API cleanup
 
 ## 0.11.2
 * Add `isOn` and `isOff` to toggle
+
+## 0.11.3
+* Fix: `offset` property in collections.toggle now works for any location.

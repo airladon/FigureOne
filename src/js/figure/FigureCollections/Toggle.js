@@ -438,14 +438,14 @@ class CollectionsToggle extends FigureElementCollection {
       let { x, y } = label.offset;
       const buffer = this.height / 2;
       if (label.location === 'left') {
-        x = -this.width / 2 - buffer;
+        x += -this.width / 2 - buffer;
       } else if (label.location === 'right') {
-        x = this.width / 2 + buffer;
+        x += this.width / 2 + buffer;
       }
       if (label.location === 'bottom') {
-        y = -this.height / 2 - buffer;
+        y += -this.height / 2 - buffer;
       } else if (label.location === 'top') {
-        y = this.height / 2 + buffer;
+        y += this.height / 2 + buffer;
       }
       _label.setPosition(x, y);
     }
