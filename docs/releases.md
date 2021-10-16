@@ -172,3 +172,4 @@ API cleanup
 
 ## 0.11.3
 * Fix: `offset` property in collections.toggle now works for any location.
+* Point class can now do component multiplication (`Point.mul()`), complex number multiplication (`Point.cmul()`), and complex number division (`Point.cdiv()`).

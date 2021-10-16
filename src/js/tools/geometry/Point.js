@@ -277,15 +277,84 @@ class Point {
    * @example
    * p = new Point(1, 1, 1);
    * s = p.scale(3);
-   * // s = Point{x: 3, y: 3, z: 3};
+   * // s = Point{x: 3, y: 3, z: 3}
    */
   scale(scalar: number): Point {
     return new this.constructor(this.x * scalar, this.y * scalar, this.z * scalar);
   }
 
+  /**
+   * Return a point with the negative of each component.
+   *
+   * @return {Point}
+   *
+   * @example
+   * p = new Point(1, 2, 3);
+   * q = p.neg();
+   * // q = Point{x: -1, y: -2, z: -3}
+   */
+  neg(): Point {
+    return new this.constructor(-this.x, -this.y, -this.z);
+  }
+
+  /**
+   * Multiply each corresponding component of two points.
+   *
+   * @return {Point}
+   *
+   * @example
+   * p = new Point(2, 3, 4);
+   * q = new Point(3, 4, 5);
+   * m = p.mul(q);
+   * // m = Point{x: 6, y: 12, z: 20}
+   */
   mul(p: TypeParsablePoint) {
     const q = getPoint(p);
-    return new Point(this.x * q.x, this.y * q.y, this.z * q.z);
+    return new this.constructor(this.x * q.x, this.y * q.y, this.z * q.z);
+  }
+
+  /**
+   * Complex multiplication.
+   *
+   * Multiply two 2D points such that x is the real value and
+   * y is the imaginary value of a complex number. z is ignored.
+   * @return {Point}
+   * @example
+   * p = new Point(1, 2); // represents 1 + 2i
+   * q = new Point(2, 3); // represents 2 + 3i
+   * m = p.cmul(q);
+   * // m = Point{x: -4, y: 7, z: 0}
+   * // which represents the complex value -4 + 7i
+   */
+  cmul(complexPoint: TypeParsablePoint) {
+    const b = getPoint(complexPoint);
+    return new this.constructor(
+      this.x * b.x - this.y * b.y,
+      this.x * b.y + this.y * b.x,
+    );
+  }
+
+  /**
+   * Complex division.
+   *
+   * Divide this point by `complexPoint`. Each point represents a complex
+   * number where x is the real value and y is the imaginary value.
+   * z is ignored.
+   * @return {Point}
+   * @example
+   * p = new Point(-4, 7); // represents -4 + 7i
+   * q = new Point(1, 2); // represents 1 + 2i
+   * m = p.cdiv(q);
+   * // m = Point{x: 2, y: 3, z: 0}
+   * // which represents the complex value 2 + 3i
+   */
+  cdiv(complexPoint: TypeParsablePoint) {
+    const b = getPoint(complexPoint);
+    const den = b.x * b.x + b.y * b.y;
+    return new this.constructor(
+      (this.x * b.x + this.y * b.y) / den,
+      (-this.x * b.y + this.y * b.x) / den,
+    );
   }
 
   /**
