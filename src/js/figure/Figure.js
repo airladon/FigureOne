@@ -44,41 +44,9 @@ import AnimationManager from './Animation/AnimationManager';
 import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 import type { TypeColor, OBJ_Font } from '../tools/types';
 import type { COL_SlideNavigator } from './FigureCollections/SlideNavigator';
+import type FigureElementPrimitiveGesture from './FigurePrimitives/FigureElementPrimitiveGesture';
 
 const FIGURE1DEBUG = false;
-
-/**
- * Zoom options.
- *
- * @property {null | number} [max] maximum zoom if value defined, no
- * maximum if `null` (`null`)
- * @property {null | number} [min] minimum zoom if value defined, no
- * minimum if `null` (`null`)
- * @property {number} [scale] scale zoom value to make it most faster
- * (scale > 1) or slower (scale < 1) (`q`)
- */
-export type OBJ_ZoomOptions = {
-  max: null | number,
-  min: null | number,
-  scale: number,
-}
-
-/**
- * Current zoom.
- *
- @property {number} zoom current zoom
- @property {Point} position figure space point where the last zoom gesture was
- * centered
- @property {number} angle when zooming with pinch touch gestures, the angle
- * difference between the latest gesture and the current gesture.
- @property {number} zooming `true` if two touches are currently zooming
- */
-export type OBJ_Zoom = {
-  zoom: number,
-  position: Point,
-  angle: number,
-  zooming: boolean,
-}
 
 /**
  * Space Transforms
@@ -114,6 +82,7 @@ export type OBJ_FigureForElement = {
   animationFinished: () => void,
   recorder: Recorder,
   timeKeeper: TimeKeeper,
+  notifications: NotificationManager,
 }
 
 /**
@@ -286,7 +255,7 @@ class Figure {
 
   beingMovedElement: null | FigureElement;
 
-  beingTouchedElement: null | FigureElement;
+  beingTouchedElement: null | FigureElement | FigureElementPrimitiveGesture;
 
 
   previousCursorPoint: Point;
@@ -355,27 +324,27 @@ class Figure {
     num: number,
   };
 
-  mousePixelPosition: null | Point;
-  zoom: {
-    last: {
-      mag: number,
-      position: Point,
-      angle: number,
-      distance: number,
-    },
-    current: {
-      position: Point,
-      angle: number,
-      distance: number,
-    },
-    max: null | number,
-    min: null | number,
-    scale: number,
-    mag: number,
-    cumOffset: Point,
-    cumAngle: number,
-    pinching: boolean,
-  }
+  // mousePixelPosition: null | Point;
+  // zoom: {
+  //   last: {
+  //     mag: number,
+  //     position: Point,
+  //     angle: number,
+  //     distance: number,
+  //   },
+  //   current: {
+  //     position: Point,
+  //     angle: number,
+  //     distance: number,
+  //   },
+  //   max: null | number,
+  //   min: null | number,
+  //   scale: number,
+  //   mag: number,
+  //   cumOffset: Point,
+  //   cumAngle: number,
+  //   pinching: boolean,
+  // }
 
   scene: Scene;
 
@@ -656,39 +625,39 @@ class Figure {
     }
 
     this.scene = new Scene(optionsToUse.scene);
-    this.zoom = {
-      min: null,
-      max: null,
-      last: {
-        mag: 1,
-        position: new Point(0, 0),
-        angle: 0,
-        distance: 0,
-      },
-      current: {
-        position: new Point(0, 0),
-        angle: 0,
-        distance: 0,
-      },
-      mag: 1,
-      cumOffset: new Point(0, 0),
-      cumAngle: new Point(0, 0),
-      pinching: false,
-      scale: 1,
-      // current: 1,
-      // position: new Point(0, 0),
-      // scale: 1,
-      // zooming: false,
-      // angle: 0,
-      // lastAngle: 0,
-      // lastDistance: 0,
-      // space: new Rect(
-      //   this.scene.left,
-      //   this.scene.bottom,
-      //   this.scene.right - this.scene.left,
-      //   this.scene.top - this.scene.bottom,
-      // ),
-    };
+    // this.zoom = {
+    //   min: null,
+    //   max: null,
+    //   last: {
+    //     mag: 1,
+    //     position: new Point(0, 0),
+    //     angle: 0,
+    //     distance: 0,
+    //   },
+    //   current: {
+    //     position: new Point(0, 0),
+    //     angle: 0,
+    //     distance: 0,
+    //   },
+    //   mag: 1,
+    //   cumOffset: new Point(0, 0),
+    //   cumAngle: new Point(0, 0),
+    //   pinching: false,
+    //   scale: 1,
+    //   // current: 1,
+    //   // position: new Point(0, 0),
+    //   // scale: 1,
+    //   // zooming: false,
+    //   // angle: 0,
+    //   // lastAngle: 0,
+    //   // lastDistance: 0,
+    //   // space: new Rect(
+    //   //   this.scene.left,
+    //   //   this.scene.bottom,
+    //   //   this.scene.right - this.scene.left,
+    //   //   this.scene.top - this.scene.bottom,
+    //   // ),
+    // };
     this.previousCursorPoint = new Point(0, 0);
     this.isTouchDown = false;
     this.fontScale = optionsToUse.fontScale;
@@ -1539,6 +1508,7 @@ class Figure {
       animationFinished: this.animationFinished.bind(this),
       recorder: this.recorder,
       timeKeeper: this.timeKeeper,
+      notifications: this.notifications,
     });
     this.setFirstTransform();
     this.animateNextFrame();
@@ -1847,220 +1817,189 @@ class Figure {
   }
 
   mousePosition(pixelPoint: Point) {
-    this.mousePixelPosition = pixelPoint;
+    // if (
+    //   this.beingTouchedElement != null
+    //   && this.beingTouchedElement.mousePixelPosition != null
+    // ) {
+    //   this.beingTouchedElement.mousePixelPosition(pixelPoint);
+    // }
+    this.notifications.publish('mousePosition', pixelPoint);
   }
 
   wheelHandler(deltaY: number) {
-    // const oldZoom = this.zoom.last.mag;
-    let mag = this.zoom.mag + deltaY / 10 * this.zoom.scale * this.zoom.mag / 100;
-    if (this.zoom.min != null) {
-      mag = Math.max(mag, this.zoom.min);
-    }
-    if (this.zoom.max != null) {
-      mag = Math.min(mag, this.zoom.max);
-    }
-    if (this.mousePixelPosition == null) {
-      this.updateZoom(mag, this.transformPoint([0, 0], 'gl', 'figure'));
-    } else {
-      const mousePosition = this.transformPoint(this.mousePixelPosition, 'pixel', 'figure');
-      this.updateZoom(mag, mousePosition, 0, 0);
-    }
-    // this.zoom.last = {
-    //   mag: this.zoom.mag,
-    //   position: this.zoom.current.position,
-    //   angle: this.zoom.current.angle,
-    //   distance: this.zoom.current.distance,
-    // };
-    // this.zoom.mag = zoom;
-    // this.zoom.current = { position: mousePosition, angle: 0, distance: 0 };
-    // const newCenter = mousePosition.scale(zoom / oldZoom);
-    // this.zoom.cumOffset = this.zoom.cumOffset.add(this.zoom.position.sub(newCenter).scale(1 / zoom));
-    this.notifications.publish('zoom', [this.zoom.mag]);
+    this.notifications.publish('gestureWheel', deltaY);
+    // // const oldZoom = this.zoom.last.mag;
+    // let mag = this.zoom.mag + deltaY / 10 * this.zoom.scale * this.zoom.mag / 100;
+    // if (this.zoom.min != null) {
+    //   mag = Math.max(mag, this.zoom.min);
+    // }
+    // if (this.zoom.max != null) {
+    //   mag = Math.min(mag, this.zoom.max);
+    // }
+    // if (this.mousePixelPosition == null) {
+    //   this.updateZoom(mag, this.transformPoint([0, 0], 'gl', 'figure'));
+    // } else {
+    //   const mousePosition = this.transformPoint(this.mousePixelPosition, 'pixel', 'figure');
+    //   this.updateZoom(mag, mousePosition, 0, 0);
+    // }
+    // this.notifications.publish('zoom', [this.zoom.mag]);
   }
 
-  /**
-   * Change the position and scale of an element to simulate it zooming.
-   *
-   * Note, the element will stay in the same space it was previous, and
-   * therefore moving it will be moving it in the same space. 
-   *
-   * Often a better way to zoom an element (especially if more than one and
-   * interactivity is being used) is to zoom the scene the element(s) belong
-   * to.
-   *
-   * @param {FigureElement} element element to zoom
-   */
-  zoomElement(
-    element: FigureElement | string,
-    originalPosition: TypeParsablePoint,
-    scale: boolean = true,
-  ) {
-    let e = element;
-    if (typeof e === 'string') {
-      e = this.get(e);
-    }
-    if (e == null) {
-      throw new Error(`Cannot zoom a non FigureElement. ${element}`);
-    }
-    const o = getPoint(originalPosition);
-    element.setPosition(o.add(this.zoom.cumOffset).scale(this.zoom.mag));
-    if (scale) {
-      element.setScale(this.zoom.mag);
-    }
-  }
+  // /**
+  //  * Change the position and scale of an element to simulate it zooming.
+  //  *
+  //  * Note, the element will stay in the same space it was previous, and
+  //  * therefore moving it will be moving it in the same space. 
+  //  *
+  //  * Often a better way to zoom an element (especially if more than one and
+  //  * interactivity is being used) is to zoom the scene the element(s) belong
+  //  * to.
+  //  *
+  //  * @param {FigureElement} element element to zoom
+  //  */
+  // zoomElement(
+  //   element: FigureElement | string,
+  //   originalPosition: TypeParsablePoint,
+  //   scale: boolean = true,
+  // ) {
+  //   let e = element;
+  //   if (typeof e === 'string') {
+  //     e = this.get(e);
+  //   }
+  //   if (e == null) {
+  //     throw new Error(`Cannot zoom a non FigureElement. ${element}`);
+  //   }
+  //   const o = getPoint(originalPosition);
+  //   element.setPosition(o.add(this.zoom.cumOffset).scale(this.zoom.mag));
+  //   if (scale) {
+  //     element.setScale(this.zoom.mag);
+  //   }
+  // }
 
-  /**
-   * Changes a 2D scene to simulate zooming in and out
-   */
-  zoom2DScene(scene: Scene, original: TypeParsableRect) {
-    // Get original scene
-    const r = getRect(original);
-    const left = r.left / this.zoom.mag;
-    const bottom = r.bottom / this.zoom.mag;
-    const right = r.right / this.zoom.mag;
-    const top = r.top / this.zoom.mag;
-    scene.set2D({
-      left: left - this.zoom.cumOffset.x,
-      right: right - this.zoom.cumOffset.x,
-      bottom: bottom - this.zoom.cumOffset.y,
-      top: top - this.zoom.cumOffset.y,
-    });
-    this.animateNextFrame();
-  }
+  // /**
+  //  * Changes a 2D scene to simulate zooming in and out
+  //  */
+  // zoom2DScene(scene: Scene, original: TypeParsableRect) {
+  //   // Get original scene
+  //   const r = getRect(original);
+  //   const left = r.left / this.zoom.mag;
+  //   const bottom = r.bottom / this.zoom.mag;
+  //   const right = r.right / this.zoom.mag;
+  //   const top = r.top / this.zoom.mag;
+  //   scene.set2D({
+  //     left: left - this.zoom.cumOffset.x,
+  //     right: right - this.zoom.cumOffset.x,
+  //     bottom: bottom - this.zoom.cumOffset.y,
+  //     top: top - this.zoom.cumOffset.y,
+  //   });
+  //   this.animateNextFrame();
+  // }
 
-  updateZoom(mag: number, zoomPosition: Point, distance: number = 0, angle: number = 0) {
-    const oldMag = this.zoom.mag;
-    this.zoom.last = {
-      mag: this.zoom.mag,
-      position: this.zoom.current.position,
-      angle: this.zoom.current.angle,
-      distance: this.zoom.current.distance,
-    };
-    this.zoom.mag = mag;
-    this.zoom.current = { position: zoomPosition, angle, distance };
-    const newPosition = zoomPosition.scale(mag / oldMag);
-    this.zoom.cumOffset = this.zoom.cumOffset.add(
-      zoomPosition.sub(newPosition).scale(1 / mag),
-    );
-    this.zoom.cumAngle += angle - this.zoom.last.angle;
-  }
+  // updateZoom(mag: number, zoomPosition: Point, distance: number = 0, angle: number = 0) {
+  //   const oldMag = this.zoom.mag;
+  //   this.zoom.last = {
+  //     mag: this.zoom.mag,
+  //     position: this.zoom.current.position,
+  //     angle: this.zoom.current.angle,
+  //     distance: this.zoom.current.distance,
+  //   };
+  //   this.zoom.mag = mag;
+  //   this.zoom.current = { position: zoomPosition, angle, distance };
+  //   const newPosition = zoomPosition.scale(mag / oldMag);
+  //   this.zoom.cumOffset = this.zoom.cumOffset.add(
+  //     zoomPosition.sub(newPosition).scale(1 / mag),
+  //   );
+  //   this.zoom.cumAngle += angle - this.zoom.last.angle;
+  // }
 
   startPinchZoom(touch1ClientPos: Point, touch2ClientPos: Point) {
     const pixelPoints = this.clientsToPixel([touch1ClientPos, touch2ClientPos]);
-    const line = new Line(pixelPoints[0], pixelPoints[1]);
-    this.zoom.current.angle = line.angle();
-    this.zoom.current.distance = line.length();
-    this.zoom.current.position = this.transformPoint(line.pointAtPercent(0.5), 'pixel', 'figure');
-    this.zoom.pinching = true;
+    this.notifications.publish(
+      'gestureStartPinch',
+      [pixelPoints[0], pixelPoints[1], this.beingTouchedElement],
+      false,
+    );
+    // const line = new Line(pixelPoints[0], pixelPoints[1]);
+    // this.zoom.current.angle = line.angle();
+    // this.zoom.current.distance = line.length();
+    // this.zoom.current.position = this.transformPoint(line.pointAtPercent(0.5), 'pixel', 'figure');
+    // this.zoom.pinching = true;
   }
 
   pinchZoom(touch1ClientPos: Point, touch2ClientPos: Point) {
     // const oldZoom = this.zoom.last.mag;
     const pixelPoints = this.clientsToPixel([touch1ClientPos, touch2ClientPos]);
-    const line = new Line(pixelPoints[0], pixelPoints[1]);
+    this.notifications.publish(
+      'gesturePinching',
+      [pixelPoints[0], pixelPoints[1], this.beingTouchedElement],
+      false,
+    );
+    // const line = new Line(pixelPoints[0], pixelPoints[1]);
 
-    const d = line.length();
-    // const { current, lastDistance, scale } = this.zoom;
-    let mag = this.zoom.mag
-      + (d - this.zoom.current.distance) / 5 * this.zoom.scale * this.zoom.mag / 100;
-    if (this.zoom.min != null) {
-      mag = Math.max(mag, this.zoom.min);
-    }
-    if (this.zoom.max != null) {
-      mag = Math.min(mag, this.zoom.max);
-    }
-    const position = this.transformPoint(line.pointAtPercent(0.5), 'pixel', 'figure');
-    this.updateZoom(mag, position, d, line.angle());
-    // const newCenter = this.zoom.position.scale(zoom / this.last.zoom);
-    // this.zoom.zoom = zoom;
-    // this.zoom.cumOffset = this.zoom.cumOffset.add(this.zoom.position.sub(newCenter).scale(1 / zoom));
-    // this.zoom.cumAngle += line.angle() - this.zoom.last.angle;
-
-    
-    // this.zoom.last = {
-    //   distance: d,
-    //   zoom,
-    //   angle: line.angle(),
-    //   position,
-    // };
-
-    // this.zoom.position = this.transformPoint(line.pointAtPercent(0.5), 'pixel', 'figure');
-    // const newCenter = this.zoom.position.scale(zoom / oldZoom);
-    // this.zoom.cumOffset = this.zoom.cumOffset.add(this.zoom.position.sub(newCenter).scale(1 / zoom));
-    this.notifications.publish('zoom', [this.zoom.mag]);
+    // const d = line.length();
+    // // const { current, lastDistance, scale } = this.zoom;
+    // let mag = this.zoom.mag
+    //   + (d - this.zoom.current.distance) / 5 * this.zoom.scale * this.zoom.mag / 100;
+    // if (this.zoom.min != null) {
+    //   mag = Math.max(mag, this.zoom.min);
+    // }
+    // if (this.zoom.max != null) {
+    //   mag = Math.min(mag, this.zoom.max);
+    // }
+    // const position = this.transformPoint(line.pointAtPercent(0.5), 'pixel', 'figure');
+    // this.updateZoom(mag, position, d, line.angle());
+    // this.notifications.publish('zoom', [this.zoom.mag]);
   }
 
-  // zoomSpace() {
-  //   if (this.zoom.space == null) {
-  //     return;
-  //   }
-    
-  //   s.set2D({
-  //     left: -w / 2 - offset.x,
-  //     right: w / 2 - offset.x,
-  //     bottom: -h / 2 - offset.y,
-  //     top: h / 2 - offset.y,
-  //   });
-  // }
-
-  /**
-  Zooming has instantaneous parameters:
-  * Zoom magnitude
-  * Zoom position
-  * Zoom angle
-
-  And cumulative parameters:
-  * Zoom cumAngle
-  * Zoom cumOffset (cumulative offsets from each zoom change where zoom position is not 0)
-   */
 
   endPinchZoom() {
-    this.zoom.pinching = false;
+    this.notifications.publish('gesturePinchEnd');
+    // this.zoom.pinching = false;
   }
 
-  /**
-   * Set zoom gesture options for figure.
-   *
-   * @param {OBJ_ZoomOptions} options
-   */
-  setZoomOptions(options: OBJ_ZoomOptions) {
-    if (options.min !== undefined) { this.zoom.min = options.min; }
-    if (options.max !== undefined) { this.zoom.max = options.max; }
-    if (options.scale !== undefined) { this.zoom.scale = options.scale; }
-  }
+  // /**
+  //  * Set zoom gesture options for figure.
+  //  *
+  //  * @param {OBJ_ZoomOptions} options
+  //  */
+  // setZoomOptions(options: OBJ_ZoomOptions) {
+  //   if (options.min !== undefined) { this.zoom.min = options.min; }
+  //   if (options.max !== undefined) { this.zoom.max = options.max; }
+  //   if (options.scale !== undefined) { this.zoom.scale = options.scale; }
+  // }
 
-  /**
-   * Set zoom
-   *
-   * @param {OBJ_Zoom} zoom
-   * @param {boolean} notify `true` to send `'zoom'` notification after set
-   */
-  setZoom(zoom: OBJ_Zoom, notify: boolean = false) {
-    const z = joinObjects({
-      mag: this.zoom.mag,
-      angle: this.zoom.current.angle,
-      distance: this.zoom.current.distance,
-      pinching: this.zoom.pinching,
-    }, zoom);
-    this.updateZoom(z.mag, z.position, z.distance, z.angle);
-    this.zoom.pinching = z.pinching;
-    if (notify) {
-      this.notifications.publish('zoom', [this.zoom.mag]);
-    }
-  }
+  // /**
+  //  * Set zoom
+  //  *
+  //  * @param {OBJ_Zoom} zoom
+  //  * @param {boolean} notify `true` to send `'zoom'` notification after set
+  //  */
+  // setZoom(zoom: OBJ_Zoom, notify: boolean = false) {
+  //   const z = joinObjects({
+  //     mag: this.zoom.mag,
+  //     angle: this.zoom.current.angle,
+  //     distance: this.zoom.current.distance,
+  //     pinching: this.zoom.pinching,
+  //   }, zoom);
+  //   this.updateZoom(z.mag, z.position, z.distance, z.angle);
+  //   this.zoom.pinching = z.pinching;
+  //   if (notify) {
+  //     this.notifications.publish('zoom', [this.zoom.mag]);
+  //   }
+  // }
 
-  /**
-   * @return {OBJ_Zoom}
-   */
-  getZoom() {
-    return {
-      last: this.zoom.last,
-      current: this.zoom.current,
-      mag: this.zoom.mag,
-      offset: this.zoom.cumOffset,
-      angle: this.zoom.cumAngle,
-    };
-  }
+  // /**
+  //  * @return {OBJ_Zoom}
+  //  */
+  // getZoom() {
+  //   return {
+  //     last: this.zoom.last,
+  //     current: this.zoom.current,
+  //     mag: this.zoom.mag,
+  //     offset: this.zoom.cumOffset,
+  //     angle: this.zoom.cumAngle,
+  //   };
+  // }
 
   touchDownHandlerClient(clientPoint: Point, eventFromPlayback: boolean = false) {
     const pixel = this.clientToPixel(clientPoint);
