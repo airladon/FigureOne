@@ -3,8 +3,8 @@
 const figure = new Fig.Figure();
 
 
-const width = 2;
-const height = 2;
+const width = 1;
+const height = 1;
 function createGrid(spacing) {
   const x = Fig.range(-width / 2, width / 2, spacing);
   const y = Fig.range(-height / 2, height / 2, spacing);
@@ -19,7 +19,7 @@ function createGrid(spacing) {
 }
 const plane = figure.add({
   make: 'gl',
-  vertices: createGrid(0.005),
+  vertices: createGrid(0.001),
   position: [0, 0],
   dimension: 2,
   color: [0.3, 0, 0, 1],
@@ -32,16 +32,45 @@ const plane = figure.add({
       uniform vec2 u_offset;
       attribute vec2 aVertex;
 
+      vec3 hsv2rgb(vec3 c) {
+        vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+        vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+        return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+      }
+
       void main() {
         gl_Position = u_worldViewProjectionMatrix * vec4(aVertex.xy, 0, 1);
         vec2 p = aVertex / u_zoom + u_offset;
-        v_color = vec4((p.x + 2.0) / 4.0, 0, 1.0 - (p.y + 2.0) / 4.0, 1);
-        if (mod(p.x, 0.2) < 0.1 && mod(p.y, 0.2) < 0.1) {
-          v_color = vec4(0, 1, 0, 1);
+        int maxIterations = 1000;
+        int iteration = 0;
+        float x = 0.0;
+        float y = 0.0;
+        float x0 = p.x / 0.5;
+        float y0 = p.y / 0.5;
+        float xTemp;
+        for (int i = 0; i < 1000; i++) {
+          xTemp = x*x - y*y + x0;
+          y = 2.0 * x * y + y0;
+          x = xTemp;
+          if (x * x + y * y > 4.0) {
+            break;
+          }
+          iteration = i;
         }
-        // } else {
-        //   v_color = vec4(0, 1, 0, 1);
-        // }
+        float z = sqrt(x * x + y * y);
+        float n = float(iteration) + 1.0 - log(log2(z));
+        float hue = n / float(maxIterations) / 0.05;
+        float rotHue = 0.0;
+        if (hue > rotHue) {
+          hue -= rotHue;
+        } else {
+          hue = (1.0 - rotHue) + hue;
+        }
+        float value = 1.0;
+        if (iteration == maxIterations - 1) {
+          value = 0.0;
+        }
+        v_color = vec4(hsv2rgb(vec3(hue, 1.0, value)).rgb, 1.0);
       }`,
     vars: ['aVertex', 'u_worldViewProjectionMatrix', 'u_zoom', 'u_offset'],
   },
@@ -65,7 +94,7 @@ const polygon = figure.add({
   move: true,
 });
 
-
+figure.setZoomOptions({ scale: 5, max: 1000000, min: 0.5 });
 figure.notifications.add('zoom', (zoom) => {
   const z = figure.getZoom();
   // console.log(z.mag, z.offset.round(4).toArray(2), z.current.position.round(2).toArray(2));
@@ -73,7 +102,7 @@ figure.notifications.add('zoom', (zoom) => {
   // figure.zoomElement(polygon, [0, -0.2], false);
   plane.drawingObject.uniforms.u_zoom.value = [z.mag];
   plane.drawingObject.uniforms.u_offset.value = [-z.offset.x, -z.offset.y];
-})
+});
 
 // const zoomPad = figure.add({
 //   make: 'rectangle',
