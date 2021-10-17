@@ -41,18 +41,20 @@ const plane = figure.add({
       void main() {
         gl_Position = u_worldViewProjectionMatrix * vec4(aVertex.xy, 0, 1);
         vec2 p = aVertex / u_zoom + u_offset;
-        int maxIterations = 1000;
         int iteration = 0;
         float x = 0.0;
         float y = 0.0;
         float x0 = p.x / 0.5;
         float y0 = p.y / 0.5;
         float xTemp;
-        for (int i = 0; i < 1000; i++) {
-          xTemp = x*x - y*y + x0;
+        int maxIterations = 1000;
+        for (int i = 0; i < 100000; i++) {
+          float x2 = x * x;
+          float y2 = y * y;
+          xTemp = x2 - y2 + x0;
           y = 2.0 * x * y + y0;
           x = xTemp;
-          if (x * x + y * y > 4.0) {
+          if (x2 + y2 > 4.0 || i > maxIterations - 1) {
             break;
           }
           iteration = i;
@@ -114,3 +116,4 @@ figure.notifications.add('zoom', (zoom) => {
 // figure.notifications.add('zoom', ([zoom, position]) => {
 
 // });
+figure.addFrameRate(10, { color: [1, 0, 0, 1] });
