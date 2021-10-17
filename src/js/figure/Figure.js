@@ -1962,7 +1962,7 @@ class Figure {
     const d = line.length();
     // const { current, lastDistance, scale } = this.zoom;
     let mag = this.zoom.mag
-      + (d - this.zoom.current.distance) / 10 * this.zoom.scale * this.zoom.mag / 100;
+      + (d - this.zoom.current.distance) / 5 * this.zoom.scale * this.zoom.mag / 100;
     if (this.zoom.min != null) {
       mag = Math.max(mag, this.zoom.min);
     }
