@@ -52,6 +52,7 @@ export type OBJ_Zoom = {
 export type OBJ_Gesture = {
   zoom?: OBJ_ZoomOptions | boolean,
   pan?: OBJ_PanOptions | boolean,
+  onlyWhenTouched?: boolean,
 } & OBJ_Rectangle;
 
 // $FlowFixMe
@@ -79,6 +80,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
   };
 
   mousePixelPosition: Point;
+  onlyWhenTouched: boolean;
 
   animations: {
     zoom: (OBJ_AnimationStep) => CustomAnimationStep,
@@ -115,6 +117,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       scale: 1,
       enabled: false,
     };
+    this.onlyWhenTouched = true;
   }
 
   setup(options: OBJ_Gesture) {
@@ -124,6 +127,10 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     if (options.zoom) {
       this.zoom.enabled = true;
     }
+    if (options.onlyWhenTouched) {
+      this.onlyWhenTouched = options.onlyWhenTouched;
+    }
+    this.setTouchable();
   }
 
   mousePosition(pixelPoint: Point) {
@@ -131,6 +138,11 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
   }
 
   wheelHandler(deltaY: number) {
+    if (this.onlyWhenTouched) {
+      if (!this.isBeingTouched(this.transformPoint(this.mousePixelPosition, 'pixel', 'gl'))) {
+        return;
+      }
+    }
     // const oldZoom = this.zoom.last.mag;
     let mag = this.zoom.mag + deltaY / 10 * this.zoom.scale * this.zoom.mag / 100;
     if (this.zoom.min != null) {
@@ -213,6 +225,9 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     touch2PixelPos: Point,
     beingTouchedElement: null | FigureElement,
   ) {
+    if (this.onlyWhenTouched && beingTouchedElement !== this) {
+      return;
+    }
     const line = new Line(touch1PixelPos, touch2PixelPos);
     this.zoom.current.angle = line.angle();
     this.zoom.current.distance = line.length();
@@ -225,6 +240,9 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     touch2PixelPos: Point,
     beingTouchedElement: null | FigureElement,
   ) {
+    if (this.onlyWhenTouched && beingTouchedElement !== this) {
+      return;
+    }
     // const oldZoom = this.zoom.last.mag;
     // const pixelPoints = this.clientsToPixel([touch1ClientPos, touch2ClientPos]);
     const line = new Line(touch1PixelPos, touch2PixelPos);
