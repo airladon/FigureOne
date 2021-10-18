@@ -318,6 +318,7 @@ const gesture = figure.add({
   width: 1,
   height: 1,
   onlyWhenTouched: false,
+  zoom: true,
 });
 const polygon = figure.add({
   make: 'polygon',

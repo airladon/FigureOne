@@ -53,6 +53,7 @@ export type OBJ_Gesture = {
   zoom?: OBJ_ZoomOptions | boolean,
   pan?: OBJ_PanOptions | boolean,
   onlyWhenTouched?: boolean,
+  scene?: Scene,
 } & OBJ_Rectangle;
 
 // $FlowFixMe
@@ -81,6 +82,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
 
   mousePixelPosition: Point;
   onlyWhenTouched: boolean;
+  relativeScene: null | Scene;
 
   animations: {
     zoom: (OBJ_AnimationStep) => CustomAnimationStep,
@@ -137,7 +139,19 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.mousePixelPosition = pixelPoint;
   }
 
+  pixelToScene(pixelPoint: Point) {
+    const glPoint = this.figure.pixelToGL(pixelPoint);
+    const scene = this.relativeScene || this.getScene();
+    if (scene == null) {
+      throw new Error(`Gesture Primitive Error - Scene does not exist: ${this.getPath()}`);
+    }
+    return scene.glToFigure(glPoint);
+  }
+
   wheelHandler(deltaY: number) {
+    if (!this.zoom.enabled) {
+      return;
+    }
     if (this.onlyWhenTouched) {
       if (!this.isBeingTouched(this.transformPoint(this.mousePixelPosition, 'pixel', 'gl'))) {
         return;
@@ -154,7 +168,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     if (this.mousePixelPosition == null) {
       this.updateZoom(mag, this.transformPoint([0, 0], 'gl', 'figure'));
     } else {
-      const mousePosition = this.transformPoint(this.mousePixelPosition, 'pixel', 'figure');
+      const mousePosition = this.pixelToScene(this.mousePixelPosition);
       this.updateZoom(mag, mousePosition, 0, 0);
     }
     this.notifications.publish('zoom', this.zoom.mag);
@@ -164,7 +178,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
    * Change the position and scale of an element to simulate it zooming.
    *
    * Note, the element will stay in the same space it was previous, and
-   * therefore moving it will be moving it in the same space. 
+   * therefore moving it will be moving it in the same space.
    *
    * Often a better way to zoom an element (especially if more than one and
    * interactivity is being used) is to zoom the scene the element(s) belong
@@ -189,17 +203,18 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
    */
   zoom2DScene(scene: Scene, original: TypeParsableRect) {
     // Get original scene
-    const r = getRect(original);
-    const left = r.left / this.zoom.mag;
-    const bottom = r.bottom / this.zoom.mag;
-    const right = r.right / this.zoom.mag;
-    const top = r.top / this.zoom.mag;
-    scene.set2D({
-      left: left - this.zoom.cumOffset.x,
-      right: right - this.zoom.cumOffset.x,
-      bottom: bottom - this.zoom.cumOffset.y,
-      top: top - this.zoom.cumOffset.y,
-    });
+    // const r = getRect(original);
+    // const left = r.left / this.zoom.mag;
+    // const bottom = r.bottom / this.zoom.mag;
+    // const right = r.right / this.zoom.mag;
+    // const top = r.top / this.zoom.mag;
+    // scene.set2D({
+    //   left: left - this.zoom.cumOffset.x,
+    //   right: right - this.zoom.cumOffset.x,
+    //   bottom: bottom - this.zoom.cumOffset.y,
+    //   top: top - this.zoom.cumOffset.y,
+    // });
+    scene.setPanZoom(this.zoom.cumOffset, this.zoom.mag);
     this.animateNextFrame();
   }
 
@@ -225,6 +240,9 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     touch2PixelPos: Point,
     beingTouchedElement: null | FigureElement,
   ) {
+    if (!this.zoom.enabled) {
+      return;
+    }
     if (this.onlyWhenTouched && beingTouchedElement !== this) {
       return;
     }
@@ -240,6 +258,9 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     touch2PixelPos: Point,
     beingTouchedElement: null | FigureElement,
   ) {
+    if (!this.zoom.enabled) {
+      return;
+    }
     if (this.onlyWhenTouched && beingTouchedElement !== this) {
       return;
     }
@@ -257,13 +278,22 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     if (this.zoom.max != null) {
       mag = Math.min(mag, this.zoom.max);
     }
-    const position = this.transformPoint(line.pointAtPercent(0.5), 'pixel', 'figure');
+    const position = this.pixelToScene(line.pointAtPercent(0.5));
     this.updateZoom(mag, position, d, line.angle());
     this.notifications.publish('zoom', [this.zoom.mag]);
   }
 
 
   endPinchZoom() {
+    this.zoom.pinching = false;
+  }
+
+  enableZoom() {
+    this.zoom.enabled = true;
+  }
+
+  disableZoom() {
+    this.zoom.enabled = false;
     this.zoom.pinching = false;
   }
 
@@ -311,6 +341,10 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     };
   }
 
+  moveGesture() {
+
+  }
+
   setFigure(figure: OBJ_FigureForElement) {
     this.figure = figure;
     if (figure != null) {
@@ -331,6 +365,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.figure.notifications.add('gestureStartPinch', this.startPinchZoom.bind(this));
     this.figure.notifications.add('gesturePinching', this.pinchZoom.bind(this));
     this.figure.notifications.add('gesturePinchEnd', this.endPinchZoom.bind(this));
+    this.figure.notifications.add('gestureMove', this.moveGesture.bind(this));
     this.notifications.publish('setFigure');
   }
 }

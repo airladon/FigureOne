@@ -324,6 +324,11 @@ class Figure {
     num: number,
   };
 
+  pixelSpace: {
+    x: { min: number, span: number },
+    y: { min: number, span: number },
+  };
+
   // mousePixelPosition: null | Point;
   // zoom: {
   //   last: {
@@ -506,6 +511,7 @@ class Figure {
         // this.draw2DHigh = new DrawContext2D(this.textCanvasHigh);
       }
     }
+    this.getPixelSpace();
 
     if (optionsToUse.gestureCanvas != null) {
       const gestureCanvas = document.getElementById(optionsToUse.gestureCanvas);
@@ -520,6 +526,7 @@ class Figure {
     if (this instanceof Figure) {  // $FlowFixMe
       this.gesture = new Gesture(this);
     }
+
 
     // if (optionsToUse.limits != null) {
     //   const limits = getRect(optionsToUse.limits);
@@ -1509,6 +1516,7 @@ class Figure {
       recorder: this.recorder,
       timeKeeper: this.timeKeeper,
       notifications: this.notifications,
+      pixelToGL: this.pixelToGL.bind(this),
     });
     this.setFirstTransform();
     this.animateNextFrame();
@@ -1717,10 +1725,27 @@ class Figure {
       this.renderAllElementsToTiedCanvases();
       this.oldWidth = this.canvasLow.clientWidth;
     }
+    const canvasRect = this.canvasLow.getBoundingClientRect();
+    this.getPixelSpace();
     this.notifications.publish('resize');
     this.animateNextFrame(true, 'resize');
     this.drawAnimationFrames = 2;
     // this.renderAllElementsToTiedCanvases(true);
+  }
+
+  getPixelSpace() {
+    const canvasRect = this.canvasLow.getBoundingClientRect();
+    this.pixelSpace = {
+      x: { min: 0, span: canvasRect.width },
+      y: { min: canvasRect.height, span: -canvasRect.height },
+    };
+  }
+
+  pixelToGL(pixelPoint: Point) {
+    return new Point(
+      pixelPoint.x / this.pixelSpace.x.span * 2 - 1,
+      (1 - (-pixelPoint.y / this.pixelSpace.y.span)) * 2 - 1,
+    );
   }
 
   updateHTMLElementTie() {
@@ -2460,6 +2485,7 @@ class Figure {
     return true;
   }
 
+  
 
   touchMoveHandler(
     previousGLPoint: Point,
@@ -2484,6 +2510,8 @@ class Figure {
     // if (e == null) {
     //   return false;
     // }
+
+    this.notifications.publish('gestureMove', [previousGLPoint, currentGLPoint], false);
 
     if (this.beingMovedElement == null || this.beingMovedElement === this.elements) {
       return false;
@@ -2691,6 +2719,10 @@ class Figure {
     } else {
       stopped();
     }
+  }
+
+  getScene() {
+    return this.scene;
   }
 
   setupAnimations() {
