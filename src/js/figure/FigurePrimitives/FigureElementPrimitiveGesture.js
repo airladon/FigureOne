@@ -32,12 +32,10 @@ export type OBJ_ZoomOptions = {
 }
 
 export type OBJ_PanOptions = {
-  bounds?: {
-    left: null | number,
-    right: null | number,
-    bottom: null | number,
-    top: null | number,
-  },
+  left: null | number,
+  right: null | number,
+  bottom: null | number,
+  top: null | number,
 }
 /**
  * Current zoom.
@@ -91,12 +89,10 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
   pan: {
     enabled: boolean,
     offset: Point,
-    bounds: {
-      left: null | number,
-      right: null | number,
-      bottom: null | number,
-      top: null | number,
-    },
+    left: null | number,
+    right: null | number,
+    bottom: null | number,
+    top: null | number,
   };
 
   mousePixelPosition: Point;
@@ -104,11 +100,6 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
   relativeScene: null | Scene;
 
   notificationIDs: Array<number>;
-
-  animations: {
-    zoom: (OBJ_AnimationStep) => CustomAnimationStep,
-    pan: (OBJ_AnimationStep) => CustomAnimationStep,
-  } & AnimationManager;
 
   constructor(
     drawingObject: DrawingObject,
@@ -142,9 +133,10 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.pan = {
       enabled: false,
       offset: new Point(0, 0),
-      bounds: {
-        left: null, right: null, top: null, bottom: null,
-      },
+      left: null,
+      right: null,
+      top: null,
+      bottom: null,
     };
     this.onlyWhenTouched = true;
     this.notificationIDs = [];
@@ -159,6 +151,9 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     }
     if (options.pan) {
       this.pan.enabled = true;
+    }
+    if (options.pan != null && typeof options.pan !== 'boolean') {
+      this.setPanOptions(options.pan);
     }
     if (options.onlyWhenTouched) {
       this.onlyWhenTouched = options.onlyWhenTouched;
@@ -346,6 +341,13 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     if (options.sensitivity !== undefined) { this.zoom.sensitivity = options.sensitivity; }
   }
 
+  setPanOptions(options: OBJ_PanOptions) {
+    if (options.left !== undefined) { this.pan.left = options.left; }
+    if (options.bottom !== undefined) { this.pan.bottom = options.bottom; }
+    if (options.top !== undefined) { this.pan.top = options.top; }
+    if (options.right !== undefined) { this.pan.right = options.right; }
+  }
+
   /**
    * Set zoom
    *
@@ -359,11 +361,15 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       distance: this.zoom.current.distance,
       pinching: this.zoom.pinching,
     }, zoom);
-    this.updateZoom(z.mag, z.position, z.distance, z.angle);
+    this.updateZoom(z.mag, getPoint(z.position), z.distance, z.angle);
     this.zoom.pinching = z.pinching;
     if (notify) {
       this.notifications.publish('zoom', this.zoom.mag);
     }
+  }
+
+  setPan(offset: TypeParsablePoint) {
+    this.setPanOffset(getPoint(offset));
   }
 
   /**
@@ -399,17 +405,20 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
 
   setPanOffset(offset: Point) {
     const o = offset;
-    if (this.pan.bounds.left != null && this.pan.bounds.left > o.x) {
-      o.x = this.pan.bounds.left;
+    const {
+      left, right, bottom, top,
+    } = this.pan;
+    if (left != null && left > o.x) {
+      o.x = left;
     }
-    if (this.pan.bounds.right != null && this.pan.bounds.right < o.x) {
-      o.x = this.pan.bounds.right;
+    if (right != null && right < o.x) {
+      o.x = right;
     }
-    if (this.pan.bounds.bottom != null && this.pan.bounds.bottom > o.y) {
-      o.y = this.pan.bounds.bottom;
+    if (bottom != null && bottom > o.y) {
+      o.y = bottom;
     }
-    if (this.pan.bounds.top != null && this.pan.bounds.top < o.y) {
-      o.y = this.pan.bounds.top;
+    if (top != null && top < o.y) {
+      o.y = top;
     }
     this.pan.offset = o;
   }
