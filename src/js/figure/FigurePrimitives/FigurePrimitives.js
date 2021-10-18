@@ -1441,6 +1441,7 @@ export default class FigurePrimitives {
       yAlign: 'middle',
       zoom: false,
       pan: false,
+      back: true,
     }, ...options);
     // $FlowFixMe
     const element = this.rectangle({

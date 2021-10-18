@@ -3423,6 +3423,44 @@ class Figure {
     };
     return frame;
   }
+
+
+  addZoomPanControl(options: {
+    zoom?: {
+      min?: number | null,
+      max?: number | null,
+      sensitivity?: number,
+    },
+    pan?: {
+      bounds?: {
+        left?: number | null,
+        bottom?: number | null,
+        right?: number | null,
+        top?: number | null,
+      }
+    }
+  }) {
+    const control = this.add(joinObjects(
+      {},
+      {
+        name: '_zoomPan_',
+        make: 'primitives.gesture',
+        zoom: {},
+        pan: {},
+        back: true,
+        width: 2,
+        height: 2,
+        scene: new Scene({}),
+      },
+      options,
+    ));
+    control.notifications.add('zoom', () => {
+      control.zoomScene(this.scene);
+    });
+    control.notifications.add('pan', () => {
+      control.panScene(this.scene);
+    });
+  }
 }
 
 export default Figure;

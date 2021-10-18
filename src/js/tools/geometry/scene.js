@@ -240,6 +240,22 @@ export default class Scene {
     this.calcViewProjectionMatrix();
   }
 
+  _dup() {
+    return new Scene({
+      style: this.style,
+      left: this.left,
+      right: this.right,
+      bottom: this.bottom,
+      top: this.top,
+      near: this.near,
+      far: this.far,
+      aspectRatio: this.aspectRatio,
+      fieldOfView: this.fieldOfView,  // $FlowFixMe
+      light: this.light,  // $FlowFixMe
+      camera: this.camera,
+    });
+  }
+
   calcProjectionMatrix() {
     if (this.style === 'orthographic' || this.style === '2D') {
       const {

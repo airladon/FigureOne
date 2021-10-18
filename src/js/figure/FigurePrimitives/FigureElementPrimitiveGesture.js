@@ -61,6 +61,7 @@ export type OBJ_Gesture = {
   pan?: OBJ_PanOptions | boolean,
   onlyWhenTouched?: boolean,
   scene?: Scene,
+  back?: boolean,
 } & OBJ_Rectangle;
 
 // $FlowFixMe
@@ -137,7 +138,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       enabled: false,
     };
     this.pan = {
-      enabled: true,
+      enabled: false,
       offset: new Point(0, 0),
       bounds: {
         left: null, right: null, top: null, bottom: null,
@@ -158,6 +159,10 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     }
     if (options.onlyWhenTouched) {
       this.onlyWhenTouched = options.onlyWhenTouched;
+    }
+    this._custom.cameraControlBack = false;
+    if (options.back) {
+      this._custom.cameraControlBack = true;
     }
     this.setTouchable();
   }
@@ -258,6 +263,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.zoom.mag = mag;
     this.zoom.current = { position: zoomPosition, angle, distance };
     const newPosition = zoomPosition.scale(mag / oldMag);
+    // if (this.getScene() === this.relativeScene)
     this.setPanOffset(
       this.pan.offset.add(zoomPosition.sub(newPosition).scale(1 / mag)),
     );
