@@ -18,6 +18,7 @@ import CollectionsAngle from './Angle';
 import CollectionsPolyline from './PolyLine';
 // eslint-disable-next-line import/no-cycle
 import CollectionsAxis from './Axis';
+import CollectionsZoomAxis from './ZoomAxis';
 // eslint-disable-next-line import/no-cycle
 import CollectionsAxis3 from './Axis3';
 // eslint-disable-next-line import/no-cycle
@@ -196,6 +197,15 @@ export default class FigureCollections {
    */
   axis(...options: Array<COL_Axis>) {
     return new CollectionsAxis(
+      this, joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options),
+    );
+  }
+
+  /**
+   * Create a {@link CollectionsAixs}.
+   */
+  zoomAxis(...options: Array<COL_ZoomAxis>) {
+    return new CollectionsZoomAxis(
       this, joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options),
     );
   }
