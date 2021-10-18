@@ -181,7 +181,7 @@ const plane = figure.add({
   },
   uniforms: [
     { name: 'u_offset', length: 2, value: [0, 0], type: 'FLOAT_VECTOR' },
-    { name: 'u_zoom', length: 1, value: [0.5], type: 'FLOAT' },
+    { name: 'u_zoom', length: 1, value: [1], type: 'FLOAT' },
     { name: 'u_convergenceSpeed', length: 1, value: [1], type: 'FLOAT' },
   ],
 });
@@ -319,6 +319,7 @@ const gesture = figure.add({
   height: 1,
   onlyWhenTouched: false,
   zoom: true,
+  pan: true,
 });
 const polygon = figure.add({
   make: 'polygon',
@@ -332,14 +333,25 @@ const polygon = figure.add({
 
 gesture.setZoomOptions({ scale: 5, max: 100000, min: 0.25 });
 
-gesture.notifications.add('zoom', (zoom) => {
+gesture.notifications.add('zoom', () => {
   const z = gesture.getZoom();
   // console.log(z.mag, z.offset.round(4).toArray(2), z.current.position.round(2).toArray(2));
   // console.log(z.mag, z.offset)
-  gesture.zoom2DScene(s, [-1, -1, 2, 2]);
+  gesture.zoomScene(s);
   // figure.zoomElement(polygon, [0, -0.2], false);
   plane.drawingObject.uniforms.u_zoom.value = [z.mag];
   plane.drawingObject.uniforms.u_offset.value = [-z.offset.x, -z.offset.y];
+});
+
+gesture.notifications.add('pan', (pan) => {
+  // const z = gesture.getZoom();
+  // console.log(z.mag, z.offset.round(4).toArray(2), z.current.position.round(2).toArray(2));
+  // console.log(z.mag, z.offset)
+  // console.log(pan)
+  gesture.panScene(s);
+  // figure.zoomElement(polygon, [0, -0.2], false);
+  // plane.drawingObject.uniforms.u_zoom.value = [z.mag];
+  plane.drawingObject.uniforms.u_offset.value = [-pan.x, -pan.y];
 });
 
 // const zoomPad = figure.add({

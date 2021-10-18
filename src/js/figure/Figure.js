@@ -2511,7 +2511,7 @@ class Figure {
     //   return false;
     // }
 
-    this.notifications.publish('gestureMove', [previousGLPoint, currentGLPoint], false);
+    this.notifications.publish('gestureMove', [previousGLPoint, currentGLPoint, this.beingTouchedElement], false);
 
     if (this.beingMovedElement == null || this.beingMovedElement === this.elements) {
       return false;

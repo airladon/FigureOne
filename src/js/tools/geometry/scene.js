@@ -340,6 +340,13 @@ export default class Scene {
     this.calcViewProjectionMatrix();
   }
 
+  setPan(pan: Point) {
+    this.pan = pan;
+    this.calcProjectionMatrix();
+    this.calcViewMatrix();
+    this.calcViewProjectionMatrix();
+  }
+
   // setProjectionMatrix(matrix: Type3DMatrix) {
   //   this.projectionMatrix = this.dupMatrix(matrix);
   //   this.calcViewProjectionMatrix();

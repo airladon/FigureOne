@@ -80,6 +80,10 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     enabled: boolean,
   };
 
+  pan: {
+    enabled: boolean,
+  }
+
   mousePixelPosition: Point;
   onlyWhenTouched: boolean;
   relativeScene: null | Scene;
@@ -119,6 +123,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       scale: 1,
       enabled: false,
     };
+    this.pan = { enabled: true };
     this.onlyWhenTouched = true;
   }
 
@@ -128,6 +133,9 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     }
     if (options.zoom) {
       this.zoom.enabled = true;
+    }
+    if (options.pan) {
+      this.pan.enabled = true;
     }
     if (options.onlyWhenTouched) {
       this.onlyWhenTouched = options.onlyWhenTouched;
@@ -141,6 +149,14 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
 
   pixelToScene(pixelPoint: Point) {
     const glPoint = this.figure.pixelToGL(pixelPoint);
+    const scene = this.relativeScene || this.getScene();
+    if (scene == null) {
+      throw new Error(`Gesture Primitive Error - Scene does not exist: ${this.getPath()}`);
+    }
+    return scene.glToFigure(glPoint);
+  }
+
+  glToScene(glPoint: Point) {
     const scene = this.relativeScene || this.getScene();
     if (scene == null) {
       throw new Error(`Gesture Primitive Error - Scene does not exist: ${this.getPath()}`);
@@ -201,7 +217,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
   /**
    * Changes a 2D scene to simulate zooming in and out
    */
-  zoom2DScene(scene: Scene, original: TypeParsableRect) {
+  zoomScene(scene: Scene) {
     // Get original scene
     // const r = getRect(original);
     // const left = r.left / this.zoom.mag;
@@ -215,6 +231,23 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     //   top: top - this.zoom.cumOffset.y,
     // });
     scene.setPanZoom(this.zoom.cumOffset, this.zoom.mag);
+    this.animateNextFrame();
+  }
+
+  panScene(scene: Scene) {
+    // Get original scene
+    // const r = getRect(original);
+    // const left = r.left / this.zoom.mag;
+    // const bottom = r.bottom / this.zoom.mag;
+    // const right = r.right / this.zoom.mag;
+    // const top = r.top / this.zoom.mag;
+    // scene.set2D({
+    //   left: left - this.zoom.cumOffset.x,
+    //   right: right - this.zoom.cumOffset.x,
+    //   bottom: bottom - this.zoom.cumOffset.y,
+    //   top: top - this.zoom.cumOffset.y,
+    // });
+    scene.setPan(this.zoom.cumOffset);
     this.animateNextFrame();
   }
 
@@ -280,7 +313,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     }
     const position = this.pixelToScene(line.pointAtPercent(0.5));
     this.updateZoom(mag, position, d, line.angle());
-    this.notifications.publish('zoom', [this.zoom.mag]);
+    this.notifications.publish('zoom', this.zoom.mag);
   }
 
 
@@ -324,7 +357,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.updateZoom(z.mag, z.position, z.distance, z.angle);
     this.zoom.pinching = z.pinching;
     if (notify) {
-      this.notifications.publish('zoom', [this.zoom.mag]);
+      this.notifications.publish('zoom', this.zoom.mag);
     }
   }
 
@@ -341,8 +374,22 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     };
   }
 
-  moveGesture() {
-
+  moveGesture(
+    previousGLPoint: Point,
+    currentGLPoint: Point,
+    beingTouchedElement: FigureElement,
+  ) {
+    if (!this.pan.enabled) {
+      return;
+    }
+    if (this.onlyWhenTouched && beingTouchedElement !== this) {
+      return;
+    }
+    const previousScenePoint = this.glToScene(previousGLPoint);
+    const currentScenePoint = this.glToScene(currentGLPoint);
+    const delta = currentScenePoint.sub(previousScenePoint);
+    this.zoom.cumOffset = this.zoom.cumOffset.add(delta.scale(1 / this.zoom.mag));
+    this.notifications.publish('pan', this.zoom.cumOffset);
   }
 
   setFigure(figure: OBJ_FigureForElement) {
