@@ -177,6 +177,11 @@ export default class Scene {
   widthNear: number;
   widthFar: number;
 
+  zoom: number;
+  pan: Point;
+  pannedCameraPosition: Point;
+  pannedLookAt: Point;
+
   // eslint-disable-next-line class-methods-use-this
   defaultOptions(): {|
   aspectRatio: number,
@@ -190,6 +195,8 @@ export default class Scene {
   right: number,
   style: '2D' | 'orthographic' | 'perspective',
   top: number,
+  zoom: number,
+  pan: Point,
   |} {
     return {
       style: '2D',
@@ -199,6 +206,8 @@ export default class Scene {
       top: 1,
       near: 0.1,
       far: 10,
+      zoom: 1,
+      pan: new Point(0, 0),
       camera: {
         position: [0, 0, 2],
         lookAt: [0, 0, 0],
@@ -237,7 +246,12 @@ export default class Scene {
         left, right, near, far, bottom, top,
       } = this;
       this.projectionMatrix = m3.orthographic(
-        left, right, bottom, top, near, far,
+        left / this.zoom,
+        right / this.zoom,
+        bottom / this.zoom,
+        top / this.zoom,
+        near,
+        far,
       );
       return;
     }
@@ -246,19 +260,28 @@ export default class Scene {
       fieldOfView, aspectRatio, near, far,
     } = this;
     this.projectionMatrix = m3.perspective(
-      fieldOfView, aspectRatio, near, far,
+      fieldOfView / this.zoom, aspectRatio, near, far,
     );
   }
 
   calcViewMatrix() {
+    this.cameraPosition = getPoint(this.camera.position);
+    this.cameraVector = getPoint(this.camera.lookAt).sub(this.cameraPosition).normalize();
+    this.rightVector = this.cameraVector
+      .crossProduct(getPoint(this.camera.up)).normalize();
+    this.upVector = this.rightVector.crossProduct(this.cameraVector).normalize();
+    this.pannedCameraPosition = this.cameraPosition
+      .add(this.upVector.scale(-this.pan.y))
+      .add(this.rightVector.scale(-this.pan.x));
+    this.pannedLookAt = getPoint(this.camera.lookAt)
+      .add(this.upVector.scale(-this.pan.y))
+      .add(this.rightVector.scale(-this.pan.x));
     this.cameraMatrix = m3.lookAt(
-      getPoint(this.camera.position).toArray(),
-      getPoint(this.camera.lookAt).toArray(),
+      getPoint(this.pannedCameraPosition).toArray(),
+      getPoint(this.pannedLookAt).toArray(),
       getPoint(this.camera.up).toArray(),
     );
     this.viewMatrix = m3.inverse(this.cameraMatrix);
-    this.cameraPosition = getPoint(this.camera.position);
-    this.cameraVector = getPoint(this.camera.lookAt).sub(this.cameraPosition).normalize();
   }
 
   calcViewProjectionMatrix() {
@@ -271,19 +294,13 @@ export default class Scene {
     if (this.style === '2D') {
       this.viewProjectionMatrix[11] = 0;
     }
-    this.rightVector = this.cameraVector
-      .crossProduct(getPoint(this.camera.up)).normalize();
-    this.upVector = this.rightVector.crossProduct(this.cameraVector).normalize();
-    // this.nearCenter = this.cameraPosition
-    //   .add(this.cameraVector.scale(this.near));
-    // this.farCenter = this.cameraPosition
-    //   .add(this.cameraVector.scale(this.far));
-    // this.nearPlane = new Plane(this.nearCenter, this.cameraVector);
-    // this.farPlane = new Plane(this.farCenter, this.cameraVector);
+    // this.rightVector = this.cameraVector
+    //   .crossProduct(getPoint(this.camera.up)).normalize();
+    // this.upVector = this.rightVector.crossProduct(this.cameraVector).normalize();
 
     if (this.style === 'perspective') {
-      this.heightNear = Math.tan(this.fieldOfView * 0.5) * this.near * 2;
-      this.heightFar = Math.tan(this.fieldOfView * 0.5) * this.far * 2;
+      this.heightNear = Math.tan(this.fieldOfView / this.zoom * 0.5) * this.near * 2;
+      this.heightFar = Math.tan(this.fieldOfView / this.zoom * 0.5) * this.far * 2;
       this.widthNear = this.aspectRatio * this.heightNear;
       this.widthFar = this.aspectRatio * this.heightFar;
       this.nearCenter = this.cameraPosition
@@ -293,18 +310,18 @@ export default class Scene {
       this.nearPlane = new Plane(this.nearCenter, this.cameraVector);
       this.farPlane = new Plane(this.farCenter, this.cameraVector);
     } else {
-      this.heightNear = this.top - this.bottom;
-      this.widthNear = this.right - this.left;
+      this.heightNear = (this.top - this.bottom) / this.zoom;
+      this.widthNear = (this.right - this.left) / this.zoom;
       this.heightFar = this.heightNear;
       this.widthFar = this.widthNear;
       this.nearCenter = this.cameraPosition
         .add(this.cameraVector.scale(this.near))
-        .add(this.rightVector.scale(this.left + this.widthNear / 2))
-        .add(this.upVector.scale(this.bottom + this.heightNear / 2));
+        .add(this.rightVector.scale(this.left / this.zoom + this.widthNear / 2))
+        .add(this.upVector.scale(this.bottom / this.zoom + this.heightNear / 2));
       this.farCenter = this.cameraPosition
         .add(this.cameraVector.scale(this.far))
-        .add(this.rightVector.scale(this.left + this.widthFar / 2))
-        .add(this.upVector.scale(this.bottom + this.heightFar / 2));
+        .add(this.rightVector.scale(this.left / this.zoom + this.widthFar / 2))
+        .add(this.upVector.scale(this.bottom / this.zoom + this.heightFar / 2));
       this.nearPlane = new Plane(this.nearCenter, this.cameraVector);
       this.farPlane = new Plane(this.farCenter, this.cameraVector);
     }
@@ -313,6 +330,14 @@ export default class Scene {
   // eslint-disable-next-line class-methods-use-this
   dupMatrix(matrix: Type3DMatrix): Type3DMatrix { // $FlowFixMe
     return matrix.slice();
+  }
+
+  setPanZoom(pan: Point, zoom: number) {
+    this.zoom = zoom;
+    this.pan = pan;
+    this.calcProjectionMatrix();
+    this.calcViewMatrix();
+    this.calcViewProjectionMatrix();
   }
 
   // setProjectionMatrix(matrix: Type3DMatrix) {
