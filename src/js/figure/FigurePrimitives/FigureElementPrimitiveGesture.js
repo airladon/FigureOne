@@ -103,6 +103,8 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
   onlyWhenTouched: boolean;
   relativeScene: null | Scene;
 
+  notificationIDs: Array<number>;
+
   animations: {
     zoom: (OBJ_AnimationStep) => CustomAnimationStep,
     pan: (OBJ_AnimationStep) => CustomAnimationStep,
@@ -145,6 +147,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       },
     };
     this.onlyWhenTouched = true;
+    this.notificationIDs = [];
   }
 
   setup(options: OBJ_Gesture) {
@@ -426,12 +429,18 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     if (this.isMovable) {
       this.setMovable();
     }
-    this.figure.notifications.add('gestureWheel', this.wheelHandler.bind(this));
-    this.figure.notifications.add('mousePosition', this.mousePosition.bind(this));
-    this.figure.notifications.add('gestureStartPinch', this.startPinchZoom.bind(this));
-    this.figure.notifications.add('gesturePinching', this.pinchZoom.bind(this));
-    this.figure.notifications.add('gesturePinchEnd', this.endPinchZoom.bind(this));
-    this.figure.notifications.add('gestureMove', this.moveGesture.bind(this));
+    this.cleanupIDs();
+    this.notificationIDs.push(this.figure.notifications.add('gestureWheel', this.wheelHandler.bind(this)));
+    this.notificationIDs.push(this.figure.notifications.add('mousePosition', this.mousePosition.bind(this)));
+    this.notificationIDs.push(this.figure.notifications.add('gestureStartPinch', this.startPinchZoom.bind(this)));
+    this.notificationIDs.push(this.figure.notifications.add('gesturePinching', this.pinchZoom.bind(this)));
+    this.notificationIDs.push(this.figure.notifications.add('gesturePinchEnd', this.endPinchZoom.bind(this)));
+    this.notificationIDs.push(this.figure.notifications.add('gestureMove', this.moveGesture.bind(this)));
     this.notifications.publish('setFigure');
+  }
+
+  cleanupIDs() {  // $FlowFixMe
+    this.notificationIDs.forEach(id => this.figure.notifications.remove(id));
+    this.notificationIDs = [];
   }
 }
