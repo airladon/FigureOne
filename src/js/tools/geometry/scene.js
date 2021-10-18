@@ -260,7 +260,7 @@ export default class Scene {
       fieldOfView, aspectRatio, near, far,
     } = this;
     this.projectionMatrix = m3.perspective(
-      fieldOfView / this.zoom, aspectRatio, near, far,
+      Math.min(fieldOfView / this.zoom, Math.PI), aspectRatio, near, far,
     );
   }
 
@@ -299,8 +299,9 @@ export default class Scene {
     // this.upVector = this.rightVector.crossProduct(this.cameraVector).normalize();
 
     if (this.style === 'perspective') {
-      this.heightNear = Math.tan(this.fieldOfView / this.zoom * 0.5) * this.near * 2;
-      this.heightFar = Math.tan(this.fieldOfView / this.zoom * 0.5) * this.far * 2;
+      const fov = Math.min(Math.PI, this.fieldOfView / this.zoom);
+      this.heightNear = Math.tan(fov * 0.5) * this.near * 2;
+      this.heightFar = Math.tan(fov * 0.5) * this.far * 2;
       this.widthNear = this.aspectRatio * this.heightNear;
       this.widthFar = this.aspectRatio * this.heightFar;
       this.nearCenter = this.cameraPosition

@@ -320,6 +320,7 @@ const gesture = figure.add({
   onlyWhenTouched: false,
   zoom: true,
   pan: true,
+  // scene: s,
 });
 const polygon = figure.add({
   make: 'polygon',
@@ -331,6 +332,22 @@ const polygon = figure.add({
   move: true,
 });
 
+const ps = new Fig.Scene({ style: 'orthographic', light: { directional: [0.2, 0.3, 0.9] }, camera: { position: [0.2, 0.5, 1] } });
+figure.add({
+  make: 'cube',
+  side: 0.2,
+  scene: ps,
+  color: [0, 1, 0, 1],
+});
+
+figure.add({
+  make: 'cube',
+  side: 0.2,
+  scene: ps,
+  color: [0, 1, 0, 1],
+  position: [0.3, 0],
+});
+
 gesture.setZoomOptions({ scale: 5, max: 100000, min: 0.25 });
 
 gesture.notifications.add('zoom', () => {
@@ -338,6 +355,7 @@ gesture.notifications.add('zoom', () => {
   // console.log(z.mag, z.offset.round(4).toArray(2), z.current.position.round(2).toArray(2));
   // console.log(z.mag, z.offset)
   gesture.zoomScene(s);
+  gesture.zoomScene(ps);
   // figure.zoomElement(polygon, [0, -0.2], false);
   plane.drawingObject.uniforms.u_zoom.value = [z.mag];
   plane.drawingObject.uniforms.u_offset.value = [-z.offset.x, -z.offset.y];
@@ -349,6 +367,7 @@ gesture.notifications.add('pan', (pan) => {
   // console.log(z.mag, z.offset)
   // console.log(pan)
   gesture.panScene(s);
+  gesture.panScene(ps);
   // figure.zoomElement(polygon, [0, -0.2], false);
   // plane.drawingObject.uniforms.u_zoom.value = [z.mag];
   plane.drawingObject.uniforms.u_offset.value = [-pan.x, -pan.y];
