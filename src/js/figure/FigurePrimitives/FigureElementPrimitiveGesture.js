@@ -1,17 +1,20 @@
 // @flow
+import type { OBJ_FigureForElement } from '../Figure';
 import { FigureElementPrimitive } from '../Element';
 import { CustomAnimationStep } from '../Animation/AnimationStep/CustomStep';
 import AnimationManager from '../Animation/AnimationManager';
 import type { OBJ_AnimationStep } from '../Animation/AnimationStep';
 import {
-  Point, getPoint, Line, getRect,
+  Point, getPoint, Line,
 } from '../../tools/g2';
 import type { FigureElement } from '../Element';
-import type { TypeParsablePoint, TypeParsableRect } from '../../tools/g2';
+import type { TypeParsablePoint, Transform } from '../../tools/g2';
 import type Scene from '../../tools/geometry/scene';
 import { joinObjects } from '../../tools/tools';
 import type { OBJ_Rectangle } from './FigurePrimitiveTypes2D';
-
+import type TimeKeeper from '../TimeKeeper';
+import type DrawingObject from '../DrawingObjects/DrawingObject';
+import type { TypeColor } from '../../tools/types';
 /**
  * Zoom options.
  *
@@ -23,14 +26,18 @@ import type { OBJ_Rectangle } from './FigurePrimitiveTypes2D';
  * (scale > 1) or slower (scale < 1) (`q`)
  */
 export type OBJ_ZoomOptions = {
-  max?: null | number,
-  min?: null | number,
-  scale?: number,
+  min: null | number,
+  max: null | number,
+  sensitivity?: number,
 }
 
 export type OBJ_PanOptions = {
-  bounds?: TypeParsableRect,
-  scale?: number,
+  bounds?: {
+    left: null | number,
+    right: null | number,
+    bottom: null | number,
+    top: null | number,
+  },
 }
 /**
  * Current zoom.
@@ -70,11 +77,11 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       angle: number,
       distance: number,
     },
-    max: null | number,
     min: null | number,
-    scale: number,
+    max: null | number,
+    sensitivity: number,
     mag: number,
-    cumOffset: Point,
+    // cumOffset: Point,
     cumAngle: number,
     pinching: boolean,
     enabled: boolean,
@@ -82,7 +89,14 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
 
   pan: {
     enabled: boolean,
-  }
+    offset: Point,
+    bounds: {
+      left: null | number,
+      right: null | number,
+      bottom: null | number,
+      top: null | number,
+    },
+  };
 
   mousePixelPosition: Point;
   onlyWhenTouched: boolean;
@@ -117,13 +131,18 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
         distance: 0,
       },
       mag: 1,
-      cumOffset: new Point(0, 0),
       cumAngle: new Point(0, 0),
       pinching: false,
-      scale: 1,
+      sensitivity: 1,
       enabled: false,
     };
-    this.pan = { enabled: true };
+    this.pan = {
+      enabled: true,
+      offset: new Point(0, 0),
+      bounds: {
+        left: null, right: null, top: null, bottom: null,
+      },
+    };
     this.onlyWhenTouched = true;
   }
 
@@ -174,13 +193,14 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       }
     }
     // const oldZoom = this.zoom.last.mag;
-    let mag = this.zoom.mag + deltaY / 10 * this.zoom.scale * this.zoom.mag / 100;
+    let mag = this.zoom.mag + deltaY / 10 * this.zoom.sensitivity * this.zoom.mag / 100;
     if (this.zoom.min != null) {
       mag = Math.max(mag, this.zoom.min);
     }
     if (this.zoom.max != null) {
       mag = Math.min(mag, this.zoom.max);
     }
+    // mag = this.zoom.bounds.clip(mag);
     if (this.mousePixelPosition == null) {
       this.updateZoom(mag, this.transformPoint([0, 0], 'gl', 'figure'));
     } else {
@@ -208,7 +228,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     scale: boolean = true,
   ) {
     const o = getPoint(originalPosition);
-    element.setPosition(o.add(this.zoom.cumOffset).scale(this.zoom.mag));
+    element.setPosition(o.add(this.pan.offset).scale(this.zoom.mag));
     if (scale) {
       element.setScale(this.zoom.mag);
     }
@@ -218,36 +238,12 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
    * Changes a 2D scene to simulate zooming in and out
    */
   zoomScene(scene: Scene) {
-    // Get original scene
-    // const r = getRect(original);
-    // const left = r.left / this.zoom.mag;
-    // const bottom = r.bottom / this.zoom.mag;
-    // const right = r.right / this.zoom.mag;
-    // const top = r.top / this.zoom.mag;
-    // scene.set2D({
-    //   left: left - this.zoom.cumOffset.x,
-    //   right: right - this.zoom.cumOffset.x,
-    //   bottom: bottom - this.zoom.cumOffset.y,
-    //   top: top - this.zoom.cumOffset.y,
-    // });
-    scene.setPanZoom(this.zoom.cumOffset, this.zoom.mag);
+    scene.setPanZoom(this.pan.offset, this.zoom.mag);
     this.animateNextFrame();
   }
 
   panScene(scene: Scene) {
-    // Get original scene
-    // const r = getRect(original);
-    // const left = r.left / this.zoom.mag;
-    // const bottom = r.bottom / this.zoom.mag;
-    // const right = r.right / this.zoom.mag;
-    // const top = r.top / this.zoom.mag;
-    // scene.set2D({
-    //   left: left - this.zoom.cumOffset.x,
-    //   right: right - this.zoom.cumOffset.x,
-    //   bottom: bottom - this.zoom.cumOffset.y,
-    //   top: top - this.zoom.cumOffset.y,
-    // });
-    scene.setPan(this.zoom.cumOffset);
+    scene.setPan(this.pan.offset);
     this.animateNextFrame();
   }
 
@@ -262,8 +258,8 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.zoom.mag = mag;
     this.zoom.current = { position: zoomPosition, angle, distance };
     const newPosition = zoomPosition.scale(mag / oldMag);
-    this.zoom.cumOffset = this.zoom.cumOffset.add(
-      zoomPosition.sub(newPosition).scale(1 / mag),
+    this.setPanOffset(
+      this.pan.offset.add(zoomPosition.sub(newPosition).scale(1 / mag)),
     );
     this.zoom.cumAngle += angle - this.zoom.last.angle;
   }
@@ -304,7 +300,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     const d = line.length();
     // const { current, lastDistance, scale } = this.zoom;
     let mag = this.zoom.mag
-      + (d - this.zoom.current.distance) / 5 * this.zoom.scale * this.zoom.mag / 100;
+      + (d - this.zoom.current.distance) / 5 * this.zoom.sensitivity * this.zoom.mag / 100;
     if (this.zoom.min != null) {
       mag = Math.max(mag, this.zoom.min);
     }
@@ -338,7 +334,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
   setZoomOptions(options: OBJ_ZoomOptions) {
     if (options.min !== undefined) { this.zoom.min = options.min; }
     if (options.max !== undefined) { this.zoom.max = options.max; }
-    if (options.scale !== undefined) { this.zoom.scale = options.scale; }
+    if (options.sensitivity !== undefined) { this.zoom.sensitivity = options.sensitivity; }
   }
 
   /**
@@ -369,7 +365,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       last: this.zoom.last,
       current: this.zoom.current,
       mag: this.zoom.mag,
-      offset: this.zoom.cumOffset,
+      offset: this.pan.offset,
       angle: this.zoom.cumAngle,
     };
   }
@@ -388,8 +384,25 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     const previousScenePoint = this.glToScene(previousGLPoint);
     const currentScenePoint = this.glToScene(currentGLPoint);
     const delta = currentScenePoint.sub(previousScenePoint);
-    this.zoom.cumOffset = this.zoom.cumOffset.add(delta.scale(1 / this.zoom.mag));
-    this.notifications.publish('pan', this.zoom.cumOffset);
+    this.setPanOffset(this.pan.offset.add(delta.scale(1 / this.zoom.mag)));
+    this.notifications.publish('pan', this.pan.offset);
+  }
+
+  setPanOffset(offset: Point) {
+    const o = offset;
+    if (this.pan.bounds.left != null && this.pan.bounds.left > o.x) {
+      o.x = this.pan.bounds.left;
+    }
+    if (this.pan.bounds.right != null && this.pan.bounds.right < o.x) {
+      o.x = this.pan.bounds.right;
+    }
+    if (this.pan.bounds.bottom != null && this.pan.bounds.bottom > o.y) {
+      o.y = this.pan.bounds.bottom;
+    }
+    if (this.pan.bounds.top != null && this.pan.bounds.top < o.y) {
+      o.y = this.pan.bounds.top;
+    }
+    this.pan.offset = o;
   }
 
   setFigure(figure: OBJ_FigureForElement) {

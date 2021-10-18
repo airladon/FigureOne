@@ -315,8 +315,9 @@ const s = new Fig.Scene({
 const gesture = figure.add({
   make: 'gesture',
   color: [0, 0, 1, 0.2],
-  width: 1,
-  height: 1,
+  // width: 1,
+  // height: 1,
+  // position: [0.5, 0.5],
   onlyWhenTouched: false,
   zoom: true,
   pan: true,

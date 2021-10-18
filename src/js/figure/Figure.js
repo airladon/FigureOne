@@ -83,6 +83,7 @@ export type OBJ_FigureForElement = {
   recorder: Recorder,
   timeKeeper: TimeKeeper,
   notifications: NotificationManager,
+  pixelToGL: (Point) => Point,
 }
 
 /**
@@ -1725,7 +1726,6 @@ class Figure {
       this.renderAllElementsToTiedCanvases();
       this.oldWidth = this.canvasLow.clientWidth;
     }
-    const canvasRect = this.canvasLow.getBoundingClientRect();
     this.getPixelSpace();
     this.notifications.publish('resize');
     this.animateNextFrame(true, 'resize');
