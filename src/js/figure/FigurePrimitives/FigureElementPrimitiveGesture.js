@@ -341,7 +341,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     }
     this.pan.delta = this.getPosition().sub(this.originalPosition);
     this.transform.updateTranslation(this.originalPosition);
-    this.setPanOffset(this.pan.offset.sub(this.pan.delta.scale(1 / this.zoom.mag)));
+    this.setPanOffset(this.pan.offset.sub(this.pan.delta.scale(1)));
     this.notifications.publish('pan', this.pan.offset);
     if (this.changeScene != null) {
       this.panScene(this.changeScene);
@@ -368,6 +368,23 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     }
     return scene.glToFigure(glPoint);
   }
+
+  /**
+  A zoom pan can be defined as:
+   1) what coordinate is in the middle of the screen (C)
+   2) what the zoom factor is
+
+  A pan zoom in a scene then:
+    - Pans camera so C is in middle of screen
+    - Zooms
+  
+  If a point is zoomed on, then it stays in its relative position in the zoomed
+  scene space, meaning C keeps changing.
+
+  Therefore to find C:
+  - Find relative position of point in scene
+  - using the zoom factor find the center point in the zoomed scene
+   */
 
   wheelHandler(delta: Point) {
     if (!this.pan.enabled && !this.zoom.enabled) {
@@ -510,7 +527,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
   panTransform(scene: Scene) {
     const s = this.getScene();
     const newQ = this.pan.offset
-      .scale(1 / (1 / this.zoom.mag - 1))
+      .scale(this.zoom.mag === 1 ? 1 : 1 / (1 / this.zoom.mag - 1))
       .sub(scene.left, scene.bottom)
       .scale((scene.right - scene.left) / (s.right - s.left))
       .add(s.left, s.bottom);
@@ -518,10 +535,10 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
   }
 
   panScene(scene: Scene) {
-    // const s = this.getScene();
-    // const p = this.pan.offset.scale((scene.right - scene.left) / (s.right - s.left) / scene.zoom);
-    // scene.setPan(p);
-    scene.setPan(this.panTransform(scene).scale(-1));
+    const s = this.getScene();
+    const p = this.pan.offset.scale((scene.right - scene.left) / (s.right - s.left) / scene.zoom);
+    scene.setPan(p.scale(-1));
+    // scene.setPan(this.panTransform(scene).scale(-1));
     this.animateNextFrame();
   }
 
