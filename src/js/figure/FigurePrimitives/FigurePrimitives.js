@@ -1432,7 +1432,7 @@ export default class FigurePrimitives {
   }
 
   gesture(...options: Array<OBJ_Gesture>) {
-    const o = joinObjectsWithOptions({}, {}, {
+    const defaultOptions = {
       color: [0, 0, 0, 0],
       width: 1,
       height: 1,
@@ -1442,7 +1442,21 @@ export default class FigurePrimitives {
       zoom: false,
       pan: false,
       back: true,
-    }, ...options);
+    };
+    const combinedOptions = joinObjects({}, ...options);
+    let scene;
+    if (combinedOptions.scene == null) {
+      scene = this.scene;
+    } else {
+      scene = new Scene(combinedOptions.scene);
+    }
+    defaultOptions.width = scene.right - scene.left;
+    defaultOptions.height = scene.top - scene.bottom;
+    defaultOptions.position = [
+      scene.left + defaultOptions.width / 2,
+      scene.bottom + defaultOptions.height / 2,
+    ];
+    const o = joinObjectsWithOptions({}, defaultOptions, combinedOptions);
     // $FlowFixMe
     const element = this.rectangle({
       width: o.width,

@@ -19,38 +19,117 @@ import type { TypeColor } from '../../tools/types';
  * maximum if `null` (`null`)
  * @property {null | number} [min] minimum zoom if value defined, no
  * minimum if `null` (`null`)
- * @property {number} [scale] scale zoom value to make it most faster
- * (scale > 1) or slower (scale < 1) (`q`)
+ * @property {number} [sensitivity] zoom sensitivity where values greater
+ * than 1 are more sensitive resulting in faster zoom changes (`1`)
+ * @property {number} [position] zoom around a fixed point (instead of the
+ * mouse of pinch location) - leave undefined or use `null` to instead zoom
+ * around mouse or pinch location (`null`)
  */
 export type OBJ_ZoomOptions = {
-  min: null | number,
-  max: null | number,
+  min?: null | number,
+  max?: null | number,
   sensitivity?: number,
+  position?: null | TypeParsablePoint
 }
 
+/**
+ * Pan options.
+ *
+ * @property {null | number} [left] maximum left pan allowed, or `null` for no
+ * limit (`null`)
+ * @property {null | number} [right] maximum right pan allowed, or `null` for no
+ * limit (`null`)
+ * @property {null | number} [bottom] maximum bottom pan allowed, or `null` for
+ * no limit (`null`)
+ * @property {null | number} [top] maximum top pan allowed, or `null` for no
+ * limit (`null`)
+ * @property {number} [sensitivity] pan sensitivity for mouse wheel
+ * panning where values greater than 1 are more sensitive resulting in faster
+ * panning (`1`)
+ * @property {boolean} [wheel] enable mouse wheel panning - only possible if
+ * zoom gesture is disabled.
+ * @property {boolean} [momentum] enable pan momentum for drag panning. NB,
+ * mouse wheel panning mamemntum cannot be controlled and will be browser
+ * dependent. (`true`)
+ */
 export type OBJ_PanOptions = {
-  left: null | number,
-  right: null | number,
-  bottom: null | number,
-  top: null | number,
-  sensitivity: number,
+  left?: null | number,
+  right?: null | number,
+  bottom?: null | number,
+  top?: null | number,
+  sensitivity?: number,
+  wheel?: boolean,
+  momentum?: boolean,
 }
+
+/**
+ * Instantaneous zoom metrics.
+ * @property {number} [mag] zoom magnification
+ * @property {Point} [position] position around which zoom is happening
+ * @property {number} [angle] (pinch zoom only) pinch angle delta to start of
+ * pinch
+ * @property {number} [distance] (pinch zoom only) distance between pinch points
+ */
+export type OBJ_ZoomInstant = {
+  mag: number,
+  position: Point,
+  angle: number,
+  distance: number,
+}
+
 /**
  * Current zoom.
  *
- @property {number} zoom current zoom
- @property {Point} position figure space point where the last zoom gesture was
- * centered
- @property {number} angle when zooming with pinch touch gestures, the angle
- * difference between the latest gesture and the current gesture.
- @property {number} zooming `true` if two touches are currently zooming
+ @property {OBJ_ZoomInstant} last last zoom metrics
+ @property {OBJ_ZoomInstant} current current zoom metrics
+ @property {number} mag current zoom magnification
+ @property {number} offset pan offset needed to keep the zoom position at a
+ * fixed location
  */
 export type OBJ_Zoom = {
-  zoom: number,
-  position: Point,
-  angle: number,
-  zooming: boolean,
+  last: OBJ_ZoomInstant,
+  current: OBJ_ZoomInstant,
+  mag: number,
+  offset: Point,
 }
+
+/**
+ * @property {OBJ_ZoomOptions | boolean} [zoom] zoom options - if not `false`
+ * then zoom will be enabled (`false`)
+ * @property {OBJ_PanOptions | boolean} [pan] pan options - if not `false` then
+ * pan will be enabled (`false`)
+ * @property {boolean} [onlyWhenTouched] (mouse wheel zoom/pan and pinch zoom)
+ * only notify when element gesture rectangle is being touched (`true`)
+ * @property {boolean} [back] if `true` 3D shape interactivity will be
+ * prioritized (`true`)
+ * @property {number} [width] width of rectangle - defaults to full scene width
+ * @property {number} [height] height of rectangle - defaults to full scene
+ * height
+ * @property {OBJ_Scene | Scene} [scene] define if gesture should be an
+ * independeant scene (like if the gestures are being used to change the
+ * default figure scene) - defaults to Figure scene
+ * @property {OBJ_Scene} [changeScene] if defined, this scene will be
+ * automatically updated with any pan and zoom events
+ * @property {'left' | 'center' | 'right' | number} [xAlign] x alignment of
+ * rectangle (`'center'`)
+ * @property {'bottom' | 'middle' | 'top' | number} [yAlign] y alignment of
+ * rectangle (`'middle'`)
+ *
+ * @extends OBJ_Generic
+ */
+export type OBJ_Gesture = {
+  zoom?: OBJ_ZoomOptions | boolean,
+  pan?: OBJ_PanOptions | boolean,
+  onlyWhenTouched?: boolean,
+  back?: boolean,
+  width?: number,
+  height?: number,
+  scene?: OBJ_Scene | Scene,
+  changeScene?: Scene,
+  xAlign?: 'left' | 'center' | 'right' | number,
+  yAlign?: 'bottom' | 'middle' | 'top' | number,
+} & OBJ_Generic;
+
 
 /**
  * The Gesture primitive converts common gestures into `'zoom'` and `'pan'`
@@ -62,7 +141,9 @@ export type OBJ_Zoom = {
  * - Pinching (often used for zooming and panning on touch devices)
  *
  * The primitive is a rectangle, usually transparant, that captures gestures.
- * Gestures can be limited to if they happen in the rectangle or not.
+ * Gestures can be limited to if they happen in the rectangle or not. The
+ * rectangle can cover the whole figure, or just a portion of the figure if
+ * only a portion needs to be zoomed/panned.
  *
  * # Pan
  *
@@ -105,16 +186,18 @@ export type OBJ_Zoom = {
  * more information is needed (like the zoom delta or zoom position for
  * example) then `getZoom()` can be called.
  *
+ * Zoom and pan events can be used in many ways. One of the most common ways
+ * will be to change a {@link Scene} that contains one or more figure elements
+ * allowing a user to pan or zoom through the scene.
  *
+ * In such cases, the `zoomScene()` and `panScene()` methods can be used to do
+ * this easily. If the scene of interest is the default scene of the figure,
+ * then make sure the gesture primitive has its own separate scene so it is not
+ * zoomed and panned itself.
+ *
+ * The gesture primitive can have its zoom and pan manually set using the
+ * `setZoom()` and `setPan()` methods.
  */
-export type OBJ_Gesture = {
-  zoom?: OBJ_ZoomOptions | boolean,
-  pan?: OBJ_PanOptions | boolean,
-  onlyWhenTouched?: boolean,
-  scene?: Scene,
-  back?: boolean,
-} & OBJ_Rectangle;
-
 // $FlowFixMe
 export default class FigureElementPrimitiveGesture extends FigureElementPrimitive {
   zoom: {
@@ -136,6 +219,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     cumAngle: number,
     pinching: boolean,
     enabled: boolean,
+    position: Point | null,
   };
 
   pan: {
@@ -147,13 +231,20 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     top: null | number,
     delta: Point,
     sensitivity: number,
+    wheel: boolean,
+    momentum: boolean,
   };
+
+  justMoved: boolean;
+  originalPosition: Point;
 
   mousePixelPosition: Point;
   onlyWhenTouched: boolean;
   relativeScene: null | Scene;
 
   notificationIDs: Array<number>;
+
+  changeScene: Scene;
 
   constructor(
     drawingObject: DrawingObject,
@@ -183,6 +274,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       pinching: false,
       sensitivity: 1,
       enabled: false,
+      position: null,
     };
     this.pan = {
       enabled: false,
@@ -193,9 +285,13 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       bottom: null,
       delta: new Point(0, 0),
       sensitivity: 1,
+      wheel: false,
+      momentum: false,
     };
+    this.justMoved = false;
     this.onlyWhenTouched = true;
     this.notificationIDs = [];
+    this.originalPosition = this.getPosition();
   }
 
   setup(options: OBJ_Gesture) {
@@ -218,7 +314,38 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     if (options.back) {
       this._custom.cameraControlBack = true;
     }
-    this.setTouchable();
+    if (options.changeScene != null) {
+      this.changeScene = options.changeScene;
+    }
+    this.setMovable();
+    if (!this.pan.momentum) {
+      this.move.freely = false;
+    }
+    this.notifications.add('beforeMove', this.setupMove.bind(this));
+    this.notifications.add('beforeMoveFreely', this.setupMove.bind(this));
+    this.notifications.add('setTransform', this.dragPan.bind(this));
+  }
+
+  setupMove() {
+    this.originalPosition = this.getPosition();
+    this.justMoved = true;
+  }
+
+  dragPan() {
+    if (!this.justMoved) {
+      return;
+    }
+    this.justMoved = false;
+    if (!this.pan.enabled) {
+      return;
+    }
+    this.pan.delta = this.getPosition().sub(this.originalPosition);
+    this.transform.updateTranslation(this.originalPosition);
+    this.setPanOffset(this.pan.offset.add(this.pan.delta));
+    this.notifications.publish('pan', this.pan.offset);
+    if (this.changeScene != null) {
+      this.panScene(this.changeScene);
+    }
   }
 
   mousePosition(pixelPoint: Point) {
@@ -247,14 +374,11 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       return;
     }
     if (this.onlyWhenTouched) {
-      if (!this.isBeingTouched(this.transformPoint(this.mousePixelPosition, 'pixel', 'gl'))) {
+      if (this.mousePixelPosition == null || !this.isBeingTouched(this.transformPoint(this.mousePixelPosition, 'pixel', 'gl'))) {
         return;
       }
     }
     if (this.zoom.enabled) {
-      // const oldZoom = this.zoom.last.mag;
-      // const scene = this.getScene();
-      // const deltaYPixel = this.pixelToScene(delta.y) + scene.bottom;
       let mag = this.zoom.mag + delta.y / 10 * this.zoom.sensitivity * this.zoom.mag / 100;
       if (this.zoom.min != null) {
         mag = Math.max(mag, this.zoom.min);
@@ -270,6 +394,12 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
         this.updateZoom(mag, mousePosition, 0, 0);
       }
       this.notifications.publish('zoom', this.zoom.mag);
+      if (this.changeScene != null) {
+        this.zoomScene(this.changeScene);
+      }
+      return;
+    }
+    if (!this.pan.wheel) {
       return;
     }
     const scene = this.getScene();
@@ -277,12 +407,15 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.pan.delta.x *= -1;
     this.setPanOffset(this.pan.offset.add(this.pan.delta));
     this.notifications.publish('pan', this.pan.offset);
+    if (this.changeScene != null) {
+      this.panScene(this.changeScene);
+    }
   }
 
   /**
    * Change the position and scale of an element to simulate it zooming.
    *
-   * Note, the element will stay in the same space it was previous, and
+   * Note, the element will stay in the same space it was previously, and
    * therefore moving it will be moving it in the same space.
    *
    * Often a better way to zoom an element (especially if more than one and
@@ -307,12 +440,20 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
    * Changes a 2D scene to simulate zooming in and out
    */
   zoomScene(scene: Scene) {
-    scene.setPanZoom(this.pan.offset, this.zoom.mag);
+    const s = this.getScene();
+    // const p = this.pan.offset.scale(((scene.right - scene.left) * scene.zoom) / ((s.right - s.left)));
+    // const unscaled = this.pan.offset.scale(1 / this.zoom.mag);
+    // const p = unscaled.scale((scene.right - scene.left) / (s.right - s.left));
+    const p = this.pan.offset.scale((scene.right - scene.left) / (s.right - s.left) / scene.zoom);
+    scene.setPanZoom(p, this.zoom.mag);
+    console.log(scene.zoom, p.round(2).toArray())
     this.animateNextFrame();
   }
 
   panScene(scene: Scene) {
-    scene.setPan(this.pan.offset);
+    const s = this.getScene();
+    const p = this.pan.offset.scale((scene.right - scene.left) / (s.right - s.left) / scene.zoom);
+    scene.setPan(p);
     this.animateNextFrame();
   }
 
@@ -325,12 +466,18 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       distance: this.zoom.current.distance,
     };
     this.zoom.mag = mag;
-    this.zoom.current = { position: zoomPosition, angle, distance };
-    const newPosition = zoomPosition.scale(mag / oldMag);
-    // if (this.getScene() === this.relativeScene)
-    this.pan.delta = zoomPosition.sub(newPosition).scale(1 / mag);
+    this.zoom.current = {
+      position: zoomPosition, angle, distance, mag: this.zoom.mag,
+    };
+    if (this.zoom.position != null) {
+      const newPosition = this.zoom.position.scale(mag / oldMag);
+      this.pan.delta = this.zoom.position.sub(newPosition).scale(1 / mag);
+    } else {
+      const newPosition = zoomPosition.scale(mag / oldMag);
+      this.pan.delta = zoomPosition.sub(newPosition).scale(1 / mag);
+    }
     this.setPanOffset(
-      this.pan.offset.add(this.pan.delta),
+      this.pan.offset.sub(this.pan.delta),
     );
     this.zoom.cumAngle += angle - this.zoom.last.angle;
   }
@@ -381,6 +528,9 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     const position = this.pixelToScene(line.pointAtPercent(0.5));
     this.updateZoom(mag, position, d, line.angle());
     this.notifications.publish('zoom', this.zoom.mag);
+    if (this.changeScene != null) {
+      this.zoomScene(this.changeScene);
+    }
   }
 
 
@@ -406,6 +556,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     if (options.min !== undefined) { this.zoom.min = options.min; }
     if (options.max !== undefined) { this.zoom.max = options.max; }
     if (options.sensitivity !== undefined) { this.zoom.sensitivity = options.sensitivity; }
+    if (options.position != null) { this.zoom.position = getPoint(options.position); }
   }
 
   setPanOptions(options: OBJ_PanOptions) {
@@ -413,6 +564,9 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     if (options.bottom !== undefined) { this.pan.bottom = options.bottom; }
     if (options.top !== undefined) { this.pan.top = options.top; }
     if (options.right !== undefined) { this.pan.right = options.right; }
+    if (options.sensitivity !== undefined) { this.pan.sensitivity = options.sensitivity; }
+    if (options.wheel !== undefined) { this.pan.wheel = options.wheel; }
+    if (options.momentum !== undefined) { this.pan.momentum = options.momentum; }
   }
 
   /**
@@ -433,6 +587,9 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     if (notify) {
       this.notifications.publish('zoom', this.zoom.mag);
     }
+    if (this.changeScene != null) {
+      this.zoomScene(this.changeScene);
+    }
   }
 
   setPan(offset: TypeParsablePoint) {
@@ -448,7 +605,6 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       current: this.zoom.current,
       mag: this.zoom.mag,
       offset: this.pan.offset,
-      angle: this.zoom.cumAngle,
     };
   }
 
@@ -459,24 +615,24 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     };
   }
 
-  moveGesture(
-    previousGLPoint: Point,
-    currentGLPoint: Point,
-    beingTouchedElement: FigureElement,
-  ) {
-    if (!this.pan.enabled) {
-      return;
-    }
-    if (this.onlyWhenTouched && beingTouchedElement !== this) {
-      return;
-    }
-    const previousScenePoint = this.glToScene(previousGLPoint);
-    const currentScenePoint = this.glToScene(currentGLPoint);
-    const delta = currentScenePoint.sub(previousScenePoint);
-    this.pan.delta = delta;
-    this.setPanOffset(this.pan.offset.add(delta.scale(1 / this.zoom.mag)));
-    this.notifications.publish('pan', this.pan.offset);
-  }
+  // moveGesture(
+  //   previousGLPoint: Point,
+  //   currentGLPoint: Point,
+  //   beingTouchedElement: FigureElement,
+  // ) {
+  //   if (!this.pan.enabled) {
+  //     return;
+  //   }
+  //   if (this.onlyWhenTouched && beingTouchedElement !== this) {
+  //     return;
+  //   }
+  //   const previousScenePoint = this.glToScene(previousGLPoint);
+  //   const currentScenePoint = this.glToScene(currentGLPoint);
+  //   const delta = currentScenePoint.sub(previousScenePoint);
+  //   this.pan.delta = delta;
+  //   this.setPanOffset(this.pan.offset.add(delta.scale(1 / this.zoom.mag)));
+  //   this.notifications.publish('pan', this.pan.offset);
+  // }
 
   setPanOffset(offset: Point) {
     const o = offset;
@@ -519,7 +675,6 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.notificationIDs.push(this.figure.notifications.add('gestureStartPinch', this.startPinchZoom.bind(this)));
     this.notificationIDs.push(this.figure.notifications.add('gesturePinching', this.pinchZoom.bind(this)));
     this.notificationIDs.push(this.figure.notifications.add('gesturePinchEnd', this.endPinchZoom.bind(this)));
-    this.notificationIDs.push(this.figure.notifications.add('gestureMove', this.moveGesture.bind(this)));
     this.notifications.publish('setFigure');
   }
 
