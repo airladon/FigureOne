@@ -1851,8 +1851,8 @@ class Figure {
     this.notifications.publish('mousePosition', pixelPoint);
   }
 
-  wheelHandler(deltaY: number) {
-    this.notifications.publish('gestureWheel', deltaY);
+  wheelHandler(deltaX: number, deltaY: number, deltaMode: 0x00 | 0x01 | 0x02) {
+    this.notifications.publish('gestureWheel', [new Point(deltaX, deltaY), deltaMode], false);
     // // const oldZoom = this.zoom.last.mag;
     // let mag = this.zoom.mag + deltaY / 10 * this.zoom.scale * this.zoom.mag / 100;
     // if (this.zoom.min != null) {

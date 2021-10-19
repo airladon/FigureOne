@@ -13,7 +13,7 @@ class Gesture {
   move: (Point, Point) => boolean;
   free: (Point) => void;
   toggleCursor: () => void;
-  wheel: (number) => void;
+  wheel: (number, number, 0x00 | 0x01 | 0x02) => void;
   binds: {
     mouseDownHandler: (MouseEvent) => void,
     mouseUpHandler: (MouseEvent) => void,
@@ -106,7 +106,7 @@ class Gesture {
   }
 
   wheelHandler(event: WheelEvent) {
-    this.wheel(event.deltaY);
+    this.wheel(event.deltaX, event.deltaY, event.deltaMode);
     event.preventDefault();
   }
 

@@ -33,6 +33,7 @@ export type OBJ_PanOptions = {
   right: null | number,
   bottom: null | number,
   top: null | number,
+  sensitivity: number,
 }
 /**
  * Current zoom.
@@ -51,6 +52,61 @@ export type OBJ_Zoom = {
   zooming: boolean,
 }
 
+/**
+ * The Gesture primitive converts common gestures into `'zoom'` and `'pan'`
+ * notifications.
+ *
+ * The guesture primitive handles the gestures:
+ * - Mouse wheel change (often used for zooming and panning with a mouse)
+ * - Drag (often used for panning with touch devices or a mouse)
+ * - Pinching (often used for zooming and panning on touch devices)
+ *
+ * The primitive is a rectangle, usually transparant, that captures gestures.
+ * Gestures can be limited to if they happen in the rectangle or not.
+ *
+ * # Pan
+ *
+ * A pan is an offset in xy.
+ *
+ * The gestures that can generate pan events are:
+ * - Mouse click then drag
+ * - Finger touch then drag (touch devices)
+ * - Mouse wheel change
+ *
+ * For the mouse click and drage, and finger touch and drag gestures, the pan
+ * value tracks the change in position of the mouse/finger in the gesture
+ * primitive rectangle. For example, if the rectangle has a width of 2, and the
+ * mouse or touch moves across half the width of the rectangle, then the pan
+ * offset will be 1.
+ *
+ * For the mouse wheel change, a `sensitivity` value is used to speed up or
+ * slow down the pan.
+ *
+ * When a pan event happens, a `'pan'` notification is published. The parameter
+ * passed to any subscribers is the pan offset value, but if more information
+ * is needed (like the pan delta for example) then `getPan()` can be called.
+ *
+ * # Zoom
+ *
+ * A zoom is a magnification at a point in the rectangle. The zoom point will
+ * stay stationary, while the other points around it spread out (when zooming
+ * in) or compress in (when zooming out). The zoom event thus includes a pan
+ * offset to ensure the zoom point stays stationary, as well as a magnification
+ * value.
+ *
+ * The gestures that can generate zoom events are:
+ * - Mouse wheel vertical change
+ * - Finger touch pinch
+ *
+ * A `sensitivity` value is used to speed up or slow down zooming.
+ *
+ * When a zoom event happens, a `'zoom'` notification is published. The
+ * parameter passed to any subscribers is the zoom magnification value, but if
+ * more information is needed (like the zoom delta or zoom position for
+ * example) then `getZoom()` can be called.
+ *
+ *
+ */
 export type OBJ_Gesture = {
   zoom?: OBJ_ZoomOptions | boolean,
   pan?: OBJ_PanOptions | boolean,
@@ -77,7 +133,6 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     max: null | number,
     sensitivity: number,
     mag: number,
-    // cumOffset: Point,
     cumAngle: number,
     pinching: boolean,
     enabled: boolean,
@@ -91,6 +146,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     bottom: null | number,
     top: null | number,
     delta: Point,
+    sensitivity: number,
   };
 
   mousePixelPosition: Point;
@@ -136,6 +192,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       top: null,
       bottom: null,
       delta: new Point(0, 0),
+      sensitivity: 1,
     };
     this.onlyWhenTouched = true;
     this.notificationIDs = [];
@@ -185,8 +242,8 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     return scene.glToFigure(glPoint);
   }
 
-  wheelHandler(deltaY: number) {
-    if (!this.zoom.enabled) {
+  wheelHandler(delta: Point) {
+    if (!this.pan.enabled && !this.zoom.enabled) {
       return;
     }
     if (this.onlyWhenTouched) {
@@ -194,22 +251,32 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
         return;
       }
     }
-    // const oldZoom = this.zoom.last.mag;
-    let mag = this.zoom.mag + deltaY / 10 * this.zoom.sensitivity * this.zoom.mag / 100;
-    if (this.zoom.min != null) {
-      mag = Math.max(mag, this.zoom.min);
+    if (this.zoom.enabled) {
+      // const oldZoom = this.zoom.last.mag;
+      // const scene = this.getScene();
+      // const deltaYPixel = this.pixelToScene(delta.y) + scene.bottom;
+      let mag = this.zoom.mag + delta.y / 10 * this.zoom.sensitivity * this.zoom.mag / 100;
+      if (this.zoom.min != null) {
+        mag = Math.max(mag, this.zoom.min);
+      }
+      if (this.zoom.max != null) {
+        mag = Math.min(mag, this.zoom.max);
+      }
+      // mag = this.zoom.bounds.clip(mag);
+      if (this.mousePixelPosition == null) {
+        this.updateZoom(mag, this.transformPoint([0, 0], 'gl', 'figure'));
+      } else {
+        const mousePosition = this.pixelToScene(this.mousePixelPosition);
+        this.updateZoom(mag, mousePosition, 0, 0);
+      }
+      this.notifications.publish('zoom', this.zoom.mag);
+      return;
     }
-    if (this.zoom.max != null) {
-      mag = Math.min(mag, this.zoom.max);
-    }
-    // mag = this.zoom.bounds.clip(mag);
-    if (this.mousePixelPosition == null) {
-      this.updateZoom(mag, this.transformPoint([0, 0], 'gl', 'figure'));
-    } else {
-      const mousePosition = this.pixelToScene(this.mousePixelPosition);
-      this.updateZoom(mag, mousePosition, 0, 0);
-    }
-    this.notifications.publish('zoom', this.zoom.mag);
+    const scene = this.getScene();
+    this.pan.delta = delta.scale(1 / 10 * (scene.right - scene.left) / 100 * this.pan.sensitivity);
+    this.pan.delta.x *= -1;
+    this.setPanOffset(this.pan.offset.add(this.pan.delta));
+    this.notifications.publish('pan', this.pan.offset);
   }
 
   /**
