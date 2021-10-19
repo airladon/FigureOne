@@ -792,6 +792,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
         location,
       });
     }
+    this._labels.drawingObject.clear();
     this._labels.drawingObject.loadText({
       text,
       font: this.labels.font,
