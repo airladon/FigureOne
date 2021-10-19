@@ -341,7 +341,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     }
     this.pan.delta = this.getPosition().sub(this.originalPosition);
     this.transform.updateTranslation(this.originalPosition);
-    this.setPanOffset(this.pan.offset.add(this.pan.delta));
+    this.setPanOffset(this.pan.offset.sub(this.pan.delta.scale(1 / this.zoom.mag)));
     this.notifications.publish('pan', this.pan.offset);
     if (this.changeScene != null) {
       this.panScene(this.changeScene);
@@ -440,27 +440,88 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
    * Changes a 2D scene to simulate zooming in and out
    */
   zoomScene(scene: Scene) {
-    const s = this.getScene();
-    // const p = this.pan.offset.scale(((scene.right - scene.left) * scene.zoom) / ((s.right - s.left)));
-    // const unscaled = this.pan.offset.scale(1 / this.zoom.mag);
-    // const p = unscaled.scale((scene.right - scene.left) / (s.right - s.left));
-    const p = this.pan.offset.scale((scene.right - scene.left) / (s.right - s.left));
-    const generic = this.pan.offset
-      .scale(1 / (1 / this.zoom.mag - 1)) // Scene position to zoom around
-      .sub(scene.left, scene.bottom)
-      .scale((scene.right - scene.left) / (s.right - s.left))
-      .add(s.left, s.bottom);
-    const targetScene = generic.scale(1 / this.zoom.mag).sub(generic).scale(-1);
-    // scene.setPanZoom(this.pan.offset.scale(-1), this.zoom.mag);
-    scene.setPanZoom(targetScene, this.zoom.mag);
-    console.log(scene.zoom, p.round(2).toArray())
+    // const s = this.getScene();
+    // // this.pan.offset is the amount of pan needed in the this.getScene() before
+    // // a zoom.
+    // //
+    // // Therefore, 
+    // const generic = this.pan.offset
+    //   .scale(1 / (1 / this.zoom.mag - 1)) // Scene position to zoom around
+    //   .sub(scene.left, scene.bottom)
+    //   .scale((scene.right - scene.left) / (s.right - s.left))
+    //   .add(s.left, s.bottom);
+    // const targetScene = generic.scale(1 / this.zoom.mag).sub(generic).scale(-1);
+    // // scene.setPanZoom(this.pan.offset.scale(-1), this.zoom.mag);
+    // scene.setPanZoom(targetScene, this.zoom.mag);
+    // console.log(scene.zoom, p.round(2).toArray())
+    // this.animateNextFrame();
+    scene.setPanZoom(this.panTransform(scene).scale(-1), this.zoom.mag);
     this.animateNextFrame();
   }
 
-  panScene(scene: Scene) {
+  // Let's say we have a rectangular scene of width 4 and height 2 from [-2, -1]
+  // to [2, 1].
+  // If we want to zoom in on a point, say [0.1, 0.1], with a zoom factor of 5
+  // and keeping the point [0.1, 0.1] at the same relative positon in the scene
+  // we can either first zoom, then translate, or first translate and then zoom.
+  //
+  // The Scene class accepts pan and zoom parameters, and it processes them by
+  // moving the camera.position and camera.lookAt by some pan offset, and then
+  // changing the left/right/top/bottom or fov to zoom. This means the pan
+  // happens "before" the zoom.
+  //
+  // So, in the example above, if we want to first pan, then zoom by 5, what is
+  // the pan value we need?
+  //
+  // If we were to zoom by 5, then the point [0.1, 0.1] would go to [0.5, 0.5].
+  // Another way to think of this is the point [0.02, 0.02] will go to
+  // [0.1, 0.1]. Therefore, we first pan [0.1, 0.1] to [0.02, 0.02] and then
+  // zoom.
+  //
+  // The pan offset is then: o = q / z - q    (q = [0.1, 0.1], z = 5)
+  //
+  // So if p = [0.1, 0.1], then p/5 = [0.02, 0.02], and we will need to offset
+  // [0.1, 0.1] by [-0.08, -0.08] to get to [0.02, 0.02].
+  //
+  // Generally, to convert from a fixed zoom position "q" to a pan offset "o"
+  // when using a zoom z:
+  //
+  //    o = q / z - q             (1)
+  //
+  // And to convert from a pan offset "o" to a fixed zoom position "q":
+  //
+  //    q = o / (1 / z - 1)       (2)
+  //
+  //
+  // In this class this.pan.offset is the pan offset before zoom for the scene
+  // used by this class (this.getScene()).
+  //
+  // If we want to use this pan offset in another scene, then we need to
+  // transform it from this scene (ts) to the new scene (ns).
+  //
+  // We can do this by:
+  //   - Transform this.pan.offset to a zoom position (using (2))
+  //   - Normalize the zoom position to be between 0 and 1:
+  //          normQ = (q - [ts.left, ts.bottom]) / (ts.right - ts.left)
+  //   - Scale the normalized zoom position to the new scene:
+  //          newQ = normQ * (ns.right - ns.left) + [ns.left, ns.bottom]
+  //   - Convert to a pan offset for the new scene (using (1)):
+  //          newO = newQ / z - newQ
+  panTransform(scene: Scene) {
     const s = this.getScene();
-    const p = this.pan.offset.scale((scene.right - scene.left) / (s.right - s.left) / scene.zoom);
-    scene.setPan(p);
+    const newQ = this.pan.offset
+      .scale(1 / (1 / this.zoom.mag - 1))
+      .sub(scene.left, scene.bottom)
+      .scale((scene.right - scene.left) / (s.right - s.left))
+      .add(s.left, s.bottom);
+    return newQ.scale(1 / this.zoom.mag).sub(newQ);
+  }
+
+  panScene(scene: Scene) {
+    // const s = this.getScene();
+    // const p = this.pan.offset.scale((scene.right - scene.left) / (s.right - s.left) / scene.zoom);
+    // scene.setPan(p);
+    scene.setPan(this.panTransform(scene).scale(-1));
     this.animateNextFrame();
   }
 
@@ -591,7 +652,6 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       pinching: this.zoom.pinching,
       position: this.zoom.current.position,
     }, zoom);
-    console.log(z)
     this.updateZoom(z.mag, getPoint(z.position), z.distance, z.angle);
     this.zoom.pinching = z.pinching;
     if (notify) {
