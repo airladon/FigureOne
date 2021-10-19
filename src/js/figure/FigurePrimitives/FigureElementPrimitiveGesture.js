@@ -1,9 +1,6 @@
 // @flow
 import type { OBJ_FigureForElement } from '../Figure';
 import { FigureElementPrimitive } from '../Element';
-import { CustomAnimationStep } from '../Animation/AnimationStep/CustomStep';
-import AnimationManager from '../Animation/AnimationManager';
-import type { OBJ_AnimationStep } from '../Animation/AnimationStep';
 import {
   Point, getPoint, Line,
 } from '../../tools/g2';
@@ -93,6 +90,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     right: null | number,
     bottom: null | number,
     top: null | number,
+    delta: number,
   };
 
   mousePixelPosition: Point;
@@ -137,6 +135,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       right: null,
       top: null,
       bottom: null,
+      delta: 0,
     };
     this.onlyWhenTouched = true;
     this.notificationIDs = [];
@@ -262,8 +261,9 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.zoom.current = { position: zoomPosition, angle, distance };
     const newPosition = zoomPosition.scale(mag / oldMag);
     // if (this.getScene() === this.relativeScene)
+    this.pan.delta = zoomPosition.sub(newPosition).scale(1 / mag);
     this.setPanOffset(
-      this.pan.offset.add(zoomPosition.sub(newPosition).scale(1 / mag)),
+      this.pan.offset.add(this.pan.delta),
     );
     this.zoom.cumAngle += angle - this.zoom.last.angle;
   }
@@ -385,6 +385,13 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     };
   }
 
+  getPan() {
+    return {
+      offset: this.pan.offset,
+      delta: this.pan.delta,
+    };
+  }
+
   moveGesture(
     previousGLPoint: Point,
     currentGLPoint: Point,
@@ -399,6 +406,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     const previousScenePoint = this.glToScene(previousGLPoint);
     const currentScenePoint = this.glToScene(currentGLPoint);
     const delta = currentScenePoint.sub(previousScenePoint);
+    this.pan.delta = delta;
     this.setPanOffset(this.pan.offset.add(delta.scale(1 / this.zoom.mag)));
     this.notifications.publish('pan', this.pan.offset);
   }

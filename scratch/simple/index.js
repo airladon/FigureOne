@@ -314,10 +314,10 @@ const s = new Fig.Scene({
 
 const gesture = figure.add({
   make: 'gesture',
-  // color: [0, 0, 1, 0.2],
-  width: 2,
+  color: [0, 0, 1, 0.2],
+  width: 1,
   height: 2,
-  // position: [0.5, 0.5],
+  position: [0.5, 0.5],
   onlyWhenTouched: false,
   zoom: true,
   pan: true,
@@ -333,13 +333,13 @@ const axis = figure.add({
   make: 'collections.zoomAxis',
   axis: 'x',
   length: 1,
-  position: [-0.5, -0.8],
+  position: [0, -0.8],
   ticks: { length: 0.03 },
   // grid: { length: 0.1, color: [1, 0, 0, 1], offset: 0 },
   labels: { precision: 2, fix: false },
   start: 0,
   stop: 2,
-  step: 0.5,
+  step: 0.1,
   font: { size: 0.05 },
   title: 'hellow',
 });
@@ -386,6 +386,9 @@ gesture.notifications.add('zoom', () => {
   // figure.zoomElement(polygon, [0, -0.2], false);
   plane.drawingObject.uniforms.u_zoom.value = [z.mag];
   plane.drawingObject.uniforms.u_offset.value = [-z.offset.x, -z.offset.y];
+  const x = axis.drawToValue(z.current.position.x);
+  console.log(z.current.position.x, x)
+  axis.changeZoom(x, z.mag);
 });
 
 gesture.notifications.add('pan', (pan) => {
@@ -395,7 +398,8 @@ gesture.notifications.add('pan', (pan) => {
   // console.log(pan)
   gesture.panScene(s);
   gesture.panScene(ps);
-  axis.pan(-pan.x, 0.5);
+  const p = gesture.getPan();
+  axis.panDeltaDraw(-p.delta.x);
   // figure.zoomElement(polygon, [0, -0.2], false);
   // plane.drawingObject.uniforms.u_zoom.value = [z.mag];
   plane.drawingObject.uniforms.u_offset.value = [-pan.x, -pan.y];

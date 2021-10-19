@@ -555,6 +555,9 @@ class CollectionsZoomAxis extends FigureElementCollection {
   grid: OBJ_Line | null;
   ticks: OBJ_Line | null;
   precision: number;
+  currentZoom: number;
+  initialScale: number;
+  initialStart: number
 
   /**
    * @hideconstructor
@@ -586,6 +589,8 @@ class CollectionsZoomAxis extends FigureElementCollection {
     } else {
       this.stopValue = this.startValue + 1;
     }
+    this.initialStart = this.startValue;
+    this.initialScale = this.stopValue - this.startValue;
     this.step = options.step == null ? (this.stopValue - this.startValue) / 5 : options.step;
     this.length = options.length;
     this.calcRatios();
@@ -598,6 +603,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
     this.axis = options.axis;
     this.angle = this.axis === 'x' ? 0 : Math.PI / 2;
     this.setColor(options.color);
+    this.currentZoom = 1;
     this.line = null;
     if (options.line != null) {
       let lineO = options.line;
@@ -685,30 +691,54 @@ class CollectionsZoomAxis extends FigureElementCollection {
   pan(toValue: number, atPosition: number) {
     const normPosition = atPosition / this.length;
     const scale = this.stopValue - this.startValue;
-    const offset = toValue - this.startValue - normPosition * scale;
-    // console.log(normPosition, scale, offset, this.startValue + offset, this.stopValue + offset)
-    this.update(this.startValue + offset, this.stopValue + offset);
+    // const offset = toValue - this.startValue - normPosition * scale;
+    // this.update(this.startValue + offset, this.stopValue + offset);
+    this.update(
+      toValue - normPosition * scale,
+      toValue + (1 - normPosition) * scale,
+    );
+  }
+
+  panDeltaValue(deltaValue: number) {
+    this.update(this.startValue + deltaValue, this.stopValue + deltaValue);
+  }
+
+  panDeltaDraw(deltaDraw: number) {
+    const deltaValue = deltaDraw / this.length * (this.stopValue - this.startValue);
+    this.update(this.startValue + deltaValue, this.stopValue + deltaValue);
+  }
+
+  zoom(toValue: number, atPosition: number, zoom: number) {
+    const normPosition = atPosition / this.length;
+    const scale = this.initialScale / zoom;
+    this.currentZoom = zoom;
+    // console.log(toValue - normPosition * scale, toValue - (1 - normPosition) * scale)
+    this.update(toValue - normPosition * scale, toValue + (1 - normPosition) * scale);
+  }
+
+  changeZoom(value: number, zoom: number) {
+    const normPosition = (value - this.startValue) / (this.stopValue - this.startValue);
+    const scale = this.initialScale / zoom;
+    this.currentZoom = zoom;
+    this.update(value - normPosition * scale, value + (1 - normPosition) * scale);
   }
 
   update(startValue: number, stopValue: number) {
     this.startValue = startValue;
     this.stopValue = stopValue;
     this.calcRatios();
-    const remainder = this.rnd(startValue % this.step);
+    const step = 1 / 2 ** Math.floor(-Math.log(this.step / this.currentZoom) / Math.log(2)) * 2;
+    const remainder = this.rnd(startValue % (step));
     let startTick = startValue;
     let values = [];
     if (remainder > 0) {
-      startTick = startValue + (this.step - remainder);
+      startTick = startValue + (step - remainder);
     } else if (remainder < 0) {
       startTick = startValue + (-remainder);
     }
     if (startTick <= stopValue) {
-      values = range(startTick, stopValue, this.step);
+      values = range(startTick, stopValue, step);
     }
-    console.log(values)
-
-    // const { ticks, grid, labels, axis } = this;
-    // const lengthSign = axis === 'x' ? 1 : -1;
     this.updateTicks('ticks', values);
     this.updateTicks('grid', values);
     this.updateText(values);
