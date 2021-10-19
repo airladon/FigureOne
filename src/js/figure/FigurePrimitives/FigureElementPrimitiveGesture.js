@@ -90,7 +90,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     right: null | number,
     bottom: null | number,
     top: null | number,
-    delta: number,
+    delta: Point,
   };
 
   mousePixelPosition: Point;
@@ -135,7 +135,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       right: null,
       top: null,
       bottom: null,
-      delta: 0,
+      delta: new Point(0, 0),
     };
     this.onlyWhenTouched = true;
     this.notificationIDs = [];

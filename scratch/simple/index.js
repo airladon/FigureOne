@@ -317,7 +317,7 @@ const gesture = figure.add({
   color: [0, 0, 1, 0.2],
   width: 1,
   height: 2,
-  position: [0.5, 0.5],
+  position: [0.3, 0],
   onlyWhenTouched: false,
   zoom: true,
   pan: true,
@@ -333,7 +333,7 @@ const axis = figure.add({
   make: 'collections.zoomAxis',
   axis: 'x',
   length: 1,
-  position: [0, -0.8],
+  position: [-0.2, -0.85],
   ticks: { length: 0.03 },
   // grid: { length: 0.1, color: [1, 0, 0, 1], offset: 0 },
   labels: { precision: 2, fix: false },
@@ -341,7 +341,7 @@ const axis = figure.add({
   stop: 2,
   step: 0.1,
   font: { size: 0.05 },
-  title: 'hellow',
+  // title: 'this is an axis',
 });
 
 axis.pan(2, 0.5);
@@ -375,6 +375,52 @@ figure.add({
   move: true,
 });
 
+const pow = (pow = 2, stop = 10, step = 0.05) => {
+  const xValues = Fig.range(0, stop, step);
+  return xValues.map(x => new Fig.Point(x, x ** pow));
+};
+
+const plot = figure.add({
+  name: 'plot',
+  make: 'collections.plot',
+  width: 1,                                    // Plot width in figure
+  height: 1,                                   // Plot height in figure
+  yAxis: {
+    start: 0,
+    stop: 100,
+    type: 'zoom',
+    step: 20,
+    labels: true,
+    ticks: true,
+    grid: true,
+  },              // Customize y axis limits
+  xAxis: {
+    start: 0,
+    stop: 10,
+    type: 'zoom',
+    step: 2,
+    labels: true,
+    grid: true,
+    ticks: true,
+  },              // Customize y axis limits
+  trace: [
+    { points: pow(1.5), name: 'Power 1.5' },   // Trace names are for legend
+    {                                          // Trace with only markers
+      points: pow(2, 10, 0.5),
+      name: 'Power 2',
+      markers: { sides: 4, radius: 0.03 },
+    },
+    {                                          // Trace with markers and
+      points: pow(3, 10, 0.5),                 // dashed line
+      name: 'Power 3',
+      markers: { radius: 0.03, sides: 10, line: { width: 0.005 } },
+      line: { dash: [0.04, 0.01] },
+    },
+  ],
+  legend: { font: { size: 0.1 } },
+  position: [-0.8, -0.8],
+});
+
 gesture.setZoomOptions({ scale: 5, max: 100000, min: 0.25 });
 
 gesture.notifications.add('zoom', () => {
@@ -387,8 +433,9 @@ gesture.notifications.add('zoom', () => {
   plane.drawingObject.uniforms.u_zoom.value = [z.mag];
   plane.drawingObject.uniforms.u_offset.value = [-z.offset.x, -z.offset.y];
   const x = axis.drawToValue(z.current.position.x);
-  console.log(z.current.position.x, x)
   axis.changeZoom(x, z.mag);
+  // console.log(plot.drawToPoint(z.current.position), z.current.position)
+  // plot.changeZoom(plot.drawToPoint(z.current.position), z.mag);
 });
 
 gesture.notifications.add('pan', (pan) => {
@@ -400,6 +447,7 @@ gesture.notifications.add('pan', (pan) => {
   gesture.panScene(ps);
   const p = gesture.getPan();
   axis.panDeltaDraw(-p.delta.x);
+  plot.panDeltaDraw(p.delta.scale(-1));
   // figure.zoomElement(polygon, [0, -0.2], false);
   // plane.drawingObject.uniforms.u_zoom.value = [z.mag];
   plane.drawingObject.uniforms.u_offset.value = [-pan.x, -pan.y];

@@ -14,7 +14,7 @@ import {
   FigureElementCollection, FigureElementPrimitive,
 } from '../Element';
 import type {
-  OBJ_Font, OBJ_Font_Fixed, TypeDash,
+  OBJ_Font, OBJ_Font_Fixed,
 } from '../../tools/types';
 import type {
   OBJ_Line, OBJ_TextLines,
@@ -23,43 +23,16 @@ import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type FigureCollections from './FigureCollections';
 
 /**
- * Axis Ticks and Grid options object for {@link COL_Axis}.
+ * Axis Ticks and Grid options object for {@link COL_ZoomAxis}.
  *
- * ![](./apiassets/axisticks.png)
- *
- * Ticks and grid locations can specified programatically with `start`,
- * `stop` and `step`, or manually using a `values` array where each value
- * is a value on the axis.
- *
- * `length` and `offset` control the length of the ticks/grid and how much
- * of the line is above or below the axis line. An offset of `0` will put
- * the entire tick on the positive side of the axis.
- *
- * Different properties are defined in different spaces.
- * - `start`, `step`, `stop` and `values` are all in axis space, or the values
- *   along the axis.
- * - `length`, `offset`, `width` and `dash` are all in draw space and relate
- *   to dimensions in the space the axis is being drawn into.
- *
- * @property {number} [start] start value of the ticks/grid on the axis
- * (`axis.start`)
- * @property {number} [step] step between ticks/grid
- * (`(axis.stop - axis.start) / 5`)
- * @property {number} [stop] stop value of the ticks/grid on the axis
- * (`axis.stop`)
- * @property {Array<number>} [values] value locations of the ticks/grid on
- * the axis (overrides `start`, `stop` and `step`)
  * @property {number} [length] length of the ticks/grid (draw space)
  * @property {number} [offset] offset of the ticks/grid (draw space) - use this
  * to center ticks around the axis or not (`-length / 2`)
  * @property {number} [width] width of ticks/grid (draw space)
- * @property {TypeDash} [dash] line style is solid or dashed (`[]`)
- *
- * @extends OBJ_Line
  *
  * @see
  *
- * {@link COL_Axis}
+ * {@link COL_ZoomAxis}
  *
  * To test examples below, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>.
@@ -71,58 +44,15 @@ import type FigureCollections from './FigureCollections';
  *   make: 'collections.axis',
  *   length: 2,
  * });
- *
- * @example
- * // Axis with default ticks
- * figure.add({
- *   name: 'x',
- *   make: 'collections.axis',
- *   length: 2,
- *   ticks: true,
- * });
- *
- * @example
- * // Axis ticks with custom step and color
- * figure.add({
- *   name: 'x',
- *   make: 'collections.axis',
- *   length: 2,
- *   ticks: { step: 0.5, color: [0, 0, 1, 1] },
- * });
- *
- * @example
- * // Axis with ticks between 0.2 and 0.8 below the line
- * figure.add({
- *   name: 'x',
- *   make: 'collections.axis',
- *   length: 2,
- *   ticks: {
- *     start: 0.2,
- *     stop: 0.8,
- *     step: 0.2,
- *     length: 0.15,
- *     offset: -0.2,
- *     dash: [0.01, 0.01]
- *   },
- * });
- *
- * @example
- * // Axis with ticks at values
- * figure.add({
- *   name: 'x',
- *   make: 'collections.axis',
- *   length: 2,
- *   ticks: { values: [0, 0.2, 0.8, 1] },
- * });
  */
-export type OBJ_AxisTicks = {
+export type OBJ_ZoomAxisTicks = {
   length?: number,
   offset?: number,
   width?: number,
 } & OBJ_Line;
 
 
-export type OBJ_AxisTicks_Fixed = {
+export type OBJ_ZoomAxisTicks_Fixed = {
   length: number,
   offset: number,
   width: number,
@@ -130,19 +60,7 @@ export type OBJ_AxisTicks_Fixed = {
 
 
 /**
- * Axis label options object for the {@link COL_Axis}.
- *
- * ![](./apiassets/axislabels_ex1.png)
- *
- * ![](./apiassets/axislabels_ex2.png)
- *
- * ![](./apiassets/axislabels_ex3.png)
- *
- * ![](./apiassets/axislabels_ex4.png)
- *
- * ![](./apiassets/axislabels_ex5.png)
- *
- * ![](./apiassets/axislabels_ex6.png)
+ * Axis label options object for the {@link COL_ZoomAxis}.
  *
  *
  * By default, labels are positioned with the first `ticks` defined in the
@@ -156,15 +74,6 @@ export type OBJ_AxisTicks_Fixed = {
  * - `space` and `offset` are defined in draw space and relate
  *   to dimensions in the space the axis is being drawn into.
  *
- * @property {null | number | Array<number>} [values] the axis values to
- * position labels at - by default (`null`) these values will be the same
- * values as the first `ticks` values if `ticks` are defined (`null`)
- * @property {null | Array<string | null | number>} [text] An array of text to
- * be used for the labels. `null` will use the
- * value the label is at, `number` and `string` can be used for label
- * customization. If using an array that is shorter than the number of values
- * for labels to be drawn at, then `null` will be used for undefined values.
- * (`null`)
  * @property {number} [precision] Number of decimal places to be shown when the
  * label text is the axis value (`null`) or a `number` (`1`)
  * @property {'decimal' | 'exp'} [format] `'exp'` will present numbers in
@@ -180,93 +89,14 @@ export type OBJ_AxisTicks_Fixed = {
  * @property {OBJ_Font} [font] specific font changes for labels
  * @property {Array<number> | number} [hide] value indexes to hide (`[]`)
  *
- * @see
- *
  * To test examples below, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>.
  *
  * For more examples see {@link OBJ_Axis}.
  *
  * @example
- * // By default labels are displayed if there are ticks
- * figure.add({
- *   name: 'x',
- *   make: 'collections.axis',
- *   length: 2,
- *   ticks: true,
- * });
- *
- * @example
- * // If there are multiple ticks, then just the first are used to show labels
- * figure.add({
- *   name: 'x',
- *   make: 'collections.axis',
- *   length: 2,
- *   ticks: [
- *     { step: 0.5 },
- *     { step: 0.1, length: 0.05, offset: 0 },
- *   ],
- * });
- *
- * @example
- * // Long labels can be displayed with a rotation. Set the
- * // xAlign, yAlign and offset to make it look good.
- * figure.add({
- *   name: 'x',
- *   make: 'collections.axis',
- *   axis: 'x',
- *   length: 2,
- *   start: 10000,
- *   stop: 20000,
- *   ticks: true,
- *   labels: {
- *     precision: 0,
- *     rotation: Math.PI / 4,
- *     yAlign: 'middle',
- *     xAlign: 'right',
- *     space: 0.05,
- *   },
- * });
- *
- * @example
- * // Specific labels can be hidden
- * figure.add({
- *   name: 'x',
- *   make: 'collections.axis',
- *   length: 2,
- *   ticks: true,
- *   labels: { hide: 0 },
- * });
- *
- * @example
- * // Labels can be at specific values, and have a specific font
- * figure.add({
- *   name: 'x',
- *   make: 'collections.axis',
- *   length: 2,
- *   ticks: true,
- *   labels: {
- *     values: [0, 0.6],
- *     font: { color: [0, 0, 1, 1], size: 0.15 },
- *   },
- * });
- *
- * @example
- * // Labels can be strings, `null` for the actual value, or numbers. If numbers
- * // then they will be drawn in the same format as the actual values.
- * figure.add({
- *   name: 'x',
- *   make: 'collections.axis',
- *   length: 2,
- *   ticks: true,
- *   labels: {
- *     values: null,
- *     text: ['0', null, 'AB', '0.6', 0.8, null],
- *     format: 'exp',
- *   },
- * });
  */
-export type OBJ_AxisLabels = {
+export type OBJ_ZoomAxisLabels = {
   // values?: null | number | Array<number>,
   // text?: null | Array<string | null | number>,
   precision?: number,
@@ -278,18 +108,20 @@ export type OBJ_AxisLabels = {
   yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
   font?: OBJ_Font,
   hide?: Array<number>,
+  fixed?: boolean,
 };
 
-export type OBJ_AxisLabelsFixed = {
+export type OBJ_ZoomAxisLabels_Fixed = {
   precision: number,
   format: 'decimal' | 'exp',
   space: number,
-  offset: TypeParsablePoint,
+  offset: Point,
   rotation: number,
   xAlign: 'left' | 'right' | 'center',
   yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
-  font: OBJ_Font,
+  font: OBJ_Font_Fixed,
   hide: Array<number>,
+  fixed: boolean,
 };
 
 /**
@@ -352,37 +184,19 @@ export type TypeAxisTitle = OBJ_TextLines & {
  *
  * @extends OBJ_Collection
  */
-export type COL_Axis = {
+export type COL_ZoomAxis = {
   axis?: 'x' | 'y',
   length?: number,              // draw space length
   line?: boolean | OBJ_Line,
   start?: number,               // value space start at draw space start
   stop?: number,                // value space stop at draw space stop
-  ticks?: OBJ_AxisTicks | boolean,
-  labels?: OBJ_AxisLabels,
-  grid?: OBJ_AxisTicks | boolean,
+  ticks?: OBJ_ZoomAxisTicks | boolean,
+  labels?: OBJ_ZoomAxisLabels,
+  grid?: OBJ_ZoomAxisTicks | boolean,
   title?: TypeAxisTitle,
   font?: OBJ_Font,              // Default font
   show?: boolean,
-  auto?: [number, number],
-  name?: string,
-  position?: TypeParsablePoint,
 } & OBJ_Collection;
-
-
-export type COL_AxisUpdate = {
-  length?: number,              // draw space length
-  line?: boolean | OBJ_Line,
-  start?: number,               // value space start at draw space start
-  stop?: number,                // value space stop at draw space stop
-  ticks?: OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean,
-  labels?: OBJ_AxisLabels | Array<OBJ_AxisLabels> | boolean,
-  grid?: OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean,
-  title?: TypeAxisTitle,
-  font?: OBJ_Font,              // Default font
-  show?: boolean,
-  auto?: [number, number],
-};
 
 
 /*
@@ -541,9 +355,9 @@ class CollectionsZoomAxis extends FigureElementCollection {
   showAxis: boolean;
   step: number;
 
-  ticks: OBJ_AxisTicks_Fixed | null;
-  grid: OBJ_AxisTicks_Fixed | null;
-  labels: OBJ_AxisLabels | null;
+  ticks: OBJ_ZoomAxisTicks_Fixed | null;
+  grid: OBJ_ZoomAxisTicks_Fixed | null;
+  labels: OBJ_ZoomAxisLabels_Fixed | null;
 
   drawToValueRatio: number;
   valueToDrawRatio: number;
@@ -553,7 +367,13 @@ class CollectionsZoomAxis extends FigureElementCollection {
   axis: 'x' | 'y';
   line: OBJ_Line | null;
   grid: OBJ_Line | null;
-  ticks: OBJ_Line | null;
+  ticks: {
+    width: number,
+    length: number,
+    angle: number,
+    offset: number,
+  } | null;
+
   precision: number;
   currentZoom: number;
   initialScale: number;
@@ -564,9 +384,9 @@ class CollectionsZoomAxis extends FigureElementCollection {
    */
   constructor(
     collections: FigureCollections,
-    optionsIn: COL_Axis,
+    optionsIn: COL_ZoomAxis,
   ) {
-    const defaultOptions: COL_Axis = {
+    const defaultOptions: COL_ZoomAxis = {
       length: collections.primitives.defaultLength,
       angle: 0,
       start: 0,
@@ -652,11 +472,15 @@ class CollectionsZoomAxis extends FigureElementCollection {
       labels.transform.updateRotation(o.rotation);
       this.add('labels', labels);
     }
+    if (options.title != null) {
+      this.addTitle(options.title);
+    }
     this.update(this.startValue, this.stopValue);
   }
 
-  addTicks(type: 'grid' | 'ticks', options) {
-    this[type] = null;
+  addTicks(type: 'grid' | 'ticks', options: OBJ_ZoomAxisTicks) {
+    // $FlowFixMe
+    this[type] = null; // $FlowFixMe
     if (options[type] != null) {
       let ticksOptions = options[type];
       if (ticksOptions === true) {
@@ -672,7 +496,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
           offset: 0,
         },
         ticksOptions,
-      );
+      ); // $FlowFixMe
       this[type] = o;
       const ticks = this.collections.primitives.line(o);
       this.add(type, ticks);
@@ -750,7 +574,9 @@ class CollectionsZoomAxis extends FigureElementCollection {
     }
 
     let { space } = this.labels;
-    const { offset, font, rotation, format, precision, fixed } = this.labels;
+    const {
+      offset, font, rotation, format, precision, fixed,
+    } = this.labels;
     if (space == null) {
       space = this.axis === 'x' ? font.size + this.collections.primitives.defaultLineWidth * 5 : this.collections.primitives.defaultLineWidth * 10;
     }
@@ -792,17 +618,18 @@ class CollectionsZoomAxis extends FigureElementCollection {
         location,
       });
     }
-    this._labels.drawingObject.clear();
+    // $FlowFixMe
+    this._labels.drawingObject.clear(); // $FlowFixMe
     this._labels.drawingObject.loadText({
-      text,
-      font: this.labels.font,
-      xAlign: this.labels.xAlign,
+      text, // $FlowFixMe
+      font: this.labels.font, // $FlowFixMe
+      xAlign: this.labels.xAlign, // $FlowFixMe
       yAlign: this.labels.yAlign,
     });
   }
 
   updateTicks(type: 'ticks' | 'grid', values: Array<number>) {
-    const lengthSign = this.axis === 'x' ? 1 : -1;
+    const lengthSign = this.axis === 'x' ? 1 : -1; // $FlowFixMe
     const ticks = this[type];
     if (ticks != null) {
       const length = ticks.length * lengthSign;
@@ -818,12 +645,41 @@ class CollectionsZoomAxis extends FigureElementCollection {
       } // $FlowFixMe
       copy[0].original = false;
       const p1 = new Point(0, offset * lengthSign).rotate(this.angle);
+      // $FlowFixMe
       this[`_${type}`].custom.updatePoints({
         p1,
         copy,
         angle: this.angle + Math.PI / 2,
       });
     }
+  }
+
+  addTitle(optionsIn: OBJ_TextLines & { rotation?: number, offset?: TypeParsablePoint } | string) {
+    const defaultOptions = {
+      font: joinObjects({}, this.defaultFont, { size: this.defaultFont.size || 0.1 * 1.3 }),
+      justify: 'center',
+      xAlign: 'center',
+      yAlign: this.axis === 'x' ? 'top' : 'bottom',
+      rotation: this.axis === 'x' ? 0 : Math.PI / 2,
+      offset: [0, 0],
+    };
+    let optionsToUse = optionsIn;
+    if (typeof optionsIn === 'string') {
+      optionsToUse = { text: [optionsIn] };
+    }
+    const o = joinObjects({}, defaultOptions, optionsToUse);
+    o.offset = getPoint(o.offset);
+    const bounds = this.getBoundingRect('draw');
+    if (o.position == null) {
+      if (this.axis === 'x') {
+        o.position = new Point(this.length / 2, bounds.bottom - o.font.size / 1.5).add(o.offset);
+      } else {
+        o.position = new Point(bounds.left - o.font.size / 1.5, this.length / 2).add(o.offset);
+      }
+    }
+    const title = this.collections.primitives.textLines(o);
+    title.transform.updateRotation(o.rotation);
+    this.add('title', title);
   }
 
 
