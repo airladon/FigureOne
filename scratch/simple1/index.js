@@ -1,320 +1,409 @@
-/* globals Fig */
-const { sphere, revolve, polygon, cone, cylinder, getLathePoints, surface } = Fig.tools.g2;
-const { getTransform } = Fig;
-const { m3 } = Fig.tools;
-const figure = new Fig.Figure({ scene: [-1, -1, 1, 1], backgroundColor: [1, 0.9, 0.9, 1] });
+// const { polygon } = Fig.tools.g2;
 
-const col = (c, numVertices) => {
-  let out = [];
-  for (let i = 0; i < numVertices; i += 1) {
-    out = [...out, ...c];
-  }
-  return out;
-};
+// const figure = new Fig.Figure();
 
-const screenGrid = figure.add({
-  make: 'grid',
-  bounds: [-2, -1, 4, 2],
-  xStep: 0.5,
-  yStep: 0.5,
-  line: { width: 0.005 },
-  color: [0.5, 0.5, 1, 1],
-  position: [0, 0, -3],
-  xAlign: 'center',
+
+// const width = 1.5;
+// const height = 1.5;
+// function createGrid(spacing) {
+//   const x = Fig.range(-width / 2, width / 2, spacing);
+//   const y = Fig.range(-height / 2, height / 2, spacing);
+//   const points = [];
+//   for (let j = 0; j < y.length - 1; j += 1) {
+//     for (let i = 0; i < x.length; i += 1) {
+//       points.push(x[i], y[j], x[i], y[j + 1]);
+//     }
+//     points.push(x[x.length - 1], y[j + 1], x[0], y[j + 1]);
+//   }
+//   return points;
+// }
+// const plane = figure.add({
+//   make: 'gl',
+//   vertices: createGrid(0.001),
+//   position: [0, 0],
+//   dimension: 2,
+//   color: [0.3, 0, 0, 1],
+//   glPrimitive: 'TRIANGLE_STRIP',
+//   vertexShader: {
+//     src: `
+//       varying vec4 v_color;
+//       uniform mat4 u_worldViewProjectionMatrix;
+//       uniform float u_zoom;
+//       uniform vec2 u_offset;
+//       attribute vec2 aVertex;
+
+//       vec3 hsv2rgb(vec3 c) {
+//         vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+//         vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+//         return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+//       }
+
+//       void main() {
+//         gl_Position = u_worldViewProjectionMatrix * vec4(aVertex.xy, 0, 1);
+//         vec2 p = aVertex / u_zoom + u_offset;
+//         int iteration = 0;
+//         float x = 0.0;
+//         float y = 0.0;
+//         float x0 = p.x / 0.5;
+//         float y0 = p.y / 0.5;
+//         float xTemp;
+//         int maxIterations = 1000;
+//         for (int i = 0; i < 100000; i++) {
+//           float x2 = x * x;
+//           float y2 = y * y;
+//           xTemp = x2 - y2 + x0;
+//           y = 2.0 * x * y + y0;
+//           x = xTemp;
+//           if (x2 + y2 > 4.0 || i > maxIterations - 1) {
+//             break;
+//           }
+//           iteration = i;
+//         }
+//         float z = sqrt(x * x + y * y);
+//         float n = float(iteration) + 1.0 - log(log2(z));
+//         float hue = n / float(maxIterations) / 0.05;
+//         float rotHue = 0.0;
+//         if (hue > rotHue) {
+//           hue -= rotHue;
+//         } else {
+//           hue = (1.0 - rotHue) + hue;
+//         }
+//         float value = 1.0;
+//         if (iteration == maxIterations - 1) {
+//           value = 0.0;
+//         }
+//         v_color = vec4(hsv2rgb(vec3(hue, 1.0, value)).rgb, 1.0);
+//       }`,
+//     vars: ['aVertex', 'u_worldViewProjectionMatrix', 'u_zoom', 'u_offset'],
+//   },
+//   fragmentShader: { color: 'vertex' },
+//   uniforms: [
+//     { name: 'u_zoom', length: 1, value: [1], type: 'FLOAT' },
+//     { name: 'u_offset', length: 2, value: [0, 0], type: 'FLOAT_VECTOR' },
+//   ],
+// });
+// R
+// t {_type: "point", x: -1, y: -1, z: 0}
+// t {_type: "point", x: -1, y: 1, z: 0}
+// t {_type: "point", x: 1, y: 1, z: 0}
+// t {_type: "point", x: 1, y: -1, z: 0}
+// P
+// 0 t {_type: "point", x: 4, y: 0, z: 0}
+// 1 t {_type: "point", x: 0, y: 0, z: 0}
+// 2 t {_type: "point", x: 0, y: 0, z: 0}
+// 3 t {_type: "point", x: 0, y: 0, z: 0}
+// 4 t {_type: "point", x: 1, y: 0, z: 0}
+// 5 t {_type: "point", x: 0, y: 0, z: 0}
+// Pd
+// 0 t {_type: "point", x: 0, y: 0, z: 0}
+// 1 t {_type: "point", x: 0, y: 0, z: 0}
+// 2 t {_type: "point", x: 0, y: 0, z: 0}
+// 3 t {_type: "point", x: 4, y: 0, z: 0}
+// 4 t {_type: "point", x: 0, y: 0, z: 0}
+
+// const plane = figure.add({
+//   make: 'gl',
+//   vertices: createGrid(0.001),
+//   dimension: 2,
+//   color: [0.3, 0, 0, 1],
+//   glPrimitive: 'TRIANGLE_STRIP',
+//   vertexShader: {
+//     src: `
+//       #define mul(a, b) vec2(a.x*b.x-a.y*b.y, a.x*b.y+a.y*b.x)
+//       varying vec4 v_color;
+//       uniform mat4 u_worldViewProjectionMatrix;
+
+//       uniform vec2 u_offset;
+//       uniform float u_zoom;
+//       uniform float u_convergenceSpeed;
+
+//       attribute vec2 aVertex;
+
+//       // Complex division
+//       vec2 div(vec2 a, vec2 b) {
+//         float den = b.x * b.x + b.y * b.y;
+//         return vec2((a.x * b.x + a.y * b.y) / den, (-a.x * b.y + a.y * b.x) / den);
+//       }
+//       vec3 hsv2rgb(vec3 c) {
+//         vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+//         vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+//         return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+//       }
+
+//       vec2 square(vec2 a) { return mul(a, a); }
+//       vec2 cube(vec2 a) { return mul(a, square(a)); }
+
+//       void main() {
+//         gl_Position = u_worldViewProjectionMatrix * vec4(aVertex.xy, 0, 1);
+
+//         vec2 p0 = vec2(4, 0);
+//         vec2 p1 = vec2(0, 0);
+//         vec2 p2 = vec2(0, 0);
+//         vec2 p3 = vec2(0, 0);
+//         vec2 p4 = vec2(1, 0);
+
+//         vec2 pd0 = vec2(0, 0);
+//         vec2 pd1 = vec2(0, 0);
+//         vec2 pd2 = vec2(0, 0);
+//         vec2 pd3 = vec2(4, 0);
+
+//         vec2 r0 = vec2(-1, -1);
+//         vec2 r1 = vec2(-1, 1);
+//         vec2 r2 = vec2(1, 1);
+//         vec2 r3 = vec2(1, -1);
+
+//         vec2 p = aVertex / u_zoom + u_offset;
+//         vec2 lastP = vec2(p.x + 1.0, p.y + 1.0);
+//         float k = 0.0;
+//         for(int i = 0; i < 500; i++) {
+//           k = k + 1.0 / 500.0;
+//           if (distance(lastP, p) > 0.00001) {
+//             vec2 squareP = square(p);
+//             vec2 cubeP = mul(p, squareP);
+//             vec2 quadP = mul(p, cubeP);
+//             lastP = p;
+//             vec2 Px = mul(p4, quadP) + mul(p3, cubeP) + mul(p2, squareP) + mul(p1, p) + p0;
+//             vec2 Pdx = mul(pd3, cubeP) + mul(pd2, squareP) + mul(pd1, p) + pd0;
+//             p = p - div(Px, Pdx);
+//           } else {
+//             break;
+//           }
+//         }
+//         if (u_convergenceSpeed > 0.5) {
+//           // v_color = vec4(1.0 - k, 0, 0, 1);
+//           v_color = vec4(k * 5.0, k * 5.0, k * 10.0, 1);
+//           // v_color = vec4(hsv2rgb(vec3(k / 0.8 + 0.5, 1.0, 1.0)).rgb, 1.0);
+//         } else {
+//           k = k * 10.0;
+//           float a = 10.0;
+//           float b = 0.4;
+//           float c = 0.2;
+//           float hue = k / a + b + c;
+//           float minDistance = distance(r0, p);
+//           float r1Distance = distance(r1, p);
+//           float r2Distance = distance(r2, p);
+//           float r3Distance = distance(r3, p);
+//           // v_color = vec4(${colors[0]});
+//           v_color = vec4(0, k, k / 0.5, 1);
+//           if (r1Distance < minDistance) {
+//             minDistance = r1Distance;
+//             hue = k / a + b + c * 2.0;
+//             // v_color = vec4(${colors[1]});
+//             v_color = vec4(0, 0, k / 0.5, 1);
+//           }
+//           if (r2Distance < minDistance) {
+//             minDistance = r2Distance;
+//             hue = k / a + b + c * 3.0;
+//             // v_color = vec4(${colors[2]});
+//             v_color = vec4(0, k / 2.0, k, 1);
+//           }
+//           if (r3Distance < minDistance) {
+//             minDistance = r3Distance;
+//             hue = k / a + b + c * 4.0;
+//             // v_color = vec4(${colors[3]});
+//             v_color = vec4(0, k, k, 1);
+//           }
+//           // v_color = vec4(hsv2rgb(vec3(hue, 1.0, 1.0)).rgb, 1.0);
+//         }
+//         // v_color = vec4(1, 0, 1, 1);
+//       }`,
+//     vars: ['aVertex', 'u_worldViewProjectionMatrix', 'u_offset', 'u_zoom', 'u_convergenceSpeed'],
+//   },
+//   fragmentShader: {
+//     src: `
+//       precision mediump float;
+//       varying vec4 v_color;
+//       void main() {
+//         gl_FragColor = v_color;
+//       }`,
+//   },
+//   uniforms: [
+//     { name: 'u_offset', length: 2, value: [0, 0], type: 'FLOAT_VECTOR' },
+//     { name: 'u_zoom', length: 1, value: [1], type: 'FLOAT' },
+//     { name: 'u_convergenceSpeed', length: 1, value: [1], type: 'FLOAT' },
+//   ],
+// });
+
+const figure = new Fig.Figure();
+
+figure.add([
+  { make: 'rectangle', width: 0.2, height: 0.2, position: [-0.5, 0] },
+  { make: 'triangle', width: 0.2, height: 0.2, position: [0, 0] },
+  { make: 'ellipse', width: 0.2, height: 0.2, position: [0.5, 0] },
+])
+
+const gesture = figure.add({
+  make: 'gesture',
+  scene: { left: -2, right: 2, bottom: -1, top: 1 },
+  // scene: { left: 0, right: 2, bottom: -0.5, top: 0.5},
+  color: [0, 1, 0, 0.4],
+  changeScene: figure.scene,
+  pan: true,
+  zoom: true,
 });
-screenGrid.scene = new Fig.Scene();
-screenGrid.scene.setProjection({ style: '2D', left: -2, right: 2, bottom: -1, top: 1 });
-const screenMinorGrid = figure.add({
-  make: 'grid',
-  bounds: [-2, -1, 4, 2],
-  xStep: 0.1,
-  yStep: 0.1,
-  line: { width: 0.005 },
-  color: [0.85, 0.85, 1, 1],
-  position: [0, 0, -3],
-  xAlign: 'center',
-});
-screenMinorGrid.scene = screenGrid.scene;
+// gesture.setZoom({ mag: 2, position: [0.75, 0] });
 
-figure.add({
-  make: 'grid',
-  bounds: [-1, -1, 2, 2],
-  xStep: 0.1,
-  yStep: 0.1,
-  line: { width: 0.005 },
-  color: [0.8, 0.8, 0.8, 1],
-  position: [0, 0, 0],
-  xAlign: 'center',
-});
+// figure.scene.setPanZoom(new Fig.Point(0.6 / 3.5 * 2.5, 0.1 / 3.5 * 2.5), 3.5);
+// setPanZoom first pans, then zooms
+// So to pan around a point p: p / mag - p
+// figure.scene.setPanZoom(new Fig.Point(-0.6 / 3.5 - -0.6, -0.1 / 3.5 - -0.1), 3.5);
+// figure.scene.setPanZoom(new Fig.Point(-0.6 / 0.25 - -0.6, -0.1 / 0.25 - -0.1), 0.25);
+figure.animateNextFrame();
 
-figure.add({
-  make: 'grid',
-  bounds: [-1, -1, 2, 2],
-  xStep: 0.5,
-  yStep: 0.5,
-  line: { width: 0.007 },
-  color: [0.5, 0.5, 0.5, 1],
-  position: [0, 0, 0],
-  xAlign: 'center',
-});
+// const s = new Fig.Scene({
+//   left: -1, right: 1, bottom: -1, top: 1,
+// });
 
-const vertexShader = {
-  dimension: 3,
-  normals: true,
-  light: 'directional',
-};
-const fragmentShader = {
-  light: 'directional',
-};
+// const gesture = figure.add({
+//   make: 'gesture',
+//   color: [0, 0, 1, 0.2],
+//   width: 1,
+//   height: 2,
+//   position: [0.3, 0],
+//   onlyWhenTouched: false,
+//   // zoom: { position: [0.5, -0.28] },
+//   // pan: { wheel: true, sensitivity: 2 },
+//   // pan: {
+//   //   left: -0.2,
+//   //   right: 0,
+//   // },
+// });
+// // figure.addZoomPanControl({ color: [1, 0, 0, 0.4]});
 
+// const axis = figure.add({
+//   name: 'axis',
+//   make: 'collections.zoomAxis',
+//   axis: 'x',
+//   length: 1,
+//   position: [-0.2, -0.85],
+//   ticks: { length: 0.03 },
+//   // grid: { length: 0.1, color: [1, 0, 0, 1], offset: 0 },
+//   labels: { precision: 2, fix: false },
+//   start: 0,
+//   stop: 2,
+//   step: 0.1,
+//   font: { size: 0.05 },
+//   // title: 'this is an axis',
+// });
 
-const addAxis = (name, direction, color, includeArrow = false) => {
-  const [p, n] = cylinder({ radius: 0.03, sides: 10, line: [[0, 0, 0], direction] });
-  let cn = [];
-  let cnNormals = [];
-  if (includeArrow) {
-    [cn, cnNormals] = cone({
-      radius: 0.06,
-      sides: 10,
-      line: { p1: direction, direction, length: 0.15 },
-    });
-  }
-  const r = figure.add({
-    name,
-    make: 'gl',
-    vertexShader,
-    fragmentShader,
-    vertices: { data: [...p, ...cn], size: 3 },
-    normals: { data: [...n, ...cnNormals] },
-    color,
-    // transform: [['rd', ...direction]],
-  });
-  r.setTouchable();
-  return r;
-};
-addAxis('xPosAxis', [0.7, 0, 0], [1, 0, 0, 1], true);
-addAxis('xNegAxis', [-0.7, 0, 0], [1, 0, 0, 1]);
-addAxis('yPosAxis', [0, 0.7, 0], [0, 1, 0, 1], true);
-addAxis('yNegAxis', [0, -0.7, 0], [0, 1, 0, 1]);
-addAxis('zPosAxis', [0, 0, 0.7], [0, 0, 1, 1], true);
-addAxis('zNegAxis', [0, 0, -0.7], [0, 0, 1, 1]);
+// axis.pan(2, 0.5);
+// // axis.addTicks({ length: 0.05, offset: -0.05, step: 0.05 }, 'ticks');
 
 
-const addSphere = (name, position, color) => {
-  // const [sx, sn] = sphere({ radius: 0.05, sides: 5, normals: 'flat', output: 'numbers' });
-  // const s = figure.add({
-  //   name,
-  //   make: 'gl',
-  //   vertexShader,
-  //   fragmentShader,
-  //   vertices: { data: Fig.tools.g2.toNumbers(sx), size: 3 },
-  //   normals: { data: Fig.tools.g2.toNumbers(sn) },
-  //   color,
-  //   position,
-  // });
-  // s.setTouchable();
-  const s = figure.add({
-    name,
-    make: 'cube',
-    side: 0.1,
-    // rotation: ['axis', [1, 1, 1], Math.PI / 4],
-    // make: 'sphere',
-    // radius: 0.05,
-    // sides: 5,
-    // normals: 'flat',
-    color,
-    position,
-    touch: { onClick: () => console.log('asdfasdf') },
-    copy: [
-      { along: 'x', num: 2, step: 0.11 },
-      { along: 'y', num: 2, step: 0.11 },
-      { along: 'z', num: 2, step: 0.11 },
-    ],
-    move: true,
-  });
-  // s.custom.updatePoints({
-  //   radius: 0.1,
-  //   sides: 10,
-  //   copy: [{along: 'x', num: 2, step: 0.12 }],
-  // })
-};
+// const polygon = figure.add({
+//   make: 'polygon',
+//   sides: 10,
+//   color: [1, 0, 0, 0.5],
+//   radius: 0.3,
+//   position: [0, -0.2],
+//   scene: s,
+//   move: true,
+// });
 
-addSphere('xPos', [1, 0, 0], [1, 0.5, 0.5, 1]);
-addSphere('xNeg', [-1, 0, 0], [1, 0, 0, 1]);
-addSphere('yPos', [0, 1, 0], [0, 1, 0, 1]);
-addSphere('yNeg', [0, -1, 0], [0, 0.5, 0, 1]);
-addSphere('zPos', [0, 0, 1], [0.5, 0.5, 1, 1]);
-addSphere('zNeg', [0, 0, -1], [0, 0, 1, 1]);
-
-const r1 = 0.01;
-const r2 = 0.02;
-
-const xAxis = figure.getElement('xPosAxis');
-// xAxis.setNotTouchable();
-xAxis.move.type = 'rotation';
-xAxis.transform.updateRotation(['axis', 0, 1, 0, 0])
-xAxis.move.plane = new Fig.tools.g2.Plane([[0, 0, 0], [0, 1, 0]]);
-xAxis.setMovable();
-xAxis.setTouchable([1, 2, 2]);
-// xAxis.onClick = () => console.log('asdfasdf')
-xAxis.move.bounds = new Fig.RangeBounds({
-  min: -Math.PI / 2,
-  max: Math.PI / 2,
-});
-
-// const [lv, ln] = revolve({
-//   // profile: [[0, 0.02, 0], [0.399, 0.099, 0], [0.4, 0.1, 0], [0.499, 0.05, 0], [0.5, 0.05, 0], [0.5, 0.0499, 0], [0.5, 0, 0]],
-//   // profile: [[0, 0.001, 0], [0.399, 0.1, 0], [0.4, 0.1, 0], [0.4, 0.099, 0], [0.4, 0, 0]],
-//   // profile: [[0, 0, 0], [0.4, r1, 0], [0.4, 0, 0]],
-//   // profile: [[0, 0], [0, r1], [0.5, r1], [0.5, r2], [0.6, 0]],
-//   // profile: [[0, 0.5], [0, 0.6], [0.1, 0.6], [0.1, 0.5], [0, 0.5]],
-//   profile: polygon({ radius: 0.1, center: [0, 0.5], sides: 12, direction: -1 }),
-//   // profile: [[0, 0, 0], [0.5, 0.3, 0], [0.7, 0, 0]],
-//   sides: 12,
-//   normals: 'flat',
-//   // rotation: ['dir', 1, -1, 0.5],
+// const ps = new Fig.Scene({ style: 'orthographic', light: { directional: [0.2, 0.3, 0.9] }, camera: { position: [0.2, 0.5, 1] } });
+// figure.add({
+//   make: 'cube',
+//   side: 0.2,
+//   scene: ps,
+//   color: [0, 1, 0, 1],
 // });
 
 // figure.add({
-//   make: 'gl',
-//   vertexShader,
-//   fragmentShader,
-//   vertices3: { data: lv },
-//   normals: { data: ln },
-//   color: [1, 0, 0, 1],
-//   position: [0, 0, 0],
+//   make: 'cube',
+//   side: 0.2,
+//   scene: ps,
+//   color: [0, 1, 0, 1],
+//   position: [0.3, 0],
+//   move: true,
+// });
+
+// const pow = (pow = 2, stop = 10, step = 0.05) => {
+//   const xValues = Fig.range(0, stop, step);
+//   return xValues.map(x => new Fig.Point(x, x ** pow));
+// };
+
+// const plot = figure.add({
+//   name: 'plot',
+//   make: 'collections.plot',
+//   width: 1,                                    // Plot width in figure
+//   height: 1,                                   // Plot height in figure
+//   yAxis: {
+//     start: 0,
+//     stop: 100,
+//     type: 'zoom',
+//     step: 20,
+//     labels: true,
+//     ticks: true,
+//     grid: true,
+//   },              // Customize y axis limits
+//   xAxis: {
+//     start: 0,
+//     stop: 10,
+//     type: 'zoom',
+//     step: 2,
+//     labels: true,
+//     grid: true,
+//     ticks: true,
+//   },              // Customize y axis limits
+//   trace: [
+//     { points: pow(1.5), name: 'Power 1.5' },   // Trace names are for legend
+//     {                                          // Trace with only markers
+//       points: pow(2, 10, 0.5),
+//       name: 'Power 2',
+//       markers: { sides: 4, radius: 0.03 },
+//     },
+//     {                                          // Trace with markers and
+//       points: pow(3, 10, 0.5),                 // dashed line
+//       name: 'Power 3',
+//       markers: { radius: 0.03, sides: 10, line: { width: 0.005 } },
+//       line: { dash: [0.04, 0.01] },
+//     },
+//   ],
+//   legend: { font: { size: 0.1 } },
+//   position: [-0.8, -0.8],
+// });
+
+// gesture.setZoomOptions({ scale: 5, max: 100000, min: 0.25 });
+
+// gesture.notifications.add('zoom', () => {
+//   const z = gesture.getZoom();
+//   // console.log(z.mag, z.offset.round(4).toArray(2), z.current.position.round(2).toArray(2));
+//   // console.log(z.mag, z.offset)
+//   gesture.zoomScene(s);
+//   gesture.zoomScene(ps);
+//   // figure.zoomElement(polygon, [0, -0.2], false);
+//   plane.drawingObject.uniforms.u_zoom.value = [z.mag];
+//   plane.drawingObject.uniforms.u_offset.value = [-z.offset.x, -z.offset.y];
+//   const x = axis.drawToValue(z.current.position.x);
+//   axis.changeZoom(x, z.mag);
+//   // console.log(plot.drawToPoint(z.current.position), z.current.position)
+//   // plot.changeZoom(plot.drawToPoint(z.current.position), z.mag);
+// });
+
+// gesture.notifications.add('pan', (pan) => {
+//   // const z = gesture.getZoom();
+//   // console.log(z.mag, z.offset.round(4).toArray(2), z.current.position.round(2).toArray(2));
+//   // console.log(z.mag, z.offset)
+//   // console.log(pan)
+//   gesture.panScene(s);
+//   gesture.panScene(ps);
+//   const p = gesture.getPan();
+//   axis.panDeltaDraw(-p.delta.x);
+//   plot.panDeltaDraw(p.delta.scale(-1));
+//   // figure.zoomElement(polygon, [0, -0.2], false);
+//   // plane.drawingObject.uniforms.u_zoom.value = [z.mag];
+//   plane.drawingObject.uniforms.u_offset.value = [-pan.x, -pan.y];
 // });
 
 
-const [rv, rn] = Fig.tools.g2.cube({
-  side: 0.2,
-  position: [0, 0, 0],
-  // rotation: ['sph', Math.PI / 4, 0],
-});
+// // const zoomPad = figure.add({
+// //   make: 'rectangle',
+// //   color: [1, 0, 0, 0.5],
+// //   width: 1,
+// //   height: 1,
+// // });
 
-const cube = figure.add({
-  name: 'cube',
-  make: 'gl',
-  vertexShader,
-  fragmentShader,
-  vertices3: { data: rv },
-  normals: { data: rn },
-  color: [0, 1, 1, 1],
-  position: [0, 0.5, 0],
-  // transform: [['s', 1, 1, 1], ['axis', [0, 1, 0], 1], ['t', 0, 0, 0]],
-  move: {
-    type: 'rotation',
-    plane: [[0, 0.5, 0], [1, 1, 0]],
-    // bounds: { min: 0.5, max: 10}
-    // bounds: { p1: [0, 0, 1], p2: [0, 0, -1] },
-    // bounds: { left: 0.5, bottom: 0.5, right: 0.5, rightDirection: [0, 0, -1] },
-  },
-});
-// cube.setMovable();
-// cube.setTouchable();
-// cube.move.type = 'translation';
-// // cube.move.plane = 
-// cube.move.plane = Fig.tools.g2.getPlane([[0, 0, 0], [1, 0, 0]]);
-// cube.move.bounds = new Fig.LineBounds({
-//   p1: [0, 0, 1],
-//   p2: [0, 0, -1],
-// });
-// cube.move.bounds = new Fig.RectBounds({
-//   normal: [1, 0, 0],
-//   rightDirection: [0, 0, -1],
-//   left: 0.5,
-//   right: 1,
-//   top: 1,
-//   bottom: 0.5,
-// });
-figure.add({
-  make: 'polygon',
-  line: { width: 0.01 },
-  radius: 0.5,
-  position: [0, 0, 0.2],
-}).pulse({
-  duration: 3, scale: 1.2, min: 0.8, num: 5,
-});
-figure.add({
-  make: 'text',
-  text: 'a',
-  position: [0.5, 0, 0],
-  xAlign: 'center',
-});
-figure.add({
-  make: 'arc',
-  radius: 1,
-            angle: Math.PI,
-            sides: 4,
-            drawBorderBuffer: 0.1,
-            line: { width: 0.1, widthIs: 'inside' },
-})
+// // figure.notifications.add('zoom', ([zoom, position]) => {
 
-figure.add({
-  make: 'polygon',
-  radius: 0.5,
-  sides: 5,
-  color: [1, 1, 0, 0.7],
-  xAlign: 'center',
-});
-
-const k = figure.add({
-  make: 'text',
-  text: 'a',
-  position: [0.5, 0, 0],
-  xAlign: 'center',
-});
-k.scene = new Fig.Scene({ left: -2, right: 2, bottom: -1, top: 1 });
-
-figure.scene.light.directional = [0.7, 0.5, 1];
-figure.scene.light.ambient = 0;
-figure.scene.light.point = [0.3, 0.1, 1];
-
-
-figure.scene.setCamera({ position: [2, 2, 2] });
-figure.scene.setProjection({ style: 'orthographic', near: 1, far: 10, left: -2, right: 2, bottom: -1, top: 1 });
-
-// figure.scene.setCamera({ position: [2, 2, 2] });
-// figure.scene.setProjection({ style: 'perspective', near: 1, far: 7, aspectRatio: 2, fieldOfView: Math.PI * 0.2 });
-
-
-// const c = new Fig.Point(-0.15, -1, 0).transformBy(figure.scene.viewMatrix);
-// const cameraZ = c.z;
-// const cameraX = c.x;
-// const cameraY = c.y;
-// const matrix0 = figure.scene.projectionMatrix[0];
-// const matrix5 = figure.scene.projectionMatrix[5];
-// const matrix10 = figure.scene.projectionMatrix[10];
-// const matrix11 = -1;
-// const matrix14 = figure.scene.projectionMatrix[11];
-// const clipY = cameraY * matrix5 / cameraZ * matrix11;
-// const clipX = cameraX * matrix0 / cameraZ * matrix11;
-// const clipZ = (matrix10 * cameraZ + matrix14) / (cameraZ * matrix11)
-
-// const q = m3.transformVector(figure.scene.viewProjectionMatrix, [-0.15, -1, 0, 1])
-// const qClip = q.map(n => n/ q[3]);
-// console.log(qClip);
-// const r = m3.transformVector(figure.scene.viewProjectionMatrix, [1, 0.6, 0, 1])
-// const rClip = r.map(n => n/ r[3])
-// // console.log(rClip);
-// // console.log(Fig.getPoint(rClip.slice(0, 3)).transformBy(m3.inverse(figure.scene.viewProjectionMatrix)))
-// // console.log(Fig.getPoint(qClip.slice(0, 3)).transformBy(m3.inverse(figure.scene.viewProjectionMatrix)))
-
-// const cz = matrix14 / (matrix11 * rClip[2] - matrix10);
-// const cx = rClip[0] * cz / matrix11 / matrix0;
-// const cy = rClip[1] * cz / matrix11 / matrix5;
-// console.log(m3.transform(figure.scene.cameraMatrix, cx, cy, cz))
-
-// const cz1 = matrix14 / (matrix11 * qClip[2] - matrix10);
-// const cx1 = qClip[0] * cz1 / matrix11 / matrix0;
-// const cy1 = qClip[1] * cz1 / matrix11 / matrix5;
-// console.log(m3.transform(figure.scene.cameraMatrix, cx1, cy1, cz1))
-
-// const a = figure.scene.figureToGL([1, 0.6, 0])
-// const b = figure.scene.figureToGL([-0.15, -1, 0])
-// const a1 = figure.scene.glToFigure(a);
-// const b1 = figure.scene.glToFigure(b);
-// console.log(a1)
-// console.log(a)
-// console.log(b1)
-// console.log(b)
+// // });
+// figure.addFrameRate(10, { color: [1, 0, 0, 1] });

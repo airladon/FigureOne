@@ -444,8 +444,15 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     // const p = this.pan.offset.scale(((scene.right - scene.left) * scene.zoom) / ((s.right - s.left)));
     // const unscaled = this.pan.offset.scale(1 / this.zoom.mag);
     // const p = unscaled.scale((scene.right - scene.left) / (s.right - s.left));
-    const p = this.pan.offset.scale((scene.right - scene.left) / (s.right - s.left) / scene.zoom);
-    scene.setPanZoom(p, this.zoom.mag);
+    const p = this.pan.offset.scale((scene.right - scene.left) / (s.right - s.left));
+    const generic = this.pan.offset
+      .scale(1 / (1 / this.zoom.mag - 1)) // Scene position to zoom around
+      .sub(scene.left, scene.bottom)
+      .scale((scene.right - scene.left) / (s.right - s.left))
+      .add(s.left, s.bottom);
+    const targetScene = generic.scale(1 / this.zoom.mag).sub(generic).scale(-1);
+    // scene.setPanZoom(this.pan.offset.scale(-1), this.zoom.mag);
+    scene.setPanZoom(targetScene, this.zoom.mag);
     console.log(scene.zoom, p.round(2).toArray())
     this.animateNextFrame();
   }
@@ -479,6 +486,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.setPanOffset(
       this.pan.offset.sub(this.pan.delta),
     );
+
     this.zoom.cumAngle += angle - this.zoom.last.angle;
   }
 
@@ -581,7 +589,9 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       angle: this.zoom.current.angle,
       distance: this.zoom.current.distance,
       pinching: this.zoom.pinching,
+      position: this.zoom.current.position,
     }, zoom);
+    console.log(z)
     this.updateZoom(z.mag, getPoint(z.position), z.distance, z.angle);
     this.zoom.pinching = z.pinching;
     if (notify) {
@@ -592,8 +602,14 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     }
   }
 
-  setPan(offset: TypeParsablePoint) {
+  setPan(offset: TypeParsablePoint, notify: boolean = false) {
     this.setPanOffset(getPoint(offset));
+    if (notify) {
+      this.notifications.publish('pan', this.pan.offset);
+    }
+    if (this.changeScene != null) {
+      this.panScene(this.changeScene);
+    }
   }
 
   /**
