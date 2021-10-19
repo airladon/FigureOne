@@ -105,6 +105,11 @@ module.exports = (env) => {
     clean = new CleanWebpackPlugin();
   }
 
+  let minimize = false;
+  if (e.uglify) {
+    minimize = true;
+  }
+
   // Make the plugin array filtering out those plugins that are null
   const pluginArray = [
     // uglify,
@@ -130,7 +135,7 @@ module.exports = (env) => {
     },
     externals,
     optimization: {
-      minimize: true,
+      minimize,
       minimizer: [
         new TerserPlugin({
           // minify: TerserPlugin.uglifyJsMinify,
