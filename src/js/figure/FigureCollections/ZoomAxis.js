@@ -123,10 +123,6 @@ export type OBJ_AxisTicks = {
 
 
 export type OBJ_AxisTicks_Fixed = {
-  start: number,
-  step: number,
-  stop: number,
-  values: Array<number>,
   length: number,
   offset: number,
   width: number,
@@ -282,7 +278,19 @@ export type OBJ_AxisLabels = {
   yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
   font?: OBJ_Font,
   hide?: Array<number>,
-}
+};
+
+export type OBJ_AxisLabelsFixed = {
+  precision: number,
+  format: 'decimal' | 'exp',
+  space: number,
+  offset: TypeParsablePoint,
+  rotation: number,
+  xAlign: 'left' | 'right' | 'center',
+  yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
+  font: OBJ_Font,
+  hide: Array<number>,
+};
 
 /**
  * Axis title
@@ -522,7 +530,9 @@ export type COL_AxisUpdate = {
 class CollectionsZoomAxis extends FigureElementCollection {
   // Figure elements
   _line: ?FigureElementPrimitive;
-  _title: ?FigureElementPrimitive;
+  _labels: ?FigureElementPrimitive;
+  _grid: ?FigureElementPrimitive;
+  _ticks: ?FigureElementPrimitive;
 
   length: number;
   angle: number;
@@ -531,9 +541,9 @@ class CollectionsZoomAxis extends FigureElementCollection {
   showAxis: boolean;
   step: number;
 
-  ticks: OBJ_AxisTicks_Fixed;
-  grid: OBJ_AxisTicks_Fixed;
-  labels: OBJ_AxisLabels;
+  ticks: OBJ_AxisTicks_Fixed | null;
+  grid: OBJ_AxisTicks_Fixed | null;
+  labels: OBJ_AxisLabels | null;
 
   drawToValueRatio: number;
   valueToDrawRatio: number;
@@ -630,8 +640,8 @@ class CollectionsZoomAxis extends FigureElementCollection {
         },
         labelsO,
       );
+      o.offset = getPoint(o.offset);
       this.labels = o;
-      this.labels.offset = getPoint(this.labels.offset);
       const labels = this.collections.primitives.text(joinObjects({}, o, { text: '0' }));
       labels.transform.updateRotation(o.rotation);
       this.add('labels', labels);
@@ -672,16 +682,30 @@ class CollectionsZoomAxis extends FigureElementCollection {
     return round(value, this.precision);
   }
 
+  pan(toValue: number, atPosition: number) {
+    const normPosition = atPosition / this.length;
+    const scale = this.stopValue - this.startValue;
+    const offset = toValue - this.startValue - normPosition * scale;
+    // console.log(normPosition, scale, offset, this.startValue + offset, this.stopValue + offset)
+    this.update(this.startValue + offset, this.stopValue + offset);
+  }
+
   update(startValue: number, stopValue: number) {
+    this.startValue = startValue;
+    this.stopValue = stopValue;
+    this.calcRatios();
     const remainder = this.rnd(startValue % this.step);
     let startTick = startValue;
     let values = [];
     if (remainder > 0) {
       startTick = startValue + (this.step - remainder);
+    } else if (remainder < 0) {
+      startTick = startValue + (-remainder);
     }
     if (startTick <= stopValue) {
       values = range(startTick, stopValue, this.step);
     }
+    console.log(values)
 
     // const { ticks, grid, labels, axis } = this;
     // const lengthSign = axis === 'x' ? 1 : -1;
@@ -770,499 +794,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
       });
     }
   }
-  // addLine(optionsInOrBool: OBJ_Line | boolean) {
-  //   let optionsIn = optionsInOrBool;
-  //   if (optionsInOrBool === true) {
-  //     optionsIn = {};
-  //   }
-  //   const defaultOptions = this.line != null ? this.line : {
-  //     length: this.length,
-  //     angle: this.angle,
-  //     width: this.collections.primitives.defaultLineWidth,
-  //     color: this.color,
-  //   };
-  //   const o = joinObjects({}, defaultOptions, optionsIn);
-  //   if (this.elements.line != null) {
-  //     this.elements.line.custom.updatePoint(o);
-  //   } else {
-  //     const line = this.collections.primitives.line(o);
-  //     this.add('line', line);
-  //   }
-  //   this.line = o;
-  // }
 
-  // udpate(optionsIn: COL_AxisUpdate) {
-  //   //   length?: number,              // draw space length
-  //   // line?: boolean | OBJ_Line,
-  //   // start?: number,               // value space start at draw space start
-  //   // stop?: number,                // value space stop at draw space stop
-  //   // ticks?: OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean,
-  //   // labels?: OBJ_AxisLabels | Array<OBJ_AxisLabels> | boolean,
-  //   // grid?: OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean,
-  //   // title?: TypeAxisTitle,
-  //   // font?: OBJ_Font,              // Default font
-  //   // show?: boolean,
-  //   // auto?: [number, number],
-  //   const defaultOptions = {
-  //     start: this.startValue,
-  //     stop: this.stopValue,
-  //     length: this.length,
-  //     font: this.defaultFont,
-
-  //   };
-  //   if (optionsIn.auto != null) {
-  //     const {
-  //       start, stop, step, precision,
-  //     } = this.calcAuto(optionsIn.auto);
-  //     defaultOptions.start = start;
-  //     defaultOptions.stop = stop;
-  //     defaultOptions.ticks = {};
-  //     defaultOptions.labels = { precision };
-  //     this.autoStep = step;
-  //   }
-  //   const options = joinObjects({}, defaultOptions, optionsIn);
-  //   if (options.stop == null || options.stop <= options.start) {
-  //     options.stop = options.start + 1;
-  //   }
-
-  //   this.defaultFont = options.font;
-  //   this.showAxis = options.show;
-  //   this.startValue = options.start;
-  //   this.stopValue = options.stop;
-  //   if (this.startValue >= this.stopValue) {
-  //     this.startValue = this.stopValue - 1;
-  //   }
-  //   this.length = options.length;
-  //   this.axis = options.axis;
-  //   this.angle = this.axis === 'x' ? 0 : Math.PI / 2;
-  //   this.drawToValueRatio = (options.stop - options.start) / options.length;
-  //   this.valueToDrawRatio = 1 / this.drawToValueRatio;
-  //   if (options.ticks != null && options.labels === undefined) {
-  //     options.labels = {};
-  //   }
-
-  //   if (this.showAxis && options.line != null && options.line !== false) {
-  //     this.addLine(options.line);
-  //   }
-  //   if (this.showAxis && options.ticks != null && options.ticks !== false) {
-  //     this.addTicks(options.ticks, 'ticks');
-  //   }
-
-  //   if (this.showAxis && options.labels != null && options.labels !== false) {
-  //     this.addLabels(options.labels);
-  //   }
-  //   if (this.showAxis && options.title != null) {
-  //     this.addTitle(options.title);
-  //   }
-  //   if (this.showAxis && options.grid != null && options.grid !== false) {
-  //     this.addTicks(options.grid, 'grid');
-  //   }
-  //   this.reorder();
-  // }
-
-  reorder() {
-    let grid = [];
-    let ticks = [];
-    const line = [];
-    this.drawOrder.forEach((elementName) => {
-      if (elementName.startsWith('grid')) {
-        grid.push(elementName);
-      }
-      if (elementName.startsWith('tick')) {
-        ticks.push(elementName);
-      }
-      if (elementName.startsWith('line')) {
-        line.push(elementName);
-      }
-    });
-    ticks = ticks.sort().reverse();
-    grid = grid.sort().reverse();
-    this.toBack(ticks);
-    this.toBack(line);
-    this.toBack(grid);
-  }
-
-  // processTicks(
-  //   name: 'ticks' | 'grid',
-  //   o: { start?: number, stop?: number, step?: number, values?: Array<number>},
-  //   index: number,
-  // ) {
-  //   // let { start, stop } = this;
-  //   let start = this.startValue;
-  //   let stop = this.stopValue;
-  //   let step;
-  //   let values;
-  //   if (o.start != null) {
-  //     start = o.start;
-  //   }
-  //   if (o.stop != null) {
-  //     stop = o.stop;
-  //   }
-  //   if (o.step != null) {
-  //     step = o.step;
-  //   }
-  //   if (o.values != null) {
-  //     values = o.values;
-  //   }
-
-  //   if (name === 'grid' && this.ticks.length >= index + 1) {
-  //     if (o.start == null) {
-  //       start = this.ticks[index].start;
-  //     }
-  //     if (o.stop == null) {
-  //       stop = this.ticks[index].stop;
-  //     }
-  //     if (o.step == null) {
-  //       step = this.ticks[index].step;
-  //     }
-  //     if (o.values == null) {
-  //       values = this.ticks[index].values;
-  //     }
-  //   }
-  //   if (step == null && this.autoStep != null && this.autoStep < (stop - start) / 2) {
-  //     step = this.autoStep;
-  //   } else if (step == null && index === 0) {
-  //     step = (stop - start) / 5;
-  //   } else if (step == null) { // $FlowFixMe
-  //     step = this[name].step / 2;
-  //   }
-  //   return {
-  //     start, stop, step, values,
-  //   };
-  // }
-
-  // getTickDefaults(index: number, name: 'ticks' | 'grid') {
-  //   if (this.ticks.length > index) {
-  //     return this.ticks[index];
-  //   }
-  //   return {
-  //     width: this.line != null ? this.line.width : this.collections.primitives.defaultLineWidth,
-  //     length: name === 'ticks' ? this.collections.primitives.defaultLineWidth * 10 : this.collections.primitives.defaultLineWidth * 50,
-  //     angle: this.angle + Math.PI / 2,
-  //     color: this.color,
-  //   };
-  // }
-
-  // // updateTicks(optionsInOrBool: OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean, name: 'ticks' | 'grid' = 'ticks') {
-  // //   let optionsIn = optionsInOrBool;
-  // //   if (optionsInOrBool === true) {
-  // //     optionsIn = {};
-  // //   }
-  // //   let tickOptions;
-  // //   if (Array.isArray(optionsIn)) {
-  // //     tickOptions = optionsIn;
-  // //   } else {
-  // //     tickOptions = [optionsIn];
-  // //   }
-  // //   const defaults = getTickDefaults();
-  // //   if (optionsTo)
-  // //   tickOptions.forEach((options, index) => {
-      
-  // //   });
-  // // }
-
-  // addTicks(optionsInOrBool: OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean, name: 'ticks' | 'grid' = 'ticks') {
-  //   let optionsIn = optionsInOrBool;
-  //   if (optionsInOrBool === true) {
-  //     optionsIn = {};
-  //   }
-  //   const defaultOptions = {
-  //     // start: this.startValue,
-  //     // stop: this.stopValue,
-  //     // step: (this.stopValue - this.startValue) / 5,
-  //     width: this.line != null ? this.line.width : this.collections.primitives.defaultLineWidth,
-  //     length: name === 'ticks' ? this.collections.primitives.defaultLineWidth * 10 : this.collections.primitives.defaultLineWidth * 50,
-  //     angle: this.angle + Math.PI / 2,
-  //     color: this.color,
-  //   };
-  //   let optionsToUse;
-  //   if (Array.isArray(optionsIn)) {
-  //     optionsToUse = optionsIn;
-  //   } else {
-  //     optionsToUse = [optionsIn];
-  //   }
-  //   // $FlowFixMe
-  //   if (this[name] == null) { // $FlowFixMe
-  //     this[name] = [];
-  //   }
-  //   // const elements = [];
-  //   const lengthSign = this.axis === 'x' ? 1 : -1;
-  //   optionsToUse.forEach((options, index) => {
-  //     // $FlowFixMe
-  //     const defOpt = this[name].length - 1 >= index ? this[name][index] : defaultOptions;
-  //     const o = joinObjects({}, defOpt, options);
-  //     const {
-  //       start, stop, step, values,
-  //     } = this.processTicks(name, o, index);
-  //     o.start = start;
-  //     o.stop = stop;
-  //     o.step = step;
-  //     o.length *= lengthSign;
-  //     if (o.offset == null && name === 'ticks') {
-  //       o.offset = this.axis === 'x' ? -o.length / 2 : o.length / 2;
-  //     } else if (o.offset == null && name === 'grid') {
-  //       const t = this.transform.t() || new Point(0, 0);
-  //       if (this.axis === 'x') {
-  //         o.offset = -t.y;
-  //       } else {
-  //         o.offset = -t.x;
-  //       }
-  //     }
-  //     const num = Math.floor((o.stop + o.step / 10000 - o.start) / o.step);
-  //     o.num = num;
-  //     if (values == null) {
-  //       o.values = range(o.start, o.stop, o.step);
-  //     } else {
-  //       o.values = values;
-  //     }
-
-  //     if (this.axis === 'x') {
-  //       o.copy = [{ to: o.values.map(v => new Point(this.valueToDraw(v), 0)) }];
-  //     } else {
-  //       o.copy = [{ to: o.values.map(v => new Point(0, this.valueToDraw(v))) }];
-  //     } // $FlowFixMe
-  //     o.copy[0].original = false;
-
-  //     if (o.p1 == null) {
-  //       o.p1 = new Point(0, o.offset * lengthSign).rotate(this.angle);
-  //     }
-
-  //     if (this.elements[`${name}${index}`] != null) {
-  //       this.elements[`${name}${index}`].custom.updatePoints(o);
-  //       // $FlowFixMe
-  //       this[name][index] = o;
-  //     } else {
-  //       const ticks = this.collections.primitives.line(o);
-  //       this.add(`${name}${index}`, ticks);
-  //       // elements.push(ticks); // $FlowFixMe
-  //       // $FlowFixMe
-  //       this[name].push(o);
-  //     }
-  //   });
-
-  //   // // Add elements in reverse to ensure first elements are drawn last and
-  //   // // will therefore overwrite later elements.
-  //   // elements.reverse();
-  //   // elements.forEach((element, index) => {
-  //   //   this.add(`${name}${index}`, element);
-  //   // });
-  // }
-
-
-  addTitle(optionsIn: OBJ_TextLines & { rotation?: number, offset?: TypeParsablePoint } | string) {
-    const defaultOptions = {
-      font: joinObjects({}, this.defaultFont, { size: this.defaultFont.size || 0.1 * 1.3 }),
-      justify: 'center',
-      xAlign: 'center',
-      yAlign: this.axis === 'x' ? 'top' : 'bottom',
-      rotation: this.axis === 'x' ? 0 : Math.PI / 2,
-      offset: [0, 0],
-    };
-    let optionsToUse = optionsIn;
-    if (typeof optionsIn === 'string') {
-      optionsToUse = { text: [optionsIn] };
-    }
-    const defOpt = this.title != null ? this.title : defaultOptions;
-    const o = joinObjects({}, defOpt, optionsToUse);
-    o.offset = getPoint(o.offset);
-    const bounds = this.getBoundingRect('draw');
-    if (o.position == null) {
-      if (this.axis === 'x') {
-        o.position = new Point(this.length / 2, bounds.bottom - o.font.size / 1.5).add(o.offset);
-      } else {
-        o.position = new Point(bounds.left - o.font.size / 1.5, this.length / 2).add(o.offset);
-      }
-    }
-    if (this.elements.title != null) {
-      this.elements.title.custom.updateText(o);
-    } else {
-      const title = this.collections.primitives.textLines(o);
-      title.transform.updateRotation(o.rotation);
-      this.add('title', title);
-    }
-    this.title = o;
-  }
-
-  addLabels(optionsInOrBool: OBJ_AxisLabels | Array<OBJ_AxisLabels> | boolean) {
-    let optionsIn = optionsInOrBool;
-    if (optionsInOrBool === true) {
-      optionsIn = {};
-    }
-    const defaultOptions = {
-      text: null,
-      precision: 1,
-      values: null,
-      format: 'decimal',  // or 'exponent'
-      font: this.defaultFont,
-      xAlign: this.axis === 'x' ? 'center' : 'right',
-      yAlign: this.axis === 'x' ? 'baseline' : 'middle',
-      rotation: 0,
-      offset: [0, 0],
-    };
-    let optionsToUse;
-    if (Array.isArray(optionsIn)) {
-      optionsToUse = optionsIn;
-    } else {
-      optionsToUse = [optionsIn];
-    }
-    if (this.labels == null) {
-      this.labels = [];
-    }
-    const bounds = this.getBoundingRect('draw');
-    optionsToUse.forEach((options, index) => {
-      const defOpt = this.labels.length - 1 >= index ? this.labels[index] : defaultOptions;
-      const o = joinObjects({}, defOpt, options);
-      if (typeof o.hide === 'number') {
-        o.hide = [o.hide];
-      }
-      if (typeof o.values === 'number') {
-        o.values = [o.values];
-      }
-
-      o.offset = getPoint(o.offset);
-
-      if (typeof o.text === 'string') {
-        o.text = [o.text];
-      }
-
-      // Values where to put the labels - null is auto which is same as ticks
-      let values = [];
-      if (o.values == null && this.ticks.length > 0) {
-        values = this.ticks[index].values;
-      } else {
-        values = o.values;
-      }
-      if (values == null) {
-        values = [];
-      }
-
-      // Text for labels at each value - null is actual value
-      if (o.text == null) {
-        o.text = [];
-        o.text = Array(values.length).map(() => null);
-      }
-
-      if (o.space == null) {
-        o.space = this.axis === 'x' ? o.font.size + this.collections.primitives.defaultLineWidth * 5 : this.collections.primitives.defaultLineWidth * 10;
-      }
-
-      // Generate the text objects
-      const text = [];
-      for (let i = 0; i < values.length; i += 1) {
-        let location;
-        const draw = this.valueToDraw(values[i]);
-        if (this.axis === 'x') {
-          location = new Point(
-            draw + o.offset.x,
-            bounds.bottom - o.space + o.offset.y,
-          ).rotate(-o.rotation);
-        } else {
-          location = new Point(
-            bounds.left + o.offset.x - o.space,
-            draw + o.offset.y,
-          ).rotate(-o.rotation);
-        }
-        if (
-          o.hide == null
-          || (o.hide != null && o.hide.indexOf(i) === -1)
-        ) {
-          let label = o.text[i];
-          if (label == null) {
-            label = values[i];
-          }
-          if (typeof label === 'number') {
-            if (o.format === 'decimal') {
-              label = `${round(label, o.precision).toFixed(o.precision)}`;
-            } else {
-              label = `${label.toExponential(o.precision)}`;
-            }
-          }
-          text.push({
-            text: label,
-            location,
-          });
-        }
-      }
-      o.text = text;
-      if (this.elements[`labels${index}`] != null) {
-        this.elements[`labels${index}`].loadText(o);
-        // $FlowFixMe
-        this.labels[index] = o;
-      } else {
-        const labels = this.collections.primitives.text(o);
-        labels.transform.updateRotation(o.rotation);
-        this.add(`labels${index}`, labels);
-        // elements.push(ticks); // $FlowFixMe
-        // $FlowFixMe
-        this.labels.push(o);
-      }
-      // const labels = this.collections.primitives.text(o);
-      // labels.transform.updateRotation(o.rotation);
-      // this.add(`labels${index}`, labels);
-      // this.labels.push(o);
-    });
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  calcAuto(auto: [number, number]) {
-    const [min, max] = auto;
-    const r = max - min;
-    let order;
-    if (r < 1) {
-      order = Math.floor(Math.log10(r));
-    // eslint-disable-next-line yoda
-    } else if (1 <= r && r < 3) {
-      order = Math.floor(Math.log10(r / 3));
-    } else {
-      order = Math.ceil(Math.log10(r));
-    }
-    // let order = r < 10 ? Math.floor(Math.log10(r)) : Math.ceil(Math.log10(r));
-    if (order === 0) {
-      order = 1;
-    }
-    const factor = 10 ** (order - 1);
-    // const newRange = Math.ceil(r / factor + 1) * factor;
-    const newStart = Math.floor(min / factor) * factor;
-    const newEnd = Math.ceil(max / factor) * factor;
-    const newRange = newEnd - newStart;
-    // const newEnd = newStart + newRange;
-    let step;
-    switch (round(newRange / factor)) {
-      case 3:
-      case 6:
-        step = newRange / 3;
-        break;
-      case 4:
-      case 8:
-        step = newRange / 4;
-        break;
-      case 7:
-        step = newRange / 7;
-        break;
-      case 9:
-        step = newRange / 3;
-        break;
-      default:
-        step = newRange / 5;
-    }
-    let precision = 0;
-    if (order < 0) {
-      precision = Math.abs(order) + 1;
-    }
-    return {
-      start: round(newStart),
-      stop: round(newEnd),
-      step: round(step),
-      precision: round(precision),
-    };
-  }
-
-  // _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
-  //   return [...super._getStateProperties(options),
-  //     'length', 'angle', 'start', 'stop',
-  //     'ticks', 'grid', 'labels', 'drawToValueRatio', 'valueToDraw',
-  //   ];
-  // }
 
   /**
    * Convert an axis value or values to a draw space position or positions.

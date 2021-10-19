@@ -314,15 +314,39 @@ const s = new Fig.Scene({
 
 const gesture = figure.add({
   make: 'gesture',
-  color: [0, 0, 1, 0.2],
-  // width: 1,
-  // height: 1,
+  // color: [0, 0, 1, 0.2],
+  width: 2,
+  height: 2,
   // position: [0.5, 0.5],
   onlyWhenTouched: false,
   zoom: true,
   pan: true,
+  // pan: {
+  //   left: -0.2,
+  //   right: 0,
+  // },
 });
 // figure.addZoomPanControl({ color: [1, 0, 0, 0.4]});
+
+const axis = figure.add({
+  name: 'axis',
+  make: 'collections.zoomAxis',
+  axis: 'x',
+  length: 1,
+  position: [-0.5, -0.8],
+  ticks: { length: 0.03 },
+  // grid: { length: 0.1, color: [1, 0, 0, 1], offset: 0 },
+  labels: { precision: 2, fix: false },
+  start: 0,
+  stop: 2,
+  step: 0.5,
+  font: { size: 0.05 },
+  title: 'hellow',
+});
+
+axis.pan(2, 0.5);
+// axis.addTicks({ length: 0.05, offset: -0.05, step: 0.05 }, 'ticks');
+
 
 const polygon = figure.add({
   make: 'polygon',
@@ -371,6 +395,7 @@ gesture.notifications.add('pan', (pan) => {
   // console.log(pan)
   gesture.panScene(s);
   gesture.panScene(ps);
+  axis.pan(-pan.x, 0.5);
   // figure.zoomElement(polygon, [0, -0.2], false);
   // plane.drawingObject.uniforms.u_zoom.value = [z.mag];
   plane.drawingObject.uniforms.u_offset.value = [-pan.x, -pan.y];
