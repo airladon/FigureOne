@@ -506,6 +506,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     }
     this.justMoved = false;
     if (!this.pan.enabled) {
+      this.transform.updateTranslation(this.originalPosition);
       return;
     }
     this.pan.delta = this.getPosition().sub(this.originalPosition).scale(1 / this.zoom.mag);
