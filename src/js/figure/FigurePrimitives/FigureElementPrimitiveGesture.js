@@ -33,6 +33,56 @@ export type OBJ_ZoomOptions = {
 }
 
 /**
+ * Manual zoom setting.
+ *
+ * @property {number} mag zoom magnification (`last zoom`)
+ * @property {TypeParsablePoint} position zoom around this position (`[0, 0]`)
+ * @property {TypeParsablePoint} offset use this pan offset
+ */
+export type OBJ_ManualZoom = {
+  mag?: number,
+  position?: TypeParsablePoint,
+  offset?: TypeParsablePoint,
+}
+
+/**
+ * Zoom values
+ *
+ * @property {number} mag zoom magnification
+ * @property {Point} position zoom position
+ * @property {number} distance distance between pinch touches (in pixels)
+ * @property {number} angle delta angle from original pinch angle
+ */
+export type OBJ_ZoomValues = {
+  mag: number,
+  position: Point,
+  distance: number,
+  angle: number,
+}
+
+/**
+ * Current zoom values
+ *
+ * @property {number} mag zoom magnification
+ * @property {Point} offset pan offset
+ * @property {OBJ_ZoomValues} last last zoom values
+ * @property {OBJ_ZoomValues} current current zoom values
+ */
+export type OBJ_CurrentZoom = {
+  delta: number,
+  mag: number,
+  offset: Point,
+  last: OBJ_ZoomValues,
+  current: OBJ_ZoomValues,
+};
+
+export type OBJ_CurrentPan = {
+  offset: number,
+  delta: number,
+};
+
+
+/**
  * Pan options.
  *
  * @property {null | number} [left] maximum left pan allowed, or `null` for no
@@ -151,18 +201,33 @@ Any zoom and pan combination in a scene can be represented by:
  */
 
 /**
- * The Gesture primitive converts common gestures into `'zoom'` and `'pan'`
- * notifications.
+ * This primitive creates a rectangle within which pan and zoom gestures can be
+ * captured from mouse and touch events and transformed into pan and zoom
+ * values. The pan and zoom values can be used to change {@link Scene} objects
+ * directly, or used for some custom purpose.
  *
- * The guesture primitive handles the gestures:
+ * The pan and zoom values are relative to the gesture rectangle and the
+ * {@link Scene} it is associated with.
+ *
+ * Performing a drag gesture over half the width of the rectangle, will create
+ * a pan value that is half the width of the rectangle.
+ *
+ * Performing a 2x zoom gesture at a point within the rectangle will create a
+ * pan value that is the delta between the original rectangle center and the
+ * center of the new zoomed rectangle, and a magnification value of 2.
+ *
+ * Any combination of zoom and pan can be expressed as a pan value, that offsets
+ * the original rectangle such that when it is then zoomed, the zoom position
+ * will be at the same relative position of the original and zoomed rectangle.
+ *
+ * Whenever a gesture changes the pan or zoom, then `'pan'` or `'zoom'`
+ * notifications will be published by the primitive's {@link NotificationManger}
+ * (`element.notifications`).
+ *
+ * The handled gestures are:
  * - Mouse wheel change (often used for zooming and panning with a mouse)
  * - Drag (often used for panning with touch devices or a mouse)
  * - Pinching (often used for zooming and panning on touch devices)
- *
- * The primitive is a rectangle, usually transparant, that captures gestures.
- * Gestures can be limited to if they happen in the rectangle or not. The
- * rectangle can cover the whole figure, or just a portion of the figure if
- * only a portion needs to be zoomed/panned.
  *
  * # Pan
  *
@@ -173,7 +238,7 @@ Any zoom and pan combination in a scene can be represented by:
  * - Finger touch then drag (touch devices)
  * - Mouse wheel change
  *
- * For the mouse click and drage, and finger touch and drag gestures, the pan
+ * For the mouse click and drag, and finger touch and drag gestures, the pan
  * value tracks the change in position of the mouse/finger in the gesture
  * primitive rectangle. For example, if the rectangle has a width of 2, and the
  * mouse or touch moves across half the width of the rectangle, then the pan
@@ -184,7 +249,8 @@ Any zoom and pan combination in a scene can be represented by:
  *
  * When a pan event happens, a `'pan'` notification is published. The parameter
  * passed to any subscribers is the pan offset value, but if more information
- * is needed (like the pan delta for example) then `getPan()` can be called.
+ * is needed (like the pan delta from the last pan) then `getPan()` can be
+ * called.
  *
  * # Zoom
  *
@@ -206,39 +272,39 @@ Any zoom and pan combination in a scene can be represented by:
  * example) then `getZoom()` can be called.
  *
  * Zoom and pan events can be used in many ways. One of the most common ways
- * will be to change a {@link Scene} that contains one or more figure elements
- * allowing a user to pan or zoom through the scene.
+ * will be to change a {@link Scene} that contains one or more
+ * {@link FigureElement}s allowing a user to pan or zoom through the scene.
  *
  * In such cases, the `zoomScene()` and `panScene()` methods can be used to do
  * this easily. If the scene of interest is the default scene of the figure,
- * then make sure the gesture primitive has its own separate scene so it is not
+ * then make sure this gesture primitive has its own separate scene so it is not
  * zoomed and panned itself.
  *
- * The gesture primitive can have its zoom and pan manually set using the
- * `setZoom()` and `setPan()` methods.
+ * Alternately, a `changeScene` can be defined which will be automatically
+ * panned and zoomed by this primitive.
  */
 // $FlowFixMe
 export default class FigureElementPrimitiveGesture extends FigureElementPrimitive {
   zoom: {
-    last: {
+    last: {               // Last zoom properties
       mag: number,
       position: Point,
       angle: number,
       distance: number,
     },
-    current: {
+    current: {            // Current zoom properties
       position: Point,
       angle: number,
       distance: number,
     },
-    min: null | number,
+    min: null | number,   // Zoom Limits
     max: null | number,
-    sensitivity: number,
-    mag: number,
+    sensitivity: number,  // Zoom sensitivity
+    mag: number,          // Zoom magnification
     cumAngle: number,
-    pinching: boolean,
+    pinching: boolean,    // True if currently pinching
     enabled: boolean,
-    position: Point | null,
+    position: Point | null, // Fixed zoom position (overrides mouse/pinch pos)
   };
 
   pan: {
@@ -313,6 +379,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.originalPosition = this.getPosition();
   }
 
+  // Setup all properties of gesture
   setup(options: OBJ_Gesture) {
     if (options.zoom != null && typeof options.zoom !== 'boolean') {
       this.setZoomOptions(options.zoom);
@@ -372,12 +439,15 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
   }
 
   /**
-   * Associate a scene with the gesture.
-   * This will reset zoom and pan.
+   * Associate this gesture rectangle with a new scene. Zoom and pan will be
+   * reset.
    */
   setScene(scene: Scene | OBJ_Scene) {
-    const s = new Scene(scene);
-    this.scene = s;
+    if (scene instanceof Scene) {
+      this.scene = scene;
+    } else {
+      this.scene = new Scene(scene);
+    }
     this.reset();
   }
 
@@ -443,23 +513,6 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     return scene.glToFigure(glPoint);
   }
 
-  /**
-  A zoom pan can be defined as:
-   1) what coordinate is in the middle of the screen (C)
-   2) what the zoom factor is
-
-  A pan zoom in a scene then:
-    - Pans camera so C is in middle of screen
-    - Zooms
-  
-  If a point is zoomed on, then it stays in its relative position in the zoomed
-  scene space, meaning C keeps changing.
-
-  Therefore to find C:
-  - Find relative position of point in scene
-  - using the zoom factor find the center point in the zoomed scene
-   */
-
   wheelHandler(delta: Point) {
     if (!this.pan.enabled && !this.zoom.enabled) {
       return;
@@ -484,10 +537,10 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
         const mousePosition = this.pixelToZoomedScene(this.mousePixelPosition);
         this.updateZoom(mag, mousePosition, 0, 0);
       }
-      this.notifications.publish('zoom', this.zoom.mag);
       if (this.changeScene != null) {
         this.zoomScene(this.changeScene);
       }
+      this.notifications.publish('zoom', this.zoom.mag);
       return;
     }
     if (!this.pan.wheel) {
@@ -497,10 +550,10 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.pan.delta = delta.scale(1 / 10 * (scene.right - scene.left) / 100 * this.pan.sensitivity);
     this.pan.delta.x *= -1;
     this.setPanOffset(this.pan.offset.add(this.pan.delta));
-    this.notifications.publish('pan', this.pan.offset);
     if (this.changeScene != null) {
       this.panScene(this.changeScene);
     }
+    this.notifications.publish('pan', this.pan.offset);
   }
 
   /**
@@ -531,97 +584,26 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
    * Changes a 2D scene to simulate zooming in and out
    */
   zoomScene(scene: Scene) {
-    const s = this.getScene();
-    const p = this.pan.offset
-      .sub(new Point(s.left, s.bottom))
-      .scale((scene.right - scene.left) / (s.right - s.left))
-      .add(new Point(scene.left, scene.bottom));
-    scene.setPanZoom(p.scale(-1), this.zoom.mag);
+    scene.setPanZoom(this.panTransform(scene), this.zoom.mag);
     this.animateNextFrame();
-    // const s = this.getScene();
-    // // this.pan.offset is the amount of pan needed in the this.getScene() before
-    // // a zoom.
-    // //
-    // // Therefore, 
-    // const generic = this.pan.offset
-    //   .scale(1 / (1 / this.zoom.mag - 1)) // Scene position to zoom around
-    //   .sub(scene.left, scene.bottom)
-    //   .scale((scene.right - scene.left) / (s.right - s.left))
-    //   .add(s.left, s.bottom);
-    // const targetScene = generic.scale(1 / this.zoom.mag).sub(generic).scale(-1);
-    // // scene.setPanZoom(this.pan.offset.scale(-1), this.zoom.mag);
-    // scene.setPanZoom(targetScene, this.zoom.mag);
-    // console.log(scene.zoom, p.round(2).toArray())
-    // this.animateNextFrame();
-    // scene.setPanZoom(this.panTransform(scene).scale(-1), this.zoom.mag);
-    // this.animateNextFrame();
   }
 
-  // Let's say we have a rectangular scene of width 4 and height 2 from [-2, -1]
-  // to [2, 1].
-  // If we want to zoom in on a point, say [0.1, 0.1], with a zoom factor of 5
-  // and keeping the point [0.1, 0.1] at the same relative positon in the scene
-  // we can either first zoom, then translate, or first translate and then zoom.
-  //
-  // The Scene class accepts pan and zoom parameters, and it processes them by
-  // moving the camera.position and camera.lookAt by some pan offset, and then
-  // changing the left/right/top/bottom or fov to zoom. This means the pan
-  // happens "before" the zoom.
-  //
-  // So, in the example above, if we want to first pan, then zoom by 5, what is
-  // the pan value we need?
-  //
-  // If we were to zoom by 5, then the point [0.1, 0.1] would go to [0.5, 0.5].
-  // Another way to think of this is the point [0.02, 0.02] will go to
-  // [0.1, 0.1]. Therefore, we first pan [0.1, 0.1] to [0.02, 0.02] and then
-  // zoom.
-  //
-  // The pan offset is then: o = q / z - q    (q = [0.1, 0.1], z = 5)
-  //
-  // So if p = [0.1, 0.1], then p/5 = [0.02, 0.02], and we will need to offset
-  // [0.1, 0.1] by [-0.08, -0.08] to get to [0.02, 0.02].
-  //
-  // Generally, to convert from a fixed zoom position "q" to a pan offset "o"
-  // when using a zoom z:
-  //
-  //    o = q / z - q             (1)
-  //
-  // And to convert from a pan offset "o" to a fixed zoom position "q":
-  //
-  //    q = o / (1 / z - 1)       (2)
-  //
-  //
-  // In this class this.pan.offset is the pan offset before zoom for the scene
-  // used by this class (this.getScene()).
-  //
-  // If we want to use this pan offset in another scene, then we need to
-  // transform it from this scene (ts) to the new scene (ns).
-  //
-  // We can do this by:
-  //   - Transform this.pan.offset to a zoom position (using (2))
-  //   - Normalize the zoom position to be between 0 and 1:
-  //          normQ = (q - [ts.left, ts.bottom]) / (ts.right - ts.left)
-  //   - Scale the normalized zoom position to the new scene:
-  //          newQ = normQ * (ns.right - ns.left) + [ns.left, ns.bottom]
-  //   - Convert to a pan offset for the new scene (using (1)):
-  //          newO = newQ / z - newQ
+  // Transform the pan offset from the gesture's scene to another
+  // scene.
   panTransform(scene: Scene) {
     const s = this.getScene();
-    const newQ = this.pan.offset
-      .scale(this.zoom.mag === 1 ? 1 : 1 / (1 / this.zoom.mag - 1))
-      .sub(scene.left, scene.bottom)
-      .scale((scene.right - scene.left) / (s.right - s.left))
-      .add(s.left, s.bottom);
-    return newQ.scale(1 / this.zoom.mag).sub(newQ);
-  }
-
-  panScene(scene: Scene) {
-    const s = this.getScene();
-    const p = this.pan.offset
+    return this.pan.offset
       .sub(new Point(s.left, s.bottom))
       .scale((scene.right - scene.left) / (s.right - s.left))
       .add(new Point(scene.left, scene.bottom));
-    scene.setPan(p.scale(-1));
+  }
+
+  /**
+   * Pan a scene with the current pan.
+   * @param {Scene} scene
+   */
+  panScene(scene: Scene) {
+    scene.setPan(this.panTransform(scene));
     this.animateNextFrame();
   }
 
@@ -645,7 +627,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     const line = new Line(zPosition, center);
     const newCenter = line.pointAtPercent(oldMag / mag);
     this.pan.delta = newCenter.sub(center);
-    this.pan.offset = this.pan.offset.add(this.pan.delta);
+    this.setPanOffset(this.pan.offset.add(this.pan.delta));
     this.zoom.cumAngle += angle - this.zoom.last.angle;
   }
 
@@ -654,12 +636,8 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     touch2PixelPos: Point,
     beingTouchedElement: null | FigureElement,
   ) {
-    if (!this.zoom.enabled) {
-      return;
-    }
-    if (this.onlyWhenTouched && beingTouchedElement !== this) {
-      return;
-    }
+    if (!this.zoom.enabled) { return; }
+    if (this.onlyWhenTouched && beingTouchedElement !== this) { return; }
     const line = new Line(touch1PixelPos, touch2PixelPos);
     this.zoom.current.angle = line.angle();
     this.zoom.current.distance = line.length();
@@ -672,14 +650,8 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     touch2PixelPos: Point,
     beingTouchedElement: null | FigureElement,
   ) {
-    if (!this.zoom.enabled) {
-      return;
-    }
-    if (this.onlyWhenTouched && beingTouchedElement !== this) {
-      return;
-    }
-    // const oldZoom = this.zoom.last.mag;
-    // const pixelPoints = this.clientsToPixel([touch1ClientPos, touch2ClientPos]);
+    if (!this.zoom.enabled) { return; }
+    if (this.onlyWhenTouched && beingTouchedElement !== this) { return; }
     const line = new Line(touch1PixelPos, touch2PixelPos);
 
     const d = line.length();
@@ -715,7 +687,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
   }
 
   /**
-   * Set zoom gesture options for figure.
+   * Set zoom gesture options.
    *
    * @param {OBJ_ZoomOptions} options
    */
@@ -726,6 +698,11 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     if (options.position != null) { this.zoom.position = getPoint(options.position); }
   }
 
+  /**
+   * Set pan gesture options.
+   *
+   * @param {OBJ_ZoomOptions} options
+   */
   setPanOptions(options: OBJ_PanOptions) {
     if (options.left !== undefined) { this.pan.left = options.left; }
     if (options.bottom !== undefined) { this.pan.bottom = options.bottom; }
@@ -737,21 +714,42 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
   }
 
   /**
-   * Set zoom
+   * Set zoom manually.
    *
-   * @param {OBJ_Zoom} zoom
+   * Zoom magnitude can be set with zoom position or pan offset. Either a
+   * position or pan should be used (not both).
+   *
+   * NB: if manually creating positions or offsets, the position (p) to offset
+   * (o) for some zoom (z) conversion is:
+   *
+   *      o = -(p / z - p)
+   *
+   *      p = -o / (1/z - 1)
+   *
+   * @param {OBJ_ManualZoom} zoom
    * @param {boolean} notify `true` to send `'zoom'` notification after set
    */
-  setZoom(zoom: OBJ_Zoom, notify: boolean = false) {
-    const z = joinObjects({
-      mag: this.zoom.mag,
-      angle: this.zoom.current.angle,
-      distance: this.zoom.current.distance,
-      pinching: this.zoom.pinching,
-      position: this.zoom.current.position,
-    }, zoom);
-    this.updateZoom(z.mag, getPoint(z.position), z.distance, z.angle);
-    this.zoom.pinching = z.pinching;
+  setZoom(
+    zoom: { mag: number, position?: TypeParsablePoint, offset?: TypeParsablePoint },
+    notify: boolean = false,
+  ) {
+    let { mag, position, offset } = zoom;
+    if (mag == null) {
+      mag = this.zoom.mag;
+    }
+    if (position != null) {
+      position = getPoint(position);
+    }
+    if (offset != null) {
+      offset = getPoint(offset);
+    }
+    if (offset == null && position == null) {
+      this.updateZoom(mag, new Point(0, 0), 0, 0);
+    } else if (offset != null) {
+      this._setZoomPan(mag, offset, new Point(0, 0));
+    } else if (position != null) {
+      this.updateZoom(mag, position, 0, 0);
+    }
     if (notify) {
       this.notifications.publish('zoom', this.zoom.mag);
     }
@@ -760,28 +758,59 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     }
   }
 
+  _setZoomPan(
+    mag: number,
+    offset: Point,
+    position: Point = new Point(0, 0),
+    angle: number = 0,
+    distance: number = 0,
+    pinching: boolean = false,
+  ) {
+    this.setPanOffset(offset);
+    this.pan.delta = offset.sub(this.pan.offset);
+    this.zoom.last = {
+      mag: this.zoom.mag,
+      position: this.zoom.current.position,
+      angle: this.zoom.current.angle,
+      distance: this.zoom.current.distance,
+    };
+    this.setZoomMag(mag);
+    this.zoom.current = {
+      position, angle, distance, mag: this.zoom.mag,
+    };
+    this.zoom.pinching = pinching;
+  }
+
+  /**
+   * Set pan offset manually.
+   * @param {TypeParsablePoint} offset
+   * @param {boolean} notify `true` to send `'zoom'` notification after set
+   */
   setPan(offset: TypeParsablePoint, notify: boolean = false) {
-    this.setPanOffset(getPoint(offset));
-    if (notify) {
-      this.notifications.publish('pan', this.pan.offset);
-    }
+    this._setZoomPan(this.zoom.mag, getPoint(offset), this.zoom.current.position);
     if (this.changeScene != null) {
       this.panScene(this.changeScene);
+    }
+    if (notify) {
+      this.notifications.publish('pan', this.pan.offset);
     }
   }
 
   /**
-   * @return {OBJ_Zoom}
+   * @return {OBJ_CurrentZoom}
    */
   getZoom() {
     return {
-      last: this.zoom.last,
-      current: this.zoom.current,
       mag: this.zoom.mag,
       offset: this.pan.offset,
+      last: this.zoom.last,
+      current: this.zoom.current,
     };
   }
 
+  /**
+   * @return {OBJ_CurrentPan}
+   */
   getPan() {
     return {
       offset: this.pan.offset,
@@ -789,25 +818,16 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     };
   }
 
-  // moveGesture(
-  //   previousGLPoint: Point,
-  //   currentGLPoint: Point,
-  //   beingTouchedElement: FigureElement,
-  // ) {
-  //   if (!this.pan.enabled) {
-  //     return;
-  //   }
-  //   if (this.onlyWhenTouched && beingTouchedElement !== this) {
-  //     return;
-  //   }
-  //   const previousScenePoint = this.glToScene(previousGLPoint);
-  //   const currentScenePoint = this.glToScene(currentGLPoint);
-  //   const delta = currentScenePoint.sub(previousScenePoint);
-  //   this.pan.delta = delta;
-  //   this.setPanOffset(this.pan.offset.add(delta.scale(1 / this.zoom.mag)));
-  //   this.notifications.publish('pan', this.pan.offset);
-  // }
+  // Clip the zoom mag to within its bounds
+  setZoomMag(mag: number) {
+    const { min, max } = this.zoom;
+    let m = mag;
+    if (min !== null && m < min) { m = min; }
+    if (max !== null && m > max) { m = max; }
+    this.zoom.mag = m;
+  }
 
+  // Clip the pan offset to within its bounds
   setPanOffset(offset: Point) {
     const o = offset;
     const {
@@ -858,3 +878,71 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.notificationIDs = [];
   }
 }
+
+
+// Let's say we have a rectangular scene of width 4 and height 2 from [-2, -1]
+// to [2, 1].
+// If we want to zoom in on a point, say [0.1, 0.1], with a zoom factor of 5
+// and keeping the point [0.1, 0.1] at the same relative positon in the scene
+// we can either first zoom, then translate, or first translate and then zoom.
+//
+// The Scene class accepts pan and zoom parameters, and it processes them by
+// moving the camera.position and camera.lookAt by some pan offset, and then
+// changing the left/right/top/bottom or fov to zoom. This means the pan
+// happens "before" the zoom.
+//
+// So, in the example above, if we want to first pan, then zoom by 5, what is
+// the pan value we need?
+//
+// If we were to zoom by 5, then the point [0.1, 0.1] would go to [0.5, 0.5].
+// Another way to think of this is the point [0.02, 0.02] will go to
+// [0.1, 0.1]. Therefore, we first pan [0.1, 0.1] to [0.02, 0.02] and then
+// zoom.
+//
+// The pan offset is then: o = q / z - q    (q = [0.1, 0.1], z = 5)
+//
+// So if p = [0.1, 0.1], then p/5 = [0.02, 0.02], and we will need to offset
+// [0.1, 0.1] by [-0.08, -0.08] to get to [0.02, 0.02].
+//
+// Generally, to convert from a fixed zoom position "q" to a pan offset "o"
+// when using a zoom z:
+//
+//    o = q / z - q             (1)
+//
+// And to convert from a pan offset "o" to a fixed zoom position "q":
+//
+//    q = o / (1 / z - 1)       (2)
+//
+//
+// In this class this.pan.offset is the pan offset before zoom for the scene
+// used by this class (this.getScene()).
+//
+// If we want to use this pan offset in another scene, then we need to
+// transform it from this scene (ts) to the new scene (ns).
+//
+// We can do this by:
+//   - Transform this.pan.offset to a zoom position (using (2))
+//   - Normalize the zoom position to be between 0 and 1:
+//          normQ = (q - [ts.left, ts.bottom]) / (ts.right - ts.left)
+//   - Scale the normalized zoom position to the new scene:
+//          newQ = normQ * (ns.right - ns.left) + [ns.left, ns.bottom]
+//   - Convert to a pan offset for the new scene (using (1)):
+//          newO = newQ / z - newQ
+
+
+/**
+  A zoom pan can be defined as:
+   1) what coordinate is in the middle of the screen (C)
+   2) what the zoom factor is
+
+  A pan zoom in a scene then:
+    - Pans camera so C is in middle of screen
+    - Zooms
+
+  If a point is zoomed on, then it stays in its relative position in the zoomed
+  scene space, meaning C keeps changing.
+
+  Therefore to find C:
+  - Find relative position of point in scene
+  - using the zoom factor find the center point in the zoomed scene
+*/

@@ -223,6 +223,10 @@ export default class Scene {
     };
   }
 
+  /**
+   * @param {OBJ_Scene} options scene definition options
+   * @param {null | (() => void)} onUpdate callback if scene is updated
+   */
   constructor(options: OBJ_Scene, onUpdate: null | (() => void) = null) {
     const defaultOptions = this.defaultOptions();
     joinObjects(this, defaultOptions, options);
@@ -287,11 +291,11 @@ export default class Scene {
       .crossProduct(getPoint(this.camera.up)).normalize();
     this.upVector = this.rightVector.crossProduct(this.cameraVector).normalize();
     this.pannedCameraPosition = this.cameraPosition
-      .add(this.upVector.scale(-this.pan.y))
-      .add(this.rightVector.scale(-this.pan.x));
+      .add(this.upVector.scale(this.pan.y))
+      .add(this.rightVector.scale(this.pan.x));
     this.pannedLookAt = getPoint(this.camera.lookAt)
-      .add(this.upVector.scale(-this.pan.y))
-      .add(this.rightVector.scale(-this.pan.x));
+      .add(this.upVector.scale(this.pan.y))
+      .add(this.rightVector.scale(this.pan.x));
     this.cameraMatrix = m3.lookAt(
       getPoint(this.pannedCameraPosition).toArray(),
       getPoint(this.pannedLookAt).toArray(),
@@ -349,6 +353,25 @@ export default class Scene {
     return matrix.slice();
   }
 
+  /**
+   * Set the pan and zoom of the scene.
+   *
+   * Pan is applied to `camera.position` and `camera.lookAt`, while
+   * zoom is applied to
+   * `camera.left`/`camera.bottom`/`camera.right`/`camera.top` (for 2D and
+   * orthographic) or `camera.fov` (for perspective)
+   *
+   * The camera and projection variables are not changed by pan and zoom, but
+   * the the view and projection matrices are.
+   *
+   * A pan in the positive direction will move the scene left and down.
+   *
+   * A zoom greater than 1 will reduce the left/right/bottom/top or fov
+   * effectively magnifying the scene.
+   *
+   * @param {Point} pan
+   * @param {number} zoom
+   */
   setPanZoom(pan: Point, zoom: number) {
     this.zoom = zoom;
     this.pan = pan;
@@ -357,6 +380,17 @@ export default class Scene {
     this.calcViewProjectionMatrix();
   }
 
+  /**
+   * Set the pan of the scene.
+   *
+   * Pan is applied to `camera.position` and `camera.lookAt`.
+   *
+   * The camera is changed by pan and zoom, but the resulting view matrix is.
+   *
+   * A pan in the positive direction will move the scene left and down.
+   *
+   * @param {Point} pan
+   */
   setPan(pan: Point) {
     this.pan = pan;
     this.calcProjectionMatrix();
@@ -381,36 +415,54 @@ export default class Scene {
   //   this.calcViewProjectionMatrix();
   // }
 
+  /**
+   * Set camera properties.
+   */
   setCamera(options: OBJ_Camera) {
     joinObjects(this.camera, options);
     this.calcViewMatrix();
     this.calcViewProjectionMatrix();
   }
 
+  /**
+   * Set projection properties.
+   */
   setProjection(options: OBJ_Projection) {
     joinObjects(this, options);
     this.calcProjectionMatrix();
     this.calcViewProjectionMatrix();
   }
 
+  /**
+   * Set a 2D scene.
+   */
   set2D(options: OBJ_2DScene) {
     joinObjects(this, { style: '2D' }, options);
     this.calcProjectionMatrix();
     this.calcViewProjectionMatrix();
   }
 
+  /**
+   * Set an orthographic scene.
+   */
   setOrthographic(options: OBJ_OrthographicScene) {
     joinObjects(this, { style: 'orthographic' }, options);
     this.calcProjectionMatrix();
     this.calcViewProjectionMatrix();
   }
 
+  /**
+   * Set a perspective scene.
+   */
   setPerspective(options: OBJ_PerspectiveScene) {
     joinObjects(this, { style: 'perspective' }, options);
     this.calcProjectionMatrix();
     this.calcViewProjectionMatrix();
   }
 
+  /**
+   * Set light properties
+   */
   setLight(options: OBJ_Light) {
     joinObjects(this.light, options);
   }
