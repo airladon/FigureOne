@@ -6,7 +6,7 @@ import {
 } from '../../tools/g2';
 import type { FigureElement } from '../Element';
 import type { TypeParsablePoint, Transform } from '../../tools/g2';
-import type Scene from '../../tools/geometry/scene';
+import Scene from '../../tools/geometry/scene';
 import { joinObjects } from '../../tools/tools';
 import type { OBJ_Rectangle } from './FigurePrimitiveTypes2D';
 import type TimeKeeper from '../TimeKeeper';
@@ -130,6 +130,25 @@ export type OBJ_Gesture = {
   yAlign?: 'bottom' | 'middle' | 'top' | number,
 } & OBJ_Generic;
 
+
+/**
+A gesture primitive is a rectangle within an associated scene.
+
+The rectangle has a center point.
+
+To define a zoomed area of the rectangle, two points are needed:
+- point of the rectangle that will be the new center point of the screen
+- zoom magnification
+
+
+A gesture primitive has an associated scene.
+
+The gesture rectangle covers a portion of space within the scene
+Any zoom and pan combination in a scene can be represented by:
+* center position
+* zoom magnification
+
+ */
 
 /**
  * The Gesture primitive converts common gestures into `'zoom'` and `'pan'`
@@ -326,6 +345,42 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.notifications.add('setTransform', this.dragPan.bind(this));
   }
 
+  /**
+   * Reset zoom and pan.
+   */
+  reset() {
+    const s = this.getScene();
+    this.pan.offset = new Point(
+      s.left + (s.right - s.left) / 2,
+      s.bottom + (s.top - s.bottom) / 2,
+    );
+    this.pan.delta = new Point(0, 0);
+    this.zoom.last = {
+      mag: 1,
+      position: new Point(0, 0),
+      angle: 0,
+      distance: 0,
+    };
+    this.zoom.current = {
+      position: new Point(0, 0),
+      angle: 0,
+      distance: 0,
+    };
+    this.zoom.mag = 1;
+    this.zoom.cumAngle = new Point(0, 0);
+    this.zoom.pinching = false;
+  }
+
+  /**
+   * Associate a scene with the gesture.
+   * This will reset zoom and pan.
+   */
+  setScene(scene: Scene | OBJ_Scene) {
+    const s = new Scene(scene);
+    this.scene = s;
+    this.reset();
+  }
+
   setupMove() {
     this.originalPosition = this.getPosition();
     this.justMoved = true;
@@ -476,6 +531,13 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
    * Changes a 2D scene to simulate zooming in and out
    */
   zoomScene(scene: Scene) {
+    const s = this.getScene();
+    const p = this.pan.offset
+      .sub(new Point(s.left, s.bottom))
+      .scale((scene.right - scene.left) / (s.right - s.left))
+      .add(new Point(scene.left, scene.bottom));
+    scene.setPanZoom(p.scale(-1), this.zoom.mag);
+    this.animateNextFrame();
     // const s = this.getScene();
     // // this.pan.offset is the amount of pan needed in the this.getScene() before
     // // a zoom.
@@ -491,8 +553,8 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     // scene.setPanZoom(targetScene, this.zoom.mag);
     // console.log(scene.zoom, p.round(2).toArray())
     // this.animateNextFrame();
-    scene.setPanZoom(this.panTransform(scene).scale(-1), this.zoom.mag);
-    this.animateNextFrame();
+    // scene.setPanZoom(this.panTransform(scene).scale(-1), this.zoom.mag);
+    // this.animateNextFrame();
   }
 
   // Let's say we have a rectangular scene of width 4 and height 2 from [-2, -1]
@@ -584,36 +646,6 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     const newCenter = line.pointAtPercent(oldMag / mag);
     this.pan.delta = newCenter.sub(center);
     this.pan.offset = this.pan.offset.add(this.pan.delta);
-    console.log(this.pan.offset)
-    // Find the center position
-    // const scene = this.getScene();
-    // const Pgl = scene.figureToGL(zoomPosition);
-    // const Cgl = Pgl.scale(1 - oldMag / mag);
-    // const C = scene.glToFigure(Cgl);
-    // console.log(zoomPosition.round(2).toArray(2), Pgl.round(2).toArray(2), Cgl.round(2).toArray(), C.round(2).toArray())
-    // this.pan.delta = C.sub(this.pan.offset);
-    // this.pan.offset = this.pan.offset.add(this.pan.delta);
-
-
-    // const l = new Line(zPosition, scene.glToFigure(new Point(0, 0)));
-    // const newCenter = l.pointAtPercent(oldMag / mag);
-    // this.pan.delta = newCenter.sub(this.pan.offset);
-    // console.log( scene.glToFigure(new Point(0, 0)).round(2).toArray(2), oldMag / mag, newCenter.round(2).toArray(2), this.pan.delta.round(2).toArray(2))
-    // this.pan.offset = this.pan.offset.sub(this.pan.delta);
-
-    // scene.glToFigure(new Point(0, 0));
-
-    // if (this.zoom.position != null) {
-    //   const newPosition = this.zoom.position.scale(mag / oldMag);
-    //   this.pan.delta = this.zoom.position.sub(newPosition).scale(1 / mag);
-    // } else {
-    //   const newPosition = zoomPosition.scale(mag / oldMag);
-    //   this.pan.delta = zoomPosition.sub(newPosition).scale(1 / mag);
-    // }
-    // this.setPanOffset(
-    //   this.pan.offset.sub(this.pan.delta),
-    // );
-
     this.zoom.cumAngle += angle - this.zoom.last.angle;
   }
 
@@ -817,6 +849,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.notificationIDs.push(this.figure.notifications.add('gestureStartPinch', this.startPinchZoom.bind(this)));
     this.notificationIDs.push(this.figure.notifications.add('gesturePinching', this.pinchZoom.bind(this)));
     this.notificationIDs.push(this.figure.notifications.add('gesturePinchEnd', this.endPinchZoom.bind(this)));
+    this.reset();
     this.notifications.publish('setFigure');
   }
 

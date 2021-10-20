@@ -234,8 +234,8 @@ figure.add([
 
 const gesture = figure.add({
   make: 'gesture',
-  scene: { left: -2, right: 2, bottom: -1, top: 1 },
-  // scene: { left: 0, right: 2, bottom: -0.5, top: 0.5},
+  // scene: { left: -2, right: 2, bottom: -1, top: 1 },
+  scene: { left: 0, right: 2, bottom: -0.5, top: 0.5},
   color: [0, 1, 0, 0.4],
   changeScene: figure.scene,
   pan: true,
