@@ -424,7 +424,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     if (options.pan != null && typeof options.pan !== 'boolean') {
       this.setPanOptions(options.pan);
     }
-    if (options.onlyWhenTouched) {
+    if (options.onlyWhenTouched != null) {
       this.onlyWhenTouched = options.onlyWhenTouched;
     }
     this._custom.cameraControlBack = false;

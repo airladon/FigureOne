@@ -11,12 +11,16 @@ if (typeof process === 'object') {
   var { makeShape } = require('./common');
 }
 
+const figToClient = (p) => {
+  const figureToPixelMatrix = figure.elements.spaceTransformMatrix('figure', 'pixel');
+  const q = Fig.getPoint(p).transformBy(figureToPixelMatrix);
+  return figure.pixelToClient(q);
+};
+
 const mousePan = (start, stop) => {
   const figureToPixelMatrix = figure.elements.spaceTransformMatrix('figure', 'pixel');
-  const startPixel = Fig.getPoint(start).transformBy(figureToPixelMatrix);
-  const stopPixel = Fig.getPoint(stop).transformBy(figureToPixelMatrix);
-  const startClient = figure.pixelToClient(startPixel);
-  const stopClient = figure.pixelToClient(stopPixel);
+  const startClient = figToClient(start);
+  const stopClient = figToClient(stop);
   const mouseDownEvent = new MouseEvent('mousedown', {
     clientX: startClient.x,
     clientY: startClient.y,
@@ -31,6 +35,61 @@ const mousePan = (start, stop) => {
   figure.gestureCanvas.dispatchEvent(mouseMoveEvent);
   figure.gestureCanvas.dispatchEvent(mouseMoveEvent);
   figure.gestureCanvas.dispatchEvent(mouseUpEvent);
+  figure.gesture.endHandler();
+};
+
+const toTouch = (...p) => p.map(q => ({ clientX: q.x, clientY: q.y }));
+
+const touchPan = (startFig, stopFig) => {
+  const start = figToClient(startFig);
+  const stop = figToClient(stopFig);
+  const tdEvent = new Event('touchstart', { bubbles: true, cancelable: true });
+  tdEvent.touches = toTouch(start);
+  tdEvent.targetTouches = toTouch(start);
+
+  const tmEvent = new Event('touchmove', { bubbles: true, cancelable: true });
+  tmEvent.touches = toTouch(stop);
+  tmEvent.targetTouches = toTouch(stop);
+
+  const touchEndEvent = new Event('touchend', {});
+  touchEndEvent.targetTouches = [];
+
+  figure.gestureCanvas.dispatchEvent(tdEvent);
+  figure.gestureCanvas.dispatchEvent(tmEvent);
+  figure.gestureCanvas.dispatchEvent(tmEvent);
+  figure.gestureCanvas.dispatchEvent(touchEndEvent);
+  figure.gesture.touchEndHandler(touchEndEvent);
+};
+
+
+const touchZoom = (start, stop) => {
+  const figureToPixelMatrix = figure.elements.spaceTransformMatrix('figure', 'pixel');
+
+  const startp1 = figToClient(start.p1);
+  const startp2 = figToClient(start.p2);
+  const stopp1 = figToClient(stop.p1);
+  const stopp2 = figToClient(stop.p2);
+
+  const tdEvent1 = new Event('touchstart', { bubbles: true, cancelable: true });
+  tdEvent1.touches = toTouch(startp1);
+  tdEvent1.targetTouches = toTouch(startp1);
+  const tdEvent2 = new Event('touchstart', { bubbles: true, cancelable: true });
+  tdEvent2.touches = toTouch(startp1, startp2);
+  tdEvent2.targetTouches = toTouch(startp1, startp2);
+
+  const tmEvent = new Event('touchmove', { bubbles: true, cancelable: true });
+  tmEvent.touches = toTouch(stopp1, stopp2);
+  tmEvent.targetTouches = toTouch(stopp1, stopp2);
+
+  const touchEndEvent = new Event('touchend', {});
+  touchEndEvent.targetTouches = [];
+
+  figure.gestureCanvas.dispatchEvent(tdEvent1);
+  figure.gestureCanvas.dispatchEvent(tdEvent2);
+  figure.gestureCanvas.dispatchEvent(tmEvent);
+  figure.gestureCanvas.dispatchEvent(tmEvent);
+  figure.gestureCanvas.dispatchEvent(touchEndEvent);
+  figure.gesture.touchEndHandler(touchEndEvent);
 };
 
 const mouseWheelZoom = (deltaY, position) => {
@@ -52,11 +111,30 @@ function getShapes(getPos) {
 
   /* eslint-disable object-curly-newline */
   return [
+    // Basic zoom and pan
     ...shape('wheelZoomIn'),
     ...shape('wheelZoomOut'),
     ...shape('wheelZoomInOut'),
     ...shape('wheelZoomInOutDiffPos'),
     ...shape('wheelZoomInPan'),
+    ...shape('touchPan'),
+    ...shape('touchPanx2'),
+    ...shape('touchZoom', { zoom: { sensitivity: 2 } }),
+    ...shape('touchZoomSensitive', { zoom: { sensitivity: 10 } }),
+    ...shape('touchZoomOut', { zoom: { sensitivity: 5 } }),
+
+    // options
+    ...shape('wheelPanDisabled', { pan: false }),
+    ...shape('wheelZoomDisabled', { zoom: false }),
+    ...shape('widthHeight', { width: 1, height: 0.5 }),
+    ...shape('align', { width: 0.5, height: 0.2, xAlign: 'left', yAlign: 'bottom' }),
+    ...shape('sensitivity', { zoom: { sensitivity: 1.5 } }),
+    ...shape('max', { zoom: { max: 1.1 } }),
+    ...shape('min', { zoom: { min: 0.9 } }),
+    ...shape('position', { zoom: { position: [2.5, 3.5] } }),
+    ...shape('setZoom'),
+    ...shape('setZoomOffset'),
+    ...shape('setPan'),
   ];
 }
 
@@ -89,6 +167,76 @@ const updates = {
     mouseWheelZoom(500, p);
     mousePan(p, p.add(0.1, 0.1));
   },
+  touchPan: (e) => {
+    const p = e.getPosition().add(-0.05, -0.1);
+    touchPan(p, p.add(-0.05, 0.1));
+  },
+  touchPanx2: (e) => {
+    const p = e.getPosition().add(-0.05, -0.1);
+    touchPan(p, p.add(0, 0.1));
+    touchPan(p, p.add(-0.05, 0.15));
+  },
+  touchZoom: (e) => {
+    const p = e.getPosition().add(-0.05, -0.1);
+    touchZoom(
+      { p1: p.add(-0.05, -0.05), p2: p.add(0.05, 0.05) },
+      { p1: p.add(-0.1, -0.1), p2: p.add(0.1, 0.1) },
+    );
+  },
+  touchZoomSensitive: (e) => {
+    const p = e.getPosition().add(-0.05, -0.1);
+    touchZoom(
+      { p1: p.add(-0.05, -0.05), p2: p.add(0.05, 0.05) },
+      { p1: p.add(-0.1, -0.1), p2: p.add(0.1, 0.1) },
+    );
+  },
+  touchZoomOut: (e) => {
+    const p = e.getPosition().add(-0.05, -0.1);
+    touchZoom(
+      { p1: p.add(-0.1, -0.1), p2: p.add(0.1, 0.1) },
+      { p1: p.add(-0.05, -0.05), p2: p.add(0.05, 0.05) },
+    );
+  },
+  wheelPanDisabled: (e) => {
+    const p = e.getPosition().add(-0.05, -0.1);
+    mousePan(p, p.add(0.1, 0.1));
+  },
+  wheelZoomDisabled: (e) => {
+    const p = e.getPosition().add(-0.05, -0.1);
+    mouseWheelZoom(500, p);
+  },
+  widthHeight: (e) => {
+    const p = e.getPosition().add(-0.4, -0.2);
+    mouseWheelZoom(500, p);
+  },
+  sensitivity: (e) => {
+    const p = e.getPosition().add(-0.25, -0.1);
+    mouseWheelZoom(500, p);
+  },
+  max: (e) => {
+    const p = e.getPosition().add(-0.25, -0.1);
+    mouseWheelZoom(500, p);
+  },
+  min: (e) => {
+    const p = e.getPosition().add(-0.25, -0.1);
+    mouseWheelZoom(-500, p);
+  },
+  position: (e) => {
+    const p = e.getPosition().add(-0.25, -0.1);
+    mouseWheelZoom(500, p);
+  },
+  setZoom: (e) => {
+    const p = e.getPosition().add(-0.25, -0.1);
+    e.setZoom({ mag: 1.5, position: p });
+  },
+  setZoomOffset: (e) => {
+    const p = e.getPosition().add(-0.25, -0.1);
+    e.setZoom({ mag: 1.5, offset: p.scale(1 / 1.5).sub(p).scale(-1) });
+  },
+  setPan: (e) => {
+    const p = e.getPosition().add(-0.25, -0.1);
+    e.setPan([0.1, 0.1]);
+  },
 };
 
 const getValues = {
@@ -105,35 +253,6 @@ const move = {
   //   element: 'defaultTouch',
   //   events: [
   //     ['touchDown', [0, 0]],
-  //   ],
-  // },
-  // 'on-color': {
-  //   element: 'on-color',
-  //   events: [
-  //     ['touchDown', [0, 0]],
-  //   ],
-  // },
-  // 'colors-switch': {
-  //   element: 'colors-switch',
-  //   events: [
-  //     ['touchDown', [0, 0]],
-  //   ],
-  // },
-  // movePad: {
-  //   element: 'move-pad',
-  //   events: [
-  //     ['touchDown', [0, 0]],
-  //     ['touchMove', [-0.1, -0.1]],
-  //     ['touchMove', [-0.1, -0.1]],
-  //     ['touchUp'],
-  //     ['touchDown', [0.3, 0]],
-  //     ['touchMove', [0.4, 0.1]],
-  //     ['touchMove', [0.4, 0.1]],
-  //     ['touchUp'],
-  //     ['touchDown', [0, 0.3]],
-  //     ['touchMove', [-0.1, 0.4]],
-  //     ['touchMove', [-0.1, 0.4]],
-  //     ['touchUp'],
   //   ],
   // },
 };

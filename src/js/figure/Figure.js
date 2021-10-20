@@ -2,8 +2,8 @@
 import WebGLInstance from './webgl/webgl';
 
 import {
-  Point, Transform, Line, Rect,
-  getPoint, getRect,
+  Point, Transform,
+  getPoint,
 } from '../tools/g2';
 import Scene from '../tools/geometry/scene';
 import type { OBJ_Scene } from '../tools/geometry/scene';
@@ -84,6 +84,7 @@ export type OBJ_FigureForElement = {
   timeKeeper: TimeKeeper,
   notifications: NotificationManager,
   pixelToGL: (Point) => Point,
+  preventDefault: () => void,
 }
 
 /**
@@ -330,6 +331,8 @@ class Figure {
     y: { min: number, span: number },
   };
 
+  defaultPrevented: boolean;
+
   // mousePixelPosition: null | Point;
   // zoom: {
   //   last: {
@@ -402,6 +405,7 @@ class Figure {
     this.nextDrawTimerStart = 0;
     this.nextDrawTimerDuration = 0;
     this.mousePixelPosition = null;
+    this.defaultPrevented = false;
     
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
