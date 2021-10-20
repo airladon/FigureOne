@@ -7,8 +7,8 @@ import {
 import type { FigureElement } from '../Element';
 import type { TypeParsablePoint, Transform } from '../../tools/g2';
 import Scene from '../../tools/geometry/scene';
-import { joinObjects } from '../../tools/tools';
-import type { OBJ_Rectangle } from './FigurePrimitiveTypes2D';
+import type { OBJ_Scene } from '../../tools/geometry/scene';
+import type { OBJ_Generic } from './FigurePrimitiveTypes2D';
 import type TimeKeeper from '../TimeKeeper';
 import type DrawingObject from '../DrawingObjects/DrawingObject';
 import type { TypeColor } from '../../tools/types';
@@ -182,32 +182,13 @@ export type OBJ_Gesture = {
 
 
 /**
-A gesture primitive is a rectangle within an associated scene.
-
-The rectangle has a center point.
-
-To define a zoomed area of the rectangle, two points are needed:
-- point of the rectangle that will be the new center point of the screen
-- zoom magnification
-
-
-A gesture primitive has an associated scene.
-
-The gesture rectangle covers a portion of space within the scene
-Any zoom and pan combination in a scene can be represented by:
-* center position
-* zoom magnification
-
- */
-
-/**
  * This primitive creates a rectangle within which pan and zoom gestures can be
- * captured from mouse and touch events and transformed into pan and zoom
+ * captured (from mouse and touch events) and transformed into pan and zoom
  * values. The pan and zoom values can be used to change {@link Scene} objects
  * directly, or used for some custom purpose.
  *
  * The pan and zoom values are relative to the gesture rectangle and the
- * {@link Scene} it is associated with.
+ * {@link Scene} it is drawn with.
  *
  * Performing a drag gesture over half the width of the rectangle, will create
  * a pan value that is half the width of the rectangle.
@@ -267,21 +248,65 @@ Any zoom and pan combination in a scene can be represented by:
  * A `sensitivity` value is used to speed up or slow down zooming.
  *
  * When a zoom event happens, a `'zoom'` notification is published. The
- * parameter passed to any subscribers is the zoom magnification value, but if
- * more information is needed (like the zoom delta or zoom position for
- * example) then `getZoom()` can be called.
+ * parameters passed to any subscribers are the zoom magnification value and
+ * pan offset, but if more information is needed (like the zoom position)
+ * then `getZoom()` can be called.
  *
  * Zoom and pan events can be used in many ways. One of the most common ways
  * will be to change a {@link Scene} that contains one or more
  * {@link FigureElement}s allowing a user to pan or zoom through the scene.
  *
  * In such cases, the `zoomScene()` and `panScene()` methods can be used to do
- * this easily. If the scene of interest is the default scene of the figure,
- * then make sure this gesture primitive has its own separate scene so it is not
- * zoomed and panned itself.
+ * this directly.
  *
  * Alternately, a `changeScene` can be defined which will be automatically
  * panned and zoomed by this primitive.
+ *
+ * In general the scene that is being used to draw the gesture primitive should
+ * not be panned or zoomed by the gesture primitive, as this will produce
+ * unexpected results (especially when panning). If the gesture primitive is
+ * setup to change the same scene as it uses itself, then it will assign itself
+ * a duplicate scene.
+ *
+ * @example
+ * // Gesture primitive pans and zooms a figure scene
+ * const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
+ *
+ * // Elements within the figure to zoom and pan
+ * figure.add([
+ *   { make: 'rectangle', width: 0.2, height: 0.2, position: [-0.3, 0] },
+ *   { make: 'triangle', width: 0.2, height: 0.2, position: [0.02, -0.025] },
+ *   { make: 'ellipse', width: 0.2, height: 0.2, position: [0.3, 0] },
+ * ])
+ *
+ * // Gesture Primitive
+ * figure.add({
+ *   make: 'gesture',
+ *   changeScene: figure.scene,
+ *   pan: true,
+ *   zoom: true,
+ * });
+ *
+ * @example
+ * // Using zoom and pan notifications when the gestures are confied
+ * // to a green rectangle
+ * const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
+ *
+ * const gesture = figure.add({
+ *   make: 'gesture',
+ *   color: [0, 1, 0, 0.3],
+ *   width: 0.5,
+ *   height: 1,
+ *   pan: true,
+ *   zoom: true,
+ * });
+ *
+ * gesture.notifications.add(
+ *   'pan', offset => console.log('Pan: ', offset.x, offset.y),
+ * );
+ * gesture.notifications.add(
+ *   'zoom', (mag, offset) => console.log('Zoom: ', mag, offset.x, offset.y),
+ * );
  */
 // $FlowFixMe
 export default class FigureElementPrimitiveGesture extends FigureElementPrimitive {
@@ -448,7 +473,20 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     } else {
       this.scene = new Scene(scene);
     }
+    if (this.changeScene === this.scene) {
+      this.scene = this.scene._dup();
+    }
     this.reset();
+  }
+
+  /**
+   * Set a scene to automatically zoom and pan.
+   */
+  setChangeScene(scene: Scene) {
+    this.changeScene = scene;
+    if (this.changeScene === this.scene) {
+      this.scene = scene._dup();
+    }
   }
 
   setupMove() {
@@ -467,24 +505,21 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.pan.delta = this.getPosition().sub(this.originalPosition).scale(1 / this.zoom.mag);
     this.transform.updateTranslation(this.originalPosition);
     this.setPanOffset(this.pan.offset.sub(this.pan.delta));
-    this.notifications.publish('pan', this.pan.offset);
-    if (this.changeScene != null) {
-      this.panScene(this.changeScene);
-    }
+    this.panChanged(true);
   }
 
   mousePosition(pixelPoint: Point) {
     this.mousePixelPosition = pixelPoint;
   }
 
-  pixelToScene(pixelPoint: Point) {
-    const glPoint = this.figure.pixelToGL(pixelPoint);
-    const scene = this.relativeScene || this.getScene();
-    if (scene == null) {
-      throw new Error(`Gesture Primitive Error - Scene does not exist: ${this.getPath()}`);
-    }
-    return scene.glToFigure(glPoint);
-  }
+  // pixelToScene(pixelPoint: Point) {
+  //   const glPoint = this.figure.pixelToGL(pixelPoint);
+  //   const scene = this.relativeScene || this.getScene();
+  //   if (scene == null) {
+  //     throw new Error(`Gesture Primitive Error - Scene does not exist: ${this.getPath()}`);
+  //   }
+  //   return scene.glToFigure(glPoint);
+  // }
 
   pixelToZoomedScene(pixelPoint: Point) {
     const glPoint = this.figure.pixelToGL(pixelPoint);
@@ -505,13 +540,13 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     );
   }
 
-  glToScene(glPoint: Point) {
-    const scene = this.relativeScene || this.getScene();
-    if (scene == null) {
-      throw new Error(`Gesture Primitive Error - Scene does not exist: ${this.getPath()}`);
-    }
-    return scene.glToFigure(glPoint);
-  }
+  // glToScene(glPoint: Point) {
+  //   const scene = this.relativeScene || this.getScene();
+  //   if (scene == null) {
+  //     throw new Error(`Gesture Primitive Error - Scene does not exist: ${this.getPath()}`);
+  //   }
+  //   return scene.glToFigure(glPoint);
+  // }
 
   wheelHandler(delta: Point) {
     if (!this.pan.enabled && !this.zoom.enabled) {
@@ -537,10 +572,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
         const mousePosition = this.pixelToZoomedScene(this.mousePixelPosition);
         this.updateZoom(mag, mousePosition, 0, 0);
       }
-      if (this.changeScene != null) {
-        this.zoomScene(this.changeScene);
-      }
-      this.notifications.publish('zoom', this.zoom.mag);
+      this.zoomChanged(true);
       return;
     }
     if (!this.pan.wheel) {
@@ -550,10 +582,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.pan.delta = delta.scale(1 / 10 * (scene.right - scene.left) / 100 * this.pan.sensitivity);
     this.pan.delta.x *= -1;
     this.setPanOffset(this.pan.offset.add(this.pan.delta));
-    if (this.changeScene != null) {
-      this.panScene(this.changeScene);
-    }
-    this.notifications.publish('pan', this.pan.offset);
+    this.panChanged(true);
   }
 
   /**
@@ -666,10 +695,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     }
     const position = this.pixelToZoomedScene(line.pointAtPercent(0.5));
     this.updateZoom(mag, position, d, line.angle());
-    this.notifications.publish('zoom', this.zoom.mag);
-    if (this.changeScene != null) {
-      this.zoomScene(this.changeScene);
-    }
+    this.zoomChanged(true);
   }
 
 
@@ -728,10 +754,11 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
    *
    * @param {OBJ_ManualZoom} zoom
    * @param {boolean} notify `true` to send `'zoom'` notification after set
+   * (`true`)
    */
   setZoom(
     zoom: { mag: number, position?: TypeParsablePoint, offset?: TypeParsablePoint },
-    notify: boolean = false,
+    notify: boolean = true,
   ) {
     let { mag, position, offset } = zoom;
     if (mag == null) {
@@ -750,11 +777,24 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     } else if (position != null) {
       this.updateZoom(mag, position, 0, 0);
     }
-    if (notify) {
-      this.notifications.publish('zoom', this.zoom.mag);
-    }
+    this.zoomChanged(notify);
+  }
+
+  zoomChanged(notify: boolean = true) {
     if (this.changeScene != null) {
       this.zoomScene(this.changeScene);
+    }
+    if (notify) {
+      this.notifications.publish('zoom', [this.zoom.mag, this.pan.offset], false);
+    }
+  }
+
+  panChanged(notify: boolean = true) {
+    if (this.changeScene != null) {
+      this.panScene(this.changeScene);
+    }
+    if (notify) {
+      this.notifications.publish('pan', this.pan.offset);
     }
   }
 
@@ -784,16 +824,11 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
   /**
    * Set pan offset manually.
    * @param {TypeParsablePoint} offset
-   * @param {boolean} notify `true` to send `'zoom'` notification after set
+   * @param {boolean} notify `true` to send `'zoom'` notification after set (`true`)
    */
-  setPan(offset: TypeParsablePoint, notify: boolean = false) {
+  setPan(offset: TypeParsablePoint, notify: boolean = true) {
     this._setZoomPan(this.zoom.mag, getPoint(offset), this.zoom.current.position);
-    if (this.changeScene != null) {
-      this.panScene(this.changeScene);
-    }
-    if (notify) {
-      this.notifications.publish('pan', this.pan.offset);
-    }
+    this.panChanged(notify);
   }
 
   /**
@@ -945,4 +980,23 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
   Therefore to find C:
   - Find relative position of point in scene
   - using the zoom factor find the center point in the zoomed scene
+*/
+
+/**
+A gesture primitive is a rectangle within an associated scene.
+
+The rectangle has a center point.
+
+To define a zoomed area of the rectangle, two points are needed:
+- point of the rectangle that will be the new center point of the screen
+- zoom magnification
+
+
+A gesture primitive has an associated scene.
+
+The gesture rectangle covers a portion of space within the scene
+Any zoom and pan combination in a scene can be represented by:
+* center position
+* zoom magnification
+
 */
