@@ -973,8 +973,16 @@ class FigureElement {
     }
   }
 
-  setScene(options: OBJ_Scene) {
-    this.scene = new Scene(options);
+  /**
+   * Associate this element with a new scene.
+   * @param {Scene | OBJ_Scene} scene
+   */
+  setScene(scene: Scene | OBJ_Scene) {
+    if (scene instanceof Scene) {
+      this.scene = scene;
+    } else {
+      this.scene = new Scene(scene);
+    }
   }
 
   setProperties(properties: Object, except: Array<string> | string = []) {
