@@ -1431,7 +1431,7 @@ export default class FigurePrimitives {
     return element;
   }
 
-  gesture(...options: Array<OBJ_Gesture>) {
+  gesture(...options: Array<OBJ_Gesture>): FigureElementPrimitiveGesture {
     const defaultOptions = {
       color: [0, 0, 0, 0],
       width: 1,
@@ -1447,8 +1447,13 @@ export default class FigurePrimitives {
     let scene;
     if (combinedOptions.scene == null) {
       scene = this.scene;
+    } else if (combinedOptions instanceof Scene) {
+      scene = combinedOptions.scene;
     } else {
       scene = new Scene(combinedOptions.scene);
+    }
+    if (combinedOptions.changeScene === scene) {
+      scene = this.scene._dup();
     }
     defaultOptions.width = scene.right - scene.left;
     defaultOptions.height = scene.top - scene.bottom;
@@ -1458,7 +1463,7 @@ export default class FigurePrimitives {
     ];
     const o = joinObjectsWithOptions({}, defaultOptions, combinedOptions);
     // $FlowFixMe
-    const element = this.rectangle({
+    const element: FigureElementPrimitiveGesture = this.rectangle({
       width: o.width,
       height: o.height,
       position: o.position,
@@ -1467,6 +1472,7 @@ export default class FigurePrimitives {
       color: o.color,
       figureElementPrimitiveCallback: (...fo) => new FigureElementPrimitiveGesture(...fo),
     });
+    element.scene = scene;
     element.setup(o);
     return element;
     // return createGestureElement(this.rectangle.bind(this), ...options);
