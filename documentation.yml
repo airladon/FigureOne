@@ -81,6 +81,8 @@ toc:
   - OBJ_ElementMove
   - OBJ_ElementMoveFreely
   - OBJ_CameraControl
+  - OBJ_Gesture
+  - FigureElementPrimitiveGesture
   - OBJ_Touch
   - OBJ_RangeBounds
   - OBJ_LineBounds
