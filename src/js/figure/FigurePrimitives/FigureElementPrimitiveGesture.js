@@ -182,6 +182,12 @@ export type OBJ_Gesture = {
 
 
 /**
+ * Gesture rectangle.
+ *
+ * ![](./apiassets/gesture1.gif)
+ *
+ * ![](./apiassets/gesture2.gif)
+ *
  * This primitive creates a rectangle within which pan and zoom gestures can be
  * captured (from mouse and touch events) and transformed into pan and zoom
  * values. The pan and zoom values can be used to change {@link Scene} objects
@@ -210,7 +216,7 @@ export type OBJ_Gesture = {
  * - Drag (often used for panning with touch devices or a mouse)
  * - Pinching (often used for zooming and panning on touch devices)
  *
- * # Pan
+ * ### Pan
  *
  * A pan is an offset in xy.
  *
@@ -233,7 +239,7 @@ export type OBJ_Gesture = {
  * is needed (like the pan delta from the last pan) then `getPan()` can be
  * called.
  *
- * # Zoom
+ * ### Zoom
  *
  * A zoom is a magnification at a point in the rectangle. The zoom point will
  * stay stationary, while the other points around it spread out (when zooming
