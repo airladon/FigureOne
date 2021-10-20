@@ -339,9 +339,9 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     if (!this.pan.enabled) {
       return;
     }
-    this.pan.delta = this.getPosition().sub(this.originalPosition);
+    this.pan.delta = this.getPosition().sub(this.originalPosition).scale(1 / this.zoom.mag);
     this.transform.updateTranslation(this.originalPosition);
-    this.setPanOffset(this.pan.offset.sub(this.pan.delta.scale(1)));
+    this.setPanOffset(this.pan.offset.sub(this.pan.delta));
     this.notifications.publish('pan', this.pan.offset);
     if (this.changeScene != null) {
       this.panScene(this.changeScene);
@@ -359,6 +359,25 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       throw new Error(`Gesture Primitive Error - Scene does not exist: ${this.getPath()}`);
     }
     return scene.glToFigure(glPoint);
+  }
+
+  pixelToZoomedScene(pixelPoint: Point) {
+    const glPoint = this.figure.pixelToGL(pixelPoint);
+    return this.glToZoomedScene(glPoint);
+  }
+
+  glToZoomedScene(glPoint: Point) {
+    const scene = this.relativeScene || this.getScene();
+    if (scene == null) {
+      throw new Error(`Gesture Primitive Error - Scene does not exist: ${this.getPath()}`);
+    }
+    const center = this.pan.offset;
+    const width = (scene.right - scene.left) / this.zoom.mag;
+    const height = (scene.top - scene.bottom) / this.zoom.mag;
+    return new Point(
+      center.x + width / 2 * glPoint.x,
+      center.y + height / 2 * glPoint.y,
+    );
   }
 
   glToScene(glPoint: Point) {
@@ -407,7 +426,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       if (this.mousePixelPosition == null) {
         this.updateZoom(mag, this.transformPoint([0, 0], 'gl', 'figure'));
       } else {
-        const mousePosition = this.pixelToScene(this.mousePixelPosition);
+        const mousePosition = this.pixelToZoomedScene(this.mousePixelPosition);
         this.updateZoom(mag, mousePosition, 0, 0);
       }
       this.notifications.publish('zoom', this.zoom.mag);
@@ -536,9 +555,11 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
 
   panScene(scene: Scene) {
     const s = this.getScene();
-    const p = this.pan.offset.scale((scene.right - scene.left) / (s.right - s.left) / scene.zoom);
+    const p = this.pan.offset
+      .sub(new Point(s.left, s.bottom))
+      .scale((scene.right - scene.left) / (s.right - s.left))
+      .add(new Point(scene.left, scene.bottom));
     scene.setPan(p.scale(-1));
-    // scene.setPan(this.panTransform(scene).scale(-1));
     this.animateNextFrame();
   }
 
@@ -554,16 +575,44 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.zoom.current = {
       position: zoomPosition, angle, distance, mag: this.zoom.mag,
     };
+    let zPosition = zoomPosition;
     if (this.zoom.position != null) {
-      const newPosition = this.zoom.position.scale(mag / oldMag);
-      this.pan.delta = this.zoom.position.sub(newPosition).scale(1 / mag);
-    } else {
-      const newPosition = zoomPosition.scale(mag / oldMag);
-      this.pan.delta = zoomPosition.sub(newPosition).scale(1 / mag);
+      zPosition = this.zoom.position;
     }
-    this.setPanOffset(
-      this.pan.offset.sub(this.pan.delta),
-    );
+    const center = this.glToZoomedScene(new Point(0, 0));
+    const line = new Line(zPosition, center);
+    const newCenter = line.pointAtPercent(oldMag / mag);
+    this.pan.delta = newCenter.sub(center);
+    this.pan.offset = this.pan.offset.add(this.pan.delta);
+    console.log(this.pan.offset)
+    // Find the center position
+    // const scene = this.getScene();
+    // const Pgl = scene.figureToGL(zoomPosition);
+    // const Cgl = Pgl.scale(1 - oldMag / mag);
+    // const C = scene.glToFigure(Cgl);
+    // console.log(zoomPosition.round(2).toArray(2), Pgl.round(2).toArray(2), Cgl.round(2).toArray(), C.round(2).toArray())
+    // this.pan.delta = C.sub(this.pan.offset);
+    // this.pan.offset = this.pan.offset.add(this.pan.delta);
+
+
+    // const l = new Line(zPosition, scene.glToFigure(new Point(0, 0)));
+    // const newCenter = l.pointAtPercent(oldMag / mag);
+    // this.pan.delta = newCenter.sub(this.pan.offset);
+    // console.log( scene.glToFigure(new Point(0, 0)).round(2).toArray(2), oldMag / mag, newCenter.round(2).toArray(2), this.pan.delta.round(2).toArray(2))
+    // this.pan.offset = this.pan.offset.sub(this.pan.delta);
+
+    // scene.glToFigure(new Point(0, 0));
+
+    // if (this.zoom.position != null) {
+    //   const newPosition = this.zoom.position.scale(mag / oldMag);
+    //   this.pan.delta = this.zoom.position.sub(newPosition).scale(1 / mag);
+    // } else {
+    //   const newPosition = zoomPosition.scale(mag / oldMag);
+    //   this.pan.delta = zoomPosition.sub(newPosition).scale(1 / mag);
+    // }
+    // this.setPanOffset(
+    //   this.pan.offset.sub(this.pan.delta),
+    // );
 
     this.zoom.cumAngle += angle - this.zoom.last.angle;
   }
@@ -611,7 +660,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     if (this.zoom.max != null) {
       mag = Math.min(mag, this.zoom.max);
     }
-    const position = this.pixelToScene(line.pointAtPercent(0.5));
+    const position = this.pixelToZoomedScene(line.pointAtPercent(0.5));
     this.updateZoom(mag, position, d, line.angle());
     this.notifications.publish('zoom', this.zoom.mag);
     if (this.changeScene != null) {
