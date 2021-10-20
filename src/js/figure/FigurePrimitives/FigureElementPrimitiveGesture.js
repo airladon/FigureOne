@@ -580,6 +580,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
         this.updateZoom(mag, mousePosition, 0, 0);
       }
       this.zoomChanged(true);
+      this.figure.preventDefault();
       return;
     }
     if (!this.pan.wheel) {
@@ -590,6 +591,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.pan.delta.x *= -1;
     this.setPanOffset(this.pan.offset.add(this.pan.delta));
     this.panChanged(true);
+    this.figure.preventDefault();
   }
 
   /**

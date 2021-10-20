@@ -1518,6 +1518,7 @@ class Figure {
       timeKeeper: this.timeKeeper,
       notifications: this.notifications,
       pixelToGL: this.pixelToGL.bind(this),
+      preventDefault: this.preventDefault.bind(this),
     });
     this.setFirstTransform();
     this.animateNextFrame();
@@ -1851,8 +1852,17 @@ class Figure {
     this.notifications.publish('mousePosition', pixelPoint);
   }
 
+  preventDefault() {
+    this.defaultPrevented = true;
+  }
+
   wheelHandler(deltaX: number, deltaY: number, deltaMode: 0x00 | 0x01 | 0x02) {
     this.notifications.publish('gestureWheel', [new Point(deltaX, deltaY), deltaMode], false);
+    if (this.defaultPrevented) {
+      this.defaultPrevented = false;
+      return true;
+    }
+    return false;
     // // const oldZoom = this.zoom.last.mag;
     // let mag = this.zoom.mag + deltaY / 10 * this.zoom.scale * this.zoom.mag / 100;
     // if (this.zoom.min != null) {

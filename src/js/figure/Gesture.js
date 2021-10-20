@@ -106,8 +106,10 @@ class Gesture {
   }
 
   wheelHandler(event: WheelEvent) {
-    this.wheel(event.deltaX, event.deltaY, event.deltaMode);
-    event.preventDefault();
+    const preventDefault = this.wheel(event.deltaX, event.deltaY, event.deltaMode);
+    if (preventDefault) {
+      event.preventDefault();
+    }
   }
 
   touchStartHandler(event: TouchEvent) {
