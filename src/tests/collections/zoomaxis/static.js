@@ -85,6 +85,39 @@ function getShapes(getPos) {
     shape('yLabelsRotation', { axis: 'y', labels: { fixed: true, precision: 3, rotation: Math.PI / 4 } }),
     shape('yLabelsAlign', { axis: 'y', labels: { xAlign: 'left', yALign: 'bottom' }, start: 0, stop: 1, step: 0.5 }),
     shape('yLabelsSpace', { axis: 'y', labels: { space: 0 } }),
+
+    /*
+    .########.....###....##....##
+    .##.....##...##.##...###...##
+    .##.....##..##...##..####..##
+    .########..##.....##.##.##.##
+    .##........#########.##..####
+    .##........##.....##.##...###
+    .##........##.....##.##....##
+    */
+    shape('pan'),
+    shape('panNeg'),
+    shape('panBig'),
+    shape('panDraw'),
+    shape('panDrawNeg'),
+    shape('panTwo'),
+    shape('panToPosition'),
+    shape('panToNegPosition'),
+    shape('minLimit', { min: 1 }),
+    shape('panMinLimit', { min: -1 }),
+    shape('maxLimit', { max: 1 }),
+    shape('panMaxLimit', { max: 4 }),
+
+    /*
+    .########..#######...#######..##.....##
+    ......##..##.....##.##.....##.###...###
+    .....##...##.....##.##.....##.####.####
+    ....##....##.....##.##.....##.##.###.##
+    ...##.....##.....##.##.....##.##.....##
+    ..##......##.....##.##.....##.##.....##
+    .########..#######...#######..##.....##
+    */
+
     // shape('defaultTouch'),
     // shape('width', { width: 0.2 }),
     // shape('height', { height: 0.2 }),
@@ -118,6 +151,16 @@ let startGetValues;
 let startMove;
 
 const updates = {
+  pan: e => e.panDeltaValue(0.5),
+  panNeg: e => e.panDeltaValue(-0.5),
+  panBig: e => e.panDeltaValue(1001),
+  panDraw: e => e.panDeltaDraw(0.125),
+  panDrawNeg: e => e.panDeltaDraw(-0.125),
+  panTwo: (e) => { e.panDeltaValue(0.5); e.panDeltaValue(0.5); },
+  panToPosition: e => e.pan(5, 0.25),
+  panToNegPosition: e => e.pan(-5, 0.25),
+  panMinLimit: e => e.panDeltaValue(-6),
+  panMaxLimit: e => e.panDeltaValue(6),
   // 'move-pad': (e) => {
   //   e.setPositionWithoutMoving(e.points[0]);
   // },

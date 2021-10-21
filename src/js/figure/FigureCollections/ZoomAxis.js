@@ -380,7 +380,6 @@ class CollectionsZoomAxis extends FigureElementCollection {
   stopValue: number;
   showAxis: boolean;
   step: Array<number>;
-  // minorStep: number;
   min: number | null;
   max: number | null;
 
@@ -470,6 +469,12 @@ class CollectionsZoomAxis extends FigureElementCollection {
     this.showAxis = options.show;
     this.min = options.min;
     this.max = options.max;
+    if (this.min != null && this.min > this.startValue) {
+      throw new Error(`ZoomAxis Error - min value cannot be greater than start value. Max pan: ${this.max}, start: ${this.startValue}`);
+    }
+    if (this.max != null && this.max < this.stopValue) {
+      throw new Error(`ZoomAxis Error - max value cannot be less than stop value. Max pan: ${this.max}, stop: ${this.stopValue}`);
+    }
     this.defaultFont = options.font;
     if (options.font == null || options.font.color == null) {
       this.defaultFont.color = options.color;
@@ -617,17 +622,31 @@ class CollectionsZoomAxis extends FigureElementCollection {
     return round(value, this.precision);
   }
 
-  pan(toValue: number, atPosition: number) {
-    const normPosition = atPosition / this.length;
+  /**
+   * Pan so an axis value is located at a draw location.
+   */
+  pan(toValue: number, atDraw: number) {
+    const normPosition = atDraw / this.length;
     const scale = this.stopValue - this.startValue;
-    // const offset = toValue - this.startValue - normPosition * scale;
-    // this.update(this.startValue + offset, this.stopValue + offset);
+    let start = toValue - normPosition * scale;
+    let stop = toValue + (1 - normPosition) * scale;
+    if (this.min != null && start < this.min) {
+      start = this.min;
+      stop = start + scale;
+    }
+    if (this.max != null && stop > this.max) {
+      stop = this.max;
+      start = stop - scale;
+    }
     this.update(
-      toValue - normPosition * scale,
-      toValue + (1 - normPosition) * scale,
+      start,
+      stop,
     );
   }
 
+  /**
+   * Pan by some delta axis value.
+   */
   panDeltaValue(deltaValue: number) {
     let start = this.startValue + deltaValue;
     let stop = this.stopValue + deltaValue;
@@ -638,14 +657,14 @@ class CollectionsZoomAxis extends FigureElementCollection {
       stop = this.max;
       start = this.startValue + (this.max - this.stopValue);
     }
-    // if (this.startValue + deltaValue < this.min || this.stopValue + deltaValue > this.max) {
-    //   return;
-    // }
     if (this.startValue !== start || this.stopValue !== stop) {
       this.update(start, stop);
     }
   }
 
+  /**
+   * Pan by some delta draw value.
+   */
   panDeltaDraw(deltaDraw: number) {
     const deltaValue = deltaDraw / this.length * (this.stopValue - this.startValue);
     this.panDeltaValue(deltaValue);
