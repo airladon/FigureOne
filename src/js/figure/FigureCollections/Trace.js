@@ -297,6 +297,10 @@ class CollectionsTrace extends FigureElementCollection {
     // }
   }
 
+  updateAxes() {
+    this.update(this.points);
+  }
+
   getY(xValue: number, precision: number = 8) {
     const yValues = [];
     let closestDelta = Math.abs(xValue - this.points[0].x);

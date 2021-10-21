@@ -743,6 +743,12 @@ class CollectionsPlot extends FigureElementCollection {
     });
   }
 
+  updateTraces() {
+    for (let i = 0; i < this.traces.length; i += 1) {
+      this.traces[i].updateAxes();
+    }
+  }
+
   getTheme(name: string, axis: 'x' | 'y' = 'x', defaultColor: Array<number> | null = null) {
     const length = axis === 'x' ? this.width : this.height;
     const gridLength = axis === 'x' ? this.height : this.width;
@@ -849,6 +855,7 @@ class CollectionsPlot extends FigureElementCollection {
     if (y != null && y._custom.type === 'zoom') {
       y.panDeltaDraw(deltaDraw.y);
     }
+    this.updateTraces();
   }
 
   changeZoom(value: Point, mag: number) {
@@ -860,7 +867,21 @@ class CollectionsPlot extends FigureElementCollection {
     if (y != null && y._custom.type === 'zoom') {
       y.changeZoom(value.y, mag);
     }
+    this.updateTraces();
   }
+
+  changeZoomDelta(value: Point, magDelta: number) {
+    const x = this.getXAxis();
+    if (x != null && x._custom.type === 'zoom') {
+      x.changeZoomDelta(value.x, magDelta);
+    }
+    const y = this.getYAxis();
+    if (y != null && y._custom.type === 'zoom') {
+      y.changeZoomDelta(value.y, magDelta);
+    }
+    this.updateTraces();
+  }
+
 
   // _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
   //   return [...super._getStateProperties(options),

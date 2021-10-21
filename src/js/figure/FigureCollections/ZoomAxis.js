@@ -196,6 +196,8 @@ export type COL_ZoomAxis = {
   title?: TypeAxisTitle,
   font?: OBJ_Font,              // Default font
   show?: boolean,
+  min?: number,
+  max?: number,
 } & OBJ_Collection;
 
 
@@ -354,6 +356,8 @@ class CollectionsZoomAxis extends FigureElementCollection {
   stopValue: number;
   showAxis: boolean;
   step: number;
+  min: number;
+  max: number;
 
   ticks: OBJ_ZoomAxisTicks_Fixed | null;
   grid: OBJ_ZoomAxisTicks_Fixed | null;
@@ -398,6 +402,8 @@ class CollectionsZoomAxis extends FigureElementCollection {
       show: true,
       axis: 'x',
       transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
+      min: null,
+      max: null,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     super(options);
@@ -416,6 +422,8 @@ class CollectionsZoomAxis extends FigureElementCollection {
     this.calcRatios();
     this.precision = options.precision;
     this.showAxis = options.show;
+    this.min = options.min;
+    this.max = options.max;
     this.defaultFont = options.font;
     if (options.font == null || options.font.color == null) {
       this.defaultFont.color = options.color;
@@ -524,12 +532,27 @@ class CollectionsZoomAxis extends FigureElementCollection {
   }
 
   panDeltaValue(deltaValue: number) {
-    this.update(this.startValue + deltaValue, this.stopValue + deltaValue);
+    let start = this.startValue + deltaValue;
+    let stop = this.stopValue + deltaValue;
+    if (this.min != null && this.startValue + deltaValue < this.min) {
+      start = this.min;
+      stop = this.stopValue + (this.min - this.startValue);
+    } else if (this.max != null && this.stopValue + deltaValue > this.max) {
+      stop = this.max;
+      start = this.startValue + (this.max - this.stopValue);
+    }
+    // if (this.startValue + deltaValue < this.min || this.stopValue + deltaValue > this.max) {
+    //   return;
+    // }
+    if (this.startValue !== start || this.stopValue !== stop) {
+      this.update(start, stop);
+    }
   }
 
   panDeltaDraw(deltaDraw: number) {
     const deltaValue = deltaDraw / this.length * (this.stopValue - this.startValue);
-    this.update(this.startValue + deltaValue, this.stopValue + deltaValue);
+    this.panDeltaValue(deltaValue);
+    // this.update(this.startValue + deltaValue, this.stopValue + deltaValue);
   }
 
   zoom(toValue: number, atPosition: number, zoom: number) {
@@ -547,9 +570,17 @@ class CollectionsZoomAxis extends FigureElementCollection {
     this.update(value - normPosition * scale, value + (1 - normPosition) * scale);
   }
 
-  update(startValue: number, stopValue: number) {
-    this.startValue = startValue;
-    this.stopValue = stopValue;
+  changeZoomDelta(value: number, zoomDelta: number) {
+    const normPosition = (value - this.startValue) / (this.stopValue - this.startValue);
+    this.currentZoom *= zoomDelta;
+    const scale = this.initialScale / this.currentZoom;
+    this.update(value - normPosition * scale, value + (1 - normPosition) * scale);
+  }
+
+  update(startValueIn: number, stopValueIn: number) {
+    this.startValue = Math.max(this.min == null ? startValueIn : this.min, startValueIn);
+    this.stopValue = Math.min(this.max == null ? stopValueIn : this.max, stopValueIn);
+    this.currentZoom = this.initialScale / (this.stopValue - this.startValue);
     this.calcRatios();
     // const step = 1 / 2 ** Math.floor(-Math.log(this.step / this.currentZoom) / Math.log(2)) * 2;
     // we only want step to change for zooms of 4, 2, 1, 0.5, 0.25, 0.
@@ -560,16 +591,16 @@ class CollectionsZoomAxis extends FigureElementCollection {
       z = 2 ** Math.floor(Math.log2(this.currentZoom));
     }
     const step = this.step / z;
-    const remainder = this.rnd(startValue % (step));
-    let startTick = startValue;
+    const remainder = this.rnd(this.startValue % (step));
+    let startTick = this.startValue;
     let values = [];
     if (remainder > 0) {
-      startTick = startValue + (step - remainder);
+      startTick = this.startValue + (step - remainder);
     } else if (remainder < 0) {
-      startTick = startValue + (-remainder);
+      startTick = this.startValue + (-remainder);
     }
-    if (startTick <= stopValue) {
-      values = range(startTick, stopValue, step);
+    if (startTick <= this.stopValue) {
+      values = range(startTick, this.stopValue, step);
     }
     this.updateTicks('ticks', values);
     this.updateTicks('grid', values);
