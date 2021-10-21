@@ -109,6 +109,7 @@ class Gesture {
     const preventDefault = this.wheel(event.deltaX, event.deltaY, event.deltaMode);
     if (preventDefault) {
       event.preventDefault();
+      event.stopPropagation();
     }
   }
 
