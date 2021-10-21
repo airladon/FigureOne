@@ -470,7 +470,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
     this.min = options.min;
     this.max = options.max;
     if (this.min != null && this.min > this.startValue) {
-      throw new Error(`ZoomAxis Error - min value cannot be greater than start value. Max pan: ${this.max}, start: ${this.startValue}`);
+      throw new Error(`ZoomAxis Error - min value cannot be greater than start value. Min pan: ${this.min}, start: ${this.startValue}`);
     }
     if (this.max != null && this.max < this.stopValue) {
       throw new Error(`ZoomAxis Error - max value cannot be less than stop value. Max pan: ${this.max}, stop: ${this.stopValue}`);
@@ -596,7 +596,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
       const o = joinObjects(
         {},
         {
-          width: (this.line != null
+          width: (this.line != null // $FlowFixMe
             ? this.line.width / (index + 1)
             : this.collections.primitives.defaultLineWidth / (index + 1)) * widthScale,
           length,
@@ -628,35 +628,39 @@ class CollectionsZoomAxis extends FigureElementCollection {
   pan(toValue: number, atDraw: number) {
     const normPosition = atDraw / this.length;
     const scale = this.stopValue - this.startValue;
-    let start = toValue - normPosition * scale;
-    let stop = toValue + (1 - normPosition) * scale;
+    const [start, stop] = this.clipRange(
+      toValue - normPosition * scale,
+      toValue + (1 - normPosition) * scale,
+    );
+    this.update(start, stop);
+  }
+
+  clipRange(startIn: number, stopIn: number) {
+    let start = startIn;
+    let stop = stopIn;
+    const span = stop - start;
     if (this.min != null && start < this.min) {
       start = this.min;
-      stop = start + scale;
+      stop = this.min + span;
+      if (this.max != null) {
+        stop = Math.min(this.max, stop);
+      }
     }
     if (this.max != null && stop > this.max) {
       stop = this.max;
-      start = stop - scale;
+      start = this.max - span;
+      if (this.min != null) {
+        stop = Math.max(this.min, start);
+      }
     }
-    this.update(
-      start,
-      stop,
-    );
+    return [start, stop];
   }
 
   /**
    * Pan by some delta axis value.
    */
   panDeltaValue(deltaValue: number) {
-    let start = this.startValue + deltaValue;
-    let stop = this.stopValue + deltaValue;
-    if (this.min != null && this.startValue + deltaValue < this.min) {
-      start = this.min;
-      stop = this.stopValue + (this.min - this.startValue);
-    } else if (this.max != null && this.stopValue + deltaValue > this.max) {
-      stop = this.max;
-      start = this.startValue + (this.max - this.stopValue);
-    }
+    const [start, stop] = this.clipRange(this.startValue + deltaValue, this.stopValue + deltaValue);
     if (this.startValue !== start || this.stopValue !== stop) {
       this.update(start, stop);
     }
@@ -671,26 +675,43 @@ class CollectionsZoomAxis extends FigureElementCollection {
     // this.update(this.startValue + deltaValue, this.stopValue + deltaValue);
   }
 
-  zoom(toValue: number, atPosition: number, zoom: number) {
-    const normPosition = atPosition / this.length;
-    const scale = this.initialScale / zoom;
-    this.currentZoom = zoom;
-    // console.log(toValue - normPosition * scale, toValue - (1 - normPosition) * scale)
-    this.update(toValue - normPosition * scale, toValue + (1 - normPosition) * scale);
-  }
-
-  changeZoom(value: number, zoom: number) {
-    const normPosition = (value - this.startValue) / (this.stopValue - this.startValue);
-    const scale = this.initialScale / zoom;
-    this.currentZoom = zoom;
+  /**
+   * Zoom to some magnitude (`mag`), such that `value`
+   * is located at `drawPosition` on the axis.
+   */
+  zoom(value: number, drawPosition: number, mag: number) {
+    const normPosition = drawPosition / this.length;
+    const scale = this.initialScale / mag;
+    this.currentZoom = mag;
     this.update(value - normPosition * scale, value + (1 - normPosition) * scale);
   }
 
-  changeZoomDelta(value: number, zoomDelta: number) {
+  /**
+   * Zoom on a value that is already shown on the axis.
+   */
+  zoomValue(value: number, mag: number) {
     const normPosition = (value - this.startValue) / (this.stopValue - this.startValue);
-    this.currentZoom *= zoomDelta;
-    const scale = this.initialScale / this.currentZoom;
-    this.update(value - normPosition * scale, value + (1 - normPosition) * scale);
+    const span = this.initialScale / mag;
+    this.currentZoom = mag;
+    const [start, stop] = this.clipRange(
+      value - normPosition * span,
+      value + (1 - normPosition) * span,
+    );
+    this.update(start, stop);
+  }
+
+  /**
+   * Zoom by a delta magnitude on a value already shown on the axis.
+   */
+  zoomDelta(value: number, magDelta: number) {
+    const normPosition = (value - this.startValue) / (this.stopValue - this.startValue);
+    this.currentZoom *= magDelta;
+    const span = this.initialScale / this.currentZoom;
+    const [start, stop] = this.clipRange(
+      value - normPosition * span,
+      value + (1 - normPosition) * span,
+    );
+    this.update(start, stop);
   }
 
   update(startValueIn: number, stopValueIn: number) {

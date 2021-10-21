@@ -103,9 +103,7 @@ function getShapes(getPos) {
     shape('panTwo'),
     shape('panToPosition'),
     shape('panToNegPosition'),
-    shape('minLimit', { min: 1 }),
     shape('panMinLimit', { min: -1 }),
-    shape('maxLimit', { max: 1 }),
     shape('panMaxLimit', { max: 4 }),
 
     /*
@@ -117,31 +115,18 @@ function getShapes(getPos) {
     ..##......##.....##.##.....##.##.....##
     .########..#######...#######..##.....##
     */
-
-    // shape('defaultTouch'),
-    // shape('width', { width: 0.2 }),
-    // shape('height', { height: 0.2 }),
-    // shape('barHeight', { barHeight: 0.2 }),
-    // shape('height-and-bar', { height: 0.2, barHeight: 0.1 }),
-    // shape('height-width-bar', { height: 0.2, barHeight: 0.1, width: 0.5 }),
-    // shape('color', { color: [1, 0, 0, 1] }),
-    // shape('off-color', { colorOff: [1, 0, 0, 1] }),
-    // shape('on-color', { colorOn: [1, 0, 0, 1] }),
-    // shape('colors', { color: [1, 0, 0, 1], colorOn: [0, 0, 1, 1], colorOff: [1, 1, 0, 1] }),
-    // shape('colors-switch', { color: [1, 0, 0, 1], colorOn: [0, 0, 1, 1], colorOff: [1, 1, 0, 1] }),
-    // shape('border-width', { circleBorder: { width: 0.05 } }),
-    // shape('border-width-color', { circleBorder: { width: 0.05, color: [1, 0, 0, 1] } }),
-    // shape('back-border-width', { barBorder: { width: 0.05 } }),
-    // shape('back-border-width-color', { barBorder: { width: 0.05, color: [1, 0, 0, 1] } }),
-    // shape('label-text', { label: 'label' }),
-    // shape('label-bottom', { label: { text: 'label', location: 'bottom' } }),
-    // shape('label-top', { label: { text: 'label', location: 'top' } }),
-    // shape('label-right', { label: { text: 'label', location: 'right' } }),
-    // shape('label-scale', { label: { text: 'label', scale: 1.5, location: 'bottom' } }),
-    // shape('label-font', { label: { text: 'label', font: { family: 'Times', size: 0.2 } } }),
-    // shape('label-eqn', { label: { text: { scale: 1, forms: { 0: { frac: ['a', 'vinculum', 'b'] } } } } }),
-    // shape('label-top-offset', { label: { location: 'left', text: 'test', offset: [0.1, 0.2] } }),
-    // shape('label-left-offset', { label: { location: 'top', text: 'test', offset: [0.1, 0.2] } }),
+    shape('zoomValueIn'),
+    shape('zoomValueOut'),
+    shape('zoomValueInMin', { labels: { precision: 2 } }),
+    shape('zoomValueOutMax', { labels: { precision: 2 } }),
+    shape('zoomValueDelta1', { labels: { precision: 2 } }),
+    shape('zoomValueDelta2', { labels: { precision: 2 } }),
+    shape('zoom', { labels: { precision: 2 } }),
+    shape('zoom1', { labels: { precision: 2 } }),
+    shape('zoomMin', { min: 0, lables: { precision: 2 } }),
+    shape('zoomMax', { max: 2, lables: { precision: 2 } }),
+    shape('zoomMinDelta', { min: -4, lables: { precision: 2 } }),
+    shape('zoomMaxDelta', { max: 10, lables: { precision: 2 } }),
   ];
 }
 
@@ -161,9 +146,18 @@ const updates = {
   panToNegPosition: e => e.pan(-5, 0.25),
   panMinLimit: e => e.panDeltaValue(-6),
   panMaxLimit: e => e.panDeltaValue(6),
-  // 'move-pad': (e) => {
-  //   e.setPositionWithoutMoving(e.points[0]);
-  // },
+  zoomValueIn: e => e.zoomValue(1, 2),
+  zoomValueOut: e => e.zoomValue(1, 0.5),
+  zoomValueInMin: (e) => { e.zoomValue(0, 4); e.zoomValue(0, 4); },
+  zoomValueOutMax: e => e.zoomValue(2, 0.5),
+  zoomValueDelta1: e => e.zoomValue(1, 2),
+  zoomValueDelta2: (e) => { e.zoomDelta(1, 2); e.zoomDelta(1, 2); },
+  zoom: e => e.zoom(10, 0.25, 2),
+  zoom1: e => e.zoom(10, 0.5, 0.5),
+  zoomMin: e => e.zoom(0, 0.25, 0.5),
+  zoomMax: e => e.zoom(2, 0.5, 2),
+  zoomMinDelta: (e) => { e.zoomDelta(1, 0.5); e.zoomDelta(1, 0.5); e.zoomDelta(1, 0.5); },
+  zoomMaxDelta: (e) => { e.zoomDelta(1, 0.5); e.zoomDelta(1, 0.5); e.zoomDelta(1, 0.5); },
 };
 
 const getValues = {
