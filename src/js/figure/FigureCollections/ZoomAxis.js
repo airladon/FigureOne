@@ -23,6 +23,20 @@ import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type FigureCollections from './FigureCollections';
 
 /**
+ * @property {Array<number>} values
+ * @property {number} start start value of axis at current zoom/pan
+ * @property {number} stop stop value of axis at current zoom/pan
+ * @property {number} step step value for current zoom
+ * @property {number} mag zoom magnification
+ */
+export type OBJ_LabelsCallbackParams = {
+  values: Array<number>,
+  start: number,
+  stop: number,
+  step: number,
+  z: number,
+}
+/**
  * Simple line style.
  *
  * @property {number} [width]
@@ -83,8 +97,9 @@ export type OBJ_ZoomAxisTicks_Fixed = {
  * - `space` and `offset` are defined in draw space and relate
  *   to dimensions in the space the axis is being drawn into.
  *
- * @property {number} [precision] Number of decimal places to be shown when the
- * label text is the axis value (`null`) or a `number` (`1`)
+ * @property {number} [precision] Maximum number of decimal places to be shown
+ * @property {number} [precision] Fix the decimal places to the precision (all
+ * labels have the same number of decimal places)
  * @property {'decimal' | 'exp'} [format] `'exp'` will present numbers in
  * exponential form (`'decimal'`)
  * @property {number} [space] space between the ticks and the label
@@ -164,19 +179,19 @@ export type TypeAxisTitle = OBJ_TextLines & {
  *
  * @property {'x' | 'y'} [axis] `'x'` axes are horizontal, `'y'` axes are
  * vertical (`'x'`)
- * @property {number} [length] length of the axis
- * @property {OBJ_Line | boolean} [line] line style of the axis - `null` will draw
- * no line. By default, a solid line will be drawn if not defined.
+ * @property {number} [length] length of the axis in draw space
+ * @property {OBJ_SimpleLineStyle | boolean} [line] line style of the axis -
+ * `false` will draw no line. By default, a solid line will be drawn if not
+ * defined.
  * @property {number} [start] start value of axis (`0`)
  * @property {number} [stop] stop value of axis. `stop` must be larger than
  * `start` (`start + 1`)
  * @property {OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean} [ticks] tick
  * options. Use an Array to setup multiple sets/styles of ticks. Use a boolean
  * value to turn ticks on or off. (`false`)
- * @property {OBJ_AxisLabels | Array<OBJ_AxisLabels> | boolean} [labels] label
- * options.
- * Use an array to setup multiple sets of labels, and use a boolean to turn
- * labels on and off (`true` if ticks exits, `false` otherwise)
+ * @property {OBJ_AxisLabels | string | (Object) => Array<string>} [labels]
+ * label options. Use `false` to turn labels off, or a string or function as
+ * a callback to define custom labels for a set of values.
  * @property {OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean} [grid] grid
  * options. Use an array for multiple sets of grids, and use a boolean to
  * turn grids on and off (`false`)
@@ -200,7 +215,7 @@ export type COL_ZoomAxis = {
   start?: number,               // value space start at draw space start
   stop?: number,                // value space stop at draw space stop
   ticks?: OBJ_ZoomAxisTicks | boolean | Array<OBJ_ZoomAxisTicks | boolean>,
-  labels?: OBJ_ZoomAxisLabels,
+  labels?: OBJ_ZoomAxisLabels | string | (OBJ_LabelsCallbackParams) => Array<string>,
   grid?: OBJ_ZoomAxisTicks | boolean | Array<OBJ_ZoomAxisTicks | boolean>,
   title?: TypeAxisTitle,
   font?: OBJ_Font,              // Default font
@@ -400,7 +415,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
   //   angle: number,
   //   offset: number,
   // } | null;
-
+  labelsCallback: null | string | (OBJ_LabelsCallbackParams) => Array<string>
   precision: number;
   currentZoom: number;
   initialScale: number;
@@ -464,7 +479,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
     this.setColor(options.color);
     this.currentZoom = 1;
     this.line = null;
-    if (options.line != null && options.line !== false) {
+    if (this.showAxis && options.line != null && options.line !== false) {
       let lineO = options.line;
       if (lineO === true) {
         lineO = {};
@@ -484,7 +499,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
       this.add('line', line);
     }
 
-    if (options.grid == null) {
+    if (!this.showAxis || options.grid == null) {
       options.grid = false;
     }
     if (!Array.isArray(options.grid)) {
@@ -495,7 +510,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
       this.addTicks('grid', options.grid[i], i);
     }
 
-    if (options.ticks == null) {
+    if (!this.showAxis || options.ticks == null) {
       options.ticks = false;
     }
     if (!Array.isArray(options.ticks)) {
@@ -516,8 +531,12 @@ class CollectionsZoomAxis extends FigureElementCollection {
     // this.addTicks('minorTicks', options);
     // this.addTicks('ticks', options);
     this.labels = null;
-    if (options.labels != null) {
+    if (this.showAxis && options.labels != null && options.labels !== false) {
       let labelsO = options.labels;
+      if (typeof options.labels === 'string' || typeof options.labels === 'function') {
+        this.labelsCallback = options.labels;
+        labelsO = true;
+      }
       if (labelsO === true) {
         labelsO = {};
       }
@@ -532,6 +551,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
           rotation: 0,
           offset: [0, 0],
           fixed: false,
+          hide: [],
         },
         labelsO,
       );
@@ -542,7 +562,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
       this.add('labels', labels);
     }
     this.update(this.startValue, this.stopValue);
-    if (options.title != null) {
+    if (this.showAxis && options.title != null) {
       this.addTitle(options.title);
     }
   }
@@ -564,16 +584,20 @@ class CollectionsZoomAxis extends FigureElementCollection {
         ticksOptions = {};
       }
       const widthScale = type === 'grid' ? 0.5 : 1;
+      const length = type === 'ticks'
+        ? this.collections.primitives.defaultLineWidth * (10 / (index + 1))
+        : this.collections.primitives.defaultLineWidth * 50;
+      const offset = type === 'ticks' ? -length / 2 : 0;
       const o = joinObjects(
         {},
         {
           width: (this.line != null
             ? this.line.width / (index + 1)
             : this.collections.primitives.defaultLineWidth / (index + 1)) * widthScale,
-          length: type === 'ticks' ? this.collections.primitives.defaultLineWidth * (10 / (index + 1)) : this.collections.primitives.defaultLineWidth * 50,
+          length,
           angle: this.angle + Math.PI / 2,
           color: this.color,
-          offset: 0,
+          offset,
         },
         ticksOptions,
       );
@@ -708,6 +732,17 @@ class CollectionsZoomAxis extends FigureElementCollection {
       return;
     }
 
+    let customLabels;
+    if (this.labelsCallback != null) {
+      customLabels = this.fnMap.exec(this.labelsCallback, ({
+        values,
+        start: this.startValue,
+        stop: this.stopValue,
+        step: this.step[0],
+        mag: this.currentZoom,
+      }));
+    }
+
     let { space } = this.labels;
     const {
       offset, font, rotation, format, precision, fixed,
@@ -721,7 +756,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
       if (this.axis === 'x') {
         bounds = Math.min(0, this.ticks[0].offset);
       } else {
-        bounds = Math.min(0, -this.ticks[0].length + this.ticks[0].offset);
+        bounds = Math.min(0, this.ticks[0].offset);
       }
     }
     for (let i = 0; i < values.length; i += 1) {
@@ -739,7 +774,9 @@ class CollectionsZoomAxis extends FigureElementCollection {
         ).rotate(-rotation);
       }
       let label;
-      if (format === 'decimal') {
+      if (customLabels != null) {
+        label = customLabels[i];
+      } else if (format === 'decimal') {
         if (fixed) {
           label = `${round(values[i], precision).toFixed(precision)}`;
         } else {
@@ -747,6 +784,11 @@ class CollectionsZoomAxis extends FigureElementCollection {
         }
       } else {
         label = `${values[i].toExponential(precision)}`;
+      } // $FlowFixMe
+      if (this.labels.hide.length > 0) { // $FlowFixMe
+        if (this.labels.hide.indexOf(round(values[i], precision + 5)) > -1) {
+          label = '';
+        }
       }
       text.push({
         text: label,

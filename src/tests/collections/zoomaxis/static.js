@@ -17,6 +17,15 @@ function getShapes(getPos) {
 
   /* eslint-disable object-curly-newline */
   return [
+    /*
+    .##.....##
+    ..##...##.
+    ...##.##..
+    ....###...
+    ...##.##..
+    ..##...##.
+    .##.....##
+    */
     shape('default'),
     shape('step', { step: 0.5 }),
     shape('startStopStep', { start: 3, stop: 9, step: 3 }),
@@ -39,7 +48,43 @@ function getShapes(getPos) {
     shape('titleOffset', { title: { text: 'time (s)', offset: [0.1, 0.05] } }),
     shape('titleRotation', { title: { text: 'time (s)', rotation: 0.5 } }),
     shape('titleTextLines', { title: { text: ['time', { text: '(s)', font: { size: 0.06, color: [0, 0, 1, 1] }, lineSpace: 0.05 }] } }),
-
+    shape('labelsNoneTitle', { labels: false, title: 'time (s)' }),
+    shape('labelsNone', { labels: false }),
+    shape('labelsPrecision2', { labels: { precision: 2 }, start: 1, stop: 1.1, step: 0.05 }),
+    shape('labelsPrecision1', { labels: { precision: 1 }, start: 1, stop: 1.1, step: 0.05 }),
+    shape('labelsFixed', { labels: { fixed: true, precision: 2 } }),
+    shape('labelsRotation', { labels: { fixed: true, precision: 3, rotation: Math.PI / 4 } }),
+    shape('labelsxAlign', { labels: { xAlign: 'left', fixed: true } }),
+    shape('labelsFont', { labels: { font: { size: 0.07, color: [0, 0, 1, 1] } } }),
+    shape('labelsHide', { labels: { hide: [0] } }),
+    shape('labelsCallback', { labels: values => values.values.map(v => `${v + 1}s`) }),
+    shape('labelsSpace', { labels: { space: 0.09 } }),
+    shape('showFalse', { show: false }),
+    /*
+    .##....##
+    ..##..##.
+    ...####..
+    ....##...
+    ....##...
+    ....##...
+    ....##...
+    */
+    shape('y', { axis: 'y' }),
+    shape('yTicksStyle', { axis: 'y', ticks: { length: 0.03, offset: -0.05, width: 0.02, color: [0, 0, 1, 1] } }),
+    shape('yMultiTicks', { axis: 'y', ticks: [true, true, true, true] }),
+    shape('yGrid', { axis: 'y', grid: true }),
+    shape('yGridStyle', { axis: 'y', grid: { width: 0.02, color: [0, 0, 1, 1], length: 0.2, dash: [0.02, 0.02] } }),
+    shape('yMultiGrid', { axis: 'y', grid: [true, true, true] }),
+    shape('yMultiGridStyle', { axis: 'y', grid: [true, { width: 0.02, color: [0, 0, 1, 1], length: 0.2, dash: [0.02, 0.02] }] }),
+    shape('yTitle', { axis: 'y', title: 'time (s)' }),
+    shape('yTitleOffset', { axis: 'y', title: { text: 'time (s)', offset: [0.1, 0.05] } }),
+    shape('yTitleRotation', { axis: 'y', title: { text: 'time (s)', rotation: 0.5 } }),
+    shape('yTitleTextLines', { axis: 'y', title: { text: ['time', { text: '(s)', font: { size: 0.06, color: [0, 0, 1, 1] }, lineSpace: 0.05 }] } }),
+    shape('yLabelsNoneTitle', { axis: 'y', labels: false, title: 'time (s)' }),
+    shape('yLabelsNone', { axis: 'y', labels: false }),
+    shape('yLabelsRotation', { axis: 'y', labels: { fixed: true, precision: 3, rotation: Math.PI / 4 } }),
+    shape('yLabelsAlign', { axis: 'y', labels: { xAlign: 'left', yALign: 'bottom' }, start: 0, stop: 1, step: 0.5 }),
+    shape('yLabelsSpace', { axis: 'y', labels: { space: 0 } }),
     // shape('defaultTouch'),
     // shape('width', { width: 0.2 }),
     // shape('height', { height: 0.2 }),
