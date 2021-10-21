@@ -116,6 +116,9 @@ export type OBJ_PanOptions = {
  * Instantaneous zoom metrics.
  * @property {number} [mag] zoom magnification
  * @property {Point} [position] position around which zoom is happening
+ * @property {Point} [normPosition] position around which zoom is happening
+ * normalized to the gesture rectangle where (0, 0) is the bottom left corner
+ * and (1, 1) is the top right corner
  * @property {number} [angle] (pinch zoom only) pinch angle delta to start of
  * pinch
  * @property {number} [distance] (pinch zoom only) distance between pinch points
@@ -123,6 +126,7 @@ export type OBJ_PanOptions = {
 export type OBJ_ZoomInstant = {
   mag: number,
   position: Point,
+  normPosition: Point,
   angle: number,
   distance: number,
 }
@@ -319,12 +323,14 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
   zoom: {
     last: {               // Last zoom properties
       mag: number,
+      normPosition: Point,
       position: Point,
       angle: number,
       distance: number,
     },
     current: {            // Current zoom properties
       position: Point,
+      normPosition: Point,
       angle: number,
       distance: number,
     },
@@ -377,11 +383,13 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       last: {
         mag: 1,
         position: new Point(0, 0),
+        normPosition: new Point(0, 0),
         angle: 0,
         distance: 0,
       },
       current: {
         position: new Point(0, 0),
+        normPosition: new Point(0, 0),
         angle: 0,
         distance: 0,
       },
@@ -456,11 +464,13 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.zoom.last = {
       mag: 1,
       position: new Point(0, 0),
+      normPosition: new Point(0, 0),
       angle: 0,
       distance: 0,
     };
     this.zoom.current = {
       position: new Point(0, 0),
+      normPosition: new Point(0, 0),
       angle: 0,
       distance: 0,
     };
@@ -544,6 +554,25 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     return new Point(
       center.x + width / 2 * glPoint.x,
       center.y + height / 2 * glPoint.y,
+    );
+  }
+
+  zoomedSceneToNorm(p: Point) {
+    const scene = this.relativeScene || this.getScene();
+    if (scene == null) {
+      throw new Error(`Gesture Primitive Error - Scene does not exist: ${this.getPath()}`);
+    }
+    const center = this.pan.offset;
+    const width = (scene.right - scene.left) / this.zoom.mag;
+    const height = (scene.top - scene.bottom) / this.zoom.mag;
+    const border = this.getBoundingRect('gl');
+    const glPoint = new Point(
+      (p.x - center.x) / width * 2,
+      (p.y - center.y) / height * 2,
+    );
+    return new Point(
+      (glPoint.x - border.left) / border.width,
+      (glPoint.y - border.bottom) / border.height,
     );
   }
 
@@ -650,12 +679,17 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.zoom.last = {
       mag: this.zoom.mag,
       position: this.zoom.current.position,
+      normPosition: this.zoom.current.normPosition,
       angle: this.zoom.current.angle,
       distance: this.zoom.current.distance,
     };
     this.zoom.mag = mag;
     this.zoom.current = {
-      position: zoomPosition, angle, distance, mag: this.zoom.mag,
+      position: zoomPosition,
+      normPosition: this.zoomedSceneToNorm(zoomPosition),
+      angle,
+      distance,
+      mag: this.zoom.mag,
     };
     let zPosition = zoomPosition;
     if (this.zoom.position != null) {
@@ -680,6 +714,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.zoom.current.angle = line.angle();
     this.zoom.current.distance = line.length();
     this.zoom.current.position = this.transformPoint(line.pointAtPercent(0.5), 'pixel', 'figure');
+    this.zoom.current.normPosition = this.zoomedSceneToNorm(this.zoom.current.position);
     this.zoom.pinching = true;
   }
 
@@ -796,6 +831,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     if (notify) {
       this.notifications.publish('zoom', [this.zoom.mag, this.pan.offset], false);
     }
+    this.animateNextFrame();
   }
 
   panChanged(notify: boolean = true) {
@@ -805,6 +841,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     if (notify) {
       this.notifications.publish('pan', this.pan.offset);
     }
+    this.animateNextFrame();
   }
 
   _setZoomPan(
@@ -820,12 +857,13 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.zoom.last = {
       mag: this.zoom.mag,
       position: this.zoom.current.position,
+      normPosition: this.zoom.current.normPosition,
       angle: this.zoom.current.angle,
       distance: this.zoom.current.distance,
     };
     this.setZoomMag(mag);
     this.zoom.current = {
-      position, angle, distance, mag: this.zoom.mag,
+      position, angle, distance, mag: this.zoom.mag, normPosition: this.zoomedSceneToNorm(position),
     };
     this.zoom.pinching = pinching;
   }
