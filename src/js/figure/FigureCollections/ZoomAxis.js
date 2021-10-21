@@ -356,8 +356,9 @@ class CollectionsZoomAxis extends FigureElementCollection {
   stopValue: number;
   showAxis: boolean;
   step: number;
-  min: number;
-  max: number;
+  minorStep: number;
+  min: number | null;
+  max: number | null;
 
   ticks: OBJ_ZoomAxisTicks_Fixed | null;
   grid: OBJ_ZoomAxisTicks_Fixed | null;
@@ -372,6 +373,13 @@ class CollectionsZoomAxis extends FigureElementCollection {
   line: OBJ_Line | null;
   grid: OBJ_Line | null;
   ticks: {
+    width: number,
+    length: number,
+    angle: number,
+    offset: number,
+  } | null;
+
+  minorTicks: {
     width: number,
     length: number,
     angle: number,
@@ -418,6 +426,9 @@ class CollectionsZoomAxis extends FigureElementCollection {
     this.initialStart = this.startValue;
     this.initialScale = this.stopValue - this.startValue;
     this.step = options.step == null ? (this.stopValue - this.startValue) / 5 : options.step;
+    this.minorStep = options.minorStep == null
+      ? (this.stopValue - this.startValue) / 20
+      : options.minorStep;
     this.length = options.length;
     this.calcRatios();
     this.precision = options.precision;
@@ -452,7 +463,9 @@ class CollectionsZoomAxis extends FigureElementCollection {
       const line = this.collections.primitives.line(o);
       this.add('line', line);
     }
+    this.addTicks('minorGrid', options);
     this.addTicks('grid', options);
+    this.addTicks('minorTicks', options);
     this.addTicks('ticks', options);
     this.labels = null;
     if (options.labels != null) {
@@ -486,11 +499,17 @@ class CollectionsZoomAxis extends FigureElementCollection {
     this.update(this.startValue, this.stopValue);
   }
 
-  addTicks(type: 'grid' | 'ticks', options: OBJ_ZoomAxisTicks) {
+  addTicks(
+    type: 'grid' | 'ticks' | 'minorTicks' | 'minorGrid',
+    options: OBJ_ZoomAxisTicks,
+  ) {
     // $FlowFixMe
     this[type] = null; // $FlowFixMe
     if (options[type] != null) {
       let ticksOptions = options[type];
+      if (ticksOptions === false) {
+        return;
+      }
       if (ticksOptions === true) {
         ticksOptions = {};
       }
@@ -498,7 +517,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
         {},
         {
           width: this.line != null ? this.line.width : this.collections.primitives.defaultLineWidth,
-          length: type === 'ticks' ? this.collections.primitives.defaultLineWidth * 10 : this.collections.primitives.defaultLineWidth * 50,
+          length: type.endsWith('icks') ? this.collections.primitives.defaultLineWidth * 10 : this.collections.primitives.defaultLineWidth * 50,
           angle: this.angle + Math.PI / 2,
           color: this.color,
           offset: 0,
@@ -591,19 +610,31 @@ class CollectionsZoomAxis extends FigureElementCollection {
       z = 2 ** Math.floor(Math.log2(this.currentZoom));
     }
     const step = this.step / z;
+    const minorStep = this.minorStep / z;
     const remainder = this.rnd(this.startValue % (step));
+    const minorRemainder = this.rnd(this.startValue % (minorStep));
     let startTick = this.startValue;
+    let minorStartTick = this.startValue;
     let values = [];
+    let minorValues = [];
     if (remainder > 0) {
       startTick = this.startValue + (step - remainder);
     } else if (remainder < 0) {
       startTick = this.startValue + (-remainder);
     }
+    if (minorRemainder > 0) {
+      minorStartTick = this.startValue + (minorStep - minorRemainder);
+    } else if (minorRemainder < 0) {
+      minorStartTick = this.startValue + (-minorRemainder);
+    }
     if (startTick <= this.stopValue) {
       values = range(startTick, this.stopValue, step);
+      minorValues = range(minorStartTick, this.stopValue, minorStep);
     }
     this.updateTicks('ticks', values);
+    this.updateTicks('minorTicks', minorValues);
     this.updateTicks('grid', values);
+    this.updateTicks('minorGrid', minorValues);
     this.updateText(values);
   }
 
@@ -667,7 +698,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
     });
   }
 
-  updateTicks(type: 'ticks' | 'grid', values: Array<number>) {
+  updateTicks(type: 'ticks' | 'grid' | 'minorTicks' | 'minorGrid', values: Array<number>) {
     const lengthSign = this.axis === 'x' ? 1 : -1; // $FlowFixMe
     const ticks = this[type];
     if (ticks != null) {
