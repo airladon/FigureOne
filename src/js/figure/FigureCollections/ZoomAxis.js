@@ -190,14 +190,14 @@ export type COL_ZoomAxis = {
   line?: boolean | OBJ_Line,
   start?: number,               // value space start at draw space start
   stop?: number,                // value space stop at draw space stop
-  ticks?: OBJ_ZoomAxisTicks | boolean,
+  ticks?: OBJ_ZoomAxisTicks | boolean | Array<OBJ_ZoomAxisTicks | boolean>,
   labels?: OBJ_ZoomAxisLabels,
-  grid?: OBJ_ZoomAxisTicks | boolean,
+  grid?: OBJ_ZoomAxisTicks | boolean | Array<OBJ_ZoomAxisTicks | boolean>,
   title?: TypeAxisTitle,
   font?: OBJ_Font,              // Default font
   show?: boolean,
-  min?: number,
-  max?: number,
+  min?: number | null,
+  max?: number | null,
 } & OBJ_Collection;
 
 
@@ -355,8 +355,8 @@ class CollectionsZoomAxis extends FigureElementCollection {
   startValue: number;
   stopValue: number;
   showAxis: boolean;
-  step: number;
-  minorStep: number;
+  step: Array<number>;
+  // minorStep: number;
   min: number | null;
   max: number | null;
 
@@ -371,20 +371,26 @@ class CollectionsZoomAxis extends FigureElementCollection {
   autoStep: null | number;
   axis: 'x' | 'y';
   line: OBJ_Line | null;
-  grid: OBJ_Line | null;
-  ticks: {
+  grid: Array<{
     width: number,
     length: number,
     angle: number,
     offset: number,
-  } | null;
+  } | boolean>;
 
-  minorTicks: {
+  ticks: Array<{
     width: number,
     length: number,
     angle: number,
     offset: number,
-  } | null;
+  } | boolean>;
+
+  // minorTicks: {
+  //   width: number,
+  //   length: number,
+  //   angle: number,
+  //   offset: number,
+  // } | null;
 
   precision: number;
   currentZoom: number;
@@ -425,10 +431,13 @@ class CollectionsZoomAxis extends FigureElementCollection {
     }
     this.initialStart = this.startValue;
     this.initialScale = this.stopValue - this.startValue;
-    this.step = options.step == null ? (this.stopValue - this.startValue) / 5 : options.step;
-    this.minorStep = options.minorStep == null
-      ? (this.stopValue - this.startValue) / 20
-      : options.minorStep;
+    this.step = options.step == null ? [(this.stopValue - this.startValue) / 5] : options.step;
+    if (!Array.isArray(this.step)) {
+      this.step = [this.step];
+    }
+    // this.minorStep = options.minorStep == null
+    //   ? (this.stopValue - this.startValue) / 20
+    //   : options.minorStep;
     this.length = options.length;
     this.calcRatios();
     this.precision = options.precision;
@@ -463,10 +472,33 @@ class CollectionsZoomAxis extends FigureElementCollection {
       const line = this.collections.primitives.line(o);
       this.add('line', line);
     }
-    this.addTicks('minorGrid', options);
-    this.addTicks('grid', options);
-    this.addTicks('minorTicks', options);
-    this.addTicks('ticks', options);
+
+    if (options.grid == null) {
+      options.grid = false;
+    }
+    if (!Array.isArray(options.grid)) {
+      options.grid = [options.grid];
+    }
+    this.grid = Array(options.grid.length);
+    for (let i = options.grid.length - 1; i >= 0; i--) {
+      this.addTicks(`grid`, options.grid[i], i);
+    }
+
+    if (options.ticks == null) {
+      options.ticks = false;
+    }
+    if (!Array.isArray(options.ticks)) {
+      options.ticks = [options.ticks];
+    }
+    this.ticks = Array(options.ticks.length);
+    for (let i = options.ticks.length - 1; i >= 0; i--) {
+      this.addTicks(`ticks`, options.ticks[i], i);
+    }
+
+    // this.addTicks('minorGrid', options);
+    // this.addTicks('grid', options);
+    // this.addTicks('minorTicks', options);
+    // this.addTicks('ticks', options);
     this.labels = null;
     if (options.labels != null) {
       let labelsO = options.labels;
@@ -500,14 +532,16 @@ class CollectionsZoomAxis extends FigureElementCollection {
   }
 
   addTicks(
-    type: 'grid' | 'ticks' | 'minorTicks' | 'minorGrid',
-    options: OBJ_ZoomAxisTicks,
+    type: 'grid' | 'ticks',
+    options: OBJ_ZoomAxisTicks | boolean,
+    index: number,
   ) {
     // $FlowFixMe
-    this[type] = null; // $FlowFixMe
-    if (options[type] != null) {
-      let ticksOptions = options[type];
-      if (ticksOptions === false) {
+    // this[type] = [];
+    if (options != null) {
+      let ticksOptions = options;
+      if (ticksOptions === false) { // $FlowFixMe
+        this[type][index] = false;
         return;
       }
       if (ticksOptions === true) {
@@ -517,16 +551,17 @@ class CollectionsZoomAxis extends FigureElementCollection {
         {},
         {
           width: this.line != null ? this.line.width : this.collections.primitives.defaultLineWidth,
-          length: type.endsWith('icks') ? this.collections.primitives.defaultLineWidth * 10 : this.collections.primitives.defaultLineWidth * 50,
+          length: type === 'ticks' ? this.collections.primitives.defaultLineWidth * 10 : this.collections.primitives.defaultLineWidth * 50,
           angle: this.angle + Math.PI / 2,
           color: this.color,
           offset: 0,
         },
         ticksOptions,
-      ); // $FlowFixMe
-      this[type] = o;
+      );
+      // $FlowFixMe
+      this[type][index] = o;
       const ticks = this.collections.primitives.line(o);
-      this.add(type, ticks);
+      this.add(`${type}${index}`, ticks);
     }
   }
 
@@ -609,33 +644,68 @@ class CollectionsZoomAxis extends FigureElementCollection {
     } else {
       z = 2 ** Math.floor(Math.log2(this.currentZoom));
     }
-    const step = this.step / z;
-    const minorStep = this.minorStep / z;
-    const remainder = this.rnd(this.startValue % (step));
-    const minorRemainder = this.rnd(this.startValue % (minorStep));
-    let startTick = this.startValue;
-    let minorStartTick = this.startValue;
-    let values = [];
-    let minorValues = [];
-    if (remainder > 0) {
-      startTick = this.startValue + (step - remainder);
-    } else if (remainder < 0) {
-      startTick = this.startValue + (-remainder);
-    }
-    if (minorRemainder > 0) {
-      minorStartTick = this.startValue + (minorStep - minorRemainder);
-    } else if (minorRemainder < 0) {
-      minorStartTick = this.startValue + (-minorRemainder);
-    }
-    if (startTick <= this.stopValue) {
-      values = range(startTick, this.stopValue, step);
-      minorValues = range(minorStartTick, this.stopValue, minorStep);
-    }
-    this.updateTicks('ticks', values);
-    this.updateTicks('minorTicks', minorValues);
-    this.updateTicks('grid', values);
-    this.updateTicks('minorGrid', minorValues);
+    const step = this.step.map(s => s / z);
+    // const step = this.step / z;
+    // const minorStep = this.minorStep / z;
+
+    const getValues = (s) => {
+      const remainder = this.rnd(this.startValue % s);
+      let startTick = this.startValue;
+      let values = [];
+      if (remainder > 0) {
+        startTick = this.startValue + (s - remainder);
+      } else if (remainder < 0) {
+        startTick = this.startValue + (-remainder);
+      }
+      if (startTick <= this.stopValue) {
+        values = range(startTick, this.stopValue, s);
+      }
+      return values;
+    };
+    const updateTicks = (type) => {
+      this[type].forEach((t, index) => {
+        if (t === false) {
+          return;
+        }
+        let s;
+        if (index <= step.length - 1) {
+          s = step[index];
+        } else {
+          s = step[step.length - 1];
+        }
+        const values = getValues(s);
+        this.updateTicks(type, values, index);
+      });
+    };
+    updateTicks('grid');
+    updateTicks('ticks');
+
+    const values = getValues(step[0]);
     this.updateText(values);
+    // const remainder = this.rnd(this.startValue % (step));
+    // const minorRemainder = this.rnd(this.startValue % (minorStep));
+    // let startTick = this.startValue;
+    // let minorStartTick = this.startValue;
+    // let values = [];
+    // let minorValues = [];
+    // if (remainder > 0) {
+    //   startTick = this.startValue + (step - remainder);
+    // } else if (remainder < 0) {
+    //   startTick = this.startValue + (-remainder);
+    // }
+    // if (minorRemainder > 0) {
+    //   minorStartTick = this.startValue + (minorStep - minorRemainder);
+    // } else if (minorRemainder < 0) {
+    //   minorStartTick = this.startValue + (-minorRemainder);
+    // }
+    // if (startTick <= this.stopValue) {
+    //   values = range(startTick, this.stopValue, step);
+    //   minorValues = range(minorStartTick, this.stopValue, minorStep);
+    // }
+    // this.updateTicks('ticks', values);
+    // this.updateTicks('minorTicks', minorValues);
+    // this.updateTicks('grid', values);
+    // this.updateTicks('minorGrid', minorValues);
   }
 
   updateText(values: Array<number>) {
@@ -652,11 +722,11 @@ class CollectionsZoomAxis extends FigureElementCollection {
     }
     const text = [];
     let bounds = 0;
-    if (this.ticks != null) {
+    if (this.ticks[0] !== false) {
       if (this.axis === 'x') {
-        bounds = Math.min(0, this.ticks.offset);
+        bounds = Math.min(0, this.ticks[0].offset);
       } else {
-        bounds = Math.min(0, -this.ticks.length + this.ticks.offset);
+        bounds = Math.min(0, -this.ticks[0].length + this.ticks[0].offset);
       }
     }
     for (let i = 0; i < values.length; i += 1) {
@@ -698,9 +768,12 @@ class CollectionsZoomAxis extends FigureElementCollection {
     });
   }
 
-  updateTicks(type: 'ticks' | 'grid' | 'minorTicks' | 'minorGrid', values: Array<number>) {
+  updateTicks(type: 'ticks' | 'grid', values: Array<number>, index: number) {
     const lengthSign = this.axis === 'x' ? 1 : -1; // $FlowFixMe
-    const ticks = this[type];
+    const ticks = this[type][index];
+    // if (this.axis === 'y') {
+    //   console.log(index)
+    // }
     if (ticks != null) {
       const length = ticks.length * lengthSign;
       let { offset } = ticks;
@@ -716,7 +789,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
       copy[0].original = false;
       const p1 = new Point(0, offset * lengthSign).rotate(this.angle);
       // $FlowFixMe
-      this[`_${type}`].custom.updatePoints({
+      this[`_${type}${index}`].custom.updatePoints({
         p1,
         copy,
         angle: this.axis === 'x' ? this.angle + Math.PI / 2 : this.angle - Math.PI / 2,
