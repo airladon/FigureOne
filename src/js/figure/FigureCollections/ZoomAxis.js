@@ -551,7 +551,15 @@ class CollectionsZoomAxis extends FigureElementCollection {
     this.startValue = startValue;
     this.stopValue = stopValue;
     this.calcRatios();
-    const step = 1 / 2 ** Math.floor(-Math.log(this.step / this.currentZoom) / Math.log(2)) * 2;
+    // const step = 1 / 2 ** Math.floor(-Math.log(this.step / this.currentZoom) / Math.log(2)) * 2;
+    // we only want step to change for zooms of 4, 2, 1, 0.5, 0.25, 0.
+    let z = 1;
+    if (this.currentZoom < 1) {
+      z = (2 ** Math.ceil(Math.log2(this.currentZoom)));
+    } else {
+      z = 2 ** Math.floor(Math.log2(this.currentZoom));
+    }
+    const step = this.step / z;
     const remainder = this.rnd(startValue % (step));
     let startTick = startValue;
     let values = [];
@@ -725,9 +733,6 @@ class CollectionsZoomAxis extends FigureElementCollection {
     }
     return true;
   }
-  // isInAxis(value: number) {
-  //   if (value )
-  // }
 }
 
 export default CollectionsZoomAxis;

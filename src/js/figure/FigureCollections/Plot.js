@@ -553,6 +553,10 @@ class CollectionsPlot extends FigureElementCollection {
       type: 'x',
     };
     axes.forEach((axisOptions) => {
+      let zoomAxis = false;
+      if (axisOptions.type === 'zoom') {
+        zoomAxis = true;
+      }
       let axisType;
       if (axisOptions.axis != null) {
         axisType = axisOptions.axis;  // $FlowFixMe
@@ -582,7 +586,13 @@ class CollectionsPlot extends FigureElementCollection {
       if (o.name == null) {
         o.name = `axis_${this.axes.length}`;
       }
-      const axis = this.collections.axis(o);
+      let axis;
+      if (zoomAxis) {
+        axis = this.collections.zoomAxis(o);
+        axis._custom.type = 'zoom';
+      } else {
+        axis = this.collections.axis(o);
+      }
       this.add(o.name, axis);
       this.axes.push(axis);
     });
@@ -817,6 +827,39 @@ class CollectionsPlot extends FigureElementCollection {
     }
     const title = this.collections.primitives.textLines(o);
     this.add('title', title);
+  }
+
+  panDeltaValue(deltaValue: Point) {
+    const x = this.getXAxis();
+    if (x != null && x._custom.type === 'zoom') {
+      x.panDeltaValue(deltaValue.x);
+    }
+    const y = this.getXAxis();
+    if (y != null && y._custom.type === 'zoom') {
+      y.panDeltaValue(deltaValue.x);
+    }
+  }
+
+  panDeltaDraw(deltaDraw: Point) {
+    const x = this.getXAxis();
+    if (x != null && x._custom.type === 'zoom') {
+      x.panDeltaDraw(deltaDraw.x);
+    }
+    const y = this.getYAxis();
+    if (y != null && y._custom.type === 'zoom') {
+      y.panDeltaDraw(deltaDraw.y);
+    }
+  }
+
+  changeZoom(value: Point, mag: number) {
+    const x = this.getXAxis();
+    if (x != null && x._custom.type === 'zoom') {
+      x.changeZoom(value.x, mag);
+    }
+    const y = this.getYAxis();
+    if (y != null && y._custom.type === 'zoom') {
+      y.changeZoom(value.y, mag);
+    }
   }
 
   // _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
