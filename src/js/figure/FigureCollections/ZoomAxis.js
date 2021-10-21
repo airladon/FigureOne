@@ -657,7 +657,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
       this[`_${type}`].custom.updatePoints({
         p1,
         copy,
-        angle: this.angle + Math.PI / 2,
+        angle: this.axis === 'x' ? this.angle + Math.PI / 2 : this.angle - Math.PI / 2,
       });
     }
   }
