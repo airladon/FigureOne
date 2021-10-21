@@ -14,7 +14,7 @@ import {
   FigureElementCollection, FigureElementPrimitive,
 } from '../Element';
 import type {
-  OBJ_Font, OBJ_Font_Fixed,
+  OBJ_Font, OBJ_Font_Fixed, TypeDash, TypeColor,
 } from '../../tools/types';
 import type {
   OBJ_Line, OBJ_TextLines,
@@ -23,40 +23,49 @@ import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type FigureCollections from './FigureCollections';
 
 /**
+ * Simple line style.
+ *
+ * @property {number} [width]
+ * @property {TypeDash} [dash]
+ * @property {TypeColor} [color]
+ */
+export type OBJ_SimpleLineStyle = {
+  width?: number,
+  dash?: TypeDash,
+  color?: TypeColor,
+};
+
+/**
  * Axis Ticks and Grid options object for {@link COL_ZoomAxis}.
  *
  * @property {number} [length] length of the ticks/grid (draw space)
  * @property {number} [offset] offset of the ticks/grid (draw space) - use this
  * to center ticks around the axis or not (`-length / 2`)
  * @property {number} [width] width of ticks/grid (draw space)
+ * @property {TypeDash} [dash] dash style of ticks (draw space)
+ * @property {TypeColor} [color] color of ticks/grid
  *
  * @see
  *
  * {@link COL_ZoomAxis}
- *
- * To test examples below, append them to the
- * <a href="#drawing-boilerplate">boilerplate</a>.
- *
- * @example
- * // Axis with no ticks
- * figure.add({
- *   name: 'x',
- *   make: 'collections.axis',
- *   length: 2,
- * });
  */
 export type OBJ_ZoomAxisTicks = {
   length?: number,
   offset?: number,
   width?: number,
-} & OBJ_Line;
+  dash?: TypeDash,
+  color?: TypeColor,
+};
 
 
 export type OBJ_ZoomAxisTicks_Fixed = {
   length: number,
   offset: number,
   width: number,
-} & OBJ_Line;
+  width?: number,
+  dash?: TypeDash,
+  color?: TypeColor,
+};
 
 
 /**
@@ -187,7 +196,7 @@ export type TypeAxisTitle = OBJ_TextLines & {
 export type COL_ZoomAxis = {
   axis?: 'x' | 'y',
   length?: number,              // draw space length
-  line?: boolean | OBJ_Line,
+  line?: boolean | OBJ_SimpleLineStyle,
   start?: number,               // value space start at draw space start
   stop?: number,                // value space stop at draw space stop
   ticks?: OBJ_ZoomAxisTicks | boolean | Array<OBJ_ZoomAxisTicks | boolean>,
@@ -376,14 +385,14 @@ class CollectionsZoomAxis extends FigureElementCollection {
     length: number,
     angle: number,
     offset: number,
-  } | boolean>;
+  } | false>;
 
   ticks: Array<{
     width: number,
     length: number,
     angle: number,
     offset: number,
-  } | boolean>;
+  } | false>;
 
   // minorTicks: {
   //   width: number,
@@ -418,6 +427,8 @@ class CollectionsZoomAxis extends FigureElementCollection {
       transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       min: null,
       max: null,
+      border: 'rect',
+      touchBorder: 'rect',
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     super(options);
@@ -453,7 +464,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
     this.setColor(options.color);
     this.currentZoom = 1;
     this.line = null;
-    if (options.line != null) {
+    if (options.line != null && options.line !== false) {
       let lineO = options.line;
       if (lineO === true) {
         lineO = {};
@@ -480,8 +491,8 @@ class CollectionsZoomAxis extends FigureElementCollection {
       options.grid = [options.grid];
     }
     this.grid = Array(options.grid.length);
-    for (let i = options.grid.length - 1; i >= 0; i--) {
-      this.addTicks(`grid`, options.grid[i], i);
+    for (let i = options.grid.length - 1; i >= 0; i -= 1) {
+      this.addTicks('grid', options.grid[i], i);
     }
 
     if (options.ticks == null) {
@@ -491,8 +502,13 @@ class CollectionsZoomAxis extends FigureElementCollection {
       options.ticks = [options.ticks];
     }
     this.ticks = Array(options.ticks.length);
-    for (let i = options.ticks.length - 1; i >= 0; i--) {
-      this.addTicks(`ticks`, options.ticks[i], i);
+    for (let i = options.ticks.length - 1; i >= 0; i -= 1) {
+      this.addTicks('ticks', options.ticks[i], i);
+    }
+
+    const maxTicksGrid = Math.max(this.ticks.length, this.grid.length);
+    while (this.step.length < maxTicksGrid) {
+      this.step.push(this.step[this.step.length - 1] / 2);
     }
 
     // this.addTicks('minorGrid', options);
@@ -525,10 +541,10 @@ class CollectionsZoomAxis extends FigureElementCollection {
       labels.transform.updateRotation(o.rotation);
       this.add('labels', labels);
     }
+    this.update(this.startValue, this.stopValue);
     if (options.title != null) {
       this.addTitle(options.title);
     }
-    this.update(this.startValue, this.stopValue);
   }
 
   addTicks(
@@ -547,11 +563,14 @@ class CollectionsZoomAxis extends FigureElementCollection {
       if (ticksOptions === true) {
         ticksOptions = {};
       }
+      const widthScale = type === 'grid' ? 0.5 : 1;
       const o = joinObjects(
         {},
         {
-          width: this.line != null ? this.line.width : this.collections.primitives.defaultLineWidth,
-          length: type === 'ticks' ? this.collections.primitives.defaultLineWidth * 10 : this.collections.primitives.defaultLineWidth * 50,
+          width: (this.line != null
+            ? this.line.width / (index + 1)
+            : this.collections.primitives.defaultLineWidth / (index + 1)) * widthScale,
+          length: type === 'ticks' ? this.collections.primitives.defaultLineWidth * (10 / (index + 1)) : this.collections.primitives.defaultLineWidth * 50,
           angle: this.angle + Math.PI / 2,
           color: this.color,
           offset: 0,
@@ -662,7 +681,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
       }
       return values;
     };
-    const updateTicks = (type) => {
+    const updateTicks = (type) => { // $FlowFixMe
       this[type].forEach((t, index) => {
         if (t === false) {
           return;
@@ -682,30 +701,6 @@ class CollectionsZoomAxis extends FigureElementCollection {
 
     const values = getValues(step[0]);
     this.updateText(values);
-    // const remainder = this.rnd(this.startValue % (step));
-    // const minorRemainder = this.rnd(this.startValue % (minorStep));
-    // let startTick = this.startValue;
-    // let minorStartTick = this.startValue;
-    // let values = [];
-    // let minorValues = [];
-    // if (remainder > 0) {
-    //   startTick = this.startValue + (step - remainder);
-    // } else if (remainder < 0) {
-    //   startTick = this.startValue + (-remainder);
-    // }
-    // if (minorRemainder > 0) {
-    //   minorStartTick = this.startValue + (minorStep - minorRemainder);
-    // } else if (minorRemainder < 0) {
-    //   minorStartTick = this.startValue + (-minorRemainder);
-    // }
-    // if (startTick <= this.stopValue) {
-    //   values = range(startTick, this.stopValue, step);
-    //   minorValues = range(minorStartTick, this.stopValue, minorStep);
-    // }
-    // this.updateTicks('ticks', values);
-    // this.updateTicks('minorTicks', minorValues);
-    // this.updateTicks('grid', values);
-    // this.updateTicks('minorGrid', minorValues);
   }
 
   updateText(values: Array<number>) {
@@ -766,6 +761,10 @@ class CollectionsZoomAxis extends FigureElementCollection {
       xAlign: this.labels.xAlign, // $FlowFixMe
       yAlign: this.labels.yAlign,
     });
+    // $FlowFixMe
+    this._labels.drawBorder = this._labels.drawingObject.textBorder;
+    // $FlowFixMe
+    this._labels.drawBorderBuffer = this._labels.drawingObject.textBorderBuffer;
   }
 
   updateTicks(type: 'ticks' | 'grid', values: Array<number>, index: number) {
