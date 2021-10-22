@@ -12,7 +12,7 @@ function makeShape(name, options = {}, mods, getPos) {
   index += 1;
   const o = {
     name,
-    make: 'collections.zoomAxis',
+    make: 'collections.axis',
     options: tools.misc.joinObjects({}, {
       position: [x - 0.25, y],
       axis: 'x',

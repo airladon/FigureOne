@@ -297,7 +297,7 @@ class CollectionsTrace extends FigureElementCollection {
     // }
   }
 
-  updateAxes() {
+  updateAxes() {   // $FlowFixMe
     this.update(this.points);
   }
 

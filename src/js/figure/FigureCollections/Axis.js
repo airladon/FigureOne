@@ -101,12 +101,14 @@ export type OBJ_LabelsCallbackParams = {
  * @property {number} [width]
  * @property {TypeDash} [dash]
  * @property {TypeColor} [color]
+ * @property {OBJ_LineArrows | TypeArrowHead} [arrow]
+ * @property {number} [arrowExt] extension to line length for arrow
  */
 export type OBJ_AxisLineStyle = {
   width?: number,
   dash?: TypeDash,
   color?: TypeColor,
-  arrowLength?: number,
+  arrowExt?: number,
   arrow?: OBJ_LineArrows | TypeArrowHead,
 };
 
@@ -584,8 +586,8 @@ class CollectionsAxis extends FigureElementCollection {
       let startArrow = false;
       let endArrow = false;
       let aLength = o.length * (this.step[0] / (this.stopValue - this.startValue)) / 2;
-      if (o.arrowLength != null) {
-        aLength = o.arrowLength;
+      if (o.arrowExt != null) {
+        aLength = o.arrowExt;
       }
       if (o.arrow != null) {
         if (typeof o.arrow === 'string') {

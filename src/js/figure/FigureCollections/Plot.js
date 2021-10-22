@@ -514,7 +514,7 @@ class CollectionsPlot extends FigureElementCollection {
       zoom: false,
       pan: false,
       plotAreaLabels: false,
-      autoGrid: !!((optionsIn.zoom || optionsIn.pan)),
+      autoGrid: !!((optionsIn.zoom || optionsIn.pan || optionsIn.cross)),
     };
     if (
       optionsIn.color != null
