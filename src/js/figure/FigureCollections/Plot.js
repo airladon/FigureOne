@@ -468,7 +468,8 @@ class CollectionsPlot extends FigureElementCollection {
   defaultFont: OBJ_Font_Fixed;
   width: number;
   height: number;
-  theme: string;
+  colorTheme: string;
+  styleTheme: string;
   grid: boolean;
   xAxisShow: boolean;
   yAxisShow: boolean;
@@ -503,7 +504,8 @@ class CollectionsPlot extends FigureElementCollection {
     const defaultOptions = {
       font: collections.primitives.defaultFont,
       color: collections.primitives.defaultColor,
-      theme: 'classic',
+      colorTheme: 'dark',
+      styleTheme: 'box',
       width: (collections.primitives.scene.right - collections.primitives.scene.left) / 3,
       height: (collections.primitives.scene.right - collections.primitives.scene.left) / 3,
       grid: [],
@@ -540,12 +542,28 @@ class CollectionsPlot extends FigureElementCollection {
 
     this.defaultFont = options.font;
     this.defaultColor = options.color;
+    const colorTheme = this.getColorTheme(options.colorTheme);
+    const styleTheme = this.getStyleTheme(options.styleTheme);
+    if (optionsIn.font == null || optionsIn.font.color == null) {
+      if (optionsIn.color == null) {
+        this.defaultFont.color = colorTheme.color;
+      } else {
+        this.defaultFont.color = this.defaultColor;
+      }
+    }
     this.width = options.width;
     this.height = options.height;
-    this.theme = options.theme;
+    this.colorTheme = options.colorTheme;
+    this.styleTheme = options.styleTheme;
     this.grid = options.grid;
-    this.cross = null;
+    this.cross = options.cross;
+    if (this.cross == null && styleTheme.cross) {
+      this.cross = getPoint(styleTheme.cross);
+    }
     this.autoGrid = options.autoGrid;
+    if (optionsIn.autoGrid == null && styleTheme.autoGrid != null) {
+      this.autoGrid = styleTheme.autoGrid;
+    }
     this.plotAreaLabels = options.plotAreaLabels;
     if (options.cross != null) {
       this.cross = getPoint(options.cross);
@@ -683,7 +701,6 @@ class CollectionsPlot extends FigureElementCollection {
     const defaultOptions = {
       color: this.defaultColor,
       font: this.defaultFont,
-      type: 'x',
     };
     axes.forEach((axisOptions) => {
       let axisType;
@@ -697,7 +714,12 @@ class CollectionsPlot extends FigureElementCollection {
       } else {                    // $FlowFixMe
         defaultOptions.length = this.height;
       }
-      const theme = this.getTheme(this.theme, axisType, axisOptions.color);
+      // const theme = this.getTheme(this.theme, axisType, axisOptions.color);
+      const theme = joinObjects(
+        {},
+        this.getStyleTheme(this.styleTheme, axisType),
+        this.getColorTheme(this.colorTheme, axisOptions.color),
+      );
       const show = axisType === 'x' ? this.xAxisShow : this.yAxisShow;
       // $FlowFixMe
       defaultOptions.show = show;
@@ -829,6 +851,8 @@ class CollectionsPlot extends FigureElementCollection {
     this.add('_frame', this.collections.rectangle(o));
     // $FlowFixMe
     this.toBack(this.__frame);
+    // $FlowFixMe
+    this.__frame.getAllPrimitives().map(e => e.drawNumber = -1);
     this.notifications.add('setFigure', () => {
       // $FlowFixMe
       this.__frame.surround(this, this.frameSpace);
@@ -860,7 +884,11 @@ class CollectionsPlot extends FigureElementCollection {
       length: this.width / 10,
       position: [this.width + this.width / 20, this.height],
     };
-    const theme = this.getTheme(this.theme).legend;
+    // const theme = this.getTheme(this.theme).legend;
+    const theme = joinObjects(
+      {}, this.getStyleTheme(this.styleTheme),
+      this.getColorTheme(this.colorTheme),
+    );
     const o = joinObjects({}, defaultOptions, theme, optionsIn);
     const legend = this.collections.plotLegend(o);
     this.add('_legend', legend);
@@ -922,7 +950,7 @@ class CollectionsPlot extends FigureElementCollection {
   }
 
   addTraces(traces: Array<COL_Trace>) {
-    const theme = this.getTheme(this.theme);
+    const theme = this.getColorTheme(this.colorTheme);
     traces.forEach((traceOptions, index) => {
       const defaultOptions = {
         xAxis: 'x',
@@ -948,36 +976,75 @@ class CollectionsPlot extends FigureElementCollection {
     }
   }
 
-  getTheme(name: string, axis: 'x' | 'y' = 'x', defaultColor: Array<number> | null = null) {
-    const length = axis === 'x' ? this.width : this.height;
+  getStyleTheme(name: string, axis: 'x' | 'y' = 'x') {
+    // const length = axis === 'x' ? this.width : this.height;
     const gridLength = axis === 'x' ? this.height : this.width;
-
-    // const minDimension = Math.min(
-
+    const lineWidth = this.collections.primitives.defaultLineWidth;
+    const tickLength = lineWidth * 5;
     let theme = {};
-    if (name === 'classic') {
-      const color = defaultColor == null ? [0.35, 0.35, 0.35, 1] : defaultColor;
-      const gridColor = defaultColor == null ? [0.7, 0.7, 0.7, 1] : defaultColor;
-      const tickLength = Math.min(this.width, this.height) / 30;
-      // const gridDash = this.collections.primitives.defaultLineWidth;
+    if (name === 'box') {
       theme = {
         axis: {
-          color,
-          line: { width: this.collections.primitives.defaultLineWidth },
+          line: { width: lineWidth },
           ticks: {
-            width: this.collections.primitives.defaultLineWidth,
+            width: lineWidth,
             length: tickLength,
-            offset: -tickLength + this.collections.primitives.defaultLineWidth / 2,
+            location: axis === 'x' ? 'bottom' : 'left',
           },
-          font: {
-            color,
+          grid: {
+            width: lineWidth / 2,
+            length: gridLength,
           },
-          length,
+          labels: {
+            location: axis === 'x' ? 'bottom' : 'left',
+          },
+        },
+      };
+    }
+    if (name === 'numberLine' || name === 'positiveNumberLine') {
+      theme = {
+        axis: {
+          line: {
+            width: lineWidth,
+            arrow: { end: 'barb' },
+            arrowLength: lineWidth * 5,
+          },
+          ticks: {
+            width: lineWidth,
+            length: tickLength,
+            location: 'center',
+          },
+          grid: {
+            width: lineWidth / 2,
+            length: gridLength,
+          },
+          labels: {
+            location: axis === 'x' ? 'bottom' : 'left',
+          },
+        },
+        cross: [0, 0],
+        autoGrid: true,
+      };
+      if (name === 'numberLine') {
+        theme.axis.labels.hide = [0];
+        theme.axis.line.arrow = 'barb';
+      }
+    }
+    return theme;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getColorTheme(name: string, defaultColor: TypeColor | null = null) {
+    let theme = {};
+    if (name === 'dark') {
+      const color = defaultColor == null ? [0.35, 0.35, 0.35, 1] : defaultColor;
+      const gridColor = defaultColor == null ? [0.7, 0.7, 0.7, 1] : defaultColor;
+      theme = {
+        color,
+        axis: {
+          color,
           grid: {
             color: gridColor,
-            width: this.collections.primitives.defaultLineWidth / 2,
-            length: gridLength,
-            // dash: [gridDash, gridDash],
           },
         },
         title: {
@@ -997,17 +1064,96 @@ class CollectionsPlot extends FigureElementCollection {
         ],
       };
     }
-
-    if (theme.axis != null && theme.axis.grid != null) {
-      if (this.grid === false) {  // $FlowFixMe
-        delete theme.axis.grid;
-        // theme.axis.grid = undefined;
-      } else if (typeof this.grid === 'object' || Array.isArray(this.grid)) {
-        theme.axis.grid = joinObjects({}, theme.axis.grid, this.grid);
-      }
+    if (name === 'light') {
+      const color = defaultColor == null ? [0.9, 0.9, 0.9, 1] : defaultColor;
+      const gridColor = defaultColor == null ? [0.5, 0.5, 0.5, 1] : defaultColor;
+      theme = {
+        axis: {
+          color,
+          grid: {
+            color: gridColor,
+          },
+        },
+        title: {
+          font: { color },
+        },
+        legend: {
+          color,
+          font: { color },
+        },
+        traceColors: [
+          [0.5, 0.5, 1, 1],
+          [1, 0.5, 0.5, 1],
+          [0.5, 1, 0.5, 1],
+          [1, 1, 0.2, 1],
+          [0.2, 1, 1, 1],
+          [1, 0.2, 1, 1],
+        ],
+      };
     }
     return theme;
   }
+
+  // getTheme(name: string, axis: 'x' | 'y' = 'x', defaultColor: Array<number> | null = null) {
+  //   const length = axis === 'x' ? this.width : this.height;
+  //   const gridLength = axis === 'x' ? this.height : this.width;
+
+  //   // const minDimension = Math.min(
+
+  //   let theme = {};
+  //   if (name === 'classic') {
+  //     const color = defaultColor == null ? [0.35, 0.35, 0.35, 1] : defaultColor;
+  //     const gridColor = defaultColor == null ? [0.7, 0.7, 0.7, 1] : defaultColor;
+  //     const tickLength = Math.min(this.width, this.height) / 30;
+  //     // const gridDash = this.collections.primitives.defaultLineWidth;
+  //     theme = {
+  //       axis: {
+  //         color,
+  //         line: { width: this.collections.primitives.defaultLineWidth },
+  //         ticks: {
+  //           width: this.collections.primitives.defaultLineWidth,
+  //           length: tickLength,
+  //           offset: -tickLength + this.collections.primitives.defaultLineWidth / 2,
+  //         },
+  //         font: {
+  //           color,
+  //         },
+  //         length,
+  //         grid: {
+  //           color: gridColor,
+  //           width: this.collections.primitives.defaultLineWidth / 2,
+  //           length: gridLength,
+  //           // dash: [gridDash, gridDash],
+  //         },
+  //       },
+  //       title: {
+  //         font: { color },
+  //       },
+  //       legend: {
+  //         color,
+  //         font: { color },
+  //       },
+  //       traceColors: [
+  //         [0, 0, 1, 1],
+  //         [1, 0, 0, 1],
+  //         [0, 0.7, 0, 1],
+  //         [0.8, 0.8, 0.2, 1],
+  //         [0.2, 0.8, 0.8, 1],
+  //         [0.8, 0.2, 0.8, 1],
+  //       ],
+  //     };
+  //   }
+
+  //   if (theme.axis != null && theme.axis.grid != null) {
+  //     if (this.grid === false) {  // $FlowFixMe
+  //       delete theme.axis.grid;
+  //       // theme.axis.grid = undefined;
+  //     } else if (typeof this.grid === 'object' || Array.isArray(this.grid)) {
+  //       theme.axis.grid = joinObjects({}, theme.axis.grid, this.grid);
+  //     }
+  //   }
+  //   return theme;
+  // }
 
   addTitle(optionsIn: OBJ_TextLines & { offset: TypeParsablePoint } | string) {
     const defaultOptions = {
@@ -1021,7 +1167,7 @@ class CollectionsPlot extends FigureElementCollection {
     if (typeof optionsIn === 'string') {
       optionsToUse = { text: [optionsIn] };
     }
-    const theme = this.getTheme(this.theme).title;
+    const theme = this.getColorTheme(this.colorTheme).title;
     const o = joinObjects({}, defaultOptions, theme, optionsToUse);
     o.offset = getPoint(o.offset);
     const bounds = this.getNonTraceBoundingRect();

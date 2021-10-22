@@ -592,7 +592,7 @@ class CollectionsAxis extends FigureElementCollection {
       throw new Error(`Axis Error - max value cannot be less than stop value. Max pan: ${this.max}, stop: ${this.stopValue}`);
     }
     this.defaultFont = options.font;
-    if (options.font == null || options.font.color == null) {
+    if (optionsIn.font == null || optionsIn.font.color == null) {
       this.defaultFont.color = options.color;
     }
     this.axis = options.axis;
