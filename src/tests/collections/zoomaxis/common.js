@@ -14,7 +14,7 @@ function makeShape(name, options = {}, mods, getPos) {
     name,
     make: 'collections.zoomAxis',
     options: tools.misc.joinObjects({}, {
-      position: [x, y],
+      position: [x - 0.25, y],
       axis: 'x',
       start: 0,
       stop: 2,
@@ -22,6 +22,7 @@ function makeShape(name, options = {}, mods, getPos) {
       step: 1,
       ticks: true,
       labels: true,
+      autoStep: true,
     }, options),
   };
   if (o.options.start === -999) { o.options.start = undefined; }

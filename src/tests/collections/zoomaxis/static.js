@@ -29,7 +29,7 @@ function getShapes(getPos) {
     shape('default'),
     shape('step', { step: 0.5 }),
     shape('startStopStep', { start: 3, stop: 9, step: 3 }),
-    shape('offsetStart', { start: 2, stop: 9, step: 3 }),
+    shape('offsetStart', { start: 2, stop: 9, step: 3, autoStep: true }),
     shape('length', { length: 0.8 }),
     shape('lineStyle', { line: { width: 0.03, dash: [0.01, 0.01], color: [0, 1, 0, 1] } }),
     shape('lineNone', { line: false }),
@@ -129,22 +129,6 @@ function getShapes(getPos) {
     shape('zoomMaxDelta', { max: 10, lables: { precision: 2 } }),
 
     /*
-    ....###....##.....##.########..#######.
-    ...##.##...##.....##....##....##.....##
-    ..##...##..##.....##....##....##.....##
-    .##.....##.##.....##....##....##.....##
-    .#########.##.....##....##....##.....##
-    .##.....##.##.....##....##....##.....##
-    .##.....##..#######.....##.....#######.
-    */
-    shape('auto', { auto: [0, 5], start: -999, stop: -999, step: -999, length: 0.8 }),
-    shape('auto1', { auto: [0, 1000], start: -999, stop: -999, step: -999, length: 0.8, labels: { format: 'exp', rotation: Math.PI / 2, yAlign: 'middle' } }),
-    shape('auto2', { auto: [0, 0.01], start: -999, stop: -999, step: -999, length: 0.8, labels: { precision: 3, rotation: Math.PI / 4 } }),
-    shape('auto3', { auto: [-1, 1], start: -999, stop: -999, step: -999, length: 0.8 }),
-    shape('auto4', { auto: [-1, 1], start: -999, stop: -999, step: 0.5, length: 0.8 }),
-    shape('auto5', { auto: [1, 9], start: -999, stop: -999, step: -999, length: 0.8 }),
-
-    /*
     ....###....########..########...#######..##......##
     ...##.##...##.....##.##.....##.##.....##.##..##..##
     ..##...##..##.....##.##.....##.##.....##.##..##..##
@@ -164,6 +148,35 @@ function getShapes(getPos) {
     shape('arrowZoom', { line: { arrow: 'barb', arrowLength: 0.1 }, step: 0.5 }),
     shape('yStartArrow', { line: { arrow: { start: 'barb' } }, axis: 'y' }),
     shape('yEndArrow', { line: { arrow: { end: 'barb' } }, axis: 'y' }),
+
+    /*
+    ....###....##.....##.########..#######...######..########.########.########.
+    ...##.##...##.....##....##....##.....##.##....##....##....##.......##.....##
+    ..##...##..##.....##....##....##.....##.##..........##....##.......##.....##
+    .##.....##.##.....##....##....##.....##..######.....##....######...########.
+    .#########.##.....##....##....##.....##.......##....##....##.......##.......
+    .##.....##.##.....##....##....##.....##.##....##....##....##.......##.......
+    .##.....##..#######.....##.....#######...######.....##....########.##.......
+    */
+    shape('autoStepFalse', { start: -10, stop: 11, step: [7, 3.5], axis: 'y', autoStep: false }),
+    shape('autoStepTrue', { start: -10, stop: 11, step: [7, 3.5], axis: 'y', autoStep: true }),
+
+    /*
+    ....###....##.....##.########..#######.
+    ...##.##...##.....##....##....##.....##
+    ..##...##..##.....##....##....##.....##
+    .##.....##.##.....##....##....##.....##
+    .#########.##.....##....##....##.....##
+    .##.....##.##.....##....##....##.....##
+    .##.....##..#######.....##.....#######.
+    */
+    shape('auto', { auto: [0, 5], start: -999, stop: -999, step: -999, length: 0.8 }),
+    shape('auto1', { auto: [0, 1000], start: -999, stop: -999, step: -999, length: 0.8, labels: { format: 'exp', rotation: Math.PI / 2, yAlign: 'middle' } }),
+    shape('auto2', { auto: [0, 0.01], start: -999, stop: -999, step: -999, length: 0.8, labels: { precision: 3, rotation: Math.PI / 4 } }),
+    shape('auto3', { auto: [-1, 1], start: -999, stop: -999, step: -999, length: 0.8 }),
+    shape('auto4', { auto: [-1, 1], start: -999, stop: -999, step: 0.5, length: 0.8 }),
+    shape('auto5', { auto: [1, 9], start: -999, stop: -999, step: -999, length: 0.8 }),
+    shape('auto6', { auto: [1, 9], autoStep: false, start: -999, stop: -999, step: -999, length: 0.8 }),
   ];
 }
 

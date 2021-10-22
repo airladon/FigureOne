@@ -261,8 +261,11 @@ export type TypeAxisTitle = OBJ_TextLines & {
  * both axes aren't to be drawn, then use `false` to hide each axis (`true`)
  * @property {[number, number]} [auto] Will select automatic values for
  * `start`, `stop`, and `step` that cover the range [min, max]
- * @property {string} [name] axis name - used to define which axes a trace
- * should be plotted against in an {@link CollectionsPlot}.
+ * @property {boolean} [autoStep] If `true` then start, stop and step tick,
+ * grid and label values will be automatically calculated such that they land
+ * on 0. This needs to be `true` if panning or zooming. If `false`, then the
+ * tick, grid and label values will be from the `start`, `stop` and `step`
+ * properties. (`false`)
  * @property {TypeParsablePoint} [position] axis position (`[0, 0]`)
  *
  * @extends OBJ_Collection
@@ -283,6 +286,7 @@ export type COL_ZoomAxis = {
   min?: number | null,
   max?: number | null,
   auto?: [number, number],
+  autoStep?: boolean,
 } & OBJ_Collection;
 
 
@@ -479,7 +483,8 @@ class CollectionsZoomAxis extends FigureElementCollection {
   precision: number;
   currentZoom: number;
   initialScale: number;
-  initialStart: number
+  initialStart: number;
+  autoStep: boolean;
 
   /**
    * @hideconstructor
@@ -506,6 +511,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
       touchBorder: 'rect',
       labels: true,
       ticks: true,
+      autoStep: false,
     };
     if (optionsIn.auto != null) {
       const {
@@ -536,6 +542,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
     //   ? (this.stopValue - this.startValue) / 20
     //   : options.minorStep;
     this.length = options.length;
+    this.autoStep = options.autoStep;
     this.calcRatios();
     this.precision = options.precision;
     this.showAxis = options.show;
@@ -831,6 +838,10 @@ class CollectionsZoomAxis extends FigureElementCollection {
     // const minorStep = this.minorStep / z;
 
     const getValues = (s) => {
+      if (!this.autoStep) {
+        const v = range(this.startValue, this.stopValue, s);
+        return v;
+      }
       const remainder = this.rnd(this.startValue % s);
       let startTick = this.startValue;
       let values = [];
