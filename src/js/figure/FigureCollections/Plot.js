@@ -11,6 +11,7 @@ import type { TypeParsablePoint } from '../../tools/g2';
 //   round,
 // } from '../../tools/math';
 import { joinObjects } from '../../tools/tools';
+import { clipValue } from '../../tools/math';
 import {
   FigureElementCollection,
 } from '../Element';
@@ -24,6 +25,7 @@ import type {
   OBJ_Font, TypeColor, OBJ_Font_Fixed, OBJ_CurvedCorner,
 } from '../../tools/types';
 import type FigureCollections from './FigureCollections';
+// import type FigureCollectionsAxis from './Axis';
 
 
 /**
@@ -102,8 +104,23 @@ export type TypePlotTitle = OBJ_TextLines & { offset: TypeParsablePoint };
  * @property {OBJ_Font} [font] Default font for plot (title, axes, labels, etc.)
  * @property {TypeColor} [color] Default color
  * @property {TypeParsablePoint} [position] Position of the plot
- * @property {OBJ_PlotZoomOptions} zoom options for interactive zooming
- * @property {OBJ_PlotPanOptions} pan options for interactive panning
+ * @property {OBJ_PlotZoomOptions} [zoom] options for interactive zooming
+ * @property {OBJ_PlotPanOptions} [pan] options for interactive panning
+ * @property {TypeParsablePoint} [cross] value where the default x and y
+ * axes should cross. If defined, each `axis.position` will be overridden. If
+ * the cross point is outside of the plot area, then the axes will be drawn on
+ * the border of the plot area. (`undefined`)
+ * @property {boolean} [plotAreaLabels] if `true` then axes with a cross point
+ * will be drawn such that the labels stay within the plot area. So, if the
+ * labels are on the left side of a y axis, and the cross point is out of the
+ * plot area to the left, then instead of the axis being drawn on the left edge
+ * of the plot area, it will be drawn within the plot area such that its labels
+ * are within the plot area (`false`).
+ * @property {boolean} [autoGrid] if `true` and a cross point is used, then
+ * then the default x and y axis grid will be repositioned as if the axes were
+ * always to the left and bottom edges of the plot area. This is primarily
+ * useful when the plot area is panned or zoomed. (`true` if pan or zoom
+ * enabled, `false` otherwise)
  */
 export type COL_Plot = {
   width?: number,
@@ -111,6 +128,7 @@ export type COL_Plot = {
   xAxis?: COL_Axis | boolean,
   yAxis?: COL_Axis | boolean,
   axes?: Array<COL_Axis>,
+  cross?: TypeParsablePoint | null,
   grid?: boolean,
   title?: string | TypePlotTitle,
   trace?: Array<COL_Trace | TypeParsablePoint> | COL_Trace | Array<TypeParsablePoint>,
@@ -122,6 +140,9 @@ export type COL_Plot = {
   position?: TypeParsablePoint,
   zoom?: OBJ_PlotZoomOptions | 'x' | 'y' | 'xy',
   pan?: OBJ_PlotPanOptions | 'x' | 'y' | 'xy',
+  cross?: TypeParsablePoint,
+  autoGrid?: boolean,
+  plotAreaLabels?: boolean,
 } & OBJ_Collection;
 
 function cleanTraces(
@@ -432,6 +453,8 @@ class CollectionsPlot extends FigureElementCollection {
   // _labels: ?FigureElementPrimitive;
   // _arrow1: ?FigureElementPrimitive;
   // _arrow2: ?FigureElementPrimitive;
+  _x: ?CollectionsAxis;
+  _y: ?CollectionsAxis;
   __frame: ?CollectionsRectangle;
 
   shapes: Object;
@@ -440,6 +463,7 @@ class CollectionsPlot extends FigureElementCollection {
 
   axes: Array<CollectionsAxis>;
   traces: Array<CollectionsTrace>;
+  cross: null | Point;
 
   defaultFont: OBJ_Font_Fixed;
   width: number;
@@ -460,6 +484,9 @@ class CollectionsPlot extends FigureElementCollection {
     y: boolean,
     enabled: boolean,
   };
+
+  autoGrid: boolean;
+  plotAreaLabels: boolean;
 
   // length: number;
   // angle: number;
@@ -486,6 +513,8 @@ class CollectionsPlot extends FigureElementCollection {
       touchBorder: 'rect',
       zoom: false,
       pan: false,
+      plotAreaLabels: false,
+      autoGrid: !!((optionsIn.zoom || optionsIn.pan)),
     };
     if (
       optionsIn.color != null
@@ -515,6 +544,12 @@ class CollectionsPlot extends FigureElementCollection {
     this.height = options.height;
     this.theme = options.theme;
     this.grid = options.grid;
+    this.cross = null;
+    this.autoGrid = options.autoGrid;
+    this.plotAreaLabels = options.plotAreaLabels;
+    if (options.cross != null) {
+      this.cross = getPoint(options.cross);
+    }
     this.drawNumberOrder = [-1, 0];
     this.xAxisShow = true;
     if (options.xAxis === false) {
@@ -554,6 +589,7 @@ class CollectionsPlot extends FigureElementCollection {
     if (options.axes != null) {
       this.addAxes(options.axes);
     }
+    this.setupCross();
     if (options.trace != null) {
       this.addTraces(traces);
     }
@@ -583,6 +619,53 @@ class CollectionsPlot extends FigureElementCollection {
       || (options.pan != null && options.pan !== false)
     ) {
       this.addGestureRectangle(options.zoom, options.pan);
+      this.setupCross();
+    }
+  }
+
+  setupCross() {
+    const { cross, _x, _y } = this;
+    if (cross == null || _x == null || _y == null) {
+      return;
+    }
+    const xAxisYPosition = _y.valueToDraw(cross.y);
+    const yAxisXPosition = _x.valueToDraw(cross.x);
+    let yMin = 0;
+    let yMax = this.height;
+    let xMin = 0;
+    let xMax = this.width;
+    if (this.plotAreaLabels) {
+      if (_x._labels != null) {
+        const labelRect = _x._labels.getBoundingRect();
+        yMin = Math.max(yMin, -labelRect.bottom * 1.2);
+        yMax = Math.min(yMax, this.height - labelRect.top);
+      }
+      if (_x._ticks0) {
+        const ticksRect = _x._ticks0.getBoundingRect();
+        yMin = Math.max(yMin, -ticksRect.bottom);
+        yMax = Math.min(yMax, this.height - ticksRect.top);
+      }
+      if (_y._labels != null) {
+        const labelRect = _y._labels.getBoundingRect();
+        xMin = Math.max(xMin, -labelRect.left);
+        xMax = Math.min(xMax, this.height - labelRect.right);
+      }
+      if (_y._ticks0) {
+        const ticksRect = _y._ticks0.getBoundingRect();
+        xMin = Math.max(xMin, -ticksRect.left);
+        xMax = Math.min(xMax, this.height - ticksRect.right);
+      }
+    }
+    const y = clipValue(xAxisYPosition, yMin, yMax);
+    const x = clipValue(yAxisXPosition, xMin, xMax);
+    _x.setPosition(0, y);
+    _y.setPosition(x, 0);
+
+    if (this.autoGrid) {
+      // $FlowFixMe
+      _x.grid.forEach((g, i) => this._x[`_grid${i}`].setPosition(0, -y));
+      // $FlowFixMe
+      _y.grid.forEach((g, i) => this._y[`_grid${i}`].setPosition(-x, 0));
     }
   }
 
@@ -971,6 +1054,8 @@ class CollectionsPlot extends FigureElementCollection {
     if (y != null && this.pan.enabled && this.pan.y) {
       y.panDeltaValue(deltaValue.x);
     }
+    this.updateTraces();
+    this.setupCross();
   }
 
   panDeltaDraw(deltaDraw: Point) {
@@ -983,6 +1068,7 @@ class CollectionsPlot extends FigureElementCollection {
       y.panDeltaDraw(deltaDraw.y);
     }
     this.updateTraces();
+    this.setupCross();
   }
 
   zoomValue(value: Point, mag: number) {
@@ -995,6 +1081,7 @@ class CollectionsPlot extends FigureElementCollection {
       y.zoomValue(value.y, mag);
     }
     this.updateTraces();
+    this.setupCross();
   }
 
   zoomDelta(value: Point, magDelta: number) {
@@ -1007,6 +1094,7 @@ class CollectionsPlot extends FigureElementCollection {
       y.zoomDelta(value.y, magDelta);
     }
     this.updateTraces();
+    this.setupCross();
   }
 }
 

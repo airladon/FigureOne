@@ -437,7 +437,8 @@ class CollectionsZoomAxis extends FigureElementCollection {
   _line: ?FigureElementPrimitive;
   _labels: ?FigureElementPrimitive;
   _grid: ?FigureElementPrimitive;
-  _ticks: ?FigureElementPrimitive;
+  _ticks0: ?FigureElementPrimitive;
+  _grid0: ?FigureElementPrimitive;
 
   length: number;
   angle: number;
@@ -563,6 +564,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
     this.setColor(options.color);
     this.currentZoom = 1;
     this.line = null;
+    // this.gridStartsAtZero = false;
     if (this.showAxis && options.line != null && options.line !== false) {
       let lineO = options.line;
       if (lineO === true) {
@@ -987,6 +989,10 @@ class CollectionsZoomAxis extends FigureElementCollection {
       if (offset == null) {
         offset = this.axis === 'x' ? -length / 2 : length / 2;
       }
+      // if (type === 'grid' && this.gridStartsAtZero) {
+      //   const p = this.getPosition();
+      //   offset -= this.axis === 'x' ? p.y : p.x;
+      // }
       let copy;
       if (this.axis === 'x') {
         copy = [{ to: values.map(v => new Point(this.valueToDraw(v), 0)) }];
@@ -1074,6 +1080,22 @@ class CollectionsZoomAxis extends FigureElementCollection {
       return false;
     }
     return true;
+  }
+
+  showLine() {
+    if (this._line != null) { this._line.show(); }
+  }
+
+  hideLine() {
+    if (this._line != null) { this._line.hide(); }
+  }
+
+  showTicks() {
+    this.ticks.forEach((t, i) => this[`_ticks${i}`].show());
+  }
+
+  hideTicks() {
+    this.ticks.forEach((t, i) => this[`_ticks${i}`].hide());
   }
 }
 
