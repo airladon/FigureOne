@@ -14,7 +14,7 @@ import { joinObjects } from '../../tools/tools';
 import {
   FigureElementCollection,
 } from '../Element';
-import type CollectionsAxis, { COL_Axis } from './Axis';
+import type CollectionsAxis, { COL_Axis } from './ZoomAxis';
 import type CollectionsTrace, { COL_Trace } from './Trace';
 import type { COL_PlotLegend } from './Legend';
 import type CollectionsRectangle, { COL_Rectangle } from './Rectangle';
@@ -95,6 +95,16 @@ export type COL_Plot = {
   font?: OBJ_Font,
   color?: TypeColor,
   position?: TypeParsablePoint,
+  zoom?: {
+    axis?: 'x' | 'y' | 'xy',
+    sensitivity?: number,
+    point?: TypeParsablePoint,
+  } | 'x' | 'y' | 'xy',
+  pan?: 'x' | 'y' | 'xy' | {
+    sensitivity?: number,
+    wheel?: boolean,
+    momentum?: boolean,
+  },
 } & OBJ_Collection;
 
 function cleanTraces(
@@ -422,6 +432,17 @@ class CollectionsPlot extends FigureElementCollection {
   xAxisShow: boolean;
   yAxisShow: boolean;
   frameSpace: ?number;
+  zoom: {
+    x: boolean,
+    y: boolean,
+    enabled: boolean,
+  };
+
+  pan: {
+    x: boolean,
+    y: boolean,
+    enabled: boolean,
+  };
 
   // length: number;
   // angle: number;
@@ -534,6 +555,15 @@ class CollectionsPlot extends FigureElementCollection {
     if (this.__frame != null && this.frameSpace != null) {
       this.__frame.surround(this, this.frameSpace, true);
     }
+
+    this.zoom = { enabled: false, x: false, y: false };
+    this.pan = { enabled: false, x: false, y: false };
+    if (
+      (options.zoom != null && options.zoom !== false)
+      || (options.pan != null && options.pan !== false)
+    ) {
+      this.addGestureRectangle(options.zoom, options.pan);
+    }
   }
 
   getNonTraceBoundingRect() {
@@ -591,7 +621,7 @@ class CollectionsPlot extends FigureElementCollection {
         axis = this.collections.zoomAxis(o);
         axis._custom.type = 'zoom';
       } else {
-        axis = this.collections.axis(o);
+        axis = this.collections.zoomAxis(o);
       }
       this.add(o.name, axis);
       this.axes.push(axis);
@@ -614,6 +644,70 @@ class CollectionsPlot extends FigureElementCollection {
       o = joinObjects({}, defaultOptions, plotArea);
     }
     this.add('_plotArea', this.collections.rectangle(o));
+  }
+
+  addGestureRectangle(zoomOptions, panOptions) {
+    const options = {
+      width: this.width,
+      height: this.height,
+      xAlign: 'left',
+      yAlign: 'bottom',
+      position: [0, 0],
+    };
+    if (zoomOptions != null && zoomOptions !== false) {
+      const defaultOptions = {
+        axis: typeof zoomOptions === 'string' ? zoomOptions : 'xy',
+        sensitivity: 1,
+        point: null,
+      };
+      let zOptions;
+      if (zoomOptions === true) {
+        zOptions = defaultOptions;
+      } else {
+        zOptions = joinObjects({}, defaultOptions, zoomOptions);
+      }
+      joinObjects(options, { zoom: zOptions });
+      this.zoom.enabled = true;
+      this.zoom.x = zOptions.axis.startsWith('x');
+      this.zoom.y = zOptions.axis.endsWith('y');
+    }
+    if (panOptions != null && panOptions !== false) {
+      const defaultOptions = {
+        axis: typeof panOptions === 'string' ? panOptions : 'xy',
+        sensitivity: 1,
+        wheel: true,
+      };
+      let pOptions;
+      if (panOptions === true) {
+        pOptions = defaultOptions;
+      } else {
+        pOptions = joinObjects({}, defaultOptions, panOptions);
+      }
+      joinObjects(options, { pan: pOptions });
+      this.pan.enabled = true;
+      this.pan.x = pOptions.axis.startsWith('x');
+      this.pan.y = pOptions.axis.endsWith('y');
+    }
+    const gesture = this.collections.primitives.gesture(options);
+    gesture.notifications.add('zoom', () => {
+      if (!this.zoom.enabled) {
+        return;
+      }
+      const z = gesture.getZoom();
+      const p = this.drawToPoint(z.current.normPosition);
+      this.zoomDelta(p, z.mag / z.last.mag);
+      gesture.reset();
+    });
+    gesture.notifications.add('pan', () => {
+      if (!this.pan.enabled) {
+        return;
+      }
+      const z = gesture.getZoom();
+      const p = gesture.getPan();
+      this.panDeltaDraw(p.delta.scale(-z.mag));
+      gesture.reset();
+    });
+    this.add('_gesture', gesture);
   }
 
   addFrame(frame: COL_Rectangle | boolean | TypeColor) {
@@ -837,67 +931,50 @@ class CollectionsPlot extends FigureElementCollection {
 
   panDeltaValue(deltaValue: Point) {
     const x = this.getXAxis();
-    if (x != null && x._custom.type === 'zoom') {
+    if (x != null && this.pan.enabled && this.pan.x) {
       x.panDeltaValue(deltaValue.x);
     }
     const y = this.getXAxis();
-    if (y != null && y._custom.type === 'zoom') {
+    if (y != null && this.pan.enabled && this.pan.y) {
       y.panDeltaValue(deltaValue.x);
     }
   }
 
   panDeltaDraw(deltaDraw: Point) {
     const x = this.getXAxis();
-    if (x != null && x._custom.type === 'zoom') {
+    if (x != null && this.pan.enabled && this.pan.x) {
       x.panDeltaDraw(deltaDraw.x);
     }
     const y = this.getYAxis();
-    if (y != null && y._custom.type === 'zoom') {
+    if (y != null && this.pan.enabled && this.pan.y) {
       y.panDeltaDraw(deltaDraw.y);
     }
     this.updateTraces();
   }
 
-  changeZoom(value: Point, mag: number) {
+  zoomValue(value: Point, mag: number) {
     const x = this.getXAxis();
-    if (x != null && x._custom.type === 'zoom') {
-      x.changeZoom(value.x, mag);
+    if (x != null && this.zoom.enabled && this.zoom.x) {
+      x.zoomValue(value.x, mag);
     }
     const y = this.getYAxis();
-    if (y != null && y._custom.type === 'zoom') {
-      y.changeZoom(value.y, mag);
+    if (y != null && this.zoom.enabled && this.zoom.y) {
+      y.zoomValue(value.y, mag);
     }
     this.updateTraces();
   }
 
-  changeZoomDelta(value: Point, magDelta: number) {
+  zoomDelta(value: Point, magDelta: number) {
     const x = this.getXAxis();
-    if (x != null && x._custom.type === 'zoom') {
-      x.changeZoomDelta(value.x, magDelta);
+    if (x != null && this.zoom.enabled && this.zoom.x) {
+      x.zoomDelta(value.x, magDelta);
     }
     const y = this.getYAxis();
-    if (y != null && y._custom.type === 'zoom') {
-      y.changeZoomDelta(value.y, magDelta);
+    if (y != null && this.zoom.enabled && this.zoom.y) {
+      y.zoomDelta(value.y, magDelta);
     }
     this.updateTraces();
   }
-
-
-  // _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
-  //   return [...super._getStateProperties(options),
-  //     'angle',
-  //     'lastLabelRotationOffset',
-  //   ];
-  // }
-
-  // _fromState(state: Object) {
-  //   joinObjects(this, state);
-  //   this.setAngle({
-  //     angle: this.angle,
-  //     rotationOffset: this.lastLabelRotationOffset,
-  //   });
-  //   return this;
-  // }
 }
 
 export default CollectionsPlot;

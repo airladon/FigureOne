@@ -410,7 +410,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       delta: new Point(0, 0),
       sensitivity: 1,
       wheel: false,
-      momentum: false,
+      momentum: true,
     };
     this.justMoved = false;
     this.onlyWhenTouched = true;
