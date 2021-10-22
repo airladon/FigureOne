@@ -77,6 +77,29 @@ function calcAuto(auto: [number, number]) {
 }
 
 /**
+ * Tick location type:
+ *
+ * `'bottom' | 'left' | 'right' | 'left' | 'center'`
+ *
+ * `'bottom'`, `'top'` and `'center'` are only for x axes.
+ *
+ * `'left'`, `'right'` and `'center'` are only for y axes.
+ */
+export type TypeTickLocation = 'bottom' | 'left' | 'right' | 'left' | 'center';
+
+/**
+ * Tick location type:
+ *
+ * `'bottom' | 'left' | 'right' | 'left'`
+ *
+ * `'bottom'` and `'top'` are only for x axes.
+ *
+ * `'left'` and `'right'` are only for y axes.
+ */
+export type TypeLabelLocation = 'bottom' | 'left' | 'right' | 'left';
+
+
+/**
  * Object passed to callback function that returns label strings for axis.
  *
  * @property {Array<number>} values
@@ -120,7 +143,9 @@ export type OBJ_AxisLineStyle = {
  * to center ticks around the axis or not (`-length / 2`)
  * @property {number} [width] width of ticks/grid (draw space)
  * @property {TypeDash} [dash] dash style of ticks (draw space)
- * @property {TypeColor} [color] color of ticks/grid
+ * @property {TypeColor} [color] color of ticks/grid (defaults to plot color)
+ * @property {TypeTickLocation} [location] location of tick which if defined
+ * will overrides `offset` (`undefined`)
  *
  * @see
  *
@@ -132,6 +157,7 @@ export type OBJ_AxisTicks = {
   width?: number,
   dash?: TypeDash,
   color?: TypeColor,
+  location?: TypeTickLocation,
 };
 
 
@@ -175,6 +201,8 @@ export type OBJ_AxisTicks_Fixed = {
  * alignment of labels (`'top'` for x axes, `'middle'` for y axes)
  * @property {OBJ_Font} [font] specific font changes for labels
  * @property {Array<number> | number} [hide] value indexes to hide (`[]`)
+ * @property {TypeLabelLocation} [location] location of label (defaults to
+ * `'bottom'` for x axis and `'left'` for y axis)
  *
  * To test examples below, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>.
@@ -194,6 +222,7 @@ export type OBJ_AxisLabels = {
   font?: OBJ_Font,
   hide?: Array<number>,
   fixed?: boolean,
+  location?: TypeLabelLocation,
 };
 
 export type OBJ_AxisLabels_Fixed = {
@@ -216,7 +245,8 @@ export type OBJ_AxisLabels_Fixed = {
  */
 export type TypeAxisTitle = OBJ_TextLines & {
   rotation?: number,
-  offset?: TypeParsablePoint
+  offset?: TypeParsablePoint,
+  location?: 'bottom' | 'top' | 'left' | 'right' | 'center',
 } | string;
 
 /**
@@ -249,10 +279,12 @@ export type TypeAxisTitle = OBJ_TextLines & {
  * `start` (`start + 1`)
  * @property {OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean} [ticks] tick
  * options. Use an Array to setup multiple sets/styles of ticks. Use a boolean
- * value to turn ticks on or off. (`false`)
+ * value to turn ticks on or off. Use a {@link TypeTickLocation} to only set
+ * tick location property (`false`)
  * @property {OBJ_AxisLabels | string | (Object) => Array<string>} [labels]
  * label options. Use `false` to turn labels off, or a string or function as
- * a callback to define custom labels for a set of values.
+ * a callback to define custom labels for a set of values. Use
+ * {@link TypeLabelLocation} to only set the label location property.
  * @property {OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean} [grid] grid
  * options. Use an array for multiple sets of grids, and use a boolean to
  * turn grids on and off (`false`)
@@ -279,8 +311,10 @@ export type COL_Axis = {
   start?: number,               // value space start at draw space start
   stop?: number,                // value space stop at draw space stop
   step?: number,
-  ticks?: OBJ_AxisTicks | boolean | Array<OBJ_AxisTicks | boolean>,
-  labels?: OBJ_AxisLabels | boolean | string | (OBJ_LabelsCallbackParams) => Array<string>,
+  ticks?: OBJ_AxisTicks | boolean | TypeTickLocation
+    | Array<OBJ_AxisTicks | boolean | TypeTickLocation>,
+  labels?: OBJ_AxisLabels | boolean | TypeLabelLocation
+    | string | (OBJ_LabelsCallbackParams) => Array<string>,
   grid?: OBJ_AxisTicks | boolean | Array<OBJ_AxisTicks | boolean>,
   title?: TypeAxisTitle,
   font?: OBJ_Font,              // Default font
@@ -652,11 +686,17 @@ class CollectionsAxis extends FigureElementCollection {
     this.labels = null;
     if (this.showAxis && options.labels != null && options.labels !== false) {
       let labelsO = options.labels;
-      if (typeof options.labels === 'string' || typeof options.labels === 'function') {
+      if (
+        options.labels === 'bottom'
+        || options.labels === 'top'
+        || options.labels === 'left'
+        || options.labels === 'right'
+      ) {
+        labelsO = { location: options.labels };
+      } else if (typeof options.labels === 'string' || typeof options.labels === 'function') {
         this.labelsCallback = options.labels;
         labelsO = true;
-      }
-      if (labelsO === true) {
+      } else if (labelsO === true) {
         labelsO = {};
       }
       const o = joinObjects(
@@ -676,8 +716,19 @@ class CollectionsAxis extends FigureElementCollection {
       );
       o.offset = getPoint(o.offset);
       this.labels = o;
+      if (o.location != null) {
+        // if (this.axis === 'x') {
+        //   if (o.location === 'bottom') { o.yAlign = '' }
+        //   if (o.location === 'top') { o.offset = 0; }
+        // }
+        if (this.axis === 'y') {
+          if (o.location === 'left') { o.xAlign = 'right'; }
+          if (o.location === 'right') { o.xAlign = 'left'; }
+        }
+      }
       const labels = this.collections.primitives.text(joinObjects({}, o, { text: '0' }));
       labels.transform.updateRotation(o.rotation);
+      labels._custom.location = o.location;
       this.add('labels', labels);
     }
     this.update(this.startValue, this.stopValue);
@@ -702,6 +753,15 @@ class CollectionsAxis extends FigureElementCollection {
       if (ticksOptions === true) {
         ticksOptions = {};
       }
+      if (
+        ticksOptions === 'left'
+        || ticksOptions === 'right'
+        || ticksOptions === 'bottom'
+        || ticksOptions === 'top'
+        || ticksOptions === 'center'
+      ) {
+        ticksOptions = { location: ticksOptions };
+      }
       const widthScale = type === 'grid' ? 0.5 : 1;
       const length = type === 'ticks'
         ? this.collections.primitives.defaultLineWidth * (10 / (index + 1))
@@ -720,6 +780,20 @@ class CollectionsAxis extends FigureElementCollection {
         },
         ticksOptions,
       );
+      if (type === 'ticks') {
+        if (o.location != null) {
+          if (this.axis === 'x') {
+            if (o.location === 'bottom') { o.offset = -o.length; }
+            if (o.location === 'top') { o.offset = 0; }
+            if (o.location === 'center') { o.offset = -o.length / 2; }
+          }
+          if (this.axis === 'y') {
+            if (o.location === 'left') { o.offset = -o.length; }
+            if (o.location === 'right') { o.offset = 0; }
+            if (o.location === 'center') { o.offset = -o.length / 2; }
+          }
+        }
+      }
       // $FlowFixMe
       this[type][index] = o;
       const ticks = this.collections.primitives.line(o);
@@ -913,20 +987,38 @@ class CollectionsAxis extends FigureElementCollection {
       }));
     }
 
+    const labelLoc = this._labels._custom.location;
+
     let { space } = this.labels;
     const {
       offset, font, rotation, format, precision, fixed,
     } = this.labels;
     if (space == null) {
       space = this.axis === 'x' ? font.size * 1.3 : font.size * 0.6;
+      if (labelLoc === 'top' && this.axis === 'x') {
+        space = font.size * 0.5;
+      }
+      // if (labelLoc === 'right' && this.axis === 'y') {
+      //   space = font.size * 0.5;
+      // }
     }
     const text = [];
-    let bounds = 0;
+    let spaceBounds = -space;
     if (this.ticks[0] !== false) {
       if (this.axis === 'x') {
-        bounds = Math.min(0, this.ticks[0].offset);
+        spaceBounds = Math.min(0, this.ticks[0].offset) - space;
       } else {
-        bounds = Math.min(0, this.ticks[0].offset);
+        spaceBounds = Math.min(0, this.ticks[0].offset) - space;
+      }
+      if (this.axis === 'x' && labelLoc === 'top') {
+        spaceBounds = this.ticks[0].offset + this.ticks[0].length + space;
+      } else if (this.axis === 'y' && labelLoc === 'right') {
+        spaceBounds = this.ticks[0].offset + this.ticks[0].length + space;
+      }
+    } else {
+      spaceBounds = -space;
+      if (labelLoc === 'top' || labelLoc === 'right') {
+        spaceBounds = +space;
       }
     }
     for (let i = 0; i < values.length; i += 1) {
@@ -935,11 +1027,11 @@ class CollectionsAxis extends FigureElementCollection {
       if (this.axis === 'x') {
         location = new Point(
           draw + offset.x,
-          bounds - space + offset.y,
+          spaceBounds + offset.y,
         ).rotate(-rotation);
       } else {
         location = new Point(
-          bounds + offset.x - space,
+          spaceBounds + offset.x,
           draw + offset.y,
         ).rotate(-rotation);
       }
@@ -1092,11 +1184,11 @@ class CollectionsAxis extends FigureElementCollection {
     if (this._line != null) { this._line.hide(); }
   }
 
-  showTicks() {
+  showTicks() { // $FlowFixMe
     this.ticks.forEach((t, i) => this[`_ticks${i}`].show());
   }
 
-  hideTicks() {
+  hideTicks() { // $FlowFixMe
     this.ticks.forEach((t, i) => this[`_ticks${i}`].hide());
   }
 }
