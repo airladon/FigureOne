@@ -418,6 +418,16 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     this.originalPosition = this.getPosition();
   }
 
+  _getStateProperties(options: { ignoreShown?: boolean }) {
+    // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(options),
+      'zoom',
+      'pan',
+      'onlyWhenTouched',
+      'originalPosition',
+    ];
+  }
+
   // Setup all properties of gesture
   setup(options: OBJ_Gesture) {
     if (options.zoom != null && typeof options.zoom !== 'boolean') {

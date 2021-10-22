@@ -741,6 +741,17 @@ class CollectionsZoomAxis extends FigureElementCollection {
     this.update(start, stop);
   }
 
+  _getStateProperties(options: { ignoreShown?: boolean }) {
+    // eslint-disable-line class-methods-use-this
+    return [...super._getStateProperties(options),
+      'currentZoom',
+      'startValue',
+      'stopValue',
+      'drawToValueRatio',
+      'valueToDrawRatio',
+    ];
+  }
+
   clipRange(startIn: number, stopIn: number) {
     let start = startIn;
     let stop = stopIn;
@@ -756,7 +767,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
       stop = this.max;
       start = this.max - span;
       if (this.min != null) {
-        stop = Math.max(this.min, start);
+        start = Math.max(this.min, start);
       }
     }
     return [start, stop];
