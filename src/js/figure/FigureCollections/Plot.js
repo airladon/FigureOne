@@ -15,7 +15,7 @@ import { clipValue } from '../../tools/math';
 import {
   FigureElementCollection,
 } from '../Element';
-import type CollectionsAxis, { COL_Axis } from './ZoomAxis';
+import type CollectionsAxis, { COL_Axis } from './Axis';
 import type CollectionsTrace, { COL_Trace } from './Trace';
 import type { COL_PlotLegend } from './Legend';
 import type CollectionsRectangle, { COL_Rectangle } from './Rectangle';
@@ -686,10 +686,6 @@ class CollectionsPlot extends FigureElementCollection {
       type: 'x',
     };
     axes.forEach((axisOptions) => {
-      let zoomAxis = false;
-      if (axisOptions.type === 'zoom') {
-        zoomAxis = true;
-      }
       let axisType;
       if (axisOptions.axis != null) {
         axisType = axisOptions.axis;  // $FlowFixMe
@@ -719,13 +715,7 @@ class CollectionsPlot extends FigureElementCollection {
       if (o.name == null) {
         o.name = `axis_${this.axes.length}`;
       }
-      let axis;
-      if (zoomAxis) {
-        axis = this.collections.zoomAxis(o);
-        axis._custom.type = 'zoom';
-      } else {
-        axis = this.collections.zoomAxis(o);
-      }
+      const axis = this.collections.axis(o);
       this.add(o.name, axis);
       this.axes.push(axis);
     });
