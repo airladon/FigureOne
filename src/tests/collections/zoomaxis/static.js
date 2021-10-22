@@ -127,6 +127,43 @@ function getShapes(getPos) {
     shape('zoomMax', { max: 2, lables: { precision: 2 } }),
     shape('zoomMinDelta', { min: -4, lables: { precision: 2 } }),
     shape('zoomMaxDelta', { max: 10, lables: { precision: 2 } }),
+
+    /*
+    ....###....##.....##.########..#######.
+    ...##.##...##.....##....##....##.....##
+    ..##...##..##.....##....##....##.....##
+    .##.....##.##.....##....##....##.....##
+    .#########.##.....##....##....##.....##
+    .##.....##.##.....##....##....##.....##
+    .##.....##..#######.....##.....#######.
+    */
+    shape('auto', { auto: [0, 5], start: -999, stop: -999, step: -999, length: 0.8 }),
+    shape('auto1', { auto: [0, 1000], start: -999, stop: -999, step: -999, length: 0.8, labels: { format: 'exp', rotation: Math.PI / 2, yAlign: 'middle' } }),
+    shape('auto2', { auto: [0, 0.01], start: -999, stop: -999, step: -999, length: 0.8, labels: { precision: 3, rotation: Math.PI / 4 } }),
+    shape('auto3', { auto: [-1, 1], start: -999, stop: -999, step: -999, length: 0.8 }),
+    shape('auto4', { auto: [-1, 1], start: -999, stop: -999, step: 0.5, length: 0.8 }),
+    shape('auto5', { auto: [1, 9], start: -999, stop: -999, step: -999, length: 0.8 }),
+
+    /*
+    ....###....########..########...#######..##......##
+    ...##.##...##.....##.##.....##.##.....##.##..##..##
+    ..##...##..##.....##.##.....##.##.....##.##..##..##
+    .##.....##.########..########..##.....##.##..##..##
+    .#########.##...##...##...##...##.....##.##..##..##
+    .##.....##.##....##..##....##..##.....##.##..##..##
+    .##.....##.##.....##.##.....##..#######...###..###.
+    */
+    shape('arrow', { line: { arrow: 'triangle' } }),
+    shape('yArrow', { line: { arrow: 'barb' }, axis: 'y' }),
+    shape('arrowLength', { line: { arrow: 'triangle', arrowLength: 0.2 } }),
+    shape('startArrow', { line: { arrow: { start: 'barb' } } }),
+    shape('startArrow1', { line: { arrow: { start: { head: 'barb' } } } }),
+    shape('endArrow', { line: { arrow: { end: 'barb' } } }),
+    shape('endArrow1', { line: { arrow: { end: { head: 'barb' } } } }),
+    shape('bothArrows', { line: { arrow: { head: 'circle' } } }),
+    shape('arrowZoom', { line: { arrow: 'barb', arrowLength: 0.1 }, step: 0.5 }),
+    shape('yStartArrow', { line: { arrow: { start: 'barb' } }, axis: 'y' }),
+    shape('yEndArrow', { line: { arrow: { end: 'barb' } }, axis: 'y' }),
   ];
 }
 
@@ -158,6 +195,7 @@ const updates = {
   zoomMax: e => e.zoom(2, 0.5, 2),
   zoomMinDelta: (e) => { e.zoomDelta(1, 0.5); e.zoomDelta(1, 0.5); e.zoomDelta(1, 0.5); },
   zoomMaxDelta: (e) => { e.zoomDelta(1, 0.5); e.zoomDelta(1, 0.5); e.zoomDelta(1, 0.5); },
+  arrowZoom: e => e.zoom(1, 0.25, 1.3),
 };
 
 const getValues = {

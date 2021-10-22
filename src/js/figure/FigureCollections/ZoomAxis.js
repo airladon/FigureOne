@@ -21,13 +21,72 @@ import type {
 } from '../FigurePrimitives/FigurePrimitiveTypes2D';
 import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type FigureCollections from './FigureCollections';
+import type { TypeArrowHead, OBJ_LineArrows } from '../geometries/arrow';
+
+function calcAuto(auto: [number, number]) {
+  const [min, max] = auto;
+  const r = max - min;
+  let order;
+  if (r < 1) {
+    order = Math.floor(Math.log10(r));
+  // eslint-disable-next-line yoda
+  } else if (1 <= r && r < 3) {
+    order = Math.floor(Math.log10(r / 3));
+  } else {
+    order = Math.ceil(Math.log10(r));
+  }
+  // let order = r < 10 ? Math.floor(Math.log10(r)) : Math.ceil(Math.log10(r));
+  if (order === 0) {
+    order = 1;
+  }
+  const factor = 10 ** (order - 1);
+  // const newRange = Math.ceil(r / factor + 1) * factor;
+  const newStart = Math.floor(min / factor) * factor;
+  const newEnd = Math.ceil(max / factor) * factor;
+  const newRange = newEnd - newStart;
+  // const newEnd = newStart + newRange;
+  let step;
+  switch (round(newRange / factor)) {
+    case 3:
+    case 6:
+      step = newRange / 3;
+      break;
+    case 4:
+    case 8:
+      step = newRange / 4;
+      break;
+    case 7:
+      step = newRange / 7;
+      break;
+    case 9:
+      step = newRange / 3;
+      break;
+    default:
+      step = newRange / 5;
+  }
+  let precision = 0;
+  if (order < 0) {
+    precision = Math.abs(order) + 1;
+  }
+  return {
+    start: round(newStart),
+    stop: round(newEnd),
+    step: round(step),
+    precision: round(precision),
+  };
+}
 
 /**
+ * Object passed to callback function that returns label strings for axis.
+ *
  * @property {Array<number>} values
  * @property {number} start start value of axis at current zoom/pan
  * @property {number} stop stop value of axis at current zoom/pan
  * @property {number} step step value for current zoom
  * @property {number} mag zoom magnification
+ * @see
+ *
+ * {@link COL_ZoomAxis}
  */
 export type OBJ_LabelsCallbackParams = {
   values: Array<number>,
@@ -47,6 +106,8 @@ export type OBJ_SimpleLineStyle = {
   width?: number,
   dash?: TypeDash,
   color?: TypeColor,
+  arrowLength?: number,
+  arrow?: OBJ_LineArrows | TypeArrowHead,
 };
 
 /**
@@ -121,8 +182,6 @@ export type OBJ_ZoomAxisTicks_Fixed = {
  * @example
  */
 export type OBJ_ZoomAxisLabels = {
-  // values?: null | number | Array<number>,
-  // text?: null | Array<string | null | number>,
   precision?: number,
   format?: 'decimal' | 'exp',
   space?: number,
@@ -159,10 +218,10 @@ export type TypeAxisTitle = OBJ_TextLines & {
 } | string;
 
 /**
- * {@link CollectionsAxis} options object that extends {@link OBJ_Collection}
+ * {@link CollectionsZoomAxis} options object that extends {@link OBJ_Collection}
  * options object (without `parent`).
  *
- * An axis can be used to create a number line, used as an axis in
+ * A zoom axis can be used to create a number line, used as an axis in
  * {@link COL_Plot} and/or used to plot a {@link COL_Trace} against.
  *
  * An axis is a line that may have
@@ -214,14 +273,16 @@ export type COL_ZoomAxis = {
   line?: boolean | OBJ_SimpleLineStyle,
   start?: number,               // value space start at draw space start
   stop?: number,                // value space stop at draw space stop
+  step?: number,
   ticks?: OBJ_ZoomAxisTicks | boolean | Array<OBJ_ZoomAxisTicks | boolean>,
-  labels?: OBJ_ZoomAxisLabels | string | (OBJ_LabelsCallbackParams) => Array<string>,
+  labels?: OBJ_ZoomAxisLabels | boolean | string | (OBJ_LabelsCallbackParams) => Array<string>,
   grid?: OBJ_ZoomAxisTicks | boolean | Array<OBJ_ZoomAxisTicks | boolean>,
   title?: TypeAxisTitle,
   font?: OBJ_Font,              // Default font
   show?: boolean,
   min?: number | null,
   max?: number | null,
+  auto?: [number, number],
 } & OBJ_Collection;
 
 
@@ -443,7 +504,18 @@ class CollectionsZoomAxis extends FigureElementCollection {
       max: null,
       border: 'rect',
       touchBorder: 'rect',
+      labels: true,
+      ticks: true,
     };
+    if (optionsIn.auto != null) {
+      const {
+        start, stop, step, precision,
+      } = calcAuto(optionsIn.auto);
+      defaultOptions.start = start;
+      defaultOptions.stop = stop;
+      defaultOptions.step = step;
+      defaultOptions.labels = { precision };
+    }
     const options = joinObjects({}, defaultOptions, optionsIn);
     super(options);
     this.collections = collections;
@@ -500,6 +572,33 @@ class CollectionsZoomAxis extends FigureElementCollection {
         lineO,
       );
       this.line = o;
+      let startArrow = false;
+      let endArrow = false;
+      let aLength = o.length * (this.step[0] / (this.stopValue - this.startValue)) / 2;
+      if (o.arrowLength != null) {
+        aLength = o.arrowLength;
+      }
+      if (o.arrow != null) {
+        if (typeof o.arrow === 'string') {
+          startArrow = true;
+          endArrow = true;
+        } else if (o.arrow.start == null && o.arrow.end == null) {
+          startArrow = true;
+          endArrow = true;
+        } else if (o.arrow.start != null) {
+          startArrow = true;
+        } else if (o.arrow.end != null) {
+          endArrow = true;
+        }
+        if (startArrow) {
+          if (this.axis === 'x') { o.p1 = [-aLength, 0]; }
+          if (this.axis === 'y') { o.p1 = [0, -aLength]; }
+          o.length += aLength;
+        }
+        if (endArrow) {
+          o.length += aLength;
+        }
+      }
       const line = this.collections.primitives.line(o);
       this.add('line', line);
     }
@@ -826,7 +925,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
         label = `${values[i].toExponential(precision)}`;
       } // $FlowFixMe
       if (this.labels.hide.length > 0) { // $FlowFixMe
-        if (this.labels.hide.indexOf(round(values[i], precision + 5)) > -1) {
+        if (this.labels.hide.indexOf(this.rnd(values[i])) > -1) {
           label = '';
         }
       }

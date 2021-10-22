@@ -6,7 +6,7 @@ if (typeof process === 'object') {
 }
 
 let index = 0;
-function makeShape(name, options, mods, getPos) {
+function makeShape(name, options = {}, mods, getPos) {
   const { x, y } = getPos(index);
   // const indexName = `${index}`;
   index += 1;
@@ -24,6 +24,9 @@ function makeShape(name, options, mods, getPos) {
       labels: true,
     }, options),
   };
+  if (o.options.start === -999) { o.options.start = undefined; }
+  if (o.options.stop === -999) { o.options.stop = undefined; }
+  if (o.options.step === -999) { o.options.step = undefined; }
   return o;
 }
 
