@@ -766,6 +766,8 @@ class FigureElement {
     scale: TypeParsablePoint;
   }
 
+  drawNumber: number;
+
   // // TODO
   // move: {
   //   line: Line,
@@ -829,6 +831,7 @@ class FigureElement {
     this.parentTransform = [new Transform()];
     this.lastDrawPulseTransform = this.transform._dup();
     this.onClick = null;
+    this.drawNumber = 0;
     // this.lastDrawElementTransformPosition = {
     //   parentCount: 0,
     //   elementCount: 0,
@@ -4234,8 +4237,9 @@ class FigureElementPrimitive extends FigureElement {
     parentTouchScale: Point | null = null,
     parentUniqueColor: TypeColor | null = null,
     // canvasIndex: number = 0,
+    drawNumber: number | null = null,
   ) {
-    if (this.isShown) {
+    if (this.isShown && (drawNumber == null || drawNumber === this.drawNumber)) {
       if (targetTexture && !this.isTouchable && !parentIsTouchable) {
         return;
       }
@@ -4462,6 +4466,7 @@ class FigureElementCollection extends FigureElement {
   +highlight: (elementsToDim: ?TypeElementPath) => void;
 
   childrenCanAnimate: boolean;
+  drawNumberOrder: Array<number | null>
 
   /**
    * @param {OBJ_FigureElementCollection} options
@@ -4482,6 +4487,7 @@ class FigureElementCollection extends FigureElement {
     if (o.position != null) {
       this.transform.updateTranslation(getPoint(o.position));
     }
+    this.drawNumberOrder = [null];
     this.elements = {};
     this.drawOrder = [];
     if (options.move != null && options.move !== false) {
@@ -5070,6 +5076,7 @@ class FigureElementCollection extends FigureElement {
     parentIsTouchable: boolean = false,
     parentTouchScale: Point | null = null,
     parentUniqueColor: TypeColor | null = null,
+    drawNumber: number | null = null,
   ) {
     if (this.isShown) {
       if (targetTexture && !this.isTouchable && !this.hasTouchableElements && !parentIsTouchable) {
@@ -5132,13 +5139,28 @@ class FigureElementCollection extends FigureElement {
 
       // let drawTimer;
       // if (FIGURE1DEBUG) { drawTimer = new PerformanceTimer(); }
-      for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
-        this.elements[this.drawOrder[i]].draw(
-          now, sceneToUse, this.drawTransforms, opacityToUse, targetTexture,
-          parentIsTouchableToUse, parentTouchScaleToUse, uniqueColorToUse,
-        ); // $FlowFixMe
-        // if (FIGURE1DEBUG) { drawTimer.stamp(this.elements[this.drawOrder[i]].name); }
-      } // $FlowFixMe
+      for (let n = 0; n < this.drawNumberOrder.length; n += 1) {
+        const drawNum = this.drawNumberOrder[n] == null ? drawNumber : this.drawNumberOrder[n];
+        if (this.name === 'default') {
+          console.log(drawNum)
+        }
+        for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
+          this.elements[this.drawOrder[i]].draw(
+            now, sceneToUse, this.drawTransforms, opacityToUse, targetTexture,
+            parentIsTouchableToUse, parentTouchScaleToUse, uniqueColorToUse,
+            drawNum,
+          ); // $FlowFixMe
+          // if (FIGURE1DEBUG) { drawTimer.stamp(this.elements[this.drawOrder[i]].name); }
+        } // $FlowFixMe
+      }
+      // for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
+      //   this.elements[this.drawOrder[i]].draw(
+      //     now, sceneToUse, this.drawTransforms, opacityToUse, targetTexture,
+      //     parentIsTouchableToUse, parentTouchScaleToUse, uniqueColorToUse,
+      //     drawNumber,
+      //   ); // $FlowFixMe
+      //   // if (FIGURE1DEBUG) { drawTimer.stamp(this.elements[this.drawOrder[i]].name); }
+      // } // $FlowFixMe
       // if (FIGURE1DEBUG) { timer.stamp('m6'); }
       if (this.unrenderNextDraw) {
         this.clearRender();

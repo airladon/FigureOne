@@ -18,20 +18,43 @@ import type CollectionsAxis, { COL_Axis } from './ZoomAxis';
 import type CollectionsTrace, { COL_Trace } from './Trace';
 import type { COL_PlotLegend } from './Legend';
 import type CollectionsRectangle, { COL_Rectangle } from './Rectangle';
-import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
+import type { OBJ_Collection, OBJ_LineStyleSimple, OBJ_Texture } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type { OBJ_TextLines } from '../FigurePrimitives/FigurePrimitiveTypes2D';
-import type { OBJ_Font, TypeColor, OBJ_Font_Fixed } from '../../tools/types';
+import type {
+  OBJ_Font, TypeColor, OBJ_Font_Fixed, OBJ_CurvedCorner,
+} from '../../tools/types';
 import type FigureCollections from './FigureCollections';
+
 
 /**
  * Plot frame.
  *
- * {@link COL_Rectangle}` & { space: number }`
  *
- * Define how much larger the frame is than the plot, labels and
- * titles with `space`.
+ * @property {OBJ_LineStyleSimple} [line] line detail
+ * @property {TypeColor | OBJ_Texture} [fill] fill detail
+ * @property {OBJ_CurvedCorner} [corner] define if need curved corners
+ * @property {number} [space] space between plot, labels and title and frame
+ * boundary
  */
-export type TypePlotFrame = COL_Rectangle & { space: number };
+export type TypePlotFrame = {
+  line?: OBJ_LineStyleSimple,
+  fill?: TypeColor | OBJ_Texture,
+  corner?: OBJ_CurvedCorner,
+  space?: number,
+};
+
+export type OBJ_PlotZoomOptions = {
+  axis?: 'x' | 'y' | 'xy',
+  sensitivity?: number,
+  point?: TypeParsablePoint,
+};
+
+export type OBJ_PlotPanOptions = {
+  axis: 'x' | 'y' | 'xy',
+  sensitivity?: number,
+  wheel?: boolean,
+  momentum?: boolean,
+}
 
 /**
  * Plot title.
@@ -74,11 +97,13 @@ export type TypePlotTitle = OBJ_TextLines & { offset: TypeParsablePoint };
  * plot can be turned on with `true`, can be a simple color fill using
  * `Array<number>` as a color, or can be fully customized with TypePlotFrame
  * @property {TypeColor | COL_Rectangle} [plotArea] plot area can be a
- * color fill with `Array<number`> as a color, or be fully customized with
+ * color fill with `TypeColor` as a color, or be fully customized with
  * COL_Rectangle
  * @property {OBJ_Font} [font] Default font for plot (title, axes, labels, etc.)
  * @property {TypeColor} [color] Default color
  * @property {TypeParsablePoint} [position] Position of the plot
+ * @property {OBJ_PlotZoomOptions} zoom options for interactive zooming
+ * @property {OBJ_PlotPanOptions} pan options for interactive panning
  */
 export type COL_Plot = {
   width?: number,
@@ -95,16 +120,8 @@ export type COL_Plot = {
   font?: OBJ_Font,
   color?: TypeColor,
   position?: TypeParsablePoint,
-  zoom?: {
-    axis?: 'x' | 'y' | 'xy',
-    sensitivity?: number,
-    point?: TypeParsablePoint,
-  } | 'x' | 'y' | 'xy',
-  pan?: 'x' | 'y' | 'xy' | {
-    sensitivity?: number,
-    wheel?: boolean,
-    momentum?: boolean,
-  },
+  zoom?: OBJ_PlotZoomOptions | 'x' | 'y' | 'xy',
+  pan?: OBJ_PlotPanOptions | 'x' | 'y' | 'xy',
 } & OBJ_Collection;
 
 function cleanTraces(
@@ -467,6 +484,8 @@ class CollectionsPlot extends FigureElementCollection {
       yAlign: 'plotAreaBottom',
       transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       touchBorder: 'rect',
+      zoom: false,
+      pan: false,
     };
     if (
       optionsIn.color != null
@@ -496,6 +515,7 @@ class CollectionsPlot extends FigureElementCollection {
     this.height = options.height;
     this.theme = options.theme;
     this.grid = options.grid;
+    this.drawNumberOrder = [-1, 0];
     this.xAxisShow = true;
     if (options.xAxis === false) {
       this.xAxisShow = false;
@@ -517,9 +537,6 @@ class CollectionsPlot extends FigureElementCollection {
     // console.log(options.trace)
     const [traces, bounds] = cleanTraces(options.trace);
 
-    if (options.frame != null && options.frame !== false) {
-      this.addFrame(options.frame);
-    }
     if (options.plotArea != null && options.plotArea !== false) {
       this.addPlotArea(options.plotArea);
     }
@@ -552,9 +569,12 @@ class CollectionsPlot extends FigureElementCollection {
     //   this.addBorder(options.border);
     // }
 
-    if (this.__frame != null && this.frameSpace != null) {
-      this.__frame.surround(this, this.frameSpace, true);
+    if (options.frame != null && options.frame !== false) {
+      this.addFrame(options.frame);
     }
+    // if (this.__frame != null && this.frameSpace != null) {
+    //   this.__frame.surround(this, this.frameSpace, true);
+    // }
 
     this.zoom = { enabled: false, x: false, y: false };
     this.pan = { enabled: false, x: false, y: false };
@@ -646,7 +666,10 @@ class CollectionsPlot extends FigureElementCollection {
     this.add('_plotArea', this.collections.rectangle(o));
   }
 
-  addGestureRectangle(zoomOptions, panOptions) {
+  addGestureRectangle(
+    zoomOptions: OBJ_PlotZoomOptions | 'xy' | 'x' | 'y' | false,
+    panOptions: OBJ_PlotPanOptions | 'xy' | 'x' | 'y' | false,
+  ) {
     const options = {
       width: this.width,
       height: this.height,
@@ -661,7 +684,7 @@ class CollectionsPlot extends FigureElementCollection {
         point: null,
       };
       let zOptions;
-      if (zoomOptions === true) {
+      if (typeof zoomOptions === 'string') {
         zOptions = defaultOptions;
       } else {
         zOptions = joinObjects({}, defaultOptions, zoomOptions);
@@ -678,7 +701,7 @@ class CollectionsPlot extends FigureElementCollection {
         wheel: true,
       };
       let pOptions;
-      if (panOptions === true) {
+      if (typeof panOptions === 'string') {
         pOptions = defaultOptions;
       } else {
         pOptions = joinObjects({}, defaultOptions, panOptions);
@@ -710,24 +733,33 @@ class CollectionsPlot extends FigureElementCollection {
     this.add('_gesture', gesture);
   }
 
-  addFrame(frame: COL_Rectangle | boolean | TypeColor) {
+  addFrame(frameIn: TypePlotFrame | true | TypeColor) {
+    let frame = frameIn;
+    if (typeof frame === 'boolean') {
+      frame = { line: { width: this.collections.primitives.defaultLineWidth } };
+    } else if (Array.isArray(frame)) {
+      frame = { fill: frameIn };
+    }
+    const space = frame.space != null && typeof frame.space === 'number'
+      ? frame.space
+      : Math.min(this.width, this.height) / 20;
     const defaultOptions = {
-      width: this.width / 2,
-      height: this.height / 2,
+      width: 0,
+      height: 0,
       xAlign: 'left',
       yAlign: 'bottom',
       position: [0, 0],
-      space: Math.min(this.width, this.height) / 20,
+      space,
     };
-    let optionsIn = frame;
-    if (optionsIn === true) {
-      optionsIn = { line: { width: this.collections.primitives.defaultLineWidth } };
-    } else if (Array.isArray(optionsIn)) {
-      optionsIn = { fill: optionsIn };
-    }
-    const o = joinObjects({}, defaultOptions, optionsIn);
+    const o = joinObjects({}, defaultOptions, frame);
     this.frameSpace = o.space;
     this.add('_frame', this.collections.rectangle(o));
+    // $FlowFixMe
+    this.toBack(this.__frame);
+    this.notifications.add('setFigure', () => {
+      // $FlowFixMe
+      this.__frame.surround(this, this.frameSpace);
+    });
   }
 
   getTraceIndex(name: string | number) {
@@ -796,7 +828,7 @@ class CollectionsPlot extends FigureElementCollection {
     const xAxis = this.getAxis(xAxisName);
     const yAxis = this.getAxis(yAxisName);
     if (xAxis == null || yAxis == null) {
-      return null;
+      throw new Error(`Plot.pointToDraw Error: Both xAxis and yAxis need to be defined. xAxis: ${JSON.stringify(xAxis)}, yAxis: ${JSON.stringify(yAxis)}`);
     }
     const p = getPoint(point);
     return new Point(xAxis.valueToDraw(p.x), yAxis.valueToDraw(p.y));
@@ -810,7 +842,7 @@ class CollectionsPlot extends FigureElementCollection {
     const xAxis = this.getAxis(xAxisName);
     const yAxis = this.getAxis(yAxisName);
     if (xAxis == null || yAxis == null) {
-      return null;
+      throw new Error(`Plot.drawToPoint Error: Both xAxis and yAxis need to be defined. xAxis: ${JSON.stringify(xAxis)}, yAxis: ${JSON.stringify(yAxis)}`);
     }
     const p = getPoint(point);
     return new Point(xAxis.drawToValue(p.x), yAxis.drawToValue(p.y));
@@ -852,8 +884,9 @@ class CollectionsPlot extends FigureElementCollection {
     let theme = {};
     if (name === 'classic') {
       const color = defaultColor == null ? [0.35, 0.35, 0.35, 1] : defaultColor;
+      const gridColor = defaultColor == null ? [0.7, 0.7, 0.7, 1] : defaultColor;
       const tickLength = Math.min(this.width, this.height) / 30;
-      const gridDash = this.collections.primitives.defaultLineWidth;
+      // const gridDash = this.collections.primitives.defaultLineWidth;
       theme = {
         axis: {
           color,
@@ -861,17 +894,17 @@ class CollectionsPlot extends FigureElementCollection {
           ticks: {
             width: this.collections.primitives.defaultLineWidth,
             length: tickLength,
-            offset: -tickLength,
+            offset: -tickLength + this.collections.primitives.defaultLineWidth / 2,
           },
           font: {
             color,
           },
           length,
           grid: {
-            color,
+            color: gridColor,
             width: this.collections.primitives.defaultLineWidth / 2,
             length: gridLength,
-            dash: [gridDash, gridDash],
+            // dash: [gridDash, gridDash],
           },
         },
         title: {

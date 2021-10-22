@@ -102,7 +102,7 @@ export type OBJ_LabelsCallbackParams = {
  * @property {TypeDash} [dash]
  * @property {TypeColor} [color]
  */
-export type OBJ_SimpleLineStyle = {
+export type OBJ_AxisLineStyle = {
   width?: number,
   dash?: TypeDash,
   color?: TypeColor,
@@ -239,7 +239,7 @@ export type TypeAxisTitle = OBJ_TextLines & {
  * @property {'x' | 'y'} [axis] `'x'` axes are horizontal, `'y'` axes are
  * vertical (`'x'`)
  * @property {number} [length] length of the axis in draw space
- * @property {OBJ_SimpleLineStyle | boolean} [line] line style of the axis -
+ * @property {OBJ_AxisLineStyle | boolean} [line] line style of the axis -
  * `false` will draw no line. By default, a solid line will be drawn if not
  * defined.
  * @property {number} [start] start value of axis (`0`)
@@ -273,7 +273,7 @@ export type TypeAxisTitle = OBJ_TextLines & {
 export type COL_ZoomAxis = {
   axis?: 'x' | 'y',
   length?: number,              // draw space length
-  line?: boolean | OBJ_SimpleLineStyle,
+  line?: boolean | OBJ_AxisLineStyle,
   start?: number,               // value space start at draw space start
   stop?: number,                // value space stop at draw space stop
   step?: number,
@@ -618,7 +618,11 @@ class CollectionsZoomAxis extends FigureElementCollection {
     }
     this.grid = Array(options.grid.length);
     for (let i = options.grid.length - 1; i >= 0; i -= 1) {
-      this.addTicks('grid', options.grid[i], i);
+      const e = this.addTicks('grid', options.grid[i], i);
+      if (e != null) {
+        this.toBack(e);
+        e.drawNumber = -1;
+      }
     }
 
     if (!this.showAxis || options.ticks == null) {
@@ -689,7 +693,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
       let ticksOptions = options;
       if (ticksOptions === false) { // $FlowFixMe
         this[type][index] = false;
-        return;
+        return null;
       }
       if (ticksOptions === true) {
         ticksOptions = {};
@@ -715,8 +719,9 @@ class CollectionsZoomAxis extends FigureElementCollection {
       // $FlowFixMe
       this[type][index] = o;
       const ticks = this.collections.primitives.line(o);
-      this.add(`${type}${index}`, ticks);
+      return this.add(`${type}${index}`, ticks);
     }
+    return null;
   }
 
   calcRatios() {
@@ -909,7 +914,7 @@ class CollectionsZoomAxis extends FigureElementCollection {
       offset, font, rotation, format, precision, fixed,
     } = this.labels;
     if (space == null) {
-      space = this.axis === 'x' ? font.size + this.collections.primitives.defaultLineWidth * 5 : this.collections.primitives.defaultLineWidth * 10;
+      space = this.axis === 'x' ? font.size * 1.3 : font.size * 0.6;
     }
     const text = [];
     let bounds = 0;
