@@ -239,15 +239,20 @@ export type OBJ_AxisLabels_Fixed = {
 };
 
 /**
- * Axis title
+ * Axis title.
  *
- * ({@link OBJ_TextLines} `& { rotation?: number, offset?:` {@link TypeParsablePoint} `}) | string`
+ * @property {number} [rotation] title rotation
+ * @property {'bottom' | 'top' | 'left' | 'right'} [location] location of text
+ * relative to axis
+ * @property {TypeParsablePoint} [offset] title offset from default location
+
+ * @extends {@link OBJ_TextLines}
  */
-export type TypeAxisTitle = OBJ_TextLines & {
+export type OBJ_AxisTitle = OBJ_TextLines & {
   rotation?: number,
   offset?: TypeParsablePoint,
-  location?: 'bottom' | 'top' | 'left' | 'right' | 'center',
-} | string;
+  location?: 'bottom' | 'top' | 'left' | 'right',
+};
 
 /**
  * {@link CollectionsAxis} options object that extends {@link OBJ_Collection}
@@ -288,7 +293,7 @@ export type TypeAxisTitle = OBJ_TextLines & {
  * @property {OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean} [grid] grid
  * options. Use an array for multiple sets of grids, and use a boolean to
  * turn grids on and off (`false`)
- * @property {TypeAxisTitle | boolean} [title] axis title (`false`)
+ * @property {OBJ_AxisTitle | string} [title] axis title
  * @property {OBJ_Font} [font] default font of axis (used by title and labels)
  * @property {boolean} [show] `false` hides the axis. Two axes are needed
  * to plot an {@link CollectionsTrace} on a {@link CollectionsPlot}, but if either or
@@ -316,7 +321,7 @@ export type COL_Axis = {
   labels?: OBJ_AxisLabels | boolean | TypeLabelLocation
     | string | (OBJ_LabelsCallbackParams) => Array<string>,
   grid?: OBJ_AxisTicks | boolean | Array<OBJ_AxisTicks | boolean>,
-  title?: TypeAxisTitle,
+  title?: OBJ_AxisTitle | string,
   font?: OBJ_Font,              // Default font
   show?: boolean,
   min?: number | null,
@@ -495,7 +500,7 @@ class CollectionsAxis extends FigureElementCollection {
   name: string;
   autoStep: null | number;
   axis: 'x' | 'y';
-  line: OBJ_Line | null;
+  line: { width: number} & OBJ_Line | null;
   grid: Array<{
     width: number,
     length: number,
@@ -744,6 +749,7 @@ class CollectionsAxis extends FigureElementCollection {
   ) {
     // $FlowFixMe
     // this[type] = [];
+    const lineWidth = this.line != null ? this.line.width : 0;
     if (options != null) {
       let ticksOptions = options;
       if (ticksOptions === false) { // $FlowFixMe
@@ -783,13 +789,13 @@ class CollectionsAxis extends FigureElementCollection {
       if (type === 'ticks') {
         if (o.location != null) {
           if (this.axis === 'x') {
-            if (o.location === 'bottom') { o.offset = -o.length; }
-            if (o.location === 'top') { o.offset = 0; }
+            if (o.location === 'bottom') { o.offset = -o.length + lineWidth / 2; }
+            if (o.location === 'top') { o.offset = -lineWidth / 2; }
             if (o.location === 'center') { o.offset = -o.length / 2; }
           }
           if (this.axis === 'y') {
-            if (o.location === 'left') { o.offset = -o.length; }
-            if (o.location === 'right') { o.offset = 0; }
+            if (o.location === 'left') { o.offset = -o.length + lineWidth / 2; }
+            if (o.location === 'right') { o.offset = -lineWidth / 2; }
             if (o.location === 'center') { o.offset = -o.length / 2; }
           }
         }
@@ -1104,28 +1110,66 @@ class CollectionsAxis extends FigureElementCollection {
     }
   }
 
-  addTitle(optionsIn: OBJ_TextLines & { rotation?: number, offset?: TypeParsablePoint } | string) {
-    const defaultOptions = {
-      font: joinObjects({}, this.defaultFont, { size: this.defaultFont.size || 0.1 * 1.3 }),
-      justify: 'center',
-      xAlign: 'center',
-      yAlign: this.axis === 'x' ? 'top' : 'bottom',
-      rotation: this.axis === 'x' ? 0 : Math.PI / 2,
-      offset: [0, 0],
-    };
+  addTitle(optionsIn: OBJ_TextLines & OBJ_AxisTitle | string) {
     let optionsToUse = optionsIn;
     if (typeof optionsIn === 'string') {
       optionsToUse = { text: [optionsIn] };
     }
-    const o = joinObjects({}, defaultOptions, optionsToUse);
-    o.offset = getPoint(o.offset);
+    const font = joinObjects(
+      {},
+      this.defaultFont,
+      { size: this.defaultFont.size || this.length / 20 },  // $FlowFixMe
+      optionsToUse.font != null ? optionsToUse.font : {},
+    );
     const bounds = this.getBoundingRect('draw');
+    /* eslint-disable object-curly-newline */
+    let { left, bottom, top, right } = bounds;
+    left -= font.size / 2;
+    bottom -= font.size / 2;
+    top += font.size / 2;
+    right += font.size / 2;
+    const l2 = this.length / 2;
+    const p2 = Math.PI / 2;
+    const defaults = {
+      x: {
+        bottom: { xAlign: 'center', yAlign: 'top', rotation: 0, _p: [l2, bottom] },
+        top: { xAlign: 'center', yAlign: 'bottom', rotation: 0, _p: [l2, top] },
+        right: { xAlign: 'left', yAlign: 'middle', rotation: 0, _p: [right, 0] },
+        left: { xAlign: 'right', yAlign: 'middle', rotation: 0, _p: [left, 0] },
+      },
+      y: {
+        left: { xAlign: 'center', yAlign: 'bottom', rotation: p2, _p: [left, l2] },
+        right: { xAlign: 'center', yAlign: 'top', rotation: p2, _p: [right, l2] },
+        bottom: { xAlign: 'center', yAlign: 'top', rotation: 0, _p: [0, bottom] },
+        top: { xAlign: 'center', yAlign: 'bottom', rotation: 0, _p: [0, top] },
+      },
+    };
+    /* eslint-enable object-curly-newline */
+    let defaultLocation;  // $FlowFixMe
+    if (optionsToUse.location != null) {  // $FlowFixMe
+      defaultLocation = defaults[this.axis][optionsToUse.location];
+    } else {
+      defaultLocation = {
+        xAlign: 'center',
+        yAlign: this.axis === 'x' ? 'top' : 'bottom',
+        rotation: this.axis === 'x' ? 0 : Math.PI / 2,
+        _p: this.axis === 'x' ? [l2, bottom] : [left, l2],
+      };
+    }
+    const defaultOptions = joinObjects({}, {
+      justify: 'center',
+      offset: [0, 0],
+    }, defaultLocation);
+    const o = joinObjects({}, defaultOptions, optionsToUse);
+    o.font = font;
+    o.offset = getPoint(o.offset);
     if (o.position == null) {
-      if (this.axis === 'x') {
-        o.position = new Point(this.length / 2, bounds.bottom - o.font.size / 1.5).add(o.offset);
-      } else {
-        o.position = new Point(bounds.left - o.font.size / 1.5, this.length / 2).add(o.offset);
-      }
+      o.position = getPoint(o._p).add(getPoint(o.offset));
+      // if (this.axis === 'x') {
+      //   o.position = new Point(this.length / 2, bounds.bottom - o.font.size / 1.5).add(o.offset);
+      // } else {
+      //   o.position = new Point(bounds.left - o.font.size / 1.5, this.length / 2).add(o.offset);
+      // }
     }
     const title = this.collections.primitives.textLines(o);
     title.transform.updateRotation(o.rotation);
