@@ -1121,7 +1121,8 @@ class CollectionsAxis extends FigureElementCollection {
       { size: this.defaultFont.size || this.length / 20 },  // $FlowFixMe
       optionsToUse.font != null ? optionsToUse.font : {},
     );
-    const bounds = this.getBoundingRect('draw');
+    const primitives = this.getAllPrimitives().filter(p => !p.name.startsWith('grid'));
+    const bounds = this.getBoundingRect('draw', 'border', primitives);
     /* eslint-disable object-curly-newline */
     let { left, bottom, top, right } = bounds;
     left -= font.size / 2;
