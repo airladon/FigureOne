@@ -116,11 +116,9 @@ export type TypePlotTitle = OBJ_TextLines & { offset: TypeParsablePoint };
  * plot area to the left, then instead of the axis being drawn on the left edge
  * of the plot area, it will be drawn within the plot area such that its labels
  * are within the plot area (`false`).
- * @property {boolean} [autoGrid] if `true` and a cross point is used, then
- * then the default x and y axis grid will be repositioned as if the axes were
- * always to the left and bottom edges of the plot area. This is primarily
- * useful when the plot area is panned or zoomed. (`true` if pan or zoom
- * enabled, `false` otherwise)
+ * @property {boolean} [autoGrid] if `true` sets the grid for an axes to expand
+ * accross the entire plot area. Set to `false` if only a partial length grid
+ * is needed (`true`)
  */
 export type COL_Plot = {
   width?: number,
@@ -516,7 +514,7 @@ class CollectionsPlot extends FigureElementCollection {
       zoom: false,
       pan: false,
       plotAreaLabels: false,
-      autoGrid: !!((optionsIn.zoom || optionsIn.pan || optionsIn.cross)),
+      autoGrid: true, // !!((optionsIn.zoom || optionsIn.pan || optionsIn.cross)),
     };
     if (
       optionsIn.color != null
@@ -639,6 +637,7 @@ class CollectionsPlot extends FigureElementCollection {
       this.addGestureRectangle(options.zoom, options.pan);
       this.setupCross();
     }
+    this.setupGrid();
   }
 
   setupCross() {
@@ -679,11 +678,19 @@ class CollectionsPlot extends FigureElementCollection {
     _x.setPosition(0, y);
     _y.setPosition(x, 0);
 
+    this.setupGrid();
+  }
+
+  setupGrid() {
     if (this.autoGrid) {
-      // $FlowFixMe
-      _x.grid.forEach((g, i) => this._x[`_grid${i}`].setPosition(0, -y));
-      // $FlowFixMe
-      _y.grid.forEach((g, i) => this._y[`_grid${i}`].setPosition(-x, 0));
+      this.axes.forEach((axis) => {
+        const p = axis.getPosition();
+        if (axis.axis === 'x') { // $FlowFixMe
+          axis.grid.forEach((g, i) => axis[`_grid${i}`].setPosition(0, -p.y));
+        } else { // $FlowFixMe
+          axis.grid.forEach((g, i) => axis[`_grid${i}`].setPosition(-p.x, 0));
+        }
+      });
     }
   }
 
@@ -724,6 +731,18 @@ class CollectionsPlot extends FigureElementCollection {
       // $FlowFixMe
       defaultOptions.show = show;
       const o = joinObjects({}, defaultOptions, theme.axis, axisOptions);
+      if (
+        axisOptions.color != null
+        && (axisOptions.font == null || axisOptions.font.color == null)
+      ) {
+        o.font.color = axisOptions.color;
+      }
+      if (typeof axisOptions.ticks === 'string') {
+        o.ticks = joinObjects({}, theme.axis.ticks, { location: axisOptions.ticks });
+      }
+      if (typeof axisOptions.labels === 'string') {
+        o.labels = joinObjects({}, theme.axis.labels, { location: axisOptions.labels });
+      }
       if (Array.isArray(o.grid)) {
         for (let i = 0; i < o.grid.length; i += 1) {
           o.grid[i] = joinObjects({}, theme.axis.grid, o.grid[i]);
@@ -852,7 +871,7 @@ class CollectionsPlot extends FigureElementCollection {
     // $FlowFixMe
     this.toBack(this.__frame);
     // $FlowFixMe
-    this.__frame.getAllPrimitives().map(e => e.drawNumber = -1);
+    this.__frame.getAllPrimitives().forEach((e) => { e.drawNumber = -1; });
     this.notifications.add('setFigure', () => {
       // $FlowFixMe
       this.__frame.surround(this, this.frameSpace);
@@ -1021,12 +1040,15 @@ class CollectionsPlot extends FigureElementCollection {
           labels: {
             location: axis === 'x' ? 'bottom' : 'left',
           },
+          title: {
+            location: axis === 'x' ? 'right' : 'top',
+          },
         },
         cross: [0, 0],
         autoGrid: true,
       };
-      if (name === 'numberLine') {
-        theme.axis.labels.hide = [0];
+      if (name === 'numberLine') {   // $FlowFixMe
+        theme.axis.labels.hide = [0]; // $FlowFixMe
         theme.axis.line.arrow = 'barb';
       }
     }
@@ -1068,6 +1090,7 @@ class CollectionsPlot extends FigureElementCollection {
       const color = defaultColor == null ? [0.9, 0.9, 0.9, 1] : defaultColor;
       const gridColor = defaultColor == null ? [0.5, 0.5, 0.5, 1] : defaultColor;
       theme = {
+        color,
         axis: {
           color,
           grid: {
