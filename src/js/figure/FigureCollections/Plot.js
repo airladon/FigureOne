@@ -85,7 +85,7 @@ export type TypePlotTitle = OBJ_TextLines & { offset: TypeParsablePoint };
  * to hide it
  * @property {COL_Axis | boolean} [yAxis] customize the y axis, or use `false`
  * to hide it
- * @property {Array<COL_Axis>} [axes] add additional axes
+ * @property {Array<COL_Axis>} [axes] add axes additional to x and y
  * @property {boolean} [grid] turn on and off the grid - use the grid options
  * in xAxis, yAxis or axes for finer customization
  * @property {TypePlotTitle | string} [title] plot title can be simply a
@@ -577,7 +577,7 @@ class CollectionsPlot extends FigureElementCollection {
     }
 
     if (optionsIn.font == null || optionsIn.font.size == null) {
-      this.defaultFont.size = Math.min(this.width, this.height) / 20;
+      this.defaultFont.size = Math.min(this.width, this.height) / 16;
     }
 
     this.setColor(options.color);
