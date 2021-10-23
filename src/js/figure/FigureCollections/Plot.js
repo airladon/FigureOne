@@ -81,13 +81,13 @@ export type TypePlotTitle = OBJ_TextLines & { offset: TypeParsablePoint };
  *
  * @property {number} [width] width of the plot area
  * @property {number} [height] height of the plot area
- * @property {COL_Axis | boolean} [xAxis] customize the x axis, or use `false`
+ * @property {COL_Axis | boolean} [x] customize the x axis, or use `false`
  * to hide it
- * @property {COL_Axis | boolean} [yAxis] customize the y axis, or use `false`
+ * @property {COL_Axis | boolean} [y] customize the y axis, or use `false`
  * to hide it
  * @property {Array<COL_Axis>} [axes] add axes additional to x and y
  * @property {boolean} [grid] turn on and off the grid - use the grid options
- * in xAxis, yAxis or axes for finer customization
+ * in x axis, y axis or axes for finer customization
  * @property {TypePlotTitle | string} [title] plot title can be simply a
  * `string` or fully customized with TypePlotTitle
  * @property {Array<COL_Trace | TypeParsablePoint> | COL_Trace | Array<TypeParsablePoint>} [trace]
@@ -123,8 +123,8 @@ export type TypePlotTitle = OBJ_TextLines & { offset: TypeParsablePoint };
 export type COL_Plot = {
   width?: number,
   height?: number,
-  xAxis?: COL_Axis | boolean,
-  yAxis?: COL_Axis | boolean,
+  x?: COL_Axis | boolean,
+  y?: COL_Axis | boolean,
   axes?: Array<COL_Axis>,
   cross?: TypeParsablePoint | null,
   grid?: boolean,
@@ -506,7 +506,7 @@ class CollectionsPlot extends FigureElementCollection {
       styleTheme: 'box',
       width: (collections.primitives.scene.right - collections.primitives.scene.left) / 3,
       height: (collections.primitives.scene.right - collections.primitives.scene.left) / 3,
-      grid: [],
+      grid: true,
       xAlign: 'plotAreaLeft',
       yAlign: 'plotAreaBottom',
       transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
@@ -568,11 +568,11 @@ class CollectionsPlot extends FigureElementCollection {
     }
     this.drawNumberOrder = [-1, 0];
     this.xAxisShow = true;
-    if (options.xAxis === false) {
+    if (options.x === false) {
       this.xAxisShow = false;
     }
     this.yAxisShow = true;
-    if (options.yAxis === false) {
+    if (options.y === false) {
       this.yAxisShow = false;
     }
 
@@ -595,12 +595,14 @@ class CollectionsPlot extends FigureElementCollection {
     this.addAxes([joinObjects(
       {},
       { axis: 'x', name: 'x', auto: [bounds.left, bounds.right] },
-      options.xAxis != null ? options.xAxis : {},
+      this.grid === false ? { grid: [] } : {},
+      options.x != null ? options.x : {},
     )]);
     this.addAxes([joinObjects(
       {},
       { axis: 'y', name: 'y', auto: [bounds.bottom, bounds.top] },
-      options.yAxis != null ? options.yAxis : {},
+      this.grid === false ? { grid: [] } : {},
+      options.y != null ? options.y : {},
     )]);
     if (options.axes != null) {
       this.addAxes(options.axes);
@@ -692,6 +694,14 @@ class CollectionsPlot extends FigureElementCollection {
         }
       });
     }
+  }
+
+  showGrid() {
+    this.axes.forEach(axis => axis.showGrid());
+  }
+
+  hideGrid() {
+    this.axes.forEach(axis => axis.hideGrid());
   }
 
   getNonTraceBoundingRect() {
