@@ -1261,6 +1261,14 @@ class CollectionsAxis extends FigureElementCollection {
   hideTicks() { // $FlowFixMe
     this.ticks.forEach((t, i) => this[`_ticks${i}`].hide());
   }
+
+  showGrid() { // $FlowFixMe
+    this.grid.forEach((t, i) => this[`_grid${i}`].show());
+  }
+
+  hideGrid() { // $FlowFixMe
+    this.grid.forEach((t, i) => this[`_grid${i}`].hide());
+  }
 }
 
 export default CollectionsAxis;

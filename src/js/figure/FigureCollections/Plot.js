@@ -59,6 +59,20 @@ export type OBJ_PlotPanOptions = {
 }
 
 /**
+ * An axis definition for a plot is the same as that for an
+ * {@link CollectionsAxis} with an additional property `location` which can be
+ * used to conveniently set the axis `position`. Note, if `position` is set in
+ * the axis definition, then it will override `location`.
+ *
+ * @extends {COL_Axis}
+ *
+ * @property {OBJ_PlotAxis} [location]
+ */
+export type OBJ_PlotAxis = {
+  location?: 'left' | 'right' | 'top' | 'bottom',
+} & COL_Axis;
+
+/**
  * Plot title.
  *
  * {@link OBJ_TextLines}` & { offset: `{@link TypeParsablePoint}` }`
@@ -81,11 +95,11 @@ export type TypePlotTitle = OBJ_TextLines & { offset: TypeParsablePoint };
  *
  * @property {number} [width] width of the plot area
  * @property {number} [height] height of the plot area
- * @property {COL_Axis | boolean} [x] customize the x axis, or use `false`
+ * @property {OBJ_PlotAxis | boolean} [x] customize the x axis, or use `false`
  * to hide it
- * @property {COL_Axis | boolean} [y] customize the y axis, or use `false`
+ * @property {OBJ_PlotAxis | boolean} [y] customize the y axis, or use `false`
  * to hide it
- * @property {Array<COL_Axis>} [axes] add axes additional to x and y
+ * @property {Array<OBJ_PlotAxis>} [axes] add axes additional to x and y
  * @property {boolean} [grid] turn on and off the grid - use the grid options
  * in x axis, y axis or axes for finer customization
  * @property {TypePlotTitle | string} [title] plot title can be simply a
@@ -123,9 +137,9 @@ export type TypePlotTitle = OBJ_TextLines & { offset: TypeParsablePoint };
 export type COL_Plot = {
   width?: number,
   height?: number,
-  x?: COL_Axis | boolean,
-  y?: COL_Axis | boolean,
-  axes?: Array<COL_Axis>,
+  x?: OBJ_PlotAxis | boolean,
+  y?: OBJ_PlotAxis | boolean,
+  axes?: Array<OBJ_PlotAxis>,
   cross?: TypeParsablePoint | null,
   grid?: boolean,
   title?: string | TypePlotTitle,
@@ -714,7 +728,7 @@ class CollectionsPlot extends FigureElementCollection {
     return this.getBoundingRect('draw', 'border', children);
   }
 
-  addAxes(axes: Array<COL_Axis>) {
+  addAxes(axes: Array<OBJ_PlotAxis>) {
     const defaultOptions = {
       color: this.defaultColor,
       font: this.defaultFont,
@@ -734,9 +748,10 @@ class CollectionsPlot extends FigureElementCollection {
       // const theme = this.getTheme(this.theme, axisType, axisOptions.color);
       const theme = joinObjects(
         {},
-        this.getStyleTheme(this.styleTheme, axisType),
+        this.getStyleTheme(this.styleTheme, axisType, axisOptions.location),
         this.getColorTheme(this.colorTheme, axisOptions.color),
       );
+
       const show = axisType === 'x' ? this.xAxisShow : this.yAxisShow;
       // $FlowFixMe
       defaultOptions.show = show;
@@ -752,6 +767,9 @@ class CollectionsPlot extends FigureElementCollection {
       }
       if (typeof axisOptions.labels === 'string') {
         o.labels = joinObjects({}, theme.axis.labels, { location: axisOptions.labels });
+      }
+      if (typeof axisOptions.title === 'string') {
+        o.title = joinObjects({}, theme.axis.title, { text: axisOptions.title });
       }
       if (Array.isArray(o.grid)) {
         for (let i = 0; i < o.grid.length; i += 1) {
@@ -1005,27 +1023,41 @@ class CollectionsPlot extends FigureElementCollection {
     }
   }
 
-  getStyleTheme(name: string, axis: 'x' | 'y' = 'x') {
+  getStyleTheme(
+    name: string,
+    axis: 'x' | 'y' = 'x',
+    location: null | 'left' | 'bottom' | 'right' | 'top' = null,
+  ) {
     // const length = axis === 'x' ? this.width : this.height;
     const gridLength = axis === 'x' ? this.height : this.width;
     const lineWidth = this.collections.primitives.defaultLineWidth;
     const tickLength = lineWidth * 5;
     let theme = {};
     if (name === 'box') {
+      let position = [0, 0];
+      if (location === 'top') {
+        position = [0, this.height];
+      } else if (location === 'right') {
+        position = [this.width, 0];
+      }
       theme = {
         axis: {
           line: { width: lineWidth },
           ticks: {
             width: lineWidth,
             length: tickLength,
-            location: axis === 'x' ? 'bottom' : 'left',
+            location: location || (axis === 'x' ? 'bottom' : 'left'),
           },
           grid: {
             width: lineWidth / 2,
             length: gridLength,
           },
           labels: {
-            location: axis === 'x' ? 'bottom' : 'left',
+            location: location || (axis === 'x' ? 'bottom' : 'left'),
+          },
+          position,
+          title: {
+            location: location || (axis === 'x' ? 'bottom' : 'left'),
           },
         },
       };
