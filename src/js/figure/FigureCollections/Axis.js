@@ -1118,7 +1118,7 @@ class CollectionsAxis extends FigureElementCollection {
     const font = joinObjects(
       {},
       this.defaultFont,
-      { size: this.defaultFont.size || this.length / 20 },  // $FlowFixMe
+      { size: this.defaultFont.size * 1.2 || this.length / 20 },  // $FlowFixMe
       optionsToUse.font != null ? optionsToUse.font : {},
     );
     const primitives = this.getAllPrimitives().filter(p => !p.name.startsWith('grid'));

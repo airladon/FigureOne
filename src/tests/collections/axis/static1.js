@@ -55,6 +55,33 @@ function getShapes(getPos) {
 
     // Label and offset
     shape('labelTopOffset', { labels: { location: 'top', offset: [0.1, 0.1] } }),
+
+    // Title location
+    shape('xTitleBottom', { title: { text: 'time (s)', location: 'bottom' } }),
+    shape('xTitleTop', { title: { text: 'time (s)', location: 'top' } }),
+    shape('xTitleLeft', { title: { text: 'time (s)', location: 'left' } }),
+    shape('xTitleRight', { title: { text: 'time (s)', location: 'right' } }),
+    shape('yTitleRight', { title: { text: 'time (s)', location: 'right' }, axis: 'y' }),
+    shape('yTitleBottom', { title: { text: 'time (s)', location: 'bottom' }, axis: 'y' }),
+    shape('yTitleTop', { title: { text: 'time (s)', location: 'top' }, axis: 'y' }),
+    shape('yTitleLeft', { title: { text: 'time (s)', location: 'left' }, axis: 'y' }),
+
+    /*
+    ..######...#######..##........#######..########...######.
+    .##....##.##.....##.##.......##.....##.##.....##.##....##
+    .##.......##.....##.##.......##.....##.##.....##.##......
+    .##.......##.....##.##.......##.....##.########...######.
+    .##.......##.....##.##.......##.....##.##...##.........##
+    .##....##.##.....##.##.......##.....##.##....##..##....##
+    ..######...#######..########..#######..##.....##..######.
+    */
+    shape('defaultColor', { color: [0, 0, 1, 1], title: 'time (s)' }),
+    shape('override', {
+      color: [0, 0, 1, 1],
+      title: { text: 'time (s)', font: { color: [0, 1, 0, 1] } },
+      labels: { color: [0, 1, 0, 1], font: { color: [0, 1, 1, 1] } },
+    }),
+
   ];
 }
 
