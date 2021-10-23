@@ -170,6 +170,14 @@ export type OBJ_AxisTicks_Fixed = {
   color?: TypeColor,
 };
 
+/**
+ * @property {Array<number>} values values to offset
+ * @property {TypeParsablePoint} offset position offset to apply to values
+ */
+export type OBJ_ValuesOffset = {
+  values: Array<number>,
+  offset: TypeParsablePoint,
+}
 
 /**
  * Axis label options object for the {@link COL_Axis}.
@@ -201,6 +209,8 @@ export type OBJ_AxisTicks_Fixed = {
  * alignment of labels (`'top'` for x axes, `'middle'` for y axes)
  * @property {OBJ_Font} [font] specific font changes for labels
  * @property {Array<number> | number} [hide] value indexes to hide (`[]`)
+ * @property {OBJ_ValuesOffset} [valueOffset] offset the position of selected
+ * values (useful to offset values in position near axis cross over points)
  * @property {TypeLabelLocation} [location] location of label (defaults to
  * `'bottom'` for x axis and `'left'` for y axis)
  *
@@ -221,6 +231,7 @@ export type OBJ_AxisLabels = {
   yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
   font?: OBJ_Font,
   hide?: Array<number>,
+  valueOffset?: OBJ_ValuesOffset,
   fixed?: boolean,
   location?: TypeLabelLocation,
 };
@@ -236,6 +247,10 @@ export type OBJ_AxisLabels_Fixed = {
   font: OBJ_Font_Fixed,
   hide: Array<number>,
   fixed: boolean,
+  valueOffset: {
+    values: Array<number>,
+    offset: Point,
+  },
 };
 
 /**
@@ -716,10 +731,12 @@ class CollectionsAxis extends FigureElementCollection {
           offset: [0, 0],
           fixed: false,
           hide: [],
+          valueOffset: { values: [], offset: [0, 0] },
         },
         labelsO,
       );
       o.offset = getPoint(o.offset);
+      o.valueOffset.offset = getPoint(o.valueOffset.offset);
       this.labels = o;
       if (o.location != null) {
         // if (this.axis === 'x') {
@@ -978,7 +995,8 @@ class CollectionsAxis extends FigureElementCollection {
   }
 
   updateText(values: Array<number>) {
-    if (this.labels == null || this._labels == null) {
+    const { labels } = this;
+    if (labels == null || this._labels == null) {
       return;
     }
 
@@ -995,10 +1013,10 @@ class CollectionsAxis extends FigureElementCollection {
 
     const labelLoc = this._labels._custom.location;
 
-    let { space } = this.labels;
+    let { space } = labels;
     const {
       offset, font, rotation, format, precision, fixed,
-    } = this.labels;
+    } = labels;
     if (space == null) {
       space = this.axis === 'x' ? font.size * 1.3 : font.size * 0.6;
       if (labelLoc === 'top' && this.axis === 'x') {
@@ -1030,15 +1048,22 @@ class CollectionsAxis extends FigureElementCollection {
     for (let i = 0; i < values.length; i += 1) {
       let location;
       const draw = this.valueToDraw(values[i]);
+      let valueOffset = new Point(0, 0);
+      if (
+        labels.valueOffset.values.length > 0
+        && labels.valueOffset.values.indexOf(values[i]) > -1
+      ) {
+        valueOffset = labels.valueOffset.offset;
+      }
       if (this.axis === 'x') {
         location = new Point(
-          draw + offset.x,
-          spaceBounds + offset.y,
+          draw + offset.x + valueOffset.x,
+          spaceBounds + offset.y + valueOffset.y,
         ).rotate(-rotation);
       } else {
         location = new Point(
-          spaceBounds + offset.x,
-          draw + offset.y,
+          spaceBounds + offset.x + valueOffset.x,
+          draw + offset.y + valueOffset.y,
         ).rotate(-rotation);
       }
       let label;
