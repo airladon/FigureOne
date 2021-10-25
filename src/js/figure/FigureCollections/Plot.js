@@ -29,6 +29,22 @@ import type FigureCollections from './FigureCollections';
 
 
 /**
+ * Gesture area extension. `left` and `bottom` should be negative numbers
+ * if extending beyond the plot area.
+ *
+ * @property {number} [left]
+ * @property {number} [right]
+ * @property {number} [top]
+ * @property {number} [bottom]
+ */
+export type OBJ_GestureArea = {
+  left?: number,
+  right?: number,
+  top?: number,
+  bottom?: number,
+};
+
+/**
  * Plot frame.
  *
  *
@@ -153,6 +169,10 @@ export type OBJ_PlotTitle = OBJ_TextLines & { offset: TypeParsablePoint };
  * @property {'light' | 'dark'} [colorTheme] defines defaul colors. `'dark'`
  * theme is better on light backgrounds while '`light'` theme is better on dark
  * backgrounds (`'dark'`)
+ * @property {OBJ_GestureArea} [gestureArea] the gesture area is the plot area
+ * by default. Use this property to extend the gesture area beyond the plot
+ * area. This is useful for the user to zoom in on areas on the edge of the
+ * plot area.
  */
 export type COL_Plot = {
   width?: number,
@@ -172,6 +192,7 @@ export type COL_Plot = {
   position?: TypeParsablePoint,
   zoom?: OBJ_PlotZoomOptions | 'x' | 'y' | 'xy',
   pan?: OBJ_PlotPanOptions | 'x' | 'y' | 'xy',
+  gestureArea?: OBJ_GestureArea,
   cross?: TypeParsablePoint,
   autoGrid?: boolean,
   plotAreaLabels?: boolean,
@@ -183,6 +204,12 @@ function cleanTraces(
   tracesIn: Array<COL_Trace | Array<TypeParsablePoint>> | COL_Trace | Array<TypeParsablePoint>,
 ): [Array<COL_Trace>, Rect] {
   let traces = [];
+  if (tracesIn == null) {
+    return [
+      [],
+      new Rect(0, 0, 1, 1),
+    ];
+  }
   if (!Array.isArray(tracesIn)) {
     traces = [tracesIn];
   } else if (tracesIn.length === 0) {
@@ -487,6 +514,13 @@ class CollectionsPlot extends FigureElementCollection {
   forceColor: null | TypeColor;
   zoomPoint: null | Point;
 
+  gestureArea: {
+    left: number,
+    bottom: number,
+    top: number,
+    right: number,
+  };
+
   // length: number;
   // angle: number;
   // start: number;
@@ -515,6 +549,9 @@ class CollectionsPlot extends FigureElementCollection {
       pan: false,
       plotAreaLabels: false,
       autoGrid: true, // !!((optionsIn.zoom || optionsIn.pan || optionsIn.cross)),
+      gestureArea: {
+        left: 0, bottom: 0, top: 0, right: 0,
+      },
     };
     if (
       optionsIn.color != null
@@ -553,6 +590,7 @@ class CollectionsPlot extends FigureElementCollection {
         this.defaultFont.color = this.defaultColor;
       }
     }
+    this.gestureArea = options.gestureArea;
     this.width = options.width;
     this.height = options.height;
     this.colorTheme = options.colorTheme;
@@ -819,11 +857,11 @@ class CollectionsPlot extends FigureElementCollection {
     panOptions: OBJ_PlotPanOptions | 'xy' | 'x' | 'y' | false,
   ) {
     const options = {
-      width: this.width,
-      height: this.height,
+      width: this.width + this.gestureArea.right - this.gestureArea.left,
+      height: this.height + this.gestureArea.top - this.gestureArea.bottom,
       xAlign: 'left',
       yAlign: 'bottom',
-      position: [0, 0],
+      position: [this.gestureArea.left, this.gestureArea.bottom],
     };
     if (zoomOptions != null && zoomOptions !== false) {
       const defaultOptions = {
@@ -887,9 +925,11 @@ class CollectionsPlot extends FigureElementCollection {
         return;
       }
       const z = gesture.getZoom();
+      const totWidth = this.width + this.gestureArea.right - this.gestureArea.left;
+      const totHeight = this.height + this.gestureArea.top - this.gestureArea.bottom;
       const p = this.drawToPoint(new Point(
-        z.current.normPosition.x * this.width,
-        z.current.normPosition.y * this.height,
+        z.current.normPosition.x * totWidth + this.gestureArea.left,
+        z.current.normPosition.y * totHeight + this.gestureArea.bottom,
       ));
       this.zoomDelta(p, z.mag / z.last.mag);
       gesture.reset();
@@ -1291,6 +1331,7 @@ class CollectionsPlot extends FigureElementCollection {
     }
     this.updateTraces();
     this.setupCross();
+    this.notifications.publish('update');
   }
 
   panDeltaDraw(deltaDrawIn: TypeParsablePoint) {
@@ -1305,6 +1346,23 @@ class CollectionsPlot extends FigureElementCollection {
     }
     this.updateTraces();
     this.setupCross();
+    this.notifications.publish('update');
+  }
+
+  panToValue(value: TypeParsablePoint, atDraw: TypeParsablePoint) {
+    const v = getPoint(value);
+    const d = getPoint(atDraw);
+    const x = this.getXAxis();
+    const y = this.getYAxis();
+    if (x != null && this.pan.enabled && this.pan.x) {
+      x.pan(v.x, d.x);
+    }
+    if (y != null && this.pan.enabled && this.pan.y) {
+      y.pan(v.y, d.y);
+    }
+    this.updateTraces();
+    this.setupCross();
+    this.notifications.publish('update');
   }
 
   zoomValue(valueIn: TypeParsablePoint, mag: number) {
@@ -1322,6 +1380,7 @@ class CollectionsPlot extends FigureElementCollection {
     }
     this.updateTraces();
     this.setupCross();
+    this.notifications.publish('update');
   }
 
   zoomDelta(valueIn: TypeParsablePoint, magDelta: number) {
@@ -1341,6 +1400,7 @@ class CollectionsPlot extends FigureElementCollection {
     }
     this.updateTraces();
     this.setupCross();
+    this.notifications.publish('update');
   }
 }
 
