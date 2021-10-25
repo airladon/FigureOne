@@ -5141,9 +5141,6 @@ class FigureElementCollection extends FigureElement {
       // if (FIGURE1DEBUG) { drawTimer = new PerformanceTimer(); }
       for (let n = 0; n < this.drawNumberOrder.length; n += 1) {
         const drawNum = this.drawNumberOrder[n] == null ? drawNumber : this.drawNumberOrder[n];
-        if (this.name === 'default') {
-          console.log(drawNum)
-        }
         for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
           this.elements[this.drawOrder[i]].draw(
             now, sceneToUse, this.drawTransforms, opacityToUse, targetTexture,

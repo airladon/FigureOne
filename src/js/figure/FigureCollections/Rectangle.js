@@ -431,10 +431,10 @@ class CollectionsRectangle extends FigureElementCollection {
     } else {
       optionsIn = { line: rectOptions };
     }
-    const o = joinObjects({}, defaultOptions, optionsIn); // $FlowFixMe
+    const o = joinObjects({}, defaultOptions, optionsIn);
     if (o.line != null && o.line.color != null) {
       o.color = o.line.color;
-    }
+    } // $FlowFixMe
     this[name] = o;
     const rect = this.collections.primitives.rectangle(o);
     this.add(name, rect);
