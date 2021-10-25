@@ -21,7 +21,7 @@ import type { TypeColor } from '../../tools/types';
  * minimum if `null` (`null`)
  * @property {number} [sensitivity] zoom sensitivity where values greater
  * than 1 are more sensitive resulting in faster zoom changes (`1`)
- * @property {number} [position] zoom around a fixed point (instead of the
+ * @property {null | TypeParsablePoint} [position] zoom around a fixed point (instead of the
  * mouse of pinch location) - leave undefined or use `null` to instead zoom
  * around mouse or pinch location (`null`)
  */
@@ -409,7 +409,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       bottom: null,
       delta: new Point(0, 0),
       sensitivity: 1,
-      wheel: false,
+      wheel: true,
       momentum: true,
     };
     this.justMoved = false;
@@ -603,7 +603,10 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
         return;
       }
     }
-    if (this.zoom.enabled) {
+    if (
+      this.zoom.enabled
+      && (!this.pan.enabled || !this.pan.wheel || Math.abs(delta.y) >= Math.abs(delta.x))
+    ) {
       let mag = this.zoom.mag + delta.y / 10 * this.zoom.sensitivity * this.zoom.mag / 100;
       if (this.zoom.min != null) {
         mag = Math.max(mag, this.zoom.min);
@@ -686,6 +689,10 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
 
   updateZoom(mag: number, zoomPosition: Point, distance: number = 0, angle: number = 0) {
     const oldMag = this.zoom.mag;
+    let zPosition = zoomPosition;
+    if (this.zoom.position != null) {
+      zPosition = this.zoom.position;
+    }
     this.zoom.last = {
       mag: this.zoom.mag,
       position: this.zoom.current.position,
@@ -695,20 +702,16 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     };
     this.zoom.mag = mag;
     this.zoom.current = {
-      position: zoomPosition,
-      normPosition: this.zoomedSceneToNorm(zoomPosition),
+      position: zPosition,
+      normPosition: this.zoomedSceneToNorm(zPosition),
       angle,
       distance,
       mag: this.zoom.mag,
     };
-    let zPosition = zoomPosition;
-    if (this.zoom.position != null) {
-      zPosition = this.zoom.position;
-    }
     const center = this.glToZoomedScene(new Point(0, 0));
     const line = new Line(zPosition, center);
     const newCenter = line.pointAtPercent(oldMag / mag);
-    this.pan.delta = newCenter.sub(center);
+    this.pan.delta = line.length() === 0 ? new Point(0, 0) : newCenter.sub(center);
     this.setPanOffset(this.pan.offset.add(this.pan.delta));
     this.zoom.cumAngle += angle - this.zoom.last.angle;
   }
