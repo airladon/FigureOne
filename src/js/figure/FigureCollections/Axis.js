@@ -65,8 +65,8 @@ function calcAuto(auto: [number, number]) {
       step = newRange / 5;
   }
   let precision = 0;
-  if (order < 0) {
-    precision = Math.abs(order) + 1;
+  if (order < 2) {
+    precision = Math.abs(order) + 3;
   }
   return {
     start: round(newStart),

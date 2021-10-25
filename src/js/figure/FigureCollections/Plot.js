@@ -148,6 +148,11 @@ export type OBJ_PlotTitle = OBJ_TextLines & { offset: TypeParsablePoint };
  * @property {boolean} [autoGrid] if `true` sets the grid for an axes to expand
  * accross the entire plot area. Set to `false` if only a partial length grid
  * is needed (`true`)
+ * @property {'box' | 'numberLine' | 'positiveNumberLine'} [styleTheme] defines
+ * default values for tick, label, axis locations and cross points. (`'box'`)
+ * @property {'light' | 'dark'} [colorTheme] defines defaul colors. `'dark'`
+ * theme is better on light backgrounds while '`light'` theme is better on dark
+ * backgrounds (`'dark'`)
  */
 export type COL_Plot = {
   width?: number,
@@ -170,6 +175,8 @@ export type COL_Plot = {
   cross?: TypeParsablePoint,
   autoGrid?: boolean,
   plotAreaLabels?: boolean,
+  styleTheme?: 'box' | 'numberLine' | 'positiveNumberLine',
+  colorTheme?: 'light' | 'dark',
 } & OBJ_Collection;
 
 function cleanTraces(
@@ -227,13 +234,18 @@ function cleanTraces(
  * labels and titles.
  *
  * ![](./apiassets/advplot_ex1.png)
+ *
  * ![](./apiassets/advplot_ex2.png)
  *
  * ![](./apiassets/advplot_ex3.png)
+ *
  * ![](./apiassets/advplot_ex4.png)
  *
  * ![](./apiassets/advplot_ex5.png)
+ *
  * ![](./apiassets/advplot_ex6.png)
+ *
+ * ![](./apiassets/advplot_zoom.gif)
  *
  * This object provides convient and customizable plot functionality.
  *
@@ -244,6 +256,9 @@ function cleanTraces(
  * Additional options can be used to finely customize each of these, as well
  * as add and customize plot and axis titles, a legend, and a frame around the
  * entire plot.
+ *
+ * Plots can also be interactive, with both zoom and pan functionality from
+ * mouse, mouse wheel, touch and pinch gestures.
  *
  * @see
  * See {@link COL_Axis}, {@link OBJ_AxisLabels}, {@link OBJ_AxisTicks},
@@ -263,7 +278,6 @@ function cleanTraces(
  * @example
  * // Plot of single trace with auto axis scaling
  * figure.add({
- *   name: 'plot',
  *   make: 'collections.plot',
  *   trace: pow(),
  * });
@@ -273,20 +287,19 @@ function cleanTraces(
  * // Some traces are customized beyond the default color to include dashes and
  * // markers
  * figure.add({
- *   name: 'plot',
  *   make: 'collections.plot',
  *   width: 2,                                    // Plot width in figure
  *   height: 2,                                   // Plot height in figure
- *   yAxis: { start: 0, stop: 100 },              // Customize y axis limits
+ *   y: { start: 0, stop: 50 },                   // Customize y axis limits
  *   trace: [
  *     { points: pow(1.5), name: 'Power 1.5' },   // Trace names are for legend
  *     {                                          // Trace with only markers
- *       points: pow(2, 10, 0.5),
+ *       points: pow(2, 0, 10, 0.5),
  *       name: 'Power 2',
  *       markers: { sides: 4, radius: 0.03 },
  *     },
  *     {                                          // Trace with markers and
- *       points: pow(3, 10, 0.5),                 // dashed line
+ *       points: pow(3, 0, 10, 0.5),              // dashed line
  *       name: 'Power 3',
  *       markers: { radius: 0.03, sides: 10, line: { width: 0.005 } },
  *       line: { dash: [0.04, 0.01] },
@@ -295,31 +308,32 @@ function cleanTraces(
  *   legend: true,
  * });
  *
- * @example > collections.plot.multiple.grids.simple.titles
+ * @example
  * // Multiple grids and simple titles
  * figure.add({
- *   name: 'plot',
  *   make: 'collections.plot',
- *   width: 2,
- *   height: 2,
- *   yAxis: {
- *     start: 0,
- *     stop: 100,
+ *   y: {
+ *     start: -50,
+ *     stop: 50,
+ *     step: [25, 5],
  *     grid: [
- *       { step: 20, width: 0.005, dash: [], color: [0.7, 0.7, 1, 1] },
- *       { step: 5, width: 0.005, dash: [0.01, 0.01], color: [1, 0.7, 0.7, 1] },
+ *       true,
+ *       { width: 0.005, dash: [0.01, 0.01], color: [1, 0.7, 0.7, 1] },
  *     ],
  *     title: 'velocity (m/s)',
  *   },
- *   xAxis: {
+ *   x: {
+ *     start: -5,
+ *     stop: 5,
+ *     step: [2.5, 0.5, 0.1],
  *     grid: [
- *       { step: 2, width: 0.005, dash: [], color: [0.7, 0.7, 1, 1] },
- *       { step: 0.5, width: 0.005, dash: [0.01, 0.01], color: [1, 0.7, 0.7, 1] },
+ *       true,
+ *       { width: 0.005, dash: [0.01, 0.01], color: [1, 0.7, 0.7, 1] },
  *     ],
  *     title: 'time (s)',
  *   },
- *   trace: pow(3),
- *   title: 'Velocity over Time'
+ *   trace: pow(3, -10, 10),
+ *   title: 'Velocity over Time',
  * });
  *
  * @example
@@ -327,13 +341,10 @@ function cleanTraces(
  * // Use plot frame and plot area
  * // Title has a subtitle
  * figure.add({
- *   name: 'plot',
  *   make: 'collections.plot',
- *   width: 2,
- *   height: 2,
  *   trace: pow(3),
- *   xAxis: { show: false },
- *   yAxis: { show: false },
+ *   x: { show: false },
+ *   y: { show: false },
  *   plotArea: [0.93, 0.93, 0.93, 1],
  *   frame: {
  *     line: { width: 0.005, color: [0.5, 0.5, 0.5, 1] },
@@ -346,48 +357,35 @@ function cleanTraces(
  *       { text: 'For object A', lineSpace: 0.13, font: { size: 0.08 } },
  *     ],
  *     offset: [0, 0],
- *   }
+ *   },
  * });
  *
  * @example
  * // Secondary y axis
  * figure.add({
- *   name: 'plot',
  *   make: 'collections.plot',
- *   width: 2,
- *   height: 2,
  *   trace: pow(2),
- *   yAxis: {
+ *   y: {
  *     title: {
  *       text: 'velocity (m/s)',
  *       rotation: 0,
  *       xAlign: 'right',
  *     },
  *   },
- *   xAxis: { title: 'time (s)' },
+ *   x: { title: 'time (s)' },
  *   axes: [
  *     {
  *       axis: 'y',
  *       start: 0,
  *       stop: 900,
+ *       step: 300,
  *       color: [1, 0, 0, 1],
- *       position: [2, 0],
- *       ticks: {
- *         step: 300,
- *         offset: 0,
- *         length: 0.05,
- *       },
- *       labels: {
- *         offset: [0.2, 0],
- *         precision: 0,
- *         xAlign: 'left',
- *       },
+ *       location: 'right',
  *       title: {
- *         offset: [0.4, 0],
- *         xAlign: 'left',
+ *         offset: [0.6, 0.1],
  *         text: 'displacment (m)',
  *         rotation: 0,
- *       }
+ *       },
  *     },
  *   ],
  *   position: [-1, -1],
@@ -398,77 +396,46 @@ function cleanTraces(
  * // Automatic layout doesn't support this, but axes, ticks, labels and titles
  * // can all be customized to create it.
  * figure.add({
- *   name: 'plot',
  *   make: 'collections.plot',
- *   width: 3,
- *   height: 3,
- *   trace: pow(2, 20),
+ *   trace: pow(3, -10, 10),
  *   font: { size: 0.1 },
- *   xAxis: {
- *     start: -25,
- *     stop: 25,
- *     ticks: {
- *       start: -20,
- *       stop: 20,
- *       step: 5,
- *       length: 0.1,
- *       offset: -0.05
- *     },
- *     line: { arrow: 'barb' },
- *     position: [0, 1.5],
- *     labels: [
- *       {
- *         hide: 4,
- *         precision: 0,
- *         space: 0.1,
- *       },
- *       {
- *         values: 0,
- *         text: 'O',
- *         offset: [0, 0.165],
- *       },
- *     ],
+ *   styleTheme: 'numberLine',
+ *   x: {
  *     title: {
  *       text: 'x',
- *       offset: [1.65, 0.3],
- *       font: {
- *         style: 'italic',
- *         family: 'Times New Roman',
- *         size: 0.15,
- *       },
+ *       font: { style: 'italic', family: 'Times New Roman', size: 0.15 },
  *     },
  *   },
- *   yAxis: {
- *     start: -500,
- *     stop: 500,
- *     line: { arrow: 'barb' },
- *     ticks: {
- *       start: -400,
- *       stop: 400,
- *       step: 100,
- *       length: 0.1,
- *       offset: -0.05,
- *     },
- *     position: [1.5, 0],
- *     labels: {
- *       hide: 4,
- *       precision: 0,
- *       space: 0.03,
- *     },
+ *   y: {
+ *     step: 500,
  *     title: {
  *       text: 'y',
- *       offset: [0.35, 1.6],
- *       font: {
- *         style: 'italic',
- *         family: 'Times New Roman',
- *         size: 0.15,
- *       },
- *       rotation: 0,
+ *       font: { style: 'italic', family: 'Times New Roman', size: 0.15 },
  *     },
  *   },
  *   grid: false,
- *   position: [-1, -1],
  * });
+ *
+ * @example
+ * // Zoomable and Pannable plot
+ *
+ * // Create the points for the plot
+ * const points = Array(3000).fill(0).map(() => {
+ *   const x = Math.random() * 8 - 4;
+ *   const y = Math.random() / Math.sqrt(2 * Math.PI) * Math.exp(-0.5 * x ** 2);
+ *   return [x, y];
+ * });
+ *
+ * // Make a zoomable and pannable plot
+ * const plot = figure.add({
+ *   make: 'collections.plot',
+ *   trace: { points, markers: { sides: 6, radius: 0.01 } },
+ *   zoom: { axis: 'xy', min: 0.5, max: 16 },
+ *   pan: true,
+ * });
+ *
+ * // Initialize by zooming in on [1.78, 0.067] by a magnification factor of 10
+ * plot.zoomValue([1.78, 0.067], 10);
  *
  */
 // $FlowFixMe
@@ -885,6 +852,9 @@ class CollectionsPlot extends FigureElementCollection {
       this.zoom.y = zOptions.axis.endsWith('y');
       this.zoom.min = zOptions.min;
       this.zoom.max = zOptions.max;
+      // $FlowFixMe
+      options.zoom.min = null; // $FlowFixMe
+      options.zoom.max = null;
     }
     if (panOptions != null && panOptions !== false) {
       const defaultOptions = {
@@ -1360,6 +1330,7 @@ class CollectionsPlot extends FigureElementCollection {
     if (x != null && this.zoom.enabled && this.zoom.x) {
       const v = this.zoomPoint != null ? this.zoomPoint.x : value.x;
       const m = clipValue(x.currentZoom * magDelta, this.zoom.min, this.zoom.max);
+      // console.log(x.currentZoom, magDelta, x.currentZoom * magDelta)
       x.zoomDelta(v, m / x.currentZoom);
     }
     const y = this.getYAxis();
