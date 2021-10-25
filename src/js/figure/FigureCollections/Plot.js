@@ -38,17 +38,30 @@ import type FigureCollections from './FigureCollections';
  * @property {number} [space] space between plot, labels and title and frame
  * boundary
  */
-export type TypePlotFrame = {
+export type OBJ_PlotFrame = {
   line?: OBJ_LineStyleSimple,
   fill?: TypeColor | OBJ_Texture,
   corner?: OBJ_CurvedCorner,
   space?: number,
 };
 
+/**
+  * @property {'x' | 'y' | 'xy'} [axis] which axis to zoom (`xy`)
+  * @property {number} [sensitivity] mouse wheel or pinch zoom sensitivity
+  * where >1 is more sensitive and <1 is less sensitive (`1`)
+  * @property {TypeParsablePoint | number} [value] fix value to zoom on - will
+  * override pinch or mouse wheel zoom location
+  * @property {null | number} [min] minimum zoom where `null` is no limit
+  * (`null`)
+  * @property {null | number} [max] maximum zoom where `null` is no limit
+  * (`null`)
+ */
 export type OBJ_PlotZoomOptions = {
   axis?: 'x' | 'y' | 'xy',
   sensitivity?: number,
-  point?: TypeParsablePoint,
+  value?: TypeParsablePoint | number,
+  min?: null | number,
+  max?: null | number,
 };
 
 export type OBJ_PlotPanOptions = {
@@ -79,7 +92,7 @@ export type OBJ_PlotAxis = {
  *
  * Use `offset` to adjust the location of the title.
  */
-export type TypePlotTitle = OBJ_TextLines & { offset: TypeParsablePoint };
+export type OBJ_PlotTitle = OBJ_TextLines & { offset: TypeParsablePoint };
 
 /**
  * {@link CollectionsPlot} options object that extends {@link OBJ_Collection}
@@ -102,24 +115,26 @@ export type TypePlotTitle = OBJ_TextLines & { offset: TypeParsablePoint };
  * @property {Array<OBJ_PlotAxis>} [axes] add axes additional to x and y
  * @property {boolean} [grid] turn on and off the grid - use the grid options
  * in x axis, y axis or axes for finer customization
- * @property {TypePlotTitle | string} [title] plot title can be simply a
- * `string` or fully customized with TypePlotTitle
+ * @property {OBJ_PlotTitle | string} [title] plot title can be simply a
+ * `string` or fully customized with OBJ_PlotTitle
  * @property {Array<COL_Trace | TypeParsablePoint> | COL_Trace | Array<TypeParsablePoint>} [trace]
  *  Use array if plotting more than one trace. Use COL_Trace to customize the
  *  trace.
  * @property {COL_PlotLegend | boolean} [legend] `true` to turn the legend on,
  * or use COL_PlotLegend to customize it's location and layout
- * @property {boolean | TypeColor | TypePlotFrame} [frame] frame around the
+ * @property {boolean | TypeColor | OBJ_PlotFrame} [frame] frame around the
  * plot can be turned on with `true`, can be a simple color fill using
- * `Array<number>` as a color, or can be fully customized with TypePlotFrame
+ * `Array<number>` as a color, or can be fully customized with OBJ_PlotFrame
  * @property {TypeColor | COL_Rectangle} [plotArea] plot area can be a
  * color fill with `TypeColor` as a color, or be fully customized with
  * COL_Rectangle
  * @property {OBJ_Font} [font] Default font for plot (title, axes, labels, etc.)
  * @property {TypeColor} [color] Default color
  * @property {TypeParsablePoint} [position] Position of the plot
- * @property {OBJ_PlotZoomOptions} [zoom] options for interactive zooming
- * @property {OBJ_PlotPanOptions} [pan] options for interactive panning
+ * @property {OBJ_PlotZoomOptions | 'x' | 'y' | 'xy'} [zoom] options for
+ * interactive zooming
+ * @property {OBJ_PlotPanOptions | 'x' | 'y' | 'xy'} [pan] options for
+ * interactive panning
  * @property {TypeParsablePoint} [cross] value where the default x and y
  * axes should cross. If defined, each `axis.position` will be overridden. If
  * the cross point is outside of the plot area, then the axes will be drawn on
@@ -142,10 +157,10 @@ export type COL_Plot = {
   axes?: Array<OBJ_PlotAxis>,
   cross?: TypeParsablePoint | null,
   grid?: boolean,
-  title?: string | TypePlotTitle,
+  title?: string | OBJ_PlotTitle,
   trace?: Array<COL_Trace | TypeParsablePoint> | COL_Trace | Array<TypeParsablePoint>,
   legend?: COL_PlotLegend,
-  frame?: boolean | TypeColor | TypePlotFrame,
+  frame?: boolean | TypeColor | OBJ_PlotFrame,
   plotArea?: TypeColor | COL_Rectangle,
   font?: OBJ_Font,
   color?: TypeColor,
@@ -490,6 +505,8 @@ class CollectionsPlot extends FigureElementCollection {
     x: boolean,
     y: boolean,
     enabled: boolean,
+    min: null | number,
+    max: null | number,
   };
 
   pan: {
@@ -500,6 +517,8 @@ class CollectionsPlot extends FigureElementCollection {
 
   autoGrid: boolean;
   plotAreaLabels: boolean;
+  forceColor: null | TypeColor;
+  zoomPoint: null | Point;
 
   // length: number;
   // angle: number;
@@ -554,6 +573,10 @@ class CollectionsPlot extends FigureElementCollection {
 
     this.defaultFont = options.font;
     this.defaultColor = options.color;
+    this.forceColor = null;
+    if (optionsIn.color != null) {
+      this.forceColor = optionsIn.color;
+    }
     const colorTheme = this.getColorTheme(options.colorTheme);
     const styleTheme = this.getStyleTheme(options.styleTheme);
     if (optionsIn.font == null || optionsIn.font.color == null) {
@@ -568,6 +591,7 @@ class CollectionsPlot extends FigureElementCollection {
     this.colorTheme = options.colorTheme;
     this.styleTheme = options.styleTheme;
     this.grid = options.grid;
+    this.zoomPoint = null;
     this.cross = options.cross;
     if (this.cross == null && styleTheme.cross) {
       this.cross = getPoint(styleTheme.cross);
@@ -644,8 +668,12 @@ class CollectionsPlot extends FigureElementCollection {
     //   this.__frame.surround(this, this.frameSpace, true);
     // }
 
-    this.zoom = { enabled: false, x: false, y: false };
-    this.pan = { enabled: false, x: false, y: false };
+    this.zoom = {
+      enabled: false, x: false, y: false, min: null, max: null,
+    };
+    this.pan = {
+      enabled: false, x: false, y: false,
+    };
     if (
       (options.zoom != null && options.zoom !== false)
       || (options.pan != null && options.pan !== false)
@@ -746,10 +774,11 @@ class CollectionsPlot extends FigureElementCollection {
         defaultOptions.length = this.height;
       }
       // const theme = this.getTheme(this.theme, axisType, axisOptions.color);
+      // if (this.forceColor) { forceColor = { color: this.forceColor }; }
       const theme = joinObjects(
         {},
         this.getStyleTheme(this.styleTheme, axisType, axisOptions.location),
-        this.getColorTheme(this.colorTheme, axisOptions.color),
+        this.getColorTheme(this.colorTheme, axisOptions.color || this.forceColor),
       );
 
       const show = axisType === 'x' ? this.xAxisShow : this.yAxisShow;
@@ -806,6 +835,8 @@ class CollectionsPlot extends FigureElementCollection {
       o = joinObjects({}, defaultOptions, plotArea);
     }
     this.add('_plotArea', this.collections.rectangle(o));
+    // $FlowFixMe
+    this.__plotArea.getAllPrimitives().forEach((e) => { e.drawNumber = -1; });
   }
 
   addGestureRectangle(
@@ -823,7 +854,9 @@ class CollectionsPlot extends FigureElementCollection {
       const defaultOptions = {
         axis: typeof zoomOptions === 'string' ? zoomOptions : 'xy',
         sensitivity: 1,
-        point: null,
+        value: null,
+        min: null,
+        max: null,
       };
       let zOptions;
       if (typeof zoomOptions === 'string') {
@@ -831,10 +864,25 @@ class CollectionsPlot extends FigureElementCollection {
       } else {
         zOptions = joinObjects({}, defaultOptions, zoomOptions);
       }
+      if (zOptions.value != null) {
+        if (typeof zOptions.value === 'number') {
+          this.zoomPoint = getPoint([zOptions.value, zOptions.value]);
+        } else {
+          this.zoomPoint = getPoint(zOptions.value);
+        }
+      }
       joinObjects(options, { zoom: zOptions });
       this.zoom.enabled = true;
       this.zoom.x = zOptions.axis.startsWith('x');
       this.zoom.y = zOptions.axis.endsWith('y');
+      this.zoom.min = zOptions.min;
+      this.zoom.max = zOptions.max;
+      if (this.zoom.x && this._x != null) {
+        this._x.autoStep = true;
+      }
+      if (this.zoom.y && this._y != null) {
+        this._y.autoStep = true;
+      }
     }
     if (panOptions != null && panOptions !== false) {
       const defaultOptions = {
@@ -875,7 +923,7 @@ class CollectionsPlot extends FigureElementCollection {
     this.add('_gesture', gesture);
   }
 
-  addFrame(frameIn: TypePlotFrame | true | TypeColor) {
+  addFrame(frameIn: OBJ_PlotFrame | true | TypeColor) {
     let frame = frameIn;
     if (typeof frame === 'boolean') {
       frame = { line: { width: this.collections.primitives.defaultLineWidth } };
@@ -930,13 +978,14 @@ class CollectionsPlot extends FigureElementCollection {
       lineTextSpace: this.width / 50,
       length: this.width / 10,
       position: [this.width + this.width / 20, this.height],
+      font: this.defaultFont,
     };
     // const theme = this.getTheme(this.theme).legend;
     const theme = joinObjects(
       {}, this.getStyleTheme(this.styleTheme),
-      this.getColorTheme(this.colorTheme),
+      this.getColorTheme(this.colorTheme, this.forceColor),
     );
-    const o = joinObjects({}, defaultOptions, theme, optionsIn);
+    const o = joinObjects({}, defaultOptions, theme.legend, optionsIn);
     const legend = this.collections.plotLegend(o);
     this.add('_legend', legend);
   }
@@ -997,7 +1046,7 @@ class CollectionsPlot extends FigureElementCollection {
   }
 
   addTraces(traces: Array<COL_Trace>) {
-    const theme = this.getColorTheme(this.colorTheme);
+    const theme = this.getColorTheme(this.colorTheme, this.forceColor);
     traces.forEach((traceOptions, index) => {
       const defaultOptions = {
         xAxis: 'x',
@@ -1067,7 +1116,7 @@ class CollectionsPlot extends FigureElementCollection {
         axis: {
           line: {
             width: lineWidth,
-            arrow: { end: 'barb' },
+            arrow: { end: { head: 'barb', scale: 0.8 } },
             arrowLength: lineWidth * 5,
           },
           ticks: {
@@ -1091,7 +1140,7 @@ class CollectionsPlot extends FigureElementCollection {
       };
       if (name === 'numberLine') {   // $FlowFixMe
         theme.axis.labels.hide = [0]; // $FlowFixMe
-        theme.axis.line.arrow = 'barb';
+        theme.axis.line.arrow = { head: 'barb', scale: 0.8 };
       }
     }
     return theme;
@@ -1147,12 +1196,12 @@ class CollectionsPlot extends FigureElementCollection {
           font: { color },
         },
         traceColors: [
-          [0.5, 0.5, 1, 1],
-          [1, 0.5, 0.5, 1],
-          [0.5, 1, 0.5, 1],
           [1, 1, 0.2, 1],
-          [0.2, 1, 1, 1],
-          [1, 0.2, 1, 1],
+          [1, 0.3, 0.3, 1],
+          [0.3, 1, 0.3, 1],
+          [0.3, 1, 1, 1],
+          [1, 0.3, 1, 1],
+          [1, 0.7, 0.5, 1],
         ],
       };
     }
@@ -1232,7 +1281,7 @@ class CollectionsPlot extends FigureElementCollection {
     if (typeof optionsIn === 'string') {
       optionsToUse = { text: [optionsIn] };
     }
-    const theme = this.getColorTheme(this.colorTheme).title;
+    const theme = this.getColorTheme(this.colorTheme, this.forceColor).title;
     const o = joinObjects({}, defaultOptions, theme, optionsToUse);
     o.offset = getPoint(o.offset);
     const bounds = this.getNonTraceBoundingRect();
@@ -1246,7 +1295,8 @@ class CollectionsPlot extends FigureElementCollection {
     this.add('title', title);
   }
 
-  panDeltaValue(deltaValue: Point) {
+  panDeltaValue(deltaValueIn: TypeParsablePoint) {
+    const deltaValue = getPoint(deltaValueIn);
     const x = this.getXAxis();
     if (x != null && this.pan.enabled && this.pan.x) {
       x.panDeltaValue(deltaValue.x);
@@ -1259,7 +1309,8 @@ class CollectionsPlot extends FigureElementCollection {
     this.setupCross();
   }
 
-  panDeltaDraw(deltaDraw: Point) {
+  panDeltaDraw(deltaDrawIn: TypeParsablePoint) {
+    const deltaDraw = getPoint(deltaDrawIn);
     const x = this.getXAxis();
     if (x != null && this.pan.enabled && this.pan.x) {
       x.panDeltaDraw(deltaDraw.x);
@@ -1272,27 +1323,36 @@ class CollectionsPlot extends FigureElementCollection {
     this.setupCross();
   }
 
-  zoomValue(value: Point, mag: number) {
+  zoomValue(valueIn: TypeParsablePoint, mag: number) {
+    const value = getPoint(valueIn);
     const x = this.getXAxis();
+    const m = clipValue(mag, this.zoom.min, this.zoom.max);
     if (x != null && this.zoom.enabled && this.zoom.x) {
-      x.zoomValue(value.x, mag);
+      const v = this.zoomPoint != null ? this.zoomPoint.x : value.x;
+      x.zoomValue(v, m);
     }
     const y = this.getYAxis();
     if (y != null && this.zoom.enabled && this.zoom.y) {
-      y.zoomValue(value.y, mag);
+      const v = this.zoomPoint != null ? this.zoomPoint.y : value.y;
+      y.zoomValue(v, m);
     }
     this.updateTraces();
     this.setupCross();
   }
 
-  zoomDelta(value: Point, magDelta: number) {
+  zoomDelta(valueIn: TypeParsablePoint, magDelta: number) {
+    const value = getPoint(valueIn);
     const x = this.getXAxis();
     if (x != null && this.zoom.enabled && this.zoom.x) {
-      x.zoomDelta(value.x, magDelta);
+      const v = this.zoomPoint != null ? this.zoomPoint.x : value.x;
+      const m = clipValue(x.currentZoom * magDelta, this.zoom.min, this.zoom.max);
+      x.zoomDelta(v, m / x.currentZoom);
     }
     const y = this.getYAxis();
     if (y != null && this.zoom.enabled && this.zoom.y) {
-      y.zoomDelta(value.y, magDelta);
+      const v = this.zoomPoint != null ? this.zoomPoint.y : value.y;
+      const m = clipValue(y.currentZoom * magDelta, this.zoom.min, this.zoom.max);
+      y.zoomDelta(v, m / y.currentZoom);
     }
     this.updateTraces();
     this.setupCross();

@@ -138,6 +138,79 @@ function getShapes(getPos) {
     */
     shape('gridOn', { grid: true }),
     shape('gridOff', { grid: false }),
+
+    /*
+    .########.####.########.##.......########
+    ....##.....##.....##....##.......##......
+    ....##.....##.....##....##.......##......
+    ....##.....##.....##....##.......######..
+    ....##.....##.....##....##.......##......
+    ....##.....##.....##....##.......##......
+    ....##....####....##....########.########
+    */
+    shape('title', { title: 'Plot Title' }),
+    shape('subTitle', { title: { text: ['Plot Title', { text: 'Sub Title', font: { size: 0.05 }, lineSpace: 0.08 }] } }),
+    shape('titleOffset', { title: { text: 'Plot Title', offset: [0.1, -0.1] } }),
+
+    /*
+    .########.########.....###.....######..########
+    ....##....##.....##...##.##...##....##.##......
+    ....##....##.....##..##...##..##.......##......
+    ....##....########..##.....##.##.......######..
+    ....##....##...##...#########.##.......##......
+    ....##....##....##..##.....##.##....##.##......
+    ....##....##.....##.##.....##..######..########
+    */
+    shape('singleTrace', { trace: {
+      points: [[0, 0], [1, 1], [2, 0.5]],
+      markers: {
+        radius: 0.035,
+        sides: 20,
+        line: { width: 0.01 },
+      },
+    } }),
+    shape('singlePoints', { trace: [[0, 0], [1, 1], [2, 0.5]] }),
+    shape('twoTraces', { trace: [pow(2), pow(3)]}),
+
+    /*
+    .##.......########..######...########.##....##.########.
+    .##.......##.......##....##..##.......###...##.##.....##
+    .##.......##.......##........##.......####..##.##.....##
+    .##.......######...##...####.######...##.##.##.##.....##
+    .##.......##.......##....##..##.......##..####.##.....##
+    .##.......##.......##....##..##.......##...###.##.....##
+    .########.########..######...########.##....##.########.
+    */
+    shape('legend', { trace: [pow(2), pow(3)], legend: true }),
+    shape('legendColorFont', { trace: [pow(2), pow(3)], legend: { fontColorIsLineColor: true } }),
+    shape('legendNamesFrame', { trace: [
+      { points: pow(2), name: 'squared' },
+      { points: pow(3), name: 'cubed' },
+    ], legend: { position: [0.2, 0.8], frame: [0, 1, 0, 0.3] } }),
+    shape('legendLengthLineFrame', { trace: [
+      { points: pow(2), name: 'squared' },
+      { points: pow(3), name: 'cubed' },
+    ], legend: { length: 0.3, frame: { line: { width: 0.01 } } } }),
+    shape('legendFontSpace', { trace: [
+      { points: pow(2), name: 'squared' },
+      { points: pow(3), name: 'cubed' },
+    ], legend: { font: { size: 0.05, family: 'Times New Roman' }, space: 0.2 } }),
+    shape('legendOffset', { trace: [
+      { points: pow(2), name: 'squared' },
+      { points: pow(3), name: 'cubed' },
+    ], legend: { offset: [0.6, 0], position: [0, 1] } }),
+    shape('legendShow', { trace: [
+      { points: pow(2), name: 'squared' },
+      { points: pow(3), name: 'cubed' },
+    ], legend: { show: [0] } }),
+    shape('legendHide', { trace: [
+      { points: pow(2), name: 'squared' },
+      { points: pow(3), name: 'cubed' },
+    ], legend: { hide: [0] } }),
+    shape('legendCustom', { trace: [
+      { points: pow(2), name: 'squared' },
+      { points: pow(3), name: 'cubed' },
+    ], legend: { position: [0, 1], custom: { 0: { space: 0.2 }, cubed: { text: 'asdf' } } } }),
   ];
 }
 

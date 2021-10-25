@@ -320,6 +320,10 @@ export type OBJ_AxisTitle = OBJ_TextLines & {
  * on 0. This needs to be `true` if panning or zooming. If `false`, then the
  * tick, grid and label values will be from the `start`, `stop` and `step`
  * properties. (`false`)
+ * @property {number | null} min minimum value axis can be zoomed or panned to
+ * where `null` no limit (`null`)
+ * @property {number | null} max maximum value axis can be zoomed or panned to
+ * where `null` no limit (`null`)
  * @property {TypeParsablePoint} [position] axis position (`[0, 0]`)
  *
  * @extends OBJ_Collection
