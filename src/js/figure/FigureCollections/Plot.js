@@ -729,9 +729,9 @@ class CollectionsPlot extends FigureElementCollection {
     if (this.autoGrid) {
       this.axes.forEach((axis) => {
         const p = axis.getPosition();
-        if (axis.axis === 'x') { // $FlowFixMe
+        if (axis.axis === 'x' && axis.showAxis) { // $FlowFixMe
           axis.grid.forEach((g, i) => axis[`_grid${i}`].setPosition(0, -p.y));
-        } else { // $FlowFixMe
+        } else if (axis.axis === 'y' && axis.showAxis) { // $FlowFixMe
           axis.grid.forEach((g, i) => axis[`_grid${i}`].setPosition(-p.x, 0));
         }
       });
@@ -799,6 +799,14 @@ class CollectionsPlot extends FigureElementCollection {
       }
       if (typeof axisOptions.title === 'string') {
         o.title = joinObjects({}, theme.axis.title, { text: axisOptions.title });
+      }
+      if (axisOptions.step == null) {
+        if (axisOptions.start != null) {
+          o.auto[0] = axisOptions.start;
+        }
+        if (axisOptions.stop != null) {
+          o.auto[1] = axisOptions.stop;
+        }
       }
       if (Array.isArray(o.grid)) {
         for (let i = 0; i < o.grid.length; i += 1) {
@@ -909,7 +917,10 @@ class CollectionsPlot extends FigureElementCollection {
         return;
       }
       const z = gesture.getZoom();
-      const p = this.drawToPoint(z.current.normPosition);
+      const p = this.drawToPoint(new Point(
+        z.current.normPosition.x * this.width,
+        z.current.normPosition.y * this.height,
+      ));
       this.zoomDelta(p, z.mag / z.last.mag);
       gesture.reset();
     });
@@ -945,6 +956,7 @@ class CollectionsPlot extends FigureElementCollection {
     };
     const o = joinObjects({}, defaultOptions, frame);
     this.frameSpace = o.space;
+
     this.add('_frame', this.collections.rectangle(o));
     // $FlowFixMe
     this.toBack(this.__frame);

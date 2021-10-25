@@ -17,7 +17,7 @@ import type CollectionsTrace, { COL_Trace } from './Trace';
 import type { OBJ_Font, OBJ_Font_Fixed } from '../../tools/types';
 import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type { OBJ_TextLines } from '../FigurePrimitives/FigurePrimitiveTypes2D';
-import type { TypePlotFrame } from './Plot';
+import type { OBJ_PlotFrame } from './Plot';
 import type FigureCollections from './FigureCollections';
 
 /**
@@ -75,7 +75,7 @@ export type OBJ_PlotLegendCustom = {
  * @property {OBJ_Font} [font] default font for trace sample text
  * @property {boolean} [fontColorIsLineColor] set the trace sample text color to
  * the same as the line sample
- * @property {Array<number> | TypePlotFrame} [frame] frame around the legend -
+ * @property {Array<number> | OBJ_PlotFrame} [frame] frame around the legend -
  * specifying just a color will create a solid fill rectangle of that color
  * @property {Array<number>} [show] array of which trace indeces to show if only
  * some should be shown
@@ -94,7 +94,7 @@ export type COL_PlotLegend = {
   offset?: Array<TypeParsablePoint> | TypeParsablePoint,
   font?: OBJ_Font,
   fontColorIsLineColor?: boolean,
-  frame?: Array<number> | TypePlotFrame,
+  frame?: Array<number> | OBJ_PlotFrame,
   show?: Array<number>,
   hide?: Array<number>,
   custom?: OBJ_PlotLegendCustom,

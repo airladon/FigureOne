@@ -679,7 +679,7 @@ class CollectionsAxis extends FigureElementCollection {
       options.grid = [options.grid];
     }
     this.grid = Array(options.grid.length);
-    for (let i = options.grid.length - 1; i >= 0; i -= 1) {
+    for (let i = 0; i < options.grid.length; i += 1) {
       const e = this.addTicks('grid', options.grid[i], i);
       if (e != null) {
         this.toBack(e);
