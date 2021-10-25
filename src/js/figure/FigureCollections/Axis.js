@@ -218,8 +218,6 @@ export type OBJ_ValuesOffset = {
  * <a href="#drawing-boilerplate">boilerplate</a>.
  *
  * For more examples see {@link OBJ_Axis}.
- *
- * @example
  */
 export type OBJ_AxisLabels = {
   precision?: number,
