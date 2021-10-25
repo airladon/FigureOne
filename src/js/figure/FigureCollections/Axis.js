@@ -323,6 +323,9 @@ export type OBJ_AxisTitle = OBJ_TextLines & {
  * @property {number | null} max maximum value axis can be zoomed or panned to
  * where `null` no limit (`null`)
  * @property {TypeParsablePoint} [position] axis position (`[0, 0]`)
+ * @property {Array<number>} [values] custom values for labels, ticks and grid.
+ * Only works for one level of ticks and grid, and doesn't not accomodate
+ * zooming or panning.
  *
  * @extends OBJ_Collection
  */
