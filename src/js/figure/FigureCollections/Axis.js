@@ -941,7 +941,10 @@ class CollectionsAxis extends FigureElementCollection {
     this.update(start, stop);
   }
 
-  update(startValueIn: number, stopValueIn: number) {
+  update(
+    startValueIn: number = this.startValue,
+    stopValueIn: number = this.stopValue,
+  ) {
     this.startValue = Math.max(this.min == null ? startValueIn : this.min, startValueIn);
     this.stopValue = Math.min(this.max == null ? stopValueIn : this.max, stopValueIn);
     this.currentZoom = this.initialScale / (this.stopValue - this.startValue);

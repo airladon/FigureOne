@@ -877,12 +877,6 @@ class CollectionsPlot extends FigureElementCollection {
       this.zoom.y = zOptions.axis.endsWith('y');
       this.zoom.min = zOptions.min;
       this.zoom.max = zOptions.max;
-      if (this.zoom.x && this._x != null) {
-        this._x.autoStep = true;
-      }
-      if (this.zoom.y && this._y != null) {
-        this._y.autoStep = true;
-      }
     }
     if (panOptions != null && panOptions !== false) {
       const defaultOptions = {
@@ -900,6 +894,14 @@ class CollectionsPlot extends FigureElementCollection {
       this.pan.enabled = true;
       this.pan.x = pOptions.axis.startsWith('x');
       this.pan.y = pOptions.axis.endsWith('y');
+    }
+    if ((this.zoom.x || this.pan.x) && this._x != null) {
+      this._x.autoStep = true;
+      this._x.update();
+    }
+    if ((this.zoom.y || this.pan.y) && this._y != null) {
+      this._y.autoStep = true;
+      this._y.update();
     }
     const gesture = this.collections.primitives.gesture(options);
     gesture.notifications.add('zoom', () => {
@@ -1301,9 +1303,9 @@ class CollectionsPlot extends FigureElementCollection {
     if (x != null && this.pan.enabled && this.pan.x) {
       x.panDeltaValue(deltaValue.x);
     }
-    const y = this.getXAxis();
+    const y = this.getYAxis();
     if (y != null && this.pan.enabled && this.pan.y) {
-      y.panDeltaValue(deltaValue.x);
+      y.panDeltaValue(deltaValue.y);
     }
     this.updateTraces();
     this.setupCross();
