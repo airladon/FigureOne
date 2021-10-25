@@ -363,6 +363,16 @@ export type COL_Axis = {
 /**
  * {@link FigureElementCollection} representing an Axis.
  *
+ * ![](./apiassets/advaxis_ex1.png)
+ *
+ * ![](./apiassets/advaxis_ex2.png)
+ *
+ * ![](./apiassets/advaxis_ex3.png)
+ *
+ * ![](./apiassets/advaxis_ex4.png)
+ *
+ * ![](./apiassets/advaxis_ex5.png)
+ *
  * This object defines an axis with an axis line, tick marks, labels,
  * grid lines and a title.
  *
@@ -388,19 +398,15 @@ export type COL_Axis = {
  * For more examples of axis labels and axis ticks, see {@link OBJ_AxisLabels}
  * and {@link OBJ_AxisTicks}.
  *
- * #### Example
- * ```javascript
+ * @see {@link COL_Axis} for parameter descriptions
+ *
+ * @example
  * // By default an axis is an 'x' axis
  * figure.add({
- *   name: 'x',
  *   make: 'collections.axis',
- *   ticks: true,
  * });
- * ```
- * ![](./apiassets/advaxis_ex1.png)
  *
- * #### Example
- * ```javascript
+ * @example
  * // An axis can also be created and then added to a figure
  * // An axis can have specific start and stop values
  * // An axis can be a y axis
@@ -408,69 +414,56 @@ export type COL_Axis = {
  *   axis: 'y',
  *   start: -10,
  *   stop: 10,
- *   ticks: { step: 5 },
- * })
+ *   step: 5,
+ * });
  * figure.add('axis', axis);
- * ```
- * ![](./apiassets/advaxis_ex2.png)
  *
- * #### Example
- * ```javascript
+ *
+ * @example
  * // An axis can have multiple sets of ticks and a title
  * figure.add({
- *   name: 'x',
  *   make: 'collections.axis',
+ *   step: [0.2, 0.05],
  *   ticks: [
- *     { step: 0.2, length: 0.1 },
- *     { step: 0.05, length: 0.05, offset: 0 },
+ *     true,
+ *     { length: 0.04, location: 'bottom' },
  *   ],
  *   title: 'time (s)',
  * });
- * ```
- * ![](./apiassets/advaxis_ex3.png)
  *
- * #### Example
- * ```javascript
+ *
+ * @example
  * // An axis line and ticks can be customized to be dashed
  * // and have arrows
  * figure.add({
- *   name: 'x',
  *   make: 'collections.axis',
  *   length: 2.5,
- *   start: -130,
- *   stop: 130,
+ *   start: -100,
+ *   stop: 100,
+ *   step: 25,
  *   line: {
  *     dash: [0.01, 0.01],
  *     arrow: 'barb',
  *   },
- *   ticks: {
- *     start: -100,
- *     stop: 100,
- *     step: 25,
- *     dash: [0.01, 0.01],
- *   },
- *   labels: { precision: 0 },
+ *   ticks: { dash: [0.01, 0.01] },
  *   title: {
- *     font: { style: 'italic' },
+ *     font: { style: 'italic', family: 'Times New Roman' },
  *     text: 'x',
- *     position: [2.65, 0.03],
+ *     location: 'right',
  *   },
  * });
- * ```
- * ![](./apiassets/advaxis_ex4.png)
  *
- * #### Example
- * ```javascript
- * // An axis title can have grid lines extend from it, and titles with more
- * // formatting
+ *
+ * @example
+ * // An axis can have grid lines extend from it, and
+ * // multi-line, formatted titles
  * figure.add({
- *   name: 'x',
  *   make: 'collections.axis',
  *   stop: 2,
- *   ticks: { step: 0.5 },
+ *   step: [0.5, 0.1],
  *   grid: [
- *     { step: 0.5, length: 1, color: [0.5, 0.5, 0.5, 1] },
- *     { step: 0.1, length: 1, dash: [0.01, 0.01], color: [0.7, 0.7, 0.7, 1] },
+ *     { length: 1, color: [0.5, 0.5, 0.5, 1] },
+ *     { length: 1, dash: [0.01, 0.01], color: [0.7, 0.7, 0.7, 1] },
  *   ],
  *   title: {
  *     font: { color: [0.4, 0.4, 0.4, 1] },
@@ -484,11 +477,6 @@ export type COL_Axis = {
  *     ],
  *   },
  * });
- * ```
- * ![](./apiassets/advaxis_ex5.png)
- *
- *
- * @see {@link COL_Axis} for parameter descriptions
  *
  */
 // $FlowFixMe
