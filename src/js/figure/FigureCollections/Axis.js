@@ -345,6 +345,7 @@ export type COL_Axis = {
   max?: number | null,
   auto?: [number, number],
   autoStep?: boolean,
+  values?: Array<number>,
 } & OBJ_Collection;
 
 
@@ -520,6 +521,8 @@ class CollectionsAxis extends FigureElementCollection {
     offset: number,
   } | false>;
 
+  values: null | Array<number>;
+
   // minorTicks: {
   //   width: number,
   //   length: number,
@@ -588,6 +591,9 @@ class CollectionsAxis extends FigureElementCollection {
     // this.minorStep = options.minorStep == null
     //   ? (this.stopValue - this.startValue) / 20
     //   : options.minorStep;
+    if (options.values != null) {
+      this.values = options.values;
+    }
     this.length = options.length;
     this.autoStep = options.autoStep;
     this.calcRatios();
@@ -948,6 +954,9 @@ class CollectionsAxis extends FigureElementCollection {
     // const minorStep = this.minorStep / z;
 
     const getValues = (s) => {
+      if (this.values != null) {
+        return this.values;
+      }
       if (!this.autoStep) {
         const v = range(this.startValue, this.stopValue, s);
         return v;
