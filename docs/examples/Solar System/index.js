@@ -1,7 +1,9 @@
 /* globals Fig */
+/* eslint-disable object-property-newline */
 
-// In this figure, each unit is 1000 million km.
-// So the main plot will be 5 units in length representing 5000 million km
+// In this figure, each unit in draw distance when fully zoomed out is 1000
+// million km. So the main plot will be 5 units in length representing 5000
+// million km.
 
 const figure = new Fig.Figure({
   scene: [-2.6, -1.3, 2.6, 1.3],
@@ -58,6 +60,7 @@ const marker = figure.add({
   height: 0.01,
   color: [1, 1, 1, 1],
 });
+
 
 // Update marker show the visible area on the reference axis
 plot.notifications.add('update', () => {
@@ -132,6 +135,7 @@ function createMass(name, distance, radius, color, labelY = 0.1, isMoon = false)
       if (span < 200) { mass.show(); } else { mass.hide(); }
     }
   });
+
   figure.elements.toBack(mass);
 
   if (!isMoon) {
@@ -182,8 +186,8 @@ createMass('Sun', 0, 696000, [1, 0.5, 0, 1], 0.3);
 
 const zoomToggle = figure.add({
   make: 'collections.toggle',
-  label: { text: 'Scale Planets', font: { size: 0.07 }, location: 'top' },
-  position: [2.3, 1.1],
+  label: { text: 'Scale Orbs to Distance', font: { size: 0.07 }, location: 'top' },
+  position: [2.2, 1.1],
   theme: 'light',
   height: 0.1,
   touchBorder: 0.04,
@@ -194,4 +198,65 @@ zoomToggle.notifications.add('on', () => { scalePlanets = true; update(); });
 zoomToggle.notifications.add('off', () => { scalePlanets = false; update(); });
 
 figure.elements.toFront(marker);
-plot.zoomValue([0, 0], 0.0001);
+plot.zoomValue([0, 0], 0.0001);   // Initially zoom out
+
+
+// Calculate and show the average panning speed.
+const speed = figure.add({
+  make: 'text',
+  text: 'Speed: 0.0c (Sublight)',
+  position: [1.6, -1.2],
+  font: { size: 0.06 },
+});
+
+// Based on the Michael Okuda revised warp scale.
+// NB: The warp scale is fictional non-linear scale. So linearly interpolating
+// between warp numbers is a fiction in a fiction.
+const warpSpeed = [1, 10, 39, 102, 150, 213, 392, 656, 1024, 1516, 3053, 5000, 6667, 7912, 199516];
+const warpNum = [1, 2, 3, 4, 4.5, 5, 6, 7, 8, 9, 9.9, 9.95, 9.975, 9.99, 9.9999];
+function calcWarp(v) {
+  for (let i = 0; i < warpSpeed.length - 1; i += 1) {
+    if (v >= warpSpeed[i] && v < warpSpeed[i + 1]) {
+      const r = (v - warpSpeed[i]) / (warpSpeed[i + 1] - warpSpeed[i]);
+      return warpNum[i] + r * (warpNum[i + 1] - warpNum[i]);
+    }
+  }
+  return 0;
+}
+
+let lastTime = performance.now() / 1000;
+let lastStart = 0;
+let sumDist = 0;
+let sumTime = 0;
+
+plot.notifications.add('pan', () => {
+  const now = performance.now() / 1000;
+  if (
+    now - lastTime > 0.1
+    || Math.abs(lastStart - plot._x.startValue) < 0.01
+  ) {
+    lastStart = plot._x.startValue;
+    lastTime = now;
+    lastTime = now;
+    sumDist = 0;
+    sumTime = 0;
+    return;
+  }
+  sumDist += Math.abs((plot._x.startValue - lastStart));
+  sumTime += now - lastTime;
+  lastTime = now;
+  const aveSpeed = sumDist * 1e3 * 1e6 / sumTime / 3e8;
+  let out = 'Sublight';
+  if (aveSpeed > 1) {
+    const w = calcWarp(aveSpeed);
+    let fix = 1;
+    if (w > 9.99) {
+      fix = 4;
+    } else if (w > 9.9) {
+      fix = 2;
+    }
+    out = `Warp ${calcWarp(aveSpeed).toFixed(fix)}`;
+  }
+  lastStart = plot._x.startValue;
+  speed.custom.updateText({ text: `Speed: ${aveSpeed.toFixed(1)}c (${out})` });
+});
