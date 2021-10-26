@@ -695,7 +695,7 @@ class CollectionsPlot extends FigureElementCollection {
       (options.zoom != null && options.zoom !== false)
       || (options.pan != null && options.pan !== false)
     ) {
-      this.addGestureRectangle(options.zoom, options.pan);
+      this.addGestureRectangle(options.zoom, options.pan, options.x, options.y);
       this.setupCross();
     }
     this.setupGrid();
@@ -867,6 +867,8 @@ class CollectionsPlot extends FigureElementCollection {
   addGestureRectangle(
     zoomOptions: OBJ_PlotZoomOptions | 'xy' | 'x' | 'y' | false,
     panOptions: OBJ_PlotPanOptions | 'xy' | 'x' | 'y' | false,
+    xAxis: OBJ_PlotAxis,
+    yAxis: OBJ_PlotAxis,
   ) {
     const options = {
       width: this.width + this.gestureArea.right - this.gestureArea.left,
@@ -926,12 +928,20 @@ class CollectionsPlot extends FigureElementCollection {
       this.pan.x = pOptions.axis.startsWith('x');
       this.pan.y = pOptions.axis.endsWith('y');
     }
-    if ((this.zoom.x || this.pan.x) && this._x != null) {
-      this._x.autoStep = true;
+    if (
+      (this.zoom.x || this.pan.x)
+      && this._x != null
+      && xAxis != null && xAxis.autoStep == null
+    ) {
+      this._x.autoStep = 'decimal';
       this._x.update();
     }
-    if ((this.zoom.y || this.pan.y) && this._y != null) {
-      this._y.autoStep = true;
+    if (
+      (this.zoom.y || this.pan.y)
+      && this._y != null
+      && yAxis != null && yAxis.autoStep == null
+    ) {
+      this._y.autoStep = 'decimal';
       this._y.update();
     }
     const gesture = this.collections.primitives.gesture(options);
