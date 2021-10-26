@@ -15,9 +15,17 @@
       <!-- ************    Example Specific HTML Start     *************** -->
       <!-- *************************************************************** -->
 
-      <p class="instructions">
-        Demonstrator of how shaders can be used to animate over 1000 elements simultaneously and still get excellent performance on low end clients.Use the Next and Prev buttons to see different configurations of charges. At any time, move the charges to see the field udpate in real time.
+      <div class="instructions">
+        <p>
+          Demonstrator of custom shader and handling pan and zoom gestures.
         </p>
+        <p>
+          Explore the Mandelbrot fractal by zooming in and out at different locations using either a <b>pinch gesture</b> on touch devices, or the <b>vertical mouse wheel</b> on desktops. Pan by <b>dragging a touch or mouse click</b>, or using the <b>horizontal mouse wheel</b>.
+        </p>
+        <p>
+          The number of iterations used to determine whether a value is in the Mandelbrot set (colored black) can be set with the <b>slider</b>. Be careful, high iteration count when viewing many values within the set can lead to slower performance.
+        </p>
+      </div>
 
       <div class="wrapper wrapper_1_1" style="max-width:500px">
           <div id="figureOneContainer" class="container container_1_1"></div>
@@ -38,7 +46,7 @@
     <!-- ***************************************************************** -->
 
     <script type="text/javascript" src="../../fill.js"></script>
-    <script>fillHeader('Example - Electric Field', 'Electric Field');</script>
+    <script>fillHeader('Example - Mandelbrot Fractal', 'Mandelbrot Fractal');</script>
     <script>fillFooter('..')</script>
 
     <!-- ***************    Example Specific Scripts     ***************** -->
