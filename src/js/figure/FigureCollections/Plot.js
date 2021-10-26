@@ -63,7 +63,9 @@ export type OBJ_PlotFrame = {
 
 /**
   * @property {'x' | 'y' | 'xy'} [axis] which axis to zoom (`xy`)
-  * @property {number} [sensitivity] mouse wheel or pinch zoom sensitivity
+  * @property {number} [pinchSensitivity] pinch zoom sensitivity
+  * where >1 is more sensitive and <1 is less sensitive (`1`)
+  * @property {number} [wheelSensitivity] mouse wheel sensitivity
   * where >1 is more sensitive and <1 is less sensitive (`1`)
   * @property {TypeParsablePoint | number} [value] fix value to zoom on - will
   * override pinch or mouse wheel zoom location
@@ -74,17 +76,27 @@ export type OBJ_PlotFrame = {
  */
 export type OBJ_PlotZoomOptions = {
   axis?: 'x' | 'y' | 'xy',
-  sensitivity?: number,
+  wheelSensitivity?: number,
+  pinchSensitivity?: number,
   value?: TypeParsablePoint | number,
   min?: null | number,
   max?: null | number,
 };
 
+/**
+  * @property {'x' | 'y' | 'xy'} [axis] which axis to zoom (`xy`)
+  * @property {number} [wheelSensitivity] mouse wheel sensitivity
+  * where >1 is more sensitive and <1 is less sensitive (`1`)
+  * @property {boolean} [wheel] enable mouse wheel to pan (`true`)
+  * @property {boolean} [momentum] enable panning momentum (`true`)
+  * @property {number} [maxVelocity] maximum panning velocity (`10`)
+ */
 export type OBJ_PlotPanOptions = {
   axis: 'x' | 'y' | 'xy',
-  sensitivity?: number,
+  wheelSensitivity?: number,
   wheel?: boolean,
   momentum?: boolean,
+  maxVelocity?: number,
 }
 
 /**
@@ -866,7 +878,8 @@ class CollectionsPlot extends FigureElementCollection {
     if (zoomOptions != null && zoomOptions !== false) {
       const defaultOptions = {
         axis: typeof zoomOptions === 'string' ? zoomOptions : 'xy',
-        sensitivity: 1,
+        wheelSensitivity: 1,
+        pinchSensitivity: 1,
         value: null,
         min: null,
         max: null,
@@ -897,8 +910,10 @@ class CollectionsPlot extends FigureElementCollection {
     if (panOptions != null && panOptions !== false) {
       const defaultOptions = {
         axis: typeof panOptions === 'string' ? panOptions : 'xy',
-        sensitivity: 1,
+        wheelSensitivity: 1,
         wheel: true,
+        maxVelocity: 10,
+        momentum: true,
       };
       let pOptions;
       if (typeof panOptions === 'string') {
@@ -932,7 +947,7 @@ class CollectionsPlot extends FigureElementCollection {
         z.current.normPosition.y * totHeight + this.gestureArea.bottom,
       ));
       this.zoomDelta(p, z.mag / z.last.mag);
-      gesture.reset();
+      gesture.reset(true);
     });
     gesture.notifications.add('pan', () => {
       if (!this.pan.enabled) {
@@ -941,7 +956,7 @@ class CollectionsPlot extends FigureElementCollection {
       const z = gesture.getZoom();
       const p = gesture.getPan();
       this.panDeltaDraw(p.delta.scale(-z.mag));
-      gesture.reset();
+      gesture.reset(true);
     });
     this.add('_gesture', gesture);
   }

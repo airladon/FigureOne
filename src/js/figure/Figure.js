@@ -2106,6 +2106,7 @@ class Figure {
     let element;
     let backCameraControl;
     element = this.elements.getSelectionFromBorders(glPoint);
+
     if (
       element != null
       && element._custom != null
@@ -2123,6 +2124,7 @@ class Figure {
     if (element == null) {
       return false;
     }
+
     // console.log(element)
     this.selectElement(element, glPoint, autoEvent);
     // element.click(glPoint);

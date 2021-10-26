@@ -7,7 +7,7 @@ const figure = new Fig.Figure({
   scene: [-2.6, -1.3, 2.6, 1.3],
   backgroundColor: [0, 0, 0, 1],
   color: [1, 1, 1, 1],
-  font: { size: 0.06 },
+  font: { size: 0.07 },
 });
 
 let scalePlanets = false;
@@ -28,20 +28,22 @@ const plot = figure.add({
   make: 'collections.plot',
   width: 5,
   height: 1.8,
-  font: { size: 0.05 },
+  font: { size: 0.07 },
   position: [-2.5, -0.5],
   grid: false,
   x: {
     start: 0, stop: 5000, step: 500, color: [1, 1, 1, 1], min: 0, max: 5000,
-    title: { text: 'km (millions)', location: 'right', offset: [-0.4, 0.05] },
+    title: { text: 'km (millions)', location: 'right', offset: [-0.6, 0.05] },
     labels: { precision: 2 },
   },
   y: { show: false },
-  zoom: { axis: 'x', max: 10000 },
-  pan: { axis: 'x', wheel: true },
-  gestureArea: { left: -0.05, right: 0.05 },
+  zoom: { axis: 'x', max: 10000, pinchSensitivity: 10, wheelSensitivity: 2 },
+  pan: { axis: 'x', maxVelocity: 50, wheelSensitivity: 2 },
+  gestureArea: { left: -0.1, right: 0.05 },
 });
 
+// Reference axis showing relative positions of all planets and how much
+// of space is currently visible
 figure.add({
   make: 'line',
   p1: [-2.5, -1], p2: [2.5, -1],
@@ -143,7 +145,7 @@ function createMass(name, distance, radius, color, labelY = 0.05, isMoon = false
           position: [0, labelY + labelY / Math.abs(labelY) * 0.01],
           yAlign: labelY < 0 ? 'top' : 'baseline',
           xAlign: 'center',
-          touchBorder: 0.01,
+          touchBorder: 0.03,
           touch: true,
           color: [0.6, 0.6, 0.6, 1],
         },
@@ -158,7 +160,7 @@ function createMass(name, distance, radius, color, labelY = 0.05, isMoon = false
     });
     label._label.notifications.add('onClick', () => {
       // console.log(distance / 1e6, distance / 1e9 - 2.5)
-      plot.panToValue([distance / 1e6, 0], [distance / 1e9, 1]);
+      plot.panToValue([distance / 1e6, 0], [2.5, 1]);
       figure.animateNextFrame();
     });
     label._label.setTouchable();
@@ -182,7 +184,7 @@ const zoomToggle = figure.add({
   position: [2.3, 1.1],
   theme: 'light',
   height: 0.1,
-  touchBorder: 0.02,
+  touchBorder: 0.04,
 });
 
 const update = () => plot.zoomDelta(plot.drawToPoint([0, 0]), 1);

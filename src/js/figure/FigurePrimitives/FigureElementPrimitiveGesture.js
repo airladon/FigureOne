@@ -19,8 +19,11 @@ import type { TypeColor } from '../../tools/types';
  * maximum if `null` (`null`)
  * @property {null | number} [min] minimum zoom if value defined, no
  * minimum if `null` (`null`)
- * @property {number} [sensitivity] zoom sensitivity where values greater
- * than 1 are more sensitive resulting in faster zoom changes (`1`)
+ * @property {number} [pinchSensitivity] pinch zoom sensitivity where values
+ * greater than 1 are more sensitive resulting in faster zoom changes (`1`)
+ * @property {number} [wheelSensitivity] mouse wheel zoom sensitivity where
+ * values greater than 1 are more sensitive resulting in faster zoom changes
+ * (`1`)
  * @property {null | TypeParsablePoint} [position] zoom around a fixed point (instead of the
  * mouse of pinch location) - leave undefined or use `null` to instead zoom
  * around mouse or pinch location (`null`)
@@ -28,7 +31,8 @@ import type { TypeColor } from '../../tools/types';
 export type OBJ_ZoomOptions = {
   min?: null | number,
   max?: null | number,
-  sensitivity?: number,
+  wheelSensitivity?: number,
+  pinchSensitivity?: number,
   position?: null | TypeParsablePoint
 }
 
@@ -93,9 +97,9 @@ export type OBJ_CurrentPan = {
  * no limit (`null`)
  * @property {null | number} [top] maximum top pan allowed, or `null` for no
  * limit (`null`)
- * @property {number} [sensitivity] pan sensitivity for mouse wheel
- * panning where values greater than 1 are more sensitive resulting in faster
- * panning (`1`)
+ * @property {number} [wheelSensitivity] mouse wheel pan sensitivity for mouse
+ * wheel panning where values greater than 1 are more sensitive resulting in
+ * faster panning (`1`)
  * @property {boolean} [wheel] enable mouse wheel panning - only possible if
  * zoom gesture is disabled.
  * @property {boolean} [momentum] enable pan momentum for drag panning. NB,
@@ -107,9 +111,10 @@ export type OBJ_PanOptions = {
   right?: null | number,
   bottom?: null | number,
   top?: null | number,
-  sensitivity?: number,
+  wheelSensitivity?: number,
   wheel?: boolean,
   momentum?: boolean,
+  maxVelocity?: number
 }
 
 /**
@@ -235,7 +240,7 @@ export type OBJ_Gesture = {
  * mouse or touch moves across half the width of the rectangle, then the pan
  * offset will be 1.
  *
- * For the mouse wheel change, a `sensitivity` value is used to speed up or
+ * For the mouse wheel change, a `wheelSensitivity` value is used to speed up or
  * slow down the pan.
  *
  * When a pan event happens, a `'pan'` notification is published. The parameter
@@ -255,7 +260,7 @@ export type OBJ_Gesture = {
  * - Mouse wheel vertical change
  * - Finger touch pinch
  *
- * A `sensitivity` value is used to speed up or slow down zooming.
+ * A `wheelSensitivity` or `pinchSenstivity` value is used to speed up or slow down zooming.
  *
  * When a zoom event happens, a `'zoom'` notification is published. The
  * parameters passed to any subscribers are the zoom magnification value and
@@ -336,7 +341,8 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     },
     min: null | number,   // Zoom Limits
     max: null | number,
-    sensitivity: number,  // Zoom sensitivity
+    wheelSensitivity: number,  // Zoom sensitivity
+    pinchSensitivity: number,  // Zoom sensitivity
     mag: number,          // Zoom magnification
     cumAngle: number,
     pinching: boolean,    // True if currently pinching
@@ -352,9 +358,10 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     bottom: null | number,
     top: null | number,
     delta: Point,
-    sensitivity: number,
+    wheelSensitivity: number,
     wheel: boolean,
     momentum: boolean,
+    maxVelocity: number,
   };
 
   justMoved: boolean;
@@ -396,7 +403,8 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       mag: 1,
       cumAngle: new Point(0, 0),
       pinching: false,
-      sensitivity: 1,
+      wheelSensitivity: 1,
+      pinchSensitivity: 1,
       enabled: false,
       position: null,
     };
@@ -408,9 +416,10 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       top: null,
       bottom: null,
       delta: new Point(0, 0),
-      sensitivity: 1,
+      wheelSensitivity: 1,
       wheel: true,
       momentum: true,
+      maxVelocity: 10,
     };
     this.justMoved = false;
     this.onlyWhenTouched = true;
@@ -456,6 +465,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     if (!this.pan.momentum) {
       this.move.freely = false;
     }
+    this.move.maxVelocity = this.pan.maxVelocity;
     this.notifications.add('beforeMove', this.setupMove.bind(this));
     this.notifications.add('beforeMoveFreely', this.setupMove.bind(this));
     this.notifications.add('setTransform', this.dragPan.bind(this));
@@ -464,7 +474,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
   /**
    * Reset zoom and pan.
    */
-  reset() {
+  reset(exceptDistance: boolean = false) {
     const s = this.getScene();
     this.pan.offset = new Point(
       s.left + (s.right - s.left) / 2,
@@ -476,13 +486,13 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       position: new Point(0, 0),
       normPosition: new Point(0, 0),
       angle: 0,
-      distance: 0,
+      distance: exceptDistance ? this.zoom.last.distance : 0,
     };
     this.zoom.current = {
       position: new Point(0, 0),
       normPosition: new Point(0, 0),
       angle: 0,
-      distance: 0,
+      distance: exceptDistance ? this.zoom.current.distance : 0,
     };
     this.zoom.mag = 1;
     this.zoom.cumAngle = new Point(0, 0);
@@ -607,7 +617,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       this.zoom.enabled
       && (!this.pan.enabled || !this.pan.wheel || Math.abs(delta.y) >= Math.abs(delta.x))
     ) {
-      let mag = this.zoom.mag + delta.y / 10 * this.zoom.sensitivity * this.zoom.mag / 100;
+      let mag = this.zoom.mag + delta.y / 10 * this.zoom.wheelSensitivity * this.zoom.mag / 100;
       if (this.zoom.min != null) {
         mag = Math.max(mag, this.zoom.min);
       }
@@ -629,7 +639,9 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       return;
     }
     const scene = this.getScene();
-    this.pan.delta = delta.scale(1 / 10 * (scene.right - scene.left) / 100 * this.pan.sensitivity);
+    this.pan.delta = delta.scale(
+      1 / 10 * (scene.right - scene.left) / 100 * this.pan.wheelSensitivity,
+    );
     this.pan.delta.x *= -1;
     this.setPanOffset(this.pan.offset.add(this.pan.delta));
     this.panChanged(true);
@@ -743,7 +755,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     const d = line.length();
     // const { current, lastDistance, scale } = this.zoom;
     let mag = this.zoom.mag
-      + (d - this.zoom.current.distance) / 5 * this.zoom.sensitivity * this.zoom.mag / 100;
+      + (d - this.zoom.current.distance) / 5 * this.zoom.pinchSensitivity * this.zoom.mag / 100;
     if (this.zoom.min != null) {
       mag = Math.max(mag, this.zoom.min);
     }
@@ -777,7 +789,12 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
   setZoomOptions(options: OBJ_ZoomOptions) {
     if (options.min !== undefined) { this.zoom.min = options.min; }
     if (options.max !== undefined) { this.zoom.max = options.max; }
-    if (options.sensitivity !== undefined) { this.zoom.sensitivity = options.sensitivity; }
+    if (options.wheelSensitivity !== undefined) {
+      this.zoom.wheelSensitivity = options.wheelSensitivity;
+    }
+    if (options.pinchSensitivity !== undefined) {
+      this.zoom.pinchSensitivity = options.pinchSensitivity;
+    }
     if (options.position != null) { this.zoom.position = getPoint(options.position); }
   }
 
@@ -791,7 +808,12 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
     if (options.bottom !== undefined) { this.pan.bottom = options.bottom; }
     if (options.top !== undefined) { this.pan.top = options.top; }
     if (options.right !== undefined) { this.pan.right = options.right; }
-    if (options.sensitivity !== undefined) { this.pan.sensitivity = options.sensitivity; }
+    if (options.wheelSensitivity !== undefined) {
+      this.pan.wheelSensitivity = options.wheelSensitivity;
+    }
+    if (options.maxVelocity !== undefined) {
+      this.pan.maxVelocity = options.maxVelocity;
+    }
     if (options.wheel !== undefined) { this.pan.wheel = options.wheel; }
     if (options.momentum !== undefined) { this.pan.momentum = options.momentum; }
   }
