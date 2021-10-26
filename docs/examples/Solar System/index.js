@@ -1,7 +1,7 @@
 /* globals Fig */
-/* eslint-disable object-property-newline */
+/* eslint-disable object-property-newline, object-curly-newline */
 
-// In this figure, each unit in draw distance when fully zoomed out is 1000
+// In this figure, each unit in draw distance (when fully zoomed) out is 1000
 // million km. So the main plot will be 5 units in length representing 5000
 // million km.
 
@@ -12,12 +12,12 @@ const figure = new Fig.Figure({
   font: { size: 0.08 },
 });
 
+// `true` will scale planet size the same as distance to sun
 let scalePlanets = false;
 
 // Mask
 figure.add({
   make: 'rectangle',
-  // line: { width: 0.3 },
   width: 6,
   height: 1,
   position: [0, -0.9],
@@ -25,7 +25,9 @@ figure.add({
 });
 
 // Main plot - zoom and pan enabled in x
-// Gesture area extends to left and right boundaries of figure
+// Gesture area extends over entire figure
+// Maximum zoom is limited by zoom.max
+// Minimum zoom and pan is limited by x.min and x.max
 const plot = figure.add({
   make: 'collections.plot',
   width: 5,
@@ -34,18 +36,20 @@ const plot = figure.add({
   position: [-2.5, -0.4],
   grid: false,
   x: {
-    start: 0, stop: 5000, step: [500, 100], color: [1, 1, 1, 1], min: 0, max: 5000,
+    start: 0, stop: 5000, step: [500, 100],
+    color: [1, 1, 1, 1],
+    min: 0, max: 5000,  // min and max zoom/pan values of axis
     title: { text: 'km (millions)', location: 'right', offset: [-0.6, 0.05] },
-    labels: { precision: 2 }, ticks: [{ length: 0.05 }, { length: 0.03 }],
+    labels: { precision: 2 },
+    ticks: [{ length: 0.05 }, { length: 0.03 }],
   },
   y: { show: false },
   zoom: { axis: 'x', max: 10000, pinchSensitivity: 10, wheelSensitivity: 2 },
   pan: { axis: 'x', maxVelocity: 50, wheelSensitivity: 2 },
-  gestureArea: { left: -0.1, right: 0.05 },
+  gestureArea: { left: -0.1, right: 0.1, bottom: -0.9 },
 });
 
-// Reference axis showing relative positions of all planets and how much
-// of space is currently visible
+// Reference line showing relative positions of all planets
 figure.add({
   make: 'line',
   p1: [-2.5, -1], p2: [2.5, -1],
@@ -53,27 +57,27 @@ figure.add({
   color: [0.5, 0.5, 0.5, 1],
 });
 
-// Marker on reference axis
-const marker = figure.add({
+// Highlighted portion of reference line showing how much space is visible
+const visibleSpace = figure.add({
   make: 'rectangle',
   width: 5,
   height: 0.01,
   color: [1, 1, 1, 1],
 });
 
-
-// Update marker show the visible area on the reference axis
+// Update the visible area on the reference line
 plot.notifications.add('update', () => {
   const w = plot._x.stopValue - plot._x.startValue;
   const v = plot._x.startValue + w / 2;
-  marker.setPosition(v / 1000 - 2.5, -1);
-  marker.setScale(Math.max(0.003, w / 5000), 1);
+  visibleSpace.setPosition(v / 1000 - 2.5, -1);
+  visibleSpace.setScale(Math.max(0.003, w / 5000), 1);
 });
 
 // Add sun and planets
 const planetY = 0.4;
 function createMass(name, distance, radius, color, labelY = 0.1, isMoon = false) {
   const s = labelY / Math.abs(labelY);
+  // Each mass contains an orb, a label and a line connecting the two
   const mass = figure.add({
     name,
     make: 'collection',
@@ -104,17 +108,20 @@ function createMass(name, distance, radius, color, labelY = 0.1, isMoon = false)
     position: [distance / 1e6 - 2.5, planetY],
   });
 
+  // When the plot zoom or pan updates, then reposition and rescale the mass
   plot.notifications.add('update', () => {
     const mag = plot._x.currentZoom;
     const span = 5000 / mag;
+    // Reposition and rescale
     mass.setPosition(plot.pointToDraw([distance / 1e6, 0]).x - 2.5, planetY);
     if (scalePlanets) {
       mass._orb.setScale(Math.max(mag, 8e6 / radius / 3));
-      // mass._orb.setScale(mag);
     } else {
       mass._orb.setScale(2000);
     }
 
+    // Change the line between orb and label with orb radius. When the orb is
+    // large, remove line and place label in orb.
     const r = mass._orb.getScale().x * radius / 1e9;
     if (r < 0.3) {
       mass._line.show();
@@ -131,13 +138,16 @@ function createMass(name, distance, radius, color, labelY = 0.1, isMoon = false)
       mass._label.setPosition(0, Math.min(r * 0.7, 0.6));
       mass._line.hide();
     }
+    // Only show the moon when the plot span is less than 200 Million km
     if (isMoon) {
       if (span < 200) { mass.show(); } else { mass.hide(); }
     }
   });
 
+  // Place the masses behind the mask
   figure.elements.toBack(mass);
 
+  // If the mass is not a moon, then include it on the reference line
   if (!isMoon) {
     const label = figure.add({
       make: 'collection',
@@ -165,7 +175,6 @@ function createMass(name, distance, radius, color, labelY = 0.1, isMoon = false)
       position: [distance / 1e9 - 2.5, -1],
     });
     label._label.notifications.add('onClick', () => {
-      // console.log(distance / 1e6, distance / 1e9 - 2.5)
       plot.panToValue([distance / 1e6, 0], [2.5, 1]);
       figure.animateNextFrame();
     });
@@ -173,6 +182,7 @@ function createMass(name, distance, radius, color, labelY = 0.1, isMoon = false)
   }
 }
 
+// Create the solar system planets and sun
 createMass('Neptune', 4475e6, 24622, [0.5, 0.5, 1, 1]);
 createMass('Uranus', 2951e6, 25263, [0.5, 0.5, 1, 1]);
 createMass('Saturn', 1483e6, 58232, [0.5, 0.5, 1, 1]);
@@ -184,6 +194,7 @@ createMass('Venus', 109e6, 6051, [0.5, 0.5, 0, 1], 0.175);
 createMass('Mercury', 58e6, 2440, [1, 0.5, 0, 1], -0.18);
 createMass('Sun', 0, 696000, [1, 0.5, 0, 1], 0.3);
 
+// The zoom toggle changes whether the planet sizes are scaled to distance
 const zoomToggle = figure.add({
   make: 'collections.toggle',
   label: { text: 'Scale Orbs to Distance', font: { size: 0.07 }, location: 'top' },
@@ -197,11 +208,11 @@ const update = () => plot.zoomDelta(plot.drawToPoint([0, 0]), 1);
 zoomToggle.notifications.add('on', () => { scalePlanets = true; update(); });
 zoomToggle.notifications.add('off', () => { scalePlanets = false; update(); });
 
-figure.elements.toFront(marker);
+figure.elements.toFront(visibleSpace);
 plot.zoomValue([0, 0], 0.0001);   // Initially zoom out
 
 
-// Calculate and show the average panning speed.
+// Calculate and show the average panning speed (including warp equivalent)
 const speed = figure.add({
   make: 'text',
   text: 'Speed: 0.0c (Sublight)',
@@ -210,7 +221,7 @@ const speed = figure.add({
 });
 
 // Based on the Michael Okuda revised warp scale.
-// NB: The warp scale is fictional non-linear scale. So linearly interpolating
+// NB: The warp scale is a fictional non-linear scale. So linearly interpolating
 // between warp numbers is a fiction in a fiction.
 const warpSpeed = [1, 10, 39, 102, 150, 213, 392, 656, 1024, 1516, 3053, 5000, 6667, 7912, 199516];
 const warpNum = [1, 2, 3, 4, 4.5, 5, 6, 7, 8, 9, 9.9, 9.95, 9.975, 9.99, 9.9999];
@@ -224,6 +235,7 @@ function calcWarp(v) {
   return 0;
 }
 
+// Calculate and show the average pan speed relative to the speed of light c
 let lastTime = performance.now() / 1000;
 let lastStart = 0;
 let sumDist = 0;
