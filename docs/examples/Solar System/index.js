@@ -1,10 +1,13 @@
 /* globals Fig */
 
+// In this figure, each unit is 1000 million km.
+// So the main plot will be 5 units in length representing 5000 million km
+
 const figure = new Fig.Figure({
-  scene: [-1.05, -0.525, 1.05, 0.525],
+  scene: [-2.6, -1.3, 2.6, 1.3],
   backgroundColor: [0, 0, 0, 1],
   color: [1, 1, 1, 1],
-  font: { size: 0.02 },
+  font: { size: 0.06 },
 });
 
 let scalePlanets = false;
@@ -13,9 +16,9 @@ let scalePlanets = false;
 figure.add({
   make: 'rectangle',
   // line: { width: 0.3 },
-  width: 2.5,
-  height: 0.4,
-  position: [0, -0.45],
+  width: 6,
+  height: 0.8,
+  position: [0, -0.9],
   color: [0, 0, 0, 0.85],
 });
 
@@ -23,40 +26,34 @@ figure.add({
 // Gesture area extends to left and right boundaries of figure
 const plot = figure.add({
   make: 'collections.plot',
-  width: 2,
-  height: 0.9,
-  font: { size: 0.02 },
-  position: [-1, -0.25],
+  width: 5,
+  height: 1.8,
+  font: { size: 0.05 },
+  position: [-2.5, -0.5],
   grid: false,
   x: {
-    start: 0, stop: 200, step: 20, color: [1, 1, 1, 1], min: 0, max: 5000,
-    title: { text: 'km (millions)', location: 'right', offset: [-0.15, 0.02] },
+    start: 0, stop: 5000, step: 500, color: [1, 1, 1, 1], min: 0, max: 5000,
+    title: { text: 'km (millions)', location: 'right', offset: [-0.4, 0.05] },
+    labels: { precision: 2 },
   },
   y: { show: false },
-  zoom: { axis: 'x', max: 500 },
+  zoom: { axis: 'x', max: 10000 },
   pan: { axis: 'x', wheel: true },
   gestureArea: { left: -0.05, right: 0.05 },
 });
 
-// Reference Axis
 figure.add({
-  make: 'collections.axis',
-  position: [-1, -0.43],
-  length: 2,
-  start: 0,
-  stop: 3000,
-  step: 500,
-  color: [0.3, 0.3, 0.3, 1],
-  font: { size: 0.02 },
-  labels: false,
-  ticks: false,
+  make: 'line',
+  p1: [-2.5, -1], p2: [2.5, -1],
+  width: 0.005,
+  color: [0.5, 0.5, 0.5, 1],
 });
 
 // Marker on reference axis
 const marker = figure.add({
   make: 'rectangle',
-  width: 2,
-  height: 0.005,
+  width: 5,
+  height: 0.01,
   color: [1, 1, 1, 1],
 });
 
@@ -64,13 +61,13 @@ const marker = figure.add({
 plot.notifications.add('update', () => {
   const w = plot._x.stopValue - plot._x.startValue;
   const v = plot._x.startValue + w / 2;
-  marker.setPosition(v / 5000 * 2 - 1, -0.43);
+  marker.setPosition(v / 1000 - 2.5, -1);
   marker.setScale(Math.max(0.003, w / 5000), 1);
 });
 
 // Add sun and planets
-const planetY = 0.125;
-function createMass(name, distance, radius, color, labelY = 0.025, isMoon = false) {
+const planetY = 0.4;
+function createMass(name, distance, radius, color, labelY = 0.05, isMoon = false) {
   const s = labelY / Math.abs(labelY);
   const mass = figure.add({
     name,
@@ -79,7 +76,7 @@ function createMass(name, distance, radius, color, labelY = 0.025, isMoon = fals
       {
         name: 'line',
         make: 'line',
-        width: 0.001,
+        width: 0.002,
         p1: [0, s * 0.01],
         p2: [0, labelY * 4],
       },
@@ -88,7 +85,7 @@ function createMass(name, distance, radius, color, labelY = 0.025, isMoon = fals
         make: 'polygon',
         sides: 100,
         color: name !== 'Sun' ? [1, 1, 1, 1] : color,
-        radius: radius / 100000000,
+        radius: radius / 1e9,
       },
       {
         name: 'label',
@@ -99,22 +96,24 @@ function createMass(name, distance, radius, color, labelY = 0.025, isMoon = fals
         position: [0, labelY * 4 + s * 0.01],
       },
     ],
-    position: [distance / 100, planetY],
+    position: [distance / 1e6 - 2.5, planetY],
   });
+
   plot.notifications.add('update', () => {
     const mag = plot._x.currentZoom;
-    mass.setPosition(plot.pointToDraw([distance, 0]).x - 1, planetY);
+    const span = 5000 / mag;
+    mass.setPosition(plot.pointToDraw([distance / 1e6, 0]).x - 2.5, planetY);
     if (scalePlanets) {
-      mass._orb.setScale(Math.max(mag, 2000 / radius * 100));
+      mass._orb.setScale(Math.max(mag, 8e6 / radius));
     } else {
-      mass._orb.setScale(100);
+      mass._orb.setScale(2000);
     }
 
-    const r = mass._orb.getScale().x * radius / 100000000;
-    if (r < 0.17) {
+    const r = mass._orb.getScale().x * radius / 1e9;
+    if (r < 0.3) {
       mass._line.show();
       mass._line.custom.updatePoints({
-        p1: [0, s * (r + 0.005)],
+        p1: [0, s * (r + 0.01)],
         p2: [0, s * (r + Math.abs(labelY) * 2)],
       });
       mass._label.setPosition(0, s * (r + Math.abs(labelY) * 2.2));
@@ -123,8 +122,11 @@ function createMass(name, distance, radius, color, labelY = 0.025, isMoon = fals
       if (name !== 'Sun') {
         mass._label.setColor([0, 0, 0, 1]);
       }
-      mass._label.setPosition(0, Math.min(r * 0.8, 0.3));
+      mass._label.setPosition(0, Math.min(r * 0.7, 0.6));
       mass._line.hide();
+    }
+    if (isMoon) {
+      if (span < 200) { mass.show(); } else { mass.hide(); }
     }
   });
   figure.elements.toBack(mass);
@@ -139,44 +141,47 @@ function createMass(name, distance, radius, color, labelY = 0.025, isMoon = fals
           text: name,
           name: 'label',
           position: [0, labelY + labelY / Math.abs(labelY) * 0.01],
-          yAlign: labelY < 0 ? 'top' : 'bottom',
+          yAlign: labelY < 0 ? 'top' : 'baseline',
           xAlign: 'center',
           touchBorder: 0.01,
           touch: true,
+          color: [0.6, 0.6, 0.6, 1],
         },
         {
           make: 'line',
           length: labelY,
           angle: Math.PI / 2,
+          color: [0.5, 0.5, 0.5, 1],
         },
       ],
-      position: [distance / 2500 - 1, -0.43],
+      position: [distance / 1e9 - 2.5, -1],
     });
     label._label.notifications.add('onClick', () => {
-      plot.panToValue([distance, 0], [distance / 2500, 1]);
+      // console.log(distance / 1e6, distance / 1e9 - 2.5)
+      plot.panToValue([distance / 1e6, 0], [distance / 1e9, 1]);
       figure.animateNextFrame();
     });
     label._label.setTouchable();
   }
 }
 
-createMass('Neptune', 2780 * 1.609, 15229 * 1.609, [0.5, 0.5, 1, 1]);
-createMass('Uranus', 1834 * 1.609, 15759 * 1.609, [0.5, 0.5, 1, 1]);
-createMass('Saturn', 921 * 1.609, 36184 * 1.609, [0.5, 0.5, 1, 1]);
-createMass('Jupiter', 465 * 1.609, 43441 * 1.609, [0.5, 0.5, 1, 1]);
-createMass('Mars', 151 * 1.609, 2106 * 1.609, [1, 0, 0, 1], 0.01);
-createMass('Earth', 93 * 1.609, 3958 * 1.609, [0.5, 0.5, 1, 1], -0.02);
-createMass('Moon', 92.76 * 1.609, 1079 * 1.609, [0.5, 0.5, 1, 1], 0.02, true);
-createMass('Venus', 67.2 * 1.609, 3760 * 1.609, [0.5, 0.5, 0, 1], 0.05);
-createMass('Mercury', 36 * 1.609, 1516 * 1.609, [1, 0.5, 0, 1], -0.05);
-createMass('Sun', 0, 696000, [1, 0.5, 0, 1], 0.09);
+createMass('Neptune', 4475e6, 24622, [0.5, 0.5, 1, 1]);
+createMass('Uranus', 2951e6, 25263, [0.5, 0.5, 1, 1]);
+createMass('Saturn', 1483e6, 58232, [0.5, 0.5, 1, 1]);
+createMass('Jupiter', 750e6, 69911, [0.5, 0.5, 1, 1]);
+createMass('Mars', 243e6, 3389, [1, 0, 0, 1], 0.06);
+createMass('Earth', 150e6, 6371, [0.5, 0.5, 1, 1], -0.05);
+createMass('Moon', 150e6 - 384400, 1737, [0.5, 0.5, 1, 1], 0.03, true);
+createMass('Venus', 109e6, 6051, [0.5, 0.5, 0, 1], 0.15);
+createMass('Mercury', 58e6, 2440, [1, 0.5, 0, 1], -0.15);
+createMass('Sun', 0, 696000, [1, 0.5, 0, 1], 0.25);
 
 const zoomToggle = figure.add({
   make: 'collections.toggle',
-  label: { text: 'Scale Planets', font: { size: 0.03 } },
-  position: [0.9, 0.45],
+  label: { text: 'Scale Planets', font: { size: 0.07 }, location: 'top' },
+  position: [2.3, 1.1],
   theme: 'light',
-  height: 0.04,
+  height: 0.1,
   touchBorder: 0.02,
 });
 
