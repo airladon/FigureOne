@@ -1357,6 +1357,7 @@ class CollectionsPlot extends FigureElementCollection {
     this.updateTraces();
     this.setupCross();
     this.notifications.publish('update');
+    this.notifications.publish('pan');
   }
 
   panDeltaDraw(deltaDrawIn: TypeParsablePoint) {
@@ -1372,6 +1373,7 @@ class CollectionsPlot extends FigureElementCollection {
     this.updateTraces();
     this.setupCross();
     this.notifications.publish('update');
+    this.notifications.publish('pan');
   }
 
   panToValue(value: TypeParsablePoint, atDraw: TypeParsablePoint) {
@@ -1388,6 +1390,7 @@ class CollectionsPlot extends FigureElementCollection {
     this.updateTraces();
     this.setupCross();
     this.notifications.publish('update');
+    this.notifications.publish('pan');
   }
 
   zoomValue(valueIn: TypeParsablePoint, mag: number) {
@@ -1406,6 +1409,7 @@ class CollectionsPlot extends FigureElementCollection {
     this.updateTraces();
     this.setupCross();
     this.notifications.publish('update');
+    this.notifications.publish('zoom');
   }
 
   zoomDelta(valueIn: TypeParsablePoint, magDelta: number) {
@@ -1414,7 +1418,6 @@ class CollectionsPlot extends FigureElementCollection {
     if (x != null && this.zoom.enabled && this.zoom.x) {
       const v = this.zoomPoint != null ? this.zoomPoint.x : value.x;
       const m = clipValue(x.currentZoom * magDelta, this.zoom.min, this.zoom.max);
-      // console.log(x.currentZoom, magDelta, x.currentZoom * magDelta)
       x.zoomDelta(v, m / x.currentZoom);
     }
     const y = this.getYAxis();
@@ -1426,6 +1429,7 @@ class CollectionsPlot extends FigureElementCollection {
     this.updateTraces();
     this.setupCross();
     this.notifications.publish('update');
+    this.notifications.publish('zoom');
   }
 }
 

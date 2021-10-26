@@ -313,11 +313,12 @@ export type OBJ_AxisTitle = OBJ_TextLines & {
  * both axes aren't to be drawn, then use `false` to hide each axis (`true`)
  * @property {[number, number]} [auto] Will select automatic values for
  * `start`, `stop`, and `step` that cover the range [min, max]
- * @property {boolean} [autoStep] If `true` then start, stop and step tick,
- * grid and label values will be automatically calculated such that they land
- * on 0. This needs to be `true` if panning or zooming. If `false`, then the
- * tick, grid and label values will be from the `start`, `stop` and `step`
- * properties. (`false`)
+ * @property {boolean | 'decimal'} [autoStep] If `true` then start, stop and
+ * step tick, grid and label values will be automatically calculated such that
+ * they land on 0 and either double/half the original step (`true`) or ensure
+ * the steps land on factors of 10 (`'decimal'`). This needs to be not `false`
+ * if panning or zooming. If `false`, then the tick, grid and label values will
+ * be from the `start`, `stop` and `step` properties. (`false`)
  * @property {number | null} min minimum value axis can be zoomed or panned to
  * where `null` no limit (`null`)
  * @property {number | null} max maximum value axis can be zoomed or panned to
@@ -347,7 +348,7 @@ export type COL_Axis = {
   min?: number | null,
   max?: number | null,
   auto?: [number, number],
-  autoStep?: boolean,
+  autoStep?: boolean | 'decimal',
   values?: Array<number>,
 } & OBJ_Collection;
 
@@ -507,7 +508,7 @@ class CollectionsAxis extends FigureElementCollection {
   valueToDrawRatio: number;
   defaultFont: OBJ_Font_Fixed;
   name: string;
-  autoStep: null | number;
+  // autoStep: null | number;
   axis: 'x' | 'y';
   line: { width: number} & OBJ_Line | null;
   grid: Array<{
@@ -537,7 +538,7 @@ class CollectionsAxis extends FigureElementCollection {
   currentZoom: number;
   initialScale: number;
   initialStart: number;
-  autoStep: boolean;
+  autoStep: boolean | 'decimal';
 
   /**
    * @hideconstructor
@@ -947,7 +948,21 @@ class CollectionsAxis extends FigureElementCollection {
     // const step = 1 / 2 ** Math.floor(-Math.log(this.step / this.currentZoom) / Math.log(2)) * 2;
     // we only want step to change for zooms of 4, 2, 1, 0.5, 0.25, 0.
     let z = 1;
-    if (this.currentZoom < 1) {
+    if (this.autoStep === 'decimal') {
+      const span = this.stopValue - this.startValue;
+      const order = Math.log10(span);
+      const minOrder = 10 ** Math.floor(order);
+      const maxOrder = 10 ** Math.ceil(order);
+      let step;
+      if (minOrder === maxOrder) {
+        step = (minOrder) / 10;
+      } else if (minOrder * 2.5 < span) {
+        step = minOrder / 2;
+      } else {
+        step = minOrder / 10;
+      }
+      z = this.step[0] / step;
+    } else if (this.currentZoom < 1) {
       z = (2 ** Math.ceil(Math.log2(this.currentZoom)));
     } else {
       z = 2 ** Math.floor(Math.log2(this.currentZoom));
@@ -960,7 +975,7 @@ class CollectionsAxis extends FigureElementCollection {
       if (this.values != null) {
         return this.values;
       }
-      if (!this.autoStep) {
+      if (this.autoStep === false) {
         const v = range(this.startValue, this.stopValue, s);
         return v;
       }

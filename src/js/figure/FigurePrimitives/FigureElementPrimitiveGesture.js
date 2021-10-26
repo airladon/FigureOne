@@ -620,6 +620,8 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       let mag = this.zoom.mag + delta.y / 10 * this.zoom.wheelSensitivity * this.zoom.mag / 100;
       if (this.zoom.min != null) {
         mag = Math.max(mag, this.zoom.min);
+      } else if (mag <= 0) {
+        mag = 0.00000000001;
       }
       if (this.zoom.max != null) {
         mag = Math.min(mag, this.zoom.max);
@@ -758,6 +760,8 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       + (d - this.zoom.current.distance) / 5 * this.zoom.pinchSensitivity * this.zoom.mag / 100;
     if (this.zoom.min != null) {
       mag = Math.max(mag, this.zoom.min);
+    } else if (mag <= 0) {
+      mag = 0.00000000001;
     }
     if (this.zoom.max != null) {
       mag = Math.min(mag, this.zoom.max);
