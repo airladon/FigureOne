@@ -1,4 +1,5 @@
 /* eslint-disable block-scoped-var */
+/* global Fig */
 
 if (typeof process === 'object') {
   // eslint-disable-next-line global-require, no-unused-vars, vars-on-top, no-var
@@ -6,9 +7,9 @@ if (typeof process === 'object') {
 }
 
 
-const pow = (pow = 3, stop = 10, step = 0.05) => {
+const pow = (p = 3, stop = 10, step = 0.05) => {
   const xValues = Fig.range(-stop, stop, step);
-  return xValues.map(x => new Fig.Point(x, x ** pow));
+  return xValues.map(x => new Fig.Point(x, x ** p));
 };
 
 let index = 0;

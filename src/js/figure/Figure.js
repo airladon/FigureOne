@@ -333,7 +333,7 @@ class Figure {
 
   defaultPrevented: boolean;
 
-  // mousePixelPosition: null | Point;
+  mousePixelPosition: null | Point;
   // zoom: {
   //   last: {
   //     mag: number,

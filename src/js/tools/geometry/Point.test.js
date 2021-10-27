@@ -130,11 +130,11 @@ describe('g2 Point', () => {
     });
   });
   describe('Components of points can be multiplied', () => {
-    test('(-1, 2, 3) / (2, 3, -4) = (-2, 6, -12)', () => {
+    test('(-1, 2, 3) * (2, 3, -4) = (-2, 6, -12)', () => {
       const p = new Point(-1, 2, 3);
       const q = new Point(2, 3, -4);
-      const m = p.cdiv(q);
-      expect(m).toEqual(new Point(-2, 6, 12));
+      const m = p.mul(q);
+      expect(m).toEqual(new Point(-2, 6, -12));
     });
   });
   describe('Points can be clipped', () => {

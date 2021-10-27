@@ -91,7 +91,6 @@ function __finish(__figure) {
         return figure.pixelToClient(q);
       };
       const downClient = figToClient(pos);
-      console.log(pos, downClient)
       const mouseDownEvent = new MouseEvent('mousedown', {
         clientX: downClient.x,
         clientY: downClient.y,

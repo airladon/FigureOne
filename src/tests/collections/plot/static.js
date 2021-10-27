@@ -2,7 +2,7 @@
   "varsIgnorePattern": "[(timeoutId)|(step)|(duration)]",
   "vars": "local",
   }] */
-/* global figure getShapes getPosition */
+/* global figure getShapes getPosition pow figureWidth figureHeight */
 /* eslint-disable block-scoped-var, object-property-newline */
 
 if (typeof process === 'object') {
@@ -170,7 +170,7 @@ function getShapes(getPos) {
       },
     } }),
     shape('singlePoints', { trace: [[0, 0], [1, 1], [2, 0.5]] }),
-    shape('twoTraces', { trace: [pow(2), pow(3)]}),
+    shape('twoTraces', { trace: [pow(2), pow(3)] }),
 
     /*
     .##.......########..######...########.##....##.########.

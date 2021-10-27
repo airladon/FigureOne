@@ -1,4 +1,5 @@
 /* eslint-disable block-scoped-var */
+/* global figure */
 
 if (typeof process === 'object') {
   // eslint-disable-next-line global-require, no-unused-vars, vars-on-top, no-var
@@ -10,7 +11,7 @@ function makeShape(name, options, mods, getPos) {
   const { x, y } = getPos(index);
   // const indexName = `${index}`;
   index += 1;
-  const scene = figure.scene._dup();
+  const scene = figure.scene.dup();
   const o = {
     name,
     make: 'gesture',
@@ -25,8 +26,12 @@ function makeShape(name, options, mods, getPos) {
     }, options),
   };
   return [
-    { make: 'rectangle', width: 0.2, height: 0.2, position: [-0.15 + x, y], scene },
-    { make: 'triangle', width: 0.2, height: 0.2, position: [0.15 + x, -0.025 + y], scene },
+    {
+      make: 'rectangle', width: 0.2, height: 0.2, position: [-0.15 + x, y], scene,
+    },
+    {
+      make: 'triangle', width: 0.2, height: 0.2, position: [0.15 + x, -0.025 + y], scene,
+    },
     o,
   ];
 }

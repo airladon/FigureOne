@@ -1454,7 +1454,7 @@ export default class FigurePrimitives {
       scene = new Scene(combinedOptions.scene);
     }
     if (combinedOptions.changeScene === scene) {
-      scene = this.scene._dup();
+      scene = this.scene.dup();
     }
     defaultOptions.width = scene.right - scene.left;
     defaultOptions.height = scene.top - scene.bottom;

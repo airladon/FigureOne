@@ -2,7 +2,7 @@
   "varsIgnorePattern": "[(timeoutId)|(step)|(duration)]",
   "vars": "local",
   }] */
-/* global figure getShapes getPosition */
+/* global figure getShapes getPosition pow figureWidth figureHeight */
 /* eslint-disable block-scoped-var, object-property-newline */
 
 if (typeof process === 'object') {
@@ -55,7 +55,7 @@ function getShapes(getPos) {
     .##.....##.##.....##.########.##.....##
     */
     shape('plotAreaColor', { plotArea: [1, 1, 0, 1] }),
-    shape('plotAreaColorLine', { plotArea: { line: { width: 0.01}, fill: [1, 1, 0, 1] } }),
+    shape('plotAreaColorLine', { plotArea: { line: { width: 0.01 }, fill: [1, 1, 0, 1] } }),
     shape('plotAreaAndFrame', { plotArea: [1, 1, 0, 1], frame: [1, 0, 1, 1] }),
 
     /*
@@ -126,7 +126,7 @@ let startGetValues;
 let startMove;
 
 const updates = {
-  zoomDelta: e => {
+  zoomDelta: (e) => {
     e.zoomDelta([-6, -200], 2);
     e.zoomDelta([-6, -200], 2);
   },

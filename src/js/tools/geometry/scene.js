@@ -272,7 +272,29 @@ export default class Scene {
 
   constructor(options: OBJ_Scene, onUpdate: null | (() => void) = null) {
     const defaultOptions = this.defaultOptions();
-    joinObjects(this, defaultOptions, options);
+    // joinObjects(this, defaultOptions, options);
+    const o = joinObjects({}, defaultOptions, options);
+    this.style = o.style;
+    this.left = o.left;
+    this.right = o.right;
+    this.bottom = o.bottom;
+    this.top = o.top;
+    this.near = o.near;
+    this.far = o.far;
+    this.zoom = o.zoom;
+    this.pan = o.pan;
+    this.camera = {
+      position: getPoint(o.camera.position),
+      lookAt: getPoint(o.camera.lookAt),
+      up: getPoint(o.camera.up),
+    };
+    this.aspectRatio = o.aspectRatio;
+    this.fieldOfView = o.fieldOfView;
+    this.light = {
+      directional: getPoint(o.light.directional),
+      ambient: o.light.ambient,
+      point: getPoint(o.light.point),
+    };
     this.calcProjectionMatrix();
     this.calcViewMatrix();
     this.calcViewProjectionMatrix();
@@ -287,7 +309,7 @@ export default class Scene {
     this.calcViewProjectionMatrix();
   }
 
-  _dup() {
+  dup() {
     return new Scene({
       style: this.style,
       left: this.left,

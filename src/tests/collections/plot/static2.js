@@ -2,7 +2,7 @@
   "varsIgnorePattern": "[(timeoutId)|(step)|(duration)]",
   "vars": "local",
   }] */
-/* global figure getShapes getPosition */
+/* global figure getShapes getPosition figureWidth figureHeight */
 /* eslint-disable block-scoped-var, object-property-newline */
 
 if (typeof process === 'object') {
