@@ -1,6 +1,6 @@
 # Example - Mandelbrot Set
 
-Demonstrator on using shaders and zoom and pan gestures to explore a Mandelbrot fractal.
+Demonstrator on using shaders and zoom and pan gestures to explore the Mandelbrot set.
 
 Open `index.html` in a browser to view example, or the example is hosted [here](https://airladon.github.io/FigureOne/examples/Mandelbrot/index.html).
 

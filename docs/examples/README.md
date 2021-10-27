@@ -110,3 +110,14 @@ Demonstration of 3D drawing and interactivity.
 
 ![](3D%20Electric%20Field/example.gif)
 
+## **[Mandelbrot](Mandelbrot)**
+
+Demonstrator on using shaders and zoom and pan gestures to explore the Mandelbrot set.
+
+![](Mandelbrot/example.gif)
+
+## **[Solar System](Solar%20System)**
+
+Demonstrator on using a zoomable and pannable plot to explore the scale of the solar system.
+
+![](Solar%20System/example.gif)

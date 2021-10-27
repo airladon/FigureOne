@@ -154,7 +154,7 @@ See this example hosted [here](https://airladon.github.io/FigureOne/examples/Int
 
 ![](docs/examples/Interactive%20Video%20-%20Trig%203%20-%20Relationships/example.gif)
 
-## **[Electric Field](Electric%20Field)**
+## **[Electric Field](docs/examples/Electric%20Field)**
 
 See this example hosted [here](https://airladon.github.io/FigureOne/examples/Electric%20Field/index.html).
 
@@ -162,13 +162,29 @@ Demonstrator of how shaders can be used to animate over 1000 elements simultaneo
 
 ![](docs/examples/Electric%20Field/example.gif)
 
-## **[3D Electric Field](3D%20Electric%20Field)**
+## **[3D Electric Field](docs/examples/3D%20Electric%20Field)**
 
 See this example hosted [here](https://airladon.github.io/FigureOne/examples/3D%20Electric%20Field/index.html).
 
 Visualize and interact with 3D figures.
 
 ![](docs/examples/3D%20Electric%20Field/example.gif)
+
+## **[Mandelbrot](docs/examples/Mandelbrot)**
+
+See this example hosted [here](https://airladon.github.io/FigureOne/examples/Mandelbrot/index.html).
+
+Use shaders and gestures to explore the Mandelbrot set.
+
+![](docs/examples/Mandelbrot/example.gif)
+
+## **[Solar System](docs/examples/Solar%20System)**
+
+See this example hosted [here](https://airladon.github.io/FigureOne/examples/Solar%20System/index.html).
+
+Use a plot that can be panned and zoomed to explore the scale of the planets in the solar system.
+
+![](docs/examples/Solar%20System/example.gif)
 
 ## NPM Package
 
