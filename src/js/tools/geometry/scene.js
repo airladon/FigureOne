@@ -271,8 +271,43 @@ export default class Scene {
   }
 
   constructor(options: OBJ_Scene, onUpdate: null | (() => void) = null) {
+    // const defaultOptions = this.defaultOptions();
+    // // joinObjects(this, defaultOptions, options);
+    // const o = joinObjects({}, defaultOptions, options);
+    // this.style = o.style;
+    // this.left = o.left;
+    // this.right = o.right;
+    // this.bottom = o.bottom;
+    // this.top = o.top;
+    // this.near = o.near;
+    // this.far = o.far;
+    // this.zoom = o.zoom;
+    // this.pan = o.pan;
+    // this.setCamera(o.camera);
+    // this.setLight(o.light);
+    // // this.camera = {
+    // //   position: getPoint(o.camera.position)._dup(),
+    // //   lookAt: getPoint(o.camera.lookAt)._dup(),
+    // //   up: getPoint(o.camera.up)._dup(),
+    // // };
+    // this.aspectRatio = o.aspectRatio;
+    // this.fieldOfView = o.fieldOfView;
+    // // this.light = {
+    // //   directional: getPoint(o.light.directional)._dup(),
+    // //   ambient: o.light.ambient,
+    // //   point: getPoint(o.light.point)._dup(),
+    // // };
+    // this.calcProjectionMatrix();
+    // this.calcViewMatrix();
+    // this.calcViewProjectionMatrix();
+    this.reset(options);
+    this.onUpdate = onUpdate;
+  }
+
+  reset(options: OBJ_Scene) {
+    this.camera = {};
+    this.light = {};
     const defaultOptions = this.defaultOptions();
-    // joinObjects(this, defaultOptions, options);
     const o = joinObjects({}, defaultOptions, options);
     this.style = o.style;
     this.left = o.left;
@@ -283,33 +318,16 @@ export default class Scene {
     this.far = o.far;
     this.zoom = o.zoom;
     this.pan = o.pan;
-    this.camera = {
-      position: getPoint(o.camera.position),
-      lookAt: getPoint(o.camera.lookAt),
-      up: getPoint(o.camera.up),
-    };
+    this.setCameraProperties(o.camera, false);
+    this.setLight(o.light, false);
     this.aspectRatio = o.aspectRatio;
     this.fieldOfView = o.fieldOfView;
-    this.light = {
-      directional: getPoint(o.light.directional),
-      ambient: o.light.ambient,
-      point: getPoint(o.light.point),
-    };
-    this.calcProjectionMatrix();
-    this.calcViewMatrix();
-    this.calcViewProjectionMatrix();
-    this.onUpdate = onUpdate;
-  }
-
-  reset(options: OBJ_Scene) {
-    const defaultOptions = this.defaultOptions();
-    joinObjects(this, defaultOptions, options);
     this.calcProjectionMatrix();
     this.calcViewMatrix();
     this.calcViewProjectionMatrix();
   }
 
-  dup() {
+  _dup() {
     return new Scene({
       style: this.style,
       left: this.left,
@@ -322,6 +340,8 @@ export default class Scene {
       fieldOfView: this.fieldOfView,  // $FlowFixMe
       light: this.light,  // $FlowFixMe
       camera: this.camera,
+      zoom: this.zoom,
+      pan: this.pan,
     });
   }
 
@@ -463,30 +483,25 @@ export default class Scene {
     this.calcViewProjectionMatrix();
   }
 
-  // setProjectionMatrix(matrix: Type3DMatrix) {
-  //   this.projectionMatrix = this.dupMatrix(matrix);
-  //   this.calcViewProjectionMatrix();
-  // }
-
-  // setCameraMatrix(matrix: Type3DMatrix) {
-  //   this.cameraMatrix = this.dupMatrix(matrix);
-  //   this.viewMatrix = m3.inverse(this.cameraMatrix);
-  //   this.calcViewProjectionMatrix();
-  // }
-
-  // setViewMatrix(matrix: Type3DMatrix) {
-  //   this.viewMatrix = this.dupMatrix(matrix);
-  //   this.cameraMatrix = m3.inverse(this.viewMatrix);
-  //   this.calcViewProjectionMatrix();
-  // }
-
   /**
    * Set camera properties.
    */
   setCamera(options: OBJ_Camera) {
-    joinObjects(this.camera, options);
+    this.setCameraProperties(options);
     this.calcViewMatrix();
     this.calcViewProjectionMatrix();
+  }
+
+  setCameraProperties(options: OBJ_Camera) {
+    if (options.position != null) {
+      this.camera.position = getPoint(options.position);
+    }
+    if (options.up != null) {
+      this.camera.up = getPoint(options.up);
+    }
+    if (options.lookAt != null) {
+      this.camera.lookAt = getPoint(options.lookAt);
+    }
   }
 
   /**
@@ -529,7 +544,16 @@ export default class Scene {
    * Set light properties
    */
   setLight(options: OBJ_Light) {
-    joinObjects(this.light, options);
+    // joinObjects(this.light, options);
+    if (options.ambient != null) {
+      this.light.ambient = options.ambient;
+    }
+    if (options.directional != null) {
+      this.light.directional = getPoint(options.directional);
+    }
+    if (options.point != null) {
+      this.light.point = getPoint(options.point);
+    }
   }
 
   /*
