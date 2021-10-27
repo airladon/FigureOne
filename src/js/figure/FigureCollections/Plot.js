@@ -309,8 +309,8 @@ function cleanTraces(
  *
  * All examples below also use this power function to generate the traces:
  * ```javascript
- * const pow = (pow = 2, stop = 10, step = 0.05) => {
- *   const xValues = Fig.range(0, stop, step);
+ * const pow = (pow = 2, start = 0, stop = 10, step = 0.05) => {
+ *   const xValues = Fig.range(start, stop, step);
  *   return xValues.map(x => new Fig.Point(x, x ** pow));
  * }
  * ```
@@ -473,8 +473,8 @@ function cleanTraces(
  *   pan: true,
  * });
  *
- * // Initialize by zooming in on [1.78, 0.067] by a magnification factor of 10
- * plot.zoomValue([1.78, 0.067], 10);
+ * // Initialize by zooming in by a magnification factor of 10
+ * plot.zoomValue([1.8333, 0.06672], 10);
  *
  */
 // $FlowFixMe

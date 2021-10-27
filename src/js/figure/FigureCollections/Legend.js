@@ -132,8 +132,8 @@ export type COL_PlotLegend = {
  *
  * All examples below also use this power function to generate the traces:
  * ```javascript
- * const pow = (pow = 2, stop = 10, step = 0.05) => {
- *   const xValues = Fig.range(0, stop, step);
+ * const pow = (pow = 2, start = 0, stop = 10, step = 0.05) => {
+ *   const xValues = Fig.range(start, stop, step);
  *   return xValues.map(x => new Fig.Point(x, x ** pow));
  * }
  * ```
@@ -147,7 +147,7 @@ export type COL_PlotLegend = {
  *     { points: pow(2), name: 'Power 2' },
  *     { points: pow(2.5), name: 'Power 2.5' },
  *     {
- *       points: pow(3, 10, 0.5),
+ *       points: pow(3, 0, 10, 0.5),
  *       name: 'Power 3',
  *       markers: { radius: 0.03, sides: 10 },
  *     },
@@ -164,7 +164,7 @@ export type COL_PlotLegend = {
  *     { points: pow(2), name: 'Power 2' },
  *     { points: pow(2.5), name: 'Power 2.5' },
  *     {
- *       points: pow(3, 10, 0.5),
+ *       points: pow(3, 0, 10, 0.5),
  *       name: 'Power 3',
  *       markers: { radius: 0.03, sides: 10 },
  *     },
@@ -185,7 +185,7 @@ export type COL_PlotLegend = {
  *     { points: pow(2), name: 'Power 2' },
  *     { points: pow(2.5), name: 'Power 2.5' },
  *     {
- *       points: pow(3, 10, 0.5),
+ *       points: pow(3, 0, 10, 0.5),
  *       name: 'Power 3',
  *       markers: { radius: 0.03, sides: 10 },
  *     },
@@ -209,7 +209,7 @@ export type COL_PlotLegend = {
  *     { points: pow(2), name: 'Power 2' },
  *     { points: pow(2.5), name: 'Power 2.5' },
  *     {
- *       points: pow(3, 10, 0.5),
+ *       points: pow(3, 0, 10, 0.5),
  *       name: 'Power 3',
  *       markers: { radius: 0.03, sides: 10 },
  *     },

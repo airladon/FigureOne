@@ -510,7 +510,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
       this.scene = new Scene(scene);
     }
     if (this.changeScene === this.scene) {
-      this.scene = this.scene.dup();
+      this.scene = this.scene._dup();
     }
     this.reset();
   }
@@ -521,7 +521,7 @@ export default class FigureElementPrimitiveGesture extends FigureElementPrimitiv
   setChangeScene(scene: Scene) {
     this.changeScene = scene;
     if (this.changeScene === this.scene) {
-      this.scene = scene.dup();
+      this.scene = scene._dup();
     }
   }
 

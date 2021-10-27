@@ -11,7 +11,7 @@ function makeShape(name, options, mods, getPos) {
   const { x, y } = getPos(index);
   // const indexName = `${index}`;
   index += 1;
-  const scene = figure.scene.dup();
+  const scene = figure.scene._dup();
   const o = {
     name,
     make: 'gesture',

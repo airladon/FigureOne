@@ -1,6 +1,6 @@
 const { browserStaticTester } = require('../../browserStaticTester');
 
 browserStaticTester(
-  'Collections: Toggle - Static',
+  'Primitives: Gesture',
   `file:/${__dirname}/static.html`,
 );
