@@ -155,58 +155,61 @@ function fig1() {
           points: getSine(2 * Math.PI),
           line: { simple: true, color: [1, 0, 0, 1], width: 0.01 },
         },
-        xAxis: {
-          grid: { width: 0.004, dash: [], color: [0.7, 0.7, 0.7, 1] },
+        font: { size: 0.06 },
+        x: {
+          grid: false,
           color: [0, 0.4, 1, 1],
           position: [0, r],
           line: { width: 0.006 },
+          step: 1,
           start: 0,
           stop: 7,
           title: {
             text: '\u03b8',
             font: { family: 'Times New Roman', style: 'italic', size: 0.1 },
-            offset: [0.9, r * 1.32],
+            location: 'right',
           },
           ticks: [
             {
-              values: range(0, Math.PI * 2.1, Math.PI / 2),
-              width: 0,
-            },
-            {
-              values: range(1, 7, 1),
               length: 0.05,
               offset: -0.025,
             },
           ],
-          labels: [
-            {
-              text: ['', '\u03C0/2', '\u03C0', '3\u03C0/2', '2\u03C0'],
-              offset: [0, -r * 0.95],
-            },
-            {
-              precision: 0,
-              offset: [0, 0],
-            },
-          ],
+          labels: { hide: [0] },
         },
-        yAxis: {
-          grid: {
-            length: 1.5 + 1, width: 0.004, dash: [], color: [0.7, 0.7, 0.7, 1], values: [-1, 1],
-          },
+        y: {
+          grid: [false, {
+            length: 1.5 + 1, width: 0.004, dash: [], color: [0.7, 0.7, 0.7, 1],
+          }],
           start: -1,
           stop: 1,
+          step: [1, 2],
           line: { width: 0.006 },
           ticks: [
-            { values: [-1, 0, 1], offset: -0.025, length: 0.05 },
+            { offset: -0.025, length: 0.05, location: 'center' },
           ],
-          labels: { precision: 0 },
+          labels: { precision: 0, space: 0.013 },
           title: {
             text: 'y',
             font: { family: 'Times New Roman', style: 'italic', size: 0.1 },
-            offset: [0.18, 0.65],
+            location: 'top',
             rotation: 0,
           },
         },
+        axes: [
+          {
+            step: Math.PI / 2,
+            start: 0,
+            stop: 7,
+            grid: { width: 0.004, dash: [], color: [0.7, 0.7, 0.7, 1] },
+            ticks: false,
+            line: false,
+            labels: {
+              text: ['', '\u03C0/2', '\u03C0', '3\u03C0/2', '2\u03C0'],
+              font: { color: [0, 0.4, 1, 1] },
+            },
+          },
+        ],
       },
     },
   ]);
