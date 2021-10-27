@@ -40,8 +40,8 @@ function getShapes(getPos) {
     shape('panx', { pan: 'x' }),
     shape('pany', { pan: 'y' }),
     shape('panEmptyOptions', { pan: {} }),
-    shape('panAxisMin', { pan: 'xy', x: { min: -20, max: 20 }, y: { min: -2000, max: 2000 } }),
-    shape('panAxisMax', { pan: 'xy', x: { min: -20, max: 20 }, y: { min: -2000, max: 2000 } }),
+    shape('panAxisMin', { pan: 'xy', x: { min: -20, max: 20, autoStep: true }, y: { min: -2000, max: 2000, autoStep: true } }),
+    shape('panAxisMax', { pan: 'xy', x: { min: -20, max: 20, autoStep: true }, y: { min: -2000, max: 2000, autoStep: true } }),
     shape('panDeltaDraw', { pan: { axis: 'xy' } }),
 
     /*

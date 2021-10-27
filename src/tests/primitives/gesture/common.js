@@ -19,7 +19,7 @@ function makeShape(name, options, mods, getPos) {
       color: [0, 1, 0, 0.3],
       width: 0.8,
       height: 0.4,
-      pan: true,
+      pan: { momentum: false },
       zoom: true,
       changeScene: scene,
     }, options),

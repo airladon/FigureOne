@@ -2,7 +2,7 @@
   "varsIgnorePattern": "[(timeoutId)|(step)|(duration)]",
   "vars": "local",
   }] */
-/* global figure getShapes getPosition */
+/* global figure getShapes getPosition Fig */
 /* eslint-disable block-scoped-var, object-property-newline */
 
 if (typeof process === 'object') {
@@ -102,6 +102,7 @@ const mouseWheelZoom = (deltaY, position) => {
   });
   const mouseWheelEvent = new Event('wheel', { bubbles: true, cancelable: true });
   mouseWheelEvent.deltaY = deltaY;
+  mouseWheelEvent.deltaX = 0;
   figure.gestureCanvas.dispatchEvent(mouseMoveEvent);
   figure.gestureCanvas.dispatchEvent(mouseWheelEvent);
 };
@@ -119,16 +120,16 @@ function getShapes(getPos) {
     ...shape('wheelZoomInPan'),
     ...shape('touchPan'),
     ...shape('touchPanx2'),
-    ...shape('touchZoom', { zoom: { sensitivity: 2 } }),
-    ...shape('touchZoomSensitive', { zoom: { sensitivity: 10 } }),
-    ...shape('touchZoomOut', { zoom: { sensitivity: 5 } }),
+    ...shape('touchZoom', { zoom: { pinchSensitivity: 2 } }),
+    ...shape('touchZoomSensitive', { zoom: { pinchSensitivity: 10 } }),
+    ...shape('touchZoomOut', { zoom: { pinchSensitivity: 5 } }),
 
-    // options
+    // // options
     ...shape('wheelPanDisabled', { pan: false }),
-    ...shape('wheelZoomDisabled', { zoom: false }),
+    ...shape('wheelZoomDisabled', { zoom: false, pan: false }),
     ...shape('widthHeight', { width: 1, height: 0.5 }),
     ...shape('align', { width: 0.5, height: 0.2, xAlign: 'left', yAlign: 'bottom' }),
-    ...shape('sensitivity', { zoom: { sensitivity: 1.5 } }),
+    ...shape('sensitivity', { zoom: { wheelSensitivity: 1.5 } }),
     ...shape('max', { zoom: { max: 1.1 } }),
     ...shape('min', { zoom: { min: 0.9 } }),
     ...shape('position', { zoom: { position: [2.5, 3.5] } }),

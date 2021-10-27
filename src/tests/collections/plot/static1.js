@@ -109,14 +109,14 @@ function getShapes(getPos) {
     shape('zoomX', { zoom: 'x' }),
     shape('zoomY', { zoom: 'y' }),
     shape('zoomEmptyOptions', { zoom: {} }),
-    shape('zoomPoint', { zoom: { value: [0, 0] } }),
-    shape('zoomPoint20', { zoom: { value: [0, 0] }, x: { labels: { precision: 4 } } }),
-    shape('zoomPointOffCenter', { zoom: { value: [5, 100] } }),
-    shape('zoomMin', { zoom: { axis: 'xy', min: 0.5, max: 2 } }),
-    shape('zoomMinDelta', { zoom: { axis: 'xy', min: 0.5, max: 2 } }),
-    shape('zoomMax', { zoom: { axis: 'xy', min: 0.5, max: 2 } }),
-    shape('zoomMaxDelta', { zoom: { axis: 'xy', min: 0.5, max: 2 } }),
-    shape('zoomAxisMaxMin', { zoom: 'xy', x: { min: -20, max: 20 } }),
+    shape('zoomPoint', { zoom: { value: [0, 0] }, x: { autoStep: true }, y: { autoStep: true } }),
+    shape('zoomPoint20', { zoom: { value: [0, 0] }, x: { autoStep: true, labels: { precision: 4 } }, y: { autoStep: true } }),
+    shape('zoomPointOffCenter', { zoom: { value: [5, 100] }, x: { autoStep: true }, y: { autoStep: true } }),
+    shape('zoomMin', { zoom: { axis: 'xy', min: 0.5, max: 2 }, x: { autoStep: true }, y: { autoStep: true } }),
+    shape('zoomMinDelta', { zoom: { axis: 'xy', min: 0.5, max: 2 }, x: { autoStep: true }, y: { autoStep: true } }),
+    shape('zoomMax', { zoom: { axis: 'xy', min: 0.5, max: 2 }, x: { autoStep: true }, y: { autoStep: true } }),
+    shape('zoomMaxDelta', { zoom: { axis: 'xy', min: 0.5, max: 2 }, x: { autoStep: true }, y: { autoStep: true } }),
+    shape('zoomAxisMaxMin', { zoom: 'xy', x: { min: -20, max: 20, autoStep: true }, y: { autoStep: true } }),
   ];
 }
 
