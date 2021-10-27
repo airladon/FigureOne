@@ -406,7 +406,7 @@ class Figure {
     this.nextDrawTimerDuration = 0;
     this.mousePixelPosition = null;
     this.defaultPrevented = false;
-    
+
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
       htmlId,
@@ -1867,89 +1867,7 @@ class Figure {
       return true;
     }
     return false;
-    // // const oldZoom = this.zoom.last.mag;
-    // let mag = this.zoom.mag + deltaY / 10 * this.zoom.scale * this.zoom.mag / 100;
-    // if (this.zoom.min != null) {
-    //   mag = Math.max(mag, this.zoom.min);
-    // }
-    // if (this.zoom.max != null) {
-    //   mag = Math.min(mag, this.zoom.max);
-    // }
-    // if (this.mousePixelPosition == null) {
-    //   this.updateZoom(mag, this.transformPoint([0, 0], 'gl', 'figure'));
-    // } else {
-    //   const mousePosition = this.transformPoint(this.mousePixelPosition, 'pixel', 'figure');
-    //   this.updateZoom(mag, mousePosition, 0, 0);
-    // }
-    // this.notifications.publish('zoom', [this.zoom.mag]);
   }
-
-  // /**
-  //  * Change the position and scale of an element to simulate it zooming.
-  //  *
-  //  * Note, the element will stay in the same space it was previous, and
-  //  * therefore moving it will be moving it in the same space. 
-  //  *
-  //  * Often a better way to zoom an element (especially if more than one and
-  //  * interactivity is being used) is to zoom the scene the element(s) belong
-  //  * to.
-  //  *
-  //  * @param {FigureElement} element element to zoom
-  //  */
-  // zoomElement(
-  //   element: FigureElement | string,
-  //   originalPosition: TypeParsablePoint,
-  //   scale: boolean = true,
-  // ) {
-  //   let e = element;
-  //   if (typeof e === 'string') {
-  //     e = this.get(e);
-  //   }
-  //   if (e == null) {
-  //     throw new Error(`Cannot zoom a non FigureElement. ${element}`);
-  //   }
-  //   const o = getPoint(originalPosition);
-  //   element.setPosition(o.add(this.zoom.cumOffset).scale(this.zoom.mag));
-  //   if (scale) {
-  //     element.setScale(this.zoom.mag);
-  //   }
-  // }
-
-  // /**
-  //  * Changes a 2D scene to simulate zooming in and out
-  //  */
-  // zoom2DScene(scene: Scene, original: TypeParsableRect) {
-  //   // Get original scene
-  //   const r = getRect(original);
-  //   const left = r.left / this.zoom.mag;
-  //   const bottom = r.bottom / this.zoom.mag;
-  //   const right = r.right / this.zoom.mag;
-  //   const top = r.top / this.zoom.mag;
-  //   scene.set2D({
-  //     left: left - this.zoom.cumOffset.x,
-  //     right: right - this.zoom.cumOffset.x,
-  //     bottom: bottom - this.zoom.cumOffset.y,
-  //     top: top - this.zoom.cumOffset.y,
-  //   });
-  //   this.animateNextFrame();
-  // }
-
-  // updateZoom(mag: number, zoomPosition: Point, distance: number = 0, angle: number = 0) {
-  //   const oldMag = this.zoom.mag;
-  //   this.zoom.last = {
-  //     mag: this.zoom.mag,
-  //     position: this.zoom.current.position,
-  //     angle: this.zoom.current.angle,
-  //     distance: this.zoom.current.distance,
-  //   };
-  //   this.zoom.mag = mag;
-  //   this.zoom.current = { position: zoomPosition, angle, distance };
-  //   const newPosition = zoomPosition.scale(mag / oldMag);
-  //   this.zoom.cumOffset = this.zoom.cumOffset.add(
-  //     zoomPosition.sub(newPosition).scale(1 / mag),
-  //   );
-  //   this.zoom.cumAngle += angle - this.zoom.last.angle;
-  // }
 
   startPinchZoom(touch1ClientPos: Point, touch2ClientPos: Point) {
     const pixelPoints = this.clientsToPixel([touch1ClientPos, touch2ClientPos]);
@@ -1958,11 +1876,6 @@ class Figure {
       [pixelPoints[0], pixelPoints[1], this.beingTouchedElement],
       false,
     );
-    // const line = new Line(pixelPoints[0], pixelPoints[1]);
-    // this.zoom.current.angle = line.angle();
-    // this.zoom.current.distance = line.length();
-    // this.zoom.current.position = this.transformPoint(line.pointAtPercent(0.5), 'pixel', 'figure');
-    // this.zoom.pinching = true;
   }
 
   pinchZoom(touch1ClientPos: Point, touch2ClientPos: Point) {
@@ -2501,7 +2414,6 @@ class Figure {
     return true;
   }
 
-  
 
   touchMoveHandler(
     previousGLPoint: Point,

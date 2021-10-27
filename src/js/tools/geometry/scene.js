@@ -22,6 +22,17 @@ import type { Type3DMatrix } from '../m3';
 //   far: number,
 // };
 
+/**
+  * @property {'orthographic' | 'perspective' | '2D'} [style]
+  * @property {number} [left]
+  * @property {number} [right]
+  * @property {number} [bottom]
+  * @property {number} [top]
+  * @property {number} [aspectRatio]
+  * @property {number} [fieldOfView]
+  * @property {number} [near]
+  * @property {number} [far]
+ */
 export type OBJ_Projection = {
   style?: 'orthographic' | 'perspective' | '2D',
   left?: number,
@@ -40,12 +51,22 @@ export type OBJ_CameraDefined = {
   up: TypeParsablePoint,
 };
 
+/**
+ * @property {TypeParsablePoint} [position]
+ * @property {TypeParsablePoint} [lookAt]
+ * @property {TypeParsablePoint} [up]
+ */
 export type OBJ_Camera = {
   position?: TypeParsablePoint,
   lookAt?: TypeParsablePoint,
   up?: TypeParsablePoint,
 };
 
+/**
+ * @property {TypeParsablePoint} [directional]
+ * @property {number} [ambient]
+ * @property {TypeParsablePoint} [point]
+ */
 export type OBJ_Light = {
   directional?: TypeParsablePoint,
   ambient?: number,
@@ -91,6 +112,12 @@ export type OBJ_Scene = {
   camera?: OBJ_Camera,
 }
 
+/**
+  * @property {number} [left]
+  * @property {number} [right]
+  * @property {number} [bottom]
+  * @property {number} [top]
+ */
 export type OBJ_2DScene = {
   left?: number,
   right?: number,
@@ -98,6 +125,14 @@ export type OBJ_2DScene = {
   top?: number,
 };
 
+/**
+  * @property {number} [left]
+  * @property {number} [right]
+  * @property {number} [bottom]
+  * @property {number} [top]
+  * @property {number} [near]
+  * @property {number} [far]
+ */
 export type OBJ_OrthographicScene = {
   left?: number,
   right?: number,
@@ -107,6 +142,12 @@ export type OBJ_OrthographicScene = {
   far?: number,
 }
 
+/**
+  * @property {aspectRatio} [number]
+  * @property {fieldOfView} [number]
+  * @property {near} [number]
+  * @property {far} [number]
+ */
 export type OBJ_PerspectiveScene = {
   aspectRatio?: number,
   fieldOfView?: number,
@@ -138,6 +179,12 @@ export type OBJ_SceneDefined = {
 }
 
 
+/**
+  * Scene.
+  *
+  * @param {OBJ_Scene} options scene definition options
+  * @param {null | (() => void)} onUpdate callback if scene is updated
+  */
 export default class Scene {
   style: '2D' | 'orthographic' | 'perspective';
   left: number;
@@ -223,10 +270,6 @@ export default class Scene {
     };
   }
 
-  /**
-   * @param {OBJ_Scene} options scene definition options
-   * @param {null | (() => void)} onUpdate callback if scene is updated
-   */
   constructor(options: OBJ_Scene, onUpdate: null | (() => void) = null) {
     const defaultOptions = this.defaultOptions();
     joinObjects(this, defaultOptions, options);
