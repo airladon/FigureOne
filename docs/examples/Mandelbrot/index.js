@@ -91,8 +91,8 @@ const gesture = figure.add({
   make: 'gesture',
   width: 2,
   height: 2,
-  pan: { left: -1, right: 1, bottom: -1, top: 1 },
-  zoom: { max: 200000, min: 1 },
+  pan: { left: -1, right: 1, bottom: -1, top: 1, wheel: false },
+  zoom: { max: 200000, min: 1, pinchSensitivity: 10 },
 });
 
 gesture.notifications.add('zoom', (mag, offset) => {
@@ -129,6 +129,7 @@ const slider = figure.add({
       name: 'slider',
       width: 1,
       position: [0, -0.05],
+      touchBorder: 0.1,
     },
   ],
   position: [-0.42, -0.87],

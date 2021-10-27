@@ -1,10 +1,11 @@
-/* global __title __duration __timeStep __frames */
+/* global __title __duration __timeStep __frames __startSteps */
 /* eslint no-unused-vars: ["error", { "vars": "local" }] */
 /* eslint-disable no-global-assign */
 __title = 'Test Title';
 __duration = 0;
 __timeStep = 1;
 __frames = [[0]];
+__startSteps = 1000;
 
 // Replace Math.random with something deterministic
 // ********************************

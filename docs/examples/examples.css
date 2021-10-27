@@ -7,7 +7,7 @@
 }
 
 .wrapper_1_1, .wrapper_2_1, .wrapper_4_3, .wrapper_3_2 {
-  width: calc(100vw - 20px);
+  width: calc(100vw - 40px);
 }
 
 @media (min-aspect-ratio: 1/1) {

@@ -85,6 +85,54 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
     file = htmlFile;
   }
   lastTime = -1;
+
+  async function mouseWheelZoom(deltaIn, positionIn) {
+    page.evaluate(([delta, position]) => {
+      const figureToPixelMatrix = figure.elements.spaceTransformMatrix('figure', 'pixel');
+      const positionPixel = Fig.getPoint(position).transformBy(figureToPixelMatrix);
+      const positionClient = figure.pixelToClient(positionPixel);
+      const mouseMoveEvent = new MouseEvent('mousemove', {
+        clientX: positionClient.x,
+        clientY: positionClient.y,
+      });
+      const mouseWheelEvent = new Event('wheel', { bubbles: true, cancelable: true });
+      // eslint-disable-next-line prefer-destructuring
+      mouseWheelEvent.deltaX = delta[0];
+      // eslint-disable-next-line prefer-destructuring
+      mouseWheelEvent.deltaY = delta[1];
+      figure.gestureCanvas.dispatchEvent(mouseMoveEvent);
+      figure.gestureCanvas.dispatchEvent(mouseWheelEvent);
+    }, [deltaIn, positionIn]);
+  }
+
+  async function mousePan(startIn, stopIn) {
+    page.evaluate(([start, stop]) => {
+      // const figureToPixelMatrix = figure.elements.spaceTransformMatrix('figure', 'pixel');
+      const figToClient = (p) => {
+        const figureToPixelMatrix = figure.elements.spaceTransformMatrix('figure', 'pixel');
+        const q = Fig.getPoint(p).transformBy(figureToPixelMatrix);
+        return figure.pixelToClient(q);
+      };
+      const startClient = figToClient(start);
+      const stopClient = figToClient(stop);
+      const mouseDownEvent = new MouseEvent('mousedown', {
+        clientX: startClient.x,
+        clientY: startClient.y,
+      });
+      const mouseMoveEvent = new MouseEvent('mousemove', {
+        clientX: stopClient.x,
+        clientY: stopClient.y,
+      });
+      const mouseUpEvent = new MouseEvent('mouseup', {});
+
+      figure.gestureCanvas.dispatchEvent(mouseDownEvent);
+      figure.gestureCanvas.dispatchEvent(mouseMoveEvent);
+      figure.gestureCanvas.dispatchEvent(mouseMoveEvent);
+      figure.gestureCanvas.dispatchEvent(mouseUpEvent);
+      figure.gesture.endHandler();
+    }, [startIn, stopIn]);
+  }
+
   // eslint-disable-next-line jest/valid-title
   describe(__title, () => {
     beforeAll(async () => {
@@ -109,7 +157,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
             d = Math.round((d - intermitentTime) * 100) / 100;
           }
         }
-        if (action !== 'delay') {
+        if (action !== 'delay' && action !== 'mouseWheelZoom' && action !== 'mousePan') {
           await frame(d);
           await page.evaluate(([t, l]) => {
             if (t != null) {
@@ -127,6 +175,16 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
               }
             }
           }, [action, location]);
+          await frame(0);
+        }
+        if (action === 'mouseWheelZoom') {
+          await frame(d);
+          await mouseWheelZoom(location[0], location[1]);
+          await frame(0);
+        }
+        if (action === 'mousePan') {
+          await frame(d);
+          await mousePan(location[0], location[1]);
           await frame(0);
         }
         if (!snap) {
