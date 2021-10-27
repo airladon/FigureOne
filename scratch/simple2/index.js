@@ -74,7 +74,7 @@ const plot = figure.add({
   make: 'collections.plot',
   width: 1,                                    // Plot width in figure
   height: 1,                                   // Plot height in figure
-  yAxis: {
+  y: {
     start: 0,
     stop: 100,
     type: 'zoom',
@@ -97,7 +97,7 @@ const plot = figure.add({
     max: 300,
     autoStep: true,
   },              // Customize y axis limits
-  xAxis: {
+  x: {
     start: 0,
     stop: 1,
     type: 'zoom',

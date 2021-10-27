@@ -271,35 +271,6 @@ export default class Scene {
   }
 
   constructor(options: OBJ_Scene, onUpdate: null | (() => void) = null) {
-    // const defaultOptions = this.defaultOptions();
-    // // joinObjects(this, defaultOptions, options);
-    // const o = joinObjects({}, defaultOptions, options);
-    // this.style = o.style;
-    // this.left = o.left;
-    // this.right = o.right;
-    // this.bottom = o.bottom;
-    // this.top = o.top;
-    // this.near = o.near;
-    // this.far = o.far;
-    // this.zoom = o.zoom;
-    // this.pan = o.pan;
-    // this.setCamera(o.camera);
-    // this.setLight(o.light);
-    // // this.camera = {
-    // //   position: getPoint(o.camera.position)._dup(),
-    // //   lookAt: getPoint(o.camera.lookAt)._dup(),
-    // //   up: getPoint(o.camera.up)._dup(),
-    // // };
-    // this.aspectRatio = o.aspectRatio;
-    // this.fieldOfView = o.fieldOfView;
-    // // this.light = {
-    // //   directional: getPoint(o.light.directional)._dup(),
-    // //   ambient: o.light.ambient,
-    // //   point: getPoint(o.light.point)._dup(),
-    // // };
-    // this.calcProjectionMatrix();
-    // this.calcViewMatrix();
-    // this.calcViewProjectionMatrix();
     this.reset(options);
     this.onUpdate = onUpdate;
   }
@@ -327,6 +298,9 @@ export default class Scene {
     this.calcViewProjectionMatrix();
   }
 
+  // Note - a scene should NOT get the _dup() method as multiple links to the
+  // same scene will mess up recording states (scenes will be doubly encoded
+  // and then unencodable)
   dup() {
     const s = new Scene({
       style: this.style,

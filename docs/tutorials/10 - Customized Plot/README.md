@@ -31,10 +31,10 @@ figure.add({
     offset: [0, 0.1],
   },
   // Axes customizations
-  xAxis: {
+  x: {
     title: 'time (s)',
   },
-  yAxis: {
+  y: {
     start: 0,
     stop: 100,
     title: 'distance (m)',

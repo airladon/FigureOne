@@ -747,9 +747,17 @@ class CollectionsPlot extends FigureElementCollection {
       this.axes.forEach((axis) => {
         const p = axis.getPosition();
         if (axis.axis === 'x' && axis.showAxis) { // $FlowFixMe
-          axis.grid.forEach((g, i) => axis[`_grid${i}`].setPosition(0, -p.y));
+          axis.grid.forEach((g, i) => {
+            if (g[i]) {
+              axis[`_grid${i}`].setPosition(0, -p.y);
+            }
+          });
         } else if (axis.axis === 'y' && axis.showAxis) { // $FlowFixMe
-          axis.grid.forEach((g, i) => axis[`_grid${i}`].setPosition(-p.x, 0));
+          axis.grid.forEach((g, i) => {
+            if (g[i]) {
+              axis[`_grid${i}`].setPosition(-p.x, 0);
+            }
+          });
         }
       });
     }
@@ -777,6 +785,7 @@ class CollectionsPlot extends FigureElementCollection {
     const defaultOptions = {
       color: this.defaultColor,
       font: this.defaultFont,
+      axis: 'x',
     };
     axes.forEach((axisOptions) => {
       let axisType;

@@ -213,6 +213,7 @@ export type OBJ_ValuesOffset = {
  * values (useful to offset values in position near axis cross over points)
  * @property {TypeLabelLocation} [location] location of label (defaults to
  * `'bottom'` for x axis and `'left'` for y axis)
+ * @property {Array<string>} [text] use custom labels
  *
  * To test examples below, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>.
@@ -232,6 +233,7 @@ export type OBJ_AxisLabels = {
   valueOffset?: OBJ_ValuesOffset,
   fixed?: boolean,
   location?: TypeLabelLocation,
+  text?: Array<string>
 };
 
 export type OBJ_AxisLabels_Fixed = {
@@ -249,6 +251,7 @@ export type OBJ_AxisLabels_Fixed = {
     values: Array<number>,
     offset: Point,
   },
+  text: Array<string>,
 };
 
 /**
@@ -674,6 +677,7 @@ class CollectionsAxis extends FigureElementCollection {
     if (!Array.isArray(options.grid)) {
       options.grid = [options.grid];
     }
+
     this.grid = Array(options.grid.length);
     for (let i = 0; i < options.grid.length; i += 1) {
       const e = this.addTicks('grid', options.grid[i], i);
@@ -732,6 +736,7 @@ class CollectionsAxis extends FigureElementCollection {
           fixed: false,
           hide: [],
           valueOffset: { values: [], offset: [0, 0] },
+          text: [],
         },
         labelsO,
       );
@@ -1029,6 +1034,8 @@ class CollectionsAxis extends FigureElementCollection {
         step: this.step[0],
         mag: this.currentZoom,
       }));
+    } else if (this.labels.text.length > 0) {
+      customLabels = this.labels.text;
     }
 
     const labelLoc = this._labels._custom.location;
