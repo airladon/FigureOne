@@ -747,14 +747,14 @@ class CollectionsPlot extends FigureElementCollection {
       this.axes.forEach((axis) => {
         const p = axis.getPosition();
         if (axis.axis === 'x' && axis.showAxis) { // $FlowFixMe
-          axis.grid.forEach((g, i) => {
-            if (g[i]) {
+          axis.grid.forEach((g, i) => { // $FlowFixMe
+            if (g[i]) { // $FlowFixMe
               axis[`_grid${i}`].setPosition(0, -p.y);
             }
           });
         } else if (axis.axis === 'y' && axis.showAxis) { // $FlowFixMe
-          axis.grid.forEach((g, i) => {
-            if (g[i]) {
+          axis.grid.forEach((g, i) => { // $FlowFixMe
+            if (g[i]) { // $FlowFixMe
               axis[`_grid${i}`].setPosition(-p.x, 0);
             }
           });

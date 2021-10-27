@@ -1034,8 +1034,8 @@ class CollectionsAxis extends FigureElementCollection {
         step: this.step[0],
         mag: this.currentZoom,
       }));
-    } else if (this.labels.text.length > 0) {
-      customLabels = this.labels.text;
+    } else if (labels.text.length > 0) {
+      customLabels = labels.text;
     }
 
     const labelLoc = this._labels._custom.location;
