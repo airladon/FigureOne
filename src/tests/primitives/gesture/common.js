@@ -11,20 +11,20 @@ function makeShape(name, options, mods, getPos) {
   const { x, y } = getPos(index);
   // const indexName = `${index}`;
   index += 1;
-  const scene = figure.scene._dup();
+  const scene = figure.scene.dup();
   const o = {
     name,
     make: 'gesture',
-    options: tools.misc.joinObjects({}, {
+    options: tools.misc.joinObjects({ changeScene: scene }, {
       position: [x, y],
       color: [0, 1, 0, 0.3],
       width: 0.8,
       height: 0.4,
       pan: { momentum: false },
       zoom: true,
-      changeScene: scene,
     }, options),
   };
+
   return [
     {
       make: 'rectangle', width: 0.2, height: 0.2, position: [-0.15 + x, y], scene,

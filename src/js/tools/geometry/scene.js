@@ -327,8 +327,8 @@ export default class Scene {
     this.calcViewProjectionMatrix();
   }
 
-  _dup() {
-    return new Scene({
+  dup() {
+    const s = new Scene({
       style: this.style,
       left: this.left,
       right: this.right,
@@ -343,6 +343,8 @@ export default class Scene {
       zoom: this.zoom,
       pan: this.pan,
     });
+    s.onUpdate = this.onUpdate;
+    return s;
   }
 
   calcProjectionMatrix() {

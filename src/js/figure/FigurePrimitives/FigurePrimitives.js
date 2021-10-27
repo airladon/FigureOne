@@ -1445,17 +1445,29 @@ export default class FigurePrimitives {
       back: true,
     };
     const combinedOptions = joinObjects({}, ...options);
-    let scene;
-    if (combinedOptions.scene == null) {
+    for (let i = options.length - 1; i >= 0; i -= 1) {
+      if (options[i].scene != null && options[i].scene instanceof Scene) {
+        combinedOptions.scene = options[i].scene;
+        break;
+      }
+    }
+    for (let i = options.length - 1; i >= 0; i -= 1) {
+      if (options[i].changeScene != null && options[i].changeScene instanceof Scene) {
+        combinedOptions.changeScene = options[i].changeScene;
+        break;
+      }
+    }
+    let { changeScene, scene } = combinedOptions;
+    if (scene == null) {
       scene = this.scene;
-    } else if (combinedOptions instanceof Scene) {
-      scene = combinedOptions.scene;
-    } else {
-      scene = new Scene(combinedOptions.scene);
+    } else if (!(scene instanceof Scene)) {
+      scene = new Scene(scene);
     }
-    if (combinedOptions.changeScene === scene) {
-      scene = this.scene._dup();
+
+    if (changeScene != null && !(changeScene instanceof Scene)) {
+      changeScene = new Scene(changeScene);
     }
+
     defaultOptions.width = scene.right - scene.left;
     defaultOptions.height = scene.top - scene.bottom;
     defaultOptions.position = [
@@ -1473,8 +1485,9 @@ export default class FigurePrimitives {
       color: o.color,
       figureElementPrimitiveCallback: (...fo) => new FigureElementPrimitiveGesture(...fo),
     });
-    element.scene = scene;
     element.setup(o);
+    element.scene = scene;
+    element.changeScene = changeScene;
     return element;
     // return createGestureElement(this.rectangle.bind(this), ...options);
   }
