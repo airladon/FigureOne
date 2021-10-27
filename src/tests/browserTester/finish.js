@@ -84,6 +84,24 @@ function __finish(__figure) {
       figure.gestureCanvas.dispatchEvent(mouseUpEvent);
       figure.gesture.endHandler();
     };
+    const mouseClick = (pos) => {
+      const figToClient = (p) => {
+        const figureToPixelMatrix = figure.elements.spaceTransformMatrix('figure', 'pixel');
+        const q = Fig.getPoint(p).transformBy(figureToPixelMatrix);
+        return figure.pixelToClient(q);
+      };
+      const downClient = figToClient(pos);
+      console.log(pos, downClient)
+      const mouseDownEvent = new MouseEvent('mousedown', {
+        clientX: downClient.x,
+        clientY: downClient.y,
+      });
+      const mouseUpEvent = new MouseEvent('mouseup', {});
+
+      figure.gestureCanvas.dispatchEvent(mouseDownEvent);
+      figure.gestureCanvas.dispatchEvent(mouseUpEvent);
+      figure.gesture.endHandler();
+    };
     const startSteps = () => {
       cumTime = 0;
       __frames.forEach((touch) => {
@@ -109,6 +127,10 @@ function __finish(__figure) {
             } else if (action === 'mousePan') {
               setTimeout(() => {
                 mousePan(location[0], location[1]);
+              }, cumTime * 1000);
+            } else if (action === 'mouseClick') {
+              setTimeout(() => {
+                mouseClick(location[0]);
               }, cumTime * 1000);
             } else {
               setTimeout(() => {

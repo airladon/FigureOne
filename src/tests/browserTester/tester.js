@@ -133,6 +133,26 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
     }, [startIn, stopIn]);
   }
 
+  async function mouseClick(posIn) {
+    page.evaluate(([pos]) => {
+      const figToClient = (p) => {
+        const figureToPixelMatrix = figure.elements.spaceTransformMatrix('figure', 'pixel');
+        const q = Fig.getPoint(p).transformBy(figureToPixelMatrix);
+        return figure.pixelToClient(q);
+      };
+      const downClient = figToClient(pos);
+      const mouseDownEvent = new MouseEvent('mousedown', {
+        clientX: downClient.x,
+        clientY: downClient.y,
+      });
+      const mouseUpEvent = new MouseEvent('mouseup', {});
+
+      figure.gestureCanvas.dispatchEvent(mouseDownEvent);
+      figure.gestureCanvas.dispatchEvent(mouseUpEvent);
+      figure.gesture.endHandler();
+    }, [posIn]);
+  }
+
   // eslint-disable-next-line jest/valid-title
   describe(__title, () => {
     beforeAll(async () => {
@@ -157,7 +177,7 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
             d = Math.round((d - intermitentTime) * 100) / 100;
           }
         }
-        if (action !== 'delay' && action !== 'mouseWheelZoom' && action !== 'mousePan') {
+        if (action !== 'delay' && action !== 'mouseWheelZoom' && action !== 'mousePan' && action !== 'mouseClick') {
           await frame(d);
           await page.evaluate(([t, l]) => {
             if (t != null) {
@@ -185,6 +205,11 @@ function tester(htmlFile, framesFile, threshold = 0, intermitentTime = 0, finish
         if (action === 'mousePan') {
           await frame(d);
           await mousePan(location[0], location[1]);
+          await frame(0);
+        }
+        if (action === 'mouseClick') {
+          await frame(d);
+          await mouseClick(location[0], location[1]);
           await frame(0);
         }
         if (!snap) {
