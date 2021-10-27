@@ -53,15 +53,15 @@ const mandelbrot = figure.add({
           xTemp = x * x - y * y + x0;
           y = 2.0 * x * y + y0;
           x = xTemp;
+          iteration = i;
           if (x * x + y * y > 4.0 || i > u_iterations - 1) {
             break;
           }
-          iteration = i;
         }
         float n = float(iteration) + 1.0 - log(log2(sqrt(x * x + y * y)));
         float hue = n / float(10000) / 0.05;
         float value = 1.0;
-        if (iteration == u_iterations - 1) {
+        if (iteration == u_iterations || iteration == 9999) {
           value = 0.0;
         }
         v_color = vec4(hsv2rgb(vec3(hue, 1.0, value)).rgb, 1.0);
@@ -136,7 +136,7 @@ const slider = figure.add({
 });
 
 slider._slider.notifications.add('changed', (v) => {
-  const iterations = Math.max(Math.floor(Fig.tools.math.easein(v) * 10000), 10);
+  const iterations = Math.max(Math.floor(Fig.tools.math.easein(v) * 10000), 1);
   mandelbrot.drawingObject.uniforms.u_iterations.value = [iterations];
   slider._label.custom.updateText({ text: `Max Iterations ${iterations}` });
 });
