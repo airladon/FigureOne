@@ -318,8 +318,8 @@ export default class Scene {
     this.far = o.far;
     this.zoom = o.zoom;
     this.pan = o.pan;
-    this.setCameraProperties(o.camera, false);
-    this.setLight(o.light, false);
+    this.setCameraProperties(o.camera);
+    this.setLight(o.light);
     this.aspectRatio = o.aspectRatio;
     this.fieldOfView = o.fieldOfView;
     this.calcProjectionMatrix();
