@@ -584,6 +584,7 @@ class CollectionsAxis extends FigureElementCollection {
     this.collections = collections;
     this.name = options.name;
     this.startValue = options.start;
+    this.initialStart = this.startValue;
     if (options.stop != null) {
       this.stopValue = options.stop;
     } else {
@@ -856,6 +857,7 @@ class CollectionsAxis extends FigureElementCollection {
     // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(options),
       'currentZoom',
+      'initialStart',
       'startValue',
       'stopValue',
       'drawToValueRatio',

@@ -50,7 +50,7 @@ function fig3() {
       plotArea: { line: { width: 0.004, color: [0.7, 0.7, 0.7, 1] } },
       x: {
         line: { width: 0.006 },
-        grid: { width: 0.004, dash: [], color: [0.7, 0.7, 0.7, 1], offset: -0.65 },
+        grid: { width: 0.004, dash: [], color: [0.7, 0.7, 0.7, 1] },
         position: [0, 0.65],
         start: 0,
         stop: 13,

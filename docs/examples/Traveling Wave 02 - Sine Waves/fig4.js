@@ -110,7 +110,7 @@ function fig4() {
         stop: 12,
         step: 1,
         line: { width: 0.006 },
-        grid: { width: 0.005, dash: [], color: [0.7, 0.7, 0.7, 1], offset: -0.7 },
+        grid: { width: 0.005, dash: [], color: [0.7, 0.7, 0.7, 1] },
         title: {
           text: '\u03b8',
           font: { family: 'Times New Roman', style: 'italic', size: 0.1 },

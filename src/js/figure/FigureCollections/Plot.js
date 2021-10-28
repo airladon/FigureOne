@@ -748,13 +748,13 @@ class CollectionsPlot extends FigureElementCollection {
         const p = axis.getPosition();
         if (axis.axis === 'x' && axis.showAxis) { // $FlowFixMe
           axis.grid.forEach((g, i) => { // $FlowFixMe
-            if (g[i]) { // $FlowFixMe
+            if (g) { // $FlowFixMe
               axis[`_grid${i}`].setPosition(0, -p.y);
             }
           });
         } else if (axis.axis === 'y' && axis.showAxis) { // $FlowFixMe
           axis.grid.forEach((g, i) => { // $FlowFixMe
-            if (g[i]) { // $FlowFixMe
+            if (g) { // $FlowFixMe
               axis[`_grid${i}`].setPosition(-p.x, 0);
             }
           });
@@ -1439,6 +1439,39 @@ class CollectionsPlot extends FigureElementCollection {
     this.setupCross();
     this.notifications.publish('update');
     this.notifications.publish('zoom');
+  }
+
+  /**
+   * Get the current zoom.
+   * @return {number}
+   */
+  getZoom() {
+    const x = this.getXAxis();
+    if (x != null && this.zoom.enabled && this.zoom.x) {
+      return x.currentZoom;
+    }
+    const y = this.getYAxis();
+    if (y != null && this.zoom.enabled && this.zoom.y) {
+      return y.currentZoom;
+    }
+    return 1;
+  }
+
+  /**
+   * Get the current pan.
+   * @return {Point}
+   */
+  getPan() {
+    const pan = new Point(0, 0);
+    const x = this.getXAxis();
+    if (x != null && this.pan.enabled && this.pan.x) {
+      pan.x = -(x.startValue - x.initialStart / x.currentZoom);
+    }
+    const y = this.getYAxis();
+    if (y != null && this.pan.enabled && this.pan.y) {
+      pan.y = -(y.startValue - y.initialStart / y.currentZoom);
+    }
+    return pan;
   }
 }
 
