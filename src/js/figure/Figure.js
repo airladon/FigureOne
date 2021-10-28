@@ -1421,21 +1421,7 @@ class Figure {
   For some reason unknown to me, the 'WEBGL_lose_context' extension is removed
   from the context when the webgl context is forced lost.
 
-  As such, the way I'm testing this code is to:
-  - remove the context
-  - add a new canvas element, and re-init gl to that canvas element
-
-  In the console it looks like:
-  ```
-  figure.loseContext()
-  c = document.createElement('canvas');
-  gl = c.getContext('webgl');
-  c.classList.add('figureone__gl', 'figureone__canvas')
-  figure.container.appendChild(c)
-  figure.container.insertBefore(c, figure.container.childNodes[0])
-  figure.canvasLow = c
-  figure.webglLow.init(figure.canvasLow.getContext('webgl', { antialias: true }))
-  figure.init(figure.webglLow)
+  As such, the extension has to be backed up to this.ext
   ```
   */
   loseContext() {
