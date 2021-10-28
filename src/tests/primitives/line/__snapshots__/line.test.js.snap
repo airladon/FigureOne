@@ -224,6 +224,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -290,10 +293,15 @@ FigureElementPrimitive {
       0.3,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -1040,6 +1048,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -1154,10 +1165,15 @@ FigureElementPrimitive {
       -0.0125,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -1976,6 +1992,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -2126,10 +2145,15 @@ FigureElementPrimitive {
       -0.0125,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -3584,6 +3608,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -4058,10 +4085,15 @@ FigureElementPrimitive {
       -0.0125,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -4928,6 +4960,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -5102,10 +5137,15 @@ FigureElementPrimitive {
       -0.0125,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -6560,6 +6600,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -7034,10 +7077,15 @@ FigureElementPrimitive {
       -0.0125,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -7832,6 +7880,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -7970,10 +8021,15 @@ FigureElementPrimitive {
       -0.0125,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -8696,6 +8752,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -8798,10 +8857,15 @@ FigureElementPrimitive {
       -0.0125,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -9423,6 +9487,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -9489,10 +9556,15 @@ FigureElementPrimitive {
       -0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -10154,6 +10226,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -10220,10 +10295,15 @@ FigureElementPrimitive {
       -0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -10900,6 +10980,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -10966,10 +11049,15 @@ FigureElementPrimitive {
       -0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -11564,6 +11652,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -11630,10 +11721,15 @@ FigureElementPrimitive {
       -0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -12228,6 +12324,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -12294,10 +12393,15 @@ FigureElementPrimitive {
       -0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -12892,6 +12996,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -12958,10 +13065,15 @@ FigureElementPrimitive {
       -0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -13607,6 +13719,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -13721,10 +13836,15 @@ FigureElementPrimitive {
       -0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -14370,6 +14490,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -14484,10 +14607,15 @@ FigureElementPrimitive {
       -0.05,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -15134,6 +15262,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -15248,10 +15379,15 @@ FigureElementPrimitive {
       -0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -15897,6 +16033,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -16011,10 +16150,15 @@ FigureElementPrimitive {
       0,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -16660,6 +16804,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -16774,10 +16921,15 @@ FigureElementPrimitive {
       -0.015,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -17372,6 +17524,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -17438,10 +17593,15 @@ FigureElementPrimitive {
       -0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -18036,6 +18196,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -18102,10 +18265,15 @@ FigureElementPrimitive {
       -0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -18700,6 +18868,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -18766,10 +18937,15 @@ FigureElementPrimitive {
       0.2823223304703363,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -19381,6 +19557,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -19447,10 +19626,15 @@ FigureElementPrimitive {
       -0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -20045,6 +20229,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -20111,10 +20298,15 @@ FigureElementPrimitive {
       -0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -20726,6 +20918,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -20792,10 +20987,15 @@ FigureElementPrimitive {
       -0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -21390,6 +21590,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -21456,10 +21659,15 @@ FigureElementPrimitive {
       -0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -22170,6 +22378,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -22280,10 +22491,15 @@ FigureElementPrimitive {
       0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -22886,6 +23102,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -22960,10 +23179,15 @@ FigureElementPrimitive {
       0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -23558,6 +23782,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -23624,10 +23851,15 @@ FigureElementPrimitive {
       -0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -24222,6 +24454,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -24288,10 +24523,15 @@ FigureElementPrimitive {
       -0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -24905,6 +25145,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -24971,10 +25214,15 @@ FigureElementPrimitive {
       -0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -25631,6 +25879,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -25697,10 +25948,15 @@ FigureElementPrimitive {
       -0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -26336,6 +26592,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -26402,10 +26661,15 @@ FigureElementPrimitive {
       -0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -27027,6 +27291,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -27093,10 +27360,15 @@ FigureElementPrimitive {
       -0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -27718,6 +27990,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -27784,10 +28059,15 @@ FigureElementPrimitive {
       -0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -28382,6 +28662,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -28448,10 +28731,15 @@ FigureElementPrimitive {
       -0.025,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -29046,6 +29334,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -29112,10 +29403,15 @@ FigureElementPrimitive {
       -0.05,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -29710,6 +30006,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -29776,10 +30075,15 @@ FigureElementPrimitive {
       -0.015,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
@@ -30374,6 +30678,9 @@ FigureElementPrimitive {
         "usage": undefined,
       },
     },
+    "fragmentShader": Object {
+      "color": "uniform",
+    },
     "gl": Object {
       "TRIANGLES": 1,
       "TRIANGLE_STRIP": 2,
@@ -30440,10 +30747,15 @@ FigureElementPrimitive {
       0,
     ],
     "programIndex": undefined,
+    "selectorFragmentShader": "selector",
     "selectorProgramIndex": undefined,
+    "selectorVertexShader": "selector",
     "texture": null,
     "type": "glPrimitive",
     "uniforms": Object {},
+    "vertexShader": Object {
+      "dimension": 2,
+    },
     "webgl": Object {
       "addTexture": [Function],
       "getProgram": [Function],
