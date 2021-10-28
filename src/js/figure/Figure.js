@@ -527,25 +527,14 @@ class Figure {
         this.canvasLow.addEventListener(
           'webglcontextrestored', this.contextRestored.bind(this), false,
         );
+        // TODO in future, if still using canvasOffScreen then need to have it
+        // handle context lost and restored events
         if (this.canvasOffscreen) {
           const webglOffscreen = new WebGLInstance(
             this.canvasOffscreen,
             this.backgroundColor,
           );
           this.webglOffscreen = webglOffscreen;
-          // this.canvasOffscreen.addEventListener(
-          //   'webglcontextlost',
-          //   (event: WebGLContextEvent) => {
-          //     event.preventDefault();
-          //   },
-          //   false,
-          // );
-          // this.canvasOffscreen.addEventListener(
-          //   'webglcontextrestored', () => {
-          //     this.webglOffscreen.init(this.canvasOffscreen.getContext('webgl', { antialias: true }));
-          //     this.init(this.webglOffscreen);
-          //   }, false,
-          // );
         }
         this.draw2DLow = new DrawContext2D(this.textCanvasLow);
         if (this.textCanvasOffscreen) {
@@ -1460,12 +1449,12 @@ class Figure {
 
   contextLost(event: WebGLContextEvent) {
     event.preventDefault();
-    this.lostContextMessage.innerHTML = '<div class="figureone__lostcontext_message"><p>Browser removed WebGL context from FigureOne and is not giving it back.</p> <p>Reload page to restore.</p></div>';
+    this.lostContextMessage.innerHTML = '<div class="figureone__lostcontext_message"><p>Browser removed WebGL context from FigureOne and has yet to return it.</p> <p>Reload page to restore.</p></div>';
     this.lostContextMessage.style.display = 'table';
   }
 
   contextRestored() {
-    this.lostContextMessage.innerHTML = '<div class="figureone__lostcontext_message"><p>Browser removed WebGL context from FigureOne and just gave it back.</p> <p>FigureOne is reinitializing...</p></div>';
+    this.lostContextMessage.innerHTML = '<div class="figureone__lostcontext_message"><p>Browser removed WebGL context from FigureOne and just returned it.</p> <p>FigureOne is reinitializing...</p></div>';
     // this.webglLow.init(this.canvasLow.getContext('webgl', { antialias: true }));
     this.webglLow.init(this.webglLow.gl);
     this.init(this.webglLow);
