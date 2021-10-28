@@ -2,7 +2,7 @@
 
 Demonstration of 3D drawing and interactivity.
 
-Open `index.html` in a browser to view example, or the example is hosted [here](https://airladon.github.io/FigureOne/examples/Electric%20Field/index.html).
+Open `index.html` in a browser to view example, or the example is hosted [here](https://airladon.github.io/FigureOne/examples/3D%20Electric%20Field/index.html).
 
 ![](./example.gif)
 
