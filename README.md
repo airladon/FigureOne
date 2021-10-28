@@ -170,7 +170,7 @@ Visualize and interact with 3D figures.
 
 ![](docs/examples/3D%20Electric%20Field/example.gif)
 
-## **[Mandelbrot](docs/examples/Mandelbrot)**
+## **[Mandelbrot Set](docs/examples/Mandelbrot)**
 
 See this example hosted [here](https://airladon.github.io/FigureOne/examples/Mandelbrot/index.html).
 
