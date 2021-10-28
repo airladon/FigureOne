@@ -93,6 +93,7 @@ class VertexText extends VertexGeneric {
       buffer: this.gl.createBuffer(),
       type: 'image',
       data: null,
+      loadColor: [0, 0, 1, 0.5],
     };
     this.type = 'vertexText';
     this.drawTextIntoBuffer();

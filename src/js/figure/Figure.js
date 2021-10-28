@@ -334,6 +334,7 @@ class Figure {
   defaultPrevented: boolean;
 
   mousePixelPosition: null | Point;
+  lostContextMessage: HTMLElement;
   // zoom: {
   //   last: {
   //     mag: number,
@@ -476,6 +477,11 @@ class Figure {
           container.appendChild(this.htmlCanvas);
         }
 
+        this.lostContextMessage = document.createElement('div');
+        this.lostContextMessage.classList.add('figureone__lostcontext', 'figureone__canvas');
+        container.appendChild(this.lostContextMessage);
+        this.lostContextMessage.style.display = 'none';
+
         const canvasStyle = document.createElement('style');
         canvasStyle.type = 'text/css';
         container.classList.add('figureone__container');
@@ -492,6 +498,18 @@ class Figure {
           .figureone__html {
             pointer-events: auto;
           }
+          .figureone__lostcontext {
+            display: table;
+            background-color: white;
+          }
+          .figureone__lostcontext_message {
+            text-align: center;
+            vertical-align: middle;
+            display: table-cell;
+            border: 1px solid #444;
+            color: #444;
+            padding: 2em;
+          }
         `;
         document.getElementsByTagName('head')[0].appendChild(canvasStyle);
 
@@ -501,12 +519,33 @@ class Figure {
           this.backgroundColor,
         );
         this.webglLow = webglLow;
+        this.canvasLow.addEventListener(
+          'webglcontextlost',
+          this.contextLost.bind(this),
+          false,
+        );
+        this.canvasLow.addEventListener(
+          'webglcontextrestored', this.contextRestored.bind(this), false,
+        );
         if (this.canvasOffscreen) {
           const webglOffscreen = new WebGLInstance(
             this.canvasOffscreen,
             this.backgroundColor,
           );
           this.webglOffscreen = webglOffscreen;
+          // this.canvasOffscreen.addEventListener(
+          //   'webglcontextlost',
+          //   (event: WebGLContextEvent) => {
+          //     event.preventDefault();
+          //   },
+          //   false,
+          // );
+          // this.canvasOffscreen.addEventListener(
+          //   'webglcontextrestored', () => {
+          //     this.webglOffscreen.init(this.canvasOffscreen.getContext('webgl', { antialias: true }));
+          //     this.init(this.webglOffscreen);
+          //   }, false,
+          // );
         }
         this.draw2DLow = new DrawContext2D(this.textCanvasLow);
         if (this.textCanvasOffscreen) {
@@ -915,6 +954,11 @@ class Figure {
       this.scrollEvent.bind(this),
       false,
     );
+  }
+
+  init(webgl: WebGLInstance) {
+    this.elements.init(webgl);
+    this.animateNextFrame();
   }
 
   getState(options: { precision?: number, ignoreShown?: boolean, min?: boolean }) {
@@ -1384,10 +1428,63 @@ class Figure {
     this.htmlCanvas.style.fontSize = `${size}px`;
   }
 
+  /*
+  For some reason unknown to me, the 'WEBGL_lose_context' extension is removed
+  from the context when the webgl context is forced lost.
+
+  As such, the way I'm testing this code is to:
+  - remove the context
+  - add a new canvas element, and re-init gl to that canvas element
+
+  In the console it looks like:
+  ```
+  figure.loseContext()
+  c = document.createElement('canvas');
+  gl = c.getContext('webgl');
+  c.classList.add('figureone__gl', 'figureone__canvas')
+  figure.container.appendChild(c)
+  figure.container.insertBefore(c, figure.container.childNodes[0])
+  figure.canvasLow = c
+  figure.webglLow.init(figure.canvasLow.getContext('webgl', { antialias: true }))
+  figure.init(figure.webglLow)
+  ```
+  */
+  loseContext() {
+    // $FlowFixMe
+    this.ext = this.webglLow.gl.getExtension('WEBGL_lose_context');
+    this.webglLow.gl.getExtension('WEBGL_lose_context').loseContext();
+    if (this.webglOffscreen) {
+      this.webglOffscreen.gl.getExtension('WEBGL_lose_context').loseContext();
+    }
+  }
+
+  contextLost(event: WebGLContextEvent) {
+    event.preventDefault();
+    this.lostContextMessage.innerHTML = '<div class="figureone__lostcontext_message"><p>Browser removed WebGL context from FigureOne and is not giving it back.</p> <p>Reload page to restore.</p></div>';
+    this.lostContextMessage.style.display = 'table';
+  }
+
+  contextRestored() {
+    this.lostContextMessage.innerHTML = '<div class="figureone__lostcontext_message"><p>Browser removed WebGL context from FigureOne and just gave it back.</p> <p>FigureOne is reinitializing...</p></div>';
+    // this.webglLow.init(this.canvasLow.getContext('webgl', { antialias: true }));
+    this.webglLow.init(this.webglLow.gl);
+    this.init(this.webglLow);
+    this.lostContextMessage.style.display = 'none';
+    Console('FigureOne context restored!');
+  }
+
+  restoreContext() {
+    // this.canvasLow.getContext('webgl').getExtension('WEBGL_lose_context').restoreContext();
+    // $FlowFixMe
+    this.ext.restoreContext();
+    if (this.webglOffscreen) {
+      this.webglOffscreen.gl.getExtension('WEBGL_lose_context').restoreContext();
+    }
+  }
+
   destroy() {
     this.gesture.destroy();
-    this.webglLow.gl.getExtension('WEBGL_lose_context').loseContext();
-    // this.webglHigh.gl.getExtension('WEBGL_lose_context').loseContext();
+    this.loseContext();
   }
 
   /**
@@ -2731,7 +2828,9 @@ class Figure {
   setupForSelectionDraw(canvasIndex: number = 0) {
     if (canvasIndex === 0) {
       const { gl } = this.webglLow;
-      gl.bindFramebuffer(gl.FRAMEBUFFER, this.webglLow.targetTexture.fb);
+      if (this.webglLow.targetTexture) {
+        gl.bindFramebuffer(gl.FRAMEBUFFER, this.webglLow.targetTexture.fb);
+      }
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
       // gl.enable(gl.CULL_FACE);
       gl.enable(gl.DEPTH_TEST);

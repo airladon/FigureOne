@@ -3969,6 +3969,10 @@ class FigureElementPrimitive extends FigureElement {
     this.touchBorder = 'draw';
   }
 
+  init(webgl: WebGLInstance) {
+    this.drawingObject.init(webgl);
+  }
+
   _getStateProperties(options: { ignoreShown?: boolean }) {
     let { ignoreShown } = options;
     if (ignoreShown == null) {
@@ -4536,6 +4540,10 @@ class FigureElementCollection extends FigureElement {
     if (o.touchScale != null) {
       this.touchScale = getScale(o.touchScale);
     }
+  }
+
+  init(webgl: WebGLInstance) {
+    this.getChildren().map(e => e.init(webgl));
   }
 
   _getStateProperties(options: { ignoreShown?: boolean }) {

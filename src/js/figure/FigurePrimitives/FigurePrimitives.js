@@ -393,6 +393,7 @@ export default class FigurePrimitives {
           b.normalize, b.stride, b.offset, b.usageIn,
         );
       });
+      glObject.initAttributes();
     }
 
     // Add all custom uniforms
@@ -416,6 +417,7 @@ export default class FigurePrimitives {
         t.src, getRect(t.mapFrom), getRect(t.mapTo), t.mapToAttribute,
         t.coords || [], t.repeat, t.onLoad, t.loadColor,
       );
+      glObject.initTexture();
     }
 
     // Create th figure element primitive with the gl drawing object
