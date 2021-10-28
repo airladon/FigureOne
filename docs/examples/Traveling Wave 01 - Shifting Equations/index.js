@@ -110,7 +110,7 @@ figure.add([
               line: { width: 0.01, color: secondaryCol },
             },
           ],
-          xAxis: {
+          x: {
             color: greyColor,
             line: { width: 0.006 },
             start: -5,
@@ -118,25 +118,27 @@ figure.add([
             grid: { width: 0.005, dash: [], color: greyColor },
             labels: {
               font: { size: 0.08, color: greyColor },
-              offset: [0, 0.03],
+              offset: [0, -0.03],
+              hide: [0],
             },
+            step: 1,
             ticks: {
-              values: [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5],
               length: 0,
             },
             title: {
               text: 'x',
               font: { family: mathFont, style: 'italic', size: 0.12 },
-              offset: [1.45, 0.2],
+              location: 'right',
             },
           },
-          yAxis: {
+          y: {
             start: 0,
             stop: 5,
             grid: { width: 0.005, dash: [], color: greyColor },
+            step: 1,
             labels: {
               font: { size: 0.08 },
-              offset: [-1.3, 0],
+              offset: [-1.32, 0],
             },
             ticks: { step: 1, width: 0 },
             position: [plotWidth / 2, 0],
@@ -146,7 +148,7 @@ figure.add([
               text: 'y',
               rotation: 0,
               font: { family: mathFont, style: 'italic', size: 0.12 },
-              offset: [plotWidth / 2 + 0.15, 0.75],
+              location: 'top',
             },
           },
         },

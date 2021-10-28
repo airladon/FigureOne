@@ -22,6 +22,17 @@ import type { Type3DMatrix } from '../m3';
 //   far: number,
 // };
 
+/**
+  * @property {'orthographic' | 'perspective' | '2D'} [style]
+  * @property {number} [left]
+  * @property {number} [right]
+  * @property {number} [bottom]
+  * @property {number} [top]
+  * @property {number} [aspectRatio]
+  * @property {number} [fieldOfView]
+  * @property {number} [near]
+  * @property {number} [far]
+ */
 export type OBJ_Projection = {
   style?: 'orthographic' | 'perspective' | '2D',
   left?: number,
@@ -40,12 +51,22 @@ export type OBJ_CameraDefined = {
   up: TypeParsablePoint,
 };
 
+/**
+ * @property {TypeParsablePoint} [position]
+ * @property {TypeParsablePoint} [lookAt]
+ * @property {TypeParsablePoint} [up]
+ */
 export type OBJ_Camera = {
   position?: TypeParsablePoint,
   lookAt?: TypeParsablePoint,
   up?: TypeParsablePoint,
 };
 
+/**
+ * @property {TypeParsablePoint} [directional]
+ * @property {number} [ambient]
+ * @property {TypeParsablePoint} [point]
+ */
 export type OBJ_Light = {
   directional?: TypeParsablePoint,
   ambient?: number,
@@ -91,6 +112,12 @@ export type OBJ_Scene = {
   camera?: OBJ_Camera,
 }
 
+/**
+  * @property {number} [left]
+  * @property {number} [right]
+  * @property {number} [bottom]
+  * @property {number} [top]
+ */
 export type OBJ_2DScene = {
   left?: number,
   right?: number,
@@ -98,6 +125,14 @@ export type OBJ_2DScene = {
   top?: number,
 };
 
+/**
+  * @property {number} [left]
+  * @property {number} [right]
+  * @property {number} [bottom]
+  * @property {number} [top]
+  * @property {number} [near]
+  * @property {number} [far]
+ */
 export type OBJ_OrthographicScene = {
   left?: number,
   right?: number,
@@ -107,6 +142,12 @@ export type OBJ_OrthographicScene = {
   far?: number,
 }
 
+/**
+  * @property {aspectRatio} [number]
+  * @property {fieldOfView} [number]
+  * @property {near} [number]
+  * @property {far} [number]
+ */
 export type OBJ_PerspectiveScene = {
   aspectRatio?: number,
   fieldOfView?: number,
@@ -138,6 +179,12 @@ export type OBJ_SceneDefined = {
 }
 
 
+/**
+  * Scene.
+  *
+  * @param {OBJ_Scene} options scene definition options
+  * @param {null | (() => void)} onUpdate callback if scene is updated
+  */
 export default class Scene {
   style: '2D' | 'orthographic' | 'perspective';
   left: number;
@@ -177,6 +224,11 @@ export default class Scene {
   widthNear: number;
   widthFar: number;
 
+  zoom: number;
+  pan: Point;
+  pannedCameraPosition: Point;
+  pannedLookAt: Point;
+
   // eslint-disable-next-line class-methods-use-this
   defaultOptions(): {|
   aspectRatio: number,
@@ -190,6 +242,8 @@ export default class Scene {
   right: number,
   style: '2D' | 'orthographic' | 'perspective',
   top: number,
+  zoom: number,
+  pan: Point,
   |} {
     return {
       style: '2D',
@@ -199,6 +253,8 @@ export default class Scene {
       top: 1,
       near: 0.1,
       far: 10,
+      zoom: 1,
+      pan: new Point(0, 0),
       camera: {
         position: [0, 0, 2],
         lookAt: [0, 0, 0],
@@ -215,20 +271,54 @@ export default class Scene {
   }
 
   constructor(options: OBJ_Scene, onUpdate: null | (() => void) = null) {
-    const defaultOptions = this.defaultOptions();
-    joinObjects(this, defaultOptions, options);
-    this.calcProjectionMatrix();
-    this.calcViewMatrix();
-    this.calcViewProjectionMatrix();
+    this.reset(options);
     this.onUpdate = onUpdate;
   }
 
   reset(options: OBJ_Scene) {
+    this.camera = {};
+    this.light = {};
     const defaultOptions = this.defaultOptions();
-    joinObjects(this, defaultOptions, options);
+    const o = joinObjects({}, defaultOptions, options);
+    this.style = o.style;
+    this.left = o.left;
+    this.right = o.right;
+    this.bottom = o.bottom;
+    this.top = o.top;
+    this.near = o.near;
+    this.far = o.far;
+    this.zoom = o.zoom;
+    this.pan = o.pan;
+    this.setCameraProperties(o.camera);
+    this.setLight(o.light);
+    this.aspectRatio = o.aspectRatio;
+    this.fieldOfView = o.fieldOfView;
     this.calcProjectionMatrix();
     this.calcViewMatrix();
     this.calcViewProjectionMatrix();
+  }
+
+  // Note - a scene should NOT get the _dup() method as multiple links to the
+  // same scene will mess up recording states (scenes will be doubly encoded
+  // and then unencodable)
+  dup() {
+    const s = new Scene({
+      style: this.style,
+      left: this.left,
+      right: this.right,
+      bottom: this.bottom,
+      top: this.top,
+      near: this.near,
+      far: this.far,
+      aspectRatio: this.aspectRatio,
+      fieldOfView: this.fieldOfView,  // $FlowFixMe
+      light: this.light,  // $FlowFixMe
+      camera: this.camera,
+      zoom: this.zoom,
+      pan: this.pan,
+    });
+    s.onUpdate = this.onUpdate;
+    return s;
   }
 
   calcProjectionMatrix() {
@@ -237,7 +327,12 @@ export default class Scene {
         left, right, near, far, bottom, top,
       } = this;
       this.projectionMatrix = m3.orthographic(
-        left, right, bottom, top, near, far,
+        left / this.zoom,
+        right / this.zoom,
+        bottom / this.zoom,
+        top / this.zoom,
+        near,
+        far,
       );
       return;
     }
@@ -246,19 +341,28 @@ export default class Scene {
       fieldOfView, aspectRatio, near, far,
     } = this;
     this.projectionMatrix = m3.perspective(
-      fieldOfView, aspectRatio, near, far,
+      Math.min(fieldOfView / this.zoom, Math.PI), aspectRatio, near, far,
     );
   }
 
   calcViewMatrix() {
+    this.cameraPosition = getPoint(this.camera.position);
+    this.cameraVector = getPoint(this.camera.lookAt).sub(this.cameraPosition).normalize();
+    this.rightVector = this.cameraVector
+      .crossProduct(getPoint(this.camera.up)).normalize();
+    this.upVector = this.rightVector.crossProduct(this.cameraVector).normalize();
+    this.pannedCameraPosition = this.cameraPosition
+      .add(this.upVector.scale(this.pan.y))
+      .add(this.rightVector.scale(this.pan.x));
+    this.pannedLookAt = getPoint(this.camera.lookAt)
+      .add(this.upVector.scale(this.pan.y))
+      .add(this.rightVector.scale(this.pan.x));
     this.cameraMatrix = m3.lookAt(
-      getPoint(this.camera.position).toArray(),
-      getPoint(this.camera.lookAt).toArray(),
+      getPoint(this.pannedCameraPosition).toArray(),
+      getPoint(this.pannedLookAt).toArray(),
       getPoint(this.camera.up).toArray(),
     );
     this.viewMatrix = m3.inverse(this.cameraMatrix);
-    this.cameraPosition = getPoint(this.camera.position);
-    this.cameraVector = getPoint(this.camera.lookAt).sub(this.cameraPosition).normalize();
   }
 
   calcViewProjectionMatrix() {
@@ -271,19 +375,14 @@ export default class Scene {
     if (this.style === '2D') {
       this.viewProjectionMatrix[11] = 0;
     }
-    this.rightVector = this.cameraVector
-      .crossProduct(getPoint(this.camera.up)).normalize();
-    this.upVector = this.rightVector.crossProduct(this.cameraVector).normalize();
-    // this.nearCenter = this.cameraPosition
-    //   .add(this.cameraVector.scale(this.near));
-    // this.farCenter = this.cameraPosition
-    //   .add(this.cameraVector.scale(this.far));
-    // this.nearPlane = new Plane(this.nearCenter, this.cameraVector);
-    // this.farPlane = new Plane(this.farCenter, this.cameraVector);
+    // this.rightVector = this.cameraVector
+    //   .crossProduct(getPoint(this.camera.up)).normalize();
+    // this.upVector = this.rightVector.crossProduct(this.cameraVector).normalize();
 
     if (this.style === 'perspective') {
-      this.heightNear = Math.tan(this.fieldOfView * 0.5) * this.near * 2;
-      this.heightFar = Math.tan(this.fieldOfView * 0.5) * this.far * 2;
+      const fov = Math.min(Math.PI, this.fieldOfView / this.zoom);
+      this.heightNear = Math.tan(fov * 0.5) * this.near * 2;
+      this.heightFar = Math.tan(fov * 0.5) * this.far * 2;
       this.widthNear = this.aspectRatio * this.heightNear;
       this.widthFar = this.aspectRatio * this.heightFar;
       this.nearCenter = this.cameraPosition
@@ -293,18 +392,18 @@ export default class Scene {
       this.nearPlane = new Plane(this.nearCenter, this.cameraVector);
       this.farPlane = new Plane(this.farCenter, this.cameraVector);
     } else {
-      this.heightNear = this.top - this.bottom;
-      this.widthNear = this.right - this.left;
+      this.heightNear = (this.top - this.bottom) / this.zoom;
+      this.widthNear = (this.right - this.left) / this.zoom;
       this.heightFar = this.heightNear;
       this.widthFar = this.widthNear;
       this.nearCenter = this.cameraPosition
         .add(this.cameraVector.scale(this.near))
-        .add(this.rightVector.scale(this.left + this.widthNear / 2))
-        .add(this.upVector.scale(this.bottom + this.heightNear / 2));
+        .add(this.rightVector.scale(this.left / this.zoom + this.widthNear / 2))
+        .add(this.upVector.scale(this.bottom / this.zoom + this.heightNear / 2));
       this.farCenter = this.cameraPosition
         .add(this.cameraVector.scale(this.far))
-        .add(this.rightVector.scale(this.left + this.widthFar / 2))
-        .add(this.upVector.scale(this.bottom + this.heightFar / 2));
+        .add(this.rightVector.scale(this.left / this.zoom + this.widthFar / 2))
+        .add(this.upVector.scale(this.bottom / this.zoom + this.heightFar / 2));
       this.nearPlane = new Plane(this.nearCenter, this.cameraVector);
       this.farPlane = new Plane(this.farCenter, this.cameraVector);
     }
@@ -315,55 +414,122 @@ export default class Scene {
     return matrix.slice();
   }
 
-  // setProjectionMatrix(matrix: Type3DMatrix) {
-  //   this.projectionMatrix = this.dupMatrix(matrix);
-  //   this.calcViewProjectionMatrix();
-  // }
-
-  // setCameraMatrix(matrix: Type3DMatrix) {
-  //   this.cameraMatrix = this.dupMatrix(matrix);
-  //   this.viewMatrix = m3.inverse(this.cameraMatrix);
-  //   this.calcViewProjectionMatrix();
-  // }
-
-  // setViewMatrix(matrix: Type3DMatrix) {
-  //   this.viewMatrix = this.dupMatrix(matrix);
-  //   this.cameraMatrix = m3.inverse(this.viewMatrix);
-  //   this.calcViewProjectionMatrix();
-  // }
-
-  setCamera(options: OBJ_Camera) {
-    joinObjects(this.camera, options);
+  /**
+   * Set the pan and zoom of the scene.
+   *
+   * Pan is applied to `camera.position` and `camera.lookAt`, while
+   * zoom is applied to
+   * `camera.left`/`camera.bottom`/`camera.right`/`camera.top` (for 2D and
+   * orthographic) or `camera.fov` (for perspective)
+   *
+   * The camera and projection variables are not changed by pan and zoom, but
+   * the the view and projection matrices are.
+   *
+   * A pan in the positive direction will move the scene left and down.
+   *
+   * A zoom greater than 1 will reduce the left/right/bottom/top or fov
+   * effectively magnifying the scene.
+   *
+   * @param {Point} pan
+   * @param {number} zoom
+   */
+  setPanZoom(pan: Point, zoom: number) {
+    this.zoom = zoom;
+    this.pan = pan;
+    this.calcProjectionMatrix();
     this.calcViewMatrix();
     this.calcViewProjectionMatrix();
   }
 
+  /**
+   * Set the pan of the scene.
+   *
+   * Pan is applied to `camera.position` and `camera.lookAt`.
+   *
+   * The camera is changed by pan and zoom, but the resulting view matrix is.
+   *
+   * A pan in the positive direction will move the scene left and down.
+   *
+   * @param {Point} pan
+   */
+  setPan(pan: Point) {
+    this.pan = pan;
+    this.calcProjectionMatrix();
+    this.calcViewMatrix();
+    this.calcViewProjectionMatrix();
+  }
+
+  /**
+   * Set camera properties.
+   */
+  setCamera(options: OBJ_Camera) {
+    this.setCameraProperties(options);
+    this.calcViewMatrix();
+    this.calcViewProjectionMatrix();
+  }
+
+  setCameraProperties(options: OBJ_Camera) {
+    if (options.position != null) {
+      this.camera.position = getPoint(options.position);
+    }
+    if (options.up != null) {
+      this.camera.up = getPoint(options.up);
+    }
+    if (options.lookAt != null) {
+      this.camera.lookAt = getPoint(options.lookAt);
+    }
+  }
+
+  /**
+   * Set projection properties.
+   */
   setProjection(options: OBJ_Projection) {
     joinObjects(this, options);
     this.calcProjectionMatrix();
     this.calcViewProjectionMatrix();
   }
 
+  /**
+   * Set a 2D scene.
+   */
   set2D(options: OBJ_2DScene) {
     joinObjects(this, { style: '2D' }, options);
     this.calcProjectionMatrix();
     this.calcViewProjectionMatrix();
   }
 
+  /**
+   * Set an orthographic scene.
+   */
   setOrthographic(options: OBJ_OrthographicScene) {
     joinObjects(this, { style: 'orthographic' }, options);
     this.calcProjectionMatrix();
     this.calcViewProjectionMatrix();
   }
 
+  /**
+   * Set a perspective scene.
+   */
   setPerspective(options: OBJ_PerspectiveScene) {
     joinObjects(this, { style: 'perspective' }, options);
     this.calcProjectionMatrix();
     this.calcViewProjectionMatrix();
   }
 
+  /**
+   * Set light properties
+   */
   setLight(options: OBJ_Light) {
-    joinObjects(this.light, options);
+    // joinObjects(this.light, options);
+    if (options.ambient != null) {
+      this.light.ambient = options.ambient;
+    }
+    if (options.directional != null) {
+      this.light.directional = getPoint(options.directional);
+    }
+    if (options.point != null) {
+      this.light.point = getPoint(options.point);
+    }
   }
 
   /*

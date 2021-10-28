@@ -63,6 +63,8 @@ import { getBufferBorder } from '../geometries/buffer';
 import type TimeKeeper from '../TimeKeeper';
 import type { Recorder } from '../Recorder/Recorder';
 import Scene from '../../tools/geometry/scene';
+import FigureElementPrimitiveGesture from './FigureElementPrimitiveGesture';
+import type { OBJ_Gesture } from './FigureElementPrimitiveGesture';
 import type {
   OBJ_LineStyleSimple, OBJ_GenericGL, OBJ_Morph, TypeGLPrimitive,
 } from './FigurePrimitiveTypes';
@@ -417,9 +419,16 @@ export default class FigurePrimitives {
     }
 
     // Create th figure element primitive with the gl drawing object
-    const element = new FigureElementPrimitive(
-      glObject, options.transform, options.color, null, options.name,
-    );
+    let element;
+    if (options.figureElementPrimitiveCallback != null) {
+      element = options.figureElementPrimitiveCallback(
+        glObject, options.transform, options.color, null, options.name,
+      );
+    } else {
+      element = new FigureElementPrimitive(
+        glObject, options.transform, options.color, null, options.name,
+      );
+    }
 
     // Add some custom methods to the FigureElementPrimitive to update
     // attributes, vertices, uniforms
@@ -1421,6 +1430,66 @@ export default class FigurePrimitives {
     // element.custom.getLine = (o: OBJ_PolyLineTris) => this.getPolylineTris(o);
     element.custom.updatePoints(joinObjects({}, ...options));
     return element;
+  }
+
+  gesture(...options: Array<OBJ_Gesture>): FigureElementPrimitiveGesture {
+    const defaultOptions = {
+      color: [0, 0, 0, 0],
+      width: 1,
+      height: 1,
+      position: [0, 0],
+      xAlign: 'center',
+      yAlign: 'middle',
+      zoom: false,
+      pan: false,
+      back: true,
+    };
+    const combinedOptions = joinObjects({}, ...options);
+    for (let i = options.length - 1; i >= 0; i -= 1) {
+      if (options[i].scene != null && options[i].scene instanceof Scene) {
+        combinedOptions.scene = options[i].scene;
+        break;
+      }
+    }
+    for (let i = options.length - 1; i >= 0; i -= 1) {
+      if (options[i].changeScene != null && options[i].changeScene instanceof Scene) {
+        combinedOptions.changeScene = options[i].changeScene;
+        break;
+      }
+    }
+    let { changeScene, scene } = combinedOptions;
+    if (scene == null) {
+      scene = this.scene;
+    } else if (!(scene instanceof Scene)) {
+      scene = new Scene(scene);
+    }
+
+    if (changeScene != null && !(changeScene instanceof Scene)) {
+      changeScene = new Scene(changeScene);
+    }
+
+    defaultOptions.width = scene.right - scene.left;
+    defaultOptions.height = scene.top - scene.bottom;
+    defaultOptions.position = [
+      scene.left + defaultOptions.width / 2,
+      scene.bottom + defaultOptions.height / 2,
+    ];
+    const o = joinObjectsWithOptions({}, defaultOptions, combinedOptions);
+    // $FlowFixMe
+    const element: FigureElementPrimitiveGesture = this.rectangle({
+      width: o.width,
+      height: o.height,
+      position: o.position,
+      xAlign: o.xAlign,
+      yAlign: o.yAlign,
+      color: o.color,
+      figureElementPrimitiveCallback: (...fo) => new FigureElementPrimitiveGesture(...fo),
+    });
+    element.setup(o);
+    element.scene = scene;
+    element.changeScene = changeScene;
+    return element;
+    // return createGestureElement(this.rectangle.bind(this), ...options);
   }
 
   /**

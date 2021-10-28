@@ -81,6 +81,8 @@ toc:
   - OBJ_ElementMove
   - OBJ_ElementMoveFreely
   - OBJ_CameraControl
+  - OBJ_Gesture
+  - FigureElementPrimitiveGesture
   - OBJ_Touch
   - OBJ_RangeBounds
   - OBJ_LineBounds
@@ -349,12 +351,20 @@ toc:
   - OBJ_LineStyleSimple
   - OBJ_AxisTicks
   - OBJ_AxisLabels
-  - TypeAxisTitle
   - CollectionsTrace
-  - TypePlotFrame
-  - TypePlotTitle
+  - TypeTickLocation
+  - OBJ_LabelsCallbackParams
+  - OBJ_AxisLineStyle
+  - OBJ_ValuesOffset
+  - OBJ_AxisTitle
   - OBJ_PlotLegendCustomTrace
   - OBJ_PlotLegendCustom
+  - OBJ_GestureArea
+  - OBJ_PlotFrame
+  - OBJ_PlotZoomOptions
+  - OBJ_PlotPanOptions
+  - OBJ_PlotAxis
+  - OBJ_PlotTitle
   - OBJ_SurroundAnimationStep
   - TypeColor
   - OBJ_AddElement
@@ -362,10 +372,18 @@ toc:
   - OBJ_TriangleSideRotationAlignment
   - FigureCollections
   - OBJ_ButtonColor
+  - OBJ_ButtonLabel
+  - OBJ_ButtonColorState
+  - OBJ_ButtonState
+  - OBJ_SliderBorder
+  - OBJ_SliderMarker
+  - OBJ_ToggleLabel
+  - OBJ_ToggleBorder
   - OBJ_LineMove
   - TypeHAlign
   - TypeVAlign
   - OBJ_Scene
+  - Scene
   - TypeRotationDirection
   - OBJ_LineDefinition
   - BoundsIntersect
@@ -381,6 +399,19 @@ toc:
   - getBounds
   - OBJ_SurfaceGrid
   - surfaceGrid
+  - OBJ_ZoomOptions
+  - OBJ_ManualZoom
+  - OBJ_ZoomValues
+  - OBJ_CurrentZoom
+  - OBJ_PanOptions
+  - OBJ_ZoomInstant
+  - OBJ_Zoom
+  - OBJ_Projection
+  - OBJ_Camera
+  - OBJ_Light
+  - OBJ_2DScene
+  - OBJ_OrthographicScene
+  - OBJ_PerspectiveScene
   - name: Misc Geometry Creation
   - OBJ_PolygonPoints
   - OBJ_PolygonLinePoints

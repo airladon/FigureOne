@@ -169,3 +169,12 @@ API cleanup
 
 ## 0.11.2
 * Add `isOn` and `isOff` to toggle
+
+## 0.12.0
+* Fix: `offset` property in collections.toggle now works for any location.
+* Point class can now do component multiplication (`Point.mul()`), complex number multiplication (`Point.cmul()`), and complex number division (`Point.cdiv()`).
+* Add `FigureElementPrimitiveGesture` ( `make: 'gesture'`) for zoom and pan handling
+* Make `CollectionsAxis` and `CollectionsPlot` zoomable and pannable
+* Add Solar System Example showing a pannable and zoomable plot
+* Add Mandlebrot Set example showing the gesture primitive
+* Make a `Scene` zoomable and pannable

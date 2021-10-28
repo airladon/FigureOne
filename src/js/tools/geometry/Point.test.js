@@ -79,6 +79,64 @@ describe('g2 Point', () => {
       expect(s).toEqual(new Point(-2, -2));
     });
   });
+  describe('Points can be negated', () => {
+    test('(0, 0, 0) => (0, 0, 0)', () => {
+      const p = new Point(0, 0, 0);
+      const q = p.neg();
+      expect(q).toEqual(new Point(-0, -0, -0));
+    });
+    test('(1, 2, 3) => (-1, -2, -3)', () => {
+      const p = new Point(1, 2, 3);
+      const q = p.neg();
+      expect(q).toEqual(new Point(-1, -2, -3));
+    });
+    test('(-1, -2, -3) => (1, 2, 3)', () => {
+      const p = new Point(-1, -2, -3);
+      const q = p.neg();
+      expect(q).toEqual(new Point(1, 2, 3));
+    });
+    test('(-1, 2, -3) => (-1, 2, -3)', () => {
+      const p = new Point(-1, 2, -3);
+      const q = p.neg();
+      expect(q).toEqual(new Point(1, -2, 3));
+    });
+  });
+  describe('Points can be used to multiply complex numbers', () => {
+    test('(1, 2) * (2, 3) = (-4, 7)', () => {
+      const p = new Point(1, 2);
+      const q = new Point(2, 3);
+      const m = p.cmul(q);
+      expect(m).toEqual(new Point(-4, 7));
+    });
+    test('(1, 2) * (2, 0) = (2, 4)', () => {
+      const p = new Point(1, 2);
+      const q = new Point(2, 0);
+      const m = p.cmul(q);
+      expect(m).toEqual(new Point(2, 4));
+    });
+  });
+  describe('Points can be used to divide complex numbers', () => {
+    test('(-4, 7) / (2, 3) = (1, 2)', () => {
+      const p = new Point(-4, 7);
+      const q = new Point(2, 3);
+      const m = p.cdiv(q);
+      expect(m).toEqual(new Point(1, 2));
+    });
+    test('(2, 4) / (2, 0) = (1, 2)', () => {
+      const p = new Point(2, 4);
+      const q = new Point(2, 0);
+      const m = p.cdiv(q);
+      expect(m).toEqual(new Point(1, 2));
+    });
+  });
+  describe('Components of points can be multiplied', () => {
+    test('(-1, 2, 3) * (2, 3, -4) = (-2, 6, -12)', () => {
+      const p = new Point(-1, 2, 3);
+      const q = new Point(2, 3, -4);
+      const m = p.mul(q);
+      expect(m).toEqual(new Point(-2, 6, -12));
+    });
+  });
   describe('Points can be clipped', () => {
     let p0;
     let p1;

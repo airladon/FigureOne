@@ -254,12 +254,15 @@ function setupFigure() {
       start: 0,
       stop: maxValue + 0.1,
       length,
-      line: { width: 0.008, arrow: { end: 'barb' } },
+      line: { width: 0.008, arrow: { end: 'barb' }, arrowExt: 0 },
       title: {
         font: { style: 'italic', family: 'serif', size: 0.12 },
         text: [title, { font: { size: 0.06 }, lineSpace: 0.06, text: units }],
         position: [length - 0.03, -0.04],
       },
+      ticks: false,
+      labels: false,
+      grid: false,
     },
   });
 
@@ -271,8 +274,11 @@ function setupFigure() {
       start: -A - 0.05,
       stop: A + 0.05,
       length: A * 2 + 0.1,
-      line: { width: 0.008, arrow: 'barb' },
+      line: { width: 0.008, arrow: 'barb', arrowExt: 0 },
       position: [0, -A - 0.05],
+      ticks: false,
+      labels: false,
+      grid: false,
       title: {
         font: { style: 'italic', family: 'serif', size: 0.12 },
         text: {

@@ -22,7 +22,7 @@ figure.add({
   options: {
     width: 2,                                    // Plot width in figure
     height: 2,                                   // Plot height in figure
-    yAxis: { start: 0, stop: 100 },              // Customize y axis limits
+    y: { start: 0, stop: 100 },              // Customize y axis limits
     trace: [
       { points: pow(1.5), name: 'Power 1.5' },   // Trace names are for legend
       {                                          // Trace with only markers

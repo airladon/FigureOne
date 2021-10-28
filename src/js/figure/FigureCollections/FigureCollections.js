@@ -200,6 +200,7 @@ export default class FigureCollections {
     );
   }
 
+
   /**
    * Create a {@link CollectionsAixs3}.
    */

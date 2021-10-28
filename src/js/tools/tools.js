@@ -1212,7 +1212,7 @@ class Notification {
    *
    * @param {any} functionArgument argument to pass to subscriber callback
    */
-  publish(functionArgument: any) {
+  publish(functionArgument: any = undefined, asArray: boolean = true) {
     const subscribersToRemove = [];
     for (let i = 0; i < this.order.length; i += 1) {
       const id = this.order[i];
@@ -1228,7 +1228,11 @@ class Notification {
         this.subscribers[`${id}`].num = num - 1;
       }
       if (publishOk) {
-        this.fnMap.exec(callback, functionArgument);
+        if (asArray) {
+          this.fnMap.exec(callback, functionArgument);
+        } else {
+          this.fnMap.exec(callback, ...functionArgument);
+        }
       }
     }
     subscribersToRemove.forEach((id) => { this.remove(id); });
@@ -1348,10 +1352,13 @@ class NotificationManager {
    *
    * @param {string} subscriptionName
    * @param {any} payload payload to pass to subscribers
+   * @param {boolean} asArray set to `true` if payload is an array that should
+   * be published as an array. Set to `false` if payload should be published as
+   * separated arguments.
    */
-  publish(eventName: string, payload: any) {
+  publish(eventName: string, payload: any = undefined, asArray: boolean = true) {
     if (this.notifications[eventName] != null) {
-      this.notifications[eventName].publish(payload);
+      this.notifications[eventName].publish(payload, asArray);
     }
   }
 

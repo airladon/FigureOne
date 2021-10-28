@@ -44,6 +44,7 @@ import AnimationManager from './Animation/AnimationManager';
 import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 import type { TypeColor, OBJ_Font } from '../tools/types';
 import type { COL_SlideNavigator } from './FigureCollections/SlideNavigator';
+import type FigureElementPrimitiveGesture from './FigurePrimitives/FigureElementPrimitiveGesture';
 
 const FIGURE1DEBUG = false;
 
@@ -81,6 +82,9 @@ export type OBJ_FigureForElement = {
   animationFinished: () => void,
   recorder: Recorder,
   timeKeeper: TimeKeeper,
+  notifications: NotificationManager,
+  pixelToGL: (Point) => Point,
+  preventDefault: () => void,
 }
 
 /**
@@ -202,7 +206,7 @@ export type OBJ_Figure = {
  * <body>
  *     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
  *     </div>
- *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.11.2/figureone.min.js'></script>
+ *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.12.0/figureone.min.js'></script>
  *     <script type="text/javascript" src='./index.js'></script>
  * </body>
  * </html>
@@ -253,7 +257,7 @@ class Figure {
 
   beingMovedElement: null | FigureElement;
 
-  beingTouchedElement: null | FigureElement;
+  beingTouchedElement: null | FigureElement | FigureElementPrimitiveGesture;
 
 
   previousCursorPoint: Point;
@@ -322,6 +326,35 @@ class Figure {
     num: number,
   };
 
+  pixelSpace: {
+    x: { min: number, span: number },
+    y: { min: number, span: number },
+  };
+
+  defaultPrevented: boolean;
+
+  mousePixelPosition: null | Point;
+  // zoom: {
+  //   last: {
+  //     mag: number,
+  //     position: Point,
+  //     angle: number,
+  //     distance: number,
+  //   },
+  //   current: {
+  //     position: Point,
+  //     angle: number,
+  //     distance: number,
+  //   },
+  //   max: null | number,
+  //   min: null | number,
+  //   scale: number,
+  //   mag: number,
+  //   cumOffset: Point,
+  //   cumAngle: number,
+  //   pinching: boolean,
+  // }
+
   scene: Scene;
 
   animations: AnimationManager;
@@ -371,6 +404,9 @@ class Figure {
     this.nextDrawTimer = null;
     this.nextDrawTimerStart = 0;
     this.nextDrawTimerDuration = 0;
+    this.mousePixelPosition = null;
+    this.defaultPrevented = false;
+
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
       htmlId,
@@ -480,6 +516,7 @@ class Figure {
         // this.draw2DHigh = new DrawContext2D(this.textCanvasHigh);
       }
     }
+    this.getPixelSpace();
 
     if (optionsToUse.gestureCanvas != null) {
       const gestureCanvas = document.getElementById(optionsToUse.gestureCanvas);
@@ -494,6 +531,7 @@ class Figure {
     if (this instanceof Figure) {  // $FlowFixMe
       this.gesture = new Gesture(this);
     }
+
 
     // if (optionsToUse.limits != null) {
     //   const limits = getRect(optionsToUse.limits);
@@ -599,6 +637,39 @@ class Figure {
     }
 
     this.scene = new Scene(optionsToUse.scene);
+    // this.zoom = {
+    //   min: null,
+    //   max: null,
+    //   last: {
+    //     mag: 1,
+    //     position: new Point(0, 0),
+    //     angle: 0,
+    //     distance: 0,
+    //   },
+    //   current: {
+    //     position: new Point(0, 0),
+    //     angle: 0,
+    //     distance: 0,
+    //   },
+    //   mag: 1,
+    //   cumOffset: new Point(0, 0),
+    //   cumAngle: new Point(0, 0),
+    //   pinching: false,
+    //   scale: 1,
+    //   // current: 1,
+    //   // position: new Point(0, 0),
+    //   // scale: 1,
+    //   // zooming: false,
+    //   // angle: 0,
+    //   // lastAngle: 0,
+    //   // lastDistance: 0,
+    //   // space: new Rect(
+    //   //   this.scene.left,
+    //   //   this.scene.bottom,
+    //   //   this.scene.right - this.scene.left,
+    //   //   this.scene.top - this.scene.bottom,
+    //   // ),
+    // };
     this.previousCursorPoint = new Point(0, 0);
     this.isTouchDown = false;
     this.fontScale = optionsToUse.fontScale;
@@ -1449,6 +1520,9 @@ class Figure {
       animationFinished: this.animationFinished.bind(this),
       recorder: this.recorder,
       timeKeeper: this.timeKeeper,
+      notifications: this.notifications,
+      pixelToGL: this.pixelToGL.bind(this),
+      preventDefault: this.preventDefault.bind(this),
     });
     this.setFirstTransform();
     this.animateNextFrame();
@@ -1657,10 +1731,26 @@ class Figure {
       this.renderAllElementsToTiedCanvases();
       this.oldWidth = this.canvasLow.clientWidth;
     }
+    this.getPixelSpace();
     this.notifications.publish('resize');
     this.animateNextFrame(true, 'resize');
     this.drawAnimationFrames = 2;
     // this.renderAllElementsToTiedCanvases(true);
+  }
+
+  getPixelSpace() {
+    const canvasRect = this.canvasLow.getBoundingClientRect();
+    this.pixelSpace = {
+      x: { min: 0, span: canvasRect.width },
+      y: { min: canvasRect.height, span: -canvasRect.height },
+    };
+  }
+
+  pixelToGL(pixelPoint: Point) {
+    return new Point(
+      pixelPoint.x / this.pixelSpace.x.span * 2 - 1,
+      (1 - (-pixelPoint.y / this.pixelSpace.y.span)) * 2 - 1,
+    );
   }
 
   updateHTMLElementTie() {
@@ -1756,6 +1846,113 @@ class Figure {
     return cursor.isShown;
   }
 
+  mousePosition(pixelPoint: Point) {
+    // if (
+    //   this.beingTouchedElement != null
+    //   && this.beingTouchedElement.mousePixelPosition != null
+    // ) {
+    //   this.beingTouchedElement.mousePixelPosition(pixelPoint);
+    // }
+    this.notifications.publish('mousePosition', pixelPoint);
+  }
+
+  preventDefault() {
+    this.defaultPrevented = true;
+  }
+
+  wheelHandler(deltaX: number, deltaY: number, deltaMode: 0x00 | 0x01 | 0x02) {
+    this.notifications.publish('gestureWheel', [new Point(deltaX, deltaY), deltaMode], false);
+    if (this.defaultPrevented) {
+      this.defaultPrevented = false;
+      return true;
+    }
+    return false;
+  }
+
+  startPinchZoom(touch1ClientPos: Point, touch2ClientPos: Point) {
+    const pixelPoints = this.clientsToPixel([touch1ClientPos, touch2ClientPos]);
+    this.notifications.publish(
+      'gestureStartPinch',
+      [pixelPoints[0], pixelPoints[1], this.beingTouchedElement],
+      false,
+    );
+  }
+
+  pinchZoom(touch1ClientPos: Point, touch2ClientPos: Point) {
+    // const oldZoom = this.zoom.last.mag;
+    const pixelPoints = this.clientsToPixel([touch1ClientPos, touch2ClientPos]);
+    this.notifications.publish(
+      'gesturePinching',
+      [pixelPoints[0], pixelPoints[1], this.beingTouchedElement],
+      false,
+    );
+    // const line = new Line(pixelPoints[0], pixelPoints[1]);
+
+    // const d = line.length();
+    // // const { current, lastDistance, scale } = this.zoom;
+    // let mag = this.zoom.mag
+    //   + (d - this.zoom.current.distance) / 5 * this.zoom.scale * this.zoom.mag / 100;
+    // if (this.zoom.min != null) {
+    //   mag = Math.max(mag, this.zoom.min);
+    // }
+    // if (this.zoom.max != null) {
+    //   mag = Math.min(mag, this.zoom.max);
+    // }
+    // const position = this.transformPoint(line.pointAtPercent(0.5), 'pixel', 'figure');
+    // this.updateZoom(mag, position, d, line.angle());
+    // this.notifications.publish('zoom', [this.zoom.mag]);
+  }
+
+
+  endPinchZoom() {
+    this.notifications.publish('gesturePinchEnd');
+    // this.zoom.pinching = false;
+  }
+
+  // /**
+  //  * Set zoom gesture options for figure.
+  //  *
+  //  * @param {OBJ_ZoomOptions} options
+  //  */
+  // setZoomOptions(options: OBJ_ZoomOptions) {
+  //   if (options.min !== undefined) { this.zoom.min = options.min; }
+  //   if (options.max !== undefined) { this.zoom.max = options.max; }
+  //   if (options.scale !== undefined) { this.zoom.scale = options.scale; }
+  // }
+
+  // /**
+  //  * Set zoom
+  //  *
+  //  * @param {OBJ_Zoom} zoom
+  //  * @param {boolean} notify `true` to send `'zoom'` notification after set
+  //  */
+  // setZoom(zoom: OBJ_Zoom, notify: boolean = false) {
+  //   const z = joinObjects({
+  //     mag: this.zoom.mag,
+  //     angle: this.zoom.current.angle,
+  //     distance: this.zoom.current.distance,
+  //     pinching: this.zoom.pinching,
+  //   }, zoom);
+  //   this.updateZoom(z.mag, z.position, z.distance, z.angle);
+  //   this.zoom.pinching = z.pinching;
+  //   if (notify) {
+  //     this.notifications.publish('zoom', [this.zoom.mag]);
+  //   }
+  // }
+
+  // /**
+  //  * @return {OBJ_Zoom}
+  //  */
+  // getZoom() {
+  //   return {
+  //     last: this.zoom.last,
+  //     current: this.zoom.current,
+  //     mag: this.zoom.mag,
+  //     offset: this.zoom.cumOffset,
+  //     angle: this.zoom.cumAngle,
+  //   };
+  // }
+
   touchDownHandlerClient(clientPoint: Point, eventFromPlayback: boolean = false) {
     const pixel = this.clientToPixel(clientPoint);
     // const glPoint = pixelP.transformBy(this.spaceTransformMatrix('pixel', 'gl'));
@@ -1822,6 +2019,7 @@ class Figure {
     let element;
     let backCameraControl;
     element = this.elements.getSelectionFromBorders(glPoint);
+
     if (
       element != null
       && element._custom != null
@@ -1839,6 +2037,7 @@ class Figure {
     if (element == null) {
       return false;
     }
+
     // console.log(element)
     this.selectElement(element, glPoint, autoEvent);
     // element.click(glPoint);
@@ -2240,6 +2439,8 @@ class Figure {
     //   return false;
     // }
 
+    this.notifications.publish('gestureMove', [previousGLPoint, currentGLPoint, this.beingTouchedElement], false);
+
     if (this.beingMovedElement == null || this.beingMovedElement === this.elements) {
       return false;
     }
@@ -2446,6 +2647,10 @@ class Figure {
     } else {
       stopped();
     }
+  }
+
+  getScene() {
+    return this.scene;
   }
 
   setupAnimations() {
@@ -3018,6 +3223,12 @@ class Figure {
     );
   }
 
+
+  clientsToPixel(clientLocations: Array<Point>): Array<Point> {
+    const canvas = this.canvasLow.getBoundingClientRect();
+    return clientLocations.map(p => new Point(p.x - canvas.left, p.y - canvas.top));
+  }
+
   pixelToClient(pixelLocation: Point): Point {
     const canvas = this.canvasLow.getBoundingClientRect();
     return new Point(
@@ -3139,6 +3350,44 @@ class Figure {
       animationManager: [],
     };
     return frame;
+  }
+
+
+  addZoomPanControl(options: {
+    zoom?: {
+      min?: number | null,
+      max?: number | null,
+      sensitivity?: number,
+    },
+    pan?: {
+      bounds?: {
+        left?: number | null,
+        bottom?: number | null,
+        right?: number | null,
+        top?: number | null,
+      }
+    }
+  }) {
+    const control = this.add(joinObjects(
+      {},
+      {
+        name: '_zoomPan_',
+        make: 'primitives.gesture',
+        zoom: {},
+        pan: {},
+        back: true,
+        width: 2,
+        height: 2,
+        scene: new Scene({}),
+      },
+      options,
+    ));
+    control.notifications.add('zoom', () => {
+      control.zoomScene(this.scene);
+    });
+    control.notifications.add('pan', () => {
+      control.panScene(this.scene);
+    });
   }
 }
 

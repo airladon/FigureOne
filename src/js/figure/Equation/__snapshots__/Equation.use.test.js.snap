@@ -241,6 +241,7 @@ FigureElementPrimitive {
       },
     ],
   ],
+  "drawNumber": 0,
   "drawPriority": 1,
   "drawTransforms": Array [],
   "drawingObject": TextObject {

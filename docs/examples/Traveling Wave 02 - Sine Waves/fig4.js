@@ -103,37 +103,39 @@ function fig4() {
         line: { width: 0.01 },
         color: [1, 0, 0, 1],
       },
-      xAxis: {
+      font: { size: 0.08 },
+      x: {
         position: [0, 0.7],
         start: 0,
         stop: 12,
+        step: 1,
         line: { width: 0.006 },
         grid: { width: 0.005, dash: [], color: [0.7, 0.7, 0.7, 1] },
         title: {
           text: '\u03b8',
           font: { family: 'Times New Roman', style: 'italic', size: 0.1 },
-          offset: [1.8, 0.22],
+          location: 'right',
         },
         ticks: {
-          values: range(1, 12, 1),
           length: 0.05,
-          offset: -0.025,
+          location: 'center',
         },
-        labels: { precision: 0, offset: [0, 0], font: { size: 0.07 } },
+        labels: { precision: 0, offset: [0, 0], font: { size: 0.07 }, hide: [0] },
       },
-      yAxis: {
+      y: {
         start: -4,
         stop: 4,
         line: { width: 0.006 },
+        step: 1,
         grid: {
-          values: [-4, -3, -2, -1, 1, 2, 3, 4], width: 0.005, dash: [], color: [0.7, 0.7, 0.7, 1],
+          width: 0.005, dash: [], color: [0.7, 0.7, 0.7, 1],
         },
-        ticks: { values: range(-4, 4, 1), offset: -0.025, length: 0.05 },
+        ticks: { location: 'center', length: 0.05 },
         labels: { precision: 0, font: { size: 0.07 }, offset: [-0.01, 0] },
         title: {
           text: 'y',
           font: { family: 'Times New Roman', style: 'italic', size: 0.1 },
-          offset: [0.28, 0.75],
+          location: 'top',
           rotation: 0,
         },
       },

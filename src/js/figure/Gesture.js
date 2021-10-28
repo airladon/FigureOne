@@ -13,6 +13,7 @@ class Gesture {
   move: (Point, Point) => boolean;
   free: (Point) => void;
   toggleCursor: () => void;
+  wheel: (number, number, 0x00 | 0x01 | 0x02) => void;
   binds: {
     mouseDownHandler: (MouseEvent) => void,
     mouseUpHandler: (MouseEvent) => void,
@@ -20,6 +21,7 @@ class Gesture {
     touchStartHandler: (TouchEvent) => void,
     touchEndHandler: (TouchEvent) => void,
     touchMoveHandler: (TouchEvent) => void,
+    wheelHandler: (WheelEvent) => void,
   };
 
   constructor(figure: Figure) {
@@ -31,6 +33,7 @@ class Gesture {
     this.move = this.figure.touchMoveHandlerClient.bind(this.figure);
     this.free = this.figure.touchFreeHandler.bind(this.figure);
     this.toggleCursor = this.figure.toggleCursor.bind(this.figure);
+    this.wheel = this.figure.wheelHandler.bind(this.figure);
 
     this.binds = {
       mouseDownHandler: this.mouseDownHandler.bind(this),
@@ -39,6 +42,7 @@ class Gesture {
       touchStartHandler: this.touchStartHandler.bind(this),
       touchEndHandler: this.touchEndHandler.bind(this),
       touchMoveHandler: this.touchMoveHandler.bind(this),
+      wheelHandler: this.wheelHandler.bind(this),
     };
 
     this.addEvent('mousedown', this.binds.mouseDownHandler, false);
@@ -47,6 +51,7 @@ class Gesture {
     this.addEvent('touchstart', this.binds.touchStartHandler, false);
     this.addWindowEvent('touchend', this.binds.touchEndHandler, false);
     this.addEvent('touchmove', this.binds.touchMoveHandler, false);
+    this.addEvent('wheel', this.binds.wheelHandler, false);
     this.enable = true;
   }
 
@@ -100,9 +105,24 @@ class Gesture {
     }
   }
 
+  wheelHandler(event: WheelEvent) {
+    const preventDefault = this.wheel(event.deltaX, event.deltaY, event.deltaMode);
+    if (preventDefault) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }
+
   touchStartHandler(event: TouchEvent) {
     const touch = event.touches[0];
-    const disableEvent = this.startHandler(new Point(touch.clientX, touch.clientY));
+    let disableEvent = this.startHandler(new Point(touch.clientX, touch.clientY));
+    if (event.targetTouches.length === 2) {
+      disableEvent = true;
+      this.figure.startPinchZoom(
+        new Point(event.targetTouches[0].clientX, event.targetTouches[0].clientY),
+        new Point(event.targetTouches[1].clientX, event.targetTouches[1].clientY),
+      );
+    }
     if (disableEvent) {
       event.preventDefault();
     }
@@ -118,9 +138,16 @@ class Gesture {
   touchMoveHandler(event: TouchEvent) {
     const touch = event.touches[0];
     this.moveHandler(event, new Point(touch.clientX, touch.clientY));
+    if (event.targetTouches.length > 1) {
+      this.figure.pinchZoom(
+        new Point(event.targetTouches[0].clientX, event.targetTouches[0].clientY),
+        new Point(event.targetTouches[1].clientX, event.targetTouches[1].clientY),
+      );
+    }
   }
 
   mouseMoveHandler(event: MouseEvent) {
+    this.figure.mousePosition(new Point(event.offsetX, event.offsetY));
     this.moveHandler(event, new Point(event.clientX, event.clientY));
   }
 
@@ -128,7 +155,10 @@ class Gesture {
     this.endHandler();
   }
 
-  touchEndHandler() {
+  touchEndHandler(event: TouchEvent) {
+    if (event.targetTouches.length < 2) {
+      this.figure.endPinchZoom();
+    }
     this.endHandler();
   }
 
@@ -139,6 +169,7 @@ class Gesture {
     this.removeEvent('touchstart', this.binds.touchStartHandler, false);
     this.removeEvent('touchend', this.binds.touchEndHandler, false);
     this.removeEvent('touchmove', this.binds.touchMoveHandler, false);
+    this.removeEvent('wheel', this.binds.wheelHandler, false);
   }
 }
 

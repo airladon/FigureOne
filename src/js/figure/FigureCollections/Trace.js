@@ -120,8 +120,8 @@ export type COL_Trace = {
  *
  * All examples below also use this power function to generate the traces:
  * ```javascript
- * const pow = (pow = 2, stop = 10, step = 0.05) => {
- *   const xValues = Fig.range(0, stop, step);
+ * const pow = (pow = 2, start = 0, stop = 10, step = 0.05) => {
+ *   const xValues = Fig.range(start, stop, step);
  *   return xValues.map(x => new Fig.Point(x, x ** pow));
  * }
  * ```
@@ -155,7 +155,7 @@ export type COL_Trace = {
  *   name: 'plot',
  *   make: 'collections.plot',
  *   trace: {
- *     points: pow(2, 10, 1),
+ *     points: pow(2, 0, 10, 1),
  *     markers: true,
  *   },
  * });
@@ -166,7 +166,7 @@ export type COL_Trace = {
  *   name: 'plot',
  *   make: 'collections.plot',
  *   trace: {
- *     points: pow(2, 10, 1),
+ *     points: pow(2, 0, 10, 1),
  *     markers: {
  *       radius: 0.035,
  *       sides: 20,
@@ -181,7 +181,7 @@ export type COL_Trace = {
  *   name: 'plot',
  *   make: 'collections.plot',
  *   trace: {
- *     points: pow(2, 10, 1),
+ *     points: pow(2, 0, 10, 1),
  *     line: { width: 0.01, dash: [0.02, 0.01] },
  *     markers: {
  *       radius: 0.035,
@@ -199,7 +199,7 @@ export type COL_Trace = {
  *     pow(2),
  *     { points: pow(2.5), name: 'Power 2.5' },
  *     {
- *       points: pow(3, 10, 1),
+ *       points: pow(3, 0, 10, 1),
  *       name: 'Power 3',
  *       markers: { radius: 0.03 },
  *       line: { width: 0.01 },
@@ -295,6 +295,10 @@ class CollectionsTrace extends FigureElementCollection {
     // if (this._line != null) {
     //   this._line.updatePoints({ points: this.points });
     // }
+  }
+
+  updateAxes() {   // $FlowFixMe
+    this.update(this.points);
   }
 
   getY(xValue: number, precision: number = 8) {

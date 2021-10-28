@@ -40,6 +40,8 @@ function getShapes(getPos) {
     shape('label-scale', { label: { text: 'label', scale: 1.5, location: 'bottom' } }),
     shape('label-font', { label: { text: 'label', font: { family: 'Times', size: 0.2 } } }),
     shape('label-eqn', { label: { text: { scale: 1, forms: { 0: { frac: ['a', 'vinculum', 'b'] } } } } }),
+    shape('label-top-offset', { label: { location: 'left', text: 'test', offset: [0.1, 0.2] } }),
+    shape('label-left-offset', { label: { location: 'top', text: 'test', offset: [0.1, 0.2] } }),
   ];
 }
 

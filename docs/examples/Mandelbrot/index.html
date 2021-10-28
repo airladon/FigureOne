@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>FigureOne</title>
+    <meta name='description' content='Javascript library to draw, animate and interact with shapes, text, plots and equations.'>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link href='../../style.css' rel='stylesheet'>
+    <link href='../examples.css' rel='stylesheet'>
+  </head>
+  <body>
+    <div id="header"></div>
+    <div class="example">
+      <!-- *************************************************************** -->
+      <!-- ************    Example Specific HTML Start     *************** -->
+      <!-- *************************************************************** -->
+
+      <div class="instructions">
+        <p>
+          Demonstrator of custom shader and handling pan and zoom gestures.
+        </p>
+        <p>
+          Explore the Mandelbrot set by zooming in and out at different locations using either a <b>pinch gesture</b> on touch devices, or the <b>vertical mouse wheel</b> on desktops. Pan by <b>dragging a touch or mouse click</b>, or using the <b>horizontal mouse wheel</b>.
+        </p>
+        <p>
+          The number of iterations used to determine whether a value is in the Mandelbrot set (colored black) can be set with the <b>slider</b>. Be careful, high iteration count when viewing many values within the set can lead to slower performance.
+        </p>
+      </div>
+
+      <div class="wrapper wrapper_1_1" style="max-width:500px">
+          <div id="figureOneContainer" class="container container_1_1"></div>
+      </div>
+
+      <!-- *************************************************************** -->
+      <!-- ************    Example Specific HTML End     *************** -->
+      <!-- *************************************************************** -->
+
+    </div>
+    <div id="footer"></div>
+
+    <!-- **********    Choose local or remote package     *************** -->
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/figureone@0.12.0/figureone.min.js"></script>
+
+    <!-- <script type="text/javascript" src='../../../package/index.js'></script> -->
+    <!-- ***************************************************************** -->
+
+    <script type="text/javascript" src="../../fill.js"></script>
+    <script>fillHeader('Example - Mandelbrot Set', 'Mandelbrot Set');</script>
+    <script>fillFooter('..')</script>
+
+    <!-- ***************    Example Specific Scripts     ***************** -->
+    <script type="text/javascript" src='./index.js'></script>
+  </body>
+</html>

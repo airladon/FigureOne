@@ -17,7 +17,7 @@ import type CollectionsTrace, { COL_Trace } from './Trace';
 import type { OBJ_Font, OBJ_Font_Fixed } from '../../tools/types';
 import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type { OBJ_TextLines } from '../FigurePrimitives/FigurePrimitiveTypes2D';
-import type { TypePlotFrame } from './Plot';
+import type { OBJ_PlotFrame } from './Plot';
 import type FigureCollections from './FigureCollections';
 
 /**
@@ -75,7 +75,7 @@ export type OBJ_PlotLegendCustom = {
  * @property {OBJ_Font} [font] default font for trace sample text
  * @property {boolean} [fontColorIsLineColor] set the trace sample text color to
  * the same as the line sample
- * @property {Array<number> | TypePlotFrame} [frame] frame around the legend -
+ * @property {Array<number> | OBJ_PlotFrame} [frame] frame around the legend -
  * specifying just a color will create a solid fill rectangle of that color
  * @property {Array<number>} [show] array of which trace indeces to show if only
  * some should be shown
@@ -94,7 +94,7 @@ export type COL_PlotLegend = {
   offset?: Array<TypeParsablePoint> | TypeParsablePoint,
   font?: OBJ_Font,
   fontColorIsLineColor?: boolean,
-  frame?: Array<number> | TypePlotFrame,
+  frame?: Array<number> | OBJ_PlotFrame,
   show?: Array<number>,
   hide?: Array<number>,
   custom?: OBJ_PlotLegendCustom,
@@ -132,8 +132,8 @@ export type COL_PlotLegend = {
  *
  * All examples below also use this power function to generate the traces:
  * ```javascript
- * const pow = (pow = 2, stop = 10, step = 0.05) => {
- *   const xValues = Fig.range(0, stop, step);
+ * const pow = (pow = 2, start = 0, stop = 10, step = 0.05) => {
+ *   const xValues = Fig.range(start, stop, step);
  *   return xValues.map(x => new Fig.Point(x, x ** pow));
  * }
  * ```
@@ -147,7 +147,7 @@ export type COL_PlotLegend = {
  *     { points: pow(2), name: 'Power 2' },
  *     { points: pow(2.5), name: 'Power 2.5' },
  *     {
- *       points: pow(3, 10, 0.5),
+ *       points: pow(3, 0, 10, 0.5),
  *       name: 'Power 3',
  *       markers: { radius: 0.03, sides: 10 },
  *     },
@@ -164,7 +164,7 @@ export type COL_PlotLegend = {
  *     { points: pow(2), name: 'Power 2' },
  *     { points: pow(2.5), name: 'Power 2.5' },
  *     {
- *       points: pow(3, 10, 0.5),
+ *       points: pow(3, 0, 10, 0.5),
  *       name: 'Power 3',
  *       markers: { radius: 0.03, sides: 10 },
  *     },
@@ -185,7 +185,7 @@ export type COL_PlotLegend = {
  *     { points: pow(2), name: 'Power 2' },
  *     { points: pow(2.5), name: 'Power 2.5' },
  *     {
- *       points: pow(3, 10, 0.5),
+ *       points: pow(3, 0, 10, 0.5),
  *       name: 'Power 3',
  *       markers: { radius: 0.03, sides: 10 },
  *     },
@@ -209,7 +209,7 @@ export type COL_PlotLegend = {
  *     { points: pow(2), name: 'Power 2' },
  *     { points: pow(2.5), name: 'Power 2.5' },
  *     {
- *       points: pow(3, 10, 0.5),
+ *       points: pow(3, 0, 10, 0.5),
  *       name: 'Power 3',
  *       markers: { radius: 0.03, sides: 10 },
  *     },
