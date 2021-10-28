@@ -1,4 +1,4 @@
-/* global __frames */
+/* global __frames __duration __timeStep */
 /* eslint-disable no-global-assign */
 /* eslint no-unused-vars: ["error", { "vars": "local" }] */
 __duration = 10;
