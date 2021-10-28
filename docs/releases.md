@@ -178,3 +178,6 @@ API cleanup
 * Add Solar System Example showing a pannable and zoomable plot
 * Add Mandlebrot Set example showing the gesture primitive
 * Make a `Scene` zoomable and pannable
+
+## 0.12.1
+* Fix: Handle WebGL context loss more gracefully, and allow automatic restore
