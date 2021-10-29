@@ -633,11 +633,11 @@ export type OBJ_PolylineToShapes = {
 /**
  * `polylineToShapes` distributes a number of shapes equally along a polyline.
  *
- * ![](./apiassets/polylineToShapes.gif)
+ * ![](./apiassets/polylinetoshapes.gif)
  *
- * ![](./apiassets/polylineToShapes2.gif)
+ * ![](./apiassets/polylinetoshapes2.gif)
  *
- * ![](./apiassets/polylineToShapes3.gif)
+ * ![](./apiassets/polylinetoshapes3.gif)
  *
  * The polyline is defined by an array of points, where each point is a corner
  * in the polyline
