@@ -365,6 +365,7 @@ toc:
   - OBJ_PlotPanOptions
   - OBJ_PlotAxis
   - OBJ_PlotTitle
+  - OBJ_PlotAreaLabelBuffer
   - OBJ_SurroundAnimationStep
   - TypeColor
   - OBJ_AddElement
