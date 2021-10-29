@@ -181,3 +181,6 @@ API cleanup
 
 ## 0.12.1
 * Fix: Handle WebGL context loss more gracefully, and allow automatic restore
+
+## 0.12.2
+* Fix: `COL_Plot.plotAreaLabels` was not setting position of y axis values correctly. This was fixed and an additional option `OBJ_PlotAreaLabelBuffer` was added to customize the buffer from the plot area border.

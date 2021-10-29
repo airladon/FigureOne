@@ -114,6 +114,27 @@ export type OBJ_PlotAxis = {
 } & COL_Axis;
 
 /**
+ * Plot area label buffer where a positive value is more buffer
+ * @property {number} [left]
+ * @property {number} [right]
+ * @property {number} [top]
+ * @property {number} [bottom]
+ */
+export type OBJ_PlotAreaLabelBuffer = {
+  left?: number,
+  right?: number,
+  top?: number,
+  bottom?: number,
+}
+
+export type OBJ_PlotAreaLabelBufferFixed = {
+  left: number,
+  right: number,
+  top: number,
+  bottom: number,
+}
+
+/**
  * Plot title.
  *
  * {@link OBJ_TextLines}` & { offset: `{@link TypeParsablePoint}` }`
@@ -167,7 +188,8 @@ export type OBJ_PlotTitle = OBJ_TextLines & { offset: TypeParsablePoint };
  * axes should cross. If defined, each `axis.position` will be overridden. If
  * the cross point is outside of the plot area, then the axes will be drawn on
  * the border of the plot area. (`undefined`)
- * @property {boolean} [plotAreaLabels] if `true` then axes with a cross point
+ * @property {boolean | OBJ_PlotAreaLabelBuffer} [plotAreaLabels] if `true`
+ * then axes with a cross point
  * will be drawn such that the labels stay within the plot area. So, if the
  * labels are on the left side of a y axis, and the cross point is out of the
  * plot area to the left, then instead of the axis being drawn on the left edge
@@ -207,7 +229,7 @@ export type COL_Plot = {
   gestureArea?: OBJ_GestureArea,
   cross?: TypeParsablePoint,
   autoGrid?: boolean,
-  plotAreaLabels?: boolean,
+  plotAreaLabels?: boolean | OBJ_PlotAreaLabelBuffer,
   styleTheme?: 'box' | 'numberLine' | 'positiveNumberLine',
   colorTheme?: 'light' | 'dark',
 } & OBJ_Collection;
@@ -522,7 +544,7 @@ class CollectionsPlot extends FigureElementCollection {
   };
 
   autoGrid: boolean;
-  plotAreaLabels: boolean;
+  plotAreaLabels: boolean | OBJ_PlotAreaLabelBufferFixed;
   forceColor: null | TypeColor;
   zoomPoint: null | Point;
 
@@ -618,6 +640,13 @@ class CollectionsPlot extends FigureElementCollection {
       this.autoGrid = styleTheme.autoGrid;
     }
     this.plotAreaLabels = options.plotAreaLabels;
+    if (typeof this.plotAreaLabels === 'object') {
+      this.plotAreaLabels = joinObjects(
+        {}, {
+          left: 0, right: 0, bottom: 0, top: 0,
+        }, this.plotAreaLabels,
+      );
+    }
     if (options.cross != null) {
       this.cross = getPoint(options.cross);
     }
@@ -713,25 +742,34 @@ class CollectionsPlot extends FigureElementCollection {
     let xMin = 0;
     let xMax = this.width;
     if (this.plotAreaLabels) {
+      let left = 0;
+      let right = 0;
+      let bottom = 0;
+      let top = 0;
+      if (!(typeof this.plotAreaLabels === 'boolean')) {
+        ({
+          left, right, bottom, top,
+        } = this.plotAreaLabels);
+      }
       if (_x._labels != null) {
         const labelRect = _x._labels.getBoundingRect();
-        yMin = Math.max(yMin, -labelRect.bottom * 1.2);
-        yMax = Math.min(yMax, this.height - labelRect.top);
+        yMin = Math.max(yMin, -labelRect.bottom + bottom);
+        yMax = Math.min(yMax, this.height - labelRect.top - top);
       }
       if (_x._ticks0) {
         const ticksRect = _x._ticks0.getBoundingRect();
-        yMin = Math.max(yMin, -ticksRect.bottom);
-        yMax = Math.min(yMax, this.height - ticksRect.top);
+        yMin = Math.max(yMin, -ticksRect.bottom + bottom);
+        yMax = Math.min(yMax, this.height - ticksRect.top - top);
       }
       if (_y._labels != null) {
         const labelRect = _y._labels.getBoundingRect();
-        xMin = Math.max(xMin, -labelRect.left);
-        xMax = Math.min(xMax, this.height - labelRect.right);
+        xMin = Math.max(xMin, -labelRect.left + left);
+        xMax = Math.min(xMax, this.width - labelRect.right - right);
       }
       if (_y._ticks0) {
         const ticksRect = _y._ticks0.getBoundingRect();
-        xMin = Math.max(xMin, -ticksRect.left);
-        xMax = Math.min(xMax, this.height - ticksRect.right);
+        xMin = Math.max(xMin, -ticksRect.left + left);
+        xMax = Math.min(xMax, this.width - ticksRect.right - right);
       }
     }
     const y = clipValue(xAxisYPosition, yMin, yMax);
