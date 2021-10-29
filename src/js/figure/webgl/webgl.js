@@ -216,7 +216,7 @@ class WebGLInstance {
     program: WebGLProgram;
   }>;
 
-  targetTexture: TargetTexture;
+  targetTexture: null | TargetTexture;
 
   addTexture(
     id: string,
@@ -322,28 +322,27 @@ class WebGLInstance {
       // $FlowFixMe
       gl = glMock;
     }
-    this.programs = [];
-    this.lastUsedProgram = null;
-    this.textures = {};
     if (gl != null) {
       // $FlowFixMe
-      this.gl = gl;
-      
-      // this.locations = getGLLocations(this.gl, this.program, shaderLocations);
-
-      // Prep canvas
-      this.resize();
-
-
-      // Clear the canvas - removing this as it's done in the draw frame
-      // this.gl.clearColor(1, 1, 1, 1);
-      // this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-      this.gl.disable(this.gl.DEPTH_TEST);
-      // $FlowFixMe
-      this.gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA)
-      this.gl.enable(gl.BLEND);
-      this.targetTexture = new TargetTexture(this);
+      this.init(gl);
     }
+  }
+
+  init(gl: WebGLRenderingContext) {
+    this.gl = gl;
+    this.textures = {};
+    this.programs = [];
+    this.targetTexture = null;
+    this.lastUsedProgram = null;
+    this.resize();
+    // Clear the canvas - removing this as it's done in the draw frame
+    // this.gl.clearColor(1, 1, 1, 1);
+    // this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+    this.gl.disable(this.gl.DEPTH_TEST);
+    // $FlowFixMe
+    this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA)
+    this.gl.enable(this.gl.BLEND);
+    this.targetTexture = new TargetTexture(this);
   }
 
   resize() {
@@ -365,8 +364,9 @@ class WebGLInstance {
     }
 
     this.gl.viewport(0, 0, this.gl.drawingBufferWidth, this.gl.drawingBufferHeight);
-    if (this.targetTexture != null)
-    this.targetTexture.setFramebufferAttachmentSizes(this.gl.canvas.width, this.gl.canvas.height);
+    if (this.targetTexture != null) {
+      this.targetTexture.setFramebufferAttachmentSizes(this.gl.canvas.width, this.gl.canvas.height);
+    }
   }
   // resize() {
   //   var width = this.gl.canvas.clientWidth;

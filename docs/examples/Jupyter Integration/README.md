@@ -80,7 +80,7 @@ This cell will load `FigureOne`, and then hide this setup code as well.
 %%javascript
 require.config({ 
   paths: { 
-    Fig: 'https://cdn.jsdelivr.net/npm/figureone@0.12.0/figureone.min'
+    Fig: 'https://cdn.jsdelivr.net/npm/figureone@0.12.1/figureone.min'
   },
   scriptType: 'text/javascript'
 });

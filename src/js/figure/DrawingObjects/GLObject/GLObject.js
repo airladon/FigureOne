@@ -53,6 +53,7 @@ class GLObject extends DrawingObject {
     mapTo: Rect,
     mapFrom: Rect,
     data?: ?Image,
+    loadColor: TypeColor,
   };
 
   attributes: {
@@ -86,6 +87,11 @@ class GLObject extends DrawingObject {
   selectorProgramIndex: number;
   onLoad: ?(() => void);
 
+  vertexShader: TypeVertexShader;
+  fragmentShader: TypeFragmentShader;
+  selectorVertexShader: TypeVertexShader;
+  selectorFragmentShader: TypeFragmentShader;
+
 
   constructor(
     webgl: WebGLInstance,
@@ -101,13 +107,36 @@ class GLObject extends DrawingObject {
     this.glPrimitive = this.gl.TRIANGLES;
     this.webgl = webgl;
     this.z = 0;
-    this.programIndex = this.webgl.getProgram(vertexShader, fragmentShader);
+    // this.programIndex = this.webgl.getProgram(vertexShader, fragmentShader);
+    this.vertexShader = vertexShader;
+    this.fragmentShader = fragmentShader;
+    this.selectorVertexShader = selectorVertexShader;
+    this.selectorFragmentShader = selectorFragShader;
     this.type = 'glPrimitive';
     this.attributes = {};
     this.numVertices = 0;
     this.uniforms = {};
     this.texture = null;
-    this.selectorProgramIndex = this.webgl.getProgram(selectorVertexShader, selectorFragShader);
+    // this.selectorProgramIndex = this.webgl.getProgram(selectorVertexShader, selectorFragShader);
+    this.initProgram();
+  }
+
+  init(webgl: WebGLInstance) {
+    this.webgl = webgl;
+    this.gl = this.webgl.gl;
+    this.initProgram();
+    this.initAttributes();
+    this.initTexture();
+  }
+
+  initProgram() {
+    this.programIndex = this.webgl.getProgram(
+      this.vertexShader,
+      this.fragmentShader,
+    );
+    this.selectorProgramIndex = this.webgl.getProgram(
+      this.selectorVertexShader, this.selectorFragmentShader,
+    );
   }
 
   showShaders() {
@@ -144,6 +173,11 @@ class GLObject extends DrawingObject {
     }
   }
 
+  initAttributes() {
+    Object.keys(this.attributes).forEach((name) => {
+      this.fillBuffer(name, this.attributes[name].data);
+    });
+  }
 
   setZ(z: number) {
     this.z = z;
@@ -237,19 +271,28 @@ class GLObject extends DrawingObject {
         mapFrom: getRect(mapFrom),
         repeat,
         src: location,
-        points: [],
-        buffer: this.gl.createBuffer(),
+        points,
+        buffer: null,
         type: 'image',
         data: null,
         mapToBuffer,
+        loadColor,
       };
     }
     this.onLoad = onLoad;
+  }
 
-    const { texture, gl, webgl } = this;
+  initTexture() {
+    const {
+      texture, gl, webgl,
+    } = this;
+
     if (texture == null) {
       return;
     }
+
+    const { loadColor, points } = texture;
+    texture.buffer = this.gl.createBuffer();
 
     // $FlowFixMe
     this.updateTextureMap(points);
