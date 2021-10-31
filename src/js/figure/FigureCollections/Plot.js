@@ -13,7 +13,7 @@ import type { TypeParsablePoint } from '../../tools/g2';
 import { joinObjects } from '../../tools/tools';
 import { clipValue } from '../../tools/math';
 import {
-  FigureElementCollection,
+  FigureElementCollection, FigureElement,
 } from '../Element';
 import type CollectionsAxis, { COL_Axis } from './Axis';
 import type CollectionsTrace, { COL_Trace } from './Trace';
@@ -1113,6 +1113,18 @@ class CollectionsPlot extends FigureElementCollection {
     return null;
   }
 
+  /**
+   * Convert a plot point value on the axes `yAxisName` and `xAxisName` to
+   * a plot draw space position.
+   *
+   * The plot draw space is (0, 0) at the bottom
+   * left of the plot area and extends to (`width`, `height`) in the top right
+   * corner of the plot area where `width` and `height` are defined when
+   * creating the plot.
+   * @param {TypeParsablePoint} point
+   * @param {string = 'x'} xAxisName
+   * @param {string = 'y'} yAxisName
+   */
   pointToDraw(
     point: TypeParsablePoint,
     xAxisName: string = 'x',
@@ -1127,8 +1139,20 @@ class CollectionsPlot extends FigureElementCollection {
     return new Point(xAxis.valueToDraw(p.x), yAxis.valueToDraw(p.y));
   }
 
+  /**
+   * Convert a plot draw space position to a plot point value on the axes
+   * `yAxisName` and `xAxisName`.
+   *
+   * The plot draw space is (0, 0) at the bottom
+   * left of the plot area and extends to (`width`, `height`) in the top right
+   * corner of the plot area where `width` and `height` are defined when
+   * creating the plot.
+   * @param {TypeParsablePoint} drawSpacePoint
+   * @param {string = 'x'} xAxisName
+   * @param {string = 'y'} yAxisName
+   */
   drawToPoint(
-    point: TypeParsablePoint,
+    drawSpacePoint: TypeParsablePoint,
     xAxisName: string = 'x',
     yAxisName: string = 'y',
   ) {
@@ -1137,8 +1161,33 @@ class CollectionsPlot extends FigureElementCollection {
     if (xAxis == null || yAxis == null) {
       throw new Error(`Plot.drawToPoint Error: Both xAxis and yAxis need to be defined. xAxis: ${JSON.stringify(xAxis)}, yAxis: ${JSON.stringify(yAxis)}`);
     }
-    const p = getPoint(point);
+    const p = getPoint(drawSpacePoint);
     return new Point(xAxis.drawToValue(p.x), yAxis.drawToValue(p.y));
+  }
+
+  /**
+   * Set a figure element's position to the position in the figure where some
+   * point on the plot is.
+   * @param {FigureElement} element
+   * @param {TypeParsablePoint} point
+   */
+  setElementTo(
+    element: FigureElement,
+    point: TypeParsablePoint,
+  ) {
+    const figurePosition = this.pointToDraw(point).transformBy(this.spaceTransformMatrix('draw', 'figure'));
+    element.setFigurePosition(figurePosition);
+  }
+
+  /**
+   * Get the plot value where some element is.
+   * @param {FigureElement} element
+   */
+  getPointAtElement(element: FigureElement) {
+    return this.drawToPoint(
+      element.getPosition('figure')
+        .transformBy(this.spaceTransformMatrix('figure', 'draw')),
+    );
   }
 
   addTraces(traces: Array<COL_Trace>) {
