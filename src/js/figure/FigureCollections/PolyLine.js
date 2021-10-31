@@ -242,7 +242,7 @@ export type OBJ_PolylineSide = {}
  * side annotations - leave undefined for no side annotations
  * @property {OBJ_PolylinePad | Array<OBJ_PolylinePadSingle>} [pad]
  * move pad - leave undefined for no move pads
- * @property {null | OBJ_ValidShapeHideThresholds} [makeValid] if defined, whenever
+ * @property {null | OBJ_ValidShape} [makeValid] if defined, whenever
  * points are updated the shape will be checked to ensure consistency with
  * displayed labels of angles and sides.
  */
@@ -1212,7 +1212,7 @@ export default class CollectionsPolyline extends FigureElementCollection {
         s12 = s01;
         s20 = s01;
       // If Isosceles possibility 1:
-      } else if (a0 === a1) {
+      } else if (a0 === a2) {
         s20 = s12;
         if (s01 === s12) {
           const moreAccurate = round(side01.getLength(), sidePrecision + 1);
@@ -1223,7 +1223,7 @@ export default class CollectionsPolyline extends FigureElementCollection {
           }
         }
       // If Isosceles possibility 2:
-      } else if (a0 === a2) {
+      } else if (a1 === a2) {
         s01 = s12;
         if (s20 === s12) {
           const moreAccurate = round(side20.getLength(), sidePrecision + 1);
@@ -1234,7 +1234,7 @@ export default class CollectionsPolyline extends FigureElementCollection {
           }
         }
       // If Isosceles possibility 3:
-      } else if (a1 === a2) {
+      } else if (a0 === a1) {
         s20 = s01;
         if (s12 === s01) {
           const moreAccurate = round(side12.getLength(), sidePrecision + 1);
