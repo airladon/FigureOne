@@ -767,6 +767,7 @@ class FigureElement {
   }
 
   drawNumber: number;
+  moveSetTransform: boolean;
 
   // // TODO
   // move: {
@@ -836,6 +837,7 @@ class FigureElement {
     //   parentCount: 0,
     //   elementCount: 0,
     // };
+    this.moveSetTransform = false;
     this.custom = {};
     this._custom = {};
     this.customState = {};
@@ -1651,6 +1653,8 @@ class FigureElement {
     //   this.notifications.publish('beforeSetTransform', [transform]);
     //   this.transform = transform;
     // }
+    const fromMovement = this.moveSetTransform;
+    this.moveSetTransform = false;
     this.notifications.publish('beforeSetTransform', [transform]);
     if (!this.cancelSetTransform) {
       this.transform = transform;
@@ -1660,12 +1664,15 @@ class FigureElement {
     // if (this.simple === false) {
     //   this.updateDrawTransforms(this.parentTransform, this.lastScene, false);
     // }
-    this.transformSet(publish);
+    this.transformSet(publish, fromMovement);
   }
 
-  transformSet(publish: boolean = true) {
+  transformSet(publish: boolean = true, fromMovement: boolean = false) {
     if (this.internalSetTransformCallback) {
       this.fnMap.exec(this.internalSetTransformCallback, this.transform);
+    }
+    if (fromMovement) {
+      this.notifications.publish('moved', [this.transform]);
     }
     if (publish) {
       this.notifications.publish('setTransform', [this.transform]);
@@ -1734,6 +1741,7 @@ class FigureElement {
 
       const t = this.transform._dup();
       this.updateTransformWithMovement(next.value, t);
+      this.moveSetTransform = true;
       this.setTransform(t);
       // this.transformSet();
     }
@@ -2119,6 +2127,7 @@ class FigureElement {
     const t = this.transform._dup();
     this.updateTransformWithMovement(value, t);
     // this.transformSet();
+    this.moveSetTransform = true;
     this.setTransform(t);
     // let tBounds;
     // if (this.move.bounds != null && this.move.bounds !== 'none') {  // $FlowFixMe
@@ -3468,13 +3477,17 @@ class FigureElement {
    * @param {TypeParsablePoint} figurePosition
    */
   setFigurePosition(figurePosition: TypeParsablePoint) {
-    const figureToGLSpace = this.spaceTransformMatrix('figure', 'gl');
-    // $FlowFixMe
-    const glLocation = getPoint(figurePosition).transformBy(figureToGLSpace.matrix());
-    // const t = new Transform(this.lastDrawTransform.def.slice(this.transform.def.length));
-    const t = this.getLocalToFigureTransform();
-    const newLocation = glLocation.transformBy(m3.inverse(t.matrix()));
-    this.setPosition(newLocation._dup());
+    // const figureToGLSpace = this.spaceTransformMatrix('figure', 'gl');
+    // // $FlowFixMe
+    // const glLocation = getPoint(figurePosition).transformBy(figureToGLSpace);
+    // // const t = new Transform(this.lastDrawTransform.def.slice(this.transform.def.length));
+    // const t = this.getLocalToFigureTransform();
+    // const newLocation = glLocation.transformBy(m3.inverse(t.matrix()));
+    // this.setPosition(newLocation._dup());
+    this.setPosition(
+      getPoint(figurePosition)
+        .transformBy(this.spaceTransformMatrix('figure', 'local')),
+    );
   }
 
   setFigurePositionToElement(element: FigureElement) {

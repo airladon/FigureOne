@@ -184,3 +184,9 @@ API cleanup
 
 ## 0.12.2
 * Fix: `COL_Plot.plotAreaLabels` was not setting position of y axis values correctly. This was fixed and an additional option `OBJ_PlotAreaLabelBuffer` was added to customize the buffer from the plot area border.
+
+## 0.13.0
+* Fix: `Collections.polyline.makeValid` isosceles triangle check now setting the correct sides to equal
+* Add `'moved'` notification to `FigureElement` which is published when the element is moved by a user
+* Add documentation for `Collections.plot.drawToPoint` and `Collections.plot.pointToDraw`
+* Add `Collections.plot.setElementTo` and `Collections.plot.getPointAtElement`

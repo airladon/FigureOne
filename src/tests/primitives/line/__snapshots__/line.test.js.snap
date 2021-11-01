@@ -472,6 +472,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "Update1",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -1344,6 +1345,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "arrow-bar",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -2324,6 +2326,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "arrow-barb",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -4264,6 +4267,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "arrow-circ",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -5316,6 +5320,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "arrow-line",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -7256,6 +7261,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "arrow-poly",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -8200,6 +8206,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "arrow-revTri",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -9036,6 +9043,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "arrow-tri",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -9735,6 +9743,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "border-buffer",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -10474,6 +10483,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "border-custom",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -11228,6 +11238,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "border-custom2",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -11900,6 +11911,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "border-draw",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -12572,6 +12584,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "border-num",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -13244,6 +13257,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "border-rect",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -14015,6 +14029,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "dash",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -14786,6 +14801,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "dash-neg",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -15558,6 +15574,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "dash-offset",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -16329,6 +16346,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "dash-pos",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -17100,6 +17118,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "dash-widthIsNum",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -17772,6 +17791,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "definition-length",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -18444,6 +18464,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "definition-override",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -19116,6 +19137,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "definition-points",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -19805,6 +19827,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "drawBorder-custom",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -20477,6 +20500,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "drawBorderBuffer-0",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -21166,6 +21190,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "drawBorderBuffer-custom",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -21838,6 +21863,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "drawBorderBuffer-number",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -22670,6 +22696,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "linePrimitives-close",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -23358,6 +23385,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "linePrimitives-open",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -24030,6 +24058,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "touchBorder-border",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -24702,6 +24731,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "touchBorder-buffer",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -25393,6 +25423,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "touchBorder-custom",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -26127,6 +26158,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "touchBorder-custom2",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -26840,6 +26872,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "touchBorder-draw",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -27539,6 +27572,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "touchBorder-num",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -28238,6 +28272,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "touchBorder-rect",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -28910,6 +28945,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "widthIs-mid",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -29582,6 +29618,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "widthIs-neg",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -30254,6 +30291,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "widthIs-num",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
@@ -30926,6 +30964,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "widthIs-pos",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
