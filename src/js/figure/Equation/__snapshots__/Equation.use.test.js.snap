@@ -629,6 +629,7 @@ FigureElementPrimitive {
     },
     "type": "translation",
   },
+  "moveSetTransform": false,
   "name": "a",
   "notifications": NotificationManager {
     "fnMap": FunctionMap {
