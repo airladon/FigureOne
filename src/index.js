@@ -180,6 +180,7 @@ const Fig = {
   roundNum: math.roundNum,
   range: math.range,
   randSign: math.randSign,
+  randBool: math.randBool,
   randInt: math.randInt,
   rand: math.rand,
   randElement: math.randElement,
