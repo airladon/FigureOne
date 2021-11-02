@@ -160,7 +160,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       this.atlas[atlasString[i]] = {
         width, ascent, descent, offsetX, offsetY,
       };
-      x += width * 1.2;
+      x += width * 2;
       if (x >= dimension - fontSize) {
         x = fontSize;
         y += fontSize * 1.2;
@@ -187,17 +187,20 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       const {
         width, ascent, descent, offsetX, offsetY,
       } = this.atlas[this.text[i]];
-      vertices.push(x, -descent * r, x + width * r, -descent * r, x + width * r, ascent * r);
-      vertices.push(x, -descent * r, x + width * r, ascent * r, x, ascent * r);
+      const s = 0.5;
+      const minX = x - width * r * s;
+      const maxX = x + width * r + width * r * s;
+      vertices.push(minX, -descent * r, maxX, -descent * r, maxX, ascent * r);
+      vertices.push(minX, -descent * r, maxX, ascent * r, minX, ascent * r);
       texCoords.push(
-        offsetX, offsetY - descent,
-        offsetX + width, offsetY - descent,
-        offsetX + width, offsetY + ascent,
+        offsetX - width * s, offsetY - descent,
+        offsetX + width + width * s, offsetY - descent,
+        offsetX + width + width * s, offsetY + ascent,
       );
       texCoords.push(
-        offsetX, (offsetY - descent),
-        (offsetX + width), (offsetY + ascent),
-        offsetX, (offsetY + ascent),
+        offsetX - width * s, offsetY - descent,
+        offsetX + width + width * s, offsetY + ascent,
+        offsetX - width * s, offsetY + ascent,
       );
       x += width * r;
     }
