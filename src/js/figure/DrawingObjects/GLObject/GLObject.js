@@ -282,6 +282,7 @@ class GLObject extends DrawingObject {
     this.onLoad = onLoad;
   }
 
+
   initTexture() {
     const {
       texture, gl, webgl,

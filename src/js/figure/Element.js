@@ -4955,6 +4955,7 @@ class FigureElementCollection extends FigureElement {
       ellipse: shapes.ellipse.bind(shapes),
       gl: shapes.gl.bind(shapes),
       morph: shapes.morph.bind(shapes),
+      glText: shapes.glText.bind(shapes),
       arc: shapes.arc.bind(shapes),
       triangle: shapes.triangle.bind(shapes),
       generic: shapes.generic.bind(shapes),

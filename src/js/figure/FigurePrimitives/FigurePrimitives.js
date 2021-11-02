@@ -30,6 +30,7 @@ import GLObject from '../DrawingObjects/GLObject/GLObject';
 import { CustomAnimationStep } from '../Animation/Animation';
 // eslint-disable-next-line import/no-cycle
 import FigureElementPrimitiveMorph from './FigureElementPrimitiveMorph';
+import FigureElementPrimitiveGLText from './FigureElementPrimitiveGLText';
 // eslint-disable-next-line import/no-cycle
 // import Generic from './Generic';
 import Text from './Text';
@@ -1431,6 +1432,36 @@ export default class FigurePrimitives {
     ];
     // element.custom.getLine = (o: OBJ_PolyLineTris) => this.getPolylineTris(o);
     element.custom.updatePoints(joinObjects({}, ...options));
+    return element;
+  }
+
+  glText(...options) {
+    const defaultOptions = {
+      font: {
+        family: this.defaultFont.family,
+        style: this.defaultFont.style,
+        size: this.defaultFont.size,
+        weight: this.defaultFont.weight,
+      },
+      xAlign: 'left',
+      yAlign: 'baseline',
+      transform: new Transform().scale(1).rotate(0).translate(0, 0),
+      color: this.defaultColor,
+      name: generateUniqueId('primitive_'),
+    };
+    const glObject = new GLObject(
+      this.webgl[0],
+      { dimension: 2, color: 'texture' },
+      { color: 'texture' },
+    );
+
+    // Set the glPrimitive
+    // glObject.setPrimitive(options.glPrimitive.toUpperCase());
+
+    const o = joinObjects({}, defaultOptions, ...options);
+    const element = new FigureElementPrimitiveGLText(glObject, o);
+    element.timeKeeper = this.timeKeeper;
+    element.recorder = this.recorder;
     return element;
   }
 
