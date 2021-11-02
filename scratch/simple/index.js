@@ -33,12 +33,12 @@ figure.add({
   move: { type: 'rotation' },
 })
 
-// figure.add({
-//   make: 'glText',
-//   // gl: true,
-//   text: 'Qwerty 123',
-//   font: { size: 0.5 },
-//   color: [1, 0, 0, 1],
-//   move: { type: 'rotation' },
-//   position: [0.5, 0],
-// })
+figure.add({
+  make: 'glText',
+  // gl: true,
+  text: 'Qwerty 123',
+  font: { size: 0.5 },
+  color: [1, 0, 0, 1],
+  move: { type: 'scale' },
+  position: [0.5, 0],
+})

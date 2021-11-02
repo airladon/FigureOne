@@ -128,6 +128,9 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     this.fontSize = fontSize;
     const id = `${this.font.family}${fontSize}${this.font.style}${this.font.weight}`;
     if (webgl.textures[id] != null) {
+      this.drawingObject.texture.id = id;
+      this.atlas = webgl.textures[id].atlas;
+      this.dimension = webgl.textures[id].atlasDimension;
       return;
     }
 
@@ -165,7 +168,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     }
 
     const glTexture = gl.createTexture();
-    webgl.addTexture(id, glTexture, 'image');
+    webgl.addTexture(id, glTexture, 'image', this.atlas, this.dimension);
     gl.activeTexture(
       gl.TEXTURE0 + webgl.textures[id].index,
     );

@@ -196,7 +196,9 @@ class WebGLInstance {
       index: number;
       type: 'image' | 'canvasText';
       state: 'loading' | 'loaded';
-      onLoad: Array<() => void>
+      onLoad: Array<() => void>;
+      atlas: Object;
+      atlasDimension: number;
     };
   };
   programs: Array<{
@@ -222,6 +224,8 @@ class WebGLInstance {
     id: string,
     glTexture: WebGLTexture,
     type: 'image' | 'canvasText',
+    atlas: Object = {},
+    atlasDimension: number = 0,
   ) {
     if (this.textures[id] && this.textures[id].glTexture != null) {
       return this.textures[id].index;
@@ -238,6 +242,8 @@ class WebGLInstance {
       type,
       state: 'loaded',
       onLoad: [],
+      atlas,
+      atlasDimension,
     };
     return index;
   }
