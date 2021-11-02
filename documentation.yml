@@ -239,6 +239,7 @@ toc:
   - range
   - randSign
   - randInt
+  - randBool
   - rand
   - randElement
   - randElements

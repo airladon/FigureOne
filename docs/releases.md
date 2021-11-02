@@ -190,3 +190,8 @@ API cleanup
 * Add `'moved'` notification to `FigureElement` which is published when the element is moved by a user
 * Add documentation for `Collections.plot.drawToPoint` and `Collections.plot.pointToDraw`
 * Add `Collections.plot.setElementTo` and `Collections.plot.getPointAtElement`
+
+## 0.14.0
+* Fix: `randInt` was not returning the max value
+* Fix: `collections.angle` was not correctly rotating label when angle was part of a collection
+* Add: `randBool` to retrieve a random boolean

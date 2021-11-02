@@ -1572,7 +1572,11 @@ class CollectionsAngle extends FigureElementCollection {
         this.updateCurve(curveAngle, fullCurveAngle, rotationForArrow1, true);
       }
     }
-    this.updateLabel();
+    if (labelRotationOffset != null) {
+      this.updateLabel(this.getRotation() + labelRotationOffset);
+    } else {
+      this.updateLabel();
+    }
 
     const { _side1, side1 } = this;
     if (_side1 && side1) {
