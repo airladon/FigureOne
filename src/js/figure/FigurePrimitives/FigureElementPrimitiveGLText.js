@@ -35,10 +35,6 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       options.parent, options.name, options.timeKeeper,
     );
     this.font = new FigureFont(options.font);
-    this.drawingObject.texture = {
-      buffer: this.drawingObject.gl.createBuffer(),
-    };
-    // this.createAtlas();
     this.atlas = {};
     this.text = options.text;
     this.drawingObject.addVertices([0, 0, 4, 0, 4, 4, 0, 0, 4, 4, 0, 4], 2);
@@ -53,6 +49,14 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       midDescent: 0.2,
       descent: 0.08,
     };
+  }
+
+  showMap(dimension: number = 1) {
+    const d = dimension;
+    this.drawingObject.updateVertices([0, 0, d, 0, d, d, 0, 0, d, d, 0, d]);
+    const points = [0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1];
+    this.drawingObject.updateTextureMap(points);
+    this.animateNextFrame();
   }
 
   setFigure(figure: OBJ_FigureForElement) {
@@ -127,6 +131,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     const fontSize = this.font.size / scene.heightNear * gl.canvas.height;
     this.fontSize = fontSize;
     const id = `${this.font.family}${fontSize}${this.font.style}${this.font.weight}`;
+    this.drawingObject.addTexture(`${this.font.family}${fontSize}${this.font.style}${this.font.weight}`);
     if (webgl.textures[id] != null) {
       this.drawingObject.texture.id = id;
       this.atlas = webgl.textures[id].atlas;
@@ -134,9 +139,10 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       return;
     }
 
-    const atlasString = `QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm,./<>?;':"[]\{}|1234567890!@#$%^&*()-=_+" `;
 
-    const dimension = Math.ceil(Math.sqrt(atlasString.length)) * fontSize * 1.2;
+    const atlasString = `QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm,./<>?;':"[]\{}|1234567890!@#$%^&*()-=_+" \u00d7\u00f7\u0391\u0392\u0393\u0394\u0395\u0396\u0397\u0398\u0399\u039A\u039B\u039C\u039D\u039E\u039F\u03A0\u03A1\u03A3\u03A4\u03A5\u03A6\u03A7\u03A8\u03A9\u03B1\u03B2\u03B3\u03B4\u03B5\u03B6\u03B7\u03B8\u03B9\u03BA\u03BB\u03BC\u03BD\u03BE\u03BF\u03C0\u03C1\u03C2\u03C3\u03C4\u03C5\u03C6\u03C7\u03C8\u03c9`;
+
+    const dimension = Math.ceil(Math.sqrt(atlasString.length) + 1) * fontSize * 1.2;
 
     const canvas = document.createElement('canvas');
     canvas.width = dimension;
@@ -166,15 +172,16 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
         y += fontSize * 1.2;
       }
     }
-
-    const glTexture = gl.createTexture();
-    webgl.addTexture(id, glTexture, 'image', this.atlas, this.dimension);
-    gl.activeTexture(
-      gl.TEXTURE0 + webgl.textures[id].index,
-    );
-    gl.bindTexture(gl.TEXTURE_2D, glTexture);
-    this.drawingObject.texture.id = id;
-    this.drawingObject.addTextureToBuffer(glTexture, ctx.canvas, false);
+    this.drawingObject.texture.data = ctx.canvas;
+    this.drawingObject.initTexture();
+    // const glTexture = gl.createTexture();
+    // webgl.addTexture(id, glTexture, 'image', this.atlas, this.dimension);
+    // gl.activeTexture(
+    //   gl.TEXTURE0 + webgl.textures[id].index,
+    // );
+    // gl.bindTexture(gl.TEXTURE_2D, glTexture);
+    // this.drawingObject.texture.id = id;
+    // this.drawingObject.addTextureToBuffer(glTexture, ctx.canvas, false);
   }
 
   setText(text: string) {
