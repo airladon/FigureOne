@@ -24,40 +24,40 @@ const figure = new Fig.Figure({ scene: [-3, -3, 6, 6]});
 // // ctx.fillText('g', 420, 400);
 // ctx.restore();
 
-// figure.add({
-//   make: 'glText',
-//   // gl: true,
-//   text: 'QwertfMy 123\u03C0',
-//   // text: 'asdf',
-//   font: { size: 0.5, style: 'italic', family: 'Times New Roman' },
-//   color: [1, 0, 0, 1],
-//   move: { type: 'rotation' },
-//   yAlign: 'bottom',
-//   xAlign: 'center',
-//   adjustments: { descent: -0.03 },
-// });
-// figure.add({
-//   make: 'rectangle',
-//   xAlign: 'left',
-//   yAlign: 'bottom',
-//   width: 2,
-//   height: 0.01,
-//   position: [0, 0],
-// });
+figure.add({
+  make: 'glText',
+  // gl: true,
+  text: 'QwertfMy 123\u03C0',
+  // text: 'asdf',
+  font: { size: 0.5, style: 'italic', family: 'Times New Roman' },
+  color: [1, 0, 0, 1],
+  move: { type: 'rotation' },
+  yAlign: 'bottom',
+  xAlign: 'center',
+  adjustments: { descent: -0.03 },
+});
+figure.add({
+  make: 'rectangle',
+  xAlign: 'left',
+  yAlign: 'bottom',
+  width: 2,
+  height: 0.01,
+  position: [0, 0],
+});
 
-// figure.add({
-//   make: 'glText',
-//   // gl: true,
-//   text: 'Qwerty 123\u03C0',
-//   font: { size: 1 },
-//   color: [1, 0, 0, 1],
-//   // move: { type: 'translate' },
-//   move: true,
-//   position: [0, 2],
-// })
+a = figure.add({
+  make: 'text2d',
+  // gl: true,
+  text: 'Qwerty 123\u03C0',
+  font: { size: 1 },
+  // move: { type: 'translate' },
+  move: true,
+  position: [0, 2],
+})
 
 eqn = figure.add({
   make: 'equation',
+  elements: { a: { color: [1, 0, 0, 1] } },
   forms: { 0: [{ frac: ['a', 'vinculum', 'b'] }, '_ = ', '2', 'c'] },
   position: [1, 1],
   textFont: { size: 0.5 },

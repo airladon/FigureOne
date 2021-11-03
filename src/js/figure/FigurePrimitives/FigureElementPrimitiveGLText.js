@@ -89,7 +89,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     this.yAlign = options.yAlign;
     // this.verticals = options.verticals;
     this.adjustments = options.adjustments;
-    this.drawBorder = [new Point(0, 0), new Point(1, 0), new Point(1, 1), new Point(0, 1)];
+    this.drawBorder = [[new Point(0, 0), new Point(1, 0), new Point(1, 1), new Point(0, 1)]];
     this.drawBorderBuffer = this.drawBorder;
     this.color = this.font.color;
   }
@@ -342,12 +342,12 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       this.measure.width,
       this.measure.ascent + this.measure.descent,
     );
-    this.drawBorder = [
+    this.drawBorder = [[
       new Point(bounds.left, bounds.bottom),
       new Point(bounds.right, bounds.bottom),
       new Point(bounds.right, bounds.top),
       new Point(bounds.left, bounds.top),
-    ];
+    ]];
     // this.drawBorder = this.textBorder;
   }
 
