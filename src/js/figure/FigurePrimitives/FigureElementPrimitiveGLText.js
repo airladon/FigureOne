@@ -5,23 +5,38 @@ import {
   Point, Rect, getBoundingBorder, isBuffer,
 } from '../../tools/g2';
 import { joinObjects } from '../../tools/tools';
-// import type DrawingObject from '../DrawingObjects/DrawingObject';
+import type { OBJ_Generic } from './FigurePrimitiveTypes2D';
 import type GLObject from '../DrawingObjects/GLObject/GLObject';
 import { FigureFont } from '../DrawingObjects/TextObject/TextObject';
-// import type { TypeColor, OBJ_Font_Fixed } from '../../tools/types';
+import type { OBJ_Font } from '../../tools/types';
+
+export type OBJ_TextAdjustments = {
+  width: number,
+  descent: number,
+  ascent: number,
+};
+
+export type OBJ_GLText = {
+  text: string,
+  font?: OBJ_Font,
+  xAlign?: 'left' | 'center' | 'right';
+  yAlign?: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
+  adjustments?: OBJ_TextAdjustments;
+} & OBJ_Generic;
+
+export type OBJ_GLText_Fixed = {
+  text: string,
+  font: OBJ_Font,
+  xAlign: 'left' | 'center' | 'right';
+  yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
+  adjustments: OBJ_TextAdjustments;
+} & OBJ_Generic;
 
 // $FlowFixMe
 export default class FigureElementPrimitiveGLText extends FigureElementPrimitive {
   text: string;
   font: FigureFont;
   atlas: Object;
-  verticals: {
-    maxAscent: number,
-    midAscent: number,
-    maxDescent: number,
-    midDescent: number,
-    descent: number,
-  };
 
   adjustments: {
     width: number,
@@ -48,43 +63,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
   textBorder: Array<Point>;
   textBorderBuffer: Array<Point>;
 
-  // constructor(
-  //   drawingObject: DrawingObject,
-  //   transform: Transform,
-  //   color: TypeColor,
-  //   parent: FigureElement | null,
-  //   name: string,
-  //   timeKeeper: TimeKeeper,
-  // ) {
-  //   super(drawingObject, transform, color, parent, name, timeKeeper);
-
-  // // constructor(
-  // //   drawingObject: DrawingObject,
-  // //   options,
-  // // ) {
-  //   // console.log(drawingObject, options)
-  //   // // super(
-  //   // //   drawingObject, options.transform, options.color,
-  //   // //   options.parent, options.name, options.timeKeeper,
-  //   // // );
-  //   // this.font = new FigureFont(options.font);
-  //   // this.atlas = {};
-  //   // this.text = options.text;
-  //   // this.drawingObject.addVertices([0, 0, 4, 0, 4, 4, 0, 0, 4, 4, 0, 4], 2);
-  //   // const points = [0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1];
-  //   // this.drawingObject.updateTextureMap(points);
-  //   // this.xAlign = options.xAlign;
-  //   // this.yAlign = options.yAlign;
-  //   // this.verticals = {
-  //   //   maxAscent: 1.5,
-  //   //   midAscent: 0.95,
-  //   //   maxDescent: 0.5,
-  //   //   midDescent: 0.2,
-  //   //   descent: 0.08,
-  //   // };
-  // }
-
-  setup(options) {
+  setup(options: OBJ_GLText_Fixed) {
     this.font = new FigureFont(options.font);
     this.atlas = {};
     if (typeof options.text[0] === 'string') {
@@ -94,7 +73,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     }
     this.xAlign = options.xAlign;
     this.yAlign = options.yAlign;
-    this.verticals = options.verticals;
+    // this.verticals = options.verticals;
     this.adjustments = options.adjustments;
     this.drawBorder = [new Point(0, 0), new Point(1, 0), new Point(1, 1), new Point(0, 1)];
     this.drawBorderBuffer = this.drawBorder;
@@ -134,8 +113,8 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
 
   measureText(text: string, fontSize: number, width: number) {
     const aWidth = fontSize / 2;
-    let ascent = aWidth * this.verticals.maxAscent;
-    let descent = aWidth * this.verticals.descent;
+    let ascent = aWidth * this.font.maxAscent;
+    let descent = aWidth * this.font.descent;
     // const maxAscentRe =
     //   /[ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890!#%^&()@$Qbdtfhiklj]/g;
     const midAscentRe = /[acemnorsuvwxz*gyqp: ]/g;
@@ -149,21 +128,21 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     const midAscentMatches = text.match(midAscentRe);
     if (Array.isArray(midAscentMatches)) {
       if (midAscentMatches.length === text.length) {
-        ascent = aWidth * this.verticals.midAscent;
+        ascent = aWidth * this.font.midAscent;
       }
     }
 
     const midDescentMatches = text.match(midDecentRe);
     if (Array.isArray(midDescentMatches)) {
       if (midDescentMatches.length > 0) {
-        descent = aWidth * this.verticals.midDescent;
+        descent = aWidth * this.font.midDescent;
       }
     }
 
     const maxDescentMatches = text.match(maxDescentRe);
     if (Array.isArray(maxDescentMatches)) {
       if (maxDescentMatches.length > 0) {
-        descent = aWidth * this.verticals.maxDescent;
+        descent = aWidth * this.font.maxDescent;
       }
     }
     return {
@@ -229,8 +208,8 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     webgl.textures[id].atlasDimension = this.dimension;
   }
 
-  setText(text: string) {
-    this.text = text;
+  measureAndAlignText() {
+    const { text } = this;
     const vertices = [];
     const texCoords = [];
     let x = 0;
@@ -294,6 +273,18 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       descent: maxDescent,
       width: totalWidth,
     };
+  }
+
+  setText(text: string) {
+    this.text = text;
+    this.measureAndAlignText();
+    this.calcBorderAndBounds();
+  }
+
+  setFont(font: OBJ_Font) {
+    const newFont = joinObjects({}, this.font.definition(), font);
+    this.font = new FigureFont(newFont);
+    this.measureAndAlignText();
     this.calcBorderAndBounds();
   }
 
@@ -332,17 +323,19 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   setTextBorder() {}
 
+  // eslint-disable-next-line class-methods-use-this
   setTouchBorder() {}
 
-  _getStateProperties(options: { ignoreShown?: boolean }) {
-    // eslint-disable-line class-methods-use-this
-    return [...super._getStateProperties(options),
-      'zoom',
-      'pan',
-      'onlyWhenTouched',
-      'originalPosition',
-    ];
-  }
+  // _getStateProperties(options: { ignoreShown?: boolean }) {
+  //   // eslint-disable-line class-methods-use-this
+  //   return [...super._getStateProperties(options),
+  //     'xAlign',
+  //     'pan',
+  //     'onlyWhenTouched',
+  //     'originalPosition',
+  //   ];
+  // }
 }

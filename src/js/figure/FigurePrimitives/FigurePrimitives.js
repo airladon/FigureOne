@@ -30,7 +30,9 @@ import GLObject from '../DrawingObjects/GLObject/GLObject';
 import { CustomAnimationStep } from '../Animation/Animation';
 // eslint-disable-next-line import/no-cycle
 import FigureElementPrimitiveMorph from './FigureElementPrimitiveMorph';
+import FigureElementPrimitive2DText from './FigureElementPrimitive2DText';
 import FigureElementPrimitiveGLText from './FigureElementPrimitiveGLText';
+import type { OBJ_GLText } from './FigureElementPrimitiveGLText';
 // eslint-disable-next-line import/no-cycle
 // import Generic from './Generic';
 import Text from './Text';
@@ -1435,7 +1437,7 @@ export default class FigurePrimitives {
     return element;
   }
 
-  glText(...options: Array<OBJ_TextGL>) {
+  glText(...options: Array<OBJ_GLText>) {
     const defaultOptions = {
       font: {
         family: this.defaultFont.family,
@@ -1451,13 +1453,6 @@ export default class FigurePrimitives {
       vertexShader: { dimension: 2, color: 'texture' },
       fragmentShader: { color: 'textureAlpha' },
       vertices: [0, 0, 1, 0, 1, 1],
-      verticals: {
-        maxAscent: 1.5,
-        midAscent: 0.95,
-        maxDescent: 0.5,
-        midDescent: 0.2,
-        descent: 0.08,
-      },
       adjustments: {
         width: 0,
         ascent: 0,
@@ -1465,13 +1460,77 @@ export default class FigurePrimitives {
       },
     };
     const o = this.parseTextOptions(defaultOptions, ...options);
-    console.log(o)
     // const o = joinObjects({}, defaultOptions, ...options);
     o.figureElementPrimitiveCallback = (...fo) => new FigureElementPrimitiveGLText(...fo);
 
+    // $FlowFixMe
     const element: FigureElementPrimitiveGLText = this.gl(o);
     element.setup(o);
     return element;
+  }
+
+  elementSetup(element: FigureElementPrimitive, options: Object) {
+    element.dimColor = this.defaultDimColor.slice();
+
+    // Setup move, touch, scenarios, dim and default colors if defined in
+    // options
+    if (options.move != null && options.move !== false) {
+      element.setTouchable();
+      element.setMovable();
+      element.setMove(options.move);
+    }
+    if (options.touch != null) {
+      element.setTouchable(options.touch);
+    }
+    if (options.dimColor != null) {
+      element.dimColor = options.dimColor;
+    }
+    if (options.defaultColor != null) {
+      element.defaultColor = options.dimColor;
+    }
+    if (options.scenarios != null) {
+      element.scenarios = options.scenarios;
+    }
+
+    if (options.scene != null) {
+      if (options.scene instanceof Scene) {
+        element.scene = options.scene;
+      } else {
+        element.setScene(options.scene);
+      }
+    }
+
+    element.timeKeeper = this.timeKeeper;
+    element.recorder = this.recorder;
+    return element;
+  }
+
+  text2d(...options: Array<OBJ_GLText>) {
+    const defaultOptions = {
+      font: {
+        family: this.defaultFont.family,
+        style: this.defaultFont.style,
+        size: this.defaultFont.size,
+        weight: this.defaultFont.weight,
+      },
+      xAlign: 'left',
+      yAlign: 'baseline',
+      transform: new Transform().scale(1).rotate(0).translate(0, 0),
+      color: this.defaultColor,
+      name: generateUniqueId('primitive_'),
+      adjustments: {
+        width: 0,
+        ascent: 0,
+        descent: 0,
+      },
+    };
+    const o = this.parseTextOptions(defaultOptions, ...options);
+    // const o = joinObjects({}, defaultOptions, ...options);
+    o.figureElementPrimitiveCallback = (...fo) => new FigureElementPrimitiveGLText(...fo);
+
+    // $FlowFixMe
+    const element = new FigureElementPrimitive2DText(this.draw2D, o);
+    return this.elementSetup(element, o);
   }
 
   gesture(...options: Array<OBJ_Gesture>): FigureElementPrimitiveGesture {

@@ -1,159 +1,48 @@
 // @flow
-
-import * as m2 from '../../../tools/m2';
-import * as m3 from '../../../tools/m3';
-import { isPointInPolygon } from '../../../tools/geometry/polygon';
-import {
-  Point, getPoint, Rect, getBoundingBorder, getBorder, isBuffer,
-} from '../../../tools/g2';
-import type { TypeParsablePoint, TypeParsableBuffer } from '../../../tools/g2';
-import type Scene from '../../../tools/geometry/scene';
-import type { Type3DMatrix } from '../../../tools/m3';
-import DrawingObject from '../DrawingObject';
-import DrawContext2D from '../../DrawContext2D';
-import { joinObjects, splitString } from '../../../tools/tools';
-import { colorArrayToRGBA } from '../../../tools/color';
-import type {
-  OBJ_Font, TypeColor,
-} from '../../../tools/types';
+import * as m2 from '../../tools/m2';
+import * as m3 from '../../tools/m3';
+import type { OBJ_FigureForElement } from '../Figure';
+import { FigureElementPrimitive } from '../Element';
+import { isPointInPolygon } from '../../tools/geometry/polygon';
 import type {
   FunctionMap,
-} from '../../../tools/FunctionMap';
-import type {
-  OBJ_TextDefinition,
-} from '../../FigurePrimitives/FigurePrimitiveTypes2D';
+} from '../../tools/FunctionMap';
+import {
+  Point, Rect, getBoundingBorder, isBuffer, getPoint, getBorder,
+} from '../../tools/g2';
+import type { TypeParsableBuffer, TypeParsablePoint } from '../../tools/g2';
+import type Scene from '../../tools/geometry/scene';
+import type { Type3DMatrix } from '../../tools/m3';
+import { joinObjects } from '../../tools/tools';
+// import type { OBJ_Generic } from './FigurePrimitiveTypes2D';
+import type GLObject from '../DrawingObjects/GLObject/GLObject';
+import DrawingObject from '../DrawingObjects/DrawingObject';
+import { FigureFont } from '../DrawingObjects/TextObject/TextObject';
+import type { OBJ_Font, TypeColor } from '../../tools/types';
+import type { OBJ_GLText_Fixed } from './FigureElementPrimitiveGLText';
+import type DrawContext2D from '../DrawContext2D';
 
-/* eslint-enable max-len */
+// export type OBJ_TextAdjustments = {
+//   width: number,
+//   descent: number,
+//   ascent: number,
+// };
 
-// FigureFont defines the font properties to be used in a TextObject
-class FigureFont {
-  size: number;
-  weight: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
-  style: 'normal' | 'italic';
-  family: string;
-  color: TypeColor | null;
-  opacity: number;
-  width: number;
-  descent: number;
-  midDescent: number;
-  maxDescent: number;
-  midAscent: number;
-  maxAscent: number;
+// export type OBJ_2DText = {
+//   text: string,
+//   font?: OBJ_Font,
+//   xAlign?: 'left' | 'center' | 'right';
+//   yAlign?: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
+//   adjustments?: OBJ_TextAdjustments;
+// } & OBJ_Generic;
 
-
-  constructor(optionsIn: OBJ_Font | FigureFont = {}) {
-    if (optionsIn instanceof FigureFont) {
-      this.family = optionsIn.family;
-      this.style = optionsIn.style;
-      this.size = optionsIn.size;
-      this.weight = optionsIn.weight;
-      this.opacity = optionsIn.opacity;
-      this.setColor(optionsIn.color);
-      this.width = optionsIn.width;
-      this.descent = optionsIn.descent;
-      this.midDescent = optionsIn.midDescent;
-      this.maxDescent = optionsIn.maxDescent;
-      this.midAscent = optionsIn.midAscent;
-      this.maxAscent = optionsIn.maxAscent;
-      return;
-    }
-    const defaultOptions = {
-      family: 'Times New Roman',
-      style: 'normal',
-      size: 1,
-      weight: '200',
-      color: null,
-      opacity: 1,
-      width: 1,
-      descent: 0.08,
-      midDescent: 0.2,
-      maxDescent: 0.5,
-      midAscent: 1.1,
-      maxAscent: 1.5,
-    };
-    const options = joinObjects({}, defaultOptions, optionsIn);
-    this.family = options.family;
-    this.style = options.style;
-    this.size = options.size;
-    this.weight = options.weight;
-    this.opacity = options.opacity;
-    this.setColor(options.color);
-    this.width = options.width;
-    this.descent = options.descent;
-    this.midDescent = options.midDescent;
-    this.maxDescent = options.maxDescent;
-    this.midAscent = options.midAscent;
-    this.maxAscent = options.maxAscent;
-  }
-
-  setColor(color: TypeColor | null = null) {
-    if (color == null) {
-      this.color = color;
-    } else {
-      this.color = color.slice();
-    }
-  }
-
-  definition() {
-    const { color } = this;
-    let colorToUse;
-    if (color == null) {
-      colorToUse = color;
-    } else {
-      colorToUse = color.slice();
-    }
-    return {
-      family: this.family,
-      style: this.style,
-      size: this.size,
-      weight: this.weight,
-      color: colorToUse,
-      opacity: this.opacity,
-      width: this.width,
-      descent: this.descent,
-      midDescent: this.midDescent,
-      maxDescent: this.maxDescent,
-      midAscent: this.midAscent,
-      maxAscent: this.maxAscent,
-    };
-  }
-
-  setFontInContext(ctx: CanvasRenderingContext2D, scalingFactor: number = 1) {
-    ctx.font = `${this.style} ${this.weight} ${this.size * scalingFactor}px ${this.family}`;
-  }
-
-  setColorInContext(ctx: CanvasRenderingContext2D, color: TypeColor | null) {
-    const thisColor = this.color;
-    // let { opacity } = this;
-    // if (color != null) {
-    //   opacity *= color[3];
-    // }
-    if (thisColor != null) {
-      const c = [
-        ...thisColor.slice(0, 3),
-        // thisColor[3] * opacity,
-        color != null ? color[3] : 1,
-      ];
-      ctx.fillStyle = colorArrayToRGBA(c);
-    } else if (color != null) {
-      ctx.fillStyle = colorArrayToRGBA(color);
-    }
-  }
-
-  _dup() {
-    return new FigureFont({
-      family: this.family,
-      style: this.style,
-      size: this.size,
-      weight: this.weight,
-      color: this.color,
-      opacity: this.opacity,
-    });
-  }
-}
-
-// FigureText is a single text element of the figure that is drawn at
-// once and referenced to the same location
+// export type OBJ_2DText_Fixed = {
+//   text: string,
+//   font: OBJ_Font,
+//   xAlign: 'left' | 'center' | 'right';
+//   yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
+//   adjustments: OBJ_TextAdjustments;
+// } & OBJ_Generic;
 class FigureTextBase {
   drawContext2D: Array<DrawContext2D>
   location: Point;
@@ -443,111 +332,6 @@ class FigureText extends FigureTextBase {
   }
 }
 
-class FigureTextLine extends FigureTextBase {
-  offset: Point;
-  inLine: boolean;
-  followOffsetY: boolean;
-  rSpace: number;
-  lSpace: number;
-
-  constructor(
-    drawContext2D: Array<DrawContext2D> | DrawContext2D,
-    location: TypeParsablePoint = new Point(0, 0),
-    text: string = '',
-    font: OBJ_Font = new FigureFont().definition(),
-    offset: TypeParsablePoint = new Point(0, 0),
-    inLine: boolean = true,
-    // border: 'rect' | Array<Point> = 'rect',
-    // touchBorder: 'rect' | number | 'border' | Array<Point> = 'border',
-    touchBorder: TypeParsableBuffer | Array<Point> = 0,
-    onClick?: string | (() => void) | null = null,
-    followOffsetY?: boolean = false,
-    lSpace?: number = 0,
-    rSpace?: number = 0,
-  ) {
-    super(drawContext2D, location, text, font, 'left', 'baseline', touchBorder, onClick);
-    this.offset = getPoint(offset);
-    this.inLine = inLine;
-    this.followOffsetY = followOffsetY;
-    this.lSpace = lSpace;
-    this.rSpace = rSpace;
-    this.measureAndAlignText();
-    this.calcBorderAndBounds();
-  }
-
-  alignText() {
-    const location = this.location._dup();
-    this.locationAligned = location.add(this.offset);
-  }
-
-  _dup() {
-    return new FigureTextLine(
-      this.drawContext2D,
-      this.location,
-      this.text,
-      this.font.definition(),
-      this.offset,
-      this.inLine,
-      this.touchBorder,
-      this.onClick,
-      this.followOffsetY,
-      this.rSpace,
-      this.lSpace,
-    );
-  }
-}
-
-class FigureTextLines extends FigureTextLine {
-  line: number;
-
-  constructor(
-    drawContext2D: Array<DrawContext2D> | DrawContext2D,
-    location: TypeParsablePoint = new Point(0, 0),
-    text: string = '',
-    font: OBJ_Font = new FigureFont().definition(),
-    offset: TypeParsablePoint = new Point(0, 0),
-    inLine: boolean = true,
-    line: number,
-    // border: 'rect' | Array<Point> = 'rect',
-    // touchBorder: 'rect' | number | 'border' | Array<Point> = 'border',
-    touchBorder: TypeParsableBuffer | Array<Point> = 0,
-    onClick?: string | (() => void) | null = null,
-    followOffsetY?: boolean = false,
-    lSpace?: number = 0,
-    rSpace?: number = 0,
-  ) {
-    super(
-      drawContext2D, location, text, font, offset, inLine, touchBorder,
-      onClick, followOffsetY, lSpace, rSpace,
-    );
-    this.line = line;
-    // this.update();
-  }
-
-  _dup() {
-    return new FigureTextLines(
-      this.drawContext2D,
-      this.location,
-      this.text,
-      this.font.definition(),
-      this.offset,
-      this.inLine,
-      this.line,
-      this.touchBorder,
-      this.onClick,
-      this.followOffsetY,
-      this.lSpace,
-      this.rSpace,
-    );
-  }
-}
-
-// Order of definition:
-// * Constructor - setup empty structures
-// * loadText
-//    - calculateScalingFactor
-//    - setTextLocations - lays out text from location property or in line
-//    - calcBoundsAndBorder
 class TextObjectBase extends DrawingObject {
   drawContext2D: Array<DrawContext2D>
   text: Array<FigureTextBase>;
@@ -989,443 +773,258 @@ class TextObject extends TextObjectBase {
   }
 }
 
-function createLine(
-  textArray: Array<FigureTextLine> | Array<FigureTextLines>,
-  initialLocation = new Point(0, 0),
-) {
-  let lastRight = initialLocation;
-  let maxY = 0;
-  let minY = 0;
-  textArray.forEach((text) => {  // eslint-disable-next-line no-param-reassign
-    text.location = lastRight.add(text.offset).add(text.lSpace);
-    if (text.inLine) {
-      if (text.followOffsetY) {
-        lastRight = text.location.add(text.measure.width + text.rSpace, 0);
-      } else {
-        lastRight = text.location.add(text.measure.width + text.rSpace, -text.offset.y);
-      }
-      const textMaxY = text.location.y + text.measure.ascent;
-      const textMinY = text.location.y - text.measure.descent;
-      if (textMaxY > maxY) {
-        maxY = textMaxY;
-      }
-      if (textMinY < minY) {
-        minY = textMinY;
-      }
-    }
-  });
-  const width = lastRight.x - 0;
-  return { width, minY, maxY };
-}
+// $FlowFixMe
+export default class FigureElementPrimitiveGLText extends FigureElementPrimitive {
+  text: string;
+  font: FigureFont;
+  atlas: Object;
 
-function align(
-  textArray: Array<FigureTextLine> | Array<FigureTextLines>,
-  xAlign: 'left' | 'center' | 'right',
-  yAlign: 'bottom' | 'baseline' | 'alphabetic' | 'middle' | 'top',
-  width: number,
-  minY: number,
-  maxY: number,
-  // useLocation: boolean = false,
-) {
-  const locationAlignOffset = new Point(0, 0);
-  if (xAlign === 'center') {
-    locationAlignOffset.x -= width / 2;
-  } else if (xAlign === 'right') {
-    locationAlignOffset.x -= width;
-  }
-  if (yAlign === 'bottom') {
-    locationAlignOffset.y -= minY;
-  } else if (yAlign === 'middle') {
-    locationAlignOffset.y += -minY - (maxY - minY) / 2;
-  } else if (yAlign === 'top') {
-    locationAlignOffset.y -= maxY;
-  }
-  textArray.forEach((text) => {  // eslint-disable-next-line no-param-reassign
-    text.locationAligned = text.location.add(locationAlignOffset);
-  });
-}
-
-class TextLineObject extends TextObjectBase {
-  // $FlowFixMe
-  text: Array<FigureTextLine>;
-  xAlign: 'left' | 'right' | 'center';                // default xAlign
-  yAlign: 'bottom' | 'baseline' | 'middle' | 'top';   // default yAlign
-
-  // $FlowFixMe
-  loadText(
-    options: {
-      text: Array<string | {
-        text: string,
-        font?: OBJ_Font,
-        offset?: TypeParsablePoint,
-        inLine?: boolean,
-        touchBorder?: number | Array<Point>,
-        onClick?: string | () => void,
-        followOffsetY?: boolean,
-        lSpace?: number,
-        rSpace?: number,
-      }>;
-      font: OBJ_Font,                    // default font
-      xAlign: 'left' | 'right' | 'center',                // default xAlign
-      yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
-      color: TypeColor,
-      fixColor: boolean,
-      defaultTextTouchBorder?: TypeParsableBuffer,
-    },
-  ) {
-    let textArray = options.text;
-    if (!Array.isArray(textArray)) {
-      textArray = [textArray];
-    }
-    if (options.fixColor != null) {
-      this.fixColor = options.fixColor;
-    }
-    const figureTextArray = [];
-    textArray.forEach((textDefinition) => {
-      let font;
-      let offset;
-      let inLine;
-      let followOffsetY;
-      let textToUse;
-      // let border;
-      let touchBorder;
-      let onClick;
-      let lSpace;
-      let rSpace;
-      if (typeof textDefinition === 'string') {
-        textToUse = textDefinition;
-      } else {
-        ({
-          font, offset, inLine, touchBorder, onClick, followOffsetY,
-          lSpace, rSpace,
-        } = textDefinition);
-        textToUse = textDefinition.text;
-        if (
-          touchBorder != null
-          && Array.isArray(touchBorder)
-          && !isBuffer(touchBorder)
-        ) { // $FlowFixMe
-          [touchBorder] = getBorder(touchBorder);
-        }
-      }
-      let offsetToUse;
-      if (offset == null) {
-        offsetToUse = new Point(0, 0);
-      } else {
-        offsetToUse = getPoint(offset);
-      }
-      let fontToUse = options.font;
-      if (font != null) {
-        fontToUse = font;
-      }
-      const fontDefinition = joinObjects({}, options.font, fontToUse);
-      if (fontDefinition.color == null && options.color != null) {
-        fontDefinition.color = options.color;
-      }
-
-      figureTextArray.push(new FigureTextLine(
-        this.drawContext2D,
-        new Point(0, 0),
-        textToUse,
-        fontDefinition,
-        offsetToUse,
-        inLine, // $FlowFixMe
-        touchBorder || options.defaultTextTouchBorder,
-        onClick,
-        followOffsetY,
-        lSpace,
-        rSpace,
-      ));
-    });
-    this.text = figureTextArray;
-    this.xAlign = options.xAlign;
-    this.yAlign = options.yAlign;
-    this.calcScalingFactor();
-    // this.borderSetup = options.border || [];
-    // this.touchBorderSetup = options.touchBorder || [];
-    this.layoutText();
-  }
-
-  setText(textOrOptions: string | OBJ_TextDefinition, index: number = 1) {
-    // if (textOrOptions.text.startsWith('abc')) {
-    // }
-    this.text[index].setText(textOrOptions);
-    this.layoutText();
-    // this.setBorder();
-    // this.setTouchBorder();
-  }
-
-  setTextLocations() {
-    const { width, minY, maxY } = createLine(this.text);
-    align(this.text, this.xAlign, this.yAlign, width, minY, maxY);
-  }
-
-  _dup() {
-    const c = new TextLineObject(this.drawContext2D);
-    c.text = this.text.map(t => t._dup());
-    c.scalingFactor = this.scalingFactor;
-    c.xAlign = this.xAlign;
-    c.yAlign = this.yAlign;
-    c.layoutText();
-    return c;
-  }
-}
-
-class TextLinesObject extends TextObjectBase {
-  // $FlowFixMe
-  line: Array<FigureTextLines>;
-  xAlign: 'left' | 'right' | 'center';                // default xAlign
-  yAlign: 'bottom' | 'baseline' | 'middle' | 'top';   // default yAlign
-  lines: Array<{
-    justify: 'left' | 'right' | 'center',
-    space: number,
-    text: Array<FigureTextLines>;
+  adjustments: {
     width: number,
-  }>;
-
-  modifiers: {
-    [modifierName: string]: {
-      text?: string,
-        offset?: TypeParsablePoint,
-        inLine?: boolean,
-        font?: OBJ_Font,
-        // border?: 'rect' | Array<Point>,
-        // touchBorder?: 'border' | 'rect' | number | Array<Point>,
-        touchBorder?: TypeParsableBuffer | Array<Point>,
-        onClick?: () => void,
-        lSpace?: number,
-        rSpace?: number,
-        followOffsetY?: boolean,
-    },
+    descent: number,
+    ascent: number,
   };
 
+  measure: {
+    ascent: number,
+    descent: number,
+    width: number,
+  };
+
+  location: Point;
+  bounds: Rect;
+
+  fontSize: number;
+  xAlign: 'left' | 'center' | 'right';
+  yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
+  dimension: number;
+
   // $FlowFixMe
-  loadText(
-    options: {
-    text: Array<string | {
-      text: string,
-      font?: OBJ_Font,
-      justify?: 'left' | 'center' | 'right',
-      lineSpace?: number
-    }>,
-    modifiers: {
-      [modifierName: string]: {
-        text?: string,
-        offset?: TypeParsablePoint,
-        inLine?: boolean,
-        font?: OBJ_Font,
-        // border?: 'rect' | Array<Point>,
-        touchBorder?: TypeParsableBuffer | Array<Point>,
-        onClick?: () => void,
-        followOffsetY?: boolean,
-        lSpace?: number,
-        rSpace?: number,
-      },
-    },
-    defaultAccent: OBJ_Font,
-    defaultTextTouchBorder?: number,
-    font: OBJ_Font,
-    justify: 'left' | 'center' | 'right',
-    lineSpace: number,
-    xAlign: 'left' | 'right' | 'center',
-    yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
-    color: TypeColor,
-    fixColor: boolean,
-    // border?: 'rect' | Array<Point>,
-    // touchBorder?: 'rect' | number | 'border' | Array<Point>,
-  },
-  ) {
-    // let { lines } = options;
-    let textLines = options.text;
-    if (typeof textLines === 'string') {
-      textLines = [textLines];
-    }
-    if (options.fixColor != null) {
-      this.fixColor = options.fixColor;
-    }
-    this.modifiers = options.modifiers || {};
-    this.lines = [];
-    const figureTextArray = [];
-    let defaultAccent = { style: 'italic' };
-    if (options.defaultAccent != null) {
-      defaultAccent = joinObjects({}, defaultAccent, options.defaultAccent);
-    }
+  drawingObject: GLObject;
+  textBorder: Array<Point>;
+  textBorderBuffer: Array<Point>;
 
-    textLines.forEach((lineDefinition, lineIndex) => {
-      let lineJustification = options.justify;
-      let lineLineSpace = options.lineSpace;
-      let lineToUse;
-      let lineFont = options.font;
-      if (typeof lineDefinition !== 'string') {
-        const {
-          font, justify, lineSpace,
-        } = lineDefinition;
-        lineToUse = lineDefinition.text;
-        if (font != null) {
-          lineFont = joinObjects({}, { color: options.color }, options.font, font);
-        }
-        if (lineSpace != null) {
-          lineLineSpace = lineSpace;
-        }
-        if (justify != null) {
-          lineJustification = justify;
-        }
-      } else {
-        lineToUse = lineDefinition;
-      }
-      const line = [];
-
-      const [split, firstToken] = splitString(lineToUse, '|', '/');
-      // console.log(split)
-      split.forEach((s, i) => {
-        let text = s;
-        let textFont = lineFont;
-        let offset = new Point(0, 0);
-        let inLine = true;
-        // let border;
-        let touchBorder;
-        let onClick;
-        let followOffsetY = false;
-        let rSpace = 0;
-        let lSpace = 0;
-        // console.log(s, firstToken, i % 2)
-        // if (this.modifiers[s] != null) {
-        if (i % 2 === firstToken) {
-          let mod;
-          if (this.modifiers[s] != null) {
-            mod = this.modifiers[s];
-          } else {
-            mod = {
-              text: s,
-              font: defaultAccent,
-            };
-          }
-          // const mod = this.modifiers[s];
-          if (mod.text != null) {
-            ({ text } = mod);
-          }
-          if (mod.font != null) {
-            textFont = joinObjects({}, lineFont, mod.font);
-          }
-          if (mod.inLine != null) { inLine = mod.inLine; }
-          if (mod.offset != null) { offset = mod.offset; }
-          // if (mod.border != null) {
-          //   border = mod.border;
-          // }
-          if (mod.touchBorder != null) {
-            touchBorder = mod.touchBorder;
-            if (
-              touchBorder != null
-              && Array.isArray(touchBorder)
-              && !isBuffer(touchBorder)
-            ) { // $FlowFixMe
-              [touchBorder] = getBorder(touchBorder);
-            }
-          }
-          if (mod.onClick != null) { onClick = mod.onClick; }
-          if (mod.followOffsetY != null) { followOffsetY = mod.followOffsetY; }
-          if (mod.lSpace != null) { lSpace = mod.lSpace; }
-          if (mod.rSpace != null) { rSpace = mod.rSpace; }
-          // if (Array.isArray(border)) {  // $FlowFixMe
-          //   border = getPoints(border);
-          // }
-          // if (Array.isArray(touchBorder)) {  // $FlowFixMe
-          //   touchBorder = getBorder(touchBorder);
-          // }
-        }
-        const t = new FigureTextLines(
-          this.drawContext2D,
-          new Point(0, 0),
-          text,
-          textFont,
-          offset,
-          inLine,
-          lineIndex, // $FlowFixMe
-          touchBorder || options.defaultTextTouchBorder,
-          onClick,
-          followOffsetY,
-          lSpace,
-          rSpace,
-        );
-        figureTextArray.push(t);
-        line.push(t);
-      });
-      this.lines.push({
-        justify: lineJustification,
-        space: lineLineSpace,
-        text: line,
-        width: 0,
-      });
-    });
-    this.text = figureTextArray;
-    this.xAlign = options.xAlign;
-    this.yAlign = options.yAlign;
-    // super.super.loadText();
-    this.calcScalingFactor();
-    // this.borderSetup = options.border || [];
-    // this.touchBorderSetup = options.touchBorder || [];
-    this.layoutText();
+  constructor(drawContext2D: DrawContext2D, options: OBJ_GLText_Fixed) {
+    const to = new TextObject(drawContext2D);
+    to.loadText(options);
+    super(to, options.transform, options.color, options.parent, options.name);
   }
 
-  setText(textOrOptions: string | OBJ_TextDefinition, index: number = 0) {
-    this.text[index].setText(textOrOptions);
-    this.layoutText();
-  }
+  // setup(options: OBJ_GLText_Fixed) {
+  //   this.font = new FigureFont(options.font);
+  //   this.atlas = {};
+  //   if (typeof options.text[0] === 'string') {
+  //     this.text = options.text[0];
+  //   } else {
+  //     this.text = options.text[0].text;
+  //   }
+  //   this.xAlign = options.xAlign;
+  //   this.yAlign = options.yAlign;
+  //   // this.verticals = options.verticals;
+  //   this.adjustments = options.adjustments;
+  //   this.drawBorder = [new Point(0, 0), new Point(1, 0), new Point(1, 1), new Point(0, 1)];
+  //   this.drawBorderBuffer = this.drawBorder;
+  //   this.color = this.font.color;
+  // }
 
-  setTextLocations() {
-    const { width, minY, maxY } = this.createLines(); // $FlowFixMe
-    align(this.text, this.xAlign, this.yAlign, width, minY, maxY);
-  }
+  // showMap(dimension: number = 1) {
+  //   const d = dimension;
+  //   this.drawingObject.updateVertices([0, 0, d, 0, d, d, 0, 0, d, d, 0, d]);
+  //   const points = [0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1];
+  //   this.drawingObject.updateTextureMap(points);
+  //   this.animateNextFrame();
+  // }
 
-  createLines() {
-    let maxLinesY = 0;
-    let minLinesY = 0;
-    let maxLinesWidth = 0;
-    let y = 0;
-    this.lines.forEach((line, index) => {
-      if (index > 0 && line.text.length > 0) {
-        y -= line.space;
-      } else if (index > 0 && line.text.length === 0) {
-        y -= line.space / 3;
+  // setFigure(figure: OBJ_FigureForElement) {
+  //   this.figure = figure;
+  //   if (figure != null) {
+  //     this.recorder = figure.recorder;
+  //     this.animationFinishedCallback = figure.animationFinished;
+  //     this.timeKeeper = figure.timeKeeper;
+  //     this.animations.timeKeeper = figure.timeKeeper;
+  //     this.animations.recorder = figure.recorder;
+  //   }
+  //   if (this.isTouchable) {
+  //     this.setTouchable();
+  //   }
+  //   if (this.isMovable) {
+  //     this.setMovable();
+  //   }
+  //   this.createAtlas();
+  //   this.setText(this.text);
+  //   this.notifications.publish('setFigure');
+  // }
+  // setText(text: string) {
+  //   this.text = text;
+  // }
+
+  measureText(text: string, fontSize: number, width: number) {
+    const aWidth = fontSize / 2;
+    let ascent = aWidth * this.font.maxAscent;
+    let descent = aWidth * this.font.descent;
+    // const maxAscentRe =
+    //   /[ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890!#%^&()@$Qbdtfhiklj]/g;
+    const midAscentRe = /[acemnorsuvwxz*gyqp: ]/g;
+    const midDecentRe = /[;,$]/g;
+    let maxDescentRe = /[gjyqp@Q(){}[\]|]/g;
+    if (this.font.family === 'Times New Roman') {
+      if (this.font.style === 'italic') {
+        maxDescentRe = /[gjyqp@Q(){}[\]|f]/g;
       }
-      const { width, minY, maxY } = createLine(line.text, new Point(0, y));
-      minLinesY = minY < minLinesY ? minY : minLinesY;
-      maxLinesY = maxY > maxLinesY ? maxY : maxLinesY;
-      maxLinesWidth = width > maxLinesWidth ? width : maxLinesWidth;
-      line.width = width;   // eslint-disable-line no-param-reassign
-    });
-    // justify lines
-    this.lines.forEach((line) => {
-      const locationAlignOffset = new Point(0, 0);
-      if (line.justify === 'center') {
-        locationAlignOffset.x += maxLinesWidth / 2 - line.width / 2;
-      } else if (line.justify === 'right') {
-        locationAlignOffset.x += maxLinesWidth - line.width;
+    }
+    const midAscentMatches = text.match(midAscentRe);
+    if (Array.isArray(midAscentMatches)) {
+      if (midAscentMatches.length === text.length) {
+        ascent = aWidth * this.font.midAscent;
       }
-      line.text.forEach((text) => {
-        // eslint-disable-next-line no-param-reassign
-        text.location = text.location.add(locationAlignOffset);
-      });
-    });
+    }
+
+    const midDescentMatches = text.match(midDecentRe);
+    if (Array.isArray(midDescentMatches)) {
+      if (midDescentMatches.length > 0) {
+        descent = aWidth * this.font.midDescent;
+      }
+    }
+
+    const maxDescentMatches = text.match(maxDescentRe);
+    if (Array.isArray(maxDescentMatches)) {
+      if (maxDescentMatches.length > 0) {
+        descent = aWidth * this.font.maxDescent;
+      }
+    }
     return {
-      width: maxLinesWidth,
-      minY: minLinesY,
-      maxY: maxLinesY,
+      ascent, descent, width,
     };
   }
 
-  _dup() {
-    const c = new TextLineObject(this.drawContext2D);
-    c.text = this.text.map(t => t._dup());
-    c.scalingFactor = this.scalingFactor;
-    c.xAlign = this.xAlign;
-    c.yAlign = this.yAlign;
-    c.layoutText();
-    return c;
-  }
-}
+  // measureAndAlignText() {
+  //   const { text } = this;
+  //   const vertices = [];
+  //   const texCoords = [];
+  //   let x = 0;
+  //   const r = this.font.size / this.fontSize;
+  //   let totalWidth = 0;
+  //   let maxDescent = 0;
+  //   let maxAscent = 0;
+  //   for (let i = 0; i < text.length; i += 1) {
+  //     const {
+  //       width, ascent, descent, offsetX, offsetY,
+  //     } = this.atlas[this.text[i]];
+  //     const s = 0.5;
+  //     const minX = x - width * r * s;
+  //     const maxX = x + width * r + width * r * s;
+  //     vertices.push(minX, -descent * r, maxX, -descent * r, maxX, ascent * r);
+  //     vertices.push(minX, -descent * r, maxX, ascent * r, minX, ascent * r);
+  //     texCoords.push(
+  //       offsetX - width * s, offsetY - descent,
+  //       offsetX + width + width * s, offsetY - descent,
+  //       offsetX + width + width * s, offsetY + ascent,
+  //     );
+  //     texCoords.push(
+  //       offsetX - width * s, offsetY - descent,
+  //       offsetX + width + width * s, offsetY + ascent,
+  //       offsetX - width * s, offsetY + ascent,
+  //     );
+  //     x += width * r;
+  //     totalWidth += width * r;
+  //     maxDescent = Math.max(descent * r, maxDescent);
+  //     maxAscent = Math.max(ascent * r, maxAscent);
+  //   }
+  //   maxAscent += this.adjustments.ascent;
+  //   maxDescent += this.adjustments.descent;
+  //   totalWidth += this.adjustments.width;
+  //   let ox = 0;
+  //   let oy = 0;
+  //   if (this.xAlign === 'center') {
+  //     ox = -totalWidth / 2;
+  //   } else if (this.xAlign === 'right') {
+  //     ox = -totalWidth;
+  //   }
+  //   if (this.yAlign === 'bottom') {
+  //     oy = maxDescent;
+  //   } else if (this.yAlign === 'top') {
+  //     oy = -maxAscent;
+  //   } else if (this.yAlign === 'middle') {
+  //     oy = maxDescent - (maxAscent + maxDescent) / 2;
+  //   }
+  //   for (let i = 0; i < vertices.length; i += 2) {
+  //     vertices[i] += ox;
+  //   }
+  //   for (let i = 1; i < vertices.length; i += 2) {
+  //     vertices[i] += oy;
+  //   }
+  //   this.drawingObject.updateVertices(vertices);
+  //   this.drawingObject.updateTextureMap(texCoords.map(v => v / this.dimension));
 
-export {
-  FigureFont, FigureText, TextObject, TextLineObject,
-  TextLinesObject, TextObjectBase,
-};
+  //   this.location = new Point(ox, oy);
+  //   this.measure = {
+  //     ascent: maxAscent,
+  //     descent: maxDescent,
+  //     width: totalWidth,
+  //   };
+  // }
+
+  // setText(text: string) {
+  //   this.text = text;
+  //   this.measureAndAlignText();
+  //   this.calcBorderAndBounds();
+  // }
+
+  // setFont(font: OBJ_Font) {
+  //   const newFont = joinObjects({}, this.font.definition(), font);
+  //   this.font = new FigureFont(newFont);
+  //   this.measureAndAlignText();
+  //   this.calcBorderAndBounds();
+  // }
+
+  calcBorderAndBounds() {
+    this.calcBounds();
+    this.calcBorder();
+    this.calcTouchBorder();
+  }
+
+  calcBounds() {
+    this.bounds = new Rect(
+      this.location.x,
+      this.location.y - this.measure.descent,
+      this.measure.width,
+      this.measure.ascent + this.measure.descent,
+    );
+  }
+
+  calcBorder() {
+    this.textBorder = [
+      new Point(this.bounds.left, this.bounds.bottom),
+      new Point(this.bounds.right, this.bounds.bottom),
+      new Point(this.bounds.right, this.bounds.top),
+      new Point(this.bounds.left, this.bounds.top),
+    ];
+    this.drawBorder = this.textBorder;
+  }
+
+  calcTouchBorder() {
+    if (isBuffer(this.touchBorder)) { // $FlowFixMe
+      this.textBorderBuffer = getBoundingBorder(this.textBorder, this.touchBorder);
+      this.drawBorderBuffer = this.textBorderBuffer;
+    } else { // $FlowFixMe
+      this.textBorderBuffer = this.touchBorder;
+      this.drawBorderBuffer = this.drawBorder;
+    }
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  setTextBorder() {}
+
+  // eslint-disable-next-line class-methods-use-this
+  setTouchBorder() {}
+
+  // _getStateProperties(options: { ignoreShown?: boolean }) {
+  //   // eslint-disable-line class-methods-use-this
+  //   return [...super._getStateProperties(options),
+  //     'xAlign',
+  //     'pan',
+  //     'onlyWhenTouched',
+  //     'originalPosition',
+  //   ];
+  // }
+}
