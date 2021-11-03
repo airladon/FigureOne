@@ -2,7 +2,7 @@
 
 import type { CPY_Step } from '../geometries/copy/copy';
 import type {
-  OBJ_Texture, OBJ_LineStyleSimple, TypeGLPrimitive,
+  OBJ_Texture, OBJ_LineStyleSimple, TypeGLPrimitive, OBJ_FigurePrimitive,
 } from './FigurePrimitiveTypes';
 // @flow
 import type {
@@ -160,7 +160,7 @@ export type OBJ_Generic = {
   border?: TypeParsableBuffer | TypeParsableBorder | 'buffer' | 'draw' | 'rect',
   touchBorder?: TypeParsableBuffer | TypeParsableBorder | 'rect' | 'border' | 'buffer' | 'draw',
   pulse?: number,
-}
+} & OBJ_FigurePrimitive;
 
 /**
  * Polyline shape options object that extends {@link OBJ_Generic} (without

@@ -4069,7 +4069,8 @@ class FigureElementPrimitive extends FigureElement {
   }
 
   clear(canvasIndex: number = 0) {
-    if (this.drawingObject instanceof TextObjectBase) {
+    // $FlowFixMe
+    if (this.drawingObject.clear != null) {
       // $FlowFixMe
       this.drawingObject.clear(canvasIndex, this.pulseTransforms);
     }

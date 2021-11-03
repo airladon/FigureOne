@@ -1458,6 +1458,7 @@ export default class FigurePrimitives {
         ascent: 0,
         descent: 0,
       },
+      text: 'TEXT NOT DEFINED',
     };
     const o = this.parseTextOptions(defaultOptions, ...options);
     // const o = joinObjects({}, defaultOptions, ...options);
@@ -1523,13 +1524,20 @@ export default class FigurePrimitives {
         ascent: 0,
         descent: 0,
       },
+      text: 'TEXT NOT DEFINED',
     };
     const o = this.parseTextOptions(defaultOptions, ...options);
     // const o = joinObjects({}, defaultOptions, ...options);
     o.figureElementPrimitiveCallback = (...fo) => new FigureElementPrimitiveGLText(...fo);
 
+    o.transform = getTransform(o.transform);
+    if (o.position != null) {
+      o.position = getPoint(o.position);
+      o.transform.updateTranslation(o.position);
+    }
+
     // $FlowFixMe
-    const element = new FigureElementPrimitive2DText(this.draw2D, o);
+    const element = new FigureElementPrimitive2DText(this.draw2D[0], o);
     return this.elementSetup(element, o);
   }
 

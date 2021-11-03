@@ -1490,7 +1490,7 @@ export class Equation extends FigureElementCollection {
     if (fontDefinition.color == null) {
       fontDefinition.color = this.color;
     }
-    const p = this.shapes.glText(
+    const p = this.shapes.text(
       {
         text: {
           text: textToUse,

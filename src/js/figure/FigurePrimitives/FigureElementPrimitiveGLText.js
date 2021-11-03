@@ -4,11 +4,14 @@ import { FigureElementPrimitive } from '../Element';
 import {
   Point, Rect, getBoundingBorder, isBuffer,
 } from '../../tools/g2';
+import type {
+  TypeParsableBuffer, TypeParsableBorder,
+} from '../../tools/g2';
 import { joinObjects } from '../../tools/tools';
-import type { OBJ_Generic } from './FigurePrimitiveTypes2D';
+import type { OBJ_FigurePrimitive } from './FigurePrimitiveTypes';
 import type GLObject from '../DrawingObjects/GLObject/GLObject';
 import { FigureFont } from '../DrawingObjects/TextObject/TextObject';
-import type { OBJ_Font } from '../../tools/types';
+import type { OBJ_Font, TypeColor } from '../../tools/types';
 
 export type OBJ_TextAdjustments = {
   width: number,
@@ -17,12 +20,14 @@ export type OBJ_TextAdjustments = {
 };
 
 export type OBJ_GLText = {
-  text: string,
+  text?: string,
   font?: OBJ_Font,
   xAlign?: 'left' | 'center' | 'right';
   yAlign?: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
   adjustments?: OBJ_TextAdjustments;
-} & OBJ_Generic;
+  border?: TypeParsableBuffer | TypeParsableBorder | 'buffer' | 'draw' | 'rect';
+  touchBorder?: TypeParsableBuffer | TypeParsableBorder | 'rect' | 'border' | 'buffer' | 'draw';
+} & OBJ_FigurePrimitive;
 
 export type OBJ_GLText_Fixed = {
   text: string,
@@ -30,7 +35,16 @@ export type OBJ_GLText_Fixed = {
   xAlign: 'left' | 'center' | 'right';
   yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
   adjustments: OBJ_TextAdjustments;
-} & OBJ_Generic;
+};
+
+export type OBJ_SetText = {
+  text?: string,
+  font?: OBJ_Font,
+  xAlign?: 'left' | 'center' | 'right';
+  yAlign?: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
+  adjustments?: OBJ_TextAdjustments;
+  color?: TypeColor;
+}
 
 // $FlowFixMe
 export default class FigureElementPrimitiveGLText extends FigureElementPrimitive {
@@ -209,6 +223,9 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
   }
 
   measureAndAlignText() {
+    if (Object.keys(this.atlas).length === 0) {
+      return;
+    }
     const { text } = this;
     const vertices = [];
     const texCoords = [];
@@ -275,8 +292,23 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     };
   }
 
-  setText(text: string) {
-    this.text = text;
+  setText(text: string | OBJ_SetText) {
+    if (typeof text === 'string') {
+      this.text = text;
+    } else {
+      if (text.font != null) {
+        this.font = joinObjects({}, this.font.definition, text.font);
+      }
+      if (text.xAlign != null) {
+        this.xAlign = text.xAlign;
+      }
+      if (text.yAlign != null) {
+        this.yAlign = text.yAlign;
+      }
+      if (text.adjustments != null) {
+        this.adjustments = joinObjects({}, this.adjustments, text.adjustments);
+      }
+    }
     this.measureAndAlignText();
     this.calcBorderAndBounds();
   }
@@ -289,36 +321,40 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
   }
 
   calcBorderAndBounds() {
-    this.calcBounds();
+    // this.calcBounds();
     this.calcBorder();
     this.calcTouchBorder();
   }
 
-  calcBounds() {
-    this.bounds = new Rect(
+  // calcBounds() {
+  //   this.bounds = new Rect(
+  //     this.location.x,
+  //     this.location.y - this.measure.descent,
+  //     this.measure.width,
+  //     this.measure.ascent + this.measure.descent,
+  //   );
+  // }
+
+  calcBorder() {
+    const bounds = new Rect(
       this.location.x,
       this.location.y - this.measure.descent,
       this.measure.width,
       this.measure.ascent + this.measure.descent,
     );
-  }
-
-  calcBorder() {
-    this.textBorder = [
-      new Point(this.bounds.left, this.bounds.bottom),
-      new Point(this.bounds.right, this.bounds.bottom),
-      new Point(this.bounds.right, this.bounds.top),
-      new Point(this.bounds.left, this.bounds.top),
+    this.drawBorder = [
+      new Point(bounds.left, bounds.bottom),
+      new Point(bounds.right, bounds.bottom),
+      new Point(bounds.right, bounds.top),
+      new Point(bounds.left, bounds.top),
     ];
-    this.drawBorder = this.textBorder;
+    // this.drawBorder = this.textBorder;
   }
 
   calcTouchBorder() {
     if (isBuffer(this.touchBorder)) { // $FlowFixMe
-      this.textBorderBuffer = getBoundingBorder(this.textBorder, this.touchBorder);
-      this.drawBorderBuffer = this.textBorderBuffer;
+      this.drawBorderBuffer = getBoundingBorder(this.drawBorder, this.touchBorder);
     } else { // $FlowFixMe
-      this.textBorderBuffer = this.touchBorder;
       this.drawBorderBuffer = this.drawBorder;
     }
   }
