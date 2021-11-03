@@ -63,3 +63,10 @@ eqn = figure.add({
   textFont: { size: 0.5 },
   font: { size: 0.5 },
 });
+
+eqn._a.setFont({ color: [0, 1, 0, 1]});
+eqn._a.setColor([0, 0, 1, 1])
+// eqn.animations.new()
+//   .delay(1)
+//   .dissolveIn(3)
+//   .start();

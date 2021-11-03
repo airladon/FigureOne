@@ -292,6 +292,11 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     };
   }
 
+  /**
+   * Change the text in the primitive.
+   *
+   * @param {string | OBJ_SetText} text
+   */
   setText(text: string | OBJ_SetText) {
     if (typeof text === 'string') {
       this.text = text;
@@ -311,13 +316,38 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     }
     this.measureAndAlignText();
     this.calcBorderAndBounds();
+    if (this.font.color != null) {
+      this.setColor(this.font.color, true);
+    }
   }
 
+  /**
+   * Get the text shown by the primitive.
+   *
+   * @return string
+   */
+  getText() {
+    return this.text;
+  }
+
+  /**
+   * Change only the font of the text.
+   *
+   * @param {OBJ_Font} font
+   */
   setFont(font: OBJ_Font) {
     const newFont = joinObjects({}, this.font.definition(), font);
     this.font = new FigureFont(newFont);
     this.measureAndAlignText();
     this.calcBorderAndBounds();
+    if (this.font.color != null) {
+      this.setColor(this.font.color, true);
+    }
+  }
+
+  setColor(color: TypeColor, setDefault: boolean = true) {
+    super.setColor(color, setDefault);
+    this.font.color = color.slice();
   }
 
   calcBorderAndBounds() {
@@ -359,11 +389,11 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  setTextBorder() {}
+  // // eslint-disable-next-line class-methods-use-this
+  // setTextBorder() {}
 
-  // eslint-disable-next-line class-methods-use-this
-  setTouchBorder() {}
+  // // eslint-disable-next-line class-methods-use-this
+  // setTouchBorder() {}
 
   // _getStateProperties(options: { ignoreShown?: boolean }) {
   //   // eslint-disable-line class-methods-use-this

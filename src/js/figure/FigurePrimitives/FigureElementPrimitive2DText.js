@@ -514,9 +514,17 @@ export default class FigureElementPrimitive2DText extends FigureElementPrimitive
     this.calcBorderAndBounds();
   }
 
+  /**
+   * Change the text in the primitive.
+   *
+   * @param {string | OBJ_SetText} text
+   */
   setText(text: string | OBJ_SetText) {
     this.drawingObject.setText(text);
     this.calcBorderAndBounds();
+    if (this.drawingObject.font.color != null) {
+      this.setColor(this.drawingObject.font.color, true);
+    }
   }
 
   calcBorderAndBounds() {
@@ -537,11 +545,37 @@ export default class FigureElementPrimitive2DText extends FigureElementPrimitive
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  setTextBorder() {}
+  /**
+   * Change only the font of the text.
+   *
+   * @param {OBJ_Font} font
+   */
+  setFont(font: OBJ_Font) {
+    this.drawingObject.setFont(font);
+    if (this.drawingObject.font.color != null) {
+      this.setColor(this.drawingObject.font.color, true);
+    }
+  }
 
-  // eslint-disable-next-line class-methods-use-this
-  setTouchBorder() {}
+  /**
+   * Get the text shown by the primitive.
+   *
+   * @return string
+   */
+  getText() {
+    return this.drawingObject.text;
+  }
+
+  setColor(color: TypeColor, setDefault: boolean = true) {
+    super.setColor(color, setDefault);
+    this.drawingObject.font.color = color.slice();
+  }
+
+  // // eslint-disable-next-line class-methods-use-this
+  // setTextBorder() {}
+
+  // // eslint-disable-next-line class-methods-use-this
+  // setTouchBorder() {}
 
   measureAndAlignText() {
     this.drawingObject.measureText();
