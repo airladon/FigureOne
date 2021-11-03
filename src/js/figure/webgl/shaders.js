@@ -277,6 +277,7 @@ function composeFragShader(
   } else if (color === 'textureAlpha') {
     // src += '  gl_FragColor = texture2D(u_texture, v_texcoord).a * u_color;\n';
     src += '  gl_FragColor = texture2D(u_texture, v_texcoord).a * u_color;\n';
+    src += '  gl_FragColor.rgb *= gl_FragColor.a;\n';
   }
 
   // src += '  gl_FragColor.rgb *= gl_FragColor.a;\n';
