@@ -1040,7 +1040,7 @@ describe('Different ways to make an equation', () => {
     expect(eqn._b.getPosition().round(2).x).toEqual(0.1);
     expect(eqn.eqn.forms['0'].content[0].width).toEqual(0.2);
     // Changing the text in a does nothing as one layout has already been done
-    eqn._a.drawingObject.setText('xx');
+    eqn._a.setText('xx');
     expect(eqn._a.getPosition().round(2).x).toEqual(0);
     expect(eqn._b.getPosition().round(2).x).toEqual(0.1);
     expect(eqn.eqn.forms['0'].content[0].width).toEqual(0.2);
@@ -1060,7 +1060,7 @@ describe('Different ways to make an equation', () => {
     expect(eqn.eqn.forms['0'].content[0].width).toEqual(0.2);
     // Changin a to 'xx' will double it's width, but only after the form
     // is shown.
-    eqn._a.drawingObject.setText('xx');
+    eqn._a.setText('xx');
     expect(eqn._a.getPosition().round(2).x).toEqual(0);
     expect(eqn._b.getPosition().round(2).x).toEqual(0.1);
     expect(eqn.eqn.forms['0'].content[0].width).toEqual(0.2);

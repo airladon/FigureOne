@@ -1459,10 +1459,10 @@ export default class FigurePrimitives {
         descent: 0,
       },
       text: 'TEXT NOT DEFINED',
-      type: 'gl',
+      type: 'bmp',
     };
     const o = this.parseTextOptions(defaultOptions, ...options);
-    if (o.type === 'gl') {
+    if (o.type === 'bmp') {
       return this.glText(o);
     }
     return this.text2d(o);

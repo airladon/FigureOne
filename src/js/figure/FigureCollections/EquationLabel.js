@@ -196,12 +196,14 @@ export default class EquationLabel {
       // This is ok to fix for flow because all the elements of the
       // simple equation created by Equationlabel will be Primitives
       // $FlowFixMe
-      const textObject = form.elements[key].drawingObject;
-      if (textObject != null) {
-        textObject.setText(text); // $FlowFixMe
-        form.elements[key].drawBorder = form.elements[key].drawingObject.textBorder; // $FlowFixMe
-        form.elements[key].drawBorderBuffer = form.elements[key].drawingObject.textBorderBuffer;
-      }
+      // const textObject = form.elements[key].drawingObject;
+      // if (textObject != null) {
+      //   textObject.setText(text); // $FlowFixMe
+      //   form.elements[key].drawBorder = form.elements[key].drawingObject.textBorder; // $FlowFixMe
+      //   form.elements[key].drawBorderBuffer = form.elements[key].drawingObject.textBorderBuffer;
+      // }
+      // console.log(form.elements[key])
+      form.elements[key].setText(text);
       form.arrange(
         this.eqn.eqn.scale,
         this.eqn.eqn.formDefaults.alignment.xAlign,
@@ -219,14 +221,15 @@ export default class EquationLabel {
       // This is ok to fix for flow because all the elements of the
       // simple equation created by Equationlabel will be Primitives
       // $FlowFixMe
-      const textObject = form.elements[key].drawingObject;
-      // This is ok to fix for flow because all the elements of the
-      // simple equation created by Equationlabel will be Primitives
-      // that are text objects
-      if (textObject != null) {
-        // $FlowFixMe
-        textToReturn = textObject.text[0].text;
-      }
+      // const textObject = form.elements[key].drawingObject;
+      // // This is ok to fix for flow because all the elements of the
+      // // simple equation created by Equationlabel will be Primitives
+      // // that are text objects
+      // if (textObject != null) {
+      //   // $FlowFixMe
+      //   textToReturn = textObject.text[0].text;
+      // }
+      textToReturn = form.elements[key].getText();
     }
     return textToReturn;
   }
