@@ -1464,8 +1464,8 @@ export default class FigurePrimitives {
         descent: 0,
       },
     };
-
-    const o = joinObjects({}, defaultOptions, ...options);
+    const o = this.parseTextOptions(defaultOptions, ...options);
+    // const o = joinObjects({}, defaultOptions, ...options);
     o.figureElementPrimitiveCallback = (...fo) => new FigureElementPrimitiveGLText(...fo);
 
     const element: FigureElementPrimitiveGLText = this.gl(o);
