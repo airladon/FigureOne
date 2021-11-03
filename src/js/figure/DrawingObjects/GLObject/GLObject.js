@@ -250,6 +250,24 @@ class GLObject extends DrawingObject {
     );
   }
 
+  // addAtlas(
+  //   location: string,
+  //   points: Array<number> = [],
+  //   onLoad: null | (() => void) = null,
+  //   loadColor: TypeColor = [0, 0, 1, 0.5],
+  // ) {
+  //   if (this.atlas == null) {
+  //     this.atlas = {
+  //       id: location,
+  //       src: location,
+  //       points,
+  //       buffer: null,
+  //       type: 'image',
+  //       loadColor,
+  //     };
+  //   }
+  //   this.onLoad = onLoad;
+  // }
 
   /**
    * Buffer a texture for the shape to be painted with.
@@ -263,6 +281,7 @@ class GLObject extends DrawingObject {
     repeat: boolean = false,
     onLoad: null | (() => void) = null,
     loadColor: TypeColor = [0, 0, 1, 0.5],
+    isAtlas: boolean = false,
   ) {
     if (this.texture == null) {
       this.texture = {
@@ -277,6 +296,7 @@ class GLObject extends DrawingObject {
         data: null,
         mapToBuffer,
         loadColor,
+        isAtlas,
       };
     }
     this.onLoad = onLoad;
