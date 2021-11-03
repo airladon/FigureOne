@@ -30,6 +30,7 @@ figure.add([
     name: 'eqn',
     make: 'collections.equation',
     options: {
+      type: '2d',
       scale: 1.1,
       color: [0.4, 0.4, 0.4, 1],
       elements: {

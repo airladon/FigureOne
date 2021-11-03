@@ -24,8 +24,8 @@ const figure = new Fig.Figure({ scene: [-3, -3, 6, 6]});
 // // ctx.fillText('g', 420, 400);
 // ctx.restore();
 
-figure.add({
-  make: 'glText',
+b = figure.add({
+  make: 'txt',
   // gl: true,
   text: 'QwertfMy 123\u03C0',
   // text: 'asdf',
@@ -35,6 +35,7 @@ figure.add({
   yAlign: 'bottom',
   xAlign: 'center',
   adjustments: { descent: -0.03 },
+  type: '2d',
 });
 figure.add({
   make: 'rectangle',
@@ -46,7 +47,7 @@ figure.add({
 });
 
 a = figure.add({
-  make: 'text2d',
+  make: 'txt',
   // gl: true,
   text: 'Qwerty 123\u03C0',
   font: { size: 1 },
@@ -64,7 +65,7 @@ eqn = figure.add({
   font: { size: 0.5 },
 });
 
-eqn._a.setFont({ color: [0, 1, 0, 1]});
+// eqn._a.setFont({ color: [0, 1, 0, 1]});
 eqn._a.setColor([0, 0, 1, 1])
 // eqn.animations.new()
 //   .delay(1)

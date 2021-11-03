@@ -1003,6 +1003,8 @@ export class Equation extends FigureElementCollection {
 
   initialForm: string | null;
 
+  defaultTextType: 'gl' | '2d';
+
   /**
    * {@link AnimationManager} extended to include additional animation steps
    * specific to equations
@@ -1066,6 +1068,7 @@ export class Equation extends FigureElementCollection {
       touchBorder: 'rect',
       transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       timeKeeper: shapes.timeKeeper,
+      type: 'gl',
     };
 
     const optionsToUse = joinObjectsWithOptions({ except: ['font'] }, {}, defaultOptions, options);
@@ -1120,6 +1123,7 @@ export class Equation extends FigureElementCollection {
     this.shapes = shapes;
     this.setColor(optionsToUse.color);
     this.dimColor = optionsToUse.dimColor;
+    this.defaultTextType = optionsToUse.type;
     // this.touchBorder = 'rect';
     // this.border = 'children';
     // this.isTouchDevice = isTouchDevice;
@@ -1447,6 +1451,7 @@ export class Equation extends FigureElementCollection {
       onClick?: () => void | 'string' | null,
       isTouchable?: boolean,
       mods?: Object,
+      type?: 'gl' | '2d',
     },
     defaultText: string = '',
   ) {
@@ -1490,7 +1495,7 @@ export class Equation extends FigureElementCollection {
     if (fontDefinition.color == null) {
       fontDefinition.color = this.color;
     }
-    const p = this.shapes.glText(
+    const p = this.shapes.txt(
       {
         text: {
           text: textToUse,
@@ -1504,6 +1509,7 @@ export class Equation extends FigureElementCollection {
         mods: {
           dimColor: this.dimColor.slice(),
         },
+        type: options.type || this.defaultTextType,
       },
     );
     if (options.touchBorder != null) {
