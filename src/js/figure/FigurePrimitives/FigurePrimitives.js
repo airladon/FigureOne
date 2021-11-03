@@ -1449,7 +1449,7 @@ export default class FigurePrimitives {
       color: this.defaultColor,
       name: generateUniqueId('primitive_'),
       vertexShader: { dimension: 2, color: 'texture' },
-      fragmentShader: { color: 'texture' },
+      fragmentShader: { color: 'textureAlpha' },
       vertices: [0, 0, 1, 0, 1, 1],
       verticals: {
         maxAscent: 1.5,
@@ -1465,6 +1465,7 @@ export default class FigurePrimitives {
       },
     };
     const o = this.parseTextOptions(defaultOptions, ...options);
+    console.log(o)
     // const o = joinObjects({}, defaultOptions, ...options);
     o.figureElementPrimitiveCallback = (...fo) => new FigureElementPrimitiveGLText(...fo);
 

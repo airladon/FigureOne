@@ -98,6 +98,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     this.adjustments = options.adjustments;
     this.drawBorder = [new Point(0, 0), new Point(1, 0), new Point(1, 1), new Point(0, 1)];
     this.drawBorderBuffer = this.drawBorder;
+    this.color = this.font.color;
   }
 
   showMap(dimension: number = 1) {
@@ -241,7 +242,6 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       const {
         width, ascent, descent, offsetX, offsetY,
       } = this.atlas[this.text[i]];
-      console.log(this.text[i], ascent, this.atlas)
       const s = 0.5;
       const minX = x - width * r * s;
       const maxX = x + width * r + width * r * s;
