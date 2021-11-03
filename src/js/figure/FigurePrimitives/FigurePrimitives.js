@@ -1437,6 +1437,44 @@ export default class FigurePrimitives {
     return element;
   }
 
+  txt(...options: Array<OBJ_GLText>) {
+    const defaultOptions = {
+      font: {
+        family: this.defaultFont.family,
+        style: this.defaultFont.style,
+        size: this.defaultFont.size,
+        weight: this.defaultFont.weight,
+      },
+      xAlign: 'left',
+      yAlign: 'baseline',
+      transform: new Transform().scale(1).rotate(0).translate(0, 0),
+      color: this.defaultColor,
+      name: generateUniqueId('primitive_'),
+      vertexShader: { dimension: 2, color: 'texture' },
+      fragmentShader: { color: 'textureAlpha' },
+      vertices: [0, 0, 1, 0, 1, 1],
+      adjustments: {
+        width: 0,
+        ascent: 0,
+        descent: 0,
+      },
+      text: 'TEXT NOT DEFINED',
+      type: 'gl',
+    };
+    const o = this.parseTextOptions(defaultOptions, ...options);
+    if (o.type === 'gl') {
+      return this.glText(o);
+    }
+    return this.text2d(o);
+    // // const o = joinObjects({}, defaultOptions, ...options);
+    // o.figureElementPrimitiveCallback = (...fo) => new FigureElementPrimitiveGLText(...fo);
+
+    // // $FlowFixMe
+    // const element: FigureElementPrimitiveGLText = this.gl(o);
+    // element.setup(o);
+    // return element;
+  }
+
   glText(...options: Array<OBJ_GLText>) {
     const defaultOptions = {
       font: {

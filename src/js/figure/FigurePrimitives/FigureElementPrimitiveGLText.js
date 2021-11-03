@@ -27,6 +27,7 @@ export type OBJ_GLText = {
   adjustments?: OBJ_TextAdjustments;
   border?: TypeParsableBuffer | TypeParsableBorder | 'buffer' | 'draw' | 'rect';
   touchBorder?: TypeParsableBuffer | TypeParsableBorder | 'rect' | 'border' | 'buffer' | 'draw';
+  type: 'bmp' | '2d'
 } & OBJ_FigurePrimitive;
 
 export type OBJ_GLText_Fixed = {
