@@ -1451,6 +1451,18 @@ export default class FigurePrimitives {
       vertexShader: { dimension: 2, color: 'texture' },
       fragmentShader: { color: 'texture' },
       vertices: [0, 0, 1, 0, 1, 1],
+      verticals: {
+        maxAscent: 1.5,
+        midAscent: 0.95,
+        maxDescent: 0.5,
+        midDescent: 0.2,
+        descent: 0.08,
+      },
+      adjustments: {
+        width: 0,
+        ascent: 0,
+        descent: 0,
+      },
     };
 
     const o = joinObjects({}, defaultOptions, ...options);

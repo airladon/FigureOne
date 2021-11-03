@@ -1,9 +1,9 @@
 // @flow
 import type { OBJ_FigureForElement } from '../Figure';
 import { FigureElementPrimitive } from '../Element';
-// import {
-//   Point, getPoint, Line,
-// } from '../../tools/g2';
+import {
+  Point, // getPoint, Line,
+} from '../../tools/g2';
 // import type DrawingObject from '../DrawingObjects/DrawingObject';
 import type GLObject from '../DrawingObjects/GLObject/GLObject';
 import { FigureFont } from '../DrawingObjects/TextObject/TextObject';
@@ -21,6 +21,20 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     midDescent: number,
     descent: number,
   };
+
+  adjustments: {
+    width: number,
+    descent: number,
+    ascent: number,
+  };
+
+  measure: {
+    ascent: number,
+    descent: number,
+    width: number,
+  };
+
+  location: Point;
 
   fontSize: number;
   xAlign: 'left' | 'center' | 'right';
@@ -72,13 +86,8 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     this.text = options.text;
     this.xAlign = options.xAlign;
     this.yAlign = options.yAlign;
-    this.verticals = {
-      maxAscent: 1.5,
-      midAscent: 0.95,
-      maxDescent: 0.5,
-      midDescent: 0.2,
-      descent: 0.08,
-    };
+    this.verticals = options.verticals;
+    this.adjustments = options.adjustments;
   }
 
   showMap(dimension: number = 1) {
@@ -205,14 +214,6 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     }
     this.drawingObject.texture.data = ctx.canvas;
     this.drawingObject.initTexture();
-    // const glTexture = gl.createTexture();
-    // webgl.addTexture(id, glTexture, 'image', this.atlas, this.dimension);
-    // gl.activeTexture(
-    //   gl.TEXTURE0 + webgl.textures[id].index,
-    // );
-    // gl.bindTexture(gl.TEXTURE_2D, glTexture);
-    // this.drawingObject.texture.id = id;
-    // this.drawingObject.addTextureToBuffer(glTexture, ctx.canvas, false);
   }
 
   setText(text: string) {
@@ -248,6 +249,9 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       maxDescent = Math.max(descent * r, maxDescent);
       maxAscent = Math.max(ascent * r, maxAscent);
     }
+    maxAscent += this.adjustments.ascent;
+    maxDescent += this.adjustments.descent;
+    totalWidth += this.adjustments.width;
     let ox = 0;
     let oy = 0;
     if (this.xAlign === 'center') {
@@ -270,6 +274,13 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     }
     this.drawingObject.updateVertices(vertices);
     this.drawingObject.updateTextureMap(texCoords.map(v => v / this.dimension));
+
+    this.location = new Point(ox, oy);
+    this.measure = {
+      ascent: maxAscent,
+      descent: maxDescent,
+      width: totalWidth,
+    };
   }
 
   _getStateProperties(options: { ignoreShown?: boolean }) {
