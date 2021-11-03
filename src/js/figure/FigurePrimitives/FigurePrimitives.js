@@ -1435,7 +1435,7 @@ export default class FigurePrimitives {
     return element;
   }
 
-  glText(...options) {
+  glText(...options: Array<OBJ_TextGL>) {
     const defaultOptions = {
       font: {
         family: this.defaultFont.family,
@@ -1448,20 +1448,16 @@ export default class FigurePrimitives {
       transform: new Transform().scale(1).rotate(0).translate(0, 0),
       color: this.defaultColor,
       name: generateUniqueId('primitive_'),
+      vertexShader: { dimension: 2, color: 'texture' },
+      fragmentShader: { color: 'texture' },
+      vertices: [0, 0, 1, 0, 1, 1],
     };
-    const glObject = new GLObject(
-      this.webgl[0],
-      { dimension: 2, color: 'texture' },
-      { color: 'texture' },
-    );
-
-    // Set the glPrimitive
-    // glObject.setPrimitive(options.glPrimitive.toUpperCase());
 
     const o = joinObjects({}, defaultOptions, ...options);
-    const element = new FigureElementPrimitiveGLText(glObject, o);
-    element.timeKeeper = this.timeKeeper;
-    element.recorder = this.recorder;
+    o.figureElementPrimitiveCallback = (...fo) => new FigureElementPrimitiveGLText(...fo);
+
+    const element: FigureElementPrimitiveGLText = this.gl(o);
+    element.setup(o);
     return element;
   }
 

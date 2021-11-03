@@ -4,7 +4,8 @@ import { FigureElementPrimitive } from '../Element';
 // import {
 //   Point, getPoint, Line,
 // } from '../../tools/g2';
-import type DrawingObject from '../DrawingObjects/DrawingObject';
+// import type DrawingObject from '../DrawingObjects/DrawingObject';
+import type GLObject from '../DrawingObjects/GLObject/GLObject';
 import { FigureFont } from '../DrawingObjects/TextObject/TextObject';
 // import type { TypeColor, OBJ_Font_Fixed } from '../../tools/types';
 
@@ -26,20 +27,49 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
   yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
   dimension: number;
 
-  constructor(
-    drawingObject: DrawingObject,
-    options,
-  ) {
-    super(
-      drawingObject, options.transform, options.color,
-      options.parent, options.name, options.timeKeeper,
-    );
+  // $FlowFixMe
+  drawingObject: GLObject;
+
+  // constructor(
+  //   drawingObject: DrawingObject,
+  //   transform: Transform,
+  //   color: TypeColor,
+  //   parent: FigureElement | null,
+  //   name: string,
+  //   timeKeeper: TimeKeeper,
+  // ) {
+  //   super(drawingObject, transform, color, parent, name, timeKeeper);
+
+  // // constructor(
+  // //   drawingObject: DrawingObject,
+  // //   options,
+  // // ) {
+  //   // console.log(drawingObject, options)
+  //   // // super(
+  //   // //   drawingObject, options.transform, options.color,
+  //   // //   options.parent, options.name, options.timeKeeper,
+  //   // // );
+  //   // this.font = new FigureFont(options.font);
+  //   // this.atlas = {};
+  //   // this.text = options.text;
+  //   // this.drawingObject.addVertices([0, 0, 4, 0, 4, 4, 0, 0, 4, 4, 0, 4], 2);
+  //   // const points = [0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1];
+  //   // this.drawingObject.updateTextureMap(points);
+  //   // this.xAlign = options.xAlign;
+  //   // this.yAlign = options.yAlign;
+  //   // this.verticals = {
+  //   //   maxAscent: 1.5,
+  //   //   midAscent: 0.95,
+  //   //   maxDescent: 0.5,
+  //   //   midDescent: 0.2,
+  //   //   descent: 0.08,
+  //   // };
+  // }
+
+  setup(options) {
     this.font = new FigureFont(options.font);
     this.atlas = {};
     this.text = options.text;
-    this.drawingObject.addVertices([0, 0, 4, 0, 4, 4, 0, 0, 4, 4, 0, 4], 2);
-    const points = [0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1];
-    this.drawingObject.updateTextureMap(points);
     this.xAlign = options.xAlign;
     this.yAlign = options.yAlign;
     this.verticals = {
@@ -133,14 +163,15 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     const id = `${this.font.family}${fontSize}${this.font.style}${this.font.weight}`;
     this.drawingObject.addTexture(`${this.font.family}${fontSize}${this.font.style}${this.font.weight}`);
     if (webgl.textures[id] != null) {
-      this.drawingObject.texture.id = id;
+      // this.drawingObject.texture.id = id;
       this.atlas = webgl.textures[id].atlas;
       this.dimension = webgl.textures[id].atlasDimension;
       return;
     }
 
-
+    /* eslint-disable */
     const atlasString = `QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm,./<>?;':"[]\{}|1234567890!@#$%^&*()-=_+" \u00d7\u00f7\u0391\u0392\u0393\u0394\u0395\u0396\u0397\u0398\u0399\u039A\u039B\u039C\u039D\u039E\u039F\u03A0\u03A1\u03A3\u03A4\u03A5\u03A6\u03A7\u03A8\u03A9\u03B1\u03B2\u03B3\u03B4\u03B5\u03B6\u03B7\u03B8\u03B9\u03BA\u03BB\u03BC\u03BD\u03BE\u03BF\u03C0\u03C1\u03C2\u03C3\u03C4\u03C5\u03C6\u03C7\u03C8\u03c9`;
+    /* eslint-enable */
 
     const dimension = Math.ceil(Math.sqrt(atlasString.length) + 1) * fontSize * 1.2;
 
@@ -190,6 +221,9 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     const texCoords = [];
     let x = 0;
     const r = this.font.size / this.fontSize;
+    let totalWidth = 0;
+    let maxDescent = 0;
+    let maxAscent = 0;
     for (let i = 0; i < text.length; i += 1) {
       const {
         width, ascent, descent, offsetX, offsetY,
@@ -210,6 +244,29 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
         offsetX - width * s, offsetY + ascent,
       );
       x += width * r;
+      totalWidth += width * r;
+      maxDescent = Math.max(descent * r, maxDescent);
+      maxAscent = Math.max(ascent * r, maxAscent);
+    }
+    let ox = 0;
+    let oy = 0;
+    if (this.xAlign === 'center') {
+      ox = -totalWidth / 2;
+    } else if (this.xAlign === 'right') {
+      ox = -totalWidth;
+    }
+    if (this.yAlign === 'bottom') {
+      oy = maxDescent;
+    } else if (this.yAlign === 'top') {
+      oy = -maxAscent;
+    } else if (this.yAlign === 'middle') {
+      oy = maxDescent - (maxAscent + maxDescent) / 2;
+    }
+    for (let i = 0; i < vertices.length; i += 2) {
+      vertices[i] += ox;
+    }
+    for (let i = 1; i < vertices.length; i += 2) {
+      vertices[i] += oy;
     }
     this.drawingObject.updateVertices(vertices);
     this.drawingObject.updateTextureMap(texCoords.map(v => v / this.dimension));
