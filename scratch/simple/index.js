@@ -57,7 +57,7 @@ a = figure.add({
 
 eqn = figure.add({
   make: 'equation',
-  elements: { a: { color: [1, 0, 0, 1] } },
+  elements: { a: { color: [1, 0, 0, 1], onClick: () => console.log('a'), touchBorder: 0.2 } },
   forms: { 0: [{ frac: ['a', 'vinculum', 'b'] }, '_ = ', '2', 'c'] },
   position: [1, 1],
   textFont: { size: 0.5 },

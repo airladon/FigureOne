@@ -1490,7 +1490,7 @@ export class Equation extends FigureElementCollection {
     if (fontDefinition.color == null) {
       fontDefinition.color = this.color;
     }
-    const p = this.shapes.text(
+    const p = this.shapes.glText(
       {
         text: {
           text: textToUse,
@@ -1508,6 +1508,9 @@ export class Equation extends FigureElementCollection {
     );
     if (options.touchBorder != null) {
       p.touchBorder = options.touchBorder;
+      if (options.isTouchable == null) {
+        options.isTouchable = true;
+      }
     }
     if (options.isTouchable != null) {
       p.isTouchable = options.isTouchable;
