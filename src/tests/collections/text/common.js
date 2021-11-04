@@ -12,12 +12,26 @@ function makeShape(name, options, mods, getPos) {
   index += 1;
   const o = {
     name,
-    make: 'collections.text',
-    options: tools.misc.joinObjects({}, {
-      font: { family: 'Times New Roman' },
-      text: ['This |is| a', 'test of', 'multi-lines'],
-      position: [x, y],
-    }, options),
+    make: 'collection',
+    elements: [
+      {
+        name: 'text',
+        make: 'collections.text',
+        options: tools.misc.joinObjects({}, {
+          font: { family: 'Times New Roman' },
+          text: ['This |is| a', 'test of', 'multi-lines'],
+        }, options),
+      },
+      {
+        name: 'count',
+        make: 'txt',
+        position: [0, 0.3],
+        text: '0',
+        // border: [[0, 0], [0, 0], [0, 0], [0, 0]],
+        // touchBorder: [[0, 0], [0, 0], [0, 0], [0, 0]],
+      },
+    ],
+    position: [x, y],
   };
   return o;
 }

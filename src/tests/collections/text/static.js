@@ -18,6 +18,8 @@ const click = (point, element) => {
   } else {
     element.count += 1;
   }
+  element.parent.parent._count.setText(element.count.toString())
+  figure.animateNextFrame();
 };
 
 function getShapes(getPos) {
@@ -147,20 +149,90 @@ function getShapes(getPos) {
     ....##....##.....##.##.....##.##....##.##.....##
     ....##.....#######...#######...######..##.....##
     */
-    shape('t1', { modifiers: { is: { touch: true, onClick: (p, e) => click(p, e) } } }),
-    // shape('a13', {
-    //   text: [
-    //     'Make it |so|',
-    //     {
-    //       text: '|engage| now',
-    //       lineSpace: 0.3,
-    //       font: { size: 0.2, style: 'italic' },
-    //     },
-    //     'Sir',
-    //   ],
-    //   xAlign: 'center',
-    // }),
+    shape('t1', { touchBorder: 'children', modifiers: { is: { touch: true, onClick: (p, e) => click(p, e) } } }),
+    shape('t2', { touchBorder: 'children', modifiers: { is: { touch: 0.1 } } }),
+    shape('t3', { touchBorder: 'children', modifiers: { is: { touch: [0.1, 0.2] } } }),
+    shape('t4', { touchBorder: 'children', modifiers: { is: { touch: [0.05, 0.1, 0.15, 0.2] } } }),
 
+    /*
+    .########..#######..##....##
+    .##.......##.....##.###...##
+    .##.......##.....##.####..##
+    .######...##.....##.##.##.##
+    .##.......##..##.##.##..####
+    .##.......##....##..##...###
+    .########..#####.##.##....##
+    */
+    shape('e1', { text: ['hello |eqn| now', 'there is'], modifiers: { eqn: { eqn: { frac: ['1', 'vinculum', '2'] } } } }),
+    shape('e2', { text: ['hello |eqn| now', 'there is'], modifiers: { eqn: { eqn: { frac: ['1', 'v', 'b'] } } }, elements: { v: { symbol: 'vinculum' }, b: { text: 'abc', color: [0, 1, 0, 1], font: { size: 0.3 } } } }),
+
+    /*
+    .########..#######..##....##.########
+    .##.......##.....##.###...##....##...
+    .##.......##.....##.####..##....##...
+    .######...##.....##.##.##.##....##...
+    .##.......##.....##.##..####....##...
+    .##.......##.....##.##...###....##...
+    .##........#######..##....##....##...
+    */
+    shape('f1', { font: { size: 0.15 } }),
+    shape('f2', { font: { size: 0.15 }, text: ['line1', { text: 'line2 |accent|', font: { size: 0.1 } }], modifiers: { accent: { font: { size: 0.25 } } } }),
+    shape('f3', { font: { style: 'italic' }, text: ['line1', { text: 'line2 |accent|', font: { style: 'normal' } }], modifiers: { accent: { font: { style: 'italic' } } } }),
+    shape('f4', { font: { weight: 'bold' }, text: ['line1', { text: 'line2 |accent|', font: { weight: 'lighter' } }], modifiers: { accent: { font: { weight: 'bolder' } } } }),
+    shape('f5', { font: { family: 'Times New Roman' }, text: ['line1', { text: 'line2 |accent|', font: { family: 'Arial' } }], modifiers: { accent: { font: { family: 'Courier' } } } }),
+
+    /*
+    ..######...#######..##........#######..########.
+    .##....##.##.....##.##.......##.....##.##.....##
+    .##.......##.....##.##.......##.....##.##.....##
+    .##.......##.....##.##.......##.....##.########.
+    .##.......##.....##.##.......##.....##.##...##..
+    .##....##.##.....##.##.......##.....##.##....##.
+    ..######...#######..########..#######..##.....##
+    */
+    shape('c1', { color: [0, 0, 1, 1] }),
+    shape('c2', { color: [0, 0, 1, 1], font: { color: [0, 1, 0, 1] } }),
+    shape('c3', { font: { color: [0, 0, 1, 1] }, text: ['line1', { text: 'line2 |accent|', font: { color: [1, 0, 1, 1] } }], modifiers: { accent: { font: { color: [0, 1, 0, 1] } } } }),
+
+    /*
+    .########.##....##.########..########
+    ....##.....##..##..##.....##.##......
+    ....##......####...##.....##.##......
+    ....##.......##....########..######..
+    ....##.......##....##........##......
+    ....##.......##....##........##......
+    ....##.......##....##........########
+    */
+    shape('type1', { type: '2d' }),
+    shape('type2', { type: 'bmp' }),
+
+    /*
+    ....###.....######...######..########.##....##.########
+    ...##.##...##....##.##....##.##.......###...##....##...
+    ..##...##..##.......##.......##.......####..##....##...
+    .##.....##.##.......##.......######...##.##.##....##...
+    .#########.##.......##.......##.......##..####....##...
+    .##.....##.##....##.##....##.##.......##...###....##...
+    .##.....##..######...######..########.##....##....##...
+    */
+    shape('ac1'),
+    shape('ac2', { accent: { color: [0, 0, 1, 1] } }),
+    shape('ac3', { accent: { weight: 'bold' } }),
+
+    /*
+    .##.....##..#######..########...######.
+    .###...###.##.....##.##.....##.##....##
+    .####.####.##.....##.##.....##.##......
+    .##.###.##.##.....##.##.....##..######.
+    .##.....##.##.....##.##.....##.......##
+    .##.....##.##.....##.##.....##.##....##
+    .##.....##..#######..########...######.
+    */
+    shape('m1', { modifiers: { is: { text: 'be more' } } }),
+    shape('m2', { modifiers: { is: { offset: [0.1, 0.1] } } }),
+    shape('m3', { modifiers: { is: { offset: [-0.1, 0.1] } } }),
+    shape('m4', { modifiers: { is: { offset: [0, 0.1], inLine: false } } }),
+    shape('m5', { modifiers: { is: { space: 0.1 } } }),
   ];
 }
 
@@ -176,16 +248,24 @@ const updates = {
   // 'move-pad': (e) => {
   //   e.setPositionWithoutMoving(e.points[0]);
   // },
+  type1: (e) => {
+    const elements = e._text.getChildren().filter(el => el.text == null);
+    e._count.setText(elements.length.toString());
+  },
+  type2: (e) => {
+    const elements = e._text.getChildren().filter(el => el.text == null);
+    e._count.setText(elements.length.toString());
+  },
 };
 
 const getValues = {
   itb1: {
-    element: 'itb1.e01',
+    element: 'itb1.text.e01',
     expect: 1,
     when: e => e.count,
   },
   itb2: {
-    element: 'itb2.e01',
+    element: 'itb2.text.e01',
     expect: 1,
     when: e => e.count,
   },
@@ -204,6 +284,13 @@ const move = {
     element: 'itb2',
     events: [
       ['touchDown', [0.15, 0.25]],
+      ['touchUp'],
+    ],
+  },
+  t1: {
+    element: 't1',
+    events: [
+      ['touchDown', [0.25, 0.05]],
       ['touchUp'],
     ],
   },

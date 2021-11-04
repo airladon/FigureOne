@@ -60,8 +60,8 @@ export type OBJ_TextLinesDefinition = {
  * to line layout (default: `true`)
  * @property {string | function(): void} [onClick] function to execute on click
  * within the `touchBorder` of the modified text
- * @property {TypeParsableBuffer | Array<TypeParsablePoint> | boolean} [touch]
- * touch border can be custom (`Array<TypeParsablePoint>`), or be set to some
+ * @property {TypeParsableBuffer | boolean} [touch] use `true` to enable touch
+ * or a buffer to enable touch and define the touchBorder (`false`)
  * buffer (`TypeParsableBuffer`) around the rectangle (default: `'0'`)
  * @property {number} [space] additional space to right of text
  */
@@ -70,7 +70,7 @@ export type OBJ_TextModifiersDefinition = {
   offset?: TypeParsablePoint,
   inLine?: boolean,
   font?: OBJ_Font,
-  touch?: boolean | TypeParsableBuffer | Array<TypeParsablePoint>,
+  touch?: boolean | TypeParsableBuffer,
   onClick?: string | () => void,
   space?: number,
 };
@@ -81,8 +81,6 @@ export type OBJ_TextModifiersDefinition = {
  * strings
  * @property {OBJ_TextModifiersDefinition} [modifiers] modifier definitions
  * @property {OBJ_Font} [font] Default font to use in lines
- * @property {TypeColor} [color] Default color to use in lines
- * (`[1, 0, 0, 1`])
  * @property {TypeParsableBuffer} [defaultTextTouchBorder] default buffer for
  * `touchBorder` property in `text`
  * @property {'left' | 'right' | 'center} [justify] justification of lines
@@ -102,9 +100,7 @@ export type OBJ_TextModifiersDefinition = {
  * border used for determining shape was touched. `number` and `'rect'` use
  * the the points in `'buffer'` to calculate the bounding rects (`'buffer'`).
  * @property {OBJ_Font} [accent] default modifier for accented text without a
- * specific modification. By default if a text line has a font with normal
- * style, then accented text will be italicized, and if a text line has a font
- * with italic style, then accented text will be normal.
+ * specific modification. By default accented text will be italic.
  * @property {TypeText} [type] choose to render text either in webgl canvas or
  * a separate 2d canvas.
  */
@@ -114,7 +110,6 @@ export type OBJ_CollectionsText = {
   modifiers: OBJ_TextModifiersDefinition | { eqn?: TypeEquationPhrase },
   elements: EQN_EquationElements,
   font?: OBJ_Font,
-  color: TypeColor,
   defaultTextTouchBorder?: TypeParsableBuffer,
   justify?: 'left' | 'center' | 'right',
   lineSpace?: number,
@@ -177,15 +172,23 @@ class CollectionsText extends Equation {
       options.formDefaults.alignment.yAlign = options.yAlign;
     }
 
+    if (optionsIn.color != null) {
+      options.color = optionsIn.color;
+    }
+    if (optionsIn.font != null && optionsIn.font.color != null) {
+      options.color = optionsIn.font.color;
+    }
+
     super(collections.primitives, joinObjects({}, options));
     if (options.lineSpace == null) {
       options.lineSpace = options.font.size * 0.5;
     }
-    if (options.accent == null) {
-      options.accent = options.font.style === 'italic' ? { style: 'normal' } : { style: 'italic' };
+    if (Object.keys(options.accent).length === 0) {
+      options.accent = { style: 'italic' };
     }
     this.collections = collections;
     this.font = options.font;
+    this.font.color = this.color;
     this.lineSpace = options.lineSpace;
     this.baselineSpace = options.baselineSpace;
     this.justify = options.justify;
