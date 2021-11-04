@@ -144,7 +144,7 @@ class CollectionsText extends Equation {
         let text = s;
         let eqn = null;
         let textFont = lineFont;
-        let offset = new Point(0, 0);
+        let offset;
         let inLine = true;
         let touchBorder;
         let onClick;
@@ -279,8 +279,16 @@ class CollectionsText extends Equation {
           onClick: element.onClick,
         };
         let content = name;
-        if (line.offset) {
-          content = { offset: { content, offset: line.offset } };
+        let inSize = true;
+        if (element.inLine === false) {
+          inSize = false;
+        }
+        if (element.offset) {
+          content = {
+            offset: {
+              content, offset: element.offset, inSize,
+            },
+          };
         }
         lineOptions.content.push(content);
       }

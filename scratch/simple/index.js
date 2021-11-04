@@ -78,7 +78,7 @@ const t = figure.add({
     'Lines justified |to| |the| left',
     'A |line| with a |modifiedPhrase|',
     {
-      text: 'A |line| with custom defaults',
+      text: 'A |line| |with| custom defaults',
       font: {
         style: 'italic',
         color: [0, 0.5, 1, 1],
@@ -101,7 +101,11 @@ const t = figure.add({
         color: [0, 0.5, 1, 1],
         size: 0.4,
       },
-      offset: [0.3, 0.2],
+    },
+    with: {
+      offset: [0.1, 0.3],
+      font: { size: 0.2 },
+      // inLine: false,
     },
     line: {
       font: {
