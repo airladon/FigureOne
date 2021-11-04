@@ -10,9 +10,9 @@ import { joinObjects, splitString } from '../../tools/tools';
 // import {
 //   FigureElementCollection, FigureElementPrimitive,
 // } from '../Element';
-// import type {
-//   OBJ_Collection,
-// } from '../FigurePrimitives/FigurePrimitiveTypes';
+import type {
+  TypeText,
+} from '../FigurePrimitives/FigurePrimitiveTypes';
 import type {
   TypeColor, OBJ_Font, OBJ_Font_Fixed,
 } from '../../tools/types';
@@ -29,7 +29,9 @@ import { Equation } from '../Equation/Equation';
  * @property {string} [text] string representing a line of text
  * @property {OBJ_Font} [font] line specific default font
 //  * @property {'left' | 'right' | 'center'} [justify] line specific justification
- * @property {number} [lineSpace] line specific separation from baseline of
+ * @property {number} [lineSpace] line specific separation from top of
+ * this line to baseline of previous line
+ * @property {number} [baselineSpace] line specific separation from baseline of
  * this line to baseline of previous line
  * @property {boolean} [fixColor] If `true`, {@link FigureElement}`.setColor`
  * method will not change the color of text
@@ -58,7 +60,7 @@ export type OBJ_TextLinesDefinition = {
  * to line layout (default: `true`)
  * @property {string | function(): void} [onClick] function to execute on click
  * within the `touchBorder` of the modified text
- * @property {TypeParsableBuffer | Array<TypeParsablePoint>} [touchBorder]
+ * @property {TypeParsableBuffer | Array<TypeParsablePoint> | boolean} [touch]
  * touch border can be custom (`Array<TypeParsablePoint>`), or be set to some
  * buffer (`TypeParsableBuffer`) around the rectangle (default: `'0'`)
  * @property {number} [space] additional space to right of text
@@ -68,28 +70,61 @@ export type OBJ_TextModifiersDefinition = {
   offset?: TypeParsablePoint,
   inLine?: boolean,
   font?: OBJ_Font,
-  touchBorder?: TypeParsableBuffer | Array<TypeParsablePoint>,
+  touch?: boolean | TypeParsableBuffer | Array<TypeParsablePoint>,
   onClick?: string | () => void,
   space?: number,
 };
 
+/* eslint-disable max-len */
 /**
+ * @property {Array<string | OBJ_TextLinesDefinition>} [text] array of line
+ * strings
+ * @property {OBJ_TextModifiersDefinition} [modifiers] modifier definitions
+ * @property {OBJ_Font} [font] Default font to use in lines
+ * @property {TypeColor} [color] Default color to use in lines
+ * (`[1, 0, 0, 1`])
+ * @property {TypeParsableBuffer} [defaultTextTouchBorder] default buffer for
+ * `touchBorder` property in `text`
+ * @property {'left' | 'right' | 'center} [justify] justification of lines
+ * (`left`)
+ * @property {number} [lineSpace] Space between ascent of each line with
+ * descent of previous line (`font.size * 0.5`)
+ * @property {number} [baselineSpace] Space between baselines of lines. This
+ * will override `lineSpace` for all lines including individual line settings
+ * (`undefined`)
+ * @property {'left' | 'right' | 'center'} [xAlign] horizontal alignment of
+ * lines with `position` (`left`)
+ * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] vertical
+ * alignment of lines with `position` (`baseline`)
+ * @property {TypeParsableBuffer | TypeParsableBorder | 'children' | 'rect' | number} [border]
+ * border used for keeping shape within limits (`'draw'`)
+ * @property {TypeParsableBuffer | TypeParsableBorder | 'border' | 'children' | 'rect' | number} [touchBorder]
+ * border used for determining shape was touched. `number` and `'rect'` use
+ * the the points in `'buffer'` to calculate the bounding rects (`'buffer'`).
+ * @property {OBJ_Font} [accent] default modifier for accented text without a
+ * specific modification. By default if a text line has a font with normal
+ * style, then accented text will be italicized, and if a text line has a font
+ * with italic style, then accented text will be normal.
+ * @property {TypeText} [type] choose to render text either in webgl canvas or
+ * a separate 2d canvas.
  */
+/* eslint-enable max-len */
 export type OBJ_CollectionsText = {
   text: Array<string | OBJ_TextLinesDefinition>,
   modifiers: OBJ_TextModifiersDefinition | { eqn?: TypeEquationPhrase },
   elements: EQN_EquationElements,
   font?: OBJ_Font,
+  color: TypeColor,
   defaultTextTouchBorder?: TypeParsableBuffer,
   justify?: 'left' | 'center' | 'right',
   lineSpace?: number,
   baselineSpace?: number,
   xAlign: 'left' | 'right' | 'center',
   yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
-  color: TypeColor,
-  border?: TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number,
-  touchBorder?: TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw',
-  defaultAccent?: OBJ_Font,
+  border?: TypeParsableBuffer | TypeParsableBorder | 'children' | 'rect' | number;
+  touchBorder?: TypeParsableBuffer | TypeParsableBorder | 'border' | 'children' | 'rect' | number;
+  accent?: OBJ_Font,
+  type: TypeText,
 }
 
 // $FlowFixMe
@@ -99,11 +134,11 @@ class CollectionsText extends Equation {
   font: OBJ_Font_Fixed;
   accent: OBJ_Font;
   justify: 'left' | 'right' | 'center';
-  // xAlign: 'left' | 'right' | 'center';
-  // yAlign: 'mid' | 'bottom' | 'top' | 'baseline';
   lineSpace: number;
   lines: Array<Object>;
   modifiers: Object;
+  baselineSpace: number | null;
+  defaultTextTouchBorder: TypeParsableBuffer;
 
   /**
    * @hideconstructor
@@ -116,8 +151,6 @@ class CollectionsText extends Equation {
       color: collections.primitives.defaultColor,
       font: collections.primitives.defaultFont,
       justify: 'left',
-      // xAlign: 'left',
-      // yAlign: 'baseline',
       lineSpace: null,
       transform: new Transform().scale(1).rotate(0).translate(0, 0),
       scale: 1,
@@ -131,6 +164,8 @@ class CollectionsText extends Equation {
         layout: 'always',
       },
       accent: {},
+      baselineSpace: null,
+      defaultTextTouchBorder: 0,
     };
 
     const options = joinObjects({}, defaultOptions, optionsIn);
@@ -144,20 +179,20 @@ class CollectionsText extends Equation {
 
     super(collections.primitives, joinObjects({}, options));
     if (options.lineSpace == null) {
-      options.lineSpace = options.font.size * 1.3;
+      options.lineSpace = options.font.size * 0.5;
     }
     if (options.accent == null) {
       options.accent = options.font.style === 'italic' ? { style: 'normal' } : { style: 'italic' };
     }
     this.collections = collections;
     this.font = options.font;
-    // this.xAlign = options.xAlign;
-    // this.yAlign = options.yAlign;
     this.lineSpace = options.lineSpace;
+    this.baselineSpace = options.baselineSpace;
     this.justify = options.justify;
     this.accent = options.accent;
     this.modifiers = options.modifiers || {};
     this.lines = [];
+    this.defaultTextTouchBorder = options.defaultTextTouchBorder;
 
     this.splitLines(options.text);
     const equationOptions = this.createEquation();
@@ -173,18 +208,25 @@ class CollectionsText extends Equation {
       // const lineDefinition = lines[i];
       let lineJustification = this.justify;
       let lineLineSpace = this.lineSpace;
+      let lineBaselineSpace = this.baselineSpace;
       let lineToUse;
       let lineFont = this.font;
       if (typeof lineDefinition !== 'string') {
         const {
-          font, justify, lineSpace,
+          font, justify, lineSpace, baselineSpace,
         } = lineDefinition;
         lineToUse = lineDefinition.text;
         if (font != null) {
           lineFont = joinObjects({}, { color: this.color }, this.font, font);
         }
+        if (baselineSpace != null) {
+          lineBaselineSpace = baselineSpace;
+        }
         if (lineSpace != null) {
           lineLineSpace = lineSpace;
+          if (baselineSpace == null) {
+            lineBaselineSpace = null;
+          }
         }
         if (justify != null) {
           lineJustification = justify;
@@ -220,14 +262,18 @@ class CollectionsText extends Equation {
             }
             if (mod.inLine != null) { inLine = mod.inLine; }
             if (mod.offset != null) { offset = mod.offset; }
-            if (mod.touchBorder != null) {
-              touchBorder = mod.touchBorder;
-              if (
-                touchBorder != null
-                && Array.isArray(touchBorder)
-                && !isBuffer(touchBorder)
-              ) { // $FlowFixMe
-                [touchBorder] = getBorder(touchBorder);
+            if (mod.touch != null) {
+              if (mod.touch === true) {
+                touchBorder = this.defaultTextTouchBorder;
+              } else if (mod.touch !== false) {
+                touchBorder = mod.touch;
+                if (
+                  touchBorder != null
+                  && Array.isArray(touchBorder)
+                  && !isBuffer(touchBorder)
+                ) { // $FlowFixMe
+                  [touchBorder] = getBorder(touchBorder);
+                }
               }
             }
             if (mod.onClick != null) { onClick = mod.onClick; }
@@ -251,7 +297,8 @@ class CollectionsText extends Equation {
       });
       this.lines.push({
         justify: lineJustification,
-        baselineSpace: lineLineSpace,
+        lineSpace: lineLineSpace,
+        baselineSpace: lineBaselineSpace,
         text: line,
         width: 0,
       });
@@ -281,7 +328,8 @@ class CollectionsText extends Equation {
           lines: {
             content,
             justify: this.justify,
-            baselineSpace: this.lineSpace,
+            lineSpace: this.lineSpace,
+            baselineSpace: this.baselineSpace,
           },
         },
       },
@@ -294,10 +342,11 @@ class CollectionsText extends Equation {
   createLine(line: Object, lineIndex: number) {
     const lineOptions = {
       justify: line.justify,
+      space: line.lineSpace,
       baselineSpace: line.baselineSpace,
       content: [],
     };
-    console.log(line.justify)
+    // console.log(line.justify)
     const elementOptions = {};
     line.text.forEach((element, index) => {
       // const name = element.modText === '' ? `e${lineIndex}${index}` : element.modText;
