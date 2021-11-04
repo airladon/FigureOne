@@ -74,7 +74,7 @@ const t = figure.add({
   justify: 'center',
   xAlign: 'left',
   text: [
-    'Lines justified to the left',
+    'Lines justified to |the| left',
     'A |line| with a |modifiedPhrase|',
     {
       text: 'A |line| with custom defaults',

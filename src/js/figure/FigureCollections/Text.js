@@ -24,6 +24,23 @@ import type {
   TypeLabelSubLocation,
 } from './EquationLabel';
 
+/**
+ */
+export type OBJ_CollectionsText = {
+  text: Array<string | OBJ_TextLinesDefinition>,
+  modifiers: OBJ_TextModifiersDefinition,
+  font?: OBJ_Font,
+  defaultTextTouchBorder?: TypeParsableBuffer,
+  justify?: 'left' | 'center' | 'right',
+  lineSpace?: number,
+  xAlign: 'left' | 'right' | 'center',
+  yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
+  color: TypeColor,
+  border?: TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number,
+  touchBorder?: TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw',
+  defaultAccent?: OBJ_Font,
+}
+
 // $FlowFixMe
 class CollectionsText extends Equation {
   _eqn: Equation;
@@ -78,7 +95,7 @@ class CollectionsText extends Equation {
       options.lineSpace = options.font.size * 1.3;
     }
     if (options.accent == null) {
-      options.accent = options.font.style === 'italic' ? 'normal' : 'italic';
+      options.accent = options.font.style === 'italic' ? { style: 'normal' } : { style: 'italic' };
     }
     this.collections = collections;
     this.font = options.font;
@@ -146,7 +163,7 @@ class CollectionsText extends Equation {
           } else {
             mod = {
               text: s,
-              font: defaultAccent,
+              font: this.accent,
             };
           }
           // const mod = this.modifiers[s];
