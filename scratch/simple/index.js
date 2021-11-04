@@ -69,12 +69,13 @@ eqn = figure.add({
 eqn._a.setColor([0, 0, 1, 1])
 
 const t = figure.add({
+  name: 'eqn',
   make: 'collections.text',
   position: [-1, 5],
   justify: 'center',
   xAlign: 'left',
   text: [
-    'Lines justified to |the| left',
+    'Lines justified |to| |the| left',
     'A |line| with a |modifiedPhrase|',
     {
       text: 'A |line| with custom defaults',
@@ -85,13 +86,22 @@ const t = figure.add({
       lineSpace: 1,
     },
   ],
+  elements: {
+    abc: { text: 'hello world' },
+    v: { symbol: 'vinculum' },
+  },
   modifiers: {
+    to: {
+      eqn: { frac: { numerator: 'abc', symbol: 'v', denominator: '2', scale: 0.6, offsetY: 0.2 } },
+    },
     modifiedPhrase: {
       text: 'modified phrase',
       font: {
         style: 'italic',
         color: [0, 0.5, 1, 1],
+        size: 0.4,
       },
+      offset: [0.3, 0.2],
     },
     line: {
       font: {

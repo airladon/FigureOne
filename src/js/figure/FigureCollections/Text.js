@@ -2,33 +2,30 @@
 
 // import Figure from '../Figure';
 import {
-  Transform, getPoint, Point,
+  Transform, Point,
   // getPoint, getTransform,
 } from '../../tools/g2';
-import type { TypeParsablePoint } from '../../tools/g2';
+// import type { TypeParsablePoint } from '../../tools/g2';
 import { joinObjects, splitString } from '../../tools/tools';
-import {
-  FigureElementCollection, FigureElementPrimitive,
-} from '../Element';
-import type {
-  OBJ_Collection,
-} from '../FigurePrimitives/FigurePrimitiveTypes';
+// import {
+//   FigureElementCollection, FigureElementPrimitive,
+// } from '../Element';
+// import type {
+//   OBJ_Collection,
+// } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type {
   TypeColor, OBJ_Font,
 } from '../../tools/types';
 import type FigureCollections from './FigureCollections';
-import EquationLabel from './EquationLabel';
 import type { EQN_Equation } from '../Equation/Equation';
 import { Equation } from '../Equation/Equation';
-import type {
-  TypeLabelSubLocation,
-} from './EquationLabel';
 
 /**
  */
 export type OBJ_CollectionsText = {
   text: Array<string | OBJ_TextLinesDefinition>,
-  modifiers: OBJ_TextModifiersDefinition,
+  modifiers: OBJ_TextModifiersDefinition | { eqn?: TypeEquationPhrase },
+  elements: EQN_EquationElements,
   font?: OBJ_Font,
   defaultTextTouchBorder?: TypeParsableBuffer,
   justify?: 'left' | 'center' | 'right',
@@ -110,7 +107,7 @@ class CollectionsText extends Equation {
     this.splitLines(options.text);
     const equationOptions = this.createEquation();
 
-    this.addElements(equationOptions.elements);
+    this.addElements(joinObjects({}, equationOptions.elements, options.elements || {}));
     this.addForms(equationOptions.forms);
     // this.add(equationOptions);
   }
@@ -145,6 +142,7 @@ class CollectionsText extends Equation {
       const [split, firstToken] = splitString(lineToUse, '|', '/');
       split.forEach((s, i) => {
         let text = s;
+        let eqn = null;
         let textFont = lineFont;
         let offset = new Point(0, 0);
         let inLine = true;
@@ -169,6 +167,9 @@ class CollectionsText extends Equation {
           // const mod = this.modifiers[s];
           if (mod.text != null) {
             ({ text } = mod);
+          }
+          if (mod.eqn != null) {
+            ({ eqn } = mod);
           }
           if (mod.font != null) {
             textFont = joinObjects({}, lineFont, mod.font);
@@ -202,6 +203,7 @@ class CollectionsText extends Equation {
         }
         line.push({
           text,
+          eqn,
           textFont,
           offset,
           inLine,
@@ -267,13 +269,21 @@ class CollectionsText extends Equation {
     line.text.forEach((element, index) => {
       // const name = element.modText === '' ? `e${lineIndex}${index}` : element.modText;
       const name = `e${lineIndex}${index}`;
-      elementOptions[name] = {
-        text: element.text,
-        font: element.textFont,
-        touchBorder: element.touchBorder,
-        onClick: element.onClick,
-      };
-      lineOptions.content.push(name);
+      if (element.eqn) {
+        lineOptions.content.push(element.eqn);
+      } else {
+        elementOptions[name] = {
+          text: element.text,
+          font: element.textFont,
+          touchBorder: element.touchBorder,
+          onClick: element.onClick,
+        };
+        let content = name;
+        if (line.offset) {
+          content = { offset: { content, offset: line.offset } };
+        }
+        lineOptions.content.push(content);
+      }
     });
     return [elementOptions, lineOptions];
   }

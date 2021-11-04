@@ -4921,6 +4921,7 @@ class FigureElementCollection extends FigureElement {
         `_${nameToUse}` in rootCollection
           && (addElementsToUse != null && addElementsToUse !== {})
           && !methodPathToUse.endsWith('equation')
+          && !methodPathToUse.endsWith('text')
       ) {
         newElement.add(addElementsToUse);
         // addedElements.push(addElementsToUse);
@@ -4994,6 +4995,7 @@ class FigureElementCollection extends FigureElement {
       //
       addEquation: collections.addEquation.bind(collections),
       equation: collections.equation.bind(collections),
+      // eqnText: collections.text.bind(collections),
       // addNavigator: collections.addNavigator.bind(collections),
     };
     if (make in methods) {

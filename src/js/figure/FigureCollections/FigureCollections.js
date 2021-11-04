@@ -164,6 +164,10 @@ export default class FigureCollections {
 
   text(...options: Array<COL_Text>) {
     const optionsToUse = joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options);
+    // if (optionsToUse.elements != null) {
+    //   optionsToUse.elems = optionsToUse.elements;
+    //   delete optionsToUse.elements;
+    // }
     return new CollectionsText(
       this, optionsToUse,
     );

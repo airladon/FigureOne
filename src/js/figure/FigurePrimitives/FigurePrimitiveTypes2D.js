@@ -1580,7 +1580,7 @@ export type OBJ_TextModifierDefinition = {
   touchBorder?: TypeParsableBuffer | Array<TypeParsablePoint>,
   onClick?: string | () => void,
   followOffsetY?: boolean,
-}
+};
 
 /**
  * Modifier object.
