@@ -2,10 +2,10 @@
 
 // import Figure from '../Figure';
 import {
-  Transform, Point,
+  Transform, Point, isBuffer, getBorder,
   // getPoint, getTransform,
 } from '../../tools/g2';
-import type { TypeParsablePoint, TypeParsableBuffer } from '../../tools/g2';
+import type { TypeParsablePoint, TypeParsableBuffer, TypeParsableBorder } from '../../tools/g2';
 import { joinObjects, splitString } from '../../tools/tools';
 // import {
 //   FigureElementCollection, FigureElementPrimitive,
@@ -14,10 +14,11 @@ import { joinObjects, splitString } from '../../tools/tools';
 //   OBJ_Collection,
 // } from '../FigurePrimitives/FigurePrimitiveTypes';
 import type {
-  TypeColor, OBJ_Font,
+  TypeColor, OBJ_Font, OBJ_Font_Fixed,
 } from '../../tools/types';
 import type FigureCollections from './FigureCollections';
-import type { EQN_Equation } from '../Equation/Equation';
+import type { EQN_EquationElements } from '../Equation/Equation';
+import type { TypeEquationPhrase } from '../Equation/EquationFunctions';
 import { Equation } from '../Equation/Equation';
 
 /**
@@ -278,7 +279,7 @@ class CollectionsText extends Equation {
 
   createEquation() {
     // console.log(this.lines);
-    const eqn = [];
+    // const eqn = [];
     const content = [];
     const elements = {};
     this.lines.forEach((line, lineIndex) => {
@@ -286,7 +287,6 @@ class CollectionsText extends Equation {
       joinObjects(elements, elementOptions);
       content.push(lineOptions);
     });
-    console.log(content)
     const o = {
       name: 'lines',
       make: 'equation',
@@ -304,7 +304,6 @@ class CollectionsText extends Equation {
           },
         },
       },
-      yAlign: this.yAlign,
     };
     // console.log(o);
     return o;
