@@ -1,5 +1,7 @@
 FROM mcr.microsoft.com/playwright:bionic
 
+
+WORKDIR /home/pwuser
 COPY ./containers/playwright/package.json package.json
 
 RUN npm install

@@ -13,10 +13,17 @@ page.on('console', (msg) => {
       failures.push(result);
     }
   }
+  // for (let i = 0; i < msg.args().length; i += 1) {
+  //   console.log(`${i}: ${msg.args()[i]}`);
+  // }
 });
 
-function browserStaticTester(title, file) {
+function browserStaticTester(title, fileIn) {
   jest.setTimeout(120000);
+  let file = fileIn;
+  if (fileIn.startsWith('file://home/pwuser')) {
+    file = fileIn.replace('file://home/pwuser', 'http://localhost:8080/');
+  }
   // eslint-disable-next-line jest/valid-title
   test(title, async () => {
     await page.goto(file);
