@@ -62,6 +62,8 @@ class TextObject extends DrawingObject {
     width: number,
   }
 
+  underline: [number, number];
+
   constructor(
     drawContext2D: DrawContext2D,
     options: OBJ_GLText_Fixed,
@@ -78,6 +80,7 @@ class TextObject extends DrawingObject {
     this.xAlign = options.xAlign;
     this.yAlign = options.yAlign;
     this.adjustments = options.adjustments;
+    this.underline = [0, 0];
     this.setText(this.text);
   }
 
@@ -184,6 +187,20 @@ class TextObject extends DrawingObject {
 
     const { width } = ctx.measureText(this.text);
     // width *= this.font.width;
+    if (this.font.underline !== false) {
+      this.underline = this.font.getUnderline();
+      const uDescent = this.underline[0] * scalingFactor;
+      if (uDescent > descent) {
+        descent = uDescent;
+      }
+      if (uDescent < 0) {
+        if (-uDescent > ascent) {
+          ascent = -uDescent;
+        }
+      }
+    } else {
+      this.underline = [0, 0];
+    }
     this.measure = {
       ascent: ascent / scalingFactor,
       descent: descent / scalingFactor,
@@ -191,6 +208,19 @@ class TextObject extends DrawingObject {
     };
     return this.measure;
   }
+
+  // getUnderline() {
+  //   if (this.font.underline === false) {
+  //     return [0, 0];
+  //   }
+  //   if (this.font.underline === true) {
+  //     return [this.font.size / 20 + this.font.size / 40, this.font.size / 40];
+  //   }
+  //   if (typeof this.font.underline === 'number') {
+  //     return [this.font.underline, this.font.size / 40];
+  //   }
+  //   return this.font.underline;
+  // }
 
   alignText() {
     const location = new Point(0, 0);
@@ -447,9 +477,15 @@ class TextObject extends DrawingObject {
 
     // Fill in all the text
     // eslint-disable-next-line no-param-reassign
+    // this.lastDraw = {
+    //   x: (this.location.x) * scalingFactor,
+    //   y: (this.location.y) * -scalingFactor,
+    //   width: this.bounds.width * scalingFactor,
+    //   height: this.bounds.height * scalingFactor,
+    // };
     this.lastDraw = {
       x: (this.location.x) * scalingFactor,
-      y: (this.location.y) * -scalingFactor,
+      y: (this.bounds.bottom) * -scalingFactor,
       width: this.bounds.width * scalingFactor,
       height: this.bounds.height * scalingFactor,
     };
@@ -460,6 +496,18 @@ class TextObject extends DrawingObject {
       (this.location.x) * scalingFactor,
       (this.location.y) * -scalingFactor,
     );
+    // console.log(this.text, c)
+    if (this.font.underline !== false) {
+      const [uDescent, uWidth] = this.underline;
+      ctx.fillRect(
+        (this.location.x) * scalingFactor,
+        (this.location.y - uDescent + uWidth) * -scalingFactor,
+        this.bounds.width * scalingFactor,
+        uWidth * scalingFactor,
+      );
+    }
+    // ctx.fillStyle = 'blue';
+    // ctx.fill();
     ctx.restore();
   }
 

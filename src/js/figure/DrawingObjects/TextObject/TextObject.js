@@ -31,6 +31,7 @@ class FigureFont {
   weight: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
   style: 'normal' | 'italic';
   family: string;
+  underline: boolean | number | [number, number];
   color: TypeColor | null;
   opacity: number;
   width: number;
@@ -48,6 +49,7 @@ class FigureFont {
       this.size = optionsIn.size;
       this.weight = optionsIn.weight;
       this.opacity = optionsIn.opacity;
+      this.underline = optionsIn.underline;
       this.setColor(optionsIn.color);
       this.width = optionsIn.width;
       this.descent = optionsIn.descent;
@@ -70,6 +72,7 @@ class FigureFont {
       maxDescent: 0.5,
       midAscent: 1.1,
       maxAscent: 1.5,
+      underline: false,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     this.family = options.family;
@@ -84,6 +87,7 @@ class FigureFont {
     this.maxDescent = options.maxDescent;
     this.midAscent = options.midAscent;
     this.maxAscent = options.maxAscent;
+    this.underline = options.underline;
   }
 
   setColor(color: TypeColor | null = null) {
@@ -92,6 +96,19 @@ class FigureFont {
     } else {
       this.color = color.slice();
     }
+  }
+
+  getUnderline() {
+    if (this.underline === false) {
+      return [0, 0];
+    }
+    if (this.underline === true) {
+      return [this.size / 20 + this.size / 40, this.size / 40];
+    }
+    if (typeof this.underline === 'number') {
+      return [this.underline, this.size / 40];
+    }
+    return this.underline;
   }
 
   definition() {
@@ -148,6 +165,7 @@ class FigureFont {
       weight: this.weight,
       color: this.color,
       opacity: this.opacity,
+      underline: this.underline,
     });
   }
 }
