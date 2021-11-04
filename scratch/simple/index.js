@@ -76,14 +76,13 @@ const t = figure.add({
   xAlign: 'left',
   text: [
     'Lines justified |to| |the| left',
-    'A |line| with a |modifiedPhrase|',
+    { text: 'A |line| with a |modifiedPhrase|', lineSpace: 1 },
     {
-      text: 'A |line| |with| custom defaults',
+      text: 'A |line| |with| cu|st|om defaults',
       font: {
         style: 'italic',
         color: [0, 0.5, 1, 1],
       },
-      lineSpace: 1,
     },
   ],
   elements: {
@@ -93,6 +92,12 @@ const t = figure.add({
   modifiers: {
     to: {
       eqn: { frac: { numerator: 'abc', symbol: 'v', denominator: '2', scale: 0.6, offsetY: 0.2 } },
+    },
+    st: {
+      // lSpace: 0.1,
+      // rSpace: 0.1,
+      offset: [0.1, 0],
+      space: 0.1,
     },
     modifiedPhrase: {
       text: 'modified phrase',
@@ -105,7 +110,6 @@ const t = figure.add({
     with: {
       offset: [0.1, 0.3],
       font: { size: 0.2 },
-      // inLine: false,
     },
     line: {
       font: {

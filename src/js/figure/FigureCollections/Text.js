@@ -5,7 +5,7 @@ import {
   Transform, Point,
   // getPoint, getTransform,
 } from '../../tools/g2';
-// import type { TypeParsablePoint } from '../../tools/g2';
+import type { TypeParsablePoint, TypeParsableBuffer } from '../../tools/g2';
 import { joinObjects, splitString } from '../../tools/tools';
 // import {
 //   FigureElementCollection, FigureElementPrimitive,
@@ -19,6 +19,57 @@ import type {
 import type FigureCollections from './FigureCollections';
 import type { EQN_Equation } from '../Equation/Equation';
 import { Equation } from '../Equation/Equation';
+
+/**
+ * Lines Text Definition object.
+ *
+ * Used to define a string within a text lines primitive {@link OBJ_TextLines}.
+ *
+ * @property {string} [text] string representing a line of text
+ * @property {OBJ_Font} [font] line specific default font
+ * @property {'left' | 'right' | 'center'} [justify] line specific justification
+ * @property {number} [lineSpace] line specific separation from baseline of
+ * this line to baseline of previous line
+ * @property {boolean} [fixColor] If `true`, {@link FigureElement}`.setColor`
+ * method will not change the color of text
+ */
+export type OBJ_TextLinesDefinition = {
+  text: string,
+  font?: OBJ_Font,
+  justify?: 'left' | 'right' | 'center',
+  lineSpace?: number,
+};
+
+/**
+ * Modifier Text Definition object.
+ *
+ * Used to define the modifiers of a string within a text lines primitive
+ * {@link OBJ_TextLines}.
+ *
+ * @property {string} [text] text to replace `modifierId` with - if `undefined`
+ * then `modifierId` is used
+ * @property {TypeParsablePoint} [offset] text offset
+ * @property {boolean} [followOffsetY] `true` will make any subsequent text
+ * have the same y offset as a starting point (`false`)
+ * @property {OBJ_Font} [font] font changes for modified text
+ * @property {boolean} [inLine] `false` if modified text should not contribute
+ * to line layout (default: `true`)
+ * @property {string | function(): void} [onClick] function to execute on click
+ * within the `touchBorder` of the modified text
+ * @property {TypeParsableBuffer | Array<TypeParsablePoint>} [touchBorder]
+ * touch border can be custom (`Array<TypeParsablePoint>`), or be set to some
+ * buffer (`TypeParsableBuffer`) around the rectangle (default: `'0'`)
+ * @property {number} [space] additional space to right of text
+ */
+export type OBJ_TextModifiersDefinition = {
+  text?: string,
+  offset?: TypeParsablePoint,
+  inLine?: boolean,
+  font?: OBJ_Font,
+  touchBorder?: TypeParsableBuffer | Array<TypeParsablePoint>,
+  onClick?: string | () => void,
+  space?: number,
+};
 
 /**
  */
@@ -148,9 +199,9 @@ class CollectionsText extends Equation {
         let inLine = true;
         let touchBorder;
         let onClick;
-        let followOffsetY = false;
-        let rSpace = 0;
-        let lSpace = 0;
+        // let followOffsetY = false;
+        let space = 0;
+        // let lSpace = 0;
         // let modText = '';
 
         if (i % 2 === firstToken) {
@@ -191,8 +242,8 @@ class CollectionsText extends Equation {
           }
           if (mod.onClick != null) { onClick = mod.onClick; }
           // if (mod.followOffsetY != null) { followOffsetY = mod.followOffsetY; }
-          if (mod.lSpace != null) { lSpace = mod.lSpace; }
-          if (mod.rSpace != null) { rSpace = mod.rSpace; }
+          // if (mod.lSpace != null) { lSpace = mod.lSpace; }
+          if (mod.space != null) { space = mod.space; }
           // this.modifiers[s] = mod;
           // if (Array.isArray(border)) {  // $FlowFixMe
           //   border = getPoints(border);
@@ -211,14 +262,14 @@ class CollectionsText extends Equation {
           touchBorder,
           onClick,
           // followOffsetY,
-          lSpace,
-          rSpace,
+          // lSpace,
+          space,
           // modText,
         });
       });
       this.lines.push({
         justify: lineJustification,
-        space: lineLineSpace,
+        baselineSpace: lineLineSpace,
         text: line,
         width: 0,
       });
@@ -235,6 +286,7 @@ class CollectionsText extends Equation {
       joinObjects(elements, elementOptions);
       content.push(lineOptions);
     });
+    console.log(content)
     const o = {
       name: 'lines',
       make: 'equation',
@@ -262,7 +314,7 @@ class CollectionsText extends Equation {
   createLine(line: Object, lineIndex: number) {
     const lineOptions = {
       justify: line.justify,
-      space: line.space,
+      baselineSpace: line.baselineSpace,
       content: [],
     };
     const elementOptions = {};
@@ -290,18 +342,18 @@ class CollectionsText extends Equation {
             },
           };
         }
-        if (element.lSpace) {
-          content = {
-            offset: {
-              content, offset: [element.lSpace, 0], inSize,
-            },
-          };
-        }
+        // if (element.lSpace) {
+        //   content = {
+        //     offset: {
+        //       content, offset: [element.lSpace, 0], inSize,
+        //     },
+        //   };
+        // }
         lineOptions.content.push(content);
-        if (element.rSpace) {
+        if (element.space) {
           lineOptions.content.push({
             container: {
-              width: element.rSpace,
+              width: element.space,
             },
           });
         }
