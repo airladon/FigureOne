@@ -1,6 +1,6 @@
 // const { polygon } = Fig.tools.g2;
 
-const figure = new Fig.Figure({ scene: [-3, -3, 6, 6]});
+const figure = new Fig.Figure({ scene: [-3, -3, 6, 6], backgroundColor: [1, 1, 1, 1], font: { size: 0.5 } });
 // Zoomable and Pannable plot
 
 // const drawContext2D = figure.draw2DLow;
@@ -54,7 +54,7 @@ a = figure.add({
   // move: { type: 'translate' },
   move: true,
   position: [0, 2],
-})
+});
 
 eqn = figure.add({
   make: 'equation',
@@ -67,7 +67,82 @@ eqn = figure.add({
 
 // eqn._a.setFont({ color: [0, 1, 0, 1]});
 eqn._a.setColor([0, 0, 1, 1])
+
+const t = figure.add({
+  make: 'collections.text',
+  position: [-1, 5],
+  justify: 'center',
+  text: [
+    'Lines justified to the left',
+    'A |line| with a |modifiedPhrase|',
+    {
+      text: 'A |line| with custom defaults',
+      font: {
+        style: 'italic',
+        color: [0, 0.5, 1, 1],
+      },
+      lineSpace: 1,
+    },
+  ],
+  modifiers: {
+    modifiedPhrase: {
+      text: 'modified phrase',
+      font: {
+        style: 'italic',
+        color: [0, 0.5, 1, 1],
+      },
+    },
+    line: {
+      font: {
+        family: 'Times New Roman',
+        color: [0, 0.6, 0, 1],
+        style: 'italic',
+      },
+    },
+  },
+});
 // eqn.animations.new()
 //   .delay(1)
 //   .dissolveIn(3)
 //   .start();
+
+// const angle = figure.add({
+//   make: 'collections.angle',
+//   angle: Math.PI / 4,
+//   label: {
+//     text: null,
+//     update: true,
+//     font: { size: 0.2 },
+//   },
+//   curve: {
+//     radius: 0.5,
+//     width: 0.01,
+//   },
+//   corner: {
+//     width: 0.01,
+//     length: 1,
+//   },
+// });
+
+// angle.setMovable({
+//   startArm: 'rotation',
+//   endArm: 'angle',
+//   movePadRadius: 0.3,
+// });
+
+// const tri = figure.add({
+//   make: 'collections.polyline',
+//   close: true,
+//   points: [[1.5, 3], [3, 0], [0, 0]],
+//   width: 0.01,
+//   angle: {
+//     label: { text: null, scale: 2, font: { size: 0.5 } },
+//     color: [1, 0, 0, 1],
+//   },
+//   color: [0, 0, 1, 1],
+//   makeValid: { shape: 'triangle', hide: { minSide: 2, minAngle: Math.PI / 12 } },
+//   side: { label: null },
+// });
+
+// tri.updatePoints([[1.5, 3], [3, 0], [0, 0]])
+// tri._angle1.setOpacity(0.5)

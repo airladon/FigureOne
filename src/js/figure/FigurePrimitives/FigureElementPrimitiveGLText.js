@@ -217,7 +217,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       this.atlas[atlasString[i]] = {
         width, ascent, descent, offsetX, offsetY,
       };
-      x += width * 2;
+      x += width * 2.5;
       if (x >= dimension - fontSize) {
         x = fontSize;
         y += fontSize * 1.2;
