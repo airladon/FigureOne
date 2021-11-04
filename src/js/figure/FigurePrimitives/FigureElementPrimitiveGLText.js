@@ -205,6 +205,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     ctx.font = `${this.font.style} ${this.font.weight} ${fontSize}px ${this.font.family}`;
     let x = fontSize;
     let y = fontSize;
+
     for (let i = 0; i < atlasString.length; i += 1) {
       ctx.fillText(atlasString[i], x, y);
       const {
@@ -278,8 +279,8 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
         maxDescent = uDescent;
       }
       if (uDescent < 0) {
-        if (-uDescent > maxAscent) {
-          maxAscent = -uDescent;
+        if (-uDescent + uWidth > maxAscent) {
+          maxAscent = -uDescent + uWidth;
         }
       }
       vertices.push(
@@ -332,7 +333,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       this.text = text;
     } else {
       if (text.font != null) {
-        this.font = joinObjects({}, this.font.definition, text.font);
+        this.font = new FigureFont(joinObjects({}, this.font.definition, text.font));
       }
       if (text.xAlign != null) {
         this.xAlign = text.xAlign;
@@ -342,6 +343,9 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       }
       if (text.adjustments != null) {
         this.adjustments = joinObjects({}, this.adjustments, text.adjustments);
+      }
+      if (text.text != null) {
+        this.text = text.text;
       }
     }
     this.measureAndAlignText();
@@ -413,7 +417,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
 
   calcTouchBorder() {
     if (isBuffer(this.touchBorder)) { // $FlowFixMe
-      this.drawBorderBuffer = getBoundingBorder(this.drawBorder, this.touchBorder);
+      this.drawBorderBuffer = [getBoundingBorder(this.drawBorder, this.touchBorder)];
     } else { // $FlowFixMe
       this.drawBorderBuffer = this.drawBorder;
     }

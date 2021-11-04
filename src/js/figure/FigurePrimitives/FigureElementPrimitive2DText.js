@@ -190,12 +190,13 @@ class TextObject extends DrawingObject {
     if (this.font.underline !== false) {
       this.underline = this.font.getUnderline();
       const uDescent = this.underline[0] * scalingFactor;
+      const uWidth = this.underline[1] * scalingFactor;
       if (uDescent > descent) {
         descent = uDescent;
       }
       if (uDescent < 0) {
-        if (-uDescent > ascent) {
-          ascent = -uDescent;
+        if (-uDescent + uWidth > ascent) {
+          ascent = -uDescent + uWidth;
         }
       }
     } else {
@@ -587,9 +588,9 @@ export default class FigureElementPrimitive2DText extends FigureElementPrimitive
 
   calcTouchBorder() {
     if (isBuffer(this.touchBorder)) { // $FlowFixMe
-      this.drawBorderBuffer = getBoundingBorder(this.drawBorder, this.touchBorder);
+      this.drawBorderBuffer = [getBoundingBorder(this.drawBorder, this.touchBorder)];
     } else { // $FlowFixMe
-      this.drawBorderBuffer = [this.drawBorder];
+      this.drawBorderBuffer = this.drawBorder;
     }
   }
 
