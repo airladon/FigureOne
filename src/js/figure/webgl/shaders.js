@@ -276,7 +276,10 @@ function composeFragShader(
     src += '  gl_FragColor = texture2D(u_texture, v_texcoord) * u_color.a;\n';
   } else if (color === 'textureAlpha') {
     // src += '  gl_FragColor = texture2D(u_texture, v_texcoord).a * u_color;\n';
-    src += '  gl_FragColor = texture2D(u_texture, v_texcoord).a * u_color;\n';
+    src += '  gl_FragColor = vec4(u_color.rgb, u_color.a * texture2D(u_texture, v_texcoord).a);\n';
+    // src += '  gl_FragColor.a = u_color.a * texture2D(u_texture, v_texcoord).a;\n'
+    // src += '  gl_FragColor.rgb *= gl_FragColor.a * texture2D(u_texture, v_texcoord).a;\n';
+    // src += '  gl_FragColor = texture2D(u_texture, v_texcoord).a * u_color;\n';
     src += '  gl_FragColor.rgb *= gl_FragColor.a;\n';
   }
 
