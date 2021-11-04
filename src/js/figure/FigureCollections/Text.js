@@ -190,7 +190,7 @@ class CollectionsText extends Equation {
             }
           }
           if (mod.onClick != null) { onClick = mod.onClick; }
-          if (mod.followOffsetY != null) { followOffsetY = mod.followOffsetY; }
+          // if (mod.followOffsetY != null) { followOffsetY = mod.followOffsetY; }
           if (mod.lSpace != null) { lSpace = mod.lSpace; }
           if (mod.rSpace != null) { rSpace = mod.rSpace; }
           // this.modifiers[s] = mod;
@@ -210,7 +210,7 @@ class CollectionsText extends Equation {
           lineIndex,
           touchBorder,
           onClick,
-          followOffsetY,
+          // followOffsetY,
           lSpace,
           rSpace,
           // modText,
@@ -226,9 +226,9 @@ class CollectionsText extends Equation {
   }
 
   createEquation() {
-    console.log(this.lines);
+    // console.log(this.lines);
     const eqn = [];
-    const content = []
+    const content = [];
     const elements = {};
     this.lines.forEach((line, lineIndex) => {
       const [elementOptions, lineOptions] = this.createLine(line, lineIndex);
@@ -254,7 +254,7 @@ class CollectionsText extends Equation {
       },
       yAlign: this.yAlign,
     };
-    console.log(o);
+    // console.log(o);
     return o;
   }
 
@@ -290,7 +290,21 @@ class CollectionsText extends Equation {
             },
           };
         }
+        if (element.lSpace) {
+          content = {
+            offset: {
+              content, offset: [element.lSpace, 0], inSize,
+            },
+          };
+        }
         lineOptions.content.push(content);
+        if (element.rSpace) {
+          lineOptions.content.push({
+            container: {
+              width: element.rSpace,
+            },
+          });
+        }
       }
     });
     return [elementOptions, lineOptions];
