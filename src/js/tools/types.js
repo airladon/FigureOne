@@ -89,6 +89,10 @@ export type OBJ_CurvedCorner = {
  * @property {number} [size] size of font in draw space (`0.2`)
  * @property {'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'} [weight]
  * font weight (`200`)
+ * @property {boolean | number | [number, number]} [underline] `true` to include
+ * an underline. Use `number` to define the descent of the bottom edge of the
+ * underline to the baseline and [`number`, `number`] to define the descent and
+ * width of the underline (`false`)
  * @property {[number, number, number, number]} [color] Font color
  * [red, green, blue, alpha] between 0 and 1 - (`[1, 0, 0, 1]`)
  * @property {number} [opacity] opacity multiplier (final opacity will be
@@ -121,6 +125,7 @@ export type OBJ_Font = {
   size?: number,
   weight?: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
   color?: TypeColor | null,
+  underline?: boolean | number | [number, number],
   opacity?: number,
   width?: number,
   descent?: number,
@@ -136,6 +141,7 @@ export type OBJ_Font_Fixed = {
   size: number,
   weight: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
   color: TypeColor | null,
+  underline: boolean | number | [number, number],
   opacity: number,
   width: number,
   descent: number,
