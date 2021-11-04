@@ -28,7 +28,7 @@ import { Equation } from '../Equation/Equation';
  *
  * @property {string} [text] string representing a line of text
  * @property {OBJ_Font} [font] line specific default font
- * @property {'left' | 'right' | 'center'} [justify] line specific justification
+//  * @property {'left' | 'right' | 'center'} [justify] line specific justification
  * @property {number} [lineSpace] line specific separation from baseline of
  * this line to baseline of previous line
  * @property {boolean} [fixColor] If `true`, {@link FigureElement}`.setColor`
@@ -37,8 +37,9 @@ import { Equation } from '../Equation/Equation';
 export type OBJ_TextLinesDefinition = {
   text: string,
   font?: OBJ_Font,
-  justify?: 'left' | 'right' | 'center',
+  // justify?: 'left' | 'right' | 'center',
   lineSpace?: number,
+  baselineSpace?: number,
 };
 
 /**
@@ -82,6 +83,7 @@ export type OBJ_CollectionsText = {
   defaultTextTouchBorder?: TypeParsableBuffer,
   justify?: 'left' | 'center' | 'right',
   lineSpace?: number,
+  baselineSpace?: number,
   xAlign: 'left' | 'right' | 'center',
   yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
   color: TypeColor,
@@ -95,7 +97,7 @@ class CollectionsText extends Equation {
   _eqn: Equation;
 
   font: OBJ_Font_Fixed;
-  accent: OBJ_Font_Fixed;
+  accent: OBJ_Font;
   justify: 'left' | 'right' | 'center';
   // xAlign: 'left' | 'right' | 'center';
   // yAlign: 'mid' | 'bottom' | 'top' | 'baseline';
@@ -128,6 +130,7 @@ class CollectionsText extends Equation {
         elementMods: {},
         layout: 'always',
       },
+      accent: {},
     };
 
     const options = joinObjects({}, defaultOptions, optionsIn);
@@ -152,7 +155,7 @@ class CollectionsText extends Equation {
     // this.yAlign = options.yAlign;
     this.lineSpace = options.lineSpace;
     this.justify = options.justify;
-    this.accent = joinObjects({}, this.font, options.accent);
+    this.accent = options.accent;
     this.modifiers = options.modifiers || {};
     this.lines = [];
 
@@ -200,58 +203,39 @@ class CollectionsText extends Equation {
         let inLine = true;
         let touchBorder;
         let onClick;
-        // let followOffsetY = false;
         let space = 0;
-        // let lSpace = 0;
-        // let modText = '';
 
         if (i % 2 === firstToken) {
           let mod;
           if (this.modifiers[s] != null) {
             mod = this.modifiers[s];
-            // modText = s;
-          } else {
-            mod = {
-              text: s,
-              font: this.accent,
-            };
-          }
-          // const mod = this.modifiers[s];
-          if (mod.text != null) {
-            ({ text } = mod);
-          }
-          if (mod.eqn != null) {
-            ({ eqn } = mod);
-          }
-          if (mod.font != null) {
-            textFont = joinObjects({}, lineFont, mod.font);
-          }
-          if (mod.inLine != null) { inLine = mod.inLine; }
-          if (mod.offset != null) { offset = mod.offset; }
-          // if (mod.border != null) {
-          //   border = mod.border;
-          // }
-          if (mod.touchBorder != null) {
-            touchBorder = mod.touchBorder;
-            if (
-              touchBorder != null
-              && Array.isArray(touchBorder)
-              && !isBuffer(touchBorder)
-            ) { // $FlowFixMe
-              [touchBorder] = getBorder(touchBorder);
+            if (mod.text != null) {
+              ({ text } = mod);
             }
+            if (mod.eqn != null) {
+              ({ eqn } = mod);
+            }
+            if (mod.font != null) {
+              textFont = joinObjects({}, lineFont, mod.font);
+            }
+            if (mod.inLine != null) { inLine = mod.inLine; }
+            if (mod.offset != null) { offset = mod.offset; }
+            if (mod.touchBorder != null) {
+              touchBorder = mod.touchBorder;
+              if (
+                touchBorder != null
+                && Array.isArray(touchBorder)
+                && !isBuffer(touchBorder)
+              ) { // $FlowFixMe
+                [touchBorder] = getBorder(touchBorder);
+              }
+            }
+            if (mod.onClick != null) { onClick = mod.onClick; }
+            if (mod.space != null) { space = mod.space; }
+          } else {
+            text = s;
+            textFont = joinObjects({}, lineFont, this.accent);
           }
-          if (mod.onClick != null) { onClick = mod.onClick; }
-          // if (mod.followOffsetY != null) { followOffsetY = mod.followOffsetY; }
-          // if (mod.lSpace != null) { lSpace = mod.lSpace; }
-          if (mod.space != null) { space = mod.space; }
-          // this.modifiers[s] = mod;
-          // if (Array.isArray(border)) {  // $FlowFixMe
-          //   border = getPoints(border);
-          // }
-          // if (Array.isArray(touchBorder)) {  // $FlowFixMe
-          //   touchBorder = getBorder(touchBorder);
-          // }
         }
         line.push({
           text,
@@ -262,10 +246,7 @@ class CollectionsText extends Equation {
           lineIndex,
           touchBorder,
           onClick,
-          // followOffsetY,
-          // lSpace,
           space,
-          // modText,
         });
       });
       this.lines.push({
@@ -316,6 +297,7 @@ class CollectionsText extends Equation {
       baselineSpace: line.baselineSpace,
       content: [],
     };
+    console.log(line.justify)
     const elementOptions = {};
     line.text.forEach((element, index) => {
       // const name = element.modText === '' ? `e${lineIndex}${index}` : element.modText;

@@ -60,7 +60,7 @@ import {
 } from '../Element';
 import type { TypeColor } from '../../tools/types';
 import CollectionsText from './Text';
-// import { Equation } from '../Equation/Equation';
+import type { OBJ_CollectionsText } from './Text';
 
 /**
  * Built in figure collections.
@@ -162,12 +162,9 @@ export default class FigureCollections {
     );
   }
 
-  text(...options: Array<COL_Text>) {
+  text(...options: Array<OBJ_CollectionsText>) {
     const optionsToUse = joinObjects({}, { timeKeeper: this.primitives.timeKeeper }, ...options);
-    // if (optionsToUse.elements != null) {
-    //   optionsToUse.elems = optionsToUse.elements;
-    //   delete optionsToUse.elements;
-    // }
+
     return new CollectionsText(
       this, optionsToUse,
     );
