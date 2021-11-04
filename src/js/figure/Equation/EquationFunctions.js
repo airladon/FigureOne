@@ -283,10 +283,12 @@ export type EQN_Container = {
 export type EQN_Offset = {
   content: TypeEquationPhrase,
   offset?: TypeParsablePoint,
+  inSize?: boolean;
   fullContentBounds?: boolean,
 } | [
   TypeEquationPhrase,
   ?TypeParsablePoint,
+  ?boolean,
   ?boolean,
 ];
 
@@ -3375,26 +3377,26 @@ export class EquationFunctions {
     try {
       let content;
       let offset;
-      // let inSize;
+      let inSize;
       let fullContentBounds;
 
       const defaultOptions = {
         offset: [0, 0],
-        // inSize: false,
+        inSize: false,
         fullContentBounds: false,
       };
       if (Array.isArray(options)) {
         [
-          content, offset, fullContentBounds,
+          content, offset, inSize, fullContentBounds,
         ] = options;
       } else {
         ({
-          content, offset, fullContentBounds,
+          content, offset, fullContentBounds, inSize,
         } = options);
       }
       const optionsIn = {
         offset: getPoint(offset || [0, 0]),
-        // inSize,
+        inSize,
         fullContentBounds,
       };
       const o = joinObjects(defaultOptions, optionsIn);
