@@ -166,6 +166,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
         descent = aWidth * this.font.maxDescent;
       }
     }
+
     return {
       ascent, descent, width,
     };
@@ -223,6 +224,8 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
         y += fontSize * 1.2;
       }
     }
+    // Create a small square to draw color from when drawing the underline
+    ctx.fillRect(0, this.dimension - 2, 2, 2);
     this.drawingObject.texture.data = ctx.canvas;
     this.drawingObject.initTexture();
     webgl.textures[id].atlas = joinObjects({}, this.atlas);
@@ -268,6 +271,23 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       maxDescent = Math.max(descent * r, maxDescent);
       maxAscent = Math.max(ascent * r, maxAscent);
     }
+
+    if (this.font.underline !== false) {
+      const [uDescent, uWidth] = this.font.getUnderline();
+      if (uDescent > maxDescent) {
+        maxDescent = uDescent;
+      }
+      if (uDescent < 0) {
+        if (-uDescent > maxAscent) {
+          maxAscent = -uDescent;
+        }
+      }
+      vertices.push(
+        0, -uDescent, totalWidth, -uDescent, totalWidth, uWidth - uDescent,
+        0, -uDescent, totalWidth, uWidth - uDescent, 0, uWidth - uDescent);
+      texCoords.push(0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1);
+    }
+
     maxAscent += this.adjustments.ascent;
     maxDescent += this.adjustments.descent;
     totalWidth += this.adjustments.width;
