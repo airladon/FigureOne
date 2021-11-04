@@ -18,20 +18,21 @@ import type {
 } from '../../tools/types';
 import type FigureCollections from './FigureCollections';
 import EquationLabel from './EquationLabel';
-import type { EQN_Equation, Equation } from '../Equation/Equation';
+import type { EQN_Equation } from '../Equation/Equation';
+import { Equation } from '../Equation/Equation';
 import type {
   TypeLabelSubLocation,
 } from './EquationLabel';
 
 // $FlowFixMe
-class CollectionsText extends FigureElementCollection {
+class CollectionsText extends Equation {
   _eqn: Equation;
 
   font: OBJ_Font_Fixed;
   accent: OBJ_Font_Fixed;
   justify: 'left' | 'right' | 'center';
-  xAlign: 'left' | 'right' | 'center';
-  yAlign: 'mid' | 'bottom' | 'top' | 'baseline';
+  // xAlign: 'left' | 'right' | 'center';
+  // yAlign: 'mid' | 'bottom' | 'top' | 'baseline';
   lineSpace: number;
   lines: Array<Object>;
   modifiers: Object;
@@ -47,24 +48,42 @@ class CollectionsText extends FigureElementCollection {
       color: collections.primitives.defaultColor,
       font: collections.primitives.defaultFont,
       justify: 'left',
-      xAlign: 'left',
-      yAlign: 'baseline',
+      // xAlign: 'left',
+      // yAlign: 'baseline',
       lineSpace: null,
       transform: new Transform().scale(1).rotate(0).translate(0, 0),
+      scale: 1,
+      formDefaults: {
+        alignment: {
+          fixTo: new Point(0, 0),
+          xAlign: 'left',
+          yAlign: 'baseline',
+        },
+        elementMods: {},
+        layout: 'always',
+      },
     };
 
     const options = joinObjects({}, defaultOptions, optionsIn);
+    options.textFont = options.font;
+    if (options.xAlign != null) {
+      options.formDefaults.alignment.xAlign = options.xAlign;
+    }
+    if (options.yAlign != null) {
+      options.formDefaults.alignment.yAlign = options.yAlign;
+    }
+
+    super(collections.primitives, joinObjects({}, options));
     if (options.lineSpace == null) {
       options.lineSpace = options.font.size * 1.3;
     }
     if (options.accent == null) {
       options.accent = options.font.style === 'italic' ? 'normal' : 'italic';
     }
-    super(joinObjects({}, options));
     this.collections = collections;
     this.font = options.font;
-    this.xAlign = options.xAlign;
-    this.yAlign = options.yAlign;
+    // this.xAlign = options.xAlign;
+    // this.yAlign = options.yAlign;
     this.lineSpace = options.lineSpace;
     this.justify = options.justify;
     this.accent = joinObjects({}, this.font, options.accent);
@@ -74,7 +93,9 @@ class CollectionsText extends FigureElementCollection {
     this.splitLines(options.text);
     const equationOptions = this.createEquation();
 
-    this.add(equationOptions);
+    this.addElements(equationOptions.elements);
+    this.addForms(equationOptions.forms);
+    // this.add(equationOptions);
   }
 
   splitLines(lines: Array<Object | string>) {
@@ -115,11 +136,13 @@ class CollectionsText extends FigureElementCollection {
         let followOffsetY = false;
         let rSpace = 0;
         let lSpace = 0;
+        // let modText = '';
 
         if (i % 2 === firstToken) {
           let mod;
           if (this.modifiers[s] != null) {
             mod = this.modifiers[s];
+            // modText = s;
           } else {
             mod = {
               text: s,
@@ -171,6 +194,7 @@ class CollectionsText extends FigureElementCollection {
           followOffsetY,
           lSpace,
           rSpace,
+          // modText,
         });
       });
       this.lines.push({
@@ -206,10 +230,10 @@ class CollectionsText extends FigureElementCollection {
             content,
             justify: this.justify,
             baselineSpace: this.lineSpace,
-            yAlign: this.yAlign,
           },
         },
       },
+      yAlign: this.yAlign,
     };
     console.log(o);
     return o;
@@ -224,6 +248,7 @@ class CollectionsText extends FigureElementCollection {
     };
     const elementOptions = {};
     line.text.forEach((element, index) => {
+      // const name = element.modText === '' ? `e${lineIndex}${index}` : element.modText;
       const name = `e${lineIndex}${index}`;
       elementOptions[name] = {
         text: element.text,
