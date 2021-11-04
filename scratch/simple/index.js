@@ -72,6 +72,7 @@ const t = figure.add({
   make: 'collections.text',
   position: [-1, 5],
   justify: 'center',
+  xAlign: 'left',
   text: [
     'Lines justified to the left',
     'A |line| with a |modifiedPhrase|',
