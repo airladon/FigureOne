@@ -88,17 +88,6 @@ class TextObject extends DrawingObject {
     return this.drawContext2D.canvas;
   }
 
-
-  // click(p: Point, fnMap: FunctionMap) {
-  //   this.text.forEach((text) => {
-  //     if (text.onClick != null) {
-  //       if (isPointInPolygon(p, text.textBorderBuffer)) {
-  //         fnMap.exec(text.onClick, fnMap);
-  //       }
-  //     }
-  //   });
-  // }
-
   calcScalingFactor() {
     this.scalingFactor = 20 / this.font.size;
   }
@@ -213,19 +202,6 @@ class TextObject extends DrawingObject {
     return this.measure;
   }
 
-  // getUnderline() {
-  //   if (this.font.underline === false) {
-  //     return [0, 0];
-  //   }
-  //   if (this.font.underline === true) {
-  //     return [this.font.size / 20 + this.font.size / 40, this.font.size / 40];
-  //   }
-  //   if (typeof this.font.underline === 'number') {
-  //     return [this.font.underline, this.font.size / 40];
-  //   }
-  //   return this.font.underline;
-  // }
-
   alignText() {
     const location = new Point(0, 0);
     if (this.xAlign === 'center') {
@@ -243,28 +219,6 @@ class TextObject extends DrawingObject {
     this.location = location;
   }
 
-  // calcBounds() {
-  //   this.bounds = new Rect(
-  //     this.location.x,
-  //     this.location.y - this.measure.descent,
-  //     this.measure.width,
-  //     this.measure.ascent + this.measure.descent,
-  //   );
-  // }
-
-  // getBoundary(
-  //   transformMatrix: Type3DMatrix | null,
-  // ): Array<Point> {
-  //   if (transformMatrix == null) {
-  //     return this.textBorder;
-  //   }
-  //   const boundary = [];
-  //   this.textBorder.forEach((p) => {
-  //     boundary.push(p.transformBy(transformMatrix));
-  //   });
-  //   return boundary;
-  // }
-
   calcBorder() {
     const bounds = new Rect(
       this.location.x,
@@ -281,54 +235,6 @@ class TextObject extends DrawingObject {
       new Point(bounds.left, bounds.top),
     ];
   }
-
-  // setOpacity(opacity: number, index: null | number = 0) {
-  //   this.clear();
-  //   if (index === null) {
-  //     for (let i = 0; i < this.text.length; i += 1) {
-  //       this.setFont({ opacity }, i);
-  //     }
-  //   } else {
-  //     this.setFont({ opacity }, index);
-  //   }
-  // }
-
-  // setColor(color: TypeColor, index: null | number = null) {
-  //   // if (this.fixColor) {
-  //   //   return;
-  //   // }
-  //   if (index === null) {
-  //     for (let i = 0; i < this.text.length; i += 1) {
-  //       this.text[i].font.color = color.slice();
-  //     }
-  //   } else {
-  //     this.text[index].font.color = color.slice();
-  //   }
-  // }
-
-  // layoutText() {
-  //   this.text.forEach((t) => {
-  //     t.calcBorderAndBounds();
-  //   });
-  //   this.setBorder();
-  //   this.setTouchBorder();
-  // }
-
-  // setBorder() {
-  //   // this.setGenericBorder('border');
-  //   this.textBorder = [];
-  //   this.text.forEach((text) => {
-  //     this.textBorder.push(text.textBorder);
-  //   });
-  // }
-
-  // setTouchBorder() {
-  //   this.textBorderBuffer = [];
-  //   this.text.forEach((text) => {
-  //     this.textBorderBuffer.push(text.textBorderBuffer);
-  //   });
-  // }
-
 
   // Text is drawn in pixel space which is 0, 0 in the left hand top corner on
   // a canvas of size canvas.offsetWidth x canvas.offsetHeight.

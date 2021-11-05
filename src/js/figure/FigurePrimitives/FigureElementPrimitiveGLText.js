@@ -82,6 +82,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
     this.font = new FigureFont(options.font);
     this.atlas = {};
     if (typeof options.text[0] === 'string') {
+      // eslint-disable-next-line
       this.text = options.text[0];
     } else {
       this.text = options.text[0].text;
@@ -285,7 +286,8 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       }
       vertices.push(
         0, -uDescent, totalWidth, -uDescent, totalWidth, uWidth - uDescent,
-        0, -uDescent, totalWidth, uWidth - uDescent, 0, uWidth - uDescent);
+        0, -uDescent, totalWidth, uWidth - uDescent, 0, uWidth - uDescent,
+      );
       texCoords.push(0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1);
     }
 

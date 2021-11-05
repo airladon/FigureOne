@@ -29,7 +29,7 @@ b = figure.add({
   // gl: true,
   text: 'QwertfMy 123\u03C0',
   // text: 'asdf',
-  font: { size: 0.5, style: 'italic', family: 'Times New Roman' },
+  font: { size: 0.5, style: 'italic', family: 'Times New Roman', underline: true },
   color: [1, 0, 0, 1],
   move: { type: 'rotation' },
   yAlign: 'bottom',
@@ -50,7 +50,8 @@ a = figure.add({
   make: 'txt',
   // gl: true,
   text: 'Qwerty 123\u03C0',
-  font: { size: 1 },
+  font: { size: 1, underline: true },
+  // font: { size: 0.5, style: 'italic', family: 'Times New Roman', underline: true },
   // move: { type: 'translate' },
   move: true,
   position: [0, 2],
@@ -66,14 +67,23 @@ eqn = figure.add({
 });
 
 // eqn._a.setFont({ color: [0, 1, 0, 1]});
-eqn._a.setColor([0, 0, 1, 1])
+eqn._a.setColor([0, 0, 1, 1]);
+
+const test = figure.add({
+  make: 'txt',
+  text: 'a',
+  font: { size: 2, color: [1, 0, 1, 1], weight: '700' },
+  type: '2d',
+});
 
 const t = figure.add({
   name: 'eqn',
   make: 'collections.text',
   position: [-1, 5],
-  justify: 'center',
+  justify: 'right',
   xAlign: 'left',
+  yAlign: 'baseline',
+  type: 'bmp',
   text: [
     'Lines justified |to| |the| left',
     { text: 'A |line| with a |modifiedPhrase|', lineSpace: 1 },
@@ -86,7 +96,7 @@ const t = figure.add({
     },
   ],
   elements: {
-    abc: { text: 'hello world' },
+    abc: { text: 'hello world', color: [1, 0, 1, 1], font: { size: 0.2 } },
     v: { symbol: 'vinculum' },
   },
   modifiers: {
