@@ -95,8 +95,6 @@ export type OBJ_CurvedCorner = {
  * width of the underline (`false`)
  * @property {[number, number, number, number]} [color] Font color
  * [red, green, blue, alpha] between 0 and 1 - (`[1, 0, 0, 1]`)
- * @property {number} [opacity] opacity multiplier (final opacity will be
- * `opacity` * `color` alpha) [`1`]
  * @property {number} [width] width multiplier for text when measured with
  * canvas2D.context.measureText (`1`)
  * @property {number} [descent] (`0.8`)
@@ -126,7 +124,6 @@ export type OBJ_Font = {
   weight?: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
   color?: TypeColor | null,
   underline?: boolean | number | [number, number],
-  opacity?: number,
   width?: number,
   descent?: number,
   maxDescent?: number,
@@ -142,7 +139,7 @@ export type OBJ_Font_Fixed = {
   weight: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
   color: TypeColor | null,
   underline: boolean | number | [number, number],
-  opacity: number,
+  // opacity: number,
   width: number,
   descent: number,
   maxDescent: number,
