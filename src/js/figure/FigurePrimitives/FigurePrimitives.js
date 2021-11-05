@@ -1463,10 +1463,19 @@ export default class FigurePrimitives {
       type: 'bmp',
     };
     const o = this.parseTextOptions(defaultOptions, ...options);
+    let element;
     if (o.type === 'bmp') {
-      return this.glText(o);
+      element = this.glText(o);
+    } else {
+      element = this.text2d(o);
     }
-    return this.text2d(o);
+    if (o.border != null) { // $FlowFixMe
+      element.border = getBorder(o.border);
+    }
+    if (o.touchBorder != null) { // $FlowFixMe
+      element.touchBorder = getBorder(o.touchBorder);
+    }
+    return element;
     // // const o = joinObjects({}, defaultOptions, ...options);
     // o.figureElementPrimitiveCallback = (...fo) => new FigureElementPrimitiveGLText(...fo);
 

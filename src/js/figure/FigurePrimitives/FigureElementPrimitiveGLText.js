@@ -333,7 +333,7 @@ export default class FigureElementPrimitiveGLText extends FigureElementPrimitive
       this.text = text;
     } else {
       if (text.font != null) {
-        this.font = new FigureFont(joinObjects({}, this.font.definition, text.font));
+        this.font = new FigureFont(joinObjects({}, this.font.definition(), text.font));
       }
       if (text.xAlign != null) {
         this.xAlign = text.xAlign;

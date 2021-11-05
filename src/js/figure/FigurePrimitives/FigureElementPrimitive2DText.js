@@ -110,7 +110,7 @@ class TextObject extends DrawingObject {
       this.text = text;
     } else {
       if (text.font != null) {
-        this.font = joinObjects({}, this.font.definition, text.font);
+        this.font = new FigureFont(joinObjects({}, this.font.definition(), text.font));
       }
       if (text.xAlign != null) {
         this.xAlign = text.xAlign;
@@ -120,6 +120,9 @@ class TextObject extends DrawingObject {
       }
       if (text.adjustments != null) {
         this.adjustments = joinObjects({}, this.adjustments, text.adjustments);
+      }
+      if (text.text != null) {
+        this.text = text.text;
       }
     }
     this.calcScalingFactor();
@@ -203,9 +206,9 @@ class TextObject extends DrawingObject {
       this.underline = [0, 0];
     }
     this.measure = {
-      ascent: ascent / scalingFactor,
-      descent: descent / scalingFactor,
-      width: width / scalingFactor,
+      ascent: ascent / scalingFactor + this.adjustments.ascent,
+      descent: descent / scalingFactor + this.adjustments.descent,
+      width: width / scalingFactor + this.adjustments.width,
     };
     return this.measure;
   }
